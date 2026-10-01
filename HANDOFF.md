@@ -35,12 +35,12 @@ newest release tag. Cloudflare Pages serves it; GitHub Actions builds and deploy
 
 ### 2. max-cli 0.22.0 — the release (lives in max-cli, not here)
 
-Until max releases, the site cannot build from tags (see "What will bite"). **State on 2026-10-02:** the release
-PR ([#315](https://github.com/leemour/max-cli/pull/315)) is merged as `c9b219f`; `pnpm release:check` passes on
-main; every approved live scenario ran; the report `/home/leemour/Projects/AI/max-cli/docs_ai/releases/0.22.0.md`
-waits for the owner's `Signed off:` line (his rulings NEED-524..526 are in
-`/home/leemour/Projects/AI/max-cli/docs_ai/journal/2026-10-02-release-0.22.0.md`). Then, from max-cli's `main`:
-`bin/release`.
+Until max releases, the site cannot build from tags (see "What will bite"). **State on 2026-10-02, ~01:40 Madrid:**
+the 0.22.0 version and changelog are on max main (#315), and every live scenario passed. The owner ruled that a
+`store fetch` bug (RISK-113) is fixed first: the fix is cli-messaging #386, which is not in 0.99.0. The order is:
+max-cli #317 (max onto 0.99.0, session max-cli-1d), then the next cli-messaging release (session "Docs", after
+01:18 UTC), then max's bump onto it, then the checks and the `store` live rows again, then the owner's signature
+on `/home/leemour/Projects/AI/max-cli/docs_ai/releases/0.22.0.md`, then `bin/release` from max-cli's `main`.
 
 After `bin/release` publishes, run `gh workflow run deploy.yml -R leemour/cli-docs` — the site then
 builds from tags again.
