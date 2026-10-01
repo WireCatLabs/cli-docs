@@ -35,19 +35,12 @@ newest release tag. Cloudflare Pages serves it; GitHub Actions builds and deploy
 
 ### 2. max-cli 0.22.0 — the release (lives in max-cli, not here)
 
-Until max releases, the site cannot build from tags (see "What will bite"). The owner answered all
-three questions on 2026-10-02: **changelog accepted as drafted; run the whole live-scenario list;
-keep the "do not retry" text for the MCP forward tool (BUG-110) in this release.**
-
-1. `/home/leemour/Projects/AI/max-cli/.claude/skills/release/SKILL.md` — the procedure; resume at
-   step 5 (live scenarios).
-2. `/home/leemour/Projects/AI/max-cli/docs_ai/releases/0.22.0.md` — the draft report, and which
-   scenario covers which command.
-3. The work: worktree `/home/leemour/Projects/AI/max-cli-wt-release`, branch `release/next`, two
-   commits, **not pushed** (its upstream was removed on purpose). Rebase it on `origin/main` first:
-   another session (max-cli-25) is moving max onto cli-messaging 0.99.0 and will add a changelog line.
-4. `/home/leemour/Projects/AI/max-cli/docs_ai/journal/2026-10-02-release-0.22.0.md` — what the
-   preparation found (TASK-238, BUG-110, FIND-460, DEBT-40, NEED-515).
+Until max releases, the site cannot build from tags (see "What will bite"). **State on 2026-10-02:** the release
+PR ([#315](https://github.com/leemour/max-cli/pull/315)) is merged as `c9b219f`; `pnpm release:check` passes on
+main; every approved live scenario ran; the report `/home/leemour/Projects/AI/max-cli/docs_ai/releases/0.22.0.md`
+waits for the owner's `Signed off:` line (his rulings NEED-524..526 are in
+`/home/leemour/Projects/AI/max-cli/docs_ai/journal/2026-10-02-release-0.22.0.md`). Then, from max-cli's `main`:
+`bin/release`.
 
 After `bin/release` publishes, run `gh workflow run deploy.yml -R leemour/cli-docs` — the site then
 builds from tags again.
