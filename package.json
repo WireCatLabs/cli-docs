@@ -1,0 +1,47 @@
+{
+  "name": "cli-docs",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "sync": "node --experimental-strip-types scripts/sync.ts",
+    "dev": "next dev",
+    "build": "pnpm sync && next build",
+    "start": "serve out",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "vitest run",
+    "check:links": "node --experimental-strip-types scripts/check-links.ts",
+    "prepare": "lefthook install || true"
+  },
+  "dependencies": {
+    "cn": "^0.3.0",
+    "fumadocs-core": "16.15.17",
+    "fumadocs-mdx": "15.4.5",
+    "fumadocs-ui": "npm:@fumadocs/base-ui@16.15.17",
+    "lucide-react": "^1.47.0",
+    "next": "16.3.5",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.15",
+    "@leemour/cli-core": "0.14.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/mdx": "^2.0.14",
+    "@types/node": "^26.6.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "lefthook": "^2.1.15",
+    "postcss": "^8.5.28",
+    "serve": "^14.2.6",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  },
+  "packageManager": "pnpm@11.20.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "type": "module"
+}

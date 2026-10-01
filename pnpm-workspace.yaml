@@ -1,0 +1,7 @@
+# pnpm blocks install scripts by default; each package is allowed by name.
+allowBuilds:
+  esbuild: true
+  lefthook: true
+  sharp: true
+minimumReleaseAgeExclude:
+  - "@leemour/cli-core@0.14.0"
