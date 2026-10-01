@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WireCat Agent Desk</title>
+<meta name="description" content="Ask your agent about your chats and watch it run tg.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,500..900&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+  /* Layout: fog wallpaper with prompt glyphs; the hero is a desktop agent app running tg, session by session. */
+  :root {
+    --wall: #cbd1cf; --wall-ink: #bfc6c4;
+    --ink: #121614; --ink-soft: #3d4643;
+    --me: #2f37d9; --me-ink: #ffffff;
+    --app: #15181a; --app-2: #1d2124; --app-3: #262b2f; --app-line: #31373c;
+    --app-ink: #e9eeec; --app-soft: #98a29f; --app-dim: #6b7572;
+    --ok: #7fd49b; --key: #9ea4ff; --str: #e6c07b; --num: #f29b7a;
+    --card: #ffffff; --card-ink: #121614; --card-soft: #5c6663;
+    --display: "Anybody", "Onest", system-ui, sans-serif;
+    --body: "Onest", system-ui, sans-serif;
+    --code: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    --gutter: clamp(16px, 4vw, 48px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --wall: #171b1c; --wall-ink: #1f2426; --ink: #e9eeec; --ink-soft: #a7b1ae;
+      --me: #4b53f0; --app: #0d0f10; --app-2: #141719; --app-3: #1c2023; --app-line: #2a3034;
+      --card: #1f2427; --card-ink: #e9eeec; --card-soft: #9aa4a1;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --wall: #171b1c; --wall-ink: #1f2426; --ink: #e9eeec; --ink-soft: #a7b1ae;
+    --me: #4b53f0; --app: #0d0f10; --app-2: #141719; --app-3: #1c2023; --app-line: #2a3034;
+    --card: #1f2427; --card-ink: #e9eeec; --card-soft: #9aa4a1;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; background-color: var(--wall); color: var(--ink); font: 400 17px/1.55 var(--body); -webkit-font-smoothing: antialiased; }
+  ::selection { background: var(--me); color: var(--me-ink); }
+  a { color: inherit; text-underline-offset: 0.2em; }
+  :focus-visible { outline: 2px solid var(--me); outline-offset: 3px; border-radius: 6px; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding-inline: var(--gutter); }
+
+  header.top { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 22px; }
+  .mark { display: inline-flex; align-items: center; gap: 10px; font: 800 22px/1 var(--display); font-stretch: 120%; letter-spacing: -0.01em; text-decoration: none; }
+  .mark svg { width: 30px; height: 30px; }
+  nav { display: flex; gap: clamp(14px, 3vw, 28px); font-weight: 500; font-size: 15px; }
+  nav a { text-decoration: none; color: var(--ink-soft); }
+  nav a:hover { color: var(--ink); }
+
+  .hero { padding-block: clamp(20px, 4vw, 48px) clamp(56px, 8vw, 104px); }
+  .hero-text { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 20px clamp(32px, 5vw, 72px); align-items: end; margin-bottom: clamp(28px, 4vw, 48px); }
+  h1 { font: 900 clamp(46px, 6.8vw, 96px)/0.9 var(--display); font-stretch: 62%; text-transform: uppercase; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+  h1 span { color: var(--me); }
+  .lede { margin: 0 0 22px; font-size: clamp(17px, 1.5vw, 20px); color: var(--ink-soft); }
+  .lede b { color: var(--ink); font-weight: 600; }
+  .cta { display: flex; flex-wrap: wrap; gap: 10px; }
+  .cmd { display: inline-flex; align-items: center; gap: 14px; min-width: 0; max-width: 100%; background: var(--app); color: var(--app-ink); border-radius: 999px; padding: 6px 6px 6px 20px; font: 400 15px/1 var(--code); }
+  .cmd code { font: inherit; white-space: nowrap; overflow-x: auto; padding-block: 4px; }
+  .cmd code::before { content: "$ "; color: var(--app-soft); }
+  .copy { flex: none; border: 0; cursor: pointer; border-radius: 999px; padding: 10px 16px; background: var(--app-ink); color: var(--app); font: 600 13px/1 var(--body); }
+  .copy:hover, .copy[data-done] { background: var(--me); color: var(--me-ink); }
+  .btn { display: inline-flex; align-items: center; min-height: 50px; padding: 0 24px; border-radius: 999px; background: var(--me); color: var(--me-ink); text-decoration: none; font: 600 16px/1 var(--body); transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+  .btn:hover { transform: translateY(-2px); }
+  .tagline { margin: 16px 0 0; font-size: 14px; color: var(--ink-soft); }
+  .tagline b { color: var(--ink); }
+
+  /* The agent app */
+  .app { background: var(--app); color: var(--app-ink); border-radius: 18px; overflow: hidden; box-shadow: 0 50px 90px -50px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--app-line); }
+  .titlebar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: var(--app-2); border-bottom: 1px solid var(--app-line); font: 500 13px/1 var(--body); color: var(--app-soft); }
+  .titlebar i { width: 12px; height: 12px; border-radius: 50%; background: var(--app-3); display: inline-block; }
+  .titlebar span { margin-left: 10px; }
+  .replay { margin-left: auto; border: 1px solid var(--app-line); background: transparent; color: var(--app-soft); border-radius: 999px; padding: 6px 12px; font: 500 12px/1 var(--body); cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
+  .replay:hover { color: var(--app-ink); }
+  .replay svg { width: 13px; height: 13px; }
+  .app-body { display: grid; grid-template-columns: 240px minmax(0, 1fr); min-height: 560px; }
+  .sessions { background: var(--app-2); border-right: 1px solid var(--app-line); padding: 14px 10px; display: flex; flex-direction: column; gap: 4px; }
+  .sessions h2 { font: 600 11px/1 var(--body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--app-dim); margin: 6px 10px 10px; }
+  .session { text-align: left; border: 0; background: transparent; color: var(--app-soft); border-radius: 10px; padding: 10px 12px; cursor: pointer; font: 500 14px/1.3 var(--body); }
+  .session small { display: block; font: 400 12px/1.3 var(--code); color: var(--app-dim); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .session:hover { background: var(--app-3); color: var(--app-ink); }
+  .session[aria-current="true"] { background: var(--app-3); color: var(--app-ink); }
+  .session[aria-current="true"] small { color: var(--key); }
+  .conv { display: flex; flex-direction: column; min-width: 0; }
+  .log { flex: 1; padding: clamp(18px, 3vw, 32px); display: flex; flex-direction: column; gap: 16px; overflow: hidden; }
+  .ask { align-self: flex-end; max-width: 78%; background: var(--app-3); padding: 10px 15px; border-radius: 16px 16px 4px 16px; font-size: 15.5px; }
+  .tool { border: 1px solid var(--app-line); border-radius: 12px; background: var(--app-2); overflow: hidden; max-width: 100%; }
+  .tool summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 10px 14px; font: 500 13.5px/1.35 var(--code); color: var(--app-ink); }
+  .tool summary::-webkit-details-marker { display: none; }
+  .tool summary .state { flex: none; width: 16px; height: 16px; display: grid; place-items: center; color: var(--ok); }
+  .tool summary .state svg { width: 16px; height: 16px; }
+  .tool summary code { min-width: 0; overflow-x: auto; white-space: nowrap; font: inherit; }
+  .tool summary code b { color: var(--key); font-weight: 600; }
+  .tool summary .chev { margin-left: auto; color: var(--app-dim); transition: transform 0.2s; flex: none; }
+  .tool[open] summary .chev { transform: rotate(90deg); }
+  .tool pre { margin: 0; padding: 12px 14px 14px; border-top: 1px solid var(--app-line); font: 400 12.5px/1.6 var(--code); color: var(--app-soft); overflow-x: auto; max-height: 220px; }
+  .k { color: var(--key); } .s { color: var(--str); } .n { color: var(--num); }
+  .tool.running .state { color: var(--app-soft); }
+  .tool.running .state svg { animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .say { max-width: 92%; font-size: 15.5px; line-height: 1.6; }
+  .say p { margin: 0 0 8px; }
+  .say h3 { margin: 12px 0 4px; font: 600 12px/1 var(--body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--app-soft); }
+  .say ul { margin: 0; padding-left: 18px; }
+  .say li { margin: 3px 0; }
+  .say q { color: var(--app-soft); }
+  .say table { border-collapse: collapse; margin: 8px 0; font-variant-numeric: tabular-nums; font-size: 14.5px; }
+  .say th, .say td { text-align: right; padding: 4px 14px 4px 0; border-bottom: 1px solid var(--app-line); }
+  .say th:first-child, .say td:first-child { text-align: left; }
+  .say th { color: var(--app-soft); font-weight: 500; }
+  .say .plus { color: var(--ok); } .say .minus { color: var(--num); }
+  .say small { color: var(--app-dim); }
+  .composer { margin: 0 clamp(18px, 3vw, 32px) clamp(18px, 3vw, 24px); border: 1px solid var(--app-line); border-radius: 14px; padding: 12px 14px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; color: var(--app-dim); font-size: 14.5px; }
+  .composer span:first-child { flex: 1 1 200px; }
+  .slash { font: 500 12.5px/1 var(--code); color: var(--app-soft); background: var(--app-3); border-radius: 999px; padding: 7px 10px; }
+  .js .playing .step { animation: rise 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); filter: blur(2px); } }
+
+  section { padding-block: clamp(64px, 9vw, 120px); }
+  h2.big { font: 900 clamp(36px, 5vw, 68px)/0.92 var(--display); font-stretch: 62%; text-transform: uppercase; margin: 0 0 16px; text-wrap: balance; }
+  .intro { color: var(--ink-soft); font-size: 19px; max-width: 36em; margin: 0 0 clamp(36px, 5vw, 56px); }
+  .runs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .run { background: var(--card); color: var(--card-ink); border-radius: 18px; padding: 20px 22px; display: grid; gap: 8px; }
+  .run code { font: 500 15px/1.4 var(--code); color: var(--me); overflow-wrap: anywhere; }
+  .run p { margin: 0; color: var(--card-soft); font-size: 15.5px; }
+  .run b { color: var(--card-ink); font-weight: 600; }
+
+  .dark { background: var(--app); color: var(--app-ink); }
+  .dark .intro { color: var(--app-soft); }
+  .connect { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .lane { border-top: 2px solid var(--app-line); padding-top: 18px; display: flex; flex-direction: column; gap: 12px; }
+  .lane h3 { margin: 0; font: 800 26px/1 var(--display); font-stretch: 75%; text-transform: uppercase; }
+  .lane p { margin: 0; color: var(--app-soft); font-size: 15.5px; }
+  .lane .cmd { background: var(--app-3); margin-top: auto; justify-content: space-between; }
+  .lane .slashes { display: flex; flex-wrap: wrap; gap: 6px; }
+  .limits { margin-top: 48px; color: var(--app-soft); max-width: 46em; }
+
+  .tools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .tool-card { background: var(--card); color: var(--card-ink); border-radius: 24px; padding: clamp(22px, 3vw, 34px); display: flex; flex-direction: column; gap: 14px; }
+  .tool-name { font: 900 60px/0.9 var(--display); font-stretch: 70%; }
+  .tool-name small { display: block; font: 600 14px/1.3 var(--body); color: var(--card-soft); margin-top: 8px; }
+  .tool-card p { margin: 0; }
+  .tool-card .cmd { margin-top: auto; }
+  .tool-links { display: flex; gap: 18px; font-weight: 600; font-size: 15px; }
+  .close { text-align: center; }
+  .close .cta { justify-content: center; margin-top: 28px; }
+  footer { padding-block: 28px 44px; font-size: 14px; color: var(--ink-soft); }
+  footer .wrap { display: flex; justify-content: space-between; gap: 14px 28px; flex-wrap: wrap; }
+
+  @media (max-width: 900px) {
+    .hero-text, .runs, .connect, .tools { grid-template-columns: minmax(0, 1fr); }
+    .app-body { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+    .sessions { flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--app-line); padding: 8px; }
+    .sessions h2 { display: none; }
+    .session { flex: none; }
+    .session small { display: none; }
+  }
+  @media (max-width: 520px) {
+    nav a.hide-sm { display: none; }
+    .titlebar span { display: none; }
+    .ask, .say { max-width: 100%; }
+    .cmd { font-size: 13.5px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .js .playing .step { animation: none; }
+    .tool.running .state svg { animation: none; }
+  }
+</style>
+</head>
+<body>
+<header class="top wrap">
+  <a class="mark" href="#">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="16" fill="var(--me)"/><path d="M9 21V11l4 4 3-4 3 4 4-4v10" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/></svg>
+    WireCat
+  </a>
+  <nav aria-label="Site">
+    <a href="#runs">Commands</a>
+    <a class="hide-sm" href="#connect">Connect</a>
+    <a href="https://wirecat.dev/en/docs/tg">Docs</a>
+    <a class="hide-sm" href="https://github.com/leemour/tg-cli">GitHub</a>
+  </nav>
+</header>
+
+<main class="wrap hero">
+  <div class="hero-text">
+    <h1>Ask your agent. <span>Watch it work your chats.</span></h1>
+    <div>
+      <p class="lede">WireCat gives Claude Code, Codex or Cursor a command line for your own <b>Telegram and MAX</b>. It finds who owes what, adds up the trip money, sets your reminders and reads voice notes for you.</p>
+      <div class="cta">
+        <span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copy</button></span>
+        <a class="btn" href="#connect">Connect your agent</a>
+      </div>
+      <p class="tagline"><b>AI messaging with CLI tools for agents.</b> Free and open source.</p>
+    </div>
+  </div>
+
+  <div class="app" id="app">
+    <div class="titlebar"><i></i><i></i><i></i><span>Agent · ~/inbox</span>
+      <button class="replay" type="button" id="replay"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 1 0 1.8-4.1M2.5 2v3.5H6"/></svg>Replay</button>
+    </div>
+    <div class="app-body">
+      <nav class="sessions" aria-label="Sessions" id="sessions"><h2>Sessions</h2></nav>
+      <div class="conv">
+        <div class="log" id="log" aria-live="off"></div>
+        <div class="composer"><span>Ask about your chats…</span><span class="slash">/catch-up</span><span class="slash">/review</span><span class="slash">/reply</span><span class="slash">/find</span></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<section id="runs" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="big">What your agent runs</h2>
+    <p class="intro">Real commands, one job each. Your agent picks them. You can type them too.</p>
+    <div class="runs">
+      <div class="run"><code>tg review --since-time 7d</code><p><b>Who owes what.</b> Everything said this week, yours too, sorted into what you owe and what others owe you.</p></div>
+      <div class="run"><code>tg inbox</code><p><b>The morning look.</b> Other people's unread messages in every chat. Nothing gets marked read.</p></div>
+      <div class="run"><code>tg review --unanswered 1d</code><p><b>Questions left hanging.</b> Asked at least a day ago, still without an answer.</p></div>
+      <div class="run"><code>tg messages send me "Call Mum" --at-time 2026-10-02T18:00</code><p><b>Reminders.</b> Lands in your Saved Messages. Telegram sends it, even with the laptop shut.</p></div>
+      <div class="run"><code>tg messages search "paid" --chat "Lisbon trip"</code><p><b>Money and dates.</b> Searches every message kept on your computer, without connecting.</p></div>
+      <div class="run"><code>tg messages transcribe "Mum" 8812 --local</code><p><b>Voice notes as text.</b> By Telegram, or by a speech model on your machine.</p></div>
+      <div class="run"><code>tg watch</code><p><b>As it happens.</b> New messages arrive in your agent the moment they land.</p></div>
+      <div class="run"><code>tg store export "Project Alpha" --format markdown</code><p><b>A whole chat as a document.</b> For a weekly report, or for a model to read in one go.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="dark" id="connect">
+  <div class="wrap">
+    <h2 class="big">Connect your agent in one line</h2>
+    <p class="intro">Each tool ships with an agent skill and an MCP server.</p>
+    <div class="connect">
+      <div class="lane"><h3>Claude Code · Codex · Gemini CLI</h3><p>Installs the skill: which commands exist and how to use them.</p><span class="cmd"><code>tg skill install</code><button class="copy" type="button" data-copy="tg skill install">Copy</button></span></div>
+      <div class="lane"><h3>Claude Desktop · Cursor</h3><p>Prints the MCP entry for your settings. Ready prompts come with it:</p><div class="slashes"><span class="slash">/catch-up</span><span class="slash">/review</span><span class="slash">/reply</span><span class="slash">/find</span></div><span class="cmd"><code>tg mcp config</code><button class="copy" type="button" data-copy="tg mcp config">Copy</button></span></div>
+      <div class="lane"><h3>Any model</h3><p>Every docs page as plain Markdown, in one list.</p><span class="cmd"><code>wirecat.dev/llms.txt</code><button class="copy" type="button" data-copy="https://wirecat.dev/llms.txt">Copy</button></span></div>
+    </div>
+    <p class="limits">Reading marks nothing read. You choose which chats it may write to and how often it sends.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 class="big">Telegram and MAX, the same commands</h2>
+    <p class="intro">Learn one and you know the other.</p>
+    <div class="tools">
+      <article class="tool-card"><div class="tool-name">tg<small>Telegram</small></div><p>A Telegram client for the terminal and for AI agents, on your own account.</p><span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copy</button></span><div class="tool-links"><a href="https://wirecat.dev/en/docs/tg">Docs</a><a href="https://github.com/leemour/tg-cli">GitHub</a><a href="https://www.npmjs.com/package/@leemour/tg-cli">npm</a></div></article>
+      <article class="tool-card"><div class="tool-name">max<small>MAX Messenger</small></div><p>Your MAX bots through the official Bot API, and your personal account.</p><span class="cmd"><code>npm i -g @leemour/max-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/max-cli">Copy</button></span><div class="tool-links"><a href="https://wirecat.dev/ru/docs/max">Docs</a><a href="https://github.com/leemour/max-cli">GitHub</a><a href="https://www.npmjs.com/package/@leemour/max-cli">npm</a></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="close" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="big">Give your agent your inbox tonight</h2>
+    <div class="cta"><span class="cmd"><code>npm i -g @leemour/tg-cli && tg session start && tg skill install</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli && tg session start && tg skill install">Copy</button></span></div>
+  </div>
+</section>
+
+<footer><div class="wrap"><span>WireCat · MIT licence · Docs for models at <a href="https://wirecat.dev/llms.txt">/llms.txt</a> · Windows, macOS, Linux</span><span>English · Русский · Español</span></div></footer>
+
+<script src="patterns.js"></script>
+<script>
+  document.documentElement.classList.add("js")
+  const paintWall = () => {
+    const ink = getComputedStyle(document.documentElement).getPropertyValue("--wall-ink").trim()
+    WirePatterns.apply(document.body, "prompts", ink)
+  }
+  paintWall()
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", paintWall)
+
+  const j = (s) => s
+    .replace(/"([a-zA-Z]+)":/g, '<span class="k">"$1"</span>:')
+    .replace(/: "([^"]*)"/g, ': <span class="s">"$1"</span>')
+    .replace(/: (\d+|true|false)/g, ': <span class="n">$1</span>')
+
+  const sessions = [
+    {
+      title: "Who owes what", hint: "tg review",
+      steps: [
+        { ask: "What did I promise anyone this week, and who still owes me?" },
+        { tool: 'tg review <b>--since-time 7d</b>', out: j(`{"since": "2026-09-25T09:00:00+02:00", "until": "2026-10-02T08:58:00+02:00",
+ "complete": true,
+ "chats": [{"title": "Anna", "kind": "dialog", "messages": […], "more": false},
+           {"title": "Design", "kind": "group", "messages": […], "more": false},
+           {"title": "Project Alpha", "kind": "group", "messages": […], "more": false}, …],
+ "skipped": [], "partial": false, "quiet": 14}`) },
+        { say: `<h3>You owe</h3><ul><li><b>Anna</b>: the invoice by Friday. That is today. <q>Anna, 29 Sep</q></li><li><b>Kate</b>: notes on the new slides. <q>Design, 1 Oct</q></li></ul>
+          <h3>Waiting on others</h3><ul><li><b>Boris</b>: the mock-up, promised for 30 Sep. Not in Design yet.</li></ul>
+          <h3>Needs clarifying</h3><ul><li><b>Project Alpha</b>: who brings the samples. <q>We'll decide later</q>, 25 Sep</li></ul>
+          <p><small>Next review starts from 2 Oct, 08:58.</small></p>` },
+        { ask: "Nudge Boris about the mock-up." },
+        { tool: 'tg messages send <b>"Boris"</b> "Hi Boris! How is the mock-up going?"', out: j(`{"message": {"id": "48213", "text": "Hi Boris! How is the mock-up going?", "timestamp": "2026-10-02T09:01:12+02:00", "outgoing": true, …},
+ "sendId": "…"}`) },
+        { say: "<p>Sent to Boris.</p>" },
+      ],
+    },
+    {
+      title: "Morning catch-up", hint: "tg inbox",
+      steps: [
+        { ask: "Anything I need to see this morning?" },
+        { tool: "tg inbox", out: j(`{"mode": "unread",
+ "chats": [{"title": "Book club", "kind": "group", "unreadCount": 4, "messages": […], "more": false},
+           {"title": "Oleg", "kind": "dialog", "unreadCount": 1, "messages": […], "more": false},
+           {"title": "Mum", "kind": "dialog", "unreadCount": 1, "messages": […], "more": false}],
+ "skipped": [], "partial": false, "quiet": 211}`) },
+        { say: `<p>Three chats need you. Nothing is marked read.</p><ul><li><b>Oleg</b> needs the release tag approved before 11.</li><li><b>Book club</b> moved Friday to 19:30 and wants a yes from you.</li><li><b>Mum</b> sent a voice note, 0:42.</li></ul><p><small>211 muted chats changed, none of them mention you.</small></p>` },
+      ],
+    },
+    {
+      title: "Lisbon money", hint: "tg messages search",
+      steps: [
+        { ask: "Who owes who from the Lisbon trip?" },
+        { tool: 'tg messages search <b>"paid"</b> --chat "Lisbon trip"', out: j(`{"items": [{"senderName": "Ana", "text": "Paid the hotel, 240", "timestamp": "2026-09-14T22:10:00+02:00"},
+           {"senderName": "Ben", "text": "paid dinner 96", "timestamp": "2026-09-15T23:41:00+02:00"},
+           {"outgoing": true, "text": "I paid the taxi, 60", "timestamp": "2026-09-16T08:05:00+02:00"}],
+ "hasMore": false}`) },
+        { say: `<p>Three payments, €396 in total, €132 each.</p>
+          <table><thead><tr><th></th><th>Paid</th><th>Share</th><th>Balance</th></tr></thead><tbody>
+          <tr><td>Ana</td><td>€240</td><td>€132</td><td class="plus">+€108</td></tr>
+          <tr><td>Ben</td><td>€96</td><td>€132</td><td class="minus">−€36</td></tr>
+          <tr><td>You</td><td>€60</td><td>€132</td><td class="minus">−€72</td></tr></tbody></table>
+          <p>You send Ana €72, Ben sends her €36. Want me to post that in the chat?</p>` },
+      ],
+    },
+    {
+      title: "Reminders", hint: "--at-time",
+      steps: [
+        { ask: "Remind me to call Mum at six. And send the team the minutes on Monday at nine." },
+        { tool: 'tg messages send <b>me</b> "Call Mum" --at-time 2026-10-02T18:00', out: j(`{"message": {"id": "…", "text": "Call Mum", "timestamp": "2026-10-02T18:00:00+02:00", …}, "sendId": "…"}`) },
+        { tool: 'tg messages send <b>"Team"</b> "Minutes from Thursday" --file minutes.pdf --at-time 2026-10-05T09:00', out: j(`{"message": {"id": "…", "text": "Minutes from Thursday", "timestamp": "2026-10-05T09:00:00+02:00", …}, "sendId": "…"}`) },
+        { say: "<p>Both are scheduled on Telegram's side: the reminder lands in your Saved Messages at 18:00 today, the minutes go to Team on Monday at 09:00. Your laptop can be closed.</p>" },
+      ],
+    },
+    {
+      title: "Voice note", hint: "tg messages transcribe",
+      steps: [
+        { ask: "What did Mum say? I'm in a meeting." },
+        { tool: 'tg messages transcribe <b>"Mum"</b> 8812 --local', out: j(`{"text": "Hi love, is your flight still at six? Call me when you land…", "pending": false}`) },
+        { say: `<p><q>Hi love, is your flight still at six? Call me when you land, and don't forget Granddad's birthday on Sunday.</q></p><p>Want a reminder for Sunday morning?</p>` },
+      ],
+    },
+  ]
+
+  const tick = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>`
+  const spin = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 2a6 6 0 1 1-6 6"/></svg>`
+  const chev = `<svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>`
+  const view = (step, open) => {
+    if (step.ask) return `<div class="ask step">${step.ask}</div>`
+    if (step.tool) return `<details class="tool step"${open ? " open" : ""}><summary><span class="state">${tick}</span><code>${step.tool}</code>${chev}</summary><pre>${step.out}</pre></details>`
+    return `<div class="say step">${step.say}</div>`
+  }
+
+  const log = document.getElementById("log")
+  const nav = document.getElementById("sessions")
+  const app = document.getElementById("app")
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches
+  let current = 0
+  let timers = []
+
+  sessions.forEach((s, i) => {
+    const b = document.createElement("button")
+    b.className = "session"; b.type = "button"
+    b.innerHTML = `${s.title}<small>${s.hint}</small>`
+    b.addEventListener("click", () => show(i, true))
+    nav.append(b)
+  })
+
+  function show(i, animate) {
+    current = i
+    timers.forEach(clearTimeout); timers = []
+    for (const [n, b] of [...nav.querySelectorAll(".session")].entries()) b.setAttribute("aria-current", String(n === i))
+    const steps = sessions[i].steps
+    if (!animate || still) {
+      app.classList.remove("playing")
+      log.innerHTML = steps.map((s, n) => view(s, n === 1)).join("")
+      return
+    }
+    app.classList.add("playing")
+    log.innerHTML = ""
+    let at = 0
+    steps.forEach((step, n) => {
+      const wait = step.ask ? 500 : step.tool ? 700 : 900
+      at += wait
+      timers.push(setTimeout(() => {
+        log.insertAdjacentHTML("beforeend", view(step, step.tool && n === 1))
+        const el = log.lastElementChild
+        if (step.tool) {
+          el.classList.add("running")
+          el.querySelector(".state").innerHTML = spin
+          timers.push(setTimeout(() => { el.classList.remove("running"); el.querySelector(".state").innerHTML = tick }, 650))
+        }
+      }, at))
+      if (step.tool) at += 650
+    })
+  }
+
+  show(0, false)
+  document.getElementById("replay").addEventListener("click", () => show(current, true))
+  let played = false
+  new IntersectionObserver((entries) => {
+    if (!played && entries.some((e) => e.isIntersecting)) { played = true; show(0, true) }
+  }, { threshold: 0.4 }).observe(app)
+
+  for (const button of document.querySelectorAll("[data-copy]")) {
+    button.addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText(button.dataset.copy) } catch {
+        const range = document.createRange(); range.selectNodeContents(button.previousElementSibling)
+        getSelection().removeAllRanges(); getSelection().addRange(range)
+      }
+      button.textContent = "Copied"; button.dataset.done = ""
+      setTimeout(() => { button.textContent = "Copy"; delete button.dataset.done }, 1600)
+    })
+  }
+</script>
+</body>
+</html>
