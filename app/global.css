@@ -1,0 +1,15 @@
+@import "tailwindcss";
+@import "fumadocs-ui/css/neutral.css";
+@import "fumadocs-ui/css/preset.css";
+
+html {
+  scrollbar-gutter: stable;
+}
+
+/* The dialog's scroll lock writes these inline; only !important outranks an inline style. */
+html > body[data-scroll-locked] {
+  /* biome-ignore lint/complexity/noImportantStyles: outranks the scroll lock's inline style */
+  margin-right: 0px !important;
+  /* biome-ignore lint/complexity/noImportantStyles: outranks the scroll lock's inline style */
+  --removed-body-scroll-bar-size: 0px !important;
+}

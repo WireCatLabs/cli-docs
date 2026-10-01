@@ -1,0 +1,15 @@
+{
+  "extends": ["@leemour/cli-core/biome"],
+  "files": {
+    "includes": [
+      "**",
+      "!**/node_modules",
+      "!**/.next",
+      "!**/out",
+      "!**/.source",
+      "!content/docs/*/",
+      "!pnpm-lock.yaml",
+      "!next-env.d.ts"
+    ]
+  }
+}
