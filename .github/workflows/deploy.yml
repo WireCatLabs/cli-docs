@@ -1,7 +1,8 @@
 name: Deploy
 
 # A tool's release workflow sends `repository_dispatch` (type `docs`) when it has published, so the
-# site shows the new version's pages; the daily run catches a signal that was lost.
+# site shows the new version's pages; the daily run catches a signal that was lost. A failed run
+# publishes nothing, so the site stays as it was.
 on:
   push:
     branches: [main]
@@ -10,6 +11,11 @@ on:
   repository_dispatch:
     types: [docs]
   workflow_dispatch:
+    inputs:
+      ref:
+        description: "Build every tool from this branch instead of its release tag (main = a preview of the next release)"
+        required: false
+        default: ""
 
 permissions:
   contents: read
@@ -21,6 +27,11 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      REF: ${{ inputs.ref }}
+      WRANGLER: pnpm dlx wrangler@4.146.0
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
@@ -29,15 +40,17 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm build
+      - run: pnpm sync ${REF:+--ref "$REF"}
+      - run: pnpm exec next build
       - run: pnpm check:links
       - name: Cloudflare Pages
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
             echo "::warning::CLOUDFLARE_API_TOKEN is not set — built, not deployed"
             exit 0
           fi
-          pnpm dlx wrangler@4.146.0 pages deploy out --project-name cli-docs --branch main
+          # The first deploy creates the project; later ones are told it exists, and the deploy below
+          # fails on its own if anything else went wrong. The custom domain is attached once, in the
+          # dashboard.
+          $WRANGLER pages project create cli-docs --production-branch main || echo "cli-docs exists"
+          $WRANGLER pages deploy out --project-name cli-docs --branch main

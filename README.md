@@ -1,6 +1,6 @@
 # cli-docs
 
-The documentation site for the owner's command line tools — today
+The documentation site for the owner's command line tools, at [wirecat.dev](https://wirecat.dev) — today
 [max](https://github.com/leemour/max-cli) and [tg](https://github.com/leemour/tg-cli). Built with
 [Fumadocs](https://fumadocs.dev) as a static site, in English, Russian and Spanish, and readable by
 agents: `/llms.txt`, `/llms-full.txt` and a Markdown copy of every page.
@@ -36,9 +36,10 @@ pnpm check:links         # every link inside out/ leads to a page and, with an a
 ## Deploying
 
 [deploy.yml](.github/workflows/deploy.yml) builds from the release tags and publishes `out/` to
-Cloudflare Pages (project `cli-docs`) on a push to `main`, daily, and on a tool's release signal.
-It needs the secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`; without them it builds and
-says it did not deploy.
+Cloudflare Pages (project `cli-docs`, served at wirecat.dev) on a push to `main`, daily, and on a
+tool's release signal; a failed run publishes nothing. It needs the secrets `CLOUDFLARE_API_TOKEN`
+(permission: Cloudflare Pages — Edit) and `CLOUDFLARE_ACCOUNT_ID`; without them it builds and says
+it did not deploy. Run it by hand with `ref: main` to publish what the tools are about to release.
 
 ## Licence
 
