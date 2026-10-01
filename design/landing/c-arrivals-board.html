@@ -1,0 +1,365 @@
+<title>WireCat Arrivals Board</title>
+<meta name="description" content="Every chat on one board. Your agent clears it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Barlow+Condensed:wght@500;600&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: a station concourse; the inbox is a split-flap arrivals board, features are wayfinding signs. */
+  :root {
+    --hall: #e3e5e0;
+    --hall-ink: #111315;
+    --hall-soft: #4a5056;
+    --hall-line: #c6c9c3;
+    --frame: #2b3035;
+    --frame-edge: #3d444a;
+    --flap: #17191c;
+    --flap-hi: #24282c;
+    --flap-ink: #f4f3ec;
+    --flap-dim: #8a9097;
+    --amber: #ffb000;
+    --amber-ink: #1d1400;
+    --sign: #111315;
+    --sign-ink: #f4f3ec;
+    --sign-soft: #a9afb4;
+    --display: "Big Shoulders Display", "Barlow Condensed", system-ui, sans-serif;
+    --flapface: "Barlow Condensed", system-ui, sans-serif;
+    --body: "Barlow", system-ui, sans-serif;
+    --code: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    --gutter: clamp(16px, 4vw, 48px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --hall: #0e1012; --hall-ink: #eceee8; --hall-soft: #a0a6ab; --hall-line: #262a2e;
+      --frame: #24292d; --frame-edge: #343a40; --flap: #121416; --flap-hi: #1d2023;
+      --sign: #1a1d20; --sign-ink: #f4f3ec; --sign-soft: #a9afb4;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --hall: #0e1012; --hall-ink: #eceee8; --hall-soft: #a0a6ab; --hall-line: #262a2e;
+    --frame: #24292d; --frame-edge: #343a40; --flap: #121416; --flap-hi: #1d2023;
+    --sign: #1a1d20; --sign-ink: #f4f3ec; --sign-soft: #a9afb4;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--hall); color: var(--hall-ink); font: 400 18px/1.55 var(--body); -webkit-font-smoothing: antialiased; }
+  ::selection { background: var(--amber); color: var(--amber-ink); }
+  a { color: inherit; text-underline-offset: 0.2em; }
+  :focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding-inline: var(--gutter); }
+
+  header.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 20px; border-bottom: 1px solid var(--hall-line); }
+  .mark { display: inline-flex; align-items: center; gap: 10px; font: 900 26px/1 var(--display); text-transform: uppercase; letter-spacing: 0.02em; text-decoration: none; }
+  .mark i { display: inline-grid; place-items: center; width: 30px; height: 30px; background: var(--amber); color: var(--amber-ink); font-style: normal; font-size: 20px; }
+  nav { display: flex; gap: clamp(14px, 3vw, 30px); font: 600 15px/1 var(--body); text-transform: uppercase; letter-spacing: 0.06em; }
+  nav a { text-decoration: none; color: var(--hall-soft); }
+  nav a:hover { color: var(--hall-ink); }
+
+  .hero { padding-block: clamp(28px, 5vw, 64px) clamp(56px, 8vw, 104px); }
+  .hero-top { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 24px clamp(32px, 5vw, 72px); align-items: end; margin-bottom: clamp(28px, 4vw, 48px); }
+  h1 { font: 900 clamp(56px, 8.6vw, 128px)/0.95 var(--display); text-transform: uppercase; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+  h1 span { display: inline; background: var(--amber); color: var(--amber-ink); padding: 0 0.12em; line-height: 1.02; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+  .lede { margin: 0 0 24px; font-size: clamp(18px, 1.5vw, 21px); color: var(--hall-soft); }
+  .lede b { color: var(--hall-ink); font-weight: 600; }
+  .cta { display: flex; flex-wrap: wrap; gap: 10px; }
+  .cmd {
+    display: inline-flex; align-items: center; gap: 14px; min-width: 0; max-width: 100%;
+    background: var(--sign); color: var(--sign-ink); padding: 6px 6px 6px 16px; font: 400 15px/1 var(--code);
+  }
+  .cmd code { font: inherit; white-space: nowrap; overflow-x: auto; padding-block: 4px; }
+  .cmd code::before { content: "$ "; color: var(--sign-soft); }
+  .copy { flex: none; border: 0; cursor: pointer; padding: 10px 14px; background: var(--sign-ink); color: var(--sign); font: 600 13px/1 var(--body); text-transform: uppercase; letter-spacing: 0.06em; }
+  .copy:hover, .copy[data-done] { background: var(--amber); color: var(--amber-ink); }
+  .btn { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 20px; background: var(--amber); color: var(--amber-ink); text-decoration: none; font: 700 16px/1 var(--body); text-transform: uppercase; letter-spacing: 0.05em; }
+  .btn svg { width: 20px; height: 20px; transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+  .btn:hover svg { transform: translateX(4px); }
+  .tagline { margin: 18px 0 0; font-size: 15px; color: var(--hall-soft); }
+  .tagline b { color: var(--hall-ink); }
+
+  /* The board */
+  .board {
+    background: var(--frame); padding: clamp(10px, 1.6vw, 20px); border-radius: 6px;
+    box-shadow: inset 0 0 0 1px var(--frame-edge), 0 40px 70px -40px rgba(0, 0, 0, 0.6);
+    overflow-x: auto;
+  }
+  .board-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 4px 6px 14px; color: var(--flap-ink); }
+  .board-head b { font: 800 clamp(24px, 2.6vw, 34px)/1 var(--display); text-transform: uppercase; letter-spacing: 0.06em; }
+  .board-head .clock { font: 600 clamp(20px, 2.2vw, 28px)/1 var(--flapface); color: var(--amber); font-variant-numeric: tabular-nums; }
+  table { border-collapse: separate; border-spacing: 0 6px; width: 100%; min-width: 0; }
+  th { text-align: left; font: 600 12px/1 var(--body); letter-spacing: 0.14em; text-transform: uppercase; color: var(--flap-dim); padding: 0 6px 4px; }
+  td { padding: 0 6px; vertical-align: middle; }
+  .lamp { width: 12px; height: 12px; border-radius: 50%; background: #3a4046; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5); }
+  tr[data-state="waiting"] .lamp { background: var(--amber); box-shadow: 0 0 12px 1px color-mix(in srgb, var(--amber) 60%, transparent); }
+  .cells { display: inline-flex; gap: 2px; }
+  .cell {
+    position: relative; display: inline-grid; place-items: center;
+    width: var(--cw); height: calc(var(--cw) * 1.5);
+    background: linear-gradient(var(--flap-hi) 0 49%, #000 49% 51%, var(--flap) 51%);
+    color: var(--flap-ink); font: 600 calc(var(--cw) * 1.08)/1 var(--flapface); text-transform: uppercase;
+    border-radius: 2px; overflow: hidden;
+  }
+  .cell.flip { animation: flip 0.09s linear; }
+  @keyframes flip { 0% { transform: scaleY(1); } 50% { transform: scaleY(0.15); filter: brightness(1.6); } 100% { transform: scaleY(1); } }
+  tr[data-state="waiting"] .status .cell { color: var(--amber); }
+  tr[data-state="quiet"] .cell { color: var(--flap-dim); }
+  .board { --cw: clamp(15px, 1.75vw, 25px); }
+  .board-foot { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 10px 6px 2px; color: var(--flap-dim); font: 500 14px/1.4 var(--body); }
+  .board-foot code { font: 400 13px/1.4 var(--code); color: var(--flap-ink); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* Signs */
+  section { padding-block: clamp(72px, 10vw, 136px); border-top: 1px solid var(--hall-line); }
+  h2 { font: 900 clamp(40px, 5.6vw, 80px)/0.9 var(--display); text-transform: uppercase; margin: 0 0 18px; text-wrap: balance; max-width: 14em; }
+  .intro { color: var(--hall-soft); max-width: 34em; margin: 0 0 clamp(36px, 5vw, 64px); font-size: 20px; }
+  .signs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px; background: var(--hall-line); border: 3px solid var(--hall-line); }
+  .sign { background: var(--sign); color: var(--sign-ink); padding: clamp(20px, 2.6vw, 32px); display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 6px 20px; align-content: start; }
+  .picto { grid-row: span 3; width: 56px; height: 56px; background: var(--amber); color: var(--amber-ink); display: grid; place-items: center; }
+  .picto svg { width: 34px; height: 34px; }
+  .sign h3 { margin: 0; font: 800 clamp(26px, 2.6vw, 36px)/1 var(--display); text-transform: uppercase; letter-spacing: 0.01em; }
+  .sign p { margin: 0; color: var(--sign-soft); font-size: 16.5px; }
+  .sign code { font: 400 13.5px/1.4 var(--code); color: var(--amber); overflow-wrap: anywhere; }
+  .limits { margin: 32px 0 0; color: var(--hall-soft); max-width: 46em; }
+
+  .gates { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+  .gate { border-top: 6px solid var(--hall-ink); padding-top: 18px; display: flex; flex-direction: column; gap: 12px; }
+  .gate-id { display: flex; align-items: center; gap: 14px; }
+  .gate-id b { display: grid; place-items: center; width: 52px; height: 52px; background: var(--hall-ink); color: var(--hall); font: 900 34px/1 var(--display); }
+  .gate-id span { font: 800 26px/1 var(--display); text-transform: uppercase; }
+  .gate p { margin: 0; color: var(--hall-soft); font-size: 16.5px; }
+  .gate .cmd { margin-top: auto; justify-content: space-between; }
+
+  .lines { display: grid; gap: 3px; background: var(--hall-line); border: 3px solid var(--hall-line); }
+  .line { background: var(--hall); display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 16px 28px; align-items: center; padding: 24px clamp(16px, 2.4vw, 32px); }
+  .badge { display: grid; place-items: center; min-width: 96px; height: 64px; padding: 0 14px; border-radius: 32px; font: 900 40px/1 var(--display); text-transform: lowercase; }
+  .badge.tg { background: #1f8fd6; color: #fff; }
+  .badge.max { background: #7a3cf0; color: #fff; }
+  .line h3 { margin: 0 0 2px; font: 800 26px/1 var(--display); text-transform: uppercase; }
+  .line p { margin: 0; color: var(--hall-soft); font-size: 16.5px; }
+  .line-links { display: flex; gap: 14px; font-weight: 600; font-size: 15px; margin-top: 8px; }
+  .line .cmd { justify-self: end; }
+
+  .close h2 { max-width: 11em; }
+  .steps { list-style: none; margin: 32px 0 0; padding: 0; display: grid; gap: 10px; max-width: 620px; }
+  .steps li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: center; }
+  .steps li > b { display: grid; place-items: center; height: 44px; background: var(--amber); color: var(--amber-ink); font: 900 24px/1 var(--display); }
+  .steps .cmd { justify-content: space-between; }
+  footer { border-top: 1px solid var(--hall-line); padding-block: 26px 44px; color: var(--hall-soft); font-size: 15px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 14px 28px; flex-wrap: wrap; }
+
+  @media (max-width: 960px) {
+    .hero-top { grid-template-columns: minmax(0, 1fr); }
+    .signs { grid-template-columns: minmax(0, 1fr); }
+    .gates { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+    .line { grid-template-columns: auto minmax(0, 1fr); }
+    .line .cmd { grid-column: 1 / -1; justify-self: start; }
+  }
+  @media (max-width: 640px) {
+    nav a.hide-sm { display: none; }
+    .col-chat { display: none; }
+    .board { --cw: clamp(10px, 2.9vw, 18px); }
+    td:first-child, th:first-child { display: none; }
+    td, th { padding-inline: 3px; }
+    .cmd { font-size: 13.5px; }
+    .sign { grid-template-columns: minmax(0, 1fr); }
+    .picto { grid-row: auto; width: 44px; height: 44px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cell.flip { animation: none; }
+    .btn svg { transition: none; }
+  }
+</style>
+
+<header class="top wrap">
+  <a class="mark" href="#"><i>W</i>WireCat</a>
+  <nav aria-label="Site">
+    <a href="#what">What you get</a>
+    <a class="hide-sm" href="#connect">Connect</a>
+    <a href="https://wirecat.dev/en/docs/tg">Docs</a>
+    <a class="hide-sm" href="https://github.com/leemour/tg-cli">GitHub</a>
+  </nav>
+</header>
+
+<main class="wrap hero">
+  <div class="hero-top">
+    <h1>Every chat on one board. <span>Your agent clears it.</span></h1>
+    <div>
+      <p class="lede">WireCat connects Claude Code, Codex or Cursor to your own <b>Telegram and MAX</b>. It watches every chat, shows you who is waiting, and answers the moment you say so.</p>
+      <div class="cta">
+        <span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copy</button></span>
+        <a class="btn" href="#connect">Connect your agent <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <p class="tagline"><b>AI messaging with CLI tools for agents.</b> Free and open source.</p>
+    </div>
+  </div>
+
+  <div class="board" aria-label="Your chats, as your agent sees them">
+    <div class="board-head"><b>Arrivals</b><span class="clock" id="clock">08:52</span></div>
+    <table>
+      <caption class="sr">Recent chats and what your agent did with each</caption>
+      <thead><tr><th scope="col"></th><th scope="col">Time</th><th scope="col">From</th><th scope="col" class="col-chat">Chat</th><th scope="col">Status</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <div class="board-foot"><span>Live from <code>tg watch</code> and <code>tg review --unanswered</code></span><span>211 muted groups, nothing for you</span></div>
+  </div>
+</main>
+
+<section id="what">
+  <div class="wrap">
+    <h2>Follow the signs. Your agent knows the way.</h2>
+    <p class="intro">Ask in plain words. Your agent picks the command, reads the answer and gets back to you.</p>
+    <div class="signs">
+      <div class="sign"><span class="picto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><h3>Who is waiting on you</h3><p>Every unanswered question in every chat, and how long each person has waited.</p><code>tg review --unanswered</code></div>
+      <div class="sign"><span class="picto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 13l3-8h12l3 8v6H3z"/><path d="M3 13h5l1 2h6l1-2h5"/></svg></span><h3>The inbox, read for you</h3><p>Only what is new since the last look. Muted groups stay quiet unless they mention you.</p><code>tg inbox --new</code></div>
+      <div class="sign"><span class="picto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></span><h3>Years of history, offline</h3><p>A copy of your chats lives on your computer. Search it on a plane.</p><code>tg messages search</code></div>
+      <div class="sign"><span class="picto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span><h3>Voice notes as text</h3><p>By Telegram, or by a speech model on your own machine, in 25 languages.</p><code>tg messages transcribe --local</code></div>
+      <div class="sign"><span class="picto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3L10 14M21 3l-7 18-4-7-7-4z"/></svg></span><h3>Sends on time, laptop shut</h3><p>Telegram itself delivers it at the hour you set.</p><code>tg messages send --at 2h</code></div>
+      <div class="sign"><span class="picto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span><h3>MAX groups kept clean</h3><p>Spam, stranger links and flood removed by your rules, through the official MAX Bot API.</p><code>max bot chats check</code></div>
+    </div>
+    <p class="limits">You decide which chats it may write to and how often it sends. Or give it a read-only profile and let it only tell you.</p>
+  </div>
+</section>
+
+<section id="connect">
+  <div class="wrap">
+    <h2>Boarding: pick your agent</h2>
+    <p class="intro">One command connects your agent. Each tool ships with an agent skill and an MCP server.</p>
+    <div class="gates">
+      <div class="gate"><div class="gate-id"><b>A</b><span>Claude Code, Codex, Gemini CLI</span></div><p>Installs the skill that teaches your agent every command.</p><span class="cmd"><code>tg skill install</code><button class="copy" type="button" data-copy="tg skill install">Copy</button></span></div>
+      <div class="gate"><div class="gate-id"><b>B</b><span>Claude Desktop, Cursor, MCP</span></div><p>Prints the entry to paste into your client's settings.</p><span class="cmd"><code>tg mcp config</code><button class="copy" type="button" data-copy="tg mcp config">Copy</button></span></div>
+      <div class="gate"><div class="gate-id"><b>C</b><span>Any other model</span></div><p>Every docs page as plain Markdown, in one list.</p><span class="cmd"><code>wirecat.dev/llms.txt</code><button class="copy" type="button" data-copy="https://wirecat.dev/llms.txt">Copy</button></span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Two lines, one timetable</h2>
+    <p class="intro">Telegram and MAX share the same commands. Learn one and you know the other.</p>
+    <div class="lines">
+      <div class="line">
+        <span class="badge tg">tg</span>
+        <div><h3>Telegram</h3><p>A Telegram client for the terminal and for AI agents, on your own account.</p>
+          <div class="line-links"><a href="https://wirecat.dev/en/docs/tg">Docs</a><a href="https://github.com/leemour/tg-cli">GitHub</a><a href="https://www.npmjs.com/package/@leemour/tg-cli">npm</a></div></div>
+        <span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copy</button></span>
+      </div>
+      <div class="line">
+        <span class="badge max">max</span>
+        <div><h3>MAX Messenger</h3><p>Your MAX bots through the official Bot API, and your personal account.</p>
+          <div class="line-links"><a href="https://wirecat.dev/ru/docs/max">Docs</a><a href="https://github.com/leemour/max-cli">GitHub</a><a href="https://www.npmjs.com/package/@leemour/max-cli">npm</a></div></div>
+        <span class="cmd"><code>npm i -g @leemour/max-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/max-cli">Copy</button></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="close">
+  <div class="wrap">
+    <h2>Clear the board by nine tomorrow</h2>
+    <ol class="steps">
+      <li><b>1</b><span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copy</button></span></li>
+      <li><b>2</b><span class="cmd"><code>tg session start</code><button class="copy" type="button" data-copy="tg session start">Copy</button></span></li>
+      <li><b>3</b><span class="cmd"><code>tg skill install</code><button class="copy" type="button" data-copy="tg skill install">Copy</button></span></li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>WireCat · MIT licence · Docs for models at <a href="https://wirecat.dev/llms.txt">/llms.txt</a> · Windows, macOS, Linux</span>
+    <span>English · Русский · Español</span>
+  </div>
+</footer>
+
+<script>
+  const widths = { time: 5, from: 7, chat: 11, status: 12 }
+  const glyphs = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:"
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches
+
+  let rows = [
+    { time: "08:51", from: "OLEG", chat: "RELEASE", status: "WAITING 1M", state: "waiting" },
+    { time: "08:44", from: "MUM", chat: "VOICE NOTE", status: "TRANSCRIBED", state: "done" },
+    { time: "08:14", from: "ANNA", chat: "BOOK CLUB", status: "WAITING 38M", state: "waiting" },
+    { time: "07:55", from: "DASHA", chat: "FLAT", status: "ANSWERED", state: "done" },
+    { time: "07:30", from: "TEAM", chat: "STANDUP", status: "SENDS 09:00", state: "done" },
+    { time: "06:12", from: "PABLO", chat: "INVOICE", status: "WAITING 2H", state: "waiting" },
+  ]
+  const script = [
+    (r) => Object.assign(r[0], { status: "ANSWERED", state: "done" }),
+    (r) => Object.assign(r[5], { status: "DRAFT READY", state: "done" }),
+    (r) => { r.unshift({ time: "08:53", from: "KATE", chat: "SLIDES", status: "WAITING 0M", state: "waiting" }); r.length = 6 },
+    (r) => Object.assign(r[3], { status: "ANSWERED", state: "done" }),
+  ]
+
+  const tbody = document.getElementById("rows")
+  const pad = (text, n) => text.slice(0, n).padEnd(n, " ")
+  const cellsFor = (text, n) => [...pad(text, n)].map((c) => `<span class="cell" aria-hidden="true">${c === " " ? "&nbsp;" : c}</span>`).join("")
+
+  const render = () => {
+    tbody.innerHTML = rows.map((r) => `
+      <tr data-state="${r.state}">
+        <td><span class="lamp" aria-hidden="true"></span></td>
+        ${["time", "from", "chat", "status"].map((k) => `<td class="${k === "chat" ? "col-chat" : ""} ${k}"><span class="sr">${r[k]}</span><span class="cells" data-key="${k}">${cellsFor(r[k], widths[k])}</span></td>`).join("")}
+      </tr>`).join("")
+  }
+
+  const flipTo = (row, r) => {
+    row.dataset.state = r.state
+    for (const key of Object.keys(widths)) {
+      const td = row.querySelector(`.${key}`)
+      td.querySelector(".sr").textContent = r[key]
+      const target = pad(r[key], widths[key])
+      const cells = td.querySelectorAll(".cell")
+      cells.forEach((cell, i) => {
+        const want = target[i]
+        const have = cell.textContent === "\u00a0" ? " " : cell.textContent
+        if (have === want) return
+        if (still) { cell.innerHTML = want === " " ? "&nbsp;" : want; return }
+        let at = Math.max(0, glyphs.indexOf(have))
+        const end = glyphs.indexOf(want)
+        const tick = () => {
+          at = (at + 1) % glyphs.length
+          const c = glyphs[at]
+          cell.innerHTML = c === " " ? "&nbsp;" : c
+          cell.classList.remove("flip"); void cell.offsetWidth; cell.classList.add("flip")
+          if (at !== end && end !== -1) setTimeout(tick, 45 + i * 4)
+          else if (end === -1) cell.innerHTML = want
+        }
+        setTimeout(tick, i * 30)
+      })
+    }
+  }
+
+  render()
+  const initial = structuredClone(rows)
+  let step = 0
+  const advance = () => {
+    if (step === script.length) {
+      rows = structuredClone(initial)
+      step = 0
+    } else {
+      script[step](rows)
+      step++
+    }
+    const trs = tbody.querySelectorAll("tr")
+    rows.forEach((r, i) => trs[i] && flipTo(trs[i], r))
+  }
+  if (!still) setInterval(advance, 3800)
+
+
+  for (const button of document.querySelectorAll("[data-copy]")) {
+    button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.copy)
+      } catch {
+        const range = document.createRange()
+        range.selectNodeContents(button.previousElementSibling)
+        getSelection().removeAllRanges()
+        getSelection().addRange(range)
+      }
+      button.textContent = "Copied"
+      button.dataset.done = ""
+      setTimeout(() => { button.textContent = "Copy"; delete button.dataset.done }, 1600)
+    })
+  }
+</script>
