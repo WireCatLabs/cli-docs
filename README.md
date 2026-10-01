@@ -5,6 +5,9 @@ The documentation site for the owner's command line tools, at [wirecat.dev](http
 [Fumadocs](https://fumadocs.dev) as a static site, in English, Russian and Spanish, and readable by
 agents: `/llms.txt`, `/llms-full.txt` and a Markdown copy of every page.
 
+How the site is laid out: [docs/DESIGN.md](docs/DESIGN.md). Picking up the work:
+[HANDOFF.md](HANDOFF.md).
+
 **The pages are not written here.** Each tool keeps its own in its repository's `docs/`, laid out by
 [STRUCTURE.md](docs/STRUCTURE.md); `pnpm sync` copies them at the tool's newest release tag.
 
