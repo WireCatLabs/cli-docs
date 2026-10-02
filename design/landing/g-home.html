@@ -38,31 +38,46 @@
   :focus-visible { outline: 2px solid var(--key); outline-offset: 3px; border-radius: 6px; }
   .wrap { max-width: 1240px; margin: 0 auto; padding-inline: var(--gutter); }
 
-  header.top { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 22px; }
-  .mark { display: inline-flex; align-items: center; gap: 10px; font: 800 22px/1 var(--display); font-stretch: 120%; letter-spacing: -0.01em; text-decoration: none; }
-  .mark svg { width: 30px; height: 30px; }
-  nav.site { display: flex; gap: clamp(14px, 3vw, 28px); font-weight: 500; font-size: 15px; }
-  nav.site a { text-decoration: none; color: var(--ink-soft); }
-  nav.site a:hover { color: var(--ink); }
+  .bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; transition: background 0.3s, box-shadow 0.3s; }
+  .bar.scrolled { background: color-mix(in srgb, var(--wall) 82%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 1px 0 var(--app-line); }
+  header.top { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 16px; }
+  .mark { display: inline-flex; align-items: center; gap: 10px; font: 800 20px/1 var(--display); font-stretch: 120%; letter-spacing: -0.01em; text-decoration: none; }
+  .mark svg { width: 28px; height: 28px; overflow: visible; transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .mark .ring { fill: none; stroke: #4b53f0; stroke-width: 1.5; opacity: 0; transform-origin: 16px 16px; }
+  .mark .pulse { fill: none; stroke: #c9ccff; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 3 60; stroke-dashoffset: 3; opacity: 0; }
+  .mark .word { transition: letter-spacing 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+  .mark:hover svg, .mark:focus-visible svg { transform: rotate(-10deg) scale(1.06); }
+  .mark:hover .wire, .mark:focus-visible .wire { animation: draw 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+  .mark:hover .pulse, .mark:focus-visible .pulse { animation: pulse 0.9s 0.35s cubic-bezier(0.45, 0, 0.2, 1); }
+  .mark:hover .ring, .mark:focus-visible .ring { animation: ring 0.9s 0.2s ease-out; }
+  .mark:hover .word { letter-spacing: 0.01em; }
+  @keyframes draw { from { stroke-dasharray: 40; stroke-dashoffset: 40; } to { stroke-dasharray: 40; stroke-dashoffset: 0; } }
+  @keyframes pulse { 0% { opacity: 1; stroke-dashoffset: 3; } 90% { opacity: 1; } 100% { opacity: 0; stroke-dashoffset: -40; } }
+  @keyframes ring { from { opacity: 0.9; transform: scale(1); } to { opacity: 0; transform: scale(1.7); } }
+  nav.site { position: relative; display: flex; gap: 2px; padding: 4px; border-radius: 999px; border: 1px solid var(--app-line); background: color-mix(in srgb, var(--app) 60%, transparent); font: 500 14px/1 var(--body); }
+  nav.site a { position: relative; z-index: 1; text-decoration: none; color: var(--ink-soft); padding: 9px 16px; border-radius: 999px; transition: color 0.2s; }
+  nav.site a:hover, nav.site a:focus-visible { color: var(--ink); }
+  nav.site .glide { position: absolute; top: 4px; bottom: 4px; left: 0; width: 0; border-radius: 999px; background: var(--app-3); opacity: 0; transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), width 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s; }
 
   .hero { padding-block: clamp(20px, 4vw, 48px) clamp(56px, 8vw, 104px); }
   .hero-text { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px clamp(32px, 5vw, 72px); align-items: end; margin-bottom: clamp(28px, 4vw, 48px); }
-  h1 { font: 900 clamp(46px, 6.8vw, 96px)/0.9 var(--display); font-stretch: 62%; text-transform: uppercase; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+  h1 { font: 900 clamp(40px, 5.8vw, 80px)/0.9 var(--display); font-stretch: 62%; text-transform: uppercase; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
   h1 span { color: var(--key); }
-  .lede { margin: 0 0 22px; font-size: clamp(17px, 1.5vw, 20px); color: var(--ink-soft); }
+  .lede { margin: 0 0 20px; font-size: clamp(16px, 1.35vw, 18.5px); max-width: 30em; color: var(--ink-soft); }
   .lede b { color: var(--ink); font-weight: 600; }
   .cta { display: flex; flex-wrap: wrap; gap: 10px; }
-  .cmd { display: inline-flex; align-items: center; gap: 14px; min-width: 0; max-width: 100%; background: var(--app); color: var(--app-ink); border-radius: 999px; padding: 6px 6px 6px 20px; font: 400 15px/1 var(--code); box-shadow: 0 0 0 1px var(--app-line); }
+  .cmd { display: inline-flex; align-items: center; gap: 14px; min-width: 0; max-width: 100%; background: var(--app); color: var(--app-ink); border-radius: 999px; padding: 5px 5px 5px 16px; font: 400 14px/1 var(--code); box-shadow: 0 0 0 1px var(--app-line); }
   .cmd code { font: inherit; white-space: nowrap; overflow-x: auto; padding-block: 4px; }
   .cmd code::before { content: "$ "; color: var(--app-soft); }
-  .copy { flex: none; border: 0; cursor: pointer; border-radius: 999px; padding: 10px 16px; background: var(--app-ink); color: var(--app); font: 600 13px/1 var(--body); }
+  .copy { flex: none; border: 0; cursor: pointer; border-radius: 999px; padding: 8px 13px; background: var(--app-ink); color: var(--app); font: 600 12.5px/1 var(--body); }
   .copy:hover, .copy[data-done] { background: var(--me); color: var(--me-ink); }
-  .btn { display: inline-flex; align-items: center; min-height: 50px; padding: 0 24px; border-radius: 999px; background: var(--me); color: var(--me-ink); text-decoration: none; font: 600 16px/1 var(--body); transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+  .btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 999px; background: var(--me); color: var(--me-ink); text-decoration: none; font: 600 15px/1 var(--body); transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
   .btn:hover { transform: translateY(-2px); }
   .tagline { margin: 16px 0 0; font-size: 14px; color: var(--ink-soft); }
   .tagline b { color: var(--ink); }
 
   .headlines { position: fixed; right: 16px; bottom: 16px; z-index: 10; display: flex; gap: 6px; align-items: center; background: var(--app-2); border: 1px solid var(--app-line); border-radius: 999px; padding: 6px 6px 6px 14px; font: 500 12px/1 var(--body); color: var(--app-soft); }
+  .headlines .sep { width: 1px; height: 18px; background: var(--app-line); margin-inline: 6px; }
   .headlines button { border: 0; border-radius: 999px; background: var(--app-3); color: var(--app-ink); width: 30px; height: 30px; cursor: pointer; font: 600 14px/1 var(--body); }
 
   /* Agent app */
@@ -238,13 +253,16 @@
     .time { font-size: 26px; }
   }
   @media (max-width: 520px) {
-    nav.site a.hide-sm { display: none; }
+    nav.site a { padding: 8px 12px; }
+    .mark { font-size: 18px; }
     .titlebar span { display: none; }
     .ask, .say { max-width: 100%; }
     .cmd { font-size: 13.5px; }
-    .headlines { left: 16px; right: 16px; justify-content: space-between; }
+    .headlines { left: 8px; right: 8px; flex-wrap: wrap; justify-content: center; border-radius: 18px; }
   }
   @media (prefers-reduced-motion: reduce) {
+    .mark svg, .mark .word, nav.site .glide { transition: none; }
+    .mark:hover .wire, .mark:hover .pulse, .mark:hover .ring { animation: none; }
     .js .playing .step, .js .fresh { animation: none; }
     .tool.running .state svg, .caret { animation: none; }
     .js .reveal { opacity: 1; transform: none; transition: none; }
@@ -252,18 +270,18 @@
 </style>
 </head>
 <body>
-<header class="top wrap">
+<div class="bar" id="bar"><header class="top wrap">
   <a class="mark" href="#">
-    <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="16" fill="#4b53f0"/><path d="M9 21V11l4 4 3-4 3 4 4-4v10" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/></svg>
-    WireCat
+    <svg viewBox="0 0 32 32" aria-hidden="true"><circle class="ring" cx="16" cy="16" r="16"/><circle cx="16" cy="16" r="16" fill="#4b53f0"/><path class="wire" pathLength="40" d="M9 21V11l4 4 3-4 3 4 4-4v10" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path class="pulse" pathLength="40" d="M9 21V11l4 4 3-4 3 4 4-4v10"/></svg>
+    <span class="word">WireCat</span>
   </a>
   <nav class="site" aria-label="Site">
-    <a href="#day">A day with it</a>
-    <a class="hide-sm" href="#connect">Connect</a>
-    <a href="https://wirecat.dev/en/docs/tg">Docs</a>
-    <a class="hide-sm" href="https://github.com/leemour/tg-cli">GitHub</a>
+    <span class="glide" aria-hidden="true"></span>
+    <a href="https://wirecat.dev/en/docs/tg">Telegram</a>
+    <a href="https://wirecat.dev/ru/docs/max">MAX</a>
+    <a href="#about">About</a>
   </nav>
-</header>
+</header></div>
 
 <main class="wrap hero">
   <div class="hero-text">
@@ -435,8 +453,8 @@
 <footer class="site">
   <div class="wrap">
     <div class="foot">
-      <div class="foot-brand">
-        <a class="mark" href="#"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="16" fill="#4b53f0"/><path d="M9 21V11l4 4 3-4 3 4 4-4v10" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/></svg>WireCat</a>
+      <div class="foot-brand" id="about">
+        <a class="mark" href="#"><svg viewBox="0 0 32 32" aria-hidden="true"><circle class="ring" cx="16" cy="16" r="16"/><circle cx="16" cy="16" r="16" fill="#4b53f0"/><path class="wire" pathLength="40" d="M9 21V11l4 4 3-4 3 4 4-4v10" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path class="pulse" pathLength="40" d="M9 21V11l4 4 3-4 3 4 4-4v10"/></svg><span class="word">WireCat</span></a>
         <p>AI messaging with CLI tools for agents. Your Telegram and MAX, for you, your scripts and your AI agents.</p>
         <span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copy</button></span>
       </div>
@@ -468,42 +486,70 @@
   </div>
 </footer>
 
-<div class="headlines" aria-label="Try another headline"><span id="hl-count">Headline 1/8</span><button type="button" id="hl-prev" aria-label="Previous headline">‹</button><button type="button" id="hl-next" aria-label="Next headline">›</button></div>
+<div class="headlines" aria-label="Design switches">
+  <span id="hl-count">Headline 1/8</span><button type="button" id="hl-prev" aria-label="Previous headline">‹</button><button type="button" id="hl-next" aria-label="Next headline">›</button>
+  <span class="sep"></span>
+  <span id="wp-count">Wallpaper</span><button type="button" id="wp-prev" aria-label="Previous wallpaper">‹</button><button type="button" id="wp-next" aria-label="Next wallpaper">›</button>
+</div>
 
 <script>
   document.documentElement.classList.add("js")
 
-  const scatter = (ink) => {
-    let seed = 7
+  const shapes = {
+    plane: `<path d="M0 0l36-14-10 34-8-12z"/><path d="M18 8l18-22"/><path d="M0 0c-18 8-26 24-18 40" stroke-dasharray="2 8"/>`,
+    wave: `<path d="M0 -3v6M6 -8v16M12 -12v24M18 -5v10M24 -10v20M30 -4v8M36 -7v14M42 -2v4"/>`,
+    face: `<path d="M-16 6c0-8 3-14 4-18l-2-12 10 9c2-1 6-1 8 0l10-9-2 12c1 4 4 10 4 18 0 10-32 10-32 0z"/><circle cx="-6" cy="0" r="1.6" fill="INK"/><circle cx="6" cy="0" r="1.6" fill="INK"/><path d="M-2 5h4l-2 2zM-9 8h-10M-9 11l-9 3M9 8h10M9 11l9 3"/>`,
+    sitting: `<path d="M-10 22c-4-12-2-24 2-28l-2-12 7 7c2-1 4-1 6 0l7-7-2 12c4 4 6 16 2 28z"/><path d="M10 20c10 0 13-10 8-17"/><circle cx="-4" cy="-4" r="1.4" fill="INK"/><circle cx="4" cy="-4" r="1.4" fill="INK"/>`,
+    sleeping: `<path d="M-22 8c0-12 12-18 26-16 12 2 18 8 18 16z"/><path d="M-22 8h44"/><path d="M-18 -2l-2-9 7 5M-10 -7l3-7 3 8"/><path d="M-15 1q2 2 4 0"/><path d="M22 8c5 0 7-6 2-9"/><path d="M26 -16h6l-6 6h6M34 -26h4l-4 4h4"/>`,
+    peek: `<path d="M-22 10h44"/><path d="M-14 10c0-8 4-13 6-15l-1-9 7 6c2-1 2-1 4 0l7-6-1 9c2 2 6 7 6 15"/><circle cx="-4" cy="2" r="1.6" fill="INK"/><circle cx="4" cy="2" r="1.6" fill="INK"/><path d="M-16 10v-3M16 10v-3"/>`,
+  }
+  const walls = [
+    { label: "Planes + cat faces", mix: ["plane", "face"] },
+    { label: "Planes + sitting cats", mix: ["plane", "sitting"] },
+    { label: "Planes + sleeping cats", mix: ["plane", "sleeping"] },
+    { label: "Planes + peeking cats", mix: ["plane", "peek"] },
+    { label: "All the cats", mix: ["face", "sitting", "sleeping", "peek", "plane"] },
+    { label: "Planes + voice waves", mix: ["plane", "wave"] },
+  ]
+  const ink = getComputedStyle(document.documentElement).getPropertyValue("--wall-ink").trim()
+  const scatter = (mix) => {
+    let seed = 11
     const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647 }
-    const size = 560
-    const wave = (n) => {
-      let d = "", x = 0
-      for (let i = 0; i < n; i++) {
-        const h = 3 + Math.round(Math.abs(Math.sin(i * 1.3 + rnd() * 2)) * 18)
-        d += `M${x} ${-h / 2}v${h}`
-        x += 6
-      }
-      return `<path d="${d}"/>`
-    }
-    const plane = () => `<path d="M0 0l36-14-10 34-8-12z"/><path d="M18 8l18-22"/><path d="M0 0c-18 8-26 24-18 40" stroke-dasharray="2 8"/>`
-    let body = ""
+    const size = 400
     const spots = []
-    for (let i = 0; i < 9; i++) {
+    let body = ""
+    for (let i = 0; i < 10; i++) {
       let x, y, tries = 0
-      do { x = 30 + rnd() * (size - 60); y = 30 + rnd() * (size - 60); tries++ }
-      while (tries < 40 && spots.some(([a, b]) => Math.hypot(a - x, b - y) < 120))
+      do { x = 24 + rnd() * (size - 48); y = 24 + rnd() * (size - 48); tries++ }
+      while (tries < 60 && spots.some(([a, b]) => Math.hypot(a - x, b - y) < 92))
       spots.push([x, y])
       const angle = Math.round(rnd() * 70 - 35)
-      const scale = (0.8 + rnd() * 0.5).toFixed(2)
-      const shape = i % 2 ? plane() : wave(6 + Math.round(rnd() * 6))
-      body += `<g transform="translate(${x.toFixed(0)} ${y.toFixed(0)}) rotate(${angle}) scale(${scale})">${shape}</g>`
+      const scale = (0.55 + rnd() * 0.3).toFixed(2)
+      body += `<g transform="translate(${x.toFixed(0)} ${y.toFixed(0)}) rotate(${angle}) scale(${scale})">${shapes[mix[i % mix.length]]}</g>`
     }
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" fill="none" stroke="${ink}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" fill="none" stroke="${ink}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">${body.replaceAll("INK", ink)}</svg>`
     document.body.style.backgroundImage = `url("data:image/svg+xml,${encodeURIComponent(svg)}")`
     document.body.style.backgroundSize = `${size}px ${size}px`
   }
-  scatter(getComputedStyle(document.documentElement).getPropertyValue("--wall-ink").trim())
+  let wall = 0
+  const showWall = () => {
+    scatter(walls[wall].mix)
+    document.getElementById("wp-count").textContent = walls[wall].label
+  }
+  document.getElementById("wp-prev").addEventListener("click", () => { wall = (wall - 1 + walls.length) % walls.length; showWall() })
+  document.getElementById("wp-next").addEventListener("click", () => { wall = (wall + 1) % walls.length; showWall() })
+  showWall()
+
+  const bar = document.getElementById("bar")
+  const onScroll = () => bar.classList.toggle("scrolled", scrollY > 8)
+  addEventListener("scroll", onScroll, { passive: true }); onScroll()
+  const navEl = document.querySelector("nav.site")
+  const glide = navEl.querySelector(".glide")
+  for (const link of navEl.querySelectorAll("a")) {
+    const to = () => { glide.style.width = `${link.offsetWidth}px`; glide.style.transform = `translateX(${link.offsetLeft}px)`; glide.style.opacity = "1" }
+    link.addEventListener("mouseenter", to); link.addEventListener("focus", to)
+  }
+  navEl.addEventListener("mouseleave", () => { glide.style.opacity = "0" })
 
   const headlines = [
     `Don't read your chats. <span>Ask about them.</span>`,
