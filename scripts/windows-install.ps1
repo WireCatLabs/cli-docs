@@ -19,6 +19,7 @@ $versionOutput = & npm.cmd view $package version
 if ($LASTEXITCODE -ne 0) { throw 'Could not resolve the published version' }
 $version = "$versionOutput".Trim()
 $spec = "${package}@$version"
+Write-Output "Checking $spec on Node $(& node --version)"
 & npm.cmd install --global --prefix $prefix $spec
 if ($LASTEXITCODE -ne 0) { throw 'Global installation failed' }
 
@@ -36,6 +37,39 @@ foreach ($command in @('doctor', 'commands')) {
     if ($null -eq $result) { throw "Installed CLI returned no JSON: $command" }
 }
 
+# Create only an empty test database; migration exercises SQLite without logging in.
+[System.IO.File]::WriteAllBytes($env:MESSAGING_STORE, [byte[]]@())
+& $shim store migrate --json
+if ($LASTEXITCODE -ne 0) { throw 'Store migration failed' }
+$storeJson = & $shim store info --json
+if ($LASTEXITCODE -ne 0) { throw 'Store info failed' }
+$store = ($storeJson -join "`n") | ConvertFrom-Json
+if ($store.error -or -not $store.exists -or $store.schema.version -lt 1 -or -not $store.schema.writable) {
+    throw "SQLite store is unusable: $storeJson"
+}
+if ([System.IO.Path]::GetFullPath($store.path) -ne [System.IO.Path]::GetFullPath($env:MESSAGING_STORE)) {
+    throw 'CLI opened a store outside the test directory'
+}
+
+# GitHub-hosted runners have disposable home directories; no account session is present.
+$skillJson = & $shim skill install --json
+if ($LASTEXITCODE -ne 0) { throw 'Skill installation failed' }
+$skill = ($skillJson -join "`n") | ConvertFrom-Json
+if ($skill.version -ne $version -or $skill.written.Count -ne 2) { throw 'Skill installation result is incomplete' }
+$skillContents = @{}
+foreach ($file in $skill.written) {
+    $content = Get-Content -LiteralPath $file -Raw -Encoding UTF8
+    if ($content -notmatch "(?m)^name: $Tool-cli\r?$" -or $content.Length -lt 100) { throw "Invalid skill: $file" }
+    $skillContents[$file] = $content
+}
+& $shim skill install --json
+if ($LASTEXITCODE -ne 0) { throw 'Repeated skill installation failed' }
+foreach ($file in $skillContents.Keys) {
+    if ((Get-Content -LiteralPath $file -Raw -Encoding UTF8) -cne $skillContents[$file]) {
+        throw "Repeated installation changed the skill: $file"
+    }
+}
+
 # The landing page's fallback works even while the global prefix is absent from PATH.
 $execVersion = & npm.cmd exec --yes "--package=$spec" -- $Tool --version
 if ($LASTEXITCODE -ne 0 -or "$execVersion".Trim() -ne $version) { throw 'npm exec without global PATH failed' }
@@ -43,3 +77,4 @@ if ($LASTEXITCODE -ne 0 -or "$execVersion".Trim() -ne $version) { throw 'npm exe
 $env:Path = "$prefix;$env:Path"
 & "$Tool.cmd" --version
 if ($LASTEXITCODE -ne 0) { throw 'CLI failed after adding the prefix to this shell PATH' }
+Write-Output "PASS: $spec launch, JSON, SQLite, skills and PATH fallback"
