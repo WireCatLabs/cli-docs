@@ -4,6 +4,8 @@ TITLE = ("WireCat · Агент для ваших чатов в Telegram и MAX"
 TEXT = {
     "About": ("О проекте", "Acerca de"),
     "Don't read your chats.": ("Не читайте чаты.", "No leas tus chats."),
+    "Never search a chat again.": ("Хватит листать.", "No leas tus chats."),
+    "Just ask.": ("Просто спросите.", "Pregúntale a tu agente."),
     "Ask about them.": ("Спросите агента.", "Pregúntale a tu agente."),
     "Connect Claude Code, Codex or another agent to your messengers. Find who owes what in": (
         "Подключите Claude Code, Codex или другого агента к своим мессенджерам. Узнавайте, кто кому что должен, в",
@@ -330,6 +332,13 @@ TEXT = {
 
 # Substrings of the page script: (English, Russian, Spanish).
 SCRIPT = [
+    ('"One tool for every side of your messenger"', '"Один инструмент для всего мессенджера"', '"Una herramienta para todo tu mensajero"'),
+    ('"Your account, your bots, your groups"', '"Ваш аккаунт, ваши боты, ваши группы"', '"Tu cuenta, tus bots, tus grupos"'),
+    ('"Everything your messenger does, from one command line"', '"Всё, что умеет мессенджер, — из командной строки"', '"Todo lo que hace tu mensajero, desde la línea de comandos"'),
+    ('"Read, reply, run your groups"', '"Читать, отвечать, вести группы"', '"Leer, responder, gestionar grupos"'),
+    ('"For you, for your bot, for your group"', '"Для вас, для бота, для группы"', '"Para ti, para tu bot, para tu grupo"'),
+    ('"Your whole messenger in one command"', '"Весь мессенджер в одной команде"', '"Todo tu mensajero en un comando"'),
+    ('const titleWord = "Title"', 'const titleWord = "Заголовок"', 'const titleWord = "Título"'),
     ('label: "Planes + cat faces"', 'label: "Самолёты + мордочки"', 'label: "Aviones + caras de gato"'),
     ('label: "Planes + sitting cats"', 'label: "Самолёты + сидящие коты"', 'label: "Aviones + gatos sentados"'),
     ('label: "Planes + sleeping cats"', 'label: "Самолёты + спящие коты"', 'label: "Aviones + gatos dormidos"'),

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" aria-current="page">
+<html lang="ru" data-hl="1" data-ff="1">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,7 +12,7 @@
 <link rel="manifest" href="../favicons/site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,500..900&family=Oswald:wght@600;700&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,500..900&family=Oswald:wght@600;700&family=Roboto+Flex:opsz,wdth,wght@8..144,25..151,100..1000&family=Sofia+Sans+Extra+Condensed:wght@800;900&family=Fira+Sans+Extra+Condensed:wght@800;900&family=Tektur:wdth,wght@75..100,400..900&family=Dela+Gothic+One&family=Rubik:wght@800;900&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <style>
   /* Layout: dark fog ground with paper planes and sleeping cats; agent app, a day, connect, tools, features, advantages, footer. */
   :root {
@@ -41,7 +41,7 @@
   .bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; transition: background 0.3s, box-shadow 0.3s; }
   .bar.scrolled { background: color-mix(in srgb, var(--wall) 82%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 1px 0 var(--app-line); }
   header.top { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 16px; }
-  .mark { display: inline-flex; align-items: center; gap: 10px; font: 800 20px/1 var(--display); font-stretch: 120%; letter-spacing: -0.01em; text-decoration: none; }
+  .mark { display: inline-flex; align-items: center; gap: 10px; font: 800 20px/1 "Anybody", "Onest", sans-serif; font-stretch: 120%; letter-spacing: -0.01em; text-decoration: none; }
   .mark svg { width: 28px; height: 28px; overflow: visible; transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
   .mark .ring { fill: none; stroke: #4b53f0; stroke-width: 1.5; opacity: 0; transform-origin: 16px 16px; }
   .mark .pulse { fill: none; stroke: #c9ccff; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 3 60; stroke-dashoffset: 3; opacity: 0; }
@@ -302,7 +302,7 @@
 
 <main class="wrap hero">
   <div class="hero-text">
-    <h1 id="headline">Не читайте чаты. <span>Спросите агента.</span></h1>
+    <h1 id="headline">Хватит листать. <span>Просто спросите.</span></h1>
     <div>
       <p class="lede">Подключите Claude Code, Codex или другого агента к своим мессенджерам. Узнавайте, кто кому что должен, в <b>Telegram и MAX</b>, ставьте напоминания и поручите ему отвечать.</p>
       <div class="cta">
@@ -450,7 +450,7 @@
 
 <section id="features" style="padding-top:0">
   <div class="wrap">
-    <h2 class="big">Один инструмент для всего мессенджера</h2>
+    <h2 class="big" id="feat-title">Один инструмент для всего мессенджера</h2>
     <p class="intro">Ваш аккаунт, ваши боты и группы, которые вы ведёте. Одни и те же команды в Telegram и MAX.</p>
     <div class="ftabs" role="tablist" aria-label="Features">
       <button class="ftab" role="tab" type="button" id="ft-personal" aria-selected="true" aria-controls="fp-personal">Личный аккаунт</button>
@@ -605,6 +605,10 @@
 <div class="headlines" aria-label="Design switches">
   <span id="hl-count">Заголовок 1/8</span><button type="button" id="hl-prev" aria-label="Previous headline">‹</button><button type="button" id="hl-next" aria-label="Next headline">›</button>
   <span class="sep"></span>
+  <span id="tt-count">Title 1/6</span><button type="button" id="tt-prev" aria-label="Previous title">‹</button><button type="button" id="tt-next" aria-label="Next title">›</button>
+  <span class="sep"></span>
+  <span id="ff-count">Font</span><button type="button" id="ff-prev" aria-label="Previous font">‹</button><button type="button" id="ff-next" aria-label="Next font">›</button>
+  <span class="sep"></span>
   <span id="wp-count">Wallpaper</span><button type="button" id="wp-prev" aria-label="Previous wallpaper">‹</button><button type="button" id="wp-next" aria-label="Next wallpaper">›</button>
 </div>
 
@@ -677,7 +681,47 @@
     `Кто кому должен? <span>Агент знает.</span>`,
     `Ваш мессенджер <span>под контролем.</span>`,
   ]
-  let hl = 0
+  const titles = [
+    "Один инструмент для всего мессенджера",
+    "Ваш аккаунт, ваши боты, ваши группы",
+    "Всё, что умеет мессенджер, — из командной строки",
+    "Читать, отвечать, вести группы",
+    "Для вас, для бота, для группы",
+    "Весь мессенджер в одной команде",
+  ]
+  let tt = 0
+  const showTitle = () => {
+    document.getElementById("feat-title").textContent = titles[tt]
+    document.getElementById("tt-count").textContent = `${titleWord} ${tt + 1}/${titles.length}`
+  }
+  const titleWord = "Заголовок"
+  document.getElementById("tt-prev").addEventListener("click", () => { tt = (tt - 1 + titles.length) % titles.length; showTitle() })
+  document.getElementById("tt-next").addEventListener("click", () => { tt = (tt + 1) % titles.length; showTitle() })
+  showTitle()
+
+  const fonts = [
+    { label: "Anybody", stack: '"Anybody", "Oswald", "Onest", sans-serif', stretch: "62%", weight: 900 },
+    { label: "Roboto Flex", stack: '"Roboto Flex", sans-serif', stretch: "35%", weight: 1000 },
+    { label: "Sofia Sans Extra Condensed", stack: '"Sofia Sans Extra Condensed", sans-serif', stretch: "100%", weight: 900 },
+    { label: "Fira Sans Extra Condensed", stack: '"Fira Sans Extra Condensed", sans-serif', stretch: "100%", weight: 900 },
+    { label: "Tektur", stack: '"Tektur", sans-serif', stretch: "75%", weight: 900 },
+    { label: "Dela Gothic One", stack: '"Dela Gothic One", sans-serif', stretch: "100%", weight: 400 },
+    { label: "Rubik", stack: '"Rubik", sans-serif', stretch: "100%", weight: 900 },
+    { label: "Oswald", stack: '"Oswald", sans-serif', stretch: "100%", weight: 700 },
+  ]
+  let ff = Number(document.documentElement.dataset.ff || 0)
+  const fontStyle = document.createElement("style")
+  document.head.append(fontStyle)
+  const showFont = () => {
+    const f = fonts[ff]
+    fontStyle.textContent = `h1, h2.big, .hour h3, .time, .lane h3, .tool-name, .spec dt { font-family: ${f.stack} !important; font-stretch: ${f.stretch} !important; font-weight: ${f.weight} !important; }`
+    document.getElementById("ff-count").textContent = f.label
+  }
+  document.getElementById("ff-prev").addEventListener("click", () => { ff = (ff - 1 + fonts.length) % fonts.length; showFont() })
+  document.getElementById("ff-next").addEventListener("click", () => { ff = (ff + 1) % fonts.length; showFont() })
+  showFont()
+
+  let hl = Number(document.documentElement.dataset.hl || 0)
   const showHeadline = () => {
     document.getElementById("headline").innerHTML = headlines[hl]
     document.getElementById("hl-count").textContent = `Заголовок ${hl + 1}/${headlines.length}`

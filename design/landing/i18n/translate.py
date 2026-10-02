@@ -7,6 +7,8 @@ from strings import CODE, SCRIPT, TEXT, TITLE
 
 landing = pathlib.Path(__file__).resolve().parent.parent
 source = (landing / "g-home.html").read_text()
+HEADLINE = {"ru": 1, "es": 0}
+FONT = {"ru": 1, "es": 0}
 SKIP = {"code", "pre", "style", "title"}
 
 
@@ -41,7 +43,7 @@ def build(lang, i):
     page = head + "<body>" + text_nodes(body, i) + "<script>" + replace_all(script, SCRIPT, i)
     page = replace_all(page, CODE, i)
     swaps = [
-        ('<html lang="en">', f'<html lang="{lang}">'),
+        ('<html lang="en" data-hl="3">', f'<html lang="{lang}" data-hl="{HEADLINE[lang]}" data-ff="{FONT[lang]}">'),
         ("<title>WireCat Home</title>", f"<title>{TITLE[i]}</title>"),
         ("<span>EN</span>", f"<span>{lang.upper()}</span>"),
         ('lang="en" aria-current="page"', 'lang="en"'),
