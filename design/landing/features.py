@@ -129,9 +129,9 @@ def v5():
 
 def v6():
     out = []
-    for i, g in enumerate(GROUPS):
+    for g in GROUPS:
         tiles = "".join(f'<div class="t6"><b>{t}</b><span>{d}</span>{cmd(c)}</div>' for t, d, c in g["items"])
-        out.append(f'<details class="acc6"{" open" if i == 0 else ""}><summary><span class="fv-ico">{ICON[g["key"]]}</span><span class="fv-name">{g["name"]}</span><span class="fv-short">{g["short"]}</span><span class="plus6" aria-hidden="true"></span></summary><p class="fv-lead">{g["lead"]}</p><div class="g6">{tiles}</div>{more(g)}</details>')
+        out.append(f'<div class="grp6"><div class="head6"><span class="fv-ico">{ICON[g["key"]]}</span><span class="fv-name">{g["name"]}</span><span class="fv-short">{g["short"]}</span></div><p class="fv-lead">{g["lead"]}</p><div class="g6">{tiles}</div>{more(g)}</div>')
     return "".join(out)
 
 
@@ -140,7 +140,7 @@ block = (
     '<section id="features" style="padding-top:0">\n  <div class="wrap">\n'
     '    <h2 class="big" id="feat-title">One tool for every side of your messenger</h2>\n'
     '    <p class="intro">Your own account, your bots and the groups you run. The same commands in Telegram and MAX.</p>\n'
-    + "".join(f'    <div class="fv fv{n}" data-variant="{n}"{"" if n == 1 else " hidden"}>{body}</div>\n' for n, body in enumerate(variants, 1))
+    + "".join(f'    <div class="fv fv{n}" data-variant="{n}"{"" if n == 6 else " hidden"}>{body}</div>\n' for n, body in enumerate(variants, 1))
     + "  </div>\n</section>\n"
 )
 
