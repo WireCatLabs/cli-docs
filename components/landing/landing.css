@@ -1307,3 +1307,106 @@
   font-stretch: 100%;
   font-weight: 900;
 }
+
+.wc .fv6 {
+  display: grid;
+  gap: 18px;
+}
+.wc .grp6 {
+  background: color-mix(in srgb, var(--app) 92%, transparent);
+  border: 1px solid var(--app-line);
+  border-radius: 26px;
+  padding: clamp(20px, 3vw, 36px);
+  box-shadow: 0 40px 70px -50px rgba(0, 0, 0, 0.9);
+}
+.wc .head6 {
+  display: grid;
+  grid-template-columns: 44px auto minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.wc .fv-ico {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--me) 22%, transparent);
+  color: var(--key);
+}
+.wc .fv-ico svg {
+  width: 22px;
+  height: 22px;
+}
+.wc .fv-name {
+  margin: 0;
+  font: 800 clamp(26px, 3vw, 38px) / 1.05 var(--display);
+  font-stretch: 75%;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.wc .fv-short {
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.wc .fv-lead {
+  margin: 0 0 22px;
+  font-size: 18px;
+  color: var(--ink);
+  max-width: 46em;
+}
+.wc .g6 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.wc .t6 {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  padding: 18px;
+  border-radius: 16px;
+  background: var(--app-2);
+}
+.wc .t6 b {
+  color: var(--card-ink);
+  font-weight: 600;
+}
+.wc .t6 span {
+  color: var(--card-soft);
+  font-size: 14.5px;
+}
+.wc .t6 code {
+  justify-self: start;
+  margin-top: 6px;
+  font: 500 12px / 1.45 var(--code);
+  color: var(--app-ink);
+  background: var(--app);
+  border: 1px solid var(--app-line);
+  border-radius: 8px;
+  padding: 5px 9px;
+  overflow-wrap: anywhere;
+}
+.wc .grp6 .more {
+  display: inline-block;
+  margin-top: 22px;
+}
+.wc.ru .fv-name {
+  font-family: var(--font-fira-condensed), sans-serif;
+  font-stretch: 100%;
+  font-weight: 900;
+}
+@media (max-width: 1000px) {
+  .wc .g6 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .wc .head6 {
+    grid-template-columns: 44px minmax(0, 1fr);
+  }
+  .wc .head6 .fv-short {
+    grid-column: 1 / -1;
+  }
+}

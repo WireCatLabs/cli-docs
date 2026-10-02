@@ -11,5 +11,5 @@ export function translator(lang: string) {
   const rows = [...data.code].sort((a, b) => (b[0]?.length ?? 0) - (a[0]?.length ?? 0))
   const code = (text: string) =>
     index === 0 ? text : rows.reduce((out, row) => out.replaceAll(row[0] ?? "", row[index] ?? ""), text)
-  return { t: (text: string) => table[text] ?? text, c: code, code }
+  return { t: (text: string) => table[text] ?? text, c: code }
 }
