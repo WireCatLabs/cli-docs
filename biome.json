@@ -11,5 +11,20 @@
       "!pnpm-lock.yaml",
       "!next-env.d.ts"
     ]
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["components/landing/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noDescendingSpecificity": "off"
+          },
+          "security": {
+            "noDangerouslySetInnerHtml": "off"
+          }
+        }
+      }
+    }
+  ]
 }
