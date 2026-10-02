@@ -5,7 +5,7 @@ import { Inter } from "next/font/google"
 import SearchDialog from "@/components/search"
 import { i18n } from "@/lib/i18n"
 import { translations } from "@/lib/layout.shared"
-import { appName, siteUrl } from "@/lib/shared"
+import { appName, siteDescription, siteUrl, tagline } from "@/lib/shared"
 import "../global.css"
 
 const inter = Inter({ subsets: ["latin", "cyrillic"] })
@@ -35,5 +35,18 @@ export function generateStaticParams() {
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: { template: `%s · ${appName}`, default: appName },
+  title: { template: `%s · ${appName}`, default: `${appName} · ${tagline}` },
+  description: siteDescription,
+  applicationName: appName,
+  openGraph: { siteName: appName, type: "website", title: `${appName} · ${tagline}`, description: siteDescription },
+  twitter: { card: "summary", title: `${appName} · ${tagline}`, description: siteDescription },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
 }

@@ -4,7 +4,10 @@ import tools from "@/tools.json"
 export type Tool = (typeof tools)[number]
 export { tools }
 
-export const appName = "CLI tools"
+export const appName = "WireCat"
+export const tagline = "AI messaging with CLI tools for agents"
+export const siteDescription =
+  "Connect Claude Code, Codex or another agent to your Telegram and MAX: find who owes what, set reminders and reply."
 export const docsRoute = "/docs"
 export const docsContentRoute = "/llms.mdx/docs"
 export const repository = "https://github.com/leemour/cli-docs"
