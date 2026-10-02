@@ -1,5 +1,6 @@
 import { AgentApp, type Session } from "@/components/landing/agent-app"
 import { LandingEffects } from "@/components/landing/effects"
+import { Features } from "@/components/landing/features"
 import { fontVariables } from "@/components/landing/fonts"
 import { wallpaper } from "@/components/landing/wallpaper"
 import { translator } from "@/lib/landing/i18n"
@@ -134,7 +135,7 @@ ${t("<p>You send Ana €72, Ben sends her €36. Want me to post that in the cha
 }
 
 export function Landing({ lang }: { lang: string }) {
-  const { t, c, code } = translator(lang)
+  const { t, c } = translator(lang)
   const sessions = sessionsFor(t, c)
   return (
     <div className={`wc ${lang} ${fontVariables}`} lang={lang} style={wallpaper()}>
@@ -672,170 +673,7 @@ export function Landing({ lang }: { lang: string }) {
         </div>
       </section>
 
-      <section id="features" style={{ paddingTop: "0" }}>
-        <div className="wrap">
-          <h2 className="big" id="feat-title">
-            {t("One tool for every side of your messenger")}
-          </h2>
-          <p className="intro">
-            {t("Your own account, your bots and the groups you run. The same commands in Telegram and MAX.")}
-          </p>
-          <div className="ftabs" role="tablist" aria-label="Features">
-            <button
-              className="ftab"
-              role="tab"
-              type="button"
-              id="ft-personal"
-              aria-selected="true"
-              aria-controls="fp-personal"
-            >
-              {t("Personal account")}
-            </button>
-            <button className="ftab" role="tab" type="button" id="ft-bot" aria-selected="false" aria-controls="fp-bot">
-              {t("Bots")}
-            </button>
-            <button
-              className="ftab"
-              role="tab"
-              type="button"
-              id="ft-groups"
-              aria-selected="false"
-              aria-controls="fp-groups"
-            >
-              {t("Groups you run")}
-            </button>
-          </div>
-
-          <div className="fpanel" role="tabpanel" id="fp-personal" aria-labelledby="ft-personal">
-            <div className="flist">
-              <p className="flead">
-                {t(
-                  "Your own account, as one more of your devices: every chat, its history, groups, channels and contacts.",
-                )}
-              </p>
-              <ul>
-                <li>
-                  <b>{t("Unread in every chat at once.")}</b>{" "}
-                  {t("Other people's messages, and nothing gets marked read.")}
-                </li>
-                <li>
-                  <b>{t("Who owes what.")}</b> {t("Everything said since the last review, yours too, in one call.")}
-                </li>
-                <li>
-                  <b>{t("Search years of history offline.")}</b> {t("In the copy of your chats kept on your computer.")}
-                </li>
-                <li>
-                  <b>{t("Voice notes as text.")}</b> {t("By Telegram, or by a speech model on your machine.")}
-                </li>
-                <li>
-                  <b>{t("Send later.")}</b> {t("Telegram delivers it on time, with your laptop shut.")}
-                </li>
-                <li>
-                  <b>{t("Everything else you do by hand.")}</b>{" "}
-                  {t("Replies, files, reactions, polls, edits, forwards, pins.")}
-                </li>
-              </ul>
-              <a className="more" href={`/${lang}/docs/tg/usage`}>
-                {t("How to use your account →")}
-              </a>
-            </div>
-            <pre
-              className="fterm"
-              dangerouslySetInnerHTML={{
-                __html: code(
-                  '<code><span class="c"># what needs you, in every chat</span>\n<span class="p">$</span> tg inbox\n<span class="c"># a week of promises, sorted</span>\n<span class="p">$</span> tg review --since-time 7d\n<span class="c"># find it without connecting</span>\n<span class="p">$</span> tg messages search "contract"\n<span class="c"># a voice note, heard on this machine</span>\n<span class="p">$</span> tg messages transcribe "Mum" 8812 --local\n<span class="c"># a reminder in Saved Messages</span>\n<span class="p">$</span> tg messages send me "Call Mum" --at-time 2h\n<span class="c"># a whole chat as a document</span>\n<span class="p">$</span> tg store export "Project Alpha" --format markdown</code>',
-                ),
-              }}
-            ></pre>
-          </div>
-
-          <div className="fpanel" role="tabpanel" id="fp-bot" aria-labelledby="ft-bot" hidden>
-            <div className="flist">
-              <p className="flead">
-                {t(
-                  "Your bots, through the official Bot API of Telegram and MAX. Keep as many as you like, each under a name you choose.",
-                )}
-              </p>
-              <ul>
-                <li>
-                  <b>{t("The bot's name is the first word.")}</b> <code>{c("tg sales bot …")}</code>,{" "}
-                  <code>{c("max support bot …")}</code>
-                </li>
-                <li>
-                  <b>{t("Tokens in the system keyring.")}</b> {t("Never printed, not even in an error.")}
-                </li>
-                <li>
-                  <b>{t("Each bot has its own list of chats.")}</b>{" "}
-                  {t("It writes only there, and keeps a journal of what it sent.")}
-                </li>
-                <li>
-                  <b>{t("Messages and files.")}</b> {t("Send, edit, delete and pin, to a chat or to a person.")}
-                </li>
-                <li>
-                  <b>{t("On MAX, the whole Bot API.")}</b>{" "}
-                  {t("Members, admins, buttons, the command menu, webhooks and moderation.")}
-                </li>
-                <li>
-                  <b>{t("A bot for your agent.")}</b> <code>{c("max sales bot mcp")}</code>{" "}
-                  {t("gives it an MCP server of its own.")}
-                </li>
-              </ul>
-              <a className="more" href={`/${lang}/docs/tg/bot`}>
-                {t("How to set up a bot →")}
-              </a>
-            </div>
-            <pre
-              className="fterm"
-              dangerouslySetInnerHTML={{
-                __html: code(
-                  '<code><span class="c"># the token, at a hidden prompt</span>\n<span class="p">$</span> tg sales bot auth set\n<span class="c"># the bot may write only here</span>\n<span class="p">$</span> tg sales bot recipients add user:&lt;id&gt;\n<span class="c"># a build report, as the bot</span>\n<span class="p">$</span> tg sales bot messages send "Team" "Build is ready" --file report.pdf\n<span class="c"># the same on MAX</span>\n<span class="p">$</span> max sales bot messages send "Sales team" "Build is ready"\n<span class="c"># a bot MCP server for your agent</span>\n<span class="p">$</span> max sales bot mcp\n<span class="c"># every bot on this computer</span>\n<span class="p">$</span> tg bot list --check</code>',
-                ),
-              }}
-            ></pre>
-          </div>
-
-          <div className="fpanel" role="tabpanel" id="fp-groups" aria-labelledby="ft-groups" hidden>
-            <div className="flist">
-              <p className="flead">
-                {t(
-                  "For the groups and channels you run: who is waiting, who came and went, and what breaks your rules.",
-                )}
-              </p>
-              <ul>
-                <li>
-                  <b>{t("Questions nobody answered.")}</b> {t("Asked at least a day ago, still open.")}
-                </li>
-                <li>
-                  <b>{t("Who joined, left, was added or removed.")}</b> {t("And by whom.")}
-                </li>
-                <li>
-                  <b>{t("Everyone in the group.")}</b> {t("With their role and when they were last seen.")}
-                </li>
-                <li>
-                  <b>{t("Forum topics and invite links.")}</b> {t("See where a link leads without joining.")}
-                </li>
-                <li>
-                  <b>{t("Manage it.")}</b> {t("Rename, add and remove members and admins, reset the invite link.")}
-                </li>
-                <li>
-                  <b>{t("Moderation by your rules.")}</b> {t("Links, forwards and flood, applied when you run them.")}
-                </li>
-              </ul>
-              <a className="more" href={`/${lang}/docs/tg/groups`}>
-                {t("How to run a group →")}
-              </a>
-            </div>
-            <pre
-              className="fterm"
-              dangerouslySetInnerHTML={{
-                __html: code(
-                  '<code><span class="c"># questions nobody answered in 24 hours</span>\n<span class="p">$</span> tg review --chat "Hiking" --unanswered\n<span class="c"># who joined, left, was added or removed</span>\n<span class="p">$</span> tg chats events "Hiking" --since-time 7d\n<span class="c"># everyone, with role and last seen</span>\n<span class="p">$</span> tg chats members list "Hiking" --all\n<span class="c"># a forum group\'s topics</span>\n<span class="p">$</span> tg topics list "Hiking"\n<span class="c"># where an invite link leads, without joining</span>\n<span class="p">$</span> tg chats inspect https://t.me/+AbCdEf\n<span class="c"># on MAX: judge new messages and members by your rules</span>\n<span class="p">$</span> max chats check "Residents"</code>',
-                ),
-              }}
-            ></pre>
-          </div>
-        </div>
-      </section>
+      <Features lang={lang} t={t} c={c} />
 
       <section className="band" id="why">
         <div className="wrap">

@@ -240,7 +240,12 @@
       "Share": "Доля",
       "You": "Вы",
       "Title": "Заголовок",
-      "Copied": "Скопировано"
+      "Copied": "Скопировано",
+      "Your chats, history and contacts": "Ваши чаты, история и контакты",
+      "Official Bot API, many bots": "Официальный Bot API, много ботов",
+      "Members, questions, moderation": "Участники, вопросы, модерация",
+      "Keep several, each under a name you choose.": "Сколько угодно ботов, у каждого своё имя.",
+      "An MCP server of its own, read-only by default.": "Собственный MCP-сервер, по умолчанию только чтение."
     },
     "es": {
       "About": "Acerca de",
@@ -482,7 +487,12 @@
       "Share": "Parte",
       "You": "Tú",
       "Title": "Título",
-      "Copied": "Copiado"
+      "Copied": "Copiado",
+      "Your chats, history and contacts": "Tus chats, historial y contactos",
+      "Official Bot API, many bots": "Bot API oficial, varios bots",
+      "Members, questions, moderation": "Miembros, preguntas, moderación",
+      "Keep several, each under a name you choose.": "Todos los que quieras, cada uno con su nombre.",
+      "An MCP server of its own, read-only by default.": "Su propio servidor MCP, de solo lectura por defecto."
     }
   },
   "code": [
@@ -510,7 +520,9 @@
       "\"Hi love, is your flight still at six? Call me when you land…\"",
       "\"Привет, рейс всё ещё в шесть? Позвони, как приземлишься…\"",
       "\"Hola, cariño, ¿tu vuelo sigue a las seis? Llámame cuando aterrices…\""
-    ]
+    ],
+    ["\"Hiking 2027\"", "\"Походы 2027\"", "\"Senderismo 2027\""],
+    ["\"The minutes\"", "\"Протокол\"", "\"El acta\""]
   ],
   "title": {
     "en": "WireCat · AI messaging with CLI tools for agents",
