@@ -157,7 +157,9 @@ export function Landing({ lang }: { lang: string }) {
               />
               <path className="pulse" pathLength="40" d="M9 21V11l4 4 3-4 3 4 4-4v10" />
             </svg>
-            <span className="word">WireCat</span>
+            <span className="word">
+              Wir<span className="word-tail">eCat</span>
+            </span>
           </a>
           <div className="right">
             <details className="lang">
@@ -795,7 +797,9 @@ export function Landing({ lang }: { lang: string }) {
                   />
                   <path className="pulse" pathLength="40" d="M9 21V11l4 4 3-4 3 4 4-4v10" />
                 </svg>
-                <span className="word">WireCat</span>
+                <span className="word">
+                  Wir<span className="word-tail">eCat</span>
+                </span>
               </a>
               <p>
                 {t(
