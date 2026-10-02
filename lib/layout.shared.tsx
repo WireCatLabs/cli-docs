@@ -1,7 +1,8 @@
 import { uiTranslations } from "fumadocs-ui/i18n"
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared"
+import { Logo } from "@/components/logo"
 import { i18n } from "@/lib/i18n"
-import { appName, repository } from "@/lib/shared"
+import { repository } from "@/lib/shared"
 
 export const translations = i18n
   .translations()
@@ -13,5 +14,5 @@ export const translations = i18n
   })
 
 export function baseOptions(lang: string): BaseLayoutProps {
-  return { nav: { title: appName, url: `/${lang}` }, githubUrl: repository }
+  return { nav: { title: <Logo />, url: `/${lang}` }, githubUrl: repository }
 }

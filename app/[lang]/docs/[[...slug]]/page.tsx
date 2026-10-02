@@ -10,7 +10,7 @@ import { createRelativeLink } from "fumadocs-ui/mdx"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getMDXComponents } from "@/components/mdx"
-import { getPageMarkdownUrl, toolOf } from "@/lib/shared"
+import { appName, getPageMarkdownUrl, toolOf } from "@/lib/shared"
 import { source } from "@/lib/source"
 import { wordsFor } from "@/lib/words"
 
@@ -60,8 +60,12 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const page = source.getPage(slug, lang)
   if (!page) notFound()
   const tool = toolOf(page.slugs)
+  const title = tool && page.slugs.length > 1 ? `${page.data.title} — ${tool.name}` : page.data.title
+  const url = page.url
   return {
-    title: tool && page.slugs.length > 1 ? `${page.data.title} — ${tool.name}` : page.data.title,
+    title,
     description: page.data.description,
+    alternates: { canonical: url },
+    openGraph: { siteName: appName, title, description: page.data.description, url, type: "article" },
   }
 }
