@@ -8,7 +8,7 @@ from strings import CODE, SCRIPT, TEXT, TITLE
 landing = pathlib.Path(__file__).resolve().parent.parent
 source = (landing / "g-home.html").read_text()
 HEADLINE = {"ru": 1, "es": 0}
-FONT = {"ru": 1, "es": 0}
+FONT = {"ru": 3, "es": 0}
 SKIP = {"code", "pre", "style", "title"}
 
 
