@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="es" aria-current="page">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>WireCat Home</title>
+<title>WireCat · Un agente para tus chats de Telegram y MAX</title>
 <meta name="description" content="Connect Claude Code, Codex or another agent to your Telegram and MAX.">
 <link rel="icon" href="../favicons/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicons/favicon-32x32.png">
@@ -288,40 +288,40 @@
   </a>
   <div class="right">
   <details class="lang">
-    <summary aria-label="Language"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="8" cy="8" r="6.3"/><path d="M1.7 8h12.6M8 1.7c1.8 1.8 2.6 4 2.6 6.3S9.8 12.5 8 14.3M8 1.7C6.2 3.5 5.4 5.7 5.4 8s.8 4.5 2.6 6.3"/></svg><span>EN</span><svg class="dn" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4.5 6.5L8 10l3.5-3.5"/></svg></summary>
-    <div class="lang-menu"><a href="g-home.html" lang="en" aria-current="page">English</a><a href="g-home.ru.html" lang="ru">Русский</a><a href="g-home.es.html" lang="es">Español</a></div>
+    <summary aria-label="Language"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="8" cy="8" r="6.3"/><path d="M1.7 8h12.6M8 1.7c1.8 1.8 2.6 4 2.6 6.3S9.8 12.5 8 14.3M8 1.7C6.2 3.5 5.4 5.7 5.4 8s.8 4.5 2.6 6.3"/></svg><span>ES</span><svg class="dn" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4.5 6.5L8 10l3.5-3.5"/></svg></summary>
+    <div class="lang-menu"><a href="g-home.html" lang="en">English</a><a href="g-home.ru.html" lang="ru">Русский</a><a href="g-home.es.html" lang="es" aria-current="page">Español</a></div>
   </details>
   <nav class="site" aria-label="Site">
     <span class="glide" aria-hidden="true"></span>
-    <a href="https://wirecat.dev/en/docs/tg">Telegram</a>
+    <a href="https://wirecat.dev/es/docs/tg">Telegram</a>
     <a href="https://wirecat.dev/ru/docs/max">MAX</a>
-    <a href="#about">About</a>
+    <a href="#about">Acerca de</a>
   </nav>
   </div>
 </header></div>
 
 <main class="wrap hero">
   <div class="hero-text">
-    <h1 id="headline">Don't read your chats. <span>Ask about them.</span></h1>
+    <h1 id="headline">No leas tus chats. <span>Pregúntale a tu agente.</span></h1>
     <div>
-      <p class="lede">Connect Claude Code, Codex or another agent to your messengers. Find who owes what in <b>Telegram and MAX</b>, set reminders and let it reply for you.</p>
+      <p class="lede">Conecta Claude Code, Codex u otro agente a tus mensajeros. Descubre quién debe qué en <b>Telegram y MAX</b>, programa recordatorios y deja que responda por ti.</p>
       <div class="cta">
-        <span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copy</button></span>
-        <a class="btn" href="#connect">Connect your agent</a>
+        <span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copiar</button></span>
+        <a class="btn" href="#connect">Conecta tu agente</a>
       </div>
-      <p class="tagline"><b>AI messaging with CLI tools for agents.</b> Free and open source.</p>
+      <p class="tagline"><b>Mensajería con IA y herramientas CLI para agentes.</b> Gratis y de código abierto.</p>
     </div>
   </div>
 
   <div class="app" id="app">
-    <div class="titlebar"><i></i><i></i><i></i><span>Agent · ~/inbox</span>
-      <button class="replay" type="button" id="replay"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 1 0 1.8-4.1M2.5 2v3.5H6"/></svg>Replay</button>
+    <div class="titlebar"><i></i><i></i><i></i><span>Agente · ~/inbox</span>
+      <button class="replay" type="button" id="replay"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 1 0 1.8-4.1M2.5 2v3.5H6"/></svg>Repetir</button>
     </div>
     <div class="app-body">
-      <nav class="sessions" aria-label="Sessions" id="sessions"><h2>Sessions</h2></nav>
+      <nav class="sessions" aria-label="Sessions" id="sessions"><h2>Sesiones</h2></nav>
       <div class="conv">
         <div class="log" id="log"></div>
-        <div class="composer"><span>Ask about your chats…</span><span class="slash">/catch-up</span><span class="slash">/review</span><span class="slash">/reply</span><span class="slash">/find</span></div>
+        <div class="composer"><span>Pregunta por tus chats…</span><span class="slash">/catch-up</span><span class="slash">/review</span><span class="slash">/reply</span><span class="slash">/find</span></div>
       </div>
     </div>
   </div>
@@ -329,95 +329,95 @@
 
 <section id="day" style="padding-top:0">
   <div class="wrap">
-    <h2 class="big">A day with your agent</h2>
-    <p class="intro">You ask in plain words. Your agent runs one <code>tg</code> command and gets back to you with the answer, not the chat.</p>
+    <h2 class="big">Un día con tu agente</h2>
+    <p class="intro">Preguntas con tus propias palabras. Tu agente ejecuta un comando <code>tg</code> y te trae la respuesta, no el chat entero.</p>
     <div class="day">
 
       <div class="hour reveal"><span class="time">08:00</span><span class="dot"></span>
-        <div><h3>The morning summary</h3><code class="chip">tg inbox --new</code>
-          <p class="why">Set it once as a schedule. Before you open the app, your agent has read everything that came in overnight and written you one message.</p>
-          <p class="why">Muted groups stay out of it unless someone mentions you. Nothing is marked as read, so nobody sees you looked.</p></div>
+        <div><h3>El resumen de la mañana</h3><code class="chip">tg inbox --new</code>
+          <p class="why">Prográmalo una vez. Antes de que abras la app, tu agente ya ha leído todo lo que llegó por la noche y te ha escrito un solo mensaje.</p>
+          <p class="why">Los grupos silenciados no aparecen salvo que te mencionen. Nada se marca como leído, así que nadie ve que has mirado.</p></div>
         <div class="thread">
-          <div class="thread-head"><span class="av"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18V7l4 4 3-4 3 4 4-4v11" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/></svg></span><b>Your agent</b> · morning summary</div>
+          <div class="thread-head"><span class="av"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18V7l4 4 3-4 3 4 4-4v11" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/></svg></span><b>Tu agente</b> · resumen de la mañana</div>
           <div class="msg bot"><span class="ran">tg inbox --new</span>
-            <p><b>Good morning. 4 chats need you, 206 messages can wait.</b></p>
-            <ul><li><b>Marco</b> needs the release tag approved before 11:00.</li><li><b>Book club</b> moved Friday to 19:30. Anna asks if you're in.</li><li><b>Pablo</b> has waited 3 days for the invoice.</li><li><b>Mum</b> sent a voice note, 0:42.</li></ul>
-            <p>Work all-hands (128) and Hiking club (57) have nothing for you.</p><div class="meta">08:00</div></div>
-          <div class="msg me"><p>Tell Anna I'm in. Remind me about Pablo at 2.</p><div class="meta">08:04</div></div>
-          <div class="msg bot"><p>Sent to Book club: <q>I'm in, 19:30 works!</q> Pablo's reminder is set for 14:00.</p><div class="meta">08:04</div></div>
+            <p><b>Buenos días. 4 chats te necesitan, 206 mensajes pueden esperar.</b></p>
+            <ul><li><b>Marco</b> necesita que apruebes la versión antes de las 11:00.</li><li><b>Club de lectura</b> pasó el viernes a las 19:30. Anna pregunta si vas.</li><li><b>Pablo</b> lleva 3 días esperando la factura.</li><li><b>Mamá</b> te mandó un audio de 0:42.</li></ul>
+            <p>En «Toda la empresa» (128) y «Senderismo» (57) no hay nada para ti.</p><div class="meta">08:00</div></div>
+          <div class="msg me"><p>Dile a Anna que voy. Recuérdame lo de Pablo a las 14:00.</p><div class="meta">08:04</div></div>
+          <div class="msg bot"><p>Enviado a Club de lectura: <q>¡Voy, las 19:30 me va bien!</q> El recordatorio de Pablo es a las 14:00.</p><div class="meta">08:04</div></div>
         </div></div>
 
       <div class="hour reveal"><span class="time">11:20</span><span class="dot"></span>
-        <div><h3>A voice note in a meeting</h3><code class="chip">tg messages transcribe "Mum" 8812 --local</code>
-          <p class="why">Read it instead of leaving the room. The speech model runs on your own computer, in 25 languages, and the audio goes nowhere else.</p></div>
+        <div><h3>Un audio en plena reunión</h3><code class="chip">tg messages transcribe "Mamá" 8812 --local</code>
+          <p class="why">Léelo sin salir de la sala. El modelo de voz funciona en tu propio ordenador, en 25 idiomas, y el audio no va a ninguna parte.</p></div>
         <div class="thread">
-          <div class="msg me"><p>What did Mum say? Can't listen now.</p><div class="meta">11:20</div></div>
-          <div class="msg bot"><span class="ran">tg messages transcribe "Mum" 8812 --local</span>
-            <p><q>Hi love, is your flight still at six? Call me when you land. And don't forget Granddad's birthday on Sunday, he'd love a call.</q></p>
-            <p>Two things in there: call her tonight after landing, and Granddad on Sunday. Set reminders for both?</p><div class="meta">11:20</div></div>
-          <div class="msg me"><p>Yes. Sunday at 10.</p><div class="meta">11:21</div></div>
-          <div class="msg bot"><p>Done: Sunday 10:00, <q>Call Granddad, happy birthday</q>.</p><div class="meta">11:21</div></div>
+          <div class="msg me"><p>¿Qué dijo mamá? Ahora no puedo escucharlo.</p><div class="meta">11:20</div></div>
+          <div class="msg bot"><span class="ran">tg messages transcribe "Mamá" 8812 --local</span>
+            <p><q>Hola, cariño, ¿tu vuelo sigue a las seis? Llámame cuando aterrices. Y no olvides el cumpleaños del abuelo el domingo, le encantará tu llamada.</q></p>
+            <p>Hay dos cosas: llamarla esta noche al aterrizar y al abuelo el domingo. ¿Pongo recordatorios para las dos?</p><div class="meta">11:20</div></div>
+          <div class="msg me"><p>Sí. El domingo a las 10.</p><div class="meta">11:21</div></div>
+          <div class="msg bot"><p>Hecho: domingo, 10:00, <q>Llamar al abuelo, felicitarle</q>.</p><div class="meta">11:21</div></div>
         </div></div>
 
       <div class="hour reveal"><span class="time">13:30</span><span class="dot"></span>
-        <div><h3>Who owes who</h3><code class="chip">tg messages search "paid" --chat "Lisbon trip"</code>
-          <p class="why">Payments are scattered across a week of trip chat. Your agent finds them in the copy of your chats on your computer and does the sums.</p>
-          <p class="why">No scrolling back, no spreadsheet.</p></div>
+        <div><h3>Quién le debe a quién</h3><code class="chip">tg messages search "pagué" --chat "Viaje a Lisboa"</code>
+          <p class="why">Los pagos están repartidos en una semana de chat del viaje. Tu agente los encuentra en la copia de tus chats en tu ordenador y hace las cuentas.</p>
+          <p class="why">Sin hacer scroll ni hojas de cálculo.</p></div>
         <div class="thread">
-          <div class="msg me"><p>Settle the Lisbon trip for me.</p><div class="meta">13:30</div></div>
-          <div class="msg bot"><span class="ran">tg messages search "paid" --chat "Lisbon trip"</span>
-            <p>Found 3 payments, €396 in total, €132 each:</p>
-            <table><thead><tr><th></th><th>Paid</th><th>Balance</th></tr></thead><tbody>
+          <div class="msg me"><p>Haz las cuentas del viaje a Lisboa.</p><div class="meta">13:30</div></div>
+          <div class="msg bot"><span class="ran">tg messages search "pagué" --chat "Viaje a Lisboa"</span>
+            <p>He encontrado 3 pagos, €396 en total, €132 cada uno:</p>
+            <table><thead><tr><th></th><th>Pagó</th><th>Saldo</th></tr></thead><tbody>
               <tr><td>Ana · hotel</td><td>€240</td><td class="plus">+€108</td></tr>
-              <tr><td>Ben · dinner</td><td>€96</td><td class="minus">−€36</td></tr>
-              <tr><td>You · taxi</td><td>€60</td><td class="minus">−€72</td></tr></tbody></table>
-            <p>You send Ana €72, Ben sends her €36. Post that in the chat?</p><div class="meta">13:30</div></div>
-          <div class="msg me"><p>Post it.</p><div class="meta">13:31</div></div>
+              <tr><td>Ben · cena</td><td>€96</td><td class="minus">−€36</td></tr>
+              <tr><td>Tú · taxi</td><td>€60</td><td class="minus">−€72</td></tr></tbody></table>
+            <p>Tú le pasas a Ana €72 y Ben le pasa €36. ¿Lo publico en el chat?</p><div class="meta">13:30</div></div>
+          <div class="msg me"><p>Publícalo.</p><div class="meta">13:31</div></div>
         </div></div>
 
       <div class="hour reveal"><span class="time">14:00</span><span class="dot"></span>
-        <div><h3>The reminder you asked for</h3><code class="chip">tg messages send me "Answer Pablo about the invoice" --at-time 2026-10-02T14:00</code>
-          <p class="why">Set this morning in one sentence. Telegram itself delivers it to your Saved Messages, so it arrives even if your laptop is closed.</p></div>
+        <div><h3>El recordatorio que pediste</h3><code class="chip">tg messages send me "Responder a Pablo sobre la factura" --at-time 2026-10-02T14:00</code>
+          <p class="why">Lo pediste esta mañana en una frase. Telegram lo entrega en tus Mensajes guardados, así que llega aunque el portátil esté cerrado.</p></div>
         <div class="thread">
-          <div class="note">Saved Messages</div>
-          <div class="msg other"><span class="from">Reminder</span><p>Answer Pablo about the invoice.</p><div class="meta">14:00</div></div>
-          <div class="msg me"><p>Draft Pablo a reply: invoice goes out Monday.</p><div class="meta">14:02</div></div>
-          <div class="msg bot"><p>Draft: <q>Hi Pablo, sorry for the wait! The invoice goes out on Monday.</q> Send it?</p><div class="meta">14:02</div></div>
+          <div class="note">Mensajes guardados</div>
+          <div class="msg other"><span class="from">Recordatorio</span><p>Responder a Pablo sobre la factura.</p><div class="meta">14:00</div></div>
+          <div class="msg me"><p>Prepara una respuesta a Pablo: la factura sale el lunes.</p><div class="meta">14:02</div></div>
+          <div class="msg bot"><p>Borrador: <q>¡Hola, Pablo, perdona la espera! La factura sale el lunes.</q> ¿La envío?</p><div class="meta">14:02</div></div>
         </div></div>
 
       <div class="hour reveal"><span class="time">16:00</span><span class="dot"></span>
-        <div><h3>Replies while you're busy</h3><code class="chip">tg watch</code>
-          <p class="why">Tell your agent what to answer, and it watches new messages as they arrive and replies in your name.</p>
-          <p class="why">Anything it isn't sure about waits for you.</p></div>
+        <div><h3>Respuestas mientras estás ocupado</h3><code class="chip">tg watch</code>
+          <p class="why">Dile a tu agente qué responder: vigila los mensajes nuevos según llegan y contesta en tu nombre.</p>
+          <p class="why">Lo que no tenga claro, te espera.</p></div>
         <div class="thread">
-          <div class="msg me"><p>I'm in workshops till 6. If Priya asks for the deck, send her the link. Anything else, tell me later.</p><div class="meta">15:58</div></div>
-          <div class="msg other"><span class="from">Priya</span><p>Hey! Where's the latest deck?</p><div class="meta">16:12</div></div>
-          <div class="msg bot"><span class="ran">tg messages send "Priya" "Here you go: …/deck-v3"</span><p>Sent Priya the deck link.</p><div class="meta">16:12</div></div>
-          <div class="msg other"><span class="from">Tom</span><p>Can we move tomorrow's call to 3?</p><div class="meta">16:40</div></div>
-          <div class="msg bot"><p>Tom wants tomorrow's call at 15:00. Saved for when you're out.</p><div class="meta">16:40</div></div>
+          <div class="msg me"><p>Estoy en talleres hasta las 18:00. Si Priya pide la presentación, mándale el enlace. Lo demás, me lo cuentas luego.</p><div class="meta">15:58</div></div>
+          <div class="msg other"><span class="from">Priya</span><p>¡Hola! ¿Dónde está la última presentación?</p><div class="meta">16:12</div></div>
+          <div class="msg bot"><span class="ran">tg messages send "Priya" "Aquí la tienes: …/deck-v3"</span><p>Le he mandado a Priya el enlace.</p><div class="meta">16:12</div></div>
+          <div class="msg other"><span class="from">Tom</span><p>¿Podemos pasar la llamada de mañana a las 15:00?</p><div class="meta">16:40</div></div>
+          <div class="msg bot"><p>Tom quiere la llamada de mañana a las 15:00. Te lo guardo para cuando salgas.</p><div class="meta">16:40</div></div>
         </div></div>
 
       <div class="hour reveal"><span class="time">18:00</span><span class="dot"></span>
-        <div><h3>Questions left hanging</h3><code class="chip">tg review --chat "Hiking club" --unanswered</code>
-          <p class="why">In the groups you run: who asked something and never got an answer. Useful before it turns into ten follow-ups.</p></div>
+        <div><h3>Preguntas sin respuesta</h3><code class="chip">tg review --chat "Senderismo" --unanswered</code>
+          <p class="why">En los grupos que gestionas: quién preguntó algo y no recibió respuesta. Útil antes de que se convierta en diez recordatorios.</p></div>
         <div class="thread">
-          <div class="msg me"><p>Anything unanswered in Hiking club?</p><div class="meta">18:00</div></div>
-          <div class="msg bot"><span class="ran">tg review --chat "Hiking club" --unanswered</span>
-            <p>Two questions have waited more than a day:</p>
-            <ul><li><b>Lucas</b>: who has the second tent? <i>yesterday, 09:14</i></li><li><b>Sofia</b>: what time does the bus leave on Saturday? <i>yesterday, 17:40</i></li></ul>
-            <p>The plan from last week says 07:30 for the bus. Answer Sofia with that?</p><div class="meta">18:00</div></div>
+          <div class="msg me"><p>¿Hay algo sin responder en Senderismo?</p><div class="meta">18:00</div></div>
+          <div class="msg bot"><span class="ran">tg review --chat "Senderismo" --unanswered</span>
+            <p>Dos preguntas llevan más de un día esperando:</p>
+            <ul><li><b>Lucas</b>: ¿quién tiene la segunda tienda? <i>ayer, 09:14</i></li><li><b>Sofia</b>: ¿a qué hora sale el autobús el sábado? <i>ayer, 17:40</i></li></ul>
+            <p>Según el plan de la semana pasada, el autobús sale a las 07:30. ¿Se lo digo a Sofia?</p><div class="meta">18:00</div></div>
         </div></div>
 
       <div class="hour reveal"><span class="time">21:30</span><span class="dot"></span>
-        <div><h3>Who owes what this week</h3><code class="chip">tg review --since-time 7d</code>
-          <p class="why">Everything said since the last review, your messages too, sorted into what you promised and what others promised you.</p>
-          <p class="why">The next review starts where this one ended.</p></div>
+        <div><h3>Quién debe qué esta semana</h3><code class="chip">tg review --since-time 7d</code>
+          <p class="why">Todo lo dicho desde la última revisión, tus mensajes también, ordenado en lo que prometiste y lo que te prometieron.</p>
+          <p class="why">La próxima revisión empieza donde terminó esta.</p></div>
         <div class="thread">
-          <div class="msg me"><p>What did I promise anyone this week?</p><div class="meta">21:30</div></div>
+          <div class="msg me"><p>¿Qué le prometí a alguien esta semana?</p><div class="meta">21:30</div></div>
           <div class="msg bot"><span class="ran">tg review --since-time 7d</span>
-            <p><b>You owe</b></p><ul><li>Anna: the invoice, by today. <i>29 Sep</i></li><li>Kate: notes on the new slides. <i>1 Oct</i></li></ul>
-            <p><b>Waiting on others</b></p><ul><li>Tom: the mock-up, promised for 30 Sep.</li></ul>
-            <p><b>Needs clarifying</b></p><ul><li>Project Alpha: who brings the samples. <i>"We'll decide later"</i></li></ul><div class="meta">21:30</div></div>
+            <p><b>Debes</b></p><ul><li>Anna: la factura, como tarde hoy. <i>29 sept.</i></li><li>Kate: comentarios sobre las nuevas diapositivas. <i>1 oct.</i></li></ul>
+            <p><b>Esperas de otros</b></p><ul><li>Tom: el boceto, prometido para el 30 de septiembre.</li></ul>
+            <p><b>Hay que aclarar</b></p><ul><li>Project Alpha: quién trae las muestras. <i>«Lo decidimos luego»</i></li></ul><div class="meta">21:30</div></div>
         </div></div>
 
     </div>
@@ -426,86 +426,86 @@
 
 <section class="band" id="connect">
   <div class="wrap">
-    <h2 class="big">Connect your agent in one line</h2>
-    <p class="intro">Each tool ships with an agent skill and an MCP server.</p>
+    <h2 class="big">Conecta tu agente en una línea</h2>
+    <p class="intro">Cada herramienta incluye una skill para agentes y un servidor MCP.</p>
     <div class="connect">
-      <div class="lane"><h3>Claude Code · Codex · Gemini CLI</h3><p>Installs the skill: which commands exist and how to use them.</p><span class="cmd"><code>tg skill install</code><button class="copy" type="button" data-copy="tg skill install">Copy</button></span></div>
-      <div class="lane"><h3>Claude Desktop · Cursor</h3><p>Prints the MCP entry for your settings. Ready prompts come with it:</p><div class="slashes"><span class="slash">/catch-up</span><span class="slash">/review</span><span class="slash">/reply</span><span class="slash">/find</span></div><span class="cmd"><code>tg mcp config</code><button class="copy" type="button" data-copy="tg mcp config">Copy</button></span></div>
-      <div class="lane"><h3>Any model</h3><p>Every docs page as plain Markdown, in one list.</p><span class="cmd"><code>wirecat.dev/llms.txt</code><button class="copy" type="button" data-copy="https://wirecat.dev/llms.txt">Copy</button></span></div>
+      <div class="lane"><h3>Claude Code · Codex · Gemini CLI</h3><p>Instala la skill: qué comandos hay y cómo usarlos.</p><span class="cmd"><code>tg skill install</code><button class="copy" type="button" data-copy="tg skill install">Copiar</button></span></div>
+      <div class="lane"><h3>Claude Desktop · Cursor</h3><p>Imprime la entrada MCP para tus ajustes. Incluye prompts listos:</p><div class="slashes"><span class="slash">/catch-up</span><span class="slash">/review</span><span class="slash">/reply</span><span class="slash">/find</span></div><span class="cmd"><code>tg mcp config</code><button class="copy" type="button" data-copy="tg mcp config">Copiar</button></span></div>
+      <div class="lane"><h3>Cualquier modelo</h3><p>Toda la documentación en Markdown, en una sola lista.</p><span class="cmd"><code>wirecat.dev/llms.txt</code><button class="copy" type="button" data-copy="https://wirecat.dev/llms.txt">Copiar</button></span></div>
     </div>
-    <p class="limits">Reading marks nothing read. You choose which chats it may write to and how often it sends.</p>
+    <p class="limits">Leer no marca nada como leído. Tú decides en qué chats puede escribir y con qué frecuencia.</p>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <h2 class="big">Telegram and MAX, the same commands</h2>
-    <p class="intro">Learn one and you know the other.</p>
+    <h2 class="big">Telegram y MAX, los mismos comandos</h2>
+    <p class="intro">Aprende uno y ya sabes el otro.</p>
     <div class="tools">
-      <article class="tool-card"><div class="tool-name">tg<small>Telegram</small></div><p>A Telegram client for the terminal and for AI agents, on your own account.</p><span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copy</button></span><div class="tool-links"><a href="https://wirecat.dev/en/docs/tg">Docs</a><a href="https://github.com/leemour/tg-cli">GitHub</a><a href="https://www.npmjs.com/package/@leemour/tg-cli">npm</a></div></article>
-      <article class="tool-card"><div class="tool-name">max<small>MAX Messenger</small></div><p>Your MAX bots through the official Bot API, and your personal account.</p><span class="cmd"><code>npm i -g @leemour/max-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/max-cli">Copy</button></span><div class="tool-links"><a href="https://wirecat.dev/ru/docs/max">Docs</a><a href="https://github.com/leemour/max-cli">GitHub</a><a href="https://www.npmjs.com/package/@leemour/max-cli">npm</a></div></article>
+      <article class="tool-card"><div class="tool-name">tg<small>Telegram</small></div><p>Un cliente de Telegram para la terminal y para agentes de IA, con tu propia cuenta.</p><span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copiar</button></span><div class="tool-links"><a href="https://wirecat.dev/es/docs/tg">Documentación</a><a href="https://github.com/leemour/tg-cli">GitHub</a><a href="https://www.npmjs.com/package/@leemour/tg-cli">npm</a></div></article>
+      <article class="tool-card"><div class="tool-name">max<small>MAX Messenger</small></div><p>Tus bots de MAX con la Bot API oficial, y tu cuenta personal.</p><span class="cmd"><code>npm i -g @leemour/max-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/max-cli">Copiar</button></span><div class="tool-links"><a href="https://wirecat.dev/ru/docs/max">Documentación</a><a href="https://github.com/leemour/max-cli">GitHub</a><a href="https://www.npmjs.com/package/@leemour/max-cli">npm</a></div></article>
     </div>
   </div>
 </section>
 
 <section id="features" style="padding-top:0">
   <div class="wrap">
-    <h2 class="big">One tool for every side of your messenger</h2>
-    <p class="intro">Your own account, your bots and the groups you run. The same commands in Telegram and MAX.</p>
+    <h2 class="big">Una herramienta para todo tu mensajero</h2>
+    <p class="intro">Tu cuenta, tus bots y los grupos que gestionas. Los mismos comandos en Telegram y MAX.</p>
     <div class="ftabs" role="tablist" aria-label="Features">
-      <button class="ftab" role="tab" type="button" id="ft-personal" aria-selected="true" aria-controls="fp-personal">Personal account</button>
+      <button class="ftab" role="tab" type="button" id="ft-personal" aria-selected="true" aria-controls="fp-personal">Cuenta personal</button>
       <button class="ftab" role="tab" type="button" id="ft-bot" aria-selected="false" aria-controls="fp-bot">Bots</button>
-      <button class="ftab" role="tab" type="button" id="ft-groups" aria-selected="false" aria-controls="fp-groups">Groups you run</button>
+      <button class="ftab" role="tab" type="button" id="ft-groups" aria-selected="false" aria-controls="fp-groups">Tus grupos</button>
     </div>
 
     <div class="fpanel" role="tabpanel" id="fp-personal" aria-labelledby="ft-personal">
       <div class="flist">
-        <p class="flead">Your own account, as one more of your devices: every chat, its history, groups, channels and contacts.</p>
+        <p class="flead">Tu propia cuenta, como un dispositivo más: todos los chats con su historial, grupos, canales y contactos.</p>
         <ul>
-          <li><b>Unread in every chat at once.</b> Other people's messages, and nothing gets marked read.</li>
-          <li><b>Who owes what.</b> Everything said since the last review, yours too, in one call.</li>
-          <li><b>Search years of history offline.</b> In the copy of your chats kept on your computer.</li>
-          <li><b>Voice notes as text.</b> By Telegram, or by a speech model on your machine.</li>
-          <li><b>Send later.</b> Telegram delivers it on time, with your laptop shut.</li>
-          <li><b>Everything else you do by hand.</b> Replies, files, reactions, polls, edits, forwards, pins.</li>
+          <li><b>Lo no leído de todos los chats a la vez.</b> Los mensajes de otros, y nada se marca como leído.</li>
+          <li><b>Quién debe qué.</b> Todo lo dicho desde la última revisión, lo tuyo también, en una llamada.</li>
+          <li><b>Busca en años de historial sin conexión.</b> En la copia de tus chats guardada en tu ordenador.</li>
+          <li><b>Audios convertidos en texto.</b> Con Telegram o con un modelo de voz en tu ordenador.</li>
+          <li><b>Envío programado.</b> Telegram lo entrega a tiempo, con el portátil cerrado.</li>
+          <li><b>Todo lo que haces a mano.</b> Respuestas, archivos, reacciones, encuestas, ediciones, reenvíos, fijados.</li>
         </ul>
-        <a class="more" href="https://wirecat.dev/en/docs/tg/usage">How to use your account →</a>
+        <a class="more" href="https://wirecat.dev/es/docs/tg/usage">Cómo usar tu cuenta →</a>
       </div>
       <pre class="fterm"><code><span class="c"># what needs you, in every chat</span>
 <span class="p">$</span> tg inbox
 <span class="c"># a week of promises, sorted</span>
 <span class="p">$</span> tg review --since-time 7d
 <span class="c"># find it without connecting</span>
-<span class="p">$</span> tg messages search "contract"
+<span class="p">$</span> tg messages search "contrato"
 <span class="c"># a voice note, heard on this machine</span>
-<span class="p">$</span> tg messages transcribe "Mum" 8812 --local
+<span class="p">$</span> tg messages transcribe "Mamá" 8812 --local
 <span class="c"># a reminder in Saved Messages</span>
-<span class="p">$</span> tg messages send me "Call Mum" --at-time 2h
+<span class="p">$</span> tg messages send me "Llamar a mamá" --at-time 2h
 <span class="c"># a whole chat as a document</span>
 <span class="p">$</span> tg store export "Project Alpha" --format markdown</code></pre>
     </div>
 
     <div class="fpanel" role="tabpanel" id="fp-bot" aria-labelledby="ft-bot" hidden>
       <div class="flist">
-        <p class="flead">Your bots, through the official Bot API of Telegram and MAX. Keep as many as you like, each under a name you choose.</p>
+        <p class="flead">Tus bots, con la Bot API oficial de Telegram y MAX. Todos los que quieras, cada uno con el nombre que elijas.</p>
         <ul>
-          <li><b>The bot's name is the first word.</b> <code>tg sales bot …</code>, <code>max support bot …</code></li>
-          <li><b>Tokens in the system keyring.</b> Never printed, not even in an error.</li>
-          <li><b>Each bot has its own list of chats.</b> It writes only there, and keeps a journal of what it sent.</li>
-          <li><b>Messages and files.</b> Send, edit, delete and pin, to a chat or to a person.</li>
-          <li><b>On MAX, the whole Bot API.</b> Members, admins, buttons, the command menu, webhooks and moderation.</li>
-          <li><b>A bot for your agent.</b> <code>max sales bot mcp</code> gives it an MCP server of its own.</li>
+          <li><b>El nombre del bot es la primera palabra.</b> <code>tg sales bot …</code>, <code>max support bot …</code></li>
+          <li><b>Tokens en el llavero del sistema.</b> Nunca se imprimen, ni siquiera en un error.</li>
+          <li><b>Cada bot tiene su propia lista de chats.</b> Solo escribe ahí y lleva un registro de lo que envía.</li>
+          <li><b>Mensajes y archivos.</b> Enviar, editar, borrar y fijar, en un chat o a una persona.</li>
+          <li><b>En MAX, toda la Bot API.</b> Miembros, administradores, botones, menú de comandos, webhooks y moderación.</li>
+          <li><b>Un bot para tu agente.</b> <code>max sales bot mcp</code> le da su propio servidor MCP.</li>
         </ul>
-        <a class="more" href="https://wirecat.dev/en/docs/tg/bot">How to set up a bot →</a>
+        <a class="more" href="https://wirecat.dev/es/docs/tg/bot">Cómo configurar un bot →</a>
       </div>
       <pre class="fterm"><code><span class="c"># the token, at a hidden prompt</span>
 <span class="p">$</span> tg sales bot auth set
 <span class="c"># the bot may write only here</span>
 <span class="p">$</span> tg sales bot recipients add user:&lt;id&gt;
 <span class="c"># a build report, as the bot</span>
-<span class="p">$</span> tg sales bot messages send "Team" "Build is ready" --file report.pdf
+<span class="p">$</span> tg sales bot messages send "Equipo" "La build está lista" --file report.pdf
 <span class="c"># the same on MAX</span>
-<span class="p">$</span> max sales bot messages send "Sales team" "Build is ready"
+<span class="p">$</span> max sales bot messages send "Ventas" "La build está lista"
 <span class="c"># a bot MCP server for your agent</span>
 <span class="p">$</span> max sales bot mcp
 <span class="c"># every bot on this computer</span>
@@ -514,55 +514,55 @@
 
     <div class="fpanel" role="tabpanel" id="fp-groups" aria-labelledby="ft-groups" hidden>
       <div class="flist">
-        <p class="flead">For the groups and channels you run: who is waiting, who came and went, and what breaks your rules.</p>
+        <p class="flead">Para los grupos y canales que gestionas: quién espera, quién entra y sale, y qué rompe tus reglas.</p>
         <ul>
-          <li><b>Questions nobody answered.</b> Asked at least a day ago, still open.</li>
-          <li><b>Who joined, left, was added or removed.</b> And by whom.</li>
-          <li><b>Everyone in the group.</b> With their role and when they were last seen.</li>
-          <li><b>Forum topics and invite links.</b> See where a link leads without joining.</li>
-          <li><b>Manage it.</b> Rename, add and remove members and admins, reset the invite link.</li>
-          <li><b>Moderation by your rules.</b> Links, forwards and flood, applied when you run them.</li>
+          <li><b>Preguntas que nadie respondió.</b> Hechas hace al menos un día y aún abiertas.</li>
+          <li><b>Quién entró, salió, fue añadido o expulsado.</b> Y por quién.</li>
+          <li><b>Todos los miembros del grupo.</b> Con su rol y cuándo se conectaron por última vez.</li>
+          <li><b>Temas del foro y enlaces de invitación.</b> Mira adónde lleva un enlace sin unirte.</li>
+          <li><b>Gestión.</b> Renombrar, añadir y quitar miembros y administradores, renovar el enlace de invitación.</li>
+          <li><b>Moderación con tus reglas.</b> Enlaces, reenvíos y flood, cuando tú la ejecutas.</li>
         </ul>
-        <a class="more" href="https://wirecat.dev/en/docs/tg/groups">How to run a group →</a>
+        <a class="more" href="https://wirecat.dev/es/docs/tg/groups">Cómo gestionar un grupo →</a>
       </div>
       <pre class="fterm"><code><span class="c"># questions nobody answered in 24 hours</span>
-<span class="p">$</span> tg review --chat "Hiking" --unanswered
+<span class="p">$</span> tg review --chat "Senderismo" --unanswered
 <span class="c"># who joined, left, was added or removed</span>
-<span class="p">$</span> tg chats events "Hiking" --since-time 7d
+<span class="p">$</span> tg chats events "Senderismo" --since-time 7d
 <span class="c"># everyone, with role and last seen</span>
-<span class="p">$</span> tg chats members list "Hiking" --all
+<span class="p">$</span> tg chats members list "Senderismo" --all
 <span class="c"># a forum group's topics</span>
-<span class="p">$</span> tg topics list "Hiking"
+<span class="p">$</span> tg topics list "Senderismo"
 <span class="c"># where an invite link leads, without joining</span>
 <span class="p">$</span> tg chats inspect https://t.me/+AbCdEf
 <span class="c"># on MAX: judge new messages and members by your rules</span>
-<span class="p">$</span> max chats check "Residents"</code></pre>
+<span class="p">$</span> max chats check "Vecinos"</code></pre>
     </div>
   </div>
 </section>
 
 <section class="band" id="why">
   <div class="wrap">
-    <h2 class="big">Why it works this well</h2>
-    <p class="intro">Built for agents and scripts first, so it is quick, predictable and leaves a trail.</p>
+    <h2 class="big">Por qué funciona tan bien</h2>
+    <p class="intro">Hecho primero para agentes y scripts: rápido, predecible y deja rastro.</p>
     <dl class="spec">
-      <div><dt>Fast</dt><dd>Search runs on the copy of your chats on your computer. No network, no waiting.</dd><code>tg messages search "contract" --offline</code></div>
-      <div><dt>Always current</dt><dd>A background service keeps that copy up to date, and catches up after a restart.</dd><code>tg server install</code></div>
-      <div><dt>Many accounts, many bots</dt><dd>Each profile and each bot has a name, and the name is the first word of the command.</dd><code>tg work inbox</code></div>
-      <div><dt>Reads without a trace</dt><dd>Reading marks nothing read. The other side sees nothing until you choose.</dd><code>tg chats mark-read</code></div>
-      <div><dt>Never sends twice</dt><dd>If the connection drops mid-send, repeat the command. Telegram recognises it and drops the copy.</dd><code>--send-id</code></div>
-      <div><dt>Logs, not your messages</dt><dd>Every send goes into a journal and every call can be traced, without text, names or numbers.</dd><code>tg sends list · --trace</code></div>
-      <div><dt>Secrets stay in the keyring</dt><dd>No password, login code, phone number or token is ever typed on the command line.</dd><code>tg session start</code></div>
-      <div><dt>Made for agents</dt><dd>One JSON value on stdout, errors on stderr, a fixed exit code for every kind of failure.</dd><code>--json</code></div>
-      <div><dt>Runs everywhere</dt><dd>Windows, macOS and Linux, on Node 22 or newer. No native module to build.</dd><code>npm i -g @leemour/tg-cli</code></div>
+      <div><dt>Rápido</dt><dd>La búsqueda funciona sobre la copia de tus chats en tu ordenador. Sin red, sin esperas.</dd><code>tg messages search "contrato" --offline</code></div>
+      <div><dt>Siempre al día</dt><dd>Un servicio en segundo plano mantiene la copia al día y se pone al corriente tras un reinicio.</dd><code>tg server install</code></div>
+      <div><dt>Varias cuentas, varios bots</dt><dd>Cada perfil y cada bot tiene un nombre, y ese nombre es la primera palabra del comando.</dd><code>tg work inbox</code></div>
+      <div><dt>Lee sin dejar rastro</dt><dd>Leer no marca nada como leído. La otra persona no ve nada hasta que tú quieras.</dd><code>tg chats mark-read</code></div>
+      <div><dt>Nunca envía dos veces</dt><dd>Si la conexión se corta al enviar, repite el comando. Telegram lo reconoce y descarta la copia.</dd><code>--send-id</code></div>
+      <div><dt>Registros, sin tus mensajes</dt><dd>Cada envío queda registrado y cada llamada se puede trazar, sin texto, nombres ni números.</dd><code>tg sends list · --trace</code></div>
+      <div><dt>Los secretos, en el llavero</dt><dd>Ninguna contraseña, código, teléfono ni token se escribe en la línea de comandos.</dd><code>tg session start</code></div>
+      <div><dt>Hecho para agentes</dt><dd>Un valor JSON en stdout, errores en stderr y un código de salida fijo para cada fallo.</dd><code>--json</code></div>
+      <div><dt>Funciona en todas partes</dt><dd>Windows, macOS y Linux, con Node 22 o posterior. Sin módulos nativos que compilar.</dd><code>npm i -g @leemour/tg-cli</code></div>
     </dl>
   </div>
 </section>
 
 <section class="close">
   <div class="wrap">
-    <h2 class="big">Give your agent your inbox tonight</h2>
-    <div class="cta"><span class="cmd"><code>npm i -g @leemour/tg-cli && tg session start && tg skill install</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli && tg session start && tg skill install">Copy</button></span></div>
+    <h2 class="big">Dale tu bandeja de entrada a tu agente esta noche</h2>
+    <div class="cta"><span class="cmd"><code>npm i -g @leemour/tg-cli && tg session start && tg skill install</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli && tg session start && tg skill install">Copiar</button></span></div>
   </div>
 </section>
 
@@ -571,39 +571,39 @@
     <div class="foot">
       <div class="foot-brand" id="about">
         <a class="mark" href="#"><svg viewBox="0 0 32 32" aria-hidden="true"><circle class="ring" cx="16" cy="16" r="16"/><circle cx="16" cy="16" r="16" fill="#4b53f0"/><path class="wire" pathLength="40" d="M9 21V11l4 4 3-4 3 4 4-4v10" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path class="pulse" pathLength="40" d="M9 21V11l4 4 3-4 3 4 4-4v10"/></svg><span class="word">WireCat</span></a>
-        <p>AI messaging with CLI tools for agents. Your Telegram and MAX, for you, your scripts and your AI agents.</p>
-        <span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copy</button></span>
+        <p>Mensajería con IA y herramientas CLI para agentes. Tu Telegram y tu MAX, para ti, tus scripts y tus agentes de IA.</p>
+        <span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copiar</button></span>
       </div>
-      <div><h4>Tools</h4><ul>
-        <li><a href="https://wirecat.dev/en/docs/tg">tg · Telegram</a></li>
+      <div><h4>Herramientas</h4><ul>
+        <li><a href="https://wirecat.dev/es/docs/tg">tg · Telegram</a></li>
         <li><a href="https://wirecat.dev/ru/docs/max">max · MAX</a></li>
-        <li><a href="https://wirecat.dev/en/docs/tg/changelog">tg changelog</a></li>
-        <li><a href="https://wirecat.dev/ru/docs/max/changelog">max changelog</a></li></ul></div>
-      <div><h4>Docs</h4><ul>
-        <li><a href="https://wirecat.dev/en/docs/tg/installation">Installation</a></li>
-        <li><a href="https://wirecat.dev/en/docs/tg/usage">Usage</a></li>
-        <li><a href="https://wirecat.dev/en/docs/tg/commands">All commands</a></li>
-        <li><a href="https://wirecat.dev/en/docs/tg/troubleshooting">Troubleshooting</a></li></ul></div>
-      <div><h4>For agents</h4><ul>
-        <li><a href="https://wirecat.dev/en/docs/tg/mcp">MCP server</a></li>
-        <li><a href="https://wirecat.dev/en/docs/tg/recipes">Recipes</a></li>
+        <li><a href="https://wirecat.dev/es/docs/tg/changelog">Cambios de tg</a></li>
+        <li><a href="https://wirecat.dev/ru/docs/max/changelog">Cambios de max</a></li></ul></div>
+      <div><h4>Documentación</h4><ul>
+        <li><a href="https://wirecat.dev/es/docs/tg/installation">Instalación</a></li>
+        <li><a href="https://wirecat.dev/es/docs/tg/usage">Uso</a></li>
+        <li><a href="https://wirecat.dev/es/docs/tg/commands">Todos los comandos</a></li>
+        <li><a href="https://wirecat.dev/es/docs/tg/troubleshooting">Solución de problemas</a></li></ul></div>
+      <div><h4>Para agentes</h4><ul>
+        <li><a href="https://wirecat.dev/es/docs/tg/mcp">Servidor MCP</a></li>
+        <li><a href="https://wirecat.dev/es/docs/tg/recipes">Recetas</a></li>
         <li><a href="https://wirecat.dev/llms.txt"><code>/llms.txt</code></a></li>
         <li><a href="https://wirecat.dev/llms-full.txt"><code>/llms-full.txt</code></a></li></ul></div>
-      <div><h4>Project</h4><ul>
-        <li><a href="https://github.com/leemour/tg-cli">tg on GitHub</a></li>
-        <li><a href="https://github.com/leemour/max-cli">max on GitHub</a></li>
-        <li><a href="https://github.com/leemour/tg-cli/issues">Report a problem</a></li>
-        <li><a href="https://wirecat.dev/en/docs/tg/security">Security</a></li></ul></div>
+      <div><h4>Proyecto</h4><ul>
+        <li><a href="https://github.com/leemour/tg-cli">tg en GitHub</a></li>
+        <li><a href="https://github.com/leemour/max-cli">max en GitHub</a></li>
+        <li><a href="https://github.com/leemour/tg-cli/issues">Informar de un problema</a></li>
+        <li><a href="https://wirecat.dev/es/docs/tg/security">Seguridad</a></li></ul></div>
     </div>
     <div class="foot-bottom">
-      <span>© 2026 WireCat · MIT licence · Windows, macOS, Linux</span>
-      <nav class="langs" aria-label="Language"><a href="g-home.html" aria-current="page">English</a><a href="g-home.ru.html">Русский</a><a href="g-home.es.html">Español</a></nav>
+      <span>© 2026 WireCat · licencia MIT · Windows, macOS, Linux</span>
+      <nav class="langs" aria-label="Language"><a href="g-home.html">English</a><a href="g-home.ru.html">Русский</a><a href="g-home.es.html" aria-current="page">Español</a></nav>
     </div>
   </div>
 </footer>
 
 <div class="headlines" aria-label="Design switches">
-  <span id="hl-count">Headline 1/8</span><button type="button" id="hl-prev" aria-label="Previous headline">‹</button><button type="button" id="hl-next" aria-label="Next headline">›</button>
+  <span id="hl-count">Titular 1/8</span><button type="button" id="hl-prev" aria-label="Previous headline">‹</button><button type="button" id="hl-next" aria-label="Next headline">›</button>
   <span class="sep"></span>
   <span id="wp-count">Wallpaper</span><button type="button" id="wp-prev" aria-label="Previous wallpaper">‹</button><button type="button" id="wp-next" aria-label="Next wallpaper">›</button>
 </div>
@@ -620,12 +620,12 @@
     peek: `<path d="M-22 10h44"/><path d="M-14 10c0-8 4-13 6-15l-1-9 7 6c2-1 2-1 4 0l7-6-1 9c2 2 6 7 6 15"/><circle cx="-4" cy="2" r="1.6" fill="INK"/><circle cx="4" cy="2" r="1.6" fill="INK"/><path d="M-16 10v-3M16 10v-3"/>`,
   }
   const walls = [
-    { label: "Planes + cat faces", mix: ["plane", "face"] },
-    { label: "Planes + sitting cats", mix: ["plane", "sitting"] },
-    { label: "Planes + sleeping cats", mix: ["plane", "sleeping"] },
-    { label: "Planes + peeking cats", mix: ["plane", "peek"] },
-    { label: "All the cats", mix: ["face", "sitting", "sleeping", "peek", "plane"] },
-    { label: "Planes + voice waves", mix: ["plane", "wave"] },
+    { label: "Aviones + caras de gato", mix: ["plane", "face"] },
+    { label: "Aviones + gatos sentados", mix: ["plane", "sitting"] },
+    { label: "Aviones + gatos dormidos", mix: ["plane", "sleeping"] },
+    { label: "Aviones + gatos asomados", mix: ["plane", "peek"] },
+    { label: "Todos los gatos", mix: ["face", "sitting", "sleeping", "peek", "plane"] },
+    { label: "Aviones + ondas de voz", mix: ["plane", "wave"] },
   ]
   const ink = getComputedStyle(document.documentElement).getPropertyValue("--wall-ink").trim()
   const scatter = (mix) => {
@@ -668,19 +668,19 @@
   navEl.addEventListener("mouseleave", () => { glide.style.opacity = "0" })
 
   const headlines = [
-    `Don't read your chats. <span>Ask about them.</span>`,
-    `Stop scrolling. <span>Start asking.</span>`,
-    `Your agent reads the chats. <span>You get the point.</span>`,
-    `Never search a chat again. <span>Just ask.</span>`,
-    `Your agent remembers <span>every chat, so you don't have to.</span>`,
-    `214 unread. <span>One message from your agent.</span>`,
-    `Who owes what? <span>Your agent knows.</span>`,
-    `Your messenger, <span>handled.</span>`,
+    `No leas tus chats. <span>Pregúntale a tu agente.</span>`,
+    `Deja de hacer scroll. <span>Empieza a preguntar.</span>`,
+    `Tu agente lee los chats. <span>Tú, lo importante.</span>`,
+    `No vuelvas a buscar en un chat. <span>Solo pregunta.</span>`,
+    `Tu agente recuerda <span>cada chat para que tú no tengas que hacerlo.</span>`,
+    `214 sin leer. <span>Un mensaje de tu agente.</span>`,
+    `¿Quién debe qué? <span>Tu agente lo sabe.</span>`,
+    `Tu mensajero, <span>resuelto.</span>`,
   ]
   let hl = 0
   const showHeadline = () => {
     document.getElementById("headline").innerHTML = headlines[hl]
-    document.getElementById("hl-count").textContent = `Headline ${hl + 1}/${headlines.length}`
+    document.getElementById("hl-count").textContent = `Titular ${hl + 1}/${headlines.length}`
   }
   document.getElementById("hl-prev").addEventListener("click", () => { hl = (hl - 1 + headlines.length) % headlines.length; showHeadline() })
   document.getElementById("hl-next").addEventListener("click", () => { hl = (hl + 1) % headlines.length; showHeadline() })
@@ -692,68 +692,68 @@
 
   const sessions = [
     {
-      title: "Who owes what", hint: "tg review",
+      title: "Quién debe qué", hint: "tg review",
       steps: [
-        { ask: "What did I promise anyone this week, and who still owes me?" },
+        { ask: "¿Qué prometí esta semana y quién me debe algo todavía?" },
         { tool: 'tg review <b>--since-time 7d</b>', out: `{"since": "2026-09-25T09:00:00+02:00", "until": "2026-10-02T08:58:00+02:00",
  "complete": true,
  "chats": [{"title": "Anna", "kind": "dialog", "messages": […], "more": false},
-           {"title": "Design", "kind": "group", "messages": […], "more": false},
+           {"title": "Diseño", "kind": "group", "messages": […], "more": false},
            {"title": "Project Alpha", "kind": "group", "messages": […], "more": false}, …],
  "skipped": [], "partial": false, "quiet": 14}` },
-        { say: `<h3>You owe</h3><ul><li><b>Anna</b>: the invoice by Friday. That is today. <q>Anna, 29 Sep</q></li><li><b>Kate</b>: notes on the new slides. <q>Design, 1 Oct</q></li></ul>
-          <h3>Waiting on others</h3><ul><li><b>Tom</b>: the mock-up, promised for 30 Sep. Not in Design yet.</li></ul>
-          <h3>Needs clarifying</h3><ul><li><b>Project Alpha</b>: who brings the samples. <q>We'll decide later</q>, 25 Sep</li></ul>
-          <p><small>Next review starts from 2 Oct, 08:58.</small></p>` },
-        { ask: "Nudge Tom about the mock-up." },
-        { tool: 'tg messages send <b>"Tom"</b> "Hi Tom! How is the mock-up going?"', out: `{"message": {"id": "48213", "text": "Hi Tom! How is the mock-up going?", "timestamp": "2026-10-02T09:01:12+02:00", "outgoing": true, …},
+        { say: `<h3>Debes</h3><ul><li><b>Anna</b>: la factura antes del viernes, o sea, hoy. <q>Anna, 29 sept.</q></li><li><b>Kate</b>: comentarios sobre las nuevas diapositivas. <q>Diseño, 1 oct.</q></li></ul>
+          <h3>Esperas de otros</h3><ul><li><b>Tom</b>: el boceto, prometido para el 30 de septiembre. Aún no está en Diseño.</li></ul>
+          <h3>Hay que aclarar</h3><ul><li><b>Project Alpha</b>: quién trae las muestras. <q>Lo decidimos luego</q>, 25 sept.</li></ul>
+          <p><small>La próxima revisión empieza el 2 oct. a las 08:58.</small></p>` },
+        { ask: "Recuérdale a Tom lo del boceto." },
+        { tool: 'tg messages send <b>"Tom"</b> "¡Hola, Tom! ¿Cómo va el boceto?"', out: `{"message": {"id": "48213", "text": "¡Hola, Tom! ¿Cómo va el boceto?", "timestamp": "2026-10-02T09:01:12+02:00", "outgoing": true, …},
  "sendId": "…"}` },
-        { say: "<p>Sent to Tom.</p>" },
+        { say: "<p>Enviado a Tom.</p>" },
       ],
     },
     {
-      title: "Morning catch-up", hint: "tg inbox",
+      title: "Resumen de la mañana", hint: "tg inbox",
       steps: [
-        { ask: "Anything I need to see this morning?" },
+        { ask: "¿Hay algo que deba ver esta mañana?" },
         { tool: "tg inbox", out: `{"mode": "unread",
- "chats": [{"title": "Book club", "kind": "group", "unreadCount": 4, "messages": […], "more": false},
+ "chats": [{"title": "Club de lectura", "kind": "group", "unreadCount": 4, "messages": […], "more": false},
            {"title": "Marco", "kind": "dialog", "unreadCount": 1, "messages": […], "more": false},
-           {"title": "Mum", "kind": "dialog", "unreadCount": 1, "messages": […], "more": false}],
+           {"title": "Mamá", "kind": "dialog", "unreadCount": 1, "messages": […], "more": false}],
  "skipped": [], "partial": false, "quiet": 211}` },
-        { say: `<p>Three chats need you. Nothing is marked read.</p><ul><li><b>Marco</b> needs the release tag approved before 11.</li><li><b>Book club</b> moved Friday to 19:30 and wants a yes from you.</li><li><b>Mum</b> sent a voice note, 0:42.</li></ul><p><small>211 muted chats changed, none of them mention you.</small></p>` },
+        { say: `<p>Tres chats te necesitan. Nada se ha marcado como leído.</p><ul><li><b>Marco</b> necesita que apruebes la versión antes de las 11:00.</li><li><b>Club de lectura</b> pasó el viernes a las 19:30 y espera tu sí.</li><li><b>Mamá</b> te mandó un audio de 0:42.</li></ul><p><small>Hay novedades en 211 chats silenciados, pero ninguno te menciona.</small></p>` },
       ],
     },
     {
-      title: "Lisbon money", hint: "tg messages search",
+      title: "Cuentas de Lisboa", hint: "tg messages search",
       steps: [
-        { ask: "Who owes who from the Lisbon trip?" },
-        { tool: 'tg messages search <b>"paid"</b> --chat "Lisbon trip"', out: `{"items": [{"senderName": "Ana", "text": "Paid the hotel, 240", "timestamp": "2026-09-14T22:10:00+02:00"},
-           {"senderName": "Ben", "text": "paid dinner 96", "timestamp": "2026-09-15T23:41:00+02:00"},
-           {"outgoing": true, "text": "I paid the taxi, 60", "timestamp": "2026-09-16T08:05:00+02:00"}],
+        { ask: "¿Quién le debe a quién del viaje a Lisboa?" },
+        { tool: 'tg messages search <b>"pagué"</b> --chat "Viaje a Lisboa"', out: `{"items": [{"senderName": "Ana", "text": "Pagué el hotel, 240", "timestamp": "2026-09-14T22:10:00+02:00"},
+           {"senderName": "Ben", "text": "pagué la cena 96", "timestamp": "2026-09-15T23:41:00+02:00"},
+           {"outgoing": true, "text": "Yo pagué el taxi, 60", "timestamp": "2026-09-16T08:05:00+02:00"}],
  "hasMore": false}` },
-        { say: `<p>Three payments, €396 in total, €132 each.</p>
-          <table><thead><tr><th></th><th>Paid</th><th>Share</th><th>Balance</th></tr></thead><tbody>
+        { say: `<p>Tres pagos, €396 en total, €132 cada uno.</p>
+          <table><thead><tr><th></th><th>Pagó</th><th>Parte</th><th>Saldo</th></tr></thead><tbody>
           <tr><td>Ana</td><td>€240</td><td>€132</td><td class="plus">+€108</td></tr>
           <tr><td>Ben</td><td>€96</td><td>€132</td><td class="minus">−€36</td></tr>
-          <tr><td>You</td><td>€60</td><td>€132</td><td class="minus">−€72</td></tr></tbody></table>
-          <p>You send Ana €72, Ben sends her €36. Want me to post that in the chat?</p>` },
+          <tr><td>Tú</td><td>€60</td><td>€132</td><td class="minus">−€72</td></tr></tbody></table>
+          <p>Tú le pasas a Ana €72 y Ben le pasa €36. ¿Lo publico en el chat?</p>` },
       ],
     },
     {
-      title: "Reminders", hint: "--at-time",
+      title: "Recordatorios", hint: "--at-time",
       steps: [
-        { ask: "Remind me to call Mum at six. And send the team the minutes on Monday at nine." },
-        { tool: 'tg messages send <b>me</b> "Call Mum" --at-time 2026-10-02T18:00', out: `{"message": {"id": "…", "text": "Call Mum", "timestamp": "2026-10-02T18:00:00+02:00", …}, "sendId": "…"}` },
-        { tool: 'tg messages send <b>"Team"</b> "Minutes from Thursday" --file minutes.pdf --at-time 2026-10-05T09:00', out: `{"message": {"id": "…", "text": "Minutes from Thursday", "timestamp": "2026-10-05T09:00:00+02:00", …}, "sendId": "…"}` },
-        { say: "<p>Both are scheduled on Telegram's side: the reminder lands in your Saved Messages at 18:00 today, the minutes go to Team on Monday at 09:00. Your laptop can be closed.</p>" },
+        { ask: "Recuérdame llamar a mamá a las seis. Y manda el acta al equipo el lunes a las nueve." },
+        { tool: 'tg messages send <b>me</b> "Llamar a mamá" --at-time 2026-10-02T18:00', out: `{"message": {"id": "…", "text": "Llamar a mamá", "timestamp": "2026-10-02T18:00:00+02:00", …}, "sendId": "…"}` },
+        { tool: 'tg messages send <b>"Equipo"</b> "Acta del jueves" --file minutes.pdf --at-time 2026-10-05T09:00', out: `{"message": {"id": "…", "text": "Acta del jueves", "timestamp": "2026-10-05T09:00:00+02:00", …}, "sendId": "…"}` },
+        { say: "<p>Los dos quedan programados en Telegram: el recordatorio llega a tus Mensajes guardados hoy a las 18:00 y el acta sale para Equipo el lunes a las 09:00. Puedes cerrar el portátil.</p>" },
       ],
     },
     {
-      title: "Voice note", hint: "tg messages transcribe",
+      title: "Audio", hint: "tg messages transcribe",
       steps: [
-        { ask: "What did Mum say? I'm in a meeting." },
-        { tool: 'tg messages transcribe <b>"Mum"</b> 8812 --local', out: `{"text": "Hi love, is your flight still at six? Call me when you land…", "pending": false}` },
-        { say: `<p><q>Hi love, is your flight still at six? Call me when you land, and don't forget Granddad's birthday on Sunday.</q></p><p>Want a reminder for Sunday morning?</p>` },
+        { ask: "¿Qué dijo mamá? Estoy en una reunión." },
+        { tool: 'tg messages transcribe <b>"Mamá"</b> 8812 --local', out: `{"text": "Hola, cariño, ¿tu vuelo sigue a las seis? Llámame cuando aterrices…", "pending": false}` },
+        { say: `<p><q>Hola, cariño, ¿tu vuelo sigue a las seis? Llámame cuando aterrices, y no olvides el cumpleaños del abuelo el domingo.</q></p><p>¿Te pongo un recordatorio el domingo por la mañana?</p>` },
       ],
     },
   ]
@@ -837,8 +837,8 @@
         const range = document.createRange(); range.selectNodeContents(button.previousElementSibling)
         getSelection().removeAllRanges(); getSelection().addRange(range)
       }
-      button.textContent = "Copied"; button.dataset.done = ""
-      setTimeout(() => { button.textContent = "Copy"; delete button.dataset.done }, 1600)
+      button.textContent = "Copiado"; button.dataset.done = ""
+      setTimeout(() => { button.textContent = "Copiar"; delete button.dataset.done }, 1600)
     })
   }
 </script>
