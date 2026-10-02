@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,500..900&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <style>
-  /* Layout: dark fog ground with scattered voice waves and paper planes; agent app, a day, connect, tools, explorer, footer. */
+  /* Layout: dark fog ground with paper planes and sleeping cats; agent app, a day, connect, tools, features, advantages, footer. */
   :root {
     color-scheme: dark;
     --wall: #171b1c; --wall-ink: #232a2c;
@@ -60,16 +60,16 @@
   nav.site .glide { position: absolute; top: 4px; bottom: 4px; left: 0; width: 0; border-radius: 999px; background: var(--app-3); opacity: 0; transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), width 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s; }
 
   .hero { padding-block: clamp(20px, 4vw, 48px) clamp(56px, 8vw, 104px); }
-  .hero-text { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px clamp(32px, 5vw, 72px); align-items: end; margin-bottom: clamp(28px, 4vw, 48px); }
+  .hero-text { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px clamp(32px, 5vw, 72px); align-items: start; margin-bottom: clamp(28px, 4vw, 48px); }
   h1 { font: 900 clamp(40px, 5.8vw, 80px)/0.9 var(--display); font-stretch: 62%; text-transform: uppercase; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
   h1 span { color: var(--key); }
-  .lede { margin: 0 0 20px; font-size: clamp(16px, 1.35vw, 18.5px); max-width: 30em; color: var(--ink-soft); }
+  .lede { margin: 0.3em 0 20px; font-size: clamp(16px, 1.35vw, 18.5px); max-width: 30em; color: var(--ink-soft); }
   .lede b { color: var(--ink); font-weight: 600; }
   .cta { display: flex; flex-wrap: wrap; gap: 10px; }
-  .cmd { display: inline-flex; align-items: center; gap: 14px; min-width: 0; max-width: 100%; background: var(--app); color: var(--app-ink); border-radius: 999px; padding: 5px 5px 5px 16px; font: 400 14px/1 var(--code); box-shadow: 0 0 0 1px var(--app-line); }
+  .cmd { display: inline-flex; align-items: center; gap: 14px; min-width: 0; max-width: 100%; background: var(--app); color: var(--app-ink); border-radius: 999px; padding: 4px 4px 4px 14px; font: 400 13px/1 var(--code); box-shadow: 0 0 0 1px var(--app-line); }
   .cmd code { font: inherit; white-space: nowrap; overflow-x: auto; padding-block: 4px; }
   .cmd code::before { content: "$ "; color: var(--app-soft); }
-  .copy { flex: none; border: 0; cursor: pointer; border-radius: 999px; padding: 8px 13px; background: var(--app-ink); color: var(--app); font: 600 12.5px/1 var(--body); }
+  .copy { flex: none; border: 0; cursor: pointer; border-radius: 999px; padding: 7px 11px; background: var(--app-ink); color: var(--app); font: 600 12px/1 var(--body); }
   .copy:hover, .copy[data-done] { background: var(--me); color: var(--me-ink); }
   .btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 999px; background: var(--me); color: var(--me-ink); text-decoration: none; font: 600 15px/1 var(--body); transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
   .btn:hover { transform: translateY(-2px); }
@@ -186,36 +186,28 @@
   .tool-card .cmd { margin-top: auto; }
   .tool-links { display: flex; gap: 18px; font-weight: 600; font-size: 15px; }
 
-  /* Explorer */
-  .explorer { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.25fr) minmax(0, 1fr); gap: 14px; align-items: stretch; }
-  .explorer > div { display: flex; flex-direction: column; min-width: 0; }
-  .pane-label { font: 600 12px/1 var(--body); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 10px; display: flex; align-items: center; gap: 8px; }
-  .pane-label i { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--ink); color: var(--wall); font: 700 11px/1 var(--body); font-style: normal; }
-  .questions { display: flex; flex-direction: column; gap: 8px; }
-  .q { text-align: left; border: 0; cursor: pointer; border-radius: 18px 18px 18px 6px; padding: 12px 15px; background: var(--card); color: var(--card-ink); font: 500 15.5px/1.35 var(--body); transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
-  .q:hover { transform: translateX(3px); }
-  .q[aria-pressed="true"] { background: var(--me); color: var(--me-ink); border-radius: 18px 18px 6px 18px; }
-  .term { background: var(--app); color: var(--app-ink); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; flex: 1; box-shadow: 0 0 0 1px var(--app-line); }
-  .term-bar { display: flex; gap: 7px; padding: 12px 16px; border-bottom: 1px solid var(--app-line); }
-  .term-bar i { width: 11px; height: 11px; border-radius: 50%; background: var(--app-3); }
-  .term-body { padding: 18px; font: 400 13px/1.65 var(--code); flex: 1; }
-  .line { white-space: pre-wrap; word-break: break-word; }
-  .line .p { color: var(--ok); }
-  .line b { color: var(--key); font-weight: 600; }
-  .out { color: var(--app-soft); white-space: pre-wrap; word-break: break-word; margin-top: 10px; }
-  .caret { display: inline-block; width: 8px; height: 1.1em; background: var(--app-ink); vertical-align: -0.2em; animation: caret 1s steps(1) infinite; }
-  @keyframes caret { 50% { opacity: 0; } }
-  .answer { display: flex; flex-direction: column; gap: 8px; }
-  .bubble { background: var(--card); color: var(--card-ink); border-radius: 18px 18px 18px 6px; padding: 14px 16px; font-size: 15.5px; line-height: 1.55; }
-  .bubble p { margin: 0 0 8px; } .bubble p:last-child { margin: 0; }
-  .bubble ul { margin: 0 0 8px; padding-left: 18px; }
-  .bubble q { color: var(--card-soft); }
-  .bubble table { border-collapse: collapse; font-variant-numeric: tabular-nums; margin: 6px 0 8px; font-size: 14.5px; }
-  .bubble td, .bubble th { padding: 3px 12px 3px 0; text-align: right; border-bottom: 1px solid var(--app-line); }
-  .bubble td:first-child, .bubble th:first-child { text-align: left; }
-  .bubble th { color: var(--card-soft); font-weight: 500; }
-  .meta-line { font-size: 12px; color: var(--ink-soft); }
-  .js .fresh { animation: rise 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+  .ftabs { display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 4px; border-radius: 999px; border: 1px solid var(--app-line); background: color-mix(in srgb, var(--app) 60%, transparent); margin-bottom: 28px; }
+  .ftab { border: 0; cursor: pointer; border-radius: 999px; padding: 10px 18px; font: 600 14.5px/1 var(--body); background: transparent; color: var(--ink-soft); transition: background 0.25s, color 0.25s; }
+  .ftab:hover { color: var(--ink); }
+  .ftab[aria-selected="true"] { background: var(--ink); color: var(--wall); }
+  .fpanel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(24px, 4vw, 56px); align-items: start; }
+  .js .fpanel:not([hidden]) { animation: rise 0.45s cubic-bezier(0.16, 1, 0.3, 1); }
+  .flead { margin: 0 0 18px; font-size: 19px; color: var(--ink); }
+  .flist ul { list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 12px; }
+  .flist li { padding-left: 22px; position: relative; color: var(--ink-soft); }
+  .flist li::before { content: ""; position: absolute; left: 2px; top: 0.62em; width: 8px; height: 8px; border-radius: 50%; border: 2px solid var(--key); }
+  .flist li b { color: var(--ink); font-weight: 600; }
+  .flist code { font: 500 0.88em/1 var(--code); color: var(--key); }
+  .more { color: var(--key); text-decoration: none; font-weight: 600; }
+  .more:hover { text-decoration: underline; }
+  .fterm { margin: 0; background: var(--app); border-radius: 18px; box-shadow: 0 0 0 1px var(--app-line), 0 40px 70px -46px rgba(0, 0, 0, 0.9); padding: 22px 24px; font: 400 13.5px/1.75 var(--code); color: var(--app-ink); overflow-x: auto; }
+  .fterm .c { color: var(--app-dim); }
+  .fterm .p { color: var(--ok); }
+  .spec { margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 clamp(24px, 3vw, 44px); }
+  .spec > div { padding-block: 22px 26px; border-top: 1px solid var(--app-line); display: flex; flex-direction: column; gap: 8px; }
+  .spec dt { font: 800 clamp(22px, 2.2vw, 28px)/1 var(--display); font-stretch: 75%; text-transform: uppercase; }
+  .spec dd { margin: 0; color: var(--app-soft); font-size: 15.5px; }
+  .spec code { align-self: flex-start; font: 500 12.5px/1.4 var(--code); color: var(--key); background: var(--app-2); border-radius: 8px; padding: 5px 9px; margin-top: 4px; overflow-wrap: anywhere; }
 
   .close { text-align: center; }
   .close .cta { justify-content: center; margin-top: 28px; }
@@ -234,9 +226,8 @@
   .langs a[aria-current="page"] { background: var(--app-3); color: var(--app-ink); }
 
   @media (max-width: 1000px) {
-    .explorer { grid-template-columns: minmax(0, 1fr); }
-    .questions { flex-direction: row; overflow-x: auto; padding-bottom: 4px; }
-    .q { flex: none; max-width: 260px; }
+    .fpanel { grid-template-columns: minmax(0, 1fr); }
+    .spec { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .foot { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .foot-brand { grid-column: 1 / -1; }
   }
@@ -253,6 +244,8 @@
     .time { font-size: 26px; }
   }
   @media (max-width: 520px) {
+    .spec { grid-template-columns: minmax(0, 1fr); }
+    .ftab { padding: 9px 13px; }
     nav.site a { padding: 8px 12px; }
     .mark { font-size: 18px; }
     .titlebar span { display: none; }
@@ -431,15 +424,114 @@
   </div>
 </section>
 
-<section style="padding-top:0">
+<section id="features" style="padding-top:0">
   <div class="wrap">
-    <h2 class="big">Ask in words. It runs <code style="font:600 0.6em/1 var(--code);text-transform:none;background:var(--app);padding:0.06em 0.22em;border-radius:0.14em;vertical-align:0.12em">tg</code>. You get the answer.</h2>
-    <p class="intro">Pick a question and see what your agent runs, what comes back, and what it tells you.</p>
-    <div class="explorer" id="explorer">
-      <div><p class="pane-label"><i>1</i>You ask</p><div class="questions" id="questions" role="group" aria-label="Questions"></div></div>
-      <div><p class="pane-label"><i>2</i>It runs</p><div class="term"><div class="term-bar"><i></i><i></i><i></i></div><div class="term-body" id="term"></div></div></div>
-      <div><p class="pane-label"><i>3</i>It tells you</p><div class="answer" id="answer"></div></div>
+    <h2 class="big">One tool for every side of your messenger</h2>
+    <p class="intro">Your own account, your bots and the groups you run. The same commands in Telegram and MAX.</p>
+    <div class="ftabs" role="tablist" aria-label="Features">
+      <button class="ftab" role="tab" type="button" id="ft-personal" aria-selected="true" aria-controls="fp-personal">Personal account</button>
+      <button class="ftab" role="tab" type="button" id="ft-bot" aria-selected="false" aria-controls="fp-bot">Bots</button>
+      <button class="ftab" role="tab" type="button" id="ft-groups" aria-selected="false" aria-controls="fp-groups">Groups you run</button>
     </div>
+
+    <div class="fpanel" role="tabpanel" id="fp-personal" aria-labelledby="ft-personal">
+      <div class="flist">
+        <p class="flead">Your own account, as one more of your devices: every chat, its history, groups, channels and contacts.</p>
+        <ul>
+          <li><b>Unread in every chat at once.</b> Other people's messages, and nothing gets marked read.</li>
+          <li><b>Who owes what.</b> Everything said since the last review, yours too, in one call.</li>
+          <li><b>Search years of history offline.</b> In the copy of your chats kept on your computer.</li>
+          <li><b>Voice notes as text.</b> By Telegram, or by a speech model on your machine.</li>
+          <li><b>Send later.</b> Telegram delivers it on time, with your laptop shut.</li>
+          <li><b>Everything else you do by hand.</b> Replies, files, reactions, polls, edits, forwards, pins.</li>
+        </ul>
+        <a class="more" href="https://wirecat.dev/en/docs/tg/usage">How to use your account →</a>
+      </div>
+      <pre class="fterm"><code><span class="c"># what needs you, in every chat</span>
+<span class="p">$</span> tg inbox
+<span class="c"># a week of promises, sorted</span>
+<span class="p">$</span> tg review --since-time 7d
+<span class="c"># find it without connecting</span>
+<span class="p">$</span> tg messages search "contract"
+<span class="c"># a voice note, heard on this machine</span>
+<span class="p">$</span> tg messages transcribe "Mum" 8812 --local
+<span class="c"># a reminder in Saved Messages</span>
+<span class="p">$</span> tg messages send me "Call Mum" --at-time 2h
+<span class="c"># a whole chat as a document</span>
+<span class="p">$</span> tg store export "Project Alpha" --format markdown</code></pre>
+    </div>
+
+    <div class="fpanel" role="tabpanel" id="fp-bot" aria-labelledby="ft-bot" hidden>
+      <div class="flist">
+        <p class="flead">Your bots, through the official Bot API of Telegram and MAX. Keep as many as you like, each under a name you choose.</p>
+        <ul>
+          <li><b>The bot's name is the first word.</b> <code>tg sales bot …</code>, <code>max support bot …</code></li>
+          <li><b>Tokens in the system keyring.</b> Never printed, not even in an error.</li>
+          <li><b>Each bot has its own list of chats.</b> It writes only there, and keeps a journal of what it sent.</li>
+          <li><b>Messages and files.</b> Send, edit, delete and pin, to a chat or to a person.</li>
+          <li><b>On MAX, the whole Bot API.</b> Members, admins, buttons, the command menu, webhooks and moderation.</li>
+          <li><b>A bot for your agent.</b> <code>max sales bot mcp</code> gives it an MCP server of its own.</li>
+        </ul>
+        <a class="more" href="https://wirecat.dev/en/docs/tg/bot">How to set up a bot →</a>
+      </div>
+      <pre class="fterm"><code><span class="c"># the token, at a hidden prompt</span>
+<span class="p">$</span> tg sales bot auth set
+<span class="c"># the bot may write only here</span>
+<span class="p">$</span> tg sales bot recipients add user:&lt;id&gt;
+<span class="c"># a build report, as the bot</span>
+<span class="p">$</span> tg sales bot messages send "Team" "Build is ready" --file report.pdf
+<span class="c"># the same on MAX</span>
+<span class="p">$</span> max sales bot messages send "Sales team" "Build is ready"
+<span class="c"># a bot MCP server for your agent</span>
+<span class="p">$</span> max sales bot mcp
+<span class="c"># every bot on this computer</span>
+<span class="p">$</span> tg bot list --check</code></pre>
+    </div>
+
+    <div class="fpanel" role="tabpanel" id="fp-groups" aria-labelledby="ft-groups" hidden>
+      <div class="flist">
+        <p class="flead">For the groups and channels you run: who is waiting, who came and went, and what breaks your rules.</p>
+        <ul>
+          <li><b>Questions nobody answered.</b> Asked at least a day ago, still open.</li>
+          <li><b>Who joined, left, was added or removed.</b> And by whom.</li>
+          <li><b>Everyone in the group.</b> With their role and when they were last seen.</li>
+          <li><b>Forum topics and invite links.</b> See where a link leads without joining.</li>
+          <li><b>Manage it.</b> Rename, add and remove members and admins, reset the invite link.</li>
+          <li><b>Moderation by your rules.</b> Links, forwards and flood, applied when you run them.</li>
+        </ul>
+        <a class="more" href="https://wirecat.dev/en/docs/tg/groups">How to run a group →</a>
+      </div>
+      <pre class="fterm"><code><span class="c"># questions nobody answered in 24 hours</span>
+<span class="p">$</span> tg review --chat "Hiking" --unanswered
+<span class="c"># who joined, left, was added or removed</span>
+<span class="p">$</span> tg chats events "Hiking" --since-time 7d
+<span class="c"># everyone, with role and last seen</span>
+<span class="p">$</span> tg chats members list "Hiking" --all
+<span class="c"># a forum group's topics</span>
+<span class="p">$</span> tg topics list "Hiking"
+<span class="c"># where an invite link leads, without joining</span>
+<span class="p">$</span> tg chats inspect https://t.me/+AbCdEf
+<span class="c"># on MAX: judge new messages and members by your rules</span>
+<span class="p">$</span> max chats check "Residents"</code></pre>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="why">
+  <div class="wrap">
+    <h2 class="big">Why it works this well</h2>
+    <p class="intro">Built for agents and scripts first, so it is quick, predictable and leaves a trail.</p>
+    <dl class="spec">
+      <div><dt>Fast</dt><dd>Search runs on the copy of your chats on your computer. No network, no waiting.</dd><code>tg messages search "contract" --offline</code></div>
+      <div><dt>Always current</dt><dd>A background service keeps that copy up to date, and catches up after a restart.</dd><code>tg server install</code></div>
+      <div><dt>Many accounts, many bots</dt><dd>Each profile and each bot has a name, and the name is the first word of the command.</dd><code>tg work inbox</code></div>
+      <div><dt>Reads without a trace</dt><dd>Reading marks nothing read. The other side sees nothing until you choose.</dd><code>tg chats mark-read</code></div>
+      <div><dt>Never sends twice</dt><dd>If the connection drops mid-send, repeat the command. Telegram recognises it and drops the copy.</dd><code>--send-id</code></div>
+      <div><dt>Logs, not your messages</dt><dd>Every send goes into a journal and every call can be traced, without text, names or numbers.</dd><code>tg sends list · --trace</code></div>
+      <div><dt>Secrets stay in the keyring</dt><dd>No password, login code, phone number or token is ever typed on the command line.</dd><code>tg session start</code></div>
+      <div><dt>Made for agents</dt><dd>One JSON value on stdout, errors on stderr, a fixed exit code for every kind of failure.</dd><code>--json</code></div>
+      <div><dt>Runs everywhere</dt><dd>Windows, macOS and Linux, on Node 22 or newer. No native module to build.</dd><code>npm i -g @leemour/tg-cli</code></div>
+    </dl>
   </div>
 </section>
 
@@ -531,7 +623,7 @@
     document.body.style.backgroundImage = `url("data:image/svg+xml,${encodeURIComponent(svg)}")`
     document.body.style.backgroundSize = `${size}px ${size}px`
   }
-  let wall = 0
+  let wall = 2
   const showWall = () => {
     scatter(walls[wall].mix)
     document.getElementById("wp-count").textContent = walls[wall].label
@@ -701,66 +793,14 @@
     if (!played && entries.some((e) => e.isIntersecting)) { played = true; show(0, true) }
   }, { threshold: 0.4 }).observe(app)
 
-  const items = [
-    { q: "Who's waiting on me?", cmd: "tg review <b>--unanswered 4h</b>",
-      out: `{"chats": [{"title": "Pablo", "kind": "dialog", "messages": […]},
-           {"title": "Landlord", "kind": "dialog", "messages": […]},
-           {"title": "Design", "kind": "group", "messages": […]}],
- "unanswered": {"olderThanHours": 4}, "quiet": 9, …}`,
-      say: `<ul><li><b>Pablo</b> asked about the invoice. <q>3 days</q></li><li><b>Landlord</b>: can the plumber come Tuesday? <q>2 days</q></li><li><b>Kate</b> in Design wants notes on the slides. <q>6 hours</q></li></ul><p>Shall I draft the three replies?</p>` },
-    { q: "Who owes who from the Lisbon trip?", cmd: 'tg messages search <b>"paid"</b> --chat "Lisbon trip"',
-      out: `{"items": [{"senderName": "Ana", "text": "Paid the hotel, 240", …},
-           {"senderName": "Ben", "text": "paid dinner 96", …},
-           {"outgoing": true, "text": "I paid the taxi, 60", …}],
- "hasMore": false}`,
-      say: `<p>€396 in total, €132 each.</p><table><thead><tr><th></th><th>Paid</th><th>Balance</th></tr></thead><tbody><tr><td>Ana</td><td>€240</td><td>+€108</td></tr><tr><td>Ben</td><td>€96</td><td>−€36</td></tr><tr><td>You</td><td>€60</td><td>−€72</td></tr></tbody></table><p>You send Ana €72, Ben sends her €36.</p>` },
-    { q: "Remind me to call Mum at six.", cmd: 'tg messages send <b>me</b> "Call Mum" --at-time 2026-10-02T18:00',
-      out: `{"message": {"id": "…", "text": "Call Mum", "timestamp": "2026-10-02T18:00:00+02:00", …},
- "sendId": "…"}`,
-      say: `<p>Done. It lands in your Saved Messages at 18:00. Telegram sends it, so your laptop can be closed.</p>` },
-    { q: "When did Anna and I agree to meet?", cmd: 'tg messages search <b>"meet"</b> --chat "Anna"',
-      out: `{"items": [{"senderName": "Anna", "text": "Saturday 11:00 at the market, then?", …},
-           {"outgoing": true, "text": "Deal, see you there", …}],
- "hasMore": false}`,
-      say: `<p>Saturday at 11:00, at the market. You agreed on 24 September: <q>Deal, see you there.</q></p>` },
-    { q: "What did Mum's voice note say?", cmd: 'tg messages transcribe <b>"Mum"</b> 8812 --local',
-      out: `{"text": "Hi love, is your flight still at six? Call me when you land…", "pending": false}`,
-      say: `<p><q>Hi love, is your flight still at six? Call me when you land, and don't forget Granddad's birthday on Sunday.</q></p>` },
-  ]
-  const qBox = document.getElementById("questions")
-  const term = document.getElementById("term")
-  const answer = document.getElementById("answer")
-  let qTimers = []
-  let auto = null
-  items.forEach((item, i) => {
-    const b = document.createElement("button")
-    b.className = "q"; b.type = "button"; b.textContent = item.q
-    b.addEventListener("click", () => { clearInterval(auto); ask(i, true) })
-    qBox.append(b)
-  })
-  function ask(i, animate) {
-    qTimers.forEach(clearTimeout); qTimers = []
-    const item = items[i]
-    for (const [n, b] of [...qBox.children].entries()) b.setAttribute("aria-pressed", String(n === i))
-    const full = () => {
-      term.innerHTML = `<div class="line"><span class="p">$</span> ${item.cmd}</div><div class="out fresh">${j(item.out)}</div>`
-      answer.innerHTML = `<div class="bubble fresh">${item.say}</div><span class="meta-line">Your agent · just now</span>`
+  const ftabs = [...document.querySelectorAll(".ftab")]
+  for (const tab of ftabs) tab.addEventListener("click", () => {
+    for (const other of ftabs) {
+      const on = other === tab
+      other.setAttribute("aria-selected", String(on))
+      document.getElementById(other.getAttribute("aria-controls")).hidden = !on
     }
-    if (!animate || still) { full(); return }
-    const plain = item.cmd.replace(/<[^>]+>/g, "")
-    term.innerHTML = `<div class="line"><span class="p">$</span> <span class="typed"></span><span class="caret"></span></div>`
-    answer.innerHTML = ""
-    const typed = term.querySelector(".typed")
-    for (let c = 1; c <= plain.length; c++) qTimers.push(setTimeout(() => { typed.textContent = plain.slice(0, c) }, c * 22))
-    qTimers.push(setTimeout(full, plain.length * 22 + 350))
-  }
-  ask(0, false)
-  let started = false
-  new IntersectionObserver((entries) => {
-    if (started || !entries.some((e) => e.isIntersecting)) return
-    started = true; ask(0, true)
-    if (!still) { let i = 0; auto = setInterval(() => { i = (i + 1) % items.length; ask(i, true) }, 6500) }
-  }, { threshold: 0.3 }).observe(document.getElementById("explorer"))
+  })
 
   const io = new IntersectionObserver((entries) => {
     for (const e of entries) if (e.isIntersecting) { e.target.classList.add("seen"); io.unobserve(e.target) }
