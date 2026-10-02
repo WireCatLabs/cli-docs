@@ -635,9 +635,20 @@ export function Landing({ lang }: { lang: string }) {
           <h2 className="big">{t("Telegram and MAX, the same commands")}</h2>
           <p className="intro">{t("Learn one and you know the other.")}</p>
           <div className="tools">
-            <article className="tool-card">
+            <article className="tool-card tool-tg">
+              <svg className="tool-art" viewBox="0 0 120 120" aria-hidden="true">
+                <path d="M10 58l96-40-26 86-22-30z" />
+                <path d="M58 74l48-56" />
+              </svg>
               <div className="tool-name">
                 tg<small>Telegram</small>
+              </div>
+              <div className="tool-tags">
+                <span>inbox</span>
+                <span>review</span>
+                <span>search</span>
+                <span>transcribe</span>
+                <span>watch</span>
               </div>
               <p>{t("A Telegram client for the terminal and for AI agents, on your own account.")}</p>
               <span className="cmd">
@@ -652,9 +663,20 @@ export function Landing({ lang }: { lang: string }) {
                 <a href="https://www.npmjs.com/package/@leemour/tg-cli">npm</a>
               </div>
             </article>
-            <article className="tool-card">
+            <article className="tool-card tool-max">
+              <svg className="tool-art" viewBox="0 0 120 120" aria-hidden="true">
+                <path d="M24 18h72a14 14 0 0 1 14 14v40a14 14 0 0 1-14 14H58l-24 20V86H24a14 14 0 0 1-14-14V32a14 14 0 0 1 14-14z" />
+                <path d="M34 44h52M34 60h34" />
+              </svg>
               <div className="tool-name">
                 max<small>{t("MAX Messenger")}</small>
+              </div>
+              <div className="tool-tags">
+                <span>bot</span>
+                <span>chats check</span>
+                <span>inbox</span>
+                <span>mcp</span>
+                <span>review</span>
               </div>
               <p>{t("Your MAX bots through the official Bot API, and your personal account.")}</p>
               <span className="cmd">

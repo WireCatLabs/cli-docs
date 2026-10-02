@@ -1410,3 +1410,72 @@
     grid-column: 1 / -1;
   }
 }
+
+.wc .me {
+  background: #373da3;
+}
+.wc.ru h1 {
+  font-size: clamp(36px, 4.9vw, 70px);
+}
+.wc .tool-tg {
+  --accent: #2aabee;
+}
+.wc .tool-max {
+  --accent: #9b6bff;
+}
+.wc .tool-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--app-line));
+  background:
+    radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, var(--accent) 24%, transparent), transparent 62%), var(--card);
+}
+.wc .tool-card .tool-name {
+  color: var(--accent);
+}
+.wc .tool-card .tool-name small {
+  color: color-mix(in srgb, var(--accent) 55%, var(--card-ink));
+}
+.wc .tool-art {
+  position: absolute;
+  z-index: -1;
+  right: -18px;
+  top: -10px;
+  width: 190px;
+  height: 190px;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  opacity: 0.22;
+  transform: rotate(-8deg);
+  transition:
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.4s;
+}
+.wc .tool-card:hover .tool-art {
+  transform: rotate(0deg) translate(-6px, 6px);
+  opacity: 0.32;
+}
+.wc .tool-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.wc .tool-tags span {
+  font: 500 12.5px / 1 var(--code);
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: color-mix(in srgb, var(--accent) 70%, #fff);
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.wc .tool-links a:hover {
+  color: var(--accent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .wc .tool-art {
+    transition: none;
+  }
+}
