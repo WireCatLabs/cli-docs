@@ -116,6 +116,9 @@
 .wc .mark .word {
   transition: letter-spacing 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
+.wc .mark .word-tail {
+  margin-left: -0.08em;
+}
 .wc .mark:hover svg,
 .wc .mark:focus-visible svg {
   transform: rotate(-10deg) scale(1.06);
