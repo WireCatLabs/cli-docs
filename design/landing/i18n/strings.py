@@ -201,6 +201,12 @@ TEXT = {
         "Tu cuenta, tus bots y los grupos que gestionas. Los mismos comandos en Telegram y MAX.",
     ),
     "Personal account": ("Личный аккаунт", "Cuenta personal"),
+    "Your chats, history and contacts": ("Ваши чаты, история и контакты", "Tus chats, historial y contactos"),
+    "Official Bot API, many bots": ("Официальный Bot API, много ботов", "Bot API oficial, varios bots"),
+    "Members, questions, moderation": ("Участники, вопросы, модерация", "Miembros, preguntas, moderación"),
+    "Keep several, each under a name you choose.": ("Сколько угодно ботов, у каждого своё имя.", "Todos los que quieras, cada uno con su nombre."),
+    "An MCP server of its own, read-only by default.": ("Собственный MCP-сервер, по умолчанию только чтение.", "Su propio servidor MCP, de solo lectura por defecto."),
+    "Block 1/6": ("Блок 1/6", "Bloque 1/6"),
     "Bots": ("Боты", "Bots"),
     "Groups you run": ("Ваши группы", "Tus grupos"),
     "Your own account, as one more of your devices: every chat, its history, groups, channels and contacts.": (
@@ -332,13 +338,7 @@ TEXT = {
 
 # Substrings of the page script: (English, Russian, Spanish).
 SCRIPT = [
-    ('"One tool for every side of your messenger"', '"Один инструмент для всего мессенджера"', '"Una herramienta para todo tu mensajero"'),
-    ('"Your account, your bots, your groups"', '"Ваш аккаунт, ваши боты, ваши группы"', '"Tu cuenta, tus bots, tus grupos"'),
-    ('"Everything your messenger does, from one command line"', '"Всё, что умеет мессенджер, — из командной строки"', '"Todo lo que hace tu mensajero, desde la línea de comandos"'),
-    ('"Read, reply, run your groups"', '"Читать, отвечать, вести группы"', '"Leer, responder, gestionar grupos"'),
-    ('"For you, for your bot, for your group"', '"Для вас, для бота, для группы"', '"Para ti, para tu bot, para tu grupo"'),
-    ('"Your whole messenger in one command"', '"Весь мессенджер в одной команде"', '"Todo tu mensajero en un comando"'),
-    ('const titleWord = "Title"', 'const titleWord = "Заголовок"', 'const titleWord = "Título"'),
+    ('const blockWord = "Block"', 'const blockWord = "Блок"', 'const blockWord = "Bloque"'),
     ('label: "Planes + cat faces"', 'label: "Самолёты + мордочки"', 'label: "Aviones + caras de gato"'),
     ('label: "Planes + sitting cats"', 'label: "Самолёты + сидящие коты"', 'label: "Aviones + gatos sentados"'),
     ('label: "Planes + sleeping cats"', 'label: "Самолёты + спящие коты"', 'label: "Aviones + gatos dormidos"'),
@@ -411,8 +411,9 @@ CODE = [
     ('"Lisbon trip"', '"Лиссабон"', '"Viaje a Lisboa"'),
     ('"Hiking club"', '"Походы"', '"Senderismo"'),
     ('"Hiking"', '"Походы"', '"Senderismo"'),
+    ('"Hiking 2027"', '"Походы 2027"', '"Senderismo 2027"'),
+    ('"The minutes"', '"Протокол"', '"El acta"'),
     ('"Team"', '"Команда"', '"Equipo"'),
-    ('"Sales team"', '"Отдел продаж"', '"Ventas"'),
     ('"Residents"', '"Жильцы"', '"Vecinos"'),
     ('"Book club"', '"Книжный клуб"', '"Club de lectura"'),
     ('"Design"', '"Дизайн"', '"Diseño"'),

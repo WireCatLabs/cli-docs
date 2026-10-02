@@ -216,6 +216,115 @@
   .fterm { margin: 0; background: var(--app); border-radius: 18px; box-shadow: 0 0 0 1px var(--app-line), 0 40px 70px -46px rgba(0, 0, 0, 0.9); padding: 22px 24px; font: 400 13.5px/1.75 var(--code); color: var(--app-ink); overflow-x: auto; }
   .fterm .c { color: var(--app-dim); }
   .fterm .p { color: var(--ok); }
+  .fv { margin-top: 8px; }
+  .fv-ico { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: color-mix(in srgb, var(--me) 22%, transparent); color: var(--key); flex: none; }
+  .fv-ico svg { width: 22px; height: 22px; }
+  .fv-name { font: 800 22px/1.05 var(--display); font-stretch: 75%; text-transform: uppercase; color: var(--ink); }
+  .fv-short { font-size: 14px; color: var(--ink-soft); }
+  .fv-lead { margin: 0 0 22px; font-size: 18px; color: var(--ink); max-width: 46em; }
+  .fv code { font: 500 13px/1.45 var(--code); color: var(--app-ink); background: var(--app); border: 1px solid var(--app-line); border-radius: 8px; padding: 5px 9px; overflow-wrap: anywhere; display: inline-block; }
+  .fv pre code { display: block; background: none; border: 0; padding: 0; border-radius: 0; font: inherit; color: inherit; }
+  .fv h4 { margin: 0; font: 600 17px/1.3 var(--body); color: var(--ink); }
+  .fv-tab { cursor: pointer; font: inherit; text-align: left; color: var(--ink-soft); }
+  .fv .more { display: inline-block; margin-top: 22px; }
+
+  .tabs1 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 28px; }
+  .tabs1 .fv-tab { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 4px 14px; align-items: center; padding: 18px; border-radius: 18px; border: 1px solid var(--app-line); background: var(--app-2); transition: border-color 0.2s, background 0.2s, transform 0.2s; }
+  .tabs1 .fv-ico { grid-row: span 2; }
+  .tabs1 .fv-tab:hover { border-color: var(--app-dim); transform: translateY(-2px); }
+  .tabs1 .fv-tab[aria-selected="true"] { background: var(--me); border-color: var(--me); }
+  .tabs1 .fv-tab[aria-selected="true"] .fv-name, .tabs1 .fv-tab[aria-selected="true"] .fv-short { color: #fff; }
+  .tabs1 .fv-tab[aria-selected="true"] .fv-ico { background: rgba(255, 255, 255, 0.18); color: #fff; }
+  .g1 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .t1 { background: var(--card); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+  .t1 p { margin: 0 0 6px; color: var(--card-soft); font-size: 15px; flex: 1; }
+  .t1 code { align-self: flex-start; }
+
+  .g2 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .c2 { background: var(--card); border-radius: 22px; padding: 24px; }
+  .c2-head { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 2px 14px; align-items: center; padding-bottom: 18px; margin-bottom: 8px; border-bottom: 1px solid var(--app-line); }
+  .c2-head .fv-ico { grid-row: span 2; }
+  .c2-head h4 { font: 800 24px/1 var(--display); font-stretch: 75%; text-transform: uppercase; }
+  .c2-head p { margin: 0; font-size: 14px; color: var(--card-soft); }
+  .c2 ul { list-style: none; margin: 0; padding: 0; }
+  .c2 li { display: grid; gap: 4px; padding: 14px 0; border-bottom: 1px solid color-mix(in srgb, var(--app-line) 60%, transparent); }
+  .c2 li span { color: var(--card-soft); font-size: 14.5px; }
+  .c2 li code { justify-self: start; margin-top: 4px; font-size: 12px; }
+
+  .g3 { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 32px; align-items: start; }
+  .tabs3 { display: grid; gap: 8px; position: sticky; top: 90px; }
+  .tabs3 .fv-tab { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 2px 14px; align-items: center; padding: 16px; border-radius: 16px; border: 1px solid transparent; background: transparent; position: relative; }
+  .tabs3 .fv-ico { grid-row: span 2; }
+  .tabs3 .fv-tab:hover { background: var(--app-2); }
+  .tabs3 .fv-tab[aria-selected="true"] { background: var(--app-2); border-color: var(--app-line); }
+  .tabs3 .fv-tab[aria-selected="true"]::after { content: ""; position: absolute; right: -17px; top: 50%; width: 10px; height: 10px; border-radius: 50%; background: var(--key); transform: translateY(-50%); }
+  .r3 { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr) minmax(0, 1.3fr); gap: 16px; align-items: center; padding: 16px 0; border-top: 1px solid var(--app-line); }
+  .r3 b { color: var(--ink); font-weight: 600; }
+  .r3 span { color: var(--ink-soft); font-size: 15px; }
+  .r3 code { justify-self: start; }
+
+  .tabs4 { display: flex; flex-wrap: wrap; gap: 6px 28px; margin-bottom: 26px; border-bottom: 1px solid var(--app-line); }
+  .tabs4 .fv-tab { background: none; border: 0; padding: 0 0 14px; display: inline-flex; align-items: center; gap: 10px; position: relative; }
+  .tabs4 .fv-short { display: none; }
+  .tabs4 .fv-ico { width: 32px; height: 32px; border-radius: 10px; }
+  .tabs4 .fv-name { font-size: clamp(22px, 2.6vw, 34px); color: var(--ink-dim); transition: color 0.2s; }
+  .tabs4 .fv-tab:hover .fv-name { color: var(--ink-soft); }
+  .tabs4 .fv-tab[aria-selected="true"] .fv-name { color: var(--ink); }
+  .tabs4 .fv-tab[aria-selected="true"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; border-radius: 3px; background: var(--key); }
+  .g4 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(24px, 4vw, 56px); align-items: start; }
+  .g4 ol { margin: 0; padding: 0; list-style: none; counter-reset: f; display: grid; gap: 4px; }
+  .g4 li { counter-increment: f; padding: 10px 12px 10px 44px; border-radius: 12px; position: relative; color: var(--ink-soft); cursor: default; transition: background 0.2s; }
+  .g4 li::before { content: counter(f); position: absolute; left: 12px; top: 10px; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font: 600 12px/1 var(--body); background: var(--app-3); color: var(--ink-soft); }
+  .g4 li b { color: var(--ink); font-weight: 600; }
+  .g4 li.hot { background: var(--app-2); }
+  .g4 li.hot::before { background: var(--key); color: var(--app); }
+  .term4 { margin: 0; background: var(--app); border-radius: 18px; box-shadow: 0 0 0 1px var(--app-line); padding: 18px; font: 400 14px/1.6 var(--code); color: var(--app-ink); overflow-x: auto; position: sticky; top: 90px; }
+  .l4 { padding: 9px 10px; border-radius: 8px; white-space: pre-wrap; word-break: break-word; transition: background 0.2s; }
+  .l4.hot { background: color-mix(in srgb, var(--me) 28%, transparent); }
+  .p { color: var(--ok); }
+
+  .term5 { background: var(--app); border-radius: 20px; box-shadow: 0 0 0 1px var(--app-line), 0 50px 80px -50px rgba(0, 0, 0, 0.9); overflow: hidden; }
+  .bar5 { display: flex; gap: 2px; padding: 8px 8px 0; background: var(--app-2); border-bottom: 1px solid var(--app-line); overflow-x: auto; }
+  .bar5 .fv-tab { display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px 12px; border: 1px solid transparent; border-bottom: 0; border-radius: 12px 12px 0 0; background: transparent; font: 500 15px/1 var(--code); color: var(--app-soft); white-space: nowrap; }
+  .bar5 .fv-ico { width: 28px; height: 28px; border-radius: 8px; }
+  .bar5 .fv-ico svg { width: 17px; height: 17px; }
+  .bar5 .fv-tab[aria-selected="true"] { background: var(--app); border-color: var(--app-line); color: var(--app-ink); margin-bottom: -1px; }
+  .term5 pre { margin: 0; padding: clamp(18px, 3vw, 32px); font: 400 15px/1.6 var(--code); color: var(--app-ink); overflow-x: auto; }
+  .l5 { display: grid; gap: 2px; padding: 10px 0; white-space: pre-wrap; word-break: break-word; }
+  .l5 .c { color: var(--app-dim); font-family: var(--body); font-size: 15px; }
+  .l5 .c b { color: var(--app-ink); font-weight: 600; }
+
+  .acc6 { border-top: 1px solid var(--app-line); }
+  .acc6:last-child { border-bottom: 1px solid var(--app-line); }
+  .acc6 summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 40px auto minmax(0, 1fr) 28px; gap: 18px; align-items: center; padding: 22px 4px; }
+  .acc6 summary::-webkit-details-marker { display: none; }
+  .acc6 .fv-name { font-size: clamp(24px, 3vw, 38px); }
+  .acc6 summary:hover .fv-name { color: var(--key); }
+  .plus6 { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--app-line); position: relative; }
+  .plus6::before, .plus6::after { content: ""; position: absolute; left: 50%; top: 50%; width: 12px; height: 2px; background: var(--ink); transform: translate(-50%, -50%); transition: transform 0.25s; }
+  .plus6::after { transform: translate(-50%, -50%) rotate(90deg); }
+  .acc6[open] .plus6::after { transform: translate(-50%, -50%) rotate(0deg); }
+  .acc6[open] { padding-bottom: 28px; }
+  .g6 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .t6 { display: grid; gap: 6px; align-content: start; padding: 18px; border-radius: 16px; background: var(--card); }
+  .t6 b { color: var(--card-ink); font-weight: 600; }
+  .t6 span { color: var(--card-soft); font-size: 14.5px; }
+  .t6 code { justify-self: start; margin-top: 6px; font-size: 12px; }
+
+  @media (max-width: 1000px) {
+    .g1, .g2, .g6 { grid-template-columns: minmax(0, 1fr); }
+    .g3, .g4 { grid-template-columns: minmax(0, 1fr); }
+    .tabs3 { position: static; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .tabs3 .fv-tab[aria-selected="true"]::after { display: none; }
+    .r3 { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+    .term4 { position: static; }
+  }
+  @media (max-width: 640px) {
+    .tabs1, .tabs3 { grid-template-columns: minmax(0, 1fr); }
+    .acc6 summary { grid-template-columns: 40px minmax(0, 1fr) 28px; }
+    .acc6 .fv-short { display: none; }
+  }
+
   .spec { margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 clamp(24px, 3vw, 44px); }
   .spec > div { padding-block: 22px 26px; border-top: 1px solid var(--app-line); display: flex; flex-direction: column; gap: 8px; }
   .spec dt { font: 800 clamp(22px, 2.2vw, 28px)/1 var(--display); font-stretch: 75%; text-transform: uppercase; }
@@ -452,92 +561,12 @@
   <div class="wrap">
     <h2 class="big" id="feat-title">Один инструмент для всего мессенджера</h2>
     <p class="intro">Ваш аккаунт, ваши боты и группы, которые вы ведёте. Одни и те же команды в Telegram и MAX.</p>
-    <div class="ftabs" role="tablist" aria-label="Features">
-      <button class="ftab" role="tab" type="button" id="ft-personal" aria-selected="true" aria-controls="fp-personal">Личный аккаунт</button>
-      <button class="ftab" role="tab" type="button" id="ft-bot" aria-selected="false" aria-controls="fp-bot">Боты</button>
-      <button class="ftab" role="tab" type="button" id="ft-groups" aria-selected="false" aria-controls="fp-groups">Ваши группы</button>
-    </div>
-
-    <div class="fpanel" role="tabpanel" id="fp-personal" aria-labelledby="ft-personal">
-      <div class="flist">
-        <p class="flead">Ваш аккаунт как ещё одно ваше устройство: все чаты с историей, группы, каналы и контакты.</p>
-        <ul>
-          <li><b>Непрочитанное во всех чатах сразу.</b> Чужие сообщения, и ничего не отмечается прочитанным.</li>
-          <li><b>Кто что должен.</b> Всё сказанное с прошлого разбора, и ваше тоже, одним вызовом.</li>
-          <li><b>Поиск по годам переписки без сети.</b> В копии чатов на вашем компьютере.</li>
-          <li><b>Голосовые — текстом.</b> Силами Telegram или моделью на вашем компьютере.</li>
-          <li><b>Отправка по времени.</b> Telegram доставит вовремя, даже если ноутбук закрыт.</li>
-          <li><b>Всё, что вы делаете руками.</b> Ответы, файлы, реакции, опросы, правки, пересылки, закрепы.</li>
-        </ul>
-        <a class="more" href="https://wirecat.dev/ru/docs/tg/usage">Как работать с аккаунтом →</a>
-      </div>
-      <pre class="fterm"><code><span class="c"># what needs you, in every chat</span>
-<span class="p">$</span> tg inbox
-<span class="c"># a week of promises, sorted</span>
-<span class="p">$</span> tg review --since-time 7d
-<span class="c"># find it without connecting</span>
-<span class="p">$</span> tg messages search "договор"
-<span class="c"># a voice note, heard on this machine</span>
-<span class="p">$</span> tg messages transcribe "Мама" 8812 --local
-<span class="c"># a reminder in Saved Messages</span>
-<span class="p">$</span> tg messages send me "Позвонить маме" --at-time 2h
-<span class="c"># a whole chat as a document</span>
-<span class="p">$</span> tg store export "Project Alpha" --format markdown</code></pre>
-    </div>
-
-    <div class="fpanel" role="tabpanel" id="fp-bot" aria-labelledby="ft-bot" hidden>
-      <div class="flist">
-        <p class="flead">Ваши боты через официальный Bot API Telegram и MAX. Сколько угодно ботов, у каждого своё имя.</p>
-        <ul>
-          <li><b>Имя бота — первое слово команды.</b> <code>tg sales bot …</code>, <code>max support bot …</code></li>
-          <li><b>Токены в системном хранилище паролей.</b> Никогда не печатаются, даже в ошибке.</li>
-          <li><b>У каждого бота свой список чатов.</b> Пишет только туда и ведёт журнал отправленного.</li>
-          <li><b>Сообщения и файлы.</b> Отправка, правка, удаление и закреп — в чат или человеку.</li>
-          <li><b>В MAX — весь Bot API.</b> Участники, админы, кнопки, меню команд, вебхуки и модерация.</li>
-          <li><b>Бот для вашего агента.</b> <code>max sales bot mcp</code> даёт ему собственный MCP-сервер.</li>
-        </ul>
-        <a class="more" href="https://wirecat.dev/ru/docs/tg/bot">Как настроить бота →</a>
-      </div>
-      <pre class="fterm"><code><span class="c"># the token, at a hidden prompt</span>
-<span class="p">$</span> tg sales bot auth set
-<span class="c"># the bot may write only here</span>
-<span class="p">$</span> tg sales bot recipients add user:&lt;id&gt;
-<span class="c"># a build report, as the bot</span>
-<span class="p">$</span> tg sales bot messages send "Команда" "Сборка готова" --file report.pdf
-<span class="c"># the same on MAX</span>
-<span class="p">$</span> max sales bot messages send "Отдел продаж" "Сборка готова"
-<span class="c"># a bot MCP server for your agent</span>
-<span class="p">$</span> max sales bot mcp
-<span class="c"># every bot on this computer</span>
-<span class="p">$</span> tg bot list --check</code></pre>
-    </div>
-
-    <div class="fpanel" role="tabpanel" id="fp-groups" aria-labelledby="ft-groups" hidden>
-      <div class="flist">
-        <p class="flead">Для групп и каналов, которые вы ведёте: кто ждёт ответа, кто пришёл и ушёл, что нарушает ваши правила.</p>
-        <ul>
-          <li><b>Вопросы без ответа.</b> Заданы больше суток назад и всё ещё открыты.</li>
-          <li><b>Кто вступил, вышел, кого добавили или удалили.</b> И кто это сделал.</li>
-          <li><b>Все участники группы.</b> С ролью и временем последнего визита.</li>
-          <li><b>Темы форума и ссылки-приглашения.</b> Куда ведёт ссылка — без вступления.</li>
-          <li><b>Управление.</b> Переименовать, добавить и удалить участников и админов, сбросить ссылку-приглашение.</li>
-          <li><b>Модерация по вашим правилам.</b> Ссылки, пересылки и флуд — когда вы её запускаете.</li>
-        </ul>
-        <a class="more" href="https://wirecat.dev/ru/docs/tg/groups">Как вести группу →</a>
-      </div>
-      <pre class="fterm"><code><span class="c"># questions nobody answered in 24 hours</span>
-<span class="p">$</span> tg review --chat "Походы" --unanswered
-<span class="c"># who joined, left, was added or removed</span>
-<span class="p">$</span> tg chats events "Походы" --since-time 7d
-<span class="c"># everyone, with role and last seen</span>
-<span class="p">$</span> tg chats members list "Походы" --all
-<span class="c"># a forum group's topics</span>
-<span class="p">$</span> tg topics list "Походы"
-<span class="c"># where an invite link leads, without joining</span>
-<span class="p">$</span> tg chats inspect https://t.me/+AbCdEf
-<span class="c"># on MAX: judge new messages and members by your rules</span>
-<span class="p">$</span> max chats check "Жильцы"</code></pre>
-    </div>
+    <div class="fv fv1" data-variant="1"><div class="tabs1" role="tablist"><button class="fv-tab" role="tab" type="button" data-v="1" data-group="personal" aria-selected="true"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.2-4 4.2-6 7.5-6s6.3 2 7.5 6"/></svg></span><span class="fv-name">Личный аккаунт</span><span class="fv-short">Ваши чаты, история и контакты</span></button><button class="fv-tab" role="tab" type="button" data-v="1" data-group="bots" aria-selected="false"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M9.5 16.5h5"/></svg></span><span class="fv-name">Боты</span><span class="fv-short">Официальный Bot API, много ботов</span></button><button class="fv-tab" role="tab" type="button" data-v="1" data-group="groups" aria-selected="false"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3.5 19c.9-3.2 3-4.8 5.5-4.8s4.6 1.6 5.5 4.8M14.5 15c2.6-.4 4.6.9 5.5 3.6"/></svg></span><span class="fv-name">Ваши группы</span><span class="fv-short">Участники, вопросы, модерация</span></button></div><div class="fv-panel" data-v="1" data-group="personal"><p class="fv-lead">Ваш аккаунт как ещё одно ваше устройство: все чаты с историей, группы, каналы и контакты.</p><div class="g1"><div class="t1"><h4>Непрочитанное во всех чатах сразу.</h4><p>Чужие сообщения, и ничего не отмечается прочитанным.</p><code>tg inbox</code></div><div class="t1"><h4>Кто что должен.</h4><p>Всё сказанное с прошлого разбора, и ваше тоже, одним вызовом.</p><code>tg review --since-time 7d</code></div><div class="t1"><h4>Поиск по годам переписки без сети.</h4><p>В копии чатов на вашем компьютере.</p><code>tg messages search "договор"</code></div><div class="t1"><h4>Голосовые — текстом.</h4><p>Силами Telegram или моделью на вашем компьютере.</p><code>tg messages transcribe "Мама" 8812 --local</code></div><div class="t1"><h4>Отправка по времени.</h4><p>Telegram доставит вовремя, даже если ноутбук закрыт.</p><code>tg messages send me "Позвонить маме" --at-time 2h</code></div><div class="t1"><h4>Всё, что вы делаете руками.</h4><p>Ответы, файлы, реакции, опросы, правки, пересылки, закрепы.</p><code>tg messages send "Книжный клуб" "Протокол" --file minutes.pdf</code></div></div><a class="more" href="https://wirecat.dev/ru/docs/tg/usage">Как работать с аккаунтом →</a></div><div class="fv-panel" data-v="1" data-group="bots" hidden><p class="fv-lead">Ваши боты через официальный Bot API Telegram и MAX. Сколько угодно ботов, у каждого своё имя.</p><div class="g1"><div class="t1"><h4>Имя бота — первое слово команды.</h4><p>Сколько угодно ботов, у каждого своё имя.</p><code>tg bot list --check</code></div><div class="t1"><h4>Токены в системном хранилище паролей.</h4><p>Никогда не печатаются, даже в ошибке.</p><code>tg sales bot auth set</code></div><div class="t1"><h4>У каждого бота свой список чатов.</h4><p>Пишет только туда и ведёт журнал отправленного.</p><code>tg sales bot recipients add user:&lt;id&gt;</code></div><div class="t1"><h4>Сообщения и файлы.</h4><p>Отправка, правка, удаление и закреп — в чат или человеку.</p><code>tg sales bot messages send "Команда" "Сборка готова" --file report.pdf</code></div><div class="t1"><h4>В MAX — весь Bot API.</h4><p>Участники, админы, кнопки, меню команд, вебхуки и модерация.</p><code>max sales bot api get-updates --limit 10</code></div><div class="t1"><h4>Бот для вашего агента.</h4><p>Собственный MCP-сервер, по умолчанию только чтение.</p><code>max sales bot mcp</code></div></div><a class="more" href="https://wirecat.dev/ru/docs/tg/bot">Как настроить бота →</a></div><div class="fv-panel" data-v="1" data-group="groups" hidden><p class="fv-lead">Для групп и каналов, которые вы ведёте: кто ждёт ответа, кто пришёл и ушёл, что нарушает ваши правила.</p><div class="g1"><div class="t1"><h4>Вопросы без ответа.</h4><p>Заданы больше суток назад и всё ещё открыты.</p><code>tg review --chat "Походы" --unanswered</code></div><div class="t1"><h4>Кто вступил, вышел, кого добавили или удалили.</h4><p>И кто это сделал.</p><code>tg chats events "Походы" --since-time 7d</code></div><div class="t1"><h4>Все участники группы.</h4><p>С ролью и временем последнего визита.</p><code>tg chats members list "Походы" --all</code></div><div class="t1"><h4>Темы форума и ссылки-приглашения.</h4><p>Куда ведёт ссылка — без вступления.</p><code>tg chats inspect https://t.me/+AbCdEf</code></div><div class="t1"><h4>Управление.</h4><p>Переименовать, добавить и удалить участников и админов, сбросить ссылку-приглашение.</p><code>tg chats create "Походы 2027" @sofia</code></div><div class="t1"><h4>Модерация по вашим правилам.</h4><p>Ссылки, пересылки и флуд — когда вы её запускаете.</p><code>max chats check "Жильцы"</code></div></div><a class="more" href="https://wirecat.dev/ru/docs/tg/groups">Как вести группу →</a></div></div>
+    <div class="fv fv2" data-variant="2" hidden><div class="g2"><div class="c2"><div class="c2-head"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.2-4 4.2-6 7.5-6s6.3 2 7.5 6"/></svg></span><h4>Личный аккаунт</h4><p>Ваши чаты, история и контакты</p></div><ul><li><b>Непрочитанное во всех чатах сразу.</b><span>Чужие сообщения, и ничего не отмечается прочитанным.</span><code>tg inbox</code></li><li><b>Кто что должен.</b><span>Всё сказанное с прошлого разбора, и ваше тоже, одним вызовом.</span><code>tg review --since-time 7d</code></li><li><b>Поиск по годам переписки без сети.</b><span>В копии чатов на вашем компьютере.</span><code>tg messages search "договор"</code></li><li><b>Голосовые — текстом.</b><span>Силами Telegram или моделью на вашем компьютере.</span><code>tg messages transcribe "Мама" 8812 --local</code></li><li><b>Отправка по времени.</b><span>Telegram доставит вовремя, даже если ноутбук закрыт.</span><code>tg messages send me "Позвонить маме" --at-time 2h</code></li><li><b>Всё, что вы делаете руками.</b><span>Ответы, файлы, реакции, опросы, правки, пересылки, закрепы.</span><code>tg messages send "Книжный клуб" "Протокол" --file minutes.pdf</code></li></ul><a class="more" href="https://wirecat.dev/ru/docs/tg/usage">Как работать с аккаунтом →</a></div><div class="c2"><div class="c2-head"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M9.5 16.5h5"/></svg></span><h4>Боты</h4><p>Официальный Bot API, много ботов</p></div><ul><li><b>Имя бота — первое слово команды.</b><span>Сколько угодно ботов, у каждого своё имя.</span><code>tg bot list --check</code></li><li><b>Токены в системном хранилище паролей.</b><span>Никогда не печатаются, даже в ошибке.</span><code>tg sales bot auth set</code></li><li><b>У каждого бота свой список чатов.</b><span>Пишет только туда и ведёт журнал отправленного.</span><code>tg sales bot recipients add user:&lt;id&gt;</code></li><li><b>Сообщения и файлы.</b><span>Отправка, правка, удаление и закреп — в чат или человеку.</span><code>tg sales bot messages send "Команда" "Сборка готова" --file report.pdf</code></li><li><b>В MAX — весь Bot API.</b><span>Участники, админы, кнопки, меню команд, вебхуки и модерация.</span><code>max sales bot api get-updates --limit 10</code></li><li><b>Бот для вашего агента.</b><span>Собственный MCP-сервер, по умолчанию только чтение.</span><code>max sales bot mcp</code></li></ul><a class="more" href="https://wirecat.dev/ru/docs/tg/bot">Как настроить бота →</a></div><div class="c2"><div class="c2-head"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3.5 19c.9-3.2 3-4.8 5.5-4.8s4.6 1.6 5.5 4.8M14.5 15c2.6-.4 4.6.9 5.5 3.6"/></svg></span><h4>Ваши группы</h4><p>Участники, вопросы, модерация</p></div><ul><li><b>Вопросы без ответа.</b><span>Заданы больше суток назад и всё ещё открыты.</span><code>tg review --chat "Походы" --unanswered</code></li><li><b>Кто вступил, вышел, кого добавили или удалили.</b><span>И кто это сделал.</span><code>tg chats events "Походы" --since-time 7d</code></li><li><b>Все участники группы.</b><span>С ролью и временем последнего визита.</span><code>tg chats members list "Походы" --all</code></li><li><b>Темы форума и ссылки-приглашения.</b><span>Куда ведёт ссылка — без вступления.</span><code>tg chats inspect https://t.me/+AbCdEf</code></li><li><b>Управление.</b><span>Переименовать, добавить и удалить участников и админов, сбросить ссылку-приглашение.</span><code>tg chats create "Походы 2027" @sofia</code></li><li><b>Модерация по вашим правилам.</b><span>Ссылки, пересылки и флуд — когда вы её запускаете.</span><code>max chats check "Жильцы"</code></li></ul><a class="more" href="https://wirecat.dev/ru/docs/tg/groups">Как вести группу →</a></div></div></div>
+    <div class="fv fv3" data-variant="3" hidden><div class="g3"><div class="tabs3" role="tablist"><button class="fv-tab" role="tab" type="button" data-v="3" data-group="personal" aria-selected="true"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.2-4 4.2-6 7.5-6s6.3 2 7.5 6"/></svg></span><span class="fv-name">Личный аккаунт</span><span class="fv-short">Ваши чаты, история и контакты</span></button><button class="fv-tab" role="tab" type="button" data-v="3" data-group="bots" aria-selected="false"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M9.5 16.5h5"/></svg></span><span class="fv-name">Боты</span><span class="fv-short">Официальный Bot API, много ботов</span></button><button class="fv-tab" role="tab" type="button" data-v="3" data-group="groups" aria-selected="false"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3.5 19c.9-3.2 3-4.8 5.5-4.8s4.6 1.6 5.5 4.8M14.5 15c2.6-.4 4.6.9 5.5 3.6"/></svg></span><span class="fv-name">Ваши группы</span><span class="fv-short">Участники, вопросы, модерация</span></button></div><div><div class="fv-panel" data-v="3" data-group="personal"><p class="fv-lead">Ваш аккаунт как ещё одно ваше устройство: все чаты с историей, группы, каналы и контакты.</p><div class="r3"><b>Непрочитанное во всех чатах сразу.</b><span>Чужие сообщения, и ничего не отмечается прочитанным.</span><code>tg inbox</code></div><div class="r3"><b>Кто что должен.</b><span>Всё сказанное с прошлого разбора, и ваше тоже, одним вызовом.</span><code>tg review --since-time 7d</code></div><div class="r3"><b>Поиск по годам переписки без сети.</b><span>В копии чатов на вашем компьютере.</span><code>tg messages search "договор"</code></div><div class="r3"><b>Голосовые — текстом.</b><span>Силами Telegram или моделью на вашем компьютере.</span><code>tg messages transcribe "Мама" 8812 --local</code></div><div class="r3"><b>Отправка по времени.</b><span>Telegram доставит вовремя, даже если ноутбук закрыт.</span><code>tg messages send me "Позвонить маме" --at-time 2h</code></div><div class="r3"><b>Всё, что вы делаете руками.</b><span>Ответы, файлы, реакции, опросы, правки, пересылки, закрепы.</span><code>tg messages send "Книжный клуб" "Протокол" --file minutes.pdf</code></div><a class="more" href="https://wirecat.dev/ru/docs/tg/usage">Как работать с аккаунтом →</a></div><div class="fv-panel" data-v="3" data-group="bots" hidden><p class="fv-lead">Ваши боты через официальный Bot API Telegram и MAX. Сколько угодно ботов, у каждого своё имя.</p><div class="r3"><b>Имя бота — первое слово команды.</b><span>Сколько угодно ботов, у каждого своё имя.</span><code>tg bot list --check</code></div><div class="r3"><b>Токены в системном хранилище паролей.</b><span>Никогда не печатаются, даже в ошибке.</span><code>tg sales bot auth set</code></div><div class="r3"><b>У каждого бота свой список чатов.</b><span>Пишет только туда и ведёт журнал отправленного.</span><code>tg sales bot recipients add user:&lt;id&gt;</code></div><div class="r3"><b>Сообщения и файлы.</b><span>Отправка, правка, удаление и закреп — в чат или человеку.</span><code>tg sales bot messages send "Команда" "Сборка готова" --file report.pdf</code></div><div class="r3"><b>В MAX — весь Bot API.</b><span>Участники, админы, кнопки, меню команд, вебхуки и модерация.</span><code>max sales bot api get-updates --limit 10</code></div><div class="r3"><b>Бот для вашего агента.</b><span>Собственный MCP-сервер, по умолчанию только чтение.</span><code>max sales bot mcp</code></div><a class="more" href="https://wirecat.dev/ru/docs/tg/bot">Как настроить бота →</a></div><div class="fv-panel" data-v="3" data-group="groups" hidden><p class="fv-lead">Для групп и каналов, которые вы ведёте: кто ждёт ответа, кто пришёл и ушёл, что нарушает ваши правила.</p><div class="r3"><b>Вопросы без ответа.</b><span>Заданы больше суток назад и всё ещё открыты.</span><code>tg review --chat "Походы" --unanswered</code></div><div class="r3"><b>Кто вступил, вышел, кого добавили или удалили.</b><span>И кто это сделал.</span><code>tg chats events "Походы" --since-time 7d</code></div><div class="r3"><b>Все участники группы.</b><span>С ролью и временем последнего визита.</span><code>tg chats members list "Походы" --all</code></div><div class="r3"><b>Темы форума и ссылки-приглашения.</b><span>Куда ведёт ссылка — без вступления.</span><code>tg chats inspect https://t.me/+AbCdEf</code></div><div class="r3"><b>Управление.</b><span>Переименовать, добавить и удалить участников и админов, сбросить ссылку-приглашение.</span><code>tg chats create "Походы 2027" @sofia</code></div><div class="r3"><b>Модерация по вашим правилам.</b><span>Ссылки, пересылки и флуд — когда вы её запускаете.</span><code>max chats check "Жильцы"</code></div><a class="more" href="https://wirecat.dev/ru/docs/tg/groups">Как вести группу →</a></div></div></div></div>
+    <div class="fv fv4" data-variant="4" hidden><div class="tabs4" role="tablist"><button class="fv-tab" role="tab" type="button" data-v="4" data-group="personal" aria-selected="true"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.2-4 4.2-6 7.5-6s6.3 2 7.5 6"/></svg></span><span class="fv-name">Личный аккаунт</span><span class="fv-short">Ваши чаты, история и контакты</span></button><button class="fv-tab" role="tab" type="button" data-v="4" data-group="bots" aria-selected="false"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M9.5 16.5h5"/></svg></span><span class="fv-name">Боты</span><span class="fv-short">Официальный Bot API, много ботов</span></button><button class="fv-tab" role="tab" type="button" data-v="4" data-group="groups" aria-selected="false"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3.5 19c.9-3.2 3-4.8 5.5-4.8s4.6 1.6 5.5 4.8M14.5 15c2.6-.4 4.6.9 5.5 3.6"/></svg></span><span class="fv-name">Ваши группы</span><span class="fv-short">Участники, вопросы, модерация</span></button></div><div class="fv-panel" data-v="4" data-group="personal"><div class="g4"><div><p class="fv-lead">Ваш аккаунт как ещё одно ваше устройство: все чаты с историей, группы, каналы и контакты.</p><ol><li data-i="0"><b>Непрочитанное во всех чатах сразу.</b> Чужие сообщения, и ничего не отмечается прочитанным.</li><li data-i="1"><b>Кто что должен.</b> Всё сказанное с прошлого разбора, и ваше тоже, одним вызовом.</li><li data-i="2"><b>Поиск по годам переписки без сети.</b> В копии чатов на вашем компьютере.</li><li data-i="3"><b>Голосовые — текстом.</b> Силами Telegram или моделью на вашем компьютере.</li><li data-i="4"><b>Отправка по времени.</b> Telegram доставит вовремя, даже если ноутбук закрыт.</li><li data-i="5"><b>Всё, что вы делаете руками.</b> Ответы, файлы, реакции, опросы, правки, пересылки, закрепы.</li></ol><a class="more" href="https://wirecat.dev/ru/docs/tg/usage">Как работать с аккаунтом →</a></div><pre class="term4"><code><div class="l4" data-i="0"><span class="p">$</span> tg inbox</div><div class="l4" data-i="1"><span class="p">$</span> tg review --since-time 7d</div><div class="l4" data-i="2"><span class="p">$</span> tg messages search "договор"</div><div class="l4" data-i="3"><span class="p">$</span> tg messages transcribe "Мама" 8812 --local</div><div class="l4" data-i="4"><span class="p">$</span> tg messages send me "Позвонить маме" --at-time 2h</div><div class="l4" data-i="5"><span class="p">$</span> tg messages send "Книжный клуб" "Протокол" --file minutes.pdf</div></code></pre></div></div><div class="fv-panel" data-v="4" data-group="bots" hidden><div class="g4"><div><p class="fv-lead">Ваши боты через официальный Bot API Telegram и MAX. Сколько угодно ботов, у каждого своё имя.</p><ol><li data-i="0"><b>Имя бота — первое слово команды.</b> Сколько угодно ботов, у каждого своё имя.</li><li data-i="1"><b>Токены в системном хранилище паролей.</b> Никогда не печатаются, даже в ошибке.</li><li data-i="2"><b>У каждого бота свой список чатов.</b> Пишет только туда и ведёт журнал отправленного.</li><li data-i="3"><b>Сообщения и файлы.</b> Отправка, правка, удаление и закреп — в чат или человеку.</li><li data-i="4"><b>В MAX — весь Bot API.</b> Участники, админы, кнопки, меню команд, вебхуки и модерация.</li><li data-i="5"><b>Бот для вашего агента.</b> Собственный MCP-сервер, по умолчанию только чтение.</li></ol><a class="more" href="https://wirecat.dev/ru/docs/tg/bot">Как настроить бота →</a></div><pre class="term4"><code><div class="l4" data-i="0"><span class="p">$</span> tg bot list --check</div><div class="l4" data-i="1"><span class="p">$</span> tg sales bot auth set</div><div class="l4" data-i="2"><span class="p">$</span> tg sales bot recipients add user:&lt;id&gt;</div><div class="l4" data-i="3"><span class="p">$</span> tg sales bot messages send "Команда" "Сборка готова" --file report.pdf</div><div class="l4" data-i="4"><span class="p">$</span> max sales bot api get-updates --limit 10</div><div class="l4" data-i="5"><span class="p">$</span> max sales bot mcp</div></code></pre></div></div><div class="fv-panel" data-v="4" data-group="groups" hidden><div class="g4"><div><p class="fv-lead">Для групп и каналов, которые вы ведёте: кто ждёт ответа, кто пришёл и ушёл, что нарушает ваши правила.</p><ol><li data-i="0"><b>Вопросы без ответа.</b> Заданы больше суток назад и всё ещё открыты.</li><li data-i="1"><b>Кто вступил, вышел, кого добавили или удалили.</b> И кто это сделал.</li><li data-i="2"><b>Все участники группы.</b> С ролью и временем последнего визита.</li><li data-i="3"><b>Темы форума и ссылки-приглашения.</b> Куда ведёт ссылка — без вступления.</li><li data-i="4"><b>Управление.</b> Переименовать, добавить и удалить участников и админов, сбросить ссылку-приглашение.</li><li data-i="5"><b>Модерация по вашим правилам.</b> Ссылки, пересылки и флуд — когда вы её запускаете.</li></ol><a class="more" href="https://wirecat.dev/ru/docs/tg/groups">Как вести группу →</a></div><pre class="term4"><code><div class="l4" data-i="0"><span class="p">$</span> tg review --chat "Походы" --unanswered</div><div class="l4" data-i="1"><span class="p">$</span> tg chats events "Походы" --since-time 7d</div><div class="l4" data-i="2"><span class="p">$</span> tg chats members list "Походы" --all</div><div class="l4" data-i="3"><span class="p">$</span> tg chats inspect https://t.me/+AbCdEf</div><div class="l4" data-i="4"><span class="p">$</span> tg chats create "Походы 2027" @sofia</div><div class="l4" data-i="5"><span class="p">$</span> max chats check "Жильцы"</div></code></pre></div></div></div>
+    <div class="fv fv5" data-variant="5" hidden><div class="term5"><div class="bar5" role="tablist"><button class="fv-tab" role="tab" type="button" data-v="5" data-group="personal" aria-selected="true"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.2-4 4.2-6 7.5-6s6.3 2 7.5 6"/></svg></span>account.sh</button><button class="fv-tab" role="tab" type="button" data-v="5" data-group="bots" aria-selected="false"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M9.5 16.5h5"/></svg></span>bots.sh</button><button class="fv-tab" role="tab" type="button" data-v="5" data-group="groups" aria-selected="false"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3.5 19c.9-3.2 3-4.8 5.5-4.8s4.6 1.6 5.5 4.8M14.5 15c2.6-.4 4.6.9 5.5 3.6"/></svg></span>groups.sh</button></div><div class="fv-panel" data-v="5" data-group="personal"><pre><code><div class="l5"><span class="c"># <b>Unread in every chat at once.</b> Other people's messages, and nothing gets marked read.</span><span><span class="p">$</span> tg inbox</span></div><div class="l5"><span class="c"># <b>Who owes what.</b> Everything said since the last review, yours too, in one call.</span><span><span class="p">$</span> tg review --since-time 7d</span></div><div class="l5"><span class="c"># <b>Search years of history offline.</b> In the copy of your chats kept on your computer.</span><span><span class="p">$</span> tg messages search "договор"</span></div><div class="l5"><span class="c"># <b>Voice notes as text.</b> By Telegram, or by a speech model on your machine.</span><span><span class="p">$</span> tg messages transcribe "Мама" 8812 --local</span></div><div class="l5"><span class="c"># <b>Send later.</b> Telegram delivers it on time, with your laptop shut.</span><span><span class="p">$</span> tg messages send me "Позвонить маме" --at-time 2h</span></div><div class="l5"><span class="c"># <b>Everything else you do by hand.</b> Replies, files, reactions, polls, edits, forwards, pins.</span><span><span class="p">$</span> tg messages send "Книжный клуб" "Протокол" --file minutes.pdf</span></div></code></pre></div><div class="fv-panel" data-v="5" data-group="bots" hidden><pre><code><div class="l5"><span class="c"># <b>The bot's name is the first word.</b> Keep several, each under a name you choose.</span><span><span class="p">$</span> tg bot list --check</span></div><div class="l5"><span class="c"># <b>Tokens in the system keyring.</b> Never printed, not even in an error.</span><span><span class="p">$</span> tg sales bot auth set</span></div><div class="l5"><span class="c"># <b>Each bot has its own list of chats.</b> It writes only there, and keeps a journal of what it sent.</span><span><span class="p">$</span> tg sales bot recipients add user:&lt;id&gt;</span></div><div class="l5"><span class="c"># <b>Messages and files.</b> Send, edit, delete and pin, to a chat or to a person.</span><span><span class="p">$</span> tg sales bot messages send "Команда" "Сборка готова" --file report.pdf</span></div><div class="l5"><span class="c"># <b>On MAX, the whole Bot API.</b> Members, admins, buttons, the command menu, webhooks and moderation.</span><span><span class="p">$</span> max sales bot api get-updates --limit 10</span></div><div class="l5"><span class="c"># <b>A bot for your agent.</b> An MCP server of its own, read-only by default.</span><span><span class="p">$</span> max sales bot mcp</span></div></code></pre></div><div class="fv-panel" data-v="5" data-group="groups" hidden><pre><code><div class="l5"><span class="c"># <b>Questions nobody answered.</b> Asked at least a day ago, still open.</span><span><span class="p">$</span> tg review --chat "Походы" --unanswered</span></div><div class="l5"><span class="c"># <b>Who joined, left, was added or removed.</b> And by whom.</span><span><span class="p">$</span> tg chats events "Походы" --since-time 7d</span></div><div class="l5"><span class="c"># <b>Everyone in the group.</b> With their role and when they were last seen.</span><span><span class="p">$</span> tg chats members list "Походы" --all</span></div><div class="l5"><span class="c"># <b>Forum topics and invite links.</b> See where a link leads without joining.</span><span><span class="p">$</span> tg chats inspect https://t.me/+AbCdEf</span></div><div class="l5"><span class="c"># <b>Manage it.</b> Rename, add and remove members and admins, reset the invite link.</span><span><span class="p">$</span> tg chats create "Походы 2027" @sofia</span></div><div class="l5"><span class="c"># <b>Moderation by your rules.</b> Links, forwards and flood, applied when you run them.</span><span><span class="p">$</span> max chats check "Жильцы"</span></div></code></pre></div></div></div>
+    <div class="fv fv6" data-variant="6" hidden><details class="acc6" open><summary><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.2-4 4.2-6 7.5-6s6.3 2 7.5 6"/></svg></span><span class="fv-name">Личный аккаунт</span><span class="fv-short">Ваши чаты, история и контакты</span><span class="plus6" aria-hidden="true"></span></summary><p class="fv-lead">Ваш аккаунт как ещё одно ваше устройство: все чаты с историей, группы, каналы и контакты.</p><div class="g6"><div class="t6"><b>Непрочитанное во всех чатах сразу.</b><span>Чужие сообщения, и ничего не отмечается прочитанным.</span><code>tg inbox</code></div><div class="t6"><b>Кто что должен.</b><span>Всё сказанное с прошлого разбора, и ваше тоже, одним вызовом.</span><code>tg review --since-time 7d</code></div><div class="t6"><b>Поиск по годам переписки без сети.</b><span>В копии чатов на вашем компьютере.</span><code>tg messages search "договор"</code></div><div class="t6"><b>Голосовые — текстом.</b><span>Силами Telegram или моделью на вашем компьютере.</span><code>tg messages transcribe "Мама" 8812 --local</code></div><div class="t6"><b>Отправка по времени.</b><span>Telegram доставит вовремя, даже если ноутбук закрыт.</span><code>tg messages send me "Позвонить маме" --at-time 2h</code></div><div class="t6"><b>Всё, что вы делаете руками.</b><span>Ответы, файлы, реакции, опросы, правки, пересылки, закрепы.</span><code>tg messages send "Книжный клуб" "Протокол" --file minutes.pdf</code></div></div><a class="more" href="https://wirecat.dev/ru/docs/tg/usage">Как работать с аккаунтом →</a></details><details class="acc6"><summary><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M9.5 16.5h5"/></svg></span><span class="fv-name">Боты</span><span class="fv-short">Официальный Bot API, много ботов</span><span class="plus6" aria-hidden="true"></span></summary><p class="fv-lead">Ваши боты через официальный Bot API Telegram и MAX. Сколько угодно ботов, у каждого своё имя.</p><div class="g6"><div class="t6"><b>Имя бота — первое слово команды.</b><span>Сколько угодно ботов, у каждого своё имя.</span><code>tg bot list --check</code></div><div class="t6"><b>Токены в системном хранилище паролей.</b><span>Никогда не печатаются, даже в ошибке.</span><code>tg sales bot auth set</code></div><div class="t6"><b>У каждого бота свой список чатов.</b><span>Пишет только туда и ведёт журнал отправленного.</span><code>tg sales bot recipients add user:&lt;id&gt;</code></div><div class="t6"><b>Сообщения и файлы.</b><span>Отправка, правка, удаление и закреп — в чат или человеку.</span><code>tg sales bot messages send "Команда" "Сборка готова" --file report.pdf</code></div><div class="t6"><b>В MAX — весь Bot API.</b><span>Участники, админы, кнопки, меню команд, вебхуки и модерация.</span><code>max sales bot api get-updates --limit 10</code></div><div class="t6"><b>Бот для вашего агента.</b><span>Собственный MCP-сервер, по умолчанию только чтение.</span><code>max sales bot mcp</code></div></div><a class="more" href="https://wirecat.dev/ru/docs/tg/bot">Как настроить бота →</a></details><details class="acc6"><summary><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3.5 19c.9-3.2 3-4.8 5.5-4.8s4.6 1.6 5.5 4.8M14.5 15c2.6-.4 4.6.9 5.5 3.6"/></svg></span><span class="fv-name">Ваши группы</span><span class="fv-short">Участники, вопросы, модерация</span><span class="plus6" aria-hidden="true"></span></summary><p class="fv-lead">Для групп и каналов, которые вы ведёте: кто ждёт ответа, кто пришёл и ушёл, что нарушает ваши правила.</p><div class="g6"><div class="t6"><b>Вопросы без ответа.</b><span>Заданы больше суток назад и всё ещё открыты.</span><code>tg review --chat "Походы" --unanswered</code></div><div class="t6"><b>Кто вступил, вышел, кого добавили или удалили.</b><span>И кто это сделал.</span><code>tg chats events "Походы" --since-time 7d</code></div><div class="t6"><b>Все участники группы.</b><span>С ролью и временем последнего визита.</span><code>tg chats members list "Походы" --all</code></div><div class="t6"><b>Темы форума и ссылки-приглашения.</b><span>Куда ведёт ссылка — без вступления.</span><code>tg chats inspect https://t.me/+AbCdEf</code></div><div class="t6"><b>Управление.</b><span>Переименовать, добавить и удалить участников и админов, сбросить ссылку-приглашение.</span><code>tg chats create "Походы 2027" @sofia</code></div><div class="t6"><b>Модерация по вашим правилам.</b><span>Ссылки, пересылки и флуд — когда вы её запускаете.</span><code>max chats check "Жильцы"</code></div></div><a class="more" href="https://wirecat.dev/ru/docs/tg/groups">Как вести группу →</a></details></div>
   </div>
 </section>
 
@@ -605,7 +634,7 @@
 <div class="headlines" aria-label="Design switches">
   <span id="hl-count">Заголовок 1/8</span><button type="button" id="hl-prev" aria-label="Previous headline">‹</button><button type="button" id="hl-next" aria-label="Next headline">›</button>
   <span class="sep"></span>
-  <span id="tt-count">Title 1/6</span><button type="button" id="tt-prev" aria-label="Previous title">‹</button><button type="button" id="tt-next" aria-label="Next title">›</button>
+  <span id="fv-count">Блок 1/6</span><button type="button" id="fv-prev" aria-label="Previous block layout">‹</button><button type="button" id="fv-next" aria-label="Next block layout">›</button>
   <span class="sep"></span>
   <span id="ff-count">Font</span><button type="button" id="ff-prev" aria-label="Previous font">‹</button><button type="button" id="ff-next" aria-label="Next font">›</button>
   <span class="sep"></span>
@@ -681,23 +710,27 @@
     `Кто кому должен? <span>Агент знает.</span>`,
     `Ваш мессенджер <span>под контролем.</span>`,
   ]
-  const titles = [
-    "Один инструмент для всего мессенджера",
-    "Ваш аккаунт, ваши боты, ваши группы",
-    "Всё, что умеет мессенджер, — из командной строки",
-    "Читать, отвечать, вести группы",
-    "Для вас, для бота, для группы",
-    "Весь мессенджер в одной команде",
-  ]
-  let tt = 0
-  const showTitle = () => {
-    document.getElementById("feat-title").textContent = titles[tt]
-    document.getElementById("tt-count").textContent = `${titleWord} ${tt + 1}/${titles.length}`
+  const blocks = [...document.querySelectorAll(".fv")]
+  const blockWord = "Блок"
+  let fv = 0
+  const showBlock = () => {
+    blocks.forEach((block, n) => { block.hidden = n !== fv })
+    document.getElementById("fv-count").textContent = `${blockWord} ${fv + 1}/${blocks.length}`
   }
-  const titleWord = "Заголовок"
-  document.getElementById("tt-prev").addEventListener("click", () => { tt = (tt - 1 + titles.length) % titles.length; showTitle() })
-  document.getElementById("tt-next").addEventListener("click", () => { tt = (tt + 1) % titles.length; showTitle() })
-  showTitle()
+  document.getElementById("fv-prev").addEventListener("click", () => { fv = (fv - 1 + blocks.length) % blocks.length; showBlock() })
+  document.getElementById("fv-next").addEventListener("click", () => { fv = (fv + 1) % blocks.length; showBlock() })
+  for (const tab of document.querySelectorAll(".fv-tab")) {
+    tab.addEventListener("click", () => {
+      const v = tab.dataset.v
+      for (const other of document.querySelectorAll(`.fv-tab[data-v="${v}"]`)) other.setAttribute("aria-selected", String(other === tab))
+      for (const panel of document.querySelectorAll(`.fv-panel[data-v="${v}"]`)) panel.hidden = panel.dataset.group !== tab.dataset.group
+    })
+  }
+  for (const item of document.querySelectorAll(".g4 li")) {
+    const line = item.closest(".g4").querySelector(`.l4[data-i="${item.dataset.i}"]`)
+    item.addEventListener("mouseenter", () => { item.classList.add("hot"); line.classList.add("hot") })
+    item.addEventListener("mouseleave", () => { item.classList.remove("hot"); line.classList.remove("hot") })
+  }
 
   const fonts = [
     { label: "Anybody", stack: '"Anybody", "Oswald", "Onest", sans-serif', stretch: "62%", weight: 900 },
