@@ -19,6 +19,31 @@ test("search uses the same heading face; font comparison stays opt-in", async ({
       await page.locator("h2.big").first().evaluate(typography),
     )
     await expect(page.locator(".font-lab")).toHaveCount(0)
+    const headings = await page
+      .locator(
+        ".wirecat-landing :is(h1,h2,h3,h4,h5,h6,[role='heading'],.fv-name,.t6 > b,.savings-quality > b,.time,.tool-name,.spec dt)",
+      )
+      .evaluateAll((elements) =>
+        elements
+          .filter((el) => el.getClientRects().length)
+          .map((el) => ({
+            text: el.textContent?.trim(),
+            font: getComputedStyle(el).fontFamily,
+            size: parseFloat(getComputedStyle(el).fontSize),
+            scroll: el.scrollWidth,
+            width: el.clientWidth,
+          })),
+      )
+    for (const heading of headings) {
+      expect(heading.font, heading.text).toContain("Unbounded")
+      expect(heading.size, heading.text).toBeGreaterThanOrEqual(11)
+    }
+    expect(
+      await page
+        .locator(".fv-name")
+        .last()
+        .evaluate((el) => parseFloat(getComputedStyle(el).fontSize)),
+    ).toBeLessThanOrEqual(24)
     expect((await page.locator("h1").evaluate(typography))[0]).toContain("Unbounded")
     expect(await page.locator("h1").evaluate((el) => parseFloat(getComputedStyle(el).fontSize))).toBeLessThanOrEqual(40)
     expect(
