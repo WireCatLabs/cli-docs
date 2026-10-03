@@ -1,0 +1,15 @@
+$ vitest run
+
+ RUN  v5.0.1 /tmp/wirecat-max-latest-verify
+
+11.17.0
+
+ Test Files  96 passed (96)
+      Tests  1305 passed | 2 skipped (1307)
+   Start at  22:39:51
+   Duration  7.49s (tests 37%, transform 31%, import 30%, setup 2%)
+
+     Import  258 modules were evaluated 6570 times · 44.15s total, 30% of tracked time
+             ~967ms faster with isolate: false — shared modules are evaluated once per worker instead of once per file
+             learn more: https://vitest.dev/guide/improving-performance#test-isolation
+

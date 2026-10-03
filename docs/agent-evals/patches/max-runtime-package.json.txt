@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@leemour/max-cli": "^0.24.0"
+  }
+}

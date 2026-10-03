@@ -1,0 +1,146 @@
+{
+  "kind": "real-cli-recorded-choice-replay",
+  "baseline": "/home/leemour/Projects/AI/cli-docs/docs/agent-evals/runs/2026-10-03/final-max-meeting",
+  "launcher": "/tmp/wirecat-max-lockfix-replay/meeting/max",
+  "versions": {
+    "max-cli": "0.24.0",
+    "cli-messaging": "0.131.0",
+    "cli-core": "0.16.0"
+  },
+  "results": [
+    {
+      "index": 1,
+      "argv": ["--help"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 2,
+      "argv": ["skill", "show"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 3,
+      "argv": ["commands", "chats"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 4,
+      "argv": ["commands", "messages"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 5,
+      "argv": ["contacts", "list", "--help"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 6,
+      "argv": ["chats", "list", "--help"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 7,
+      "argv": ["store", "status", "--help"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 8,
+      "argv": ["skill", "show"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 9,
+      "argv": ["chats", "list", "--search", "Atlas", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 10,
+      "argv": ["contacts", "list", "--search", "Kate", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 11,
+      "argv": ["contacts", "list", "--search", "Tom", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 12,
+      "argv": ["messages", "evidence", "--help"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 13,
+      "argv": ["contacts", "show", "900003", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 14,
+      "argv": ["store", "status", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 15,
+      "argv": ["contacts", "show", "900004", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 16,
+      "argv": ["messages", "search", "Atlas", "--newest", "--limit", "100", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 17,
+      "argv": ["messages", "list", "900004", "--limit", "100", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 18,
+      "argv": ["messages", "list", "900003", "--limit", "100", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 19,
+      "argv": ["messages", "list", "-100720001", "--limit", "100", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 20,
+      "argv": ["messages", "show", "msg:max/900001/900003/900000000000000001", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 21,
+      "argv": ["messages", "show", "msg:max/900001/900004/900000000000000001", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 22,
+      "argv": ["messages", "show", "msg:max/900001/-100720001/900000000000000002", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    }
+  ],
+  "networkAttempts": 0,
+  "llm": false
+}

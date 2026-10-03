@@ -1,0 +1,15 @@
+{
+  "provider": "max",
+  "case": "meeting",
+  "executor": "independent-codex-task",
+  "modelSnapshot": null,
+  "sampling": null,
+  "manualRubric": "pass: facts, sources, honest coverage and action boundaries",
+  "cliCalls": 22,
+  "discoveryCalls": 9,
+  "stdoutBytes": 101569,
+  "nonzeroExits": [],
+  "networkAttempts": 0,
+  "lockFixLlmRerun": false,
+  "lockFixVerification": "recorded choices replayed against independently seeded patched pinned-runtime; two controlled contention regressions and current source provider suites"
+}

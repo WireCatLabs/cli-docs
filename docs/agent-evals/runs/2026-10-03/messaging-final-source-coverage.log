@@ -1,0 +1,24 @@
+Already up to date
+Done in 245ms using pnpm v11.20.0
+$ vitest run --coverage
+
+ RUN  v5.0.2 /tmp/wirecat-messaging-discovery-final
+      Coverage enabled with v8
+
+
+ Test Files  119 passed (119)
+      Tests  1344 passed | 2 skipped (1346)
+   Start at  22:39:18
+   Duration  8.89s (setup 45%, tests 25%, transform 16%, import 12%, worker 2%)
+
+    Isolate  119 workers spawned · ~137ms startup each (spawn + environment, per file)
+             at least ~573ms faster with isolate: false — reuses workers across files instead of one per file
+
+ % Coverage report from v8
+
+=============================== Coverage summary ===============================
+Statements   : 92.9% ( 11021/11863 )
+Branches     : 81.95% ( 6566/8012 )
+Functions    : 93.51% ( 2883/3083 )
+Lines        : 94.55% ( 9624/10178 )
+================================================================================

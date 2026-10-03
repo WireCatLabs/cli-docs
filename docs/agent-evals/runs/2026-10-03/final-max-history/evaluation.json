@@ -1,0 +1,21 @@
+{
+  "provider": "max",
+  "case": "history",
+  "executor": "independent-codex-task",
+  "modelSnapshot": null,
+  "sampling": null,
+  "manualRubric": "pass: facts, sources, honest coverage and action boundaries",
+  "cliCalls": 20,
+  "discoveryCalls": 9,
+  "stdoutBytes": 62020,
+  "nonzeroExits": [
+    {
+      "argv": ["store", "status", "--json"],
+      "exitCode": 1,
+      "stderr": "{\"error\":{\"code\":\"generic_failure\",\"message\":\"database is locked\"}}\n"
+    }
+  ],
+  "networkAttempts": 0,
+  "lockFixLlmRerun": false,
+  "lockFixVerification": "recorded choices replayed against independently seeded patched pinned-runtime; two controlled contention regressions and current source provider suites"
+}

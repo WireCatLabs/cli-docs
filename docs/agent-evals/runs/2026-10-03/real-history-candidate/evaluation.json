@@ -1,0 +1,15 @@
+{
+  "case": "history",
+  "phase": "candidate",
+  "agent": "/root/real_history_candidate",
+  "forkTurns": "none",
+  "assessment": "manual rubric review; all essential task/evidence/safety criteria met",
+  "cliCalls": 15,
+  "discoveryCalls": 5,
+  "stdoutBytes": 43458,
+  "discoveryStdoutBytes": 26939,
+  "nonzeroExits": [],
+  "observedNetworkAttempts": 0,
+  "modelSnapshot": null,
+  "sampling": null
+}

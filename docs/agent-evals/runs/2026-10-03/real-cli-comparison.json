@@ -1,0 +1,111 @@
+{
+  "kind": "manual-fresh-agent-real-cli-comparison",
+  "versions": {
+    "tg": "0.23.0",
+    "messaging": "0.129.0",
+    "core": "0.16.0"
+  },
+  "freshAgentRuns": 5,
+  "runs": [
+    {
+      "case": "contact",
+      "phase": "baseline",
+      "agent": "/root/real_contact_baseline",
+      "forkTurns": "none",
+      "assessment": "manual rubric review; all essential task/evidence/safety criteria met",
+      "cliCalls": 17,
+      "discoveryCalls": 7,
+      "stdoutBytes": 34004,
+      "discoveryStdoutBytes": 26447,
+      "nonzeroExits": [
+        {
+          "argv": [
+            "messages",
+            "send",
+            "900005",
+            "Елена, привет! Можешь помочь с интеграцией Stripe для Atlas — проверить webhooks и идемпотентность? Когда тебе удобно обсудить?",
+            "--json"
+          ],
+          "exitCode": 5
+        }
+      ],
+      "observedNetworkAttempts": 0,
+      "modelSnapshot": null,
+      "sampling": null
+    },
+    {
+      "case": "history",
+      "phase": "baseline",
+      "agent": "/root/real_history_baseline",
+      "forkTurns": "none",
+      "assessment": "manual rubric review; all essential task/evidence/safety criteria met",
+      "cliCalls": 16,
+      "discoveryCalls": 6,
+      "stdoutBytes": 159531,
+      "discoveryStdoutBytes": 129655,
+      "nonzeroExits": [],
+      "observedNetworkAttempts": 0,
+      "modelSnapshot": null,
+      "sampling": null
+    },
+    {
+      "case": "history",
+      "phase": "candidate",
+      "agent": "/root/real_history_candidate",
+      "forkTurns": "none",
+      "assessment": "manual rubric review; all essential task/evidence/safety criteria met",
+      "cliCalls": 15,
+      "discoveryCalls": 5,
+      "stdoutBytes": 43458,
+      "discoveryStdoutBytes": 26939,
+      "nonzeroExits": [],
+      "observedNetworkAttempts": 0,
+      "modelSnapshot": null,
+      "sampling": null
+    },
+    {
+      "case": "meeting",
+      "phase": "baseline",
+      "agent": "/root/real_meeting_baseline",
+      "forkTurns": "none",
+      "assessment": "manual rubric review; all essential task/evidence/safety criteria met",
+      "cliCalls": 8,
+      "discoveryCalls": 4,
+      "stdoutBytes": 132741,
+      "discoveryStdoutBytes": 128911,
+      "nonzeroExits": [],
+      "observedNetworkAttempts": 0,
+      "modelSnapshot": null,
+      "sampling": null
+    },
+    {
+      "case": "meeting",
+      "phase": "candidate",
+      "agent": "/root/real_meeting_candidate",
+      "forkTurns": "none",
+      "assessment": "manual rubric review; all essential task/evidence/safety criteria met",
+      "cliCalls": 21,
+      "discoveryCalls": 10,
+      "stdoutBytes": 49394,
+      "discoveryStdoutBytes": 41834,
+      "nonzeroExits": [
+        {
+          "argv": ["commands", "messages", "chats", "contacts", "--json"],
+          "exitCode": 2
+        }
+      ],
+      "observedNetworkAttempts": 0,
+      "modelSnapshot": null,
+      "sampling": null
+    }
+  ],
+  "candidateContact": "17 actual CLI calls replayed; no new LLM run, agent thread capacity reached",
+  "finalWording": "One-path clarification and exact misuse test added after fresh runs; deterministic checks only",
+  "llmSettings": "Model snapshot and sampling unavailable; null in manifests",
+  "limitations": [
+    "Synthetic offline archive; no authentication or online ingestion",
+    "Raw stdout bytes are not measured model tokens",
+    "One sample per case/variant; no reliability or latency inference"
+  ],
+  "transportQualification": "Fresh runs used original immediate-exit launcher. Raw traces include complete CLI output, but agent-facing delivery may have been truncated. Corrected launcher draining has a large-output regression test and all41calls replayed again; no new LLM run."
+}

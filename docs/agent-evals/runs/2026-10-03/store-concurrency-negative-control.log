@@ -1,0 +1,48 @@
+Already up to date
+Done in 269ms using pnpm v11.20.0
+
+ RUN  v5.0.2 /tmp/wirecat-messaging-concurrency
+
+ ❯ src/store/open-concurrency.test.ts (2 tests | 2 failed) 127ms
+   ❯ cache connection contention (1)
+     × waits for a short lock before initializing journal mode 70ms
+   ❯ store connection contention (1)
+     × waits for a short lock before initializing journal mode 56ms
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  22:38:25
+   Duration  435ms (setup 47%, tests 35%, transform 12%, import 5%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/store/open-concurrency.test.ts > cache connection contention > waits for a short lock before initializing journal mode
+Error: database is locked
+ ❯ Object.exec src/store/drivers/node-sqlite.ts:13:29
+     11| export const cacheOverNodeSqlite = (database: DatabaseSync): CacheData…
+     12|   return {
+     13|     exec: (sql) => database.exec(sql),
+       |                             ^
+     14|     prepare: (sql) => {
+     15|       const statement = database.prepare(sql)
+ ❯ openCache src/store/open.ts:17:12
+ ❯ src/store/open-concurrency.test.ts:41:24
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/store/open-concurrency.test.ts > store connection contention > waits for a short lock before initializing journal mode
+Error: database is locked
+ ❯ Object.exec src/store/drivers/node-sqlite.ts:13:29
+     11| export const cacheOverNodeSqlite = (database: DatabaseSync): CacheData…
+     12|   return {
+     13|     exec: (sql) => database.exec(sql),
+       |                             ^
+     14|     prepare: (sql) => {
+     15|       const statement = database.prepare(sql)
+ ❯ openSqlite src/store/sqlite/open.ts:25:19
+ ❯ store src/store/open-concurrency.test.ts:11:35
+ ❯ src/store/open-concurrency.test.ts:41:24
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

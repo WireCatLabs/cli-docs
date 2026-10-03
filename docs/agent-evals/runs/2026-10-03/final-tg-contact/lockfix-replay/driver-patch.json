@@ -1,0 +1,6 @@
+{
+  "provider": "tg",
+  "patch": "SQLitebusy_timeout before WAL",
+  "beforeSha256": "ee2a1a74e53a8a1f013a3180abfde4c471d49e0abf8d786a06d7d81129df8cd5",
+  "afterSha256": "e0f06b194a5fb082dd8bee3a11ba70040447f32da51b7555e7e3f7a03631409b"
+}

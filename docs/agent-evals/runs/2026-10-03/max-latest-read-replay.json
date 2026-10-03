@@ -1,0 +1,470 @@
+{
+  "records": [
+    {
+      "case": "history",
+      "index": 2,
+      "argv": ["--offline", "chats", "--help"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "history",
+      "index": 3,
+      "argv": ["--offline", "messages", "--help"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "history",
+      "index": 4,
+      "argv": ["--offline", "chats", "list", "--help"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "history",
+      "index": 5,
+      "argv": ["--offline", "store", "status", "--help"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "history",
+      "index": 6,
+      "argv": ["--offline", "messages", "search", "--help"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "history",
+      "index": 7,
+      "argv": ["--offline", "messages", "context", "--help"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "history",
+      "index": 8,
+      "argv": ["--offline", "chats", "list", "--search", "Atlas", "--all", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "history",
+      "index": 9,
+      "argv": ["--offline", "messages", "search", "Atlas", "--limit", "100", "--newest", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": "4 of the chats searched are not held in full \u2014 `max store fetch <chat>` fetches one\n"
+    },
+    {
+      "case": "history",
+      "index": 10,
+      "argv": [
+        "--offline",
+        "messages",
+        "context",
+        "msg:max/900001/-100710002/900000000000000001",
+        "--before-n",
+        "5",
+        "--after-n",
+        "10",
+        "--json"
+      ],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "history",
+      "index": 11,
+      "argv": ["--offline", "store", "status", "--json"],
+      "originalExit": 1,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "history",
+      "index": 12,
+      "argv": [
+        "--offline",
+        "messages",
+        "context",
+        "msg:max/900001/-100710001/900000000000000001",
+        "--before-n",
+        "5",
+        "--after-n",
+        "10",
+        "--json"
+      ],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "history",
+      "index": 13,
+      "argv": ["--offline", "messages", "list", "--help"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "history",
+      "index": 14,
+      "argv": ["--offline", "store", "status", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "history",
+      "index": 15,
+      "argv": ["--offline", "chats", "list", "--all", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "history",
+      "index": 16,
+      "argv": [
+        "--offline",
+        "messages",
+        "search",
+        "analytics OR \u0430\u043d\u0430\u043b\u0438\u0442\u0438\u043a\u0430 OR 1500 OR 1800 OR VAT OR \u041d\u0414\u0421",
+        "--limit",
+        "100",
+        "--newest",
+        "--timezone",
+        "Europe/Madrid",
+        "--json"
+      ],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": "4 of the chats searched are not held in full \u2014 `max store fetch <chat>` fetches one\n"
+    },
+    {
+      "case": "history",
+      "index": 17,
+      "argv": ["--offline", "messages", "list", "-100710003", "--limit", "100", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "history",
+      "index": 18,
+      "argv": [
+        "--offline",
+        "messages",
+        "search",
+        "analytics OR Atlas OR 1500 OR 1800 OR VAT OR \u041d\u0414\u0421",
+        "--chat",
+        "-100710003",
+        "--limit",
+        "100",
+        "--json"
+      ],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": "1 of the chats searched are not held in full \u2014 `max store fetch <chat>` fetches one\n"
+    },
+    {
+      "case": "history",
+      "index": 19,
+      "argv": ["--offline", "store", "status", "-100710003", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": "the store holds no messages for this profile yet\n"
+    },
+    {
+      "case": "meeting",
+      "index": 4,
+      "argv": ["--offline", "contacts", "list", "--help"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "meeting",
+      "index": 5,
+      "argv": ["--offline", "chats", "list", "--help"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "meeting",
+      "index": 6,
+      "argv": ["--offline", "store", "status", "--help"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "meeting",
+      "index": 8,
+      "argv": ["--offline", "chats", "list", "--search", "Atlas", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "meeting",
+      "index": 9,
+      "argv": ["--offline", "contacts", "list", "--search", "Kate", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "meeting",
+      "index": 10,
+      "argv": ["--offline", "contacts", "list", "--search", "Tom", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "meeting",
+      "index": 11,
+      "argv": ["--offline", "messages", "evidence", "--help"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "meeting",
+      "index": 12,
+      "argv": ["--offline", "contacts", "show", "900003", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "meeting",
+      "index": 13,
+      "argv": ["--offline", "store", "status", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "meeting",
+      "index": 14,
+      "argv": ["--offline", "contacts", "show", "900004", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "meeting",
+      "index": 15,
+      "argv": ["--offline", "messages", "search", "Atlas", "--newest", "--limit", "100", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": "3 of the chats searched are not held in full \u2014 `max store fetch <chat>` fetches one\n"
+    },
+    {
+      "case": "meeting",
+      "index": 16,
+      "argv": ["--offline", "messages", "list", "900004", "--limit", "100", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "meeting",
+      "index": 17,
+      "argv": ["--offline", "messages", "list", "900003", "--limit", "100", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "meeting",
+      "index": 18,
+      "argv": ["--offline", "messages", "list", "-100720001", "--limit", "100", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "meeting",
+      "index": 19,
+      "argv": ["--offline", "messages", "show", "msg:max/900001/900003/900000000000000001", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "meeting",
+      "index": 20,
+      "argv": ["--offline", "messages", "show", "msg:max/900001/900004/900000000000000001", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "meeting",
+      "index": 21,
+      "argv": ["--offline", "messages", "show", "msg:max/900001/-100720001/900000000000000002", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "contact",
+      "index": 2,
+      "argv": ["--offline", "contacts", "--help"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "contact",
+      "index": 3,
+      "argv": ["--offline", "messages", "--help"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "contact",
+      "index": 4,
+      "argv": ["--offline", "messages", "search", "--help"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "contact",
+      "index": 5,
+      "argv": ["--offline", "store", "status", "--help"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "contact",
+      "index": 6,
+      "argv": ["--offline", "chats", "list", "--help"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "contact",
+      "index": 7,
+      "argv": ["--offline", "messages", "search", "Stripe OR Atlas", "--limit", "100", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": "5 of the chats searched are not held in full \u2014 `max store fetch <chat>` fetches one\n"
+    },
+    {
+      "case": "contact",
+      "index": 8,
+      "argv": ["--offline", "chats", "list", "--all", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "contact",
+      "index": 9,
+      "argv": ["--offline", "store", "status", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "contact",
+      "index": 10,
+      "argv": ["--offline", "messages", "list", "--help"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "contact",
+      "index": 11,
+      "argv": ["--offline", "contacts", "show", "900006", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "contact",
+      "index": 12,
+      "argv": ["--offline", "contacts", "show", "900005", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "contact",
+      "index": 13,
+      "argv": ["--offline", "messages", "context", "--help"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "contact",
+      "index": 14,
+      "argv": ["--offline", "contacts", "show", "900007", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "contact",
+      "index": 15,
+      "argv": ["--offline", "messages", "list", "-100730001", "--limit", "30", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "contact",
+      "index": 16,
+      "argv": ["--offline", "messages", "list", "900006", "--limit", "30", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "contact",
+      "index": 17,
+      "argv": ["--offline", "messages", "list", "900007", "--limit", "30", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "contact",
+      "index": 18,
+      "argv": ["--offline", "messages", "list", "900005", "--limit", "30", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "contact",
+      "index": 19,
+      "argv": ["--offline", "messages", "list", "-100730002", "--limit", "30", "--json"],
+      "originalExit": 0,
+      "exit": 0,
+      "stderr": ""
+    }
+  ],
+  "kind": "recorded-read-choices replay; no new agent decisions or byte equality assertion"
+}

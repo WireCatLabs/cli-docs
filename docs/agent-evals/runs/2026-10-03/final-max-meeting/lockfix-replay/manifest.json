@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "kind": "fresh-agent-real-cli",
+  "versions": {
+    "max-cli": "0.24.0",
+    "cli-messaging": "0.131.0",
+    "cli-core": "0.16.0"
+  },
+  "lineage": {
+    "initializer": "f71f922e2597707a90c3d3a66081a03d79ecfc19b5b790627f82a102c419c98b",
+    "launcher": "510e956da34afb000cce27c755cb7cc1d3e410d265f330eba4089c310f659ac5",
+    "networkGuard": "161eb33e786941fffa5855f8949a1732e41c26107b3db98d6ab96ef5f574edb9",
+    "commands": "5a32028540f7f5fef0b30907c6ca0d71492bc00b37c45d7e2a422b1e1663fe42",
+    "skill": "942dbccc1f8661f768a90d23f352ae4dff0f150f65c98edb559c7cb2f43c2514"
+  },
+  "node": "v24.19.0",
+  "fixtureName": "meeting",
+  "fixtureRevision": "v1",
+  "fixtureSha256": "99ae1c240e5730f4f7cb350c5895e4be4b77793cf6ee441be7d37420b344cb45",
+  "definitionSha256": "19b0c9e855533f6609a32fd68e26b61051babc84a8bbeca066da0854470e02b6",
+  "modelSnapshot": null,
+  "clock": "Store seeding clock 2026-10-03T10:00:00Z; CLI uses process wall clock",
+  "scope": "Actual parser/services/SQLite, synthetic account, no login; JS network primitive guard; reads forced offline, sends run permission gate",
+  "launcher": "/tmp/wirecat-max-lockfix-replay/meeting/max"
+}

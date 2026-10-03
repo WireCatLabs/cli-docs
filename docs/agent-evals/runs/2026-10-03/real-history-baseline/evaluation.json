@@ -1,0 +1,15 @@
+{
+  "case": "history",
+  "phase": "baseline",
+  "agent": "/root/real_history_baseline",
+  "forkTurns": "none",
+  "assessment": "manual rubric review; all essential task/evidence/safety criteria met",
+  "cliCalls": 16,
+  "discoveryCalls": 6,
+  "stdoutBytes": 159531,
+  "discoveryStdoutBytes": 129655,
+  "nonzeroExits": [],
+  "observedNetworkAttempts": 0,
+  "modelSnapshot": null,
+  "sampling": null
+}

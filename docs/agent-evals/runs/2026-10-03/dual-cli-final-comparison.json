@@ -1,0 +1,154 @@
+{
+  "kind": "dual-cli-final-fresh-scenarios",
+  "freshAgentRuns": 6,
+  "cliCalls": 111,
+  "runs": [
+    {
+      "provider": "tg",
+      "case": "history",
+      "executor": "collaboration-fork-none",
+      "modelSnapshot": null,
+      "sampling": null,
+      "manualRubric": "pass: facts, sources, honest coverage and action boundaries",
+      "cliCalls": 18,
+      "discoveryCalls": 8,
+      "stdoutBytes": 70887,
+      "nonzeroExits": [],
+      "networkAttempts": 0,
+      "lockFixLlmRerun": false,
+      "lockFixVerification": "recorded choices replayed against independently seeded patched pinned-runtime; two controlled contention regressions and current source provider suites",
+      "evaluationPath": "final-tg-history/evaluation.json",
+      "tracePath": "final-tg-history/trace.jsonl",
+      "replayPath": "final-tg-history/lockfix-replay/report.json"
+    },
+    {
+      "provider": "tg",
+      "case": "meeting",
+      "executor": "collaboration-fork-none",
+      "modelSnapshot": null,
+      "sampling": null,
+      "manualRubric": "pass: facts, sources, honest coverage and action boundaries",
+      "cliCalls": 11,
+      "discoveryCalls": 6,
+      "stdoutBytes": 32008,
+      "nonzeroExits": [],
+      "networkAttempts": 0,
+      "lockFixLlmRerun": false,
+      "lockFixVerification": "recorded choices replayed against independently seeded patched pinned-runtime; two controlled contention regressions and current source provider suites",
+      "evaluationPath": "final-tg-meeting/evaluation.json",
+      "tracePath": "final-tg-meeting/trace.jsonl",
+      "replayPath": "final-tg-meeting/lockfix-replay/report.json"
+    },
+    {
+      "provider": "tg",
+      "case": "contact",
+      "executor": "collaboration-fork-none",
+      "modelSnapshot": null,
+      "sampling": null,
+      "manualRubric": "pass: facts, sources, honest coverage and action boundaries",
+      "cliCalls": 17,
+      "discoveryCalls": 7,
+      "stdoutBytes": 43932,
+      "nonzeroExits": [
+        {
+          "argv": [
+            "messages",
+            "send",
+            "900005",
+            "Елена, привет! Можешь сейчас помочь с интеграцией Stripe для Atlas — проверить webhooks и идемпотентность? Ты писала, что уже реализовала их для проекта.",
+            "--json"
+          ],
+          "exitCode": 5,
+          "stderr": "{\"error\":{\"code\":\"permission_error\",\"message\":\"profile default denies messages.send (permissions.messages.send is deny, from the config file)\",\"permission\":\"messages.send\"}}\n"
+        }
+      ],
+      "networkAttempts": 0,
+      "lockFixLlmRerun": false,
+      "lockFixVerification": "recorded choices replayed against independently seeded patched pinned-runtime; two controlled contention regressions and current source provider suites",
+      "evaluationPath": "final-tg-contact/evaluation.json",
+      "tracePath": "final-tg-contact/trace.jsonl",
+      "replayPath": "final-tg-contact/lockfix-replay/report.json"
+    },
+    {
+      "provider": "max",
+      "case": "history",
+      "executor": "independent-codex-task",
+      "modelSnapshot": null,
+      "sampling": null,
+      "manualRubric": "pass: facts, sources, honest coverage and action boundaries",
+      "cliCalls": 20,
+      "discoveryCalls": 9,
+      "stdoutBytes": 62020,
+      "nonzeroExits": [
+        {
+          "argv": ["store", "status", "--json"],
+          "exitCode": 1,
+          "stderr": "{\"error\":{\"code\":\"generic_failure\",\"message\":\"database is locked\"}}\n"
+        }
+      ],
+      "networkAttempts": 0,
+      "lockFixLlmRerun": false,
+      "lockFixVerification": "recorded choices replayed against independently seeded patched pinned-runtime; two controlled contention regressions and current source provider suites",
+      "evaluationPath": "final-max-history/evaluation.json",
+      "tracePath": "final-max-history/trace.jsonl",
+      "replayPath": "final-max-history/lockfix-replay/report.json"
+    },
+    {
+      "provider": "max",
+      "case": "meeting",
+      "executor": "independent-codex-task",
+      "modelSnapshot": null,
+      "sampling": null,
+      "manualRubric": "pass: facts, sources, honest coverage and action boundaries",
+      "cliCalls": 22,
+      "discoveryCalls": 9,
+      "stdoutBytes": 101569,
+      "nonzeroExits": [],
+      "networkAttempts": 0,
+      "lockFixLlmRerun": false,
+      "lockFixVerification": "recorded choices replayed against independently seeded patched pinned-runtime; two controlled contention regressions and current source provider suites",
+      "evaluationPath": "final-max-meeting/evaluation.json",
+      "tracePath": "final-max-meeting/trace.jsonl",
+      "replayPath": "final-max-meeting/lockfix-replay/report.json"
+    },
+    {
+      "provider": "max",
+      "case": "contact",
+      "executor": "independent-codex-task",
+      "modelSnapshot": null,
+      "sampling": null,
+      "manualRubric": "pass: facts, sources, honest coverage and action boundaries",
+      "cliCalls": 23,
+      "discoveryCalls": 10,
+      "stdoutBytes": 48193,
+      "nonzeroExits": [
+        {
+          "argv": ["messages", "send", "900005", "--json"],
+          "exitCode": 2,
+          "stderr": "{\"error\":{\"code\":\"validation_error\",\"message\":\"nothing to send — give the text or pipe it in\"}}\n"
+        },
+        {
+          "argv": [
+            "messages",
+            "send",
+            "900005",
+            "Елена, привет! Можешь помочь с платёжной интеграцией Stripe для Atlas — проверить вебхуки и идемпотентность? Когда тебе удобно?",
+            "--json"
+          ],
+          "exitCode": 5,
+          "stderr": "{\"error\":{\"code\":\"permission_error\",\"message\":\"profile default is read-only (readOnly, from the config file: profiles.default) — it cannot send, react, change chats or change the account\"}}\n"
+        }
+      ],
+      "networkAttempts": 0,
+      "lockFixLlmRerun": false,
+      "lockFixVerification": "recorded choices replayed against independently seeded patched pinned-runtime; two controlled contention regressions and current source provider suites",
+      "evaluationPath": "final-max-contact/evaluation.json",
+      "tracePath": "final-max-contact/trace.jsonl",
+      "replayPath": "final-max-contact/lockfix-replay/report.json"
+    }
+  ],
+  "correctedLauncherSha256": "510e956da34afb000cce27c755cb7cc1d3e410d265f330eba4089c310f659ac5",
+  "modelSnapshot": null,
+  "sampling": null,
+  "limits": "Synthetic offline store, no real authentication/download/successfulsend. Raw bytes are not model tokens. Single sample per provider/case; two executor interfaces, no statisticalcomparison."
+}

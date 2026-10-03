@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "kind": "fresh-agent-real-cli",
+  "versions": {
+    "tg-cli": "0.23.0",
+    "cli-messaging": "0.129.0",
+    "cli-core": "0.16.0"
+  },
+  "lineage": {
+    "initializer": "5b35ce7c00c512ff29c40dae3525a38cb9fd000d67ff9f4e670c5dc1e0d7748e",
+    "launcher": "86ca032031fc98b05e1e2e18ae41c1b4d24d3ba43525813b3c358aa0372eaa28",
+    "networkGuard": "161eb33e786941fffa5855f8949a1732e41c26107b3db98d6ab96ef5f574edb9",
+    "commands": "d1258289cb9f0f500682b31bdd074ee0c2b9285dc36bb1bdcc899a59df31e254",
+    "skill": "0ac8382493f5dbb0c437ae3a956ebfb38815dee6d9cec899fe9b770139f9ee39"
+  },
+  "node": "v24.19.0",
+  "fixtureName": "history",
+  "fixtureRevision": "v1",
+  "fixtureSha256": "4cda53a6917000bd7c557f7430ebbca99b4f007beef69db53d119a8356d2986c",
+  "definitionSha256": "9585c684c8c4735656e5100b1146a0c7f98057eb8191954de5d90ed299fc9dbf",
+  "modelSnapshot": null,
+  "clock": "Store seeding clock 2026-10-03T10:00:00Z; CLI uses process wall clock",
+  "scope": "Actual parser/services/SQLite, synthetic account, no login; JS network primitive guard; reads forced offline, sends run permission gate",
+  "launcher": "/tmp/wirecat-cold-real-023-candidate-v1/history/tg"
+}
