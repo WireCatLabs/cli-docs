@@ -34,6 +34,7 @@
 
 .light .wirecat-landing {
   color-scheme: light;
+  background-blend-mode: soft-light;
   --wall: #f1f4f2;
   --wall-ink: #dce4df;
   --ink: #182822;
