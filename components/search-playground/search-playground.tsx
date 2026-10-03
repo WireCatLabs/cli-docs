@@ -85,7 +85,7 @@ export function SearchPlayground({ lang }: { lang: string }) {
     { id: "12", text: text.deadline },
     { id: "22", text: text.budget },
   ].filter((fact) => evidence.some((message) => message.id === fact.id))
-  const command = `${tool} messages search '${query.replaceAll("'", "'\\''")}' --source all --context 2 --json`
+  const command = `${tool} messages search '${query.replaceAll("'", "'\\''")}' --source all --timezone UTC --context 2 --json`
   const update = (value: string, position = value.length) => {
     setQuery(value)
     setSuggestionOpen(/(?:chat|from|date|kind|has|in):$/u.test(value))

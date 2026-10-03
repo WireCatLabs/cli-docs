@@ -64,7 +64,9 @@ test("filter shortcuts open their suggestions and clipboard copies the actual qu
   await page.locator(".sp-suggestion").filter({ hasText: "Client studio" }).click()
   await expect(page.locator(".sp-hit")).toHaveCount(2)
   await page.locator(".sp-copy").click()
-  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('chat:"Client studio"')
+  const command = await page.evaluate(() => navigator.clipboard.readText())
+  expect(command).toContain('chat:"Client studio"')
+  expect(command).toContain("--timezone UTC")
 })
 
 test("search controls and results meet automated accessibility checks in both themes", async ({ page }) => {
