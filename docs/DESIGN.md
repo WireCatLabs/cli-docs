@@ -171,7 +171,7 @@ security), Project (changelog, roadmap).
   separate navigation roots. The title stays “Documentation”; only the active link and expanded
   guide change with the current page. `lib/docs-sidebar-tree.tsx` adapts the source tree without
   changing the tree used for search, Markdown or release metadata.
-- Landing: the reviewed dark design, Anybody headings, Onest body, JetBrains Mono commands.
+- Landing: the reviewed dark design, Anybody headings (Fira Sans Extra Condensed for Russian), Onest body, JetBrains Mono commands. Search shares the section-heading face, weight and width. For font review, `?fonts=1` enables a 20-face previous/next/picker panel; `font=<id>` retains a choice in the URL. Self-hosted candidate faces load on selection, with unsupported Cyrillic options disabled.
 - Landing uses the purple WireCat monogram and word mark. max's own logo appears on max's pages.
 - Code blocks: Shiki highlighting, a copy button; an unknown language shows as plain text.
 - Documentation uses the owner-selected **Quiet** treatment (2026-10-03): headings retain their

@@ -1,0 +1,165 @@
+[
+  {
+    "id": "anybody",
+    "family": "Anybody",
+    "weight": 900,
+    "stretch": "62%",
+    "style": "Condensed display",
+    "cyrillic": false,
+    "existing": true
+  },
+  {
+    "id": "archivo",
+    "family": "Archivo",
+    "weight": 900,
+    "stretch": "100%",
+    "style": "Heavy grotesk",
+    "cyrillic": false
+  },
+  {
+    "id": "barlowcondensed",
+    "family": "Barlow Condensed",
+    "weight": 800,
+    "stretch": "100%",
+    "style": "Editorial condensed",
+    "cyrillic": false
+  },
+  {
+    "id": "barlowsemicondensed",
+    "family": "Barlow Semi Condensed",
+    "weight": 800,
+    "stretch": "100%",
+    "style": "Compact grotesk",
+    "cyrillic": false
+  },
+  {
+    "id": "robotocondensed",
+    "family": "Roboto Condensed",
+    "weight": 800,
+    "stretch": "100%",
+    "style": "Condensed sans",
+    "cyrillic": true
+  },
+  {
+    "id": "oswald",
+    "family": "Oswald",
+    "weight": 700,
+    "stretch": "100%",
+    "style": "Tall condensed",
+    "cyrillic": true,
+    "existing": true
+  },
+  {
+    "id": "firasansextracondensed",
+    "family": "Fira Sans Extra Condensed",
+    "weight": 900,
+    "stretch": "100%",
+    "style": "Extra condensed",
+    "cyrillic": true,
+    "existing": true
+  },
+  {
+    "id": "sofiasanscondensed",
+    "family": "Sofia Sans Condensed",
+    "weight": 900,
+    "stretch": "100%",
+    "style": "Compact humanist",
+    "cyrillic": true
+  },
+  {
+    "id": "ibmplexsanscondensed",
+    "family": "IBM Plex Sans Condensed",
+    "weight": 700,
+    "stretch": "100%",
+    "style": "Technical condensed",
+    "cyrillic": false
+  },
+  {
+    "id": "spacegrotesk",
+    "family": "Space Grotesk",
+    "weight": 700,
+    "stretch": "100%",
+    "style": "Expressive grotesk",
+    "cyrillic": false
+  },
+  {
+    "id": "sora",
+    "family": "Sora",
+    "weight": 800,
+    "stretch": "100%",
+    "style": "Geometric sans",
+    "cyrillic": false
+  },
+  {
+    "id": "manrope",
+    "family": "Manrope",
+    "weight": 800,
+    "stretch": "100%",
+    "style": "Geometric grotesk",
+    "cyrillic": true
+  },
+  {
+    "id": "plusjakartasans",
+    "family": "Plus Jakarta Sans",
+    "weight": 800,
+    "stretch": "100%",
+    "style": "Contemporary grotesk",
+    "cyrillic": false
+  },
+  {
+    "id": "outfit",
+    "family": "Outfit",
+    "weight": 800,
+    "stretch": "100%",
+    "style": "Clean geometric",
+    "cyrillic": false
+  },
+  {
+    "id": "geist",
+    "family": "Geist",
+    "weight": 800,
+    "stretch": "100%",
+    "style": "Sharp grotesk",
+    "cyrillic": true
+  },
+  {
+    "id": "bricolagegrotesque",
+    "family": "Bricolage Grotesque",
+    "weight": 800,
+    "stretch": "100%",
+    "style": "Expressive display",
+    "cyrillic": false
+  },
+  {
+    "id": "chivo",
+    "family": "Chivo",
+    "weight": 900,
+    "stretch": "100%",
+    "style": "Dense grotesk",
+    "cyrillic": false
+  },
+  {
+    "id": "urbanist",
+    "family": "Urbanist",
+    "weight": 900,
+    "stretch": "100%",
+    "style": "Geometric display",
+    "cyrillic": false
+  },
+  {
+    "id": "golostext",
+    "family": "Golos Text",
+    "weight": 900,
+    "stretch": "100%",
+    "style": "Strong neutral sans",
+    "cyrillic": true
+  },
+  {
+    "id": "unbounded",
+    "family": "Unbounded",
+    "weight": 800,
+    "stretch": "100%",
+    "style": "Wide display",
+    "cyrillic": true
+  }
+]

@@ -802,15 +802,13 @@
 
 /* The query decoration shares the textarea's wrapping and scroll position. */
 :is(.wirecat-landing, .sp-docs-host) .sp-heading h2 {
-  font-family: var(--display);
-  font-stretch: normal;
-  font-weight: 650;
+  font-family: var(--heading-family, var(--display));
+  font-stretch: var(--heading-stretch, normal);
+  font-weight: var(--heading-weight, 650);
   line-height: 1.18;
   letter-spacing: -0.015em;
 }
 :where(html[lang="ru"]) :is(.wirecat-landing, .sp-docs-host) .sp-heading h2 {
-  font-family: "Fira Sans Extra Condensed", sans-serif;
-  font-weight: 800;
   line-height: 1.2;
   letter-spacing: 0;
 }
@@ -1052,4 +1050,11 @@
 :is(.wirecat-landing, .sp-docs-host) .sp-input-wrap.sp-invalid:focus-within {
   border-color: #d86b6b;
   box-shadow: 0 0 0 3px #e172721c;
+}
+
+@media (max-width: 760px) {
+  .wirecat-landing .sp-heading h2.big {
+    font-size: clamp(26px, 8vw, 54px);
+    overflow-wrap: normal;
+  }
 }
