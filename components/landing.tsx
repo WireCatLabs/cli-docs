@@ -258,18 +258,18 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
       root.classList.remove("is-ready")
     }
   }, [sessions, maxSessions, lang])
-  const [before, after] = html.split("<!--time-savings-->")
-  const [beforeSearch, afterSearch] = before.split("<div data-search-playground></div>")
+  const [before, tail] = html.split("<!--time-savings-->")
+  const [after, afterSearch] = (tail ?? "").split("<div data-search-playground></div>")
   return (
     <div ref={rootRef} className="landing-content">
       {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Reviewed local exported HTML only. */}
-      <div dangerouslySetInnerHTML={{ __html: beforeSearch }} />
+      <div dangerouslySetInnerHTML={{ __html: before }} />
+      {tail !== undefined && <TimeSavings lang={lang} />}
+      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Reviewed local exported HTML only. */}
+      {tail !== undefined && <div dangerouslySetInnerHTML={{ __html: after }} />}
       {afterSearch !== undefined && <SearchPlayground lang={lang} />}
       {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Reviewed local exported HTML only. */}
       {afterSearch !== undefined && <div dangerouslySetInnerHTML={{ __html: afterSearch }} />}
-      {after !== undefined && <TimeSavings lang={lang} />}
-      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Reviewed local exported HTML only. */}
-      {after !== undefined && <div dangerouslySetInnerHTML={{ __html: after }} />}
     </div>
   )
 }

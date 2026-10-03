@@ -2,7 +2,7 @@
 
 Approved by the owner after reviewing a compact query-builder idea and asking for a current React solution. Implemented in `feat/search-playground` without changing the active shared landing checkout.
 
-The section sits below scenarios and before benefits. One free-form query input offers field/value/operator suggestions, chat/person/date/file shortcuts, editable examples and a copied CLI command. Results come from a fictional 12-message/four-chat Telegram/MAX archive; context preserves qualified source locators. Prepared summary facts appear only when their supporting messages were retrieved. English, Russian and Spanish, light/dark themes and keyboard/mobile behavior are included.
+The section follows the closing “Continue the conversation with the full context” block and also appears at `/{lang}/docs/search-playground`. A wrapping textarea offers field/value/operator suggestions, sample words and phrases, useful date presets, reversible text/chat/person/date/file/kind filters and a copied CLI command. A clear button shows all sample messages in a bounded scrollable pane. Incomplete or invalid edits retain the previous valid results and mark the offending span in red; syntax help is a popover above the input. Redundant example buttons are removed. Results come from a fictional 12-message/four-chat Telegram/MAX archive; context preserves qualified source locators. Prepared summary facts appear only when their supporting messages were retrieved. English, Russian and Spanish, light/dark themes and keyboard/mobile behavior are included.
 
 ## Library decision
 
@@ -22,4 +22,4 @@ The landing exporter owns the slot and generated locale snapshots. React renders
 
 Run `pnpm search:check`, lint/typecheck/test, `pnpm test:browser`, static Next build and link checks. Browser checks cover cursor completion, filter shortcuts, exact copied command, context/source provenance, all three locales, mobile overflow, reduced motion, themes and scoped automated AA checks.
 
-The concurrent landing/docs work has landed and this feature is rebased onto it, retaining the scenario selector, time estimate and updated guides. Default sync uses the reviewed MAX v0.23.0/Telegram v0.22.0 refs and passes. Keep this feature in draft for UI review: the new search profile itself is a preview, and production availability of its copied commands/search-guide translations must follow consumer releases. The primary site release-sync check remains intact.
+The concurrent landing/docs work has landed and this feature is rebased onto it, retaining the scenario selector, time estimate and updated guides. Default sync uses the reviewed MAX v0.24.0/Telegram v0.22.0 refs and passes. Keep this feature in draft for UI review: the new search profile itself is a preview, and production availability of its copied commands/search-guide translations must follow consumer releases. The primary site release-sync check remains intact.

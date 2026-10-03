@@ -4,6 +4,7 @@ import type { MDXComponents } from "mdx/types"
 import type { ComponentProps, ComponentType } from "react"
 import { InstallationGuide } from "@/components/installation-guide"
 import { PlatformPaths } from "@/components/platform-paths"
+import { SearchPlayground } from "@/components/search-playground/search-playground"
 import { AgentPrompt } from "@/components/text-snippet"
 
 export function getMDXComponents(components?: MDXComponents) {
@@ -11,6 +12,7 @@ export function getMDXComponents(components?: MDXComponents) {
   return {
     ...defaultMdxComponents,
     InstallationGuide,
+    SearchPlayground,
     "platform-paths": PlatformPaths,
     "agent-prompt": AgentPrompt,
     ...components,
