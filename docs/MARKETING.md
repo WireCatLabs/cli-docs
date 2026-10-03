@@ -94,3 +94,12 @@
    Identifica dónde hace falta tu decisión, quién espera respuesta y qué se ha acordado. Convierte las preguntas abiertas en un plan claro.
 
 Текущий испанский hero: **Deja de buscar. Solo pregunta.** Короткая версия подчёркивает действие; подключение агента объясняется рядом в подзаголовке.
+
+
+## Полный Bot API
+
+- **RU:** Все методы Bot API. Все методы официальных Bot API Telegram и MAX доступны через CLI — вместе с удобными командами для сообщений, файлов и управления чатами.
+- **EN:** All Bot API methods. Every method of the official Telegram and MAX Bot APIs is exposed through the CLI, alongside simple commands for messages, files and chat administration.
+- **ES:** Todos los métodos de la Bot API. Todos los métodos de las Bot API oficiales de Telegram y MAX están disponibles desde la CLI, junto con comandos sencillos para mensajes, archivos y administración de chats.
+
+Покрытие относится к нативному интерфейсу `tg bot api` / `max bot api`. MCP предоставляет отдельные инструменты для типичных задач. Доступность операций определяется провайдером; полного live-прогона всех методов не заявляем. Публиковать этот текст о Telegram после npm-релиза с generated Bot API: текущая 0.24.0 его не содержит.
