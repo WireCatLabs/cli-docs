@@ -107,7 +107,7 @@ tg conversations embed status --chat "Project team" --json
 - **Смысл:** запрос векторизуется выбранной моделью; читаются vectors текущих conversation builds в выбранном account/chat, для разговора сохраняется лучший chunk.
 - **Слова:** из вопроса извлекаются слова, объединяются через OR для message search; найденные сообщения переводятся в построенные разговоры.
 
-Списки соединяются reciprocal rank fusion: каждый даёт `1 / (60 + rank)`, начиная с rank 1. Поле `by` равно `["meaning"]`, `["words"]` или обоим. `score` — cosine лучшего chunk, не fusion score и не вероятность верности ответа; у word-only результата `score: null`.
+Списки соединяются reciprocal rank fusion: каждый даёт `1 / (60 + rank)`, начиная с rank 1. Поле `by` равно `["meaning"]`, `["words"]` или обоим. `summary` — metadata разговора (IDs, даты, число сообщений), не сгенерированный текст. `score` — cosine лучшего chunk, не fusion score и не вероятность верности ответа; у word-only результата `score: null`.
 
 Векторы хранятся как SQLite blobs. Сейчас они читаются страницами и сравниваются в JavaScript; ANN/vector index и отдельной vector DB нет. Paging ограничивает одновременно загруженные vectors, но общая работа растёт с числом chunks в scope.
 
