@@ -17,16 +17,16 @@ Status marks: ✅ live · 🟡 planned · ⚪ later.
 ## The rules behind every page
 
 1. **One home per fact.** A tool's pages live in that tool's repository, `docs/`. The site copies
-   them; it never edits them. The site writes only what belongs to no tool: the landing page, the
-   interface words, the "built for agents" text.
+   them; it never edits them. The site writes the landing page, interface words, and shared guides
+   for installation, agent connections and MCP. Tool-specific details stay in the tool's pages.
 2. **The site shows what is released.** Pages are copied at each tool's newest release tag, so the
    site never describes a command that is not on npm yet.
 3. **Every tool looks the same.** The same pages at the same addresses, in the same sidebar groups
    (STRUCTURE.md). A reader who knows `max` knows where to look in `tg`.
 4. **Agents get plain Markdown.** Every page has a Markdown copy, and `/llms.txt` lists them all.
-5. **Three interface languages, one text per page.** The interface is English, Russian or Spanish; a
-   page's text is in the language its tool writes it in, and says so when the reader's interface
-   differs.
+5. **Three languages, including the guides.** Interface and tool documentation are available in
+   English, Russian and Spanish. Reviewed translations survive release sync; changes in the source
+   require a new review before publishing.
 
 ## The map
 
@@ -34,7 +34,10 @@ Status marks: ✅ live · 🟡 planned · ⚪ later.
 wirecat.dev/
 ├── /                              → the reader's language, from the browser                  ✅
 ├── /{lang}                        the landing page                                            ✅ → 🟡 redesign
-├── /{lang}/docs                   → the landing page                                          🟡
+├── /{lang}/docs                   getting started: choose a messenger and a path              ✅
+├── /{lang}/docs/installation      install with an agent or terminal, log in, first check        ✅
+├── /{lang}/docs/agents            Codex, Cursor, Claude Code, Gemini CLI, Hermes                ✅
+├── /{lang}/docs/mcp               MCP connections and documentation for agents                ✅
 ├── /{lang}/docs/{tool}            the tool's start page (its docs/index.md)                   ✅
 ├── /{lang}/docs/{tool}/{page}     one page of STRUCTURE.md                                    ✅
 ├── /{lang}/docs/{tool}/changelog  the tool's CHANGELOG.md                                     ✅
@@ -49,69 +52,53 @@ wirecat.dev/
 
 ## The landing page — `/{lang}`
 
-What it must do: say in five seconds what this is, why it suits agents, which tools there are, and
-how to connect one. Build steps: [the landing plan](plans/2026-10-02-landing.md).
+The reviewed `design/landing/g-home*.html` prototypes define the English, Russian and Spanish
+landing. The page keeps the purple WireCat mark and pill navigation, dark patterned background,
+large condensed headline, install command and documentation CTA, interactive agent demo with
+five sessions and replay, a day with an agent, Telegram/MAX tool cards,
+all three feature groups, advantages, closing CTA and footer. About is a separate translated
+`/{lang}/about` page with project details, custom chatbot/integration information and
+`hello@wirecat.dev` for enquiries. Header and footer links lead there.
 
-```text
-┌──────────────────────────────────────────────────────────────────────────┐
-│ WireCat                          [Search  Ctrl K]  ☀/☾  Language  GitHub │
-├──────────────────────────────────────────────────────────────────────────┤
-│                                                                          │
-│  WireCat                                                                 │
-│  AI Messaging with CLI tools for agents                                  │
-│  Your Telegram and MAX accounts, from the terminal — for you, your       │
-│  scripts and your AI agents.                                             │
-│                                                                          │
-│  ┌──────────────────────────────────────────────────────────────┐        │
-│  │ $ tg inbox --json --limit 2                                  │        │
-│  │ {"items":[{"chat":…,"from":…,"text":"Are we still on…"}…],   │        │
-│  │  "limit":2,"hasMore":true}                                   │        │
-│  └──────────────────────────────────────────────────────────────┘        │
-│  [ Get started ]  [ GitHub ]                                             │
-│                                                                          │
-├──────────────────────────────────────────────────────────────────────────┤
-│  BUILT FOR AGENTS                                                        │
-│  ┌────────────────────┐ ┌────────────────────┐ ┌────────────────────┐    │
-│  │ One call, one      │ │ Limits you set     │ │ Agents connect     │    │
-│  │ answer             │ │                    │ │ themselves         │    │
-│  │ JSON on stdout,    │ │ allowed chats,     │ │ MCP server, agent  │    │
-│  │ fixed exit codes   │ │ sends per hour,    │ │ skill, /llms.txt   │    │
-│  │                    │ │ read-only profiles │ │                    │    │
-│  └────────────────────┘ └────────────────────┘ └────────────────────┘    │
-├──────────────────────────────────────────────────────────────────────────┤
-│  THE TOOLS                                                               │
-│  ┌──────────────────────────────┐  ┌──────────────────────────────┐      │
-│  │ max                  v0.22.0 │  │ tg                   v0.21.0 │      │
-│  │ MAX Messenger: bots and your │  │ A Telegram client for the    │      │
-│  │ personal account.            │  │ terminal and AI agents.      │      │
-│  │ • …  • …  • …                │  │ • …  • …  • …                │      │
-│  │ npm install -g @leemour/max… │  │ npm install -g @leemour/tg-… │      │
-│  │ Docs · GitHub · npm · Changes│  │ Docs · GitHub · npm · Changes│      │
-│  └──────────────────────────────┘  └──────────────────────────────┘      │
-├──────────────────────────────────────────────────────────────────────────┤
-│  CONNECT YOUR AGENT                              tool: [ tg ▾ ]          │
-│  [Claude Code · Codex · Gemini CLI] [MCP clients] [Any model]            │
-│  $ tg skill install                                                      │
-├──────────────────────────────────────────────────────────────────────────┤
-│  GitHub · MIT · Docs as Markdown: /llms.txt                              │
-└──────────────────────────────────────────────────────────────────────────┘
-```
+The hero has a connection dropdown for Telegram and MAX. Each option displays its installation
+command and copies it on click, with inline confirmation and a link to the matching installation
+guide. The standalone agent connection section is omitted. Five-agent and MCP guides remain in
+the documentation. Skills installation commands and detailed setup live in the docs.
+Landing buttons stay fixed on hover and press, with 180 ms surface-color and shadow feedback.
+The connection menu fades in over 140 ms and its chevron rotates to indicate the open state.
+Reduced motion removes the menu fade and chevron transition, retaining brief color feedback.
+After the interactive scenarios, sections appear in this order: benefits, Telegram/MAX,
+why it works, the daily habit, and the closing CTA. The daily habit is four short moments at
+08:00, 11:00, 15:00 and 19:00, with one action and result each; it has no duplicate command demos.
+Only feature variant 6 is published, with its groups
+always open; prototype design switches and hidden experiments are removed.
 
-| Section | Shows | Comes from |
-|---|---|---|
-| Hero | name, tagline, one promise, a real command and answer, two buttons | `lib/words.ts`; the answer's shape from a real `tg inbox --json` |
-| Built for agents | three blocks | `lib/words.ts` |
-| The tools | summary, version, three highlights, install, four links | `tools.json`; the version from the tag `pnpm sync` used |
-| Connect your agent | one command per kind of client | the tools' own commands: `skill install`, `mcp config` |
-| Footer | links | `lib/shared.ts` |
+Each feature group has six cards describing user benefits, without command snippets. Personal
+accounts cover unread messages, agreements, search, news, transcription and scheduled sends.
+Bots cover broadcasts, personalisation, contextual replies, team notifications, buttons and send
+controls; the introduction identifies MAX as the platform supporting these messaging workflows.
+Groups cover unanswered questions, membership analytics, discussion review, moderation, summaries
+and administration. Semantic discussion review is performed by the agent, rather than described
+as a built-in automatic profanity filter. The Russian hero uses a smaller size and an explicit
+break before its second phrase to stay on two lines on mobile and desktop.
+
+`node scripts/export-landing.mjs` exports the repository-owned prototypes into `lib/landing/`.
+`components/landing.tsx` handles demo sessions, replay, results and clipboard, with event/timer
+cleanup on navigation. The first demo renders in static HTML without waiting for JavaScript.
+Landing CSS is scoped to `.wirecat-landing`; it cannot restyle documentation after navigation.
+Fonts are local source assets with OFL licences in `public/fonts/`; Fira Sans Extra Condensed supplies Russian display headings, matching commit b41b263. The documentation header uses an animated SVG logo in a quieter purple,
+with motion disabled when the reader requests reduced motion.
 
 ## A tool's pages — `/{lang}/docs/{tool}/…`
 
 ```text
 ┌────────────────────┬──────────────────────────────────────────┬──────────────┐
-│ WireCat            │ Using tg                                 │ On this page │
-│ [Search]           │ [Copy Markdown] [Open ▾]                 │ The first…   │
-│ [ tg ▾ ]  ← switch │ ─────────────────────────────────────── │ Reading      │
+│ WireCat     [Telegram / MAX]       [Search] [Language] [Theme]             │
+├────────────────────┬──────────────────────────────────────────┬──────────────┤
+│ Getting started    │ Using tg                                 │ On this page │
+│ Installation       │ [Copy Markdown] [Open ▾]                 │ The first…   │
+│ Connect your agent │ ─────────────────────────────────────── │ Reading      │
+│ MCP and docs       │                                          │              │
 │ v0.21.0 · Changes  │ This page is in English.  (when the      │ Sending      │
 │                    │  interface is another language)          │ …            │
 │ Start              │                                          │              │
@@ -127,13 +114,20 @@ how to connect one. Build steps: [the landing plan](plans/2026-10-02-landing.md)
 └────────────────────┴──────────────────────────────────────────┴──────────────┘
 ```
 
-- **Sidebar** ✅ — the tool switch at the top, then the tool's own `docs/meta.json` groups. Each tool
-  is a tab of its own (`root: true` added by sync).
+- **Top bar** ✅ — Telegram / MAX, search and a language button next to it, at desktop and mobile
+  widths. Switching messengers keeps the current section if it exists in both; otherwise it opens
+  the target's overview. Changing language keeps the current page. Getting started remains selected throughout the
+  shared installation, agent and MCP guides, including in the sidebar.
+- **Sidebar** ✅ — the current section title (Telegram, MAX or localized Getting started),
+  shared getting-started links, then the tool's own `docs/meta.json` groups. The brand logo appears
+  only in the top bar.
+  `root: true` from sync still scopes the sidebar to the active tool; the old tabs dropdown is off.
 - **The version line** 🟡 — under the switch: the release the pages come from, and its changelog.
 - **Page header** ✅ — title; **Copy Markdown**; **Open** (in ChatGPT, Claude, GitHub); the note
   "This page is in Russian/English" in the interface language when the page's language differs.
-- **Body** ✅ — the page as its tool wrote it. Links to its other pages stay on the site; links to
-  anything else in the repository go to GitHub at the same tag.
+- **Body** ✅ — the released guide in the selected language, with reviewed corrections. Entry pages
+  explain the tool, the current section and the first steps before linking to detailed reference.
+  Links to other pages stay on the site; repository links go to GitHub at the release tag.
 - **On this page** ✅ — the headings.
 
 Which pages a tool has, and what each answers, is [STRUCTURE.md](STRUCTURE.md): Start (index,
@@ -149,7 +143,7 @@ security), Project (changelog, roadmap).
 | Every page in one file | `/llms-full.txt` | ✅ |
 | One page as Markdown | `/llms.mdx/docs/{tool}/{page}/content.md` | ✅ |
 | Copy / open a page in a chat | page header buttons | ✅ |
-| The agent skill | `<tool> skill install` — on the landing page and each start page | 🟡 |
+| The agent skill | `<tool> skill install` — in the shared agent guide; the CLI already hints at it in agent environments | ✅ |
 | An MCP server over the docs themselves | — | ⚪ step 2 of the portal plan |
 
 ## Languages
@@ -158,14 +152,20 @@ security), Project (changelog, roadmap).
   `lib/words.ts` and `tools.json`, not by the translation agent.
 - First visit: `/` picks the language from the browser (`public/language.js`); after that the
   language switch decides.
-- Pages: `max` in Russian, `tg` in English. Translations of the tools' pages come later, from a
-  separate agent, as separate files.
+- Tool pages: source MAX guides are Russian and Telegram guides English; all three locales have
+  full reviewed guides. Durable translations live in `translations/`, with per-locale source
+  fingerprints and checks for commands, literals, links and heading structure. Original section
+  anchors remain usable. Translation review findings live in `docs/reviews/`.
+- Shared getting-started, installation, agent and MCP guides: English, Russian and Spanish,
+  owned by the portal. They are in search and the default-language Markdown index. Copy Markdown
+  on any translated guide keeps that language at `/llms.mdx/docs/{lang}/…/content.md`.
 - Search finds a page in any interface language; Russian words are found from the English one too.
 
 ## Look
 
-- Fumadocs' neutral theme, Inter (Latin and Cyrillic), light and dark from the system, with a switch.
-- No logo yet: **WireCat** as a word mark. max's own logo appears only on max's pages.
+- Documentation: Fumadocs' neutral theme, Inter (Latin and Cyrillic), light and dark with a switch.
+- Landing: the reviewed dark design, Anybody headings, Onest body, JetBrains Mono commands.
+- Landing uses the purple WireCat monogram and word mark. max's own logo appears on max's pages.
 - Code blocks: Shiki highlighting, a copy button; an unknown language shows as plain text.
 - Works at phone width: the sidebar folds into the menu button.
 

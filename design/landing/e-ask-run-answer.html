@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WireCat Ask Run Answer</title>
+<meta name="description" content="Ask in words. Your agent runs tg. You get the answer.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,500..900&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+  /* Layout: sage wallpaper; a three-pane explorer (question → command → answer) leads, a command sheet follows. */
+  :root {
+    --wall: #c3cab0; --wall-ink: #b1ba9a;
+    --ink: #14170e; --ink-soft: #424a33;
+    --me: #2f37d9; --me-ink: #ffffff; --me-soft: #c9ccff;
+    --bot: #ffffff; --bot-ink: #14170e; --bot-soft: #626b52;
+    --term: #14170e; --term-2: #1d2116; --term-line: #2e3424; --term-ink: #eef3df; --term-soft: #a2ac8a; --term-dim: #6d7660;
+    --k: #a9b0ff; --s: #e6c07b; --n: #f29b7a; --ok: #9fd58a;
+    --display: "Anybody", "Onest", system-ui, sans-serif;
+    --body: "Onest", system-ui, sans-serif;
+    --code: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    --gutter: clamp(16px, 4vw, 48px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --wall: #1c2118; --wall-ink: #272d21; --ink: #eef3df; --ink-soft: #b5bf9c;
+      --me: #4b53f0; --bot: #2a3220; --bot-ink: #eef3df; --bot-soft: #a2ac8a;
+      --term: #0f120b; --term-2: #161a11; --term-line: #262c1e;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --wall: #1c2118; --wall-ink: #272d21; --ink: #eef3df; --ink-soft: #b5bf9c;
+    --me: #4b53f0; --bot: #2a3220; --bot-ink: #eef3df; --bot-soft: #a2ac8a;
+    --term: #0f120b; --term-2: #161a11; --term-line: #262c1e;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; background-color: var(--wall); color: var(--ink); font: 400 17px/1.55 var(--body); -webkit-font-smoothing: antialiased; }
+  ::selection { background: var(--me); color: var(--me-ink); }
+  a { color: inherit; text-underline-offset: 0.2em; }
+  :focus-visible { outline: 2px solid var(--me); outline-offset: 3px; border-radius: 6px; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding-inline: var(--gutter); }
+  header.top { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 22px; }
+  .mark { display: inline-flex; align-items: center; gap: 10px; font: 800 22px/1 var(--display); font-stretch: 120%; letter-spacing: -0.01em; text-decoration: none; }
+  .mark svg { width: 30px; height: 30px; }
+  nav { display: flex; gap: clamp(14px, 3vw, 28px); font-weight: 500; font-size: 15px; }
+  nav a { text-decoration: none; color: var(--ink-soft); }
+  nav a:hover { color: var(--ink); }
+
+  .hero { padding-block: clamp(16px, 4vw, 44px) clamp(56px, 8vw, 104px); }
+  h1 { font: 900 clamp(46px, 7.4vw, 108px)/0.88 var(--display); font-stretch: 62%; text-transform: uppercase; margin: 0 0 22px; text-wrap: balance; }
+  h1 .a { color: var(--ink); } h1 .b { color: var(--me); }
+  h1 code { font: 600 0.62em/1 var(--code); text-transform: none; background: var(--term); color: var(--term-ink); padding: 0.06em 0.22em; border-radius: 0.14em; vertical-align: 0.1em; }
+  .hero-row { display: flex; flex-wrap: wrap; gap: 16px 40px; align-items: center; justify-content: space-between; margin-bottom: clamp(28px, 4vw, 44px); }
+  .lede { margin: 0; font-size: clamp(17px, 1.5vw, 20px); color: var(--ink-soft); max-width: 34em; }
+  .lede b { color: var(--ink); font-weight: 600; }
+  .cta { display: flex; flex-wrap: wrap; gap: 10px; }
+  .cmd { display: inline-flex; align-items: center; gap: 14px; min-width: 0; max-width: 100%; background: var(--term); color: var(--term-ink); border-radius: 999px; padding: 6px 6px 6px 20px; font: 400 15px/1 var(--code); }
+  .cmd code { font: inherit; white-space: nowrap; overflow-x: auto; padding-block: 4px; }
+  .cmd code::before { content: "$ "; color: var(--term-soft); }
+  .copy { flex: none; border: 0; cursor: pointer; border-radius: 999px; padding: 10px 16px; background: var(--term-ink); color: var(--term); font: 600 13px/1 var(--body); }
+  .copy:hover, .copy[data-done] { background: var(--me); color: var(--me-ink); }
+  .btn { display: inline-flex; align-items: center; min-height: 50px; padding: 0 24px; border-radius: 999px; background: var(--me); color: var(--me-ink); text-decoration: none; font: 600 16px/1 var(--body); }
+
+  /* Explorer */
+  .explorer { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.25fr) minmax(0, 1fr); gap: 14px; align-items: stretch; }
+  .pane-label { font: 600 12px/1 var(--body); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 10px; display: flex; align-items: center; gap: 8px; }
+  .pane-label i { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--ink); color: var(--wall); font: 700 11px/1 var(--body); font-style: normal; }
+  .questions { display: flex; flex-direction: column; gap: 8px; }
+  .q { text-align: left; border: 0; cursor: pointer; border-radius: 18px 18px 18px 6px; padding: 12px 15px; background: var(--bot); color: var(--bot-ink); font: 500 15.5px/1.35 var(--body); box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+  .q:hover { transform: translateX(3px); }
+  .q[aria-pressed="true"] { background: var(--me); color: var(--me-ink); border-radius: 18px 18px 6px 18px; }
+  .explorer > div { display: flex; flex-direction: column; min-width: 0; }
+  .term { background: var(--term); color: var(--term-ink); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; flex: 1; box-shadow: 0 40px 70px -44px rgba(0, 0, 0, 0.7); }
+  .term-bar { display: flex; gap: 7px; padding: 12px 16px; border-bottom: 1px solid var(--term-line); }
+  .term-bar i { width: 11px; height: 11px; border-radius: 50%; background: var(--term-line); }
+  .term-body { padding: 18px; font: 400 13px/1.65 var(--code); flex: 1; overflow-x: auto; }
+  .line { color: var(--term-ink); white-space: pre-wrap; word-break: break-word; }
+  .line .p { color: var(--ok); }
+  .line b { color: var(--k); font-weight: 600; }
+  .out { color: var(--term-soft); white-space: pre-wrap; word-break: break-word; margin-top: 10px; }
+  .out .k { color: var(--k); } .out .s { color: var(--s); } .out .n { color: var(--n); }
+  .caret { display: inline-block; width: 8px; height: 1.1em; background: var(--term-ink); vertical-align: -0.2em; animation: caret 1s steps(1) infinite; }
+  @keyframes caret { 50% { opacity: 0; } }
+  .answer { display: flex; flex-direction: column; gap: 8px; }
+  .bubble { background: var(--bot); color: var(--bot-ink); border-radius: 18px 18px 18px 6px; padding: 14px 16px; font-size: 15.5px; line-height: 1.55; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); }
+  .bubble p { margin: 0 0 8px; } .bubble p:last-child { margin: 0; }
+  .bubble h3 { margin: 10px 0 4px; font: 700 12px/1 var(--body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--bot-soft); }
+  .bubble h3:first-child { margin-top: 0; }
+  .bubble ul { margin: 0; padding-left: 18px; }
+  .bubble q { color: var(--bot-soft); }
+  .bubble table { border-collapse: collapse; font-variant-numeric: tabular-nums; margin: 6px 0 8px; font-size: 14.5px; }
+  .bubble td, .bubble th { padding: 3px 12px 3px 0; text-align: right; border-bottom: 1px solid color-mix(in srgb, var(--bot-ink) 12%, transparent); }
+  .bubble td:first-child, .bubble th:first-child { text-align: left; }
+  .bubble th { color: var(--bot-soft); font-weight: 500; }
+  .meta { font-size: 12px; color: var(--ink-soft); }
+  .js .fresh { animation: in 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+  @keyframes in { from { opacity: 0; transform: translateY(8px); filter: blur(3px); } }
+
+  section { padding-block: clamp(64px, 9vw, 120px); }
+  h2 { font: 900 clamp(36px, 5vw, 68px)/0.92 var(--display); font-stretch: 62%; text-transform: uppercase; margin: 0 0 16px; text-wrap: balance; }
+  .intro { color: var(--ink-soft); font-size: 19px; max-width: 36em; margin: 0 0 clamp(36px, 5vw, 56px); }
+  .sheet { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .job { background: var(--term); color: var(--term-ink); border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 14px; }
+  .job h3 { margin: 0; font: 800 28px/1 var(--display); font-stretch: 72%; text-transform: uppercase; }
+  .job p { margin: 0; color: var(--term-soft); font-size: 15px; }
+  .job ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .job li { display: grid; gap: 2px; }
+  .job li code { font: 500 13.5px/1.45 var(--code); color: var(--term-ink); overflow-wrap: anywhere; }
+  .job li code::before { content: "$ "; color: var(--ok); }
+  .job li span { font-size: 13.5px; color: var(--term-dim); }
+
+  .dark { background: var(--term); color: var(--term-ink); }
+  .dark .intro { color: var(--term-soft); }
+  .tabs { display: inline-flex; flex-wrap: wrap; gap: 6px; padding: 6px; border-radius: 999px; background: var(--term-2); }
+  .tab { border: 0; cursor: pointer; border-radius: 999px; padding: 12px 18px; font: 600 15px/1 var(--body); background: transparent; color: var(--term-soft); }
+  .tab[aria-selected="true"] { background: var(--term-ink); color: var(--term); }
+  .tabpanel { margin-top: 26px; display: grid; gap: 14px; max-width: 640px; }
+  .tabpanel p { margin: 0; color: var(--term-soft); }
+  .tabpanel .cmd { background: var(--term-2); justify-content: space-between; }
+  .limits { margin-top: 48px; color: var(--term-soft); max-width: 46em; }
+
+  .tools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .tool { background: var(--bot); color: var(--bot-ink); border-radius: 26px; padding: clamp(22px, 3vw, 34px); display: flex; flex-direction: column; gap: 14px; }
+  .tool-name { font: 900 60px/0.9 var(--display); font-stretch: 70%; }
+  .tool-name small { display: block; font: 600 14px/1.3 var(--body); color: var(--bot-soft); margin-top: 8px; }
+  .tool p { margin: 0; }
+  .tool .cmd { margin-top: auto; }
+  .tool-links { display: flex; gap: 18px; font-weight: 600; font-size: 15px; }
+  .close { text-align: center; }
+  .close .cta { justify-content: center; margin-top: 28px; }
+  footer { padding-block: 28px 44px; font-size: 14px; color: var(--ink-soft); }
+  footer .wrap { display: flex; justify-content: space-between; gap: 14px 28px; flex-wrap: wrap; }
+
+  @media (max-width: 1000px) {
+    .explorer { grid-template-columns: minmax(0, 1fr); }
+    .questions { flex-direction: row; overflow-x: auto; padding-bottom: 4px; }
+    .q { flex: none; max-width: 260px; }
+    .sheet { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    nav a.hide-sm { display: none; }
+    .sheet, .tools { grid-template-columns: minmax(0, 1fr); }
+    .cmd { font-size: 13.5px; }
+    .out { font-size: 12px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .js .fresh { animation: none; }
+    .caret { animation: none; }
+    .q { transition: none; }
+  }
+</style>
+</head>
+<body>
+<header class="top wrap">
+  <a class="mark" href="#">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="16" fill="var(--me)"/><path d="M9 21V11l4 4 3-4 3 4 4-4v10" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/></svg>
+    WireCat
+  </a>
+  <nav aria-label="Site">
+    <a href="#commands">Commands</a>
+    <a class="hide-sm" href="#connect">Connect</a>
+    <a href="https://wirecat.dev/en/docs/tg">Docs</a>
+    <a class="hide-sm" href="https://github.com/leemour/tg-cli">GitHub</a>
+  </nav>
+</header>
+
+<main class="wrap hero">
+  <h1><span class="a">Ask in words.</span> It runs <code>tg</code>. <span class="b">You get the answer.</span></h1>
+  <div class="hero-row">
+    <p class="lede">Your agent gets a command line for your own <b>Telegram and MAX</b>. Pick a question below and see what it runs, what comes back, and what it tells you.</p>
+    <div class="cta">
+      <span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copy</button></span>
+      <a class="btn" href="#connect">Connect your agent</a>
+    </div>
+  </div>
+
+  <div class="explorer" id="explorer">
+    <div>
+      <p class="pane-label"><i>1</i>You ask</p>
+      <div class="questions" id="questions" role="group" aria-label="Questions"></div>
+    </div>
+    <div>
+      <p class="pane-label"><i>2</i>It runs</p>
+      <div class="term"><div class="term-bar"><i></i><i></i><i></i></div><div class="term-body" id="term"></div></div>
+    </div>
+    <div>
+      <p class="pane-label"><i>3</i>It tells you</p>
+      <div class="answer" id="answer"></div>
+    </div>
+  </div>
+</main>
+
+<section id="commands" style="padding-top:0">
+  <div class="wrap">
+    <h2>The commands behind it</h2>
+    <p class="intro">Grouped by the job you want done. With <code>--json</code>, or when piped, each one prints a single JSON value and nothing else.</p>
+    <div class="sheet">
+      <div class="job"><h3>Catch up</h3><p>What came in, without marking anything read.</p><ul>
+        <li><code>tg inbox</code><span>unread in every chat</span></li>
+        <li><code>tg inbox --new</code><span>only what arrived since the last check</span></li>
+        <li><code>tg watch</code><span>new messages as they arrive</span></li></ul></div>
+      <div class="job"><h3>Who owes what</h3><p>Promises and questions, yours and theirs.</p><ul>
+        <li><code>tg review --since-time 7d</code><span>a week of messages, yours too</span></li>
+        <li><code>tg review --unanswered 1d</code><span>questions still open after a day</span></li>
+        <li><code>tg review --chat "Hiking" --unanswered</code><span>in a group you run</span></li></ul></div>
+      <div class="job"><h3>Remember</h3><p>Telegram sends it later, even with this computer off.</p><ul>
+        <li><code>tg messages send me "Call Mum" --at-time 2h</code><span>a reminder in Saved Messages</span></li>
+        <li><code>tg messages send "Team" "Minutes" --file minutes.pdf --at-time 2026-10-05T09:00</code><span>on Monday at nine</span></li></ul></div>
+      <div class="job"><h3>Find</h3><p>Searches the copy on your computer. No connection needed.</p><ul>
+        <li><code>tg messages search "contract"</code><span>every word, across all chats</span></li>
+        <li><code>tg messages search "paid" --chat "Lisbon trip"</code><span>in one chat</span></li>
+        <li><code>tg store export "Project Alpha" --format markdown</code><span>a whole chat as a document</span></li></ul></div>
+      <div class="job"><h3>Listen</h3><p>Voice notes as text, by Telegram or on your machine.</p><ul>
+        <li><code>tg messages transcribe "Mum" 8812 --local</code><span>one voice note</span></li>
+        <li><code>tg inbox --transcribe</code><span>every new voice note, as text</span></li></ul></div>
+      <div class="job"><h3>Groups you run</h3><p>Who came, who left, who is still waiting for an answer.</p><ul>
+        <li><code>tg chats events "Hiking" --since-time 7d</code><span>joins, leaves, adds, removals</span></li>
+        <li><code>tg chats members list "Hiking" --all</code><span>everyone, with their role</span></li>
+        <li><code>max chats check "Residents"</code><span>on MAX: spam and flood, by your rules</span></li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="dark" id="connect">
+  <div class="wrap">
+    <h2>One command. Your agent knows the rest.</h2>
+    <p class="intro">Each tool ships with an agent skill and an MCP server.</p>
+    <div class="tabs" role="tablist" aria-label="Where your agent lives">
+      <button class="tab" role="tab" type="button" id="t1" aria-selected="true" aria-controls="p1">Claude Code · Codex · Gemini CLI</button>
+      <button class="tab" role="tab" type="button" id="t2" aria-selected="false" aria-controls="p2">MCP clients</button>
+      <button class="tab" role="tab" type="button" id="t3" aria-selected="false" aria-controls="p3">Any model</button>
+    </div>
+    <div class="tabpanel" role="tabpanel" id="p1" aria-labelledby="t1"><p>Installs the skill that teaches your agent every command.</p><span class="cmd"><code>tg skill install</code><button class="copy" type="button" data-copy="tg skill install">Copy</button></span></div>
+    <div class="tabpanel" role="tabpanel" id="p2" aria-labelledby="t2" hidden><p>Claude Desktop, Cursor and others. Prints the entry for your settings, with ready prompts: /catch-up, /review, /reply, /find.</p><span class="cmd"><code>tg mcp config</code><button class="copy" type="button" data-copy="tg mcp config">Copy</button></span></div>
+    <div class="tabpanel" role="tabpanel" id="p3" aria-labelledby="t3" hidden><p>Every docs page as plain Markdown, in one list.</p><span class="cmd"><code>wirecat.dev/llms.txt</code><button class="copy" type="button" data-copy="https://wirecat.dev/llms.txt">Copy</button></span></div>
+    <p class="limits">Reading marks nothing read. You choose which chats it may write to and how often it sends.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Telegram and MAX, the same words</h2>
+    <p class="intro">Learn one and you know the other.</p>
+    <div class="tools">
+      <article class="tool"><div class="tool-name">tg<small>Telegram</small></div><p>A Telegram client for the terminal and for AI agents, on your own account.</p><span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copy</button></span><div class="tool-links"><a href="https://wirecat.dev/en/docs/tg">Docs</a><a href="https://github.com/leemour/tg-cli">GitHub</a><a href="https://www.npmjs.com/package/@leemour/tg-cli">npm</a></div></article>
+      <article class="tool"><div class="tool-name">max<small>MAX Messenger</small></div><p>Your MAX bots through the official Bot API, and your personal account.</p><span class="cmd"><code>npm i -g @leemour/max-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/max-cli">Copy</button></span><div class="tool-links"><a href="https://wirecat.dev/ru/docs/max">Docs</a><a href="https://github.com/leemour/max-cli">GitHub</a><a href="https://www.npmjs.com/package/@leemour/max-cli">npm</a></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="close" style="padding-top:0">
+  <div class="wrap">
+    <h2>Ask your first question tonight</h2>
+    <div class="cta"><span class="cmd"><code>npm i -g @leemour/tg-cli && tg session start && tg skill install</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli && tg session start && tg skill install">Copy</button></span></div>
+  </div>
+</section>
+
+<footer><div class="wrap"><span>WireCat · MIT licence · Docs for models at <a href="https://wirecat.dev/llms.txt">/llms.txt</a> · Windows, macOS, Linux</span><span>English · Русский · Español</span></div></footer>
+
+<script src="patterns.js"></script>
+<script>
+  document.documentElement.classList.add("js")
+  const paintWall = () => {
+    const ink = getComputedStyle(document.documentElement).getPropertyValue("--wall-ink").trim()
+    WirePatterns.apply(document.body, "marks", ink)
+  }
+  paintWall()
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", paintWall)
+
+  const j = (s) => s
+    .replace(/"([a-zA-Z]+)":/g, '<span class="k">"$1"</span>:')
+    .replace(/: "([^"]*)"/g, ': <span class="s">"$1"</span>')
+    .replace(/: (\d+|true|false)/g, ': <span class="n">$1</span>')
+
+  const items = [
+    {
+      q: "Who's waiting on me?",
+      cmd: "tg review <b>--unanswered 4h</b>",
+      out: `{"since": "2026-09-29T09:00:00+02:00", "until": "2026-10-02T09:00:00+02:00",
+ "chats": [{"title": "Pablo", "kind": "dialog", "messages": […]},
+           {"title": "Landlord", "kind": "dialog", "messages": […]},
+           {"title": "Design", "kind": "group", "messages": […]}],
+ "unanswered": {"olderThanHours": 4}, "quiet": 9, …}`,
+      say: `<ul><li><b>Pablo</b> asked about the invoice. <q>3 days</q></li><li><b>Landlord</b>: can the plumber come Tuesday? <q>2 days</q></li><li><b>Kate</b> in Design wants notes on the slides. <q>6 hours</q></li></ul><p>Shall I draft the three replies?</p>`,
+    },
+    {
+      q: "What did I promise anyone this week?",
+      cmd: "tg review <b>--since-time 7d</b>",
+      out: `{"since": "2026-09-25T09:00:00+02:00", "until": "2026-10-02T09:00:00+02:00",
+ "complete": true,
+ "chats": [{"title": "Anna", …}, {"title": "Design", …}, {"title": "Project Alpha", …}],
+ "skipped": [], "partial": false, "quiet": 14}`,
+      say: `<h3>You owe</h3><ul><li><b>Anna</b>: the invoice by Friday. That's today.</li></ul><h3>Waiting on others</h3><ul><li><b>Boris</b>: the mock-up, due 30 Sep.</li></ul><h3>Needs clarifying</h3><ul><li><b>Project Alpha</b>: who brings the samples.</li></ul>`,
+    },
+    {
+      q: "Who owes who from the Lisbon trip?",
+      cmd: 'tg messages search <b>"paid"</b> --chat "Lisbon trip"',
+      out: `{"items": [{"senderName": "Ana", "text": "Paid the hotel, 240", …},
+           {"senderName": "Ben", "text": "paid dinner 96", …},
+           {"outgoing": true, "text": "I paid the taxi, 60", …}],
+ "hasMore": false}`,
+      say: `<p>€396 in total, €132 each.</p><table><thead><tr><th></th><th>Paid</th><th>Balance</th></tr></thead><tbody><tr><td>Ana</td><td>€240</td><td>+€108</td></tr><tr><td>Ben</td><td>€96</td><td>−€36</td></tr><tr><td>You</td><td>€60</td><td>−€72</td></tr></tbody></table><p>You send Ana €72, Ben sends her €36.</p>`,
+    },
+    {
+      q: "Remind me to call Mum at six.",
+      cmd: 'tg messages send <b>me</b> "Call Mum" --at-time 2026-10-02T18:00',
+      out: `{"message": {"id": "…", "text": "Call Mum",
+             "timestamp": "2026-10-02T18:00:00+02:00", …},
+ "sendId": "…"}`,
+      say: `<p>Done. It lands in your Saved Messages at 18:00. Telegram sends it, so your laptop can be closed.</p>`,
+    },
+    {
+      q: "What did Mum's voice note say?",
+      cmd: 'tg messages transcribe <b>"Mum"</b> 8812 --local',
+      out: `{"text": "Hi love, is your flight still at six? Call me when you land…",
+ "pending": false}`,
+      say: `<p><q>Hi love, is your flight still at six? Call me when you land, and don't forget Granddad's birthday on Sunday.</q></p><p>Heard on this laptop. Want a reminder for Sunday?</p>`,
+    },
+    {
+      q: "When did Anna and I agree to meet?",
+      cmd: 'tg messages search <b>"meet"</b> --chat "Anna"',
+      out: `{"items": [{"senderName": "Anna", "text": "Saturday 11:00 at the market, then?",
+             "timestamp": "2026-09-24T19:12:00+02:00", …},
+           {"outgoing": true, "text": "Deal, see you there", …}],
+ "hasMore": false}`,
+      say: `<p>Saturday at 11:00, at the market. You agreed on 24 September: <q>Deal, see you there.</q></p>`,
+    },
+  ]
+
+  const qBox = document.getElementById("questions")
+  const term = document.getElementById("term")
+  const answer = document.getElementById("answer")
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches
+  let timers = []
+  let auto = null
+
+  items.forEach((item, i) => {
+    const b = document.createElement("button")
+    b.className = "q"; b.type = "button"; b.textContent = item.q
+    b.addEventListener("click", () => { clearInterval(auto); show(i, true) })
+    qBox.append(b)
+  })
+
+  function show(i, animate) {
+    timers.forEach(clearTimeout); timers = []
+    const item = items[i]
+    for (const [n, b] of [...qBox.children].entries()) b.setAttribute("aria-pressed", String(n === i))
+    const full = () => {
+      term.innerHTML = `<div class="line"><span class="p">$</span> ${item.cmd}</div><div class="out fresh">${j(item.out)}</div>`
+      answer.innerHTML = `<div class="bubble fresh">${item.say}</div><span class="meta">Your agent · just now</span>`
+    }
+    if (!animate || still) { full(); return }
+    const plain = item.cmd.replace(/<[^>]+>/g, "")
+    term.innerHTML = `<div class="line"><span class="p">$</span> <span id="typed"></span><span class="caret"></span></div>`
+    answer.innerHTML = ""
+    const typed = document.getElementById("typed")
+    for (let c = 1; c <= plain.length; c++) {
+      timers.push(setTimeout(() => { typed.textContent = plain.slice(0, c) }, c * 22))
+    }
+    timers.push(setTimeout(full, plain.length * 22 + 350))
+  }
+
+  show(0, false)
+  const cycle = () => {
+    let i = 0
+    auto = setInterval(() => { i = (i + 1) % items.length; show(i, true) }, 6500)
+  }
+  let started = false
+  new IntersectionObserver((entries) => {
+    if (!started && entries.some((e) => e.isIntersecting)) { started = true; show(0, true); if (!still) cycle() }
+  }, { threshold: 0.3 }).observe(document.getElementById("explorer"))
+
+  const tabs = [...document.querySelectorAll("[role=tab]")]
+  for (const tab of tabs) tab.addEventListener("click", () => {
+    for (const other of tabs) {
+      const on = other === tab
+      other.setAttribute("aria-selected", String(on))
+      document.getElementById(other.getAttribute("aria-controls")).hidden = !on
+    }
+  })
+
+  for (const button of document.querySelectorAll("[data-copy]")) {
+    button.addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText(button.dataset.copy) } catch {
+        const range = document.createRange(); range.selectNodeContents(button.previousElementSibling)
+        getSelection().removeAllRanges(); getSelection().addRange(range)
+      }
+      button.textContent = "Copied"; button.dataset.done = ""
+      setTimeout(() => { button.textContent = "Copy"; delete button.dataset.done }, 1600)
+    })
+  }
+</script>
+</body>
+</html>

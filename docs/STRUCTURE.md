@@ -83,4 +83,7 @@ does not change.
 
 Each tool writes its pages in one language. The portal records which in its own `tools.json`, not
 in `meta.json`, whose keys are Fumadocs' and none of ours. The portal shows the pages in every
-interface language; translations come later as separate files.
+interface language using reviewed files in its own `translations/{tool}/` directory. They are
+installed after sync, with per-locale source fingerprints and checks that preserve command examples,
+inline literals, heading structure and link destinations. Released originals stay in ignored
+`content/upstream/`. Portal start pages and reviewed source corrections are kept separately.

@@ -1,0 +1,451 @@
+[
+  {
+    "tool": "tg",
+    "slug": "usage",
+    "reason": "tg v0.22 changelog/archive/reference document short queries, typo correction and fallback matching; only the chat-name filter retains the three-character minimum.",
+    "replacements": {
+      "en": [
+        {
+          "before": "A search needs **at least three characters**. `messages search` looks for every word, as a word or\nthe start of one — `invoic` finds \"invoice\". It never connects to Telegram: it answers from what was\nread, fetched or kept by `serve` ([archive.md](./archive.md#search)). Once you have the chat, use its id.",
+          "after": "The chat-name filter needs **at least three characters**. Message search also accepts one- and two-letter queries. `messages search` first looks for every word, as a whole word or its beginning (`invoic` finds \"invoice\"); it corrects typos and falls back to any word, then part of a word when needed. It never connects to Telegram: it searches what was read, fetched or kept by `serve` ([archive.md](./archive.md#search)). Once you have the chat, use its id."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Для поиска чата требуется **не меньше трёх символов**. `messages search` ищет сохранённые сообщения: сначала все слова целиком или по началу (`invoic` находит «invoice»), затем любое слово или часть слова, если точных совпадений нет. В версии 0.22 поиск сообщений принимает и запросы из одной-двух букв. Telegram не запрашивается; используется прочитанное, загруженное или сохранённое `serve` ([Поиск](./archive.md#search)). Дальше используйте идентификатор чата.",
+          "after": "Фильтр названия чата требует **не меньше трёх символов**. Поиск сообщений принимает и запросы из одной-двух букв. `messages search` сначала ищет все слова целиком или по началу (`invoic` находит «invoice»), исправляет опечатки и при необходимости ищет любое слово, затем часть слова. Telegram не запрашивается; используется прочитанное, загруженное или сохранённое `serve` ([Поиск](./archive.md#search)). Дальше используйте идентификатор чата."
+        }
+      ],
+      "es": [
+        {
+          "before": "Una búsqueda necesita **al menos tres caracteres**. `messages search` busca todas las palabras completas o sus inicios: `invoic` encuentra \"invoice\". Nunca se conecta a Telegram; consulta lo leído, descargado o guardado por `serve` ([archivo local](./archive.md#search)). Cuando encuentres el chat, usa su identificador.",
+          "after": "El filtro por nombre de chat necesita **al menos tres caracteres**. La búsqueda de mensajes también admite consultas de una o dos letras. `messages search` primero busca todas las palabras completas o sus inicios (`invoic` encuentra \"invoice\"), corrige erratas y, si hace falta, prueba cualquier palabra y después parte de una palabra. No se conecta a Telegram: consulta lo leído, descargado o guardado por `serve` ([archivo local](./archive.md#search)). Cuando encuentres el chat, usa su identificador."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "usage",
+    "reason": "Current command reference and v0.21 breaking-change note require durations for --unanswered; bare hours are invalid.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`--unanswered [hours]` keeps only questions waiting for you or for a group's admins. A question is a\nmessage with `?` in it (a link's `?` does not count), or a reply to you or to an admin. It is\nanswered when you or an admin replied to it, or were the next to speak after the person who asked.\nQuestions younger than the hours given (24 by default) are left out: nobody has had time to answer.\nWhen a group's admins are not known, the command says so, and only your answers count.",
+          "after": "`--unanswered [duration]` keeps only questions waiting for you or for a group's admins. A question is a\nmessage with `?` in it (a link's `?` does not count), or a reply to you or to an admin. It is\nanswered when you or an admin replied to it, or were the next to speak after the person who asked.\nQuestions younger than the given duration (24 hours by default) are left out: nobody has had time to answer.\nWhen a group's admins are not known, the command says so, and only your answers count. Use a duration such as `4h` or `1d`; a bare number of hours is not accepted."
+        }
+      ],
+      "ru": [
+        {
+          "before": "`--unanswered [hours]` оставляет вопросы, ожидающие вас или администраторов группы. Вопрос — сообщение с `?` (знак `?` в ссылках не учитывается) или ответ вам/администратору. Он закрыт, если вы или администратор ответили либо написали следом за автором. Вопросы моложе указанного срока (по умолчанию 24 часа) исключаются. Если администраторы неизвестны, учитываются только ваши ответы и выводится предупреждение.",
+          "after": "`--unanswered [duration]` оставляет вопросы, ожидающие вас или администраторов группы. Вопрос — сообщение с `?` (знак `?` в ссылках не учитывается) или ответ вам/администратору. Он закрыт, если вы или администратор ответили либо написали следом за автором. Вопросы моложе указанного срока (по умолчанию 24 часа) исключаются. Если администраторы неизвестны, учитываются только ваши ответы и выводится предупреждение. Указывайте длительность, например `4h` или `1d`; число часов без единицы не принимается."
+        }
+      ],
+      "es": [
+        {
+          "before": "`--unanswered [hours]` conserva solo preguntas pendientes para ti o los administradores. Una pregunta contiene `?` (no cuenta dentro de enlaces) o responde a ti o a un administrador. Se considera contestada si tú o un administrador respondéis o sois los siguientes en hablar tras quien preguntó. Omite preguntas más recientes que el intervalo indicado (24 horas por defecto) para dar tiempo a responder. Si no se conocen los administradores, lo avisa y solo cuenta tus respuestas.",
+          "after": "`--unanswered [duration]` conserva solo preguntas pendientes para ti o los administradores. Una pregunta contiene `?` (no cuenta dentro de enlaces) o responde a ti o a un administrador. Se considera contestada si tú o un administrador respondéis o sois los siguientes en hablar tras quien preguntó. Omite preguntas más recientes que el intervalo indicado (24 horas por defecto) para dar tiempo a responder. Si no se conocen los administradores, lo avisa y solo cuenta tus respuestas. Usa una duración como `4h` o `1d`; no se admite un número de horas sin unidad."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "usage",
+    "reason": "Cursor can have terminal access; select CLI/skill or MCP by actual client access rather than assuming Cursor lacks a terminal.",
+    "replacements": {
+      "en": [
+        {
+          "before": "An agent without one (Claude Desktop, Cursor) connects over MCP: [mcp.md](./mcp.md).",
+          "after": "For an agent without terminal access, such as Claude Desktop, use [MCP](./mcp.md). Cursor can use the CLI when terminal access is available, or connect through MCP."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Агент без терминала (Claude Desktop; в Cursor тоже доступен этот вариант) подключается через [MCP](./mcp.md).",
+          "after": "Для агента без доступа к терминалу, например Claude Desktop, используйте [MCP](./mcp.md). В Cursor можно выбрать CLI с доступом к терминалу или подключение через MCP."
+        }
+      ],
+      "es": [
+        {
+          "before": "Los agentes sin terminal (Claude Desktop, Cursor) se conectan mediante [MCP](./mcp.md).",
+          "after": "Para agentes sin acceso a terminal, como Claude Desktop, usa [MCP](./mcp.md). Cursor puede usar el CLI con acceso a terminal o conectarse mediante MCP."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "usage",
+    "reason": "Shell ! inverts the exit status to zero inside then; capture the command status in else before dispatching on 14/4. Applied after preservation validation to the same literal example in every locale.",
+    "replacements": {
+      "en": [
+        {
+          "before": "if ! tg messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  case $? in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg session start\" ;;\n  esac\nfi",
+          "after": "if tg messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg session start\" ;;\n  esac\nfi"
+        }
+      ],
+      "ru": [
+        {
+          "before": "if ! tg messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  case $? in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg session start\" ;;\n  esac\nfi",
+          "after": "if tg messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg session start\" ;;\n  esac\nfi"
+        }
+      ],
+      "es": [
+        {
+          "before": "if ! tg messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  case $? in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg session start\" ;;\n  esac\nfi",
+          "after": "if tg messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg session start\" ;;\n  esac\nfi"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "security",
+    "reason": "usage and command reference explicitly support messages list --mark-read in addition to chats mark-read; ordinary reading remains unmarked.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Only `tg chats mark-read` sends the second.",
+          "after": "`tg chats mark-read` and `tg messages list --mark-read` send the explicit read-marking request."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Отдельную отметку отправляет `tg chats mark-read`; явно включённая отметка при чтении списка сообщений также меняет статус.",
+          "after": "Отдельную отметку отправляют `tg chats mark-read` и `tg messages list --mark-read`."
+        }
+      ],
+      "es": [
+        {
+          "before": "Solo `tg chats mark-read` envía la segunda.",
+          "after": "`tg chats mark-read` y `tg messages list --mark-read` envían la petición explícita de marcar como leído."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "security",
+    "reason": "The security storage table lists config/service files as 0644, protected state as 0600, and shell-controlled permissions for redirected exports; do not claim all files are owner-only.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Every file `tg` writes is created readable by you only, in folders\n  only you can open ([below](#what-reaches-the-disk)).",
+          "after": "The session, store, runs and send journal are owner-only. Settings and service files have different permissions, and redirected exports use your shell’s permissions ([below](#what-reaches-the-disk))."
+        },
+        {
+          "before": "Other users of the machine see none of `tg`'s files: folders are `0700`, files `0600`.",
+          "after": "Protected state files use `0600` inside `0700` folders. Not every file written by `tg` has that mode: settings and service files may be `0644`; redirected exports follow the shell’s permissions. Check the storage table above."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Файлы `tg` создаются доступными только вам, в закрытых каталогах ([ниже](#what-reaches-the-disk)).",
+          "after": "Сессия, база, записи запусков и журнал отправок `tg` доступны только владельцу. У настроек и файлов служб другие права; при перенаправлении экспорта права задаёт оболочка ([ниже](#what-reaches-the-disk))."
+        },
+        {
+          "before": "Другие пользователи компьютера не видят файлов `tg`: каталоги имеют права `0700`, файлы — `0600`.",
+          "after": "Защищённые файлы состояния имеют права `0600` в каталогах `0700`. Это не относится ко всем файлам `tg`: настройки и файлы служб могут иметь `0644`, а права перенаправленного экспорта задаёт оболочка. См. таблицу хранения выше."
+        }
+      ],
+      "es": [
+        {
+          "before": "Los archivos se crean para que solo tú puedas leerlos, dentro de carpetas a las que solo tú puedes acceder ([más abajo](#what-reaches-the-disk)).",
+          "after": "La sesión, el archivo local, las ejecuciones y el registro de envíos son accesibles solo para su propietario. Los ajustes y archivos de servicio tienen otros permisos; una exportación redirigida usa los permisos de la terminal ([más abajo](#what-reaches-the-disk))."
+        },
+        {
+          "before": "Otros usuarios no pueden leer los archivos de `tg`: las carpetas tienen permisos `0700` y los archivos `0600`.",
+          "after": "Los archivos de estado protegidos usan `0600` en carpetas `0700`. No todos los archivos de `tg` tienen ese modo: los ajustes y servicios pueden usar `0644`; las exportaciones redirigidas siguen los permisos de la terminal. Consulta la tabla anterior."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "groups",
+    "reason": "Cursor terminal access is a configuration choice; native Russian source incorrectly categorizes every Cursor agent as terminal-less.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "Агенту с терминалом (Claude Code, Codex) нужен [навык](https://github.com/leemour/max-cli/blob/v0.23.0/README.md#навык-для-агентов-с-терминалом);\nагенту без терминала (Claude Desktop, Cursor) — [MCP-сервер](./mcp.md). Ниже — что вы говорите, что\nагент вызывает и что вы получаете.",
+          "after": "Агенту с доступом к терминалу (например, Claude Code или Codex) можно подключить [навык](https://github.com/leemour/max-cli/blob/v0.23.0/README.md#навык-для-агентов-с-терминалом). Без доступа к терминалу используйте [MCP-сервер](./mcp.md), например в Claude Desktop. В Cursor доступны оба способа. Ниже — ваш запрос, команда агента и результат."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "groups",
+    "reason": "MAX v0.23 bot page and changelog rename bot chats check to bot chats moderate; personal-account chats check remains unchanged.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`max <бот> bot chats\ncheck`",
+          "after": "`max <бот> bot chats moderate`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`max <бот> bot chats\ncheck`",
+          "after": "`max <бот> bot chats moderate`"
+        }
+      ],
+      "es": [
+        {
+          "before": "`max <бот> bot chats\ncheck`",
+          "after": "`max <бот> bot chats moderate`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "security",
+    "reason": "Replace a blanket legal compliance assurance with the documented technical data flows; no legal exemption is inferred from local storage.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`tg` keeps other people's messages and names on your computer. That is fine while you do it for\nyourself, with your own account: the GDPR does not apply to processing for purely personal or\nhousehold purposes (Article 2(2)(c)). Working with other people's accounts, or for a business, is no\nlonger personal. An export you hand to someone else leaves that purpose too.",
+          "after": "`tg` keeps other people's messages and names on your computer. Exporting this data shares it with whoever receives the file. If you connect an AI agent, check what it sends to its provider and how that provider handles the data. Local storage alone does not establish whether your use complies with applicable privacy requirements."
+        }
+      ],
+      "ru": [
+        {
+          "before": "`tg` сохраняет чужие сообщения и имена на вашем компьютере. При использовании своего аккаунта для личных и домашних целей действует исключение GDPR для такой обработки (статья 2(2)(c)). Работа с чужими аккаунтами или для бизнеса уже не является личной. Передача экспорта другим также выходит за эти рамки.",
+          "after": "`tg` сохраняет чужие сообщения и имена на вашем компьютере. При передаче экспорта эти данные получает адресат файла. Если вы подключаете ИИ-агента, проверьте, что он отправляет своему провайдеру и как провайдер обрабатывает данные. Само по себе локальное хранение не подтверждает соответствие вашего использования применимым требованиям конфиденциальности."
+        }
+      ],
+      "es": [
+        {
+          "before": "`tg` guarda en tu equipo mensajes y nombres ajenos. Para uso propio con tu cuenta, el RGPD no se aplica al tratamiento con fines exclusivamente personales o domésticos (artículo 2(2)(c)). Trabajar con cuentas ajenas o para una empresa deja de ser uso personal. Una exportación entregada a otra persona también sale de ese ámbito.",
+          "after": "`tg` guarda mensajes y nombres de otras personas en tu equipo. Al compartir una exportación, su destinatario recibe esos datos. Si conectas un agente de IA, comprueba qué envía a su proveedor y cómo se tratan esos datos. El almacenamiento local por sí solo no confirma que tu uso cumpla los requisitos de privacidad aplicables."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "usage",
+    "reason": "Current security/configuration/reference use per-command permissions, not a profile allow list; ask can require consent even for send.",
+    "replacements": {
+      "en": [
+        {
+          "before": "**Nothing sends unless you typed a command that sends**, and it asks no confirmation: the chat and\nthe text are already in the line you typed. Every send goes through the send guard: a read-only\nprofile, the profile's `allow` list, the list of allowed recipients and the hourly limit\n([security.md](./security.md#the-send-guard)). Every attempt is logged, never its text:\n`tg sends list`.",
+          "after": "**Sending requires a command that sends.** By default, sending needs no extra confirmation because the command specifies the chat and text. Per-command permission settings can require approval or refuse the action. Every send also checks allowed recipients and the hourly limit ([security](./security.md#the-send-guard)). Each attempt is logged without its text: `tg sends list`."
+        }
+      ],
+      "ru": [
+        {
+          "before": "**Отправка происходит только по команде отправки.** По умолчанию подтверждения нет: вы уже указали чат и текст. Каждая попытка проходит защиту: профиль только для чтения, список `allow`, разрешённые получатели и часовой лимит ([Безопасность](./security.md#the-send-guard)). Попытки записываются без текста: `tg sends list`.",
+          "after": "**Отправка происходит по команде отправки.** По умолчанию дополнительное подтверждение не нужно: вы уже указали чат и текст. Права отдельной команды могут потребовать подтверждение или запретить действие. Также проверяются разрешённые получатели и часовой лимит ([Безопасность](./security.md#the-send-guard)). Попытки записываются без текста: `tg sends list`."
+        }
+      ],
+      "es": [
+        {
+          "before": "**Nada se envía si no ejecutas un comando de envío**, y por defecto no pide confirmación: el chat y texto ya están en el comando. Cada envío pasa por los controles de perfil de solo lectura, lista `allow`, destinatarios permitidos y límite por hora ([seguridad](./security.md#the-send-guard)). Se registra cada intento, nunca el texto: `tg sends list`.",
+          "after": "**Enviar requiere ejecutar un comando de envío.** Por defecto no hace falta otra confirmación porque el comando indica el chat y el texto. Los permisos de cada comando pueden pedir aprobación o impedir la acción. También se comprueban los destinatarios permitidos y el límite por hora ([seguridad](./security.md#the-send-guard)). Se registra cada intento sin su texto: `tg sends list`."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "commands",
+    "reason": "TG v0.22 bot guide explicitly states joins are not judged; current bot moderation uses locally observed messages only.",
+    "replacements": {
+      "en": [
+        {
+          "before": "judge a group's new messages and joins by its rules, and act as they allow — as the bot",
+          "after": "judge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged"
+        }
+      ],
+      "ru": [
+        {
+          "before": "проверить новые сообщения и вступления по правилам группы и выполнить разрешённое от бота",
+          "after": "проверить новые сообщения по правилам группы и выполнить разрешённое от бота; вступления не проверяются"
+        }
+      ],
+      "es": [
+        {
+          "before": "revisa como bot mensajes y entradas nuevos según las reglas y ejecuta lo permitido",
+          "after": "revisa como bot los mensajes nuevos según las reglas y ejecuta lo permitido; no evalúa incorporaciones al grupo"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "usage",
+    "reason": "MAX v0.23 client.ts forwards scheduledFor to the send guard; send-guards.test.ts confirms future-send hour accounting. Restrictions are checked at queuing, capacity belongs to the scheduled hour.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "- Защиты отправки (только чтение, список получателей, лимит в час) считают сообщение сейчас,\n  в момент постановки в очередь.",
+          "after": "- Режим только чтения и список получателей проверяются при постановке в очередь. Часовой лимит тоже проверяется тогда, но сообщение учитывается в том часу, на который запланирована отправка."
+        }
+      ],
+      "en": [
+        {
+          "before": "- Send safeguards (read-only, recipients, hourly limit) are checked when queuing.",
+          "after": "- Read-only mode and allowed recipients are checked when queuing. The hourly limit is checked then too, but the message counts in the hour scheduled for sending."
+        }
+      ],
+      "es": [
+        {
+          "before": "- Los controles de solo lectura, destinatarios y límite por hora se aplican ahora, al añadirlo a la cola.",
+          "after": "- El modo de solo lectura y los destinatarios permitidos se comprueban al añadirlo a la cola. También se comprueba el límite por hora, pero el mensaje cuenta en la hora programada para el envío."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "usage",
+    "reason": "v0.23 reference and archive document corrected queries and relaxed fallback matching; name/list filters retain their minimum, while message search is not restricted to all words matching.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "Часть названия там тоже принимается — и в `max messages search --chat`: поиск идёт по локальной\nкопии и не подключается к MAX, а имя ищется среди сохранённых чатов. В поиске каждое слово должно\nвстретиться как слово или его начало (`квартир` найдёт «квартира»); `--regex` — одно регулярное\nвыражение без учёта регистра.",
+          "after": "Часть названия там тоже принимается — и в `max messages search --chat`: поиск идёт по локальной копии без подключения к MAX, а имя ищется среди сохранённых чатов. Сначала ищутся все слова целиком или по началу (`квартир` найдёт «квартира»). Опечатки исправляются; без полного совпадения поиск пробует любое слово, затем часть слова. Поиск сообщений принимает и запросы из одной-двух букв. `--regex` — одно регулярное выражение без учёта регистра."
+        }
+      ],
+      "en": [
+        {
+          "before": "Title fragments are also accepted, including in `max messages search --chat`, which searches local storage without connecting. Every search word must match a word or its prefix (`квартир` finds the Russian word for apartment). `--regex` uses one case-insensitive regular expression.",
+          "after": "Title fragments are also accepted, including in `max messages search --chat`, which searches stored chats and messages without connecting. It first looks for all words or prefixes (`квартир` finds the Russian word for apartment), corrects typos, then falls back to any word and part of a word if needed. Message search also accepts one- and two-letter queries. `--regex` uses one case-insensitive regular expression."
+        }
+      ],
+      "es": [
+        {
+          "before": "También admite título parcial, incluido `max messages search --chat`: busca entre chats guardados sin conectarse. Cada palabra debe aparecer completa o como prefijo (`квартир` encuentra «квартира»); `--regex` aplica una expresión regular sin distinguir mayúsculas.",
+          "after": "También admite título parcial, incluido `max messages search --chat`: busca entre chats y mensajes guardados sin conectarse. Primero busca todas las palabras o sus prefijos (`квартир` encuentra «квартира»), corrige erratas y, si hace falta, prueba cualquier palabra y después parte de una palabra. La búsqueda de mensajes también admite consultas de una o dos letras. `--regex` aplica una expresión regular sin distinguir mayúsculas."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "usage",
+    "reason": "Shell ! inverts command status inside then; capture the original failure in else. Same proven correction as TG; raw translation code remains intact until post-validation application.",
+    "replacements": {
+      "en": [
+        {
+          "before": "if ! max messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max session start\" ;;\n  esac\nfi",
+          "after": "if max messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max session start\" ;;\n  esac\nfi"
+        }
+      ],
+      "ru": [
+        {
+          "before": "if ! max messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max session start\" ;;\n  esac\nfi",
+          "after": "if max messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max session start\" ;;\n  esac\nfi"
+        }
+      ],
+      "es": [
+        {
+          "before": "if ! max messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max session start\" ;;\n  esac\nfi",
+          "after": "if max messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max session start\" ;;\n  esac\nfi"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "security",
+    "reason": "v0.23 src/commands/cache.ts calls cache.clear and maxRecord.purge; src/record.ts purges provider=max,current viewerId only and explicitly preserves other account rows. The archive is not merely a legacy cache and reconstruction is not guaranteed for deleted/unavailable messages.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "⚠ **Локальная копия содержит тексты сообщений** — это её назначение: отвечать без сети. Она лежит\nв кэше, её можно удалить в любой момент, и она восстановится из MAX:",
+          "after": "⚠ **Локальная копия содержит тексты сообщений**, чтобы отвечать без сети. Команда ниже без `--left` очищает старый кеш профиля и записи его личного аккаунта MAX в общей базе. Записи других аккаунтов сохраняются; это не удаление всего общего архива. Повторное чтение может восстановить только сообщения, которые ещё доступны в MAX:"
+        },
+        {
+          "before": "`max session end` копию не удаляет — после выхода из профиля сотрите её этой командой.",
+          "after": "`max session end` не удаляет локально сохранённую переписку. Очистка выше не удаляет файлы экспорта, скачанные вложения или резервные копии."
+        }
+      ],
+      "en": [
+        {
+          "before": "⚠ **Local storage contains message text**, so it can answer offline. The profile cache can be deleted and rebuilt from MAX:",
+          "after": "⚠ **Local storage contains message text**, so it can answer offline. Without `--left`, the command below clears the profile’s old cache and this personal MAX account’s records in the shared store. Other accounts’ records remain; it does not erase the entire shared archive. Later reads can restore only messages still available in MAX:"
+        },
+        {
+          "before": "`max session end` does not delete the cache; clear it with this command after ending the session. The shared message store is a separate file listed above.",
+          "after": "`max session end` does not delete locally stored conversations. The clear command above does not remove exported files, downloaded attachments or backups."
+        }
+      ],
+      "es": [
+        {
+          "before": "⚠ **La copia local contiene texto de mensajes:** sirve para responder sin red. La copia de caché se puede eliminar y volver a obtener de MAX:",
+          "after": "⚠ **La copia local contiene texto de mensajes:** sirve para responder sin red. Sin `--left`, el comando siguiente borra la caché anterior del perfil y los registros de esta cuenta personal de MAX en el archivo compartido. Conserva las demás cuentas; no elimina todo el archivo compartido. Solo se pueden volver a leer los mensajes que sigan disponibles en MAX:"
+        },
+        {
+          "before": "`max session end` no elimina esa copia; después de cerrar el perfil, bórrala con ese comando.",
+          "after": "`max session end` no elimina las conversaciones guardadas localmente. El comando de limpieza anterior no borra exportaciones, archivos descargados ni copias de seguridad."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "security",
+    "reason": "Released security table distinguishes protected state 0600/0700 from configuration 0644; redirected outputs are governed by shell permissions. Narrow universal owner-only claims to actual protected files.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "Всё, что `max` пишет, сразу создаётся с правами `0600` в каталогах `0700`, включая\n  локальную копию переписки",
+          "after": "Чувствительные файлы состояния `max`, включая локальную переписку, защищены правами `0600` в каталогах `0700`. Это не универсальные права всех файлов: настройки имеют `0644`, а при перенаправлении вывода права задаёт оболочка"
+        },
+        {
+          "before": "Другие пользователи машины не видят ни файлов `max`, ни сокета фонового сервера: каталоги —\n`0700`, файлы — `0600`.",
+          "after": "Файлы состояния и сокет фонового сервера защищены правами `0600` и каталогами `0700`. У других файлов могут быть иные права, например `0644` у настроек. При переносе файлов или перенаправлении вывода проверяйте права отдельно."
+        }
+      ],
+      "en": [
+        {
+          "before": "Sensitive files written by `max`, including local messages, are created with permissions `0600` in directories with `0700`",
+          "after": "Sensitive state files written by `max`, including local messages, use `0600` in `0700` directories. This does not apply to every output: configuration uses `0644`, and redirected output follows the shell’s permissions"
+        },
+        {
+          "before": "Other users cannot read `max` files or its server socket: directories use `0700`, files `0600`.",
+          "after": "State files and the server socket are protected by `0600` files and `0700` directories. Other files may use different modes, such as `0644` for configuration. Check permissions separately when moving files or redirecting output."
+        }
+      ],
+      "es": [
+        {
+          "before": "se crean con `0600` dentro de directorios `0700`, incluida la copia local",
+          "after": "los archivos de estado sensibles usan `0600` en directorios `0700`, incluida la copia local. No se aplica a todos los archivos: la configuración usa `0644` y las redirecciones siguen los permisos de la terminal"
+        },
+        {
+          "before": "Otros usuarios no ven archivos ni socket: carpetas `0700`, archivos `0600`.",
+          "after": "Los archivos de estado y el socket están protegidos con `0600` en directorios `0700`. Otros archivos pueden tener permisos distintos, como `0644` para la configuración. Comprueba los permisos al mover archivos o redirigir la salida."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "security",
+    "reason": "Replace broad legal-compliance assurance with documented technical storage/sharing facts only. No legal exemption or interpretation is asserted; plaintext archive and exported photo-link accessibility are already documented by this release.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "Инструмент хранит у вас переписку и контакты других людей. Это допустимо, пока вы делаете это для\nсебя, со своим аккаунтом: и российский закон о персональных данных (152-ФЗ, ст. 1 ч. 2 п. 1), и\nевропейский GDPR (ст. 2(2)(c)) не распространяются на обработку для личных и семейных нужд.\nРабота с чужими аккаунтами или для бизнеса — уже не личные нужды.\nВыгрузка (`max store export`), отданная кому-то ещё, тоже выходит за личные нужды — и в ней\nссылки на фото, которые открываются без входа.",
+          "after": "Инструмент сохраняет на вашем компьютере переписку и контакты других людей, включая тексты сообщений. Доступ к локальной базе даёт доступ к этим данным. Выгрузка (`max store export`), переданная другому человеку, передаёт и содержимое переписки; ссылки на фото в ней могут открываться без входа. Перед передачей проверьте содержимое и круг получателей. Эта страница описывает работу инструмента, а не подтверждает соблюдение законодательства для вашего сценария."
+        }
+      ],
+      "en": [
+        {
+          "before": "The tool stores other people's conversations and contacts on your computer. The source documentation treats use with your own account for personal and household purposes as covered by exemptions in Russian personal-data law (152-FZ, article 1, part 2, paragraph 1) and GDPR (article 2(2)(c)). Working with other people's accounts or for business is outside personal use. Sharing a `max store export` file also goes beyond personal use, and exported photo links work without login.",
+          "after": "The tool stores other people’s conversations and contacts on your computer, including message text. Access to the local store provides access to those data. Sharing a `max store export` file also shares conversation content; exported photo links may open without login. Check the contents and recipients before sharing. This page describes technical behavior, not legal compliance for your particular use."
+        }
+      ],
+      "es": [
+        {
+          "before": "La herramienta guarda conversaciones y contactos ajenos. Para fines propios con tu cuenta, la ley rusa de datos personales (152-ФЗ, artículo 1, parte 2, punto 1) y el RGPD europeo (artículo 2(2)(c)) excluyen los fines personales y domésticos. Trabajar con cuentas ajenas o para negocios deja de ser uso personal. Entregar una exportación (`max store export`) también sale de ese ámbito; incluye enlaces de fotos que se abren sin iniciar sesión.",
+          "after": "La herramienta guarda conversaciones y contactos ajenos en tu equipo, incluido el texto de los mensajes. Quien accede al archivo local puede acceder a esos datos. Compartir una exportación (`max store export`) también comparte su contenido; los enlaces de fotos pueden abrirse sin iniciar sesión. Revisa el contenido y los destinatarios antes de compartir. Esta página describe el comportamiento técnico, no garantiza el cumplimiento legal de tu uso."
+        }
+      ]
+    }
+  }
+]

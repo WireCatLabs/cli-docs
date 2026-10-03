@@ -1,0 +1,113 @@
+---
+title: "MCP and documentation"
+description: "What MCP adds, how to connect each agent, and how an agent reads the WireCat docs."
+---
+
+**MCP gives your agent callable tools for your account:** list chats, read an inbox, search messages,
+prepare replies and perform the actions allowed by your profile. The client discovers tool names,
+parameters and structured results. The MCP server ships inside `tg` and `max`.
+
+## CLI, skill or MCP?
+
+| Connection | What it provides | Choose it when |
+|---|---|---|
+| CLI | Commands in a terminal, with JSON results | Your agent already has a local terminal |
+| Skill + CLI | Instructions for using those commands and workflows | You use Codex, Cursor Agent, Claude Code, Gemini CLI or Hermes |
+| MCP | Named tools and their parameters directly inside your client | You use Claude Desktop, or prefer the client's tool interface |
+| Markdown docs | A readable explanation and command reference | You want the agent to look up how something works |
+
+For an agent with a terminal, start with [a skill](./agents.md). MCP is optional and follows the
+same profile permissions as the CLI. It does not log in for you or download the whole archive.
+
+## Before connecting
+
+[Install permanently and log in](./installation.mdx). Run `tg mcp config` or `max mcp config`
+to print a configuration with the actual Node and CLI paths on your machine. This command prints
+settings; it does not edit your client. Desktop clients may have a different PATH from your terminal.
+
+### Codex
+
+In a terminal where the installed command works:
+
+```sh
+codex mcp add tg -- tg mcp
+codex mcp add max -- max mcp
+codex mcp list
+```
+
+Connect only the messengers you use. Codex stores MCP settings in `~/.codex/config.toml`.
+For Windows or an IDE with a different PATH, take `command`, `args` and `env` from `mcp config`
+and put them into `[mcp_servers.tg]` or `[mcp_servers.max]`; Codex uses TOML, not `mcpServers` JSON.
+[Official Codex MCP guide](https://learn.chatgpt.com/docs/extend/mcp?surface=cli).
+
+### Claude Code
+
+```sh
+claude mcp add --scope user tg -- tg mcp
+claude mcp add --scope user max -- max mcp
+claude mcp list
+```
+
+Use `/mcp` in a session to check status. For full paths, use the values from `mcp config`.
+[Official Claude Code MCP guide](https://code.claude.com/docs/en/mcp).
+
+### Cursor and Claude Desktop
+
+Copy the server entry printed by `tg mcp config` or `max mcp config` into the client's
+`mcpServers` settings, preserving its full paths and environment. Merge it with existing servers.
+
+| Client | Configuration file |
+|---|---|
+| Cursor, personal | `~/.cursor/mcp.json` |
+| Cursor, project | `.cursor/mcp.json` |
+| Claude Desktop, macOS | `~/Library/Application Support/Claude/claude_desktop_config.json` |
+| Claude Desktop, Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
+
+Restart the client and check that the server's tools are available.
+[Official Cursor MCP guide](https://cursor.com/help/customization/mcp).
+
+### Gemini CLI
+
+```sh
+gemini mcp add --scope user tg tg mcp
+gemini mcp add --scope user max max mcp
+gemini mcp list
+```
+
+For full paths and environment variables, merge the generated entry into `mcpServers` in
+`~/.gemini/settings.json`. [Official Gemini MCP guide](https://geminicli.com/docs/tools/mcp-server/).
+
+### Hermes
+
+Hermes uses `mcp_servers` in `~/.hermes/config.yaml`. Add `tg` or `max` there with the `command`,
+`args` and `env` values from the generated configuration, keeping existing settings. Hermes uses
+YAML; do not paste the whole `mcpServers` JSON object into it. Restart Hermes to load the server.
+[Official Hermes quickstart](https://hermes-agent.nousresearch.com/docs/getting-started/quickstart/).
+
+## What the agent can do
+
+Available actions follow the profile's permissions. Use `mcp config --confirm-send` to generate
+a connection that asks before changes; the client needs to support MCP confirmation forms.
+For a read-only profile and the full tool list, see [Telegram MCP](./tg/mcp.md) or [MAX MCP](./max/mcp.md).
+Ask the agent to list five chats as the first connection check.
+
+## Documentation for your agent
+
+The messenger MCP servers access your account. Documentation access is separate:
+
+| Resource | What to give your agent |
+|---|---|
+| [Page index](/llms.txt) | `https://wirecat.dev/llms.txt` — find a relevant page and follow its Markdown link |
+| [All pages](/llms-full.txt) | `https://wirecat.dev/llms-full.txt` — the full reference, for tools that can handle a large document |
+| One page | Use **Copy Markdown** or **Open** at the top of a docs page |
+
+Try: **“Read https://wirecat.dev/llms.txt, find the Telegram inbox documentation and use it to
+summarise my unread messages.”** If your agent cannot fetch URLs, copy the page's Markdown into the chat.
+
+WireCat currently provides these Markdown resources, without a hosted documentation MCP endpoint.
+You do not need another server to read them. A documentation MCP would add search and page retrieval
+as tools; it would be a separate service from `tg mcp` and `max mcp`.
+
+If a connection fails, check the full paths, the Node version, and that client and terminal use the
+same profile and configuration directories. Each [Telegram](./tg/mcp.md) / [MAX](./max/mcp.md)
+MCP reference explains the environment and troubleshooting.

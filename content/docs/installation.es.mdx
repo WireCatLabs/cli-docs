@@ -1,0 +1,153 @@
+---
+title: "Instalación"
+description: "Elige Telegram o MAX, instala el CLI con tu agente o terminal e inicia sesión."
+---
+
+Funciona en **Windows, macOS y Linux**. Pide a tu agente que instale el CLI y te ayude a
+configurar lo necesario. Si prefieres hacerlo por tu cuenta, abre las instrucciones de la terminal.
+
+## 1. Elige el mensajero
+
+Abre **Telegram** o **MAX** abajo y copia la petición en tu agente local.
+Sirve para Codex, Cursor, Claude Code, Gemini CLI y Hermes. Para instalarlo por tu cuenta,
+abre **Instalar en una terminal** dentro del mensajero elegido.
+
+<InstallationGuide />
+
+Reserva unos cinco minutos para instalar e iniciar sesión. Descargar el historial es un paso
+separado: elige los chats y la cantidad de mensajes después de configurar el CLI.
+
+## 2. Inicia sesión en tu ordenador
+
+Introduce los códigos y contraseñas en tu terminal local cuando los pida el CLI.
+
+**Telegram:** `--app auto` obtiene el ID y hash de tu aplicación de Telegram y después inicia
+el acceso por QR. Escanéalo en Telegram: Ajustes → Dispositivos → Vincular dispositivo.
+Si falla el paso de la aplicación, ejecuta `tg session start --app browser` y sigue las instrucciones.
+Consulta [las sesiones de Telegram](./tg/sessions.md) para otros métodos y perfiles.
+
+**MAX:** escanea el QR en la app de MAX y sigue las instrucciones de la terminal.
+Para un bot, utiliza la [guía de bots de MAX](./max/bot.md).
+Hay otros métodos en [las sesiones de MAX](./max/sessions.md).
+
+`account show` debe identificar tu cuenta. Antes de iniciar sesión, `doctor` puede indicar que
+falta una sesión; ejecútalo de nuevo después. La lista de chats confirma la conexión.
+
+## 3. Conecta tu agente
+
+[Conectar tu agente](./agents.md) explica los cinco clientes. Para Claude Desktop o MCP, sigue
+con [MCP y documentación](./mcp.md).
+
+Primera petición: **«Resume mis mensajes sin leer por chat e indica a quién tengo que responder».**
+En el CLI: `tg inbox --limit 5` o `max inbox --limit 5`.
+
+## Actualizaciones, autocompletado y archivos
+
+Consulta la [instalación de Telegram](./tg/installation.md) o [MAX](./max/installation.md).
+Si falla alguna comprobación, abre [solución de problemas de Telegram](./tg/troubleshooting.md)
+o [MAX](./max/troubleshooting.md).
+
+## Comandos para la terminal
+
+Para instalarlo manualmente necesitas **Node.js 22.16 o posterior** con npm.
+[Descarga Node.js](https://nodejs.org/en/download), abre una terminal nueva y comprueba las versiones:
+
+```sh
+node --version
+```
+
+```sh
+npm --version
+```
+
+### Telegram
+
+Instalar:
+
+```sh
+npm install -g @leemour/tg-cli
+```
+
+Versión:
+
+```sh
+tg --version
+```
+
+Diagnóstico:
+
+```sh
+tg doctor
+```
+
+Iniciar sesión:
+
+```sh
+tg session start --app auto
+```
+
+Cuenta:
+
+```sh
+tg account show
+```
+
+Primeros cinco chats:
+
+```sh
+tg chats list --limit 5
+```
+
+### MAX
+
+Instalar:
+
+```sh
+npm install -g @leemour/max-cli
+```
+
+Versión:
+
+```sh
+max --version
+```
+
+Diagnóstico:
+
+```sh
+max doctor
+```
+
+Iniciar sesión:
+
+```sh
+max session start qr
+```
+
+Cuenta:
+
+```sh
+max account show
+```
+
+Primeros cinco chats:
+
+```sh
+max chats list --limit 5
+```
+
+### Windows
+
+Si PowerShell bloquea `npm.ps1`, usa `npm.cmd`; para el comando instalado, `tg.cmd` o `max.cmd`.
+Si no se encuentra en PATH, puedes iniciar el paquete sin cambiar PATH:
+
+```powershell
+npm.cmd exec --yes --package=@leemour/tg-cli -- tg doctor
+```
+
+```powershell
+npm.cmd exec --yes --package=@leemour/max-cli -- max doctor
+```
+
+Usa el mismo prefijo para `session start` y otros comandos mientras corriges PATH.
+MCP necesita una instalación permanente: `mcp config` no usa rutas temporales de npm cache.
