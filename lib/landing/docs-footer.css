@@ -16,27 +16,10 @@
 }
 
 .wirecat-docs-footer footer.site {
-  border-top: 0;
-  font-family: inherit;
+  border-color: var(--color-fd-border);
 }
 
 .wirecat-docs-footer .foot-brand .wirecat-brand {
   display: inline-flex;
   color: var(--color-fd-foreground);
-}
-
-.wirecat-docs-footer .foot h4 {
-  font-family: inherit;
-}
-
-.wirecat-docs-footer .footer-install .cmd {
-  font-family: inherit;
-}
-
-.wirecat-docs-footer .footer-install .cmd code {
-  font-family: var(--code);
-}
-
-.wirecat-docs-footer .footer-install .copy {
-  font-family: inherit;
 }

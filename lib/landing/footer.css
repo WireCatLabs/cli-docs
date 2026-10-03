@@ -1,5 +1,7 @@
 /* Shared landing/About footer: navigation first, installation on its own line. */
 .wirecat-landing footer.site {
+  --body: var(--font-docs, "Inter", sans-serif);
+  font-family: var(--body);
   padding-block: clamp(40px, 5vw, 64px) 28px;
 }
 
@@ -8,7 +10,12 @@
   gap: clamp(24px, 3.2vw, 48px);
 }
 
-.wirecat-landing .foot-brand .mark {
+.wirecat-landing .foot-brand .wirecat-brand {
+  display: inline-flex;
+}
+
+.wirecat-landing .site-footer-landing .wirecat-logo {
+  --wirecat-brand-tone: #4b53f0;
   color: var(--app-ink);
 }
 
@@ -73,6 +80,7 @@
 
 .wirecat-landing .footer-install .cmd {
   grid-column: 2 / -1;
+  font-family: var(--body);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -86,6 +94,7 @@
 }
 
 .wirecat-landing .footer-install .cmd code {
+  font-family: var(--code);
   min-width: 0;
   padding-block: 4px;
   font-size: 13px;

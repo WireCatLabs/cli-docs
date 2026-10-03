@@ -167,6 +167,11 @@ security), Project (changelog, roadmap).
 - Landing: the reviewed dark design, Anybody headings, Onest body, JetBrains Mono commands.
 - Landing uses the purple WireCat monogram and word mark. max's own logo appears on max's pages.
 - Code blocks: Shiki highlighting, a copy button; an unknown language shows as plain text.
+- Documentation uses the owner-selected **Quiet** treatment (2026-10-03): headings retain their
+  ordinary text color; links have a muted blue tone and no underline; prompts use a nearly neutral
+  surface with a small labelled header and copy icon. `lib/docs-usability.css` owns these styles,
+  and `components/text-snippet.tsx` renders the prompt and command blocks. The selection is recorded
+  in `design/docs/options.json`; the comparison gallery is excluded from the shipped site.
 - Works at phone width: the sidebar folds into the menu button.
 
 ## Later
