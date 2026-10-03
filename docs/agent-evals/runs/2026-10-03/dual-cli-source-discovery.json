@@ -1,0 +1,101 @@
+{
+  "records": [
+    {
+      "cli": "tg",
+      "argv": ["commands", "--json"],
+      "exitCode": 0,
+      "stdoutSha256": "f647e6ef657da109c9e4d2315f5dc5b56a814d4d2738084167022532aafbd9a3",
+      "stderr": "",
+      "stdoutBytes": 426368
+    },
+    {
+      "cli": "tg",
+      "argv": ["commands", "messages", "--json"],
+      "exitCode": 0,
+      "stdoutSha256": "c48c1983eee97a844819ac1fe3013690679fa2d39384406d6ce296a85fc739c6",
+      "stderr": "",
+      "stdoutBytes": 15648
+    },
+    {
+      "cli": "tg",
+      "argv": ["commands", "messages", "search", "--json"],
+      "exitCode": 0,
+      "stdoutSha256": "ae948750e7221d855f79ca842c77d367aa75e7660b9c733541de284ea1d1daa7",
+      "stderr": "",
+      "stdoutBytes": 3821
+    },
+    {
+      "cli": "tg",
+      "argv": ["commands", "messages", "chats", "contacts", "--json"],
+      "exitCode": 2,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "{\"error\":{\"code\":\"validation_error\",\"message\":\"unknown command path \\\"messages chats contacts\\\" \u2014 inspect `tg commands messages --json`; available here: evidence, list, search, send, show, context, download, transcribe, edit, delete, forward, pin, unpin, scheduled, links. Give one command path per call, not a list of groups: `tg commands messages --json` and `tg commands chats --json` are separate calls\",\"path\":[\"messages\",\"chats\",\"contacts\"],\"at\":\"chats\",\"available\":[\"evidence\",\"list\",\"search\",\"send\",\"show\",\"context\",\"download\",\"transcribe\",\"edit\",\"delete\",\"forward\",\"pin\",\"unpin\",\"scheduled\",\"links\"]}}\n",
+      "stdoutBytes": 0
+    },
+    {
+      "cli": "tg",
+      "argv": ["commands", "not-real", "--json"],
+      "exitCode": 2,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "{\"error\":{\"code\":\"validation_error\",\"message\":\"unknown command path \\\"not-real\\\" \u2014 inspect `tg commands --json`; available here: session, setup, account, chats, contacts, messages, reactions, polls, models, inbox, review, topics, watch, serve, server, store, conversations, recipients, sends, runs, config, doctor, commands, complete, upgrade, mcp, bot, skill. Give one command path per call, not a list of groups: `tg commands messages --json` and `tg commands chats --json` are separate calls\",\"path\":[\"not-real\"],\"at\":\"not-real\",\"available\":[\"session\",\"setup\",\"account\",\"chats\",\"contacts\",\"messages\",\"reactions\",\"polls\",\"models\",\"inbox\",\"review\",\"topics\",\"watch\",\"serve\",\"server\",\"store\",\"conversations\",\"recipients\",\"sends\",\"runs\",\"config\",\"doctor\",\"commands\",\"complete\",\"upgrade\",\"mcp\",\"bot\",\"skill\"]}}\n",
+      "stdoutBytes": 0
+    },
+    {
+      "cli": "tg",
+      "argv": ["commands", "--help"],
+      "exitCode": 0,
+      "stdoutSha256": "7a8249646e9de9274d0c9980f5f6cd4884bddb7ed4c824acf774912bc0184324",
+      "stderr": "",
+      "stdoutBytes": 295
+    },
+    {
+      "cli": "max",
+      "argv": ["commands", "--json"],
+      "exitCode": 0,
+      "stdoutSha256": "d62b1cd9e2d46045f1e1d5d83bff9a33247c66391080a632af294223fdbddd36",
+      "stderr": "",
+      "stdoutBytes": 126748
+    },
+    {
+      "cli": "max",
+      "argv": ["commands", "messages", "--json"],
+      "exitCode": 0,
+      "stdoutSha256": "efdc5fbcf5ca5184fb9d685f4cdca941ed47c48c02aeb0c39dcf86b33390eccc",
+      "stderr": "",
+      "stdoutBytes": 14237
+    },
+    {
+      "cli": "max",
+      "argv": ["commands", "messages", "search", "--json"],
+      "exitCode": 0,
+      "stdoutSha256": "b9d20767bfb0d4c08db2f4565aeb4af501f49f8cf7d0430beeab53a545c47bee",
+      "stderr": "",
+      "stdoutBytes": 4114
+    },
+    {
+      "cli": "max",
+      "argv": ["commands", "messages", "chats", "contacts", "--json"],
+      "exitCode": 2,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "{\"error\":{\"code\":\"validation_error\",\"message\":\"unknown command path \\\"messages chats contacts\\\" \u2014 inspect `max commands messages --json`; available here: list, search, show, context, links, download, transcribe, send, scheduled, edit, delete, forward, pin, unpin. Give one command path per call, not a list of groups: `max commands messages --json` and `max commands chats --json` are separate calls\",\"path\":[\"messages\",\"chats\",\"contacts\"],\"at\":\"chats\",\"available\":[\"list\",\"search\",\"show\",\"context\",\"links\",\"download\",\"transcribe\",\"send\",\"scheduled\",\"edit\",\"delete\",\"forward\",\"pin\",\"unpin\"]}}\n",
+      "stdoutBytes": 0
+    },
+    {
+      "cli": "max",
+      "argv": ["commands", "not-real", "--json"],
+      "exitCode": 2,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "{\"error\":{\"code\":\"validation_error\",\"message\":\"unknown command path \\\"not-real\\\" \u2014 inspect `max commands --json`; available here: session, setup, account, chats, contacts, messages, store, conversations, models, polls, reactions, recipients, sends, inbox, review, serve, server, watch, config, doctor, runs, skill, commands, upgrade, complete, mcp, bot. Give one command path per call, not a list of groups: `max commands messages --json` and `max commands chats --json` are separate calls\",\"path\":[\"not-real\"],\"at\":\"not-real\",\"available\":[\"session\",\"setup\",\"account\",\"chats\",\"contacts\",\"messages\",\"store\",\"conversations\",\"models\",\"polls\",\"reactions\",\"recipients\",\"sends\",\"inbox\",\"review\",\"serve\",\"server\",\"watch\",\"config\",\"doctor\",\"runs\",\"skill\",\"commands\",\"upgrade\",\"complete\",\"mcp\",\"bot\"]}}\n",
+      "stdoutBytes": 0
+    },
+    {
+      "cli": "max",
+      "argv": ["commands", "--help"],
+      "exitCode": 0,
+      "stdoutSha256": "6291d493915c71cf4d15a1af82b8d41387a002b3ad86499158cb4e59fe9332a9",
+      "stderr": "",
+      "stdoutBytes": 296
+    }
+  ],
+  "observedNetworkAttempts": 0
+}

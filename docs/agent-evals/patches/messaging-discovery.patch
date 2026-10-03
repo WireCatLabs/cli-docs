@@ -1,0 +1,253 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index f24ec37..1040f78 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -8,6 +8,9 @@ Notable changes to `@leemour/cli-messaging`, one section per version, newest fir
+ 
+ ### Added
+ 
++- `commands [path...]` inspects one command or group instead of printing the whole tree. JSON
++  retains global options and exit codes, resolves aliases to canonical paths, and includes
++  ancestor options in `inheritedOptions`. With no path, the existing envelope is unchanged.
+ - Detailed parity audit evidence and synthetic consumer checks via `--deep --output <new-directory>`; the existing surface audit is preserved.
+ 
+ ## 0.133.0 — 03.10.2026
+diff --git a/README.md b/README.md
+index a202fc0..8aa7bf9 100644
+--- a/README.md
++++ b/README.md
+@@ -38,6 +38,15 @@ before sending, after the permission gate. Telegram group forums support it; MAX
+ Journal records carry only the thread id. A retry keeps the same send id, chat and topic; scheduled
+ sends must be checked in the queue instead of repeated.
+ 
++## Command discovery
++
++To discover arguments without reading the whole command tree, run
++`<cli> commands messages evidence --json`. Replace the path with any command or group;
++`<cli> commands messages --json` includes its descendants. The response retains global options
++and exit codes, includes options inherited from ancestor groups, and resolves command aliases.
++Give one command path per call; inspect other groups in separate calls.
++`<cli> commands --json` still returns the full tree.
++
+ ## Evidence packets for agents
+ 
+ `prepareEvidencePacket` from `@leemour/cli-messaging/services` packages a message page that the
+diff --git a/docs/dev/STANDARD.md b/docs/dev/STANDARD.md
+index 6ed8043..d315731 100644
+--- a/docs/dev/STANDARD.md
++++ b/docs/dev/STANDARD.md
+@@ -386,6 +386,14 @@ many), `--allow-any-file` (which files).
+ 
+ ## Help text
+ 
++`<cli> commands messages search --json` describes one command; `<cli> commands messages --json`
++includes the group's descendants. Give one command path per call; inspect different groups in
++separate calls. Scoped discovery keeps `globalOptions` and `exitCodes`, adds
++the canonical `scope` path, and lists options from non-root ancestors in `inheritedOptions`
++as `{ path, options }` entries. Aliases resolve to canonical command names. Unknown or hidden
++paths return `validation_error` (exit 2), with the valid commands at that level. The full tree
++remains available through `<cli> commands --json`, with no scoped fields.
++
+ 1. **A description says what the command does, as the user sees it**, in one line, lower case, no
+    full stop, no internal term — no wire field, no port, no adapter.
+ 2. **A shared command has the same sentence in both tools.** It is one command; the shared factory
+diff --git a/src/cli/commands-command.ts b/src/cli/commands-command.ts
+index 4485371..bd5c638 100644
+--- a/src/cli/commands-command.ts
++++ b/src/cli/commands-command.ts
+@@ -1,5 +1,5 @@
+-import { EXIT_CODES, GENERIC_FAILURE } from "@leemour/cli-core"
+-import { describeOptions, describeProgram, flatten } from "@leemour/cli-core/commands"
++import { CliError, EXIT_CODES, GENERIC_FAILURE } from "@leemour/cli-core"
++import { type CommandInfo, describeOptions, describeProgram, flatten } from "@leemour/cli-core/commands"
+ import { Command } from "commander"
+ import type { AppIdentity } from "./app.js"
+ import { outputFor } from "./context.js"
+@@ -17,11 +17,14 @@ export const CONTRACT = 0
+  */
+ export const commandsCommand = (app: AppIdentity): Command =>
+   new Command("commands")
+-    .description("every command, option and exit code as JSON — what an agent reads instead of --help")
+-    .action(function (this: Command) {
++    .description("commands, options and exit codes as JSON — inspect one command path per call")
++    .argument("[path...]", "one command path, for example: messages search; inspect other groups in separate calls")
++    .action(function (this: Command, path: string[]) {
+       const root = rootOf(this)
+       const { renderer, format } = outputFor(this)
+-      const commands = describeProgram(root)
++      const all = describeProgram(root)
++      const scoped = path.length > 0 ? scopeOf(root, all, path) : undefined
++      const commands = scoped ? [scoped.command] : all
+ 
+       if (format === "pretty") {
+         renderer.result(
+@@ -41,7 +44,38 @@ export const commandsCommand = (app: AppIdentity): Command =>
+         contract: CONTRACT,
+         description: root.description(),
+         globalOptions: describeOptions(root),
++        ...(scoped ? { scope: scoped.command.path, inheritedOptions: scoped.inheritedOptions } : {}),
+         commands,
+         exitCodes: { ok: 0, generic_failure: GENERIC_FAILURE, ...EXIT_CODES },
+       })
+     })
++
++const scopeOf = (root: Command, all: CommandInfo[], path: string[]) => {
++  let parent = root
++  let available: readonly CommandInfo[] = all
++  let selected: CommandInfo | undefined
++  const inheritedOptions: { path: readonly string[]; options: ReturnType<typeof describeOptions> }[] = []
++  for (const word of path) {
++    const child = parent.commands.find((command) => command.name() === word || command.aliases().includes(word))
++    const described = child && available.find(({ name }) => name === child.name())
++    if (!child || !described) {
++      const prefix = selected?.path ?? []
++      const choices = available.map(({ name }) => name)
++      throw new CliError(
++        "validation_error",
++        `unknown command path "${path.join(" ")}" — inspect \`${[root.name(), "commands", ...prefix, "--json"].join(" ")}\`; ` +
++          (choices.length ? `available here: ${choices.join(", ")}. ` : "this command has no subcommands. ") +
++          `Give one command path per call, not a list of groups: \`${root.name()} commands messages --json\` ` +
++          `and \`${root.name()} commands chats --json\` are separate calls`,
++        { path, at: word, available: choices },
++      )
++    }
++    if (selected && selected.options.length > 0) {
++      inheritedOptions.push({ path: selected.path, options: [...selected.options] })
++    }
++    selected = described
++    parent = child
++    available = described.commands
++  }
++  return { command: selected as CommandInfo, inheritedOptions }
++}
+diff --git a/src/cli/commands-command.test.ts b/src/cli/commands-command.test.ts
+new file mode 100644
+index 0000000..f6fd5ea
+--- /dev/null
++++ b/src/cli/commands-command.test.ts
+@@ -0,0 +1,125 @@
++import { captureStreams } from "@leemour/cli-core"
++import { annotate } from "@leemour/cli-core/commands"
++import { Command } from "commander"
++import { describe, expect, it, vi } from "vitest"
++import { commandsCommand } from "./commands-command.js"
++import { run } from "./program.js"
++
++const app = { command: "app", appName: "app-cli", envPrefix: "APP", description: "Discovery", version: "1.2.3" }
++
++const call = async (path: string[], pretty = false) => {
++  const action = vi.fn(() => {
++    throw new Error("discovery must not execute the inspected command")
++  })
++  const streams = captureStreams()
++  const code = await run(
++    ["commands", ...path, ...(pretty ? [] : ["--json"])],
++    {
++      app,
++      commands: () => [
++        commandsCommand(app),
++        new Command("bot")
++          .alias("b")
++          .option("--account <name>", "which bot")
++          .addCommand(
++            new Command("messages").option("--scope <chat>", "inherited scope").addCommand(
++              annotate(new Command("send").alias("post").argument("<text>").option("--silent").action(action), {
++                mutates: true,
++              }),
++            ),
++          ),
++        new Command("hidden").action(action),
++        new Command("messages").addCommand(new Command("search").action(action)),
++        new Command("chats").addCommand(new Command("list").action(action)),
++        new Command("contacts").addCommand(new Command("list").action(action)),
++      ],
++      configure: (root) => {
++        root.addCommand(new Command("private").action(action), { hidden: true })
++      },
++    },
++    { streams, tty: pretty, env: process.env },
++  )
++  expect(action).not.toHaveBeenCalled()
++  return { code, stdout: streams.stdout.join("\n"), stderr: streams.stderr.join("\n") }
++}
++
++describe("scoped command discovery", () => {
++  it("keeps the full-tree envelope without scope fields when no path is given", async () => {
++    const result = await call([])
++    expect(result.code).toBe(0)
++    const packet = JSON.parse(result.stdout)
++    expect(Object.keys(packet).sort()).toEqual(
++      ["cli", "version", "contract", "description", "globalOptions", "commands", "exitCodes"].sort(),
++    )
++    expect(packet.commands.map((command: { name: string }) => command.name)).toEqual([
++      "commands",
++      "bot",
++      "hidden",
++      "messages",
++      "chats",
++      "contacts",
++    ])
++    expect(packet.exitCodes.validation_error).toBe(2)
++  })
++
++  it("canonicalizes aliases and includes all inherited options while omitting unrelated commands", async () => {
++    const result = await call(["b", "messages", "post"])
++    expect(result.code).toBe(0)
++    const packet = JSON.parse(result.stdout)
++    expect(packet.scope).toEqual(["bot", "messages", "send"])
++    expect(packet.commands).toHaveLength(1)
++    expect(packet.commands[0]).toMatchObject({
++      path: ["bot", "messages", "send"],
++      usage: "app bot messages send <text> [options]",
++      mutates: true,
++      arguments: [{ name: "text", required: true }],
++      options: [{ flags: "--silent", takesValue: false }],
++    })
++    expect(packet.inheritedOptions).toMatchObject([
++      { path: ["bot"], options: [{ flags: "--account <name>" }] },
++      { path: ["bot", "messages"], options: [{ flags: "--scope <chat>" }] },
++    ])
++    const full = JSON.parse((await call([])).stdout)
++    expect(packet.globalOptions).toEqual(full.globalOptions)
++    expect(packet.exitCodes).toEqual(full.exitCodes)
++    expect(result.stdout.length).toBeLessThan(JSON.stringify(full).length)
++  })
++
++  it("includes a group's descendants and their metadata", async () => {
++    const packet = JSON.parse((await call(["bot", "messages"])).stdout)
++    expect(packet.commands[0].commands).toMatchObject([{ path: ["bot", "messages", "send"], mutates: true }])
++    expect(packet.inheritedOptions).toMatchObject([{ path: ["bot"] }])
++  })
++
++  it.each([["missing"], ["private"], ["bot", "missing"], ["bot", "messages", "send", "missing"]])(
++    "refuses invalid or hidden paths with actionable validation errors: %j",
++    async (...path) => {
++      const result = await call(path)
++      expect(result.code).toBe(2)
++      expect(result.stdout).toBe("")
++      expect(result.stderr).toContain("unknown command path")
++      expect(result.stderr).toContain("app commands")
++      expect(JSON.parse(result.stderr).error.code).toBe("validation_error")
++    },
++  )
++
++  it("scopes the human-readable table too", async () => {
++    const result = await call(["bot", "messages"], true)
++    expect(result.code).toBe(0)
++    expect(result.stdout).toContain("app bot messages send")
++    expect(result.stdout).not.toContain("app hidden")
++  })
++
++  it("explains that multiple groups need separate discovery calls", async () => {
++    const result = await call(["messages", "chats", "contacts"])
++    expect(result.code).toBe(2)
++    expect(result.stdout).toBe("")
++    const { error } = JSON.parse(result.stderr)
++    expect(error.code).toBe("validation_error")
++    expect(error.message).toContain("one command path per call, not a list of groups")
++    expect(error.message).toContain("app commands messages --json")
++    expect(error.message).toContain("app commands chats --json")
++    expect(error.at).toBe("chats")
++    expect(error.available).toEqual(["search"])
++  })
++})

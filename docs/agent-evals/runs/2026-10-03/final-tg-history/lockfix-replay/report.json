@@ -1,0 +1,141 @@
+{
+  "kind": "real-cli-recorded-choice-replay",
+  "baseline": "/home/leemour/Projects/AI/cli-docs/docs/agent-evals/runs/2026-10-03/final-tg-history",
+  "launcher": "/tmp/wirecat-tg-lockfix-replay/history/tg",
+  "versions": {
+    "tg-cli": "0.23.0",
+    "cli-messaging": "0.129.0",
+    "cli-core": "0.16.0"
+  },
+  "results": [
+    {
+      "index": 1,
+      "argv": ["--help"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 2,
+      "argv": ["skill", "show"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 3,
+      "argv": ["commands", "messages"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 4,
+      "argv": ["commands", "chats"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 5,
+      "argv": ["messages", "context", "--help"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 6,
+      "argv": ["messages", "search", "--help"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 7,
+      "argv": ["chats", "list", "--all", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 8,
+      "argv": ["store", "status", "--help"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 9,
+      "argv": ["store", "status", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 10,
+      "argv": [
+        "messages",
+        "search",
+        "Atlas OR аналитик* OR НДС",
+        "--limit",
+        "100",
+        "--newest",
+        "--timezone",
+        "Europe/Madrid",
+        "--json"
+      ],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 11,
+      "argv": [
+        "messages",
+        "search",
+        "Atlas OR analytics OR аналитик* OR 1500 OR 1800 OR VAT OR НДС OR price OR цена",
+        "--chat",
+        "-100710003",
+        "--limit",
+        "100",
+        "--json"
+      ],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 12,
+      "argv": ["store", "status", "-100710003", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 13,
+      "argv": ["messages", "context", "-100710002", "1", "--before-n", "3", "--after-n", "10", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 14,
+      "argv": ["messages", "context", "-100710001", "1", "--before-n", "3", "--after-n", "40", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 15,
+      "argv": ["messages", "evidence", "--help"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 16,
+      "argv": ["messages", "evidence", "-100710001", "--before-id", "3", "--limit", "10", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 17,
+      "argv": ["messages", "evidence", "-100710003", "--limit", "10", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 18,
+      "argv": ["messages", "evidence", "-100710002", "--limit", "10", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    }
+  ],
+  "networkAttempts": 0,
+  "llm": false
+}

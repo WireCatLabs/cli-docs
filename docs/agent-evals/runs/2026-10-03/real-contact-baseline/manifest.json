@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "kind": "fresh-agent-real-cli",
+  "versions": {
+    "tg-cli": "0.23.0",
+    "cli-messaging": "0.129.0",
+    "cli-core": "0.16.0"
+  },
+  "node": "v24.19.0",
+  "fixtureName": "contact",
+  "fixtureSha256": "2ba4592aff32d43d6d5614dfbefd81bcca90c1e62a99da75f822f82a870babad",
+  "modelSnapshot": null,
+  "clock": "Store seeding clock 2026-10-03T10:00:00Z; CLI uses process wall clock",
+  "scope": "Actual parser/services/SQLite, synthetic account, no login; JS network primitive guard; reads forced offline, sends run permission gate",
+  "launcher": "/tmp/wirecat-cold-real-023-v1/contact/tg"
+}

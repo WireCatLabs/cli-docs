@@ -1,0 +1,9 @@
+import { fork } from 'node:child_process';
+import { DatabaseSync } from 'node:sqlite';
+import { mkdtempSync,writeFileSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
+const root=process.argv[2];
+const tmp=mkdtempSync('/tmp/wirecat-pragma-lock-'); const path=tmp+'/db.sqlite';
+const holder=new DatabaseSync(path);holder.exec('CREATE TABLE t(x); BEGIN EXCLUSIVE; INSERT INTO t VALUES(1)');
+writeFileSync(tmp+'/child.mjs',`import {openSqlite} from '${pathToFileURL(root+'/node_modules/@leemour/cli-messaging/dist/store/sqlite/open.js')}'; process.send('ready'); process.on('message',async()=>{let start=performance.now();try {const db=await openSqlite(${JSON.stringify(path)});db.database.close();process.send({ok:true,ms:performance.now()-start})}catch(e){process.send({ok:false,message:e.message,ms:performance.now()-start})}finally{process.disconnect()}});`);
+const child=fork(tmp+'/child.mjs',{silent:true});child.on('message',m=>{if(m==='ready'){child.send('open');setTimeout(()=>{holder.exec('COMMIT');holder.close()},100)}else{console.log(JSON.stringify({root,...m}))}});

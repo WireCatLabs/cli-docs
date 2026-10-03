@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "kind": "fresh-agent-real-cli",
+  "versions": {
+    "max-cli": "0.24.0",
+    "cli-messaging": "0.131.0",
+    "cli-core": "0.16.0"
+  },
+  "lineage": {
+    "initializer": "07cecce5ff768fc8ceb727f28d8edfc528d34969181231bbf1a0645251634a9e",
+    "launcher": "510e956da34afb000cce27c755cb7cc1d3e410d265f330eba4089c310f659ac5",
+    "networkGuard": "161eb33e786941fffa5855f8949a1732e41c26107b3db98d6ab96ef5f574edb9",
+    "commands": "5a32028540f7f5fef0b30907c6ca0d71492bc00b37c45d7e2a422b1e1663fe42",
+    "skill": "942dbccc1f8661f768a90d23f352ae4dff0f150f65c98edb559c7cb2f43c2514"
+  },
+  "node": "v24.19.0",
+  "fixtureName": "contact",
+  "fixtureRevision": "v1",
+  "fixtureSha256": "776582b805b5e37e1179213e97174e302fab5c49fc32c9280bffe42677207b06",
+  "definitionSha256": "8ab149fd0977b8a269711a8d6c3a862aff3f36e5fd7064dbfd79e5c2833189af",
+  "modelSnapshot": null,
+  "clock": "Store seeding clock 2026-10-03T10:00:00Z; CLI uses process wall clock",
+  "scope": "Actual parser/services/SQLite, synthetic account, no login; JS network primitive guard; reads forced offline, sends run permission gate",
+  "launcher": "/tmp/wirecat-cold-max-final-round3/contact/max"
+}

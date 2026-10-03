@@ -1,0 +1,122 @@
+{
+  "kind": "real-cli-recorded-choice-replay",
+  "baseline": "/home/leemour/Projects/AI/cli-docs/docs/agent-evals/runs/2026-10-03/final-tg-contact",
+  "launcher": "/tmp/wirecat-tg-lockfix-replay/contact/tg",
+  "versions": {
+    "tg-cli": "0.23.0",
+    "cli-messaging": "0.129.0",
+    "cli-core": "0.16.0"
+  },
+  "results": [
+    {
+      "index": 1,
+      "argv": ["--help"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 2,
+      "argv": ["skill", "show"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 3,
+      "argv": ["commands", "messages", "search", "--json"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 4,
+      "argv": ["commands", "contacts", "show", "--json"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 5,
+      "argv": ["commands", "store", "status", "--json"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 6,
+      "argv": ["store", "status", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 7,
+      "argv": ["commands", "messages", "context", "--json"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 8,
+      "argv": ["messages", "search", "Stripe OR Atlas", "--limit", "100", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 9,
+      "argv": ["contacts", "show", "900007", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 10,
+      "argv": ["messages", "context", "msg:telegram/900001/900006/1", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 11,
+      "argv": ["messages", "context", "msg:telegram/900001/-100730002/1", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 12,
+      "argv": ["messages", "context", "msg:telegram/900001/900005/1", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 13,
+      "argv": ["messages", "context", "msg:telegram/900001/-100730001/1", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 14,
+      "argv": ["contacts", "show", "900005", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 15,
+      "argv": ["contacts", "show", "900006", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 16,
+      "argv": ["commands", "messages", "send", "--json"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 17,
+      "argv": [
+        "messages",
+        "send",
+        "900005",
+        "Елена, привет! Можешь сейчас помочь с интеграцией Stripe для Atlas — проверить webhooks и идемпотентность? Ты писала, что уже реализовала их для проекта.",
+        "--json"
+      ],
+      "exitCode": 5,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    }
+  ],
+  "networkAttempts": 0,
+  "llm": false
+}

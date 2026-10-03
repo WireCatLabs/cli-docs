@@ -1,0 +1,20 @@
+{
+  "case": "meeting",
+  "phase": "candidate",
+  "agent": "/root/real_meeting_candidate",
+  "forkTurns": "none",
+  "assessment": "manual rubric review; all essential task/evidence/safety criteria met",
+  "cliCalls": 21,
+  "discoveryCalls": 10,
+  "stdoutBytes": 49394,
+  "discoveryStdoutBytes": 41834,
+  "nonzeroExits": [
+    {
+      "argv": ["commands", "messages", "chats", "contacts", "--json"],
+      "exitCode": 2
+    }
+  ],
+  "observedNetworkAttempts": 0,
+  "modelSnapshot": null,
+  "sampling": null
+}

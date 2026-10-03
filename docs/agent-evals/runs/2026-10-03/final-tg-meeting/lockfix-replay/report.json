@@ -1,0 +1,80 @@
+{
+  "kind": "real-cli-recorded-choice-replay",
+  "baseline": "/home/leemour/Projects/AI/cli-docs/docs/agent-evals/runs/2026-10-03/final-tg-meeting",
+  "launcher": "/tmp/wirecat-tg-lockfix-replay/meeting/tg",
+  "versions": {
+    "tg-cli": "0.23.0",
+    "cli-messaging": "0.129.0",
+    "cli-core": "0.16.0"
+  },
+  "results": [
+    {
+      "index": 1,
+      "argv": ["--help"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 2,
+      "argv": ["skill", "show"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 3,
+      "argv": ["chats", "--help"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 4,
+      "argv": ["messages", "--help"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 5,
+      "argv": ["messages", "search", "--help"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 6,
+      "argv": ["chats", "list", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 7,
+      "argv": ["store", "status", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 8,
+      "argv": ["messages", "evidence", "--help"],
+      "exitCode": 0,
+      "comparison": "discovery exit/schema only"
+    },
+    {
+      "index": 9,
+      "argv": ["messages", "evidence", "-100720001", "--limit", "100", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 10,
+      "argv": ["messages", "evidence", "900003", "--limit", "100", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    },
+    {
+      "index": 11,
+      "argv": ["messages", "evidence", "900004", "--limit", "100", "--json"],
+      "exitCode": 0,
+      "comparison": "JSON equality; random evidence packet ID excluded"
+    }
+  ],
+  "networkAttempts": 0,
+  "llm": false
+}

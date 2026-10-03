@@ -1,0 +1,55 @@
+{
+  "version": "0.140.0",
+  "sourceRevision": "680d22e61a2c7d6edf961ec28a04000b84a8e1e1",
+  "prs": [426, 487, 488],
+  "workflow": "https://github.com/leemour/cli-messaging/actions/runs/37159791474",
+  "integrity": "sha512-zruYLqNVoN2YmyOmvbFqCd/YMloaRf/1JLmVZv2QrLBxlvorPaEks6mq7vYm/M9cEhAyn9aoTkAj8+mEZl6hvA==",
+  "artifactSha512": "cebb982ea355a0dd989b23a6bdb16a09dfd8325a1a45fff524b99566fd90acb07196fa2b3da124b3a9aaeef626fccf5c1210329fd6a84e4023f3e984665ea1bc",
+  "provenance": {
+    "_type": "https://in-toto.io/Statement/v1",
+    "subject": [
+      {
+        "name": "pkg:npm/%40leemour/cli-messaging@0.140.0",
+        "digest": {
+          "sha512": "cebb982ea355a0dd989b23a6bdb16a09dfd8325a1a45fff524b99566fd90acb07196fa2b3da124b3a9aaeef626fccf5c1210329fd6a84e4023f3e984665ea1bc"
+        }
+      }
+    ],
+    "predicateType": "https://slsa.dev/provenance/v1",
+    "predicate": {
+      "buildDefinition": {
+        "buildType": "https://slsa-framework.github.io/github-actions-buildtypes/workflow/v1",
+        "externalParameters": {
+          "workflow": {
+            "ref": "refs/heads/main",
+            "repository": "https://github.com/leemour/cli-messaging",
+            "path": ".github/workflows/release.yml"
+          }
+        },
+        "internalParameters": {
+          "github": {
+            "event_name": "workflow_dispatch",
+            "repository_id": "1389275743",
+            "repository_owner_id": "710919"
+          }
+        },
+        "resolvedDependencies": [
+          {
+            "uri": "git+https://github.com/leemour/cli-messaging@refs/heads/main",
+            "digest": {
+              "gitCommit": "680d22e61a2c7d6edf961ec28a04000b84a8e1e1"
+            }
+          }
+        ]
+      },
+      "runDetails": {
+        "builder": {
+          "id": "https://github.com/actions/runner/github-hosted"
+        },
+        "metadata": {
+          "invocationId": "https://github.com/leemour/cli-messaging/actions/runs/37159791474/attempts/1"
+        }
+      }
+    }
+  }
+}

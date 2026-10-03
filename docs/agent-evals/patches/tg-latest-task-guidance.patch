@@ -1,0 +1,48 @@
+diff --git a/skills/tg-cli/SKILL.md b/skills/tg-cli/SKILL.md
+index 2902945..4fc9698 100644
+--- a/skills/tg-cli/SKILL.md
++++ b/skills/tg-cli/SKILL.md
+@@ -8,10 +8,13 @@ description: Set up Telegram and read or send messages in the owner's personal a
+ `tg` works with the owner's **real personal account**. A mistake here does not fail a test; it
+ writes to a living person. One call, one action: connect, do it, print, exit.
+ 
+-The full list of commands and flags is **`tg commands --json`**: the whole tree in one answer —
+-arguments, flags (whether each takes a value, whether it is required), exit codes, and `mutates:
+-true` on the commands that change something in Telegram. `tg --help` is the same for a person. This
+-file holds what the help cannot say: the traps and the boundaries.
++Read this skill, then discover only the commands relevant to the task. **`tg commands messages
++search --json`** describes one command; **`tg commands messages --json`** describes that group.
++Both include arguments, options, global options and exit codes. Use `tg <command> --help` for a
++shorter explanation. Command words form one path, not a list of groups: inspect different groups
++in separate calls. **`tg commands --json`** returns the entire tree when you need an overview;
++do not read it in full before every task. `mutates: true` identifies writes; `local: true` limits
++those writes to this machine. This file holds the traps and boundaries.
+ 
+ ## Installation readiness
+ 
+@@ -152,6 +155,25 @@ summary; news digests remain separate future work. Permission: `messages.evidenc
+ 
+ ## The usual path
+ 
++Choose a path from the user's task rather than reading recent messages by default:
++
++- **Find an agreement or document:** find the relevant chat IDs, then search the local archive.
++  Inspect search coverage and `store status`; `messages list` alone is only a recent window.
++  Follow promising hits with `messages context` or `messages show` and cite their locators.
++  Check related chats for a later correction. Empty hits, an empty chat and `hasMore: false`
++  never establish complete Telegram history. If missing history matters, explain the gap.
++  Fetch only an authorized chat and bounded period/amount; inspect `store fetch --estimate`
++  before a download. Offline cannot fetch missing history.
++- **Prepare for a meeting:** find project groups and the participants' personal chats. A DM's
++  title need not contain the project name. Compare dated group messages with relevant DMs;
++  a later confirmation can close an old blocker. Use `messages evidence` for a brief, inspect
++  coverage and follow its cursor. Distinguish decisions, open questions and inferred dates.
++- **Recommend a person:** compare actual evidence of relevant experience across chats. Match
++  message sender IDs to `contacts show` and relevant personal chats; two identical display
++  names are not one person. Past availability is not current availability. Prepare a draft
++  unless the owner explicitly asks to send it to the identified recipient. If sending is
++  refused by permissions, stop and keep the draft; do not change settings or switch profiles.
++
+ The ids below are made up — use the real ones from the previous answer.
+ 
+ ```sh

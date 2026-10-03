@@ -1,0 +1,19 @@
+import subprocess,json,tempfile,pathlib,hashlib
+records=[]
+node=subprocess.check_output(['which','node'],text=True).strip()
+for name in ['tg','max']:
+ root=pathlib.Path(f'/tmp/wirecat-{name}-latest-verify')
+ scratch=pathlib.Path(tempfile.mkdtemp(prefix=f'wirecat-{name}-discovery-contract-'))
+ env={'PATH':str(pathlib.Path(node).parent),'HOME':str(scratch),'NO_COLOR':'1','TZ':'UTC','XDG_CONFIG_HOME':str(scratch/'config'),'XDG_STATE_HOME':str(scratch/'state'),'XDG_CACHE_HOME':str(scratch/'cache'),'MESSAGING_STORE':str(scratch/'messages.db'),'AGENT_EVAL_NETWORK_LOG':str(scratch/'network.jsonl'),f'{name.upper()}_CONFIG_DIR':str(scratch/'config'),f'{name.upper()}_STATE_DIR':str(scratch/'state'),f'{name.upper()}_CACHE_DIR':str(scratch/'cache')}
+ for argv,code in [(['commands','--json'],0),(['commands','messages','--json'],0),(['commands','messages','search','--json'],0),(['commands','messages','chats','contacts','--json'],2),(['commands','not-real','--json'],2),(['commands','--help'],0)]:
+  p=subprocess.run([node,'--import','/home/leemour/Projects/AI/cli-docs/scripts/agent-evals/deny-network.mjs',str(root/f'dist/bin/{name}.js'),*argv],capture_output=True,text=True,env=env,timeout=20)
+  assert p.returncode==code,(name,argv,p.returncode,p.stderr)
+  if code==0 and argv[-1]=='--json':
+   data=json.loads(p.stdout); assert data['cli']==name; assert data['globalOptions'] and data['exitCodes']
+   if len(argv)>2: assert data['scope']==argv[1:-1] and len(data['commands'])==1
+  if code==2: assert p.stdout=='' and 'one command path per call' in p.stderr
+  assert '\x1b' not in p.stdout
+  records.append({'cli':name,'argv':argv,'exitCode':p.returncode,'stdoutSha256':hashlib.sha256(p.stdout.encode()).hexdigest(),'stderr':p.stderr,'stdoutBytes':len(p.stdout.encode())})
+ assert not (scratch/'network.jsonl').exists(),str(scratch)
+p=pathlib.Path('/home/leemour/Projects/AI/cli-docs/docs/agent-evals/runs/2026-10-03/dual-cli-source-discovery.json');p.write_text(json.dumps({'records':records,'observedNetworkAttempts':0},indent=2)+'\n')
+print('12 real compiled CLI contract calls passed; no observed network attempts')

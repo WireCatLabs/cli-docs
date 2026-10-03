@@ -1,0 +1,15 @@
+{
+  "provider": "tg",
+  "case": "meeting",
+  "executor": "collaboration-fork-none",
+  "modelSnapshot": null,
+  "sampling": null,
+  "manualRubric": "pass: facts, sources, honest coverage and action boundaries",
+  "cliCalls": 11,
+  "discoveryCalls": 6,
+  "stdoutBytes": 32008,
+  "nonzeroExits": [],
+  "networkAttempts": 0,
+  "lockFixLlmRerun": false,
+  "lockFixVerification": "recorded choices replayed against independently seeded patched pinned-runtime; two controlled contention regressions and current source provider suites"
+}

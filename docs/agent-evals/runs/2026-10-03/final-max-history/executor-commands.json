@@ -1,0 +1,13 @@
+{
+  "executor": "independent-codex-task",
+  "threadId": "01a102e4-62b0-77e0-9fab-a9a9a72a70e4",
+  "modelSnapshot": null,
+  "sampling": null,
+  "turns": [
+    {
+      "id": "01a102e4-64c1-77f2-80ec-297a154900d5",
+      "status": "completed",
+      "commands": []
+    }
+  ]
+}

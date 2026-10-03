@@ -1,0 +1,87 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index e648f83..7035ec5 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -6,6 +6,11 @@ Notable changes to `@leemour/cli-messaging`, one section per version, newest fir
+ 
+ ## Unreleased
+ 
++### Fixed
++
++- Set the SQLite busy timeout before journal initialization so a new store connection waits for
++  a brief lock instead of failing immediately with `database is locked`.
++
+ ## 0.136.0 — 03.10.2026
+ 
+ Released early: max-cli streamed download adoption needs response MIME filename fix; 0.135 mislabels unnamed WebP photos as JPEG
+diff --git a/src/store/driver.ts b/src/store/driver.ts
+index 6155298..92fa443 100644
+--- a/src/store/driver.ts
++++ b/src/store/driver.ts
+@@ -38,7 +38,7 @@ export type OpenDatabase = (path: string) => CacheDatabase
+  * `foreign_keys` is off by default in SQLite, which surprises everyone once.
+  */
+ export const PRAGMAS = `
+-  PRAGMA journal_mode = WAL;
+   PRAGMA busy_timeout = 5000;
++  PRAGMA journal_mode = WAL;
+   PRAGMA foreign_keys = ON;
+ `
+diff --git a/src/store/open-concurrency.test.ts b/src/store/open-concurrency.test.ts
+new file mode 100644
+index 0000000..a7990be
+--- /dev/null
++++ b/src/store/open-concurrency.test.ts
+@@ -0,0 +1,52 @@
++import { fork } from "node:child_process"
++import { mkdtempSync, writeFileSync } from "node:fs"
++import { tmpdir } from "node:os"
++import { join } from "node:path"
++import { describe, expect, it } from "vitest"
++import { openCache } from "./open.js"
++import { openSqlite } from "./sqlite/open.js"
++
++const openers = {
++  cache: openCache,
++  store: async (path: string) => (await openSqlite(path)).database,
++}
++
++describe.each(Object.entries(openers))("%s connection contention", (_, open) => {
++  it("waits for a short lock before initializing journal mode", async () => {
++    ;(await open(":memory:")).close()
++    const directory = mkdtempSync(join(tmpdir(), "store-open-contention-"))
++    const path = join(directory, "messages.db")
++    const script = join(directory, "holder.mjs")
++    writeFileSync(
++      script,
++      `import { DatabaseSync } from "node:sqlite";
++const db = new DatabaseSync(process.argv[2]);
++db.exec("CREATE TABLE held (value INTEGER); BEGIN EXCLUSIVE; INSERT INTO held VALUES (1)");
++process.send("locked");
++process.on("message", () => setTimeout(() => {
++  db.exec("COMMIT"); db.close(); process.disconnect();
++}, 25));`,
++    )
++    const holder = fork(script, [path], { execArgv: [], stdio: ["ignore", "ignore", "ignore", "ipc"] })
++    const done = new Promise<void>((resolve, reject) => {
++      holder.once("error", reject)
++      holder.once("exit", (code) => (code === 0 ? resolve() : reject(new Error(`lock holder exited ${code}`))))
++    })
++    await new Promise<void>((resolve, reject) => {
++      holder.once("message", () => resolve())
++      holder.once("error", reject)
++    })
++    holder.send("release")
++    try {
++      const database = await open(path)
++      try {
++        expect(database.prepare("PRAGMA journal_mode").get()).toEqual({ journal_mode: "wal" })
++        expect(database.prepare("SELECT value FROM held").get()).toEqual({ value: 1 })
++      } finally {
++        database.close()
++      }
++    } finally {
++      await done
++    }
++  })
++})

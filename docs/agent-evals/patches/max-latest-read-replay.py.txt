@@ -1,0 +1,14 @@
+import json,subprocess,pathlib
+records=[]
+for case in ['history','meeting','contact']:
+ trace=pathlib.Path('/tmp/wirecat-cold-max-final-round3')/case/'trace.jsonl'
+ if not trace.exists(): continue
+ cfg=json.load(open(f'/tmp/wirecat-max-lock-latest/{case}/launcher.json'))
+ for i,line in enumerate(trace.read_text().splitlines()):
+  original=json.loads(line);a=original['argv']
+  clean=[v for v in a if v not in ['--offline','--json','--jsonl']]
+  if not clean or clean[0] in ['commands','skill','config','--help'] or any(v in clean for v in ['send','set','add','fetch','delete','edit','pin','forward','start','install','download']):continue
+  p=subprocess.run([cfg['node'],'--import',cfg['guard'],cfg['cli'],*a],env=cfg['env'],text=True,capture_output=True,timeout=20)
+  records.append({'case':case,'index':i,'argv':a,'originalExit':original['exitCode'],'exit':p.returncode,'stderr':p.stderr})
+print(json.dumps({'replayed':len(records),'nonzero':[r for r in records if r['exit']],'originalLockRetries':[r for r in records if r['originalExit']==1]},indent=2))
+pathlib.Path('/home/leemour/Projects/AI/cli-docs/docs/agent-evals/runs/2026-10-03/max-latest-read-replay.json').write_text(json.dumps({'records':records,'kind':'recorded-read-choices replay; no new agent decisions or byte equality assertion'},indent=2)+'\n')

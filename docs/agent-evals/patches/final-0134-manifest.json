@@ -1,0 +1,19 @@
+{
+  "sourceRevision": "5bf4d0961634823d868c546c5e39afee223dc0eb",
+  "sourceBranch": "fix/agent-discovery-final",
+  "version": "0.134.0",
+  "moduleHashes": {
+    "cli/commands-command.js": "5a32028540f7f5fef0b30907c6ca0d71492bc00b37c45d7e2a422b1e1663fe42",
+    "store/driver.js": "e0f06b194a5fb082dd8bee3a11ba70040447f32da51b7555e7e3f7a03631409b"
+  },
+  "distTreeHash": "90f806fb2a5b3796ed4f4759a68efb631605b1fa8eb8884aa8e3a18cf20e6b08",
+  "distFiles": 994,
+  "checks": {
+    "messagingTestsPassed": 1344,
+    "messagingTestsSkipped": 2,
+    "tgTestsPassed": 952,
+    "tgTestsSkipped": 1,
+    "maxTestsPassed": 1305,
+    "maxTestsSkipped": 2
+  }
+}
