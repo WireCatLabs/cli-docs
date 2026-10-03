@@ -1,0 +1,1055 @@
+:is(.wirecat-landing, .sp-docs-host) .search-playground {
+  --sp-accent: var(--key);
+  --sp-dim: #899591;
+  --sp-muted: var(--ink-soft);
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 76px 28px 90px;
+  color: var(--ink);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-heading {
+  max-width: 760px;
+  margin-bottom: 32px;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--sp-accent);
+  font:
+    500 12px / 1.4 Onest,
+    sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-heading h2 {
+  margin: 12px 0 14px;
+  font:
+    600 clamp(36px, 5vw, 62px) / 1.06 Anybody,
+    sans-serif;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-heading p {
+  margin: 0;
+  max-width: 650px;
+  font:
+    400 17px / 1.65 Onest,
+    sans-serif;
+  color: var(--sp-muted);
+  text-wrap: pretty;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-workspace {
+  overflow: visible;
+  border: 1px solid var(--app-line);
+  border-radius: 20px;
+  background: var(--app);
+  box-shadow:
+    0 22px 80px #0002,
+    inset 0 1px 0 #ffffff08;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-editor {
+  padding: 23px 28px 20px;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  color: var(--app-soft);
+  font:
+    400 12px / 1.4 Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-topline > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-topline > span:last-child {
+  border: 1px solid var(--app-line);
+  border-radius: 5px;
+  padding: 3px 7px;
+  font:
+    11px "JetBrains Mono",
+    monospace;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 12%, transparent);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-label {
+  display: block;
+  margin-bottom: 9px;
+  color: var(--app-ink);
+  font:
+    500 13px Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 0 16px;
+  border: 1px solid var(--app-line);
+  border-radius: 11px;
+  background: var(--app-2);
+  color: var(--app-soft);
+  transition:
+    border-color 150ms,
+    box-shadow 150ms;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-input-wrap:focus-within {
+  border-color: var(--sp-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--sp-accent) 12%, transparent);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  height: 58px;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  color: var(--app-ink);
+  background: transparent;
+  font:
+    400 15px / 1.5 "JetBrains Mono",
+    monospace;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-trigger {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 30px;
+  border: 0;
+  border-radius: 5px;
+  color: var(--app-soft);
+  background: transparent;
+  cursor: pointer;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-hint {
+  margin: 9px 0 0;
+  min-height: 18px;
+  color: var(--app-soft);
+  font:
+    400 12px / 1.5 Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-invalid {
+  border-color: #ed9f95;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 17px;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-filters button,
+:is(.wirecat-landing, .sp-docs-host) .sp-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid var(--app-line);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--app-soft);
+  font:
+    400 12px Onest,
+    sans-serif;
+  cursor: pointer;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-filters button:hover {
+  color: var(--app-ink);
+  border-color: var(--sp-dim);
+  background: var(--app-2);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-filters :where(button) > span {
+  color: var(--sp-dim);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-date input {
+  max-width: 117px;
+  border: 0;
+  background: transparent;
+  color: var(--app-soft);
+  font:
+    11px "JetBrains Mono",
+    monospace;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-zone {
+  margin-left: auto;
+  color: var(--sp-dim);
+  font:
+    11px Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-examples {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 22px;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-examples > span {
+  padding-right: 6px;
+  color: var(--sp-dim);
+  font:
+    12px Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-examples button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 9px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--app-soft);
+  font:
+    12px Onest,
+    sans-serif;
+  cursor: pointer;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-examples button[aria-pressed="true"] {
+  color: var(--sp-accent);
+  background: color-mix(in srgb, var(--sp-accent) 9%, transparent);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-results-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  border-top: 1px solid var(--app-line);
+  border-bottom: 1px solid var(--app-line);
+  background: var(--app-2);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-views {
+  display: flex;
+  gap: 22px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-views button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 47px;
+  padding: 0;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--app-soft);
+  font:
+    500 12px Onest,
+    sans-serif;
+  cursor: pointer;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-views button[aria-pressed="true"] {
+  color: var(--app-ink);
+  border-bottom-color: var(--sp-accent);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-views :where(button) > span {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--app-3);
+  color: var(--app-soft);
+  font:
+    10px "JetBrains Mono",
+    monospace;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-results-count {
+  color: var(--sp-dim);
+  font:
+    11px Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-results {
+  height: 350px;
+  padding: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--app-line) transparent;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-hit-list {
+  padding: 0 28px;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-hit {
+  position: relative;
+  width: 100%;
+  padding: 18px 0;
+  text-align: left;
+  border: 0;
+  border-bottom: 1px solid var(--app-line);
+  background: transparent;
+  color: var(--app-ink);
+  cursor: pointer;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-hit:last-child {
+  border-bottom: 0;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-hit:hover {
+  background: color-mix(in srgb, var(--sp-accent) 3%, transparent);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-hit-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  font:
+    11px Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-hit-meta strong {
+  font-weight: 500;
+  color: var(--app-soft);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-hit-meta time {
+  margin-left: auto;
+  color: var(--sp-dim);
+  font-size: 10px;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-provider {
+  border-radius: 4px;
+  padding: 2px 5px;
+  font-size: 9px;
+  font-weight: 500;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-telegram {
+  background: #279cd318;
+  color: #78c5eb;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-max {
+  background: #8b7dff18;
+  color: #b2a8ff;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-hit p {
+  display: flex;
+  gap: 13px;
+  margin: 10px 55px 0 0;
+  font:
+    400 13px / 1.7 Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-hit p > b {
+  min-width: 33px;
+  font-weight: 500;
+  color: var(--app-soft);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-read-context {
+  position: absolute;
+  right: 0;
+  bottom: 21px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--sp-dim);
+  font:
+    10px Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-context,
+:is(.wirecat-landing, .sp-docs-host) .sp-summary {
+  padding: 23px 28px;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-context-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font:
+    13px Onest,
+    sans-serif;
+  color: var(--app-ink);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-context-title > span {
+  margin-left: auto;
+  color: var(--app-soft);
+  font-size: 11px;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-context-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 13px 0 19px;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-context-picker button {
+  padding: 4px 7px;
+  border: 1px solid var(--app-line);
+  border-radius: 5px;
+  background: transparent;
+  color: var(--app-soft);
+  font:
+    10px Onest,
+    sans-serif;
+  cursor: pointer;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-context-picker button[aria-pressed="true"] {
+  border-color: var(--sp-accent);
+  color: var(--sp-accent);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-message {
+  padding: 13px 15px;
+  margin: 5px 0;
+  border-left: 2px solid transparent;
+  border-radius: 0 6px 6px 0;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-message header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  color: var(--app-soft);
+  font:
+    11px Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-message header > span {
+  color: var(--sp-accent);
+  font-size: 10px;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-message time {
+  font-size: 10px;
+  color: var(--sp-dim);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-message p {
+  margin: 6px 0 0;
+  color: var(--app-ink);
+  font:
+    13px / 1.65 Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-anchor {
+  border-left-color: var(--sp-accent);
+  background: color-mix(in srgb, var(--sp-accent) 7%, transparent);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-locator {
+  display: block;
+  margin-top: 15px;
+  color: var(--sp-dim);
+  font:
+    10px "JetBrains Mono",
+    monospace;
+  overflow-wrap: anywhere;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-summary h3 {
+  margin: 0 0 8px;
+  font:
+    500 16px / 1.5 Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-summary > p {
+  margin: 0 0 20px;
+  max-width: 700px;
+  color: var(--app-soft);
+  font:
+    12px / 1.6 Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-summary article {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  color: var(--ok);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-summary article h4 {
+  margin: 0;
+  color: var(--app-ink);
+  font:
+    500 14px / 1.6 Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-summary blockquote {
+  margin: 10px 0;
+  padding: 0 0 0 12px;
+  border-left: 1px solid var(--app-line);
+  color: var(--app-soft);
+  font:
+    12px / 1.65 Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-detail-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--app-2);
+  border-bottom: 1px solid var(--app-line);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-detail-bar button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--app-soft);
+  font:
+    12px Onest,
+    sans-serif;
+  white-space: nowrap;
+  overflow-wrap: normal;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-detail-bar button:first-child {
+  margin-right: auto;
+  white-space: normal;
+  flex-shrink: 1;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-detail-bar button[aria-pressed="true"] {
+  color: var(--key);
+  background: color-mix(in srgb, var(--key) 10%, transparent);
+}
+
+:is(.wirecat-landing, .sp-docs-host) .sp-summary article button {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--sp-accent);
+  font:
+    11px Onest,
+    sans-serif;
+  cursor: pointer;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-command {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 15px 20px;
+  border-top: 1px solid var(--app-line);
+  border-radius: 0 0 20px 20px;
+  background: var(--app-2);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-tool {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 4px 6px;
+  border: 0;
+  background: transparent;
+  color: var(--app-soft);
+  font:
+    11px Onest,
+    sans-serif;
+  cursor: pointer;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-command > code {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  padding: 2px 0;
+  color: var(--app-soft);
+  font:
+    10px / 1.5 "JetBrains Mono",
+    monospace;
+  white-space: pre-wrap;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-copy {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 7px 10px;
+  border: 1px solid var(--app-line);
+  border-radius: 6px;
+  background: var(--app-3);
+  color: var(--app-ink);
+  font:
+    10px Onest,
+    sans-serif;
+  cursor: pointer;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-copy:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-footnote {
+  display: flex;
+  align-items: flex-start;
+  gap: 26px;
+  justify-content: space-between;
+  margin-top: 19px;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-footnote p {
+  max-width: 610px;
+  margin: 0;
+  color: var(--ink-dim);
+  font:
+    11px / 1.6 Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-footnote > div {
+  display: flex;
+  gap: 15px;
+  flex-shrink: 0;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-footnote a {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--ink-soft);
+  font:
+    11px / 1.6 Onest,
+    sans-serif;
+  text-decoration: none;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-disclosure {
+  margin-top: 18px;
+  color: var(--ink-soft);
+  font:
+    12px / 1.6 Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-disclosure summary {
+  width: fit-content;
+  cursor: pointer;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-disclosure code {
+  display: block;
+  margin: 10px 0;
+  font:
+    11px "JetBrains Mono",
+    monospace;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-disclosure a {
+  color: var(--sp-accent);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-empty {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  height: 100%;
+  padding: 30px;
+  text-align: center;
+  color: var(--sp-dim);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-empty h3 {
+  margin: 15px 0 9px;
+  color: var(--app-soft);
+  font:
+    500 15px Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-empty p {
+  max-width: 440px;
+  margin: 0;
+  font:
+    12px / 1.7 Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-positioner {
+  z-index: 150;
+  width: min(440px, calc(100vw - 48px));
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-popup {
+  overflow: hidden;
+  border: 1px solid var(--app-line);
+  border-radius: 12px;
+  background: var(--app-2);
+  color: var(--app-ink);
+  box-shadow: 0 16px 55px #0005;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-popup-label {
+  padding: 12px 14px 8px;
+  color: var(--sp-dim);
+  font:
+    10px Onest,
+    sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-suggestion {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  outline: 0;
+  font:
+    12px "JetBrains Mono",
+    monospace;
+  cursor: pointer;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-suggestion[data-highlighted] {
+  background: color-mix(in srgb, var(--sp-accent) 12%, transparent);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-suggestion > small {
+  margin-left: auto;
+  color: var(--app-soft);
+  font:
+    10px Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-popup-footer {
+  padding: 10px 14px;
+  border-top: 1px solid var(--app-line);
+  color: var(--sp-dim);
+  font:
+    10px Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .search-playground :where(button, a, input, summary):focus-visible {
+  outline: 2px solid var(--sp-accent);
+  outline-offset: 4px;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-input:focus-visible {
+  outline: 0;
+}
+@media (max-width: 760px) {
+  :is(.wirecat-landing, .sp-docs-host) .search-playground {
+    padding: 50px 18px 60px;
+  }
+  :is(.wirecat-landing, .sp-docs-host) .sp-heading h2 {
+    font-size: 39px;
+  }
+  :is(.wirecat-landing, .sp-docs-host) .sp-heading p {
+    font-size: 15px;
+  }
+  :is(.wirecat-landing, .sp-docs-host) .sp-editor {
+    padding: 18px 17px;
+  }
+  :is(.wirecat-landing, .sp-docs-host) .sp-topline {
+    font-size: 10px;
+    gap: 10px;
+  }
+  :is(.wirecat-landing, .sp-docs-host) .sp-input {
+    height: 55px;
+    font-size: 12px;
+  }
+  :is(.wirecat-landing, .sp-docs-host) .sp-input-wrap {
+    gap: 9px;
+    padding: 0 11px;
+  }
+  :is(.wirecat-landing, .sp-docs-host) .sp-zone {
+    display: none;
+  }
+  :is(.wirecat-landing, .sp-docs-host) .sp-examples {
+    gap: 4px;
+  }
+  :is(.wirecat-landing, .sp-docs-host) .sp-examples > span {
+    width: 100%;
+  }
+  :is(.wirecat-landing, .sp-docs-host) .sp-results-bar {
+    padding: 0 17px;
+  }
+  :is(.wirecat-landing, .sp-docs-host) .sp-views {
+    gap: 18px;
+  }
+  :is(.wirecat-landing, .sp-docs-host) .sp-results-count {
+    display: none;
+  }
+  :is(.wirecat-landing, .sp-docs-host) .sp-hit-list {
+    padding: 0 17px;
+  }
+  :is(.wirecat-landing, .sp-docs-host) .sp-hit p {
+    margin-right: 0;
+  }
+  :is(.wirecat-landing, .sp-docs-host) .sp-read-context {
+    position: static;
+    margin: 8px 0 0 46px;
+  }
+  :is(.wirecat-landing, .sp-docs-host) .sp-context,
+  :is(.wirecat-landing, .sp-docs-host) .sp-summary {
+    padding: 19px 17px;
+  }
+  :is(.wirecat-landing, .sp-docs-host) .sp-command {
+    padding: 12px;
+    gap: 8px;
+  }
+  :is(.wirecat-landing, .sp-docs-host) .sp-copy span {
+    display: none;
+  }
+  :is(.wirecat-landing, .sp-docs-host) .sp-footnote {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(.wirecat-landing, .sp-docs-host) .sp-input-wrap {
+    transition: none;
+  }
+}
+
+.light :is(.wirecat-landing, .sp-docs-host) .sp-telegram {
+  color: #17698b;
+}
+.light :is(.wirecat-landing, .sp-docs-host) .sp-max {
+  color: #6550a8;
+}
+
+:is(.wirecat-landing, .sp-docs-host) .search-playground mark {
+  background: color-mix(in srgb, var(--sp-accent) 12%, transparent);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+.light :is(.wirecat-landing, .sp-docs-host) .search-playground {
+  --sp-dim: #617569;
+}
+
+/* The query decoration shares the textarea's wrapping and scroll position. */
+:is(.wirecat-landing, .sp-docs-host) .sp-heading h2 {
+  font-family: var(--display);
+  font-stretch: normal;
+  font-weight: 650;
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+}
+:where(html[lang="ru"]) :is(.wirecat-landing, .sp-docs-host) .sp-heading h2 {
+  font-family: "Fira Sans Extra Condensed", sans-serif;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-input-wrap {
+  align-items: flex-start;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-input-wrap > svg {
+  margin-top: 18px;
+  flex-shrink: 0;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-query-field {
+  position: relative;
+  min-width: 0;
+  flex: 1;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-input,
+:is(.wirecat-landing, .sp-docs-host) .sp-query-decoration {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 14px 0;
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font:
+    400 15px / 24px "JetBrains Mono",
+    monospace;
+  letter-spacing: 0;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-input {
+  display: block;
+  min-height: 58px;
+  max-height: 220px;
+  resize: none;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  position: relative;
+  z-index: 1;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-query-decoration {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  color: transparent;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-query-decoration .sp-query-error {
+  color: transparent;
+  background: #e1727240;
+  border-bottom: 2px solid #d86b6b;
+  padding: 0;
+  border-radius: 2px;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-clear {
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--app-soft);
+  width: 28px;
+  height: 30px;
+  margin-top: 14px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-trigger {
+  margin-top: 14px;
+  flex-shrink: 0;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-filters button[aria-pressed="true"],
+:is(.wirecat-landing, .sp-docs-host) .sp-filter-active {
+  color: var(--sp-accent);
+  background: color-mix(in srgb, var(--sp-accent) 10%, transparent);
+  border-color: color-mix(in srgb, var(--sp-accent) 45%, var(--app-line));
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-date {
+  padding: 0 8px 0 0;
+  gap: 2px;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-date .sp-date-presets,
+:is(.wirecat-landing, .sp-docs-host) .sp-date .sp-remove-date {
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-date .sp-remove-date {
+  padding: 6px 4px;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-help {
+  position: relative;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-help summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font:
+    11px Onest,
+    sans-serif;
+  list-style: none;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-help summary::-webkit-details-marker {
+  display: none;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-help-content {
+  position: absolute;
+  right: 0;
+  top: 27px;
+  z-index: 30;
+  width: min(360px, calc(100vw - 80px));
+  padding: 16px;
+  border-radius: 10px;
+  border: 1px solid var(--app-line);
+  background: var(--app-2);
+  box-shadow: 0 12px 45px #0003;
+  color: var(--app-ink);
+  font:
+    12px / 1.6 Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-help-content p {
+  margin: 0 0 10px;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-help-content code {
+  display: block;
+  white-space: normal;
+  font:
+    11px / 1.7 "JetBrains Mono",
+    monospace;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-help-content a {
+  display: block;
+  margin-top: 12px;
+  color: var(--sp-accent);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-popup [role="listbox"] {
+  max-height: 270px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-results {
+  height: 320px;
+}
+@media (max-width: 760px) {
+  :is(.wirecat-landing, .sp-docs-host) .sp-input,
+  :is(.wirecat-landing, .sp-docs-host) .sp-query-decoration {
+    font-size: 12px;
+    line-height: 22px;
+  }
+}
+
+.sp-docs-host {
+  --display: "Anybody", sans-serif;
+  --ink: #182822;
+  --ink-soft: #465c4f;
+  --ink-dim: #617569;
+  --app: #fff;
+  --app-2: #f3f6f4;
+  --app-3: #e5ece7;
+  --app-line: #ccd7cf;
+  --app-ink: #182822;
+  --app-soft: #465c4f;
+  --app-dim: #617569;
+  --key: #5145b8;
+  --ok: #2f7b4e;
+}
+.dark .sp-docs-host {
+  --ink: #e9eeec;
+  --ink-soft: #a7b1ae;
+  --ink-dim: #8a9792;
+  --app: #0d0f10;
+  --app-2: #141719;
+  --app-3: #1c2023;
+  --app-line: #2a3034;
+  --app-ink: #e9eeec;
+  --app-soft: #98a29f;
+  --key: #9ea4ff;
+  --ok: #7fd49b;
+}
+.sp-docs-host .search-playground.sp-embedded {
+  margin: 24px 0;
+  padding: 0;
+  max-width: 100%;
+}
+.sp-docs-host .sp-embedded.search-playground .sp-heading h2 {
+  font-size: 32px;
+  font-family: inherit;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+.sp-docs-host .sp-heading p {
+  font-size: 14px;
+}
+.sp-docs-host .sp-footnote {
+  flex-direction: column;
+  gap: 12px;
+}
+.sp-docs-host .sp-embedded .sp-telegram {
+  color: #17698b;
+}
+.sp-docs-host .sp-embedded .sp-max {
+  color: #6550a8;
+}
+.dark .sp-docs-host .sp-embedded .sp-telegram {
+  color: #78c5eb;
+}
+.dark .sp-docs-host .sp-embedded .sp-max {
+  color: #b2a8ff;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-autocomplete-box {
+  position: relative;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-help-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: transparent;
+  color: var(--app-soft);
+  cursor: pointer;
+  font:
+    11px Onest,
+    sans-serif;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-help-content {
+  position: relative;
+  top: auto;
+  right: auto;
+}
+.sp-docs-host .search-playground.sp-embedded {
+  --sp-dim: #617569;
+}
+.dark .sp-docs-host .search-playground.sp-embedded {
+  --sp-dim: #899591;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-input-wrap.sp-invalid:focus-within {
+  border-color: #d86b6b;
+  box-shadow: 0 0 0 3px #e172721c;
+}

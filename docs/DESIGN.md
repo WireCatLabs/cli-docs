@@ -37,6 +37,7 @@ wirecat.dev/
 ├── /{lang}/docs                   getting started: choose a messenger and a path              ✅
 ├── /{lang}/docs/installation      install with an agent or terminal, log in, first check        ✅
 ├── /{lang}/docs/agents            Codex, Cursor, Claude Code, Gemini CLI, Hermes                ✅
+├── /{lang}/docs/search-playground  interactive search on a fictional local archive            🟡
 ├── /{lang}/docs/mcp               MCP connections and documentation for agents                ✅
 ├── /{lang}/docs/{tool}            the tool's start page (its docs/index.md)                   ✅
 ├── /{lang}/docs/{tool}/{page}     one page of STRUCTURE.md                                    ✅
@@ -70,6 +71,7 @@ Reduced motion removes the menu fade and chevron transition, retaining brief col
 After the interactive scenarios, sections appear in this order: benefits, Telegram/MAX,
 why it works, the daily habit, and the closing CTA. The daily habit is four short moments at
 08:00, 11:00, 15:00 and 19:00, with one action and result each; it has no duplicate command demos.
+The interactive search playground follows the closing CTA. Its multiline query editor offers value suggestions and reversible filters; invalid edits retain the last valid results. Matches and All let visitors filter or browse the sample archive; editing or submitting a query returns to Matches. Suggestions show fields first, then sample values inside a field. Context and cited summaries open from a message. The same component appears in the shared documentation.
 Only feature variant 6 is published, with its groups
 always open; prototype design switches and hidden experiments are removed.
 

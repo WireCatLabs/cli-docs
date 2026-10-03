@@ -234,6 +234,7 @@ for (const lang of ["en", "ru", "es"]) {
       `<div class="footer-controls">${themeButton}<details class="lang footer-language"><summary aria-label="${languageLabel}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg><span>${lang.toUpperCase()}</span><svg class="dn" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary><div class="lang-menu">${links}</div></details></div>`,
   )
   html = html.replace(sourceFooter, "")
+  html += "\n<div data-search-playground></div>"
   writeFileSync(
     `lib/landing/${lang}.json`,
     `${JSON.stringify({ html: html.trim(), footerHtml, sessions, maxSessions }, null, 2)}\n`,

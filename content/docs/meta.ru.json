@@ -1,3 +1,14 @@
 {
-  "pages": ["index", "installation", "agents", "first-tasks", "prompting", "mcp", "---Мессенджеры---", "tg", "max"]
+  "pages": [
+    "index",
+    "installation",
+    "agents",
+    "first-tasks",
+    "prompting",
+    "search-playground",
+    "mcp",
+    "---Мессенджеры---",
+    "tg",
+    "max"
+  ]
 }
