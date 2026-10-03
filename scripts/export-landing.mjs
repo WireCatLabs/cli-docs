@@ -126,9 +126,8 @@ let localeTypography = ""
 for (const lang of ["en", "ru", "es"]) {
   const source = readFileSync(`design/landing/g-home${lang === "en" ? "" : `.${lang}`}.html`, "utf8")
   const script = source.match(/<script>([\s\S]*?)<\/script>/)[1]
-  // Preserve the font selected in the reviewed prototype, including Russian data-ff="3".
-  const fonts = runInNewContext(`(${script.match(/const fonts = (\[[\s\S]*?\n {2}\])\n/)[1]})`)
-  const font = fonts[Number(source.match(/data-ff="(\d+)"/)?.[1] ?? 0)]
+  // The chosen heading family is shared across Latin and Cyrillic locales.
+  const font = { stack: '"Unbounded", sans-serif', stretch: "100%", weight: 800 }
   localeTypography += `\nhtml[lang="${lang}"] .wirecat-landing { --heading-family: ${font.stack}; --heading-stretch: ${font.stretch}; --heading-weight: ${font.weight}; }\n`
 
   // Evaluate only the constant sample data from our own design source, at export time.
@@ -281,7 +280,7 @@ for (const lang of ["en", "ru", "es"]) {
   const reset =
     ".wirecat-landing { min-height: 100vh; overflow-wrap: anywhere; }\n.wirecat-landing :where(h1,h2,h3,h4,p,ul,ol,dl,pre) { margin: revert; padding: revert; font-size: revert; font-weight: revert; }\n.wirecat-landing :where(ul,ol) { list-style: revert; }\n.wirecat-landing :where(svg) { display: inline; vertical-align: middle; }\n"
   const typography =
-    '\n.wirecat-landing :is(h1,h2.big,.hour h3,.time,.lane h3,.tool-name,.spec dt) { font-family: var(--heading-family, "Anybody"); font-stretch: var(--heading-stretch, 62%); font-weight: var(--heading-weight, 900); }\n'
+    '\n.wirecat-landing :is(h1,h2,h3,h4,.hour h3,.time,.lane h3,.tool-name,.spec dt) { font-family: var(--heading-family, "Anybody"); font-stretch: var(--heading-stretch, 62%); font-weight: var(--heading-weight, 900); }\n'
   const patternScript = script.slice(script.indexOf("const shapes ="), script.indexOf("let wall ="))
   const background = {}
   runInNewContext(`${patternScript}\nscatter(["plane", "sleeping"])`, {
@@ -294,5 +293,24 @@ for (const lang of ["en", "ru", "es"]) {
   )
 }
 
-appendFileSync("lib/landing/landing.css", localeTypography)
+appendFileSync(
+  "lib/landing/landing.css",
+  `${localeTypography}
+/* Unbounded is wider than the previous condensed faces: keep display headings compact. */
+html[lang] .wirecat-landing :is(h1, #headline) {
+  font-size: clamp(26px, 3.25vw, 40px);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+html[lang] .wirecat-landing :is(h2.big, .sp-heading h2.big) {
+  font-size: clamp(22px, 2.5vw, 34px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+html[lang] .wirecat-landing .tool-name {
+  font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.25;
+}
+`,
+)
 execFileSync("pnpm", ["exec", "biome", "format", "--write", "lib/landing"], { stdio: "inherit" })

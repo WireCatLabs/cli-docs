@@ -2020,7 +2020,7 @@
   display: block;
 }
 
-.wirecat-landing :is(h1, h2.big, .hour h3, .time, .lane h3, .tool-name, .spec dt) {
+.wirecat-landing :is(h1, h2, h3, h4, .hour h3, .time, .lane h3, .tool-name, .spec dt) {
   font-family: var(--heading-family, "Anybody");
   font-stretch: var(--heading-stretch, 62%);
   font-weight: var(--heading-weight, 900);
@@ -2046,19 +2046,35 @@
 }
 
 html[lang="en"] .wirecat-landing {
-  --heading-family: "Anybody", "Oswald", "Onest", sans-serif;
-  --heading-stretch: 62%;
-  --heading-weight: 900;
+  --heading-family: "Unbounded", sans-serif;
+  --heading-stretch: 100%;
+  --heading-weight: 800;
 }
 
 html[lang="ru"] .wirecat-landing {
-  --heading-family: "Fira Sans Extra Condensed", sans-serif;
+  --heading-family: "Unbounded", sans-serif;
   --heading-stretch: 100%;
-  --heading-weight: 900;
+  --heading-weight: 800;
 }
 
 html[lang="es"] .wirecat-landing {
-  --heading-family: "Anybody", "Oswald", "Onest", sans-serif;
-  --heading-stretch: 62%;
-  --heading-weight: 900;
+  --heading-family: "Unbounded", sans-serif;
+  --heading-stretch: 100%;
+  --heading-weight: 800;
+}
+
+/* Unbounded is wider than the previous condensed faces: keep display headings compact. */
+html[lang] .wirecat-landing :is(h1, #headline) {
+  font-size: clamp(26px, 3.25vw, 40px);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+html[lang] .wirecat-landing :is(h2.big, .sp-heading h2.big) {
+  font-size: clamp(22px, 2.5vw, 34px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+html[lang] .wirecat-landing .tool-name {
+  font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.25;
 }

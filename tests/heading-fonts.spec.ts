@@ -19,8 +19,16 @@ test("search uses the same heading face; font comparison stays opt-in", async ({
       await page.locator("h2.big").first().evaluate(typography),
     )
     await expect(page.locator(".font-lab")).toHaveCount(0)
+    expect((await page.locator("h1").evaluate(typography))[0]).toContain("Unbounded")
+    expect(await page.locator("h1").evaluate((el) => parseFloat(getComputedStyle(el).fontSize))).toBeLessThanOrEqual(40)
+    expect(
+      await page
+        .locator("h2.big")
+        .first()
+        .evaluate((el) => parseFloat(getComputedStyle(el).fontSize)),
+    ).toBeLessThanOrEqual(34)
   }
-  expect(fontRequests).toEqual([])
+  expect(fontRequests.every((url) => /unbounded-(latin|cyrillic)\.woff2$/u.test(url))).toBe(true)
 })
 
 test("all eight Cyrillic fonts load locally and update hero, section and search headings together", async ({
@@ -53,7 +61,7 @@ test("all eight Cyrillic fonts load locally and update hero, section and search 
   await page.getByRole("button", { name: "Previous font", exact: true }).click()
   await expect(picker).toHaveValue("unbounded")
   await page.getByRole("button", { name: "Reset font", exact: true }).click()
-  await expect(page.locator(".wirecat-landing")).toHaveAttribute("data-heading-font", "firasansextracondensed")
+  await expect(page.locator(".wirecat-landing")).toHaveAttribute("data-heading-font", "unbounded")
   const results = await new AxeBuilder({ page }).include(".font-lab").withTags(["wcag2a", "wcag2aa"]).analyze()
   expect(results.violations).toEqual([])
   expect(failures).toEqual([])
@@ -71,7 +79,7 @@ test("Russian rotation uses fonts with Cyrillic; a choice survives reload and fi
   }
   await page.getByRole("button", { name: "Сбросить шрифт", exact: true }).click()
   await page.getByRole("button", { name: "Следующий шрифт", exact: true }).click()
-  await expect(page.locator(".wirecat-landing")).toHaveAttribute("data-heading-font", "sofiasanscondensed")
+  await expect(page.locator(".wirecat-landing")).toHaveAttribute("data-heading-font", "robotocondensed")
   await picker.selectOption("manrope")
   await expect(page.locator(".wirecat-landing")).toHaveAttribute("data-heading-font", "manrope")
   await page.reload()
@@ -101,10 +109,10 @@ test("wide display fonts keep the final word and punctuation together on mobile"
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
 })
 
-test("removed Latin-only choices fall back to Fira and update the shared URL", async ({ page }) => {
+test("removed Latin-only choices fall back to Unbounded and update the shared URL", async ({ page }) => {
   await page.goto("/en?fonts=1&font=archivo&scenario=commitments#search-playground")
-  await expect(page.locator(".wirecat-landing")).toHaveAttribute("data-heading-font", "firasansextracondensed")
-  await expect(page).toHaveURL(/font=firasansextracondensed/u)
+  await expect(page.locator(".wirecat-landing")).toHaveAttribute("data-heading-font", "unbounded")
+  await expect(page).toHaveURL(/font=unbounded/u)
   await expect(page).toHaveURL(/scenario=commitments/u)
   const picker = page.getByRole("combobox", { name: "Heading fonts", exact: true })
   await expect(picker.locator("option")).toHaveCount(8)
