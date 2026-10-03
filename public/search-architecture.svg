@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 670" role="img" aria-labelledby="title desc">
+  <title id="title">Two retrieval paths over one local archive</title>
+  <desc id="desc">Stored messages feed strict Lucene queries or an explicitly built per-chat relationship graph. Graph conversations are chunked and optionally embedded. Natural-language conversation search fuses vectors and word matches. Both paths lead back to original source messages for the agent.</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#64748b"/></marker></defs>
+  <rect width="1000" height="670" rx="20" fill="#f8fafc"/>
+  <g font-family="system-ui, sans-serif" text-anchor="middle" fill="#17243a">
+    <text x="500" y="36" font-size="21" font-weight="700">One archive. Two different retrieval paths.</text>
+    <rect x="290" y="56" width="420" height="65" rx="12" fill="#e9edf6" stroke="#b1bdd0"/>
+    <text x="500" y="84" font-size="18" font-weight="650">Local SQLite archive</text><text x="500" y="106" font-size="13">provider / account / chat / message + coverage</text>
+    <g stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"><path d="M350 122V146H240V164"/><path d="M650 122V146H760V164"/></g>
+    <rect x="60" y="165" width="360" height="81" rx="12" fill="white" stroke="#b1bdd0"/>
+    <text x="240" y="196" font-size="18" font-weight="650">Strict message query</text><text x="240" y="220" font-size="14">Lucene → validate → resolve scope</text>
+    <rect x="580" y="165" width="360" height="81" rx="12" fill="white" stroke="#b1bdd0"/>
+    <text x="760" y="196" font-size="18" font-weight="650">Explicit conversation build</text><text x="760" y="220" font-size="14">reply → agent answer → heuristic links</text>
+    <g stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"><path d="M240 247V277"/><path d="M760 247V277"/></g>
+    <rect x="60" y="278" width="360" height="81" rx="12" fill="white" stroke="#b1bdd0"/>
+    <text x="240" y="309" font-size="18" font-weight="650">Word index + metadata predicates</text><text x="240" y="333" font-size="14">parameterized SQL + bounded patterns</text>
+    <rect x="580" y="278" width="360" height="81" rx="12" fill="white" stroke="#b1bdd0"/>
+    <text x="760" y="309" font-size="18" font-weight="650">Conversations → text chunks</text><text x="760" y="333" font-size="14">content hashes + optional embedding vectors</text>
+    <g stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"><path d="M240 360V390"/><path d="M760 360V390"/></g>
+    <rect x="60" y="391" width="360" height="81" rx="12" fill="white" stroke="#b1bdd0"/>
+    <text x="240" y="422" font-size="18" font-weight="650">Matching messages</text><text x="240" y="446" font-size="14">locators + optional chronological context</text>
+    <rect x="580" y="391" width="360" height="81" rx="12" fill="white" stroke="#b1bdd0"/>
+    <text x="760" y="422" font-size="18" font-weight="650">Natural-language conversation search</text><text x="760" y="446" font-size="14">cosine vector scan + words → rank fusion</text>
+    <g stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"><path d="M240 473V495H500V520"/><path d="M760 473V495H500V520"/></g>
+    <rect x="225" y="521" width="550" height="85" rx="12" fill="#e9edf6" stroke="#b1bdd0"/>
+    <text x="500" y="553" font-size="18" font-weight="650">Open the original messages / conversation</text><text x="500" y="579" font-size="14">Agent interprets evidence, states coverage and cites sources</text>
+    <text x="500" y="643" font-size="13" fill="#526176">Local search does not fetch missing history or automatically summarize a chat.</text>
+  </g>
+</svg>
