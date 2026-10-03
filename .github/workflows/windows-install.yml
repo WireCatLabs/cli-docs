@@ -22,14 +22,21 @@ jobs:
       matrix:
         tool: [max, tg]
         node: ["22.16.0", "24"]
-        shell: [pwsh, powershell]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: ${{ matrix.node }}
       - name: Install and check the published CLI
-        shell: ${{ matrix.shell }}
+        shell: pwsh
         env:
           WIRECAT_TOOL: ${{ matrix.tool }}
         run: ./scripts/windows-install.ps1 -Tool $env:WIRECAT_TOOL
+
+      - name: Install and check with built-in PowerShell 5.1
+        shell: pwsh
+        env:
+          WIRECAT_TOOL: ${{ matrix.tool }}
+        run: |
+          & powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File ./scripts/windows-install.ps1 -Tool $env:WIRECAT_TOOL
+          if ($LASTEXITCODE -ne 0) { throw 'PowerShell 5.1 installation check failed' }
