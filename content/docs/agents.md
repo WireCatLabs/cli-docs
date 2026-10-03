@@ -3,6 +3,8 @@ title: "Connect your agent"
 description: "Set up Codex, Cursor, Claude Code, Gemini CLI or Hermes to work with Telegram and MAX."
 ---
 
+The Windows installer already installs the skill before login. Read `tg skill show` or `max skill show` and verify that your agent loaded it. The commands below refresh a skill or install it separately after another installation method.
+
 First [install the CLI and log in](./installation.mdx). Your local agent can call `tg` or `max`
 in its terminal. A **skill** teaches it the commands, output formats and workflows; it does not
 replace installation or login. [MCP](./mcp.md) is another way to expose tools to the agent.

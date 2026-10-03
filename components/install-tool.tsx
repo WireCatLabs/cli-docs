@@ -49,7 +49,7 @@ export function InstallTool({ tool, lang }: { tool: Tool; lang: string }) {
   }, [tool.name])
   const docs = `${siteUrl}/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}installation/content.md`
   const login = tool.name === "tg" ? "session start --app auto" : "session start qr"
-  const runner = `npm.cmd exec --yes --package=${tool.package} -- ${tool.name}`
+  const installer = `& ([scriptblock]::Create((Invoke-RestMethod '${siteUrl}/install.ps1'))) -Tool ${tool.name} -Agent all`
   return (
     <details
       id={tool.name}
@@ -75,10 +75,10 @@ export function InstallTool({ tool, lang }: { tool: Tool; lang: string }) {
             </a>
             <CopyText
               lang={lang}
-              text={`npm install -g ${tool.package}\n${tool.name} --version\n${tool.name} doctor`}
+              text={`npm install -g ${tool.package}\n${tool.name} skill install --for all\n${tool.name} --version\n${tool.name} doctor`}
             />
             <p className="text-sm text-fd-muted-foreground">{ui.windows}</p>
-            <CopyText lang={lang} text={`${runner} --version\n${runner} doctor\n${runner} ${login}`} />
+            <CopyText lang={lang} text={installer} />
             <p className="text-sm font-medium">{ui.login}</p>
             <CopyText lang={lang} text={`${tool.name} ${login}`} />
             {tool.name === "tg" && <p className="text-sm text-fd-muted-foreground">{ui.telegram}</p>}

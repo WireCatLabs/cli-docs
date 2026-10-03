@@ -139,16 +139,20 @@ max chats list --limit 5
 
 ### Windows
 
-Если PowerShell блокирует `npm.ps1`, вызывайте `npm.cmd`, а установленную команду — через
-`tg.cmd` или `max.cmd`. Если команда не находится на PATH, можно запустить пакет без изменения PATH:
+Выполните одну команду PowerShell для своего мессенджера:
 
 ```powershell
-npm.cmd exec --yes --package=@leemour/tg-cli -- tg doctor
+& ([scriptblock]::Create((Invoke-RestMethod 'https://wirecat.dev/install.ps1'))) -Tool tg -Agent all
 ```
 
 ```powershell
-npm.cmd exec --yes --package=@leemour/max-cli -- max doctor
+& ([scriptblock]::Create((Invoke-RestMethod 'https://wirecat.dev/install.ps1'))) -Tool max -Agent all
 ```
 
-С тем же префиксом запускайте `session start` и другие команды, пока исправляете PATH.
-Для MCP нужна постоянная установка: `mcp config` не использует временный путь npm cache.
+Установщик ставит npm-пакет, сохраняет прежние записи PATH пользователя, обновляет текущий
+PowerShell, устанавливает навык агента и проверяет запуск `tg` или `max` по имени.
+Редактировать PATH вручную не нужно. Это работает и при отключённых install scripts npm.
+Установщик оставляет `.cmd` и удаляет только созданный npm PowerShell shim этого пакета;
+политика выполнения не меняется. `-Agent codex|cursor|claude|gemini|all|none` выбирает навык;
+по умолчанию — `all`. Уже запущенный агент сам обновляет окружение своего терминала перед
+следующими командами. При входе код или QR по-прежнему подтверждает владелец локально.
