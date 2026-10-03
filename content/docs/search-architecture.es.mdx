@@ -107,7 +107,7 @@ Antes de calcular el vector, se reconstruye el texto actual y se compara con su 
 - **Significado:** convierte el query con el modelo elegido, examina vectores de las construcciones actuales en la cuenta/chat y conserva el mejor fragmento de cada conversación.
 - **Palabras:** extrae palabras, las une con OR para buscar mensajes y los relaciona con sus conversaciones construidas.
 
-Combina las listas mediante reciprocal rank fusion: cada una aporta `1 / (60 + rank)`, comenzando en 1. `by` indica `["meaning"]`, `["words"]` o ambos. `score` es el coseno del mejor fragmento, no la puntuación de fusión ni la probabilidad de una respuesta correcta; las coincidencias solo de palabras tienen `score: null`.
+Combina las listas mediante reciprocal rank fusion: cada una aporta `1 / (60 + rank)`, comenzando en 1. `by` indica `["meaning"]`, `["words"]` o ambos. `summary` contiene metadatos de conversación (IDs, fechas, número de mensajes), no texto generado. `score` es el coseno del mejor fragmento, no la puntuación de fusión ni la probabilidad de una respuesta correcta; las coincidencias solo de palabras tienen `score: null`.
 
 Los vectores son blobs de SQLite. La implementación los lee por páginas y calcula similitud en JavaScript: no tiene un índice ANN/vectorial ni una base vectorial separada. Las páginas acotan los vectores cargados a la vez, pero el trabajo total crece con los fragmentos del ámbito.
 
