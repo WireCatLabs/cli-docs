@@ -1,14 +1,34 @@
 "use client"
 
+import { useTheme } from "next-themes"
 import { useEffect, useRef } from "react"
 
 type Step = { html: string; tool: boolean; delay: number }
 type Session = { title: string; hint: string; steps: Step[] }
-type Props = { html: string; sessions: Session[] }
+type Props = { html: string; sessions: Session[]; lang: string }
 
 /** The markup and demo responses are exported from our reviewed static prototypes. */
-export function Landing({ html, sessions }: Props) {
+export function Landing({ html, sessions, lang }: Props) {
   const rootRef = useRef<HTMLDivElement>(null)
+  const { resolvedTheme, setTheme } = useTheme()
+  useEffect(() => {
+    const button = rootRef.current?.querySelector<HTMLButtonElement>(".theme-toggle")
+    if (!button) return
+    const dark = resolvedTheme === "dark"
+    const label =
+      (
+        {
+          en: dark ? "Switch to light theme" : "Switch to dark theme",
+          ru: dark ? "Включить светлую тему" : "Включить тёмную тему",
+          es: dark ? "Cambiar al tema claro" : "Cambiar al tema oscuro",
+        } as Record<string, string>
+      )[lang] ?? "Switch theme"
+    button.setAttribute("aria-label", label)
+    button.setAttribute("title", label)
+    const toggle = () => setTheme(dark ? "light" : "dark")
+    button.addEventListener("click", toggle)
+    return () => button.removeEventListener("click", toggle)
+  }, [lang, resolvedTheme, setTheme])
   useEffect(() => {
     const root = rootRef.current
     if (!root) return

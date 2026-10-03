@@ -9,7 +9,7 @@ type Props = { params: Promise<{ lang: string }> }
 export default async function HomePage({ params }: Props) {
   const { lang } = await params
   const content = lang === "ru" ? ru : lang === "es" ? es : en
-  return <Landing {...content} />
+  return <Landing {...content} lang={lang} />
 }
 
 export function generateStaticParams() {
