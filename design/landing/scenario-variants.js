@@ -1,4 +1,3 @@
-// Eight selected landing scenarios. Full scenario bank: docs/LANDING_SCENARIOS.md.
 window.WireScenarioVariants = {
   "en": [
     {
@@ -61,7 +60,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Tom\",\n      \"text\": \"Test payments work. I still need access to production.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg messages search \"Atlas\" --chat 503",
+          "tool": "tg messages search \"Atlas\" --chat 503 --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Tom\",\n      \"text\": \"Test payments work. I still need access to production.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -117,7 +116,7 @@ window.WireScenarioVariants = {
           "ask": "Use tg cli, find SQL course recommendations across Telegram and MAX. I want exercises and feedback."
         },
         {
-          "tool": "tg messages search \"SQL\" --source all --limit 10",
+          "tool": "tg messages search \"SQL\" --source all --limit 10 --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"chatId\": \"601\",\n      \"chat\": \"Analytics · community\",\n      \"messenger\": \"tg\",\n      \"date\": \"2026-10-02T09:00:00Z\",\n      \"text\": \"Took a SQL workshop: weekly exercises and feedback from the instructor.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\",\n      \"senderName\": \"Daria\"\n    },\n    {\n      \"id\": \"67210\",\n      \"chatId\": \"701\",\n      \"chat\": \"Team · learning\",\n      \"messenger\": \"max\",\n      \"date\": \"2026-10-02T12:00:00Z\",\n      \"text\": \"The SQL video course helped with basics, but nobody reviewed my work.\",\n      \"timestamp\": \"2026-10-02T12:00:00Z\",\n      \"senderName\": \"Alex\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -425,7 +424,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Tom\",\n      \"text\": \"Here’s the first design draft. I’ll finalise it after your feedback.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg messages search \"design\" --chat 503",
+          "tool": "tg messages search \"design\" --chat 503 --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Tom\",\n      \"text\": \"Here’s the first design draft. I’ll finalise it after your feedback.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -529,7 +528,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"101\",\n      \"title\": \"Atlas · team\"\n    },\n    {\n      \"id\": \"102\",\n      \"title\": \"Atlas · design\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg messages search \"contract OR invoice OR presentation\" --chat \"Atlas · team\"",
+          "tool": "tg messages search \"contract OR invoice OR presentation\" --chat \"Atlas · team\" --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Anna\",\n      \"text\": \"Atlas presentation v2.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    },\n    {\n      \"id\": \"48211\",\n      \"senderName\": \"Marco\",\n      \"text\": \"Invoice for the first phase.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    },\n    {\n      \"id\": \"48212\",\n      \"senderName\": \"Tom\",\n      \"text\": \"Contract — initial draft.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -569,11 +568,11 @@ window.WireScenarioVariants = {
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"501\",\n      \"title\": \"Anna\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg messages search \"contract\" --chat 501",
+          "tool": "tg messages search \"contract\" --chat 501 --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Anna\",\n      \"text\": \"Final Atlas contract. Payment terms updated.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg messages search \"presentation\" --chat \"Atlas · design\"",
+          "tool": "tg messages search \"presentation\" --chat \"Atlas · design\" --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Anna\",\n      \"text\": \"Atlas presentation v3, with updated designs.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -601,7 +600,7 @@ window.WireScenarioVariants = {
           "ask": "Check the remaining invoices and download the current files into an Atlas folder. Don’t send anything."
         },
         {
-          "tool": "tg messages search \"invoice\" --chat 501",
+          "tool": "tg messages search \"invoice\" --chat 501 --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48213\",\n      \"senderName\": \"Anna\",\n      \"text\": \"The second-phase invoice hasn’t been issued yet.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -769,7 +768,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Tom\",\n      \"text\": \"Los pagos de prueba funcionan. Todavía necesito acceso a producción.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg messages search \"Atlas\" --chat 503",
+          "tool": "tg messages search \"Atlas\" --chat 503 --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Tom\",\n      \"text\": \"Los pagos de prueba funcionan. Todavía necesito acceso a producción.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -825,7 +824,7 @@ window.WireScenarioVariants = {
           "ask": "Usa tg cli, busca recomendaciones de cursos de SQL en Telegram y MAX. Quiero ejercicios y comentarios del profesor."
         },
         {
-          "tool": "tg messages search \"SQL\" --source all --limit 10",
+          "tool": "tg messages search \"SQL\" --source all --limit 10 --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"chatId\": \"601\",\n      \"chat\": \"Analistas · comunidad\",\n      \"messenger\": \"tg\",\n      \"date\": \"2026-10-02T09:00:00Z\",\n      \"text\": \"Hice un taller de SQL: ejercicios semanales y comentarios del profesor.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\",\n      \"senderName\": \"Daria\"\n    },\n    {\n      \"id\": \"67210\",\n      \"chatId\": \"701\",\n      \"chat\": \"Equipo · formación\",\n      \"messenger\": \"max\",\n      \"date\": \"2026-10-02T12:00:00Z\",\n      \"text\": \"El curso de vídeos de SQL me ayudó con lo básico, pero nadie revisaba los ejercicios.\",\n      \"timestamp\": \"2026-10-02T12:00:00Z\",\n      \"senderName\": \"Álex\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1133,7 +1132,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Tom\",\n      \"text\": \"Aquí está la primera versión de la maqueta. La cerraré después de vuestros comentarios.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg messages search \"maqueta\" --chat 503",
+          "tool": "tg messages search \"maqueta\" --chat 503 --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Tom\",\n      \"text\": \"Aquí está la primera versión de la maqueta. La cerraré después de vuestros comentarios.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1237,7 +1236,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"101\",\n      \"title\": \"Atlas · equipo\"\n    },\n    {\n      \"id\": \"102\",\n      \"title\": \"Atlas · diseño\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg messages search \"contrato OR factura OR presentación\" --chat \"Atlas · equipo\"",
+          "tool": "tg messages search \"contrato OR factura OR presentación\" --chat \"Atlas · equipo\" --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Anna\",\n      \"text\": \"Presentación de Atlas v2.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    },\n    {\n      \"id\": \"48211\",\n      \"senderName\": \"Marco\",\n      \"text\": \"Factura de la primera fase.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    },\n    {\n      \"id\": \"48212\",\n      \"senderName\": \"Tom\",\n      \"text\": \"Contrato: versión preliminar.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1277,11 +1276,11 @@ window.WireScenarioVariants = {
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"501\",\n      \"title\": \"Anna\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg messages search \"contrato\" --chat 501",
+          "tool": "tg messages search \"contrato\" --chat 501 --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Anna\",\n      \"text\": \"Contrato final de Atlas. Condiciones de pago actualizadas.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg messages search \"presentación\" --chat \"Atlas · diseño\"",
+          "tool": "tg messages search \"presentación\" --chat \"Atlas · diseño\" --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Anna\",\n      \"text\": \"Presentación de Atlas v3, con las maquetas actualizadas.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1317,7 +1316,7 @@ window.WireScenarioVariants = {
           "ask": "Revisa las facturas restantes y descarga los archivos actuales en una carpeta Atlas. No envíes nada."
         },
         {
-          "tool": "tg messages search \"factura\" --chat 501",
+          "tool": "tg messages search \"factura\" --chat 501 --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48213\",\n      \"senderName\": \"Anna\",\n      \"text\": \"La factura de la segunda fase aún no se ha emitido.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1493,7 +1492,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Том\",\n      \"text\": \"Проверил тестовую оплату. Для боевого стенда всё ещё нужен доступ.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg messages search \"Atlas\" --chat 503",
+          "tool": "tg messages search \"Atlas\" --chat 503 --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Том\",\n      \"text\": \"Проверил тестовую оплату. Для боевого стенда всё ещё нужен доступ.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1549,7 +1548,7 @@ window.WireScenarioVariants = {
           "ask": "Используй tg cli, найди в Telegram и MAX рекомендации курса SQL с практикой и обратной связью."
         },
         {
-          "tool": "tg messages search \"SQL\" --source all --limit 10",
+          "tool": "tg messages search \"SQL\" --source all --limit 10 --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"chatId\": \"601\",\n      \"chat\": \"Аналитики · сообщество\",\n      \"messenger\": \"tg\",\n      \"date\": \"2026-10-02T09:00:00Z\",\n      \"text\": \"Проходил практикум SQL: каждую неделю задания и комментарии преподавателя.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\",\n      \"senderName\": \"Дарья\"\n    },\n    {\n      \"id\": \"67210\",\n      \"chatId\": \"701\",\n      \"chat\": \"Команда · обучение\",\n      \"messenger\": \"max\",\n      \"date\": \"2026-10-02T12:00:00Z\",\n      \"text\": \"Видеокурс SQL помог с базой, но работы никто не проверял.\",\n      \"timestamp\": \"2026-10-02T12:00:00Z\",\n      \"senderName\": \"Алексей\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1857,7 +1856,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Том\",\n      \"text\": \"Вот первый вариант макета. Финал после ваших комментариев.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg messages search \"макет\" --chat 503",
+          "tool": "tg messages search \"макет\" --chat 503 --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Том\",\n      \"text\": \"Вот первый вариант макета. Финал после ваших комментариев.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1961,7 +1960,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"101\",\n      \"title\": \"Atlas · команда\"\n    },\n    {\n      \"id\": \"102\",\n      \"title\": \"Atlas · дизайн\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg messages search \"договор OR счёт OR презентация\" --chat \"Atlas · команда\"",
+          "tool": "tg messages search \"договор OR счёт OR презентация\" --chat \"Atlas · команда\" --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Анна\",\n      \"text\": \"Презентация Atlas v2.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    },\n    {\n      \"id\": \"48211\",\n      \"senderName\": \"Марко\",\n      \"text\": \"Счёт за первый этап.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    },\n    {\n      \"id\": \"48212\",\n      \"senderName\": \"Том\",\n      \"text\": \"Договор — предварительная версия.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -2001,11 +2000,11 @@ window.WireScenarioVariants = {
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"501\",\n      \"title\": \"Анна\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg messages search \"договор\" --chat 501",
+          "tool": "tg messages search \"договор\" --chat 501 --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Анна\",\n      \"text\": \"Финальный договор по Atlas. Исправлены условия оплаты.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg messages search \"презентация\" --chat \"Atlas · дизайн\"",
+          "tool": "tg messages search \"презентация\" --chat \"Atlas · дизайн\" --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Анна\",\n      \"text\": \"Презентация Atlas v3, обновила макеты.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -2041,7 +2040,7 @@ window.WireScenarioVariants = {
           "ask": "Проверь оставшиеся счета и скачай актуальные файлы в папку Atlas. Ничего не отправляй."
         },
         {
-          "tool": "tg messages search \"счёт\" --chat 501",
+          "tool": "tg messages search \"счёт\" --chat 501 --language legacy",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48213\",\n      \"senderName\": \"Анна\",\n      \"text\": \"Счёт за второй этап пока не выставляли.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {

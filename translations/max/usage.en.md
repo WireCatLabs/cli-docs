@@ -21,6 +21,8 @@ max chats list           # ваши чаты
 
 Setup may take about five minutes. It checks up to five chats and does not start the background service. Download history separately after choosing a chat and how much to fetch. Before login, your agent reads `max skill show`, available without a session.
 
+`max skill show link-conversations` prints the shared skill for linking archived conversations; it needs no additional login.
+
 ## Logging in
 
 For your first run, use `max setup`. For an explicit fresh login, use `max session start qr`: scan the terminal’s QR code with the MAX app, and the token is saved in your operating system’s keychain. See [docs/sessions.md](./sessions.md) for all login methods. Without a method, `max session start` **imports a token** obtained from the official client and saves it in the keychain.
@@ -137,6 +139,8 @@ max models audio list                # какие модели есть, как�
 max models audio download gigaam-v3  # 233 МБ, один раз
 max messages transcribe "Иван Петров" 100000000000000001
 ```
+
+Models live in a directory shared by MAX and Telegram; `CLI_COMMON_CACHE_DIR` relocates it. `models audio list --json` returns an `items/page/limit/hasMore` page and the `directory` path. Downloaded files are reused. `gigaam-v3` remains first, and `config set --defaults transcribeModel <модель>` selects the model.
 
 | Model | Languages | Size | 5 minutes of speech |
 |---|---|---|---|
@@ -416,7 +420,9 @@ ffmpeg -i запись.m4a -ac 1 -ar 48000 -c:a libopus -b:a 32k заметка.
 
 Hidden files, files in hidden directories such as `~/.ssh`, and files in `max` directories are protected because they may contain keys or tokens. Use `--allow-any-file` only when intentionally sending one.
 
-`--md` formats text in `send` and `edit`: `**жирный**`, `_курсив_` or `*курсив*`, `~~зачёркнутый~~`, `` `код` ``. Without the flag, formatting characters remain literal. `_` and `*` inside words are not markup (`file_name` remains `file_name`); `\*` preserves a literal asterisk.
+With `--md`, MAX uses its own formatter: `**жирный**` or `__жирный__`, `_курсив_` or `*курсив*`, `~~зачёркнутый~~`, `++подчёркнутый++`, `[ссылка](https://example.com)` and monospaced code in backticks or a block. Styles nest; positions use UTF-16 offsets. Newlines inside inline code become spaces; MAX does not retain a block's language. Without the flag, text is sent literally. `_` and `*` within words remain literal; a backslash escapes a mark. Links allow http, https and mailto; an unclosed code block is rejected.
+
+The MAX Bot API formatter also supports `^^выделение^^`, headings with `#` and quotations with `>`; it safely converts the result to HTML. The personal protocol rejects these three forms before sending or uploading a file. `||spoiler||` remains literal text in MAX. Telegram has its own syntax: `__текст__` means underline there, but bold in MAX.
 
 ```sh
 max messages send 0 "встреча **в 15:00**, не _в 14_" --md
@@ -623,3 +629,5 @@ A profile list replaces rather than extends `defaults`. An empty list permits no
 - [Command reference](./commands.md) — generated from the program.
 - [Configuration](./configuration.md) — the full settings file.
 - [Installation](./installation.md) — install, update and storage locations.
+
+`sends list` uses the configured `limit` when `--limit` is omitted. JSON includes `items`, `page`, `limit`, `hasMore`; `limit` is the selected page limit, not the number of rows. JSONL outputs one send-attempt record per line.

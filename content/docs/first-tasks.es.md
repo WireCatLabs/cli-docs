@@ -40,7 +40,7 @@ más contexto. Si usa más chats que los cinco iniciales, debe decir cuáles.
 
 Los nombres, fechas, IDs y respuestas de los siguientes diálogos son **ficticios**. Ilustran cómo
 debería trabajar el agente; no son resultados de tu cuenta. Los comandos corresponden a Telegram
-CLI v0.22.0. El agente debe obtener los IDs reales antes de usarlos.
+CLI v0.24.0. El agente debe obtener los IDs reales antes de usarlos.
 
 **Tú**
 
@@ -53,7 +53,7 @@ cargar antes de concluir que no está.
 ```sh
 tg chats list --search Atlas
 tg store status "Atlas · equipo"
-tg messages search 'analítica after:2026-09-01 before:2026-10-01' --chat "Atlas · equipo" --context 3
+tg messages search 'analítica after:2026-09-01 before:2026-10-01' --chat "Atlas · equipo" --context 3 --language legacy
 ```
 
 **Agente**
@@ -72,7 +72,7 @@ mensajes y avísame si no basta. No cargues otros chats.
 ```sh
 tg store fetch "Atlas · equipo" --estimate
 tg store fetch "Atlas · equipo" --since-time 2026-09-01T00:00:00+02:00 --limit 1000
-tg messages search 'analítica after:2026-09-01 before:2026-10-01' --chat "Atlas · equipo" --context 3
+tg messages search 'analítica after:2026-09-01 before:2026-10-01' --chat "Atlas · equipo" --context 3 --language legacy
 tg messages context "Atlas · equipo" 200
 tg store status "Atlas · equipo"
 ```

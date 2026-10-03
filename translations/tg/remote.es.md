@@ -17,7 +17,7 @@ ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ mcp-auth-pro
 
 - **Quien supere la contraseña puede leer tu Telegram.** Usa una contraseña larga que no utilices en ningún otro sitio. Nunca lo configures sin contraseña ni mediante un túnel sin autenticación.
 - **Por defecto, la aplicación de IA puede enviar mensajes.** Con los ajustes predeterminados, `tg mcp` permite enviar, editar, reaccionar, reenviar, fijar, votar y marcar chats como leídos. Si solo debe leer, sirve un perfil `readonly`; también puedes iniciar el servidor con `--confirm-send` para aprobar o rechazar cada cambio. La lista de destinatarios y el límite por hora siguen aplicándose ([permisos del agente](./mcp.md#what-an-agent-may-do)).
-- **El equipo que ejecuta `tg` debe estar encendido.** Para usarlo desde un móvil o portátil sin instalar nada allí, ejecuta todo en un pequeño servidor que permanezca encendido e inicia sesión en él (`tg session start`). En tu dispositivo solo necesitarás un navegador.
+- **El equipo que ejecuta `tg` debe estar encendido.** Para usarlo desde un móvil o portátil sin instalar nada allí, ejecuta todo en un pequeño servidor que permanezca encendido e inicia sesión en él (`tg setup --agent none`). En tu dispositivo solo necesitarás un navegador.
 - **Quién puede utilizarlo:**
 
 | Aplicación | Planes | Documentación |

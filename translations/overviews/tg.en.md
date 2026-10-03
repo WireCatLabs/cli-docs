@@ -29,10 +29,10 @@ Then follow [the guide for your agent](/en/docs/agents). Apps that use an MCP se
 ### Start in a terminal
 
 Open [the installation guide](/en/docs/installation#tg) and choose the terminal instructions.
-After installing, log in and list a few chats:
+After installing, run guided setup: it helps with app registration and login, checks your account and five chats, and installs agent skills. It reuses an existing session; downloading history remains a separate choice.
 
 ```sh
-tg session start --app auto
+tg setup --agent all
 ```
 
 ```sh
@@ -55,6 +55,8 @@ First, the command asks for your phone number and a code sent in Telegram to obt
 Reading **does not mark messages as read**. Sending, deleting and other changes require separate
 commands. You can restrict the agent's access: see [access and safety](/en/docs/tg/security).
 
+Search uses only saved history. The default matches exact words; use `--language legacy` for forgiving matching and typo correction. The [search guide](/en/docs/tg/search) explains filters, dates and archive coverage.
+
 ## Find the guide for your task
 
 | Task | Guide |
@@ -62,11 +64,12 @@ commands. You can restrict the agent's access: see [access and safety](/en/docs/
 | Read, search and send messages | [Everyday commands](/en/docs/tg/usage) |
 | Log in, log out or add another account | [Login and profiles](/en/docs/tg/sessions) |
 | Search local history and export conversations | [Message archive](/en/docs/tg/archive) |
+| Write a precise search query, filters or dates | [Message search](/en/docs/tg/search) |
 | Follow questions and membership in a group | [Your groups](/en/docs/tg/groups) |
 | Find a ready request for your agent | [Usage recipes](/en/docs/tg/recipes) |
 | Check what Telegram bots currently support | [Bots: available capabilities](/en/docs/tg/bot) |
 | Fix an error | [Troubleshooting](/en/docs/tg/troubleshooting) |
 | Look up an exact command or option | [Command reference](/en/docs/tg/commands) |
 
-The left sidebar lists the pages in this section. The right sidebar lists sections of the current
+The left sidebar keeps Getting started and expandable Telegram/MAX guides available. The right sidebar lists sections of the current
 page. Use the command reference when you need an exact option; installation and everyday tasks are enough to get started.

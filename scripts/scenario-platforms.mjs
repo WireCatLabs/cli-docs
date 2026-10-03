@@ -7,7 +7,8 @@ export function maxSession(session) {
     if (step.tool && !step.fixedMessenger) {
       step.tool = step.tool.replace(/^tg\b/, "max")
       // These demonstrations use the forgiving search supported by both reviewed releases.
-      if (/^max messages search\b/.test(step.tool)) step.tool += " --language legacy"
+      if (/^max messages search\b/.test(step.tool) && !step.tool.includes("--language"))
+        step.tool += " --language legacy"
       if (/^max chats moderate\b/.test(step.tool)) {
         const output = JSON.parse(step.out)
         step.out = JSON.stringify({ chatId: "301", rows: output.items }, null, 2)

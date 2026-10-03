@@ -4,6 +4,22 @@ title: "Historial de cambios"
 
 Cambios destacados de `@leemour/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.25.0 — 03.10.2026
+
+### Novedades
+
+- **`max skill show link-conversations` imprime el skill compartido para vincular conversaciones.** Disponible sin sesión; sin nombre sigue mostrando el skill principal de MAX.
+
+- `bot api` comparte la construcción de comandos y validación de entradas con Telegram. Los generadores siguen en cli-core; se conservan los parámetros, respuestas nativas y permisos actuales de MAX. La opción compartida `--store-token <profile>` está destinada a operaciones que devuelven credenciales; las demás la rechazan.
+
+### Cambios que pueden romper scripts
+
+- **`max sends list` respeta el `limit` configurado, como Telegram.** Antes, sin opción siempre seleccionaba 20 intentos. El campo JSON `limit` contiene el límite elegido; se conservan `items`, `page` y `hasMore`. `--limit` tiene prioridad sobre la configuración.
+
+- **`max models audio list --json` añade `directory`:** el directorio de modelos compartido por MAX y Telegram. Los comandos de modelos, directorio y verificación de descargas ahora se comparten; se conservan archivos existentes, orden de modelos y configuración `transcribeModel`. No hace falta descargarlos otra vez. JSONL sigue devolviendo un modelo por línea.
+
+- **`--md` usa el conversor propio de MAX** para send/edit y leyendas: estilos anidados, `__жирный__`, `++подчёркнутый++`, enlaces y código. Los bots admiten resaltado, encabezados y citas mediante HTML seguro; el protocolo personal rechaza explícitamente tipos sin confirmar. Telegram tiene otra sintaxis. Los tipos wire desconocidos ya no se envían silenciosamente.
+
 ## 0.24.0 — 03.10.2026
 
 ### Novedades
@@ -321,7 +337,7 @@ Los comandos siguen sustantivo y acción. Los nombres anteriores devuelven «unk
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/leemour/max-cli/blob/v0.24.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/leemour/max-cli/blob/v0.25.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos cómodos.** `max <имя> bot messages send <чат> <текст>` escribe a ID, `user:<номер>` o nombre visto. También `edit`, `delete`, `list`, `get`. `max <имя> bot chats list`, `chats get|pin|unpin|leave|action`, `max bot list`. MAX no lista chats del bot: el CLI recuerda los vistos.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).
 - **Actividad de grupos.** `max review --unanswered [часы]` encuentra preguntas sin respuesta tuya ni de administradores; `max review --chat <чат>` revisa un chat. `max chats events <чат>` muestra ingresos, salidas, altas y expulsiones. `max chats members list

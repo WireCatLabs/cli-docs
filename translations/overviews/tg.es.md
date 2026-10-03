@@ -7,7 +7,7 @@ description: "Conecta tu cuenta de Telegram a un agente o úsala desde la termin
 con **tu cuenta personal** y sus chats. También puedes usarlo directamente con comandos en la
 terminal. Funciona en Windows, macOS y Linux.
 
-Estás en la documentación de **Telegram**. Usa el selector de mensajero de arriba para abrir MAX.
+Estás en la documentación de **Telegram**. En la barra izquierda tienes las guías de inicio y las secciones Telegram y MAX; abre MAX para consultar el otro mensajero.
 
 **En esta página**
 
@@ -30,21 +30,23 @@ MCP tienen una [guía de MCP](/es/docs/mcp).
 ### Empezar desde la terminal
 
 Abre [la guía de instalación](/es/docs/installation#tg) y elige las instrucciones para terminal.
-Tras instalar la herramienta, inicia sesión y consulta algunos chats:
+Tras instalar la herramienta, ejecuta la configuración guiada y consulta algunos chats:
 
 ```sh
-tg session start --app auto
+tg setup --agent all
 ```
 
 ```sh
 tg chats list --limit 5
 ```
 
-Primero el comando pide el número y un código recibido en Telegram para obtener `api_id` y `api_hash` de [my.telegram.org](https://my.telegram.org/apps). Después muestra el QR para acceder a la cuenta. En el teléfono, abre Telegram → Ajustes → Dispositivos → Vincular dispositivo de escritorio y escanéalo. Espera **Logged in as …** antes de listar chats. [Pasos completos de acceso](/es/docs/tg/sessions).
+Reserva unos cinco minutos. Primero el comando pide el número y un código recibido en Telegram para obtener `api_id` y `api_hash` de [my.telegram.org](https://my.telegram.org/apps). Después muestra el QR para acceder a la cuenta. En el teléfono, abre Telegram → Ajustes → Dispositivos → Vincular dispositivo de escritorio y escanéalo. Setup comprueba los primeros cinco chats e instala las skills. Si ya tienes una sesión válida, la reutiliza. Espera a que termine antes de listar chats. [Pasos completos de acceso](/es/docs/tg/sessions).
 
 > **¿Qué es una aplicación Telegram y para qué sirve?**
 >
 > Es el registro del programa que se conecta a Telegram, aquí el CLI `tg`. Rellenas un formulario sin desarrollar ni descargar otra aplicación. Telegram entrega `api_id` y `api_hash` para identificar el programa; el QR o código confirma después el acceso a tu cuenta. El comando puede registrar u obtener estas credenciales. [Explicación y método manual](/es/docs/tg/sessions#the-app-from-mytelegramorg).
+
+El archivo local contiene solo lo que hayas leído o descargado; no incluye automáticamente todo tu historial. La búsqueda consulta ese archivo. Para un periodo concreto, elige chat y cantidad siguiendo la [guía del archivo](/es/docs/tg/archive).
 
 ## Qué probar después de conectar
 
@@ -62,7 +64,8 @@ comandos específicos. Puedes limitar el acceso del agente: consulta [acceso y s
 |---|---|
 | Leer, buscar y enviar mensajes | [Comandos cotidianos](/es/docs/tg/usage) |
 | Iniciar sesión, salir o añadir otra cuenta | [Acceso y perfiles](/es/docs/tg/sessions) |
-| Buscar en el historial local y exportar conversaciones | [Archivo de mensajes](/es/docs/tg/archive) |
+| Buscar palabras, frases o mensajes de varias cuentas | [Búsqueda de mensajes](/es/docs/tg/search) |
+| Descargar historial y exportar conversaciones | [Archivo de mensajes](/es/docs/tg/archive) |
 | Seguir las preguntas y los participantes de un grupo | [Tus grupos](/es/docs/tg/groups) |
 | Encontrar una petición preparada para el agente | [Recetas de uso](/es/docs/tg/recipes) |
 | Consultar qué admiten los bots de Telegram | [Bots: funciones disponibles](/es/docs/tg/bot) |

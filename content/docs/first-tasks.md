@@ -29,7 +29,7 @@ inspect context when necessary and tell you about skipped chats or truncated res
 reads do not mark messages read. [Reading and inbox](./tg/usage.md#reading) explains their limits.
 
 The examples below use **fictional chats, IDs, messages and results**. They illustrate possible
-dialogues, not commands you should run unchanged. Commands follow the Telegram v0.22 reference;
+dialogues, not commands you should run unchanged. Commands follow the Telegram v0.24 reference;
 your agent should check the installed CLI's skill and command help. MAX has its own
 [usage reference](./max/usage.md); do not assume every Telegram option has a MAX equivalent.
 
@@ -47,7 +47,7 @@ confirmation. Check the local archive first; tell me if it lacks that period. Do
 ```sh
 tg chats list --search Atlas --kind group
 tg store status -1001001001001
-tg messages search 'analytics after:2026-09-01 before:2026-10-01' --chat -1001001001001 --json
+tg messages search 'analytics after:2026-09-01 before:2026-10-01' --chat -1001001001001 --json --language legacy
 ```
 
 **Agent**
@@ -68,7 +68,7 @@ tell me what remains.
 ```sh
 tg store fetch -1001001001001 --since-time 2026-09-01 --limit 1000
 tg store status -1001001001001
-tg messages search 'analytics after:2026-09-01 before:2026-10-01' --chat -1001001001001 --json
+tg messages search 'analytics after:2026-09-01 before:2026-10-01' --chat -1001001001001 --json --language legacy
 tg messages context -1001001001001 4312 --before-n 2 --after-n 4
 ```
 

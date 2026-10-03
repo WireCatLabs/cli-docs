@@ -10,18 +10,22 @@ Cada comando realiza una tarea, imprime la respuesta y termina. Solo `tg watch`,
 tg [profile] [options] <resource> <action> [arguments]
 ```
 
-## Primer minuto
+## Primeros pasos
 
 ```sh
 npm install -g @leemour/tg-cli
-tg session start          # the app from my.telegram.org, then a QR code to scan
+tg setup                  # guided app registration, login and agent skill
 tg chats list --limit 5   # your newest chats
 tg messages list me       # Saved Messages, the latest 20
 ```
 
 No necesitas nada más para leer mensajes.
 
+Antes de continuar, reserva unos cinco minutos para la configuración. Descargar historial es una decisión aparte: elige el chat y la cantidad antes de `tg store fetch <chat> --last 100`. Un agente puede leer `tg skill show` antes de iniciar sesión; usa `tg setup --agent codex` para elegir su skill. `tg setup --help` explica las opciones.
+
 ## Iniciar sesión
+
+`tg setup` es el comando para el primer uso. Por defecto registra la aplicación automáticamente y usa un QR; `--app browser` y `--method phone` eligen los otros métodos. Para iniciar sesión sin los demás pasos, o terminar un acceso interrumpido o caducado:
 
 ```sh
 tg session start                        # QR code: Settings → Devices → Link Desktop Device
@@ -233,7 +237,7 @@ tg messages search "contract" --chat "Book club"
 tg messages search "invoice.*(march|april)" --regex
 ```
 
-Una búsqueda necesita **al menos tres caracteres**. `messages search` busca todas las palabras completas o sus inicios: `invoic` encuentra "invoice". Nunca se conecta a Telegram; consulta lo leído, descargado o guardado por `serve` ([archivo local](./archive.md#search)). Cuando encuentres el chat, usa su identificador.
+Las búsquedas de chats y contactos necesitan **al menos tres caracteres**. `messages search` consulta el archivo local con el [perfil estricto de Lucene](./search.md): `invoic*` busca prefijos; `invoic` es un término exacto. No se conecta a Telegram: consulta lo descargado o guardado por `serve`. Usa `--language legacy` para las coincidencias aproximadas anteriores. Cuando encuentres el chat, usa su identificador.
 
 ## Enviar
 
@@ -243,10 +247,11 @@ Una búsqueda necesita **al menos tres caracteres**. `messages search` busca tod
 tg messages send me "a note to myself"
 tg messages send "Book club" "See you at 7" --silent       # no notification
 tg messages send "Book club" "a link, no card" --no-preview
-tg messages send "Book club" "**Bold** and _italic_" --md  # bold, italic, struck, code
+tg messages send "Book club" "**Bold** and _italic_" --md  # Telegram Markdown
 ```
 
-`--md` interpreta negrita (`**`), cursiva (`_`), tachado (dos virgulillas) y código (comillas invertidas), nada más. Las marcas solo cuentan en los extremos de una palabra, por lo que `file_name` queda literal; `\` conserva una marca como texto. Sin la opción, el texto se envía tal cual. `messages edit` también acepta `--md`.
+`--md` usa el formato de Telegram: `**bold**` o `*bold*`, `_italic_`, `__underline__`, `~~struck~~` o `~struck~`, `||spoiler||`, código en línea, bloques de código con lenguaje, `[label](https://example.com)` y citas que empiezan por `> `. Se pueden combinar estilos; el código y los bloques pre no pueden combinarse con otras entidades, ni los enlaces o las citas anidarse dentro de otros enlaces o citas. Sin la opción, el texto se envía tal cual.
+Una barra invertida escapa una marca; `_` y `*` dentro de una palabra quedan literales. Las marcas en línea sin cerrar quedan literales; un bloque de código sin cerrar se rechaza. Los enlaces admiten URL absolutas http, https y mailto. `messages edit` y los pies de archivos usan el mismo formato. En Telegram, `__text__` significa subrayado; en MAX, negrita. En Telegram, un solo `*text*` ahora significa negrita.
 
 ### Texto desde stdin
 
@@ -350,7 +355,7 @@ Las carpetas se indican por identificador o título exacto. Solo tú las ves; lo
 
 ### Funciones aún no disponibles
 
-Varias fotos en un solo mensaje y envíos a temas de foro. Están en [próximas mejoras](./roadmap.md).
+Varias fotos en un solo mensaje siguen en [próximas mejoras](./roadmap.md).
 
 ## Grupos y canales
 
@@ -367,6 +372,8 @@ tg review --chat "Hiking" --unanswered             # questions nobody answered
 Estos comandos solo leen. `events` consulta mensajes de servicio: quién hizo qué y a quién. Los tipos son `join`, `leave`, `add`, `remove`, `create`, `title` y `pin`.
 
 Los siguientes hacen cambios visibles para los miembros:
+
+Para un foro, usa `tg topics enable <chat>` y `tg topics create <chat> <title>`. Un grupo básico requiere `--upgrade --yes`; conserva el nuevo identificador de chat devuelto. Si no sabes si se creó un tema, consulta `topics list` en vez de crearlo otra vez. Envía al tema con `tg messages send <chat> <text> --topic <id>` o `tg polls create <chat> <question> <answers> --topic <id>`.
 
 ```sh
 tg chats create "Hiking 2027" @olga 12345          # a supergroup; the people added are told

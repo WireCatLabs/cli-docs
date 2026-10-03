@@ -58,27 +58,15 @@ tg store jobs cancel <job>                  # stops after the current page; a la
 
 ## Поиск
 
-```sh
-tg messages search "invoice march"                  # every word, best match first
-tg messages search invoice --chat "Book club" --limit 50
-tg messages search invoice --newest                 # newest first instead
-tg messages search invoice --context 3              # three messages either side of each hit
-tg messages search 'from:@anna after:7d "the contract" -draft'
-tg messages search invoice --source all             # every account and messenger in the store
-tg messages search --regex 'inv(oice)?\s+\d+'       # a regular expression, case-insensitive
-```
-
-**Поиск читает только базу и не запрашивает Telegram.** Пустой результат означает «не сохранено здесь», а не «никогда не говорили». Сначала прочитайте чат (`tg messages list <chat>`) или загрузите историю.
-
-Должны присутствовать все слова целиком или по началу: `invoi` находит `invoice`. Лучшее совпадение первое. Опечатки исправляются с пояснением в stderr. Если все слова не найдены вместе, поиск пробует любое из них, затем часть слова.
-
-Запрос поддерживает `"a phrase"`, исключение `-word`, `a OR b` и фильтры: `from:` (имя, `@username`, `me`), `chat:`, `after:`, `before:` (дата или `7d`), `has:` (тип вложения, `attachment`, `link`). Обычно поиск ограничен текущим аккаунтом. `in:max`, `in:all`, `--source` включают другие аккаунты той же базы, включая MAX. Результат MAX открывается через `max`.
-
-JSON показывает полноту истории каждого проверенного чата (`completeness`). Результаты содержат указатель `msg:` для `messages show` и `messages context`:
+`tg messages search` ищет только в локальном архиве. По умолчанию используется строгий профиль Lucene: слова, фразы, логические группы, поля, даты и регулярные выражения с ограничениями. [Руководство по поиску](./search.md) объясняет синтаксис и переход с прежней версии. Для старых фильтров и неточного поиска используйте `--language legacy`.
 
 ```sh
-tg messages context msg:telegram/<account>/<chat>/<id>
+tg messages search 'invoice kind:private' --json
+tg messages search 'invoice date:[2026-01-01 TO 2026-02-01}' --timezone Europe/Madrid --json
+tg messages search 'preset:secret kind:saved' --json
 ```
+
+Пустой результат означает «не найдено в выбранном архиве». JSON сообщает полноту и охват; отсутствие отметок сетевого обновления не означает, что данные актуальны. `--source` выбирает мессенджер и аккаунты, `--newest` — порядок по времени, `--context` добавляет соседние сообщения. --regex остаётся отдельным прежним режимом JavaScript.
 
 ## Экспорт
 

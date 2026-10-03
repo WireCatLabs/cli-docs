@@ -41,3 +41,6 @@ __pycache__/
 /test-results/
 
 /playwright-report/
+
+# Generated release audit reports and source proposals
+.docs-updates/

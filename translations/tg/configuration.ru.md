@@ -162,7 +162,7 @@ config.json is not a valid config:
 ```sh
 export TG_CONFIG_DIR=/tmp/tg-try/config TG_STATE_DIR=/tmp/tg-try/state TG_CACHE_DIR=/tmp/tg-try/cache
 export MESSAGING_STORE=/tmp/tg-try/messages.db
-tg session start
+tg setup
 ```
 
 Без `MESSAGING_STORE` прочитанные этой сессией сообщения всё равно попадут в обычную локальную базу.
