@@ -162,7 +162,7 @@ Apunta los tres directorios a otra ubicación: `tg` tendrá allí una configurac
 ```sh
 export TG_CONFIG_DIR=/tmp/tg-try/config TG_STATE_DIR=/tmp/tg-try/state TG_CACHE_DIR=/tmp/tg-try/cache
 export MESSAGING_STORE=/tmp/tg-try/messages.db
-tg session start
+tg setup
 ```
 
 Sin `MESSAGING_STORE`, lo que lea esa sesión seguirá guardándose en tu archivo local habitual.

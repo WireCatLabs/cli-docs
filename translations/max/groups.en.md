@@ -10,7 +10,7 @@ Group-changing commands return `operationId` in JSON. After creating, joining, u
 
 ## Working with an agent
 
-An agent with a terminal, such as Claude Code or Codex, can use a [skill](https://github.com/leemour/max-cli/blob/v0.24.0/README.md#навык-для-агентов-с-терминалом). An agent can also connect through the [MCP server](./mcp.md), for example in Claude Desktop or Cursor. The examples below show your request, the command the agent runs and the result.
+An agent with a terminal, such as Claude Code or Codex, can use a [skill](https://github.com/leemour/max-cli/blob/v0.25.0/README.md#навык-для-агентов-с-терминалом). An agent can also connect through the [MCP server](./mcp.md), for example in Claude Desktop or Cursor. The examples below show your request, the command the agent runs and the result.
 
 ### An admin's morning: who needs an answer
 

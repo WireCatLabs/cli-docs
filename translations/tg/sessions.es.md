@@ -7,7 +7,7 @@ Un inicio de sesión tiene dos partes:
 - **La aplicación:** un `api_id` y un `api_hash` de [my.telegram.org](https://my.telegram.org/apps). Identifican el programa ante Telegram. `tg` los guarda en el almacén de claves del sistema operativo.
 - **La sesión:** lo que Telegram entrega después de iniciar sesión. Se guarda como archivo en el directorio de estado y permite acceder a tu cuenta igual que una contraseña.
 
-`tg session start` obtiene ambas partes. Hace preguntas, así que ejecútalo en una terminal.
+`tg setup` guía el primer uso: prepara ambas partes, comprueba cinco chats y ofrece una skill para el agente. Reserva unos cinco minutos; descargar historial es un paso aparte. Ejecútalo en una terminal. Usa `tg setup --app browser` para registrar la aplicación manualmente o `--method phone` para acceder por teléfono. `tg session start` sigue siendo el comando para solo iniciar sesión, incluido retomar un acceso interrumpido. Setup comprueba una sesión existente y no inicia otra en silencio si Telegram la rechaza.
 
 ## La aplicación de my.telegram.org
 

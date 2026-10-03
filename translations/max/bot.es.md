@@ -288,7 +288,7 @@ Incluye chat, acción, resultado y longitud, nunca texto. **Toda** escritura, in
 
 ## Cualquier operación API
 
-`max bot api <операция>` expone todas las operaciones, generadas de la especificación oficial; al actualizarla aparecen las nuevas:
+`max bot api <операция>` expone todas las operaciones, generadas de la especificación oficial por cli-core. La construcción de comandos y validación de entradas se comparten con Telegram; al actualizar la especificación aparecen las nuevas:
 
 ```sh
 max sales bot api get-my-info
@@ -297,7 +297,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Ruta y consulta se pasan como opciones, cuerpo JSON en `--body`, `--body -` o `--body-file`. Se valida antes de enviar; errores indican campo y tipo esperado sin exponer valor. Consulta [Cobertura API](https://github.com/leemour/max-cli/blob/v0.24.0/docs/dev/bot-api-coverage.md).
+Ruta y consulta se pasan como opciones, cuerpo JSON en `--body`, `--body -` o `--body-file`. `--body-file -` también lee stdin. El parámetro nativo `timeout` se llama `--poll-timeout`; la opción global `--timeout` limita el comando completo. La opción compartida `--store-token <profile>` no está disponible para los métodos MAX actuales: todos la rechazan antes de ejecutar la operación. Se valida antes de enviar; errores indican campo y tipo esperado sin exponer valor. Consulta [Cobertura API](https://github.com/leemour/max-cli/blob/v0.25.0/docs/dev/bot-api-coverage.md).
 
 ## Scripts y agentes
 
@@ -340,3 +340,5 @@ El perfil determina acceso a detalles, chats, mensajes, búsquedas, personas, mi
 `--allow-send`, `--allow-delete`, `--allow-moderate` ya no otorgan permisos: se aceptan con aviso.
 
 Cada escritura aplica comandos, destinatarios, `readOnly`, `allow` y registro. El agente no accede al token ni webhooks; solo lee destinatarios, menú y administradores. Tampoco puede salir de chats, enviar archivos ni usar `bot api`.
+
+Con `--md`, el bot usa las reglas MAX: `__жирный__`, `++подчёркнутый++`, `^^выделенный^^`, enlaces, código, encabezados y citas. El conversor genera HTML seguro con texto y direcciones escapados; es una representación interna, y el argumento --md sigue siendo Markdown.

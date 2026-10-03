@@ -56,7 +56,7 @@ tg store status 101 --json
 ```sh
 tg store fetch 101 --since-time 2026-09-01T00:00:00+02:00 --limit 500 --estimate --json
 tg store fetch 101 --since-time 2026-09-01T00:00:00+02:00 --limit 500 --json
-tg messages search "аналитика after:2026-09-01 before:2026-10-01" --chat 101 --json
+tg messages search "аналитика after:2026-09-01 before:2026-10-01" --chat 101 --json --language legacy
 tg messages context 101 201 --before-n 3 --after-n 3 --json
 ```
 

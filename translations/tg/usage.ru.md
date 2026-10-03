@@ -10,18 +10,20 @@ title: "Использование tg"
 tg [profile] [options] <resource> <action> [arguments]
 ```
 
-## Первые команды
+## Начало работы
 
 ```sh
 npm install -g @leemour/tg-cli
-tg session start          # the app from my.telegram.org, then a QR code to scan
+tg setup                  # guided app registration, login and agent skill
 tg chats list --limit 5   # your newest chats
 tg messages list me       # Saved Messages, the latest 20
 ```
 
-Для чтения больше ничего не нужно.
+На настройку отведите около пяти минут. История загружается отдельно: выберите чат и объём перед `tg store fetch <chat> --last 100`. Агент может прочитать `tg skill show` без входа; `tg setup --agent codex` явно выбирает его skill. Параметры объяснены в `tg setup --help`. Для чтения больше ничего не нужно.
 
 ## Вход
+
+`tg setup` — команда первого запуска. По умолчанию она автоматически регистрирует приложение и предлагает вход по QR; `--app browser` и `--method phone` выбирают альтернативы. Для входа без остальных шагов либо для завершения прерванного или истёкшего входа используйте:
 
 ```sh
 tg session start                        # QR code: Settings → Devices → Link Desktop Device
@@ -233,7 +235,7 @@ tg messages search "contract" --chat "Book club"
 tg messages search "invoice.*(march|april)" --regex
 ```
 
-Для поиска чата требуется **не меньше трёх символов**. `messages search` ищет сохранённые сообщения: сначала все слова целиком или по началу (`invoic` находит «invoice»), затем любое слово или часть слова, если точных совпадений нет. В версии 0.22 поиск сообщений принимает и запросы из одной-двух букв. Telegram не запрашивается; используется прочитанное, загруженное или сохранённое `serve` ([Поиск](./archive.md#search)). Дальше используйте идентификатор чата.
+Для поиска чатов и контактов требуется **не меньше трёх символов**. Локальный `messages search` использует [строгий профиль Lucene](./search.md): `invoic*` ищет по началу слова, а `invoic` — точное слово. Команда не подключается к Telegram: она читает загруженное или сохранённое `serve`. Для прежнего неточного поиска используйте `--language legacy`. Найдя чат, используйте его идентификатор.
 
 ## Отправка
 
@@ -243,10 +245,10 @@ tg messages search "invoice.*(march|april)" --regex
 tg messages send me "a note to myself"
 tg messages send "Book club" "See you at 7" --silent       # no notification
 tg messages send "Book club" "a link, no card" --no-preview
-tg messages send "Book club" "**Bold** and _italic_" --md  # bold, italic, struck, code
+tg messages send "Book club" "**Bold** and _italic_" --md  # Telegram Markdown
 ```
 
-`--md` поддерживает жирный (`**`), курсив (`_`), зачёркивание (две тильды) и код (обратные кавычки). Разметка действует на границе слова: `file_name` сохраняется; `\` экранирует символ. Без параметра текст отправляется как введён. `messages edit` тоже принимает `--md`.
+`--md` использует форматтер Telegram: `**bold**` или `*bold*`, `_italic_`, `__underline__`, `~~struck~~` или `~struck~`, `||spoiler||`, встроенный код, блоки кода с языком, `[label](https://example.com)` и строки цитат, начинающиеся с `> `. Стили могут быть вложенными; код и блоки кода нельзя совмещать с другими сущностями, ссылки и цитаты нельзя вкладывать друг в друга. Без флага текст отправляется как есть. Обратная косая черта экранирует знак; `_` и `*` внутри слова остаются буквальными. Незакрытые встроенные знаки остаются в тексте; незакрытый блок кода вызывает ошибку. Ссылки поддерживают абсолютные URL http, https и mailto. `messages edit` и подписи медиа используют тот же форматтер. В Telegram `__text__` — подчёркивание; в MAX `__text__` — жирный текст. Одиночный `*text*` в Telegram теперь тоже означает жирный текст.
 
 ### Текст через stdin
 
@@ -350,7 +352,7 @@ tg chats folders delete "Travel"                   # the chats stay
 
 ### Чего пока нет в tg
 
-Несколько фотографий в одном сообщении и отправка в тему форума. Они в [планах развития](./roadmap.md).
+Несколько фотографий в одном сообщении остаются в [планах](./roadmap.md).
 
 ## Группы и каналы
 
@@ -367,6 +369,8 @@ tg review --chat "Hiking" --unanswered             # questions nobody answered
 Эти команды только читают. `events` получает служебные сообщения: кто, что и с кем сделал. Типы: `join`, `leave`, `add`, `remove`, `create`, `title`, `pin`.
 
 Эти команды меняют данные, и участники видят изменения:
+
+Для форума используйте `tg topics enable <chat>` и `tg topics create <chat> <title>`. Обычная группа требует `--upgrade --yes`; сохраните новый идентификатор чата после преобразования. Если результат создания неизвестен, прочитайте `topics list` вместо повторного создания. Отправляйте в тему по её идентификатору через `tg messages send <chat> <text> --topic <id>` или `tg polls create <chat> <question> <answers> --topic <id>`.
 
 ```sh
 tg chats create "Hiking 2027" @olga 12345          # a supergroup; the people added are told

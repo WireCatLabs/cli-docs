@@ -81,7 +81,7 @@ export const words: Record<string, Words> = {
       maxSetup:
         "MAX setup guides QR login, checks your account and five chats, and installs agent skills. It reuses an existing session. It does not download all history or start the background service.",
       telegram:
-        "Telegram: auto obtains your app ID and hash. Enter the code from Telegram in your terminal, then scan the QR in Settings → Devices → Link Desktop Device. If auto fails, use session start --app browser.",
+        "Telegram setup checks your account and five chats and installs agent skills; history downloads are separate. The auto mode obtains your app ID and hash. Enter the code from Telegram in your terminal, then scan the QR in Settings → Devices → Link Desktop Device. If auto fails, use session start --app browser.",
       timing: "Allow about 5 minutes for setup. Downloading chat history is a separate step and may take longer.",
       prompt: (tool, pkg, docs) =>
         `Set up ${tool} (${pkg}) on my computer: install the cli. On Windows use the one-call installer at https://wirecat.dev/install.ps1 with -Tool ${tool} -Agent all; ensure user PATH and your shell PATH are updated. Install and verify the skill for your environment before login. Then read ${tool} --help, ${tool} commands --json and ${tool} skill show before logging in. Use guided setup if it is listed by the installed cli; otherwise follow the documented login steps. Connect the skill for your environment. Tell me setup may take about 5 minutes and history downloads are separate. Verify it works and show 5 chats. Guide: ${docs}`,
@@ -124,7 +124,7 @@ export const words: Record<string, Words> = {
       maxSetup:
         "Настройка MAX проведёт через QR-вход, проверит аккаунт и пять чатов, установит навыки агентов. Существующий вход используется повторно. История целиком не скачивается, фоновый сервис не запускается.",
       telegram:
-        "Telegram: auto получает app ID и hash за вас. Введите код из Telegram в терминале, затем отсканируйте QR: Настройки → Устройства → Подключить устройство. Если auto не сработал, используйте session start --app browser.",
+        "Настройка Telegram проверяет аккаунт и пять чатов, устанавливает навыки агентов; история скачивается отдельно. Режим auto получает app ID и hash за вас. Введите код из Telegram в терминале, затем отсканируйте QR: Настройки → Устройства → Подключить устройство. Если auto не сработал, используйте session start --app browser.",
       timing:
         "На настройку заложите около 5 минут. Скачивание истории чатов — отдельный шаг, который может занять больше времени.",
       prompt: (tool, pkg, docs) =>
@@ -168,7 +168,7 @@ export const words: Record<string, Words> = {
       maxSetup:
         "La configuración de MAX guía el acceso por QR, comprueba tu cuenta y cinco chats e instala los skills. Reutiliza una sesión existente. No descarga todo el historial ni inicia el servicio en segundo plano.",
       telegram:
-        "Telegram: auto obtiene tu app ID y hash. Introduce el código de Telegram en la terminal y escanea el QR en Ajustes → Dispositivos → Vincular dispositivo. Si auto falla, usa session start --app browser.",
+        "La configuración de Telegram comprueba tu cuenta y cinco chats e instala los skills; el historial se descarga aparte. El modo auto obtiene tu app ID y hash. Introduce el código de Telegram en la terminal y escanea el QR en Ajustes → Dispositivos → Vincular dispositivo. Si auto falla, usa session start --app browser.",
       timing:
         "Reserva unos 5 minutos para la configuración. Descargar el historial es un paso separado y puede tardar más.",
       prompt: (tool, pkg, docs) =>

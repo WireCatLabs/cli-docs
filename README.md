@@ -98,3 +98,29 @@ every affected locale, its source fingerprint and any portal errata. Tool pages 
 version and link GitHub views to that tag. This makes daily/release-triggered deploys reproducible
 when a newer CLI is released before its translations are reviewed. `--ref` remains an explicit
 preview override; unreviewed source changes still fail the translation gate.
+
+### Keeping published documentation current
+
+`tools.json` pins reviewed GitHub releases. The **Documentation release check** workflow checks GitHub stable releases and npm every day, on demand, and whenever the pins change. It maintains one tracking issue with source comparisons, changed public pages and a translation/errata checklist. When both tools are current, it closes its own tracking issue. The report is also available in the workflow summary. It needs only the repository's built-in token; no translation-service key is required.
+
+Run the same check locally:
+
+```sh
+pnpm docs:updates
+```
+
+Prepare an update in an isolated checkout:
+
+```sh
+pnpm docs:updates --prepare
+```
+
+Preparation verifies that GitHub and npm agree, captures the new upstream pages, and advances the proposed `docsRef` values. It leaves translations, correction rules and review fingerprints unchanged. Reports are written to ignored `.docs-updates/report.md` and `.docs-updates/updates.json`. Review changed pages, translate new or changed prose, and check command examples and errata before marking fingerprints reviewed. Unchanged content keeps its existing fingerprint.
+
+To capture one released tool without replacing the localized site pages:
+
+```sh
+pnpm sync --tool tg --capture-only
+```
+
+The remaining review gates are `pnpm docs:localize`, lint, tests, `pnpm search:check`, type checking, build, link checks and browser checks. CI rejects missing, stale or structurally changed translations. The scheduled workflow reports updates; it does not merge or deploy unreviewed documentation.

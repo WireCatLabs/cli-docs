@@ -4,6 +4,44 @@ title: "Historial de cambios"
 
 Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.24.0 — 03.10.2026
+
+### Cambios que pueden afectar a scripts
+
+- `--md` usa el formato propio de Telegram para envíos, ediciones y pies de archivos, tanto personales como de bots. Admite estilos combinados, subrayado, spoilers, enlaces, bloques de código y citas. `__text__` significa subrayado; un solo `*text*` ahora significa negrita. MAX tiene otra sintaxis. Rechaza combinaciones no válidas y enlaces inseguros antes de escribir.
+
+## 0.23.0 — 03.10.2026
+
+### Cambios que pueden afectar a scripts
+
+- **La búsqueda local usa por defecto un perfil estricto de Lucene:** grupos, campos tipados, intervalos de fechas, `--timezone`, comodines y expresiones regulares con límites, y cobertura incluso sin resultados. Escribe los prefijos explícitamente como `word*`; usa `--language legacy` para las coincidencias aproximadas anteriores. La guía de búsqueda y la skill explican la migración. El `--regex` de JavaScript se ejecuta de forma aislada, con límites de tamaño y tiempo.
+
+- **`tg upgrade --json` siempre incluye `restarted`**, también en comprobaciones y actualizaciones sin cambios. Conserva los campos anteriores y la política de reinicio de servidores administrados. Los scripts que validan las claves exactas deben aceptar una lista vacía cuando no se reinicie ningún servidor.
+
+### Novedades
+
+- **`tg mcp` libera el modelo de búsqueda tras diez minutos sin búsquedas:** `conversations_search` ya no ocupa alrededor de 1 GB de memoria durante toda la sesión del agente. La siguiente búsqueda carga de nuevo el modelo en aproximadamente un segundo.
+- **`tg <bot> bot me` y el MCP `tg_bot_me`** muestran identificador, nombre y nombre de usuario del bot. Usa el token, rechaza el modo sin conexión y no envía mensajes.
+
+- La instalación global de npm instala la skill antes de iniciar sesión cuando se permite su script. En Windows guarda la carpeta de comandos de npm en el PATH del usuario y conserva el lanzador `.cmd` para políticas restrictivas de PowerShell. El instalador de Windows también actualiza la terminal actual, instala skills aunque se omitan scripts y comprueba `tg` sin acceder a la cuenta.
+
+- **La configuración se encuentra nada más instalar:** la ayuda principal y los errores de primer uso indican `tg setup`; la ayuda de setup y sesiones incluye ejemplos, instrucciones para agentes y consejos para Windows. Las guías de inicio, instalación, MCP y seguridad explican el primer uso guiado. `tg skill show` funciona antes de iniciar sesión y setup lo indica al finalizar.
+
+- **`tg topics enable` activa temas de foro y `tg topics create` crea un tema con nombre.** Los grupos básicos requieren `--upgrade --yes`; cambia su identificador y el resultado devuelve la nueva dirección. CLI y MCP comprueban permisos e informan de resultados parciales si la conversión funciona pero la activación falla. Crear temas usa `--send-id` para identificar el intento; rechaza reutilizarlo si ya se envió o el resultado es desconocido. Nunca repitas una creación de resultado desconocido. Los mensajes archivados conservan sus identificadores de chat originales.
+
+- **`tg messages send --topic` y `tg polls create --topic` envían a un tema de foro.** Texto, pies de archivos, respuestas y mensajes programados conservan el tema. Rechaza temas inexistentes o cerrados y respuestas a otro tema antes de enviar. MCP acepta la misma dirección como `topic`.
+- **`tg setup` guía el primer uso:** comprobaciones locales, registro de aplicación automático o en navegador, acceso por QR o teléfono, consulta de cinco chats y skill opcional. Reutiliza sesiones, explica los cinco minutos y deja las descargas de historial como decisión aparte. Windows incluye lanzadores `.cmd` y una alternativa npm exec si falta PATH.
+
+- **`tg mcp setup codex|claude-code` y `tg mcp doctor`** añaden el servidor local al cliente y comprueban la conexión inicial y las herramientas. Setup requiere `--allow-writes` si el perfil ofrece escritura; doctor no comprueba el acceso a Telegram.
+- **`tg <bot> bot store fetch <chat>` importa mensajes anteriores de canales y supergrupos** al archivo local del bot, sin enviar ni marcar como leído. Usa `--from <message link>` al empezar si no conoces un número de mensaje; las ejecuciones siguientes continúan hacia atrás. Rechaza chats privados y grupos básicos. Consulta [la guía de bots](./bot.md#fetching-older-messages).
+
+### Correcciones
+
+- **Una lista truncada de `tg runs list --limit` sugiere aumentar `--limit`**, en vez de usar la opción inexistente `--page`. El JSON conserva `hasMore`; leer ejecuciones guardadas no crea otro registro.
+- Los fallos tempranos de comandos del bot usan sus ajustes de registro; un subcomando desconocido ya no atribuye el fallo a un perfil válido. El ejecutor compartido aplica estas reglas de forma consistente.
+
+- Al completar el acceso se acortan correctamente las rutas personales de Windows. Las comprobaciones de documentación reconocen sus separadores de rutas. Los tests de permisos Unix solo se aplican en Unix; en Windows el acceso sigue ACL heredadas, como explica la guía de seguridad.
+
 ## 0.22.0 — 03.10.2026
 
 ### Novedades

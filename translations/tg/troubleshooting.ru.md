@@ -11,7 +11,7 @@ title: "Решение проблем"
 | `1` | `generic_failure` | опечатка в команде или сбой `tg` | [неизвестная команда](#error-unknown-command-), [сообщить](#report-a-problem) |
 | `2` | `validation_error` | неверное значение, сочетание параметров или несколько подходящих чатов | [значения](#--limit-takes-a-whole-number-from-1-upwards), [чаты](#-matches-3-chats--name-one-by-its-id) |
 | `3` | `configuration_error` | ошибка `config.json` или база новее `tg` | [настройки](#-is-not-a-valid-config), [база](#the-message-store-was-written-by-a-newer-version-) |
-| `4` | `authentication_error` | нет входа, сессия завершена или хранилище ключей недоступно | [сессия](#no-session-for-profile-default--run-tg-session-start) |
+| `4` | `authentication_error` | нет входа, сессия завершена или хранилище ключей недоступно | [нет сессии](#no-session-for-profile-default--run-tg-setup) |
 | `5` | `permission_error` | отказ `permissions` профиля или Telegram | [разрешения](#profile--does-not-let--write-or-profile--denies-), [Telegram](#telegram-refused-) |
 | `6` | `not_found` | чат, сообщение или человек не найден; база пустая | [чат](#no-chat-matches-), [база](#nothing-recorded-for-profile--yet--run-the-command-once-without---offline) |
 | `7` | `confirmation_required` | чат отсутствует в получателях или некому подтвердить действие | [получатели](#chat--is-not-on-the-recipient-list-of-profile-), [подтверждение](#-asks-before-it-acts) |
@@ -60,16 +60,18 @@ error: unknown command 'list'
 
 Здесь `chat` считается профилем, а `list` не является командой. Правильно — `chats`, во множественном числе. Список: `tg --help`.
 
-## Нет сессии профиля «default» — выполните `tg session start`
+## "no session for profile "default" — run `tg setup`"
 
 Код `4`. Профиль ещё не входил на этом компьютере или вышел. Проверьте профиль: первое слово команды или `TG_PROFILE` ([Вход и сессии](./sessions.md#profiles)).
 
 ```sh
-tg session start            # log in
+tg setup                    # guided first run
 tg work chats list          # or name the profile you logged in to
 ```
 
 Если вход выполнен, проверьте различия `TG_CONFIG_DIR`, `TG_STATE_DIR`, `TG_CACHE_DIR` между входом и запуском, например в разных терминалах. Они меняют место хранения входа. `tg config show` показывает заданные переменные; `env | grep TG_` — все.
+
+При первом запуске без ключей приложения ошибка предлагает `tg setup` (или `tg work setup` для рабочего профиля). Варианты входа описаны в `tg setup --help`. Агент может прочитать `tg skill show` до входа. Прерванная или истёкшая сессия требует `tg session start`, затем повторной проверки настройкой.
 
 ## Данные приложения не найдены, хотя вход уже выполнен
 

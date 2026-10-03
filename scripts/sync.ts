@@ -98,7 +98,7 @@ const run = (command: string, args: string[], cwd?: string) =>
     stdio: ["ignore", "pipe", "inherit"],
   })
 
-const sync = (tool: Tool, root: string, ref?: string) => {
+export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = false) => {
   const tag =
     ref ?? tool.docsRef ?? latestTag(run("git", ["ls-remote", "--tags", `https://github.com/${tool.repo}.git`]))
   if (!tag) throw new Error(`${tool.repo}: no vX.Y.Z tag`)
@@ -125,7 +125,7 @@ const sync = (tool: Tool, root: string, ref?: string) => {
     const docs = join(checkout, "docs")
     const files = readdirSync(docs).filter((name) => name.endsWith(".md") && name !== "README.md")
     const pages = new Set(files.map((name) => name.slice(0, -3)))
-    const destination = join(root, "content/docs", tool.name)
+    const destination = join(root, captureOnly ? "content/upstream" : "content/docs", tool.name)
     rmSync(destination, { recursive: true, force: true })
     mkdirSync(destination, { recursive: true })
 
@@ -150,11 +150,12 @@ const sync = (tool: Tool, root: string, ref?: string) => {
     // root: each tool is a tab of its own in the sidebar, not a folder under the others.
     const meta = JSON.parse(readFileSync(join(docs, "meta.json"), "utf8")) as Record<string, unknown>
     writeFileSync(join(destination, "meta.json"), `${JSON.stringify({ ...meta, root: true }, null, 2)}\n`)
-    if (existsSync(join(docs, "design")))
+    if (!captureOnly && existsSync(join(docs, "design")))
       cpSync(join(docs, "design"), join(root, "public", tool.name), {
         recursive: true,
       })
     console.log(`${tool.name}: ${files.length} pages from ${tool.repo} ${tag}`)
+    if (captureOnly) return
     captureUpstream(root, tool)
     const untranslated = localizeTool(root, tool)
     if (untranslated.length) throw new Error(`Documentation localization failed:\n${untranslated.join("\n")}`)
@@ -166,6 +167,10 @@ const sync = (tool: Tool, root: string, ref?: string) => {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const root = join(dirname(fileURLToPath(import.meta.url)), "..")
   const tools = JSON.parse(readFileSync(join(root, "tools.json"), "utf8")) as Tool[]
-  const { values } = parseArgs({ options: { ref: { type: "string" } } })
-  for (const tool of tools) sync(tool, root, values.ref)
+  const { values } = parseArgs({
+    options: { ref: { type: "string" }, tool: { type: "string" }, "capture-only": { type: "boolean", default: false } },
+  })
+  if (values.tool && !tools.some((tool) => tool.name === values.tool)) throw new Error(`Unknown tool: ${values.tool}`)
+  for (const tool of tools.filter((tool) => !values.tool || values.tool === tool.name))
+    syncTool(tool, root, values.ref, values["capture-only"])
 }

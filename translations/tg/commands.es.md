@@ -65,6 +65,23 @@ cierra la sesión del perfil en Telegram y elimina su archivo local
 tg session end
 ```
 
+## `tg setup`
+
+configura Telegram y conecta tu agente
+
+**Cambia algo en Telegram.**
+
+```sh
+tg setup [options]
+```
+
+| Opción | Qué hace |
+|---|---|
+| `--agent <agent>` | instala la skill para este agente; pregunta en una terminal, de lo contrario no instala ninguna. Valores: `none`, `codex`, `cursor`, `claude`, `gemini`, `all`. |
+| `--app <how>` | cómo obtener las credenciales de aplicación Telegram la primera vez. Valores: `auto`, `browser`. Por defecto: `auto`. |
+| `--method <method>` | cómo iniciar sesión si no existe una. Valores: `qr`, `phone`. Por defecto: `qr`. |
+| `--qr-file <png>` | guarda una imagen QR temporal para el acceso del agente; sin terminal requiere credenciales de aplicación guardadas. |
+
 ## `tg account`
 
 la cuenta conectada
@@ -712,7 +729,7 @@ tg messages search <query> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `query` | obligatorio | busca todas las palabras, mejores coincidencias primero; admite "a phrase", -word, a OR b y filtros from: chat: after: before: has: in:. Corrige erratas; sin coincidencias completas, busca cualquiera de las palabras y después fragmentos. |
+| `query` | obligatorio | consulta estricta de Lucene: palabras, "frases", AND/OR/NOT, grupos de campos e intervalos de fechas; --language legacy conserva la búsqueda aproximada. |
 
 | Opción | Qué hace |
 |---|---|
@@ -721,6 +738,8 @@ tg messages search <query> [options]
 | `--limit <n>` | cuántos. |
 | `--newest` | recientes primero en lugar de mejores coincidencias. |
 | `--context <n>` | mensajes anteriores y posteriores a cada resultado; 2 en terminal, 0 en otros casos. |
+| `--language <lucene\|legacy>` | lenguaje de consulta: Lucene estricto o búsqueda aproximada heredada. |
+| `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
 | `--regex` | interpreta el texto como expresión regular sin distinguir mayúsculas; comprueba todos los textos guardados. |
 
 ### `tg messages send`
@@ -740,11 +759,12 @@ tg messages send <chat> [text] [options]
 
 | Opción | Qué hace |
 |---|---|
+| `--topic <id>` | envía a este tema de foro; no disponible en mensajeros sin temas. |
 | `--reply-to <message>` | responde al mensaje indicado por su identificador dentro del mismo chat. |
 | `--send-id <id>` | reintenta un envío de resultado desconocido sin arriesgar una segunda copia. |
 | `--silent` | entrega sin notificación. |
 | `--no-preview` | no muestra vista previa de enlaces. |
-| `--md` | interpreta **negrita**, _cursiva_, \~\~tachado\~\~ y `code`; \ conserva una marca literal. |
+| `--md` | interpreta el Markdown de este mensajero; consulta la guía de formato para la sintaxis admitida. |
 | `--file <file>` | adjunta un archivo; el texto será su leyenda. |
 | `--photo <file>` | adjunta .jpg, .png o .webp como foto; el texto será su leyenda. |
 | `--as-file` | envía --file como archivo descargable, incluidos vídeos. |
@@ -838,7 +858,7 @@ tg messages edit <chat> <message> [text] [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--md` | interpreta **negrita**, _cursiva_, \~\~tachado\~\~ y `code`; \ conserva una marca literal. |
+| `--md` | interpreta el Markdown de este mensajero; consulta la guía de formato para la sintaxis admitida. |
 
 ### `tg messages delete`
 
@@ -1045,6 +1065,7 @@ tg polls create <chat> <question> <answers> [options]
 
 | Opción | Qué hace |
 |---|---|
+| `--topic <id>` | envía a este tema de foro; no disponible en mensajeros sin temas. |
 | `--multiple` | permite elegir varias respuestas. |
 | `--anonymous` | oculta quién votó por cada opción. |
 | `--revote` | permite cambiar el voto. |
@@ -1209,6 +1230,43 @@ tg topics search <chat> <text> [options]
 | `--limit <n>` | cuántos mostrar. |
 | `--page <n>` | número de página, desde 1. |
 | `--all` | todas las filas, sin paginar. |
+
+### `tg topics enable`
+
+activa temas de foro; solo el propietario, con conversión explícita para un grupo básico
+
+**Cambia algo en Telegram.**
+
+```sh
+tg topics enable <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | un chat: título o parte de él, identificador, @username o `me` para Mensajes guardados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--upgrade` | convierte primero un grupo básico en supergrupo; cambia el identificador del chat. |
+
+### `tg topics create`
+
+crea un tema con nombre en un foro existente; nunca activa ni convierte un grupo implícitamente
+
+**Cambia algo en Telegram.**
+
+```sh
+tg topics create <chat> <title> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | un chat: título o parte de él, identificador, @username o `me` para Mensajes guardados. |
+| `title` | obligatorio | el título del tema, hasta 128 bytes UTF-8. |
+
+| Opción | Qué hace |
+|---|---|
+| `--send-id <id>` | identifica este intento de creación; rechaza un identificador ya enviado o de resultado desconocido. |
 
 ## `tg watch`
 
@@ -1887,6 +1945,45 @@ tg mcp config [options]
 | `--allow-mark-read` | obsoleta: deciden los permisos del perfil. |
 | `--allow-delete` | obsoleta: deciden los permisos del perfil. |
 
+### `tg mcp setup`
+
+añade el servidor MCP local de este perfil a Codex o Claude Code
+
+**Solo cambia algo en este equipo.**
+
+```sh
+tg mcp setup <client> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `client` | obligatorio | codex o claude-code. |
+
+| Opción | Qué hace |
+|---|---|
+| `--allow-writes` | confirma que este perfil ofrece herramientas de escritura. |
+| `--confirm-send` | muestra al propietario un formulario del servidor antes de cada escritura. |
+| `--allow-dangerous` | omite el formulario antes de eliminar con nivel de permiso ask. |
+| `--allow-send` | ya no se usa: los permisos del perfil deciden; se conserva para que las configuraciones anteriores arranquen. |
+| `--allow-mark-read` | ya no se usa: los permisos del perfil deciden. |
+| `--allow-delete` | ya no se usa: los permisos del perfil deciden. |
+
+### `tg mcp doctor`
+
+comprueba la conexión inicial MCP local y la lista de herramientas de este perfil
+
+```sh
+tg mcp doctor [options]
+```
+
+| Opción | Qué hace |
+|---|---|
+| `--confirm-send` | muestra al propietario un formulario del servidor antes de cada escritura. |
+| `--allow-dangerous` | omite el formulario antes de eliminar con nivel de permiso ask. |
+| `--allow-send` | ya no se usa: los permisos del perfil deciden; se conserva para que las configuraciones anteriores arranquen. |
+| `--allow-mark-read` | ya no se usa: los permisos del perfil deciden. |
+| `--allow-delete` | ya no se usa: los permisos del perfil deciden. |
+
 ## `tg bot`
 
 bot de Telegram mediante la Bot API oficial y un token, independiente de tu cuenta personal
@@ -2154,7 +2251,7 @@ tg bot messages send <chat> [text] [options]
 |---|---|
 | `--reply-to <message>` | responde al mensaje indicado por su identificador dentro del mismo chat. |
 | `--silent` | entrega sin notificación. |
-| `--md` | interpreta **negrita**, _cursiva_, \~\~tachado\~\~ y `code`; \ conserva una marca literal. |
+| `--md` | interpreta el Markdown de este mensajero; consulta la guía de formato para la sintaxis admitida. |
 | `--html` | texto HTML: <b>, <i>, <a href>, <code>. |
 | `--file <file>` | adjunta un archivo; el texto será su leyenda. |
 | `--photo <file>` | adjunta .jpg, .png o .webp como foto; el texto será su leyenda. |
@@ -2209,7 +2306,7 @@ tg bot messages edit <chat> <message> <text> [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--md` | interpreta **negrita**, _cursiva_, \~\~tachado\~\~ y `code`; \ conserva una marca literal. |
+| `--md` | interpreta el Markdown de este mensajero; consulta la guía de formato para la sintaxis admitida. |
 | `--html` | texto HTML: <b>, <i>, <a href>, <code>. |
 
 #### `tg bot messages delete`
@@ -2504,6 +2601,39 @@ tg bot contacts show <who> [options]
 | `--bots <profiles>` | también lee estos bots, separados por comas; todos deben estar permitidos por readOtherBots. |
 | `--limit <n>` | cantidad de mensajes del chat privado. |
 | `--refresh` | vuelve a consultar primero el chat privado desde el servicio; una petición. |
+
+### `tg bot me`
+
+el bot al que pertenece el token de este perfil: identificador, nombre y nombre de usuario
+
+```sh
+tg bot me
+```
+
+### `tg bot store`
+
+la copia local del bot en este equipo
+
+#### `tg bot store fetch`
+
+descarga el historial del chat a la copia local del bot, recientes primero; repite para continuar
+
+```sh
+tg bot store fetch <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | identificador del chat o título de un chat visto por este bot. |
+
+| Opción | Qué hace |
+|---|---|
+| `--limit <n>` | máximo de mensajes en esta ejecución; 1000 si se omite. |
+| `--page-size <n>` | mensajes por petición; 100 si se omite. |
+| `--pause <duration>` | espera entre páginas para respetar los límites del mensajero. Por defecto: `1s`. |
+| `--since-time <time>` | se detiene al llegar a mensajes anteriores al momento indicado: ISO 8601 o 2h / 1d atrás. |
+| `--last <n>` | se detiene cuando tiene guardados los n mensajes más recientes. |
+| `--from <link>` | empieza en este enlace de mensaje, incluido; de lo contrario usa el mensaje más reciente conocido. |
 
 ### `tg bot mcp`
 

@@ -99,3 +99,7 @@ tg runs list --limit 100 --json | jq '[.items[] | select(.requests > 10) | {comm
 
 - [Solución de problemas](./troubleshooting.md): qué significa cada error y cómo resolverlo.
 - [Seguridad](./security.md): qué se guarda en disco.
+
+## Descubrir comandos desde scripts
+
+`tg commands --json` enumera comandos, opciones globales y códigos de salida sin conectar una cuenta. `cli` identifica la herramienta, `version` es la versión instalada del paquete y `contract` es la versión del contrato JSON compartido (`0`). Cambia cuando hay modificaciones incompatibles en los campos de respuesta; actualizar el paquete por sí solo no cambia `contract`. Los scripts pueden consultar campos individuales en vez de comparar todo el JSON con una cadena guardada.

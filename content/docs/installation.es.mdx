@@ -28,12 +28,12 @@ Introduce los códigos y contraseñas en tu terminal local cuando los pida el CL
 1. Ejecuta en tu terminal local:
 
    ```sh
-   tg session start --app auto
+   tg setup --agent all
    ```
 
 2. La primera vez, el CLI obtiene las credenciales de la aplicación Telegram. Introduce el número y el código recibido en Telegram cuando se soliciten.
 3. En el teléfono, selecciona la cuenta correcta. Abre Ajustes → Dispositivos → Vincular dispositivo de escritorio y escanea el QR del ordenador.
-4. Introduce tu contraseña de dos pasos si se solicita y espera un acceso correcto.
+4. Introduce tu contraseña de dos pasos si se solicita. La configuración comprueba tu cuenta y cinco chats e instala los skills. Reutiliza una sesión existente; la descarga del historial se elige aparte. Para iniciar sesión sin más pasos, usa `tg session start --app auto`.
 
 Si falla el registro automático, usa:
 
@@ -125,7 +125,7 @@ tg doctor
 Iniciar sesión:
 
 ```sh
-tg session start --app auto
+tg setup --agent all
 ```
 
 Cuenta:
