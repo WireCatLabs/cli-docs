@@ -102,4 +102,4 @@
 - **EN:** All Bot API methods. Every method of the official Telegram and MAX Bot APIs is exposed through the CLI, alongside simple commands for messages, files and chat administration.
 - **ES:** Todos los métodos de la Bot API. Todos los métodos de las Bot API oficiales de Telegram y MAX están disponibles desde la CLI, junto con comandos sencillos para mensajes, archivos y administración de chats.
 
-Покрытие относится к нативному интерфейсу `tg bot api` / `max bot api`. MCP предоставляет отдельные инструменты для типичных задач. Доступность операций определяется провайдером; полного live-прогона всех методов не заявляем. Публиковать этот текст о Telegram после npm-релиза с generated Bot API: текущая 0.24.0 его не содержит.
+Покрытие относится к нативному интерфейсу `tg bot api` / `max bot api`. MCP предоставляет отдельные инструменты для типичных задач. Доступность операций определяется провайдером; полного live-прогона всех методов не заявляем. Текст соответствует опубликованным Telegram CLI 0.25.0 и MAX CLI 0.25.0; общий guide указывает эти минимальные версии.
