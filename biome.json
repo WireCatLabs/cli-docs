@@ -9,7 +9,8 @@
       "!**/.source",
       "!content/docs/*/",
       "!pnpm-lock.yaml",
-      "!next-env.d.ts"
+      "!next-env.d.ts",
+      "!design"
     ]
   },
   "overrides": [

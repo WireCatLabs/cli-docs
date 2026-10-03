@@ -1,0 +1,100 @@
+.wirecat-landing .agent-connect {
+  position: relative;
+  max-width: 100%;
+}
+.wirecat-landing .agent-connect > summary {
+  cursor: pointer;
+  list-style: none;
+  gap: 10px;
+}
+.wirecat-landing .agent-connect > summary::-webkit-details-marker {
+  display: none;
+}
+.wirecat-landing .agent-connect > summary svg {
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.wirecat-landing .agent-connect[open] > summary svg {
+  transform: rotate(180deg);
+}
+.wirecat-landing .connect-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  z-index: 10;
+  width: min(360px, calc(100vw - 36px));
+  padding: 12px;
+  border: 1px solid var(--app-line);
+  border-radius: 18px;
+  background: var(--app);
+  box-shadow: 0 12px 40px #0006;
+}
+.wirecat-landing .connect-menu p {
+  margin: 0 4px 12px;
+  color: var(--app-soft);
+  font-size: 13px;
+}
+.wirecat-landing .agent-connect[open] .connect-menu {
+  animation: connect-menu-enter 140ms ease-out;
+}
+@keyframes connect-menu-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.wirecat-landing .connect-choice {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--app-line);
+  border-radius: 12px;
+  background: var(--app-2);
+  color: var(--app-ink);
+  cursor: pointer;
+  text-align: left;
+}
+.wirecat-landing .connect-choice:hover,
+.wirecat-landing .connect-choice[data-done] {
+  border-color: var(--me);
+}
+.wirecat-landing .connect-choice-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 14px;
+}
+.wirecat-landing .connect-choice-title > span {
+  color: var(--key);
+  font-size: 12px;
+}
+.wirecat-landing .connect-choice code {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--code);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.wirecat-landing .connect-guide {
+  display: block;
+  width: fit-content;
+  margin: 8px 4px 12px;
+  color: var(--app-soft);
+  font-size: 12px;
+}
+.wirecat-landing .connect-guide:last-child {
+  margin-bottom: 0;
+}
+.wirecat-landing .agent-connect :is(summary, button, a):focus-visible {
+  outline: 2px solid var(--me);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wirecat-landing .agent-connect > summary svg {
+    transition: none;
+  }
+  .wirecat-landing .agent-connect[open] .connect-menu {
+    animation: none;
+  }
+}

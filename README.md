@@ -8,14 +8,22 @@ agents: `/llms.txt`, `/llms-full.txt` and a Markdown copy of every page.
 How the site is laid out: [docs/DESIGN.md](docs/DESIGN.md). Picking up the work:
 [HANDOFF.md](HANDOFF.md).
 
-**The pages are not written here.** Each tool keeps its own in its repository's `docs/`, laid out by
+Each tool keeps its reference pages in its repository's `docs/`, laid out by
 [STRUCTURE.md](docs/STRUCTURE.md); `pnpm sync` copies them at the tool's newest release tag.
+Shared installation, agent and MCP guides live here in `content/docs/`, in all three languages.
+Tool translations and the concise entry pages live in `translations/`. They are installed after
+release sync; `content/upstream/` holds the untouched release pages locally. `pnpm docs:localize`
+checks per-locale source fingerprints, heading structure, executable examples, literals and link destinations.
+Changed upstream text requires a translation review before a successful build. Original heading
+anchors remain available alongside translated headings, and Markdown copies keep their language.
+Reviewed release errata are applied after validation from `scripts/docs-corrections.json`; exact
+matches prevent silently applying an old correction to a new source. Findings are in `docs/reviews/`.
 
 ## Running it
 
 ```sh
 pnpm install
-pnpm sync --ref main     # the tools' pages; without --ref, their newest release tags
+pnpm sync                # newest released tools, with reviewed translations
 pnpm dev                 # http://localhost:3000
 ```
 
@@ -25,6 +33,22 @@ pnpm dev                 # http://localhost:3000
 pnpm lint && pnpm typecheck && pnpm test
 pnpm check:links         # every link inside out/ leads to a page and, with an anchor, a heading
 ```
+
+## Landing page
+
+The home page preserves the reviewed `design/landing/g-home*.html` design in all three languages.
+Run `node scripts/export-landing.mjs` after editing those prototypes or
+`design/landing/scenario-variants.js`; it exports trusted static markup, the seven selected
+demo sessions and scoped CSS into `lib/landing/`. The complete scenario bank is preserved in
+`docs/LANDING_SCENARIOS.md`, and marketing copy in `docs/MARKETING.md`. Production omits the design
+switches and experimental feature variants. Agent setup links lead to the shared documentation.
+`components/landing.tsx` adds demo, replay and copy interactions and cleans them up on navigation.
+Fonts, including the selected Fira Sans Extra Condensed for Russian, are served locally from `public/fonts/`, with their
+OFL licences. Browser icons are wired in the shared metadata; run
+`node scripts/export-favicons.mjs` (ImageMagick required) to regenerate them from `app/icon.svg`.
+About is a separate localized `/{lang}/about` page; its content and public contact
+are in `lib/about.ts`. The export removes the old inline About section and links to this page.
+After the demo, sections are benefits, Telegram/MAX, reasons, and a concise daily timeline.
 
 ## Adding a tool
 

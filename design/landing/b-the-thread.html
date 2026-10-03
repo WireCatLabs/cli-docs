@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WireCat Thread</title>
+<meta name="description" content="Ask your agent what you missed. It has already read everything.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,500..900&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: the page is a messenger wallpaper; every claim is proven by a short thread with your agent. */
+  :root {
+    --wall: #cddc98;
+    --wall-ink: #b4c77a;
+    --ink: #14170e;
+    --ink-soft: #3f4630;
+    --me: #2f37d9;
+    --me-ink: #ffffff;
+    --me-soft: #c9ccff;
+    --bot: #ffffff;
+    --bot-ink: #14170e;
+    --bot-soft: #626b52;
+    --chip: #eef3dc;
+    --tick: #2f37d9;
+    --panel: #14170e;
+    --panel-ink: #f2f6e4;
+    --panel-soft: #aab394;
+    --display: "Anybody", "Onest", system-ui, sans-serif;
+    --body: "Onest", system-ui, sans-serif;
+    --code: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    --gutter: clamp(16px, 4vw, 48px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --wall: #1b2213; --wall-ink: #26301a; --ink: #eef3df; --ink-soft: #b5bf9c;
+      --me: #4b53f0; --me-ink: #ffffff; --me-soft: #d3d5ff;
+      --bot: #2a3220; --bot-ink: #eef3df; --bot-soft: #a2ac8a; --chip: #1f2618; --tick: #9ea4ff;
+      --panel: #0f130a; --panel-ink: #eef3df; --panel-soft: #9aa486;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --wall: #1b2213; --wall-ink: #26301a; --ink: #eef3df; --ink-soft: #b5bf9c;
+    --me: #4b53f0; --me-ink: #ffffff; --me-soft: #d3d5ff;
+    --bot: #2a3220; --bot-ink: #eef3df; --bot-soft: #a2ac8a; --chip: #1f2618; --tick: #9ea4ff;
+    --panel: #0f130a; --panel-ink: #eef3df; --panel-soft: #9aa486;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background-color: var(--wall); color: var(--ink);
+    font: 400 17px/1.55 var(--body); -webkit-font-smoothing: antialiased;
+  }
+  .wallpaper {
+    background-color: var(--wall);
+    background-image: var(--doodles);
+    background-size: 220px 220px;
+  }
+  ::selection { background: var(--me); color: var(--me-ink); }
+  a { color: inherit; text-underline-offset: 0.2em; }
+  :focus-visible { outline: 2px solid var(--me); outline-offset: 3px; border-radius: 6px; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding-inline: var(--gutter); }
+
+  header.top { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 22px; }
+  .mark { display: inline-flex; align-items: center; gap: 10px; font: 800 22px/1 var(--display); font-stretch: 120%; text-decoration: none; letter-spacing: -0.01em; }
+  .mark svg { width: 30px; height: 30px; }
+  nav { display: flex; gap: clamp(14px, 3vw, 28px); font-weight: 500; font-size: 15px; }
+  nav a { text-decoration: none; color: var(--ink-soft); }
+  nav a:hover { color: var(--ink); }
+
+  .hero {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 470px);
+    gap: clamp(32px, 6vw, 80px); align-items: center;
+    padding-block: clamp(20px, 5vw, 64px) clamp(64px, 9vw, 120px);
+  }
+  h1 {
+    font: 900 clamp(46px, 7vw, 96px)/0.9 var(--display); font-stretch: 62%;
+    letter-spacing: -0.02em; margin: 0 0 26px; text-transform: uppercase; text-wrap: balance;
+  }
+  h1 span { color: var(--me); }
+  .lede { font-size: clamp(18px, 1.6vw, 21px); color: var(--ink-soft); margin: 0 0 34px; max-width: 32em; }
+  .lede b { color: var(--ink); font-weight: 600; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; }
+  .cmd {
+    display: inline-flex; align-items: center; gap: 14px; min-width: 0; max-width: 100%;
+    background: var(--panel); color: var(--panel-ink); border-radius: 999px;
+    padding: 6px 6px 6px 20px; font: 400 15px/1 var(--code);
+  }
+  .cmd code { font: inherit; white-space: nowrap; overflow-x: auto; padding-block: 4px; }
+  .cmd code::before { content: "$ "; color: var(--panel-soft); }
+  .copy {
+    flex: none; border: 0; cursor: pointer; border-radius: 999px; padding: 10px 16px;
+    background: var(--panel-ink); color: var(--panel); font: 600 13px/1 var(--body);
+  }
+  .copy[data-done], .copy:hover { background: var(--me); color: var(--me-ink); }
+  .btn {
+    display: inline-flex; align-items: center; min-height: 50px; padding: 0 24px; border-radius: 999px;
+    background: var(--me); color: var(--me-ink); text-decoration: none; font: 600 16px/1 var(--body);
+    box-shadow: 0 10px 20px -12px rgba(20, 23, 14, 0.5); transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .tagline { margin-top: 24px; font-size: 14px; color: var(--ink-soft); }
+  .tagline b { color: var(--ink); }
+
+  /* Chat window */
+  .chat {
+    background: color-mix(in srgb, var(--wall) 70%, var(--bot) 30%);
+    border-radius: 28px; overflow: hidden;
+    box-shadow: 0 40px 80px -40px rgba(20, 23, 14, 0.55), 0 0 0 1px color-mix(in srgb, var(--ink) 10%, transparent);
+  }
+  .chat-head {
+    display: flex; align-items: center; gap: 12px; padding: 14px 18px;
+    background: var(--bot); color: var(--bot-ink);
+  }
+  .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--me); display: grid; place-items: center; flex: none; }
+  .avatar svg { width: 24px; height: 24px; }
+  .chat-head b { display: block; font-weight: 600; }
+  .chat-head small { color: var(--bot-soft); font-size: 13px; }
+  .thread { display: flex; flex-direction: column; gap: 8px; padding: 18px 14px 20px; }
+  .day { align-self: center; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: color-mix(in srgb, var(--panel) 55%, transparent); color: var(--panel-ink); margin-bottom: 4px; }
+  .msg {
+    max-width: 86%; padding: 9px 13px 7px; border-radius: 18px; font-size: 15.5px; line-height: 1.45;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); position: relative;
+  }
+  .msg p { margin: 0; }
+  .msg p + p, .msg ul + p, .msg p + ul { margin-top: 6px; }
+  .msg ul { margin: 0; padding-left: 18px; }
+  .msg li + li { margin-top: 3px; }
+  .me { align-self: flex-end; background: var(--me); color: var(--me-ink); border-bottom-right-radius: 6px; }
+  .bot { align-self: flex-start; background: var(--bot); color: var(--bot-ink); border-bottom-left-radius: 6px; }
+  .meta { display: flex; justify-content: flex-end; align-items: center; gap: 4px; font-size: 11.5px; margin-top: 2px; opacity: 0.75; }
+  .me .meta { color: var(--me-soft); opacity: 1; }
+  .meta svg { width: 16px; height: 16px; }
+  .ran {
+    display: inline-flex; align-items: center; gap: 8px; margin-bottom: 6px; max-width: 100%;
+    font: 500 12px/1.3 var(--code); color: var(--bot-soft); background: var(--chip);
+    padding: 5px 9px; border-radius: 8px; overflow-x: auto; white-space: nowrap;
+  }
+  .ran svg { width: 13px; height: 13px; flex: none; }
+  .who { font-weight: 600; }
+  .quote { border-left: 2px solid var(--me); padding-left: 9px; margin-bottom: 4px; }
+  .quote small { display: block; color: var(--me); font-weight: 600; font-size: 13px; }
+  .voice { display: flex; align-items: center; gap: 10px; }
+  .voice svg { height: 26px; flex: 1; min-width: 0; }
+  .voice svg rect { fill: currentColor; }
+  .typing { display: inline-flex; gap: 4px; padding: 14px 14px; }
+  .typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--bot-soft); animation: blink 1.2s infinite; }
+  .typing i:nth-child(2) { animation-delay: 0.15s; }
+  .typing i:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes blink { 0%, 60%, 100% { opacity: 0.25; } 30% { opacity: 1; } }
+
+  .js .play .msg { animation: pop 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards; animation-delay: calc(var(--i) * 0.55s + 0.2s); }
+  @keyframes pop { from { opacity: 0; transform: translateY(10px) scale(0.97); filter: blur(3px); } }
+
+  /* Scenes */
+  section { padding-block: clamp(64px, 9vw, 128px); }
+  h2 {
+    font: 900 clamp(36px, 5vw, 68px)/0.92 var(--display); font-stretch: 62%; text-transform: uppercase;
+    letter-spacing: -0.01em; margin: 0 0 16px; text-wrap: balance;
+  }
+  .intro { color: var(--ink-soft); font-size: 19px; max-width: 34em; margin: 0 0 clamp(40px, 6vw, 72px); }
+  .scenes { display: grid; gap: clamp(56px, 8vw, 104px); }
+  .scene { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 5vw, 72px); align-items: center; }
+  .scene:nth-child(even) .scene-text { order: 2; }
+  .scene h3 { font: 800 clamp(28px, 3.2vw, 42px)/1 var(--display); font-stretch: 75%; letter-spacing: -0.01em; margin: 0 0 12px; text-transform: uppercase; }
+  .scene p { margin: 0; color: var(--ink-soft); max-width: 30em; }
+  .scene p + p { margin-top: 12px; }
+  .scene .msg p { color: inherit; max-width: none; }
+  [hidden] { display: none !important; }
+  .scene .chat { border-radius: 24px; }
+  .scene .thread { padding-block: 16px; }
+
+  .dark {
+    background: var(--panel); color: var(--panel-ink);
+  }
+  .dark h2 { color: var(--panel-ink); }
+  .dark .intro { color: var(--panel-soft); }
+  .tabs { display: inline-flex; flex-wrap: wrap; gap: 6px; padding: 6px; border-radius: 999px; background: color-mix(in srgb, var(--panel-ink) 10%, transparent); }
+  .tab {
+    border: 0; cursor: pointer; border-radius: 999px; padding: 12px 18px; font: 600 15px/1 var(--body);
+    background: transparent; color: var(--panel-soft);
+  }
+  .tab[aria-selected="true"] { background: var(--panel-ink); color: var(--panel); }
+  .tabpanel { margin-top: 28px; display: grid; gap: 14px; max-width: 640px; }
+  .tabpanel p { margin: 0; color: var(--panel-soft); }
+  .tabpanel .cmd { background: color-mix(in srgb, var(--panel-ink) 10%, transparent); justify-content: space-between; }
+  .limits { margin-top: 56px; padding-top: 28px; border-top: 1px solid color-mix(in srgb, var(--panel-ink) 16%, transparent); color: var(--panel-soft); max-width: 46em; }
+
+  .tools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  .tool {
+    background: var(--bot); color: var(--bot-ink); border-radius: 28px; padding: clamp(24px, 3vw, 36px);
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .tool-name { font: 900 64px/0.9 var(--display); font-stretch: 70%; text-transform: lowercase; }
+  .tool-name small { display: block; font: 600 14px/1.3 var(--body); color: var(--bot-soft); margin-top: 8px; text-transform: none; }
+  .tool p { margin: 0; }
+  .tool .cmd { margin-top: auto; }
+  .tool-links { display: flex; gap: 18px; font-weight: 600; font-size: 15px; }
+
+  .close { text-align: center; }
+  .close h2 { margin-inline: auto; max-width: 12em; }
+  .close .cta { justify-content: center; margin-top: 32px; }
+  footer { padding-block: 28px 44px; font-size: 14px; color: var(--ink-soft); }
+  footer .wrap { display: flex; justify-content: space-between; gap: 14px 28px; flex-wrap: wrap; }
+
+  @media (max-width: 900px) {
+    .hero, .scene { grid-template-columns: minmax(0, 1fr); }
+    .scene:nth-child(even) .scene-text { order: 0; }
+    .tools { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 520px) {
+    nav a.hide-sm { display: none; }
+    .msg { max-width: 92%; font-size: 15px; }
+    .cmd { font-size: 13.5px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .js .play .msg { animation: none; }
+    .typing i { animation: none; opacity: 0.6; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wallpaper">
+<header class="top wrap">
+  <a class="mark" href="#">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="16" fill="var(--me)"/><path d="M9 21V11l4 4 3-4 3 4 4-4v10" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/></svg>
+    WireCat
+  </a>
+  <nav aria-label="Site">
+    <a href="#ask">What you can ask</a>
+    <a class="hide-sm" href="#connect">Connect</a>
+    <a href="https://wirecat.dev/en/docs/tg">Docs</a>
+    <a class="hide-sm" href="https://github.com/leemour/tg-cli">GitHub</a>
+  </nav>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div>
+      <h1>Ask what you missed. <span>Your agent already read it.</span></h1>
+      <p class="lede">WireCat puts your own <b>Telegram and MAX</b> in the hands of Claude Code, Codex or Cursor. It reads every chat, tells you who needs you, and replies in your name when you say so.</p>
+      <div class="cta">
+        <span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copy</button></span>
+        <a class="btn" href="#connect">Connect your agent</a>
+      </div>
+      <p class="tagline"><b>AI messaging with CLI tools for agents.</b> Free, open source, on your own computer.</p>
+    </div>
+
+    <div class="chat play" aria-label="A conversation with your agent">
+      <div class="chat-head">
+        <span class="avatar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18V7l4 4 3-4 3 4 4-4v11" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg></span>
+        <span><b>Your agent</b><small>reads tg and max</small></span>
+      </div>
+      <div class="thread">
+        <span class="day">Today</span>
+        <div class="msg me" style="--i:0"><p>Anything I missed today?</p><div class="meta">21:40 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M1.5 8.5l3 3 6-7M6.5 11.5l.5.5 6-7"/></svg></div></div>
+        <div class="msg bot" style="--i:1">
+          <span class="ran"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 4l4 4-4 4M8 12h5"/></svg>tg inbox --new</span>
+          <p>Three people are waiting on you:</p>
+          <ul>
+            <li><span class="who">Anna</span>, book club: is Friday still on? <i>2h</i></li>
+            <li><span class="who">Oleg</span> needs you to approve the release tag. <i>40m</i></li>
+            <li><span class="who">Mum</span> sent a voice note: "Call me when you land."</li>
+          </ul>
+          <p>The other 211 are muted groups with nothing for you.</p>
+          <div class="meta">21:40</div>
+        </div>
+        <div class="msg me" style="--i:2"><p>Tell Anna yes, 7pm. And remind the team about standup at 9 tomorrow.</p><div class="meta">21:41 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M1.5 8.5l3 3 6-7M6.5 11.5l.5.5 6-7"/></svg></div></div>
+        <div class="msg bot" style="--i:3">
+          <span class="ran"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 4l4 4-4 4M8 12h5"/></svg>tg messages send Team "Standup at 9" --at 2026-10-03T09:00</span>
+          <p>Done. Anna has her answer. The standup reminder goes out at 09:00, even if your laptop is asleep.</p>
+          <div class="meta">21:41</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<section id="ask" style="padding-top:0">
+  <div class="wrap">
+    <h2>Ask it like you would ask a friend</h2>
+    <p class="intro">Your agent picks the command, reads the answer and puts it in a sentence. You never have to learn a flag.</p>
+    <div class="scenes">
+      <div class="scene">
+        <div class="scene-text">
+          <h3>Find anything, years back</h3>
+          <p>WireCat keeps a copy of your chats on your computer. Search all of it, even with no signal, without asking Telegram.</p>
+        </div>
+        <div class="chat"><div class="thread">
+          <div class="msg me"><p>What was the wifi password Dasha sent in March?</p><div class="meta">08:05</div></div>
+          <div class="msg bot">
+            <span class="ran"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 4l4 4-4 4M8 12h5"/></svg>tg messages search wifi --chat Dasha</span>
+            <div class="quote"><small>Dasha · 14 March</small>New wifi is Kitchen-5G, password on the fridge: hedgehog-42</div>
+            <p>hedgehog-42. Want me to send it to Oleg?</p><div class="meta">08:05</div>
+          </div>
+        </div></div>
+      </div>
+      <div class="scene">
+        <div class="scene-text">
+          <h3>Read voice notes in a meeting</h3>
+          <p>Voice notes turn into text, by Telegram or by a speech model that runs on your own machine, in 25 languages.</p>
+        </div>
+        <div class="chat"><div class="thread">
+          <div class="msg me"><p>What did Mum say? I can't listen right now.</p><div class="meta">11:20</div></div>
+          <div class="msg bot">
+            <span class="ran"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 4l4 4-4 4M8 12h5"/></svg>tg messages transcribe Mum 8812 --local</span>
+            <div class="voice"><svg viewBox="0 0 120 26" preserveAspectRatio="none" aria-hidden="true" id="wave"></svg><small>0:42</small></div>
+            <p>"Your flight is still at six? Call me when you land, and don't forget Granddad's birthday on Sunday."</p><div class="meta">11:20</div>
+          </div>
+        </div></div>
+      </div>
+      <div class="scene">
+        <div class="scene-text">
+          <h3>Never leave anyone hanging</h3>
+          <p>Your agent sees every question you have not answered, in every chat, and how long each person has waited.</p>
+        </div>
+        <div class="chat"><div class="thread">
+          <div class="msg me"><p>Who am I ignoring this week?</p><div class="meta">18:02</div></div>
+          <div class="msg bot">
+            <span class="ran"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 4l4 4-4 4M8 12h5"/></svg>tg review --since 7d --unanswered</span>
+            <ul><li><span class="who">Pablo</span> asked about the invoice. <i>4 days</i></li><li><span class="who">Landlord</span>: can the plumber come Tuesday? <i>2 days</i></li><li><span class="who">Kate</span> shared slides and asked for notes. <i>6h</i></li></ul>
+            <p>Shall I draft replies for you to check?</p><div class="meta">18:02</div>
+          </div>
+        </div></div>
+      </div>
+      <div class="scene">
+        <div class="scene-text">
+          <h3>Keep your groups clean</h3>
+          <p>On MAX, your bot removes spam, stranger links and flood by rules you write, through the official MAX Bot API.</p>
+        </div>
+        <div class="chat"><div class="thread">
+          <div class="msg me"><p>Clean up the residents' chat.</p><div class="meta">09:15</div></div>
+          <div class="msg bot">
+            <span class="ran"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 4l4 4-4 4M8 12h5"/></svg>max house bot chats check "Residents"</span>
+            <p>Removed 4 spam messages and banned 1 account posting casino links. Two questions about the lift have no answer yet.</p><div class="meta">09:15</div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<section class="dark" id="connect">
+  <div class="wrap">
+    <h2>One command. Your agent knows the rest.</h2>
+    <p class="intro">Each tool ships with an agent skill and an MCP server.</p>
+    <div class="tabs" role="tablist" aria-label="Where your agent lives">
+      <button class="tab" role="tab" type="button" id="t1" aria-selected="true" aria-controls="p1">Claude Code · Codex · Gemini CLI</button>
+      <button class="tab" role="tab" type="button" id="t2" aria-selected="false" aria-controls="p2">MCP clients</button>
+      <button class="tab" role="tab" type="button" id="t3" aria-selected="false" aria-controls="p3">Any model</button>
+    </div>
+    <div class="tabpanel" role="tabpanel" id="p1" aria-labelledby="t1">
+      <p>Installs the skill that teaches your agent every command.</p>
+      <span class="cmd"><code>tg skill install</code><button class="copy" type="button" data-copy="tg skill install">Copy</button></span>
+    </div>
+    <div class="tabpanel" role="tabpanel" id="p2" aria-labelledby="t2" hidden>
+      <p>Claude Desktop, Cursor and others: prints the entry to paste into your client's settings.</p>
+      <span class="cmd"><code>tg mcp config</code><button class="copy" type="button" data-copy="tg mcp config">Copy</button></span>
+    </div>
+    <div class="tabpanel" role="tabpanel" id="p3" aria-labelledby="t3" hidden>
+      <p>Every docs page as plain Markdown, in one list.</p>
+      <span class="cmd"><code>wirecat.dev/llms.txt</code><button class="copy" type="button" data-copy="https://wirecat.dev/llms.txt">Copy</button></span>
+    </div>
+    <p class="limits">You decide which chats it may write to and how often it sends. Or give it a read-only profile and let it only tell you.</p>
+  </div>
+</section>
+
+<div class="wallpaper">
+<section>
+  <div class="wrap">
+    <h2>Telegram and MAX, the same words</h2>
+    <p class="intro">Learn one and you know the other.</p>
+    <div class="tools">
+      <article class="tool">
+        <div class="tool-name">tg<small>Telegram</small></div>
+        <p>A Telegram client for the terminal and for AI agents, on your own account.</p>
+        <span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copy</button></span>
+        <div class="tool-links"><a href="https://wirecat.dev/en/docs/tg">Docs</a><a href="https://github.com/leemour/tg-cli">GitHub</a><a href="https://www.npmjs.com/package/@leemour/tg-cli">npm</a></div>
+      </article>
+      <article class="tool">
+        <div class="tool-name">max<small>MAX Messenger</small></div>
+        <p>Your MAX bots through the official Bot API, and your personal account.</p>
+        <span class="cmd"><code>npm i -g @leemour/max-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/max-cli">Copy</button></span>
+        <div class="tool-links"><a href="https://wirecat.dev/ru/docs/max">Docs</a><a href="https://github.com/leemour/max-cli">GitHub</a><a href="https://www.npmjs.com/package/@leemour/max-cli">npm</a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="close" style="padding-top:0">
+  <div class="wrap">
+    <h2>Say hi to your agent tonight</h2>
+    <div class="cta">
+      <span class="cmd"><code>npm i -g @leemour/tg-cli && tg session start</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli && tg session start">Copy</button></span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>WireCat · MIT licence · Docs for models at <a href="https://wirecat.dev/llms.txt">/llms.txt</a> · Windows, macOS, Linux</span>
+    <span>English · Русский · Español</span>
+  </div>
+</footer>
+</div>
+
+<script>
+  document.documentElement.classList.add("js")
+
+  const doodle = (color) => {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" viewBox="0 0 220 220" fill="none" stroke="${color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 40l40-16-12 40-9-14z"/><path d="M41 50l21-26"/>
+      <path d="M140 24h46a10 10 0 0 1 10 10v20a10 10 0 0 1-10 10h-30l-12 10v-10h-4a10 10 0 0 1-10-10V34a10 10 0 0 1 10-10z"/>
+      <path d="M30 140l10-14 10 14m16 0l10-14 10 14M28 140c0 22 50 22 50 0"/><circle cx="44" cy="150" r="1.5"/><circle cx="62" cy="150" r="1.5"/>
+      <path d="M150 130l6 18h19l-15 11 6 18-16-11-16 11 6-18-15-11h19z"/>
+      <path d="M96 96c8-8 20-8 28 0m-20 6c4-4 8-4 12 0"/><circle cx="110" cy="110" r="2"/>
+      <path d="M180 190h22m-11-11v22"/><path d="M90 196c6-10 14-10 20 0s14 10 20 0"/></svg>`
+    return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`
+  }
+  const paintWall = () => {
+    const ink = getComputedStyle(document.documentElement).getPropertyValue("--wall-ink").trim()
+    document.documentElement.style.setProperty("--doodles", doodle(ink))
+  }
+  paintWall()
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", paintWall)
+  new MutationObserver(paintWall).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] })
+
+  const wave = document.getElementById("wave")
+  let bars = ""
+  for (let i = 0; i < 40; i++) {
+    const h = 4 + Math.round(Math.abs(Math.sin(i * 1.7) * 16 + Math.sin(i * 0.6) * 6))
+    bars += `<rect x="${i * 3}" y="${(26 - h) / 2}" width="2" height="${h}" rx="1"/>`
+  }
+  wave.innerHTML = bars
+
+  const tabs = [...document.querySelectorAll("[role=tab]")]
+  for (const tab of tabs) {
+    tab.addEventListener("click", () => {
+      for (const other of tabs) {
+        const on = other === tab
+        other.setAttribute("aria-selected", String(on))
+        document.getElementById(other.getAttribute("aria-controls")).hidden = !on
+      }
+    })
+  }
+
+  for (const button of document.querySelectorAll("[data-copy]")) {
+    button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.copy)
+      } catch {
+        const range = document.createRange()
+        range.selectNodeContents(button.previousElementSibling)
+        getSelection().removeAllRanges()
+        getSelection().addRange(range)
+      }
+      button.textContent = "Copied"
+      button.dataset.done = ""
+      setTimeout(() => { button.textContent = "Copy"; delete button.dataset.done }, 1600)
+    })
+  }
+</script>
+</body>
+</html>

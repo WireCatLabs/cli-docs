@@ -21,9 +21,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm test
-      # main, not the release tags: a pull request here is checked against what the tools are about
-      # to publish. The deploy workflow builds from the tags.
-      - run: pnpm sync --ref main
+      # Translations are reviewed against released documentation, matching the deployment build.
+      - run: pnpm sync
       - run: pnpm typecheck
       - run: pnpm exec next build
       - run: pnpm check:links

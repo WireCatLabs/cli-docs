@@ -1,0 +1,189 @@
+/* Editorial About layout: the brand, header and footer belong to the landing shell. */
+.wirecat-about .wirecat-logo {
+  --wirecat-brand-tone: #4b53f0;
+  color: var(--ink);
+}
+.wirecat-about .wirecat-brand {
+  display: inline-flex;
+}
+.wirecat-about .wirecat-brand svg {
+  flex: none;
+}
+.wirecat-about nav.site a:is(:hover, [aria-current="page"]) {
+  color: var(--ink);
+  background: var(--app-3);
+}
+.wirecat-about .bar {
+  background: var(--wall);
+}
+.wirecat-about .about-page {
+  padding-block: clamp(48px, 7vw, 100px) clamp(64px, 8vw, 112px);
+}
+.wirecat-about .about-intro {
+  max-width: 900px;
+  margin-bottom: clamp(56px, 7vw, 96px);
+}
+.wirecat-about .about-page h1 {
+  margin: 0;
+  font-size: clamp(48px, 7vw, 88px);
+  line-height: 1;
+}
+.wirecat-about .about-intro .intro {
+  max-width: 38em;
+  margin: 28px 0 0;
+  font-size: clamp(20px, 2.2vw, 28px);
+  line-height: 1.5;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+.wirecat-about .about-page h2 {
+  margin: 0 0 24px;
+  font-size: clamp(24px, 2.6vw, 34px);
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+.wirecat-about .about-page p {
+  max-width: 70ch;
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  margin: 0 0 20px;
+}
+.wirecat-about .about-intro p {
+  font-size: clamp(20px, 2.2vw, 28px);
+  line-height: 1.5;
+  color: var(--ink);
+}
+.wirecat-about .about-purpose,
+.wirecat-about .about-services,
+.wirecat-about .about-process {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: clamp(24px, 4vw, 64px);
+  padding: 0;
+}
+.wirecat-about .about-purpose .about-statement {
+  margin: 28px 0 0;
+  color: var(--ink);
+  font-size: clamp(21px, 2.1vw, 27px);
+  line-height: 1.5;
+}
+.wirecat-about .about-tools {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(240px, 1fr);
+  gap: clamp(32px, 5vw, 80px);
+  margin-top: 72px;
+  padding: clamp(28px, 4vw, 48px);
+  background: var(--app-2);
+  border-radius: 16px;
+}
+.wirecat-about .about-tool-links {
+  align-self: center;
+}
+.wirecat-about .about-tool-links a {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--app-line);
+  font-size: 23px;
+  color: var(--ink);
+}
+.wirecat-about .about-tool-links code {
+  font-size: 15px;
+  color: var(--ink-soft);
+  margin-left: auto;
+}
+.wirecat-about .about-tool-links .about-start {
+  font-size: 16px;
+  border: 0;
+  padding-bottom: 0;
+}
+.wirecat-about .about-outlook {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: clamp(32px, 6vw, 88px);
+  margin-block: 80px;
+}
+.wirecat-about .about-outlook section {
+  padding: 0;
+}
+.wirecat-about .about-outlook section + section {
+  padding-left: clamp(24px, 4vw, 56px);
+  border-left: 1px solid var(--app-line);
+}
+.wirecat-about .about-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-top: 28px;
+  font-size: 16px;
+}
+.wirecat-about .about-services {
+  border-top: 1px solid var(--app-line);
+  padding-top: 64px;
+}
+.wirecat-about .about-process {
+  margin-top: 40px;
+}
+.wirecat-about .about-contact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 56px;
+  padding: clamp(28px, 4vw, 48px) 0 0;
+  border-top: 1px solid var(--app-line);
+}
+.wirecat-about .about-contact h2 {
+  margin-bottom: 12px;
+}
+.wirecat-about .about-contact p {
+  margin: 0;
+}
+.wirecat-about .about-page a:not(.btn):hover {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.wirecat-about .about-page a:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 6px;
+}
+@media (width < 48rem) {
+  .wirecat-about .wirecat-logo-word {
+    display: none;
+  }
+  .wirecat-about .about-purpose,
+  .wirecat-about .about-tools,
+  .wirecat-about .about-outlook,
+  .wirecat-about .about-services,
+  .wirecat-about .about-process {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .wirecat-about .about-outlook {
+    margin-block: 56px;
+    gap: 40px;
+  }
+  .wirecat-about .about-outlook section + section {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .wirecat-about .about-tools {
+    margin-top: 48px;
+    padding: 24px;
+  }
+  .wirecat-about .about-services {
+    padding-top: 40px;
+  }
+  .wirecat-about .about-process {
+    margin-top: 32px;
+  }
+  .wirecat-about .about-page h2 {
+    margin-bottom: 16px;
+  }
+}

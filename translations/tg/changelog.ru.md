@@ -1,0 +1,297 @@
+---
+title: "История изменений"
+---
+
+Основные изменения `@leemour/tg-cli` по версиям, от новых к старым. Используется [семантическое версионирование](https://semver.org); до `1.0.0` интерфейс команд может меняться.
+
+## 0.22.0 — 03.10.2026
+
+### Новое
+
+- **`tg messages evidence <chat>` и `tg_messages_evidence` в MCP** готовят ограниченный пакет локального архива для сводки агента без подключения и отметки прочитанным. Указатели источников, отпечатки, явная полнота и курсор старой страницы обеспечивают точность цитат и продолжения. Целые сообщения занимают до 64 КиБ JSON; `--limit` принимает 1–100.
+
+- **`tg <name> bot contacts show --refresh`** использует справку как `max`, без имени мессенджера (cli-messaging 0.109.0).
+- **Полная документация бота** ([Бот Telegram](./bot.md)): поиск идентификатора чата, файлы, лимиты и коды завершения.
+- **`tg <name> bot contacts show`, `bot messages search`, `bot messages between`** читают локальную базу бота. См. [Сохранённые данные](./bot.md#what-the-bot-kept).
+- **`tg <name> bot chats moderate`, `bot chats rules`** проверяют новые сообщения по правилам и выполняют разрешённое. Читают сохранённое `bot watch`, поскольку Telegram не даёт историю. См. [Модерация](./bot.md#moderating-a-group-by-its-rules).
+- **`tg <name> bot mcp` — бот для агента** с инструментами по разрешениям профиля и формой перед удалением. См. [MCP бота](./bot.md#the-bot-for-an-agent-mcp).
+- **Язык запросов `tg messages search`**: `"a phrase"`, `-word`, `a OR b`, `from:`, `chat:`, `after:`/`before:`, `has:`. Исправление опечаток сообщается в stderr. `--context <n>` показывает контекст (2 сообщения в терминале). `in:max`, `in:all`, `--source` включают другие аккаунты, в том числе MAX. См. [Поиск](./archive.md#search).
+- **Поиск разговоров группы по смыслу**: `tg conversations embed --chat <chat>` строит локальные векторы; `tg conversations search "<question>"` ищет ближайшие в одном или всех обработанных чатах. `tg models text list|download` скачивает модель в общий с моделями речи каталог. `--provider openai` или `--base-url` для Ollama, LM Studio и других использует ваш сервис после оценки передачи и стоимости. См. [Поиск по смыслу](./archive.md#search-by-meaning).
+- **`tg store fetch` не зацикливается** при повторных ответах Telegram с теми же сообщениями.
+- **`tg bot watch`** сохраняет события до вывода; `--events` — правки, кнопки, вступления и выходы. **`tg bot callbacks answer`**, **`tg bot commands list|set|clear`**, **`tg bot webhooks
+  list|set|delete`**, как `max bot`. См. [Бот Telegram](./bot.md).
+- **`tg bot chats admins list|add|remove`**, **`tg bot chats members remove [--block]`**: администраторы, права и титул, назначение с `--can`, `--title`, снятие прав, удаление участника, с `--block` — блокировка. См. [Бот Telegram](./bot.md).
+- **`tg bot messages send|list|show|edit|delete|pin|unpin`**, **`tg bot chats show|leave|action`**: бот пишет по идентификатору/названию или `user:<id>`, с `--md`, `--html`, файлом/фото. `list`, `show` читают локально отправленное и полученное, поскольку истории Telegram нет. Удаление требует подтверждения или `--allow-dangerous`.
+- **Ваш AI-агент связывает разговоры по запросу**: `tg skill show
+  link-conversations` объясняет процесс. Сначала объём текста и согласие, затем пакеты (`tg conversations batches next`, `tg conversations links add`); `tg conversations links clear` удаляет связи. Сам tg не вызывает модель. См. [Локальная база](./archive.md).
+- **`tg mcp` предоставляет инструкцию ресурсом `tg://skill`**, указывая её при подключении: агент читает без `tg skill show`.
+
+### Изменения, влияющие на скрипты
+
+- **`tg messages search` сначала показывает лучшее совпадение**; `--newest` возвращает прежний порядок. Без всех слов поиск пробует любое, затем часть слова. JSON сохраняет `items`, `limit`, `hasMore`, добавляет `match`, `score`, `corrections`, `completeness` (полнота по чатам), `wordsReady`. Запросы из одной-двух букв больше не отклоняются.
+- **Нужен Node 22.16+** или Bun. При слишком старом системном SQLite в Linux `tg` перезапускается на своём SQLite из `@leemour/cli-messaging-sqlite` до чтения/отправки. Официальные сборки Node/Bun работают без изменений.
+
+### Исправления
+
+- **Отказ изменения ботом указывает правильную команду настройки** с `--bot` и ключом разрешения (cli-messaging 0.111.0). Раньше `config` ошибочно располагался внутри `bot`.
+
+- **Локальные изменения больше не помечаются как изменения Telegram.** `config set`, `unset`, `chats rules set`, `unset`, `recipients add`, `remove`, `clear`, а также `auth set`, `auth remove`, `recipients add`, `remove`, `clear` бота записывают настройки, правила, получателей или ключи. [Справочник команд](./commands.md) отмечает локальные изменения; в `tg commands` они остаются изменяющими. `chats moderate`, `session end` меняют Telegram.
+- **`tg contacts show` включает личный чат** в общий список от новых к старым. Раньше показывались только группы, возвращаемые списком общих чатов Telegram.
+
+## 0.21.0 — 01.10.2026
+
+### Новое
+
+- **`tg bot`** — бот Telegram через официальный Bot API: `bot auth set|show|remove`, `bot list [--check]`, `bot chats list`, `bot recipients list|add|remove|clear`, `bot sends list`, аналогично `max bot`. Несколько имён ботов; токен в хранилище как `bot:<name>` или `TG_BOT_TOKEN`. См. [Бот Telegram](./bot.md).
+- **`tg conversations batches status|next --chat <chat> [--size <n>]`** — пакеты групповой переписки для связывания вашим AI-агентом. `status` показывает оставшиеся сообщения и пакеты, `next` — следующий пакет. Сам tg не вызывает модель.
+- **`tg skill install [--for claude|agents|all]`** устанавливает инструкцию для Claude Code и других агентов. При отсутствии копии агенту сообщается раз в день в stderr; отключение: `tg config set skillHint false --defaults`.
+- **`tg store clear --left`** удаляет покинутые чаты с сообщениями из базы. Требует `--allow-dangerous`, иначе только показывает объём.
+- **`tg conversations build|list|show`**, **`tg messages links`**, MCP `tg_conversations_list`, `tg_conversations_show` — разговоры группы из сохранённых ответов, упоминаний и очередности авторов без Telegram и AI. Построение только после `build`. См. [Локальная база](./archive.md#conversations-in-a-group).
+- **Сохраняются упоминания по имени**, а не только @username, для связывания разговоров.
+- **`tg chats rules show|set|unset`**, **`tg chats moderate`**, MCP `tg_chats_rules_show`, `tg_chats_moderate` — правила ссылок, приглашений, пересылок, флуда и заблокированных участников. Уровни: запрет, отчёт, подтверждение (по умолчанию), действие. Ничего не работает в фоне. См. [Группы](./groups.md#rules).
+- **`tg messages list --before-time`** читает назад от ISO 8601 или `2h` / `1d` назад.
+- **`tg contacts add|remove|block|unblock|rename|import`**, **`tg account update`**, **`tg account sessions end --others`**, MCP `tg_contacts_add|remove|block|unblock|rename`, `tg_account_update`. `contacts import` читает строки `number, name` и возвращает только числа и найденных людей. Завершение сессий отключает и телефон, требует подтверждения и не предлагается агенту.
+- **`tg chats folders list|create|update|delete`**, MCP `tg_chats_folders_list|create|update|delete`. Остальные чаты папки сохраняются; неизменяемая папка «Все чаты» не выводится.
+- **`tg chats members add|remove`**, **`tg chats admins add|remove`**, MCP `tg_chats_members_add|remove`, `tg_chats_admins_add|remove`. `--can`: members, admins, info, pin, link, post, edit, delete; отдельного права читать нет. Неудачные добавления перечисляются; каждый участник входит в часовой лимит.
+- **`tg chats update <chat>`**: `--title`, `--description`, `--all-can-pin on|off`, `--only-admins-add on|off`; **`tg chats link show|reset`**, MCP `tg_chats_update`, `tg_chats_link_show`, `tg_chats_link_reset`. `tg chats show` показывает описание, приглашение и настройки.
+- **`tg chats create <title> [person...]`, `tg chats join <link>`, `tg chats leave <chat>`**, MCP `tg_chats_create`, `tg_chats_join`, `tg_chats_leave`. Создаётся супергруппа (`--channel` — канал); ошибки добавления перечисляются. См. [Использование](./usage.md#groups-and-channels).
+- **Разрешения команд для вас и агента.** `permissions`: `deny` (включая чтение), `readonly`, `ask`, `allow`. Конкретный ключ важнее общего: `tg config set permissions.messages.delete allow`. По умолчанию всё разрешено кроме удаления и завершения других сессий с подтверждением. `ask` спрашивает y/N; `--allow-dangerous` подтверждает удаление, `--yes` — другое изменение в скрипте. `readOnly` и `allow` совместимы. См. [Безопасность](./security.md).
+- **`tg messages send --voice <file>`** — Ogg Opus как голосовое; `.mp4`, `.mov` с `--file` воспроизводятся как видео; `--as-file` оставляет скачиваемым файлом.
+- **`tg messages list --mark-read`** отмечает чат до последнего показанного сообщения. Обычное чтение не отмечает.
+- **`--model` с `--transcribe`** для `tg messages list`, `tg inbox`; **`tg review
+  --transcribe`** — текст голосовых в обзоре.
+- **`tg store fetch --last <n>`** останавливается после сохранения последних n сообщений; повтор с `--last` проверяет одну страницу и выходит.
+- **`tg polls create --revote`** разрешает менять голос.
+- **`tg store export --output <file> --since-time <time>`** пишет в новый закрытый файл без перезаписи, начиная с выбранного времени.
+- **`tg account show`** показывает последние четыре цифры телефона, полный номер — с `--show-phone`. `tg_account_show` всегда показывает только четыре.
+- **`tg messages forward --send-id`** повторяет неизвестную пересылку без дубликата, как отправка. `--json` возвращает `sendId`; `tg_messages_forward` принимает `send_id`.
+- **`tg messages edit --md`** форматирует как `messages send --md`; `tg_messages_edit` принимает `markdown`.
+- **Обслуживание базы: `tg store info`, `check`, `migrate`, `backup`, `restore`.** `info` — путь `messages.db`, размер, структура, строки. `check` — целостность, внешние ключи, индексы, свободный диск, отстающие чаты; ничего не исправляет. `migrate` обновляет структуру и старые сообщения. `backup <file>` копирует используемую базу в новый закрытый файл. `restore <file>` сохраняет заменяемую базу рядом; запрещён при `tg serve` или открытой базе. После восстановления общей с max-cli базы перезапустите `serve` и `mcp` обоих CLI.
+- **Каждое изменение имеет `operationId`** в `--json`, MCP, журнале и `--trace`: отправка, правка, пересылка, удаление, закрепление, реакция, отметка прочитанным, голос. Для отправки `operationId` равен `sendId`.
+- **Размер установки меньше примерно на 16 МБ**: cli-messaging 0.60.0 включает слой базы вместо отдельной зависимости.
+
+### Изменения, влияющие на скрипты
+
+- **`tg server status --json`** использует общие поля: `since` → `startedAt`, `listening` → `connected`, `listeningSince` → `connectedAt`; новые: `cliVersion`, `log`, `stale` для оставшейся блокировки. `tg server start` возвращает `startedAt`, `connectedAt`; `tg server stop` — автора запуска `by`. «listening» заменено на «connected».
+- **`tg messages send --at` → `--at-time`**.
+- **Аргументы MCP соответствуют параметрам:** `tg_messages_list`: `before_id`, `before_time`, `after_id`, `after_time`; `tg_messages_context`: `before_n`, `after_n`; `since` → `since_time` в `tg_inbox`, `tg_review`, `tg_chats_events`, где `event` → `type`; `tg_messages_send`: `md`, `at_time`.
+- **Имена параметров отражают тип.** Старые отклоняются без псевдонимов; аргументы MCP не меняются.
+  - `tg messages list --before` → `--before-id`; `--after` → `--after-id` для идентификатора или `--after-time` для времени.
+  - `tg messages context --before`, `--after` → `--before-n`, `--after-n`.
+  - `--since` → `--since-time` в `tg inbox`, `tg review`, `tg chats events`, `tg store fetch`.
+  - `tg messages download --output` → `--output-dir`.
+  - `tg chats events --event` → `--type`.
+- **`tg review --unanswered` принимает длительность** (`4h`, `1d`), а не часы без единицы; `--unanswered 4` отклоняется. Без значения 24 часа. MCP `tg_review` по-прежнему принимает часы.
+- **`tg chats events --json`: `{ items, page, limit, hasMore, chatId, since }`**, `events` → `items`, `more` → `hasMore`. **`tg server logs --json`**: `lines` → `items`. `--jsonl` не меняется.
+- **`.mp4`, `.mov` с `--file` воспроизводятся как видео**; `--as-file` сохраняет прежний вид файла.
+- **`tg mcp` выбирает инструменты по разрешениям профиля.** По умолчанию отправка, правка, пересылка, реакции, голосование, отметка прочитанным без `--allow-send` и формы. Удаление с формой; `tg mcp --allow-dangerous` пропускает её. Для чтения профиль с `readOnly`: [MCP](./mcp.md). `--allow-send`, `--allow-mark-read`, `--allow-delete` устарели и предупреждают; `--confirm-send` показывает каждое изменение.
+- **`tg messages delete` спрашивает** без `--allow-dangerous` вместо отказа; без терминала отказ сохраняется.
+- **`tg store fetch --max <n>` удалён:** `--limit <n>` ограничивает сообщения запуска (1000), `--page-size <n>` — страницу (100), как max-cli. Псевдонима `--max` нет.
+- **Опрос без `--revote` не разрешает менять голос**, как max-cli; для прежнего поведения добавьте параметр.
+- **`tg polls vote`, `tg polls close --json`: `{ operationId, poll }`**, опрос теперь в `.poll`. `tg_polls_vote`, `tg_polls_close` аналогичны.
+- **`tg runs list`, `tg sends list`, `tg recipients list --json`: `{ items, page, limit, hasMore }`** вместо массива; строки в `.items`. `--jsonl` не меняется.
+
+### Исправления
+
+- **`tg chats list` не дублирует закреплённые чаты.** Страницы Telegram с архивом повторяли закрепления ниже: на одном аккаунте 8 из 1361 чатов. Название такого чата также ошибочно считалось неоднозначным.
+
+- **`tg server stop` и Ctrl-C корректно завершают `serve`, `watch`.** Раньше очистка не успевала, и `tg server status` показывал `stale`.
+- **`tg server` из репозитория не меняет службу установленного tg.** Свои `TG_STATE_DIR` или база дают отдельное имя службы; установленный использует `tg-serve-<profile>.service`.
+- **Покинутые чаты исчезают из `chats list --offline`** после полного `tg chats list`. Сообщения остаются до `tg store clear --left`; повторное вступление возвращает чат.
+
+- **Отказы объясняют действия.** При повторном добавлении вышедшего или удалённого человека без взаимных контактов предлагается приглашение (`tg chats link show <chat>`). Неизвестный аккаунту идентификатор требует @username или предварительного чтения его чата.
+
+- **Ошибка библиотеки не повторяет аргументы.** Раньше могли раскрыться названия и ссылки. Теперь сообщается тип неверных данных: не вступивший чат, сообщение, приглашение, телефон, код или пароль; иначе общий отказ аргумента.
+- **Переписка отображается на английском.** Ваши сообщения — `you`, даты — `26 September 2026`; раньше были русскими.
+- **Отсутствующие чат/сообщение — `not_found`**, неверный тип чата — `validation_error`, вместо общего кода 1 и текста библиотеки с возможным раскрытием названия.
+- **Ошибка входа указывает профиль:** `tg <profile> session start`.
+- **Права загрузок и экспортов снова обычные.** Раньше вход делал все последующие файлы tg закрытыми. Сессия и связанные файлы остаются доступны только владельцу.
+
+## 0.20.0 — 30.09.2026
+
+### Новое
+
+- **В базе сохраняется @username автора**, для `--from @name` и связывания упоминаний. cli-messaging 0.57.0+; старая история обновляется при следующей загрузке.
+- **`tg store fetch <chat> --since <time>`** останавливается у сообщений старше `2026-09-01` или `2h` / `1d` назад.
+
+### Изменения, влияющие на скрипты
+
+Команды используют единый порядок: существительное, затем глагол. Старые имена удалены без псевдонимов; скрипты получают «unknown command» или «unknown option».
+
+- **`tg export <chat>` → `tg store export <chat>`**, **`tg sync status [chat]` → `tg store status [chat]`**, **`tg backfill <chat>` → `tg store fetch <chat>`**, **`tg backfill list|status|cancel` → `tg store jobs list|show|cancel`**. `store fetch` загружает по умолчанию; `--estimate` оценивает. `--pace` → **`--pause`** там и в `tg messages download --all`. `--max` пока сохраняется и считает сообщения.
+- **`tg messages reply` удалён:** ответ через `tg messages send <chat> [text] --reply-to <id>`, доступны `--file`, `--photo`, `--silent`, `--at` и остальные. Для `msg:telegram/…` замены нет: укажите чат и сообщение.
+- **`tg chats read` → `tg chats mark-read`**; `tg_chats_read` → `tg_chats_mark_read`.
+- **`tg recipients off` → `tg recipients clear`.**
+- **`tg update [--check]` → `tg upgrade [--check]`**, уведомление тоже указывает `tg upgrade`.
+- **`tg messages search <words…>`** переименовывает аргумент в `<text…>` без изменений поиска.
+
+## 0.19.0 — 30.09.2026
+
+### Исправления
+
+- **tg выходит после завершения команды.** Раньше загрузка могла оставаться открытой полчаса даже с `--timeout`. Через пять секунд перечисляются открытые ресурсы в stderr и процесс выходит со своим кодом, дожидаясь записи вывода.
+
+## 0.18.0 — 30.09.2026
+
+### Исправления
+
+- **Супергруппа/канал, впервые увиденные через сообщение, не теряют сообщения из-за удаления в личном чате** (cli-messaging 0.54.0). В 0.16.0 тип мог быть неизвестен; теперь достаточно `-100…`.
+- **Ошибочно удалённые записи восстанавливаются** при чтении чата (`messages list`, `messages context`, правка в реальном времени). Более позднее удаление сохраняется.
+
+## 0.17.0 — 30.09.2026
+
+### Новое
+
+- **`tg messages download <chat> --all`** сохраняет все фото, документы, видео и голосовые в `--output` от новых к старым. После `--timeout` или Ctrl-C продолжает, также подхватывая новое; позиция в `.download-<chat>.json`. Ожидание Telegram выполняется до пяти минут; `--pace` (1 секунда) разделяет страницы. К занятому имени добавляется идентификатор; без перезаписи (cli-messaging 0.53.0).
+
+## 0.16.0 — 30.09.2026
+
+### Исправления
+
+- **Удаление в личном чате/обычной группе не помечает сообщения других чатов удалёнными** (cli-messaging 0.52.0). Telegram не указывает чат, а база раньше затрагивала все совпадающие номера, включая каналы/супергруппы. Старые ошибочные отметки остаются; текст сохранён.
+
+## 0.15.0 — 30.09.2026
+
+### Исправления
+
+- **Локальная модель не пропускает тихие слова.** Раньше тихий фрагмент считался тишиной; исправлено для Parakeet и GigaAM. Ранее обработанные локально записи распознаются заново при `--transcribe`; расшифровки Telegram сохраняются (cli-messaging 0.51.0).
+
+## 0.14.0 — 30.09.2026
+
+### Новое
+
+Изменения видимых другим сообщений проходят защиту, как `messages send`: профиль для чтения запрещает, `allow` должен разрешать, получатели и лимит проверяются, `tg sends list` записывает без текста.
+
+- **`tg messages edit <chat> <id> [text]`** правит своё сообщение; повтор не меняет ничего. `tg_messages_edit` с `mcp --allow-send`.
+- **`tg messages forward <chat> <id> --to <chat> [--silent]`** проверяет получателя; при неизвестном результате сначала проверьте чат. `tg_messages_forward`.
+- **`tg messages pin|unpin <chat> <id>`**, тихо без `--notify`; в личном чате закрепление только у вас. `tg_messages_pin`, `tg_messages_unpin`.
+- **`tg reactions add <chat> <id> <emoji>`**, **`tg reactions remove <chat> <id>`** без часового лимита. `tg_reactions_add`, `tg_reactions_remove`.
+- **`tg chats read <chat> [--until id]`** отмечает прочитанным видимо собеседнику. `tg_chats_read` только с **`tg mcp --allow-mark-read`**; `--allow-send` не включает.
+- **`tg messages delete <chat> <id…> --allow-dangerous [--for-everyone]`**: максимум 10, только у себя без `--for-everyone`, ничего без `--allow-dangerous`. Супергруппы/каналы требуют `--for-everyone`. **`tg mcp --allow-delete`** предоставляет `tg_messages_delete` только для своей копии.
+- **`tg polls show|vote|close|create`**: опрос, голос по идентификатору или `--retract`, закрытие своего, новый публичный без `--anonymous`; `--send-id` безопасно повторяет. `tg_polls_show` читает; `tg_polls_vote`, `_close`, `_create` с `--allow-send`.
+
+## 0.13.0 — 30.09.2026
+
+### Изменения, влияющие на скрипты
+
+- **Структура общей базы версии 6** (cli-messaging 0.49.0). Первый `tg` обновляет `messages.db`; старый `max` требует `npm install -g @leemour/max-cli@latest`. Команды `tg` не меняются.
+
+## 0.12.0 — 30.09.2026
+
+### Новое
+
+- **`tg chats inspect <link>`**, `tg_chats_inspect`: название, участники, описание, ваш статус и необходимость одобрения по ссылке без вступления.
+- **`tg topics list <chat>`, `tg topics search <chat> <text>`**, `tg_topics_list`: темы форума постранично с идентификатором `threadId`.
+
+## 0.11.0 — 30.09.2026
+
+### Новое
+
+- **Текст голосовых в `tg messages list` и `tg inbox`.** Расшифровка сохраняется для профиля и видна при следующих чтениях: `transcript` в `--json`, `🎤 …` в терминале. `--transcribe` распознаёт остальные через Telegram или локальную модель, максимум две минуты на список; остаток в `unheard`. Аналогично `transcribe` у `tg_messages_list`, `tg_inbox`.
+- **`tg chats members list <chat>`**, `tg_chats_members`: участники постранично с ролью и последним появлением, до лимита Telegram 10 000.
+- **`tg contacts lookup`**, `tg_contacts_lookup`: человек по номеру при разрешённой приватности; телефон через stdin или запрос, не аргумент.
+- **`tg contacts sync`** загружает контакты и возвращает числа новых и изменённых.
+- **`tg account sessions list`**, `tg_account_sessions`: устройства и приложения без IP; сессии не завершаются.
+
+## 0.10.0 — 29.09.2026
+
+### Новое
+
+- **Локальное распознавание речи.** `tg models audio list`, `tg models audio download <id>` скачивают Parakeet v3 (25 языков, по умолчанию), GigaAM v3/CTC (русский) в общую `~/.cache/cli-common/models/audio`. `tg messages transcribe` сначала пробует Telegram, без Premium — локальную модель; `--local`, `--model <id>` пропускают Telegram. `transcribeWith` (`auto`, `messenger`, `local`) и `speechModel` задают исходные значения. Автозагрузки нет.
+- **`tg messages send --photo <path>`, `--file <path>`**, `photo`, `file` у `tg_messages_send`: текст — подпись. Скрытые файлы, `~/.ssh`, каталоги tg и база запрещены без `--allow-any-file`; через MCP обхода нет. Журнал сохраняет тип/размер, не имя. Повтор с `--send-id` даёт одну копию (проверено на фото).
+
+- **`tg update` перезапускает сервер новой версией**; ручной serve предлагается перезапустить. **`tg server status` сообщает устаревшую версию serve**, как max-cli.
+
+- **`tg chats events <chat> [--since] [--event]`**, `tg_chats_events`: вступления, выходы, добавления, удаления с авторами, создание, переименование, закрепление из служебных сообщений; семь дней по умолчанию. Максимум десять страниц, `more` показывает остаток.
+
+## 0.9.0 — 29.09.2026
+
+### Новое
+
+- **`tg session start` объясняет аккаунт, путь сессии, источник ключей и следующий шаг**; `--json` добавляет `session`, `appKeys` (`environment`, `keyring`, `file`, без ключей).
+- **`tg chats list --search <text> --kind <kind> --unread`**, аналогично `tg_chats_list`: совместные фильтры последних 200 чатов, `--search` минимум 3 символа.
+- **`tg messages list --after <id-or-time>`** читает вперёд после идентификатора или времени (`2h`, `1d`, ISO 8601); `after` в `tg_messages_list`.
+- **`tg messages send --silent --no-preview --md`**: без уведомления/предпросмотра, разметка `**bold**`, `_italic_`, `~~struck~~`, `` `code` ``. MCP: `silent`, `no_preview`, `markdown`. Журнал только с длиной.
+- **`tg messages send --at <time>`** передаёт отложенную отправку Telegram: `2h`, `1d`, `2026-10-01T09:00` местного времени. `tg messages scheduled <chat>`, `tg_messages_scheduled` показывают очередь. Повтор запрещён, `--send-id` отклоняется.
+
+### Изменения, влияющие на скрипты
+
+- **`tg service …` → `tg server …`**: `start|stop|restart|status|logs|install|uninstall`, как max-cli. `tg serve status` заменён на `tg server status`. `tg server start` без службы работает в фоне. Служба из `tg service install` распознаётся (cli-messaging 0.40.0).
+
+## 0.8.0 — 29.09.2026
+
+### Новое
+
+- **`tg review`**: все сообщения, включая ваши, в чатах с активностью после `--since` (три дня). Показывает начало следующей проверки. `--chat` — один чат, `--unanswered [hours]` — вопросы без ответа с учётом администраторов, `--all` — архив и отключённые уведомления. Аналогично `tg_review` и запросу `review`.
+
+## 0.7.0 — 29.09.2026
+
+### Новое
+
+- **`tg messages transcribe <chat> <id>`**, `tg_messages_transcribe` распознают голосовые/видеозаметки через Telegram для Premium или пробной квоты. Ожидание до минуты, затем `"pending": true`. Отказ поясняет неверный тип, длину, отсутствие Premium.
+- **`tg_messages_photo`** передаёт агенту фото до 512 КБ. Большие фото, файлы, видео и голосовые отклоняются с командой сохранения `tg messages download`.
+
+## 0.6.0 — 29.09.2026
+
+### Новое
+
+- **`tg inbox` исключает архив и чаты без уведомлений**, кроме упоминаний и ответов вам. `--all`/`all` у `tg_inbox` включает их. Иначе они занимали лимит 20 чатов `inbox`; `quiet` считает исключённые.
+- **Чат содержит `muted`, `archived`, `unreadMentions`** в `--json`. `archived` вынесен из `providerMetadata`; `muted` отсутствует при общих настройках аккаунта.
+
+### Исправления
+
+- **`tg messages send --silent`, `--no-preview`, `--markdown` отклоняют отправку** вместо игнорирования: cli-messaging 0.32 добавил их, но tg ещё не передаёт Telegram.
+
+## 0.5.0 — 29.09.2026
+
+### Новое
+
+- **`tg service install|uninstall|start|stop|status|logs`** запускает `tg serve` службой systemd (Linux) или launchd (macOS) по профилям. `install` пишет файл; запуск только через `tg service start`.
+- **`tg backfill <chat> --background`** — фоновое задание; `tg backfill list`, `status [job]`, `cancel <job>` управляют им. Ctrl-C/`cancel` заканчивают текущую страницу и сохраняют её.
+- **`tg backfill <chat> --estimate`** оценивает оставшиеся сообщения, запросы, секунды по базе без Telegram.
+- **`tg export <chat> --format markdown`** — читаемая переписка.
+- **`tg messages search --regex '<pattern>'`** — регулярное выражение по базе.
+- **`tg doctor report create`** — версии, пути, ошибочный запуск и отправки без текста; идентификаторы заменяются метками.
+- **`tg session start --qr-file login.png`** сохраняет QR в PNG для агента и удаляет после входа; при сохранённом приложении терминал не нужен.
+- **`tg messages download <chat> <id> [--output dir]`** сохраняет вложение в текущий или `--output` каталог и возвращает путь/размер. Имя не может выйти из каталога или скрыть файл; перезаписи нет. Сообщение каждый раз загружается заново, даже старое.
+
+### Исправления
+
+- **`tg messages list --jsonl`, `tg messages search --jsonl` выводят сообщение на строку**, как в `--help`, вместо страницы. Скрипты должны читать строки, а не `.items`.
+
+## 0.4.0 — 29.09.2026
+
+### Новое
+
+- **`tg inbox`** — чужие непрочитанные; `--new` — после последней проверки, каждое один раз. MCP `tg_inbox`, запрос `catch-up`.
+- **`tg skill show`** выводит инструкции агенту.
+- **Готовые запросы MCP и ресурс чата:** `reply`, `find`, `tg://chat/{id}`.
+
+## 0.3.0 — 28.09.2026
+
+### Новое
+
+- **`tg mcp`** предоставляет профиль по stdin/stdout, по умолчанию чтение. `--allow-send` добавляет отправку, `--confirm-send` показывает каждую владельцу. `tg mcp config` выводит настройки клиента.
+
+### Изменения, влияющие на скрипты
+
+- **Ошибки до запуска команды сохраняются**: неверное использование или конфигурация. Видны в `tg runs list`; `--no-record` отключает.
+
+## 0.2.0 — 28.09.2026
+
+### Новое
+
+- **`tg update`** обновляет через установивший менеджер пакетов; `--check` проверяет.
+- **Раз в день stderr сообщает о новой версии npm**, только в терминале после команды. `TG_NO_UPDATE_CHECK=1` отключает.
+
+## 0.1.0 — 27.09.2026
+
+Первый выпуск в npm.
+
+### Новое
+
+- **Вход** по QR или телефону (`tg session start`); приложение my.telegram.org через браузер или `--app auto`, ключи в системном хранилище.
+- **Чтение:** `account show`, `chats list|show`, `contacts list|show`, `messages list|show|context`.
+- **Отправка:** `messages send`, `messages reply` с получателями, профилем для чтения, журналом (`tg sends`), `--send-id` для безопасного повтора неизвестного результата.
+- **Локальный архив:** каждое чтение сохраняется в общую базу; `--offline` читает, `messages search` ищет, `backfill` загружает, `watch`, `serve` обновляют, `sync status`, `export` показывают.
+- **Записи запусков** (`tg runs`), `config`, `doctor`, `commands`, автодополнение (`complete`).

@@ -1,0 +1,1036 @@
+<!doctype html>
+<html lang="es" data-hl="0" data-ff="0">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WireCat · Un agente para tus chats de Telegram y MAX</title>
+<meta name="description" content="Connect Claude Code, Codex or another agent to your Telegram and MAX.">
+<link rel="icon" href="../favicons/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../favicons/favicon-16x16.png">
+<link rel="apple-touch-icon" href="../favicons/apple-touch-icon.png">
+<link rel="manifest" href="../favicons/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,500..900&family=Oswald:wght@600;700&family=Roboto+Flex:opsz,wdth,wght@8..144,25..151,100..1000&family=Sofia+Sans+Extra+Condensed:wght@800;900&family=Fira+Sans+Extra+Condensed:wght@800;900&family=Tektur:wdth,wght@75..100,400..900&family=Dela+Gothic+One&family=Rubik:wght@800;900&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+  /* Layout: dark fog ground with paper planes and sleeping cats; agent app, a day, connect, tools, features, advantages, footer. */
+  :root {
+    color-scheme: dark;
+    --wall: #131718; --wall-ink: #1b2123;
+    --ink: #e9eeec; --ink-soft: #a7b1ae; --ink-dim: #7c8784;
+    --me: #4b53f0; --me-ink: #ffffff;
+    --app: #0d0f10; --app-2: #141719; --app-3: #1c2023; --app-line: #2a3034;
+    --app-ink: #e9eeec; --app-soft: #98a29f; --app-dim: #6b7572;
+    --ok: #7fd49b; --key: #9ea4ff; --str: #e6c07b; --num: #f29b7a;
+    --card: #1f2427; --card-ink: #e9eeec; --card-soft: #9aa4a1;
+    --bubble: #232a2d;
+    --display: "Anybody", "Oswald", "Onest", system-ui, sans-serif;
+    --body: "Onest", system-ui, sans-serif;
+    --code: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    --gutter: clamp(16px, 4vw, 48px);
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; background-color: var(--wall); color: var(--ink); font: 400 17px/1.55 var(--body); -webkit-font-smoothing: antialiased; }
+  ::selection { background: var(--me); color: var(--me-ink); }
+  a { color: inherit; text-underline-offset: 0.2em; }
+  :focus-visible { outline: 2px solid var(--key); outline-offset: 3px; border-radius: 6px; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding-inline: var(--gutter); }
+
+  .bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; transition: background 0.3s, box-shadow 0.3s; }
+  .bar.scrolled { background: color-mix(in srgb, var(--wall) 82%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 1px 0 var(--app-line); }
+  header.top { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 16px; }
+  .mark { display: inline-flex; align-items: center; gap: 10px; font: 800 20px/1 "Anybody", "Onest", sans-serif; font-stretch: 120%; letter-spacing: -0.01em; text-decoration: none; }
+  .mark svg { width: 28px; height: 28px; overflow: visible; transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .mark .ring { fill: none; stroke: #4b53f0; stroke-width: 1.5; opacity: 0; transform-origin: 16px 16px; }
+  .mark .pulse { fill: none; stroke: #c9ccff; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 3 60; stroke-dashoffset: 3; opacity: 0; }
+  .mark .word { transition: letter-spacing 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+  .mark:hover svg, .mark:focus-visible svg { transform: rotate(-10deg) scale(1.06); }
+  .mark:hover .wire, .mark:focus-visible .wire { animation: draw 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+  .mark:hover .pulse, .mark:focus-visible .pulse { animation: pulse 0.9s 0.35s cubic-bezier(0.45, 0, 0.2, 1); }
+  .mark:hover .ring, .mark:focus-visible .ring { animation: ring 0.9s 0.2s ease-out; }
+  .mark:hover .word { letter-spacing: 0.01em; }
+  @keyframes draw { from { stroke-dasharray: 40; stroke-dashoffset: 40; } to { stroke-dasharray: 40; stroke-dashoffset: 0; } }
+  @keyframes pulse { 0% { opacity: 1; stroke-dashoffset: 3; } 90% { opacity: 1; } 100% { opacity: 0; stroke-dashoffset: -40; } }
+  @keyframes ring { from { opacity: 0.9; transform: scale(1); } to { opacity: 0; transform: scale(1.7); } }
+  .right { display: flex; align-items: center; gap: 8px; }
+  .lang { position: relative; }
+  .lang summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--app-line); background: color-mix(in srgb, var(--app) 60%, transparent); color: var(--ink-soft); font: 600 12.5px/1 var(--body); letter-spacing: 0.06em; transition: color 0.2s, border-color 0.2s; }
+  .lang summary::-webkit-details-marker { display: none; }
+  .lang summary:hover, .lang[open] summary { color: var(--ink); border-color: var(--app-dim); }
+  .lang summary svg { width: 15px; height: 15px; }
+  .lang summary .dn { width: 12px; height: 12px; transition: transform 0.2s; }
+  .lang[open] summary .dn { transform: rotate(180deg); }
+  .lang-menu { position: absolute; right: 0; top: calc(100% + 8px); min-width: 150px; display: grid; padding: 6px; border-radius: 14px; border: 1px solid var(--app-line); background: var(--app-2); box-shadow: 0 24px 40px -20px rgba(0, 0, 0, 0.8); }
+  .lang-menu a { padding: 9px 12px; border-radius: 9px; text-decoration: none; color: var(--app-soft); font-size: 14px; }
+  .lang-menu a:hover { background: var(--app-3); color: var(--app-ink); }
+  .lang-menu a[aria-current="page"] { color: var(--app-ink); }
+  .lang-menu a[aria-current="page"]::after { content: ""; float: right; width: 6px; height: 6px; margin-top: 6px; border-radius: 50%; background: var(--key); }
+  nav.site { position: relative; display: flex; gap: 2px; padding: 4px; border-radius: 999px; border: 1px solid var(--app-line); background: color-mix(in srgb, var(--app) 60%, transparent); font: 500 14px/1 var(--body); }
+  nav.site a { position: relative; z-index: 1; text-decoration: none; color: var(--ink-soft); padding: 9px 16px; border-radius: 999px; transition: color 0.2s; }
+  nav.site a:hover, nav.site a:focus-visible { color: var(--ink); }
+  nav.site .glide { position: absolute; top: 4px; bottom: 4px; left: 0; width: 0; border-radius: 999px; background: var(--app-3); opacity: 0; transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), width 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s; }
+
+  .hero { padding-block: clamp(20px, 4vw, 48px) clamp(56px, 8vw, 104px); }
+  .hero-text { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px clamp(32px, 5vw, 72px); align-items: start; margin-bottom: clamp(28px, 4vw, 48px); }
+  h1 { font: 900 clamp(40px, 5.8vw, 80px)/0.9 var(--display); font-stretch: 62%; text-transform: uppercase; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+  h1 span { color: var(--key); }
+  .lede { margin: 0.3em 0 20px; font-size: clamp(16px, 1.35vw, 18.5px); max-width: 30em; color: var(--ink-soft); }
+  .lede b { color: var(--ink); font-weight: 600; }
+  .cta { display: flex; flex-wrap: wrap; gap: 10px; }
+  .cmd { display: inline-flex; align-items: center; gap: 14px; min-width: 0; max-width: 100%; background: var(--app); color: var(--app-ink); border-radius: 999px; padding: 4px 4px 4px 14px; font: 400 13px/1 var(--code); box-shadow: 0 0 0 1px var(--app-line); }
+  .cmd code { font: inherit; white-space: nowrap; overflow-x: auto; padding-block: 4px; }
+  .cmd code::before { content: "$ "; color: var(--app-soft); }
+  .copy { flex: none; border: 0; cursor: pointer; border-radius: 999px; padding: 7px 11px; background: var(--app-ink); color: var(--app); font: 600 12px/1 var(--body); }
+  .copy:hover, .copy[data-done] { background: var(--me); color: var(--me-ink); }
+  .btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 999px; background: var(--me); color: var(--me-ink); text-decoration: none; font: 600 15px/1 var(--body); transition: background-color 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1); }
+  .btn:hover { background: color-mix(in srgb, var(--me) 92%, white); box-shadow: inset 0 1px 0 #fff3, 0 4px 12px #0003; }
+  .btn:active { background: color-mix(in srgb, var(--me) 92%, black); box-shadow: inset 0 2px 3px #0003; }
+  .btn:focus-visible { outline: 2px solid var(--key); outline-offset: 3px; }
+  .tagline { margin: 16px 0 0; font-size: 14px; color: var(--ink-soft); }
+  .tagline b { color: var(--ink); }
+
+  .headlines { position: fixed; right: 16px; bottom: 16px; z-index: 10; display: flex; gap: 6px; align-items: center; background: var(--app-2); border: 1px solid var(--app-line); border-radius: 999px; padding: 6px 6px 6px 14px; font: 500 12px/1 var(--body); color: var(--app-soft); }
+  .headlines .sep { width: 1px; height: 18px; background: var(--app-line); margin-inline: 6px; }
+  body { padding-bottom: 110px; }
+  .headlines { max-width: calc(100vw - 32px); flex-wrap: wrap; justify-content: center; border-radius: 18px; }
+  .headlines button { border: 0; border-radius: 999px; background: var(--app-3); color: var(--app-ink); width: 30px; height: 30px; cursor: pointer; font: 600 14px/1 var(--body); }
+
+  /* Agent app */
+  .app { background: var(--app); color: var(--app-ink); border-radius: 18px; overflow: hidden; box-shadow: 0 50px 90px -50px rgba(0, 0, 0, 0.9), 0 0 0 1px var(--app-line); }
+  .titlebar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: var(--app-2); border-bottom: 1px solid var(--app-line); font: 500 13px/1 var(--body); color: var(--app-soft); }
+  .titlebar i { width: 12px; height: 12px; border-radius: 50%; background: var(--app-3); display: inline-block; }
+  .titlebar span { margin-left: 10px; }
+  .replay { margin-left: auto; border: 1px solid var(--app-line); background: transparent; color: var(--app-soft); border-radius: 999px; padding: 6px 12px; font: 500 12px/1 var(--body); cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
+  .replay:hover { color: var(--app-ink); }
+  .replay svg { width: 13px; height: 13px; }
+  .app-body { display: grid; grid-template-columns: 240px minmax(0, 1fr); min-height: 540px; }
+  .sessions { background: var(--app-2); border-right: 1px solid var(--app-line); padding: 14px 10px; display: flex; flex-direction: column; gap: 4px; max-height: 650px; overflow-y: auto; }
+  .sessions h2 { font: 600 11px/1 var(--body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--app-dim); margin: 6px 10px 10px; }
+  .session { flex-shrink: 0; text-align: left; border: 0; background: transparent; color: var(--app-soft); border-radius: 10px; padding: 10px 12px; cursor: pointer; font: 500 14px/1.3 var(--body); }
+  .session small { display: block; font: 400 12px/1.3 var(--code); color: var(--app-dim); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .session:hover, .session[aria-current="true"] { background: var(--app-3); color: var(--app-ink); }
+  .session[aria-current="true"] small { color: var(--key); }
+  .conv { display: flex; flex-direction: column; min-width: 0; max-height: 650px; }
+  .log { flex: 1; padding: clamp(18px, 3vw, 32px); display: flex; flex-direction: column; gap: 14px; overflow-y: auto; min-height: 0; scroll-behavior: smooth; }
+  .ask { align-self: flex-end; max-width: 78%; background: var(--app-3); padding: 10px 15px; border-radius: 16px 16px 4px 16px; font-size: 15.5px; }
+  .tool { border: 1px solid var(--app-line); border-radius: 10px; background: var(--app-2); max-width: 100%; align-self: flex-start; }
+  .tool summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 8px 12px; font: 500 13px/1.35 var(--code); color: var(--app-ink); }
+  .tool summary::-webkit-details-marker { display: none; }
+  .tool .state { flex: none; width: 16px; height: 16px; display: grid; place-items: center; color: var(--ok); }
+  .tool .state svg { width: 16px; height: 16px; }
+  .tool summary code { min-width: 0; overflow-x: auto; white-space: nowrap; font: inherit; }
+  .tool summary code b { color: var(--key); font-weight: 600; }
+  .tool .chev { color: var(--app-dim); transition: transform 0.2s; flex: none; }
+  .tool[open] .chev { transform: rotate(90deg); }
+  .tool pre { margin: 0; padding: 12px 14px 14px; border-top: 1px solid var(--app-line); font: 400 12.5px/1.6 var(--code); color: var(--app-soft); overflow-x: auto; max-height: 220px; }
+  .k { color: var(--key); } .s { color: var(--str); } .n { color: var(--num); }
+  .tool.running .state { color: var(--app-soft); }
+  .tool.running .state svg { animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .say { max-width: 92%; font-size: 15.5px; line-height: 1.6; }
+  .say p { margin: 0 0 8px; }
+  .say h3 { margin: 18px 0 6px; font: 600 12px/1 var(--body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--app-soft); }
+  .say ul, .say ol { margin: 0 0 12px; padding-left: 18px; }
+  .say h3:first-child { margin-top: 0; }
+  .say blockquote { margin: 8px 0 14px; padding: 10px 16px; border-left: 2px solid var(--key); background: var(--app-2); border-radius: 0 10px 10px 0; }
+  .say blockquote p:last-child { margin-bottom: 0; }
+  .say li { margin: 3px 0; }
+  .say q { color: var(--app-soft); }
+  .say table { border-collapse: collapse; margin: 8px 0; font-variant-numeric: tabular-nums; font-size: 14.5px; }
+  .say th, .say td { text-align: right; padding: 4px 14px 4px 0; border-bottom: 1px solid var(--app-line); }
+  .say th:first-child, .say td:first-child { text-align: left; }
+  .say th { color: var(--app-soft); font-weight: 500; }
+  .plus { color: var(--ok); } .minus { color: var(--num); }
+  .say small { color: var(--app-dim); }
+  .composer { margin: 0 clamp(18px, 3vw, 32px) clamp(18px, 3vw, 24px); border: 1px solid var(--app-line); border-radius: 14px; padding: 12px 14px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; color: var(--app-dim); font-size: 14.5px; }
+  .composer span:first-child { flex: 1 1 200px; }
+  .slash { font: 500 12.5px/1 var(--code); color: var(--app-soft); background: var(--app-3); border-radius: 999px; padding: 7px 10px; }
+  .js .playing .step { animation: rise 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); filter: blur(2px); } }
+
+  section { padding-block: clamp(64px, 9vw, 120px); }
+  h2.big { font: 900 clamp(36px, 5vw, 68px)/0.92 var(--display); font-stretch: 62%; text-transform: uppercase; margin: 0 0 16px; text-wrap: balance; }
+  .intro { color: var(--ink-soft); font-size: 19px; max-width: 36em; margin: 0 0 clamp(40px, 6vw, 72px); }
+
+  /* A day */
+  .day { position: relative; display: grid; gap: clamp(48px, 6vw, 80px); }
+  .day::before { content: ""; position: absolute; left: 88px; top: 8px; bottom: 8px; width: 2px; background: var(--app-line); }
+  .hour { display: grid; grid-template-columns: 70px 36px minmax(0, 0.85fr) minmax(0, 1.15fr); gap: 0 20px; align-items: start; }
+  .time { font: 900 34px/1 var(--display); font-stretch: 70%; text-align: right; font-variant-numeric: tabular-nums; }
+  .dot { width: 17px; height: 17px; border-radius: 50%; background: var(--wall); border: 3px solid var(--key); margin: 8px 0 0 9px; position: relative; z-index: 1; }
+  .hour h3 { margin: 0 0 12px; font: 800 clamp(24px, 2.6vw, 34px)/1 var(--display); font-stretch: 75%; text-transform: uppercase; }
+  .hour code.chip { display: inline-block; font: 500 13px/1.45 var(--code); background: var(--app); color: var(--app-ink); padding: 8px 12px; border-radius: 10px; overflow-wrap: anywhere; box-shadow: 0 0 0 1px var(--app-line); margin-bottom: 14px; }
+  .hour code.chip::before { content: "$ "; color: var(--ok); }
+  .hour p.why { margin: 0; color: var(--ink-soft); }
+  .hour p.why + p.why { margin-top: 10px; }
+  .thread { display: flex; flex-direction: column; gap: 8px; background: color-mix(in srgb, var(--app) 55%, transparent); border: 1px solid var(--app-line); border-radius: 22px; padding: 16px; }
+  .thread-head { display: flex; align-items: center; gap: 10px; padding-bottom: 10px; margin-bottom: 4px; border-bottom: 1px solid var(--app-line); font-size: 14px; color: var(--app-soft); }
+  .thread-head b { color: var(--app-ink); font-weight: 600; }
+  .thread-head .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--me); flex: none; }
+  .thread-head .av svg { width: 16px; height: 16px; }
+  .msg { max-width: 90%; padding: 10px 14px 7px; border-radius: 18px; font-size: 15px; line-height: 1.5; }
+  .msg p { margin: 0; } .msg p + p, .msg p + ul, .msg ul + p { margin-top: 6px; }
+  .msg ul { margin: 0; padding-left: 18px; }
+  .msg li + li { margin-top: 2px; }
+  .msg .meta { font-size: 11.5px; opacity: 0.65; text-align: right; margin-top: 3px; }
+  .msg .from { display: block; font-size: 12.5px; font-weight: 600; color: var(--str); margin-bottom: 2px; }
+  .bot { align-self: flex-start; background: var(--bubble); color: var(--app-ink); border-bottom-left-radius: 6px; }
+  .me { align-self: flex-end; background: var(--me); color: var(--me-ink); border-bottom-right-radius: 6px; }
+  .other { align-self: flex-start; background: var(--app-3); color: var(--app-ink); border-bottom-left-radius: 6px; }
+  .ran { display: inline-flex; gap: 6px; align-items: center; font: 500 11.5px/1.4 var(--code); color: var(--app-soft); background: var(--app); border-radius: 6px; padding: 3px 7px; margin-bottom: 6px; overflow-wrap: anywhere; }
+  .ran::before { content: "$"; color: var(--ok); }
+  .note { align-self: center; font-size: 12px; color: var(--app-dim); padding: 2px 10px; }
+  .msg table { border-collapse: collapse; font-variant-numeric: tabular-nums; margin: 6px 0; font-size: 14px; }
+  .msg td, .msg th { padding: 2px 12px 2px 0; text-align: right; border-bottom: 1px solid var(--app-line); }
+  .msg td:first-child, .msg th:first-child { text-align: left; }
+  .msg th { color: var(--app-soft); font-weight: 500; }
+  .js .reveal { opacity: 0.001; transform: translateY(14px); transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+  .js .reveal.seen { opacity: 1; transform: none; }
+
+  .band { background: var(--app); }
+  .connect { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .lane { border-top: 2px solid var(--app-line); padding-top: 18px; display: flex; flex-direction: column; gap: 12px; }
+  .lane h3 { margin: 0; font: 800 26px/1 var(--display); font-stretch: 75%; text-transform: uppercase; }
+  .lane p { margin: 0; color: var(--app-soft); font-size: 15.5px; }
+  .lane .cmd { background: var(--app-3); margin-top: auto; justify-content: space-between; }
+  .slashes { display: flex; flex-wrap: wrap; gap: 6px; }
+  .limits { margin-top: 48px; color: var(--app-soft); max-width: 46em; }
+
+  .tools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .tool-card { background: var(--card); color: var(--card-ink); border-radius: 24px; padding: clamp(22px, 3vw, 34px); display: flex; flex-direction: column; gap: 14px; }
+  .tool-name { font: 900 60px/0.9 var(--display); font-stretch: 70%; }
+  .tool-name small { display: block; font: 600 14px/1.3 var(--body); color: var(--card-soft); margin-top: 8px; }
+  .tool-card p { margin: 0; }
+  .tool-card .cmd { margin-top: auto; }
+  .tool-links { display: flex; gap: 18px; font-weight: 600; font-size: 15px; }
+
+  .ftabs { display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 4px; border-radius: 999px; border: 1px solid var(--app-line); background: color-mix(in srgb, var(--app) 60%, transparent); margin-bottom: 28px; }
+  .ftab { border: 0; cursor: pointer; border-radius: 999px; padding: 10px 18px; font: 600 14.5px/1 var(--body); background: transparent; color: var(--ink-soft); transition: background 0.25s, color 0.25s; }
+  .ftab:hover { color: var(--ink); }
+  .ftab[aria-selected="true"] { background: var(--ink); color: var(--wall); }
+  .fpanel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(24px, 4vw, 56px); align-items: start; }
+  .js .fpanel:not([hidden]) { animation: rise 0.45s cubic-bezier(0.16, 1, 0.3, 1); }
+  .flead { margin: 0 0 18px; font-size: 19px; color: var(--ink); }
+  .flist ul { list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 12px; }
+  .flist li { padding-left: 22px; position: relative; color: var(--ink-soft); }
+  .flist li::before { content: ""; position: absolute; left: 2px; top: 0.62em; width: 8px; height: 8px; border-radius: 50%; border: 2px solid var(--key); }
+  .flist li b { color: var(--ink); font-weight: 600; }
+  .flist code { font: 500 0.88em/1 var(--code); color: var(--key); }
+  .more { color: var(--key); text-decoration: none; font-weight: 600; }
+  .more:hover { text-decoration: underline; }
+  .fterm { margin: 0; background: var(--app); border-radius: 18px; box-shadow: 0 0 0 1px var(--app-line), 0 40px 70px -46px rgba(0, 0, 0, 0.9); padding: 22px 24px; font: 400 13.5px/1.75 var(--code); color: var(--app-ink); overflow-x: auto; }
+  .fterm .c { color: var(--app-dim); }
+  .fterm .p { color: var(--ok); }
+  .fv { margin-top: 8px; }
+  .fv-ico { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: color-mix(in srgb, var(--me) 22%, transparent); color: var(--key); flex: none; }
+  .fv-ico svg { width: 22px; height: 22px; }
+  .fv-name { font: 800 22px/1.05 var(--display); font-stretch: 75%; text-transform: uppercase; color: var(--ink); }
+  .fv-short { font-size: 14px; color: var(--ink-soft); }
+  .fv-lead { margin: 0 0 22px; font-size: 18px; color: var(--ink); max-width: 46em; }
+  .fv code { font: 500 13px/1.45 var(--code); color: var(--app-ink); background: var(--app); border: 1px solid var(--app-line); border-radius: 8px; padding: 5px 9px; overflow-wrap: anywhere; display: inline-block; }
+  .fv pre code { display: block; background: none; border: 0; padding: 0; border-radius: 0; font: inherit; color: inherit; }
+  .fv h4 { margin: 0; font: 600 17px/1.3 var(--body); color: var(--ink); }
+  .fv-tab { cursor: pointer; font: inherit; text-align: left; color: var(--ink-soft); }
+  .fv .more { display: inline-block; margin-top: 22px; }
+
+  .tabs1 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 28px; }
+  .tabs1 .fv-tab { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 4px 14px; align-items: center; padding: 18px; border-radius: 18px; border: 1px solid var(--app-line); background: var(--app-2); transition: border-color 0.2s, background 0.2s, transform 0.2s; }
+  .tabs1 .fv-ico { grid-row: span 2; }
+  .tabs1 .fv-tab:hover { border-color: var(--app-dim); transform: translateY(-2px); }
+  .tabs1 .fv-tab[aria-selected="true"] { background: var(--me); border-color: var(--me); }
+  .tabs1 .fv-tab[aria-selected="true"] .fv-name, .tabs1 .fv-tab[aria-selected="true"] .fv-short { color: #fff; }
+  .tabs1 .fv-tab[aria-selected="true"] .fv-ico { background: rgba(255, 255, 255, 0.18); color: #fff; }
+  .g1 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .t1 { background: var(--card); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+  .t1 p { margin: 0 0 6px; color: var(--card-soft); font-size: 15px; flex: 1; }
+  .t1 code { align-self: flex-start; }
+
+  .g2 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .c2 { background: var(--card); border-radius: 22px; padding: 24px; }
+  .c2-head { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 2px 14px; align-items: center; padding-bottom: 18px; margin-bottom: 8px; border-bottom: 1px solid var(--app-line); }
+  .c2-head .fv-ico { grid-row: span 2; }
+  .c2-head h4 { font: 800 24px/1 var(--display); font-stretch: 75%; text-transform: uppercase; }
+  .c2-head p { margin: 0; font-size: 14px; color: var(--card-soft); }
+  .c2 ul { list-style: none; margin: 0; padding: 0; }
+  .c2 li { display: grid; gap: 4px; padding: 14px 0; border-bottom: 1px solid color-mix(in srgb, var(--app-line) 60%, transparent); }
+  .c2 li span { color: var(--card-soft); font-size: 14.5px; }
+  .c2 li code { justify-self: start; margin-top: 4px; font-size: 12px; }
+
+  .g3 { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 32px; align-items: start; }
+  .tabs3 { display: grid; gap: 8px; position: sticky; top: 90px; }
+  .tabs3 .fv-tab { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 2px 14px; align-items: center; padding: 16px; border-radius: 16px; border: 1px solid transparent; background: transparent; position: relative; }
+  .tabs3 .fv-ico { grid-row: span 2; }
+  .tabs3 .fv-tab:hover { background: var(--app-2); }
+  .tabs3 .fv-tab[aria-selected="true"] { background: var(--app-2); border-color: var(--app-line); }
+  .tabs3 .fv-tab[aria-selected="true"]::after { content: ""; position: absolute; right: -17px; top: 50%; width: 10px; height: 10px; border-radius: 50%; background: var(--key); transform: translateY(-50%); }
+  .r3 { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr) minmax(0, 1.3fr); gap: 16px; align-items: center; padding: 16px 0; border-top: 1px solid var(--app-line); }
+  .r3 b { color: var(--ink); font-weight: 600; }
+  .r3 span { color: var(--ink-soft); font-size: 15px; }
+  .r3 code { justify-self: start; }
+
+  .tabs4 { display: flex; flex-wrap: wrap; gap: 6px 28px; margin-bottom: 26px; border-bottom: 1px solid var(--app-line); }
+  .tabs4 .fv-tab { background: none; border: 0; padding: 0 0 14px; display: inline-flex; align-items: center; gap: 10px; position: relative; }
+  .tabs4 .fv-short { display: none; }
+  .tabs4 .fv-ico { width: 32px; height: 32px; border-radius: 10px; }
+  .tabs4 .fv-name { font-size: clamp(22px, 2.6vw, 34px); color: var(--ink-dim); transition: color 0.2s; }
+  .tabs4 .fv-tab:hover .fv-name { color: var(--ink-soft); }
+  .tabs4 .fv-tab[aria-selected="true"] .fv-name { color: var(--ink); }
+  .tabs4 .fv-tab[aria-selected="true"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; border-radius: 3px; background: var(--key); }
+  .g4 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(24px, 4vw, 56px); align-items: start; }
+  .g4 ol { margin: 0; padding: 0; list-style: none; counter-reset: f; display: grid; gap: 4px; }
+  .g4 li { counter-increment: f; padding: 10px 12px 10px 44px; border-radius: 12px; position: relative; color: var(--ink-soft); cursor: default; transition: background 0.2s; }
+  .g4 li::before { content: counter(f); position: absolute; left: 12px; top: 10px; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font: 600 12px/1 var(--body); background: var(--app-3); color: var(--ink-soft); }
+  .g4 li b { color: var(--ink); font-weight: 600; }
+  .g4 li.hot { background: var(--app-2); }
+  .g4 li.hot::before { background: var(--key); color: var(--app); }
+  .term4 { margin: 0; background: var(--app); border-radius: 18px; box-shadow: 0 0 0 1px var(--app-line); padding: 18px; font: 400 14px/1.6 var(--code); color: var(--app-ink); overflow-x: auto; position: sticky; top: 90px; }
+  .l4 { padding: 9px 10px; border-radius: 8px; white-space: pre-wrap; word-break: break-word; transition: background 0.2s; }
+  .l4.hot { background: color-mix(in srgb, var(--me) 28%, transparent); }
+  .p { color: var(--ok); }
+
+  .term5 { background: var(--app); border-radius: 20px; box-shadow: 0 0 0 1px var(--app-line), 0 50px 80px -50px rgba(0, 0, 0, 0.9); overflow: hidden; }
+  .bar5 { display: flex; gap: 2px; padding: 8px 8px 0; background: var(--app-2); border-bottom: 1px solid var(--app-line); overflow-x: auto; }
+  .bar5 .fv-tab { display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px 12px; border: 1px solid transparent; border-bottom: 0; border-radius: 12px 12px 0 0; background: transparent; font: 500 15px/1 var(--code); color: var(--app-soft); white-space: nowrap; }
+  .bar5 .fv-ico { width: 28px; height: 28px; border-radius: 8px; }
+  .bar5 .fv-ico svg { width: 17px; height: 17px; }
+  .bar5 .fv-tab[aria-selected="true"] { background: var(--app); border-color: var(--app-line); color: var(--app-ink); margin-bottom: -1px; }
+  .term5 pre { margin: 0; padding: clamp(18px, 3vw, 32px); font: 400 15px/1.6 var(--code); color: var(--app-ink); overflow-x: auto; }
+  .l5 { display: grid; gap: 2px; padding: 10px 0; white-space: pre-wrap; word-break: break-word; }
+  .l5 .c { color: var(--app-dim); font-family: var(--body); font-size: 15px; }
+  .l5 .c b { color: var(--app-ink); font-weight: 600; }
+
+  .fv6 { display: grid; gap: 18px; }
+  .grp6 { background: color-mix(in srgb, var(--app) 92%, transparent); border: 1px solid var(--app-line); border-radius: 26px; padding: clamp(20px, 3vw, 36px); box-shadow: 0 40px 70px -50px rgba(0, 0, 0, 0.9); }
+  .head6 { display: grid; grid-template-columns: 44px auto minmax(0, 1fr); gap: 18px; align-items: center; margin-bottom: 16px; }
+  .head6 .fv-ico { width: 44px; height: 44px; }
+  .head6 .fv-name { font-size: clamp(26px, 3vw, 38px); }
+  .grp6 .t6 { background: var(--app-2); }
+  .grp6 .t6 code { background: var(--app); }
+  .g6 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .t6 { display: grid; gap: 6px; align-content: start; padding: 18px; border-radius: 16px; background: var(--card); }
+  .t6 b { color: var(--card-ink); font-weight: 600; }
+  .t6 span { color: var(--card-soft); font-size: 14.5px; }
+  .t6 code { justify-self: start; margin-top: 6px; font-size: 12px; }
+
+  @media (max-width: 1000px) {
+    .g1, .g2, .g6 { grid-template-columns: minmax(0, 1fr); }
+    .g3, .g4 { grid-template-columns: minmax(0, 1fr); }
+    .tabs3 { position: static; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .tabs3 .fv-tab[aria-selected="true"]::after { display: none; }
+    .r3 { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+    .term4 { position: static; }
+  }
+  @media (max-width: 640px) {
+    .tabs1, .tabs3 { grid-template-columns: minmax(0, 1fr); }
+    .head6 { grid-template-columns: 44px minmax(0, 1fr); }
+    .head6 .fv-short { grid-column: 1 / -1; }
+  }
+
+  .spec { margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 clamp(24px, 3vw, 44px); }
+  .spec > div { padding-block: 22px 26px; border-top: 1px solid var(--app-line); display: flex; flex-direction: column; gap: 8px; }
+  .spec dt { font: 800 clamp(22px, 2.2vw, 28px)/1 var(--display); font-stretch: 75%; text-transform: uppercase; }
+  .spec dd { margin: 0; color: var(--app-soft); font-size: 15.5px; }
+  .spec code { align-self: flex-start; font: 500 12.5px/1.4 var(--code); color: var(--key); background: var(--app-2); border-radius: 8px; padding: 5px 9px; margin-top: 4px; overflow-wrap: anywhere; }
+
+  .close { text-align: center; }
+  .close .intro { margin: 24px auto 0; max-width: 38em; }
+  #closing { scroll-margin-top: 90px; }
+  .close .cta { justify-content: center; margin-top: 28px; }
+
+  footer.site { background: var(--app); border-top: 1px solid var(--app-line); padding-block: clamp(48px, 7vw, 80px) 32px; color: var(--app-soft); font-size: 15px; }
+  .foot { display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(4, minmax(0, 1fr)); gap: 32px; }
+  .foot-brand p { margin: 14px 0 18px; max-width: 22em; }
+  .foot h4 { margin: 0 0 14px; font: 600 12px/1 var(--body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--app-dim); }
+  .foot ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .foot a { text-decoration: none; }
+  .foot a:hover { color: var(--app-ink); text-decoration: underline; }
+  .foot code { font: 400 13.5px/1 var(--code); }
+  .foot-bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px 28px; margin-top: 48px; padding-top: 22px; border-top: 1px solid var(--app-line); font-size: 13.5px; color: var(--app-dim); }
+  .langs { display: flex; gap: 6px; }
+  .langs a { padding: 6px 10px; border-radius: 999px; text-decoration: none; border: 1px solid var(--app-line); color: var(--app-soft); }
+  .langs a[aria-current="page"] { background: var(--app-3); color: var(--app-ink); }
+
+  @media (max-width: 1000px) {
+    .fpanel { grid-template-columns: minmax(0, 1fr); }
+    .spec { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .foot { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .foot-brand { grid-column: 1 / -1; }
+  }
+  @media (max-width: 900px) {
+    .hero-text, .connect, .tools { grid-template-columns: minmax(0, 1fr); }
+    .app-body { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+    .sessions { flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--app-line); padding: 8px; }
+    .sessions h2 { display: none; }
+    .session { flex: none; }
+    .session small { display: none; }
+    .hour { grid-template-columns: 56px 30px minmax(0, 1fr); }
+    .hour .thread { grid-column: 1 / -1; margin-top: 18px; }
+    .day::before { display: none; }
+    .time { font-size: 26px; }
+  }
+  @media (max-width: 520px) {
+    .spec { grid-template-columns: minmax(0, 1fr); }
+    .ftab { padding: 9px 13px; }
+    header.top { flex-wrap: wrap; row-gap: 12px; }
+    .right { margin-left: auto; min-width: 0; }
+    nav.site { font-size: 13px; }
+    nav.site a { padding: 8px 9px; }
+    .lang summary { padding: 0 10px; }
+    .lang summary span { display: none; }
+    .mark { font-size: 18px; }
+    .titlebar span { display: none; }
+    .ask, .say { max-width: 100%; }
+    .cmd { font-size: 13.5px; }
+    .headlines { left: 8px; right: 8px; flex-wrap: wrap; justify-content: center; border-radius: 18px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition-duration: 80ms; }
+    .mark svg, .mark .word, nav.site .glide { transition: none; }
+    .mark:hover .wire, .mark:hover .pulse, .mark:hover .ring { animation: none; }
+    .js .playing .step, .js .fresh { animation: none; }
+    .tool.running .state svg, .caret { animation: none; }
+    .js .reveal { opacity: 1; transform: none; transition: none; }
+  }
+  :lang(ru) #headline { font-size: clamp(29px, 5.5vw, 68px); }
+  :lang(ru) #headline span { display: block; }
+</style>
+</head>
+<body>
+<div class="bar" id="bar"><header class="top wrap">
+  <a class="mark" href="#">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><circle class="ring" cx="16" cy="16" r="16"/><circle cx="16" cy="16" r="16" fill="#4b53f0"/><path class="wire" pathLength="40" d="M9 21V11l4 4 3-4 3 4 4-4v10" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path class="pulse" pathLength="40" d="M9 21V11l4 4 3-4 3 4 4-4v10"/></svg>
+    <span class="word">WireCat</span>
+  </a>
+  <div class="right">
+  <details class="lang">
+    <summary aria-label="Idioma"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="8" cy="8" r="6.3"/><path d="M1.7 8h12.6M8 1.7c1.8 1.8 2.6 4 2.6 6.3S9.8 12.5 8 14.3M8 1.7C6.2 3.5 5.4 5.7 5.4 8s.8 4.5 2.6 6.3"/></svg><span>ES</span><svg class="dn" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4.5 6.5L8 10l3.5-3.5"/></svg></summary>
+    <div class="lang-menu"><a href="g-home.html" lang="en">English</a><a href="g-home.ru.html" lang="ru">Русский</a><a href="g-home.es.html" lang="es" aria-current="page">Español</a></div>
+  </details>
+  <nav class="site" aria-label="Navegación del sitio">
+    <span class="glide" aria-hidden="true"></span>
+    <a href="https://wirecat.dev/es/docs/tg">Telegram</a>
+    <a href="https://wirecat.dev/ru/docs/max">MAX</a>
+  </nav>
+  </div>
+</header></div>
+
+<main class="wrap hero">
+  <div class="hero-text">
+    <h1 id="headline">Deja de buscar en tus chats. <span>Pregúntale a tu agente.</span></h1>
+    <div>
+      <p class="lede">Conecta Claude Code, Codex u otro agente a <b>Telegram y MAX</b>. Encuentra lo importante, recuerda lo acordado y responde con todo el contexto.</p>
+      <div class="cta">
+        <span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copiar</button></span>
+        <a class="btn" href="#connect">Conecta tu agente</a>
+      </div>
+      <p class="tagline"><b>Herramientas de mensajería para tu agente de IA.</b> Gratis y de código abierto.</p>
+    </div>
+  </div>
+
+  <div class="app" id="app">
+    <div class="titlebar"><i></i><i></i><i></i><span>Agente · ~/inbox</span>
+      <button class="replay" type="button" id="replay"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 1 0 1.8-4.1M2.5 2v3.5H6"/></svg>Repetir</button>
+    </div>
+    <div class="app-body">
+      <nav class="sessions" aria-label="Sesiones" id="sessions"><h2>Sesiones</h2></nav>
+      <div class="conv">
+        <div class="log" id="log"></div>
+        <div class="composer"><span>Pregunta sobre tus chats…</span><span class="slash">Sin leer</span><span class="slash">Acuerdos</span><span class="slash">Respuestas</span><span class="slash">Buscar</span></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<section id="day" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="big">Un día con tu agente</h2>
+    <p class="intro">Preguntas con tus propias palabras. Tu agente ejecuta un comando <code>tg</code> y te trae la respuesta, no el chat entero.</p>
+    <div class="day">
+
+      <div class="hour reveal"><span class="time">08:00</span><span class="dot"></span>
+        <div><h3>El resumen de la mañana</h3><code class="chip">tg inbox --new</code>
+          <p class="why">Prográmalo una vez. Antes de que abras la app, tu agente ya ha leído todo lo que llegó por la noche y te ha escrito un solo mensaje.</p>
+          <p class="why">Descubre quién espera una respuesta, qué plazos se acercan y qué cambió mientras no estabas. Los mensajes siguen sin leer.</p></div>
+        <div class="thread">
+          <div class="thread-head"><span class="av"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18V7l4 4 3-4 3 4 4-4v11" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/></svg></span><b>Tu agente</b> · resumen de la mañana</div>
+          <div class="msg bot"><span class="ran">tg inbox --new</span>
+            <p><b>Buenos días. 4 chats te necesitan, 206 mensajes pueden esperar.</b></p>
+            <ul><li><b>Marco</b> necesita que apruebes la versión antes de las 11:00.</li><li><b>Club de lectura</b> pasó el viernes a las 19:30. Anna pregunta si vas.</li><li><b>Pablo</b> lleva 3 días esperando la factura.</li><li><b>Mamá</b> te mandó un audio de 0:42.</li></ul>
+            <p>En «Toda la empresa» (128) y «Senderismo» (57) no hay nada para ti.</p><div class="meta">08:00</div></div>
+          <div class="msg me"><p>Dile a Anna que voy. Recuérdame lo de Pablo a las 14:00.</p><div class="meta">08:04</div></div>
+          <div class="msg bot"><p>Enviado a Club de lectura: <q>¡Voy, las 19:30 me va bien!</q> El recordatorio de Pablo es a las 14:00.</p><div class="meta">08:04</div></div>
+        </div></div>
+
+      <div class="hour reveal"><span class="time">11:20</span><span class="dot"></span>
+        <div><h3>Un audio en plena reunión</h3><code class="chip">tg messages transcribe "Mamá" 8812 --local</code>
+          <p class="why">Léelo sin salir de la sala. El modelo de voz funciona en tu propio ordenador, en 25 idiomas, y el audio no va a ninguna parte.</p></div>
+        <div class="thread">
+          <div class="msg me"><p>¿Qué dijo mamá? Ahora no puedo escucharlo.</p><div class="meta">11:20</div></div>
+          <div class="msg bot"><span class="ran">tg messages transcribe "Mamá" 8812 --local</span>
+            <p><q>Hola, cariño, ¿tu vuelo sigue a las seis? Llámame cuando aterrices. Y no olvides el cumpleaños del abuelo el domingo, le encantará tu llamada.</q></p>
+            <p>Hay dos cosas: llamarla esta noche al aterrizar y al abuelo el domingo. ¿Pongo recordatorios para las dos?</p><div class="meta">11:20</div></div>
+          <div class="msg me"><p>Sí. El domingo a las 10.</p><div class="meta">11:21</div></div>
+          <div class="msg bot"><p>Hecho: domingo, 10:00, <q>Llamar al abuelo, felicitarle</q>.</p><div class="meta">11:21</div></div>
+        </div></div>
+
+      <div class="hour reveal"><span class="time">13:30</span><span class="dot"></span>
+        <div><h3>Quién le debe a quién</h3><code class="chip">tg messages search "pagué" --chat "Viaje a Lisboa"</code>
+          <p class="why">Los pagos están repartidos en una semana de chat del viaje. Tu agente los encuentra en la copia de tus chats en tu ordenador y hace las cuentas.</p>
+          <p class="why">Sin hacer scroll ni hojas de cálculo.</p></div>
+        <div class="thread">
+          <div class="msg me"><p>Haz las cuentas del viaje a Lisboa.</p><div class="meta">13:30</div></div>
+          <div class="msg bot"><span class="ran">tg messages search "pagué" --chat "Viaje a Lisboa"</span>
+            <p>He encontrado 3 pagos, €396 en total, €132 cada uno:</p>
+            <table><thead><tr><th></th><th>Pagó</th><th>Saldo</th></tr></thead><tbody>
+              <tr><td>Ana · hotel</td><td>€240</td><td class="plus">+€108</td></tr>
+              <tr><td>Ben · cena</td><td>€96</td><td class="minus">−€36</td></tr>
+              <tr><td>Tú · taxi</td><td>€60</td><td class="minus">−€72</td></tr></tbody></table>
+            <p>Tú le pasas a Ana €72 y Ben le pasa €36. ¿Lo publico en el chat?</p><div class="meta">13:30</div></div>
+          <div class="msg me"><p>Publícalo.</p><div class="meta">13:31</div></div>
+        </div></div>
+
+      <div class="hour reveal"><span class="time">14:00</span><span class="dot"></span>
+        <div><h3>El recordatorio que pediste</h3><code class="chip">tg messages send me "Responder a Pablo sobre la factura" --at-time 2026-10-02T14:00</code>
+          <p class="why">Lo pediste esta mañana en una frase. Telegram lo entrega en tus Mensajes guardados, así que llega aunque el portátil esté cerrado.</p></div>
+        <div class="thread">
+          <div class="note">Mensajes guardados</div>
+          <div class="msg other"><span class="from">Recordatorio</span><p>Responder a Pablo sobre la factura.</p><div class="meta">14:00</div></div>
+          <div class="msg me"><p>Prepara una respuesta a Pablo: la factura sale el lunes.</p><div class="meta">14:02</div></div>
+          <div class="msg bot"><p>Borrador: <q>¡Hola, Pablo, perdona la espera! La factura sale el lunes.</q> ¿La envío?</p><div class="meta">14:02</div></div>
+        </div></div>
+
+      <div class="hour reveal"><span class="time">16:00</span><span class="dot"></span>
+        <div><h3>Respuestas mientras estás ocupado</h3><code class="chip">tg watch</code>
+          <p class="why">Dile a tu agente qué responder: vigila los mensajes nuevos según llegan y contesta en tu nombre.</p>
+          <p class="why">Lo que no tenga claro, te espera.</p></div>
+        <div class="thread">
+          <div class="msg me"><p>Estoy en talleres hasta las 18:00. Si Priya pide la presentación, mándale el enlace. Lo demás, me lo cuentas luego.</p><div class="meta">15:58</div></div>
+          <div class="msg other"><span class="from">Priya</span><p>¡Hola! ¿Dónde está la última presentación?</p><div class="meta">16:12</div></div>
+          <div class="msg bot"><span class="ran">tg messages send "Priya" "Aquí la tienes: …/deck-v3"</span><p>Le he mandado a Priya el enlace.</p><div class="meta">16:12</div></div>
+          <div class="msg other"><span class="from">Tom</span><p>¿Podemos pasar la llamada de mañana a las 15:00?</p><div class="meta">16:40</div></div>
+          <div class="msg bot"><p>Tom quiere la llamada de mañana a las 15:00. Te lo guardo para cuando salgas.</p><div class="meta">16:40</div></div>
+        </div></div>
+
+      <div class="hour reveal"><span class="time">18:00</span><span class="dot"></span>
+        <div><h3>Preguntas sin respuesta</h3><code class="chip">tg review --chat "Senderismo" --unanswered</code>
+          <p class="why">En los grupos que gestionas: quién preguntó algo y no recibió respuesta. Útil antes de que se convierta en diez recordatorios.</p></div>
+        <div class="thread">
+          <div class="msg me"><p>¿Hay algo sin responder en Senderismo?</p><div class="meta">18:00</div></div>
+          <div class="msg bot"><span class="ran">tg review --chat "Senderismo" --unanswered</span>
+            <p>Dos preguntas llevan más de un día esperando:</p>
+            <ul><li><b>Lucas</b>: ¿quién tiene la segunda tienda? <i>ayer, 09:14</i></li><li><b>Sofia</b>: ¿a qué hora sale el autobús el sábado? <i>ayer, 17:40</i></li></ul>
+            <p>Según el plan de la semana pasada, el autobús sale a las 07:30. ¿Se lo digo a Sofia?</p><div class="meta">18:00</div></div>
+        </div></div>
+
+      <div class="hour reveal"><span class="time">21:30</span><span class="dot"></span>
+        <div><h3>Quién debe qué esta semana</h3><code class="chip">tg review --since-time 7d</code>
+          <p class="why">Todo lo dicho desde la última revisión, tus mensajes también, ordenado en lo que prometiste y lo que te prometieron.</p>
+          <p class="why">La próxima revisión empieza donde terminó esta.</p></div>
+        <div class="thread">
+          <div class="msg me"><p>¿Qué le prometí a alguien esta semana?</p><div class="meta">21:30</div></div>
+          <div class="msg bot"><span class="ran">tg review --since-time 7d</span>
+            <p><b>Debes</b></p><ul><li>Anna: la factura, como tarde hoy. <i>29 sept.</i></li><li>Kate: comentarios sobre las nuevas diapositivas. <i>1 oct.</i></li></ul>
+            <p><b>Esperas de otros</b></p><ul><li>Tom: el boceto, prometido para el 30 de septiembre.</li></ul>
+            <p><b>Hay que aclarar</b></p><ul><li>Project Alpha: quién trae las muestras. <i>«Lo decidimos luego»</i></li></ul><div class="meta">21:30</div></div>
+        </div></div>
+
+    </div>
+  </div>
+</section>
+
+<section class="band" id="connect">
+  <div class="wrap">
+    <h2 class="big">Conecta tu agente en una línea</h2>
+    <p class="intro">Cada herramienta incluye una skill para agentes y un servidor MCP.</p>
+    <div class="connect">
+      <div class="lane"><h3>Claude Code · Codex · Gemini CLI</h3><p>Instala la skill: qué comandos hay y cómo usarlos.</p><span class="cmd"><code>tg skill install</code><button class="copy" type="button" data-copy="tg skill install">Copiar</button></span></div>
+      <div class="lane"><h3>Claude Desktop · Cursor</h3><p>Imprime la entrada MCP para tus ajustes. Incluye prompts listos:</p><div class="slashes"><span class="slash">/catch-up</span><span class="slash">/review</span><span class="slash">/reply</span><span class="slash">/find</span></div><span class="cmd"><code>tg mcp config</code><button class="copy" type="button" data-copy="tg mcp config">Copiar</button></span></div>
+      <div class="lane"><h3>Cualquier modelo</h3><p>Toda la documentación en Markdown, en una sola lista.</p><span class="cmd"><code>wirecat.dev/llms.txt</code><button class="copy" type="button" data-copy="https://wirecat.dev/llms.txt">Copiar</button></span></div>
+    </div>
+    <p class="limits">Leer no marca nada como leído. Tú decides en qué chats puede escribir y con qué frecuencia.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 class="big">Telegram y MAX, los mismos comandos</h2>
+    <p class="intro">Aprende los comandos una vez y úsalos en ambos.</p>
+    <div class="tools">
+      <article class="tool-card"><div class="tool-name">tg<small>Telegram</small></div><p>Un cliente de Telegram para la terminal y los agentes de IA, con tu propia cuenta.</p><span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copiar</button></span><div class="tool-links"><a href="https://wirecat.dev/es/docs/tg">Documentación</a><a href="https://github.com/leemour/tg-cli">GitHub</a><a href="https://www.npmjs.com/package/@leemour/tg-cli">npm</a></div></article>
+      <article class="tool-card"><div class="tool-name">max<small>MAX Messenger</small></div><p>Conecta tu cuenta de MAX o usa tus bots a través de la Bot API oficial.</p><span class="cmd"><code>npm i -g @leemour/max-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/max-cli">Copiar</button></span><div class="tool-links"><a href="https://wirecat.dev/ru/docs/max">Documentación</a><a href="https://github.com/leemour/max-cli">GitHub</a><a href="https://www.npmjs.com/package/@leemour/max-cli">npm</a></div></article>
+    </div>
+  </div>
+</section>
+
+<section id="features" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="big" id="feat-title">Menos tareas repetitivas en tus chats</h2>
+    <p class="intro">Ten presentes los acuerdos, ayuda a clientes y cuida tus grupos. Pide a tu agente que trabaje con Telegram y MAX.</p>
+    <div class="fv fv1" data-variant="1" hidden><div class="tabs1" role="tablist"><button class="fv-tab" role="tab" type="button" data-v="1" data-group="personal" aria-selected="true"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.2-4 4.2-6 7.5-6s6.3 2 7.5 6"/></svg></span><span class="fv-name">Cuenta personal</span><span class="fv-short">Tus chats, historial y contactos</span></button><button class="fv-tab" role="tab" type="button" data-v="1" data-group="bots" aria-selected="false"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M9.5 16.5h5"/></svg></span><span class="fv-name">Bots</span><span class="fv-short">Clientes, equipos y comunicaciones</span></button><button class="fv-tab" role="tab" type="button" data-v="1" data-group="groups" aria-selected="false"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3.5 19c.9-3.2 3-4.8 5.5-4.8s4.6 1.6 5.5 4.8M14.5 15c2.6-.4 4.6.9 5.5 3.6"/></svg></span><span class="fv-name">Grupos que administras</span><span class="fv-short">Preguntas, conversaciones y comunidad</span></button></div><div class="fv-panel" data-v="1" data-group="personal"><p class="fv-lead">Conecta tu cuenta como si añadieras otro dispositivo. Accede a tus chats, historial, grupos, canales y contactos.</p><div class="g1"><div class="t1"><h4>Lo que tienes sin leer, en un solo lugar.</h4><p>Consulta los mensajes recibidos sin marcarlos como leídos.</p><code>tg inbox</code></div><div class="t1"><h4>Recuerda lo acordado.</h4><p>Revisa lo que habéis acordado desde la última revisión, incluidos tus propios compromisos.</p><code>tg review --since-time 7d</code></div><div class="t1"><h4>Encuentra mensajes incluso con erratas.</h4><p>Busca en tu archivo local de chats por palabras completas, fragmentos o términos con erratas.</p><code>tg messages search "contrato"</code></div><div class="t1"><h4>Noticias de los canales que sigues.</h4><p>Pide a tu agente un resumen de los canales que sigues, sobre los temas que elijas y con enlaces a las publicaciones.</p><code>tg review --chat "Noticias de tecnología" --since-time 1d</code></div><div class="t1"><h4>Audios convertidos en texto.</h4><p>Transcribe con Telegram o con un modelo de voz que se ejecuta en tu ordenador.</p><code>tg messages transcribe "Mamá" 8812 --local</code></div><div class="t1"><h4>Envío programado.</h4><p>Telegram envía tu mensaje a la hora prevista, aunque el portátil esté cerrado.</p><code>tg messages send me "Llamar a mamá" --at-time 2h</code></div></div><a class="more" href="https://wirecat.dev/es/docs/tg/usage">Cómo usar tu cuenta →</a></div><div class="fv-panel" data-v="1" data-group="bots" hidden><p class="fv-lead">Usa bots de Telegram y MAX para comunicarte con clientes y equipos: anuncios, respuestas útiles y acciones sencillas.</p><div class="g1"><div class="t1"><h4>Avisos a grupos.</h4><p>Pide a tu agente que envíe un anuncio a los grupos y canales que elijas.</p><code>max sales bot chats list</code></div><div class="t1"><h4>Mensajes personalizados.</h4><p>Tu agente adapta cada mensaje con los datos del cliente que le proporciones.</p><code>max sales bot messages send user:4815162342 "Anna, your order is ready"</code></div><div class="t1"><h4>Respuestas con contexto.</h4><p>Dale a tu agente una base de conocimientos o el historial de consultas para ayudarle a responder a tus clientes.</p><code>max support bot messages list "Support" --limit 20</code></div><div class="t1"><h4>Notificaciones para el equipo.</h4><p>Informa sobre solicitudes, resultados y cambios, con los archivos necesarios.</p><code>max sales bot messages send "Equipo" "La build está lista" --file report.pdf</code></div><div class="t1"><h4>Botones y opciones claras.</h4><p>Ayuda a elegir una acción, abrir un enlace o responder con un toque.</p><code>max sales bot commands set start=Start help=Help</code></div><div class="t1"><h4>Control de los envíos.</h4><p>Elige a quién puede escribir el bot y revisa qué envíos se completaron o requieren atención.</p><code>max sales bot sends list</code></div></div><a class="more" href="https://wirecat.dev/en/docs/max/bot">Cómo configurar un bot →</a></div><div class="fv-panel" data-v="1" data-group="groups" hidden><p class="fv-lead">Ayuda a que los miembros reciban respuestas, conserva las decisiones y cuida los debates.</p><div class="g1"><div class="t1"><h4>Seguimiento de preguntas.</h4><p>Encuentra preguntas sin respuesta para que los miembros reciban la ayuda que buscan.</p><code>tg review --chat "Senderismo" --unanswered</code></div><div class="t1"><h4>Actividad del grupo.</h4><p>Quién entró, salió, fue añadido o expulsado, y quién lo hizo.</p><code>tg chats events "Senderismo" --since-time 7d</code></div><div class="t1"><h4>Supervisión de conversaciones.</h4><p>Pide a tu agente que señale spam, insultos y conflictos para poder intervenir a tiempo.</p><code>tg review --chat "Senderismo" --since-time 1d</code></div><div class="t1"><h4>Moderación con tus reglas.</h4><p>Elige qué infracciones señalar, qué mensajes borrar y cuándo expulsar a un participante.</p><code>max chats check "Vecinos"</code></div><div class="t1"><h4>Resúmenes de conversaciones.</h4><p>Recibe las decisiones, preguntas pendientes y próximos pasos sin releer toda la conversación.</p><code>tg review --chat "Senderismo" --since-time 7d</code></div><div class="t1"><h4>Gestión de grupos.</h4><p>Delega las invitaciones, los cambios de administradores y la renovación de enlaces en tu agente.</p><code>tg chats create "Senderismo 2027" @sofia</code></div></div><a class="more" href="https://wirecat.dev/es/docs/tg/groups">Cómo gestionar un grupo →</a></div></div>
+    <div class="fv fv2" data-variant="2" hidden><div class="g2"><div class="c2"><div class="c2-head"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.2-4 4.2-6 7.5-6s6.3 2 7.5 6"/></svg></span><h4>Cuenta personal</h4><p>Tus chats, historial y contactos</p></div><ul><li><b>Lo que tienes sin leer, en un solo lugar.</b><span>Consulta los mensajes recibidos sin marcarlos como leídos.</span><code>tg inbox</code></li><li><b>Recuerda lo acordado.</b><span>Revisa lo que habéis acordado desde la última revisión, incluidos tus propios compromisos.</span><code>tg review --since-time 7d</code></li><li><b>Encuentra mensajes incluso con erratas.</b><span>Busca en tu archivo local de chats por palabras completas, fragmentos o términos con erratas.</span><code>tg messages search "contrato"</code></li><li><b>Noticias de los canales que sigues.</b><span>Pide a tu agente un resumen de los canales que sigues, sobre los temas que elijas y con enlaces a las publicaciones.</span><code>tg review --chat "Noticias de tecnología" --since-time 1d</code></li><li><b>Audios convertidos en texto.</b><span>Transcribe con Telegram o con un modelo de voz que se ejecuta en tu ordenador.</span><code>tg messages transcribe "Mamá" 8812 --local</code></li><li><b>Envío programado.</b><span>Telegram envía tu mensaje a la hora prevista, aunque el portátil esté cerrado.</span><code>tg messages send me "Llamar a mamá" --at-time 2h</code></li></ul><a class="more" href="https://wirecat.dev/es/docs/tg/usage">Cómo usar tu cuenta →</a></div><div class="c2"><div class="c2-head"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M9.5 16.5h5"/></svg></span><h4>Bots</h4><p>Clientes, equipos y comunicaciones</p></div><ul><li><b>Avisos a grupos.</b><span>Pide a tu agente que envíe un anuncio a los grupos y canales que elijas.</span><code>max sales bot chats list</code></li><li><b>Mensajes personalizados.</b><span>Tu agente adapta cada mensaje con los datos del cliente que le proporciones.</span><code>max sales bot messages send user:4815162342 "Anna, your order is ready"</code></li><li><b>Respuestas con contexto.</b><span>Dale a tu agente una base de conocimientos o el historial de consultas para ayudarle a responder a tus clientes.</span><code>max support bot messages list "Support" --limit 20</code></li><li><b>Notificaciones para el equipo.</b><span>Informa sobre solicitudes, resultados y cambios, con los archivos necesarios.</span><code>max sales bot messages send "Equipo" "La build está lista" --file report.pdf</code></li><li><b>Botones y opciones claras.</b><span>Ayuda a elegir una acción, abrir un enlace o responder con un toque.</span><code>max sales bot commands set start=Start help=Help</code></li><li><b>Control de los envíos.</b><span>Elige a quién puede escribir el bot y revisa qué envíos se completaron o requieren atención.</span><code>max sales bot sends list</code></li></ul><a class="more" href="https://wirecat.dev/en/docs/max/bot">Cómo configurar un bot →</a></div><div class="c2"><div class="c2-head"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3.5 19c.9-3.2 3-4.8 5.5-4.8s4.6 1.6 5.5 4.8M14.5 15c2.6-.4 4.6.9 5.5 3.6"/></svg></span><h4>Grupos que administras</h4><p>Preguntas, conversaciones y comunidad</p></div><ul><li><b>Seguimiento de preguntas.</b><span>Encuentra preguntas sin respuesta para que los miembros reciban la ayuda que buscan.</span><code>tg review --chat "Senderismo" --unanswered</code></li><li><b>Actividad del grupo.</b><span>Quién entró, salió, fue añadido o expulsado, y quién lo hizo.</span><code>tg chats events "Senderismo" --since-time 7d</code></li><li><b>Supervisión de conversaciones.</b><span>Pide a tu agente que señale spam, insultos y conflictos para poder intervenir a tiempo.</span><code>tg review --chat "Senderismo" --since-time 1d</code></li><li><b>Moderación con tus reglas.</b><span>Elige qué infracciones señalar, qué mensajes borrar y cuándo expulsar a un participante.</span><code>max chats check "Vecinos"</code></li><li><b>Resúmenes de conversaciones.</b><span>Recibe las decisiones, preguntas pendientes y próximos pasos sin releer toda la conversación.</span><code>tg review --chat "Senderismo" --since-time 7d</code></li><li><b>Gestión de grupos.</b><span>Delega las invitaciones, los cambios de administradores y la renovación de enlaces en tu agente.</span><code>tg chats create "Senderismo 2027" @sofia</code></li></ul><a class="more" href="https://wirecat.dev/es/docs/tg/groups">Cómo gestionar un grupo →</a></div></div></div>
+    <div class="fv fv3" data-variant="3" hidden><div class="g3"><div class="tabs3" role="tablist"><button class="fv-tab" role="tab" type="button" data-v="3" data-group="personal" aria-selected="true"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.2-4 4.2-6 7.5-6s6.3 2 7.5 6"/></svg></span><span class="fv-name">Cuenta personal</span><span class="fv-short">Tus chats, historial y contactos</span></button><button class="fv-tab" role="tab" type="button" data-v="3" data-group="bots" aria-selected="false"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M9.5 16.5h5"/></svg></span><span class="fv-name">Bots</span><span class="fv-short">Clientes, equipos y comunicaciones</span></button><button class="fv-tab" role="tab" type="button" data-v="3" data-group="groups" aria-selected="false"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3.5 19c.9-3.2 3-4.8 5.5-4.8s4.6 1.6 5.5 4.8M14.5 15c2.6-.4 4.6.9 5.5 3.6"/></svg></span><span class="fv-name">Grupos que administras</span><span class="fv-short">Preguntas, conversaciones y comunidad</span></button></div><div><div class="fv-panel" data-v="3" data-group="personal"><p class="fv-lead">Conecta tu cuenta como si añadieras otro dispositivo. Accede a tus chats, historial, grupos, canales y contactos.</p><div class="r3"><b>Lo que tienes sin leer, en un solo lugar.</b><span>Consulta los mensajes recibidos sin marcarlos como leídos.</span><code>tg inbox</code></div><div class="r3"><b>Recuerda lo acordado.</b><span>Revisa lo que habéis acordado desde la última revisión, incluidos tus propios compromisos.</span><code>tg review --since-time 7d</code></div><div class="r3"><b>Encuentra mensajes incluso con erratas.</b><span>Busca en tu archivo local de chats por palabras completas, fragmentos o términos con erratas.</span><code>tg messages search "contrato"</code></div><div class="r3"><b>Noticias de los canales que sigues.</b><span>Pide a tu agente un resumen de los canales que sigues, sobre los temas que elijas y con enlaces a las publicaciones.</span><code>tg review --chat "Noticias de tecnología" --since-time 1d</code></div><div class="r3"><b>Audios convertidos en texto.</b><span>Transcribe con Telegram o con un modelo de voz que se ejecuta en tu ordenador.</span><code>tg messages transcribe "Mamá" 8812 --local</code></div><div class="r3"><b>Envío programado.</b><span>Telegram envía tu mensaje a la hora prevista, aunque el portátil esté cerrado.</span><code>tg messages send me "Llamar a mamá" --at-time 2h</code></div><a class="more" href="https://wirecat.dev/es/docs/tg/usage">Cómo usar tu cuenta →</a></div><div class="fv-panel" data-v="3" data-group="bots" hidden><p class="fv-lead">Usa bots de Telegram y MAX para comunicarte con clientes y equipos: anuncios, respuestas útiles y acciones sencillas.</p><div class="r3"><b>Avisos a grupos.</b><span>Pide a tu agente que envíe un anuncio a los grupos y canales que elijas.</span><code>max sales bot chats list</code></div><div class="r3"><b>Mensajes personalizados.</b><span>Tu agente adapta cada mensaje con los datos del cliente que le proporciones.</span><code>max sales bot messages send user:4815162342 "Anna, your order is ready"</code></div><div class="r3"><b>Respuestas con contexto.</b><span>Dale a tu agente una base de conocimientos o el historial de consultas para ayudarle a responder a tus clientes.</span><code>max support bot messages list "Support" --limit 20</code></div><div class="r3"><b>Notificaciones para el equipo.</b><span>Informa sobre solicitudes, resultados y cambios, con los archivos necesarios.</span><code>max sales bot messages send "Equipo" "La build está lista" --file report.pdf</code></div><div class="r3"><b>Botones y opciones claras.</b><span>Ayuda a elegir una acción, abrir un enlace o responder con un toque.</span><code>max sales bot commands set start=Start help=Help</code></div><div class="r3"><b>Control de los envíos.</b><span>Elige a quién puede escribir el bot y revisa qué envíos se completaron o requieren atención.</span><code>max sales bot sends list</code></div><a class="more" href="https://wirecat.dev/en/docs/max/bot">Cómo configurar un bot →</a></div><div class="fv-panel" data-v="3" data-group="groups" hidden><p class="fv-lead">Ayuda a que los miembros reciban respuestas, conserva las decisiones y cuida los debates.</p><div class="r3"><b>Seguimiento de preguntas.</b><span>Encuentra preguntas sin respuesta para que los miembros reciban la ayuda que buscan.</span><code>tg review --chat "Senderismo" --unanswered</code></div><div class="r3"><b>Actividad del grupo.</b><span>Quién entró, salió, fue añadido o expulsado, y quién lo hizo.</span><code>tg chats events "Senderismo" --since-time 7d</code></div><div class="r3"><b>Supervisión de conversaciones.</b><span>Pide a tu agente que señale spam, insultos y conflictos para poder intervenir a tiempo.</span><code>tg review --chat "Senderismo" --since-time 1d</code></div><div class="r3"><b>Moderación con tus reglas.</b><span>Elige qué infracciones señalar, qué mensajes borrar y cuándo expulsar a un participante.</span><code>max chats check "Vecinos"</code></div><div class="r3"><b>Resúmenes de conversaciones.</b><span>Recibe las decisiones, preguntas pendientes y próximos pasos sin releer toda la conversación.</span><code>tg review --chat "Senderismo" --since-time 7d</code></div><div class="r3"><b>Gestión de grupos.</b><span>Delega las invitaciones, los cambios de administradores y la renovación de enlaces en tu agente.</span><code>tg chats create "Senderismo 2027" @sofia</code></div><a class="more" href="https://wirecat.dev/es/docs/tg/groups">Cómo gestionar un grupo →</a></div></div></div></div>
+    <div class="fv fv4" data-variant="4" hidden><div class="tabs4" role="tablist"><button class="fv-tab" role="tab" type="button" data-v="4" data-group="personal" aria-selected="true"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.2-4 4.2-6 7.5-6s6.3 2 7.5 6"/></svg></span><span class="fv-name">Cuenta personal</span><span class="fv-short">Tus chats, historial y contactos</span></button><button class="fv-tab" role="tab" type="button" data-v="4" data-group="bots" aria-selected="false"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M9.5 16.5h5"/></svg></span><span class="fv-name">Bots</span><span class="fv-short">Clientes, equipos y comunicaciones</span></button><button class="fv-tab" role="tab" type="button" data-v="4" data-group="groups" aria-selected="false"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3.5 19c.9-3.2 3-4.8 5.5-4.8s4.6 1.6 5.5 4.8M14.5 15c2.6-.4 4.6.9 5.5 3.6"/></svg></span><span class="fv-name">Grupos que administras</span><span class="fv-short">Preguntas, conversaciones y comunidad</span></button></div><div class="fv-panel" data-v="4" data-group="personal"><div class="g4"><div><p class="fv-lead">Conecta tu cuenta como si añadieras otro dispositivo. Accede a tus chats, historial, grupos, canales y contactos.</p><ol><li data-i="0"><b>Lo que tienes sin leer, en un solo lugar.</b> Consulta los mensajes recibidos sin marcarlos como leídos.</li><li data-i="1"><b>Recuerda lo acordado.</b> Revisa lo que habéis acordado desde la última revisión, incluidos tus propios compromisos.</li><li data-i="2"><b>Encuentra mensajes incluso con erratas.</b> Busca en tu archivo local de chats por palabras completas, fragmentos o términos con erratas.</li><li data-i="3"><b>Noticias de los canales que sigues.</b> Pide a tu agente un resumen de los canales que sigues, sobre los temas que elijas y con enlaces a las publicaciones.</li><li data-i="4"><b>Audios convertidos en texto.</b> Transcribe con Telegram o con un modelo de voz que se ejecuta en tu ordenador.</li><li data-i="5"><b>Envío programado.</b> Telegram envía tu mensaje a la hora prevista, aunque el portátil esté cerrado.</li></ol><a class="more" href="https://wirecat.dev/es/docs/tg/usage">Cómo usar tu cuenta →</a></div><pre class="term4"><code><div class="l4" data-i="0"><span class="p">$</span> tg inbox</div><div class="l4" data-i="1"><span class="p">$</span> tg review --since-time 7d</div><div class="l4" data-i="2"><span class="p">$</span> tg messages search "contrato"</div><div class="l4" data-i="3"><span class="p">$</span> tg review --chat "Noticias de tecnología" --since-time 1d</div><div class="l4" data-i="4"><span class="p">$</span> tg messages transcribe "Mamá" 8812 --local</div><div class="l4" data-i="5"><span class="p">$</span> tg messages send me "Llamar a mamá" --at-time 2h</div></code></pre></div></div><div class="fv-panel" data-v="4" data-group="bots" hidden><div class="g4"><div><p class="fv-lead">Usa bots de Telegram y MAX para comunicarte con clientes y equipos: anuncios, respuestas útiles y acciones sencillas.</p><ol><li data-i="0"><b>Avisos a grupos.</b> Pide a tu agente que envíe un anuncio a los grupos y canales que elijas.</li><li data-i="1"><b>Mensajes personalizados.</b> Tu agente adapta cada mensaje con los datos del cliente que le proporciones.</li><li data-i="2"><b>Respuestas con contexto.</b> Dale a tu agente una base de conocimientos o el historial de consultas para ayudarle a responder a tus clientes.</li><li data-i="3"><b>Notificaciones para el equipo.</b> Informa sobre solicitudes, resultados y cambios, con los archivos necesarios.</li><li data-i="4"><b>Botones y opciones claras.</b> Ayuda a elegir una acción, abrir un enlace o responder con un toque.</li><li data-i="5"><b>Control de los envíos.</b> Elige a quién puede escribir el bot y revisa qué envíos se completaron o requieren atención.</li></ol><a class="more" href="https://wirecat.dev/en/docs/max/bot">Cómo configurar un bot →</a></div><pre class="term4"><code><div class="l4" data-i="0"><span class="p">$</span> max sales bot chats list</div><div class="l4" data-i="1"><span class="p">$</span> max sales bot messages send user:4815162342 "Anna, your order is ready"</div><div class="l4" data-i="2"><span class="p">$</span> max support bot messages list "Support" --limit 20</div><div class="l4" data-i="3"><span class="p">$</span> max sales bot messages send "Equipo" "La build está lista" --file report.pdf</div><div class="l4" data-i="4"><span class="p">$</span> max sales bot commands set start=Start help=Help</div><div class="l4" data-i="5"><span class="p">$</span> max sales bot sends list</div></code></pre></div></div><div class="fv-panel" data-v="4" data-group="groups" hidden><div class="g4"><div><p class="fv-lead">Ayuda a que los miembros reciban respuestas, conserva las decisiones y cuida los debates.</p><ol><li data-i="0"><b>Seguimiento de preguntas.</b> Encuentra preguntas sin respuesta para que los miembros reciban la ayuda que buscan.</li><li data-i="1"><b>Actividad del grupo.</b> Quién entró, salió, fue añadido o expulsado, y quién lo hizo.</li><li data-i="2"><b>Supervisión de conversaciones.</b> Pide a tu agente que señale spam, insultos y conflictos para poder intervenir a tiempo.</li><li data-i="3"><b>Moderación con tus reglas.</b> Elige qué infracciones señalar, qué mensajes borrar y cuándo expulsar a un participante.</li><li data-i="4"><b>Resúmenes de conversaciones.</b> Recibe las decisiones, preguntas pendientes y próximos pasos sin releer toda la conversación.</li><li data-i="5"><b>Gestión de grupos.</b> Delega las invitaciones, los cambios de administradores y la renovación de enlaces en tu agente.</li></ol><a class="more" href="https://wirecat.dev/es/docs/tg/groups">Cómo gestionar un grupo →</a></div><pre class="term4"><code><div class="l4" data-i="0"><span class="p">$</span> tg review --chat "Senderismo" --unanswered</div><div class="l4" data-i="1"><span class="p">$</span> tg chats events "Senderismo" --since-time 7d</div><div class="l4" data-i="2"><span class="p">$</span> tg review --chat "Senderismo" --since-time 1d</div><div class="l4" data-i="3"><span class="p">$</span> max chats check "Vecinos"</div><div class="l4" data-i="4"><span class="p">$</span> tg review --chat "Senderismo" --since-time 7d</div><div class="l4" data-i="5"><span class="p">$</span> tg chats create "Senderismo 2027" @sofia</div></code></pre></div></div></div>
+    <div class="fv fv5" data-variant="5" hidden><div class="term5"><div class="bar5" role="tablist"><button class="fv-tab" role="tab" type="button" data-v="5" data-group="personal" aria-selected="true"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.2-4 4.2-6 7.5-6s6.3 2 7.5 6"/></svg></span>account.sh</button><button class="fv-tab" role="tab" type="button" data-v="5" data-group="bots" aria-selected="false"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M9.5 16.5h5"/></svg></span>bots.sh</button><button class="fv-tab" role="tab" type="button" data-v="5" data-group="groups" aria-selected="false"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3.5 19c.9-3.2 3-4.8 5.5-4.8s4.6 1.6 5.5 4.8M14.5 15c2.6-.4 4.6.9 5.5 3.6"/></svg></span>groups.sh</button></div><div class="fv-panel" data-v="5" data-group="personal"><pre><code><div class="l5"><span class="c"># <b>Unread messages in one place.</b> See incoming messages without marking them as read.</span><span><span class="p">$</span> tg inbox</span></div><div class="l5"><span class="c"># <b>Ten presentes los acuerdos.</b> Todo lo dicho desde la última revisión, lo tuyo también, en una llamada.</span><span><span class="p">$</span> tg review --since-time 7d</span></div><div class="l5"><span class="c"># <b>Encuentra incluso con una errata.</b> Busca en varios chats por palabras, partes de palabras o escritura aproximada, en tu archivo local.</span><span><span class="p">$</span> tg messages search "contrato"</span></div><div class="l5"><span class="c"># <b>Noticias de tus suscripciones.</b> Pide a tu agente un resumen de los canales que sigues, sobre los temas que elijas y con enlaces a las publicaciones.</span><span><span class="p">$</span> tg review --chat "Noticias de tecnología" --since-time 1d</span></div><div class="l5"><span class="c"># <b>Voice notes as text.</b> Transcribe with Telegram or a speech model running on your computer.</span><span><span class="p">$</span> tg messages transcribe "Mamá" 8812 --local</span></div><div class="l5"><span class="c"># <b>Send later.</b> Telegram delivers your message on schedule, even when your laptop is closed.</span><span><span class="p">$</span> tg messages send me "Llamar a mamá" --at-time 2h</span></div></code></pre></div><div class="fv-panel" data-v="5" data-group="bots" hidden><pre><code><div class="l5"><span class="c"># <b>Group broadcasts.</b> Ask your agent to send an announcement to the groups and channels you choose.</span><span><span class="p">$</span> max sales bot chats list</span></div><div class="l5"><span class="c"># <b>Personalised messages.</b> Let your agent tailor each message using the customer details you provide.</span><span><span class="p">$</span> max sales bot messages send user:4815162342 "Anna, your order is ready"</span></div><div class="l5"><span class="c"># <b>Replies with context.</b> Give your agent a knowledge base or conversation history to help it answer customer questions.</span><span><span class="p">$</span> max support bot messages list "Support" --limit 20</span></div><div class="l5"><span class="c"># <b>Team notifications.</b> Keep people informed about requests, results and changes, with the files they need.</span><span><span class="p">$</span> max sales bot messages send "Equipo" "La build está lista" --file report.pdf</span></div><div class="l5"><span class="c"># <b>Buttons and clear choices.</b> Help people choose an action, open a link or respond with a tap.</span><span><span class="p">$</span> max sales bot commands set start=Start help=Help</span></div><div class="l5"><span class="c"># <b>Control what gets sent.</b> Choose who the bot may contact and check which sends succeeded or need attention.</span><span><span class="p">$</span> max sales bot sends list</span></div></code></pre></div><div class="fv-panel" data-v="5" data-group="groups" hidden><pre><code><div class="l5"><span class="c"># <b>Question monitoring.</b> Find questions left without an answer so members get the help they came for.</span><span><span class="p">$</span> tg review --chat "Senderismo" --unanswered</span></div><div class="l5"><span class="c"># <b>Group activity.</b> Who joined, left, was added or removed, and who did it.</span><span><span class="p">$</span> tg chats events "Senderismo" --since-time 7d</span></div><div class="l5"><span class="c"># <b>Keep discussions on track.</b> Ask your agent to flag spam, insults and conflicts so you can step in early.</span><span><span class="p">$</span> tg review --chat "Senderismo" --since-time 1d</span></div><div class="l5"><span class="c"># <b>Moderation by your rules.</b> Choose which violations to flag, which messages to delete and when to remove a participant.</span><span><span class="p">$</span> max chats check "Vecinos"</span></div><div class="l5"><span class="c"># <b>Discussion summaries.</b> Get the decisions, open questions and next steps without rereading the whole conversation.</span><span><span class="p">$</span> tg review --chat "Senderismo" --since-time 7d</span></div><div class="l5"><span class="c"># <b>Group management.</b> Delegate routine invitations, admin changes and invite-link updates to your agent.</span><span><span class="p">$</span> tg chats create "Senderismo 2027" @sofia</span></div></code></pre></div></div></div>
+    <div class="fv fv6" data-variant="6"><div class="grp6"><div class="head6"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.2-4 4.2-6 7.5-6s6.3 2 7.5 6"/></svg></span><span class="fv-name">Cuenta personal</span><span class="fv-short">Tus chats, historial y contactos</span></div><p class="fv-lead">Conecta tu cuenta como si añadieras otro dispositivo. Accede a tus chats, historial, grupos, canales y contactos.</p><div class="g6"><div class="t6"><b>Lo que tienes sin leer, en un solo lugar.</b><span>Consulta los mensajes recibidos sin marcarlos como leídos.</span></div><div class="t6"><b>Recuerda lo acordado.</b><span>Revisa lo que habéis acordado desde la última revisión, incluidos tus propios compromisos.</span></div><div class="t6"><b>Encuentra mensajes incluso con erratas.</b><span>Busca en tu archivo local de chats por palabras completas, fragmentos o términos con erratas.</span></div><div class="t6"><b>Noticias de los canales que sigues.</b><span>Pide a tu agente un resumen de los canales que sigues, sobre los temas que elijas y con enlaces a las publicaciones.</span></div><div class="t6"><b>Audios convertidos en texto.</b><span>Transcribe con Telegram o con un modelo de voz que se ejecuta en tu ordenador.</span></div><div class="t6"><b>Envío programado.</b><span>Telegram envía tu mensaje a la hora prevista, aunque el portátil esté cerrado.</span></div></div><a class="more" href="https://wirecat.dev/es/docs/tg/usage">Cómo usar tu cuenta →</a></div><div class="grp6"><div class="head6"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M9.5 16.5h5"/></svg></span><span class="fv-name">Bots</span><span class="fv-short">Clientes, equipos y comunicaciones</span></div><p class="fv-lead">Usa bots de Telegram y MAX para comunicarte con clientes y equipos: anuncios, respuestas útiles y acciones sencillas.</p><div class="g6"><div class="t6"><b>Avisos a grupos.</b><span>Pide a tu agente que envíe un anuncio a los grupos y canales que elijas.</span></div><div class="t6"><b>Mensajes personalizados.</b><span>Tu agente adapta cada mensaje con los datos del cliente que le proporciones.</span></div><div class="t6"><b>Respuestas con contexto.</b><span>Dale a tu agente una base de conocimientos o el historial de consultas para ayudarle a responder a tus clientes.</span></div><div class="t6"><b>Notificaciones para el equipo.</b><span>Informa sobre solicitudes, resultados y cambios, con los archivos necesarios.</span></div><div class="t6"><b>Botones y opciones claras.</b><span>Ayuda a elegir una acción, abrir un enlace o responder con un toque.</span></div><div class="t6"><b>Control de los envíos.</b><span>Elige a quién puede escribir el bot y revisa qué envíos se completaron o requieren atención.</span></div></div><a class="more" href="https://wirecat.dev/en/docs/max/bot">Cómo configurar un bot →</a></div><div class="grp6"><div class="head6"><span class="fv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3.5 19c.9-3.2 3-4.8 5.5-4.8s4.6 1.6 5.5 4.8M14.5 15c2.6-.4 4.6.9 5.5 3.6"/></svg></span><span class="fv-name">Grupos que administras</span><span class="fv-short">Preguntas, conversaciones y comunidad</span></div><p class="fv-lead">Ayuda a que los miembros reciban respuestas, conserva las decisiones y cuida los debates.</p><div class="g6"><div class="t6"><b>Seguimiento de preguntas.</b><span>Encuentra preguntas sin respuesta para que los miembros reciban la ayuda que buscan.</span></div><div class="t6"><b>Actividad del grupo.</b><span>Quién entró, salió, fue añadido o expulsado, y quién lo hizo.</span></div><div class="t6"><b>Supervisión de conversaciones.</b><span>Pide a tu agente que señale spam, insultos y conflictos para poder intervenir a tiempo.</span></div><div class="t6"><b>Moderación con tus reglas.</b><span>Elige qué infracciones señalar, qué mensajes borrar y cuándo expulsar a un participante.</span></div><div class="t6"><b>Resúmenes de conversaciones.</b><span>Recibe las decisiones, preguntas pendientes y próximos pasos sin releer toda la conversación.</span></div><div class="t6"><b>Gestión de grupos.</b><span>Delega las invitaciones, los cambios de administradores y la renovación de enlaces en tu agente.</span></div></div><a class="more" href="https://wirecat.dev/es/docs/tg/groups">Cómo gestionar un grupo →</a></div></div>
+  </div>
+</section>
+
+<section class="band" id="why">
+  <div class="wrap">
+    <h2 class="big">Por qué funciona tan bien</h2>
+    <p class="intro">Diseñado para agentes y scripts: rápido, predecible y con un registro de acciones.</p>
+    <dl class="spec">
+      <div><dt>Rápido</dt><dd>La búsqueda funciona sobre la copia de tus chats en tu ordenador. Sin red, sin esperas.</dd><code>tg messages search "contrato" --offline</code></div>
+      <div><dt>Funciona en todas partes</dt><dd>Windows, macOS y Linux con Node.js 22 o posterior. No necesitas compilar módulos nativos.</dd><code>npm i -g @leemour/tg-cli</code></div>
+      <div><dt>Búsqueda potente</dt><dd>Encuentra mensajes incluso con erratas o palabras incompletas. Busca en chats y canales, filtra por autor o fecha y recupera el contexto de la conversación.</dd><code>tg messages search "contrato"</code></div>
+      <div><dt>Almacenamiento local</dt><dd>El historial se guarda en una caché local en tu ordenador. Busca sin conexión, crea copias de seguridad y restaura el historial cuando lo necesites.</dd><code>tg store backup · tg store restore</code></div>
+      <div><dt>Permisos flexibles</dt><dd>Tú controlas qué puede hacer el agente: solo leer, ejecutar comandos permitidos o pedirte permiso antes de actuar.</dd><code>permissions.messages.send · --confirm-send</code></div>
+      <div><dt>Siempre al día</dt><dd>Un servicio en segundo plano mantiene el historial local al día y sincroniza los mensajes pendientes tras un reinicio.</dd><code>tg server install</code></div>
+      <div><dt>Varias cuentas, varios bots</dt><dd>Cambia fácilmente entre cuentas y bots. Separa tus conversaciones personales de las de trabajo, o pide a tu agente que reúna contexto de varias cuentas.</dd><code>tg work inbox</code></div>
+      <div><dt>Historial de acciones</dt><dd>Consulta los intentos de envío y registra las ejecuciones de comandos cuando lo necesites. Los registros incluyen identificadores, estados y tiempos, sin el texto de los mensajes.</dd><code>tg sends list · tg runs list · --record</code></div>
+      <div><dt>Seguro</dt><dd>Los secretos se guardan en el almacén de contraseñas del sistema. Las contraseñas, los códigos de acceso, los números de teléfono y los tokens no se filtran a los registros ni al historial de comandos. La protección contra la inyección de instrucciones (prompt injection) ayuda a impedir que mensajes maliciosos controlen al agente.</dd><code>tg session start</code></div>
+    </dl>
+  </div>
+</section>
+
+<section class="close" id="closing">
+  <div class="wrap">
+    <h2 class="big" id="closing-title">Continúa la conversación con todo el contexto.</h2>
+    <p class="intro" id="closing-help">Pega este comando en el chat de tu agente o ejecútalo en una terminal para instalar la herramienta y conectar Telegram a tu agente.</p>
+    <div class="cta"><span class="cmd"><code>npm i -g @leemour/tg-cli && tg session start && tg skill install</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli && tg session start && tg skill install">Copiar</button></span></div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot">
+      <div class="foot-brand">
+        <a class="mark" href="#"><svg viewBox="0 0 32 32" aria-hidden="true"><circle class="ring" cx="16" cy="16" r="16"/><circle cx="16" cy="16" r="16" fill="#4b53f0"/><path class="wire" pathLength="40" d="M9 21V11l4 4 3-4 3 4 4-4v10" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path class="pulse" pathLength="40" d="M9 21V11l4 4 3-4 3 4 4-4v10"/></svg><span class="word">WireCat</span></a>
+        <p>Tus conversaciones de Telegram y MAX, conectadas a tus scripts y agentes de IA.</p>
+        <span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copiar</button></span>
+      </div>
+      <div><h4>Herramientas</h4><ul>
+        <li><a href="https://wirecat.dev/es/docs/tg">tg · Telegram</a></li>
+        <li><a href="https://wirecat.dev/ru/docs/max">max · MAX</a></li>
+        <li><a href="https://wirecat.dev/es/docs/tg/changelog">Cambios de tg</a></li>
+        <li><a href="https://wirecat.dev/ru/docs/max/changelog">Cambios de max</a></li></ul></div>
+      <div><h4>Documentación</h4><ul>
+        <li><a href="https://wirecat.dev/es/docs/tg/installation">Instalación</a></li>
+        <li><a href="https://wirecat.dev/es/docs/tg/usage">Uso</a></li>
+        <li><a href="https://wirecat.dev/es/docs/tg/commands">Todos los comandos</a></li>
+        <li><a href="https://wirecat.dev/es/docs/tg/troubleshooting">Solución de problemas</a></li></ul></div>
+      <div><h4>Para agentes</h4><ul>
+        <li><a href="https://wirecat.dev/es/docs/tg/mcp">Servidor MCP</a></li>
+        <li><a href="https://wirecat.dev/es/docs/tg/recipes">Recetas</a></li>
+        <li><a href="https://wirecat.dev/llms.txt"><code>/llms.txt</code></a></li>
+        <li><a href="https://wirecat.dev/llms-full.txt"><code>/llms-full.txt</code></a></li></ul></div>
+      <div><h4>Proyecto</h4><ul>
+        <li><a href="https://github.com/leemour/tg-cli">tg en GitHub</a></li>
+        <li><a href="https://github.com/leemour/max-cli">max en GitHub</a></li>
+        <li><a href="https://github.com/leemour/tg-cli/issues">Informar de un problema</a></li>
+        <li><a href="https://wirecat.dev/es/docs/tg/security">Seguridad</a></li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 WireCat · licencia MIT · Windows, macOS, Linux</span>
+      <nav class="langs" aria-label="Idioma"><a href="g-home.html">English</a><a href="g-home.ru.html">Русский</a><a href="g-home.es.html" aria-current="page">Español</a></nav>
+    </div>
+  </div>
+</footer>
+
+<div class="headlines" aria-label="Design switches">
+  <span id="cl-count" aria-live="polite">Cierre</span><button type="button" id="cl-prev" aria-label="Texto de cierre anterior">‹</button><button type="button" id="cl-next" aria-label="Siguiente texto de cierre">›</button>
+  <span class="sep"></span>
+  <span id="sc-count" aria-live="polite">Escenario</span><button type="button" id="sc-prev" aria-label="Escenario anterior">‹</button><button type="button" id="sc-next" aria-label="Siguiente escenario">›</button>
+  <span class="sep"></span>
+  <span id="hl-count">Titular 1/8</span><button type="button" id="hl-prev" aria-label="Previous headline">‹</button><button type="button" id="hl-next" aria-label="Next headline">›</button>
+  <span class="sep"></span>
+  <span id="fv-count">Bloque 1/6</span><button type="button" id="fv-prev" aria-label="Previous block layout">‹</button><button type="button" id="fv-next" aria-label="Next block layout">›</button>
+  <span class="sep"></span>
+  <span id="ff-count">Font</span><button type="button" id="ff-prev" aria-label="Previous font">‹</button><button type="button" id="ff-next" aria-label="Next font">›</button>
+  <span class="sep"></span>
+  <span id="wp-count">Wallpaper</span><button type="button" id="wp-prev" aria-label="Previous wallpaper">‹</button><button type="button" id="wp-next" aria-label="Next wallpaper">›</button>
+</div>
+
+<script src="scenario-variants.js"></script>
+<script>
+  document.documentElement.classList.add("js")
+
+  const shapes = {
+    plane: `<path d="M0 0l36-14-10 34-8-12z"/><path d="M18 8l18-22"/><path d="M0 0c-18 8-26 24-18 40" stroke-dasharray="2 8"/>`,
+    wave: `<path d="M0 -3v6M6 -8v16M12 -12v24M18 -5v10M24 -10v20M30 -4v8M36 -7v14M42 -2v4"/>`,
+    face: `<path d="M-16 6c0-8 3-14 4-18l-2-12 10 9c2-1 6-1 8 0l10-9-2 12c1 4 4 10 4 18 0 10-32 10-32 0z"/><circle cx="-6" cy="0" r="1.6" fill="INK"/><circle cx="6" cy="0" r="1.6" fill="INK"/><path d="M-2 5h4l-2 2zM-9 8h-10M-9 11l-9 3M9 8h10M9 11l9 3"/>`,
+    sitting: `<path d="M-10 22c-4-12-2-24 2-28l-2-12 7 7c2-1 4-1 6 0l7-7-2 12c4 4 6 16 2 28z"/><path d="M10 20c10 0 13-10 8-17"/><circle cx="-4" cy="-4" r="1.4" fill="INK"/><circle cx="4" cy="-4" r="1.4" fill="INK"/>`,
+    sleeping: `<path d="M-22 8c0-12 12-18 26-16 12 2 18 8 18 16z"/><path d="M-22 8h44"/><path d="M-18 -2l-2-9 7 5M-10 -7l3-7 3 8"/><path d="M-15 1q2 2 4 0"/><path d="M22 8c5 0 7-6 2-9"/><path d="M26 -16h6l-6 6h6M34 -26h4l-4 4h4"/>`,
+    peek: `<path d="M-22 10h44"/><path d="M-14 10c0-8 4-13 6-15l-1-9 7 6c2-1 2-1 4 0l7-6-1 9c2 2 6 7 6 15"/><circle cx="-4" cy="2" r="1.6" fill="INK"/><circle cx="4" cy="2" r="1.6" fill="INK"/><path d="M-16 10v-3M16 10v-3"/>`,
+  }
+  const walls = [
+    { label: "Aviones + caras de gato", mix: ["plane", "face"] },
+    { label: "Aviones + gatos sentados", mix: ["plane", "sitting"] },
+    { label: "Aviones + gatos dormidos", mix: ["plane", "sleeping"] },
+    { label: "Aviones + gatos asomados", mix: ["plane", "peek"] },
+    { label: "Todos los gatos", mix: ["face", "sitting", "sleeping", "peek", "plane"] },
+    { label: "Aviones + ondas de voz", mix: ["plane", "wave"] },
+  ]
+  const ink = getComputedStyle(document.documentElement).getPropertyValue("--wall-ink").trim()
+  const scatter = (mix) => {
+    let seed = 11
+    const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647 }
+    const size = 400
+    const spots = []
+    let body = ""
+    for (let i = 0; i < 10; i++) {
+      let x, y, tries = 0
+      do { x = 24 + rnd() * (size - 48); y = 24 + rnd() * (size - 48); tries++ }
+      while (tries < 60 && spots.some(([a, b]) => Math.hypot(a - x, b - y) < 92))
+      spots.push([x, y])
+      const angle = Math.round(rnd() * 70 - 35)
+      const scale = (0.55 + rnd() * 0.3).toFixed(2)
+      body += `<g transform="translate(${x.toFixed(0)} ${y.toFixed(0)}) rotate(${angle}) scale(${scale})">${shapes[mix[i % mix.length]]}</g>`
+    }
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" fill="none" stroke="${ink}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">${body.replaceAll("INK", ink)}</svg>`
+    document.body.style.backgroundImage = `url("data:image/svg+xml,${encodeURIComponent(svg)}")`
+    document.body.style.backgroundSize = `${size}px ${size}px`
+  }
+  let wall = 2
+  const showWall = () => {
+    scatter(walls[wall].mix)
+    document.getElementById("wp-count").textContent = walls[wall].label
+  }
+  document.getElementById("wp-prev").addEventListener("click", () => { wall = (wall - 1 + walls.length) % walls.length; showWall() })
+  document.getElementById("wp-next").addEventListener("click", () => { wall = (wall + 1) % walls.length; showWall() })
+  showWall()
+
+  const bar = document.getElementById("bar")
+  const onScroll = () => bar.classList.toggle("scrolled", scrollY > 8)
+  addEventListener("scroll", onScroll, { passive: true }); onScroll()
+  const navEl = document.querySelector("nav.site")
+  const glide = navEl.querySelector(".glide")
+  for (const link of navEl.querySelectorAll("a")) {
+    const to = () => { glide.style.width = `${link.offsetWidth}px`; glide.style.transform = `translateX(${link.offsetLeft}px)`; glide.style.opacity = "1" }
+    link.addEventListener("mouseenter", to); link.addEventListener("focus", to)
+  }
+  navEl.addEventListener("mouseleave", () => { glide.style.opacity = "0" })
+
+  const headlines = [
+    `Deja de buscar en tus chats. <span>Pregúntale a tu agente.</span>`,
+    `Deja de hacer scroll. <span>Empieza a preguntar.</span>`,
+    `Tu agente lee los chats. <span>Tú, lo importante.</span>`,
+    `No vuelvas a buscar en un chat. <span>Solo pregunta.</span>`,
+    `Tu agente recuerda <span>cada chat para que tú no tengas que hacerlo.</span>`,
+    `214 sin leer. <span>Un mensaje de tu agente.</span>`,
+    `¿Quién debe qué? <span>Tu agente lo sabe.</span>`,
+    `Tu mensajero, <span>resuelto.</span>`,
+  ]
+  const blocks = [...document.querySelectorAll(".fv")]
+  const blockWord = "Bloque"
+  let fv = 5
+  const showBlock = () => {
+    blocks.forEach((block, n) => { block.hidden = n !== fv })
+    document.getElementById("fv-count").textContent = `${blockWord} ${fv + 1}/${blocks.length}`
+  }
+  document.getElementById("fv-prev").addEventListener("click", () => { fv = (fv - 1 + blocks.length) % blocks.length; showBlock() })
+  document.getElementById("fv-next").addEventListener("click", () => { fv = (fv + 1) % blocks.length; showBlock() })
+  for (const tab of document.querySelectorAll(".fv-tab")) {
+    tab.addEventListener("click", () => {
+      const v = tab.dataset.v
+      for (const other of document.querySelectorAll(`.fv-tab[data-v="${v}"]`)) other.setAttribute("aria-selected", String(other === tab))
+      for (const panel of document.querySelectorAll(`.fv-panel[data-v="${v}"]`)) panel.hidden = panel.dataset.group !== tab.dataset.group
+    })
+  }
+  for (const item of document.querySelectorAll(".g4 li")) {
+    const line = item.closest(".g4").querySelector(`.l4[data-i="${item.dataset.i}"]`)
+    item.addEventListener("mouseenter", () => { item.classList.add("hot"); line.classList.add("hot") })
+    item.addEventListener("mouseleave", () => { item.classList.remove("hot"); line.classList.remove("hot") })
+  }
+
+  const fonts = [
+    { label: "Anybody", stack: '"Anybody", "Oswald", "Onest", sans-serif', stretch: "62%", weight: 900 },
+    { label: "Roboto Flex", stack: '"Roboto Flex", sans-serif', stretch: "35%", weight: 1000 },
+    { label: "Sofia Sans Extra Condensed", stack: '"Sofia Sans Extra Condensed", sans-serif', stretch: "100%", weight: 900 },
+    { label: "Fira Sans Extra Condensed", stack: '"Fira Sans Extra Condensed", sans-serif', stretch: "100%", weight: 900 },
+    { label: "Tektur", stack: '"Tektur", sans-serif', stretch: "75%", weight: 900 },
+    { label: "Dela Gothic One", stack: '"Dela Gothic One", sans-serif', stretch: "100%", weight: 400 },
+    { label: "Rubik", stack: '"Rubik", sans-serif', stretch: "100%", weight: 900 },
+    { label: "Oswald", stack: '"Oswald", sans-serif', stretch: "100%", weight: 700 },
+  ]
+  let ff = Number(document.documentElement.dataset.ff || 0)
+  const fontStyle = document.createElement("style")
+  document.head.append(fontStyle)
+  const showFont = () => {
+    const f = fonts[ff]
+    fontStyle.textContent = `h1, h2.big, .hour h3, .time, .lane h3, .tool-name, .spec dt { font-family: ${f.stack} !important; font-stretch: ${f.stretch} !important; font-weight: ${f.weight} !important; }`
+    document.getElementById("ff-count").textContent = f.label
+  }
+  document.getElementById("ff-prev").addEventListener("click", () => { ff = (ff - 1 + fonts.length) % fonts.length; showFont() })
+  document.getElementById("ff-next").addEventListener("click", () => { ff = (ff + 1) % fonts.length; showFont() })
+  showFont()
+
+  let hl = Number(document.documentElement.dataset.hl || 0)
+  const showHeadline = () => {
+    document.getElementById("headline").innerHTML = headlines[hl]
+    document.getElementById("hl-count").textContent = `Titular ${hl + 1}/${headlines.length}`
+  }
+  document.getElementById("hl-prev").addEventListener("click", () => { hl = (hl - 1 + headlines.length) % headlines.length; showHeadline() })
+  document.getElementById("hl-next").addEventListener("click", () => { hl = (hl + 1) % headlines.length; showHeadline() })
+
+  const closingVariants = {
+  "ru": [
+    {
+      "title": "Продолжайте разговор с полным контекстом."
+    },
+    {
+      "title": "Больше внимания людям."
+    },
+    {
+      "title": "Важное не теряется."
+    },
+    {
+      "title": "Контекст под рукой."
+    },
+    {
+      "title": "Быть в курсе проще."
+    },
+    {
+      "title": "Ясные следующие шаги."
+    }
+  ],
+  "en": [
+    {
+      "title": "Continue the conversation with the full context."
+    },
+    {
+      "title": "More attention for people."
+    },
+    {
+      "title": "Keep what matters in sight."
+    },
+    {
+      "title": "Context at hand."
+    },
+    {
+      "title": "Stay informed with ease."
+    },
+    {
+      "title": "Clear next steps."
+    }
+  ],
+  "es": [
+    {
+      "title": "Continúa la conversación con todo el contexto."
+    },
+    {
+      "title": "Más atención a las personas."
+    },
+    {
+      "title": "Lo importante sigue presente."
+    },
+    {
+      "title": "Contexto a mano."
+    },
+    {
+      "title": "Mantente al día fácilmente."
+    },
+    {
+      "title": "Próximos pasos claros."
+    }
+  ]
+}
+  const closings = closingVariants[document.documentElement.lang] ?? closingVariants.en
+  const closingWord = ({ ru: "Финал", en: "Closing", es: "Cierre" })[document.documentElement.lang] ?? "Closing"
+  const requestedClosing = Number(new URL(location.href).searchParams.get("closing")) - 1
+  let closing = Number.isInteger(requestedClosing) && requestedClosing >= 0 && requestedClosing < closings.length ? requestedClosing : 0
+  function showClosing(scroll) {
+    document.getElementById("closing-title").textContent = closings[closing].title
+    document.getElementById("cl-count").textContent = `${closingWord} ${closing + 1}/${closings.length}`
+    const url = new URL(location.href)
+    url.searchParams.set("closing", String(closing + 1))
+    history.replaceState(null, "", url)
+    if (scroll) document.getElementById("closing").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "start" })
+  }
+  document.getElementById("cl-prev").addEventListener("click", () => { closing = (closing - 1 + closings.length) % closings.length; showClosing(true) })
+  document.getElementById("cl-next").addEventListener("click", () => { closing = (closing + 1) % closings.length; showClosing(true) })
+  showClosing(false)
+
+  const j = (s) => s
+    .replace(/"([a-zA-Z]+)":/g, '<span class="k">"$1"</span>:')
+    .replace(/: "([^"]*)"/g, ': <span class="s">"$1"</span>')
+    .replace(/: (\d+|true|false)/g, ': <span class="n">$1</span>')
+
+  const sessions = [
+    {
+      title: "Quién debe qué", hint: "tg review",
+      steps: [
+        { ask: "¿Qué prometí esta semana y quién me debe algo todavía?" },
+        { tool: 'tg review <b>--since-time 7d</b>', out: `{"since": "2026-09-25T09:00:00+02:00", "until": "2026-10-02T08:58:00+02:00",
+ "complete": true,
+ "chats": [{"title": "Anna", "kind": "dialog", "messages": […], "more": false},
+           {"title": "Diseño", "kind": "group", "messages": […], "more": false},
+           {"title": "Project Alpha", "kind": "group", "messages": […], "more": false}, …],
+ "skipped": [], "partial": false, "quiet": 14}` },
+        { say: `<h3>Debes</h3><ul><li><b>Anna</b>: la factura antes del viernes, o sea, hoy. <q>Anna, 29 sept.</q></li><li><b>Kate</b>: comentarios sobre las nuevas diapositivas. <q>Diseño, 1 oct.</q></li></ul>
+          <h3>Esperas de otros</h3><ul><li><b>Tom</b>: el boceto, prometido para el 30 de septiembre. Aún no está en Diseño.</li></ul>
+          <h3>Hay que aclarar</h3><ul><li><b>Project Alpha</b>: quién trae las muestras. <q>Lo decidimos luego</q>, 25 sept.</li></ul>
+          <p><small>La próxima revisión empieza el 2 oct. a las 08:58.</small></p>` },
+        { ask: "Recuérdale a Tom lo del boceto." },
+        { tool: 'tg messages send <b>"Tom"</b> "¡Hola, Tom! ¿Cómo va el boceto?"', out: `{"message": {"id": "48213", "text": "¡Hola, Tom! ¿Cómo va el boceto?", "timestamp": "2026-10-02T09:01:12+02:00", "outgoing": true, …},
+ "sendId": "…"}` },
+        { say: "<p>Enviado a Tom.</p>" },
+      ],
+    },
+    {
+      title: "Resumen de la mañana", hint: "tg inbox",
+      steps: [
+        { ask: "¿Hay algo que deba ver esta mañana?" },
+        { tool: "tg inbox", out: `{"mode": "unread",
+ "chats": [{"title": "Club de lectura", "kind": "group", "unreadCount": 4, "messages": […], "more": false},
+           {"title": "Marco", "kind": "dialog", "unreadCount": 1, "messages": […], "more": false},
+           {"title": "Mamá", "kind": "dialog", "unreadCount": 1, "messages": […], "more": false}],
+ "skipped": [], "partial": false, "quiet": 211}` },
+        { say: `<p>Tres chats te necesitan. Nada se ha marcado como leído.</p><ul><li><b>Marco</b> necesita que apruebes la versión antes de las 11:00.</li><li><b>Club de lectura</b> pasó el viernes a las 19:30 y espera tu sí.</li><li><b>Mamá</b> te mandó un audio de 0:42.</li></ul><p><small>Hay novedades en 211 chats silenciados, pero ninguno te menciona.</small></p>` },
+      ],
+    },
+    {
+      title: "Cuentas de Lisboa", hint: "tg messages search",
+      steps: [
+        { ask: "¿Quién le debe a quién del viaje a Lisboa?" },
+        { tool: 'tg messages search <b>"pagué"</b> --chat "Viaje a Lisboa"', out: `{"items": [{"senderName": "Ana", "text": "Pagué el hotel, 240", "timestamp": "2026-09-14T22:10:00+02:00"},
+           {"senderName": "Ben", "text": "pagué la cena 96", "timestamp": "2026-09-15T23:41:00+02:00"},
+           {"outgoing": true, "text": "Yo pagué el taxi, 60", "timestamp": "2026-09-16T08:05:00+02:00"}],
+ "hasMore": false}` },
+        { say: `<p>Tres pagos, €396 en total, €132 cada uno.</p>
+          <table><thead><tr><th></th><th>Pagó</th><th>Parte</th><th>Saldo</th></tr></thead><tbody>
+          <tr><td>Ana</td><td>€240</td><td>€132</td><td class="plus">+€108</td></tr>
+          <tr><td>Ben</td><td>€96</td><td>€132</td><td class="minus">−€36</td></tr>
+          <tr><td>Tú</td><td>€60</td><td>€132</td><td class="minus">−€72</td></tr></tbody></table>
+          <p>Tú le pasas a Ana €72 y Ben le pasa €36. ¿Lo publico en el chat?</p>` },
+      ],
+    },
+    {
+      title: "Recordatorios", hint: "tg messages send",
+      steps: [
+        { ask: "Recuérdame llamar a mamá a las seis. Y manda el acta al equipo el lunes a las nueve." },
+        { tool: 'tg messages send <b>me</b> "Llamar a mamá" --at-time 2026-10-02T18:00', out: `{"message": {"id": "…", "text": "Llamar a mamá", "timestamp": "2026-10-02T18:00:00+02:00", …}, "sendId": "…"}` },
+        { tool: 'tg messages send <b>"Equipo"</b> "Acta del jueves" --file minutes.pdf --at-time 2026-10-05T09:00', out: `{"message": {"id": "…", "text": "Acta del jueves", "timestamp": "2026-10-05T09:00:00+02:00", …}, "sendId": "…"}` },
+        { say: "<p>Los dos quedan programados en Telegram: el recordatorio llega a tus Mensajes guardados hoy a las 18:00 y el acta sale para Equipo el lunes a las 09:00. Puedes cerrar el portátil.</p>" },
+      ],
+    },
+    {
+      title: "Audio", hint: "tg messages transcribe",
+      steps: [
+        { ask: "¿Qué dijo mamá? Estoy en una reunión." },
+        { tool: 'tg messages transcribe <b>"Mamá"</b> 8812 --local', out: `{"text": "Hola, cariño, ¿tu vuelo sigue a las seis? Llámame cuando aterrices…", "pending": false}` },
+        { say: `<p><q>Hola, cariño, ¿tu vuelo sigue a las seis? Llámame cuando aterrices, y no olvides el cumpleaños del abuelo el domingo.</q></p><p>¿Te pongo un recordatorio el domingo por la mañana?</p>` },
+      ],
+    },
+  ]
+
+  sessions.splice(0, sessions.length, ...(window.WireScenarioVariants?.[document.documentElement.lang] ?? sessions))
+  const scenarioWord = ({ ru: "Сценарий", en: "Scenario", es: "Escenario" })[document.documentElement.lang] ?? "Scenario"
+
+  const tick = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>`
+  const spin = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 2a6 6 0 1 1-6 6"/></svg>`
+  const chev = `<svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>`
+  const commandView = (command) => {
+    const plain = command.replace(/<\/?b>/g, "")
+    return plain.replace(/^(tg (?:messages \w+|chats list|bot (?:list|mcp)|config (?:show|set)|runs list|sends list|review|inbox)|tg \w+ (?:bot (?:recipients \w+|mcp(?: config)?)|config set))\s+(.*)$/, "$1 <b>$2</b>")
+  }
+  const view = (step) => {
+    if (step.ask) return `<div class="ask step">${step.ask}</div>`
+    if (step.tool) return `<details class="tool step"><summary><span class="state">${tick}</span><code>${commandView(step.tool)}</code>${chev}</summary><pre>${j(step.out)}</pre></details>`
+    return `<div class="say step">${step.say}</div>`
+  }
+
+  const log = document.getElementById("log")
+  const nav = document.getElementById("sessions")
+  const app = document.getElementById("app")
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches
+  let current = 0
+  let timers = []
+
+  sessions.forEach((s, i) => {
+    const b = document.createElement("button")
+    b.className = "session"; b.type = "button"
+    b.innerHTML = `${s.title}<small>${s.hint}</small>`
+    b.addEventListener("click", () => show(i, true))
+    nav.append(b)
+  })
+
+  function show(i, animate) {
+    current = i
+    log.scrollTop = 0
+    document.getElementById("sc-count").textContent = `${scenarioWord} ${i + 1}/${sessions.length}`
+    const url = new URL(location.href)
+    url.searchParams.set("scenario", String(i + 1))
+    history.replaceState(null, "", url)
+    timers.forEach(clearTimeout); timers = []
+    for (const [n, b] of [...nav.querySelectorAll(".session")].entries()) b.setAttribute("aria-current", String(n === i))
+    const active = nav.querySelector('[aria-current="true"]')
+    if (active) {
+      if (matchMedia("(max-width: 760px)").matches) nav.scrollLeft = active.offsetLeft - nav.offsetLeft
+      else nav.scrollTop = active.offsetTop - nav.offsetTop - 44
+    }
+    const steps = sessions[i].steps
+    if (!animate || still) {
+      app.classList.remove("playing")
+      log.innerHTML = steps.map(view).join("")
+      return
+    }
+    app.classList.add("playing")
+    log.innerHTML = ""
+    let at = 0
+    for (const step of steps) {
+      at += step.ask ? 500 : step.tool ? 600 : 900
+      timers.push(setTimeout(() => {
+        log.insertAdjacentHTML("beforeend", view(step))
+        const el = log.lastElementChild
+        log.scrollTop = log.scrollHeight
+        if (step.tool) {
+          el.classList.add("running")
+          el.querySelector(".state").innerHTML = spin
+          timers.push(setTimeout(() => { el.classList.remove("running"); el.querySelector(".state").innerHTML = tick }, 700))
+        }
+      }, at))
+      if (step.tool) at += 700
+    }
+  }
+
+  const selected = Number(new URL(location.href).searchParams.get("scenario")) - 1
+  const initial = Number.isInteger(selected) && selected >= 0 && selected < sessions.length ? selected : 0
+  show(initial, false)
+  document.getElementById("sc-prev").addEventListener("click", () => show((current - 1 + sessions.length) % sessions.length, false))
+  document.getElementById("sc-next").addEventListener("click", () => show((current + 1) % sessions.length, false))
+  document.getElementById("replay").addEventListener("click", () => show(current, true))
+  let played = false
+  new IntersectionObserver((entries) => {
+    if (!played && entries.some((e) => e.isIntersecting)) { played = true; show(current, true) }
+  }, { threshold: 0.4 }).observe(app)
+
+  const ftabs = [...document.querySelectorAll(".ftab")]
+  for (const tab of ftabs) tab.addEventListener("click", () => {
+    for (const other of ftabs) {
+      const on = other === tab
+      other.setAttribute("aria-selected", String(on))
+      document.getElementById(other.getAttribute("aria-controls")).hidden = !on
+    }
+  })
+
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) { e.target.classList.add("seen"); io.unobserve(e.target) }
+  }, { threshold: 0.15 })
+  for (const el of document.querySelectorAll(".reveal")) io.observe(el)
+
+  for (const button of document.querySelectorAll("[data-copy]")) {
+    button.addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText(button.dataset.copy) } catch {
+        const range = document.createRange(); range.selectNodeContents(button.previousElementSibling)
+        getSelection().removeAllRanges(); getSelection().addRange(range)
+      }
+      button.textContent = "Copiado"; button.dataset.done = ""
+      setTimeout(() => { button.textContent = "Copiar"; delete button.dataset.done }, 1600)
+    })
+  }
+</script>
+</body>
+</html>

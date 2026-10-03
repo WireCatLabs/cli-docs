@@ -1,20 +1,15 @@
-import type { Metadata } from "next"
-import { Landing } from "@/components/landing/landing"
+import { Landing } from "@/components/landing"
 import { i18n } from "@/lib/i18n"
-import { landingTitle, translator } from "@/lib/landing/i18n"
+import en from "@/lib/landing/en.json"
+import es from "@/lib/landing/es.json"
+import ru from "@/lib/landing/ru.json"
 
 type Props = { params: Promise<{ lang: string }> }
 
-export default async function HomePage(props: Props) {
-  const { lang } = await props.params
-  return <Landing lang={lang} />
-}
-
-export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { lang } = await props.params
-  const { t } = translator(lang)
-  const description = `${t("Connect Claude Code, Codex or another agent to your messengers. Find who owes what in")} ${t("Telegram and MAX")}${t(", set reminders and let it reply for you.")}`
-  return { title: { absolute: landingTitle(lang) }, description, openGraph: { title: landingTitle(lang), description } }
+export default async function HomePage({ params }: Props) {
+  const { lang } = await params
+  const content = lang === "ru" ? ru : lang === "es" ? es : en
+  return <Landing {...content} />
 }
 
 export function generateStaticParams() {

@@ -6,10 +6,121 @@ html {
   scrollbar-gutter: stable;
 }
 
+.wirecat-docs {
+  --wirecat-docs-grid:
+    "header header header header header" "sidebar sidebar toc-popover toc toc" "sidebar sidebar main toc toc" 1fr /
+    minmax(0, 1fr) var(--fd-sidebar-col)
+    minmax(0, calc(var(--fd-layout-width, 97rem) - var(--fd-sidebar-width) - var(--fd-toc-width))) var(--fd-toc-width)
+    minmax(0, 1fr);
+}
+
+@media (width < 48rem) {
+  .wirecat-docs {
+    --wirecat-docs-grid: "header" "toc-popover" "main" 1fr / minmax(0, 1fr);
+  }
+}
+
+.wirecat-docs [data-sidebar-placeholder] {
+  top: var(--fd-docs-row-2);
+  height: calc(var(--fd-docs-height) - var(--fd-docs-row-2));
+}
+
 /* The dialog's scroll lock writes these inline; only !important outranks an inline style. */
 html > body[data-scroll-locked] {
   /* biome-ignore lint/complexity/noImportantStyles: outranks the scroll lock's inline style */
   margin-right: 0px !important;
   /* biome-ignore lint/complexity/noImportantStyles: outranks the scroll lock's inline style */
   --removed-body-scroll-bar-size: 0px !important;
+}
+
+.wirecat-logo {
+  --wirecat-brand-tone: #737aab;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--color-fd-foreground);
+}
+.wirecat-logo-mark {
+  width: 28px;
+  height: 28px;
+  overflow: visible;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.wirecat-logo-word {
+  width: 110px;
+  height: 22px;
+}
+.wirecat-logo-ring {
+  fill: none;
+  stroke: var(--wirecat-brand-tone);
+  stroke-width: 1.5;
+  opacity: 0;
+  transform-origin: 16px 16px;
+}
+.wirecat-logo-pulse {
+  fill: none;
+  stroke: #c9ccff;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 3 60;
+  stroke-dashoffset: 3;
+  opacity: 0;
+}
+.wirecat-brand:is(:hover, :focus-visible) .wirecat-logo-mark {
+  transform: rotate(-10deg) scale(1.06);
+}
+.wirecat-brand:is(:hover, :focus-visible) .wirecat-logo-wire {
+  animation: wirecat-draw 0.6s ease-out;
+}
+.wirecat-brand:is(:hover, :focus-visible) .wirecat-logo-pulse {
+  animation: wirecat-pulse 0.9s 0.35s ease-out;
+}
+.wirecat-brand:is(:hover, :focus-visible) .wirecat-logo-ring {
+  animation: wirecat-ring 0.9s 0.2s ease-out;
+}
+@keyframes wirecat-draw {
+  from {
+    stroke-dasharray: 40;
+    stroke-dashoffset: 40;
+  }
+  to {
+    stroke-dasharray: 40;
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes wirecat-pulse {
+  0% {
+    opacity: 1;
+    stroke-dashoffset: 3;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    stroke-dashoffset: -40;
+  }
+}
+@keyframes wirecat-ring {
+  from {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+@media (width < 64rem) {
+  .wirecat-docs .wirecat-logo-word {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wirecat-logo-mark {
+    transition: none;
+  }
+  .wirecat-brand:is(:hover, :focus-visible) :is(.wirecat-logo-wire, .wirecat-logo-pulse, .wirecat-logo-ring) {
+    animation: none;
+  }
 }

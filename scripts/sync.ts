@@ -13,6 +13,7 @@ import { dirname, join, normalize } from "node:path"
 import { fileURLToPath } from "node:url"
 import { parseArgs } from "node:util"
 import { structureProblems } from "@leemour/cli-core/release"
+import { captureUpstream, localizeTool } from "./localize.ts"
 
 export type Tool = {
   name: string
@@ -152,6 +153,9 @@ const sync = (tool: Tool, root: string, ref?: string) => {
         recursive: true,
       })
     console.log(`${tool.name}: ${files.length} pages from ${tool.repo} ${tag}`)
+    captureUpstream(root, tool)
+    const untranslated = localizeTool(root, tool)
+    if (untranslated.length) throw new Error(`Documentation localization failed:\n${untranslated.join("\n")}`)
   } finally {
     rmSync(checkout, { recursive: true, force: true })
   }

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "sync": "node --experimental-strip-types scripts/sync.ts",
+    "docs:localize": "node --experimental-strip-types scripts/localize.ts",
     "dev": "next dev",
     "build": "pnpm sync && next build",
     "start": "serve out",
@@ -19,7 +20,9 @@
     "fumadocs-core": "16.15.17",
     "fumadocs-mdx": "15.4.5",
     "fumadocs-ui": "npm:@fumadocs/base-ui@16.15.17",
+    "github-slugger": "2.0.0",
     "lucide-react": "^1.47.0",
+    "mdast-util-from-markdown": "2.0.2",
     "next": "16.3.5",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"

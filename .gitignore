@@ -26,4 +26,11 @@ yarn-error.log*
 next-env.d.ts
 # filled by `pnpm sync` from each tool's repository
 /content/docs/*/
+/content/upstream/
 /public/*/
+
+# Local landing fonts are source assets, not synced tool files.
+!/public/fonts/
+
+# Python translation build caches are not source assets.
+__pycache__/
