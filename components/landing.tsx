@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react"
 import { FontSwitcher } from "@/components/landing/font-switcher"
 import { SearchPlayground } from "@/components/search-playground/search-playground"
 import { TimeSavings } from "@/components/time-savings"
-import { useThemeToggle } from "@/components/use-theme-toggle"
 import { prepareInstallationButton } from "@/lib/installation-command"
 
 type Step = { html: string; tool: boolean; delay: number }
@@ -14,7 +13,6 @@ type Props = { html: string; sessions: Session[]; maxSessions: Session[]; lang: 
 /** The markup and demo responses are exported from our reviewed static prototypes. */
 export function Landing({ html, sessions, maxSessions, lang }: Props) {
   const rootRef = useRef<HTMLDivElement>(null)
-  useThemeToggle(rootRef, lang)
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
@@ -31,7 +29,6 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
     const log = root.querySelector<HTMLElement>("#log")
     const app = root.querySelector<HTMLElement>("#app")
     const sessionNav = root.querySelector<HTMLElement>("#sessions")
-    const bar = root.querySelector<HTMLElement>("#bar")
     const still = matchMedia("(prefers-reduced-motion: reduce)").matches
     let current = 0
     let readingEvidence = false
@@ -166,28 +163,6 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
         if (overflow > 0) log.scrollTop += overflow
       },
       { capture: true, signal: controller.signal },
-    )
-    const onScroll = () => bar?.classList.toggle("scrolled", scrollY > 8)
-    window.addEventListener("scroll", onScroll, { passive: true, signal: controller.signal })
-    onScroll()
-    const nav = root.querySelector<HTMLElement>("nav.site")
-    const glide = nav?.querySelector<HTMLElement>(".glide")
-    for (const link of nav?.querySelectorAll<HTMLElement>("a") ?? []) {
-      const move = () => {
-        if (!glide) return
-        glide.style.width = `${link.offsetWidth}px`
-        glide.style.transform = `translateX(${link.offsetLeft}px)`
-        glide.style.opacity = "1"
-      }
-      link.addEventListener("mouseenter", move, { signal: controller.signal })
-      link.addEventListener("focus", move, { signal: controller.signal })
-    }
-    nav?.addEventListener(
-      "mouseleave",
-      () => {
-        if (glide) glide.style.opacity = "0"
-      },
-      { signal: controller.signal },
     )
     const observer = new IntersectionObserver(
       (entries) => {

@@ -1,0 +1,12 @@
+.wirecat-landing .site-header .site-brand {
+  display: inline-flex;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+.wirecat-landing .site-header .wirecat-logo {
+  --wirecat-brand-tone: #4b53f0;
+  color: var(--ink);
+}
+.wirecat-landing .site-header nav.site a[aria-current="page"] {
+  color: var(--ink);
+}

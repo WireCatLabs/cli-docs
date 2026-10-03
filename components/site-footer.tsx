@@ -85,6 +85,12 @@ export function SiteFooter({ html, variant = "landing" }: { html: string; varian
       clearTimeout(timer)
     }
   }, [pathname])
-  // biome-ignore lint/security/noDangerouslySetInnerHtml: Reviewed repository-owned footer, exported without scripts or user input.
-  return <div ref={rootRef} className={`site-footer-${variant}`} dangerouslySetInnerHTML={{ __html: footerHtml }} />
+  return (
+    <div
+      ref={rootRef}
+      className={`site-footer-shell site-footer-${variant}`}
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: Reviewed repository-owned footer, exported without scripts or user input.
+      dangerouslySetInnerHTML={{ __html: footerHtml }}
+    />
+  )
 }

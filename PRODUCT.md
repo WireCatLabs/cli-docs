@@ -18,6 +18,13 @@ agents that read the docs as Markdown.
 
 ## Product Purpose
 
+WireCat's mission is to help people and AI agents work with conversations, remember agreements
+and turn messages into useful actions. Telegram and MAX are the tools available today; other
+messengers, email and knowledge-base integrations such as Obsidian and Notion are planned (owner,
+2026-10-04). About describes an open-source project building and connecting tools for knowledge
+and conversations; personal project enquiries go to the configured maintainer Telegram.
+
+
 WireCat (`wirecat.dev`) is the home of two command line tools, `tg` (Telegram) and `max` (MAX
 Messenger). Each one puts the owner's own account in the terminal: for the owner, their scripts and
 their AI agents. Success on the landing page: a visitor understands in seconds that their agent can

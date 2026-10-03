@@ -1,4 +1,8 @@
 /* Shared landing/About footer: navigation first, installation on its own line. */
+.wirecat-landing .site-footer-shell {
+  padding-block-start: clamp(48px, 5vw, 72px);
+}
+
 .wirecat-landing footer.site {
   --body: var(--font-docs, "Inter", sans-serif);
   font-family: var(--body);

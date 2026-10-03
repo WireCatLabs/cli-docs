@@ -1,5 +1,3 @@
-import siteConfig from "@/site.config.json"
-
 export const aboutCopy = {
   en: {
     title: "About WireCat",
@@ -12,49 +10,56 @@ export const aboutCopy = {
       {
         title: "Why we started",
         paragraphs: [
-          "Important information is scattered across chats: a promise to a colleague, a customer's question, a document, a meeting time. We want to find that context without spending hours scrolling and to help questions get answered and promises get followed through.",
-          "WireCat brings messenger conversations into the workflows you already use: your terminal, scripts and AI agent.",
+          "A document in one chat, a customer's question in another, a promise you made last week. Finding the right message takes time, and it's easy to miss something that needs your attention.",
+          "The project brings together and builds open-source tools for working with conversations and knowledge. They help you find what you need, keep track of agreements and save time.",
         ],
       },
       {
         title: "What you can use today",
         paragraphs: [
-          "Our open-source Telegram and MAX CLI tools connect your personal account or bots to an agent. They can retrieve messages, search history, gather context and help prepare replies. Available features depend on the messenger and account type; the documentation describes each tool.",
-          "You can work through CLI commands or an MCP server. Agent guides cover Claude Code, Codex, Cursor, Gemini CLI and Hermes. The CLI runs on your computer; you choose your agent, its permissions and which conversations it can access.",
+          "Today, you can use our open-source command line tools: tg for Telegram and max for MAX. They run on your computer and let an AI agent read messages, search your chat history and prepare replies.",
+          "The setup guides cover Claude Code, Codex, Cursor, Gemini CLI and Hermes. You choose which agent to use and what it can access. Other agents can connect through MCP, a standard for connecting AI apps to tools.",
         ],
       },
       {
-        title: "Custom chatbots and integrations",
+        title: "Custom bots and integrations",
         paragraphs: [
-          "Have a specific workflow in mind? Get in touch about building custom Telegram or MAX chatbots, connecting an agent to your business processes, or automating routine work with messages.",
-          "Possible projects include support bots that use your knowledge base, assistants for internal teams, notifications and reminders, and integrations with a CRM or other services. We will discuss the task, data sources and access requirements before choosing an approach.",
+          "We can also build a bot for your team or connect an AI agent to the services you already use.",
+          "That might be a support bot that answers from your knowledge base, an assistant for your team, reminders, or an integration with your CRM. We start with the task and the information the bot needs, then choose how to build it.",
         ],
       },
       {
-        title: "How to discuss a project",
+        title: "Tell us what you need",
         paragraphs: [
-          `Email ${siteConfig.contacts.email} with a short description: who will use the bot, which messenger it needs, what it should do, and which systems it should connect to. Examples of questions or a current workflow are helpful; a detailed specification is not required.`,
-          "We can start by clarifying the scope, then agree on a prototype, deployment and maintenance. Timing and cost depend on the task and are discussed individually.",
+          "Tell us who will use it, what they need help with, and which messenger or services are involved. A few examples from your current workflow are enough to start the conversation.",
+          "We'll work out the scope together, then discuss a prototype, hosting and maintenance. Timing and cost depend on the project.",
         ],
       },
       {
-        title: "Where we want to go",
+        title: "What's next",
         paragraphs: [
-          "Our next direction is connecting contacts across messengers and helping you manage relationships: one person, shared history, open questions and agreements. This is a direction for the project; today's foundation is the CLI tools and their agent integrations.",
+          "Next, we plan to connect email, other messengers and knowledge bases such as Obsidian and Notion. We want to bring messages, notes and contacts together, so you can find information and keep track of questions and agreements across them.",
         ],
       },
       {
-        title: "Built in the open",
+        title: "Open source, on your computer",
         paragraphs: [
-          "The code is available on GitHub under the MIT licence. You can inspect how the tools work, read their security model, report issues and contribute. Permissions and confirmations help you control what an agent may do; the docs explain how to configure them.",
+          "Both tools are available on GitHub under the MIT licence. You can read the code, report a problem or contribute a change.",
+          "You control the agent's access and actions through permissions and confirmations. The security guides explain how that works and where your data is stored.",
         ],
       },
     ],
+    toolDescriptions: {
+      tg: "Read and search conversations from your Telegram account.",
+      max: "Connect your MAX account, work with bots and manage groups.",
+    },
     contact: "How can you be more productive?",
-    contactText: "Custom bots, agent integrations and questions about WireCat:",
+    contactText: "Message me on Telegram to discuss the project, suggest an integration or talk about your workflow.",
+    contactTelegram: "Message us on Telegram",
     source: "Source code",
-    security: "Security model",
+    security: "Security",
     start: "Get started",
+    agentGuide: "Connect your agent",
   },
   ru: {
     title: "О WireCat",
@@ -67,49 +72,56 @@ export const aboutCopy = {
       {
         title: "Зачем мы начали",
         paragraphs: [
-          "Важная информация разбросана по чатам: обещание коллеге, вопрос клиента, документ, время встречи. Мы хотим находить этот контекст без часов прокрутки и помогать вопросам получать ответы, а договорённостям — выполняться.",
-          "WireCat добавляет переписки в привычные рабочие процессы: терминал, скрипты и вашего ИИ-агента.",
+          "Документ в одном чате, вопрос клиента в другом, обещание, которое вы дали на прошлой неделе. Поиск нужного сообщения занимает время, а среди новых сообщений легко пропустить важное.",
+          "Проект объединяет и создаёт инструменты с открытым кодом для работы с переписками и знаниями. Они помогают находить нужное, помнить договорённости и экономить время.",
         ],
       },
       {
         title: "Что уже можно использовать",
         paragraphs: [
-          "Наши открытые CLI для Telegram и MAX подключают личный аккаунт или ботов к агенту. Они позволяют читать сообщения, искать историю, собирать контекст и готовить ответы. Возможности зависят от мессенджера и типа аккаунта; подробности есть в документации каждого инструмента.",
-          "Работать можно через команды CLI или MCP-сервер. Гайды подключения охватывают Claude Code, Codex, Cursor, Gemini CLI и Hermes. CLI запускается на вашем компьютере; вы выбираете агента, его права и доступные ему переписки.",
+          "Сейчас доступны два инструмента с открытым кодом: tg для Telegram и max для MAX. Они запускаются в терминале на вашем компьютере и позволяют ИИ-агенту читать сообщения, искать по истории чатов и готовить ответы.",
+          "Есть инструкции для Claude Code, Codex, Cursor, Gemini CLI и Hermes. Вы выбираете агента и его права доступа. Другие агенты могут подключаться через MCP — стандарт для подключения ИИ-приложений к инструментам.",
         ],
       },
       {
-        title: "Кастомные чатботы и интеграции",
+        title: "Боты и интеграции на заказ",
         paragraphs: [
-          "Есть конкретная задача? Обращайтесь по вопросам создания кастомных чатботов для Telegram и MAX, подключения агента к процессам вашей команды и автоматизации работы с сообщениями.",
-          "Это могут быть боты поддержки с вашей базой знаний, помощники для внутренних команд, уведомления и напоминания, интеграции с CRM и другими сервисами. Сначала обсудим задачу, источники данных и необходимые права доступа, затем выберем подход.",
+          "Мы также можем создать бота для вашей команды или подключить ИИ-агента к сервисам, которыми вы уже пользуетесь.",
+          "Например, бота поддержки с вашей базой знаний, помощника для команды, напоминания или интеграцию с CRM. Сначала разберёмся в задаче и нужных данных, затем выберем способ реализации.",
         ],
       },
       {
-        title: "Как обсудить проект",
+        title: "Расскажите о задаче",
         paragraphs: [
-          `Напишите на ${siteConfig.contacts.email}: кто будет пользоваться ботом, какой нужен мессенджер, что бот должен делать и с какими системами взаимодействовать. Примеры вопросов или описание текущего процесса помогут; подробное техническое задание для первого разговора не требуется.`,
-          "Можно начать с уточнения задачи, затем согласовать прототип, размещение и сопровождение. Сроки и стоимость зависят от объёма работы и обсуждаются индивидуально.",
+          "Расскажите, кто будет пользоваться ботом или агентом, с чем ему нужно помогать и какие мессенджеры или сервисы задействованы. Для первого разговора хватит нескольких примеров из вашей работы.",
+          "Вместе уточним задачу, затем обсудим прототип, размещение и сопровождение. Сроки и стоимость зависят от проекта.",
         ],
       },
       {
-        title: "Куда хотим двигаться",
+        title: "Что дальше",
         paragraphs: [
-          "Следующее направление — связывать контакты из разных мессенджеров и помогать управлять отношениями: один человек, общая история, открытые вопросы и договорённости. Это направление развития проекта; сегодняшняя основа — CLI и их интеграции с агентами.",
+          "Дальше планируем подключить электронную почту, другие мессенджеры и базы знаний — например, Obsidian и Notion. Хотим связать сообщения, заметки и контакты, чтобы было проще находить информацию и следить за вопросами и договорённостями в разных источниках.",
         ],
       },
       {
-        title: "Развиваем открыто",
+        title: "Открытый код, на вашем компьютере",
         paragraphs: [
-          "Код доступен на GitHub под лицензией MIT. Можно проверить, как работают инструменты, прочитать модель безопасности, сообщить о проблеме и предложить изменение. Права доступа и подтверждения помогают управлять действиями агента; документация объясняет их настройку.",
+          "Оба инструмента доступны на GitHub под лицензией MIT. Можно изучить код, сообщить о проблеме или предложить изменение.",
+          "Вы управляете доступом и действиями агента через права и подтверждения. В разделе о безопасности описано, как это работает и где хранятся ваши данные.",
         ],
       },
     ],
+    toolDescriptions: {
+      tg: "Читайте переписки своего аккаунта Telegram и ищите сообщения.",
+      max: "Подключите аккаунт MAX, работайте с ботами и управляйте группами.",
+    },
     contact: "Как повысить продуктивность?",
-    contactText: "Кастомные боты, интеграции агентов и вопросы о WireCat:",
+    contactText: "Напишите мне в Telegram: обсудим проект, нужные интеграции или ваши рабочие задачи.",
+    contactTelegram: "Написать в Telegram",
     source: "Исходный код",
-    security: "Модель безопасности",
+    security: "Безопасность",
     start: "Начать работу",
+    agentGuide: "Подключить агента",
   },
   es: {
     title: "Acerca de WireCat",
@@ -122,48 +134,55 @@ export const aboutCopy = {
       {
         title: "Por qué empezamos",
         paragraphs: [
-          "La información importante está repartida entre chats: una promesa, una pregunta de un cliente, un documento o una cita. Queremos encontrar ese contexto sin pasar horas desplazándonos y ayudar a que las preguntas reciban respuestas y los acuerdos se cumplan.",
-          "WireCat incorpora las conversaciones a tus flujos habituales: la terminal, los scripts y tu agente de IA.",
+          "Un documento en un chat, una pregunta de un cliente en otro, algo que prometiste la semana pasada. Encontrar el mensaje correcto lleva tiempo y es fácil pasar por alto algo importante.",
+          "El proyecto reúne y desarrolla herramientas de código abierto para trabajar con conversaciones y conocimiento. Te ayudan a encontrar lo que necesitas, recordar acuerdos y ahorrar tiempo.",
         ],
       },
       {
         title: "Qué puedes usar hoy",
         paragraphs: [
-          "Nuestros CLI de código abierto para Telegram y MAX conectan tu cuenta personal o tus bots con un agente. Permiten consultar mensajes, buscar el historial, reunir contexto y preparar respuestas. Las funciones dependen del mensajero y del tipo de cuenta; la documentación explica cada herramienta.",
-          "Puedes usar comandos CLI o un servidor MCP. Las guías cubren Claude Code, Codex, Cursor, Gemini CLI y Hermes. El CLI se ejecuta en tu ordenador; tú eliges el agente, sus permisos y las conversaciones a las que puede acceder.",
+          "Hoy puedes usar dos herramientas de línea de comandos de código abierto: tg para Telegram y max para MAX. Se ejecutan en tu ordenador y permiten que un agente de IA lea mensajes, busque en el historial y prepare respuestas.",
+          "Tenemos guías para Claude Code, Codex, Cursor, Gemini CLI y Hermes. Tú eliges el agente y sus permisos. Otros agentes pueden conectarse mediante MCP, un estándar que conecta aplicaciones de IA con herramientas.",
         ],
       },
       {
-        title: "Chatbots e integraciones a medida",
+        title: "Bots e integraciones a medida",
         paragraphs: [
-          "¿Tienes un flujo concreto en mente? Escríbenos sobre chatbots personalizados para Telegram o MAX, integración de agentes en los procesos de tu equipo y automatización del trabajo con mensajes.",
-          "Los proyectos pueden incluir bots de soporte con tu base de conocimientos, asistentes internos, avisos y recordatorios, o conexiones con un CRM y otros servicios. Primero hablamos de la tarea, las fuentes de datos y los permisos necesarios para elegir el enfoque.",
+          "También podemos crear un bot para tu equipo o conectar un agente de IA con los servicios que ya utilizas.",
+          "Por ejemplo, un bot de soporte que consulte tu base de conocimientos, un asistente interno, recordatorios o una integración con tu CRM. Primero entendemos la tarea y los datos necesarios; después elegimos cómo desarrollarlo.",
         ],
       },
       {
-        title: "Cómo hablar de un proyecto",
+        title: "Cuéntanos qué necesitas",
         paragraphs: [
-          `Escribe a ${siteConfig.contacts.email} y cuéntanos quién usará el bot, qué mensajero necesita, qué debe hacer y con qué sistemas se conectará. Ayudan ejemplos de preguntas o del proceso actual; no necesitas una especificación detallada para empezar.`,
-          "Podemos comenzar por definir el alcance y después acordar un prototipo, el despliegue y el mantenimiento. Los plazos y el coste dependen del proyecto y se hablan individualmente.",
+          "Cuéntanos quién lo usará, con qué necesita ayuda y qué aplicaciones de mensajería o servicios están implicados. Unos ejemplos de cómo trabajas ahora bastan para empezar.",
+          "Definiremos juntos el alcance y hablaremos del prototipo, el alojamiento y el mantenimiento. Los plazos y el coste dependen del proyecto.",
         ],
       },
       {
-        title: "Hacia dónde queremos ir",
+        title: "Lo que viene después",
         paragraphs: [
-          "Nuestra siguiente dirección es conectar contactos entre mensajeros y ayudar a gestionar relaciones: una persona, historial compartido, preguntas pendientes y acuerdos. Es una dirección del proyecto; la base actual son los CLI y sus integraciones con agentes.",
+          "Tenemos previsto conectar el correo electrónico, otras aplicaciones de mensajería y bases de conocimiento como Obsidian y Notion. Queremos reunir mensajes, notas y contactos para que sea más fácil encontrar información y seguir preguntas y acuerdos entre distintas fuentes.",
         ],
       },
       {
-        title: "Desarrollo abierto",
+        title: "Código abierto, en tu ordenador",
         paragraphs: [
-          "El código está en GitHub bajo la licencia MIT. Puedes revisar las herramientas y su modelo de seguridad, informar de problemas y contribuir. Los permisos y las confirmaciones permiten controlar las acciones del agente; la documentación explica cómo configurarlos.",
+          "Las dos herramientas están en GitHub bajo la licencia MIT. Puedes consultar el código, informar de un problema o contribuir.",
+          "Tú controlas el acceso y las acciones del agente mediante permisos y confirmaciones. Las guías de seguridad explican cómo funciona y dónde se guardan tus datos.",
         ],
       },
     ],
+    toolDescriptions: {
+      tg: "Consulta las conversaciones de tu cuenta de Telegram y busca mensajes.",
+      max: "Conecta tu cuenta de MAX, usa bots y administra grupos.",
+    },
     contact: "¿Cómo mejorar tu productividad?",
-    contactText: "Bots personalizados, integraciones de agentes y preguntas sobre WireCat:",
+    contactText: "Escríbeme en Telegram para hablar del proyecto, proponer una integración o contarme cómo trabajas.",
+    contactTelegram: "Escríbenos en Telegram",
     source: "Código fuente",
-    security: "Modelo de seguridad",
+    security: "Seguridad",
     start: "Empezar",
+    agentGuide: "Conectar tu agente",
   },
 }

@@ -1,6 +1,6 @@
+import { ArrowRight } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
-import { SiteHeader } from "@/components/site-header"
 import { aboutCopy } from "@/lib/about"
 import { i18n } from "@/lib/i18n"
 import siteConfig from "@/site.config.json"
@@ -21,7 +21,6 @@ export default async function AboutPage({ params }: Props) {
   const paragraphs = (section: typeof purpose) => section.paragraphs.map((text) => <p key={text}>{text}</p>)
   return (
     <div className="wirecat-about">
-      <SiteHeader lang={lang} />
       <main className="wrap about-page">
         <header className="about-intro">
           <h1>{words.title}</h1>
@@ -43,15 +42,16 @@ export default async function AboutPage({ params }: Props) {
             <Link href={`/${lang}/docs/tg`}>
               <span>Telegram</span>
               <code>tg</code>
-              <span aria-hidden="true">→</span>
+              <ArrowRight aria-hidden="true" />
             </Link>
             <Link href={`/${lang}/docs/max`}>
               <span>MAX</span>
               <code>max</code>
-              <span aria-hidden="true">→</span>
+              <ArrowRight aria-hidden="true" />
             </Link>
             <Link className="about-start" href={`/${lang}/docs/installation`}>
-              {words.start} →
+              {words.start}
+              <ArrowRight aria-hidden="true" />
             </Link>
           </nav>
         </section>
@@ -60,9 +60,18 @@ export default async function AboutPage({ params }: Props) {
             <h2>{open.title}</h2>
             {paragraphs(open)}
             <div className="about-links">
-              <a href="https://github.com/leemour/tg-cli">tg · {words.source} →</a>
-              <a href="https://github.com/leemour/max-cli">max · {words.source} →</a>
-              <Link href={`/${lang}/docs/tg/security`}>{words.security} →</Link>
+              <a href="https://github.com/leemour/tg-cli">
+                tg · {words.source}
+                <ArrowRight aria-hidden="true" />
+              </a>
+              <a href="https://github.com/leemour/max-cli">
+                max · {words.source}
+                <ArrowRight aria-hidden="true" />
+              </a>
+              <Link href={`/${lang}/docs/tg/security`}>
+                {words.security}
+                <ArrowRight aria-hidden="true" />
+              </Link>
             </div>
           </section>
           <section>
@@ -83,8 +92,9 @@ export default async function AboutPage({ params }: Props) {
             <h2>{words.contact}</h2>
             <p>{words.contactText}</p>
           </div>
-          <a className="btn" href={`mailto:${siteConfig.contacts.email}`}>
-            {siteConfig.contacts.email}
+          <a className="btn" href={siteConfig.contacts.maintainerTelegram}>
+            @{new URL(siteConfig.contacts.maintainerTelegram).pathname.slice(1)}
+            <ArrowRight aria-hidden="true" />
           </a>
         </section>
       </main>

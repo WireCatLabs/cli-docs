@@ -43,11 +43,14 @@ demo sessions and scoped CSS into `lib/landing/`. The complete scenario bank is 
 `docs/LANDING_SCENARIOS.md`, and marketing copy in `docs/MARKETING.md`. Production omits the design
 switches and experimental feature variants. Agent setup links lead to the shared documentation.
 `components/landing.tsx` adds demo, replay and copy interactions and cleans them up on navigation.
-Fonts, including the selected Fira Sans Extra Condensed for Russian, are served locally from `public/fonts/`, with their
+The shared home layout renders `SiteHeader` and `SiteFooter` for both the landing and About;
+the exporter removes the prototype header and footer from the page body. Header navigation,
+theme switching and language selection therefore use the same components on both pages.
+Fonts, including the selected Unbounded face for Latin and Cyrillic headings, are served locally from `public/fonts/`, with their
 OFL licences. Browser icons are wired in the shared metadata; run
 `node scripts/export-favicons.mjs` (ImageMagick required) to regenerate them from `app/icon.svg`.
 Site name, URL, repository and public contacts are configured in [site.config.json](site.config.json).
-The footer and About page use the same contacts in all languages. Edit the config and rebuild the site;
+The footer uses public email/Telegram contacts; About uses `contacts.maintainerTelegram` for personal enquiries. These values are shared across languages. Edit the config and rebuild the site;
 contact changes do not require regenerating the landing snapshots.
 About is a separate localized `/{lang}/about` page; its content is in `lib/about.ts`. The export removes the old inline About section and links to this page.
 After the demo, sections are benefits, an editable time estimate, Telegram/MAX, reasons, and a concise daily timeline.
