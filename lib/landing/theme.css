@@ -1,0 +1,57 @@
+.wirecat-landing .theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--app-line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--app) 60%, transparent);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.wirecat-landing .theme-toggle:hover {
+  color: var(--ink);
+  border-color: var(--app-dim);
+}
+
+.wirecat-landing .theme-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+.wirecat-landing .theme-moon,
+.light .wirecat-landing .theme-sun {
+  display: none;
+}
+
+.light .wirecat-landing .theme-moon {
+  display: inline;
+}
+
+.light .wirecat-landing {
+  color-scheme: light;
+  --wall: #f1f4f2;
+  --wall-ink: #dce4df;
+  --ink: #182822;
+  --ink-soft: #4c5e55;
+  --ink-dim: #63746a;
+  --app: #ffffff;
+  --app-2: #f3f6f4;
+  --app-3: #e5ece7;
+  --app-line: #ccd7cf;
+  --app-ink: #182822;
+  --app-soft: #465c4f;
+  --app-dim: #617569;
+  --ok: #23764c;
+  --key: #5145b8;
+  --str: #805b20;
+  --num: #a3462b;
+  --card: #ffffff;
+  --card-ink: #182822;
+  --card-soft: #4c5e55;
+  --bubble: #e5ece7;
+}
