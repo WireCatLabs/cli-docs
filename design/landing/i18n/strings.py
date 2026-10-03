@@ -948,3 +948,15 @@ TEXT.update({'Telegram and MAX, one search': ('Telegram и MAX — один по
 # Short Spanish hero, matching the concise RU/EN headlines.
 TEXT['Never search a chat again.'] = ('Хватит листать.', 'Deja de buscar.')
 TEXT['Just ask.'] = ('Просто спросите.', 'Solo pregunta.')
+
+
+# Owner wording: action-oriented feature descriptions and headings without trailing periods.
+TEXT.update({
+    'Context, decisions and reminders': ('Поиск контекста, принятие решений и напоминания', 'Contexto, decisiones y recordatorios'),
+    'Personalisation, customer support and broadcasts': ('Персонализация, помощь клиентам и рассылки', 'Personalización, ayuda al cliente y comunicaciones'),
+    'Moderation, answers and community health': ('Модерация, ответы на вопросы и порядок', 'Moderación, respuestas y orden'),
+    'Analytics': ('Аналитика', 'Analítica'),
+})
+for _heading, _translations in list(TEXT.items()):
+    if _heading.endswith('.'):
+        TEXT.setdefault(_heading[:-1], tuple(value.rstrip('.') for value in _translations))

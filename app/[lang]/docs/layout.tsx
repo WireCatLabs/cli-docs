@@ -5,6 +5,7 @@ import { DocsSidebarItem } from "@/components/docs-sidebar-item"
 import { DocsSidebarTitle } from "@/components/docs-sidebar-title"
 import { GettingStartedLinks } from "@/components/getting-started-links"
 import { SiteFooter } from "@/components/site-footer"
+import { unifiedDocsTree } from "@/lib/docs-sidebar-tree"
 import en from "@/lib/landing/en.json"
 import es from "@/lib/landing/es.json"
 import ru from "@/lib/landing/ru.json"
@@ -30,7 +31,7 @@ export default async function Layout({
     <>
       <DocsLayout
         {...options}
-        tree={source.getPageTree(lang)}
+        tree={unifiedDocsTree(source.getPageTree(lang))}
         tabs={false}
         slots={{ header: DocsHeader, navTitle: DocsSidebarTitle }}
         sidebar={{

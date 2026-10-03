@@ -86,6 +86,23 @@
 .wirecat-landing .connect-guide:last-child {
   margin-bottom: 0;
 }
+.wirecat-landing .connect-guide {
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 4px;
+  transition:
+    color 160ms,
+    text-decoration-color 160ms;
+}
+.wirecat-landing .connect-guide:hover {
+  color: var(--app-ink);
+  text-decoration-color: currentColor;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wirecat-landing .connect-guide {
+    transition: none;
+  }
+}
 .wirecat-landing .agent-connect :is(summary, button, a):focus-visible {
   outline: 2px solid var(--me);
   outline-offset: 3px;

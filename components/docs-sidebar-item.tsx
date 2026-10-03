@@ -9,8 +9,10 @@ export function DocsSidebarItem({ item }: { item: Item }) {
   const pathname = usePathname()
   const depth = useFolderDepth()
   const isOverview = /^\/(en|ru|es)\/docs\/?$/.test(item.url)
+  // These pages stay in the fixed icon menu above the scrolling messenger guides.
+  if (isOverview || isGettingStarted(item.url)) return null
   const exact = pathname.replace(/\/$/, "") === item.url.replace(/\/$/, "")
-  const active = exact || (isOverview && isGettingStarted(pathname))
+  const active = exact
   return (
     <SidebarItem
       href={item.url}

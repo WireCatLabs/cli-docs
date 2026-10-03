@@ -2,7 +2,7 @@
 
 Research date: 3 October 2026. Scope: functionality, user value, existing solutions, and incremental development. Pricing and monetization are outside this report.
 
-The recommended direction is to make WireCat a dependable source of personal conversation context for the tools and AI agents a user already has. Start with meeting preparation, saving decisions into an existing knowledge base, and tracking commitments across messages and email. A productivity suite can emerge from these working connections without requiring a new application for every function.
+The recommended direction is a personal knowledge system that starts with messaging: retain the source conversations, incrementally maintain useful knowledge about people, projects, and topics, and expose that knowledge through a coherent human interface and agent tools. Meeting preparation, decision capture, and commitment tracking are ways to evaluate that system, rather than limits on its eventual scope. Reuse independent tools inside the implementation while giving users one setup and one experience.
 
 This recommendation is a product hypothesis. The research below establishes documented capabilities and integration routes; it does not establish demand, market share, or comparative answer quality. Third-party tools were researched through their maintainers' documentation and repositories, rather than installed or benchmarked. Repository documentation establishes WireCat's described capabilities, with narrower verification evidence noted below. The user confirmed that the email CLI they had in mind is Himalaya.
 
@@ -49,7 +49,7 @@ These are the most relevant products to examine for this decision, not an adopti
 
 | Product or category | Documented functionality | Implication for WireCat |
 | --- | --- | --- |
-| **Beeper** | Local desktop API and MCP for personal messaging networks, including Telegram; message search and send or draft operations. The desktop app must run, and available history can be limited. [Developer documentation](https://developers.beeper.com/desktop-api/) | The closest competitor to agent access across personal chats. A local API and MCP alone do not differentiate WireCat. Compare archival coverage, unattended operation, and reproducibility. It could also supply additional networks through an optional adapter. |
+| **Beeper** | Desktop API and MCP for personal messaging, plus an MIT-licensed CLI documenting local, remote, and headless Server targets, structured output, export, and event streams. The Desktop API's running-app requirement does not apply to every Beeper deployment. [Desktop API](https://developers.beeper.com/desktop-api/), [CLI repository](https://github.com/beeper/cli) | A direct messaging competitor. Neither a CLI nor headless access is an exclusive advantage. Compare onboarding, archive fidelity, knowledge maintenance, and independence from the vendor's account system. |
 | **Read AI** | Ask Read searches meeting reports and connected email, calendars, Slack or Teams, cloud storage, documentation, and CRM systems. [Ask Read documentation](https://support.read.ai/hc/en-us/articles/39009378777875-Using-Ask-Read-to-search-your-meetings-and-connected-apps) | Much of the proposed context assistant already exists as SaaS. Telegram and MAX are not listed on this documented integration surface; that is an opening to investigate, not proof of a permanent gap. |
 | **Notion AI** | Enterprise Search answers questions across Notion and connected apps with citations. A personal Gmail connector searches the connected inbox; its documentation currently excludes attachments. [Enterprise Search](https://www.notion.com/help/enterprise-search), [personal Gmail connector](https://www.notion.com/help/notion-mail-ai-connector) | Notes plus email context already exist. Position WireCat around additional conversation sources, archive control, and useful workflows. Notion can be a destination and context provider as well as a competitor. |
 | **Glean** | Connectors ingest content and source permissions; documented access patterns include indexed, live, and hybrid retrieval. [Connector architecture](https://docs.glean.com/connectors/about) | A strong reference for organization knowledge search. A personal CLI can focus on a smaller setup and owner controlled data. Team search would introduce a substantially larger product scope. |
@@ -63,7 +63,7 @@ These are the most relevant products to examine for this decision, not an adopti
 | **Akiflow and Motion** | Akiflow consolidates tasks from existing services with calendars. Motion schedules and reprioritizes tasks around availability and deadlines. [Akiflow integrations](https://akiflow.com/integrations), [Motion task manager](https://www.usemotion.com/features/ai-task-manager) | Deliver good commitments into these systems. Calendar planning is a different specialization from discovering what was agreed in conversations. |
 | **OpenClaw** | A personal assistant gateway with memory and tools, running on the user's hardware. Its standard Telegram channel uses a bot token. [Repository](https://github.com/openclaw/openclaw), [channel setup](https://docs.openclaw.ai/channels) | An agent runtime can consume WireCat. Talking to an assistant through Telegram is a different capability from reading the owner's existing account history. |
 
-The answer to “does SaaS already cover this?” is **yes, substantial parts**. There are also local solutions. The remaining question is whether WireCat can deliver a particular workflow better for a particular user. Documentation cannot establish that competitors are inaccurate or inconvenient; comparative testing must.
+Existing SaaS and local products cover substantial components. This does not establish that a coherent, continuously maintained personal knowledge system is solved, or that the market is saturated. The question is whether users can obtain dependable knowledge from their actual communication and document sources without operating the integration infrastructure themselves. Documentation cannot establish that competitors are inaccurate or inconvenient; comparative testing must.
 
 ### Where WireCat could compete
 
@@ -85,7 +85,7 @@ The priorities and effort assessments are recommendations. Effort is relative to
 | **Todoist** | Turn a confirmed personal commitment into a task with its source | [Doist's official CLI](https://github.com/Doist/todoist-cli) | Next. Start with reviewed task creation and a returned task identifier. |
 | **Linear** | Convert a confirmed development action into an issue, or check whether one already exists | [Official Linear MCP](https://linear.app/docs/mcp) | Next for technical teams; choose this or Todoist according to the pilot segment. |
 | **Meeting notes** | Check what was agreed during the call against the surrounding messages | Granola MCP or a supplied meeting export | Next if pilot users already have meeting capture. |
-| **Beeper** | Give a workflow access to another personal messaging network | Its local API or MCP | Optional expansion experiment. Evaluate history coverage and desktop dependency first. |
+| **Beeper** | Give a workflow access to another personal messaging network | Its API, MCP, or CLI | Optional expansion experiment. Evaluate history fidelity, target options, and account dependency first. |
 | **CRM** | Attach selected messaging context to an existing person or company record | Existing CRM API or agent integration; Attio is a candidate | Later, after testing cross-channel person matching. |
 | **Cloud storage backup** | Restore the user's archive on another device | WireCat snapshot plus [rclone](https://rclone.org/drive/); optional [crypt](https://rclone.org/crypt/) or [restic](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html) | Small supporting recipe now; a larger archive product only if recovery is a primary need. |
 | **Data analysis** | Inspect defined patterns in exported messages and commitments | JSONL plus [DuckDB](https://duckdb.org/docs/current/data/json/overview), then existing analysis scripts | Small optional recipe. Use exports rather than binding third-party queries to the internal database schema. |
@@ -106,7 +106,7 @@ Reading selected messages is much smaller work than maintaining a mailbox archiv
 
 ### Let the agent compose independent tools
 
-This is the best starting point. WireCat supplies conversation evidence, the email CLI supplies email, calendar tools identify meetings, and a knowledge tool supplies the relevant project document. A reusable instruction or small script defines the workflow.
+This is a useful development and validation technique. WireCat supplies conversation evidence, the email CLI supplies email, calendar tools identify meetings, and a knowledge tool supplies the relevant project document. A reusable instruction or small script defines the workflow. For a general personal productivity audience, package the connections behind a shared product interface; requiring the user to configure each component would leave the fragmentation problem unresolved.
 
 ```mermaid
 flowchart LR
@@ -216,7 +216,7 @@ These are observations from current documented products, followed by their impli
 
 1. **Applications are exposing interfaces for agents.** Obsidian, Notion, and Todoist now document their own CLIs; knowledge and work products also expose MCP servers. This supports WireCat's modular strategy, while reducing the differentiation of merely having a CLI or MCP endpoint.
 2. **Context across tools is becoming a standard product direction.** Read AI, Notion, Google, Microsoft, and Glean already combine multiple work sources. A broad universal-search claim faces substantial competition. Choose a source population and recurring workflow where WireCat can demonstrate value.
-3. **Personal messaging access has a credible local competitor.** Beeper changes the comparison: locally accessible chats are already a product surface. WireCat needs measured benefits in archival retrieval, history transparency, or particular workflows.
+3. **Personal messaging access has a credible local competitor.** Beeper exposes local messaging interfaces and a CLI with a documented headless server path. Its official desktop changelog lists version 4.3.160 on 30 September 2026, so a May release page is not its latest product release. WireCat needs measured benefits in archival fidelity, knowledge maintenance, or user experience. [Beeper release](https://www.beeper.com/changelog/desktop/4.3.160).
 4. **Products are moving from recall into follow-through.** Mem Agent and Superhuman's documented workflows include proactive resurfacing and handling commitments. Saving information is increasingly only the first step; an outstanding promise has to remain current.
 5. **Retrieval and persistent agent memory are distinct systems.** QMD indexes source documents. [Mem0](https://github.com/mem0ai/mem0) offers persistent agent memory, while [Graphiti](https://help.getzep.com/graphiti/getting-started/overview) models temporal relationships. They are useful adjacent projects to watch. Introduce extracted memory or graphs only if ordinary retrieval fails concrete user questions, and preserve links to underlying evidence.
 
@@ -250,4 +250,55 @@ Evaluate the completed workflow: whether it finds the right context, cites the r
 
 The strongest early evidence would be repeated use before real meetings, action on accepted commitments, and later retrieval of saved project notes. Many generated summaries or connected accounts would be weaker evidence of value.
 
-The immediate product decision is therefore a pilot around meeting preparation and selected knowledge capture, using WireCat with Himalaya or a Google Workspace CLI. Commitment tracking is the next branch to test. A separate context CLI remains an option when shared retrieval and synchronization requirements become concrete.
+The immediate product decision is therefore to complete a messaging-to-knowledge loop, with a small human interface and agent access to the same evidence. Use meeting preparation and decision recall to evaluate it. Add existing notes and email next, reusing transports where practical. A separate context CLI remains an implementation option, while the user's experience should remain coherent.
+
+## A broader knowledge system starting with messaging
+
+The product thesis is larger than a collection of productivity shortcuts. A retained corpus, a search interface, and a maintained knowledge base are distinct capabilities. The proposed system would provide all three: source history, accumulated knowledge, and access for people and agents.
+
+Karpathy's original LLM Wiki idea describes an agent maintaining interlinked pages from raw sources, using schema instructions to guide the process and periodic checks to keep the wiki coherent. This is a relevant architectural pattern. His examples involve curated source material; applying it to continuous communications requires additional decisions about noise, changing claims, and source edits. [Original idea file](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f).
+
+### What beating Beeper would require
+
+Beeper is a consumer messaging application with graphical onboarding. Its Telegram guide describes adding an account in Settings, entering a phone number, and confirming a code. On paper, this is more approachable for a nontechnical user than installing and configuring a CLI; this is an assessment of the documented flow, not a hands-on usability result. [Telegram setup](https://help.beeper.com/telegram).
+
+It also has meaningful open source components. Its documented bridge self-hosting workflow still requires a Beeper account. Published bridge and CLI code does not establish an entirely open source desktop and server product. I did not verify a complete open source app/server stack or an independent replacement for its identity service. [Open source projects](https://developers.beeper.com/open-source/), [bridge self-hosting boundaries](https://help.beeper.com/en_US/troubleshooting/what-beeper-self-hosting-does-and-which-account-it-uses).
+
+The proposed competitive priorities are:
+
+| Priority | Product behavior to build and measure |
+| --- | --- |
+| Source fidelity | Preserve the meaning of replies, forwards, attachments, edits, and conversation boundaries; expose gaps in retained history. |
+| Accumulated knowledge | Maintain person, project, and topic pages across conversations, with links to supporting sources. |
+| Changes over time | Preserve why a decision changed, distinguish a proposal from an accepted decision, and retire superseded claims. |
+| A coherent interface | Let a user connect messaging, inspect the resulting knowledge, search, and open exact evidence in one product. |
+| Agent access | Let external agents search maintained knowledge and fall back to original source context through the same service. |
+| Independence | Make source data, compiled knowledge, and the running product usable without a mandatory WireCat cloud identity. |
+
+These are proposed requirements, not claims that Beeper lacks every one. A fair comparison should use Beeper's current CLI/server capabilities as well as its desktop app.
+
+### Challenges to the thesis
+
+The statement that no knowledge ecosystem or useful UI exists is too broad. AnythingLLM offers a local desktop application, document knowledge, agents, and extensions; Khoj combines multiple document sources with browser, desktop, and Obsidian interfaces. Their existence does not prove that continuous personal communication is well handled. It does require a more specific claim about the experience and knowledge quality WireCat will improve. [AnythingLLM](https://anythingllm.com/), [Khoj features](https://docs.khoj.dev/features/all-features/).
+
+The difficult distinction is between a searchable archive and knowledge a user trusts. A message can contain a suggestion, joke, obsolete plan, or quoted statement. Extracting each as a current fact would build a polished but unreliable wiki. Use source timestamps and relationships, preserve uncertainty, and make it possible to inspect and correct the interpretation. Retrieval of raw evidence remains necessary even when the wiki is useful.
+
+Another challenge is scope. Supporting every source is not required to make one person's knowledge coherent. Messaging, email, notes, documents, and calendar context form a substantial first source set. Task managers can remain optional action destinations. Research which subset matters for the first audience; “executives” includes very different source environments.
+
+### What to own and what to reuse
+
+Own source identity, retained history and its coverage, synchronization state, knowledge updates, evidence links, human corrections, retrieval contracts, and the unified interface. These determine whether users trust the system and whether new sources improve existing knowledge.
+
+Reuse provider protocols and SDKs, email transport, document parsing, transcription engines, model execution, and search components where they meet the needed contract. Himalaya and QMD are candidates for internal adapters or optional integrations. Obsidian can provide an early view and editing environment while a small WireCat interface develops. Reuse does not require the customer to install and operate every dependency separately.
+
+Keep generated knowledge inspectable and portable, with a clear policy for human edits. An internal database can retain source relationships and update state; Markdown exports can expose knowledge to Obsidian and other tools. A single canonical claim should not become two competing versions simply because it appears in both formats.
+
+### A sequence that preserves the larger vision
+
+1. **Messaging and visible knowledge.** Make Telegram and MAX ingestion dependable, then add an explorer for source conversations and the first person/project pages. Let users search these pages and inspect evidence. A broad knowledge compiler can begin with a limited set of chats and page types.
+2. **Maintenance across new messages.** Add incremental updates, changed decisions, source edits, explicit person corrections, and preserved user annotations. Test that weeks of use make the system more accurate and useful.
+3. **Existing notes and local documents.** Read a vault or selected folder so communication can update or challenge existing project knowledge. Give the user a clear way to retain human authored notes separately from generated claims.
+4. **Email and calendar context.** Add one email backend and calendar connection behind the same setup flow. Verify that related communication is combined correctly across channels.
+5. **More providers and action destinations.** Add messaging providers, cloud documents, and optional task or CRM actions using the same knowledge and evidence model. Provide plugin boundaries once two or three adapters reveal the common requirements.
+
+Each stage enlarges one coherent system. Meeting briefs and commitment reviews remain useful tests of the knowledge it maintains; they do not define the entire product.
