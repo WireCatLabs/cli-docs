@@ -9,7 +9,7 @@ How the site is laid out: [docs/DESIGN.md](docs/DESIGN.md). Picking up the work:
 [HANDOFF.md](HANDOFF.md).
 
 Each tool keeps its reference pages in its repository's `docs/`, laid out by
-[STRUCTURE.md](docs/STRUCTURE.md); `pnpm sync` copies them at the tool's newest release tag.
+[STRUCTURE.md](docs/STRUCTURE.md); `pnpm sync` copies them at the reviewed release tag in `tools.json` (`docsRef`).
 Shared installation, agent and MCP guides live here in `content/docs/`, in all three languages.
 Tool translations and the concise entry pages live in `translations/`. They are installed after
 release sync; `content/upstream/` holds the untouched release pages locally. `pnpm docs:localize`
@@ -23,7 +23,7 @@ matches prevent silently applying an old correction to a new source. Findings ar
 
 ```sh
 pnpm install
-pnpm sync                # newest released tools, with reviewed translations
+pnpm sync                # reviewed released tools, with source-matched translations
 pnpm dev                 # http://localhost:3000
 ```
 
@@ -90,3 +90,11 @@ Search vocabulary lives in `lib/search-intents.json`: reviewed task descriptions
 are indexed on the matching existing pages in English, Russian and Spanish. `{tool}` becomes the
 page's messenger command. Search prioritizes the current messenger unless the query names another;
 this adds no model calls or embedding service. Add phrases here and rebuild to cover another task.
+
+## Updating reviewed tool versions
+
+`tools.json` pins each translated tool’s reviewed `docsRef`. Update that tag only after reviewing
+every affected locale, its source fingerprint and any portal errata. Tool pages display the reviewed
+version and link GitHub views to that tag. This makes daily/release-triggered deploys reproducible
+when a newer CLI is released before its translations are reviewed. `--ref` remains an explicit
+preview override; unreviewed source changes still fail the translation gate.

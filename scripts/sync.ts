@@ -1,5 +1,5 @@
 /**
- * Fills `content/docs/<tool>/` from each tool's repository at its newest release tag: the pages in
+ * Fills `content/docs/<tool>/` from each tool's repository at its reviewed release tag (or newest tag for unpinned tools): the pages in
  * `docs/`, its `meta.json` sidebar and the changelog. Never `main` — it can describe what is not
  * released yet.
  *
@@ -20,6 +20,7 @@ export type Tool = {
   repo: string
   package: string
   lang: string
+  docsRef?: string
   summary: Record<string, string>
 }
 
@@ -98,7 +99,8 @@ const run = (command: string, args: string[], cwd?: string) =>
   })
 
 const sync = (tool: Tool, root: string, ref?: string) => {
-  const tag = ref ?? latestTag(run("git", ["ls-remote", "--tags", `https://github.com/${tool.repo}.git`]))
+  const tag =
+    ref ?? tool.docsRef ?? latestTag(run("git", ["ls-remote", "--tags", `https://github.com/${tool.repo}.git`]))
   if (!tag) throw new Error(`${tool.repo}: no vX.Y.Z tag`)
   const checkout = mkdtempSync(join(tmpdir(), `cli-docs-${tool.name}-`))
   try {

@@ -52,6 +52,11 @@ export default async function Page(props: Props) {
     <DocsPage toc={toc} full={page.data.full}>
       <DocsDisclosures />
       <DocsTitle>{page.data.title}</DocsTitle>
+      {tool?.docsRef && (
+        <p className="text-xs text-fd-muted-foreground">
+          {{ en: "Documentation", ru: "Документация", es: "Documentación" }[lang]}: {tool.docsRef}
+        </p>
+      )}
       <DocsDescription className="mb-0">{page.data.description}</DocsDescription>
       <div className="flex flex-row gap-2 items-center border-b pb-6">
         <MarkdownCopyButton markdownUrl={markdownUrl} />
@@ -59,7 +64,7 @@ export default async function Page(props: Props) {
           markdownUrl={markdownUrl}
           {...(tool
             ? {
-                githubUrl: `https://github.com/${tool.repo}/blob/main/${repoPath}`,
+                githubUrl: `https://github.com/${tool.repo}/blob/${tool.docsRef ?? "main"}/${repoPath}`,
               }
             : {})}
         />

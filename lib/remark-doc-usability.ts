@@ -54,12 +54,16 @@ export function resolveCommand(value: string, tool: string | undefined, indexes:
 }
 
 /** Shared presentation for released Markdown; executable examples and anchors stay intact. */
-export function remarkDocUsability() {
+function loadCommandIndexes() {
   const indexes = new Map<string, Map<string, string>>()
   for (const tool of ["tg", "max"]) {
     const file = join(process.cwd(), "content/docs", tool, "commands.md")
     if (existsSync(file)) indexes.set(tool, commandReferences(readFileSync(file, "utf8")))
   }
+  return indexes
+}
+
+export function remarkDocUsability(indexes = loadCommandIndexes()) {
   return (tree: Node, file: { path?: string }) => {
     const path = (file.path ?? "").replaceAll("\\", "/")
     const tool = /\/docs\/(tg|max)\//.exec(path)?.[1]

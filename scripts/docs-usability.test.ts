@@ -34,7 +34,7 @@ describe("documentation command references", () => {
     const tree = fromMarkdown(
       "## `tg doctor`\n\nUse `tg doctor --online` and [`tg doctor`](./diagnostics.md).\n\n```sh\ntg doctor\n```\n",
     )
-    remarkDocUsability()(tree, { path: "/project/content/docs/tg/installation.ru.md" })
+    remarkDocUsability(indexes)(tree, { path: "/project/content/docs/tg/installation.ru.md" })
     const result = JSON.stringify(tree)
     expect(result.match(/command-reference/g)).toHaveLength(1)
     expect(result).toContain("/ru/docs/tg/commands#tg-doctor")
