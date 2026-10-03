@@ -107,7 +107,7 @@ Before embedding, chunk text is reconstructed from current messages and checked 
 - **Meaning:** embed the question with the selected model, scan vectors belonging to current conversation builds in the selected account/chat, and keep each conversation's best matching chunk.
 - **Words:** extract words from the question, join them with OR for message retrieval, and map the matching messages back to built conversations.
 
-The two ranked lists are combined with reciprocal rank fusion: each list contributes `1 / (60 + rank)` to a conversation, with ranks starting at one. A result can report `by: ["meaning"]`, `["words"]` or both. Its `score` is the best chunk's cosine similarity, not the fusion score or a probability that an answer is correct; a word-only result has `score: null`.
+The two ranked lists are combined with reciprocal rank fusion: each list contributes `1 / (60 + rank)` to a conversation, with ranks starting at one. A result can report `by: ["meaning"]`, `["words"]` or both. Its `summary` contains conversation metadata (IDs, dates, message count), not generated prose. Its `score` is the best chunk's cosine similarity, not the fusion score or a probability that an answer is correct; a word-only result has `score: null`.
 
 Vectors live in SQLite blobs. The current implementation scans them in pages and scores them in JavaScript; it does **not** use an approximate-nearest-neighbor/vector index or a separate vector database. Paging bounds the vectors loaded at once, but total scan work grows with the chunks in scope.
 
