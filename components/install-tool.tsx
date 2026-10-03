@@ -39,7 +39,9 @@ export function InstallTool({ tool, lang }: { tool: Tool; lang: string }) {
   const words = wordsFor(lang)
   const ui = words.onboarding
   const [open, setOpen] = useState(false)
+  const [windows, setWindows] = useState(false)
   useEffect(() => {
+    setWindows(navigator.userAgent.includes("Windows"))
     const followHash = () => {
       if (window.location.hash === `#${tool.name}`) setOpen(true)
     }
@@ -73,12 +75,21 @@ export function InstallTool({ tool, lang }: { tool: Tool; lang: string }) {
             <a href="https://nodejs.org/en/download" className="text-sm underline">
               Node.js ↗
             </a>
+            {windows && <p className="text-sm text-fd-muted-foreground">{ui.windows}</p>}
             <CopyText
               lang={lang}
-              text={`npm install -g ${tool.package}\n${tool.name} skill install --for all\n${tool.name} --version\n${tool.name} doctor`}
+              text={
+                windows
+                  ? installer
+                  : `npm install -g ${tool.package}\n${tool.name} skill install --for all\n${tool.name} --version\n${tool.name} doctor`
+              }
             />
-            <p className="text-sm text-fd-muted-foreground">{ui.windows}</p>
-            <CopyText lang={lang} text={installer} />
+            {!windows && (
+              <>
+                <p className="text-sm text-fd-muted-foreground">{ui.windows}</p>
+                <CopyText lang={lang} text={installer} />
+              </>
+            )}
             <p className="text-sm font-medium">{ui.login}</p>
             <CopyText lang={lang} text={`${tool.name} ${login}`} />
             {tool.name === "tg" && <p className="text-sm text-fd-muted-foreground">{ui.telegram}</p>}
