@@ -105,6 +105,53 @@ export function FontSwitcher({ lang }: { lang: string }) {
 
   useEffect(() => {
     if (!enabled) return
+    const widget = panel.current
+    const footer = widget?.closest(".wirecat-landing")?.querySelector(".site-footer-landing")
+    if (!widget || !footer) return
+    const reposition = () => {
+      const visibleFooter = innerHeight - footer.getBoundingClientRect().top
+      widget.style.bottom = `${Math.max(18, Math.min(visibleFooter + 18, innerHeight - widget.offsetHeight - 88))}px`
+    }
+    reposition()
+    window.addEventListener("scroll", reposition, { passive: true })
+    window.addEventListener("resize", reposition)
+    const observer = new ResizeObserver(reposition)
+    observer.observe(widget)
+    observer.observe(footer)
+    return () => {
+      window.removeEventListener("scroll", reposition)
+      window.removeEventListener("resize", reposition)
+      observer.disconnect()
+    }
+  }, [enabled])
+
+  useEffect(() => {
+    if (!enabled) return
+    const root = panel.current?.closest<HTMLElement>(".wirecat-landing")
+    if (!root) return
+    const preserveComparison = (event: MouseEvent) => {
+      const link =
+        event.target instanceof Element ? event.target.closest<HTMLAnchorElement>(".lang-menu a[href]") : null
+      if (!link || !root.contains(link)) return
+      const destination = new URL(link.href)
+      if (destination.origin !== location.origin || !/^\/(en|ru|es)(?:\/|$)/u.test(destination.pathname)) return
+      const current = new URL(location.href)
+      destination.search = current.search
+      destination.searchParams.set("fonts", "1")
+      destination.searchParams.set("font", font.id)
+      destination.hash = destination.hash || current.hash
+      link.href = destination.href
+    }
+    root.addEventListener("click", preserveComparison, true)
+    root.addEventListener("auxclick", preserveComparison, true)
+    return () => {
+      root.removeEventListener("click", preserveComparison, true)
+      root.removeEventListener("auxclick", preserveComparison, true)
+    }
+  }, [enabled, font.id])
+
+  useEffect(() => {
+    if (!enabled) return
     const root = panel.current?.closest<HTMLElement>(".wirecat-landing")
     if (!root) return
     headingRoot.current = root

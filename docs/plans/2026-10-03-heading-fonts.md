@@ -1,6 +1,6 @@
 # Heading font comparison
 
-The owner requested matching search/section typography and bold, expressive, non-cartoonish fonts with Cyrillic support (initially 20 candidates, narrowed to eight by the owner) to rotate through the existing comparison concept. The prototype has previous/next font controls, excluded from the exported landing. Restore this as a React comparison panel enabled by `?fonts=1`, with a direct picker, previous/next, reset and shareable `font=<id>` selection. Keep ordinary landing visits on the reviewed face.
+The owner requested matching search/section typography and bold, expressive, non-cartoonish fonts with Cyrillic support (initially 20 candidates, narrowed to eight by the owner) to rotate through the existing comparison concept. The prototype has previous/next font controls, excluded from the exported landing. Restore this as a React comparison panel enabled by `?fonts=1`, with a direct picker, previous/next, reset and shareable `font=<id>` selection. Header and footer language links preserve comparison mode, font, scenario/messenger and section anchor; the floating panel moves above the visible footer to keep its controls accessible. Keep ordinary landing visits on the reviewed face.
 
 Unify landing heading family, weight and width through locale-specific CSS variables owned by the exporter. Include the search heading in that system. Body text and documentation typography keep their normal faces. A selected face updates hero, section and card headings together.
 
