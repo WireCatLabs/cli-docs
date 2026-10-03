@@ -88,7 +88,7 @@ break before its second phrase to stay on two lines on mobile and desktop.
 `components/landing.tsx` handles demo sessions, replay, results and clipboard, with event/timer
 cleanup on navigation. The first demo renders in static HTML without waiting for JavaScript.
 Landing CSS is scoped to `.wirecat-landing`; it cannot restyle documentation after navigation.
-Fonts are local source assets with OFL licences in `public/fonts/`; Fira Sans Extra Condensed supplies Russian display headings, matching commit b41b263. The documentation header uses an animated SVG logo in a quieter purple,
+Fonts are local source assets with OFL licences in `public/fonts/`; Unbounded supplies display headings in all three languages, at compact responsive sizes. The documentation header uses an animated SVG logo in a quieter purple,
 with motion disabled when the reader requests reduced motion.
 
 ## A tool's pages — `/{lang}/docs/{tool}/…`
@@ -171,7 +171,7 @@ security), Project (changelog, roadmap).
   separate navigation roots. The title stays “Documentation”; only the active link and expanded
   guide change with the current page. `lib/docs-sidebar-tree.tsx` adapts the source tree without
   changing the tree used for search, Markdown or release metadata.
-- Landing: the reviewed dark design, Anybody headings (Fira Sans Extra Condensed for Russian), Onest body, JetBrains Mono commands. Search shares the section-heading face, weight and width. For font review, `?fonts=1` enables an eight-face previous/next/picker panel with Cyrillic support; `font=<id>` retains a choice in the URL. Self-hosted candidate faces load on selection, with the same Latin/Cyrillic shortlist in all languages.
+- Landing: the reviewed dark design, Unbounded headings (800 weight, 40px maximum hero and 34px maximum section headings), Onest body, JetBrains Mono commands. Search shares the section-heading face, weight and width. For font review, `?fonts=1` enables an eight-face previous/next/picker panel with Cyrillic support; `font=<id>` retains a choice in the URL. Unbounded is loaded with the page; other self-hosted candidate faces load on selection, with the same Latin/Cyrillic shortlist in all languages. Reset returns to Unbounded.
 - Landing uses the purple WireCat monogram and word mark. max's own logo appears on max's pages.
 - Code blocks: Shiki highlighting, a copy button; an unknown language shows as plain text.
 - Documentation uses the owner-selected **Quiet** treatment (2026-10-03): headings retain their

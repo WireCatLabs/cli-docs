@@ -72,7 +72,7 @@ const resetHeading = (root: HTMLElement | null) => {
 export function FontSwitcher({ lang }: { lang: string }) {
   const language = lang === "ru" || lang === "es" ? lang : "en"
   const text = copy[language]
-  const defaultIndex = fonts.findIndex((candidate) => candidate.id === "firasansextracondensed")
+  const defaultIndex = fonts.findIndex((candidate) => candidate.id === "unbounded")
   const [enabled, setEnabled] = useState(false)
   const [index, setIndex] = useState(defaultIndex)
   const [status, setStatus] = useState<"loading" | "ready" | "error">("ready")
