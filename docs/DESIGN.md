@@ -60,7 +60,17 @@ large condensed headline, install command and documentation CTA, interactive age
 five sessions and replay, a day with an agent, Telegram/MAX tool cards,
 all three feature groups, advantages, closing CTA and footer. About is a separate translated
 `/{lang}/about` page with project details, custom chatbot/integration information and
-`hello@wirecat.dev` for enquiries. Header and footer links lead there.
+the configured maintainer Telegram for enquiries. Header and footer links lead there.
+
+About retains its two-column editorial composition: purpose and services use a heading column
+and a prose column; the current tools have documentation links alongside; open-source information
+and future plans sit side by side. Columns stack below 48rem. Spacing follows a 48–72px section rhythm.
+The introduction describes the broader project; Telegram and MAX are today's tools, with other
+messengers, email and knowledge-base integrations (Obsidian and Notion) planned. The tools block aligns
+with the page left edge. About enquiries link to `contacts.maintainerTelegram`; public footer contacts
+remain configured separately in `site.config.json`. Copy
+is maintained in `lib/about.ts` for all three languages. About and landing headings use the selected,
+self-hosted Unbounded face; About keeps title case and a compact 28–44px title.
 
 The hero has a connection dropdown for Telegram and MAX. Each option displays its installation
 command and copies it on click, with inline confirmation and a link to the matching installation
@@ -88,6 +98,10 @@ break before its second phrase to stay on two lines on mobile and desktop.
 `node scripts/export-landing.mjs` exports the repository-owned prototypes into `lib/landing/`.
 `components/landing.tsx` handles demo sessions, replay, results and clipboard, with event/timer
 cleanup on navigation. The first demo renders in static HTML without waiting for JavaScript.
+The home layout owns the shared `SiteHeader` and `SiteFooter` for landing and About. The exporter
+removes the prototype header and footer from the page body. Both pages share the logo, navigation,
+theme switch and language menu; changing language keeps the current page. The shared footer shell
+adds 48–72px of space above the footer on landing and About, and 80–128px on documentation pages.
 Landing CSS is scoped to `.wirecat-landing`; it cannot restyle documentation after navigation.
 Fonts are local source assets with OFL licences in `public/fonts/`; Unbounded supplies display headings in all three languages, at compact responsive sizes. The documentation header uses an animated SVG logo in a quieter purple,
 with motion disabled when the reader requests reduced motion.

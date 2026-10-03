@@ -1,4 +1,5 @@
 import { SiteFooter } from "@/components/site-footer"
+import { SiteHeader } from "@/components/site-header"
 import en from "@/lib/landing/en.json"
 import es from "@/lib/landing/es.json"
 import ru from "@/lib/landing/ru.json"
@@ -14,6 +15,7 @@ import "@/lib/landing/about.css"
 import "@/lib/landing/theme.css"
 import "@/lib/landing/install.css"
 import "@/lib/landing/footer.css"
+import "@/lib/landing/header.css"
 
 export default async function Layout({
   children,
@@ -26,6 +28,7 @@ export default async function Layout({
   const content = { en, es, ru }[lang as "en" | "es" | "ru"] ?? en
   return (
     <div className="wirecat-landing">
+      <SiteHeader lang={lang} />
       {children}
       <SiteFooter html={content.footerHtml} />
     </div>

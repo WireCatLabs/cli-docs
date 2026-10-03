@@ -1,46 +1,30 @@
-/* Editorial About layout: the brand, header and footer belong to the landing shell. */
-.wirecat-about .wirecat-logo {
-  --wirecat-brand-tone: #4b53f0;
-  color: var(--ink);
-}
-.wirecat-about .wirecat-brand {
-  display: inline-flex;
-}
-.wirecat-about .wirecat-brand svg {
-  flex: none;
-}
-.wirecat-about nav.site a:is(:hover, [aria-current="page"]) {
-  color: var(--ink);
-  background: var(--app-3);
-}
-.wirecat-about .bar {
-  background: var(--wall);
-}
+/* The original two-column About composition, using the shared public-site shell. */
 .wirecat-about .about-page {
-  padding-block: clamp(48px, 7vw, 100px) clamp(64px, 8vw, 112px);
+  padding-block: clamp(48px, 6vw, 80px) 40px;
 }
 .wirecat-about .about-intro {
   max-width: 900px;
-  margin-bottom: clamp(56px, 7vw, 96px);
+  margin-bottom: clamp(48px, 6vw, 72px);
 }
-.wirecat-about .about-page h1 {
+.wirecat-landing .wirecat-about .about-page h1 {
   margin: 0;
-  font-size: clamp(48px, 7vw, 88px);
-  line-height: 1;
+  font-size: clamp(28px, 3.3vw, 44px);
+  line-height: 1.2;
+  text-transform: none;
 }
 .wirecat-about .about-intro .intro {
   max-width: 38em;
   margin: 28px 0 0;
-  font-size: clamp(20px, 2.2vw, 28px);
+  font-size: clamp(20px, 2.1vw, 26px);
   line-height: 1.5;
   color: var(--ink);
   text-wrap: pretty;
 }
 .wirecat-about .about-page h2 {
   margin: 0 0 24px;
-  font-size: clamp(24px, 2.6vw, 34px);
+  font-size: clamp(20px, 2.1vw, 26px);
   line-height: 1.2;
-  font-weight: 600;
+  font-weight: 800;
   letter-spacing: -0.025em;
   text-wrap: balance;
 }
@@ -52,7 +36,7 @@
   margin: 0 0 20px;
 }
 .wirecat-about .about-intro p {
-  font-size: clamp(20px, 2.2vw, 28px);
+  font-size: clamp(20px, 2.1vw, 26px);
   line-height: 1.5;
   color: var(--ink);
 }
@@ -61,7 +45,7 @@
 .wirecat-about .about-process {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-  gap: clamp(24px, 4vw, 64px);
+  gap: clamp(24px, 3vw, 48px);
   padding: 0;
 }
 .wirecat-about .about-purpose .about-statement {
@@ -73,11 +57,10 @@
 .wirecat-about .about-tools {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(240px, 1fr);
-  gap: clamp(32px, 5vw, 80px);
-  margin-top: 72px;
-  padding: clamp(28px, 4vw, 48px);
-  background: var(--app-2);
-  border-radius: 16px;
+  gap: clamp(24px, 3vw, 48px);
+  margin-top: clamp(48px, 6vw, 72px);
+  padding-block: clamp(28px, 4vw, 48px);
+  border-block: 1px solid var(--app-line);
 }
 .wirecat-about .about-tool-links {
   align-self: center;
@@ -103,9 +86,9 @@
 }
 .wirecat-about .about-outlook {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(32px, 6vw, 88px);
-  margin-block: 80px;
+  margin-block: clamp(48px, 6vw, 72px);
 }
 .wirecat-about .about-outlook section {
   padding: 0;
@@ -154,9 +137,6 @@
   outline-offset: 6px;
 }
 @media (width < 48rem) {
-  .wirecat-about .wirecat-logo-word {
-    display: none;
-  }
   .wirecat-about .about-purpose,
   .wirecat-about .about-tools,
   .wirecat-about .about-outlook,
@@ -175,7 +155,7 @@
   }
   .wirecat-about .about-tools {
     margin-top: 48px;
-    padding: 24px;
+    padding-block: 24px;
   }
   .wirecat-about .about-services {
     padding-top: 40px;
@@ -186,4 +166,23 @@
   .wirecat-about .about-page h2 {
     margin-bottom: 16px;
   }
+}
+
+.wirecat-about .about-page a > svg {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+.wirecat-about .about-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+}
+.wirecat-about .about-page p:last-child {
+  margin-bottom: 0;
+}
+
+.wirecat-about .about-contact .btn {
+  gap: 8px;
 }

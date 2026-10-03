@@ -15,6 +15,10 @@
   font-family: inherit;
 }
 
+.wirecat-docs-footer .site-footer-shell {
+  padding-block-start: clamp(80px, 8vw, 128px);
+}
+
 .wirecat-docs-footer footer.site {
   border-color: var(--color-fd-border);
 }

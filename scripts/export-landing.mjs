@@ -148,7 +148,10 @@ for (const lang of ["en", "ru", "es"]) {
   const sessions = renderSessions("tg")
   const maxSessions = renderSessions("max")
   let html = source.split("<body>")[1].split('<div class="headlines"')[0]
-  html = html.replace('<details class="lang">', `${themeButton}<details class="lang">`)
+  const sourceHeader = html.match(/<div class="bar" id="bar">[\s\S]*?<\/header><\/div>/)?.[0]
+  if (!sourceHeader) throw new Error("Missing prototype header")
+  // The public-site layout renders SiteHeader for both the landing and About.
+  html = html.replace(sourceHeader, "")
   html = html.replace(/^ {4}<div class="fv fv[1-5]"[^\n]+\n/gm, "")
   html = html.replace(/href="g-home(?:\.(ru|es))?\.html"/g, (_, locale) => `href="/${locale ?? "en"}"`)
   html = html
