@@ -117,7 +117,9 @@ export function SearchPlayground({ lang }: { lang: string }) {
           <Sparkles size={14} aria-hidden />
           {text.eyebrow}
         </span>
-        <h2 id={`${id}-title`}>{text.title}</h2>
+        <h2 className="big" id={`${id}-title`}>
+          {text.title}
+        </h2>
         <p>{text.intro}</p>
       </div>
       <div className="sp-workspace">
