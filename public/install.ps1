@@ -93,8 +93,13 @@ $Prefix = [IO.Path]::GetFullPath($Prefix)
 if ($Prefix.Contains(';') -or $NodeDirectory.Contains(';')) { throw 'Installation folders cannot contain a semicolon.' }
 
 if (-not $RepairOnly) {
-    & $node -e 'const [a,b]=process.versions.node.split(".").map(Number);process.exit(a>=24||(a===22&&b>=16)?0:1)'
-    if ($LASTEXITCODE -ne 0) { throw 'Node.js 22.16+ or 24+ is required. Install a supported Node.js release first.' }
+    $nodeVersion = (& $node --version | Out-String).Trim()
+    if ($LASTEXITCODE -ne 0 -or $nodeVersion -notmatch '^v(\d+)\.(\d+)\.') { throw 'Could not read the Node.js version.' }
+    $major = [int] $Matches[1]
+    $minor = [int] $Matches[2]
+    if (-not ($major -ge 24 -or ($major -eq 22 -and $minor -ge 16))) {
+        throw 'Node.js 22.16+ or 24+ is required. Install a supported Node.js release first.'
+    }
     $npm = (Get-Command npm.cmd -CommandType Application -ErrorAction Stop | Select-Object -First 1).Source
     $package = "@leemour/$Tool-cli"
     if (-not $PackageSpec) { $PackageSpec = $package }
