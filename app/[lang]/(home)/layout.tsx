@@ -10,6 +10,7 @@ import "@/lib/landing/connect.css"
 import "@/lib/landing/day.css"
 import "@/lib/landing/about.css"
 import "@/lib/landing/theme.css"
+import "@/lib/landing/install.css"
 
 export default async function Layout({
   children,
