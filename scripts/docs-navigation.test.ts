@@ -1,5 +1,7 @@
+import type { Root } from "fumadocs-core/page-tree"
 import { describe, expect, it } from "vitest"
 import { isGettingStarted, messengerHref } from "../lib/docs-navigation"
+import { unifiedDocsTree } from "../lib/docs-sidebar-tree"
 
 const pages = ["tg", "tg/installation", "tg/mcp", "max", "max/installation", "max/mcp", "max/bot"]
 
@@ -31,5 +33,45 @@ describe("getting-started navigation state", () => {
   it("does not select Getting started for messenger guides or other routes", () => {
     for (const path of ["/ru/docs/tg/installation", "/en/docs/max/mcp", "/en/about", "/ru/docs/installation-extra"])
       expect(isGettingStarted(path)).toBe(false)
+  })
+})
+
+describe("one persistent documentation sidebar", () => {
+  const original: Root = {
+    name: "Docs",
+    children: [
+      { type: "page", name: "Install", url: "/ru/docs/installation" },
+      {
+        type: "folder",
+        name: "Telegram",
+        root: true,
+        index: { type: "page", name: "Overview", url: "/ru/docs/tg" },
+        children: [{ type: "page", name: "Sessions", url: "/ru/docs/tg/sessions" }],
+      },
+      {
+        type: "folder",
+        name: "MAX",
+        root: true,
+        children: [{ type: "page", name: "Sessions", url: "/ru/docs/max/sessions" }],
+      },
+    ],
+  }
+  it("keeps shared pages and both tools in one root, instead of selecting a different tree per route", () => {
+    const tree = unifiedDocsTree(original)
+    expect(tree.children.map((item) => item.name)).toEqual(["Install", "Telegram", "MAX"])
+    for (const item of tree.children) {
+      if (item.type === "folder") {
+        expect(item.root).toBe(false)
+        expect(item.defaultOpen).toBe(false)
+        expect(item.children[0]).toHaveProperty("icon")
+      }
+    }
+    expect(tree.children[1]).toMatchObject({ index: { url: "/ru/docs/tg" } })
+  })
+  it("does not modify the source tree used by breadcrumbs, Markdown and search", () => {
+    unifiedDocsTree(original)
+    expect(original.children[1]).toMatchObject({ root: true })
+    expect(original.children[0]).not.toHaveProperty("icon")
+    expect(original.children[1]).toMatchObject({ children: [{ url: "/ru/docs/tg/sessions" }] })
   })
 })

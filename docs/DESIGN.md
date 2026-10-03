@@ -164,6 +164,11 @@ security), Project (changelog, roadmap).
 ## Look
 
 - Documentation: Fumadocs' neutral theme, Inter (Latin and Cyrillic), light and dark with a switch.
+- The documentation sidebar is one persistent menu: five shared getting-started links with icons
+  remain visible above the scrolling Telegram and MAX folders. Tool folders expand without becoming
+  separate navigation roots. The title stays “Documentation”; only the active link and expanded
+  guide change with the current page. `lib/docs-sidebar-tree.tsx` adapts the source tree without
+  changing the tree used for search, Markdown or release metadata.
 - Landing: the reviewed dark design, Anybody headings, Onest body, JetBrains Mono commands.
 - Landing uses the purple WireCat monogram and word mark. max's own logo appears on max's pages.
 - Code blocks: Shiki highlighting, a copy button; an unknown language shows as plain text.
