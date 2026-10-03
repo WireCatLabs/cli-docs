@@ -28,12 +28,10 @@ export function SiteFooter({ html, variant = "landing" }: { html: string; varian
     }[lang] ?? "Telegram · CLI + agent skill"
   const command = html.match(/<span class="cmd">[\s\S]*?<\/span>/)?.[0]
   let footerHtml = html.replace(/(<div class="foot-brand">[\s\S]*?<\/p>)/, (brand) => `${brand}${contacts}`)
-  if (variant === "docs") {
-    footerHtml = footerHtml.replace(
-      /<a class="mark"[^>]*>[\s\S]*?<\/a>/,
-      `<a class="wirecat-brand" href="/${lang}"><span class="wirecat-logo" role="img" aria-label="WireCat">${wirecatLogoSvg}</span></a>`,
-    )
-  }
+  footerHtml = footerHtml.replace(
+    /<a class="mark"[^>]*>[\s\S]*?<\/a>/,
+    `<a class="wirecat-brand" href="/${lang}"><span class="wirecat-logo" role="img" aria-label="WireCat">${wirecatLogoSvg}</span></a>`,
+  )
   if (command) {
     footerHtml = footerHtml
       .replace(command, "")
@@ -88,5 +86,5 @@ export function SiteFooter({ html, variant = "landing" }: { html: string; varian
     }
   }, [pathname])
   // biome-ignore lint/security/noDangerouslySetInnerHtml: Reviewed repository-owned footer, exported without scripts or user input.
-  return <div ref={rootRef} dangerouslySetInnerHTML={{ __html: footerHtml }} />
+  return <div ref={rootRef} className={`site-footer-${variant}`} dangerouslySetInnerHTML={{ __html: footerHtml }} />
 }

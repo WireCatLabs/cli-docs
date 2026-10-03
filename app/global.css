@@ -27,7 +27,6 @@ html {
 
 .wirecat-landing.wirecat-docs-footer {
   min-height: 0;
-  border-top: 1px solid var(--color-fd-border);
 }
 
 /* The dialog's scroll lock writes these inline; only !important outranks an inline style. */
