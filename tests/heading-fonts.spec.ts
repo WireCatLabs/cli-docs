@@ -21,7 +21,7 @@ test("search uses the same heading face; font comparison stays opt-in", async ({
     await expect(page.locator(".font-lab")).toHaveCount(0)
     const headings = await page
       .locator(
-        ".wirecat-landing :is(h1,h2,h3,h4,h5,h6,[role='heading'],.fv-name,.t6 > b,.savings-quality > b,.time,.tool-name,.spec dt)",
+        ".wirecat-landing :is(h1,h2,h3,h4,h5,h6,[role='heading'],.t6 > b,.savings-quality > b,.time,.tool-name,.spec dt)",
       )
       .evaluateAll((elements) =>
         elements
@@ -43,7 +43,15 @@ test("search uses the same heading face; font comparison stays opt-in", async ({
         .locator(".fv-name")
         .last()
         .evaluate((el) => parseFloat(getComputedStyle(el).fontSize)),
-    ).toBeLessThanOrEqual(24)
+    ).toBeLessThanOrEqual(20)
+    for (const category of await page
+      .locator(".fv6 .fv-name")
+      .evaluateAll((elements) => elements.map((el) => getComputedStyle(el).fontFamily)))
+      expect(category).toContain("Onest")
+    for (const icon of await page
+      .locator(".fv6 .fv-ico")
+      .evaluateAll((elements) => elements.map((el) => el.getBoundingClientRect().width)))
+      expect(icon).toBe(31)
     expect((await page.locator("h1").evaluate(typography))[0]).toContain("Unbounded")
     expect(await page.locator("h1").evaluate((el) => parseFloat(getComputedStyle(el).fontSize))).toBeLessThanOrEqual(40)
     expect(

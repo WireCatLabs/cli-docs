@@ -280,7 +280,7 @@ for (const lang of ["en", "ru", "es"]) {
   const reset =
     ".wirecat-landing { min-height: 100vh; overflow-wrap: anywhere; }\n.wirecat-landing :where(h1,h2,h3,h4,p,ul,ol,dl,pre) { margin: revert; padding: revert; font-size: revert; font-weight: revert; }\n.wirecat-landing :where(ul,ol) { list-style: revert; }\n.wirecat-landing :where(svg) { display: inline; vertical-align: middle; }\n"
   const typography =
-    '\nhtml[lang] .wirecat-landing :is(h1,h2,h3,h4,h5,h6,[role="heading"],.fv-name,.t6 > b,.savings-quality > b,.time,.tool-name,.spec dt) { font-family: var(--heading-family, "Unbounded"); font-stretch: var(--heading-stretch, 100%); font-weight: var(--heading-weight, 800); }\n'
+    '\nhtml[lang] .wirecat-landing :is(h1,h2,h3,h4,h5,h6,[role="heading"],.t6 > b,.savings-quality > b,.time,.tool-name,.spec dt) { font-family: var(--heading-family, "Unbounded"); font-stretch: var(--heading-stretch, 100%); font-weight: var(--heading-weight, 800); }\n'
   const patternScript = script.slice(script.indexOf("const shapes ="), script.indexOf("let wall ="))
   const background = {}
   runInNewContext(`${patternScript}\nscatter(["plane", "sleeping"])`, {
@@ -312,8 +312,29 @@ html[lang] .wirecat-landing .tool-name {
   line-height: 1.25;
 }
 html[lang] .wirecat-landing .fv-name {
-  font-size: clamp(18px, 2vw, 24px);
-  line-height: 1.25;
+  font-family: "Onest", system-ui, sans-serif;
+  font-stretch: 100%;
+  font-size: clamp(18px, 1.5vw, 20px);
+  font-weight: 700;
+  line-height: 1.3;
+}
+html[lang] .wirecat-landing .head6 {
+  grid-template-columns: 31px auto minmax(0, 1fr);
+  gap: 14px;
+}
+html[lang] .wirecat-landing .fv-ico {
+  width: 31px;
+  height: 31px;
+  border-radius: 8px;
+}
+html[lang] .wirecat-landing .fv-ico svg {
+  width: 16px;
+  height: 16px;
+}
+@media (max-width: 760px) {
+  html[lang] .wirecat-landing .head6 {
+    grid-template-columns: 31px minmax(0, 1fr);
+  }
 }
 html[lang] .wirecat-landing .t6 > b {
   font-size: 16px;
