@@ -14,8 +14,7 @@ const copy = {
     loading: "Loading font…",
     error: "Could not load this font. Try again.",
     scope: "All landing headings · body text stays the same",
-    latin: "Latin only",
-    coverage: "Fonts without Cyrillic are unavailable in Russian.",
+    coverage: "All fonts support Latin and Cyrillic.",
     source: "Font specimen",
   },
   ru: {
@@ -26,8 +25,7 @@ const copy = {
     loading: "Загрузка шрифта…",
     error: "Не удалось загрузить шрифт. Попробуйте ещё раз.",
     scope: "Все заголовки · основной текст не меняется",
-    latin: "Только латиница",
-    coverage: "Шрифты без кириллицы недоступны на русском.",
+    coverage: "Все шрифты поддерживают латиницу и кириллицу.",
     source: "Образец шрифта",
   },
   es: {
@@ -38,8 +36,7 @@ const copy = {
     loading: "Cargando fuente…",
     error: "No se pudo cargar la fuente. Inténtalo de nuevo.",
     scope: "Todos los títulos · el texto conserva su fuente",
-    latin: "Solo latín",
-    coverage: "Las fuentes sin cirílico no están disponibles en ruso.",
+    coverage: "Todas las fuentes admiten latín y cirílico.",
     source: "Muestra de la fuente",
   },
 }
@@ -75,7 +72,7 @@ const resetHeading = (root: HTMLElement | null) => {
 export function FontSwitcher({ lang }: { lang: string }) {
   const language = lang === "ru" || lang === "es" ? lang : "en"
   const text = copy[language]
-  const defaultIndex = language === "ru" ? 6 : 0
+  const defaultIndex = fonts.findIndex((candidate) => candidate.id === "firasansextracondensed")
   const [enabled, setEnabled] = useState(false)
   const [index, setIndex] = useState(defaultIndex)
   const [status, setStatus] = useState<"loading" | "ready" | "error">("ready")
@@ -87,16 +84,19 @@ export function FontSwitcher({ lang }: { lang: string }) {
   useEffect(() => {
     const restore = () => {
       const params = new URL(location.href).searchParams
-      const selected = fonts.findIndex(
-        (candidate) => candidate.id === params.get("font") && (language !== "ru" || candidate.cyrillic),
-      )
+      const selected = fonts.findIndex((candidate) => candidate.id === params.get("font"))
+      if (params.has("font") && selected < 0) {
+        const url = new URL(location.href)
+        url.searchParams.set("font", fonts[defaultIndex].id)
+        history.replaceState(null, "", url)
+      }
       setIndex(selected >= 0 ? selected : defaultIndex)
       setEnabled(params.get("fonts") === "1" || params.has("font"))
     }
     restore()
     window.addEventListener("popstate", restore)
     return () => window.removeEventListener("popstate", restore)
-  }, [defaultIndex, language])
+  }, [defaultIndex])
 
   useEffect(() => {
     if (!enabled) resetHeading(headingRoot.current)
@@ -141,13 +141,7 @@ export function FontSwitcher({ lang }: { lang: string }) {
     url.searchParams.set("font", fonts[next].id)
     history.replaceState(null, "", url)
   }
-  const rotate = (direction: number) => {
-    let next = index
-    do {
-      next = (next + direction + fonts.length) % fonts.length
-    } while (language === "ru" && !fonts[next].cyrillic)
-    choose(next)
-  }
+  const rotate = (direction: number) => choose((index + direction + fonts.length) % fonts.length)
 
   if (!enabled) return null
   return (
@@ -169,9 +163,8 @@ export function FontSwitcher({ lang }: { lang: string }) {
           onChange={(event) => choose(fonts.findIndex((candidate) => candidate.id === event.target.value))}
         >
           {fonts.map((candidate) => (
-            <option key={candidate.id} value={candidate.id} disabled={language === "ru" && !candidate.cyrillic}>
+            <option key={candidate.id} value={candidate.id}>
               {candidate.family}
-              {language === "ru" && !candidate.cyrillic ? ` · ${text.latin}` : ""}
             </option>
           ))}
         </select>
@@ -186,7 +179,7 @@ export function FontSwitcher({ lang }: { lang: string }) {
         {status === "loading" ? text.loading : status === "error" ? text.error : `${font.style} · ${font.weight}`}
       </div>
       <p>{text.scope}</p>
-      {language === "ru" && <p>{text.coverage}</p>}
+      <p>{text.coverage}</p>
       <a
         href={`https://fonts.google.com/specimen/${font.family.replaceAll(" ", "+")}`}
         target="_blank"

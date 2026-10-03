@@ -23,7 +23,9 @@ test("search uses the same heading face; font comparison stays opt-in", async ({
   expect(fontRequests).toEqual([])
 })
 
-test("all 20 fonts load locally and update hero, section and search headings together", async ({ page }) => {
+test("all eight Cyrillic fonts load locally and update hero, section and search headings together", async ({
+  page,
+}) => {
   test.setTimeout(60000)
   const failures: string[] = []
   page.on("requestfailed", (request) => failures.push(request.url()))
@@ -32,7 +34,7 @@ test("all 20 fonts load locally and update hero, section and search headings tog
   })
   await page.goto("/en?fonts=1&scenario=commitments&messenger=max#search-playground")
   const picker = page.getByRole("combobox", { name: "Heading fonts", exact: true })
-  await expect(picker.locator("option")).toHaveCount(20)
+  await expect(picker.locator("option")).toHaveCount(8)
   const body = await page.locator(".lede").evaluate(typography)
   for (const font of fonts) {
     await picker.selectOption(font.id)
@@ -47,11 +49,11 @@ test("all 20 fonts load locally and update hero, section and search headings tog
     await expect(page).toHaveURL(/messenger=max/u)
   }
   await page.getByRole("button", { name: "Next font", exact: true }).click()
-  await expect(picker).toHaveValue("anybody")
+  await expect(picker).toHaveValue("robotocondensed")
   await page.getByRole("button", { name: "Previous font", exact: true }).click()
   await expect(picker).toHaveValue("unbounded")
   await page.getByRole("button", { name: "Reset font", exact: true }).click()
-  await expect(page.locator(".wirecat-landing")).toHaveAttribute("data-heading-font", "anybody")
+  await expect(page.locator(".wirecat-landing")).toHaveAttribute("data-heading-font", "firasansextracondensed")
   const results = await new AxeBuilder({ page }).include(".font-lab").withTags(["wcag2a", "wcag2aa"]).analyze()
   expect(results.violations).toEqual([])
   expect(failures).toEqual([])
@@ -62,8 +64,12 @@ test("Russian rotation uses fonts with Cyrillic; a choice survives reload and fi
   await page.goto("/ru?fonts=1")
   const picker = page.getByRole("combobox", { name: "Шрифты заголовков", exact: true })
   for (const font of fonts) {
-    if (!font.cyrillic) await expect(picker.locator(`option[value="${font.id}"]`)).toBeDisabled()
+    expect(font.cyrillic).toBe(true)
+    await expect(picker.locator(`option[value="${font.id}"]`)).toBeEnabled()
+    await picker.selectOption(font.id)
+    await expect(page.locator(".wirecat-landing")).toHaveAttribute("data-heading-font", font.id)
   }
+  await page.getByRole("button", { name: "Сбросить шрифт", exact: true }).click()
   await page.getByRole("button", { name: "Следующий шрифт", exact: true }).click()
   await expect(page.locator(".wirecat-landing")).toHaveAttribute("data-heading-font", "sofiasanscondensed")
   await picker.selectOption("manrope")
@@ -93,4 +99,14 @@ test("wide display fonts keep the final word and punctuation together on mobile"
   })
   expect(positions[0]).toBe(positions[1])
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+})
+
+test("removed Latin-only choices fall back to Fira and update the shared URL", async ({ page }) => {
+  await page.goto("/en?fonts=1&font=archivo&scenario=commitments#search-playground")
+  await expect(page.locator(".wirecat-landing")).toHaveAttribute("data-heading-font", "firasansextracondensed")
+  await expect(page).toHaveURL(/font=firasansextracondensed/u)
+  await expect(page).toHaveURL(/scenario=commitments/u)
+  const picker = page.getByRole("combobox", { name: "Heading fonts", exact: true })
+  await expect(picker.locator("option")).toHaveCount(8)
+  await expect(picker.locator('option[value="archivo"]')).toHaveCount(0)
 })
