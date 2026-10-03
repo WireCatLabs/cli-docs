@@ -7,14 +7,22 @@
 static [Fumadocs](https://fumadocs.dev) site (Next.js export) in English, Russian and Spanish. It
 writes no tool's pages itself: `pnpm sync` copies each tool's `docs/` from its repository at its
 newest release tag. Cloudflare Pages serves it; GitHub Actions builds and deploys it. How to run it:
-[README.md](README.md).
+  [README.md](README.md).
+
+The portal now also owns shared getting-started, installation, agent and MCP guides in
+`content/docs/`, in English, Russian and Spanish. Tool reference pages remain generated.
 
 ## Where things are
 
 - [docs/DESIGN.md](docs/DESIGN.md) — **start here**: the site map, what every page shows, the rules.
 - [docs/STRUCTURE.md](docs/STRUCTURE.md) — the pages every tool has, and the checks that hold them.
-- [docs/plans/2026-10-02-landing.md](docs/plans/2026-10-02-landing.md) — the next build: the landing
-  page. Approved in outline; the owner was asked about the hero sentence and the logo.
+- [docs/plans/2026-10-02-docs-onboarding.md](docs/plans/2026-10-02-docs-onboarding.md) — the shared
+  installation and five-agent guides, MCP explanation, top messenger/language controls, and checks.
+- [docs/plans/2026-10-02-landing.md](docs/plans/2026-10-02-landing.md) — the earlier landing outline.
+  The implemented design follows the owner’s screenshot and `design/landing/g-home*.html`.
+- [docs/plans/2026-10-02-onboarding.md](docs/plans/2026-10-02-onboarding.md) — separate MAX/Telegram
+  install controls implemented; Windows package installation CI added; findings and next CLI PRs
+  for setup, PATH and Telegram credentials. The reviewed landing design is now implemented locally.
 - [docs/plans/2026-10-01-portal-v1.md](docs/plans/2026-10-01-portal-v1.md) — how the site was built
   and what the spike found; its "Where it stands" section is the status list.
 - [tools.json](tools.json) — the tools: repository, npm package, the language of its pages, summary.
@@ -23,34 +31,37 @@ newest release tag. Cloudflare Pages serves it; GitHub Actions builds and deploy
 
 ## What to read for each next task
 
-### 1. The landing page — the next thing to build
+### 1. The landing page — implemented from the reviewed prototype
 
-1. [docs/plans/2026-10-02-landing.md](docs/plans/2026-10-02-landing.md) — what to build, in order,
-   and how to check it.
-2. [docs/DESIGN.md](docs/DESIGN.md), "The landing page" — the wireframe and where each section's
-   content comes from.
-3. `app/[lang]/(home)/page.tsx` — the current page you replace.
-4. `lib/words.ts` — where every interface word lives, in three languages; add the new ones here.
-5. `scripts/sync.ts`, function `sync` — where to write `content/docs/versions.json` (the tag it used).
+The owner explicitly requested the `design/landing/g-home*.html` design, including the patterned
+background, large typography, demo and all sections. `app/[lang]/(home)/page.tsx` now renders
+`lib/landing/{en,ru,es}.json` with `components/landing.tsx`. Regenerate those snapshots and scoped
+CSS with `node scripts/export-landing.mjs` after a prototype change. Fonts and licences are in
+`public/fonts/`; no external font request is needed. Agent installation commands belong in docs:
+the export replaces the prototype's skill setup and closing command with documentation links.
+Production removes the design controls and uses feature variant 6. Home uses its own header;
+docs retain the separate Fumadocs layout. About now lives at `/{lang}/about` (`lib/about.ts`),
+with custom chatbot/integration details and the owner-supplied `hello@wirecat.dev` contact.
+Russian display headings use Fira Sans Extra Condensed, as selected in commit b41b263; the export preserves each prototype’s data-ff choice. Documentation uses the quieter animated SVG
+logo and highlights Getting started in the header and sidebar on all shared guides.
 
-### 2. max-cli 0.22.0 — the release (lives in max-cli, not here)
+### 2. Release sources
 
-Until max releases, the site cannot build from tags (see "What will bite"). **State on 2026-10-02:** the release
-PR ([#315](https://github.com/leemour/max-cli/pull/315)) is merged as `c9b219f`; `pnpm release:check` passes on
-main; every approved live scenario ran; the report `/home/leemour/Projects/AI/max-cli/docs_ai/releases/0.22.0.md`
-waits for the owner's `Signed off:` line (his rulings NEED-524..526 are in
-`/home/leemour/Projects/AI/max-cli/docs_ai/journal/2026-10-02-release-0.22.0.md`). Then, from max-cli's `main`:
-`bin/release`.
-
-After `bin/release` publishes, run `gh workflow run deploy.yml -R leemour/cli-docs` — the site then
-builds from tags again.
+Verified on 2026-10-02: default `pnpm sync` succeeds from **max v0.22.0** and **tg v0.21.0**.
+The earlier missing-`meta.json` blocker for max v0.21.0 is resolved. Use the default release refs
+for checks; `--ref main` is only for a preview of unreleased tool changes.
 
 ### 3. Translations of the tools' pages
 
-The owner's rule: a separate agent translates, after everything else is done. Read
-[docs/DESIGN.md](docs/DESIGN.md), "Languages", then `lib/source.ts` (the i18n loader: a translated
-page is `<page>.<lang>.md` beside the original). Translations belong in each tool's repository, so
-`pnpm sync` must copy `docs/*.{lang}.md` too — that change is part of the task.
+The full tool guides are translated into English, Russian and Spanish by Codex agents using the
+same model. Durable files live in `translations/{tool}/{slug}.{lang}.md`, with concise start pages
+in `translations/overviews/`. `pnpm sync` captures untouched release pages in ignored
+`content/upstream/`, then validates and installs translations. Source fingerprints in
+`translations/sources.json` are specific to each translated locale; a release change requires
+reviewing each affected translation before updating its fingerprint. Original heading anchors,
+command examples, inline literals and link destinations are checked automatically. Reviewed source
+errata are applied after validation from `scripts/docs-corrections.json` and fail if their exact
+text no longer matches. Review findings are in `docs/reviews/`.
 
 ### 4. Later ideas
 
@@ -60,10 +71,8 @@ one paragraph in [docs/DESIGN.md](docs/DESIGN.md), "Later". None is planned yet;
 
 ## What will bite
 
-- **The daily deploy fails until max releases.** It builds from release tags; max v0.21.0 predates
-  `docs/meta.json`, and `scripts/sync.ts` refuses a tag that fails the structure check. A failed
-  run publishes nothing, so the live site stays as it was. To publish what is on the tools' `main`:
-  `gh workflow run deploy.yml -R leemour/cli-docs -f ref=main`.
+- **Every release tag needs `docs/meta.json`.** `scripts/sync.ts` refuses a tag that fails the
+  structure check. A failed deploy publishes nothing; default sync now works for both tools.
 - **Links between pages need `./`.** Fumadocs' `createRelativeLink` resolves `./usage.md` and leaves
   `usage.md` as a dead link; `sync.ts` writes the `./`. Test: `scripts/sync.test.ts`.
 - **lychee reports every Russian anchor as missing.** It does not decode `%D0…` anchors. The site's
@@ -75,6 +84,8 @@ one paragraph in [docs/DESIGN.md](docs/DESIGN.md), "Later". None is planned yet;
   template's versions list every page three times, once per interface language.
 - **Shiki rejects an unknown fence language** (`cron` in tg's recipes) and fails the build;
   `lib/source.ts` sets `fallbackLanguage: "text"`.
+- **Interactive docs need `.mdx`.** A JSX component in `.md` is discarded by the Markdown
+  compiler. Shared installation uses `installation*.mdx`; link to it with `./installation.mdx`.
 - **One copy of cli-core in each CLI.** max-cli and tg-cli force it with a pnpm override; two copies
   make the "changes something" marks vanish from the generated `commands.md` (RISK-97). Any cli-core
   or cli-messaging bump in a CLI: `pnpm generate`, then check that page has no diff.

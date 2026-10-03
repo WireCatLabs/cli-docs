@@ -1,0 +1,41 @@
+.wirecat-landing .day-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px;
+  margin-top: 32px;
+}
+.wirecat-landing .day-summary > div {
+  border-top: 1px solid var(--app-line);
+  padding-top: 18px;
+}
+.wirecat-landing .day-summary .time {
+  display: block;
+  font-size: 34px;
+  line-height: 1;
+  color: var(--key);
+  text-align: left;
+}
+.wirecat-landing .day-summary h3 {
+  margin: 16px 0 8px;
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+.wirecat-landing .day-summary p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.6;
+}
+@media (max-width: 900px) {
+  .wirecat-landing .day-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 480px) {
+  .wirecat-landing .day-summary {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}

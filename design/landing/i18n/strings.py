@@ -3,8 +3,8 @@ TITLE = ("WireCat · Агент для ваших чатов в Telegram и MAX"
 # English text node -> (Russian, Spanish). Names and commands stay as they are.
 TEXT = {
     "About": ("О проекте", "Acerca de"),
-    "Don't read your chats.": ("Не читайте чаты.", "No leas tus chats."),
-    "Never search a chat again.": ("Хватит листать.", "No leas tus chats."),
+    "Don't read your chats.": ("Не читайте чаты.", "Deja de buscar en tus chats."),
+    "Never search a chat again.": ("Хватит листать.", "Deja de buscar en tus chats."),
     "Just ask.": ("Просто спросите.", "Pregúntale a tu agente."),
     "Ask about them.": ("Спросите агента.", "Pregúntale a tu agente."),
     "Connect Claude Code, Codex or another agent to your messengers. Find who owes what in": (
@@ -18,7 +18,7 @@ TEXT = {
     ),
     "Copy": ("Копировать", "Copiar"),
     "Connect your agent": ("Подключить агента", "Conecta tu agente"),
-    "AI messaging with CLI tools for agents.": ("ИИ-переписка через CLI для агентов.", "Mensajería con IA y herramientas CLI para agentes."),
+    "Messaging tools for your AI agent.": ("ИИ-переписка через CLI для агентов.", "Mensajería con IA y herramientas CLI para agentes."),
     "Free and open source.": ("Бесплатно, с открытым кодом.", "Gratis y de código abierto."),
     "Agent · ~/inbox": ("Агент · ~/inbox", "Agente · ~/inbox"),
     "Replay": ("Повторить", "Repetir"),
@@ -184,14 +184,14 @@ TEXT = {
         "Leer no marca nada como leído. Tú decides en qué chats puede escribir y con qué frecuencia.",
     ),
     "Telegram and MAX, the same commands": ("Telegram и MAX, одни и те же команды", "Telegram y MAX, los mismos comandos"),
-    "Learn one and you know the other.": ("Выучили одну — знаете и другую.", "Aprende uno y ya sabes el otro."),
-    "A Telegram client for the terminal and for AI agents, on your own account.": (
+    "Learn the commands once. Use them in both.": ("Выучили одну — знаете и другую.", "Aprende uno y ya sabes el otro."),
+    "A Telegram client for your terminal and AI agents, using your own account.": (
         "Клиент Telegram для терминала и ИИ-агентов, на вашем собственном аккаунте.",
         "Un cliente de Telegram para la terminal y para agentes de IA, con tu propia cuenta.",
     ),
     "Docs": ("Документация", "Documentación"),
     "MAX Messenger": ("Мессенджер MAX", "MAX Messenger"),
-    "Your MAX bots through the official Bot API, and your personal account.": (
+    "Connect your MAX account or use your bots through the official Bot API.": (
         "Ваши боты MAX через официальный Bot API и ваш личный аккаунт.",
         "Tus bots de MAX con la Bot API oficial, y tu cuenta personal.",
     ),
@@ -209,20 +209,20 @@ TEXT = {
     "Block 1/6": ("Блок 1/6", "Bloque 1/6"),
     "Bots": ("Боты", "Bots"),
     "Groups you run": ("Ваши группы", "Tus grupos"),
-    "Your own account, as one more of your devices: every chat, its history, groups, channels and contacts.": (
+    "Connect your own account, just like adding another device. Access your chats, history, groups, channels and contacts.": (
         "Ваш аккаунт как ещё одно ваше устройство: все чаты с историей, группы, каналы и контакты.",
         "Tu propia cuenta, como un dispositivo más: todos los chats con su historial, grupos, canales y contactos.",
     ),
-    "Unread in every chat at once.": ("Непрочитанное во всех чатах сразу.", "Lo no leído de todos los chats a la vez."),
-    "Other people's messages, and nothing gets marked read.": ("Чужие сообщения, и ничего не отмечается прочитанным.", "Los mensajes de otros, y nada se marca como leído."),
+    "Unread messages in one place.": ("Непрочитанное во всех чатах сразу.", "Lo no leído de todos los chats a la vez."),
+    "See incoming messages without marking them as read.": ("Чужие сообщения, и ничего не отмечается прочитанным.", "Los mensajes de otros, y nada se marca como leído."),
     "Who owes what.": ("Кто что должен.", "Quién debe qué."),
-    "Everything said since the last review, yours too, in one call.": ("Всё сказанное с прошлого разбора, и ваше тоже, одним вызовом.", "Todo lo dicho desde la última revisión, lo tuyo también, en una llamada."),
+    "Review what you and others have promised since your last check-in.": ("Всё сказанное с прошлого разбора, и ваше тоже, одним вызовом.", "Todo lo dicho desde la última revisión, lo tuyo también, en una llamada."),
     "Search years of history offline.": ("Поиск по годам переписки без сети.", "Busca en años de historial sin conexión."),
     "In the copy of your chats kept on your computer.": ("В копии чатов на вашем компьютере.", "En la copia de tus chats guardada en tu ordenador."),
     "Voice notes as text.": ("Голосовые — текстом.", "Audios convertidos en texto."),
-    "By Telegram, or by a speech model on your machine.": ("Силами Telegram или моделью на вашем компьютере.", "Con Telegram o con un modelo de voz en tu ordenador."),
+    "Transcribe with Telegram or a speech model running on your computer.": ("Силами Telegram или моделью на вашем компьютере.", "Con Telegram o con un modelo de voz en tu ordenador."),
     "Send later.": ("Отправка по времени.", "Envío programado."),
-    "Telegram delivers it on time, with your laptop shut.": ("Telegram доставит вовремя, даже если ноутбук закрыт.", "Telegram lo entrega a tiempo, con el portátil cerrado."),
+    "Telegram delivers your message on schedule, even when your laptop is closed.": ("Telegram доставит вовремя, даже если ноутбук закрыт.", "Telegram lo entrega a tiempo, con el portátil cerrado."),
     "Everything else you do by hand.": ("Всё, что вы делаете руками.", "Todo lo que haces a mano."),
     "Replies, files, reactions, polls, edits, forwards, pins.": ("Ответы, файлы, реакции, опросы, правки, пересылки, закрепы.", "Respuestas, archivos, reacciones, encuestas, ediciones, reenvíos, fijados."),
     "How to use your account →": ("Как работать с аккаунтом →", "Cómo usar tu cuenta →"),
@@ -259,11 +259,11 @@ TEXT = {
         "Переименовать, добавить и удалить участников и админов, сбросить ссылку-приглашение.",
         "Renombrar, añadir y quitar miembros y administradores, renovar el enlace de invitación.",
     ),
-    "Moderation by your rules.": ("Модерация по вашим правилам.", "Moderación con tus reglas."),
+    "Moderation by your rules.": ("Модерация по правилам.", "Moderación con tus reglas."),
     "Links, forwards and flood, applied when you run them.": ("Ссылки, пересылки и флуд — когда вы её запускаете.", "Enlaces, reenvíos y flood, cuando tú la ejecutas."),
     "How to run a group →": ("Как вести группу →", "Cómo gestionar un grupo →"),
     "Why it works this well": ("Почему это работает так хорошо", "Por qué funciona tan bien"),
-    "Built for agents and scripts first, so it is quick, predictable and leaves a trail.": (
+    "Built for agents and scripts: fast, predictable and easy to audit.": (
         "Сделано в первую очередь для агентов и скриптов: быстро, предсказуемо и с журналом.",
         "Hecho primero para agentes y scripts: rápido, predecible y deja rastro.",
     ),
@@ -272,12 +272,12 @@ TEXT = {
         "Поиск идёт по копии чатов на вашем компьютере. Без сети и без ожидания.",
         "La búsqueda funciona sobre la copia de tus chats en tu ordenador. Sin red, sin esperas.",
     ),
-    "Always current": ("Всегда свежее", "Siempre al día"),
-    "A background service keeps that copy up to date, and catches up after a restart.": (
+    "Always up to date": ("Всегда свежее", "Siempre al día"),
+    "A background service keeps your local history up to date and syncs missed messages after a restart.": (
         "Фоновая служба держит копию в актуальном состоянии и догоняет пропущенное после перезапуска.",
         "Un servicio en segundo plano mantiene la copia al día y se pone al corriente tras un reinicio.",
     ),
-    "Many accounts, many bots": ("Много аккаунтов и ботов", "Varias cuentas, varios bots"),
+    "Multiple accounts and bots": ("Много аккаунтов и ботов", "Varias cuentas, varios bots"),
     "Each profile and each bot has a name, and the name is the first word of the command.": (
         "У каждого профиля и бота есть имя, и это имя — первое слово команды.",
         "Cada perfil y cada bot tiene un nombre, y ese nombre es la primera palabra del comando.",
@@ -308,12 +308,12 @@ TEXT = {
         "Un valor JSON en stdout, errores en stderr y un código de salida fijo para cada fallo.",
     ),
     "Runs everywhere": ("Работает везде", "Funciona en todas partes"),
-    "Windows, macOS and Linux, on Node 22 or newer. No native module to build.": (
+    "Windows, macOS and Linux with Node.js 22 or later. No native modules to compile.": (
         "Windows, macOS и Linux, Node 22 и новее. Ничего не нужно собирать.",
         "Windows, macOS y Linux, con Node 22 o posterior. Sin módulos nativos que compilar.",
     ),
     "Give your agent your inbox tonight": ("Отдайте агенту входящие уже сегодня", "Dale tu bandeja de entrada a tu agente esta noche"),
-    "AI messaging with CLI tools for agents. Your Telegram and MAX, for you, your scripts and your AI agents.": (
+    "Your Telegram and MAX conversations, connected to your scripts and AI agents.": (
         "ИИ-переписка через CLI для агентов. Ваши Telegram и MAX — для вас, ваших скриптов и ИИ-агентов.",
         "Mensajería con IA y herramientas CLI para agentes. Tu Telegram y tu MAX, para ti, tus scripts y tus agentes de IA.",
     ),
@@ -345,7 +345,7 @@ SCRIPT = [
     ('label: "Planes + peeking cats"', 'label: "Самолёты + выглядывающие коты"', 'label: "Aviones + gatos asomados"'),
     ('label: "All the cats"', 'label: "Все коты"', 'label: "Todos los gatos"'),
     ('label: "Planes + voice waves"', 'label: "Самолёты + звуковые волны"', 'label: "Aviones + ondas de voz"'),
-    ("`Don't read your chats. <span>Ask about them.</span>`", "`Не читайте чаты. <span>Спросите агента.</span>`", "`No leas tus chats. <span>Pregúntale a tu agente.</span>`"),
+    ("`Don't read your chats. <span>Ask about them.</span>`", "`Не читайте чаты. <span>Спросите агента.</span>`", "`Deja de buscar en tus chats. <span>Pregúntale a tu agente.</span>`"),
     ("`Stop scrolling. <span>Start asking.</span>`", "`Хватит листать. <span>Просто спросите.</span>`", "`Deja de hacer scroll. <span>Empieza a preguntar.</span>`"),
     ("`Your agent reads the chats. <span>You get the point.</span>`", "`Агент читает чаты. <span>Вы получаете суть.</span>`", "`Tu agente lee los chats. <span>Tú, lo importante.</span>`"),
     ("`Never search a chat again. <span>Just ask.</span>`", "`Больше никакого поиска по чатам. <span>Просто спросите.</span>`", "`No vuelvas a buscar en un chat. <span>Solo pregunta.</span>`"),
@@ -412,7 +412,6 @@ CODE = [
     ('"Hiking club"', '"Походы"', '"Senderismo"'),
     ('"Hiking"', '"Походы"', '"Senderismo"'),
     ('"Hiking 2027"', '"Походы 2027"', '"Senderismo 2027"'),
-    ('"The minutes"', '"Протокол"', '"El acta"'),
     ('"Team"', '"Команда"', '"Equipo"'),
     ('"Residents"', '"Жильцы"', '"Vecinos"'),
     ('"Book club"', '"Книжный клуб"', '"Club de lectura"'),
@@ -430,3 +429,514 @@ CODE = [
     ('"I paid the taxi, 60"', '"Я заплатил за такси, 60"', '"Yo pagué el taxi, 60"'),
     ('"Hi love, is your flight still at six? Call me when you land…"', '"Привет, рейс всё ещё в шесть? Позвони, как приземлишься…"', '"Hola, cariño, ¿tu vuelo sigue a las seis? Llámame cuando aterrices…"'),
 ]
+
+# Landing copy revision: purpose, search, controls and project direction.
+TEXT.update({
+    "Connect Claude Code, Codex or another agent to": [
+        "Подключите Claude Code, Codex или другого агента к",
+        "Conecta Claude Code, Codex u otro agente a"
+    ],
+    ". Find what matters, keep track of commitments and reply with the full context.": [
+        ". Находите важное, вспоминайте договорённости и отвечайте с учётом всей переписки.",
+        ". Encuentra lo importante, recupera acuerdos y responde con todo el contexto."
+    ],
+    "See what needs an answer, which deadlines are close and what changed while you were away. Reading leaves messages unread.": [
+        "Узнайте, где ждут ответа, какие сроки приближаются и что изменилось, пока вас не было. Сообщения остаются непрочитанными.",
+        "Descubre quién espera una respuesta, qué plazos se acercan y qué cambió mientras no estabas. Los mensajes siguen sin leer."
+    ],
+    "Keep track of agreements.": [
+        "Помните о договорённостях.",
+        "Ten presentes los acuerdos."
+    ],
+    "Find it, even with a typo.": [
+        "Находите даже с опечаткой.",
+        "Encuentra incluso con una errata."
+    ],
+    "Search your local chat archive by full words, partial words or approximate spelling.": [
+        "Ищите сразу по чатам: по словам, части слова или неточному написанию — в локальном архиве.",
+        "Busca en varios chats por palabras, partes de palabras o escritura aproximada, en tu archivo local."
+    ],
+    "News from your subscriptions.": [
+        "Новости из ваших подписок.",
+        "Noticias de tus suscripciones."
+    ],
+    "Ask your agent for a digest of the channels you follow, on the topics you choose, with links to the posts.": [
+        "Попросите агента собрать новости из ваших каналов по нужным темам, со ссылками на публикации.",
+        "Pide a tu agente un resumen de los canales que sigues, sobre los temas que elijas y con enlaces a las publicaciones."
+    ],
+    "Separate profiles, clear permissions": [
+        "Отдельные профили и права",
+        "Perfiles y permisos separados"
+    ],
+    "Give your agent its own profile. Choose which commands it may run, where it may send and which actions need your approval.": [
+        "Выделите агенту отдельный профиль. Задайте доступные команды, получателей и действия, которые требуют вашего подтверждения.",
+        "Dale a tu agente un perfil propio. Elige qué comandos puede ejecutar, a quién puede escribir y qué acciones requieren tu aprobación."
+    ],
+    "Messages are data, not orders": [
+        "Сообщения — данные, а не команды",
+        "Los mensajes son datos, no órdenes"
+    ],
+    "Read tools tell the agent to treat chat text as data. Permissions and send confirmations help limit actions if a message tries to redirect it.": [
+        "Инструменты чтения обозначают текст чатов как данные. Права доступа и подтверждение отправки помогают ограничить действия, если чужое сообщение пытается управлять агентом.",
+        "Las herramientas de lectura indican que el texto del chat son datos. Los permisos y las confirmaciones de envío ayudan a limitar acciones si un mensaje intenta dirigir al agente."
+    ],
+    "Action history": [
+        "История действий",
+        "Un historial de acciones"
+    ],
+    "Check send attempts in the journal and record command runs when needed. Logs keep IDs, statuses and timings, without message text.": [
+        "Смотрите попытки отправки в журнале и при необходимости записывайте запуски команд. В логах — ID, статусы и время выполнения, без текста сообщений.",
+        "Consulta los intentos de envío en el registro y guarda las ejecuciones cuando lo necesites. Los registros contienen IDs, estados y tiempos, sin texto de mensajes."
+    ],
+    "We want our messengers back under our control": [
+        "Мы хотим вернуть контроль над своими мессенджерами",
+        "Queremos recuperar el control de nuestros mensajeros"
+    ],
+    "We are building WireCat for the conversations, people and agreements that matter to us.": [
+        "Мы создаём WireCat для переписок, людей и договорённостей, которые для нас важны.",
+        "Creamos WireCat para las conversaciones, las personas y los acuerdos que nos importan."
+    ],
+    "Why we started": [
+        "Зачем мы это делаем",
+        "Por qué empezamos"
+    ],
+    "We want to understand what is happening without spending hours in chats: what needs attention, which facts matter and what we agreed to do. Our goal is to help every question get an answer and every promise get followed through.": [
+        "Мы хотим быстро понимать, что происходит: что требует внимания, какие факты нельзя упустить и о чём мы договорились. Наша цель — помогать доводить вопросы до ответа, а обещания — до результата.",
+        "Queremos entender qué ocurre sin pasar horas en chats: qué requiere atención, qué hechos importan y qué acordamos hacer. Nuestro objetivo es ayudar a que cada pregunta reciba respuesta y cada promesa se cumpla."
+    ],
+    "What we are building today": [
+        "Что мы делаем сейчас",
+        "Qué construimos hoy"
+    ],
+    "Open-source tools for Telegram and MAX that connect your agent to your conversations. It can find messages, gather context and help you answer. For customer conversations, you can build bots that use the history you make available instead of starting from scratch each time.": [
+        "Открытые инструменты для Telegram и MAX, которые подключают вашего агента к перепискам. Он может искать сообщения, собирать контекст и помогать с ответами. Для общения с клиентами можно строить ботов, которые учитывают доступную им историю, а не начинают каждый разговор с нуля.",
+        "Herramientas de código abierto para Telegram y MAX que conectan tu agente con tus conversaciones. Puede encontrar mensajes, reunir contexto y ayudarte a responder. Puedes crear bots para clientes que usen el historial disponible en lugar de empezar de cero."
+    ],
+    "Where we want to go": [
+        "Куда хотим двигаться",
+        "Hacia dónde queremos ir"
+    ],
+    "Our next direction is connecting contacts across messengers and helping you manage relationships: one person, the shared history, open questions and agreements. This is our plan for the project; today WireCat provides the CLI tools to build on.": [
+        "Дальше мы хотим объединять контакты между мессенджерами и помогать управлять отношениями: один человек, общая история, открытые вопросы и договорённости. Это направление развития проекта; сегодня WireCat даёт CLI-инструменты, на которых можно строить такие сценарии.",
+        "Queremos unir contactos entre mensajeros y ayudarte a gestionar relaciones: una persona, su historial, preguntas abiertas y acuerdos. Es nuestro plan para el proyecto; hoy WireCat ofrece las herramientas CLI sobre las que construir."
+    ],
+    "Built in the open": [
+        "Развиваем открыто",
+        "Desarrollo abierto"
+    ],
+    "The source code is on GitHub under the MIT licence. You can inspect how the tools handle data, read the security model, report a problem or contribute a change. The CLI runs on your computer; you choose your agent and which conversations it can access.": [
+        "Исходный код доступен на GitHub под лицензией MIT. Можно проверить, как инструменты работают с данными, прочитать модель безопасности, сообщить о проблеме или предложить изменение. CLI работает на вашем компьютере; вы выбираете агента и доступные ему переписки.",
+        "El código está en GitHub con licencia MIT. Puedes revisar cómo se tratan los datos, leer el modelo de seguridad, comunicar un problema o contribuir. El CLI se ejecuta en tu ordenador; tú eliges el agente y las conversaciones a las que accede."
+    ],
+    "Security model": [
+        "Модель безопасности",
+        "Modelo de seguridad"
+    ],
+    "Discuss an idea": [
+        "Обсудить идею",
+        "Comentar una idea"
+    ]
+})
+
+# Translatable comments inside the terminal layout.
+CODE.extend([
+    [
+        "# <b>Keep track of agreements.</b> Review what you and others have promised since your last check-in.",
+        "# <b>Помните о договорённостях.</b> Всё сказанное с прошлого разбора, и ваше тоже, одним вызовом.",
+        "# <b>Ten presentes los acuerdos.</b> Todo lo dicho desde la última revisión, lo tuyo también, en una llamada."
+    ],
+    [
+        "# <b>Find it, even with a typo.</b> Search your local chat archive by full words, partial words or approximate spelling.",
+        "# <b>Находите даже с опечаткой.</b> Ищите сразу по чатам: по словам, части слова или неточному написанию — в локальном архиве.",
+        "# <b>Encuentra incluso con una errata.</b> Busca en varios chats por palabras, partes de palabras o escritura aproximada, en tu archivo local."
+    ],
+    [
+        "# <b>News from your subscriptions.</b> Ask your agent for a digest of the channels you follow, on the topics you choose, with links to the posts.",
+        "# <b>Новости из ваших подписок.</b> Попросите агента собрать новости из ваших каналов по нужным темам, со ссылками на публикации.",
+        "# <b>Noticias de tus suscripciones.</b> Pide a tu agente un resumen de los canales que sigues, sobre los temas que elijas y con enlaces a las publicaciones."
+    ]
+])
+
+CODE.append(('"Tech news"', '"Новости технологий"', '"Noticias de tecnología"'))
+
+TEXT.update({"Scenario": ("Сценарий", "Escenario")})
+
+# Simplified benefits; About moves to a separate page.
+TEXT.update({
+    "Flexible permissions": [
+        "Гибкая настройка прав",
+        "Permisos flexibles"
+    ],
+    "You control what your agent can do: read only, run allowed commands or ask your permission before an action.": [
+        "Вы контролируете, что может выполнять агент: только читать, запускать разрешённые команды или спрашивать ваше разрешение перед действием.",
+        "Tú controlas qué puede hacer el agente: solo leer, ejecutar comandos permitidos o pedirte permiso antes de actuar."
+    ],
+    "Secure": [
+        "Безопасно",
+        "Seguro"
+    ],
+    "Secrets stay in the system keyring. Passwords, login codes, phone numbers and tokens never go on the command line. Protection against prompt injection helps prevent chat messages from steering your agent.": [
+        "Секреты хранятся в системном хранилище паролей. Пароли, коды входа, номера телефонов и токены не попадают в командную строку. Защита от prompt injection помогает не допустить, чтобы чужие сообщения управляли агентом.",
+        "Los secretos se guardan en el llavero del sistema. Contraseñas, códigos de acceso, teléfonos y tokens no aparecen en la línea de comandos. La protección contra prompt injection ayuda a impedir que los mensajes dirijan al agente."
+    ]
+})
+
+# Search, local storage and the user benefit of multiple accounts.
+TEXT.update({
+    "Powerful search": [
+        "Мощный поиск",
+        "Búsqueda potente"
+    ],
+    "Find messages even with typos or incomplete words. Search across chats and channels, narrow results by sender or date and recover the surrounding conversation.": [
+        "Находите сообщения даже с опечатками или по части слова. Ищите по чатам и каналам, уточняйте автора и дату и восстанавливайте контекст переписки.",
+        "Encuentra mensajes incluso con erratas o palabras incompletas. Busca en chats y canales, filtra por autor o fecha y recupera el contexto de la conversación."
+    ],
+    "Local storage": [
+        "Локальное хранение",
+        "Almacenamiento local"
+    ],
+    "Your chat history stays in a local cache on your computer. Search it offline, create backups and restore your archive when needed.": [
+        "История переписок хранится в локальном кеше на вашем компьютере. Ищите без интернета, создавайте бэкапы и восстанавливайте архив при необходимости.",
+        "El historial se guarda en una caché local en tu ordenador. Busca sin conexión, crea copias de seguridad y restaura el archivo cuando lo necesites."
+    ],
+    "Switch easily between accounts and bots. Keep work and personal conversations separate, or ask your agent to gather context from several accounts.": [
+        "Удобно переключайтесь между аккаунтами и ботами. Разделяйте рабочие и личные переписки или поручайте агенту собирать общий контекст из нескольких аккаунтов.",
+        "Cambia fácilmente entre cuentas y bots. Separa conversaciones de trabajo y personales, o pide a tu agente reunir contexto de varias cuentas."
+    ],
+    "Secrets stay in the system keyring. Passwords, login codes, phone numbers and tokens do not leak into logs or command history. Protection against prompt injection helps prevent chat messages from steering your agent.": [
+        "Секреты хранятся в системном хранилище паролей. Пароли, коды входа и номера телефонов не утекают. Защита от prompt injection не даст злоумышленникам управлять агентом.",
+        "Los secretos se guardan en el llavero del sistema. Contraseñas, códigos de acceso, teléfonos y tokens no se filtran a los registros ni al historial de comandos. La protección contra prompt injection ayuda a impedir que los mensajes dirijan al agente."
+    ]
+})
+
+# Benefit-led closing block; alternatives use the design switches.
+TEXT.update({
+    "Clarity in your conversations. Time for what matters.": [
+        "Ясность в переписке. Время для важного.",
+        "Claridad en tus conversaciones. Tiempo para lo importante."
+    ],
+    "Understand what is happening, revisit agreements and find answers without spending hours scrolling through chats.": [
+        "Быстро понимайте, что происходит, возвращайтесь к договорённостям и находите ответы без долгого просмотра чатов.",
+        "Entiende qué ocurre, recupera acuerdos y encuentra respuestas sin pasar horas recorriendo chats."
+    ],
+    "Closing": [
+        "Финал",
+        "Cierre"
+    ]
+})
+
+# Short closing; full marketing copy is preserved in docs/MARKETING.md.
+TEXT.update({"Time for what matters.": ("Время для важного.", "Tiempo para lo importante.")})
+
+TEXT.update({"Continue the conversation with the full context.": ("Продолжайте разговор с полным контекстом.", "Continúa la conversación con todo el contexto.")})
+
+TEXT.update({
+    "Paste this command into your agent’s chat or run it in a terminal to install the tool and connect Telegram to your agent.": [
+        "Вставьте команду в чат с агентом или запустите в терминале — чтобы установить инструмент и подключить Telegram к вашему агенту.",
+        "Pega este comando en el chat de tu agente o ejecútalo en una terminal para instalar la herramienta y conectar Telegram a tu agente."
+    ]
+})
+
+# User-facing feature tasks; implementation details stay in the docs.
+TEXT.update({'Less busywork in your chats': ('Меньше рутины в мессенджерах',
+                                          'Menos tareas repetitivas en tus chats'),
+ 'Keep track of agreements, help customers and keep your groups useful. Ask your agent to work through Telegram and MAX.': ('Следите '
+                                                                                                                            'за '
+                                                                                                                            'договорённостями, '
+                                                                                                                            'помогайте '
+                                                                                                                            'клиентам '
+                                                                                                                            'и '
+                                                                                                                            'поддерживайте '
+                                                                                                                            'порядок '
+                                                                                                                            'в '
+                                                                                                                            'группах. '
+                                                                                                                            'Поручите '
+                                                                                                                            'агенту '
+                                                                                                                            'работу '
+                                                                                                                            'с '
+                                                                                                                            'Telegram '
+                                                                                                                            'и '
+                                                                                                                            'MAX.',
+                                                                                                                            'Ten '
+                                                                                                                            'presentes '
+                                                                                                                            'los '
+                                                                                                                            'acuerdos, '
+                                                                                                                            'ayuda '
+                                                                                                                            'a '
+                                                                                                                            'clientes '
+                                                                                                                            'y '
+                                                                                                                            'cuida '
+                                                                                                                            'tus '
+                                                                                                                            'grupos. '
+                                                                                                                            'Pide '
+                                                                                                                            'a '
+                                                                                                                            'tu '
+                                                                                                                            'agente '
+                                                                                                                            'que '
+                                                                                                                            'trabaje '
+                                                                                                                            'con '
+                                                                                                                            'Telegram '
+                                                                                                                            'y '
+                                                                                                                            'MAX.'),
+ 'Customers, teams and announcements': ('Клиенты, команды и рассылки', 'Clientes, equipos y anuncios'),
+ 'Use MAX bots to reach customers and teams: announcements, helpful replies and simple actions. Telegram bot connections and access settings are also available.': ('Общайтесь '
+                                                                                                                                                                    'с '
+                                                                                                                                                                    'клиентами '
+                                                                                                                                                                    'и '
+                                                                                                                                                                    'командой '
+                                                                                                                                                                    'через '
+                                                                                                                                                                    'ботов '
+                                                                                                                                                                    'MAX: '
+                                                                                                                                                                    'рассылки, '
+                                                                                                                                                                    'ответы '
+                                                                                                                                                                    'с '
+                                                                                                                                                                    'контекстом '
+                                                                                                                                                                    'и '
+                                                                                                                                                                    'понятные '
+                                                                                                                                                                    'действия. '
+                                                                                                                                                                    'Подключение '
+                                                                                                                                                                    'ботов '
+                                                                                                                                                                    'Telegram '
+                                                                                                                                                                    'и '
+                                                                                                                                                                    'настройка '
+                                                                                                                                                                    'доступа '
+                                                                                                                                                                    'тоже '
+                                                                                                                                                                    'доступны.',
+                                                                                                                                                                    'Comunícate '
+                                                                                                                                                                    'con '
+                                                                                                                                                                    'clientes '
+                                                                                                                                                                    'y '
+                                                                                                                                                                    'equipos '
+                                                                                                                                                                    'mediante '
+                                                                                                                                                                    'bots '
+                                                                                                                                                                    'de '
+                                                                                                                                                                    'MAX: '
+                                                                                                                                                                    'anuncios, '
+                                                                                                                                                                    'respuestas '
+                                                                                                                                                                    'con '
+                                                                                                                                                                    'contexto '
+                                                                                                                                                                    'y '
+                                                                                                                                                                    'acciones '
+                                                                                                                                                                    'sencillas. '
+                                                                                                                                                                    'También '
+                                                                                                                                                                    'puedes '
+                                                                                                                                                                    'conectar '
+                                                                                                                                                                    'bots '
+                                                                                                                                                                    'de '
+                                                                                                                                                                    'Telegram '
+                                                                                                                                                                    'y '
+                                                                                                                                                                    'configurar '
+                                                                                                                                                                    'sus '
+                                                                                                                                                                    'permisos.'),
+ 'Group broadcasts.': ('Групповые рассылки.', 'Anuncios a grupos.'),
+ 'Ask your agent to send an announcement to the groups and channels you choose.': ('Попросите агента '
+                                                                                   'разослать объявление в '
+                                                                                   'выбранные группы и '
+                                                                                   'каналы.',
+                                                                                   'Pide a tu agente que '
+                                                                                   'envíe un anuncio a los '
+                                                                                   'grupos y canales que '
+                                                                                   'elijas.'),
+ 'Personalised messages.': ('Персонализация.', 'Mensajes personalizados.'),
+ 'Let your agent tailor each message using the customer details you provide.': ('Агент подготовит разные '
+                                                                                'сообщения для клиентов по '
+                                                                                'данным, которые вы ему '
+                                                                                'передадите.',
+                                                                                'Tu agente adapta cada '
+                                                                                'mensaje con los datos del '
+                                                                                'cliente que le '
+                                                                                'proporciones.'),
+ 'Replies with context.': ('Ответы с контекстом.', 'Respuestas con contexto.'),
+ 'Give your agent a knowledge base or conversation history to help it answer customer questions.': ('Передайте '
+                                                                                                    'агенту '
+                                                                                                    'базу '
+                                                                                                    'знаний '
+                                                                                                    'или '
+                                                                                                    'историю '
+                                                                                                    'обращений, '
+                                                                                                    'чтобы '
+                                                                                                    'он '
+                                                                                                    'помогал '
+                                                                                                    'отвечать '
+                                                                                                    'на '
+                                                                                                    'вопросы '
+                                                                                                    'клиентов.',
+                                                                                                    'Dale a '
+                                                                                                    'tu '
+                                                                                                    'agente '
+                                                                                                    'una '
+                                                                                                    'base de '
+                                                                                                    'conocimientos '
+                                                                                                    'o el '
+                                                                                                    'historial '
+                                                                                                    'de '
+                                                                                                    'consultas '
+                                                                                                    'para '
+                                                                                                    'ayudarle '
+                                                                                                    'a '
+                                                                                                    'responder '
+                                                                                                    'a tus '
+                                                                                                    'clientes.'),
+ 'Team notifications.': ('Уведомления команды.', 'Avisos al equipo.'),
+ 'Keep people informed about requests, results and changes, with the files they need.': ('Сообщайте о новых '
+                                                                                         'заявках, '
+                                                                                         'результатах и '
+                                                                                         'изменениях — '
+                                                                                         'вместе с нужными '
+                                                                                         'файлами.',
+                                                                                         'Informa sobre '
+                                                                                         'solicitudes, '
+                                                                                         'resultados y '
+                                                                                         'cambios, con los '
+                                                                                         'archivos '
+                                                                                         'necesarios.'),
+ 'Buttons and clear choices.': ('Кнопки и понятные сценарии.', 'Botones y opciones claras.'),
+ 'Help people choose an action, open a link or respond with a tap.': ('Помогите пользователю выбрать '
+                                                                      'действие, открыть ссылку или ответить '
+                                                                      'одним нажатием.',
+                                                                      'Ayuda a elegir una acción, abrir un '
+                                                                      'enlace o responder con un toque.'),
+ 'Control what gets sent.': ('Контроль отправок.', 'Control de envíos.'),
+ 'Choose who the bot may contact and check which sends succeeded or need attention.': ('Выберите, кому бот '
+                                                                                       'может писать, и '
+                                                                                       'проверяйте, какие '
+                                                                                       'отправки прошли, а '
+                                                                                       'где возникла ошибка.',
+                                                                                       'Elige a quién puede '
+                                                                                       'escribir el bot y '
+                                                                                       'revisa qué envíos se '
+                                                                                       'completaron o '
+                                                                                       'requieren atención.'),
+ 'Questions, discussions and community health': ('Вопросы, обсуждения и порядок',
+                                                 'Preguntas, debates y comunidad'),
+ 'Keep your community useful: unanswered questions, clear decisions and conversations that follow your rules.': ('Помогайте '
+                                                                                                                 'участникам '
+                                                                                                                 'получать '
+                                                                                                                 'ответы, '
+                                                                                                                 'сохраняйте '
+                                                                                                                 'решения '
+                                                                                                                 'и '
+                                                                                                                 'поддерживайте '
+                                                                                                                 'порядок '
+                                                                                                                 'в '
+                                                                                                                 'обсуждениях.',
+                                                                                                                 'Ayuda '
+                                                                                                                 'a '
+                                                                                                                 'que '
+                                                                                                                 'los '
+                                                                                                                 'miembros '
+                                                                                                                 'reciban '
+                                                                                                                 'respuestas, '
+                                                                                                                 'conserva '
+                                                                                                                 'las '
+                                                                                                                 'decisiones '
+                                                                                                                 'y '
+                                                                                                                 'cuida '
+                                                                                                                 'los '
+                                                                                                                 'debates.'),
+ 'Question monitoring.': ('Мониторинг вопросов.', 'Seguimiento de preguntas.'),
+ 'Find questions left without an answer so members get the help they came for.': ('Находите вопросы, '
+                                                                                  'оставшиеся без ответа, '
+                                                                                  'чтобы участники получали '
+                                                                                  'нужную помощь.',
+                                                                                  'Encuentra preguntas sin '
+                                                                                  'respuesta para que los '
+                                                                                  'miembros reciban la ayuda '
+                                                                                  'que buscan.'),
+ 'Group activity.': ('Аналитики.', 'Analítica.'),
+ 'Who joined, left, was added or removed, and who did it.': ('Кто вступил, вышел, кого добавили или удалили '
+                                                             '— и кто это сделал.',
+                                                             'Quién entró, salió, fue añadido o expulsado, y '
+                                                             'quién lo hizo.'),
+ 'Keep discussions on track.': ('Контроль дискуссий.', 'Control de debates.'),
+ 'Ask your agent to flag spam, insults and conflicts so you can step in early.': ('Попросите агента отметить '
+                                                                                  'спам, ругательства и '
+                                                                                  'конфликты, чтобы вовремя '
+                                                                                  'вмешаться.',
+                                                                                  'Pide a tu agente que '
+                                                                                  'señale spam, insultos y '
+                                                                                  'conflictos para poder '
+                                                                                  'intervenir a tiempo.'),
+ 'Choose which violations to flag, which messages to delete and when to remove a participant.': ('Задайте, '
+                                                                                                 'какие '
+                                                                                                 'нарушения '
+                                                                                                 'отмечать, '
+                                                                                                 'какие '
+                                                                                                 'сообщения '
+                                                                                                 'удалять и '
+                                                                                                 'когда '
+                                                                                                 'удалять '
+                                                                                                 'участника.',
+                                                                                                 'Elige qué '
+                                                                                                 'infracciones '
+                                                                                                 'señalar, '
+                                                                                                 'qué '
+                                                                                                 'mensajes '
+                                                                                                 'borrar y '
+                                                                                                 'cuándo '
+                                                                                                 'expulsar a '
+                                                                                                 'un '
+                                                                                                 'participante.'),
+ 'Discussion summaries.': ('Итоги обсуждений.', 'Resúmenes de debates.'),
+ 'Get the decisions, open questions and next steps without rereading the whole conversation.': ('Получайте '
+                                                                                                'решения, '
+                                                                                                'открытые '
+                                                                                                'вопросы и '
+                                                                                                'следующие '
+                                                                                                'шаги без '
+                                                                                                'перечитывания '
+                                                                                                'всей '
+                                                                                                'переписки.',
+                                                                                                'Recibe las '
+                                                                                                'decisiones, '
+                                                                                                'preguntas '
+                                                                                                'pendientes '
+                                                                                                'y próximos '
+                                                                                                'pasos sin '
+                                                                                                'releer toda '
+                                                                                                'la '
+                                                                                                'conversación.'),
+ 'Group management.': ('Управление группой.', 'Gestión del grupo.'),
+ 'Delegate routine invitations, admin changes and invite-link updates to your agent.': ('Делегируйте агенту '
+                                                                                        'рутину: приглашение '
+                                                                                        'участников, смену '
+                                                                                        'администраторов и '
+                                                                                        'обновление ссылок.',
+                                                                                        'Delega las '
+                                                                                        'invitaciones, los '
+                                                                                        'cambios de '
+                                                                                        'administradores y '
+                                                                                        'la renovación de '
+                                                                                        'enlaces en tu '
+                                                                                        'agente.')})
+
+# Both messengers support bot messaging in tg v0.22 / max v0.23.
+TEXT['Use Telegram and MAX bots to reach customers and teams: announcements, helpful replies and simple actions.'] = ('Общайтесь с клиентами и командами через ботов Telegram и MAX: рассылки, полезные ответы и простые действия.', 'Usa bots de Telegram y MAX para comunicarte con clientes y equipos: anuncios, respuestas útiles y acciones sencillas.')
+
+# Reviewed English and Spanish landing copy; Russian wording is preserved.
+TEXT.update({'Your Telegram and MAX conversations, connected to your scripts and AI agents.': ('ИИ-переписка через CLI для агентов. Ваши Telegram и MAX — для вас, ваших скриптов и ИИ-агентов.', 'Tus conversaciones de Telegram y MAX, conectadas a tus scripts y agentes de IA.'), 'Messaging tools for your AI agent.': ('ИИ-переписка через CLI для агентов.', 'Herramientas de mensajería para tu agente de IA.'), 'Connect your own account, just like adding another device. Access your chats, history, groups, channels and contacts.': ('Ваш аккаунт как ещё одно ваше устройство: все чаты с историей, группы, каналы и контакты.', 'Conecta tu cuenta como si añadieras otro dispositivo. Accede a tus chats, historial, grupos, canales y contactos.'), 'See incoming messages without marking them as read.': ('Чужие сообщения, и ничего не отмечается прочитанным.', 'Consulta los mensajes recibidos sin marcarlos como leídos.'), 'Review what you and others have promised since your last check-in.': ('Всё сказанное с прошлого разбора, и ваше тоже, одним вызовом.', 'Revisa lo que habéis acordado desde la última revisión, incluidos tus propios compromisos.'), 'Search your local chat archive by full words, partial words or approximate spelling.': ('Ищите сразу по чатам: по словам, части слова или неточному написанию — в локальном архиве.', 'Busca en tu archivo local de chats por palabras completas, fragmentos o términos con erratas.'), 'Transcribe with Telegram or a speech model running on your computer.': ('Силами Telegram или моделью на вашем компьютере.', 'Transcribe con Telegram o con un modelo de voz que se ejecuta en tu ordenador.'), 'Telegram delivers your message on schedule, even when your laptop is closed.': ('Telegram доставит вовремя, даже если ноутбук закрыт.', 'Telegram envía tu mensaje a la hora prevista, aunque el portátil esté cerrado.'), 'Connect your MAX account or use your bots through the official Bot API.': ('Ваши боты MAX через официальный Bot API и ваш личный аккаунт.', 'Conecta tu cuenta de MAX o usa tus bots a través de la Bot API oficial.'), 'A Telegram client for your terminal and AI agents, using your own account.': ('Клиент Telegram для терминала и ИИ-агентов, на вашем собственном аккаунте.', 'Un cliente de Telegram para la terminal y los agentes de IA, con tu propia cuenta.'), 'Learn the commands once. Use them in both.': ('Выучили одну — знаете и другую.', 'Aprende los comandos una vez y úsalos en ambos.'), 'Windows, macOS and Linux with Node.js 22 or later. No native modules to compile.': ('Windows, macOS и Linux, Node 22 и новее. Ничего не нужно собирать.', 'Windows, macOS y Linux con Node.js 22 o posterior. No necesitas compilar módulos nativos.'), 'A background service keeps your local history up to date and syncs missed messages after a restart.': ('Фоновая служба держит копию в актуальном состоянии и догоняет пропущенное после перезапуска.', 'Un servicio en segundo plano mantiene el historial local al día y sincroniza los mensajes pendientes tras un reinicio.'), 'Built for agents and scripts: fast, predictable and easy to audit.': ('Сделано в первую очередь для агентов и скриптов: быстро, предсказуемо и с журналом.', 'Diseñado para agentes y scripts: rápido, predecible y con un registro de acciones.'), 'Action history': ('История действий', 'Historial de acciones')})
+TEXT['Never search a chat again.'] = ('Хватит листать.', 'Deja de buscar en tus chats.')
+TEXT['. Find what matters, keep track of commitments and reply with the full context.'] = ('. Находите важное, вспоминайте договорённости и отвечайте с учётом всей переписки.', '. Encuentra lo importante, recuerda lo acordado y responde con todo el contexto.')
+TEXT['Unread messages in one place.'] = ('Непрочитанное во всех чатах сразу.', 'Lo que tienes sin leer, en un solo lugar.')
+TEXT['Find it, even with a typo.'] = ('Находите даже с опечаткой.', 'Encuentra mensajes incluso con erratas.')
+TEXT['Keep track of agreements.'] = ('Помните о договорённостях.', 'Recuerda lo acordado.')
+TEXT['News from your subscriptions.'] = ('Новости из ваших подписок.', 'Noticias de los canales que sigues.')
+TEXT['Customers, teams and announcements'] = ('Клиенты, команды и рассылки', 'Clientes, equipos y comunicaciones')
+TEXT['Group broadcasts.'] = ('Групповые рассылки.', 'Avisos a grupos.')
+TEXT['Team notifications.'] = ('Уведомления команды.', 'Notificaciones para el equipo.')
+TEXT['Control what gets sent.'] = ('Контроль отправок.', 'Control de los envíos.')
+TEXT['Groups you run'] = ('Ваши группы', 'Grupos que administras')
+TEXT['Questions, discussions and community health'] = ('Вопросы, обсуждения и порядок', 'Preguntas, conversaciones y comunidad')
+TEXT['Group activity.'] = ('Аналитики.', 'Actividad del grupo.')
+TEXT['Keep discussions on track.'] = ('Контроль дискуссий.', 'Supervisión de conversaciones.')
+TEXT['Discussion summaries.'] = ('Итоги обсуждений.', 'Resúmenes de conversaciones.')
+TEXT['Group management.'] = ('Управление группой.', 'Gestión de grupos.')
+TEXT['Switch easily between accounts and bots. Keep work and personal conversations separate, or ask your agent to gather context from several accounts.'] = ('Удобно переключайтесь между аккаунтами и ботами. Разделяйте рабочие и личные переписки или поручайте агенту собирать общий контекст из нескольких аккаунтов.', 'Cambia fácilmente entre cuentas y bots. Separa tus conversaciones personales de las de trabajo, o pide a tu agente que reúna contexto de varias cuentas.')
+TEXT['Secrets stay in the system keyring. Passwords, login codes, phone numbers and tokens do not leak into logs or command history. Protection against prompt injection helps prevent chat messages from steering your agent.'] = ('Секреты хранятся в системном хранилище паролей. Пароли, коды входа и номера телефонов не утекают. Защита от prompt injection не даст злоумышленникам управлять агентом.', 'Los secretos se guardan en el almacén de contraseñas del sistema. Las contraseñas, los códigos de acceso, los números de teléfono y los tokens no se filtran a los registros ni al historial de comandos. La protección contra la inyección de instrucciones (prompt injection) ayuda a impedir que mensajes maliciosos controlen al agente.')
+TEXT['Your chat history stays in a local cache on your computer. Search it offline, create backups and restore your archive when needed.'] = ('История переписок хранится в локальном кеше на вашем компьютере. Ищите без интернета, создавайте бэкапы и восстанавливайте архив при необходимости.', 'El historial se guarda en una caché local en tu ordenador. Busca sin conexión, crea copias de seguridad y restaura el historial cuando lo necesites.')
+TEXT['Check send attempts in the journal and record command runs when needed. Logs keep IDs, statuses and timings, without message text.'] = ('Смотрите попытки отправки в журнале и при необходимости записывайте запуски команд. В логах — ID, статусы и время выполнения, без текста сообщений.', 'Consulta los intentos de envío y registra las ejecuciones de comandos cuando lo necesites. Los registros incluyen identificadores, estados y tiempos, sin el texto de los mensajes.')
+TEXT['Ask about your chats…'] = ('Спросите о своих чатах…', 'Pregunta sobre tus chats…')
+TEXT['Agent · ~/inbox'] = ('Агент · ~/inbox', 'Agente · ~/inbox')
+
+# Final wording pass; locale-specific wording stays consistent.
+TEXT.update({'Less busywork in your chats': ('Меньше рутины в мессенджерах', 'Menos tareas repetitivas en tus chats'), 'Unread messages in one place.': ('Непрочитанное во всех чатах сразу.', 'Lo que tienes sin leer, en un solo lugar.'), 'Control what gets sent.': ('Контроль отправок.', 'Control de los envíos.'), 'Group activity.': ('Аналитики.', 'Actividad del grupo.'), 'Keep discussions on track.': ('Контроль дискуссий.', 'Supervisión de conversaciones.'), 'Always up to date': ('Всегда свежее', 'Siempre al día'), 'Multiple accounts and bots': ('Много аккаунтов и ботов', 'Varias cuentas, varios bots'), '. Find what matters, keep track of commitments and reply with the full context.': ('. Находите важное, вспоминайте договорённости и отвечайте с учётом всей переписки.', '. Encuentra lo importante, recuerda lo acordado y responde con todo el contexto.')})

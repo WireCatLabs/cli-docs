@@ -12,11 +12,18 @@ const urlsOf = (nodes: readonly Node[]): string[] =>
     return []
   })
 
-// The default language only, in sidebar order: every page is built once per interface language,
-// and the other copies hold the same text.
+// English index in sidebar order; localized Markdown URLs retain the requested language.
 export function GET() {
   const pages = new Map(source.getPages(i18n.defaultLanguage).map((page) => [page.url, page]))
   const ordered = urlsOf(source.getPageTree(i18n.defaultLanguage).children)
+  const gettingStarted = [
+    "## Getting started",
+    "",
+    ...ordered
+      .map((url) => pages.get(url))
+      .filter((page) => page && !tools.some((tool) => tool.name === page.slugs[0]))
+      .map((page) => (page ? `- [${page.data.title}](${getPageMarkdownUrl(page).url})` : "")),
+  ].join("\n")
   const sections = tools.map((tool) => {
     const lines = ordered
       .map((url) => pages.get(url))
@@ -29,6 +36,8 @@ export function GET() {
     "",
     "> Documentation of command line tools built for people and AI agents. Every link is the page as Markdown;",
     "> /llms-full.txt is every page in one file.",
+    "",
+    gettingStarted,
     "",
     ...sections.flatMap((section) => [section, ""]),
   ].join("\n")

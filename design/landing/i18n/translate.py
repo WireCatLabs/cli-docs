@@ -46,10 +46,17 @@ def build(lang, i):
         ('<html lang="en" data-hl="3">', f'<html lang="{lang}" data-hl="{HEADLINE[lang]}" data-ff="{FONT[lang]}">'),
         ("<title>WireCat Home</title>", f"<title>{TITLE[i]}</title>"),
         ("<span>EN</span>", f"<span>{lang.upper()}</span>"),
+        ('aria-label="Language"', 'aria-label="Язык"' if lang == "ru" else 'aria-label="Idioma"'),
+        ('aria-label="Site"', 'aria-label="Навигация по сайту"' if lang == "ru" else 'aria-label="Navegación del sitio"'),
+        ('aria-label="Sessions"', 'aria-label="Сессии"' if lang == "ru" else 'aria-label="Sesiones"'),
         ('lang="en" aria-current="page"', 'lang="en"'),
         (f'lang="{lang}">', f'lang="{lang}" aria-current="page">'),
         ('<a href="g-home.html" aria-current="page">', '<a href="g-home.html">'),
         (f'<a href="g-home.{lang}.html">', f'<a href="g-home.{lang}.html" aria-current="page">'),
+        ('aria-label="Previous scenario"', 'aria-label="Предыдущий сценарий"' if lang == "ru" else 'aria-label="Escenario anterior"'),
+        ('aria-label="Next scenario"', 'aria-label="Следующий сценарий"' if lang == "ru" else 'aria-label="Siguiente escenario"'),
+        ('aria-label="Previous closing copy"', 'aria-label="Предыдущий финальный текст"' if lang == "ru" else 'aria-label="Texto de cierre anterior"'),
+        ('aria-label="Next closing copy"', 'aria-label="Следующий финальный текст"' if lang == "ru" else 'aria-label="Siguiente texto de cierre"'),
         ("wirecat.dev/en/docs/tg", f"wirecat.dev/{lang}/docs/tg"),
     ]
     for old, new in swaps:

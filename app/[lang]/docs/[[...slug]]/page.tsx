@@ -8,6 +8,7 @@ import {
 } from "fumadocs-ui/layouts/docs/page"
 import { createRelativeLink } from "fumadocs-ui/mdx"
 import type { Metadata } from "next"
+import Link from "next/link"
 import { notFound } from "next/navigation"
 import { getMDXComponents } from "@/components/mdx"
 import { getPageMarkdownUrl, toolOf } from "@/lib/shared"
@@ -24,7 +25,14 @@ export default async function Page(props: Props) {
   const MDX = page.data.body
   const markdownUrl = getPageMarkdownUrl(page).url
   const tool = toolOf(page.slugs)
-  const written = tool?.lang ?? lang
+  const written = page.data.contentLanguage ?? tool?.lang ?? lang
+  const ui = wordsFor(lang).navigation
+  const guide =
+    tool && page.slugs.at(-1) === "installation"
+      ? "installation"
+      : tool && page.slugs.at(-1) === "mcp"
+        ? "mcp"
+        : undefined
   const repoPath =
     page.slugs.at(-1) === "changelog" ? "CHANGELOG.md" : `docs/${page.slugs.slice(1).join("/") || "index"}.md`
 
@@ -44,6 +52,17 @@ export default async function Page(props: Props) {
         />
       </div>
       {written !== lang && <p className="text-sm text-fd-muted-foreground">{wordsFor(lang).inLanguage(written)}</p>}
+      {guide && (
+        <Link
+          href={`/${lang}/docs/${guide}${guide === "installation" ? `#${tool?.name}` : ""}`}
+          className="rounded-xl border bg-fd-card p-4 transition-colors hover:bg-fd-accent"
+        >
+          <span className="block text-sm font-semibold">{guide === "installation" ? ui.installGuide : ui.mcp} →</span>
+          <span className="mt-1 block text-sm text-fd-muted-foreground">
+            {guide === "installation" ? ui.installGuideDescription : ui.mcpGuideDescription}
+          </span>
+        </Link>
+      )}
       <DocsBody lang={written}>
         <MDX components={getMDXComponents({ a: createRelativeLink(source, page) })} />
       </DocsBody>

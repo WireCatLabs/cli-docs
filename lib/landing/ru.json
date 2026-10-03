@@ -1,0 +1,408 @@
+{
+  "html": "<div class=\"bar\" id=\"bar\"><header class=\"top wrap\">\n  <a class=\"mark\" href=\"#\">\n    <svg viewBox=\"0 0 32 32\" aria-hidden=\"true\"><circle class=\"ring\" cx=\"16\" cy=\"16\" r=\"16\"/><circle cx=\"16\" cy=\"16\" r=\"16\" fill=\"#4b53f0\"/><path class=\"wire\" pathLength=\"40\" d=\"M9 21V11l4 4 3-4 3 4 4-4v10\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path class=\"pulse\" pathLength=\"40\" d=\"M9 21V11l4 4 3-4 3 4 4-4v10\"/></svg>\n    <span class=\"word\">WireCat</span>\n  </a>\n  <div class=\"right\">\n  <details class=\"lang\">\n    <summary aria-label=\"Язык\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.4\" aria-hidden=\"true\"><circle cx=\"8\" cy=\"8\" r=\"6.3\"/><path d=\"M1.7 8h12.6M8 1.7c1.8 1.8 2.6 4 2.6 6.3S9.8 12.5 8 14.3M8 1.7C6.2 3.5 5.4 5.7 5.4 8s.8 4.5 2.6 6.3\"/></svg><span>RU</span><svg class=\"dn\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"M4.5 6.5L8 10l3.5-3.5\"/></svg></summary>\n    <div class=\"lang-menu\"><a href=\"/en\" lang=\"en\">English</a><a href=\"/ru\" lang=\"ru\" aria-current=\"page\">Русский</a><a href=\"/es\" lang=\"es\">Español</a></div>\n  </details>\n  <nav class=\"site\" aria-label=\"Навигация по сайту\">\n    <span class=\"glide\" aria-hidden=\"true\"></span>\n    <a href=\"/ru/docs/tg\">Telegram</a>\n    <a href=\"/ru/docs/max\">MAX</a>\n  <a href=\"/ru/about\">О проекте</a></nav>\n  </div>\n</header></div>\n\n<main class=\"wrap hero\">\n  <div class=\"hero-text\">\n    <h1 id=\"headline\">Хватит листать. <span>Просто спросите.</span></h1>\n    <div>\n      <p class=\"lede\">Подключите Claude Code, Codex или другого агента к <b>Telegram и MAX</b>. Находите важное, вспоминайте договорённости и отвечайте с учётом всей переписки.</p>\n      <div class=\"cta\"><details class=\"agent-connect\"><summary class=\"btn\">Подключите агента<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" aria-hidden=\"true\"><path d=\"m4 6 4 4 4-4\"/></svg></summary><div class=\"connect-menu\"><p>Нажмите, чтобы скопировать команду установки.</p><button class=\"connect-choice\" type=\"button\" data-copy=\"npm i -g @leemour/tg-cli\" aria-label=\"Telegram: Копировать\"><span class=\"connect-choice-title\"><strong>Telegram</strong><span data-copy-label role=\"status\" aria-live=\"polite\">Копировать</span></span><code>npm i -g @leemour/tg-cli</code></button><a class=\"connect-guide\" href=\"/ru/docs/installation#tg\">Инструкция: Telegram →</a><button class=\"connect-choice\" type=\"button\" data-copy=\"npm i -g @leemour/max-cli\" aria-label=\"MAX: Копировать\"><span class=\"connect-choice-title\"><strong>MAX</strong><span data-copy-label role=\"status\" aria-live=\"polite\">Копировать</span></span><code>npm i -g @leemour/max-cli</code></button><a class=\"connect-guide\" href=\"/ru/docs/installation#max\">Инструкция: MAX →</a></div></details></div>\n      <p class=\"tagline\"><b>ИИ-переписка через CLI для агентов.</b> Бесплатно, с открытым кодом.</p>\n    </div>\n  </div>\n\n  <div class=\"app\" id=\"app\">\n    <div class=\"titlebar\"><i></i><i></i><i></i><span>Агент · ~/inbox</span>\n      <button class=\"replay\" type=\"button\" id=\"replay\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"M2.5 8a5.5 5.5 0 1 0 1.8-4.1M2.5 2v3.5H6\"/></svg>Повторить</button>\n    </div>\n    <div class=\"app-body\">\n      <nav class=\"sessions\" aria-label=\"Сессии\" id=\"sessions\"><h2>Сессии</h2><button class=\"session\" type=\"button\" aria-current=\"true\">Контекст к созвону<small>tg chats list → tg review</small></button><button class=\"session\" type=\"button\" aria-current=\"false\">Утренняя сводка<small>tg inbox → tg review</small></button><button class=\"session\" type=\"button\" aria-current=\"false\">Вопросы без ответа<small>tg review --unanswered</small></button><button class=\"session\" type=\"button\" aria-current=\"false\">Напоминания и отправка<small>tg messages send --at-time</small></button><button class=\"session\" type=\"button\" aria-current=\"false\">Рекомендованный контакт<small>tg chats list → tg messages search</small></button><button class=\"session\" type=\"button\" aria-current=\"false\">Все документы по теме<small>tg chats list → tg messages search</small></button><button class=\"session\" type=\"button\" aria-current=\"false\">Бот для клиентов<small>tg bot list → tg bot mcp</small></button></nav>\n      <div class=\"conv\">\n        <div class=\"log\" id=\"log\"><div class=\"ask step\">Используй tg CLI. Завтра созвон по Atlas. Собери, что решили, что тормозит запуск и какие вопросы мне нужно задать.</div><details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg chats list <b>--search \"Atlas\"</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"101\"</span>,\n      <span class=\"k\">\"title\"</span>: <span class=\"s\">\"Atlas · команда\"</span>,\n      <span class=\"k\">\"kind\"</span>: <span class=\"s\">\"group\"</span>\n    },\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"102\"</span>,\n      <span class=\"k\">\"title\"</span>: <span class=\"s\">\"Atlas · дизайн\"</span>,\n      <span class=\"k\">\"kind\"</span>: <span class=\"s\">\"group\"</span>\n    }\n  ],\n  <span class=\"k\">\"hasMore\"</span>: <span class=\"n\">false</span>\n}</pre></details><details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg review <b>--chat \"Atlas · команда\" --since-time 7d</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"chats\"</span>: [\n    {\n      <span class=\"k\">\"title\"</span>: <span class=\"s\">\"Atlas\"</span>,\n      <span class=\"k\">\"messages\"</span>: [\n        {\n          <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n          <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n          <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Запускаем в пятницу.\"</span>\n        },\n        {\n          <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48211\"</span>,\n          <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Марко\"</span>,\n          <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Анна ждёт финальные тексты до четверга.\"</span>\n        },\n        {\n          <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48212\"</span>,\n          <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Том\"</span>,\n          <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Тому нужен доступ к стенду.\"</span>\n        }\n      ],\n      <span class=\"k\">\"more\"</span>: <span class=\"n\">false</span>\n    }\n  ],\n  <span class=\"k\">\"skipped\"</span>: [],\n  <span class=\"k\">\"partial\"</span>: <span class=\"n\">false</span>\n}</pre></details><div class=\"say step\"><h3>Уже решили</h3><ul><li><b>Запуск:</b> пятница, объём первой версии зафиксирован.</li><li><b>Тексты:</b> Анне нужна финальная версия до четверга.</li></ul><h3>Блокирует запуск</h3><p><b>Том:</b> ждёт доступ к стенду для проверки оплаты.</p><h3>К созвону</h3><p>Назначить ответственного за доступ и срок проверки. Нашёл также группу дизайна — могу проверить её и личные договорённости участников.</p></div><div class=\"ask step\">Посмотри ещё дизайн и мою личку с Томом. Он мог прислать результат туда.</div><details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg review <b>--chat \"Atlas · дизайн\" --since-time 7d</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"chats\"</span>: [\n    {\n      <span class=\"k\">\"title\"</span>: <span class=\"s\">\"Atlas\"</span>,\n      <span class=\"k\">\"messages\"</span>: [\n        {\n          <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n          <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n          <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Макет готов. Финальные тексты ещё ждём.\"</span>\n        }\n      ],\n      <span class=\"k\">\"more\"</span>: <span class=\"n\">false</span>\n    }\n  ],\n  <span class=\"k\">\"skipped\"</span>: [],\n  <span class=\"k\">\"partial\"</span>: <span class=\"n\">false</span>\n}</pre></details><details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg messages search <b>\"Atlas\" --chat \"Том\"</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Проверил тестовую оплату. Для боевого стенда всё ещё нужен доступ.\"</span>\n    }\n  ],\n  <span class=\"k\">\"hasMore\"</span>: <span class=\"n\">false</span>\n}</pre></details><div class=\"say step\"><h3>Контекст из других чатов</h3><ul><li><b>Дизайн:</b> макет готов; тексты остаются последней зависимостью.</li><li><b>Том, личная переписка:</b> тестовую оплату проверил. Доступ нужен именно к боевому стенду.</li></ul><h3>Уточнённый риск</h3><p>Не вся проверка оплаты заблокирована — осталась проверка в боевой среде. На созвоне стоит обсуждать её, а не начинать с нуля.</p></div><div class=\"ask step\">Сделай повестку на 20 минут: риски, ответственные и сроки. Ничего не отправляй.</div><details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg messages context <b>\"Том\" 48210 --before-n 2 --after-n 2</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Тестовая оплата проходит.\"</span>\n    },\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48211\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Марко\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Нужен доступ к боевому стенду.\"</span>\n    }\n  ],\n  <span class=\"k\">\"hasMore\"</span>: <span class=\"n\">false</span>\n}</pre></details><div class=\"say step\"><h3>Повестка на 20 минут</h3><ol><li><b>0–7:</b> боевой стенд — кто выдаёт доступ и когда Том завершит проверку.</li><li><b>7–12:</b> финальные тексты — кто передаёт Анне до четверга.</li><li><b>12–17:</b> если не успеваем — сокращаем объём или переносим запуск?</li><li><b>17–20:</b> зафиксировать владельца и срок каждого решения.</li></ol><p><small>Черновик готов. Учтены проектная группа, дизайн и личная переписка с Томом. Ничего не отправлено.</small></p></div></div>\n        <div class=\"composer\"><span>Спросите о своих чатах…</span><span class=\"slash\">Непрочитанное</span><span class=\"slash\">Договорённости</span><span class=\"slash\">Ответы</span><span class=\"slash\">Поиск</span></div>\n      </div>\n    </div>\n  </div>\n</main>\n\n\n\n\n\n\n\n\n\n\n\n<section id=\"features\" style=\"padding-top:0\">\n  <div class=\"wrap\">\n    <h2 class=\"big\" id=\"feat-title\">Меньше рутины в мессенджерах</h2>\n    <p class=\"intro\">Следите за договорённостями, помогайте клиентам и поддерживайте порядок в группах. Поручите агенту работу с Telegram и MAX.</p>\n    <div class=\"fv fv6\" data-variant=\"6\"><div class=\"grp6\"><div class=\"head6\"><span class=\"fv-ico\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"8\" r=\"3.6\"/><path d=\"M4.5 20c1.2-4 4.2-6 7.5-6s6.3 2 7.5 6\"/></svg></span><span class=\"fv-name\">Личный аккаунт</span><span class=\"fv-short\">Ваши чаты, история и контакты</span></div><p class=\"fv-lead\">Ваш аккаунт как ещё одно ваше устройство: все чаты с историей, группы, каналы и контакты.</p><div class=\"g6\"><div class=\"t6\"><b>Непрочитанное во всех чатах сразу.</b><span>Чужие сообщения, и ничего не отмечается прочитанным.</span></div><div class=\"t6\"><b>Помните о договорённостях.</b><span>Всё сказанное с прошлого разбора, и ваше тоже, одним вызовом.</span></div><div class=\"t6\"><b>Находите даже с опечаткой.</b><span>Ищите сразу по чатам: по словам, части слова или неточному написанию — в локальном архиве.</span></div><div class=\"t6\"><b>Новости из ваших подписок.</b><span>Попросите агента собрать новости из ваших каналов по нужным темам, со ссылками на публикации.</span></div><div class=\"t6\"><b>Голосовые — текстом.</b><span>Силами Telegram или моделью на вашем компьютере.</span></div><div class=\"t6\"><b>Отправка по времени.</b><span>Telegram доставит вовремя, даже если ноутбук закрыт.</span></div></div><a class=\"more\" href=\"/ru/docs/tg/usage\">Как работать с аккаунтом →</a></div><div class=\"grp6\"><div class=\"head6\"><span class=\"fv-ico\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"4\" y=\"8\" width=\"16\" height=\"11\" rx=\"3\"/><path d=\"M12 4v4M9 13h.01M15 13h.01M9.5 16.5h5\"/></svg></span><span class=\"fv-name\">Боты</span><span class=\"fv-short\">Клиенты, команды и рассылки</span></div><p class=\"fv-lead\">Общайтесь с клиентами и командами через ботов Telegram и MAX: рассылки, полезные ответы и простые действия.</p><div class=\"g6\"><div class=\"t6\"><b>Групповые рассылки.</b><span>Попросите агента разослать объявление в выбранные группы и каналы.</span></div><div class=\"t6\"><b>Персонализация.</b><span>Агент подготовит разные сообщения для клиентов по данным, которые вы ему передадите.</span></div><div class=\"t6\"><b>Ответы с контекстом.</b><span>Передайте агенту базу знаний или историю обращений, чтобы он помогал отвечать на вопросы клиентов.</span></div><div class=\"t6\"><b>Уведомления команды.</b><span>Сообщайте о новых заявках, результатах и изменениях — вместе с нужными файлами.</span></div><div class=\"t6\"><b>Кнопки и понятные сценарии.</b><span>Помогите пользователю выбрать действие, открыть ссылку или ответить одним нажатием.</span></div><div class=\"t6\"><b>Контроль отправок.</b><span>Выберите, кому бот может писать, и проверяйте, какие отправки прошли, а где возникла ошибка.</span></div></div><a class=\"more\" href=\"/ru/docs/max/bot\">Как настроить бота →</a></div><div class=\"grp6\"><div class=\"head6\"><span class=\"fv-ico\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"9\" cy=\"9\" r=\"3\"/><circle cx=\"17\" cy=\"10\" r=\"2.4\"/><path d=\"M3.5 19c.9-3.2 3-4.8 5.5-4.8s4.6 1.6 5.5 4.8M14.5 15c2.6-.4 4.6.9 5.5 3.6\"/></svg></span><span class=\"fv-name\">Ваши группы</span><span class=\"fv-short\">Вопросы, обсуждения и порядок</span></div><p class=\"fv-lead\">Помогайте участникам получать ответы, сохраняйте решения и поддерживайте порядок в обсуждениях.</p><div class=\"g6\"><div class=\"t6\"><b>Мониторинг вопросов.</b><span>Находите вопросы, оставшиеся без ответа, чтобы участники получали нужную помощь.</span></div><div class=\"t6\"><b>Аналитики.</b><span>Кто вступил, вышел, кого добавили или удалили — и кто это сделал.</span></div><div class=\"t6\"><b>Контроль дискуссий.</b><span>Попросите агента отметить спам, ругательства и конфликты, чтобы вовремя вмешаться.</span></div><div class=\"t6\"><b>Модерация по правилам.</b><span>Задайте, какие нарушения отмечать, какие сообщения удалять и когда удалять участника.</span></div><div class=\"t6\"><b>Итоги обсуждений.</b><span>Получайте решения, открытые вопросы и следующие шаги без перечитывания всей переписки.</span></div><div class=\"t6\"><b>Управление группой.</b><span>Делегируйте агенту рутину: приглашение участников, смену администраторов и обновление ссылок.</span></div></div><a class=\"more\" href=\"/ru/docs/tg/groups\">Как вести группу →</a></div></div>\n  </div>\n</section>\n<section>\n  <div class=\"wrap\">\n    <h2 class=\"big\">Telegram и MAX, одни и те же команды</h2>\n    <p class=\"intro\">Выучили одну — знаете и другую.</p>\n    <div class=\"tools\">\n      <article class=\"tool-card\"><div class=\"tool-name\">tg<small>Telegram</small></div><p>Клиент Telegram для терминала и ИИ-агентов, на вашем собственном аккаунте.</p><span class=\"cmd\"><code>npm i -g @leemour/tg-cli</code><button class=\"copy\" type=\"button\" data-copy=\"npm i -g @leemour/tg-cli\">Копировать</button></span><div class=\"tool-links\"><a href=\"/ru/docs/tg\">Документация</a><a href=\"https://github.com/leemour/tg-cli\">GitHub</a><a href=\"https://www.npmjs.com/package/@leemour/tg-cli\">npm</a></div></article>\n      <article class=\"tool-card\"><div class=\"tool-name\">max<small>Мессенджер MAX</small></div><p>Ваши боты MAX через официальный Bot API и ваш личный аккаунт.</p><span class=\"cmd\"><code>npm i -g @leemour/max-cli</code><button class=\"copy\" type=\"button\" data-copy=\"npm i -g @leemour/max-cli\">Копировать</button></span><div class=\"tool-links\"><a href=\"/ru/docs/max\">Документация</a><a href=\"https://github.com/leemour/max-cli\">GitHub</a><a href=\"https://www.npmjs.com/package/@leemour/max-cli\">npm</a></div></article>\n    </div>\n  </div>\n</section>\n<section class=\"band\" id=\"why\">\n  <div class=\"wrap\">\n    <h2 class=\"big\">Почему это работает так хорошо</h2>\n    <p class=\"intro\">Сделано в первую очередь для агентов и скриптов: быстро, предсказуемо и с журналом.</p>\n    <dl class=\"spec\">\n      <div><dt>Быстро</dt><dd>Поиск идёт по копии чатов на вашем компьютере. Без сети и без ожидания.</dd><code>tg messages search \"договор\" --offline</code></div>\n      <div><dt>Работает везде</dt><dd>Windows, macOS и Linux, Node 22 и новее. Ничего не нужно собирать.</dd><code>npm i -g @leemour/tg-cli</code></div>\n      <div><dt>Мощный поиск</dt><dd>Находите сообщения даже с опечатками или по части слова. Ищите по чатам и каналам, уточняйте автора и дату и восстанавливайте контекст переписки.</dd><code>tg messages search \"договор\"</code></div>\n      <div><dt>Локальное хранение</dt><dd>История переписок хранится в локальном кеше на вашем компьютере. Ищите без интернета, создавайте бэкапы и восстанавливайте архив при необходимости.</dd><code>tg store backup · tg store restore</code></div>\n      <div><dt>Гибкая настройка прав</dt><dd>Вы контролируете, что может выполнять агент: только читать, запускать разрешённые команды или спрашивать ваше разрешение перед действием.</dd><code>permissions.messages.send · --confirm-send</code></div>\n      <div><dt>Всегда свежее</dt><dd>Фоновая служба держит копию в актуальном состоянии и догоняет пропущенное после перезапуска.</dd><code>tg server install</code></div>\n      <div><dt>Много аккаунтов и ботов</dt><dd>Удобно переключайтесь между аккаунтами и ботами. Разделяйте рабочие и личные переписки или поручайте агенту собирать общий контекст из нескольких аккаунтов.</dd><code>tg work inbox</code></div>\n      <div><dt>История действий</dt><dd>Смотрите попытки отправки в журнале и при необходимости записывайте запуски команд. В логах — ID, статусы и время выполнения, без текста сообщений.</dd><code>tg sends list · tg runs list · --record</code></div>\n      <div><dt>Безопасно</dt><dd>Секреты хранятся в системном хранилище паролей. Пароли, коды входа и номера телефонов не утекают. Защита от prompt injection не даст злоумышленникам управлять агентом.</dd><code>tg session start</code></div>\n    </dl>\n  </div>\n</section>\n<section id=\"day\"><div class=\"wrap\"><h2 class=\"big\">Один день с агентом</h2><p class=\"intro\">Несколько обращений к агенту. Остальное время — ваше.</p><div class=\"day-summary\"><div><time class=\"time\" datetime=\"08:00\">08:00</time><h3>Начните с главного</h3><p>Получите короткую сводку чатов, которым нужно ваше внимание.</p></div><div><time class=\"time\" datetime=\"11:00\">11:00</time><h3>Подготовьтесь к встрече</h3><p>Соберите нужные сообщения перед началом разговора.</p></div><div><time class=\"time\" datetime=\"15:00\">15:00</time><h3>Продвиньте дела</h3><p>Ответьте на запрос или напомните о том, чего ждёте.</p></div><div><time class=\"time\" datetime=\"19:00\">19:00</time><h3>Завершите день</h3><p>Посмотрите, что решено и к чему вернуться завтра.</p></div></div></div></section>\n<section class=\"close\" id=\"closing\">\n  <div class=\"wrap\">\n    <h2 class=\"big\" id=\"closing-title\">Продолжайте разговор с полным контекстом.</h2>\n    <p class=\"intro\" id=\"closing-help\">Выберите мессенджер. Гайд проведёт вас от установки до первого ответа.</p>\n    <div class=\"cta\"><a class=\"btn\" href=\"/ru/docs/installation#tg\">Начать с Telegram →</a><a class=\"btn\" href=\"/ru/docs/installation#max\">Начать с MAX →</a></div>\n  </div>\n</section>",
+  "footerHtml": "<footer class=\"site\">\n  <div class=\"wrap\">\n    <div class=\"foot\">\n      <div class=\"foot-brand\">\n        <a class=\"mark\" href=\"#\"><svg viewBox=\"0 0 32 32\" aria-hidden=\"true\"><circle class=\"ring\" cx=\"16\" cy=\"16\" r=\"16\"/><circle cx=\"16\" cy=\"16\" r=\"16\" fill=\"#4b53f0\"/><path class=\"wire\" pathLength=\"40\" d=\"M9 21V11l4 4 3-4 3 4 4-4v10\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path class=\"pulse\" pathLength=\"40\" d=\"M9 21V11l4 4 3-4 3 4 4-4v10\"/></svg><span class=\"word\">WireCat</span></a>\n        <p>ИИ-переписка через CLI для агентов. Ваши Telegram и MAX — для вас, ваших скриптов и ИИ-агентов.</p>\n        <span class=\"cmd\"><code>npm i -g @leemour/tg-cli</code><button class=\"copy\" type=\"button\" data-copy=\"npm i -g @leemour/tg-cli\">Копировать</button></span>\n      </div>\n      <div><h4>Инструменты</h4><ul>\n        <li><a href=\"/ru/docs/tg\">tg · Telegram</a></li>\n        <li><a href=\"/ru/docs/max\">max · MAX</a></li>\n        <li><a href=\"/ru/docs/tg/changelog\">Изменения tg</a></li>\n        <li><a href=\"/ru/docs/max/changelog\">Изменения max</a></li></ul></div>\n      <div><h4>Документация</h4><ul>\n        <li><a href=\"/ru/docs/installation\">Установка</a></li>\n        <li><a href=\"/ru/docs/tg/usage\">Использование</a></li>\n        <li><a href=\"/ru/docs/tg/commands\">Все команды</a></li>\n        <li><a href=\"/ru/docs/tg/troubleshooting\">Если что-то не так</a></li></ul></div>\n      <div><h4>Для агентов</h4><ul>\n        <li><a href=\"/ru/docs/mcp\">MCP-сервер</a></li>\n        <li><a href=\"/ru/docs/tg/recipes\">Рецепты</a></li>\n        <li><a href=\"/llms.txt\"><code>/llms.txt</code></a></li>\n        <li><a href=\"/llms-full.txt\"><code>/llms-full.txt</code></a></li></ul></div>\n      <div><h4>Проект</h4><ul>\n        <li><a href=\"https://github.com/leemour/tg-cli\">tg на GitHub</a></li>\n        <li><a href=\"https://github.com/leemour/max-cli\">max на GitHub</a></li>\n        <li><a href=\"/ru/about\">О проекте</a></li><li><a href=\"https://github.com/leemour/tg-cli/issues\">Сообщить о проблеме</a></li>\n        <li><a href=\"/ru/docs/tg/security\">Безопасность</a></li></ul></div>\n    </div>\n    <div class=\"foot-bottom\">\n      <span>© 2026 WireCat · лицензия MIT · Windows, macOS, Linux</span>\n      <nav class=\"langs\" aria-label=\"Язык\"><a href=\"/en\">English</a><a href=\"/ru\" aria-current=\"page\">Русский</a><a href=\"/es\">Español</a></nav>\n    </div>\n  </div>\n</footer>",
+  "sessions": [
+    {
+      "title": "Контекст к созвону",
+      "hint": "tg chats list → tg review",
+      "steps": [
+        {
+          "html": "<div class=\"ask step\">Используй tg CLI. Завтра созвон по Atlas. Собери, что решили, что тормозит запуск и какие вопросы мне нужно задать.</div>",
+          "tool": false,
+          "delay": 500
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg chats list <b>--search \"Atlas\"</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"101\"</span>,\n      <span class=\"k\">\"title\"</span>: <span class=\"s\">\"Atlas · команда\"</span>,\n      <span class=\"k\">\"kind\"</span>: <span class=\"s\">\"group\"</span>\n    },\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"102\"</span>,\n      <span class=\"k\">\"title\"</span>: <span class=\"s\">\"Atlas · дизайн\"</span>,\n      <span class=\"k\">\"kind\"</span>: <span class=\"s\">\"group\"</span>\n    }\n  ],\n  <span class=\"k\">\"hasMore\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg review <b>--chat \"Atlas · команда\" --since-time 7d</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"chats\"</span>: [\n    {\n      <span class=\"k\">\"title\"</span>: <span class=\"s\">\"Atlas\"</span>,\n      <span class=\"k\">\"messages\"</span>: [\n        {\n          <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n          <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n          <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Запускаем в пятницу.\"</span>\n        },\n        {\n          <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48211\"</span>,\n          <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Марко\"</span>,\n          <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Анна ждёт финальные тексты до четверга.\"</span>\n        },\n        {\n          <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48212\"</span>,\n          <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Том\"</span>,\n          <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Тому нужен доступ к стенду.\"</span>\n        }\n      ],\n      <span class=\"k\">\"more\"</span>: <span class=\"n\">false</span>\n    }\n  ],\n  <span class=\"k\">\"skipped\"</span>: [],\n  <span class=\"k\">\"partial\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<div class=\"say step\"><h3>Уже решили</h3><ul><li><b>Запуск:</b> пятница, объём первой версии зафиксирован.</li><li><b>Тексты:</b> Анне нужна финальная версия до четверга.</li></ul><h3>Блокирует запуск</h3><p><b>Том:</b> ждёт доступ к стенду для проверки оплаты.</p><h3>К созвону</h3><p>Назначить ответственного за доступ и срок проверки. Нашёл также группу дизайна — могу проверить её и личные договорённости участников.</p></div>",
+          "tool": false,
+          "delay": 900
+        },
+        {
+          "html": "<div class=\"ask step\">Посмотри ещё дизайн и мою личку с Томом. Он мог прислать результат туда.</div>",
+          "tool": false,
+          "delay": 500
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg review <b>--chat \"Atlas · дизайн\" --since-time 7d</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"chats\"</span>: [\n    {\n      <span class=\"k\">\"title\"</span>: <span class=\"s\">\"Atlas\"</span>,\n      <span class=\"k\">\"messages\"</span>: [\n        {\n          <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n          <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n          <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Макет готов. Финальные тексты ещё ждём.\"</span>\n        }\n      ],\n      <span class=\"k\">\"more\"</span>: <span class=\"n\">false</span>\n    }\n  ],\n  <span class=\"k\">\"skipped\"</span>: [],\n  <span class=\"k\">\"partial\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg messages search <b>\"Atlas\" --chat \"Том\"</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Проверил тестовую оплату. Для боевого стенда всё ещё нужен доступ.\"</span>\n    }\n  ],\n  <span class=\"k\">\"hasMore\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<div class=\"say step\"><h3>Контекст из других чатов</h3><ul><li><b>Дизайн:</b> макет готов; тексты остаются последней зависимостью.</li><li><b>Том, личная переписка:</b> тестовую оплату проверил. Доступ нужен именно к боевому стенду.</li></ul><h3>Уточнённый риск</h3><p>Не вся проверка оплаты заблокирована — осталась проверка в боевой среде. На созвоне стоит обсуждать её, а не начинать с нуля.</p></div>",
+          "tool": false,
+          "delay": 900
+        },
+        {
+          "html": "<div class=\"ask step\">Сделай повестку на 20 минут: риски, ответственные и сроки. Ничего не отправляй.</div>",
+          "tool": false,
+          "delay": 500
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg messages context <b>\"Том\" 48210 --before-n 2 --after-n 2</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Тестовая оплата проходит.\"</span>\n    },\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48211\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Марко\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Нужен доступ к боевому стенду.\"</span>\n    }\n  ],\n  <span class=\"k\">\"hasMore\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<div class=\"say step\"><h3>Повестка на 20 минут</h3><ol><li><b>0–7:</b> боевой стенд — кто выдаёт доступ и когда Том завершит проверку.</li><li><b>7–12:</b> финальные тексты — кто передаёт Анне до четверга.</li><li><b>12–17:</b> если не успеваем — сокращаем объём или переносим запуск?</li><li><b>17–20:</b> зафиксировать владельца и срок каждого решения.</li></ol><p><small>Черновик готов. Учтены проектная группа, дизайн и личная переписка с Томом. Ничего не отправлено.</small></p></div>",
+          "tool": false,
+          "delay": 900
+        }
+      ]
+    },
+    {
+      "title": "Утренняя сводка",
+      "hint": "tg inbox → tg review",
+      "steps": [
+        {
+          "html": "<div class=\"ask step\">Используй tg CLI. Доброе утро. Что требует моего внимания и какие новости из подписок стоит прочитать?</div>",
+          "tool": false,
+          "delay": 500
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg inbox</code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"chats\"</span>: [\n    {\n      <span class=\"k\">\"title\"</span>: <span class=\"s\">\"Atlas\"</span>,\n      <span class=\"k\">\"messages\"</span>: [\n        {\n          <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n          <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n          <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Марко: согласуй бюджет до 11:00.\"</span>\n        },\n        {\n          <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48211\"</span>,\n          <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Марко\"</span>,\n          <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Анна: встреча перенесена на 19:30.\"</span>\n        },\n        {\n          <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48212\"</span>,\n          <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Том\"</span>,\n          <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Мама: голосовое на 42 секунды.\"</span>\n        }\n      ],\n      <span class=\"k\">\"more\"</span>: <span class=\"n\">false</span>\n    }\n  ],\n  <span class=\"k\">\"skipped\"</span>: [],\n  <span class=\"k\">\"partial\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg review <b>--chat \"Новости технологий\" --since-time 1d --all</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"chats\"</span>: [\n    {\n      <span class=\"k\">\"title\"</span>: <span class=\"s\">\"Atlas\"</span>,\n      <span class=\"k\">\"messages\"</span>: [\n        {\n          <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n          <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n          <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Обновился инструмент для кода.\"</span>\n        },\n        {\n          <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48211\"</span>,\n          <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Марко\"</span>,\n          <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Опубликован разбор нового подхода к поиску.\"</span>\n        }\n      ],\n      <span class=\"k\">\"more\"</span>: <span class=\"n\">false</span>\n    }\n  ],\n  <span class=\"k\">\"skipped\"</span>: [],\n  <span class=\"k\">\"partial\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<div class=\"say step\"><h3>Сегодня нужно вам</h3><ul><li><b>До 11:00 — Марко:</b> подтвердить бюджет, чтобы команда продолжила работу.</li><li><b>Вечером — Анна:</b> встречу перенесли на 19:30, ждёт подтверждения.</li><li><b>Без срока — мама:</b> голосовое, 0:42.</li></ul><h3>Новости из подписок</h3><ul><li><b>Инструменты для кода:</b> обновление рабочего процесса.</li><li><b>Поиск:</b> практический разбор с примерами.</li></ul><p><small>Подробности и исходные сообщения доступны по каждому пункту. Могу сузить новости до рабочих тем.</small></p></div>",
+          "tool": false,
+          "delay": 900
+        },
+        {
+          "html": "<div class=\"ask step\">Добавь канал про ИИ, объедини повторы и оставь только полезное для нашей команды.</div>",
+          "tool": false,
+          "delay": 500
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg review <b>--chat \"Новости ИИ\" --since-time 1d --all</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"chats\"</span>: [\n    {\n      <span class=\"k\">\"title\"</span>: <span class=\"s\">\"Atlas\"</span>,\n      <span class=\"k\">\"messages\"</span>: [\n        {\n          <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n          <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n          <span class=\"k\">\"text\"</span>: <span class=\"s\">\"То же обновление инструмента для кода.\"</span>\n        },\n        {\n          <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48211\"</span>,\n          <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Марко\"</span>,\n          <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Новая модель: анонс возможностей.\"</span>\n        }\n      ],\n      <span class=\"k\">\"more\"</span>: <span class=\"n\">false</span>\n    }\n  ],\n  <span class=\"k\">\"skipped\"</span>: [],\n  <span class=\"k\">\"partial\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<div class=\"say step\"><h3>Для команды разработчиков</h3><ol><li><b>Обновление инструмента:</b> повтор из двух каналов объединил; сохранил оба источника.</li><li><b>Разбор поиска:</b> практический материал, можно применить к нашей задаче.</li></ol><h3>Можно отложить</h3><p>Анонс модели: пока есть заявления о возможностях, но нет проверки на нашем проекте.</p></div>",
+          "tool": false,
+          "delay": 900
+        },
+        {
+          "html": "<div class=\"ask step\">Что первым сделать за ближайшие 15 минут?</div>",
+          "tool": false,
+          "delay": 500
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg messages context <b>\"Марко\" 48210 --before-n 2 --after-n 2</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Нужно согласовать бюджет до 11:00, иначе подрядчик не начнёт.\"</span>\n    }\n  ],\n  <span class=\"k\">\"hasMore\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<div class=\"say step\"><h3>Первые 15 минут</h3><ol><li><b>Сначала бюджет:</b> открыть запрос Марко и принять решение — он блокирует подрядчика.</li><li><b>Затем встреча:</b> подтвердить Анне 19:30.</li><li><b>После этого:</b> прослушать голосовое или попросить расшифровку.</li></ol><p><small>Новости оставил отдельным списком на потом: срочных действий по ним нет.</small></p></div>",
+          "tool": false,
+          "delay": 900
+        }
+      ]
+    },
+    {
+      "title": "Вопросы без ответа",
+      "hint": "tg review --unanswered",
+      "steps": [
+        {
+          "html": "<div class=\"ask step\">Используй tg CLI. Посмотри все чаты: кому я должен ответить, что обещал и от кого мы сами ждём результата. Подготовь черновики.</div>",
+          "tool": false,
+          "delay": 500
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg review <b>--since-time 7d --all --unanswered</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"chats\"</span>: [\n    {\n      <span class=\"k\">\"title\"</span>: <span class=\"s\">\"Atlas\"</span>,\n      <span class=\"k\">\"messages\"</span>: [\n        {\n          <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n          <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n          <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Марко: подтвердите бюджет.\"</span>\n        },\n        {\n          <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48211\"</span>,\n          <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Марко\"</span>,\n          <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Клиент: когда доставка?\"</span>\n        }\n      ],\n      <span class=\"k\">\"more\"</span>: <span class=\"n\">false</span>\n    }\n  ],\n  <span class=\"k\">\"skipped\"</span>: [],\n  <span class=\"k\">\"partial\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg review <b>--since-time 7d --all</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"chats\"</span>: [\n    {\n      <span class=\"k\">\"title\"</span>: <span class=\"s\">\"Atlas\"</span>,\n      <span class=\"k\">\"messages\"</span>: [\n        {\n          <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n          <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n          <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Вы: пришлю счёт Анне до пятницы.\"</span>\n        },\n        {\n          <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48211\"</span>,\n          <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Марко\"</span>,\n          <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Том: макет отдам в среду.\"</span>\n        },\n        {\n          <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48212\"</span>,\n          <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Том\"</span>,\n          <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Клиент: пятница подходит.\"</span>\n        }\n      ],\n      <span class=\"k\">\"more\"</span>: <span class=\"n\">false</span>\n    }\n  ],\n  <span class=\"k\">\"skipped\"</span>: [],\n  <span class=\"k\">\"partial\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<div class=\"say step\"><h3>Вы должны</h3><ul><li><b>Анна:</b> счёт до пятницы — сегодня.</li><li><b>Марко:</b> решение по бюджету.</li><li><b>Клиент:</b> подтверждение доставки.</li></ul><h3>Ждёте от других</h3><p><b>Том:</b> макет обещан к среде. Проверю другие чаты перед напоминанием.</p><h3>Можно закрыть сейчас</h3><p>Дата доставки уже согласована. Для бюджета нужно ваше решение; его не буду придумывать.</p></div>",
+          "tool": false,
+          "delay": 900
+        },
+        {
+          "html": "<div class=\"ask step\">Проверь личку Тома и сделай драфты: клиенту про доставку, Анне про счёт, Тому про макет.</div>",
+          "tool": false,
+          "delay": 500
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg messages search <b>\"макет\" --chat \"Том\"</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Вот первый вариант макета. Финал после ваших комментариев.\"</span>\n    }\n  ],\n  <span class=\"k\">\"hasMore\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<div class=\"say step\"><h3>Клиенту</h3><blockquote><p>Доставка остаётся на пятницу, как согласовали. Если есть ограничения по времени, подскажите, пожалуйста.</p></blockquote><h3>Анне</h3><blockquote><p>Анна, привет! Счёт пришлю сегодня, как договорились.</p></blockquote><h3>Тому</h3><blockquote><p>Том, спасибо за первый вариант! Подскажи, когда сможешь прислать финал после комментариев?</p></blockquote><p><small>Макет уже есть в личке, поэтому напоминание «ты ничего не прислал» было бы неверным. Все три ответа — черновики.</small></p></div>",
+          "tool": false,
+          "delay": 900
+        },
+        {
+          "html": "<div class=\"ask step\">Покажи сначала бюджет и больше ничего пока не отправляй.</div>",
+          "tool": false,
+          "delay": 500
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg messages context <b>\"Марко\" 48210 --before-n 3 --after-n 3</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Нужно согласовать дополнительные работы по аналитике.\"</span>\n    },\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48211\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Марко\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Цена ещё не подтверждена подрядчиком.\"</span>\n    }\n  ],\n  <span class=\"k\">\"hasMore\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<div class=\"say step\"><h3>Что нужно решить</h3><p><b>Дополнительная аналитика:</b> обсуждали объём, но финальной цены нет.</p><h3>Предлагаемый следующий шаг</h3><blockquote><p>Марко, пришли финальную оценку подрядчика: стоимость и влияние на срок. После этого подтвержу бюджет.</p></blockquote><p><small>Без оценки не считаю бюджет согласованным. Подготовленные ответы сохранены в диалоге; отправки не было.</small></p></div>",
+          "tool": false,
+          "delay": 900
+        }
+      ]
+    },
+    {
+      "title": "Напоминания и отправка",
+      "hint": "tg messages send --at-time",
+      "steps": [
+        {
+          "html": "<div class=\"ask step\">Используй tg CLI. В понедельник в 10 созвон по Atlas. Напомни мне за час, а в 18:00 — проверить, закрыли ли вопросы. Всё по Мадриду.</div>",
+          "tool": false,
+          "delay": 500
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg messages send <b>me \"В 10:00 созвон по Atlas: открой повестку\" --at-time 2026-10-05T09:00+02:00</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"message\"</span>: {\n    <span class=\"k\">\"id\"</span>: <span class=\"s\">\"901\"</span>,\n    <span class=\"k\">\"text\"</span>: <span class=\"s\">\"В 10:00 созвон по Atlas: открой повестку\"</span>\n  },\n  <span class=\"k\">\"scheduledFor\"</span>: <span class=\"s\">\"2026-10-05T09:00:00+02:00\"</span>,\n  <span class=\"k\">\"sendId\"</span>: <span class=\"s\">\"reminder-901\"</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg messages send <b>me \"Atlas: проверь решения, ответственных и сроки после созвона\" --at-time 2026-10-05T18:00+02:00</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"message\"</span>: {\n    <span class=\"k\">\"id\"</span>: <span class=\"s\">\"902\"</span>,\n    <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Atlas: проверь решения, ответственных и сроки после созвона\"</span>\n  },\n  <span class=\"k\">\"scheduledFor\"</span>: <span class=\"s\">\"2026-10-05T18:00:00+02:00\"</span>,\n  <span class=\"k\">\"sendId\"</span>: <span class=\"s\">\"reminder-902\"</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<div class=\"say step\"><h3>Ваши напоминания</h3><table><thead><tr><th>Когда</th><th>Что</th></tr></thead><tbody><tr><td>09:00</td><td>Открыть повестку за час до созвона</td></tr><tr><td>18:00</td><td>Проверить решения и открытые вопросы</td></tr></tbody></table><p><small>Понедельник, 5 октября. Время Мадрида. Оба сообщения запланированы в «Избранное».</small></p></div>",
+          "tool": false,
+          "delay": 900
+        },
+        {
+          "html": "<div class=\"ask step\">Анне отправь в 9:30 просьбу принести финальные тексты. Тому в 9:45 — статус проверки оплаты. Лично каждому.</div>",
+          "tool": false,
+          "delay": 500
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg messages send <b>\"Анна\" \"Привет! К созвону в 10:00 по Atlas принеси, пожалуйста, финальные тексты\" --at-time 2026-10-05T09:30+02:00</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"message\"</span>: {\n    <span class=\"k\">\"id\"</span>: <span class=\"s\">\"903\"</span>,\n    <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Привет! К созвону в 10:00 по Atlas принеси, пожалуйста, финальные тексты\"</span>\n  },\n  <span class=\"k\">\"scheduledFor\"</span>: <span class=\"s\">\"2026-10-05T09:30:00+02:00\"</span>,\n  <span class=\"k\">\"sendId\"</span>: <span class=\"s\">\"reminder-903\"</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg messages send <b>\"Том\" \"Привет! К созвону в 10:00 по Atlas подготовь, пожалуйста, статус проверки оплаты\" --at-time 2026-10-05T09:45+02:00</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"message\"</span>: {\n    <span class=\"k\">\"id\"</span>: <span class=\"s\">\"904\"</span>,\n    <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Привет! К созвону в 10:00 по Atlas подготовь, пожалуйста, статус проверки оплаты\"</span>\n  },\n  <span class=\"k\">\"scheduledFor\"</span>: <span class=\"s\">\"2026-10-05T09:45:00+02:00\"</span>,\n  <span class=\"k\">\"sendId\"</span>: <span class=\"s\">\"reminder-904\"</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<div class=\"say step\"><h3>Личные сообщения участникам</h3><ul><li><b>Анна, 09:30:</b> просьба принести финальные тексты.</li><li><b>Том, 09:45:</b> просьба подготовить статус проверки оплаты.</li></ul><h3>Итого</h3><p>Четыре сообщения в разное время: два вам и по одному каждому участнику. Telegram отправит их по расписанию, даже если ноутбук будет выключен.</p></div>",
+          "tool": false,
+          "delay": 900
+        }
+      ]
+    },
+    {
+      "title": "Рекомендованный контакт",
+      "hint": "tg chats list → tg messages search",
+      "steps": [
+        {
+          "html": "<div class=\"ask step\">Используй tg CLI. Мне нужен бухгалтер для ИП с международными платежами. Кто-то советовал человека в чатах про фриланс или бизнес — найди контакт.</div>",
+          "tool": false,
+          "delay": 500
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg chats list <b>--search \"Фриланс\"</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"301\"</span>,\n      <span class=\"k\">\"title\"</span>: <span class=\"s\">\"Фриланс · сообщество\"</span>\n    },\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"302\"</span>,\n      <span class=\"k\">\"title\"</span>: <span class=\"s\">\"Фриланс · налоги\"</span>\n    }\n  ],\n  <span class=\"k\">\"hasMore\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg messages search <b>\"бухгалтер\" --chat \"Фриланс · сообщество\"</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"София: рекомендую Елену, работает с ИП и международными платежами.\"</span>\n    }\n  ],\n  <span class=\"k\">\"hasMore\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<div class=\"say step\"><h3>Нашёл подходящую рекомендацию</h3><p><b>София → Елена:</b> ИП и международные платежи. В сообщении есть контакт.</p><h3>Где ещё проверить</h3><p>Нашёл отдельный чат «Фриланс · налоги». Могу сверить отзывы там и поискать рекомендации в бизнес-чате.</p><p><small>Цена и текущая доступность Елены пока неизвестны.</small></p></div>",
+          "tool": false,
+          "delay": 900
+        },
+        {
+          "html": "<div class=\"ask step\">Проверь налоги и бизнес. Мне важны евро, доллары и ведение под ключ.</div>",
+          "tool": false,
+          "delay": 500
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg messages search <b>\"Елена\" --chat \"Фриланс · налоги\"</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Елена ведёт ИП под ключ. С валютными платежами помогала.\"</span>\n    }\n  ],\n  <span class=\"k\">\"hasMore\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg chats list <b>--search \"Бизнес\"</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"303\"</span>,\n      <span class=\"k\">\"title\"</span>: <span class=\"s\">\"Бизнес · рекомендации\"</span>\n    }\n  ],\n  <span class=\"k\">\"hasMore\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<div class=\"say step\"><h3>Что подтвердилось в обсуждениях</h3><ul><li><b>Ведение под ключ:</b> участник налогового чата это упоминает.</li><li><b>Валютные платежи:</b> есть положительный отзыв.</li></ul><h3>Ещё нужно уточнить</h3><p>Евро и доллары отдельно не названы. Нашёл «Бизнес · рекомендации» — проверю, нет ли там другого кандидата.</p></div>",
+          "tool": false,
+          "delay": 900
+        },
+        {
+          "html": "<div class=\"ask step\">Сравни с альтернативой и подготовь первое сообщение, не отправляй.</div>",
+          "tool": false,
+          "delay": 500
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg messages search <b>\"бухгалтер\" --chat \"Бизнес · рекомендации\"</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Рекомендую Ольгу для разовых консультаций по налогам.\"</span>\n    }\n  ],\n  <span class=\"k\">\"hasMore\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<div class=\"say step\"><h3>Кого выбрать для первого контакта</h3><ul><li><b>Елена:</b> ближе к задаче — ИП, валютные платежи, ведение под ключ.</li><li><b>Ольга:</b> рекомендована для разовых консультаций; постоянное сопровождение не подтверждено.</li></ul><h3>Черновик Елене</h3><blockquote><p>Елена, здравствуйте! София рекомендовала вас в чате «Фриланс». Я работаю как ИП, получаю платежи в евро и долларах и ищу ведение под ключ. Берёте ли новых клиентов и какие условия?</p></blockquote><p><small>Контакт найден. Отзывы участников не заменяют подтверждение условий самой Еленой. Ничего не отправлено.</small></p></div>",
+          "tool": false,
+          "delay": 900
+        }
+      ]
+    },
+    {
+      "title": "Все документы по теме",
+      "hint": "tg chats list → tg messages search",
+      "steps": [
+        {
+          "html": "<div class=\"ask step\">Используй tg CLI. Собери все документы по Atlas: договор, счета и презентацию. Их могли присылать в проектную группу или в личку.</div>",
+          "tool": false,
+          "delay": 500
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg chats list <b>--search \"Atlas\"</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"101\"</span>,\n      <span class=\"k\">\"title\"</span>: <span class=\"s\">\"Atlas · команда\"</span>\n    },\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"102\"</span>,\n      <span class=\"k\">\"title\"</span>: <span class=\"s\">\"Atlas · дизайн\"</span>\n    }\n  ],\n  <span class=\"k\">\"hasMore\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg messages search <b>\"договор OR счёт OR презентация\" --chat \"Atlas · команда\"</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Презентация Atlas v2.\"</span>\n    },\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48211\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Марко\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Счёт за первый этап.\"</span>\n    },\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48212\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Том\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Договор — предварительная версия.\"</span>\n    }\n  ],\n  <span class=\"k\">\"hasMore\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<div class=\"say step\"><h3>В проектной группе</h3><ul><li><b>Презентация:</b> версия v2.</li><li><b>Счёт:</b> за первый этап.</li><li><b>Договор:</b> предварительная версия.</li></ul><h3>Перед сборкой комплекта</h3><p>Нужно проверить личку Анны и группу дизайна — там могли остаться более новые файлы.</p></div>",
+          "tool": false,
+          "delay": 900
+        },
+        {
+          "html": "<div class=\"ask step\">Посмотри личку Анны и дизайн. Оставь последние версии, но не теряй старые.</div>",
+          "tool": false,
+          "delay": 500
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg messages search <b>\"договор\" --chat \"Анна\"</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Финальный договор по Atlas. Исправлены условия оплаты.\"</span>\n    }\n  ],\n  <span class=\"k\">\"hasMore\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg messages search <b>\"презентация\" --chat \"Atlas · дизайн\"</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Презентация Atlas v3, обновила макеты.\"</span>\n    }\n  ],\n  <span class=\"k\">\"hasMore\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<div class=\"say step\"><h3>Актуальный комплект</h3><table><thead><tr><th>Документ</th><th>Версия</th><th>Где найден</th></tr></thead><tbody><tr><td>Договор</td><td>Финальный</td><td>Личка Анны</td></tr><tr><td>Счёт</td><td>Первый этап</td><td>Atlas · команда</td></tr><tr><td>Презентация</td><td>v3</td><td>Atlas · дизайн</td></tr></tbody></table><h3>История версий</h3><p>Предварительный договор и презентация v2 сохранены отдельными пунктами. Ничего не удаляю.</p></div>",
+          "tool": false,
+          "delay": 900
+        },
+        {
+          "html": "<div class=\"ask step\">Проверь, есть ли ещё счета, и составь список для отправки клиенту.</div>",
+          "tool": false,
+          "delay": 500
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg messages search <b>\"счёт\" --chat \"Анна\"</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Счёт за второй этап пока не выставляли.\"</span>\n    }\n  ],\n  <span class=\"k\">\"hasMore\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<div class=\"say step\"><h3>Можно подготовить клиенту</h3><ol><li>Финальный договор от Анны.</li><li>Счёт за первый этап.</li><li>Презентацию v3 из группы дизайна.</li></ol><h3>Не включаю</h3><p>Счёт за второй этап: его ещё не выставляли. Старые версии оставлены в истории, но в актуальный комплект не входят.</p><p><small>Список готов. Для отправки нужно выбрать найденные вложения и подтвердить получателя.</small></p></div>",
+          "tool": false,
+          "delay": 900
+        }
+      ]
+    },
+    {
+      "title": "Бот для клиентов",
+      "hint": "tg bot list → tg bot mcp",
+      "steps": [
+        {
+          "html": "<div class=\"ask step\">Используй tg CLI. Хочу бота для клиентов: учитывать историю заказа, отвечать на вопросы, а спорные случаи передавать мне. Начнём с одного клиента.</div>",
+          "tool": false,
+          "delay": 500
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg bot list</code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"name\"</span>: <span class=\"s\">\"sales\"</span>,\n      <span class=\"k\">\"configured\"</span>: <span class=\"n\">true</span>\n    }\n  ]\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg sales bot recipients list</code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"501\"</span>,\n      <span class=\"k\">\"name\"</span>: <span class=\"s\">\"Анна · клиент\"</span>\n    }\n  ]\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<div class=\"say step\"><h3>Пилот на одном клиенте</h3><ul><li><b>Бот:</b> sales.</li><li><b>Получатель:</b> Анна — уже в списке разрешённых чатов.</li><li><b>Контекст:</b> только доступная история её заказа.</li></ul><h3>Правила</h3><p>Вопросы по истории — черновик ответа. Изменение сроков, цены и компенсации — сначала вам. Если данных нет, уточнение вместо догадки.</p></div>",
+          "tool": false,
+          "delay": 900
+        },
+        {
+          "html": "<div class=\"ask step\">Покажи на двух вопросах: когда доставка и можно ли перенести её на завтра.</div>",
+          "tool": false,
+          "delay": 500
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg messages search <b>\"доставка\" --chat \"Анна · клиент\"</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48210\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Анна\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Доставка согласована на пятницу.\"</span>\n    },\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"48211\"</span>,\n      <span class=\"k\">\"senderName\"</span>: <span class=\"s\">\"Марко\"</span>,\n      <span class=\"k\">\"text\"</span>: <span class=\"s\">\"Адрес клиент подтвердил.\"</span>\n    }\n  ],\n  <span class=\"k\">\"hasMore\"</span>: <span class=\"n\">false</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<div class=\"say step\"><h3>Когда доставка?</h3><blockquote><p>В переписке согласовали доставку на пятницу. Адрес подтверждён.</p></blockquote><h3>Можно перенести на завтра?</h3><blockquote><p>Уточню у команды, возможен ли перенос на завтра, и вернусь с подтверждением.</p></blockquote><h3>Вам на проверку</h3><p>Запрос на изменение даты. Бот не обещает перенос, пока команда его не подтвердит.</p></div>",
+          "tool": false,
+          "delay": 900
+        },
+        {
+          "html": "<div class=\"ask step\">Настрой подтверждение каждого ответа. И покажи, как потом проверить его действия.</div>",
+          "tool": false,
+          "delay": 500
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg sales config set <b>permissions.messages.send ask --bot</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"setting\"</span>: <span class=\"s\">\"permissions.messages.send\"</span>,\n  <span class=\"k\">\"value\"</span>: <span class=\"s\">\"ask\"</span>,\n  <span class=\"k\">\"bot\"</span>: <span class=\"n\">true</span>\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>tg sales bot mcp config <b>--confirm-send</b></code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"mcpServers\"</span>: {\n    <span class=\"k\">\"sales\"</span>: {\n      <span class=\"k\">\"command\"</span>: <span class=\"s\">\"tg\"</span>,\n      <span class=\"k\">\"args\"</span>: [\n        \"sales\",\n        \"bot\",\n        \"mcp\",\n        \"--confirm-send\"\n      ]\n    }\n  }\n}</pre></details>",
+          "tool": true,
+          "delay": 600
+        },
+        {
+          "html": "<div class=\"say step\"><h3>Подтверждение отправки</h3><p>Настройки и конфигурация MCP подготовлены для проверки ответов перед отправкой. Пилот остаётся на одном разрешённом клиенте.</p><h3>История действий</h3><p>Можно смотреть журнал попыток отправки и записанные запуски: статусы, время и ID получателя.</p><p><small>Следующий шаг — подключить конфигурацию к агенту и проверить первый вопрос в пилоте.</small></p></div>",
+          "tool": false,
+          "delay": 900
+        }
+      ]
+    }
+  ]
+}

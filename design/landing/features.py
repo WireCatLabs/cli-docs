@@ -12,47 +12,81 @@ ICON = {
     "groups": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3.5 19c.9-3.2 3-4.8 5.5-4.8s4.6 1.6 5.5 4.8M14.5 15c2.6-.4 4.6.9 5.5 3.6"/></svg>',
 }
 
-GROUPS = [
-    {
-        "key": "personal", "name": "Personal account", "short": "Your chats, history and contacts",
-        "lead": "Your own account, as one more of your devices: every chat, its history, groups, channels and contacts.",
-        "more": ("How to use your account →", "usage"), "file": "account.sh",
-        "items": [
-            ("Unread in every chat at once.", "Other people's messages, and nothing gets marked read.", "tg inbox"),
-            ("Who owes what.", "Everything said since the last review, yours too, in one call.", "tg review --since-time 7d"),
-            ("Search years of history offline.", "In the copy of your chats kept on your computer.", 'tg messages search "contract"'),
-            ("Voice notes as text.", "By Telegram, or by a speech model on your machine.", 'tg messages transcribe "Mum" 8812 --local'),
-            ("Send later.", "Telegram delivers it on time, with your laptop shut.", 'tg messages send me "Call Mum" --at-time 2h'),
-            ("Everything else you do by hand.", "Replies, files, reactions, polls, edits, forwards, pins.", 'tg messages send "Book club" "The minutes" --file minutes.pdf'),
-        ],
-    },
-    {
-        "key": "bots", "name": "Bots", "short": "Official Bot API, many bots",
-        "lead": "Your bots, through the official Bot API of Telegram and MAX. Keep as many as you like, each under a name you choose.",
-        "more": ("How to set up a bot →", "bot"), "file": "bots.sh",
-        "items": [
-            ("The bot's name is the first word.", "Keep several, each under a name you choose.", "tg bot list --check"),
-            ("Tokens in the system keyring.", "Never printed, not even in an error.", "tg sales bot auth set"),
-            ("Each bot has its own list of chats.", "It writes only there, and keeps a journal of what it sent.", "tg sales bot recipients add user:<id>"),
-            ("Messages and files.", "Send, edit, delete and pin, to a chat or to a person.", 'tg sales bot messages send "Team" "Build is ready" --file report.pdf'),
-            ("On MAX, the whole Bot API.", "Members, admins, buttons, the command menu, webhooks and moderation.", "max sales bot api get-updates --limit 10"),
-            ("A bot for your agent.", "An MCP server of its own, read-only by default.", "max sales bot mcp"),
-        ],
-    },
-    {
-        "key": "groups", "name": "Groups you run", "short": "Members, questions, moderation",
-        "lead": "For the groups and channels you run: who is waiting, who came and went, and what breaks your rules.",
-        "more": ("How to run a group →", "groups"), "file": "groups.sh",
-        "items": [
-            ("Questions nobody answered.", "Asked at least a day ago, still open.", 'tg review --chat "Hiking" --unanswered'),
-            ("Who joined, left, was added or removed.", "And by whom.", 'tg chats events "Hiking" --since-time 7d'),
-            ("Everyone in the group.", "With their role and when they were last seen.", 'tg chats members list "Hiking" --all'),
-            ("Forum topics and invite links.", "See where a link leads without joining.", "tg chats inspect https://t.me/+AbCdEf"),
-            ("Manage it.", "Rename, add and remove members and admins, reset the invite link.", 'tg chats create "Hiking 2027" @sofia'),
-            ("Moderation by your rules.", "Links, forwards and flood, applied when you run them.", 'max chats check "Residents"'),
-        ],
-    },
-]
+GROUPS = [{'key': 'personal',
+  'name': 'Personal account',
+  'short': 'Your chats, history and contacts',
+  'lead': 'Connect your own account, just like adding another device. Access your chats, history, groups, channels and contacts.',
+  'more': ('How to use your account →', 'usage'),
+  'file': 'account.sh',
+  'items': [('Unread messages in one place.',
+             "See incoming messages without marking them as read.",
+             'tg inbox'),
+            ('Keep track of agreements.',
+             'Review what you and others have promised since your last check-in.',
+             'tg review --since-time 7d'),
+            ('Find it, even with a typo.',
+             'Search your local chat archive by full words, partial words or approximate spelling.',
+             'tg messages search "contract"'),
+            ('News from your subscriptions.',
+             'Ask your agent for a digest of the channels you follow, on the topics you choose, with links to the '
+             'posts.',
+             'tg review --chat "Tech news" --since-time 1d'),
+            ('Voice notes as text.',
+             'Transcribe with Telegram or a speech model running on your computer.',
+             'tg messages transcribe "Mum" 8812 --local'),
+            ('Send later.',
+             'Telegram delivers your message on schedule, even when your laptop is closed.',
+             'tg messages send me "Call Mum" --at-time 2h')]},
+ {'key': 'bots',
+  'name': 'Bots',
+  'short': 'Customers, teams and announcements',
+  'lead': 'Use Telegram and MAX bots to reach customers and teams: announcements, helpful replies and simple actions.',
+  'more': ('How to set up a bot →', 'bot'),
+  'file': 'bots.sh',
+  'items': [('Group broadcasts.',
+             'Ask your agent to send an announcement to the groups and channels you choose.',
+             'max sales bot chats list'),
+            ('Personalised messages.',
+             'Let your agent tailor each message using the customer details you provide.',
+             'max sales bot messages send user:4815162342 "Anna, your order is ready"'),
+            ('Replies with context.',
+             'Give your agent a knowledge base or conversation history to help it answer customer questions.',
+             'max support bot messages list "Support" --limit 20'),
+            ('Team notifications.',
+             'Keep people informed about requests, results and changes, with the files they need.',
+             'max sales bot messages send "Team" "Build is ready" --file report.pdf'),
+            ('Buttons and clear choices.',
+             'Help people choose an action, open a link or respond with a tap.',
+             'max sales bot commands set start=Start help=Help'),
+            ('Control what gets sent.',
+             'Choose who the bot may contact and check which sends succeeded or need attention.',
+             'max sales bot sends list')],
+  'more_tool': 'max'},
+ {'key': 'groups',
+  'name': 'Groups you run',
+  'short': 'Questions, discussions and community health',
+  'lead': 'Keep your community useful: unanswered questions, clear decisions and conversations that follow your '
+          'rules.',
+  'more': ('How to run a group →', 'groups'),
+  'file': 'groups.sh',
+  'items': [('Question monitoring.',
+             'Find questions left without an answer so members get the help they came for.',
+             'tg review --chat "Hiking" --unanswered'),
+            ('Group activity.',
+             'Who joined, left, was added or removed, and who did it.',
+             'tg chats events "Hiking" --since-time 7d'),
+            ('Keep discussions on track.',
+             'Ask your agent to flag spam, insults and conflicts so you can step in early.',
+             'tg review --chat "Hiking" --since-time 1d'),
+            ('Moderation by your rules.',
+             'Choose which violations to flag, which messages to delete and when to remove a participant.',
+             'max chats check "Residents"'),
+            ('Discussion summaries.',
+             'Get the decisions, open questions and next steps without rereading the whole conversation.',
+             'tg review --chat "Hiking" --since-time 7d'),
+            ('Group management.',
+             'Delegate routine invitations, admin changes and invite-link updates to your agent.',
+             'tg chats create "Hiking 2027" @sofia')]}]
 
 e = html.escape
 
@@ -63,7 +97,7 @@ def cmd(text):
 
 def more(g):
     label, slug = g["more"]
-    return f'<a class="more" href="https://wirecat.dev/en/docs/tg/{slug}">{label}</a>'
+    return f'<a class="more" href="https://wirecat.dev/en/docs/{g.get("more_tool", "tg")}/{slug}">{label}</a>'
 
 
 def tabs(v, cls):
@@ -130,7 +164,7 @@ def v5():
 def v6():
     out = []
     for g in GROUPS:
-        tiles = "".join(f'<div class="t6"><b>{t}</b><span>{d}</span>{cmd(c)}</div>' for t, d, c in g["items"])
+        tiles = "".join(f'<div class="t6"><b>{t}</b><span>{d}</span></div>' for t, d, c in g["items"])
         out.append(f'<div class="grp6"><div class="head6"><span class="fv-ico">{ICON[g["key"]]}</span><span class="fv-name">{g["name"]}</span><span class="fv-short">{g["short"]}</span></div><p class="fv-lead">{g["lead"]}</p><div class="g6">{tiles}</div>{more(g)}</div>')
     return "".join(out)
 
@@ -138,8 +172,8 @@ def v6():
 variants = [v1(), v2(), v3(), v4(), v5(), v6()]
 block = (
     '<section id="features" style="padding-top:0">\n  <div class="wrap">\n'
-    '    <h2 class="big" id="feat-title">One tool for every side of your messenger</h2>\n'
-    '    <p class="intro">Your own account, your bots and the groups you run. The same commands in Telegram and MAX.</p>\n'
+    '    <h2 class="big" id="feat-title">Less busywork in your chats</h2>\n'
+    '    <p class="intro">Keep track of agreements, help customers and keep your groups useful. Ask your agent to work through Telegram and MAX.</p>\n'
     + "".join(f'    <div class="fv fv{n}" data-variant="{n}"{"" if n == 6 else " hidden"}>{body}</div>\n' for n, body in enumerate(variants, 1))
     + "  </div>\n</section>\n"
 )
