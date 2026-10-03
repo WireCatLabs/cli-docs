@@ -10,7 +10,19 @@ title: "MCP-сервер"
 
 ## Подключение
 
-Сначала войдите в терминале (`tg session start`). Сервер не выполняет вход.
+Сначала выполните `tg setup --agent none` в локальном терминале: эта команда настраивает аккаунт Telegram. `tg mcp setup` отдельно подключает клиент. `tg skill show` объясняет оба шага до входа. Сам MCP-сервер не выполняет вход за вас.
+
+**Codex или Claude Code на этом компьютере:**
+
+```sh
+tg mcp doctor                # check that MCP starts and lists tools
+tg mcp setup codex          # add it to Codex
+tg mcp setup claude-code    # or add it to Claude Code
+```
+
+Укажите профиль первым, например `tg work mcp setup codex`. Настройка использует собственную команду клиента и не меняет другие серверы. Если сервер с таким именем уже есть, удалите его запись в клиенте перед повторной настройкой. Стандартный профиль tg предлагает инструменты изменения данных, поэтому настройка просит проверить разрешения и повторить команду с `--allow-writes`. Этот флаг подтверждает установку, но не меняет разрешения. Чтобы ограничить действия агента, сначала задайте `permissions` профиля ([ниже](#what-an-agent-may-do)).
+
+`mcp doctor` не читает сообщения и не входит в Telegram. Успешная проверка означает, что подключение MCP и список инструментов работают; она не подтверждает действительность сессии аккаунта. `potentialWrites` считает инструменты без объявления «только чтение». Для браузера и мобильных чатов требуется отдельное удалённое подключение ([инструкция](./remote.md)).
 
 **Claude Code:**
 
@@ -123,6 +135,8 @@ claude mcp add tg -- tg mcp --confirm-send
 | `tg_chats_events` | `tg chats events`, `--since-time`, `--type` | кто вступил, вышел, кого добавили или удалили и кем, по служебным сообщениям; без `since_time` — семь дней |
 | `tg_chats_members` | `tg chats members list` | участники группы постранично, роли и последнее появление |
 | `tg_chats_inspect` | `tg chats inspect` | куда ведёт публичная ссылка или приглашение; без вступления |
+| `tg_topics_enable` | `tg topics enable` | включить форум с разрешением `groups`; только владелец группы может включить темы; явное преобразование обычной группы возвращает новый идентификатор чата |
+| `tg_topics_create` | `tg topics create` | создать тему с разрешением `groups`; при неизвестном результате проверить `tg_topics_list`, а не повторять, даже с тем же `send_id` |
 | `tg_topics_list` | `tg topics list`, `tg topics search` | темы форума с идентификаторами; `search` ищет по названию |
 | `tg_chats_show` | `tg chats show` | один чат и его участники |
 | `tg_contacts_list` | `tg contacts list` | люди с личным чатом |
@@ -135,13 +149,13 @@ claude mcp add tg -- tg mcp --confirm-send
 | `tg_messages_photo` | `tg messages download` | фотография сообщения как изображение до 512 КБ; для остальных вложений возвращает отказ с командой сохранения `tg messages download` |
 | `tg_messages_transcribe` | `tg messages transcribe` | голосовое в текст через Telegram (Premium или недельная пробная квота), иначе локальной моделью; `local: true` пропускает Telegram; `pending: true` означает, что результат не готов за минуту; отсутствующая модель не скачивается, возвращается команда `tg models audio download` |
 | `tg_messages_search` | `tg messages search` | поиск сохранённого на компьютере; без запросов Telegram |
-| `tg_messages_send` | `tg messages send`, `--reply-to` | отправка с разрешением `messages.send`; `reply_to` — ответ, `send_id` — повтор отправки с неизвестным результатом; `silent`, `no_preview` и `md` соответствуют `--silent`, `--no-preview`, `--md`; `at_time` — отложенная отправка без повторов, форма показывает время. `file` или `photo` прикладывает локальный файл, текст служит подписью (`as_file` сохраняет видео как файл), `voice` отправляет Ogg Opus как голосовое. Скрытые файлы, `~/.ssh`, каталоги tg и база сообщений запрещены без обхода через MCP |
+| `tg_messages_send` | `tg messages send`, `--reply-to`, `--topic` | отправить с разрешением `messages.send`; `reply_to` отвечает на сообщение; `send_id` повторяет отправку с неизвестным результатом; `silent`, `no_preview` и `md` соответствуют `--silent`, `--no-preview` и `--md`; `topic` выбирает тему форума; `at_time` отправляет позже — без повторов, время показано в форме подтверждения; `file` или `photo` прикрепляет путь на этом компьютере, текст становится подписью (`as_file` сохраняет видео как файл), `voice` отправляет Ogg Opus как голосовое сообщение — скрытые файлы, `~/.ssh`, каталоги tg и база сообщений запрещены без обхода через MCP |
 | `tg_messages_edit` | `tg messages edit` | новый текст собственного сообщения, разрешение `messages.edit`; `md` как `--md`; повтор ничего не меняет |
 | `tg_chats_mark_read` | `tg chats mark-read` | отметка прочитанным до последнего или указанного `until` сообщения, разрешение `chats.mark-read`; собеседник видит прочтение |
 | `tg_messages_delete` | `tg messages delete` | до 10 сообщений только из вида владельца, разрешение `messages.delete`; по умолчанию форма подтверждения; никогда у всех; каждое входит в часовой лимит |
 | `tg_reactions_add`, `tg_reactions_remove` | `tg reactions add`, `remove` | реакция владельца на сообщение, разрешение `reactions`; форма показывает эмодзи |
 | `tg_polls_show` | `tg polls show` | опрос и идентификаторы ответов; только чтение |
-| `tg_polls_vote`, `tg_polls_close`, `tg_polls_create` | `tg polls vote`, `close`, `create` | голос по идентификатору (`polls.vote`), закрытие своего опроса (`polls.close`), создание (`polls.create`, с `send_id` для повтора и `revote` для изменения голосов) |
+| `tg_polls_vote`, `tg_polls_close`, `tg_polls_create` | `tg polls vote`, `close`, `create` | проголосовать по идентификатору ответа (`polls.vote`), закрыть собственный опрос (`polls.close`), создать опрос (`polls.create`, с `send_id` для повтора, `revote` для изменения голоса и `topic` для выбора темы форума) |
 | `tg_messages_forward` | `tg messages forward` | пересылка сообщения в другой чат (`to`), разрешение `messages.forward`; `send_id` повторяет пересылку с неизвестным результатом |
 | `tg_messages_pin`, `tg_messages_unpin` | `tg messages pin`, `unpin` | закрепить или открепить сообщение; тихо, если нет `notify`; разрешения `messages.pin` и `messages.unpin` |
 | `tg_chats_create`, `tg_chats_join`, `tg_chats_leave` | `tg chats create`, `join`, `leave` | создать группу или канал с участниками, вступить по ссылке, выйти; каждое действие видно другим |

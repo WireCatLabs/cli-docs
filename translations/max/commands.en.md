@@ -826,7 +826,7 @@ max messages send <chat> [text] [options]
 | `--send-id <id>` | repeat a send whose outcome was unknown, without risking a second copy. |
 | `--silent` | deliver without a notification. |
 | `--no-preview` | no preview card for a link in the text. |
-| `--md` | read **bold**, _italic_, \~\~struck\~\~ and `code` in the text; \ keeps a mark literal. |
+| `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
 | `--file <file>` | attach a file; the text becomes its caption. |
 | `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption. |
 | `--as-file` | send the --file as a file to download, a video included. |
@@ -864,7 +864,7 @@ max messages edit <chat> <message> [text] [options]
 
 | Option | Purpose |
 |---|---|
-| `--md` | read **bold**, _italic_, \~\~struck\~\~ and `code` in the text; \ keeps a mark literal. |
+| `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
 
 ### `max messages delete`
 
@@ -1288,7 +1288,7 @@ speech models for transcribing voice messages
 
 #### `max models audio list`
 
-the models max can use, which are downloaded, and which one is the default
+the speech models, most suitable first, which are downloaded, and which one is the default
 
 ```sh
 max models audio list
@@ -1296,7 +1296,7 @@ max models audio list
 
 #### `max models audio download`
 
-download a speech model once, checked against the sha256 this version of max expects
+download a speech model once, checked against the sha256 this version expects
 
 ```sh
 max models audio download <model>
@@ -1304,7 +1304,7 @@ max models audio download <model>
 
 | Argument | | Meaning |
 |---|---|---|
-| `model` | required | a model id from `max models audio list`. |
+| `model` | required | a model id from `models audio list`. |
 
 ### `max models text`
 
@@ -1538,7 +1538,7 @@ max sends list [options]
 
 | Option | Purpose |
 |---|---|
-| `--limit <n>` | how many to show. Default: `20`. |
+| `--limit <n>` | how many to show. |
 
 ## `max inbox`
 
@@ -1805,8 +1805,12 @@ the instructions an agent is given for this tool
 print SKILL.md — `max skill install` puts it where Claude Code, Codex and Gemini CLI look for it
 
 ```sh
-max skill show
+max skill show [name]
 ```
+
+| Argument | | Meaning |
+|---|---|---|
+| `name` | optional | one of the skills shipped for a task: link-conversations. |
 
 ### `max skill install`
 
@@ -2222,7 +2226,7 @@ max bot messages send <chat> [text] [options]
 |---|---|
 | `--reply-to <message>` | answer this message, by its id in the same chat. |
 | `--silent` | deliver without a notification. |
-| `--md` | read **bold**, _italic_, \~\~struck\~\~ and `code` in the text; \ keeps a mark literal. |
+| `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
 | `--html` | the text is HTML: <b>, <i>, <a href>, <code>. |
 | `--file <file>` | attach a file; the text becomes its caption. |
 | `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption. |
@@ -2277,7 +2281,7 @@ max bot messages edit <chat> <message> <text> [options]
 
 | Option | Purpose |
 |---|---|
-| `--md` | read **bold**, _italic_, \~\~struck\~\~ and `code` in the text; \ keeps a mark literal. |
+| `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
 | `--html` | the text is HTML: <b>, <i>, <a href>, <code>. |
 
 #### `max bot messages delete`
@@ -2750,6 +2754,14 @@ max bot uploads put <file> [options]
 ### `max bot api`
 
 every operation of the official Bot API, generated from its schema — docs/dev/bot-api-coverage.md
+
+```sh
+max bot api [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--store-token <profile>` | keep a returned authentication token only in this bot profile's OS keyring; never print it. |
 
 #### `max bot api get-my-info`
 

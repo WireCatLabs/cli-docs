@@ -28,12 +28,12 @@ Enter login codes and passwords in your local terminal when the CLI asks for the
 1. Run in your local terminal:
 
    ```sh
-   tg session start --app auto
+   tg setup --agent all
    ```
 
 2. On first login, the CLI obtains Telegram application credentials. Enter your phone number and the code sent in Telegram when requested.
 3. On your phone, choose the right Telegram account. Open Settings → Devices → Link Desktop Device and scan the computer’s QR code.
-4. Enter your two-step verification password if requested, then wait for successful login.
+4. Enter your two-step verification password if requested, then wait for setup to check your account and five chats and install agent skills. It reuses an existing session; history downloads remain a separate choice. For login alone, use `tg session start --app auto`.
 
 If automatic registration fails, use:
 
@@ -125,7 +125,7 @@ tg doctor
 Log in:
 
 ```sh
-tg session start --app auto
+tg setup --agent all
 ```
 
 Account:

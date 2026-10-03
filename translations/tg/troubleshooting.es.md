@@ -11,7 +11,7 @@ Busca el síntoma que ves en pantalla y sigue los pasos. Con `--json`, cada erro
 | `1` | `generic_failure` | error en el nombre del comando o fallo de `tg` | [comando desconocido](#error-unknown-command-), [informar del problema](#report-a-problem) |
 | `2` | `validation_error` | valor o combinación de opciones no admitidos; nombre que coincide con varios chats | [valores](#--limit-takes-a-whole-number-from-1-upwards), [varios chats](#-matches-3-chats--name-one-by-its-id) |
 | `3` | `configuration_error` | `config.json` incorrecto o archivo local más reciente que este `tg` | [configuración](#-is-not-a-valid-config), [archivo local](#the-message-store-was-written-by-a-newer-version-) |
-| `4` | `authentication_error` | sin sesión, sesión finalizada o almacén de claves inaccesible | [sin sesión](#no-session-for-profile-default--run-tg-session-start) |
+| `4` | `authentication_error` | sin sesión, sesión finalizada o almacén de claves inaccesible | [sin sesión](#no-session-for-profile-default--run-tg-setup) |
 | `5` | `permission_error` | rechazado por `permissions` o por Telegram | [no permitido](#profile--does-not-let--write-or-profile--denies-), [rechazo de Telegram](#telegram-refused-) |
 | `6` | `not_found` | chat, mensaje o persona inexistentes; archivo local vacío | [sin chat](#no-chat-matches-), [sin datos guardados](#nothing-recorded-for-profile--yet--run-the-command-once-without---offline) |
 | `7` | `confirmation_required` | chat fuera de destinatarios permitidos o cambio que requiere aprobación sin nadie que responda | [destinatarios](#chat--is-not-on-the-recipient-list-of-profile-), [confirmación](#-asks-before-it-acts) |
@@ -60,16 +60,18 @@ error: unknown command 'list'
 
 Aquí `chat` se interpretó como perfil y `list` no es un comando. El correcto es `chats`, en plural. `tg --help` muestra todos.
 
-## "no session for profile "default" — run `tg session start`"
+## "no session for profile "default" — run `tg setup`"
 
 Código `4`. El perfil nunca inició sesión en este equipo o la cerró. Comprueba qué perfil querías usar: primera palabra o `TG_PROFILE` ([perfiles](./sessions.md#profiles)).
 
 ```sh
-tg session start            # log in
+tg setup                    # guided first run
 tg work chats list          # or name the profile you logged in to
 ```
 
 Si sabes que iniciaste sesión, comprueba si `TG_CONFIG_DIR`, `TG_STATE_DIR` o `TG_CACHE_DIR` está ahora definida y antes no, o viceversa, por ejemplo en otra terminal. Cambian dónde se busca la sesión. `tg config show` avisa si hay alguna; `env | grep TG_` las muestra todas.
+
+Si es el primer uso y no hay claves de aplicación, el error indica `tg setup` (o `tg work setup` para el perfil work). Lee `tg setup --help` para las opciones de acceso. Los agentes pueden leer `tg skill show` antes de iniciar sesión. Una sesión interrumpida o caducada sigue necesitando `tg session start` y después otra comprobación con setup.
 
 ## "no Telegram app credentials found … although it has logged in on this machine"
 

@@ -4,7 +4,7 @@ title: "MCP server"
 
 `max mcp` gives an agent access to a profile over [MCP](https://modelcontextprotocol.io), through stdin and stdout without a network listener. It ships with `max`; no separate installation is needed.
 
-**When to use it.** Claude Code, Codex and other agents with a terminal can use `max` directly with [agent instructions](https://github.com/leemour/max-cli/blob/v0.24.0/README.md#для-скриптов-и-агентов). Token use and capabilities are the same. MCP is useful for clients without a terminal, such as Claude Desktop, or chat-based integration in Cursor, and when you want the client to request permission for each send. Browser-based ChatGPT and Claude require [Remote access](./remote.md).
+**When to use it.** Claude Code, Codex and other agents with a terminal can use `max` directly with [agent instructions](https://github.com/leemour/max-cli/blob/v0.25.0/README.md#для-скриптов-и-агентов). Token use and capabilities are the same. MCP is useful for clients without a terminal, such as Claude Desktop, or chat-based integration in Cursor, and when you want the client to request permission for each send. Browser-based ChatGPT and Claude require [Remote access](./remote.md).
 
 ## Connecting
 

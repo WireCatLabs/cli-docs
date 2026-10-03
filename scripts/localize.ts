@@ -147,6 +147,7 @@ export function captureUpstream(root: string, tool: Tool) {
 export function localizeTool(root: string, tool: Tool) {
   const source = join(root, "content/upstream", tool.name)
   const target = join(root, "content/docs", tool.name)
+  mkdirSync(target, { recursive: true })
   const translations = join(root, "translations", tool.name)
   const hashes = JSON.parse(readFileSync(join(root, "translations/sources.json"), "utf8")) as Record<string, string>
   const correctionFile = join(root, "scripts/docs-corrections.json")

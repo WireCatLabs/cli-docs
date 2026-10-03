@@ -288,7 +288,7 @@ The log records the chat, action, outcome and text length, but never the text it
 
 ## Any API operation
 
-Every Bot API operation is available as `max bot api <операция>`. Commands are generated from the official API schema, so new MAX operations appear after updating the schema:
+Every Bot API operation is available as `max bot api <операция>`. Commands are generated from the official API schema by cli-core; command construction and input validation are shared with Telegram. New MAX operations appear after updating the schema:
 
 ```sh
 max sales bot api get-my-info
@@ -297,7 +297,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Path and query parameters become flags; the body is JSON in `--body`, `--body -` (from a pipe) or `--body-file`. Before sending, the body is checked against the schema. Errors identify the field and expected type without exposing its value. See [Bot API coverage](https://github.com/leemour/max-cli/blob/v0.24.0/docs/dev/bot-api-coverage.md) for all operations and their read/write classification.
+Path and query parameters become flags; the body is JSON in `--body`, `--body -` (from a pipe) or `--body-file`. `--body-file -` also reads stdin. The native `timeout` parameter is named `--poll-timeout`; the global `--timeout` limits the whole command. The shared `--store-token <profile>` option is unavailable for current MAX methods: each rejects it before performing the operation. Before sending, the body is checked against the schema. Errors identify the field and expected type without exposing its value. See [Bot API coverage](https://github.com/leemour/max-cli/blob/v0.25.0/docs/dev/bot-api-coverage.md) for all operations and their read/write classification.
 
 ## Scripts and agents
 
@@ -340,3 +340,5 @@ The bot profile determines agent access: bot details, seen chats, messages, sear
 `--allow-send`, `--allow-delete` and `--allow-moderate` no longer grant permissions. The server accepts them with a warning.
 
 Every write runs through the same command you would run yourself, including the recipient allowlist, `readOnly`, `allow` and logging. The agent cannot access tokens or webhooks; it can only read recipients, command menus and admins. It also cannot leave chats, send files or use `bot api`.
+
+With `--md`, the bot uses MAX rules: `__жирный__`, `++подчёркнутый++`, `^^выделенный^^`, links, code, headings and quotations. The formatter creates safe HTML with escaped text and addresses; this is an internal representation, and the --md argument remains Markdown.

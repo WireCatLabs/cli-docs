@@ -2,31 +2,6 @@
   {
     "tool": "tg",
     "slug": "usage",
-    "reason": "tg v0.22 changelog/archive/reference document short queries, typo correction and fallback matching; only the chat-name filter retains the three-character minimum.",
-    "replacements": {
-      "en": [
-        {
-          "before": "A search needs **at least three characters**. `messages search` looks for every word, as a word or\nthe start of one — `invoic` finds \"invoice\". It never connects to Telegram: it answers from what was\nread, fetched or kept by `serve` ([archive.md](./archive.md#search)). Once you have the chat, use its id.",
-          "after": "The chat-name filter needs **at least three characters**. Message search also accepts one- and two-letter queries. `messages search` first looks for every word, as a whole word or its beginning (`invoic` finds \"invoice\"); it corrects typos and falls back to any word, then part of a word when needed. It never connects to Telegram: it searches what was read, fetched or kept by `serve` ([archive.md](./archive.md#search)). Once you have the chat, use its id."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Для поиска чата требуется **не меньше трёх символов**. `messages search` ищет сохранённые сообщения: сначала все слова целиком или по началу (`invoic` находит «invoice»), затем любое слово или часть слова, если точных совпадений нет. В версии 0.22 поиск сообщений принимает и запросы из одной-двух букв. Telegram не запрашивается; используется прочитанное, загруженное или сохранённое `serve` ([Поиск](./archive.md#search)). Дальше используйте идентификатор чата.",
-          "after": "Фильтр названия чата требует **не меньше трёх символов**. Поиск сообщений принимает и запросы из одной-двух букв. `messages search` сначала ищет все слова целиком или по началу (`invoic` находит «invoice»), исправляет опечатки и при необходимости ищет любое слово, затем часть слова. Telegram не запрашивается; используется прочитанное, загруженное или сохранённое `serve` ([Поиск](./archive.md#search)). Дальше используйте идентификатор чата."
-        }
-      ],
-      "es": [
-        {
-          "before": "Una búsqueda necesita **al menos tres caracteres**. `messages search` busca todas las palabras completas o sus inicios: `invoic` encuentra \"invoice\". Nunca se conecta a Telegram; consulta lo leído, descargado o guardado por `serve` ([archivo local](./archive.md#search)). Cuando encuentres el chat, usa su identificador.",
-          "after": "El filtro por nombre de chat necesita **al menos tres caracteres**. La búsqueda de mensajes también admite consultas de una o dos letras. `messages search` primero busca todas las palabras completas o sus inicios (`invoic` encuentra \"invoice\"), corrige erratas y, si hace falta, prueba cualquier palabra y después parte de una palabra. No se conecta a Telegram: consulta lo leído, descargado o guardado por `serve` ([archivo local](./archive.md#search)). Cuando encuentres el chat, usa su identificador."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "usage",
     "reason": "Current command reference and v0.21 breaking-change note require durations for --unanswered; bare hours are invalid.",
     "replacements": {
       "en": [
@@ -132,31 +107,31 @@
       "en": [
         {
           "before": "Every file `tg` writes is created readable by you only, in folders\n  only you can open ([below](#what-reaches-the-disk)).",
-          "after": "The session, store, runs and send journal are owner-only. Settings and service files have different permissions, and redirected exports use your shell’s permissions ([below](#what-reaches-the-disk))."
+          "after": "On Linux and macOS, the session, store, runs and send journal are owner-only. Settings and service files have different permissions, and redirected exports use your shell’s permissions ([below](#what-reaches-the-disk))."
         },
         {
-          "before": "Other users of the machine see none of `tg`'s files: folders are `0700`, files `0600`.",
-          "after": "Protected state files use `0600` inside `0700` folders. Not every file written by `tg` has that mode: settings and service files may be `0644`; redirected exports follow the shell’s permissions. Check the storage table above."
+          "before": "On Linux and macOS, folders are `0700` and files `0600`. On Windows, access follows the directory's\ninherited ACLs.",
+          "after": "On Linux and macOS, protected state files use `0600` inside `0700` folders. Settings and service files may use `0644`; redirected exports follow shell permissions. On Windows, access follows the directory’s inherited ACLs. Check the storage table above."
         }
       ],
       "ru": [
         {
           "before": "Файлы `tg` создаются доступными только вам, в закрытых каталогах ([ниже](#what-reaches-the-disk)).",
-          "after": "Сессия, база, записи запусков и журнал отправок `tg` доступны только владельцу. У настроек и файлов служб другие права; при перенаправлении экспорта права задаёт оболочка ([ниже](#what-reaches-the-disk))."
+          "after": "На Linux и macOS сессия, база, записи запусков и журнал отправок `tg` доступны только владельцу. У настроек и файлов служб другие права; при перенаправлении экспорта права задаёт оболочка ([ниже](#what-reaches-the-disk))."
         },
         {
-          "before": "Другие пользователи компьютера не видят файлов `tg`: каталоги имеют права `0700`, файлы — `0600`.",
-          "after": "Защищённые файлы состояния имеют права `0600` в каталогах `0700`. Это не относится ко всем файлам `tg`: настройки и файлы служб могут иметь `0644`, а права перенаправленного экспорта задаёт оболочка. См. таблицу хранения выше."
+          "before": "В Linux и macOS каталоги имеют права `0700`, файлы — `0600`. В Windows доступ определяется унаследованными ACL каталога.",
+          "after": "На Linux и macOS чувствительные файлы состояния защищены правами `0600` в каталогах `0700`. Настройки и файлы сервиса могут иметь `0644`; права перенаправленного вывода задаёт оболочка. На Windows доступ определяется унаследованными ACL каталога. Сверяйтесь с таблицей выше."
         }
       ],
       "es": [
         {
           "before": "Los archivos se crean para que solo tú puedas leerlos, dentro de carpetas a las que solo tú puedes acceder ([más abajo](#what-reaches-the-disk)).",
-          "after": "La sesión, el archivo local, las ejecuciones y el registro de envíos son accesibles solo para su propietario. Los ajustes y archivos de servicio tienen otros permisos; una exportación redirigida usa los permisos de la terminal ([más abajo](#what-reaches-the-disk))."
+          "after": "En Linux y macOS, la sesión, el archivo local, las ejecuciones y el registro de envíos son accesibles solo para su propietario. Los ajustes y archivos de servicio tienen otros permisos; una exportación redirigida usa los permisos de la terminal ([más abajo](#what-reaches-the-disk))."
         },
         {
-          "before": "Otros usuarios no pueden leer los archivos de `tg`: las carpetas tienen permisos `0700` y los archivos `0600`.",
-          "after": "Los archivos de estado protegidos usan `0600` en carpetas `0700`. No todos los archivos de `tg` tienen ese modo: los ajustes y servicios pueden usar `0644`; las exportaciones redirigidas siguen los permisos de la terminal. Consulta la tabla anterior."
+          "before": "En Linux y macOS, las carpetas tienen permisos `0700` y los archivos `0600`. En Windows, el acceso sigue las ACL heredadas del directorio.",
+          "after": "En Linux y macOS, los archivos de estado protegidos usan `0600` en carpetas `0700`. La configuración y los archivos del servicio pueden usar `0644`; los permisos de exportaciones redirigidas dependen de la shell. En Windows, el acceso sigue las ACL heredadas del directorio. Consulta la tabla anterior."
         }
       ]
     }
@@ -168,8 +143,8 @@
     "replacements": {
       "ru": [
         {
-          "before": "Агенту с терминалом (Claude Code, Codex) нужен [навык](https://github.com/leemour/max-cli/blob/v0.24.0/README.md#навык-для-агентов-с-терминалом);\nагенту без терминала (Claude Desktop, Cursor) — [MCP-сервер](./mcp.md). Ниже — что вы говорите, что\nагент вызывает и что вы получаете.",
-          "after": "Агенту с доступом к терминалу (например, Claude Code или Codex) можно подключить [навык](https://github.com/leemour/max-cli/blob/v0.24.0/README.md#навык-для-агентов-с-терминалом). Без доступа к терминалу используйте [MCP-сервер](./mcp.md), например в Claude Desktop. В Cursor доступны оба способа. Ниже — ваш запрос, команда агента и результат."
+          "before": "Агенту с терминалом (Claude Code, Codex) нужен [навык](https://github.com/leemour/max-cli/blob/v0.25.0/README.md#навык-для-агентов-с-терминалом);\nагенту без терминала (Claude Desktop, Cursor) — [MCP-сервер](./mcp.md). Ниже — что вы говорите, что\nагент вызывает и что вы получаете.",
+          "after": "Агенту с доступом к терминалу (например, Claude Code или Codex) можно подключить [навык](https://github.com/leemour/max-cli/blob/v0.25.0/README.md#навык-для-агентов-с-терминалом). Без доступа к терминалу используйте [MCP-сервер](./mcp.md), например в Claude Desktop. В Cursor доступны оба способа. Ниже — ваш запрос, команда агента и результат."
         }
       ]
     }
@@ -375,10 +350,6 @@
         {
           "before": "- **Состояние**: сессия (`sessions/<profile>.session`), записи запусков (`runs/`), журнал отправок (`sends/`), разрешённые получатели (`profiles/`), сохранённая позиция `inbox --new` (`inbox/`), фоновые задания загрузки, журнал и файл блокировки `serve`.",
           "after": "- **Данные аккаунта и работы CLI:** в таблице указаны полные пути к сессии входа, записям запусков, журналу отправок, списку разрешённых получателей и позиции чтения входящих. Фоновые задания загрузки и блокировка сервера также хранятся в каталоге данных аккаунта."
-        },
-        {
-          "before": "**Модели речи**",
-          "after": "**Модели распознавания речи**"
         }
       ],
       "es": [
@@ -433,8 +404,8 @@
     "replacements": {
       "ru": [
         {
-          "before": "\nДля входа нужны две составляющие:\n\n- **Приложение**: `api_id` и `api_hash` с [my.telegram.org](https://my.telegram.org/apps). Они идентифицируют программу в Telegram. `tg` сохраняет их в системном хранилище ключей.\n- **Сессия**: данные, которые Telegram выдаёт после входа. Они хранятся файлом в каталоге состояния и дают такой же доступ, как пароль.\n\n`tg session start` получает обе составляющие. Команда задаёт вопросы, поэтому запускайте её в терминале.\n\n",
-          "after": "\nПеред первым входом откройте Telegram на телефоне и убедитесь, что уже вошли в нужный аккаунт. Оставьте телефон под рукой: он понадобится для кода или сканирования QR.\n\nПодключение состоит из двух шагов:\n\n1. **Получить данные приложения Telegram** — `api_id` (числовой идентификатор) и `api_hash` (секретный ключ) с [my.telegram.org](https://my.telegram.org/apps). С ними `tg` может обращаться к Telegram от имени программы. Обычно этот шаг нужен только при первом входе для выбранного профиля.\n2. **Подтвердить вход в свой аккаунт** — отсканировать QR-код или ввести код входа. После этого `tg` сохраняет **сессию**: данные авторизации, с которыми следующие команды работают без повторного входа.\n\nОба шага выполняет `tg session start`. Запускайте команду в локальном терминале: она будет запрашивать данные и ждать подтверждения с телефона.\n\n"
+          "before": "\nДля входа нужны две составляющие:\n\n- **Приложение**: `api_id` и `api_hash` с [my.telegram.org](https://my.telegram.org/apps). Они идентифицируют программу в Telegram. `tg` сохраняет их в системном хранилище ключей.\n- **Сессия**: данные, которые Telegram выдаёт после входа. Они хранятся файлом в каталоге состояния и дают такой же доступ, как пароль.\n\n",
+          "after": "\nПеред первым входом откройте Telegram на телефоне и убедитесь, что уже вошли в нужный аккаунт. Оставьте телефон под рукой: он понадобится для кода или сканирования QR.\n\nПодключение состоит из двух шагов:\n\n1. **Получить данные приложения Telegram** — `api_id` (числовой идентификатор) и `api_hash` (секретный ключ) с [my.telegram.org](https://my.telegram.org/apps). С ними `tg` может обращаться к Telegram от имени программы. Обычно этот шаг нужен только при первом входе для выбранного профиля.\n2. **Подтвердить вход в свой аккаунт** — отсканировать QR-код или ввести код входа. После этого `tg` сохраняет **сессию**: данные авторизации, с которыми следующие команды работают без повторного входа.\n\nОба шага выполняет `tg session start`. Запускайте команду в локальном терминале: она будет запрашивать данные и ждать подтверждения с телефона.\n\n\n\n"
         },
         {
           "before": "\nКаждый пользователь регистрирует своё приложение. Telegram выдаёт одно приложение на номер телефона, поэтому общий идентификатор не включён в `tg`. Данные нужны один раз для каждого профиля; `tg session start` запрашивает их только при отсутствии.\n\nЕсть два способа получить данные:\n\n- **`--app browser`** (по умолчанию) открывает [my.telegram.org/apps](https://my.telegram.org/apps). Войдите, создайте приложение, если его нет (любые название и короткое имя, платформа Desktop), и вставьте `App api_id` и `App api_hash` по запросу `tg`. Хеш при вводе скрыт.\n- **`--app auto`** заполняет сайт за вас. Команда запрашивает телефон и код, который my.telegram.org присылает сообщением в Telegram, затем получает существующее приложение или создаёт новое. У сайта нет API: `tg` работает с веб-формой. Изменения сайта могут сломать этот способ; в таком случае используйте `--app\n  browser`.\n\nДанные приложения сохраняются только после успешного входа в Telegram.\n\n",
@@ -455,8 +426,8 @@
       ],
       "en": [
         {
-          "before": "\nA login has two parts:\n\n- **the app**: an `api_id` and `api_hash` from [my.telegram.org](https://my.telegram.org/apps). They\n  identify the program to Telegram. `tg` keeps them in the OS keyring.\n- **the session**: what Telegram hands out once you log in. It is a file in the state directory, and\n  it is as good as your password.\n\n`tg session start` gets both. It asks questions, so run it in a terminal.\n\n",
-          "after": "\nBefore starting, open Telegram on your phone and make sure you are signed in to the account you want to connect. Keep it nearby to read codes or scan a QR code.\n\nConnecting has two steps:\n\n1. **Get Telegram application credentials**: `api_id` (a numeric identifier) and `api_hash` (a secret key) from [my.telegram.org](https://my.telegram.org/apps). They let `tg` identify its program to Telegram. Usually you only do this on the first login for a profile.\n2. **Confirm access to your account** by scanning a QR code or entering a login code. `tg` then saves a **session**: authorization data that lets later commands work without signing in again.\n\n`tg session start` handles both steps. Run it in your local terminal: it asks for input and waits for confirmation on your phone.\n\n"
+          "before": "\nA login has two parts:\n\n- **the app**: an `api_id` and `api_hash` from [my.telegram.org](https://my.telegram.org/apps). They\n  identify the program to Telegram. `tg` keeps them in the OS keyring.\n- **the session**: what Telegram hands out once you log in. It is a file in the state directory, and\n  it is as good as your password.\n\n",
+          "after": "\nBefore starting, open Telegram on your phone and make sure you are signed in to the account you want to connect. Keep it nearby to read codes or scan a QR code.\n\nConnecting has two steps:\n\n1. **Get Telegram application credentials**: `api_id` (a numeric identifier) and `api_hash` (a secret key) from [my.telegram.org](https://my.telegram.org/apps). They let `tg` identify its program to Telegram. Usually you only do this on the first login for a profile.\n2. **Confirm access to your account** by scanning a QR code or entering a login code. `tg` then saves a **session**: authorization data that lets later commands work without signing in again.\n\n"
         },
         {
           "before": "\nEvery user registers their own app. Telegram gives one app per phone number, so an app id is never\nshared or built into `tg`. You need it once per profile; `tg session start` asks only when the profile\nhas none.\n\nTwo ways to get it:\n\n- **`--app browser`** (the default) opens [my.telegram.org/apps](https://my.telegram.org/apps). Log\n  in there, create an app if you have none (any title and short name, platform Desktop), and paste\n  `App api_id` and `App api_hash` when `tg` asks. The hash is not shown as you type.\n- **`--app auto`** fills in the site for you. It asks your phone number and the code my.telegram.org\n  sends you as a message in Telegram, then reads your app, or creates one if you have none. The site\n  has no API, so `tg` follows its web form; a change on Telegram's side can break this. `--app\n  browser` still works then.\n\nThe app is stored only after Telegram has accepted the login.\n\n",
@@ -477,8 +448,8 @@
       ],
       "es": [
         {
-          "before": "\nUn inicio de sesión tiene dos partes:\n\n- **La aplicación:** un `api_id` y un `api_hash` de [my.telegram.org](https://my.telegram.org/apps). Identifican el programa ante Telegram. `tg` los guarda en el almacén de claves del sistema operativo.\n- **La sesión:** lo que Telegram entrega después de iniciar sesión. Se guarda como archivo en el directorio de estado y permite acceder a tu cuenta igual que una contraseña.\n\n`tg session start` obtiene ambas partes. Hace preguntas, así que ejecútalo en una terminal.\n\n",
-          "after": "\nAntes de empezar, abre Telegram en tu teléfono y comprueba que has iniciado sesión en la cuenta que quieres conectar. Tenlo a mano para leer códigos o escanear el QR.\n\nLa conexión tiene dos pasos:\n\n1. **Obtener credenciales de la aplicación Telegram**: `api_id` (identificador numérico) y `api_hash` (clave secreta) de [my.telegram.org](https://my.telegram.org/apps). Permiten a `tg` identificar el programa ante Telegram. Normalmente solo se hace en el primer acceso de cada perfil.\n2. **Confirmar el acceso a tu cuenta** mediante QR o código. `tg` guarda una **sesión**: datos de autorización para ejecutar comandos sin volver a iniciar sesión.\n\n`tg session start` realiza ambos pasos. Ejecútalo en tu terminal local: solicita datos y espera la confirmación desde el teléfono.\n\n"
+          "before": "\nUn inicio de sesión tiene dos partes:\n\n- **La aplicación:** un `api_id` y un `api_hash` de [my.telegram.org](https://my.telegram.org/apps). Identifican el programa ante Telegram. `tg` los guarda en el almacén de claves del sistema operativo.\n- **La sesión:** lo que Telegram entrega después de iniciar sesión. Se guarda como archivo en el directorio de estado y permite acceder a tu cuenta igual que una contraseña.\n\n",
+          "after": "\nAntes de empezar, abre Telegram en tu teléfono y comprueba que has iniciado sesión en la cuenta que quieres conectar. Tenlo a mano para leer códigos o escanear el QR.\n\nLa conexión tiene dos pasos:\n\n1. **Obtener credenciales de la aplicación Telegram**: `api_id` (identificador numérico) y `api_hash` (clave secreta) de [my.telegram.org](https://my.telegram.org/apps). Permiten a `tg` identificar el programa ante Telegram. Normalmente solo se hace en el primer acceso de cada perfil.\n2. **Confirmar el acceso a tu cuenta** mediante QR o código. `tg` guarda una **sesión**: datos de autorización para ejecutar comandos sin volver a iniciar sesión.\n\n"
         },
         {
           "before": "\nCada usuario registra su propia aplicación. Telegram proporciona una aplicación por número de teléfono; por eso `tg` no incluye ni comparte un identificador de aplicación. Se necesita una vez por perfil; `tg session start` solo lo pide si el perfil todavía no tiene uno.\n\nHay dos formas de obtenerlo:\n\n- **`--app browser`** (predeterminado) abre [my.telegram.org/apps](https://my.telegram.org/apps). Inicia sesión allí, crea una aplicación si aún no tienes una (cualquier título y nombre corto, plataforma Desktop) y pega `App api_id` y `App api_hash` cuando `tg` los solicite. El hash no se muestra mientras lo escribes.\n- **`--app auto`** rellena el sitio por ti. Solicita tu número y el código que my.telegram.org envía por Telegram; después consulta tu aplicación o crea una si no existe. El sitio no tiene API, así que `tg` utiliza el formulario web; un cambio de Telegram puede romper este proceso. En ese caso, `--app\n  browser` sigue disponible.\n\nLa aplicación solo se guarda después de que Telegram acepte el inicio de sesión.\n\n",
@@ -844,6 +815,31 @@
         {
           "before": "`--allow-moderate` ofrece `max_chats_check`, equivalente a `max chats moderate`: revisa las reglas y ejecuta lo permitido. La opción aporta el consentimiento requerido por `flag`: elimina mensajes y miembros si la regla es `flag` o `allow`. Para `confirm`, muestra primero un único formulario con todas esas acciones; tras aprobar ejecuta exactamente esas acciones. Si aparece algo nuevo durante la espera, rechaza y hay que repetir la revisión. Nunca ejecuta `forbid`. Con `dry_run`, solo muestra el plan. El perfil necesita permisos `delete` y `groups`.",
           "after": "Este párrafo usa los nombres históricos de consentimiento del MCP personal. En el archivo compartido de reglas, `ask` corresponde a la confirmación MCP (`confirm`); `deny` y `readonly` impiden ejecutar acciones. El CLI usa los niveles de la [guía de grupos](./groups.md); usa esos nombres en comandos nuevos.\n\n`--allow-moderate` ofrece `max_chats_check`, equivalente a `max chats moderate`: revisa las reglas y ejecuta lo permitido. La opción aporta el consentimiento requerido por `flag`: elimina mensajes y miembros si la regla es `flag` o `allow`. Para `confirm`, muestra primero un único formulario con todas esas acciones; tras aprobar ejecuta exactamente esas acciones. Si aparece algo nuevo durante la espera, rechaza y hay que repetir la revisión. Nunca ejecuta `forbid`. Con `dry_run`, solo muestra el plan. El perfil necesita permisos `delete` y `groups`."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "search",
+    "reason": "Beginner entry point: explain local archive and strict matching before advanced query syntax, with one copyable single-word example.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "`tg messages search` ищет только в общем локальном архиве, без сети и отметок о прочтении.",
+          "after": "`tg messages search` ищет только в общем локальном архиве, без сети и отметок о прочтении.\n\nНачните с одного слова, которое помните из сообщения:\n\n```sh\ntg messages search \"договор\"\n```\n\nКоманда ищет среди сообщений, уже сохранённых на компьютере. Если нужного периода нет, сначала загрузите историю выбранного чата по [инструкции архива](./archive.md). По умолчанию ищется точное слово: Lucene — язык для добавления фраз, фильтров и условий. Для опечаток и неточного поиска выберите `--language legacy`. Ниже — примеры фильтров; поля и regex нужны только для более сложных запросов."
+        }
+      ],
+      "en": [
+        {
+          "before": "`tg messages search` reads only the shared local archive, without networking or read receipts.",
+          "after": "`tg messages search` reads only the shared local archive, without networking or read receipts.\n\nStart with one word you remember from the message:\n\n```sh\ntg messages search \"invoice\"\n```\n\nIt searches messages already saved on your computer. If the required period is missing, first fetch that chat’s history using the [archive guide](./archive.md). The default matches exact words: Lucene is a query language for adding phrases, filters and conditions. For typos and forgiving matching, choose `--language legacy`. The examples below add filters; fields and regex are only needed for more complex queries."
+        }
+      ],
+      "es": [
+        {
+          "before": "`tg messages search` consulta solo el archivo local compartido, sin conectarse ni marcar mensajes como leídos.",
+          "after": "`tg messages search` consulta solo el archivo local compartido, sin conectarse ni marcar mensajes como leídos.\n\nEmpieza con una palabra que recuerdes del mensaje:\n\n```sh\ntg messages search \"factura\"\n```\n\nBusca mensajes ya guardados en tu ordenador. Si falta el periodo que necesitas, descarga primero el historial de ese chat siguiendo la [guía del archivo](./archive.md). Por defecto coincide con palabras exactas: Lucene es un lenguaje para añadir frases, filtros y condiciones. Para erratas y coincidencias aproximadas, elige `--language legacy`. Los ejemplos siguientes añaden filtros; los campos y regex solo hacen falta para consultas más complejas."
         }
       ]
     }

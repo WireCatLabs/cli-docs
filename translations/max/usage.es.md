@@ -21,6 +21,8 @@ max chats list           # ваши чаты
 
 La configuración puede tardar unos cinco minutos. Comprueba hasta cinco chats sin iniciar un servicio en segundo plano. El historial se descarga aparte tras elegir el chat y la cantidad. Antes de iniciar sesión, el agente lee `max skill show`, disponible sin sesión.
 
+`max skill show link-conversations` imprime el skill compartido para vincular conversaciones del archivo; no requiere otro inicio de sesión.
+
 ## Iniciar sesión
 
 Para empezar, usa `max setup`. Para volver a iniciar sesión explícitamente, ejecuta `max session start qr`: escanea el QR del terminal con MAX y el token se guarda en el llavero. Consulta todos los métodos en [sesiones](./sessions.md). Sin método, `max session start` **importa un token** obtenido en el cliente oficial y lo guarda en el llavero del sistema.
@@ -137,6 +139,8 @@ max models audio list                # какие модели есть, как�
 max models audio download gigaam-v3  # 233 МБ, один раз
 max messages transcribe "Иван Петров" 100000000000000001
 ```
+
+Los modelos se guardan en un directorio compartido por MAX y Telegram; `CLI_COMMON_CACHE_DIR` cambia su ubicación. `models audio list --json` devuelve una página `items/page/limit/hasMore` y la ruta `directory`. Los archivos descargados se reutilizan. `gigaam-v3` sigue primero, y `config set --defaults transcribeModel <модель>` selecciona el modelo.
 
 | Modelo | Idiomas | Tamaño | 5 minutos de voz |
 |---|---|---|---|
@@ -416,7 +420,9 @@ ffmpeg -i запись.m4a -ac 1 -ar 48000 -c:a libopus -b:a 32k заметка.
 
 Rechaza archivos ocultos, carpetas ocultas como `~/.ssh` y carpetas de `max`, que suelen contener claves. Si necesitas enviarlos, usa `--allow-any-file`.
 
-`--md` interpreta formato en `send` y `edit`: `**жирный**`, `_курсив_`, `*курсив*`, `~~зачёркнутый~~` y `` `код` ``. Sin opción se envían marcas literales. `_` y `*` dentro de palabras no cuentan (`file_name` permanece igual); `\*` conserva el símbolo.
+Con `--md`, MAX usa su propio conversor: `**жирный**` o `__жирный__`, `_курсив_` o `*курсив*`, `~~зачёркнутый~~`, `++подчёркнутый++`, `[ссылка](https://example.com)` y código monoespaciado entre comillas invertidas o en bloque. Los estilos pueden anidarse; las posiciones se calculan en UTF-16. Los saltos de línea en código de una línea se convierten en espacios; MAX no conserva el lenguaje de un bloque. Sin la opción, el texto se envía literalmente. `_` y `*` dentro de palabras siguen siendo literales; la barra inversa escapa un signo. Los enlaces admiten http, https y mailto; se rechaza un bloque de código sin cerrar.
+
+El conversor MAX Bot API también admite `^^выделение^^`, encabezados con `#` y citas con `>`; convierte el resultado de forma segura a HTML. El protocolo personal rechaza estas tres formas antes de enviar o cargar un archivo. `||spoiler||` permanece como texto literal en MAX. Telegram tiene otra sintaxis: `__текст__` significa subrayado allí, pero negrita en MAX.
 
 ```sh
 max messages send 0 "встреча **в 15:00**, не _в 14_" --md
@@ -623,3 +629,5 @@ La lista del perfil sustituye a `defaults`, no se suma. Vacía impide cambios co
 - [Referencia de comandos](./commands.md): generada desde el programa.
 - [Configuración](./configuration.md): todos los ajustes.
 - [Instalación](./installation.md): instalar, actualizar y encontrar archivos.
+
+`sends list` usa el `limit` configurado si se omite `--limit`. JSON incluye `items`, `page`, `limit`, `hasMore`; `limit` es el límite seleccionado, no el número de filas. JSONL imprime un registro de intento de envío por línea.

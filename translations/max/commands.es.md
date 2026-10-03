@@ -829,7 +829,7 @@ max messages send <chat> [text] [options]
 | `--send-id <id>` | reintenta un envío de resultado desconocido sin arriesgar una segunda copia. |
 | `--silent` | entrega sin notificación. |
 | `--no-preview` | no muestra vista previa de enlaces. |
-| `--md` | interpreta **negrita**, _cursiva_, \~\~tachado\~\~ y `code`; \ conserva una marca literal. |
+| `--md` | interpreta el Markdown de este mensajero; consulta su guía de formato para ver la sintaxis admitida. |
 | `--file <file>` | adjunta un archivo; el texto será su leyenda. |
 | `--photo <file>` | adjunta .jpg, .png o .webp como foto; el texto será su leyenda. |
 | `--as-file` | envía --file como archivo descargable, incluidos vídeos. |
@@ -867,7 +867,7 @@ max messages edit <chat> <message> [text] [options]
 
 | Opción | Descripción |
 |---|---|
-| `--md` | interpreta **negrita**, _cursiva_, \~\~tachado\~\~ y `code`; \ conserva una marca literal. |
+| `--md` | interpreta el Markdown de este mensajero; consulta su guía de formato para ver la sintaxis admitida. |
 
 ### `max messages delete`
 
@@ -1291,7 +1291,7 @@ modelos para transcribir voz
 
 #### `max models audio list`
 
-Modelos que puede usar max, cuáles están descargados y cuál es el predeterminado.
+Modelos de voz, los más adecuados primero; cuáles están descargados y cuál es el predeterminado.
 
 ```sh
 max models audio list
@@ -1299,7 +1299,7 @@ max models audio list
 
 #### `max models audio download`
 
-Descarga una vez un modelo de voz y verifica su sha256 esperado por esta versión de max.
+Descarga una vez un modelo de voz y verifica el sha256 esperado por esta versión.
 
 ```sh
 max models audio download <model>
@@ -1307,7 +1307,7 @@ max models audio download <model>
 
 | Argumento || Descripción |
 |---|---|---|
-| `model` | obligatorio | Identificador de modelo de `max models audio list`. |
+| `model` | obligatorio | Identificador de modelo de `models audio list`. |
 
 ### `max models text`
 
@@ -1541,7 +1541,7 @@ max sends list [options]
 
 | Opción | Descripción |
 |---|---|
-| `--limit <n>` | cuántas mostrar. Predeterminado: `20`. |
+| `--limit <n>` | cuántas mostrar. |
 
 ## `max inbox`
 
@@ -1808,8 +1808,12 @@ instrucciones para que un agente utilice la herramienta
 imprime SKILL.md; `max skill install` lo coloca donde lo buscan Claude Code, Codex y Gemini CLI
 
 ```sh
-max skill show
+max skill show [name]
 ```
+
+| Argumento | | Descripción |
+|---|---|---|
+| `name` | opcional | uno de los skills incluidos para una tarea: link-conversations. |
 
 ### `max skill install`
 
@@ -2225,7 +2229,7 @@ max bot messages send <chat> [text] [options]
 |---|---|
 | `--reply-to <message>` | responde al mensaje indicado por su identificador dentro del mismo chat. |
 | `--silent` | entrega sin notificación. |
-| `--md` | interpreta **negrita**, _cursiva_, \~\~tachado\~\~ y `code`; \ conserva una marca literal. |
+| `--md` | interpreta el Markdown de este mensajero; consulta su guía de formato para ver la sintaxis admitida. |
 | `--html` | texto HTML: <b>, <i>, <a href>, <code>. |
 | `--file <file>` | adjunta un archivo; el texto será su leyenda. |
 | `--photo <file>` | adjunta .jpg, .png o .webp como foto; el texto será su leyenda. |
@@ -2280,7 +2284,7 @@ max bot messages edit <chat> <message> <text> [options]
 
 | Opción | Descripción |
 |---|---|
-| `--md` | interpreta **negrita**, _cursiva_, \~\~tachado\~\~ y `code`; \ conserva una marca literal. |
+| `--md` | interpreta el Markdown de este mensajero; consulta su guía de formato para ver la sintaxis admitida. |
 | `--html` | texto HTML: <b>, <i>, <a href>, <code>. |
 
 #### `max bot messages delete`
@@ -2751,6 +2755,14 @@ max bot uploads put <file> [options]
 ### `max bot api`
 
 Todas las operaciones de la API oficial de bots, generadas desde su esquema: docs/dev/bot-api-coverage.md.
+
+```sh
+max bot api [options]
+```
+
+| Opción | Descripción |
+|---|---|
+| `--store-token <profile>` | guarda un token de autenticación devuelto solo en el llavero del sistema operativo para este perfil de bot; nunca lo imprime. |
 
 #### `max bot api get-my-info`
 

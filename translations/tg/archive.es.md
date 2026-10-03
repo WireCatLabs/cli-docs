@@ -58,27 +58,15 @@ tg store jobs cancel <job>                  # stops after the current page; a la
 
 ## Buscar
 
-```sh
-tg messages search "invoice march"                  # every word, best match first
-tg messages search invoice --chat "Book club" --limit 50
-tg messages search invoice --newest                 # newest first instead
-tg messages search invoice --context 3              # three messages either side of each hit
-tg messages search 'from:@anna after:7d "the contract" -draft'
-tg messages search invoice --source all             # every account and messenger in the store
-tg messages search --regex 'inv(oice)?\s+\d+'       # a regular expression, case-insensitive
-```
-
-**La búsqueda solo consulta el archivo local y nunca pregunta a Telegram.** Un resultado vacío significa «no está guardado aquí», no «nunca se dijo». Lee primero el chat (`tg messages list <chat>`) o descarga su historial.
-
-Deben aparecer todas las palabras, completas o como prefijos: `invoi` encuentra `invoice`. Las mejores coincidencias van primero. Se corrigen erratas y stderr indica los cambios. Sin coincidencias con todas las palabras, busca cualquiera de ellas y después fragmentos.
-
-La consulta admite `"a phrase"`, `-word` para excluir, `a OR b` y filtros: `from:` (nombre, `@username` o `me`), `chat:`, `after:` y `before:` (fecha o `7d`), `has:` (tipo de adjunto, `attachment` o `link`). Por defecto busca en la cuenta activa. `in:max`, `in:all` o `--source` incluyen otras cuentas de la base compartida, también MAX. Los resultados de MAX se abren con `max`.
-
-El JSON indica la cobertura del archivo para cada chat (`completeness`). Cada resultado lleva un localizador `msg:` que aceptan `messages show` y `messages context`:
+`tg messages search` consulta solo el archivo local. El modo predeterminado usa un perfil estricto de Lucene: palabras, frases, grupos booleanos, campos, fechas y expresiones regulares con límites. La [guía de búsqueda](./search.md) explica la sintaxis y la migración. Usa `--language legacy` para los filtros y las coincidencias aproximadas anteriores.
 
 ```sh
-tg messages context msg:telegram/<account>/<chat>/<id>
+tg messages search 'invoice kind:private' --json
+tg messages search 'invoice date:[2026-01-01 TO 2026-02-01}' --timezone Europe/Madrid --json
+tg messages search 'preset:secret kind:saved' --json
 ```
+
+Sin resultados significa «no encontrado en el archivo seleccionado». El JSON informa de la cobertura y de lo completo que está el archivo; sin registros de actualización desde la red, no se puede afirmar que esté al día. `--source` elige mensajeros y cuentas, `--newest` ordena por fecha y `--context` añade mensajes cercanos. --regex conserva un modo independiente de JavaScript heredado.
 
 ## Exportar
 

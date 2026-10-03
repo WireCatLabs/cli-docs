@@ -22,7 +22,7 @@ export function InstallTool({ tool, lang }: { tool: Tool; lang: string }) {
     return () => window.removeEventListener("hashchange", followHash)
   }, [tool.name])
   const docs = `${siteUrl}/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}installation/content.md`
-  const login = tool.name === "tg" ? "session start --app auto" : "setup --agent all"
+  const login = "setup --agent all"
   const installer = `& ([scriptblock]::Create((Invoke-RestMethod '${siteUrl}/install.ps1'))) -Tool ${tool.name} -Agent all`
   return (
     <details

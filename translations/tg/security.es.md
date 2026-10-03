@@ -27,6 +27,7 @@ No protege frente a:
 | Contenido | Ubicación | Quién puede usarlo |
 |---|---|---|
 | sesión | `sessions/<profile>.session` en el directorio de estado, `0600` en carpeta `0700` | cualquiera que lea el archivo: permite acceder como una contraseña |
+| sesión de historial del bot | `bots/<profile>/mtproto-<bot-id>.session` en el directorio de estado | quien pueda leerla puede usar esa autorización del bot; protégela como la sesión personal |
 | identificador y hash de la aplicación | almacén de claves del sistema; `credentials.json` (`0600`) junto a la configuración si no hay almacén | solo junto con una sesión |
 | datos para CI | `TG_API_ID` y `TG_API_HASH` | el proceso que los tenga |
 
@@ -57,11 +58,13 @@ La sesión es la clave de autorización de Telegram. Copiar el archivo copia el 
 
 Consulta las rutas exactas con `tg doctor` y las carpetas de cada sistema en [instalación](./installation.md#where-files-go).
 
+Los permisos `0600` de archivos y `0700` de carpetas indicados arriba se aplican en Linux y macOS. Windows usa listas de control de acceso (ACL) heredadas; esos modos numéricos no establecen una ACL exclusiva para el propietario. Guarda estado, archivo local, exportaciones e imágenes QR temporales en directorios privados de tu usuario de Windows.
+
 **El archivo local no está cifrado.** Quien pueda leerlo puede leer tus mensajes. Se comparte con otros CLI de la misma biblioteca y permanece después de `tg session end` y de desinstalar. El texto también aparece en exportaciones, copias y archivos descargados; nada más de la tabla lo contiene.
 
 ### Si pierdes el equipo
 
-`0600` protege frente a otros usuarios del equipo, no frente a quien se lleva el disco. Para eso sirve el cifrado completo: FileVault en macOS, LUKS en Linux o BitLocker en Windows. El archivo local no incorpora cifrado: una clave en el almacén del sistema no detendría a un programa ejecutado como tu usuario, que puede acceder a él igual que `tg`.
+En Linux y macOS, `0600` protege frente a otros usuarios del equipo, no frente a quien se lleva el disco. Para eso sirve el cifrado completo: FileVault en macOS, LUKS en Linux o BitLocker en Windows. El archivo local no incorpora cifrado: una clave en el almacén del sistema no detendría a un programa ejecutado como tu usuario, que puede acceder a él igual que `tg`.
 
 Cierra la sesión desde otro dispositivo: Telegram → Ajustes → Dispositivos, y termina la creada por `tg`. Así el archivo de sesión deja de servir.
 
@@ -138,13 +141,13 @@ tg messages send me "text"     # this line is visible in ps and stays in your sh
 
 Si te preocupa, omite el texto del comando y pásalo por stdin: `tg messages send me < note.txt`.
 
-Otros usuarios no pueden leer los archivos de `tg`: las carpetas tienen permisos `0700` y los archivos `0600`.
+En Linux y macOS, las carpetas tienen permisos `0700` y los archivos `0600`. En Windows, el acceso sigue las ACL heredadas del directorio.
 
 ## Qué pasa por la red
 
-- **Telegram**, por MTProto, para lo solicitado por el comando, incluidos fotos y archivos.
+- **Telegram**, por MTProto para comandos de la cuenta personal, incluidos fotos y archivos. Los comandos de bots usan la Bot API por HTTPS; `bot store fetch` usa una sesión MTProto separada del bot para el historial.
 - **npm**, una vez al día desde la terminal para comprobar versiones y al ejecutar `tg upgrade`. `updateCheck` o `TG_NO_UPDATE_CHECK=1` desactiva la comprobación ([configuración](./configuration.md)).
-- **my.telegram.org**, solo durante `tg session start`: en el navegador o mediante `tg` con `--app auto`. Las aplicaciones creadas por `tg` se llaman `tg-cli` y usan la página de GitHub del proyecto como dirección.
+- **my.telegram.org**, solo durante `tg setup` o `tg session start`: en el navegador o mediante `tg` con `--app auto`. Las aplicaciones creadas por `tg` se llaman `tg-cli` y usan la página de GitHub del proyecto como dirección.
 - **Hugging Face y GitHub**, solo al ejecutar `tg models audio download`. La voz nunca se envía allí: el modelo local se ejecuta en este equipo.
 
 Nada más. No hay telemetría.
@@ -161,7 +164,7 @@ Un informe (`tg doctor report create`) se envía a una incidencia **pública** e
 
 ## Inicio de sesión
 
-`tg session start` dibuja el QR en la terminal. Queda en el historial visual, pero Telegram lo renueva mientras esperas, por lo que los antiguos no sirven. `--qr-file` lo guarda como PNG legible solo por ti y elimina el archivo al finalizar, funcione o no.
+`tg setup` y `tg session start` dibujan el QR en la terminal. Queda en el historial visual, pero Telegram lo renueva mientras esperas, por lo que los antiguos no sirven. `--qr-file` lo guarda como PNG legible solo por ti y elimina el archivo al finalizar, funcione o no.
 
 `--app auto` rellena my.telegram.org sin navegador: solicita el teléfono y el código que el sitio envía por Telegram, nada más.
 
@@ -178,3 +181,7 @@ Cada inicio añade un dispositivo en Telegram → Ajustes → Dispositivos.
 - [Sesiones](./sessions.md): aplicación, almacén de claves, perfiles y cierre de sesión.
 - [MCP](./mcp.md): permisos del agente y efecto de niveles y opciones.
 - [Configuración](./configuration.md): `permissions` y `sendsPerHour`.
+
+## Cambios de la instalación global
+
+El postinstall global de npm instala la skill incluida en los directorios de agentes del usuario; en Windows añade la carpeta de comandos npm al PATH del usuario y elimina solo el lanzador `tg.ps1` generado por npm para este paquete. Conserva el lanzador `.cmd`. Las instalaciones de proyectos y npx no hacen estos cambios. `TG_INSTALL_AGENT=none` omite la skill. El instalador independiente de Windows hace la misma preparación aunque los scripts npm estén desactivados. No cambia la política de ejecución, el PATH del equipo, las credenciales ni el estado de la cuenta. La instalación nunca inicia sesión ni lee chats.

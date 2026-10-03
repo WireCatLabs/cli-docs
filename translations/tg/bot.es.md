@@ -53,6 +53,7 @@ El token se guarda en el almacén de claves como `bot:<name>`, separado de tu se
 
 ```sh
 tg sales bot auth show    # where the token comes from, and which bot it is
+tg sales bot me           # the bot's id, name and username
 tg sales bot auth remove  # forget it
 ```
 
@@ -99,12 +100,35 @@ Los archivos de carpetas ocultas o propias de `tg` se rechazan salvo con `--allo
 
 Si se interrumpe la conexión durante un envío, `tg` no reintenta: indica resultado desconocido (código 14). Comprueba el chat antes de repetir.
 
-**Telegram no da acceso al historial a los bots.** No pueden consultar mensajes del chat ni un mensaje concreto. `messages list` y `messages show` responden desde lo enviado y recibido mediante `bot watch` en este equipo, y lo indican:
+**La Bot API de Telegram no tiene una llamada para consultar historial.** `messages list` y `messages show` responden desde lo enviado, recibido por `bot watch` e importado con `bot store fetch` en este equipo, y lo indican:
 
 ```sh
 tg sales bot messages list "Team"
 tg sales bot messages show "Team" 512
 ```
+
+## Descargar mensajes anteriores
+
+`bot store fetch` descarga mensajes anteriores de un canal o supergrupo al archivo local del bot. Inicia una sesión separada en la API MTProto de Telegram con el token existente. Consulta los números de mensaje con [channels.getMessages](https://core.telegram.org/method/channels.getMessages). Los envíos y `bot watch` siguen usando la Bot API; la sesión de historial no recibe actualizaciones. El comando no envía nada ni marca mensajes como leídos.
+
+Estos ejemplos usan un identificador de chat y un enlace ficticios:
+
+```sh
+tg sales bot store fetch -1001234567890 --from https://t.me/c/1234567890/512 --limit 20 --json
+tg sales bot store fetch -1001234567890 --last 200 --pause 1s
+```
+
+`--from` empieza en ese mensaje, incluido, y debe referirse al mismo chat. Sin él, usa el mensaje más reciente que el bot tenga guardado. Si no tiene ninguno, consulta el más reciente de la sesión personal `default` existente. Si ninguna conoce un número, solicita `--from`. Usa las credenciales de aplicación Telegram del perfil del bot (`api_id` y `api_hash`) o las del perfil `default` existente; también acepta `TG_API_ID` y `TG_API_HASH`. No inicia una sesión personal.
+
+- `--limit` limita los mensajes descargados en esta ejecución (1000 por defecto).
+- `--page-size` limita los números de mensaje consultados por página, hasta 100.
+- `--pause` espera entre peticiones (1 segundo por defecto), también en tramos vacíos.
+- `--last` se detiene cuando tiene guardada la cantidad solicitada de mensajes más recientes.
+- `--since-time` se detiene al llegar a mensajes anteriores al intervalo indicado; acepta ISO 8601 o `2h` / `1d`. Usa `--last` o `--since-time`, no ambos.
+
+Vuelve a ejecutarlo para seguir hacia atrás. El JSON informa de `chat`, `fetched`, `complete` y `ranges`. Los mensajes importados quedan disponibles para `bot messages list --offline`, búsquedas y contactos. La sesión del bot se guarda por separado bajo su directorio de estado, por perfil e identificador del bot; se cierra al terminar.
+
+**Límites:** no admite chats privados ni grupos básicos, porque sus números de mensaje comparten una secuencia entre todos los chats del bot. El bot necesita acceso al canal o supergrupo. Los mensajes eliminados y los números de servicio dejan huecos; la lectura los recorre hasta llegar al número 1. Los huecos grandes pueden exigir muchas peticiones incluso con un `--limit` pequeño. Se aplican los límites de Telegram: respeta esperas cortas y termina ante una espera larga para continuar más tarde.
 
 ## Consultar y gestionar un chat
 
@@ -184,7 +208,7 @@ tg sales bot messages search --from @ann     # what one person wrote
 tg sales bot messages between @ann Bob       # what both wrote, in the chats both wrote in
 ```
 
-`--all-bots` y `--bots <names>` incluyen copias de otros bots cuando `readOtherBots` lo permite. Telegram no ofrece historial, por lo que `contacts show --refresh` se rechaza.
+`--all-bots` y `--bots <names>` incluyen copias de otros bots cuando `readOtherBots` lo permite. La Bot API no permite consultar historial, por lo que `contacts show --refresh` se rechaza; importa primero mensajes anteriores con `bot store fetch`.
 
 ## Moderar mediante reglas
 
@@ -196,7 +220,7 @@ tg sales bot chats moderate -1001234567890 --dry-run         # what breaks the r
 tg sales bot chats moderate -1001234567890                   # act as the rules allow
 ```
 
-Al no tener acceso al historial, solo revisa lo guardado por `tg sales bot watch`, nada anterior a su inicio. No evalúa entradas de miembros. Las personas eliminadas no pueden regresar por enlace salvo con `--no-ban`. Las reglas se guardan en el mismo archivo que las de tu perfil personal del mismo nombre.
+Solo revisa lo guardado por `tg sales bot watch` o importado con `bot store fetch` en este equipo. No evalúa entradas de miembros. Las personas eliminadas no pueden regresar por enlace salvo con `--no-ban`. Las reglas se guardan en el mismo archivo que las de tu perfil personal del mismo nombre.
 
 ## Para scripts y agentes
 
@@ -227,3 +251,5 @@ tg sales bot mcp config          # the entry for Claude Desktop, Cursor and othe
 Se ofrecen herramientas según los permisos del perfil bajo `bot.`: chats vistos, mensajes, administradores, menú, registro y destinatarios. Salvo en solo lectura, permite enviar, editar, fijar, indicar «escribiendo», responder botones, eliminar y retirar miembros. `bot: readonly` conserva solo lectura. Eliminar muestra un formulario primero; `--allow-dangerous` lo omite y `--confirm-send` exige formulario en toda escritura. `tg_bot_status` indica perfil y herramientas de escritura activas.
 
 Cada escritura ejecuta el mismo comando que usarías tú: se aplican destinatarios y registro del bot. Cambiar token, webhooks, menú y destinatarios sigue correspondiéndote a ti.
+
+El `--md` del bot usa las mismas [reglas de formato de Telegram](./usage.md#sending) que los envíos personales. Las ediciones de texto y los pies de fotos y archivos usan el mismo formato.
