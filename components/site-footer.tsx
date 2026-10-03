@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation"
 import { useEffect, useRef } from "react"
 import { useThemeToggle } from "@/components/use-theme-toggle"
+import { prepareInstallationButton } from "@/lib/installation-command"
 
 /** Shared footer exported from the same reviewed source as the landing. */
 export function SiteFooter({ html }: { html: string }) {
@@ -21,6 +22,7 @@ export function SiteFooter({ html }: { html: string }) {
     const brand = root.querySelector<HTMLAnchorElement>(".foot-brand .mark")
     if (brand) brand.href = `/${pathname.split("/")[1]}`
     const button = root.querySelector<HTMLButtonElement>("[data-copy]")
+    if (button) prepareInstallationButton(button)
     const label = button?.textContent ?? ""
     button?.addEventListener(
       "click",

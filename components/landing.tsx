@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react"
 import { useThemeToggle } from "@/components/use-theme-toggle"
+import { prepareInstallationButton } from "@/lib/installation-command"
 
 type Step = { html: string; tool: boolean; delay: number }
 type Session = { title: string; hint: string; steps: Step[] }
@@ -121,6 +122,7 @@ export function Landing({ html, sessions, lang }: Props) {
     root.classList.add("is-ready")
     for (const element of root.querySelectorAll(".reveal")) observer.observe(element)
     for (const button of root.querySelectorAll<HTMLButtonElement>("[data-copy]")) {
+      prepareInstallationButton(button)
       const feedback = button.querySelector<HTMLElement>("[data-copy-label]") ?? button
       const label = feedback.textContent
       button.addEventListener(

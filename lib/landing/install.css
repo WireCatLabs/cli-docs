@@ -1,0 +1,6 @@
+.wirecat-landing .connect-choice code,
+.wirecat-landing .foot-brand .cmd code {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
