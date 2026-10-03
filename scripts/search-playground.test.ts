@@ -80,6 +80,14 @@ describe("browser demo against the actual indexed SQLite search service", () => 
     '"final invoice"',
     "date:[2026-10-01 TO 2026-10-31]",
     "date>2026-10-02",
+    "date:2026-10-03",
+    "date:2026-10-04",
+    "date:2026-10-05",
+    "text:coffee",
+    "from:Mia AND text:budget",
+    "from:Sam",
+    "from:Leo",
+    "from:Noah",
     "invoice nonexisting",
     "NOT invoice",
   ])("returns the same message ids for %s", async (query) => {
@@ -171,5 +179,24 @@ describe("reversible query filters and value suggestions", () => {
       limit: 100,
     })
     expect(ids(searchDemo("").map((hit) => hit.message))).toEqual(ids(expected.items))
+  })
+})
+
+describe("discoverable sample search paths", () => {
+  it("keeps concrete values out of general field completion", () => {
+    const general = suggestionsFor("", 0).map((item) => item.label)
+    expect(general).toContain("text:")
+    expect(general).not.toContain("invoice")
+    expect(general).not.toContain("Alice")
+    expect(suggestionsFor("from:", 5).map((item) => item.label)).toContain("Alice")
+    expect(suggestionsFor("text:", 5).map((item) => item.label)).toContain("coffee")
+  })
+  it("offers distinct invoice, budget, coffee and date paths", () => {
+    expect(searchDemo("text:invoice")).toHaveLength(4)
+    expect(searchDemo("text:budget")).toHaveLength(2)
+    expect(searchDemo("text:coffee")).toHaveLength(1)
+    expect(searchDemo("date:2026-10-03")).toHaveLength(8)
+    expect(searchDemo("date:2026-10-04")).toHaveLength(2)
+    expect(searchDemo("date:2026-10-05")).toHaveLength(2)
   })
 })

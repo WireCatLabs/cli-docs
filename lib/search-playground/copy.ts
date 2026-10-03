@@ -1,5 +1,7 @@
 export const copy = {
   en: {
+    all: "All",
+    backToMessages: "Back to messages",
     suggestionsTitle: "Suggestions",
     clear: "Clear query",
     clearDate: "Clear date filter",
@@ -26,7 +28,7 @@ export const copy = {
     invalid: "Complete the query or choose a suggestion.",
     unsupported: "This field or operator is not supported. Open Syntax & fields above.",
     sampleError: "Not available in this sample archive. Choose a suggestion or open the search guide.",
-    hint: "Type a word or field, or choose a filter for suggestions.",
+    hint: "Choose a field for sample values. Use All to explore the archive.",
     chat: "Chat",
     person: "Person",
     date: "Date",
@@ -59,6 +61,8 @@ export const copy = {
     utc: "Dates use UTC",
   },
   ru: {
+    all: "Все",
+    backToMessages: "К сообщениям",
     suggestionsTitle: "Подсказки",
     clear: "Очистить запрос",
     clearDate: "Убрать фильтр даты",
@@ -84,7 +88,7 @@ export const copy = {
     invalid: "Допишите запрос или выберите подсказку.",
     unsupported: "Это поле или оператор не поддержаны. Откройте «Синтаксис и поля» выше.",
     sampleError: "Недоступно в этом примере архива. Выберите подсказку или откройте руководство по поиску.",
-    hint: "Введите слово или поле, либо выберите фильтр — появятся подсказки.",
+    hint: "Выберите поле, чтобы увидеть значения. Вкладка «Все» покажет весь архив.",
     chat: "Чат",
     person: "Человек",
     date: "Дата",
@@ -116,6 +120,8 @@ export const copy = {
     utc: "Даты в UTC",
   },
   es: {
+    all: "Todos",
+    backToMessages: "Volver a los mensajes",
     suggestionsTitle: "Sugerencias",
     clear: "Borrar consulta",
     clearDate: "Quitar filtro de fecha",
@@ -141,7 +147,7 @@ export const copy = {
     invalid: "Completa la consulta o elige una sugerencia.",
     unsupported: "Este campo u operador no está disponible. Abre Sintaxis y campos arriba.",
     sampleError: "No está disponible en este archivo de ejemplo. Elige una sugerencia o abre la guía de búsqueda.",
-    hint: "Escribe una palabra o campo, o elige un filtro para ver sugerencias.",
+    hint: "Elige un campo para ver valores. Usa Todos para explorar el archivo.",
     chat: "Chat",
     person: "Persona",
     date: "Fecha",

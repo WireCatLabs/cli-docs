@@ -7,6 +7,7 @@ import {
   ArrowDown,
   ArrowUpRight,
   Check,
+  ChevronLeft,
   ChevronRight,
   CircleHelp,
   Copy,
@@ -48,7 +49,8 @@ function Excerpt({ text, words }: { text: string; words: Set<string> }) {
   )
 }
 
-type View = "matches" | "context" | "summary"
+type View = "matches" | "all"
+type Detail = "context" | "summary"
 export function SearchPlayground({ lang, embedded = false }: { lang: string; embedded?: boolean }) {
   const language = lang === "ru" || lang === "es" ? lang : "en"
   const text = copy[language]
@@ -58,11 +60,13 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
   const [suggestionOpen, setSuggestionOpen] = useState(false)
   const [cursor, setCursor] = useState(initialQuery.length)
   const [view, setView] = useState<View>("matches")
+  const [detail, setDetail] = useState<Detail | null>(null)
   const [selected, setSelected] = useState("12")
   const [copied, setCopied] = useState(false)
   const [copyError, setCopyError] = useState(false)
   const [tool, setTool] = useState("tg")
   const input = useRef<HTMLInputElement>(null)
+  const highlighted = useRef<Suggestion | undefined>(undefined)
   const decoration = useRef<HTMLPreElement>(null)
   const [previous, setPrevious] = useState(() => ({ query: initialQuery, hits: searchDemo(initialQuery) }))
   const section = useRef<HTMLElement>(null)
@@ -75,6 +79,8 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
     }
   }, [query])
   const displayed = result.error ? previous : { query, hits: result.hits }
+  const allHits = useMemo(() => searchDemo(""), [])
+  const visibleHits = view === "all" ? allHits : displayed.hits
   const clauses = useMemo(() => filterClauses(query), [query])
   const field = (name: string) => clauses.find((clause) => clause.field === name)
   const errorHint = result.error
@@ -87,9 +93,9 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
   const words = useMemo(() => highlightWords(displayed.query), [displayed.query])
   const suggestions = useMemo(() => suggestionsFor(query, cursor), [query, cursor])
   const active =
-    displayed.hits.find((hit) => hit.message.id === selected) ??
-    displayed.hits.find((hit) => hit.context.some((message) => message.id === selected)) ??
-    displayed.hits[0]
+    visibleHits.find((hit) => hit.message.id === selected) ??
+    visibleHits.find((hit) => hit.context.some((message) => message.id === selected)) ??
+    visibleHits[0]
   const anchor = active?.context.find((message) => message.id === selected) ?? active?.message
   const evidence = [
     ...new Map(displayed.hits.flatMap((hit) => hit.context).map((message) => [message.id, message])).values(),
@@ -106,7 +112,8 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
       /* Keep the last executable query while editing. */
     }
     setQuery(value)
-    if (!value.trim()) setView("matches")
+    setView("matches")
+    setDetail(null)
     setSuggestionOpen(/(?:text|body|chat|from|date|kind|has|in):$/u.test(value))
     setCursor(position)
     setCopied(false)
@@ -142,7 +149,7 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
     }).format(new Date(value))
   const source = (messageId: string) => {
     setSelected(messageId)
-    setView("context")
+    setDetail("context")
   }
   return (
     <div className={embedded ? "sp-docs-host" : "sp-host"}>
@@ -194,6 +201,9 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
               mode="list"
               value={query}
               itemToStringValue={(item: Suggestion) => item.value}
+              onItemHighlighted={(item) => {
+                highlighted.current = item
+              }}
               onValueChange={(value) => {
                 const suggestion = suggestions.find((item) => item.value === value)
                 update(value, suggestion?.cursor ?? input.current?.selectionStart ?? value.length, !!suggestion)
@@ -232,6 +242,13 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
                       spellCheck={false}
                       autoComplete="off"
                       onKeyDown={(event) => {
+                        if (event.key === "Enter" && (!suggestionOpen || !highlighted.current) && !event.shiftKey) {
+                          event.preventBaseUIHandler()
+                          event.preventDefault()
+                          setView("matches")
+                          setDetail(null)
+                          setSuggestionOpen(false)
+                        }
                         if (event.key === "Escape") {
                           event.preventBaseUIHandler()
                           setSuggestionOpen(false)
@@ -256,9 +273,20 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
                       <X size={16} aria-hidden />
                     </button>
                   )}
-                  <Autocomplete.Trigger className="sp-trigger" aria-label={text.advanced}>
+                  <button
+                    type="button"
+                    className="sp-trigger"
+                    aria-label={text.suggestionsTitle}
+                    aria-expanded={suggestionOpen && suggestions.length > 0}
+                    aria-controls={suggestionOpen && suggestions.length > 0 ? `${id}-suggestions` : undefined}
+                    onClick={() => {
+                      setCursor(input.current?.selectionStart ?? query.length)
+                      setSuggestionOpen(!suggestionOpen)
+                      input.current?.focus()
+                    }}
+                  >
                     <ArrowDown size={16} aria-hidden />
-                  </Autocomplete.Trigger>
+                  </button>
                 </Autocomplete.InputGroup>
                 {suggestionOpen && suggestions.length > 0 && (
                   <Autocomplete.Portal container={section}>
@@ -354,27 +382,49 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
           </div>
           <div className="sp-results-bar">
             <fieldset className="sp-views" aria-label={text.countLabel}>
-              {(["matches", "context", "summary"] as const).map((tab) => (
-                <button type="button" key={tab} aria-pressed={view === tab} onClick={() => setView(tab)}>
+              {(["matches", "all"] as const).map((tab) => (
+                <button
+                  type="button"
+                  key={tab}
+                  aria-pressed={view === tab}
+                  onClick={() => {
+                    setView(tab)
+                    setDetail(null)
+                  }}
+                >
                   {text[tab]}
-                  {tab === "matches" && <span>{displayed.hits.length}</span>}
+                  <span>{tab === "matches" ? displayed.hits.length : allHits.length}</span>
                 </button>
               ))}
             </fieldset>
             <span className="sp-results-count" aria-live="polite">
-              {text.matches}: {displayed.hits.length}
+              {text[view]}: {visibleHits.length}
             </span>
           </div>
+          {detail && (
+            <div className="sp-detail-bar">
+              <button type="button" onClick={() => setDetail(null)}>
+                <ChevronLeft size={14} aria-hidden />
+                {text.backToMessages}
+              </button>
+              <button type="button" aria-pressed={detail === "context"} onClick={() => setDetail("context")}>
+                {text.context}
+              </button>
+              <button type="button" aria-pressed={detail === "summary"} onClick={() => setDetail("summary")}>
+                {text.summary}
+              </button>
+            </div>
+          )}
           <section className="sp-results" aria-label={text.countLabel}>
-            {displayed.hits.length === 0 ? (
+            {visibleHits.length === 0 ? (
               <div className="sp-empty">
                 <Search size={25} aria-hidden />
                 <h3>{text.empty}</h3>
                 <p>{errorHint ?? text.emptyHelp}</p>
               </div>
-            ) : view === "matches" ? (
+            ) : detail === null ? (
               <div className="sp-hit-list">
-                {displayed.hits.map(({ message }) => (
+                {visibleHits.map(({ message }) => (
                   <button type="button" className="sp-hit" key={locator(message)} onClick={() => source(message.id)}>
                     <div className="sp-hit-meta">
                       <span className={`sp-provider sp-${message.provider}`}>
@@ -396,7 +446,7 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
                   </button>
                 ))}
               </div>
-            ) : view === "context" && active ? (
+            ) : detail === "context" && active ? (
               <div className="sp-context">
                 <div className="sp-context-title">
                   <MessageSquare size={17} aria-hidden />
@@ -404,7 +454,7 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
                   <span>{active.message.provider === "max" ? "MAX" : "Telegram"}</span>
                 </div>
                 <div className="sp-context-picker">
-                  {displayed.hits.map((hit) => (
+                  {visibleHits.map((hit) => (
                     <button
                       type="button"
                       key={hit.message.id}

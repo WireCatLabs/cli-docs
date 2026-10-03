@@ -29,13 +29,14 @@ const row = (
   hour: string,
   text: string,
   has: string[] = [],
+  day = "2026-10-03",
 ): DemoMessage => ({
   id,
   provider,
   chat,
   chatId,
   from,
-  date: `2026-10-03T${hour}:00Z`,
+  date: `${day}T${hour}:00Z`,
   text,
   has,
   kind: provider === "max" ? "private" : "group",
@@ -76,7 +77,7 @@ export const messages: DemoMessage[] = [
     "max",
     "Client studio",
     "401",
-    "Sam",
+    "Leo",
     "10:03",
     "The original scope is covered. The extra work is a separate estimate.",
   ),
@@ -89,7 +90,7 @@ export const messages: DemoMessage[] = [
     "10:06",
     "Atlas budget: extra work is not approved. We need the final quote.",
   ),
-  row("23", "max", "Client studio", "401", "Sam", "10:09", "I will send a revised estimate tomorrow.", ["file"]),
+  row("23", "max", "Client studio", "401", "Leo", "10:09", "I will send a revised estimate tomorrow.", ["file"]),
   row(
     "30",
     "telegram",
@@ -99,6 +100,7 @@ export const messages: DemoMessage[] = [
     "11:00",
     "Atlas invoice draft is attached. The agreed deadline is Friday.",
     ["file"],
+    "2026-10-04",
   ),
   row(
     "31",
@@ -108,9 +110,11 @@ export const messages: DemoMessage[] = [
     "Alice",
     "11:05",
     "Please keep the extra work out until it is approved.",
+    [],
+    "2026-10-04",
   ),
-  row("40", "telegram", "Weekend plans", "303", "Mia", "12:00", "Anyone up for coffee on Friday?"),
-  row("41", "telegram", "Weekend plans", "303", "Sam", "12:03", "Yes! See you there."),
+  row("40", "telegram", "Weekend plans", "303", "Noah", "12:00", "Anyone up for coffee on Friday?", [], "2026-10-05"),
+  row("41", "telegram", "Weekend plans", "303", "Noah", "12:03", "Yes! See you there.", [], "2026-10-05"),
 ]
 export const initialQuery = "Atlas AND (invoice OR budget)"
 export const demoFields = QUERY_FIELDS.filter(
@@ -314,7 +318,7 @@ export const suggestionsFor = (query: string, cursor: number): Suggestion[] => {
   const from = field === "date" && clause ? clause.start : cursor - (fragmentMatch?.[2].length ?? 0)
   let candidates: { label: string; insert: string; detail: string; labelKey?: string }[]
   const words = [...new Set(messages.flatMap((row) => tokens(row.text)))].filter((word) => word.length > 2)
-  const textValues = ["Atlas", "invoice", "budget", "Friday", "approved", ...words].filter(
+  const textValues = ["Atlas", "invoice", "budget", "deadline", "estimate", "coffee", "approved", ...words].filter(
     (word, index, all) => all.findIndex((value) => normalize(value) === normalize(word)) === index,
   )
   if (field === "chat" || field === "from")
@@ -326,7 +330,7 @@ export const suggestionsFor = (query: string, cursor: number): Suggestion[] => {
   else if (field === "date") candidates = dates.map((row) => ({ ...row, labelKey: row.key, detail: row.insert }))
   else if (field === "text")
     candidates = [
-      ...textValues.slice(0, 5).map((label) => ({ label, insert: label, detail: "text" })),
+      ...textValues.slice(0, 7).map((label) => ({ label, insert: label, detail: "text" })),
       { label: '"final invoice"', insert: '"final invoice"', detail: "phrase" },
     ]
   else if (field === "body")
@@ -342,7 +346,6 @@ export const suggestionsFor = (query: string, cursor: number): Suggestion[] => {
     }))
   else
     candidates = [
-      ...textValues.slice(0, 5).map((label) => ({ label, insert: label, detail: "text" })),
       ...demoFields.map((row) => ({ label: `${row.name}:`, insert: `${row.name}:`, detail: row.type })),
       ...["AND", "OR", "NOT"].map((label) => ({ label, insert: `${label} `, detail: "operator" })),
     ]

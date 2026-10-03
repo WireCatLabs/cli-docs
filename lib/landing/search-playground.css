@@ -475,6 +475,41 @@
     12px / 1.65 Onest,
     sans-serif;
 }
+:is(.wirecat-landing, .sp-docs-host) .sp-detail-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--app-2);
+  border-bottom: 1px solid var(--app-line);
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-detail-bar button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--app-soft);
+  font:
+    12px Onest,
+    sans-serif;
+  white-space: nowrap;
+  overflow-wrap: normal;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-detail-bar button:first-child {
+  margin-right: auto;
+  white-space: normal;
+  flex-shrink: 1;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-detail-bar button[aria-pressed="true"] {
+  color: var(--key);
+  background: color-mix(in srgb, var(--key) 10%, transparent);
+}
+
 :is(.wirecat-landing, .sp-docs-host) .sp-summary article button {
   display: inline-flex;
   gap: 6px;
