@@ -280,7 +280,7 @@ for (const lang of ["en", "ru", "es"]) {
   const reset =
     ".wirecat-landing { min-height: 100vh; overflow-wrap: anywhere; }\n.wirecat-landing :where(h1,h2,h3,h4,p,ul,ol,dl,pre) { margin: revert; padding: revert; font-size: revert; font-weight: revert; }\n.wirecat-landing :where(ul,ol) { list-style: revert; }\n.wirecat-landing :where(svg) { display: inline; vertical-align: middle; }\n"
   const typography =
-    '\n.wirecat-landing :is(h1,h2,h3,h4,.hour h3,.time,.lane h3,.tool-name,.spec dt) { font-family: var(--heading-family, "Anybody"); font-stretch: var(--heading-stretch, 62%); font-weight: var(--heading-weight, 900); }\n'
+    '\nhtml[lang] .wirecat-landing :is(h1,h2,h3,h4,h5,h6,[role="heading"],.fv-name,.t6 > b,.savings-quality > b,.time,.tool-name,.spec dt) { font-family: var(--heading-family, "Unbounded"); font-stretch: var(--heading-stretch, 100%); font-weight: var(--heading-weight, 800); }\n'
   const patternScript = script.slice(script.indexOf("const shapes ="), script.indexOf("let wall ="))
   const background = {}
   runInNewContext(`${patternScript}\nscatter(["plane", "sleeping"])`, {
@@ -309,6 +309,22 @@ html[lang] .wirecat-landing :is(h2.big, .sp-heading h2.big) {
 }
 html[lang] .wirecat-landing .tool-name {
   font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.25;
+}
+html[lang] .wirecat-landing .fv-name {
+  font-size: clamp(18px, 2vw, 24px);
+  line-height: 1.25;
+}
+html[lang] .wirecat-landing .t6 > b {
+  font-size: 16px;
+  line-height: 1.4;
+}
+html[lang] .wirecat-landing .spec dt {
+  font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.3;
+}
+html[lang] .wirecat-landing .day-summary .time {
+  font-size: 24px;
   line-height: 1.25;
 }
 `,
