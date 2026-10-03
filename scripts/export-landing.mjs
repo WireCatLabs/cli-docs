@@ -60,6 +60,8 @@ const copy = {
 const escapeHtml = (text) => text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
 const tick =
   '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>'
+const themeButton =
+  '<button class="theme-toggle" type="button" aria-label="Switch theme" title="Switch theme"><svg class="theme-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="theme-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14a9 9 0 0 1-10.5-10.5A9 9 0 1 0 20.5 14Z"/></svg></button>'
 const commandView = (command) =>
   command
     .replace(/<\/?b>/g, "")
@@ -102,10 +104,7 @@ for (const lang of ["en", "ru", "es"]) {
     })),
   }))
   let html = source.split("<body>")[1].split('<div class="headlines"')[0]
-  html = html.replace(
-    '<details class="lang">',
-    '<button class="theme-toggle" type="button" aria-label="Switch theme" title="Switch theme"><svg class="theme-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="theme-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14a9 9 0 0 1-10.5-10.5A9 9 0 1 0 20.5 14Z"/></svg></button><details class="lang">',
-  )
+  html = html.replace('<details class="lang">', `${themeButton}<details class="lang">`)
   html = html.replace(/^ {4}<div class="fv fv[1-5]"[^\n]+\n/gm, "")
   html = html.replace(/href="g-home(?:\.(ru|es))?\.html"/g, (_, locale) => `href="/${locale ?? "en"}"`)
   html = html
@@ -163,9 +162,15 @@ for (const lang of ["en", "ru", "es"]) {
     `<div class="log" id="log">${sessions[0].steps.map((s) => s.html).join("")}</div>`,
   )
   if (/skill install|<script|data-variant="[1-5]"/.test(html)) throw new Error("Unpublished prototype content remains")
-  const footerHtml = html.match(/<footer class="site">[\s\S]*?<\/footer>/)?.[0]
-  if (!footerHtml) throw new Error("Missing shared site footer")
-  html = html.replace(footerHtml, "")
+  const sourceFooter = html.match(/<footer class="site">[\s\S]*?<\/footer>/)?.[0]
+  if (!sourceFooter) throw new Error("Missing shared site footer")
+  const languageLabel = { en: "Language", ru: "Язык", es: "Idioma" }[lang]
+  const footerHtml = sourceFooter.replace(
+    /<nav class="langs"[^>]*>([\s\S]*?)<\/nav>/,
+    (_, links) =>
+      `<div class="footer-controls">${themeButton}<details class="lang footer-language"><summary aria-label="${languageLabel}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg><span>${lang.toUpperCase()}</span><svg class="dn" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary><div class="lang-menu">${links}</div></details></div>`,
+  )
+  html = html.replace(sourceFooter, "")
   writeFileSync(`lib/landing/${lang}.json`, `${JSON.stringify({ html: html.trim(), footerHtml, sessions }, null, 2)}\n`)
   if (lang !== "en") continue
   const css = postcss.parse(source.match(/<style>([\s\S]*?)<\/style>/)[1].replaceAll(" !important", ""))

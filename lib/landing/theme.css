@@ -23,6 +23,17 @@
   height: 18px;
 }
 
+.wirecat-landing .footer-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wirecat-landing .footer-language .lang-menu {
+  top: auto;
+  bottom: calc(100% + 8px);
+}
+
 .wirecat-landing .theme-moon,
 .light .wirecat-landing .theme-sun {
   display: none;
