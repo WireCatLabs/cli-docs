@@ -6,7 +6,7 @@ import { defineDocs } from "fumadocs-mdx/macro"
 import { i18n } from "./i18n"
 import { remarkAnchorAliases } from "./remark-anchor-aliases"
 import { remarkDocUsability } from "./remark-doc-usability"
-import { docsRoute } from "./shared"
+import { docsRoute, toolOf } from "./shared"
 
 const docs = defineDocs({
   dir: "content/docs",
@@ -34,7 +34,14 @@ export const source = loader({
 })
 
 export const docsLlms = llms(source, {
-  renderPage: async (page) => `# ${page.data.title} (${page.url})
-
-${await page.data.getText("processed")}`,
+  renderPage: async (page) => {
+    const tool = toolOf(page.slugs)
+    const label =
+      page.locale === "ru"
+        ? "Версия документации"
+        : page.locale === "es"
+          ? "Versión de documentación"
+          : "Documentation version"
+    return `# ${page.data.title} (${page.url})\n\n${tool?.docsRef ? `${label}: ${tool.docsRef}\n\n` : ""}${await page.data.getText("processed")}`
+  },
 })
