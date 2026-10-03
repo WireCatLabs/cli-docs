@@ -168,33 +168,8 @@
     "replacements": {
       "ru": [
         {
-          "before": "Агенту с терминалом (Claude Code, Codex) нужен [навык](https://github.com/leemour/max-cli/blob/v0.23.0/README.md#навык-для-агентов-с-терминалом);\nагенту без терминала (Claude Desktop, Cursor) — [MCP-сервер](./mcp.md). Ниже — что вы говорите, что\nагент вызывает и что вы получаете.",
-          "after": "Агенту с доступом к терминалу (например, Claude Code или Codex) можно подключить [навык](https://github.com/leemour/max-cli/blob/v0.23.0/README.md#навык-для-агентов-с-терминалом). Без доступа к терминалу используйте [MCP-сервер](./mcp.md), например в Claude Desktop. В Cursor доступны оба способа. Ниже — ваш запрос, команда агента и результат."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "groups",
-    "reason": "MAX v0.23 bot page and changelog rename bot chats check to bot chats moderate; personal-account chats check remains unchanged.",
-    "replacements": {
-      "en": [
-        {
-          "before": "`max <бот> bot chats\ncheck`",
-          "after": "`max <бот> bot chats moderate`"
-        }
-      ],
-      "ru": [
-        {
-          "before": "`max <бот> bot chats\ncheck`",
-          "after": "`max <бот> bot chats moderate`"
-        }
-      ],
-      "es": [
-        {
-          "before": "`max <бот> bot chats\ncheck`",
-          "after": "`max <бот> bot chats moderate`"
+          "before": "Агенту с терминалом (Claude Code, Codex) нужен [навык](https://github.com/leemour/max-cli/blob/v0.24.0/README.md#навык-для-агентов-с-терминалом);\nагенту без терминала (Claude Desktop, Cursor) — [MCP-сервер](./mcp.md). Ниже — что вы говорите, что\nагент вызывает и что вы получаете.",
+          "after": "Агенту с доступом к терминалу (например, Claude Code или Codex) можно подключить [навык](https://github.com/leemour/max-cli/blob/v0.24.0/README.md#навык-для-агентов-с-терминалом). Без доступа к терминалу используйте [MCP-сервер](./mcp.md), например в Claude Desktop. В Cursor доступны оба способа. Ниже — ваш запрос, команда агента и результат."
         }
       ]
     }
@@ -301,100 +276,13 @@
   },
   {
     "tool": "max",
-    "slug": "usage",
-    "reason": "v0.23 reference and archive document corrected queries and relaxed fallback matching; name/list filters retain their minimum, while message search is not restricted to all words matching.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "Часть названия там тоже принимается — и в `max messages search --chat`: поиск идёт по локальной\nкопии и не подключается к MAX, а имя ищется среди сохранённых чатов. В поиске каждое слово должно\nвстретиться как слово или его начало (`квартир` найдёт «квартира»); `--regex` — одно регулярное\nвыражение без учёта регистра.",
-          "after": "Часть названия там тоже принимается — и в `max messages search --chat`: поиск идёт по локальной копии без подключения к MAX, а имя ищется среди сохранённых чатов. Сначала ищутся все слова целиком или по началу (`квартир` найдёт «квартира»). Опечатки исправляются; без полного совпадения поиск пробует любое слово, затем часть слова. Поиск сообщений принимает и запросы из одной-двух букв. `--regex` — одно регулярное выражение без учёта регистра."
-        }
-      ],
-      "en": [
-        {
-          "before": "Title fragments are also accepted, including in `max messages search --chat`, which searches local storage without connecting. Every search word must match a word or its prefix (`квартир` finds the Russian word for apartment). `--regex` uses one case-insensitive regular expression.",
-          "after": "Title fragments are also accepted, including in `max messages search --chat`, which searches stored chats and messages without connecting. It first looks for all words or prefixes (`квартир` finds the Russian word for apartment), corrects typos, then falls back to any word and part of a word if needed. Message search also accepts one- and two-letter queries. `--regex` uses one case-insensitive regular expression."
-        }
-      ],
-      "es": [
-        {
-          "before": "También admite título parcial, incluido `max messages search --chat`: busca entre chats guardados sin conectarse. Cada palabra debe aparecer completa o como prefijo (`квартир` encuentra «квартира»); `--regex` aplica una expresión regular sin distinguir mayúsculas.",
-          "after": "También admite título parcial, incluido `max messages search --chat`: busca entre chats y mensajes guardados sin conectarse. Primero busca todas las palabras o sus prefijos (`квартир` encuentra «квартира»), corrige erratas y, si hace falta, prueba cualquier palabra y después parte de una palabra. La búsqueda de mensajes también admite consultas de una o dos letras. `--regex` aplica una expresión regular sin distinguir mayúsculas."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "usage",
-    "reason": "Shell ! inverts command status inside then; capture the original failure in else. Same proven correction as TG; raw translation code remains intact until post-validation application.",
-    "replacements": {
-      "en": [
-        {
-          "before": "if ! max messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max session start\" ;;\n  esac\nfi",
-          "after": "if max messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max session start\" ;;\n  esac\nfi"
-        }
-      ],
-      "ru": [
-        {
-          "before": "if ! max messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max session start\" ;;\n  esac\nfi",
-          "after": "if max messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max session start\" ;;\n  esac\nfi"
-        }
-      ],
-      "es": [
-        {
-          "before": "if ! max messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max session start\" ;;\n  esac\nfi",
-          "after": "if max messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max session start\" ;;\n  esac\nfi"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "security",
-    "reason": "v0.23 src/commands/cache.ts calls cache.clear and maxRecord.purge; src/record.ts purges provider=max,current viewerId only and explicitly preserves other account rows. The archive is not merely a legacy cache and reconstruction is not guaranteed for deleted/unavailable messages.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "⚠ **Локальная копия содержит тексты сообщений** — это её назначение: отвечать без сети. Она лежит\nв кэше, её можно удалить в любой момент, и она восстановится из MAX:",
-          "after": "⚠ **Локальная копия содержит тексты сообщений**, чтобы отвечать без сети. Команда ниже без `--left` очищает старый кеш профиля и записи его личного аккаунта MAX в общей базе. Записи других аккаунтов сохраняются; это не удаление всего общего архива. Повторное чтение может восстановить только сообщения, которые ещё доступны в MAX:"
-        },
-        {
-          "before": "`max session end` копию не удаляет — после выхода из профиля сотрите её этой командой.",
-          "after": "`max session end` не удаляет локально сохранённую переписку. Очистка выше не удаляет файлы экспорта, скачанные вложения или резервные копии."
-        }
-      ],
-      "en": [
-        {
-          "before": "⚠ **Local storage contains message text**, so it can answer offline. The profile cache can be deleted and rebuilt from MAX:",
-          "after": "⚠ **Local storage contains message text**, so it can answer offline. Without `--left`, the command below clears the profile’s old cache and this personal MAX account’s records in the shared store. Other accounts’ records remain; it does not erase the entire shared archive. Later reads can restore only messages still available in MAX:"
-        },
-        {
-          "before": "`max session end` does not delete the cache; clear it with this command after ending the session. The shared message store is a separate file listed above.",
-          "after": "`max session end` does not delete locally stored conversations. The clear command above does not remove exported files, downloaded attachments or backups."
-        }
-      ],
-      "es": [
-        {
-          "before": "⚠ **La copia local contiene texto de mensajes:** sirve para responder sin red. La copia de caché se puede eliminar y volver a obtener de MAX:",
-          "after": "⚠ **La copia local contiene texto de mensajes:** sirve para responder sin red. Sin `--left`, el comando siguiente borra la caché anterior del perfil y los registros de esta cuenta personal de MAX en el archivo compartido. Conserva las demás cuentas; no elimina todo el archivo compartido. Solo se pueden volver a leer los mensajes que sigan disponibles en MAX:"
-        },
-        {
-          "before": "`max session end` no elimina esa copia; después de cerrar el perfil, bórrala con ese comando.",
-          "after": "`max session end` no elimina las conversaciones guardadas localmente. El comando de limpieza anterior no borra exportaciones, archivos descargados ni copias de seguridad."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
     "slug": "security",
     "reason": "Released security table distinguishes protected state 0600/0700 from configuration 0644; redirected outputs are governed by shell permissions. Narrow universal owner-only claims to actual protected files.",
     "replacements": {
       "ru": [
         {
-          "before": "Всё, что `max` пишет, сразу создаётся с правами `0600` в каталогах `0700`, включая\n  локальную копию переписки",
-          "after": "Чувствительные файлы состояния `max`, включая локальную переписку, защищены правами `0600` в каталогах `0700`. Это не универсальные права всех файлов: настройки имеют `0644`, а при перенаправлении вывода права задаёт оболочка"
+          "before": "На Linux и macOS файлы создаются с правами `0600` в каталогах `0700`, включая\n  локальную копию переписки. На Windows доступ определяют унаследованные ACL каталога пользователя",
+          "after": "На Linux и macOS чувствительные файлы состояния, включая локальную переписку, защищены правами `0600` в каталогах `0700`. Настройки могут иметь `0644`; при перенаправлении вывода права задаёт оболочка. На Windows доступ определяют унаследованные ACL каталога пользователя"
         },
         {
           "before": "Другие пользователи машины не видят ни файлов `max`, ни сокета фонового сервера: каталоги —\n`0700`, файлы — `0600`.",
@@ -403,8 +291,8 @@
       ],
       "en": [
         {
-          "before": "Sensitive files written by `max`, including local messages, are created with permissions `0600` in directories with `0700`",
-          "after": "Sensitive state files written by `max`, including local messages, use `0600` in `0700` directories. This does not apply to every output: configuration uses `0644`, and redirected output follows the shell’s permissions"
+          "before": "- **Files.** On Linux and macOS, files use `0600` in `0700` directories, including stored conversations. On Windows, access follows inherited ACLs from the user directory ([below](#что-ещё-пишется-на-диск)).",
+          "after": "- **Files.** On Linux and macOS, sensitive state files, including stored conversations, use `0600` in `0700` directories. Configuration can use `0644`; redirected output follows shell permissions. On Windows, access follows inherited ACLs from the user directory ([below](#что-ещё-пишется-на-диск))."
         },
         {
           "before": "Other users cannot read `max` files or its server socket: directories use `0700`, files `0600`.",
@@ -413,8 +301,8 @@
       ],
       "es": [
         {
-          "before": "se crean con `0600` dentro de directorios `0700`, incluida la copia local",
-          "after": "los archivos de estado sensibles usan `0600` en directorios `0700`, incluida la copia local. No se aplica a todos los archivos: la configuración usa `0644` y las redirecciones siguen los permisos de la terminal"
+          "before": "- **Archivos:** en Linux y macOS se crean con `0600` dentro de directorios `0700`, incluida la copia local. En Windows, el acceso depende de las ACL heredadas del directorio del usuario ([más abajo](#что-ещё-пишется-на-диск)).",
+          "after": "- **Archivos:** en Linux y macOS, los archivos de estado sensibles, incluidas las conversaciones guardadas, usan `0600` dentro de directorios `0700`. La configuración puede usar `0644`; los permisos del texto redirigido dependen de la shell. En Windows, el acceso depende de las ACL heredadas del directorio del usuario ([más abajo](#что-ещё-пишется-на-диск))."
         },
         {
           "before": "Otros usuarios no ven archivos ni socket: carpetas `0700`, archivos `0600`.",
@@ -881,6 +769,81 @@
         {
           "before": "\nSu duración es desconocida: MAX no la comunica. Sigue funcionando después de cerrar la pestaña de web.max.ru. Cuando MAX deje de aceptarlo, vuelve a iniciar sesión con `max session start`.\n\n`max` no limita el número de accesos, pero los cuenta por perfil; `max doctor` muestra el contador.\n\n",
           "after": "\nMAX no informa de una fecha fija de caducidad del token; el CLI no puede prometer un número de días. Cerrar web.max.ru no termina la autorización. Si MAX rechaza el token guardado, vuelve a conectar por QR:\n\n```sh\nmax session start qr\n```\n\nPara el perfil laboral, usa `max work session start qr`. Comprueba después la cuenta con `max account show` o `max work account show`. El comando `max session start` sin método importa un token existente en lugar de mostrar un QR. `max doctor` muestra el número de accesos del perfil.\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "usage",
+    "reason": "Shell ! inverts command status inside then; capture the original failure in else. Same proven correction as TG; raw translation code remains intact until post-validation application.",
+    "replacements": {
+      "en": [
+        {
+          "before": "if ! max messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max setup\" ;;\n  esac\nfi",
+          "after": "if max messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max setup\" ;;\n  esac\nfi"
+        }
+      ],
+      "ru": [
+        {
+          "before": "if ! max messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max setup\" ;;\n  esac\nfi",
+          "after": "if max messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max setup\" ;;\n  esac\nfi"
+        }
+      ],
+      "es": [
+        {
+          "before": "if ! max messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max setup\" ;;\n  esac\nfi",
+          "after": "if max messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max setup\" ;;\n  esac\nfi"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "search",
+    "reason": "Beginner entry point: explain local archive and strict matching before advanced query syntax, with one copyable single-word example.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "`max messages search` ищет только в общем локальном архиве, без сети и отметок о прочтении.",
+          "after": "`max messages search` ищет только в общем локальном архиве, без сети и отметок о прочтении.\n\nНачните с одного слова, которое помните из сообщения:\n\n```sh\nmax messages search \"договор\"\n```\n\nКоманда ищет среди сообщений, уже сохранённых на компьютере. Если нужного периода нет, сначала загрузите историю выбранного чата по [инструкции архива](./archive.md). По умолчанию ищется точное слово: Lucene — язык для добавления фраз, фильтров и условий. Для опечаток и неточного поиска выберите `--language legacy`. Ниже — примеры фильтров; поля и regex нужны только для более сложных запросов."
+        }
+      ],
+      "en": [
+        {
+          "before": "`max messages search` searches only the shared local archive, without network access or read receipts.",
+          "after": "`max messages search` searches only the shared local archive, without network access or read receipts.\n\nStart with one word you remember from the message:\n\n```sh\nmax messages search \"invoice\"\n```\n\nIt searches messages already saved on your computer. If the required period is missing, first fetch that chat’s history using the [archive guide](./archive.md). The default matches exact words: Lucene is a query language for adding phrases, filters and conditions. For typos and forgiving matching, choose `--language legacy`. The examples below add filters; fields and regex are only needed for more complex queries."
+        }
+      ],
+      "es": [
+        {
+          "before": "`max messages search` busca solo en el archivo local compartido, sin conectarse ni marcar mensajes como leídos.",
+          "after": "`max messages search` busca solo en el archivo local compartido, sin conectarse ni marcar mensajes como leídos.\n\nEmpieza con una palabra que recuerdes del mensaje:\n\n```sh\nmax messages search \"factura\"\n```\n\nBusca mensajes ya guardados en tu ordenador. Si falta el periodo que necesitas, descarga primero el historial de ese chat siguiendo la [guía del archivo](./archive.md). Por defecto coincide con palabras exactas: Lucene es un lenguaje para añadir frases, filtros y condiciones. Para erratas y coincidencias aproximadas, elige `--language legacy`. Los ejemplos siguientes añaden filtros; los campos y regex solo hacen falta para consultas más complejas."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "mcp",
+    "reason": "Released personal MCP retains legacy consent names internally; distinguish them from shared CLI names using rules.ts SHARED_LEVELS and tools.ts registerCheck.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "`--allow-moderate` даёт агенту инструмент `max_chats_check` — то же, что `max chats moderate`: проверить",
+          "after": "В этом абзаце приведены исторические названия уровней личного MCP. В общем файле правил `ask` соответствует подтверждению `confirm` в MCP, а `deny` и `readonly` запрещают выполнение. CLI использует уровни из [руководства по группам](./groups.md); не переносите старые названия в новые команды.\n\n`--allow-moderate` даёт агенту инструмент `max_chats_check` — то же, что `max chats moderate`: проверить"
+        }
+      ],
+      "en": [
+        {
+          "before": "`--allow-moderate` exposes `max_chats_check`, equivalent to `max chats moderate`: check group rules and perform permitted actions. The flag supplies the consent required by `flag`; with it, messages and members are removed where consent is `flag` or `allow`. For `confirm`, the server first performs nothing and shows one form containing all such actions. After approval it performs exactly those actions. If new actions appear meanwhile, it refuses and the check must be run again. `forbid` actions never run. With `dry_run`, only a plan is displayed. The profile requires `delete` and `groups` permissions.",
+          "after": "This paragraph uses the personal MCP implementation’s legacy consent names. In the shared rules file, `ask` maps to MCP confirmation (`confirm`), while `deny` and `readonly` prevent execution. The CLI uses the levels in the [group guide](./groups.md); use those names in new CLI commands.\n\n`--allow-moderate` exposes `max_chats_check`, equivalent to `max chats moderate`: check group rules and perform permitted actions. The flag supplies the consent required by `flag`; with it, messages and members are removed where consent is `flag` or `allow`. For `confirm`, the server first performs nothing and shows one form containing all such actions. After approval it performs exactly those actions. If new actions appear meanwhile, it refuses and the check must be run again. `forbid` actions never run. With `dry_run`, only a plan is displayed. The profile requires `delete` and `groups` permissions."
+        }
+      ],
+      "es": [
+        {
+          "before": "`--allow-moderate` ofrece `max_chats_check`, equivalente a `max chats moderate`: revisa las reglas y ejecuta lo permitido. La opción aporta el consentimiento requerido por `flag`: elimina mensajes y miembros si la regla es `flag` o `allow`. Para `confirm`, muestra primero un único formulario con todas esas acciones; tras aprobar ejecuta exactamente esas acciones. Si aparece algo nuevo durante la espera, rechaza y hay que repetir la revisión. Nunca ejecuta `forbid`. Con `dry_run`, solo muestra el plan. El perfil necesita permisos `delete` y `groups`.",
+          "after": "Este párrafo usa los nombres históricos de consentimiento del MCP personal. En el archivo compartido de reglas, `ask` corresponde a la confirmación MCP (`confirm`); `deny` y `readonly` impiden ejecutar acciones. El CLI usa los niveles de la [guía de grupos](./groups.md); usa esos nombres en comandos nuevos.\n\n`--allow-moderate` ofrece `max_chats_check`, equivalente a `max chats moderate`: revisa las reglas y ejecuta lo permitido. La opción aporta el consentimiento requerido por `flag`: elimina mensajes y miembros si la regla es `flag` o `allow`. Para `confirm`, muestra primero un único formulario con todas esas acciones; tras aprobar ejecuta exactamente esas acciones. Si aparece algo nuevo durante la espera, rechaza y hay que repetir la revisión. Nunca ejecuta `forbid`. Con `dry_run`, solo muestra el plan. El perfil necesita permisos `delete` y `groups`."
         }
       ]
     }

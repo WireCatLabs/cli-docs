@@ -12,18 +12,18 @@ max [профиль] [опции] <ресурс> <действие> [аргум�
 
 The [Command reference](./commands.md) lists every command and option, generated from the program itself.
 
-## Your first minute
+## Getting started
 
 ```sh
-max session start qr     # QR-код в терминале, токен уйдёт в ключницу
+max setup --agent codex  # QR-вход и навык агента
 max chats list           # ваши чаты
 ```
 
-That is all you need to start reading.
+Setup may take about five minutes. It checks up to five chats and does not start the background service. Download history separately after choosing a chat and how much to fetch. Before login, your agent reads `max skill show`, available without a session.
 
 ## Logging in
 
-The easiest method is `max session start qr`: scan the terminal's QR code with the MAX app, and the token is stored in your keyring. See [Sessions and profiles](./sessions.md) for all methods. Without a method, `max session start` **imports a token** issued by an official client into the operating-system keyring.
+For your first run, use `max setup`. For an explicit fresh login, use `max session start qr`: scan the terminal’s QR code with the MAX app, and the token is saved in your operating system’s keychain. See [docs/sessions.md](./sessions.md) for all login methods. Without a method, `max session start` **imports a token** obtained from the official client and saves it in the keychain.
 
 ```sh
 max session start
@@ -75,7 +75,7 @@ export MAX_PROFILE=personal
 max chats list
 ```
 
-Each profile has its own token, state and cache.
+Each profile has its own token and state. The local message store is shared, with data separated by account.
 
 ## Reading
 
@@ -196,7 +196,7 @@ MAX provides admin information at login only for recently active chats. If unava
 
 ### Pagination
 
-`chats list` and `contacts list` support three pagination options. `messages list`, `inbox`, `sends list`, `runs list` support only `--limit`; `chats members list` and `chats events` support none:
+`chats list`, `contacts list` and `chats members list` have three pagination options. `messages list`, `inbox`, `sends list` and `runs list` have only `--limit`; `chats events` reads events from a specified time without pagination:
 
 ```sh
 max contacts list --limit 5             # по пять в странице
@@ -246,7 +246,7 @@ max messages list 42 --limit 20
 max messages send 42 "текст"
 ```
 
-Title fragments are also accepted, including in `max messages search --chat`, which searches local storage without connecting. Every search word must match a word or its prefix (`квартир` finds the Russian word for apartment). `--regex` uses one case-insensitive regular expression.
+Partial chat names also work here and in `max messages search --chat`: search reads the local store without connecting to MAX and resolves names among saved chats. The default search uses strict Lucene: whole words, or an explicit prefix pattern such as `квартир*`. The previous typo-correcting search is available with `--language legacy`; `--regex` is a separate case-insensitive regular-expression mode. See [search](./search.md).
 
 ### Who counts as a contact
 
@@ -377,7 +377,7 @@ max contacts remove 20000002
 max contacts rename 20000002 "Соседка" "Анна" # своё имя для человека; он его не видит
 max contacts block 20000002                 # больше не сможет вам писать
 max contacts unblock 20000002
-max contacts import книжка.csv              # строка: номер, запятая или табуляция, имя
+max contacts import книжка.csv              # строка: номер, запятая, табуляция или точка с запятой, имя
 max account update --description "о себе"   # имя остаётся прежним
 max account update --photo портрет.png      # новое фото профиля
 max account sessions list                   # где ещё выполнен вход
@@ -389,6 +389,12 @@ max chats folders delete "Офис"             # чаты остаются
 ```
 
 Phone numbers do not appear in command arguments, visible through `ps` and history. An added person without a direct conversation is absent from `contacts list`, but accessible through `contacts show <id>`. You can block someone not in contacts. MAX does not offer personal-account short names (`@имя`); attempts return “This name is unavailable”. Folder names must not exceed 20 characters; longer names refuse before contacting MAX. `import` sends other people's phone numbers to MAX.
+
+Contact changes return `operationId` in JSON. `add` and `rename` also return `person` with `id`, `name`, `username`; `remove`, `block` and `unblock` return `personId`. `import` returns `sent` and `recognised`: the first counts file rows, including duplicates, while the second contains person records returned by MAX. If MAX returned only phone numbers without records, `recognised` is empty; phone numbers are not included in the response.
+
+`chats folders create` and `update` return `{operationId, folder}` in JSON; `delete` returns `{operationId, folderId}`. `list` returns a page of folders. `update` requires at least one change: `--title`, `--add` or `--remove`. Identify a folder by ID or exact name; if names repeat, use its ID from `list`.
+
+`account update` returns `{operationId, account}` in JSON. The record contains `id`, `name`, `username` (`null` for MAX) and a masked `phone`. Read the description after a change with `account show`. Profile photos must be JPG, JPEG, PNG or WebP. `account sessions end --others --yes` returns `{operationId, sessions}`, the sessions that remain. If ending sessions succeeds but saving the new token or reading remaining sessions fails, the command reports an error while the journal records the completed action.
 
 ### Photos, video, files and voice messages
 
@@ -426,7 +432,7 @@ max chats join https://max.ru/join/…             # вступить в гру�
 max chats leave "Семья"                          # выйти
 max chats create "Поход" "Аня" 20000002          # создать группу с людьми (имя или id)
 max chats create "Новости" --channel            # закрытый канал; люди входят по ссылке-приглашению
-max chats members list "Поход"                   # все участники: когда заведён аккаунт, когда был в сети
+max chats members list "Поход" --all             # все участники: когда заведён аккаунт, когда был в сети
 max chats members add "Поход" "Боря"             # без старых сообщений; с ними — --history
 max chats members remove "Поход" "Боря"
 max chats admins add "Поход" "Аня" --can members,pin
@@ -437,15 +443,19 @@ max chats update "Поход" --all-can-pin off       # поменять одн�
 max chats link show "Поход"                      # ссылка-приглашение, если вам её видно
 max chats link reset "Поход"                     # новая ссылка; старая перестаёт работать
 max chats events "Поход"                         # кто вступил, вышел, кого добавили и удалили — за 7 дней
-max chats events "Поход" --event add,remove --since 2026-09-01T00:00
+max chats events "Поход" --type add,remove --since-time 2026-09-01T00:00
 ```
 
-**Other people see these changes:** joins, departures, additions and new titles. `inspect`, `settings` without flags, `events` and `members list` only read. Changes pass send checks: read-only refuses; recipients restrict destinations; actions are logged without titles or links. `create` and `members add` count one hourly send per person because each receives a message. If recipients are restricted, each person's direct chat must be listed. Failures are not retried: repeating `create` makes another group.
+**Other people see these changes:** joins, departures, additions and new titles. `inspect`, `link show`, `events` and `members list` only read. Changes pass send checks: read-only refuses; recipients restrict destinations; actions are logged without titles or links. `create` and `members add` count one hourly send per person because each receives a message. If recipients are restricted, each person's direct chat must be listed. Failures are not retried: repeating `create` makes another group.
 
-`events` reads service messages identifying actions and participants. MAX event names include `new` for chat creation, `add`, `remove` and `pin`; other names are shown as returned. A run reads up to 2,000 messages oldest first, with a continuation hint if more exist.
+Group changes return `operationId` in JSON. `create`, `join`, `update` and `link reset` put the chat record in `chat`; `leave` returns `chatId`. Adding members returns `{operationId, chatId, added, notAdded}`; removing them returns `{operationId, chatId, removed}`. After a successful MAX response, `notAdded` is empty: MAX does not provide a separate list of partial failures; refusing to add a person returns an error. `admins` commands return `personId`; `admins add` also returns `rights` without duplicates. `link show` retains `{chatId, title, link}`.
 
-`members list` queries MAX and works for channels and large groups; `chats
-show` shows only people known to local storage. Each member includes a role (`owner`, `admin`, `member`, absent if login supplied no admin information), account creation time (`registeredAt`, useful for spotting very new accounts) and last seen time (`lastSeenAt`, absent if hidden). A run returns up to 5,000 people.
+In one `update`, the title or description and the settings are sent separately. If the first write succeeds but the second does not complete, the command returns `outcome_unknown`: the change may have applied partially. Read the group with `chats show` before retrying; requests are never retried automatically.
+
+`events` reads service messages from chat history: who did what, and to whom. Event types: `create` means the chat was created, `add` means someone was added, `remove` means someone was removed and `pin` means a message was pinned. Other names appear unchanged. A run reads up to 2,000 messages, oldest first; if there are more, the command tells you where to continue.
+
+`members list` asks MAX for members, so it works for channels and large groups too; `chats
+show` includes only people seen by the local store. Each record includes the role (`owner`, `admin`, `member`; absent if MAX did not report group admins at login), account creation time (`registeredAt`: a very new account in a group is worth checking) and last-seen time (`lastSeenAt`; empty if hidden). It shows the requested page; `--all` reads all available members, up to 5,000. The command warns if MAX truncates the list or repeats a marker. `hasMore` indicates additional rows already read, rather than promising that the full list is available. JSON contains `items`, `page`, `limit`, `hasMore`; an absent `role` means MAX did not report roles. `chats inspect` shows a link’s destination without joining: `id`, `kind`, `title`, `username`, `participantsCount`, `description`, `member`. Unknown `member` and `username` values are `null`.
 
 You can remove a member but cannot clear their messages. Deleting an entire chat is intentionally unsupported. Admin `--can` permissions are `read`, `members`, `admins`, `info`, `pin`, `link`, `post`, `edit`, `delete`. `read` grants access to every group message, matching “Read messages” in the app; without it, bots see none. `link` allows resetting invite links.
 
@@ -456,26 +466,28 @@ max chats rules show "Поход"                          # правила гр
 max chats rules set "Поход" invites delete            # приглашения в чужие чаты — удалять
 max chats rules set "Поход" newAccount.days 3         # аккаунт моложе трёх дней — отметить
 max chats rules set "Поход" trusted 30000003,30000004 # этих людей правила не трогают
-max chats rules set "Поход" consent.delete confirm    # перед удалением — спрашивать
+max chats rules set "Поход" consent.delete ask        # перед удалением — спрашивать
 max chats rules unset "Поход" consent.delete          # вернуть значение по умолчанию
 ```
 
 Rules live on this computer beside profile settings; the response names the file. The first group `set` writes every rule and default, showing all configurable fields. You can edit the file manually; `rules show` validates it.
 
-By default, rules only report (`report`). Other actions are `delete` for messages and `remove` for people. Each has a separate consent level (`consent.delete`, `consent.remove`): `forbid`, never; `flag`, only with `--allow-dangerous` (default); `confirm`, ask each time; `allow`, immediately.
+By default, rules only report (`report`). Beyond that, a rule can `delete` a message or `remove` a person. Each action has its own consent level (`consent.delete`, `consent.remove`): `deny` means never, `readonly` means report only, `ask` means ask first (the default) and `allow` means act without asking. `--allow-dangerous` authorizes `ask` actions for this run. Old `forbid`, `flag` and `confirm` values in files are read as `deny`, `ask` and `ask`.
 
 #### Checking a group
 
 ```sh
-max chats check "Поход"                       # что нового нарушает правила; делает то, что разрешено
-max chats check "Поход" --dry-run             # только показать
-max chats check "Поход" --allow-dangerous     # сделать и то, что стоит на уровне flag
-max chats check "Поход" --since 2026-09-20T00:00
+max chats moderate "Поход"                       # что нового нарушает правила; делает то, что разрешено
+max chats moderate "Поход" --dry-run             # только показать
+max chats moderate "Поход" --allow-dangerous     # сделать и то, что стоит на уровне ask
+max chats moderate "Поход" --since-time 2026-09-20T00:00
 ```
 
 The check reads messages and joins since the previous check, or the past day initially. Messages are checked for blocked authors, invites, links, forwards and flooding; new members against blocklists and account-age rules. You, admins and `trusted` people are exempt.
 
 Rules and consent determine the action. Everything is reported by default. Each result identifies the issue, person, rule, action and outcome: `reported`, flagged; `done`, completed; `planned`, awaiting a flag or approval, with a manual command; `forbidden`, disallowed by rules; `declined`, rejected by you; `refused`, blocked by profile safeguards or hourly limits; `skipped`, not reached yet.
+
+The JSON response is `{ chatId, rows }`. A check reads up to 1,000 messages. The saved position is in the rules file; the old session position is migrated automatically. `--since-time` and `--dry-run` do not advance it. Personal-account MCP uses the same position and keeps `max_chats_check`.
 
 A check performs at most 10 actions (`--max-actions`). Deletions count toward the hourly limit; remaining actions are deferred. The next check starts from the first unperformed message. Removed people may return through invite links because personal accounts cannot ban.
 
@@ -531,7 +543,7 @@ Times are local, with separators between days. `вы` identifies your messages; 
 Errors go **to stderr** with stdout empty, so they cannot be mistaken for data:
 
 ```json
-{"error":{"code":"authentication_error","message":"no session for profile \"default\" — run `max session start`"}}
+{"error":{"code":"authentication_error","message":"no session for profile \"default\" — run `max setup` in a local terminal; agents: read `max skill show`"}}
 ```
 
 Branch on exit codes, not wording. See the full [Command reference](./commands.md); common codes are `4`, no session; `6`, not found; `9`, timeout; `14`, unknown outcome.
@@ -540,7 +552,7 @@ Branch on exit codes, not wording. See the full [Command reference](./commands.m
 if ! max messages send 0 "текст" --json > /dev/null; then
   case $? in
     14) echo "могло уйти, повторять только с тем же --send-id" ;;
-    4)  echo "нужен max session start" ;;
+    4)  echo "нужен max setup" ;;
   esac
 fi
 ```

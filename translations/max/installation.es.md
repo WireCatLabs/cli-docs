@@ -2,7 +2,7 @@
 title: "Instalación"
 ---
 
-`max` se instala como un paquete npm normal. Funciona con Node o Bun: no compila nada al instalarse ni inicia procesos por su cuenta. El servidor en segundo plano `max serve` se inicia después, cuando un comando lo necesita (véase `serve` en [configuración](./configuration.md)).
+`max` se instala como un paquete npm normal. Funciona con Node o Bun: no compila nada al instalarse ni inicia procesos por su cuenta. El servidor en segundo plano `max serve` se inicia después, cuando una orden normal lo necesita; setup no lo inicia (véase `serve` en [configuración](./configuration.md)).
 
 ## Requisitos
 
@@ -73,21 +73,40 @@ max --help              # список команд
 
 El nombre sin ámbito (`max-cli`) pertenece a otro paquete desde 2018. El ámbito es obligatorio.
 
+## Primer inicio e instrucciones para el agente
+
+```sh
+max --help
+max setup --help
+max commands --json
+max skill show                    # доступно до входа
+max setup --agent codex            # QR-вход и навык агента
+```
+
+Reserva unos cinco minutos. `setup` comprueba la cuenta y hasta cinco chats; si ya hay sesión, la reutiliza. El historial se descarga aparte, tras elegir el chat y la cantidad. No inicia un servicio en segundo plano. Agentes disponibles: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Para instalar solo el skill: `max skill install --for all`. Consulta métodos de acceso y recuperación en [sesiones](./sessions.md).
+
+**Windows.** Después de instalar Node.js, abre un PowerShell nuevo. Si bloquea los scripts, usa `npm.cmd` y `max.cmd`. Si la orden no está en PATH:
+
+```powershell
+npm.cmd exec --yes --package=@leemour/max-cli -- max setup --agent codex
+```
+
+El mismo prefijo sirve para `--help`, `skill show` y las demás órdenes. Diagnóstico: `npm.cmd exec --yes --package=@leemour/max-cli -- max doctor --json`.
+
 ## Dónde se guardan los archivos
 
-Hay tres directorios, según las convenciones de cada sistema operativo:
+Directorios de configuración y estado según cada sistema operativo:
 
 | Contenido | Linux | macOS | Windows | Archivos |
 |---|---|---|---|---|
 | configuración | `~/.config/max-cli/` | `~/Library/Preferences/max-cli/` | `%APPDATA%\max-cli\Config\` | `config.json` y el archivo del token si no hay llavero |
 | estado | `~/.local/share/max-cli/` | `~/Library/Application Support/max-cli/` | `%LOCALAPPDATA%\max-cli\Data\` | `profiles/<имя>.json`, `bots/`: chats vistos por los bots y su registro de envíos; `runs/`: registros de ejecución |
-| caché | `~/.cache/max-cli/` | `~/Library/Caches/max-cli/` | `%LOCALAPPDATA%\max-cli\Cache\` | `<профиль>.db`: copia local de chats y mensajes |
 
 `max doctor` muestra las rutas exactas de este equipo.
 
 **El token se guarda en el llavero del sistema operativo**, no en un archivo. `config.json` no tiene un campo para él y su esquema no lo acepta.
 
-Puedes cambiar cada directorio con una variable de entorno: `MAX_CONFIG_DIR`, `MAX_STATE_DIR`, `MAX_CACHE_DIR`.
+Los directorios de `max` se cambian con `MAX_CONFIG_DIR` y `MAX_STATE_DIR`. La copia compartida se guarda aparte; `MESSAGING_STORE` indica su archivo. `max doctor` muestra la ruta exacta.
 
 > ⚠ **Estas variables también cambian la ubicación de la entrada del llavero.** Una sesión guardada con `MAX_CONFIG_DIR` no es visible para un comando ejecutado sin ella: cambia el nombre del servicio bajo el que se guarda el token. Es útil para perfiles temporales y pruebas, pero puede parecer que no hay sesión aunque el token siga existiendo; al propietario le costó media hora encontrar el motivo. Usa siempre las mismas variables o no las uses.
 
@@ -111,6 +130,10 @@ Tab **nunca se conecta a MAX**: hacerlo con cada pulsación supondría iniciar s
 max upgrade           # тем же менеджером пакетов, которым max поставлен: pnpm, npm или bun
 max upgrade --check   # только сказать, есть ли новее; ничего не ставит
 ```
+
+### Respuesta JSON de actualización
+
+`max upgrade --check --json` informa de la versión actual y disponible sin instalar. La respuesta común contiene `current`, `latest`, `newer`, `installer`, `command`, `updated` y `restarted`: perfiles cuyos servidores se reiniciaron tras actualizar. En una comprobación, sin versión nueva o sin reinicios, es un array vacío; los campos anteriores se conservan. MAX sigue sin reiniciar automáticamente sus servidores al actualizar. Los scripts que comprueban el conjunto exacto de claves deben admitir `restarted`.
 
 Una vez al día, `max` consulta npm para comprobar si hay una versión nueva. Si la hay, escribe una línea en stderr después del comando, solo en una terminal interactiva: no con `--json`, una tubería, `--quiet` ni `CI`. Desactívalo con `max config set updateCheck false --defaults`. `max` nunca se actualiza por sí solo.
 

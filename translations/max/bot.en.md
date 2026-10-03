@@ -141,7 +141,7 @@ max sales bot messages show "Команда продаж" mid.0000019a7f3c21de -
 max sales bot messages search "итоги недели"
 ```
 
-Search matches words, best matches first; use `--newest` for newest first. Every word is required. `"фраза"`, `-слово`, `а OR б` and filters `from:`, `chat:`, `after:`, `before:`, `has:` work as in `max messages search`; typos are corrected.
+Search matches words, with best matches first; `--newest` puts recent matches first. All words are required. `"фраза"`, `-слово`, `а OR б` and the filters `from:`, `chat:`, `after:`, `before:`, `has:` work as in `max messages search --language legacy`, including typo correction. For strict search across the shared archive, use [regular search](./search.md) with `in:bots`.
 
 Download older chat history into the local store:
 
@@ -192,7 +192,7 @@ Updates received by `watch` are no longer delivered to another reader using this
 
 ## Checking a chat against rules
 
-A bot can check groups where it is an admin using the same rules as the personal-account `max chats check` ([Group guide](./groups.md)). Each bot has its own rules:
+A bot can monitor a group where it is an admin using the same rules as `max chats moderate` for a personal account ([groups.md](./groups.md)). Each bot has its own rules:
 
 ```sh
 max sales bot chats rules set -72894839451 invites remove        # приглашения в чужие чаты — удалять автора
@@ -297,7 +297,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Path and query parameters become flags; the body is JSON in `--body`, `--body -` (from a pipe) or `--body-file`. Before sending, the body is checked against the schema. Errors identify the field and expected type without exposing its value. See [Bot API coverage](https://github.com/leemour/max-cli/blob/v0.23.0/docs/dev/bot-api-coverage.md) for all operations and their read/write classification.
+Path and query parameters become flags; the body is JSON in `--body`, `--body -` (from a pipe) or `--body-file`. Before sending, the body is checked against the schema. Errors identify the field and expected type without exposing its value. See [Bot API coverage](https://github.com/leemour/max-cli/blob/v0.24.0/docs/dev/bot-api-coverage.md) for all operations and their read/write classification.
 
 ## Scripts and agents
 

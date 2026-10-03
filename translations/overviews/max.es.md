@@ -39,22 +39,24 @@ Hermes. Las aplicaciones que usan MCP tienen una [guía de MCP](/es/docs/mcp).
 ### Empezar desde la terminal
 
 Abre [la guía de instalación](/es/docs/installation#max) y elige las instrucciones para terminal.
-Tras instalar la herramienta, inicia sesión con un QR y consulta algunos chats:
+Tras instalar la herramienta, configura la cuenta y consulta algunos chats:
 
 ```sh
-max session start qr
+max setup --agent all
 ```
 
 ```sh
 max chats list --limit 5
 ```
 
+`setup` guía el acceso con QR e instala los skills de los agentes. Reutiliza la sesión al repetirlo; no descarga todo el historial.
+
 Consulta [acceso y perfiles](/es/docs/max/sessions) para otros métodos de acceso y cuentas adicionales.
 
 ## Qué probar después de conectar
 
 Pide a tu agente que revise los mensajes pendientes, encuentre un mensaje, recuerde acuerdos o
-prepare una respuesta. Leer **no marca los mensajes como leídos**. Enviar, eliminar y realizar
+prepare una respuesta. La búsqueda usa Lucene estricto por defecto; `--language legacy` conserva la búsqueda anterior con correcciones. Leer **no marca los mensajes como leídos**. Enviar, eliminar y realizar
 otros cambios requiere comandos específicos; puedes limitar el acceso del agente.
 
 ## Encuentra la guía para tu tarea
@@ -65,10 +67,11 @@ otros cambios requiere comandos específicos; puedes limitar el acceso del agent
 | Iniciar sesión, salir o añadir otra cuenta | [Acceso y perfiles](/es/docs/max/sessions) |
 | Conectar un bot, enviar mensajes y añadir botones | [Bots](/es/docs/max/bot) |
 | Seguir preguntas pendientes y moderar un grupo | [Tus grupos](/es/docs/max/groups) |
+| Buscar mensajes con campos, fechas y filtros | [Búsqueda](/es/docs/max/search) |
 | Buscar en el historial local y exportar conversaciones | [Archivo de mensajes](/es/docs/max/archive) |
 | Encontrar una petición preparada para el agente | [Recetas de uso](/es/docs/max/recipes) |
 | Resolver un error | [Solución de problemas](/es/docs/max/troubleshooting) |
 | Consultar un comando o parámetro concreto | [Referencia de comandos](/es/docs/max/commands) |
 
-La barra izquierda contiene las páginas de MAX. La derecha muestra las secciones de la página
+La barra izquierda contiene las guías comunes y las páginas de Telegram y MAX. La derecha muestra las secciones de la página
 actual. Empieza con la instalación; usa la referencia detallada cuando tengas una tarea concreta.

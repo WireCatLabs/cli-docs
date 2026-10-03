@@ -4,6 +4,12 @@ title: "Sesiones y perfiles"
 
 Una sesión combina el token de tu cuenta de MAX con una identidad de dispositivo estable. El token se guarda en el llavero del sistema operativo; el resto, en un archivo junto a la configuración.
 
+## Primer inicio
+
+`max setup --agent codex` comprueba los directorios locales, guía el acceso con QR, comprueba la cuenta y hasta cinco chats e instala el skill del agente. Opciones: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Sin opción pregunta en el terminal; en modo máquina omite el skill. `max skill show` se puede leer antes de iniciar sesión.
+
+Reserva unos cinco minutos. El historial se descarga aparte, tras elegir el chat y la cantidad; setup no inicia el servicio en segundo plano. Al repetirlo comprueba la sesión existente. `--method token|qr|qr-chrome|sms` elige el método para una sesión nueva; por defecto usa `qr`. El QR y el navegador requieren una persona en el terminal local. No pases el token como argumento. Si se interrumpe, repite setup. Si el token caducó, ejecuta explícitamente `max session start qr`; si el llavero no está disponible, corrige primero el entorno según el aviso.
+
 ## Cómo obtener el token
 
 `max session start <способ>` permite iniciar sesión de cuatro maneras. En todos los casos, el token solo se guarda en el llavero después de que MAX lo acepte.
@@ -67,7 +73,7 @@ Es una diferencia importante: olvidar un token que el servidor sigue aceptando n
 
 ## Perfiles
 
-Un perfil es una cuenta separada, con su token, estado y caché. Se indica como **primera palabra**, no con una opción:
+Cada perfil guarda su token y estado propios; la copia de mensajes es compartida, con datos separados por cuenta. Se indica como **primera palabra**, no con una opción:
 
 ```sh
 max chats list              # профиль default

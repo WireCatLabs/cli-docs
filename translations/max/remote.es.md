@@ -17,7 +17,7 @@ ChatGPT / Claude ──интернет──▶ Tailscale Funnel ──▶ mcp-
 
 - **Quien supere el acceso con contraseña podrá leer tu cuenta de MAX.** Usa una contraseña larga y exclusiva. Nunca expongas este montaje sin contraseña ni un túnel sin autenticación.
 - **Solo lectura por defecto.** `max mcp` no envía nada sin `--allow-send`. Actívalo únicamente cuando necesites enviar, después de leer la [Guía MCP](./mcp.md). `--confirm-send` y la lista de destinatarios también se aplican aquí.
-- **El ordenador con `max` debe permanecer encendido.** Para usar un móvil o un portátil sin instalar nada, ejecuta el montaje en un servidor que esté siempre encendido e inicia sesión allí (`max session start`). Después solo necesitarás un navegador.
+- **El ordenador con `max` debe permanecer encendido.** Para usar un móvil o un portátil sin instalar nada, ejecuta el montaje en un servidor que esté siempre encendido e inicia sesión allí (`max setup --agent none`). Después solo necesitarás un navegador.
 - **Disponibilidad:**
 
 | Aplicación | Planes | Documentación |

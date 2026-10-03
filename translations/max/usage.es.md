@@ -12,18 +12,18 @@ max [профиль] [опции] <ресурс> <действие> [аргум�
 
 La [referencia](./commands.md) contiene todos los comandos y opciones y se genera desde el programa.
 
-## Primer minuto
+## Inicio
 
 ```sh
-max session start qr     # QR-код в терминале, токен уйдёт в ключницу
+max setup --agent codex  # QR-вход и навык агента
 max chats list           # ваши чаты
 ```
 
-No necesitas nada más para leer.
+La configuración puede tardar unos cinco minutos. Comprueba hasta cinco chats sin iniciar un servicio en segundo plano. El historial se descarga aparte tras elegir el chat y la cantidad. Antes de iniciar sesión, el agente lee `max skill show`, disponible sin sesión.
 
 ## Iniciar sesión
 
-La forma más sencilla es `max session start qr`: escanea el QR de la terminal con MAX y el token se guarda en el almacén de claves. Consulta todos los métodos en [sesiones](./sessions.md). Sin método, `max session start` **importa un token** obtenido en el cliente oficial y lo guarda en el almacén del sistema.
+Para empezar, usa `max setup`. Para volver a iniciar sesión explícitamente, ejecuta `max session start qr`: escanea el QR del terminal con MAX y el token se guarda en el llavero. Consulta todos los métodos en [sesiones](./sessions.md). Sin método, `max session start` **importa un token** obtenido en el cliente oficial y lo guarda en el llavero del sistema.
 
 ```sh
 max session start
@@ -75,7 +75,7 @@ export MAX_PROFILE=personal
 max chats list
 ```
 
-Cada perfil tiene su token, estado y caché propios.
+Cada perfil tiene su token y estado propios. La copia local de mensajes es compartida; sus datos se separan por cuenta.
 
 ## Leer
 
@@ -196,7 +196,7 @@ MAX identifica administradores al entrar, solo en chats con actividad reciente. 
 
 ### Páginas
 
-`chats list` y `contacts list` tienen tres opciones de paginación; `messages list`, `inbox`, `sends list` y `runs list`, solo `--limit`; `chats members list` y `chats events`, ninguna:
+`chats list`, `contacts list` y `chats members list` tienen tres opciones de paginación; `messages list`, `inbox`, `sends list` y `runs list`, solo `--limit`. `chats events` lee eventos desde una fecha sin páginas:
 
 ```sh
 max contacts list --limit 5             # по пять в странице
@@ -246,7 +246,7 @@ max messages list 42 --limit 20
 max messages send 42 "текст"
 ```
 
-También admite título parcial, incluido `max messages search --chat`: busca entre chats guardados sin conectarse. Cada palabra debe aparecer completa o como prefijo (`квартир` encuentra «квартира»); `--regex` aplica una expresión regular sin distinguir mayúsculas.
+También admite título parcial, incluido `max messages search --chat`: busca entre chats guardados sin conectarse. Por defecto usa Lucene estricto: palabras completas y un patrón explícito para prefijos, como `квартир*`. La búsqueda anterior con correcciones está disponible con `--language legacy`; `--regex` es un modo independiente sin distinguir mayúsculas. Consulta la [guía de búsqueda](./search.md).
 
 ### Quién se considera contacto
 
@@ -377,7 +377,7 @@ max contacts remove 20000002
 max contacts rename 20000002 "Соседка" "Анна" # своё имя для человека; он его не видит
 max contacts block 20000002                 # больше не сможет вам писать
 max contacts unblock 20000002
-max contacts import книжка.csv              # строка: номер, запятая или табуляция, имя
+max contacts import книжка.csv              # строка: номер, запятая, табуляция или точка с запятой, имя
 max account update --description "о себе"   # имя остаётся прежним
 max account update --photo портрет.png      # новое фото профиля
 max account sessions list                   # где ещё выполнен вход
@@ -389,6 +389,12 @@ max chats folders delete "Офис"             # чаты остаются
 ```
 
 No introduzcas teléfonos en argumentos, visibles en `ps` e historial. Contactos sin chat no aparecen en `contacts list`, pero sí en `contacts show <id>`. Se puede bloquear a alguien que no es contacto. MAX no permite nombre corto (`@имя`) en cuentas personales: devuelve «This name is unavailable». Las carpetas tienen máximo 20 caracteres; `max` rechaza nombres más largos sin enviar. `import` entrega a MAX teléfonos ajenos.
+
+Los cambios de contactos devuelven `operationId` en JSON: `add` y `rename` también incluyen `person` con `id`, `name`, `username`; `remove`, `block` y `unblock`, `personId`. `import` incluye `sent` y `recognised`: el primero cuenta las filas, incluidos duplicados; el segundo contiene las fichas de personas devueltas por MAX. Si MAX devuelve solo números, `recognised` queda vacío; los teléfonos no aparecen en la respuesta.
+
+`chats folders create` y `update` devuelven `{operationId, folder}` en JSON; `delete`, `{operationId, folderId}`. `list` devuelve una página de carpetas. `update` necesita al menos un cambio: `--title`, `--add` o `--remove`. Usa el ID o nombre exacto de la carpeta; si hay nombres repetidos, elige el ID de `list`.
+
+`account update` devuelve `{operationId, account}` en JSON: la ficha contiene `id`, `name`, `username` (`null` en MAX) y `phone` oculto parcialmente. Lee la descripción con `account show`. La foto admite JPG, JPEG, PNG y WebP. `account sessions end --others --yes` devuelve `{operationId, sessions}` con las sesiones restantes. Si las sesiones se cerraron pero falla guardar el token nuevo o leer las restantes, la orden da error y el registro conserva la acción ya realizada.
 
 ### Fotos, vídeos, archivos y voz
 
@@ -426,7 +432,7 @@ max chats join https://max.ru/join/…             # вступить в гру�
 max chats leave "Семья"                          # выйти
 max chats create "Поход" "Аня" 20000002          # создать группу с людьми (имя или id)
 max chats create "Новости" --channel            # закрытый канал; люди входят по ссылке-приглашению
-max chats members list "Поход"                   # все участники: когда заведён аккаунт, когда был в сети
+max chats members list "Поход" --all             # все участники: когда заведён аккаунт, когда был в сети
 max chats members add "Поход" "Боря"             # без старых сообщений; с ними — --history
 max chats members remove "Поход" "Боря"
 max chats admins add "Поход" "Аня" --can members,pin
@@ -437,15 +443,19 @@ max chats update "Поход" --all-can-pin off       # поменять одн�
 max chats link show "Поход"                      # ссылка-приглашение, если вам её видно
 max chats link reset "Поход"                     # новая ссылка; старая перестаёт работать
 max chats events "Поход"                         # кто вступил, вышел, кого добавили и удалили — за 7 дней
-max chats events "Поход" --event add,remove --since 2026-09-01T00:00
+max chats events "Поход" --type add,remove --since-time 2026-09-01T00:00
 ```
 
-**Son cambios visibles para otros:** entrar, salir, añadir personas o renombrar. Solo leen `inspect`, `settings` sin opciones, `events` y `members list`. Pasa por los controles: solo lectura rechaza, destinatarios restringen chats y registro conserva la acción sin nombres ni enlaces. `create` y `members add` cuentan una vez por persona, que recibe notificación. Con lista activa solo puedes invitar si el chat individual está permitido. No reintenta fallos; repetir `create` crea otro grupo.
+**Son cambios visibles para otros:** entrar, salir, añadir personas o renombrar. Solo leen `inspect`, `link show`, `events` y `members list`. Pasan por los mismos controles que los envíos: solo lectura rechaza cambios y la lista de destinatarios restringe chats. El registro conserva la acción sin nombres ni enlaces. `create` y `members add` cuentan una vez por persona en el límite horario: reciben un mensaje. Con la lista activa solo puedes invitar a personas cuyo chat individual esté permitido. No se reintenta tras un fallo; repetir `create` crea otro grupo.
 
-`events` lee mensajes de servicio: quién hizo qué y a quién. Nombres de MAX: `new`, creación; `add`, añadido; `remove`, eliminado; `pin`, fijado. Otros nombres se muestran tal cual. Lee hasta 2000 mensajes, antiguos primero; si hay más, indica cómo continuar.
+Los cambios de grupos devuelven `operationId` en JSON. `create`, `join`, `update` y `link reset` incluyen la ficha en `chat`; `leave` devuelve `chatId`. Añadir miembros devuelve `{operationId, chatId, added, notAdded}`; eliminarlos, `{operationId, chatId, removed}`. Tras una respuesta correcta de MAX, `notAdded` está vacío: MAX no proporciona una lista de fallos parciales; rechazar una incorporación devuelve un error. `admins` devuelve `personId`; `admins add` también incluye `rights` sin duplicados. `link show` conserva `{chatId, title, link}`.
 
-`members list` consulta MAX y funciona en canales y grupos grandes; `chats
-show` solo muestra personas vistas localmente. Incluye función (`owner`, `admin`, `member`, salvo que MAX no identifique administradores), creación (`registeredAt`, útil para revisar cuentas nuevas) y última conexión (`lastSeenAt`, vacía si está oculta). Hasta 5000 personas por ejecución.
+Cambiar título o descripción y ajustes en un mismo `update` requiere solicitudes separadas. Si el primer cambio termina pero el segundo no, la orden devuelve `outcome_unknown`: puede haberse aplicado parcialmente. Consulta `chats show` antes de repetir; no se reintenta automáticamente.
+
+`events` lee mensajes de servicio: quién hizo qué y a quién. Eventos: `create`, creación; `add`, añadido; `remove`, eliminado; `pin`, fijado. Otros nombres se muestran tal cual. Lee hasta 2000 mensajes, antiguos primero; si hay más, indica cómo continuar.
+
+`members list` consulta MAX, también en canales y grupos grandes; `chats
+show` solo muestra personas vistas localmente. Incluye función (`owner`, `admin`, `member`, salvo que MAX no identifique administradores), creación (`registeredAt`, útil para revisar cuentas nuevas) y última conexión (`lastSeenAt`, vacía si está oculta). Muestra la página solicitada; `--all` lee todos los disponibles, hasta 5000. Si MAX recorta la lista o repite el marcador, avisa. `hasMore` indica que se leyeron filas posteriores, sin garantizar acceso a toda la lista. JSON contiene `items`, `page`, `limit`, `hasMore`; sin `role`, MAX no informó del rol. `chats inspect` muestra el destino del enlace sin entrar: `id`, `kind`, `title`, `username`, `participantsCount`, `description`, `member`. Si MAX no informa de `member` o `username`, son `null`.
 
 Puedes eliminar miembros, no todos sus mensajes ni el chat completo. Permisos `--can`: `read`, `members`, `admins`, `info`, `pin`, `link`, `post`, `edit`, `delete`. `read` permite leer todos los mensajes como «Read messages» en la aplicación; sin él, el bot no ve ninguno. `link` permite cambiar invitaciones.
 
@@ -456,26 +466,28 @@ max chats rules show "Поход"                          # правила гр
 max chats rules set "Поход" invites delete            # приглашения в чужие чаты — удалять
 max chats rules set "Поход" newAccount.days 3         # аккаунт моложе трёх дней — отметить
 max chats rules set "Поход" trusted 30000003,30000004 # этих людей правила не трогают
-max chats rules set "Поход" consent.delete confirm    # перед удалением — спрашивать
+max chats rules set "Поход" consent.delete ask        # перед удалением — спрашивать
 max chats rules unset "Поход" consent.delete          # вернуть значение по умолчанию
 ```
 
 Se guardan localmente junto a la configuración; la respuesta indica el archivo. El primer `set` guarda todas las reglas predeterminadas. Puedes editarlo manualmente; `rules show` avisa si hay errores.
 
-Por defecto solo informan (`report`). También pueden eliminar mensajes (`delete`) o personas (`remove`). `consent.delete` y `consent.remove` controlan cada acción: `forbid`, nunca; `flag`, solo con `--allow-dangerous`, predeterminado; `confirm`, preguntar cada vez; `allow`, sin preguntas.
+Por defecto las reglas solo informan (`report`). También pueden eliminar mensajes (`delete`) o personas (`remove`). `consent.delete` y `consent.remove` controlan cada acción: `deny`, nunca; `readonly`, solo informar; `ask`, preguntar (predeterminado); `allow`, sin preguntas. `--allow-dangerous` permite acciones de nivel `ask` en esta ejecución. En archivos anteriores, `forbid` equivale a `deny`; `flag` y `confirm`, a `ask`.
 
 #### Revisar el grupo
 
 ```sh
-max chats check "Поход"                       # что нового нарушает правила; делает то, что разрешено
-max chats check "Поход" --dry-run             # только показать
-max chats check "Поход" --allow-dangerous     # сделать и то, что стоит на уровне flag
-max chats check "Поход" --since 2026-09-20T00:00
+max chats moderate "Поход"                       # что нового нарушает правила; делает то, что разрешено
+max chats moderate "Поход" --dry-run             # только показать
+max chats moderate "Поход" --allow-dangerous     # сделать и то, что стоит на уровне ask
+max chats moderate "Поход" --since-time 2026-09-20T00:00
 ```
 
 Revisa lo nuevo desde el último control, o las últimas 24 horas la primera vez: mensajes y entradas. Detecta autores bloqueados, invitaciones, enlaces, reenvíos y exceso de mensajes; en entradas, listas y edad de cuenta. No actúa sobre ti, administradores ni `trusted`.
 
 Las reglas y consentimiento deciden qué hacer. Por defecto solo informa. Cada fila indica hallazgo, persona, regla, acción y resultado: `reported`, informado; `done`, ejecutado; `planned`, pendiente de opción o aprobación con comando manual; `forbidden`, prohibido por reglas; `declined`, rechazado por ti; `refused`, bloqueado por perfil o límite; `skipped`, no procesado.
+
+La respuesta JSON es `{ chatId, rows }`. Se leen hasta 1000 mensajes por comprobación. El punto guardado está en el archivo de reglas; el anterior, de la sesión, se migra automáticamente. `--since-time` y `--dry-run` no lo cambian. MCP personal comparte ese punto y conserva `max_chats_check`.
 
 Máximo 10 acciones (`--max-actions`). Las eliminaciones cuentan por hora; al alcanzar el límite se pospone el resto. Si queda algo pendiente, continúa desde el primero la próxima vez. Una persona eliminada puede volver por enlace; esta cuenta no permite bloquear su regreso.
 
@@ -531,7 +543,7 @@ Horas locales y separadores por día. `вы` son tus mensajes; si falta nombre, 
 Los errores van por **stderr**, dejando stdout vacío para no confundirlos con resultados:
 
 ```json
-{"error":{"code":"authentication_error","message":"no session for profile \"default\" — run `max session start`"}}
+{"error":{"code":"authentication_error","message":"no session for profile \"default\" — run `max setup` in a local terminal; agents: read `max skill show`"}}
 ```
 
 Decide por código de salida, no por texto. Tabla completa en [referencia](./commands.md); habituales: `4`, sin sesión; `6`, no encontrado; `9`, tiempo agotado; `14`, resultado desconocido.
@@ -540,7 +552,7 @@ Decide por código de salida, no por texto. Tabla completa en [referencia](./com
 if ! max messages send 0 "текст" --json > /dev/null; then
   case $? in
     14) echo "могло уйти, повторять только с тем же --send-id" ;;
-    4)  echo "нужен max session start" ;;
+    4)  echo "нужен max setup" ;;
   esac
 fi
 ```

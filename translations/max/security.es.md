@@ -12,7 +12,7 @@ Esta herramienta accede a conversaciones personales. Por eso, explicar qué guar
 - **El texto ajeno no controla la terminal.** Controles e invisibles se muestran como texto, nombres en una línea y autocompletado solo con identificadores ([más abajo](#чужой-текст-на-экране)).
 - **Red:** descargas solo por https, sin destinos locales y con límite de tamaño. Los marcos de MAX y datos descomprimidos tienen límites; las conexiones, tiempo máximo ([más abajo](#что-уходит-в-сеть)).
 - **Token:** `max` no guarda `MAX_TOKEN` ni lo entrega al servidor. El servidor no entrega tokens a clientes del socket ([más abajo](#где-живёт-токен)).
-- **Archivos:** se crean con `0600` dentro de directorios `0700`, incluida la copia local ([más abajo](#что-ещё-пишется-на-диск)).
+- **Archivos:** en Linux y macOS se crean con `0600` dentro de directorios `0700`, incluida la copia local. En Windows, el acceso depende de las ACL heredadas del directorio del usuario ([más abajo](#что-ещё-пишется-на-диск)).
 - **Publicación:** desde GitHub Actions con prueba de procedencia; no ejecuta código de dependencias al publicar y fija versiones exactas.
 
 ## Dónde se guarda el token
@@ -43,30 +43,26 @@ El token de `max bot` está separado en el servicio `max-cli`, entrada `bot:<п�
 | bot: chats vistos, envíos, destinatarios y punto de `watch` | `~/.local/share/max-cli/bots/…` | carpeta `0700`, archivos `0600` |
 | copia compartida de mensajes de cuenta personal, bot y `tg`, con textos y transcripciones | `~/.local/share/cli-messaging/messages.db` | carpeta `0700`, archivo `0600` |
 | socket y registro de `max serve` | `~/.local/share/max-cli/profiles/<профиль>.sock`, `.serve.log` | `0600` |
-| caché anterior, solo utilizada por `max cache` | `~/.cache/max-cli/<профиль>.db` y sus `-wal`, `-shm` | carpeta `0700`, archivos `0600` |
+| copia anterior del perfil; ya no se abre | `~/.cache/max-cli/<профиль>.db` y sus `-wal`, `-shm` | carpeta `0700`, archivos `0600` |
 | exportación, **solo `max store export --output`** | destino indicado | `0600` |
 | archivos descargados, **solo `max messages download`** | carpeta actual o `--output` | `0600` |
 | informe, **solo `max doctor report create`** | carpeta actual o `--output` | `0600` |
 | modelos de voz, **solo tras `max models audio download`** | `~/.cache/cli-common/models/audio/…` | carpeta `0700`, archivos `0600` |
 
-⚠ **La copia local contiene texto de mensajes:** sirve para responder sin red. La copia de caché se puede eliminar y volver a obtener de MAX:
+⚠ **La copia compartida contiene texto de mensajes y transcripciones de voz:** sirve para responder sin red. `max session end` no la elimina. `max store clear --left --allow-dangerous` solo borra datos de chats abandonados; no hay una orden que elimine toda la copia compartida.
 
-```sh
-max cache clear
-```
-
-`max session end` no elimina esa copia; después de cerrar el perfil, bórrala con ese comando.
+Los archivos antiguos de caché del perfil ya no se abren. Si quedan, `max doctor` muestra su ruta; puedes borrarlos aparte sin afectar a la copia compartida.
 
 También hay contenido de conversaciones en la copia del bot, exportaciones y descargas; la lista de chats del bot contiene títulos. El resto no contiene conversaciones.
 
 ### Si el equipo cae en otras manos
 
-`0600` protege frente a otros usuarios, no frente a quien extrae el disco. Para eso usa cifrado completo: FileVault en macOS, LUKS en Linux, BitLocker en Windows. La copia local no tiene cifrado propio: SQLite integrado en Node no lo ofrece y una clave del almacén no protegería frente a un programa ejecutado como tu usuario, que puede leerlo igual que `max`.
+En Linux y macOS, `0600` protege frente a otros usuarios, no frente a quien extrae el disco. Para eso usa cifrado completo: FileVault en macOS, LUKS en Linux, BitLocker en Windows. En Windows, `0600` y `0700` no establecen ACL: el acceso depende de los permisos del directorio del usuario y los directorios `MAX_*_DIR` elegidos. Los permisos numéricos de la tabla corresponden a Unix. La copia local no tiene cifrado propio: SQLite integrado en Node no lo ofrece y una clave del llavero no impediría que otro programa ejecutado como tu usuario lo leyese, igual que `max`.
 
 ## Qué no hace la herramienta
 
 - **No marca como leído sin pedirlo.** Consultar historial y marcar como leído son operaciones diferentes. Solo `max chats mark-read` y `messages list --mark-read` envían la segunda; hay una prueba que comprueba que leer no la envía.
-- **No cambia nada sin solicitarlo.** Solo cambian `messages send|edit|delete|forward|pin|unpin`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `chats join|leave|create|update`, `chats members|admins …`, `chats link reset`, `chats folders create|update|delete`, `chats check` según reglas, `chats mark-read` y `messages list --mark-read`. Cada uno hace lo indicado. `max commands --json` los marca con `mutates`.
+- **No cambia nada sin solicitarlo.** Solo cambian `messages send|edit|delete|forward|pin|unpin`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `chats join|leave|create|update`, `chats members|admins …`, `chats link reset`, `chats folders create|update|delete`, `chats moderate` según reglas, `chats mark-read` y `messages list --mark-read`. Cada uno hace lo indicado. `max commands --json` los marca con `mutates`.
 - **No elimina sin aprobación explícita.** `max messages delete` requiere `--allow-dangerous` y, para todos, `--for-everyone`. Es irreversible.
 - **No acepta teléfonos como argumentos.** `contacts lookup` solicita o lee por stdin; `contacts import`, por archivo. `ps` e historial mostrarían los argumentos. Errores y registros no contienen teléfonos; `max session start` y `max account show` los ocultan parcialmente.
 - **No registra mensajes**, ni abreviados ni mediante hash: consulta [diagnóstico](./diagnostics.md).
@@ -93,7 +89,7 @@ Cada bot tiene destinatarios (`max <имя> bot recipients add <чат>`) y regi
 
 Contactos, perfil, carpetas y sesiones también respetan solo lectura. No usan destinatarios ni límite por hora porque no envían a chats. Se registran como `account` y acción, sin nombres, teléfonos ni títulos.
 
-La lista es opcional: sin destinatarios añadidos, cualquier chat; activa pero vacía significa ninguno. Si está activa, `chats create <название> <люди…>` y `chats members add` solo admiten personas cuyo chat individual esté permitido. Un nuevo miembro no ve mensajes anteriores salvo con `--history`. Un mensaje programado cuenta en la hora del envío. Dos comandos simultáneos no superan juntos el límite: se reserva desde la comprobación hasta la respuesta. `max cache clear` no toca el registro de envíos.
+La lista es opcional: sin destinatarios añadidos, cualquier chat; activa pero vacía significa ninguno. Si está activa, `chats create <название> <люди…>` y `chats members add` solo admiten personas cuyo chat individual esté permitido. Un nuevo miembro no ve mensajes anteriores salvo con `--history`. Un mensaje programado cuenta en la hora del envío. Dos comandos simultáneos no superan juntos el límite: se reserva desde la comprobación hasta la respuesta. Eliminar datos de chats abandonados no modifica el registro de envíos.
 
 ⚠ **Limitaciones de los controles.** Están dentro de `max`; un agente con shell puede modificar ajustes o quitar listas. Protegen frente a mensajes que **inducen** al modelo, no frente a agentes que **intentan** eludirlos. Para eso necesitas límites externos: entorno aislado, otro usuario del sistema o reglas del agente.
 
@@ -133,7 +129,7 @@ Otros usuarios no ven archivos ni socket: carpetas `0700`, archivos `0600`.
 |---|---|
 | `wss://api.oneme.ru/websocket`, cabecera `Origin`: `https://web.max.ru` | comandos que necesitan MAX |
 | servidores de archivos de MAX, dirección indicada por MAX | `messages send --file`, `messages download` |
-| `https://web.max.ru` en perfil Chromium temporal | `session start qr-chrome` y `session start sms` |
+| `https://web.max.ru` en perfil Chromium temporal | `session start qr-chrome`, `session start sms`, `setup --method qr-chrome|sms` |
 | Hugging Face y GitHub para modelos de voz | solo `max models audio download`; la voz se procesa localmente |
 | `https://platform-api2.max.ru`, Bot API oficial, token en `Authorization` | solo `max bot` |
 | registro npm para comprobar versiones | `max upgrade` y una vez al día desde terminal; se desactiva con `updateCheck: false` |
@@ -153,7 +149,7 @@ Recomendaciones:
 - **Usa también MAX normalmente en el navegador o móvil.** Una cuenta que solo atiende peticiones del CLI se comporta de forma diferente a una cuenta humana.
 - **No conviertas `max` en un flujo continuo de peticiones.** Lee cuando lo necesites, no cada minuto por programación.
 
-Se avisa una vez por stderr al ejecutar el primer `max session start` del perfil.
+Se avisa una vez por stderr al iniciar sesión por primera vez con `max setup` o `max session start`.
 
 ## Uso personal
 
@@ -171,7 +167,7 @@ Cada acceso añade un dispositivo en la lista de sesiones de MAX; puedes cerrarl
 
 ## Protocolo no oficial
 
-MAX no publica API de cuentas personales. El conocimiento del protocolo procede de mediciones reales o ingeniería inversa ajena; se registra el origen de cada operación ([protocolo (`protocol.md`)](https://github.com/leemour/max-cli/blob/v0.23.0/docs/dev/protocol.md), columna «Where it came from»).
+MAX no publica API de cuentas personales. El conocimiento del protocolo procede de mediciones reales o ingeniería inversa ajena; se registra el origen de cada operación ([protocolo (`protocol.md`)](https://github.com/leemour/max-cli/blob/v0.24.0/docs/dev/protocol.md), columna «Where it came from»).
 
 **Puede dejar de funcionar sin aviso.** En ese caso el comando indica el problema por stderr, en lugar de devolver una lista vacía como si todo funcionase.
 

@@ -17,7 +17,7 @@ ChatGPT / Claude ──интернет──▶ Tailscale Funnel ──▶ mcp-
 
 - **Anyone who passes the password check can read your MAX account.** Use a long password you do not use elsewhere. Never run this setup without a password or expose an unauthenticated tunnel.
 - **Read-only by default.** `max mcp` sends nothing without `--allow-send`. Add the flag only if the app needs to send, and first read the [MCP guide](./mcp.md): `--confirm-send` and recipient allowlists apply here too.
-- **The computer running `max` must stay on.** To use a phone or a laptop without installing anything there, run the setup on a small always-on server and log into `max` there (`max session start`). You then need only a browser.
+- **The computer running `max` must stay on.** To use a phone or a laptop without installing anything there, run the setup on a small always-on server and log into `max` there (`max setup --agent none`). You then need only a browser.
 - **Availability:**
 
 | App | Plans | Documentation |

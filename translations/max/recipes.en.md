@@ -117,9 +117,9 @@ Once you approve, the agent sends with `max messages send "Иван Петров
 
 ## A group you manage
 
-Writes to MAX: **only as permitted by group rules**. Permit: `Bash(max review:*)`, `Bash(max chats events:*)`, `Bash(max chats members list:*)`, `Bash(max chats check:*)`.
+Writes to MAX: **only as permitted by group rules**. Permit: `Bash(max review:*)`, `Bash(max chats events:*)`, `Bash(max chats members list:*)`, `Bash(max chats moderate:*)`.
 
-> Run `max review --chat "Поход" --unanswered 4h --json` and `max chats check "Поход" --dry-run
+> Run `max review --chat "Поход" --unanswered 4h --json` and `max chats moderate "Поход" --dry-run
 > --json`. Briefly list who is waiting for answers, what the rule check found and its proposed actions. Do not delete anything; list the commands that would perform the actions if I approve.
 
 See [Managing groups](./groups.md) for all scenarios and rules.

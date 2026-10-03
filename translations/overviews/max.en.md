@@ -39,15 +39,17 @@ or Hermes. Apps that use MCP have a [separate MCP guide](/en/docs/mcp).
 ### Start in a terminal
 
 Open [the installation guide](/en/docs/installation#max) and choose the terminal instructions.
-After installing, log in by QR code and list a few chats:
+After installing, run guided setup for QR login and agent skills:
 
 ```sh
-max session start qr
+max setup --agent all
 ```
 
 ```sh
 max chats list --limit 5
 ```
+
+Setup checks your account and up to five chats. Running it again reuses your session; it does not download full history or start the background service.
 
 See [login and profiles](/en/docs/max/sessions) for other login methods and additional accounts.
 
@@ -65,10 +67,13 @@ separate commands; you can restrict the agent's access.
 | Log in, log out or add another account | [Login and profiles](/en/docs/max/sessions) |
 | Connect a bot, send messages and add buttons | [Bots](/en/docs/max/bot) |
 | Follow unanswered questions and moderate a group | [Your groups](/en/docs/max/groups) |
+| Search syntax, dates and filters | [Message search](/en/docs/max/search) |
 | Search local history and export conversations | [Message archive](/en/docs/max/archive) |
 | Find a ready request for your agent | [Usage recipes](/en/docs/max/recipes) |
 | Fix an error | [Troubleshooting](/en/docs/max/troubleshooting) |
 | Look up an exact command or option | [Command reference](/en/docs/max/commands) |
 
-The left sidebar lists MAX pages. The right sidebar lists sections of the current page. Start
+Message search uses strict Lucene by default; `--language legacy` keeps the previous filters and typo correction.
+
+The left sidebar lists shared guides and both messengers. The right sidebar lists sections of the current page. Start
 with installation; use the detailed reference when you have a specific task.

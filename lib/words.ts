@@ -31,6 +31,7 @@ export type Words = {
     windows: string
     login: string
     telegram: string
+    maxSetup: string
     timing: string
     prompt: (tool: string, pkg: string, docs: string) => string
   }
@@ -77,6 +78,8 @@ export const words: Record<string, Words> = {
       windows:
         "Windows: this single PowerShell installer installs the CLI and agent skill, saves user PATH, updates this terminal and verifies the command. No manual PATH edits:",
       login: "Log in",
+      maxSetup:
+        "MAX setup guides QR login, checks your account and five chats, and installs agent skills. It reuses an existing session. It does not download all history or start the background service.",
       telegram:
         "Telegram: auto obtains your app ID and hash. Enter the code from Telegram in your terminal, then scan the QR in Settings → Devices → Link Desktop Device. If auto fails, use session start --app browser.",
       timing: "Allow about 5 minutes for setup. Downloading chat history is a separate step and may take longer.",
@@ -118,6 +121,8 @@ export const words: Record<string, Words> = {
       windows:
         "Windows: одна команда PowerShell устанавливает CLI и навык агента, сохраняет PATH пользователя, обновляет текущий терминал и проверяет запуск. PATH вручную менять не нужно:",
       login: "Войти в аккаунт",
+      maxSetup:
+        "Настройка MAX проведёт через QR-вход, проверит аккаунт и пять чатов, установит навыки агентов. Существующий вход используется повторно. История целиком не скачивается, фоновый сервис не запускается.",
       telegram:
         "Telegram: auto получает app ID и hash за вас. Введите код из Telegram в терминале, затем отсканируйте QR: Настройки → Устройства → Подключить устройство. Если auto не сработал, используйте session start --app browser.",
       timing:
@@ -160,6 +165,8 @@ export const words: Record<string, Words> = {
       windows:
         "Windows: usa PowerShell. Si npm está bloqueado, usa npm.cmd. Si no se encuentra el comando instalado, ejecútalo con npm exec sin modificar PATH:",
       login: "Iniciar sesión",
+      maxSetup:
+        "La configuración de MAX guía el acceso por QR, comprueba tu cuenta y cinco chats e instala los skills. Reutiliza una sesión existente. No descarga todo el historial ni inicia el servicio en segundo plano.",
       telegram:
         "Telegram: auto obtiene tu app ID y hash. Introduce el código de Telegram en la terminal y escanea el QR en Ajustes → Dispositivos → Vincular dispositivo. Si auto falla, usa session start --app browser.",
       timing:

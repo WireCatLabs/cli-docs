@@ -22,7 +22,7 @@ export function InstallTool({ tool, lang }: { tool: Tool; lang: string }) {
     return () => window.removeEventListener("hashchange", followHash)
   }, [tool.name])
   const docs = `${siteUrl}/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}installation/content.md`
-  const login = tool.name === "tg" ? "session start --app auto" : "session start qr"
+  const login = tool.name === "tg" ? "session start --app auto" : "setup --agent all"
   const installer = `& ([scriptblock]::Create((Invoke-RestMethod '${siteUrl}/install.ps1'))) -Tool ${tool.name} -Agent all`
   return (
     <details
@@ -65,6 +65,7 @@ export function InstallTool({ tool, lang }: { tool: Tool; lang: string }) {
             <p className="text-sm font-medium">{ui.login}</p>
             <CopyText lang={lang} text={`${tool.name} ${login}`} />
             {tool.name === "tg" && <p className="text-sm text-fd-muted-foreground">{ui.telegram}</p>}
+            {tool.name === "max" && <p className="text-sm text-fd-muted-foreground">{ui.maxSetup}</p>}
             <CopyText
               lang={lang}
               text={`${tool.name} account show\n${tool.name} chats list --limit 5\n${tool.name} inbox --limit 5`}

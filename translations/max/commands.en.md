@@ -28,10 +28,10 @@ Apply to every command.
 | `--json` | machine-readable output: one JSON value on stdout, nothing else. |
 | `--jsonl` | machine-readable output: one JSON object per line, for streaming and jq. |
 | `--quiet` | diagnostics off. |
-| `--yes` | go ahead without the question an ask level puts before a write. |
 | `--trace` | one line per request on stderr: ids and timings, never message content. |
 | `--timeout <duration>` | give up on the whole command after this — 30s, 2m, 500ms. |
 | `--offline` | answer from what was recorded and never connect; fails if nothing was. |
+| `--yes` | go ahead without the question an ask level puts before a write. |
 | `--record` | keep this run under `max runs` — ids and timings, never message content. |
 | `--no-record` | do not keep it, whatever the configuration says. |
 | `--serve` | start `max serve` in the background if it is not running (the default). |
@@ -60,6 +60,21 @@ forget the stored session for this profile
 ```sh
 max session end
 ```
+
+## `max setup`
+
+set up your personal MAX account and connect your agent
+
+**Changes data in MAX.**
+
+```sh
+max setup [options]
+```
+
+| Option | Purpose |
+|---|---|
+| `--agent <agent>` | install the skill for this agent; asks at a terminal, otherwise none. One of: `none`, `codex`, `cursor`, `claude`, `gemini`, `all`. |
+| `--method <method>` | how to log in when there is no session. One of: `token`, `qr`, `qr-chrome`, `sms`. Default: `qr`. |
 
 ## `max account`
 
@@ -100,7 +115,7 @@ where else this account is logged in — not `max session`, which is this tool's
 
 #### `max account sessions list`
 
-every device and browser logged in to this account
+every device and app logged in to this account; nothing is ended
 
 ```sh
 max account sessions list
@@ -118,7 +133,7 @@ max account sessions end [options]
 
 | Option | Purpose |
 |---|---|
-| `--others` | every session but this one — the only choice MAX offers. |
+| `--others` | every session but this one. |
 
 ## `max chats`
 
@@ -163,16 +178,16 @@ max chats events <chat> [options]
 
 | Argument | | Meaning |
 |---|---|---|
-| `chat` | required | chat id, or part of a chat name. |
+| `chat` | required | a chat: its id, or part of its title. |
 
 | Option | Purpose |
 |---|---|
-| `--since <id-or-time>` | from this message id, ISO 8601 time, or 2h / 1d ago; 7 days ago if not given. |
-| `--event <names>` | only these, comma-separated, as MAX names them: new, add, remove, pin…. |
+| `--since-time <time>` | ISO 8601, or 2h / 1d ago; 7 days ago if not given. |
+| `--type <names>` | only these, comma-separated: join, leave, add, remove, create, title, pin. |
 
 ### `max chats inspect`
 
-what a link leads to, without joining it
+what an invite or public link leads to, without joining it
 
 ```sh
 max chats inspect <link>
@@ -180,7 +195,7 @@ max chats inspect <link>
 
 | Argument | | Meaning |
 |---|---|---|
-| `link` | required | an invite link, https://max.ru/join/…, or a public one, https://max.ru/<name>. |
+| `link` | required | an invite link or a public one. |
 
 ### `max chats join`
 
@@ -194,7 +209,7 @@ max chats join <link>
 
 | Argument | | Meaning |
 |---|---|---|
-| `link` | required | an invite link, https://max.ru/join/…, or a public one, https://max.ru/<name>. |
+| `link` | required | an invite link, or a public one. |
 
 ### `max chats mark-read`
 
@@ -226,7 +241,7 @@ max chats leave <chat>
 
 | Argument | | Meaning |
 |---|---|---|
-| `chat` | required | chat id, or part of a chat name. |
+| `chat` | required | a chat: its id, or part of its title. |
 
 ### `max chats create`
 
@@ -249,19 +264,25 @@ max chats create <title> [person] [options]
 
 ### `max chats members`
 
-who is in a group or channel; add or remove people
+who is in a group
 
 #### `max chats members list`
 
-everyone in a group or channel, from MAX: when their account was made and when they were last seen
+everyone in a group, a page at a time, with their role and when they were last seen
 
 ```sh
-max chats members list <chat>
+max chats members list <chat> [options]
 ```
 
 | Argument | | Meaning |
 |---|---|---|
-| `chat` | required | chat id, or part of a chat name. |
+| `chat` | required | a chat: its id, or part of its title. |
+
+| Option | Purpose |
+|---|---|
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+| `--all` | every row, no paging. |
 
 #### `max chats members add`
 
@@ -275,7 +296,7 @@ max chats members add <chat> <person> [options]
 
 | Argument | | Meaning |
 |---|---|---|
-| `chat` | required | chat id, or part of a chat name. |
+| `chat` | required | a chat: its id, or part of its title. |
 | `person` | required | an id, or part of a name. |
 
 | Option | Purpose |
@@ -294,7 +315,7 @@ max chats members remove <chat> <person>
 
 | Argument | | Meaning |
 |---|---|---|
-| `chat` | required | chat id, or part of a chat name. |
+| `chat` | required | a chat: its id, or part of its title. |
 | `person` | required | an id, or part of a name. |
 
 ### `max chats admins`
@@ -313,7 +334,7 @@ max chats admins add <chat> <person> [options]
 
 | Argument | | Meaning |
 |---|---|---|
-| `chat` | required | chat id, or part of a chat name. |
+| `chat` | required | a chat: its id, or part of its title. |
 | `person` | required | an id, or part of a name. |
 
 | Option | Purpose |
@@ -332,7 +353,7 @@ max chats admins remove <chat> <person>
 
 | Argument | | Meaning |
 |---|---|---|
-| `chat` | required | chat id, or part of a chat name. |
+| `chat` | required | a chat: its id, or part of its title. |
 | `person` | required | an id, or part of a name. |
 
 ### `max chats update`
@@ -347,7 +368,7 @@ max chats update <chat> [options]
 
 | Argument | | Meaning |
 |---|---|---|
-| `chat` | required | chat id, or part of a chat name. |
+| `chat` | required | a chat: its id, or part of its title. |
 
 | Option | Purpose |
 |---|---|
@@ -373,7 +394,7 @@ max chats link show <chat>
 
 | Argument | | Meaning |
 |---|---|---|
-| `chat` | required | chat id, or part of a chat name. |
+| `chat` | required | a chat: its id, or part of its title. |
 
 #### `max chats link reset`
 
@@ -387,7 +408,7 @@ max chats link reset <chat>
 
 | Argument | | Meaning |
 |---|---|---|
-| `chat` | required | chat id, or part of a chat name. |
+| `chat` | required | a chat: its id, or part of its title. |
 
 ### `max chats folders`
 
@@ -395,7 +416,7 @@ your chat folders
 
 #### `max chats folders list`
 
-your chat folders, in the order MAX shows them
+your chat folders, in the order the app shows them
 
 ```sh
 max chats folders list
@@ -413,7 +434,7 @@ max chats folders create <title> [options]
 
 | Argument | | Meaning |
 |---|---|---|
-| `title` | required | the folder's name; MAX refused 21 characters and took 15. |
+| `title` | required | the folder's name; the app may refuse a long one. |
 
 | Option | Purpose |
 |---|---|
@@ -455,7 +476,7 @@ max chats folders delete <folder>
 
 ### `max chats rules`
 
-a group's moderation rules, kept on this machine
+what `chats moderate` judges a group by, kept in a file of this profile
 
 #### `max chats rules show`
 
@@ -467,7 +488,7 @@ max chats rules show <chat>
 
 | Argument | | Meaning |
 |---|---|---|
-| `chat` | required | chat id, or part of a chat name. |
+| `chat` | required | a chat: its id, or part of its title. |
 
 #### `max chats rules set`
 
@@ -481,9 +502,9 @@ max chats rules set <chat> <key> <value>
 
 | Argument | | Meaning |
 |---|---|---|
-| `chat` | required | chat id, or part of a chat name. |
+| `chat` | required | a chat: its id, or part of its title. |
 | `key` | required | one of: trusted, blocked, blockedNames, links, invites, forwards, blockedPeople, flood.messages, flood.minutes, flood.action, newAccount.days, newAccount.action, consent.delete, consent.remove. |
-| `value` | required | see `max chats rules show`; lists are comma-separated and replace the old one. |
+| `value` | required | the new value; a list is comma-separated. |
 
 #### `max chats rules unset`
 
@@ -497,29 +518,29 @@ max chats rules unset <chat> <key>
 
 | Argument | | Meaning |
 |---|---|---|
-| `chat` | required | chat id, or part of a chat name. |
+| `chat` | required | a chat: its id, or part of its title. |
 | `key` | required | one of: trusted, blocked, blockedNames, links, invites, forwards, blockedPeople, flood.messages, flood.minutes, flood.action, newAccount.days, newAccount.action, consent.delete, consent.remove. |
 
-### `max chats check`
+### `max chats moderate`
 
 judge a group's new messages and members by its rules, and act as they allow
 
 **Changes data in MAX.**
 
 ```sh
-max chats check <chat> [options]
+max chats moderate <chat> [options]
 ```
 
 | Argument | | Meaning |
 |---|---|---|
-| `chat` | required | chat id, or part of a chat name. |
+| `chat` | required | a chat: its id, or part of its title. |
 
 | Option | Purpose |
 |---|---|
-| `--since <id-or-time>` | judge what came after this message id, ISO 8601 time, or 2h / 1d ago; the saved point stays. |
+| `--since-time <time>` | judge what came after this ISO 8601 time, or 2h / 1d ago; the saved point stays. |
 | `--dry-run` | judge and plan; do nothing. |
-| `--allow-dangerous` | do what a rule at consent level flag asks: delete messages, remove people. |
-| `--max-actions <n>` | at most this many actions in one check; 10 if not given. |
+| `--allow-dangerous` | yes to every action whose level in the group's rules is ask. |
+| `--max-actions <n>` | at most this many actions in one run; 10 if not given. |
 
 ## `max contacts`
 
@@ -643,7 +664,7 @@ max contacts rename <person> <first-name> [last-name]
 
 ### `max contacts import`
 
-upload phone numbers to MAX and add the people it has under them
+upload phone numbers and add the people the messenger has under them
 
 **Changes data in MAX.**
 
@@ -653,7 +674,7 @@ max contacts import <file>
 
 | Argument | | Meaning |
 |---|---|---|
-| `file` | required | one person per line: number, then a comma or a tab, then the name. |
+| `file` | required | one person per line: number, then a comma, a tab or a semicolon, then the name. |
 
 ## `max messages`
 
@@ -692,7 +713,7 @@ max messages search <query> [options]
 
 | Argument | | Meaning |
 |---|---|---|
-| `query` | required | every word must appear, best match first; "a phrase", -word, a OR b, and the filters from: chat: after: before: has: in: — a typo is corrected, and a word that matches nothing falls back to any word, then to a piece of a word. |
+| `query` | required | strict Lucene query: words, "phrases", AND/OR/NOT, field groups and date ranges; --language legacy keeps discovery. |
 
 | Option | Purpose |
 |---|---|
@@ -701,6 +722,8 @@ max messages search <query> [options]
 | `--limit <n>` | how many. |
 | `--newest` | newest first instead of best first. |
 | `--context <n>` | messages before and after each hit; 2 in the terminal, 0 otherwise. |
+| `--language <lucene\|legacy>` | the query language: strict Lucene or legacy discovery. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 | `--regex` | the words are one regular expression, case-insensitive, tested against every stored text. |
 
 ### `max messages show`
@@ -1733,22 +1756,6 @@ max doctor report create [options]
 | `--run <id>` | the run the report is about; the newest failed one if not given. |
 | `--output <file>` | where to write it; a new file in this directory if not given. |
 
-## `max cache`
-
-the local copy of chats, contacts and messages
-
-### `max cache clear`
-
-forget everything this profile has cached
-
-```sh
-max cache clear [options]
-```
-
-| Option | Purpose |
-|---|---|
-| `--left` | only the chats this account has left, with their messages. |
-
 ## `max runs`
 
 recorded runs — what this tool did, and when
@@ -1767,7 +1774,7 @@ max runs list [options]
 
 ### `max runs show`
 
-one run: what it was, and one line per request
+one run: what it was, and one line per operation
 
 ```sh
 max runs show <run-id>

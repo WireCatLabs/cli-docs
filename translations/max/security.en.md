@@ -12,7 +12,7 @@ This tool accesses private conversations. Explaining what it records is a centra
 - **Untrusted text cannot control the terminal.** Control and invisible characters are displayed as text; names and titles stay on one line; completion inserts only IDs ([below](#чужой-текст-на-экране)).
 - **Network limits.** Downloads require HTTPS, reject local-machine and local-network addresses, and enforce size limits. MAX frames and decompressed data are bounded, and connections have timeouts ([below](#что-уходит-в-сеть)).
 - **Tokens.** `max` never saves a token from `MAX_TOKEN` or passes it to the background server. The server never exposes a token through its socket ([below](#где-живёт-токен)).
-- **Files.** Sensitive files written by `max`, including local messages, are created with permissions `0600` in directories with `0700` ([below](#что-ещё-пишется-на-диск)).
+- **Files.** On Linux and macOS, files use `0600` in `0700` directories, including stored conversations. On Windows, access follows inherited ACLs from the user directory ([below](#что-ещё-пишется-на-диск)).
 - **Releases.** The package is published from GitHub Actions with provenance. Publishing does not execute dependency code, and direct dependency versions are pinned exactly.
 
 ## Token storage
@@ -43,30 +43,26 @@ The `max bot` token is stored separately under the same `max-cli` service, in `b
 | Bot: seen chats, send log, recipient list, `watch` position | `~/.local/share/max-cli/bots/…` | Directory `0700`, files `0600` |
 | Shared message store for personal accounts, bots and `tg`, including text and voice transcripts | `~/.local/share/cli-messaging/messages.db` | Directory `0700`, file `0600` |
 | Background `max serve` socket and log | `~/.local/share/max-cli/profiles/<профиль>.sock`, `.serve.log` | `0600` |
-| Old chat and message cache, now used only by `max cache` commands | `~/.cache/max-cli/<профиль>.db` and its `-wal`, `-shm` files | Directory `0700`, files `0600` |
+| Old profile cache; no longer opened | `~/.cache/max-cli/<профиль>.db` and its `-wal`, `-shm` files | Directory `0700`, files `0600` |
 | Conversation export, **only through `max store export --output`** | Your chosen destination | `0600` |
 | Downloaded attachments, **only through `max messages download`** | Current directory or `--output` | `0600` |
 | Problem report, **only through `max doctor report create`** | Current directory or `--output` | `0600` |
 | Speech models, **only after `max models audio download`** | `~/.cache/cli-common/models/audio/…` | Directory `0700`, files `0600` |
 
-⚠ **Local storage contains message text**, so it can answer offline. The profile cache can be deleted and rebuilt from MAX:
+⚠ **The shared local store contains message text and voice transcripts**: it exists to answer offline. `max session end` does not remove it. `max store clear --left --allow-dangerous` removes only data for departed chats; there is no command to erase the entire shared store.
 
-```sh
-max cache clear
-```
-
-`max session end` does not delete the cache; clear it with this command after ending the session. The shared message store is a separate file listed above.
+Old profile cache files are no longer opened. If they remain, `max doctor` shows their path; you can delete them separately without affecting the shared store.
 
 Conversation content also exists in bot storage, exports and downloaded files; bot chat lists contain chat titles. Other items in the table contain no conversation content.
 
 ### If someone obtains your computer
 
-`0600` permissions protect files from other machine users, but not someone who obtains the disk. Use full-disk encryption: FileVault on macOS, LUKS on Linux or BitLocker on Windows. Local storage has no encryption of its own: Node's built-in SQLite does not provide it, and a key in the keyring would not stop a program running as your user, which can access the keyring just like `max`.
+On Linux and macOS, `0600` permissions keep files private from other users on this computer, but not from someone who obtains the disk. Full-disk encryption provides that protection: FileVault on macOS, LUKS on Linux and BitLocker on Windows. On Windows, `0600` and `0700` modes do not set ACLs: access depends on permissions inherited from your user directory and the chosen `MAX_*_DIR` directories. The permission numbers in the table apply to Unix. The local store has no encryption of its own: Node’s built-in SQLite does not provide it, and a key in the keychain would not stop a program running as you, because it can read the keychain just as `max` does.
 
 ## Actions the tool never takes on its own
 
 - **No read receipts without a request.** Fetching history and marking read are separate protocol operations. Only `max chats mark-read` and `messages list --mark-read` request the latter; tests verify that normal reading does not.
-- **No unrequested changes.** Only `messages send|edit|delete|forward|pin|unpin`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `chats join|leave|create|update`, `chats members|admins …`, `chats link reset`, `chats folders create|update|delete`, `chats check` (only actions allowed by rules), `chats mark-read` and `messages list --mark-read` change data. Each does only what the command line requests. `max commands --json` marks them with `mutates`.
+- **No unrequested changes.** Only `messages send|edit|delete|forward|pin|unpin`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `chats join|leave|create|update`, `chats members|admins …`, `chats link reset`, `chats folders create|update|delete`, `chats moderate` (only actions allowed by rules), `chats mark-read` and `messages list --mark-read` change data. Each does only what the command line requests. `max commands --json` marks them with `mutates`.
 - **No deletion without explicit permission.** `max messages delete` requires `--allow-dangerous`; deletion for everyone also requires `--for-everyone`. Deletion cannot be undone.
 - **No phone number in command arguments.** `contacts lookup` prompts or reads from a pipe; `contacts import` reads a file. Command arguments are visible through `ps` and shell history. Errors, send logs and run records omit phone numbers, while `max session start` and `max account show` mask them.
 - **No message content in logs**, even truncated or hashed; see [Diagnostics](./diagnostics.md).
@@ -93,7 +89,7 @@ Each bot has its own recipient list (`max <имя> bot recipients add <чат>`)
 
 Account changes — contacts, profile, folders and sessions — also respect read-only mode. Recipient lists and hourly limits do not apply because these actions have no destination chat or message recipient. They are logged as `account` with the action, without names, numbers or titles.
 
-The recipient list is optional: before anything is added, any chat is allowed. An enabled but empty list allows no destinations. When enabled, `chats create <название> <люди…>` and `chats members add` accept only people whose direct chat is listed. New group members cannot see older messages unless `--history` is supplied. Scheduled messages count in their send hour. Simultaneous commands cannot exceed the limit: capacity is held from checking until MAX responds. `max cache clear` does not affect the send log.
+The recipient list is optional: before anything is added, any chat is allowed. An enabled but empty list allows no destinations. When enabled, `chats create <название> <люди…>` and `chats members add` accept only people whose direct chat is listed. New group members cannot see older messages unless `--history` is supplied. Scheduled messages count in their send hour. Simultaneous commands cannot exceed the limit: capacity is held from checking until MAX responds. Clearing departed-chat data does not touch the send journal.
 
 ⚠ **What these checks cannot prevent.** An agent with shell access can change settings or disable recipient lists. These safeguards protect against a model **persuaded** by a message, rather than an agent **intentionally** bypassing them. For that, enforce an external boundary: a sandbox, a separate OS user or agent-level policy.
 
@@ -133,7 +129,7 @@ Other users cannot read `max` files or its server socket: directories use `0700`
 |---|---|
 | `wss://api.oneme.ru/websocket`, with `Origin` set to `https://web.max.ru` | Any command needing MAX |
 | MAX file servers, using addresses provided by MAX | `messages send --file`, `messages download` |
-| `https://web.max.ru` in a temporary Chromium profile | `session start qr-chrome` and `session start sms` |
+| `https://web.max.ru` in a temporary Chromium profile | `session start qr-chrome`, `session start sms`, `setup --method qr-chrome|sms` |
 | Hugging Face and GitHub, for speech-model files | Only `max models audio download`; voice audio stays on this computer |
 | `https://platform-api2.max.ru`, official Bot API, token in `Authorization` | Only `max bot` commands |
 | npm registry, for the latest version number | `max upgrade`, and once a day when a person runs a terminal command; disabled by `updateCheck: false` |
@@ -153,7 +149,7 @@ Practical precautions:
 - **Continue using MAX normally in the browser or on your phone alongside `max`.** An account used only for CLI requests behaves differently from a person's account.
 - **Avoid a constant stream of requests.** Read when needed rather than polling every minute.
 
-The first `max session start` for a profile reports this once on stderr.
+The same notice appears once on stderr when a profile first logs in through `max setup` or `max session start`.
 
 ## Personal use
 
@@ -171,7 +167,7 @@ Each login adds a device to the MAX app's session list. You can end it there.
 
 ## Unofficial protocol
 
-MAX publishes no personal-account API. Protocol knowledge comes from observed live connections or others' reverse engineering; each operation records its source ([`protocol.md`](https://github.com/leemour/max-cli/blob/v0.23.0/docs/dev/protocol.md), “Where it came from” column).
+MAX publishes no personal-account API. Protocol knowledge comes from observed live connections or others' reverse engineering; each operation records its source ([`protocol.md`](https://github.com/leemour/max-cli/blob/v0.24.0/docs/dev/protocol.md), “Where it came from” column).
 
 **This can stop working without warning.** If it does, the command reports it on stderr instead of quietly returning an empty list.
 
