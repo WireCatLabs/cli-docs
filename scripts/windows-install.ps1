@@ -20,11 +20,18 @@ if ($LASTEXITCODE -ne 0) { throw 'Could not resolve the published version' }
 $version = "$versionOutput".Trim()
 $spec = "${package}@$version"
 Write-Output "Checking $spec on Node $(& node --version)"
-& npm.cmd install --global --prefix $prefix $spec
-if ($LASTEXITCODE -ne 0) { throw 'Global installation failed' }
-
-# A fresh custom prefix reproduces a successful install without a PATH entry.
 if (Get-Command $Tool -ErrorAction SilentlyContinue) { throw 'Expected CLI to be absent from PATH' }
+$installer = Join-Path $PSScriptRoot '../public/install.ps1'
+$ready = & $installer -Tool $Tool -Prefix $prefix -PackageSpec $spec -Agent all -Json
+if ($LASTEXITCODE -ne 0) { throw 'Windows installer failed' }
+$ready = ($ready -join "`n") | ConvertFrom-Json
+if ($ready.tool -ne $Tool -or $ready.written.Count -ne 2) { throw 'Installer did not install agent instructions' }
+$userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
+if (-not $userPath.Contains($prefix)) { throw 'Installer did not persist user PATH' }
+$directVersion = & $Tool --version
+if ($LASTEXITCODE -ne 0 -or "$directVersion".Trim() -ne $version) { throw 'Bare CLI command is not ready' }
+if (Test-Path (Join-Path $prefix "$Tool.ps1")) { throw 'Generated PowerShell shim still shadows the command launcher' }
+
 $shim = Join-Path $prefix "$Tool.cmd"
 $installedVersion = & $shim --version
 if ($LASTEXITCODE -ne 0 -or "$installedVersion".Trim() -ne $version) { throw 'Installed CLI version does not match npm' }
@@ -70,11 +77,9 @@ foreach ($file in $skillContents.Keys) {
     }
 }
 
-# The landing page's fallback works even while the global prefix is absent from PATH.
-$execVersion = & npm.cmd exec --yes "--package=$spec" -- $Tool --version
-if ($LASTEXITCODE -ne 0 -or "$execVersion".Trim() -ne $version) { throw 'npm exec without global PATH failed' }
-
-$env:Path = "$prefix;$env:Path"
-& "$Tool.cmd" --version
-if ($LASTEXITCODE -ne 0) { throw 'CLI failed after adding the prefix to this shell PATH' }
-Write-Output "PASS: $spec launch, JSON, SQLite, skills and PATH fallback"
+# Simulate a newly opened terminal with only persistent PATH values.
+$powershell = (Get-Command powershell.exe).Source
+$env:Path = [Environment]::ExpandEnvironmentVariables("$([Environment]::GetEnvironmentVariable('Path', 'Machine'));$userPath")
+& $powershell -NoProfile -ExecutionPolicy Restricted -Command "$Tool --version; if (`$LASTEXITCODE -ne 0) { exit 1 }; $Tool skill show | Out-Null; if (`$LASTEXITCODE -ne 0) { exit 1 }"
+if ($LASTEXITCODE -ne 0) { throw 'Fresh restricted PowerShell cannot run the installed command' }
+Write-Output "PASS: $spec persistent/current PATH, bare launch, automatic skills, JSON and SQLite"
