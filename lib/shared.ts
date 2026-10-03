@@ -7,6 +7,9 @@ export type Tool = (typeof tools)[number]
 export { tools }
 
 export const appName = siteConfig.name
+export const tagline = "Messaging tools for your AI agent"
+export const siteDescription =
+  "Connect Claude Code, Codex or another agent to Telegram and MAX. Find what matters, keep track of commitments and reply with the full context."
 export const docsRoute = "/docs"
 export const docsContentRoute = "/llms.mdx/docs"
 export const repository = siteConfig.repository

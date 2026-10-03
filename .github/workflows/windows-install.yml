@@ -32,3 +32,11 @@ jobs:
         env:
           WIRECAT_TOOL: ${{ matrix.tool }}
         run: ./scripts/windows-install.ps1 -Tool $env:WIRECAT_TOOL
+
+      - name: Install and check with built-in PowerShell 5.1
+        shell: pwsh
+        env:
+          WIRECAT_TOOL: ${{ matrix.tool }}
+        run: |
+          & powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File ./scripts/windows-install.ps1 -Tool $env:WIRECAT_TOOL
+          if ($LASTEXITCODE -ne 0) { throw 'PowerShell 5.1 installation check failed' }

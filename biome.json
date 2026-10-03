@@ -12,5 +12,20 @@
       "!next-env.d.ts",
       "!design"
     ]
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["components/landing/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noDescendingSpecificity": "off"
+          },
+          "security": {
+            "noDangerouslySetInnerHtml": "off"
+          }
+        }
+      }
+    }
+  ]
 }

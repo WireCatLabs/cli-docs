@@ -13,7 +13,7 @@ import { notFound } from "next/navigation"
 import { DocsDisclosures } from "@/components/docs-disclosures"
 import { getMDXComponents } from "@/components/mdx"
 import { installationReferenceTitle, ToolInstallationIntro } from "@/components/tool-installation-intro"
-import { getPageMarkdownUrl, toolOf } from "@/lib/shared"
+import { appName, getPageMarkdownUrl, toolOf } from "@/lib/shared"
 import { source } from "@/lib/source"
 import { wordsFor } from "@/lib/words"
 import "@/lib/docs-usability.css"
@@ -91,8 +91,11 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const page = source.getPage(slug, lang)
   if (!page) notFound()
   const tool = toolOf(page.slugs)
+  const title = tool && page.slugs.length > 1 ? `${page.data.title} — ${tool.name}` : page.data.title
   return {
-    title: tool && page.slugs.length > 1 ? `${page.data.title} — ${tool.name}` : page.data.title,
+    title,
     description: page.data.description,
+    alternates: { canonical: page.url },
+    openGraph: { siteName: appName, title, description: page.data.description, url: page.url, type: "article" },
   }
 }

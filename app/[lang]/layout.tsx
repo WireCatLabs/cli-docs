@@ -5,7 +5,7 @@ import { Inter } from "next/font/google"
 import SearchDialog from "@/components/search"
 import { i18n } from "@/lib/i18n"
 import { translations } from "@/lib/layout.shared"
-import { appName, siteUrl } from "@/lib/shared"
+import { appName, siteDescription, siteUrl, tagline } from "@/lib/shared"
 import "../global.css"
 
 const inter = Inter({ subsets: ["latin", "cyrillic"] })
@@ -45,5 +45,9 @@ export const metadata: Metadata = {
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
   manifest: "/site.webmanifest",
-  title: { template: `%s · ${appName}`, default: appName },
+  title: { template: `%s · ${appName}`, default: `${appName} · ${tagline}` },
+  description: siteDescription,
+  applicationName: appName,
+  openGraph: { siteName: appName, type: "website", title: `${appName} · ${tagline}`, description: siteDescription },
+  twitter: { card: "summary", title: `${appName} · ${tagline}`, description: siteDescription },
 }
