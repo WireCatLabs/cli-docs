@@ -8,7 +8,7 @@ import { translations } from "@/lib/layout.shared"
 import { appName, siteDescription, siteUrl, tagline } from "@/lib/shared"
 import "../global.css"
 
-const inter = Inter({ subsets: ["latin", "cyrillic"] })
+const inter = Inter({ subsets: ["latin", "cyrillic"], variable: "--font-docs" })
 
 export default async function Layout({
   params,
@@ -19,7 +19,7 @@ export default async function Layout({
 }) {
   const { lang } = await params
   return (
-    <html lang={lang} className={inter.className} suppressHydrationWarning>
+    <html lang={lang} className={`${inter.className} ${inter.variable}`} suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
         <RootProvider i18n={i18nProvider(translations, lang)} search={{ SearchDialog }}>
           {children}

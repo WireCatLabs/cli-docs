@@ -21,7 +21,8 @@
   **Проверено 2026-10-03:** max-cli 0.22.0 и tg-cli 0.22.0 прошли все четыре задания на Node
   22.16.0 и 24.21.0; основной CI сайта также прошёл.
   [Результаты Windows](https://github.com/leemour/cli-docs/actions/runs/37078689619),
-  [PR #9](https://github.com/leemour/cli-docs/pull/9) — открыт, ещё не слит в main.
+  [PR #9](https://github.com/leemour/cli-docs/pull/9) слит в main; повторный запуск после слияния
+  прошёл все четыре задания.
   Вход в реальные аккаунты и работа keyring с настоящими ключами не проверялись.
 
 ## Можно ли установить кнопкой из браузера
@@ -39,12 +40,13 @@
 
 ## Windows: что ещё сделать в CLI
 
-Проверено по исходникам: текущие CI tg-cli и общий workflow cli-core для max-cli выполняются
-на Ubuntu. Страница установки MAX заявляет Windows/macOS тесты, но текущие workflows эту
-формулировку не подтверждают. Исправить её в max-cli, либо добавить соответствующие задания.
+Основной CI выполняется на Ubuntu. Telegram теперь автоматически проверяет onboarding PR на
+Windows/macOS. Такой же запуск для MAX добавлен в [PR #351](https://github.com/leemour/max-cli/pull/351).
+PR #351 слит; полный набор тестов и сборка прошли на Windows/macOS.
 Windows workflow портала проверяет установку опубликованных пакетов, а не полный набор unit tests.
 Проверка портала от 2026-10-03 подтвердила запуск на Windows, обход отсутствующего PATH,
-SQLite и установку skills. Постоянное исправление пользовательского PATH пока не реализовано.
+SQLite и установку skills. Постоянное исправление пользовательского PATH теперь выполняет
+Windows-установщик; [PR #13](https://github.com/leemour/cli-docs/pull/13) слит и опубликован.
 
 Следующий PR в каждом CLI:
 
@@ -83,8 +85,9 @@ Node предоставляет [Single executable applications](https://nodejs.
 Windows-прогон выявил и помог исправить сокращение home-пути, распознавание user docs и
 Unix-only ожидания file mode; security docs описывают Windows ACL.
 
-На npm tg-cli эта команда пока не выпущена и на лендинге не предлагается. Для MAX она остаётся
-планом. Остальные пункты целевого сценария:
+На npm tg-cli эта команда пока не выпущена и на лендинге не предлагается. Для MAX реализована
+в [PR #351](https://github.com/leemour/max-cli/pull/351), по утверждённому владельцем плану.
+Остальные пункты целевого сценария:
 
 1. Проверить runtime, каталоги, наличие сессии, доступность CLI на PATH и подключение агента.
 2. Сообщить человеку этапы и ориентир «около 5 минут», затем провести через вход; существующая
@@ -124,8 +127,9 @@ QR-вход тоже требует api_id/api_hash:
   спроектировать её отдельно с loopback-сервером, одноразовым токеном и проверкой Origin;
   регистрация приложения всё равно остаётся на my.telegram.org.
 
-Исходники MAX не менялись. Telegram setup реализован и слит в main; публикация
-новой версии tg-cli — отдельный шаг. Локальная авторизация через browser UI не реализована.
+MAX setup использует существующие QR/token/Chromium/SMS пути и не меняет default `session start`.
+Telegram setup реализован и слит в main; публикация новой версии tg-cli — отдельный шаг.
+Локальная авторизация Telegram через browser UI не реализована.
 
 ## Документация и обнаружение инструкций после установки
 
@@ -139,7 +143,40 @@ config, troubleshooting, MCP, remote, security и bundled skill согласов
 Для parity-проверки стандартного `--help` опубликован cli-messaging 0.121.0
 ([PR #447](https://github.com/leemour/cli-messaging/pull/447)).
 
-Локально обновлён onboarding prompt лендинга на EN/RU/ES: после установки агент читает help,
+Обновлён и включён в коммит сайта onboarding prompt лендинга на EN/RU/ES: после установки агент читает help,
 commands и skill, затем использует setup, если команда есть в установленной версии.
 На npm tg-cli изменения ещё не выпущены; опубликованные tool reference docs остаются привязаны
 к релизу. Обнаружение инструкций не зависит от npm lifecycle scripts.
+
+## Выпуск и MAX: состояние 2026-10-03
+
+Telegram 0.23.0 подготовлен в [draft PR #231](https://github.com/leemour/tg-cli/pull/231).
+Все release checks и CI Linux/Windows/macOS прошли. В релиз входят также изменения отправки в
+forum topics, поэтому release skill требует отдельного live-разрешения и существующий тестовый
+forum с вторым тестовым аккаунтом. Владелец разрешил только smoke в Saved Messages.
+Захваченные этапы прошли до планирования и списка сообщений; финальный вывод недоступен.
+Оставшееся доставленное тестовое сообщение проверено по автору/времени, удалено; перечитывание
+подтвердило отсутствие сообщений smoke. Полный smoke пока не отмечен как пройденный.
+
+MAX PR #351 слит: guided setup, помощь и bundled skill до входа. После интеграции нового
+shared runner прошли 1235 тестов, coverage, Bun, docs, parity и matrix (488 tested, 63 reason,
+0 missing). Первый Windows CI выявил старые Unix mode assertions, separator classifier,
+запуск Biome `.cmd` без shell и нестабильный HTTP burst test; исправления прошли CI Linux/Windows/macOS
+([результаты](https://github.com/leemour/max-cli/actions/runs/37117782374)).
+Реальный аккаунт MAX не использовался. Обе новые setup-команды пока не опубликованы на npm.
+
+Основной Windows-вход теперь `https://wirecat.dev/install.ps1`: одна команда ставит CLI,
+сохраняет прежние записи PATH, добавляет npm prefix, обновляет текущий PowerShell, ставит skill
+и проверяет запуск по имени. Npm-generated `.ps1` удаляется только при подтверждённой ссылке
+на свой пакет; `.cmd` остаётся, execution policy не меняется. Все четыре сочетания TG/MAX и
+Node 22.16/24 прошли свежий restricted PowerShell, PATH, skills и SQLite в CI.
+
+[TG PR #235](https://github.com/leemour/tg-cli/pull/235) слит: global-only npm hook сохраняет PATH
+и устанавливает навыки при разрешённых scripts. Project installs и npx не меняют эти настройки.
+567 tests и Windows tarball install CI прошли, включая idempotence и отключённые scripts.
+Хук ещё требует публикации пакета; standalone установщик уже работает с выпущенными версиями.
+Скрипт сайта скачан с опубликованного URL и успешно разобран PowerShell.
+
+Переключатели темы сверху и снизу и выпадающий язык в футере опубликованы через
+[PR #12](https://github.com/leemour/cli-docs/pull/12). Общий preview на localhost:4317 обновлён,
+с сохранением параллельных правок сценариев и калькулятора; theme/footer проверены браузером.

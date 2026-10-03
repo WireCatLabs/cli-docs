@@ -1,0 +1,175 @@
+.wirecat-docs {
+  --docs-accent: #5963b7;
+  --docs-link: #465797;
+  --docs-tint: #f8f9fa;
+  --docs-bar: #f2f3f5;
+  --docs-outline: #e0e4e9;
+  --docs-prompt-label: #596373;
+}
+.dark .wirecat-docs {
+  --docs-accent: #a8b3f1;
+  --docs-link: #9eacd2;
+  --docs-tint: #17191c;
+  --docs-bar: #1d2024;
+  --docs-outline: #34393f;
+  --docs-prompt-label: #a6adb8;
+}
+.wirecat-docs .prose a,
+.wirecat-docs .fd-prose a {
+  color: var(--docs-link);
+  text-decoration-line: none;
+}
+.wirecat-docs .prose a:hover,
+.wirecat-docs .fd-prose a:hover {
+  color: var(--docs-accent);
+}
+.wirecat-docs .prose :is(h1, h2, h3, h4, h5, h6) a,
+.wirecat-docs .prose :is(h1, h2, h3, h4, h5, h6) a:hover {
+  color: inherit;
+}
+.wirecat-docs a:focus-visible,
+.docs-copy:focus-visible {
+  outline: 2px solid var(--docs-accent);
+  outline-offset: 3px;
+}
+.wirecat-docs .command-reference {
+  display: inline-flex;
+  margin-inline-start: 0.05em;
+  margin-inline-end: 0.4em;
+  padding: 0;
+  vertical-align: -0.12em;
+  text-decoration: none;
+  color: var(--docs-link);
+}
+.command-reference:hover,
+.command-reference:focus-visible {
+  color: var(--color-fd-primary);
+}
+.docs-snippet {
+  overflow: hidden;
+  margin-block: 1.25rem;
+  border: 1px solid var(--color-fd-border);
+  border-radius: 12px;
+  background: var(--color-fd-card);
+}
+.docs-prompt {
+  border-color: var(--docs-outline);
+  background: var(--docs-tint);
+}
+.docs-snippet-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--color-fd-border);
+  font-size: 0.75rem;
+}
+.docs-prompt .docs-snippet-bar {
+  color: var(--docs-prompt-label);
+  border-color: var(--docs-outline);
+  background: var(--docs-bar);
+}
+.docs-snippet-label,
+.docs-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 500;
+}
+.docs-copy {
+  cursor: pointer;
+  padding: 0.25rem 0;
+  color: inherit;
+}
+.docs-copy:hover {
+  color: var(--color-fd-foreground);
+}
+.docs-snippet pre {
+  margin: 0;
+  padding: 1rem;
+  max-height: 24rem;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+.docs-prompt pre {
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+.docs-prompt code {
+  font-family: inherit;
+}
+.docs-copy-status:empty {
+  display: none;
+}
+.docs-copy-status {
+  display: block;
+  padding: 0 1rem 0.75rem;
+  font-size: 0.75rem;
+}
+.wirecat-docs .prose :is(h2, h3),
+.wirecat-docs .fd-prose :is(h2, h3) {
+  text-wrap: balance;
+}
+.wirecat-docs ::selection {
+  color: var(--color-fd-foreground);
+  background: var(--docs-outline);
+}
+.docs-disclosure {
+  margin-block: 1.5rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--color-fd-border);
+  border-radius: 0.75rem;
+  background: var(--color-fd-card);
+}
+.docs-disclosure > summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.docs-disclosure > summary h2 {
+  display: inline;
+  margin: 0;
+  border: 0;
+  font-size: 1em;
+}
+.platform-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-block: 1rem;
+}
+.platform-options button {
+  cursor: pointer;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid var(--color-fd-border);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+}
+.platform-options button[aria-pressed="true"] {
+  color: var(--color-fd-primary);
+  border-color: var(--color-fd-primary);
+  background: var(--color-fd-accent);
+}
+.platform-paths[data-platform="windows"] tr > :nth-child(2),
+.platform-paths[data-platform="windows"] tr > :nth-child(3),
+.platform-paths[data-platform="linux"] tr > :nth-child(3),
+.platform-paths[data-platform="linux"] tr > :nth-child(4),
+.platform-paths[data-platform="macos"] tr > :nth-child(2),
+.platform-paths[data-platform="macos"] tr > :nth-child(4) {
+  display: none;
+}
+.platform-paths td code {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+@media print {
+  .platform-options {
+    display: none;
+  }
+  .platform-paths[data-platform] tr > :nth-child(n) {
+    display: table-cell;
+  }
+}

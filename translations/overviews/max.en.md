@@ -8,6 +8,13 @@ from a terminal. It runs on Windows, macOS and Linux.
 
 You are in the **MAX** documentation. Use the messenger switch at the top to open Telegram.
 
+**On this page**
+
+- [Choose what to connect](#choose-what-to-connect)
+- [Start with your personal account](#start-with-your-personal-account)
+- [Try it after connecting](#try-it-after-connecting)
+- [Find the guide for your task](#find-the-guide-for-your-task)
+
 ## Choose what to connect
 
 - **Personal account:** your chats, history and contacts, as on another device. Start with

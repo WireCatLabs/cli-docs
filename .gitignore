@@ -32,5 +32,6 @@ next-env.d.ts
 # Local landing fonts are source assets, not synced tool files.
 !/public/fonts/
 
-# Python translation build caches are not source assets.
+# Generated Python caches are not source.
 __pycache__/
+*.py[cod]

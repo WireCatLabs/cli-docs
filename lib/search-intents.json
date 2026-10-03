@@ -1,0 +1,50 @@
+[
+  {
+    "pages": ["tg/troubleshooting", "max/troubleshooting"],
+    "phrases": {
+      "ru": "Команда {tool} не найдена. command not found. Не запускается после установки. Не добавилось в PATH. Windows не распознаёт команду.",
+      "en": "{tool} command not found. Cannot run after installation. Missing PATH. Windows does not recognize the command.",
+      "es": "No se encuentra el comando {tool}. command not found. No funciona tras instalar. Falta PATH. Windows no reconoce el comando."
+    }
+  },
+  {
+    "pages": ["tg/sessions", "max/sessions"],
+    "phrases": {
+      "ru": "Как прочитать QR код. Как отсканировать QR. Где сканер на телефоне. Как войти по номеру телефона. Не приходит код входа. Сессия закончилась. Вход не выполнен.",
+      "en": "How to scan the QR code. Where is the phone scanner. Login with phone number. Login code not received. Session expired. Not logged in.",
+      "es": "Cómo escanear el código QR. Dónde está el escáner del teléfono. Acceder con número. No llega el código de acceso. Sesión caducada. No he iniciado sesión."
+    }
+  },
+  {
+    "pages": ["tg/sessions"],
+    "phrases": {
+      "ru": "Зачем приложение Telegram. Что такое api_id api_hash. Где получить app id hash. my.telegram.org. Регистрация приложения для CLI.",
+      "en": "Why a Telegram application is needed. What are api_id api_hash. Where to get app id hash. my.telegram.org. Register an application for CLI.",
+      "es": "Para qué sirve una aplicación Telegram. Qué son api_id api_hash. Dónde obtener app id hash. my.telegram.org. Registrar aplicación para CLI."
+    }
+  },
+  {
+    "pages": ["tg/sessions", "max/sessions"],
+    "phrases": {
+      "ru": "Как добавить второй аккаунт. Подключить рабочий номер. Переключить аккаунт. Несколько номеров телефона. Что такое профиль.",
+      "en": "How to add a second account. Connect work phone number. Switch account. Multiple phone numbers. What is a profile.",
+      "es": "Cómo añadir una segunda cuenta. Conectar el número del trabajo. Cambiar de cuenta. Varios números. Qué es un perfil."
+    }
+  },
+  {
+    "pages": ["tg/archive", "max/archive"],
+    "phrases": {
+      "ru": "Почему поиск ничего не находит. История пустая. Как скачать старые сообщения. Загрузить переписку за месяц. Сколько истории сохранено. Локальный архив.",
+      "en": "Why search finds nothing. Empty history. Download older messages. Fetch a month of chat history. How much history is saved. Local archive.",
+      "es": "La búsqueda no encuentra nada. Historial vacío. Descargar mensajes antiguos. Cargar un mes de conversación. Cuánto historial está guardado. Archivo local."
+    }
+  },
+  {
+    "pages": ["agents"],
+    "phrases": {
+      "ru": "Агент не видит CLI. Как установить навык. Как подключить Codex Cursor Claude Gemini Hermes. Skill не появился. Агент не знает команды.",
+      "en": "Agent cannot find CLI. Install a skill. Connect Codex Cursor Claude Gemini Hermes. Skill not showing. Agent does not know the commands.",
+      "es": "El agente no encuentra CLI. Instalar skill. Conectar Codex Cursor Claude Gemini Hermes. No aparece el skill. El agente no conoce comandos."
+    }
+  }
+]

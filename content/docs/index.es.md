@@ -9,7 +9,9 @@ WireCat conecta tus cuentas de Telegram y MAX con tu terminal y tu agente de IA.
 
 1. [Instalar e iniciar sesión](./installation.mdx) — con Codex, Cursor, Claude Code, Gemini CLI, Hermes o la terminal.
 2. [Conectar tu agente](./agents.md) — enseñarle los comandos y pedir un resumen de tus mensajes.
-3. [Elegir CLI o MCP](./mcp.md) — entender la conexión y compartir la documentación.
+3. [Probar las primeras tareas](./first-tasks.md) — buscar en el historial, preparar una reunión y redactar respuestas.
+4. [Formular una petición](./prompting.md) — indicar el objetivo, dónde buscar y qué resultado necesitas.
+5. [Elegir CLI o MCP](./mcp.md) — entender la conexión y compartir la documentación.
 
 ## Elige tu mensajero
 
@@ -19,7 +21,7 @@ WireCat conecta tus cuentas de Telegram y MAX con tu terminal y tu agente de IA.
 | MAX · `max` | Tu cuenta personal, bots con la Bot API oficial y grupos | [MAX](./max/index.md) |
 
 El selector **Telegram / MAX** de arriba conserva la sección cuando existe en ambos CLI.
-El idioma se cambia junto a la búsqueda. Las páginas de cada herramienta mantienen su idioma original.
+El selector de idioma junto a la búsqueda conserva la página cuando hay una traducción disponible.
 
 ## Comparte la documentación con tu agente
 

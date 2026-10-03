@@ -1,6 +1,6 @@
 "use client"
 
-import { Bot, Cable, Download } from "lucide-react"
+import { Bot, Cable, Download, ListChecks, MessageSquare } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { wordsFor } from "@/lib/words"
@@ -15,6 +15,8 @@ export function GettingStartedLinks({ lang }: { lang: string }) {
       {[
         { slug: "installation", label: ui.installation, icon: Download },
         { slug: "agents", label: ui.agents, icon: Bot },
+        { slug: "first-tasks", label: ui.firstTasks, icon: ListChecks },
+        { slug: "prompting", label: ui.prompting, icon: MessageSquare },
         { slug: "mcp", label: ui.mcp, icon: Cable },
       ].map(({ slug, label, icon: Icon }) => (
         <Link

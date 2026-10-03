@@ -167,6 +167,11 @@ security), Project (changelog, roadmap).
 - Landing: the reviewed dark design, Anybody headings, Onest body, JetBrains Mono commands.
 - Landing uses the purple WireCat monogram and word mark. max's own logo appears on max's pages.
 - Code blocks: Shiki highlighting, a copy button; an unknown language shows as plain text.
+- Documentation uses the owner-selected **Quiet** treatment (2026-10-03): headings retain their
+  ordinary text color; links have a muted blue tone and no underline; prompts use a nearly neutral
+  surface with a small labelled header and copy icon. `lib/docs-usability.css` owns these styles,
+  and `components/text-snippet.tsx` renders the prompt and command blocks. The selection is recorded
+  in `design/docs/options.json`; the comparison gallery is excluded from the shipped site.
 - Works at phone width: the sidebar folds into the menu button.
 
 ## Later
@@ -179,3 +184,13 @@ security), Project (changelog, roadmap).
   cookies); "Edit on GitHub" at the release tag instead of `main`.
 - ⚪ Outside links checked weekly with lychee.
 - ⚪ Each tool's release workflow signals this site to rebuild (the daily build covers it now).
+
+The benefits section is followed by an interactive, localized time estimate. `components/time-savings.tsx` uses `lib/time-savings.ts`: messages, active chats and replies per day plus six editable timing assumptions. Monthly estimates use 22 days; negative savings are shown honestly. It makes no measured speed or accuracy claim.
+
+Scenario order: context, cross-messenger recommendations, group management, inbox, commitments, scheduling, files, bot. The window’s Telegram/MAX selector preserves the scenario, and shareable URLs use `scenario=<id>&messenger=<tg|max>`. Each request can be copied; each illustrated source has its chat/date/excerpt. Group management previews first, then performs only specifically approved deletions. Time-calculator defaults remain editable assumptions by the owner’s choice; no measured calibration is claimed.
+
+Sources inside scenarios use native disclosures rather than anchor links. Summaries identify sender/message ID and chat/date; opening a source never navigates or scrolls the document. The shared landing footer also follows the docs layout, with its theme/locale controls. Tool-card links show a stationary hover underline and external-tab icon.
+
+Source disclosures remain compact single-line rows (12px type and 3px vertical padding), with full message text appearing only when expanded. Prompt-copy controls sit at the bottom-right of each request bubble; there is no adjacent setup link.
+
+Prompt copying now uses an icon-only button at the bubble’s bottom-right, with a localized tooltip/accessibility label and checkmark feedback. Spanish hero: “Deja de buscar. Solo pregunta.”

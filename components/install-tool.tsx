@@ -2,38 +2,10 @@
 
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { CopyText } from "@/components/text-snippet"
 import type { Tool } from "@/lib/shared"
 import { siteUrl } from "@/lib/shared"
 import { wordsFor } from "@/lib/words"
-
-function CopyText({ text, lang }: { text: string; lang: string }) {
-  const words = wordsFor(lang).onboarding
-  const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle")
-  return (
-    <div className="space-y-2">
-      <pre className="max-h-64 overflow-auto whitespace-pre-wrap break-words rounded-lg bg-fd-muted p-3 text-xs leading-relaxed">
-        <code>{text}</code>
-      </pre>
-      <button
-        type="button"
-        className="rounded-md border px-3 py-2 text-sm font-medium hover:bg-fd-muted"
-        onClick={async () => {
-          try {
-            await navigator.clipboard.writeText(text)
-            setStatus("copied")
-          } catch {
-            setStatus("failed")
-          }
-        }}
-      >
-        {words.copy}
-      </button>
-      <span role="status" className="ml-3 text-xs text-fd-muted-foreground">
-        {status === "copied" ? words.copied : status === "failed" ? words.copyFailed : ""}
-      </span>
-    </div>
-  )
-}
 
 export function InstallTool({ tool, lang }: { tool: Tool; lang: string }) {
   const words = wordsFor(lang)
@@ -64,7 +36,7 @@ export function InstallTool({ tool, lang }: { tool: Tool; lang: string }) {
       </summary>
       <div className="space-y-4 border-t p-5">
         <p className="text-sm text-fd-muted-foreground">{ui.paste}</p>
-        <CopyText lang={lang} text={ui.prompt(tool.name, tool.package, docs)} />
+        <CopyText kind="prompt" lang={lang} text={ui.prompt(tool.name, tool.package, docs)} />
         <Link href={`/${lang}/docs/agents`} className="inline-block text-sm underline">
           {words.navigation.agents} →
         </Link>

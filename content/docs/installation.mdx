@@ -3,8 +3,10 @@ title: "Installation"
 description: "Choose Telegram or MAX, install with your agent or terminal, then log in and check it works."
 ---
 
-Works on **Windows, macOS and Linux**. Ask your agent to install the CLI and help set up
-everything it needs. If you prefer to install it yourself, open the terminal instructions.
+The Telegram and MAX CLIs are npm packages that run on **Windows, macOS and Linux**.
+Ask your local agent to check your computer, install the CLI and help connect your account,
+or install it yourself in a terminal. Once you have logged in, check your account and first chats,
+then give your agent a useful task.
 
 ## 1. Choose a messenger
 
@@ -21,27 +23,67 @@ choose the chats and amount of history after setup.
 
 Enter login codes and passwords in your local terminal when the CLI asks for them.
 
-**Telegram:** the `--app auto` step obtains your Telegram application ID and hash, then starts QR
-login. Scan it in Telegram: Settings → Devices → Link Desktop Device. If the application step
-fails, run `tg session start --app browser` and follow the browser instructions.
-[Telegram sessions](./tg/sessions.md) explains alternative login methods and profiles.
+### Telegram
 
-**MAX:** scan the QR in the MAX app and follow the terminal prompts.
-For a bot, use the [MAX bot guide](./max/bot.md) instead of a personal-account login.
-[MAX sessions](./max/sessions.md) covers other login methods.
+1. Run in your local terminal:
 
-`account show` should identify your account. `doctor` may report a missing session before login;
-run it again afterwards. A list of chats confirms that the CLI can reach the messenger.
+   ```sh
+   tg session start --app auto
+   ```
+
+2. On first login, the CLI obtains Telegram application credentials. Enter your phone number and the code sent in Telegram when requested.
+3. On your phone, choose the right Telegram account. Open Settings → Devices → Link Desktop Device and scan the computer’s QR code.
+4. Enter your two-step verification password if requested, then wait for successful login.
+
+If automatic registration fails, use:
+
+```sh
+tg session start --app browser
+```
+
+[Telegram login instructions](./tg/sessions.md) explain application credentials, QR and phone login.
+
+### MAX
+
+1. Run:
+
+   ```sh
+   max session start qr
+   ```
+
+2. On your phone, open MAX → Settings → Devices. Scan the computer’s QR code and confirm the connection.
+3. Follow the terminal prompts and wait for successful login.
+
+See [MAX login instructions](./max/sessions.md) for alternatives, or the [bot guide](./max/bot.md) to connect a bot.
+
+### Check the connection
+
+Run the command for your messenger:
+
+```sh
+tg account show
+```
+
+```sh
+max account show
+```
+
+The response should show your account. Diagnostics may report a missing session before login; that is expected. Repeat the check after login, then list your chats.
 
 ## 3. Connect your agent
 
 [Connect your agent](./agents.md) gives the steps for all five agents. For Claude Desktop or an
 MCP connection, continue to [MCP and documentation](./mcp.md).
 
-Start with: **“Summarise my unread messages by chat and tell me who needs an answer.”**
+```text prompt
+Summarise my unread messages by chat and tell me who needs an answer.
+```
 The CLI command is `tg inbox --limit 5` or `max inbox --limit 5`.
 
-## Update, completion and file locations
+Continue with [first tasks](./first-tasks.md): find a past decision, prepare for a meeting
+and draft a reply. [Writing requests](./prompting.md) provides copyable examples and useful constraints.
+
+## Updates and file locations
 
 These belong to each CLI's reference: [Telegram installation](./tg/installation.md),
 [MAX installation](./max/installation.md). If a check fails, see

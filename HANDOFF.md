@@ -47,7 +47,7 @@ logo and highlights Getting started in the header and sidebar on all shared guid
 
 ### 2. Release sources
 
-Verified on 2026-10-02: default `pnpm sync` succeeds from **max v0.23.0** and **tg v0.22.0**.
+Verified on 2026-10-02: default `pnpm sync` succeeds from **max v0.22.0** and **tg v0.21.0**.
 The earlier missing-`meta.json` blocker for max v0.21.0 is resolved. Use the default release refs
 for checks; `--ref main` is only for a preview of unreleased tool changes.
 

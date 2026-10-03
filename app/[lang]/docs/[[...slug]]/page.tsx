@@ -10,10 +10,13 @@ import { createRelativeLink } from "fumadocs-ui/mdx"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { DocsDisclosures } from "@/components/docs-disclosures"
 import { getMDXComponents } from "@/components/mdx"
+import { installationReferenceTitle, ToolInstallationIntro } from "@/components/tool-installation-intro"
 import { appName, getPageMarkdownUrl, toolOf } from "@/lib/shared"
 import { source } from "@/lib/source"
 import { wordsFor } from "@/lib/words"
+import "@/lib/docs-usability.css"
 
 type Props = { params: Promise<{ lang: string; slug?: string[] }> }
 
@@ -36,9 +39,24 @@ export default async function Page(props: Props) {
   const repoPath =
     page.slugs.at(-1) === "changelog" ? "CHANGELOG.md" : `docs/${page.slugs.slice(1).join("/") || "index"}.md`
 
+  const toc =
+    guide === "installation"
+      ? [
+          { title: ui.installGuide, url: "#agent-installation", depth: 2 },
+          { title: installationReferenceTitle(lang), url: "#installation-reference", depth: 2 },
+          ...page.data.toc,
+        ]
+      : page.data.toc
+
   return (
-    <DocsPage toc={page.data.toc} full={page.data.full}>
+    <DocsPage toc={toc} full={page.data.full}>
+      <DocsDisclosures />
       <DocsTitle>{page.data.title}</DocsTitle>
+      {tool?.docsRef && (
+        <p className="text-xs text-fd-muted-foreground">
+          {{ en: "Documentation", ru: "Документация", es: "Documentación" }[lang]}: {tool.docsRef}
+        </p>
+      )}
       <DocsDescription className="mb-0">{page.data.description}</DocsDescription>
       <div className="flex flex-row gap-2 items-center border-b pb-6">
         <MarkdownCopyButton markdownUrl={markdownUrl} />
@@ -46,24 +64,23 @@ export default async function Page(props: Props) {
           markdownUrl={markdownUrl}
           {...(tool
             ? {
-                githubUrl: `https://github.com/${tool.repo}/blob/main/${repoPath}`,
+                githubUrl: `https://github.com/${tool.repo}/blob/${tool.docsRef ?? "main"}/${repoPath}`,
               }
             : {})}
         />
       </div>
       {written !== lang && <p className="text-sm text-fd-muted-foreground">{wordsFor(lang).inLanguage(written)}</p>}
-      {guide && (
+      {guide === "mcp" && (
         <Link
-          href={`/${lang}/docs/${guide}${guide === "installation" ? `#${tool?.name}` : ""}`}
+          href={`/${lang}/docs/mcp`}
           className="rounded-xl border bg-fd-card p-4 transition-colors hover:bg-fd-accent"
         >
-          <span className="block text-sm font-semibold">{guide === "installation" ? ui.installGuide : ui.mcp} →</span>
-          <span className="mt-1 block text-sm text-fd-muted-foreground">
-            {guide === "installation" ? ui.installGuideDescription : ui.mcpGuideDescription}
-          </span>
+          <span className="block text-sm font-semibold">{ui.mcp} →</span>
+          <span className="mt-1 block text-sm text-fd-muted-foreground">{ui.mcpGuideDescription}</span>
         </Link>
       )}
       <DocsBody lang={written}>
+        {guide === "installation" && tool && <ToolInstallationIntro tool={tool} lang={lang} />}
         <MDX components={getMDXComponents({ a: createRelativeLink(source, page) })} />
       </DocsBody>
     </DocsPage>
@@ -80,11 +97,10 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   if (!page) notFound()
   const tool = toolOf(page.slugs)
   const title = tool && page.slugs.length > 1 ? `${page.data.title} — ${tool.name}` : page.data.title
-  const url = page.url
   return {
     title,
     description: page.data.description,
-    alternates: { canonical: url },
-    openGraph: { siteName: appName, title, description: page.data.description, url, type: "article" },
+    alternates: { canonical: page.url },
+    openGraph: { siteName: appName, title, description: page.data.description, url: page.url, type: "article" },
   }
 }

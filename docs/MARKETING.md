@@ -92,3 +92,5 @@
 6. **De las conversaciones a los siguientes pasos.**
 
    Identifica dónde hace falta tu decisión, quién espera respuesta y qué se ha acordado. Convierte las preguntas abiertas en un plan claro.
+
+Текущий испанский hero: **Deja de buscar. Solo pregunta.** Короткая версия подчёркивает действие; подключение агента объясняется рядом в подзаголовке.

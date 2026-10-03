@@ -25,6 +25,10 @@ html {
   height: calc(var(--fd-docs-height) - var(--fd-docs-row-2));
 }
 
+.wirecat-landing.wirecat-docs-footer {
+  min-height: 0;
+}
+
 /* The dialog's scroll lock writes these inline; only !important outranks an inline style. */
 html > body[data-scroll-locked] {
   /* biome-ignore lint/complexity/noImportantStyles: outranks the scroll lock's inline style */

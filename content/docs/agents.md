@@ -5,6 +5,8 @@ description: "Set up Codex, Cursor, Claude Code, Gemini CLI or Hermes to work wi
 
 The Windows installer already installs the skill before login. Read `tg skill show` or `max skill show` and verify that your agent loaded it. The commands below refresh a skill or install it separately after another installation method.
 
+**CLI** is the installed terminal program (`tg` or `max`). An **agent** is the AI assistant you use, for example in an editor or terminal. A **skill** is an instruction file the agent reads to learn the CLI; it does not store your Telegram/MAX login. **PATH** is the list of folders where your computer looks for commands: if `tg --version` or `max --version` works in the agent’s terminal, it can find the installed CLI.
+
 First [install the CLI and log in](./installation.mdx). Your local agent can call `tg` or `max`
 in its terminal. A **skill** teaches it the commands, output formats and workflows; it does not
 replace installation or login. [MCP](./mcp.md) is another way to expose tools to the agent.
@@ -88,3 +90,6 @@ For **Claude Desktop**, use [MCP](./mcp.md#cursor-and-claude-desktop).
 For an agent without skill support, give it [the Markdown docs](./mcp.md#documentation-for-your-agent).
 For a cloud agent, install and log in in its execution environment; your local session is not
 available there automatically.
+
+Continue with [first tasks](./first-tasks.md): find a past decision, prepare for a meeting
+and draft a reply. [Writing requests](./prompting.md) provides copyable examples and useful constraints.

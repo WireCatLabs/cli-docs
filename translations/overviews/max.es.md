@@ -8,6 +8,13 @@ puedes usarlo directamente desde la terminal. Funciona en Windows, macOS y Linux
 
 Estás en la documentación de **MAX**. Usa el selector de mensajero de arriba para abrir Telegram.
 
+**En esta página**
+
+- [Elige qué conectar](#elige-qué-conectar)
+- [Empieza con tu cuenta personal](#empieza-con-tu-cuenta-personal)
+- [Qué probar después de conectar](#qué-probar-después-de-conectar)
+- [Encuentra la guía para tu tarea](#encuentra-la-guía-para-tu-tarea)
+
 ## Elige qué conectar
 
 - **Cuenta personal:** tus chats, historial y contactos, como en otro dispositivo. Empieza con

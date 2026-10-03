@@ -3,6 +3,7 @@ import Link from "next/link"
 import { SiteHeader } from "@/components/site-header"
 import { aboutCopy } from "@/lib/about"
 import { i18n } from "@/lib/i18n"
+import siteConfig from "@/site.config.json"
 
 type Props = { params: Promise<{ lang: string }> }
 const copyFor = (lang: string) => aboutCopy[lang as keyof typeof aboutCopy] ?? aboutCopy.en
@@ -82,8 +83,8 @@ export default async function AboutPage({ params }: Props) {
             <h2>{words.contact}</h2>
             <p>{words.contactText}</p>
           </div>
-          <a className="btn" href="mailto:hello@wirecat.dev">
-            hello@wirecat.dev
+          <a className="btn" href={`mailto:${siteConfig.contacts.email}`}>
+            {siteConfig.contacts.email}
           </a>
         </section>
       </main>
