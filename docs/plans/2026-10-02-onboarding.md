@@ -45,7 +45,8 @@ Windows/macOS. Такой же запуск для MAX добавлен в [PR #
 PR #351 слит; полный набор тестов и сборка прошли на Windows/macOS.
 Windows workflow портала проверяет установку опубликованных пакетов, а не полный набор unit tests.
 Проверка портала от 2026-10-03 подтвердила запуск на Windows, обход отсутствующего PATH,
-SQLite и установку skills. Постоянное исправление пользовательского PATH пока не реализовано.
+SQLite и установку skills. Постоянное исправление пользовательского PATH теперь выполняет
+Windows-установщик; [PR #13](https://github.com/leemour/cli-docs/pull/13) слит и опубликован.
 
 Следующий PR в каждом CLI:
 
@@ -164,6 +165,18 @@ shared runner прошли 1235 тестов, coverage, Bun, docs, parity и mat
 ([результаты](https://github.com/leemour/max-cli/actions/runs/37117782374)).
 Реальный аккаунт MAX не использовался. Обе новые setup-команды пока не опубликованы на npm.
 
-`npm install -g` создаёт Windows `.cmd` launcher, но не меняет пользовательский PATH.
-Если npm global prefix отсутствует в PATH, агент использует документированный `npm.cmd exec`
-и подсказки CLI. Автоматическое постоянное изменение PATH не реализовано.
+Основной Windows-вход теперь `https://wirecat.dev/install.ps1`: одна команда ставит CLI,
+сохраняет прежние записи PATH, добавляет npm prefix, обновляет текущий PowerShell, ставит skill
+и проверяет запуск по имени. Npm-generated `.ps1` удаляется только при подтверждённой ссылке
+на свой пакет; `.cmd` остаётся, execution policy не меняется. Все четыре сочетания TG/MAX и
+Node 22.16/24 прошли свежий restricted PowerShell, PATH, skills и SQLite в CI.
+
+[TG PR #235](https://github.com/leemour/tg-cli/pull/235) слит: global-only npm hook сохраняет PATH
+и устанавливает навыки при разрешённых scripts. Project installs и npx не меняют эти настройки.
+567 tests и Windows tarball install CI прошли, включая idempotence и отключённые scripts.
+Хук ещё требует публикации пакета; standalone установщик уже работает с выпущенными версиями.
+Скрипт сайта скачан с опубликованного URL и успешно разобран PowerShell.
+
+Переключатели темы сверху и снизу и выпадающий язык в футере опубликованы через
+[PR #12](https://github.com/leemour/cli-docs/pull/12). Общий preview на localhost:4317 обновлён,
+с сохранением параллельных правок сценариев и калькулятора; theme/footer проверены браузером.

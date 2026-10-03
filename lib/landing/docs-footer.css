@@ -1,0 +1,42 @@
+/* Same footer structure, with the documentation's neutral palette and typography. */
+.wirecat-landing.wirecat-docs-footer {
+  --app: var(--color-fd-background);
+  --app-2: var(--color-fd-muted);
+  --app-3: var(--color-fd-accent);
+  --app-line: var(--color-fd-border);
+  --app-ink: var(--color-fd-foreground);
+  --app-soft: color-mix(in srgb, var(--color-fd-foreground) 66%, var(--color-fd-background));
+  --app-dim: var(--app-soft);
+  --ink: var(--color-fd-foreground);
+  --ink-soft: var(--color-fd-muted-foreground);
+  --me: var(--color-fd-primary);
+  --me-ink: var(--color-fd-primary-foreground);
+  background: var(--color-fd-background);
+  font-family: inherit;
+}
+
+.wirecat-docs-footer footer.site {
+  border-top: 0;
+  font-family: inherit;
+}
+
+.wirecat-docs-footer .foot-brand .wirecat-brand {
+  display: inline-flex;
+  color: var(--color-fd-foreground);
+}
+
+.wirecat-docs-footer .foot h4 {
+  font-family: inherit;
+}
+
+.wirecat-docs-footer .footer-install .cmd {
+  font-family: inherit;
+}
+
+.wirecat-docs-footer .footer-install .cmd code {
+  font-family: var(--code);
+}
+
+.wirecat-docs-footer .footer-install .copy {
+  font-family: inherit;
+}

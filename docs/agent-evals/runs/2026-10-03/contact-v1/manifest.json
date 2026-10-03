@@ -1,0 +1,33 @@
+{
+  "case": "contact",
+  "date": "2026-10-03",
+  "clock": "2026-10-03T10:00:00+02:00",
+  "timezone": "Europe/Madrid",
+  "cliVersion": "0.22.0",
+  "messagingVersion": "0.112.0",
+  "fixtureVersion": "v1",
+  "harnessSha256": "5f3d0acb82bc362c8b456912e0bbeb2e8752d4583e40ef6565939273a5abdf58",
+  "discoverySha256": "f4fa22f0880f28ea6c9d2d472ddc58f11b8b68d6a83617455714838d5c911a3c",
+  "skillSha256": "249c83ff25fb8a9e463fdf6cefb68629182f3d044867b18552881a4b27ca793a",
+  "agent": "Codex subagent, inherited parent model",
+  "modelSnapshot": null,
+  "samplingSettings": null,
+  "fork": "none",
+  "environment": "synthetic CLI simulator; published discovery; no Telegram backend",
+  "workingCallBudget": 14,
+  "discoveryExcludedFromBudget": true,
+  "evaluation": "human-reviewed pilot; not a production benchmark",
+  "traceScope": "tg argv/stdout/stderr/exit codes; not the complete outer tool transcript",
+  "usableBaseline": false,
+  "limitations": [
+    "real SQLite, provider I/O, authentication, rate limits and send effects not exercised",
+    "mock search ranking, date handling, context windows and completeness are simplified",
+    "model snapshot and sampling configuration not exposed by collaboration tooling"
+  ],
+  "helpSha256": "3236f17bbf082e2b0016253abf4656ae4b60e46aca44e562fff9b5ed659bb6d6",
+  "nodeVersion": "v24.19.0",
+  "pythonVersion": "3.14.4",
+  "os": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+  "discoveryRawCaptureSha256": "ac0a1753165ab4893b6187835bde28e24748e2de5542620fb41ef8d168accd71",
+  "discoveryStorageFormat": "Repository-formatted JSON; published command tree unchanged."
+}

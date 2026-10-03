@@ -9,6 +9,12 @@ It runs on Windows, macOS and Linux.
 
 You are in the **Telegram** documentation. Use the messenger switch at the top to open MAX.
 
+**On this page**
+
+- [Choose how to start](#choose-how-to-start)
+- [Try it after connecting](#try-it-after-connecting)
+- [Find the guide for your task](#find-the-guide-for-your-task)
+
 ## Choose how to start
 
 ### Connect through your agent
@@ -33,8 +39,11 @@ tg session start --app auto
 tg chats list --limit 5
 ```
 
-The first login needs a Telegram app from my.telegram.org. The command helps register it, then
-shows a QR code. See [login and profiles](/en/docs/tg/sessions) for details and phone login.
+First, the command asks for your phone number and a code sent in Telegram to obtain `api_id` and `api_hash` from [my.telegram.org](https://my.telegram.org/apps). Then it displays the QR code for account login. Open Telegram on your phone → Settings → Devices → Link Desktop Device and scan it. Wait for **Logged in as …** before listing chats. [Complete login steps](/en/docs/tg/sessions).
+
+> **What is a Telegram application and why is it needed?**
+>
+> This is a registration record for the program connecting to Telegram, here the `tg` CLI. You fill in a form, without writing or downloading another application. Telegram issues `api_id` and `api_hash` to identify the program; QR or code confirmation then grants access to your account. The command can register or retrieve these credentials for you. [Explanation and browser fallback](/en/docs/tg/sessions#the-app-from-mytelegramorg).
 
 ## Try it after connecting
 

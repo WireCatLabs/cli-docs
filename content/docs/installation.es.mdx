@@ -3,8 +3,10 @@ title: "Instalación"
 description: "Elige Telegram o MAX, instala el CLI con tu agente o terminal e inicia sesión."
 ---
 
-Funciona en **Windows, macOS y Linux**. Pide a tu agente que instale el CLI y te ayude a
-configurar lo necesario. Si prefieres hacerlo por tu cuenta, abre las instrucciones de la terminal.
+Los CLI de Telegram y MAX se instalan como paquetes npm y funcionan en **Windows, macOS y Linux**.
+Pide a tu agente local que compruebe tu ordenador, instale el CLI y te ayude a conectar tu cuenta,
+o hazlo por tu cuenta en la terminal. Tras iniciar sesión, comprueba tu cuenta y los primeros chats
+y pide al agente que resuelva una tarea útil.
 
 ## 1. Elige el mensajero
 
@@ -21,27 +23,67 @@ separado: elige los chats y la cantidad de mensajes después de configurar el CL
 
 Introduce los códigos y contraseñas en tu terminal local cuando los pida el CLI.
 
-**Telegram:** `--app auto` obtiene el ID y hash de tu aplicación de Telegram y después inicia
-el acceso por QR. Escanéalo en Telegram: Ajustes → Dispositivos → Vincular dispositivo.
-Si falla el paso de la aplicación, ejecuta `tg session start --app browser` y sigue las instrucciones.
-Consulta [las sesiones de Telegram](./tg/sessions.md) para otros métodos y perfiles.
+### Telegram
 
-**MAX:** escanea el QR en la app de MAX y sigue las instrucciones de la terminal.
-Para un bot, utiliza la [guía de bots de MAX](./max/bot.md).
-Hay otros métodos en [las sesiones de MAX](./max/sessions.md).
+1. Ejecuta en tu terminal local:
 
-`account show` debe identificar tu cuenta. Antes de iniciar sesión, `doctor` puede indicar que
-falta una sesión; ejecútalo de nuevo después. La lista de chats confirma la conexión.
+   ```sh
+   tg session start --app auto
+   ```
+
+2. La primera vez, el CLI obtiene las credenciales de la aplicación Telegram. Introduce el número y el código recibido en Telegram cuando se soliciten.
+3. En el teléfono, selecciona la cuenta correcta. Abre Ajustes → Dispositivos → Vincular dispositivo de escritorio y escanea el QR del ordenador.
+4. Introduce tu contraseña de dos pasos si se solicita y espera un acceso correcto.
+
+Si falla el registro automático, usa:
+
+```sh
+tg session start --app browser
+```
+
+[Instrucciones de acceso a Telegram](./tg/sessions.md) explican las credenciales, el QR y el acceso por teléfono.
+
+### MAX
+
+1. Ejecuta:
+
+   ```sh
+   max session start qr
+   ```
+
+2. En el teléfono, abre MAX → Ajustes → Dispositivos. Escanea el QR del ordenador y confirma la conexión.
+3. Sigue las peticiones de la terminal y espera un acceso correcto.
+
+Consulta [el acceso a MAX](./max/sessions.md) para otros métodos o la [guía de bots](./max/bot.md) para conectar un bot.
+
+### Comprueba la conexión
+
+Ejecuta el comando de tu mensajero:
+
+```sh
+tg account show
+```
+
+```sh
+max account show
+```
+
+La respuesta debe mostrar tu cuenta. Antes de iniciar sesión, el diagnóstico puede indicar que falta una sesión; es normal. Repite la comprobación tras acceder y consulta tus chats.
 
 ## 3. Conecta tu agente
 
 [Conectar tu agente](./agents.md) explica los cinco clientes. Para Claude Desktop o MCP, sigue
 con [MCP y documentación](./mcp.md).
 
-Primera petición: **«Resume mis mensajes sin leer por chat e indica a quién tengo que responder».**
+```text prompt
+Revisa los mensajes no leídos por chat y dime a quién debo responder.
+```
 En el CLI: `tg inbox --limit 5` o `max inbox --limit 5`.
 
-## Actualizaciones, autocompletado y archivos
+Continúa con [las primeras tareas](./first-tasks.md): encontrar un acuerdo, preparar una reunión
+y redactar una respuesta. En [cómo formular peticiones](./prompting.md) tienes ejemplos para copiar y límites útiles.
+
+## Actualizaciones y ubicación de archivos
 
 Consulta la [instalación de Telegram](./tg/installation.md) o [MAX](./max/installation.md).
 Si falla alguna comprobación, abre [solución de problemas de Telegram](./tg/troubleshooting.md)
@@ -138,16 +180,20 @@ max chats list --limit 5
 
 ### Windows
 
-Si PowerShell bloquea `npm.ps1`, usa `npm.cmd`; para el comando instalado, `tg.cmd` o `max.cmd`.
-Si no se encuentra en PATH, puedes iniciar el paquete sin cambiar PATH:
+Ejecuta un único instalador de PowerShell para tu servicio:
 
 ```powershell
-npm.cmd exec --yes --package=@leemour/tg-cli -- tg doctor
+& ([scriptblock]::Create((Invoke-RestMethod 'https://wirecat.dev/install.ps1'))) -Tool tg -Agent all
 ```
 
 ```powershell
-npm.cmd exec --yes --package=@leemour/max-cli -- max doctor
+& ([scriptblock]::Create((Invoke-RestMethod 'https://wirecat.dev/install.ps1'))) -Tool max -Agent all
 ```
 
-Usa el mismo prefijo para `session start` y otros comandos mientras corriges PATH.
-MCP necesita una instalación permanente: `mcp config` no usa rutas temporales de npm cache.
+Instala el paquete npm, conserva las entradas de PATH del usuario, actualiza este PowerShell,
+instala el skill y verifica que `tg` o `max` se ejecuta directamente. No necesitas editar PATH.
+Funciona aunque npm omita los scripts de instalación. Conserva `.cmd` y elimina solo el shim
+PowerShell generado por npm para este paquete; no cambia la política de ejecución.
+`-Agent codex|cursor|claude|gemini|all|none` elige el skill; el valor predeterminado es `all`.
+Un agente que ya está abierto actualiza su propio entorno antes de las siguientes llamadas.
+El propietario sigue introduciendo los códigos o escaneando el QR localmente para iniciar sesión.

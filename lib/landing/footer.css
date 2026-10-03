@@ -1,0 +1,190 @@
+/* Shared landing/About footer: navigation first, installation on its own line. */
+.wirecat-landing footer.site {
+  padding-block: clamp(40px, 5vw, 64px) 28px;
+}
+
+.wirecat-landing .foot {
+  grid-template-columns: minmax(0, 1.6fr) repeat(4, minmax(0, 1fr));
+  gap: clamp(24px, 3.2vw, 48px);
+}
+
+.wirecat-landing .foot-brand .mark {
+  color: var(--app-ink);
+}
+
+.wirecat-landing .foot-brand p {
+  max-width: 32ch;
+  margin: 16px 0 18px;
+  line-height: 1.65;
+}
+
+.wirecat-landing .foot .foot-contacts {
+  gap: 8px;
+  margin: 0;
+}
+
+.wirecat-landing .foot h4 {
+  margin-bottom: 16px;
+  color: var(--app-ink);
+  font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.wirecat-landing .foot a:not(.mark) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  line-height: 1.5;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 5px;
+  transition:
+    color 160ms ease-out,
+    text-decoration-color 160ms ease-out;
+}
+
+.wirecat-landing .foot a:not(.mark):hover {
+  text-decoration-color: currentColor;
+}
+
+.wirecat-landing .foot a:focus-visible,
+.wirecat-landing .footer-install button:focus-visible {
+  outline: 2px solid var(--app-ink);
+  outline-offset: 5px;
+}
+
+.wirecat-landing .footer-install {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) repeat(4, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(24px, 3.2vw, 48px);
+  margin-top: 36px;
+  padding-top: 24px;
+}
+
+.wirecat-landing .footer-install-label {
+  color: var(--app-ink);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.wirecat-landing .footer-install .cmd {
+  grid-column: 2 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  padding: 10px 12px 10px 16px;
+  border: 1px solid var(--app-line);
+  border-radius: 12px;
+  background: var(--app-2);
+  box-shadow: none;
+}
+
+.wirecat-landing .footer-install .cmd code {
+  min-width: 0;
+  padding-block: 4px;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: nowrap;
+  overflow-wrap: normal;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--app-line) transparent;
+}
+
+.wirecat-landing .footer-install .copy {
+  min-width: 100px;
+  min-height: 40px;
+  padding: 10px 14px;
+}
+
+.wirecat-landing .foot-bottom {
+  align-items: center;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 0;
+  color: var(--app-soft);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+@media (width <= 1000px) {
+  .wirecat-landing .foot {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px 24px;
+  }
+
+  .wirecat-landing .foot-brand {
+    grid-column: 1 / -1;
+  }
+
+  .wirecat-landing .foot-brand p {
+    max-width: 52ch;
+  }
+
+  .wirecat-landing .foot .foot-contacts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+  }
+
+  .wirecat-landing .footer-install {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .wirecat-landing .footer-install .cmd {
+    grid-column: 1;
+  }
+}
+
+@media (width < 600px) {
+  .wirecat-landing .foot {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px 20px;
+    font-size: 14px;
+  }
+
+  .wirecat-landing .foot h4 {
+    margin-bottom: 8px;
+  }
+
+  .wirecat-landing .foot ul {
+    gap: 2px;
+  }
+
+  .wirecat-landing .foot a:not(.mark) {
+    min-height: 44px;
+  }
+
+  .wirecat-landing .footer-install .cmd {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .wirecat-landing .footer-install .cmd code {
+    white-space: normal;
+  }
+
+  .wirecat-landing .footer-install .copy {
+    align-self: flex-end;
+    min-height: 44px;
+  }
+
+  .wirecat-landing .foot-bottom {
+    gap: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wirecat-landing .foot a:not(.mark) {
+    transition: none;
+  }
+}

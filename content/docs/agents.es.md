@@ -3,6 +3,10 @@ title: "Conectar tu agente"
 description: "Configura Codex, Cursor, Claude Code, Gemini CLI o Hermes para Telegram y MAX."
 ---
 
+El instalador de Windows ya instala el skill antes del inicio de sesión. Lee `tg skill show` o `max skill show` y verifica que tu agente lo ha cargado. Los comandos siguientes actualizan el skill o lo instalan por separado tras otro método de instalación.
+
+**CLI** es el programa instalado de terminal (`tg` o `max`). Un **agente** es tu asistente de IA, por ejemplo en el editor o terminal. Un **skill** es un archivo de instrucciones que enseña al agente a usar el CLI; no guarda tu acceso a Telegram/MAX. **PATH** es la lista de carpetas donde se buscan comandos: si `tg --version` o `max --version` funciona en la terminal del agente, puede encontrar el CLI.
+
 Primero [instala el CLI e inicia sesión](./installation.mdx). Tu agente local puede ejecutar
 `tg` o `max` en la terminal. Un **skill** le enseña los comandos, formatos y flujos de trabajo;
 la instalación y el inicio de sesión siguen siendo necesarios. [MCP](./mcp.md) ofrece otra conexión.
@@ -85,3 +89,6 @@ Para **Claude Desktop**, usa [MCP](./mcp.md#cursor-y-claude-desktop).
 Para agentes sin skills, comparte [la documentación Markdown](./mcp.md#documentación-para-tu-agente).
 Para un agente en la nube, instala e inicia sesión en su entorno: tu sesión local no se transfiere
 automáticamente.
+
+Continúa con [las primeras tareas](./first-tasks.md): encontrar un acuerdo, preparar una reunión
+y redactar una respuesta. En [cómo formular peticiones](./prompting.md) tienes ejemplos para copiar y límites útiles.

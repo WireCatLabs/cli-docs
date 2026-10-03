@@ -1,0 +1,143 @@
+.wirecat-landing .savings-section {
+  padding-top: 0;
+}
+.wirecat-landing .savings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 32px;
+}
+.wirecat-landing .savings-controls,
+.wirecat-landing .savings-result {
+  min-width: 0;
+  border: 1px solid var(--app-line);
+  border-radius: 18px;
+  padding: 28px;
+  background: var(--app-1);
+}
+.wirecat-landing .savings-control {
+  margin-bottom: 24px;
+}
+.wirecat-landing .savings-control label {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+.wirecat-landing .savings-control output {
+  color: var(--key);
+  font-variant-numeric: tabular-nums;
+}
+.wirecat-landing .savings-control input {
+  width: 100%;
+  accent-color: var(--key);
+  cursor: pointer;
+}
+.wirecat-landing .savings-assumptions {
+  border-top: 1px solid var(--app-line);
+  padding-top: 18px;
+}
+.wirecat-landing .savings-assumptions summary {
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.wirecat-landing .savings-timings {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+.wirecat-landing .savings-timings label {
+  display: grid;
+  grid-template-columns: 1fr 72px;
+  gap: 16px;
+  align-items: center;
+  font-size: 13px;
+}
+.wirecat-landing .savings-timings input {
+  width: 72px;
+  border: 1px solid var(--app-line);
+  border-radius: 6px;
+  padding: 6px;
+  background: var(--app-2);
+  color: var(--ink);
+  font: inherit;
+}
+.wirecat-landing .savings-label {
+  margin: 0 0 12px;
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+.wirecat-landing .savings-total {
+  margin: 0;
+  line-height: 1.2;
+}
+.wirecat-landing .savings-total strong {
+  color: var(--key);
+  font-size: clamp(38px, 5vw, 64px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+.wirecat-landing .savings-total span {
+  display: inline-block;
+  font-size: 16px;
+}
+.wirecat-landing .savings-month {
+  font-size: 20px;
+  margin: 16px 0 28px;
+}
+.wirecat-landing .savings-month small {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.wirecat-landing .savings-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  border-top: 1px solid var(--app-line);
+  padding-top: 20px;
+  margin: 24px 0;
+}
+.wirecat-landing .savings-comparison dt {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.wirecat-landing .savings-comparison dd {
+  margin: 8px 0 0;
+  font-size: 24px;
+}
+.wirecat-landing .savings-quality {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin: 0;
+}
+.wirecat-landing .savings-quality b {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--ink);
+}
+.wirecat-landing .savings-note {
+  margin: 18px 0 0;
+  max-width: 75ch;
+  color: var(--ink-soft);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.wirecat-landing .savings-grid :is(input, summary):focus-visible {
+  outline: 2px solid var(--key);
+  outline-offset: 4px;
+}
+@media (max-width: 760px) {
+  .wirecat-landing .savings-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .wirecat-landing .savings-controls,
+  .wirecat-landing .savings-result {
+    padding: 22px;
+  }
+}

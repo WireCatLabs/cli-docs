@@ -7,6 +7,8 @@ description: "Qué aporta MCP, cómo conectar cada agente y cómo leer la docume
 buscar, preparar respuestas y ejecutar acciones permitidas por el perfil. El cliente descubre
 nombres, parámetros y resultados estructurados. El servidor viene incluido en `tg` y `max`.
 
+**MCP (Model Context Protocol)** permite a una aplicación de IA descubrir y ejecutar herramientas. Aquí el **cliente** es tu aplicación de IA y el **servidor** es el proceso local `tg mcp` o `max mcp` que ofrece las herramientas. Conectar MCP no registra una cuenta ni inicia sesión; completa el acceso al mensajero primero.
+
 ## ¿CLI, skill o MCP?
 
 | Conexión | Qué ofrece | Cuándo elegirla |
@@ -21,7 +23,7 @@ permisos del perfil que el CLI. El inicio de sesión y la descarga del archivo s
 
 ## Antes de conectar
 
-[Instala de forma permanente e inicia sesión](./installation.mdx). `tg mcp config` o `max mcp config`
+[Instala e inicia sesión](./installation.mdx). `tg mcp config` o `max mcp config`
 muestra la configuración con las rutas reales de Node y del CLI. No edita el cliente.
 El PATH de una aplicación de escritorio puede ser diferente del de la terminal.
 

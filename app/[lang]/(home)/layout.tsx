@@ -8,7 +8,12 @@ import "@/lib/landing/fira.css"
 import "@/lib/landing/landing.css"
 import "@/lib/landing/connect.css"
 import "@/lib/landing/day.css"
+import "@/lib/landing/savings.css"
+import "@/lib/landing/scenarios.css"
 import "@/lib/landing/about.css"
+import "@/lib/landing/theme.css"
+import "@/lib/landing/install.css"
+import "@/lib/landing/footer.css"
 
 export default async function Layout({
   children,

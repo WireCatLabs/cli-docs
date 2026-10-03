@@ -2,7 +2,7 @@ type Node = {
   type: string
   value?: string
   children?: Node[]
-  data?: { hName: string; hProperties: { id: string } }
+  data?: { hName?: string; hProperties?: Record<string, unknown> }
 }
 
 /** Markdown drops raw HTML; turn only our empty anchor aliases into safe span nodes. */

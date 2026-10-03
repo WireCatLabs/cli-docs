@@ -940,3 +940,11 @@ TEXT['Agent · ~/inbox'] = ('Агент · ~/inbox', 'Agente · ~/inbox')
 
 # Final wording pass; locale-specific wording stays consistent.
 TEXT.update({'Less busywork in your chats': ('Меньше рутины в мессенджерах', 'Menos tareas repetitivas en tus chats'), 'Unread messages in one place.': ('Непрочитанное во всех чатах сразу.', 'Lo que tienes sin leer, en un solo lugar.'), 'Control what gets sent.': ('Контроль отправок.', 'Control de los envíos.'), 'Group activity.': ('Аналитики.', 'Actividad del grupo.'), 'Keep discussions on track.': ('Контроль дискуссий.', 'Supervisión de conversaciones.'), 'Always up to date': ('Всегда свежее', 'Siempre al día'), 'Multiple accounts and bots': ('Много аккаунтов и ботов', 'Varias cuentas, varios bots'), '. Find what matters, keep track of commitments and reply with the full context.': ('. Находите важное, вспоминайте договорённости и отвечайте с учётом всей переписки.', '. Encuentra lo importante, recuerda lo acordado y responde con todo el contexto.')})
+
+TEXT.update({'Unread': ('Непрочитанное', 'Sin leer'), 'Agreements': ('Договорённости', 'Acuerdos'), 'Replies': ('Ответы', 'Respuestas'), 'Search': ('Поиск', 'Buscar')})
+
+TEXT.update({'Telegram and MAX, one search': ('Telegram и MAX — один поиск', 'Telegram y MAX, una búsqueda'), 'Find messages across both. Bring agreements and files together from your saved history.': ('Ищите сообщения сразу в обоих. Собирайте договорённости и файлы из сохранённой истории.', 'Busca mensajes en ambos. Reúne acuerdos y archivos de tu historial guardado.')})
+
+# Short Spanish hero, matching the concise RU/EN headlines.
+TEXT['Never search a chat again.'] = ('Хватит листать.', 'Deja de buscar.')
+TEXT['Just ask.'] = ('Просто спросите.', 'Solo pregunta.')

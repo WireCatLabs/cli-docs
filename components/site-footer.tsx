@@ -2,23 +2,61 @@
 
 import { usePathname } from "next/navigation"
 import { useEffect, useRef } from "react"
+import { useThemeToggle } from "@/components/use-theme-toggle"
+import { wirecatLogoSvg } from "@/lib/brand"
+import { prepareInstallationButton } from "@/lib/installation-command"
+import siteConfig from "@/site.config.json"
+
+const escapeHtml = (value: string) =>
+  value.replace(
+    /[&<>"']/g,
+    (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character] ?? character,
+  )
 
 /** Shared footer exported from the same reviewed source as the landing. */
-export function SiteFooter({ html }: { html: string }) {
-  const rootRef = useRef<HTMLDivElement>(null)
+export function SiteFooter({ html, variant = "landing" }: { html: string; variant?: "landing" | "docs" }) {
   const pathname = usePathname()
+  // Add configured contacts at render time so builds do not need to regenerate landing snapshots.
+  const { email, telegram } = siteConfig.contacts
+  const contacts = `<ul class="foot-contacts"><li><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></li><li><a href="${escapeHtml(telegram)}">Telegram · ${escapeHtml(`@${new URL(telegram).pathname.replace(/^\//, "")}`)}</a></li></ul>`
+  const lang = pathname.split("/")[1] ?? "en"
+  const installLabel =
+    {
+      en: "Telegram · CLI + agent skill",
+      ru: "Telegram · CLI + skill",
+      es: "Telegram · CLI + skill del agente",
+    }[lang] ?? "Telegram · CLI + agent skill"
+  const command = html.match(/<span class="cmd">[\s\S]*?<\/span>/)?.[0]
+  let footerHtml = html.replace(/(<div class="foot-brand">[\s\S]*?<\/p>)/, (brand) => `${brand}${contacts}`)
+  if (variant === "docs") {
+    footerHtml = footerHtml.replace(
+      /<a class="mark"[^>]*>[\s\S]*?<\/a>/,
+      `<a class="wirecat-brand" href="/${lang}"><span class="wirecat-logo" role="img" aria-label="WireCat">${wirecatLogoSvg}</span></a>`,
+    )
+  }
+  if (command) {
+    footerHtml = footerHtml
+      .replace(command, "")
+      .replace(
+        '<div class="foot-bottom">',
+        `<div class="footer-install"><span class="footer-install-label">${escapeHtml(installLabel)}</span>${command}</div><div class="foot-bottom">`,
+      )
+  }
+  const rootRef = useRef<HTMLDivElement>(null)
+  useThemeToggle(rootRef, pathname.split("/")[1] ?? "en")
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
     const controller = new AbortController()
     let timer: ReturnType<typeof setTimeout> | undefined
-    for (const link of root.querySelectorAll<HTMLAnchorElement>(".langs a")) {
+    for (const link of root.querySelectorAll<HTMLAnchorElement>(".footer-language a")) {
       const locale = new URL(link.href).pathname.split("/")[1]
       link.href = pathname.replace(/^\/(en|ru|es)(?=\/|$)/, `/${locale}`)
     }
-    const brand = root.querySelector<HTMLAnchorElement>(".foot-brand .mark")
+    const brand = root.querySelector<HTMLAnchorElement>(".foot-brand > a")
     if (brand) brand.href = `/${pathname.split("/")[1]}`
     const button = root.querySelector<HTMLButtonElement>("[data-copy]")
+    if (button) prepareInstallationButton(button)
     const label = button?.textContent ?? ""
     button?.addEventListener(
       "click",
@@ -50,5 +88,5 @@ export function SiteFooter({ html }: { html: string }) {
     }
   }, [pathname])
   // biome-ignore lint/security/noDangerouslySetInnerHtml: Reviewed repository-owned footer, exported without scripts or user input.
-  return <div ref={rootRef} dangerouslySetInnerHTML={{ __html: html }} />
+  return <div ref={rootRef} dangerouslySetInnerHTML={{ __html: footerHtml }} />
 }

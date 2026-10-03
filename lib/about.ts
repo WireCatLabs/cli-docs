@@ -1,3 +1,5 @@
+import siteConfig from "@/site.config.json"
+
 export const aboutCopy = {
   en: {
     title: "About WireCat",
@@ -31,7 +33,7 @@ export const aboutCopy = {
       {
         title: "How to discuss a project",
         paragraphs: [
-          "Email hello@wirecat.dev with a short description: who will use the bot, which messenger it needs, what it should do, and which systems it should connect to. Examples of questions or a current workflow are helpful; a detailed specification is not required.",
+          `Email ${siteConfig.contacts.email} with a short description: who will use the bot, which messenger it needs, what it should do, and which systems it should connect to. Examples of questions or a current workflow are helpful; a detailed specification is not required.`,
           "We can start by clarifying the scope, then agree on a prototype, deployment and maintenance. Timing and cost depend on the task and are discussed individually.",
         ],
       },
@@ -86,7 +88,7 @@ export const aboutCopy = {
       {
         title: "Как обсудить проект",
         paragraphs: [
-          "Напишите на hello@wirecat.dev: кто будет пользоваться ботом, какой нужен мессенджер, что бот должен делать и с какими системами взаимодействовать. Примеры вопросов или описание текущего процесса помогут; подробное техническое задание для первого разговора не требуется.",
+          `Напишите на ${siteConfig.contacts.email}: кто будет пользоваться ботом, какой нужен мессенджер, что бот должен делать и с какими системами взаимодействовать. Примеры вопросов или описание текущего процесса помогут; подробное техническое задание для первого разговора не требуется.`,
           "Можно начать с уточнения задачи, затем согласовать прототип, размещение и сопровождение. Сроки и стоимость зависят от объёма работы и обсуждаются индивидуально.",
         ],
       },
@@ -141,7 +143,7 @@ export const aboutCopy = {
       {
         title: "Cómo hablar de un proyecto",
         paragraphs: [
-          "Escribe a hello@wirecat.dev y cuéntanos quién usará el bot, qué mensajero necesita, qué debe hacer y con qué sistemas se conectará. Ayudan ejemplos de preguntas o del proceso actual; no necesitas una especificación detallada para empezar.",
+          `Escribe a ${siteConfig.contacts.email} y cuéntanos quién usará el bot, qué mensajero necesita, qué debe hacer y con qué sistemas se conectará. Ayudan ejemplos de preguntas o del proceso actual; no necesitas una especificación detallada para empezar.`,
           "Podemos comenzar por definir el alcance y después acordar un prototipo, el despliegue y el mantenimiento. Los plazos y el coste dependen del proyecto y se hablan individualmente.",
         ],
       },

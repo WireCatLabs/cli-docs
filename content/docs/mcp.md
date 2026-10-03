@@ -7,6 +7,8 @@ description: "What MCP adds, how to connect each agent, and how an agent reads t
 prepare replies and perform the actions allowed by your profile. The client discovers tool names,
 parameters and structured results. The MCP server ships inside `tg` and `max`.
 
+**MCP (Model Context Protocol)** is a way for an AI app to discover and call tools. Here the **client** is your AI app, and the **server** is a local `tg mcp` or `max mcp` process that provides messenger tools. Installing it does not register or sign in to a messenger account; complete the login first.
+
 ## CLI, skill or MCP?
 
 | Connection | What it provides | Choose it when |
@@ -21,7 +23,7 @@ same profile permissions as the CLI. It does not log in for you or download the 
 
 ## Before connecting
 
-[Install permanently and log in](./installation.mdx). Run `tg mcp config` or `max mcp config`
+[Install and log in](./installation.mdx). Run `tg mcp config` or `max mcp config`
 to print a configuration with the actual Node and CLI paths on your machine. This command prints
 settings; it does not edit your client. Desktop clients may have a different PATH from your terminal.
 

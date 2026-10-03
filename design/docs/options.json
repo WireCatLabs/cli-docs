@@ -1,0 +1,20 @@
+[
+  {
+    "id": "quiet",
+    "title": "1. Спокойный",
+    "description": "Нейтральный блок промпта и приглушённые синие ссылки. Ближе всего к текущему WireCat.",
+    "css": ""
+  },
+  {
+    "id": "guide",
+    "title": "2. Пошаговый",
+    "description": "Бирюзовые акценты и более лёгкий блок промпта. Акцент на шагах и действиях.",
+    "css": ".wirecat-docs{--docs-accent:#236b62;--docs-link:#2b645a;--docs-tint:#f7f9f8;--docs-bar:#f0f4f2;--docs-outline:#dfe6e3}.dark .wirecat-docs{--docs-accent:#91cab9;--docs-link:#93b8ae;--docs-tint:#191d1c;--docs-bar:#202422;--docs-outline:#373e3b}.docs-prompt .docs-snippet-bar{background:transparent;border-bottom:0;padding-top:1rem}.docs-prompt pre{padding-top:0.5rem}.wirecat-docs .prose li::marker{color:var(--docs-accent)}"
+  },
+  {
+    "id": "editorial",
+    "title": "3. Редакционный",
+    "description": "Тёплый акцент, промпт как текстовая вставка между тонкими линиями. Меньше контейнеров и рамок.",
+    "css": ".wirecat-docs{--docs-accent:#8c642b;--docs-link:#715532;--docs-tint:#faf9f7;--docs-bar:#f4f2ee;--docs-outline:#e4e0d8}.dark .wirecat-docs{--docs-accent:#dbbe88;--docs-link:#bfae91;--docs-tint:#1c1b19;--docs-bar:#24221f;--docs-outline:#3c3934}.docs-prompt{border-inline:0;border-radius:0;background:transparent}.docs-prompt .docs-snippet-bar{background:transparent;border-bottom:0;padding-inline:0}.docs-prompt pre{padding-inline:0;font-size:1rem}"
+  }
+]

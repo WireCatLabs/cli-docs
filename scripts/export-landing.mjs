@@ -6,6 +6,7 @@ import { execFileSync } from "node:child_process"
 import { appendFileSync, readFileSync, writeFileSync } from "node:fs"
 import { runInNewContext } from "node:vm"
 import postcss from "postcss"
+import { maxSession } from "./scenario-platforms.mjs"
 
 const copy = {
   en: {
@@ -60,11 +61,13 @@ const copy = {
 const escapeHtml = (text) => text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
 const tick =
   '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>'
+const themeButton =
+  '<button class="theme-toggle" type="button" aria-label="Switch theme" title="Switch theme"><svg class="theme-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="theme-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14a9 9 0 0 1-10.5-10.5A9 9 0 1 0 20.5 14Z"/></svg></button>'
 const commandView = (command) =>
   command
     .replace(/<\/?b>/g, "")
     .replace(
-      /^(tg (?:messages \w+|chats list|bot (?:list|mcp)|config (?:show|set)|runs list|sends list|review|inbox)|tg \w+ (?:bot (?:recipients \w+|mcp(?: config)?)|config set))\s+(.*)$/,
+      /^((?:tg|max) (?:messages \w+|chats \w+|bot (?:list|mcp)|config (?:show|set)|runs list|sends list|review|inbox)|(?:tg|max) \w+ (?:bot (?:recipients \w+|mcp(?: config)?)|config set))\s+(.*)$/,
       "$1 <b>$2</b>",
     )
 // Only evaluate repository-owned demo data; the preview itself never executes these commands.
@@ -72,8 +75,31 @@ const previewData = { window: {} }
 runInNewContext(readFileSync("design/landing/scenario-variants.js", "utf8"), previewData)
 const selectedSessions = previewData.window.WireScenarioVariants
 if (!selectedSessions) throw new Error("Missing selected landing scenarios")
-const view = (step) => {
-  if (step.ask) return `<div class="ask step">${escapeHtml(step.ask)}</div>`
+const escapeAttribute = (text) => escapeHtml(text).replaceAll('"', "&quot;")
+const labels = {
+  en: {
+    copy: "Copy prompt",
+    setup: "Set up",
+    sources: "Source messages",
+    messenger: "Messenger for this example",
+  },
+  ru: {
+    copy: "Копировать запрос",
+    setup: "Подключить",
+    sources: "Исходные сообщения",
+    messenger: "Мессенджер для примера",
+  },
+  es: {
+    copy: "Copiar petición",
+    setup: "Conectar",
+    sources: "Mensajes originales",
+    messenger: "Mensajero del ejemplo",
+  },
+}
+const view = (step, lang, messenger, session, index) => {
+  const text = labels[lang]
+  if (step.ask)
+    return `<div class="ask step"><p>${escapeHtml(step.ask)}</p><div class="prompt-actions"><button type="button" data-prompt="${escapeAttribute(step.ask)}" aria-label="${text.copy}" title="${text.copy}"><svg class="prompt-copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4"/></svg><svg class="prompt-copied-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg><span class="prompt-feedback" data-prompt-label role="status" aria-live="polite">${text.copy}</span></button></div></div>`
   if (step.tool)
     return `<details class="tool step"><summary><span class="state">${tick}</span><code>${commandView(step.tool)}</code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><pre>${escapeHtml(
       step.out,
@@ -81,7 +107,20 @@ const view = (step) => {
       .replace(/"([a-zA-Z]+)":/g, '<span class="k">"$1"</span>:')
       .replace(/: "([^"]*)"/g, ': <span class="s">"$1"</span>')
       .replace(/: (\d+|true|false)/g, ': <span class="n">$1</span>')}</pre></details>`
-  return `<div class="say step">${step.say}</div>`
+  const sources = (step.sources ?? [])
+    .map((source, i) => {
+      const id = `evidence-${messenger}-${session}-${index}-${i}`
+      const date = new Intl.DateTimeFormat(lang, {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        timeZone: "UTC",
+      }).format(new Date(source.date))
+      const name = source.messenger === "max" ? "MAX" : "Telegram"
+      return `<details class="evidence-message" id="${id}"><summary><span class="evidence-heading"><strong>${escapeHtml(source.senderName)} <span class="evidence-id">#${escapeHtml(String(source.id))}</span></strong><span class="evidence-meta">${escapeHtml(source.chat)} · ${name} · ${date}</span></span><svg class="evidence-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 4 4 4-4 4"/></svg></summary><blockquote>${escapeHtml(source.text)}</blockquote></details>`
+    })
+    .join("")
+  return `<div class="say step">${step.say}${sources ? `<div class="answer-sources"><small>${text.sources}</small>${sources}</div>` : ""}</div>`
 }
 let localeTypography = ""
 for (const lang of ["en", "ru", "es"]) {
@@ -93,15 +132,24 @@ for (const lang of ["en", "ru", "es"]) {
   localeTypography += `\nhtml[lang="${lang}"] .wirecat-landing :is(h1,h2.big,.hour h3,.time,.lane h3,.tool-name,.spec dt) { font-family: ${font.stack}; font-stretch: ${font.stretch}; font-weight: ${font.weight}; }\n`
 
   // Evaluate only the constant sample data from our own design source, at export time.
-  const sessions = selectedSessions[lang].map((session) => ({
-    ...session,
-    steps: session.steps.map((step) => ({
-      html: view(step),
-      tool: Boolean(step.tool),
-      delay: step.ask ? 500 : step.tool ? 600 : 900,
-    })),
-  }))
+  const renderSessions = (messenger) =>
+    selectedSessions[lang].map((original) => {
+      const session = messenger === "max" ? maxSession(original) : original
+      return {
+        id: session.id,
+        title: session.title,
+        hint: session.hint,
+        steps: session.steps.map((step, index) => ({
+          html: view(step, lang, messenger, session.id, index),
+          tool: Boolean(step.tool),
+          delay: step.ask ? 500 : step.tool ? 600 : 900,
+        })),
+      }
+    })
+  const sessions = renderSessions("tg")
+  const maxSessions = renderSessions("max")
   let html = source.split("<body>")[1].split('<div class="headlines"')[0]
+  html = html.replace('<details class="lang">', `${themeButton}<details class="lang">`)
   html = html.replace(/^ {4}<div class="fv fv[1-5]"[^\n]+\n/gm, "")
   html = html.replace(/href="g-home(?:\.(ru|es))?\.html"/g, (_, locale) => `href="/${locale ?? "en"}"`)
   html = html
@@ -112,6 +160,17 @@ for (const lang of ["en", "ru", "es"]) {
     .replaceAll(`href="/${lang}/docs/tg/mcp"`, `href="/${lang}/docs/mcp"`)
   html = html.replace(/<section id="about">[\s\S]*?<\/section>/, "")
   html = html.replaceAll('href="#about"', `href="/${lang}/about"`)
+  html = html.replace(
+    /(<div class="tool-links">)([\s\S]*?)(<\/div>)/g,
+    (_, start, links, end) =>
+      start +
+      links.replace(
+        /<a href="([^"]+)">([\s\S]*?)<\/a>/g,
+        (_anchor, href, label) =>
+          `<a href="${href}" target="_blank" rel="noopener noreferrer">${label}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>`,
+      ) +
+      end,
+  )
   const aboutLabel = { en: "About", ru: "О проекте", es: "Acerca de" }[lang]
   if (!html.includes(`href="/${lang}/about"`)) {
     html = html.replace(/(<nav class="site"[\s\S]*?)(<\/nav>)/, `$1<a href="/${lang}/about">${aboutLabel}</a>$2`)
@@ -131,7 +190,10 @@ for (const lang of ["en", "ru", "es"]) {
   const dayTitle = day.match(/<h2[^>]*>(.*?)<\/h2>/)?.[1]
   const shortDay = `<section id="day"><div class="wrap"><h2 class="big">${dayTitle}</h2><p class="intro">${w.dayIntro}</p><div class="day-summary">${w.day.map(([time, title, text]) => `<div><time class="time" datetime="${time}">${time}</time><h3>${title}</h3><p>${text}</p></div>`).join("")}</div></div></section>`
   for (const section of [day, benefits, toolsSection, reasons]) html = html.replace(section, "")
-  html = html.replace(/(?=<section class="close")/, `${benefits}\n${toolsSection}\n${reasons}\n${shortDay}\n`)
+  html = html.replace(
+    /(?=<section class="close")/,
+    `${benefits}\n<!--time-savings-->\n${toolsSection}\n${reasons}\n${shortDay}\n`,
+  )
   const choices = [
     ["Telegram", "tg-cli", "tg"],
     ["MAX", "max-cli", "max"],
@@ -158,11 +220,24 @@ for (const lang of ["en", "ru", "es"]) {
     '<div class="log" id="log"></div>',
     `<div class="log" id="log">${sessions[0].steps.map((s) => s.html).join("")}</div>`,
   )
+  html = html.replace(
+    '<button class="replay"',
+    `<div class="demo-messengers" role="group" aria-label="${labels[lang].messenger}"><button type="button" data-messenger="tg" aria-pressed="true">Telegram</button><button type="button" data-messenger="max" aria-pressed="false">MAX</button></div><button class="replay"`,
+  )
   if (/skill install|<script|data-variant="[1-5]"/.test(html)) throw new Error("Unpublished prototype content remains")
-  const footerHtml = html.match(/<footer class="site">[\s\S]*?<\/footer>/)?.[0]
-  if (!footerHtml) throw new Error("Missing shared site footer")
-  html = html.replace(footerHtml, "")
-  writeFileSync(`lib/landing/${lang}.json`, `${JSON.stringify({ html: html.trim(), footerHtml, sessions }, null, 2)}\n`)
+  const sourceFooter = html.match(/<footer class="site">[\s\S]*?<\/footer>/)?.[0]
+  if (!sourceFooter) throw new Error("Missing shared site footer")
+  const languageLabel = { en: "Language", ru: "Язык", es: "Idioma" }[lang]
+  const footerHtml = sourceFooter.replace(
+    /<nav class="langs"[^>]*>([\s\S]*?)<\/nav>/,
+    (_, links) =>
+      `<div class="footer-controls">${themeButton}<details class="lang footer-language"><summary aria-label="${languageLabel}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg><span>${lang.toUpperCase()}</span><svg class="dn" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary><div class="lang-menu">${links}</div></details></div>`,
+  )
+  html = html.replace(sourceFooter, "")
+  writeFileSync(
+    `lib/landing/${lang}.json`,
+    `${JSON.stringify({ html: html.trim(), footerHtml, sessions, maxSessions }, null, 2)}\n`,
+  )
   if (lang !== "en") continue
   const css = postcss.parse(source.match(/<style>([\s\S]*?)<\/style>/)[1].replaceAll(" !important", ""))
   // Expand font shorthands before Next's CSS optimizer combines percentage stretches.

@@ -38,7 +38,7 @@ pnpm check:links         # every link inside out/ leads to a page and, with an a
 
 The home page preserves the reviewed `design/landing/g-home*.html` design in all three languages.
 Run `node scripts/export-landing.mjs` after editing those prototypes or
-`design/landing/scenario-variants.js`; it exports trusted static markup, the seven selected
+`design/landing/scenario-variants.js`; it exports trusted static markup, the eight selected
 demo sessions and scoped CSS into `lib/landing/`. The complete scenario bank is preserved in
 `docs/LANDING_SCENARIOS.md`, and marketing copy in `docs/MARKETING.md`. Production omits the design
 switches and experimental feature variants. Agent setup links lead to the shared documentation.
@@ -46,9 +46,11 @@ switches and experimental feature variants. Agent setup links lead to the shared
 Fonts, including the selected Fira Sans Extra Condensed for Russian, are served locally from `public/fonts/`, with their
 OFL licences. Browser icons are wired in the shared metadata; run
 `node scripts/export-favicons.mjs` (ImageMagick required) to regenerate them from `app/icon.svg`.
-About is a separate localized `/{lang}/about` page; its content and public contact
-are in `lib/about.ts`. The export removes the old inline About section and links to this page.
-After the demo, sections are benefits, Telegram/MAX, reasons, and a concise daily timeline.
+Site name, URL, repository and public contacts are configured in [site.config.json](site.config.json).
+The footer and About page use the same contacts in all languages. Edit the config and rebuild the site;
+contact changes do not require regenerating the landing snapshots.
+About is a separate localized `/{lang}/about` page; its content is in `lib/about.ts`. The export removes the old inline About section and links to this page.
+After the demo, sections are benefits, an editable time estimate, Telegram/MAX, reasons, and a concise daily timeline.
 
 ## Adding a tool
 
@@ -71,3 +73,20 @@ it did not deploy. Run it by hand with `ref: main` to publish what the tools are
 ## Licence
 
 MIT.
+
+The landing time estimate lives in `components/time-savings.tsx` and `lib/time-savings.ts`. Its timing assumptions are editable, and it shows when manual work would be quicker. Daily/monthly figures are scenario estimates, not product benchmarks.
+
+The scenario top bar switches Telegram/MAX while retaining the current stable scenario ID. Prompts are copyable and link to the matching installation guide. Source links expand illustrated message excerpts with chat/date labels. Shared-store search keeps each result’s original provider and locator; MAX moderation/download syntax is adapted explicitly rather than only renaming the executable.
+
+Documentation presentation is shared in `lib/remark-doc-usability.ts`: inline command mentions link
+only to commands present in the current reference, existing links and executable fences stay intact,
+and source-build sections on tool installation pages are collapsed. `components/docs-disclosures.tsx`
+opens those sections for incoming anchors and TOC links. OS path tables retain all original Markdown
+cells and add `components/platform-paths.tsx` for an automatic OS choice and manual comparison.
+User-facing release copy adjustments live in `scripts/docs-corrections.json`; they apply after strict
+translation validation, so sync preserves both the changes and the untouched upstream references.
+
+Search vocabulary lives in `lib/search-intents.json`: reviewed task descriptions and error wording
+are indexed on the matching existing pages in English, Russian and Spanish. `{tool}` becomes the
+page's messenger command. Search prioritizes the current messenger unless the query names another;
+this adds no model calls or embedding service. Add phrases here and rebuild to cover another task.

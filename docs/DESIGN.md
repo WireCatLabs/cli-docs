@@ -179,3 +179,13 @@ security), Project (changelog, roadmap).
   cookies); "Edit on GitHub" at the release tag instead of `main`.
 - ⚪ Outside links checked weekly with lychee.
 - ⚪ Each tool's release workflow signals this site to rebuild (the daily build covers it now).
+
+The benefits section is followed by an interactive, localized time estimate. `components/time-savings.tsx` uses `lib/time-savings.ts`: messages, active chats and replies per day plus six editable timing assumptions. Monthly estimates use 22 days; negative savings are shown honestly. It makes no measured speed or accuracy claim.
+
+Scenario order: context, cross-messenger recommendations, group management, inbox, commitments, scheduling, files, bot. The window’s Telegram/MAX selector preserves the scenario, and shareable URLs use `scenario=<id>&messenger=<tg|max>`. Each request can be copied; each illustrated source has its chat/date/excerpt. Group management previews first, then performs only specifically approved deletions. Time-calculator defaults remain editable assumptions by the owner’s choice; no measured calibration is claimed.
+
+Sources inside scenarios use native disclosures rather than anchor links. Summaries identify sender/message ID and chat/date; opening a source never navigates or scrolls the document. The shared landing footer also follows the docs layout, with its theme/locale controls. Tool-card links show a stationary hover underline and external-tab icon.
+
+Source disclosures remain compact single-line rows (12px type and 3px vertical padding), with full message text appearing only when expanded. Prompt-copy controls sit at the bottom-right of each request bubble; there is no adjacent setup link.
+
+Prompt copying now uses an icon-only button at the bubble’s bottom-right, with a localized tooltip/accessibility label and checkmark feedback. Spanish hero: “Deja de buscar. Solo pregunta.”

@@ -5,6 +5,7 @@ import { applyMdxPreset } from "fumadocs-mdx/config"
 import { defineDocs } from "fumadocs-mdx/macro"
 import { i18n } from "./i18n"
 import { remarkAnchorAliases } from "./remark-anchor-aliases"
+import { remarkDocUsability } from "./remark-doc-usability"
 import { docsRoute } from "./shared"
 
 const docs = defineDocs({
@@ -13,7 +14,7 @@ const docs = defineDocs({
     schema: pageSchema.extend({ contentLanguage: pageSchema.shape.title.optional() }),
     // The tools' pages use fences Shiki has no grammar for (`cron`); those show as plain text.
     mdxOptions: applyMdxPreset({
-      remarkPlugins: [remarkAnchorAliases],
+      remarkPlugins: [remarkAnchorAliases, remarkDocUsability],
       rehypeCodeOptions: { ...rehypeCodeDefaultOptions, fallbackLanguage: "text" },
     }),
     postprocess: {
