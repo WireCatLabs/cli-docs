@@ -86,15 +86,17 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 ## “no session for profile "default"”
 
 ```json
-{"error":{"code":"authentication_error","message":"no session for profile \"default\" — run `max session start`"}}
+{"error":{"code":"authentication_error","message":"no session for profile \"default\" — run `max setup` in a local terminal; agents: read `max skill show`"}}
 ```
 
 Code `4`: no token for this profile. You may not have logged in, may have logged into **another profile**, or may have used different directory variables.
 
 ```sh
-max session start          # войти
+max setup                  # первый запуск
 max personal chats list    # или назвать профиль, в который входили
 ```
+
+Resume an interrupted first run with `max setup`. An expired token requires an explicit fresh login: `max session start qr`. Your agent reads `max skill show` before login.
 
 ⚠ A common cause when a token definitely exists is `MAX_CONFIG_DIR` set in one terminal but not another. Directory overrides also change keyring entries, so a session saved with them is invisible without them. Check `env | grep MAX_`.
 
@@ -238,10 +240,10 @@ First check whether you are reading only local storage:
 
 ```sh
 max chats list --trace     # видны ли запросы к MAX
-max cache clear              # забыть локальную копию и спросить заново
+max contacts sync         # заново получить полный список контактов
 ```
 
-If the first run returns chats but an immediate second run returns none, report a defect. The second login receives only changes; unchanged data should come from storage.
+If the first run listed chats but the next consecutive run is empty, that is a bug; report it. Subsequent logins may return only changed contacts; the remaining contacts come from the shared local store.
 
 ## Ctrl-C
 

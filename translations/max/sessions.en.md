@@ -4,6 +4,12 @@ title: "Sessions and profiles"
 
 A session consists of your MAX account token and a stable device identity. The token is stored in the operating-system keyring; everything else lives in a file beside the configuration.
 
+## First run
+
+`max setup --agent codex` checks local directories, guides you through QR login, checks your account and up to five chats, and installs the agent skill. Agent choices: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Without a parameter, an interactive terminal asks you; machine mode skips skill installation. `max skill show` is available before login.
+
+Allow about five minutes. Download history separately after choosing a chat and how much to fetch; setup does not start the background service. Running it again checks the existing session. `--method token|qr|qr-chrome|sms` selects the method for a fresh login; setup defaults to `qr`. QR and browser login require a person at the local terminal. Do not pass a token as an argument. If setup is interrupted, run it again. For an expired token, explicitly run `max session start qr`; if the keychain is unavailable, first fix the environment as instructed.
+
 ## Getting a token
 
 `max session start <способ>` supports four login methods. Whichever method you use, the token is saved to the keyring only after MAX accepts it.
@@ -67,7 +73,7 @@ This distinction matters: forgetting a token that remains valid on the server is
 
 ## Profiles
 
-A profile represents a separate account, with its own token, state and cache. Its name is the **first word**, rather than a flag:
+Each profile has its own token and state; the local message store is shared, with data separated by account. Select a profile with the **first word**, rather than a flag:
 
 ```sh
 max chats list              # профиль default

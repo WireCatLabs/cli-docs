@@ -48,11 +48,11 @@ tg session start --app browser
 1. Run:
 
    ```sh
-   max session start qr
+   max setup --agent all
    ```
 
 2. On your phone, open MAX → Settings → Devices. Scan the computer’s QR code and confirm the connection.
-3. Follow the terminal prompts and wait for successful login.
+3. Follow the terminal prompts. Guided setup checks your account and five chats and installs agent skills. It reuses an existing session; it does not download all history or start the background service. Use `max session start qr` if you only want to log in.
 
 See [MAX login instructions](./max/sessions.md) for alternatives, or the [bot guide](./max/bot.md) to connect a bot.
 
@@ -163,7 +163,7 @@ max doctor
 Log in:
 
 ```sh
-max session start qr
+max setup --agent all
 ```
 
 Account:

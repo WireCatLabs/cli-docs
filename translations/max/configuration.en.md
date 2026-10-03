@@ -20,8 +20,8 @@ MAX_PROFILE=personal max chats list   # переменная выбирает п
 
 Two explicit exceptions take precedence over this order:
 
-- **`MAX_TOKEN` overrides the keyring**, supporting CI usage.
-- **`MAX_CONFIG_DIR`, `MAX_STATE_DIR`, `MAX_CACHE_DIR` relocate configuration, login and cache for `max`**, including which keyring entry belongs to the profile.
+- **`MAX_TOKEN` takes precedence over the keychain.** If set, it is used instead, as in CI.
+- **`MAX_CONFIG_DIR`, `MAX_STATE_DIR` relocate `max` settings and login state**, including the keychain entry associated with a profile.
 
 ## Current effective settings
 
@@ -149,7 +149,7 @@ It prints the chosen profile **and its source**, the configuration path and whet
 | `MAX_BOT_TOKEN` | Token for `max bot`, bypassing the keyring |
 | `MAX_CONFIG_DIR` | Directory for `config.json` and, without a keyring, the token file |
 | `MAX_STATE_DIR` | Directory for profile state and `runs/` |
-| `MAX_CACHE_DIR` | Directory for local chats and messages |
+| `MESSAGING_STORE` | Shared local store file for chats, messages and transcripts |
 | `NO_COLOR` | Disable color, following the common convention |
 | `MAX_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER` | Do not query npm for a newer version; `CI` has the same effect |
 
@@ -159,15 +159,14 @@ An empty string counts as unset: `MAX_PROFILE=` is equivalent to not setting `MA
 
 ## Temporary separate configuration
 
-The three directory variables give you separate configuration, login and cache, useful for experiments, second accounts and tests. The shared message store used by `tg` is unaffected; set its separate file with `MESSAGING_STORE`. Speech models remain shared.
+Directory variables give you separate settings and login state, useful for experiments, a second account or tests. They do not change the shared message store used by `tg`: `MESSAGING_STORE` selects that separate file. Speech models remain shared.
 
 ```sh
 export MAX_CONFIG_DIR=/tmp/max-try/config
 export MAX_STATE_DIR=/tmp/max-try/state
-export MAX_CACHE_DIR=/tmp/max-try/cache
 export MESSAGING_STORE=/tmp/max-try/messages.db
 
-max session start     # этот токен не виден обычной установке
+max setup            # этот токен не виден обычной установке
 max chats list
 ```
 
@@ -178,3 +177,5 @@ max chats list
 - [Command reference](./commands.md) — all commands, options and exit codes.
 - [Sessions and profiles](./sessions.md) — profiles and token storage.
 - [Troubleshooting](./troubleshooting.md) — resolving problems.
+
+`MAX_CACHE_DIR` now applies only to the old cache: `max doctor` looks there for a remaining file. For compatibility, this variable still changes the keychain entry. Use `MESSAGING_STORE` for the new shared store.

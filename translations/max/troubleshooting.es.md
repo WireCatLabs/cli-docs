@@ -86,15 +86,17 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 ## «no session for profile "default"»
 
 ```json
-{"error":{"code":"authentication_error","message":"no session for profile \"default\" — run `max session start`"}}
+{"error":{"code":"authentication_error","message":"no session for profile \"default\" — run `max setup` in a local terminal; agents: read `max skill show`"}}
 ```
 
 Código `4`: no hay token. No has entrado, usaste **otro perfil** o variables de directorios distintas.
 
 ```sh
-max session start          # войти
+max setup                  # первый запуск
 max personal chats list    # или назвать профиль, в который входили
 ```
+
+Si el primer inicio se interrumpe, repite `max setup`. Un token caducado requiere volver a iniciar sesión explícitamente: `max session start qr`. El agente debe leer primero `max skill show`.
 
 ⚠ Una causa habitual es `MAX_CONFIG_DIR` en una ventana y no otra. Cambia también el llavero. Comprueba `env | grep MAX_`.
 
@@ -238,10 +240,10 @@ Comprueba si solo estás consultando la copia:
 
 ```sh
 max chats list --trace     # видны ли запросы к MAX
-max cache clear              # забыть локальную копию и спросить заново
+max contacts sync         # заново получить полный список контактов
 ```
 
-Si primero hubo chats y después ninguno, informa. El segundo acceso recibe solo cambios; lo demás debe recuperarse localmente.
+Si primero hubo chats y después ninguno, es un defecto: informa de él. El siguiente acceso puede recibir solo contactos modificados; el resto se obtiene de la copia local compartida.
 
 ## Ctrl-C
 

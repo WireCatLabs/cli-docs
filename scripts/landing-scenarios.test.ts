@@ -42,11 +42,19 @@ describe("reviewed landing workflows", () => {
   it("uses real MAX option differences and retains messenger-specific source locators", () => {
     for (const sessions of Object.values(scenarios)) {
       const group = maxSession(sessionById(sessions, "moderation"))
-      expect(group.steps.some((step: Step) => step.tool?.startsWith("max chats check 301 --dry-run"))).toBe(true)
+      expect(group.steps.some((step: Step) => step.tool?.startsWith("max chats moderate 301 --dry-run"))).toBe(true)
+      expect(group.steps.some((step: Step) => step.tool?.includes("chats check"))).toBe(false)
+      const preview = group.steps.find((step: Step) => step.tool?.startsWith("max chats moderate"))
+      expect(JSON.parse(preview.out)).toMatchObject({ chatId: "301", rows: expect.any(Array) })
       const files = maxSession(sessionById(sessions, "files"))
       expect(files.steps.filter((step: Step) => step.tool?.includes("--output ./Atlas"))).toHaveLength(3)
       expect(files.steps.some((step: Step) => step.tool?.includes("--output-dir"))).toBe(false)
       const search = maxSession(sessionById(sessions, "search"))
+      expect(
+        search.steps
+          .filter((step: Step) => step.tool?.startsWith("max messages search"))
+          .every((step: Step) => step.tool?.includes("--language legacy")),
+      ).toBe(true)
       expect(search.steps.some((step: Step) => step.tool?.startsWith("tg messages context msg:telegram/"))).toBe(true)
       expect(search.steps.some((step: Step) => step.tool?.startsWith("max messages context msg:max/"))).toBe(true)
       const bot = maxSession(sessionById(sessions, "bot"))

@@ -117,9 +117,9 @@ Tras aprobar, envía con `max messages send "Иван Петров" "…"`. Sin 
 
 ## Un grupo que administras
 
-Escribe: **solo según las reglas**. Permite `Bash(max review:*)`, `Bash(max chats events:*)`, `Bash(max chats members list:*)`, `Bash(max chats check:*)`.
+Escribe: **solo según las reglas**. Permite `Bash(max review:*)`, `Bash(max chats events:*)`, `Bash(max chats members list:*)`, `Bash(max chats moderate:*)`.
 
-> Ejecuta `max review --chat "Поход" --unanswered 4h --json` y `max chats check "Поход" --dry-run
+> Ejecuta `max review --chat "Поход" --unanswered 4h --json` y `max chats moderate "Поход" --dry-run
 > --json`. Resume preguntas pendientes y autores, infracciones y acciones propuestas. No borres nada: indica las órdenes que las ejecutarían si lo apruebo.
 
 Consulta [Grupos](./groups.md) para escenarios y reglas.

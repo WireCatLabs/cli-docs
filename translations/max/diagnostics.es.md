@@ -137,3 +137,7 @@ Este ajuste registra todo; `--no-record` lo desactiva para una llamada. Por defe
 
 - [Seguridad](./security.md): todo lo que se escribe en disco.
 - [Solución de problemas](./troubleshooting.md): usar el diagnóstico ante un fallo.
+
+## Referencia para scripts
+
+`max commands --json` enumera órdenes, opciones globales y códigos de salida sin conectarse a la cuenta. `cli` identifica la herramienta, `version` la versión instalada y `contract` la versión del contrato JSON común (`0`). Esta cambia cuando hay cambios incompatibles en la respuesta; actualizar el paquete no cambia por sí solo `contract`. Los scripts pueden leer campos concretos sin comparar todo el JSON con una cadena guardada.

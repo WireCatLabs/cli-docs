@@ -4,7 +4,6 @@ title: "Referencia de comandos"
 
 <!-- Generado desde el árbol de comandos por scripts/commands.ts. No editar el original; `pnpm generate`. -->
 
-
 Referencia de todas las órdenes, opciones y códigos de salida. La página se **genera desde el
 propio programa**, por lo que no puede describir una versión que no existe.
 
@@ -65,6 +64,21 @@ Olvida la sesión guardada de este perfil.
 max session end
 ```
 
+## `max setup`
+
+Configura tu cuenta personal de MAX y conecta el agente.
+
+**Modifica datos en MAX.**
+
+```sh
+max setup [options]
+```
+
+| Opción | Descripción |
+|---|---|
+| `--agent <agent>` | Instala el skill de este agente; pregunta en el terminal, fuera de él no instala ninguno. Opciones: `none`, `codex`, `cursor`, `claude`, `gemini`, `all`. |
+| `--method <method>` | Método de acceso si no hay sesión. Opciones: `token`, `qr`, `qr-chrome`, `sms`. Predeterminado: `qr`. |
+
 ## `max account`
 
 La cuenta con la que ha iniciado sesión este perfil.
@@ -104,7 +118,7 @@ otras sesiones de la cuenta; no es `max session`, que gestiona la sesión de est
 
 #### `max account sessions list`
 
-Todos los dispositivos y navegadores conectados a esta cuenta.
+Todos los dispositivos y aplicaciones conectados a esta cuenta; no cierra ninguna sesión.
 
 ```sh
 max account sessions list
@@ -122,7 +136,7 @@ max account sessions end [options]
 
 | Opción | Descripción |
 |---|---|
-| `--others` | Todas las sesiones excepto esta: es la única opción que ofrece MAX. |
+| `--others` | Todas las sesiones excepto esta. |
 
 ## `max chats`
 
@@ -171,8 +185,8 @@ max chats events <chat> [options]
 
 | Opción | Descripción |
 |---|---|
-| `--since <id-or-time>` | Desde este mensaje, fecha ISO 8601 o hace 2h / 1d; hace 7 días si se omite. |
-| `--event <names>` | Solo estos eventos separados por comas, con los nombres de MAX: new, add, remove, pin…. |
+| `--since-time <time>` | Fecha ISO 8601 o hace 2h / 1d; últimos 7 días si se omite. |
+| `--type <names>` | Solo estos eventos, separados por comas: join, leave, add, remove, create, title, pin. |
 
 ### `max chats inspect`
 
@@ -184,7 +198,7 @@ max chats inspect <link>
 
 | Argumento || Descripción |
 |---|---|---|
-| `link` | obligatorio | Un enlace de invitación https://max.ru/join/… o uno público https://max.ru/<name>. |
+| `link` | obligatorio | Enlace de invitación o enlace público. |
 
 ### `max chats join`
 
@@ -198,7 +212,7 @@ max chats join <link>
 
 | Argumento || Descripción |
 |---|---|---|
-| `link` | obligatorio | Un enlace de invitación https://max.ru/join/… o uno público https://max.ru/<name>. |
+| `link` | obligatorio | Enlace de invitación o enlace público. |
 
 ### `max chats mark-read`
 
@@ -257,15 +271,21 @@ Participantes del grupo o canal; permite añadirlos o eliminarlos.
 
 #### `max chats members list`
 
-Participantes de un grupo o canal, consultados en MAX: fecha de creación de la cuenta y última conexión.
+Miembros del grupo por páginas, con sus roles y última conexión.
 
 ```sh
-max chats members list <chat>
+max chats members list <chat> [options]
 ```
 
 | Argumento || Descripción |
 |---|---|---|
 | `chat` | obligatorio | Identificador del chat o parte de su nombre. |
+
+| Opción | Descripción |
+|---|---|
+| `--limit <n>` | Cuántos mostrar. |
+| `--page <n>` | Número de página, desde 1. |
+| `--all` | Todas las filas, sin paginación. |
 
 #### `max chats members add`
 
@@ -417,7 +437,7 @@ max chats folders create <title> [options]
 
 | Argumento || Descripción |
 |---|---|---|
-| `title` | obligatorio | Nombre de la carpeta: MAX rechazó 21 caracteres y aceptó 15. |
+| `title` | obligatorio | Nombre de la carpeta; la aplicación puede rechazar uno largo. |
 
 | Opción | Descripción |
 |---|---|
@@ -459,7 +479,7 @@ max chats folders delete <folder>
 
 ### `max chats rules`
 
-Reglas de moderación de un grupo, guardadas en este equipo.
+Reglas que utiliza `chats moderate` para revisar el grupo, guardadas en un archivo de este perfil.
 
 #### `max chats rules show`
 
@@ -487,7 +507,7 @@ max chats rules set <chat> <key> <value>
 |---|---|---|
 | `chat` | obligatorio | Identificador del chat o parte de su nombre. |
 | `key` | obligatorio | uno de: trusted, blocked, blockedNames, links, invites, forwards, blockedPeople, flood.messages, flood.minutes, flood.action, newAccount.days, newAccount.action, consent.delete, consent.remove. |
-| `value` | obligatorio | Consulta `max chats rules show`; las listas se separan con comas y reemplazan las anteriores. |
+| `value` | obligatorio | Valor nuevo; las listas se separan con comas. |
 
 #### `max chats rules unset`
 
@@ -504,14 +524,14 @@ max chats rules unset <chat> <key>
 | `chat` | obligatorio | Identificador del chat o parte de su nombre. |
 | `key` | obligatorio | uno de: trusted, blocked, blockedNames, links, invites, forwards, blockedPeople, flood.messages, flood.minutes, flood.action, newAccount.days, newAccount.action, consent.delete, consent.remove. |
 
-### `max chats check`
+### `max chats moderate`
 
 revisa mensajes y miembros nuevos según las reglas y ejecuta lo permitido
 
 **Modifica datos en MAX.**
 
 ```sh
-max chats check <chat> [options]
+max chats moderate <chat> [options]
 ```
 
 | Argumento || Descripción |
@@ -520,10 +540,10 @@ max chats check <chat> [options]
 
 | Opción | Descripción |
 |---|---|
-| `--since <id-or-time>` | Evalúa lo posterior a este mensaje, fecha ISO 8601 o hace 2h / 1d; conserva el punto guardado. |
-| `--dry-run` | revisa y prepara un plan, sin actuar. |
-| `--allow-dangerous` | Ejecuta lo que pide una regla con consentimiento flag: eliminar mensajes o participantes. |
-| `--max-actions <n>` | Máximo de acciones por comprobación; 10 si se omite. |
+| `--since-time <time>` | Revisa lo posterior a esta fecha ISO 8601 o hace 2h / 1d; conserva el punto guardado. |
+| `--dry-run` | Revisa y prepara un plan, sin actuar. |
+| `--allow-dangerous` | Aprueba todas las acciones de nivel ask en las reglas del grupo. |
+| `--max-actions <n>` | Máximo de acciones por ejecución; 10 si se omite. |
 
 ## `max contacts`
 
@@ -657,7 +677,7 @@ max contacts import <file>
 
 | Argumento || Descripción |
 |---|---|---|
-| `file` | obligatorio | Una persona por línea: número, coma o tabulación y nombre. |
+| `file` | obligatorio | Una persona por línea: número, coma, tabulación o punto y coma, y nombre. |
 
 ## `max messages`
 
@@ -696,16 +716,18 @@ max messages search <query> [options]
 
 | Argumento || Descripción |
 |---|---|---|
-| `query` | obligatorio | busca todas las palabras, mejores coincidencias primero; admite "a phrase", -word, a OR b y filtros from: chat: after: before: has: in:. Corrige erratas; sin coincidencias completas, busca cualquiera de las palabras y después fragmentos. |
+| `query` | obligatorio | Consulta Lucene estricta: palabras, "frases", AND/OR/NOT, grupos de campos y rangos de fechas; --language legacy conserva la búsqueda anterior. |
 
 | Opción | Descripción |
 |---|---|
-| `--chat <chat>` | Solo este chat, igual que chat: en la consulta; identificador o título parcial. |
-| `--source <messenger>` | todas las cuentas de este servicio guardadas, personal, bots o all; igual que in: en la consulta. |
-| `--limit <n>` | cuántos. |
-| `--newest` | recientes primero en lugar de mejores coincidencias. |
-| `--context <n>` | mensajes anteriores y posteriores a cada resultado; 2 en terminal, 0 en otros casos. |
-| `--regex` | interpreta el texto como expresión regular sin distinguir mayúsculas; comprueba todos los textos guardados. |
+| `--chat <chat>` | Solo este chat, igual que chat: en la consulta; identificador o parte del título. |
+| `--source <messenger>` | Todas las cuentas de este servicio guardadas, personal, bots o all; igual que in: en la consulta. |
+| `--limit <n>` | Cuántos mostrar. |
+| `--newest` | Más recientes primero en lugar de mejores coincidencias. |
+| `--context <n>` | Mensajes anteriores y posteriores a cada resultado; 2 en terminal, 0 en otros casos. |
+| `--language <lucene\|legacy>` | Lenguaje de consulta: Lucene estricto o búsqueda legacy. |
+| `--timezone <zone>` | Zona horaria IANA para los límites de fechas del calendario. |
+| `--regex` | Interpreta el texto como una expresión regular sin distinguir mayúsculas; comprueba todos los textos guardados. |
 
 ### `max messages show`
 
@@ -1737,22 +1759,6 @@ max doctor report create [options]
 | `--run <id>` | ejecución que incluir; la última fallida por defecto. |
 | `--output <file>` | destino; un archivo nuevo en la carpeta actual por defecto. |
 
-## `max cache`
-
-Copia local de chats, contactos y mensajes.
-
-### `max cache clear`
-
-Borra toda la caché de este perfil.
-
-```sh
-max cache clear [options]
-```
-
-| Opción | Descripción |
-|---|---|
-| `--left` | Solo los chats que esta cuenta ha abandonado, con sus mensajes. |
-
 ## `max runs`
 
 ejecuciones registradas: qué hizo la herramienta y cuándo
@@ -1771,7 +1777,7 @@ max runs list [options]
 
 ### `max runs show`
 
-Una ejecución: comando realizado y una línea por petición.
+Una ejecución: qué se hizo y una línea por operación.
 
 ```sh
 max runs show <run-id>
@@ -2423,8 +2429,6 @@ max bot recipients clear
 envíos, ediciones y eliminaciones del bot desde este equipo; identificadores y resultados, nunca texto
 
 #### `max bot sends list`
-
-
 
 ```sh
 max bot sends list

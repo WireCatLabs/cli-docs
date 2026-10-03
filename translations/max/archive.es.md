@@ -11,17 +11,19 @@ Los datos leídos se conservan para responder sin conexión:
 ```sh
 max chats list --offline      # только из локальной копии, никуда не подключаться
 max messages send 0 "текст" --offline   # отказ: из копии отправить нельзя
-max cache clear               # забыть всё, что этот профиль накопил
-max cache clear --left        # забыть только чаты, из которых вы вышли, с их сообщениями
+max store clear --left        # посмотреть, сколько данных покинутых чатов можно удалить
+max store clear --left --allow-dangerous  # удалить их из общей копии
 ```
 
-Un chat del que sales o te expulsan desaparece de `chats list` y `chats show` en el siguiente acceso. Los mensajes permanecen. `max store clear --left --allow-dangerous` elimina chats abandonados y mensajes; sin `--allow-dangerous`, solo informa de cuánto borraría. `max cache clear --left` hace lo mismo en la antigua copia de `max`. Al volver al chat reaparece en la lista.
+Un chat del que sales o te expulsan desaparece de `chats list` y `chats show` en el siguiente acceso. Sus mensajes permanecen en la copia; `max store clear --left --allow-dangerous` los elimina junto al chat. Sin `--allow-dangerous`, solo informa de cuánto borraría. Si vuelves al chat, reaparece en la lista.
 
 `chats list|show` y `contacts list|show` guardan datos en el almacén compartido con `tg`. Se llena desde la primera ejecución sin `--offline` tras actualizar; la copia anterior de `max` no se migra. `chats show` solo obtiene de MAX los ajustes (`description`, `access`, `settings`), ausentes sin conexión.
 
 Las órdenes normales siguen consultando MAX: el acceso ya devuelve chats y contactos. Responder solo con la copia impediría conocer cambios. Usa `--offline` cuando no tengas red o no quieras conectar.
 
-El acceso incluye la fecha de la conexión anterior, y MAX envía **solo los cambios posteriores**. `max contacts list` responde con la copia actualizada completa, no únicamente con los datos de ese acceso. `max cache clear` borra tanto datos como fecha: conservar la fecha sin datos dejaría sin información de base al siguiente acceso.
+MAX recibe la marca guardada de contactos; el siguiente acceso puede traer solo personas modificadas. `max contacts list` responde desde la copia compartida actualizada durante ese acceso. Para obtener de nuevo toda la lista, ejecuta `max contacts sync`.
+
+La caché antigua del perfil ya no se abre ni se migra al almacén compartido. Si queda un archivo, `max doctor` muestra su ruta. No hay una orden que borre toda la copia compartida; `store clear --left` solo elimina datos de chats abandonados.
 
 ### Descargar el historial
 
@@ -61,13 +63,15 @@ La exportación **no se conecta a nada**; solo incluye datos leídos o descargad
 
 ## Buscar
 
+`max messages search` lee solo el archivo local. Por defecto usa el perfil estricto Lucene: palabras, frases, grupos lógicos, campos, fechas y regex limitadas. La [guía de búsqueda](./search.md) explica la sintaxis y la migración. Para conservar filtros y correcciones anteriores, usa `--language legacy`.
+
 ```sh
-max messages search счёт --context 3                 # по три сообщения вокруг каждого совпадения
-max messages search 'from:@anna after:7d "договор" -черновик'
-max messages search счёт --source all                # во всех аккаунтах общей копии
+max messages search 'invoice kind:private' --json
+max messages search 'invoice date:[2026-01-01 TO 2026-02-01}' --timezone Europe/Madrid --json
+max messages search 'preset:secret kind:saved' --json
 ```
 
-La búsqueda lee únicamente la copia local. Ordena por coincidencia; `--newest` muestra primero lo reciente. Corrige errores tipográficos con aviso en stderr. Consulta la cuenta actual; `in:personal`, `in:bots`, `in:all` o `--source` también incluyen otras cuentas del almacén, incluso `tg`.
+Una respuesta vacía significa «no encontrado en el archivo elegido». JSON informa de su cobertura y completitud; la fecha de actualización por red aún se desconoce. `--source` elige el servicio y las cuentas, `--newest` ordena por fecha y `--context` incluye mensajes cercanos. `--regex` sigue siendo un modo JS independiente.
 
 ## Conversaciones dentro de un grupo
 

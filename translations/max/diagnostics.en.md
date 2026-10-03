@@ -137,3 +137,7 @@ This records every run; `--no-record` disables it for one invocation. The defaul
 
 - [Security](./security.md) — everything stored on disk.
 - [Troubleshooting](./troubleshooting.md) — using diagnostics when something fails.
+
+## Reference for scripts
+
+`max commands --json` lists commands, global options and exit codes without connecting to an account. `cli` is the tool name, `version` is the installed package version and `contract` is the shared JSON contract version (`0`). The contract changes when response fields change incompatibly; a package update alone does not change `contract`. Scripts can read individual fields rather than compare the entire JSON response against a saved string.

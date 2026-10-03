@@ -1,20 +1,19 @@
 /** Adapt released syntax deliberately; source locators retain their original messenger. */
 export function maxSession(session) {
   const result = structuredClone(session)
-  result.hint = result.hint.replaceAll("tg ", "max ").replace("chats moderate", "chats check")
+  result.hint = result.hint.replaceAll("tg ", "max ")
   result.steps = result.steps.flatMap((step) => {
     if (step.ask) step.ask = step.ask.replace("tg cli,", "max cli,")
     if (step.tool && !step.fixedMessenger) {
       step.tool = step.tool.replace(/^tg\b/, "max")
-      if (/^max chats moderate\b/.test(step.tool))
-        step.tool = step.tool.replace("chats moderate", "chats check").replace("--since-time", "--since")
+      // These demonstrations use the forgiving search supported by both reviewed releases.
+      if (/^max messages search\b/.test(step.tool)) step.tool += " --language legacy"
+      if (/^max chats moderate\b/.test(step.tool)) {
+        const output = JSON.parse(step.out)
+        step.out = JSON.stringify({ chatId: "301", rows: output.items }, null, 2)
+      }
       if (/^max messages download\b/.test(step.tool)) step.tool = step.tool.replace("--output-dir", "--output")
       if (/^max \w+ bot messages list\b/.test(step.tool)) step.tool += " --offline"
-      if (session.id === "moderation" && /chats rules show/.test(step.tool)) {
-        const output = JSON.parse(step.out)
-        output.rules["consent.delete"] = "flag"
-        step.out = JSON.stringify(output, null, 2)
-      }
     }
     if (session.id !== "search") {
       if (step.say) step.say = step.say.replaceAll("Telegram", "MAX")

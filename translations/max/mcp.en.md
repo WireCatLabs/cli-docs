@@ -4,13 +4,13 @@ title: "MCP server"
 
 `max mcp` gives an agent access to a profile over [MCP](https://modelcontextprotocol.io), through stdin and stdout without a network listener. It ships with `max`; no separate installation is needed.
 
-**When to use it.** Claude Code, Codex and other agents with a terminal can use `max` directly with [agent instructions](https://github.com/leemour/max-cli/blob/v0.23.0/README.md#для-скриптов-и-агентов). Token use and capabilities are the same. MCP is useful for clients without a terminal, such as Claude Desktop, or chat-based integration in Cursor, and when you want the client to request permission for each send. Browser-based ChatGPT and Claude require [Remote access](./remote.md).
+**When to use it.** Claude Code, Codex and other agents with a terminal can use `max` directly with [agent instructions](https://github.com/leemour/max-cli/blob/v0.24.0/README.md#для-скриптов-и-агентов). Token use and capabilities are the same. MCP is useful for clients without a terminal, such as Claude Desktop, or chat-based integration in Cursor, and when you want the client to request permission for each send. Browser-based ChatGPT and Claude require [Remote access](./remote.md).
 
 ## Connecting
 
 Bots use a separate server, `max <имя> bot mcp` ([Bot MCP](./bot.md#бот-для-агента-mcp)). Its profile settings `readOnly` and `allow` control access. Bot flags `--allow-send`, `--allow-delete` and `--allow-moderate` are accepted with warnings and enable nothing. The `max mcp` flags described below apply to personal accounts and enable their write tools.
 
-Log in through the terminal first (`max session start`); MCP does not handle login.
+First run `max setup --agent none` in a local terminal; MCP cannot log you in. This connects your MAX account; `max mcp setup` below separately connects the MCP client. Your agent can read `max skill show` before login.
 
 **Codex or Claude Code on this computer:**
 
@@ -57,7 +57,7 @@ max work mcp config --allow-send
 
 Paste it into `mcpServers` in your client's configuration. Claude Desktop uses `%APPDATA%\Claude\claude_desktop_config.json` on Windows and `~/Library/Application Support/Claude/claude_desktop_config.json` on macOS; Cursor uses `~/.cursor/mcp.json`. The command writes nothing itself.
 
-Paths are absolute because a client launched outside a terminal does not inherit its `PATH`. On Windows, `max` is a `max.cmd` file, which a client without a shell cannot execute. Flags such as `--allow-send` are included in the entry. `MAX_CONFIG_DIR`, `MAX_STATE_DIR` and `MAX_CACHE_DIR` are included only when set; tokens are never included.
+Paths are absolute because a client launched outside a terminal does not inherit its `PATH`. On Windows, `max` is a `max.cmd` file, which a client without a shell cannot execute. Flags such as `--allow-send` are included in the entry. `MAX_CONFIG_DIR`, `MAX_STATE_DIR` and `MAX_CACHE_DIR` are included only when set; tokens are never included. `MAX_CACHE_DIR` now refers only to the old cache; `MESSAGING_STORE` selects the shared store.
 
 With Node installed through nvm, fnm or Volta, the path points to one Node version. After changing versions, run `max mcp config` again. The command refuses when run through `npx`, because the `npx` cache may be deleted and invalidate the path.
 
@@ -91,7 +91,7 @@ With `--confirm-send`, every action visible to others — sending, editing, forw
 
 `--allow-delete` exposes `max_messages_delete`, deleting up to 10 messages **only for the account owner**, not other participants. Deletion is irreversible, so `--allow-send` does not include it. This tool cannot delete for everyone; use `max messages delete --for-everyone` or rule-based group checks below. Deletion passes send checks, and each message counts toward `sendsPerHour`.
 
-`--allow-moderate` exposes `max_chats_check`, equivalent to `max chats check`: check group rules and perform permitted actions. The flag supplies the consent required by `flag`; with it, messages and members are removed where consent is `flag` or `allow`. For `confirm`, the server first performs nothing and shows one form containing all such actions. After approval it performs exactly those actions. If new actions appear meanwhile, it refuses and the check must be run again. `forbid` actions never run. With `dry_run`, only a plan is displayed. The profile requires `delete` and `groups` permissions.
+`--allow-moderate` exposes `max_chats_check`, equivalent to `max chats moderate`: check group rules and perform permitted actions. The flag supplies the consent required by `flag`; with it, messages and members are removed where consent is `flag` or `allow`. For `confirm`, the server first performs nothing and shows one form containing all such actions. After approval it performs exactly those actions. If new actions appear meanwhile, it refuses and the check must be run again. `forbid` actions never run. With `dry_run`, only a plan is displayed. The profile requires `delete` and `groups` permissions.
 
 Flags enable tools; the profile's `allow` determines which tools the agent can see. **Both are required.** `max mcp --allow-send --allow-delete` with `allow` set to `send` exposes sending, but not editing, forwarding, pinning or deletion. Read tools are always visible.
 
@@ -145,10 +145,10 @@ This prevents an agent from enabling them by adding a startup flag. Every action
 | `max_polls_create` | `max polls create` | Create a poll, only with `--allow-send` |
 | `max_chats_mark_read` | `max chats mark-read` | Mark a chat read, only with `--allow-mark-read` |
 | `max_messages_delete` | `max messages delete` | Delete for the owner, only with `--allow-delete` |
-| `max_chats_check` | `max chats check` | Check group rules and perform permitted actions, only with `--allow-moderate` |
+| `max_chats_check` | `max chats moderate` | Check group rules and perform permitted actions, only with `--allow-moderate` |
 | `max_contacts_*`, `max_polls_close`, `max_chats_join` and others | `max contacts …`, `max polls close`, `max chats …`, `max account update` | Available only for a group enabled in `mcpTools` above |
 
-Responses match command `--json` output: lists use `{ items, page, limit, hasMore }`, IDs are strings. Errors use `{ error: { code, message, … } }` with CLI error codes. Ambiguous chat names return `candidates` without sending anything.
+Lists use `{ items, page, limit, hasMore }`; IDs are strings. MCP and CLI formats can differ: `max_chats_events` keeps `since` (including message IDs) and the `chatId`/`since` fields; `max_chats_members_list` keeps `chatId`/`rolesKnown` and does not accept pagination options. See [groups](./groups.md) for the corresponding CLI commands’ new parameters and formats. Errors use `{ error: { code, message, … } }` with the same codes as the CLI. An ambiguous chat name returns `candidates` and sends nothing.
 
 `at` in `max_messages_send` follows `--at-time`: `2026-09-25T09:00` (local time), or `30m`, `2h`, `1d`, from one minute to one year, rounded down to a minute. It cannot be combined with `silent` or `send_id`. The message counts toward the limit in the hour when it is sent. `--confirm-send` shows the send time. If no response arrives, it is not retried; inspect the queue with `max_messages_scheduled`.
 

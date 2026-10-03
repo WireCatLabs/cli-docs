@@ -11,17 +11,19 @@ Read data is saved locally so you can use it without a network connection:
 ```sh
 max chats list --offline      # только из локальной копии, никуда не подключаться
 max messages send 0 "текст" --offline   # отказ: из копии отправить нельзя
-max cache clear               # забыть всё, что этот профиль накопил
-max cache clear --left        # забыть только чаты, из которых вы вышли, с их сообщениями
+max store clear --left        # посмотреть, сколько данных покинутых чатов можно удалить
+max store clear --left --allow-dangerous  # удалить их из общей копии
 ```
 
-A chat you left or were removed from disappears from `chats list` and `chats show` on the next login. Its messages remain in local storage. `max store clear --left --allow-dangerous` deletes both the chat and its messages; without `--allow-dangerous`, the command only reports how much it would delete. `max cache clear --left` does the same in the older `max` cache. If you rejoin, the chat reappears in the list.
+A chat you left or were removed from disappears from `chats list` and `chats show` on the next login. Its messages remain in local storage. `max store clear --left --allow-dangerous` deletes both the chat and its messages; without `--allow-dangerous`, the command only reports how much it would delete. If you rejoin, the chat reappears in the list.
 
 `chats list|show` and `contacts list|show` save data in the shared store used by `tg`. It starts filling on your first run without `--offline` after upgrading; the old `max` cache is not migrated. `chats show` gets group settings (`description`, `access`, `settings`) only from MAX, so these fields are absent with `--offline`.
 
 Normal commands still query MAX: login already returns chats and contacts, so answering only from storage would deliberately miss changes. Use `--offline` when there is no network or when you do not want to connect.
 
-These requests are small: login includes the previous login time, and MAX sends **only changes since then**. `max contacts list` therefore answers from the updated local copy, not just the data received during this particular login. `max cache clear` clears both records and the timestamp. Keeping the timestamp without the records would make the next login request changes from a point for which no baseline data exists.
+MAX receives the saved contact marker, so the next login may return only changed contacts. `max contacts list` reads the shared store updated by that login. Run `max contacts sync` to retrieve the full contact list again.
+
+The old profile cache is no longer opened or migrated into the shared store. `max doctor` shows its path if the file remains. There is no command to erase the entire shared store; `store clear --left` removes only data for departed chats.
 
 ### Downloading history
 
@@ -61,13 +63,15 @@ Export **never connects to the network** and includes only downloaded or previou
 
 ## Search
 
+`max messages search` reads only the local archive. Its default is a strict Lucene profile: words, phrases, Boolean groups, fields, dates and limited regex. The full [search reference](./search.md) explains syntax and migration. Use `--language legacy` for the previous filters and typo correction.
+
 ```sh
-max messages search счёт --context 3                 # по три сообщения вокруг каждого совпадения
-max messages search 'from:@anna after:7d "договор" -черновик'
-max messages search счёт --source all                # во всех аккаунтах общей копии
+max messages search 'invoice kind:private' --json
+max messages search 'invoice date:[2026-01-01 TO 2026-02-01}' --timezone Europe/Madrid --json
+max messages search 'preset:secret kind:saved' --json
 ```
 
-Search reads only local storage and never queries MAX. Best matches come first; use `--newest` for newest first. Typos are corrected, with a notice on stderr. By default, search reads the account running the command. `in:personal`, `in:bots`, `in:all` in the query, or `--source`, also search other accounts in the shared store, including `tg` accounts.
+An empty result means “not found in the selected archive”. JSON reports completeness and coverage; the last network update time is currently unknown. `--source` selects providers and accounts, `--newest` sorts by time and `--context` includes neighboring messages. `--regex` remains a separate JavaScript mode.
 
 ## Conversations within a group
 

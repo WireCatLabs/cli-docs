@@ -21,7 +21,7 @@ MAX_PROFILE=personal max chats list   # переменная выбирает п
 Dos excepciones explícitas:
 
 - **`MAX_TOKEN` prevalece sobre el llavero**, para CI.
-- **`MAX_CONFIG_DIR`, `MAX_STATE_DIR`, `MAX_CACHE_DIR` cambian configuración, acceso y caché de `max`**, incluida la entrada del llavero correspondiente al perfil.
+- **`MAX_CONFIG_DIR` y `MAX_STATE_DIR` cambian configuración y acceso de `max`**, incluida la entrada del llavero correspondiente al perfil.
 
 ## Ajustes efectivos
 
@@ -148,8 +148,8 @@ Muestra perfil **y origen**, ruta y existencia del archivo, perfiles disponibles
 | `MAX_TOKEN` | Token directo, sin llavero, para CI y usos puntuales |
 | `MAX_BOT_TOKEN` | Token directo de `max bot` |
 | `MAX_CONFIG_DIR` | Directorio de `config.json` y token si no hay llavero |
+| `MESSAGING_STORE` | Archivo compartido de chats, mensajes y transcripciones |
 | `MAX_STATE_DIR` | Estado de perfiles y `runs/` |
-| `MAX_CACHE_DIR` | Copia local de chats y mensajes |
 | `NO_COLOR` | Desactivar color, según la convención habitual |
 | `MAX_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER` | No consultar versiones npm; `CI` hace lo mismo |
 
@@ -159,15 +159,14 @@ Una cadena vacía equivale a no definida: `MAX_PROFILE=` es como no establecer `
 
 ## Configuración temporal separada
 
-Las tres variables de directorios separan configuración, acceso y caché, útiles para pruebas u otra cuenta. No afectan al almacén compartido con `tg`: su archivo se elige mediante `MESSAGING_STORE`. Los modelos de voz siguen compartidos.
+Las variables de directorios separan configuración y estado de acceso para pruebas u otra cuenta. No afectan al almacén compartido con `tg`: su archivo se elige mediante `MESSAGING_STORE`. Los modelos de voz siguen compartidos.
 
 ```sh
 export MAX_CONFIG_DIR=/tmp/max-try/config
 export MAX_STATE_DIR=/tmp/max-try/state
-export MAX_CACHE_DIR=/tmp/max-try/cache
 export MESSAGING_STORE=/tmp/max-try/messages.db
 
-max session start     # этот токен не виден обычной установке
+max setup            # этот токен не виден обычной установке
 max chats list
 ```
 
@@ -178,3 +177,5 @@ max chats list
 - [Referencia](./commands.md): comandos, opciones y códigos.
 - [Sesiones y perfiles](./sessions.md): acceso y llavero.
 - [Solución de problemas](./troubleshooting.md): qué hacer ante errores.
+
+`MAX_CACHE_DIR` solo corresponde a la caché antigua: `max doctor` busca allí el archivo restante. Por compatibilidad, todavía cambia la entrada del llavero; para la copia compartida nueva, usa `MESSAGING_STORE`.

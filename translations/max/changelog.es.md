@@ -4,6 +4,50 @@ title: "Historial de cambios"
 
 Cambios destacados de `@leemour/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.24.0 — 03.10.2026
+
+### Novedades
+
+- **`max setup` guía el primer inicio de una cuenta personal:** comprueba directorios, ofrece acceso por QR, comprueba la cuenta y hasta cinco chats e instala el skill del agente elegido. Reutiliza la sesión existente al repetirse. El historial se descarga aparte; setup no inicia el servicio en segundo plano. La ayuda, instalación e instrucciones del agente explican los siguientes pasos y cómo ejecutar en Windows sin PATH. `max skill show` funciona antes de iniciar sesión.
+
+### Cambios que pueden afectar a scripts
+
+- **`max chats check` pasa a ser `max chats moderate`:** reglas y moderación compartidas con Telegram. `--since-time` acepta fecha o `30m`/`2h`/`1d`, en lugar de `--since` con un ID de mensaje; JSON devuelve `{ chatId, rows }`. Lee hasta 1000 mensajes por ejecución. Los niveles son `deny|readonly|ask|allow`; los antiguos `forbid` y `flag|confirm` se interpretan como `deny` y `ask`. El punto guardado se migra de la sesión al archivo de reglas, por lo que la primera ejecución continúa desde él. CLI y MCP personal comparten ese punto; nombres y opciones MCP se conservan. La incorporación por enlace en `chats events` se llama `join`.
+
+- **`max upgrade --json` siempre incluye `restarted`.** En MAX es un array vacío: la política de inicio de servidores no cambia. Comprobar versiones y no encontrar actualizaciones devuelve el mismo formato que instalar, conservando los campos anteriores. Los scripts que comprueban las claves exactas deben admitir este campo.
+
+- **La búsqueda local usa un perfil Lucene estricto:** paréntesis, campos, rangos de fechas, `--timezone`, patrones y regex limitados. Los prefijos deben indicarse como `слово*`; la búsqueda anterior con correcciones está en `--language legacy`. JSON informa de la cobertura incluso sin resultados. La guía y el skill explican la migración; JS `--regex` se ejecuta en un worker separado con límites de tamaño y tiempo.
+
+- **`max commands --json` incluye la versión del contrato JSON en `contract`.** El valor `0` coincide con Telegram CLI; conserva los campos anteriores. Los scripts que comparan todo el JSON con una cadena guardada deben admitirlo; leer campos concretos no necesita cambios.
+
+- **Las lecturas de grupos comparten opciones y formatos.** `chats events` usa `--since-time` en lugar de `--since` y `--type` en lugar de `--event`; el límite es temporal, no un ID. La creación se llama `create`, antes `new`. `chats members list` muestra páginas con `--limit`, `--page` y `--all`; añade `--all` para obtener la cantidad anterior. JSON ya no incluye `chatId` ni `rolesKnown`; roles, creación y última conexión permanecen en las filas. `chats inspect` devuelve `id`, `kind`, `title`, `username`, `participantsCount`, `description` y `member`, en lugar de acceso, enlace y ajustes. `member` y `username` son `null` si MAX no los informa. Actualiza scripts y filtros. Se conservan los avisos sobre listas incompletas y roles desconocidos; leer no marca mensajes como leídos. Consulta [grupos](./usage.md#группы-и-каналы).
+
+- **La gestión de grupos devuelve JSON común con `operationId`.** `chats create`, `join`, `update` y `link reset` guardan la ficha en `chat`; `leave` devuelve `chatId`. `members add` incluye `added` y `notAdded`; `members remove`, `removed`; `admins`, `personId` y, al añadir, `rights`. Es el formato compartido con Telegram; actualiza el análisis de resultados. `link show` no cambia. Título y ajustes siguen usando dos solicitudes: si cambia título o descripción pero falla la segunda solicitud, informa de `outcome_unknown` y registra el resultado parcial. Consulta `chats show` antes de repetir. Más en [gestión de grupos](./usage.md#группы-и-каналы).
+
+- **`max account update` y `max account sessions end` devuelven el formato común con `operationId`.** Cambiar perfil devuelve `{operationId, account}` con `id`, `name`, `username`, `phone`; cerrar sesiones, `{operationId, sessions}` en lugar de un array. Lee los datos desde `account` o `sessions`. Tras cambiar el perfil, consulta su descripción con `account show`. El teléfono sigue oculto parcialmente; `sessions end` aún requiere `--others --yes`. La foto admite JPG, JPEG, PNG y WebP; convierte los GIF a uno de esos formatos. Consulta [perfil y sesiones](./usage.md#контакты-профиль-папки).
+
+- **`max chats folders create|update|delete` incluye `operationId`.** Crear o modificar devuelve `{operationId, folder}`; eliminar, `{operationId, folderId}`, en lugar de la ficha directamente. Los scripts deben leer desde `folder` y usar `folderId` al eliminar. `update` sin `--title`, `--add` ni `--remove` ahora rechaza la operación en lugar de reescribir lo mismo. Listar no cambia. Consulta [carpetas](./usage.md#контакты-профиль-папки).
+
+- **`max contacts add|remove|block|unblock|rename|import` devuelve el formato común con `operationId`.** Añadir y renombrar devuelve `{operationId, person}`; eliminar y bloquear, `{operationId, personId}`; importar, `{operationId, sent, recognised}`. `recognised` contiene fichas (`id`, `name`, `username`) devueltas por MAX en lugar de teléfonos; sin fichas queda vacío. `sent` cuenta filas del archivo, incluidos números repetidos. Actualiza el análisis de respuestas. Un teléfono rechazado por MAX ya no indica la fila; los errores de estructura todavía la indican. Consulta [contactos](./usage.md#контакты-профиль-папки).
+
+- **Se elimina `max cache clear`.** Lecturas y nombres usan la copia compartida; `max store clear --left --allow-dangerous` elimina datos de chats abandonados. No ofrece borrar toda la copia. El archivo antiguo no se migra ni se abre; `max doctor` muestra su ruta y puedes descargar otra vez el historial con `max store fetch`.
+
+### Correcciones
+
+- **`max conversations embed status` calcula mejor el tiempo para e5-small.** Usa una medición de 31 fragmentos/s, antes 15; en el portátil medido, la estimación anterior era el doble. El tiempo real depende del ordenador y la longitud del texto. Tres workers dieron 1,04–1,1× con más uso de memoria; la distribución de workers no cambió.
+
+- **`max_messages_search` por MCP conserva la cobertura del archivo y usa los parámetros de CLI.** Admite `language`, `timezone`, `ast` versionado, nombre de chat y filtros `source`, `newest`, `context`. El perfil estándar admite consultas de un carácter. Antes faltaban parámetros y se perdían `query`, `coverage` y `completeness`; una respuesta vacía no explicaba el alcance de la copia. Los campos anteriores y el nombre de herramienta se conservan.
+
+- **`max runs list --limit` sugiere ampliar el límite si faltan registros.** Ya no sugiere la opción inexistente `--page`. Leer la lista o un registro no crea otra ejecución; JSON conserva `hasMore`.
+
+- **`chats show` muestra un grupo guardado aunque no llegue en la última actualización de acceso.** Antes podía fallar con «sin chat». Los ajustes y enlaces desconocidos quedan vacíos; leer no modifica el grupo.
+
+- **`max messages transcribe` encuentra una transcripción guardada por nombre de chat, aunque no esté descargado el modelo.** Antes buscaba por nombre en lugar de ID y proponía descargar otra vez el modelo. Un nombre completo o fragmento único devuelve ahora el texto guardado sin descargar el audio ni reconocerlo de nuevo. Consulta [mensajes de voz](./usage.md).
+
+- En Windows, el generador usa Node en lugar de ejecutar `.cmd` directamente; las comprobaciones de documentación reconocen rutas Windows. Los tests de permisos Unix no los exigen en Windows, donde se usa ACL.
+
+- **Los errores de `max bot` antes de iniciar una acción respetan los ajustes de registro del perfil bot, incluso con `--timeout` delante.** Antes, una opción global anterior a `bot` podía aplicar ajustes de la cuenta personal. Si el bot tiene desactivado el registro, un error al interpretar la orden ya no crea un registro contra esa preferencia.
+
 ## 0.23.0 — 03.10.2026
 
 ### Novedades
@@ -277,7 +321,7 @@ Los comandos siguen sustantivo y acción. Los nombres anteriores devuelven «unk
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/leemour/max-cli/blob/v0.23.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/leemour/max-cli/blob/v0.24.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos cómodos.** `max <имя> bot messages send <чат> <текст>` escribe a ID, `user:<номер>` o nombre visto. También `edit`, `delete`, `list`, `get`. `max <имя> bot chats list`, `chats get|pin|unpin|leave|action`, `max bot list`. MAX no lista chats del bot: el CLI recuerda los vistos.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).
 - **Actividad de grupos.** `max review --unanswered [часы]` encuentra preguntas sin respuesta tuya ni de administradores; `max review --chat <чат>` revisa un chat. `max chats events <чат>` muestra ingresos, salidas, altas y expulsiones. `max chats members list

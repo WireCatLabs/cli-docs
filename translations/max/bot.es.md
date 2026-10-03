@@ -141,7 +141,7 @@ max sales bot messages show "Команда продаж" mid.0000019a7f3c21de -
 max sales bot messages search "итоги недели"
 ```
 
-La búsqueda usa palabras, mejores coincidencias primero; `--newest` prioriza recientes. Exige todas las palabras y admite `"фраза"`, `-слово`, `а OR б`, `from:`, `chat:`, `after:`, `before:`, `has:`, igual que `max messages search`, corrigiendo erratas.
+La búsqueda usa palabras, mejores coincidencias primero; `--newest` prioriza recientes. Exige todas las palabras y admite `"фраза"`, `-слово`, `а OR б`, `from:`, `chat:`, `after:`, `before:`, `has:`, igual que `max messages search --language legacy`, corrigiendo erratas. Para una búsqueda estricta en el archivo compartido, usa la [búsqueda normal](./search.md) con `in:bots`.
 
 Descarga historial anterior:
 
@@ -192,7 +192,7 @@ Los eventos consumidos no se entregan a otro lector mediante `get-updates`.
 
 ## Comprobar las reglas del chat
 
-Un bot administrador puede aplicar las reglas de `max chats check` personal ([Grupos](./groups.md)), con reglas propias:
+Un bot administrador puede aplicar las reglas de `max chats moderate` personal ([Grupos](./groups.md)), con reglas propias:
 
 ```sh
 max sales bot chats rules set -72894839451 invites remove        # приглашения в чужие чаты — удалять автора
@@ -297,7 +297,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Ruta y consulta se pasan como opciones, cuerpo JSON en `--body`, `--body -` o `--body-file`. Se valida antes de enviar; errores indican campo y tipo esperado sin exponer valor. Consulta [Cobertura API](https://github.com/leemour/max-cli/blob/v0.23.0/docs/dev/bot-api-coverage.md).
+Ruta y consulta se pasan como opciones, cuerpo JSON en `--body`, `--body -` o `--body-file`. Se valida antes de enviar; errores indican campo y tipo esperado sin exponer valor. Consulta [Cobertura API](https://github.com/leemour/max-cli/blob/v0.24.0/docs/dev/bot-api-coverage.md).
 
 ## Scripts y agentes
 
