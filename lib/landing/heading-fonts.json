@@ -1,0 +1,68 @@
+[
+  {
+    "id": "robotocondensed",
+    "family": "Roboto Condensed",
+    "weight": 800,
+    "stretch": "100%",
+    "style": "Condensed sans",
+    "cyrillic": true
+  },
+  {
+    "id": "oswald",
+    "family": "Oswald",
+    "weight": 700,
+    "stretch": "100%",
+    "style": "Tall condensed",
+    "cyrillic": true,
+    "existing": true
+  },
+  {
+    "id": "firasansextracondensed",
+    "family": "Fira Sans Extra Condensed",
+    "weight": 900,
+    "stretch": "100%",
+    "style": "Extra condensed",
+    "cyrillic": true,
+    "existing": true
+  },
+  {
+    "id": "sofiasanscondensed",
+    "family": "Sofia Sans Condensed",
+    "weight": 900,
+    "stretch": "100%",
+    "style": "Compact humanist",
+    "cyrillic": true
+  },
+  {
+    "id": "manrope",
+    "family": "Manrope",
+    "weight": 800,
+    "stretch": "100%",
+    "style": "Geometric grotesk",
+    "cyrillic": true
+  },
+  {
+    "id": "geist",
+    "family": "Geist",
+    "weight": 800,
+    "stretch": "100%",
+    "style": "Sharp grotesk",
+    "cyrillic": true
+  },
+  {
+    "id": "golostext",
+    "family": "Golos Text",
+    "weight": 900,
+    "stretch": "100%",
+    "style": "Strong neutral sans",
+    "cyrillic": true
+  },
+  {
+    "id": "unbounded",
+    "family": "Unbounded",
+    "weight": 800,
+    "stretch": "100%",
+    "style": "Wide display",
+    "cyrillic": true
+  }
+]

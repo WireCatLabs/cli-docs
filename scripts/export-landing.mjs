@@ -129,7 +129,7 @@ for (const lang of ["en", "ru", "es"]) {
   // Preserve the font selected in the reviewed prototype, including Russian data-ff="3".
   const fonts = runInNewContext(`(${script.match(/const fonts = (\[[\s\S]*?\n {2}\])\n/)[1]})`)
   const font = fonts[Number(source.match(/data-ff="(\d+)"/)?.[1] ?? 0)]
-  localeTypography += `\nhtml[lang="${lang}"] .wirecat-landing :is(h1,h2.big,.hour h3,.time,.lane h3,.tool-name,.spec dt) { font-family: ${font.stack}; font-stretch: ${font.stretch}; font-weight: ${font.weight}; }\n`
+  localeTypography += `\nhtml[lang="${lang}"] .wirecat-landing { --heading-family: ${font.stack}; --heading-stretch: ${font.stretch}; --heading-weight: ${font.weight}; }\n`
 
   // Evaluate only the constant sample data from our own design source, at export time.
   const renderSessions = (messenger) =>
@@ -281,7 +281,7 @@ for (const lang of ["en", "ru", "es"]) {
   const reset =
     ".wirecat-landing { min-height: 100vh; overflow-wrap: anywhere; }\n.wirecat-landing :where(h1,h2,h3,h4,p,ul,ol,dl,pre) { margin: revert; padding: revert; font-size: revert; font-weight: revert; }\n.wirecat-landing :where(ul,ol) { list-style: revert; }\n.wirecat-landing :where(svg) { display: inline; vertical-align: middle; }\n"
   const typography =
-    '\n.wirecat-landing :is(h1,h2.big,.hour h3,.time,.lane h3,.tool-name,.spec dt) { font-family: "Anybody", "Oswald", "Onest", sans-serif; font-stretch: 62%; font-weight: 900; }\n'
+    '\n.wirecat-landing :is(h1,h2.big,.hour h3,.time,.lane h3,.tool-name,.spec dt) { font-family: var(--heading-family, "Anybody"); font-stretch: var(--heading-stretch, 62%); font-weight: var(--heading-weight, 900); }\n'
   const patternScript = script.slice(script.indexOf("const shapes ="), script.indexOf("let wall ="))
   const background = {}
   runInNewContext(`${patternScript}\nscatter(["plane", "sleeping"])`, {

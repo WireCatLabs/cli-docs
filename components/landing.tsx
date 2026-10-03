@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { FontSwitcher } from "@/components/landing/font-switcher"
 import { SearchPlayground } from "@/components/search-playground/search-playground"
 import { TimeSavings } from "@/components/time-savings"
 import { useThemeToggle } from "@/components/use-theme-toggle"
@@ -262,6 +263,7 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
   const [after, afterSearch] = (tail ?? "").split("<div data-search-playground></div>")
   return (
     <div ref={rootRef} className="landing-content">
+      <FontSwitcher lang={lang} />
       {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Reviewed local exported HTML only. */}
       <div dangerouslySetInnerHTML={{ __html: before }} />
       {tail !== undefined && <TimeSavings lang={lang} />}

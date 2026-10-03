@@ -1,0 +1,338 @@
+{
+  "provider": "Google Fonts",
+  "retrieved": "2026-10-03",
+  "fonts": [
+    {
+      "id": "anybody",
+      "family": "Anybody",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/anybody/METADATA.pb",
+      "license": "anybody-OFL.txt",
+      "weight": 900,
+      "files": []
+    },
+    {
+      "id": "archivo",
+      "family": "Archivo",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/archivo/METADATA.pb",
+      "license": "archivo-OFL.txt",
+      "weight": 900,
+      "files": [
+        {
+          "name": "archivo-latin.woff2",
+          "url": "https://fonts.gstatic.com/s/archivo/v25/k3k6o8UDI-1M0wlSV9XAw6lQkqWY8Q82sJaRE-NWIDdgffTTnTRZ9xdp.woff2",
+          "sha256": "e915040a27c5310623be7ae57b6e4c508e8800206dcc37abe99984510e74a66d",
+          "bytes": 13548
+        }
+      ],
+      "cssSource": "https://fonts.googleapis.com/css2?family=Archivo:wght@900&display=swap"
+    },
+    {
+      "id": "barlowcondensed",
+      "family": "Barlow Condensed",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/barlowcondensed/METADATA.pb",
+      "license": "barlowcondensed-OFL.txt",
+      "weight": 800,
+      "files": [
+        {
+          "name": "barlowcondensed-latin.woff2",
+          "url": "https://fonts.gstatic.com/s/barlowcondensed/v13/HTxwL3I-JCGChYJ8VI-L6OO_au7B47b1z3bWuQ.woff2",
+          "sha256": "2515494e8cc2ca07c86ea78766cfa104b796aa6ed5d66821c01d51dbb0b52bce",
+          "bytes": 22464
+        }
+      ],
+      "cssSource": "https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@800&display=swap"
+    },
+    {
+      "id": "barlowsemicondensed",
+      "family": "Barlow Semi Condensed",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/barlowsemicondensed/METADATA.pb",
+      "license": "barlowsemicondensed-OFL.txt",
+      "weight": 800,
+      "files": [
+        {
+          "name": "barlowsemicondensed-latin.woff2",
+          "url": "https://fonts.gstatic.com/s/barlowsemicondensed/v16/wlpigxjLBV1hqnzfr-F8sEYMB0Yybp0mudRf36y_B2sl.woff2",
+          "sha256": "a4f4f353506e6c61f9070de26d34a872ab32aeb1b9b318303732c22941755666",
+          "bytes": 23192
+        }
+      ],
+      "cssSource": "https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@800&display=swap"
+    },
+    {
+      "id": "robotocondensed",
+      "family": "Roboto Condensed",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/robotocondensed/METADATA.pb",
+      "license": "robotocondensed-OFL.txt",
+      "weight": 800,
+      "files": [
+        {
+          "name": "robotocondensed-cyrillic.woff2",
+          "url": "https://fonts.gstatic.com/s/robotocondensed/v31/ieVo2ZhZI2eCN5jzbjEETS9weq8-_d6T_POl0fRJeyUypcBK5XxxKA.woff2",
+          "sha256": "bea164290de73972ee92ea1d14bb0196d7e27a8d7c88318509b27edbb654c4c7",
+          "bytes": 12172
+        },
+        {
+          "name": "robotocondensed-latin.woff2",
+          "url": "https://fonts.gstatic.com/s/robotocondensed/v31/ieVo2ZhZI2eCN5jzbjEETS9weq8-_d6T_POl0fRJeyUypcBO5Xw.woff2",
+          "sha256": "82e7ca54449f9a9f4ee9f17a84d52f1517ef7fe2292b93c75e444757695b782d",
+          "bytes": 21172
+        }
+      ],
+      "cssSource": "https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@800&display=swap"
+    },
+    {
+      "id": "oswald",
+      "family": "Oswald",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/oswald/METADATA.pb",
+      "license": "oswald-OFL.txt",
+      "weight": 700,
+      "files": []
+    },
+    {
+      "id": "firasansextracondensed",
+      "family": "Fira Sans Extra Condensed",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/firasansextracondensed/METADATA.pb",
+      "license": "firasansextracondensed-OFL.txt",
+      "weight": 900,
+      "files": []
+    },
+    {
+      "id": "sofiasanscondensed",
+      "family": "Sofia Sans Condensed",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/sofiasanscondensed/METADATA.pb",
+      "license": "sofiasanscondensed-OFL.txt",
+      "weight": 900,
+      "files": [
+        {
+          "name": "sofiasanscondensed-cyrillic.woff2",
+          "url": "https://fonts.gstatic.com/s/sofiasanscondensed/v6/r05xGKVS5aVKd567NYXawnFKJaTtoAuLnK0EjiAN5s9CZwUqLuaclM4P7Oc.woff2",
+          "sha256": "8d31bc1ea6f98261d0fc6b1e7d91b4e7fa9b96bf614f2d68484ea8cd51946c9f",
+          "bytes": 9936
+        },
+        {
+          "name": "sofiasanscondensed-latin.woff2",
+          "url": "https://fonts.gstatic.com/s/sofiasanscondensed/v6/r05xGKVS5aVKd567NYXawnFKJaTtoAuLnK0EjiAN5s9CZwUqLuackM4P.woff2",
+          "sha256": "d93b5de4f0bffe970644cc3663548ed3b04232a926821674863d1f71f958d73d",
+          "bytes": 16024
+        }
+      ],
+      "cssSource": "https://fonts.googleapis.com/css2?family=Sofia+Sans+Condensed:wght@900&display=swap"
+    },
+    {
+      "id": "ibmplexsanscondensed",
+      "family": "IBM Plex Sans Condensed",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/ibmplexsanscondensed/METADATA.pb",
+      "license": "ibmplexsanscondensed-OFL.txt",
+      "weight": 700,
+      "files": [
+        {
+          "name": "ibmplexsanscondensed-latin.woff2",
+          "url": "https://fonts.gstatic.com/s/ibmplexsanscondensed/v15/Gg8gN4UfRSqiPg7Jn2ZI12V4DCEwkj1E4LVeHY4S7bvspYY.woff2",
+          "sha256": "4768878c107d92c528a65bba206a87cdcf2c694514e75907fb91772cf8a388a5",
+          "bytes": 19352
+        }
+      ],
+      "cssSource": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@700&display=swap"
+    },
+    {
+      "id": "spacegrotesk",
+      "family": "Space Grotesk",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/spacegrotesk/METADATA.pb",
+      "license": "spacegrotesk-OFL.txt",
+      "weight": 700,
+      "files": [
+        {
+          "name": "spacegrotesk-latin.woff2",
+          "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVnskPMA.woff2",
+          "sha256": "35f8aec56cfd5cbfdb03cc68733a54a0b05bb3617ffcd5fd332badc0b045ca55",
+          "bytes": 12840
+        }
+      ],
+      "cssSource": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap"
+    },
+    {
+      "id": "sora",
+      "family": "Sora",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/sora/METADATA.pb",
+      "license": "sora-OFL.txt",
+      "weight": 800,
+      "files": [
+        {
+          "name": "sora-latin.woff2",
+          "url": "https://fonts.gstatic.com/s/sora/v17/xMQOuFFYT72X5wkB_18qmnndmSfSmU-NKQI.woff2",
+          "sha256": "b3058cd014993defb5c446d9ccdeba7f994c4b7f0ff2b50b2b213944af0f176e",
+          "bytes": 14864
+        }
+      ],
+      "cssSource": "https://fonts.googleapis.com/css2?family=Sora:wght@800&display=swap"
+    },
+    {
+      "id": "manrope",
+      "family": "Manrope",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/manrope/METADATA.pb",
+      "license": "manrope-OFL.txt",
+      "weight": 800,
+      "files": [
+        {
+          "name": "manrope-cyrillic.woff2",
+          "url": "https://fonts.gstatic.com/s/manrope/v20/xn7_YHE41ni1AdIRqAuZuw1Bx9mbZk59E9_G-bnBeA.woff2",
+          "sha256": "e76a69e66b624abdb84cdda1e96b04417afbfb1f3cb684488a867b29bcb3870c",
+          "bytes": 7588
+        },
+        {
+          "name": "manrope-latin.woff2",
+          "url": "https://fonts.gstatic.com/s/manrope/v20/xn7_YHE41ni1AdIRqAuZuw1Bx9mbZk59E9_C-bk.woff2",
+          "sha256": "74c161dbcbce7c3590803cc72dc1f63313c360e13367aba5075a7b7b3818ea49",
+          "bytes": 13648
+        }
+      ],
+      "cssSource": "https://fonts.googleapis.com/css2?family=Manrope:wght@800&display=swap"
+    },
+    {
+      "id": "plusjakartasans",
+      "family": "Plus Jakarta Sans",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/plusjakartasans/METADATA.pb",
+      "license": "plusjakartasans-OFL.txt",
+      "weight": 800,
+      "files": [
+        {
+          "name": "plusjakartasans-latin.woff2",
+          "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIbaomQNQcsA88c7O9yZ4KMCoOg4IA6-91aHEjcWuA_KUn9TR_V.woff2",
+          "sha256": "5f301a8ef9c266c8b596e6793d3cc826daeff9849c5af035f5386439137955ad",
+          "bytes": 11896
+        }
+      ],
+      "cssSource": "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800&display=swap"
+    },
+    {
+      "id": "outfit",
+      "family": "Outfit",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/outfit/METADATA.pb",
+      "license": "outfit-OFL.txt",
+      "weight": 800,
+      "files": [
+        {
+          "name": "outfit-latin.woff2",
+          "url": "https://fonts.gstatic.com/s/outfit/v15/QGYyz_MVcBeNP4NjuGObqx1XmO1I4bCyO4a0Ew.woff2",
+          "sha256": "eabf8cb2c01d0345e2eb19a49d04e8f8d0d520b74959b173d5ea6c2dcb95e4cd",
+          "bytes": 14048
+        }
+      ],
+      "cssSource": "https://fonts.googleapis.com/css2?family=Outfit:wght@800&display=swap"
+    },
+    {
+      "id": "geist",
+      "family": "Geist",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/geist/METADATA.pb",
+      "license": "geist-OFL.txt",
+      "weight": 800,
+      "files": [
+        {
+          "name": "geist-cyrillic.woff2",
+          "url": "https://fonts.gstatic.com/s/geist/v5/gyBhhwUxId8gMGYQMKR3pzfaWI_RHOQInpna-1Q.woff2",
+          "sha256": "77f10e39c4a7fc12cbf11a5b98befcef8c144979af9c061b5314ea724ad823f6",
+          "bytes": 6420
+        },
+        {
+          "name": "geist-latin.woff2",
+          "url": "https://fonts.gstatic.com/s/geist/v5/gyBhhwUxId8gMGYQMKR3pzfaWI_RHOQImpna.woff2",
+          "sha256": "4def20882cb74bf7e9cf2994058ed8d1236f6a53045cda277472bbc553714995",
+          "bytes": 13396
+        }
+      ],
+      "cssSource": "https://fonts.googleapis.com/css2?family=Geist:wght@800&display=swap"
+    },
+    {
+      "id": "bricolagegrotesque",
+      "family": "Bricolage Grotesque",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/bricolagegrotesque/METADATA.pb",
+      "license": "bricolagegrotesque-OFL.txt",
+      "weight": 800,
+      "files": [
+        {
+          "name": "bricolagegrotesque-latin.woff2",
+          "url": "https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvZvl-Molsg.woff2",
+          "sha256": "3e1b5f0a56ee995b7c1445bc54e6ec98c5dffb585ef5c4baf86731cf68e27c61",
+          "bytes": 21844
+        }
+      ],
+      "cssSource": "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&display=swap"
+    },
+    {
+      "id": "chivo",
+      "family": "Chivo",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/chivo/METADATA.pb",
+      "license": "chivo-OFL.txt",
+      "weight": 900,
+      "files": [
+        {
+          "name": "chivo-latin.woff2",
+          "url": "https://fonts.gstatic.com/s/chivo/v21/va9b4kzIxd1KFppkaRKvDRPJVDf_FRjekGrT.woff2",
+          "sha256": "d648bc146847c08e581cc50372dfdd3c47918ce19570b7ae08f8db0230274ba5",
+          "bytes": 13972
+        }
+      ],
+      "cssSource": "https://fonts.googleapis.com/css2?family=Chivo:wght@900&display=swap"
+    },
+    {
+      "id": "urbanist",
+      "family": "Urbanist",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/urbanist/METADATA.pb",
+      "license": "urbanist-OFL.txt",
+      "weight": 900,
+      "files": [
+        {
+          "name": "urbanist-latin.woff2",
+          "url": "https://fonts.gstatic.com/s/urbanist/v18/L0xjDF02iFML4hGCyOCpRdycFsGxSrqDYhkvEZmq.woff2",
+          "sha256": "f84b45b9ce8627a580387a0e886c93afe7306f1c66acac3fd6ef099daf9c4032",
+          "bytes": 11484
+        }
+      ],
+      "cssSource": "https://fonts.googleapis.com/css2?family=Urbanist:wght@900&display=swap"
+    },
+    {
+      "id": "golostext",
+      "family": "Golos Text",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/golostext/METADATA.pb",
+      "license": "golostext-OFL.txt",
+      "weight": 900,
+      "files": [
+        {
+          "name": "golostext-cyrillic.woff2",
+          "url": "https://fonts.gstatic.com/s/golostext/v7/q5uXsoe9Lv5t7Meb31EcOR9UdVTNs822plX4Qj5fGL4DXQ.woff2",
+          "sha256": "93826b7123936704ccc5e2474edcb4c0cded1db090bebf79db32f4bd29e49f6d",
+          "bytes": 7080
+        },
+        {
+          "name": "golostext-latin.woff2",
+          "url": "https://fonts.gstatic.com/s/golostext/v7/q5uXsoe9Lv5t7Meb31EcOR9UdVTNs822plX4Qj5bGL4.woff2",
+          "sha256": "71caea9ed4c5065461fe8f9f0410ea1850fec28e89cbf707863caf6ea8f02a0b",
+          "bytes": 12140
+        }
+      ],
+      "cssSource": "https://fonts.googleapis.com/css2?family=Golos+Text:wght@900&display=swap"
+    },
+    {
+      "id": "unbounded",
+      "family": "Unbounded",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/unbounded/METADATA.pb",
+      "license": "unbounded-OFL.txt",
+      "weight": 800,
+      "files": [
+        {
+          "name": "unbounded-cyrillic.woff2",
+          "url": "https://fonts.gstatic.com/s/unbounded/v12/Yq6F-LOTXCb04q32xlpat-6uR42XTqtG65j2447Ngc6L.woff2",
+          "sha256": "a535053f07dcb5d168ecea735d37ff7e49e8bbc0666cb62763dc58f5df12ff47",
+          "bytes": 13156
+        },
+        {
+          "name": "unbounded-latin.woff2",
+          "url": "https://fonts.gstatic.com/s/unbounded/v12/Yq6F-LOTXCb04q32xlpat-6uR42XTqtG65j244rNgQ.woff2",
+          "sha256": "fe6d4ea7ed9647abf1e100a703786338d7898d56d0bedcdfdbc325e8fb02c834",
+          "bytes": 21828
+        }
+      ],
+      "cssSource": "https://fonts.googleapis.com/css2?family=Unbounded:wght@800&display=swap"
+    }
+  ]
+}

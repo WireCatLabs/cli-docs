@@ -1,0 +1,71 @@
+.wirecat-landing .font-lab {
+  position: fixed;
+  bottom: 18px;
+  right: 18px;
+  z-index: 80;
+  width: min(340px, calc(100vw - 32px));
+  padding: 15px;
+  border: 1px solid var(--app-line);
+  border-radius: 15px;
+  background: var(--app);
+  color: var(--app-ink);
+  box-shadow: 0 8px 40px #0003;
+  font:
+    12px / 1.5 Onest,
+    sans-serif;
+}
+.wirecat-landing .font-lab-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.wirecat-landing .font-lab-title > span {
+  margin-left: auto;
+  color: var(--app-soft);
+  font-variant-numeric: tabular-nums;
+}
+.wirecat-landing .font-lab-controls {
+  display: flex;
+  gap: 5px;
+}
+.wirecat-landing .font-lab-controls button,
+.wirecat-landing .font-lab-controls select {
+  height: 36px;
+  border: 1px solid var(--app-line);
+  border-radius: 7px;
+  background: var(--app-2);
+  color: var(--app-ink);
+  font: inherit;
+  cursor: pointer;
+}
+.wirecat-landing .font-lab-controls button {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 32px;
+}
+.wirecat-landing .font-lab-controls select {
+  min-width: 0;
+  flex: 1;
+  padding: 0 5px;
+}
+.wirecat-landing .font-lab-controls :focus-visible {
+  outline: 2px solid var(--key);
+  outline-offset: 2px;
+}
+.wirecat-landing .font-lab-meta {
+  margin-top: 9px;
+  color: var(--app-soft);
+}
+.wirecat-landing .font-lab p {
+  margin: 3px 0;
+  color: var(--app-soft);
+  font-size: 11px;
+}
+.wirecat-landing .font-lab a {
+  display: inline-block;
+  margin-top: 5px;
+  color: var(--key);
+  font-size: 11px;
+}

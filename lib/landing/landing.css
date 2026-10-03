@@ -2021,9 +2021,9 @@
 }
 
 .wirecat-landing :is(h1, h2.big, .hour h3, .time, .lane h3, .tool-name, .spec dt) {
-  font-family: "Anybody", "Oswald", "Onest", sans-serif;
-  font-stretch: 62%;
-  font-weight: 900;
+  font-family: var(--heading-family, "Anybody");
+  font-stretch: var(--heading-stretch, 62%);
+  font-weight: var(--heading-weight, 900);
 }
 .wirecat-landing {
   --gutter: clamp(16px, 2.7vw, 48px);
@@ -2045,20 +2045,20 @@
   }
 }
 
-html[lang="en"] .wirecat-landing :is(h1, h2.big, .hour h3, .time, .lane h3, .tool-name, .spec dt) {
-  font-family: "Anybody", "Oswald", "Onest", sans-serif;
-  font-stretch: 62%;
-  font-weight: 900;
+html[lang="en"] .wirecat-landing {
+  --heading-family: "Anybody", "Oswald", "Onest", sans-serif;
+  --heading-stretch: 62%;
+  --heading-weight: 900;
 }
 
-html[lang="ru"] .wirecat-landing :is(h1, h2.big, .hour h3, .time, .lane h3, .tool-name, .spec dt) {
-  font-family: "Fira Sans Extra Condensed", sans-serif;
-  font-stretch: 100%;
-  font-weight: 900;
+html[lang="ru"] .wirecat-landing {
+  --heading-family: "Fira Sans Extra Condensed", sans-serif;
+  --heading-stretch: 100%;
+  --heading-weight: 900;
 }
 
-html[lang="es"] .wirecat-landing :is(h1, h2.big, .hour h3, .time, .lane h3, .tool-name, .spec dt) {
-  font-family: "Anybody", "Oswald", "Onest", sans-serif;
-  font-stretch: 62%;
-  font-weight: 900;
+html[lang="es"] .wirecat-landing {
+  --heading-family: "Anybody", "Oswald", "Onest", sans-serif;
+  --heading-stretch: 62%;
+  --heading-weight: 900;
 }
