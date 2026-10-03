@@ -201,3 +201,5 @@ Sources inside scenarios use native disclosures rather than anchor links. Summar
 Source disclosures remain compact single-line rows (12px type and 3px vertical padding), with full message text appearing only when expanded. Prompt-copy controls sit at the bottom-right of each request bubble; there is no adjacent setup link.
 
 Prompt copying now uses an icon-only button at the bubble’s bottom-right, with a localized tooltip/accessibility label and checkmark feedback. Spanish hero: “Deja de buscar. Solo pregunta.”
+
+Feature category titles (“Personal account”, “Bots”, “Your groups”) use Onest 700 at 18–20px. Their icon tiles are 31px with 16px SVGs; this is an intentional exception to the Unbounded display-heading system.
