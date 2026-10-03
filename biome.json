@@ -10,7 +10,9 @@
       "!content/docs/*/",
       "!pnpm-lock.yaml",
       "!next-env.d.ts",
-      "!design"
+      "!design",
+      "!lib/search-language.generated.js",
+      "!lib/search-language.generated.d.ts"
     ]
   },
   "overrides": [

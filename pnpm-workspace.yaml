@@ -5,3 +5,4 @@ allowBuilds:
   sharp: true
 minimumReleaseAgeExclude:
   - "@leemour/cli-core@0.14.0"
+  - '@leemour/cli-messaging@0.128.0'

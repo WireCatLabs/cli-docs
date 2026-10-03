@@ -1,0 +1,81 @@
+import AxeBuilder from "@axe-core/playwright"
+import { expect, test } from "@playwright/test"
+
+for (const lang of ["en", "ru", "es"]) {
+  test(`${lang}: live results, source context, zero hits and no unsupported summary`, async ({ page }) => {
+    const errors: string[] = []
+    page.on("pageerror", (error) => errors.push(error.message))
+    await page.goto(`/${lang}`)
+    const demo = page.locator("#search-playground")
+    await expect(demo.locator(".sp-hit")).toHaveCount(5)
+    const query = demo.locator(".sp-input")
+    await query.fill("kind:private")
+    await expect(demo.locator(".sp-hit")).toHaveCount(4)
+    await demo.locator(".sp-hit").first().click()
+    await expect(demo.locator(".sp-context-title")).toContainText("Client studio")
+    await expect(demo.locator(".sp-message")).toHaveCount(3)
+    await demo.locator(".sp-views button").nth(2).click()
+    await expect(demo.locator(".sp-summary article")).toHaveCount(1)
+    await expect(demo.locator(".sp-summary blockquote")).toContainText("not approved")
+    await query.fill("nothingwillmatch")
+    await expect(demo.locator(".sp-empty")).toBeVisible()
+    await expect(demo.locator(".sp-summary article")).toHaveCount(0)
+    await query.fill("filename:*.pdf")
+    await expect(query).toHaveAttribute("aria-invalid", "true")
+    await expect(demo.locator(".sp-copy")).toBeDisabled()
+    expect(errors).toEqual([])
+  })
+}
+test("keyboard completion quotes a value and retains the remainder of a query", async ({ page }) => {
+  await page.goto("/en")
+  const query = page.locator(".sp-input")
+  await query.fill("Atlas chat:Cl")
+  await expect(page.locator(".sp-suggestion")).toHaveCount(1)
+  await query.press("ArrowDown")
+  await query.press("Enter")
+  await expect(query).toHaveValue('Atlas chat:"Client studio"')
+  await expect(page.locator(".sp-hit")).toHaveCount(2)
+  await query.fill("Atlas ch")
+  await query.press("ArrowDown")
+  await query.press("Enter")
+  await expect(query).toHaveValue("Atlas chat:")
+  await query.press("Escape")
+  await expect(page.locator(".sp-popup")).not.toBeVisible()
+})
+test("mobile has no horizontal overflow; theme and reduced motion remain usable", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.emulateMedia({ reducedMotion: "reduce", colorScheme: "dark" })
+  await page.goto("/ru")
+  await page.locator("#search-playground").scrollIntoViewIfNeeded()
+  await expect(page.locator(".sp-hit")).toHaveCount(5)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+  await page.locator(".sp-examples button").nth(1).click()
+  await expect(page.locator(".sp-hit")).toHaveCount(1)
+  await page.locator("#bar .theme-toggle").click()
+  await expect(page.locator(".sp-heading")).toBeVisible()
+  await page.locator("#search-playground").screenshot({ path: "/tmp/search-playground-mobile.png" })
+})
+
+test("filter shortcuts open their suggestions and clipboard copies the actual query", async ({ page, context }) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"])
+  await page.goto("/en")
+  await page.locator(".sp-filters button").first().click()
+  await expect(page.locator(".sp-suggestion")).toHaveCount(4)
+  await page.locator(".sp-suggestion").filter({ hasText: "Client studio" }).click()
+  await expect(page.locator(".sp-hit")).toHaveCount(2)
+  await page.locator(".sp-copy").click()
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('chat:"Client studio"')
+})
+
+test("search controls and results meet automated accessibility checks in both themes", async ({ page }) => {
+  await page.goto("/en")
+  await page.locator("#search-playground").waitFor()
+  for (let theme = 0; theme < 2; theme++) {
+    const results = await new AxeBuilder({ page })
+      .include("#search-playground")
+      .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+      .analyze()
+    expect(results.violations).toEqual([])
+    await page.locator("#bar .theme-toggle").click()
+  }
+})

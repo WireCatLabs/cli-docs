@@ -1,0 +1,766 @@
+.wirecat-landing .search-playground {
+  --sp-accent: var(--key);
+  --sp-dim: #899591;
+  --sp-muted: var(--ink-soft);
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 76px 28px 90px;
+  color: var(--ink);
+}
+.wirecat-landing .sp-heading {
+  max-width: 760px;
+  margin-bottom: 32px;
+}
+.wirecat-landing .sp-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--sp-accent);
+  font:
+    500 12px / 1.4 Onest,
+    sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.wirecat-landing .sp-heading h2 {
+  margin: 12px 0 14px;
+  font:
+    600 clamp(36px, 5vw, 62px) / 1.06 Anybody,
+    sans-serif;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+.wirecat-landing .sp-heading p {
+  margin: 0;
+  max-width: 650px;
+  font:
+    400 17px / 1.65 Onest,
+    sans-serif;
+  color: var(--sp-muted);
+  text-wrap: pretty;
+}
+.wirecat-landing .sp-workspace {
+  overflow: visible;
+  border: 1px solid var(--app-line);
+  border-radius: 20px;
+  background: var(--app);
+  box-shadow:
+    0 22px 80px #0002,
+    inset 0 1px 0 #ffffff08;
+}
+.wirecat-landing .sp-editor {
+  padding: 23px 28px 20px;
+}
+.wirecat-landing .sp-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  color: var(--app-soft);
+  font:
+    400 12px / 1.4 Onest,
+    sans-serif;
+}
+.wirecat-landing .sp-topline > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.wirecat-landing .sp-topline > span:last-child {
+  border: 1px solid var(--app-line);
+  border-radius: 5px;
+  padding: 3px 7px;
+  font:
+    11px "JetBrains Mono",
+    monospace;
+}
+.wirecat-landing .sp-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 12%, transparent);
+}
+.wirecat-landing .sp-label {
+  display: block;
+  margin-bottom: 9px;
+  color: var(--app-ink);
+  font:
+    500 13px Onest,
+    sans-serif;
+}
+.wirecat-landing .sp-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 0 16px;
+  border: 1px solid var(--app-line);
+  border-radius: 11px;
+  background: var(--app-2);
+  color: var(--app-soft);
+  transition:
+    border-color 150ms,
+    box-shadow 150ms;
+}
+.wirecat-landing .sp-input-wrap:focus-within {
+  border-color: var(--sp-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--sp-accent) 12%, transparent);
+}
+.wirecat-landing .sp-input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  height: 58px;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  color: var(--app-ink);
+  background: transparent;
+  font:
+    400 15px / 1.5 "JetBrains Mono",
+    monospace;
+}
+.wirecat-landing .sp-trigger {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 30px;
+  border: 0;
+  border-radius: 5px;
+  color: var(--app-soft);
+  background: transparent;
+  cursor: pointer;
+}
+.wirecat-landing .sp-hint {
+  margin: 9px 0 0;
+  min-height: 18px;
+  color: var(--app-soft);
+  font:
+    400 12px / 1.5 Onest,
+    sans-serif;
+}
+.wirecat-landing .sp-invalid {
+  border-color: #ed9f95;
+}
+.wirecat-landing .sp-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 17px;
+}
+.wirecat-landing .sp-filters button,
+.wirecat-landing .sp-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid var(--app-line);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--app-soft);
+  font:
+    400 12px Onest,
+    sans-serif;
+  cursor: pointer;
+}
+.wirecat-landing .sp-filters button:hover {
+  color: var(--app-ink);
+  border-color: var(--sp-dim);
+  background: var(--app-2);
+}
+.wirecat-landing .sp-filters :where(button) > span {
+  color: var(--sp-dim);
+}
+.wirecat-landing .sp-date input {
+  max-width: 117px;
+  border: 0;
+  background: transparent;
+  color: var(--app-soft);
+  font:
+    11px "JetBrains Mono",
+    monospace;
+}
+.wirecat-landing .sp-zone {
+  margin-left: auto;
+  color: var(--sp-dim);
+  font:
+    11px Onest,
+    sans-serif;
+}
+.wirecat-landing .sp-examples {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 22px;
+}
+.wirecat-landing .sp-examples > span {
+  padding-right: 6px;
+  color: var(--sp-dim);
+  font:
+    12px Onest,
+    sans-serif;
+}
+.wirecat-landing .sp-examples button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 9px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--app-soft);
+  font:
+    12px Onest,
+    sans-serif;
+  cursor: pointer;
+}
+.wirecat-landing .sp-examples button[aria-pressed="true"] {
+  color: var(--sp-accent);
+  background: color-mix(in srgb, var(--sp-accent) 9%, transparent);
+}
+.wirecat-landing .sp-results-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  border-top: 1px solid var(--app-line);
+  border-bottom: 1px solid var(--app-line);
+  background: var(--app-2);
+}
+.wirecat-landing .sp-views {
+  display: flex;
+  gap: 22px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.wirecat-landing .sp-views button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 47px;
+  padding: 0;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--app-soft);
+  font:
+    500 12px Onest,
+    sans-serif;
+  cursor: pointer;
+}
+.wirecat-landing .sp-views button[aria-pressed="true"] {
+  color: var(--app-ink);
+  border-bottom-color: var(--sp-accent);
+}
+.wirecat-landing .sp-views :where(button) > span {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--app-3);
+  color: var(--app-soft);
+  font:
+    10px "JetBrains Mono",
+    monospace;
+}
+.wirecat-landing .sp-results-count {
+  color: var(--sp-dim);
+  font:
+    11px Onest,
+    sans-serif;
+}
+.wirecat-landing .sp-results {
+  height: 350px;
+  padding: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--app-line) transparent;
+}
+.wirecat-landing .sp-hit-list {
+  padding: 0 28px;
+}
+.wirecat-landing .sp-hit {
+  position: relative;
+  width: 100%;
+  padding: 18px 0;
+  text-align: left;
+  border: 0;
+  border-bottom: 1px solid var(--app-line);
+  background: transparent;
+  color: var(--app-ink);
+  cursor: pointer;
+}
+.wirecat-landing .sp-hit:last-child {
+  border-bottom: 0;
+}
+.wirecat-landing .sp-hit:hover {
+  background: color-mix(in srgb, var(--sp-accent) 3%, transparent);
+}
+.wirecat-landing .sp-hit-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  font:
+    11px Onest,
+    sans-serif;
+}
+.wirecat-landing .sp-hit-meta strong {
+  font-weight: 500;
+  color: var(--app-soft);
+}
+.wirecat-landing .sp-hit-meta time {
+  margin-left: auto;
+  color: var(--sp-dim);
+  font-size: 10px;
+}
+.wirecat-landing .sp-provider {
+  border-radius: 4px;
+  padding: 2px 5px;
+  font-size: 9px;
+  font-weight: 500;
+}
+.wirecat-landing .sp-telegram {
+  background: #279cd318;
+  color: #78c5eb;
+}
+.wirecat-landing .sp-max {
+  background: #8b7dff18;
+  color: #b2a8ff;
+}
+.wirecat-landing .sp-hit p {
+  display: flex;
+  gap: 13px;
+  margin: 10px 55px 0 0;
+  font:
+    400 13px / 1.7 Onest,
+    sans-serif;
+}
+.wirecat-landing .sp-hit p > b {
+  min-width: 33px;
+  font-weight: 500;
+  color: var(--app-soft);
+}
+.wirecat-landing .sp-read-context {
+  position: absolute;
+  right: 0;
+  bottom: 21px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--sp-dim);
+  font:
+    10px Onest,
+    sans-serif;
+}
+.wirecat-landing .sp-context,
+.wirecat-landing .sp-summary {
+  padding: 23px 28px;
+}
+.wirecat-landing .sp-context-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font:
+    13px Onest,
+    sans-serif;
+  color: var(--app-ink);
+}
+.wirecat-landing .sp-context-title > span {
+  margin-left: auto;
+  color: var(--app-soft);
+  font-size: 11px;
+}
+.wirecat-landing .sp-context-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 13px 0 19px;
+}
+.wirecat-landing .sp-context-picker button {
+  padding: 4px 7px;
+  border: 1px solid var(--app-line);
+  border-radius: 5px;
+  background: transparent;
+  color: var(--app-soft);
+  font:
+    10px Onest,
+    sans-serif;
+  cursor: pointer;
+}
+.wirecat-landing .sp-context-picker button[aria-pressed="true"] {
+  border-color: var(--sp-accent);
+  color: var(--sp-accent);
+}
+.wirecat-landing .sp-message {
+  padding: 13px 15px;
+  margin: 5px 0;
+  border-left: 2px solid transparent;
+  border-radius: 0 6px 6px 0;
+}
+.wirecat-landing .sp-message header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  color: var(--app-soft);
+  font:
+    11px Onest,
+    sans-serif;
+}
+.wirecat-landing .sp-message header > span {
+  color: var(--sp-accent);
+  font-size: 10px;
+}
+.wirecat-landing .sp-message time {
+  font-size: 10px;
+  color: var(--sp-dim);
+}
+.wirecat-landing .sp-message p {
+  margin: 6px 0 0;
+  color: var(--app-ink);
+  font:
+    13px / 1.65 Onest,
+    sans-serif;
+}
+.wirecat-landing .sp-anchor {
+  border-left-color: var(--sp-accent);
+  background: color-mix(in srgb, var(--sp-accent) 7%, transparent);
+}
+.wirecat-landing .sp-locator {
+  display: block;
+  margin-top: 15px;
+  color: var(--sp-dim);
+  font:
+    10px "JetBrains Mono",
+    monospace;
+  overflow-wrap: anywhere;
+}
+.wirecat-landing .sp-summary h3 {
+  margin: 0 0 8px;
+  font:
+    500 16px / 1.5 Onest,
+    sans-serif;
+}
+.wirecat-landing .sp-summary > p {
+  margin: 0 0 20px;
+  max-width: 700px;
+  color: var(--app-soft);
+  font:
+    12px / 1.6 Onest,
+    sans-serif;
+}
+.wirecat-landing .sp-summary article {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  color: var(--ok);
+}
+.wirecat-landing .sp-summary article h4 {
+  margin: 0;
+  color: var(--app-ink);
+  font:
+    500 14px / 1.6 Onest,
+    sans-serif;
+}
+.wirecat-landing .sp-summary blockquote {
+  margin: 10px 0;
+  padding: 0 0 0 12px;
+  border-left: 1px solid var(--app-line);
+  color: var(--app-soft);
+  font:
+    12px / 1.65 Onest,
+    sans-serif;
+}
+.wirecat-landing .sp-summary article button {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--sp-accent);
+  font:
+    11px Onest,
+    sans-serif;
+  cursor: pointer;
+}
+.wirecat-landing .sp-command {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 15px 20px;
+  border-top: 1px solid var(--app-line);
+  border-radius: 0 0 20px 20px;
+  background: var(--app-2);
+}
+.wirecat-landing .sp-tool {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 4px 6px;
+  border: 0;
+  background: transparent;
+  color: var(--app-soft);
+  font:
+    11px Onest,
+    sans-serif;
+  cursor: pointer;
+}
+.wirecat-landing .sp-command > code {
+  flex: 1;
+  overflow-x: auto;
+  padding: 2px 0;
+  color: var(--app-soft);
+  font:
+    10px / 1.5 "JetBrains Mono",
+    monospace;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+.wirecat-landing .sp-copy {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 7px 10px;
+  border: 1px solid var(--app-line);
+  border-radius: 6px;
+  background: var(--app-3);
+  color: var(--app-ink);
+  font:
+    10px Onest,
+    sans-serif;
+  cursor: pointer;
+}
+.wirecat-landing .sp-copy:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.wirecat-landing .sp-footnote {
+  display: flex;
+  align-items: flex-start;
+  gap: 26px;
+  justify-content: space-between;
+  margin-top: 19px;
+}
+.wirecat-landing .sp-footnote p {
+  max-width: 610px;
+  margin: 0;
+  color: var(--ink-dim);
+  font:
+    11px / 1.6 Onest,
+    sans-serif;
+}
+.wirecat-landing .sp-footnote > div {
+  display: flex;
+  gap: 15px;
+  flex-shrink: 0;
+}
+.wirecat-landing .sp-footnote a {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--ink-soft);
+  font:
+    11px / 1.6 Onest,
+    sans-serif;
+  text-decoration: none;
+}
+.wirecat-landing .sp-disclosure {
+  margin-top: 18px;
+  color: var(--ink-soft);
+  font:
+    12px / 1.6 Onest,
+    sans-serif;
+}
+.wirecat-landing .sp-disclosure summary {
+  width: fit-content;
+  cursor: pointer;
+}
+.wirecat-landing .sp-disclosure code {
+  display: block;
+  margin: 10px 0;
+  font:
+    11px "JetBrains Mono",
+    monospace;
+}
+.wirecat-landing .sp-disclosure a {
+  color: var(--sp-accent);
+}
+.wirecat-landing .sp-empty {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  height: 100%;
+  padding: 30px;
+  text-align: center;
+  color: var(--sp-dim);
+}
+.wirecat-landing .sp-empty h3 {
+  margin: 15px 0 9px;
+  color: var(--app-soft);
+  font:
+    500 15px Onest,
+    sans-serif;
+}
+.wirecat-landing .sp-empty p {
+  max-width: 440px;
+  margin: 0;
+  font:
+    12px / 1.7 Onest,
+    sans-serif;
+}
+.wirecat-landing .sp-positioner {
+  z-index: 150;
+  width: min(440px, calc(100vw - 48px));
+}
+.wirecat-landing .sp-popup {
+  overflow: hidden;
+  border: 1px solid var(--app-line);
+  border-radius: 12px;
+  background: var(--app-2);
+  color: var(--app-ink);
+  box-shadow: 0 16px 55px #0005;
+}
+.wirecat-landing .sp-popup-label {
+  padding: 12px 14px 8px;
+  color: var(--sp-dim);
+  font:
+    10px Onest,
+    sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.wirecat-landing .sp-suggestion {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  outline: 0;
+  font:
+    12px "JetBrains Mono",
+    monospace;
+  cursor: pointer;
+}
+.wirecat-landing .sp-suggestion[data-highlighted] {
+  background: color-mix(in srgb, var(--sp-accent) 12%, transparent);
+}
+.wirecat-landing .sp-suggestion > small {
+  margin-left: auto;
+  color: var(--app-soft);
+  font:
+    10px Onest,
+    sans-serif;
+}
+.wirecat-landing .sp-popup-footer {
+  padding: 10px 14px;
+  border-top: 1px solid var(--app-line);
+  color: var(--sp-dim);
+  font:
+    10px Onest,
+    sans-serif;
+}
+.wirecat-landing .search-playground :where(button, a, input, summary):focus-visible {
+  outline: 2px solid var(--sp-accent);
+  outline-offset: 4px;
+}
+.wirecat-landing .sp-input:focus-visible {
+  outline: 0;
+}
+@media (max-width: 760px) {
+  .wirecat-landing .search-playground {
+    padding: 50px 18px 60px;
+  }
+  .wirecat-landing .sp-heading h2 {
+    font-size: 39px;
+  }
+  .wirecat-landing .sp-heading p {
+    font-size: 15px;
+  }
+  .wirecat-landing .sp-editor {
+    padding: 18px 17px;
+  }
+  .wirecat-landing .sp-topline {
+    font-size: 10px;
+    gap: 10px;
+  }
+  .wirecat-landing .sp-input {
+    height: 55px;
+    font-size: 12px;
+  }
+  .wirecat-landing .sp-input-wrap {
+    gap: 9px;
+    padding: 0 11px;
+  }
+  .wirecat-landing .sp-zone {
+    display: none;
+  }
+  .wirecat-landing .sp-examples {
+    gap: 4px;
+  }
+  .wirecat-landing .sp-examples > span {
+    width: 100%;
+  }
+  .wirecat-landing .sp-results-bar {
+    padding: 0 17px;
+  }
+  .wirecat-landing .sp-views {
+    gap: 18px;
+  }
+  .wirecat-landing .sp-results-count {
+    display: none;
+  }
+  .wirecat-landing .sp-hit-list {
+    padding: 0 17px;
+  }
+  .wirecat-landing .sp-hit p {
+    margin-right: 0;
+  }
+  .wirecat-landing .sp-read-context {
+    position: static;
+    margin: 8px 0 0 46px;
+  }
+  .wirecat-landing .sp-context,
+  .wirecat-landing .sp-summary {
+    padding: 19px 17px;
+  }
+  .wirecat-landing .sp-command {
+    padding: 12px;
+    gap: 8px;
+  }
+  .wirecat-landing .sp-copy span {
+    display: none;
+  }
+  .wirecat-landing .sp-footnote {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wirecat-landing .sp-input-wrap {
+    transition: none;
+  }
+}
+
+.light .wirecat-landing .sp-telegram {
+  color: #17698b;
+}
+.light .wirecat-landing .sp-max {
+  color: #6550a8;
+}
+
+.wirecat-landing .search-playground mark {
+  background: color-mix(in srgb, var(--sp-accent) 12%, transparent);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+.light .wirecat-landing .search-playground {
+  --sp-dim: #617569;
+}

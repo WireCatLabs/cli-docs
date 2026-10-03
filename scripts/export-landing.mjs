@@ -192,7 +192,7 @@ for (const lang of ["en", "ru", "es"]) {
   for (const section of [day, benefits, toolsSection, reasons]) html = html.replace(section, "")
   html = html.replace(
     /(?=<section class="close")/,
-    `${benefits}\n<!--time-savings-->\n${toolsSection}\n${reasons}\n${shortDay}\n`,
+    `<div data-search-playground></div>\n${benefits}\n<!--time-savings-->\n${toolsSection}\n${reasons}\n${shortDay}\n`,
   )
   const choices = [
     ["Telegram", "tg-cli", "tg"],

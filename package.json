@@ -13,9 +13,13 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "check:links": "node --experimental-strip-types scripts/check-links.ts",
-    "prepare": "lefthook install || true"
+    "prepare": "lefthook install || true",
+    "search:generate": "node scripts/build-search-language.mjs",
+    "search:check": "node scripts/build-search-language.mjs --check",
+    "test:browser": "playwright test"
   },
   "dependencies": {
+    "@base-ui/react": "^1.8.0",
     "cn": "^0.3.0",
     "fumadocs-core": "16.15.17",
     "fumadocs-mdx": "15.4.5",
@@ -29,13 +33,17 @@
     "react-dom": "^19.3.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@biomejs/biome": "^2.5.15",
     "@leemour/cli-core": "0.14.0",
+    "@leemour/cli-messaging": "0.128.0",
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/mdx": "^2.0.14",
     "@types/node": "^26.6.1",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "esbuild": "^0.28.2",
     "lefthook": "^2.1.15",
     "postcss": "^8.5.28",
     "serve": "^14.2.6",

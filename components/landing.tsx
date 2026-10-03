@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { SearchPlayground } from "@/components/search-playground/search-playground"
 import { TimeSavings } from "@/components/time-savings"
 import { useThemeToggle } from "@/components/use-theme-toggle"
 import { prepareInstallationButton } from "@/lib/installation-command"
@@ -258,10 +259,14 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
     }
   }, [sessions, maxSessions, lang])
   const [before, after] = html.split("<!--time-savings-->")
+  const [beforeSearch, afterSearch] = before.split("<div data-search-playground></div>")
   return (
     <div ref={rootRef} className="landing-content">
       {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Reviewed local exported HTML only. */}
-      <div dangerouslySetInnerHTML={{ __html: before }} />
+      <div dangerouslySetInnerHTML={{ __html: beforeSearch }} />
+      {afterSearch !== undefined && <SearchPlayground lang={lang} />}
+      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Reviewed local exported HTML only. */}
+      {afterSearch !== undefined && <div dangerouslySetInnerHTML={{ __html: afterSearch }} />}
       {after !== undefined && <TimeSavings lang={lang} />}
       {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Reviewed local exported HTML only. */}
       {after !== undefined && <div dangerouslySetInnerHTML={{ __html: after }} />}
