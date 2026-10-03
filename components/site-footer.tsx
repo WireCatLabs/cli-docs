@@ -2,17 +2,19 @@
 
 import { usePathname } from "next/navigation"
 import { useEffect, useRef } from "react"
+import { useThemeToggle } from "@/components/use-theme-toggle"
 
 /** Shared footer exported from the same reviewed source as the landing. */
 export function SiteFooter({ html }: { html: string }) {
   const rootRef = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
+  useThemeToggle(rootRef, pathname.split("/")[1] ?? "en")
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
     const controller = new AbortController()
     let timer: ReturnType<typeof setTimeout> | undefined
-    for (const link of root.querySelectorAll<HTMLAnchorElement>(".langs a")) {
+    for (const link of root.querySelectorAll<HTMLAnchorElement>(".footer-language a")) {
       const locale = new URL(link.href).pathname.split("/")[1]
       link.href = pathname.replace(/^\/(en|ru|es)(?=\/|$)/, `/${locale}`)
     }
