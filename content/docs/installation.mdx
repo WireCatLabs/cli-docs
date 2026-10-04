@@ -262,6 +262,12 @@ delete messages, manage groups and contacts. Your agent gets that access when it
 | Sends only to chats you chose | a recipient list | [Telegram](./tg/security.md#the-send-guard) · [MAX](./max/security.md#preventing-sends-to-the-wrong-place) |
 | Fewer messages per hour | `sendsPerHour` | [Telegram](./tg/security.md#the-send-guard) · [MAX](./max/security.md#preventing-sends-to-the-wrong-place) |
 
+These rules stop an agent that was tricked by a message it read. They do not stop an agent that
+can change the settings itself, because the settings are ordinary files and commands on your
+computer. For that, pin the agent to one profile with `TG_PROFILE_LOCK` or `MAX_PROFILE_LOCK`, and
+don't let it run `config` or `recipients` commands.
+[What the limits cannot hold](./tg/security.md#what-the-guard-cannot-hold).
+
 **Your login is saved on this computer.** Treat the saved session like a password: whoever copies
 it can use your account. To log out, run `tg session end` or `max session end`, or end the device
 in **Settings → Devices** on your phone. What is stored where:
@@ -280,8 +286,7 @@ command, see [Connect your agent](./agents.md).
 
 ## Troubleshooting
 
-<Accordions>
-<Accordion title="What the Windows installer changes" id="what-the-windows-installer-changes">
+### What the Windows installer changes
 
 npm puts the `tg` or `max` command in its global folder. Windows finds commands only in folders
 listed in PATH, and npm does not always add its folder there. The installer:
@@ -294,7 +299,7 @@ listed in PATH, and npm does not always add its folder there. The installer:
 It does not change PowerShell's execution policy. An agent that was already running when you
 installed must restart, or refresh its own PATH, before it can find the command.
 
-</Accordion>
+<Accordions>
 <Accordion title="Install without the Windows installer">
 
 ```powershell

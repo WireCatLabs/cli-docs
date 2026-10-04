@@ -8,7 +8,7 @@ read: you see what the agent can do, and nothing changes in your account.
 
 ## Your first five minutes
 
-Copy one request into your agent. Each takes under a minute. They work the same for Telegram and
+Copy one request into your agent. They work the same for Telegram and
 MAX; write *max* instead of *tg* if you use MAX.
 
 **Who needs an answer from me?**

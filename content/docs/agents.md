@@ -73,7 +73,7 @@ my unread messages by chat and say who needs an answer. Read only for this task.
 
 It should be able to run `account show`, `chats list --limit 5` and `inbox --limit 5`, or the
 equivalent MCP tools. If it cannot find the CLI, reopen the editor after installing Node/npm;
-see [Windows and PATH](./installation.mdx#windows). If it reports no session, log in in the same
+see [Windows and PATH](./installation.mdx#what-the-windows-installer-changes). If it reports no session, log in in the same
 environment and profile the agent uses.
 
 ## The CLI already offers the skill
