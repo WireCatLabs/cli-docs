@@ -138,3 +138,17 @@ Markdown twins resolve documentation links to their own Markdown URLs and expand
 installation component into instructions and agent prompts. `pnpm check:links` validates HTML
 and Markdown targets and keeps code blocks intact. Deployment runs lint, tests, reviewed-release
 sync, type checking, build and link checks before publication.
+
+### Inline documentation explanations
+
+Use `<DocTerm term="local-agent" lang="ru" label="локального агента" />` in authored MDX to add
+an inline information button. The popover supports hover, click, keyboard and touch, with Escape
+and a close button. Definitions and localized guide destinations live in `lib/doc-terms.ts`.
+Markdown twins expand the same definitions into readable text; code examples remain intact.
+Installation prompts are short and platform-neutral. Windows environment recovery stays in each
+cli's installation reference, rather than in the copied prompt.
+
+`public/telegram-app-login.png` is an unmodified screenshot of the public
+[my.telegram.org/apps login page](https://my.telegram.org/apps), captured on 2026-10-04 in a fresh
+unauthenticated browser. No phone number, login code, API credentials or account QR was entered.
+Its localized captions are reviewed portal corrections for the Telegram sessions page.

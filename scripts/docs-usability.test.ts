@@ -15,6 +15,20 @@ describe("documentation command references", () => {
     })
     expect(tree.children[1]).toMatchObject({ type: "code", value: "Logged in as a user." })
   })
+  it("keeps browser-login screenshots in an accessible closed disclosure", () => {
+    const tree = fromMarkdown(
+      "> **See the my.telegram.org login screen**\n>\n> ![Empty login form](/telegram-app-login.png)\n>\n> Website login comes before account authorization.\n",
+    )
+    remarkDocUsability()(tree, { path: "/project/content/docs/tg/sessions.md" })
+    expect(tree.children[0]).toMatchObject({
+      data: { hName: "details", hProperties: { id: "telegram-app-login" } },
+      children: [
+        { data: { hName: "summary" } },
+        { type: "paragraph", children: [{ type: "image", url: "/telegram-app-login.png" }] },
+        { type: "paragraph" },
+      ],
+    })
+  })
   const index = commandReferences(
     "## General options\n\n## `tg doctor`\n\n### `tg doctor report`\n\n#### `tg doctor report create`\n",
   )

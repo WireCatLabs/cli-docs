@@ -42,7 +42,7 @@ Open [the installation guide](/en/docs/installation#max) and choose the terminal
 After installing, run guided setup for QR login and agent skills:
 
 ```sh
-max setup --agent all
+max setup
 ```
 
 ```sh

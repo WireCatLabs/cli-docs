@@ -77,6 +77,9 @@ export function remarkDocUsability(indexes = loadCommandIndexes()) {
         node.type === "blockquote" &&
         node.children[0] &&
         [
+          "See the my.telegram.org login screen",
+          "Посмотреть экран входа my.telegram.org",
+          "Ver la pantalla de acceso de my.telegram.org",
           "How are login credentials protected?",
           "Как защищены данные входа?",
           "¿Cómo se protegen las credenciales?",
@@ -85,9 +88,11 @@ export function remarkDocUsability(indexes = loadCommandIndexes()) {
           "¿Qué es una aplicación Telegram y para qué sirve?",
         ].includes(textOf(node.children[0]))
       ) {
-        const id = /application|приложение|aplicación/.test(textOf(node.children[0]))
-          ? "telegram-app-explained"
-          : "credential-storage"
+        const id = textOf(node.children[0]).includes("my.telegram.org")
+          ? "telegram-app-login"
+          : /application|приложение|aplicación/.test(textOf(node.children[0]))
+            ? "telegram-app-explained"
+            : "credential-storage"
         node.data = { hName: "details", hProperties: { className: "docs-disclosure", id } }
         node.children[0].data = { hName: "summary" }
       }

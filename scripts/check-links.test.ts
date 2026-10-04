@@ -71,7 +71,7 @@ describe("linkProblems", () => {
     write("llms.mdx/docs/installation/content.md", "<InstallationGuide />\n\n```text\n<InstallationGuide />\n```\n")
     expect(linkProblems(out)).toEqual(['en/docs/installation.html: duplicate id "max"'])
     expect(markdownLinkProblems(out)).toEqual([
-      "llms.mdx/docs/installation/content.md: InstallationGuide was not expanded for Markdown readers",
+      "llms.mdx/docs/installation/content.md: Documentation component was not expanded for Markdown readers",
     ])
   })
 

@@ -843,5 +843,179 @@
         }
       ]
     }
+  },
+  {
+    "tool": "tg",
+    "slug": "installation",
+    "reason": "Use harness-neutral first-run commands. setup asks for the agent in an interactive terminal; preserve explicit option documentation and machine-mode behavior. Requested by owner 2026-10-04; checked against setup option/selectAgent implementations.",
+    "replacements": {
+      "en": [
+        {
+          "before": "\ntg setup --agent codex\n",
+          "after": "\ntg setup\n"
+        },
+        {
+          "before": "\nWithout a global installation, use `npm exec --yes --package=@leemour/tg-cli -- tg setup --agent codex`.\n",
+          "after": "\nWithout a global installation, use `npm exec --yes --package=@leemour/tg-cli -- tg setup`.\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "\ntg setup --agent codex\n",
+          "after": "\ntg setup\n"
+        },
+        {
+          "before": "\nБез глобальной установки используйте `npm exec --yes --package=@leemour/tg-cli -- tg setup --agent codex`. Настройка предложит последующие команды в таком же виде.\n",
+          "after": "\nБез глобальной установки используйте `npm exec --yes --package=@leemour/tg-cli -- tg setup`. Настройка предложит последующие команды в таком же виде.\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "\ntg setup --agent codex\n",
+          "after": "\ntg setup\n"
+        },
+        {
+          "before": "\nSin instalación global, usa `npm exec --yes --package=@leemour/tg-cli -- tg setup --agent codex`. Setup propone los comandos siguientes de la misma forma.\n",
+          "after": "\nSin instalación global, usa `npm exec --yes --package=@leemour/tg-cli -- tg setup`. Setup propone los comandos siguientes de la misma forma.\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "usage",
+    "reason": "Use harness-neutral first-run commands. setup asks for the agent in an interactive terminal; preserve explicit option documentation and machine-mode behavior. Requested by owner 2026-10-04; checked against setup option/selectAgent implementations.",
+    "replacements": {
+      "en": [
+        {
+          "before": "\nuse `tg setup --agent codex` to select its skill explicitly. `tg setup --help` explains the flags.\n",
+          "after": "\nuse `tg setup` to choose a skill interactively. `tg setup --help` explains the flags.\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "\nНа настройку отведите около пяти минут. История загружается отдельно: выберите чат и объём перед `tg store fetch <chat> --last 100`. Агент может прочитать `tg skill show` без входа; `tg setup --agent codex` явно выбирает его skill. Параметры объяснены в `tg setup --help`. Для чтения больше ничего не нужно.\n",
+          "after": "\nНа настройку отведите около пяти минут. История загружается отдельно: выберите чат и объём перед `tg store fetch <chat> --last 100`. Агент может прочитать `tg skill show` без входа; `tg setup` предложит выбрать skill. Параметры объяснены в `tg setup --help`. Для чтения больше ничего не нужно.\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "\nAntes de continuar, reserva unos cinco minutos para la configuración. Descargar historial es una decisión aparte: elige el chat y la cantidad antes de `tg store fetch <chat> --last 100`. Un agente puede leer `tg skill show` antes de iniciar sesión; usa `tg setup --agent codex` para elegir su skill. `tg setup --help` explica las opciones.\n",
+          "after": "\nAntes de continuar, reserva unos cinco minutos para la configuración. Descargar historial es una decisión aparte: elige el chat y la cantidad antes de `tg store fetch <chat> --last 100`. Un agente puede leer `tg skill show` antes de iniciar sesión; usa `tg setup` para elegir un skill en el terminal. `tg setup --help` explica las opciones.\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "installation",
+    "reason": "Use harness-neutral first-run commands. setup asks for the agent in an interactive terminal; preserve explicit option documentation and machine-mode behavior. Requested by owner 2026-10-04; checked against setup option/selectAgent implementations.",
+    "replacements": {
+      "en": [
+        {
+          "before": "\nmax setup --agent codex            # QR-вход и навык агента\n",
+          "after": "\nmax setup            # QR-вход и навык агента\n"
+        },
+        {
+          "before": "\nnpm.cmd exec --yes --package=@leemour/max-cli -- max setup --agent codex\n",
+          "after": "\nnpm.cmd exec --yes --package=@leemour/max-cli -- max setup\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "\nmax setup --agent codex            # QR-вход и навык агента\n",
+          "after": "\nmax setup            # QR-вход и навык агента\n"
+        },
+        {
+          "before": "\nnpm.cmd exec --yes --package=@leemour/max-cli -- max setup --agent codex\n",
+          "after": "\nnpm.cmd exec --yes --package=@leemour/max-cli -- max setup\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "\nmax setup --agent codex            # QR-вход и навык агента\n",
+          "after": "\nmax setup            # QR-вход и навык агента\n"
+        },
+        {
+          "before": "\nnpm.cmd exec --yes --package=@leemour/max-cli -- max setup --agent codex\n",
+          "after": "\nnpm.cmd exec --yes --package=@leemour/max-cli -- max setup\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "usage",
+    "reason": "Use harness-neutral first-run commands. setup asks for the agent in an interactive terminal; preserve explicit option documentation and machine-mode behavior. Requested by owner 2026-10-04; checked against setup option/selectAgent implementations.",
+    "replacements": {
+      "en": [
+        {
+          "before": "\nmax setup --agent codex  # QR-вход и навык агента\n",
+          "after": "\nmax setup  # QR-вход и навык агента\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "\nmax setup --agent codex  # QR-вход и навык агента\n",
+          "after": "\nmax setup  # QR-вход и навык агента\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "\nmax setup --agent codex  # QR-вход и навык агента\n",
+          "after": "\nmax setup  # QR-вход и навык агента\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "sessions",
+    "reason": "Use harness-neutral first-run commands. setup asks for the agent in an interactive terminal; preserve explicit option documentation and machine-mode behavior. Requested by owner 2026-10-04; checked against setup option/selectAgent implementations.",
+    "replacements": {
+      "en": [
+        {
+          "before": "\n`max setup --agent codex` checks local directories, guides you through QR login, checks your account and up to five chats, and installs the agent skill. Agent choices: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Without a parameter, an interactive terminal asks you; machine mode skips skill installation. `max skill show` is available before login.\n",
+          "after": "\n`max setup` checks local directories, guides you through QR login, checks your account and up to five chats, and installs the agent skill. Agent choices: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Without a parameter, an interactive terminal asks you; machine mode skips skill installation. `max skill show` is available before login.\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "\n`max setup --agent codex` проверяет локальные каталоги, проводит через QR-вход, проверяет\n",
+          "after": "\n`max setup` проверяет локальные каталоги, проводит через QR-вход, проверяет\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "\n`max setup --agent codex` comprueba los directorios locales, guía el acceso con QR, comprueba la cuenta y hasta cinco chats e instala el skill del agente. Opciones: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Sin opción pregunta en el terminal; en modo máquina omite el skill. `max skill show` se puede leer antes de iniciar sesión.\n",
+          "after": "\n`max setup` comprueba los directorios locales, guía el acceso con QR, comprueba la cuenta y hasta cinco chats e instala el skill del agente. Opciones: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Sin opción pregunta en el terminal; en modo máquina omite el skill. `max skill show` se puede leer antes de iniciar sesión.\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "sessions",
+    "reason": "Show the real public my.telegram.org login screen and distinguish website registration from account QR authorization. Screenshot captured 2026-10-04 in a fresh unauthenticated browser; no phone, code, api_hash or QR tokens entered. Guidance verified against https://core.telegram.org/api/obtaining_api_id and https://my.telegram.org/apps.",
+    "replacements": {
+      "en": [
+        {
+          "before": "**Fill in the site automatically:**",
+          "after": "> **See the my.telegram.org login screen**\n>\n> ![Official my.telegram.org login screen with an empty phone-number field.](/telegram-app-login.png)\n>\n> This is the website login for managing your Telegram application credentials. The code arrives in Telegram, not by SMS. After login, choose **API development tools**. Authorizing the cli with a QR code comes later. [my.telegram.org](https://my.telegram.org/apps)\n\n**Fill in the site automatically:**"
+        }
+      ],
+      "ru": [
+        {
+          "before": "**Заполнить форму сайта автоматически:**",
+          "after": "> **Посмотреть экран входа my.telegram.org**\n>\n> ![Официальный экран входа my.telegram.org: поле номера телефона не заполнено.](/telegram-app-login.png)\n>\n> Это вход на сайт для получения данных приложения Telegram. Код приходит сообщением в Telegram, не по SMS. После входа выберите **API development tools**. Подтверждение доступа cli через QR-код будет следующим этапом. [my.telegram.org](https://my.telegram.org/apps)\n\n**Заполнить форму сайта автоматически:**"
+        }
+      ],
+      "es": [
+        {
+          "before": "**Rellenar el sitio automáticamente:**",
+          "after": "> **Ver la pantalla de acceso de my.telegram.org**\n>\n> ![Pantalla oficial de my.telegram.org con el campo del teléfono vacío.](/telegram-app-login.png)\n>\n> Este es el acceso al sitio para obtener las credenciales de aplicación de Telegram. El código llega por Telegram, no por SMS. Tras entrar, elige **API development tools**. La autorización del cli por QR viene después. [my.telegram.org](https://my.telegram.org/apps)\n\n**Rellenar el sitio automáticamente:**"
+        }
+      ]
+    }
   }
 ]

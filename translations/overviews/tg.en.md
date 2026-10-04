@@ -32,7 +32,7 @@ Open [the installation guide](/en/docs/installation#tg) and choose the terminal 
 After installing, run guided setup: it helps with app registration and login, checks your account and five chats, and installs agent skills. It reuses an existing session; downloading history remains a separate choice.
 
 ```sh
-tg setup --agent all
+tg setup
 ```
 
 ```sh

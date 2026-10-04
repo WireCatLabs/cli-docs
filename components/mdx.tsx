@@ -2,6 +2,7 @@ import defaultMdxComponents from "fumadocs-ui/mdx"
 import { ExternalLink } from "lucide-react"
 import type { MDXComponents } from "mdx/types"
 import type { ComponentProps, ComponentType } from "react"
+import { DocTerm } from "@/components/doc-term"
 import { InstallationGuide } from "@/components/installation-guide"
 import { PlatformPaths } from "@/components/platform-paths"
 import { SearchPlayground } from "@/components/search-playground/search-playground"
@@ -13,6 +14,7 @@ export function getMDXComponents(components?: MDXComponents) {
   return {
     ...defaultMdxComponents,
     InstallationGuide,
+    DocTerm,
     SearchPlayground,
     "platform-paths": PlatformPaths,
     "agent-prompt": AgentPrompt,

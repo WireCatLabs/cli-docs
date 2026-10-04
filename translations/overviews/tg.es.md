@@ -33,7 +33,7 @@ Abre [la guía de instalación](/es/docs/installation#tg) y elige las instruccio
 Tras instalar la herramienta, ejecuta la configuración guiada y consulta algunos chats:
 
 ```sh
-tg setup --agent all
+tg setup
 ```
 
 ```sh
