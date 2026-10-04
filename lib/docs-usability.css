@@ -173,3 +173,8 @@
     display: table-cell;
   }
 }
+
+/* Tailwind's reset gives buttons the default cursor; accordions, tabs and disclosures are clickable. */
+.wirecat-docs :is(button:not(:disabled), summary, [role="tab"]) {
+  cursor: pointer;
+}

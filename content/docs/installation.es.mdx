@@ -17,6 +17,28 @@ Elige tu sistema y tu mensajero en las pestañas de abajo. La página recuerda t
 
 ### Instala el CLI
 
+**Lo más fácil: pídeselo a tu agente de IA.** Copia la petición de tu mensajero en tu agente
+(Claude Code, Codex, Cursor, Gemini CLI o Hermes). Comprueba Node.js, instala el CLI, aprende los
+comandos y te guía en el inicio de sesión del paso 2.
+
+<a id="tg" />
+<a id="max" />
+
+<Tabs groupId="messenger" persist items={["Telegram", "MAX"]}>
+<Tab value="Telegram">
+
+<AgentInstallPrompt tool="tg" />
+
+</Tab>
+<Tab value="MAX">
+
+<AgentInstallPrompt tool="max" />
+
+</Tab>
+</Tabs>
+
+**O instálalo tú mismo** en una terminal:
+
 <Tabs groupId="os" persist items={["macOS / Linux", "Windows"]}>
 <Tab value="macOS / Linux">
 
@@ -68,17 +90,6 @@ Esto instala el CLI con npm y hace que el comando `tg` o `max` funcione en cada 
 </Tab>
 </Tabs>
 
-<Accordions>
-<Accordion title="¿Prefieres que lo instale tu agente de IA?">
-
-Copia la petición de tu mensajero en tu agente (Claude Code, Codex, Cursor, Gemini CLI o Hermes).
-El agente comprueba Node.js, instala el CLI y aprende los comandos. El inicio de sesión del paso 2
-lo haces tú: el agente no puede escanear un código QR por ti.
-
-<InstallationGuide />
-
-</Accordion>
-</Accordions>
 
 </Step>
 <Step>
@@ -86,8 +97,9 @@ lo haces tú: el agente no puede escanear un código QR por ti.
 ### Inicia sesión con el teléfono
 
 Al iniciar sesión, tu ordenador se añade como un dispositivo nuevo de tu cuenta, igual que Telegram
-Desktop o MAX en el navegador. Tu teléfono lo aprueba. Ejecuta el comando en **tu propia terminal**,
-no en el chat del agente: los códigos y las contraseñas solo deben escribirse en la terminal.
+Desktop o MAX en el navegador. Tu teléfono lo aprueba. El CLI hace sus preguntas en una ventana de
+terminal, así que, aunque tu agente guíe la configuración, normalmente te pedirá que ejecutes este
+comando y respondas tú.
 
 <Tabs groupId="messenger" persist items={["Telegram", "MAX"]}>
 <Tab value="Telegram">
@@ -218,6 +230,9 @@ Otras formas de iniciar sesión (una ventana del navegador, SMS, un token existe
 
 ### Comprueba que funciona
 
+La configuración ya lo comprueba, y un agente que instaló el CLI también. Ejecútalo tú si tu
+agente dice que no encuentra el comando, tus chats o tus mensajes:
+
 <Tabs groupId="messenger" persist items={["Telegram", "MAX"]}>
 <Tab value="Telegram">
 
@@ -235,18 +250,16 @@ max chats list --limit 5
 </Tab>
 </Tabs>
 
-Deberías ver cinco de tus chats recientes. La configuración ya hizo esta comprobación; puedes
-repetirla cuando quieras.
+Deberías ver cinco de tus chats recientes.
 
-Si dice que no has iniciado sesión, vuelve a ejecutar el comando de configuración. Si no encuentra
-el comando, abre una terminal nueva; en Windows, consulta
-[qué cambia el instalador](#what-the-windows-installer-changes).
+- **«No has iniciado sesión»**: vuelve a ejecutar la configuración.
+- **No se encuentra el comando**: abre una terminal nueva o reinicia tu agente; en Windows, mira
+  [qué cambia el instalador](#what-the-windows-installer-changes).
+- **Falta un chat o mensajes antiguos**: iniciar sesión no descarga el historial. Pide a tu agente
+  que primero descargue el historial de ese chat.
 
 </Step>
 </Steps>
-
-Iniciar sesión no descarga tu historial de mensajes. Más adelante, cuando una tarea lo necesite,
-eliges qué chats y cuánto historial descargar.
 
 ## Qué pueden hacer el CLI y tu agente con este acceso
 

@@ -12,3 +12,9 @@ export function installationMarkdown(lang: string): string {
     )
     .join("\n\n")
 }
+
+export function agentPromptMarkdown(tool: string, lang: string): string {
+  const pkg = tools.find((item) => item.name === tool)?.package ?? `@leemour/${tool}-cli`
+  const docs = `${siteUrl}/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}installation/content.md`
+  return `\`\`\`text\n${wordsFor(lang).onboarding.prompt(tool, pkg, docs)}\n\`\`\``
+}

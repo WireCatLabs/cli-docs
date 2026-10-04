@@ -4,7 +4,7 @@ import { metaSchema, pageSchema } from "fumadocs-core/source/schema"
 import { applyMdxPreset } from "fumadocs-mdx/config"
 import { defineDocs } from "fumadocs-mdx/macro"
 import { i18n } from "./i18n"
-import { installationMarkdown } from "./installation-markdown"
+import { agentPromptMarkdown, installationMarkdown } from "./installation-markdown"
 import { resolveDocumentationLink, rewriteMarkdownLinks } from "./markdown-links"
 import { remarkAnchorAliases } from "./remark-anchor-aliases"
 import { remarkDocUsability } from "./remark-doc-usability"
@@ -50,10 +50,11 @@ export const docsLlms = llms(source, {
         : page.locale === "es"
           ? "Versión de documentación"
           : "Documentation version"
-    const body = (await page.data.getText("processed")).replace(
-      "<InstallationGuide />",
-      installationMarkdown(page.locale ?? i18n.defaultLanguage),
-    )
+    const body = (await page.data.getText("processed"))
+      .replace("<InstallationGuide />", installationMarkdown(page.locale ?? i18n.defaultLanguage))
+      .replace(/<AgentInstallPrompt tool="(tg|max)" \/>/g, (_, tool) =>
+        agentPromptMarkdown(tool, page.locale ?? i18n.defaultLanguage),
+      )
     const markdown = rewriteMarkdownLinks(body, (href) =>
       resolveDocumentationLink(
         href,

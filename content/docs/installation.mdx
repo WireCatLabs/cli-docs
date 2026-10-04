@@ -17,6 +17,28 @@ Pick your system and messenger on the tabs below. The page remembers your choice
 
 ### Install the CLI
 
+**The easiest way: ask your AI agent.** Copy the request for your messenger into your agent
+(Claude Code, Codex, Cursor, Gemini CLI or Hermes). It checks Node.js, installs the CLI, learns the
+commands and walks you through the login in step 2.
+
+<a id="tg" />
+<a id="max" />
+
+<Tabs groupId="messenger" persist items={["Telegram", "MAX"]}>
+<Tab value="Telegram">
+
+<AgentInstallPrompt tool="tg" />
+
+</Tab>
+<Tab value="MAX">
+
+<AgentInstallPrompt tool="max" />
+
+</Tab>
+</Tabs>
+
+**Or install it yourself** in a terminal:
+
 <Tabs groupId="os" persist items={["macOS / Linux", "Windows"]}>
 <Tab value="macOS / Linux">
 
@@ -68,17 +90,6 @@ This installs the CLI with npm and makes the `tg` or `max` command work in every
 </Tab>
 </Tabs>
 
-<Accordions>
-<Accordion title="Prefer to let your AI agent install it?">
-
-Copy the request for your messenger into your agent (Claude Code, Codex, Cursor, Gemini CLI or
-Hermes). It checks Node.js, installs the CLI and teaches your agent the commands. You still log in
-yourself in step 2: the agent cannot scan a QR code for you.
-
-<InstallationGuide />
-
-</Accordion>
-</Accordions>
 
 </Step>
 <Step>
@@ -86,8 +97,9 @@ yourself in step 2: the agent cannot scan a QR code for you.
 ### Log in with your phone
 
 Logging in adds your computer as a new device on your account, the same way Telegram Desktop or
-MAX on the web does. Your phone approves it. Run the command in **your own terminal**, not in the
-agent chat: codes and passwords should only go into the terminal.
+MAX on the web does. Your phone approves it. The CLI asks its questions in a terminal window, so
+even when your agent leads the setup, it usually asks you to run this command and answer the
+questions yourself.
 
 <Tabs groupId="messenger" persist items={["Telegram", "MAX"]}>
 <Tab value="Telegram">
@@ -214,6 +226,9 @@ Other ways to log in (a browser window, SMS, an existing token):
 
 ### Check that it works
 
+Setup checks this for you, and an agent that installed the CLI checks it too. Run it yourself if
+your agent says it cannot find the command, your chats or your messages:
+
 <Tabs groupId="messenger" persist items={["Telegram", "MAX"]}>
 <Tab value="Telegram">
 
@@ -231,17 +246,16 @@ max chats list --limit 5
 </Tab>
 </Tabs>
 
-You should see five of your recent chats. Setup already ran this check; you can repeat it at any
-time.
+You should see five of your recent chats.
 
-If it says you are not logged in, run the setup command again. If the command is not found, open
-a new terminal; on Windows, see [what the installer changes](#what-the-windows-installer-changes).
+- **"Not logged in"** — run the setup command again.
+- **Command not found** — open a new terminal, or restart your agent; on Windows, see
+  [what the installer changes](#what-the-windows-installer-changes).
+- **A chat or older messages are missing** — logging in does not download history. Ask your agent
+  to fetch that chat's history first.
 
 </Step>
 </Steps>
-
-Logging in does not download your message history. You choose which chats and how much history to
-fetch later, when a task needs it.
 
 ## What the CLI and your agent can do with this login
 
