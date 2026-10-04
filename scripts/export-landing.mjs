@@ -124,7 +124,7 @@ const view = (step, lang, messenger, session, index) => {
       return `<details class="evidence-message" id="${id}"><summary><span class="evidence-heading"><strong>${escapeHtml(source.senderName)} <span class="evidence-id">#${escapeHtml(String(source.id))}</span></strong><span class="evidence-meta">${escapeHtml(source.chat)} · ${name} · ${date}</span></span><svg class="evidence-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 4 4 4-4 4"/></svg></summary><blockquote>${escapeHtml(source.text)}</blockquote></details>`
     })
     .join("")
-  return `<div class="say step">${step.say}${sources ? `<div class="answer-sources"><small>${text.sources}</small>${sources}</div>` : ""}</div>`
+  return `<div class="say step">${step.say.replace(/<h3>/g, '<span class="answer-label">').replace(/<\/h3>/g, "</span>")}${sources ? `<div class="answer-sources"><small>${text.sources}</small>${sources}</div>` : ""}</div>`
 }
 let localeTypography = ""
 for (const lang of ["en", "ru", "es"]) {
@@ -281,6 +281,8 @@ for (const lang of ["en", "ru", "es"]) {
     }
   })
   css.walkRules((rule) => {
+    rule.selector = rule.selector.replace(/\.say h3/g, ".say .answer-label")
+    if (rule.selector === ".wirecat-landing .say .answer-label") rule.append({ prop: "display", value: "block" })
     if (!rule.nodes.length) rule.remove()
   })
   // Reset only inside the landing: Tailwind preflight must not change the prototype's typography.
