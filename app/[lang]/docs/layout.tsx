@@ -1,3 +1,4 @@
+import "../../docs.css"
 import { DocsLayout } from "fumadocs-ui/layouts/docs"
 import type { CSSProperties } from "react"
 import { preload } from "react-dom"

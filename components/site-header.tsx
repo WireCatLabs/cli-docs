@@ -83,7 +83,12 @@ export function SiteHeader({ lang }: { lang: string }) {
   return (
     <div ref={rootRef} className="bar site-header" id="bar">
       <header className="top wrap">
-        <Link className="wirecat-brand site-brand" href={`/${lang}`} aria-label={`WireCat · ${words.back}`}>
+        <Link
+          prefetch={false}
+          className="wirecat-brand site-brand"
+          href={`/${lang}`}
+          aria-label={`WireCat · ${words.back}`}
+        >
           <WirecatLogo />
         </Link>
         <div className="right">
@@ -116,9 +121,17 @@ export function SiteHeader({ lang }: { lang: string }) {
           </details>
           <nav className="site" aria-label={ui.navigation}>
             <span className="glide" aria-hidden="true" />
-            <Link href={`/${lang}/docs/tg`}>Telegram</Link>
-            <Link href={`/${lang}/docs/max`}>MAX</Link>
-            <Link href={`/${lang}/about`} aria-current={pathname === `/${lang}/about` ? "page" : undefined}>
+            <Link prefetch={false} href={`/${lang}/docs/tg`}>
+              Telegram
+            </Link>
+            <Link prefetch={false} href={`/${lang}/docs/max`}>
+              MAX
+            </Link>
+            <Link
+              prefetch={false}
+              href={`/${lang}/about`}
+              aria-current={pathname === `/${lang}/about` ? "page" : undefined}
+            >
               {words.nav}
             </Link>
           </nav>
