@@ -4,16 +4,13 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 import { CopyText } from "@/components/text-snippet"
 import type { Tool } from "@/lib/shared"
-import { siteUrl } from "@/lib/shared"
 import { wordsFor } from "@/lib/words"
 
 export function InstallTool({ tool, lang }: { tool: Tool; lang: string }) {
   const words = wordsFor(lang)
   const ui = words.onboarding
   const [open, setOpen] = useState(false)
-  const [windows, setWindows] = useState(false)
   useEffect(() => {
-    setWindows(navigator.userAgent.includes("Windows"))
     const followHash = () => {
       if (window.location.hash === `#${tool.name}`) setOpen(true)
     }
@@ -21,9 +18,6 @@ export function InstallTool({ tool, lang }: { tool: Tool; lang: string }) {
     window.addEventListener("hashchange", followHash)
     return () => window.removeEventListener("hashchange", followHash)
   }, [tool.name])
-  const docs = `${siteUrl}/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}installation/content.md`
-  const login = "setup --agent all"
-  const installer = `& ([scriptblock]::Create((Invoke-RestMethod '${siteUrl}/install.ps1'))) -Tool ${tool.name} -Agent all`
   return (
     <details
       id={tool.name}
@@ -36,7 +30,7 @@ export function InstallTool({ tool, lang }: { tool: Tool; lang: string }) {
       </summary>
       <div className="space-y-4 border-t p-5">
         <p className="text-sm text-fd-muted-foreground">{ui.paste}</p>
-        <CopyText kind="prompt" lang={lang} text={ui.prompt(tool.name, tool.package, docs)} />
+        <CopyText kind="prompt" lang={lang} text={ui.prompt(tool.name, tool.package)} />
         <Link href={`/${lang}/docs/agents`} className="inline-block text-sm underline">
           {words.navigation.agents} →
         </Link>
@@ -47,29 +41,9 @@ export function InstallTool({ tool, lang }: { tool: Tool; lang: string }) {
             <a href="https://nodejs.org/en/download" className="text-sm underline">
               Node.js ↗
             </a>
-            {windows && <p className="text-sm text-fd-muted-foreground">{ui.windows}</p>}
-            <CopyText
-              lang={lang}
-              text={
-                windows
-                  ? installer
-                  : `npm install -g ${tool.package}\n${tool.name} skill install --for all\n${tool.name} --version\n${tool.name} doctor`
-              }
-            />
-            {!windows && (
-              <>
-                <p className="text-sm text-fd-muted-foreground">{ui.windows}</p>
-                <CopyText lang={lang} text={installer} />
-              </>
-            )}
+            <CopyText lang={lang} text={`npm install -g ${tool.package}`} />
             <p className="text-sm font-medium">{ui.login}</p>
-            <CopyText lang={lang} text={`${tool.name} ${login}`} />
-            {tool.name === "tg" && <p className="text-sm text-fd-muted-foreground">{ui.telegram}</p>}
-            {tool.name === "max" && <p className="text-sm text-fd-muted-foreground">{ui.maxSetup}</p>}
-            <CopyText
-              lang={lang}
-              text={`${tool.name} account show\n${tool.name} chats list --limit 5\n${tool.name} inbox --limit 5`}
-            />
+            <CopyText lang={lang} text={`${tool.name} setup`} />
             <Link href={`/${lang}/docs/${tool.name}/sessions`} className="inline-block text-sm underline">
               {words.docs} →
             </Link>

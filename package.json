@@ -17,7 +17,8 @@
     "search:generate": "node scripts/build-search-language.mjs",
     "search:check": "node scripts/build-search-language.mjs --check",
     "test:browser": "playwright test",
-    "docs:updates": "node --experimental-strip-types scripts/docs-updates.ts"
+    "docs:updates": "node --experimental-strip-types scripts/docs-updates.ts",
+    "check:seo": "node --experimental-strip-types scripts/check-seo.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

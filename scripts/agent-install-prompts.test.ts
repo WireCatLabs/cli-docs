@@ -3,17 +3,18 @@ import { wordsFor } from "../lib/words"
 
 describe("agent installation requests", () => {
   for (const lang of ["en", "ru", "es"]) {
-    it.each(["tg", "max"])(`${lang}: prepares %s through npm and verifies PATH/skill before login`, (tool) => {
-      const guide = "https://wirecat.dev/llms.mdx/docs/installation/content.md"
-      const prompt = wordsFor(lang).onboarding.prompt(tool, `@leemour/${tool}-cli`, guide)
+    it.each(["tg", "max"])(`${lang}: gives a short, platform-neutral setup request for %s`, (tool) => {
+      const prompt = wordsFor(lang).onboarding.prompt(tool, `@leemour/${tool}-cli`)
       expect(prompt).toContain(`npm install -g @leemour/${tool}-cli`)
-      expect(prompt).toContain("npm.cmd prefix -g")
-      expect(prompt).toContain(`${tool} skill install --for all`)
-      expect(prompt).toContain(`${tool} skill show`)
-      expect(prompt).toContain(`${tool} --version`)
-      expect(prompt).toContain(guide)
-      expect(prompt).not.toContain("install.ps1")
-      expect(prompt).not.toContain("Invoke-RestMethod")
+      expect(prompt).toContain(`${tool} setup --help`)
+      expect(prompt).toContain(`${tool} setup`)
+      expect(prompt).toContain(`${tool} doctor`)
+      expect(prompt).toContain("22.16+")
+      expect(prompt.split("\n")).toHaveLength(5)
+      expect(prompt.split("\n").at(-1)).toContain("skill")
+      expect(prompt.length).toBeLessThan(550)
+      for (const noise of ["PATH", "Windows", "npm.cmd", "--agent", "--version", "https://", "install.ps1"])
+        expect(prompt).not.toContain(noise)
     })
   }
 })

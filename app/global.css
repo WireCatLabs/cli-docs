@@ -2,6 +2,10 @@
 @import "fumadocs-ui/css/neutral.css";
 @import "fumadocs-ui/css/preset.css";
 
+:root:not(.dark) {
+  --color-fd-muted-foreground: #595959;
+}
+
 html {
   scrollbar-gutter: stable;
 }

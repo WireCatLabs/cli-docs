@@ -1,203 +1,59 @@
 ---
 title: "Instalación"
-description: "Elige Telegram o MAX, instala el CLI con tu agente o terminal e inicia sesión."
+description: "Instala el cli de Telegram o MAX, conecta tu cuenta y dale al agente su primera tarea."
 ---
 
-Los CLI de Telegram y MAX se instalan como paquetes npm y funcionan en **Windows, macOS y Linux**.
-Pide a tu agente local que compruebe tu ordenador, instale el CLI y te ayude a conectar tu cuenta,
-o hazlo por tu cuenta en la terminal. Tras iniciar sesión, comprueba tu cuenta y los primeros chats
-y pide al agente que resuelva una tarea útil.
+Las herramientas de Telegram y MAX se instalan con npm y funcionan en **Windows, macOS y Linux**.
+Pide a un <DocTerm term="local-agent" lang="es" label="agente local" /> ayuda para instalar e iniciar sesión, o ejecuta los comandos en la terminal.
 
 ## 1. Elige el mensajero
 
-Abre **Telegram** o **MAX** abajo y copia la petición en tu agente local.
-Sirve para Codex, Cursor, Claude Code, Gemini CLI y Hermes. Para instalarlo por tu cuenta,
-abre **Instalar en una terminal** dentro del mensajero elegido.
+Abre **Telegram** o **MAX** y copia el prompt a tu agente.
 
 <InstallationGuide />
 
-Reserva unos cinco minutos para instalar e iniciar sesión. Descargar el historial es un paso
-separado: elige los chats y la cantidad de mensajes después de configurar el CLI.
-
 ## 2. Inicia sesión en tu ordenador
 
-Introduce los códigos y contraseñas en tu terminal local cuando los pida el CLI.
+Abre la guía de tu mensajero. Ten el teléfono a mano: tú autorizas el acceso a la cuenta y el agente te ayuda con los pasos.
 
-### Telegram
+- **[Iniciar sesión en Telegram](./tg/sessions.md)** — el cli obtiene primero las <DocTerm term="telegram-app" lang="es" label="credenciales de aplicación de Telegram" />; después confirmas el acceso con un QR o un código de Telegram. La guía explica ambos pasos, [my.telegram.org](https://my.telegram.org/apps) y cómo escanear el QR.
+- **[Iniciar sesión en MAX](./max/sessions.md)** — escanea el QR en la aplicación MAX del teléfono y confirma la conexión. Los bots usan una [conexión por token](./max/bot.md) aparte.
 
-1. Ejecuta en tu terminal local:
+Reserva unos cinco minutos para la configuración. Introduce los códigos y contraseñas en tu terminal local cuando el cli los pida. La descarga del historial es un paso aparte después de iniciar sesión.
 
-   ```sh
-   tg setup --agent all
-   ```
+## 3. Conecta tu agente y prueba una primera tarea
 
-2. La primera vez, el CLI obtiene las credenciales de la aplicación Telegram. Introduce el número y el código recibido en Telegram cuando se soliciten.
-3. En el teléfono, selecciona la cuenta correcta. Abre Ajustes → Dispositivos → Vincular dispositivo de escritorio y escanea el QR del ordenador.
-4. Introduce tu contraseña de dos pasos si se solicita. La configuración comprueba tu cuenta y cinco chats e instala los skills. Reutiliza una sesión existente; la descarga del historial se elige aparte. Para iniciar sesión sin más pasos, usa `tg session start --app auto`.
+Un <DocTerm term="skill" lang="es" label="skill" /> enseña al agente a usar el cli. La [guía de conexión](./agents.md) explica cómo comprobar su instalación y conectar tu agente. Para Claude Desktop, usa [MCP](./mcp.md).
 
-Si falla el registro automático, usa:
-
-```sh
-tg session start --app browser
-```
-
-[Instrucciones de acceso a Telegram](./tg/sessions.md) explican las credenciales, el QR y el acceso por teléfono.
-
-### Iniciar sesión en MAX
-
-1. Ejecuta:
-
-   ```sh
-   max setup --agent all
-   ```
-
-2. En el teléfono, abre MAX → Ajustes → Dispositivos. Escanea el QR del ordenador y confirma la conexión.
-3. Sigue las indicaciones de la terminal. La configuración comprueba tu cuenta y cinco chats e instala los skills. Reutiliza una sesión existente; no descarga todo el historial ni inicia el servicio en segundo plano. Para iniciar sesión sin más pasos, usa `max session start qr`.
-
-Consulta [el acceso a MAX](./max/sessions.md) para otros métodos o la [guía de bots](./max/bot.md) para conectar un bot.
-
-### Comprueba la conexión
-
-Ejecuta el comando de tu mensajero:
-
-```sh
-tg account show
-```
-
-```sh
-max account show
-```
-
-La respuesta debe mostrar tu cuenta. Antes de iniciar sesión, el diagnóstico puede indicar que falta una sesión; es normal. Repite la comprobación tras acceder y consulta tus chats.
-
-## 3. Conecta tu agente
-
-[Conectar tu agente](./agents.md) explica los cinco clientes. Para Claude Desktop o MCP, sigue
-con [MCP y documentación](./mcp.md).
+Prueba esta petición:
 
 ```text prompt
-Revisa los mensajes no leídos por chat y dime a quién debo responder.
-```
-En el CLI: `tg inbox --limit 5` o `max inbox --limit 5`.
-
-Continúa con [las primeras tareas](./first-tasks.md): encontrar un acuerdo, preparar una reunión
-y redactar una respuesta. En [cómo formular peticiones](./prompting.md) tienes ejemplos para copiar y límites útiles.
-
-## Actualizaciones y ubicación de archivos
-
-Consulta la [instalación de Telegram](./tg/installation.md) o [MAX](./max/installation.md).
-Si falla alguna comprobación, abre [solución de problemas de Telegram](./tg/troubleshooting.md)
-o [MAX](./max/troubleshooting.md).
-
-## Comandos para la terminal
-
-Para instalarlo manualmente necesitas **Node.js 22.16+ (rama 22.x) o 24+** con npm.
-[Descarga Node.js](https://nodejs.org/en/download), abre una terminal nueva y comprueba las versiones:
-
-```sh
-node --version
+Revisa los mensajes sin leer por chat y dime quién necesita una respuesta.
 ```
 
-```sh
-npm --version
-```
+[Primeras tareas](./first-tasks.md) incluye buscar acuerdos, preparar una llamada y redactar respuestas.
+
+## Instalar en una terminal
+
+Necesitas **Node.js 22.16+ (rama 22.x) o 24+** con npm. Si falta, [instala Node.js](https://nodejs.org/en/download) y abre una terminal nueva.
 
 ### Telegram
-
-Instalar:
 
 ```sh
 npm install -g @leemour/tg-cli
+tg setup
 ```
 
-Versión:
-
-```sh
-tg --version
-```
-
-Diagnóstico:
-
-```sh
-tg doctor
-```
-
-Iniciar sesión:
-
-```sh
-tg setup --agent all
-```
-
-Cuenta:
-
-```sh
-tg account show
-```
-
-Primeros cinco chats:
-
-```sh
-tg chats list --limit 5
-```
-
-### Comandos de MAX en la terminal
-
-Instalar:
+### Comandos MAX
 
 ```sh
 npm install -g @leemour/max-cli
+max setup
 ```
 
-Versión:
-
-```sh
-max --version
-```
-
-Diagnóstico:
-
-```sh
-max doctor
-```
-
-Iniciar sesión:
-
-```sh
-max setup --agent all
-```
-
-Cuenta:
-
-```sh
-max account show
-```
-
-Primeros cinco chats:
-
-```sh
-max chats list --limit 5
-```
+`setup` guía el acceso y ofrece conectar un skill para tu agente.
+Tras la configuración, ejecuta `tg doctor` o `max doctor` y sigue los pasos sugeridos.
 
 ### Windows
 
-La petición al agente de arriba usa npm y le pide que instale el skill, compruebe PATH y verifique el comando. No descarga un script de instalación.
-
-npm crea el comando en su carpeta de instalación global. En Windows, esa carpeta debe estar en PATH. Un agente que ya está abierto también debe actualizar el entorno de su terminal: guardar el PATH del usuario no cambia el de una terminal abierta.
-
-Para instalarlo por tu cuenta, el instalador de PowerShell siguiente configura PATH e instala el skill:
-
-```powershell
-& ([scriptblock]::Create((Invoke-RestMethod 'https://wirecat.dev/install.ps1'))) -Tool tg -Agent all
-```
-
-```powershell
-& ([scriptblock]::Create((Invoke-RestMethod 'https://wirecat.dev/install.ps1'))) -Tool max -Agent all
-```
-
-Instala el paquete npm, conserva las entradas de PATH del usuario, actualiza este PowerShell,
-instala el skill y verifica que `tg` o `max` se ejecuta directamente. No necesitas editar PATH.
-Funciona aunque npm omita los scripts de instalación. Conserva `.cmd` y elimina solo el shim
-PowerShell generado por npm para este paquete; no cambia la política de ejecución.
-`-Agent codex|cursor|claude|gemini|all|none` elige el skill; el valor predeterminado es `all`.
-Un agente que ya está abierto actualiza su propio entorno antes de las siguientes llamadas.
-El propietario sigue introduciendo los códigos o escaneando el QR localmente para iniciar sesión.
+La referencia de cada cli explica problemas al ejecutar comandos, actualizaciones y ubicación de archivos: [instalación de Telegram](./tg/installation.md) e [instalación de MAX](./max/installation.md). También incluye ayuda para Windows si el comando no funciona después de instalarlo.

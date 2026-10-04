@@ -68,9 +68,9 @@ describe("exported Markdown destinations", () => {
     expect(text).toContain("@leemour/max-cli")
     expect(text).toContain("[#tg]")
     expect(text).toContain("[#max]")
-    expect(text).toContain(
-      `https://wirecat.dev/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}installation/content.md`,
-    )
+    expect(text).toContain("tg setup --help")
+    expect(text).toContain("max doctor")
+    expect(text).not.toContain("https://wirecat.dev/llms.mdx/docs/")
     expect(text).not.toContain("<InstallationGuide")
   })
 })

@@ -34,7 +34,7 @@
   margin: 0;
 }
 
-.wirecat-landing .foot h4 {
+.wirecat-landing .foot h2 {
   margin-bottom: 16px;
   color: var(--app-ink);
   font-size: 14px;
@@ -163,7 +163,7 @@
     font-size: 14px;
   }
 
-  .wirecat-landing .foot h4 {
+  .wirecat-landing .foot h2 {
     margin-bottom: 8px;
   }
 

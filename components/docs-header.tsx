@@ -5,11 +5,11 @@ import { useI18n } from "fumadocs-ui/contexts/i18n"
 import { useTreeContext } from "fumadocs-ui/contexts/tree"
 import { useDocsLayout } from "fumadocs-ui/layouts/docs"
 import { LanguageSelect } from "fumadocs-ui/layouts/shared/slots/language-select"
-import { FullSearchTrigger, SearchTrigger } from "fumadocs-ui/layouts/shared/slots/search-trigger"
 import { Languages, Menu } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import type { ComponentProps } from "react"
+import { type ComponentProps, useEffect } from "react"
+import { DocsSearchTrigger } from "@/components/docs-search-trigger"
 import { WirecatLogo } from "@/components/wirecat-logo"
 import { isGettingStarted, messengerHref } from "@/lib/docs-navigation"
 import { wordsFor } from "@/lib/words"
@@ -53,6 +53,27 @@ export function DocsHeader(props: ComponentProps<"header">) {
   const ui = wordsFor(lang).navigation
   const pathname = usePathname()
   const startActive = isGettingStarted(pathname)
+  useEffect(() => {
+    const dismiss = (event: KeyboardEvent) => {
+      if (
+        event.key !== "Escape" ||
+        event.defaultPrevented ||
+        (event.target instanceof Element && event.target.closest('[role="dialog"]'))
+      )
+        return
+      const trigger = document.querySelector<HTMLButtonElement>(
+        '#nd-subnav button[aria-controls="nd-sidebar-mobile"][aria-expanded="true"]',
+      )
+      if (trigger) {
+        trigger.click()
+        trigger.focus()
+        event.preventDefault()
+      }
+    }
+    document.addEventListener("keydown", dismiss)
+    return () => document.removeEventListener("keydown", dismiss)
+  }, [])
+
   return (
     <header
       {...props}
@@ -71,8 +92,8 @@ export function DocsHeader(props: ComponentProps<"header">) {
         {ui.start}
       </Link>
       <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
-        <FullSearchTrigger className="hidden w-44 md:flex" />
-        <SearchTrigger className="md:hidden" />
+        <DocsSearchTrigger full className="hidden w-44 md:flex" />
+        <DocsSearchTrigger className="md:hidden" />
         <LanguageSelect aria-label={ui.language} className="gap-1.5 px-2 py-2">
           <Languages className="size-4" />
           <span className="text-xs font-medium uppercase">{lang}</span>

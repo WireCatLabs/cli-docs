@@ -1,11 +1,11 @@
 import type { Metadata } from "next"
 import { SiteAnalytics } from "@/components/site-analytics"
-import { appName, siteDescription, siteUrl, tagline } from "@/lib/shared"
+import { pageMetadata, seoWords } from "@/lib/seo"
+import { siteUrl } from "@/lib/shared"
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: `${appName} · ${tagline}`,
-  description: siteDescription,
+  ...pageMetadata({ lang: "en", title: seoWords("en").homeTitle, description: seoWords("en").homeDescription }),
   icons: { icon: [{ url: "/favicon.ico", sizes: "any" }], apple: "/apple-touch-icon.png" },
 }
 

@@ -42,7 +42,7 @@ Abre [la guía de instalación](/es/docs/installation#max) y elige las instrucci
 Tras instalar la herramienta, configura la cuenta y consulta algunos chats:
 
 ```sh
-max setup --agent all
+max setup
 ```
 
 ```sh

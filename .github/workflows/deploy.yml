@@ -46,6 +46,11 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm exec next build
       - run: pnpm check:links
+      - run: pnpm check:seo
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm exec playwright test
+        env:
+          PLAYWRIGHT_EXPORT: "1"
       - name: Cloudflare Pages
         run: |
           if [ -z "$CLOUDFLARE_API_TOKEN" ]; then

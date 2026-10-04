@@ -31,7 +31,9 @@ pnpm dev                 # http://localhost:3000
 
 ```sh
 pnpm lint && pnpm typecheck && pnpm test
-pnpm check:links         # every link inside out/ leads to a page and, with an anchor, a heading
+pnpm check:links         # HTML/Markdown targets, anchors, duplicate IDs and unexpanded components
+pnpm check:seo           # metadata, hreflang, JSON-LD, social images, sitemap and robots
+PLAYWRIGHT_EXPORT=1 pnpm exec playwright test tests/site-quality.spec.ts
 ```
 
 ## Landing page
@@ -137,4 +139,34 @@ and requests. Local previews do not load the JavaScript tags.
 Markdown twins resolve documentation links to their own Markdown URLs and expand the shared
 installation component into instructions and agent prompts. `pnpm check:links` validates HTML
 and Markdown targets and keeps code blocks intact. Deployment runs lint, tests, reviewed-release
-sync, type checking, build and link checks before publication.
+sync, type checking, build, link/SEO checks and production browser checks before publication.
+
+Localized search and social metadata are assembled in `lib/seo.ts`; reviewed descriptions live in
+`lib/seo-copy.json`. Sitemap and robots routes export from the same public documentation source.
+Social cards are generated locally at `/og/{en,ru,es}.png`. JSON-LD describes pages, breadcrumbs and
+released source facts. Adding an undocumented tool reference without reviewed description copy
+fails the build. Production builds also reject a missing or local public origin.
+
+Documentation uses the same licensed Inter font, stored under `public/fonts/docs-inter/` with its
+source hashes and licence. Docs routes preload their Latin/Cyrillic subsets through the shared layout;
+landing routes use the existing selected heading/body fonts.
+
+The browser quality suite checks representative landing, installation and long-reference pages
+in every language at desktop/mobile widths, plus deferred search, keyboard dismissal and native
+agent resources. `PLAYWRIGHT_EXPORT=1` serves `out/` with real 404s; the default browser configuration
+continues to support development checks. Private full-site audit tools, credentials instructions
+and detailed evidence live in the owner's separate `max-cli/docs_ai` repository.
+
+### Inline documentation explanations
+
+Use `<DocTerm term="local-agent" lang="ru" label="локального агента" />` in authored MDX to add
+an inline information button. The popover supports hover, click, keyboard and touch, with Escape
+and a close button. Definitions and localized guide destinations live in `lib/doc-terms.ts`.
+Markdown twins expand the same definitions into readable text; code examples remain intact.
+Installation prompts are short and platform-neutral. Windows environment recovery stays in each
+cli's installation reference, rather than in the copied prompt.
+
+`public/telegram-app-login.png` is an unmodified screenshot of the public
+[my.telegram.org/apps login page](https://my.telegram.org/apps), captured on 2026-10-04 in a fresh
+unauthenticated browser. No phone number, login code, API credentials or account QR was entered.
+Its localized captions are reviewed portal corrections for the Telegram sessions page.

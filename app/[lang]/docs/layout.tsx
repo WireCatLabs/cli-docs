@@ -1,6 +1,10 @@
 import { DocsLayout } from "fumadocs-ui/layouts/docs"
 import type { CSSProperties } from "react"
+import { preload } from "react-dom"
+import { documentationFonts } from "@/lib/docs-fonts"
+import "@/lib/docs-fonts.css"
 import { DocsHeader } from "@/components/docs-header"
+import { DocsProvider } from "@/components/docs-provider"
 import { DocsSidebarFolder } from "@/components/docs-sidebar-folder"
 import { DocsSidebarItem } from "@/components/docs-sidebar-item"
 import { DocsSidebarTitle } from "@/components/docs-sidebar-title"
@@ -26,10 +30,12 @@ export default async function Layout({
   children: React.ReactNode
 }) {
   const { lang } = await params
+  for (const font of documentationFonts(lang))
+    preload(font, { as: "font", type: "font/woff2", crossOrigin: "anonymous" })
   const options = baseOptions(lang)
   const content = { en, es, ru }[lang as "en" | "es" | "ru"] ?? en
   return (
-    <>
+    <DocsProvider lang={lang}>
       <DocsLayout
         {...options}
         tree={unifiedDocsTree(source.getPageTree(lang))}
@@ -57,6 +63,6 @@ export default async function Layout({
       <div className="wirecat-landing wirecat-docs-footer">
         <SiteFooter html={content.footerHtml} variant="docs" />
       </div>
-    </>
+    </DocsProvider>
   )
 }

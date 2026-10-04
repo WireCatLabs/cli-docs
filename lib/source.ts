@@ -3,9 +3,11 @@ import { llms, loader } from "fumadocs-core/source"
 import { metaSchema, pageSchema } from "fumadocs-core/source/schema"
 import { applyMdxPreset } from "fumadocs-mdx/config"
 import { defineDocs } from "fumadocs-mdx/macro"
+import { expandDocTerms } from "./doc-terms-markdown"
 import { i18n } from "./i18n"
 import { installationMarkdown } from "./installation-markdown"
 import { resolveDocumentationLink, rewriteMarkdownLinks } from "./markdown-links"
+import { rehypeCodeAccessibility } from "./rehype-code-accessibility"
 import { remarkAnchorAliases } from "./remark-anchor-aliases"
 import { remarkDocUsability } from "./remark-doc-usability"
 import { docsRoute, getPageMarkdownUrl, siteUrl, toolOf } from "./shared"
@@ -17,7 +19,13 @@ const docs = defineDocs({
     // The tools' pages use fences Shiki has no grammar for (`cron`); those show as plain text.
     mdxOptions: applyMdxPreset({
       remarkPlugins: [remarkAnchorAliases, remarkDocUsability],
-      rehypeCodeOptions: { ...rehypeCodeDefaultOptions, fallbackLanguage: "text" },
+      remarkImageOptions: { useImport: false },
+      rehypePlugins: [rehypeCodeAccessibility],
+      rehypeCodeOptions: {
+        ...rehypeCodeDefaultOptions,
+        themes: { light: "github-light-high-contrast", dark: "github-dark-high-contrast" },
+        fallbackLanguage: "text",
+      },
     }),
     postprocess: {
       includeProcessedMarkdown: true,
@@ -54,7 +62,7 @@ export const docsLlms = llms(source, {
       "<InstallationGuide />",
       installationMarkdown(page.locale ?? i18n.defaultLanguage),
     )
-    const markdown = rewriteMarkdownLinks(body, (href) =>
+    const markdown = rewriteMarkdownLinks(expandDocTerms(body, page.locale ?? i18n.defaultLanguage), (href) =>
       resolveDocumentationLink(
         href,
         page.slugs.length === 0 || (tool && page.slugs.length === 1) ? `${page.url}/` : page.url,

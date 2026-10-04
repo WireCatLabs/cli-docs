@@ -70,13 +70,34 @@ export function remarkDocUsability(indexes = loadCommandIndexes()) {
     const language = /\.(ru|es)\.mdx?$/.exec(path)?.[1] ?? "en"
     const reference = { en: "Command reference", ru: "Справочник команды", es: "Referencia del comando" }[language]
     const installation = /\/installation(?:\.(?:ru|es))?\.mdx?$/.test(path) && tool
+    let tableNumber = 0
 
     const visit = (node: Node) => {
+      if (node.type === "table") {
+        tableNumber++
+        node.data = {
+          ...node.data,
+          hProperties: {
+            ...node.data?.hProperties,
+            "data-table-label": `${{ en: "Reference table", ru: "Справочная таблица", es: "Tabla de referencia" }[language]} ${tableNumber}`,
+          },
+        }
+
+        for (const cell of node.children?.[0]?.children ?? []) {
+          if (!textOf(cell).trim())
+            cell.children = [
+              { type: "text", value: { en: "Requirement", ru: "Обязательность", es: "Obligatoriedad" }[language] },
+            ]
+        }
+      }
       if (!node.children || ["link", "linkReference", "heading", "code", "html"].includes(node.type)) return
       if (
         node.type === "blockquote" &&
         node.children[0] &&
         [
+          "See the my.telegram.org login screen",
+          "Посмотреть экран входа my.telegram.org",
+          "Ver la pantalla de acceso de my.telegram.org",
           "How are login credentials protected?",
           "Как защищены данные входа?",
           "¿Cómo se protegen las credenciales?",
@@ -85,9 +106,11 @@ export function remarkDocUsability(indexes = loadCommandIndexes()) {
           "¿Qué es una aplicación Telegram y para qué sirve?",
         ].includes(textOf(node.children[0]))
       ) {
-        const id = /application|приложение|aplicación/.test(textOf(node.children[0]))
-          ? "telegram-app-explained"
-          : "credential-storage"
+        const id = textOf(node.children[0]).includes("my.telegram.org")
+          ? "telegram-app-login"
+          : /application|приложение|aplicación/.test(textOf(node.children[0]))
+            ? "telegram-app-explained"
+            : "credential-storage"
         node.data = { hName: "details", hProperties: { className: "docs-disclosure", id } }
         node.children[0].data = { hName: "summary" }
       }
@@ -164,6 +187,7 @@ export function remarkDocUsability(indexes = loadCommandIndexes()) {
       const alias = tree.children[i - 1]
       const start = alias?.data?.hProperties?.id === "from-source" ? i - 1 : i
       const summary = tree.children.slice(start, i + 1)
+      heading.data = { ...heading.data, hProperties: { ...heading.data?.hProperties, "data-static-heading": true } }
       const body = tree.children.slice(i + 1, end)
       tree.children.splice(start, end - start, {
         type: "blockquote",
