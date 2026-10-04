@@ -3,6 +3,7 @@
 import { Popover } from "@base-ui/react/popover"
 import { Info, X } from "lucide-react"
 import Link from "next/link"
+import { useEffect, useState } from "react"
 import { type DocTermId, docTerm } from "@/lib/doc-terms"
 
 const labels = {
@@ -12,6 +13,8 @@ const labels = {
 }
 
 export function DocTerm({ term, label, lang = "en" }: { term: DocTermId; label?: string; lang?: string }) {
+  const [ready, setReady] = useState(false)
+  useEffect(() => setReady(true), [])
   const entry = docTerm(term, lang)
   const ui = labels[lang as keyof typeof labels] ?? labels.en
   return (
@@ -20,6 +23,7 @@ export function DocTerm({ term, label, lang = "en" }: { term: DocTermId; label?:
       <Popover.Root>
         <Popover.Trigger
           openOnHover
+          disabled={!ready}
           delay={200}
           closeDelay={200}
           className="docs-term-trigger"

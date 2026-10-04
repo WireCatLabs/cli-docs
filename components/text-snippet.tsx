@@ -21,6 +21,8 @@ export function CopyText({
 }) {
   const words = wordsFor(lang).onboarding
   const label = (labels[lang as keyof typeof labels] ?? labels.en)[kind]
+  const [ready, setReady] = useState(false)
+  useEffect(() => setReady(true), [])
   const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle")
   useEffect(() => {
     if (status !== "copied") return
@@ -37,6 +39,7 @@ export function CopyText({
         </span>
         <button
           type="button"
+          disabled={!ready}
           className="docs-copy"
           aria-label={`${words.copy}: ${label}`}
           onClick={async () => {

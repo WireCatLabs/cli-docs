@@ -31,6 +31,7 @@ for (const lang of languages) {
   }) => {
     await page.goto(`/${lang}/docs/installation`)
     const trigger = page.getByRole("button", { name: labels[lang].local, exact: true })
+    await expect(trigger).toBeEnabled()
     await trigger.hover()
     const popup = page.locator(".docs-term-popup")
     await expect(popup).toBeVisible()
@@ -82,8 +83,10 @@ for (const lang of languages) {
     await page.goto(`/${lang}/docs/installation#tg`)
     for (const tool of ["tg", "max"]) {
       const details = page.locator(`details#${tool}`)
+      await expect(details.locator(".docs-prompt .docs-copy")).toBeEnabled()
       if (!(await details.evaluate((element) => (element as HTMLDetailsElement).open)))
         await details.locator(":scope > summary").click()
+      await expect(details.locator(".docs-prompt code")).toBeVisible()
       const text = await details.locator(".docs-prompt code").innerText()
       expect(text.split("\n")).toHaveLength(5)
       expect(text.length).toBeLessThan(550)
@@ -95,7 +98,7 @@ for (const lang of languages) {
     await page.getByText(labels[lang].screenshot, { exact: true }).click()
     const image = page.locator('img[src="/telegram-app-login.png"]')
     await expect(image).toBeVisible()
-    await expect.poll(() => image.evaluate((el) => (el as HTMLImageElement).naturalWidth)).toBe(880)
+    await expect.poll(() => image.evaluate((el) => (el as HTMLImageElement).naturalWidth)).toBe(1040)
     const markdownPath = `/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}installation/content.md`
     const response = await page.request.get(markdownPath)
     expect(response.ok()).toBe(true)
