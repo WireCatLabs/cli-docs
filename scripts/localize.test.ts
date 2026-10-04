@@ -7,6 +7,7 @@ import {
   correctDocumentation,
   fingerprint,
   localizeTool,
+  siteLinks,
   translationProblems,
   withOriginalAnchors,
 } from "./localize.ts"
@@ -44,6 +45,10 @@ describe("released documentation translations", () => {
   })
   it("marks the actual content language, including untranslated fallbacks", () => {
     expect(contentLanguage(original, "en")).toContain('contentLanguage: "en"')
+  })
+  it("opens a site page named by its full URL in the reader's language", () => {
+    const page = "[shared page](https://wirecat.dev/ru/docs/security) · `https://wirecat.dev/ru/docs/x`"
+    expect(siteLinks(page, "es")).toBe("[shared page](/es/docs/security) · `https://wirecat.dev/ru/docs/x`")
   })
   it("applies reviewed errata exactly once and rejects stale or ambiguous corrections", () => {
     const correction = [{ before: "old claim", after: "reviewed claim" }]

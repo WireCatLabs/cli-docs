@@ -37,6 +37,8 @@ wirecat.dev/
 ├── /{lang}/docs                   getting started: choose a messenger and a path              ✅
 ├── /{lang}/docs/installation      install with an agent or terminal, log in, first check        ✅
 ├── /{lang}/docs/agents            Codex, Cursor, Claude Code, Gemini CLI, Hermes                ✅
+├── /{lang}/docs/architecture     packages, layers, adapters, store, patterns, limits         ✅
+├── /{lang}/docs/security         shared security: store, send guard, MCP, reporting          ✅
 ├── /{lang}/docs/search-architecture  message/graph/embedding architecture, shared guide       🟡
 ├── /{lang}/docs/search-playground  interactive search on a fictional local archive            🟡
 ├── /{lang}/docs/mcp               MCP connections and documentation for agents                ✅

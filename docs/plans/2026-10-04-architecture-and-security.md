@@ -76,16 +76,18 @@ Sources read: cli-docs `a4c1899`, cli-messaging `680d22e` (0.140.0), cli-core 0.
   engineered; one socket per device for MAX, so writes go through `max serve`; vectors are scanned
   in JavaScript with no vector index; store writes block the event loop and other processes wait up
   to 5 s for the lock.
-- **D4 · The footer reads both links from configuration.** "Report a problem" →
-  `contacts.telegram`; "Security" → `/{lang}/docs/security`. Changed in the export script and the
-  prototypes, then re-exported, and checked that the JSON diff touches only those links.
+- **D4 · Footer links.** "Report a problem" → `https://t.me/wirecatdev`; "Security" →
+  `/{lang}/docs/security`. **Correction 2026-10-04:** written into the prototypes and the export
+  script rather than read from `site.config.json` — the footer is static exported HTML, and a
+  render-time rewrite would be more code for one URL. Re-exported; the JSON diff touches only those
+  two links.
 - **D5 · The shared security page holds what cli-core and cli-messaging own**, the same for both
   tools: what stays on the computer, the keyring, the shared store and run records (never message
   text), the send guard and permissions, MCP `--allow-send` / `--confirm-send`, other people's text
   as untrusted input for agents, what goes over the network, how to report a problem. Anything
   only one tool has stays on its page.
-- **D6 · Tool pages get a link first, trimming second.** A lead line pointing to the shared page,
-  in a PR to each tool. It appears on the site with each tool's next release; each change needs
+- **D6 · Tool pages are trimmed now** (NEED-556 B): a lead line pointing to the shared page, and the
+  generic sections the shared page covers cut down to what is specific to the tool, in one PR per tool. It appears on the site with each tool's next release; each change needs
   its translations re-reviewed (max: en, es; tg: ru, es) and fingerprints updated in
   `translations/sources.json`.
 - **D7 · Links from a tool page to the site are rewritten per language at sync.** The tool page
@@ -124,6 +126,11 @@ Sources read: cli-docs `a4c1899`, cli-messaging `680d22e` (0.140.0), cli-core 0.
 
 ## Work items (in order)
 
+**Correction 2026-10-04:** items 1–4 shipped as one cli-docs PR — the security page links to the
+architecture page, so splitting them would have published a dead link. Item 5 is cli-messaging #492,
+tg-cli #257 and max-cli #387.
+
+
 1. Footer and About links (D4) — cli-docs PR 1. Smallest, independent.
 2. Shared security page in three languages, sidebar, footer pointing to it — cli-docs PR 1 too,
    since the footer needs the page to exist.
@@ -143,7 +150,14 @@ open `/en|ru|es/docs/architecture` and `/security` in light and dark, phone widt
 on the landing and on a docs page. In each tool repository its own `pnpm lint && pnpm typecheck &&
 pnpm test`.
 
-## Open questions
+## Owner's answers (2026-10-04)
+
+- NEED-554 → **A**: "Report a problem" links to `t.me/wirecatdev`.
+- NEED-555 → **C**: `hello@wirecat.dev` and GitHub private vulnerability reporting, enabled on each
+  repository; tg-cli and max-cli get a `SECURITY.md` pointing to the shared page.
+- NEED-556 → **B**: trim the tool pages now.
+
+## Open questions (answered above)
 
 - **NEED-554 · Support link:** is `https://t.me/wirecatdev` the support chat for "Report a problem"?
   (Inferred from "3 members".)

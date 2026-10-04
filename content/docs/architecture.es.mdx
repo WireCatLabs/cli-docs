@@ -1,0 +1,274 @@
+---
+title: Arquitectura
+description: Cómo están construidos tg y max — los paquetes, las capas, el contrato del adaptador, el almacén local y los patrones que lo sostienen.
+---
+
+`tg` y `max` son dos herramientas de línea de comandos sobre un núcleo común. Esta página muestra
+cómo está montado ese núcleo: qué paquete se ocupa de qué, cómo viaja un comando desde tu terminal
+hasta un mensajero y de vuelta, cómo se conecta un mensajero nuevo y dónde tiene límites el diseño.
+Está escrita para quien quiere saber qué está ejecutando y para quien quiere contribuir.
+
+Describe el código leído el 4 de octubre de 2026. Los enlaces al código apuntan a commits fijos, así
+que siguen mostrando lo que describe esta página aunque el código cambie. Cómo funcionan la búsqueda,
+los grafos de conversaciones y los embeddings es otra guía: [arquitectura de la búsqueda](./search-architecture.mdx).
+
+## Paquetes
+
+<ArchitectureDiagram name="packages" lang="es" />
+
+Cuatro paquetes propios y dos builds fijados, todos publicados en npm bajo `@leemour`:
+
+| Paquete | De qué se ocupa |
+| --- | --- |
+| [`@leemour/cli-core`](https://github.com/leemour/cli-core/tree/8648e39) | Lo que necesita cualquier herramienta de línea de comandos y ningún mensajero: modos de salida, el renderizado en terminal, la lista cerrada de errores y sus códigos de salida, el llavero, archivos de configuración, relojes, reintentos, un cliente HTTP, un generador de código para APIs HTTP, la autoactualización. También lo usa `braze-cli`, que no tiene nada que ver con mensajería. |
+| [`@leemour/cli-messaging`](https://github.com/leemour/cli-messaging/tree/c7cd479) | Todo lo de mensajería que no es de un mensajero concreto: el modelo de dominio, la resolución de nombres, el almacén local SQLite, la protección de envíos, los servicios (casos de uso), el árbol de comandos, el servidor MCP, el reconocimiento de voz, los procesos en segundo plano. |
+| `@leemour/cli-messaging-sqlite` | Builds de SQLite 3.53, cargados solo donde el SQLite del entorno es demasiado antiguo (Bun en macOS, el Node de una distribución Linux). |
+| `@leemour/cli-messaging-onnx` | ONNX Runtime como WebAssembly, para los modelos locales de voz y embeddings. |
+| [`@leemour/tg-cli`](https://github.com/leemour/tg-cli/tree/4a36e85) | El adaptador de Telegram sobre [mtcute](https://github.com/mtcute/mtcute), la sesión de Telegram, la configuración guiada. Casi todos los comandos de `tg` vienen de cli-messaging. |
+| [`@leemour/max-cli`](https://github.com/leemour/max-cli/tree/fff19ff) | El protocolo MAX (WebSocket, tramas binarias), la sesión de MAX, la conexión en segundo plano `max serve` y una parte aparte para la Bot API oficial de MAX. |
+
+Cada herramienta fija una versión exacta de cli-messaging y cli-core. Un cambio en el código común
+llega a los usuarios con una versión del paquete común y después una versión de cada herramienta; las
+dos suelen salir el mismo día.
+
+**La regla del paquete común: nada en él conoce un mensajero.** Una regla del linter rechaza cualquier
+import de `@mtcute/*`, `ws` o de una carpeta de adaptador dentro de `src/` de cli-messaging
+([biome.json](https://github.com/leemour/cli-messaging/blob/c7cd479/biome.json)). Lo que solo tiene un
+mensajero viaja en un campo `providerMetadata` de los tipos comunes.
+
+## Un comando, de principio a fin
+
+<ArchitectureDiagram name="command" lang="es" />
+
+Toma `tg work messages send "Book club" "See you at 7"`:
+
+1. **`run()`** ([program.ts](https://github.com/leemour/cli-messaging/blob/c7cd479/src/cli/program.ts))
+   toma `work` como perfil, resuelve los ajustes en un orden fijo (opción → entorno → archivo → valor
+   por defecto), empieza el registro de la ejecución y arma el plazo de `--timeout`. Nunca lanza una
+   excepción: cada resultado se convierte en un código de salida.
+2. **El comando** analiza sus propias opciones y pide servicios. No sabe nada de Telegram.
+3. **La protección de envíos** ([guard.ts](https://github.com/leemour/cli-messaging/blob/c7cd479/src/sends/guard.ts))
+   comprueba `permissions`, la lista de destinatarios y el límite por hora, antes de conectar. Las
+   lecturas no pasan por ella. Cada intento de escritura — enviado, rechazado, fallido o desconocido —
+   queda en el registro de envíos, sin su texto.
+4. **El servicio** ejecuta el caso de uso. La herramienta MCP `tg_messages_send` llama al mismo método,
+   así que un comando y una herramienta dan la misma respuesta, y el mismo error, para la misma
+   entrada.
+5. **El adaptador** convierte la llamada en peticiones a Telegram y la respuesta de Telegram en un
+   `Message` del dominio. Lo rodean dos envoltorios: uno mide cada llamada para el registro de la
+   ejecución, otro guarda lo leído en el almacén local.
+6. **Salida**: stdout recibe el resultado y nada más; notas y avisos van a stderr. Después se cierra
+   todo lo que abrió el comando — socket, temporizador, base de datos — y el proceso termina.
+
+Un comando puntual que imprime su resultado y sigue en marcha se considera un defecto. Solo `watch`,
+`serve` y `mcp` mantienen una conexión, y solo mientras se ejecutan.
+
+## Capas
+
+<ArchitectureDiagram name="layers" lang="es" />
+
+Cinco capas, cada una llama solo a las de abajo:
+
+- **Dominio** ([models.ts](https://github.com/leemour/cli-messaging/blob/c7cd479/src/domain/models.ts)) —
+  `Chat`, `Message`, `Person`, `Page` y el resto. Solo tipos, sin comportamiento, sin mensajero.
+- **Adaptadores** — uno por mensajero, en su propio repositorio:
+  [TelegramAdapter](https://github.com/leemour/tg-cli/blob/4a36e85/src/telegram/adapter.ts) en tg,
+  [maxAdapter](https://github.com/leemour/max-cli/blob/fff19ff/src/adapter/max-adapter.ts) en max.
+- **Puertos** — las dos interfaces de las que dependen los servicios:
+  [`MessengerAdapter`](https://github.com/leemour/cli-messaging/blob/c7cd479/src/cli/messenger/port.ts)
+  y [`MessageStore`](https://github.com/leemour/cli-messaging/blob/c7cd479/src/store/store.ts).
+- **Servicios** ([services/](https://github.com/leemour/cli-messaging/blob/c7cd479/src/services/index.ts)) —
+  messages, chats, people, inbox, archive, conversations, moderation y más; cada uno es un objeto
+  simple creado por una fábrica.
+- **Interfaz** — los comandos CLI y las herramientas MCP.
+
+La dirección se hace cumplir, no se espera. Las reglas del linter rechazan un import de `commander` o
+de un archivo de comando desde los servicios, la protección de envíos y el servidor MCP; en tg solo
+`src/telegram/` puede importar mtcute; en max los comandos no pueden importar el protocolo, las
+especificaciones de operaciones ni el código generado. Un import prohibido rompe la compilación con
+una frase que explica por qué.
+
+**Los servicios abren lo que necesitan al primer uso.** Un servicio obtiene su conexión, su almacén y
+su cuenta de forma perezosa ([deps.ts](https://github.com/leemour/cli-messaging/blob/c7cd479/src/services/deps.ts)),
+así que una lectura respondida desde el almacén local nunca conecta. Un comando obtiene los servicios
+con `withServices`, que cierra lo abierto; una herramienta MCP los construye sobre la conexión de su
+sesión.
+
+**Una herramienta sustituye un caso de uso, no un comando.** Un mensajero puede redefinir un método
+de un servicio y llamar al común dentro del suyo; el comando y la herramienta MCP ven el cambio:
+
+```ts
+services: (base) => ({
+  messages: { ...base.messages, list: (chat, window) => maxList(base.messages, chat, window) },
+}),
+```
+
+## Adaptadores
+
+Un mensajero se incorpora escribiendo dos cosas: un **adaptador**, que habla con el mensajero, y una
+descripción **`Messenger`**, que se lo presenta a los comandos comunes — el nombre de la aplicación,
+el nombre del proveedor en el almacén, cómo conectar, cómo paginar el historial. No se modifica
+cli-messaging. La guía completa es [ADAPTERS.md](https://github.com/leemour/cli-messaging/blob/c7cd479/docs/dev/ADAPTERS.md).
+
+**Un núcleo obligatorio y grupos opcionales.** `MessengerCore` — `self`, `me`, `resolve`, `chat`,
+`send`, `logout`, `close` — es obligatorio. Todo lo demás va en grupos: `ServerReads`,
+`MessageEditing`, `MessagePins`, `MessageReactions`, `MessagePolls`, `ReadState`, `LiveUpdates`,
+`PushedHistory`, `MessageMedia`, `GroupAdmin`, `ChatFolders`, `ContactBook` y más. Un comando llega
+a un método opcional con `capability()`; si el adaptador no lo tiene, el comando responde «este
+mensajero no puede …», no se cae.
+
+**Rechazar, nunca descartar.** Una opción que el mensajero no puede cumplir — un mensaje silencioso
+donde no existen — se rechaza con `validation_error`. Nunca se ignora en silencio.
+
+**Los ids son cadenas, siempre.** Chats, mensajes, personas, encuestas. Los ids de mensaje de MAX
+tienen 18 dígitos, más de lo que un número de JavaScript guarda con exactitud, y el código común
+nunca hace aritmética con un id. Un mensajero cuyos ids no son enteros pequeños pagina su historial
+por tiempo.
+
+**Un envío tiene identidad.** Cada envío recibe un `sendId`, que se pasa al mensajero como id propio
+del cliente cuando lo admite, así el servidor descarta una repetición. Si la petición salió y no
+llegó respuesta, el adaptador lanza `outcome_unknown` — no `network_error`, que diría que el mensaje
+no salió. Repetir el envío con el mismo `sendId` da un mensaje, no dos. En max, el único reintento
+reutiliza el mismo id porque se midió que MAX elimina duplicados con él.
+
+**Los errores se traducen en la frontera.** Cada error de una biblioteca se convierte en un código de
+la lista cerrada de cli-core, cada uno con su código de salida, para que un script pueda decidir por
+`$?`:
+
+| Código | Salida | Código | Salida |
+| --- | --- | --- | --- |
+| `validation_error` | 2 | `timeout` | 9 |
+| `configuration_error` | 3 | `network_error` | 10 |
+| `authentication_error` | 4 | `provider_error` | 11 |
+| `permission_error` | 5 | `provider_unavailable` | 12 |
+| `not_found` | 6 | `invalid_response` | 13 |
+| `confirmation_required` | 7 | `outcome_unknown` | 14 |
+| `rate_limited` | 8 | `cancelled` | 130 |
+
+**Ningún tipo de biblioteca cruza el adaptador.** Por encima solo hay tipos del dominio. Eso es lo que
+mantiene reemplazables mtcute o el código de protocolo propio de max.
+
+**Historial del servidor o historial enviado.** Telegram responde cuando se le pide el historial de
+un chat, así que tg implementa `ServerReads`. Un mensajero que en cambio envía el historial al
+cliente declara `history: "store"`: los servicios comunes responden las lecturas desde el almacén
+local, y `PushedHistory.feed()` del adaptador entrega lotes a `serve`, que los guarda.
+
+**Cómo cumplen el contrato las dos herramientas.** El adaptador de tg envuelve mtcute, y un solo
+archivo, [map.ts](https://github.com/leemour/tg-cli/blob/4a36e85/src/telegram/map.ts), conoce la forma
+de los objetos de mtcute. El adaptador de max se apoya en su propio
+[`MaxClient`](https://github.com/leemour/max-cli/blob/fff19ff/src/client.ts), dueño del protocolo MAX;
+[messenger.ts](https://github.com/leemour/max-cli/blob/fff19ff/src/messenger.ts) describe MAX a los
+comandos comunes, y la mayoría de los archivos de comandos de max son envoltorios finos sobre los
+comunes que añaden las opciones propias de MAX.
+
+## El almacén local
+
+Un archivo SQLite, `~/.local/share/cli-messaging/messages.db`, guarda todos los mensajeros y cuentas —
+los perfiles de tg, la cuenta de max y sus bots — con clave por proveedor y cuenta.
+
+- **Dos entornos.** Abre `node:sqlite` en Node y `bun:sqlite` en Bun, cada uno con import dinámico,
+  porque un import estático del módulo del otro entorno falla al cargar.
+- **Un SQLite comprobado.** Antes de abrir, el almacén comprueba que el SQLite del entorno tiene la
+  búsqueda de texto completo que necesita el esquema; el número de versión no basta. Donde falta, el
+  build fijado ocupa su lugar: siempre en Bun para macOS, y en el Node de una distribución Linux el
+  comando se reinicia con la biblioteca fijada primero, antes de leer o enviar nada
+  ([sqlite-runtime.ts](https://github.com/leemour/cli-messaging/blob/c7cd479/src/sqlite-runtime.ts)).
+- **Un método, una transacción.** Cada método del almacén es una operación completa: un
+  `BEGIN IMMEDIATE` … `COMMIT` síncrono, sin `await` en medio. Dos llamadas en el mismo proceso de
+  larga duración no se mezclan dentro de una transacción. La única excepción deliberada es reconstruir
+  las conversaciones de un chat: escribe una versión nueva en transacciones cortas y cambia a ella en
+  una más, así nunca se lee una versión a medio escribir.
+- **Migraciones solo hacia delante.** Numeradas, aditivas, nunca editadas una vez publicadas
+  ([manifest.ts](https://github.com/leemour/cli-messaging/blob/c7cd479/src/store/sqlite/manifest.ts)).
+  Una versión `min_compatible` permite que una herramienta antigua siga usando un archivo que migró una
+  nueva; subirla es una versión mayor del paquete común, y las dos herramientas publican su
+  actualización juntas.
+- **Consultas con Drizzle, empaquetado.** El constructor de consultas va empaquetado dentro del
+  paquete publicado en lugar de instalarse, lo que bajó su coste de carga de unos 200 ms a unos 6 ms
+  por proceso.
+
+El almacén guarda el texto de los mensajes para responder sin red. No está cifrado;
+[seguridad](./security.md) explica qué significa eso para ti.
+
+## Patrones que lo sostienen
+
+- **stdout lleva datos y nada más** en modo máquina: sin spinner, sin color, sin avisos. Los agentes y
+  los scripts dependen de ello, y los tests lo comprueban.
+- **Puntual significa que el proceso termina.** Lo que abre un socket, un temporizador o un listener
+  lo cierra en cada camino de salida.
+- **Leer solo observa.** Leer un chat nunca lo marca como leído; eso es un comando aparte y explícito.
+  Un test comprueba que leer no envía la petición de «leído».
+- **Un nombre nunca se resuelve adivinando.** Un nombre que encaja con varios chats es un error que
+  los lista, no una elección.
+- **Un modelo de permisos, una protección**, usados por cada comando, cada herramienta MCP y, en max,
+  por el proceso en segundo plano `max serve` para todo lo que pasa por él.
+- **Las ejecuciones se registran sin contenido.** Un registro guarda las palabras del comando, ids,
+  recuentos y tiempos; los mensajes, tokens y teléfonos nunca llegan a un log, un fixture o un
+  documento.
+- **Generado y comprobado.** La referencia de comandos (`commands.md`), los envoltorios de operaciones
+  de max y los tipos de la Bot API se generan; CI falla si la copia confirmada se aparta del
+  generador.
+
+## El lado de MAX
+
+MAX no publica una API para cuentas personales, así que max lleva más código propio que tg:
+
+- **Cada operación se declara una vez.** Cada petición a MAX se declara en
+  [`src/spec/operations/`](https://github.com/leemour/max-cli/tree/fff19ff/src/spec/operations) con su
+  esquema y de dónde salió su forma — medida en una conexión real, capturada del cliente web o leída en
+  la ingeniería inversa de otros. Los envoltorios de `src/generated/` se generan a partir de ellas y
+  nunca se editan a mano.
+- **Tramas binarias, como las envía el cliente web.** MessagePack con compresión LZ4; todo el códec es
+  un archivo, [frame.ts](https://github.com/leemour/max-cli/blob/fff19ff/src/protocol/frame.ts). Un
+  número que perdería dígitos llega como `bigint` y por encima del códec se convierte en cadena.
+- **Se parece al cliente oficial.** El user agent y cada campo que identifica al cliente copian lo que
+  envía web.max.ru; no hay un nombre propio en la red.
+- **`max serve` mantiene la conexión.** Lo arranca en segundo plano el primer comando que necesita MAX;
+  los siguientes pasan por él, y se detiene solo tras 15 minutos sin actividad.
+- **La Bot API es una parte aparte.** `max bot …` habla con la Bot API HTTP oficial de MAX. Sus tipos y
+  esquemas se generan a partir del documento OpenAPI oficial con el generador de cli-core, y nada en
+  `src/bot/` comparte transporte, sesión ni código generado con la cuenta personal.
+
+## Tests
+
+- **Los tests nunca tocan tus datos.** Configuración, estado, caché y la carpeta temporal viven en un
+  sandbox durante la ejecución ([sandbox.ts](https://github.com/leemour/max-cli/blob/fff19ff/src/testing/sandbox.ts)).
+- **Casos de contrato para adaptadores.** cli-messaging incluye una semilla fija, un adaptador falso y
+  los casos de contrato ([src/kit](https://github.com/leemour/cli-messaging/tree/c7cd479/src/kit)). El
+  adaptador de un mensajero ejecuta los mismos casos sobre su propio cliente falso; ningún caso habla
+  con un servicio real.
+- **Los comandos se prueban de extremo a extremo** con `run(argv, environment)`: un mensajero con guion,
+  un llavero en memoria y la salida capturada.
+- **Los dos entornos.** CI se ejecuta en Linux, macOS y Windows, con Node y Bun, y en un Node antiguo
+  para ver al almacén rechazar un SQLite sin búsqueda de texto completo.
+- **La paridad entre herramientas** la comprueba un auditor común que compara comandos, opciones,
+  esquemas MCP y tests de tg y max.
+- **Las pruebas en vivo son aparte y manuales**: solo con cuentas y chats de prueba, con el
+  consentimiento del propietario, guardando la forma de cada respuesta y nunca su contenido.
+
+## Límites y compromisos
+
+- **El protocolo de MAX no es oficial.** Todo lo que max sabe de él se midió o se obtuvo por ingeniería
+  inversa. Puede dejar de funcionar sin aviso; entonces un comando lo dice en stderr en lugar de
+  mostrar una lista vacía.
+- **Una escritura a la vez por almacén.** Las escrituras bloquean el bucle de eventos del proceso
+  mientras duran, y otro proceso espera hasta 5 segundos por el bloqueo. Las escrituras grandes se
+  hacen en lotes acotados.
+- **Sin índice vectorial.** La búsqueda de conversaciones compara vectores en JavaScript, página a
+  página; el trabajo crece con el número de fragmentos en el ámbito ([detalles](./search-architecture.mdx)).
+- **Las protecciones viven dentro de la herramienta.** Frenan a un modelo convencido para enviar, no a
+  un agente con shell que decide cambiar la configuración. Un sandbox o un usuario del sistema aparte
+  es el límite externo.
+- **El almacén local no está cifrado.** El cifrado de disco completo protege frente a un ordenador
+  perdido.
+
+## Contribuir: por dónde empezar
+
+- Un mensajero nuevo: [ADAPTERS.md](https://github.com/leemour/cli-messaging/blob/c7cd479/docs/dev/ADAPTERS.md),
+  y después los casos de contrato.
+- El código común: [ARCHITECTURE.md](https://github.com/leemour/cli-messaging/blob/c7cd479/docs/dev/ARCHITECTURE.md)
+  de cli-messaging.
+- Telegram: [ARCHITECTURE.md](https://github.com/leemour/tg-cli/blob/4a36e85/docs/dev/ARCHITECTURE.md) de tg.
+- MAX: [ARCHITECTURE.md](https://github.com/leemour/max-cli/blob/fff19ff/docs/dev/ARCHITECTURE.md) de max
+  y las [notas del protocolo](https://github.com/leemour/max-cli/blob/fff19ff/docs/dev/protocol.md).
+- Preguntas: el [chat de soporte](https://t.me/wirecatdev).
