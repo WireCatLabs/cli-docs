@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest"
 import { StructuredData } from "../components/structured-data"
 import {
   documentationDescription,
+  documentationTitle,
   pageAlternates,
   pageMetadata,
   pageStructuredData,
@@ -35,6 +36,18 @@ describe("localized SEO", () => {
       card: "summary_large_image",
     })
   })
+
+  it.each(seoLocales)(
+    "describes product intent on provider entry pages without relabeling shared guides in %s",
+    (lang) => {
+      expect(documentationTitle(lang, ["tg"], "Telegram")).toContain("Telegram")
+      expect(documentationTitle(lang, ["tg"], "Telegram")).toContain("CLI")
+      expect(documentationTitle(lang, ["max"], "MAX")).toContain("MAX")
+      expect(documentationTitle(lang, ["max"], "MAX")).toContain("CLI")
+      expect(documentationTitle(lang, ["agents"], "Connect your agent")).toBe("Connect your agent")
+      expect(documentationTitle(lang, ["tg", "search"], "Search")).toBe("Search — tg")
+    },
+  )
 
   it("does not announce a locale whose equivalent page is unavailable", () => {
     expect(pageAlternates("ru", "/docs/tg/new", ["en", "ru"]).languages).not.toHaveProperty("es")

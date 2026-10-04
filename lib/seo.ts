@@ -58,6 +58,13 @@ export function pageMetadata({
   }
 }
 
+export function documentationTitle(lang: string, slugs: string[], authored: string): string {
+  const tool = tools.find((candidate) => candidate.name === slugs[0])
+  if (!tool) return authored
+  if (slugs.length === 1) return seoWords(lang).toolTitles[tool.name as "tg" | "max"]
+  return `${authored} — ${tool.name}`
+}
+
 export function documentationDescription(lang: string, slugs: string[], authored?: string): string {
   if (authored?.trim()) return authored
   const [tool, slug] = slugs
