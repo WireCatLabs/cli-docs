@@ -48,7 +48,7 @@ It does not protect against:
 | What | Where | Holds |
 |---|---|---|
 | the local store, shared by `tg` and `max` | `~/.local/share/cli-messaging/messages.db` | **the full text** of every message read or sent, chat titles, names, voice transcripts |
-| the login | the OS keyring; a `0600` file where there is none | see the tool's page |
+| the login | max: a token in the OS keyring · tg: a session file, with the app id and hash in the keyring | see the tool's page |
 | settings | `config.json` in the tool's config folder | settings only — there is no field for a secret |
 | recorded runs — with `--record`, and every failed run | `runs/` in the tool's state folder | the command's words, ids, counts, durations, error codes |
 | the send journal — always | `sends/<profile>.jsonl` | for each attempt: when, which chat, the outcome, the length — never the text |

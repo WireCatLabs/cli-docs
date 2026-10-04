@@ -48,7 +48,7 @@ No protege contra:
 | Qué | Dónde | Contiene |
 |---|---|---|
 | la copia local, compartida por `tg` y `max` | `~/.local/share/cli-messaging/messages.db` | **el texto completo** de cada mensaje leído o enviado, títulos de chats, nombres, transcripciones de voz |
-| el inicio de sesión | el llavero del sistema; un archivo `0600` donde no lo hay | ver la página de la herramienta |
+| el inicio de sesión | max: un token en el llavero del sistema · tg: un archivo de sesión, con el id y el hash de la app en el llavero | ver la página de la herramienta |
 | configuración | `config.json` en la carpeta de configuración de la herramienta | solo ajustes — no hay campo para un secreto |
 | ejecuciones registradas — con `--record`, y cada ejecución fallida | `runs/` en la carpeta de estado de la herramienta | las palabras del comando, ids, recuentos, duraciones, códigos de error |
 | el registro de envíos — siempre | `sends/<perfil>.jsonl` | por cada intento: cuándo, qué chat, el resultado, la longitud — nunca el texto |

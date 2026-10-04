@@ -23,9 +23,9 @@ Cuatro paquetes propios y dos builds fijados, todos publicados en npm bajo `@lee
 | [`@leemour/cli-core`](https://github.com/leemour/cli-core/tree/8648e39) | Lo que necesita cualquier herramienta de línea de comandos y ningún mensajero: modos de salida, el renderizado en terminal, la lista cerrada de errores y sus códigos de salida, el llavero, archivos de configuración, relojes, reintentos, un cliente HTTP, un generador de código para APIs HTTP, la autoactualización. También lo usa `braze-cli`, que no tiene nada que ver con mensajería. |
 | [`@leemour/cli-messaging`](https://github.com/leemour/cli-messaging/tree/c7cd479) | Todo lo de mensajería que no es de un mensajero concreto: el modelo de dominio, la resolución de nombres, el almacén local SQLite, la protección de envíos, los servicios (casos de uso), el árbol de comandos, el servidor MCP, el reconocimiento de voz, los procesos en segundo plano. |
 | `@leemour/cli-messaging-sqlite` | Builds de SQLite 3.53, cargados solo donde el SQLite del entorno es demasiado antiguo (Bun en macOS, el Node de una distribución Linux). |
-| `@leemour/cli-messaging-onnx` | ONNX Runtime como WebAssembly, para los modelos locales de voz y embeddings. |
+| `@leemour/cli-messaging-onnx` | ONNX Runtime como WebAssembly, para los modelos locales de embeddings. El reconocimiento de voz usa `sherpa-onnx`. |
 | [`@leemour/tg-cli`](https://github.com/leemour/tg-cli/tree/4a36e85) | El adaptador de Telegram sobre [mtcute](https://github.com/mtcute/mtcute), la sesión de Telegram, la configuración guiada. Casi todos los comandos de `tg` vienen de cli-messaging. |
-| [`@leemour/max-cli`](https://github.com/leemour/max-cli/tree/fff19ff) | El protocolo MAX (WebSocket, tramas binarias), la sesión de MAX, la conexión en segundo plano `max serve` y una parte aparte para la Bot API oficial de MAX. |
+| [`@leemour/max-cli`](https://github.com/leemour/max-cli/tree/fff19ff) | El protocolo MAX (WebSocket, tramas binarias), la sesión de MAX, la conexión en segundo plano `max serve`, su propio servidor MCP sobre los servicios comunes y una parte aparte para la Bot API oficial de MAX. |
 
 Cada herramienta fija una versión exacta de cli-messaging y cli-core. Un cambio en el código común
 llega a los usuarios con una versión del paquete común y después una versión de cada herramienta; las
@@ -225,6 +225,9 @@ MAX no publica una API para cuentas personales, así que max lleva más código 
   envía web.max.ru; no hay un nombre propio en la red.
 - **`max serve` mantiene la conexión.** Lo arranca en segundo plano el primer comando que necesita MAX;
   los siguientes pasan por él, y se detiene solo tras 15 minutos sin actividad.
+- **Su propio servidor MCP.** `max mcp` mantiene una conexión con sesión iniciada por cada sesión del
+  agente y la cierra tras poco tiempo inactiva; sus herramientas llaman a los mismos servicios comunes
+  que los comandos.
 - **La Bot API es una parte aparte.** `max bot …` habla con la Bot API HTTP oficial de MAX. Sus tipos y
   esquemas se generan a partir del documento OpenAPI oficial con el generador de cli-core, y nada en
   `src/bot/` comparte transporte, sesión ni código generado con la cuenta personal.
