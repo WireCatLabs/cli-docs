@@ -1,4 +1,64 @@
 const terms = {
+  agent: {
+    en: {
+      title: "AI agent",
+      description:
+        "An AI assistant you give tasks to in everyday language, such as Claude Code, Codex or Cursor. It can use connected tools to find messages, summarise conversations and prepare replies. It gets access to your conversations after you connect your account.",
+      page: "agents",
+    },
+    ru: {
+      title: "ИИ-агент",
+      description:
+        "ИИ-помощник, которому вы задаёте задачи обычным языком: например, Claude Code, Codex или Cursor. Он может пользоваться подключёнными инструментами, чтобы искать сообщения, разбирать переписки и готовить ответы. Доступ к переписке появляется после подключения вашего аккаунта.",
+      page: "agents",
+    },
+    es: {
+      title: "Agente de IA",
+      description:
+        "Un asistente de IA al que pides tareas con tus propias palabras, como Claude Code, Codex o Cursor. Usa herramientas conectadas para buscar mensajes, resumir conversaciones y preparar respuestas. Accede a tus conversaciones después de que conectes tu cuenta.",
+      page: "agents",
+    },
+  },
+  cli: {
+    en: {
+      title: "CLI",
+      description:
+        "A program that runs through text commands. Here, tg connects to Telegram and max connects to MAX. Your agent runs the commands for your task; you do not need to memorise them to get started.",
+      page: "installation",
+    },
+    ru: {
+      title: "CLI",
+      description:
+        "Программа, которую запускают текстовыми командами. Здесь tg подключается к Telegram, а max — к MAX. Агент выполняет команды для вашей задачи; чтобы начать, вам не нужно запоминать их.",
+      page: "installation",
+    },
+    es: {
+      title: "CLI",
+      description:
+        "Un programa que se ejecuta con comandos de texto. Aquí tg conecta con Telegram y max con MAX. El agente ejecuta los comandos necesarios para tu tarea; no tienes que aprenderlos de memoria para empezar.",
+      page: "installation",
+    },
+  },
+  mcp: {
+    en: {
+      title: "MCP",
+      description:
+        "A way to connect tools to an AI assistant. The agent can then request chats or messages through that connection. This works with clients such as Claude Desktop, where the agent does not run terminal commands directly.",
+      page: "mcp",
+    },
+    ru: {
+      title: "MCP",
+      description:
+        "Способ подключить инструменты к ИИ-помощнику. После подключения агент может запрашивать чаты и сообщения через это соединение. Такой вариант подходит, например, для Claude Desktop, где агент не запускает команды терминала напрямую.",
+      page: "mcp",
+    },
+    es: {
+      title: "MCP",
+      description:
+        "Una forma de conectar herramientas a un asistente de IA. Después, el agente puede solicitar chats o mensajes mediante esa conexión. Sirve para clientes como Claude Desktop, donde el agente no ejecuta comandos de terminal directamente.",
+      page: "mcp",
+    },
+  },
   "local-agent": {
     en: {
       title: "Local agent",
