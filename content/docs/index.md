@@ -7,10 +7,14 @@ WireCat gives your AI agent your Telegram or MAX account. You ask in plain words
 still waiting for my answer?"*, *"what did we agree with Marco in September?"* — and the agent
 reads your chats and answers, with the messages it used as proof.
 
-It works through two command line tools: `tg` for Telegram and `max` for MAX. They run on your
-computer and use your own account. Your agent (Claude Code, Codex, Cursor, Gemini CLI, Hermes)
-runs them for you. You decide what it may do: only read, ask before sending, or send to chosen
-chats.
+It works through a command line tool for your messenger: `tg` for Telegram, `max` for MAX. You
+need only the one for the messenger you use. The tool runs on your computer and uses your own
+account. Your agent (Claude Code, Codex, Cursor, Gemini CLI, Hermes) runs it for you. You decide
+what the agent may do: only read, ask before sending, or send to chosen chats.
+
+Your messages stay between you and the messenger. The tool talks straight to Telegram or MAX, keeps
+its archive on your computer, and sends nothing to WireCat: there is no WireCat service in between. Your agent
+sees only the messages it reads for a task.
 
 ## What you can ask
 
@@ -18,6 +22,8 @@ chats.
 - **Find** — "Find the price we agreed in the Atlas group and show the message."
 - **Prepare** — "Prepare an agenda for my call with Anna from this week's chats."
 - **Follow up** — "What did I promise this week? Draft the replies, don't send them."
+- **Personal messages to many people** — "Write to everyone who asked about the workshop this week.
+  Make each message personal, using what they asked. Show me the drafts first."
 
 ## What it covers
 

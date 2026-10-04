@@ -1,62 +1,94 @@
 ---
 title: "Features"
-description: "What the Telegram and MAX CLIs can do: your whole account, a searchable archive, voice to text, every Bot API method, and limits you set for your agent."
+description: "What the Telegram and MAX CLIs can do: your whole account, groups, a searchable archive, voice to text, every Bot API method, and limits you set for your agent."
 ---
 
-Both tools cover the same ground, so everything below works in Telegram (`tg`) and MAX (`max`)
-unless it says otherwise. For the exact commands, see [Telegram commands](./tg/commands.md) or
+Each tool works with one messenger: `tg` with Telegram, `max` with MAX. They cover the same ground;
+the tables show where they differ. ✓ means it is there, — means that messenger's tool does not have
+it. For the exact commands, see [Telegram commands](./tg/commands.md) or
 [MAX commands](./max/commands.md).
 
-## Your account, from the terminal
+## Messages
 
-What you do in the app, your agent can do through the CLI.
+| What you can do | Telegram | MAX |
+|---|---|---|
+| Read chats and message history | ✓ | ✓ |
+| Send text and files, reply to a message | ✓ | ✓ |
+| Edit, delete, forward and pin messages | ✓ | ✓ |
+| Schedule a message — it goes out even when your computer is off | ✓ | ✓ |
+| Download photos, documents and other attachments | ✓ | ✓ |
+| React to messages | ✓ | ✓ |
+| Create polls, vote, close your own | ✓ | ✓ |
+| Turn voice messages into text on your own computer | ✓ | ✓ |
+| Get a link to a message | ✓ | ✓ |
+| Mark chats as read — only when you ask | ✓ | ✓ |
 
-- **Messages** — read, send, reply, edit, delete, forward, pin. Send files, schedule a message for
-  later (it goes out even when your computer is off), download attachments.
-- **Chats and groups** — list and search chats, create groups, join and leave, manage members and
-  admins, invite links and chat folders. Mark chats as read only when you ask.
-- **Group moderation** — set rules for a group, for example "delete messages with links", and
-  apply them with one command.
-- **Contacts** — find, add, rename, block, import.
-- **Polls and reactions** — vote, create and close polls, react to messages.
-- **Forum topics** — list, search and create topics in forum groups (Telegram).
-- **Account** — update your profile, see every device logged in to the account.
+Guides: [Telegram usage](./tg/usage.md) · [MAX usage](./max/usage.md)
 
-Guides: [Telegram usage](./tg/usage.md) · [Telegram groups](./tg/groups.md) ·
-[MAX usage](./max/usage.md) · [MAX groups](./max/groups.md)
+## Chats, contacts and account
 
-## Find anything in your history
+| What you can do | Telegram | MAX |
+|---|---|---|
+| List and search chats, filter by kind (people, groups, channels) | ✓ | ✓ |
+| Create, change and delete chat folders | ✓ | ✓ |
+| Contacts: find, add, rename, block, import | ✓ | ✓ |
+| Update your profile | ✓ | ✓ |
+| See every device logged in to your account, end one | ✓ | ✓ |
+| Several accounts, one *profile* each | ✓ | ✓ |
 
-- **A local archive.** The CLI saves the chats you choose on your computer. Searching it is fast,
-  works offline and does not touch your account.
-- **Search** by words, sender, date and chat, including forgiving matching for typos.
-- **Conversations.** In a busy group, the CLI separates the threads by replies and mentions, so
-  the agent can follow one discussion.
-- **Export and backup** — a chat as a readable Markdown transcript or as JSON lines, or a backup
-  of the whole archive.
+Guides: [Telegram login and profiles](./tg/sessions.md) · [MAX sessions and profiles](./max/sessions.md)
+
+## Groups and channels
+
+| What you can do | Telegram | MAX |
+|---|---|---|
+| Create a group or a channel | ✓ | ✓ |
+| Check where an invite link leads without joining | ✓ | ✓ |
+| Join and leave; show or reset the invite link | ✓ | ✓ |
+| Add and remove members; make admins and set their rights | ✓ | ✓ |
+| See who joined, left or was removed | ✓ | ✓ |
+| Find questions nobody in the group answered | ✓ | ✓ |
+| Change the title, description and settings | ✓ | ✓ |
+| Forum topics: list, search, create, post into a topic | ✓ | — |
+| Moderation rules: links, invites, forwards, flooding, blocked people | ✓ | ✓ |
+| A rule for new accounts (younger than N days) | — | ✓ |
+
+Moderation runs when you, your agent or your schedule starts it; nothing watches a group by itself.
+Guides: [Telegram groups](./tg/groups.md) · [MAX groups](./max/groups.md)
+
+## History, search and staying on top
+
+| What you can do | Telegram | MAX |
+|---|---|---|
+| Keep a local archive of the chats you choose | ✓ | ✓ |
+| Search it offline by words, sender, date and chat, with typo-tolerant matching | ✓ | ✓ |
+| Separate the threads of a busy group by replies and mentions | ✓ | ✓ |
+| Export a chat as Markdown or JSON lines; back up the whole archive | ✓ | ✓ |
+| Inbox: unread messages from every chat in one list | ✓ | ✓ |
+| Review: who is waiting for your answer, and what you are waiting for | ✓ | ✓ |
+| Watch new messages as they arrive | ✓ | ✓ |
+| Keep the archive current in the background | ✓ | ✓ |
 
 Guides: [Telegram archive](./tg/archive.md) · [Telegram search](./tg/search.md) ·
 [MAX archive](./max/archive.md) · [MAX search](./max/search.md)
 
-## Stay on top of your messages
+## Bots
 
-- **Inbox** — unread messages from every chat in one list.
-- **Review** — who is waiting for your answer, and what you are waiting for from others.
-- **Live watch** — new messages as they arrive.
-- **Background service** — keeps the archive up to date while your computer is on.
+A bot works with its own token, separate from your personal account.
 
-## Voice messages to text
+| What you can do | Telegram | MAX |
+|---|---|---|
+| Every method of the official Bot API | ✓ all 185 | ✓ all 33 |
+| Send, edit, delete and pin messages; search the bot's messages | ✓ | ✓ |
+| Answer button presses; set the bot's command menu | ✓ | ✓ |
+| Manage webhooks | ✓ | ✓ |
+| Manage group admins; remove members | ✓ | ✓ |
+| List and add group members | — | ✓ |
+| Moderate a group by the same rules as your account | ✓ | ✓ |
+| Comments under channel posts | — | ✓ |
+| Give the bot to an agent over MCP | ✓ | ✓ |
 
-Turn a voice message into text with a speech model that runs on your own computer, so the audio
-never leaves it. Telegram can also use its own transcription.
-[Voice messages](./tg/usage.md#voice-messages).
-
-## Bots: the full Bot API
-
-Run your bots from the same tool: **every method of the official Bot API** — all 185 for Telegram
-and all 33 for MAX — plus short commands for everyday bot tasks. A bot works with its own token,
-separate from your personal account. [Full Bot API](./bot-api.md) · [Telegram bots](./tg/bot.md) ·
-[MAX bots](./max/bot.md)
+Guides: [Full Bot API](./bot-api.md) · [Telegram bots](./tg/bot.md) · [MAX bots](./max/bot.md)
 
 ## Built for agents
 
@@ -75,14 +107,13 @@ separate from your personal account. [Full Bot API](./bot-api.md) · [Telegram b
 - **A recipient list** — the chats this profile may send to.
 - **An hourly limit** on sends, 30 by default.
 - **A send journal** — every send attempt, without the message text.
-- **Several accounts** — one *profile* per account, and a lock that keeps an agent on one profile.
+- **A profile lock** that keeps an agent on one account.
 
 [What the login allows and how to limit it](./installation.mdx) ·
 [Telegram security](./tg/security.md) · [MAX security](./max/security.md)
 
 ## Not there yet
 
-- **Telegram:** several photos in one message, and sending into a forum topic.
-  [Roadmap](./tg/roadmap.md)
+- **Telegram:** several photos in one message. [Roadmap](./tg/roadmap.md)
 - **MAX:** video notes, and setting or removing the cloud password. Deleting whole chats is not
   planned. [Roadmap](./max/roadmap.md)
