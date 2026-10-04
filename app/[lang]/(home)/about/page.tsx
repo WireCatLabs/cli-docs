@@ -82,7 +82,7 @@ export default async function AboutPage({ params }: Props) {
                 max · {words.source}
                 <ArrowRight aria-hidden="true" />
               </a>
-              <Link href={`/${lang}/docs/tg/security`}>
+              <Link href={`/${lang}/docs/security`}>
                 {words.security}
                 <ArrowRight aria-hidden="true" />
               </Link>
