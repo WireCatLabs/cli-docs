@@ -3,13 +3,14 @@ title: "Connect your agent"
 description: "Set up Codex, Cursor, Claude Code, Gemini CLI or Hermes to work with Telegram and MAX."
 ---
 
+**Usually you don't need this page.** [`tg setup` and `max setup`](./installation.mdx) already
+install the skill for the agent you chose. Use the commands below if your agent does not know the
+`tg` or `max` command, if you use another agent, or after an update. [MCP](./mcp.md) is another
+way to give tools to the agent.
+
 Global npm installation installs the skill before login when installation scripts are allowed. The optional Windows installer also installs it. Read `tg skill show` or `max skill show` and check that your agent has loaded the skill. The commands below update it or install it separately if npm skipped that step.
 
 **CLI** is the installed terminal program (`tg` or `max`). An **agent** is the AI assistant you use, for example in an editor or terminal. A **skill** is an instruction file the agent reads to learn the CLI; it does not store your Telegram/MAX login. **PATH** is the list of folders where your computer looks for commands: if `tg --version` or `max --version` works in the agent’s terminal, it can find the installed CLI.
-
-First [install the CLI and log in](./installation.mdx). Your local agent can call `tg` or `max`
-in its terminal. A **skill** teaches it the commands, output formats and workflows; it does not
-replace installation or login. [MCP](./mcp.md) is another way to expose tools to the agent.
 
 ## Choose your agent
 
@@ -74,7 +75,7 @@ my unread messages by chat and say who needs an answer. Read only for this task.
 
 It should be able to run `account show`, `chats list --limit 5` and `inbox --limit 5`, or the
 equivalent MCP tools. If it cannot find the CLI, reopen the editor after installing Node/npm;
-see [Windows and PATH](./installation.mdx#windows). If it reports no session, log in in the same
+see [Windows and PATH](./installation.mdx#what-the-windows-installer-changes). If it reports no session, log in in the same
 environment and profile the agent uses.
 
 ## The CLI already offers the skill

@@ -1,61 +1,60 @@
 ---
 title: "Primeros pasos"
-description: "Conecta tu asistente de IA a las conversaciones de Telegram o MAX: encuentra acuerdos, revisa mensajes sin leer y prepara respuestas."
+description: "Deja que tu agente de IA lea, busque y responda tus mensajes de Telegram y MAX, desde tu propia cuenta y en tu propio ordenador."
 ---
 
-Dale <DocTerm term="agent" lang="es" label="a tu asistente de IA" /> acceso a tus **conversaciones de Telegram o MAX**. Podrá encontrar mensajes y acuerdos, resumir chats sin leer y ayudarte con las respuestas.
+Da a tu <DocTerm term="agent" lang="es" label="agente de IA" /> acceso a tu cuenta de Telegram o MAX. Le preguntas con palabras
+normales —*«¿quién sigue esperando mi respuesta?»*, *«¿qué acordamos con Marco en septiembre?»*— y
+el agente lee tus chats y responde. Como prueba, te muestra los mensajes que ha usado.
 
-Instalaremos en tu ordenador un pequeño programa para el mensajero elegido, conectaremos tu cuenta y le enseñaremos al agente a usarlo. Después podrás pedirle tareas con tus propias palabras.
+Funciona con un programa de terminal (<DocTerm term="cli" lang="es" label="cli" />) para tu mensajero: `tg` para Telegram, `max` para MAX.
+Solo necesitas el de tu mensajero. El CLI se ejecuta en tu ordenador y usa tu propia cuenta. Tu
+agente (Claude Code, Codex, Cursor, Gemini CLI, Hermes) lo ejecuta por ti. Tú decides qué puede
+hacer el agente: solo leer, preguntar antes de enviar o enviar a los chats que elijas.
 
-## Por dónde empezar
+Tus mensajes quedan entre tú y el mensajero. El CLI se conecta directamente con Telegram o MAX,
+guarda su archivo en tu ordenador y no envía nada a WireCat: no hay ningún servicio de WireCat en
+medio. Tu agente solo ve los mensajes que lee para una tarea.
 
-Abre un agente que pueda ejecutar programas en tu ordenador, como Codex, Claude Code, Cursor, Gemini CLI o Hermes. Ten cerca el teléfono con la cuenta del mensajero que quieres conectar.
+## Qué puedes pedir
 
-1. **Instala el programa de tu mensajero.** Abre [Instalación](./installation.mdx), elige Telegram o MAX y copia el prompt preparado a tu agente. Comprobará el ordenador y te ayudará a instalarlo.
-2. **Confirma el acceso a tu cuenta.** El agente te guía por los pasos; tú introduces el código o confirmas desde el teléfono. En la primera conexión a Telegram también hay que registrar el programa; el agente te ayudará. Detalles: [acceso a Telegram](./tg/sessions.md) y [acceso a MAX](./max/sessions.md).
-3. **Dale al agente las instrucciones para trabajar con las conversaciones.** La configuración ofrece conectarlas a tu agente. Para comprobar la conexión o elegir otro agente, consulta [Conectar tu agente](./agents.md).
+- **Ponerte al día** — «Resume mis mensajes sin leer y dime quién necesita una respuesta».
+- **Encontrar** — «Busca el precio que acordamos en el grupo Atlas y muéstrame el mensaje».
+- **Preparar** — «Prepara una agenda para mi llamada con Anna a partir de los chats de esta semana».
+- **Hacer seguimiento** — «¿Qué prometí esta semana? Redacta las respuestas, no las envíes».
+- **Mensajes personales a muchas personas** — «Escribe a todos los que preguntaron por el taller
+  esta semana. Haz cada mensaje personal, según lo que preguntó cada uno. Enséñame antes los
+  borradores».
 
-Reserva unos cinco minutos para la configuración. No hace falta descargar todo el historial de inmediato: después de iniciar sesión, elige los chats y cuántos mensajes necesitas.
+## Qué incluye
 
-## Tu primera petición
+- **Toda tu cuenta** — mensajes, chats, grupos, contactos, encuestas: lo que haces en la app.
+- **Tu historial, con búsqueda sin conexión** — un archivo local de los chats que elijas.
+- **Mensajes de voz a texto** — en tu propio ordenador.
+- **Todos los métodos de la Bot API** — los 185 de Telegram y los 33 de MAX.
+- **Límites que tú fijas** — solo lectura, preguntar antes de enviar, solo chats elegidos.
 
-Una vez conectado, copia esto a tu agente:
+[Todas las funciones →](./features.md)
 
-```text prompt
-Revisa los mensajes sin leer por chat. Destaca las preguntas que debería responder y resume brevemente lo importante.
-```
+## Empieza aquí
 
-Después prueba una tarea concreta:
+1. **[Instalar e iniciar sesión](./installation.mdx)** — unos 5 minutos. Instalas el CLI y
+   escaneas un código QR con el teléfono.
+2. **[Probar las primeras tareas](./first-tasks.md)** — copia una petición en tu agente y recibe
+   tu primera respuesta.
 
-- Encontrar el plazo que acordaste con un compañero.
-- Reunir el contexto de una conversación antes de una llamada.
-- Preparar un borrador de respuesta a un cliente.
+El <DocTerm term="skill" lang="es" label="skill" /> instalado da al agente instrucciones para usar el mensajero. Los ajustes de tu agente determinan dónde se procesan los mensajes que lee.
 
-[Primeras tareas](./first-tasks.md) incluye ejemplos listos para usar. [Cómo formular peticiones](./prompting.md) te ayuda a indicar los chats, el periodo y el resultado que necesitas.
+Con eso basta para empezar. Más adelante, cuando lo necesites:
 
-## Elige tu mensajero
+- [Formular peticiones](./prompting.md) — consigue mejores respuestas de tu agente.
+- [Conectar tu agente](./agents.md) — si tu agente no encuentra el comando `tg` o `max`.
+- <DocTerm term="mcp" lang="es" label="MCP" />: [MCP y documentación](./mcp.md) — para Claude Desktop y otros clientes sin terminal.
 
-| Mensajero | Con qué puedes trabajar | Guía |
-|---|---|---|
-| Telegram | Conversaciones de tu cuenta personal, mensajes sin leer y búsqueda en el historial | [Empezar con Telegram](./tg/index.md) |
-| MAX | Conversaciones de tu cuenta personal, bots y gestión de grupos | [Empezar con MAX](./max/index.md) |
+## ¿Telegram o MAX?
 
-Puedes conectar ambos mensajeros. Para cada uno, instala su programa e inicia sesión en la cuenta que quieras usar.
+Ambos cubren las tareas habituales; la [página de funciones](./features.md) explica sus diferencias. Instala el de tu mensajero, o los dos:
+[guía de Telegram](./tg/index.md) · [guía de MAX](./max/index.md).
 
-## Qué instalamos
-
-El programa para Telegram se llama `tg`; el de MAX, `max`. Se ejecuta en tu ordenador y obtiene los mensajes que el agente solicita para tu tarea.
-
-Más adelante encontrarás tres términos en la documentación:
-
-- **<DocTerm term="cli" lang="es" label="CLI" />** es un programa que se ejecuta con comandos de texto. El agente puede ejecutarlos por ti; no necesitas aprenderlos para empezar.
-- **<DocTerm term="skill" lang="es" label="Skill" />** es un archivo de instrucciones que enseña al agente a usar el programa y sus comandos.
-- **<DocTerm term="mcp" lang="es" label="MCP" />** conecta el programa a un agente que no ejecuta comandos directamente, como Claude Desktop. Para ese caso, usa la [guía de conexión por MCP](./mcp.md).
-
-Leer mensajes no los marca como leídos. Enviar una respuesta o modificar un mensaje es una acción aparte que le pides al agente.
-
-## Comparte la documentación con tu agente
-
-Normalmente, el skill instalado basta para empezar. Para compartir las instrucciones de una tarea concreta, abre su página y pulsa **Copiar Markdown** para darle el texto al agente.
-
-El índice completo está en [wirecat.dev/llms.txt](/llms.txt). [MCP y documentación](./mcp.md#documentación-para-tu-agente) explica todas las opciones.
+El selector **Telegram / MAX** de la parte superior de cada página te lleva a la misma sección del
+otro mensajero.

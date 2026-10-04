@@ -46,7 +46,8 @@ sets limits (allowed chats, sends per hour, read-only profiles) — a fact, stat
   clients), `https://wirecat.dev/llms.txt` (any model).
 - Daily use: `tg inbox`, `tg review --unanswered`, `tg messages search`, `tg watch`, `tg export
   --format markdown`, `tg messages transcribe --local`, `tg messages send --at 2h`.
-- max adds bots through the official MAX Bot API, and group moderation by the owner's rules.
+- Both add bots through each messenger's official Bot API (every method: 185 Telegram, 33 MAX) and
+  group moderation by the owner's rules. Differences per tool: `content/docs/features.md`.
 
 ## Capabilities and Constraints
 
@@ -56,13 +57,13 @@ sets limits (allowed chats, sends per hour, read-only profiles) — a fact, stat
   live watch of new messages; CLI and MCP share profile permissions; most writes are allowed by default, while deletion asks for confirmation. Read-only permissions and confirmation forms can restrict access.
 - Safety by design: nothing is sent, marked read or deleted unless the command asked for it.
 - Site languages: English, Russian, Spanish. Tool guides are localized from reviewed releases; the generated Telegram Bot API method appendix retains its English descriptions with an explicit locale-specific notice.
-- Undecided: the hero sentence (draft in docs/plans/2026-10-02-landing.md), a logo.
+- Hero headline (implemented): "Never search a chat again. Just ask."
 
 ## Brand Commitments
 
 - Name **WireCat**; tagline **AI Messaging with CLI tools for agents** (owner, 2026-10-02).
 - tg is described as "a Telegram client" — never "unofficial", "at your own risk", or ban talk.
-- No logo yet: WireCat is a word mark. max's own logo appears only on max's pages.
+- Logo: the purple WireCat monogram and word mark. max's own logo appears only on max's pages.
 
 ## Evidence on Hand
 

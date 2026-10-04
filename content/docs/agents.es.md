@@ -3,13 +3,14 @@ title: "Conectar tu agente"
 description: "Configura Codex, Cursor, Claude Code, Gemini CLI o Hermes para Telegram y MAX."
 ---
 
+**Normalmente no necesitas esta página.** [`tg setup` y `max setup`](./installation.mdx) ya
+instalan el skill para el agente que elegiste. Usa los comandos de abajo si tu agente no conoce el
+comando `tg` o `max`, si usas otro agente o después de una actualización. [MCP](./mcp.md) es otra
+forma de dar herramientas al agente.
+
 La instalación global con npm instala el skill antes de iniciar sesión si se permiten los scripts de instalación. El instalador opcional de Windows también lo instala. Lee `tg skill show` o `max skill show` y comprueba que el agente ha cargado el skill. Los comandos siguientes lo actualizan o lo instalan por separado si npm omitió ese paso.
 
 **CLI** es el programa instalado de terminal (`tg` o `max`). Un **agente** es tu asistente de IA, por ejemplo en el editor o terminal. Un **skill** es un archivo de instrucciones que enseña al agente a usar el CLI; no guarda tu acceso a Telegram/MAX. **PATH** es la lista de carpetas donde se buscan comandos: si `tg --version` o `max --version` funciona en la terminal del agente, puede encontrar el CLI.
-
-Primero [instala el CLI e inicia sesión](./installation.mdx). Tu agente local puede ejecutar
-`tg` o `max` en la terminal. Un **skill** le enseña los comandos, formatos y flujos de trabajo;
-la instalación y el inicio de sesión siguen siendo necesarios. [MCP](./mcp.md) ofrece otra conexión.
 
 ## Elige tu agente
 
@@ -74,7 +75,7 @@ los mensajes sin leer por chat e indica a quién debo responder. Solo lee para e
 
 Debe ejecutar `account show`, `chats list --limit 5` e `inbox --limit 5`, o las herramientas MCP
 equivalentes. Si no encuentra el comando, vuelve a abrir el editor tras instalar Node/npm;
-consulta [Windows y PATH](./installation.mdx#windows). Si falta la sesión, inicia sesión en el mismo
+consulta [Windows y PATH](./installation.mdx#what-the-windows-installer-changes). Si falta la sesión, inicia sesión en el mismo
 entorno y perfil que usa el agente.
 
 ## El CLI ya sugiere instalar el skill

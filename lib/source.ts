@@ -58,10 +58,14 @@ export const docsLlms = llms(source, {
         : page.locale === "es"
           ? "Versión de documentación"
           : "Documentation version"
-    const body = (await page.data.getText("processed")).replace(
-      "<InstallationGuide />",
-      installationMarkdown(page.locale ?? i18n.defaultLanguage),
+    // Processed MDX indents nested tabs as code. Expand the authored installation guide instead,
+    // preserving runnable fences and making every messenger/OS branch readable to agents.
+    const text = await page.data.getText(
+      page.slugs.length === 1 && page.slugs[0] === "installation" ? "raw" : "processed",
     )
+    const body = text
+      .replace(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/, "")
+      .replace("<InstallationGuide />", installationMarkdown(page.locale ?? i18n.defaultLanguage))
     const markdown = rewriteMarkdownLinks(expandDocTerms(body, page.locale ?? i18n.defaultLanguage), (href) =>
       resolveDocumentationLink(
         href,

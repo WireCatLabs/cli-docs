@@ -7,7 +7,7 @@ import { CopyText } from "@/components/text-snippet"
 import type { Tool } from "@/lib/shared"
 import { wordsFor } from "@/lib/words"
 
-export function InstallTool({ tool, lang }: { tool: Tool; lang: string }) {
+export function InstallTool({ tool, lang, terminal = true }: { tool: Tool; lang: string; terminal?: boolean }) {
   const words = wordsFor(lang)
   const ui = words.onboarding
   const [open, setOpen] = useState(false)
@@ -35,23 +35,25 @@ export function InstallTool({ tool, lang }: { tool: Tool; lang: string }) {
         <Link href={`/${lang}/docs/agents`} className="inline-block text-sm">
           {words.navigation.agents} →
         </Link>
-        <details className="rounded-lg border p-3">
-          <summary className="cursor-pointer text-sm font-medium">{ui.terminal}</summary>
-          <div className="mt-4 space-y-4">
-            <p className="text-sm text-fd-muted-foreground">
-              <RuntimeRequirements lang={lang} />
-            </p>
-            <Link href={`/${lang}/docs/installation#nodejs`} className="inline-block text-sm">
-              {ui.nodeHelp} →
-            </Link>
-            <CopyText lang={lang} text={`npm install -g ${tool.package}`} />
-            <p className="text-sm font-medium">{ui.login}</p>
-            <CopyText lang={lang} text={`${tool.name} setup`} />
-            <Link href={`/${lang}/docs/${tool.name}/sessions`} className="inline-block text-sm">
-              {words.docs} →
-            </Link>
-          </div>
-        </details>
+        {terminal && (
+          <details className="rounded-lg border p-3">
+            <summary className="cursor-pointer text-sm font-medium">{ui.terminal}</summary>
+            <div className="mt-4 space-y-4">
+              <p className="text-sm text-fd-muted-foreground">
+                <RuntimeRequirements lang={lang} />
+              </p>
+              <Link href={`/${lang}/docs/installation#nodejs`} className="inline-block text-sm">
+                {ui.nodeHelp} →
+              </Link>
+              <CopyText lang={lang} text={`npm install -g ${tool.package}`} />
+              <p className="text-sm font-medium">{ui.login}</p>
+              <CopyText lang={lang} text={`${tool.name} setup`} />
+              <Link href={`/${lang}/docs/${tool.name}/sessions`} className="inline-block text-sm">
+                {words.docs} →
+              </Link>
+            </div>
+          </details>
+        )}
         <p className="text-xs text-fd-muted-foreground">{ui.timing}</p>
         <p className="text-xs text-fd-muted-foreground">{ui.browser}</p>
       </div>

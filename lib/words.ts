@@ -11,6 +11,8 @@ export type Words = {
     installation: string
     agents: string
     firstTasks: string
+    features: string
+    overview: string
     prompting: string
     mcp: string
     messenger: string
@@ -52,9 +54,11 @@ export const words: Record<string, Words> = {
     agents: "For agents: every page as Markdown in /llms.txt and /llms-full.txt.",
     navigation: {
       start: "Getting started",
-      installation: "Installation",
+      installation: "Install and log in",
       agents: "Connect your agent",
       firstTasks: "First tasks",
+      features: "Features",
+      overview: "Overview",
       prompting: "Writing requests",
       mcp: "MCP and documentation",
       messenger: "Choose a messenger",
@@ -96,9 +100,11 @@ At the end, offer to install the ${tool} skill for my agent.`,
     agents: "Для агентов: каждая страница в Markdown — /llms.txt и /llms-full.txt.",
     navigation: {
       start: "Начало работы",
-      installation: "Установка",
+      installation: "Установка и вход",
       agents: "Подключение агента",
       firstTasks: "Первые задачи",
+      features: "Возможности",
+      overview: "Обзор",
       prompting: "Как формулировать запросы",
       mcp: "MCP и документация",
       messenger: "Выбрать мессенджер",
@@ -141,9 +147,11 @@ At the end, offer to install the ${tool} skill for my agent.`,
     agents: "Para agentes: cada página en Markdown en /llms.txt y /llms-full.txt.",
     navigation: {
       start: "Primeros pasos",
-      installation: "Instalación",
+      installation: "Instalar e iniciar sesión",
       agents: "Conectar tu agente",
       firstTasks: "Primeras tareas",
+      features: "Funciones",
+      overview: "Resumen",
       prompting: "Cómo formular peticiones",
       mcp: "MCP y documentación",
       messenger: "Elegir mensajero",
