@@ -40,7 +40,10 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm test
       - run: pnpm sync ${REF:+--ref "$REF"}
+      - run: pnpm typecheck
       - run: pnpm exec next build
       - run: pnpm check:links
       - name: Cloudflare Pages

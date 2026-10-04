@@ -6,5 +6,9 @@
     "email": "hello@wirecat.dev",
     "telegram": "https://t.me/wirecatdev",
     "maintainerTelegram": "https://t.me/hurrykan"
+  },
+  "analytics": {
+    "yandexMetrikaId": 113377132,
+    "googleMeasurementId": "G-GKZ1KFCJ0E"
   }
 }

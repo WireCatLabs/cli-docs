@@ -3,6 +3,7 @@ import { RootProvider } from "fumadocs-ui/provider/next"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import SearchDialog from "@/components/search"
+import { SiteAnalytics } from "@/components/site-analytics"
 import { i18n } from "@/lib/i18n"
 import { translations } from "@/lib/layout.shared"
 import { appName, siteDescription, siteUrl, tagline } from "@/lib/shared"
@@ -21,6 +22,7 @@ export default async function Layout({
   return (
     <html lang={lang} className={`${inter.className} ${inter.variable}`} suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
+        <SiteAnalytics />
         <RootProvider i18n={i18nProvider(translations, lang)} search={{ SearchDialog }}>
           {children}
         </RootProvider>

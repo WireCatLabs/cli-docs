@@ -127,3 +127,14 @@ pnpm sync --tool tg --capture-only
 ```
 
 The remaining review gates are `pnpm docs:localize`, lint, tests, `pnpm search:check`, type checking, build, link checks and browser checks. CI rejects missing, stale or structurally changed translations. The scheduled workflow reports updates; it does not merge or deploy unreviewed documentation.
+
+### Analytics and agent-readable documentation
+
+Production-only GA4 and Yandex Metrika IDs live in `site.config.json`. Tracking loads after
+hydration on the configured production hostname; browser checks use intercepted provider scripts
+and requests. Local previews do not load the JavaScript tags.
+
+Markdown twins resolve documentation links to their own Markdown URLs and expand the shared
+installation component into instructions and agent prompts. `pnpm check:links` validates HTML
+and Markdown targets and keeps code blocks intact. Deployment runs lint, tests, reviewed-release
+sync, type checking, build and link checks before publication.

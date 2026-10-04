@@ -2021,7 +2021,14 @@
   display: block;
 }
 
-html[lang] .wirecat-landing :is(h1, h2, h3, h4, h5, h6) {
+html[lang]
+  .wirecat-landing
+  :is(h2, h3, h4, h5, h6, [role="heading"], .t6 > b, .savings-quality > b, .time, .tool-name, .spec dt) {
+  font-family: "Onest", system-ui, sans-serif;
+  font-stretch: 100%;
+  font-weight: 700;
+}
+html[lang] .wirecat-landing :is(h1, h2.big, .about-page h2) {
   font-family: var(--heading-family, "Unbounded");
   font-stretch: var(--heading-stretch, 100%);
   font-weight: var(--heading-weight, 800);

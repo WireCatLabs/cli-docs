@@ -24,6 +24,8 @@ test("search uses the same heading face; font comparison stays opt-in", async ({
         .filter((el) => el.getClientRects().length)
         .map((el) => ({
           text: el.textContent?.trim(),
+          primary: el.matches("h1,h2.big"),
+          hero: el.tagName === "H1",
           font: getComputedStyle(el).fontFamily,
           size: parseFloat(getComputedStyle(el).fontSize),
           scroll: el.scrollWidth,
@@ -31,7 +33,8 @@ test("search uses the same heading face; font comparison stays opt-in", async ({
         })),
     )
     for (const heading of headings) {
-      expect(heading.font, heading.text).toContain("Unbounded")
+      expect(heading.font, heading.text).toContain(heading.primary ? "Unbounded" : "Onest")
+      if (!heading.hero) expect(heading.text).not.toMatch(/\.\s*$/u)
       expect(heading.size, heading.text).toBeGreaterThanOrEqual(11)
     }
     expect(

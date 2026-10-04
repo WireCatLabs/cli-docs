@@ -74,7 +74,7 @@ export const words: Record<string, Words> = {
       copied: "Copied",
       copyFailed: "Copy failed. Select and copy the text below.",
       browser: "The browser gives you the instructions; your agent or terminal runs the installation on your computer.",
-      requirements: "Node.js 22.16+ with npm. After installing Node.js, open a new terminal.",
+      requirements: "Node.js 22.16+ (22.x) or 24+ with npm. After installing Node.js, open a new terminal.",
       windows:
         "Windows: this single PowerShell installer installs the CLI and agent skill, saves user PATH, updates this terminal and verifies the command. No manual PATH edits:",
       login: "Log in",
@@ -84,7 +84,17 @@ export const words: Record<string, Words> = {
         "Telegram setup checks your account and five chats and installs agent skills; history downloads are separate. The auto mode obtains your app ID and hash. Enter the code from Telegram in your terminal, then scan the QR in Settings → Devices → Link Desktop Device. If auto fails, use session start --app browser.",
       timing: "Allow about 5 minutes for setup. Downloading chat history is a separate step and may take longer.",
       prompt: (tool, pkg, docs) =>
-        `Set up ${tool} (${pkg}) on my computer: install the cli. On Windows use the one-call installer at https://wirecat.dev/install.ps1 with -Tool ${tool} -Agent all; ensure user PATH and your shell PATH are updated. Install and verify the skill for your environment before login. Then read ${tool} --help, ${tool} commands --json and ${tool} skill show before logging in. Use guided setup if it is listed by the installed cli; otherwise follow the documented login steps. Connect the skill for your environment. Tell me setup may take about 5 minutes and history downloads are separate. Verify it works and show 5 chats. Guide: ${docs}`,
+        `Set up ${tool} on my computer. First read the guide: ${docs}
+
+Check that Node.js 22.16+ (22.x) or 24+ and npm are installed.
+
+Install with npm install -g ${pkg} (use npm.cmd in Windows PowerShell). Make sure ${tool} runs by name in your current shell and in future terminals. On Windows, find the installation folder with npm.cmd prefix -g; add it to user PATH if missing, preserve existing entries, and refresh your own shell PATH. Do not assume npm updated your running shell. On macOS/Linux, check npm prefix -g and its bin folder when resolving the command; preserve existing shell configuration. If PowerShell blocks the generated script, use the .cmd launcher and follow the documented package repair without changing the permanent execution policy.
+
+Before login, run ${tool} skill install --for all. Read ${tool} --help, ${tool} commands --json and ${tool} skill show, then load and verify the installed skill for your agent.
+
+Use guided setup if the installed cli supports it; otherwise follow the login guide. Tell me setup takes about five minutes and chat history downloads are a separate step. Have me enter login codes and passwords locally or scan the QR code.
+
+Verify ${tool} --version, run ${tool} doctor, check the logged-in account and show the first five chats.`,
     },
   },
   ru: {
@@ -117,7 +127,7 @@ export const words: Record<string, Words> = {
       copied: "Скопировано",
       copyFailed: "Не удалось скопировать. Выделите и скопируйте текст ниже.",
       browser: "Браузер показывает инструкцию; установку на вашем компьютере выполняет агент или терминал.",
-      requirements: "Node.js 22.16+ с npm. После установки Node.js откройте новый терминал.",
+      requirements: "Node.js 22.16+ (ветка 22.x) или 24+ с npm. После установки Node.js откройте новый терминал.",
       windows:
         "Windows: одна команда PowerShell устанавливает CLI и навык агента, сохраняет PATH пользователя, обновляет текущий терминал и проверяет запуск. PATH вручную менять не нужно:",
       login: "Войти в аккаунт",
@@ -128,7 +138,17 @@ export const words: Record<string, Words> = {
       timing:
         "На настройку заложите около 5 минут. Скачивание истории чатов — отдельный шаг, который может занять больше времени.",
       prompt: (tool, pkg, docs) =>
-        `Настрой ${tool} (${pkg}) на моём компьютере: установи cli. На Windows используй установщик https://wirecat.dev/install.ps1 с -Tool ${tool} -Agent all; проверь PATH пользователя и своего терминала. До входа установи и проверь навык для своей среды. Затем прочитай ${tool} --help, ${tool} commands --json и ${tool} skill show. Используй пошаговую настройку, если она есть в установленном cli; иначе следуй инструкции входа. Подключи skill для своего окружения. Скажи, что настройка может занять около 5 минут, а скачивание истории — отдельный шаг. Проверь работу и покажи 5 чатов. Инструкция: ${docs}`,
+        `Настрой ${tool} на моём компьютере. Сначала прочитай инструкцию: ${docs}
+
+Проверь, что установлены Node.js 22.16+ (ветка 22.x) или 24+ и npm.
+
+Установи через npm install -g ${pkg} (в Windows PowerShell используй npm.cmd). Проверь, что ${tool} запускается по имени в твоём терминале и будет доступен в новых терминалах. На Windows узнай папку установки через npm.cmd prefix -g; добавь её в PATH пользователя, если её там нет, сохрани прежние записи и обнови PATH своего терминала. Не предполагай, что npm обновил уже работающий терминал. На macOS/Linux проверь npm prefix -g и подпапку bin; сохрани существующие настройки терминала. Если PowerShell блокирует созданный скрипт, используй запуск через .cmd и восстановление из инструкции без изменения постоянной политики выполнения.
+
+До входа выполни ${tool} skill install --for all. Прочитай ${tool} --help, ${tool} commands --json и ${tool} skill show, затем загрузи и проверь установленный skill для своего агента.
+
+Используй пошаговую настройку, если она есть в установленном cli; иначе следуй инструкции входа. Скажи, что настройка займёт около пяти минут, а скачивание истории чатов — отдельный шаг. Коды и пароли я введу локально или отсканирую QR-код.
+
+Проверь ${tool} --version, выполни ${tool} doctor, проверь аккаунт после входа и покажи первые пять чатов.`,
     },
   },
   es: {
@@ -161,7 +181,7 @@ export const words: Record<string, Words> = {
       copied: "Copiado",
       copyFailed: "No se pudo copiar. Selecciona y copia el texto de abajo.",
       browser: "El navegador muestra las instrucciones; tu agente o terminal ejecuta la instalación en tu ordenador.",
-      requirements: "Node.js 22.16+ con npm. Tras instalar Node.js, abre una terminal nueva.",
+      requirements: "Node.js 22.16+ (rama 22.x) o 24+ con npm. Tras instalar Node.js, abre una terminal nueva.",
       windows:
         "Windows: usa PowerShell. Si npm está bloqueado, usa npm.cmd. Si no se encuentra el comando instalado, ejecútalo con npm exec sin modificar PATH:",
       login: "Iniciar sesión",
@@ -172,7 +192,17 @@ export const words: Record<string, Words> = {
       timing:
         "Reserva unos 5 minutos para la configuración. Descargar el historial es un paso separado y puede tardar más.",
       prompt: (tool, pkg, docs) =>
-        `Configura ${tool} (${pkg}) en mi ordenador: instala el cli. En Windows usa https://wirecat.dev/install.ps1 con -Tool ${tool} -Agent all; verifica PATH del usuario y de tu terminal. Instala y verifica el skill antes del inicio de sesión. Después lee ${tool} --help, ${tool} commands --json y ${tool} skill show. Usa la configuración guiada si aparece en el cli instalado; de lo contrario, sigue los pasos de inicio de sesión documentados. Conecta el skill para tu entorno. Dime que la configuración puede tardar unos 5 minutos y la descarga del historial es un paso separado. Verifica que funciona y muestra 5 chats. Guía: ${docs}`,
+        `Configura ${tool} en mi ordenador. Primero lee la guía: ${docs}
+
+Comprueba que tienes Node.js 22.16+ (rama 22.x) o 24+ y npm.
+
+Instala con npm install -g ${pkg} (usa npm.cmd en Windows PowerShell). Comprueba que ${tool} funciona por su nombre en tu terminal actual y en terminales nuevas. En Windows, consulta la carpeta de instalación con npm.cmd prefix -g; añádela al PATH del usuario si falta, conserva las entradas existentes y actualiza el PATH de tu propia terminal. No supongas que npm ha actualizado una terminal que ya estaba abierta. En macOS/Linux, comprueba npm prefix -g y su carpeta bin sin sobrescribir la configuración del shell. Si PowerShell bloquea el script generado, usa el ejecutable .cmd y la recuperación documentada sin cambiar la política de ejecución permanente.
+
+Antes de iniciar sesión, ejecuta ${tool} skill install --for all. Lee ${tool} --help, ${tool} commands --json y ${tool} skill show; carga el skill instalado y verifica que tu agente lo utiliza.
+
+Usa la configuración guiada si el cli instalado la admite; si no, sigue la guía de inicio de sesión. Dime que la configuración tarda unos cinco minutos y que descargar el historial es un paso separado. Introduciré los códigos y contraseñas localmente o escanearé el QR.
+
+Comprueba ${tool} --version, ejecuta ${tool} doctor, verifica la cuenta conectada y muestra los primeros cinco chats.`,
     },
   },
 }

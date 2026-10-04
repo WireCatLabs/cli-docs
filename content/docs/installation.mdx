@@ -43,7 +43,7 @@ tg session start --app browser
 
 [Telegram login instructions](./tg/sessions.md) explain application credentials, QR and phone login.
 
-### MAX
+### Log in to MAX
 
 1. Run:
 
@@ -91,7 +91,7 @@ These belong to each CLI's reference: [Telegram installation](./tg/installation.
 
 ## Terminal commands
 
-For manual installation, you need **Node.js 22.16 or newer** with npm.
+For manual installation, you need **Node.js 22.16+ (22.x) or 24+** with npm.
 [Download Node.js](https://nodejs.org/en/download), open a new terminal and check the versions:
 
 ```sh
@@ -140,7 +140,7 @@ First five chats:
 tg chats list --limit 5
 ```
 
-### MAX
+### MAX terminal commands
 
 Install:
 
@@ -180,7 +180,11 @@ max chats list --limit 5
 
 ### Windows
 
-Run the single PowerShell installer for your messenger:
+The agent request above uses npm and asks the agent to install its skill, check PATH and verify the command. It does not download an installation script.
+
+npm creates the command launcher in its global installation folder. On Windows, that folder must be on PATH. An already-running agent must also refresh its own shell environment; changing the saved user PATH does not update an open terminal.
+
+For manual installation, the PowerShell installer below handles PATH and skill installation for you:
 
 ```powershell
 & ([scriptblock]::Create((Invoke-RestMethod 'https://wirecat.dev/install.ps1'))) -Tool tg -Agent all

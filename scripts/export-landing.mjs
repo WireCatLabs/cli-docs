@@ -8,6 +8,12 @@ import { runInNewContext } from "node:vm"
 import postcss from "postcss"
 import { maxSession } from "./scenario-platforms.mjs"
 
+const cleanHeadingPeriods = (html) =>
+  html.replace(
+    /(<h[2-6]\b[^>]*>)([\s\S]*?)(<\/h[2-6]>)/g,
+    (_, open, text, close) => `${open}${text.replace(/\.(?=(?:<\/[^>]+>|\s)*$)/, "")}${close}`,
+  )
+
 const copy = {
   en: {
     heading: "Connect your agent",
@@ -124,7 +130,12 @@ const view = (step, lang, messenger, session, index) => {
       return `<details class="evidence-message" id="${id}"><summary><span class="evidence-heading"><strong>${escapeHtml(source.senderName)} <span class="evidence-id">#${escapeHtml(String(source.id))}</span></strong><span class="evidence-meta">${escapeHtml(source.chat)} · ${name} · ${date}</span></span><svg class="evidence-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 4 4 4-4 4"/></svg></summary><blockquote>${escapeHtml(source.text)}</blockquote></details>`
     })
     .join("")
-  return `<div class="say step">${step.say.replace(/<h3>/g, '<span class="answer-label">').replace(/<\/h3>/g, "</span>")}${sources ? `<div class="answer-sources"><small>${text.sources}</small>${sources}</div>` : ""}</div>`
+  return `<div class="say step">${cleanHeadingPeriods(step.say)
+    .replace(/<h3>/g, '<span class="answer-label">')
+    .replace(
+      /<\/h3>/g,
+      "</span>",
+    )}${sources ? `<div class="answer-sources"><small>${text.sources}</small>${sources}</div>` : ""}</div>`
 }
 let localeTypography = ""
 for (const lang of ["en", "ru", "es"]) {
@@ -243,7 +254,7 @@ for (const lang of ["en", "ru", "es"]) {
   html += "\n<div data-search-playground></div>"
   writeFileSync(
     `lib/landing/${lang}.json`,
-    `${JSON.stringify({ html: html.trim(), footerHtml, sessions, maxSessions }, null, 2)}\n`,
+    `${JSON.stringify({ html: cleanHeadingPeriods(html.trim()), footerHtml, sessions, maxSessions }, null, 2)}\n`,
   )
   if (lang !== "en") continue
   const css = postcss.parse(source.match(/<style>([\s\S]*?)<\/style>/)[1].replaceAll(" !important", ""))
@@ -289,7 +300,7 @@ for (const lang of ["en", "ru", "es"]) {
   const reset =
     ".wirecat-landing { min-height: 100vh; overflow-wrap: anywhere; }\n.wirecat-landing :where(h1,h2,h3,h4,p,ul,ol,dl,pre) { margin: revert; padding: revert; font-size: revert; font-weight: revert; }\n.wirecat-landing :where(ul,ol) { list-style: revert; }\n.wirecat-landing :where(svg) { display: inline; vertical-align: middle; }\n"
   const typography =
-    '\nhtml[lang] .wirecat-landing :is(h1,h2,h3,h4,h5,h6) { font-family: var(--heading-family, "Unbounded"); font-stretch: var(--heading-stretch, 100%); font-weight: var(--heading-weight, 800); }\n'
+    '\nhtml[lang] .wirecat-landing :is(h2,h3,h4,h5,h6,[role="heading"],.t6 > b,.savings-quality > b,.time,.tool-name,.spec dt) { font-family: "Onest", system-ui, sans-serif; font-stretch: 100%; font-weight: 700; }\nhtml[lang] .wirecat-landing :is(h1,h2.big,.about-page h2) { font-family: var(--heading-family, "Unbounded"); font-stretch: var(--heading-stretch, 100%); font-weight: var(--heading-weight, 800); }\n'
   const patternScript = script.slice(script.indexOf("const shapes ="), script.indexOf("let wall ="))
   const background = {}
   runInNewContext(`${patternScript}\nscatter(["plane", "sleeping"])`, {
