@@ -21,7 +21,7 @@ your system keyring under an entry named after the deleted folder. It is harmles
 
 ## Before you start
 
-- A QR code stops working within a minute, so a screenshot of it is safe to publish later.
+- Publish a QR screenshot only after confirming that its code has expired or been used successfully; otherwise cover the entire QR before sharing it.
 - **Blur** phone numbers, names, usernames, the api_hash, login codes and chat titles.
 - PNG or JPG. Phone screenshots at the phone's own size; terminal screenshots with a normal-width
   window (about 100 columns).
@@ -39,7 +39,7 @@ your system keyring under an entry named after the deleted folder. It is harmles
 
 | # | File | What it must show | Status |
 |---|---|---|---|
-| 4 | `max/terminal-qr.png` | The terminal during `bin/login-screenshot max`, showing the QR code | needed |
+| 4 | `max/terminal-qr.png` | The terminal during `max setup`, showing the QR code and completed setup | ✅ done |
 | 5 | `max/devices-scanner.png` | MAX on your phone: **Settings → Devices**, with the button that opens the QR scanner | needed |
 
 ## Optional

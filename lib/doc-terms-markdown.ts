@@ -10,7 +10,7 @@ export function expandDocTerms(markdown: string, lang: string): string {
   const visit = (node: Node) => {
     if ((node.type === "html" || node.type === "text") && node.position) {
       const pattern =
-        /<(\/?)(DocTerm|NodeSetupPrompt|AgentInstallPrompt|InstallationMessengerTabs|Screenshot|Tabs|Tab|Steps|Step|Accordions|Accordion)\b([^>]*)>/g
+        /<(\/?)(DocTerm|NodeSetupPrompt|AgentInstallPrompt|InstallationMessengerTabs|InstallationOsTabs|Screenshot|Tabs|Tab|Steps|Step|Accordions|Accordion)\b([^>]*)>/g
       const authored = markdown.slice(node.position.start.offset, node.position.end.offset)
       for (const match of authored.matchAll(pattern)) {
         const props = Object.fromEntries([...match[3].matchAll(/(\w+)="([^"]*)"/g)].map((attr) => [attr[1], attr[2]]))
