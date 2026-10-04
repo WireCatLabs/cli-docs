@@ -16,6 +16,7 @@ nombres, parámetros y resultados estructurados. El servidor viene incluido en `
 | CLI | Comandos de terminal con resultados JSON | Tu agente ya tiene una terminal local |
 | Skill + CLI | Instrucciones de comandos y flujos de trabajo | Usas Codex, Cursor Agent, Claude Code, Gemini CLI o Hermes |
 | MCP | Herramientas con parámetros directamente en el cliente | Usas Claude Desktop o prefieres su interfaz de herramientas |
+| MCP por HTTP | Las mismas herramientas para ChatGPT o Claude en el navegador, tras tu propio túnel | Chateas en el navegador — [ChatGPT y Claude en el navegador](./browser-apps.mdx) |
 | Markdown | Explicaciones y referencia de comandos | El agente necesita consultar cómo funciona algo |
 
 Con una terminal, empieza con [un skill](./agents.md). MCP es opcional y respeta los mismos

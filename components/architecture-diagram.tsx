@@ -195,6 +195,67 @@ const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] }>> = {
       ],
     },
   },
+  remote: {
+    en: {
+      title: "From ChatGPT or Claude to your messages",
+      rows: [
+        {
+          boxes: [
+            { name: "ChatGPT · Claude", note: "in your browser; their servers make the request", tone: "outside" },
+          ],
+        },
+        { boxes: [{ name: "Tailscale Funnel", note: "a public https address for one port of your computer" }] },
+        {
+          boxes: [
+            {
+              name: "tg / max mcp --http",
+              note: "on your computer; asks for the login code, then a form before each change",
+              tone: "tool",
+            },
+          ],
+        },
+        { boxes: [{ name: "Telegram · MAX", note: "your own account", tone: "outside" }] },
+      ],
+    },
+    ru: {
+      title: "От ChatGPT или Claude до вашей переписки",
+      rows: [
+        { boxes: [{ name: "ChatGPT · Claude", note: "в браузере; запрос делают их серверы", tone: "outside" }] },
+        { boxes: [{ name: "Tailscale Funnel", note: "публичный адрес https для одного порта компьютера" }] },
+        {
+          boxes: [
+            {
+              name: "tg / max mcp --http",
+              note: "на вашем компьютере; просит код входа, а перед каждым изменением — форму",
+              tone: "tool",
+            },
+          ],
+        },
+        { boxes: [{ name: "Telegram · MAX", note: "ваш собственный аккаунт", tone: "outside" }] },
+      ],
+    },
+    es: {
+      title: "De ChatGPT o Claude a tus mensajes",
+      rows: [
+        {
+          boxes: [
+            { name: "ChatGPT · Claude", note: "en tu navegador; la petición la hacen sus servidores", tone: "outside" },
+          ],
+        },
+        { boxes: [{ name: "Tailscale Funnel", note: "una dirección https pública para un puerto de tu ordenador" }] },
+        {
+          boxes: [
+            {
+              name: "tg / max mcp --http",
+              note: "en tu ordenador; pide el código de acceso y un formulario antes de cada cambio",
+              tone: "tool",
+            },
+          ],
+        },
+        { boxes: [{ name: "Telegram · MAX", note: "tu propia cuenta", tone: "outside" }] },
+      ],
+    },
+  },
   layers: {
     en: {
       title: "Layers: each calls only the ones below",
