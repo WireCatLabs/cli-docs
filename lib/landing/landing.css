@@ -1805,6 +1805,7 @@
 
 .wirecat-landing .close {
   text-align: center;
+  background: var(--app);
 }
 .wirecat-landing .close .intro {
   margin: 24px auto 0;

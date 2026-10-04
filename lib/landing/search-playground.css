@@ -1,6 +1,3 @@
-.wirecat-landing .sp-host {
-  background: var(--app);
-}
 :is(.wirecat-landing, .sp-docs-host) .search-playground {
   --sp-accent: var(--key);
   --sp-dim: #899591;
