@@ -963,3 +963,5 @@ for _heading, _translations in list(TEXT.items()):
 
 TEXT["All Bot API methods."] = ("Все методы Bot API.", "Todos los métodos de la Bot API.")
 TEXT["Every method of the official Telegram and MAX Bot APIs is exposed through the CLI, alongside simple commands for messages, files and chat administration."] = ("Все методы официальных Bot API Telegram и MAX доступны через CLI — вместе с удобными командами для сообщений, файлов и управления чатами.", "Todos los métodos de las Bot API oficiales de Telegram y MAX están disponibles desde la CLI, junto con comandos sencillos para mensajes, archivos y administración de chats.")
+
+TEXT["All Bot API methods"] = ("Все методы Bot API", "Todos los métodos de la API Bot")

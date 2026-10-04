@@ -6,6 +6,7 @@ import { InstallationGuide } from "@/components/installation-guide"
 import { PlatformPaths } from "@/components/platform-paths"
 import { SearchPlayground } from "@/components/search-playground/search-playground"
 import { AgentPrompt } from "@/components/text-snippet"
+import { isStaticDocumentationResource } from "@/lib/static-resource"
 
 export function getMDXComponents(components?: MDXComponents) {
   const LinkComponent = (components?.a ?? defaultMdxComponents.a) as ComponentType<ComponentProps<"a">>
@@ -16,15 +17,18 @@ export function getMDXComponents(components?: MDXComponents) {
     "platform-paths": PlatformPaths,
     "agent-prompt": AgentPrompt,
     ...components,
-    a: (props) => (
-      <LinkComponent {...props}>
-        {props.className?.split(" ").includes("command-reference") ? (
-          <ExternalLink size={14} aria-hidden="true" />
-        ) : (
-          props.children
-        )}
-      </LinkComponent>
-    ),
+    a: (props) => {
+      const Component = isStaticDocumentationResource(props.href) ? "a" : LinkComponent
+      return (
+        <Component {...props}>
+          {props.className?.split(" ").includes("command-reference") ? (
+            <ExternalLink size={14} aria-hidden="true" />
+          ) : (
+            props.children
+          )}
+        </Component>
+      )
+    },
   } satisfies MDXComponents
 }
 

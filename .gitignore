@@ -44,3 +44,7 @@ __pycache__/
 
 # Generated release audit reports and source proposals
 .docs-updates/
+
+# Private local WireCat review skills and evidence.
+/.agents/skills/
+/.audit/

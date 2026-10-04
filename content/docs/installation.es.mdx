@@ -43,7 +43,7 @@ tg session start --app browser
 
 [Instrucciones de acceso a Telegram](./tg/sessions.md) explican las credenciales, el QR y el acceso por teléfono.
 
-### MAX
+### Iniciar sesión en MAX
 
 1. Ejecuta:
 
@@ -91,7 +91,7 @@ o [MAX](./max/troubleshooting.md).
 
 ## Comandos para la terminal
 
-Para instalarlo manualmente necesitas **Node.js 22.16 o posterior** con npm.
+Para instalarlo manualmente necesitas **Node.js 22.16+ (rama 22.x) o 24+** con npm.
 [Descarga Node.js](https://nodejs.org/en/download), abre una terminal nueva y comprueba las versiones:
 
 ```sh
@@ -140,7 +140,7 @@ Primeros cinco chats:
 tg chats list --limit 5
 ```
 
-### MAX
+### Comandos de MAX en la terminal
 
 Instalar:
 
@@ -180,7 +180,11 @@ max chats list --limit 5
 
 ### Windows
 
-Ejecuta un único instalador de PowerShell para tu servicio:
+La petición al agente de arriba usa npm y le pide que instale el skill, compruebe PATH y verifique el comando. No descarga un script de instalación.
+
+npm crea el comando en su carpeta de instalación global. En Windows, esa carpeta debe estar en PATH. Un agente que ya está abierto también debe actualizar el entorno de su terminal: guardar el PATH del usuario no cambia el de una terminal abierta.
+
+Para instalarlo por tu cuenta, el instalador de PowerShell siguiente configura PATH e instala el skill:
 
 ```powershell
 & ([scriptblock]::Create((Invoke-RestMethod 'https://wirecat.dev/install.ps1'))) -Tool tg -Agent all
