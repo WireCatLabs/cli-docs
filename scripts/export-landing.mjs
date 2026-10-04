@@ -326,15 +326,15 @@ html[lang] .wirecat-landing :is(h1, #headline) {
   line-height: 1.15;
   letter-spacing: -0.025em;
 }
-/* Keep the two short hero phrases on separate lines in Russian and Spanish. */
-html:is([lang="ru"], [lang="es"]) .wirecat-landing #headline {
+/* All hero locales share one responsive size; Russian and Spanish use two explicit lines. */
+html[lang] .wirecat-landing #headline {
   font-size: clamp(17px, 5.3vw, 36px);
 }
 html:is([lang="ru"], [lang="es"]) .wirecat-landing #headline span {
   display: block;
 }
 @media (min-width: 901px) {
-  html:is([lang="ru"], [lang="es"]) .wirecat-landing #headline {
+  html[lang] .wirecat-landing #headline {
     font-size: clamp(22px, 2.9vw, 36px);
   }
 }
