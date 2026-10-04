@@ -1,203 +1,317 @@
 ---
-title: "Installation"
-description: "Choose Telegram or MAX, install with your agent or terminal, then log in and check it works."
+title: "Install and log in"
+description: "Install the Telegram or MAX CLI, log in with your phone, and check that it works. About five minutes."
 ---
 
-The Telegram and MAX CLIs are npm packages that run on **Windows, macOS and Linux**.
-Ask your local agent to check your computer, install the CLI and help connect your account,
-or install it yourself in a terminal. Once you have logged in, check your account and first chats,
-then give your agent a useful task.
+Three steps, about five minutes: **install** the CLI, **log in** with your phone, **check** that it works.
 
-## 1. Choose a messenger
+You need:
 
-Open **Telegram** or **MAX** below and copy the request into your local agent.
-It works with Codex, Cursor, Claude Code, Gemini CLI and Hermes. To install it yourself,
-open **Install in a terminal** inside the selected messenger.
+- a computer with Windows, macOS or Linux;
+- your phone, with Telegram or MAX open on the account you want to connect.
 
-<InstallationGuide />
+Pick your system and messenger on the tabs below. The page remembers your choice.
 
-Allow about five minutes for installation and login. Downloading chat history is a separate step;
-choose the chats and amount of history after setup.
+<Steps>
+<Step>
 
-## 2. Log in on your computer
+### Install the CLI
 
-Enter login codes and passwords in your local terminal when the CLI asks for them.
+<Tabs groupId="os" persist items={["macOS / Linux", "Windows"]}>
+<Tab value="macOS / Linux">
 
-### Telegram
+You need [Node.js](https://nodejs.org/en/download) 22.16 or newer. Check with `node --version`.
+Then run in a terminal:
 
-1. Run in your local terminal:
-
-   ```sh
-   tg setup --agent all
-   ```
-
-2. On first login, the CLI obtains Telegram application credentials. Enter your phone number and the code sent in Telegram when requested.
-3. On your phone, choose the right Telegram account. Open Settings → Devices → Link Desktop Device and scan the computer’s QR code.
-4. Enter your two-step verification password if requested, then wait for setup to check your account and five chats and install agent skills. It reuses an existing session; history downloads remain a separate choice. For login alone, use `tg session start --app auto`.
-
-If automatic registration fails, use:
-
-```sh
-tg session start --app browser
-```
-
-[Telegram login instructions](./tg/sessions.md) explain application credentials, QR and phone login.
-
-### Log in to MAX
-
-1. Run:
-
-   ```sh
-   max setup --agent all
-   ```
-
-2. On your phone, open MAX → Settings → Devices. Scan the computer’s QR code and confirm the connection.
-3. Follow the terminal prompts. Guided setup checks your account and five chats and installs agent skills. It reuses an existing session; it does not download all history or start the background service. Use `max session start qr` if you only want to log in.
-
-See [MAX login instructions](./max/sessions.md) for alternatives, or the [bot guide](./max/bot.md) to connect a bot.
-
-### Check the connection
-
-Run the command for your messenger:
-
-```sh
-tg account show
-```
-
-```sh
-max account show
-```
-
-The response should show your account. Diagnostics may report a missing session before login; that is expected. Repeat the check after login, then list your chats.
-
-## 3. Connect your agent
-
-[Connect your agent](./agents.md) gives the steps for all five agents. For Claude Desktop or an
-MCP connection, continue to [MCP and documentation](./mcp.md).
-
-```text prompt
-Summarise my unread messages by chat and tell me who needs an answer.
-```
-The CLI command is `tg inbox --limit 5` or `max inbox --limit 5`.
-
-Continue with [first tasks](./first-tasks.md): find a past decision, prepare for a meeting
-and draft a reply. [Writing requests](./prompting.md) provides copyable examples and useful constraints.
-
-## Updates and file locations
-
-These belong to each CLI's reference: [Telegram installation](./tg/installation.md),
-[MAX installation](./max/installation.md). If a check fails, see
-[Telegram troubleshooting](./tg/troubleshooting.md) or [MAX troubleshooting](./max/troubleshooting.md).
-
-## Terminal commands
-
-For manual installation, you need **Node.js 22.16+ (22.x) or 24+** with npm.
-[Download Node.js](https://nodejs.org/en/download), open a new terminal and check the versions:
-
-```sh
-node --version
-```
-
-```sh
-npm --version
-```
-
-### Telegram
-
-Install:
+<Tabs groupId="messenger" persist items={["Telegram", "MAX"]}>
+<Tab value="Telegram">
 
 ```sh
 npm install -g @leemour/tg-cli
 ```
 
-Version:
-
-```sh
-tg --version
-```
-
-Diagnostics:
-
-```sh
-tg doctor
-```
-
-Log in:
-
-```sh
-tg setup --agent all
-```
-
-Account:
-
-```sh
-tg account show
-```
-
-First five chats:
-
-```sh
-tg chats list --limit 5
-```
-
-### MAX terminal commands
-
-Install:
+</Tab>
+<Tab value="MAX">
 
 ```sh
 npm install -g @leemour/max-cli
 ```
 
-Version:
+</Tab>
+</Tabs>
 
-```sh
-max --version
-```
+</Tab>
+<Tab value="Windows">
 
-Diagnostics:
+You need [Node.js](https://nodejs.org/en/download) 22.16 or newer. Open **PowerShell** and run:
 
-```sh
-max doctor
-```
-
-Log in:
-
-```sh
-max setup --agent all
-```
-
-Account:
-
-```sh
-max account show
-```
-
-First five chats:
-
-```sh
-max chats list --limit 5
-```
-
-### Windows
-
-The agent request above uses npm and asks the agent to install its skill, check PATH and verify the command. It does not download an installation script.
-
-npm creates the command launcher in its global installation folder. On Windows, that folder must be on PATH. An already-running agent must also refresh its own shell environment; changing the saved user PATH does not update an open terminal.
-
-For manual installation, the PowerShell installer below handles PATH and skill installation for you:
+<Tabs groupId="messenger" persist items={["Telegram", "MAX"]}>
+<Tab value="Telegram">
 
 ```powershell
 & ([scriptblock]::Create((Invoke-RestMethod 'https://wirecat.dev/install.ps1'))) -Tool tg -Agent all
 ```
 
+</Tab>
+<Tab value="MAX">
+
 ```powershell
 & ([scriptblock]::Create((Invoke-RestMethod 'https://wirecat.dev/install.ps1'))) -Tool max -Agent all
 ```
 
-It installs the npm package, preserves existing user PATH entries, updates this PowerShell,
-installs the agent skill and verifies bare `tg` or `max`. No manual PATH editing is needed.
-The installer completes these steps even when npm skips lifecycle scripts. It keeps the `.cmd`
-launcher and removes only npm's generated PowerShell shim for this package; execution policy
-is unchanged. `-Agent codex|cursor|claude|gemini|all|none` selects the skill; default is `all`.
-An already-running agent refreshes its shell environment itself before subsequent commands.
-Account login still needs your QR scan or code, entered locally.
+</Tab>
+</Tabs>
+
+This installs the CLI with npm and makes the `tg` or `max` command work in every new terminal.
+[What the installer changes](#what-the-windows-installer-changes).
+
+</Tab>
+</Tabs>
+
+<Accordions>
+<Accordion title="Prefer to let your AI agent install it?">
+
+Copy the request for your messenger into your agent (Claude Code, Codex, Cursor, Gemini CLI or
+Hermes). It checks Node.js, installs the CLI and teaches your agent the commands. You still log in
+yourself in step 2: the agent cannot scan a QR code for you.
+
+<InstallationGuide />
+
+</Accordion>
+</Accordions>
+
+</Step>
+<Step>
+
+### Log in with your phone
+
+Logging in adds your computer as a new device on your account, the same way Telegram Desktop or
+MAX on the web does. Your phone approves it. Run the command in **your own terminal**, not in the
+agent chat: codes and passwords should only go into the terminal.
+
+<Tabs groupId="messenger" persist items={["Telegram", "MAX"]}>
+<Tab value="Telegram">
+
+```sh
+tg setup
+```
+
+The terminal asks you, in this order:
+
+1. **Phone number** — in international format, for example `+34600111222`.
+2. **Code from Telegram for my.telegram.org** — Telegram sends it as a message in the Telegram
+   app (from the chat called *Telegram*), not by SMS. Type it in the terminal. The CLI uses it to
+   register itself with Telegram for you; this happens only on the first login.
+
+   <Screenshot alt="the Telegram app showing the message with the my.telegram.org login code" width={360} />
+
+3. **QR code** — the terminal shows a QR code. On your phone, open
+   **Settings → Devices → Link Desktop Device** and scan it with that scanner (not the camera app).
+
+   <Screenshot alt="the terminal showing the Telegram login QR code" />
+   <Screenshot alt="Telegram on the phone: Settings → Devices → Link Desktop Device" width={360} />
+
+4. **Two-step verification password** — only if you set one in Telegram. The characters stay
+   hidden while you type.
+5. **Which agent you use** — setup teaches it the commands. Then it shows
+   `Logged in as <your name>` and checks five of your chats.
+
+<Accordions>
+<Accordion title="Why does Telegram need a code for my.telegram.org?">
+
+Telegram asks every program that connects to an account to be registered first. The registration
+gives the program two values: an **app ID** and an **app hash**. They only identify the program;
+they give no access to your messages on their own. Telegram allows one registration per phone
+number, so if you have one already, the CLI reuses it.
+
+The code in step 2 lets the CLI fill in that registration form on
+[my.telegram.org](https://my.telegram.org) for you. The QR scan in step 3 is the actual login.
+
+</Accordion>
+<Accordion title="Why scan a QR code?">
+
+The QR code links the CLI to your account as a new device, like Telegram Desktop. Your phone
+proves it is you, so the CLI never needs your password. After login the CLI shows up in
+**Settings → Devices**, where you can end it at any time.
+
+</Accordion>
+<Accordion title="Automatic registration failed? Register the app in your browser">
+
+Run:
+
+```sh
+tg setup --app browser
+```
+
+The command opens [my.telegram.org](https://my.telegram.org). Then:
+
+1. Enter your phone number. Telegram sends a code to the Telegram app. Enter it on the site.
+
+   <Screenshot src="/screenshots/telegram/my-telegram-login.png" alt="my.telegram.org login form with phone number and confirmation code" />
+
+2. Open **API development tools**.
+
+   <Screenshot src="/screenshots/telegram/my-telegram-api-tools.png" alt="my.telegram.org menu with API development tools highlighted" />
+
+3. If you have no app yet, fill in the form: any title and short name, platform **Desktop**.
+   Skip this if the page already shows an app.
+
+   <Screenshot alt="my.telegram.org form to create a new application, filled in" />
+
+4. Copy **App api_id** and **App api_hash** into the terminal when it asks. The hash stays hidden
+   while you type.
+
+   <Screenshot src="/screenshots/telegram/my-telegram-credentials.png" alt="my.telegram.org App configuration page with api_id and api_hash highlighted" />
+
+5. Continue with the QR code from step 3 above.
+
+</Accordion>
+</Accordions>
+
+More options, such as logging in with a code instead of a QR, or a second account:
+[Telegram login and profiles](./tg/sessions.md).
+
+</Tab>
+<Tab value="MAX">
+
+```sh
+max setup
+```
+
+1. **QR code** — the terminal shows a QR code. If the terminal window is narrow, it opens in
+   your browser instead.
+
+   <Screenshot alt="the terminal showing the MAX login QR code" />
+
+2. **Scan it on your phone** — open MAX → **Settings → Devices**, open the QR scanner there and
+   scan the code. Confirm the connection if MAX asks.
+
+   <Screenshot alt="MAX on the phone: Settings → Devices with the QR scanner" width={360} />
+
+3. **Account password** — only if your MAX account has one. The characters stay hidden while you
+   type.
+4. **Which agent you use** — setup teaches it the commands, then checks your account and five of
+   your chats.
+
+<Accordions>
+<Accordion title="Why scan a QR code?">
+
+The QR code links the CLI to your account as a new device, like MAX on the web. Your phone proves
+it is you, so the CLI never needs a password or SMS code. After login the CLI shows up in
+**Settings → Devices**, where you can end it at any time.
+
+</Accordion>
+</Accordions>
+
+Other ways to log in (a browser window, SMS, an existing token):
+[MAX sessions and profiles](./max/sessions.md).
+
+</Tab>
+</Tabs>
+
+</Step>
+<Step>
+
+### Check that it works
+
+<Tabs groupId="messenger" persist items={["Telegram", "MAX"]}>
+<Tab value="Telegram">
+
+```sh
+tg chats list --limit 5
+```
+
+</Tab>
+<Tab value="MAX">
+
+```sh
+max chats list --limit 5
+```
+
+</Tab>
+</Tabs>
+
+You should see five of your recent chats. Setup already ran this check; you can repeat it at any
+time.
+
+If it says you are not logged in, run the setup command again. If the command is not found, open
+a new terminal; on Windows, see [what the installer changes](#what-the-windows-installer-changes).
+
+</Step>
+</Steps>
+
+Logging in does not download your message history. You choose which chats and how much history to
+fetch later, when a task needs it.
+
+## What the CLI and your agent can do with this login
+
+The login gives the CLI **the same access you have in the app**: read your chats, send, edit and
+delete messages, manage groups and contacts. Your agent gets that access when it runs `tg` or
+`max` commands.
+
+- **It acts only when a command asks.** Reading does not mark messages as read, and nothing is sent
+  unless a command sends it.
+- **By default, sending is allowed**, up to 30 messages per hour. Deleting messages needs an extra
+  confirmation.
+- **You decide what an agent may do.** Each account connection (a *profile*) has its own rules:
+
+| You want | Set up | Read more |
+|---|---|---|
+| The agent only reads, never changes anything | a read-only profile | [Telegram](./tg/configuration.md#what-a-profile-may-do) · [MAX](./max/security.md#preventing-sends-to-the-wrong-place) |
+| A question before each send | the `ask` level for sending | [Telegram](./tg/configuration.md#a-question-before-a-change) |
+| Sends only to chats you chose | a recipient list | [Telegram](./tg/security.md#the-send-guard) · [MAX](./max/security.md#preventing-sends-to-the-wrong-place) |
+| Fewer messages per hour | `sendsPerHour` | [Telegram](./tg/security.md#the-send-guard) · [MAX](./max/security.md#preventing-sends-to-the-wrong-place) |
+
+**Your login is saved on this computer.** Treat the saved session like a password: whoever copies
+it can use your account. To log out, run `tg session end` or `max session end`, or end the device
+in **Settings → Devices** on your phone. What is stored where:
+[Telegram security](./tg/security.md) · [MAX security](./max/security.md).
+
+## Next: ask your agent
+
+Setup has already taught your agent the commands. Open your agent and paste:
+
+```text prompt
+Summarise my unread messages by chat and tell me who needs an answer. Read only: don't send anything.
+```
+
+Then continue with [first tasks](./first-tasks.md). If your agent does not know the `tg` or `max`
+command, see [Connect your agent](./agents.md).
+
+## Troubleshooting
+
+<Accordions>
+<Accordion title="What the Windows installer changes" id="what-the-windows-installer-changes">
+
+npm puts the `tg` or `max` command in its global folder. Windows finds commands only in folders
+listed in PATH, and npm does not always add its folder there. The installer:
+
+- installs the npm package;
+- adds npm's folder to your user PATH, keeping existing entries, and updates the open PowerShell;
+- teaches your agents the commands (`-Agent codex|cursor|claude|gemini|all|none`, default `all`);
+- checks that `tg` or `max` runs by name.
+
+It does not change PowerShell's execution policy. An agent that was already running when you
+installed must restart, or refresh its own PATH, before it can find the command.
+
+</Accordion>
+<Accordion title="Install without the Windows installer">
+
+```powershell
+npm.cmd install -g @leemour/tg-cli
+```
+
+If `tg` is then not found, run `npm.cmd prefix -g`, add that folder to your user PATH, and open a
+new terminal. Use `max-cli` and `max` for MAX.
+
+</Accordion>
+<Accordion title="Updates, file locations and other problems">
+
+- Updating and where files are stored: [Telegram installation](./tg/installation.md) ·
+  [MAX installation](./max/installation.md)
+- Error messages: [Telegram troubleshooting](./tg/troubleshooting.md) ·
+  [MAX troubleshooting](./max/troubleshooting.md)
+- A health check of your setup: `tg doctor` or `max doctor`
+
+</Accordion>
+</Accordions>

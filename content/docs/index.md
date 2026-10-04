@@ -1,29 +1,45 @@
 ---
 title: "Getting started"
-description: "Install a messenger CLI, connect your agent, and get your first useful result."
+description: "Let your AI agent read, search and answer your Telegram and MAX messages, from your own account on your own computer."
 ---
 
-WireCat brings your Telegram and MAX accounts to your terminal and AI agent.
+WireCat gives your AI agent your Telegram or MAX account. You ask in plain words — *"who is
+still waiting for my answer?"*, *"what did we agree with Marco in September?"* — and the agent
+reads your chats and answers, with the messages it used as proof.
+
+It works through two command line tools: `tg` for Telegram and `max` for MAX. They run on your
+computer and use your own account. Your agent (Claude Code, Codex, Cursor, Gemini CLI, Hermes)
+runs them for you. You decide what it may do: only read, ask before sending, or send to chosen
+chats.
+
+## What you can ask
+
+- **Catch up** — "Summarise my unread messages and tell me who needs an answer."
+- **Find** — "Find the price we agreed in the Atlas group and show the message."
+- **Prepare** — "Prepare an agenda for my call with Anna from this week's chats."
+- **Follow up** — "What did I promise this week? Draft the replies, don't send them."
 
 ## Start here
 
-1. [Install and log in](./installation.mdx) — with Codex, Cursor, Claude Code, Gemini CLI, Hermes, or your terminal.
-2. [Connect your agent](./agents.md) — teach it the commands, then ask it to summarise your inbox.
-3. [Try your first tasks](./first-tasks.md) — search history, prepare for a meeting and draft replies.
-4. [Write a request](./prompting.md) — describe your goal, scope and desired result.
-5. [Choose CLI or MCP](./mcp.md) — understand the connection and give your agent these docs.
+1. **[Install and log in](./installation.mdx)** — about 5 minutes. You install the CLI and scan
+   a QR code with your phone.
+2. **[Try your first tasks](./first-tasks.md)** — copy a request into your agent and get your
+   first answer.
 
-## Choose your messenger
+That is all you need to start. Later, when you need them:
 
-| Messenger | What you get | Documentation |
+- [Writing requests](./prompting.md) — get better answers from your agent.
+- [Connect your agent](./agents.md) — if your agent does not see the `tg` or `max` command.
+- [MCP and documentation](./mcp.md) — for Claude Desktop and other clients without a terminal.
+
+## Telegram or MAX?
+
+Both tools work the same way. Install the one for the messenger you use, or both.
+
+| Messenger | What you get | Full guide |
 |---|---|---|
-| Telegram · `tg` | Your personal account, inbox, search and a local archive | [Telegram](./tg/index.md) |
-| MAX · `max` | Your personal account, bots through the official Bot API and groups | [MAX](./max/index.md) |
+| Telegram · `tg` | Your personal account: inbox, search, a local archive of your chats | [Telegram](./tg/index.md) |
+| MAX · `max` | Your personal account, plus bots and group moderation | [MAX](./max/index.md) |
 
-Use **Telegram / MAX** at the top to switch messengers. It keeps the same section when both
-tools have it. The language switcher next to search keeps the current page when a translation is available.
-
-## Give the docs to your agent
-
-Share [wirecat.dev/llms.txt](/llms.txt) for the page index, or use **Copy Markdown** on any page.
-[MCP and documentation](./mcp.md#documentation-for-your-agent) explains all the options.
+The **Telegram / MAX** switch at the top of every page takes you to the same section for the other
+messenger.

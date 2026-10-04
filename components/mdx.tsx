@@ -1,9 +1,13 @@
+import { Accordion, Accordions } from "fumadocs-ui/components/accordion"
+import { Step, Steps } from "fumadocs-ui/components/steps"
+import { Tab, Tabs } from "fumadocs-ui/components/tabs"
 import defaultMdxComponents from "fumadocs-ui/mdx"
 import { ExternalLink } from "lucide-react"
 import type { MDXComponents } from "mdx/types"
 import type { ComponentProps, ComponentType } from "react"
 import { InstallationGuide } from "@/components/installation-guide"
 import { PlatformPaths } from "@/components/platform-paths"
+import { Screenshot } from "@/components/screenshot"
 import { SearchPlayground } from "@/components/search-playground/search-playground"
 import { AgentPrompt } from "@/components/text-snippet"
 import { isStaticDocumentationResource } from "@/lib/static-resource"
@@ -13,6 +17,13 @@ export function getMDXComponents(components?: MDXComponents) {
   return {
     ...defaultMdxComponents,
     InstallationGuide,
+    Screenshot,
+    Tabs,
+    Tab,
+    Steps,
+    Step,
+    Accordions,
+    Accordion,
     SearchPlayground,
     "platform-paths": PlatformPaths,
     "agent-prompt": AgentPrompt,

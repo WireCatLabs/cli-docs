@@ -54,7 +54,7 @@ export const words: Record<string, Words> = {
     agents: "For agents: every page as Markdown in /llms.txt and /llms-full.txt.",
     navigation: {
       start: "Getting started",
-      installation: "Installation",
+      installation: "Install and log in",
       agents: "Connect your agent",
       firstTasks: "First tasks",
       prompting: "Writing requests",
