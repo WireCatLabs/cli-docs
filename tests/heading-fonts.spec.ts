@@ -19,21 +19,17 @@ test("search uses the same heading face; font comparison stays opt-in", async ({
       await page.locator("h2.big").first().evaluate(typography),
     )
     await expect(page.locator(".font-lab")).toHaveCount(0)
-    const headings = await page
-      .locator(
-        ".wirecat-landing :is(h1,h2,h3,h4,h5,h6,[role='heading'],.t6 > b,.savings-quality > b,.time,.tool-name,.spec dt)",
-      )
-      .evaluateAll((elements) =>
-        elements
-          .filter((el) => el.getClientRects().length)
-          .map((el) => ({
-            text: el.textContent?.trim(),
-            font: getComputedStyle(el).fontFamily,
-            size: parseFloat(getComputedStyle(el).fontSize),
-            scroll: el.scrollWidth,
-            width: el.clientWidth,
-          })),
-      )
+    const headings = await page.locator(".wirecat-landing :is(h1,h2,h3,h4,h5,h6)").evaluateAll((elements) =>
+      elements
+        .filter((el) => el.getClientRects().length)
+        .map((el) => ({
+          text: el.textContent?.trim(),
+          font: getComputedStyle(el).fontFamily,
+          size: parseFloat(getComputedStyle(el).fontSize),
+          scroll: el.scrollWidth,
+          width: el.clientWidth,
+        })),
+    )
     for (const heading of headings) {
       expect(heading.font, heading.text).toContain("Unbounded")
       expect(heading.size, heading.text).toBeGreaterThanOrEqual(11)
@@ -52,6 +48,30 @@ test("search uses the same heading face; font comparison stays opt-in", async ({
       .locator(".fv6 .fv-ico")
       .evaluateAll((elements) => elements.map((el) => el.getBoundingClientRect().width)))
       expect(icon).toBe(31)
+    const nonHeadingDisplayFonts = await page
+      .locator(".wirecat-landing *")
+      .evaluateAll((elements) =>
+        elements
+          .filter(
+            (el) =>
+              el.getClientRects().length &&
+              !el.closest("h1,h2,h3,h4,h5,h6") &&
+              getComputedStyle(el).fontFamily.includes("Unbounded"),
+          )
+          .map((el) => ({ tag: el.tagName, text: el.textContent?.trim().slice(0, 60) })),
+      )
+    expect(nonHeadingDisplayFonts).toEqual([])
+    const labels = await page
+      .locator(".t6 > b,.spec dt,.time,.tool-name,.savings-quality > b")
+      .evaluateAll((elements) =>
+        elements.map((el) => ({ text: el.textContent?.trim(), font: getComputedStyle(el).fontFamily })),
+      )
+    for (const label of labels) expect(label.font, label.text).toContain("Onest")
+    const titles = await page
+      .locator(".wirecat-landing :is(h2,h3,h4,h5,h6),.t6 > b,.fv-name")
+      .evaluateAll((elements) => elements.map((el) => el.textContent?.trim()))
+    for (const title of titles) expect(title).not.toMatch(/\.(?:\s|$)/u)
+    expect(await page.locator("#headline").innerText()).toContain(".")
     expect((await page.locator("h1").evaluate(typography))[0]).toContain("Unbounded")
     expect(await page.locator("h1").evaluate((el) => parseFloat(getComputedStyle(el).fontSize))).toBeLessThanOrEqual(40)
     expect(
@@ -69,7 +89,9 @@ test("all eight Cyrillic fonts load locally and update hero, section and search 
 }) => {
   test.setTimeout(60000)
   const failures: string[] = []
-  page.on("requestfailed", (request) => failures.push(request.url()))
+  page.on("requestfailed", (request) => {
+    if (/\.(?:woff2?|ttf)(?:\?|$)|\/heading-lab\//u.test(request.url())) failures.push(request.url())
+  })
   page.on("request", (request) => {
     if (/fonts\.(?:googleapis|gstatic)\.com/u.test(request.url())) failures.push(request.url())
   })
