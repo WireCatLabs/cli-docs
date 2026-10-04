@@ -44,8 +44,8 @@
   width: 32px;
   height: 32px;
   flex: 0 0 32px;
-  border: 1px solid var(--app-line);
-  background: var(--app-2);
+  border: 1px solid transparent;
+  background: transparent;
   color: var(--ink-soft);
   padding: 0;
   border-radius: 6px;
@@ -86,15 +86,38 @@
   text-decoration: underline;
 }
 .wirecat-landing .answer-sources {
-  display: grid;
-  gap: 2px;
-  margin-top: 16px;
-  padding-top: 12px;
-  border-top: 1px solid var(--app-line);
+  margin-top: 12px;
   font-size: 12px;
 }
-.wirecat-landing .answer-sources > small {
+.wirecat-landing .sources-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   color: var(--app-soft);
+  cursor: pointer;
+  list-style: none;
+  padding: 4px 0;
+  transition: color 160ms;
+}
+.wirecat-landing .sources-toggle::-webkit-details-marker {
+  display: none;
+}
+.wirecat-landing .sources-toggle:hover {
+  color: var(--ink);
+}
+.wirecat-landing .sources-chevron {
+  transition: transform 180ms ease-out;
+}
+.wirecat-landing .answer-sources[open] > .sources-toggle .sources-chevron {
+  transform: rotate(90deg);
+}
+.wirecat-landing .sources-list {
+  display: grid;
+  gap: 2px;
+  margin-top: 4px;
+}
+.wirecat-landing .answer-sources:not([open]) > .sources-list {
+  display: none;
 }
 .wirecat-landing .log {
   overflow-anchor: none;
@@ -196,6 +219,7 @@
     .prompt-actions button,
     .prompt-actions a,
     .evidence-message summary,
+    .sources-toggle,
     .tool-links a
   ):focus-visible {
   outline: 2px solid var(--key);
@@ -224,6 +248,8 @@
   .wirecat-landing .prompt-actions button,
   .wirecat-landing .evidence-message summary,
   .wirecat-landing .evidence-chevron,
+  .wirecat-landing .sources-chevron,
+  .wirecat-landing .sources-toggle,
   .wirecat-landing .tool-links a,
   .wirecat-landing .tool-links a svg {
     transition: none;
