@@ -4,9 +4,11 @@ import { metaSchema, pageSchema } from "fumadocs-core/source/schema"
 import { applyMdxPreset } from "fumadocs-mdx/config"
 import { defineDocs } from "fumadocs-mdx/macro"
 import { i18n } from "./i18n"
+import { installationMarkdown } from "./installation-markdown"
+import { resolveDocumentationLink, rewriteMarkdownLinks } from "./markdown-links"
 import { remarkAnchorAliases } from "./remark-anchor-aliases"
 import { remarkDocUsability } from "./remark-doc-usability"
-import { docsRoute, toolOf } from "./shared"
+import { docsRoute, getPageMarkdownUrl, siteUrl, toolOf } from "./shared"
 
 const docs = defineDocs({
   dir: "content/docs",
@@ -33,6 +35,12 @@ export const source = loader({
   plugins: [],
 })
 
+const markdownUrls = new Map(
+  i18n.languages.flatMap((lang) =>
+    source.getPages(lang).map((page) => [page.url, getPageMarkdownUrl(page).url] as const),
+  ),
+)
+
 export const docsLlms = llms(source, {
   renderPage: async (page) => {
     const tool = toolOf(page.slugs)
@@ -42,6 +50,18 @@ export const docsLlms = llms(source, {
         : page.locale === "es"
           ? "Versión de documentación"
           : "Documentation version"
-    return `# ${page.data.title} (${page.url})\n\n${tool?.docsRef ? `${label}: ${tool.docsRef}\n\n` : ""}${await page.data.getText("processed")}`
+    const body = (await page.data.getText("processed")).replace(
+      "<InstallationGuide />",
+      installationMarkdown(page.locale ?? i18n.defaultLanguage),
+    )
+    const markdown = rewriteMarkdownLinks(body, (href) =>
+      resolveDocumentationLink(
+        href,
+        page.slugs.length === 0 || (tool && page.slugs.length === 1) ? `${page.url}/` : page.url,
+        siteUrl,
+        (pathname) => markdownUrls.get(pathname),
+      ),
+    )
+    return `# ${page.data.title} (${page.url})\n\n${tool?.docsRef ? `${label}: ${tool.docsRef}\n\n` : ""}${markdown}`
   },
 })

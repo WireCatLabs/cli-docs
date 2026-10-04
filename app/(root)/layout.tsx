@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { SiteAnalytics } from "@/components/site-analytics"
 import { appName, siteDescription, siteUrl, tagline } from "@/lib/shared"
 
 export const metadata: Metadata = {
@@ -11,7 +12,10 @@ export const metadata: Metadata = {
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <SiteAnalytics />
+        {children}
+      </body>
     </html>
   )
 }

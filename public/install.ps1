@@ -105,16 +105,17 @@ if (-not $RepairOnly) {
     if (-not $PackageSpec) { $PackageSpec = $package }
     Note "1/3 Installing $package..."
     $savedPreference = $ErrorActionPreference
-    $savedAgent = $env:TG_INSTALL_AGENT
+    $agentVariable = $Tool.ToUpperInvariant() + '_INSTALL_AGENT'
+    $savedAgent = [Environment]::GetEnvironmentVariable($agentVariable, 'Process')
     try {
         # PowerShell 5.1 turns redirected native warnings into errors; npm's exit code decides success.
         $ErrorActionPreference = 'Continue'
-        $env:TG_INSTALL_AGENT = $Agent
+        [Environment]::SetEnvironmentVariable($agentVariable, $Agent, 'Process')
         $log = & $npm install --global --prefix $Prefix "--allow-scripts=$package" --foreground-scripts $PackageSpec 2>&1
         $installExit = $LASTEXITCODE
     } finally {
         $ErrorActionPreference = $savedPreference
-        $env:TG_INSTALL_AGENT = $savedAgent
+        [Environment]::SetEnvironmentVariable($agentVariable, $savedAgent, 'Process')
     }
     foreach ($line in $log) { Note ([string] $line) }
     if ($installExit -ne 0) { throw 'npm installation failed; PATH was not changed.' }

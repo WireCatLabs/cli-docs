@@ -1,6 +1,7 @@
 import { DocsLayout } from "fumadocs-ui/layouts/docs"
 import type { CSSProperties } from "react"
 import { DocsHeader } from "@/components/docs-header"
+import { DocsSidebarFolder } from "@/components/docs-sidebar-folder"
 import { DocsSidebarItem } from "@/components/docs-sidebar-item"
 import { DocsSidebarTitle } from "@/components/docs-sidebar-title"
 import { GettingStartedLinks } from "@/components/getting-started-links"
@@ -41,7 +42,7 @@ export default async function Layout({
               <GettingStartedLinks lang={lang} />
             </>
           ),
-          components: { Item: DocsSidebarItem },
+          components: { Item: DocsSidebarItem, Folder: DocsSidebarFolder },
         }}
         containerProps={{
           className: "wirecat-docs",
