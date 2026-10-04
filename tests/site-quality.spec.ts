@@ -100,3 +100,19 @@ test("documentation preloads its licensed font without adding it to landing down
   expect(font.status()).toBe(200)
   expect((await font.body()).subarray(0, 4).toString()).toBe("wOF2")
 })
+
+test("landing fonts are discoverable in initial HTML and match each locale", async ({ request }) => {
+  for (const lang of ["en", "ru", "es"]) {
+    const html = await (await request.get(`/${lang}`)).text()
+    const preloads = [...html.matchAll(/<link[^>]+href="([^"]+)"[^>]+as="font"[^>]*>/g)].map((match) => match[1])
+    expect(preloads).toContain("/fonts/gNMKW3F-SZuj7xmf-HY.woff2")
+    expect(preloads).toContain("/fonts/heading-lab/unbounded-latin.woff2")
+    expect(preloads.includes("/fonts/heading-lab/unbounded-cyrillic.woff2")).toBe(lang === "ru")
+    expect(preloads.includes("/fonts/gNMKW3F-SZuj7xmb-HY6EQ.woff2")).toBe(lang === "ru")
+    for (const font of preloads) {
+      const response = await request.get(font)
+      expect(response.status()).toBe(200)
+      expect((await response.body()).subarray(0, 4).toString()).toBe("wOF2")
+    }
+  }
+})
