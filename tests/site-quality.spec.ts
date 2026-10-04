@@ -5,6 +5,8 @@ test.setTimeout(90000)
 
 for (const lang of ["en", "ru", "es"]) {
   test(`${lang}: landing and long references render without accessibility or browser failures`, async ({ page }) => {
+    // Six full-page axe scans include the generated command reference (~1.8 MB HTML).
+    test.setTimeout(180000)
     const errors: string[] = []
     const failed: string[] = []
     page.on("pageerror", (error) => errors.push(error.message))
