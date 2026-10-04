@@ -38,24 +38,25 @@ export function SiteAnalytics() {
       {enabled && (
         <>
           <Script id="wirecat-metrika" strategy="afterInteractive" onReady={() => setMetrikaReady(true)}>
-            {`(function(m,e,t,r,i,k,a){
-              m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-              m[i].l=1*new Date();
-              for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}
-              k=e.createElement(t);a=e.getElementsByTagName(t)[0];k.async=1;k.src=r;a.parentNode.insertBefore(k,a);
-            })(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=${yandexMetrikaId}','ym');
+            {`window.ym=window.ym||function(){(window.ym.a=window.ym.a||[]).push(arguments)};
+            window.ym.l=window.ym.l||Date.now();
             ym(${yandexMetrikaId},'init',{ssr:true,defer:true,webvisor:true,clickmap:true,ecommerce:'dataLayer',referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});`}
           </Script>
           <Script
+            id="wirecat-metrika-tag"
+            src={`https://mc.yandex.ru/metrika/tag.js?id=${yandexMetrikaId}`}
+            strategy="lazyOnload"
+          />
+          <Script
             id="wirecat-google-tag"
             src={`https://www.googletagmanager.com/gtag/js?id=${googleMeasurementId}`}
-            strategy="afterInteractive"
+            strategy="lazyOnload"
           />
           <Script id="wirecat-google-init" strategy="afterInteractive">
             {`window.dataLayer=window.dataLayer||[];
             function gtag(){dataLayer.push(arguments);}
             gtag('js',new Date());
-            gtag('config','${googleMeasurementId}');`}
+            gtag('config','${googleMeasurementId}',{page_location:location.href,page_referrer:document.referrer});`}
           </Script>
         </>
       )}
