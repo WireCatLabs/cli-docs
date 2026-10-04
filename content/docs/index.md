@@ -1,29 +1,61 @@
 ---
 title: "Getting started"
-description: "Install a messenger CLI, connect your agent, and get your first useful result."
+description: "Connect your AI assistant to Telegram or MAX conversations: find agreements, review unread messages and prepare replies."
 ---
 
-WireCat brings your Telegram and MAX accounts to your terminal and AI agent.
+Give your AI assistant access to your **Telegram or MAX conversations**. It can find messages and agreements, summarise unread chats and help with replies.
+
+We will install a small program for your messenger on your computer, connect your account and show your agent how to use it. Then you can give it tasks in everyday language.
 
 ## Start here
 
-1. [Install and log in](./installation.mdx) — with Codex, Cursor, Claude Code, Gemini CLI, Hermes, or your terminal.
-2. [Connect your agent](./agents.md) — teach it the commands, then ask it to summarise your inbox.
-3. [Try your first tasks](./first-tasks.md) — search history, prepare for a meeting and draft replies.
-4. [Write a request](./prompting.md) — describe your goal, scope and desired result.
-5. [Choose CLI or MCP](./mcp.md) — understand the connection and give your agent these docs.
+Open an agent that can run programs on your computer, such as Codex, Claude Code, Cursor, Gemini CLI or Hermes. Keep your phone nearby, signed in to the messenger account you want to connect.
+
+1. **Install the program for your messenger.** Open [Installation](./installation.mdx), choose Telegram or MAX and copy the ready-made prompt to your agent. It will check your computer and help with installation.
+2. **Approve login to your account.** Your agent walks you through the steps; you enter the code or confirm on your phone. Telegram also requires a program registration on the first connection, which your agent can help with. Details: [Telegram login](./tg/sessions.md) and [MAX login](./max/sessions.md).
+3. **Give your agent the instructions for working with conversations.** Setup offers to connect them to your agent. To check the connection or choose a different agent, see [Connect your agent](./agents.md).
+
+Allow about five minutes for setup. You do not need to download all history immediately: after login, choose the chats and how much history you need.
+
+## Your first request
+
+After connecting, copy this to your agent:
+
+```text prompt
+Review unread messages by chat. Highlight questions I should answer and briefly summarise what matters.
+```
+
+Then try a specific task:
+
+- Find the deadline you agreed on with a colleague.
+- Gather conversation context before a call.
+- Draft a reply to a customer.
+
+[First tasks](./first-tasks.md) has ready-made examples. [Writing requests](./prompting.md) helps you specify chats, dates and the result you want.
 
 ## Choose your messenger
 
-| Messenger | What you get | Documentation |
+| Messenger | What you can work with | Guide |
 |---|---|---|
-| Telegram · `tg` | Your personal account, inbox, search and a local archive | [Telegram](./tg/index.md) |
-| MAX · `max` | Your personal account, bots through the official Bot API and groups | [MAX](./max/index.md) |
+| Telegram | Personal-account conversations, unread messages and history search | [Start with Telegram](./tg/index.md) |
+| MAX | Personal-account conversations, bots and group management | [Start with MAX](./max/index.md) |
 
-Use **Telegram / MAX** at the top to switch messengers. It keeps the same section when both
-tools have it. The language switcher next to search keeps the current page when a translation is available.
+You can connect both messengers. For each one, install its program and log in to the account you want to use.
+
+## What we install
+
+The Telegram program is called `tg`; the MAX program is `max`. It runs on your computer and retrieves the messages your agent requests for your task.
+
+You will encounter three terms later in the documentation:
+
+- **CLI** is a program you run with text commands. Your agent can run them for you; you do not need to learn them to get started.
+- **Skill** is an instruction file that teaches your agent how to use the program and its commands.
+- **MCP** connects the program to an agent that does not run commands directly, such as Claude Desktop. Use the [MCP connection guide](./mcp.md) for that setup.
+
+Reading messages does not mark them as read. Sending a reply or changing a message is a separate action you ask your agent to perform.
 
 ## Give the docs to your agent
 
-Share [wirecat.dev/llms.txt](/llms.txt) for the page index, or use **Copy Markdown** on any page.
-[MCP and documentation](./mcp.md#documentation-for-your-agent) explains all the options.
+The installed skill is usually enough to get started. For instructions on a particular task, open its page and use **Copy Markdown** to give the agent the text.
+
+The complete page index is at [wirecat.dev/llms.txt](/llms.txt). [MCP and documentation](./mcp.md#documentation-for-your-agent) explains all the options.
