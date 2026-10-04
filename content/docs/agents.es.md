@@ -3,7 +3,7 @@ title: "Conectar tu agente"
 description: "Configura Codex, Cursor, Claude Code, Gemini CLI o Hermes para Telegram y MAX."
 ---
 
-El instalador de Windows ya instala el skill antes del inicio de sesión. Lee `tg skill show` o `max skill show` y verifica que tu agente lo ha cargado. Los comandos siguientes actualizan el skill o lo instalan por separado tras otro método de instalación.
+La instalación global con npm instala el skill antes de iniciar sesión si se permiten los scripts de instalación. El instalador opcional de Windows también lo instala. Lee `tg skill show` o `max skill show` y comprueba que el agente ha cargado el skill. Los comandos siguientes lo actualizan o lo instalan por separado si npm omitió ese paso.
 
 **CLI** es el programa instalado de terminal (`tg` o `max`). Un **agente** es tu asistente de IA, por ejemplo en el editor o terminal. Un **skill** es un archivo de instrucciones que enseña al agente a usar el CLI; no guarda tu acceso a Telegram/MAX. **PATH** es la lista de carpetas donde se buscan comandos: si `tg --version` o `max --version` funciona en la terminal del agente, puede encontrar el CLI.
 

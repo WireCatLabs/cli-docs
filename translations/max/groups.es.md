@@ -10,7 +10,7 @@ Las órdenes que modifican grupos devuelven `operationId` en JSON; después de c
 
 ## Trabajar con un agente
 
-Los agentes con terminal, como Claude Code o Codex, pueden usar una [skill](https://github.com/leemour/max-cli/blob/v0.25.0/README.md#навык-для-агентов-с-терминалом). También pueden conectarse mediante el [servidor MCP](./mcp.md), por ejemplo en Claude Desktop o Cursor. Los ejemplos muestran tu petición, la llamada del agente y el resultado.
+Los agentes con terminal, como Claude Code o Codex, pueden usar una [skill](https://github.com/leemour/max-cli/blob/v0.27.0/README.md#навык-для-агентов-с-терминалом). También pueden conectarse mediante el [servidor MCP](./mcp.md), por ejemplo en Claude Desktop o Cursor. Los ejemplos muestran tu petición, la llamada del agente y el resultado.
 
 ### La mañana del administrador: quién espera respuesta
 

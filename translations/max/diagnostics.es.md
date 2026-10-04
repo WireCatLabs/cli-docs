@@ -1,7 +1,6 @@
 ---
 title: "Diagnóstico: qué hizo un comando"
 ---
-
 Cada solicitud genera un evento, con dos destinos posibles. `--trace` lo muestra sin guardarlo; `--record` lo guarda sin mostrarlo. Por defecto no se muestra nada y solo se guardan ejecuciones fallidas (véase «Las ejecuciones fallidas siempre se guardan»).
 
 ## Mostrar eventos
@@ -140,4 +139,4 @@ Este ajuste registra todo; `--no-record` lo desactiva para una llamada. Por defe
 
 ## Referencia para scripts
 
-`max commands --json` enumera órdenes, opciones globales y códigos de salida sin conectarse a la cuenta. `cli` identifica la herramienta, `version` la versión instalada y `contract` la versión del contrato JSON común (`0`). Esta cambia cuando hay cambios incompatibles en la respuesta; actualizar el paquete no cambia por sí solo `contract`. Los scripts pueden leer campos concretos sin comparar todo el JSON con una cadena guardada.
+`max commands --json` enumera comandos, opciones globales y códigos de salida sin conectar a una cuenta. Usa `max commands messages search --json` para un comando y `max commands messages --json` para un grupo; ambos conservan las opciones globales y códigos de salida. Las palabras tras `commands` indican una ruta; consulta grupos distintos en llamadas separadas. `cli` es el nombre de la herramienta, `version` la versión instalada y `contract` la versión del contrato JSON compartido (`0`). Cambia cuando los campos de respuesta dejan de ser compatibles; actualizar el paquete no cambia por sí solo `contract`. Un script puede leer campos concretos sin comparar todo el JSON con una cadena guardada.

@@ -1,7 +1,6 @@
 ---
 title: "Personal account guide"
 ---
-
 This page covers your personal account. Bots using the official Bot API have a separate [Bot guide](./bot.md).
 
 Each command performs one task, prints its result and exits. Only [`max serve`](./archive.md#новые-сообщения-сразу-max-serve-и-max-watch) keeps a MAX connection open. The first command needing MAX starts it in the background; it stops after 15 minutes without use.
@@ -125,10 +124,20 @@ The selected message is marked `◀` in the feed and `"anchor": true` in JSON. A
 Save photos, files, video and audio to a directory, current by default:
 
 ```sh
-max messages download -1000 100000000000000001 --output ~/Downloads
+max messages download -1000 100000000000000001 --output-dir ~/Downloads
 ```
 
-Files keep their names; other attachments use `<id сообщения>-<номер>.<расширение>`. **Existing files are never overwritten**: the command stops with an error naming the file. Video is saved as the largest MP4. Calls, links and stickers are skipped with a stderr notice. Saved files are owner-only, permissions 600.
+`--output` remains a compatible name for `--output-dir`; do not specify different directories with both. The directory is created if missing. Single-message JSON contains `{items}`; JSONL emits one file record per line.
+
+For the entire chat: `max messages download -1000 --all --output-dir ~/Downloads --pause 5s`. Repeating the command continues saved progress; previously saved files remain in place.
+
+`max messages evidence -1000 --limit 20 --json` returns a bounded message packet from the local archive, with locators and completeness information, without connecting to MAX. Select older messages with `--before-id`. A packet does not establish that the history is complete.
+
+Files keep their name; other attachments use `<id сообщения>-<номер>.<расширение>`. **Existing files are not overwritten**: the command stops with an error naming the file. Video downloads use the largest MP4; calls, links and stickers are not downloaded and produce a stderr note. Saved files are owner-only (mode 600). Voices have `kind: voice` in JSON; unnamed attachments get their extension from HTTP MIME.
+
+### Message link
+
+`max messages link <chat> <message>` or `max messages link <msg:locator>` returns `{ locator, url, access, reason }`. Personal MAX first validates the message in the local archive and returns a locator; a native link format has not yet been verified. `--offline` makes no connection. A locator from another account is refused. `messages links` remains the conversation-relationship command.
 
 ### Voice messages to text
 
@@ -150,7 +159,7 @@ Models live in a directory shared by MAX and Telegram; `CLI_COMMON_CACHE_DIR` re
 
 Timings use one thread on a Ryzen AI 9 HX 470 laptop. Select another model for one run with `--model parakeet-v3`, or permanently with `"transcribeModel": "parakeet-v3"` in configuration `defaults`. Every download is checked against a checksum embedded in `max`; a mismatch prevents installation.
 
-Transcripts are saved under your account in the shared `messages.db`, used by `messages list`, `messages transcribe`, `inbox`, `review` and MCP. Repeating a call by chat ID with the same model returns immediately without the network or model. Old transcripts from the separate profile cache are not migrated; `--transcribe` recreates them. The MAX connection is closed before recognition starts. Audio downloads use a separate connection; with `--no-serve`, this means another MAX login. Memory usage is about 700 MB, or 1.3 GB for `parakeet-v3`.
+Text is stored under your account in the shared local `messages.db`, used by `messages list`, `messages transcribe`, `inbox`, `review` and MCP. Repeating a request by chat id with the same model answers immediately, without network or model execution. Transcripts from the old profile-specific cache are not migrated; `--transcribe` recreates them. Recordings download over the reading connection, which closes before local recognition. Downloading does not need a second login. Memory usage is about 700 MB (`parakeet-v3` uses 1.3 GB).
 
 Transcribe displayed voice messages in a chat or inbox:
 
@@ -194,7 +203,7 @@ max review --unanswered                      # вопросы, на которы
 max review --chat "Соседи" --unanswered 4h    # в одной группе, без ответа 4 часа
 ```
 
-`--unanswered [длительность]` selects questions awaiting your answer or an admin's. A question contains “?” or replies to your or an admin's message. It counts as answered if you or an admin reply, or are first to speak after the questioner. Questions newer than the specified duration (for example `4h`, `1d`; default `24h`) are excluded to allow time to answer.
+`--unanswered [длительность]` keeps questions waiting for your answer or a group administrator's. A question contains “?” in its text or transcript, or replies to your message or an administrator's. Stored transcripts always participate; `--transcribe` recognizes new voices before question selection. An unrecognized recording leaves the review incomplete. A question is answered if you or an administrator replied to it or spoke next after its author. Questions younger than the specified duration, such as `4h` or `1d` (default `24h`), are omitted because there has not been time to answer.
 
 MAX provides admin information at login only for recently active chats. If unavailable, the command reports it and counts only your answers. Replies after the review's end are not visible. `--chat` restricts any review to one chat, with or without `--unanswered`.
 
@@ -350,7 +359,7 @@ max messages delete 0 100000000000000001 100000000000000002 --allow-dangerous # 
 max messages delete 0 100000000000000001 --for-everyone --allow-dangerous    # у всех в чате
 ```
 
-Deletion is irreversible. Without `--allow-dangerous`, the command refuses without prompting. By default, only your copy disappears. `--for-everyone` deletes it for everyone, irreversibly.
+Deletion cannot be undone, so `messages.delete` defaults to `ask`: confirm in the terminal, or pass `--allow-dangerous` in JSON mode. Explicit `allow` for `permissions.messages.delete` permits deletion without that question; `readonly` and `deny` forbid it regardless of the flag. By default, the message disappears only for you and remains for the other person. `--for-everyone` removes it for everyone, and the other person cannot restore it.
 
 Deletion passes send checks. **Each deleted message counts toward `sendsPerHour`** like one send, with at most 10 per run. Large deletion bursts resemble automation and can trigger MAX restrictions. Deleted data is removed from local cache and search too.
 
@@ -370,7 +379,7 @@ chosen}], closed, multiple, anonymous, voters}`. For `vote` and `close`, this is
 
 web.max.ru does not display polls, showing “Update MAX…” instead. Browser readers cannot see your poll; phone and desktop apps can.
 
-Votes are visible unless anonymous. Like the web client, the command rejects closed polls, multiple choices in a single-choice poll, a second vote when changing votes is disabled, or nonexistent answer IDs, without querying MAX. Voting, closing and creating pass send checks as reaction, edit and message respectively. Creation and closing count toward `sendsPerHour`; voting does not. Votes are never retried automatically. For agents, `max_polls_vote` and `max_polls_create` in `max mcp` require `--allow-send`; `max_polls_close` requires `polls` in `mcpTools` ([MCP guide](./mcp.md)).
+Other participants can see votes unless the poll is anonymous. The command refuses locally, as the web client does, if the poll is closed, multiple choices are supplied for a single-choice poll, a second vote is forbidden, or an option id does not exist. Voting, closing and creating polls run the same checks as sending: a vote is a reaction, closing is an edit, and creation is a message. `sendsPerHour` counts creation and closure, but not votes or reactions. Votes are never retried automatically. For agents, `max_polls_vote` and `max_polls_create` in `max mcp` use `permissions`; `max_polls_close` requires write access to `polls.close` ([mcp.md](./mcp.md)).
 
 ### Contacts, profile and folders
 
@@ -606,23 +615,19 @@ An optional `~/.config/max-cli/config.json` file:
 }
 ```
 
-Every setting follows **flag → environment variable → file → built-in default**. In the file, profile settings override global `defaults`; `personal` and `bot` sections provide separate values (`max config set --personal …`, `--bot …`). See [Configuration](./configuration.md) for every field, including `defaultProfile` and `mcpTools`. A misspelled field produces an error naming it rather than silently using a default.
+Every setting resolves in this order: **flag → environment variable → file → built-in default**. In the file, profile settings override shared `defaults`, while `personal` and `bot` set values separately for personal and bot accounts (`max config set --personal …`, `--bot …`). All fields, including `defaultProfile` and `permissions`, are listed in [configuration.md](./configuration.md). A misspelled field produces an error naming it rather than silently choosing a default.
 
 **This file cannot contain secrets:** its schema has no secret fields.
 
 ### Profile permissions
 
-`allow` lists permitted actions. Without it, all actions are allowed.
-
 ```sh
-max work config set allow send,reaction      # только писать и ставить реакции
-max work config unset allow                  # снова всё
-max config set --defaults allow send          # для всех профилей, у которых нет своего списка
+max config set permissions.messages readonly
+max work config set permissions.messages.delete allow
+max config set --defaults permissions.contacts readonly
 ```
 
-Names: `send` for text, files, replies and scheduled messages; `forward`, `reaction`, `edit`, `pin`; `read` for marking read; `delete`; `groups` for groups and channels; `contacts`; `profile` for your account profile; `folders`; and `sessions` for ending other sessions. There is no wildcard: `delete` and `sessions` must be named explicitly.
-
-A profile list replaces rather than extends `defaults`. An empty list permits nothing, like `readOnly`; `readOnly` overrides any list. Rejection returns code `5` before connecting, with a command that would permit the action. Deletion still requires `--allow-dangerous`.
+`deny`, `readonly`, `ask` and `allow` apply in CLI and MCP. More specific keys take precedence: permitting deletion separately does not permit sending. At `ask`, the terminal prompts; JSON requires an explicit confirmation flag. `allow` does not prompt. This example leaves other resources and limits unchanged. Convert legacy `readOnly`, `allow` and `mcpTools` with `config migrate`; preview with `config migrate --dry-run`. See [configuration.md](./configuration.md).
 
 ## Next steps
 
@@ -631,3 +636,5 @@ A profile list replaces rather than extends `defaults`. An empty list permits no
 - [Installation](./installation.md) — install, update and storage locations.
 
 `sends list` uses the configured `limit` when `--limit` is omitted. JSON includes `items`, `page`, `limit`, `hasMore`; `limit` is the selected page limit, not the number of rows. JSONL outputs one send-attempt record per line.
+
+`account show --json` retains MAX's `id`, `name`, `phone` and `description`, adding `username: null` for the shared account format. Phone numbers remain masked; `--show-phone` explicitly reveals the entire number.

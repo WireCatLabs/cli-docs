@@ -1,7 +1,6 @@
 ---
 title: "Cómo usar tu cuenta personal"
 ---
-
 Esta página explica tu cuenta personal. Para bots que utilizan la Bot API oficial, consulta [bots](./bot.md).
 
 Cada comando realiza una tarea, imprime el resultado y termina. Solo [`max serve`](./archive.md#новые-сообщения-сразу-max-serve-и-max-watch) mantiene conexión: lo inicia en segundo plano el primer comando que necesita MAX y se detiene tras 15 minutos sin actividad.
@@ -125,10 +124,20 @@ El mensaje consultado se marca con `◀` o `"anchor": true` en JSON. Si no exist
 Guarda fotos, archivos, vídeos y audio en una carpeta, la actual por defecto:
 
 ```sh
-max messages download -1000 100000000000000001 --output ~/Downloads
+max messages download -1000 100000000000000001 --output-dir ~/Downloads
 ```
 
-Los archivos conservan nombre; otros adjuntos reciben `<id сообщения>-<номер>.<расширение>`. **No sobrescribe archivos:** se detiene y señala el conflicto. Descarga el MP4 de mayor tamaño; no llamadas, enlaces ni stickers, y lo avisa por stderr. Los archivos son legibles solo por ti (600).
+`--output` sigue siendo un alias compatible de `--output-dir`; no pases directorios distintos a ambos. Se crea el directorio si falta. El JSON de un mensaje contiene `{items}`; JSONL emite un registro de archivo por línea.
+
+Para el chat completo: `max messages download -1000 --all --output-dir ~/Downloads --pause 5s`. Al repetir, continúa desde el progreso guardado y mantiene los archivos ya descargados.
+
+`max messages evidence -1000 --limit 20 --json` devuelve un paquete limitado del archivo local, con locators e información de integridad, sin conectar con MAX. Selecciona mensajes anteriores con `--before-id`. El paquete no confirma que el historial esté completo.
+
+Los archivos conservan el nombre; los demás adjuntos usan `<id сообщения>-<номер>.<расширение>`. **No sobrescribe archivos existentes**: se detiene con un error que los identifica. El vídeo se guarda como el MP4 más grande; llamadas, enlaces y stickers no se descargan y generan un aviso en stderr. Los archivos son legibles solo por el propietario (permisos 600). Los audios tienen `kind: voice` en JSON; los adjuntos sin nombre reciben la extensión según el MIME HTTP.
+
+### Enlace al mensaje
+
+`max messages link <chat> <message>` o `max messages link <msg:locator>` devuelve `{ locator, url, access, reason }`. MAX personal valida primero el mensaje en el archivo local y devuelve un locator; el formato de enlace nativo aún no está verificado. `--offline` no conecta. Rechaza locators de otra cuenta. `messages links` sigue siendo el comando de relaciones entre conversaciones.
 
 ### Voz a texto
 
@@ -150,7 +159,7 @@ Los modelos se guardan en un directorio compartido por MAX y Telegram; `CLI_COMM
 
 Tiempos en un portátil Ryzen AI 9 HX 470 con un hilo. Elige otro modelo para un comando con `--model parakeet-v3` o como predeterminado con `"transcribeModel": "parakeet-v3"` en `defaults`. Cada descarga se comprueba contra la suma incluida en `max`; si no coincide, no se instala.
 
-El texto se guarda bajo tu cuenta en `messages.db`, utilizado por `messages list`, `messages transcribe`, `inbox`, `review` y MCP. Repetir la consulta por chat con el mismo modelo responde inmediatamente, sin red ni modelo. No se migran transcripciones de la antigua caché; se regeneran con `--transcribe`. La conexión se cierra antes de reconocer voz. La grabación se descarga con otra conexión; con `--no-serve`, implica otro inicio en MAX. Memoria aproximada: 700 MB o 1,3 GB para `parakeet-v3`.
+El texto se guarda bajo tu cuenta en la base compartida `messages.db`, usada por `messages list`, `messages transcribe`, `inbox`, `review` y MCP. Repetir con el id del chat y el mismo modelo responde de inmediato, sin red ni reconocimiento. Las transcripciones del antiguo caché de perfil no se migran; `--transcribe` las genera de nuevo. La grabación se descarga mediante la conexión de lectura y esta se cierra antes del reconocimiento local. No hace falta un segundo acceso. Se necesitan unos 700 MB de memoria (`parakeet-v3`, 1,3 GB).
 
 Para transcribir la voz mostrada en un chat o la bandeja:
 
@@ -194,7 +203,7 @@ max review --unanswered                      # вопросы, на которы
 max review --chat "Соседи" --unanswered 4h    # в одной группе, без ответа 4 часа
 ```
 
-`--unanswered [длительность]` filtra preguntas pendientes para ti o administradores. Una pregunta contiene «?» o responde a ti o a un administrador. Cuenta como respuesta si contestáis directamente o sois los siguientes en hablar tras quien preguntó. Omite preguntas más recientes que `4h`, `1d` o `24h` por defecto, para dar tiempo a responder.
+`--unanswered [длительность]` conserva preguntas pendientes para ti o los administradores. Una pregunta contiene «?» en el texto o transcripción, o responde a un mensaje tuyo o de un administrador. Siempre considera las transcripciones guardadas; `--transcribe` reconoce nuevas grabaciones antes de filtrar. Una grabación sin reconocer deja la revisión incompleta. Se considera respondida si tú o un administrador contestasteis o hablasteis justo después del autor. Omite preguntas más recientes que el plazo, como `4h` o `1d` (por defecto `24h`), porque aún no ha habido tiempo de contestar.
 
 MAX identifica administradores al entrar, solo en chats con actividad reciente. Si no están disponibles, lo avisa y solo cuentan tus respuestas. No ve respuestas posteriores al final de la revisión. `--chat` limita a un chat, con o sin `--unanswered`.
 
@@ -350,7 +359,7 @@ max messages delete 0 100000000000000001 100000000000000002 --allow-dangerous # 
 max messages delete 0 100000000000000001 --for-everyone --allow-dangerous    # у всех в чате
 ```
 
-Es irreversible: sin `--allow-dangerous`, rechaza sin preguntar. Por defecto solo elimina tu copia; con `--for-everyone`, la de todos, sin posibilidad de recuperar.
+Eliminar no se puede deshacer; `messages.delete` tiene nivel `ask` por defecto. Confirma en la terminal o pasa `--allow-dangerous` en JSON. Un `allow` explícito para `permissions.messages.delete` permite borrar sin preguntar; `readonly` y `deny` lo impiden independientemente de la opción. Por defecto el mensaje desaparece solo para ti. Con `--for-everyone` desaparece para todos y la otra persona no puede restaurarlo.
 
 Aplica los controles de envío. **Cada mensaje eliminado cuenta para `sendsPerHour`**; máximo 10 por ejecución porque muchas eliminaciones parecen automatización y pueden provocar bloqueo. También desaparecen de caché y búsqueda.
 
@@ -370,7 +379,7 @@ chosen}], closed, multiple, anonymous, voters}`. En `vote` y `close`, está bajo
 
 web.max.ru no muestra encuestas: indica «Actualiza MAX…». Solo pueden verse en aplicaciones móviles o de escritorio.
 
-Los votos son visibles salvo encuestas anónimas. Rechaza antes de consultar MAX si está cerrada, eliges varias opciones donde solo cabe una, cambias un voto no modificable o el identificador no existe. Votar pasa como reacción, cerrar como edición y crear como mensaje. Crear y cerrar cuentan para `sendsPerHour`; votar no. No reintenta votos automáticamente. `max_polls_vote` y `max_polls_create` en `max mcp` necesitan `--allow-send`; `max_polls_close`, `polls` en `mcpTools` ([MCP](./mcp.md)).
+Los demás participantes ven el voto salvo que la encuesta sea anónima. El comando rechaza localmente, como el cliente web, encuestas cerradas, varias opciones en encuestas de respuesta única, segundos votos prohibidos e ids de opción inexistentes. Votar, cerrar y crear usan las mismas comprobaciones que enviar: el voto es una reacción, cerrar una edición y crear un mensaje. `sendsPerHour` cuenta creación y cierre, pero no votos ni reacciones. Nunca repite votos automáticamente. Para agentes, `max_polls_vote` y `max_polls_create` en `max mcp` usan `permissions`; `max_polls_close` necesita escritura en `polls.close` ([mcp.md](./mcp.md)).
 
 ### Contactos, perfil y carpetas
 
@@ -606,23 +615,19 @@ Archivo opcional `~/.config/max-cli/config.json`:
 }
 ```
 
-Prioridad: **opción → variable de entorno → archivo → programa**. En el archivo, perfil antes que `defaults`; `personal` y `bot` separan cuentas y bots (`max config set --personal …`, `--bot …`). Consulta todos los campos, incluidos `defaultProfile` y `mcpTools`, en [configuración](./configuration.md). Las erratas son errores explícitos, no valores predeterminados silenciosos.
+Los ajustes se resuelven en este orden: **opción → variable de entorno → archivo → valor incorporado**. En el archivo, el perfil tiene prioridad sobre `defaults`; `personal` y `bot` definen valores separados para cuentas personales y bots (`max config set --personal …`, `--bot …`). Todos los campos, incluidos `defaultProfile` y `permissions`, están en [configuration.md](./configuration.md). Un nombre mal escrito provoca un error que lo identifica, no un valor predeterminado silencioso.
 
 **No admite secretos:** el esquema no tiene campos para ellos.
 
 ### Permisos del perfil
 
-`allow` enumera acciones permitidas. Sin lista se permite todo.
-
 ```sh
-max work config set allow send,reaction      # только писать и ставить реакции
-max work config unset allow                  # снова всё
-max config set --defaults allow send          # для всех профилей, у которых нет своего списка
+max config set permissions.messages readonly
+max work config set permissions.messages.delete allow
+max config set --defaults permissions.contacts readonly
 ```
 
-Permisos: `send` para texto, archivos, respuestas y programados; `forward`, `reaction`, `edit`, `pin`, `read` para marcar como leído; `delete`, `groups` para grupos y canales; `contacts`, `profile`, `folders`, `sessions` para cerrar otras sesiones. No hay comodín: menciona `delete` o `sessions` expresamente.
-
-La lista del perfil sustituye a `defaults`, no se suma. Vacía impide cambios como `readOnly`, que tiene prioridad sobre toda lista. Rechaza con código `5` antes de conectar, indicando cómo autorizar. Eliminar sigue requiriendo `--allow-dangerous`.
+Los niveles `deny`, `readonly`, `ask` y `allow` se aplican en CLI y MCP. La clave más específica tiene prioridad: permitir eliminar no permite enviar. Con `ask`, la terminal pregunta y JSON exige una opción explícita de confirmación. `allow` no pregunta. El ejemplo no cambia otros recursos ni límites. Convierte `readOnly`, `allow` y `mcpTools` mediante `config migrate`; previsualiza con `config migrate --dry-run`. Consulta [configuration.md](./configuration.md).
 
 ## Siguientes pasos
 
@@ -631,3 +636,5 @@ La lista del perfil sustituye a `defaults`, no se suma. Vacía impide cambios co
 - [Instalación](./installation.md): instalar, actualizar y encontrar archivos.
 
 `sends list` usa el `limit` configurado si se omite `--limit`. JSON incluye `items`, `page`, `limit`, `hasMore`; `limit` es el límite seleccionado, no el número de filas. JSONL imprime un registro de intento de envío por línea.
+
+`account show --json` conserva los campos MAX `id`, `name`, `phone` y `description`, añadiendo `username: null` para el formato compartido. El teléfono sigue oculto; `--show-phone` lo revela explícitamente completo.

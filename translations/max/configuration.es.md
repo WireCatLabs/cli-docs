@@ -1,7 +1,6 @@
 ---
 title: "Configuración"
 ---
-
 No necesitas configurar nada: sin archivo ni variables funcionan los valores iniciales. El archivo sirve para evitar repetir opciones.
 
 ## Prioridad de los ajustes
@@ -37,6 +36,27 @@ Cada ajuste indica su origen: `flag`, `default` o `config file:` con la clave, c
 
 No aparecen secretos: el archivo no dispone de campos para guardarlos.
 
+## Permisos de acceso
+
+`deny` prohíbe leer y escribir; `readonly` permite leer; `ask` exige confirmación; `allow` ejecuta la acción sin preguntar. En la terminal, `ask` muestra una pregunta con «no» como respuesta predeterminada. En JSON no hay pregunta: usa `--yes`, o `--allow-dangerous` para eliminar mensajes. MCP obtiene la confirmación mediante un formulario del cliente. `--confirm-send` exige un formulario antes de cada escritura.
+
+Una clave más específica tiene prioridad sobre su recurso. Este ejemplo permite leer mensajes y eliminarlos sin confirmación, pero prohíbe las demás escrituras en mensajes:
+
+```json
+{ "profiles": { "work": { "permissions": { "messages": "readonly", "messages.delete": "allow" } } } }
+```
+
+Este ejemplo no limita contactos, chats, reacciones ni otros recursos. Las claves de bots empiezan por `bot`, como `bot.messages.send`. `config show` muestra los permisos efectivos y su origen.
+
+Puedes ver los cambios antes de convertir un archivo antiguo:
+
+```sh
+max config migrate --dry-run
+max config migrate
+```
+
+La migración conserva los permisos efectivos, los ajustes MAX y los puntos de moderación. Los niveles antiguos `forbid/flag/confirm` pasan a `deny/ask/ask`. `--dry-run` no escribe. Una vez existe `permissions`, cambiar `readOnly`, `allow` o `mcpTools` se rechaza indicando el nuevo ajuste. `MAX_PROFILE_LOCK` impide migrar el archivo completo; permite la vista previa.
+
 ## Archivo
 
 `~/.config/max-cli/config.json`, permisos `0644`. Lo escribe `max config set` o puedes editarlo.
@@ -53,7 +73,7 @@ No aparecen secretos: el archivo no dispone de campos para guardarlos.
     "defaults": { "sendsPerHour": 30 }
   },
   "bot": {
-    "defaults": { "allow": ["send", "reaction"] },
+    "defaults": { "permissions": { "bot": "readonly", "bot.messages.send": "allow" } },
     "profiles": { "shop": { "sendsPerHour": 200 } }
   }
 }
@@ -72,13 +92,12 @@ No aparecen secretos: el archivo no dispone de campos para guardarlos.
 | `color` | Color; si falta, se detecta si es un terminal | Detección del terminal |
 | `senderColors` | Color por autor en `max messages`; `вы` siempre cian. Requiere `color`. Solo cuenta personal | `false` |
 | `record` | Registrar cada ejecución como con `--record` | `false` |
-| `allow` | Acciones permitidas: `send`, `reaction`, `edit`, `delete`, `groups`, `contacts` y otras. Si falta, todas | Todas |
+| `permissions` | niveles por recurso y comando: `deny`, `readonly`, `ask`, `allow`; una clave más específica tiene prioridad | casi todo `allow`; eliminar mensajes y cerrar otras sesiones `ask` |
 | `serve` | Iniciar `max serve` si se necesita y no existe; `--no-serve` evita una vez. No inicia con `MAX_TOKEN`. Solo personal | `true` |
 | `keepRunsForDays` | Días de conservación de ejecuciones | `30` |
-| `readOnly` | Solo lectura; `max messages send` rechaza con `5` | `false` |
+| `readOnly`, `allow`, `mcpTools` | ajustes antiguos compatibles; `config migrate` los convierte en `permissions` | no se pueden cambiar tras migrar |
 | `sendsPerHour` | Límite horario, incluidos reenvíos, ediciones, fijados con aviso, borrados y personas añadidas; superar devuelve `8`. **Bots** solo usan la sección `bot`; sin ella no tienen límite | `30`; sin límite para bots |
 | `readOtherBots` | Leer copias de otros bots al pedir `--all-bots` o `--bots`: `false`, `true` para todos o lista de perfiles. **Solo `bot`** | `false` |
-| `mcpTools` | Cambios por `max mcp`: `contacts`, `polls`, `groups`, `profile`. Solo aquí, nunca por opción; [MCP](./mcp.md). Solo personal | Ninguno |
 | `updateCheck` | Consultar npm una vez al día y avisar en el terminal. **Solo `defaults`**, la versión es común | `true` |
 | `skillHint` | Avisar al agente en stderr una vez al día si falta la skill de `max` o es antigua; sugiere `max skill install`. Detecta `AI_AGENT` o `CLAUDECODE`. **Solo `defaults`** | `true` |
 | `transcribeModel` | Modelo de `max messages transcribe`. **Solo `defaults`** | `gigaam-v3` |
@@ -100,20 +119,20 @@ max config set limit 50                 # профилю по умолчанию
 max work config set record true         # профилю work
 max config set keepRunsForDays 7 --defaults   # всем профилям сразу
 max work config unset limit             # убрать; снова решает defaults или встроенное
-max agent config set readOnly true      # профиль agent ничего не отправит
+max agent config set permissions.messages readonly  # чтение сообщений без записи
 max shop config set --bot sendsPerHour 200    # только боту shop
 max config set --personal --defaults limit 30 # всем личным аккаунтам
 max config set defaultProfile work      # какой профиль без первого слова
 ```
 
-Los valores se validan con el mismo esquema **antes de escribir**. `max config set limit 0` rechaza y deja el archivo intacto. `serve`, `senderColors`, `mcpTools` no aceptan `--bot`: no tiene servidor ni colores y `mcpTools` corresponde a la cuenta personal.
+El valor se valida con el mismo esquema que al leer, **antes de escribir**: `max config set limit 0` se rechaza y deja el archivo intacto. `serve`, `senderColors` y `mcpTools` no se aceptan con `--bot`: un bot no tiene servidor ni colores de autores y el antiguo `mcpTools` pertenece solo a cuentas personales.
 
 ## Las erratas son errores
 
 Un campo desconocido se rechaza con su nombre y `configuration_error`, código `3`:
 
 ```json
-{"error":{"code":"configuration_error","message":"/home/you/.config/max-cli/config.json is not a valid config:\n  profiles.default.limitt: unknown setting — the known ones are limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, sendsPerHour, senderColors, serve, mcpTools"}}
+{"error":{"code":"configuration_error","message":"/home/you/.config/max-cli/config.json is not a valid config:\n  profiles.default.limitt: unknown setting — the known ones are limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, senderColors, serve, mcpTools"}}
 ```
 
 Un tipo incorrecto identifica el campo y lo admitido: `profiles.default.limit: has to be a

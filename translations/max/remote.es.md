@@ -1,7 +1,6 @@
 ---
 title: "ChatGPT o Claude en el navegador"
 ---
-
 **Estado:** este montaje sigue la documentación de cada herramienta. No lo hemos probado completo de principio a fin. Si algún paso no funciona como se describe, [abre una incidencia](https://github.com/leemour/max-cli/issues).
 
 `max mcp` se comunica con la aplicación de IA mediante un canal en tu propio ordenador. ChatGPT y Claude en el navegador se conectan desde sus servidores, por internet, a una dirección que les facilites. Esta página sitúa dos herramientas gratuitas entre ellos y `max`:
@@ -15,10 +14,10 @@ ChatGPT / Claude ──интернет──▶ Tailscale Funnel ──▶ mcp-
 
 ## Antes de empezar
 
-- **Quien supere el acceso con contraseña podrá leer tu cuenta de MAX.** Usa una contraseña larga y exclusiva. Nunca expongas este montaje sin contraseña ni un túnel sin autenticación.
-- **Solo lectura por defecto.** `max mcp` no envía nada sin `--allow-send`. Actívalo únicamente cuando necesites enviar, después de leer la [Guía MCP](./mcp.md). `--confirm-send` y la lista de destinatarios también se aplican aquí.
-- **El ordenador con `max` debe permanecer encendido.** Para usar un móvil o un portátil sin instalar nada, ejecuta el montaje en un servidor que esté siempre encendido e inicia sesión allí (`max setup --agent none`). Después solo necesitarás un navegador.
-- **Disponibilidad:**
+- **Quien conoce la contraseña puede leer tu MAX.** Usa una contraseña larga que no reutilices. No ejecutes este servicio sin contraseña ni mediante un túnel sin autenticación.
+- **La mayoría de escrituras están permitidas por defecto.** Antes de conectar la aplicación, establece `permissions` con `readonly` o `deny` para los recursos que no debe cambiar. Una clave más específica puede permitir una acción concreta; revisa los permisos efectivos con `max config show`. `--confirm-send` confirma cada escritura; aquí también se aplica la lista de destinatarios. El antiguo `--allow-send` no añade permisos. Consulta [mcp.md](./mcp.md) y [configuración](./configuration.md).
+- **El ordenador con `max` debe estar encendido.** Para usarlo desde un teléfono o un portátil sin configurar, ejecútalo en un pequeño servidor siempre encendido e inicia sesión allí (`max setup --agent none`). Después solo necesitas el navegador.
+- **Quién puede usarlo:**
 
 | Aplicación | Planes | Documentación |
 |---|---|---|
@@ -46,7 +45,7 @@ read -rs PASSWORD && export PASSWORD
   --external-url https://<устройство>.<сеть>.ts.net \
   --no-auto-tls \
   --listen 127.0.0.1:8080 \
-  -- max mcp
+  -- max mcp --confirm-send
 ```
 
 `--no-auto-tls` indica que Tailscale ya proporciona el certificado. `--listen 127.0.0.1:8080` limita el acceso al Funnel de este ordenador. También puedes usar autenticación GitHub o Google restringida a tu cuenta: [Configuración del proxy](https://github.com/sigbit/mcp-auth-proxy/blob/main/docs/docs/configuration.md).

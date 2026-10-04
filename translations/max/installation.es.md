@@ -1,14 +1,13 @@
 ---
 title: "Instalación"
 ---
-
-`max` se instala como un paquete npm normal. Funciona con Node o Bun: no compila nada al instalarse ni inicia procesos por su cuenta. El servidor en segundo plano `max serve` se inicia después, cuando una orden normal lo necesita; setup no lo inicia (véase `serve` en [configuración](./configuration.md)).
+`max` es un solo comando. Se instala como un paquete npm normal, funciona con Node y Bun, no compila nada al instalarse ni inicia el servicio en segundo plano. `max serve` se inicia después con el primer comando normal que lo necesita; setup no lo inicia (`serve` en [configuration.md](./configuration.md)).
 
 ## Requisitos
 
-- **Node 22.16 o posterior**: probado con 24.19.0; 22.16 es la versión mínima indicada en `package.json`.
-- **O Bun 1.3+**: probado con 1.3.14, con una comprobación independiente en CI para cada pull request.
-- Linux, macOS o Windows: el desarrollo se hace en Linux; las pruebas también pasan en macOS y Windows.
+- **Node 22.16+ (rama 22.x) o 24+** con npm
+- **O Bun 1.3+** para ejecutar el comando
+- Linux, macOS o Windows
 
 El acceso al llavero del sistema usa un binario ya preparado: no tienes que compilarlo. Si el equipo no tiene llavero, el token se guarda en un archivo junto a la configuración y el comando lo indica en una línea.
 
@@ -85,13 +84,21 @@ max setup --agent codex            # QR-вход и навык агента
 
 Reserva unos cinco minutos. `setup` comprueba la cuenta y hasta cinco chats; si ya hay sesión, la reutiliza. El historial se descarga aparte, tras elegir el chat y la cantidad. No inicia un servicio en segundo plano. Agentes disponibles: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Para instalar solo el skill: `max skill install --for all`. Consulta métodos de acceso y recuperación en [sesiones](./sessions.md).
 
-**Windows.** Después de instalar Node.js, abre un PowerShell nuevo. Si bloquea los scripts, usa `npm.cmd` y `max.cmd`. Si la orden no está en PATH:
+**La instalación global con npm** también instala el skill del agente. Por defecto selecciona todos los entornos compatibles; `MAX_INSTALL_AGENT=codex|cursor|claude|gemini|all|none` elige uno o desactiva el skill. Comprueba `max skill show` antes de iniciar sesión. La instalación local y `npx` no cambian PATH ni instalan el skill.
+
+**Windows.** Usa `npm.cmd install -g @leemour/max-cli`. Si npm permite los scripts de instalación, el paquete añade su carpeta al PATH del usuario conservando las entradas existentes y deja un lanzador `.cmd` funcional. Una terminal nueva encuentra `max` por su nombre. Una terminal o agente ya abiertos deben actualizar su entorno: un proceso hijo de npm no puede cambiar el PATH de su terminal padre.
+
+Si npm omitió el script de instalación, ejecuta la reparación del paquete instalado:
 
 ```powershell
-npm.cmd exec --yes --package=@leemour/max-cli -- max setup --agent codex
+$maxNpmPrefix = (npm.cmd prefix -g).Trim()
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$maxNpmPrefix\node_modules\@leemour\max-cli\install\windows.ps1" -RepairOnly -Prefix $maxNpmPrefix
+$env:Path = "$maxNpmPrefix;$env:Path"
+max skill install --for all
+max --version
 ```
 
-El mismo prefijo sirve para `--help`, `skill show` y las demás órdenes. Diagnóstico: `npm.cmd exec --yes --package=@leemour/max-cli -- max doctor --json`.
+La reparación conserva las otras entradas PATH y no cambia la política permanente de PowerShell. Repetirla no crea duplicados. Usa `max doctor` para el diagnóstico; consulta las opciones de recuperación en [troubleshooting.md](./troubleshooting.md#max-не-находится-после-установки).
 
 ## Dónde se guardan los archivos
 

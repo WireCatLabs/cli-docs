@@ -1,19 +1,18 @@
 ---
 title: "What is stored on disk and what never is"
 ---
-
 This tool accesses private conversations. Explaining what it records is a central part of its documentation.
 
 ## Safeguards at a glance
 
-- **Other people's messages must not control your agent.** MCP write tools are unavailable until enabled by `--allow-*` flags or `mcpTools` configuration. With `--confirm-send`, the server shows a form before each action. Approval applies once, for five minutes, only to the displayed chat and text ([MCP confirmation](./mcp.md#подтверждение-формой-от-самого-сервера)). Read tools warn the model that message text is data, not instructions.
-- **Profile restrictions apply everywhere.** Read-only mode, allowed actions, recipient lists and hourly limits are checked by the command and background server, including clients connecting directly to its socket. Every attempt is logged without content ([below](#защита-от-отправки-не-туда)).
-- **Profile boundaries and protected files.** `MAX_PROFILE_LOCK` fixes the profile, and `--file` refuses hidden files, `~/.ssh` and `max`'s directories.
-- **Untrusted text cannot control the terminal.** Control and invisible characters are displayed as text; names and titles stay on one line; completion inserts only IDs ([below](#чужой-текст-на-экране)).
-- **Network limits.** Downloads require HTTPS, reject local-machine and local-network addresses, and enforce size limits. MAX frames and decompressed data are bounded, and connections have timeouts ([below](#что-уходит-в-сеть)).
-- **Tokens.** `max` never saves a token from `MAX_TOKEN` or passes it to the background server. The server never exposes a token through its socket ([below](#где-живёт-токен)).
-- **Files.** On Linux and macOS, files use `0600` in `0700` directories, including stored conversations. On Windows, access follows inherited ACLs from the user directory ([below](#что-ещё-пишется-на-диск)).
-- **Releases.** The package is published from GitHub Actions with provenance. Publishing does not execute dependency code, and direct dependency versions are pinned exactly.
+- **Other people's messages must not control the agent.** Reading tools warn the model that message text is data, not instructions. CLI and MCP share `permissions`: most writes are allowed by default, while `messages.delete` and ending other sessions require confirmation. Restrict resources with `readonly` or `deny`. `--confirm-send` requires your form before every write, including `allow`; its answer works once, for five minutes and only for the displayed parameters ([mcp.md](./mcp.md#подтверждение-формой-от-самого-сервера)).
+- **Profile limits apply everywhere.** Reading and writing permissions, the recipient list and the hourly limit are checked by both the command and the background server, even for a program connecting directly to its socket. Every attempt is recorded without its text ([below](#защита-от-отправки-не-туда)).
+- **The agent stays in its profile and cannot send your keys.** `MAX_PROFILE_LOCK` fixes the profile; `--file` rejects hidden files, `~/.ssh` and `max`'s own directories.
+- **Other people's text cannot control the terminal.** Control and invisible characters are displayed as text, names and titles are printed on one line, and completion inserts only numbers ([below](#чужой-текст-на-экране)).
+- **Network.** Files download only over HTTPS, never from this machine or local-network addresses, and within the configured size. MAX frames and decompressed data have limits; connections have timeouts ([below](#что-уходит-в-сеть)).
+- **Token.** `max` does not save a token from `MAX_TOKEN` or pass it to the background server. The server does not disclose tokens to socket clients ([below](#где-живёт-токен)).
+- **Files.** Linux and macOS files are created with mode `0600` inside `0700` directories, including the local conversation archive. Windows uses inherited ACLs from the user's directory ([below](#что-ещё-пишется-на-диск)).
+- **Release.** GitHub Actions publishes the package with provenance. Publication does not run dependency code; direct dependency versions are pinned exactly.
 
 ## Token storage
 
@@ -61,13 +60,13 @@ On Linux and macOS, `0600` permissions keep files private from other users on th
 
 ## Actions the tool never takes on its own
 
-- **No read receipts without a request.** Fetching history and marking read are separate protocol operations. Only `max chats mark-read` and `messages list --mark-read` request the latter; tests verify that normal reading does not.
-- **No unrequested changes.** Only `messages send|edit|delete|forward|pin|unpin`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `chats join|leave|create|update`, `chats members|admins …`, `chats link reset`, `chats folders create|update|delete`, `chats moderate` (only actions allowed by rules), `chats mark-read` and `messages list --mark-read` change data. Each does only what the command line requests. `max commands --json` marks them with `mutates`.
-- **No deletion without explicit permission.** `max messages delete` requires `--allow-dangerous`; deletion for everyone also requires `--for-everyone`. Deletion cannot be undone.
-- **No phone number in command arguments.** `contacts lookup` prompts or reads from a pipe; `contacts import` reads a file. Command arguments are visible through `ps` and shell history. Errors, send logs and run records omit phone numbers, while `max session start` and `max account show` mask them.
-- **No message content in logs**, even truncated or hashed; see [Diagnostics](./diagnostics.md).
-- **No intermediary servers.** See [Network destinations](#что-уходит-в-сеть). `max` has no telemetry service of its own; `max serve` sends one MAX service event, matching a hidden web-client tab, as described there.
-- **Persistent connections only through `max serve`.** The first command needing MAX starts it in the background; it stops after 15 minutes without use. Disable startup with `max config set serve false`.
+- **Reading does not mark messages read unless requested.** Fetching history and marking it read are separate protocol operations. Only `max chats mark-read` and `messages list --mark-read` send the latter; tests verify ordinary reading does not.
+- **Nothing unrequested is sent.** Only `messages send|edit|delete|forward|pin|unpin`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `chats join|leave|create|update`, `chats members|admins …`, `chats link reset`, `chats folders create|update|delete`, `chats moderate` (only actions allowed by group rules), `chats mark-read` and `messages list --mark-read` change anything. Each performs only the operation in the command line. `max commands --json` labels them `mutates`.
+- **Deletion requires confirmation by default.** The `ask` level for `messages.delete` requires a terminal answer or `--allow-dangerous`; explicit `allow` deletes without a question. Deleting for everyone also requires `--for-everyone`; the shared MCP tool does not permit this.
+- **Phone numbers do not come from command-line arguments.** `contacts lookup` prompts or reads from a pipe; `contacts import` reads a file. Command lines are visible to `ps` and shell history. Errors, the send journal and run records contain no phone numbers; `max session start` and `max account show` mask them.
+- **Messages are not logged.** Neither truncated text nor a hash is logged; see [diagnostics.md](./diagnostics.md).
+- **Connections use no intermediary.** Exact destinations are listed under [network traffic](#что-уходит-в-сеть). `max` has no telemetry of its own; `max serve` sends MAX one service event like a hidden web-client tab, as explained there.
+- **Only `max serve` holds a connection.** The first command needing MAX starts it in the background; it stops after 15 idle minutes. Disable this with `max config set serve false`.
 
 ## Preventing sends to the wrong place
 
@@ -75,13 +74,13 @@ An agent reads other people's messages alongside your instructions. A malicious 
 
 | Safeguard | How to enable | Rejection |
 |---|---|---|
-| Read-only profile | `max <профиль> config set readOnly true` | Code `5`, no connection |
-| Only named actions: `send`, `reaction`, `delete`… | `max <профиль> config set allow send,reaction` | Code `5`, no connection |
+| forbid message writes, except more specific grants | `max agent config set permissions.messages readonly`; restrict other resources separately | code `5`, no connection |
+| permit sends while forbidding other message writes | first `max agent config set permissions.messages readonly`, then `max agent config set permissions.messages.send allow`; other resources and more specific rules remain | code `5` for forbidden actions, no connection |
 | Recipient allowlist | `max <профиль> recipients add <чат>`; disable with `recipients clear` | Code `7` |
 | Hourly limit for messages, forwards, edits, notified pins, deleted messages and added members; reactions excluded | `sendsPerHour`, default `30` | Code `8`, with next available time |
 | Log every attempt without content | Always; inspect with `max sends list` | — |
 
-**`max bot` follows the same `readOnly` and `allow` restrictions.** Read-only prevents all bot changes. Bot action names are `send` for messages and callback answers, `edit`, `delete`, `pin`, `groups` for members and settings, `profile` for bot commands, and `read` for updates. Actions without a permission name, such as webhooks, are forbidden when `allow` is set.
+**Bots have their own `bot.*` keys, such as `bot.messages.send`.** They use the same levels. Common settings and `bot.defaults`/`bot.profiles` layers resolve in the same order; `config show --bot` reports effective permissions. Legacy `readOnly` and `allow` remain readable for compatibility before migration.
 
 Each bot has its own recipient list (`max <имя> bot recipients add <чат>`) and log (`max <имя> bot sends list`). **Every** write passes them, including `messages send`, `messages pin` and `bot api`, preventing a generic API call from bypassing safeguards. Edits and deletions take the chat first: `max` fetches the message and refuses if it belongs to another chat. This comparison is unavailable for a chat addressed as `user:<id>`. Logs contain chat, action, outcome and text length, but not text. Bots have no hourly limit unless configured in `bot`: `max <имя> config set --bot sendsPerHour 200`.
 
@@ -95,9 +94,9 @@ The recipient list is optional: before anything is added, any chat is allowed. A
 
 When choosing that boundary:
 
-- **Use `MAX_PROFILE_LOCK`, not `MAX_PROFILE`, to fix a profile.** The command's first word overrides `MAX_PROFILE`; an agent with `MAX_PROFILE=agent` can run `max work messages send …`. `MAX_PROFILE_LOCK=agent` rejects it, but only where the agent cannot change the environment, such as MCP-client settings or a wrapper. An agent with shell access can unset it. MCP fixes its profile at startup.
-- **`--file` rejects hidden files, files inside hidden directories such as `~/.ssh`, and `max`'s own directories**, where keys and tokens live. `--allow-any-file` removes this protection; agents must not grant it themselves. Other files readable by your user may be sent; logs retain only attachment type and size.
-- **An agent rule matching “ask before `max messages send`”** may miss the profile form `max work messages send`. Restrict the profile itself through `readOnly`, `allow` or recipients, and avoid keeping an unrestricted logged-in profile alongside it.
+- **`MAX_PROFILE_LOCK` fixes a profile; `MAX_PROFILE` does not.** The first command word overrides `MAX_PROFILE`: an agent with `MAX_PROFILE=agent` can type `max work messages send …`. `MAX_PROFILE_LOCK=agent` refuses that call, but only where the agent cannot change its environment, such as MCP client settings or a wrapper script. An agent with shell access can unset the variable. MCP fixes its profile at startup.
+- **`--file` rejects hidden files, files in hidden directories such as `~/.ssh`, and `max`'s own directories**, which hold keys and tokens. `--allow-any-file` removes the restriction; the agent must not add it on its own. Other files readable by your user can be sent; the journal stores only their type and size.
+- **An agent rule such as “ask before `max messages send`”** misses a profile-qualified form such as `max work messages send`. Restrict the profile itself through `permissions` or a recipient list instead, and avoid keeping an unrestricted logged-in profile beside it.
 
 ## Untrusted text in your terminal
 
@@ -167,7 +166,7 @@ Each login adds a device to the MAX app's session list. You can end it there.
 
 ## Unofficial protocol
 
-MAX publishes no personal-account API. Protocol knowledge comes from observed live connections or others' reverse engineering; each operation records its source ([`protocol.md`](https://github.com/leemour/max-cli/blob/v0.25.0/docs/dev/protocol.md), “Where it came from” column).
+MAX publishes no personal-account API. Protocol knowledge comes from observed live connections or others' reverse engineering; each operation records its source ([`protocol.md`](https://github.com/leemour/max-cli/blob/v0.27.0/docs/dev/protocol.md), “Where it came from” column).
 
 **This can stop working without warning.** If it does, the command reports it on stderr instead of quietly returning an empty list.
 

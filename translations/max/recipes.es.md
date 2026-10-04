@@ -1,7 +1,6 @@
 ---
 title: "Recetas: tu agente y tus conversaciones"
 ---
-
 Encarga a Claude Code o Codex resúmenes de no leídos, informes, compromisos, recordatorios de preguntas pendientes y comprobaciones de grupos. Cada receta incluye petición, permisos y programación.
 
 ## Preparación inicial
@@ -33,12 +32,15 @@ Codex no tiene esa lista. Su entorno restringido bloquea red y escritura, necesa
 **En `max`**, el límite se aplica a cualquier agente:
 
 ```sh
-max config set readOnly true           # профиль ничего не отправит
+for resource in messages reactions polls topics chats contacts account bot conversations; do
+  max config set "permissions.$resource" readonly
+done
+max config show                       # проверить эффективные права
 max config set sendsPerHour 5          # или: не больше пяти сообщений в час
 max recipients add "Иван Петров"       # и писать только в эти чаты
 ```
 
-`readOnly` también impide que envíes tú hasta quitarlo con `max config unset readOnly`. Todos los intentos, incluso rechazados, aparecen en `max sends list`.
+`readonly` limita cada recurso nombrado tanto para ti como para el agente. Claves más específicas, como `permissions.messages.send: allow`, tienen prioridad: elimina esas autorizaciones si el perfil solo debe leer. Tras migrar no se puede cambiar `readOnly`. Usa `max config unset permissions.<ресурс>` para quitar tu restricción y recuperar los ajustes heredados y predeterminados. `max sends list` incluye todos los intentos, también los rechazados.
 
 **Leer no revela tu actividad.** Ninguna orden de estas recetas marca mensajes leídos; tu interlocutor no ve que el agente abrió el chat.
 

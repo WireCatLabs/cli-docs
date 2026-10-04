@@ -104,6 +104,11 @@ version and link GitHub views to that tag. This makes daily/release-triggered de
 when a newer CLI is released before its translations are reviewed. `--ref` remains an explicit
 preview override; unreviewed source changes still fail the translation gate.
 
+Telegram’s generated Bot API method appendix retains the pinned English schema descriptions.
+Russian and Spanish pages label that section explicitly and mark it `lang="en"`; the bot guide,
+installation steps and surrounding reference remain localized. This is recorded in the reviewed
+portal corrections after source-preservation validation.
+
 ### Keeping published documentation current
 
 `tools.json` pins reviewed GitHub releases. The **Documentation release check** workflow checks GitHub stable releases and npm every day, on demand, and whenever the pins change. It maintains one tracking issue with source comparisons, changed public pages and a translation/errata checklist. When both tools are current, it closes its own tracking issue. The report is also available in the workflow summary. It needs only the repository's built-in token; no translation-service key is required.

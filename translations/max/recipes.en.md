@@ -1,7 +1,6 @@
 ---
 title: "Recipes: your agent and your conversations"
 ---
-
 Delegate regular MAX tasks to Claude Code or Codex: unread summaries, chat reports, commitments, unanswered-message reminders and checks on groups you manage. Each recipe includes a prompt, required permissions and scheduling instructions.
 
 ## One-time setup
@@ -33,12 +32,15 @@ Codex has no equivalent list. Its default sandbox blocks network access and file
 **Restrictions in `max`** apply to every agent:
 
 ```sh
-max config set readOnly true           # профиль ничего не отправит
+for resource in messages reactions polls topics chats contacts account bot conversations; do
+  max config set "permissions.$resource" readonly
+done
+max config show                       # проверить эффективные права
 max config set sendsPerHour 5          # или: не больше пяти сообщений в час
 max recipients add "Иван Петров"       # и писать только в эти чаты
 ```
 
-`readOnly` also prevents you from sending until you disable it with `max config unset readOnly`. All send attempts, including rejected ones, appear in `max sends list`.
+`readonly` restricts each named resource for both you and the agent. More specific keys such as `permissions.messages.send: allow` take precedence: remove these grants if the profile should only read. Legacy `readOnly` cannot be changed after migration. Remove your own restriction with `max config unset permissions.<ресурс>` to restore inherited settings and defaults. `max sends list` includes all send attempts, including refusals.
 
 **Reading does not reveal your activity.** None of the commands below marks messages read, so other people do not see that the agent opened the chat.
 

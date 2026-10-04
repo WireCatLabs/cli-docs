@@ -1,7 +1,6 @@
 ---
 title: "Diagnostics: what a command did"
 ---
-
 Each request produces an event, with two destinations available. `--trace` displays events without storing them; `--record` stores them without displaying them. By default, nothing is displayed, and only failed runs are saved (see “Failed runs are always saved”).
 
 ## Displaying events
@@ -140,4 +139,4 @@ This records every run; `--no-record` disables it for one invocation. The defaul
 
 ## Reference for scripts
 
-`max commands --json` lists commands, global options and exit codes without connecting to an account. `cli` is the tool name, `version` is the installed package version and `contract` is the shared JSON contract version (`0`). The contract changes when response fields change incompatibly; a package update alone does not change `contract`. Scripts can read individual fields rather than compare the entire JSON response against a saved string.
+`max commands --json` lists commands, global options and exit codes without connecting to an account. Use `max commands messages search --json` for one command or `max commands messages --json` for a group; both retain global options and exit codes. Words after `commands` specify one path; inspect different groups in separate calls. `cli` is the tool name, `version` is the installed package version, and `contract` is the shared JSON contract version (`0`). It changes when response fields change incompatibly; updating a package does not itself change `contract`. Scripts can read individual fields instead of comparing the entire JSON to a saved string.

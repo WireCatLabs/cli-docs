@@ -1,8 +1,69 @@
 ---
 title: "Historial de cambios"
 ---
-
 Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
+
+## 0.26.0 — 04.10.2026
+
+### Novedades
+
+- **Las instrucciones incluidas para el agente explican cómo encontrar acuerdos, preparar reuniones y recomendar contactos.**
+  Los agentes comprueban la cobertura del archivo, comparan chats de grupo y personales, distinguen
+  personas con el mismo nombre y conservan un borrador cuando se rechaza el envío.
+
+- **`tg messages link` y la herramienta MCP de lectura `tg_messages_link` devuelven un enlace permanente y un localizador del mensaje.**
+  En canales y supergrupos se conserva el contexto del hilo; los enlaces privados requieren acceso
+  y no añaden miembros al chat. Los diálogos, grupos básicos y Mensajes guardados devuelven un
+  localizador. Sin conexión se valida el mensaje almacenado; se rechazan localizadores de otra cuenta.
+  El comando singular `link` se distingue de `links`, que describe las relaciones entre conversaciones.
+
+### Cambios que pueden afectar a scripts
+
+- **Desfijar usa su propio permiso, `messages.unpin`, en la CLI y MCP.** Antes la comprobación
+  compartida usaba `messages.pin`. Los perfiles con permisos canónicos explícitos deben revisar
+  la regla para desfijar; el antiguo `allow: ["pin"]` sigue cubriendo ambas acciones.
+
+- **`tg commands [path...] --json` puede describir un comando o grupo.** Por ejemplo,
+  `tg commands messages search --json` incluye las opciones globales y los códigos de salida junto
+  con ese comando. Sin ruta se devuelve el árbol completo; las respuestas limitadas a una ruta
+  añaden `scope` e `inheritedOptions`. Consulta las distintas rutas en llamadas separadas.
+
+### Correcciones
+
+- **La revisión de preguntas sin respuesta tiene en cuenta las transcripciones guardadas y las nuevas solicitadas antes de filtrar.**
+  Añade `--transcribe` para reconocer audios sin texto guardado. Los audios sin reconocer dejan
+  `complete` en false: conserva el límite anterior de revisión en vez de interpretar un resultado
+  vacío como prueba de que no hay nada que responder.
+
+- Los comandos que abren el archivo local a la vez esperan brevemente a que se inicialice, en vez
+  de fallar inmediatamente si otro proceso mantiene el bloqueo de escritura. Los bloqueos persistentes siguen dando error.
+
+- La descarga de audios usa la conexión del historial y la cierra antes del reconocimiento local,
+  evitando una segunda conexión para `messages list --transcribe`, `inbox` y `review`.
+
+## 0.25.0 — 03.10.2026
+
+### Correcciones
+
+- `chats show` explica que una diferencia entre los miembros listados y el total de participantes
+  puede deberse a la omisión del propio usuario o a una lista parcial, sin afirmar que la carga esté incompleta.
+  Los datos JSON no cambian.
+
+### Novedades
+
+- El README y la guía de bots explicitan toda la API nativa: los 185 métodos de la versión fijada
+  de Telegram Bot API 10.3, junto con los comandos habituales del bot y las herramientas MCP para tareas concretas.
+
+- `config migrate --dry-run` muestra la conversión de los ajustes de acceso antiguos a permisos
+  canónicos sin escribir ni conectarse; `config migrate` la aplica explícitamente conservando
+  los niveles efectivos. Los demás ajustes no cambian.
+
+- `tg <bot> bot api <method>` ofrece la versión fijada del esquema Telegram Bot API mediante
+  generadores de cli-core y el constructor de comandos común de MAX/TG. Las opciones de campos
+  nativos, cuerpos JSON/stdin y cargas multipart anidadas comparten validación y controles de escritura.
+  Los métodos destructivos piden confirmación por defecto; las escrituras sin respuesta no se reintentan.
+  Las credenciales de bots gestionados requieren un destino explícito `--store-token <profile>`
+  y se guardan solo en el almacén de claves del sistema; stdout contiene un recibo de almacenamiento.
 
 ## 0.24.0 — 03.10.2026
 

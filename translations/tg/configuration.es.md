@@ -1,7 +1,6 @@
 ---
 title: "Configuración"
 ---
-
 Todos los ajustes, variables y prioridades. La configuración no admite secretos: no tiene campos para sesiones, hash de aplicación, teléfonos ni identificadores de chats.
 
 ## Qué valor tiene prioridad
@@ -171,3 +170,12 @@ Sin `MESSAGING_STORE`, lo que lea esa sesión seguirá guardándose en tu archiv
 
 - [Seguridad](./security.md): protección mediante `permissions`, destinatarios permitidos y `sendsPerHour`.
 - [Diagnóstico](./diagnostics.md): `record` y `keepRunsForDays`.
+
+## Migrar los ajustes de acceso antiguos
+
+`tg config migrate --dry-run --json` muestra la sustitución de `readOnly` y `allow` por
+`permissions` canónicos, conservando los niveles efectivos del archivo para perfiles personales y bots.
+No escribe el archivo ni se conecta a Telegram. `tg config migrate --json` aplica la migración
+explícitamente; un proceso limitado a un perfil no puede aplicar un cambio que afecte a todos los perfiles.
+Los demás ajustes se conservan. Los archivos canónicos no necesitan migración. Cuando ya existe
+`permissions`, `config set` rechaza cambios en los antiguos `readOnly` y `allow`; cambia las claves de permisos correspondientes.

@@ -1,14 +1,14 @@
 ---
 title: "Instalación"
 ---
-
 `tg` es un comando que se instala como un paquete npm normal. No compila nada durante la instalación: SQLite viene incluido en el entorno de ejecución, por lo que no hay módulos nativos que compilar. Tampoco inicia procesos en segundo plano por su cuenta. Una instalación global con npm puede instalar las instrucciones del agente y, en Windows, reparar el PATH del usuario. Nunca inicia sesión ni lee chats durante la instalación.
 
 ## Requisitos
 
-- **Node 22.16 o posterior.** CI se ejecuta con Node 24; 22.16 es el mínimo indicado en `package.json`. CI también ejecuta el comando compilado con Bun.
+- **Node 22.16+ (22.x) o 24+** con npm. El comando también admite **Bun**.
 - Linux, macOS o Windows.
-- **Tu propia aplicación de Telegram**, registrada en [my.telegram.org](https://my.telegram.org/apps). `tg` la solicita al iniciar sesión por primera vez y puede registrarla por ti ([sesiones](./sessions.md#the-app-from-mytelegramorg)).
+- **Tu propia aplicación de Telegram** desde [my.telegram.org](https://my.telegram.org/apps). `tg` la pide
+  en el primer inicio de sesión y puede registrarla por ti ([sessions.md](./sessions.md#the-app-from-mytelegramorg)).
 
 ## Instalación
 
@@ -71,7 +71,12 @@ La instalación global de npm también repara el PATH persistente de Windows e i
 npm.cmd install -g --allow-scripts=@leemour/tg-cli --foreground-scripts @leemour/tg-cli
 ```
 
-Las versiones nuevas de npm pueden omitir los scripts salvo que se autoricen. `--ignore-scripts` también omite este. El instalador PowerShell es la vía principal en Windows porque actualiza tanto la terminal actual como el PATH persistente; un proceso hijo de npm no puede modificar el entorno de su padre. Los agentes iniciados antes de instalar deben actualizar el PATH de su terminal a partir del entorno de usuario y equipo, sin pedir al usuario que lo edite.
+Las versiones nuevas de npm pueden omitir los scripts de instalación si no se autorizan. `--ignore-scripts`
+también omite expresamente este script del paquete. Para una configuración guiada por un agente, usa npm
+y comprueba el comando, la habilidad instalada y el PATH del terminal antes de iniciar sesión. El instalador
+opcional de PowerShell actualiza tanto el terminal que lo ejecuta como el PATH persistente; un proceso hijo
+de npm no puede modificar el entorno de su padre. Los agentes iniciados antes de la instalación deben
+actualizar el PATH de su terminal desde el entorno del usuario y del sistema, sin pedir al usuario que lo edite.
 
 El script global solo se ejecuta en una instalación global de npm, nunca en dependencias de proyectos ni con npx. `TG_INSTALL_AGENT=codex|cursor|claude|gemini|all|none` selecciona la skill; `none` la desactiva. El agente lee `tg skill show` y comprueba su skill instalada antes de guiar el acceso a la cuenta. No hace falta un ejecutable separado para Windows.
 

@@ -1,7 +1,6 @@
 ---
 title: "Команды"
 ---
-
 <!-- Сгенерировано из дерева команд скриптом scripts/commands.ts. Не редактировать; `pnpm generate`. -->
 
 Справочник: каждая команда, каждая опция, каждый код возврата. Страница **собирается из самой
@@ -59,6 +58,8 @@ max session start [method]
 
 удалить сохранённую сессию профиля
 
+**Изменяет данные только на этом компьютере.**
+
 ```sh
 max session end
 ```
@@ -67,7 +68,7 @@ max session end
 
 настроить личный аккаунт MAX и подключить агента
 
-**Меняет что-то в MAX.**
+**Изменяет данные MAX.**
 
 ```sh
 max setup [options]
@@ -80,7 +81,7 @@ max setup [options]
 
 ## `max account`
 
-аккаунт, под которым вошёл профиль
+аккаунт, в который выполнен вход
 
 ### `max account show`
 
@@ -496,7 +497,7 @@ max chats rules show <chat>
 
 изменить правило; первое изменение сохраняет все правила с исходными значениями
 
-**Меняет что-то только на этом компьютере.**
+**Изменяет данные только на этом компьютере.**
 
 ```sh
 max chats rules set <chat> <key> <value>
@@ -512,7 +513,7 @@ max chats rules set <chat> <key> <value>
 
 вернуть правило к значению по умолчанию
 
-**Меняет что-то только на этом компьютере.**
+**Изменяет данные только на этом компьютере.**
 
 ```sh
 max chats rules unset <chat> <key>
@@ -772,22 +773,55 @@ max messages links <chat> <message>
 | `chat` | обязательный | чат: идентификатор или часть названия. |
 | `message` | обязательный | идентификатор сообщения. |
 
-### `max messages download`
+### `max messages link`
 
-сохранить фото, файлы, видео и аудио сообщения в каталог
+постоянная ссылка на сообщение, если она поддерживается, и локатор, привязанный к аккаунту
 
 ```sh
-max messages download <chat> <message> [options]
+max messages link <chat> [message]
 ```
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | идентификатор или часть названия чата. |
-| `message` | обязательный | идентификатор сообщения. |
+| `chat` | обязательный | чат по идентификатору или части названия; либо msg: без следующего идентификатора сообщения. |
+| `message` | необязательный | идентификатор сообщения. |
+
+### `max messages download`
+
+сохранить фотографии, файлы, видео и голосовые сообщения из одного сообщения или всего чата с --all
+
+```sh
+max messages download <chat> [message] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | чат: идентификатор или часть названия. |
+| `message` | необязательный | идентификатор сообщения; не указывается с --all. |
 
 | Опция | Что делает |
 |---|---|
-| `--output <dir>` | каталог сохранения. По умолчанию: `.`. |
+| `--output-dir <dir>` | папка для сохранения; создаётся, если её нет. По умолчанию: `.`. |
+| `--all` | все файлы чата, начиная с новых; повторный запуск продолжает с места остановки. |
+| `--pause <duration>` | пауза между страницами с --all, чтобы не превышать ограничения сервиса. По умолчанию: `5s`. |
+| `--output <dir>` | совместимый псевдоним --output-dir. |
+
+### `max messages evidence`
+
+подборка сохранённых сообщений с ограничением объёма, начиная с новых
+
+```sh
+max messages evidence <chat> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | чат: идентификатор или часть названия. |
+
+| Опция | Что делает |
+|---|---|
+| `--limit <n>` | количество, от 1 до 100. |
+| `--before-id <id>` | старше указанного идентификатора сообщения. |
 
 ### `max messages transcribe`
 
@@ -838,7 +872,7 @@ max messages send <chat> [text] [options]
 
 ### `max messages scheduled`
 
-отложенные сообщения от ближайших к поздним; отмена в приложении MAX
+сообщения чата, ожидающие отправки позже, начиная с ближайших; отменить можно в приложении
 
 ```sh
 max messages scheduled <chat>
@@ -846,7 +880,7 @@ max messages scheduled <chat>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | идентификатор или часть названия чата. |
+| `chat` | обязательный | чат: идентификатор или часть названия. |
 
 ### `max messages edit`
 
@@ -1492,7 +1526,7 @@ max recipients list
 
 разрешить отправку в чат; первое добавление включает ограничения
 
-**Меняет что-то только на этом компьютере.**
+**Изменяет данные только на этом компьютере.**
 
 ```sh
 max recipients add <chat>
@@ -1506,7 +1540,7 @@ max recipients add <chat>
 
 запретить чат; список остаётся включённым
 
-**Меняет что-то только на этом компьютере.**
+**Изменяет данные только на этом компьютере.**
 
 ```sh
 max recipients remove <chat>
@@ -1520,7 +1554,7 @@ max recipients remove <chat>
 
 очистить и отключить список: снова разрешены все чаты
 
-**Меняет что-то только на этом компьютере.**
+**Изменяет данные только на этом компьютере.**
 
 ```sh
 max recipients clear
@@ -1688,11 +1722,25 @@ max config show [options]
 |---|---|
 | `--bot` | настройки `max bot` профиля вместо личного аккаунта. |
 
+### `max config migrate`
+
+заменить прежние настройки доступа разрешениями, сохранив действующие уровни
+
+**Изменяет данные только на этом компьютере.**
+
+```sh
+max config migrate [options]
+```
+
+| Опция | Что делает |
+|---|---|
+| `--dry-run` | показать преобразование без записи в файл. |
+
 ### `max config set`
 
 сохранить настройку в файл
 
-**Меняет что-то только на этом компьютере.**
+**Изменяет данные только на этом компьютере.**
 
 ```sh
 max config set <setting> <value> [options]
@@ -1700,7 +1748,7 @@ max config set <setting> <value> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `setting` | обязательный | одно из: limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, sendsPerHour, senderColors, serve, mcpTools, readOtherBots, updateCheck, skillHint, transcribeModel, defaultProfile. |
+| `setting` | обязательный | одно из: limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, senderColors, serve, mcpTools, readOtherBots, updateCheck, skillHint, transcribeModel, defaultProfile. |
 | `value` | обязательный | число, true, false или список allow, например send,reaction. |
 
 | Опция | Что делает |
@@ -1713,7 +1761,7 @@ max config set <setting> <value> [options]
 
 удалить настройку из файла
 
-**Меняет что-то только на этом компьютере.**
+**Изменяет данные только на этом компьютере.**
 
 ```sh
 max config unset <setting> [options]
@@ -1721,7 +1769,7 @@ max config unset <setting> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `setting` | обязательный | одно из: limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, sendsPerHour, senderColors, serve, mcpTools, readOtherBots, updateCheck, skillHint, transcribeModel, defaultProfile. |
+| `setting` | обязательный | одно из: limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, senderColors, serve, mcpTools, readOtherBots, updateCheck, skillHint, transcribeModel, defaultProfile. |
 
 | Опция | Что делает |
 |---|---|
@@ -1828,11 +1876,15 @@ max skill install [options]
 
 ## `max commands`
 
-команды, параметры и коды JSON для агента вместо --help
+команды, параметры и коды завершения в JSON — один путь команды за вызов
 
 ```sh
-max commands
+max commands [path]
 ```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `path` | необязательный | один путь команды, например: messages search; другие группы проверяйте отдельными вызовами. |
 
 ## `max upgrade`
 
@@ -1868,11 +1920,12 @@ max mcp [options]
 
 | Опция | Что делает |
 |---|---|
-| `--allow-send` | добавить отправку; без параметра сервер только читает. |
+| `--allow-dangerous` | пропустить подтверждение для messages.delete с уровнем ask. |
+| `--allow-send` | устарело: задайте permissions.messages.send в настройках; флаг не даёт доступ. |
 | `--confirm-send` | форма перед всеми предлагаемыми изменениями: отправками, правками, реакциями, mcpTools. |
-| `--allow-mark-read` | инструмент отметки прочитанным; собеседник видит прочтение. |
-| `--allow-delete` | инструмент необратимого удаления только у себя. |
-| `--allow-moderate` | разрешить max_chats_check действовать по правилам группы: удалять чужие сообщения/участников, если разрешено. |
+| `--allow-mark-read` | устарело: задайте permissions.chats.mark-read в настройках; флаг не даёт доступ. |
+| `--allow-delete` | устарело: задайте permissions.messages.delete в настройках; флаг не даёт доступ. |
+| `--allow-moderate` | устарело: используйте permissions.chats.moderate и правила группы; флаг не даёт доступ. |
 
 ### `max mcp config`
 
@@ -1884,17 +1937,18 @@ max mcp config [options]
 
 | Опция | Что делает |
 |---|---|
-| `--allow-send` | добавить отправку; без параметра сервер только читает. |
+| `--allow-dangerous` | пропустить подтверждение для messages.delete с уровнем ask. |
+| `--allow-send` | устарело: задайте permissions.messages.send в настройках; флаг не даёт доступ. |
 | `--confirm-send` | форма перед всеми предлагаемыми изменениями: отправками, правками, реакциями, mcpTools. |
-| `--allow-mark-read` | инструмент отметки прочитанным; собеседник видит прочтение. |
-| `--allow-delete` | инструмент необратимого удаления только у себя. |
-| `--allow-moderate` | разрешить max_chats_check действовать по правилам группы: удалять чужие сообщения/участников, если разрешено. |
+| `--allow-mark-read` | устарело: задайте permissions.chats.mark-read в настройках; флаг не даёт доступ. |
+| `--allow-delete` | устарело: задайте permissions.messages.delete в настройках; флаг не даёт доступ. |
+| `--allow-moderate` | устарело: используйте permissions.chats.moderate и правила группы; флаг не даёт доступ. |
 
 ### `max mcp setup`
 
 подключить локальный MCP профиля к Codex или Claude Code
 
-**Меняет что-то только на этом компьютере.**
+**Изменяет данные только на этом компьютере.**
 
 ```sh
 max mcp setup <client> [options]
@@ -1907,11 +1961,12 @@ max mcp setup <client> [options]
 | Опция | Что делает |
 |---|---|
 | `--allow-writes` | подтвердить наличие инструментов изменения у профиля. |
-| `--allow-send` | добавить отправку; без параметра сервер только читает. |
+| `--allow-dangerous` | пропустить подтверждение для messages.delete с уровнем ask. |
+| `--allow-send` | устарело: задайте permissions.messages.send в настройках; флаг не даёт доступ. |
 | `--confirm-send` | форма перед всеми предлагаемыми изменениями: отправками, правками, реакциями, mcpTools. |
-| `--allow-mark-read` | инструмент отметки прочитанным; собеседник видит прочтение. |
-| `--allow-delete` | инструмент необратимого удаления только у себя. |
-| `--allow-moderate` | разрешить max_chats_check действовать по правилам группы: удалять чужие сообщения/участников, если разрешено. |
+| `--allow-mark-read` | устарело: задайте permissions.chats.mark-read в настройках; флаг не даёт доступ. |
+| `--allow-delete` | устарело: задайте permissions.messages.delete в настройках; флаг не даёт доступ. |
+| `--allow-moderate` | устарело: используйте permissions.chats.moderate и правила группы; флаг не даёт доступ. |
 
 ### `max mcp doctor`
 
@@ -1923,11 +1978,12 @@ max mcp doctor [options]
 
 | Опция | Что делает |
 |---|---|
-| `--allow-send` | добавить отправку; без параметра сервер только читает. |
+| `--allow-dangerous` | пропустить подтверждение для messages.delete с уровнем ask. |
+| `--allow-send` | устарело: задайте permissions.messages.send в настройках; флаг не даёт доступ. |
 | `--confirm-send` | форма перед всеми предлагаемыми изменениями: отправками, правками, реакциями, mcpTools. |
-| `--allow-mark-read` | инструмент отметки прочитанным; собеседник видит прочтение. |
-| `--allow-delete` | инструмент необратимого удаления только у себя. |
-| `--allow-moderate` | разрешить max_chats_check действовать по правилам группы: удалять чужие сообщения/участников, если разрешено. |
+| `--allow-mark-read` | устарело: задайте permissions.chats.mark-read в настройках; флаг не даёт доступ. |
+| `--allow-delete` | устарело: задайте permissions.messages.delete в настройках; флаг не даёт доступ. |
+| `--allow-moderate` | устарело: используйте permissions.chats.moderate и правила группы; флаг не даёт доступ. |
 
 ## `max bot`
 
@@ -1941,7 +1997,7 @@ max mcp doctor [options]
 
 проверить токен в MAX и сохранить: скрытый ввод или stdin
 
-**Меняет что-то только на этом компьютере.**
+**Изменяет данные только на этом компьютере.**
 
 ```sh
 max bot auth set
@@ -1959,7 +2015,7 @@ max bot auth show
 
 удалить токен профиля
 
-**Меняет что-то только на этом компьютере.**
+**Изменяет данные только на этом компьютере.**
 
 ```sh
 max bot auth remove
@@ -2156,7 +2212,7 @@ max bot chats rules show <chat>
 
 изменить правило: trusted, blocked, blockedNames, links, invites, forwards, blockedPeople, flood.messages, flood.minutes, flood.action, newAccount.days, newAccount.action, consent.delete, consent.remove
 
-**Меняет что-то только на этом компьютере.**
+**Изменяет данные только на этом компьютере.**
 
 ```sh
 max bot chats rules set <chat> <key> <value>
@@ -2172,7 +2228,7 @@ max bot chats rules set <chat> <key> <value>
 
 вернуть правило к значению по умолчанию
 
-**Меняет что-то только на этом компьютере.**
+**Изменяет данные только на этом компьютере.**
 
 ```sh
 max bot chats rules unset <chat> <key>
@@ -2393,7 +2449,7 @@ max bot recipients list
 
 разрешить чат: идентификатор, `user:<id>` или название увиденного чата
 
-**Меняет что-то только на этом компьютере.**
+**Изменяет данные только на этом компьютере.**
 
 ```sh
 max bot recipients add <chat>
@@ -2407,7 +2463,7 @@ max bot recipients add <chat>
 
 убрать чат из списка
 
-**Меняет что-то только на этом компьютере.**
+**Изменяет данные только на этом компьютере.**
 
 ```sh
 max bot recipients remove <chat>
@@ -2421,7 +2477,7 @@ max bot recipients remove <chat>
 
 удалить список: снова разрешены все чаты
 
-**Меняет что-то только на этом компьютере.**
+**Изменяет данные только на этом компьютере.**
 
 ```sh
 max bot recipients clear
@@ -2721,13 +2777,17 @@ max bot comments edit <message> <comment> <text> [options]
 **Изменяет данные MAX.**
 
 ```sh
-max bot comments delete <message> <comment>
+max bot comments delete <message> <comment> [options]
 ```
 
 | Аргумент | | Что это |
 |---|---|---|
 | `message` | обязательный |  |
 | `comment` | обязательный |  |
+
+| Опция | Что делает |
+|---|---|
+| `--allow-dangerous` | пропустить подтверждение для bot.messages.delete с уровнем ask. |
 
 ### `max bot uploads`
 
@@ -3104,6 +3164,7 @@ max bot api delete-message [options]
 | Опция | Что делает |
 |---|---|
 | `--message-id <value>` | Идентификатор удаляемого сообщения. |
+| `--allow-dangerous` | пропустить подтверждение для bot.messages.delete с уровнем ask. |
 
 #### `max bot api get-message-by-id`
 
@@ -3181,6 +3242,7 @@ max bot api delete-comment [options]
 |---|---|
 | `--message-id <value>` | Идентификатор комментируемого сообщения (`mid`). |
 | `--comment-id <value>` | Идентификатор удаляемого комментария. |
+| `--allow-dangerous` | пропустить подтверждение для bot.messages.delete с уровнем ask. |
 
 #### `max bot api get-comment-by-id`
 

@@ -41,7 +41,7 @@ sets limits (allowed chats, sends per hour, read-only profiles) — a fact, stat
 
 ## Operating Context
 
-- Install: `npm install -g @leemour/tg-cli` / `@leemour/max-cli`. Node 22+. Windows, macOS, Linux.
+- Install: `npm install -g @leemour/tg-cli` / `@leemour/max-cli`. Node 22.16+ (22.x) or 24+ with npm; Bun is also supported. Windows, macOS, Linux.
 - Connect an agent: `tg skill install` (Claude Code, Codex, Gemini CLI), `tg mcp config` (MCP
   clients), `https://wirecat.dev/llms.txt` (any model).
 - Daily use: `tg inbox`, `tg review --unanswered`, `tg messages search`, `tg watch`, `tg export
@@ -53,9 +53,9 @@ sets limits (allowed chats, sends per hour, read-only profiles) — a fact, stat
 - Real capabilities: unread inbox across chats; a review of who owes whom an answer; a local
   searchable archive of chats (works offline); export to JSONL or Markdown; voice notes to text,
   on Telegram or a model on the user's machine; scheduled sends that go out with the computer off;
-  live watch of new messages; MCP server read-only by default, writes behind flags.
+  live watch of new messages; CLI and MCP share profile permissions; most writes are allowed by default, while deletion asks for confirmation. Read-only permissions and confirmation forms can restrict access.
 - Safety by design: nothing is sent, marked read or deleted unless the command asked for it.
-- Interface languages: English, Russian, Spanish. max's pages are in Russian, tg's in English.
+- Site languages: English, Russian, Spanish. Tool guides are localized from reviewed releases; the generated Telegram Bot API method appendix retains its English descriptions with an explicit locale-specific notice.
 - Undecided: the hero sentence (draft in docs/plans/2026-10-02-landing.md), a logo.
 
 ## Brand Commitments

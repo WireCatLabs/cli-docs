@@ -1,24 +1,72 @@
 ---
 title: "Historial de cambios"
 ---
-
 Cambios destacados de `@leemour/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
+
+## 0.27.0 — 04.10.2026
+
+### Novedades
+
+- **La instalación global con npm configura el PATH de Windows y el skill del agente.** Conserva las entradas existentes y permite ejecutar `max` en terminales nuevas. Un agente que ya está abierto debe actualizar su entorno. El skill se instala antes de iniciar sesión; `MAX_INSTALL_AGENT=none` lo desactiva. La instalación local y npx no cambian el entorno del usuario.
+
+- **`max commands messages search --json` describe un comando; `max commands messages --json`, un grupo.** El agente ya no necesita leer el árbol completo antes de cada tarea. Se conservan las opciones globales y los códigos de salida. Las palabras tras `commands` indican una ruta; consulta otros grupos en llamadas separadas. Sin ruta, sigue devolviendo el árbol completo.
+
+- **`max messages link` y MCP `max_messages_link` devuelven un locator del mensaje del archivo local.** El destino se valida con la cuenta actual; se rechazan locators de otra cuenta. MAX personal aún no tiene un formato de permalink verificado: `url` es `null` y la respuesta indica el motivo. `--offline` no conecta con MAX. Consulta [mensajes](./usage.md).
+
+### Cambios que pueden romper scripts
+
+- **CLI y MCP usan `permissions` con los niveles `deny`, `readonly`, `ask` y `allow`.** Comandos y agentes comparten permisos. La mayoría de escrituras por MCP están ahora disponibles por defecto; eliminar mensajes y cerrar otras sesiones requiere confirmación salvo que exista un `allow` explícito. Por ejemplo, `messages: readonly` junto con `messages.delete: allow` permite leer y eliminar sin preguntar, pero prohíbe las demás escrituras en mensajes; no limita otros recursos. Antes de actualizar, revisa los permisos del agente y asigna `readonly` o `deny` a los recursos que quieras restringir. `--confirm-send` exige un formulario antes de cada escritura; en JSON, `ask` necesita una opción explícita.
+
+- **`config migrate` convierte los ajustes antiguos de acceso y los niveles de moderación.** `--dry-run` muestra cambios sin escribir. Conserva los permisos efectivos, los ajustes MAX y las posiciones guardadas de comprobación de grupos. Cuando existe `permissions`, no se pueden cambiar `readOnly`, `allow` ni `mcpTools`. Los antiguos `--allow-send`, `--allow-mark-read`, `--allow-delete` y `--allow-moderate` se aceptan con aviso, pero no otorgan permisos. Siguen vigentes la lista de destinatarios y el límite por hora. Consulta [configuración](./configuration.md) y [MCP](./mcp.md).
+
+### Correcciones
+
+- **La apertura simultánea del archivo local espera un bloqueo breve de SQLite al arrancar.** Antes, la configuración del journal podía encontrar una base ocupada antes de activar la espera y fallar de inmediato. Un bloqueo prolongado sigue causando un error. Este cambio no inicia la descarga del historial.
+
+## 0.26.0 — 03.10.2026
+
+### Novedades
+
+- **`max skill show link-conversations` imprime el skill compartido para relacionar conversaciones.** Funciona sin sesión; sin nombre, sigue mostrando el skill principal de MAX.
+
+- **`max messages evidence` devuelve un paquete limitado del archivo local**, con locator, información de integridad y continuación mediante `--before-id`. No conecta con MAX.
+
+### Cambios que pueden romper scripts
+
+- **Las fotos descargadas reciben su extensión según el MIME HTTP**, por ejemplo `.webp` para WebP, en lugar de JPEG según el tipo de adjunto. Se conservan los nombres originales; no hay consultas preliminares adicionales.
+
+- **`max account show` usa el formato de cuenta compartido con Telegram.** JSON añade `username: null`; mantiene los campos MAX, el teléfono oculto y `--show-phone`.
+
+- **`max sends list` respeta el `limit` configurado, como Telegram.** Antes seleccionaba siempre 20 intentos sin opción explícita. El campo JSON `limit` muestra el límite elegido; mantiene `items`, `page` y `hasMore`. `--limit` tiene prioridad sobre el ajuste.
+
+- **`max messages download` admite `--all`, `--output-dir` y `--pause`, como Telegram.** Crea el directorio y, al repetir la descarga del chat completo, continúa desde el progreso guardado. `--output` sigue siendo un nombre compatible para el directorio. El JSON de un mensaje contiene ahora `{items}`, sin `page`, `limit` ni `hasMore` artificiales; los scripts deben leer `items`. Los audios tienen ahora `kind` = `voice`, como Telegram, en vez de `audio`. Los archivos se descargan en streaming con las mismas comprobaciones de dirección y tamaño; los audios conservan el límite de 32 MiB.
+
+### Seguridad
+
+- **`max contacts lookup` no repite un teléfono pasado por error como argumento.** Rechaza el uso antes de pedir el número o conectar; introduce el teléfono cuando se solicite o mediante stdin.
+
+### Correcciones
+
+- **`messages list`, `inbox` y `review` con `--transcribe` descargan grabaciones mediante la conexión de lectura.** Antes se abría un segundo acceso a MAX. La descarga termina antes de cerrar la conexión y el reconocimiento local empieza después. Nada se marca como leído sin `--mark-read` explícito.
+- **`review --unanswered` considera las transcripciones guardadas y nuevas de preguntas de voz.** Antes descartaba las preguntas con texto vacío antes de transcribirlas. MCP tiene la misma corrección. El texto original no cambia; las grabaciones sin reconocer dejan la revisión incompleta.
+
+- **`max chats show` explica correctamente las diferencias en el número de miembros.** La lista puede excluir tu cuenta o estar incompleta. El comando muestra ambas cifras sin afirmar que falló la descarga. Se conservan JSON y la lista original.
+
+- **El rechazo `poll.already.voted` explica cómo cambiar el voto.** Si la encuesta lo permite, ejecuta primero `polls vote <chat> <message> --retract` en el mismo perfil y elige después otra respuesta.
+
+- **`max messages download --timeout` también cierra el flujo HTTP del adjunto.** Antes podía seguir descargando tras vencer el tiempo del comando, hasta otro límite de inactividad. Ahora el cierre del adaptador cancela sus flujos y elimina el archivo incompleto.
 
 ## 0.25.0 — 03.10.2026
 
 ### Novedades
 
-- **`max skill show link-conversations` imprime el skill compartido para vincular conversaciones.** Disponible sin sesión; sin nombre sigue mostrando el skill principal de MAX.
-
-- `bot api` comparte la construcción de comandos y validación de entradas con Telegram. Los generadores siguen en cli-core; se conservan los parámetros, respuestas nativas y permisos actuales de MAX. La opción compartida `--store-token <profile>` está destinada a operaciones que devuelven credenciales; las demás la rechazan.
+- `bot api` usa el mismo constructor de comandos y validación de entrada que Telegram. Los generadores permanecen en cli-core; se conservan los parámetros, respuestas nativas y permisos efectivos de MAX. La opción compartida `--store-token <profile>` sirve para operaciones que devuelven credenciales; las demás la rechazan.
 
 ### Cambios que pueden romper scripts
 
-- **`max sends list` respeta el `limit` configurado, como Telegram.** Antes, sin opción siempre seleccionaba 20 intentos. El campo JSON `limit` contiene el límite elegido; se conservan `items`, `page` y `hasMore`. `--limit` tiene prioridad sobre la configuración.
+- **`max models audio list --json` añade `directory`:** el directorio de modelos compartido por MAX y Telegram. Los comandos, la selección del directorio y la verificación de descargas son ahora comunes; se conservan los archivos, el orden y `transcribeModel`. No hace falta descargar de nuevo. JSONL sigue devolviendo un modelo por línea.
 
-- **`max models audio list --json` añade `directory`:** el directorio de modelos compartido por MAX y Telegram. Los comandos de modelos, directorio y verificación de descargas ahora se comparten; se conservan archivos existentes, orden de modelos y configuración `transcribeModel`. No hace falta descargarlos otra vez. JSONL sigue devolviendo un modelo por línea.
-
-- **`--md` usa el conversor propio de MAX** para send/edit y leyendas: estilos anidados, `__жирный__`, `++подчёркнутый++`, enlaces y código. Los bots admiten resaltado, encabezados y citas mediante HTML seguro; el protocolo personal rechaza explícitamente tipos sin confirmar. Telegram tiene otra sintaxis. Los tipos wire desconocidos ya no se envían silenciosamente.
+- **`--md` usa el formateador propio de MAX** para send/edit y pies de archivo: estilos anidados, `__жирный__`, `++подчёркнутый++`, enlaces y código. Los bots admiten énfasis, títulos y citas mediante HTML seguro; el protocolo personal rechaza tipos no verificados. Telegram tiene otra sintaxis. Ya no se envían silenciosamente tipos wire desconocidos.
 
 ## 0.24.0 — 03.10.2026
 
@@ -26,7 +74,7 @@ Cambios destacados de `@leemour/max-cli`, con una sección por versión, recient
 
 - **`max setup` guía el primer inicio de una cuenta personal:** comprueba directorios, ofrece acceso por QR, comprueba la cuenta y hasta cinco chats e instala el skill del agente elegido. Reutiliza la sesión existente al repetirse. El historial se descarga aparte; setup no inicia el servicio en segundo plano. La ayuda, instalación e instrucciones del agente explican los siguientes pasos y cómo ejecutar en Windows sin PATH. `max skill show` funciona antes de iniciar sesión.
 
-### Cambios que pueden afectar a scripts
+### Cambios que pueden romper scripts
 
 - **`max chats check` pasa a ser `max chats moderate`:** reglas y moderación compartidas con Telegram. `--since-time` acepta fecha o `30m`/`2h`/`1d`, en lugar de `--since` con un ID de mensaje; JSON devuelve `{ chatId, rows }`. Lee hasta 1000 mensajes por ejecución. Los niveles son `deny|readonly|ask|allow`; los antiguos `forbid` y `flag|confirm` se interpretan como `deny` y `ask`. El punto guardado se migra de la sesión al archivo de reglas, por lo que la primera ejecución continúa desde él. CLI y MCP personal comparten ese punto; nombres y opciones MCP se conservan. La incorporación por enlace en `chats events` se llama `join`.
 
@@ -76,7 +124,7 @@ Cambios destacados de `@leemour/max-cli`, con una sección por versión, recient
 - **`max <бот> bot store fetch <чат>`** descarga historial en la copia del bot, recientes primero, y puede reanudarse. `--last`, `--since-time`, `--limit`, `--page-size` y `--pause` funcionan como `max store fetch`.
 - **`--yes` para cualquier comando** aprueba la pregunta del nivel `ask` antes de escribir; `max account sessions end --others --yes` funciona igual.
 
-### Cambios que pueden afectar a scripts
+### Cambios que pueden romper scripts
 
 - **`messages send --topic` y `polls create --topic` rechazan claramente destinos MAX.** La opción compartida corresponde a temas de foros de Telegram, que MAX no admite. No envía mensaje ni encuesta; sin `--topic`, nada cambia.
 - **`max doctor --json` describe la base compartida en `store` y el archivo anterior en `legacyCache`.** Ya no abre ni comprueba el esquema de la caché antigua. Cambia `cache` por `store` en scripts. Puedes borrar el archivo anterior y recuperar historial mediante `max store fetch`.
@@ -120,7 +168,7 @@ La mayoría de comandos personales se comparten con tg: opciones, resultados `--
 - **Cada registro tiene `operationId`**, común a filas de un envío, edición, eliminación o cambio de chat, para ver su resultado. En envíos equivale a `sendId`.
 - **Unos 16 MB menos al instalar:** la capa de base de datos viene incluida. Los comandos no cambian.
 
-### Cambios que pueden afectar a scripts
+### Cambios que pueden romper scripts
 
 - **`max messages search` busca palabras, mejores resultados primero.** `--newest` recupera orden reciente. Admite `"фраза"`, `-слово`, `OR`, `from:`, `chat:`, `after:`/`before:` y `has:`. Corrige erratas y lo avisa. `--context <n>` muestra contexto. JSON añade `match` y `score`.
 - **`max bot updates watch` pasa a `max bot watch`**, como tg y `max watch`. Sin `--events` muestra mensajes; con ella, cada línea indica evento (`{ "event": "message" | "edit" | "delete" | "callback" | "joined" | … }`), no eventos MAX sin procesar. `--timeout` termina normalmente con `0`. Los bots de solo lectura pueden usar `watch` para recibir actualizaciones. El punto guardado no cambia.
@@ -178,7 +226,7 @@ La mayoría de comandos personales se comparten con tg: opciones, resultados `--
 
 ## 0.21.0 — 30.09.2026
 
-### Cambios que pueden afectar a scripts
+### Cambios que pueden romper scripts
 
 Los comandos siguen sustantivo y acción. Los nombres anteriores devuelven «unknown command» o «unknown option», código `1`, sin actuar.
 
@@ -198,7 +246,7 @@ Los comandos siguen sustantivo y acción. Los nombres anteriores devuelven «unk
 
 ## 0.20.0 — 30.09.2026
 
-### Cambios que pueden afectar a scripts
+### Cambios que pueden romper scripts
 
 - **La base compartida pasa al esquema 6** (cli-messaging 0.49.0). El primer `max` actualiza `messages.db`; tg anterior al publicado ese día rechaza el archivo y pide `npm install -g @leemour/tg-cli@latest`. Los comandos MAX no cambian.
 - **`--all-bots` necesita autorización para leer otros bots.** Define `readOtherBots` en `bot`: `max <имя> config set --bot readOtherBots true` o lista de perfiles. Sin ella, código `5` y comando para permitirlo.
@@ -213,7 +261,7 @@ Los comandos siguen sustantivo y acción. Los nombres anteriores devuelven «unk
 
 ## 0.19.0 — 28.09.2026
 
-### Cambios que pueden afectar a scripts
+### Cambios que pueden romper scripts
 
 - **Cerrar encuestas mediante `max mcp` requiere `edit`**, antes `reaction`. Cerrar edita el mensaje y `max polls close` ya lo exigía. Si `allow` restringe acciones, añade `edit` para ofrecer `max_polls_close`. Sin lista nada cambia. Consulta [MCP](./mcp.md).
 
@@ -250,7 +298,7 @@ Los comandos siguen sustantivo y acción. Los nombres anteriores devuelven «unk
 
 ## 0.17.0 — 28.09.2026
 
-### Cambios que pueden afectar a scripts
+### Cambios que pueden romper scripts
 
 - **Todas las listas con `--json` son objetos `{items, page, limit, hasMore}`, no arrays.** Incluye `account sessions list`, `chats members list`, `chats folders list`, `messages scheduled`, `messages download`, `messages context`, `models audio list`, `recipients list`, `sends list`, `runs list`, `chats check`, `chats events` y listas del bot. Antes algunas eran arrays y `chats events` devolvía `{events, more}`.
   Motivo: había tres formatos distintos que los scripts y agentes debían recordar.
@@ -294,7 +342,7 @@ Los comandos siguen sustantivo y acción. Los nombres anteriores devuelven «unk
 - **Encuestas.** `max messages list` muestra pregunta, opciones con IDs en `[скобках]`, votos y ✓ en tu opción. `max polls vote <чат> <сообщение> <вариант>…` vota, `--retract` retira, `max polls close` cierra, `max polls create` crea. MCP: `max_polls_vote`, `max_polls_create` con `--allow-send`. Los estados inválidos se rechazan antes de enviar: encuesta cerrada, opciones sobrantes o segundo voto no permitido. web.max.ru no muestra encuestas y `polls create` lo recuerda.
 - **`max <имя> bot mcp` para agentes.** Solo lectura por defecto; escritura con `--allow-send`, `--allow-delete`, `--allow-moderate`, `--confirm-send`. Ejecuta los mismos comandos con destinatarios y registro. Acciones que requieren consentimiento se muestran en un formulario. Consulta [MCP del bot](./bot.md#бот-для-агента-mcp).
 
-### Cambios que pueden afectar a scripts
+### Cambios que pueden romper scripts
 
 - **`timeout` de `max bot api get-updates` pasa a `--poll-timeout`.** Antes `--timeout` no llegaba a MAX porque limita toda la ejecución. Los scripts de long polling deben usar `--poll-timeout`.
 
@@ -322,7 +370,7 @@ Los comandos siguen sustantivo y acción. Los nombres anteriores devuelven «unk
 - **Personas en la copia.** `max <имя> bot people show <кто>` muestra chats y últimos mensajes privados; `--refresh` relee desde MAX. `bot messages
   search --from <кто>` filtra autor; `bot messages between <кто> <кто> …` compara autores en chats comunes. `--all-bots` incluye todas las copias. Persona: número, `@username` o parte del nombre.
 
-### Cambios que pueden afectar a scripts
+### Cambios que pueden romper scripts
 
 - **`max bot messages list` ordena de antiguos a nuevos**, como `max messages list`. Los envíos del bot se marcan propios. Los scripts que tomaban la primera fila como la más reciente deben adaptarse.
 
@@ -337,7 +385,7 @@ Los comandos siguen sustantivo y acción. Los nombres anteriores devuelven «unk
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/leemour/max-cli/blob/v0.25.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/leemour/max-cli/blob/v0.27.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos cómodos.** `max <имя> bot messages send <чат> <текст>` escribe a ID, `user:<номер>` o nombre visto. También `edit`, `delete`, `list`, `get`. `max <имя> bot chats list`, `chats get|pin|unpin|leave|action`, `max bot list`. MAX no lista chats del bot: el CLI recuerda los vistos.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).
 - **Actividad de grupos.** `max review --unanswered [часы]` encuentra preguntas sin respuesta tuya ni de administradores; `max review --chat <чат>` revisa un chat. `max chats events <чат>` muestra ingresos, salidas, altas y expulsiones. `max chats members list
@@ -359,7 +407,7 @@ Los comandos siguen sustantivo y acción. Los nombres anteriores devuelven «unk
 - **`max doctor --online`** realiza un inicio, lee un chat y arranca MCP sin enviar.
 - **`max models audio download` prueba el modelo descargado.** Si falta, indica idioma y alternativas con tamaños.
 
-### Cambios que pueden afectar a scripts
+### Cambios que pueden romper scripts
 
 - **`max_messages_attachment` pasa a `max_messages_photo`.** Renueva permisos guardados del cliente MCP.
 - **No se admite el perfil `review`**, ahora una orden; renombra perfiles existentes.
@@ -392,7 +440,7 @@ Los comandos siguen sustantivo y acción. Los nombres anteriores devuelven «unk
 - **`max serve` pide lo mismo que web.max.ru al entrar:** carpetas, banners, llamadas, stickers y reacciones. Al reconectar envía la hora anterior y pide solo chats cambiados. Motivo: reducir diferencias frente al cliente web. Solo lectura; no muestra ni guarda respuestas. Las órdenes puntuales no lo hacen ([Seguridad](./security.md#что-уходит-в-сеть)).
 - **El servidor tolera un mensaje entrante malformado**, lo omite y registra una línea en vez de detenerse.
 
-### Cambios que pueden afectar a scripts
+### Cambios que pueden romper scripts
 
 - **Más protección para agentes.**
   - `max mcp --confirm-send` confirma cualquier escritura —edición, reenvío, fijado, lectura y borrado—; aprobación única durante cinco minutos.
@@ -434,7 +482,7 @@ Los comandos siguen sustantivo y acción. Los nombres anteriores devuelven «unk
 - **`max serve` envía un evento de servicio como una pestaña oculta:** lista de chats mostrada, 20 segundos después de entrar. Solo número de cuenta y hora, sin títulos/textos. Las órdenes puntuales no lo envían ([Seguridad](./security.md#что-уходит-в-сеть)).
 - **Nombres de carpeta mayores de 20 caracteres se rechazan localmente**, antes llegaban a MAX y fallaban.
 
-### Cambios que pueden afectar a scripts
+### Cambios que pueden romper scripts
 
 - **Un rechazo por demasiados inicios no provoca nuevos intentos.** Código `8` y pausas de 1 minuto, 5, 30, una hora, 6 horas, un día. El servidor se detiene ante cualquier rechazo; antes repetía cada minuto indefinidamente. Scripts reciben `8` hasta acabar la pausa: respeta el plazo del error ([Problemas](./troubleshooting.md)).
 
@@ -506,7 +554,7 @@ Los comandos siguen sustantivo y acción. Los nombres anteriores devuelven «unk
 - **Registro y destinatarios.** Cada intento sin texto en `max sends list`. Lista opcional `max recipients add|remove|list|off`; destinatario no autorizado código `7`, perfil `readOnly` código `5`. Alcance: [Seguridad](./security.md).
 - **`max session start qr | qr-chrome | sms | token` permite entrar sin copiar token.** `qr` dibuja en terminal o abre navegador si es estrecho. `qr-chrome`, `sms` abren web.max.ru en ventana aparte de Chrome/Chromium/Edge/Brave. Sin método sigue token manual o stdin.
 
-### Cambios que pueden afectar a scripts
+### Cambios que pueden romper scripts
 
 - **Límite por hora: 30 mensajes por defecto (`sendsPerHour`).** `max messages send` falla con `8` al excederlo; antes no había límite. Aumenta el ajuste si un script necesita más.
 
@@ -542,7 +590,7 @@ Los comandos siguen sustantivo y acción. Los nombres anteriores devuelven «unk
 - **`--timeout <срок>` limita toda la ejecución**, conexión, entrada y solicitud, no una respuesta.
 - **`max doctor` revisa dependencias sin MAX:** fuente del token sin revelarlo, número/último inicio, perfiles, estructura de base y entrada de claves. Funciona con todo roto; falta de sesión es dato, no error.
 
-### Cambios que pueden afectar a scripts
+### Cambios que pueden romper scripts
 
 - **`--query` pasa a `--search`.** Ya cambió en 0.3.0 sin anotarlo. Los scripts deben sustituirlo.
 
@@ -562,7 +610,7 @@ Los comandos siguen sustantivo y acción. Los nombres anteriores devuelven «unk
 - **Adjuntos como enlaces:** `📎 photo`, `📎 photo ×3 1 2 3`, `📎 файл.pdf · 24 MB`; JSON `url`, `width`, `height`, `title`. El enlace de foto no requiere sesión: quien lo recibe puede verla.
 - **`senderColors: true` da color por autor**, desactivado por defecto.
 
-### Cambios que pueden afectar a scripts
+### Cambios que pueden romper scripts
 
 - **`-v` significa detalle; versión con `max -V`.** **`--trace`**, antes `--verbose`, activa peticiones stderr. Los scripts que usaban `max -v` para la versión deben cambiar a `-V`; adapta también el antiguo `--verbose`.
 - **`--query` pasa a `--search`**, inicialmente no anotado.

@@ -143,8 +143,8 @@
     "replacements": {
       "ru": [
         {
-          "before": "Агенту с терминалом (Claude Code, Codex) нужен [навык](https://github.com/leemour/max-cli/blob/v0.25.0/README.md#навык-для-агентов-с-терминалом);\nагенту без терминала (Claude Desktop, Cursor) — [MCP-сервер](./mcp.md). Ниже — что вы говорите, что\nагент вызывает и что вы получаете.",
-          "after": "Агенту с доступом к терминалу (например, Claude Code или Codex) можно подключить [навык](https://github.com/leemour/max-cli/blob/v0.25.0/README.md#навык-для-агентов-с-терминалом). Без доступа к терминалу используйте [MCP-сервер](./mcp.md), например в Claude Desktop. В Cursor доступны оба способа. Ниже — ваш запрос, команда агента и результат."
+          "before": "Агенту с терминалом (Claude Code, Codex) нужен [навык](https://github.com/leemour/max-cli/blob/v0.27.0/README.md#навык-для-агентов-с-терминалом);\nагенту без терминала (Claude Desktop, Cursor) — [MCP-сервер](./mcp.md). Ниже — что вы говорите, что\nагент вызывает и что вы получаете.",
+          "after": "Агенту с доступом к терминалу (например, Claude Code или Codex) можно подключить [навык](https://github.com/leemour/max-cli/blob/v0.27.0/README.md#навык-для-агентов-с-терминалом). Без доступа к терминалу используйте [MCP-сервер](./mcp.md), например в Claude Desktop. В Cursor доступны оба способа. Ниже — ваш запрос, команда агента и результат."
         }
       ]
     }
@@ -266,7 +266,7 @@
       ],
       "en": [
         {
-          "before": "- **Files.** On Linux and macOS, files use `0600` in `0700` directories, including stored conversations. On Windows, access follows inherited ACLs from the user directory ([below](#что-ещё-пишется-на-диск)).",
+          "before": "- **Files.** Linux and macOS files are created with mode `0600` inside `0700` directories, including the local conversation archive. Windows uses inherited ACLs from the user's directory ([below](#что-ещё-пишется-на-диск)).",
           "after": "- **Files.** On Linux and macOS, sensitive state files, including stored conversations, use `0600` in `0700` directories. Configuration can use `0644`; redirected output follows shell permissions. On Windows, access follows inherited ACLs from the user directory ([below](#что-ещё-пишется-на-диск))."
         },
         {
@@ -276,7 +276,7 @@
       ],
       "es": [
         {
-          "before": "- **Archivos:** en Linux y macOS se crean con `0600` dentro de directorios `0700`, incluida la copia local. En Windows, el acceso depende de las ACL heredadas del directorio del usuario ([más abajo](#что-ещё-пишется-на-диск)).",
+          "before": "- **Archivos.** En Linux y macOS se crean con permisos `0600` en directorios `0700`, incluido el archivo local de conversaciones. Windows aplica las ACL heredadas del directorio del usuario ([abajo](#что-ещё-пишется-на-диск)).",
           "after": "- **Archivos:** en Linux y macOS, los archivos de estado sensibles, incluidas las conversaciones guardadas, usan `0600` dentro de directorios `0700`. La configuración puede usar `0644`; los permisos del texto redirigido dependen de la shell. En Windows, el acceso depende de las ACL heredadas del directorio del usuario ([más abajo](#что-ещё-пишется-на-диск))."
         },
         {
@@ -318,10 +318,6 @@
     "replacements": {
       "en": [
         {
-          "before": "- **Node 22.16 or newer.** CI runs on Node 24; 22.16 is the floor written in `package.json`. CI also runs\n  the built command under Bun.",
-          "after": "- **Node.js 22.16 or newer. Bun is also supported.**"
-        },
-        {
           "before": "| What | Linux | macOS | Windows |\n|---|---|---|---|\n| settings | `~/.config/tg-cli/` | `~/Library/Preferences/tg-cli/` | `%APPDATA%\\tg-cli\\Config\\` |\n| state | `~/.local/share/tg-cli/` | `~/Library/Application Support/tg-cli/` | `%LOCALAPPDATA%\\tg-cli\\Data\\` |\n| cache | `~/.cache/tg-cli/` | `~/Library/Caches/tg-cli/` | `%LOCALAPPDATA%\\tg-cli\\Cache\\` |\n| the local store | `~/.local/share/cli-messaging/messages.db` | under `~/Library/Application Support/cli-messaging/` | under `%LOCALAPPDATA%\\cli-messaging\\Data\\` |\n| speech models | `~/.cache/cli-common/models/audio/` | under `~/Library/Caches/cli-common/` | under `%LOCALAPPDATA%\\cli-common\\Cache\\` |",
           "after": "| Data | Linux | macOS | Windows |\n|---|---|---|---|\n| Settings | `~/.config/tg-cli/config.json` | `~/Library/Preferences/tg-cli/config.json` | `%APPDATA%\\tg-cli\\Config\\config.json` |\n| Telegram login session | `~/.local/share/tg-cli/sessions/<profile>.session` | `~/Library/Application Support/tg-cli/sessions/<profile>.session` | `%LOCALAPPDATA%\\tg-cli\\Data\\sessions\\<profile>.session` |\n| Run records | `~/.local/share/tg-cli/runs/` | `~/Library/Application Support/tg-cli/runs/` | `%LOCALAPPDATA%\\tg-cli\\Data\\runs\\` |\n| Send journal | `~/.local/share/tg-cli/sends/<profile>.jsonl` | `~/Library/Application Support/tg-cli/sends/<profile>.jsonl` | `%LOCALAPPDATA%\\tg-cli\\Data\\sends\\<profile>.jsonl` |\n| Allowed recipients | `~/.local/share/tg-cli/profiles/<profile>.recipients.json` | `~/Library/Application Support/tg-cli/profiles/<profile>.recipients.json` | `%LOCALAPPDATA%\\tg-cli\\Data\\profiles\\<profile>.recipients.json` |\n| Inbox reading position | `~/.local/share/tg-cli/inbox/<profile>.json` | `~/Library/Application Support/tg-cli/inbox/<profile>.json` | `%LOCALAPPDATA%\\tg-cli\\Data\\inbox\\<profile>.json` |\n| Background server log | `~/.local/share/tg-cli/serve/<profile>.log` | `~/Library/Application Support/tg-cli/serve/<profile>.log` | `%LOCALAPPDATA%\\tg-cli\\Data\\serve\\<profile>.log` |\n| Cache | `~/.cache/tg-cli/` | `~/Library/Caches/tg-cli/` | `%LOCALAPPDATA%\\tg-cli\\Cache\\` |\n| Local message database | `~/.local/share/cli-messaging/messages.db` | `~/Library/Application Support/cli-messaging/messages.db` | `%LOCALAPPDATA%\\cli-messaging\\Data\\messages.db` |\n| Speech recognition models | `~/.cache/cli-common/models/audio/` | `~/Library/Caches/cli-common/models/audio/` | `%LOCALAPPDATA%\\cli-common\\Cache\\models\\audio\\` |\n\n`~` means your home folder. On Windows, paste `%APPDATA%` or `%LOCALAPPDATA%` into File Explorer’s address bar. `<profile>` is the account profile name, usually `default`. These are default locations; `tg doctor` shows the actual paths, including overrides."
         },
@@ -335,10 +331,6 @@
         }
       ],
       "ru": [
-        {
-          "before": "- **Node 22.16 или новее.** В CI используется Node 24; минимальная версия 22.16 указана в `package.json`. CI также проверяет собранную команду в Bun.",
-          "after": "- **Node.js 22.16 или новее. Также поддерживается Bun.**"
-        },
         {
           "before": "| Данные | Linux | macOS | Windows |\n|---|---|---|---|\n| настройки | `~/.config/tg-cli/` | `~/Library/Preferences/tg-cli/` | `%APPDATA%\\tg-cli\\Config\\` |\n| состояние | `~/.local/share/tg-cli/` | `~/Library/Application Support/tg-cli/` | `%LOCALAPPDATA%\\tg-cli\\Data\\` |\n| кеш | `~/.cache/tg-cli/` | `~/Library/Caches/tg-cli/` | `%LOCALAPPDATA%\\tg-cli\\Cache\\` |\n| локальная база | `~/.local/share/cli-messaging/messages.db` | в `~/Library/Application Support/cli-messaging/` | в `%LOCALAPPDATA%\\cli-messaging\\Data\\` |\n| модели распознавания речи | `~/.cache/cli-common/models/audio/` | в `~/Library/Caches/cli-common/` | в `%LOCALAPPDATA%\\cli-common\\Cache\\` |",
           "after": "| Данные | Linux | macOS | Windows |\n|---|---|---|---|\n| Настройки | `~/.config/tg-cli/config.json` | `~/Library/Preferences/tg-cli/config.json` | `%APPDATA%\\tg-cli\\Config\\config.json` |\n| Сессия входа в Telegram | `~/.local/share/tg-cli/sessions/<profile>.session` | `~/Library/Application Support/tg-cli/sessions/<profile>.session` | `%LOCALAPPDATA%\\tg-cli\\Data\\sessions\\<profile>.session` |\n| Записи запусков | `~/.local/share/tg-cli/runs/` | `~/Library/Application Support/tg-cli/runs/` | `%LOCALAPPDATA%\\tg-cli\\Data\\runs\\` |\n| Журнал отправок | `~/.local/share/tg-cli/sends/<profile>.jsonl` | `~/Library/Application Support/tg-cli/sends/<profile>.jsonl` | `%LOCALAPPDATA%\\tg-cli\\Data\\sends\\<profile>.jsonl` |\n| Разрешённые получатели | `~/.local/share/tg-cli/profiles/<profile>.recipients.json` | `~/Library/Application Support/tg-cli/profiles/<profile>.recipients.json` | `%LOCALAPPDATA%\\tg-cli\\Data\\profiles\\<profile>.recipients.json` |\n| Позиция чтения входящих | `~/.local/share/tg-cli/inbox/<profile>.json` | `~/Library/Application Support/tg-cli/inbox/<profile>.json` | `%LOCALAPPDATA%\\tg-cli\\Data\\inbox\\<profile>.json` |\n| Журнал фонового сервера | `~/.local/share/tg-cli/serve/<profile>.log` | `~/Library/Application Support/tg-cli/serve/<profile>.log` | `%LOCALAPPDATA%\\tg-cli\\Data\\serve\\<profile>.log` |\n| Кеш | `~/.cache/tg-cli/` | `~/Library/Caches/tg-cli/` | `%LOCALAPPDATA%\\tg-cli\\Cache\\` |\n| Локальная база сообщений | `~/.local/share/cli-messaging/messages.db` | `~/Library/Application Support/cli-messaging/messages.db` | `%LOCALAPPDATA%\\cli-messaging\\Data\\messages.db` |\n| Модели распознавания речи | `~/.cache/cli-common/models/audio/` | `~/Library/Caches/cli-common/models/audio/` | `%LOCALAPPDATA%\\cli-common\\Cache\\models\\audio\\` |\n\n`~` — ваша домашняя папка. В Windows вставьте `%APPDATA%` или `%LOCALAPPDATA%` в адресную строку Проводника. `<profile>` — имя профиля аккаунта, обычно `default`. Здесь указаны пути по умолчанию; `tg doctor` покажет фактические пути, включая переопределения."
@@ -354,10 +346,6 @@
       ],
       "es": [
         {
-          "before": "- **Node 22.16 o posterior.** CI se ejecuta con Node 24; 22.16 es el mínimo indicado en `package.json`. CI también ejecuta el comando compilado con Bun.",
-          "after": "- **Node.js 22.16 o posterior. También es compatible con Bun.**"
-        },
-        {
           "before": "| Contenido | Linux | macOS | Windows |\n|---|---|---|---|\n| configuración | `~/.config/tg-cli/` | `~/Library/Preferences/tg-cli/` | `%APPDATA%\\tg-cli\\Config\\` |\n| estado | `~/.local/share/tg-cli/` | `~/Library/Application Support/tg-cli/` | `%LOCALAPPDATA%\\tg-cli\\Data\\` |\n| caché | `~/.cache/tg-cli/` | `~/Library/Caches/tg-cli/` | `%LOCALAPPDATA%\\tg-cli\\Cache\\` |\n| archivo local | `~/.local/share/cli-messaging/messages.db` | dentro de `~/Library/Application Support/cli-messaging/` | dentro de `%LOCALAPPDATA%\\cli-messaging\\Data\\` |\n| modelos de voz | `~/.cache/cli-common/models/audio/` | dentro de `~/Library/Caches/cli-common/` | dentro de `%LOCALAPPDATA%\\cli-common\\Cache\\` |",
           "after": "| Datos | Linux | macOS | Windows |\n|---|---|---|---|\n| Configuración | `~/.config/tg-cli/config.json` | `~/Library/Preferences/tg-cli/config.json` | `%APPDATA%\\tg-cli\\Config\\config.json` |\n| Sesión de Telegram | `~/.local/share/tg-cli/sessions/<profile>.session` | `~/Library/Application Support/tg-cli/sessions/<profile>.session` | `%LOCALAPPDATA%\\tg-cli\\Data\\sessions\\<profile>.session` |\n| Ejecuciones registradas | `~/.local/share/tg-cli/runs/` | `~/Library/Application Support/tg-cli/runs/` | `%LOCALAPPDATA%\\tg-cli\\Data\\runs\\` |\n| Registro de envíos | `~/.local/share/tg-cli/sends/<profile>.jsonl` | `~/Library/Application Support/tg-cli/sends/<profile>.jsonl` | `%LOCALAPPDATA%\\tg-cli\\Data\\sends\\<profile>.jsonl` |\n| Destinatarios permitidos | `~/.local/share/tg-cli/profiles/<profile>.recipients.json` | `~/Library/Application Support/tg-cli/profiles/<profile>.recipients.json` | `%LOCALAPPDATA%\\tg-cli\\Data\\profiles\\<profile>.recipients.json` |\n| Posición de lectura | `~/.local/share/tg-cli/inbox/<profile>.json` | `~/Library/Application Support/tg-cli/inbox/<profile>.json` | `%LOCALAPPDATA%\\tg-cli\\Data\\inbox\\<profile>.json` |\n| Registro del servidor | `~/.local/share/tg-cli/serve/<profile>.log` | `~/Library/Application Support/tg-cli/serve/<profile>.log` | `%LOCALAPPDATA%\\tg-cli\\Data\\serve\\<profile>.log` |\n| Caché | `~/.cache/tg-cli/` | `~/Library/Caches/tg-cli/` | `%LOCALAPPDATA%\\tg-cli\\Cache\\` |\n| Base de mensajes local | `~/.local/share/cli-messaging/messages.db` | `~/Library/Application Support/cli-messaging/messages.db` | `%LOCALAPPDATA%\\cli-messaging\\Data\\messages.db` |\n| Modelos de reconocimiento de voz | `~/.cache/cli-common/models/audio/` | `~/Library/Caches/cli-common/models/audio/` | `%LOCALAPPDATA%\\cli-common\\Cache\\models\\audio\\` |\n\n`~` es tu carpeta personal. En Windows, pega `%APPDATA%` o `%LOCALAPPDATA%` en la barra de direcciones del Explorador. `<profile>` es el nombre del perfil, normalmente `default`. Estas son las rutas predeterminadas; `tg doctor` muestra las rutas reales y sus cambios."
         },
@@ -368,31 +356,6 @@
         {
           "before": "- **Estado:** contiene la sesión (`sessions/<profile>.session`), las ejecuciones registradas (`runs/`), el registro de envíos (`sends/`), los destinatarios permitidos (`profiles/`), el punto guardado de `inbox --new` (`inbox/`), las tareas de descarga en segundo plano y el registro y bloqueo de `serve`.",
           "after": "- **Datos de la cuenta y actividad:** la tabla muestra las rutas completas de la sesión, las ejecuciones, los envíos, los destinatarios permitidos y la posición de lectura. Las descargas en segundo plano y el bloqueo del servidor también se guardan en el directorio de estado."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "installation",
-    "reason": "Describe supported runtimes and operating systems without developer-oriented CI/version testing details.",
-    "replacements": {
-      "en": [
-        {
-          "before": "- **Node 22.16 or later** — tested on 24.19.0; 22.16 is the minimum specified in `package.json`.\n- **Or Bun 1.3+** — tested on 1.3.14, with a separate CI check on every pull request.\n- Linux, macOS or Windows — developed on Linux; tests also pass on macOS and Windows.",
-          "after": "- **Node.js 22.16 or newer, or Bun 1.3+.**\n- Linux, macOS or Windows."
-        }
-      ],
-      "ru": [
-        {
-          "before": "- **Node 22.16 или новее** — проверено на 24.19.0; 22.16 — нижняя граница, она записана в `package.json`\n- **или Bun 1.3+** — проверено на 1.3.14, отдельной проверкой в CI на каждый pull request\n- Linux, macOS или Windows — разрабатывается на Linux; тесты проходят и на macOS, и на Windows",
-          "after": "- **Node.js 22.16 или новее, либо Bun 1.3+.**\n- Linux, macOS или Windows."
-        }
-      ],
-      "es": [
-        {
-          "before": "- **Node 22.16 o posterior**: probado con 24.19.0; 22.16 es la versión mínima indicada en `package.json`.\n- **O Bun 1.3+**: probado con 1.3.14, con una comprobación independiente en CI para cada pull request.\n- Linux, macOS o Windows: el desarrollo se hace en Linux; las pruebas también pasan en macOS y Windows.",
-          "after": "- **Node.js 22.16 o posterior, o Bun 1.3+.**\n- Linux, macOS o Windows."
         }
       ]
     }
@@ -795,31 +758,6 @@
     }
   },
   {
-    "tool": "max",
-    "slug": "mcp",
-    "reason": "Released personal MCP retains legacy consent names internally; distinguish them from shared CLI names using rules.ts SHARED_LEVELS and tools.ts registerCheck.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "`--allow-moderate` даёт агенту инструмент `max_chats_check` — то же, что `max chats moderate`: проверить",
-          "after": "В этом абзаце приведены исторические названия уровней личного MCP. В общем файле правил `ask` соответствует подтверждению `confirm` в MCP, а `deny` и `readonly` запрещают выполнение. CLI использует уровни из [руководства по группам](./groups.md); не переносите старые названия в новые команды.\n\n`--allow-moderate` даёт агенту инструмент `max_chats_check` — то же, что `max chats moderate`: проверить"
-        }
-      ],
-      "en": [
-        {
-          "before": "`--allow-moderate` exposes `max_chats_check`, equivalent to `max chats moderate`: check group rules and perform permitted actions. The flag supplies the consent required by `flag`; with it, messages and members are removed where consent is `flag` or `allow`. For `confirm`, the server first performs nothing and shows one form containing all such actions. After approval it performs exactly those actions. If new actions appear meanwhile, it refuses and the check must be run again. `forbid` actions never run. With `dry_run`, only a plan is displayed. The profile requires `delete` and `groups` permissions.",
-          "after": "This paragraph uses the personal MCP implementation’s legacy consent names. In the shared rules file, `ask` maps to MCP confirmation (`confirm`), while `deny` and `readonly` prevent execution. The CLI uses the levels in the [group guide](./groups.md); use those names in new CLI commands.\n\n`--allow-moderate` exposes `max_chats_check`, equivalent to `max chats moderate`: check group rules and perform permitted actions. The flag supplies the consent required by `flag`; with it, messages and members are removed where consent is `flag` or `allow`. For `confirm`, the server first performs nothing and shows one form containing all such actions. After approval it performs exactly those actions. If new actions appear meanwhile, it refuses and the check must be run again. `forbid` actions never run. With `dry_run`, only a plan is displayed. The profile requires `delete` and `groups` permissions."
-        }
-      ],
-      "es": [
-        {
-          "before": "`--allow-moderate` ofrece `max_chats_check`, equivalente a `max chats moderate`: revisa las reglas y ejecuta lo permitido. La opción aporta el consentimiento requerido por `flag`: elimina mensajes y miembros si la regla es `flag` o `allow`. Para `confirm`, muestra primero un único formulario con todas esas acciones; tras aprobar ejecuta exactamente esas acciones. Si aparece algo nuevo durante la espera, rechaza y hay que repetir la revisión. Nunca ejecuta `forbid`. Con `dry_run`, solo muestra el plan. El perfil necesita permisos `delete` y `groups`.",
-          "after": "Este párrafo usa los nombres históricos de consentimiento del MCP personal. En el archivo compartido de reglas, `ask` corresponde a la confirmación MCP (`confirm`); `deny` y `readonly` impiden ejecutar acciones. El CLI usa los niveles de la [guía de grupos](./groups.md); usa esos nombres en comandos nuevos.\n\n`--allow-moderate` ofrece `max_chats_check`, equivalente a `max chats moderate`: revisa las reglas y ejecuta lo permitido. La opción aporta el consentimiento requerido por `flag`: elimina mensajes y miembros si la regla es `flag` o `allow`. Para `confirm`, muestra primero un único formulario con todas esas acciones; tras aprobar ejecuta exactamente esas acciones. Si aparece algo nuevo durante la espera, rechaza y hay que repetir la revisión. Nunca ejecuta `forbid`. Con `dry_run`, solo muestra el plan. El perfil necesita permisos `delete` y `groups`."
-        }
-      ]
-    }
-  },
-  {
     "tool": "tg",
     "slug": "search",
     "reason": "Beginner entry point: explain local archive and strict matching before advanced query syntax, with one copyable single-word example.",
@@ -915,30 +853,18 @@
         {
           "before": "\nmax setup --agent codex            # QR-вход и навык агента\n",
           "after": "\nmax setup            # QR-вход и навык агента\n"
-        },
-        {
-          "before": "\nnpm.cmd exec --yes --package=@leemour/max-cli -- max setup --agent codex\n",
-          "after": "\nnpm.cmd exec --yes --package=@leemour/max-cli -- max setup\n"
         }
       ],
       "ru": [
         {
           "before": "\nmax setup --agent codex            # QR-вход и навык агента\n",
           "after": "\nmax setup            # QR-вход и навык агента\n"
-        },
-        {
-          "before": "\nnpm.cmd exec --yes --package=@leemour/max-cli -- max setup --agent codex\n",
-          "after": "\nnpm.cmd exec --yes --package=@leemour/max-cli -- max setup\n"
         }
       ],
       "es": [
         {
           "before": "\nmax setup --agent codex            # QR-вход и навык агента\n",
           "after": "\nmax setup            # QR-вход и навык агента\n"
-        },
-        {
-          "before": "\nnpm.cmd exec --yes --package=@leemour/max-cli -- max setup --agent codex\n",
-          "after": "\nnpm.cmd exec --yes --package=@leemour/max-cli -- max setup\n"
         }
       ]
     }
@@ -1014,6 +940,33 @@
         {
           "before": "**Rellenar el sitio automáticamente:**",
           "after": "> **Ver la pantalla de acceso de my.telegram.org**\n>\n> ![Pantalla oficial de my.telegram.org con el campo del teléfono vacío.](/telegram-app-login.png)\n>\n> Este es el acceso al sitio para obtener las credenciales de aplicación de Telegram. El código llega por Telegram, no por SMS. Tras entrar, elige **API development tools**. La autorización del cli por QR viene después. [my.telegram.org](https://my.telegram.org/apps)\n\n**Rellenar el sitio automáticamente:**"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "commands",
+    "reason": "Preserve the pinned native Bot API reference with an explicit localized language notice and semantic English language boundary. Owner preference question 2026-10-04; default keeps the generated schema original while translating the bot guide and surrounding documentation.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "### `tg bot api`\n",
+          "after": "### `tg bot api`\n\n> Ниже — автоматически сформированная справка по 185 методам Telegram Bot API на английском языке. Пошаговые инструкции и руководство по ботам переведены; имена методов и параметров совпадают с командами установленного cli.\n\n<div lang=\"en\">\n"
+        },
+        {
+          "before": "\n## `tg skill`\n",
+          "after": "\n</div>\n\n## `tg skill`\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "### `tg bot api`\n",
+          "after": "### `tg bot api`\n\n> A continuación se muestra la referencia generada de los 185 métodos de Telegram Bot API en inglés. Las instrucciones y la guía de bots están traducidas; los nombres de métodos y parámetros coinciden con los comandos de la CLI instalada.\n\n<div lang=\"en\">\n"
+        },
+        {
+          "before": "\n## `tg skill`\n",
+          "after": "\n</div>\n\n## `tg skill`\n"
         }
       ]
     }
