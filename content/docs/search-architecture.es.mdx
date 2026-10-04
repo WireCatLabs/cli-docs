@@ -7,7 +7,7 @@ WireCat ofrece dos vías sobre un archivo local compartido: **la búsqueda estri
 
 Esta guía describe la implementación examinada el 4 de octubre de 2026. Los detalles de los comandos están en las guías de [Telegram](./tg/search.md) y [MAX](./max/search.md) y sus páginas del archivo. Los enlaces al código fijan la versión examinada del motor; no implican que todos los CLI instalados ya usen esa versión del SDK.
 
-![El archivo SQLite alimenta la búsqueda estricta y otra vía de grafos, fragmentos, embeddings y búsqueda híbrida. Ambas regresan a los mensajes originales.](/search-architecture.svg)
+<ArchitectureDiagram name="searchPaths" lang="es" />
 
 ## Elegir la vía adecuada
 
@@ -41,6 +41,8 @@ El flujo de ejecución:
 5. Expande comodines/regex de texto mediante el vocabulario. Las condiciones sobre el cuerpo completo y los detectores preset ejecutan comprobaciones acotadas. Regex usa un autómata limitado en lugar de backtracking sin restricciones.
 6. Ordena solo los mensajes que cumplen la consulta y puede recuperar sus vecinos cronológicos en la cuenta/chat original. La relevancia nunca amplía el conjunto booleano.
 
+<ArchitectureDiagram name="strictSearch" lang="es" />
+
 El motor implementa `text`, `body`, `from`, `chat`, `date`, `kind`, `has`, `topic`, `in` y los `preset` admitidos. `filename/mime/size/tag`, fuzzy/proximity/boost/intervals no están implementados en este perfil y producen errores explícitos.
 
 ```sh
@@ -58,7 +60,25 @@ La respuesta incluye versiones del query/campos/presets, zona horaria, orden, `w
 
 El descubrimiento legacy y JavaScript `--regex` son modos explícitos independientes. Sus correcciones y fallback no forman parte de la semántica estricta de Lucene.
 
+### Formas de las palabras
+
+La búsqueda estricta compara palabras normalizadas completas, así que otra forma de una palabra es otra palabra. `квартира` no encuentra `квартиру` ni `квартиры`, y `piso` no encuentra `pisos`. Para encontrar las formas hoy, usa un prefijo como `квартир*` o `pis*`. Un prefijo también puede encontrar otras palabras que empiezan igual, como `квартирант` o `piscina`.
+
+La corrección de erratas legacy no añade formas de las palabras. Solo corrige palabras que el archivo no contiene; una palabra que está en el archivo se busca tal cual.
+
+Medimos tres maneras de encontrar formas de las palabras en treebanks de Universal Dependencies, con 102 palabras por idioma ([resultados de la medición](https://github.com/leemour/cli-messaging/blob/bench/stemming-vs-trigrams/bench/stemming/results.md)). *Encontrados* es la parte de los mensajes relevantes que devuelve la búsqueda. *Correctos* es la parte de los resultados devueltos que son relevantes.
+
+| Coincidencia | Ruso: encontrados | Ruso: correctos | Español: encontrados | Español: correctos |
+| --- | --- | --- | --- | --- |
+| Palabra exacta | 26% | 99% | 39% | 87% |
+| Vecinos por trigramas (escritura parecida) | 69% | 52% | 85% | 44% |
+| Raíces de Snowball | 88% | 84% | 96% | 69% |
+
+**Previsto, aún no publicado:** un índice de raíces separado, con los stemmers oficiales de Snowball, que obtienen la raíz de cada palabra antes de normalizarla. La idea es activarlo por defecto para palabras simples. Un modo exacto conserva el comportamiento actual: una palabra entre comillas o `--exact` para toda la consulta. Mientras no se publique, la búsqueda estricta funciona como se describe arriba.
+
 ## 3. Reconstruir discusiones con un grafo
+
+<ArchitectureDiagram name="conversationSearch" lang="es" />
 
 `conversations build` procesa un chat guardado en orden cronológico. Cada mensaje puede tener enlaces candidatos a mensajes anteriores. El padre elegido lo incorpora a una discusión existente; sin padre empieza otra.
 

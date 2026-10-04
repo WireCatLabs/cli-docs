@@ -7,7 +7,7 @@ WireCat has two retrieval paths over a shared local archive: **strict message se
 
 This guide describes the implemented architecture inspected on 4 October 2026. Command details live in the [Telegram search guide](./tg/search.md), [MAX search guide](./max/search.md) and their archive guides. Source links below identify the inspected engine snapshot; they do not mean every installed CLI already has that SDK version.
 
-![The shared local archive feeds strict message search and a separate conversation graph, chunk, embedding and hybrid-search path. Both return original source messages.](/search-architecture.svg)
+<ArchitectureDiagram name="searchPaths" lang="en" />
 
 ## Choose the right path
 
@@ -41,6 +41,8 @@ The execution pipeline is:
 5. Expand supported text wildcards/regex through the word vocabulary. Full-body patterns and preset detectors run bounded checks over candidates. Regex uses a bounded automaton rather than unrestricted backtracking.
 6. Rank or order only satisfying messages, then optionally fetch chronological neighbors in each hit's original account/chat. Relevance ordering never broadens the Boolean result set.
 
+<ArchitectureDiagram name="strictSearch" lang="en" />
+
 Fields implemented in the engine are `text`, `body`, `from`, `chat`, `date`, `kind`, `has`, `topic`, `in` and supported `preset` predicates. File-name/MIME/size/tag fields and fuzzy/proximity/boost/interval operators are not implemented in this profile; they return explicit errors.
 
 ```sh
@@ -58,7 +60,25 @@ The response includes query/field/preset versions, timezone, ordering, `wordsRea
 
 Legacy discovery and legacy JavaScript `--regex` remain explicit modes. Their correction/fallback behavior is separate from strict Lucene semantics.
 
+### Word forms
+
+Strict search matches whole normalized words, so another form of a word is another word. `квартира` does not find `квартиру` or `квартиры`, and `piso` does not find `pisos`. To catch the forms today, use a prefix such as `квартир*` or `pis*`. A prefix can also catch other words that start the same way, such as `квартирант` or `piscina`.
+
+The legacy typo correction does not add word forms. It corrects only words that the archive does not contain; a word that is in the archive is searched as it is.
+
+We measured three ways of matching word forms on Universal Dependencies treebanks, with 102 words per language ([benchmark results](https://github.com/leemour/cli-messaging/blob/bench/stemming-vs-trigrams/bench/stemming/results.md)). *Found* is the share of relevant messages that the search returns. *Correct* is the share of returned results that are relevant.
+
+| Matching | Russian: found | Russian: correct | Spanish: found | Spanish: correct |
+| --- | --- | --- | --- | --- |
+| Exact word | 26% | 99% | 39% | 87% |
+| Trigram neighbors (similar spelling) | 69% | 52% | 85% | 44% |
+| Snowball stems | 88% | 84% | 96% | 69% |
+
+**Planned, not shipped yet:** a separate stem index built with the official Snowball stemmers, which take the stem of each word before it is folded into normalized text. It is meant to be on by default for plain words. An exact mode keeps today's behavior: put one word in quotes, or pass `--exact` for the whole query. Until it ships, strict search works as described above.
+
 ## 3. Reconstruct discussions with a message graph
+
+<ArchitectureDiagram name="conversationSearch" lang="en" />
 
 `conversations build` processes one chat's stored messages in chronological order. Each message can have candidate links to earlier messages. A chosen parent joins the message to an existing discussion; no parent starts a new discussion.
 
