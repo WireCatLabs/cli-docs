@@ -16,6 +16,7 @@ parameters and structured results. The MCP server ships inside `tg` and `max`.
 | CLI | Commands in a terminal, with JSON results | Your agent already has a local terminal |
 | Skill + CLI | Instructions for using those commands and workflows | You use Codex, Cursor Agent, Claude Code, Gemini CLI or Hermes |
 | MCP | Named tools and their parameters directly inside your client | You use Claude Desktop, or prefer the client's tool interface |
+| MCP over HTTP | The same tools for ChatGPT or Claude in a browser, behind your own tunnel | You chat in a browser — [ChatGPT and Claude in the browser](./browser-apps.mdx) |
 | Markdown docs | A readable explanation and command reference | You want the agent to look up how something works |
 
 For an agent with a terminal, start with [a skill](./agents.md). MCP is optional and follows the

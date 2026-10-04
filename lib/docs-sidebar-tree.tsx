@@ -33,6 +33,7 @@ const icons = {
   "search-architecture": Network,
   "search-playground": FlaskConical,
   "bot-api": Webhook,
+  "browser-apps": Globe,
   usage: MessageSquare,
   sessions: Users,
   archive: Archive,

@@ -159,6 +159,66 @@ const terms = {
       page: "tg/sessions",
     },
   },
+  tunnel: {
+    en: {
+      title: "Tunnel",
+      description:
+        "A service that gives a program on your computer a public https address, so apps on the internet can reach it while your computer stays behind your home router. Nothing else on your computer becomes reachable. We use Tailscale Funnel; it closes when you stop it.",
+      page: "browser-apps",
+    },
+    ru: {
+      title: "Туннель",
+      description:
+        "Сервис, который даёт программе на вашем компьютере публичный адрес https, чтобы приложения из интернета могли до неё достучаться, хотя компьютер остаётся за домашним роутером. Больше ничего на компьютере доступным не становится. Мы используем Tailscale Funnel; он закрывается, когда вы его останавливаете.",
+      page: "browser-apps",
+    },
+    es: {
+      title: "Túnel",
+      description:
+        "Un servicio que da a un programa de tu ordenador una dirección https pública, para que las apps de internet lleguen a él aunque tu ordenador siga detrás del router. Nada más de tu ordenador queda accesible. Usamos Tailscale Funnel; se cierra cuando lo detienes.",
+      page: "browser-apps",
+    },
+  },
+  tailscale: {
+    en: {
+      title: "Tailscale",
+      description:
+        "A free service that connects your devices into a private network. Its Funnel feature publishes one port of your computer at an address like https://laptop.tail1234.ts.net, with a certificate, so no domain or router setup is needed.",
+      page: "browser-apps",
+    },
+    ru: {
+      title: "Tailscale",
+      description:
+        "Бесплатный сервис, который объединяет ваши устройства в частную сеть. Его функция Funnel открывает один порт компьютера по адресу вида https://laptop.tail1234.ts.net, с сертификатом, поэтому ни домен, ни настройка роутера не нужны.",
+      page: "browser-apps",
+    },
+    es: {
+      title: "Tailscale",
+      description:
+        "Un servicio gratuito que une tus dispositivos en una red privada. Su función Funnel publica un puerto de tu ordenador en una dirección como https://laptop.tail1234.ts.net, con certificado, así que no hace falta dominio ni configurar el router.",
+      page: "browser-apps",
+    },
+  },
+  connector: {
+    en: {
+      title: "Connector",
+      description:
+        "What Claude and ChatGPT call a tool you add from outside: you give the app an address, sign in once, and the assistant can then call that tool in your chats. ChatGPT calls it an app in developer mode.",
+      page: "browser-apps",
+    },
+    ru: {
+      title: "Коннектор",
+      description:
+        "Так Claude и ChatGPT называют инструмент, который вы добавляете извне: даёте приложению адрес, один раз входите, и ассистент может пользоваться этим инструментом в ваших чатах. В ChatGPT это приложение в режиме разработчика.",
+      page: "browser-apps",
+    },
+    es: {
+      title: "Conector",
+      description:
+        "Así llaman Claude y ChatGPT a una herramienta que añades desde fuera: le das a la app una dirección, inicias sesión una vez y el asistente puede usarla en tus chats. En ChatGPT es una app del modo desarrollador.",
+      page: "browser-apps",
+    },
+  },
 }
 
 export type DocTermId = keyof typeof terms
