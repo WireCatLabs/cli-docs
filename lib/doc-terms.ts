@@ -39,23 +39,63 @@ const terms = {
       page: "agents",
     },
   },
+  nodejs: {
+    en: {
+      title: "Node.js",
+      description:
+        "The program that runs the Telegram and MAX tools on your computer. The numbers beside its name are the supported versions. Your agent can check what is installed and install a suitable version.",
+      page: "installation#nodejs",
+    },
+    ru: {
+      title: "Node.js",
+      description:
+        "Программа, которая нужна для запуска инструментов Telegram и MAX на вашем компьютере. Числа рядом с названием — подходящие версии. Агент может проверить, что уже установлено, и поставить нужную версию.",
+      page: "installation#nodejs",
+    },
+    es: {
+      title: "Node.js",
+      description:
+        "El programa que ejecuta las herramientas de Telegram y MAX en tu ordenador. Los números junto al nombre indican las versiones compatibles. Tu agente puede comprobar qué está instalado e instalar una versión adecuada.",
+      page: "installation#nodejs",
+    },
+  },
+  npm: {
+    en: {
+      title: "npm",
+      description:
+        "A package installer that comes with Node.js. Your agent uses it to download and install the tool for your messenger, and to update it later.",
+      page: "installation#nodejs",
+    },
+    ru: {
+      title: "npm",
+      description:
+        "Установщик программ, который входит в Node.js. С его помощью агент скачает и установит инструмент для выбранного мессенджера, а позже сможет обновить его.",
+      page: "installation#nodejs",
+    },
+    es: {
+      title: "npm",
+      description:
+        "Un instalador de paquetes que viene con Node.js. El agente lo usa para descargar e instalar la herramienta de tu mensajero y actualizarla más adelante.",
+      page: "installation#nodejs",
+    },
+  },
   "telegram-app": {
     en: {
-      title: "Telegram application credentials",
+      title: "Telegram application",
       description:
-        "Telegram gives your program an api_id and api_hash at my.telegram.org. This is a registration for the cli, not another app to install. You then authorize access to your account separately, using a QR code or login code.",
+        "An application is a program that works with Telegram, such as the app on your phone or the tool your agent uses. Telegram requires this program to be registered before it can request your messages and contacts. Setup obtains that registration for you; you approve account access when you log in.",
       page: "tg/sessions",
     },
     ru: {
-      title: "Данные приложения Telegram",
+      title: "Приложение Telegram",
       description:
-        "Telegram выдаёт программе api_id и api_hash на my.telegram.org. Это регистрация cli, а не ещё одно приложение для установки. Доступ к вашему аккаунту вы затем подтверждаете отдельно — QR-кодом или кодом входа.",
+        "Приложение — это программа для работы с Telegram: например, клиент на телефоне или инструмент вашего агента. Telegram просит зарегистрировать программу, которая будет запрашивать ваши сообщения и контакты. При настройке мы получим данные этой регистрации; доступ к аккаунту вы подтверждаете при входе.",
       page: "tg/sessions",
     },
     es: {
-      title: "Credenciales de aplicación de Telegram",
+      title: "Aplicación de Telegram",
       description:
-        "Telegram da a tu programa un api_id y un api_hash en my.telegram.org. Es el registro del cli, no otra aplicación que debas instalar. Después autorizas el acceso a tu cuenta por separado, con un QR o un código de acceso.",
+        "Una aplicación es un programa que trabaja con Telegram, como la app del teléfono o la herramienta de tu agente. Telegram pide registrar el programa que va a solicitar tus mensajes y contactos. La configuración obtiene ese registro; tú autorizas el acceso a la cuenta al iniciar sesión.",
       page: "tg/sessions",
     },
   },

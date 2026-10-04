@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { docTerm } from "../lib/doc-terms"
 import { expandDocTerms } from "../lib/doc-terms-markdown"
+import { wordsFor } from "../lib/words"
 
 describe("documentation explanations for Markdown readers", () => {
   it.each(["en", "ru", "es"])("keeps %s explanations while preserving code examples", (lang) => {
@@ -10,6 +11,12 @@ describe("documentation explanations for Markdown readers", () => {
     expect(result).toContain(`Ask Agent (${docTerm("local-agent", lang).description}).`)
     expect(result).toContain(`Use ${docTerm("skill", lang).title} (${docTerm("skill", lang).description}).`)
     expect(result).toContain(`\`\`\`mdx\n${hint}\n\`\`\``)
+  })
+  it.each(["en", "ru", "es"])("exports the actual Node setup prompt in %s without changing code examples", (lang) => {
+    const component = `<NodeSetupPrompt lang="${lang}" />`
+    const text = expandDocTerms(`${component}\n\n\`\`\`mdx\n${component}\n\`\`\``, lang)
+    expect(text).toContain(`\`\`\`text\n${wordsFor(lang).onboarding.nodePrompt}\n\`\`\``)
+    expect(text).toContain(`\`\`\`mdx\n${component}\n\`\`\``)
   })
   it("fails an unknown term so broken hints do not reach published agent docs", () => {
     expect(() => expandDocTerms('<DocTerm term="typo" />', "en")).toThrow("Unknown documentation term")

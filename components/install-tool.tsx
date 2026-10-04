@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { RuntimeRequirements } from "@/components/runtime-requirements"
 import { CopyText } from "@/components/text-snippet"
 import type { Tool } from "@/lib/shared"
 import { wordsFor } from "@/lib/words"
@@ -31,20 +32,22 @@ export function InstallTool({ tool, lang }: { tool: Tool; lang: string }) {
       <div className="space-y-4 border-t p-5">
         <p className="text-sm text-fd-muted-foreground">{ui.paste}</p>
         <CopyText kind="prompt" lang={lang} text={ui.prompt(tool.name, tool.package)} />
-        <Link href={`/${lang}/docs/agents`} className="inline-block text-sm underline">
+        <Link href={`/${lang}/docs/agents`} className="inline-block text-sm">
           {words.navigation.agents} →
         </Link>
         <details className="rounded-lg border p-3">
           <summary className="cursor-pointer text-sm font-medium">{ui.terminal}</summary>
           <div className="mt-4 space-y-4">
-            <p className="text-sm text-fd-muted-foreground">{ui.requirements}</p>
-            <a href="https://nodejs.org/en/download" className="text-sm underline">
-              Node.js ↗
-            </a>
+            <p className="text-sm text-fd-muted-foreground">
+              <RuntimeRequirements lang={lang} />
+            </p>
+            <Link href={`/${lang}/docs/installation#nodejs`} className="inline-block text-sm">
+              {ui.nodeHelp} →
+            </Link>
             <CopyText lang={lang} text={`npm install -g ${tool.package}`} />
             <p className="text-sm font-medium">{ui.login}</p>
             <CopyText lang={lang} text={`${tool.name} setup`} />
-            <Link href={`/${lang}/docs/${tool.name}/sessions`} className="inline-block text-sm underline">
+            <Link href={`/${lang}/docs/${tool.name}/sessions`} className="inline-block text-sm">
               {words.docs} →
             </Link>
           </div>

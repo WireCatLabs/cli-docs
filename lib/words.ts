@@ -27,7 +27,8 @@ export type Words = {
     copied: string
     copyFailed: string
     browser: string
-    requirements: string
+    nodeHelp: string
+    nodePrompt: string
     login: string
     timing: string
     prompt: (tool: string, pkg: string) => string
@@ -71,14 +72,17 @@ export const words: Record<string, Words> = {
       copied: "Copied",
       copyFailed: "Copy failed. Select and copy the text below.",
       browser: "The browser gives you the instructions; your agent or terminal runs the installation on your computer.",
-      requirements: "Node.js 22.16+ (22.x) or 24+ with npm. After installing Node.js, open a new terminal.",
+      nodeHelp: "Need Node.js? Ask your agent to prepare your computer.",
+      nodePrompt: `Check whether Node.js and npm are installed.
+If needed, install a compatible stable version of Node.js with npm for my operating system: 22.16+ (22.x) or 24+.
+Verify node --version and npm --version, then continue setting up the messenger.`,
       login: "Log in",
       timing: "Allow about 5 minutes for setup. Downloading chat history is a separate step and may take longer.",
       prompt: (tool, pkg) =>
         `Install ${tool} with npm install -g ${pkg}.
 Read ${tool} setup --help, explain the setup steps and allow about five minutes, then help me run ${tool} setup.
 Run ${tool} doctor and suggest next steps.
-Before installation, check Node.js 22.16+ (22.x) or 24+ and npm.
+Before installation, check Node.js 22.16+ (22.x) or 24+ and npm; help me install them if needed.
 At the end, offer to install the ${tool} skill for my agent.`,
     },
   },
@@ -112,7 +116,10 @@ At the end, offer to install the ${tool} skill for my agent.`,
       copied: "Скопировано",
       copyFailed: "Не удалось скопировать. Выделите и скопируйте текст ниже.",
       browser: "Браузер показывает инструкцию; установку на вашем компьютере выполняет агент или терминал.",
-      requirements: "Node.js 22.16+ (ветка 22.x) или 24+ с npm. После установки Node.js откройте новый терминал.",
+      nodeHelp: "Если Node.js ещё нет, попросите агента подготовить компьютер.",
+      nodePrompt: `Проверь, установлены ли Node.js и npm.
+Если нужно, установи подходящую стабильную версию Node.js с npm для моей операционной системы: 22.16+ (ветка 22.x) или 24+.
+Проверь node --version и npm --version, затем продолжи настройку мессенджера.`,
       login: "Войти в аккаунт",
       timing:
         "На настройку заложите около 5 минут. Скачивание истории чатов — отдельный шаг, который может занять больше времени.",
@@ -120,7 +127,7 @@ At the end, offer to install the ${tool} skill for my agent.`,
         `Установи ${tool} через npm install -g ${pkg}.
 Прочитай ${tool} setup --help, предупреди о шагах настройки и что понадобится около пяти минут, затем помоги выполнить ${tool} setup.
 Выполни ${tool} doctor и предложи следующие шаги.
-Перед установкой проверь Node.js 22.16+ (ветка 22.x) или 24+ и npm.
+Перед установкой проверь Node.js 22.16+ (ветка 22.x) или 24+ и npm; если нужно, помоги их установить.
 В конце предложи установить ${tool} skill для моего агента.`,
     },
   },
@@ -154,7 +161,10 @@ At the end, offer to install the ${tool} skill for my agent.`,
       copied: "Copiado",
       copyFailed: "No se pudo copiar. Selecciona y copia el texto de abajo.",
       browser: "El navegador muestra las instrucciones; tu agente o terminal ejecuta la instalación en tu ordenador.",
-      requirements: "Node.js 22.16+ (rama 22.x) o 24+ con npm. Tras instalar Node.js, abre una terminal nueva.",
+      nodeHelp: "¿Falta Node.js? Pide al agente que prepare tu ordenador.",
+      nodePrompt: `Comprueba si Node.js y npm están instalados.
+Si hace falta, instala una versión estable compatible de Node.js con npm para mi sistema operativo: 22.16+ (rama 22.x) o 24+.
+Verifica node --version y npm --version y continúa con la configuración del mensajero.`,
       login: "Iniciar sesión",
       timing:
         "Reserva unos 5 minutos para la configuración. Descargar el historial es un paso separado y puede tardar más.",
@@ -162,7 +172,7 @@ At the end, offer to install the ${tool} skill for my agent.`,
         `Instala ${tool} con npm install -g ${pkg}.
 Lee ${tool} setup --help, explica los pasos y que harán falta unos cinco minutos, y ayúdame a ejecutar ${tool} setup.
 Ejecuta ${tool} doctor y propone los siguientes pasos.
-Antes de instalar, comprueba Node.js 22.16+ (rama 22.x) o 24+ y npm.
+Antes de instalar, comprueba Node.js 22.16+ (rama 22.x) o 24+ y npm; ayúdame a instalarlos si hace falta.
 Al terminar, ofrece instalar el skill de ${tool} para mi agente.`,
     },
   },
