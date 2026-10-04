@@ -12,6 +12,7 @@ export type Words = {
     agents: string
     firstTasks: string
     features: string
+    overview: string
     prompting: string
     mcp: string
     messenger: string
@@ -59,6 +60,7 @@ export const words: Record<string, Words> = {
       agents: "Connect your agent",
       firstTasks: "First tasks",
       features: "Features",
+      overview: "Overview",
       prompting: "Writing requests",
       mcp: "MCP and documentation",
       messenger: "Choose a messenger",
@@ -113,6 +115,7 @@ Verify ${tool} --version, run ${tool} doctor, check the logged-in account and sh
       agents: "Подключение агента",
       firstTasks: "Первые задачи",
       features: "Возможности",
+      overview: "Обзор",
       prompting: "Как формулировать запросы",
       mcp: "MCP и документация",
       messenger: "Выбрать мессенджер",
@@ -168,6 +171,7 @@ Verify ${tool} --version, run ${tool} doctor, check the logged-in account and sh
       agents: "Conectar tu agente",
       firstTasks: "Primeras tareas",
       features: "Funciones",
+      overview: "Resumen",
       prompting: "Cómo formular peticiones",
       mcp: "MCP y documentación",
       messenger: "Elegir mensajero",
