@@ -193,8 +193,8 @@ for (const lang of ["en", "ru", "es"]) {
     html = html.replace(/(<nav class="site"[\s\S]*?)(<\/nav>)/, `$1<a href="/${lang}/about">${aboutLabel}</a>$2`)
   }
   html = html.replace(
-    '<li><a href="https://github.com/leemour/tg-cli/issues">',
-    `<li><a href="/${lang}/about">${aboutLabel}</a></li><li><a href="https://github.com/leemour/tg-cli/issues">`,
+    '<li><a href="https://t.me/wirecatdev">',
+    `<li><a href="/${lang}/about">${aboutLabel}</a></li><li><a href="https://t.me/wirecatdev">`,
   )
   const w = copy[lang]
   html = html.replace(/<section class="band" id="connect">[\s\S]*?<\/section>/, "")

@@ -34,6 +34,10 @@ export const fingerprint = (text: string) =>
 export const contentLanguage = (text: string, lang: string) =>
   text.replace(/^---\r?\n/, `---\ncontentLanguage: ${JSON.stringify(lang)}\n`)
 
+/** A tool page names a site page by its full URL, in its own language; on the site it opens in the reader's. */
+export const siteLinks = (text: string, lang: string) =>
+  text.replace(/\]\(https:\/\/wirecat\.dev\/(?:en|ru|es)\/docs\//g, `](/${lang}/docs/`)
+
 type MarkdownNode = {
   type: string
   value?: string
@@ -164,39 +168,39 @@ export function localizeTool(root: string, tool: Tool) {
   for (const file of pages) {
     const slug = file.slice(0, -3)
     const original = readFileSync(join(source, file), "utf8")
-    writeFileSync(join(target, file), contentLanguage(corrected(original, slug, tool.lang), tool.lang))
+    writeFileSync(join(target, file), siteLinks(contentLanguage(corrected(original, slug, tool.lang), tool.lang), "en"))
     for (const lang of languages) {
       const overview = join(root, "translations/overviews", `${tool.name}.${lang}.md`)
       const path = join(translations, `${slug}.${lang}.md`)
       const destination = join(target, lang === "en" ? file : `${slug}.${lang}.md`)
       if (slug === "index" && existsSync(overview)) {
-        writeFileSync(destination, contentLanguage(readFileSync(overview, "utf8"), lang))
+        writeFileSync(destination, siteLinks(contentLanguage(readFileSync(overview, "utf8"), lang), lang))
         continue
       }
       if (lang === tool.lang && !existsSync(path)) {
-        writeFileSync(destination, contentLanguage(corrected(original, slug, lang), lang))
+        writeFileSync(destination, siteLinks(contentLanguage(corrected(original, slug, lang), lang), lang))
         continue
       }
       if (!existsSync(path)) {
         problems.push(`${tool.name}/${slug}.${lang}: missing translation`)
-        if (lang !== "en") writeFileSync(destination, contentLanguage(original, tool.lang))
+        if (lang !== "en") writeFileSync(destination, siteLinks(contentLanguage(original, tool.lang), lang))
         continue
       }
       if (hashes[`${tool.name}/${slug}.${lang}`] !== fingerprint(original)) {
         problems.push(`${tool.name}/${slug}.${lang}: source changed; translation needs review`)
-        if (lang !== "en") writeFileSync(destination, contentLanguage(original, tool.lang))
+        if (lang !== "en") writeFileSync(destination, siteLinks(contentLanguage(original, tool.lang), lang))
         continue
       }
       const translated = readFileSync(path, "utf8")
       const errors = translationProblems(original, translated)
       if (errors.length) {
         problems.push(`${tool.name}/${slug}.${lang}: ${errors.join(", ")}`)
-        if (lang !== "en") writeFileSync(destination, contentLanguage(original, tool.lang))
+        if (lang !== "en") writeFileSync(destination, siteLinks(contentLanguage(original, tool.lang), lang))
         continue
       }
       writeFileSync(
         destination,
-        contentLanguage(withOriginalAnchors(original, corrected(translated, slug, lang)), lang),
+        siteLinks(contentLanguage(withOriginalAnchors(original, corrected(translated, slug, lang)), lang), lang),
       )
     }
   }
