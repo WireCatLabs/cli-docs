@@ -16,7 +16,14 @@ import { DocsTocPopover } from "@/components/docs-toc-popover"
 import { getMDXComponents } from "@/components/mdx"
 import { StructuredData } from "@/components/structured-data"
 import { installationReferenceTitle, ToolInstallationIntro } from "@/components/tool-installation-intro"
-import { documentationDescription, pageMetadata, pageStructuredData, seoLocales, seoWords } from "@/lib/seo"
+import {
+  documentationDescription,
+  documentationTitle,
+  pageMetadata,
+  pageStructuredData,
+  seoLocales,
+  seoWords,
+} from "@/lib/seo"
 import { appName, getPageMarkdownUrl, toolOf } from "@/lib/shared"
 import { source } from "@/lib/source"
 import { wordsFor } from "@/lib/words"
@@ -125,8 +132,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const { slug, lang } = await props.params
   const page = source.getPage(slug, lang)
   if (!page) notFound()
-  const tool = toolOf(page.slugs)
-  const title = tool && page.slugs.length > 1 ? `${page.data.title} — ${tool.name}` : page.data.title
+  const title = documentationTitle(lang, page.slugs, page.data.title)
   return pageMetadata({
     lang,
     suffix: `/docs${page.slugs.length ? `/${page.slugs.join("/")}` : ""}`,

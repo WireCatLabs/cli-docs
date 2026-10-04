@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import siteConfig from "../site.config.json"
 import seoCopy from "./seo-copy.json"
 import { appName, siteUrl, tools } from "./shared"
 
@@ -57,6 +58,13 @@ export function pageMetadata({
   }
 }
 
+export function documentationTitle(lang: string, slugs: string[], authored: string): string {
+  const tool = tools.find((candidate) => candidate.name === slugs[0])
+  if (!tool) return authored
+  if (slugs.length === 1) return seoWords(lang).toolTitles[tool.name as "tg" | "max"]
+  return `${authored} — ${tool.name}`
+}
+
 export function documentationDescription(lang: string, slugs: string[], authored?: string): string {
   if (authored?.trim()) return authored
   const [tool, slug] = slugs
@@ -73,6 +81,7 @@ export function pageStructuredData({
   description,
   breadcrumbs = [],
   tool,
+  aboutProject = false,
 }: {
   lang: string
   pathname: string
@@ -80,18 +89,36 @@ export function pageStructuredData({
   description: string
   breadcrumbs?: { name: string; pathname: string }[]
   tool?: (typeof tools)[number]
+  aboutProject?: boolean
 }) {
   const url = absoluteUrl(pathname)
+  const organizationId = `${siteUrl}/#organization`
   const graph: Record<string, unknown>[] = [
-    { "@type": "WebSite", "@id": `${siteUrl}/#website`, url: siteUrl, name: appName, inLanguage: seoLocales },
     {
-      "@type": tool ? "TechArticle" : "WebPage",
+      "@type": ["Organization", "Project"],
+      "@id": organizationId,
+      name: appName,
+      url: siteUrl,
+      logo: absoluteUrl("/android-chrome-512x512.png"),
+      email: siteConfig.contacts.email,
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
+      name: appName,
+      inLanguage: seoLocales,
+      publisher: { "@id": organizationId },
+    },
+    {
+      "@type": tool ? "TechArticle" : aboutProject ? "AboutPage" : "WebPage",
       "@id": `${url}#page`,
       url,
       name: title,
       description,
       inLanguage: lang,
       isPartOf: { "@id": `${siteUrl}/#website` },
+      ...(aboutProject ? { mainEntity: { "@id": organizationId } } : {}),
     },
   ]
   if (breadcrumbs.length > 1)
