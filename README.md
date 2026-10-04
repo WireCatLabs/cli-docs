@@ -163,6 +163,11 @@ Use `<DocTerm term="local-agent" lang="ru" label="локального аген�
 an inline information button. The popover supports hover, click, keyboard and touch, with Escape
 and a close button. Definitions and localized guide destinations live in `lib/doc-terms.ts`.
 Markdown twins expand the same definitions into readable text; code examples remain intact.
+Use `<NodeSetupPrompt lang="ru" />` for the copied prerequisite-installation request; its
+localized text lives in `lib/words.ts` and is also expanded into Markdown twins. Node.js and npm
+explanations use the same term dictionary. The getting-started page introduces the outcome and
+account connection before explaining CLI, skill and MCP. Documentation links use color, hover
+and keyboard focus without underlines.
 Installation prompts are short and platform-neutral. Windows environment recovery stays in each
 cli's installation reference, rather than in the copied prompt.
 

@@ -1,0 +1,61 @@
+---
+title: "Getting started"
+description: "Connect your AI assistant to Telegram or MAX conversations: find agreements, review unread messages and prepare replies."
+---
+
+Give <DocTerm term="agent" lang="en" label="your AI assistant" /> access to your **Telegram or MAX conversations**. It can find messages and agreements, summarise unread chats and help with replies.
+
+We will install a small program for your messenger on your computer, connect your account and show your agent how to use it. Then you can give it tasks in everyday language.
+
+## Start here
+
+Open an agent that can run programs on your computer, such as Codex, Claude Code, Cursor, Gemini CLI or Hermes. Keep your phone nearby, signed in to the messenger account you want to connect.
+
+1. **Install the program for your messenger.** Open [Installation](./installation.mdx), choose Telegram or MAX and copy the ready-made prompt to your agent. It will check your computer and help with installation.
+2. **Approve login to your account.** Your agent walks you through the steps; you enter the code or confirm on your phone. Telegram also requires a program registration on the first connection, which your agent can help with. Details: [Telegram login](./tg/sessions.md) and [MAX login](./max/sessions.md).
+3. **Give your agent the instructions for working with conversations.** Setup offers to connect them to your agent. To check the connection or choose a different agent, see [Connect your agent](./agents.md).
+
+Allow about five minutes for setup. You do not need to download all history immediately: after login, choose the chats and how much history you need.
+
+## Your first request
+
+After connecting, copy this to your agent:
+
+```text prompt
+Review unread messages by chat. Highlight questions I should answer and briefly summarise what matters.
+```
+
+Then try a specific task:
+
+- Find the deadline you agreed on with a colleague.
+- Gather conversation context before a call.
+- Draft a reply to a customer.
+
+[First tasks](./first-tasks.md) has ready-made examples. [Writing requests](./prompting.md) helps you specify chats, dates and the result you want.
+
+## Choose your messenger
+
+| Messenger | What you can work with | Guide |
+|---|---|---|
+| Telegram | Personal-account conversations, unread messages and history search | [Start with Telegram](./tg/index.md) |
+| MAX | Personal-account conversations, bots and group management | [Start with MAX](./max/index.md) |
+
+You can connect both messengers. For each one, install its program and log in to the account you want to use.
+
+## What we install
+
+The Telegram program is called `tg`; the MAX program is `max`. It runs on your computer and retrieves the messages your agent requests for your task.
+
+You will encounter three terms later in the documentation:
+
+- **<DocTerm term="cli" lang="en" label="CLI" />** is a program you run with text commands. Your agent can run them for you; you do not need to learn them to get started.
+- **<DocTerm term="skill" lang="en" label="Skill" />** is an instruction file that teaches your agent how to use the program and its commands.
+- **<DocTerm term="mcp" lang="en" label="MCP" />** connects the program to an agent that does not run commands directly, such as Claude Desktop. Use the [MCP connection guide](./mcp.md) for that setup.
+
+Reading messages does not mark them as read. Sending a reply or changing a message is a separate action you ask your agent to perform.
+
+## Give the docs to your agent
+
+The installed skill is usually enough to get started. For instructions on a particular task, open its page and use **Copy Markdown** to give the agent the text.
+
+The complete page index is at [wirecat.dev/llms.txt](/llms.txt). [MCP and documentation](./mcp.md#documentation-for-your-agent) explains all the options.

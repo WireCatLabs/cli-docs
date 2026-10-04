@@ -14,10 +14,16 @@
   --docs-outline: #34393f;
   --docs-prompt-label: #a6adb8;
 }
+.wirecat-docs a,
+.wirecat-docs .prose a,
+.wirecat-docs .fd-prose a,
+.wirecat-docs a:hover,
+.wirecat-docs a:focus-visible {
+  text-decoration-line: none;
+}
 .wirecat-docs .prose a,
 .wirecat-docs .fd-prose a {
   color: var(--docs-link);
-  text-decoration-line: underline;
 }
 .wirecat-docs .prose a:hover,
 .wirecat-docs .fd-prose a:hover {

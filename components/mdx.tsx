@@ -7,6 +7,7 @@ import { ArchitectureDiagram } from "@/components/architecture-diagram"
 import { DocTerm } from "@/components/doc-term"
 import { DocsCodeBlock } from "@/components/docs-code-block"
 import { InstallationGuide } from "@/components/installation-guide"
+import { NodeSetupPrompt } from "@/components/node-setup-prompt"
 import { PlatformPaths } from "@/components/platform-paths"
 import { SearchPlayground } from "@/components/search-playground/search-playground"
 import { AgentPrompt } from "@/components/text-snippet"
@@ -32,6 +33,7 @@ export function getMDXComponents(components?: MDXComponents) {
     ArchitectureDiagram,
     InstallationGuide,
     DocTerm,
+    NodeSetupPrompt,
     SearchPlayground,
     "platform-paths": PlatformPaths,
     "agent-prompt": AgentPrompt,

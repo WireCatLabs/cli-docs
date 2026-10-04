@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test"
+import { wordsFor } from "../lib/words"
 
 const languages = ["en", "ru", "es"] as const
 const labels = {
@@ -110,5 +111,75 @@ for (const lang of languages) {
     const sessionsText = await sessions.text()
     expect(sessionsText).toContain("/telegram-app-login.png")
     expect(sessionsText).not.toContain("__img")
+  })
+  test(`${lang}: getting started leads with the outcome; links stay unadorned and Node setup is copyable`, async ({
+    page,
+    context,
+  }) => {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"])
+    await page.goto(`/${lang}/docs`)
+    const intro = await page.locator(".prose > p,.fd-prose > p").first().innerText()
+    expect(intro).not.toMatch(/WireCat|CLI|Node\.js|npm/u)
+    expect(intro).toContain("Telegram")
+    expect(intro).toContain("MAX")
+    const definitions = [
+      {
+        label: { en: "your AI assistant", ru: "своему ИИ-помощнику", es: "a tu asistente de IA" }[lang],
+        page: "agents",
+      },
+      { label: "CLI", page: "installation" },
+      { label: { en: "Skill", ru: "Skill, или навык", es: "Skill" }[lang], page: "agents" },
+      { label: "MCP", page: "mcp" },
+    ]
+    await expect(page.locator(".docs-term-trigger")).toHaveCount(4)
+    for (const definition of definitions) {
+      const prefix = { en: "More about", ru: "Подробнее", es: "Más sobre" }[lang]
+      const trigger = page.getByRole("button", { name: `${prefix}: ${definition.label}`, exact: true })
+      await expect(trigger).toBeEnabled()
+      await trigger.focus()
+      await page.keyboard.press("Enter")
+      const popup = page.locator(".docs-term-popup")
+      await expect(popup).toBeVisible()
+      await expect(popup.locator("a")).toHaveAttribute("href", `/${lang}/docs/${definition.page}`)
+      expect(await popup.locator("a").evaluate((el) => getComputedStyle(el).textDecorationLine)).toBe("none")
+      await page.keyboard.press("Escape")
+      await expect(popup).not.toBeVisible()
+      await expect(trigger).toBeFocused()
+    }
+    const homeMarkdown = await page.request.get(`/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}content.md`)
+    expect(homeMarkdown.ok()).toBe(true)
+    expect(await homeMarkdown.text()).not.toContain("<DocTerm")
+    const links = page.locator(".wirecat-docs a")
+    const styles = await links.evaluateAll((elements) =>
+      elements.filter((el) => el.getClientRects().length).map((el) => getComputedStyle(el).textDecorationLine),
+    )
+    expect(styles.length).toBeGreaterThan(10)
+    for (const style of styles) expect(style).toBe("none")
+    const guide = page
+      .locator(`.prose a[href="/${lang}/docs/installation"],.fd-prose a[href="/${lang}/docs/installation"]`)
+      .first()
+    await guide.hover()
+    expect(await guide.evaluate((el) => getComputedStyle(el).textDecorationLine)).toBe("none")
+    await guide.focus()
+    expect(await guide.evaluate((el) => getComputedStyle(el).textDecorationLine)).toBe("none")
+    await page.goto(`/${lang}/docs/installation#nodejs`)
+    const node = page.getByRole("button", { name: /: Node\.js$/u }).first()
+    await expect(node).toBeEnabled()
+    await node.click()
+    await expect(page.locator(".docs-term-popup")).toBeVisible()
+    await expect(page.locator(".docs-term-popup a")).toHaveAttribute("href", `/${lang}/docs/installation#nodejs`)
+    await page.keyboard.press("Escape")
+    const prompt = page.locator(".docs-prompt").filter({ hasText: "node --version" })
+    await expect(prompt.locator(".docs-copy")).toBeEnabled()
+    expect(await prompt.locator("code").innerText()).toBe(wordsFor(lang).onboarding.nodePrompt)
+    await prompt.locator(".docs-copy").click()
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(wordsFor(lang).onboarding.nodePrompt)
+    const response = await page.request.get(`/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}installation/content.md`)
+    expect(response.ok()).toBe(true)
+    const markdown = await response.text()
+    expect(markdown).toContain(wordsFor(lang).onboarding.nodePrompt)
+    expect(markdown).not.toContain("<NodeSetupPrompt")
+    expect(markdown).not.toContain("https://nodejs.org/en/download")
+    for (const source of [markdown, wordsFor(lang).onboarding.nodePrompt]) expect(source).toContain("npm --version")
   })
 }
