@@ -40,7 +40,7 @@ description: "Установите CLI для Telegram или MAX, войдит�
 
 **Или установите сами** в терминале:
 
-<Tabs groupId="os" persist items={["macOS / Linux", "Windows"]}>
+<InstallationOsTabs>
 <Tab value="macOS / Linux">
 
 Нужен <DocTerm term="nodejs" lang="ru" label="Node.js" /> **22.16+ (ветка 22.x) или 24+** с <DocTerm term="npm" lang="ru" label="npm" />. Проверьте командой `node --version`.
@@ -89,7 +89,7 @@ npm.cmd install -g --allow-scripts=@leemour/max-cli --foreground-scripts @leemou
 [Что меняет установщик](#what-the-windows-installer-changes).
 
 </Tab>
-</Tabs>
+</InstallationOsTabs>
 
 <details id="nodejs" className="docs-disclosure">
 <summary>Node.js ещё нет или нужно обновление</summary>
@@ -123,13 +123,13 @@ tg setup
    (в чат *Telegram*), а не по SMS. Введите его в терминале. С этим кодом CLI сам регистрируется
    в Telegram; это нужно только при первом входе.
 
-   <Screenshot alt="приложение Telegram с сообщением, в котором код входа на my.telegram.org" width={360} />
+   <Screenshot src="/screenshots/telegram/code-message.jpg" alt="приложение Telegram с сообщением, в котором код входа на my.telegram.org" width={360} />
 
 3. **QR-код** — терминал показывает QR-код. На телефоне откройте
    **Настройки → Устройства → Подключить устройство** и отсканируйте код этим сканером (не приложением камеры).
 
    <Screenshot alt="терминал с QR-кодом для входа в Telegram" />
-   <Screenshot alt="Telegram на телефоне: Настройки → Устройства → Подключить устройство" width={360} />
+   <Screenshot src="/screenshots/telegram/add-device.jpg" alt="Telegram на телефоне: Настройки → Устройства, кнопка подключения устройства" width={360} />
 
 4. **Облачный пароль** — только если вы задали его в Telegram. Символы при вводе не видны.
 5. **Какой агент вы используете** — настройка научит его командам. Затем она покажет
@@ -174,8 +174,6 @@ tg setup --app browser
 
 3. Если приложения ещё нет, заполните форму: любое название и короткое имя, платформа **Desktop**.
    Пропустите этот шаг, если на странице уже есть приложение.
-
-   <Screenshot alt="заполненная форма создания приложения на my.telegram.org" />
 
 4. Скопируйте **App api_id** и **App api_hash** в терминал, когда он спросит. Hash при вводе не виден.
 

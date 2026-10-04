@@ -40,7 +40,7 @@ commands and walks you through the login in step 2.
 
 **Or install it yourself** in a terminal:
 
-<Tabs groupId="os" persist items={["macOS / Linux", "Windows"]}>
+<InstallationOsTabs>
 <Tab value="macOS / Linux">
 
 You need <DocTerm term="nodejs" lang="en" label="Node.js" /> **22.16+ (22.x) or 24+** with <DocTerm term="npm" lang="en" label="npm" />. Check with `node --version`.
@@ -89,7 +89,7 @@ This installs the CLI with npm and makes the `tg` or `max` command work in every
 [What the installer changes](#what-the-windows-installer-changes).
 
 </Tab>
-</Tabs>
+</InstallationOsTabs>
 
 <details id="nodejs" className="docs-disclosure">
 <summary>Node.js is missing or needs an update</summary>
@@ -124,13 +124,13 @@ The terminal asks you, in this order:
    app (from the chat called *Telegram*), not by SMS. Type it in the terminal. The CLI uses it to
    register itself with Telegram for you; this happens only on the first login.
 
-   <Screenshot alt="the Telegram app showing the message with the my.telegram.org login code" width={360} />
+   <Screenshot src="/screenshots/telegram/code-message.jpg" alt="the Telegram app showing the message with the my.telegram.org login code" width={360} />
 
 3. **QR code** — the terminal shows a QR code. On your phone, open
-   **Settings → Devices → Link Desktop Device** and scan it with that scanner (not the camera app).
+   **Settings → Devices → Add Device** (in older apps: *Link Desktop Device*) and scan it with that scanner (not the camera app).
 
    <Screenshot alt="the terminal showing the Telegram login QR code" />
-   <Screenshot alt="Telegram on the phone: Settings → Devices → Link Desktop Device" width={360} />
+   <Screenshot src="/screenshots/telegram/add-device.jpg" alt="Telegram on the phone: Settings → Devices, with the Add Device button" width={360} />
 
 4. **Two-step verification password** — only if you set one in Telegram. The characters stay
    hidden while you type.
@@ -176,8 +176,6 @@ The command opens [my.telegram.org](https://my.telegram.org). Then:
 
 3. If you have no app yet, fill in the form: any title and short name, platform **Desktop**.
    Skip this if the page already shows an app.
-
-   <Screenshot alt="my.telegram.org form to create a new application, filled in" />
 
 4. Copy **App api_id** and **App api_hash** into the terminal when it asks. The hash stays hidden
    while you type.

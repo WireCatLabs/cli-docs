@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# A first-time login in throwaway folders, for documentation screenshots.
+# Usage: bin/login-screenshot tg|max
+set -euo pipefail
+
+tool="${1:-}"
+if [[ "$tool" != "tg" && "$tool" != "max" ]]; then
+  echo "usage: bin/login-screenshot tg|max" >&2
+  exit 2
+fi
+
+dir="$(mktemp -d)"
+trap 'rm -rf "$dir"' EXIT
+
+# Empty folders make the CLI behave like a first install: it cannot see your real login, archive or settings.
+unset TG_PROFILE TG_PROFILE_LOCK MAX_PROFILE MAX_PROFILE_LOCK MAX_TOKEN
+if [[ "$tool" == "tg" ]]; then
+  export TG_CONFIG_DIR="$dir/config" TG_STATE_DIR="$dir/state" TG_CACHE_DIR="$dir/cache"
+else
+  export MAX_CONFIG_DIR="$dir/config" MAX_STATE_DIR="$dir/state"
+  max config set serve false >/dev/null
+fi
+
+cat <<EOF
+Test login for screenshots, in $dir (deleted at the end).
+A QR code stops working within a minute, so a screenshot of it is safe to publish later.
+Scan it to finish the login, or press Ctrl-C after the screenshot.
+
+EOF
+
+"$tool" setup --agent none || true
+
+echo
+read -r -p "Screenshots done? Press Enter to log this test device out. " _
+"$tool" session end || true

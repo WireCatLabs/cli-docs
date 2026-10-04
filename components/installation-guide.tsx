@@ -53,3 +53,23 @@ export function AgentInstallPrompt({ tool }: { tool: "tg" | "max" }) {
     </div>
   )
 }
+
+export function InstallationOsTabs({ children }: { children: ReactNode }) {
+  // Windows visitors start on the Windows tab unless they already chose a system on this site.
+  useEffect(() => {
+    let chosen: string | null = null
+    try {
+      chosen = sessionStorage.getItem("os") ?? localStorage.getItem("os")
+    } catch {}
+    if (chosen || !navigator.userAgent.includes("Windows")) return
+    const tab = [...document.querySelectorAll<HTMLButtonElement>('.wirecat-docs [role="tab"]')].find(
+      (element) => element.textContent?.trim() === "Windows",
+    )
+    if (tab?.getAttribute("aria-selected") !== "true") tab?.click()
+  }, [])
+  return (
+    <Tabs groupId="os" persist items={["macOS / Linux", "Windows"]}>
+      {children}
+    </Tabs>
+  )
+}

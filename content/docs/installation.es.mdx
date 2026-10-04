@@ -40,7 +40,7 @@ comandos y te guía en el inicio de sesión del paso 2.
 
 **O instálalo tú mismo** en una terminal:
 
-<Tabs groupId="os" persist items={["macOS / Linux", "Windows"]}>
+<InstallationOsTabs>
 <Tab value="macOS / Linux">
 
 Necesitas <DocTerm term="nodejs" lang="es" label="Node.js" /> **22.16+ (22.x) o 24+** con <DocTerm term="npm" lang="es" label="npm" />. Compruébalo con `node --version`.
@@ -89,7 +89,7 @@ Esto instala el CLI con npm y hace que el comando `tg` o `max` funcione en cada 
 [Qué cambia el instalador](#what-the-windows-installer-changes).
 
 </Tab>
-</Tabs>
+</InstallationOsTabs>
 
 <details id="nodejs" className="docs-disclosure">
 <summary>Falta Node.js o necesita una actualización</summary>
@@ -124,14 +124,14 @@ La terminal te pide, en este orden:
    Telegram (en el chat llamado *Telegram*), no por SMS. Escríbelo en la terminal. El CLI lo usa
    para registrarse en Telegram por ti; esto solo ocurre en el primer inicio de sesión.
 
-   <Screenshot alt="la app de Telegram con el mensaje que contiene el código de acceso a my.telegram.org" width={360} />
+   <Screenshot src="/screenshots/telegram/code-message.jpg" alt="la app de Telegram con el mensaje que contiene el código de acceso a my.telegram.org" width={360} />
 
 3. **Código QR** — la terminal muestra un código QR. En el teléfono, abre
-   **Ajustes → Dispositivos → Vincular dispositivo de escritorio** y escanéalo con ese lector (no
+   **Ajustes → Dispositivos → Add Device** (en versiones antiguas, *Link Desktop Device*) y escanéalo con ese lector (no
    con la app de la cámara).
 
    <Screenshot alt="la terminal con el código QR de acceso a Telegram" />
-   <Screenshot alt="Telegram en el teléfono: Ajustes → Dispositivos → Vincular dispositivo de escritorio" width={360} />
+   <Screenshot src="/screenshots/telegram/add-device.jpg" alt="Telegram en el teléfono: Ajustes → Dispositivos, con el botón para añadir un dispositivo" width={360} />
 
 4. **Contraseña de verificación en dos pasos** — solo si la configuraste en Telegram. Los
    caracteres no se ven mientras escribes.
@@ -179,8 +179,6 @@ El comando abre [my.telegram.org](https://my.telegram.org). Después:
 
 3. Si aún no tienes una app, rellena el formulario: cualquier título y nombre corto, plataforma
    **Desktop**. Sáltate este paso si la página ya muestra una app.
-
-   <Screenshot alt="formulario de my.telegram.org para crear una aplicación nueva, ya rellenado" />
 
 4. Copia **App api_id** y **App api_hash** en la terminal cuando te los pida. El hash no se ve
    mientras escribes.

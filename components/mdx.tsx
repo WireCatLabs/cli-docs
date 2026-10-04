@@ -9,7 +9,12 @@ import type { ComponentProps, ComponentType } from "react"
 import { ArchitectureDiagram } from "@/components/architecture-diagram"
 import { DocTerm } from "@/components/doc-term"
 import { DocsCodeBlock } from "@/components/docs-code-block"
-import { AgentInstallPrompt, InstallationGuide, InstallationMessengerTabs } from "@/components/installation-guide"
+import {
+  AgentInstallPrompt,
+  InstallationGuide,
+  InstallationMessengerTabs,
+  InstallationOsTabs,
+} from "@/components/installation-guide"
 import { NodeSetupPrompt } from "@/components/node-setup-prompt"
 import { PlatformPaths } from "@/components/platform-paths"
 import { Screenshot } from "@/components/screenshot"
@@ -38,6 +43,7 @@ export function getMDXComponents(components?: MDXComponents) {
     InstallationGuide,
     AgentInstallPrompt,
     InstallationMessengerTabs,
+    InstallationOsTabs,
     Screenshot,
     Tabs,
     Tab,
