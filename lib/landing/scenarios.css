@@ -28,13 +28,13 @@
 .wirecat-landing .ask > p {
   margin: 0;
 }
+.wirecat-landing .prompt-ending {
+  white-space: nowrap;
+}
 .wirecat-landing .prompt-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 10px;
+  display: inline-flex;
+  vertical-align: middle;
+  margin-inline-start: 8px;
   font-size: 12px;
 }
 .wirecat-landing .prompt-actions button {

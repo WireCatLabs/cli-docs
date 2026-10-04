@@ -98,8 +98,12 @@ const labels = {
 }
 const view = (step, lang, messenger, session, index) => {
   const text = labels[lang]
-  if (step.ask)
-    return `<div class="ask step"><p>${escapeHtml(step.ask)}</p><div class="prompt-actions"><button type="button" data-prompt="${escapeAttribute(step.ask)}" aria-label="${text.copy}" title="${text.copy}"><svg class="prompt-copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4"/></svg><svg class="prompt-copied-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg><span class="prompt-feedback" data-prompt-label role="status" aria-live="polite">${text.copy}</span></button></div></div>`
+  if (step.ask) {
+    const ending = step.ask.match(/^(.*\s)(\S+)\s*$/su)
+    const lead = ending?.[1] ?? ""
+    const lastWord = ending?.[2] ?? step.ask
+    return `<div class="ask step"><p>${escapeHtml(lead)}<span class="prompt-ending">${escapeHtml(lastWord)}<span class="prompt-actions"><button type="button" data-prompt="${escapeAttribute(step.ask)}" aria-label="${text.copy}" title="${text.copy}"><svg class="prompt-copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4"/></svg><svg class="prompt-copied-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg><span class="prompt-feedback" data-prompt-label role="status" aria-live="polite">${text.copy}</span></button></span></span></p></div>`
+  }
   if (step.tool)
     return `<details class="tool step"><summary><span class="state">${tick}</span><code>${commandView(step.tool)}</code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><pre>${escapeHtml(
       step.out,
