@@ -30,6 +30,24 @@ export function SiteHeader({ lang }: { lang: string }) {
     const onScroll = () => root.classList.toggle("scrolled", scrollY > 8)
     window.addEventListener("scroll", onScroll, { passive: true, signal: controller.signal })
     onScroll()
+    document.addEventListener(
+      "keydown",
+      (event) => {
+        if (event.key === "Escape" && language?.open) {
+          language.open = false
+          language.querySelector<HTMLElement>("summary")?.focus()
+          event.preventDefault()
+        }
+      },
+      { signal: controller.signal },
+    )
+    document.addEventListener(
+      "click",
+      (event) => {
+        if (language && event.target instanceof Node && !language.contains(event.target)) language.open = false
+      },
+      { signal: controller.signal },
+    )
     const nav = root.querySelector<HTMLElement>("nav.site")
     const glide = nav?.querySelector<HTMLElement>(".glide")
     const move = (link: HTMLElement | null) => {

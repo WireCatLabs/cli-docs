@@ -1,8 +1,10 @@
 import { ArrowRight } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
+import { StructuredData } from "@/components/structured-data"
 import { aboutCopy } from "@/lib/about"
 import { i18n } from "@/lib/i18n"
+import { pageMetadata, pageStructuredData, seoWords } from "@/lib/seo"
 import siteConfig from "@/site.config.json"
 
 type Props = { params: Promise<{ lang: string }> }
@@ -11,7 +13,7 @@ const copyFor = (lang: string) => aboutCopy[lang as keyof typeof aboutCopy] ?? a
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params
   const words = copyFor(lang)
-  return { title: words.title, description: words.intro }
+  return pageMetadata({ lang, suffix: "/about", title: words.title, description: words.intro })
 }
 
 export default async function AboutPage({ params }: Props) {
@@ -21,6 +23,18 @@ export default async function AboutPage({ params }: Props) {
   const paragraphs = (section: typeof purpose) => section.paragraphs.map((text) => <p key={text}>{text}</p>)
   return (
     <div className="wirecat-about">
+      <StructuredData
+        data={pageStructuredData({
+          lang,
+          pathname: `/${lang}/about`,
+          title: words.title,
+          description: words.intro,
+          breadcrumbs: [
+            { name: seoWords(lang).homeLabel, pathname: `/${lang}` },
+            { name: words.title, pathname: `/${lang}/about` },
+          ],
+        })}
+      />
       <main className="wrap about-page">
         <header className="about-intro">
           <h1>{words.title}</h1>

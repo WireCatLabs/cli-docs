@@ -60,7 +60,10 @@ describe("documentation command references", () => {
     expect(tree.children[1]).toMatchObject({
       data: { hName: "details" },
       children: [
-        { data: { hName: "summary" }, children: [{ type: "heading" }] },
+        {
+          data: { hName: "summary" },
+          children: [{ type: "heading", data: { hProperties: { "data-static-heading": true } } }],
+        },
         { type: "code", value: "pnpm build" },
       ],
     })

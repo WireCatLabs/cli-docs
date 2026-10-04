@@ -232,12 +232,13 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
                     </pre>
                     <Autocomplete.Input
                       render={<textarea rows={1} />}
+                      role="textbox"
                       ref={input}
                       readOnly={!ready}
                       id={`${id}-input`}
                       className="sp-input"
                       placeholder={text.placeholder}
-                      aria-expanded={suggestionOpen && suggestions.length > 0}
+                      aria-expanded={undefined}
                       aria-controls={suggestionOpen && suggestions.length > 0 ? `${id}-suggestions` : undefined}
                       aria-invalid={!!result.error}
                       aria-describedby={`${id}-hint`}
@@ -523,6 +524,7 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
             <button
               type="button"
               className="sp-copy"
+              aria-label={copied ? text.copied : text.copy}
               disabled={!!result.error}
               onClick={async () => {
                 try {

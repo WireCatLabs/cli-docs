@@ -53,6 +53,7 @@ export function SiteFooter({ html, variant = "landing" }: { html: string; varian
     }
     const brand = root.querySelector<HTMLAnchorElement>(".foot-brand > a")
     if (brand) brand.href = `/${pathname.split("/")[1]}`
+    for (const code of root.querySelectorAll<HTMLElement>(".cmd code")) code.tabIndex = 0
     const button = root.querySelector<HTMLButtonElement>("[data-copy]")
     if (button) prepareInstallationButton(button)
     const label = button?.textContent ?? ""

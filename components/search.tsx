@@ -40,6 +40,7 @@ export default function DefaultSearchDialog(props: SharedProps) {
         <SearchDialogHeader>
           <SearchDialogIcon />
           <SearchDialogInput
+            aria-expanded={query.data !== "empty" && !!query.data?.length}
             placeholder={
               {
                 en: "Task, command or error — e.g. command not found",

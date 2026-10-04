@@ -17,7 +17,7 @@
 .wirecat-docs .prose a,
 .wirecat-docs .fd-prose a {
   color: var(--docs-link);
-  text-decoration-line: none;
+  text-decoration-line: underline;
 }
 .wirecat-docs .prose a:hover,
 .wirecat-docs .fd-prose a:hover {

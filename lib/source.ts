@@ -7,6 +7,7 @@ import { expandDocTerms } from "./doc-terms-markdown"
 import { i18n } from "./i18n"
 import { installationMarkdown } from "./installation-markdown"
 import { resolveDocumentationLink, rewriteMarkdownLinks } from "./markdown-links"
+import { rehypeCodeAccessibility } from "./rehype-code-accessibility"
 import { remarkAnchorAliases } from "./remark-anchor-aliases"
 import { remarkDocUsability } from "./remark-doc-usability"
 import { docsRoute, getPageMarkdownUrl, siteUrl, toolOf } from "./shared"
@@ -19,7 +20,12 @@ const docs = defineDocs({
     mdxOptions: applyMdxPreset({
       remarkPlugins: [remarkAnchorAliases, remarkDocUsability],
       remarkImageOptions: { useImport: false },
-      rehypeCodeOptions: { ...rehypeCodeDefaultOptions, fallbackLanguage: "text" },
+      rehypePlugins: [rehypeCodeAccessibility],
+      rehypeCodeOptions: {
+        ...rehypeCodeDefaultOptions,
+        themes: { light: "github-light-high-contrast", dark: "github-dark-high-contrast" },
+        fallbackLanguage: "text",
+      },
     }),
     postprocess: {
       includeProcessedMarkdown: true,

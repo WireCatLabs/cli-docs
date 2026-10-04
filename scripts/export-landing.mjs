@@ -221,7 +221,7 @@ for (const lang of ["en", "ru", "es"]) {
     )
     .join("")
   html = html.replace(
-    /(<main class="wrap hero">[\s\S]*?<div class="cta">)[\s\S]*?(<\/div>)/,
+    /(<section class="wrap hero"[^>]*>[\s\S]*?<div class="cta">)[\s\S]*?(<\/div>)/,
     `$1<details class="agent-connect"><summary class="btn">${w.heading}<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary><div class="connect-menu"><p>${w.hint}</p>${choices}</div></details>$2`,
   )
   html = html.replace(

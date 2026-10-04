@@ -1,3 +1,4 @@
+import { HomeProvider } from "@/components/home-provider"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import en from "@/lib/landing/en.json"
@@ -27,10 +28,12 @@ export default async function Layout({
   const { lang } = await params
   const content = { en, es, ru }[lang as "en" | "es" | "ru"] ?? en
   return (
-    <div className="wirecat-landing">
-      <SiteHeader lang={lang} />
-      {children}
-      <SiteFooter html={content.footerHtml} />
-    </div>
+    <HomeProvider>
+      <div className="wirecat-landing">
+        <SiteHeader lang={lang} />
+        {children}
+        <SiteFooter html={content.footerHtml} />
+      </div>
+    </HomeProvider>
   )
 }

@@ -70,8 +70,26 @@ export function remarkDocUsability(indexes = loadCommandIndexes()) {
     const language = /\.(ru|es)\.mdx?$/.exec(path)?.[1] ?? "en"
     const reference = { en: "Command reference", ru: "Справочник команды", es: "Referencia del comando" }[language]
     const installation = /\/installation(?:\.(?:ru|es))?\.mdx?$/.test(path) && tool
+    let tableNumber = 0
 
     const visit = (node: Node) => {
+      if (node.type === "table") {
+        tableNumber++
+        node.data = {
+          ...node.data,
+          hProperties: {
+            ...node.data?.hProperties,
+            "data-table-label": `${{ en: "Reference table", ru: "Справочная таблица", es: "Tabla de referencia" }[language]} ${tableNumber}`,
+          },
+        }
+
+        for (const cell of node.children?.[0]?.children ?? []) {
+          if (!textOf(cell).trim())
+            cell.children = [
+              { type: "text", value: { en: "Requirement", ru: "Обязательность", es: "Obligatoriedad" }[language] },
+            ]
+        }
+      }
       if (!node.children || ["link", "linkReference", "heading", "code", "html"].includes(node.type)) return
       if (
         node.type === "blockquote" &&
@@ -169,6 +187,7 @@ export function remarkDocUsability(indexes = loadCommandIndexes()) {
       const alias = tree.children[i - 1]
       const start = alias?.data?.hProperties?.id === "from-source" ? i - 1 : i
       const summary = tree.children.slice(start, i + 1)
+      heading.data = { ...heading.data, hProperties: { ...heading.data?.hProperties, "data-static-heading": true } }
       const body = tree.children.slice(i + 1, end)
       tree.children.splice(start, end - start, {
         type: "blockquote",

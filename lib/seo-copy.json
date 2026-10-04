@@ -1,0 +1,83 @@
+{
+  "en": {
+    "homeTitle": "WireCat — Telegram and MAX for your AI agent",
+    "homeDescription": "Connect your AI agent to Telegram and MAX on your computer. Search conversations, track commitments and prepare replies with open-source CLI tools.",
+    "homeLabel": "Home",
+    "docsLabel": "Documentation",
+    "socialTitle": "Your conversations. Your AI agent.",
+    "socialDescription": "Telegram and MAX · Open-source CLI tools",
+    "reference": {
+      "installation": "Install the {messenger} CLI on Windows, macOS or Linux, check requirements, update it and find its local files.",
+      "usage": "Read your {messenger} inbox, search conversations and work with messages using the CLI and your AI agent.",
+      "commands": "Find every {messenger} CLI command, argument, option and exit code in the generated command reference.",
+      "configuration": "Configure {messenger} CLI profiles, local paths, environment variables and background-service settings.",
+      "sessions": "Log in to {messenger}, manage account profiles and sessions, and troubleshoot authentication from your computer.",
+      "archive": "Build and search a local {messenger} message archive, export conversations and manage stored history.",
+      "recipes": "Follow practical {messenger} CLI workflows for your AI agent, scripts and everyday messaging tasks.",
+      "bot": "Connect a {messenger} bot and use the CLI to work with its chats, messages and configured permissions.",
+      "groups": "Review {messenger} groups, unanswered questions, members and events, and configure moderation rules.",
+      "mcp": "Connect the {messenger} CLI as an MCP server, configure client access and inspect the available tools.",
+      "remote": "Use the {messenger} CLI remotely with its supported connection methods and access configuration.",
+      "diagnostics": "Check the {messenger} CLI environment, configuration and connection, and gather a diagnostic report.",
+      "troubleshooting": "Resolve common {messenger} CLI installation, login, connection and command errors.",
+      "security": "Understand {messenger} CLI permissions, account credentials, local storage and confirmation controls.",
+      "roadmap": "Review implemented {messenger} CLI capabilities, current limitations and planned development.",
+      "changelog": "Read release notes and changes in the {messenger} CLI, including fixes and new capabilities.",
+      "search": "Search your local {messenger} message archive with words, phrases, filters, dates and Lucene queries; learn the supported fields and matching rules."
+    }
+  },
+  "ru": {
+    "homeTitle": "WireCat — Telegram и MAX для вашего ИИ-агента",
+    "homeDescription": "Подключите ИИ-агента к Telegram и MAX на своём компьютере. Ищите переписки, следите за договорённостями и готовьте ответы с CLI-инструментами с открытым кодом.",
+    "homeLabel": "Главная",
+    "docsLabel": "Документация",
+    "socialTitle": "Ваши переписки. Ваш ИИ-агент.",
+    "socialDescription": "Telegram и MAX · CLI с открытым кодом",
+    "reference": {
+      "installation": "Установите CLI для {messenger} на Windows, macOS или Linux: требования, обновление и расположение локальных файлов.",
+      "usage": "Читайте входящие в {messenger}, ищите переписки и работайте с сообщениями через CLI и ИИ-агента.",
+      "commands": "Все команды CLI для {messenger}, аргументы, параметры и коды завершения в справочнике, созданном из программы.",
+      "configuration": "Настройте профили CLI для {messenger}, пути к файлам, переменные окружения и фоновую службу.",
+      "sessions": "Войдите в {messenger}, управляйте профилями и сессиями и решайте проблемы авторизации на своём компьютере.",
+      "archive": "Создайте локальный архив сообщений {messenger}, ищите по истории, экспортируйте переписки и управляйте сохранёнными данными.",
+      "recipes": "Практические сценарии CLI для {messenger}: задачи ИИ-агента, скрипты и повседневная работа с переписками.",
+      "bot": "Подключите бота {messenger} и работайте через CLI с его чатами, сообщениями и настроенными правами.",
+      "groups": "Следите за группами {messenger}, вопросами без ответа, участниками и событиями; настраивайте правила модерации.",
+      "mcp": "Подключите CLI для {messenger} как MCP-сервер, настройте доступ клиента и изучите доступные инструменты.",
+      "remote": "Используйте CLI для {messenger} удалённо: поддерживаемые способы подключения и настройки доступа.",
+      "diagnostics": "Проверьте окружение, настройки и подключение CLI для {messenger} и подготовьте диагностический отчёт.",
+      "troubleshooting": "Решите типичные проблемы установки, входа, подключения и выполнения команд CLI для {messenger}.",
+      "security": "Разберитесь в правах CLI для {messenger}, данных входа, локальном хранении и подтверждении действий.",
+      "roadmap": "Реализованные возможности CLI для {messenger}, текущие ограничения и планы развития.",
+      "changelog": "История выпусков CLI для {messenger}: исправления, изменения и новые возможности.",
+      "search": "Ищите сообщения в локальном архиве {messenger}: слова, фразы, фильтры, даты и запросы Lucene. Поддерживаемые поля и правила поиска."
+    }
+  },
+  "es": {
+    "homeTitle": "WireCat — Telegram y MAX para tu agente de IA",
+    "homeDescription": "Conecta tu agente de IA a Telegram y MAX en tu ordenador. Busca conversaciones, sigue acuerdos y prepara respuestas con herramientas CLI de código abierto.",
+    "homeLabel": "Inicio",
+    "docsLabel": "Documentación",
+    "socialTitle": "Tus conversaciones. Tu agente de IA.",
+    "socialDescription": "Telegram y MAX · CLI de código abierto",
+    "reference": {
+      "installation": "Instala la CLI de {messenger} en Windows, macOS o Linux: requisitos, actualizaciones y ubicación de los archivos locales.",
+      "usage": "Lee los mensajes pendientes de {messenger}, busca conversaciones y trabaja con mensajes mediante la CLI y tu agente de IA.",
+      "commands": "Consulta todos los comandos, argumentos, opciones y códigos de salida de la CLI de {messenger} en la referencia generada.",
+      "configuration": "Configura perfiles, rutas locales, variables de entorno y el servicio en segundo plano de la CLI de {messenger}.",
+      "sessions": "Inicia sesión en {messenger}, gestiona perfiles y sesiones y resuelve problemas de autenticación desde tu ordenador.",
+      "archive": "Crea y busca en un archivo local de mensajes de {messenger}, exporta conversaciones y gestiona el historial guardado.",
+      "recipes": "Flujos prácticos de la CLI de {messenger} para tu agente de IA, scripts y tareas de mensajería cotidianas.",
+      "bot": "Conecta un bot de {messenger} y usa la CLI para trabajar con sus chats, mensajes y permisos configurados.",
+      "groups": "Revisa grupos de {messenger}, preguntas sin respuesta, miembros y eventos, y configura reglas de moderación.",
+      "mcp": "Conecta la CLI de {messenger} como servidor MCP, configura el acceso del cliente y consulta sus herramientas.",
+      "remote": "Usa la CLI de {messenger} de forma remota con sus métodos de conexión y configuración de acceso compatibles.",
+      "diagnostics": "Comprueba el entorno, la configuración y la conexión de la CLI de {messenger} y prepara un informe de diagnóstico.",
+      "troubleshooting": "Resuelve errores habituales de instalación, inicio de sesión, conexión y comandos de la CLI de {messenger}.",
+      "security": "Consulta los permisos, las credenciales, el almacenamiento local y las confirmaciones de la CLI de {messenger}.",
+      "roadmap": "Revisa las capacidades disponibles, las limitaciones actuales y los planes de desarrollo de la CLI de {messenger}.",
+      "changelog": "Consulta las notas de versión de la CLI de {messenger}, con correcciones, cambios y nuevas capacidades.",
+      "search": "Busca mensajes en tu archivo local de {messenger} con palabras, frases, filtros, fechas y consultas Lucene; consulta los campos y las reglas de búsqueda."
+    }
+  }
+}

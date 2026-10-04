@@ -6,13 +6,17 @@ import {
   MarkdownCopyButton,
   ViewOptionsPopover,
 } from "fumadocs-ui/layouts/docs/page"
+import { TOC, TOCProvider } from "fumadocs-ui/layouts/docs/page/slots/toc"
 import { createRelativeLink } from "fumadocs-ui/mdx"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { DocsDisclosures } from "@/components/docs-disclosures"
+import { DocsTocPopover } from "@/components/docs-toc-popover"
 import { getMDXComponents } from "@/components/mdx"
+import { StructuredData } from "@/components/structured-data"
 import { installationReferenceTitle, ToolInstallationIntro } from "@/components/tool-installation-intro"
+import { documentationDescription, pageMetadata, pageStructuredData, seoLocales, seoWords } from "@/lib/seo"
 import { appName, getPageMarkdownUrl, toolOf } from "@/lib/shared"
 import { source } from "@/lib/source"
 import { wordsFor } from "@/lib/words"
@@ -28,6 +32,13 @@ export default async function Page(props: Props) {
   const MDX = page.data.body
   const markdownUrl = getPageMarkdownUrl(page).url
   const tool = toolOf(page.slugs)
+  const description = documentationDescription(lang, page.slugs, page.data.description)
+  const breadcrumbs = [
+    { name: seoWords(lang).homeLabel, pathname: `/${lang}` },
+    { name: seoWords(lang).docsLabel, pathname: `/${lang}/docs` },
+    ...(tool ? [{ name: tool.name === "tg" ? "Telegram" : "MAX", pathname: `/${lang}/docs/${tool.name}` }] : []),
+    ...(page.slugs.length > (tool ? 1 : 0) ? [{ name: page.data.title, pathname: page.url }] : []),
+  ]
   const written = page.data.contentLanguage ?? tool?.lang ?? lang
   const ui = wordsFor(lang).navigation
   const guide =
@@ -49,7 +60,26 @@ export default async function Page(props: Props) {
       : page.data.toc
 
   return (
-    <DocsPage toc={toc} full={page.data.full}>
+    <DocsPage
+      toc={toc}
+      full={page.data.full}
+      slots={{ toc: { provider: TOCProvider, main: TOC, popover: DocsTocPopover } }}
+      tableOfContent={{
+        container: {
+          role: "navigation",
+          "aria-label": { en: "On this page", ru: "На этой странице", es: "En esta página" }[lang],
+        },
+      }}
+      tableOfContentPopover={{
+        container: {
+          role: "navigation",
+          "aria-label": { en: "On this page", ru: "На этой странице", es: "En esta página" }[lang],
+        },
+      }}
+    >
+      <StructuredData
+        data={pageStructuredData({ lang, pathname: page.url, title: page.data.title, description, breadcrumbs, tool })}
+      />
       <DocsDisclosures />
       <DocsTitle>{page.data.title}</DocsTitle>
       {tool?.docsRef && (
@@ -57,7 +87,7 @@ export default async function Page(props: Props) {
           {{ en: "Documentation", ru: "Документация", es: "Documentación" }[lang]}: {tool.docsRef}
         </p>
       )}
-      <DocsDescription className="mb-0">{page.data.description}</DocsDescription>
+      <DocsDescription className="mb-0">{description}</DocsDescription>
       <div className="flex flex-row gap-2 items-center border-b pb-6">
         <MarkdownCopyButton markdownUrl={markdownUrl} />
         <ViewOptionsPopover
@@ -97,10 +127,12 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   if (!page) notFound()
   const tool = toolOf(page.slugs)
   const title = tool && page.slugs.length > 1 ? `${page.data.title} — ${tool.name}` : page.data.title
-  return {
-    title,
-    description: page.data.description,
-    alternates: { canonical: page.url },
-    openGraph: { siteName: appName, title, description: page.data.description, url: page.url, type: "article" },
-  }
+  return pageMetadata({
+    lang,
+    suffix: `/docs${page.slugs.length ? `/${page.slugs.join("/")}` : ""}`,
+    title: `${title} · ${appName}`,
+    description: documentationDescription(lang, page.slugs, page.data.description),
+    available: seoLocales.filter((locale) => source.getPage(page.slugs, locale)),
+    article: true,
+  })
 }

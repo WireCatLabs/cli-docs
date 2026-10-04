@@ -27,6 +27,11 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm exec next build
       - run: pnpm check:links
+      - run: pnpm check:seo
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm exec playwright test tests/site-quality.spec.ts
+        env:
+          PLAYWRIGHT_EXPORT: "1"
 
   search-playground:
     runs-on: ubuntu-latest
@@ -40,4 +45,4 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm sync
       - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm test:browser
+      - run: pnpm exec playwright test tests/heading-fonts.spec.ts tests/search-playground.spec.ts tests/doc-hints.spec.ts

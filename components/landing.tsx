@@ -12,7 +12,7 @@ type Props = { html: string; sessions: Session[]; maxSessions: Session[]; lang: 
 
 /** The markup and demo responses are exported from our reviewed static prototypes. */
 export function Landing({ html, sessions, maxSessions, lang }: Props) {
-  const rootRef = useRef<HTMLDivElement>(null)
+  const rootRef = useRef<HTMLElement>(null)
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
@@ -30,6 +30,7 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
     const app = root.querySelector<HTMLElement>("#app")
     const sessionNav = root.querySelector<HTMLElement>("#sessions")
     const still = matchMedia("(prefers-reduced-motion: reduce)").matches
+    for (const code of root.querySelectorAll<HTMLElement>(".cmd code, .fv pre")) code.tabIndex = 0
     let current = 0
     let readingEvidence = false
     let messenger = new URL(window.location.href).searchParams.get("messenger") === "max" ? "max" : "tg"
@@ -242,7 +243,7 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
   const [before, tail] = html.split("<!--time-savings-->")
   const [after, afterSearch] = (tail ?? "").split("<div data-search-playground></div>")
   return (
-    <div ref={rootRef} className="landing-content">
+    <main ref={rootRef} className="landing-content">
       <FontSwitcher lang={lang} />
       {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Reviewed local exported HTML only. */}
       <div dangerouslySetInnerHTML={{ __html: before }} />
@@ -252,6 +253,6 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
       {afterSearch !== undefined && <SearchPlayground lang={lang} />}
       {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Reviewed local exported HTML only. */}
       {afterSearch !== undefined && <div dangerouslySetInnerHTML={{ __html: afterSearch }} />}
-    </div>
+    </main>
   )
 }
