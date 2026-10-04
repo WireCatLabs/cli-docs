@@ -5,6 +5,8 @@ test.setTimeout(90000)
 
 for (const lang of ["en", "ru", "es"]) {
   test(`${lang}: landing and long references render without accessibility or browser failures`, async ({ page }) => {
+    // Six full-page axe scans include the generated command reference (~1.8 MB HTML).
+    test.setTimeout(180000)
     const errors: string[] = []
     const failed: string[] = []
     page.on("pageerror", (error) => errors.push(error.message))
@@ -99,4 +101,20 @@ test("documentation preloads its licensed font without adding it to landing down
   const font = await request.get("/fonts/docs-inter/inter-latin.woff2")
   expect(font.status()).toBe(200)
   expect((await font.body()).subarray(0, 4).toString()).toBe("wOF2")
+})
+
+test("landing fonts are discoverable in initial HTML and match each locale", async ({ request }) => {
+  for (const lang of ["en", "ru", "es"]) {
+    const html = await (await request.get(`/${lang}`)).text()
+    const preloads = [...html.matchAll(/<link[^>]+href="([^"]+)"[^>]+as="font"[^>]*>/g)].map((match) => match[1])
+    expect(preloads).toContain("/fonts/gNMKW3F-SZuj7xmf-HY.woff2")
+    expect(preloads).toContain("/fonts/heading-lab/unbounded-latin.woff2")
+    expect(preloads.includes("/fonts/heading-lab/unbounded-cyrillic.woff2")).toBe(lang === "ru")
+    expect(preloads.includes("/fonts/gNMKW3F-SZuj7xmb-HY6EQ.woff2")).toBe(lang === "ru")
+    for (const font of preloads) {
+      const response = await request.get(font)
+      expect(response.status()).toBe(200)
+      expect((await response.body()).subarray(0, 4).toString()).toBe("wOF2")
+    }
+  }
 })
