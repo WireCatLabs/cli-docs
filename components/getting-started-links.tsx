@@ -1,7 +1,7 @@
 "use client"
 
 import { SidebarItem } from "fumadocs-ui/components/sidebar/base"
-import { Bot, Cable, Download, ListChecks, MessageSquare } from "lucide-react"
+import { Bot, Cable, Download, LayoutGrid, ListChecks, MessageSquare } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { wordsFor } from "@/lib/words"
 
@@ -15,6 +15,7 @@ export function GettingStartedLinks({ lang }: { lang: string }) {
         { slug: "installation", label: ui.installation, icon: Download },
         { slug: "agents", label: ui.agents, icon: Bot },
         { slug: "first-tasks", label: ui.firstTasks, icon: ListChecks },
+        { slug: "features", label: ui.features, icon: LayoutGrid },
         { slug: "prompting", label: ui.prompting, icon: MessageSquare },
         { slug: "mcp", label: ui.mcp, icon: Cable },
       ].map(({ slug, label, icon: Icon }) => (

@@ -9,5 +9,5 @@ export function messengerHref(pathname: string, lang: string, tool: string, page
 
 /** Shared onboarding pages belong to Getting started, not to a messenger. */
 export function isGettingStarted(pathname: string): boolean {
-  return /^\/(en|ru|es)\/docs(?:\/(?:installation|agents|first-tasks|prompting|mcp))?\/?$/.test(pathname)
+  return /^\/(en|ru|es)\/docs(?:\/(?:installation|agents|first-tasks|features|prompting|mcp))?\/?$/.test(pathname)
 }

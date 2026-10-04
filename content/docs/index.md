@@ -19,6 +19,16 @@ chats.
 - **Prepare** — "Prepare an agenda for my call with Anna from this week's chats."
 - **Follow up** — "What did I promise this week? Draft the replies, don't send them."
 
+## What it covers
+
+- **Your whole account** — messages, chats, groups, contacts, polls: what you do in the app.
+- **Your history, searchable offline** — a local archive of the chats you choose.
+- **Voice messages to text** — on your own computer.
+- **Every Bot API method** — all 185 for Telegram, all 33 for MAX.
+- **Limits you set** — read-only, ask before sending, chosen chats only.
+
+[All features →](./features.md)
+
 ## Start here
 
 1. **[Install and log in](./installation.mdx)** — about 5 minutes. You install the CLI and scan
@@ -34,12 +44,8 @@ That is all you need to start. Later, when you need them:
 
 ## Telegram or MAX?
 
-Both tools work the same way. Install the one for the messenger you use, or both.
-
-| Messenger | What you get | Full guide |
-|---|---|---|
-| Telegram · `tg` | Your personal account: inbox, search, a local archive of your chats | [Telegram](./tg/index.md) |
-| MAX · `max` | Your personal account, plus bots and group moderation | [MAX](./max/index.md) |
+Both tools do the same things. Install the one for the messenger you use, or both:
+[Telegram guide](./tg/index.md) · [MAX guide](./max/index.md).
 
 The **Telegram / MAX** switch at the top of every page takes you to the same section for the other
 messenger.

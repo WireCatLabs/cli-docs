@@ -24,7 +24,7 @@ describe("switching documentation messengers", () => {
 describe("getting-started navigation state", () => {
   it("selects Getting started for every shared guide and locale", () => {
     for (const lang of ["en", "ru", "es"]) {
-      for (const section of ["", "/installation", "/agents", "/first-tasks", "/prompting", "/mcp"]) {
+      for (const section of ["", "/installation", "/agents", "/first-tasks", "/features", "/prompting", "/mcp"]) {
         expect(isGettingStarted(`/${lang}/docs${section}`)).toBe(true)
         expect(isGettingStarted(`/${lang}/docs${section}/`)).toBe(true)
       }
