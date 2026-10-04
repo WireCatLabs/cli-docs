@@ -3,7 +3,7 @@ title: "Getting started"
 description: "Let your AI agent read, search and answer your Telegram and MAX messages, from your own account on your own computer."
 ---
 
-WireCat gives your AI agent your Telegram or MAX account. You ask in plain words — *"who is
+WireCat gives your AI agent access to your Telegram or MAX account. You ask in plain words — *"who is
 still waiting for my answer?"*, *"what did we agree with Marco in September?"* — and the agent
 reads your chats and answers, with the messages it used as proof.
 

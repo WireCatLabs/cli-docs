@@ -1,46 +1,63 @@
 ---
 title: "Primeras tareas"
-description: "Encuentra un dato, prepara una reunión y revisa acuerdos con tu agente y el CLI."
+description: "Tus primeras peticiones al agente tras iniciar sesión y después ejemplos más largos: encontrar una decisión, preparar una reunión, redactar respuestas."
 ---
 
-Con la cuenta conectada y [el agente configurado](./agents.md), empieza por una tarea de lectura:
-buscar un mensaje, preparar una reunión o revisar quién espera tu respuesta. Describe el resultado
-que necesitas; el agente elige los comandos.
+Ya has iniciado sesión. Ahora da a tu agente una tarea con palabras normales. Empieza por tareas
+que solo leen: ves lo que puede hacer el agente y nada cambia en tu cuenta.
 
-**Iniciar sesión no descarga todo el historial.** El CLI guarda los mensajes que lee en un archivo
-local. Para buscar en conversaciones antiguas puede necesitar cargar el periodo del chat que te
-interesa. No hace falta descargar todos tus chats para empezar.
+## Tus primeros cinco minutos
 
-## Tu primera petición
+Copia una petición en tu agente. Funcionan igual con Telegram y con MAX; si usas MAX, escribe
+*max* en lugar de *tg*.
 
-Copia esto en tu agente local:
+**¿Quién necesita una respuesta mía?**
 
 ```text prompt
-Usa tg cli para mostrar cinco chats de trabajo y revisar en qué mensajes recibidos esperan una
-respuesta mía. Indica los chats revisados y cita los mensajes. Solo lee: no envíes nada ni marques
-los mensajes como leídos.
+Usa tg para revisar mis mensajes sin leer. Agrúpalos por chat y dime quién necesita una respuesta mía. Solo lectura: no envíes nada ni marques nada como leído.
 ```
 
-El agente puede empezar así:
+Recibes una lista corta de chats con las preguntas que te esperan y los mensajes de cada una.
 
-```sh
-tg chats list --limit 5
-tg inbox --limit 5
+**¿Qué ha pasado hoy?**
+
+```text prompt
+Usa tg para resumir lo que ha pasado hoy en mis cinco chats más activos. Una línea por chat. Solo lectura.
 ```
 
-`chats list` muestra chats recientes; el agente tiene que identificar cuáles son de trabajo.
-`inbox` muestra mensajes de otras personas, pero **un mensaje sin leer no implica que debas
-responder**. El agente debe comprobar el contenido y explicar si el resultado está limitado por
-chats omitidos o mensajes pendientes que no se han leído en esta consulta.
+Recibes un resumen del día sin abrir cada chat.
 
-Un buen resultado distingue peticiones de respuesta, mensajes informativos y dudas que requieren
-más contexto. Si usa más chats que los cinco iniciales, debe decir cuáles.
+**Encontrar algo**
 
-## 1. Encontrar un acuerdo en el historial
+```text prompt
+Usa tg para revisar mis cinco chats más recientes y encontrar el último enlace que alguien me envió. Muestra el mensaje y el chat. Solo lectura.
+```
 
-Los nombres, fechas, IDs y respuestas de los siguientes diálogos son **ficticios**. Ilustran cómo
-debería trabajar el agente; no son resultados de tu cuenta. Los comandos corresponden a Telegram
-CLI v0.24.0. El agente debe obtener los IDs reales antes de usarlos.
+El agente lee esos chats y te muestra el mensaje con el enlace.
+
+**Qué pasa por dentro.** Para la primera petición, el agente ejecuta comandos como
+`tg inbox --limit 5` y `tg chats list --limit 5`, y después lee más mensajes donde necesita
+contexto. Leer no marca los mensajes como leídos. [Leer mensajes](./tg/usage.md#reading) explica
+los límites.
+
+**Conviene saber**
+
+- **Sin leer no es lo mismo que «necesita respuesta».** Un buen agente lee el contexto antes de
+  decidir y te dice qué chats ha revisado.
+- **Tu historial solo se descarga cuando hace falta.** Iniciar sesión no descarga los mensajes
+  antiguos. Para una pregunta sobre el mes pasado, el agente puede pedirte primero descargar el
+  historial de ese chat. Tú decides hasta qué fecha.
+- **Pide las fuentes.** «Muéstrame los mensajes en los que te basas» obliga al agente a demostrar
+  cada afirmación.
+
+## Ejemplos más largos
+
+Los diálogos siguientes muestran cómo es una tarea completa: la petición, los comandos que ejecuta
+el agente y su respuesta. Los chats, los IDs y los mensajes son ficticios; no ejecutes los comandos
+tal cual. MAX tiene su propia [guía de uso](./max/usage.md); no todas las opciones de Telegram
+existen en MAX.
+
+### Encontrar un acuerdo en el historial
 
 **Tú**
 
@@ -90,7 +107,7 @@ también la guarda; puede bastar para una conversación reciente. `store fetch` 
 forma limitada y reanudable. Una carga que llega al límite no garantiza que haya cubierto todo el
 periodo. Consulta [el archivo local](./tg/archive.md).
 
-## 2. Preparar una reunión con el contexto de varios chats
+### Preparar una reunión con el contexto de varios chats
 
 **Tú**
 
@@ -144,7 +161,7 @@ El agente compara las fuentes y las fechas: un mensaje más reciente en un chat 
 resolver un problema mencionado antes en el grupo. Si una lectura está truncada o faltan
 participantes, debe explicarlo. Consulta [lectura y revisión de mensajes](./tg/usage.md).
 
-## 3. Revisar compromisos y preparar respuestas
+### Revisar compromisos y preparar respuestas
 
 **Tú**
 

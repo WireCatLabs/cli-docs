@@ -111,7 +111,7 @@ Verify ${tool} --version, run ${tool} doctor, check the logged-in account and sh
     agents: "Для агентов: каждая страница в Markdown — /llms.txt и /llms-full.txt.",
     navigation: {
       start: "Начало работы",
-      installation: "Установка",
+      installation: "Установка и вход",
       agents: "Подключение агента",
       firstTasks: "Первые задачи",
       features: "Возможности",
@@ -167,7 +167,7 @@ Verify ${tool} --version, run ${tool} doctor, check the logged-in account and sh
     agents: "Para agentes: cada página en Markdown en /llms.txt y /llms-full.txt.",
     navigation: {
       start: "Primeros pasos",
-      installation: "Instalación",
+      installation: "Instalar e iniciar sesión",
       agents: "Conectar tu agente",
       firstTasks: "Primeras tareas",
       features: "Funciones",
