@@ -1,7 +1,8 @@
 "use client"
 
+import { Tabs } from "fumadocs-ui/components/tabs"
 import { useI18n } from "fumadocs-ui/contexts/i18n"
-import { useEffect } from "react"
+import { type ReactNode, useEffect } from "react"
 import { InstallTool } from "@/components/install-tool"
 import { CopyText } from "@/components/text-snippet"
 import { tools } from "@/lib/shared"
@@ -20,10 +21,7 @@ export function InstallationGuide({ terminal = false }: { terminal?: boolean }) 
   )
 }
 
-export function AgentInstallPrompt({ tool }: { tool: "tg" | "max" }) {
-  const { locale } = useI18n()
-  const lang = locale ?? "en"
-  const pkg = tools.find((item) => item.name === tool)?.package ?? `@leemour/${tool}-cli`
+export function InstallationMessengerTabs({ children }: { children: ReactNode }) {
   // The anchors exist in server HTML; activate the matching messenger after tab groups mount.
   useEffect(() => {
     const followHash = () => {
@@ -38,6 +36,17 @@ export function AgentInstallPrompt({ tool }: { tool: "tg" | "max" }) {
     window.addEventListener("hashchange", followHash)
     return () => window.removeEventListener("hashchange", followHash)
   }, [])
+  return (
+    <Tabs groupId="messenger" persist items={["Telegram", "MAX"]}>
+      {children}
+    </Tabs>
+  )
+}
+
+export function AgentInstallPrompt({ tool }: { tool: "tg" | "max" }) {
+  const { locale } = useI18n()
+  const lang = locale ?? "en"
+  const pkg = tools.find((item) => item.name === tool)?.package ?? `@leemour/${tool}-cli`
   return (
     <div className="not-prose my-4">
       <CopyText kind="prompt" lang={lang} text={wordsFor(lang).onboarding.prompt(tool, pkg)} />

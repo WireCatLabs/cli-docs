@@ -74,7 +74,9 @@ export const markdownLinkProblems = (out: string, origin = "https://wirecat.dev"
     const visit = (node: MarkdownNode) => {
       if (
         node.type === "html" &&
-        /<(?:InstallationGuide|AgentInstallPrompt|DocTerm|NodeSetupPrompt)(?:\s|\/|>)/.test(node.value ?? "")
+        /<(?:InstallationGuide|InstallationMessengerTabs|AgentInstallPrompt|DocTerm|NodeSetupPrompt)(?:\s|\/|>)/.test(
+          node.value ?? "",
+        )
       )
         problems.push(`${where}: Documentation component was not expanded for Markdown readers`)
       if (node.url !== undefined && ["link", "image", "definition"].includes(node.type)) {
