@@ -217,4 +217,6 @@ Source disclosures remain compact single-line rows (12px type and 3px vertical p
 
 Prompt copying now uses an icon-only button at the bubble’s bottom-right, with a localized tooltip/accessibility label and checkmark feedback. Spanish hero: “Deja de buscar. Solo pregunta.”
 
-Feature category titles (“Personal account”, “Bots”, “Your groups”) use Onest 700 at 18–20px. Their icon tiles are 31px with 16px SVGs; this is an intentional exception to the Unbounded display-heading system.
+Feature category titles (“Personal account”, “Bots”, “Your groups”) use Onest 700 at 18–20px. Their icon tiles are 31px with 16px SVGs; these are styled spans, not semantic heading tags.
+
+Unbounded applies only to actual h1–h6 elements (and their inline contents). Bold card titles, spans, dt labels and time labels use Onest. Remove sentence periods from section/card titles; only the hero heading retains them.

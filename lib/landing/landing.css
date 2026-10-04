@@ -2020,9 +2020,7 @@
   display: block;
 }
 
-html[lang]
-  .wirecat-landing
-  :is(h1, h2, h3, h4, h5, h6, [role="heading"], .t6 > b, .savings-quality > b, .time, .tool-name, .spec dt) {
+html[lang] .wirecat-landing :is(h1, h2, h3, h4, h5, h6) {
   font-family: var(--heading-family, "Unbounded");
   font-stretch: var(--heading-stretch, 100%);
   font-weight: var(--heading-weight, 800);
@@ -2065,6 +2063,9 @@ html[lang="es"] .wirecat-landing {
   --heading-weight: 800;
 }
 
+html[lang] .wirecat-landing {
+  --display: "Onest", system-ui, sans-serif;
+}
 /* Unbounded is wider than the previous condensed faces: keep display headings compact. */
 html[lang] .wirecat-landing :is(h1, #headline) {
   font-size: clamp(26px, 3.25vw, 40px);

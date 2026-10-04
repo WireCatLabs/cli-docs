@@ -283,7 +283,7 @@ for (const lang of ["en", "ru", "es"]) {
   const reset =
     ".wirecat-landing { min-height: 100vh; overflow-wrap: anywhere; }\n.wirecat-landing :where(h1,h2,h3,h4,p,ul,ol,dl,pre) { margin: revert; padding: revert; font-size: revert; font-weight: revert; }\n.wirecat-landing :where(ul,ol) { list-style: revert; }\n.wirecat-landing :where(svg) { display: inline; vertical-align: middle; }\n"
   const typography =
-    '\nhtml[lang] .wirecat-landing :is(h1,h2,h3,h4,h5,h6,[role="heading"],.t6 > b,.savings-quality > b,.time,.tool-name,.spec dt) { font-family: var(--heading-family, "Unbounded"); font-stretch: var(--heading-stretch, 100%); font-weight: var(--heading-weight, 800); }\n'
+    '\nhtml[lang] .wirecat-landing :is(h1,h2,h3,h4,h5,h6) { font-family: var(--heading-family, "Unbounded"); font-stretch: var(--heading-stretch, 100%); font-weight: var(--heading-weight, 800); }\n'
   const patternScript = script.slice(script.indexOf("const shapes ="), script.indexOf("let wall ="))
   const background = {}
   runInNewContext(`${patternScript}\nscatter(["plane", "sleeping"])`, {
@@ -299,6 +299,7 @@ for (const lang of ["en", "ru", "es"]) {
 appendFileSync(
   "lib/landing/landing.css",
   `${localeTypography}
+html[lang] .wirecat-landing { --display: "Onest", system-ui, sans-serif; }
 /* Unbounded is wider than the previous condensed faces: keep display headings compact. */
 html[lang] .wirecat-landing :is(h1, #headline) {
   font-size: clamp(26px, 3.25vw, 40px);
