@@ -107,6 +107,37 @@ describe("truthful structured data", () => {
     expect(JSON.stringify(data)).not.toMatch(/aggregateRating|reviewCount|downloadCount/)
   })
 
+  it.each(seoLocales)("identifies the same factual WireCat project and publisher in %s", (lang) => {
+    for (const aboutProject of [false, true]) {
+      const data = pageStructuredData({
+        lang,
+        pathname: `/${lang}${aboutProject ? "/about" : ""}`,
+        title: "WireCat",
+        description: "Open-source tools",
+        aboutProject,
+      })
+      const organization = data["@graph"].find(
+        (node) => Array.isArray(node["@type"]) && node["@type"].includes("Organization"),
+      )
+      expect(organization).toMatchObject({
+        "@type": ["Organization", "Project"],
+        "@id": "https://wirecat.dev/#organization",
+        name: "WireCat",
+        url: "https://wirecat.dev",
+        logo: "https://wirecat.dev/android-chrome-512x512.png",
+        email: "hello@wirecat.dev",
+      })
+      expect(data["@graph"].find((node) => node["@type"] === "WebSite")).toMatchObject({
+        publisher: { "@id": organization?.["@id"] },
+      })
+      if (aboutProject)
+        expect(data["@graph"].find((node) => node["@type"] === "AboutPage")).toMatchObject({
+          mainEntity: { "@id": organization?.["@id"] },
+        })
+      expect(JSON.stringify(data)).not.toMatch(/"Person"|legalName|founder|taxID|aggregateRating/)
+    }
+  })
+
   it("cannot close its script element through a metadata string", () => {
     const html = renderToStaticMarkup(
       createElement(StructuredData, { data: { name: "</script><script>alert(1)</script>" } }),

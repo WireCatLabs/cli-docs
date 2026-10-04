@@ -27,6 +27,7 @@ export default async function AboutPage({ params }: Props) {
         data={pageStructuredData({
           lang,
           pathname: `/${lang}/about`,
+          aboutProject: true,
           title: words.title,
           description: words.intro,
           breadcrumbs: [

@@ -61,14 +61,48 @@ export function seoProblems(out: string, origin: string, locales = ["en", "ru", 
     if (!schemas.length) fail("missing page structured data")
     for (const [, json] of schemas) {
       try {
-        const data = JSON.parse(json) as { "@context"?: string; "@graph"?: { "@type"?: string; url?: string }[] }
+        const data = JSON.parse(json) as {
+          "@context"?: string
+          "@graph"?: {
+            "@type"?: string | string[]
+            "@id"?: string
+            url?: string
+            name?: string
+            logo?: string
+            publisher?: { "@id"?: string }
+            mainEntity?: { "@id"?: string }
+          }[]
+        }
         if (data["@context"] !== "https://schema.org") fail("unexpected structured-data context")
         if (
           !data["@graph"]?.some(
-            (node) => ["WebPage", "TechArticle"].includes(node["@type"] ?? "") && node.url === `${origin}${pathname}`,
+            (node) =>
+              typeof node["@type"] === "string" &&
+              ["WebPage", "AboutPage", "TechArticle"].includes(node["@type"]) &&
+              node.url === `${origin}${pathname}`,
           )
         )
           fail("structured data must identify this page")
+        const organization = data["@graph"]?.find(
+          (node) => Array.isArray(node["@type"]) && node["@type"].includes("Organization"),
+        )
+        if (
+          organization?.["@id"] !== `${origin}/#organization` ||
+          organization.name !== "WireCat" ||
+          organization.url !== origin
+        )
+          fail("missing consistent WireCat organization identity")
+        const website = data["@graph"]?.find((node) => node["@type"] === "WebSite")
+        if (website?.publisher?.["@id"] !== organization?.["@id"]) fail("website publisher must reference WireCat")
+        if (
+          !organization?.logo?.startsWith(`${origin}/`) ||
+          !existsSync(join(out, new URL(organization.logo).pathname))
+        )
+          fail("organization logo must be an available local image")
+        if (pathname.endsWith("/about")) {
+          const about = data["@graph"]?.find((node) => node["@type"] === "AboutPage")
+          if (about?.mainEntity?.["@id"] !== organization?.["@id"]) fail("About must describe the WireCat identity")
+        }
       } catch {
         fail("invalid JSON-LD")
       }
