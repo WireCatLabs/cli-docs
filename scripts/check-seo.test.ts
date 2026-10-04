@@ -29,6 +29,25 @@ describe("production SEO guard", () => {
         ),
       )
     }
+    const identity = {
+      "@type": ["Organization", "Project"],
+      "@id": "https://example.test/#organization",
+      name: "WireCat",
+      url: "https://example.test",
+      logo: "https://example.test/logo.png",
+    }
+    const website = { "@type": "WebSite", publisher: { "@id": identity["@id"] } }
+    for (const lang of ["en", "ru"]) {
+      const file = join(out, `${lang}.html`)
+      writeFileSync(
+        file,
+        readFileSync(file, "utf8").replace(
+          '"@graph":[',
+          `"@graph":[${JSON.stringify(identity)},${JSON.stringify(website)},`,
+        ),
+      )
+    }
+    write("logo.png", "fixture")
     write("og.png", "fixture")
     write(
       "sitemap.xml",
@@ -47,6 +66,24 @@ describe("production SEO guard", () => {
       writeFileSync(file, readFileSync(file, "utf8").replaceAll("hreflang=", "hrefLang="))
     }
     expect(seoProblems(out, "https://example.test", ["en", "ru"])).toEqual([])
+  })
+  it("rejects an unrelated publisher and a missing project logo", () => {
+    const file = join(out, "en.html")
+    writeFileSync(
+      file,
+      readFileSync(file, "utf8")
+        .replace(
+          '"publisher":{"@id":"https://example.test/#organization"}',
+          '"publisher":{"@id":"https://other.test/#organization"}',
+        )
+        .replace('"logo":"https://example.test/logo.png"', '"logo":"https://example.test/missing.png"'),
+    )
+    expect(seoProblems(out, "https://example.test", ["en", "ru"])).toEqual(
+      expect.arrayContaining([
+        "/en: website publisher must reference WireCat",
+        "/en: organization logo must be an available local image",
+      ]),
+    )
   })
   it("rejects a canonical and social field accidentally inherited from another page", () => {
     const file = join(out, "ru.html")
