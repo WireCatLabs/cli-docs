@@ -5,6 +5,7 @@ import { searchStore } from "@leemour/cli-messaging/services"
 import { type MessageStore, openStore } from "@leemour/cli-messaging/store"
 import { afterAll, beforeAll, describe, expect, it } from "vitest"
 import {
+  demoFields,
   filterClauses,
   initialQuery,
   locator,
@@ -46,7 +47,9 @@ beforeAll(async () => {
           timestamp: message.date,
           editedAt: null,
           outgoing: false,
-          attachments: message.has.map(() => ({ kind: "file" as const, name: "estimate.pdf" })),
+          attachments: message.has
+            .filter((kind) => kind !== "link")
+            .map((kind) => ({ kind, name: "sample-attachment" })),
           replyTo: null,
           forwardedFrom: null,
           reactions: null,
@@ -68,15 +71,25 @@ describe("browser demo against the actual indexed SQLite search service", () => 
     "Atlas from:Alice",
     'chat:"Client studio"',
     "in:max",
-    "kind:private",
-    "kind:GROUP",
     "has:FILE",
+    ...[
+      "attachment",
+      "link",
+      "photo",
+      "image",
+      "video",
+      "audio",
+      "voice",
+      "sticker",
+      "contact",
+      "location",
+      "poll",
+    ].flatMap((kind) => [`has:${kind}`, `Atlas has:${kind}`, `has:${kind} date:2026-10-04`]),
     "in:MAX",
     "invoice OR budget AND Atlas",
     "Atlas NOT budget",
     "invo*",
     "text:/invo.*/",
-    "body:/.*Atlas.*/",
     '"final invoice"',
     "date:[2026-10-01 TO 2026-10-31]",
     "date>2026-10-02",
@@ -119,7 +132,16 @@ describe("browser demo against the actual indexed SQLite search service", () => 
     }
   })
   it("rejects malformed, unsupported and unfinished input without broadening it", () => {
-    for (const query of ["chat:", "invoice~1", "(invoice OR", "filename:*.pdf", "text:/~invoice/", "body:/a{20000}/"])
+    for (const query of [
+      "chat:",
+      "invoice~1",
+      "(invoice OR",
+      "filename:*.pdf",
+      "text:/~invoice/",
+      "text:/a{20000}/",
+      "body:Atlas",
+      "kind:private",
+    ])
       expect(() => searchDemo(query), query).toThrow()
     expect(searchDemo("nothing")).toEqual([])
     expect(searchDemo("")).toHaveLength(messages.length)
@@ -141,6 +163,8 @@ describe("cursor-sensitive completion", () => {
     expect(labels).toContain("chat:")
     expect(labels).not.toContain("filename:")
     expect(labels).not.toContain("preset:")
+    expect(labels).not.toContain("kind:")
+    expect(labels).not.toContain("body:")
   })
 })
 
@@ -152,8 +176,8 @@ describe("reversible query filters and value suggestions", () => {
     expect(replaceFilter("date:2026-10-03 AND invoice", "date")).toBe("invoice")
   })
   it("ignores field-looking text inside quoted strings and regex", () => {
-    expect(filterClauses('"chat:foo" body:/.*from:Alice.*/ has:file').map((clause) => clause.field)).toEqual([
-      "body",
+    expect(filterClauses('"chat:foo" text:/.*from:Alice.*/ has:file').map((clause) => clause.field)).toEqual([
+      "text",
       "has",
     ])
     expect(replaceFilter('"has:file" AND has:file', "has")).toBe('"has:file"')
@@ -183,6 +207,15 @@ describe("reversible query filters and value suggestions", () => {
 })
 
 describe("discoverable sample search paths", () => {
+  it("has an Atlas example and another topic for every attachment filter", () => {
+    const kinds = demoFields.find((field) => field.name === "has")?.values ?? []
+    expect(kinds.length).toBe(12)
+    for (const kind of kinds) {
+      expect(searchDemo(`Atlas has:${kind}`).length, kind).toBeGreaterThan(0)
+      expect(searchDemo(`has:${kind} NOT Atlas`).length, kind).toBeGreaterThan(0)
+    }
+    expect(searchDemo("has:link NOT has:attachment")).toHaveLength(2)
+  })
   it("keeps concrete values out of general field completion", () => {
     const general = suggestionsFor("", 0).map((item) => item.label)
     expect(general).toContain("text:")
@@ -192,11 +225,11 @@ describe("discoverable sample search paths", () => {
     expect(suggestionsFor("text:", 5).map((item) => item.label)).toContain("coffee")
   })
   it("offers distinct invoice, budget, coffee and date paths", () => {
-    expect(searchDemo("text:invoice")).toHaveLength(4)
-    expect(searchDemo("text:budget")).toHaveLength(2)
-    expect(searchDemo("text:coffee")).toHaveLength(1)
+    expect(searchDemo("text:invoice")).toHaveLength(11)
+    expect(searchDemo("text:budget")).toHaveLength(9)
+    expect(searchDemo("text:coffee")).toHaveLength(4)
     expect(searchDemo("date:2026-10-03")).toHaveLength(8)
-    expect(searchDemo("date:2026-10-04")).toHaveLength(2)
+    expect(searchDemo("date:2026-10-04")).toHaveLength(26)
     expect(searchDemo("date:2026-10-05")).toHaveLength(2)
   })
 })

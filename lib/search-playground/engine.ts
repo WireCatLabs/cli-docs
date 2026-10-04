@@ -115,10 +115,274 @@ export const messages: DemoMessage[] = [
   ),
   row("40", "telegram", "Weekend plans", "303", "Noah", "12:00", "Anyone up for coffee on Friday?", [], "2026-10-05"),
   row("41", "telegram", "Weekend plans", "303", "Noah", "12:03", "Yes! See you there.", [], "2026-10-05"),
-]
+  row(
+    "50",
+    "telegram",
+    "Atlas project",
+    "301",
+    "Alice",
+    "14:00",
+    "Atlas invoice spreadsheet is ready for review.",
+    ["file"],
+    "2026-10-04",
+  ),
+  row(
+    "51",
+    "max",
+    "Client studio",
+    "401",
+    "Leo",
+    "14:05",
+    "The course budget spreadsheet includes the team discount.",
+    ["file"],
+    "2026-10-04",
+  ),
+  row(
+    "52",
+    "telegram",
+    "Atlas project",
+    "301",
+    "Sam",
+    "14:10",
+    "Atlas budget notes and meeting agenda: https://docs.google.com/",
+    ["link"],
+    "2026-10-04",
+  ),
+  row(
+    "53",
+    "max",
+    "Learning circle",
+    "402",
+    "Mia",
+    "14:15",
+    "This online course has practical design exercises: https://www.coursera.org/",
+    ["link"],
+    "2026-10-04",
+  ),
+  row(
+    "54",
+    "telegram",
+    "Atlas project",
+    "301",
+    "Alice",
+    "14:20",
+    "Atlas invoice: here is a photo of the signed delivery receipt.",
+    ["photo"],
+    "2026-10-04",
+  ),
+  row(
+    "55",
+    "telegram",
+    "Weekend plans",
+    "303",
+    "Noah",
+    "14:25",
+    "A photo of the coffee shop entrance so nobody gets lost.",
+    ["photo"],
+    "2026-10-04",
+  ),
+  row(
+    "56",
+    "max",
+    "Client studio",
+    "401",
+    "Leo",
+    "14:30",
+    "Atlas budget: the image shows the design options within the original scope.",
+    ["image"],
+    "2026-10-04",
+  ),
+  row(
+    "57",
+    "max",
+    "Learning circle",
+    "402",
+    "Mia",
+    "14:35",
+    "The course schedule is in this image. The first meeting is Friday.",
+    ["image"],
+    "2026-10-04",
+  ),
+  row(
+    "58",
+    "telegram",
+    "Atlas project",
+    "301",
+    "Sam",
+    "14:40",
+    "Atlas invoice review: this video walks through the delivery checklist.",
+    ["video"],
+    "2026-10-04",
+  ),
+  row(
+    "59",
+    "max",
+    "Learning circle",
+    "402",
+    "Leo",
+    "14:45",
+    "A short video from the design course, with a useful feedback exercise.",
+    ["video"],
+    "2026-10-04",
+  ),
+  row(
+    "60",
+    "max",
+    "Client studio",
+    "401",
+    "Mia",
+    "14:50",
+    "Atlas budget meeting recording: extra work still needs a final quote.",
+    ["audio"],
+    "2026-10-04",
+  ),
+  row(
+    "61",
+    "telegram",
+    "Design club",
+    "304",
+    "Alice",
+    "14:55",
+    "The audio recording from our course discussion is ready.",
+    ["audio"],
+    "2026-10-04",
+  ),
+  row(
+    "62",
+    "telegram",
+    "Finance team",
+    "302",
+    "Sam",
+    "15:00",
+    "Atlas invoice voice note: please check the billing address before Friday.",
+    ["voice"],
+    "2026-10-04",
+  ),
+  row(
+    "63",
+    "max",
+    "Learning circle",
+    "402",
+    "Leo",
+    "15:05",
+    "A voice note with my design course recommendation and the weekly workload.",
+    ["voice"],
+    "2026-10-04",
+  ),
+  row(
+    "64",
+    "telegram",
+    "Atlas project",
+    "301",
+    "Alice",
+    "15:10",
+    "Atlas invoice draft received, thank you!",
+    ["sticker"],
+    "2026-10-04",
+  ),
+  row(
+    "65",
+    "telegram",
+    "Weekend plans",
+    "303",
+    "Noah",
+    "15:15",
+    "Coffee plans confirmed, see you Friday!",
+    ["sticker"],
+    "2026-10-04",
+  ),
+  row(
+    "66",
+    "max",
+    "Client studio",
+    "401",
+    "Mia",
+    "15:20",
+    "Atlas budget questions: sharing the finance contact for the final quote.",
+    ["contact"],
+    "2026-10-04",
+  ),
+  row(
+    "67",
+    "telegram",
+    "Design club",
+    "304",
+    "Sam",
+    "15:25",
+    "Here is the course tutor's contact if you want to ask about the design exercises.",
+    ["contact"],
+    "2026-10-04",
+  ),
+  row(
+    "68",
+    "telegram",
+    "Atlas project",
+    "301",
+    "Alice",
+    "15:30",
+    "Atlas invoice review meeting: sharing the office location.",
+    ["location"],
+    "2026-10-04",
+  ),
+  row(
+    "69",
+    "telegram",
+    "Weekend plans",
+    "303",
+    "Noah",
+    "15:35",
+    "Coffee on Friday: here is the location, next to the station.",
+    ["location"],
+    "2026-10-04",
+  ),
+  row(
+    "70",
+    "max",
+    "Client studio",
+    "401",
+    "Leo",
+    "15:40",
+    "Atlas budget review: vote for a meeting time before we send the final quote.",
+    ["poll"],
+    "2026-10-04",
+  ),
+  row(
+    "71",
+    "max",
+    "Learning circle",
+    "402",
+    "Mia",
+    "15:45",
+    "Which online course should we take together? Vote for design or project management.",
+    ["poll"],
+    "2026-10-04",
+  ),
+  row(
+    "72",
+    "telegram",
+    "Finance team",
+    "302",
+    "Alice",
+    "16:00",
+    "Atlas invoice: the billing address is checked. Friday remains the deadline.",
+    [],
+    "2026-10-04",
+  ),
+  row(
+    "73",
+    "max",
+    "Client studio",
+    "401",
+    "Mia",
+    "16:05",
+    "Atlas budget: please bring the revised estimate to Friday's meeting.",
+    [],
+    "2026-10-04",
+  ),
+].sort((a, b) => a.date.localeCompare(b.date))
 export const initialQuery = "Atlas AND (invoice OR budget)"
 export const demoFields = QUERY_FIELDS.filter(
-  (field) => field.support === "A1" && !["preset", "topic"].includes(field.name),
+  (field) => field.support === "A1" && !["preset", "topic", "kind", "body"].includes(field.name),
 )
 export const locator = (message: DemoMessage) => `msg:${message.provider}/demo/${message.chatId}/${message.id}`
 const tokens = (text: string) => normalize(text).match(/[\p{L}\p{N}]+/gu) ?? []
@@ -166,13 +430,6 @@ export const compileQuery = (query: string): ((message: DemoMessage) => boolean)
         wanted.length > 0 &&
         tokens(message.text).some((_, index, terms) => wanted.every((term, at) => terms[index + at] === term))
     }
-    if (node.field === "body") {
-      if (["regex", "wildcard"].includes(node.operator)) {
-        const pattern = compileAutomaton(node.operator === "regex" ? node.value : wildcardPattern(node.value))
-        return (message) => pattern.test(message.text)
-      }
-      return (message) => message.text === node.value
-    }
     if (node.field === "chat" || node.field === "from") {
       const matching = [
         ...new Set(messages.map((message) => (node.field === "chat" ? message.chat : message.from))),
@@ -190,9 +447,8 @@ export const compileQuery = (query: string): ((message: DemoMessage) => boolean)
     if (node.field === "has")
       return (message) =>
         node.value.toLowerCase() === "attachment"
-          ? message.has.length > 0
+          ? message.has.some((kind) => kind !== "link")
           : message.has.includes(node.value.toLowerCase())
-    if (node.field === "kind") return (message) => message.kind === node.value.toLowerCase()
     if (node.field === "in")
       return (message) => ["all", "personal", message.provider].includes(node.value.toLowerCase())
     throw new Error("This field is not available in this demo.")
@@ -332,11 +588,6 @@ export const suggestionsFor = (query: string, cursor: number): Suggestion[] => {
     candidates = [
       ...textValues.slice(0, 7).map((label) => ({ label, insert: label, detail: "text" })),
       { label: '"final invoice"', insert: '"final invoice"', detail: "phrase" },
-    ]
-  else if (field === "body")
-    candidates = [
-      { label: "Contains invoice", insert: "/.*invoice.*/", detail: "body", labelKey: "containsInvoice" },
-      { label: "Contains Atlas", insert: "/.*Atlas.*/", detail: "body", labelKey: "containsAtlas" },
     ]
   else if (field)
     candidates = (demoFields.find((row) => row.name === field)?.values ?? []).map((label) => ({

@@ -114,7 +114,7 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
     setQuery(value)
     setView("matches")
     setDetail(null)
-    setSuggestionOpen(/(?:text|body|chat|from|date|kind|has|in):$/u.test(value))
+    setSuggestionOpen(/(?:text|chat|from|date|has|in):$/u.test(value))
     setCursor(position)
     setCopied(false)
     setCopyError(false)
@@ -374,10 +374,6 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
                 <FileText size={13} aria-hidden />
                 {text.attachment}
                 <span>{field("has")?.value.toLowerCase() === "file" ? "×" : "+"}</span>
-              </button>
-              <button type="button" aria-pressed={!!field("kind")} onClick={() => pickFilter("kind")}>
-                {text.filters.kind}
-                <span>{field("kind") ? "×" : "+"}</span>
               </button>
               <span className="sp-zone">{text.utc}</span>
             </div>

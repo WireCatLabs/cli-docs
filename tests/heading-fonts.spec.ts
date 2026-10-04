@@ -62,10 +62,12 @@ test("search uses the same heading face; font comparison stays opt-in", async ({
       )
     expect(nonHeadingDisplayFonts).toEqual([])
     const labels = await page
-      .locator(".t6 > b,.spec dt,.time,.tool-name,.savings-quality > b")
+      .locator(".t6 > b,.spec dt,.time,.tool-name,.savings-quality > b,.say .answer-label")
       .evaluateAll((elements) =>
         elements.map((el) => ({ text: el.textContent?.trim(), font: getComputedStyle(el).fontFamily })),
       )
+    await expect(page.locator(".say h3")).toHaveCount(0)
+    expect(await page.locator(".say span.answer-label").count()).toBeGreaterThan(0)
     for (const label of labels) expect(label.font, label.text).toContain("Onest")
     const titles = await page
       .locator(".wirecat-landing :is(h2,h3,h4,h5,h6),.t6 > b,.fv-name")

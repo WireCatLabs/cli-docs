@@ -673,7 +673,7 @@
 .wirecat-landing .say p {
   margin: 0 0 8px;
 }
-.wirecat-landing .say h3 {
+.wirecat-landing .say .answer-label {
   margin: 18px 0 6px;
   font-weight: 600;
   font-size: 12px;
@@ -682,13 +682,14 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--app-soft);
+  display: block;
 }
 .wirecat-landing .say ul,
 .wirecat-landing .say ol {
   margin: 0 0 12px;
   padding-left: 18px;
 }
-.wirecat-landing .say h3:first-child {
+.wirecat-landing .say .answer-label:first-child {
   margin-top: 0;
 }
 .wirecat-landing .say blockquote {
