@@ -135,7 +135,7 @@ const view = (step, lang, messenger, session, index) => {
     .replace(
       /<\/h3>/g,
       "</span>",
-    )}${sources ? `<div class="answer-sources"><small>${text.sources}</small>${sources}</div>` : ""}</div>`
+    )}${sources ? `<details class="answer-sources"><summary class="sources-toggle">${text.sources}<svg class="sources-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 4 4 4-4 4"/></svg></summary><div class="sources-list">${sources}</div></details>` : ""}</div>`
 }
 let localeTypography = ""
 for (const lang of ["en", "ru", "es"]) {
@@ -293,7 +293,10 @@ for (const lang of ["en", "ru", "es"]) {
   })
   css.walkRules((rule) => {
     rule.selector = rule.selector.replace(/\.say h3/g, ".say .answer-label")
-    if (rule.selector === ".wirecat-landing .say .answer-label") rule.append({ prop: "display", value: "block" })
+    if (rule.selector === ".wirecat-landing .say .answer-label") {
+      rule.append({ prop: "display", value: "block" })
+      rule.nodes.find((node) => node.prop === "font-size").value = "11px"
+    }
     if (!rule.nodes.length) rule.remove()
   })
   // Reset only inside the landing: Tailwind preflight must not change the prototype's typography.
@@ -322,6 +325,18 @@ html[lang] .wirecat-landing :is(h1, #headline) {
   font-size: clamp(26px, 3.25vw, 40px);
   line-height: 1.15;
   letter-spacing: -0.025em;
+}
+/* Keep the two short hero phrases on separate lines in Russian and Spanish. */
+html:is([lang="ru"], [lang="es"]) .wirecat-landing #headline {
+  font-size: clamp(17px, 5.3vw, 36px);
+}
+html:is([lang="ru"], [lang="es"]) .wirecat-landing #headline span {
+  display: block;
+}
+@media (min-width: 901px) {
+  html:is([lang="ru"], [lang="es"]) .wirecat-landing #headline {
+    font-size: clamp(22px, 2.9vw, 36px);
+  }
 }
 html[lang] .wirecat-landing :is(h2.big, .sp-heading h2.big) {
   font-size: clamp(22px, 2.5vw, 34px);

@@ -154,7 +154,12 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
       "toggle",
       (event) => {
         const detail = event.target
-        if (!(detail instanceof HTMLDetailsElement) || !detail.matches(".evidence-message") || !detail.open || !log)
+        if (
+          !(detail instanceof HTMLDetailsElement) ||
+          !detail.matches(".evidence-message,.answer-sources") ||
+          !detail.open ||
+          !log
+        )
           return
         readingEvidence = true
         log.style.scrollBehavior = "auto"
