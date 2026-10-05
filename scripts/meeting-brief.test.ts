@@ -17,7 +17,7 @@ it("reproduces the published retrieval evidence in every localized walkthrough",
     text: "Tuesday is too early. The client needs time to review.",
   })
   for (const suffix of ["", ".ru", ".es"]) {
-    const guide = readFileSync(`content/docs/meeting-brief${suffix}.md`, "utf8")
+    const guide = readFileSync(`content/docs/meeting-brief${suffix}.mdx`, "utf8")
     expect(JSON.parse(guide.match(/```json\n([\s\S]*?)\n```/)?.[1] ?? "null")).toEqual(result)
   }
 })

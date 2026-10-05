@@ -6,3 +6,5 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - "@leemour/cli-core@0.14.0"
   - '@leemour/cli-messaging@0.128.0'
+patchedDependencies:
+  '@fumadocs/base-ui@16.15.17': patches/@fumadocs__base-ui@16.15.17.patch

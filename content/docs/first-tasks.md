@@ -225,4 +225,4 @@ review windows and check later messages before labelling an old promise outstand
 For prompts you can adapt, continue to [How to phrase requests](./prompting.md).
 For command syntax, use [Telegram commands](./tg/commands.md) or [MAX commands](./max/commands.md).
 
-For a fully reproducible search with actual fixture output, try the [meeting-brief walkthrough](./meeting-brief.md).
+For a fully reproducible search with actual fixture output, try the [meeting-brief walkthrough](./meeting-brief.mdx).

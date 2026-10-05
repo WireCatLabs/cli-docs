@@ -118,3 +118,69 @@ test("landing fonts are discoverable in initial HTML and match each locale", asy
     }
   }
 })
+
+for (const lang of ["en", "ru", "es"]) {
+  for (const tool of ["tg", "max"]) {
+    test(`${lang}/${tool}: reference scrolling groups preserve tables, anchors and printing without landmark overload`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 390, height: 844 })
+      await page.goto(`/${lang}/docs/${tool}/commands`)
+      const tables = page.locator(".docs-reference-table")
+      expect(await tables.count()).toBeGreaterThan(10)
+      expect(await tables.first().getAttribute("role")).toBe("group")
+      expect(await tables.first().evaluate((element) => getComputedStyle(element).contentVisibility)).toBe("visible")
+      const cdp = await page.context().newCDPSession(page)
+      const tree = await cdp.send("Accessibility.getFullAXTree")
+      expect(tree.nodes.filter((node) => node.role?.value === "region")).toHaveLength(0)
+      expect(tree.nodes.filter((node) => node.role?.value === "table")).toHaveLength(
+        await page.locator(".prose table").count(),
+      )
+      const heading = page.locator(".prose h3[id]").last()
+      const id = await heading.getAttribute("id")
+      await page.goto(`/${lang}/docs/${tool}/commands#${id}`)
+      await expect(heading).toBeInViewport()
+      await tables.last().scrollIntoViewIfNeeded()
+      await tables.last().focus()
+      await expect(tables.last()).toBeFocused()
+      expect(await tables.last().innerText()).not.toBe("")
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
+      await page.emulateMedia({ media: "print" })
+      expect(await tables.first().evaluate((element) => getComputedStyle(element).contentVisibility)).toBe("visible")
+    })
+  }
+  test(`${lang}: successful copy has an independent live status and restores its button name after a demo change`, async ({
+    page,
+  }) => {
+    await page.addInitScript(() =>
+      Object.defineProperty(navigator, "clipboard", { value: { writeText: async () => {} } }),
+    )
+    await page.goto(`/${lang}`)
+    await page.locator(".hero .agent-connect summary").click()
+    const button = page.locator(".hero .connect-choice").first()
+    await button.click()
+    const copied = { en: "Copied", ru: "Скопировано", es: "Copiado" }[lang]
+    await expect(button).toHaveAccessibleName(`Telegram: ${copied}`)
+    await expect(page.locator('main > p[role="status"]')).toHaveText(`Telegram: ${copied}`)
+    await page.keyboard.press("Escape")
+    await page.locator('[data-messenger="max"]').click()
+    await page.locator(".hero .agent-connect summary").click()
+    const original = { en: "Copy", ru: "Копировать", es: "Copiar" }[lang]
+    await expect(button).toHaveAccessibleName(`Telegram: ${original}`)
+  })
+}
+
+for (const lang of ["en", "ru", "es"]) {
+  test(`${lang}: the reproduced English fixture declares its language inside the localized guide`, async ({ page }) => {
+    await page.goto(`/${lang}/docs/meeting-brief`)
+    await expect(page.locator("html")).toHaveAttribute("lang", lang)
+    const fixture = page.locator('.prose div[lang="en"]')
+    await expect(fixture).toHaveCount(1)
+    await expect(fixture).toContainText("Atlas invoice deadline confirmed: Friday, October 9.")
+  })
+}
+
+test("the public project contact opts out of an unnecessary edge email decoder", async ({ request }) => {
+  const html = await (await request.get("/en")).text()
+  expect(html).toContain('<!--email_off--><a href="mailto:hello@wirecat.dev">hello@wirecat.dev</a><!--/email_off-->')
+})
