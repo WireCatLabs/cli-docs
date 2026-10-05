@@ -26,6 +26,12 @@ not read in order.
   export, how long it lives.
 - `mcp.md` — the MCP server for clients without a terminal: connecting, what it can do, what is
   off until turned on.
+- `search.md` — everyday message search: words, people, chats, dates, files, links, tags, saved
+  searches and counts. No internals.
+- `topic-search.md` — conversations for a non-technical reader: building, embedding, searching by
+  meaning, freshness, and what a remote model sends.
+- `query-language.md` — the search reference: fields, operators, presets, limits, the JSON answer.
+  The technical page on how search works is shared: `content/docs/search-architecture.mdx`.
 - `recipes.md` — whole tasks for an agent, each one copyable.
 - Pages only one tool has, named after what they cover — today `bot.md`, `groups.md`, `remote.md`
   (max).

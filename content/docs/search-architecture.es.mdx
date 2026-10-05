@@ -1,100 +1,101 @@
 ---
-title: Arquitectura de búsqueda
-description: Cómo se conectan la búsqueda de mensajes, los grafos de conversaciones, los embeddings y las fuentes.
+title: Cómo funciona la búsqueda
+description: "La parte técnica de la búsqueda de mensajes y la búsqueda por temas: índices, grafo de conversaciones, vectores, orden de resultados, frescura y mediciones."
 ---
 
-WireCat ofrece dos vías sobre un archivo local compartido: **la búsqueda estricta de mensajes** encuentra mensajes que cumplen una consulta y **la búsqueda de conversaciones** encuentra discusiones por significado y palabras. Los grafos y los embeddings ya existen como etapas opcionales, separadas de la búsqueda Lucene de mensajes.
+WireCat tiene dos formas de buscar en un mismo archivo local. **La búsqueda de mensajes** encuentra los mensajes que cumplen una consulta estricta. **La búsqueda por temas** encuentra conversaciones por significado y por palabras en común. Solo comparten el archivo: el grafo de conversaciones y los vectores son etapas opcionales que la búsqueda de mensajes nunca lee.
 
-Esta guía describe la implementación examinada el 4 de octubre de 2026. Los detalles de los comandos están en las guías de [Telegram](./tg/search.md) y [MAX](./max/search.md) y sus páginas del archivo. Los enlaces al código fijan la versión examinada del motor; no implican que todos los CLI instalados ya usen esa versión del SDK.
+Esta es la página técnica. Para el uso diario, lee las guías de búsqueda de [Telegram](./tg/search.md) y [MAX](./max/search.md) y sus páginas del archivo. La página describe el motor de [`cli-messaging` 0.148.2](https://github.com/leemour/cli-messaging/tree/v0.148.2), que usan las versiones en desarrollo de tg y max. Las versiones publicadas (tg 0.27, max 0.28) usan 0.147.0, que aún no tiene etiquetas, búsquedas guardadas ni el ajuste de raíces de palabras.
 
 <ArchitectureDiagram name="searchPaths" lang="es" />
 
-## Elegir la vía adecuada
+## Elige la vía adecuada
 
-| Pregunta | Entrada | Resultado | Preparación |
+| Pregunta | Comando | Qué devuelve | Qué hace falta antes |
 | --- | --- | --- | --- |
-| «¿Dónde dijo Alice invoice en octubre, con un archivo?» | `messages search` | Mensajes coincidentes, localizadores y contexto cercano opcional | Historial guardado; índice de palabras preparado para condiciones de texto |
-| «¿Dónde hablamos de alquilar un piso?» | `conversations search` | Conversaciones ordenadas, fragmentos coincidentes y motivo de recuperación | Conversaciones construidas; embeddings para coincidencias semánticas |
-| «¿A qué discusión pertenece este mensaje?» | `conversations show` / `messages links` | Miembros, enlaces candidatos y cadena de padres elegida | Conversaciones construidas |
-| «¿Qué se escribió alrededor de este mensaje?» | `messages context` / `--context` | Vecinos cronológicos en su cuenta y chat | Historial guardado; no necesita grafo ni embeddings |
+| «¿Dónde dijo Alice factura, en octubre, con un PDF?» | `messages search` | Mensajes que coinciden, sus localizadores y, si quieres, los mensajes vecinos | Historial guardado; índice de palabras listo para consultas con palabras |
+| «¿Cuántos mensajes al día mencionan el presupuesto?» | `messages stats` | Recuentos por chat, remitente, día u hora | Lo mismo que la búsqueda de mensajes |
+| «¿Dónde hablamos de alquilar un piso?» | `conversations search` | Conversaciones ordenadas, el fragmento que coincide y cómo coincidió | Conversaciones construidas; vectores para coincidir por significado |
+| «¿Qué más trató lo mismo?» | `conversations related` | Las conversaciones más cercanas a la de un mensaje | Vectores; no se ejecuta ningún modelo |
+| «¿A qué conversación pertenece este mensaje?» | `conversations show` / `messages links` | La conversación y la cadena de padres elegida | Conversaciones construidas |
+| «¿Qué había alrededor de este mensaje?» | `messages context` / `--context` en la búsqueda | Vecinos en el tiempo, en la misma cuenta y chat | Solo el historial guardado |
 
-Un tema nativo del mensajero, una conversación inferida y una ventana cronológica son conceptos distintos. Una conversación puede unir mensajes no adyacentes; los mensajes cercanos pueden tratar otro asunto.
+Un tema de foro del mensajero, una conversación inferida y una ventana de mensajes vecinos son tres cosas distintas. Una conversación puede unir mensajes lejanos; los mensajes vecinos pueden pertenecer a discusiones distintas.
 
 ## 1. Archivo e identidad
 
-Las lecturas, la descarga explícita del historial y la captura de novedades habilitada guardan mensajes en SQLite. La búsqueda lee esa copia y no descarga silenciosamente todo el historial remoto. Los identificadores provider/account/chat/message separan mensajes con el mismo número en fuentes diferentes. Los localizadores completos permiten volver al original.
+Las lecturas, las descargas explícitas de historial y la captura en segundo plano guardan los mensajes en un único almacén SQLite compartido. La búsqueda lee esta copia local y nunca descarga historial remoto por su cuenta. Los identificadores de proveedor, cuenta, chat y mensaje separan mensajes con el mismo número de fuentes distintas, y cada resultado lleva un localizador completo para que un agente vuelva al original.
 
-El texto original y los metadatos del proveedor se conservan separados del texto normalizado del índice. El archivo registra rangos de historial y su completitud. Un índice, una conversación construida o un vector no prueban que se haya descargado todo el chat.
+El almacén guarda el texto original de cada mensaje y, aparte, su texto normalizado para buscar. También registra qué tramos del historial de cada chat tiene. Un índice, una construcción o un vector no prueban que un chat se descargara entero.
 
-La búsqueda estricta empieza en la cuenta activa. `--source all` o `in:all` amplía explícitamente el ámbito a las cuentas guardadas; un ámbito de proveedor lo reduce. Los nombres se resuelven dentro del ámbito elegido. Si un nombre es ambiguo, hay que usar un identificador preciso o reducir el ámbito.
+La búsqueda de mensajes empieza en la cuenta activa. `--source all` o `in:all` la amplía a todas las cuentas del almacén; un proveedor la reduce. Los nombres se resuelven dentro de ese alcance, y un autor o chat ambiguo pide un identificador más preciso. La búsqueda por temas lee una sola cuenta: sus conversaciones construidas, opcionalmente un chat y un límite de tiempo.
 
-La búsqueda de conversaciones está actualmente limitada a una cuenta: sus conversaciones construidas, con filtros opcionales de chat y tiempo. No ofrece un equivalente de `--source all`. La búsqueda de mensajes entre mensajeros no implica búsqueda semántica entre cuentas.
+## 2. Búsqueda estricta de mensajes
 
-## 2. Búsqueda estricta de mensajes con Lucene
+El proceso:
 
-El flujo de ejecución:
-
-1. Analiza el texto y crea un AST booleano versionado con posiciones para los errores. Lucene define el lenguaje comprobado de consultas; no significa que haya un servidor Elasticsearch ni un índice Java Lucene.
-2. Un registro común valida campos, valores y operadores. El CLI y las peticiones MCP de texto/AST llegan al mismo servicio.
-3. Resuelve cuentas, nombres almacenados y límites de fechas. `topic:` requiere un único chat obligatorio porque los IDs de temas son locales al chat.
-4. Compila el árbol en condiciones SQLite parametrizadas. Términos y frases usan el índice FTS5 de palabras normalizadas; los metadatos restringen los candidatos.
-5. Expande comodines/regex de texto mediante el vocabulario. Las condiciones sobre el cuerpo completo y los detectores preset ejecutan comprobaciones acotadas. Regex usa un autómata limitado en lugar de backtracking sin restricciones.
-6. Ordena solo los mensajes que cumplen la consulta y puede recuperar sus vecinos cronológicos en la cuenta/chat original. La relevancia nunca amplía el conjunto booleano.
+1. Analizar el texto en un árbol booleano con versión que conserva las posiciones para los errores. La gramática sigue un perfil probado de la sintaxis de consultas de Apache Lucene 9.12.3. Lucene es aquí el lenguaje de consulta, no un servidor de búsqueda ni un índice Java.
+2. Validar campos, valores y operadores con un único registro. El texto de la CLI y el texto y los árboles de MCP pasan por el mismo validador y servicio.
+3. Resolver el alcance de cuentas, los nombres guardados y los límites de calendario en la zona IANA elegida. `topic:` necesita exactamente un chat, porque los números de tema son locales a cada chat.
+4. Compilar el árbol en SQL parametrizado para SQLite. Palabras y frases usan un índice de palabras FTS5 sobre el texto normalizado; los predicados de metadatos reducen los candidatos.
+5. Expandir comodines y expresiones regulares de `text:` mediante el vocabulario. Los patrones sobre el texto completo y los presets revisan candidatos dentro de un presupuesto. Las expresiones regulares se ejecutan como un autómata sin retroceso.
+6. Ordenar solo los mensajes que coinciden y, si se pide, añadir vecinos en la cuenta y el chat de cada resultado. El orden nunca amplía el resultado.
 
 <ArchitectureDiagram name="strictSearch" lang="es" />
 
-El motor implementa `text`, `body`, `from`, `chat`, `date`, `kind`, `has`, `topic`, `in` y los `preset` admitidos. `filename/mime/size/tag`, fuzzy/proximity/boost/intervals no están implementados en este perfil y producen errores explícitos.
+Los campos son `text`, `body`, `from`, `chat`, `date`, `kind`, `has`, `topic`, `in`, `preset`, `filename`, `mime`, `size` y `tag`. Los campos de archivo coinciden cuando al menos un adjunto coincide, por el nombre, tamaño y tipo que informó el mensajero; MAX no informa el tipo, así que allí `mime:` no encuentra nada. `tag:` lee las etiquetas locales del dueño en el mensaje, su chat o su remitente. `date:` también acepta `today`, `yesterday` y desplazamientos como `7d`, contados desde el momento de la consulta. Los operadores difusos, de proximidad, de peso y de intervalos se rechazan con un error explícito.
 
 ```sh
 tg messages search 'invoice AND has:file' --source all --context 2 --json
 max messages search 'chat:"Project team" AND date:[2026-10-01 TO 2026-10-31]' --timezone Europe/Madrid --json
+tg messages search 'filename:*.pdf size>1MB date:7d' --json
 ```
 
-`text` compara palabras normalizadas; `body`, el texto original completo. Por ejemplo, `body:/.*invoice.*/` expresa una condición de subcadena del cuerpo. La sintaxis regex tiene un subconjunto admitido: flags, lookaround y backreferences de JavaScript no son equivalentes.
+`text` compara palabras normalizadas; `body` se refiere al texto original completo, distinguiendo mayúsculas. `body:/.*invoice.*/` expresa una condición de subcadena. Una fecha sin hora es un día de calendario en la zona elegida; un día superior inclusivo incluye el día entero, y los días de cambio de hora no se suponen de 24 horas.
 
-Una fecha ISO sin hora representa un día de calendario en la zona IANA elegida. Un límite superior inclusivo incluye todo el día; uno exclusivo lo excluye. Los límites contemplan el horario de verano, sin suponer días de exactamente 24 horas.
+Cuando todas las ramas exigen palabras, los resultados se ordenan por BM25 sobre el índice de palabras; si no, primero los más nuevos. `--newest` siempre ordena por tiempo. Los empates se resuelven con identificadores que incluyen la cuenta, así que las páginas son estables.
 
-Si el índice no está preparado, la búsqueda estricta solicita mantenimiento en vez de devolver coincidencias aproximadas por subcadena. Se limitan bytes del query, profundidad del árbol, tamaño del autómata, expansión del vocabulario, candidatos, bytes leídos, trabajo y tiempo. Agotar un presupuesto es un error, no un resultado vacío completo.
+Si el índice de palabras no está listo, una consulta con palabras falla con `index_not_ready`, la parte ya construida y el comando que lo termina; nunca recurre a buscar subcadenas. La longitud de la consulta, la profundidad del árbol, el tamaño del autómata, la expansión del vocabulario (10 000 palabras), los candidatos, los bytes leídos, el trabajo y el tiempo están acotados. Superar un límite es un error, nunca un resultado recortado en silencio.
 
-La respuesta incluye versiones del query/campos/presets, zona horaria, orden, `wordsReady`, cuentas/chats cubiertos y completitud, incluso sin coincidencias. Actualmente `inventoryComplete: false` y `lastSyncedAt: null` no certifican un inventario completo ni una sincronización reciente. JSONL transmite elementos; JSON conserva esta envoltura.
+La respuesta JSON incluye las versiones del lenguaje, los campos y los presets, la zona horaria, el orden, `wordsReady` y la cobertura de cuentas y chats, incluso sin resultados. `lastSyncedAt` es la hora más antigua en que un chat del alcance se descargó por última vez con `store fetch`, o `null` si alguno nunca se descargó. `inventoryComplete` indica que cada cuenta del alcance entregó alguna vez su lista completa de chats; es un dato del pasado, no una promesa sobre el presente.
 
-El descubrimiento legacy y JavaScript `--regex` son modos explícitos independientes. Sus correcciones y fallback no forman parte de la semántica estricta de Lucene.
+`messages stats` ejecuta la misma consulta y cuenta cada mensaje una vez, por chat, remitente, día de calendario u hora. Una búsqueda o recuento correcto guarda su consulta y opciones, nunca sus resultados, en un historial local de las 1000 ejecuciones más recientes; las búsquedas guardadas son entradas con nombre que se analizan de nuevo en cada ejecución.
+
+La búsqueda anterior (`--language legacy`) y el modo JavaScript `--regex` siguen siendo explícitos y separados de la semántica estricta.
 
 ### Formas de las palabras
 
-La búsqueda estricta compara palabras normalizadas completas, así que otra forma de una palabra es otra palabra. `квартира` no encuentra `квартиру` ni `квартиры`, y `piso` no encuentra `pisos`. Para encontrar las formas hoy, usa un prefijo como `квартир*` o `pis*`. Un prefijo también puede encontrar otras palabras que empiezan igual, como `квартирант` o `piscina`.
+La búsqueda estricta compara palabras normalizadas completas, así que otra forma de una palabra es otra palabra. `квартира` no encuentra `квартиру`, y `piso` no encuentra `pisos`. Un prefijo como `квартир*` o `pis*` captura las formas, y también puede captar otras palabras con el mismo inicio, como `квартирант` o `piscina`. La corrección de erratas del modo legacy no añade formas: solo corrige palabras que el archivo no contiene.
 
-La corrección de erratas legacy no añade formas de las palabras. Solo corrige palabras que el archivo no contiene; una palabra que está en el archivo se busca tal cual.
-
-Medimos tres maneras de encontrar formas de las palabras en treebanks de Universal Dependencies, con 102 palabras por idioma ([resultados de la medición](https://github.com/leemour/cli-messaging/blob/bench/stemming-vs-trigrams/bench/stemming/results.md)). *Encontrados* es la parte de los mensajes relevantes que devuelve la búsqueda. *Correctos* es la parte de los resultados devueltos que son relevantes.
+Medimos tres formas de encontrar las variantes en treebanks de Universal Dependencies, con 102 palabras por idioma ([resultados de la medición](https://github.com/leemour/cli-messaging/blob/bench/stemming-vs-trigrams/bench/stemming/results.md)). *Encontrados* es la proporción de mensajes relevantes que devuelve la búsqueda; *correctos* es la proporción de resultados devueltos que son relevantes.
 
 | Coincidencia | Ruso: encontrados | Ruso: correctos | Español: encontrados | Español: correctos |
 | --- | --- | --- | --- | --- |
 | Palabra exacta | 26% | 99% | 39% | 87% |
-| Vecinos por trigramas (escritura parecida) | 69% | 52% | 85% | 44% |
-| Raíces de Snowball | 88% | 84% | 96% | 69% |
+| Trigramas (escritura parecida) | 69% | 52% | 85% | 44% |
+| Raíces Snowball | 88% | 84% | 96% | 69% |
 
-**Previsto, aún no publicado:** un índice de raíces separado, con los stemmers oficiales de Snowball, que obtienen la raíz de cada palabra antes de normalizarla. La idea es activarlo por defecto para palabras simples. Un modo exacto conserva el comportamiento actual: una palabra entre comillas o `--exact` para toda la consulta. Mientras no se publique, la búsqueda estricta funciona como se describe arriba.
+El almacén ya guarda un índice aparte de raíces, construido con los stemmers oficiales de Snowball a partir de cada palabra antes de normalizarla. Los stemmers son un ajuste de todo el almacén (`searchStemmers.cyrillic` y `searchStemmers.latin`: ruso, español, inglés o ninguno), y `store reindex` aplica un cambio. La búsqueda estricta todavía no usa ese índice y funciona como se describe arriba.
 
-## 3. Reconstruir discusiones con un grafo
+## 3. Reconstruir conversaciones con un grafo de mensajes
 
 <ArchitectureDiagram name="conversationSearch" lang="es" />
 
-`conversations build` procesa un chat guardado en orden cronológico. Cada mensaje puede tener enlaces candidatos a mensajes anteriores. El padre elegido lo incorpora a una discusión existente; sin padre empieza otra.
+`conversations build` recorre en orden temporal los mensajes guardados de un chat. Cada mensaje puede tener vínculos candidatos con mensajes anteriores. Un padre elegido lo une a esa conversación; sin padre empieza una nueva.
 
-La prioridad actual:
+Precedencia:
 
-1. **Respuesta del proveedor:** una respuesta explícita a un mensaje anterior presente en la construcción tiene prioridad.
-2. **Respuesta del agente:** una propuesta válida de tu agente puede elegir un padre anterior o comenzar una nueva conversación.
-3. **Reglas:** el candidato con mayor peso derivado de menciones o continuación del mismo autor.
+1. **La respuesta del mensajero:** una respuesta explícita a un mensaje anterior presente en la construcción gana.
+2. **La respuesta del agente:** una respuesta guardada y válida del propio agente del dueño puede elegir un padre anterior o empezar una conversación nueva.
+3. **Reglas:** el candidato de mayor confianza entre las menciones (por @username o por nombre) y la continuación del mismo remitente.
 
-Las menciones examinan hasta 50 mensajes anteriores y respetan los IDs de temas nativos cuando están presentes. La continuación del autor busca entre los últimos 10 mensajes y cinco minutos, también en el mismo tema. Los pesos son heurísticos, no probabilidades calibradas. Las respuestas explícitas pueden apuntar más atrás si su padre existe en el historial cargado.
+Las reglas miran como mucho 50 mensajes atrás: en un grupo medido, el 97% de los padres de respuestas estaban dentro de 50. La continuación del mismo remitente mira los últimos 10 mensajes y cinco minutos. Ambas respetan los identificadores nativos de hilo. Los pesos son heurísticas, no probabilidades calibradas. Una respuesta explícita puede apuntar más atrás si su padre está en la construcción.
 
-Es un **grafo de relaciones entre mensajes dentro de un chat**, no un grafo de conocimiento global de personas, proyectos y chats. Un tema nativo restringe heurísticas, pero no equivale a una conversación inferida. Padres ausentes, historial incompleto y discusiones intercaladas pueden producir agrupaciones imperfectas.
+Es un **grafo de relaciones entre mensajes dentro de un chat**, no un grafo de conocimiento sobre personas, proyectos y chats. Los padres que faltan, el historial incompleto y las discusiones entrelazadas pueden producir agrupaciones imperfectas.
 
-La construcción es explícita: la sincronización normal no reconstruye todos los chats automáticamente. Una nueva construcción publica nuevos miembros e IDs de conversaciones. La anterior sigue disponible hasta que la sustitución esté preparada; un fallo no debe mostrar una versión escrita a medias. Después de reconstruir, vuelve a listar las conversaciones en vez de tratar sus IDs como identidades permanentes.
+La construcción es explícita. Una construcción nueva publica nuevas pertenencias e identificadores de conversación; la anterior sigue legible hasta que la nueva está completa, y una construcción fallida nunca muestra medio resultado. Cada construcción registra la versión de las reglas, para que una versión posterior pueda nombrar los chats construidos con reglas antiguas.
 
-Tu agente puede mejorar las relaciones: consultar estado de lotes, obtener mensajes, proponer padres, guardar la respuesta estructurada y reconstruir. El CLI no invoca un LLM ocultamente para enlazarlos. Las respuestas cuyos mensajes o padres han cambiado/se han eliminado quedan obsoletas y se excluyen de construcciones posteriores.
+Vinculación con ayuda del agente: `skill show link-conversations` da al agente del dueño sus instrucciones; `conversations batches status` estima los mensajes, los lotes y el texto; `batches next` entrega una ventana de 10–200 mensajes (50 por defecto) con los mensajes anteriores; `conversations links add` guarda la respuesta JSON del agente, toda o nada. La CLI nunca llama a un modelo para vincular mensajes. Una respuesta que se refiere a un mensaje cambiado o eliminado queda obsoleta y no entra en construcciones posteriores.
 
 ```sh
 tg conversations build --chat "Project team"
@@ -102,13 +103,15 @@ tg conversations list --chat "Project team" --json
 max conversations batches status --chat "Project team" --json
 ```
 
-## 4. Embeddings de fragmentos de conversaciones
+## 4. Fragmentos y vectores
 
-La construcción divide cada conversación en fragmentos de texto de aproximadamente 1.200 caracteres por límites de mensajes, incluyendo los nombres de autores. Un mensaje demasiado largo ocupa su propio fragmento; el límite de entrada del modelo puede truncarlo. Una conversación solo de medios sin texto no crea fragmentos de texto.
+La construcción corta cada conversación en los límites de los mensajes en fragmentos de unos 1200 caracteres, con los nombres de los remitentes. Un solo mensaje demasiado largo queda como un fragmento; el límite de entrada del modelo puede truncarlo. Una conversación sin texto no produce fragmentos.
 
-Cada fragmento conserva referencias al primer/último mensaje y un hash de contenido. Los vectores se guardan por identidad del modelo y hash: el texto idéntico puede reutilizar un vector y una ejecución interrumpida continúa con lo pendiente. Los mensajes originales son la evidencia; el vector es una representación derivada para recuperar candidatos.
+Cada fragmento conserva su primer y último mensaje y un hash de su texto. Los vectores se guardan por modelo y hash del texto, así que un texto idéntico reutiliza un vector y una ejecución interrumpida continúa con lo que falta. Los mensajes siguen siendo la prueba; los vectores son una representación derivada para buscar.
 
-El modelo local predeterminado es `e5-small`, con 384 dimensiones. `embeddinggemma` es opcional, tiene 768 y exige aceptar sus condiciones. Los archivos están fijados y se comprueban sus checksums. No se mezclan modelos/dimensiones diferentes en una comparación semántica.
+Los modelos locales se ejecutan con ONNX Runtime (WebAssembly) en Node o Bun. El predeterminado es `e5-small` (multilingual-e5-small, 8 bits, 384 dimensiones, MIT). `embeddinggemma` (EmbeddingGemma 300M, 4 bits, 768 dimensiones) encuentra más, pero es unas siete veces más lento y requiere aceptar sus términos. Los archivos de los modelos están fijados y se verifican por suma de control, y nunca se comparan vectores de dos modelos.
+
+Una sesión local usa `min(8, núcleos)` hilos. `--workers` inicia varias sesiones y reparte los hilos entre ellas; `--threads` fija el total.
 
 ```sh
 tg models text download e5-small
@@ -116,54 +119,77 @@ tg conversations embed --chat "Project team"
 tg conversations embed status --chat "Project team" --json
 ```
 
-La ejecución local permanece en el equipo. Los proveedores hosted elegidos explícitamente usan la clave configurada del propietario y reciben el texto seleccionado. Antes de enviar pasajes, el comando estima el trabajo pendiente y pide confirmación, salvo que se confirme mediante `--yes`. Una búsqueda hosted también envía el texto del query al proveedor. La búsqueda ordinaria del archivo no requiere ningún proveedor de embeddings externo.
+Un proveedor remoto calcula los vectores con la clave del dueño: OpenAI, o cualquier servidor con la forma `/v1/embeddings` de OpenAI mediante `--base-url` junto con `--model` y `--dims`, como Gemini, Jina, Ollama o LM Studio. Eso envía el texto de los fragmentos, y cada búsqueda envía la pregunta. Antes de enviar nada, `embed` indica los fragmentos, el máximo de tokens y el precio máximo, y espera un sí (`--yes` en scripts, `--max-tokens` como tope).
 
-Antes de calcular el vector, se reconstruye el texto actual y se compara con su hash. Los fragmentos cambiados se omiten y necesitan reconstrucción. El nuevo historial también requiere construcción/embedding para entrar en esta vía. La consulta semántica usa hashes de la construcción actual; no revalida todos los mensajes en cada consulta. Tras una edición pueden persistir representaciones anteriores hasta reconstruir y calcular embeddings. Tener vectores no demuestra frescura del archivo.
+Antes de calcular, el texto de cada fragmento se reconstruye a partir de los mensajes actuales y se compara con su hash guardado. Un fragmento cambiado se omite hasta la siguiente construcción.
 
-## 5. Recuperación híbrida de conversaciones
+### Mediciones
 
-`conversations search` acepta una pregunta natural, no una expresión Lucene. Ejecuta dos ramas:
+100 000 mensajes en tres idiomas, de 5 a 40 palabras cada uno, como un solo chat; AMD Ryzen AI 9 HX 470 (24 hilos), 30 GB de RAM, Linux, Node 24 y Bun 1.3; medido el 2 de octubre de 2026 ([medición](https://github.com/leemour/cli-messaging/blob/v0.148.2/bench/embeddings/README.md)).
 
-- **Significado:** convierte el query con el modelo elegido, examina vectores de las construcciones actuales en la cuenta/chat y conserva el mejor fragmento de cada conversación.
-- **Palabras:** extrae palabras, las une con OR para buscar mensajes y los relaciona con sus conversaciones construidas.
+| Paso | Entorno | Tiempo | Memoria máxima |
+| --- | --- | --- | --- |
+| `conversations build` | Node | 3,3 s | 331 MB |
+| `conversations embed`, 1 proceso | Node | 1371 s (31 fragmentos/s) | 1,2 GB |
+| `conversations embed`, 3 procesos | Node | 1240 s (34 fragmentos/s) | 2,6 GB |
+| `conversations embed`, 1 proceso | Bun | 1329 s (32 fragmentos/s) | 3,2 GB |
+| `conversations embed`, 3 procesos | Bun | 1279 s (33 fragmentos/s) | 2,7 GB |
 
-Combina las listas mediante reciprocal rank fusion: cada una aporta `1 / (60 + rank)`, comenzando en 1. `by` indica `["meaning"]`, `["words"]` o ambos. `summary` contiene metadatos de conversación (IDs, fechas, número de mensajes), no texto generado. `score` es el coseno del mejor fragmento, no la puntuación de fusión ni la probabilidad de una respuesta correcta; las coincidencias solo de palabras tienen `score: null`.
+La ejecución produjo 42 417 fragmentos y el almacén creció 292 MB. Tres procesos solo dieron 1,1× en Node y 1,04× en Bun: una sesión ya usa 8 hilos, y tres comparten más o menos los mismos. Una búsqueda, desde que el recorrido de vectores lee cada página por su clave: unos 0,35 s en un proceso que mantiene el modelo abierto (el servidor MCP) y unos 1,4 s para un comando puntual, de los que cargar el modelo es cerca de 1 s.
 
-Los vectores son blobs de SQLite. La implementación los lee por páginas y calcula similitud en JavaScript: no tiene un índice ANN/vectorial ni una base vectorial separada. Las páginas acotan los vectores cargados a la vez, pero el trabajo total crece con los fragmentos del ámbito.
+## 5. Búsqueda híbrida de conversaciones
 
-Un chat vectorizado solo con otro modelo queda fuera de la rama semántica del modelo elegido y se identifica en `embeddedOnlyElsewhere`; sus conversaciones pueden aportar coincidencias léxicas. Historial descargado sin construcción no aparece como conversación. El comando actual codifica el query incluso para resultados solo léxicos: el modelo elegido debe estar instalado/configurado y su ausencia no activa una búsqueda sin modelo. Puede haber candidatos cercanos aunque el archivo no contenga la respuesta: comprueba los originales.
+`conversations search` recibe una pregunta en lenguaje natural, no una consulta Lucene. Ejecuta dos ramas:
+
+- **Significado:** convertir la pregunta en vector con el modelo elegido, recorrer los vectores de las construcciones actuales del alcance y quedarse con el mejor fragmento de cada conversación.
+- **Palabras:** tomar las palabras de la pregunta, unirlas con OR sobre el índice de palabras y asignar los mensajes encontrados a conversaciones construidas.
+
+Las dos listas se combinan con reciprocal rank fusion: cada lista suma `1 / (60 + puesto)` a una conversación, con puestos desde uno. Un resultado indica `by: ["meaning"]`, `["words"]` o ambos. Su `score` es la similitud coseno del mejor fragmento, no la puntuación combinada ni la probabilidad de que responda; un resultado encontrado solo por palabras tiene `score: null`. Su `summary` son metadatos (identificadores, fechas, número de mensajes y remitentes), no texto generado.
+
+Sin un modelo local descargado, la búsqueda responde solo por palabras e indica `"meaning": "unavailable"`; nunca descarga un modelo ni cambia a uno remoto. Un chat con vectores solo de otro modelo queda fuera de la rama de significado y aparece en `embeddedOnlyElsewhere`. Un chat nunca construido no devuelve nada aquí.
+
+Los vectores son blobs de SQLite que se recorren por páginas y se puntúan en JavaScript. No hay índice de vecinos aproximados ni base de datos vectorial aparte: el trabajo total crece con los fragmentos del alcance. Siempre aparecen vecinos cercanos aunque el archivo no tenga la respuesta, así que verifica los mensajes originales.
+
+`conversations related` usa como consulta la media de los vectores actuales de una conversación y busca en todos los chats construidos. No se ejecuta ningún modelo, así que no hace falta descargarlo.
 
 ```sh
 tg conversations search "Where did we discuss renting a flat?" --chat "Project team" --json
-max conversations search "What changed in the project budget?" --json
+max conversations related "Project team" 4521 --json
 ```
 
-CLI y MCP usan servicios compartidos. El esquema MCP de conversation search admite query/chat/since/limit, no todas las opciones model/provider del CLI. MCP ofrece list/show/search; construir y vectorizar pasajes son preparaciones explícitas. Un modelo puede codificar la pregunta, pero ninguna vía genera por sí misma una respuesta de IA.
+## 6. Frescura
 
-## 6. Contexto y evidencia para un agente
+`conversations status` informa, para cada chat construido, un estado —`ready`, `stale`, `partial`, `words-only` o `not-built`— con los mensajes que la construcción no ha visto (nuevos, editados, eliminados), si se usaron reglas antiguas y los fragmentos cuyo vector está al día, obsoleto o ausente. Sin `--chat` también cuenta los grupos nunca construidos.
 
-Después de recuperar candidatos, abre los mensajes o la conversación originales. Distingue una coincidencia exacta, un candidato semántico, una relación inferida por el grafo y una conclusión del agente. Conserva el localizador, chat, fecha y texto relevante junto a cada afirmación.
+- **Ediciones.** Un resultado cuyo fragmento cambió después de calcular el vector se marca `stale: true`; su puntuación corresponde al texto anterior hasta la siguiente construcción y cálculo.
+- **Eliminaciones.** Un mensaje eliminado conserva su fila, para que una sincronización posterior no lo traiga de vuelta, pero pierde su texto: en la fila, en la copia de búsqueda, en el historial de ediciones, en las transcripciones y en todos los vectores de los fragmentos que lo contenían, salvo que un fragmento actual sin mensajes eliminados use el mismo texto.
+- **Puesta al día.** `conversations build` y `embed` sin `--chat`, y `conversations search --refresh`, construyen y calculan en este equipo los chats que cambiaron o nunca se construyeron: por defecto, como mucho 20 chats y 2000 fragmentos por ejecución (`--max-chats`, `--max-chunks`). Nunca descargan un modelo; un modelo remoto solo se usa por chat y con el sí del dueño. MCP ofrece la misma puesta al día como `conversations_refresh`.
 
-El `--context` cronológico no recorre el grafo. `messages links` explica relaciones y la cadena de padres; `conversations show` lee los mensajes agrupados. Los paquetes de evidencia compartidos añaden identidades, fingerprints, límites y metadatos de truncamiento. Una página de evidencia tampoco prueba que el historial esté completo.
+## 7. Pruebas y contexto para un agente
 
-Leer/buscar/contexto no marca mensajes como leídos ni envía mensajes. Descargar historial, construir, vectorizar pasajes y usar proveedores externos son acciones explícitas separadas. Un resumen debe declarar datos incompletos/obsoletos en vez de tratar relevancia como prueba.
+Después de buscar, abre el mensaje original o la conversación reconstruida. Una respuesta debe distinguir cuatro cosas: una coincidencia exacta de mensaje, un candidato por significado, una relación del grafo y la conclusión del propio agente. Conserva junto a cada afirmación el localizador, el chat, la fecha y el texto relevante alrededor.
 
-## 7. Qué demuestra el playground
+`--context` sigue el tiempo, no el grafo. `messages links` explica las relaciones del grafo y la cadena de padres elegida; `conversations show` lee los mensajes agrupados. Los paquetes de pruebas añaden identidades de fuente, huellas del contenido, límites y datos de truncado; aun así, una página de pruebas no demuestra que el historial de un chat esté completo.
 
-El [playground interactivo](./search-playground.mdx) usa el parser compartido con 12 mensajes ficticios en cuatro chats. Demuestra coincidencias estrictas, sugerencias de campos/valores, filtros reversibles, fechas, Matches/All y contexto original. Los errores destacan el segmento incorrecto y conservan los últimos resultados válidos.
+Leer, buscar y ver el contexto nunca marca mensajes como leídos ni envía nada. Descargar historial, construir, calcular vectores y usar proveedores remotos son acciones separadas y explícitas.
 
-El navegador no abre cuentas, reconstruye conversaciones, calcula embeddings ni invoca IA real. Sus resúmenes citados son ejemplos preparados, visibles cuando se recupera su evidencia. La interfaz está traducida y los mensajes ficticios siguen en inglés. El motor real admite más campos que el evaluador de ejemplo.
+## 8. Qué muestra el playground
 
-## Código y lecturas adicionales
+El [playground interactivo](./search-playground.mdx) ejecuta el analizador de consultas compartido sobre 36 mensajes ficticios en seis chats. Muestra la coincidencia estricta, sugerencias de campos y valores, filtros que se pueden quitar, fechas, predicados de archivos y enlaces y el contexto alrededor de un resultado. Una edición inválida conserva los últimos resultados válidos y marca el error de sintaxis.
 
-Fuente examinada: [`cli-messaging` 0.140.0, commit `680d22e`](https://github.com/leemour/cli-messaging/tree/680d22e). Son referencias de implementación, no garantías de rendimiento ni afirmaciones sobre un binary antiguo instalado.
+El navegador no abre ninguna cuenta ni ejecuta construcción de conversaciones, vectores ni IA en vivo. Sus resúmenes breves son ejemplos preparados que solo se muestran cuando se recuperan sus pruebas. La interfaz está traducida; los mensajes de ejemplo siguen en inglés.
+
+## Mapa del código
+
+Código del motor en [`cli-messaging` v0.148.2](https://github.com/leemour/cli-messaging/tree/v0.148.2). Son referencias de implementación, no promesas de rendimiento.
 
 | Responsabilidad | Implementación |
 | --- | --- |
-| Parse, validation, scope, coverage | [Servicio de mensajes](https://github.com/leemour/cli-messaging/blob/680d22e/src/services/messages-search.ts), [ejecutor SQLite Lucene](https://github.com/leemour/cli-messaging/blob/680d22e/src/store/sqlite/lucene.ts) |
-| Grafo y ciclo de construcción | [Reglas](https://github.com/leemour/cli-messaging/blob/680d22e/src/conversations/link.ts), [servicio de conversaciones](https://github.com/leemour/cli-messaging/blob/680d22e/src/services/conversations.ts), [persistencia](https://github.com/leemour/cli-messaging/blob/680d22e/src/store/sqlite/conversations.ts) |
-| Fragmentos y vectores | [División](https://github.com/leemour/cli-messaging/blob/680d22e/src/conversations/chunks.ts), [almacenamiento/similitud](https://github.com/leemour/cli-messaging/blob/680d22e/src/store/sqlite/vectors.ts) |
-| Modelos y fusión | [Servicio de embeddings](https://github.com/leemour/cli-messaging/blob/680d22e/src/services/embeddings.ts), [catálogo](https://github.com/leemour/cli-messaging/blob/680d22e/src/embeddings/models.ts) |
-| Contrato de evidencia | [Servicio de evidencia](https://github.com/leemour/cli-messaging/blob/680d22e/src/services/evidence.ts) |
+| Análisis, validación, alcance y cobertura | [Servicio de búsqueda de mensajes](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/services/messages-search.ts) y [ejecutor Lucene para SQLite](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/store/sqlite/lucene.ts) |
+| Índice de palabras y vocabulario | [Coincidencia de palabras](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/store/sqlite/words.ts) y [llenado del índice](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/store/sqlite/search-index.ts) |
+| Vínculos del grafo y ciclo de construcción | [Reglas de vínculos](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/conversations/link.ts), [servicio de conversaciones](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/services/conversations.ts) y [persistencia de construcciones](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/store/sqlite/conversations.ts) |
+| Fragmentos y almacenamiento de vectores | [Fragmentación](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/conversations/chunks.ts) y [almacenamiento y puntuación de vectores](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/store/sqlite/vectors.ts) |
+| Modelos, combinación y frescura | [Servicio de vectores](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/services/embeddings.ts), [catálogo de modelos](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/embeddings/models.ts) y [grupo de procesos](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/embeddings/pool.ts) |
+| Contrato del paquete de pruebas | [Servicio de pruebas](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/services/evidence.ts) |
 
-Consulta la [referencia canónica del lenguaje](https://github.com/leemour/cli-messaging/blob/680d22e/docs/search/query-language.md) para gramática/campos/límites y los archivos de [Telegram](./tg/archive.md) y [MAX](./max/archive.md) para preparación y opciones.
+La gramática exacta, los campos, los presets y los límites están en la [referencia del lenguaje de consulta](https://github.com/leemour/cli-messaging/blob/v0.148.2/docs/search/query-language.md). La preparación y las opciones están en las guías del archivo de [Telegram](./tg/archive.md) y [MAX](./max/archive.md).
