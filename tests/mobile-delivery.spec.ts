@@ -66,6 +66,7 @@ test("analytics queues initial views and navigation before idle provider downloa
   await page.reload()
   await expect.poll(async () => (await queued()).ym.filter((item) => item[1] === "hit").length).toBe(1)
   expect((await queued()).ga.filter((item) => item[0] === "config")).toHaveLength(1)
+  await page.context().unrouteAll({ behavior: "ignoreErrors" })
 })
 
 test("blocked analytics providers leave landing interactions usable", async ({ page, baseURL }) => {
@@ -84,6 +85,7 @@ test("blocked analytics providers leave landing interactions usable", async ({ p
   await expect(page.locator("h1")).toBeVisible()
   await expect(page).toHaveURL("https://wirecat.dev/en/about")
   expect(errors).toEqual([])
+  await page.unrouteAll({ behavior: "ignoreErrors" })
 })
 
 for (const lang of ["en", "ru", "es"]) {
