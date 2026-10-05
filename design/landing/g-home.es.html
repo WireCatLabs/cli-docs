@@ -398,6 +398,12 @@
 
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 .tool summary code { overflow: visible; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+  .connection-answers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; margin-top: 32px; }
+  .connection-answers h3 { margin: 0 0 12px; font-size: 20px; }
+  .connection-answers p { margin: 0; color: var(--ink-soft); line-height: 1.7; }
+  .connection-answers a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  @media (max-width: 760px) { .connection-answers { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -428,7 +434,7 @@
         <span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copiar</button></span>
         <a class="btn" href="#connect">Conecta tu agente</a>
       </div>
-      <p class="tagline"><b>Herramientas de mensajería para tu agente de IA.</b> Gratis y de código abierto.</p>
+      <p class="tagline"><b>WireCat es un proyecto de código abierto.</b> Sus dos herramientas CLI, tg y max, conectan tu agente con Telegram y MAX.</p>
     </div>
   </div>
 
@@ -597,6 +603,8 @@
     </dl>
   </div>
 </section>
+
+<section id="questions" aria-labelledby="questions-title"><div class="wrap"><h2 class="big" id="questions-title">Antes de conectar</h2><div class="connection-answers"><div><h3>¿Mi cuenta o un bot?</h3><p>Conecta tu propia cuenta de Telegram o MAX para trabajar con conversaciones existentes. Los perfiles de bots usan la Bot API oficial de cada servicio y tienen su propia configuración. <a href="/es/docs/tg/usage">Usa tu cuenta personal</a> · <a href="/es/docs/bot-api">Configura la Bot API</a>.</p></div><div><h3>¿Necesito MCP?</h3><p>Un agente con acceso al terminal puede usar la CLI y su skill. MCP ofrece herramientas con nombre para clientes compatibles. También puedes usar la CLI directamente, sin un agente de IA. <a href="/es/docs/mcp">Elige cómo conectar</a>.</p></div><div><h3>¿Dónde se procesan mis datos?</h3><p>La caché de mensajes se guarda en tu ordenador. El contenido que das a un agente de IA se procesa según la configuración local o en la nube del agente y su modelo. <a href="/es/docs/security">Lee sobre almacenamiento y acceso</a>.</p></div><div><h3>¿Qué pruebo primero?</h3><p>Empieza leyendo: busca una decisión anterior o prepara una reunión. Pide las fuentes y los chats revisados antes de redactar una respuesta. <a href="/es/docs/meeting-brief">Reproduce un resumen para una reunión</a>.</p></div></div></div></section>
 
 <section class="close" id="closing">
   <div class="wrap">

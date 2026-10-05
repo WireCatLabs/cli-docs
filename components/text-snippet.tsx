@@ -2,6 +2,7 @@
 
 import { Check, Copy, MessageSquareText, Terminal } from "lucide-react"
 import { useEffect, useState } from "react"
+import { type InstallationEventContext, trackSiteEvent } from "@/lib/site-events"
 import { wordsFor } from "@/lib/words"
 
 const labels = {
@@ -14,10 +15,12 @@ export function CopyText({
   text,
   lang,
   kind = "command",
+  tracking,
 }: {
   text: string
   lang: string
   kind?: "prompt" | "command"
+  tracking?: InstallationEventContext
 }) {
   const words = wordsFor(lang).onboarding
   const label = (labels[lang as keyof typeof labels] ?? labels.en)[kind]
@@ -46,6 +49,7 @@ export function CopyText({
             try {
               await navigator.clipboard.writeText(text)
               setStatus("copied")
+              if (tracking) trackSiteEvent("installation_command_copy", tracking)
             } catch {
               setStatus("failed")
             }

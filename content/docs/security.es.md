@@ -185,7 +185,7 @@ Cuando importe, pasa el texto por una tubería: `tg messages send me < note.txt`
   conversaciones. Recibe el texto que vectoriza; el comando pregunta antes de enviar fragmentos. El
   modelo por defecto funciona en local.
 
-Nada más.
+Estos son los destinos de red de la CLI. Un agente de IA es un programa aparte: cuando le das mensajes o permites que lea la salida de la CLI, ese contenido se procesa según su modelo y su configuración local o en la nube. Una caché local no convierte un modelo alojado en un modelo local. Revisa los ajustes del agente antes de elegir qué conversaciones compartir.
 
 ## Para ti
 

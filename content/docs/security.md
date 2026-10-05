@@ -180,7 +180,7 @@ When that matters, pipe the text in: `tg messages send me < note.txt`.
   It gets the text it embeds; the command asks before sending passages. The default model runs
   locally.
 
-Nothing else.
+These are the CLI’s network destinations. An AI agent is a separate program: when you give it message text or let it read CLI output, that content is processed according to its model and local or cloud configuration. A local message cache does not make a hosted model local. Review your agent’s settings before choosing which conversations to share.
 
 ## For yourself
 

@@ -44,7 +44,11 @@ export function InstallTool({ tool, lang }: { tool: Tool; lang: string }) {
             <Link href={`/${lang}/docs/installation#nodejs`} className="inline-block text-sm">
               {ui.nodeHelp} →
             </Link>
-            <CopyText lang={lang} text={`npm install -g ${tool.package}`} />
+            <CopyText
+              lang={lang}
+              text={`npm install -g ${tool.package}`}
+              tracking={{ tool: tool.name as "tg" | "max", locale: lang, surface: "installation" }}
+            />
             <p className="text-sm font-medium">{ui.login}</p>
             <CopyText lang={lang} text={`${tool.name} setup`} />
             <Link href={`/${lang}/docs/${tool.name}/sessions`} className="inline-block text-sm">
