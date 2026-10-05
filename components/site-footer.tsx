@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react"
 import { useThemeToggle } from "@/components/use-theme-toggle"
 import { wirecatLogoSvg } from "@/lib/brand"
 import { prepareInstallationButton } from "@/lib/installation-command"
+import { copiedInstallationTool, trackSiteEvent } from "@/lib/site-events"
 import siteConfig from "@/site.config.json"
 
 const escapeHtml = (value: string) =>
@@ -64,6 +65,9 @@ export function SiteFooter({ html, variant = "landing" }: { html: string; varian
           await navigator.clipboard.writeText(button.dataset.copy ?? "")
           if (controller.signal.aborted) return
           button.textContent = { en: "Copied", ru: "Скопировано", es: "Copiado" }[pathname.split("/")[1]] ?? "Copied"
+          const tool = copiedInstallationTool(button.dataset.copy ?? "")
+          if (tool)
+            trackSiteEvent("installation_command_copy", { tool, locale: pathname.split("/")[1], surface: "footer" })
           clearTimeout(timer)
           timer = setTimeout(() => {
             button.textContent = label

@@ -1,10 +1,12 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
 import { FontSwitcher } from "@/components/landing/font-switcher"
 import { SearchPlayground } from "@/components/search-playground/search-playground"
 import { TimeSavings } from "@/components/time-savings"
 import { prepareInstallationButton } from "@/lib/installation-command"
+import { copiedInstallationTool, trackSiteEvent } from "@/lib/site-events"
 
 type Step = { html: string; tool: boolean; delay: number }
 type Session = { id: string; title: string; hint: string; steps: Step[] }
@@ -12,6 +14,7 @@ type Props = { html: string; sessions: Session[]; maxSessions: Session[]; lang: 
 
 /** The markup and demo responses are exported from our reviewed static prototypes. */
 export function Landing({ html, sessions, maxSessions, lang }: Props) {
+  const router = useRouter()
   const rootRef = useRef<HTMLElement>(null)
   useEffect(() => {
     const root = rootRef.current
@@ -170,6 +173,34 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
       },
       { capture: true, signal: controller.signal },
     )
+    root.addEventListener(
+      "click",
+      (event) => {
+        const link = event.target instanceof Element ? event.target.closest("a") : null
+        if (!link || event.defaultPrevented) return
+        const url = new URL(link.href)
+        if (url.origin !== location.origin || url.pathname !== `/${lang}/docs/installation`) return
+        const tool = url.hash.slice(1)
+        if (tool !== "tg" && tool !== "max") return
+        trackSiteEvent("setup_guide_open", {
+          tool,
+          locale: lang,
+          surface: link.closest(".hero") ? "hero" : link.closest(".close") ? "closing" : "footer",
+        })
+        if (
+          event.button === 0 &&
+          !event.metaKey &&
+          !event.ctrlKey &&
+          !event.shiftKey &&
+          !event.altKey &&
+          !link.target
+        ) {
+          event.preventDefault()
+          router.push(url.pathname + url.search + url.hash)
+        }
+      },
+      { signal: controller.signal },
+    )
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries)
@@ -195,6 +226,13 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
             feedback.textContent =
               { en: "Copied", ru: "Скопировано", es: "Copiado" }[document.documentElement.lang] ?? "Copied"
             button.dataset.done = ""
+            const tool = copiedInstallationTool(button.dataset.copy ?? "")
+            if (tool)
+              trackSiteEvent("installation_command_copy", {
+                tool,
+                locale: lang,
+                surface: button.closest(".hero") ? "hero" : "footer",
+              })
           } catch {
             if (controller.signal.aborted) return
             const code = button.querySelector("code") ?? button.previousElementSibling
@@ -239,7 +277,7 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
       for (const timer of timers) clearTimeout(timer)
       root.classList.remove("is-ready")
     }
-  }, [sessions, maxSessions, lang])
+  }, [sessions, maxSessions, lang, router])
   const [before, tail] = html.split("<!--time-savings-->")
   const [after, afterSearch] = (tail ?? "").split("<div data-search-playground></div>")
   return (

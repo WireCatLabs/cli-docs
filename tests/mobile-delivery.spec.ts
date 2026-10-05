@@ -106,3 +106,72 @@ for (const lang of ["en", "ru", "es"]) {
     }
   })
 }
+
+for (const lang of ["en", "ru", "es"]) {
+  test(`${lang}: installation intent events count successful copies and guide opens without clipboard text`, async ({
+    page,
+    baseURL,
+  }) => {
+    await page.context().route("**/*", async (route) => {
+      const url = new URL(route.request().url())
+      if (url.hostname === "wirecat.dev") {
+        await route.fulfill({ response: await route.fetch({ url: `${baseURL}${url.pathname}${url.search}` }) })
+      } else if (url.hostname === "localhost") await route.continue()
+      else await route.abort()
+    })
+    await page.addInitScript(() => {
+      const browser = window as typeof window & { failAuditCopy?: boolean }
+      Object.defineProperty(navigator, "clipboard", {
+        value: {
+          writeText: async () => {
+            if (browser.failAuditCopy) throw new Error("Copy denied")
+          },
+        },
+      })
+    })
+    await page.goto(`https://wirecat.dev/${lang}`)
+    await expect
+      .poll(() =>
+        page.evaluate(() => (window as typeof window & { wirecatTrackingReady?: boolean }).wirecatTrackingReady),
+      )
+      .toBe(true)
+    const events = () =>
+      page.evaluate(() => {
+        const browser = window as typeof window & { dataLayer?: IArguments[]; ym?: { a?: IArguments[] } }
+        return {
+          ga: (browser.dataLayer ?? []).map((item) => Array.from(item)).filter((item) => item[0] === "event"),
+          ym: (browser.ym?.a ?? []).map((item) => Array.from(item)).filter((item) => item[1] === "reachGoal"),
+        }
+      })
+    await page.locator(".hero .agent-connect summary").click()
+    await page.locator(".hero .connect-choice").first().click()
+    expect((await events()).ga).toEqual([
+      ["event", "installation_command_copy", { tool: "tg", locale: lang, surface: "hero" }],
+    ])
+    await page.evaluate(() => {
+      ;(window as typeof window & { failAuditCopy?: boolean }).failAuditCopy = true
+    })
+    await page.locator(".hero .connect-choice").nth(1).click()
+    expect((await events()).ga).toHaveLength(1)
+    await page.evaluate(() => {
+      ;(window as typeof window & { failAuditCopy?: boolean }).failAuditCopy = false
+    })
+    await page.locator(".hero .connect-choice").nth(1).click()
+    expect((await events()).ga).toHaveLength(2)
+    expect((await events()).ym).toHaveLength(2)
+    await page.locator(".hero .connect-guide").first().click()
+    await expect(page).toHaveURL(`https://wirecat.dev/${lang}/docs/installation#tg`)
+    expect((await events()).ga[2]).toEqual(["event", "setup_guide_open", { tool: "tg", locale: lang, surface: "hero" }])
+    await page.locator("details#tg details > summary").click()
+    const install = page.locator("#tg .docs-command").filter({ hasText: "npm install -g @leemour/tg-cli" })
+    await install.locator("button").click()
+    expect((await events()).ga[3]).toEqual([
+      "event",
+      "installation_command_copy",
+      { tool: "tg", locale: lang, surface: "installation" },
+    ])
+    expect((await events()).ym).toHaveLength(4)
+    expect(JSON.stringify(await events())).not.toContain("npm")
+    await page.context().unrouteAll({ behavior: "ignoreErrors" })
+  })
+}

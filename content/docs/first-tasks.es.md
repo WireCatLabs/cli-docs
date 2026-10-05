@@ -214,3 +214,5 @@ debe comprobar qué admite tu cuenta y usar [los comandos de MAX](./max/usage.md
 automáticamente `tg` por `max` en cualquier receta.
 
 Para adaptar las peticiones a tus tareas, sigue con [Cómo formular peticiones](./prompting.md).
+
+Para reproducir una búsqueda con la salida real del conjunto controlado, sigue el [recorrido para preparar una reunión](./meeting-brief.md).
