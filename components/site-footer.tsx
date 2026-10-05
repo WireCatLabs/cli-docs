@@ -19,7 +19,7 @@ export function SiteFooter({ html, variant = "landing" }: { html: string; varian
   const pathname = usePathname()
   // Add configured contacts at render time so builds do not need to regenerate landing snapshots.
   const { email, telegram } = siteConfig.contacts
-  const contacts = `<ul class="foot-contacts"><li><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></li><li><a href="${escapeHtml(telegram)}">Telegram · ${escapeHtml(`@${new URL(telegram).pathname.replace(/^\//, "")}`)}</a></li></ul>`
+  const contacts = `<ul class="foot-contacts"><li><!--email_off--><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a><!--/email_off--></li><li><a href="${escapeHtml(telegram)}">Telegram · ${escapeHtml(`@${new URL(telegram).pathname.replace(/^\//, "")}`)}</a></li></ul>`
   const lang = pathname.split("/")[1] ?? "en"
   const installLabel =
     {

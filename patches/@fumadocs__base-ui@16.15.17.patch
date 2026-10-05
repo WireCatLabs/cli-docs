@@ -1,0 +1,13 @@
+diff --git a/dist/components/codeblock.js b/dist/components/codeblock.js
+index 6a276931132c1c04eb20b794a51a1c7fb683d78c..510acf398d1870e8fbc263fd4bd5203d63842f26 100644
+--- a/dist/components/codeblock.js
++++ b/dist/components/codeblock.js
+@@ -53,7 +53,7 @@ function CodeBlock({ ref, title, allowCopy = true, keepBackground = false, icon,
+ 		}), /* @__PURE__ */ jsx("div", {
+ 			ref: areaRef,
+ 			...viewportProps,
+-			role: "region",
++			role: viewportProps.role ?? "region",
+ 			tabIndex: 0,
+ 			className: cn("text-[0.8125rem] py-3.5 overflow-auto max-h-[600px] fd-scroll-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-fd-ring", viewportProps.className),
+ 			style: {

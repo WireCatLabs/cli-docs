@@ -16,11 +16,13 @@ type Props = { html: string; sessions: Session[]; maxSessions: Session[]; lang: 
 export function Landing({ html, sessions, maxSessions, lang }: Props) {
   const router = useRouter()
   const rootRef = useRef<HTMLElement>(null)
+  const copyStatusRef = useRef<HTMLParagraphElement>(null)
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
     const controller = new AbortController()
     const timers = new Set<ReturnType<typeof setTimeout>>()
+    const copyTimers = new Map<HTMLButtonElement, ReturnType<typeof setTimeout>>()
     const later = (fn: () => void, delay: number) => {
       const timer = setTimeout(() => {
         timers.delete(timer)
@@ -217,14 +219,19 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
       prepareInstallationButton(button)
       const feedback = button.querySelector<HTMLElement>("[data-copy-label]") ?? button
       const label = feedback.textContent
+      const accessibleLabel = button.getAttribute("aria-label")
       button.addEventListener(
         "click",
         async () => {
           try {
             await navigator.clipboard.writeText(button.dataset.copy ?? "")
             if (controller.signal.aborted) return
-            feedback.textContent =
-              { en: "Copied", ru: "Скопировано", es: "Copiado" }[document.documentElement.lang] ?? "Copied"
+            const copied = { en: "Copied", ru: "Скопировано", es: "Copiado" }[lang] ?? "Copied"
+            feedback.textContent = copied
+            const name = button.querySelector("strong")?.textContent ?? ""
+            const announcement = name ? `${name}: ${copied}` : copied
+            if (accessibleLabel) button.setAttribute("aria-label", announcement)
+            if (copyStatusRef.current) copyStatusRef.current.textContent = announcement
             button.dataset.done = ""
             const tool = copiedInstallationTool(button.dataset.copy ?? "")
             if (tool)
@@ -245,10 +252,16 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
             }
             return
           }
-          later(() => {
-            feedback.textContent = label
-            delete button.dataset.done
-          }, 1600)
+          clearTimeout(copyTimers.get(button))
+          copyTimers.set(
+            button,
+            setTimeout(() => {
+              feedback.textContent = label
+              if (accessibleLabel) button.setAttribute("aria-label", accessibleLabel)
+              delete button.dataset.done
+              if (copyStatusRef.current) copyStatusRef.current.textContent = ""
+            }, 1600),
+          )
         },
         { signal: controller.signal },
       )
@@ -275,6 +288,7 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
       controller.abort()
       observer.disconnect()
       for (const timer of timers) clearTimeout(timer)
+      for (const timer of copyTimers.values()) clearTimeout(timer)
       root.classList.remove("is-ready")
     }
   }, [sessions, maxSessions, lang, router])
@@ -283,6 +297,7 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
   return (
     <main ref={rootRef} className="landing-content">
       <FontSwitcher lang={lang} />
+      <p ref={copyStatusRef} role="status" aria-live="polite" aria-atomic="true" className="sr-only" />
       {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Reviewed local exported HTML only. */}
       <div dangerouslySetInnerHTML={{ __html: before }} />
       {tail !== undefined && <TimeSavings lang={lang} />}

@@ -44,7 +44,7 @@ export function CopyText({
           type="button"
           disabled={!ready}
           className="docs-copy"
-          aria-label={`${words.copy}: ${label}`}
+          aria-label={`${status === "copied" ? words.copied : words.copy}: ${label}`}
           onClick={async () => {
             try {
               await navigator.clipboard.writeText(text)
