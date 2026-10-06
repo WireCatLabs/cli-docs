@@ -22,12 +22,24 @@ const types = {
 export async function serveExport(directory, { port = 0, gzip = true } = {}) {
   const root = resolve(directory)
   const cache = new Map()
+  const redirectsFile = resolve(root, "_redirects")
+  const redirects = existsSync(redirectsFile)
+    ? readFileSync(redirectsFile, "utf8")
+        .trim()
+        .split(/\n/)
+        .map((line) => line.trim().split(/\s+/))
+    : []
   const server = createServer((request, response) => {
     let pathname
     try {
       pathname = decodeURIComponent(new URL(request.url, "http://localhost").pathname)
     } catch {
       response.writeHead(400).end()
+      return
+    }
+    const redirect = redirects.find(([source]) => source === pathname)
+    if (redirect) {
+      response.writeHead(Number(redirect[2]), { Location: redirect[1] }).end()
       return
     }
     const candidate = resolve(root, `.${pathname}`)

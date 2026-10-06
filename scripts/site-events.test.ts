@@ -15,6 +15,32 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllGlobals())
 
 describe("installation intent measurement", () => {
+  it("preserves bounded pending intent through a full homepage-to-docs navigation", () => {
+    const values = new Map<string, string>()
+    const storage = {
+      getItem: (key: string) => values.get(key) ?? null,
+      setItem: (key: string, value: string) => values.set(key, value),
+      removeItem: (key: string) => values.delete(key),
+    }
+    Object.assign(browser, { sessionStorage: storage })
+    trackSiteEvent("installation_command_copy", context)
+    const next = { location: { hostname: "wirecat.dev" }, sessionStorage: storage, gtag: vi.fn(), ym: vi.fn() }
+    vi.stubGlobal("window", next)
+    enableSiteEvents()
+    enableSiteEvents()
+    expect(next.gtag).toHaveBeenCalledExactlyOnceWith("event", "installation_command_copy", context)
+    expect(values.size).toBe(0)
+  })
+  it("discards expired or malformed stored events", () => {
+    Object.assign(browser, {
+      sessionStorage: {
+        getItem: () => JSON.stringify({ expires: 1, events: [{ name: "installation_command_copy", context }] }),
+        removeItem: vi.fn(),
+      },
+    })
+    enableSiteEvents()
+    expect(browser.gtag).not.toHaveBeenCalled()
+  })
   it("queues before initialization and delivers each action once after readiness", () => {
     trackSiteEvent("installation_command_copy", context)
     expect(browser.gtag).not.toHaveBeenCalled()

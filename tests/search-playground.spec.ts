@@ -5,7 +5,7 @@ for (const lang of ["en", "ru", "es"]) {
   test(`${lang}: live results, source context, zero hits and no unsupported summary`, async ({ page }) => {
     const errors: string[] = []
     page.on("pageerror", (error) => errors.push(error.message))
-    await page.goto(`/${lang}`)
+    await page.goto(lang === "en" ? "/" : `/${lang}`)
     const demo = page.locator("#search-playground")
     await expect(demo.locator(".sp-hit")).toHaveCount(18)
     const query = demo.locator(".sp-input")
@@ -27,7 +27,7 @@ for (const lang of ["en", "ru", "es"]) {
   })
 }
 test("keyboard completion quotes a value and retains the remainder of a query", async ({ page }) => {
-  await page.goto("/en")
+  await page.goto("/")
   const query = page.locator(".sp-input")
   await query.fill("Atlas chat:Clien")
   await expect(page.locator(".sp-suggestion")).toHaveCount(1)
@@ -61,7 +61,7 @@ test("mobile has no horizontal overflow; theme and reduced motion remain usable"
 
 test("filter shortcuts open their suggestions and clipboard copies the actual query", async ({ page, context }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"])
-  await page.goto("/en")
+  await page.goto("/")
   await page.getByRole("button", { name: "Chat +", exact: true }).click()
   await expect(page.locator(".sp-suggestion")).toHaveCount(6)
   await page.locator(".sp-suggestion").filter({ hasText: "Client studio" }).click()
@@ -73,7 +73,7 @@ test("filter shortcuts open their suggestions and clipboard copies the actual qu
 })
 
 test("search controls and results meet automated accessibility checks in both themes", async ({ page }) => {
-  await page.goto("/en")
+  await page.goto("/")
   await page.locator("#search-playground").waitFor()
   for (let theme = 0; theme < 2; theme++) {
     const results = await new AxeBuilder({ page })
@@ -86,7 +86,7 @@ test("search controls and results meet automated accessibility checks in both th
 })
 
 test("invalid edits keep the last valid results and mark the incorrect span", async ({ page }) => {
-  await page.goto("/en")
+  await page.goto("/")
   const input = page.locator(".sp-input")
   await input.fill("has:file")
   await expect(page.locator(".sp-hit")).toHaveCount(5)
@@ -104,7 +104,7 @@ test("invalid edits keep the last valid results and mark the incorrect span", as
   await expect(page.locator(".sp-results")).toHaveCSS("padding-top", "0px")
 })
 test("date presets and active filters are editable and clearable", async ({ page }) => {
-  await page.goto("/en")
+  await page.goto("/")
   const input = page.locator(".sp-input")
   await input.fill("")
   await page.getByRole("button", { name: "Files +", exact: true }).click()
@@ -123,7 +123,7 @@ test("date presets and active filters are editable and clearable", async ({ page
 })
 test("long queries wrap; syntax help is near the input and the demo follows the closing section", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 900 })
-  await page.goto("/en")
+  await page.goto("/")
   const input = page.locator(".sp-input")
   await input.fill("Atlas AND (invoice OR budget) AND (has:file OR has:link) AND date:[2026-10-01 TO 2026-10-31]")
   expect((await input.boundingBox())?.height).toBeGreaterThan(80)
@@ -149,7 +149,7 @@ test("the same query playground works in the shared documentation", async ({ pag
 })
 
 test("All browses the sample archive; edits and submit return to Matches", async ({ page }) => {
-  await page.goto("/en")
+  await page.goto("/")
   const tabs = page.locator(".sp-views button")
   await expect(tabs).toHaveCount(2)
   await tabs.nth(1).click()
@@ -175,7 +175,7 @@ test("All browses the sample archive; edits and submit return to Matches", async
   await expect(page.locator(".sp-hit")).toHaveCount(36)
 })
 test("general completion suggests fields; named fields offer useful sample values", async ({ page }) => {
-  await page.goto("/en")
+  await page.goto("/")
   const input = page.locator(".sp-input")
   await input.fill("")
   await input.press("Escape")
@@ -197,7 +197,7 @@ test("general completion suggests fields; named fields offer useful sample value
 })
 
 test("simplified fields and attachment examples work in landing and docs", async ({ page }) => {
-  for (const route of ["/en", "/ru/docs/search-playground", "/es/docs/search-playground"]) {
+  for (const route of ["/", "/ru/docs/search-playground", "/es/docs/search-playground"]) {
     await page.goto(route)
     const input = page.locator(".sp-input:not([readonly])")
     await input.waitFor()

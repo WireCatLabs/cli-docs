@@ -15,12 +15,52 @@ type TrackingWindow = Window & {
   gtag?: (...args: unknown[]) => void
   ym?: (...args: unknown[]) => void
 }
+const pendingKey = "wirecat.pending-installation-events"
+const eventNames = ["installation_command_copy", "setup_guide_open"]
+const surfaces = ["hero", "footer", "closing", "installation"]
+
+function eventQueue(browser: TrackingWindow): SiteEvent[] {
+  if (browser.wirecatEvents) return browser.wirecatEvents
+  browser.wirecatEvents = []
+  try {
+    const saved = JSON.parse(browser.sessionStorage.getItem(pendingKey) ?? "null")
+    if (saved?.expires > Date.now() && Array.isArray(saved.events))
+      for (const event of saved.events.slice(0, 50)) {
+        const context = event?.context
+        if (
+          eventNames.includes(event?.name) &&
+          ["tg", "max"].includes(context?.tool) &&
+          ["en", "ru", "es"].includes(context?.locale) &&
+          surfaces.includes(context?.surface)
+        )
+          browser.wirecatEvents.push({
+            name: event.name,
+            context: { tool: context.tool, locale: context.locale, surface: context.surface },
+          })
+      }
+  } catch {}
+  return browser.wirecatEvents
+}
+
+function savePending(browser: TrackingWindow) {
+  try {
+    if (browser.wirecatEvents?.length)
+      browser.sessionStorage.setItem(
+        pendingKey,
+        JSON.stringify({ expires: Date.now() + 300000, events: browser.wirecatEvents }),
+      )
+    else browser.sessionStorage.removeItem(pendingKey)
+  } catch {}
+}
+
 const productionHostname = new URL(siteConfig.url).hostname
 
 export function flushSiteEvents(): void {
   const browser = window as TrackingWindow
   if (!browser.wirecatTrackingReady || !browser.gtag || !browser.ym) return
-  for (const event of browser.wirecatEvents?.splice(0) ?? []) {
+  const pending = eventQueue(browser).splice(0)
+  savePending(browser)
+  for (const event of pending) {
     try {
       browser.gtag("event", event.name, event.context)
     } catch {}
@@ -34,10 +74,10 @@ export function trackSiteEvent(name: SiteEvent["name"], context: InstallationEve
   if (typeof window === "undefined" || window.location.hostname !== productionHostname) return
   if (!["en", "ru", "es"].includes(context.locale) || !["tg", "max"].includes(context.tool)) return
   const browser = window as TrackingWindow
-  browser.wirecatEvents ??= []
-  const queue = browser.wirecatEvents
+  const queue = eventQueue(browser)
   if (queue.length < 50)
     queue.push({ name, context: { tool: context.tool, locale: context.locale, surface: context.surface } })
+  savePending(browser)
   flushSiteEvents()
 }
 

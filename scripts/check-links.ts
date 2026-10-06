@@ -37,6 +37,17 @@ export const linkProblems = (out: string, origin = "https://wirecat.dev"): strin
   const problems: string[] = []
   for (const file of outputFiles(out).filter((file) => file.endsWith(".html"))) {
     const html = readFileSync(file, "utf8")
+    for (const [tag] of html.matchAll(/<(?:script|img|source|link)\b[^>]*>/g)) {
+      const asset =
+        /\ssrc="([^"]+)"/.exec(tag)?.[1] ??
+        (/<link\b/.test(tag) && /\srel="(?:stylesheet|preload|icon|apple-touch-icon)"/.test(tag)
+          ? /\shref="([^"]+)"/.exec(tag)?.[1]
+          : undefined)
+      if (!asset) continue
+      const url = new URL(asset.replace(/&amp;/g, "&"), `${origin}/${relative(out, file)}`)
+      if (url.origin === origin && !fileFor(out, decodeURIComponent(url.pathname)))
+        problems.push(`${relative(out, file)}: ${asset} — missing local asset`)
+    }
     const seen = new Set<string>()
     for (const [, id = ""] of html.matchAll(/\sid="([^"]+)"/g)) {
       if (seen.has(id)) problems.push(`${relative(out, file)}: duplicate id "${id}"`)

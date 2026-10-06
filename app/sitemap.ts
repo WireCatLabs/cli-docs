@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next"
 import { absoluteUrl, pageAlternates, seoLocales } from "@/lib/seo"
+import { homePath } from "@/lib/site-routes"
 import { source } from "@/lib/source"
 
 export const dynamic = "force-static"
@@ -7,7 +8,7 @@ export const dynamic = "force-static"
 export default function sitemap(): MetadataRoute.Sitemap {
   return seoLocales.flatMap((lang) => [
     ...["", "/about"].map((suffix) => ({
-      url: absoluteUrl(`/${lang}${suffix}`),
+      url: absoluteUrl(suffix ? `/${lang}${suffix}` : homePath(lang)),
       alternates: { languages: pageAlternates(lang, suffix).languages },
     })),
     ...source.getPages(lang).map((page) => {

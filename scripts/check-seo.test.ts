@@ -13,14 +13,14 @@ describe("production SEO guard", () => {
   beforeEach(() => {
     out = mkdtempSync(join(tmpdir(), "seo-"))
     for (const lang of ["en", "ru"]) {
-      const url = `https://example.test/${lang}`
+      const url = `https://example.test/${lang === "en" ? "" : lang}`
       write(
-        `${lang}.html`,
-        `<html lang="${lang}"><title>${lang}</title><meta name="description" content="${lang} description"><meta property="og:title" content="${lang}"><meta property="og:description" content="${lang} description"><meta property="og:url" content="${url}"><meta property="og:image" content="https://example.test/og.png"><meta name="twitter:title" content="${lang}"><meta name="twitter:description" content="${lang} description"><link rel="canonical" href="${url}"><link hreflang="en" href="https://example.test/en"><link hreflang="ru" href="https://example.test/ru"><link hreflang="x-default" href="https://example.test/en"><main><h1>${lang}</h1></main><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","url":"${url}"}]}</script></html>`,
+        lang === "en" ? "index.html" : `${lang}.html`,
+        `<html lang="${lang}"><title>${lang}</title><meta name="description" content="${lang} description"><meta property="og:title" content="${lang}"><meta property="og:description" content="${lang} description"><meta property="og:url" content="${url}"><meta property="og:image" content="https://example.test/og.png"><meta name="twitter:title" content="${lang}"><meta name="twitter:description" content="${lang} description"><link rel="canonical" href="${url}"><link hreflang="en" href="https://example.test/"><link hreflang="ru" href="https://example.test/ru"><link hreflang="x-default" href="https://example.test/"><main><h1>${lang}</h1></main><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","url":"${url}"}]}</script></html>`,
       )
     }
     for (const lang of ["en", "ru"]) {
-      const file = join(out, `${lang}.html`)
+      const file = join(out, lang === "en" ? "index.html" : `${lang}.html`)
       writeFileSync(
         file,
         readFileSync(file, "utf8").replace(
@@ -38,7 +38,7 @@ describe("production SEO guard", () => {
     }
     const website = { "@type": "WebSite", publisher: { "@id": identity["@id"] } }
     for (const lang of ["en", "ru"]) {
-      const file = join(out, `${lang}.html`)
+      const file = join(out, lang === "en" ? "index.html" : `${lang}.html`)
       writeFileSync(
         file,
         readFileSync(file, "utf8").replace(
@@ -51,7 +51,7 @@ describe("production SEO guard", () => {
     write("og.png", "fixture")
     write(
       "sitemap.xml",
-      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://example.test/en</loc></url><url><loc>https://example.test/ru</loc></url></urlset>',
+      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://example.test/</loc></url><url><loc>https://example.test/ru</loc></url></urlset>',
     )
     write("robots.txt", "User-agent: *\nAllow: /\nSitemap: https://example.test/sitemap.xml\n")
   })
@@ -60,15 +60,37 @@ describe("production SEO guard", () => {
   it("accepts matching public metadata and a complete reciprocal locale cluster", () => {
     expect(seoProblems(out, "https://example.test", ["en", "ru"])).toEqual([])
   })
+  it("accepts equivalent root metadata serialized without a trailing slash", () => {
+    for (const name of ["index.html", "ru.html"]) {
+      const file = join(out, name)
+      writeFileSync(
+        file,
+        readFileSync(file, "utf8")
+          .replaceAll('href="https://example.test/"', 'href="https://example.test"')
+          .replace(
+            'property="og:url" content="https://example.test/"',
+            'property="og:url" content="https://example.test"',
+          ),
+      )
+    }
+    expect(seoProblems(out, "https://example.test", ["en", "ru"])).toEqual([])
+  })
+  it("rejects an English root that still performs language detection", () => {
+    const file = join(out, "index.html")
+    writeFileSync(file, `${readFileSync(file, "utf8")}<script src="/language.js"></script>`)
+    expect(seoProblems(out, "https://example.test", ["en", "ru"])).toContain(
+      "/: homepage must not redirect by language",
+    )
+  })
   it("accepts React's mixed-case HTML attributes", () => {
     for (const lang of ["en", "ru"]) {
-      const file = join(out, `${lang}.html`)
+      const file = join(out, lang === "en" ? "index.html" : `${lang}.html`)
       writeFileSync(file, readFileSync(file, "utf8").replaceAll("hreflang=", "hrefLang="))
     }
     expect(seoProblems(out, "https://example.test", ["en", "ru"])).toEqual([])
   })
   it("rejects an unrelated publisher and a missing project logo", () => {
-    const file = join(out, "en.html")
+    const file = join(out, "index.html")
     writeFileSync(
       file,
       readFileSync(file, "utf8")
@@ -80,8 +102,8 @@ describe("production SEO guard", () => {
     )
     expect(seoProblems(out, "https://example.test", ["en", "ru"])).toEqual(
       expect.arrayContaining([
-        "/en: website publisher must reference WireCat",
-        "/en: organization logo must be an available local image",
+        "/: website publisher must reference WireCat",
+        "/: organization logo must be an available local image",
       ]),
     )
   })
@@ -90,7 +112,7 @@ describe("production SEO guard", () => {
     writeFileSync(
       file,
       readFileSync(file, "utf8")
-        .replace('rel="canonical" href="https://example.test/ru"', 'rel="canonical" href="https://example.test/en"')
+        .replace('rel="canonical" href="https://example.test/ru"', 'rel="canonical" href="https://example.test/"')
         .replace('name="twitter:title" content="ru"', 'name="twitter:title" content="en"'),
     )
     expect(seoProblems(out, "https://example.test", ["en", "ru"])).toEqual(
@@ -105,8 +127,8 @@ describe("production SEO guard", () => {
     writeFileSync(
       file,
       readFileSync(file, "utf8")
-        .replace('<link hreflang="en" href="https://example.test/en">', "")
-        .replace('"url":"https://example.test/ru"', '"url":"https://example.test/en"'),
+        .replace('<link hreflang="en" href="https://example.test/">', "")
+        .replace('"url":"https://example.test/ru"', '"url":"https://example.test/"'),
     )
     expect(seoProblems(out, "https://example.test", ["en", "ru"])).toEqual(
       expect.arrayContaining(["/ru: missing or incorrect en hreflang", "/ru: structured data must identify this page"]),
@@ -115,14 +137,14 @@ describe("production SEO guard", () => {
   it("rejects sitemap omissions and accidental non-public entries", () => {
     write(
       "sitemap.xml",
-      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://example.test/en</loc></url><url><loc>https://example.test/404</loc></url></urlset>',
+      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://example.test/</loc></url><url><loc>https://example.test/404</loc></url></urlset>',
     )
     expect(seoProblems(out, "https://example.test", ["en", "ru"])).toEqual(
       expect.arrayContaining(["/ru: missing from sitemap", "Non-public sitemap URL: https://example.test/404"]),
     )
   })
   it("rejects accidentally noindexed public pages and stale Twitter images", () => {
-    const file = join(out, "en.html")
+    const file = join(out, "index.html")
     writeFileSync(
       file,
       readFileSync(file, "utf8")
@@ -134,8 +156,8 @@ describe("production SEO guard", () => {
     )
     expect(seoProblems(out, "https://example.test", ["en", "ru"])).toEqual(
       expect.arrayContaining([
-        "/en: public sitemap pages must be indexable",
-        "/en: Twitter must use the matching large social image",
+        "/: public sitemap pages must be indexable",
+        "/: Twitter must use the matching large social image",
       ]),
     )
   })

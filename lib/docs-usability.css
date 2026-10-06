@@ -1,6 +1,7 @@
 .wirecat-docs {
   --docs-accent: #5963b7;
   --docs-link: #465797;
+  --docs-quote-link: #4a5b9e;
   --docs-tint: #f8f9fa;
   --docs-bar: #f2f3f5;
   --docs-outline: #e0e4e9;
@@ -9,6 +10,7 @@
 .dark .wirecat-docs {
   --docs-accent: #a8b3f1;
   --docs-link: #9eacd2;
+  --docs-quote-link: #7984ad;
   --docs-tint: #17191c;
   --docs-bar: #1d2024;
   --docs-outline: #34393f;
@@ -24,6 +26,9 @@
 .wirecat-docs .prose a,
 .wirecat-docs .fd-prose a {
   color: var(--docs-link);
+}
+.wirecat-docs .prose blockquote a {
+  color: var(--docs-quote-link);
 }
 .wirecat-docs .prose a:hover,
 .wirecat-docs .fd-prose a:hover {

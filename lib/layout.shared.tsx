@@ -3,6 +3,7 @@ import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared"
 import { WirecatLogo } from "@/components/wirecat-logo"
 import { i18n } from "@/lib/i18n"
 import { repository } from "@/lib/shared"
+import { homePath } from "@/lib/site-routes"
 
 export const translations = i18n
   .translations()
@@ -47,7 +48,7 @@ export const translations = i18n
 
 export function baseOptions(lang: string): BaseLayoutProps {
   return {
-    nav: { title: <WirecatLogo />, url: `/${lang}` },
+    nav: { title: <WirecatLogo />, url: homePath(lang) },
     links: [
       {
         type: "icon",

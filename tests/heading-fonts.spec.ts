@@ -13,7 +13,7 @@ test("search uses the same heading face; font comparison stays opt-in", async ({
     if (request.url().includes("/heading-lab/")) fontRequests.push(request.url())
   })
   for (const lang of ["en", "ru", "es"]) {
-    await page.goto(`/${lang}`)
+    await page.goto(lang === "en" ? "/" : `/${lang}`)
     await page.locator(".sp-input:not([readonly])").waitFor()
     expect(await page.locator(".sp-heading h2").evaluate(typography)).toEqual(
       await page.locator("h2.big").first().evaluate(typography),
@@ -100,7 +100,7 @@ test("all eight Cyrillic fonts load locally and update hero, section and search 
   page.on("request", (request) => {
     if (/fonts\.(?:googleapis|gstatic)\.com/u.test(request.url())) failures.push(request.url())
   })
-  await page.goto("/en?fonts=1&scenario=commitments&messenger=max#search-playground")
+  await page.goto("/?fonts=1&scenario=commitments&messenger=max#search-playground")
   const picker = page.getByRole("combobox", { name: "Heading fonts", exact: true })
   await expect(picker.locator("option")).toHaveCount(8)
   const body = await page.locator(".lede").evaluate(typography)
@@ -113,8 +113,8 @@ test("all eight Cyrillic fonts load locally and update hero, section and search 
     expect(await page.locator("h2.big").first().evaluate(typography)).toEqual(hero)
     expect(await page.locator(".sp-heading h2").evaluate(typography)).toEqual(hero)
     expect(await page.locator(".lede").evaluate(typography)).toEqual(body)
-    await expect(page).toHaveURL(/scenario=commitments/u)
-    await expect(page).toHaveURL(/messenger=max/u)
+    expect(new URL(page.url()).searchParams.has("scenario")).toBe(false)
+    expect(new URL(page.url()).searchParams.has("messenger")).toBe(false)
   }
   await page.getByRole("button", { name: "Next font", exact: true }).click()
   await expect(picker).toHaveValue("robotocondensed")
@@ -152,7 +152,7 @@ test("Russian rotation uses fonts with Cyrillic; a choice survives reload and fi
 
 test("wide display fonts keep the final word and punctuation together on mobile", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 844 })
-  await page.goto("/en?fonts=1&font=unbounded#search-playground")
+  await page.goto("/?fonts=1&font=unbounded#search-playground")
   await expect(page.locator(".wirecat-landing")).toHaveAttribute("data-heading-font", "unbounded")
   const positions = await page.locator(".sp-heading h2").evaluate((element) => {
     const node = element.firstChild
@@ -170,24 +170,24 @@ test("wide display fonts keep the final word and punctuation together on mobile"
 })
 
 test("removed Latin-only choices fall back to Unbounded and update the shared URL", async ({ page }) => {
-  await page.goto("/en?fonts=1&font=archivo&scenario=commitments#search-playground")
+  await page.goto("/?fonts=1&font=archivo&scenario=commitments#search-playground")
   await expect(page.locator(".wirecat-landing")).toHaveAttribute("data-heading-font", "unbounded")
   await expect(page).toHaveURL(/font=unbounded/u)
-  await expect(page).toHaveURL(/scenario=commitments/u)
+  expect(new URL(page.url()).searchParams.has("scenario")).toBe(false)
   const picker = page.getByRole("combobox", { name: "Heading fonts", exact: true })
   await expect(picker.locator("option")).toHaveCount(8)
   await expect(picker.locator('option[value="archivo"]')).toHaveCount(0)
 })
 
 test("header and footer language switches keep the font panel and current choice", async ({ page }) => {
-  await page.goto("/en?fonts=1&scenario=commitments&messenger=max#search-playground")
+  await page.goto("/?fonts=1&scenario=commitments&messenger=max#search-playground")
   await page.getByRole("combobox", { name: "Heading fonts", exact: true }).selectOption("geist")
   await page.locator("#bar .lang summary").click()
   await page.locator('#bar .lang-menu a[href="/ru"]').click()
   await expect(page).toHaveURL(/\/ru\?fonts=1/u)
   await expect(page).toHaveURL(/font=geist/u)
-  await expect(page).toHaveURL(/scenario=commitments/u)
-  await expect(page).toHaveURL(/messenger=max/u)
+  expect(new URL(page.url()).searchParams.has("scenario")).toBe(false)
+  expect(new URL(page.url()).searchParams.has("messenger")).toBe(false)
   await expect(page.getByRole("combobox", { name: "Шрифты заголовков", exact: true })).toHaveValue("geist")
   await expect(page.locator(".wirecat-landing")).toHaveAttribute("data-heading-font", "geist")
   await page.locator(".footer-language summary").click()

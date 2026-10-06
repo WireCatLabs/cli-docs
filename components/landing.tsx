@@ -38,19 +38,20 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
     for (const code of root.querySelectorAll<HTMLElement>(".cmd code, .fv pre")) code.tabIndex = 0
     let current = 0
     let readingEvidence = false
-    let messenger = new URL(window.location.href).searchParams.get("messenger") === "max" ? "max" : "tg"
+    let messenger = "tg"
+    const initialUrl = new URL(window.location.href)
+    if (initialUrl.searchParams.has("scenario") || initialUrl.searchParams.has("messenger")) {
+      initialUrl.searchParams.delete("scenario")
+      initialUrl.searchParams.delete("messenger")
+      window.history.replaceState(window.history.state, "", initialUrl)
+    }
     const show = (index: number, animate: boolean) => {
       if (!log || !app) return
       current = index
       readingEvidence = false
       log.style.scrollBehavior = still ? "auto" : ""
       log.scrollTop = 0
-      const url = new URL(window.location.href)
-      url.hash = ""
       const selected = messenger === "max" ? maxSessions : sessions
-      url.searchParams.set("scenario", selected[index].id)
-      url.searchParams.set("messenger", messenger)
-      window.history.replaceState(null, "", url)
       for (const timer of timers) clearTimeout(timer)
       timers.clear()
       buttons.forEach((button, i) => {
@@ -103,13 +104,7 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
     buttons.forEach((button, i) => {
       button.addEventListener("click", () => show(i, true), { signal: controller.signal })
     })
-    const parameter = new URL(window.location.href).searchParams.get("scenario")
-    const requested = sessions.findIndex((session) => session.id === parameter)
-    const legacy = Number(parameter) - 1
-    show(
-      requested >= 0 ? requested : Number.isInteger(legacy) && legacy >= 0 && legacy < sessions.length ? legacy : 0,
-      false,
-    )
+    show(0, false)
     root.querySelectorAll<HTMLButtonElement>("[data-messenger]").forEach((button) => {
       button.addEventListener(
         "click",
