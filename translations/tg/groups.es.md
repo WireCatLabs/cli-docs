@@ -125,3 +125,19 @@ Por MCP, `tg_chats_moderate` solo actúa si el nivel es `allow`; las acciones qu
 - **Solo se conocen los administradores si Telegram los indica.** En caso contrario, `review --unanswered` solo cuenta tus respuestas y lo avisa.
 - **Nada vigila el grupo por su cuenta.** La revisión se ejecuta cuando la inicias tú, un agente por petición tuya o una tarea programada.
 - **Se aplican los límites de Telegram.** Leer todos los miembros de un grupo grande requiere muchas peticiones. Una respuesta `FLOOD_WAIT` indica cuánto debes esperar ([solución de problemas](./troubleshooting.md#telegram-asks-to-wait-n-s-before-the-next-request)).
+
+## Estadísticas de actividad
+
+```sh
+tg chats stats <chat> --since-time 7d --by day --timezone Europe/Madrid --json
+tg chats stats <chat> --offline --json
+```
+
+Cuenta, a partir del almacén local, los mensajes, los remitentes activos, las respuestas, los hilos, las reacciones, las publicaciones más destacadas y las preguntas contestadas. El comando en línea también pide a Telegram las entradas y salidas del grupo; `--offline` y la herramienta MCP `tg_chats_stats` omiten `members`. Si `complete` es false, las cifras son un mínimo; ejecuta el `store fetch` que se sugiere.
+
+## Revisar miembros sospechosos
+
+`tg chats members audit <chat>` enumera los miembros con señales propias de un bot y los motivos; `--budget` limita el número de páginas y `--min-score` fija el umbral. No elimina a nadie y excluye a los administradores y al propietario. `more` indica que la lista es parcial, y `unknown` nombra las señales que no están disponibles. No funciona con `--offline`; las puntuaciones requieren revisión humana.
+
+Se recogen de Telegram los indicadores de bot, estafa, cuenta falsa, cuenta eliminada y foto, y los datos de entrada y de quién invitó, cuando Telegram los proporciona.
+Consulta `unknown` para ver qué datos no están disponibles; las puntuaciones siguen requiriendo revisión humana.

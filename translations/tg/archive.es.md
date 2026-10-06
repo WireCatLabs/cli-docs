@@ -58,15 +58,7 @@ tg store jobs cancel <job>                  # stops after the current page; a la
 
 ## Buscar
 
-`tg messages search` consulta solo el archivo local. El modo predeterminado usa un perfil estricto de Lucene: palabras, frases, grupos booleanos, campos, fechas y expresiones regulares con límites. La [guía de búsqueda](./search.md) explica la sintaxis y la migración. Usa `--language legacy` para los filtros y las coincidencias aproximadas anteriores.
-
-```sh
-tg messages search 'invoice kind:private' --json
-tg messages search 'invoice date:[2026-01-01 TO 2026-02-01}' --timezone Europe/Madrid --json
-tg messages search 'preset:secret kind:saved' --json
-```
-
-Sin resultados significa «no encontrado en el archivo seleccionado». El JSON informa de la cobertura y de lo completo que está el archivo; sin registros de actualización desde la red, no se puede afirmar que esté al día. `--source` elige mensajeros y cuentas, `--newest` ordena por fecha y `--context` añade mensajes cercanos. --regex conserva un modo independiente de JavaScript heredado.
+`tg messages search` encuentra mensajes guardados por sus palabras, remitente, chat, fecha, archivos, enlaces y tus propias etiquetas; por defecto nunca consulta Telegram. `--sync-first` descarga primero, de forma explícita, los mensajes nuevos. La guía es [búsqueda de mensajes](./search.md), con búsquedas guardadas y recuentos. Una respuesta vacía significa «no está en este archivo»: descarga primero el chat.
 
 ## Exportar
 
@@ -81,36 +73,32 @@ La exportación solo escribe lo guardado y nunca consulta Telegram. Comprueba pr
 
 `--output <file>` escribe líneas JSON, o una transcripción con `--format markdown`, en un archivo nuevo que solo tú puedes leer. Indica la ruta y el número de mensajes. Nunca sobrescribe un archivo. `--since-time` acepta una fecha ISO 8601 o un intervalo anterior como `30m`, `2h`, `1d`.
 
+### En una carpeta, y solo lo que ha cambiado
+
+```sh
+tg store export "Book club" "Work" --to ~/tg-export   # a JSON-lines file per chat, and manifest.json
+tg store export --kind group --to ~/tg-groups          # every stored group
+tg store export --all --to ~/tg-all                    # every stored chat of this account
+```
+
+Si vuelves a ejecutarlo en la misma carpeta, solo añade lo que ha cambiado desde la última vez: mensajes nuevos, ediciones (también de mensajes antiguos) y eliminaciones. Un mensaje eliminado se escribe sin su texto, como `{ "id", "chatId", "deleted": true }`. Se rechaza una carpeta que contenga otros archivos o que se haya exportado desde otra cuenta. Un cambio solo en las reacciones no cuenta como cambio.
+
+### Con contraseña
+
+`--encrypt` en `store export` (con `--output` o `--to`) y en `store backup` comprime el archivo y lo cifra con una contraseña, sin necesidad de otro programa. `tg store decrypt <file> --output <new file>` lo abre; `tg store restore` pide la contraseña de una copia de seguridad cifrada.
+
+- **La contraseña no se guarda en ningún sitio**: ni en la configuración, ni en el almacén de claves, ni en ningún registro. Si la pierdes, no se puede abrir el archivo.
+- Escríbela tú en la solicitud oculta, que la pide dos veces. Un agente al que se la hayas dado la pasa por stdin, nunca como argumento, porque otros programas del equipo pueden verlo:
+
+  ```sh
+  printf '%s' 'password' | tg store backup ~/tg.sealed --encrypt
+  ```
+
+- Una carpeta cifrada recibe un archivo por ejecución. Su `manifest.json` no nombra ningún chat, y se rechaza una ejecución con otra contraseña.
+
 ## Conversaciones dentro de un grupo
 
-Un grupo activo mezcla varias conversaciones. `tg conversations` las identifica en los mensajes guardados mediante respuestas, menciones y quién escribió después, sin consultar Telegram ni usar IA:
-
-```sh
-tg conversations build --chat "Valencia Expats"          # find them; run it again after fetching more
-tg conversations list --chat "Valencia Expats" --since-time 7d
-tg conversations show 91                                 # one conversation, oldest first
-tg conversations show "Valencia Expats" 4521             # the conversation message 4521 is in
-tg messages links "Valencia Expats" 4521                 # why that message is where it is
-```
-
-No se construye nada hasta ejecutar `build`; cada nuevo `build` sustituye al anterior. `tg store check` señala los chats procesados con reglas anteriores. Una mención por nombre, sin @username, también cuenta.
-
-Tu agente puede vincular lo que las reglas dejan pendiente. `tg skill show link-conversations` contiene la guía: indica cuánto texto leerá y espera tu aprobación; después responde por lotes (`tg conversations batches next`, `tg conversations links add`). tg no llama a modelos. Las respuestas del agente tienen prioridad sobre las inferencias de las reglas, pero no sobre las respuestas explícitas de Telegram. `tg conversations links clear --chat <chat>` las elimina. `conversations.links` controla si el perfil puede guardarlas.
-
-### Buscar por significado
-
-Después de construir las conversaciones, puedes buscarlas por tema, además de por palabras. `tg conversations embed` convierte cada conversación o fragmento en un vector local; `tg conversations search` encuentra las más próximas a tu consulta:
-
-```sh
-tg models text download e5-small                         # once: 135 MB, shared with max
-tg conversations embed --chat "Valencia Expats"          # resumes where it stopped; --workers 3 for more speed
-tg conversations search "where to rent a flat" --chat "Valencia Expats"
-tg conversations search "renting a flat"                 # every chat you embedded
-```
-
-Nada sale del equipo. `tg models text list` muestra los modelos; `e5-small` es el predeterminado. `embeddinggemma` encuentra más resultados, pero es varias veces más lento y exige `--accept-terms` para descargar bajo las condiciones Gemma de Google. `tg conversations embed status --chat <chat>` indica lo pendiente; `tg conversations embed clear --chat <chat>` elimina los vectores.
-
-Con tu propia clave puedes usar un servicio: `tg models text key set openai`, seguido de `--provider openai` en `embed` y `search`. Antes de enviar mensajes fuera, `embed` indica fragmentos, máximo de tokens y precio máximo, y espera aprobación (`--yes` en scripts; `--max-tokens` limita). `--base-url` admite cualquier servidor compatible, como Ollama o LM Studio local, con `--model` y `--dims`.
+Un grupo activo mezcla varias conversaciones. `tg conversations` las separa a partir de los mensajes guardados y las encuentra por su tema, en este equipo: [búsqueda por tema](./topic-search.md).
 
 ## Fuentes para un resumen del chat
 
@@ -172,7 +160,8 @@ En macOS, el agente se guarda en `~/Library/LaunchAgents/`.
 
 - La unidad ejecuta el `node` y el `tg` usados al instalarla. Vuelve a instalarla si cambias su ubicación, por ejemplo al cambiar de versión de Node.
 - Recibe el perfil y las variables `TG_*_DIR` y `MESSAGING_STORE` de la terminal que ejecutó `server install`, y ninguna otra.
-- **Compruébalo después de `server start`:** `tg server logs`. El servicio obtiene la aplicación del almacén de claves. Si este permanece bloqueado hasta iniciar sesión, el servicio probablemente fallará; los registros indican la causa.
+- **Compruébalo después de `server start`:** `tg server logs`. El servicio obtiene la aplicación del almacén de claves. Si este permanece bloqueado hasta iniciar sesión, el servicio falla; systemd lo reintenta cada 30 s y los registros indican la causa.
+- **Una sesión ya revocada impide el inicio.** `serve` lo comprueba antes de indicar que está listo y termina con el código 4; la unidad instalada queda detenida. Inicia sesión con `tg session start` y después ejecuta `tg server start`. Si la sesión se revoca mientras el servicio funciona, también termina con el código 4, en unos 15 minutos. Si las credenciales de la aplicación no están disponibles y existe una sesión guardada, serve termina con el código 12 y systemd lo reintenta. En macOS, el agente no se reinicia tras ningún fallo, porque launchd no puede excluir un código de salida concreto; vuelve a iniciarlo con `tg server start`. Ejecuta de nuevo `tg server install` para actualizar una unidad antigua.
 - `tg server uninstall` elimina la unidad. Detén el servicio primero.
 - `tg upgrade` reinicia el servidor activo para que no siga usando la versión anterior.
 
@@ -181,7 +170,7 @@ En macOS, el agente se guarda en `~/Library/LaunchAgents/`.
 ```sh
 tg store info                          # where the file is, its size, its schema, how many rows; changes nothing
 tg store check                         # integrity, search indexes, disk, and which chats are behind; changes nothing
-tg store backup ~/tg-store.db          # a copy of the store, while it is in use
+tg store backup ~/tg-store.db          # a copy of the store, while it is in use; --encrypt for a password
 tg store restore ~/tg-store.db         # put a backup in place of the store
 tg store migrate                       # bring the store up to this version's schema
 tg store clear --left --allow-dangerous  # delete the chats you have left, with their messages
@@ -206,3 +195,13 @@ Ejecuta `tg upgrade`. No se pierde ningún dato del archivo.
 
 - [Ejemplos prácticos](./recipes.md): búsquedas y exportaciones en el trabajo diario de un agente.
 - [Seguridad](./security.md): implicaciones del archivo local para la privacidad de tus mensajes.
+
+## Reparación y mantenimiento de índices
+
+`tg store migrate` construye los índices sin terminar; `tg store reindex` los reconstruye. `store info` y `store check` muestran si los índices de palabras y raíces están listos. Un índice de raíces por sí solo no cambia las coincidencias de la búsqueda estricta. `tg config set searchStemmers.cyrillic russian` y `searchStemmers.latin spanish` definen los lematizadores del almacén compartido (`none` desactiva uno; para el alfabeto latino también está disponible `english`); ejecuta después `store reindex`. El ajuste afecta a ambos mensajeros y a todos los perfiles; un proceso bloqueado a un perfil no puede cambiarlo.
+
+`tg store repair --dry-run --json` muestra una vista previa de la reparación estructural y la deshace. `store repair` la aplica sin eliminar datos: las tablas que no coinciden se conservan como copias, y la respuesta nombra las filas y columnas que quedan en ellas. Revisa las copias conservadas antes de eliminar una con `store copies delete <exact name>`; `store repair` las nombra en su respuesta. Detén los procesos que usan el almacén antes de reparar.
+
+## Reglas de respuesta solo para probadores
+
+`tg replies test [rule] --since-time 7d --json` simula qué recibirían los mensajes guardados; nunca envía nada. Las reglas están en el archivo de respuestas del perfil. `replies status`, `pause` y `resume` las consultan y controlan. Para que `serve` compartido responda de verdad, se necesitan tanto el permiso explícito `replies.send:allow` como una lista `testers` configurada. El envío está denegado por defecto; si falta la lista de probadores o está vacía, no se responde a nadie. Se ignoran las ediciones, los mensajes anteriores al inicio y los mensajes ya respondidos. `ask` no puede enviar desde un servicio desatendido.

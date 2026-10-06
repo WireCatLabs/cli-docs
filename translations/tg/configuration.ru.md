@@ -55,23 +55,33 @@ tg work config show
 }
 ```
 
-| Настройка | По умолчанию | Назначение |
-|---|---|---|
-| `limit` | `20` | строк на странице списка; параметр `--limit` имеет приоритет |
-| `timeoutMs` | не задано | время ожидания **одного** запроса к Telegram в миллисекундах. Команда может делать несколько запросов; для ограничения всей команды используйте `--timeout` |
-| `color` | зависит от терминала | цвета в таблицах; `NO_COLOR` также отключает их |
-| `senderColors` | `false` | отдельный цвет для каждого отправителя в таблице сообщений |
-| `record` | `false` | сохранять каждый запуск ([Диагностика](./diagnostics.md)); `--record` и `--no-record` имеют приоритет |
-| `keepRunsForDays` | `30` | записи старше этого числа дней удаляются при сохранении следующей |
-| `permissions` | всё разрешено; удаление и завершение сессий требуют подтверждения | разрешения профиля для каждой команды ([ниже](#what-a-profile-may-do)) |
-| `sendsPerHour` | `30` | максимум отправок за любой час ([Безопасность](./security.md#the-send-guard)) |
-| `transcribeWith` | `auto` | распознавание речи: `auto` (Telegram, иначе локальная модель), `messenger` или `local` |
-| `speechModel` | не задано | скачанная модель для `--local` (`tg models audio list`) |
-| `updateCheck` | `true` | ежедневное уведомление о новой версии; только в `defaults` |
-| `skillHint` | `true` | уведомление агенту об отсутствующем или устаревшем skill для tg, не чаще раза в день; только в `defaults` |
-| `readOtherBots` | `false` | только для бота: разрешено ли `tg bot` читать данные, сохранённые другими ботами на этом компьютере; `true` или список имён профилей ([Бот Telegram](./bot.md)) |
+| Настройка | По умолчанию | Назначение | Чем заменить на один запуск |
+|---|---|---|---|
+| `embeddingProvider` | `local` | локальная модель или `openai` | `--provider` |
+| `embeddingModel` | по умолчанию провайдера | модель векторов | `--model` |
+| `embeddingBaseUrl` | по умолчанию провайдера | адрес API для векторов | `--base-url` |
+| `embeddingDims` | по умолчанию модели | целое число от 1 до 65 536 | `--dims` |
+| `analysisProvider` | `agent` | `agent`, `openai` или `anthropic` | `build --provider` |
+| `analysisModel` | не задано; обязательно для `--analyze` | модель анализа | `build --model` |
+| `analysisBaseUrl` | по умолчанию провайдера | адрес API для анализа | `build --base-url` |
+| `limit` | `20` | строк на странице списка | `--limit` |
+| `timeoutMs` | не задано | время ожидания **одного** запроса к Telegram в миллисекундах. Команда может делать несколько запросов; для ограничения всей команды используйте `--timeout` | нет (`--timeout` — другое ограничение) |
+| `color` | зависит от терминала | цвета в таблицах | нет; если настройка не задана, `NO_COLOR` отключает цвета |
+| `senderColors` | `false` | отдельный цвет для каждого отправителя в таблице сообщений | нет |
+| `catchUpMarksRead` | `false` | `inbox` и `review` отмечают каждый показанный чат прочитанным до последнего показанного сообщения. Собеседник это видит | `--mark-read`, `--no-mark-read` |
+| `record` | `false` | сохранять каждый запуск ([Диагностика](./diagnostics.md)) | `--record`, `--no-record` |
+| `keepRunsForDays` | `30` | записи старше этого числа дней удаляются при сохранении следующей | нет |
+| `permissions` | всё разрешено, кроме отправки правилами ответов; удаление и завершение сессий требуют подтверждения | разрешения профиля для каждой команды ([ниже](#what-a-profile-may-do)) | нет; `--yes` и `--allow-dangerous` только отвечают на `ask` и никогда не снимают `deny` |
+| `sendsPerHour` | `30` | максимум отправок за любой час ([Безопасность](./security.md#the-send-guard)) | нет |
+| `transcribeWith` | `auto` | распознавание речи: `auto` (Telegram, иначе локальная модель), `messenger` или `local` | `--local` или `--model`, который его подразумевает |
+| `speechModel` | не задано | скачанная модель для `--local` (`tg models audio list`) | `--model` |
+| `updateCheck` | `true` | ежедневное уведомление о новой версии; только в `defaults` | нет; `TG_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER` или `CI` отключают его |
+| `skillHint` | `true` | уведомление агенту об отсутствующем или устаревшем skill для tg, не чаще раза в день; только в `defaults` | нет |
+| `readOtherBots` | `false` | только для бота: разрешено ли `tg bot` читать данные, сохранённые другими ботами на этом компьютере; `true` или список имён профилей ([Бот Telegram](./bot.md)) | нет; `--all-bots` и `--bots` запрашивают доступ, а настройка его разрешает |
+| `proxy` | не задано | сервер SOCKS5, HTTP `CONNECT` или MTProxy для подключения к Telegram ([ниже](#through-a-proxy)) | `TG_PROXY` |
+| `searchStemmers.cyrillic`, `searchStemmers.latin` | `russian`, `spanish` | языки основ слов для всей базы, обоих CLI и всех профилей: `russian` или `none`; `spanish`, `english` или `none` ([Локальная база](./archive.md#repair-and-index-maintenance)) | нет |
 
-Поле `defaultProfile` верхнего уровня задаёт профиль, если он не указан первым словом команды или через `TG_PROFILE`.
+Поле `defaultProfile` верхнего уровня задаёт профиль, если он не указан первым словом команды или через `TG_PROFILE`. Первое слово (`tg work …`) и `TG_PROFILE` имеют приоритет над ним.
 
 ## Разрешения профиля
 
@@ -88,11 +98,22 @@ tg work config show
 | `ask` | подтверждение y/N в терминале; по умолчанию нет ([ниже](#a-question-before-a-change)) |
 | `allow` | действие выполняется без подтверждения |
 
-**Ключ — путь команды**: `messages`, `messages.delete`, `messages.send`, `reactions`, `polls.vote`, `chats.mark-read`, `chats.members.remove`, `contacts`, `account.sessions.end`. Он должен начинаться с ресурса: `messages`, `reactions`, `polls`, `topics`, `chats`, `contacts`, `account` или `bot`. **Самый конкретный ключ имеет приоритет**: в примере выше `messages.send` разрешён, а остальные изменения сообщений запрещены. Подстановочных знаков нет: `messages: readonly` не влияет на `reactions`, `polls` или `chats`.
+**Ключ — путь команды**: `messages`, `messages.delete`, `messages.send`, `reactions`, `polls.vote`, `chats.mark-read`, `chats.members.remove`, `contacts`, `account.sessions.end`. Он должен начинаться с ресурса — `messages`, `reactions`, `polls`, `topics`, `chats`, `contacts`, `account`, `conversations`, `tags`, `searches`, `replies`, `attachments` или `bot` — и называть известную команду или проверяемое изменение. Неизвестные ключи команд `config set` отклоняет с кодом 2, в том числе внутри целого объекта `permissions`. `config unset` может удалить старый неизвестный ключ. При чтении существующего файла с таким ключом выводится предупреждение в stderr, и работа продолжается. **Самый конкретный ключ имеет приоритет**: в примере выше `messages.send` разрешён, а остальные изменения сообщений запрещены. Подстановочных знаков нет: `messages: readonly` не влияет на `reactions`, `polls` или `chats`.
+
+Ключи из разных разделов файла складываются, но **сначала решает ближайший раздел, затем самый длинный ключ**. Ключ, заданный профилем, скрывает такой же ключ и все вложенные в него ключи в `personal.defaults`, `bot.defaults` и `defaults`. Здесь профиль `agent` не может удалять: его `messages` скрывает `messages.delete` из `defaults`.
+
+```json
+{
+  "defaults": { "permissions": { "messages.delete": "allow" } },
+  "profiles": { "agent": { "permissions": { "messages": "readonly" } } }
+}
+```
+
+Это работает и в обратную сторону: `messages: allow` профиля тоже скрывает `messages.delete: deny` из `defaults`, и удаление снова требует подтверждения, как по умолчанию. Старые `readOnly` и `allow` действуют в том разделе, где они записаны.
 
 `inbox`, `review`, `watch`, `serve` и `store fetch`, `export`, `search` показывают сообщения и относятся к `messages`: `messages: deny` блокирует и их. `config`, `session`, `doctor`, `recipients`, `mcp` и обслуживание самой базы не ограничиваются.
 
-**По умолчанию разрешено всё, кроме двух необратимых действий**: `messages.delete` и `account.sessions.end` имеют уровень `ask`. Встроенные ограничения могут только усиливаться: `messages: readonly` запрещает удаление, а `messages: allow` сохраняет запрос подтверждения, пока вы явно не настроите `messages.delete`.
+**По умолчанию разрешено всё, кроме двух необратимых действий**: `messages.delete` и `account.sessions.end` имеют уровень `ask`. Правила ответов не могут отправлять, пока вы это не разрешите: `replies.send` имеет уровень `deny`. Встроенные ограничения могут только усиливаться: `messages: readonly` запрещает удаление, а `messages: allow` сохраняет запрос подтверждения, пока вы явно не настроите `messages.delete`.
 
 ```sh
 tg config set permissions.messages.delete allow     # delete without the question
@@ -103,7 +124,7 @@ tg config unset permissions.messages.delete         # back to the default
 Чтобы сделать профиль доступным только для чтения (здесь профиль `agent`), настройте каждый ресурс:
 
 ```sh
-for key in messages reactions polls topics chats contacts account; do
+for key in messages reactions polls topics chats contacts account conversations tags searches replies attachments bot; do
   tg agent config set permissions.$key readonly
 done
 ```
@@ -114,7 +135,7 @@ done
 
 ### Совместимость со старыми настройками
 
-`readOnly: true` задаёт `readonly` для всех ресурсов. Список в `allow` (`send`, `forward`, `reaction`, `edit`, `pin`, `read`, `delete`, `groups`, `contacts`, `profile`, `folders`, `sessions`) задаёт этим действиям `allow`, а остальным — `readonly`; удаление всё равно требует подтверждения. Ключ в `permissions` имеет приоритет над обоими вариантами.
+`readOnly: true` задаёт `readonly` для всех ресурсов. Список в `allow` (`send`, `forward`, `reaction`, `edit`, `pin`, `read`, `delete`, `groups`, `contacts`, `profile`, `folders`, `sessions`) задаёт этим действиям `allow`, а остальным — `readonly`; удаление всё равно требует подтверждения. Ключ в `permissions` того же раздела имеет приоритет над обоими вариантами.
 
 ## Изменение через команду
 
@@ -139,6 +160,31 @@ config.json is not a valid config:
 
 Если бы ошибочные настройки игнорировались, команда незаметно использовала бы значение по умолчанию. Поэтому ошибкой также считается ключ `permissions`, не начинающийся с ресурса.
 
+## Через прокси
+
+Если Telegram заблокирован, `tg` может подключаться к нему через прокси: SOCKS5, HTTP-прокси с поддержкой `CONNECT` или MTProxy. Одна настройка `proxy` на профиль или для всех профилей с `--defaults`. Задайте её до `tg setup`: вход тоже идёт через прокси.
+
+```sh
+tg config set proxy socks5://proxy.example:1080       # no password: on the command line
+tg config set proxy http://alice@proxy.example:3128   # a user without a password
+tg config set proxy -                                 # with a password or an MTProxy secret
+proxy URL, hidden as you type: tg://proxy?server=mt.example&port=443&secret=ee…
+tg config unset proxy
+```
+
+| Формат | Вид |
+|---|---|
+| `socks5://[user:password@]host[:port]` | SOCKS5; без порта используется 1080; `socks5h://` читается так же |
+| `http://[user:password@]host[:port]` | HTTP-прокси через `CONNECT`; `https://` подключается к самому прокси по TLS |
+| `tg://proxy?server=…&port=…&secret=…` или `https://t.me/proxy?…` | MTProxy в том виде, в каком им делится Telegram; секреты FakeTLS (`ee…`) поддерживаются |
+| `tg://socks?server=…&port=…&user=…&pass=…` | ссылка Telegram на прокси SOCKS5 |
+
+**Пароль или секрет MTProxy никогда не попадает в файл настроек.** `config set proxy -` читает URL без отображения ввода или из канала, сохраняет секрет в хранилище ключей ОС — один на профиль и один для `--defaults`, который профиль использует только с прокси из defaults, — и записывает URL без него; `config show`, `doctor` и сообщения об ошибках показывают его так же. URL с секретом в командной строке отклоняется, поскольку его сохранили бы `ps` и история оболочки.
+
+`TG_PROXY` принимает весь URL вместе с секретом и имеет приоритет над настройкой — для CI или для одной попытки. `config show` выводит настройку из файла; `tg doctor` — прокси, который фактически используется. `ALL_PROXY` и `HTTPS_PROXY` не читаются: их обычно задают для других программ, а прокси выбирают для этого аккаунта.
+
+Bot API (`tg bot …`) и регистрация приложения в `session start --app auto` идут через тот же прокси SOCKS5 или HTTP. MTProxy передаёт только собственный протокол Telegram, поэтому с ним они подключаются напрямую; `tg doctor` сообщает, как именно. `--app browser` открывает my.telegram.org в вашем браузере, который использует собственные настройки прокси.
+
 ## Переменные окружения
 
 | Переменная | Назначение |
@@ -147,6 +193,7 @@ config.json is not a valid config:
 | `TG_PROFILE_LOCK` | фиксирует процесс на одном профиле; остальные запрещены ([Вход и сессии](./sessions.md#profiles)) |
 | `TG_TIMEOUT` | как `--timeout`: `500ms`, `30s` или `2m` для всей команды |
 | `TG_API_ID`, `TG_API_HASH` | данные приложения вместо хранилища ключей, например для CI; задавайте обе или ни одной |
+| `TG_PROXY` | URL прокси, включая пароль или секрет; имеет приоритет над настройкой `proxy` ([выше](#through-a-proxy)) |
 | `TG_CONFIG_DIR`, `TG_STATE_DIR`, `TG_CACHE_DIR` | переносят три каталога и связанную запись хранилища ключей |
 | `MESSAGING_STORE` | путь к файлу локальной базы |
 | `CLI_COMMON_CACHE_DIR` | каталог моделей распознавания речи |
@@ -180,3 +227,12 @@ tg setup
 Остальные настройки сохраняются. Файлам с современными разрешениями преобразование не нужно.
 Если `permissions` уже заданы, `config set` отказывается менять прежние `readOnly` и `allow`;
 изменяйте соответствующие ключи разрешений.
+
+Через `tg mcp --http` любая запись требует формы подтверждения, даже с `allow`, `--yes` или `--allow-dangerous`. Уровни разрешений по-прежнему определяют, какие инструменты доступны профилю.
+
+`replies.send` по умолчанию имеет уровень `deny`; включение правила само по себе не разрешает отправку. Список тестировщиков — отдельное обязательное условие.
+
+Настройки векторов и анализа независимы и могут различаться по профилям. Переменные окружения
+`TG_EMBEDDING_PROVIDER`, `TG_EMBEDDING_MODEL`, `TG_EMBEDDING_BASE_URL`, `TG_EMBEDDING_DIMS`,
+`TG_ANALYSIS_PROVIDER`, `TG_ANALYSIS_MODEL`, `TG_ANALYSIS_BASE_URL` имеют приоритет над файлом настроек, а параметры команды — над итоговыми настройками. Адреса должны быть HTTP/S без встроенных учётных данных, параметров запроса и фрагмента. Удалённое построение векторов отправляет и текст поисковых запросов MCP. Ключи задаются через `models text key set openai|anthropic` и хранятся вне `config.json`.
+Обычный `build` не запускает удалённый анализ: нужен явный `--analyze`.

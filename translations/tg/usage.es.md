@@ -94,7 +94,7 @@ tg chats list --search book                # titles containing "book"; at least 
 tg chats show "Book club"                  # kind, unread count, last message, who is in it
 ```
 
-`--kind` acepta `dialog` (individual), `group`, `channel` o `saved`. Los filtros se aplican a los 200 chats más recientes. Los grupos y canales tienen [su propia sección](#groups-and-channels).
+`--kind` acepta `dialog` (individual), `group`, `channel` o `saved`. Los filtros se aplican a todos los chats devueltos. Los grupos y canales tienen [su propia sección](#groups-and-channels).
 
 ### Enlaces a mensajes
 
@@ -324,7 +324,7 @@ tg messages send "Book club" "See you at 7" --send-id <id from the error>
 tg messages forward "Book club" 4242 --to me --send-id <id from the error>
 ```
 
-Los reenvíos y encuestas también incluyen ese identificador. Repetir sin él envía otro mensaje. Un envío con `--at-time` nunca se repite: consulta `tg messages scheduled <chat>`.
+Los reenvíos y encuestas también incluyen ese identificador. Repetir sin él envía otro mensaje. Un archivo se sube antes de enviar el mensaje: tg reintenta tres veces una subida interrumpida y, si aun así falla, el error dice que no se envió nada; ese comando puedes simplemente repetirlo. Las demás escrituras (fijar, reaccionar, marcar como leído, borrar, votar, carpetas, contactos) terminan igual con el código de salida `14` cuando Telegram no responde; el mensaje indica si es seguro repetir. Crear una carpeta no lo es: mira primero en `tg chats folders list` o puedes acabar con dos. Un envío con `--at-time` nunca se repite: consulta `tg messages scheduled <chat>`.
 
 ### Editar, reenviar, fijar y eliminar
 
@@ -535,3 +535,9 @@ tg config set sendsPerHour 10
 - [Configuración](./configuration.md): ajustes y permisos.
 - [Seguridad](./security.md): datos en disco y controles de envío.
 - [Ejemplos prácticos](./recipes.md): tareas diarias para un agente.
+
+## Contexto local de una persona
+
+`tg contacts context <person>` lee los mensajes guardados y los chats compartidos de las identidades vinculadas, sin conectarse ni marcar nada como leído. `complete:false` y `notRead` muestran huecos en el archivo. `contacts link <person> max:<id>` y `contacts unlink` mantienen los vínculos locales entre identidades; no cambian la libreta de direcciones de Telegram.
+
+`contacts context` devuelve el texto de los mensajes y por eso sigue los permisos de `messages`; la escritura de vínculos entre identidades sigue controlada por `contacts`.

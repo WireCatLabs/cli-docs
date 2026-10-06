@@ -23,7 +23,9 @@
       "security": "Understand {messenger} CLI permissions, account credentials, local storage and confirmation controls.",
       "roadmap": "Review implemented {messenger} CLI capabilities, current limitations and planned development.",
       "changelog": "Read release notes and changes in the {messenger} CLI, including fixes and new capabilities.",
-      "search": "Search your local {messenger} message archive with words, phrases, filters, dates and Lucene queries; learn the supported fields and matching rules."
+      "search": "Search your local {messenger} message archive with words, phrases, filters, dates and Lucene queries; learn the supported fields and matching rules.",
+      "query-language": "Every field, operator, preset and limit of {messenger} message search, with date rules, regular expressions and the JSON answer for scripts and agents.",
+      "topic-search": "Find a {messenger} discussion by what it was about: build conversations from your local archive, add embeddings and search by meaning, privately on your computer."
     },
     "toolTitles": {
       "tg": "Telegram CLI client for AI agents",
@@ -54,7 +56,9 @@
       "security": "Разберитесь в правах CLI для {messenger}, данных входа, локальном хранении и подтверждении действий.",
       "roadmap": "Реализованные возможности CLI для {messenger}, текущие ограничения и планы развития.",
       "changelog": "История выпусков CLI для {messenger}: исправления, изменения и новые возможности.",
-      "search": "Ищите сообщения в локальном архиве {messenger}: слова, фразы, фильтры, даты и запросы Lucene. Поддерживаемые поля и правила поиска."
+      "search": "Ищите сообщения в локальном архиве {messenger}: слова, фразы, фильтры, даты и запросы Lucene. Поддерживаемые поля и правила поиска.",
+      "query-language": "Все поля, операторы, пресеты и ограничения поиска сообщений {messenger}: правила дат, регулярные выражения и JSON-ответ для скриптов и агентов.",
+      "topic-search": "Найдите обсуждение в {messenger} по смыслу: соберите беседы из локального архива, добавьте embeddings и ищите по теме прямо на своём компьютере."
     },
     "toolTitles": {
       "tg": "CLI-клиент Telegram для ИИ-агентов",
@@ -85,7 +89,9 @@
       "security": "Consulta los permisos, las credenciales, el almacenamiento local y las confirmaciones de la CLI de {messenger}.",
       "roadmap": "Revisa las capacidades disponibles, las limitaciones actuales y los planes de desarrollo de la CLI de {messenger}.",
       "changelog": "Consulta las notas de versión de la CLI de {messenger}, con correcciones, cambios y nuevas capacidades.",
-      "search": "Busca mensajes en tu archivo local de {messenger} con palabras, frases, filtros, fechas y consultas Lucene; consulta los campos y las reglas de búsqueda."
+      "search": "Busca mensajes en tu archivo local de {messenger} con palabras, frases, filtros, fechas y consultas Lucene; consulta los campos y las reglas de búsqueda.",
+      "query-language": "Todos los campos, operadores, presets y límites de la búsqueda de mensajes de {messenger}, con reglas de fechas, expresiones regulares y la respuesta JSON para scripts y agentes.",
+      "topic-search": "Encuentra una conversación de {messenger} por su tema: crea conversaciones desde tu archivo local, añade embeddings y busca por significado en tu propio ordenador."
     },
     "toolTitles": {
       "tg": "Cliente CLI de Telegram para agentes de IA",
