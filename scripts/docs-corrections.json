@@ -75,68 +75,6 @@
     }
   },
   {
-    "tool": "tg",
-    "slug": "security",
-    "reason": "usage and command reference explicitly support messages list --mark-read in addition to chats mark-read; ordinary reading remains unmarked.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Only `tg chats mark-read` sends the second.",
-          "after": "`tg chats mark-read` and `tg messages list --mark-read` send the explicit read-marking request."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Отдельную отметку отправляет `tg chats mark-read`; явно включённая отметка при чтении списка сообщений также меняет статус.",
-          "after": "Отдельную отметку отправляют `tg chats mark-read` и `tg messages list --mark-read`."
-        }
-      ],
-      "es": [
-        {
-          "before": "Solo `tg chats mark-read` envía la segunda.",
-          "after": "`tg chats mark-read` y `tg messages list --mark-read` envían la petición explícita de marcar como leído."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "security",
-    "reason": "The security storage table lists config/service files as 0644, protected state as 0600, and shell-controlled permissions for redirected exports; do not claim all files are owner-only.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Every file `tg` writes is created readable by you only, in folders\n  only you can open ([below](#what-reaches-the-disk)).",
-          "after": "On Linux and macOS, the session, store, runs and send journal are owner-only. Settings and service files have different permissions, and redirected exports use your shell’s permissions ([below](#what-reaches-the-disk))."
-        },
-        {
-          "before": "On Linux and macOS, folders are `0700` and files `0600`. On Windows, access follows the directory's\ninherited ACLs.",
-          "after": "On Linux and macOS, protected state files use `0600` inside `0700` folders. Settings and service files may use `0644`; redirected exports follow shell permissions. On Windows, access follows the directory’s inherited ACLs. Check the storage table above."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Файлы `tg` создаются доступными только вам, в закрытых каталогах ([ниже](#what-reaches-the-disk)).",
-          "after": "На Linux и macOS сессия, база, записи запусков и журнал отправок `tg` доступны только владельцу. У настроек и файлов служб другие права; при перенаправлении экспорта права задаёт оболочка ([ниже](#what-reaches-the-disk))."
-        },
-        {
-          "before": "В Linux и macOS каталоги имеют права `0700`, файлы — `0600`. В Windows доступ определяется унаследованными ACL каталога.",
-          "after": "На Linux и macOS чувствительные файлы состояния защищены правами `0600` в каталогах `0700`. Настройки и файлы сервиса могут иметь `0644`; права перенаправленного вывода задаёт оболочка. На Windows доступ определяется унаследованными ACL каталога. Сверяйтесь с таблицей выше."
-        }
-      ],
-      "es": [
-        {
-          "before": "Los archivos se crean para que solo tú puedas leerlos, dentro de carpetas a las que solo tú puedes acceder ([más abajo](#what-reaches-the-disk)).",
-          "after": "En Linux y macOS, la sesión, el archivo local, las ejecuciones y el registro de envíos son accesibles solo para su propietario. Los ajustes y archivos de servicio tienen otros permisos; una exportación redirigida usa los permisos de la terminal ([más abajo](#what-reaches-the-disk))."
-        },
-        {
-          "before": "En Linux y macOS, las carpetas tienen permisos `0700` y los archivos `0600`. En Windows, el acceso sigue las ACL heredadas del directorio.",
-          "after": "En Linux y macOS, los archivos de estado protegidos usan `0600` en carpetas `0700`. La configuración y los archivos del servicio pueden usar `0644`; los permisos de exportaciones redirigidas dependen de la shell. En Windows, el acceso sigue las ACL heredadas del directorio. Consulta la tabla anterior."
-        }
-      ]
-    }
-  },
-  {
     "tool": "max",
     "slug": "groups",
     "reason": "Cursor terminal access is a configuration choice; native Russian source incorrectly categorizes every Cursor agent as terminal-less.",
@@ -145,31 +83,6 @@
         {
           "before": "Агенту с терминалом (Claude Code, Codex) нужен [навык](https://github.com/leemour/max-cli/blob/v0.28.0/README.md#навык-для-агентов-с-терминалом);\nагенту без терминала (Claude Desktop, Cursor) — [MCP-сервер](./mcp.md). Ниже — что вы говорите, что\nагент вызывает и что вы получаете.",
           "after": "Агенту с доступом к терминалу (например, Claude Code или Codex) можно подключить [навык](https://github.com/leemour/max-cli/blob/v0.28.0/README.md#навык-для-агентов-с-терминалом). Без доступа к терминалу используйте [MCP-сервер](./mcp.md), например в Claude Desktop. В Cursor доступны оба способа. Ниже — ваш запрос, команда агента и результат."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "security",
-    "reason": "Replace a blanket legal compliance assurance with the documented technical data flows; no legal exemption is inferred from local storage.",
-    "replacements": {
-      "en": [
-        {
-          "before": "`tg` keeps other people's messages and names on your computer. That is fine while you do it for\nyourself, with your own account: the GDPR does not apply to processing for purely personal or\nhousehold purposes (Article 2(2)(c)). Working with other people's accounts, or for a business, is no\nlonger personal. An export you hand to someone else leaves that purpose too.",
-          "after": "`tg` keeps other people's messages and names on your computer. Exporting this data shares it with whoever receives the file. If you connect an AI agent, check what it sends to its provider and how that provider handles the data. Local storage alone does not establish whether your use complies with applicable privacy requirements."
-        }
-      ],
-      "ru": [
-        {
-          "before": "`tg` сохраняет чужие сообщения и имена на вашем компьютере. При использовании своего аккаунта для личных и домашних целей действует исключение GDPR для такой обработки (статья 2(2)(c)). Работа с чужими аккаунтами или для бизнеса уже не является личной. Передача экспорта другим также выходит за эти рамки.",
-          "after": "`tg` сохраняет чужие сообщения и имена на вашем компьютере. При передаче экспорта эти данные получает адресат файла. Если вы подключаете ИИ-агента, проверьте, что он отправляет своему провайдеру и как провайдер обрабатывает данные. Само по себе локальное хранение не подтверждает соответствие вашего использования применимым требованиям конфиденциальности."
-        }
-      ],
-      "es": [
-        {
-          "before": "`tg` guarda en tu equipo mensajes y nombres ajenos. Para uso propio con tu cuenta, el RGPD no se aplica al tratamiento con fines exclusivamente personales o domésticos (artículo 2(2)(c)). Trabajar con cuentas ajenas o para una empresa deja de ser uso personal. Una exportación entregada a otra persona también sale de ese ámbito.",
-          "after": "`tg` guarda mensajes y nombres de otras personas en tu equipo. Al compartir una exportación, su destinatario recibe esos datos. Si conectas un agente de IA, comprueba qué envía a su proveedor y cómo se tratan esos datos. El almacenamiento local por sí solo no confirma que tu uso cumpla los requisitos de privacidad aplicables."
         }
       ]
     }
@@ -747,31 +660,6 @@
   },
   {
     "tool": "tg",
-    "slug": "search",
-    "reason": "Beginner entry point: explain local archive and strict matching before advanced query syntax, with one copyable single-word example.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "`tg messages search` ищет только в общем локальном архиве, без сети и отметок о прочтении.",
-          "after": "`tg messages search` ищет только в общем локальном архиве, без сети и отметок о прочтении.\n\nНачните с одного слова, которое помните из сообщения:\n\n```sh\ntg messages search \"договор\"\n```\n\nКоманда ищет среди сообщений, уже сохранённых на компьютере. Если нужного периода нет, сначала загрузите историю выбранного чата по [инструкции архива](./archive.md). По умолчанию ищется точное слово: Lucene — язык для добавления фраз, фильтров и условий. Для опечаток и неточного поиска выберите `--language legacy`. Ниже — примеры фильтров; поля и regex нужны только для более сложных запросов."
-        }
-      ],
-      "en": [
-        {
-          "before": "`tg messages search` reads only the shared local archive, without networking or read receipts.",
-          "after": "`tg messages search` reads only the shared local archive, without networking or read receipts.\n\nStart with one word you remember from the message:\n\n```sh\ntg messages search \"invoice\"\n```\n\nIt searches messages already saved on your computer. If the required period is missing, first fetch that chat’s history using the [archive guide](./archive.md). The default matches exact words: Lucene is a query language for adding phrases, filters and conditions. For typos and forgiving matching, choose `--language legacy`. The examples below add filters; fields and regex are only needed for more complex queries."
-        }
-      ],
-      "es": [
-        {
-          "before": "`tg messages search` consulta solo el archivo local compartido, sin conectarse ni marcar mensajes como leídos.",
-          "after": "`tg messages search` consulta solo el archivo local compartido, sin conectarse ni marcar mensajes como leídos.\n\nEmpieza con una palabra que recuerdes del mensaje:\n\n```sh\ntg messages search \"factura\"\n```\n\nBusca mensajes ya guardados en tu ordenador. Si falta el periodo que necesitas, descarga primero el historial de ese chat siguiendo la [guía del archivo](./archive.md). Por defecto coincide con palabras exactas: Lucene es un lenguaje para añadir frases, filtros y condiciones. Para erratas y coincidencias aproximadas, elige `--language legacy`. Los ejemplos siguientes añaden filtros; los campos y regex solo hacen falta para consultas más complejas."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
     "slug": "installation",
     "reason": "Use harness-neutral first-run commands. setup asks for the agent in an interactive terminal; preserve explicit option documentation and machine-mode behavior. Requested by owner 2026-10-04; checked against setup option/selectAgent implementations.",
     "replacements": {
@@ -966,32 +854,20 @@
     "replacements": {
       "en": [
         {
-          "before": "| ChatGPT | Plus, Pro, Business, Enterprise, Education — in developer mode | [developer mode](https://developers.openai.com/api/docs/guides/developer-mode) |",
-          "after": "| ChatGPT | Plus, Pro, Business, Enterprise, Education — in developer mode | [developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server) |"
-        },
-        {
-          "before": "  [developer mode](https://developers.openai.com/api/docs/guides/developer-mode) describes. By default",
-          "after": "  [developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server) describes. By default"
+          "before": "[ChatGPT developer mode](https://developers.openai.com/api/docs/guides/developer-mode) or",
+          "after": "[ChatGPT developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server) or"
         }
       ],
       "ru": [
         {
-          "before": "| ChatGPT | Plus, Pro, Business, Enterprise, Education — в режиме разработчика | [Режим разработчика](https://developers.openai.com/api/docs/guides/developer-mode) |",
-          "after": "| ChatGPT | Plus, Pro, Business, Enterprise, Education — в режиме разработчика | [Режим разработчика](https://developers.openai.com/api/docs/guides/custom-mcp-server) |"
-        },
-        {
-          "before": "- **ChatGPT:** включите режим разработчика и добавьте коннектор с этим адресом по [инструкции](https://developers.openai.com/api/docs/guides/developer-mode). По умолчанию ChatGPT просит подтверждать каждое изменение.",
-          "after": "- **ChatGPT:** включите режим разработчика и добавьте коннектор с этим адресом по [инструкции](https://developers.openai.com/api/docs/guides/custom-mcp-server). По умолчанию ChatGPT просит подтверждать каждое изменение."
+          "before": "[режим разработчика ChatGPT](https://developers.openai.com/api/docs/guides/developer-mode) или",
+          "after": "[режим разработчика ChatGPT](https://developers.openai.com/api/docs/guides/custom-mcp-server) или"
         }
       ],
       "es": [
         {
-          "before": "| ChatGPT | Plus, Pro, Business, Enterprise, Education: en modo desarrollador | [modo desarrollador](https://developers.openai.com/api/docs/guides/developer-mode) |",
-          "after": "| ChatGPT | Plus, Pro, Business, Enterprise, Education: en modo desarrollador | [modo desarrollador](https://developers.openai.com/api/docs/guides/custom-mcp-server) |"
-        },
-        {
-          "before": "- **ChatGPT:** activa el modo desarrollador y añade un conector con esa dirección, siguiendo la [guía del modo desarrollador](https://developers.openai.com/api/docs/guides/developer-mode). Por defecto, ChatGPT solicita confirmación para cada acción que escribe.",
-          "after": "- **ChatGPT:** activa el modo desarrollador y añade un conector con esa dirección, siguiendo la [guía del modo desarrollador](https://developers.openai.com/api/docs/guides/custom-mcp-server). Por defecto, ChatGPT solicita confirmación para cada acción que escribe."
+          "before": "Añade la dirección del túnel con `/mcp`, por ejemplo `https://<device>.<network>.ts.net/mcp`, como conector MCP remoto. Consulta las instrucciones de la aplicación: [modo desarrollador de ChatGPT](https://developers.openai.com/api/docs/guides/developer-mode) o [conectores personalizados de Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp). La página de acceso pide el código que aparece en tu terminal. Caduca a los diez minutos; tras cada acceso se muestra un código nuevo. Cinco códigos incorrectos bloquean el acceso hasta que se reinicie el servidor.",
+          "after": "Añade la dirección del túnel con `/mcp`, por ejemplo `https://<device>.<network>.ts.net/mcp`, como conector MCP remoto. Consulta las instrucciones de la aplicación: [modo desarrollador de ChatGPT](https://developers.openai.com/api/docs/guides/custom-mcp-server) o [conectores personalizados de Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp). La página de acceso pide el código que aparece en tu terminal. Caduca a los diez minutos; tras cada acceso se muestra un código nuevo. Cinco códigos incorrectos bloquean el acceso hasta que se reinicie el servidor."
         }
       ]
     }

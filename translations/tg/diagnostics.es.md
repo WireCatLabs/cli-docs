@@ -37,7 +37,7 @@ Cada ejecución es un directorio en `runs/<day>/` dentro del directorio de estad
 
 Si un comando termina con error, se guarda aunque no uses `--record`, con `"keptBecauseFailed": true` en `run.json`. Se aplica a todos los comandos y errores: opciones incorrectas, comandos desconocidos, comprobaciones previas y comandos que no se conectan (`models`, `server`, `upgrade`). Un fallo anterior al inicio del comando, como una configuración que no se puede cargar, se guarda con el nombre `tg`. Solo se conservan las palabras del comando, como `messages list`, nunca sus argumentos.
 
-Las ejecuciones correctas no dejan registro salvo que lo solicites. Así siempre hay un fallo que adjuntar a un informe, sin crear un historial de lo que lees. `--no-record` o `"record": false` en la configuración también desactivan el registro de fallos.
+Una ejecución correcta no deja registro de diagnóstico salvo que lo solicites; las consultas de búsqueda y estadísticas correctas tienen un historial aparte. Así siempre hay un fallo que adjuntar a un informe, y el historial de consultas tiene sus propios controles. `--no-record` o `"record": false` en la configuración también desactivan el registro de fallos.
 
 ## Cuándo registrar todas las ejecuciones
 
@@ -67,10 +67,16 @@ Lo mismo se aplica a los informes creados a partir de registros.
 
 ```sh
 tg doctor              # connects to nothing
-tg doctor --online     # also connects once and reads the account; sends nothing
+tg doctor --online     # also connects once and reads the account; sends nothing to Telegram
 ```
 
 Muestra versión, entorno de ejecución, perfil, configuración, existencia de sesión y credenciales (nunca sus valores), si `TG_*_DIR` ha cambiado la entrada del almacén de claves, el archivo local (ruta, versión, número de chats y mensajes), los envíos de la última hora y las ejecuciones guardadas.
+
+- **`login`** aparece como `not checked` sin `--online`. Que haya un archivo de sesión en disco no significa que Telegram siga aceptándolo. Con `--online` es `ok` o `failed`, con una sugerencia.
+- **`files`** y **`telegram.session.files`** nombran cada archivo o carpeta privados que otros usuarios de este equipo pueden leer: la sesión, el almacén, sus archivos SQLite `-wal` y `-shm`, el registro de envíos y la carpeta de ejecuciones. Cada uno incluye el comando `chmod` que lo corrige. `doctor` nunca cambia los permisos por sí mismo. En Windows no se comprueba.
+- **`online.clock`** (con `--online`) compara el reloj de este equipo con el de Telegram. `skewMs` es positivo cuando este equipo va adelantado. Avisa (`ok: false`) a partir de 10 segundos. Telegram rechaza una petición con una hora más de 30 segundos por delante de su propio reloj.
+- **`online.standing`** (con `--online`) es `active`, `frozen`, `banned`, `deactivated` o `revoked`, o `unknown` cuando la respuesta de Telegram no permite saberlo. Una cuenta congelada puede leer, pero no escribir. Se indican la fecha en que se congeló, la fecha en que Telegram la eliminará y el enlace de apelación, cuando Telegram los proporciona. Volver a iniciar sesión no reabre una cuenta que Telegram ha cerrado.
+- **`flood`** enumera las esperas que Telegram ha pedido respetar a este perfil (`deadlines`) y un bloqueo de sus envíos (`sendBlock`). `doctor` solo lee, con una excepción: **`doctor --online` escribe el bloqueo por congelación.** Si ve la cuenta congelada, bloquea los envíos hasta la fecha que indica Telegram; si la ve activa, levanta ese bloqueo. Nunca levanta un bloqueo por un límite de spam: eso lo hace `tg flood clear`.
 
 ## Crear un informe de problema
 
@@ -79,7 +85,7 @@ tg doctor report create                   # about the newest failed run
 tg doctor report create --run <run-id>    # about this one
 ```
 
-Escribe un archivo JSON con lo que muestra `tg doctor` y la ejecución, e indica dónde enviarlo: una nueva incidencia en [GitHub](https://github.com/leemour/tg-cli/issues/new). Revísalo antes de enviarlo. No contiene texto de mensajes; los identificadores aparecen como etiquetas, no como números de Telegram.
+Escribe un archivo JSON con lo que muestra `tg doctor` y la ejecución, e indica dónde enviarlo: una nueva incidencia en [GitHub](https://github.com/leemour/tg-cli/issues/new). Revísalo antes de enviarlo. No contiene texto de mensajes, y cada identificador aparece como una etiqueta, no como el número de Telegram.
 
 Si no hay ejecuciones fallidas guardadas, vuelve a ejecutar el comando que falla; el fallo se guardará automáticamente.
 
@@ -103,3 +109,5 @@ tg runs list --limit 100 --json | jq '[.items[] | select(.requests > 10) | {comm
 ## Descubrir comandos desde scripts
 
 `tg commands --json` enumera comandos, opciones globales y códigos de salida sin conectar una cuenta. `cli` identifica la herramienta, `version` es la versión instalada del paquete y `contract` es la versión del contrato JSON compartido (`0`). Cambia cuando hay modificaciones incompatibles en los campos de respuesta; actualizar el paquete por sí solo no cambia `contract`. Los scripts pueden consultar campos individuales en vez de comparar todo el JSON con una cadena guardada.
+
+El historial de consultas de búsqueda y estadísticas es independiente de los registros de ejecución; consulta [el historial de consultas y --no-record](./search.md).

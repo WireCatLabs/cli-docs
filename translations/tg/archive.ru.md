@@ -58,15 +58,7 @@ tg store jobs cancel <job>                  # stops after the current page; a la
 
 ## Поиск
 
-`tg messages search` ищет только в локальном архиве. По умолчанию используется строгий профиль Lucene: слова, фразы, логические группы, поля, даты и регулярные выражения с ограничениями. [Руководство по поиску](./search.md) объясняет синтаксис и переход с прежней версии. Для старых фильтров и неточного поиска используйте `--language legacy`.
-
-```sh
-tg messages search 'invoice kind:private' --json
-tg messages search 'invoice date:[2026-01-01 TO 2026-02-01}' --timezone Europe/Madrid --json
-tg messages search 'preset:secret kind:saved' --json
-```
-
-Пустой результат означает «не найдено в выбранном архиве». JSON сообщает полноту и охват; отсутствие отметок сетевого обновления не означает, что данные актуальны. `--source` выбирает мессенджер и аккаунты, `--newest` — порядок по времени, `--context` добавляет соседние сообщения. --regex остаётся отдельным прежним режимом JavaScript.
+`tg messages search` находит сохранённые сообщения по словам, автору, чату, дате, файлам, ссылкам и вашим собственным меткам; по умолчанию он не обращается к Telegram. `--sync-first` явно загружает новые сообщения перед поиском. Подробности, включая сохранённые поиски и подсчёты, — в руководстве [Поиск сообщений](./search.md). Пустой ответ означает «нет в этом архиве»: сначала загрузите чат.
 
 ## Экспорт
 
@@ -81,36 +73,32 @@ tg store export "Book club" --output book-club.jsonl --since-time 7d     # the l
 
 `--output <file>` записывает JSON по строкам или текст переписки с `--format markdown` в новый файл, доступный только вам. Команда показывает путь и число сообщений, существующие файлы не перезаписывает. `--since-time` принимает время ISO 8601 или период `30m`, `2h`, `1d` назад.
 
+### В каталог, и только изменения
+
+```sh
+tg store export "Book club" "Work" --to ~/tg-export   # a JSON-lines file per chat, and manifest.json
+tg store export --kind group --to ~/tg-groups          # every stored group
+tg store export --all --to ~/tg-all                    # every stored chat of this account
+```
+
+Повторный запуск в тот же каталог добавляет только изменения с прошлого раза: новые сообщения, правки (в том числе старых сообщений) и удаления. Удалённое сообщение записывается без текста, как `{ "id", "chatId", "deleted": true }`. Каталог с другими файлами или экспортированный из другого аккаунта отклоняется. Изменение одних только реакций изменением не считается.
+
+### С паролем
+
+`--encrypt` в `store export` (с `--output` или `--to`) и в `store backup` сжимает файл и шифрует его паролем — других программ не нужно. `tg store decrypt <file> --output <new file>` расшифровывает файл; `tg store restore` запрашивает пароль зашифрованной копии.
+
+- **Пароль нигде не хранится** — ни в настройках, ни в хранилище ключей, ни в записях. Если вы его потеряете, файл открыть нельзя.
+- Вводите пароль сами в скрытом запросе, который спрашивает его дважды. Агент, которому вы его дали, передаёт пароль через stdin, а не аргументом: аргументы видны другим программам на компьютере.
+
+  ```sh
+  printf '%s' 'password' | tg store backup ~/tg.sealed --encrypt
+  ```
+
+- В зашифрованный каталог за один запуск пишется один файл. Его `manifest.json` не содержит названий чатов, а запуск с другим паролем отклоняется.
+
 ## Разговоры внутри группы
 
-В активной группе несколько разговоров идут одновременно. `tg conversations` выделяет их из сохранённых сообщений по ответам, упоминаниям и очередности авторов — без запросов Telegram и без AI:
-
-```sh
-tg conversations build --chat "Valencia Expats"          # find them; run it again after fetching more
-tg conversations list --chat "Valencia Expats" --since-time 7d
-tg conversations show 91                                 # one conversation, oldest first
-tg conversations show "Valencia Expats" 4521             # the conversation message 4521 is in
-tg messages links "Valencia Expats" 4521                 # why that message is where it is
-```
-
-Построение происходит только после `build`; повторный `build` заменяет предыдущий результат. `tg store check` перечисляет чаты, обработанные старыми правилами. Упоминание по имени без @username также учитывается.
-
-Ваш AI-агент может связать сообщения, которые правила не определили. Инструкция `tg skill show link-conversations` сначала сообщает объём читаемого текста и ждёт согласия, затем обрабатывает чат пакетами (`tg conversations batches next`, `tg conversations links add`). Сам tg не вызывает модели. Связи агента имеют приоритет над предположениями правил, но уступают явным ответам Telegram. `tg conversations links clear --chat <chat>` удаляет их. Сохранение контролирует разрешение `conversations.links`.
-
-### Поиск по смыслу
-
-После построения разговоров можно искать их по смыслу, а не только словам. `tg conversations embed` преобразует разговоры или части длинных разговоров в векторы на компьютере. `tg conversations search` находит ближайшие к вашему вопросу:
-
-```sh
-tg models text download e5-small                         # once: 135 MB, shared with max
-tg conversations embed --chat "Valencia Expats"          # resumes where it stopped; --workers 3 for more speed
-tg conversations search "where to rent a flat" --chat "Valencia Expats"
-tg conversations search "renting a flat"                 # every chat you embedded
-```
-
-Данные остаются на компьютере. `tg models text list` показывает модели: `e5-small` используется по умолчанию; `embeddinggemma` находит больше, но работает в несколько раз медленнее и скачивается только с `--accept-terms`, поскольку действует лицензия Google Gemma. `tg conversations embed status --chat <chat>` показывает остаток, `tg conversations embed clear --chat <chat>` удаляет векторы.
-
-Можно использовать сервис со своим ключом: `tg models text key set openai`, затем `--provider openai` в `embed` и `search`. Перед передачей сообщений `embed` показывает число фрагментов, верхние оценки токенов и стоимости и ждёт согласия (`--yes` для скриптов, `--max-tokens` для лимита). `--base-url` принимает совместимый сервер, например локальный Ollama или LM Studio, вместе с `--model` и `--dims`.
+В активной группе несколько разговоров идут одновременно. `tg conversations` распутывает их по сохранённым сообщениям и находит по теме, на этом компьютере: [Поиск по темам](./topic-search.md).
 
 ## Исходные данные для сводки по чату
 
@@ -172,7 +160,8 @@ systemctl --user enable tg-serve-default    # only if it should start at every l
 
 - Служба запускает те `node` и `tg`, которыми установлена. После переноса или смены версии Node установите её заново.
 - Она получает профиль, `TG_*_DIR` и `MESSAGING_STORE` из оболочки, запустившей `server install`, и больше ничего.
-- **После `server start` проверьте журнал:** `tg server logs`. Служба читает данные приложения из хранилища ключей. Если оно заблокировано до входа пользователя, запуск может не сработать; причина будет в журнале.
+- **После `server start` проверьте журнал:** `tg server logs`. Служба читает данные приложения из хранилища ключей. Если оно заблокировано до входа пользователя, запуск не сработает; systemd повторяет попытку каждые 30 секунд, причина будет в журнале.
+- **Уже отозванный вход не даёт службе запуститься.** `serve` проверяет его до сообщения о готовности и завершается с кодом 4; после этого установленная служба остаётся остановленной. Войдите через `tg session start`, затем выполните `tg server start`. Вход, отозванный во время работы службы, тоже завершает её с кодом 4 — примерно в течение 15 минут. Если данные приложения недоступны, а сохранённая сессия есть, serve завершается с кодом 12, и systemd повторяет запуск. В macOS агент не перезапускается ни после какой ошибки, поскольку launchd не умеет исключить один код завершения; запустите его снова через `tg server start`. Чтобы обновить старую службу, снова выполните `tg server install`.
 - `tg server uninstall` удаляет службу. Сначала остановите её.
 - `tg upgrade` перезапускает работающий сервер для перехода на новую версию.
 
@@ -181,7 +170,7 @@ systemctl --user enable tg-serve-default    # only if it should start at every l
 ```sh
 tg store info                          # where the file is, its size, its schema, how many rows; changes nothing
 tg store check                         # integrity, search indexes, disk, and which chats are behind; changes nothing
-tg store backup ~/tg-store.db          # a copy of the store, while it is in use
+tg store backup ~/tg-store.db          # a copy of the store, while it is in use; --encrypt for a password
 tg store restore ~/tg-store.db         # put a backup in place of the store
 tg store migrate                       # bring the store up to this version's schema
 tg store clear --left --allow-dangerous  # delete the chats you have left, with their messages
@@ -206,3 +195,13 @@ the message store was written by a newer version (schema N, needs at least M; th
 
 - [Сценарии использования](./recipes.md) — поиск и экспорт в работе агента
 - [Безопасность](./security.md) — конфиденциальность локальной базы
+
+## Восстановление и обслуживание индексов
+
+`tg store migrate` достраивает незавершённые индексы; `tg store reindex` перестраивает их. `store info` и `store check` показывают готовность индексов слов и основ. Индекс основ сам по себе не меняет совпадения при строгом поиске. `tg config set searchStemmers.cyrillic russian` и `searchStemmers.latin spanish` задают стеммеры общей базы (`none` отключает стеммер, для латиницы доступен также `english`); после этого выполните `store reindex`. Настройка действует на оба мессенджера и все профили; процесс, привязанный к профилю, изменить её не может.
+
+`tg store repair --dry-run --json` показывает структурное восстановление и откатывает его. `store repair` применяет его без удаления данных: несовпадающие таблицы сохраняются как копии, а оставшиеся в них строки и столбцы перечисляются в ответе. Проверьте сохранённые копии, прежде чем удалять их через `store copies delete <exact name>`; `store repair` называет их в ответе. Перед восстановлением остановите процессы, использующие базу.
+
+## Правила ответов только для тестировщиков
+
+`tg replies test [rule] --since-time 7d --json` моделирует, что получили бы сохранённые сообщения; ничего не отправляет. Правила хранятся в файле ответов профиля. `replies status`, `pause` и `resume` показывают их состояние и управляют ими. Настоящие ответы общего `serve` требуют и явного разрешения `replies.send:allow`, и заданного списка `testers`. По умолчанию отправка запрещена; если список testers отсутствует или пуст, никто не получает ответа. Правки, сообщения до запуска и сообщения, на которые уже ответили, пропускаются. `ask` не может отправлять из службы, работающей без присмотра.

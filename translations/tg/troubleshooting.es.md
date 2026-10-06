@@ -10,9 +10,9 @@ Busca el síntoma que ves en pantalla y sigue los pasos. Con `--json`, cada erro
 |---|---|---|---|
 | `1` | `generic_failure` | error en el nombre del comando o fallo de `tg` | [comando desconocido](#error-unknown-command-), [informar del problema](#report-a-problem) |
 | `2` | `validation_error` | valor o combinación de opciones no admitidos; nombre que coincide con varios chats | [valores](#--limit-takes-a-whole-number-from-1-upwards), [varios chats](#-matches-3-chats--name-one-by-its-id) |
-| `3` | `configuration_error` | `config.json` incorrecto o archivo local más reciente que este `tg` | [configuración](#-is-not-a-valid-config), [archivo local](#the-message-store-was-written-by-a-newer-version-) |
+| `3` | `configuration_error` | `config.json` incorrecto, el proxy rechazó la conexión o no responde, o archivo local más reciente que este `tg` | [configuración](#-is-not-a-valid-config), [proxy](#the-proxy--cannot-be-reached-or--refused), [archivo local](#the-message-store-was-written-by-a-newer-version-) |
 | `4` | `authentication_error` | sin sesión, sesión finalizada o almacén de claves inaccesible | [sin sesión](#no-session-for-profile-default--run-tg-setup) |
-| `5` | `permission_error` | rechazado por `permissions` o por Telegram | [no permitido](#profile--does-not-let--write-or-profile--denies-), [rechazo de Telegram](#telegram-refused-) |
+| `5` | `permission_error` | rechazado por `permissions` o por Telegram | [no permitido](#profile--does-not-let--write-or-profile--denies-), [rechazo de Telegram](#telegram-refused-), [PEER_FLOOD](#telegram-limited-this-accounts-messages-as-spam-peer_flood) |
 | `6` | `not_found` | chat, mensaje o persona inexistentes; archivo local vacío | [sin chat](#no-chat-matches-), [sin datos guardados](#nothing-recorded-for-profile--yet--run-the-command-once-without---offline) |
 | `7` | `confirmation_required` | chat fuera de destinatarios permitidos o cambio que requiere aprobación sin nadie que responda | [destinatarios](#chat--is-not-on-the-recipient-list-of-profile-), [confirmación](#-asks-before-it-acts) |
 | `8` | `rate_limited` | límite por hora o espera exigida por Telegram | [límite por hora](#profile--has-sent-n-messages-in-the-hour-), [FLOOD_WAIT](#telegram-asks-to-wait-n-s-before-the-next-request) |
@@ -21,7 +21,7 @@ Busca el síntoma que ves en pantalla y sigue los pasos. Con `--json`, cada erro
 | `11` | `provider_error` | Telegram rechazó la petición | [rechazo de Telegram](#telegram-refused-) |
 | `12` | `provider_unavailable` | fallo en Telegram | [fallo de Telegram](#telegram-failed-) |
 | `13` | `invalid_response` | respuesta que `tg` no entiende; hasta ahora, solo de my.telegram.org | [my.telegram.org](#mytelegramorg-says-the-app-was-created-but-its-page-shows-none) |
-| `14` | `outcome_unknown` | conexión interrumpida después de enviar; el mensaje puede haber llegado | [resultado desconocido](#outcome_unknown-after-a-send) |
+| `14` | `outcome_unknown` | conexión interrumpida después de una escritura; puede haberse realizado | [resultado desconocido](#outcome_unknown-after-a-send) |
 | `130` | `cancelled` | Ctrl-C o respuesta negativa a una pregunta | [Ctrl-C](#ctrl-c) |
 
 ## Primero: `tg doctor`
@@ -36,7 +36,7 @@ No se conecta y muestra las dependencias de los comandos: versión, entorno, con
 tg doctor --online
 ```
 
-`--online` también se conecta una vez y lee la cuenta. No envía nada ni marca mensajes como leídos.
+`--online` también se conecta una vez y lee la cuenta. No envía nada ni marca mensajes como leídos. Sin esta opción, el inicio de sesión aparece como `not checked`: solo `--online` indica si Telegram sigue aceptando la sesión. `--online` también avisa si el reloj de este equipo va mal y si Telegram congeló o cerró la cuenta ([diagnóstico](./diagnostics.md#check-the-installation-tg-doctor)).
 
 ## No se encuentra `tg` después de instalar
 
@@ -142,6 +142,12 @@ Telegram lets you find has this number" si la persona oculta su teléfono o no t
 
 Código `8`. Es el límite propio de Telegram (FLOOD_WAIT). Espera ese tiempo; el JSON incluye `retryAfterMs`. Suele aparecer tras muchas peticiones seguidas, como `chats list --all` después de otros comandos o una descarga larga con `store fetch`. Para `store fetch` y `messages download --all`, aumentar `--pause` ayuda.
 
+Un comando espera una petición de hasta 10 segundos, dos veces como máximo, y lo indica en stderr: "Telegram asks to wait 3 s before … — waiting, then going on". `serve` y `watch` esperan hasta 2 minutos. Una espera más larga termina el comando con este error. `tg` también recuerda la espera: hasta que acaba, el mismo comando falla al instante sin volver a preguntar a Telegram, y `tg doctor` y `tg server status` la muestran en `flood`.
+
+## "Telegram limited this account's messages as spam (PEER_FLOOD)"
+
+Código `5`. Telegram limita una cuenta que ha escrito a demasiadas personas que no son sus contactos. Puede seguir leyendo. Escribe a @SpamBot desde una aplicación de Telegram: te dice hasta cuándo dura. Volver a enviar lo empeora, así que `tg` retiene todos los envíos durante una hora y lo indica; cada nuevo rechazo reinicia la hora. `tg doctor` muestra la retención en `flood.sendBlock`. Cuando @SpamBot diga que el límite ha terminado, `tg flood clear` la levanta, junto con cualquier espera que `tg` recuerde. El rechazo a una cuenta congelada retiene los envíos del mismo modo, hasta la fecha que indica Telegram; `tg doctor --online` activa y levanta esa retención.
+
 ## "profile … has sent N messages in the hour …"
 
 Código `8`. Límite por hora del perfil (`sendsPerHour`, 30 por defecto). El error indica cuándo podrá enviar de nuevo. Auméntalo solo si pretendías enviar esa cantidad: `tg config set sendsPerHour <n>`.
@@ -172,7 +178,17 @@ Código `12`. Fallo de Telegram. `tg` no cambió nada; reintenta pasado un minut
 
 ## "cannot reach Telegram (…)"
 
-Código `10`. No se pudo conectar o se interrumpió: red, cortafuegos, proxy o DNS. El código entre paréntesis identifica la causa (`ECONNREFUSED`, `ENOTFOUND`, `ETIMEDOUT`). Los comandos del archivo local funcionan sin red: `tg --offline chats list`.
+Código `10`. No se pudo conectar o se interrumpió: red, cortafuegos, proxy o DNS. El código entre paréntesis identifica la causa (`ECONNREFUSED`, `ENOTFOUND`, `ETIMEDOUT`). Los comandos del archivo local funcionan sin red: `tg --offline chats list`. Donde Telegram está bloqueado, configura un proxy ([configuración](./configuration.md#through-a-proxy)).
+
+## "the proxy … cannot be reached" or "… refused"
+
+Código `3`. El fallo está en el proxy, no en Telegram: nada llegó a Telegram, así que ni siquiera un envío salió. `tg` se detiene en la primera conexión fallida en lugar de esperar al límite de tiempo.
+
+- **cannot be reached (`ECONNREFUSED`, `ENOTFOUND`, `ETIMEDOUT`)**: el proxy no funciona o su host o puerto son incorrectos.
+- **refused: … auth …** o **refused the tunnel (HTTP 407)**: usuario o contraseña incorrectos. Vuelve a configurarlo con `tg config set proxy -`.
+- **refused the tunnel (HTTP 403 or 502)**: el proxy no quiere o no puede llegar a Telegram.
+
+`tg doctor` muestra el proxy en uso, de dónde viene (`TG_PROXY` o la configuración) y si la Bot API pasa por él. Para probar sin él, `tg config unset proxy`. Un MTProxy con un secreto incorrecto suele parecer un bloqueo más que un rechazo: limítalo con `--timeout 30s`.
 
 ## `outcome_unknown` después de enviar
 
@@ -183,6 +199,8 @@ tg messages send <chat> "<the same text>" --send-id <id from the error>
 ```
 
 Después de `--at-time`, consulta `tg messages scheduled <chat>`: los envíos programados nunca se repiten.
+
+Fijar, desfijar, reaccionar, marcar como leído, borrar, votar, cerrar encuestas y cambiar carpetas o contactos terminan igual cuando Telegram no responde. El mensaje indica si es seguro repetir. Al crear una carpeta no lo es: mira primero en `tg chats folders list` o puedes acabar con una segunda carpeta.
 
 ## Un comando se queda bloqueado
 
@@ -214,13 +232,21 @@ Código `6`. `--offline`, `messages search`, `store status` y `store export` sol
 
 Solo busca lo guardado en este equipo, nunca en Telegram. Vacío significa «no guardado», no «nunca se dijo». Lee el chat (`tg messages list <chat>`) o descarga el historial con `tg store fetch` y busca de nuevo ([archivo local](./archive.md#search)). `tg store check` identifica chats desactualizados.
 
+## Un chat figura como descargado entero, pero faltan mensajes antiguos
+
+Ejecuta de nuevo `tg store fetch <chat>`. Lee por debajo del mensaje más antiguo del archivo local, tanto si el chat se contó como completo como si no, y sigue hasta el primer mensaje del chat; da más margen a `--limit` en un chat largo. Mantén `--page-size` en 100 o menos: Telegram devuelve hasta 100 mensajes por petición.
+
 ## "tg serve is already running for profile …"
 
 Código `2`. Solo se admite un `serve` por perfil. `tg server status` indica proceso y hora de inicio; `tg server stop` detiene los iniciados por `server start` o por la unidad.
 
+## `serve` se detuvo por sí solo
+
+`tg server logs` indica por qué. Si Telegram cerró la sesión mientras `serve` funcionaba, termina con código `4` en unos 15 minutos y no se reinicia: ejecuta `tg session start` y después `tg server start`. Si las actualizaciones de Telegram dejaron de llegar por otro motivo, termina con código `12` y systemd lo vuelve a iniciar.
+
 ## El servidor en segundo plano no se inicia
 
-`tg server logs` indica por qué. En un servicio, suele deberse al almacén de claves: se inicia antes de que se desbloquee o sin `XDG_RUNTIME_DIR`. Si cambias la ubicación de Node o `tg`, ejecuta `tg server install` de nuevo: la unidad utiliza las rutas de instalación ([archivo local](./archive.md#as-a-service)).
+`tg server status --json` incluye `stopped` y `unit.exitCode` cuando la última salida normal fue una tras la que la unidad no se reinicia. Con la salida 4, renueva la sesión con `tg session start` y después `tg server start`. `tg server logs` indica por qué. En un servicio, suele deberse al almacén de claves: se inicia antes de que se desbloquee o sin `XDG_RUNTIME_DIR`. Si cambias la ubicación de Node o `tg`, ejecuta `tg server install` de nuevo: la unidad utiliza las rutas de instalación ([archivo local](./archive.md#as-a-service)).
 
 ## `npx @leemour/tg-cli` ejecuta una versión anterior
 
@@ -239,3 +265,7 @@ tg doctor report create --run <id>    # about another run; ids from tg runs list
 Envíalo como nueva incidencia en [GitHub](https://github.com/leemour/tg-cli/issues/new): explica qué hiciste y qué ocurrió y adjunta el archivo. Tanto la incidencia como el archivo son públicos: revísalo antes.
 
 ⚠ Nunca adjuntes el directorio de estado, la sesión ni `~/.local/share/cli-messaging/`: contienen tu acceso y tus mensajes.
+
+## Esperas recordadas
+
+El SDK recuerda plazos por operación y chat; un reintento antes de que venzan falla con el código 8 sin hacer otra petición. Los rechazos por cuenta congelada o limitada por spam pueden retener los envíos. `tg flood clear` es mantenimiento del propietario una vez terminada la restricción: borra las esperas y retenciones locales y no cambia nada en Telegram. No tiene herramienta MCP; los agentes no deben levantar una retención solo para reintentar. `doctor --online` comprueba la sesión, el estado de la cuenta y el reloj; sin conexión, doctor no demuestra que la sesión siga activa.

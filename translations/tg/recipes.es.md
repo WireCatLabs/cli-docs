@@ -76,7 +76,27 @@ Escribe en Telegram: **no**. Permite: `Bash(tg inbox:*)`.
 
 > Ejecuta `tg inbox --new --json`. Agrupa los mensajes por chat. Para cada chat, escribe una línea: quién escribe y qué necesita. Pon primero lo que requiere respuesta hoy. Agrupa anuncios y notificaciones de servicio en una línea al final.
 
-`--new` muestra cada mensaje una sola vez: `tg` recuerda dónde terminó y la siguiente ejecución continúa allí. La primera revisa las últimas 24 horas.
+`--new` muestra cada mensaje una sola vez: `tg` recuerda dónde terminó (en cada chat) y la siguiente ejecución continúa allí. La primera revisa las últimas 24 horas.
+
+### Desde cuándo es "nuevo"
+
+- `tg inbox`: lo no leído, tal como lo cuenta Telegram: lo que no has abierto en ningún dispositivo.
+- `tg inbox --new`: desde la última ejecución con `--new`. Solo `tg` conoce ese punto; nadie más lo ve.
+- `tg inbox --since-time 2d`: los dos últimos días; el punto guardado no se mueve.
+
+Ninguno marca nada como leído. Para eso, añade `--mark-read` o activa `catchUpMarksRead` en la [configuración](./configuration.md); entonces la otra parte ve que lo has leído.
+
+### Chats directos, grupos y canales por separado
+
+`--kind` deja solo los chats de ese tipo: `dialog`, `group`, `channel`. Un resumen de noticias de los canales y un resumen de tus conversaciones pueden ejecutarse por separado, a horas distintas: cada chat tiene su propio punto, así que una ejecución nunca oculta lo que la otra aún no ha mostrado.
+
+```cron
+30 8 * * * claude -p "$(cat ~/tg-recipes/morning.md)" --allowedTools "Bash(tg inbox:*)"
+0 19 * * * claude -p "$(cat ~/tg-recipes/news.md)" --allowedTools "Bash(tg inbox:*)"
+```
+
+En `morning.md`, `tg inbox --new --kind dialog,group --json`; en `news.md`, `tg inbox --new --kind
+channel --json` y una petición para elegir lo importante. Sin `--kind`, todo junto.
 
 ## Informe semanal de un chat
 
@@ -89,9 +109,9 @@ Escribe en Telegram: **no**. Permite: `Bash(tg messages list:*)`.
 
 Escribe en Telegram: **no**. Permite: `Bash(tg review:*)`, `Bash(tg messages context:*)`, `Bash(tg messages search:*)`.
 
-> Ejecuta `tg review --since-time <where the last review ended> --json` (sin `--since-time`, revisa los últimos 3 días). Separa el resultado en tres listas: lo que debo hacer, lo que espero de otros y lo que necesita aclaración. Indica chat, fecha e identificadores de los mensajes que respaldan cada punto; añade un plazo solo si se mencionó. Antes de considerar algo vencido, comprueba si se completó después. Al final, indica desde qué `--since-time` debe empezar la siguiente revisión y enumera los pendientes.
+> Ejecuta `tg review --new --json` (la primera vez, los últimos 3 días; después, desde el último `--new`, con un punto por chat). Separa el resultado en tres listas: lo que debo hacer, lo que espero de otros y lo que necesita aclaración. Indica chat, fecha e identificadores de los mensajes que respaldan cada punto; añade un plazo solo si se mencionó. Antes de considerar algo vencido, comprueba si se completó después. Al final, enumera los pendientes.
 
-La siguiente revisión usa la misma petición con los pendientes de la anterior. En un cliente MCP, corresponde al prompt `review`.
+La siguiente revisión usa la misma petición con los pendientes de la anterior. Un chat que no se leyó entero conserva su punto y vuelve a aparecer. En un cliente MCP, corresponde al prompt `review`.
 
 ## Qué no has respondido
 

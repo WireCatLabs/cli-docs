@@ -10,9 +10,9 @@ title: "Решение проблем"
 |---|---|---|---|
 | `1` | `generic_failure` | опечатка в команде или сбой `tg` | [неизвестная команда](#error-unknown-command-), [сообщить](#report-a-problem) |
 | `2` | `validation_error` | неверное значение, сочетание параметров или несколько подходящих чатов | [значения](#--limit-takes-a-whole-number-from-1-upwards), [чаты](#-matches-3-chats--name-one-by-its-id) |
-| `3` | `configuration_error` | ошибка `config.json` или база новее `tg` | [настройки](#-is-not-a-valid-config), [база](#the-message-store-was-written-by-a-newer-version-) |
+| `3` | `configuration_error` | ошибка `config.json`, прокси отказал или недоступен, либо база новее `tg` | [настройки](#-is-not-a-valid-config), [прокси](#the-proxy--cannot-be-reached-or--refused), [база](#the-message-store-was-written-by-a-newer-version-) |
 | `4` | `authentication_error` | нет входа, сессия завершена или хранилище ключей недоступно | [нет сессии](#no-session-for-profile-default--run-tg-setup) |
-| `5` | `permission_error` | отказ `permissions` профиля или Telegram | [разрешения](#profile--does-not-let--write-or-profile--denies-), [Telegram](#telegram-refused-) |
+| `5` | `permission_error` | отказ `permissions` профиля или Telegram | [разрешения](#profile--does-not-let--write-or-profile--denies-), [Telegram](#telegram-refused-), [PEER_FLOOD](#telegram-limited-this-accounts-messages-as-spam-peer_flood) |
 | `6` | `not_found` | чат, сообщение или человек не найден; база пустая | [чат](#no-chat-matches-), [база](#nothing-recorded-for-profile--yet--run-the-command-once-without---offline) |
 | `7` | `confirmation_required` | чат отсутствует в получателях или некому подтвердить действие | [получатели](#chat--is-not-on-the-recipient-list-of-profile-), [подтверждение](#-asks-before-it-acts) |
 | `8` | `rate_limited` | часовой лимит или ожидание Telegram | [лимит](#profile--has-sent-n-messages-in-the-hour-), [FLOOD_WAIT](#telegram-asks-to-wait-n-s-before-the-next-request) |
@@ -21,7 +21,7 @@ title: "Решение проблем"
 | `11` | `provider_error` | Telegram отклонил запрос | [отказ](#telegram-refused-) |
 | `12` | `provider_unavailable` | сбой на стороне Telegram | [сбой](#telegram-failed-) |
 | `13` | `invalid_response` | `tg` не может прочитать ответ; пока только my.telegram.org | [приложение](#mytelegramorg-says-the-app-was-created-but-its-page-shows-none) |
-| `14` | `outcome_unknown` | соединение оборвалось после отправки; сообщение могло уйти | [неизвестный результат](#outcome_unknown-after-a-send) |
+| `14` | `outcome_unknown` | соединение оборвалось после записи; действие могло выполниться | [неизвестный результат](#outcome_unknown-after-a-send) |
 | `130` | `cancelled` | Ctrl-C или отказ от подтверждения | [Ctrl-C](#ctrl-c) |
 
 ## Сначала: `tg doctor`
@@ -36,7 +36,7 @@ tg doctor
 tg doctor --online
 ```
 
-`--online` также подключается один раз и читает аккаунт. Ничего не отправляет и не отмечает прочитанным.
+`--online` также подключается один раз и читает аккаунт. Ничего не отправляет и не отмечает прочитанным. Без него вход показан как `not checked`: только `--online` скажет, что Telegram ещё принимает сессию. `--online` также сообщает о неверных часах на этом компьютере и о том, заморозил или закрыл ли Telegram аккаунт ([Диагностика](./diagnostics.md#check-the-installation-tg-doctor)).
 
 ## После установки команда `tg` не найдена
 
@@ -141,6 +141,12 @@ XDG_RUNTIME_DIR=/run/user/$(id -u) tg chats list
 
 Код `8`. Ограничение Telegram (FLOOD_WAIT). Подождите указанный срок; JSON содержит `retryAfterMs`. Обычно возникает после серии запросов, например `chats list --all` или долгого `store fetch`. Для `store fetch` и `messages download --all` увеличьте `--pause`.
 
+Команда сама выжидает запрос до 10 секунд, не больше двух раз, и сообщает об этом в stderr: «Telegram asks to wait 3 s before … — waiting, then going on». `serve` и `watch` ждут до 2 минут. Более долгое ожидание завершает команду этой ошибкой. `tg` также запоминает ожидание: пока оно не закончится, та же команда сразу завершается ошибкой, не обращаясь к Telegram снова, а `tg doctor` и `tg server status` показывают его в `flood`.
+
+## Telegram ограничил сообщения аккаунта как спам (PEER_FLOOD)
+
+Код `5`. Telegram ограничивает аккаунт, который написал слишком многим людям не из своих контактов. Читать он по-прежнему может. Напишите @SpamBot в приложении Telegram: он скажет, до какого срока. Новые отправки только ухудшают положение, поэтому `tg` задерживает все отправки на час и сообщает об этом; каждый новый отказ начинает час заново. `tg doctor` показывает задержку в `flood.sendBlock`. Когда @SpamBot скажет, что ограничение снято, `tg flood clear` снимет задержку вместе с любым ожиданием, которое запомнил `tg`. Отказ замороженного аккаунта задерживает отправки так же — до даты, названной Telegram; `tg doctor --online` устанавливает и снимает эту задержку.
+
 ## Превышен часовой лимит профиля
 
 Код `8`. Лимит профиля — `sendsPerHour`, по умолчанию 30. Ошибка показывает время следующей отправки. Увеличивайте лимит только намеренно: `tg config set sendsPerHour <n>`.
@@ -171,7 +177,17 @@ XDG_RUNTIME_DIR=/run/user/$(id -u) tg chats list
 
 ## Не удаётся подключиться к Telegram
 
-Код `10`. Нет сети, мешает firewall, прокси или DNS, либо соединение оборвалось. Код в скобках уточняет причину: `ECONNREFUSED`, `ENOTFOUND`, `ETIMEDOUT`. Локальные команды работают без сети: `tg --offline chats list`.
+Код `10`. Нет сети, мешает firewall, прокси или DNS, либо соединение оборвалось. Код в скобках уточняет причину: `ECONNREFUSED`, `ENOTFOUND`, `ETIMEDOUT`. Локальные команды работают без сети: `tg --offline chats list`. Если Telegram заблокирован, задайте прокси ([Настройки](./configuration.md#through-a-proxy)).
+
+## Прокси недоступен или отказал
+
+Код `3`. Проблема в прокси, а не в Telegram: до Telegram ничего не дошло, поэтому даже отправка не ушла. `tg` останавливается на первом неудачном подключении, а не ждёт истечения срока.
+
+- **недоступен (`ECONNREFUSED`, `ENOTFOUND`, `ETIMEDOUT`)** — прокси не работает или указаны неверные адрес или порт.
+- **refused: … auth …** или **refused the tunnel (HTTP 407)** — неверные имя пользователя или пароль. Задайте их снова: `tg config set proxy -`.
+- **refused the tunnel (HTTP 403 или 502)** — прокси не хочет или не может подключиться к Telegram.
+
+`tg doctor` показывает используемый прокси, откуда он взят (`TG_PROXY` или настройки) и идёт ли через него Bot API. Чтобы попробовать без прокси: `tg config unset proxy`. MTProxy с неверным секретом обычно выглядит как зависание, а не как отказ: ограничьте время через `--timeout 30s`.
 
 ## `outcome_unknown` после отправки
 
@@ -182,6 +198,8 @@ tg messages send <chat> "<the same text>" --send-id <id from the error>
 ```
 
 После `--at-time` проверьте `tg messages scheduled <chat>`: отложенная отправка никогда не повторяется.
+
+Закрепление, открепление, реакция, отметка о прочтении, удаление, голос, закрытие опроса, изменения папок и контактов завершаются так же, когда Telegram не отвечает. Сообщение говорит, безопасно ли повторять. Создание папки повторять небезопасно: сначала посмотрите `tg chats folders list`, иначе появится вторая папка.
 
 ## Команда зависла
 
@@ -213,13 +231,21 @@ tg --timeout 30s --trace chats list
 
 Поиск не запрашивает Telegram. Пустой результат означает отсутствие сохранённых данных, а не самого сообщения. Прочитайте чат (`tg messages list <chat>`) или загрузите историю через `tg store fetch`, затем повторите ([Поиск](./archive.md#search)). `tg store check` показывает отстающие чаты.
 
+## Чат считается загруженным целиком, но старых сообщений нет
+
+Снова выполните `tg store fetch <chat>`. Команда читает сообщения старше самого старого в базе, независимо от того, считался ли чат полным, и доходит до первого сообщения чата; для длинного чата увеличьте `--limit`. Держите `--page-size` не больше 100: Telegram возвращает до 100 сообщений за запрос.
+
 ## tg serve уже работает для профиля
 
 Код `2`. Разрешён один `serve` на профиль. `tg server status` показывает процесс и время запуска; `tg server stop` останавливает запущенный через `server start` или службу.
 
+## `serve` остановился сам
+
+Причина находится в `tg server logs`. Если Telegram завершил вход, пока работал `serve`, он примерно в течение 15 минут выходит с кодом `4` и не перезапускается: выполните `tg session start`, затем `tg server start`. Если обновления Telegram перестали приходить по другой причине, он выходит с кодом `12`, и systemd запускает его снова.
+
 ## Фоновый сервер не запускается
 
-Причина находится в `tg server logs`. Обычно служба не видит хранилище ключей: оно ещё закрыто или нет `XDG_RUNTIME_DIR`. После переноса Node или `tg` повторите `tg server install`: служба использует пути времени установки ([Служба](./archive.md#as-a-service)).
+`tg server status --json` содержит `stopped` и `unit.exitCode`, если последний обычный выход был таким, после которого служба не перезапускается. При коде 4 обновите сессию через `tg session start`, затем выполните `tg server start`. Причина находится в `tg server logs`. Обычно служба не видит хранилище ключей: оно ещё закрыто или нет `XDG_RUNTIME_DIR`. После переноса Node или `tg` повторите `tg server install`: служба использует пути времени установки ([Служба](./archive.md#as-a-service)).
 
 ## `npx @leemour/tg-cli` запускает старую версию
 
@@ -238,3 +264,7 @@ tg doctor report create --run <id>    # about another run; ids from tg runs list
 Создайте обращение на [GitHub](https://github.com/leemour/tg-cli/issues/new): опишите действия и результат, приложите файл. Обращение и файл публичные: сначала прочитайте его.
 
 ⚠ Не прикладывайте каталог состояния, файл сессии или `~/.local/share/cli-messaging/`: они содержат доступ к аккаунту и ваши сообщения.
+
+## Запомненные ожидания
+
+SDK запоминает сроки ожидания для каждой операции и чата; повтор до их истечения завершается кодом 8 без нового запроса. Отказы из-за заморозки или ограничения за спам могут задерживать отправку. `tg flood clear` — обслуживание для владельца после снятия ограничения: команда сбрасывает локальные ожидания и задержки и ничего не меняет в Telegram. MCP-инструмента для неё нет; агент не должен снимать задержку только ради повтора. `doctor --online` проверяет вход, состояние аккаунта и часы; doctor без подключения вход не подтверждает.
