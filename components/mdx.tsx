@@ -17,6 +17,7 @@ import {
 } from "@/components/installation-guide"
 import { NodeSetupPrompt } from "@/components/node-setup-prompt"
 import { PlatformPaths } from "@/components/platform-paths"
+import { PlatformSetupTabs } from "@/components/platform-setup-tabs"
 import { Screenshot } from "@/components/screenshot"
 import { SearchPlayground } from "@/components/search-playground/search-playground"
 import { AgentPrompt } from "@/components/text-snippet"
@@ -46,6 +47,7 @@ export function getMDXComponents(components?: MDXComponents) {
     AgentInstallPrompt,
     InstallationMessengerTabs,
     InstallationOsTabs,
+    PlatformSetupTabs,
     Screenshot,
     Tabs,
     Tab,
@@ -57,6 +59,8 @@ export function getMDXComponents(components?: MDXComponents) {
     NodeSetupPrompt,
     SearchPlayground,
     "platform-paths": PlatformPaths,
+    "platform-setup-tabs": PlatformSetupTabs,
+    "platform-setup-tab": Tab,
     "agent-prompt": AgentPrompt,
     ...components,
     a: (props) => {
