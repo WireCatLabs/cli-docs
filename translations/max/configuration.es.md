@@ -32,6 +32,8 @@ max config show --json     # то же одним объектом
 
 Cada ajuste indica su origen: `flag`, `default` o `config file:` con la clave, como `config file: bot.profiles.test`. El perfil muestra `first word`, `MAX_PROFILE`, `MAX_PROFILE_LOCK`, `config file: defaultProfile` o `default`.
 
+Con `--json`, la respuesta también incluye `storeSettings`: los ajustes del archivo compartido (`searchStemmers.*`) y su origen, `store` o `default`.
+
 `max test config show --bot` muestra lo usado por `max test bot …`, con sección y límite propios. `configFound: false` indica que no hay archivo y se aplican valores iniciales. Si hay variables `MAX_*_DIR`, aparece un aviso en stderr: al cambiar la entrada del llavero, una sesión creada sin ellas puede parecer inexistente.
 
 No aparecen secretos: el archivo no dispone de campos para guardarlos.
@@ -98,13 +100,20 @@ La migración conserva los permisos efectivos, los ajustes MAX y los puntos de m
 | Campo | Función | Qué lo sustituye en una ejecución | Valor inicial |
 |---|---|---|---|
 | `defaultProfile` | Perfil sin primera palabra ni `MAX_PROFILE` | La primera palabra (`max work …`), `MAX_PROFILE` | `default` |
+| `embeddingProvider` | Modelo local (`local`, por defecto) u `openai` | `--provider` | `local` |
+| `embeddingModel` | Modelo de vectores | `--model` | Según el servicio |
+| `embeddingBaseUrl` | Dirección de la API de vectores | `--base-url` | Según el servicio |
+| `embeddingDims` | Tamaño del vector, entero de 1 a 65 536 | `--dims` | Según el modelo |
+| `analysisProvider` | Agente (`agent`), `openai` o `anthropic` | `build --provider` | `agent` |
+| `analysisModel` | Modelo de análisis | `build --model` | Ninguno; indicar explícitamente para `--analyze` |
+| `analysisBaseUrl` | Dirección de la API de análisis | `build --base-url` | Según el servicio |
 | `limit` | Registros que mostrar sin `--limit` | `--limit` | `20` |
 | `timeoutMs` | Espera para **una solicitud** | — (`--timeout` es otra cosa, ver abajo) | La del transporte |
 | `color` | Color; si falta, se detecta si es un terminal | —; si falta el campo, `NO_COLOR` desactiva el color | Detección del terminal |
 | `senderColors` | Color por autor en `max messages`; `вы` siempre cian. Requiere `color`. Solo cuenta personal | — | `false` |
 | `catchUpMarksRead` | `max inbox` y `max review` marcan como leído cada chat mostrado, hasta el último mensaje mostrado. El interlocutor ve la marca. Solo cuenta personal | `--mark-read`, `--no-mark-read` | `false` |
 | `record` | Registrar cada ejecución como con `--record` | `--record`, `--no-record` | `false` |
-| `permissions` | niveles por recurso y comando: `deny`, `readonly`, `ask`, `allow`; una clave más específica tiene prioridad | —; `--yes` y `--allow-dangerous` solo responden a `ask`, no anulan `deny` | casi todo `allow`; eliminar mensajes y cerrar otras sesiones `ask` |
+| `permissions` | niveles por recurso y comando: `deny`, `readonly`, `ask`, `allow`; una clave más específica tiene prioridad | —; `--yes` y `--allow-dangerous` solo responden a `ask`, no anulan `deny` | casi todo `allow`; eliminar mensajes y cerrar otras sesiones `ask`; respuestas automáticas `replies.send` `deny` |
 | `serve` | Iniciar `max serve` si se necesita y no existe. No inicia con `MAX_TOKEN`. Solo personal | `--serve`, `--no-serve` | `true` |
 | `keepRunsForDays` | Días de conservación de ejecuciones | — | `30` |
 | `readOnly`, `allow`, `mcpTools` | ajustes antiguos compatibles; `config migrate` los convierte en `permissions` | — | no se pueden cambiar tras migrar |
@@ -138,6 +147,9 @@ max config set defaultProfile work      # какой профиль без пе�
 ```
 
 El valor se valida con el mismo esquema que al leer, **antes de escribir**: `max config set limit 0` se rechaza y deja el archivo intacto. `serve`, `senderColors`, `catchUpMarksRead` y `mcpTools` no se aceptan con `--bot`: un bot no tiene servidor, ni colores de autores, ni mensajes no leídos, y el antiguo `mcpTools` pertenece solo a cuentas personales.
+
+`searchStemmers.cyrillic` (`russian` o `none`) y `searchStemmers.latin` (`spanish`, `english` o
+`none`) se guardan en el archivo compartido de mensajes, no en el archivo de configuración: son comunes a todos los perfiles y a ambos mensajeros. Por ello no admiten `--defaults`, `--personal` ni `--bot`, y no pueden cambiarse bajo `MAX_PROFILE_LOCK`. `config unset` restaura el valor incorporado. Tras cambiarlos, ejecuta `max store reindex`: consulta [Mantenimiento del archivo](./archive.md#обслуживание-архива).
 
 ## Las erratas son errores
 
@@ -210,3 +222,5 @@ max chats list
 - [Solución de problemas](./troubleshooting.md): qué hacer ante errores.
 
 `MAX_CACHE_DIR` solo corresponde a la caché antigua: `max doctor` busca allí el archivo restante. Por compatibilidad, todavía cambia la entrada del llavero; para la copia compartida nueva, usa `MESSAGING_STORE`.
+
+Los ajustes de vectores y análisis son independientes y pueden variar por perfil. `MAX_EMBEDDING_PROVIDER`, `MAX_EMBEDDING_MODEL`, `MAX_EMBEDDING_BASE_URL`, `MAX_EMBEDDING_DIMS`, `MAX_ANALYSIS_PROVIDER`, `MAX_ANALYSIS_MODEL` y `MAX_ANALYSIS_BASE_URL` sustituyen la configuración; las opciones sustituyen los ajustes. La dirección debe ser HTTP/S sin contraseña integrada, query ni fragment. El servicio externo de vectores también recibe la pregunta de una búsqueda MCP. Las claves se establecen con `models text key set openai|anthropic` y no se escriben en `config.json`. Un `build` normal no ejecuta análisis externo: requiere `--analyze` explícito.

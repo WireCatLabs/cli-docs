@@ -10,7 +10,7 @@ Group-changing commands return `operationId` in JSON. After creating, joining, u
 
 ## Working with an agent
 
-An agent with a terminal, such as Claude Code or Codex, can use a [skill](https://github.com/leemour/max-cli/blob/v0.28.0/README.md#навык-для-агентов-с-терминалом). An agent can also connect through the [MCP server](./mcp.md), for example in Claude Desktop or Cursor. The examples below show your request, the command the agent runs and the result.
+An agent with terminal access, such as Claude Code or Codex, can use the [skill](https://github.com/leemour/max-cli/blob/v0.29.0/README.md#навык-для-агентов-с-терминалом). Without terminal access, use the [MCP server](./mcp.md), for example in Claude Desktop. Cursor supports both approaches. Below: your request, the agent’s command and the result.
 
 ### An admin's morning: who needs an answer
 
@@ -143,3 +143,9 @@ moderate`. Unlike the personal account, it can ban removed members so they canno
 ## Member audit
 
 `max chats members audit <чат>` reads group members and shows signs of suspicious accounts. `--budget` limits the pages, `--min-score` sets the minimum score. This is a hint for a human review: no one is removed, and admins and the owner are excluded; `more` means the list is incomplete, `unknown` means signs that could not be determined. MAX does not provide all the signs that Telegram does. The audit is not available with `--offline`.
+
+`--deep <n>` additionally checks the first n members in full, one per second: their profile and everything they wrote in saved chats. Public spammer lists cover only Telegram accounts, so MAX does not query them and reports that fact.
+
+### Member snapshots
+
+`max chats members fetch` reads the member list into local storage; `--budget` limits the number of pages. Repeated snapshots show joins, departures and profile changes through `max chats members history`. Departures are recorded only after a complete list fetch. `--since-time` sets the earliest history date, and `--offline` reads it without connecting. MAX snapshots are collected by explicit commands: daily roster checks by the background service are not supported yet.

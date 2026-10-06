@@ -293,3 +293,10 @@ La orden imprime enlace para una [incidencia de GitHub](https://github.com/leemo
 Incidencias y adjuntos son públicos.
 
 ⚠ No adjuntes `~/.cache/max-cli/` ni `~/.local/share/cli-messaging/`: contienen mensajes.
+
+## Límite recordado
+
+Si el mensajero indica cuánto esperar, `max` lo recuerda para la operación y el chat. Un reintento antes de que termine se rechaza con código `8` sin contactar con el mensajero. MAX aún no indica ese tiempo, por lo que no se recuerda nada ni se retienen envíos de una cuenta personal MAX. Una pausa de inicio de sesión evita los accesos demasiado frecuentes; `max doctor` muestra su duración.
+
+Las esperas recordadas y las retenciones de envíos aparecen en `max server status` (`flood`). `max flood
+clear` las olvida sin cambiar nada en MAX. Ejecútalo solo cuando MAX ya no limite la cuenta. MCP no ofrece este comando: el agente no debe quitar un límite para reintentar.

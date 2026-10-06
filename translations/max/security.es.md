@@ -40,11 +40,11 @@ El token de `max bot` está separado en el servicio `max-cli`, entrada `bot:<п�
 | destinatarios permitidos, si está activo | `~/.local/share/max-cli/profiles/<профиль>.recipients.json` | `0600` |
 | reglas de moderación tras el primer `chats rules set` | `~/.local/share/max-cli/profiles/<профиль>.moderation.json` | `0600` |
 | bot: chats vistos, envíos, destinatarios y punto de `watch` | `~/.local/share/max-cli/bots/…` | carpeta `0700`, archivos `0600` |
-| copia compartida de mensajes de cuenta personal, bot y `tg`, con textos y transcripciones | `~/.local/share/cli-messaging/messages.db` | carpeta `0700`, archivo `0600` |
+| copia compartida de mensajes de cuenta personal, bot y `tg`, con textos, transcripciones, rutas de adjuntos descargados y su texto extraído | `~/.local/share/cli-messaging/messages.db` | carpeta `0700`, archivo `0600` |
 | socket y registro de `max serve` | `~/.local/share/max-cli/profiles/<профиль>.sock`, `.serve.log` | `0600` |
 | copia anterior del perfil; ya no se abre | `~/.cache/max-cli/<профиль>.db` y sus `-wal`, `-shm` | carpeta `0700`, archivos `0600` |
 | exportación, **solo `max store export --output`** | destino indicado | `0600` |
-| archivos descargados, **solo `max messages download`** | carpeta actual o `--output` | `0600` |
+| archivos descargados, `max messages download` o `max attachments extract --download --output-dir` | carpeta actual o `--output` | `0600` |
 | informe, **solo `max doctor report create`** | carpeta actual o `--output` | `0600` |
 | modelos de voz, **solo tras `max models audio download`** | `~/.cache/cli-common/models/audio/…` | carpeta `0700`, archivos `0600` |
 
@@ -98,7 +98,7 @@ Los nombres, títulos y textos de otras personas no controlan la terminal: los c
 
 ## Qué ven otros procesos
 
-El token no se pasa como argumento, pero el texto de un mensaje sí, y se ve en `ps` y en el historial de la shell ([página común](https://wirecat.dev/ru/docs/security)). Los archivos de `max` y el socket del servidor en segundo plano no son visibles para otros usuarios del equipo: carpetas `0700`, archivos `0600`.
+El token no se pasa como argumento, pero el texto de un mensaje sí, y se ve en `ps` y en el historial de la shell ([página común](https://wirecat.dev/ru/docs/security)). Los archivos de estado y el socket del servidor en segundo plano están protegidos con permisos `0600` y carpetas `0700`. Otros archivos pueden tener permisos distintos, como `0644` en la configuración. Al mover archivos o redirigir la salida, comprueba los permisos por separado.
 
 ## Qué sale por la red
 
@@ -108,6 +108,9 @@ El token no se pasa como argumento, pero el texto de un mensaje sí, y se ve en 
 | servidores de archivos de MAX, dirección indicada por MAX | `messages send --file`, `messages download` |
 | `https://web.max.ru` en perfil Chromium temporal | `session start qr-chrome`, `session start sms`, `setup --method qr-chrome|sms` |
 | Hugging Face y GitHub para modelos de voz | solo `max models audio download`; la voz se procesa localmente |
+| Hugging Face, archivos del modelo de texto | Solo `max models text download`; el modelo local no envía mensajes |
+| Servicio externo de vectores configurado | `conversations embed` envía texto de conversaciones tras el consentimiento; `conversations search`, incluido MCP, envía la pregunta al seleccionar un servicio externo |
+| Servicio compatible con OpenAI o Anthropic configurado | `conversations build --analyze --chat` envía lotes limitados tras el consentimiento para la cuenta, el chat y el servicio |
 | `https://platform-api2.max.ru`, Bot API oficial, token en `Authorization` | solo `max bot` |
 | registro npm para comprobar versiones | `max upgrade` y una vez al día desde terminal; se desactiva con `updateCheck: false` |
 
@@ -130,7 +133,7 @@ Se avisa una vez por stderr al iniciar sesión por primera vez con `max setup` o
 
 ## Uso personal
 
-Guardar conversaciones de otras personas es admisible mientras lo hagas para ti, con tu cuenta: la ley rusa de datos personales (152-ФЗ, artículo 1, parte 2, punto 1) no se aplica al tratamiento con fines personales y domésticos. Lo mismo sobre el RGPD, en la [página común](https://wirecat.dev/ru/docs/security). Entregar una exportación (`max store export`) a otra persona sale del uso personal; incluye enlaces de fotos que se abren sin iniciar sesión.
+La herramienta guarda en tu equipo conversaciones y contactos de otras personas, incluidos los textos de los mensajes. El acceso a la base local permite acceder a esos datos. Entregar una exportación (`max store export`) a otra persona también entrega el contenido de la conversación; sus enlaces a fotos pueden abrirse sin iniciar sesión. Antes de compartir, revisa el contenido y los destinatarios. Esta página describe el funcionamiento de la herramienta y no certifica el cumplimiento legal de tu caso de uso.
 
 Los informes (`max doctor report create`) se adjuntan a incidencias **públicas** de GitHub. No contienen texto, nombres ni teléfonos; los identificadores se sustituyen por etiquetas. Revísalos antes de enviarlos.
 
@@ -144,7 +147,7 @@ Cada acceso añade un dispositivo en la lista de sesiones de MAX; puedes cerrarl
 
 ## Protocolo no oficial
 
-MAX no publica API de cuentas personales. El conocimiento del protocolo procede de mediciones reales o ingeniería inversa ajena; se registra el origen de cada operación ([protocolo (`protocol.md`)](https://github.com/leemour/max-cli/blob/v0.28.0/docs/dev/protocol.md), columna «Where it came from»).
+MAX no publica API de cuentas personales. El conocimiento del protocolo procede de mediciones reales o ingeniería inversa ajena; se registra el origen de cada operación ([protocolo (`protocol.md`)](https://github.com/leemour/max-cli/blob/v0.29.0/docs/dev/protocol.md), columna «Where it came from»).
 
 **Puede dejar de funcionar sin aviso.** En ese caso el comando indica el problema por stderr, en lugar de devolver una lista vacía como si todo funcionase.
 

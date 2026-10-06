@@ -250,7 +250,7 @@ max messages search "договор"            # по тексту сообще
 max messages search "договор" --chat 42  # в одном чате
 ```
 
-Search needs **at least three characters**. With `--search`, `--kind` or `--unread`, `chats list` checks the 200 newest chats and reports whether older ones exist. Offline, it checks all stored chats.
+Search needs **at least three characters**. With `--search`, `--kind` or `--unread`, `chats list` checks all chats MAX provided at login and reports (`partial`) if MAX did not provide them all; with `--offline`, it checks all stored chats.
 
 After finding the chat, use its **ID**, shown in output and stable:
 
@@ -537,7 +537,7 @@ max chats list --json
 
 `--all` and `--offline` use **the same** object; `--all` sets `page: 1` and `hasMore: false`. The shape does not encode the data source; exit codes and diagnostics already do that.
 
-`hasMore` means another page may exist, not a total count. Chats and contacts have exact counts from storage. ⚠ **For messages, it describes the local copy, not the whole chat**; a full backwards page is the available evidence for more history.
+`hasMore` means another page may exist, not a total count. It is exact for chats and contacts counted locally; if MAX did not provide all chats, the last page reports `hasMore: true`. ⚠ **For messages, it describes our copy, not the whole chat**: MAX does not report whether older messages exist. A full page is treated as evidence of more; after a short page, `max` requests one older message, because a short page can also occur in the middle of a conversation.
 
 Terminals still display tables, with continuation hints **on stderr**. Stdout contains data in every mode.
 
@@ -651,3 +651,46 @@ max config set --defaults permissions.contacts readonly
 `sends list` uses the configured `limit` when `--limit` is omitted. JSON includes `items`, `page`, `limit`, `hasMore`; `limit` is the selected page limit, not the number of rows. JSONL outputs one send-attempt record per line.
 
 `account show --json` retains MAX's `id`, `name`, `phone` and `description`, adding `username: null` for the shared account format. Phone numbers remain masked; `--show-phone` explicitly reveals the entire number.
+
+## A person's profile
+
+`max contacts profile <человек>` shows what MAX reports about a person and how much they write in shared chats:
+
+- name, username link and description;
+- `registered` — account creation time reported by MAX itself (`source: max`);
+- `hasPhoto` — whether they have their own photo;
+- for each shared chat, the number of their messages in the local copy, and the first and last message.
+  `complete: false` means the chat is not fully stored, so the count is a lower bound.
+
+The command makes one additional MAX request beyond `contacts show` and does not notify the person. MAX does not provide labels such as “bot” or “scammer” for personal accounts, so `flags` is empty. With `--offline`, the answer comes from the local copy.
+
+## Does a person look like a bot?
+
+`max contacts check <человек>` assesses one person for signs of a bot, fake account or spammer. Each reason includes its source:
+
+- profile: missing photo, username or description, unusual name;
+- stored messages: no messages, a link as the first message, the same text in several chats.
+
+Public spam lists (Combot CAS and lols.bot) cover Telegram accounts only. They are not queried for MAX, and the response explains this; the person's ID is not sent anywhere. `--offline` reads stored data only. The score is a hint, not a conclusion.
+
+## A person's local context
+
+`max contacts context <человек>` reads stored messages and shared chats for linked identities, without connecting or marking anything as read. `complete: false` and `notRead` indicate gaps in the archive. `max contacts link <человек> telegram:<id>` links MAX and Telegram identities; `contacts unlink` removes the link. This writes to the local contact graph and does not change the MAX address book.
+
+`max contacts context <человек> --chat <чат> --chat <чат>` returns the person's latest messages in each named chat, oldest first, with only time and text: a compact input for an AI agent to summarize. `--limit` applies to each chat (20 by default); `-v` adds IDs, message links, sender and reply reference; `-vv` includes everything. `--refresh` first reads the chat from MAX: it takes the person's messages from the latest chat page, because MAX cannot search by sender. Nothing is marked as read.
+
+`contacts context` returns message text and therefore follows `messages` permissions; local identity links follow `contacts` permissions.
+
+## Statistics charts
+
+`max stats charts` returns a chart description in JSON. `--output activity.svg` also saves a dark-theme SVG. Pass a chat found through `max chats list` as the command argument. `--chart-kind messages` shows messages, `active` shows active authors, and `membership` shows joins and departures. `--by day` or `week` sets the period; weeks begin on Monday. `--timezone` applies to calendar dates.
+
+The chat name `synthetic-group` in this example is fictional:
+
+```sh
+max stats charts synthetic-group --chart-kind messages --by day --timezone Europe/Madrid --output activity.svg --json
+```
+
+JSON contains `chart` and, when an image is saved, `chartFile` with its path and size. SVG is written only to a new file, without overwriting. A missing date remains a gap; incomplete data is marked in both description and image. `membership` requires online chat events and is unavailable with `--offline`. MCP `max_stats_charts` returns JSON from the local store, without connecting or writing files; joins and departures are unavailable there. Reading follows the `messages` permission. PNG, `--jsonl` and an image on stdout are not yet available.
+
+![Chart using fictional data](https://raw.githubusercontent.com/leemour/max-cli/v0.29.0/docs/images/stats-charts.png)

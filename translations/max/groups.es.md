@@ -10,7 +10,7 @@ Las órdenes que modifican grupos devuelven `operationId` en JSON; después de c
 
 ## Trabajar con un agente
 
-Los agentes con terminal, como Claude Code o Codex, pueden usar una [skill](https://github.com/leemour/max-cli/blob/v0.28.0/README.md#навык-для-агентов-с-терминалом). También pueden conectarse mediante el [servidor MCP](./mcp.md), por ejemplo en Claude Desktop o Cursor. Los ejemplos muestran tu petición, la llamada del agente y el resultado.
+Un agente con acceso al terminal, como Claude Code o Codex, puede usar la [habilidad](https://github.com/leemour/max-cli/blob/v0.29.0/README.md#навык-для-агентов-с-терминалом). Sin acceso al terminal, usa el [servidor MCP](./mcp.md), por ejemplo en Claude Desktop. Cursor admite ambas opciones. A continuación: tu petición, el comando del agente y el resultado.
 
 ### La mañana del administrador: quién espera respuesta
 
@@ -143,3 +143,9 @@ moderate`. Puede impedir el regreso por invitación a las personas expulsadas, a
 ## Revisión de miembros
 
 `max chats members audit <чат>` lee los miembros del grupo y muestra señales de cuentas sospechosas. `--budget` limita las páginas y `--min-score`, la puntuación mínima. Es una pista para que una persona revise: no se elimina a nadie y se excluyen los administradores y el propietario; `more` indica que la lista está incompleta y `unknown`, señales desconocidas. MAX no ofrece todas las señales de Telegram. Con `--offline` la revisión no está disponible.
+
+`--deep <n>` comprueba además a los primeros n miembros por completo, uno por segundo: su perfil y lo que escribieron en los chats guardados. Las listas públicas de spammers solo cubren cuentas Telegram, por lo que MAX no las consulta y lo indica en la respuesta.
+
+### Instantáneas de miembros
+
+`max chats members fetch` guarda la lista de miembros localmente; `--budget` limita las páginas. Las instantáneas repetidas muestran entradas, salidas y cambios de perfil con `max chats members history`. Las salidas solo se registran tras leer la lista completa. `--since-time` fija el inicio del historial, y `--offline` permite leerlo sin conectar. Las instantáneas MAX se recogen mediante comandos explícitos: la revisión diaria desde el servicio de fondo aún no está disponible.

@@ -293,3 +293,10 @@ The command prints a link to a new [GitHub issue](https://github.com/leemour/max
 Issues and attachments are public.
 
 ⚠ Never attach `~/.cache/max-cli/` or `~/.local/share/cli-messaging/`: they contain message text.
+
+## Remembered rate limit
+
+If a messenger specifies a wait time, `max` remembers it for the operation and chat. A retry before it expires immediately refuses with code `8`, without contacting the messenger. MAX does not yet report such a time, so nothing is remembered and sends are not held for a personal MAX account. A login pause protects against frequent logins; `max doctor` shows its duration.
+
+Remembered waits and send holds appear in `max server status` (`flood`). `max flood
+clear` forgets them without changing anything in MAX. Run it only when MAX is no longer limiting the account. MCP has no such command: an agent must not clear a limit to retry.

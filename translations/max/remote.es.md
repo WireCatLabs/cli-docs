@@ -1,6 +1,7 @@
 ---
 title: "ChatGPT o Claude en el navegador"
 ---
+
 **Estado:** montado y probado con un cliente local. Aún no se ha probado completo con ChatGPT y Claude a través de un túnel real. Si algún paso no funciona como se describe, [abre una incidencia](https://github.com/leemour/max-cli/issues).
 
 `max mcp` se comunica con la aplicación de IA mediante un canal en tu propio ordenador. ChatGPT y Claude en el navegador no pueden usarlo: se conectan desde sus servidores, por internet, a una dirección que les facilites. `max mcp --http` ofrece las mismas herramientas por HTTP con su propio acceso, y **[Tailscale Funnel](https://tailscale.com/kb/1223/funnel)** proporciona al ordenador una dirección HTTPS pública como `https://laptop.tail1234.ts.net`. No necesitas comprar un dominio.
@@ -18,7 +19,7 @@ ChatGPT / Claude ──интернет──▶ Tailscale Funnel ──▶ max 
 
 | Aplicación | Planes | Documentación |
 |---|---|---|
-| ChatGPT | Plus, Pro, Business, Enterprise, Education, en modo de desarrollador | [Modo de desarrollador](https://developers.openai.com/api/docs/guides/developer-mode) |
+| ChatGPT | Plus, Pro, Business, Enterprise, Education, en modo de desarrollador | [Modo de desarrollador](https://developers.openai.com/api/docs/guides/custom-mcp-server) |
 | Claude | Cualquier plan; uno personalizado en el gratuito | [Conectores personalizados](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |
 | Gemini | Solo adultos en EE. UU. con cuenta personal de Google; no disponible en Rusia ni Europa | [Aplicaciones conectadas](https://support.google.com/gemini/answer/17209137?hl=en) |
 
@@ -46,7 +47,7 @@ max mcp --http --public-url https://<устройство>.<сеть>.ts.net
 
 La dirección para la aplicación es tu dirección de Funnel terminada en `/mcp`: `https://<устройство>.<сеть>.ts.net/mcp`.
 
-- **ChatGPT:** activa el modo de desarrollador y añade el conector con esa dirección siguiendo la [documentación](https://developers.openai.com/api/docs/guides/developer-mode).
+- **ChatGPT:** activa el modo de desarrollador y añade el conector con esa dirección siguiendo la [documentación](https://developers.openai.com/api/docs/guides/custom-mcp-server).
 - **Claude:** añade un conector personalizado con esa dirección siguiendo la [documentación](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp). En la configuración del conector también puedes decidir, para cada herramienta, si está siempre permitida, si requiere confirmación o si está prohibida.
 
 La aplicación abre la página de acceso de `max`. Comprueba la línea que indica adónde irá el acceso (debe decir `chatgpt.com` o `claude.ai`) e introduce el código del terminal. La aplicación sigue conectada 30 días y renueva el acceso por sí misma; después pedirá un código nuevo.

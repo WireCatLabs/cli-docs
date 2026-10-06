@@ -1,6 +1,7 @@
 ---
 title: "Diagnostics: what a command did"
 ---
+
 Each request produces an event, with two destinations available. `--trace` displays events without storing them; `--record` stores them without displaying them. By default, nothing is displayed, and only failed runs are saved (see “Failed runs are always saved”).
 
 ## Displaying events
@@ -122,7 +123,7 @@ Whole days are removed by directory name, without opening files to decide what t
 
 ## Failed runs are always saved
 
-A failed run is saved even without `--record`, with `"keptBecauseFailed": true` in `run.json`. This applies to every command and error: invalid flags, unknown commands, preflight checks and commands that never contact MAX (`models`, `server`, `watch`, `upgrade`). Only command words, such as `messages list`, are recorded, without following arguments. Successful runs without `--record` leave no record. This gives bug reports useful evidence without accumulating a history of what you read. `--no-record` or `"record": false` in configuration disables this too.
+A command that ends with an error is saved even without `--record`, with `"keptBecauseFailed": true` in `run.json`. This applies to every command and error: wrong options, unknown commands, preflight checks and commands that do not contact MAX (`models`, `server`, `watch`, `upgrade`). The record contains only command words, such as `messages list`, without subsequent arguments. A successful run without `--record` leaves no diagnostic record; search queries are stored separately. This provides something to attach to a problem report. Search history contains query parameters, not the matching messages. `--no-record` or `"record": false` in settings disables this too.
 
 ## Recording every run
 
@@ -130,7 +131,7 @@ A failed run is saved even without `--record`, with `"keptBecauseFailed": true` 
 { "profiles": { "default": { "record": true } } }
 ```
 
-This records every run; `--no-record` disables it for one invocation. The default is the reverse: successful runs are not recorded unless requested, while failures are saved without content so they can support a bug report. A messenger should not automatically accumulate a log of whom you read and when.
+Every run is then recorded, and `--no-record` disables recording for one invocation. The default is the reverse: successful runs are not recorded unless requested; failed runs are always saved without text so they can accompany an error report. Successful search parameters are stored separately from diagnostic runs; `--no-record` or `"record": false` disables both kinds of recording.
 
 ## Next steps
 
@@ -140,3 +141,5 @@ This records every run; `--no-record` disables it for one invocation. The defaul
 ## Reference for scripts
 
 `max commands --json` lists commands, global options and exit codes without connecting to an account. Use `max commands messages search --json` for one command or `max commands messages --json` for a group; both retain global options and exit codes. Words after `commands` specify one path; inspect different groups in separate calls. `cli` is the tool name, `version` is the installed package version, and `contract` is the shared JSON contract version (`0`). It changes when response fields change incompatibly; updating a package does not itself change `contract`. Scripts can read individual fields instead of comparing the entire JSON to a saved string.
+
+Search and counts save queries separately from runs; see query history and --no-record in [search](./search.md).

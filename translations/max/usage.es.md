@@ -250,7 +250,7 @@ max messages search "договор"            # по тексту сообще
 max messages search "договор" --chat 42  # в одном чате
 ```
 
-La búsqueda requiere **tres caracteres como mínimo**. Con `--search`, `--kind` o `--unread`, `chats list` examina los 200 chats recientes y avisa si hay anteriores; con `--offline`, todos los guardados.
+La búsqueda requiere **tres caracteres como mínimo**. Con `--search`, `--kind` o `--unread`, `chats list` examina todos los chats que MAX proporcionó al iniciar sesión y avisa (`partial`) si no los proporcionó todos; con `--offline`, examina todos los guardados.
 
 Utiliza después **el identificador**, que aparece en la salida y no cambia:
 
@@ -537,7 +537,7 @@ max chats list --json
 
 `--all` y `--offline` usan **el mismo** objeto; `--all` incluye `page: 1` y `hasMore: false`. La forma no indica el origen: eso corresponde a códigos y diagnóstico.
 
-`hasMore` indica si hay otra página, no el total. Es exacto para chats y contactos, contados localmente. ⚠ **En mensajes describe nuestra copia, no todo el chat:** una página completa anterior solo prueba que hay más detrás.
+`hasMore` indica si puede haber otra página, no el total. Es exacto para chats y contactos contados localmente; si MAX no proporcionó todos los chats, la última página indica `hasMore: true`. ⚠ **En mensajes describe nuestra copia, no todo el chat**: MAX no informa de si existen mensajes anteriores. Una página completa se toma como indicio de que hay más; tras una página corta, `max` solicita un mensaje anterior, porque una página corta también puede aparecer en medio de una conversación.
 
 En terminal muestra tablas y la indicación de la página siguiente va por **stderr**: stdout siempre contiene datos.
 
@@ -651,3 +651,46 @@ Los niveles `deny`, `readonly`, `ask` y `allow` se aplican en CLI y MCP. La clav
 `sends list` usa el `limit` configurado si se omite `--limit`. JSON incluye `items`, `page`, `limit`, `hasMore`; `limit` es el límite seleccionado, no el número de filas. JSONL imprime un registro de intento de envío por línea.
 
 `account show --json` conserva los campos MAX `id`, `name`, `phone` y `description`, añadiendo `username: null` para el formato compartido. El teléfono sigue oculto; `--show-phone` lo revela explícitamente completo.
+
+## Perfil de una persona
+
+`max contacts profile <человек>` muestra lo que MAX informa sobre una persona y cuánto escribe en los chats comunes:
+
+- nombre, enlace de usuario y descripción;
+- `registered`: cuándo se creó la cuenta, según el propio MAX (`source: max`);
+- `hasPhoto`: si tiene foto propia;
+- en cada chat común, cuántos mensajes suyos hay en la copia local y cuáles son el primero y el último.
+  `complete: false` significa que el chat no está guardado por completo y que la cifra es un mínimo.
+
+El comando hace una solicitud a MAX adicional a las de `contacts show` y no avisa a la persona. MAX no proporciona etiquetas como «bot» o «estafador» para cuentas personales, por lo que `flags` está vacío. Con `--offline`, la respuesta se obtiene de la copia local.
+
+## ¿Parece un bot?
+
+`max contacts check <человек>` evalúa a una persona en busca de indicios de bot, cuenta falsa o spammer. Cada motivo indica su fuente:
+
+- perfil: falta foto, nombre de usuario o descripción, nombre extraño;
+- mensajes guardados: no ha escrito, el primer mensaje es un enlace, repite el mismo texto en varios chats.
+
+Las listas públicas de spam (Combot CAS y lols.bot) solo incluyen cuentas de Telegram. No se consultan para MAX y la respuesta lo explica; el identificador de la persona no se envía a ningún sitio. `--offline` solo lee lo guardado. La puntuación es una orientación, no una conclusión.
+
+## Contexto local de una persona
+
+`max contacts context <человек>` lee mensajes guardados y chats comunes de identidades vinculadas, sin conectarse ni marcar como leído. `complete: false` y `notRead` señalan lagunas del archivo. `max contacts link <человек> telegram:<id>` vincula identidades de MAX y Telegram; `contacts unlink` elimina el vínculo. Es una escritura en el grafo local de contactos y no cambia la agenda de MAX.
+
+`max contacts context <человек> --chat <чат> --chat <чат>` devuelve sus últimos mensajes en cada chat indicado, de antiguos a nuevos, solo con hora y texto: un formato breve para que un agente de IA pueda resumirlos. `--limit` se aplica a cada chat (20 por defecto); `-v` añade identificadores, enlaces a mensajes, remitente y referencia de respuesta; `-vv` incluye todo. `--refresh` primero lee el chat en MAX: obtiene los mensajes de esa persona de la última página del chat, ya que MAX no puede buscar por remitente. No se marca nada como leído.
+
+`contacts context` devuelve textos de mensajes y por ello respeta los permisos de `messages`; los vínculos locales de identidades respetan los de `contacts`.
+
+## Gráficos de estadísticas
+
+`max stats charts` devuelve la descripción de un gráfico en JSON. `--output activity.svg` también guarda un SVG con tema oscuro. Indica como argumento un chat encontrado mediante `max chats list`. `--chart-kind messages` muestra mensajes; `active`, autores activos; `membership`, entradas y salidas. `--by day` o `week` establece el periodo; la semana empieza el lunes. `--timezone` se aplica a las fechas del calendario.
+
+El nombre de chat `synthetic-group` de este ejemplo es ficticio:
+
+```sh
+max stats charts synthetic-group --chart-kind messages --by day --timezone Europe/Madrid --output activity.svg --json
+```
+
+El JSON contiene `chart` y, al guardar una imagen, también `chartFile` con ruta y tamaño. El SVG solo se escribe en un archivo nuevo, sin sobrescribir. Una fecha ausente queda como hueco; los datos incompletos se señalan en la descripción y la imagen. `membership` requiere eventos del chat en línea y no está disponible con `--offline`. MCP `max_stats_charts` devuelve JSON del archivo local, sin conectarse ni escribir archivos; no incluye entradas y salidas. La lectura respeta el permiso `messages`. PNG, `--jsonl` y la imagen por stdout aún no están disponibles.
+
+![Gráfico con datos ficticios](https://raw.githubusercontent.com/leemour/max-cli/v0.29.0/docs/images/stats-charts.png)
