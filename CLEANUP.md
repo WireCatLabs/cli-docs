@@ -1,0 +1,1 @@
+- public/search-architecture.svg — replaced by HTML diagrams (ArchitectureDiagram searchPaths/strictSearch/conversationSearch); no page references it any more — 2026-10-04

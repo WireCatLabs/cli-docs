@@ -7,7 +7,10 @@ type Props = ComponentProps<typeof CodeBlock> & { "data-code-label"?: string }
 
 export function DocsCodeBlock({ children, "data-code-label": label, ...props }: Props) {
   return (
-    <CodeBlock {...props} viewportProps={{ ...props.viewportProps, "aria-label": label ?? "Code example" }}>
+    <CodeBlock
+      {...props}
+      viewportProps={{ ...props.viewportProps, role: "group", "aria-label": label ?? "Code example" }}
+    >
       <Pre>{children}</Pre>
     </CodeBlock>
   )

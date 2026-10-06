@@ -1,0 +1,91 @@
+---
+title: "Reproduce un resumen de Telegram para una reunión"
+description: "Reproduce una búsqueda local, revisa las fuentes y prepara una reunión con un conjunto de datos controlado."
+---
+
+Este recorrido usa los mensajes sintéticos del buscador de prueba de WireCat y su motor real de consultas. No accede a ninguna cuenta, usa credenciales, envía mensajes ni llama a un proveedor de IA. El resultado muestra evidencia recuperada, no un caso de cliente ni una respuesta de Telegram en vivo.
+
+## Ejecuta el ejemplo controlado
+
+Necesitas Node 22.16+ o 24+ y una copia del [repositorio del sitio WireCat](https://github.com/leemour/cli-docs). Desde su directorio raíz, ejecuta:
+
+```sh
+node --experimental-strip-types scripts/reproduce-meeting-brief.mjs
+```
+
+<div lang="en">
+
+```json
+{
+  "dataset": "WireCat synthetic search-playground fixture",
+  "query": "chat:\"Atlas project\" AND (\"deadline confirmed\" OR \"final invoice\")",
+  "matches": [
+    {
+      "source": "msg:telegram/demo/301/13",
+      "text": "Agreed. I will send the final invoice after the review."
+    },
+    {
+      "source": "msg:telegram/demo/301/12",
+      "text": "Atlas invoice deadline confirmed: Friday, October 9."
+    }
+  ],
+  "context": [
+    {
+      "source": "msg:telegram/demo/301/11",
+      "text": "Tuesday is too early. The client needs time to review."
+    },
+    {
+      "source": "msg:telegram/demo/301/12",
+      "text": "Atlas invoice deadline confirmed: Friday, October 9."
+    },
+    {
+      "source": "msg:telegram/demo/301/13",
+      "text": "Agreed. I will send the final invoice after the review."
+    },
+    {
+      "source": "msg:telegram/demo/301/50",
+      "text": "Atlas invoice spreadsheet is ready for review."
+    },
+    {
+      "source": "msg:telegram/demo/301/52",
+      "text": "Atlas budget notes and meeting agenda: https://docs.google.com/"
+    },
+    {
+      "source": "msg:telegram/demo/301/10",
+      "text": "Atlas invoice: can we aim for Tuesday?"
+    }
+  ]
+}
+```
+
+</div>
+
+La salida completa anterior se generó con ese comando. Los mensajes del conjunto se mantienen en inglés en todos los idiomas para reproducir la misma evidencia. [Código del script](https://github.com/leemour/cli-docs/blob/main/scripts/reproduce-meeting-brief.mjs), [mensajes y ventana de contexto](https://github.com/leemour/cli-docs/blob/main/lib/search-playground/engine.ts).
+
+## Revisa la decisión en contexto
+
+Las coincidencias son el mensaje 13 («enviaré la factura final después de la revisión») y el mensaje 12 («plazo confirmado: viernes, 9 de octubre»). El contexto incluye la propuesta inicial del martes y la respuesta que la rechaza. El resumen debe indicar **el viernes, 9 de octubre como plazo confirmado para la factura**, con las fuentes 12 y 13. El martes fue una propuesta, no el acuerdo final.
+
+Un resumen útil separa decisiones, preguntas abiertas y mensajes de origen. Este resultado no demuestra que se enviara la factura: el mensaje 13 habla de una acción futura y el contexto es una ventana limitada. El script recupera mensajes; la explicación anterior interpreta la evidencia mostrada.
+
+## Aplica el proceso a tu archivo
+
+Después de la [instalación](./installation.mdx), el inicio de sesión y una [descarga acotada del historial](./tg/archive.md), busca en las conversaciones guardadas de Telegram con la misma sintaxis. Sustituye el chat y las frases por los de tu tarea:
+
+```sh
+tg messages search 'chat:"Atlas project" AND ("deadline confirmed" OR "final invoice")' --json
+```
+
+`messages search` lee el archivo local. Iniciar sesión no descarga todo el historial. Usa con `tg messages context` los localizadores de **tu propia** búsqueda; los localizadores `demo` anteriores solo pertenecen al conjunto de prueba. La [referencia de comandos](./tg/commands.md) y la [guía de búsqueda](./tg/search.md) documentan la versión revisada de Telegram y sus opciones.
+
+Después pide al agente:
+
+```text prompt
+Prepara un resumen para la reunión con estos resultados. Separa decisiones confirmadas de propuestas y preguntas sin respuesta. Cita los mensajes de origen, enumera los chats y el periodo revisados, y explica qué no demuestra la evidencia. Solo lee: no envíes nada ni marques mensajes como leídos.
+```
+
+Para MAX, consulta su [propia guía de búsqueda](./max/search.md); sus opciones y localizadores pueden diferir de Telegram. La caché es local, pero el texto dado al agente sigue la configuración de su modelo. Consulta [seguridad](./security.md) y [conexión del agente](./agents.md).
+
+## Reproducibilidad y límites
+
+Los mensajes y el script están versionados con el sitio. Los tests comparan la salida con esta guía en los tres idiomas. Anota el commit al repetirlo. El ejemplo demuestra consultas y contexto limitado, no un historial completo, un benchmark de la CLI en vivo ni la precisión de un modelo de IA. Este recorrido no envía nada.

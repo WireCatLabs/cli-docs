@@ -195,6 +195,67 @@ const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] }>> = {
       ],
     },
   },
+  remote: {
+    en: {
+      title: "From ChatGPT or Claude to your messages",
+      rows: [
+        {
+          boxes: [
+            { name: "ChatGPT · Claude", note: "in your browser; their servers make the request", tone: "outside" },
+          ],
+        },
+        { boxes: [{ name: "Tailscale Funnel", note: "a public https address for one port of your computer" }] },
+        {
+          boxes: [
+            {
+              name: "tg / max mcp --http",
+              note: "on your computer; asks for the login code, then a form before each change",
+              tone: "tool",
+            },
+          ],
+        },
+        { boxes: [{ name: "Telegram · MAX", note: "your own account", tone: "outside" }] },
+      ],
+    },
+    ru: {
+      title: "От ChatGPT или Claude до вашей переписки",
+      rows: [
+        { boxes: [{ name: "ChatGPT · Claude", note: "в браузере; запрос делают их серверы", tone: "outside" }] },
+        { boxes: [{ name: "Tailscale Funnel", note: "публичный адрес https для одного порта компьютера" }] },
+        {
+          boxes: [
+            {
+              name: "tg / max mcp --http",
+              note: "на вашем компьютере; просит код входа, а перед каждым изменением — форму",
+              tone: "tool",
+            },
+          ],
+        },
+        { boxes: [{ name: "Telegram · MAX", note: "ваш собственный аккаунт", tone: "outside" }] },
+      ],
+    },
+    es: {
+      title: "De ChatGPT o Claude a tus mensajes",
+      rows: [
+        {
+          boxes: [
+            { name: "ChatGPT · Claude", note: "en tu navegador; la petición la hacen sus servidores", tone: "outside" },
+          ],
+        },
+        { boxes: [{ name: "Tailscale Funnel", note: "una dirección https pública para un puerto de tu ordenador" }] },
+        {
+          boxes: [
+            {
+              name: "tg / max mcp --http",
+              note: "en tu ordenador; pide el código de acceso y un formulario antes de cada cambio",
+              tone: "tool",
+            },
+          ],
+        },
+        { boxes: [{ name: "Telegram · MAX", note: "tu propia cuenta", tone: "outside" }] },
+      ],
+    },
+  },
   layers: {
     en: {
       title: "Layers: each calls only the ones below",
@@ -241,6 +302,246 @@ const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] }>> = {
           ],
         },
         { boxes: [{ name: "dominio", note: "Chat, Message, Person, Page… solo tipos", tone: "core" }] },
+      ],
+    },
+  },
+  searchPaths: {
+    en: {
+      title: "One archive, two separate search paths",
+      rows: [
+        {
+          boxes: [
+            {
+              name: "local SQLite archive",
+              note: "provider / account / chat / message, with coverage; search never fetches missing history",
+              tone: "core",
+            },
+          ],
+        },
+        {
+          label: "two separate paths",
+          boxes: [
+            { name: "messages search", note: "Lucene query → word index + metadata → matching messages", tone: "tool" },
+            {
+              name: "conversations search",
+              note: "graph build → chunks → embeddings → meaning + words",
+              tone: "tool",
+            },
+          ],
+        },
+        {
+          boxes: [
+            {
+              name: "original messages",
+              note: "locators and context; the agent cites them and says what the archive covers",
+            },
+          ],
+        },
+      ],
+    },
+    ru: {
+      title: "Один архив, два отдельных пути поиска",
+      rows: [
+        {
+          boxes: [
+            {
+              name: "локальный архив SQLite",
+              note: "provider / account / chat / message и полнота; поиск не докачивает историю",
+              tone: "core",
+            },
+          ],
+        },
+        {
+          label: "два отдельных пути",
+          boxes: [
+            {
+              name: "messages search",
+              note: "запрос Lucene → word index + metadata → совпавшие сообщения",
+              tone: "tool",
+            },
+            {
+              name: "conversations search",
+              note: "построение графа → chunks → embeddings → смысл + слова",
+              tone: "tool",
+            },
+          ],
+        },
+        {
+          boxes: [
+            {
+              name: "исходные сообщения",
+              note: "locators и контекст; агент ссылается на них и говорит, что покрывает архив",
+            },
+          ],
+        },
+      ],
+    },
+    es: {
+      title: "Un archivo, dos vías de búsqueda separadas",
+      rows: [
+        {
+          boxes: [
+            {
+              name: "archivo SQLite local",
+              note: "provider / account / chat / message y completitud; la búsqueda no descarga historial",
+              tone: "core",
+            },
+          ],
+        },
+        {
+          label: "dos vías separadas",
+          boxes: [
+            {
+              name: "messages search",
+              note: "consulta Lucene → índice de palabras + metadatos → mensajes coincidentes",
+              tone: "tool",
+            },
+            {
+              name: "conversations search",
+              note: "grafo → fragmentos → embeddings → significado + palabras",
+              tone: "tool",
+            },
+          ],
+        },
+        {
+          boxes: [
+            {
+              name: "mensajes originales",
+              note: "localizadores y contexto; el agente los cita e indica qué cubre el archivo",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  strictSearch: {
+    en: {
+      title: "Strict message search, step by step",
+      rows: [
+        { boxes: [{ name: "parse", note: "Lucene text → Boolean syntax tree, with positions for errors" }] },
+        { boxes: [{ name: "validate", note: "fields, values and operators against one registry" }] },
+        { boxes: [{ name: "resolve", note: "account scope, stored names, calendar days in the timezone" }] },
+        {
+          label: "compiled to parameterized SQLite",
+          boxes: [
+            { name: "FTS5 word index", note: "words and phrases over normalized text", tone: "core" },
+            { name: "metadata", note: "from, chat, date, kind, has, topic…", tone: "core" },
+          ],
+        },
+        { boxes: [{ name: "expand", note: "wildcards and regex through the vocabulary, within budgets" }] },
+        { boxes: [{ name: "rank or order", note: "only messages that match; never widens the result" }] },
+        {
+          boxes: [{ name: "--context", note: "optional neighbors in the same account and chat", tone: "tool" }],
+        },
+      ],
+    },
+    ru: {
+      title: "Строгий поиск сообщений по шагам",
+      rows: [
+        { boxes: [{ name: "разбор", note: "текст Lucene → Boolean AST с позициями для ошибок" }] },
+        { boxes: [{ name: "проверка", note: "поля, значения и операторы по одному registry" }] },
+        { boxes: [{ name: "область и даты", note: "scope аккаунтов, сохранённые имена, дни в timezone" }] },
+        {
+          label: "параметризованный SQLite",
+          boxes: [
+            { name: "FTS5 word index", note: "слова и фразы по нормализованному тексту", tone: "core" },
+            { name: "metadata", note: "from, chat, date, kind, has, topic…", tone: "core" },
+          ],
+        },
+        { boxes: [{ name: "раскрытие", note: "wildcard и regex через словарь индекса, в пределах бюджетов" }] },
+        { boxes: [{ name: "порядок", note: "только совпавшие сообщения; выдача не расширяется" }] },
+        {
+          boxes: [{ name: "--context", note: "соседи в том же аккаунте и чате, по желанию", tone: "tool" }],
+        },
+      ],
+    },
+    es: {
+      title: "Búsqueda estricta de mensajes, paso a paso",
+      rows: [
+        { boxes: [{ name: "análisis", note: "texto Lucene → AST booleano con posiciones para errores" }] },
+        { boxes: [{ name: "validación", note: "campos, valores y operadores con un registro común" }] },
+        { boxes: [{ name: "ámbito y fechas", note: "cuentas, nombres guardados, días en la zona horaria" }] },
+        {
+          label: "SQLite parametrizado",
+          boxes: [
+            { name: "índice FTS5", note: "palabras y frases sobre texto normalizado", tone: "core" },
+            { name: "metadatos", note: "from, chat, date, kind, has, topic…", tone: "core" },
+          ],
+        },
+        { boxes: [{ name: "expansión", note: "comodines y regex con el vocabulario, dentro de presupuestos" }] },
+        { boxes: [{ name: "orden", note: "solo mensajes que cumplen; nunca amplía el resultado" }] },
+        {
+          boxes: [{ name: "--context", note: "vecinos opcionales en la misma cuenta y chat", tone: "tool" }],
+        },
+      ],
+    },
+  },
+  conversationSearch: {
+    en: {
+      title: "Conversation search, from build to evidence",
+      rows: [
+        { boxes: [{ name: "conversations build", note: "per-chat graph: reply → agent answer → rules" }] },
+        { boxes: [{ name: "chunks", note: "about 1,200 characters at message boundaries, with a content hash" }] },
+        {
+          boxes: [{ name: "embeddings", note: "e5-small by default, cached by model and content hash", tone: "core" }],
+        },
+        {
+          label: "conversations search",
+          boxes: [
+            { name: "meaning", note: "question vector against chunk vectors" },
+            { name: "words", note: "question words joined with OR" },
+          ],
+        },
+        { boxes: [{ name: "rank fusion", note: "each list adds 1 / (60 + rank) to a conversation" }] },
+        { boxes: [{ name: "evidence", note: "open the original messages; a candidate is not proof", tone: "tool" }] },
+      ],
+    },
+    ru: {
+      title: "Поиск разговоров: от построения до доказательств",
+      rows: [
+        { boxes: [{ name: "conversations build", note: "граф внутри чата: reply → ответ агента → правила" }] },
+        { boxes: [{ name: "chunks", note: "около 1 200 символов по границам сообщений, с хешем текста" }] },
+        {
+          boxes: [{ name: "embeddings", note: "по умолчанию e5-small, кеш по модели и хешу текста", tone: "core" }],
+        },
+        {
+          label: "conversations search",
+          boxes: [
+            { name: "смысл", note: "вектор вопроса против векторов chunks" },
+            { name: "слова", note: "слова вопроса, соединённые через OR" },
+          ],
+        },
+        { boxes: [{ name: "слияние рангов", note: "каждый список даёт разговору 1 / (60 + rank)" }] },
+        {
+          boxes: [
+            { name: "доказательства", note: "откройте исходные сообщения; кандидат — не доказательство", tone: "tool" },
+          ],
+        },
+      ],
+    },
+    es: {
+      title: "Búsqueda de conversaciones, de la construcción a las fuentes",
+      rows: [
+        { boxes: [{ name: "conversations build", note: "grafo por chat: respuesta → agente → reglas" }] },
+        {
+          boxes: [{ name: "fragmentos", note: "unos 1.200 caracteres en límites de mensaje, con hash del contenido" }],
+        },
+        {
+          boxes: [{ name: "embeddings", note: "e5-small por defecto, en caché por modelo y hash", tone: "core" }],
+        },
+        {
+          label: "conversations search",
+          boxes: [
+            { name: "significado", note: "vector de la pregunta frente a los de los fragmentos" },
+            { name: "palabras", note: "palabras de la pregunta unidas con OR" },
+          ],
+        },
+        { boxes: [{ name: "fusión de rangos", note: "cada lista suma 1 / (60 + rango) a una conversación" }] },
+        {
+          boxes: [
+            { name: "fuentes", note: "abre los mensajes originales; un candidato no es una prueba", tone: "tool" },
+          ],
+        },
       ],
     },
   },

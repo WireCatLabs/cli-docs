@@ -24,6 +24,10 @@
       "roadmap": "Review implemented {messenger} CLI capabilities, current limitations and planned development.",
       "changelog": "Read release notes and changes in the {messenger} CLI, including fixes and new capabilities.",
       "search": "Search your local {messenger} message archive with words, phrases, filters, dates and Lucene queries; learn the supported fields and matching rules."
+    },
+    "toolTitles": {
+      "tg": "Telegram CLI client for AI agents",
+      "max": "MAX CLI for AI agents and bots"
     }
   },
   "ru": {
@@ -51,6 +55,10 @@
       "roadmap": "Реализованные возможности CLI для {messenger}, текущие ограничения и планы развития.",
       "changelog": "История выпусков CLI для {messenger}: исправления, изменения и новые возможности.",
       "search": "Ищите сообщения в локальном архиве {messenger}: слова, фразы, фильтры, даты и запросы Lucene. Поддерживаемые поля и правила поиска."
+    },
+    "toolTitles": {
+      "tg": "CLI-клиент Telegram для ИИ-агентов",
+      "max": "MAX CLI для ИИ-агентов и ботов"
     }
   },
   "es": {
@@ -78,6 +86,10 @@
       "roadmap": "Revisa las capacidades disponibles, las limitaciones actuales y los planes de desarrollo de la CLI de {messenger}.",
       "changelog": "Consulta las notas de versión de la CLI de {messenger}, con correcciones, cambios y nuevas capacidades.",
       "search": "Busca mensajes en tu archivo local de {messenger} con palabras, frases, filtros, fechas y consultas Lucene; consulta los campos y las reglas de búsqueda."
+    },
+    "toolTitles": {
+      "tg": "Cliente CLI de Telegram para agentes de IA",
+      "max": "CLI de MAX para agentes de IA y bots"
     }
   }
 }

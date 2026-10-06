@@ -15,6 +15,19 @@ describe("linkProblems", () => {
   })
   afterEach(() => rmSync(out, { recursive: true, force: true }))
 
+  it("rejects missing scripts, images and preloaded fonts including Next assets", () => {
+    write(
+      "index.html",
+      '<script src="/_next/static/chunks/missing.js"></script><img src="/missing.png"><link rel="preload" href="/fonts/missing.woff2"><script src="https://external.example/tag.js"></script>',
+    )
+    expect(linkProblems(out)).toEqual(
+      expect.arrayContaining([
+        "index.html: /_next/static/chunks/missing.js — missing local asset",
+        "index.html: /missing.png — missing local asset",
+        "index.html: /fonts/missing.woff2 — missing local asset",
+      ]),
+    )
+  })
   it("follows a percent-encoded Russian anchor to its heading", () => {
     write("en/docs/max/archive.html", '<h2 id="скачать-историю">Скачать историю</h2>')
     write(

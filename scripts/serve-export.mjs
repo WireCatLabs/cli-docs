@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, statSync } from "node:fs"
 import { createServer } from "node:http"
 import { extname, resolve, sep } from "node:path"
+import { pathToFileURL } from "node:url"
 import { gzipSync } from "node:zlib"
 
 const types = {
@@ -21,12 +22,24 @@ const types = {
 export async function serveExport(directory, { port = 0, gzip = true } = {}) {
   const root = resolve(directory)
   const cache = new Map()
+  const redirectsFile = resolve(root, "_redirects")
+  const redirects = existsSync(redirectsFile)
+    ? readFileSync(redirectsFile, "utf8")
+        .trim()
+        .split(/\n/)
+        .map((line) => line.trim().split(/\s+/))
+    : []
   const server = createServer((request, response) => {
     let pathname
     try {
       pathname = decodeURIComponent(new URL(request.url, "http://localhost").pathname)
     } catch {
       response.writeHead(400).end()
+      return
+    }
+    const redirect = redirects.find(([source]) => source === pathname)
+    if (redirect) {
+      response.writeHead(Number(redirect[2]), { Location: redirect[1] }).end()
       return
     }
     const candidate = resolve(root, `.${pathname}`)
@@ -48,10 +61,10 @@ export async function serveExport(directory, { port = 0, gzip = true } = {}) {
     if (compress) {
       headers["Content-Encoding"] = "gzip"
       headers.Vary = "Accept-Encoding"
-      if (!cache.has(bodyFile)) cache.set(bodyFile, gzipSync(body))
+      if (!cache.get(bodyFile)?.body.equals(body)) cache.set(bodyFile, { body, gzip: gzipSync(body) })
     }
     response.writeHead(file ? 200 : 404, headers)
-    response.end(request.method === "HEAD" ? undefined : compress ? cache.get(bodyFile) : body)
+    response.end(request.method === "HEAD" ? undefined : compress ? cache.get(bodyFile).gzip : body)
   })
   await new Promise((yes, no) => {
     server.once("error", no)
@@ -63,12 +76,14 @@ export async function serveExport(directory, { port = 0, gzip = true } = {}) {
   }
 }
 
-const directory = process.argv[2] ?? "out"
-const port = Number(process.argv[3] ?? 4319)
-const server = await serveExport(directory, { port })
-console.log(`Production export: ${server.url}`)
-for (const signal of ["SIGTERM", "SIGINT"])
-  process.once(signal, async () => {
-    await server.close()
-    process.exit(0)
-  })
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+  const directory = process.argv[2] ?? "out"
+  const port = Number(process.argv[3] ?? 4319)
+  const server = await serveExport(directory, { port })
+  console.log(`Production export: ${server.url}`)
+  for (const signal of ["SIGTERM", "SIGINT"])
+    process.once(signal, async () => {
+      await server.close()
+      process.exit(0)
+    })
+}

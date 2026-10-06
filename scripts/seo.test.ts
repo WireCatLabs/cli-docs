@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest"
 import { StructuredData } from "../components/structured-data"
 import {
   documentationDescription,
+  documentationTitle,
   pageAlternates,
   pageMetadata,
   pageStructuredData,
@@ -13,6 +14,20 @@ import {
 import { tools } from "../lib/shared"
 
 describe("localized SEO", () => {
+  it("uses the stable English root for home alternates without changing subpages", () => {
+    expect(pageAlternates("en", "")).toEqual({
+      canonical: "https://wirecat.dev/",
+      languages: {
+        en: "https://wirecat.dev/",
+        ru: "https://wirecat.dev/ru",
+        es: "https://wirecat.dev/es",
+        "x-default": "https://wirecat.dev/",
+      },
+    })
+    expect(pageMetadata({ lang: "en", title: "Home", description: "Home" }).openGraph).toMatchObject({
+      url: "https://wirecat.dev/",
+    })
+  })
   it.each(seoLocales)("aligns search, social and canonical fields in %s", (lang) => {
     const words = seoWords(lang)
     const metadata = pageMetadata({
@@ -35,6 +50,18 @@ describe("localized SEO", () => {
       card: "summary_large_image",
     })
   })
+
+  it.each(seoLocales)(
+    "describes product intent on provider entry pages without relabeling shared guides in %s",
+    (lang) => {
+      expect(documentationTitle(lang, ["tg"], "Telegram")).toContain("Telegram")
+      expect(documentationTitle(lang, ["tg"], "Telegram")).toContain("CLI")
+      expect(documentationTitle(lang, ["max"], "MAX")).toContain("MAX")
+      expect(documentationTitle(lang, ["max"], "MAX")).toContain("CLI")
+      expect(documentationTitle(lang, ["agents"], "Connect your agent")).toBe("Connect your agent")
+      expect(documentationTitle(lang, ["tg", "search"], "Search")).toBe("Search — tg")
+    },
+  )
 
   it("does not announce a locale whose equivalent page is unavailable", () => {
     expect(pageAlternates("ru", "/docs/tg/new", ["en", "ru"]).languages).not.toHaveProperty("es")
@@ -105,6 +132,37 @@ describe("truthful structured data", () => {
       version: tools[1].docsRef,
     })
     expect(JSON.stringify(data)).not.toMatch(/aggregateRating|reviewCount|downloadCount/)
+  })
+
+  it.each(seoLocales)("identifies the same factual WireCat project and publisher in %s", (lang) => {
+    for (const aboutProject of [false, true]) {
+      const data = pageStructuredData({
+        lang,
+        pathname: `/${lang}${aboutProject ? "/about" : ""}`,
+        title: "WireCat",
+        description: "Open-source tools",
+        aboutProject,
+      })
+      const organization = data["@graph"].find(
+        (node) => Array.isArray(node["@type"]) && node["@type"].includes("Organization"),
+      )
+      expect(organization).toMatchObject({
+        "@type": ["Organization", "Project"],
+        "@id": "https://wirecat.dev/#organization",
+        name: "WireCat",
+        url: "https://wirecat.dev",
+        logo: "https://wirecat.dev/android-chrome-512x512.png",
+        email: "hello@wirecat.dev",
+      })
+      expect(data["@graph"].find((node) => node["@type"] === "WebSite")).toMatchObject({
+        publisher: { "@id": organization?.["@id"] },
+      })
+      if (aboutProject)
+        expect(data["@graph"].find((node) => node["@type"] === "AboutPage")).toMatchObject({
+          mainEntity: { "@id": organization?.["@id"] },
+        })
+      expect(JSON.stringify(data)).not.toMatch(/"Person"|legalName|founder|taxID|aggregateRating/)
+    }
   })
 
   it("cannot close its script element through a metadata string", () => {

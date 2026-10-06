@@ -1,10 +1,12 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
 import { FontSwitcher } from "@/components/landing/font-switcher"
 import { SearchPlayground } from "@/components/search-playground/search-playground"
 import { TimeSavings } from "@/components/time-savings"
 import { prepareInstallationButton } from "@/lib/installation-command"
+import { copiedInstallationTool, trackSiteEvent } from "@/lib/site-events"
 
 type Step = { html: string; tool: boolean; delay: number }
 type Session = { id: string; title: string; hint: string; steps: Step[] }
@@ -12,12 +14,15 @@ type Props = { html: string; sessions: Session[]; maxSessions: Session[]; lang: 
 
 /** The markup and demo responses are exported from our reviewed static prototypes. */
 export function Landing({ html, sessions, maxSessions, lang }: Props) {
+  const router = useRouter()
   const rootRef = useRef<HTMLElement>(null)
+  const copyStatusRef = useRef<HTMLParagraphElement>(null)
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
     const controller = new AbortController()
     const timers = new Set<ReturnType<typeof setTimeout>>()
+    const copyTimers = new Map<HTMLButtonElement, ReturnType<typeof setTimeout>>()
     const later = (fn: () => void, delay: number) => {
       const timer = setTimeout(() => {
         timers.delete(timer)
@@ -33,19 +38,20 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
     for (const code of root.querySelectorAll<HTMLElement>(".cmd code, .fv pre")) code.tabIndex = 0
     let current = 0
     let readingEvidence = false
-    let messenger = new URL(window.location.href).searchParams.get("messenger") === "max" ? "max" : "tg"
+    let messenger = "tg"
+    const initialUrl = new URL(window.location.href)
+    if (initialUrl.searchParams.has("scenario") || initialUrl.searchParams.has("messenger")) {
+      initialUrl.searchParams.delete("scenario")
+      initialUrl.searchParams.delete("messenger")
+      window.history.replaceState(window.history.state, "", initialUrl)
+    }
     const show = (index: number, animate: boolean) => {
       if (!log || !app) return
       current = index
       readingEvidence = false
       log.style.scrollBehavior = still ? "auto" : ""
       log.scrollTop = 0
-      const url = new URL(window.location.href)
-      url.hash = ""
       const selected = messenger === "max" ? maxSessions : sessions
-      url.searchParams.set("scenario", selected[index].id)
-      url.searchParams.set("messenger", messenger)
-      window.history.replaceState(null, "", url)
       for (const timer of timers) clearTimeout(timer)
       timers.clear()
       buttons.forEach((button, i) => {
@@ -98,13 +104,7 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
     buttons.forEach((button, i) => {
       button.addEventListener("click", () => show(i, true), { signal: controller.signal })
     })
-    const parameter = new URL(window.location.href).searchParams.get("scenario")
-    const requested = sessions.findIndex((session) => session.id === parameter)
-    const legacy = Number(parameter) - 1
-    show(
-      requested >= 0 ? requested : Number.isInteger(legacy) && legacy >= 0 && legacy < sessions.length ? legacy : 0,
-      false,
-    )
+    show(0, false)
     root.querySelectorAll<HTMLButtonElement>("[data-messenger]").forEach((button) => {
       button.addEventListener(
         "click",
@@ -170,6 +170,34 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
       },
       { capture: true, signal: controller.signal },
     )
+    root.addEventListener(
+      "click",
+      (event) => {
+        const link = event.target instanceof Element ? event.target.closest("a") : null
+        if (!link || event.defaultPrevented) return
+        const url = new URL(link.href)
+        if (url.origin !== location.origin || url.pathname !== `/${lang}/docs/installation`) return
+        const tool = url.hash.slice(1)
+        if (tool !== "tg" && tool !== "max") return
+        trackSiteEvent("setup_guide_open", {
+          tool,
+          locale: lang,
+          surface: link.closest(".hero") ? "hero" : link.closest(".close") ? "closing" : "footer",
+        })
+        if (
+          event.button === 0 &&
+          !event.metaKey &&
+          !event.ctrlKey &&
+          !event.shiftKey &&
+          !event.altKey &&
+          !link.target
+        ) {
+          event.preventDefault()
+          router.push(url.pathname + url.search + url.hash)
+        }
+      },
+      { signal: controller.signal },
+    )
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries)
@@ -186,15 +214,27 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
       prepareInstallationButton(button)
       const feedback = button.querySelector<HTMLElement>("[data-copy-label]") ?? button
       const label = feedback.textContent
+      const accessibleLabel = button.getAttribute("aria-label")
       button.addEventListener(
         "click",
         async () => {
           try {
             await navigator.clipboard.writeText(button.dataset.copy ?? "")
             if (controller.signal.aborted) return
-            feedback.textContent =
-              { en: "Copied", ru: "Скопировано", es: "Copiado" }[document.documentElement.lang] ?? "Copied"
+            const copied = { en: "Copied", ru: "Скопировано", es: "Copiado" }[lang] ?? "Copied"
+            feedback.textContent = copied
+            const name = button.querySelector("strong")?.textContent ?? ""
+            const announcement = name ? `${name}: ${copied}` : copied
+            if (accessibleLabel) button.setAttribute("aria-label", announcement)
+            if (copyStatusRef.current) copyStatusRef.current.textContent = announcement
             button.dataset.done = ""
+            const tool = copiedInstallationTool(button.dataset.copy ?? "")
+            if (tool)
+              trackSiteEvent("installation_command_copy", {
+                tool,
+                locale: lang,
+                surface: button.closest(".hero") ? "hero" : "footer",
+              })
           } catch {
             if (controller.signal.aborted) return
             const code = button.querySelector("code") ?? button.previousElementSibling
@@ -207,10 +247,16 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
             }
             return
           }
-          later(() => {
-            feedback.textContent = label
-            delete button.dataset.done
-          }, 1600)
+          clearTimeout(copyTimers.get(button))
+          copyTimers.set(
+            button,
+            setTimeout(() => {
+              feedback.textContent = label
+              if (accessibleLabel) button.setAttribute("aria-label", accessibleLabel)
+              delete button.dataset.done
+              if (copyStatusRef.current) copyStatusRef.current.textContent = ""
+            }, 1600),
+          )
         },
         { signal: controller.signal },
       )
@@ -237,14 +283,16 @@ export function Landing({ html, sessions, maxSessions, lang }: Props) {
       controller.abort()
       observer.disconnect()
       for (const timer of timers) clearTimeout(timer)
+      for (const timer of copyTimers.values()) clearTimeout(timer)
       root.classList.remove("is-ready")
     }
-  }, [sessions, maxSessions, lang])
+  }, [sessions, maxSessions, lang, router])
   const [before, tail] = html.split("<!--time-savings-->")
   const [after, afterSearch] = (tail ?? "").split("<div data-search-playground></div>")
   return (
     <main ref={rootRef} className="landing-content">
       <FontSwitcher lang={lang} />
+      <p ref={copyStatusRef} role="status" aria-live="polite" aria-atomic="true" className="sr-only" />
       {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Reviewed local exported HTML only. */}
       <div dangerouslySetInnerHTML={{ __html: before }} />
       {tail !== undefined && <TimeSavings lang={lang} />}

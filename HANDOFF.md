@@ -77,9 +77,7 @@ one paragraph in [docs/DESIGN.md](docs/DESIGN.md), "Later". None is planned yet;
   `usage.md` as a dead link; `sync.ts` writes the `./`. Test: `scripts/sync.test.ts`.
 - **lychee reports every Russian anchor as missing.** It does not decode `%D0…` anchors. The site's
   own `pnpm check:links` does; trust it, not lychee, for links inside the site.
-- **No middleware in a static export.** No server-side language detection or redirects: `/` picks the
-  language in `public/language.js`, and a page that should redirect has to render a link and a
-  `refresh` itself.
+- **No middleware in a static export.** The root `/` serves the complete English landing with stable metadata. Locale homes are `/ru` and `/es`; `/en` permanently redirects to `/` through Pages `_redirects`, with a static fallback. English subpages retain `/en/`.
 - **`llms.txt` and `llms-full.txt` are our own routes**, listing the default language only — the
   template's versions list every page three times, once per interface language.
 - **Shiki rejects an unknown fence language** (`cron` in tg's recipes) and fails the build;
@@ -120,4 +118,4 @@ pnpm sync --ref main && pnpm exec next build && pnpm check:links
 pnpm exec serve out -l 4317    # then open http://localhost:4317 — stop it by its PID afterwards
 ```
 
-Live: `https://wirecat.dev/en`, `/ru`, `/es`; `https://wirecat.dev/llms.txt`.
+Live: `https://wirecat.dev/`, `/ru`, `/es`; `https://wirecat.dev/llms.txt`.

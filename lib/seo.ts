@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
+import siteConfig from "../site.config.json"
 import seoCopy from "./seo-copy.json"
 import { appName, siteUrl, tools } from "./shared"
+import { homePath } from "./site-routes"
 
 export type SiteLocale = keyof typeof seoCopy
 export const seoLocales = Object.keys(seoCopy) as SiteLocale[]
@@ -9,9 +11,11 @@ export const seoWords = (lang: string) => seoCopy[localeOf(lang)]
 export const absoluteUrl = (pathname: string) => new URL(pathname, siteUrl).href
 
 export function pageAlternates(lang: string, suffix: string, available = seoLocales) {
-  const languages = Object.fromEntries(available.map((locale) => [locale, absoluteUrl(`/${locale}${suffix}`)]))
+  const languages = Object.fromEntries(
+    available.map((locale) => [locale, absoluteUrl(suffix ? `/${locale}${suffix}` : homePath(locale))]),
+  )
   return {
-    canonical: absoluteUrl(`/${lang}${suffix}`),
+    canonical: absoluteUrl(suffix ? `/${lang}${suffix}` : homePath(lang)),
     languages: { ...languages, "x-default": languages.en ?? languages[available[0]] },
   }
 }
@@ -45,7 +49,7 @@ export function pageMetadata({
       siteName: appName,
       title,
       description,
-      url: absoluteUrl(`/${lang}${suffix}`),
+      url: absoluteUrl(suffix ? `/${lang}${suffix}` : homePath(lang)),
       type: article ? "article" : "website",
       locale: { en: "en_US", ru: "ru_RU", es: "es_ES" }[localeOf(lang)],
       alternateLocale: available
@@ -55,6 +59,13 @@ export function pageMetadata({
     },
     twitter: { card: "summary_large_image", title, description, images: [image.url] },
   }
+}
+
+export function documentationTitle(lang: string, slugs: string[], authored: string): string {
+  const tool = tools.find((candidate) => candidate.name === slugs[0])
+  if (!tool) return authored
+  if (slugs.length === 1) return seoWords(lang).toolTitles[tool.name as "tg" | "max"]
+  return `${authored} — ${tool.name}`
 }
 
 export function documentationDescription(lang: string, slugs: string[], authored?: string): string {
@@ -73,6 +84,7 @@ export function pageStructuredData({
   description,
   breadcrumbs = [],
   tool,
+  aboutProject = false,
 }: {
   lang: string
   pathname: string
@@ -80,18 +92,36 @@ export function pageStructuredData({
   description: string
   breadcrumbs?: { name: string; pathname: string }[]
   tool?: (typeof tools)[number]
+  aboutProject?: boolean
 }) {
   const url = absoluteUrl(pathname)
+  const organizationId = `${siteUrl}/#organization`
   const graph: Record<string, unknown>[] = [
-    { "@type": "WebSite", "@id": `${siteUrl}/#website`, url: siteUrl, name: appName, inLanguage: seoLocales },
     {
-      "@type": tool ? "TechArticle" : "WebPage",
+      "@type": ["Organization", "Project"],
+      "@id": organizationId,
+      name: appName,
+      url: siteUrl,
+      logo: absoluteUrl("/android-chrome-512x512.png"),
+      email: siteConfig.contacts.email,
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
+      name: appName,
+      inLanguage: seoLocales,
+      publisher: { "@id": organizationId },
+    },
+    {
+      "@type": tool ? "TechArticle" : aboutProject ? "AboutPage" : "WebPage",
       "@id": `${url}#page`,
       url,
       name: title,
       description,
       inLanguage: lang,
       isPartOf: { "@id": `${siteUrl}/#website` },
+      ...(aboutProject ? { mainEntity: { "@id": organizationId } } : {}),
     },
   ]
   if (breadcrumbs.length > 1)

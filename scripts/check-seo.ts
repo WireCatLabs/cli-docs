@@ -15,6 +15,9 @@ const attributes = (tag: string) =>
 
 export function seoProblems(out: string, origin: string, locales = ["en", "ru", "es"]): string[] {
   const problems: string[] = []
+  const normalizedRoot = (url: string | undefined) => (url === origin ? `${origin}/` : url)
+  const stableHome = existsSync(join(out, "index.html"))
+  if (locales.includes("en") && !stableHome) problems.push("Missing stable English homepage at /")
   const pages = new Map<
     string,
     { html: string; lang: string; metadata: Map<string, string>; alternates: Map<string, string> }
@@ -23,7 +26,13 @@ export function seoProblems(out: string, origin: string, locales = ["en", "ru", 
     const pathname = `/${relative(out, file)
       .replace(/\/index\.html$|\.html$/, "")
       .replace(/^index$/, "")}`
-    const lang = pathname.split("/")[1]
+    if (pathname === "/en" && stableHome) {
+      const redirects = join(out, "_redirects")
+      if (!existsSync(redirects) || !/^\/en\s+\/\s+301$/m.test(readFileSync(redirects, "utf8")))
+        problems.push("/en: legacy homepage must permanently redirect to /")
+      continue
+    }
+    const lang = pathname === "/" ? "en" : pathname.split("/")[1]
     if (!locales.includes(lang)) continue
     const raw = readFileSync(file, "utf8")
     const html = raw.replace(/<script\b[\s\S]*?<\/script>/g, "")
@@ -37,8 +46,10 @@ export function seoProblems(out: string, origin: string, locales = ["en", "ru", 
     const alternates = new Map(links.filter((link) => link.hreflang).map((link) => [link.hreflang, link.href]))
     pages.set(pathname, { html, lang, metadata, alternates })
     const fail = (message: string) => problems.push(`${pathname}: ${message}`)
+    if (pathname === "/" && (/<meta[^>]+http-equiv="refresh"/i.test(html) || /src="\/language\.js"/.test(raw)))
+      fail("homepage must not redirect by language")
     const canonical = links.filter((link) => link.rel === "canonical")
-    if (canonical.length !== 1 || canonical[0]?.href !== `${origin}${pathname}`)
+    if (canonical.length !== 1 || normalizedRoot(canonical[0]?.href) !== `${origin}${pathname}`)
       fail("canonical must match the public HTTPS page")
     const title = decode(/<title[^>]*>([\s\S]*?)<\/title>/.exec(html)?.[1] ?? "")
     if (!title.trim()) fail("missing title")
@@ -51,7 +62,7 @@ export function seoProblems(out: string, origin: string, locales = ["en", "ru", 
       if (metadata.get(key) !== title) fail(`${key} must match the page title`)
     for (const key of ["og:description", "twitter:description"])
       if (metadata.get(key) !== metadata.get("description")) fail(`${key} must match the page description`)
-    if (metadata.get("og:url") !== `${origin}${pathname}`) fail("Open Graph URL must match canonical")
+    if (normalizedRoot(metadata.get("og:url")) !== `${origin}${pathname}`) fail("Open Graph URL must match canonical")
     const image = metadata.get("og:image")
     if (!image?.startsWith(`${origin}/`) || !existsSync(join(out, new URL(image).pathname)))
       fail("missing or unavailable local social image")
@@ -61,14 +72,48 @@ export function seoProblems(out: string, origin: string, locales = ["en", "ru", 
     if (!schemas.length) fail("missing page structured data")
     for (const [, json] of schemas) {
       try {
-        const data = JSON.parse(json) as { "@context"?: string; "@graph"?: { "@type"?: string; url?: string }[] }
+        const data = JSON.parse(json) as {
+          "@context"?: string
+          "@graph"?: {
+            "@type"?: string | string[]
+            "@id"?: string
+            url?: string
+            name?: string
+            logo?: string
+            publisher?: { "@id"?: string }
+            mainEntity?: { "@id"?: string }
+          }[]
+        }
         if (data["@context"] !== "https://schema.org") fail("unexpected structured-data context")
         if (
           !data["@graph"]?.some(
-            (node) => ["WebPage", "TechArticle"].includes(node["@type"] ?? "") && node.url === `${origin}${pathname}`,
+            (node) =>
+              typeof node["@type"] === "string" &&
+              ["WebPage", "AboutPage", "TechArticle"].includes(node["@type"]) &&
+              node.url === `${origin}${pathname}`,
           )
         )
           fail("structured data must identify this page")
+        const organization = data["@graph"]?.find(
+          (node) => Array.isArray(node["@type"]) && node["@type"].includes("Organization"),
+        )
+        if (
+          organization?.["@id"] !== `${origin}/#organization` ||
+          organization.name !== "WireCat" ||
+          organization.url !== origin
+        )
+          fail("missing consistent WireCat organization identity")
+        const website = data["@graph"]?.find((node) => node["@type"] === "WebSite")
+        if (website?.publisher?.["@id"] !== organization?.["@id"]) fail("website publisher must reference WireCat")
+        if (
+          !organization?.logo?.startsWith(`${origin}/`) ||
+          !existsSync(join(out, new URL(organization.logo).pathname))
+        )
+          fail("organization logo must be an available local image")
+        if (pathname.endsWith("/about")) {
+          const about = data["@graph"]?.find((node) => node["@type"] === "AboutPage")
+          if (about?.mainEntity?.["@id"] !== organization?.["@id"]) fail("About must describe the WireCat identity")
+        }
       } catch {
         fail("invalid JSON-LD")
       }
@@ -76,11 +121,11 @@ export function seoProblems(out: string, origin: string, locales = ["en", "ru", 
   }
   if (!pages.size) problems.push("No localized public pages found; refusing an empty SEO check")
   for (const [pathname, page] of pages) {
-    const suffix = pathname.slice(page.lang.length + 1)
+    const suffix = pathname === "/" ? "" : pathname.slice(page.lang.length + 1)
     for (const lang of locales) {
-      const equivalent = `/${lang}${suffix}`
+      const equivalent = lang === "en" && !suffix ? "/" : `/${lang}${suffix}`
       if (!pages.has(equivalent)) continue
-      if (page.alternates.get(lang) !== `${origin}${equivalent}`)
+      if (normalizedRoot(page.alternates.get(lang)) !== `${origin}${equivalent}`)
         problems.push(`${pathname}: missing or incorrect ${lang} hreflang`)
     }
     if (page.alternates.get("x-default") !== page.alternates.get("en"))

@@ -5,6 +5,7 @@ import { StructuredData } from "@/components/structured-data"
 import { aboutCopy } from "@/lib/about"
 import { i18n } from "@/lib/i18n"
 import { pageMetadata, pageStructuredData, seoWords } from "@/lib/seo"
+import { homePath } from "@/lib/site-routes"
 import siteConfig from "@/site.config.json"
 
 type Props = { params: Promise<{ lang: string }> }
@@ -27,10 +28,11 @@ export default async function AboutPage({ params }: Props) {
         data={pageStructuredData({
           lang,
           pathname: `/${lang}/about`,
+          aboutProject: true,
           title: words.title,
           description: words.intro,
           breadcrumbs: [
-            { name: seoWords(lang).homeLabel, pathname: `/${lang}` },
+            { name: seoWords(lang).homeLabel, pathname: homePath(lang) },
             { name: words.title, pathname: `/${lang}/about` },
           ],
         })}

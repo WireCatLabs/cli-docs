@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation"
 import Script from "next/script"
 import { useEffect, useRef, useState } from "react"
+import { enableSiteEvents } from "@/lib/site-events"
 import siteConfig from "@/site.config.json"
 
 const { yandexMetrikaId, googleMeasurementId } = siteConfig.analytics
@@ -16,6 +17,7 @@ export function SiteAnalytics() {
   const pathname = usePathname()
   const [enabled, setEnabled] = useState(false)
   const [metrikaReady, setMetrikaReady] = useState(false)
+  const [googleReady, setGoogleReady] = useState(false)
   const previousUrl = useRef<string | undefined>(undefined)
 
   useEffect(() => {
@@ -32,6 +34,10 @@ export function SiteAnalytics() {
     })
     previousUrl.current = url
   }, [enabled, metrikaReady, pathname])
+
+  useEffect(() => {
+    if (enabled && metrikaReady && googleReady) enableSiteEvents()
+  }, [enabled, metrikaReady, googleReady])
 
   return (
     <>
@@ -52,7 +58,7 @@ export function SiteAnalytics() {
             src={`https://www.googletagmanager.com/gtag/js?id=${googleMeasurementId}`}
             strategy="lazyOnload"
           />
-          <Script id="wirecat-google-init" strategy="afterInteractive">
+          <Script id="wirecat-google-init" strategy="afterInteractive" onReady={() => setGoogleReady(true)}>
             {`window.dataLayer=window.dataLayer||[];
             function gtag(){dataLayer.push(arguments);}
             gtag('js',new Date());

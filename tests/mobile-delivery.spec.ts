@@ -6,7 +6,7 @@ for (const lang of ["en", "ru", "es"]) {
     const requests: string[] = []
     page.on("request", (request) => requests.push(request.url()))
     await page.setViewportSize({ width: 390, height: 844 })
-    await page.goto(`/${lang}`)
+    await page.goto(lang === "en" ? "/" : `/${lang}`)
     await expect(page.locator(".sp-input")).toBeEditable()
     await page.waitForTimeout(1200)
     expect(requests.filter((url) => /\/docs\/|\/fonts\/docs-inter\//.test(url))).toEqual([])
@@ -17,7 +17,7 @@ for (const lang of ["en", "ru", "es"]) {
   })
 }
 
-test("analytics queues initial views and navigation before idle provider downloads", async ({ page, baseURL }) => {
+test("analytics initializes one view per document before idle provider downloads", async ({ page, baseURL }) => {
   const providers: string[] = []
   await page.context().route("**/*", async (route) => {
     const url = new URL(route.request().url())
@@ -38,7 +38,7 @@ test("analytics queues initial views and navigation before idle provider downloa
     browser.auditIdleCallbacks = []
     window.requestIdleCallback = (callback) => browser.auditIdleCallbacks.push(callback)
   })
-  await page.goto("https://wirecat.dev/en")
+  await page.goto("https://wirecat.dev/")
   const queued = () =>
     page.evaluate(() => {
       const browser = window as typeof window & { ym?: { a?: IArguments[] }; dataLayer?: IArguments[] }
@@ -49,11 +49,12 @@ test("analytics queues initial views and navigation before idle provider downloa
     })
   await expect.poll(async () => (await queued()).ym.filter((item) => item[1] === "hit").length).toBe(1)
   const initialConfig = (await queued()).ga.find((item) => item[0] === "config")?.[2] as { page_location: string }
-  expect(new URL(initialConfig.page_location).pathname).toBe("/en")
+  expect(new URL(initialConfig.page_location).pathname).toBe("/")
   expect(providers).toEqual([])
   await page.locator('.site-header nav a[href="/en/about"]').click()
   await expect(page).toHaveURL("https://wirecat.dev/en/about")
-  await expect.poll(async () => (await queued()).ym.filter((item) => item[1] === "hit").length).toBe(2)
+  await expect.poll(async () => (await queued()).ym.filter((item) => item[1] === "hit").length).toBe(1)
+  expect(new URL(String((await queued()).ym.find((item) => item[1] === "hit")?.[2])).pathname).toBe("/en/about")
   expect((await queued()).ga.filter((item) => item[0] === "config")).toHaveLength(1)
   expect(providers).toEqual([])
   await page.evaluate(() => {
@@ -66,6 +67,7 @@ test("analytics queues initial views and navigation before idle provider downloa
   await page.reload()
   await expect.poll(async () => (await queued()).ym.filter((item) => item[1] === "hit").length).toBe(1)
   expect((await queued()).ga.filter((item) => item[0] === "config")).toHaveLength(1)
+  await page.context().unrouteAll({ behavior: "ignoreErrors" })
 })
 
 test("blocked analytics providers leave landing interactions usable", async ({ page, baseURL }) => {
@@ -78,12 +80,13 @@ test("blocked analytics providers leave landing interactions usable", async ({ p
     } else if (url.hostname === "localhost") await route.continue()
     else await route.abort()
   })
-  await page.goto("https://wirecat.dev/en")
+  await page.goto("https://wirecat.dev/")
   await expect(page.locator(".sp-input")).toBeEditable()
   await page.locator('.site-header nav a[href="/en/about"]').click()
   await expect(page.locator("h1")).toBeVisible()
   await expect(page).toHaveURL("https://wirecat.dev/en/about")
   expect(errors).toEqual([])
+  await page.unrouteAll({ behavior: "ignoreErrors" })
 })
 
 for (const lang of ["en", "ru", "es"]) {
@@ -102,5 +105,81 @@ for (const lang of ["en", "ru", "es"]) {
         expect(result.violations, `${lang}/${path} ${theme}`).toEqual([])
       }
     }
+  })
+}
+
+for (const lang of ["en", "ru", "es"]) {
+  test(`${lang}: installation intent events count successful copies and guide opens without clipboard text`, async ({
+    page,
+    baseURL,
+  }) => {
+    await page.context().route("**/*", async (route) => {
+      const url = new URL(route.request().url())
+      if (url.hostname === "wirecat.dev") {
+        await route.fulfill({ response: await route.fetch({ url: `${baseURL}${url.pathname}${url.search}` }) })
+      } else if (url.hostname === "localhost") await route.continue()
+      else await route.abort()
+    })
+    await page.addInitScript(() => {
+      const browser = window as typeof window & { failAuditCopy?: boolean }
+      Object.defineProperty(navigator, "clipboard", {
+        value: {
+          writeText: async () => {
+            if (browser.failAuditCopy) throw new Error("Copy denied")
+          },
+        },
+      })
+    })
+    await page.goto(`https://wirecat.dev${lang === "en" ? "/" : `/${lang}`}`)
+    await expect
+      .poll(() =>
+        page.evaluate(() => (window as typeof window & { wirecatTrackingReady?: boolean }).wirecatTrackingReady),
+      )
+      .toBe(true)
+    const events = () =>
+      page.evaluate(() => {
+        const browser = window as typeof window & { dataLayer?: IArguments[]; ym?: { a?: IArguments[] } }
+        return {
+          ga: (browser.dataLayer ?? []).map((item) => Array.from(item)).filter((item) => item[0] === "event"),
+          ym: (browser.ym?.a ?? []).map((item) => Array.from(item)).filter((item) => item[1] === "reachGoal"),
+        }
+      })
+    await page.locator(".hero .agent-connect summary").click()
+    await page.locator(".hero .connect-choice").first().click()
+    expect((await events()).ga).toEqual([
+      ["event", "installation_command_copy", { tool: "tg", locale: lang, surface: "hero" }],
+    ])
+    await page.evaluate(() => {
+      ;(window as typeof window & { failAuditCopy?: boolean }).failAuditCopy = true
+    })
+    await page.locator(".hero .connect-choice").nth(1).click()
+    expect((await events()).ga).toHaveLength(1)
+    await page.evaluate(() => {
+      ;(window as typeof window & { failAuditCopy?: boolean }).failAuditCopy = false
+    })
+    await page.locator(".hero .connect-choice").nth(1).click()
+    expect((await events()).ga).toHaveLength(2)
+    expect((await events()).ym).toHaveLength(2)
+    if (lang === "en")
+      await page.evaluate(() => {
+        ;(window as typeof window & { wirecatTrackingReady?: boolean }).wirecatTrackingReady = false
+      })
+    await page.locator(".hero .connect-guide").first().click()
+    await expect(page).toHaveURL(`https://wirecat.dev/${lang}/docs/installation#tg`)
+    const guideIndex = lang === "en" ? 0 : 2
+    await expect
+      .poll(async () => (await events()).ga[guideIndex])
+      .toEqual(["event", "setup_guide_open", { tool: "tg", locale: lang, surface: "hero" }])
+    await page.locator("details#tg details > summary").click()
+    const install = page.locator("#tg .docs-command").filter({ hasText: "npm install -g @leemour/tg-cli" })
+    await install.locator("button").click()
+    expect((await events()).ga[guideIndex + 1]).toEqual([
+      "event",
+      "installation_command_copy",
+      { tool: "tg", locale: lang, surface: "installation" },
+    ])
+    expect((await events()).ym).toHaveLength(lang === "en" ? 2 : 4)
+    expect(JSON.stringify(await events())).not.toContain("npm")
+    await page.context().unrouteAll({ behavior: "ignoreErrors" })
   })
 }

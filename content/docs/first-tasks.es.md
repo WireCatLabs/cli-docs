@@ -261,3 +261,5 @@ promesa antigua como pendiente.
 Para ver peticiones que puedes adaptar, sigue con [Cómo formular peticiones](./prompting.md).
 Para la sintaxis de los comandos, usa [los comandos de Telegram](./tg/commands.md) o
 [los comandos de MAX](./max/commands.md).
+
+Para reproducir una búsqueda con la salida real del conjunto controlado, sigue el [recorrido para preparar una reunión](./meeting-brief.mdx).

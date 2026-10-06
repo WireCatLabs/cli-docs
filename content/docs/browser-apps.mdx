@@ -1,0 +1,146 @@
+---
+title: ChatGPT and Claude in the browser
+description: Use your Telegram or MAX conversations from ChatGPT or Claude in a browser — no agent on your computer to talk to, just the chat you already use.
+---
+
+Ask ChatGPT or Claude about your Telegram or MAX conversations, right in the chat window you already use — in a browser, at work, on a laptop with nothing installed. "What did Anna say about the contract?", "Which questions in the team chat are still unanswered?", "Draft a reply to the landlord." The assistant reads the messages it needs, and asks you before it sends anything.
+
+> **Needs `tg` 0.27.0 or `max` 0.28.0, or later.** Check with `tg --version` or `max --version`; `tg upgrade` and `max upgrade` update them.
+
+## What you get
+
+- **Your own assistant, your own messages.** ChatGPT or Claude can search your chats, summarise unread messages, gather context before a call and prepare replies — the same tasks as in [first tasks](./first-tasks.md), from the browser.
+- **Nothing sent without you.** Every change — a message, a reaction, a deletion — first shows you a form in the chat with exactly what will happen. You click to allow it, or nothing happens.
+- **No third-party service sees your messages.** The program runs on your own computer and talks to Telegram or MAX directly. ChatGPT or Claude receive only what they ask for in your conversation.
+- **Free, apart from your ChatGPT or Claude plan.** The tunnel we use, <DocTerm term="tailscale" lang="en" label="Tailscale" />, is free for personal use.
+
+## How it works
+
+ChatGPT and Claude in a browser cannot run programs on your computer. Instead, they call tools on the internet that you add as a <DocTerm term="connector" lang="en" label="connector" />. So we make the program on your computer reachable — safely, and only while you want it.
+
+<ArchitectureDiagram name="remote" lang="en" />
+
+1. **On your computer**, `tg` (Telegram) or `max` (MAX) runs in a special mode, `mcp --http`, which speaks the same <DocTerm term="mcp" lang="en" label="MCP" /> language the assistants use for tools.
+2. **A <DocTerm term="tunnel" lang="en" label="tunnel" />** — Tailscale Funnel — gives that one program a public https address, like `https://laptop.tail1234.ts.net`. Nothing else on your computer becomes reachable, and you do not need a domain or router settings.
+3. **In ChatGPT or Claude** you add that address as a connector. The first time, the app opens a login page from your computer, and you type a **one-time code** that only your terminal shows.
+4. **Then you just chat.** When the assistant needs messages, its servers call your computer through the tunnel; your computer asks Telegram or MAX and answers.
+
+Your computer has to be on, with the program running. To use it from anywhere, run it on a small always-on server instead — see [the end of this page](#running-it-all-the-time).
+
+## Is it safe?
+
+- **Only you can log an app in.** Each login needs a code printed in your terminal. It works once, for 10 minutes; five wrong codes lock the login page until you restart.
+- **The login page tells you where it leads.** Before you type the code, check that it says the login goes to `claude.ai` or `chatgpt.com`.
+- **Changes always ask.** Over this connection, every write shows a form, whatever your settings. If an app cannot show such forms, it can only read.
+- **You can cut everyone off.** `tg mcp --revoke` ends every app's login at once. Logins also expire after 30 days unless the app keeps using them.
+- **A stolen login is limited.** Access keys last an hour and renew only through the app that logged in; the program keeps only their fingerprints, never the keys themselves.
+- **Your permission settings still apply.** A profile that may only read stays read-only; the [send guard](./security.md#the-send-guard) and its hourly limit work here too.
+
+More detail: [Security](./security.md).
+
+## What you need
+
+- **`tg` or `max` installed and logged in.** If not yet: [Installation](./installation.mdx).
+- **A ChatGPT or Claude plan that allows your own connectors:**
+  - **Claude:** every plan, including Free — [custom connectors](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
+  - **ChatGPT:** Plus, Pro, Business, Enterprise or Education, in developer mode — [developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server).
+- **A free Tailscale account** — you create it in step 1.
+- **About 15 minutes** the first time; afterwards, two commands.
+
+## Step 1 · Set up Tailscale (once)
+
+1. **Create an account** at [tailscale.com](https://tailscale.com/) — signing in with Google, Microsoft or GitHub is enough.
+2. **Install Tailscale on the computer that runs `tg` or `max`:**
+   - **macOS or Windows:** download the app from [tailscale.com/download](https://tailscale.com/download), open it and sign in. You will also use its `tailscale` command in the terminal — see [Tailscale's command-line guide](https://tailscale.com/kb/1080/cli).
+   - **Linux:** in a terminal:
+
+     ```sh
+     curl -fsSL https://tailscale.com/install.sh | sh
+     sudo tailscale up
+     sudo tailscale set --operator=$USER
+     ```
+
+     The second command prints a link: open it and sign in. The third lets you run `tailscale funnel` without `sudo`.
+3. **Turn on three switches** in the [Tailscale admin console](https://login.tailscale.com/admin), once:
+   1. **DNS → MagicDNS → Enable.** Your computer gets a name like `laptop.tail1234.ts.net`.
+   2. **DNS → HTTPS Certificates → Enable HTTPS.** This gives the address a certificate. Your computer's name and network name then appear in public certificate logs — [why](https://tailscale.com/kb/1153/enabling-https).
+   3. **Access controls → Funnel → Add Funnel to policy → Save.** This allows Funnel on your devices — [Funnel guide](https://tailscale.com/kb/1223/funnel).
+
+## Step 2 · Start it
+
+You need two terminal windows; keep both open while you use the assistant.
+
+**First window — the tunnel:**
+
+```sh
+tailscale funnel 8765
+```
+
+It prints your public address, `https://<computer>.<network>.ts.net`. The very first time it may print a link to approve Funnel — open it.
+
+**Second window — the program,** with your address:
+
+```sh
+tg mcp --http --public-url https://<computer>.<network>.ts.net
+```
+
+For MAX, use `max` instead of `tg`. The program prints a **login code** such as `K7QP-M2XD`, and a new one after each login.
+
+## Step 3 · Add it to ChatGPT or Claude
+
+The address to add is your Tailscale address with `/mcp` at the end: `https://<computer>.<network>.ts.net/mcp`.
+
+**Claude** ([guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp)):
+
+1. Open **Customize → Connectors**, click **+ Add**, then **Add custom connector**.
+2. Name it, for example `Telegram`, and paste the address. Keep sign-in on.
+3. Click **Add**, then connect: Claude opens the login page from your computer.
+
+**ChatGPT** ([guide](https://developers.openai.com/api/docs/guides/custom-mcp-server)):
+
+1. Open **Settings → Security and login** and turn on **Developer mode**.
+2. Create a developer-mode app for your MCP server with the address, as the guide shows.
+3. Connect it: ChatGPT opens the login page from your computer.
+
+**On the login page:** check the line that says where the login goes — it should be `claude.ai` or `chatgpt.com` — then type the code from the second terminal window and click **Allow**.
+
+## Step 4 · Try it
+
+Start a new chat with the connector turned on, and ask:
+
+```text prompt
+List my five most recent Telegram chats with their unread counts.
+```
+
+Then something useful:
+
+- "Summarise what I missed in the team chat since yesterday."
+- "Find where we agreed on the delivery date with Max."
+- "Draft a reply to Anna's last message, and show it to me before sending."
+
+When the assistant wants to send, a form appears with the chat and the exact text. Allow it, or decline and nothing is sent. [Writing requests](./prompting.md) has more on asking well.
+
+## Stopping and revoking
+
+- **Stop for now:** press Ctrl-C in both windows. Nothing stays reachable once the tunnel is closed.
+- **Next time:** run the same two commands again; the apps stay logged in for 30 days.
+- **End every app's access:**
+
+  ```sh
+  tg mcp --revoke
+  ```
+
+  Each app then has to log in again with a new code. Also remove the connector in the app's settings if you no longer want it.
+
+## Something does not work
+
+- **The app cannot connect.** Open `https://<computer>.<network>.ts.net/.well-known/oauth-protected-resource/mcp` in a browser. A short JSON document means the tunnel works; otherwise the tunnel is not running, Funnel is not enabled (step 1), or the port numbers in the two windows differ.
+- **"Too many wrong codes."** Five wrong codes lock the login page until you restart the program. If you did not type them, someone found your address: restart, and consider renaming your computer in Tailscale.
+- **The code is refused as expired.** Codes last 10 minutes. Try again: the terminal then shows a new code.
+- **A change fails with "the owner did not confirm this".** The app did not show the form, or it was declined. Nothing was sent.
+- **It connects but shows no tools.** Run `tg chats list --limit 3` in a terminal; an expired login shows there, and [Login](./tg/sessions.md) explains how to renew it.
+- **The port is in use.** Pick another with `--port 8766`, and give the tunnel the same number: `tailscale funnel 8766`.
+
+## Running it all the time
+
+The steps above use your own computer, which must stay on. To reach your messages from anywhere — a phone, a borrowed laptop — run the same setup on a small always-on server: install `tg` or `max` there, log in (`tg setup --agent none`), install Tailscale, and start the two commands. Your side then needs only a browser.

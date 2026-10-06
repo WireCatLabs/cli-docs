@@ -28,14 +28,16 @@ export function getMDXComponents(components?: MDXComponents) {
     ...defaultMdxComponents,
     pre: DocsCodeBlock,
     table: (props: ComponentProps<"table"> & { "data-table-label"?: string }) => (
-      <section
-        className="relative my-6 overflow-auto prose-no-margin"
+      // biome-ignore lint/a11y/useSemanticElements: A named scrolling group keeps repeated data tables out of landmark navigation.
+      <div
+        role="group"
+        className="docs-reference-table relative my-6 overflow-auto prose-no-margin"
         // biome-ignore lint/a11y/noNoninteractiveTabindex: Keyboard focus enables scrolling wide reference tables.
         tabIndex={0}
         aria-label={props["data-table-label"] ?? "Reference table"}
       >
         <table {...props} />
-      </section>
+      </div>
     ),
     h2: (props: ComponentProps<"h2"> & { "data-static-heading"?: boolean }) =>
       props["data-static-heading"] ? <h2 {...props}>{props.children}</h2> : <Heading as="h2" {...props} />,
