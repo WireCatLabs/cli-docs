@@ -47,8 +47,8 @@ Store maintenance:
 
 - `max store check` — file integrity, search indexes, disk space and stale chats.
 - `max store backup <файл>` — back up the live store without overwriting an existing file; `max store restore <файл>` restores it and keeps the previous file alongside. With `--encrypt`, the copy is compressed and encrypted with a password — see [Password](#пароль);
-- `max store reindex` — rebuild the search index without losing messages.
-- `max store migrate` — upgrade the file to this version's schema.
+- `max store reindex` — rebuild the search index, typo dictionary and word stems without losing messages.
+- `max store migrate` — upgrade the file to this version's schema and complete indexes for older messages.
 
 ### Exporting to a file
 
@@ -88,44 +88,11 @@ max store export --all --to ~/max-всё
 
 ## Search
 
-`max messages search` reads only the local archive. Its default is a strict Lucene profile: words, phrases, Boolean groups, fields, dates and limited regex. The full [search reference](./search.md) explains syntax and migration. Use `--language legacy` for the previous filters and typo correction.
-
-```sh
-max messages search 'invoice kind:private' --json
-max messages search 'invoice date:[2026-01-01 TO 2026-02-01}' --timezone Europe/Madrid --json
-max messages search 'preset:secret kind:saved' --json
-```
-
-An empty result means “not found in the selected archive”. JSON reports completeness and coverage; `lastSyncedAt` is the oldest chat fetch in coverage, or `null` if at least one chat has not been fetched yet. `--source` selects providers and accounts, `--newest` sorts by time and `--context` includes neighboring messages. `--regex` remains a separate JavaScript mode.
+`max messages search` finds saved messages by words, sender, chat, date, files, links and your tags. By default it reads only the archive; `--sync-first` first fetches a bounded set of new messages from MAX without marking them read. The [message search guide](./search.md) also covers saved searches and counts. An empty result means “not in this archive”: fetch the chat first.
 
 ## Conversations within a group
 
-Busy groups contain several conversations at once. `max conversations` finds them in local storage using replies, mentions and message order, without querying MAX or using AI:
-
-```sh
-max conversations build --chat Друзья                  # найти; ещё раз — после того, как скачано больше
-max conversations list --chat Друзья --since-time 7d
-max conversations show 91                              # один разговор, от старых к новым
-max messages links Друзья <id>                         # почему это сообщение там, где оно есть
-```
-
-Nothing is built until you run `build`, and a new build replaces the previous one. Download history first with `max store fetch`.
-
-Your own agent can link messages more accurately. `max conversations batches status --chat <чат>` reports message and batch counts; `batches next` returns the next batch, and `conversations links
-add --batch <id>` reads the agent's JSON response from stdin. `conversations links clear` removes those responses. `max` itself never calls a model.
-
-### Semantic search
-
-After building conversations, `max` can find them by topic rather than exact words. `max conversations embed` computes a vector for each conversation on your computer; `max conversations search` finds those closest to your question:
-
-```sh
-max models text download e5-small                       # один раз: 135 МБ, общая папка с tg
-max conversations embed --chat Друзья                   # продолжает с места, где остановился
-max conversations search "где снять квартиру" --chat Друзья
-max conversations search "аренда квартиры"              # во всех чатах, для которых посчитано
-```
-
-Nothing leaves your computer. `max conversations embed status --chat <чат>` reports remaining work; `embed clear --chat <чат>` deletes vectors. An external service can compute vectors with your own key: run `max models text key set openai`, then use `--provider openai` with `embed` and `search`. Before sending anything, `embed` shows chunk and token counts and the cost, then waits for confirmation (`--yes` in scripts).
+Several conversations happen at once in a busy group. `max conversations` groups saved messages and finds discussions by their subject on this computer: see [topic search](./topic-search.md).
 
 ## Live messages: `max serve` and `max watch`
 
@@ -166,3 +133,9 @@ max watch --events --jsonl  # ещё правки, удаления и реак�
 - [Personal account guide](./usage.md) — reading and sending.
 - [Diagnostics](./diagnostics.md) — what a command did.
 - [Command reference](./commands.md) — every `store`, `serve` and `watch` option.
+
+## Archive maintenance
+
+`max store migrate` completes indexes; `max store reindex` rebuilds them. `store info` and `store check` report word and stem index readiness. Having a stem index does not itself change strict search matching. `config set searchStemmers.cyrillic` accepts `russian` or `none`; `config set searchStemmers.latin` accepts `spanish`, `english` or `none`. `none` disables stems for that alphabet. Then run `store reindex`. This setting is shared across all profiles and both messengers, so `--defaults`, `--personal` and `--bot` do not apply, and it cannot be changed under `MAX_PROFILE_LOCK`.
+
+`max store repair --dry-run --json` previews structural repairs and rolls changes back; `store repair` applies them without deleting data. An incompatible table is retained as a copy; the response lists rows and columns that could not be transferred. Keep the copy until you have checked the result. `store repair` lists copy names (`copies` in `--json`); `store copies delete <точное имя>` deletes only the named copy. Stop processes using the archive before repairing its structure.

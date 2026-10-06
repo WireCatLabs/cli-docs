@@ -1,6 +1,7 @@
 ---
 title: "Diagnóstico: qué hizo un comando"
 ---
+
 Cada solicitud genera un evento, con dos destinos posibles. `--trace` lo muestra sin guardarlo; `--record` lo guarda sin mostrarlo. Por defecto no se muestra nada y solo se guardan ejecuciones fallidas (véase «Las ejecuciones fallidas siempre se guardan»).
 
 ## Mostrar eventos
@@ -122,7 +123,7 @@ Se eliminan días enteros según el nombre del directorio, sin abrir archivos.
 
 ## Las ejecuciones fallidas siempre se guardan
 
-Un fallo se guarda incluso sin `--record`, con `"keptBecauseFailed": true` en `run.json`. Incluye opciones inválidas, comandos desconocidos, comprobaciones previas y comandos sin red (`models`, `server`, `watch`, `upgrade`). Solo se guardan palabras del comando, como `messages list`, sin argumentos. Una ejecución correcta sin `--record` no deja registro. Así los informes tienen pruebas sin acumular tu historial de lectura. `--no-record` o `"record": false` también desactiva esta conservación.
+Un comando que termina con error se guarda incluso sin `--record`, con `"keptBecauseFailed": true` en `run.json`. Se aplica a todo comando y error: opciones incorrectas, comandos desconocidos, comprobaciones previas y comandos que no contactan con MAX (`models`, `server`, `watch`, `upgrade`). El registro solo contiene las palabras del comando, como `messages list`, sin los argumentos posteriores. Una ejecución correcta sin `--record` no deja registro de diagnóstico; las consultas de búsqueda se guardan aparte. Así hay algo que adjuntar a un informe de problema. El historial de búsqueda contiene parámetros, no los mensajes encontrados. `--no-record` o `"record": false` en los ajustes también desactiva esto.
 
 ## Registrar cada ejecución
 
@@ -130,7 +131,7 @@ Un fallo se guarda incluso sin `--record`, con `"keptBecauseFailed": true` en `r
 { "profiles": { "default": { "record": true } } }
 ```
 
-Este ajuste registra todo; `--no-record` lo desactiva para una llamada. Por defecto, los éxitos no se guardan sin pedirlo y los fallos se guardan sin contenido para informar del problema. No se acumula automáticamente un historial de a quién leíste y cuándo.
+Entonces se registra cada ejecución, y `--no-record` lo desactiva para una invocación. Por defecto es al revés: las ejecuciones correctas no se registran salvo que lo pidas; las fallidas siempre se guardan sin textos para adjuntarlas a un informe. Los parámetros de búsquedas correctas se guardan aparte de los diagnósticos; `--no-record` o `"record": false` desactiva ambos registros.
 
 ## Siguiente paso
 
@@ -140,3 +141,5 @@ Este ajuste registra todo; `--no-record` lo desactiva para una llamada. Por defe
 ## Referencia para scripts
 
 `max commands --json` enumera comandos, opciones globales y códigos de salida sin conectar a una cuenta. Usa `max commands messages search --json` para un comando y `max commands messages --json` para un grupo; ambos conservan las opciones globales y códigos de salida. Las palabras tras `commands` indican una ruta; consulta grupos distintos en llamadas separadas. `cli` es el nombre de la herramienta, `version` la versión instalada y `contract` la versión del contrato JSON compartido (`0`). Cambia cuando los campos de respuesta dejan de ser compatibles; actualizar el paquete no cambia por sí solo `contract`. Un script puede leer campos concretos sin comparar todo el JSON con una cadena guardada.
+
+La búsqueda y los recuentos guardan consultas aparte de las ejecuciones; consulta el historial y --no-record en [búsqueda](./search.md).

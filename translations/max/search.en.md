@@ -2,54 +2,161 @@
 title: "Message search"
 ---
 
-`max messages search` searches only the shared local archive, without network access or read receipts.
+`max messages search` finds messages in the local archive: the copy of your chats that `max` keeps on this computer. By default it does not connect to MAX and marks nothing read. A message `max` has not downloaded cannot be found, so download the history first: `max store fetch <чат>` ([archive](./archive.md)).
 
-## Quick start
+This page covers everyday searches. Three more pages go further:
 
-```sh
-max messages search 'invoice AND (kind:group OR kind:private)' --json
-max messages search 'from:"Alice Synthetic" date:[2026-01-01 TO 2026-02-01}' --timezone Europe/Madrid --json
-max messages search 'preset:secret kind:saved' --json
-max messages search 'text:/pass(port)?/' --json
-max messages search 'chat:"Работа" AND body:/.*invoice.*/' --json
-max messages search 'has:file' --json
-```
+- [Topic search](./topic-search.md) — find a discussion by what it was about, when you do not remember
+  its words.
+- [Query language](./query-language.md) — every field, operator, limit and the JSON answer.
+- [How search works](https://wirecat.dev/ru/docs/search-architecture) — the technical page: the word
+  index, the conversation graph, vectors and how results are ranked.
 
-Replace example names with your own. Words and phrases match strictly, without automatic typo correction or substring search. `alpha OR beta gamma` means `(alpha OR beta) AND gamma`; `alpha OR beta AND gamma` means `alpha OR (beta AND gamma)`. Use parentheses for clarity.
+Put the query in single quotes, so the shell leaves its quotes and brackets alone. The names below are
+examples; use your own chats and people.
 
-## Fields and operators
-
-Supported fields are `text/body/from/chat/date/kind/has/topic/in/preset/filename/mime/size`, with Boolean groups, field-value groups, inclusive and exclusive ranges, limited wildcards and Lucene regex. `topic` requires exactly one chat. `kind:bot` selects a bot conversation partner; `in:bots` selects Bot API accounts. `tag` is not supported yet; fuzzy, proximity, boosts and intervals also produce errors. Unknown fields do not become plain text.
-
-Files are found by name and size; the message text is not needed: `filename:*.pdf`, `filename:*договор*` (the whole name, ignoring case and ё), `size>10MB`, `size:[1KB TO 300KB]` (KB/MB/GB in units of 1024). MAX does not report the file type, so `mime:` finds nothing here — search by extension instead. A link to a website is found by a phrase: `has:link AND "github.com"`.
-
-## Dates and regex
-
-`--timezone` sets an IANA time zone; a date without a time means a calendar day. An inclusive upper bound includes the entire day; an exclusive bound excludes it. Daylight-saving changes can make a day shorter or longer than 24 hours. Quote exact timestamps and include seconds and a UTC offset.
-
-Regex on `text` matches an entire normalized word; `body` matches the full original text, case-sensitively. Use `.*` for a substring in `body`. A subset of Lucene regex is supported, without JavaScript lookaround, backreferences or flags. Exceeding limits on rows, bytes, automaton states, work or time produces an explicit error; narrow your search.
-
-## Archive coverage and machine-readable output
-
-An empty result does not prove that a message is absent from the messenger. JSON reports the query version, completeness, account/chat coverage and index readiness even without matches. `lastSyncedAt` is the oldest moment a chat in coverage was fetched, or `null` if at least one chat has not been fetched yet. `inventoryComplete` means that every account in coverage has sent a full chat list at least once; it does not promise complete history. After an update, an old archive keeps `false` and `null` until the next full chat list and `store fetch`. JSONL contains only `items`; use `--json` for coverage information. An unready word index requires `max store migrate`; fetch missing history with `max store fetch`. Built-in predicates find candidates, rather than confirming whether credentials are valid.
-
-## Migrating from legacy
+## Words and phrases
 
 ```sh
-max messages search 'from:alice after:7d invoice -draft' --language legacy --json
-max messages search --regex 'invoice\s+\d+' --json
+max messages search счёт
+max messages search '"счёт оплачен"'             # точная фраза
+max messages search 'кафе OR библиотека'
+max messages search '(кафе OR библиотека) NOT шумно'
+max messages search 'квартир*'                   # все слова, которые начинаются на «квартир»
 ```
 
-Legacy preserves the previous filters and typo correction. `--regex` is a separate JavaScript `iu` mode over the full text, with an isolated worker and limits; combining `--regex --language lucene` is rejected. The saved-query programmatic contract includes `language/version`; the migration preview does not promise to preserve results from typo-correcting searches.
+Words next to each other must all appear in the message. A word finds that same word in any case, with or without accents; `ё` and `е` are treated alike. Another form of a word is a different word: `квартира` does not find «квартиру»; the prefix `квартир*` finds both. Nothing is guessed: no typo correction or similar words.
 
-## Full reference
+## People and chats
 
-The [main query-language reference](https://github.com/leemour/cli-messaging/blob/main/docs/search/query-language.md) covers fields and operators, Unicode and escaping, built-in predicates, limits, errors and ten testable recipes. The [technical specification](https://github.com/leemour/cli-messaging/blob/main/docs/search/query-language-spec.md) describes the fixed grammar, AST/schema, reference examples and compiler. [Archive](./archive.md) explains fetching and completeness; [commands](./commands.md) lists current options.
+```sh
+max messages search 'from:"Алиса Тестова" счёт'
+max messages search 'from:("Алиса Тестова" OR "Борис Тестов") библиотека'
+max messages search 'from:me date:7d'            # что вы писали за неделю
+max messages search 'chat:"Книжный клуб" библиотека'
+max messages search библиотека --chat "Книжный клуб"   # то же, опцией
+max messages search 'паспорт kind:private'       # только личные переписки
+```
 
-## Search through MCP
+`kind:` accepts `private` (private chats), `group`, `channel`, `saved` (Saved Messages) and `bot`.
 
-`max_messages_search` uses the same language and service as `messages search`. A query contains `text` or a versioned `ast`; `language` selects `lucene` or `legacy`, while `timezone` sets the calendar time zone. `chat` accepts an ID or a name from the local store; `source`, `newest`, `context` and `limit` select coverage and result presentation.
+## Dates
 
-The response keeps `query`, `coverage`, `completeness`, `wordsReady` and `corrections` alongside the usual `items/page/limit/hasMore` page, including when there are no matches. Metadata describes the local archive, rather than completeness of the remote chat. The tool’s permissions and name remain unchanged.
+```sh
+max messages search 'date:today'
+max messages search 'библиотека date:yesterday'
+max messages search 'счёт date:7d'               # от 7 дней назад до сейчас; также 30m, 2h
+max messages search 'счёт date:[2026-01-01 TO 2026-02-01}' --timezone Europe/Madrid
+```
 
-`wordsReady` reports whether the word index is ready, also for queries that use only filters or regex. When it is `false`, finish `max store migrate`; until then, strict word search refuses, and legacy uses search by word parts.
+`today`, `yesterday` and calendar dates are days in your computer's time zone; `--timezone` picks
+another. In a range, `[` and `]` include that day, `{` and `}` exclude it.
+
+## Files and links
+
+```sh
+max messages search 'has:file'
+max messages search 'filename:*.pdf'
+max messages search 'filename:*договор*'         # часть имени
+max messages search 'size>10MB'
+max messages search 'size:[1KB TO 300KB]'
+max messages search 'has:photo chat:"Книжный клуб"'
+max messages search 'has:link AND "github.com"'  # ссылка на сайт
+```
+
+A file is found by name and size even when the message has no text. `filename:` compares the whole name, ignoring case, accents and `ё`. Sizes use KB, MB and GB of 1,024. MAX does not report the file type, so search by extension: `filename:*.pdf`, rather than `mime:`. `has:` also accepts `attachment`, `video`, `audio`, `voice`, `sticker`, `contact`, `location` and `poll`. A link counts whether it appears in the text or only in a link card.
+
+## Passwords, codes and cards
+
+```sh
+max messages search 'preset:secret kind:saved'   # что-то похожее на пароль или токен в Избранном
+max messages search 'preset:card'
+```
+
+A preset finds messages that *look like* a password, a login code, an API key, a card or IBAN number, a
+passport, a phone, an email or a link. It checks the shape only: it does not prove that a password
+works or a card is real. The full list is in the [query language](./query-language.md#preset).
+
+## Tags
+
+```sh
+max tags add work --chat "Книжный клуб"
+max tags add work --contact "Борис Тестов"
+max tags list --tag work --type chat
+max messages search 'tag:work счёт'
+max messages search 'счёт NOT tag:work'
+max tags remove work --chat "Книжный клуб"
+```
+
+A tag is your own label on a chat, a person or one message (`--message <id> --chat <чат>`). It stays in the local archive and is never sent to MAX. `tag:work` finds messages tagged `work`, messages in a chat with that tag and messages from a person with that tag. A tag is 1–32 characters: Latin letters a–z, digits and hyphens.
+
+## Saved searches and history
+
+```sh
+max searches create meetings 'библиотека OR кафе' --chat "Книжный клуб"
+max messages search --saved meetings
+max messages search --saved meetings 'date:today'   # слова добавляются через AND
+max messages stats --saved meetings --by day
+max searches list
+max searches history --limit 10
+max messages search --saved 42                   # строка истории, по её номеру
+```
+
+`searches create` saves a query with its options and runs nothing; an existing name needs `--replace`.
+Options you type with `--saved` replace the saved ones. The saved text is read again on every run, so
+`date:7d` always means the last 7 days. `searches show` prints one, `searches delete` removes one.
+
+Every successful search and count goes into the history: the query and options, never the messages found. The latest 1,000 runs are kept. `--no-record` excludes one run; in MCP, use `record: false`. `searches clear` clears the history, leaving saved searches intact. This history is separate from `max runs`.
+
+Saved searches and history live in the archive shared by `max` and `tg`: both see the same entries, and `delete` or `clear` in one changes them in the other. Tags remain with their own account.
+
+## Counting: `messages stats`
+
+```sh
+max messages stats счёт                          # сколько в каждом чате
+max messages stats 'date:7d' --by sender
+max messages stats 'from:me' --by day --timezone Europe/Madrid
+max messages stats --by hour                     # все сохранённые сообщения
+```
+
+`messages stats` counts the messages `messages search` would find with the same query, each one once.
+`--by chat` (the default) and `--by sender` put the largest first; `--by day` and `--by hour` go in
+order. When some chats are not stored in full, the numbers are a lower bound, and stderr says how
+many chats that is.
+
+## When nothing is found
+
+An empty answer means “not in the archive you searched”, not “never sent”. `max store status` shows what is stored; `max store fetch` adds history. With `--json`, the answer reports which chats were searched and how complete they are, even without matches. If `max` asks for `max store migrate`, the word index is still being built; searches without words (`has:file`, `date:today`) already work.
+
+To search every account in the store, add `--source all`. `--newest` orders by time instead of by
+relevance, and `--context 2` shows two messages around each one found.
+
+## For scripts and agents
+
+`--json` returns one object with the messages and what was searched; `--jsonl` streams the messages
+only. In MCP, `max_messages_search` and `max_messages_stats` take the same queries, and `max_tags_*` and
+`max_searches_*` manage tags and saved searches. The answer's fields,
+the older `--language legacy` mode and `--regex` are in the [query language](./query-language.md).
+
+Search reads the local archive by default. `--sync-first` explicitly fetches new messages before searching and
+marks nothing read: at most 5 chats, 500 messages and 30 seconds. Change these bounds with `--max-chats`,
+`--max-messages`, `--sync-time`. Failed or incomplete refresh retains local results with stale coverage and refresh
+details.
+
+`content:договор` searches words in the retained text of an attachment. Extraction supports plain-text files, DOCX and PDFs with text layers. Your agent reads photos and scans and saves their text through `attachments text set`. For multiple attachments, specify `--attachment`, numbered from 1.
+
+```sh
+max attachments extract --chat "Книжный клуб" --download --output-dir ./files
+max messages search 'content:договор'
+max attachments list --chat "Книжный клуб" --needs-text
+max attachments text set "Книжный клуб" 204 --text-file ./scan.txt
+```
+
+`--download` requires `--output-dir`; without them extraction reads retained files. `list` exposes retained paths and text status, not text contents.
+
+`--thread` follows the stored reply graph; in `messages context` it replaces chronological neighbours. Defaults are
+8 hops, 50 messages, 65,536 bytes and one day around each hit. Change them with `--thread-hops`,
+`--thread-messages`, `--thread-bytes`, `--thread-within`. Without a graph it falls back to chronological context;
+stale links are marked and not traversed.
+
+PDF extraction needs the optional package `unpdf`; DOCX needs `mammoth`, installed alongside `max`. For a global npm installation: `npm install -g unpdf mammoth`. If a package is missing, the command reports it; an agent can supply the text instead.

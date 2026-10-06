@@ -5,7 +5,7 @@ description: "La parte técnica de la búsqueda de mensajes y la búsqueda por t
 
 WireCat tiene dos formas de buscar en un mismo archivo local. **La búsqueda de mensajes** encuentra los mensajes que cumplen una consulta estricta. **La búsqueda por temas** encuentra conversaciones por significado y por palabras en común. Solo comparten el archivo: el grafo de conversaciones y los vectores son etapas opcionales que la búsqueda de mensajes nunca lee.
 
-Esta es la página técnica. Para el uso diario, lee las guías de búsqueda de [Telegram](./tg/search.md) y [MAX](./max/search.md) y sus páginas del archivo. La página describe el motor de [`cli-messaging` 0.148.2](https://github.com/leemour/cli-messaging/tree/v0.148.2), que usan las versiones en desarrollo de tg y max. Las versiones publicadas (tg 0.27, max 0.28) usan 0.147.0, que aún no tiene etiquetas, búsquedas guardadas ni el ajuste de raíces de palabras.
+Esta es la página técnica. Para el uso diario, lee las guías de búsqueda de [Telegram](./tg/search.md) y [MAX](./max/search.md) y sus páginas del archivo. El motor de búsqueda compartido está publicado en tg 0.28 (cli-messaging 0.149.0) y max 0.29 ([cli-messaging 0.152.0](https://github.com/leemour/cli-messaging/tree/v0.152.0)), con etiquetas, búsquedas guardadas, búsqueda en archivos y ajustes de raíces de palabras.
 
 <ArchitectureDiagram name="searchPaths" lang="es" />
 

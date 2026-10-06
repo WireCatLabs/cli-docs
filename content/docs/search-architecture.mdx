@@ -5,7 +5,7 @@ description: "The technical side of message search and topic search — indexes,
 
 WireCat has two ways to search one local archive. **Message search** finds the messages that satisfy a strict query. **Topic search** finds conversations by meaning and shared words. They share the archive and nothing else: the conversation graph and the vectors are optional stages that message search never reads.
 
-This is the technical page. For everyday use, read the [Telegram search guide](./tg/search.md) or the [MAX search guide](./max/search.md) and their archive guides. The page describes the engine in [`cli-messaging` 0.148.2](https://github.com/leemour/cli-messaging/tree/v0.148.2), which the development versions of tg and max use. The current releases (tg 0.27, max 0.28) run 0.147.0, which does not have tags, saved searches or the stem settings yet.
+This is the technical page. For everyday use, read the [Telegram search guide](./tg/search.md) or the [MAX search guide](./max/search.md) and their archive guides. The shared search engine is released in tg 0.28 (cli-messaging 0.149.0) and max 0.29 ([cli-messaging 0.152.0](https://github.com/leemour/cli-messaging/tree/v0.152.0)), including tags, saved searches, file-content search and stem settings.
 
 <ArchitectureDiagram name="searchPaths" lang="en" />
 

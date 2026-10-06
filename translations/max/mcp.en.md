@@ -1,9 +1,10 @@
 ---
 title: "MCP server"
 ---
-`max mcp` gives an agent access to a profile over [MCP](https://modelcontextprotocol.io) — through stdin and stdout by default; `--http --public-url` serves the tools on a local port behind your HTTPS tunnel. It ships with `max`; no separate installation is needed.
 
-**When to use it.** Claude Code, Codex and other agents with a terminal can use `max` directly with [agent instructions](https://github.com/leemour/max-cli/blob/v0.28.0/README.md#для-скриптов-и-агентов): the agent calls the CLI directly. MCP is useful for clients without a terminal, such as Claude Desktop, or chat-based integration in Cursor, and when you want the client to request permission for each send. Browser-based ChatGPT and Claude connect through `--http`: see [Remote access](./remote.md).
+`max mcp` exposes a profile to an agent through [MCP](https://modelcontextprotocol.io), using stdin/stdout by default. `--http --public-url` exposes tools on a local port behind your HTTPS tunnel. The server is included with `max`; no separate installation is needed.
+
+**When you need it.** Claude Code, Codex and other agents with a terminal can use `max` directly with the [agent instructions](https://github.com/leemour/max-cli/blob/v0.29.0/README.md#для-скриптов-и-агентов). MCP is for clients without a terminal, such as Claude Desktop or Cursor chat, and for clients that should ask permission before every send. ChatGPT and Claude in the browser connect through `--http`: see [remote.md](./remote.md).
 
 ## Connecting
 
@@ -81,7 +82,7 @@ Other resources retain their permissions. The recipient list and `sendsPerHour` 
 claude mcp add max -- max mcp --confirm-send
 ```
 
-`--confirm-send` displays a form before every write, including `allow`. Without it, in stdin/stdout mode only `ask` needs a form. Startup with `--yes` confirms other `ask` actions; `--allow-dangerous` confirms message deletion and moderation actions requiring that confirmation. These flags do not bypass `deny`, `readonly`, the recipient list or the limit. A local refresh of conversations under `ask` or `--confirm-send` is refused before any write: the owner starts it through the CLI.
+`--confirm-send` shows a form before every write, including permission level `allow`. Without it, stdin/stdout mode needs a form only for `ask`. `--yes` confirms other `ask` actions; `--allow-dangerous` confirms message deletion and moderation actions that require it. These flags do not bypass `deny`, `readonly`, recipient lists or limits. Local conversation, tag and saved-query changes under `ask` or `--confirm-send` are refused before writing: the owner runs them through the CLI.
 
 The form is bound to the tool, chat and displayed parameters. An answer works once and for five minutes; substituting parameters after confirmation is refused. An owner's refusal or a client without form support writes nothing. Group moderation also follows its own rule levels: `readonly` only reports the result, while `ask` requires a form.
 
@@ -105,6 +106,7 @@ Legacy `--allow-send`, `--allow-mark-read`, `--allow-delete` and `--allow-modera
 | `max_chats_rules` | `max chats rules show` | Group moderation rules; only the owner can change them through a command |
 | `max_contacts_list` | `max contacts list` | People with direct conversations |
 | `max_contacts_show` | `max contacts show` | One person and shared chats |
+| `max_contacts_profile` | `max contacts profile` | what MAX reports about a person and their message count in each shared chat; phone shows only its last four digits |
 | `max_account_sessions` | `max account sessions list` | List of devices, without login secrets |
 | `max_contacts_lookup` | `max contacts lookup` | Search by phone number without adding a contact; the phone number is not returned |
 | `max_chats_members_list`, `max_chats_members_show` | `max chats members …` | Members with pagination, and one member |
@@ -113,12 +115,18 @@ Legacy `--allow-send`, `--allow-mark-read`, `--allow-delete` and `--allow-modera
 | `max_chats_update`, `max_chats_settings` | `max chats update`, `settings` | Group title and settings |
 | `max_polls_show` | `max polls show` | A poll and its answer options |
 | `max_messages_evidence` | `max messages evidence` | A bundle of messages from the current account's archive, without connecting |
-| `max_messages_stats` | `max messages stats` | Number of query matches in the local archive |
+| `max_messages_stats` | `max messages stats` | query match count in the local archive; `saved` runs a saved query or a previous run |
+| `max_conversations_batches_status`, `max_conversations_batches_next` | `max conversations batches …` | volume and bounded batches for the agent; read after owner consent |
+| `max_conversations_links_add`, `max_conversations_links_clear`, `max_conversations_build` | `max conversations links …`, `build` | save or remove agent links, rebuild the graph; `conversations.links` |
+| `max_attachments_list`, `max_attachments_text_set` | `max attachments list`, `text set` | paths and text status; save agent text for `content:` |
 | `max_conversations_status`, `max_conversations_refresh` | `max conversations status`, `search --refresh` | Index status and local refresh; writing is controlled by `conversations.embed` |
 | `max_conversations_related` | `max conversations related` | Similar conversations from saved vectors, without running the model |
 | `max_conversations_list`, `max_conversations_show`, `max_conversations_search` | `max conversations …` | Conversations from the built local archive; search by words and by the installed model |
 | `max_messages_list` | `max messages list` | Chat messages; `transcribe` converts voice messages; never marks read |
-| `max_messages_search` | `max messages search` | Search data already read on this machine |
+| `max_messages_search` | `max messages search` | search messages already read on this computer; `saved` runs a saved query or a previous run |
+| `max_contacts_context` | `max contacts context` | what the archive knows about one person across linked messengers; permissions as for message reads |
+| `max_tags_list`, `max_tags_add`, `max_tags_remove` | `max tags …` | your tags on chats, people and messages; stored only on this computer |
+| `max_searches_list`, `max_searches_history`, `max_searches_create`, `max_searches_delete`, `max_searches_clear` | `max searches …` | saved queries and search history; results are not stored |
 | `max_messages_link` | `max messages link` | a stored message locator, without connecting or returning message text |
 | `max_messages_context` | `max messages show`, `context` | One message and surrounding messages |
 | `max_messages_photo` | `max messages download` | A message photo as an image, up to 512 KB; files, videos, voice messages or larger photos refuse with a download command. Never returns a photo URL |
@@ -148,12 +156,13 @@ Errors are `{ error: { code, message, … } }`, with the same codes as the CLI. 
 
 ## Prompts and chats through `@`
 
-The server provides four prompts; in Claude Code, these are `/` commands:
+The server provides five ready-made prompts — commands through `/` in Claude Code:
 
 | Prompt | Argument | Agent behavior |
 |---|---|---|
 | `catch-up` | `kind`, `mode`, optional | Calls `max_inbox`; `mode` is `unread` (default), `new` or a point in time; `kind` selects the chat kind; marking as read needs a separate confirmation |
 | `reply` | `chat` | Reads the chat, drafts a reply and sends only after you approve that text |
+| `link-conversations` | none | first estimate volume and obtain owner consent, then batches, links and graph rebuild |
 | `review` | `since`, `groups`, optional | Calls `max_review` once; groups commitments into what I owe, what I await and what needs clarification, with message IDs. Checks groups for completion before declaring anything overdue. Reminders remain drafts until approval. Ends with `since` for the next review |
 | `find` | `text` | Finds a person or words and shows surrounding messages; sends nothing |
 
@@ -172,3 +181,9 @@ Telegram topics are not available in MAX, so there are no `max_topics_*` tools. 
 In stdin/stdout mode, the server exits when the client closes stdin, closing its MAX connection too. HTTP runs until Ctrl-C.
 
 `max mcp --http --public-url https://<имя>.ts.net` is available through your HTTPS tunnel, with login by a code from the terminal. Over HTTP, every write requires a form regardless of `allow`, `--yes` or `--allow-dangerous`. `max mcp --revoke` ends app logins and keeps the MAX session. See [connecting from a browser](./remote.md).
+
+Local tags/searches writes and conversation updates under ask refuse without a form. With --confirm-send or HTTP they return confirmation_required if the form cannot be bound to this action; nothing changes. These data can be read with readonly.
+
+Through MCP, the agent gets the `link-conversations` prompt, estimates the volume with `max_conversations_batches_status` and waits for the owner’s consent for that chat. It then reads `max_conversations_batches_next`, saves answers with `max_conversations_links_add` and rebuilds the graph with `max_conversations_build`. `max_conversations_links_clear` deletes the agent’s answers; rebuild the graph afterwards too. Writes require `conversations.links`. External embedding settings also apply to MCP search: the question goes to the chosen provider.
+
+`max_attachments_list` shows paths and text status; `max_attachments_text_set` saves agent text for `content:`. Extraction uses the CLI. `messages_context` accepts `offline: true` to read only the archive.

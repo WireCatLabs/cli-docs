@@ -9,7 +9,7 @@
       "ru": "MAX в терминале: боты через официальный Bot API и ваш личный аккаунт.",
       "es": "MAX Messenger desde la terminal: bots con la Bot API oficial y tu cuenta personal."
     },
-    "docsRef": "v0.28.0"
+    "docsRef": "v0.29.0"
   },
   {
     "name": "tg",

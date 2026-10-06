@@ -1,6 +1,7 @@
 ---
 title: "ChatGPT or Claude in a browser"
 ---
+
 **Status:** built and tested with a local client. The complete setup with ChatGPT and Claude through a real tunnel has not been tested yet. If a step does not work as described, [open an issue](https://github.com/leemour/max-cli/issues).
 
 `max mcp` communicates with an AI app over a channel on your own computer. Browser-based ChatGPT and Claude cannot use it directly: their servers connect over the internet to an address you provide. `max mcp --http` serves the same tools over HTTP with its own login, and **[Tailscale Funnel](https://tailscale.com/kb/1223/funnel)** gives your computer a public HTTPS address such as `https://laptop.tail1234.ts.net`. You do not need to buy a domain.
@@ -18,7 +19,7 @@ ChatGPT / Claude ──интернет──▶ Tailscale Funnel ──▶ max 
 
 | App | Plans | Documentation |
 |---|---|---|
-| ChatGPT | Plus, Pro, Business, Enterprise, Education, in developer mode | [Developer mode](https://developers.openai.com/api/docs/guides/developer-mode) |
+| ChatGPT | Plus, Pro, Business, Enterprise, Education, in developer mode | [Developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server) |
 | Claude | Any plan; free accounts allow one custom connector | [Custom connectors](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |
 | Gemini | Only adults in the US with a personal Google account; unavailable in Russia and Europe | [Connected apps](https://support.google.com/gemini/answer/17209137?hl=en) |
 
@@ -46,7 +47,7 @@ max mcp --http --public-url https://<устройство>.<сеть>.ts.net
 
 The address for the app is your Funnel address ending in `/mcp`: `https://<устройство>.<сеть>.ts.net/mcp`.
 
-- **ChatGPT:** enable developer mode and add a connector with this address, following [Developer mode](https://developers.openai.com/api/docs/guides/developer-mode).
+- **ChatGPT:** enable developer mode and add a connector with this address, following [Developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server).
 - **Claude:** add a custom connector using this address, following [Custom connectors](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp). In the connector settings, you can also set each tool to always allowed, needs approval or blocked.
 
 The app opens the `max` login page. Check the line that says where the login goes — it must be `chatgpt.com` or `claude.ai` — and enter the code from the terminal. The app stays connected for 30 days and renews the login itself; after that, it asks for a new code.

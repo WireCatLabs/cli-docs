@@ -47,8 +47,8 @@ Mantenimiento:
 
 - `max store check`: integridad, índices de búsqueda, espacio y chats desactualizados.
 - `max store backup <файл>`: copia del archivo en uso, sin sobrescribir. `max store restore <файл>` restaura y conserva el anterior al lado. Con `--encrypt`, la copia se comprime y se cifra con contraseña; consulta [Contraseña](#пароль).
-- `max store reindex`: reconstruye índices sin perder mensajes.
-- `max store migrate`: actualiza el esquema a esta versión de `max`.
+- `max store reindex`: reconstruye índices, diccionario de errores y raíces sin perder mensajes.
+- `max store migrate`: actualiza el esquema a esta versión de `max` y completa índices de mensajes antiguos.
 
 ### Exportar a un archivo
 
@@ -88,44 +88,11 @@ max store export --all --to ~/max-всё
 
 ## Buscar
 
-`max messages search` lee solo el archivo local. Por defecto usa el perfil estricto Lucene: palabras, frases, grupos lógicos, campos, fechas y regex limitadas. La [guía de búsqueda](./search.md) explica la sintaxis y la migración. Para conservar filtros y correcciones anteriores, usa `--language legacy`.
-
-```sh
-max messages search 'invoice kind:private' --json
-max messages search 'invoice date:[2026-01-01 TO 2026-02-01}' --timezone Europe/Madrid --json
-max messages search 'preset:secret kind:saved' --json
-```
-
-Una respuesta vacía significa «no encontrado en el archivo elegido». JSON informa de su cobertura y completitud; `lastSyncedAt` es la carga más antigua entre los chats cubiertos, o `null` si al menos un chat aún no se ha cargado. `--source` elige el servicio y las cuentas, `--newest` ordena por fecha y `--context` incluye mensajes cercanos. `--regex` sigue siendo un modo JS independiente.
+`max messages search` encuentra mensajes guardados por palabras, remitente, chat, fecha, archivos, enlaces y tus etiquetas. Por defecto solo lee el archivo; `--sync-first` primero descarga un conjunto limitado de mensajes nuevos de MAX sin marcarlos como leídos. La [guía de búsqueda de mensajes](./search.md) también explica las búsquedas guardadas y los recuentos. Un resultado vacío significa «no está en este archivo»: descarga primero el chat.
 
 ## Conversaciones dentro de un grupo
 
-`max conversations` separa conversaciones simultáneas mediante respuestas, menciones y orden de mensajes, sin consultar MAX ni usar IA:
-
-```sh
-max conversations build --chat Друзья                  # найти; ещё раз — после того, как скачано больше
-max conversations list --chat Друзья --since-time 7d
-max conversations show 91                              # один разговор, от старых к новым
-max messages links Друзья <id>                         # почему это сообщение там, где оно есть
-```
-
-Nada se construye antes de `build`; repetirlo reemplaza el resultado. Descarga antes con `max store fetch`.
-
-Tu agente puede mejorar los enlaces. `max conversations batches status --chat <чат>` muestra mensajes y lotes; `batches next` entrega el siguiente; `conversations links
-add --batch <id>` lee la respuesta JSON del agente desde stdin. `conversations links clear` elimina sus respuestas. `max` no llama a un modelo.
-
-### Búsqueda por significado
-
-Una vez construidas, `max` puede buscar conversaciones por tema. `max conversations embed` calcula vectores localmente; `max conversations search` encuentra las más cercanas a tu pregunta:
-
-```sh
-max models text download e5-small                       # один раз: 135 МБ, общая папка с tg
-max conversations embed --chat Друзья                   # продолжает с места, где остановился
-max conversations search "где снять квартиру" --chat Друзья
-max conversations search "аренда квартиры"              # во всех чатах, для которых посчитано
-```
-
-Nada sale del ordenador. `max conversations embed status --chat <чат>` muestra lo pendiente; `embed clear --chat <чат>` borra vectores. Un servicio externo puede calcularlos con tu clave: `max models text key set openai`, después `--provider openai` en `embed` y `search`. Antes de enviar, `embed` muestra fragmentos, tokens y precio y pide aprobación (`--yes` en scripts).
+En un grupo activo hay varias conversaciones a la vez. `max conversations` agrupa mensajes guardados y encuentra debates por su tema en este ordenador: consulta la [búsqueda por temas](./topic-search.md).
 
 ## Mensajes en directo: `max serve` y `max watch`
 
@@ -166,3 +133,9 @@ max watch --events --jsonl  # ещё правки, удаления и реак�
 - [Uso de la cuenta personal](./usage.md): leer y enviar.
 - [Diagnóstico](./diagnostics.md): qué hizo la orden.
 - [Referencia](./commands.md): opciones de `store`, `serve`, `watch`.
+
+## Mantenimiento del archivo
+
+`max store migrate` completa los índices; `max store reindex` los reconstruye. `store info` y `store check` indican si los índices de palabras y raíces están listos. Tener un índice de raíces no cambia por sí solo la coincidencia estricta. `config set searchStemmers.cyrillic` acepta `russian` o `none`; `config set searchStemmers.latin` acepta `spanish`, `english` o `none`. `none` desactiva las raíces para ese alfabeto. Después ejecuta `store reindex`. Este ajuste es común a todos los perfiles y ambos mensajeros: no admite `--defaults`, `--personal` ni `--bot`, y no puede cambiarse con `MAX_PROFILE_LOCK`.
+
+`max store repair --dry-run --json` muestra las reparaciones de estructura y revierte los cambios; `store repair` las aplica sin borrar datos. Una tabla incompatible se conserva como copia; la respuesta enumera las filas y columnas que no pudieron trasladarse. Conserva la copia hasta comprobar el resultado. `store repair` indica los nombres de las copias (`copies` en `--json`); `store copies delete <точное имя>` borra solo la indicada. Detén los procesos que usen el archivo antes de reparar su estructura.

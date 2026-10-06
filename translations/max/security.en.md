@@ -40,11 +40,11 @@ The `max bot` token is stored separately under the same `max-cli` service, in `b
 | Recipient allowlist, if enabled | `~/.local/share/max-cli/profiles/<профиль>.recipients.json` | `0600` |
 | Group moderation rules, after the first `chats rules set` | `~/.local/share/max-cli/profiles/<профиль>.moderation.json` | `0600` |
 | Bot: seen chats, send log, recipient list, `watch` position | `~/.local/share/max-cli/bots/…` | Directory `0700`, files `0600` |
-| Shared message store for personal accounts, bots and `tg`, including text and voice transcripts | `~/.local/share/cli-messaging/messages.db` | Directory `0700`, file `0600` |
+| Shared message store for personal accounts, bots and `tg`, including text, voice transcripts, downloaded attachment paths and their extracted text | `~/.local/share/cli-messaging/messages.db` | Directory `0700`, file `0600` |
 | Background `max serve` socket and log | `~/.local/share/max-cli/profiles/<профиль>.sock`, `.serve.log` | `0600` |
 | Old profile cache; no longer opened | `~/.cache/max-cli/<профиль>.db` and its `-wal`, `-shm` files | Directory `0700`, files `0600` |
 | Conversation export, **only through `max store export --output`** | Your chosen destination | `0600` |
-| Downloaded attachments, **only through `max messages download`** | Current directory or `--output` | `0600` |
+| Downloaded attachments, `max messages download` or `max attachments extract --download --output-dir` | Current directory or `--output` | `0600` |
 | Problem report, **only through `max doctor report create`** | Current directory or `--output` | `0600` |
 | Speech models, **only after `max models audio download`** | `~/.cache/cli-common/models/audio/…` | Directory `0700`, files `0600` |
 
@@ -98,7 +98,7 @@ Names, titles and text from other people cannot control the terminal: control an
 
 ## What other processes can see
 
-Tokens are not passed as arguments, but message text is, and it is visible in `ps` and in shell history ([shared page](https://wirecat.dev/ru/docs/security)). Other users of the machine cannot see `max` files or the background server socket: directories use `0700`, files `0600`.
+Tokens are not passed as arguments, but message text is, and it is visible in `ps` and in shell history ([shared page](https://wirecat.dev/ru/docs/security)). State files and the background server socket are protected by `0600` file permissions and `0700` directories. Other files may have different permissions, such as `0644` for configuration. Check permissions separately when moving files or redirecting output.
 
 ## Network destinations
 
@@ -108,6 +108,9 @@ Tokens are not passed as arguments, but message text is, and it is visible in `p
 | MAX file servers, using addresses provided by MAX | `messages send --file`, `messages download` |
 | `https://web.max.ru` in a temporary Chromium profile | `session start qr-chrome`, `session start sms`, `setup --method qr-chrome|sms` |
 | Hugging Face and GitHub, for speech-model files | Only `max models audio download`; voice audio stays on this computer |
+| Hugging Face, for text-model files | Only `max models text download`; the local model does not send messages |
+| Configured external embedding service | `conversations embed` sends conversation text after consent; `conversations search`, including MCP, sends the question when an external service is selected |
+| Configured OpenAI-compatible service or Anthropic | `conversations build --analyze --chat` sends bounded batches after consent for the account, chat and service |
 | `https://platform-api2.max.ru`, official Bot API, token in `Authorization` | Only `max bot` commands |
 | npm registry, for the latest version number | `max upgrade`, and once a day when a person runs a terminal command; disabled by `updateCheck: false` |
 
@@ -130,7 +133,7 @@ The same notice appears once on stderr when a profile first logs in through `max
 
 ## Personal use
 
-Storing other people's conversations is acceptable while you do it for yourself, with your own account: Russian personal-data law (152-FZ, article 1, part 2, paragraph 1) does not apply to processing for personal and household purposes. The same about GDPR is on the [shared page](https://wirecat.dev/ru/docs/security). Sharing a `max store export` file with someone else goes beyond personal use, and exported photo links work without login.
+The tool stores other people’s conversations and contacts on your computer, including message text. Access to the local database gives access to this data. Sharing a `max store export` file also shares the conversation contents; photo links in it may open without login. Before sharing, check the contents and intended recipients. This page describes how the tool works and does not certify legal compliance for your use case.
 
 A problem report (`max doctor report create`) is attached to a **public** GitHub issue. It contains no message text, names or phone numbers; chat and message IDs are replaced with labels. Open and inspect the file before submitting it.
 
@@ -144,7 +147,7 @@ Each login adds a device to the MAX app's session list. You can end it there.
 
 ## Unofficial protocol
 
-MAX publishes no personal-account API. Protocol knowledge comes from observed live connections or others' reverse engineering; each operation records its source ([`protocol.md`](https://github.com/leemour/max-cli/blob/v0.28.0/docs/dev/protocol.md), “Where it came from” column).
+MAX publishes no personal-account API. Protocol knowledge comes from observed live connections or others' reverse engineering; each operation records its source ([`protocol.md`](https://github.com/leemour/max-cli/blob/v0.29.0/docs/dev/protocol.md), “Where it came from” column).
 
 **This can stop working without warning.** If it does, the command reports it on stderr instead of quietly returning an empty list.
 
