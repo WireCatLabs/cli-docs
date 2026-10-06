@@ -70,7 +70,15 @@ ChatGPT и Claude в браузере не могут запускать про�
 
    Команда напечатает ссылку. Откройте её и подтвердите: Tailscale сам выпустит сертификат HTTPS и добавит разрешение Funnel в настройки ([руководство по Funnel](https://tailscale.com/kb/1223/funnel)). Имя компьютера и имя сети попадут в открытые журналы сертификатов — [почему](https://tailscale.com/kb/1153/enabling-https). Затем терминал покажет ваш адрес, `https://<компьютер>.<сеть>.ts.net`; нажмите Ctrl-C. Это делается один раз.
 
-   Если удобнее через веб-консоль: [настройки DNS](https://console.tailscale.com/admin/dns) → **HTTPS Certificates** → **Enable HTTPS**, затем [Access controls](https://console.tailscale.com/admin/acls) → **Funnel** → **Add Funnel to policy** → **Save**.
+   Если команда не показала ссылку, разрешите Funnel вручную: [настройки DNS](https://console.tailscale.com/admin/dns) → **HTTPS Certificates** → **Enable HTTPS**; затем **Access controls → JSON editor**, вставьте сразу после первой `{` и нажмите **Save**:
+
+   ```json
+   "nodeAttrs": [
+     { "target": ["autogroup:member"], "attr": ["funnel"] },
+   ],
+   ```
+
+   Если в файле уже есть `"nodeAttrs"`, добавьте в его список только строку `{ … }`.
 
 ## Шаг 2 · Запустить
 

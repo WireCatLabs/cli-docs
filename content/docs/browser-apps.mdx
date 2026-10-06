@@ -70,7 +70,15 @@ More detail: [Security](./security.md).
 
    It prints a link. Open it and approve: Tailscale then creates the HTTPS certificate and adds the Funnel permission to your settings by itself ([Funnel guide](https://tailscale.com/kb/1223/funnel)). Your computer's name and network name appear in public certificate logs — [why](https://tailscale.com/kb/1153/enabling-https). The terminal then shows your address, `https://<computer>.<network>.ts.net`; press Ctrl-C. You do this only once.
 
-   If you prefer the web console: [DNS settings](https://console.tailscale.com/admin/dns) → **HTTPS Certificates** → **Enable HTTPS**, then [Access controls](https://console.tailscale.com/admin/acls) → **Funnel** → **Add Funnel to policy** → **Save**.
+   If the command shows no link, allow Funnel by hand: [DNS settings](https://console.tailscale.com/admin/dns) → **HTTPS Certificates** → **Enable HTTPS**; then **Access controls → JSON editor**, add this right after the first `{`, and **Save**:
+
+   ```json
+   "nodeAttrs": [
+     { "target": ["autogroup:member"], "attr": ["funnel"] },
+   ],
+   ```
+
+   If the file already has `"nodeAttrs"`, add only the `{ … }` line inside its list.
 
 ## Step 2 · Start it
 
