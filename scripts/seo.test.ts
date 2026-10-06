@@ -14,6 +14,20 @@ import {
 import { tools } from "../lib/shared"
 
 describe("localized SEO", () => {
+  it("uses the stable English root for home alternates without changing subpages", () => {
+    expect(pageAlternates("en", "")).toEqual({
+      canonical: "https://wirecat.dev/",
+      languages: {
+        en: "https://wirecat.dev/",
+        ru: "https://wirecat.dev/ru",
+        es: "https://wirecat.dev/es",
+        "x-default": "https://wirecat.dev/",
+      },
+    })
+    expect(pageMetadata({ lang: "en", title: "Home", description: "Home" }).openGraph).toMatchObject({
+      url: "https://wirecat.dev/",
+    })
+  })
   it.each(seoLocales)("aligns search, social and canonical fields in %s", (lang) => {
     const words = seoWords(lang)
     const metadata = pageMetadata({

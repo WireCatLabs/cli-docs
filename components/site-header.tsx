@@ -7,6 +7,7 @@ import { useEffect, useRef } from "react"
 import { useThemeToggle } from "@/components/use-theme-toggle"
 import { WirecatLogo } from "@/components/wirecat-logo"
 import { aboutCopy } from "@/lib/about"
+import { homePath, localizedPath } from "@/lib/site-routes"
 
 const labels = {
   en: { language: "Language", navigation: "Site navigation" },
@@ -86,7 +87,7 @@ export function SiteHeader({ lang }: { lang: string }) {
         <Link
           prefetch={false}
           className="wirecat-brand site-brand"
-          href={`/${lang}`}
+          href={homePath(lang)}
           aria-label={`WireCat · ${words.back}`}
         >
           <WirecatLogo />
@@ -110,7 +111,7 @@ export function SiteHeader({ lang }: { lang: string }) {
               ].map(([locale, label]) => (
                 <a
                   key={locale}
-                  href={pathname.replace(/^\/(en|ru|es)(?=\/|$)/, `/${locale}`)}
+                  href={localizedPath(pathname, locale)}
                   lang={locale}
                   aria-current={locale === lang ? "page" : undefined}
                 >

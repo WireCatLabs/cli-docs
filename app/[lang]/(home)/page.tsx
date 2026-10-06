@@ -10,6 +10,15 @@ type Props = { params: Promise<{ lang: string }> }
 
 export default async function HomePage({ params }: Props) {
   const { lang } = await params
+  if (lang === "en")
+    return (
+      <>
+        <meta httpEquiv="refresh" content="0;url=/" />
+        <p>
+          <a href="/">WireCat — English homepage</a>
+        </p>
+      </>
+    )
   const content = lang === "ru" ? ru : lang === "es" ? es : en
   const words = seoWords(lang)
   return (

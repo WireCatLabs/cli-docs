@@ -134,7 +134,11 @@ export function FontSwitcher({ lang }: { lang: string }) {
         event.target instanceof Element ? event.target.closest<HTMLAnchorElement>(".lang-menu a[href]") : null
       if (!link || !root.contains(link)) return
       const destination = new URL(link.href)
-      if (destination.origin !== location.origin || !/^\/(en|ru|es)(?:\/|$)/u.test(destination.pathname)) return
+      if (
+        destination.origin !== location.origin ||
+        !(destination.pathname === "/" || /^\/(en|ru|es)(?:\/|$)/u.test(destination.pathname))
+      )
+        return
       const current = new URL(location.href)
       destination.search = current.search
       destination.searchParams.set("fonts", "1")

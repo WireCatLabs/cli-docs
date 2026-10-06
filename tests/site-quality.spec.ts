@@ -15,11 +15,15 @@ for (const lang of ["en", "ru", "es"]) {
     })
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1000 })
-      for (const path of [`/${lang}`, `/${lang}/docs/tg/installation`, `/${lang}/docs/max/commands`]) {
+      for (const path of [
+        lang === "en" ? "/" : `/${lang}`,
+        `/${lang}/docs/tg/installation`,
+        `/${lang}/docs/max/commands`,
+      ]) {
         const response = await page.goto(path)
         expect(response?.status(), path).toBe(200)
         await page.evaluate(() => document.fonts.ready)
-        if (path === `/${lang}`) await expect(page.locator(".sp-input")).toBeEditable()
+        if (path === (lang === "en" ? "/" : `/${lang}`)) await expect(page.locator(".sp-input")).toBeEditable()
         await expect(page.locator("h1")).toHaveCount(1)
         await expect(page.locator("main")).toHaveCount(1)
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), path).toBe(true)
@@ -66,7 +70,7 @@ test("documentation search loads on demand and mobile navigation dismisses with 
 })
 
 test("agent resources stay native documents when opened from the landing", async ({ page }) => {
-  await page.goto("/en")
+  await page.goto("/")
   await page.locator('footer a[href="/llms.txt"]').click()
   await expect(page).toHaveURL(/\/llms\.txt$/)
   await expect(page.locator("body")).toContainText("# CLI tools")
@@ -80,7 +84,7 @@ test("dark landing text retains contrast at desktop and mobile widths", async ({
   for (const lang of ["en", "ru", "es"]) {
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1000 })
-      await page.goto(`/${lang}`)
+      await page.goto(lang === "en" ? "/" : `/${lang}`)
       await expect(page.locator(".sp-input")).toBeEditable()
       const result = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa", "wcag21aa", "best-practice"])
@@ -92,7 +96,7 @@ test("dark landing text retains contrast at desktop and mobile widths", async ({
 
 test("documentation preloads its licensed font without adding it to landing downloads", async ({ request }) => {
   for (const lang of ["en", "ru", "es"]) {
-    const home = await (await request.get(`/${lang}`)).text()
+    const home = await (await request.get(lang === "en" ? "/" : `/${lang}`)).text()
     expect(home).not.toMatch(/<link[^>]+href="\/fonts\/docs-inter\/[^>]+as="font"/)
     const docs = await (await request.get(`/${lang}/docs/tg/commands`)).text()
     expect(docs).toMatch(/<link[^>]+href="\/fonts\/docs-inter\/inter-latin\.woff2"[^>]+as="font"/)
@@ -105,7 +109,7 @@ test("documentation preloads its licensed font without adding it to landing down
 
 test("landing fonts are discoverable in initial HTML and match each locale", async ({ request }) => {
   for (const lang of ["en", "ru", "es"]) {
-    const html = await (await request.get(`/${lang}`)).text()
+    const html = await (await request.get(lang === "en" ? "/" : `/${lang}`)).text()
     const preloads = [...html.matchAll(/<link[^>]+href="([^"]+)"[^>]+as="font"[^>]*>/g)].map((match) => match[1])
     expect(preloads).toContain("/fonts/gNMKW3F-SZuj7xmf-HY.woff2")
     expect(preloads).toContain("/fonts/heading-lab/unbounded-latin.woff2")
@@ -155,7 +159,7 @@ for (const lang of ["en", "ru", "es"]) {
     await page.addInitScript(() =>
       Object.defineProperty(navigator, "clipboard", { value: { writeText: async () => {} } }),
     )
-    await page.goto(`/${lang}`)
+    await page.goto(lang === "en" ? "/" : `/${lang}`)
     await page.locator(".hero .agent-connect summary").click()
     const button = page.locator(".hero .connect-choice").first()
     await button.click()
@@ -181,6 +185,17 @@ for (const lang of ["en", "ru", "es"]) {
 }
 
 test("the public project contact opts out of an unnecessary edge email decoder", async ({ request }) => {
-  const html = await (await request.get("/en")).text()
+  const html = await (await request.get("/")).text()
   expect(html).toContain('<!--email_off--><a href="mailto:hello@wirecat.dev">hello@wirecat.dev</a><!--/email_off-->')
 })
+
+for (const lang of ["en", "ru", "es"]) {
+  test(`${lang}: session recovery links remain distinguishable inside callouts`, async ({ page }) => {
+    for (const colorScheme of ["light", "dark"] as const) {
+      await page.emulateMedia({ colorScheme })
+      await page.goto(`/${lang}/docs/tg/sessions`)
+      await expect(page.locator("html")).toHaveClass(colorScheme === "dark" ? /dark/ : /light/)
+      expect((await new AxeBuilder({ page }).withRules(["link-in-text-block"]).analyze()).violations).toEqual([])
+    }
+  })
+}

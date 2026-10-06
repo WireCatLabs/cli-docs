@@ -1017,5 +1017,79 @@
         }
       ]
     }
+  },
+  {
+    "tool": "tg",
+    "slug": "remote",
+    "reason": "Release validation October 6: old OpenAI developer-mode URL returns 404; current official custom MCP setup guide returns 200. Preserve reviewed source/translation fingerprints and fix delivered links through exact errata.",
+    "replacements": {
+      "en": [
+        {
+          "before": "| ChatGPT | Plus, Pro, Business, Enterprise, Education — in developer mode | [developer mode](https://developers.openai.com/api/docs/guides/developer-mode) |",
+          "after": "| ChatGPT | Plus, Pro, Business, Enterprise, Education — in developer mode | [developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server) |"
+        },
+        {
+          "before": "  [developer mode](https://developers.openai.com/api/docs/guides/developer-mode) describes. By default",
+          "after": "  [developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server) describes. By default"
+        }
+      ],
+      "ru": [
+        {
+          "before": "| ChatGPT | Plus, Pro, Business, Enterprise, Education — в режиме разработчика | [Режим разработчика](https://developers.openai.com/api/docs/guides/developer-mode) |",
+          "after": "| ChatGPT | Plus, Pro, Business, Enterprise, Education — в режиме разработчика | [Режим разработчика](https://developers.openai.com/api/docs/guides/custom-mcp-server) |"
+        },
+        {
+          "before": "- **ChatGPT:** включите режим разработчика и добавьте коннектор с этим адресом по [инструкции](https://developers.openai.com/api/docs/guides/developer-mode). По умолчанию ChatGPT просит подтверждать каждое изменение.",
+          "after": "- **ChatGPT:** включите режим разработчика и добавьте коннектор с этим адресом по [инструкции](https://developers.openai.com/api/docs/guides/custom-mcp-server). По умолчанию ChatGPT просит подтверждать каждое изменение."
+        }
+      ],
+      "es": [
+        {
+          "before": "| ChatGPT | Plus, Pro, Business, Enterprise, Education: en modo desarrollador | [modo desarrollador](https://developers.openai.com/api/docs/guides/developer-mode) |",
+          "after": "| ChatGPT | Plus, Pro, Business, Enterprise, Education: en modo desarrollador | [modo desarrollador](https://developers.openai.com/api/docs/guides/custom-mcp-server) |"
+        },
+        {
+          "before": "- **ChatGPT:** activa el modo desarrollador y añade un conector con esa dirección, siguiendo la [guía del modo desarrollador](https://developers.openai.com/api/docs/guides/developer-mode). Por defecto, ChatGPT solicita confirmación para cada acción que escribe.",
+          "after": "- **ChatGPT:** activa el modo desarrollador y añade un conector con esa dirección, siguiendo la [guía del modo desarrollador](https://developers.openai.com/api/docs/guides/custom-mcp-server). Por defecto, ChatGPT solicita confirmación para cada acción que escribe."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "remote",
+    "reason": "Release validation October 6: old OpenAI developer-mode URL returns 404; current official custom MCP setup guide returns 200. Preserve reviewed source/translation fingerprints and fix delivered links through exact errata.",
+    "replacements": {
+      "en": [
+        {
+          "before": "| ChatGPT | Plus, Pro, Business, Enterprise, Education, in developer mode | [Developer mode](https://developers.openai.com/api/docs/guides/developer-mode) |",
+          "after": "| ChatGPT | Plus, Pro, Business, Enterprise, Education, in developer mode | [Developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server) |"
+        },
+        {
+          "before": "- **ChatGPT:** enable developer mode and add a connector with this address, following [Developer mode](https://developers.openai.com/api/docs/guides/developer-mode). By default, ChatGPT asks for confirmation before every action that changes something.",
+          "after": "- **ChatGPT:** enable developer mode and add a connector with this address, following [Developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server). By default, ChatGPT asks for confirmation before every action that changes something."
+        }
+      ],
+      "ru": [
+        {
+          "before": "| ChatGPT | Plus, Pro, Business, Enterprise, Education — в режиме разработчика | [developer mode](https://developers.openai.com/api/docs/guides/developer-mode) |",
+          "after": "| ChatGPT | Plus, Pro, Business, Enterprise, Education — в режиме разработчика | [developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server) |"
+        },
+        {
+          "before": "  [developer mode](https://developers.openai.com/api/docs/guides/developer-mode). По умолчанию",
+          "after": "  [developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server). По умолчанию"
+        }
+      ],
+      "es": [
+        {
+          "before": "| ChatGPT | Plus, Pro, Business, Enterprise, Education, en modo de desarrollador | [Modo de desarrollador](https://developers.openai.com/api/docs/guides/developer-mode) |",
+          "after": "| ChatGPT | Plus, Pro, Business, Enterprise, Education, en modo de desarrollador | [Modo de desarrollador](https://developers.openai.com/api/docs/guides/custom-mcp-server) |"
+        },
+        {
+          "before": "- **ChatGPT:** activa el modo de desarrollador y añade el conector siguiendo la [documentación](https://developers.openai.com/api/docs/guides/developer-mode). Por defecto, ChatGPT pide confirmar cada acción que modifica algo.",
+          "after": "- **ChatGPT:** activa el modo de desarrollador y añade el conector siguiendo la [documentación](https://developers.openai.com/api/docs/guides/custom-mcp-server). Por defecto, ChatGPT pide confirmar cada acción que modifica algo."
+        }
+      ]
+    }
   }
 ]

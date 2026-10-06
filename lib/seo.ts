@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import siteConfig from "../site.config.json"
 import seoCopy from "./seo-copy.json"
 import { appName, siteUrl, tools } from "./shared"
+import { homePath } from "./site-routes"
 
 export type SiteLocale = keyof typeof seoCopy
 export const seoLocales = Object.keys(seoCopy) as SiteLocale[]
@@ -10,9 +11,11 @@ export const seoWords = (lang: string) => seoCopy[localeOf(lang)]
 export const absoluteUrl = (pathname: string) => new URL(pathname, siteUrl).href
 
 export function pageAlternates(lang: string, suffix: string, available = seoLocales) {
-  const languages = Object.fromEntries(available.map((locale) => [locale, absoluteUrl(`/${locale}${suffix}`)]))
+  const languages = Object.fromEntries(
+    available.map((locale) => [locale, absoluteUrl(suffix ? `/${locale}${suffix}` : homePath(locale))]),
+  )
   return {
-    canonical: absoluteUrl(`/${lang}${suffix}`),
+    canonical: absoluteUrl(suffix ? `/${lang}${suffix}` : homePath(lang)),
     languages: { ...languages, "x-default": languages.en ?? languages[available[0]] },
   }
 }
@@ -46,7 +49,7 @@ export function pageMetadata({
       siteName: appName,
       title,
       description,
-      url: absoluteUrl(`/${lang}${suffix}`),
+      url: absoluteUrl(suffix ? `/${lang}${suffix}` : homePath(lang)),
       type: article ? "article" : "website",
       locale: { en: "en_US", ru: "ru_RU", es: "es_ES" }[localeOf(lang)],
       alternateLocale: available

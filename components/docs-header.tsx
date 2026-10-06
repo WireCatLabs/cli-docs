@@ -12,6 +12,7 @@ import { type ComponentProps, useEffect } from "react"
 import { DocsSearchTrigger } from "@/components/docs-search-trigger"
 import { WirecatLogo } from "@/components/wirecat-logo"
 import { isGettingStarted, messengerHref } from "@/lib/docs-navigation"
+import { homePath } from "@/lib/site-routes"
 import { wordsFor } from "@/lib/words"
 
 const pageUrls = (nodes: readonly Node[]): string[] =>
@@ -80,7 +81,7 @@ export function DocsHeader(props: ComponentProps<"header">) {
       id="nd-subnav"
       className="sticky top-0 z-40 flex h-14 items-center gap-2 border-b bg-fd-background/95 px-3 backdrop-blur-sm [grid-area:header] sm:gap-4 sm:px-5"
     >
-      <Link href={`/${lang}`} className="wirecat-brand shrink-0">
+      <Link href={homePath(lang)} className="wirecat-brand shrink-0">
         <WirecatLogo />
       </Link>
       <MessengerSwitch lang={lang} pages={pageUrls(tree.children).map((url) => url.slice(`/${lang}/docs/`.length))} />

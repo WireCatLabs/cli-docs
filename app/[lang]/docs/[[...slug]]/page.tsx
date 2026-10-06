@@ -25,6 +25,7 @@ import {
   seoWords,
 } from "@/lib/seo"
 import { appName, getPageMarkdownUrl, toolOf } from "@/lib/shared"
+import { homePath } from "@/lib/site-routes"
 import { source } from "@/lib/source"
 import { wordsFor } from "@/lib/words"
 import "@/lib/docs-usability.css"
@@ -41,7 +42,7 @@ export default async function Page(props: Props) {
   const tool = toolOf(page.slugs)
   const description = documentationDescription(lang, page.slugs, page.data.description)
   const breadcrumbs = [
-    { name: seoWords(lang).homeLabel, pathname: `/${lang}` },
+    { name: seoWords(lang).homeLabel, pathname: homePath(lang) },
     { name: seoWords(lang).docsLabel, pathname: `/${lang}/docs` },
     ...(tool ? [{ name: tool.name === "tg" ? "Telegram" : "MAX", pathname: `/${lang}/docs/${tool.name}` }] : []),
     ...(page.slugs.length > (tool ? 1 : 0) ? [{ name: page.data.title, pathname: page.url }] : []),
