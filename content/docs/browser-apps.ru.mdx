@@ -61,10 +61,16 @@ ChatGPT и Claude в браузере не могут запускать про�
      ```
 
      Вторая команда печатает ссылку: откройте её и войдите. Третья позволяет запускать `tailscale funnel` без `sudo`.
-3. **Включите три переключателя** в [консоли Tailscale](https://login.tailscale.com/admin), один раз:
-   1. **DNS → MagicDNS → Enable.** Компьютер получит имя вида `laptop.tail1234.ts.net`.
-   2. **DNS → HTTPS Certificates → Enable HTTPS.** Адрес получит сертификат. Имя компьютера и имя сети после этого попадают в открытые журналы сертификатов — [почему](https://tailscale.com/kb/1153/enabling-https).
-   3. **Access controls → Funnel → Add Funnel to policy → Save.** Это разрешает Funnel на ваших устройствах — [руководство по Funnel](https://tailscale.com/kb/1223/funnel).
+3. **Включите MagicDNS**, если он ещё не включён: [настройки DNS](https://console.tailscale.com/admin/dns) → **MagicDNS** → **Enable**. Компьютер получит имя вида `laptop.tail1234.ts.net`.
+4. **Один раз разрешите Funnel.** В терминале запустите Funnel отдельно:
+
+   ```sh
+   tailscale funnel 8765
+   ```
+
+   Команда напечатает ссылку. Откройте её и подтвердите: Tailscale сам выпустит сертификат HTTPS и добавит разрешение Funnel в настройки ([руководство по Funnel](https://tailscale.com/kb/1223/funnel)). Имя компьютера и имя сети попадут в открытые журналы сертификатов — [почему](https://tailscale.com/kb/1153/enabling-https). Затем терминал покажет ваш адрес, `https://<компьютер>.<сеть>.ts.net`; нажмите Ctrl-C. Это делается один раз.
+
+   Если удобнее через веб-консоль: [настройки DNS](https://console.tailscale.com/admin/dns) → **HTTPS Certificates** → **Enable HTTPS**, затем [Access controls](https://console.tailscale.com/admin/acls) → **Funnel** → **Add Funnel to policy** → **Save**.
 
 ## Шаг 2 · Запустить
 

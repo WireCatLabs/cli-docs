@@ -61,10 +61,16 @@ More detail: [Security](./security.md).
      ```
 
      The second command prints a link: open it and sign in. The third lets you run `tailscale funnel` without `sudo`.
-3. **Turn on three switches** in the [Tailscale admin console](https://login.tailscale.com/admin), once:
-   1. **DNS → MagicDNS → Enable.** Your computer gets a name like `laptop.tail1234.ts.net`.
-   2. **DNS → HTTPS Certificates → Enable HTTPS.** This gives the address a certificate. Your computer's name and network name then appear in public certificate logs — [why](https://tailscale.com/kb/1153/enabling-https).
-   3. **Access controls → Funnel → Add Funnel to policy → Save.** This allows Funnel on your devices — [Funnel guide](https://tailscale.com/kb/1223/funnel).
+3. **Turn on MagicDNS** if it is not on yet: [DNS settings](https://console.tailscale.com/admin/dns) → **MagicDNS** → **Enable**. Your computer gets a name like `laptop.tail1234.ts.net`.
+4. **Approve Funnel once.** In a terminal, run Funnel on its own:
+
+   ```sh
+   tailscale funnel 8765
+   ```
+
+   It prints a link. Open it and approve: Tailscale then creates the HTTPS certificate and adds the Funnel permission to your settings by itself ([Funnel guide](https://tailscale.com/kb/1223/funnel)). Your computer's name and network name appear in public certificate logs — [why](https://tailscale.com/kb/1153/enabling-https). The terminal then shows your address, `https://<computer>.<network>.ts.net`; press Ctrl-C. You do this only once.
+
+   If you prefer the web console: [DNS settings](https://console.tailscale.com/admin/dns) → **HTTPS Certificates** → **Enable HTTPS**, then [Access controls](https://console.tailscale.com/admin/acls) → **Funnel** → **Add Funnel to policy** → **Save**.
 
 ## Step 2 · Start it
 
