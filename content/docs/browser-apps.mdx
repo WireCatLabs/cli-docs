@@ -1,160 +1,199 @@
 ---
-title: ChatGPT and Claude in the browser
-description: Use your Telegram or MAX conversations from ChatGPT or Claude in a browser — no agent on your computer to talk to, just the chat you already use.
+title: ChatGPT, Codex and Claude in the browser
+description: Connect Telegram or MAX tools through an authenticated HTTPS tunnel, with setup for Windows, macOS and Linux.
 ---
 
-Ask ChatGPT or Claude about your Telegram or MAX conversations, right in the chat window you already use — in a browser, at work, on a laptop with nothing installed. "What did Anna say about the contract?", "Which questions in the team chat are still unanswered?", "Draft a reply to the landlord." The assistant reads the messages it needs, and asks you before it sends anything.
+Ask your browser assistant to search Telegram or MAX, summarise conversations or draft replies.
+Both `tg` and `max` provide HTTP MCP with OAuth; **Tailscale is a separate program** that gives
+that server a public HTTPS address. Install it on the computer running the messenger CLI.
+Your browser device needs no Tailscale installation.
 
-> **Needs `tg` 0.27.0 or `max` 0.28.0, or later.** Check with `tg --version` or `max --version`; `tg upgrade` and `max upgrade` update them.
-
-## What you get
-
-- **Your own assistant, your own messages.** ChatGPT or Claude can search your chats, summarise unread messages, gather context before a call and prepare replies — the same tasks as in [first tasks](./first-tasks.md), from the browser.
-- **Nothing sent without you.** Every change — a message, a reaction, a deletion — first shows you a form in the chat with exactly what will happen. You click to allow it, or nothing happens.
-- **No third-party service sees your messages.** The program runs on your own computer and talks to Telegram or MAX directly. ChatGPT or Claude receive only what they ask for in your conversation.
-- **Free, apart from your ChatGPT or Claude plan.** The tunnel we use, <DocTerm term="tailscale" lang="en" label="Tailscale" />, is free for personal use.
-
-## How it works
-
-ChatGPT and Claude in a browser cannot run programs on your computer. Instead, they call tools on the internet that you add as a <DocTerm term="connector" lang="en" label="connector" />. So we make the program on your computer reachable — safely, and only while you want it.
+**Test status:** the owner confirmed Telegram reading and sending in Claude web on 7 October 2026.
+OpenAI web, MAX in the browser and setup on each OS still need an end-to-end check.
+HTTP reading needs `tg` 0.27+ or `max` 0.28+. The sending commands below need `max` 0.30+
+or `tg` 0.30 (the next release). Until that TG version is published, use the tested build or
+omit `--http-confirmation permissions --permission messages.send=allow` for reading.
+Check your version before following these commands.
 
 <ArchitectureDiagram name="remote" lang="en" />
 
-1. **On your computer**, `tg` (Telegram) or `max` (MAX) runs in a special mode, `mcp --http`, which speaks the same <DocTerm term="mcp" lang="en" label="MCP" /> language the assistants use for tools.
-2. **A <DocTerm term="tunnel" lang="en" label="tunnel" />** — Tailscale Funnel — gives that one program a public https address, like `https://laptop.tail1234.ts.net`. Nothing else on your computer becomes reachable, and you do not need a domain or router settings.
-3. **In ChatGPT or Claude** you add that address as a connector. The first time, the app opens a login page from your computer, and you type a **one-time code** that only your terminal shows.
-4. **Then you just chat.** When the assistant needs messages, its servers call your computer through the tunnel; your computer asks Telegram or MAX and answers.
+## Before starting
 
-Your computer has to be on, with the program running. To use it from anywhere, run it on a small always-on server instead — see [the end of this page](#running-it-all-the-time).
+- Install and log into [Telegram or MAX](./installation.mdx) under your normal OS user.
+  Setup without a local agent is `tg setup --agent none` or `max setup --agent none`.
+- Install [Tailscale](https://tailscale.com/download) and sign in. Enable MagicDNS, HTTPS
+  certificates and [Funnel](https://tailscale.com/docs/features/tailscale-funnel) in your tailnet.
+  The first Funnel command can print a link to approve this configuration.
+- Keep the computer awake and both terminal windows open while using the connector.
+- Your app or workspace must support custom MCP servers. See the current
+  [OpenAI plugin guide](https://developers.openai.com/plugins/quickstart) or
+  [Claude connector guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
 
-## Is it safe?
+## Start the tunnel and messenger server
 
-- **Only you can log an app in.** Each login needs a code printed in your terminal. It works once, for 10 minutes; five wrong codes lock the login page until you restart.
-- **The login page tells you where it leads.** Before you type the code, check that it says the login goes to `claude.ai` or `chatgpt.com`.
-- **Changes always ask.** Over this connection, every write shows a form, whatever your settings. If an app cannot show such forms, it can only read.
-- **You can cut everyone off.** `tg mcp --revoke` ends every app's login at once. Logins also expire after 30 days unless the app keeps using them.
-- **A stolen login is limited.** Access keys last an hour and renew only through the app that logged in; the program keeps only their fingerprints, never the keys themselves.
-- **Your permission settings still apply.** A profile that may only read stays read-only; the [send guard](./security.md#the-send-guard) and its hourly limit work here too.
+Choose your operating system below. **The first code block goes in window 1; the second in
+window 2.** Copy the real HTTPS origin printed by Funnel when window 2 asks. Do not append
+`/mcp` here. Keep a public port such as `:8443` if Funnel prints one.
+The commands grant sending for this process; read the permission explanation below.
 
-More detail: [Security](./security.md).
+<PlatformSetupTabs>
 
-## What you need
+<Tab value="Windows">
 
-- **`tg` or `max` installed and logged in.** If not yet: [Installation](./installation.mdx).
-- **A ChatGPT or Claude plan that allows your own connectors:**
-  - **Claude:** every plan, including Free — [custom connectors](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
-  - **ChatGPT:** Plus, Pro, Business, Enterprise or Education, in developer mode — [developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server).
-- **A free Tailscale account** — you create it in step 1.
-- **About 15 minutes** the first time; afterwards, two commands.
+**Windows · PowerShell**
 
-## Step 1 · Set up Tailscale (once)
+Install the Windows Tailscale app and sign in through its tray menu. Open fresh PowerShell
+windows after installing Node.js, the CLI and Tailscale so they see the updated PATH.
+Use `.cmd` CLI shims to avoid PowerShell execution-policy errors; initial setup is
+`tg.cmd setup --agent none` or `max.cmd setup --agent none`.
 
-1. **Create an account** at [tailscale.com](https://tailscale.com/) — signing in with Google, Microsoft or GitHub is enough.
-2. **Install Tailscale on the computer that runs `tg` or `max`:**
-   - **macOS or Windows:** download the app from [tailscale.com/download](https://tailscale.com/download), open it and sign in. You will also use its `tailscale` command in the terminal — see [Tailscale's command-line guide](https://tailscale.com/kb/1080/cli).
-   - **Linux:** in a terminal:
+Run **window 1 as Administrator** for Funnel. `&` handles the space in the default installation
+path; adjust it if Tailscale is installed elsewhere. Run **window 2 as your normal user**,
+who logged into the messenger.
 
-     ```sh
-     curl -fsSL https://tailscale.com/install.sh | sh
-     sudo tailscale up
-     sudo tailscale set --operator=$USER
-     ```
-
-     The second command prints a link: open it and sign in. The third lets you run `tailscale funnel` without `sudo`.
-3. **Turn on MagicDNS** if it is not on yet: [DNS settings](https://console.tailscale.com/admin/dns) → **MagicDNS** → **Enable**. Your computer gets a name like `laptop.tail1234.ts.net`.
-4. **Approve Funnel once.** In a terminal, run Funnel on its own:
-
-   ```sh
-   tailscale funnel 8765
-   ```
-
-   It prints a link. Open it and approve: Tailscale then creates the HTTPS certificate and adds the Funnel permission to your settings by itself ([Funnel guide](https://tailscale.com/kb/1223/funnel)). Your computer's name and network name appear in public certificate logs — [why](https://tailscale.com/kb/1153/enabling-https). The terminal then shows your address, `https://<computer>.<network>.ts.net`; press Ctrl-C. You do this only once.
-
-   If the command shows no link, allow Funnel by hand: [DNS settings](https://console.tailscale.com/admin/dns) → **HTTPS Certificates** → **Enable HTTPS**; then **Access controls → JSON editor**, add this right after the first `{`, and **Save**:
-
-   ```json
-   "nodeAttrs": [
-     { "target": ["autogroup:member"], "attr": ["funnel"] },
-   ],
-   ```
-
-   If the file already has `"nodeAttrs"`, add only the `{ … }` line inside its list.
-
-## Step 2 · Start it
-
-You need two terminal windows; keep both open while you use the assistant.
-
-**First window — the tunnel:**
-
-```sh
-tailscale funnel 8765
+```powershell
+& "$env:ProgramFiles\Tailscale\tailscale.exe" funnel 8765
 ```
 
-It prints your public address, `https://<computer>.<network>.ts.net`. The very first time it may print a link to approve Funnel — open it.
-
-**Second window — the program,** with your address:
-
-```sh
-tg mcp --http --public-url https://<computer>.<network>.ts.net
+```powershell
+$mcpPublicUrl = Read-Host 'HTTPS origin from Funnel (no /mcp)'
+tg.cmd mcp --http --port 8765 --public-url $mcpPublicUrl --http-confirmation permissions --permission messages.send=allow
 ```
 
-For MAX, use `max` instead of `tg`. The program prints a **login code** such as `K7QP-M2XD`, and a new one after each login.
+For MAX, replace `tg.cmd` with `max.cmd` in window 2. Run both processes in native Windows.
+WSL has separate paths and loopback networking; do not mix its server with this Windows setup.
 
-## Step 3 · Add it to ChatGPT or Claude
+</Tab>
 
-The address to add is your Tailscale address with `/mcp` at the end: `https://<computer>.<network>.ts.net/mcp`.
+<Tab value="macOS">
 
-**Claude** ([guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp)):
+**macOS · Terminal (zsh or bash)**
 
-1. Open **Customize → Connectors**, click **+ Add**, then **Add custom connector**.
-2. Name it, for example `Telegram`, and paste the address. Keep sign-in on.
-3. Click **Add**, then connect: Claude opens the login page from your computer.
+Install the Tailscale app and sign in. Its [bundled CLI](https://tailscale.com/docs/reference/tailscale-cli?tab=macos)
+works even when `tailscale` is absent from PATH. Use two ordinary Terminal windows.
 
-**ChatGPT** ([guide](https://developers.openai.com/api/docs/guides/custom-mcp-server)):
+```sh
+TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8765
+```
 
-1. Open **Settings → Security and login** and turn on **Developer mode**.
-2. Create a developer-mode app for your MCP server with the address, as the guide shows.
-3. Connect it: ChatGPT opens the login page from your computer.
+```sh
+printf 'HTTPS origin from Funnel (no /mcp): '
+IFS= read -r mcpPublicUrl
+tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --http-confirmation permissions --permission messages.send=allow
+```
 
-**On the login page:** check the line that says where the login goes — it should be `claude.ai` or `chatgpt.com` — then type the code from the second terminal window and click **Allow**.
+For MAX, replace `tg` with `max` in window 2.
 
-## Step 4 · Try it
+</Tab>
 
-Start a new chat with the connector turned on, and ask:
+<Tab value="Linux">
+
+**Linux · Terminal (bash or zsh)**
+
+Install Tailscale using the [Linux instructions](https://tailscale.com/download/linux)
+and sign in with `sudo tailscale up`. Only the tunnel in window 1 needs `sudo`.
+Window 2 must run as your normal user, so it finds the session you set up.
+
+```sh
+sudo tailscale funnel 8765
+```
+
+```sh
+printf 'HTTPS origin from Funnel (no /mcp): '
+IFS= read -r mcpPublicUrl
+tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --http-confirmation permissions --permission messages.send=allow
+```
+
+For MAX, replace `tg` with `max` in window 2. Do not run the messenger server with `sudo`.
+
+</Tab>
+
+</PlatformSetupTabs>
+
+The server listens on `127.0.0.1:8765` and prints a one-time login code. A named profile goes
+before the command, for example `tg work mcp`; on Windows, `tg.cmd work mcp`.
+
+## Permissions and sending
+
+By default, **every HTTP write requires a server confirmation form**, even when saved
+permissions say `allow`. The app's tool approval is a separate prompt and cannot satisfy that
+server form. Apps without MCP elicitation cannot write in this default mode.
+
+The commands above opt into `--http-confirmation permissions`: effective `allow` executes
+without the server form, `ask` still needs it, and `deny` / `readonly` restrict access.
+`--permission messages.send=allow` enables sending only for the running server; it does not
+edit saved configuration. Recipient restrictions and hourly limits still apply.
+The app may ask before calling a tool, but if you set it to always allow sending, a new call
+may execute without another prompt. Ask for drafts explicitly when you want to review them.
+
+Repeat `--permission key=level` for other commands. A broad `messages=allow` override replaces
+saved message permissions, but built-in confirmation defaults remain: deletion needs its
+own `messages.delete=allow`. `--yes` does not bypass an HTTP confirmation form.
+See [Telegram permissions](./tg/configuration.md) or [MAX permissions](./max/configuration.md).
+MAX connects directly when runtime overrides are supplied; an existing `max serve` retains
+its saved profile permissions.
+
+## Add it to Codex / ChatGPT web or Claude
+
+Use the Funnel origin **with `/mcp` appended** as the connector URL. Each messenger gets its
+own connector. Choose OAuth, not a manually copied token.
+
+**Codex / ChatGPT web:** open **Plugins → + Add custom MCP server**, create a plugin, and
+enter the `/mcp` URL and OAuth. Choose dynamic client registration (DCR) when offered;
+the server advertises DCR and S256. Connect using the terminal code, install the plugin,
+then enable it in a Work chat or mention it with `@`.
+Local Codex `config.toml` configures the local client, not this web connection.
+Follow the [OpenAI instructions](https://developers.openai.com/plugins/quickstart) and
+[OAuth requirements](https://developers.openai.com/plugins/build/auth).
+
+**Claude:** add a custom connector in **Customize → Connectors → + Add**, paste the `/mcp` URL,
+and connect with the code printed by the messenger server.
+Follow [Claude's current instructions](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
+
+Before entering the code, check that the login page names your intended app as the destination.
+Codes work once for 10 minutes. Five wrong codes lock login until the server restarts.
+
+## Try reading first
+
+Start a chat with the plugin or connector enabled:
 
 ```text prompt
 List my five most recent Telegram chats with their unread counts.
 ```
 
-Then something useful:
+Then ask for a draft or, when you intend to send, name the recipient and exact text.
+[Writing requests](./prompting.md) explains how to ask for review before sending.
 
-- "Summarise what I missed in the team chat since yesterday."
-- "Find where we agreed on the delivery date with Max."
-- "Draft a reply to Anna's last message, and show it to me before sending."
+## Run both messengers
 
-When the assistant wants to send, a form appears with the chat and the exact text. Allow it, or decline and nothing is sent. [Writing requests](./prompting.md) has more on asking well.
+Use separate local ports and public HTTPS endpoints. For example: Telegram on local `8765`
+and public `443`; MAX on local `8766` and public `8443`. For the second tunnel, use your OS's
+Tailscale invocation with `funnel --https=8443 8766`, and add `--port 8766` to MAX.
+Copy its printed HTTPS origin including `:8443` into MAX's startup command and append `/mcp`
+for its connector. Funnel's permitted public ports are `443`, `8443` and `10000`
+([reference](https://tailscale.com/docs/reference/tailscale-cli/funnel)).
 
-## Stopping and revoking
+## Stop, restart or revoke
 
-- **Stop for now:** press Ctrl-C in both windows. Nothing stays reachable once the tunnel is closed.
-- **Next time:** run the same two commands again; the apps stay logged in for 30 days.
-- **End every app's access:**
+- **Stop:** Ctrl-C in both foreground windows stops that server and tunnel.
+- **Restart:** repeat the commands with the same profile and public URL. Browser logins survive
+  ordinary restarts; they expire after 30 days without renewal.
+- **Background Funnel:** if you used `--bg`, Ctrl-C does not disable it. Check
+  `tailscale funnel status`, then disable only that route with `tailscale funnel --https=443 off`
+  (or `8443` for the second server). Use your OS's executable path and elevation above.
+  Avoid `funnel reset` if you have another route: it clears them all.
+- **Revoke app access:** run `tg mcp --revoke` or `max mcp --revoke`; use `tg.cmd` / `max.cmd`
+  in PowerShell. Apps must log in again. Your messenger account stays logged in.
 
-  ```sh
-  tg mcp --revoke
-  ```
+## Troubleshooting
 
-  Each app then has to log in again with a new code. Also remove the connector in the app's settings if you no longer want it.
-
-## Something does not work
-
-- **The app cannot connect.** Open `https://<computer>.<network>.ts.net/.well-known/oauth-protected-resource/mcp` in a browser. A short JSON document means the tunnel works; otherwise the tunnel is not running, Funnel is not enabled (step 1), or the port numbers in the two windows differ.
-- **"Too many wrong codes."** Five wrong codes lock the login page until you restart the program. If you did not type them, someone found your address: restart, and consider renaming your computer in Tailscale.
-- **The code is refused as expired.** Codes last 10 minutes. Try again: the terminal then shows a new code.
-- **A change fails with "the owner did not confirm this".** The app did not show the form, or it was declined. Nothing was sent.
-- **It connects but shows no tools.** Run `tg chats list --limit 3` in a terminal; an expired login shows there, and [Login](./tg/sessions.md) explains how to renew it.
-- **The port is in use.** Pick another with `--port 8766`, and give the tunnel the same number: `tailscale funnel 8766`.
-
-## Running it all the time
-
-The steps above use your own computer, which must stay on. To reach your messages from anywhere — a phone, a borrowed laptop — run the same setup on a small always-on server: install `tg` or `max` there, log in (`tg setup --agent none`), install Tailscale, and start the two commands. Your side then needs only a browser.
+- **No connection:** append `/.well-known/oauth-protected-resource/mcp` to the origin and open
+  it in a browser. You should see JSON. Otherwise check Funnel, its approval and the local port.
+- **Reads work, sending fails after app approval:** check the two startup flags above and the
+  effective permission. `ask` still requires a server form; unsupported or declined forms send nothing.
+- **PowerShell refuses scripts:** use `tg.cmd` or `max.cmd`. If the command is missing, reopen
+  PowerShell and check the CLI installation; do not change machine-wide execution policy.
+- **No tools:** `tg mcp doctor` or `max mcp doctor` checks the local handshake, not the tunnel or
+  messenger login. An explicit `account show` command checks that account connection.
+- **Port occupied:** use another local port and point Funnel at the same number. For simultaneous
+  servers, also give each route a distinct public HTTPS port as above.

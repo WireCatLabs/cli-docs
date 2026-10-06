@@ -5,6 +5,38 @@ import { commandReferences, remarkDocUsability, resolveCommand } from "../lib/re
 import { preferredSearchTool, searchIntentPhrases } from "../lib/search-intents"
 
 describe("documentation command references", () => {
+  it("groups only complete remote setup sections, preserving each shell example and the next heading", () => {
+    const markdown =
+      "## Start\n\n### Windows (PowerShell)\n\n```powershell\ntg.cmd mcp\n```\n\n### macOS (Terminal)\n\n```sh\nmax mcp\n```\n\n### Linux (Terminal)\n\n```sh\nsudo tailscale funnel 8765\n```\n\n## Connect\n"
+    for (const locale of ["", ".ru", ".es"]) {
+      const tree = fromMarkdown(markdown)
+      remarkDocUsability()(tree, { path: `/project/content/docs/tg/remote${locale}.md` })
+      expect(tree.children[1]).toMatchObject({
+        data: { hName: "platform-setup-tabs" },
+        children: [
+          {
+            data: { hProperties: { value: "Windows" } },
+            children: [{ type: "paragraph" }, { lang: "powershell", value: "tg.cmd mcp" }],
+          },
+          {
+            data: { hProperties: { value: "macOS" } },
+            children: [{ type: "paragraph" }, { lang: "sh", value: "max mcp" }],
+          },
+          {
+            data: { hProperties: { value: "Linux" } },
+            children: [{ type: "paragraph" }, { lang: "sh", value: "sudo tailscale funnel 8765" }],
+          },
+        ],
+      })
+      expect(tree.children[2]).toMatchObject({ type: "heading", depth: 2 })
+    }
+    const incomplete = fromMarkdown(markdown.replace("### Linux (Terminal)", "### Other"))
+    remarkDocUsability()(incomplete, { path: "/project/content/docs/max/remote.md" })
+    expect(JSON.stringify(incomplete)).not.toContain("platform-setup-tabs")
+    const otherPage = fromMarkdown(markdown)
+    remarkDocUsability()(otherPage, { path: "/project/content/docs/max/groups.md" })
+    expect(JSON.stringify(otherPage)).not.toContain("platform-setup-tabs")
+  })
   it("marks native reference prose as English without including the next localized section or altering examples", () => {
     const tree = fromMarkdown(
       '### `tg bot api`\n\nLocalized notice.\n\n<div lang="en">\n\n#### `tg bot api get-me`\n\nNative description.\n\n```sh\ntg bot api get-me\n```\n\n</div>\n\n## Localized next section\n',

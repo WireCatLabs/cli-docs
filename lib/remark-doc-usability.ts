@@ -165,6 +165,34 @@ export function remarkDocUsability(indexes = loadCommandIndexes()) {
       })
     }
     visit(tree)
+    if (/\/remote(?:\.(?:ru|es))?\.md$/.test(path) && tree.children) {
+      const labels = ["Windows (PowerShell)", "macOS (Terminal)", "Linux (Terminal)"]
+      for (let i = 0; i < tree.children.length; i++) {
+        if (tree.children[i].type !== "heading" || textOf(tree.children[i]) !== labels[0]) continue
+        let end = i
+        const panels: Node[] = []
+        for (const [index, label] of labels.entries()) {
+          const heading = tree.children[end]
+          if (heading?.type !== "heading" || heading.depth !== 3 || textOf(heading) !== label) break
+          const next = sectionEnd(tree.children, end)
+          panels.push({
+            type: "blockquote",
+            data: { hName: "platform-setup-tab", hProperties: { value: ["Windows", "macOS", "Linux"][index] } },
+            children: [
+              { type: "paragraph", children: [{ type: "strong", children: heading.children }] },
+              ...tree.children.slice(end + 1, next),
+            ],
+          })
+          end = next
+        }
+        if (panels.length !== labels.length) continue
+        tree.children.splice(i, end - i, {
+          type: "blockquote",
+          data: { hName: "platform-setup-tabs" },
+          children: panels,
+        })
+      }
+    }
     if (!installation || !tree.children) return
     for (let i = 0; i < tree.children.length; i++) {
       const heading = tree.children[i]

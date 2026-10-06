@@ -85,7 +85,7 @@ export const markdownLinkProblems = (out: string, origin = "https://wirecat.dev"
     const visit = (node: MarkdownNode) => {
       if (
         node.type === "html" &&
-        /<(?:InstallationGuide|InstallationMessengerTabs|InstallationOsTabs|AgentInstallPrompt|DocTerm|NodeSetupPrompt)(?:\s|\/|>)/.test(
+        /<(?:InstallationGuide|InstallationMessengerTabs|InstallationOsTabs|PlatformSetupTabs|AgentInstallPrompt|DocTerm|NodeSetupPrompt)(?:\s|\/|>)/.test(
           node.value ?? "",
         )
       )
