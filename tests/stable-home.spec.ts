@@ -4,6 +4,7 @@ test("English root is complete and stable with JavaScript disabled and non-Engli
   browser,
 }) => {
   const context = await browser.newContext({ javaScriptEnabled: false, locale: "ru-RU" })
+  await context.route("https://mc.yandex.ru/**", (route) => route.abort())
   const page = await context.newPage()
   await page.goto("/")
   await expect(page).toHaveURL(/\/$/)
