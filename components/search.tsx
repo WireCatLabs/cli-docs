@@ -19,7 +19,7 @@ import { preferredSearchTool } from "@/lib/search-intents"
 export default function DefaultSearchDialog(props: SharedProps) {
   const { locale } = useI18n() // (optional) for i18n
   const pathname = usePathname()
-  const baseClient = staticClient({ locale })
+  const baseClient = staticClient({ locale, from: `/api/search/${locale ?? "en"}` })
   const { search, setSearch, query } = useDocsSearch({
     client: {
       deps: [...(baseClient.deps ?? []), pathname],

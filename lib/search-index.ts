@@ -2,9 +2,8 @@ import { createFromSource } from "fumadocs-core/search/server"
 import { searchIntentPhrases } from "@/lib/search-intents"
 import { source } from "@/lib/source"
 
-export const revalidate = false
-
-export const { staticGET: GET } = createFromSource(source, {
+/** The whole static search index, every language in one export. */
+export const searchIndex = createFromSource(source, {
   localeMap: { en: "english", ru: "russian", es: "spanish" },
   buildIndex: (page) => {
     const structuredData = page.data.structuredData
