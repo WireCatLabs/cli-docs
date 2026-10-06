@@ -170,9 +170,8 @@ for (const lang of ["en", "ru", "es"]) {
     await expect
       .poll(async () => (await events()).ga[guideIndex])
       .toEqual(["event", "setup_guide_open", { tool: "tg", locale: lang, surface: "hero" }])
-    await page.locator("details#tg details > summary").click()
-    const install = page.locator("#tg .docs-command").filter({ hasText: "npm install -g @leemour/tg-cli" })
-    await install.locator("button").click()
+    const install = page.locator('[role="tabpanel"] .docs-prompt').filter({ hasText: "@leemour/tg-cli" })
+    await install.locator("button.docs-copy").click()
     expect((await events()).ga[guideIndex + 1]).toEqual([
       "event",
       "installation_command_copy",

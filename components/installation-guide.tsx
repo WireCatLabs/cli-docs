@@ -49,7 +49,12 @@ export function AgentInstallPrompt({ tool }: { tool: "tg" | "max" }) {
   const pkg = tools.find((item) => item.name === tool)?.package ?? `@leemour/${tool}-cli`
   return (
     <div className="not-prose my-4">
-      <CopyText kind="prompt" lang={lang} text={wordsFor(lang).onboarding.prompt(tool, pkg)} />
+      <CopyText
+        kind="prompt"
+        lang={lang}
+        text={wordsFor(lang).onboarding.prompt(tool, pkg)}
+        tracking={{ tool, locale: lang, surface: "installation" }}
+      />
     </div>
   )
 }
