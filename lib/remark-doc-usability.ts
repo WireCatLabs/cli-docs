@@ -72,6 +72,25 @@ export function remarkDocUsability(indexes = loadCommandIndexes()) {
     const installation = /\/installation(?:\.(?:ru|es))?\.mdx?$/.test(path) && tool
     let tableNumber = 0
 
+    // Markdown drops raw HTML. Preserve the reviewed native-reference language boundary
+    // as a structured node so assistive technology reads its descriptions in English.
+    if (tree.children) {
+      for (let i = 0; i < tree.children.length; i++) {
+        const opening = tree.children[i]
+        if (opening.type !== "html" || opening.value?.trim() !== '<div lang="en">') continue
+        const end = tree.children.findIndex(
+          (node, j) => j > i && node.type === "html" && node.value?.trim() === "</div>",
+        )
+        if (end < 0) continue
+        const children = tree.children.slice(i + 1, end)
+        tree.children.splice(i, end - i + 1, {
+          type: "blockquote",
+          data: { hName: "div", hProperties: { lang: "en" } },
+          children,
+        })
+      }
+    }
+
     const visit = (node: Node) => {
       if (node.type === "table") {
         tableNumber++

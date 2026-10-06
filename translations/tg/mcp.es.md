@@ -1,7 +1,6 @@
 ---
 title: "Servidor MCP"
 ---
-
 `tg mcp` permite que un agente utilice un perfil mediante [MCP](https://modelcontextprotocol.io), por stdin y stdout, sin abrir puertos de red. El servidor viene incluido en `tg`; no tienes que instalar nada más.
 
 **Cuándo lo necesitas.** En Claude Code, Codex y otros agentes con terminal basta con `tg`: consume los mismos tokens y ofrece las mismas funciones. MCP sirve para clientes sin terminal, como Claude Desktop o el chat de Cursor, y para quienes quieren aprobar cada envío desde el cliente. ChatGPT o Claude **en el navegador** necesitan pasos adicionales: consulta [acceso desde el navegador](./remote.md).
@@ -127,7 +126,7 @@ El servidor muestra un formulario antes de los cambios con nivel `ask`; con `--c
 | Herramienta | Comando | Qué hace |
 |---|---|---|
 | `tg_status` | `tg doctor` | perfil del servidor, última cuenta conocida y herramientas de escritura habilitadas; nunca se conecta |
-| `tg_review` | `tg review`, `--since-time`, `--chat`, `--unanswered`, `--all` | todos los mensajes, incluidos los tuyos, en chats con actividad desde un momento (tres días por defecto); `complete` y `until` indican desde dónde continuar; `unanswered` filtra preguntas sin respuesta; `transcribe` transcribe voz y `model` elige el modelo |
+| `tg_review` | `tg review`, `--since-time`, `--chat`, `--unanswered`, `--all` | todos los mensajes, incluidos los del propietario, en cada chat que cambió desde un momento dado (tres días si no se indica); `unanswered` también considera transcripciones guardadas; `transcribe` reconoce nuevos audios antes de filtrar y `model` elige el modelo; los audios sin reconocer dejan `complete` en false, por lo que se conserva el límite anterior hasta completar la revisión |
 | `tg_inbox` | `tg inbox`, `--since-time`, `--all` | mensajes sin leer o todos los posteriores a un momento, en una llamada; incluye chats silenciados y archivados solo si te mencionan o con `all`; no marca como leído ni cambia el punto de `tg inbox --new`; `transcribe` transcribe voz y `model` elige el modelo |
 | `tg_account_show` | `tg account show` | cuenta conectada; solo muestra las cuatro últimas cifras del teléfono |
 | `tg_account_sessions` | `tg account sessions list` | todos los dispositivos y aplicaciones con sesión; solo lectura |
@@ -149,13 +148,14 @@ El servidor muestra un formulario antes de los cambios con nivel `ask`; con `--c
 | `tg_messages_photo` | `tg messages download` | foto de un mensaje como imagen para visualizar, hasta 512 KB; rechaza otros tipos e indica el comando `tg messages download` para guardarlos |
 | `tg_messages_transcribe` | `tg messages transcribe` | voz a texto mediante Telegram (Premium o prueba semanal), o un modelo local; `local: true` omite Telegram; `pending: true` significa que no terminó en un minuto; si falta el modelo, indica `tg models audio download` sin descargarlo automáticamente |
 | `tg_messages_search` | `tg messages search` | busca en lo guardado en este equipo; nunca consulta Telegram |
-| `tg_messages_send` | `tg messages send`, `--reply-to`, `--topic` | envía según `messages.send`; `reply_to` responde a un mensaje; `send_id` reintenta un envío de resultado desconocido; `silent`, `no_preview` y `md` equivalen a `--silent`, `--no-preview` y `--md`; `topic` selecciona un tema de foro; `at_time` programa un envío, nunca reintentado, y el formulario muestra la hora; `file` o `photo` adjunta un archivo local con el texto como leyenda (`as_file` conserva vídeos como archivo); `voice` envía Ogg Opus como nota de voz. Rechaza archivos ocultos, `~/.ssh`, carpetas de tg y la base de datos, sin excepción por MCP |
+| `tg_messages_link` | `tg messages link` | enlace permanente cuando se admite y localizador vinculado a la cuenta; solo lectura; el enlace no añade miembros al chat |
+| `tg_messages_send` | `tg messages send`, `--reply-to`, `--topic` | enviar con `messages.send`; `reply_to` responde a un mensaje del tema elegido; `send_id` repite un envío de resultado desconocido en el mismo chat y tema; `silent`, `no_preview` y `md` equivalen a `--silent`, `--no-preview` y `--md`; `topic` elige un tema del foro; `at_time` programa el envío, sin reintentos, y el formulario de confirmación muestra la hora; `file` o `photo` adjunta un archivo local y usa el texto como leyenda (`as_file` mantiene un vídeo como archivo), `voice` envía Ogg Opus como mensaje de voz; se rechazan archivos ocultos, `~/.ssh`, las carpetas de tg y su almacén de mensajes, sin posibilidad de eludirlo mediante MCP |
 | `tg_messages_edit` | `tg messages edit` | cambia el texto de un mensaje propio según `messages.edit`; `md` equivale a `--md`; repetir no produce nuevos cambios |
 | `tg_chats_mark_read` | `tg chats mark-read` | marca como leído hasta el mensaje más reciente o `until`, según `chats.mark-read`; la otra persona lo ve |
 | `tg_messages_delete` | `tg messages delete` | elimina hasta 10 mensajes de tu vista según `messages.delete`, con formulario por defecto; nunca para todos; cada mensaje cuenta para el límite por hora |
 | `tg_reactions_add`, `tg_reactions_remove` | `tg reactions add`, `remove` | tu reacción a un mensaje, según `reactions`; el formulario muestra el emoji |
 | `tg_polls_show` | `tg polls show` | encuesta e identificadores de respuestas; solo lectura |
-| `tg_polls_vote`, `tg_polls_close`, `tg_polls_create` | `tg polls vote`, `close`, `create` | votar por identificador (`polls.vote`), cerrar una encuesta propia (`polls.close`) o crearla (`polls.create`, con `send_id` para reintentos y `revote` para permitir cambiar el voto y `topic` para seleccionar un tema de foro) |
+| `tg_polls_vote`, `tg_polls_close`, `tg_polls_create` | `tg polls vote`, `close`, `create` | votar por identificador de respuesta (`polls.vote`), cerrar una encuesta propia (`polls.close`), crearla (`polls.create`, con `send_id` para reintentar en el mismo chat y tema, `revote` para permitir cambiar el voto y `topic` para elegir un tema abierto del foro) |
 | `tg_messages_forward` | `tg messages forward` | reenvía un mensaje a otro chat (`to`) según `messages.forward`; `send_id` reintenta un reenvío de resultado desconocido |
 | `tg_messages_pin`, `tg_messages_unpin` | `tg messages pin`, `unpin` | fija un mensaje sin aviso salvo `notify`, según `messages.pin` y `messages.unpin` |
 | `tg_chats_create`, `tg_chats_join`, `tg_chats_leave` | `tg chats create`, `join`, `leave` | crea grupo o canal con las personas indicadas, se une mediante enlace o sale; todos los cambios son visibles |
@@ -193,3 +193,7 @@ Los chats son recursos `tg://chat/<id>`; en Claude Code puedes mencionarlos con 
 La primera llamada se conecta a Telegram y las siguientes reutilizan la conexión. Se cierra tras 2 minutos sin llamadas y, en cualquier caso, 5 minutos después de abrirse, para que una sesión larga del agente no consulte datos desactualizados. La siguiente llamada vuelve a conectarse. Las llamadas se ejecutan de una en una, incluso si el cliente las envía juntas.
 
 El servidor termina cuando el cliente cierra stdin y cierra su conexión con Telegram.
+
+`tg_messages_link` devuelve `{ locator, url, access, reason }` sin el contenido del mensaje.
+Comparte la validación de cuenta y las restricciones de acceso de `messages link`;
+un enlace privado no añade miembros al chat.

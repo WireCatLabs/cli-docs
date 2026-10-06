@@ -251,3 +251,8 @@
   color: var(--color-fd-foreground);
   background: var(--color-fd-muted);
 }
+
+/* Accordions, tabs and disclosures are clickable. */
+.wirecat-docs :is(button:not(:disabled), summary, [role="tab"]) {
+  cursor: pointer;
+}

@@ -1,12 +1,16 @@
 ---
 title: "Bots de Telegram"
 ---
-
 `tg bot` utiliza un bot con la [Bot API oficial de Telegram](https://core.telegram.org/bots/api) y su token. Es independiente de tu cuenta: el bot tiene nombre, chats y token propios. `tg …` sin `bot` sigue actuando como tú ([uso](./usage.md)).
 
 Crea el bot con [@BotFather](https://t.me/BotFather) en Telegram para obtener el token.
 
 Consulta todos los comandos y opciones en la [referencia](./commands.md).
+
+**La CLI ofrece toda la API de bots de Telegram:** los 185 métodos de la versión fijada del esquema
+Bot API 10.3, incluidas operaciones sin un comando específico de uso frecuente.
+Usa `tg <bot> bot api <method>` con opciones para los campos de la API o cuerpos JSON; consulta
+[la guía de la API completa](#the-complete-bot-api). MCP ofrece herramientas separadas para las tareas habituales.
 
 ## Primer minuto
 
@@ -248,8 +252,44 @@ claude mcp add sales-bot -- tg sales bot mcp
 tg sales bot mcp config          # the entry for Claude Desktop, Cursor and others
 ```
 
-Se ofrecen herramientas según los permisos del perfil bajo `bot.`: chats vistos, mensajes, administradores, menú, registro y destinatarios. Salvo en solo lectura, permite enviar, editar, fijar, indicar «escribiendo», responder botones, eliminar y retirar miembros. `bot: readonly` conserva solo lectura. Eliminar muestra un formulario primero; `--allow-dangerous` lo omite y `--confirm-send` exige formulario en toda escritura. `tg_bot_status` indica perfil y herramientas de escritura activas.
+El agente accede a lo que permiten los permisos del perfil del bot, bajo `bot.`: los chats que
+el bot ha visto, mensajes, administradores, menú de comandos, registro y lista de destinatarios.
+Si el perfil permite escribir, puede enviar y editar mensajes como el bot, fijarlos, mostrar
+«escribiendo», responder a botones, borrar mensajes y expulsar miembros.
+`permissions.bot: readonly` bloquea la escritura salvo que una regla más específica la permita.
+Un borrado con nivel `ask` muestra un formulario de confirmación; un permiso explícito
+`permissions.bot.messages.delete: allow` o `--allow-dangerous` omite ese formulario salvo
+que esté activado `--confirm-send`. `--confirm-send` exige confirmar cada operación de escritura.
+`tg_bot_status` indica qué perfil usa el servidor y qué herramientas de escritura están disponibles.
 
 Cada escritura ejecuta el mismo comando que usarías tú: se aplican destinatarios y registro del bot. Cambiar token, webhooks, menú y destinatarios sigue correspondiéndote a ti.
 
 El `--md` del bot usa las mismas [reglas de formato de Telegram](./usage.md#sending) que los envíos personales. Las ediciones de texto y los pies de fotos y archivos usan el mismo formato.
+
+## La API de bots completa
+
+`tg <bot> bot api <method>` ofrece todos los métodos de la versión fijada del esquema Telegram Bot API.
+Los nombres de métodos y campos usan guiones: `get-me`, `get-chat --chat-id <id>`.
+`tg bot api --help` enumera los métodos; la ayuda de cada método enumera sus campos. Los resultados
+mantienen la estructura original de Telegram; los enteros fuera del rango seguro de JavaScript son cadenas.
+
+Pasa los campos como opciones separadas o como JSON con `--body <json>`, `--body -` (stdin)
+o `--body-file <path>`. `--body-file -` también lee stdin. Un campo no puede aparecer a la vez
+como opción y en el cuerpo JSON. El parámetro nativo `timeout` se pasa mediante `--poll-timeout`;
+el parámetro global `--timeout` limita la duración de todo el comando.
+
+Solo los campos de archivo declarados en el esquema interpretan `@path` como una carga local,
+incluidos los campos anidados de un array JSON `media`. El carácter `@` en texto normal se conserva.
+Los campos secretos, como `secret_token` y `provider_token`, se pasan por stdin o mediante un archivo
+JSON legible solo por su propietario; no tienen opciones de línea de comandos separadas.
+
+Las operaciones usan `permissions.bot.api.<method>`, la lista de destinatarios del bot y su registro de envíos.
+Las acciones destructivas piden confirmación por defecto. `get-updates` también la pide: su desplazamiento
+puede confirmar la recepción de actualizaciones u omitirlas. Una escritura sin respuesta nunca se reintenta
+automáticamente. Esta interfaz necesita conexión al servicio y rechaza `--offline`.
+
+`get-managed-bot-token` y `replace-managed-bot-token` requieren `--store-token <profile>`.
+El token recibido se guarda solo en el almacén de claves del sistema y nunca se muestra.
+El perfil de destino debe pertenecer al bot solicitado; su identidad se comprueba antes de renovar el token remoto.
+Tras guardarlo, stdout contiene solo el perfil, el identificador del bot y `stored: "keyring"`.
+Si el almacén de claves no está disponible, la operación se rechaza sin guardar el token en un archivo.

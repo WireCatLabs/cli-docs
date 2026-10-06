@@ -34,8 +34,10 @@ Status marks: ✅ live · 🟡 planned · ⚪ later.
 wirecat.dev/
 ├── /                              → the reader's language, from the browser                  ✅
 ├── /{lang}                        the landing page                                            ✅ → 🟡 redesign
-├── /{lang}/docs                   getting started: choose a messenger and a path              ✅
-├── /{lang}/docs/installation      install with an agent or terminal, log in, first check        ✅
+├── /{lang}/docs                   getting started: what it is, what it covers, two first steps ✅
+├── /{lang}/docs/installation      install and log in: OS and messenger tabs, three steps, access ✅
+├── /{lang}/docs/first-tasks       first read-only requests, then longer worked examples        ✅
+├── /{lang}/docs/features          feature tables per area, Telegram vs MAX                     🟡 en only
 ├── /{lang}/docs/agents            Codex, Cursor, Claude Code, Gemini CLI, Hermes                ✅
 ├── /{lang}/docs/architecture     packages, layers, adapters, store, patterns, limits         ✅
 ├── /{lang}/docs/security         shared security: store, send guard, MCP, reporting          ✅
@@ -183,7 +185,7 @@ security), Project (changelog, roadmap).
 ## Look
 
 - Documentation: Fumadocs' neutral theme, Inter (Latin and Cyrillic), light and dark with a switch.
-- The documentation sidebar is one persistent menu: five shared getting-started links with icons
+- The documentation sidebar is one persistent menu: six shared getting-started links with icons
   remain visible above the scrolling Telegram and MAX folders. Tool folders expand without becoming
   separate navigation roots. The title stays “Documentation”; only the active link and expanded
   guide change with the current page. `lib/docs-sidebar-tree.tsx` adapts the source tree without

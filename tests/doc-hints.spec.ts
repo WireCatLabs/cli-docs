@@ -4,21 +4,21 @@ import { wordsFor } from "../lib/words"
 const languages = ["en", "ru", "es"] as const
 const labels = {
   en: {
-    local: "More about: local agent",
+    local: "More about: AI agent",
     title: "Local agent",
     close: "Close explanation",
     screenshot: "See the my.telegram.org login screen",
     copy: "Copy: Prompt",
   },
   ru: {
-    local: "Подробнее: локального агента",
+    local: "Подробнее: ИИ-агента",
     title: "Локальный агент",
     close: "Закрыть пояснение",
     screenshot: "Посмотреть экран входа my.telegram.org",
     copy: "Скопировать: Промпт",
   },
   es: {
-    local: "Más sobre: agente local",
+    local: "Más sobre: agente de IA",
     title: "Agente local",
     close: "Cerrar explicación",
     screenshot: "Ver la pantalla de acceso de my.telegram.org",
@@ -80,19 +80,23 @@ for (const lang of languages) {
     page,
     context,
   }) => {
+    // Five pages and two Markdown routes, each compiled on first request by the dev server in CI.
+    test.slow()
     await context.grantPermissions(["clipboard-read", "clipboard-write"])
     await page.goto(`/${lang}/docs/installation#tg`)
     for (const tool of ["tg", "max"]) {
-      const details = page.locator(`details#${tool}`)
-      await expect(details.locator(".docs-prompt .docs-copy")).toBeEnabled()
-      if (!(await details.evaluate((element) => (element as HTMLDetailsElement).open)))
-        await details.locator(":scope > summary").click()
-      await expect(details.locator(".docs-prompt code")).toBeVisible()
-      const text = await details.locator(".docs-prompt code").innerText()
+      await page
+        .getByRole("tab", { name: tool === "tg" ? "Telegram" : "MAX", exact: true })
+        .first()
+        .click()
+      const prompt = page.locator(".docs-prompt").filter({ hasText: `npm install -g @leemour/${tool}-cli` })
+      await expect(prompt.locator(".docs-copy")).toBeEnabled()
+      await expect(prompt.locator("code")).toBeVisible()
+      const text = await prompt.locator("code").innerText()
       expect(text.split("\n")).toHaveLength(5)
       expect(text.length).toBeLessThan(550)
       expect(text).not.toMatch(/Windows|PATH|https:\/\/|--agent/u)
-      await details.getByRole("button", { name: labels[lang].copy, exact: true }).click()
+      await prompt.getByRole("button", { name: labels[lang].copy, exact: true }).click()
       expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(text)
     }
     await page.goto(`/${lang}/docs/tg/sessions`)
@@ -124,11 +128,11 @@ for (const lang of languages) {
     expect(intro).toContain("MAX")
     const definitions = [
       {
-        label: { en: "your AI assistant", ru: "своему ИИ-помощнику", es: "a tu asistente de IA" }[lang],
+        label: { en: "AI agent", ru: "ИИ-агенту", es: "agente de IA" }[lang],
         page: "agents",
       },
-      { label: "CLI", page: "installation" },
-      { label: { en: "Skill", ru: "Skill, или навык", es: "Skill" }[lang], page: "agents" },
+      { label: "cli", page: "installation" },
+      { label: "skill", page: "agents" },
       { label: "MCP", page: "mcp" },
     ]
     await expect(page.locator(".docs-term-trigger")).toHaveCount(4)

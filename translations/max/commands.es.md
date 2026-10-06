@@ -1,7 +1,6 @@
 ---
 title: "Referencia de comandos"
 ---
-
 <!-- Generado desde el árbol de comandos por scripts/commands.ts. No editar el original; `pnpm generate`. -->
 
 Referencia de todas las órdenes, opciones y códigos de salida. La página se **genera desde el
@@ -60,6 +59,8 @@ max session start [method]
 
 Olvida la sesión guardada de este perfil.
 
+**Solo modifica datos en este equipo.**
+
 ```sh
 max session end
 ```
@@ -81,7 +82,7 @@ max setup [options]
 
 ## `max account`
 
-La cuenta con la que ha iniciado sesión este perfil.
+la cuenta conectada
 
 ### `max account show`
 
@@ -181,7 +182,7 @@ max chats events <chat> [options]
 
 | Argumento || Descripción |
 |---|---|---|
-| `chat` | obligatorio | Identificador del chat o parte de su nombre. |
+| `chat` | obligatorio | Un chat: identificador o parte de su título. |
 
 | Opción | Descripción |
 |---|---|
@@ -244,7 +245,7 @@ max chats leave <chat>
 
 | Argumento || Descripción |
 |---|---|---|
-| `chat` | obligatorio | Identificador del chat o parte de su nombre. |
+| `chat` | obligatorio | Un chat: identificador o parte de su título. |
 
 ### `max chats create`
 
@@ -279,7 +280,7 @@ max chats members list <chat> [options]
 
 | Argumento || Descripción |
 |---|---|---|
-| `chat` | obligatorio | Identificador del chat o parte de su nombre. |
+| `chat` | obligatorio | Un chat: identificador o parte de su título. |
 
 | Opción | Descripción |
 |---|---|
@@ -371,7 +372,7 @@ max chats update <chat> [options]
 
 | Argumento || Descripción |
 |---|---|---|
-| `chat` | obligatorio | Identificador del chat o parte de su nombre. |
+| `chat` | obligatorio | Un chat: identificador o parte de su título. |
 
 | Opción | Descripción |
 |---|---|
@@ -397,7 +398,7 @@ max chats link show <chat>
 
 | Argumento || Descripción |
 |---|---|---|
-| `chat` | obligatorio | Identificador del chat o parte de su nombre. |
+| `chat` | obligatorio | Un chat: identificador o parte de su título. |
 
 #### `max chats link reset`
 
@@ -411,7 +412,7 @@ max chats link reset <chat>
 
 | Argumento || Descripción |
 |---|---|---|
-| `chat` | obligatorio | Identificador del chat o parte de su nombre. |
+| `chat` | obligatorio | Un chat: identificador o parte de su título. |
 
 ### `max chats folders`
 
@@ -491,7 +492,7 @@ max chats rules show <chat>
 
 | Argumento || Descripción |
 |---|---|---|
-| `chat` | obligatorio | Identificador del chat o parte de su nombre. |
+| `chat` | obligatorio | Un chat: identificador o parte de su título. |
 
 #### `max chats rules set`
 
@@ -536,7 +537,7 @@ max chats moderate <chat> [options]
 
 | Argumento || Descripción |
 |---|---|---|
-| `chat` | obligatorio | Identificador del chat o parte de su nombre. |
+| `chat` | obligatorio | Un chat: identificador o parte de su título. |
 
 | Opción | Descripción |
 |---|---|
@@ -773,22 +774,55 @@ max messages links <chat> <message>
 | `chat` | obligatorio | Un chat: identificador o parte de su título. |
 | `message` | obligatorio | identificador del mensaje. |
 
-### `max messages download`
+### `max messages link`
 
-Guarda fotos, archivos, vídeos y audios del mensaje en un directorio.
+un permalink cuando se admite y el locator asociado a la cuenta
 
 ```sh
-max messages download <chat> <message> [options]
+max messages link <chat> [message]
 ```
 
 | Argumento || Descripción |
 |---|---|---|
-| `chat` | obligatorio | Identificador del chat o parte de su nombre. |
-| `message` | obligatorio | identificador de mensaje. |
+| `chat` | obligatorio | Un chat por identificador o título parcial, o un localizador msg: sin identificador de mensaje después. |
+| `message` | opcional | identificador del mensaje. |
+
+### `max messages download`
+
+guardar fotos, archivos, vídeos y audios del mensaje en un directorio; con --all, los del chat completo
+
+```sh
+max messages download <chat> [message] [options]
+```
+
+| Argumento || Descripción |
+|---|---|---|
+| `chat` | obligatorio | Un chat: identificador o parte de su título. |
+| `message` | opcional | identificador del mensaje; se omite con --all. |
 
 | Opción | Descripción |
 |---|---|
-| `--output <dir>` | Directorio donde guardarlos. Predeterminado: `.`. |
+| `--output-dir <dir>` | dónde guardarlos; se crea si falta. Predeterminado: `.`. |
+| `--all` | todos los archivos del chat, del más reciente al más antiguo; repite para continuar. |
+| `--pause <duration>` | con --all, pausa entre páginas para respetar los límites del proveedor. Predeterminado: `5s`. |
+| `--output <dir>` | alias de compatibilidad de --output-dir. |
+
+### `max messages evidence`
+
+un paquete limitado de evidencias de mensajes guardados, del más reciente al más antiguo
+
+```sh
+max messages evidence <chat> [options]
+```
+
+| Argumento || Descripción |
+|---|---|---|
+| `chat` | obligatorio | Un chat: identificador o parte de su título. |
+
+| Opción | Descripción |
+|---|---|
+| `--limit <n>` | cuántos, 1–100. |
+| `--before-id <id>` | solo mensajes anteriores a este identificador. |
 
 ### `max messages transcribe`
 
@@ -839,7 +873,7 @@ max messages send <chat> [text] [options]
 
 ### `max messages scheduled`
 
-Mensajes programados del chat, desde el más próximo; cancélalos desde la aplicación MAX.
+mensajes programados del chat, empezando por el próximo; cancélalos desde la aplicación
 
 ```sh
 max messages scheduled <chat>
@@ -847,7 +881,7 @@ max messages scheduled <chat>
 
 | Argumento || Descripción |
 |---|---|---|
-| `chat` | obligatorio | Identificador del chat o parte de su nombre. |
+| `chat` | obligatorio | Un chat: identificador o parte de su título. |
 
 ### `max messages edit`
 
@@ -1689,6 +1723,20 @@ max config show [options]
 |---|---|
 | `--bot` | Configuración de los comandos `max bot` de este perfil, distinta de la cuenta personal. |
 
+### `max config migrate`
+
+convertir ajustes antiguos de acceso a permisos conservando los niveles efectivos
+
+**Solo modifica datos en este equipo.**
+
+```sh
+max config migrate [options]
+```
+
+| Opción | Descripción |
+|---|---|
+| `--dry-run` | mostrar la migración sin escribir el archivo. |
+
 ### `max config set`
 
 guarda un ajuste en la configuración
@@ -1701,7 +1749,7 @@ max config set <setting> <value> [options]
 
 | Argumento || Descripción |
 |---|---|---|
-| `setting` | obligatorio | Uno de: limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, sendsPerHour, senderColors, serve, mcpTools, readOtherBots, updateCheck, skillHint, transcribeModel, defaultProfile. |
+| `setting` | obligatorio | uno de: limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, senderColors, serve, mcpTools, readOtherBots, updateCheck, skillHint, transcribeModel, defaultProfile. |
 | `value` | obligatorio | número, true o false; para allow, lista como send,reaction. |
 
 | Opción | Descripción |
@@ -1722,7 +1770,7 @@ max config unset <setting> [options]
 
 | Argumento || Descripción |
 |---|---|---|
-| `setting` | obligatorio | Uno de: limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, sendsPerHour, senderColors, serve, mcpTools, readOtherBots, updateCheck, skillHint, transcribeModel, defaultProfile. |
+| `setting` | obligatorio | uno de: limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, senderColors, serve, mcpTools, readOtherBots, updateCheck, skillHint, transcribeModel, defaultProfile. |
 
 | Opción | Descripción |
 |---|---|
@@ -1829,11 +1877,15 @@ max skill install [options]
 
 ## `max commands`
 
-comandos, opciones y códigos de salida en JSON, para agentes en lugar de --help
+comandos, opciones y códigos de salida en JSON; consulta una ruta de comando por llamada
 
 ```sh
-max commands
+max commands [path]
 ```
+
+| Argumento || Descripción |
+|---|---|---|
+| `path` | opcional | una ruta de comando, por ejemplo: messages search; consulta otros grupos por separado. |
 
 ## `max upgrade`
 
@@ -1869,11 +1921,12 @@ max mcp [options]
 
 | Opción | Descripción |
 |---|---|
-| `--allow-send` | Ofrece la herramienta de envío; sin ella el servidor solo permite leer. |
+| `--allow-dangerous` | omitir la confirmación de messages.delete con nivel ask. |
+| `--allow-send` | obsoleto: usa permissions.messages.send en la configuración; no otorga acceso. |
 | `--confirm-send` | Muestra primero al propietario un formulario del servidor para cada escritura ofrecida: envíos, ediciones, reacciones y mcpTools. |
-| `--allow-mark-read` | Ofrece la herramienta que marca un chat como leído; la otra persona lo ve. |
-| `--allow-delete` | Ofrece la herramienta que elimina mensajes solo para ti; no se puede deshacer. |
-| `--allow-moderate` | Permite que max_chats_check aplique las reglas del grupo, incluida la eliminación de mensajes ajenos o participantes cuando las reglas lo permiten. |
+| `--allow-mark-read` | obsoleto: usa permissions.chats.mark-read en la configuración; no otorga acceso. |
+| `--allow-delete` | obsoleto: usa permissions.messages.delete en la configuración; no otorga acceso. |
+| `--allow-moderate` | obsoleto: usa permissions.chats.moderate y las reglas del grupo; no otorga acceso. |
 
 ### `max mcp config`
 
@@ -1885,11 +1938,12 @@ max mcp config [options]
 
 | Opción | Descripción |
 |---|---|
-| `--allow-send` | Ofrece la herramienta de envío; sin ella el servidor solo permite leer. |
+| `--allow-dangerous` | omitir la confirmación de messages.delete con nivel ask. |
+| `--allow-send` | obsoleto: usa permissions.messages.send en la configuración; no otorga acceso. |
 | `--confirm-send` | Muestra primero al propietario un formulario del servidor para cada escritura ofrecida: envíos, ediciones, reacciones y mcpTools. |
-| `--allow-mark-read` | Ofrece la herramienta que marca un chat como leído; la otra persona lo ve. |
-| `--allow-delete` | Ofrece la herramienta que elimina mensajes solo para ti; no se puede deshacer. |
-| `--allow-moderate` | Permite que max_chats_check aplique las reglas del grupo, incluida la eliminación de mensajes ajenos o participantes cuando las reglas lo permiten. |
+| `--allow-mark-read` | obsoleto: usa permissions.chats.mark-read en la configuración; no otorga acceso. |
+| `--allow-delete` | obsoleto: usa permissions.messages.delete en la configuración; no otorga acceso. |
+| `--allow-moderate` | obsoleto: usa permissions.chats.moderate y las reglas del grupo; no otorga acceso. |
 
 ### `max mcp setup`
 
@@ -1908,11 +1962,12 @@ max mcp setup <client> [options]
 | Opción | Descripción |
 |---|---|
 | `--allow-writes` | Reconoce que este perfil ofrece herramientas de escritura. |
-| `--allow-send` | Ofrece la herramienta de envío; sin ella el servidor solo permite leer. |
+| `--allow-dangerous` | omitir la confirmación de messages.delete con nivel ask. |
+| `--allow-send` | obsoleto: usa permissions.messages.send en la configuración; no otorga acceso. |
 | `--confirm-send` | Muestra primero al propietario un formulario del servidor para cada escritura ofrecida: envíos, ediciones, reacciones y mcpTools. |
-| `--allow-mark-read` | Ofrece la herramienta que marca un chat como leído; la otra persona lo ve. |
-| `--allow-delete` | Ofrece la herramienta que elimina mensajes solo para ti; no se puede deshacer. |
-| `--allow-moderate` | Permite que max_chats_check aplique las reglas del grupo, incluida la eliminación de mensajes ajenos o participantes cuando las reglas lo permiten. |
+| `--allow-mark-read` | obsoleto: usa permissions.chats.mark-read en la configuración; no otorga acceso. |
+| `--allow-delete` | obsoleto: usa permissions.messages.delete en la configuración; no otorga acceso. |
+| `--allow-moderate` | obsoleto: usa permissions.chats.moderate y las reglas del grupo; no otorga acceso. |
 
 ### `max mcp doctor`
 
@@ -1924,11 +1979,12 @@ max mcp doctor [options]
 
 | Opción | Descripción |
 |---|---|
-| `--allow-send` | Ofrece la herramienta de envío; sin ella el servidor solo permite leer. |
+| `--allow-dangerous` | omitir la confirmación de messages.delete con nivel ask. |
+| `--allow-send` | obsoleto: usa permissions.messages.send en la configuración; no otorga acceso. |
 | `--confirm-send` | Muestra primero al propietario un formulario del servidor para cada escritura ofrecida: envíos, ediciones, reacciones y mcpTools. |
-| `--allow-mark-read` | Ofrece la herramienta que marca un chat como leído; la otra persona lo ve. |
-| `--allow-delete` | Ofrece la herramienta que elimina mensajes solo para ti; no se puede deshacer. |
-| `--allow-moderate` | Permite que max_chats_check aplique las reglas del grupo, incluida la eliminación de mensajes ajenos o participantes cuando las reglas lo permiten. |
+| `--allow-mark-read` | obsoleto: usa permissions.chats.mark-read en la configuración; no otorga acceso. |
+| `--allow-delete` | obsoleto: usa permissions.messages.delete en la configuración; no otorga acceso. |
+| `--allow-moderate` | obsoleto: usa permissions.chats.moderate y las reglas del grupo; no otorga acceso. |
 
 ## `max bot`
 
@@ -2722,13 +2778,17 @@ Elimina un comentario de una publicación.
 **Modifica datos en MAX.**
 
 ```sh
-max bot comments delete <message> <comment>
+max bot comments delete <message> <comment> [options]
 ```
 
 | Argumento || Descripción |
 |---|---|---|
 | `message` | obligatorio ||
 | `comment` | obligatorio ||
+
+| Opción | Descripción |
+|---|---|
+| `--allow-dangerous` | omitir la confirmación de bot.messages.delete con nivel ask. |
 
 ### `max bot uploads`
 
@@ -3105,6 +3165,7 @@ max bot api delete-message [options]
 | Opción | Descripción |
 |---|---|
 | `--message-id <value>` | Identificador del mensaje que eliminar. |
+| `--allow-dangerous` | omitir la confirmación de bot.messages.delete con nivel ask. |
 
 #### `max bot api get-message-by-id`
 
@@ -3182,6 +3243,7 @@ max bot api delete-comment [options]
 |---|---|
 | `--message-id <value>` | Identificador (`mid`) del mensaje comentado. |
 | `--comment-id <value>` | Identificador del comentario que eliminar. |
+| `--allow-dangerous` | omitir la confirmación de bot.messages.delete con nivel ask. |
 
 #### `max bot api get-comment-by-id`
 

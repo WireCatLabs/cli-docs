@@ -1,12 +1,13 @@
 ---
 title: "Bots de MAX"
 ---
-
 `max bot` usa el [Bot API oficial de MAX](https://dev.max.ru/docs-api) con el token del bot. Es independiente de tu cuenta personal: tiene nombre, chats y token propios. `max …` sin `bot` utiliza tu cuenta personal ([Guía de uso](./usage.md)).
 
 Crea el bot en [business.max.ru](https://business.max.ru/self). MAX solo permite bots a organizaciones verificadas, empresarios individuales y autónomos registrados; todos pasan moderación.
 
 Consulta la [Referencia](./commands.md) para todas las opciones.
+
+**Está disponible toda la Bot API de MAX**, incluidos métodos fuera de los comandos habituales de mensajes y chats: `max <бот> bot api <операция>`. Los parámetros se pasan como opciones y el cuerpo como JSON; la ayuda de cada método enumera los campos admitidos. Es la interfaz nativa completa del CLI; MCP ofrece herramientas separadas para tareas habituales.
 
 ## Primer minuto
 
@@ -117,6 +118,8 @@ max sales bot chats leave "Команда продаж"    # вернуть бо
 ### Miembros y administradores
 
 El bot necesita ser administrador con permiso para cada acción.
+
+La incorporación de miembros con `bot chats members add` se comprobó el 3 de octubre de 2026: un bot administrador añadió a un miembro ausente y la cuenta personal confirmó el resultado. La [documentación de MAX](https://dev.max.ru/docs-api) declara este método eliminado desde el 30 de septiembre, pero el servidor sigue ejecutándolo en el grupo comprobado. El comando se conserva; el servidor MAX decide si el método está disponible.
 
 Primero permite añadirlo a grupos. MAX lo impide por defecto, tanto desde la aplicación como con `max chats members add` (`participants.filter.out`). Actívalo en [business.max.ru](https://business.max.ru/self): bot → **⋮ → Ajustes → Privacidad** ([Documentación MAX](https://dev.max.ru/docs/chatbots/bots-create/manage)). Añádelo y conviértelo en administrador en la aplicación. Las comprobaciones necesitan lectura; sin ella no recibe mensajes del grupo. También puedes darla con `max chats admins add "Поход" <номер бота> --can read,members,delete`.
 
@@ -264,8 +267,8 @@ max sales bot webhooks delete https://bot.example.ru/max
 
 El bot respeta los ajustes del perfil:
 
-- `readOnly`: solo leer.
-- `allow`: `send`, `edit`, `delete`, `pin`, `groups` para miembros/ajustes, `profile` para menú, `read` para actualizaciones. Acciones sin permiso propio, como webhooks, se prohíben si hay lista.
+- `permissions` define niveles para las claves `bot.*`; `readonly` permite solo leer;
+- `allow` permite únicamente las acciones nombradas: enviar `send`, editar `edit`, eliminar `delete`, fijar `pin`, miembros y ajustes del chat `groups`, comandos del bot `profile` y recibir actualizaciones `read`. Una acción sin palabra propia, como los webhooks, queda prohibida cuando se establece `allow`.
 
 Cada bot tiene su lista:
 
@@ -297,7 +300,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Ruta y consulta se pasan como opciones, cuerpo JSON en `--body`, `--body -` o `--body-file`. `--body-file -` también lee stdin. El parámetro nativo `timeout` se llama `--poll-timeout`; la opción global `--timeout` limita el comando completo. La opción compartida `--store-token <profile>` no está disponible para los métodos MAX actuales: todos la rechazan antes de ejecutar la operación. Se valida antes de enviar; errores indican campo y tipo esperado sin exponer valor. Consulta [Cobertura API](https://github.com/leemour/max-cli/blob/v0.25.0/docs/dev/bot-api-coverage.md).
+Ruta y consulta se pasan como opciones, cuerpo JSON en `--body`, `--body -` o `--body-file`. `--body-file -` también lee stdin. El parámetro nativo `timeout` se llama `--poll-timeout`; la opción global `--timeout` limita el comando completo. La opción compartida `--store-token <profile>` no está disponible para los métodos MAX actuales: todos la rechazan antes de ejecutar la operación. Se valida antes de enviar; errores indican campo y tipo esperado sin exponer valor. Consulta [Cobertura API](https://github.com/leemour/max-cli/blob/v0.27.0/docs/dev/bot-api-coverage.md).
 
 ## Scripts y agentes
 
@@ -331,14 +334,14 @@ max sales bot mcp config          # запись для Claude Desktop, Cursor �
 
 El perfil determina acceso a detalles, chats, mensajes, búsquedas, personas, miembros, administradores, comentarios, menú, registro y destinatarios. Si permite escribir, también envíos, ediciones, fijados, escritura en curso, comentarios, respuestas a botones, borrados, miembros y moderación (`max_bot_chats_moderate`). `max_bot_status` indica perfil, fuente del token, dueño y herramientas de escritura.
 
-- `readOnly: true`: solo leer.
-- `allow`: solo acciones indicadas; `"allow": ["send"]` permite envíos y comentarios, no editar ni borrar.
-- Borrar mensajes o comentarios muestra un formulario; `--allow-dangerous` al iniciar elimina esa confirmación.
-- Las acciones que las reglas exigen confirmar se muestran en un formulario conjunto.
-- `--confirm-send`: cada escritura requiere tu formulario.
+- `permissions.bot: readonly` limita al agente a leer salvo que existan permisos más específicos;
+- para permitir solo envíos y comentarios, establece `permissions.bot: readonly` y después `permissions.bot.messages.send: allow`; comprueba que no haya otros permisos más específicos;
+- eliminar un mensaje o comentario tiene nivel `ask` por defecto: el agente muestra un formulario; un `allow` explícito para `permissions.bot.messages.delete`, o iniciar el servidor con `--allow-dangerous`, elimina ese formulario salvo que esté activado `--confirm-send`;
+- las acciones que las reglas del chat exigen confirmar se muestran en un solo formulario;
+- `--confirm-send` muestra un formulario antes de cada escritura.
 
 `--allow-send`, `--allow-delete`, `--allow-moderate` ya no otorgan permisos: se aceptan con aviso.
 
-Cada escritura aplica comandos, destinatarios, `readOnly`, `allow` y registro. El agente no accede al token ni webhooks; solo lee destinatarios, menú y administradores. Tampoco puede salir de chats, enviar archivos ni usar `bot api`.
+Cada escritura ejecuta el mismo comando que escribirías tú y comprueba la lista de destinatarios del bot, `permissions` y el registro. El agente no puede acceder al token ni a los webhooks. Puede leer la lista de destinatarios, el menú de comandos y los administradores, pero no cambiarlos; tampoco puede salir del chat, enviar archivos ni usar `bot api`.
 
 Con `--md`, el bot usa las reglas MAX: `__жирный__`, `++подчёркнутый++`, `^^выделенный^^`, enlaces, código, encabezados y citas. El conversor genera HTML seguro con texto y direcciones escapados; es una representación interna, y el argumento --md sigue siendo Markdown.

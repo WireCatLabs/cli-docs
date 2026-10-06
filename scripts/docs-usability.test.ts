@@ -5,6 +5,19 @@ import { commandReferences, remarkDocUsability, resolveCommand } from "../lib/re
 import { preferredSearchTool, searchIntentPhrases } from "../lib/search-intents"
 
 describe("documentation command references", () => {
+  it("marks native reference prose as English without including the next localized section or altering examples", () => {
+    const tree = fromMarkdown(
+      '### `tg bot api`\n\nLocalized notice.\n\n<div lang="en">\n\n#### `tg bot api get-me`\n\nNative description.\n\n```sh\ntg bot api get-me\n```\n\n</div>\n\n## Localized next section\n',
+    )
+    remarkDocUsability()(tree, { path: "/project/content/docs/tg/commands.ru.md" })
+    expect(tree.children[2]).toMatchObject({
+      data: { hName: "div", hProperties: { lang: "en" } },
+      children: [{ type: "heading", depth: 4 }, { type: "paragraph" }, { type: "code", value: "tg bot api get-me" }],
+    })
+    expect(tree.children[3]).toMatchObject({ type: "heading", depth: 2 })
+    expect(JSON.stringify(tree.children[2])).not.toContain("Localized next section")
+  })
+
   it("labels explicit prompts without treating output examples as requests or changing their copyable text", () => {
     const tree = fromMarkdown(
       "```text prompt\nUse tg cli.\nKeep line breaks.\n```\n\n```text\nLogged in as a user.\n```",

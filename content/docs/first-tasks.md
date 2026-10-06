@@ -1,39 +1,60 @@
 ---
 title: "First tasks"
-description: "Find a past decision, prepare for a meeting and draft replies with your agent."
+description: "Your first requests to your agent after login, then longer examples: find a decision, prepare a meeting, draft replies."
 ---
 
-After [installation](./installation.mdx) and [connecting your agent](./agents.md), give it a task in
-ordinary language. Start with reading. Logging in connects the account; it does not download every
-chat's history. A search through older conversations may need a separate, bounded history fetch.
+You have logged in. Now give your agent a task in plain words. Start with tasks that only
+read: you see what the agent can do, and nothing changes in your account.
 
-## Try a read-only task
+## Your first five minutes
 
-Copy this into your agent:
+Copy one request into your agent. They work the same for Telegram and
+MAX; write *max* instead of *tg* if you use MAX.
+
+**Who needs an answer from me?**
 
 ```text prompt
-Use tg cli to list five recent work chats and check my incoming messages for requests that need
-an answer. Show the messages behind your conclusions and say which chats you checked. Read only:
-don't send anything or mark anything read.
+Use tg to check my unread messages. Group them by chat and tell me who needs an answer from me. Read only: don't send anything or mark anything read.
 ```
 
-The agent can start with:
+You get a short list of chats with the questions waiting for you, and the messages behind each one.
 
-```sh
-tg chats list --limit 5
-tg inbox --limit 5
+**What happened today?**
+
+```text prompt
+Use tg to summarise what happened in my five most active chats today. One line per chat. Read only.
 ```
 
-Unread messages are a starting point, not proof that someone needs an answer. The agent should
-inspect context when necessary and tell you about skipped chats or truncated results. Ordinary
-reads do not mark messages read. [Reading and inbox](./tg/usage.md#reading) explains their limits.
+You get a brief of the day, without opening each chat.
 
-The examples below use **fictional chats, IDs, messages and results**. They illustrate possible
-dialogues, not commands you should run unchanged. Commands follow the Telegram v0.24 reference;
-your agent should check the installed CLI's skill and command help. MAX has its own
-[usage reference](./max/usage.md); do not assume every Telegram option has a MAX equivalent.
+**Find something**
 
-## Find a decision in older history
+```text prompt
+Use tg to look through my five most recent chats and find the last link someone sent me. Show the message and the chat. Read only.
+```
+
+The agent reads those chats and shows the message with the link.
+
+**Behind the scenes.** For the first request, the agent runs commands like `tg inbox --limit 5` and
+`tg chats list --limit 5`, then reads more messages where it needs context. Reading does not mark
+messages as read. [Reading and inbox](./tg/usage.md#reading) explains the limits.
+
+**Good to know**
+
+- **Unread is not the same as "needs an answer".** A good agent reads the context before it
+  decides, and tells you which chats it checked.
+- **Your history is downloaded only when needed.** Logging in does not download old messages. For a
+  question about last month, the agent may ask to fetch that chat's history first. You decide how
+  far back.
+- **Ask for sources.** "Show the messages behind your answer" makes the agent prove each claim.
+
+## Longer examples
+
+The dialogues below show what a full task looks like: the request, the commands the agent runs,
+and its answer. The chats, IDs and messages are made up; don't run the commands as they are. MAX
+has its own [usage guide](./max/usage.md); not every Telegram option exists in MAX.
+
+### Find a decision in older history
 
 **You**
 
@@ -91,7 +112,7 @@ the result to September.
 `messages context` checks what was said around a match. Neither the latest 20 messages nor an empty
 local search proves that a month has been checked. [Archive and search](./tg/archive.md).
 
-## Prepare for a meeting
+### Prepare for a meeting
 
 **You**
 
@@ -151,7 +172,7 @@ must follow the message cursor or report the missing part before claiming to hav
 whole week. It should ask about ambiguous participant names rather than choose a direct chat
 without evidence. [Message windows and cursors](./tg/usage.md#pages).
 
-## Check promises and prepare replies
+### Check promises and prepare replies
 
 **You**
 

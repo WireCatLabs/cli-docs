@@ -1,7 +1,6 @@
 ---
 title: "Cómo usar tg"
 ---
-
 Desde el primer inicio de sesión hasta enviar mensajes, en el orden en que lo necesitarás. La [referencia de comandos](./commands.md) contiene todos los comandos y opciones; esta guía explica cómo combinarlos.
 
 Cada comando realiza una tarea, imprime la respuesta y termina. Solo `tg watch`, `tg serve` y `tg mcp` permanecen activos, y cada uno lo indica.
@@ -22,6 +21,11 @@ tg messages list me       # Saved Messages, the latest 20
 No necesitas nada más para leer mensajes.
 
 Antes de continuar, reserva unos cinco minutos para la configuración. Descargar historial es una decisión aparte: elige el chat y la cantidad antes de `tg store fetch <chat> --last 100`. Un agente puede leer `tg skill show` antes de iniciar sesión; usa `tg setup --agent codex` para elegir su skill. `tg setup --help` explica las opciones.
+
+Para consultar los argumentos de una tarea, usa `tg commands messages search --json` para
+un comando o `tg commands messages --json` para un grupo. Ambos incluyen las opciones globales
+y los códigos de salida. Consulta cada ruta de comando en una llamada separada;
+`tg commands --json` devuelve todo el árbol.
 
 ## Iniciar sesión
 
@@ -92,6 +96,15 @@ tg chats show "Book club"                  # kind, unread count, last message, w
 
 `--kind` acepta `dialog` (individual), `group`, `channel` o `saved`. Los filtros se aplican a los 200 chats más recientes. Los grupos y canales tienen [su propia sección](#groups-and-channels).
 
+### Enlaces a mensajes
+
+`tg messages link <chat> <message>` o `tg messages link <msg:locator>` devuelve
+`{ locator, url, access, reason }`. Los enlaces permanentes de canales y supergrupos pueden
+ser públicos o restringidos; un enlace no añade miembros al chat. Los diálogos, grupos básicos
+y Mensajes guardados devuelven un localizador. Sin conexión se valida el mensaje almacenado y no
+se devuelve enlace permanente. Se rechaza un localizador de otra cuenta. Este comando singular
+se distingue de `messages links`, que explica las relaciones entre conversaciones.
+
 ### Mensajes
 
 ```sh
@@ -140,6 +153,11 @@ tg review --chat "Neighbours" --unanswered 4h
 
 `--unanswered [hours]` conserva solo preguntas pendientes para ti o los administradores. Una pregunta contiene `?` (no cuenta dentro de enlaces) o responde a ti o a un administrador. Se considera contestada si tú o un administrador respondéis o sois los siguientes en hablar tras quien preguntó. Omite preguntas más recientes que el intervalo indicado (24 horas por defecto) para dar tiempo a responder. Si no se conocen los administradores, lo avisa y solo cuenta tus respuestas.
 
+Las transcripciones guardadas también participan en este filtro. Añade `--transcribe` para
+reconocer audios sin transcripción guardada antes de seleccionar preguntas sin respuesta.
+Los audios sin reconocer dejan la revisión incompleta: un resultado vacío no demuestra que
+no haya preguntas pendientes. Conserva el límite anterior hasta que `complete` sea true.
+
 ### Mensajes de voz
 
 ```sh
@@ -164,7 +182,12 @@ tg models audio download parakeet-v3   # once, checked against the sha256 this v
 | `gigaam-v3` | ruso; el mejor de los tres para ruso | 232 MB |
 | `gigaam-v3-ctc` | ruso; algo más rápido, con peor uso de mayúsculas | 225 MB |
 
-`--model` elige otro modelo para un comando, junto a `--transcribe` o en `messages transcribe`. `transcribeWith` y `speechModel` definen los valores predeterminados ([configuración](./configuration.md)). La transcripción se guarda en el archivo local, por lo que repetir la consulta responde inmediatamente. `--transcribe` puede tardar minutos.
+`--model` elige otro modelo para un comando, junto con `--transcribe` o en `messages transcribe`;
+los ajustes `transcribeWith` y `speechModel` eligen los valores predeterminados
+([configuration.md](./configuration.md)). La transcripción se guarda localmente y se reutiliza
+al listar mensajes, consultar la bandeja de entrada y realizar revisiones. Otra llamada a
+`messages transcribe` puede solicitar una nueva transcripción o ejecutar de nuevo el reconocimiento.
+`--transcribe` puede tardar varios minutos.
 
 ### Archivos
 
