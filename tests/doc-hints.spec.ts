@@ -80,6 +80,8 @@ for (const lang of languages) {
     page,
     context,
   }) => {
+    // Five pages and two Markdown routes, each compiled on first request by the dev server in CI.
+    test.slow()
     await context.grantPermissions(["clipboard-read", "clipboard-write"])
     await page.goto(`/${lang}/docs/installation#tg`)
     for (const tool of ["tg", "max"]) {
