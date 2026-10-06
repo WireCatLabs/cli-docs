@@ -261,6 +261,19 @@ max messages send 42 "текст"
 
 También admite título parcial, incluido `max messages search --chat`: busca entre chats guardados sin conectarse. Por defecto usa Lucene estricto: palabras completas y un patrón explícito para prefijos, como `квартир*`. La búsqueda anterior con correcciones está disponible con `--language legacy`; `--regex` es un modo independiente sin distinguir mayúsculas. Consulta la [guía de búsqueda](./search.md).
 
+### Cuántos mensajes coinciden
+
+`max messages stats` cuenta mensajes del archivo local sin conectarse a MAX. Sin consulta, cuenta todos los mensajes guardados de la cuenta actual; con consulta, las coincidencias de Lucene estricto, igual que `messages search`. Cada mensaje se cuenta una sola vez.
+
+```sh
+max messages stats "договор" --by chat --json
+max messages stats --by sender --chat "Работа" --limit 10 --json
+max messages stats --by day --timezone Europe/Madrid --json
+max messages stats --by hour --timezone UTC --jsonl
+```
+
+`--by` agrupa por chat, remitente, día natural u hora. `--limit` limita las filas, y `total` es el número de todos los mensajes que coinciden. En un archivo incompleto, las cifras son un límite inferior: revisa `coverage` y `completeness` antes de tomar la ausencia de coincidencias como prueba. Para incluir todas las cuentas de MAX guardadas, añade `--source max` explícitamente; sin él, los demás perfiles no entran en el resultado. El JSON contiene `by`, `items`, `total`, `page`, `limit`, `hasMore`, `query`, `coverage` y `completeness`; JSONL imprime las filas de `items`.
+
 ### Quién se considera contacto
 
 `max contacts list` muestra **personas con chat individual**, conversación reciente primero. Otros miembros de grupos se guardan con nombre y chats compartidos, pero no aparecen como contactos.

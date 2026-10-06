@@ -3,6 +3,31 @@ title: "Changelog"
 ---
 Notable changes to `@leemour/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
+## 0.28.0 — 04.10.2026
+
+### New
+
+- MCP `max_chats_stats` counts group or channel activity from the local archive; joins and departures are not requested. `max chats members audit` shows signs of suspicious members without removing anyone.
+- MCP `max_inbox` and `max_review` accept `kinds` and `new`, with per-chat points kept separately from the CLI.
+
+- **`max messages stats` counts messages from the local archive by chat, sender, day or hour.** The query uses strict Lucene; without one, all saved messages of the current account are counted. No network is used; `--source max` explicitly includes other profiles. In an incomplete archive, the result stays a lower bound; check `coverage` and `completeness`.
+- **`max mcp --http --public-url https://<имя>.ts.net` opens `max` to ChatGPT and Claude in the browser.** MCP tools are served on `127.0.0.1` behind your own tunnel, with their own login: the app needs a one-time code that `max` prints in the terminal. Every change first asks through a form in the app. The login lasts 30 days; `max mcp --revoke` ends all logins. [docs/remote.md](./remote.md) replaces the setup with a third-party proxy.
+
+- Personal MCP uses the same set of schemas as Telegram: devices, contact lookup by phone number, folders, members, invite links, group settings, polls, local evidence and conversations. Telegram topics are not supported in MAX. The old names of the group check and rules are kept.
+- A confirmed scheduled send uses the time from the form, even if the answer arrived later.
+
+### Changed — may break scripts
+
+- `coverage.inventoryComplete` now reflects receiving a full chat list, and `lastSyncedAt` the oldest fetch in coverage; `completeness` entries contain `fetchedAt`. An existing archive gets this information after the next full chat list and history fetch. `/catch-up` accepts `kind` and `mode` instead of `since`.
+- `config set permissions` rejects unknown commands with code 2, including typos inside a whole object. `config unset` lets you remove them; reading an existing file prints a warning and continues.
+
+- MCP arguments now use shared names: `at_time`, `md`, `since_time`, `before_n`, `after_n`, `unanswered`; `send_id` is now a string. Unknown arguments are rejected before anything runs. Update your calls using the schema from `tools/list`. For `max_inbox` and `max_review`, `all: true` includes muted and archived chats; without it, only mentions of the owner remain.
+
+### Fixed
+
+- Search and statistics show the actual coverage of the local archive and the time of the last fetch. `wordsReady` no longer promises a ready word index for searches that use only filters or regex. `store fetch` ignores the start-of-history mark if older messages turn up in the archive.
+- `server status` reports the exit code of a normal service shutdown and the reason it stopped, without starting it again.
+
 ## 0.27.0 — 04.10.2026
 
 ### New
@@ -61,6 +86,11 @@ Notable changes to `@leemour/max-cli`, one section per version, newest first. Ve
 ### New
 
 - `bot api` uses the same command builder and input validation as Telegram. Generators remain in cli-core; parameters, native responses and effective MAX permissions are preserved. The shared `--store-token <profile>` option is for operations returning credentials; other operations reject it.
+
+### Fixed
+
+- **`messages list`, `inbox` and `review` with `--transcribe` download the recording through the reading connection.** Previously, a second login to MAX was opened. The recording is downloaded before the connection closes, and local recognition starts after it closes. Nothing is marked as read without an explicit `--mark-read`.
+- **`review --unanswered` takes into account saved and new transcripts of voice questions.** Previously, a question with empty text was dropped before transcription. The same fix applies in MCP; the original message text does not change, and unrecognized recordings leave the review incomplete.
 
 ### Changed — may break scripts
 
@@ -383,7 +413,7 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/leemour/max-cli/blob/v0.27.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/leemour/max-cli/blob/v0.28.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands:** `max <имя> bot messages send <чат> <текст>` accepts chat IDs, `user:<номер>` or a known title; `edit`, `delete`, `list`, `get` are available. `max <имя> bot chats list` lists seen chats; `chats get|pin|unpin|leave|action` manages them. `max bot list` lists profiles with bot tokens. MAX has no bot-chat listing, so the CLI remembers seen chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).
 - **Group moderation data:** `max review --unanswered [часы]` finds questions unanswered by you or admins; `max review --chat <чат>` reviews one chat. `max chats events <чат>` shows joins, departures, additions and removals. `max chats members list

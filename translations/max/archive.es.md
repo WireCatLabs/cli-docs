@@ -46,7 +46,7 @@ Los datos van al almacén compartido con `tg`; `max store info` muestra su ruta.
 Mantenimiento:
 
 - `max store check`: integridad, índices de búsqueda, espacio y chats desactualizados.
-- `max store backup <файл>`: copia del archivo en uso, sin sobrescribir. `max store restore <файл>` restaura y conserva el anterior al lado.
+- `max store backup <файл>`: copia del archivo en uso, sin sobrescribir. `max store restore <файл>` restaura y conserva el anterior al lado. Con `--encrypt`, la copia se comprime y se cifra con contraseña; consulta [Contraseña](#пароль).
 - `max store reindex`: reconstruye índices sin perder mensajes.
 - `max store migrate`: actualiza el esquema a esta versión de `max`.
 
@@ -61,6 +61,31 @@ max store export 111 --format jsonl --since-time 2026-09-01 > чат.jsonl
 
 La exportación **no se conecta a nada**; solo incluye datos leídos o descargados. Usa `max store fetch <чат>` para obtener lo anterior. Nunca sobrescribe archivos. El archivo de `--output` es privado (`0600`), pues contiene enlaces de fotos accesibles sin iniciar sesión.
 
+### Exportar a una carpeta y añadir solo lo nuevo
+
+`--to <папка>` escribe los chats en una carpeta: un archivo JSONL por chat y `manifest.json`. Al repetir en la misma carpeta, solo se añade lo que ha cambiado desde la vez anterior: mensajes nuevos, ediciones (también de mensajes antiguos) y borrados. Un mensaje borrado se escribe sin texto: `{ "id", "chatId", "deleted": true }`.
+
+```sh
+max store export Друзья Работа --to ~/max-архив
+max store export --kind group --to ~/max-группы
+max store export --all --to ~/max-всё
+```
+
+`max` no toca una carpeta con archivos ajenos ni la exportación de otra cuenta. Un cambio solo en las reacciones no cuenta como cambio.
+
+### Contraseña
+
+`--encrypt` en `store export` (con `--output` o `--to`) y en `store backup` comprime el archivo y lo cifra con una contraseña. No hacen falta programas externos. Para abrir ese archivo: `max store decrypt <файл> --output <новый файл>`; `max store restore` pide por sí mismo la contraseña de una copia cifrada.
+
+- **La contraseña no se guarda en ningún sitio**: ni en la configuración, ni en el almacén de contraseñas, ni en el registro. Si la olvidas, el archivo no se puede abrir.
+- Si la escribes tú en el terminal, no se muestra y se pide dos veces. Un agente al que hayas dado la contraseña la pasa por stdin, no como argumento de la orden, porque otros programas pueden ver los argumentos:
+
+  ```sh
+  printf '%s' 'пароль' | max store backup ~/max.sealed --encrypt
+  ```
+
+- En una carpeta cifrada se escribe un archivo por ejecución. Su `manifest.json` no incluye nombres de chats, y `max` no acepta una ejecución con otra contraseña.
+
 ## Buscar
 
 `max messages search` lee solo el archivo local. Por defecto usa el perfil estricto Lucene: palabras, frases, grupos lógicos, campos, fechas y regex limitadas. La [guía de búsqueda](./search.md) explica la sintaxis y la migración. Para conservar filtros y correcciones anteriores, usa `--language legacy`.
@@ -71,7 +96,7 @@ max messages search 'invoice date:[2026-01-01 TO 2026-02-01}' --timezone Europe/
 max messages search 'preset:secret kind:saved' --json
 ```
 
-Una respuesta vacía significa «no encontrado en el archivo elegido». JSON informa de su cobertura y completitud; la fecha de actualización por red aún se desconoce. `--source` elige el servicio y las cuentas, `--newest` ordena por fecha y `--context` incluye mensajes cercanos. `--regex` sigue siendo un modo JS independiente.
+Una respuesta vacía significa «no encontrado en el archivo elegido». JSON informa de su cobertura y completitud; `lastSyncedAt` es la carga más antigua entre los chats cubiertos, o `null` si al menos un chat aún no se ha cargado. `--source` elige el servicio y las cuentas, `--newest` ordena por fecha y `--context` incluye mensajes cercanos. `--regex` sigue siendo un modo JS independiente.
 
 ## Conversaciones dentro de un grupo
 

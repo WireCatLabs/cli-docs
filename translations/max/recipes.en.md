@@ -84,7 +84,26 @@ Writes to MAX: **no**. Permit: `Bash(max inbox:*)`.
 
 > Run `max inbox --new --json`. Group messages by chat. Give each chat one line: who is writing and what they need. Put items needing a response today first. Combine advertisements and service notifications into one final line.
 
-`--new` shows each message once: `max` saves its position and resumes from there on the next run. The first run covers the past 24 hours.
+`--new` shows each message once: `max` saves its position — separately for each chat — and resumes from there on the next run. The first run covers the past 24 hours.
+
+### Where “new” starts
+
+- `max inbox` — unread messages, as MAX counts them: everything you have not opened on any device.
+- `max inbox --new` — since the previous `--new` run. Only `max` knows this point; your contacts do not see it.
+- `max inbox --since-time 2d` — the past two days; the saved point does not move.
+
+None of them marks messages as read. If you need that, add `--mark-read` or turn on `catchUpMarksRead` in [settings](./configuration.md) — then the other person sees that you have read the messages.
+
+### Direct chats, groups and channels separately
+
+`--kind` keeps only chats of the given kind: `dialog` for direct chats, `group` for groups, `channel` for channels. You can run a channel summary and a conversation summary separately, at different times — each chat has its own point, and one run does not hide what the other has not shown yet:
+
+```cron
+30 8 * * * claude -p "$(cat ~/max-recipes/morning.md)" --allowedTools "Bash(max inbox:*)"
+0 19 * * * claude -p "$(cat ~/max-recipes/news.md)" --allowedTools "Bash(max inbox:*)"
+```
+
+`morning.md` contains `max inbox --new --kind dialog,group --json`; `news.md` contains `max inbox --new --kind channel --json` and a request to pick out the main points. Without `--kind`, everything comes together.
 
 ## Weekly work-chat report
 
@@ -97,9 +116,9 @@ Writes to MAX: **no**. Permit: `Bash(max messages list:*)`.
 
 Writes to MAX: **no**. Permit: `Bash(max review:*)`, `Bash(max messages context:*)`, `Bash(max messages search:*)`.
 
-> Run `max review --since-time <конец прошлого обзора> --transcribe --json` (without `--since-time`, it covers 3 days). Make three lists: what I owe, what I am waiting for, and what needs clarification. For each item, include its chat, date and supporting message IDs; include a deadline only if explicitly stated. Before calling anything overdue, check whether it was completed later or in work groups. If `"complete": false`, explain what is missing. End with the `--since-time` value for the next review and outstanding items.
+> Run `max review --new --transcribe --json` (the first time it covers 3 days, then everything since the previous `--new`; each chat has its own point). Make three lists: what I owe, what I am waiting for, and what needs clarification. For each item, include its chat, date and supporting message IDs; include a deadline only if explicitly stated. Before calling anything overdue, check whether it was completed later or in work groups. If `"complete": false`, explain what is missing. End with the outstanding items.
 
-For the next review, repeat the request and include previous outstanding items; the agent checks them first. In Claude Desktop and other MCP clients, use `/review` ([MCP prompts](./mcp.md#команды-и-чаты-по-)).
+For the next review, repeat the request and include previous outstanding items; the agent checks them first. A chat that was not read in full keeps its point and comes up again. In Claude Desktop and other MCP clients, use `/review` ([MCP prompts](./mcp.md#команды-и-чаты-по-)).
 
 ## People you have not answered
 

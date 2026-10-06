@@ -10,7 +10,7 @@ Group-changing commands return `operationId` in JSON. After creating, joining, u
 
 ## Working with an agent
 
-An agent with a terminal, such as Claude Code or Codex, can use a [skill](https://github.com/leemour/max-cli/blob/v0.27.0/README.md#навык-для-агентов-с-терминалом). An agent can also connect through the [MCP server](./mcp.md), for example in Claude Desktop or Cursor. The examples below show your request, the command the agent runs and the result.
+An agent with a terminal, such as Claude Code or Codex, can use a [skill](https://github.com/leemour/max-cli/blob/v0.28.0/README.md#навык-для-агентов-с-терминалом). An agent can also connect through the [MCP server](./mcp.md), for example in Claude Desktop or Cursor. The examples below show your request, the command the agent runs and the result.
 
 ### An admin's morning: who needs an answer
 
@@ -139,3 +139,7 @@ moderate`. Unlike the personal account, it can ban removed members so they canno
 - **Up to 1,000 messages per CLI check.** If there are more, the next check continues from that position.
 - **One join means reading the full member list.** To find a new member's account age, the check reads every member; in a large group this can require dozens of MAX requests.
 - **Nothing monitors the group automatically.** A check runs only when started by you, by an agent at your request, or by a schedule you set up.
+
+## Member audit
+
+`max chats members audit <чат>` reads group members and shows signs of suspicious accounts. `--budget` limits the pages, `--min-score` sets the minimum score. This is a hint for a human review: no one is removed, and admins and the owner are excluded; `more` means the list is incomplete, `unknown` means signs that could not be determined. MAX does not provide all the signs that Telegram does. The audit is not available with `--offline`.

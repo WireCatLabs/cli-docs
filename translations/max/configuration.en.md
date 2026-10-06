@@ -38,7 +38,7 @@ Output contains no secrets: the configuration file has no fields in which to sto
 
 ## Access permissions
 
-`deny` forbids reading and writing; `readonly` permits reading; `ask` requires confirmation; `allow` performs the action without a question. In a terminal, `ask` prompts with “no” as the default answer. JSON mode has no prompt: use `--yes`, or `--allow-dangerous` for message deletion. MCP obtains confirmation through a client form. `--confirm-send` requires a form for every write.
+`deny` forbids reading and writing; `readonly` permits reading; `ask` requires confirmation; `allow` performs the action without a question. In a terminal, `ask` prompts with “no” as the default answer. JSON mode has no prompt: use `--yes`, or `--allow-dangerous` for message deletion. MCP obtains confirmation through a client form. `--confirm-send` requires a form for every write. Through `mcp --http`, every write requires a form regardless of the permission level and confirmation flags.
 
 A more specific key overrides its resource. This example allows reading messages and deleting them without confirmation, while forbidding other message writes:
 
@@ -46,7 +46,18 @@ A more specific key overrides its resource. This example allows reading messages
 { "profiles": { "work": { "permissions": { "messages": "readonly", "messages.delete": "allow" } } } }
 ```
 
-This example does not restrict contacts, chats, reactions or other resources. Bot keys start with `bot`, such as `bot.messages.send`. `config show` reports effective permissions and their source.
+This example does not restrict contacts, chats, reactions or other resources. Bot keys start with `bot`, such as `bot.messages.send`. `config show` reports effective permissions and their source. `config set` rejects an unknown command key with code 2, including inside a whole `permissions` object. `config unset` lets you remove an old unknown key. Reading an existing file with such a key prints a warning on stderr and continues.
+
+Permissions from different sections of the file add up, but **the nearest section decides first, then the key length**. A key set on a profile overrides the same key and all keys under it in `personal.defaults` and `defaults`. Here, the `agent` profile does not delete messages: its `messages` overrides `messages.delete` from `defaults`.
+
+```json
+{
+  "defaults": { "permissions": { "messages.delete": "allow" } },
+  "profiles": { "agent": { "permissions": { "messages": "readonly" } } }
+}
+```
+
+This works both ways: `messages: allow` on a profile also overrides `messages.delete: deny` from `defaults`, and then deletion asks again, as by default. Legacy `readOnly` and `allow` apply in the section where they are written.
 
 Preview the changes before converting an older file:
 
@@ -84,23 +95,24 @@ Migration preserves effective permissions, MAX settings and moderation checkpoin
 - `personal.defaults`, `personal.profiles.<имя>` — personal-account commands only.
 - `bot.defaults`, `bot.profiles.<имя>` — `max <имя> bot …` commands only.
 
-| Field | Purpose | Default |
-|---|---|---|
-| `defaultProfile` | Profile when none is named as the first word and `MAX_PROFILE` is unset | `default` |
-| `limit` | Records to display when `--limit` is absent | `20` |
-| `timeoutMs` | Time to wait for **one request** | Transport default |
-| `color` | Terminal color; if absent, detect whether output is a terminal | Terminal detection |
-| `senderColors` | Give each author a color in `max messages`; `вы` is always cyan. Requires `color`. Personal accounts only | `false` |
-| `record` | Record every run as though `--record` were set | `false` |
-| `permissions` | resource and command permission levels: `deny`, `readonly`, `ask`, `allow`; a more specific key takes precedence | almost everything `allow`; message deletion and ending other sessions `ask` |
-| `serve` | Start `max serve` in the background when a command needs MAX and no server exists; `--no-serve` overrides for one run. Never starts with `MAX_TOKEN`. Personal accounts only | `true` |
-| `keepRunsForDays` | Run-record retention in days | `30` |
-| `readOnly`, `allow`, `mcpTools` | legacy settings read for compatibility; `config migrate` converts them to `permissions` | cannot be changed after migration |
-| `sendsPerHour` | Hourly limit including messages, forwards, edits, pins with notifications, deleted messages and members added to groups; exceeding it refuses with code `8`. **Bots** use only the `bot` section; without it, bots have no limit | `30`; unlimited for bots |
-| `readOtherBots` | Permit another bot's local data when requested with `--all-bots` or `--bots`: `false`, `true` for all bots, or a list of bot profiles. **Only in `bot`** | `false` |
-| `updateCheck` | Check npm once a day for a newer version and report it in the terminal. **Only in `defaults`**, because the program version is shared by all profiles | `true` |
-| `skillHint` | Once a day, tell an agent on stderr if the `max` skill is missing or outdated, and suggest `max skill install`. Agents are detected through `AI_AGENT` or `CLAUDECODE`. **Only in `defaults`** | `true` |
-| `transcribeModel` | Speech model for `max messages transcribe`. **Only in `defaults`** | `gigaam-v3` |
+| Field | Purpose | Overridden for one run by | Default |
+|---|---|---|---|
+| `defaultProfile` | Profile when none is named as the first word and `MAX_PROFILE` is unset | first word (`max work …`), `MAX_PROFILE` | `default` |
+| `limit` | Records to display when `--limit` is absent | `--limit` | `20` |
+| `timeoutMs` | Time to wait for **one request** | — (`--timeout` is different, see below) | Transport default |
+| `color` | Terminal color; if absent, detect whether output is a terminal | —; without the field, `NO_COLOR` turns color off | Terminal detection |
+| `senderColors` | Give each author a color in `max messages`; `вы` is always cyan. Requires `color`. Personal accounts only | — | `false` |
+| `catchUpMarksRead` | `max inbox` and `max review` mark each shown chat as read — up to the last shown message. The other person sees the mark. Personal accounts only | `--mark-read`, `--no-mark-read` | `false` |
+| `record` | Record every run as though `--record` were set | `--record`, `--no-record` | `false` |
+| `permissions` | resource and command permission levels: `deny`, `readonly`, `ask`, `allow`; a more specific key takes precedence | —; `--yes` and `--allow-dangerous` only answer `ask`; they do not lift `deny` | almost everything `allow`; message deletion and ending other sessions `ask` |
+| `serve` | Start `max serve` in the background when a command needs MAX and no server exists. Never starts with `MAX_TOKEN`. Personal accounts only | `--serve`, `--no-serve` | `true` |
+| `keepRunsForDays` | Run-record retention in days | — | `30` |
+| `readOnly`, `allow`, `mcpTools` | legacy settings read for compatibility; `config migrate` converts them to `permissions` | — | cannot be changed after migration |
+| `sendsPerHour` | Hourly limit including messages, forwards, edits, pins with notifications, deleted messages and members added to groups; exceeding it refuses with code `8`. **Bots** use only the `bot` section; without it, bots have no limit | — | `30`; unlimited for bots |
+| `readOtherBots` | Permit another bot's local data when requested with `--all-bots` or `--bots`: `false`, `true` for all bots, or a list of bot profiles. **Only in `bot`** | —; `--all-bots` and `--bots` request it, the field permits it | `false` |
+| `updateCheck` | Check npm once a day for a newer version and report it in the terminal. **Only in `defaults`**, because the program version is shared by all profiles | —; turned off by `MAX_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER`, `CI` | `true` |
+| `skillHint` | Once a day, tell an agent on stderr if the `max` skill is missing or outdated, and suggest `max skill install`. Agents are detected through `AI_AGENT` or `CLAUDECODE`. **Only in `defaults`** | — | `true` |
+| `transcribeModel` | Speech model for `max messages transcribe`. **Only in `defaults`** | `--model` on `messages transcribe` and next to `--transcribe` | `gigaam-v3` |
 
 ⚠ **`timeoutMs` and `--timeout` are different.** `timeoutMs` is the wait for **one MAX response**. `--timeout` limits **the whole command**. A read involves connecting, INIT, LOGIN, resolving a chat name and the request itself, so its total time can be several times `timeoutMs`.
 
@@ -125,7 +137,7 @@ max config set --personal --defaults limit 30 # всем личным аккау
 max config set defaultProfile work      # какой профиль без первого слова
 ```
 
-Values are validated by the same schema used for reading, **before writing**: `max config set limit 0` is refused and leaves the file unchanged. `serve`, `senderColors` and `mcpTools` are not accepted with `--bot`: bots have no server or sender colors, and legacy `mcpTools` belongs only to personal accounts.
+Values are validated by the same schema used for reading, **before writing**: `max config set limit 0` is refused and leaves the file unchanged. `serve`, `senderColors`, `catchUpMarksRead` and `mcpTools` are not accepted with `--bot`: bots have no server, sender colors or unread messages, and legacy `mcpTools` belongs only to personal accounts.
 
 ## Typos are errors, not ignored settings
 

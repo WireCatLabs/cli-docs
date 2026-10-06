@@ -1,9 +1,9 @@
 ---
 title: "Servidor MCP"
 ---
-`max mcp` ofrece un perfil al agente mediante [MCP](https://modelcontextprotocol.io), por stdin y stdout, sin red. Viene incluido en `max`; no tienes que instalarlo por separado.
+`max mcp` ofrece un perfil al agente mediante [MCP](https://modelcontextprotocol.io), por defecto por stdin y stdout; `--http --public-url` ofrece las herramientas en un puerto local detrás de tu túnel HTTPS. Viene incluido en `max`; no tienes que instalarlo por separado.
 
-**Cuándo lo necesitas.** Claude Code, Codex y otros agentes con terminal pueden usar directamente `max` y las [instrucciones para agentes](https://github.com/leemour/max-cli/blob/v0.27.0/README.md#для-скриптов-и-агентов): no hay diferencia en tokens ni funciones. MCP sirve para clientes sin terminal, como Claude Desktop o el chat de Cursor, y para aprobar cada envío desde el cliente. ChatGPT y Claude en el navegador necesitan [acceso remoto](./remote.md).
+**Cuándo lo necesitas.** Claude Code, Codex y otros agentes con terminal pueden usar directamente `max` y las [instrucciones para agentes](https://github.com/leemour/max-cli/blob/v0.28.0/README.md#для-скриптов-и-агентов): el agente llama directamente a la CLI. MCP sirve para clientes sin terminal, como Claude Desktop o el chat de Cursor, y para aprobar cada envío desde el cliente. ChatGPT y Claude en el navegador se conectan mediante `--http`: consulta [remote.md](./remote.md).
 
 ## Conexión
 
@@ -66,7 +66,7 @@ Con Node instalado mediante nvm, fnm o Volta, la ruta pertenece a una versión: 
 
 CLI y MCP comparten `permissions`. `deny` oculta la herramienta; `readonly` muestra solo las de lectura. Con `ask`, las escrituras exigen formulario; con `allow`, se ejecutan sin preguntar. La mayoría de escrituras están permitidas por defecto, incluidos envíos y cambios de contactos, grupos y perfil. Eliminar mensajes exige confirmación por defecto.
 
-Para que el agente lea y elimine mensajes sin formulario, pero no envíe ni edite:
+En el modo stdin/stdout, este ejemplo permite leer y eliminar sin formulario, y prohíbe enviar y editar. Por HTTP, eliminar también exige formulario:
 
 ```sh
 max work config set permissions.messages readonly
@@ -81,7 +81,7 @@ Los demás recursos conservan sus permisos. La lista de destinatarios y `sendsPe
 claude mcp add max -- max mcp --confirm-send
 ```
 
-`--confirm-send` muestra un formulario antes de cada escritura, incluido `allow`. Sin esta opción, solo `ask` requiere formulario. Iniciar con `--yes` confirma las demás acciones `ask`; `--allow-dangerous` confirma la eliminación de mensajes y las acciones de moderación que lo requieren. Estas opciones no evitan `deny`, `readonly`, la lista de destinatarios ni el límite.
+`--confirm-send` muestra un formulario antes de cada escritura, incluido `allow`. Sin esta opción, en el modo stdin/stdout solo `ask` requiere formulario. Iniciar con `--yes` confirma las demás acciones `ask`; `--allow-dangerous` confirma la eliminación de mensajes y las acciones de moderación que lo requieren. Estas opciones no evitan `deny`, `readonly`, la lista de destinatarios ni el límite. Con `ask` o `--confirm-send`, la actualización local de conversaciones se rechaza antes de escribir: la inicia el propietario desde la CLI.
 
 El formulario queda ligado a la herramienta, el chat y los parámetros mostrados. La respuesta vale una vez y durante cinco minutos; sustituir parámetros después se rechaza. Una negativa del propietario o un cliente sin formularios no escriben nada. La moderación también aplica los niveles de sus reglas: `readonly` solo informa del resultado y `ask` exige formulario.
 
@@ -91,17 +91,32 @@ Los antiguos `--allow-send`, `--allow-mark-read`, `--allow-delete` y `--allow-mo
 
 | Herramienta | Comando | Qué hace |
 |---|---|---|
-| `max_inbox` | `max inbox`, `--since-time` | mensajes sin leer o posteriores a un momento, en una llamada; `transcribe` transcribe voz; no marca ni cambia el punto de `max inbox --new`; incluye silenciados y archivados como `max inbox --all` |
-| `max_review` | `max review` | todos los mensajes, incluidos propios, en chats activos desde `since` (3 días por defecto) para revisar compromisos; `transcribe` transcribe voz; `chat` filtra uno; `unanswered_after_hours` filtra preguntas pendientes para ti o administradores; incluye silenciados y archivados como `max review --all`; no marca como leído |
+| `max_inbox` | `max inbox`, `--since-time` | mensajes sin leer o posteriores a un momento, en una llamada; `transcribe` transcribe voz; no marca nada; `new` guarda puntos propios de MCP, separados de `max inbox --new`; incompatible con `since_time`; `kinds` elige tipos de chat; omite silenciados y archivados sin avisar al propietario; `all: true` los incluye |
+| `max_review` | `max review` | todos los mensajes, incluidos propios, en chats activos desde `since_time` (3 días por defecto) para revisar compromisos; `transcribe` transcribe voz; `chat` filtra uno; `unanswered` filtra preguntas que ni tú ni los administradores habéis respondido en esas horas; omite silenciados y archivados sin avisar al propietario; `all: true` los incluye; no marca como leído; `kinds` elige tipos de chat, `new` guarda puntos propios y es incompatible con `since_time` y `unanswered` |
 | `max_account_show` | `max account show` | identidad de la sesión |
 | `max_status` | `max doctor` | perfil, existencia de token y sesión y herramientas de escritura activas; no se conecta a MAX |
 | `max_chats_list` | `max chats list` | chats con filtros de nombre, tipo y no leídos |
+| `max_chats_members_audit` | `max chats members audit` | miembros con señales de cuentas sospechosas; no elimina a nadie, las señales desconocidas se indican en `unknown` |
+| `max_chats_stats` | solo MCP | estadísticas de un grupo o canal en un periodo, desde el archivo local; no consulta los miembros y no incluye `members`; con `complete: false` las cifras son un límite inferior |
 | `max_chats_show` | `max chats show` | un chat, miembros y configuración |
-| `max_chats_events` | `max chats events` | entradas, salidas, añadidos y eliminados según mensajes de servicio; últimos 7 días sin `since` |
+| `max_chats_events` | `max chats events` | entradas, salidas, añadidos y eliminados según mensajes de servicio; últimos 7 días sin `since_time` |
 | `max_chats_members` | `max chats members list` | todos los miembros del grupo o canal según MAX, con creación de cuenta y última conexión |
+| `max_chats_rules_show`, `max_chats_moderate` | `max chats rules show`, `max chats moderate` | reglas canónicas y moderación; una acción de nivel `ask` solo se planifica para el propietario |
 | `max_chats_rules` | `max chats rules show` | reglas de moderación; solo tú puedes cambiarlas mediante comando |
 | `max_contacts_list` | `max contacts list` | personas con chat individual |
 | `max_contacts_show` | `max contacts show` | persona y chats compartidos |
+| `max_account_sessions` | `max account sessions list` | lista de dispositivos sin secretos de acceso |
+| `max_contacts_lookup` | `max contacts lookup` | busca por teléfono sin añadir el contacto; no devuelve el teléfono |
+| `max_chats_members_list`, `max_chats_members_show` | `max chats members …` | miembros con paginación y un miembro concreto |
+| `max_chats_link`, `max_chats_link_revoke` | `max chats link …` | invitación y su revocación según los permisos del perfil |
+| `max_chats_folders_*` | `max chats folders …` | listar, crear, cambiar y eliminar carpetas |
+| `max_chats_update`, `max_chats_settings` | `max chats update`, `settings` | nombre y configuración del grupo |
+| `max_polls_show` | `max polls show` | encuesta y opciones de respuesta |
+| `max_messages_evidence` | `max messages evidence` | paquete de mensajes del archivo de la cuenta actual, sin conectarse |
+| `max_messages_stats` | `max messages stats` | número de coincidencias de una consulta en el archivo local |
+| `max_conversations_status`, `max_conversations_refresh` | `max conversations status`, `search --refresh` | estado del índice y actualización local; escribe según `conversations.embed` |
+| `max_conversations_related` | `max conversations related` | conversaciones similares según los vectores guardados, sin ejecutar el modelo |
+| `max_conversations_list`, `max_conversations_show`, `max_conversations_search` | `max conversations …` | conversaciones del archivo local ya construido; búsqueda por palabras y por el modelo instalado |
 | `max_messages_list` | `max messages list` | mensajes; `transcribe` transcribe voz; no marca como leído |
 | `max_messages_search` | `max messages search` | busca lo leído en este equipo |
 | `max_messages_link` | `max messages link` | locator de un mensaje archivado, sin conectar ni devolver texto |
@@ -109,7 +124,7 @@ Los antiguos `--allow-send`, `--allow-mark-read`, `--allow-delete` y `--allow-mo
 | `max_messages_photo` | `max messages download` | foto como imagen hasta 512 KB; rechaza archivos, vídeo, voz y fotos mayores indicando cómo guardarlos; no entrega enlaces de foto |
 | `max_messages_scheduled` | `max messages scheduled` | mensajes pendientes con `scheduledFor` |
 | `max_messages_transcribe` | `max messages transcribe` | transcripción local de voz |
-| `max_messages_send` | `max messages send` | enviar según los permisos del perfil; `at` programa, como `--at-time`; `reply_to` responde a un mensaje y `markdown` activa formato |
+| `max_messages_send` | `max messages send` | enviar según los permisos del perfil; `at_time` programa, como `--at-time`; `reply_to` responde a un mensaje y `md` activa formato; `file` o `photo` adjunta un archivo con el texto como pie |
 | `max_messages_edit` | `max messages edit` | editar tu mensaje según los permisos del perfil |
 | `max_messages_forward` | `max messages forward` | reenviar a otro chat según los permisos; `silent` evita la notificación |
 | `max_messages_pin` | `max messages pin` | fijar en un grupo o canal según los permisos; sin notificación salvo que pases `notify` |
@@ -125,9 +140,11 @@ Los antiguos `--allow-send`, `--allow-mark-read`, `--allow-delete` y `--allow-mo
 
 `max_review` considera las transcripciones guardadas y nuevas antes de filtrar preguntas. Una grabación sin reconocer deja la revisión incompleta; el `text` original no cambia.
 
-Las listas usan `{ items, page, limit, hasMore }`; los ids son cadenas. MCP y CLI pueden tener formatos distintos: `max_chats_events` conserva `since` (incluidos ids de mensaje) y `chatId`/`since`; `max_chats_members` conserva `chatId`/`rolesKnown` y no acepta paginación. Los parámetros y formatos nuevos de los comandos CLI se explican en [grupos](./groups.md). Los errores son `{ error: { code, message, … } }`, con los mismos códigos del CLI. Un nombre ambiguo devuelve `candidates` y no envía nada.
+Las listas usan `{ items, page, limit, hasMore }`; los ids son cadenas. Los argumentos de las herramientas comunes coinciden con Telegram: `since_time`, `before_n`/`after_n`, `at_time`, `md`; `send_id` es una cadena decimal. Un argumento desconocido se rechaza antes de ejecutar, así que el antiguo `at` no enviará el mensaje de inmediato. `max_chats_check` y `max_chats_rules` siguen como nombres compatibles; los nombres principales son `max_chats_moderate` y `max_chats_rules_show`.
 
-`at` de `max_messages_send` sigue `--at-time`: fecha local `2026-09-25T09:00` o `30m`, `2h`, `1d`, entre un minuto y un año, redondeando hacia abajo al minuto. Rechaza `silent` y `send_id`. Cuenta en la hora del envío. El formulario de `--confirm-send` muestra la hora. Sin respuesta no reintenta; consulta `max_messages_scheduled`.
+Los errores son `{ error: { code, message, … } }`, con los mismos códigos del CLI. Un nombre ambiguo devuelve `candidates` y no envía nada.
+
+`at_time` de `max_messages_send` sigue `--at-time`: fecha local `2026-09-25T09:00` o `30m`, `2h`, `1d`, entre un minuto y un año, redondeando hacia abajo al minuto. Rechaza `silent` y `send_id`. Cuenta en la hora del envío. El formulario de `--confirm-send` muestra la hora. Sin respuesta no reintenta; consulta `max_messages_scheduled`.
 
 ## Prompts y chats mediante `@`
 
@@ -135,7 +152,7 @@ Ofrece cuatro prompts preparados; en Claude Code son comandos `/`:
 
 | Prompt | Argumento | Qué hace el agente |
 |---|---|---|
-| `catch-up` | `since`: opcional | llama una vez a `max_inbox` y resume por chat; no envía |
+| `catch-up` | `kind`, `mode`: opcionales | llama a `max_inbox`; `mode` es `unread` (por defecto), `new` o un momento; `kind` elige el tipo de chat; marcar como leído exige una confirmación aparte |
 | `reply` | `chat` | lee, prepara borrador y solo envía tras aprobar ese texto |
 | `review` | `since`, `groups`: opcionales | llama a `max_review`, clasifica tus compromisos, lo esperado y dudas con identificadores; antes de marcar vencido busca si se cumplió en grupos; recordatorios en borrador hasta aprobar; indica `since` para continuar |
 | `find` | `text` | busca persona o palabras y muestra contexto; no envía |
@@ -148,6 +165,10 @@ Los chats son recursos `max://chat/<id>`, mencionables con `@` en Claude Code. D
 
 ## Cómo mantiene la conexión
 
-La primera llamada se conecta a MAX y las siguientes reutilizan la conexión. Se cierra tras 2 minutos sin llamadas y siempre a los 5 minutos, porque la lista de chats procede del inicio de sesión y podría quedar obsoleta. La siguiente llamada vuelve a conectar. Las llamadas se ejecutan una a una aunque lleguen simultáneamente.
+La primera llamada que necesita MAX abre la conexión; las siguientes llamadas de red la reutilizan. La búsqueda local, las estadísticas, las pruebas y la lectura de datos guardados no requieren iniciar sesión. La conexión se cierra tras 2 minutos sin llamadas y siempre a los 5 minutos, porque la lista de chats procede del inicio de sesión y podría quedar obsoleta. La siguiente llamada vuelve a conectar. Las llamadas se ejecutan una a una aunque lleguen simultáneamente.
 
-El servidor termina al cerrar stdin el cliente y cierra la conexión con MAX.
+Los temas de Telegram no existen en MAX, así que no hay herramientas `max_topics_*`. El reconocimiento directo puede devolver la transcripción guardada del mismo modelo; la foto usa la vista previa de MAX, se elige con `index` y está limitada a 512 KB. Los modelos nunca se descargan automáticamente. Antes del reconocimiento local, el servidor libera la conexión; el modelo de búsqueda se cierra al terminar el servidor.
+
+En el modo stdin/stdout, el servidor termina al cerrar stdin el cliente y cierra la conexión con MAX. HTTP funciona hasta Ctrl-C.
+
+`max mcp --http --public-url https://<имя>.ts.net` está disponible a través de tu túnel HTTPS, con acceso mediante un código del terminal. Por HTTP, cada escritura exige formulario, sea cual sea `allow`, `--yes` o `--allow-dangerous`. `max mcp --revoke` cierra los accesos de las aplicaciones y conserva la sesión de MAX. Consulta la [conexión desde el navegador](./remote.md).

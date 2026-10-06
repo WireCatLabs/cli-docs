@@ -287,6 +287,23 @@ max chats members list <chat> [options]
 | `--page <n>` | номер страницы, начиная с 1. |
 | `--all` | все строки без страниц. |
 
+#### `max chats members audit`
+
+участники, похожие на ботов, с причинами для каждого — по списку участников и локальной базе; без запроса на каждого человека, никого не удаляет
+
+```sh
+max chats members audit <chat> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | чат: идентификатор или часть названия. |
+
+| Опция | Что делает |
+|---|---|
+| `--budget <pages>` | не больше стольких страниц по 200 участников, с паузой между ними (по умолчанию: 10). |
+| `--min-score <n>` | только участники с оценкой не ниже этой; 1 выводит всех, у кого есть причина (по умолчанию: 2). |
+
 #### `max chats members add`
 
 добавить участников; они получат уведомление
@@ -773,6 +790,26 @@ max messages links <chat> <message>
 | `chat` | обязательный | чат: идентификатор или часть названия. |
 | `message` | обязательный | идентификатор сообщения. |
 
+### `max messages stats`
+
+число подходящих сохранённых сообщений по чатам, отправителям, дням или часам — только локальная база; без запросов
+
+```sh
+max messages stats [query] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | строгий запрос Lucene, как в messages search; без него считаются все сохранённые сообщения. |
+
+| Опция | Что делает |
+|---|---|
+| `--by <chat\|sender\|day\|hour>` | признак группировки (по умолчанию: chat). |
+| `--chat <chat>` | только этот чат — то же, что chat: в запросе; чат: идентификатор или часть названия. |
+| `--source <messenger>` | все аккаунты этого мессенджера в базе; personal, bots или all — то же, что in: в запросе. |
+| `--limit <n>` | количество строк. |
+| `--timezone <zone>` | часовой пояс IANA для календарных дней и часов. |
+
 ### `max messages link`
 
 постоянная ссылка на сообщение, если она поддерживается, и локатор, привязанный к аккаунту
@@ -1056,18 +1093,22 @@ max store jobs cancel <job>
 сохранённые сообщения чата в JSON по строкам, от старых к новым; без запросов
 
 ```sh
-max store export <chat> [options]
+max store export [chats] [options]
 ```
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | чат: идентификатор или часть названия. |
+| `chats` | необязательный | чат: идентификатор или часть названия; несколько с --to. |
 
 | Опция | Что делает |
 |---|---|
 | `--format <format>` | jsonl (по умолчанию): сообщение на строку; markdown: переписка с дневными заголовками и цитатами ответов и пересылок. |
 | `--since-time <time>` | после времени ISO 8601 или 30m / 2h / 1d назад. |
 | `--output <file>` | записать JSON по строкам или переписку в новый закрытый файл. |
+| `--to <dir>` | записать в эту папку файл на каждый чат и манифест; повторный запуск в ту же папку добавит только изменения. |
+| `--kind <kinds>` | с --to: все сохранённые чаты этих типов через запятую: dialog, group, channel, saved. |
+| `--all` | с --to: все сохранённые чаты этого аккаунта. |
+| `--encrypt` | сжать и зашифровать паролем, введённым в скрытом запросе или переданным через stdin; пароль не сохраняется — без него файл не открыть. |
 
 ### `max store clear`
 
@@ -1119,12 +1160,16 @@ max store reindex
 скопировать работающую базу в новый файл без перезаписи
 
 ```sh
-max store backup <file>
+max store backup <file> [options]
 ```
 
 | Аргумент | | Что это |
 |---|---|---|
 | `file` | обязательный | новый файл. |
+
+| Опция | Что делает |
+|---|---|
+| `--encrypt` | сжать и зашифровать паролем, введённым в скрытом запросе или переданным через stdin; пароль не сохраняется — без него файл не открыть. |
 
 ### `max store restore`
 
@@ -1136,7 +1181,23 @@ max store restore <file>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `file` | обязательный | файл, созданный `store backup`. |
+| `file` | обязательный | файл, созданный `store backup`; для файла с --encrypt запрашивается пароль. |
+
+### `max store decrypt`
+
+открыть файл, записанный с --encrypt, в новый файл; запрашивает пароль
+
+```sh
+max store decrypt <file> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `file` | обязательный | файл, созданный `store backup --encrypt` или `store export --encrypt`. |
+
+| Опция | Что делает |
+|---|---|
+| `--output <file>` | новый закрытый файл. |
 
 ## `max conversations`
 
@@ -1144,7 +1205,7 @@ max store restore <file>
 
 ### `max conversations build`
 
-построить разговоры из базы вместо прошлого результата; без запросов
+построить разговоры из базы вместо прошлого результата; без --chat — все чаты, изменившиеся после построения, и все ещё не построенные группы; без запросов
 
 ```sh
 max conversations build [options]
@@ -1153,6 +1214,7 @@ max conversations build [options]
 | Опция | Что делает |
 |---|---|
 | `--chat <chat>` | чат: идентификатор или часть названия. |
+| `--max-chats <n>` | не больше стольких чатов за запуск; по умолчанию 20. |
 
 ### `max conversations list`
 
@@ -1181,6 +1243,43 @@ max conversations show <conversation> [message]
 | `conversation` | обязательный | идентификатор из `conversations list` либо чат по идентификатору/части названия с сообщением. |
 | `message` | необязательный | идентификатор сообщения чата для выбора разговора. |
 
+### `max conversations related`
+
+разговоры, ближайшие по смыслу к разговору сообщения, во всех построенных чатах, лучшие первыми — по векторам из `conversations embed`; модель не запускается
+
+```sh
+max conversations related <chat> <message> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | чат: идентификатор или часть названия. |
+| `message` | обязательный | идентификатор сообщения в этом чате. |
+
+| Опция | Что делает |
+|---|---|
+| `--limit <n>` | количество. |
+| `--model <model>` | локально: идентификатор из `models text list` (по умолчанию e5-small); удалённо: модель сервиса. |
+| `--provider <provider>` | векторизация через сервис со своим ключом вместо локальной: openai. |
+| `--base-url <url>` | сервер с OpenAI /v1/embeddings: Gemini, Jina, локальные Ollama или LM Studio. |
+| `--dims <n>` | размер вектора сервиса; нужен с --base-url, уменьшает вектор модели OpenAI. |
+
+### `max conversations status`
+
+актуальность разговоров и векторов каждого построенного чата: сообщения после построения, фрагменты с актуальным, устаревшим или отсутствующим вектором
+
+```sh
+max conversations status [options]
+```
+
+| Опция | Что делает |
+|---|---|
+| `--chat <chat>` | только чат: идентификатор или часть названия. |
+| `--model <model>` | локально: идентификатор из `models text list` (по умолчанию e5-small); удалённо: модель сервиса. |
+| `--provider <provider>` | векторизация через сервис со своим ключом вместо локальной: openai. |
+| `--base-url <url>` | сервер с OpenAI /v1/embeddings: Gemini, Jina, локальные Ollama или LM Studio. |
+| `--dims <n>` | размер вектора сервиса; нужен с --base-url, уменьшает вектор модели OpenAI. |
+
 ### `max conversations search`
 
 ближайшие разговоры по смыслу и словам, лучшие первыми, один или все чаты; смысл после `conversations embed`; локальное выполнение
@@ -1199,9 +1298,12 @@ max conversations search <query> [options]
 | `--provider <provider>` | векторизация через сервис со своим ключом вместо локальной: openai. |
 | `--base-url <url>` | сервер с OpenAI /v1/embeddings: Gemini, Jina, локальные Ollama или LM Studio. |
 | `--dims <n>` | размер вектора сервиса; нужен с --base-url, уменьшает вектор модели OpenAI. |
+| `--max-chats <n>` | не больше стольких чатов за запуск; по умолчанию 20. |
+| `--max-chunks <n>` | не больше стольких векторизованных фрагментов за запуск; по умолчанию 2000. |
 | `--chat <chat>` | только чат: идентификатор или часть названия. |
 | `--since-time <time>` | разговоры, продолжавшиеся после ISO 8601 или 30m / 2h / 1d назад. |
 | `--limit <n>` | количество. |
+| `--refresh` | сначала локально построить и векторизовать изменившиеся или не построенные чаты в области поиска — в пределах --max-chats и --max-chunks. |
 
 ### `max conversations batches`
 
@@ -1264,7 +1366,7 @@ max conversations links clear [options]
 
 ### `max conversations embed`
 
-векторизовать фрагменты разговоров локально или через --provider со своим ключом; повтор продолжает работу
+векторизовать фрагменты разговоров локально или через --provider со своим ключом; повтор продолжает работу; без --chat — все построенные чаты с оставшимися фрагментами, только локально
 
 ```sh
 max conversations embed [options]
@@ -1281,6 +1383,8 @@ max conversations embed [options]
 | `--threads <n>` | локально: общее число потоков (по умолчанию min(8, cores)). |
 | `--concurrency <n>` | удалённо: параллельные запросы (по умолчанию 4). |
 | `--max-tokens <n>` | удалённо: не запускать задачу, превышающую лимит токенов. |
+| `--max-chats <n>` | не больше стольких чатов за запуск; по умолчанию 20. |
+| `--max-chunks <n>` | не больше стольких векторизованных фрагментов за запуск; по умолчанию 2000. |
 
 #### `max conversations embed status`
 
@@ -1590,8 +1694,11 @@ max inbox [options]
 | `--since-time <time>` | после времени ISO 8601 или 2h / 1d назад; позиция не меняется. |
 | `--limit <n>` | максимум на чат, самые новые. |
 | `--all` | включить чаты без уведомлений и архив; иначе только упоминания и ответы вам. |
+| `--kind <kinds>` | только чаты этих типов через запятую: dialog, group, channel, saved. |
 | `--transcribe` | распознать ещё не обработанные голосовые через мессенджер или локальную модель; может занять минуты. |
 | `--model <id>` | скачанная модель для --transcribe; список в `models audio list`. |
+| `--mark-read` | также отметить каждый показанный чат прочитанным до последнего показанного сообщения; собеседник это увидит. |
+| `--no-mark-read` | не отмечать, независимо от настройки catchUpMarksRead. |
 
 ## `max review`
 
@@ -1605,10 +1712,14 @@ max review [options]
 |---|---|
 | `--since-time <time>` | конец прошлой проверки: ISO 8601 или 2h / 1d назад; по умолчанию три дня. |
 | `--chat <chat>` | только чат: идентификатор или часть названия. |
+| `--kind <kinds>` | только чаты этих типов через запятую: dialog, group, channel, saved. |
 | `--unanswered [duration]` | вопросы вам или администраторам без ответа старше срока: 4h, 1d; по умолчанию 24h. |
 | `--all` | включить чаты без уведомлений и архив; иначе только упоминания и ответы вам. |
 | `--transcribe` | распознать ещё не обработанные голосовые через мессенджер или локальную модель; может занять минуты. |
 | `--model <id>` | скачанная модель для --transcribe; список в `models audio list`. |
+| `--new` | изменения после последнего `review --new`, с позицией для каждого чата; для расписания. |
+| `--mark-read` | также отметить каждый показанный чат прочитанным до последнего показанного сообщения; собеседник это увидит. |
+| `--no-mark-read` | не отмечать, независимо от настройки catchUpMarksRead. |
 
 ## `max serve`
 
@@ -1748,7 +1859,7 @@ max config set <setting> <value> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `setting` | обязательный | одно из: limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, senderColors, serve, mcpTools, readOtherBots, updateCheck, skillHint, transcribeModel, defaultProfile. |
+| `setting` | обязательный | одно из: limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, senderColors, catchUpMarksRead, serve, mcpTools, readOtherBots, updateCheck, skillHint, transcribeModel, defaultProfile. |
 | `value` | обязательный | число, true, false или список allow, например send,reaction. |
 
 | Опция | Что делает |
@@ -1769,7 +1880,7 @@ max config unset <setting> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `setting` | обязательный | одно из: limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, senderColors, serve, mcpTools, readOtherBots, updateCheck, skillHint, transcribeModel, defaultProfile. |
+| `setting` | обязательный | одно из: limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, senderColors, catchUpMarksRead, serve, mcpTools, readOtherBots, updateCheck, skillHint, transcribeModel, defaultProfile. |
 
 | Опция | Что делает |
 |---|---|
@@ -1926,6 +2037,10 @@ max mcp [options]
 | `--allow-mark-read` | устарело: задайте permissions.chats.mark-read в настройках; флаг не даёт доступ. |
 | `--allow-delete` | устарело: задайте permissions.messages.delete в настройках; флаг не даёт доступ. |
 | `--allow-moderate` | устарело: используйте permissions.chats.moderate и правила группы; флаг не даёт доступ. |
+| `--http` | работать по HTTP на 127.0.0.1 для ChatGPT и Claude в браузере, за вашим туннелем; каждое изменение требует подтверждения. |
+| `--port <port>` | локальный порт для --http (по умолчанию 8765). |
+| `--public-url <url>` | https-адрес туннеля для браузерных приложений, например https://<name>.ts.net. |
+| `--revoke` | отозвать все входы браузерных приложений; каждому придётся войти снова. |
 
 ### `max mcp config`
 
