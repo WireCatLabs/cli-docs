@@ -3,6 +3,31 @@ title: "Historial de cambios"
 ---
 Cambios destacados de `@leemour/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.28.0 — 04.10.2026
+
+### Novedades
+
+- MCP `max_chats_stats` calcula la actividad de un grupo o canal a partir del archivo local; no consulta las entradas ni las salidas. `max chats members audit` muestra señales de miembros sospechosos, sin eliminar a nadie.
+- MCP `max_inbox` y `max_review` aceptan `kinds` y `new`, con marcas por chat separadas de las de la CLI.
+
+- **`max messages stats` cuenta mensajes del archivo local por chat, remitente, día u hora.** La consulta usa Lucene estricto; sin ella, se cuentan todos los mensajes guardados de la cuenta actual. No usa la red; `--source max` incluye explícitamente los demás perfiles. En un archivo incompleto, el resultado es un límite inferior; revisa `coverage` y `completeness`.
+- **`max mcp --http --public-url https://<имя>.ts.net` abre `max` a ChatGPT y Claude en el navegador.** Las herramientas MCP se ofrecen en `127.0.0.1` detrás de tu propio túnel, con acceso propio: la aplicación necesita un código de un solo uso que `max` muestra en el terminal. Cada cambio pregunta antes mediante un formulario en la aplicación. El acceso dura 30 días; `max mcp --revoke` los cierra todos. [docs/remote.md](./remote.md) sustituye el montaje con un proxy de terceros.
+
+- El MCP personal usa el mismo conjunto de esquemas que Telegram: dispositivos, búsqueda de contactos por teléfono, carpetas, miembros, invitaciones, configuración del grupo, encuestas, pruebas locales y conversaciones. Los temas de Telegram no existen en MAX. Se conservan los nombres antiguos de comprobación y reglas del grupo.
+- Un envío programado confirmado usa la hora del formulario, aunque la respuesta llegue más tarde.
+
+### Cambios que pueden romper scripts
+
+- `coverage.inventoryComplete` indica ahora que se ha recibido la lista completa de chats, y `lastSyncedAt`, la carga más antigua dentro de la cobertura; las entradas de `completeness` incluyen `fetchedAt`. Un archivo existente obtiene estos datos tras la siguiente lista completa y la descarga del historial. `/catch-up` acepta `kind` y `mode` en lugar de `since`.
+- `config set permissions` rechaza órdenes desconocidas, incluidas erratas dentro de un objeto completo, con el código 2. `config unset` permite eliminarlas; al leer un archivo existente se avisa y se continúa.
+
+- Los argumentos de MCP usan los nombres comunes: `at_time`, `md`, `since_time`, `before_n`, `after_n`, `unanswered`; `send_id` es ahora una cadena. Los argumentos desconocidos se rechazan antes de ejecutar. Actualiza las llamadas según el esquema de `tools/list`. En `max_inbox` y `max_review`, el parámetro `all: true` incluye los chats silenciados y archivados; sin él, solo quedan las menciones al propietario.
+
+### Correcciones
+
+- La búsqueda y las estadísticas muestran la cobertura real del archivo local y la hora de la última carga. `wordsReady` ya no promete un índice de palabras listo para búsquedas solo con filtros o regex. `store fetch` ignora la marca de inicio del historial si aparecen mensajes más antiguos en el archivo.
+- `server status` informa del código de cierre normal del servicio y del motivo de la parada sin volver a iniciarlo.
+
 ## 0.27.0 — 04.10.2026
 
 ### Novedades
@@ -61,6 +86,11 @@ Cambios destacados de `@leemour/max-cli`, con una sección por versión, recient
 ### Novedades
 
 - `bot api` usa el mismo constructor de comandos y validación de entrada que Telegram. Los generadores permanecen en cli-core; se conservan los parámetros, respuestas nativas y permisos efectivos de MAX. La opción compartida `--store-token <profile>` sirve para operaciones que devuelven credenciales; las demás la rechazan.
+
+### Correcciones
+
+- **`messages list`, `inbox` y `review` con `--transcribe` descargan la grabación por la conexión de lectura.** Antes se abría un segundo acceso a MAX. La grabación se descarga antes de cerrar la conexión, y el reconocimiento local empieza después del cierre. Sin un `--mark-read` explícito, no se marca nada como leído.
+- **`review --unanswered` tiene en cuenta las transcripciones guardadas y nuevas de preguntas de voz.** Antes, una pregunta con texto vacío se descartaba antes de transcribirla. La misma corrección se aplica en MCP; el texto original del mensaje no cambia, y las grabaciones sin reconocer dejan la revisión incompleta.
 
 ### Cambios que pueden romper scripts
 
@@ -385,7 +415,7 @@ Los comandos siguen sustantivo y acción. Los nombres anteriores devuelven «unk
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/leemour/max-cli/blob/v0.27.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/leemour/max-cli/blob/v0.28.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos cómodos.** `max <имя> bot messages send <чат> <текст>` escribe a ID, `user:<номер>` o nombre visto. También `edit`, `delete`, `list`, `get`. `max <имя> bot chats list`, `chats get|pin|unpin|leave|action`, `max bot list`. MAX no lista chats del bot: el CLI recuerda los vistos.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).
 - **Actividad de grupos.** `max review --unanswered [часы]` encuentra preguntas sin respuesta tuya ni de administradores; `max review --chat <чат>` revisa un chat. `max chats events <чат>` muestra ingresos, salidas, altas y expulsiones. `max chats members list

@@ -46,7 +46,7 @@ Downloaded data goes into the shared store used by `tg`; `max store info` shows 
 Store maintenance:
 
 - `max store check` — file integrity, search indexes, disk space and stale chats.
-- `max store backup <файл>` — back up the live store without overwriting an existing file; `max store restore <файл>` restores it and keeps the previous file alongside.
+- `max store backup <файл>` — back up the live store without overwriting an existing file; `max store restore <файл>` restores it and keeps the previous file alongside. With `--encrypt`, the copy is compressed and encrypted with a password — see [Password](#пароль);
 - `max store reindex` — rebuild the search index without losing messages.
 - `max store migrate` — upgrade the file to this version's schema.
 
@@ -61,6 +61,31 @@ max store export 111 --format jsonl --since-time 2026-09-01 > чат.jsonl
 
 Export **never connects to the network** and includes only downloaded or previously read data. Fetch older history with `max store fetch <чат>`. Existing files are never overwritten. A file written with `--output` is accessible only to you (`0600`): it contains photo links that open without logging in.
 
+### Exporting to a folder and adding only what is new
+
+`--to <папка>` writes chats to a folder: one JSONL file per chat and `manifest.json`. Running it again into the same folder adds only what has changed since the last run: new messages, edits (including edits to old messages) and deletions. A deleted message is written without its text — `{ "id", "chatId", "deleted": true }`.
+
+```sh
+max store export Друзья Работа --to ~/max-архив
+max store export --kind group --to ~/max-группы
+max store export --all --to ~/max-всё
+```
+
+`max` does not touch a folder with other files in it or an export from another account. A change to reactions alone does not count as a change.
+
+### Password
+
+`--encrypt` on `store export` (with `--output` or `--to`) and on `store backup` compresses the file and encrypts it with a password. No external programs are needed. To open such a file, use `max store decrypt <файл> --output <новый файл>`; `max store restore` asks for the password of an encrypted copy itself.
+
+- **The password is not saved anywhere** — not in the settings, not in the password store, not in the log. If you forget it, the file cannot be opened.
+- Enter the password yourself in the terminal: it is not shown and is asked for twice. An agent that you gave the password to passes it through stdin, not as a command argument — an argument is visible to other programs:
+
+  ```sh
+  printf '%s' 'пароль' | max store backup ~/max.sealed --encrypt
+  ```
+
+- An encrypted folder gets one file per run. Its `manifest.json` has no chat names, and `max` does not accept a run with a different password.
+
 ## Search
 
 `max messages search` reads only the local archive. Its default is a strict Lucene profile: words, phrases, Boolean groups, fields, dates and limited regex. The full [search reference](./search.md) explains syntax and migration. Use `--language legacy` for the previous filters and typo correction.
@@ -71,7 +96,7 @@ max messages search 'invoice date:[2026-01-01 TO 2026-02-01}' --timezone Europe/
 max messages search 'preset:secret kind:saved' --json
 ```
 
-An empty result means “not found in the selected archive”. JSON reports completeness and coverage; the last network update time is currently unknown. `--source` selects providers and accounts, `--newest` sorts by time and `--context` includes neighboring messages. `--regex` remains a separate JavaScript mode.
+An empty result means “not found in the selected archive”. JSON reports completeness and coverage; `lastSyncedAt` is the oldest chat fetch in coverage, or `null` if at least one chat has not been fetched yet. `--source` selects providers and accounts, `--newest` sorts by time and `--context` includes neighboring messages. `--regex` remains a separate JavaScript mode.
 
 ## Conversations within a group
 

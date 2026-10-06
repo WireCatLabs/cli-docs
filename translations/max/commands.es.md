@@ -288,6 +288,23 @@ max chats members list <chat> [options]
 | `--page <n>` | Número de página, desde 1. |
 | `--all` | Todas las filas, sin paginación. |
 
+#### `max chats members audit`
+
+miembros que parecen bots, cada uno con sus motivos; se lee de la lista de miembros y del archivo local, nunca una solicitud por persona, y no elimina a nadie
+
+```sh
+max chats members audit <chat> [options]
+```
+
+| Argumento || Descripción |
+|---|---|---|
+| `chat` | obligatorio | Un chat: identificador o parte de su título. |
+
+| Opción | Descripción |
+|---|---|
+| `--budget <pages>` | como máximo estas páginas de 200 miembros, con una pausa entre ellas (predeterminado: 10). |
+| `--min-score <n>` | solo miembros con al menos esta puntuación; 1 muestra a todos los que tengan algún motivo (predeterminado: 2). |
+
 #### `max chats members add`
 
 añade personas y les notifica
@@ -774,6 +791,26 @@ max messages links <chat> <message>
 | `chat` | obligatorio | Un chat: identificador o parte de su título. |
 | `message` | obligatorio | identificador del mensaje. |
 
+### `max messages stats`
+
+cuántos mensajes guardados coinciden, por chat, remitente, día u hora; solo el archivo local, nunca consulta el servicio
+
+```sh
+max messages stats [query] [options]
+```
+
+| Argumento || Descripción |
+|---|---|---|
+| `query` | opcional | una consulta Lucene estricta, como en messages search; sin ella se cuentan todos los mensajes guardados. |
+
+| Opción | Descripción |
+|---|---|
+| `--by <chat\|sender\|day\|hour>` | por qué contar (predeterminado: chat). |
+| `--chat <chat>` | solo este chat, igual que chat: en la consulta; un chat: identificador o parte de su título. |
+| `--source <messenger>` | todas las cuentas de este servicio guardadas en el archivo; personal, bots o all, igual que in: en la consulta. |
+| `--limit <n>` | cuántas filas. |
+| `--timezone <zone>` | zona horaria IANA para días naturales y horas. |
+
 ### `max messages link`
 
 un permalink cuando se admite y el locator asociado a la cuenta
@@ -1057,18 +1094,22 @@ max store jobs cancel <job>
 mensajes guardados de un chat en líneas JSON, antiguos primero; nunca consulta el servicio
 
 ```sh
-max store export <chat> [options]
+max store export [chats] [options]
 ```
 
 | Argumento || Descripción |
 |---|---|---|
-| `chat` | obligatorio | Un chat: identificador o parte de su título. |
+| `chats` | opcional | Un chat: identificador o parte de su título; varios con --to. |
 
 | Opción | Descripción |
 |---|---|
 | `--format <format>` | jsonl (predeterminado): mensaje por línea; markdown: transcripción por días con respuestas y reenvíos citados. |
 | `--since-time <time>` | solo a partir de esta fecha ISO 8601 o intervalo anterior como 30m / 2h / 1d. |
 | `--output <file>` | escribe líneas JSON o transcripción en un archivo nuevo, legible solo por ti. |
+| `--to <dir>` | escribe en esta carpeta un archivo por chat y un manifiesto; al repetir sobre ella, solo lo que ha cambiado desde entonces. |
+| `--kind <kinds>` | con --to: todos los chats guardados de estos tipos, separados por comas: dialog, group, channel, saved. |
+| `--all` | con --to: todos los chats guardados de esta cuenta. |
+| `--encrypt` | comprime y cifra con una contraseña, escrita en una entrada oculta o pasada por stdin; nunca se guarda: si la pierdes, el archivo no se puede abrir. |
 
 ### `max store clear`
 
@@ -1120,12 +1161,16 @@ max store reindex
 copia el archivo local mientras está en uso, sin sobrescribir
 
 ```sh
-max store backup <file>
+max store backup <file> [options]
 ```
 
 | Argumento || Descripción |
 |---|---|---|
 | `file` | obligatorio | archivo nuevo. |
+
+| Opción | Descripción |
+|---|---|
+| `--encrypt` | comprime y cifra con una contraseña, escrita en una entrada oculta o pasada por stdin; nunca se guarda: si la pierdes, el archivo no se puede abrir. |
 
 ### `max store restore`
 
@@ -1137,7 +1182,23 @@ max store restore <file>
 
 | Argumento || Descripción |
 |---|---|---|
-| `file` | obligatorio | archivo creado por `store backup`. |
+| `file` | obligatorio | archivo creado por `store backup`; si se creó con --encrypt, pide su contraseña. |
+
+### `max store decrypt`
+
+abre en un archivo nuevo un archivo creado con --encrypt; pide su contraseña
+
+```sh
+max store decrypt <file> [options]
+```
+
+| Argumento || Descripción |
+|---|---|---|
+| `file` | obligatorio | archivo creado por `store backup --encrypt` o `store export --encrypt`. |
+
+| Opción | Descripción |
+|---|---|
+| `--output <file>` | el archivo nuevo, legible solo por ti. |
 
 ## `max conversations`
 
@@ -1145,7 +1206,7 @@ conversaciones dentro de un chat, identificadas por respuestas, menciones y turn
 
 ### `max conversations build`
 
-identifica conversaciones en el archivo local, sustituyendo el análisis anterior; nunca consulta el servicio
+identifica conversaciones en el archivo local, sustituyendo el análisis anterior; sin --chat, cada chat que ha cambiado desde su análisis y cada grupo nunca analizado; nunca consulta el servicio
 
 ```sh
 max conversations build [options]
@@ -1154,6 +1215,7 @@ max conversations build [options]
 | Opción | Descripción |
 |---|---|
 | `--chat <chat>` | Un chat: identificador o parte de su título. |
+| `--max-chats <n>` | como máximo estos chats por ejecución; 20 si no se indica. |
 
 ### `max conversations list`
 
@@ -1182,6 +1244,43 @@ max conversations show <conversation> [message]
 | `conversation` | obligatorio | Un identificador de conversación de `conversations list`, o un chat por identificador o título parcial y un mensaje. |
 | `message` | opcional | identificador de mensaje del chat; muestra la conversación que lo contiene. |
 
+### `max conversations related`
+
+conversaciones más próximas por significado a la que contiene un mensaje, en todos los chats analizados, mejores primero; usa los vectores guardados por `conversations embed`, sin ejecutar ningún modelo
+
+```sh
+max conversations related <chat> <message> [options]
+```
+
+| Argumento || Descripción |
+|---|---|---|
+| `chat` | obligatorio | Un chat: identificador o parte de su título. |
+| `message` | obligatorio | identificador de mensaje de ese chat. |
+
+| Opción | Descripción |
+|---|---|
+| `--limit <n>` | cuántos. |
+| `--model <model>` | local: identificador de `models text list` (predeterminado: e5-small); remoto: modelo del proveedor. |
+| `--provider <provider>` | calcula vectores mediante servicio con tu clave en lugar de localmente: openai. |
+| `--base-url <url>` | servidor compatible con /v1/embeddings de OpenAI: Gemini, Jina, Ollama o LM Studio local. |
+| `--dims <n>` | remoto: tamaño vectorial; necesario con --base-url y reduce el de modelos OpenAI. |
+
+### `max conversations status`
+
+lo actualizadas que están las conversaciones y los vectores de cada chat analizado: mensajes que el análisis no ha visto y fragmentos con vector actual, obsoleto o ausente
+
+```sh
+max conversations status [options]
+```
+
+| Opción | Descripción |
+|---|---|
+| `--chat <chat>` | Solo este chat, por identificador o título parcial. |
+| `--model <model>` | local: identificador de `models text list` (predeterminado: e5-small); remoto: modelo del proveedor. |
+| `--provider <provider>` | calcula vectores mediante servicio con tu clave en lugar de localmente: openai. |
+| `--base-url <url>` | servidor compatible con /v1/embeddings de OpenAI: Gemini, Jina, Ollama o LM Studio local. |
+| `--dims <n>` | remoto: tamaño vectorial; necesario con --base-url y reduce el de modelos OpenAI. |
+
 ### `max conversations search`
 
 conversaciones más próximas por significado y palabras, mejores primero, en uno o todos los chats; significado tras `conversations embed`, en este equipo
@@ -1200,9 +1299,12 @@ max conversations search <query> [options]
 | `--provider <provider>` | calcula vectores mediante servicio con tu clave en lugar de localmente: openai. |
 | `--base-url <url>` | servidor compatible con /v1/embeddings de OpenAI: Gemini, Jina, Ollama o LM Studio local. |
 | `--dims <n>` | remoto: tamaño vectorial; necesario con --base-url y reduce el de modelos OpenAI. |
+| `--max-chats <n>` | como máximo estos chats por ejecución; 20 si no se indica. |
+| `--max-chunks <n>` | como máximo estos fragmentos con vector por ejecución; 2000 si no se indica. |
 | `--chat <chat>` | Solo este chat, por identificador o título parcial. |
 | `--since-time <time>` | solo conversaciones aún activas desde esta fecha ISO 8601 o intervalo anterior como 30m / 2h / 1d. |
 | `--limit <n>` | cuántos. |
+| `--refresh` | primero analiza y calcula vectores, en este equipo, de los chats del alcance que han cambiado o nunca se analizaron, dentro de --max-chats y --max-chunks. |
 
 ### `max conversations batches`
 
@@ -1265,7 +1367,7 @@ max conversations links clear [options]
 
 ### `max conversations embed`
 
-calcula vectores de cada fragmento de conversaciones para búsqueda semántica, localmente o con --provider y tu clave; puede reanudarse
+calcula vectores de cada fragmento de conversaciones para búsqueda semántica, localmente o con --provider y tu clave; puede reanudarse; sin --chat, cada chat analizado con fragmentos pendientes, solo en este equipo
 
 ```sh
 max conversations embed [options]
@@ -1282,6 +1384,8 @@ max conversations embed [options]
 | `--threads <n>` | local: hilos totales (predeterminado: min(8, núcleos)). |
 | `--concurrency <n>` | remoto: peticiones simultáneas (predeterminado: 4). |
 | `--max-tokens <n>` | remoto: rechaza una ejecución que pueda enviar más tokens que este límite. |
+| `--max-chats <n>` | como máximo estos chats por ejecución; 20 si no se indica. |
+| `--max-chunks <n>` | como máximo estos fragmentos con vector por ejecución; 2000 si no se indica. |
 
 #### `max conversations embed status`
 
@@ -1591,8 +1695,11 @@ max inbox [options]
 | `--since-time <time>` | lo recibido después de esta fecha ISO 8601 o intervalo anterior como 2h / 1d; conserva el punto guardado. |
 | `--limit <n>` | máximo por chat, los más recientes. |
 | `--all` | incluye silenciados y archivados; por defecto los omite salvo menciones o respuestas a ti. |
+| `--kind <kinds>` | solo chats de estos tipos, separados por comas: dialog, group, channel, saved. |
 | `--transcribe` | transcribe notas de voz pendientes mediante el servicio o un modelo local; puede tardar minutos. |
 | `--model <id>` | modelo de voz descargado para --transcribe; `models audio list` muestra los disponibles. |
+| `--mark-read` | marca además como leído cada chat mostrado, hasta el mensaje más reciente mostrado; el interlocutor lo ve. |
+| `--no-mark-read` | no marca, diga lo que diga el ajuste catchUpMarksRead. |
 
 ## `max review`
 
@@ -1606,10 +1713,14 @@ max review [options]
 |---|---|
 | `--since-time <time>` | punto donde terminó la revisión anterior, en ISO 8601 o intervalo anterior como 2h / 1d; últimos 3 días por defecto. |
 | `--chat <chat>` | Solo este chat, por identificador o título parcial. |
+| `--kind <kinds>` | solo chats de estos tipos, separados por comas: dialog, group, channel, saved. |
 | `--unanswered [duration]` | solo preguntas para ti o administradores sin respuesta y anteriores a este intervalo: 4h, 1d; 24h por defecto. |
 | `--all` | incluye silenciados y archivados; por defecto los omite salvo menciones o respuestas a ti. |
 | `--transcribe` | transcribe notas de voz pendientes mediante el servicio o un modelo local; puede tardar minutos. |
 | `--model <id>` | modelo de voz descargado para --transcribe; `models audio list` muestra los disponibles. |
+| `--new` | lo que ha cambiado desde el último `review --new`, con un punto por chat; para tareas programadas. |
+| `--mark-read` | marca además como leído cada chat mostrado, hasta el mensaje más reciente mostrado; el interlocutor lo ve. |
+| `--no-mark-read` | no marca, diga lo que diga el ajuste catchUpMarksRead. |
 
 ## `max serve`
 
@@ -1749,7 +1860,7 @@ max config set <setting> <value> [options]
 
 | Argumento || Descripción |
 |---|---|---|
-| `setting` | obligatorio | uno de: limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, senderColors, serve, mcpTools, readOtherBots, updateCheck, skillHint, transcribeModel, defaultProfile. |
+| `setting` | obligatorio | uno de: limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, senderColors, catchUpMarksRead, serve, mcpTools, readOtherBots, updateCheck, skillHint, transcribeModel, defaultProfile. |
 | `value` | obligatorio | número, true o false; para allow, lista como send,reaction. |
 
 | Opción | Descripción |
@@ -1770,7 +1881,7 @@ max config unset <setting> [options]
 
 | Argumento || Descripción |
 |---|---|---|
-| `setting` | obligatorio | uno de: limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, senderColors, serve, mcpTools, readOtherBots, updateCheck, skillHint, transcribeModel, defaultProfile. |
+| `setting` | obligatorio | uno de: limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, senderColors, catchUpMarksRead, serve, mcpTools, readOtherBots, updateCheck, skillHint, transcribeModel, defaultProfile. |
 
 | Opción | Descripción |
 |---|---|
@@ -1927,6 +2038,10 @@ max mcp [options]
 | `--allow-mark-read` | obsoleto: usa permissions.chats.mark-read en la configuración; no otorga acceso. |
 | `--allow-delete` | obsoleto: usa permissions.messages.delete en la configuración; no otorga acceso. |
 | `--allow-moderate` | obsoleto: usa permissions.chats.moderate y las reglas del grupo; no otorga acceso. |
+| `--http` | sirve por HTTP en 127.0.0.1 para ChatGPT y Claude en el navegador, detrás de tu túnel; cada escritura pregunta primero. |
+| `--port <port>` | puerto local para --http (predeterminado 8765). |
+| `--public-url <url>` | dirección https del túnel que usan las aplicaciones del navegador, p. ej. https://<name>.ts.net. |
+| `--revoke` | olvida todos los accesos concedidos a aplicaciones del navegador; cada una tendrá que volver a iniciar sesión. |
 
 ### `max mcp config`
 

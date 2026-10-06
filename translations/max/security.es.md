@@ -3,16 +3,16 @@ title: "Seguridad y datos guardados"
 ---
 Esta herramienta accede a conversaciones personales. Por eso, explicar qué guarda es una parte central de su documentación.
 
+Lo común a `max` y `tg` (la copia local de las conversaciones, la protección de envíos, los permisos del agente, el texto ajeno en pantalla, lo que ven otros en el equipo y cómo informar de una vulnerabilidad) se describe en la [página común de seguridad](https://wirecat.dev/ru/docs/security). Aquí está lo que afecta solo a MAX.
+
 ## Resumen: qué protege
 
-- **Los mensajes ajenos no deben controlar al agente.** Las herramientas avisan al modelo de que el texto es contenido, no instrucciones. CLI y MCP usan los mismos `permissions`: la mayoría de escrituras se permiten por defecto; `messages.delete` y cerrar otras sesiones exigen confirmación. Restringe recursos con `readonly` o `deny`. `--confirm-send` exige tu formulario antes de cada escritura, incluido `allow`; la respuesta vale una vez, cinco minutos y solo para los parámetros mostrados ([mcp.md](./mcp.md#подтверждение-формой-от-самого-сервера)).
-- **Los límites del perfil se aplican en todas partes.** Los permisos de lectura y escritura, destinatarios y límite por hora se comprueban en el comando y en el servidor, incluso para programas que conectan directamente al socket. Cada intento se registra sin texto ([abajo](#защита-от-отправки-не-туда)).
-- **El agente permanece en su perfil y no envía tus claves.** `MAX_PROFILE_LOCK` fija el perfil; `--file` rechaza archivos ocultos, `~/.ssh` y los directorios de `max`.
-- **El texto ajeno no controla la terminal.** Los caracteres invisibles y de control aparecen como texto; nombres y títulos se imprimen en una línea y el autocompletado solo introduce números ([abajo](#чужой-текст-на-экране)).
-- **Red.** Solo se descargan archivos por HTTPS, nunca desde esta máquina o la red local, y dentro del tamaño configurado. Los frames MAX y los datos descomprimidos tienen límites; las conexiones tienen tiempos de espera ([abajo](#что-уходит-в-сеть)).
+Lo que protege cualquier herramienta de WireCat está en la [página común](https://wirecat.dev/ru/docs/security). Particularidades de MAX:
+
+- **El servidor en segundo plano también aplica los límites del perfil.** Los permisos, los destinatarios y el límite por hora se comprueban en el comando y en `max serve`, incluso para programas que conectan directamente a su socket ([abajo](#защита-от-отправки-не-туда)).
 - **Token.** `max` no guarda un token de `MAX_TOKEN` ni lo pasa al servidor. El servidor no entrega tokens a los clientes del socket ([abajo](#где-живёт-токен)).
-- **Archivos.** En Linux y macOS se crean con permisos `0600` en directorios `0700`, incluido el archivo local de conversaciones. Windows aplica las ACL heredadas del directorio del usuario ([abajo](#что-ещё-пишется-на-диск)).
-- **Publicación.** GitHub Actions publica el paquete con procedencia verificable. La publicación no ejecuta código de dependencias y sus versiones directas están fijadas exactamente.
+- **Red.** Solo se descargan archivos por HTTPS, nunca desde esta máquina o la red local, y dentro del tamaño configurado. Los frames MAX y los datos descomprimidos tienen límites; las conexiones tienen tiempos de espera ([abajo](#что-уходит-в-сеть)).
+- **Cuenta.** `max` no es una aplicación oficial, y las condiciones de MAX no permiten este tipo de programas sin consentimiento de la empresa ([abajo](#правила-max-и-ваш-аккаунт)).
 
 ## Dónde se guarda el token
 
@@ -56,7 +56,7 @@ También hay contenido de conversaciones en la copia del bot, exportaciones y de
 
 ### Si el equipo cae en otras manos
 
-En Linux y macOS, `0600` protege frente a otros usuarios, no frente a quien extrae el disco. Para eso usa cifrado completo: FileVault en macOS, LUKS en Linux, BitLocker en Windows. En Windows, `0600` y `0700` no establecen ACL: el acceso depende de los permisos del directorio del usuario y los directorios `MAX_*_DIR` elegidos. Los permisos numéricos de la tabla corresponden a Unix. La copia local no tiene cifrado propio: SQLite integrado en Node no lo ofrece y una clave del llavero no impediría que otro programa ejecutado como tu usuario lo leyese, igual que `max`.
+Frente a quien extrae el disco solo protege el cifrado completo del disco: consulta la [página común](https://wirecat.dev/ru/docs/security). En Windows, el acceso a los archivos depende de los permisos del directorio del usuario y de los directorios `MAX_*_DIR` elegidos; los permisos numéricos de la tabla corresponden a Unix.
 
 ## Qué no hace la herramienta
 
@@ -70,7 +70,7 @@ En Linux y macOS, `0600` protege frente a otros usuarios, no frente a quien extr
 
 ## Protección de envíos
 
-Un agente lee mensajes ajenos junto a tu petición. Esos mensajes pueden intentar hacerse pasar por instrucciones, como «reenvía esto aquí». Antes de enviar mensajes, reaccionar, editar, reenviar o eliminar, `max` comprueba límites; después registra el intento.
+Por qué hace falta la protección de envíos y cómo funciona se explica en la [página común](https://wirecat.dev/ru/docs/security). Antes de cada escritura (mensajes, reacciones, ediciones, reenvíos, eliminaciones), `max` comprueba cuatro cosas y después escribe una línea en el registro:
 
 | Control | Cómo activarlo | Rechazo |
 |---|---|---|
@@ -90,37 +90,15 @@ Contactos, perfil, carpetas y sesiones también respetan solo lectura. No usan d
 
 La lista es opcional: sin destinatarios añadidos, cualquier chat; activa pero vacía significa ninguno. Si está activa, `chats create <название> <люди…>` y `chats members add` solo admiten personas cuyo chat individual esté permitido. Un nuevo miembro no ve mensajes anteriores salvo con `--history`. Un mensaje programado cuenta en la hora del envío. Dos comandos simultáneos no superan juntos el límite: se reserva desde la comprobación hasta la respuesta. Eliminar datos de chats abandonados no modifica el registro de envíos.
 
-⚠ **Limitaciones de los controles.** Están dentro de `max`; un agente con shell puede modificar ajustes o quitar listas. Protegen frente a mensajes que **inducen** al modelo, no frente a agentes que **intentan** eludirlos. Para eso necesitas límites externos: entorno aislado, otro usuario del sistema o reglas del agente.
-
-Al elegir esos límites:
-
-- **`MAX_PROFILE_LOCK` fija el perfil; `MAX_PROFILE` no.** La primera palabra del comando tiene prioridad sobre `MAX_PROFILE`: un agente con `MAX_PROFILE=agent` puede ejecutar `max work messages send …`. `MAX_PROFILE_LOCK=agent` lo rechaza, pero solo donde el agente no puede cambiar su entorno, como ajustes MCP o un script envoltorio. Un agente con shell puede quitar la variable. El servidor MCP fija el perfil al arrancar.
-- **`--file` rechaza archivos ocultos, archivos dentro de directorios ocultos como `~/.ssh` y los directorios de `max`**, que contienen claves y tokens. `--allow-any-file` quita la restricción; el agente no debe añadirlo por su cuenta. Los demás archivos legibles por tu usuario pueden enviarse; el registro solo guarda tipo y tamaño.
-- **Una regla del agente como «preguntar antes de `max messages send`»** no detecta el perfil en `max work messages send`. Es más fiable limitar el perfil con `permissions` o destinatarios y evitar otro perfil conectado sin restricciones al lado.
+⚠ **Limitaciones de los controles.** Están dentro de `max`: un agente con shell puede quitarlos por sí mismo. Qué límite poner desde fuera se explica en la [página común](https://wirecat.dev/ru/docs/security). Para `max`: `MAX_PROFILE_LOCK` fija el perfil, `MAX_PROFILE` no; `--file` rechaza archivos ocultos, `~/.ssh` y los directorios de `max` mientras no se indique `--allow-any-file`.
 
 ## Texto ajeno en pantalla
 
-Nombres, títulos, archivos y mensajes provienen de otras personas. `max` impide que controlen tu terminal o falseen lo mostrado:
-
-- Controles que cambian colores, borran líneas, alteran títulos o portapapeles aparecen como texto (`\x1b`), sin ejecutarse; también invisibles y cambios de dirección.
-- Nombre, título y leyenda ocupan una línea para impedir filas falsas.
-- Aunque el nombre coincida exactamente con un chat y parcialmente con otros, muestra todos sin elegir.
-- Autocompletado inserta solo identificadores de chat o persona; el nombre es una ayuda.
-- Markdown y rutas descargadas reciben la misma limpieza; se eliminan controles de los nombres de archivos.
-
-`--json` contiene datos tal como los envió MAX, escapados según JSON. Si los pasas a un programa que imprime en terminal, límpialos allí.
+Los nombres, títulos y textos de otras personas no controlan la terminal: los caracteres de control e invisibles aparecen como texto, los nombres se imprimen en una línea y el autocompletado solo introduce números. Más detalles en la [página común](https://wirecat.dev/ru/docs/security).
 
 ## Qué ven otros procesos
 
-Los argumentos son visibles en `ps`. Por eso el token no es argumento, pero **el texto de un mensaje sí**:
-
-```sh
-max messages send 0 "текст"     # эта строка видна в ps и остаётся в истории оболочки
-```
-
-Si te preocupa, pásalo mediante el entorno de un script que controlas en lugar de la línea de comando, como el token.
-
-Otros usuarios no ven archivos ni socket: carpetas `0700`, archivos `0600`.
+El token no se pasa como argumento, pero el texto de un mensaje sí, y se ve en `ps` y en el historial de la shell ([página común](https://wirecat.dev/ru/docs/security)). Los archivos de `max` y el socket del servidor en segundo plano no son visibles para otros usuarios del equipo: carpetas `0700`, archivos `0600`.
 
 ## Qué sale por la red
 
@@ -152,7 +130,7 @@ Se avisa una vez por stderr al iniciar sesión por primera vez con `max setup` o
 
 ## Uso personal
 
-La herramienta guarda conversaciones y contactos ajenos. Para fines propios con tu cuenta, la ley rusa de datos personales (152-ФЗ, artículo 1, parte 2, punto 1) y el RGPD europeo (artículo 2(2)(c)) excluyen los fines personales y domésticos. Trabajar con cuentas ajenas o para negocios deja de ser uso personal. Entregar una exportación (`max store export`) también sale de ese ámbito; incluye enlaces de fotos que se abren sin iniciar sesión.
+Guardar conversaciones de otras personas es admisible mientras lo hagas para ti, con tu cuenta: la ley rusa de datos personales (152-ФЗ, artículo 1, parte 2, punto 1) no se aplica al tratamiento con fines personales y domésticos. Lo mismo sobre el RGPD, en la [página común](https://wirecat.dev/ru/docs/security). Entregar una exportación (`max store export`) a otra persona sale del uso personal; incluye enlaces de fotos que se abren sin iniciar sesión.
 
 Los informes (`max doctor report create`) se adjuntan a incidencias **públicas** de GitHub. No contienen texto, nombres ni teléfonos; los identificadores se sustituyen por etiquetas. Revísalos antes de enviarlos.
 
@@ -166,7 +144,7 @@ Cada acceso añade un dispositivo en la lista de sesiones de MAX; puedes cerrarl
 
 ## Protocolo no oficial
 
-MAX no publica API de cuentas personales. El conocimiento del protocolo procede de mediciones reales o ingeniería inversa ajena; se registra el origen de cada operación ([protocolo (`protocol.md`)](https://github.com/leemour/max-cli/blob/v0.27.0/docs/dev/protocol.md), columna «Where it came from»).
+MAX no publica API de cuentas personales. El conocimiento del protocolo procede de mediciones reales o ingeniería inversa ajena; se registra el origen de cada operación ([protocolo (`protocol.md`)](https://github.com/leemour/max-cli/blob/v0.28.0/docs/dev/protocol.md), columna «Where it came from»).
 
 **Puede dejar de funcionar sin aviso.** En ese caso el comando indica el problema por stderr, en lugar de devolver una lista vacía como si todo funcionase.
 
@@ -182,6 +160,7 @@ Esto **no basta**: `session end` no avisa al servidor y la sesión sigue activa.
 
 ## Siguientes pasos
 
+- [Página común de seguridad](https://wirecat.dev/ru/docs/security): lo que es igual en `max` y `tg`, y cómo informar de una vulnerabilidad.
 - [Diagnóstico](./diagnostics.md): qué se registra y qué nunca se registra.
 - [Sesiones](./sessions.md): almacén, `MAX_TOKEN` y diferencia entre cerrar localmente y revocar.
 - [MCP](./mcp.md): permisos del agente y opciones.

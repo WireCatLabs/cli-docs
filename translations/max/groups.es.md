@@ -10,7 +10,7 @@ Las órdenes que modifican grupos devuelven `operationId` en JSON; después de c
 
 ## Trabajar con un agente
 
-Los agentes con terminal, como Claude Code o Codex, pueden usar una [skill](https://github.com/leemour/max-cli/blob/v0.27.0/README.md#навык-для-агентов-с-терминалом). También pueden conectarse mediante el [servidor MCP](./mcp.md), por ejemplo en Claude Desktop o Cursor. Los ejemplos muestran tu petición, la llamada del agente y el resultado.
+Los agentes con terminal, como Claude Code o Codex, pueden usar una [skill](https://github.com/leemour/max-cli/blob/v0.28.0/README.md#навык-для-агентов-с-терминалом). También pueden conectarse mediante el [servidor MCP](./mcp.md), por ejemplo en Claude Desktop o Cursor. Los ejemplos muestran tu petición, la llamada del agente y el resultado.
 
 ### La mañana del administrador: quién espera respuesta
 
@@ -139,3 +139,7 @@ moderate`. Puede impedir el regreso por invitación a las personas expulsadas, a
 - **Hasta 1000 mensajes por comprobación en CLI.** La siguiente continúa desde el punto anterior.
 - **Una incorporación requiere toda la lista de miembros** para conocer la antigüedad de la cuenta; en grupos grandes puede necesitar decenas de solicitudes.
 - **No hay vigilancia automática.** Solo se comprueba cuando tú, tu agente por encargo o tu programación lo iniciáis.
+
+## Revisión de miembros
+
+`max chats members audit <чат>` lee los miembros del grupo y muestra señales de cuentas sospechosas. `--budget` limita las páginas y `--min-score`, la puntuación mínima. Es una pista para que una persona revise: no se elimina a nadie y se excluyen los administradores y el propietario; `more` indica que la lista está incompleta y `unknown`, señales desconocidas. MAX no ofrece todas las señales de Telegram. Con `--offline` la revisión no está disponible.

@@ -19,7 +19,9 @@ Replace example names with your own. Words and phrases match strictly, without a
 
 ## Fields and operators
 
-Supported fields are `text/body/from/chat/date/kind/has/topic/in/preset`, with Boolean groups, field-value groups, inclusive and exclusive ranges, limited wildcards and Lucene regex. `topic` requires exactly one chat. `kind:bot` selects a bot conversation partner; `in:bots` selects Bot API accounts. `filename/mime/size/tag` are not supported yet; fuzzy, proximity, boosts and intervals also produce errors. Unknown fields do not become plain text.
+Supported fields are `text/body/from/chat/date/kind/has/topic/in/preset/filename/mime/size`, with Boolean groups, field-value groups, inclusive and exclusive ranges, limited wildcards and Lucene regex. `topic` requires exactly one chat. `kind:bot` selects a bot conversation partner; `in:bots` selects Bot API accounts. `tag` is not supported yet; fuzzy, proximity, boosts and intervals also produce errors. Unknown fields do not become plain text.
+
+Files are found by name and size; the message text is not needed: `filename:*.pdf`, `filename:*договор*` (the whole name, ignoring case and ё), `size>10MB`, `size:[1KB TO 300KB]` (KB/MB/GB in units of 1024). MAX does not report the file type, so `mime:` finds nothing here — search by extension instead. A link to a website is found by a phrase: `has:link AND "github.com"`.
 
 ## Dates and regex
 
@@ -29,7 +31,7 @@ Regex on `text` matches an entire normalized word; `body` matches the full origi
 
 ## Archive coverage and machine-readable output
 
-An empty result does not prove that a message is absent from the messenger. JSON reports the query version, completeness, account/chat coverage and index readiness even without matches. `lastSyncedAt` is currently `null`; a profile’s chat list is not treated as complete. JSONL contains only `items`; use `--json` for coverage information. An unready word index requires `max store migrate`; fetch missing history with `max store fetch`. Built-in predicates find candidates, rather than confirming whether credentials are valid.
+An empty result does not prove that a message is absent from the messenger. JSON reports the query version, completeness, account/chat coverage and index readiness even without matches. `lastSyncedAt` is the oldest moment a chat in coverage was fetched, or `null` if at least one chat has not been fetched yet. `inventoryComplete` means that every account in coverage has sent a full chat list at least once; it does not promise complete history. After an update, an old archive keeps `false` and `null` until the next full chat list and `store fetch`. JSONL contains only `items`; use `--json` for coverage information. An unready word index requires `max store migrate`; fetch missing history with `max store fetch`. Built-in predicates find candidates, rather than confirming whether credentials are valid.
 
 ## Migrating from legacy
 
@@ -49,3 +51,5 @@ The [main query-language reference](https://github.com/leemour/cli-messaging/blo
 `max_messages_search` uses the same language and service as `messages search`. A query contains `text` or a versioned `ast`; `language` selects `lucene` or `legacy`, while `timezone` sets the calendar time zone. `chat` accepts an ID or a name from the local store; `source`, `newest`, `context` and `limit` select coverage and result presentation.
 
 The response keeps `query`, `coverage`, `completeness`, `wordsReady` and `corrections` alongside the usual `items/page/limit/hasMore` page, including when there are no matches. Metadata describes the local archive, rather than completeness of the remote chat. The tool’s permissions and name remain unchanged.
+
+`wordsReady` reports whether the word index is ready, also for queries that use only filters or regex. When it is `false`, finish `max store migrate`; until then, strict word search refuses, and legacy uses search by word parts.

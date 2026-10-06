@@ -143,8 +143,8 @@
     "replacements": {
       "ru": [
         {
-          "before": "Агенту с терминалом (Claude Code, Codex) нужен [навык](https://github.com/leemour/max-cli/blob/v0.27.0/README.md#навык-для-агентов-с-терминалом);\nагенту без терминала (Claude Desktop, Cursor) — [MCP-сервер](./mcp.md). Ниже — что вы говорите, что\nагент вызывает и что вы получаете.",
-          "after": "Агенту с доступом к терминалу (например, Claude Code или Codex) можно подключить [навык](https://github.com/leemour/max-cli/blob/v0.27.0/README.md#навык-для-агентов-с-терминалом). Без доступа к терминалу используйте [MCP-сервер](./mcp.md), например в Claude Desktop. В Cursor доступны оба способа. Ниже — ваш запрос, команда агента и результат."
+          "before": "Агенту с терминалом (Claude Code, Codex) нужен [навык](https://github.com/leemour/max-cli/blob/v0.28.0/README.md#навык-для-агентов-с-терминалом);\nагенту без терминала (Claude Desktop, Cursor) — [MCP-сервер](./mcp.md). Ниже — что вы говорите, что\nагент вызывает и что вы получаете.",
+          "after": "Агенту с доступом к терминалу (например, Claude Code или Codex) можно подключить [навык](https://github.com/leemour/max-cli/blob/v0.28.0/README.md#навык-для-агентов-с-терминалом). Без доступа к терминалу используйте [MCP-сервер](./mcp.md), например в Claude Desktop. В Cursor доступны оба способа. Ниже — ваш запрос, команда агента и результат."
         }
       ]
     }
@@ -256,31 +256,19 @@
     "replacements": {
       "ru": [
         {
-          "before": "На Linux и macOS файлы создаются с правами `0600` в каталогах `0700`, включая\n  локальную копию переписки. На Windows доступ определяют унаследованные ACL каталога пользователя",
-          "after": "На Linux и macOS чувствительные файлы состояния, включая локальную переписку, защищены правами `0600` в каталогах `0700`. Настройки могут иметь `0644`; при перенаправлении вывода права задаёт оболочка. На Windows доступ определяют унаследованные ACL каталога пользователя"
-        },
-        {
-          "before": "Другие пользователи машины не видят ни файлов `max`, ни сокета фонового сервера: каталоги —\n`0700`, файлы — `0600`.",
+          "before": "Файлы `max` и сокет фонового сервера другим пользователям машины не видны: каталоги — `0700`,\nфайлы — `0600`.",
           "after": "Файлы состояния и сокет фонового сервера защищены правами `0600` и каталогами `0700`. У других файлов могут быть иные права, например `0644` у настроек. При переносе файлов или перенаправлении вывода проверяйте права отдельно."
         }
       ],
       "en": [
         {
-          "before": "- **Files.** Linux and macOS files are created with mode `0600` inside `0700` directories, including the local conversation archive. Windows uses inherited ACLs from the user's directory ([below](#что-ещё-пишется-на-диск)).",
-          "after": "- **Files.** On Linux and macOS, sensitive state files, including stored conversations, use `0600` in `0700` directories. Configuration can use `0644`; redirected output follows shell permissions. On Windows, access follows inherited ACLs from the user directory ([below](#что-ещё-пишется-на-диск))."
-        },
-        {
-          "before": "Other users cannot read `max` files or its server socket: directories use `0700`, files `0600`.",
+          "before": "Other users of the machine cannot see `max` files or the background server socket: directories use `0700`, files `0600`.",
           "after": "State files and the server socket are protected by `0600` files and `0700` directories. Other files may use different modes, such as `0644` for configuration. Check permissions separately when moving files or redirecting output."
         }
       ],
       "es": [
         {
-          "before": "- **Archivos.** En Linux y macOS se crean con permisos `0600` en directorios `0700`, incluido el archivo local de conversaciones. Windows aplica las ACL heredadas del directorio del usuario ([abajo](#что-ещё-пишется-на-диск)).",
-          "after": "- **Archivos:** en Linux y macOS, los archivos de estado sensibles, incluidas las conversaciones guardadas, usan `0600` dentro de directorios `0700`. La configuración puede usar `0644`; los permisos del texto redirigido dependen de la shell. En Windows, el acceso depende de las ACL heredadas del directorio del usuario ([más abajo](#что-ещё-пишется-на-диск))."
-        },
-        {
-          "before": "Otros usuarios no ven archivos ni socket: carpetas `0700`, archivos `0600`.",
+          "before": "Los archivos de `max` y el socket del servidor en segundo plano no son visibles para otros usuarios del equipo: carpetas `0700`, archivos `0600`.",
           "after": "Los archivos de estado y el socket están protegidos con `0600` en directorios `0700`. Otros archivos pueden tener permisos distintos, como `0644` para la configuración. Comprueba los permisos al mover archivos o redirigir la salida."
         }
       ]
@@ -293,19 +281,19 @@
     "replacements": {
       "ru": [
         {
-          "before": "Инструмент хранит у вас переписку и контакты других людей. Это допустимо, пока вы делаете это для\nсебя, со своим аккаунтом: и российский закон о персональных данных (152-ФЗ, ст. 1 ч. 2 п. 1), и\nевропейский GDPR (ст. 2(2)(c)) не распространяются на обработку для личных и семейных нужд.\nРабота с чужими аккаунтами или для бизнеса — уже не личные нужды.\nВыгрузка (`max store export`), отданная кому-то ещё, тоже выходит за личные нужды — и в ней\nссылки на фото, которые открываются без входа.",
+          "before": "Хранить переписку других людей допустимо, пока вы делаете это для себя, со своим аккаунтом:\nроссийский закон о персональных данных (152-ФЗ, ст. 1 ч. 2 п. 1) не распространяется на\nобработку для личных и семейных нужд. То же о GDPR — на\n[общей странице](https://wirecat.dev/ru/docs/security). Выгрузка (`max store export`),\nотданная кому-то ещё, выходит за личные нужды — и в ней ссылки на фото, которые открываются без входа.",
           "after": "Инструмент сохраняет на вашем компьютере переписку и контакты других людей, включая тексты сообщений. Доступ к локальной базе даёт доступ к этим данным. Выгрузка (`max store export`), переданная другому человеку, передаёт и содержимое переписки; ссылки на фото в ней могут открываться без входа. Перед передачей проверьте содержимое и круг получателей. Эта страница описывает работу инструмента, а не подтверждает соблюдение законодательства для вашего сценария."
         }
       ],
       "en": [
         {
-          "before": "The tool stores other people's conversations and contacts on your computer. The source documentation treats use with your own account for personal and household purposes as covered by exemptions in Russian personal-data law (152-FZ, article 1, part 2, paragraph 1) and GDPR (article 2(2)(c)). Working with other people's accounts or for business is outside personal use. Sharing a `max store export` file also goes beyond personal use, and exported photo links work without login.",
+          "before": "Storing other people's conversations is acceptable while you do it for yourself, with your own account: Russian personal-data law (152-FZ, article 1, part 2, paragraph 1) does not apply to processing for personal and household purposes. The same about GDPR is on the [shared page](https://wirecat.dev/ru/docs/security). Sharing a `max store export` file with someone else goes beyond personal use, and exported photo links work without login.",
           "after": "The tool stores other people’s conversations and contacts on your computer, including message text. Access to the local store provides access to those data. Sharing a `max store export` file also shares conversation content; exported photo links may open without login. Check the contents and recipients before sharing. This page describes technical behavior, not legal compliance for your particular use."
         }
       ],
       "es": [
         {
-          "before": "La herramienta guarda conversaciones y contactos ajenos. Para fines propios con tu cuenta, la ley rusa de datos personales (152-ФЗ, artículo 1, parte 2, punto 1) y el RGPD europeo (artículo 2(2)(c)) excluyen los fines personales y domésticos. Trabajar con cuentas ajenas o para negocios deja de ser uso personal. Entregar una exportación (`max store export`) también sale de ese ámbito; incluye enlaces de fotos que se abren sin iniciar sesión.",
+          "before": "Guardar conversaciones de otras personas es admisible mientras lo hagas para ti, con tu cuenta: la ley rusa de datos personales (152-ФЗ, artículo 1, parte 2, punto 1) no se aplica al tratamiento con fines personales y domésticos. Lo mismo sobre el RGPD, en la [página común](https://wirecat.dev/ru/docs/security). Entregar una exportación (`max store export`) a otra persona sale del uso personal; incluye enlaces de fotos que se abren sin iniciar sesión.",
           "after": "La herramienta guarda conversaciones y contactos ajenos en tu equipo, incluido el texto de los mensajes. Quien accede al archivo local puede acceder a esos datos. Compartir una exportación (`max store export`) también comparte su contenido; los enlaces de fotos pueden abrirse sin iniciar sesión. Revisa el contenido y los destinatarios antes de compartir. Esta página describe el comportamiento técnico, no garantiza el cumplimiento legal de tu uso."
         }
       ]
@@ -438,13 +426,13 @@
     "slug": "changelog",
     "reason": "Installation no longer includes shell completion. Preserve changelog navigation by linking directly to the complete command reference.",
     "replacements": {
-      "en": [
+      "ru": [
         {
           "before": "./installation.md#автодополнение",
           "after": "./commands.md#max-complete"
         }
       ],
-      "ru": [
+      "en": [
         {
           "before": "./installation.md#автодополнение",
           "after": "./commands.md#max-complete"
@@ -1013,24 +1001,24 @@
     "slug": "remote",
     "reason": "Release validation October 6: old OpenAI developer-mode URL returns 404; current official custom MCP setup guide returns 200. Preserve reviewed source/translation fingerprints and fix delivered links through exact errata.",
     "replacements": {
-      "en": [
-        {
-          "before": "| ChatGPT | Plus, Pro, Business, Enterprise, Education, in developer mode | [Developer mode](https://developers.openai.com/api/docs/guides/developer-mode) |",
-          "after": "| ChatGPT | Plus, Pro, Business, Enterprise, Education, in developer mode | [Developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server) |"
-        },
-        {
-          "before": "- **ChatGPT:** enable developer mode and add a connector with this address, following [Developer mode](https://developers.openai.com/api/docs/guides/developer-mode). By default, ChatGPT asks for confirmation before every action that changes something.",
-          "after": "- **ChatGPT:** enable developer mode and add a connector with this address, following [Developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server). By default, ChatGPT asks for confirmation before every action that changes something."
-        }
-      ],
       "ru": [
         {
           "before": "| ChatGPT | Plus, Pro, Business, Enterprise, Education — в режиме разработчика | [developer mode](https://developers.openai.com/api/docs/guides/developer-mode) |",
           "after": "| ChatGPT | Plus, Pro, Business, Enterprise, Education — в режиме разработчика | [developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server) |"
         },
         {
-          "before": "  [developer mode](https://developers.openai.com/api/docs/guides/developer-mode). По умолчанию",
-          "after": "  [developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server). По умолчанию"
+          "before": "  [developer mode](https://developers.openai.com/api/docs/guides/developer-mode).",
+          "after": "  [developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server)."
+        }
+      ],
+      "en": [
+        {
+          "before": "| ChatGPT | Plus, Pro, Business, Enterprise, Education, in developer mode | [Developer mode](https://developers.openai.com/api/docs/guides/developer-mode) |",
+          "after": "| ChatGPT | Plus, Pro, Business, Enterprise, Education, in developer mode | [Developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server) |"
+        },
+        {
+          "before": "- **ChatGPT:** enable developer mode and add a connector with this address, following [Developer mode](https://developers.openai.com/api/docs/guides/developer-mode).",
+          "after": "- **ChatGPT:** enable developer mode and add a connector with this address, following [Developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server)."
         }
       ],
       "es": [
@@ -1039,8 +1027,8 @@
           "after": "| ChatGPT | Plus, Pro, Business, Enterprise, Education, en modo de desarrollador | [Modo de desarrollador](https://developers.openai.com/api/docs/guides/custom-mcp-server) |"
         },
         {
-          "before": "- **ChatGPT:** activa el modo de desarrollador y añade el conector siguiendo la [documentación](https://developers.openai.com/api/docs/guides/developer-mode). Por defecto, ChatGPT pide confirmar cada acción que modifica algo.",
-          "after": "- **ChatGPT:** activa el modo de desarrollador y añade el conector siguiendo la [documentación](https://developers.openai.com/api/docs/guides/custom-mcp-server). Por defecto, ChatGPT pide confirmar cada acción que modifica algo."
+          "before": "- **ChatGPT:** activa el modo de desarrollador y añade el conector con esa dirección siguiendo la [documentación](https://developers.openai.com/api/docs/guides/developer-mode).",
+          "after": "- **ChatGPT:** activa el modo de desarrollador y añade el conector con esa dirección siguiendo la [documentación](https://developers.openai.com/api/docs/guides/custom-mcp-server)."
         }
       ]
     }

@@ -84,7 +84,26 @@ Escribe en MAX: **no**. Permite `Bash(max inbox:*)`.
 
 > Ejecuta `max inbox --new --json`. Agrupa por chat y resume en una línea quién escribe y qué necesita. Pon primero lo que necesita respuesta hoy. Agrupa publicidad y notificaciones de servicios al final.
 
-`--new` muestra cada mensaje una vez; `max` guarda la posición. La primera ejecución abarca 24 horas.
+`--new` muestra cada mensaje una vez; `max` guarda la posición, por separado para cada chat, y la siguiente ejecución empieza desde ahí. La primera ejecución abarca 24 horas.
+
+### Desde cuándo es «nuevo»
+
+- `max inbox`: lo no leído según MAX, es decir, todo lo que no has abierto en ningún dispositivo.
+- `max inbox --new`: desde la ejecución anterior de `--new`. Ese punto solo lo conoce `max`; tus interlocutores no lo ven.
+- `max inbox --since-time 2d`: los dos últimos días; el punto guardado no se mueve.
+
+Ninguna de las tres marca los mensajes como leídos. Si lo necesitas, añade `--mark-read` o activa `catchUpMarksRead` en la [configuración](./configuration.md); entonces tu interlocutor verá que lo has leído.
+
+### Chats individuales, grupos y canales por separado
+
+`--kind` deja solo los chats del tipo indicado: `dialog` para individuales, `group` para grupos y `channel` para canales. Puedes ejecutar el resumen de canales y el de conversaciones por separado, a distintas horas: cada chat tiene su propio punto, y una ejecución no oculta lo que la otra aún no ha mostrado:
+
+```cron
+30 8 * * * claude -p "$(cat ~/max-recipes/morning.md)" --allowedTools "Bash(max inbox:*)"
+0 19 * * * claude -p "$(cat ~/max-recipes/news.md)" --allowedTools "Bash(max inbox:*)"
+```
+
+`morning.md` contiene `max inbox --new --kind dialog,group --json`; `news.md`, `max inbox --new --kind channel --json` y la petición de elegir lo importante. Sin `--kind`, todo junto.
 
 ## Informe semanal del trabajo
 
@@ -97,9 +116,9 @@ Escribe: **no**. Permite `Bash(max messages list:*)`.
 
 Escribe: **no**. Permite `Bash(max review:*)`, `Bash(max messages context:*)`, `Bash(max messages search:*)`.
 
-> Ejecuta `max review --since-time <конец прошлого обзора> --transcribe --json` (sin `--since-time`, 3 días). Separa qué debo, qué espero de otros y qué falta aclarar. Incluye chat, fecha e IDs de apoyo; plazos solo si están expresados. Antes de señalar retrasos, comprueba si se resolvió después o en grupos de trabajo. Si `"complete": false`, indica lo que falta. Termina con `--since-time` para la siguiente revisión y los asuntos pendientes.
+> Ejecuta `max review --new --transcribe --json` (la primera vez, 3 días; después, desde el `--new` anterior, con un punto propio por chat). Separa qué debo, qué espero de otros y qué falta aclarar. Incluye chat, fecha e IDs de apoyo; plazos solo si están expresados. Antes de señalar retrasos, comprueba si se resolvió después o en grupos de trabajo. Si `"complete": false`, indica lo que falta. Termina con los asuntos pendientes.
 
-Repite la petición añadiendo pendientes anteriores; el agente los revisará primero. En clientes MCP usa `/review` ([Peticiones](./mcp.md#команды-и-чаты-по-)).
+Repite la petición añadiendo pendientes anteriores; el agente los revisará primero. Un chat que no se ha leído entero conserva su punto y volverá a aparecer. En clientes MCP usa `/review` ([Peticiones](./mcp.md#команды-и-чаты-по-)).
 
 ## A quién no has respondido
 

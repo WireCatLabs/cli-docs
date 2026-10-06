@@ -261,6 +261,19 @@ max messages send 42 "текст"
 
 Partial chat names also work here and in `max messages search --chat`: search reads the local store without connecting to MAX and resolves names among saved chats. The default search uses strict Lucene: whole words, or an explicit prefix pattern such as `квартир*`. The previous typo-correcting search is available with `--language legacy`; `--regex` is a separate case-insensitive regular-expression mode. See [search](./search.md).
 
+### How many messages matched
+
+`max messages stats` counts messages from the local archive without connecting to MAX. Without a query, it counts all saved messages of the current account; with a query, it counts strict Lucene matches, like `messages search`. Each message is counted once.
+
+```sh
+max messages stats "договор" --by chat --json
+max messages stats --by sender --chat "Работа" --limit 10 --json
+max messages stats --by day --timezone Europe/Madrid --json
+max messages stats --by hour --timezone UTC --jsonl
+```
+
+`--by` groups by chat, sender, calendar day or hour. `--limit` limits the rows, and `total` is the number of all matching messages. In an incomplete archive, the numbers are a lower bound: check `coverage` and `completeness` before you treat zero matches as proof. To include all saved MAX accounts, add `--source max` explicitly; without it, other profiles are not included. JSON contains `by`, `items`, `total`, `page`, `limit`, `hasMore`, `query`, `coverage` and `completeness`; JSONL prints the `items` rows.
+
 ### Who counts as a contact
 
 `max contacts list` shows **people with whom you have a direct chat**, newest conversation first. Group members are also saved with names and shared chats, but do not appear in this contact list.
