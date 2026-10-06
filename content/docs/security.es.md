@@ -187,12 +187,13 @@ Cuando importe, pasa el texto por una tubería: `tg messages send me < note.txt`
 
 Estos son los destinos de red de la CLI. Un agente de IA es un programa aparte: cuando le das mensajes o permites que lea la salida de la CLI, ese contenido se procesa según su modelo y su configuración local o en la nube. Una caché local no convierte un modelo alojado en un modelo local. Revisa los ajustes del agente antes de elegir qué conversaciones compartir.
 
-## Para ti
+## Datos de otras personas
 
-Las herramientas guardan mensajes y nombres de otras personas en tu ordenador. Es correcto mientras
-lo hagas para ti, con tu propia cuenta: el RGPD no se aplica al tratamiento con fines exclusivamente
-personales o domésticos (artículo 2(2)(c)). Trabajar con cuentas ajenas o para una empresa ya no es
-personal. Una exportación que entregas a otra persona también sale de ese fin.
+Las herramientas guardan en tu ordenador mensajes, nombres y contactos de otras personas, incluido el
+texto de los mensajes. Quien accede al almacén local accede a esos datos. Una exportación que
+entregas a otra persona entrega también la conversación; los enlaces a fotos que contiene pueden
+abrirse sin iniciar sesión. Revisa qué contiene y quién la recibe antes de compartirla. Esta página
+describe cómo funcionan las herramientas; no confirma que tu uso cumpla la ley de tu país.
 
 Un informe de problema (`doctor report create`) está pensado para una incidencia **pública**. No
 contiene textos, nombres ni teléfonos, y cada id se sustituye por una etiqueta. Abre el archivo y

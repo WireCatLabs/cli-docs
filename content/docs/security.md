@@ -182,12 +182,13 @@ When that matters, pipe the text in: `tg messages send me < note.txt`.
 
 These are the CLI’s network destinations. An AI agent is a separate program: when you give it message text or let it read CLI output, that content is processed according to its model and local or cloud configuration. A local message cache does not make a hosted model local. Review your agent’s settings before choosing which conversations to share.
 
-## For yourself
+## Other people's data
 
-The tools keep other people's messages and names on your computer. That is fine while you do it
-for yourself, with your own account: the GDPR does not apply to processing for purely personal or
-household purposes (Article 2(2)(c)). Working with other people's accounts, or for a business, is no
-longer personal. An export you hand to someone else leaves that purpose too.
+The tools keep other people's messages, names and contacts on your computer, including the text of
+messages. Anyone with access to the local store has access to them. An export you hand to someone
+else hands over that conversation too; photo links in it may open without a login. Check what an
+export holds and who receives it before you share it. This page describes how the tools work; it
+does not confirm that your use complies with the law where you are.
 
 A problem report (`doctor report create`) is meant for a **public** issue. It holds no text, names
 or phone numbers, and every id in it is replaced by a label. Open the file and check it before you
