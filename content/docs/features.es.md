@@ -31,10 +31,12 @@ Guías: [uso de Telegram](./tg/usage.md) · [uso de MAX](./max/usage.md)
 | Listar y buscar chats, filtrar por tipo (personas, grupos, canales) | `chats list` |
 | Crear, cambiar y eliminar carpetas de chats | `chats folders` |
 | Contactos: buscar, añadir, renombrar, bloquear, importar | `contacts` |
+| Quién es alguien, qué escribió, si la cuenta parece un bot | `contacts profile`, `context`, `check` |
+| Respuestas automáticas con tus reglas, solo a cuentas de prueba | `replies` |
 | Actualizar tu perfil; ver cada dispositivo con sesión abierta y cerrar uno | `account` |
 | Varias cuentas, un *perfil* para cada una | `tg work …`, `max work …` |
 
-Guías: [acceso y perfiles de Telegram](./tg/sessions.md) · [sesiones y perfiles de MAX](./max/sessions.md)
+Guías: [personas](./people.md) · [acceso y perfiles de Telegram](./tg/sessions.md) · [sesiones y perfiles de MAX](./max/sessions.md)
 
 ## Grupos y canales
 

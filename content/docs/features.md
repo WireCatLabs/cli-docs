@@ -31,10 +31,12 @@ Guides: [Telegram usage](./tg/usage.md) · [MAX usage](./max/usage.md)
 | List and search chats, filter by kind (people, groups, channels) | `chats list` |
 | Create, change and delete chat folders | `chats folders` |
 | Contacts: find, add, rename, block, import | `contacts` |
+| Who someone is, what they wrote, whether the account looks like a bot | `contacts profile`, `context`, `check` |
+| Auto-replies by your rules, to test accounts only | `replies` |
 | Update your profile; see every device logged in, end one | `account` |
 | Several accounts, one *profile* each | `tg work …`, `max work …` |
 
-Guides: [Telegram login and profiles](./tg/sessions.md) · [MAX sessions and profiles](./max/sessions.md)
+Guides: [People](./people.md) · [Telegram login and profiles](./tg/sessions.md) · [MAX sessions and profiles](./max/sessions.md)
 
 ## Groups and channels
 
