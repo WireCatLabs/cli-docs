@@ -26,8 +26,8 @@ export function DocsContentsHint({ lang }: { lang: string }) {
       }}
     >
       <List className="size-5 shrink-0" aria-hidden="true" />
-      <span className="hidden xl:inline">{words.desktop}</span>
-      <span className="xl:hidden">{words.mobile}</span>
+      <span className="docs-contents-desktop">{words.desktop}</span>
+      <span className="docs-contents-mobile">{words.mobile}</span>
       <ArrowRight className="ml-auto size-5 shrink-0" aria-hidden="true" />
     </button>
   )
