@@ -24,7 +24,7 @@ Un tema de foro del mensajero, una conversación inferida y una ventana de mensa
 
 ## 1. Archivo e identidad
 
-Las lecturas, las descargas explícitas de historial y la captura en segundo plano guardan los mensajes en un único almacén SQLite compartido. La búsqueda lee esta copia local y nunca descarga historial remoto por su cuenta. Los identificadores de proveedor, cuenta, chat y mensaje separan mensajes con el mismo número de fuentes distintas, y cada resultado lleva un localizador completo para que un agente vuelva al original.
+Las lecturas, las descargas explícitas de historial y la captura en segundo plano guardan los mensajes en un único almacén SQLite compartido. La búsqueda lee esta copia local y no descarga por su cuenta el historial de los chats; además puede pedir candidatos a la búsqueda del propio mensajero (abajo). Los identificadores de proveedor, cuenta, chat y mensaje separan mensajes con el mismo número de fuentes distintas, y cada resultado lleva un localizador completo para que un agente vuelva al original.
 
 El almacén guarda el texto original de cada mensaje y, aparte, su texto normalizado para buscar. También registra qué tramos del historial de cada chat tiene. Un índice, una construcción o un vector no prueban que un chat se descargara entero.
 
@@ -76,6 +76,12 @@ Medimos tres formas de encontrar las variantes en treebanks de Universal Depende
 | Raíces Snowball | 88% | 84% | 96% | 69% |
 
 Los stemmers son un ajuste de todo el almacén, compartido por cada perfil, tg y MAX: `searchStemmers.cyrillic` (ruso o ninguno) y `searchStemmers.latin` (español, inglés o ninguno); `store reindex` aplica un cambio y, hasta entonces, una búsqueda con palabras avisa de que las raíces no están listas. Algunas palabras distintas comparten raíz —`часть`/`часто`, `caso`/`casa`— y `exact:` o `--exact` las separa. La respuesta JSON dice que se usaron raíces: `query.stemming` nombra el stemmer y la raíz de cada palabra, `stemsReady` está junto a `wordsReady`, y cada resultado lleva `exact: false` cuando solo coincidió otra forma. Las raíces llegaron en cli-messaging 0.163.0 (tg 0.33, max 0.32).
+
+### Búsqueda en el servidor junto al archivo
+
+`messages search` también puede preguntar a la búsqueda del propio mensajero: tg pregunta a Telegram por defecto (desde tg 0.34), y max pregunta al servidor de MAX cuando la consulta nombra un chat. Las reglas de coincidencia del servidor son suyas y no están documentadas. En cuentas de prueba, Telegram encontró palabras completas y formas rusas de las palabras, pero no comienzos de palabra; MAX, comienzos de palabra, pero no otras formas. Por eso la respuesta del servidor son solo candidatos: se guardan en el archivo y la misma consulta estricta se ejecuta una vez sobre el archivo y las filas nuevas. `exact:`, `-palabra`, las frases, los filtros y el orden conservan su significado, y un mensaje nunca aparece dos veces. Un candidato que la consulta estricta rechaza se guarda, pero no se muestra.
+
+Solo se envía lo que reduce los candidatos: las palabras y frases obligatorias, un chat, un remitente con ese chat y las fechas; las negaciones, los comodines, las expresiones regulares y los filtros siguen siendo locales. Como máximo tres llamadas al servidor corren en paralelo, dentro de 5 segundos (`--server-time`); una respuesta posterior se descarta y nada se marca como leído. Cada resultado dice de dónde viene (`source`: `archive`, `server` o `both`), y un bloque `server` dice qué devolvió el servidor y por qué se omitió o se detuvo. `--backend archive` busca solo en el archivo; `stats` nunca pregunta al servidor, que cuenta según sus propias reglas.
 
 ## 3. Reconstruir conversaciones con un grafo de mensajes
 

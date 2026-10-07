@@ -24,7 +24,7 @@ A messenger's native forum topic, an inferred conversation and a window of neigh
 
 ## 1. Archive and identity
 
-Reads, explicit history fetches and background capture write messages into one shared SQLite store. Search reads this local copy; it never silently fetches remote history. Provider, account, chat and message identifiers keep equally numbered messages from different sources apart, and every result carries a qualified locator, so an agent can return to the original.
+Reads, explicit history fetches and background capture write messages into one shared SQLite store. Search reads this local copy and never downloads a chat's history on its own; it can also ask the messenger's own search for candidates (below). Provider, account, chat and message identifiers keep equally numbered messages from different sources apart, and every result carries a qualified locator, so an agent can return to the original.
 
 The store keeps each message's original text and, separately, its normalized text for search. It also records which ranges of each chat's history it holds. An index, a build or a vector does not prove that a whole chat was downloaded.
 
@@ -76,6 +76,12 @@ We measured three ways of matching word forms on Universal Dependencies treebank
 | Snowball stems | 88% | 84% | 96% | 69% |
 
 The stemmers are a store-wide setting, shared by every profile, tg and MAX: `searchStemmers.cyrillic` (Russian or none) and `searchStemmers.latin` (Spanish, English or none); `store reindex` applies a change, and until then a search with words reports that the stems are not ready. Some different words share a stem — `часть`/`часто`, `caso`/`casa` — and `exact:` or `--exact` separates them. The JSON answer says that stems were used: `query.stemming` names the stemmer and each word's stem, `stemsReady` sits beside `wordsReady`, and each hit carries `exact: false` when only another form matched. Stems arrived in cli-messaging 0.163.0 (tg 0.33, max 0.32).
+
+### Server search beside the archive
+
+`messages search` can also ask the messenger's own search: tg asks Telegram by default (since tg 0.34), and max asks MAX's server for a search that names one chat. The server's matching is its own and not documented — measured on test accounts, Telegram matches whole words and Russian word forms but not word beginnings, and MAX matches word beginnings but not word forms. So the server's results are only candidates: they are saved into the archive, and the same strict query then runs once over the archive and the new rows. `exact:`, `-word`, phrases, filters and the ranking keep their meaning, and a message is never listed twice. A candidate the strict query rejects is kept but not shown.
+
+Only what narrows the candidates is sent: the required words and phrases, one chat, a sender with that chat, and dates; negations, wildcards, regular expressions and filters stay local. At most three server calls run in parallel within 5 seconds (`--server-time`); a later answer is dropped, and nothing is marked read. Each hit says where it came from (`source`: `archive`, `server` or `both`), and a `server` block says what the server returned and why it was skipped or stopped. `--backend archive` searches only the archive; `stats` never asks the server, since the server counts by its own rules.
 
 ## 3. Reconstruct discussions with a message graph
 
