@@ -37,9 +37,13 @@ Their phone number shows only as its last four digits, and only when the messeng
 The registration date always names its source:
 
 - **Telegram** sends the month when someone writes to you for the first time. Otherwise `tg` guesses
-  it from the account id and says `estimate`. The guess stops at accounts made before 2025; newer
-  ones get no date rather than a wrong one.
+  it from the account id and says `estimate`. The guess covers accounts made up to August 2026;
+  newer ones get no date rather than a wrong one.
 - **MAX** gives the exact day, so `max` shows it for everyone.
+
+Earlier names and usernames your local copy saw them with are listed under `aliases`, oldest first,
+with a `t.me` link for an old Telegram username. A name read off their stored messages says
+`source: messages` and is approximate: a message fetched again carries the newest name.
 
 ## What they wrote
 
