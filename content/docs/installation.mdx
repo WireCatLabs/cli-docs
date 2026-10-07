@@ -285,11 +285,9 @@ delete messages, manage groups and contacts. Your agent gets that access when it
 | Sends only to chats you chose | a recipient list | [Telegram](./tg/security.md#the-send-guard) · [MAX](./max/security.md#preventing-sends-to-the-wrong-place) |
 | Fewer messages per hour | `sendsPerHour` | [Telegram](./tg/security.md#the-send-guard) · [MAX](./max/security.md#preventing-sends-to-the-wrong-place) |
 
-These rules stop an agent that was tricked by a message it read. They do not stop an agent that
-can change the settings itself, because the settings are ordinary files and commands on your
-computer. For that, pin the agent to one profile with `TG_PROFILE_LOCK` or `MAX_PROFILE_LOCK`, and
-don't let it run `config` or `recipients` commands.
-[What the limits cannot hold](./security.md#what-the-guard-cannot-hold).
+These controls help prevent unwanted actions. An assistant with full access to your terminal or
+settings files can change them; a profile is not a separate secure computer.
+[Understand the limits](./security.md#what-the-guard-cannot-hold).
 
 **Your login is saved on this computer.** Treat the saved session like a password: whoever copies
 it can use your account. To log out, run `tg session end` or `max session end`, or remove the device

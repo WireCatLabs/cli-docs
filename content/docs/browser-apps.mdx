@@ -1,5 +1,5 @@
 ---
-title: ChatGPT, Codex and Claude in the browser
+title: "ChatGPT, Claude in browser"
 description: Connect Telegram or MAX tools through an authenticated HTTPS tunnel, with setup for Windows, macOS and Linux.
 ---
 
@@ -8,14 +8,7 @@ Both `tg` and `max` provide HTTP MCP with OAuth; **Tailscale is a separate progr
 that server a public HTTPS address. Install it on the computer running the messenger CLI.
 Your browser device needs no Tailscale installation.
 
-**Test status:** the owner confirmed Telegram reading and sending in Claude web on 7 October 2026.
-OpenAI web, MAX in the browser and setup on each OS still need an end-to-end check.
-HTTP reading needs `tg` 0.27+ or `max` 0.28+. The sending commands below need `max` 0.30+
-or `tg` 0.30 (the next release). Until that TG version is published, use the tested build or
-omit `--http-confirmation permissions --permission messages.send=allow` for reading.
-Check your version before following these commands.
 
-<ArchitectureDiagram name="remote" lang="en" />
 
 ## Before starting
 
@@ -57,7 +50,7 @@ who logged into the messenger.
 
 ```powershell
 $mcpPublicUrl = Read-Host 'HTTPS origin from Funnel (no /mcp)'
-tg.cmd mcp --http --port 8765 --public-url $mcpPublicUrl --http-confirmation permissions --permission messages.send=allow
+tg.cmd mcp --http --port 8765 --public-url $mcpPublicUrl --permission messages.send=allow
 ```
 
 For MAX, replace `tg.cmd` with `max.cmd` in window 2. Run both processes in native Windows.
@@ -79,7 +72,7 @@ TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --http-confirmation permissions --permission messages.send=allow
+tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
 ```
 
 For MAX, replace `tg` with `max` in window 2.
@@ -101,7 +94,7 @@ sudo tailscale funnel 8765
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --http-confirmation permissions --permission messages.send=allow
+tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
 ```
 
 For MAX, replace `tg` with `max` in window 2. Do not run the messenger server with `sudo`.
@@ -113,25 +106,16 @@ For MAX, replace `tg` with `max` in window 2. Do not run the messenger server wi
 The server listens on `127.0.0.1:8765` and prints a one-time login code. A named profile goes
 before the command, for example `tg work mcp`; on Windows, `tg.cmd work mcp`.
 
-## Permissions and sending
+## Choose what the assistant may do
 
-By default, **every HTTP write requires a server confirmation form**, even when saved
-permissions say `allow`. The app's tool approval is a separate prompt and cannot satisfy that
-server form. Apps without MCP elicitation cannot write in this default mode.
+The examples above allow sending for this running server with `--permission messages.send=allow`.
+Your saved settings stay the same. The app controls its own approval prompts. Over MCP,
+`ask` does not force a server confirmation. For a connection that only reads, use a read-only profile.
 
-The commands above opt into `--http-confirmation permissions`: effective `allow` executes
-without the server form, `ask` still needs it, and `deny` / `readonly` restrict access.
-`--permission messages.send=allow` enables sending only for the running server; it does not
-edit saved configuration. Recipient restrictions and hourly limits still apply.
-The app may ask before calling a tool, but if you set it to always allow sending, a new call
-may execute without another prompt. Ask for drafts explicitly when you want to review them.
-
-Repeat `--permission key=level` for other commands. A broad `messages=allow` override replaces
-saved message permissions, but built-in confirmation defaults remain: deletion needs its
-own `messages.delete=allow`. `--yes` does not bypass an HTTP confirmation form.
-See [Telegram permissions](./tg/configuration.md) or [MAX permissions](./max/configuration.md).
-MAX connects directly when runtime overrides are supplied; an existing `max serve` retains
-its saved profile permissions.
+The app's approval and the server's permission checks are separate. If you always allow a tool in the
+app and the server permits it, another call can send without asking again. Ask for a draft when
+you want to review the text first. Recipient restrictions and hourly limits still apply.
+See [permissions](./permissions.md) for examples and how to change access.
 
 ## Add it to Codex / ChatGPT web or Claude
 
@@ -189,11 +173,15 @@ for its connector. Funnel's permitted public ports are `443`, `8443` and `10000`
 
 - **No connection:** append `/.well-known/oauth-protected-resource/mcp` to the origin and open
   it in a browser. You should see JSON. Otherwise check Funnel, its approval and the local port.
-- **Reads work, sending fails after app approval:** check the two startup flags above and the
-  effective permission. `ask` still requires a server form; unsupported or declined forms send nothing.
+- **Reads work, sending fails after app approval:** check the startup permissions and the
+  effective permission. Use `deny` or `readonly` to refuse server-side changes; check the app's own approval settings.
 - **PowerShell refuses scripts:** use `tg.cmd` or `max.cmd`. If the command is missing, reopen
   PowerShell and check the CLI installation; do not change machine-wide execution policy.
 - **No tools:** `tg mcp doctor` or `max mcp doctor` checks the local handshake, not the tunnel or
   messenger login. An explicit `account show` command checks that account connection.
 - **Port occupied:** use another local port and point Funnel at the same number. For simultaneous
   servers, also give each route a distinct public HTTPS port as above.
+
+## How the connection works
+
+<ArchitectureDiagram name="remote" lang="en" />

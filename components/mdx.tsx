@@ -15,6 +15,7 @@ import {
   InstallationMessengerTabs,
   InstallationOsTabs,
 } from "@/components/installation-guide"
+import { MeetingBriefDemo } from "@/components/meeting-brief-demo"
 import { NodeSetupPrompt } from "@/components/node-setup-prompt"
 import { PlatformPaths } from "@/components/platform-paths"
 import { PlatformSetupTabs } from "@/components/platform-setup-tabs"
@@ -57,6 +58,7 @@ export function getMDXComponents(components?: MDXComponents) {
     Accordion,
     DocTerm,
     NodeSetupPrompt,
+    MeetingBriefDemo,
     SearchPlayground,
     "platform-paths": PlatformPaths,
     "platform-setup-tabs": PlatformSetupTabs,

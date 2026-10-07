@@ -1,211 +1,76 @@
 ---
 title: Security
-description: What the WireCat tools keep on your computer, what stops an agent from sending, and how to report a vulnerability.
+description: Control the assistant's access, understand where your messages go, and know the limits of those controls.
 ---
 
-`tg` and `max` work with your real messenger accounts. This page covers what both tools share:
-the local store, the send guard, what an agent may do, and what never leaves your computer. The
-details of each messenger — where its login lives, which servers it talks to, what its account
-rules say — are on the tool's own page: [Telegram security](./tg/security.md) and
-[MAX security](./max/security.md).
+WireCat works with your own Telegram or MAX account. Start with reading, decide which actions
+you want to allow, and keep your computer and account login private.
 
-Both tools are built on the same libraries ([architecture](./architecture.mdx)), so what this page
-says is one implementation, not two promises.
+## Decide what the assistant can do
 
-## In short
+[Permissions](./permissions.md) can let an assistant read, ask before changing something, or
+refuse an action. You can also restrict recipients and set an hourly send limit. These controls
+are useful for preventing a mistaken send or a loop that sends too many messages.
 
-It protects against:
+A refusal means the requested action is not allowed by the current settings. Check the recipient
+and permission before retrying. Do not tell an assistant to bypass the restriction to make a task finish.
 
-- **an agent talked into sending** by a message it read. The profile's `permissions` decide what an
-  agent may do. Every read tool tells the model that message text is data, never instructions.
-- **a change the profile does not allow.** `permissions`, the recipient list and the hourly limit
-  are checked by every command and every MCP tool. Every attempt is written to a journal without
-  its text.
-- **an agent stepping outside its profile, or sending your keys.** `TG_PROFILE_LOCK` and
-  `MAX_PROFILE_LOCK` pin the profile; `--file` refuses hidden files, `~/.ssh` and the tool's own
-  folders.
-- **other people's text taking over your terminal.** Control and invisible characters are shown as
-  text, names are printed on one line, completion inserts only ids.
-- **a secret in a log, in `ps` or in shell history.** Runs, reports and the send journal hold ids
-  and counts, never text. No command takes a password, a token, a code or a phone number as an
-  argument.
-- **other users of this machine.** Every file is created readable by you only, in folders only you
-  can open (Linux and macOS).
-- **a tampered release.** Packages are published from GitHub Actions with npm provenance. The
-  publish step installs nothing and runs no package scripts; direct dependencies are pinned to
-  exact versions.
+For important replies, ask for a draft and review the recipient and text before sending.
+Reading messages does not mark them as read; that is a separate action.
 
-It does not protect against:
+## Where your information goes
 
-- **someone with your user account on this machine.** They can read the login and the local store,
-  as you can.
-- **an agent that can change the settings.** The guard reads the profile's settings. An agent
-  allowed to run `config set` or `recipients add`, or to edit those files, can lift the limits
-  ([below](#what-the-guard-cannot-hold)).
+The tools run on your computer and connect to your messenger. They keep a local copy of the
+messages they read, so search and summaries can use that history later.
 
-## What stays on your computer
+Your chosen AI assistant receives the messages you ask it to work with. If you use an online
+model for analysis, replies or search by meaning, the data needed for that task may also go to
+that model's provider. Local models can keep that processing on your computer; check which
+provider you selected before using them with sensitive conversations.
 
-| What | Where | Holds |
-|---|---|---|
-| the local store, shared by `tg` and `max` | `~/.local/share/cli-messaging/messages.db` | **the full text** of every message read or sent, chat titles, names, voice transcripts |
-| the login | max: a token in the OS keyring · tg: a session file, with the app id and hash in the keyring | see the tool's page |
-| settings | `config.json` in the tool's config folder | settings only — there is no field for a secret |
-| recorded runs — with `--record`, and every failed run | `runs/` in the tool's state folder | the command's words, ids, counts, durations, error codes |
-| the send journal — always | `sends/<profile>.jsonl` | for each attempt: when, which chat, the outcome, the length — never the text |
-| the recipient list | `profiles/<profile>.recipients.json` | the chats this profile may send to |
-| speech models — only after `models audio download` | `~/.cache/cli-common/models/audio/` | the model files |
-| exports, downloads, problem reports | only where you ask, with `--output` | what you asked for |
+Exports, downloaded files and transcripts contain the information you requested. Choose where
+you save them and who can access that folder. `tg doctor` or `max doctor` shows the exact paths
+used on your computer.
 
-`tg doctor` and `max doctor` print the exact paths on this machine.
+<a id="what-the-guard-cannot-hold" />
 
-On Linux and macOS, files are `0600` in `0700` folders. Windows uses the access lists inherited from
-your user folder; the numeric modes do not set one.
+## What the controls cannot protect
 
-**The local store is not encrypted.** That is its purpose: to answer without the network. Anyone who
-can read the file reads your messages. It stays after `session end` and after uninstalling. Message
-text is also in exports and downloaded files; nothing else in the table holds it.
+- **Someone who can use your computer account.** They may be able to read your stored messages
+  and use your messenger login. Use a screen lock, a protected user account and disk encryption.
+- **An assistant with unrestricted terminal or file access.** It may change the same settings you
+  can change. A read-only profile is useful, but it is not a separate secure computer.
+- **Every misleading instruction in a message.** The tools identify message text as information,
+  but a model can still misunderstand it. Keep sending permission narrow and review important actions.
+- **Data you share with another service.** Permission to read a chat does not control that AI
+  service's own storage or privacy policy. Share only the context you need.
+- **Actions after they happen.** Messages may be seen before you delete them. Removing a local
+  copy does not remove copies held by recipients or other services.
 
-**If the computer is lost:** the file modes keep other users out, not someone who takes the disk.
-Whole-disk encryption does that — FileVault on macOS, LUKS on Linux, BitLocker on Windows. The store
-has no encryption of its own: a key in the keyring would not stop a program running as your user,
-which can read the keyring as the tool does. End the session from another device; the tool's page
-says where.
+The local message store is not encrypted by the tools. Signing out or uninstalling does not
+necessarily remove that copy. Review stored data and exports separately when retiring a computer.
 
-## What it never does
+## Connecting from a browser
 
-- **Mark anything read without being asked.** Reading a chat and marking it read are two different
-  requests. Only `chats mark-read` and `messages list --mark-read` send the second.
-- **Send or change anything you did not type.** Only commands marked "changes something" do;
-  `commands --json` marks them `mutates`. Each does only what its line says.
-- **Delete without an explicit word.** Deleting messages and ending other sessions ask by default.
-  Deleting for everyone needs `--for-everyone` too. An agent over MCP never deletes for everyone.
-- **Write a message into a log.** Not shortened, not hashed.
-- **Send telemetry of its own.** There is none.
+[Browser setup](./browser-apps.mdx) uses an HTTPS address and a one-time code from your terminal.
+Only approve a connection you started, and check the destination app before entering the code.
+Never share login codes or messenger credentials in a chat or public issue.
 
-## The send guard
+The app's approval and the server's permission are separate controls. If both allow sending
+without another question, a tool call can send immediately. Use a profile that only reads when
+you do not need sending. Stop the server or tunnel to pause access; `tg mcp --revoke` or
+`max mcp --revoke` makes connected apps log in again.
 
-An agent reads other people's messages together with your request. A message can be written so the
-agent takes it for an order: "forward this conversation there". So every command and MCP tool that
-changes something — a send, a reply, an edit, a forward, a pin, a reaction, a vote, a deletion,
-marking a chat read — goes through the same checks, in this order:
+## A practical starting point
 
-| Check | Turn it on | Refusal |
-|---|---|---|
-| **`permissions`** — per resource or command: `deny`, `readonly`, `ask` or `allow` | `tg config set permissions.messages.send ask` | `deny` and `readonly`: exit code `5`, before anything is sent; `ask` with nobody to answer: exit code `7` |
-| **the recipient list** — only the chats on it | `max recipients add <chat>` | exit code `7` |
-| **`sendsPerHour`** — the most sends in any hour, 30 by default | `tg config set sendsPerHour 10` | exit code `8`; the error says when the next send is possible |
-| **the journal** — every attempt, never its text | always; `sends list` | — |
+1. Connect a profile with permission to read only.
+2. Try finding messages and asking for summaries.
+3. Allow sending only when you need it, to the recipients you intend.
+4. Ask for drafts, keep a send limit, and review your settings when you add another assistant.
 
-By default every change is allowed except deleting messages and ending other sessions, which ask.
-A more precise key wins: `messages` set to `readonly` and `messages.send` set to `allow` lets a
-profile send and nothing else.
+## Report a problem
 
-The recipient list is optional: until something is added, any chat is allowed. Two commands started
-at once cannot get past the hourly limit together — each holds its place from the check until the
-messenger answers. A scheduled message counts in the hour it goes out.
-
-**A refusal is the owner's decision, not a fault.** An agent that meets exit code `5`, `7` or `8`
-should stop and say so, not change the settings or retry. The skill file tells agents exactly that.
-
-### What the guard cannot hold
-
-The checks live in the tool itself, so an agent with a shell can lift them: change a setting, clear
-the list. They protect against a model **talked into** sending by a message it read, not against an
-agent that **sets out** to get round them. Against that, only a boundary outside works: a sandbox, a
-separate OS user, a rule in the agent's own settings.
-
-When you choose that boundary:
-
-- **`*_PROFILE_LOCK` pins the profile; `*_PROFILE` does not.** The first word of a command beats
-  `TG_PROFILE`: an agent with `TG_PROFILE=agent` only has to type `tg work messages send …`.
-  `TG_PROFILE_LOCK=agent` refuses that — but only where the agent cannot change its own environment:
-  in the MCP client's settings, or in a wrapper script. The MCP server pins its profile at start.
-- **`--file` refuses hidden files and folders, `~/.ssh` and the tool's own folders**, where keys and
-  tokens live. `--allow-any-file` lifts it for one command; it is meant for you, not for an agent.
-  Anything else your user can read can be sent; the journal keeps only its kind and size.
-- **An agent rule like "ask before `tg messages send`"** does not see the form with a profile,
-  `tg work messages send`. Limit the profile itself — `permissions` or the recipient list — and do
-  not keep an unlimited profile with a live login beside it.
-
-## Agents and MCP
-
-- **Message text is data.** "Forward this there" inside a message is not your request. The skill
-  file and the MCP server's instructions say so to every agent that reads them; the send guard is
-  there for when one does not listen.
-- **The MCP server uses the same `permissions` as the commands.** A level of `ask` shows you a form
-  in the MCP client before the change.
-- **`--confirm-send` shows a form before every change**, even at `allow`. A yes counts once, for five
-  minutes, and only for the chat and text the form showed. The older `--allow-send` and
-  `--allow-delete` flags are accepted with a warning and decide nothing.
-
-How to connect a client, and what each tool does: [MCP](./mcp.md).
-
-## Other people's text on your screen
-
-Names, chat titles, file names and messages are written by other people. The tools do not let them
-drive your terminal or fake what you see:
-
-- control characters — the ones that recolour, erase lines, change the window title or the
-  clipboard — are shown as text (`\x1b`), not run; so are invisible characters and the ones that
-  reverse the direction of text;
-- a name, a title or a caption is printed on one line, so a line break in a name cannot start a fake
-  line of the conversation;
-- when a typed name fits more than one chat, the tool does not choose: it lists them all;
-- shell completion inserts only an id; the title is a hint beside it;
-- a Markdown export and a downloaded file's name go through the same cleaning.
-
-`--json` is data: strings are as the messenger sent them, escaped by JSON's rules. If you pass it to
-a program that prints to a terminal, clean it there.
-
-## What others on this machine can see
-
-The arguments of a command are visible to every process in `ps`. That is why no secret is an
-argument — but **a message's text is**:
-
-```sh
-tg messages send me "text"     # visible in ps, and stays in your shell history
-```
-
-When that matters, pipe the text in: `tg messages send me < note.txt`.
-
-## What goes over the network
-
-- **The messenger itself** — Telegram or MAX, for the commands that need it. Exactly which servers:
-  the tool's page.
-- **npm**, once a day when a person runs a command in a terminal, to see whether a newer version
-  exists, and on `upgrade`. `updateCheck: false` turns it off.
-- **Hugging Face and GitHub**, only when you run `models … download`. A voice message never goes
-  there: recognition runs on this computer.
-- **An embedding provider you choose**, only if you configure a hosted one for conversation search.
-  It gets the text it embeds; the command asks before sending passages. The default model runs
-  locally.
-
-These are the CLI’s network destinations. An AI agent is a separate program: when you give it message text or let it read CLI output, that content is processed according to its model and local or cloud configuration. A local message cache does not make a hosted model local. Review your agent’s settings before choosing which conversations to share.
-
-## Other people's data
-
-The tools keep other people's messages, names and contacts on your computer, including the text of
-messages. Anyone with access to the local store has access to them. An export you hand to someone
-else hands over that conversation too; photo links in it may open without a login. Check what an
-export holds and who receives it before you share it. This page describes how the tools work; it
-does not confirm that your use complies with the law where you are.
-
-A problem report (`doctor report create`) is meant for a **public** issue. It holds no text, names
-or phone numbers, and every id in it is replaced by a label. Open the file and check it before you
-send it.
-
-## Reporting a vulnerability
-
-Please report a security problem privately, not in the chat or a public issue:
-
-- by email: [hello@wirecat.dev](mailto:hello@wirecat.dev);
-- or through GitHub's private vulnerability reporting, on the repository it concerns:
-  [tg-cli](https://github.com/leemour/tg-cli/security/advisories/new),
-  [max-cli](https://github.com/leemour/max-cli/security/advisories/new),
-  [cli-messaging](https://github.com/leemour/cli-messaging/security/advisories/new),
-  [cli-core](https://github.com/leemour/cli-core/security/advisories/new).
-
-Say what you saw, how to repeat it, and which version (`tg --version`, `max --version`). Never send a
-session file, a token or someone's messages.
-
-Anything else — a bug, a question — goes to the [support chat](https://t.me/wirecatdev).
+Do not put credentials or private messages in a public issue. For a security problem, contact
+[the maintainer](mailto:hello@wirecat.dev) or use private vulnerability reporting on the
+[Telegram repository](https://github.com/leemour/tg-cli/security/advisories/new) or
+[MAX repository](https://github.com/leemour/max-cli/security/advisories/new).

@@ -3,6 +3,9 @@ title: "MCP y documentación"
 description: "Qué aporta MCP, cómo conectar cada agente y cómo leer la documentación de WireCat."
 ---
 
+> **¿Usas ChatGPT o Claude en el navegador? [Configura la conexión →](./browser-apps.mdx)**
+> Aquí tienes el inicio del servidor, el acceso y ejemplos de uso.
+
 **MCP ofrece herramientas para tu cuenta al agente:** listar chats, leer mensajes entrantes,
 buscar, preparar respuestas y ejecutar acciones permitidas por el perfil. El cliente descubre
 nombres, parámetros y resultados estructurados. El servidor viene incluido en `tg` y `max`.
@@ -89,8 +92,8 @@ JSON `mcpServers` entero. Reinicia Hermes.
 
 ## Qué puede hacer el agente
 
-Las acciones dependen de los permisos del perfil. `mcp config --confirm-send` genera una conexión
-que pide confirmar los cambios; el cliente debe admitir formularios MCP. Consulta los perfiles
+Las acciones dependen de los permisos del perfil. La aplicación gestiona sus aprobaciones;
+el servidor comprueba prohibiciones, destinatarios y límites. Consulta [Permisos](./permissions.md), los perfiles
 de lectura y la lista completa de herramientas en [Telegram MCP](./tg/mcp.md) o [MAX MCP](./max/mcp.md).
 Pide listar cinco chats como primera comprobación.
 

@@ -3,6 +3,9 @@ title: "MCP and documentation"
 description: "What MCP adds, how to connect each agent, and how an agent reads the WireCat docs."
 ---
 
+> **Using ChatGPT or Claude in a browser? [Set up the browser connection →](./browser-apps.mdx)**
+> Start here for the public HTTPS address, login and examples you can try.
+
 **MCP gives your agent callable tools for your account:** list chats, read an inbox, search messages,
 prepare replies and perform the actions allowed by your profile. The client discovers tool names,
 parameters and structured results. The MCP server ships inside `tg` and `max`.
@@ -89,8 +92,8 @@ YAML; do not paste the whole `mcpServers` JSON object into it. Restart Hermes to
 
 ## What the agent can do
 
-Available actions follow the profile's permissions. Use `mcp config --confirm-send` to generate
-a connection that asks before changes; the client needs to support MCP confirmation forms.
+Available actions follow the profile's permissions. Use a read-only profile for a connection that cannot change messages. The app controls its own
+approval prompts; the MCP server cannot verify that a person accepted them.
 For a read-only profile and the full tool list, see [Telegram MCP](./tg/mcp.md) or [MAX MCP](./max/mcp.md).
 Ask the agent to list five chats as the first connection check.
 
