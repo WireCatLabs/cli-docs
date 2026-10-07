@@ -37,7 +37,7 @@ Their phone number shows only as its last four digits, and only when the messeng
 The registration date always names its source:
 
 - **Telegram** sends the month when someone writes to you for the first time. Otherwise `tg` guesses
-  it from the account id and says `estimate`. The guess covers accounts made up to November 2025;
+  it from the account id and says `estimate`. The guess covers accounts made up to August 2026;
   newer ones get no date rather than a wrong one.
 - **MAX** gives the exact day, so `max` shows it for everyone.
 
