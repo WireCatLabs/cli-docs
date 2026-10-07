@@ -37,9 +37,14 @@ Su número de teléfono solo se ve con sus cuatro últimas cifras, y solo si el 
 La fecha de registro siempre indica su origen:
 
 - **Telegram** envía el mes cuando alguien te escribe por primera vez. Si no, `tg` lo calcula a partir
-  del id de la cuenta y lo marca como `estimate`. El cálculo llega hasta cuentas creadas antes de 2025;
-  las más nuevas no reciben fecha antes que una equivocada.
+  del id de la cuenta y lo marca como `estimate`. El cálculo llega hasta cuentas creadas en noviembre
+  de 2025; las más nuevas no reciben fecha antes que una equivocada.
 - **MAX** da el día exacto, así que `max` lo muestra para todos.
+
+Los nombres y usuarios anteriores con los que tu copia local vio a la persona aparecen en `aliases`,
+del más antiguo al más nuevo, con un enlace `t.me` para un usuario antiguo de Telegram. Un nombre
+tomado de sus mensajes guardados indica `source: messages` y es aproximado: un mensaje descargado de
+nuevo lleva el nombre más reciente.
 
 ## Qué escribió
 
