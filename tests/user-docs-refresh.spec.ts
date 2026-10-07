@@ -23,7 +23,7 @@ for (const lang of ["en", "ru", "es"]) {
     const scan = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze()
     expect(scan.violations).toEqual([])
     await page.goto(`/${lang}/about`)
-    await expect(page.locator(".about-entry-links a").first()).toHaveAttribute("href", `/${lang}/docs/meeting-brief`)
+    await expect(page.locator(".about-project-card")).toContainText("Viacheslav Ptsarev")
     await page.screenshot({ path: `/tmp/wirecat-about-${lang}-mobile.png`, fullPage: true })
     await page.setViewportSize({ width: 1440, height: 1000 })
     await page.screenshot({ path: `/tmp/wirecat-about-${lang}-desktop.png`, fullPage: true })
