@@ -37,8 +37,8 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@biomejs/biome": "^2.5.15",
-    "@leemour/cli-core": "0.14.0",
-    "@leemour/cli-messaging": "0.128.0",
+    "@leemour/cli-core": "0.17.2",
+    "@leemour/cli-messaging": "0.168.0",
     "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/mdx": "^2.0.14",

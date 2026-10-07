@@ -7,11 +7,13 @@ import { build } from "esbuild"
 const require = createRequire(import.meta.url)
 const dist = resolve(dirname(require.resolve("@leemour/cli-messaging/services")), "..")
 const core = resolve(dirname(require.resolve("@leemour/cli-core")), "errors.js")
+const sanitize = resolve(dirname(core), "sanitize.js")
 const files = ["parser", "registry", "dates", "automaton", "types"]
 const inputs = [
   ...files.map((name) => resolve(dist, `search/lucene/${name}.js`)),
   resolve(dist, "store/normalize.js"),
   core,
+  sanitize,
 ]
 const fingerprint = createHash("sha256")
   .update(inputs.map((file) => readFileSync(file)).join("\n"))
@@ -27,7 +29,19 @@ const result = await build({
   format: "esm",
   minify: true,
   write: false,
-  alias: { "@leemour/cli-core": core },
+  // The parser needs only cli-core's browser-safe parts: CliError, and singleLine for tag names.
+  plugins: [
+    {
+      name: "cli-core-browser",
+      setup(build) {
+        build.onResolve({ filter: /^@leemour\/cli-core$/ }, () => ({ path: "cli-core", namespace: "cli-core" }))
+        build.onLoad({ filter: /.*/, namespace: "cli-core" }, () => ({
+          contents: `export * from ${JSON.stringify(core)}; export * from ${JSON.stringify(sanitize)};`,
+          resolveDir: dirname(core),
+        }))
+      },
+    },
+  ],
   legalComments: "inline",
 })
 const header = `// Generated from pinned @leemour/cli-messaging. Source SHA-256: ${fingerprint}\n// Apache Lucene notices: /search-language-notices.txt\n`

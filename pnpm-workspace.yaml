@@ -4,7 +4,7 @@ allowBuilds:
   lefthook: true
   sharp: true
 minimumReleaseAgeExclude:
-  - "@leemour/cli-core@0.14.0"
-  - '@leemour/cli-messaging@0.128.0'
+  - '@leemour/cli-core@0.14.0 || 0.17.2'
+  - '@leemour/cli-messaging@0.128.0 || 0.168.0'
 patchedDependencies:
   '@fumadocs/base-ui@16.15.17': patches/@fumadocs__base-ui@16.15.17.patch
