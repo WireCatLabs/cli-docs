@@ -43,7 +43,7 @@ El proceso:
 
 <ArchitectureDiagram name="strictSearch" lang="es" />
 
-Los campos son `text`, `body`, `from`, `chat`, `date`, `kind`, `has`, `topic`, `in`, `preset`, `filename`, `mime`, `size` y `tag`. Los campos de archivo coinciden cuando al menos un adjunto coincide, por el nombre, tamaño y tipo que informó el mensajero; MAX no informa el tipo, así que allí `mime:` no encuentra nada. `tag:` lee las etiquetas locales del dueño en el mensaje, su chat o su remitente. `date:` también acepta `today`, `yesterday` y desplazamientos como `7d`, contados desde el momento de la consulta. Los operadores difusos, de proximidad, de peso y de intervalos se rechazan con un error explícito.
+Los campos son `text`, `exact`, `body`, `from`, `chat`, `date`, `kind`, `has`, `topic`, `in`, `preset`, `filename`, `mime`, `size` y `tag`. Los campos de archivo coinciden cuando al menos un adjunto coincide, por el nombre, tamaño y tipo que informó el mensajero; MAX no informa el tipo, así que allí `mime:` no encuentra nada. `tag:` lee las etiquetas locales del dueño en el mensaje, su chat o su remitente. `date:` también acepta `today`, `yesterday` y desplazamientos como `7d`, contados desde el momento de la consulta. Los operadores difusos, de proximidad, de peso y de intervalos se rechazan con un error explícito.
 
 ```sh
 tg messages search 'invoice AND has:file' --source all --context 2 --json
@@ -53,7 +53,7 @@ tg messages search 'filename:*.pdf size>1MB date:7d' --json
 
 `text` compara palabras normalizadas; `body` se refiere al texto original completo, distinguiendo mayúsculas. `body:/.*invoice.*/` expresa una condición de subcadena. Una fecha sin hora es un día de calendario en la zona elegida; un día superior inclusivo incluye el día entero, y los días de cambio de hora no se suponen de 24 horas.
 
-Cuando todas las ramas exigen palabras, los resultados se ordenan por BM25 sobre el índice de palabras; si no, primero los más nuevos. `--newest` siempre ordena por tiempo. Los empates se resuelven con identificadores que incluyen la cuenta, así que las páginas son estables.
+Cuando todas las ramas exigen palabras, los resultados se ordenan por BM25 sobre el índice de palabras, con las formas exactas primero; si no, primero los más nuevos. `--newest` siempre ordena por tiempo. Los empates se resuelven con identificadores que incluyen la cuenta, así que las páginas son estables.
 
 Si el índice de palabras no está listo, una consulta con palabras falla con `index_not_ready`, la parte ya construida y el comando que lo termina; nunca recurre a buscar subcadenas. La longitud de la consulta, la profundidad del árbol, el tamaño del autómata, la expansión del vocabulario (10 000 palabras), los candidatos, los bytes leídos, el trabajo y el tiempo están acotados. Superar un límite es un error, nunca un resultado recortado en silencio.
 
@@ -65,7 +65,7 @@ La búsqueda anterior (`--language legacy`) y el modo JavaScript `--regex` sigue
 
 ### Formas de las palabras
 
-La búsqueda estricta compara palabras normalizadas completas, así que otra forma de una palabra es otra palabra. `квартира` no encuentra `квартиру`, y `piso` no encuentra `pisos`. Un prefijo como `квартир*` o `pis*` captura las formas, y también puede captar otras palabras con el mismo inicio, como `квартирант` o `piscina`. La corrección de erratas del modo legacy no añade formas: solo corrige palabras que el archivo no contiene.
+Las palabras y las frases entre comillas en `text`, el campo por defecto, encuentran todas las formas de sus palabras. `квартира` encuentra `квартиру` y `квартиры`, y `piso` encuentra `pisos`. Cada palabra se compara por su raíz Snowball, tomada antes de normalizarla (ё→е, sin tildes). Las comillas mantienen las palabras juntas, pero también admiten todas las formas: `"оплатил счёт"` encuentra `оплатила счета`. Los mensajes con la forma exacta que escribiste van primero. Para la forma exacta sola, escribe `exact:квартира` o `exact:"оплатил счёт"`, o añade `--exact` (MCP: `exact: true`) para todas las palabras sin campo. `-квартира` excluye todas las formas; `-exact:квартира`, solo la exacta. Un comodín como `квартир*` y una expresión regular en `text:` siguen leyendo palabras completas, sin raíces.
 
 Medimos tres formas de encontrar las variantes en treebanks de Universal Dependencies, con 102 palabras por idioma ([resultados de la medición](https://github.com/leemour/cli-messaging/blob/bench/stemming-vs-trigrams/bench/stemming/results.md)). *Encontrados* es la proporción de mensajes relevantes que devuelve la búsqueda; *correctos* es la proporción de resultados devueltos que son relevantes.
 
@@ -75,7 +75,7 @@ Medimos tres formas de encontrar las variantes en treebanks de Universal Depende
 | Trigramas (escritura parecida) | 69% | 52% | 85% | 44% |
 | Raíces Snowball | 88% | 84% | 96% | 69% |
 
-El almacén ya guarda un índice aparte de raíces, construido con los stemmers oficiales de Snowball a partir de cada palabra antes de normalizarla. Los stemmers son un ajuste de todo el almacén (`searchStemmers.cyrillic` y `searchStemmers.latin`: ruso, español, inglés o ninguno), y `store reindex` aplica un cambio. La búsqueda estricta todavía no usa ese índice y funciona como se describe arriba.
+Los stemmers son un ajuste de todo el almacén, compartido por cada perfil, tg y MAX: `searchStemmers.cyrillic` (ruso o ninguno) y `searchStemmers.latin` (español, inglés o ninguno); `store reindex` aplica un cambio y, hasta entonces, una búsqueda con palabras avisa de que las raíces no están listas. Algunas palabras distintas comparten raíz —`часть`/`часто`, `caso`/`casa`— y `exact:` o `--exact` las separa. La respuesta JSON dice que se usaron raíces: `query.stemming` nombra el stemmer y la raíz de cada palabra, `stemsReady` está junto a `wordsReady`, y cada resultado lleva `exact: false` cuando solo coincidió otra forma. Las raíces llegaron en cli-messaging 0.163.0 (tg 0.33, max 0.32).
 
 ## 3. Reconstruir conversaciones con un grafo de mensajes
 

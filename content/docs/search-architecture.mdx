@@ -43,7 +43,7 @@ The pipeline:
 
 <ArchitectureDiagram name="strictSearch" lang="en" />
 
-The fields are `text`, `body`, `from`, `chat`, `date`, `kind`, `has`, `topic`, `in`, `preset`, `filename`, `mime`, `size` and `tag`. File fields match a message when at least one of its attachments matches, by the name, size and type the messenger reported; MAX reports no type, so `mime:` finds nothing there. `tag:` reads the owner's local tags on the message, its chat or its sender. `date:` also takes `today`, `yesterday` and offsets such as `7d`, counted from the moment the query runs. Fuzzy, proximity, boost and interval operators are refused with an explicit error.
+The fields are `text`, `exact`, `body`, `from`, `chat`, `date`, `kind`, `has`, `topic`, `in`, `preset`, `filename`, `mime`, `size` and `tag`. File fields match a message when at least one of its attachments matches, by the name, size and type the messenger reported; MAX reports no type, so `mime:` finds nothing there. `tag:` reads the owner's local tags on the message, its chat or its sender. `date:` also takes `today`, `yesterday` and offsets such as `7d`, counted from the moment the query runs. Fuzzy, proximity, boost and interval operators are refused with an explicit error.
 
 ```sh
 tg messages search 'invoice AND has:file' --source all --context 2 --json
@@ -53,7 +53,7 @@ tg messages search 'filename:*.pdf size>1MB date:7d' --json
 
 `text` matches normalized words; `body` addresses the original full text, case-sensitive. `body:/.*invoice.*/` expresses a substring condition. A date without a time is a calendar day in the chosen zone; an inclusive upper day includes the whole day, and days when clocks change are not assumed to last 24 hours.
 
-When every branch requires words, results are ranked by BM25 over the word index; otherwise they come newest first. `--newest` always orders by time. Ties break on account-qualified identifiers, so pages are stable.
+When every branch requires words, results are ranked by BM25 over the word index, exact forms first; otherwise they come newest first. `--newest` always orders by time. Ties break on account-qualified identifiers, so pages are stable.
 
 If the word index is not ready, a query with words fails with `index_not_ready`, the share already built and the command that finishes it; it never falls back to substring matching. Query length, tree depth, automaton size, vocabulary expansion (10,000 words), candidates, scanned bytes, work and time are bounded. Exceeding a budget is an error, never a silently shorter result.
 
@@ -65,7 +65,7 @@ Legacy discovery (`--language legacy`) and the legacy JavaScript `--regex` mode 
 
 ### Word forms
 
-Strict search matches whole normalized words, so another form of a word is another word. `квартира` does not find `квартиру`, and `piso` does not find `pisos`. A prefix such as `квартир*` or `pis*` catches the forms, and can also catch other words that start the same way, such as `квартирант` or `piscina`. Typo correction in legacy mode does not add word forms: it corrects only words the archive does not contain.
+Words and quoted phrases in `text`, the default field, match every form of their words. `квартира` finds `квартиру` and `квартиры`, and `piso` finds `pisos`. Each word is compared by its Snowball stem, taken before the word is folded (ё→е, accents removed). Quotes keep words together but still allow every form: `"оплатил счёт"` finds `оплатила счета`. Messages that contain the exact form you typed come first. For the exact form only, write `exact:квартира` or `exact:"оплатил счёт"`, or add `--exact` (MCP: `exact: true`) to treat every word without a field that way. `-квартира` excludes every form; `-exact:квартира` only the exact one. A wildcard such as `квартир*` and a `text:` regular expression still read whole words, without stems.
 
 We measured three ways of matching word forms on Universal Dependencies treebanks, with 102 words per language ([benchmark results](https://github.com/leemour/cli-messaging/blob/bench/stemming-vs-trigrams/bench/stemming/results.md)). *Found* is the share of relevant messages the search returns; *correct* is the share of returned results that are relevant.
 
@@ -75,7 +75,7 @@ We measured three ways of matching word forms on Universal Dependencies treebank
 | Trigram neighbors (similar spelling) | 69% | 52% | 85% | 44% |
 | Snowball stems | 88% | 84% | 96% | 69% |
 
-The store now keeps a separate stem index built with the official Snowball stemmers, taken from each word before it is folded. The stemmers are a store-wide setting (`searchStemmers.cyrillic` and `searchStemmers.latin`: Russian, Spanish, English or none), and `store reindex` applies a change. Strict matching does not use the stem index yet: search behaves as described above.
+The stemmers are a store-wide setting, shared by every profile, tg and MAX: `searchStemmers.cyrillic` (Russian or none) and `searchStemmers.latin` (Spanish, English or none); `store reindex` applies a change, and until then a search with words reports that the stems are not ready. Some different words share a stem — `часть`/`часто`, `caso`/`casa` — and `exact:` or `--exact` separates them. The JSON answer says that stems were used: `query.stemming` names the stemmer and each word's stem, `stemsReady` sits beside `wordsReady`, and each hit carries `exact: false` when only another form matched. Stems arrived in cli-messaging 0.163.0 (tg 0.33, max 0.32).
 
 ## 3. Reconstruct discussions with a message graph
 
