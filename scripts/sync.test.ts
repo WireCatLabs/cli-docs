@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { latestTag, toPage } from "./sync.ts"
+import { latestTag, reviewedGuideRefs, toPage } from "./sync.ts"
 
 describe("latestTag", () => {
   it("compares versions as numbers and skips peeled and other tags", () => {
@@ -43,5 +43,36 @@ describe("toPage", () => {
   it("leaves code alone and quotes a title with a colon", () => {
     const page = toPage("# Usage: the basics\n\n```sh\n# a comment\n[x](usage.md)\n```\n", context)
     expect(page).toBe('---\ntitle: "Usage: the basics"\n---\n\n```sh\n# a comment\n[x](usage.md)\n```\n')
+  })
+})
+
+describe("reviewed prose source", () => {
+  const tool = {
+    name: "tg",
+    repo: "leemour/tg-cli",
+    package: "@leemour/tg-cli",
+    lang: "en",
+    summary: {},
+    docsRef: "v0.36.0",
+    guideRefs: { attachments: "a".repeat(40) },
+  }
+  it("keeps a page's immutable source independent of the runtime release", () => {
+    expect(reviewedGuideRefs(tool)).toEqual([["attachments", "a".repeat(40)]])
+    expect(tool.docsRef).toBe("v0.36.0")
+    const page = toPage("# File attachments\n\n[remote](remote.md) [source](../src/app.ts)", {
+      repo: tool.repo,
+      tag: tool.guideRefs.attachments,
+      pages: new Set(["attachments", "remote"]),
+      from: "docs/attachments.md",
+    })
+    expect(page).toContain("[remote](./remote.md)")
+    expect(page).toContain(`/blob/${"a".repeat(40)}/src/app.ts`)
+  })
+  it("rejects mutable branches and paths outside an individual guide", () => {
+    expect(() => reviewedGuideRefs({ ...tool, guideRefs: { attachments: "main" } })).toThrow("immutable")
+    expect(() => reviewedGuideRefs({ ...tool, guideRefs: { "../commands": "a".repeat(40) } })).toThrow("page slug")
+  })
+  it("does not mix reviewed prose into an explicit next-release preview", () => {
+    expect(reviewedGuideRefs(tool, "main")).toEqual([])
   })
 })

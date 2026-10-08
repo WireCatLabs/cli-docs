@@ -858,5 +858,30 @@
         }
       ]
     }
+  },
+  {
+    "tool": "tg",
+    "slug": "usage",
+    "reason": "Link the reviewed file-attachment guide from the released sending workflow without changing command behavior.",
+    "replacements": {
+      "en": [
+        {
+          "before": "### Files, photos and voice messages",
+          "after": "### Files, photos and voice messages\n\nFor sending, downloading and recognizing documents, see [File attachments](./attachments.md)."
+        }
+      ],
+      "ru": [
+        {
+          "before": "### Файлы, фото и голосовые",
+          "after": "### Файлы, фото и голосовые\n\nОтправка, скачивание и чтение документов описаны в [Файловых вложениях](./attachments.md)."
+        }
+      ],
+      "es": [
+        {
+          "before": "### Archivos, fotos y voz",
+          "after": "### Archivos, fotos y voz\n\nPara enviar, descargar y leer documentos, consulta [Archivos adjuntos](./attachments.md)."
+        }
+      ]
+    }
   }
 ]
