@@ -1,0 +1,293 @@
+---
+title: "Notas y archivos"
+description: "Importa archivos, escribe notas sobre personas y mensajes y vuelve a encontrarlos con etiquetas."
+---
+
+Esta guía explica cómo WireCat trabaja con notas y archivos: tu agente puede buscar en
+carpetas de texto y documentos, usar notas de Obsidian y guardar tus propias notas vinculadas
+a personas o mensajes. Úsala cuando necesites encontrar información o guardar contexto para después.
+
+Después de seguir la guía, podrás:
+
+- importar carpetas y buscar en archivos con referencias de origen;
+- crear, editar y exportar notas sobre una persona o mensaje;
+- organizar notas, mensajes y contactos con etiquetas.
+
+WireCat utiliza Memo para estas tareas. Memo es una herramienta que se ejecuta en tu ordenador
+para importar y buscar archivos y guardar notas vinculadas a sus temas. Tu agente puede ejecutar
+sus órdenes por ti.
+
+El correo tiene su propia guía: [conectar y usar correo](./email.mdx). Usa la misma instalación de Memo.
+
+## Antes de empezar
+
+Usa un <DocTerm term="local-agent" lang="es" label="agente de IA local" /> en el ordenador donde
+están tus archivos. Puedes empezar con una sola carpeta de notas. El correo y el historial
+son opcionales; para incluir mensajes, [conecta Telegram o MAX](./installation.mdx) y descarga
+el historial necesario. Memo lee ese historial local; no lo descarga por sí mismo.
+
+<a id="pruébalo-con-tu-agente" />
+
+<a id="install-memo" />
+
+## Instala Memo
+
+**La forma más fácil: pídeselo a tu agente.** Copia esta petición en Claude Code, Codex, Cursor,
+Gemini CLI o Hermes, igual que para instalar Telegram o MAX:
+
+```text prompt
+Ayúdame a instalar Memo en este ordenador con npm install -g @leemour/cli-memo.
+Comprueba primero Node.js y npm y ayúdame a configurarlos si hace falta.
+Lee memo --help y https://wirecat.dev/es/docs/memo para conocer las órdenes.
+Comprueba que memo --help funciona en tu terminal y ayúdame a conectar la carpeta que elija.
+```
+
+El agente instala la <DocTerm term="cli" lang="es" label="CLI" /> y comprueba la orden `memo`.
+Memo no tiene un paso de inicio de sesión en el mensajero; tú eliges las carpetas y configuras
+el correo por separado. El navegador muestra las instrucciones; la instalación ocurre en tu ordenador.
+
+<Accordions>
+<Accordion title="O instálalo tú mismo">
+
+Necesitas <DocTerm term="nodejs" lang="es" label="Node.js" /> y
+<DocTerm term="npm" lang="es" label="npm" />. Abre un
+<DocTerm term="terminal" lang="es" label="terminal" /> y elige tu sistema:
+
+<InstallationOsTabs>
+<Tab value="macOS / Linux">
+
+```sh
+npm install -g @leemour/cli-memo
+memo --help
+```
+
+</Tab>
+<Tab value="Windows">
+
+Abre PowerShell y ejecuta:
+
+```powershell
+npm.cmd install -g @leemour/cli-memo
+memo --help
+```
+
+</Tab>
+</InstallationOsTabs>
+
+La ayuda debe mostrar las órdenes de Memo. Si la orden no se encuentra, vuelve a abrir el
+terminal tras instalarlo. [Ayuda para configurar Node.js y npm](./installation.mdx#nodejs).
+
+</Accordion>
+</Accordions>
+
+## Añade tus notas
+
+### Elige una carpeta
+
+Una carpeta es un directorio de tu ordenador que contiene archivos. Memo lee la carpeta elegida
+**y sus subcarpetas**: puede trabajar con carpetas de proyectos, de notas o bóvedas de Obsidian.
+Puedes registrar más de una carpeta.
+
+Una <DocTerm term="vault" lang="es" label="bóveda de Obsidian" /> es una carpeta de notas que
+Obsidian abre como un espacio de trabajo. Sus notas son archivos
+<DocTerm term="markdown" lang="es" label="Markdown" />; Memo los lee directamente, sin necesitar
+que Obsidian esté abierto. No hace falta usar Obsidian para usar Memo.
+
+### Archivos que Memo puede leer
+
+| Archivos | Extensiones habituales | Qué esperar |
+| --- | --- | --- |
+| Texto y notas Markdown | `.txt`, `.md`, `.markdown` | Texto legible, incluidas las notas de Obsidian. |
+| Tablas y hojas de cálculo | `.csv`, `.tsv`, `.xlsx`, `.ods` | Texto y valores de celdas, con ubicaciones de origen cuando estén disponibles. |
+| Documentos, diapositivas y libros | `.odt`, `.pptx`, `.epub` | Texto legible extraído, sin el diseño original. |
+| PDF y documentos Word | `.pdf`, `.docx` | Necesitan lectores opcionales: `unpdf` para PDF y `mammoth` para DOCX. |
+
+Un PDF escaneado contiene imágenes de páginas; necesita reconocimiento de texto antes de
+importar su contenido. Los antiguos `.doc` y `.xls` no son compatibles; conviértelos a un formato
+admitido. La importación indica los archivos ilegibles o lectores que faltan, en vez de darlos por buscados.
+
+### Importa la carpeta que elijas
+
+Sustituye `/path/to/notes` por la ruta completa de una **carpeta existente** en tu ordenador.
+Para carpetas normales, elige el formato Markdown:
+
+```sh
+memo folders add /path/to/notes --format markdown
+memo notes import --no-embed
+```
+
+Para una bóveda de Obsidian, sustituye `/path/to/vault` por su ruta y elige el formato Obsidian:
+
+```sh
+memo folders add /path/to/vault --format obsidian
+memo notes import --no-embed
+```
+
+El formato indica cómo interpretar los enlaces y etiquetas de las notas. Markdown usa enlaces
+como `[label](other-note.md)`; Obsidian también entiende `[[Note]]`. Obsidian es el predeterminado
+si omites `--format`.
+
+El registro muestra un ID de carpeta. La importación copia el contenido legible al almacén local
+sin cambiar los archivos originales. Omite carpetas ocultas como `.obsidian`.
+`--no-embed` limita esta primera importación a la búsqueda por palabras, por lo que no necesitas
+un modelo de búsqueda para empezar. Repite `memo notes import --no-embed` después de editar o añadir archivos.
+
+### Encuentra información en tus archivos
+
+Dile a tu agente qué tema quieres encontrar:
+
+```text prompt
+Usa Memo para encontrar notas y archivos sobre el presupuesto en las carpetas que he importado.
+Muestra el texto coincidente y el archivo de origen de cada resultado útil. Indica qué archivos no se han podido leer.
+```
+
+Para buscar manualmente:
+
+```sh
+memo notes search 'budget' --json
+```
+
+Los resultados identifican el archivo, una referencia de origen y la primera línea coincidente.
+Abre el archivo para comprobar el detalle. Si no hay resultados, prueba una palabra que sepas
+que está en un archivo y revisa el informe de importación: un archivo sin importar no aparece en la búsqueda.
+
+<a id="create-your-own-notes" />
+
+## Crea tus propias notas
+
+Una nota llega a Memo de dos formas. Las **notas importadas** proceden de archivos: edita el
+original y vuelve a importarlo. Tus **propias notas** se escriben en el almacén local de Memo
+sobre una persona, mensaje, proyecto, tarea u otra nota. Crearlas no envía nada al contacto ni
+cambia el mensaje al que se refieren.
+
+Pide a tu agente una nota sobre la persona o mensaje que elijas:
+
+```text prompt
+Guarda en Memo una nota de que Rin Example prefiere reuniones por la mañana y asóciala a esa persona.
+Muéstrame la nota guardada y su referencia para comprobarla.
+```
+
+Para hacerlo manualmente, sustituye la persona y el texto:
+
+```sh
+memo notes add 'Prefers morning meetings' --about telegram:'Rin Example' --json
+memo notes list --about telegram:'Rin Example' --json
+```
+
+Para una nota sobre un mensaje, copia su referencia completa del resultado de búsqueda o contexto.
+Los números son ilustrativos; sustituye toda la referencia `msg:telegram/1/77/42` por la tuya:
+
+```sh
+memo notes add 'Check the revised budget' --about 'msg:telegram/1/77/42' --json
+```
+
+Una nota puede tener varios temas: repite `--about` para cada uno. Usa `max:<name or id>` o
+`email:<address>` para otra identidad. Un objeto almacenado también puede nombrarse mediante
+su referencia `person:`, `entity:`, `task:` o `note:`. Debe existir en el almacén; coincidir en
+el nombre no establece que dos cuentas pertenezcan a la misma persona.
+
+### Lee, edita y elimina una nota
+
+La creación devuelve un ID de nota. Sustituye `NOTE_ID` por él; `revision` indica su revisión
+actual. Lee ese valor antes de editar y sustituye `1` por él:
+
+```sh
+memo notes show note:NOTE_ID --json
+memo notes edit NOTE_ID --revision 1 --text 'Prefers early morning meetings'
+```
+
+Comprobar la revisión evita sobrescribir una edición posterior. Si cambió, vuelve a leer la
+nota antes de editar. Si ya no necesitas la nota que creaste, puedes eliminarla:
+
+```sh
+memo notes remove NOTE_ID
+```
+
+### Exporta tus notas a archivos
+
+Exportar escribe las notas que creaste en Memo en una carpeta que elijas:
+
+```sh
+memo notes export --to /path/to/exported-notes --format markdown
+```
+
+Usa `--format obsidian` para Obsidian. Los archivos exportados llevan metadatos `memo-id` y
+`memo-hash`, para que importarlos no cree duplicados. Si editaste un archivo exportado, Memo
+lo deja intacto e informa del conflicto.
+
+<a id="tag-your-sources" />
+
+## Etiqueta tus fuentes
+
+Una etiqueta es un nombre corto que eliges, como `work` o `follow-up`. Ayuda a encontrar
+fuentes relacionadas sin reescribirlas. Pide al agente que etiquete las notas, mensajes o
+contactos que elijas y te muestre las etiquetas guardadas.
+
+Usa los IDs y referencias de tus propias búsquedas. `NOTE_ID`, `PERSON_UID` y `FOLDER_ID` son
+marcadores; los IDs numéricos de mensajes, contactos y cuentas son ilustrativos.
+
+| Qué etiquetar | Orden |
+| --- | --- |
+| Una nota | `memo tags add work --note note:NOTE_ID` |
+| Un mensaje almacenado | `memo tags add follow-up --message 'msg:telegram/1/77/42'` |
+| Un contacto seleccionado mediante una cuenta | `memo tags add work --contact 101 --provider telegram --account 1` |
+| Una persona vinculada | `memo tags add work --person PERSON_UID` |
+| Notas en una subcarpeta | `memo tags add project --folder FOLDER_ID --path Projects` |
+
+Un **contacto** identifica a alguien en un proveedor; la cuenta elige los datos locales donde encontrarlo. Una **persona** reúne
+las identidades que vinculaste explícitamente. Obtén su identificador (UID) del campo
+`messages.person.uid` de `memo context ... --json`; consulta [vincular identidades](./people.md#link-your-accounts). La referencia
+completa de un mensaje contiene proveedor, cuenta, chat y mensaje: el mismo ID numérico en
+otra cuenta no selecciona la misma fuente.
+
+Las etiquetas usan 1–32 letras a–z, números o guiones; no distinguen mayúsculas. Viven en
+el almacén local y no cambian archivos, indicadores del buzón ni etiquetas de Gmail. También
+se importan etiquetas de archivos: Obsidian entiende `#tags` en el texto y el campo `tags:`;
+el formato Markdown usa `tags:`. En Markdown normal, un `#word` no es automáticamente una etiqueta.
+
+### Encuentra y elimina etiquetas
+
+```sh
+memo notes search 'budget' --tag work --json
+memo search 'tag:follow-up' --all --json
+memo tags list --tag work --json
+memo tags remove work --note note:NOTE_ID
+```
+
+La primera consulta busca notas etiquetadas; la segunda busca fuentes almacenadas en todas
+las cuentas. Comprueba el tipo de fuente y la cuenta. Quitar la etiqueta deja intacta la fuente.
+Añadir una existente o quitar una ausente no crea un segundo cambio.
+
+## Pide el contexto que necesitas
+
+Una nota de archivo importada puede tratar de una persona, además de mencionar su nombre.
+Asóciala explícitamente:
+
+```sh
+memo note telegram:"Rin Example" /path/to/notes/people/Rin.md
+memo notes about telegram:"Rin Example" --json
+memo context telegram:"Rin Example" --json
+```
+
+El archivo debe estar importado. Un nombre en texto normal no crea un enlace.
+`notes about` muestra notas relacionadas; `context` también reúne mensajes y correo de las
+identidades vinculadas. Consulta [vincular cuentas](./people.md#link-your-accounts) y [Correo](./email.mdx).
+
+## Añade correo
+
+Consulta [Correo](./email.mdx) para las cuentas, importaciones y enlaces de direcciones con personas.
+
+## Comprueba el resultado
+
+Una nota guardada debe tener ID, texto y enlaces a los temas elegidos. La lista de etiquetas
+debe identificar la nota, mensaje, contacto o persona correctos. Para archivos importados,
+abre el original y comprueba el texto. Si una fuente no se importó o un enlace a una persona
+no se resolvió, pide al agente que explique la carencia en vez de dar el resultado por completo.
+
+## Si falta algo
+
+Si falta una nota o etiqueta, comprueba su ID y cuenta. Para notas de archivo, revisa el informe y repite la importación tras editar. Si una edición entra en conflicto, lee la revisión actual antes de volver a intentarlo.
+
+Continúa con [Correo](./email.mdx) para importar mensajes y vincular direcciones a tus contactos,
+o [trabajar con personas](./people.md#link-your-accounts) para vincular identidades entre mensajeros.
+Consulta las opciones exactas en `memo --help` o el `--help` de una suborden.

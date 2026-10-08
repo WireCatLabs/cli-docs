@@ -1,0 +1,285 @@
+---
+title: "Notes and files"
+description: "Import files, write notes about people and messages, and find them again with tags."
+---
+
+This guide explains how WireCat works with notes and files: your agent can search folders of
+text files and documents, use Obsidian notes, and keep your own notes linked to people or
+messages. Use it when you want to find information in your files or save context for later.
+
+After following the guide, you will be able to:
+
+- import folders and search your files with source references;
+- create, edit and export notes about a person or message;
+- organise notes, messages and contacts with tags.
+
+WireCat uses Memo for these tasks. Memo is a tool that runs on your computer to import and
+search files and keep notes linked to their subjects. Your agent can run its commands for you.
+
+Email has a separate guide: [connect and use email](./email.mdx). It uses the same Memo installation.
+
+## Before you start
+
+Use a <DocTerm term="local-agent" lang="en" label="local AI agent" /> on the computer where your
+files are stored. You can start with a folder of notes alone. Email and messenger history are
+optional; to include messages, [connect Telegram or MAX](./installation.mdx) and download the
+history you need. Memo reads that local history; it does not download it itself.
+
+<a id="try-it-with-your-agent" />
+
+## Install Memo
+
+**The easiest way: ask your agent.** Copy this request into Claude Code, Codex, Cursor,
+Gemini CLI or Hermes, as you would when installing Telegram or MAX:
+
+```text prompt
+Help me install Memo on this computer with npm install -g @leemour/cli-memo.
+Check Node.js and npm first and help me set them up if needed.
+Read memo --help and https://wirecat.dev/en/docs/memo to learn how to use it.
+Check that memo --help works in your terminal, then help me connect a folder I choose.
+```
+
+The agent installs the <DocTerm term="cli" lang="en" label="CLI" /> and checks that the
+`memo` command works. Memo itself has no messenger login step; you choose folders and configure
+mail separately. The browser shows these instructions; installation happens on your computer.
+
+<Accordions>
+<Accordion title="Or install it yourself">
+
+You need <DocTerm term="nodejs" lang="en" label="Node.js" /> and
+<DocTerm term="npm" lang="en" label="npm" />. Open a
+<DocTerm term="terminal" lang="en" label="terminal" /> and choose your system:
+
+<InstallationOsTabs>
+<Tab value="macOS / Linux">
+
+```sh
+npm install -g @leemour/cli-memo
+memo --help
+```
+
+</Tab>
+<Tab value="Windows">
+
+Open PowerShell and run:
+
+```powershell
+npm.cmd install -g @leemour/cli-memo
+memo --help
+```
+
+</Tab>
+</InstallationOsTabs>
+
+The help command should list Memo's commands. If it is not found, reopen the terminal after
+installation. [Get help setting up Node.js and npm](./installation.mdx#nodejs).
+
+</Accordion>
+</Accordions>
+
+## Add your notes
+
+### Choose a folder
+
+A folder is a directory on your computer containing files. Memo reads the selected folder
+**and its subfolders**, so it can work with ordinary project folders, a folder of notes or an
+Obsidian vault. You can register more than one folder.
+
+An <DocTerm term="vault" lang="en" label="Obsidian vault" /> is simply a folder of notes that
+Obsidian opens as one workspace. Its notes are <DocTerm term="markdown" lang="en" label="Markdown" />
+files; Memo reads those files directly, without requiring Obsidian to be open. You do not need
+to use Obsidian to use Memo.
+
+### Files Memo can read
+
+| Files | Common extensions | What to expect |
+| --- | --- | --- |
+| Text and Markdown notes | `.txt`, `.md`, `.markdown` | Readable text, including Obsidian notes. |
+| Tables and spreadsheets | `.csv`, `.tsv`, `.xlsx`, `.ods` | Text and cell values, with source locations where available. |
+| Documents, slides and ebooks | `.odt`, `.pptx`, `.epub` | Extracted readable text, rather than the original layout. |
+| PDF and Word documents | `.pdf`, `.docx` | Require optional readers: `unpdf` for PDF and `mammoth` for DOCX. |
+
+A scanned PDF contains page images; it needs text recognition before its contents can be
+imported. Older `.doc` and `.xls` files are not supported; convert them to a supported format.
+Import reports unreadable files or missing readers rather than silently treating them as searched.
+
+### Import the folder you choose
+
+Replace `/path/to/notes` with the full path to an **existing folder** on your computer. For
+ordinary folders, select the Markdown format:
+
+```sh
+memo folders add /path/to/notes --format markdown
+memo notes import --no-embed
+```
+
+For an Obsidian vault, replace `/path/to/vault` with its folder path and select Obsidian's format:
+
+```sh
+memo folders add /path/to/vault --format obsidian
+memo notes import --no-embed
+```
+
+The format tells Memo how to understand links and tags in your notes. Markdown uses links such
+as `[label](other-note.md)`; Obsidian also understands `[[Note]]` links. Obsidian is the default
+if you omit `--format`.
+
+Registration prints a folder ID. Import copies readable content into the local store without
+changing the source files. Hidden folders such as `.obsidian` are skipped. `--no-embed` keeps
+this first import to word search, so you do not need a search model to get started. Repeat
+`memo notes import --no-embed` after editing or adding files.
+
+### Find something in your files
+
+Tell your agent which topic you want to find:
+
+```text prompt
+Use Memo to find notes and files about the budget in the folders I imported.
+Show the matching text and source file for each useful result. Tell me if any files were not read.
+```
+
+For a manual search:
+
+```sh
+memo notes search 'budget' --json
+```
+
+The results identify the matching file, a source reference and the first matching line. Open
+the file to check the detail. If no result appears, try a word you know is in one of your files
+and inspect the import report; a file that was not imported cannot appear in the search.
+
+## Create your own notes
+
+There are two ways a note reaches Memo. **Imported notes** come from your files; edit the
+original file and import it again. **Your own notes** are written in Memo's local store and
+can be about a person, message, project, task or another note. Creating one does not send
+anything to a contact or change the message it refers to.
+
+Ask your agent to add a note about the person or message you choose:
+
+```text prompt
+Save a note in Memo that Rin Example prefers morning meetings and link it to that person.
+Show me the saved note and its source reference so I can check it.
+```
+
+For manual use, replace the person and text with yours:
+
+```sh
+memo notes add 'Prefers morning meetings' --about telegram:'Rin Example' --json
+memo notes list --about telegram:'Rin Example' --json
+```
+
+For a note about a message, copy the full source reference from a search or context result.
+The numbers below are illustrative; replace the whole `msg:telegram/1/77/42` reference with yours:
+
+```sh
+memo notes add 'Check the revised budget' --about 'msg:telegram/1/77/42' --json
+```
+
+One note can have several subjects: repeat `--about` for each one. Use `max:<name or id>` or
+`email:<address>` for another identity. A stored object can also be named by its `person:`,
+`entity:`, `task:` or `note:` reference. The subject must exist in the store; a matching name
+alone does not establish that two accounts belong to one person.
+
+### Read, edit and remove a note
+
+Creation returns a note ID. Replace `NOTE_ID` with it; the returned `revision` is the current
+revision of the note. Read that value before editing and replace `1` below with it:
+
+```sh
+memo notes show note:NOTE_ID --json
+memo notes edit NOTE_ID --revision 1 --text 'Prefers early morning meetings'
+```
+
+The revision check prevents your edit from overwriting a newer one. If it changed, reread the
+note before editing. If you no longer need a note you created, you can remove it:
+
+```sh
+memo notes remove NOTE_ID
+```
+
+### Export your notes to files
+
+Export writes the notes you created in Memo to a folder you choose:
+
+```sh
+memo notes export --to /path/to/exported-notes --format markdown
+```
+
+Use `--format obsidian` for Obsidian files. Exported files carry `memo-id` and `memo-hash` metadata
+so importing that folder does not create duplicate notes. If you edited an exported file yourself,
+export leaves it alone and reports the conflict.
+
+## Tag your sources
+
+A tag is a short label you choose, such as `work` or `follow-up`. It helps you find related
+sources without rewriting them. Ask your agent to tag the exact notes, messages or contacts
+you choose, then show the labels it saved.
+
+Use IDs and source references returned by your own searches. `NOTE_ID`, `PERSON_UID` and
+`FOLDER_ID` below are placeholders; the numeric message/contact/account IDs are illustrative.
+
+| What to label | Command |
+| --- | --- |
+| A note | `memo tags add work --note note:NOTE_ID` |
+| A stored message | `memo tags add follow-up --message 'msg:telegram/1/77/42'` |
+| A contact identity selected through an account | `memo tags add work --contact 101 --provider telegram --account 1` |
+| A linked person | `memo tags add work --person PERSON_UID` |
+| Notes in a subfolder | `memo tags add project --folder FOLDER_ID --path Projects` |
+
+A **contact** identifies someone in a provider; the account selects the local view used to find them. A **person** combines the
+identities you linked explicitly. Obtain the person's identifier (UID) from `messages.person.uid`
+in `memo context ... --json`; see [linking identities](./people.md#link-your-accounts). A full message
+reference includes the provider, account, chat and message, so the same numeric ID in another
+account does not select the same source.
+
+Tags contain 1–32 letters a–z, digits or hyphens; case is ignored. Labels live in the local
+store and do not change source files, mailbox flags or Gmail labels. File tags are also imported:
+Obsidian understands inline `#tags` and the `tags:` field; the Markdown format uses `tags:`.
+In ordinary Markdown, a `#word` in text is not automatically a tag.
+
+### Find and remove labels
+
+```sh
+memo notes search 'budget' --tag work --json
+memo search 'tag:follow-up' --all --json
+memo tags list --tag work --json
+memo tags remove work --note note:NOTE_ID
+```
+
+The first query searches tagged notes; the second searches stored sources across accounts.
+Check the source type/account in the result. Removing a label leaves the source intact.
+Adding an existing label or removing an absent one does not create a second change.
+
+## Ask for the context you need
+
+An imported file can be about a person as well as containing their name. Associate it explicitly:
+
+```sh
+memo note telegram:"Rin Example" /path/to/notes/people/Rin.md
+memo notes about telegram:"Rin Example" --json
+memo context telegram:"Rin Example" --json
+```
+
+The file must already be imported. Ordinary text mentions do not create a person link.
+`notes about` shows related notes; `context` also gathers stored messages and mail for linked
+identities. See [linking accounts](./people.md#link-your-accounts) and [Email](./email.mdx).
+
+## Add email
+
+For mail accounts, imports and linking an address to a person, continue with [Email](./email.mdx).
+
+## Check the result
+
+A saved note should have an ID, text and links to the subjects you selected. A tag listing
+should identify the intended note, message, contact or person. For imported files, open the
+original to check the text. If a source was not imported or a person link is unresolved, ask
+the agent to explain the gap rather than treat the result as complete.
+
+## If something is missing
+
+If a note or tag is missing, check its exact ID and account. For file notes, inspect the import report and rerun the import after edits. If an edit conflicts, read the current revision before trying again.
+
+Continue with [Email](./email.mdx) to import mail and link addresses to your contacts, or
+[Know your people](./people.md#link-your-accounts) to connect identities across messengers.
+For exact Memo options, use `memo --help` or a subcommand's `--help`.
