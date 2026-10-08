@@ -1,11 +1,47 @@
 ---
 title: "Search"
-description: "Find a message, a decision or a whole discussion."
+description: "Find a message, person, chat or file using words, word forms, typos or meaning."
 ---
 
-You can look for a remembered word, a phrase, a person or a discussion whose exact wording
-you no longer remember. Start with the messages already saved on your computer.
+Find what you need in Telegram or MAX: a message, agreement, person, chat or document.
+Your agent can choose a search method even if you remember only part of a phrase or its subject.
 
+**What you can search:**
+
+- **Messages and discussions** — by text, sender, date, subject and nearby messages.
+- **Contacts and people** — by name, username or ID, then recall what you discussed.
+- **Chats, groups and channels** — by title among your account's chats.
+- **Files** — by filename, extension and contents, once the document's text has been extracted and saved.
+- **Links and attachments** — for example, messages with a link, PDF or voice note; voice transcripts become searchable once their text is saved.
+
+Content search supports text files, Word and PDFs with text layers. Scans and photos need text
+recognition first; ask your agent to do that. Details: [Telegram files](./tg/search.md#for-scripts-and-agents)
+and [MAX](./max/search.md#for-scripts-and-agents). See [People](./people.md) for finding a person.
+
+For word forms, typo handling and meaning-based search, see [How search works](./search-architecture.mdx).
+
+## Fetch the relevant chat history first
+
+Before searching older messages, download the conversations for the period you need. Logging
+in does not download all history; ordinary search reads messages already saved on your computer.
+If that conversation is missing, an empty result does not mean the message was never sent.
+
+Ask your agent to fetch the selected chats or run your messenger's command. Replace `Project`
+with the chat title; this example downloads the past month, up to 1,000 messages per run:
+
+```sh
+tg store fetch "Project" --since-time 30d --limit 1000
+```
+
+```sh
+max store fetch "Project" --since-time 30d --limit 1000
+```
+
+If the limit is reached, that month's history may still be incomplete. Instructions for fetching,
+resuming and checking history: [Telegram](./tg/archive.md#fetch-a-chats-history) and
+[MAX](./max/archive.md#downloading-history).
+
+## Find a word or phrase
 
 Start by asking your agent:
 
@@ -14,9 +50,6 @@ Find where we agreed the renovation deadline in the group and my chat with the c
 ```
 
 You should get the agreed date and the messages behind it. If the date was only proposed or later changed, the answer should make that clear. You do not need to know the search syntax.
-
-
-## Find a word or phrase
 
 <details>
 <summary>Optional: commands for the terminal</summary>
@@ -42,6 +75,21 @@ max messages search 'exact:"final invoice"'
 
 Results link back to messages. Ask your assistant to show nearby messages before interpreting
 an agreement: one line may miss a correction or a later answer.
+
+## When you don't remember the exact wording
+
+Message search offers several approaches:
+
+- **A word or exact phrase:** when you remember the wording. Use `exact:` for literal matching.
+- **Part of a word:** `flat*` finds words starting with that part, such as “flat” and “flats”.
+- **Word forms and shared stems:** “invoice” can find “invoices” with English stemming configured. Automatic stem matching is available in `tg` 0.33+ and `max` 0.32+; results depend on the language and configured index.
+- **Typos:** `legacy` mode can expand a query and correct unknown words using the saved conversation's vocabulary. Your agent can choose it when the spelling is approximate.
+- **Meaning:** when you remember the subject, such as “the renovation deadline we agreed”, rather than the words. This needs a prepared discussion index.
+
+Word forms, exact matching, indexes and meaning-based search: **[How search works](./search-architecture.mdx)**.
+Detailed syntax and modes: [Telegram](./tg/query-language.md#the-older-modes) and
+[MAX](./max/query-language.md#the-older-modes). These modes describe message search;
+chat-title and person-name lookup can behave differently.
 
 ## Narrow the conversation
 
