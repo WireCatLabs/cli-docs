@@ -44,9 +44,9 @@ También puedes filtrar por persona, fecha o adjuntos. Las guías de
 
 ## Si falta un resultado
 
-No puedes encontrar mensajes que no se han guardado. Descarga el historial del chat primero.
-Buscar palabras y buscar por significado resuelven tareas distintas; prueba ambas si no recuerdas
-el texto preciso. Comprueba fechas, chats elegidos y si el historial está completo.
+La búsqueda por palabras también consulta el servidor de Telegram, o el de MAX si indicas
+un chat. La búsqueda solo en el archivo y por significado necesita historial guardado:
+descarga el período que falta y repite la consulta. Revisa fechas, chats y cobertura.
 
 ## Probar sin instalar
 

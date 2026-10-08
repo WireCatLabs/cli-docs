@@ -44,9 +44,9 @@ You can also filter by person, date or attachments. The [Telegram](./tg/search.m
 
 ## If a result is missing
 
-The tools cannot find messages they have not saved. Fetch the chat's history first, then search
-again. A word search is different from a search by meaning; try both when you remember only
-roughly how something was said. Check dates, chat scope and whether history is complete.
+Word search also asks Telegram's server, or MAX's server when you name a chat. Archive-only
+and topic search need saved history: fetch the missing period, then search again. Try word and
+topic search when you remember the phrasing roughly; check dates, scope and coverage.
 
 ## Try without installing
 
