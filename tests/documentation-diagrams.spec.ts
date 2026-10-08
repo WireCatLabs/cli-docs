@@ -38,5 +38,6 @@ for (const lang of ["en", "ru", "es"]) {
       await expect(link).toHaveCount(1)
       await expect(link.locator("svg")).toHaveCount(1)
     }
+    await expect(page.locator(`#nd-sidebar a[href="/${lang}/docs/meeting-brief"] .lucide-video`)).toHaveCount(1)
   })
 }

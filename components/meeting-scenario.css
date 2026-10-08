@@ -174,3 +174,32 @@
     scroll-behavior: auto;
   }
 }
+
+.meeting-scenario .meeting-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.meeting-scenario .meeting-choices legend {
+  margin-bottom: 10px;
+  color: var(--color-fd-foreground);
+  font-size: 14px;
+  font-weight: 600;
+}
+.meeting-scenario .meeting-choices button {
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--color-fd-border);
+  background: var(--color-fd-card);
+  color: var(--color-fd-foreground);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.meeting-scenario .meeting-choices button[aria-pressed="true"] {
+  border-color: var(--color-fd-primary);
+  background: var(--color-fd-accent);
+  font-weight: 600;
+}

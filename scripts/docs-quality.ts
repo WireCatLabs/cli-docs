@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url"
 import type { CommandInfo, OptionInfo } from "@leemour/cli-core/commands"
 import { fromMarkdown } from "mdast-util-from-markdown"
 import { parse, quote } from "shell-quote"
+import { demoScenarioIds } from "../lib/demo-scenarios.ts"
 
 export type Program = { cli: string; commands: CommandInfo[]; globalOptions: OptionInfo[] }
 export type Example = { text: string; line: number; executable: boolean }
@@ -253,6 +254,38 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
               file: file.slice(root.length + 1),
               line: example.line,
               command: example.text.trim(),
+              ...finding,
+            })
+        }
+      }
+    }
+    for (const lang of ["en", "ru", "es"]) {
+      const file = `lib/landing/${lang}.json`
+      const source = readFileSync(join(root, file), "utf8")
+      const data = JSON.parse(source) as {
+        sessions: { id: string; steps: { tool: boolean; html: string }[] }[]
+        maxSessions: { id: string; steps: { tool: boolean; html: string }[] }[]
+      }
+      for (const session of [...data.sessions, ...data.maxSessions].filter((s) =>
+        demoScenarioIds.some((id) => id === s.id),
+      )) {
+        for (const step of session.steps.filter((step) => step.tool)) {
+          const encoded = /<code>([\s\S]*?)<\/code>/.exec(step.html)?.[1]
+          if (!encoded) throw new Error(`Missing command markup in ${file}: ${session.id}`)
+          const command = encoded
+            .replace(/<[^>]*>/g, "")
+            .replaceAll("&quot;", '"')
+            .replaceAll("&amp;", "&")
+            .replaceAll("&lt;", "<")
+            .replaceAll("&gt;", ">")
+          if (!command.startsWith(`${tool.name} `)) continue
+          checkedExamples++
+          const finding = validateInvocation(command, contract.program, true)
+          if (finding)
+            findings.push({
+              file,
+              line: source.slice(0, source.indexOf(JSON.stringify(step.html))).split("\n").length,
+              command,
               ...finding,
             })
         }

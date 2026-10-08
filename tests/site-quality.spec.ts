@@ -211,11 +211,23 @@ for (const lang of ["en", "ru", "es"]) {
         .first()
         .evaluate((element) => getComputedStyle(element).animationName),
     ).toBe("none")
+    for (const id of ["inbox", "search"]) {
+      await scenario.locator(`[data-scenario="${id}"]`).click()
+      await expect(scenario.locator("details.tool")).toHaveCount(0)
+      await scenario.getByRole("button", { name: send, exact: true }).click()
+      await expect(scenario.locator("[data-meeting-pending]")).toBeVisible()
+      await expect(scenario.locator("details.tool code").first()).toContainText(
+        id === "inbox" ? "max inbox" : "max messages search",
+      )
+      await expect(scenario.locator(".say")).toHaveCount(1)
+    }
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
     expect((await new AxeBuilder({ page }).include("main").analyze()).violations).toEqual([])
     const locale = lang === "en" ? "" : `${lang}/`
     const markdown = await (await request.get(`/llms.mdx/docs/${locale}meeting-brief/content.md`)).text()
     expect(markdown).toContain("tg chats list")
+    expect(markdown).toContain("max inbox")
+    expect(markdown).toContain("max messages search")
     expect(markdown).not.toContain("<MeetingGuide")
     expect(markdown).toContain("```text prompt")
   })

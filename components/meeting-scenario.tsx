@@ -7,15 +7,16 @@ import { RotateCcw, Send } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import type { MeetingSession, meetingCopy } from "@/lib/meeting-guide"
 
-type Props = { sessions: { tg: MeetingSession; max: MeetingSession }; text: typeof meetingCopy.en }
+type Props = { sessions: { tg: MeetingSession; max: MeetingSession }[]; text: typeof meetingCopy.en }
 export function MeetingScenario({ sessions, text }: Props) {
+  const [scenario, setScenario] = useState(0)
   const [tool, setTool] = useState<"tg" | "max">("tg")
   const [shown, setShown] = useState(0)
   const [target, setTarget] = useState(0)
   const [copyStatus, setCopyStatus] = useState("")
   const pending = useRef<HTMLDivElement>(null)
   const log = useRef<HTMLDivElement>(null)
-  const steps = sessions[tool].steps
+  const steps = sessions[scenario][tool].steps
   const running = shown < target
   useEffect(() => {
     if (!running) return
@@ -64,10 +65,27 @@ export function MeetingScenario({ sessions, text }: Props) {
   }
   return (
     <div className="not-prose wirecat-landing meeting-scenario" data-meeting-scenario>
+      <fieldset className="meeting-choices">
+        <legend>{text.title}</legend>
+        {sessions.map((session, index) => (
+          <button
+            key={session.tg.id}
+            data-scenario={session.tg.id}
+            type="button"
+            aria-pressed={scenario === index}
+            onClick={() => {
+              reset()
+              setScenario(index)
+            }}
+          >
+            {session[tool].title}
+          </button>
+        ))}
+      </fieldset>
       <p className="meeting-hint">{text.hint}</p>
       <div className="app">
         <div className="titlebar">
-          <span>{text.title}</span>
+          <span>{sessions[scenario][tool].title}</span>
           <fieldset className="demo-messengers" aria-label="Telegram / MAX">
             {(["tg", "max"] as const).map((value) => (
               <button key={value} type="button" aria-pressed={tool === value} onClick={() => reset(value)}>

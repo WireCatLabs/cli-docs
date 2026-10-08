@@ -29,7 +29,8 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | Why does my agent not see the tool? | `agents.md` | Setup/recovery | Preserve the “usually already connected” distinction |
 | What should I ask first? | `first-tasks.md` | Tutorial/task hub | Pilot catch-up, older-history search and draft workflows here |
 | What do my accounts know about a person? | `people.md` | Task guide | Review source and data boundaries |
-| How do I prepare a meeting brief? | `meeting-brief.mdx` | Task guide | Show request, gathered context, follow-up and agenda before technical detail |
+| Can I see what the agent does? | `meeting-brief.mdx` | Interactive demo | Reuse reviewed meeting, inbox and search scenarios with sources |
+| How do I find a message or agreement? | `search.md` | Task guide | Lead with an agent request; keep terminal syntax optional |
 | How do I connect a browser AI app? | `browser-apps.mdx` | Connection guide | Preserve current web setup instructions |
 | How do I ask for a useful result? | `prompting.md` | Task guidance | Cross-link to worked examples instead of duplicating dialogues |
 | Can it do my task in Telegram or MAX? | `features.md` | Capability orientation | Verify differences; link task homes, not only command lists |

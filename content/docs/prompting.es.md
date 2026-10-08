@@ -109,6 +109,8 @@ indica después a quién, qué archivos y con qué texto. [Recetas con archivos]
 
 ## Revisar compromisos y preparar respuestas
 
+Buscas un borrador que puedas revisar antes de que lo reciba alguien. Indica la persona y pide al agente que lea primero la conversación. El resultado debe ser el texto propuesto, sin hechos no confirmados o con ellos señalados.
+
 Delimita de quién son los compromisos y pide comprobar mensajes posteriores.
 
 ```text prompt

@@ -14,7 +14,7 @@
   },
   {
     "id": "find-history",
-    "pages": ["first-tasks.md", "tg/archive.md", "max/archive.md", "tg/search.md", "max/search.md"],
+    "pages": ["search.md", "first-tasks.md", "tg/archive.md", "max/archive.md", "tg/search.md", "max/search.md"],
     "families": { "tg": ["store", "messages", "conversations"], "max": ["store", "messages", "conversations"] }
   },
   {

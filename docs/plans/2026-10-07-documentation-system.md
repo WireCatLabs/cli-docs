@@ -185,3 +185,16 @@ in the implementation review. No human-reader or real-account evaluation and no 
 performed. Generated evidence remains separate from authored pages.
 
 Current-base correction and outstanding release mismatches: [review](../reviews/2026-10-08-main-base-correction.md).
+
+
+## User-task refresh — 8 October 2026
+
+The main-based continuation now incorporates `f5ad67f`, fixes the 15 shared-guide release
+mismatches, shortens First tasks, adapts the existing shared Search guide, and extends Demo
+with homepage-backed meeting, inbox and recommendation scenarios. Strict checks cover the
+rendered Demo commands as well as Markdown examples. The review records release evidence,
+branch reconciliation and validation: [user-task refresh](../reviews/2026-10-08-user-task-refresh.md).
+
+The separate newer-release guide review remains with its current worktree. Manual review of
+the generic-example queue and reader feedback on these pages are the next editorial inputs;
+additional pages are not required merely to increase coverage.

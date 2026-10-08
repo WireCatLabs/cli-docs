@@ -45,7 +45,7 @@ dependencies and a discovery hash. It does not log in or read account data.
 
 `docs:check` runs scoped Markdown lint and strict release validation. It rejects missing command
 reference entries/options, invalid command examples and missing task destinations. It checks
-authored shared pages and synced localized tool guides, including inline command mentions and
+authored shared pages, synced localized tool guides and the homepage fixtures used in Demo, including inline command mentions and
 shell/PowerShell fences. It never executes an example. A stale or missing contract is an error.
 
 Inspect `.docs-tooling/reports/quality.json` for four distinct results:

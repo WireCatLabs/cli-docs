@@ -10,10 +10,8 @@ Your browser device needs no Tailscale installation.
 
 **Test status:** the owner confirmed Telegram reading and sending in Claude web on 7 October 2026.
 OpenAI web, MAX in the browser and setup on each OS still need an end-to-end check.
-HTTP reading needs `tg` 0.27+ or `max` 0.28+. The sending commands below need `max` 0.30+
-or `tg` 0.30 (the next release). Until that TG version is published, use the tested build or
-omit `--http-confirmation permissions --permission messages.send=allow` for reading.
-Check your version before following these commands.
+The examples below match the reviewed releases: Telegram v0.28.0 and MAX v0.29.0.
+They start a server for reading and drafting; sending still depends on permissions and confirmation.
 
 <ArchitectureDiagram name="remote" lang="en" />
 
@@ -34,7 +32,7 @@ Check your version before following these commands.
 Choose your operating system below. **The first code block goes in window 1; the second in
 window 2.** Copy the real HTTPS origin printed by Funnel when window 2 asks. Do not append
 `/mcp` here. Keep a public port such as `:8443` if Funnel prints one.
-The commands grant sending for this process; read the permission explanation below.
+Start with reading and drafts; the permission explanation below covers sending.
 
 <PlatformSetupTabs>
 
@@ -57,7 +55,7 @@ who logged into the messenger.
 
 ```powershell
 $mcpPublicUrl = Read-Host 'HTTPS origin from Funnel (no /mcp)'
-tg.cmd mcp --http --port 8765 --public-url $mcpPublicUrl --http-confirmation permissions --permission messages.send=allow
+tg.cmd mcp --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 For MAX, replace `tg.cmd` with `max.cmd` in window 2. Run both processes in native Windows.
@@ -79,7 +77,7 @@ TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --http-confirmation permissions --permission messages.send=allow
+tg mcp --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 For MAX, replace `tg` with `max` in window 2.
@@ -101,7 +99,7 @@ sudo tailscale funnel 8765
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --http-confirmation permissions --permission messages.send=allow
+tg mcp --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 For MAX, replace `tg` with `max` in window 2. Do not run the messenger server with `sudo`.
@@ -115,23 +113,15 @@ before the command, for example `tg work mcp`; on Windows, `tg.cmd work mcp`.
 
 ## Permissions and sending
 
-By default, **every HTTP write requires a server confirmation form**, even when saved
-permissions say `allow`. The app's tool approval is a separate prompt and cannot satisfy that
-server form. Apps without MCP elicitation cannot write in this default mode.
+In these reviewed releases, **every HTTP write needs the server's confirmation form**, even
+when the saved permission is `allow`. Approval in the browser app does not replace this form.
+If the app cannot display MCP confirmation forms (elicitation), use reading and drafts.
 
-The commands above opt into `--http-confirmation permissions`: effective `allow` executes
-without the server form, `ask` still needs it, and `deny` / `readonly` restrict access.
-`--permission messages.send=allow` enables sending only for the running server; it does not
-edit saved configuration. Recipient restrictions and hourly limits still apply.
-The app may ask before calling a tool, but if you set it to always allow sending, a new call
-may execute without another prompt. Ask for drafts explicitly when you want to review them.
-
-Repeat `--permission key=level` for other commands. A broad `messages=allow` override replaces
-saved message permissions, but built-in confirmation defaults remain: deletion needs its
-own `messages.delete=allow`. `--yes` does not bypass an HTTP confirmation form.
-See [Telegram permissions](./tg/configuration.md) or [MAX permissions](./max/configuration.md).
-MAX connects directly when runtime overrides are supplied; an existing `max serve` retains
-its saved profile permissions.
+The startup examples do not change permissions. A draft stays in your agent chat until you
+explicitly request sending and the required confirmation succeeds. Check
+[Telegram permissions](./tg/configuration.md) or [MAX permissions](./max/configuration.md)
+before enabling writes. Newer releases have different HTTP permission options; consult the
+reference for your exact version rather than adding unsupported flags to these commands.
 
 ## Add it to Codex / ChatGPT web or Claude
 

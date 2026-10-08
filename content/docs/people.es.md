@@ -1,131 +1,96 @@
 ---
 title: "Personas"
-description: "Averigua quién es alguien desde tus propias cuentas de Telegram y MAX: su perfil, dónde habláis, qué escribió, si la cuenta parece un bot — y respuestas automáticas con tus reglas."
+description: "Recuerda quién te escribió y qué hablasteis antes de responder, usando tu historial de Telegram o MAX."
 ---
 
-Antes de contestar a un desconocido, aceptar a alguien en un grupo o pasar una conversación a tu
-agente, puedes preguntar a tu propia cuenta qué sabe de esa persona. Todo aquí lee tu cuenta y la
-copia local de tus mensajes en tu ordenador. No se envía nada a la persona y nada se marca como
-leído.
+Alguien te escribe, pero no recuerdas dónde os conocisteis ni qué acordasteis. Pide al agente
+que encuentre a la persona, reúna las conversaciones anteriores y muestre los mensajes de origen.
+Necesitas una [cuenta conectada](./installation.mdx) y un [agente](./agents.md).
 
-| Pregunta | Comando |
-|---|---|
-| ¿Quién es y dónde hablamos? | `contacts profile` |
-| ¿Qué escribió, en todos los chats o en los que yo diga? | `contacts context` |
-| ¿Parece la cuenta un bot, una cuenta falsa o un spammer? | `contacts check` |
-| ¿Qué miembros de mi grupo parecen sospechosos? | `chats members audit --deep` |
-| ¿Es esta cuenta de Telegram la misma persona que esta de MAX? | `contacts link` |
 
-Los comandos son los mismos en `tg` y `max`. Una persona es su id, su `@username` o parte de su
-nombre; si parte de un nombre coincide con varias personas, el comando las lista y se detiene.
+<a id="si-la-cuenta-parece-un-bot" />
+
+<a id="pídeselo-a-tu-agente" />
+
+<a id="respuestas-automáticas-con-tus-reglas" />
+
+## Pide al agente
+
+```text prompt
+Antes de responder a @example_user, recuérdame quién es y qué hablamos en el último mes. Muestra los chats y mensajes de origen. Separa acuerdos confirmados de preguntas sin respuesta. Solo lee: no respondas ni marques mensajes como leídos.
+```
+
+Sustituye el usuario por un nombre o ID. Si aparecen varias personas, elige la correcta antes
+de leer más. Espera un resumen breve de su identidad, las conversaciones y las preguntas pendientes.
+El agente debe indicar qué historial estaba disponible.
 
 ## Quién es
 
+Para una consulta breve en la versión revisada de Telegram, usa `contacts show`. MAX también
+ofrece un perfil más completo:
+
 ```sh
-tg contacts profile @example_user
+tg contacts show @example_user
 max contacts profile 20000002
 ```
 
-La respuesta incluye su id, nombre, nombres de usuario, biografía y cumpleaños, si es tu contacto,
-cuándo se conectó por última vez y cuándo se creó la cuenta. Para cada chat que compartís dice
-cuántos de sus mensajes tiene tu copia local, y el primero y el último. La cifra es un mínimo cuando
-la copia local no tiene el chat desde el principio (`complete: false`); `store fetch <chat>` lo completa.
-
-Su número de teléfono solo se ve con sus cuatro últimas cifras, y solo si el mensajero te lo muestra.
-`--show-phone` lo imprime entero. Un agente conectado por MCP nunca recibe el número completo.
-
-La fecha de registro siempre indica su origen:
-
-- **Telegram** envía el mes cuando alguien te escribe por primera vez. Si no, `tg` lo calcula a partir
-  del id de la cuenta y lo marca como `estimate`. El cálculo llega hasta cuentas creadas hasta agosto
-  de 2026; las más nuevas no reciben fecha antes que una equivocada.
-- **MAX** da el día exacto, así que `max` lo muestra para todos.
-
-Los nombres y usuarios anteriores con los que tu copia local vio a la persona aparecen en `aliases`,
-del más antiguo al más nuevo, con un enlace `t.me` para un usuario antiguo de Telegram. Un nombre
-tomado de sus mensajes guardados indica `source: messages` y es aproximado: un mensaje descargado de
-nuevo lleva el nombre más reciente.
+Son comandos distintos. Telegram v0.28.0 no ofrece `contacts profile` ni `contacts check`;
+MAX v0.29.0 sí. Usa el comando de tu mensajero: que exista en una versión nueva no significa
+que tu versión instalada lo admita.
 
 ## Qué escribió
 
+Ambos mensajeros reúnen contexto de mensajes ya guardados en tu ordenador:
+
 ```sh
-tg contacts context @example_user
-tg contacts context @example_user --chat "Club de lectura" --chat "Trabajo" --limit 10
+tg contacts context @example_user --since-time 30d --limit 20
+max contacts context 20000002 --since-time 30d --limit 20
 ```
 
-Sin `--chat` obtienes un resumen: los chats que compartís, el último mensaje en cada sentido, sus
-mensajes recientes y dónde lo mencionaron otros. Con `--chat` obtienes sus mensajes más nuevos en
-cada chat que nombres, del más antiguo al más reciente. Cada mensaje es solo su hora y su texto, para
-que un agente lea muchos a la vez y los resuma; `-v` añade ids y enlaces, `-vv` el mensaje completo.
+El resultado puede incluir chats compartidos, mensajes recientes y menciones. Depende del historial
+guardado; que falten mensajes no demuestra que nunca hablarais de algo. Para más historial, consulta
+[el archivo de Telegram](./tg/archive.md) o [el de MAX](./max/archive.md).
 
-Por defecto la respuesta sale de tu copia local y no se conecta. `--refresh` pregunta antes al
-mensajero: Telegram busca en cada chat los mensajes de esa persona; MAX lee la página más reciente de
-cada chat.
-
-## Si la cuenta parece un bot
+MAX también permite limitar el contexto a un chat:
 
 ```sh
-tg contacts check @example_user
+max contacts context 20000002 --chat "Team" --limit 10
+```
+
+Telegram v0.28.0 no tiene la opción `--chat` en este comando. Pide al agente que lea ese chat
+por separado; [leer mensajes](./tg/usage.md#reading) explica ese camino.
+
+## Parece un bot
+
+Esta comprobación está disponible en la versión revisada de MAX:
+
+```sh
 max contacts check 20000002
 ```
 
-La respuesta es una puntuación y todos los motivos, cada uno con su origen: las marcas del propio
-mensajero (bot, estafa, falsa), un perfil vacío, una cuenta nueva, solo fotos recientes, un enlace
-como primer mensaje, el mismo texto en varios chats. La puntuación es una pista, nunca un veredicto:
-muchas personas reales no tienen foto ni biografía. `unknown` enumera lo que no se pudo juzgar.
-
-En Telegram, `tg` también consulta dos listas públicas de spam, [Combot Anti-Spam](https://cas.chat/api)
-y [lols.bot](https://lols.bot). **Se les envía el id de Telegram de la persona.** `--no-registries`
-las omite. Las listas solo cubren cuentas de Telegram, así que `max` nunca les envía nada.
-
-Para un grupo entero, `chats members audit` puntúa a cada miembro a partir de la lista de miembros y
-tu copia local, y lista a quienes tienen algún motivo. `--deep 10` hace después la comprobación
-completa de los diez con más puntos, una persona por segundo. No elimina a nadie.
+Lee los motivos y los datos que faltan junto con la puntuación. Una señal es una pista, no una
+prueba de fraude. Telegram v0.28.0 no tiene un comando equivalente; no inventes una llamada.
 
 ## La misma persona en los dos mensajeros
 
-`tg` y `max` comparten una sola copia local en tu ordenador. Si sabes que una cuenta de Telegram y
-una de MAX son la misma persona, regístralo:
+Si sabes que dos cuentas pertenecen a la misma persona, puedes guardar el vínculo localmente:
 
 ```sh
 tg contacts link @example_user max:"Example User"
 ```
 
-Después, `contacts profile` y `contacts context` incluyen las dos. El mismo nombre en dos mensajeros
-nunca se toma como la misma persona; solo cuenta lo que registras tú. `contacts unlink` lo deshace.
+Las identidades vinculadas pueden aportar contexto a `contacts context`. Un nombre igual no basta.
+Vincula solo cuentas identificadas; `contacts unlink` elimina esa asociación local.
 
 ## Qué cambia en MAX
 
-| | Telegram (`tg`) | MAX (`max`) |
-|---|---|---|
-| Fecha de registro | el mes de Telegram tras un primer contacto; si no, un cálculo | el día exacto, de MAX |
-| Marcas como estafa, falsa, verificada, premium | se muestran | MAX no las envía |
-| `--refresh` | busca en cada chat los mensajes de la persona | lee la página más reciente de cada chat |
-| Listas públicas de spam | se consultan, salvo con `--no-registries` | no se consultan |
-| Peticiones extra por perfil | ninguna | una por persona |
+Para las opciones exactas, consulta [Telegram](./tg/commands.md) o [MAX](./max/commands.md).
+Las diferencias anteriores corresponden a las versiones revisadas de este sitio.
 
-## Pídeselo a tu agente
+## Respuestas automáticas por tus reglas
 
-Con el servidor MCP conectado, estas mismas lecturas son herramientas: `contacts_profile`,
-`contacts_context` y `contacts_check`. Basta con pedirlo con palabras normales:
+Las respuestas automáticas son una tarea aparte que puede enviar mensajes. Empieza por
+[las respuestas automáticas de MAX](./max/replies.md) para configurarlas; leer el historial no las activa.
 
-> ¿Quién es @example_user? Comprueba si la cuenta parece un bot y resume lo que escribió en el Club
-> de lectura el último mes. No le respondas.
-
-El texto de los mensajes en estas respuestas lo escribieron otras personas; tu agente lo resume y no
-obedece peticiones que haya dentro. Para conectar un agente, mira [MCP](./mcp.md).
-
-## Respuestas automáticas con tus reglas
-
-`serve`, el proceso en segundo plano que mantiene al día tu copia local, también puede contestar a
-los mensajes entrantes según reglas que tú escribes: horario, palabras, una pregunta, una mención y
-una plantilla de respuesta con límites por chat y por persona. Antes, dos protecciones:
-
-- **Solo responde a cuentas de prueba.** Una respuesta solo va a un remitente que esté en `testers`
-  en el archivo de reglas, que empieza vacío.
-- **El envío está apagado hasta que lo enciendas** con `config set permissions.replies.send allow`.
-  `replies pause` detiene todas las reglas a la vez.
-
-`replies test` muestra qué habrían contestado tus reglas a los mensajes que ya tienes y no envía
-nada. Configuración paso a paso: [respuestas automáticas en MAX](./max/replies.md); sintaxis completa
-en [comandos de Telegram](./tg/commands.md) y [comandos de MAX](./max/commands.md).
+Cuando conozcas el contexto, pide [un borrador](./prompting.md#revisar-compromisos-y-preparar-respuestas)
+y revisa el texto antes de autorizar el envío.

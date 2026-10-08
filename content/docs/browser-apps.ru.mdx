@@ -9,10 +9,8 @@ description: Подключите Telegram или MAX через HTTPS с вхо
 
 **Статус проверки:** владелец подтвердил чтение и отправку Telegram в Claude web 07.10.2026.
 OpenAI web, MAX в браузере и установка на каждой ОС ещё требуют полного прогона.
-Для чтения нужны `tg` 0.27+ или `max` 0.28+. Команды отправки ниже требуют `max` 0.30+
-или `tg` 0.30 (следующий выпуск). Пока эта версия TG не опубликована, используйте проверенную
-сборку либо уберите `--http-confirmation permissions --permission messages.send=allow` для чтения.
-Перед запуском проверьте версию.
+Примеры ниже соответствуют проверенным выпускам: Telegram v0.28.0 и MAX v0.29.0.
+Они запускают сервер для чтения и черновиков; отправка зависит от прав и подтверждения.
 
 <ArchitectureDiagram name="remote" lang="ru" />
 
@@ -32,7 +30,7 @@ OpenAI web, MAX в браузере и установка на каждой ОС
 
 Выберите ОС ниже. **Первый блок — в окно 1, второй — в окно 2.** Когда второе окно спросит,
 вставьте настоящий HTTPS origin из Funnel без `/mcp`. Если адрес содержит публичный порт,
-например `:8443`, сохраните его. Команды разрешают отправку этому процессу; права описаны ниже.
+например `:8443`, сохраните его. Начните с чтения и черновиков; права отправки описаны ниже.
 
 <PlatformSetupTabs>
 
@@ -55,7 +53,7 @@ OpenAI web, MAX в браузере и установка на каждой ОС
 
 ```powershell
 $mcpPublicUrl = Read-Host 'HTTPS origin from Funnel (no /mcp)'
-tg.cmd mcp --http --port 8765 --public-url $mcpPublicUrl --http-confirmation permissions --permission messages.send=allow
+tg.cmd mcp --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 Для MAX замените `tg.cmd` на `max.cmd` в окне 2. Оба процесса запускайте в Windows.
@@ -78,7 +76,7 @@ TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --http-confirmation permissions --permission messages.send=allow
+tg mcp --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 Для MAX замените `tg` на `max` в окне 2.
@@ -100,7 +98,7 @@ sudo tailscale funnel 8765
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --http-confirmation permissions --permission messages.send=allow
+tg mcp --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 Для MAX замените `tg` на `max` в окне 2. Не запускайте сервер мессенджера с `sudo`.
@@ -114,22 +112,15 @@ tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --http-confirmation permi
 
 ## Права и отправка
 
-По умолчанию **каждая HTTP-запись требует серверную форму**, даже при сохранённом `allow`.
-Подтверждение вызова в приложении — отдельный вопрос, который не заменяет эту форму.
-Приложение без MCP elicitation в этом режиме может только читать.
+В этих проверенных выпусках **каждая HTTP-запись требует серверную форму подтверждения**, даже
+при сохранённом `allow`. Подтверждение в приложении не заменяет эту форму. Если приложение
+не умеет показывать такие формы MCP (elicitation), используйте чтение и черновики.
 
-Команды выше включают `--http-confirmation permissions`: эффективный `allow` выполняется
-без серверной формы, `ask` требует её, `deny` / `readonly` ограничивают доступ.
-`--permission messages.send=allow` разрешает отправку только этому процессу и не меняет
-сохранённые настройки. Список получателей и лимит в час продолжают действовать.
-Приложение может спрашивать перед вызовом, но при постоянном разрешении инструмента следующий
-вызов может отправить без нового вопроса. Просите черновик явно, если хотите сначала проверить текст.
-
-Повторяйте `--permission ключ=уровень` для других команд. Широкий `messages=allow` заменяет
-сохранённые права ресурса, но встроенные подтверждения остаются: для удаления нужно отдельное
-`messages.delete=allow`. `--yes` не обходит форму HTTP.
-См. [права Telegram](./tg/configuration.md), [права MAX](./max/configuration.md).
-При временных правах MAX подключается напрямую; уже работающий `max serve` сохраняет права профиля.
+Примеры запуска не меняют права. Черновик остаётся в беседе с агентом, пока вы явно не попросите
+отправку и не пройдёт нужное подтверждение. Перед включением записи проверьте
+[права Telegram](./tg/configuration.md) или [права MAX](./max/configuration.md).
+В новых выпусках параметры прав HTTP отличаются; сверяйтесь со справочником своей версии,
+а не добавляйте неподдерживаемые флаги в эти команды.
 
 ## Подключить Codex / ChatGPT web или Claude
 

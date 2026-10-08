@@ -5,7 +5,7 @@ description: "Prompts for search, meeting context, contacts, files, drafts and r
 
 Tell the agent what you want to find or accomplish. It should choose commands and arguments from
 the installed CLI's skill and help; you do not need to write a command sequence in every prompt.
-See [First tasks](./first-tasks.md) for full dialogues and examples of the underlying commands.
+See [First tasks](./first-tasks.md) for short requests and the results to expect.
 
 ## Add detail when it changes the result
 
@@ -96,6 +96,8 @@ The agent should verify the destination and report the paths it actually created
 do not overwrite existing files. [File downloads](./tg/usage.md#files).
 
 ## Draft a reply, then decide whether to send
+
+You want a draft you can review before anyone receives it. Name the person and ask the agent to check the conversation first. The result should be the proposed text, with uncertain facts kept out or flagged.
 
 ```text prompt
 Check what Tom has already sent about the design and what he is waiting for from me. Prepare

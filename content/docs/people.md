@@ -1,129 +1,90 @@
 ---
 title: "People"
-description: "Learn who someone is from your own Telegram and MAX accounts: their profile, where you talk, what they wrote, whether the account looks like a bot — and auto-replies by your rules."
+description: "Recall who someone is and what you discussed before replying, using your own Telegram or MAX history."
 ---
 
-Before you answer a stranger, accept someone into a group or hand a conversation to your agent, you
-can ask your own account what it knows about that person. Everything here reads your account and
-the local copy of your messages on your computer. Nothing is sent to the person, and nothing is
-marked read.
+Someone has written to you, but you don't remember where you met or what you agreed. Ask your
+agent to find the person, collect your previous conversations and show the messages behind its
+answer. You need a [connected account](./installation.mdx) and an [agent](./agents.md).
 
-| Question | Command |
-|---|---|
-| Who is this, and where do we talk? | `contacts profile` |
-| What did they write, in all chats or in the ones I name? | `contacts context` |
-| Does the account look like a bot, a fake or a spammer? | `contacts check` |
-| Which members of my group look suspicious? | `chats members audit --deep` |
-| Is this Telegram account the same person as this MAX account? | `contacts link` |
+## Ask your agent
 
-The commands are the same in `tg` and `max`. A person is their id, their `@username`, or part of
-their name; when part of a name matches several people, the command lists them and stops.
+```text prompt
+Before I reply to @example_user, remind me who they are and what we've discussed in the past month. Show the chats and source messages. Separate confirmed agreements from unanswered questions. Read only: don't reply or mark messages as read.
+```
+
+Replace the username with a name or account ID. If several people match, choose the right one
+before the agent reads more. Expect a brief with the person's identity, relevant conversations
+and questions still open. The answer should say which history was available.
 
 ## Who they are
 
+For a quick lookup in the reviewed Telegram release, use `contacts show`. MAX also provides
+a fuller profile:
+
 ```sh
-tg contacts profile @example_user
+tg contacts show @example_user
 max contacts profile 20000002
 ```
 
-The answer has their id, name, usernames, bio and birthday, whether they are your contact, when
-they were last seen, and when the account was made. For every chat you share it says how many of
-their messages your local copy holds, and the first and last of them. A count is a minimum when the
-local copy does not hold the chat from its start (`complete: false`); `store fetch <chat>` fills it.
-
-Their phone number shows only as its last four digits, and only when the messenger shows it to you.
-`--show-phone` prints it whole. An agent connected over MCP never gets the whole number.
-
-The registration date always names its source:
-
-- **Telegram** sends the month when someone writes to you for the first time. Otherwise `tg` guesses
-  it from the account id and says `estimate`. The guess covers accounts made up to August 2026;
-  newer ones get no date rather than a wrong one.
-- **MAX** gives the exact day, so `max` shows it for everyone.
-
-Earlier names and usernames your local copy saw them with are listed under `aliases`, oldest first,
-with a `t.me` link for an old Telegram username. A name read off their stored messages says
-`source: messages` and is approximate: a message fetched again carries the newest name.
+These are different commands. Telegram v0.28.0 does not provide `contacts profile` or
+`contacts check`. MAX v0.29.0 does. Use the command for your messenger; the same command name
+in a newer release is not evidence that your installed version supports it.
 
 ## What they wrote
 
+Both messengers can gather context from messages already saved on your computer:
+
 ```sh
-tg contacts context @example_user
-tg contacts context @example_user --chat "Book club" --chat "Team" --limit 10
+tg contacts context @example_user --since-time 30d --limit 20
+max contacts context 20000002 --since-time 30d --limit 20
 ```
 
-Without `--chat` you get an overview: the chats you share, the last message each way, their recent
-messages, and where others mentioned them. With `--chat` you get their newest messages in each chat
-you name, oldest first. Each message is only its time and text, so an agent can read many at once
-and summarise them; `-v` adds message ids and links, `-vv` the whole message.
+The result can include shared chats, recent messages and mentions. It is limited by saved history;
+missing messages do not prove you never discussed something. For more history, use
+[Telegram archive](./tg/archive.md) or [MAX archive](./max/archive.md).
 
-By default the answer comes from your local copy and never connects. `--refresh` asks the messenger
-first: Telegram searches each chat for that person's messages; MAX reads each chat's newest page.
+MAX additionally supports restricting context to a chat:
+
+```sh
+max contacts context 20000002 --chat "Team" --limit 10
+```
+
+Telegram v0.28.0 has no `--chat` option on this command. Ask the agent to read the named
+conversation instead; [reading messages](./tg/usage.md#reading) explains that path.
 
 ## Does the account look like a bot
 
+This check is available in the reviewed MAX release:
+
 ```sh
-tg contacts check @example_user
 max contacts check 20000002
 ```
 
-The answer is a score and every reason behind it, each with where it came from: the messenger's own
-marks (bot, scam, fake), an empty profile, a new account, only recent photos, a link as the first
-message, the same text in several chats. A score is a hint, never a verdict — many real people have
-no photo or bio. `unknown` lists what there was nothing to judge by.
-
-On Telegram, `tg` also asks two public spam lists, [Combot Anti-Spam](https://cas.chat/api) and
-[lols.bot](https://lols.bot). **The person's Telegram id is sent to them.** `--no-registries` skips
-them. The lists cover Telegram only, so `max` never sends anything to them.
-
-For a whole group, `chats members audit` scores every member from the member list and your local
-copy, and lists those with a reason. `--deep 10` then runs the full check on the ten highest, one
-person a second. It removes nobody.
+Read the reasons and missing evidence alongside the score. A signal is a clue, not proof
+that a person is fraudulent. Telegram v0.28.0 has no corresponding command; don't substitute
+a guessed invocation.
 
 ## The same person in both messengers
 
-`tg` and `max` share one local copy on your computer. When you know a Telegram account and a MAX
-account belong to one person, record it:
+If you know two accounts belong to the same person, you can record that link locally:
 
 ```sh
 tg contacts link @example_user max:"Example User"
 ```
 
-`contacts profile` and `contacts context` then include both. The same name in two messengers is
-never taken as the same person; only what you record counts. `contacts unlink` undoes it.
+Linked identities can then contribute to `contacts context`. A shared name alone is not a match.
+Only link accounts you have identified; `contacts unlink` removes that local association.
 
 ## What differs in MAX
 
-| | Telegram (`tg`) | MAX (`max`) |
-|---|---|---|
-| Registration date | Telegram's month after a first contact, otherwise an estimate | the exact day, from MAX |
-| Marks like scam, fake, verified, premium | shown | MAX does not send them |
-| `--refresh` | searches each chat for the person's messages | reads each chat's newest page |
-| Public spam lists | asked, unless `--no-registries` | not asked |
-| Extra requests for a profile | none | one per person |
-
-## Ask your agent
-
-With the MCP server connected, the same reads are tools: `contacts_profile`, `contacts_context` and
-`contacts_check`. A request in plain words is enough:
-
-> Who is @example_user? Check whether the account looks like a bot, then summarise what they wrote
-> in Book club over the last month. Don't reply to them.
-
-Message text in these answers is what other people wrote; your agent reports it and does not act on
-requests inside it. See [MCP](./mcp.md) for connecting an agent.
+Use your messenger's [Telegram reference](./tg/commands.md) or [MAX reference](./max/commands.md)
+when you need exact options. The version differences above refer to this site's reviewed releases.
 
 ## Auto-replies by your rules
 
-`serve`, the background process that keeps your local copy up to date, can also answer incoming
-messages by rules you write: working hours, words, a question, a mention, and a reply template with
-limits per chat and per person. Two safeguards come first:
+Auto-replies are a separate task that can send messages. Start with [MAX auto-replies](./max/replies.md)
+if you want to configure them; reading a person's history does not turn them on.
 
-- **It answers only test accounts.** A reply goes only to a sender listed in `testers` in the rules
-  file, which starts empty.
-- **Sending is off until you turn it on** with `config set permissions.replies.send allow`.
-  `replies pause` stops every rule at once.
-
-`replies test` shows what your rules would have answered in messages you already have, and sends
-nothing. Setup step by step: [MAX auto-replies](./max/replies.md); full syntax in
-[Telegram commands](./tg/commands.md) and [MAX commands](./max/commands.md).
+Once you know the context, ask for a [draft reply](./prompting.md#draft-a-reply-then-decide-whether-to-send)
+and review the wording before authorising a send.
