@@ -82,6 +82,8 @@ Para un grupo entero, `chats members audit` puntúa a cada miembro a partir de l
 tu copia local, y lista a quienes tienen algún motivo. `--deep 10` hace después la comprobación
 completa de los diez con más puntos, una persona por segundo. No elimina a nadie.
 
+<a id="link-your-accounts" />
+
 ## La misma persona en los dos mensajeros
 
 `tg` y `max` comparten una sola copia local en tu ordenador. Si sabes que una cuenta de Telegram y
@@ -91,8 +93,25 @@ una de MAX son la misma persona, regístralo:
 tg contacts link @example_user max:"Example User"
 ```
 
-Después, `contacts profile` y `contacts context` incluyen las dos. El mismo nombre en dos mensajeros
+Después, `contacts context` reúne las identidades vinculadas. `contacts profile` describe la identidad seleccionada del mensajero. El mismo nombre en dos mensajeros
 nunca se toma como la misma persona; solo cuenta lo que registras tú. `contacts unlink` lo deshace.
+
+### Vincula una dirección de correo
+
+[Importa el correo](./email.mdx) primero y vincula una dirección conocida al contacto almacenado:
+
+```sh
+tg contacts link @example_user email:rin@example.test
+```
+
+Sustituye el usuario y la dirección por las identidades reales de la persona. Comprueba las
+identidades devueltas: coincidir en el nombre no basta. Vincular cambia el registro local de la
+persona, no los inicios de sesión ni los buzones. `contacts unlink` separa la identidad indicada si el enlace es incorrecto.
+
+Para guardar contexto propio sobre la persona, consulta [crear notas](./memo.mdx#create-your-own-notes).
+La [guía de notas y etiquetas](./memo.mdx#tag-your-sources) explica etiquetas sobre contactos,
+personas vinculadas y mensajes. Las órdenes de notas del mensajero se describen en
+[Telegram](./tg/commands.md#tg-contacts-notes) y [MAX](./max/commands.md#max-contacts-notes).
 
 ## Qué cambia en MAX
 
