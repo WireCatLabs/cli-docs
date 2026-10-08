@@ -62,7 +62,7 @@ Frente a quien extrae el disco solo protege el cifrado completo del disco: consu
 ## Qué no hace la herramienta
 
 - **No marca mensajes como leídos sin petición.** Obtener historial y marcarlo leído son operaciones distintas. Solo `max chats mark-read` y `messages list --mark-read` envían la segunda; hay pruebas de que la lectura normal no lo hace.
-- **No envía nada que no hayas pedido.** Solo cambian algo `messages send|edit|delete|forward|pin|unpin`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `session end`, `chats join|leave|create|update`, `chats members|admins …`, `chats link reset`, `chats folders create|update|delete|order`, `chats moderate` (dentro de las reglas del grupo), `chats mark-read` y `messages list --mark-read`, y cada comando hace solo lo que indica la línea que has escrito. `max commands --json` los marca como `mutates`.
+- **No envía nada que no hayas pedido.** Solo cambian algo `messages send|edit|delete|forward|pin|unpin|press`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `session end`, `chats join|leave|create|update|start|app`, `chats members|admins …`, `chats link reset`, `chats folders create|update|delete|order`, `chats moderate` (dentro de las reglas del grupo), `chats mark-read` y `messages list --mark-read`, y cada comando hace solo lo que indica la línea que has escrito. `max commands --json` los marca como `mutates`.
 - **Eliminar exige confirmación por defecto.** `ask` en `messages.delete` requiere respuesta en la terminal o `--allow-dangerous`; un `allow` explícito elimina sin preguntar. Para borrar para todos también se necesita `--for-everyone`; la herramienta compartida de MCP no lo permite.
 - **No recibe teléfonos por argumentos de comando.** `contacts lookup` pregunta o lee de una tubería; `contacts import` lee un archivo. `ps` y el historial muestran los argumentos. Los errores y registros no contienen teléfonos; `max session start` y `max account show` los ocultan.
 - **No registra mensajes.** Ni truncados ni como hash; consulta [diagnostics.md](./diagnostics.md).
@@ -148,7 +148,7 @@ Cada acceso añade un dispositivo en la lista de sesiones de MAX; puedes cerrarl
 
 ## Protocolo no oficial
 
-MAX no publica API de cuentas personales. El conocimiento del protocolo procede de mediciones reales o ingeniería inversa ajena; se registra el origen de cada operación ([protocolo (`protocol.md`)](https://github.com/leemour/max-cli/blob/v0.36.0/docs/dev/protocol.md), columna «Where it came from»).
+MAX no publica API de cuentas personales. El conocimiento del protocolo procede de mediciones reales o ingeniería inversa ajena; se registra el origen de cada operación ([protocolo (`protocol.md`)](https://github.com/leemour/max-cli/blob/v0.37.0/docs/dev/protocol.md), columna «Where it came from»).
 
 **Puede dejar de funcionar sin aviso.** En ese caso el comando indica el problema por stderr, en lugar de devolver una lista vacía como si todo funcionase.
 

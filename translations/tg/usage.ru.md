@@ -46,6 +46,7 @@ tg session start --qr-file login.png    # the QR code as a picture, for an agent
 ```sh
 tg account show                # who this profile is logged in as; the phone as its last four digits
 tg account show --show-phone   # the whole phone number
+tg account list                # every profile on this computer and the account each is logged in as
 tg account sessions list       # every device and app logged in to the account; ends nothing
 tg session end                 # log out on Telegram's side, and delete the session here
 ```
@@ -305,6 +306,8 @@ tg messages scheduled "Book club"                               # what waits to 
 `--at-time` передаёт сообщение Telegram, который отправит его даже при выключенном компьютере. Время округляется вниз до минуты. Менее минуты или более года вперёд запрещено. Сообщение учитывается в лимите в час отправки. **Отмена и изменение доступны в приложении Telegram**; `tg` этого не делает.
 
 ### Файлы, фото и голосовые
+
+Форматы, отправка, скачивание, OCR агента и поиск текста описаны в [Файловых вложениях](./attachments.md).
 
 ```sh
 tg messages send "Book club" "The agenda" --file agenda.pdf   # byte for byte; the text is the caption

@@ -93,6 +93,15 @@ max setup [options]
 
 the logged-in account
 
+### `max account list`
+
+все профили на этом компьютере и аккаунт каждого; не обращается к мессенджеру
+
+```sh
+max account list
+```
+
+
 ### `max account show`
 
 who this profile is logged in as; the phone number shows its last four digits
@@ -831,6 +840,44 @@ max chats clear <chat> [options]
 |---|---|
 | `--allow-dangerous` | go ahead without the question an ask level puts before a deletion. |
 
+### `max chats start`
+
+запустить бота, как кнопка «Начать»; бот видит запуск
+
+**Меняет что-то в MAX.**
+
+```sh
+max chats start <bot> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `bot` | обязательный | чат с ботом — ID или имя — либо ссылка на бота, даже ещё не открытого. |
+
+| Опция | Что делает |
+|---|---|
+| `--payload <text>` | параметр запуска для бота; если не задан — ?start= из ссылки. |
+
+
+### `max chats app`
+
+адрес мини-приложения бота со входом от вашего имени; не передавайте его
+
+**Меняет что-то в MAX.**
+
+```sh
+max chats app <bot> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `bot` | обязательный | чат с ботом: ID или имя. |
+
+| Опция | Что делает |
+|---|---|
+| `--start <param>` | параметр запуска для приложения. |
+
+
 ## `max contacts`
 
 people you have a one-to-one chat with
@@ -1480,6 +1527,23 @@ max messages unpin <chat> <message>
 |---|---|---|
 | `chat` | обязательный | a chat: its id, or part of its title. |
 | `message` | обязательный | the message id. |
+
+### `max messages press`
+
+нажать кнопку бота под сообщением; бот видит нажатие
+
+**Меняет что-то в MAX.**
+
+```sh
+max messages press <chat> <message> <button>
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | чат: ID или часть названия. |
+| `message` | обязательный | ID сообщения с кнопками. |
+| `button` | обязательный | номер из `messages show` или точный текст. |
+
 
 ## `max store`
 

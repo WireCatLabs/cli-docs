@@ -4,6 +4,28 @@ title: "Changelog"
 
 Notable changes to `@leemour/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
+## 0.37.0 — 08.10.2026
+
+### What's new
+
+- **Bot buttons:** `messages list` and `messages show` display numbered buttons beneath a bot's message: `[1 Да] [2 Нет]`. `max messages press <чат> <сообщение> <кнопка>` selects by number or exact text; the bot sees who pressed. Only ordinary callback buttons are pressed. Phone and location sharing buttons are never pressed; other kinds explain the next step. Buttons appear in messages read from MAX and are absent from the local copy ([usage](./usage.md)).
+- **Start a bot:** `max chats start <бот> [--payload]` acts like its Start button. It accepts `https://max.ru/<бот>?start=…`, including a bot you have never messaged; its chat appears in the list. Links to people are refused. Starting is a message from you and passes send checks.
+- **Bot mini apps:** `max chats app <бот> [--start]` prints a signed-in app address. Keep it private; `max` does not store it.
+- **`max account list`** lists local profiles and their accounts without contacting MAX.
+- **`max bot messages list`** also displays keyboards in the bot's own messages.
+- **`max watch --events`** displays read receipts and chat changes (shipped in 0.36.0 but omitted there): `read` can be your own other device; `chat` reflects title, membership or departure changes. Marking unread is not a read event.
+
+### Changed — may break scripts
+
+- **`contacts profile`: `flags` now contains `bot`**, true for bots, false for people; it was empty before.
+- **`watch --events`: `chat` lines appear only when the chat actually changes** — name, description, membership, status, photo or owner. Previously they could appear on every send through `max serve`.
+
+### Fixed
+
+- A lost reply after starting a bot or pressing its button returns unknown outcome (`outcome_unknown`, exit 14), rather than a safely retryable failure. No automatic retry occurs; check the bot's reply before repeating. The journal retains the unknown outcome.
+- Viewing a group by link through `max serve` no longer adds a group you have not joined to your chat list (fixed in 0.36.0 but omitted there).
+- Bare `max` and command groups such as `max chats` display help at a terminal rather than `✗ (outputHelp)`. Scripts and `--json` get an error pointing to `max --help`.
+
 ## 0.36.0 — 08.10.2026
 
 ### What's new
@@ -647,7 +669,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/leemour/max-cli/blob/v0.36.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/leemour/max-cli/blob/v0.37.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).

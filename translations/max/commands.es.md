@@ -93,6 +93,15 @@ max setup [options]
 
 the logged-in account
 
+### `max account list`
+
+todos los perfiles de este ordenador y sus cuentas; no consulta el mensajero
+
+```sh
+max account list
+```
+
+
 ### `max account show`
 
 who this profile is logged in as; the phone number shows its last four digits
@@ -831,6 +840,44 @@ max chats clear <chat> [options]
 |---|---|
 | `--allow-dangerous` | go ahead without the question an ask level puts before a deletion. |
 
+### `max chats start`
+
+iniciar un bot como su botón Inicio; el bot ve que lo iniciaste
+
+**Cambia algo en MAX.**
+
+```sh
+max chats start <bot> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `bot` | obligatorio | chat con el bot — ID o nombre — o enlace al bot, incluso si nunca lo abriste. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--payload <text>` | parámetro de inicio que lee el bot; usa ?start= del enlace si se omite. |
+
+
+### `max chats app`
+
+dirección de la miniaplicación del bot con tu sesión; mantenla privada
+
+**Cambia algo en MAX.**
+
+```sh
+max chats app <bot> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `bot` | obligatorio | chat con el bot: ID o nombre. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--start <param>` | parámetro de inicio que lee la aplicación. |
+
+
 ## `max contacts`
 
 people you have a one-to-one chat with
@@ -1480,6 +1527,23 @@ max messages unpin <chat> <message>
 |---|---|---|
 | `chat` | obligatorio | a chat: its id, or part of its title. |
 | `message` | obligatorio | the message id. |
+
+### `max messages press`
+
+pulsar un botón del bot bajo un mensaje; el bot ve la pulsación
+
+**Cambia algo en MAX.**
+
+```sh
+max messages press <chat> <message> <button>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat: ID o parte de su título. |
+| `message` | obligatorio | ID del mensaje con botones. |
+| `button` | obligatorio | número mostrado por `messages show` o texto exacto. |
+
 
 ## `max store`
 
