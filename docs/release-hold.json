@@ -1,0 +1,9 @@
+{
+  "reason": "Unpublished search namespace and candidate statistics/admin guides are merged for release preparation.",
+  "pullRequests": [83, 84],
+  "beforeProductionRelease": [
+    "Publish and review Telegram, MAX and Memo releases providing the documented search namespace.",
+    "Replace candidate guideRefs in tools.json with matching reviewed release pins.",
+    "Refresh localized tool guides and command references for those releases, then verify the combined export."
+  ]
+}

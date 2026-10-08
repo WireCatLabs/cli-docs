@@ -12,52 +12,114 @@ Un agente con terminal (Claude Code, Codex) necesita la [skill](./recipes.md#onc
 
 ### Revisión de la mañana: quién espera una respuesta
 
-```text
-You:    What is still unanswered in "Hiking"?
-Agent:  (tg review --chat "Hiking" --unanswered 4h --json)
-        Unanswered for more than 4 hours — 3 questions:
-        · Lena, 08:12 — "What time do we leave on Saturday?"
-        · Artem, yesterday 22:40 — a reply to your post about the route: "Are the tents shared?"
-        · Ira, yesterday 19:05 — "Who brings the pot?"
-        You or the admins answered the rest.
+Empieza por las preguntas que esperan una respuesta tuya o de los administradores.
+
+**Tu petición:**
+
+> ¿Qué preguntas de Hiking llevan más de cuatro horas esperando respuesta?
+
+**Comando:**
+
+```sh
+tg review --chat "Hiking" --unanswered 4h --json
 ```
 
-Se considera pregunta un mensaje con `?` o una respuesta a ti o a un administrador; un `?` dentro de un enlace no cuenta. Se considera contestada si tú o un administrador respondéis al mensaje o sois los siguientes en hablar después de quien preguntó. Si Telegram no indica quiénes son los administradores, solo cuentan tus respuestas y el comando lo avisa.
+**Ejemplo de respuesta del agente:**
+
+> **3 preguntas esperan una respuesta.**
+>
+> | Persona | Pregunta | Espera |
+> | --- | --- | --- |
+> | Lena | ¿A qué hora salimos el sábado? | 6 horas |
+> | Sam | ¿Compartimos las tiendas? | 12 horas |
+> | Ira | ¿Quién llevará la olla? | 15 horas |
+>
+> Abre una pregunta para revisar el contexto de la conversación.
+
+Estas son las reglas de `review`: un signo de interrogación fuera de un enlace, o una respuesta a ti o a un administrador, puede abrir una pregunta. Tu respuesta o la de un administrador, incluso el siguiente mensaje, puede cerrarla. El [informe estadístico](./rankings.md) cuenta respuestas directas vinculadas y puede dar otro resultado. Si Telegram no proporciona la lista de administradores, solo cuentan tus respuestas y el resultado lo indica.
 
 ### Nuevos miembros de la semana
 
-```text
-You:    Who joined "Hiking" this week?
-Agent:  (tg chats events "Hiking" --type join,add --json)
-        Five people:
-        · Kate — added by Lena, Tuesday
-        · Oleg — joined by the link, Wednesday
-        · …
+Revisa los eventos de entrada. Una cuenta nueva merece revisión; su edad no demuestra que sea spam.
+
+**Tu petición:**
+
+> ¿Quién se unió a Hiking esta semana? Muéstrame a quién conviene revisar.
+
+**Comando:**
+
+```sh
+tg chats events "Hiking" --type join,add --since-time 7d --json
 ```
 
-`chats events` lee los mensajes de servicio del grupo, por lo que muestra lo que Telegram conserva en el historial: quién se unió, salió, fue añadido o eliminado, y quién realizó la acción. `tg chats members list` muestra todos los miembros, su función y cuándo se conectaron por última vez.
+**Ejemplo de respuesta del agente:**
+
+> | Nuevo miembro | Cómo entró |
+> | --- | --- |
+> | Kate | Añadido por Lena |
+> | Oleg | Entró por su cuenta |
+>
+> Revisa la información disponible del perfil de Oleg antes de sacar conclusiones. La edad de la cuenta no basta para expulsarlo.
+
+Los eventos solo cubren el historial disponible. Puedes consultar la lista actual de miembros por separado.
 
 ### Un enlace de invitación filtrado
 
-```text
-You:    The invite link to "Hiking" ended up in a public chat. Replace it, and stop members adding people.
-Agent:  (tg chats link reset "Hiking" --json)
-        (tg chats update "Hiking" --only-admins-add on --json)
-        Done: the old link no longer works, the new one is https://t.me/+…, and only admins can add
-        people now.
+Reemplaza el enlace de invitación cuando hayas pedido ese cambio.
+
+**Tu petición:**
+
+> Se filtró el enlace de Hiking. Reemplázalo y permite que solo los administradores añadan miembros.
+
+**Reemplazar el enlace:**
+
+```sh
+tg chats link reset "Hiking" --json
 ```
 
-`link reset` devuelve el estado actualizado del grupo, incluido el nuevo enlace; `chats update` también devuelve su estado. Así el agente puede explicar el cambio sin volver a consultar el grupo.
+**Restringir la incorporación de miembros:**
+
+```sh
+tg chats update "Hiking" --only-admins-add on --json
+```
+
+**Ejemplo de respuesta del agente:**
+
+> | Ajuste | Resultado |
+> | --- | --- |
+> | Enlace anterior | Reemplazado |
+> | Quién puede añadir miembros | Solo administradores |
+>
+> El enlace privado nuevo aparece en el resultado solicitado; compártelo solo con las personas indicadas.
+
+Estos comandos cambian el grupo. La petición del ejemplo autoriza ambos cambios; una petición para consultar el enlace no lo haría.
 
 ### Resumen semanal
 
-```text
-You:    Sum up the week in "Hiking".
-Agent:  (tg review --chat "Hiking" --since-time 2026-09-20T00:00 --json)
-        Decided: we leave on 4 October, at 7:00 from the station.
-        Taken on: Lena — food, Artem — tents.
-        Open: who brings the pot — asked three times, no answer.
+Pide un resumen de decisiones, compromisos y preguntas pendientes.
+
+**Tu petición:**
+
+> Resume la semana en Hiking.
+
+**Comando:**
+
+```sh
+tg review --chat "Hiking" --since-time 7d --json
 ```
+
+**Ejemplo de respuesta del agente:**
+
+> **Decidido:** salir a las 7:00 desde la estación.
+>
+> **Compromisos:**
+>
+> - Lena — comida.
+> - Sam — tiendas.
+>
+> **Pendiente:** quién llevará la olla.
+>
+> Puedo mostrar los mensajes originales para comprobar el resumen.
 
 ### Revisiones programadas
 
@@ -100,11 +162,23 @@ Un agente sin terminal obtiene las funciones de lectura como herramientas MCP: `
 `review` y `serve` mantienen una lista de tareas en el almacén local. Una pregunta sin respuesta y un mensaje que te menciona por nombre abren una tarea; tu respuesta la cierra. La tarea apunta al mensaje y nunca lo copia.
 
 ```sh
-tg tasks list --state open                                # what waits on you, oldest first
+tg tasks list --state open
+```
+
+```sh
 tg tasks list --chat "Hiking" --type question,mention
-tg tasks add msg:telegram/<you>/<chat>/<message> --type promise   # what the rules cannot see
+```
+
+```sh
+tg tasks add msg:telegram/<you>/<chat>/<message> --type promise
+```
+
+```sh
 tg tasks close <task> --as dismissed --reason no-reply-needed
-tg stats tasks show                                            # open per chat, the oldest, the median time to close
+```
+
+```sh
+tg stats tasks show
 ```
 
 Una tarea cerrada sigue cerrada y una descartada nunca vuelve. Solo tus respuestas cierran una tarea, no las de un administrador; no se detectan las menciones por `@username`. El agente obtiene lo mismo con herramientas MCP: `tg_read` (`command: "tasks list"`), `tg_write` (`command: "tasks add"`), `tg_write` (`command: "tasks close"`), `tg_read` (`command: "stats tasks show"`) ([mcp.md](./mcp.md)).
@@ -114,13 +188,31 @@ Una tarea cerrada sigue cerrada y una descartada nunca vuelve. Solo tus respuest
 Las reglas del grupo definen qué busca `tg chats moderate` y qué puede hacer. Se guardan en un archivo del perfil, nunca en Telegram. No hay vigilancia automática en segundo plano: las reglas solo se aplican al ejecutar `chats moderate`.
 
 ```sh
-tg chats rules show "Hiking"                       # the defaults, marked not saved, until the first change
-tg chats rules set "Hiking" links delete           # a message with a link is deleted
-tg chats rules set "Hiking" blocked 12345,67890    # these people…
-tg chats rules set "Hiking" blockedPeople remove   # …are removed when they write or join
-tg chats rules set "Hiking" consent.delete allow   # delete without asking
-tg chats moderate "Hiking" --dry-run               # what it would do, doing nothing
-tg chats moderate "Hiking"                         # judge what is new since the last run, and act
+tg chats rules show "Hiking"
+```
+
+```sh
+tg chats rules set "Hiking" links delete
+```
+
+```sh
+tg chats rules set "Hiking" blocked 12345,67890
+```
+
+```sh
+tg chats rules set "Hiking" blockedPeople remove
+```
+
+```sh
+tg chats rules set "Hiking" consent.delete allow
+```
+
+```sh
+tg chats moderate "Hiking" --dry-run
+```
+
+```sh
+tg chats moderate "Hiking"
 ```
 
 | Regla | Qué detecta |
@@ -143,16 +235,29 @@ Por MCP, `tg_write` (`command: "chats moderate"`) actúa solo donde el nivel es 
 
 ## Estadísticas para administradores de grupos
 
+Consulta los mensajes, las personas que escribieron y las respuestas de la semana. Para saber quién responde, quién necesita ayuda y si los nuevos miembros se quedan, abre [Estadísticas](./rankings.md).
+
+**Tu petición:**
+
+> Muéstrame la actividad de Hiking esta semana y las lagunas del historial.
+
+**Comando:**
+
 ```sh
-tg stats chats show <chat> --since-time 7d --by day --timezone Europe/Madrid --json
-tg stats chats show <chat> --offline --json
+tg stats chats show "Hiking" --since-time 7d --offline --json
 ```
 
-`tg stats chats show` cuenta mensajes, remitentes activos, respuestas, hilos, reacciones y preguntas respondidas durante un periodo desde el almacén local. `--by day` o `--by week` añade filas de calendario; las semanas empiezan el lunes y `--timezone` fija su zona horaria. Las vistas, reenvíos y comentarios aparecen solo donde Telegram proporcionó los recuentos y se guardaron con las publicaciones. Un recuento ausente no significa cero. Las reacciones usan los recuentos guardados sin actualizar cada publicación. Las preguntas siguen las mismas reglas que `review --unanswered`. Son cifras calculadas localmente; el comando no solicita las estadísticas oficiales de administración de Telegram.
+**Ejemplo de respuesta del agente:**
 
-El comando en línea también consulta a Telegram los eventos de entrada y salida. `--offline` y MCP `tg_read` (`command: "stats chats show"`) omiten `members`, el resumen de esos eventos. Es distinto de `memberCounts`: instantáneas diarias guardadas del tamaño del grupo, disponibles también sin conexión.
+> | Métrica | En el historial disponible |
+> | --- | ---: |
+> | Mensajes | 120 |
+> | Personas que escribieron | 18 |
+> | Respuestas | 30 |
+>
+> El historial está incompleto: estos son recuentos observados. Esta consulta local no descargó eventos de entrada o salida.
 
-Cuando `complete` es false, el historial disponible está incompleto: los totales abarcan solo lo leído, y las medianas y proporciones pueden diferir de las del grupo completo. El campo `fetch` propone un comando para descargar los mensajes que faltan. Un historial de eventos incompleto también limita los recuentos de entradas y salidas. Ni siquiera un historial completo de mensajes puede reconstruir perfiles anteriores de miembros ni listas diarias previas al inicio del registro.
+Sin `--offline`, el CLI también descarga eventos de entrada y salida. Las observaciones diarias de miembros guardadas siguen disponibles localmente. El primer informe no puede reconstruir listas de miembros anteriores.
 
 ### Estadísticas de Telegram
 
@@ -187,9 +292,21 @@ Telegram responde solo para un chat donde te muestra estadísticas. En un grupo 
 
 ```sh
 tg chats members fetch "Hiking Club" --track --json
+```
+
+```sh
 tg stats chats show "Hiking Club" --since-time 7d --by day --timezone Europe/Madrid --json
+```
+
+```sh
 tg chats members history "Hiking Club" --since-time 7d --offline --json
+```
+
+```sh
 tg chats tracking show "Hiking Club" --offline --json
+```
+
+```sh
 tg chats members audit "Hiking Club" --json
 ```
 
