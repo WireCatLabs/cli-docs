@@ -67,7 +67,7 @@ tg messages list 503 --limit 30
 ```
 
 ```sh
-tg messages search "Atlas" --chat 503
+tg search messages "Atlas" --chat 503
 ```
 
 **Агент:**
@@ -109,12 +109,12 @@ tg messages context 503 48210 --before-n 2 --after-n 2
 
 ### 2. Найти рекомендации
 
-Основные команды: messages search --source all
+Основные команды: search messages --source all
 
 **Пользователь:** Используй tg cli, найди в Telegram и MAX рекомендации курса SQL с практикой и обратной связью.
 
 ```sh
-tg messages search "SQL" --source all --limit 10
+tg search messages "SQL" --source all --limit 10
 ```
 
 **Агент:**
@@ -325,7 +325,7 @@ tg messages list 503 --limit 30
 ```
 
 ```sh
-tg messages search "макет" --chat 503
+tg search messages "макет" --chat 503
 ```
 
 **Агент:**
@@ -400,7 +400,7 @@ tg messages send "Том" "Привет! Пришли, пожалуйста, с�
 
 ### 7. Все документы по теме
 
-Основные команды: tg chats list → tg messages search
+Основные команды: tg chats list → tg search messages
 
 **Пользователь:** Используй tg cli, найди актуальный договор, счета и презентацию по Atlas. Проверь проектные группы и личную переписку.
 
@@ -409,7 +409,7 @@ tg chats list --search "Atlas"
 ```
 
 ```sh
-tg messages search "договор OR счёт OR презентация" --chat "Atlas · команда"
+tg search messages "договор OR счёт OR презентация" --chat "Atlas · команда"
 ```
 
 **Агент:**
@@ -439,11 +439,11 @@ tg chats list --search "Анна"
 ```
 
 ```sh
-tg messages search "договор" --chat 501
+tg search messages "договор" --chat 501
 ```
 
 ```sh
-tg messages search "презентация" --chat "Atlas · дизайн"
+tg search messages "презентация" --chat "Atlas · дизайн"
 ```
 
 **Агент:**
@@ -467,7 +467,7 @@ tg messages search "презентация" --chat "Atlas · дизайн"
 **Пользователь:** Проверь оставшиеся счета и скачай актуальные файлы в папку Atlas. Ничего не отправляй.
 
 ```sh
-tg messages search "счёт" --chat 501
+tg search messages "счёт" --chat 501
 ```
 
 ```sh
@@ -590,7 +590,7 @@ tg messages list 503 --limit 30
 ```
 
 ```sh
-tg messages search "Atlas" --chat 503
+tg search messages "Atlas" --chat 503
 ```
 
 **Агент:**
@@ -728,7 +728,7 @@ tg messages list 503 --limit 30
 ```
 
 ```sh
-tg messages search "макет" --chat 503
+tg search messages "макет" --chat 503
 ```
 
 **Агент:**
@@ -795,7 +795,7 @@ tg messages send "Том" "Привет! Пришли, пожалуйста, с�
 
 ### 5. Рекомендованный контакт
 
-Основные команды: tg chats list → tg messages search
+Основные команды: tg chats list → tg search messages
 
 **Пользователь:** Используй tg cli, найди бухгалтера для ИП с международными платежами, которого советовали в чатах про фриланс или бизнес.
 
@@ -804,7 +804,7 @@ tg chats list --search "Фриланс"
 ```
 
 ```sh
-tg messages search "бухгалтер" --chat "Фриланс · сообщество"
+tg search messages "бухгалтер" --chat "Фриланс · сообщество"
 ```
 
 **Агент:**
@@ -822,7 +822,7 @@ tg messages search "бухгалтер" --chat "Фриланс · сообщес
 **Пользователь:** Проверь налоги и бизнес. Мне важны евро, доллары и ведение под ключ.
 
 ```sh
-tg messages search "Елена" --chat "Фриланс · налоги"
+tg search messages "Елена" --chat "Фриланс · налоги"
 ```
 
 ```sh
@@ -844,7 +844,7 @@ tg chats list --search "Бизнес"
 **Пользователь:** Сравни с альтернативой и подготовь первое сообщение, не отправляй.
 
 ```sh
-tg messages search "бухгалтер" --chat "Бизнес · рекомендации"
+tg search messages "бухгалтер" --chat "Бизнес · рекомендации"
 ```
 
 **Агент:**
@@ -863,7 +863,7 @@ tg messages search "бухгалтер" --chat "Бизнес · рекоменд
 
 ### 6. Все документы по теме
 
-Основные команды: tg chats list → tg messages search
+Основные команды: tg chats list → tg search messages
 
 **Пользователь:** Используй tg cli, найди актуальный договор, счета и презентацию по Atlas. Проверь проектные группы и личную переписку.
 
@@ -872,7 +872,7 @@ tg chats list --search "Atlas"
 ```
 
 ```sh
-tg messages search "договор OR счёт OR презентация" --chat "Atlas · команда"
+tg search messages "договор OR счёт OR презентация" --chat "Atlas · команда"
 ```
 
 **Агент:**
@@ -896,11 +896,11 @@ tg chats list --search "Анна"
 ```
 
 ```sh
-tg messages search "договор" --chat 501
+tg search messages "договор" --chat 501
 ```
 
 ```sh
-tg messages search "презентация" --chat "Atlas · дизайн"
+tg search messages "презентация" --chat "Atlas · дизайн"
 ```
 
 **Агент:**
@@ -918,7 +918,7 @@ tg messages search "презентация" --chat "Atlas · дизайн"
 **Пользователь:** Проверь оставшиеся счета и скачай актуальные файлы в папку Atlas. Ничего не отправляй.
 
 ```sh
-tg messages search "счёт" --chat 501
+tg search messages "счёт" --chat 501
 ```
 
 ```sh
@@ -1055,12 +1055,12 @@ tg messages context "Project Alpha" 48212 --before-n 3 --after-n 3
 
 ### 2 Последняя договорённость
 
-Основные команды: tg messages search
+Основные команды: tg search messages
 
 **Пользователь:** О чём мы в итоге договорились с Анной?
 
 ```sh
-tg messages search "правки" --chat "Анна"
+tg search messages "правки" --chat "Анна"
 ```
 
 **Агент:**
@@ -1194,12 +1194,12 @@ tg messages context "Project Alpha" 48212 --before-n 3 --after-n 3
 
 ### 4 Почему так решили
 
-Основные команды: tg messages search
+Основные команды: tg search messages
 
 **Пользователь:** Почему команда выбрала этот вариант? Найди обсуждение.
 
 ```sh
-tg messages search "вариант" --chat "Project Alpha"
+tg search messages "вариант" --chat "Project Alpha"
 ```
 
 **Агент:**
@@ -1223,7 +1223,7 @@ tg messages search "вариант" --chat "Project Alpha"
 **Пользователь:** А были возражения, которые так и не сняли?
 
 ```sh
-tg messages search "экспорт" --chat "Project Alpha"
+tg search messages "экспорт" --chat "Project Alpha"
 ```
 
 **Агент:**
@@ -1268,12 +1268,12 @@ tg messages context "Project Alpha" 48212 --before-n 3 --after-n 3
 
 ### 5 История вопроса
 
-Основные команды: tg messages search
+Основные команды: tg search messages
 
 **Пользователь:** Восстанови историю вопроса: от первого сообщения до решения.
 
 ```sh
-tg messages search "сбой" --chat "Клиент"
+tg search messages "сбой" --chat "Клиент"
 ```
 
 **Агент:**
@@ -1293,7 +1293,7 @@ tg messages search "сбой" --chat "Клиент"
 **Пользователь:** Кто сейчас должен ответить про компенсацию?
 
 ```sh
-tg messages search "компенсация" --chat "Клиент"
+tg search messages "компенсация" --chat "Клиент"
 ```
 
 **Агент:**
@@ -1338,12 +1338,12 @@ tg messages context "Клиент" 48212 --before-n 3 --after-n 3
 
 ### 6 Поиск по каналу
 
-Основные команды: tg messages search
+Основные команды: tg search messages
 
 **Пользователь:** Найди в канале инструкцию по настройке сервера.
 
 ```sh
-tg messages search "настройка сервера" --chat "Заметки команды"
+tg search messages "настройка сервера" --chat "Заметки команды"
 ```
 
 **Агент:**
@@ -1383,7 +1383,7 @@ tg messages context "Заметки команды" 48210 --before-n 3 --after-n
 **Пользователь:** А там есть что-нибудь про ошибку доступа?
 
 ```sh
-tg messages search "доступ" --chat "Заметки команды"
+tg search messages "доступ" --chat "Заметки команды"
 ```
 
 **Агент:**
@@ -1417,12 +1417,12 @@ tg messages context "Заметки команды" 48211 --before-n 3 --after-n
 
 ### 7 Рекомендованный контакт
 
-Основные команды: tg messages search
+Основные команды: tg search messages
 
 **Пользователь:** Помню, кто-то советовал бухгалтера. Найди контакт.
 
 ```sh
-tg messages search "бухгалтер" --chat "Фриланс"
+tg search messages "бухгалтер" --chat "Фриланс"
 ```
 
 **Агент:**
@@ -1484,12 +1484,12 @@ tg messages context "Фриланс" 48210 --before-n 3 --after-n 3
 
 ### 8 Последний документ
 
-Основные команды: tg messages search
+Основные команды: tg search messages
 
 **Пользователь:** Где присылали последнюю версию договора?
 
 ```sh
-tg messages search "договор" --chat "Анна"
+tg search messages "договор" --chat "Анна"
 ```
 
 **Агент:**
@@ -1554,12 +1554,12 @@ tg messages context "Анна" 48211 --before-n 3 --after-n 3
 
 ### 9 Поиск с опечаткой
 
-Основные команды: tg messages search
+Основные команды: tg search messages
 
 **Пользователь:** Найди сообщения про возварт в переписках с магазином.
 
 ```sh
-tg messages search "возварт" --chat "Магазин"
+tg search messages "возварт" --chat "Магазин"
 ```
 
 **Агент:**
@@ -1597,7 +1597,7 @@ tg messages context "Магазин" 48210 --before-n 3 --after-n 3
 **Пользователь:** Найди подтверждение, что посылку получили.
 
 ```sh
-tg messages search "получили" --chat "Магазин"
+tg search messages "получили" --chat "Магазин"
 ```
 
 **Агент:**
@@ -1624,12 +1624,12 @@ tg messages context "Магазин" 48212 --before-n 3 --after-n 3
 
 ### 10 Ссылки по теме
 
-Основные команды: tg messages search
+Основные команды: tg search messages
 
 **Пользователь:** Собери все ссылки на материалы по этой теме.
 
 ```sh
-tg messages search "материалы" --chat "Команда"
+tg search messages "материалы" --chat "Команда"
 ```
 
 **Агент:**
@@ -1863,7 +1863,7 @@ tg review --chat "Дизайн" --since-time 7d
 **Пользователь:** Проверь, не присылали ли макет в другом чате.
 
 ```sh
-tg messages search "макет" --chat "Том"
+tg search messages "макет" --chat "Том"
 ```
 
 **Агент:**
@@ -2136,7 +2136,7 @@ tg review --chat "Клиент" --since-time 30d
 **Пользователь:** Есть ли что-то, о чём клиент уже жаловался?
 
 ```sh
-tg messages search "упаковка" --chat "Клиент"
+tg search messages "упаковка" --chat "Клиент"
 ```
 
 **Агент:**
@@ -2178,12 +2178,12 @@ tg messages context "Клиент" 48212 --before-n 3 --after-n 3
 
 ### 18 Запрос и договорённости
 
-Основные команды: tg messages search
+Основные команды: tg search messages
 
 **Пользователь:** Сравни новый запрос клиента с тем, что мы согласовали.
 
 ```sh
-tg messages search "страница" --chat "Клиент"
+tg search messages "страница" --chat "Клиент"
 ```
 
 **Агент:**
@@ -2207,7 +2207,7 @@ tg messages search "страница" --chat "Клиент"
 **Пользователь:** Может, третью страницу уже обещал кто-то из команды?
 
 ```sh
-tg messages search "третья страница" --chat "Команда"
+tg search messages "третья страница" --chat "Команда"
 ```
 
 **Агент:**
@@ -2447,12 +2447,12 @@ tg messages context "Новости ИИ" 48212 --before-n 3 --after-n 3
 
 ### 22 Моя тема в каналах
 
-Основные команды: tg messages search
+Основные команды: tg search messages
 
 **Пользователь:** Что нового по моей теме в этих пяти каналах?
 
 ```sh
-tg messages search "аналитика" --limit 50
+tg search messages "аналитика" --limit 50
 ```
 
 **Агент:**
@@ -2581,12 +2581,12 @@ tg messages context "Новости технологий" 48211 --before-n 3 --a
 
 ### 24 Месяц в одном канале
 
-Основные команды: tg messages search
+Основные команды: tg search messages
 
 **Пользователь:** Найди в канале все публикации про этот продукт за месяц.
 
 ```sh
-tg messages search "продукт" --chat "Новости технологий" --newest
+tg search messages "продукт" --chat "Новости технологий" --newest
 ```
 
 **Агент:**
@@ -2787,12 +2787,12 @@ tg messages transcribe "Анна" 8812 --local
 
 ### 27 Напоминание о встрече
 
-Основные команды: tg messages search
+Основные команды: tg search messages
 
 **Пользователь:** Пришли напоминание за час до встречи завтра в 15:00.
 
 ```sh
-tg messages search "встреча" --chat "Команда"
+tg search messages "встреча" --chat "Команда"
 ```
 
 **Агент:**
@@ -2854,12 +2854,12 @@ tg messages context "Команда" 48210 --before-n 3 --after-n 3
 
 ### 28 Отправить по расписанию
 
-Основные команды: tg messages search
+Основные команды: tg search messages
 
 **Пользователь:** Отправь команде материалы в понедельник утром.
 
 ```sh
-tg messages search "презентация" --chat "Команда"
+tg search messages "презентация" --chat "Команда"
 ```
 
 **Агент:**
@@ -2947,7 +2947,7 @@ tg review --chat "Сообщество" --since-time 7d --unanswered
 **Пользователь:** Не отвечали ли на них в другой теме форума?
 
 ```sh
-tg messages search "инструкция" --chat "Сообщество"
+tg search messages "инструкция" --chat "Сообщество"
 ```
 
 **Агент:**
@@ -3119,12 +3119,12 @@ tg inbox
 
 ### 33 Деньги за Лиссабон
 
-Основные команды: tg messages search
+Основные команды: tg search messages
 
 **Пользователь:** Кто кому должен за поездку в Лиссабон?
 
 ```sh
-tg messages search "заплатил" --chat "Лиссабон"
+tg search messages "заплатил" --chat "Лиссабон"
 ```
 
 **Агент:**
