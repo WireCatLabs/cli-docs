@@ -37,7 +37,7 @@ export function reviewedGuideRefs(tool: Tool, previewRef?: string): [string, str
 /** Candidate guides can build for review, but the production workflow must wait for release pins. */
 export function assertDocsReleaseReady(
   root: string,
-  env: { GITHUB_ACTIONS?: string; GITHUB_WORKFLOW?: string } = process.env,
+  env: Readonly<Record<string, string | undefined>> = process.env,
 ): void {
   if (
     env.GITHUB_ACTIONS === "true" &&
