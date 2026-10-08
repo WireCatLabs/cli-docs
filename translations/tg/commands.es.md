@@ -1,10 +1,14 @@
 ---
 title: "Referencia de comandos"
 ---
+
 <!-- Generated from the command tree by scripts/commands.ts. Do not edit; run `pnpm generate`. -->
 
-Todos los comandos, opciones y códigos de salida. Esta página se **genera a partir del propio programa**,
-así que corresponde a una versión real. Para obtener la misma lista en JSON, ejecuta `tg commands --json`.
+
+Todos los comandos, opciones y códigos de salida. Esta página se **genera a partir del propio programa**, por lo que
+no puede describir una versión que no existe.
+
+Para obtener la misma lista en JSON, ejecuta `tg commands --json`.
 
 Estructura de un comando:
 
@@ -28,6 +32,11 @@ toda la sesión de terminal; sin ninguna de las dos formas, el perfil es `defaul
 | `--trace` | registros de la conexión por stderr; nunca el contenido de mensajes. |
 | `--timeout <duration>` | detiene todo el comando después de este intervalo: 30s, 2m, 500ms. |
 | `--offline` | responde desde lo guardado sin conectarse; falla si no hay datos. |
+| `--no-input` | no pedir entrada ni abrir un inicio de sesión interactivo; la entrada mediante una tubería sigue disponible. |
+| `--max-input-bytes <bytes>` | máximo de bytes de entrada almacenados en búfer (predeterminado: 16777216). |
+| `--max-output-bytes <bytes>` | máximo de bytes de salida para máquinas (predeterminado: 4194304; 0 desactiva el límite). |
+| `--fields <paths>` | campos de elementos o del objeto separados por comas: id,text; conservar la paginación y los identificadores de operaciones. |
+| `--dry-run` | previsualizar los argumentos analizados y los permisos antes de ejecutar la acción. |
 | `--yes` | omite la confirmación que el nivel ask exige antes de escribir. |
 | `--record` | guarda esta ejecución: identificadores y tiempos, nunca contenido. |
 | `--no-record` | no guarda la ejecución, independientemente de la configuración. |
@@ -57,7 +66,7 @@ tg session start [method] [options]
 
 cierra la sesión del perfil en Telegram y elimina su archivo local
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg session end
@@ -67,7 +76,7 @@ tg session end
 
 configura Telegram y conecta tu agente
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg setup [options]
@@ -100,7 +109,7 @@ tg account show [options]
 
 cambia nombre, descripción o foto visibles de tu perfil
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg account update [options]
@@ -129,7 +138,7 @@ tg account sessions list
 
 cierra todos los demás dispositivos, incluido el móvil; conserva este
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg account sessions end [options]
@@ -174,7 +183,7 @@ tg chats events <chat> [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--since-time <time>` | ISO 8601 o intervalo anterior como 2h / 1d; últimos 7 días por defecto. |
+| `--since-time <time>` | fecha ISO 8601 o intervalo anterior como 2h / 1d; hace 7 días por defecto. |
 | `--type <names>` | solo estos tipos, separados por comas: join, leave, add, remove, create, title, pin. |
 
 ### `tg chats inspect`
@@ -195,6 +204,18 @@ un chat: tipo, pendientes, hora del último mensaje y participantes
 
 ```sh
 tg chats show <chat>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+### `tg chats send-as`
+
+en nombre de quién puede publicar esta cuenta en un chat; no cambia la elección guardada
+
+```sh
+tg chats send-as <chat>
 ```
 
 | Argumento | | Qué es |
@@ -225,7 +246,7 @@ tg chats members list <chat> [options]
 
 #### `tg chats members audit`
 
-miembros que parecen bots, cada uno con sus motivos; se leen de la lista de miembros y del archivo local; nunca una petición por persona, y no elimina a nadie
+miembros que parecen bots, con los motivos para cada uno, a partir de la lista de miembros y el almacenamiento local; --deep comprueba individualmente a las personas seleccionadas; no elimina a nadie
 
 ```sh
 tg chats members audit <chat> [options]
@@ -239,12 +260,46 @@ tg chats members audit <chat> [options]
 |---|---|
 | `--budget <pages>` | como máximo este número de páginas de 200 miembros, con una pausa entre ellas (predeterminado: 10). |
 | `--min-score <n>` | solo miembros con al menos esta puntuación; 1 muestra a todos los que tienen algún motivo (predeterminado: 2). |
+| `--deep <n>` | comprobar también los primeros n perfiles, las fotos más antiguas, hasta 1,000 mensajes almacenados de cada uno y las listas públicas de bloqueos, a las que se envían sus identificadores — una persona por segundo. |
+
+#### `tg chats members history`
+
+quién entró, quién salió y qué perfiles cambiaron, primero los más antiguos — lo que chats members fetch registró en el almacenamiento local; nunca consulta el servicio de mensajería
+
+```sh
+tg chats members history <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--since-time <time>` | ISO 8601 o hace 2h / 1d; todos los registros si no se indica. |
+
+#### `tg chats members fetch`
+
+leer la lista completa de miembros de un grupo en el historial de miembros del almacenamiento local: quién entró, quién salió, recuentos diarios y cambios de perfil; una persona se registra como ausente solo cuando se ha leído a todos los miembros
+
+```sh
+tg chats members fetch <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--track` | descargarla también a diario mientras se ejecuta serve; chats tracking enumera y modifica esos chats. |
+| `--budget <pages>` | como máximo este número de páginas de 200 miembros, con una pausa entre ellas (predeterminado: 10). |
 
 #### `tg chats members add`
 
 añade personas y les notifica
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg chats members add <chat> <person>
@@ -259,7 +314,7 @@ tg chats members add <chat> <person>
 
 elimina personas; conserva sus mensajes
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg chats members remove <chat> <person>
@@ -274,7 +329,7 @@ tg chats members remove <chat> <person>
 
 marca el chat como leído; la otra persona lo ve
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg chats mark-read <chat> [options]
@@ -289,29 +344,59 @@ tg chats mark-read <chat> [options]
 | `--until <message>` | solo hasta este identificador de mensaje; hasta el más reciente por defecto. |
 | `--topic <id>` | marca como leído solo este tema del foro; no disponible en mensajeros sin temas. |
 
-### `tg chats stats`
+### `tg chats tracking`
 
-las cifras de un grupo o canal en un periodo: mensajes, miembros activos, respuestas, reacciones, preguntas contestadas, entradas y salidas; se cuentan a partir del archivo local, y las entradas y salidas se piden al servicio
+los chats cuyas listas de miembros descarga serve a diario al almacenamiento local — chats members fetch --track añade uno
+
+#### `tg chats tracking list`
+
+cada chat seguido: desde cuándo y su último recuento de miembros
 
 ```sh
-tg chats stats <chat> [options]
+tg chats tracking list
+```
+
+#### `tg chats tracking show`
+
+un chat: si se sigue y su recuento de miembros por día durante los últimos 30 días
+
+```sh
+tg chats tracking show <chat>
 ```
 
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 
-| Opción | Qué hace |
-|---|---|
-| `--since-time <time>` | fecha ISO 8601 o intervalo anterior como 2h / 1d; hace 7 días por defecto. |
-| `--by <day\|week>` | también una fila por día o semana natural (las semanas empiezan el lunes). |
-| `--timezone <zone>` | zona horaria IANA para los días del calendario. |
+#### `tg chats tracking add`
+
+descargar a diario la lista de miembros de este chat mientras se ejecuta serve, a partir de su siguiente ejecución
+
+```sh
+tg chats tracking add <chat>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+#### `tg chats tracking remove`
+
+dejar de descargarla a diario; se conserva el historial ya guardado
+
+```sh
+tg chats tracking remove <chat>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 
 ### `tg chats create`
 
 crea grupo o canal; notifica a las personas añadidas
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg chats create <title> [person] [options]
@@ -330,7 +415,7 @@ tg chats create <title> [person] [options]
 
 se une a grupo o canal mediante enlace; los demás ven que entraste
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg chats join <link>
@@ -344,7 +429,7 @@ tg chats join <link>
 
 sale de grupo o canal; los demás ven que saliste
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg chats leave <chat>
@@ -358,7 +443,7 @@ tg chats leave <chat>
 
 cambia nombre, descripción o activa y desactiva ajustes del grupo o canal
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg chats update <chat> [options]
@@ -374,6 +459,7 @@ tg chats update <chat> [options]
 | `--description <text>` | descripción nueva. |
 | `--all-can-pin <on\|off>` | permite fijar mensajes a todos los miembros. |
 | `--only-admins-add <on\|off>` | solo administradores pueden añadir miembros. |
+| `--join-approval <on\|off>` | la gente pide unirse, y un administrador los deja entrar. |
 
 ### `tg chats link`
 
@@ -391,11 +477,63 @@ tg chats link show <chat>
 |---|---|---|
 | `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 
+#### `tg chats link create`
+
+crear otro enlace de invitación; nadie recibe un aviso hasta que lo compartas
+
+**Changes something in Telegram.**
+
+```sh
+tg chats link create <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--approval` | quien quiera entrar con el enlace debe solicitarlo primero y un administrador permite su entrada. |
+| `--expire-time <time>` | deja de funcionar entonces: 2026-09-25T09:00 (hora local) o dentro de 30m, 2h, 7d. |
+| `--max-uses <n>` | como máximo este número de personas puede entrar con el enlace, de 1 a 99999. |
+
+#### `tg chats link list`
+
+tus enlaces de invitación, primero los más recientes, con el número de personas que entraron y que esperan
+
+```sh
+tg chats link list <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--revoked` | los enlaces que revocaste, en su lugar. |
+| `--limit <n>` | cuántos. |
+
+#### `tg chats link revoke`
+
+revocar un enlace; para el enlace propio del grupo, la respuesta contiene el nuevo
+
+**Changes something in Telegram.**
+
+```sh
+tg chats link revoke <chat> <link>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+| `link` | obligatorio | el enlace tal como lo muestra `chats link list`. |
+
 #### `tg chats link reset`
 
 sustituye el enlace de invitación; el anterior deja de funcionar
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg chats link reset <chat>
@@ -405,6 +543,68 @@ tg chats link reset <chat>
 |---|---|---|
 | `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 
+### `tg chats requests`
+
+solicitudes para entrar en un grupo que requiere aprobación de un administrador
+
+#### `tg chats requests list`
+
+quién solicitó entrar, primero los más recientes; solo los administradores pueden verlos y la lectura no avisa a nadie
+
+```sh
+tg chats requests list <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--limit <n>` | cuántos. |
+| `--search <text>` | solo personas cuyo nombre o @username contiene este texto. |
+| `--link <link>` | solo personas que lo solicitaron mediante este enlace de invitación; no se combina con --search. |
+
+#### `tg chats requests accept`
+
+permitirles entrar; el grupo ve que se unen
+
+**Changes something in Telegram.**
+
+```sh
+tg chats requests accept <chat> [person] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+| `person` | opcional | quien solicitó entrar: un identificador de `chats requests list`. |
+
+| Opción | Qué hace |
+|---|---|
+| `--all` | todas las solicitudes pendientes, contabilizadas primero frente al límite por hora. |
+| `--link <link>` | con --all: solo las solicitudes hechas mediante este enlace de invitación. |
+
+#### `tg chats requests decline`
+
+rechazar la solicitud
+
+**Changes something in Telegram.**
+
+```sh
+tg chats requests decline <chat> [person] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+| `person` | opcional | quien solicitó entrar: un identificador de `chats requests list`. |
+
+| Opción | Qué hace |
+|---|---|
+| `--all` | todas las solicitudes pendientes, contabilizadas primero frente al límite por hora. |
+| `--link <link>` | con --all: solo las solicitudes hechas mediante este enlace de invitación. |
+
 ### `tg chats admins`
 
 otorga o retira permisos de administrador a un miembro
@@ -413,7 +613,7 @@ otorga o retira permisos de administrador a un miembro
 
 convierte a un miembro en administrador con estos permisos
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg chats admins add <chat> <person> [options]
@@ -432,7 +632,7 @@ tg chats admins add <chat> <person> [options]
 
 retira permisos de administrador; sigue siendo miembro
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg chats admins remove <chat> <person>
@@ -459,7 +659,7 @@ tg chats folders list
 
 crea una carpeta de chats
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg chats folders create <title> [options]
@@ -477,7 +677,7 @@ tg chats folders create <title> [options]
 
 renombra una carpeta o cambia los chats que contiene
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg chats folders update <folder> [options]
@@ -491,13 +691,13 @@ tg chats folders update <folder> [options]
 |---|---|
 | `--title <title>` | nuevo nombre. |
 | `--add <chat>` | añade un chat; repite la opción para incluir más. |
-| `--remove <chat>` | quita un chat; repite la opción para quitar más. |
+| `--remove <chat>` | quitar un chat de ella y de sus listas de excluidos y fijados; repítelo para más chats. |
 
 #### `tg chats folders delete`
 
 elimina la carpeta, conservando sus chats
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg chats folders delete <folder>
@@ -506,6 +706,34 @@ tg chats folders delete <folder>
 | Argumento | | Qué es |
 |---|---|---|
 | `folder` | obligatorio | identificador de carpeta o título exacto. |
+
+#### `tg chats folders order`
+
+colocar las carpetas en este orden; las que no se nombran conservan su orden después de ellas
+
+**Changes something in Telegram.**
+
+```sh
+tg chats folders order <folders>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `folders` | obligatorio | identificadores de carpetas o títulos exactos, la primera va primero. |
+
+#### `tg chats folders join`
+
+añadir una carpeta que alguien compartió mediante un enlace; entra en todos sus chats y los demás participantes ven que te has unido
+
+**Changes something in Telegram.**
+
+```sh
+tg chats folders join <link>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `link` | obligatorio | el enlace de la carpeta, como t.me/addlist/…. |
 
 ### `tg chats rules`
 
@@ -558,7 +786,7 @@ tg chats rules unset <chat> <key>
 
 revisa mensajes y miembros nuevos según las reglas y ejecuta lo permitido
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg chats moderate <chat> [options]
@@ -593,23 +821,44 @@ tg contacts list [options]
 | `--page <n>` | número de página, desde 1. |
 | `--all` | todas las filas, sin paginar. |
 | `--order <recent\|name>` | conversación más reciente primero o por orden alfabético. Predeterminado: `recent`. |
-| `--search <text>` | solo personas cuyo nombre o @username contiene el texto. |
+| `--search <text>` | solo personas cuyo nombre, alias local o @username contiene este texto. |
+| `--search-notes <text>` | solo personas cuyas notas privadas contienen este texto. |
 
 ### `tg contacts show`
 
 una persona y los chats que compartís
 
 ```sh
-tg contacts show <person>
+tg contacts show <person> [options]
 ```
 
 | Argumento | | Qué es |
 |---|---|---|
 | `person` | obligatorio | identificador, @username o parte del nombre. |
 
+| Opción | Qué hace |
+|---|---|
+| `--with-notes` | incluir tus notas privadas, sujeto al permiso contacts.notes.list. |
+
+### `tg contacts profile`
+
+todo lo que el servicio de mensajería informa sobre una persona —identificadores, indicadores, última conexión y cuándo se registró— y cuántos de sus mensajes guarda el almacenamiento en cada chat que compartís, el primero y el último, y los nombres y nombres de usuario anteriores que registró el almacenamiento
+
+```sh
+tg contacts profile <person> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `person` | obligatorio | identificador, @username o parte del nombre. |
+
+| Opción | Qué hace |
+|---|---|
+| `--show-phone` | muestra el número completo. |
+
 ### `tg contacts context`
 
-lo que el archivo local guarda sobre una persona en cada mensajero vinculado a ella: chats compartidos, los últimos mensajes en cada sentido, sus mensajes recientes y dónde la mencionaron otros; nunca se conecta
+lo que guarda el almacenamiento local sobre una persona; --chat --refresh consulta explícitamente Telegram primero
 
 ```sh
 tg contacts context <person> [options]
@@ -623,6 +872,24 @@ tg contacts context <person> [options]
 |---|---|
 | `--limit <n>` | como máximo este número de mensajes en cada lista; 10 por defecto. |
 | `--since-time <time>` | nada anterior a esta fecha ISO 8601 o intervalo anterior como 2h / 1d. |
+| `--chat <chat>` | un chat por identificador o nombre; repítelo para más — después, sus mensajes más recientes en cada uno, 20 salvo que se indique --limit, abreviados salvo que se indique -v. |
+| `--refresh` | con --chat, leer primero sus mensajes más recientes en cada chat desde el servicio de mensajería. |
+
+### `tg contacts check`
+
+si una persona parece un bot, una cuenta falsa o un spammer: su perfil, lo que escribió en el almacenamiento y las listas públicas de bloqueos (Combot Anti-Spam (CAS), lols.bot), a las que se envía su identificador — una pista, nunca un veredicto
+
+```sh
+tg contacts check <person> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `person` | obligatorio | identificador, @username o parte del nombre. |
+
+| Opción | Qué hace |
+|---|---|
+| `--no-registries` | omitir las listas públicas de bloqueos; seguir consultando Telegram para obtener el perfil y las fotos salvo que se indique --offline. |
 
 ### `tg contacts link`
 
@@ -665,11 +932,126 @@ guarda toda la lista de contactos del servicio en el archivo local
 tg contacts sync
 ```
 
+### `tg contacts alias`
+
+un nombre visible local y privado en la cuenta seleccionada
+
+#### `tg contacts alias set`
+
+
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg contacts alias set <person> <alias>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `person` | obligatorio |  |
+| `alias` | obligatorio |  |
+
+#### `tg contacts alias rm`
+
+
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg contacts alias rm <person>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `person` | obligatorio |  |
+
+### `tg contacts notes`
+
+tus notas privadas sobre un contacto almacenado, limitadas a esta cuenta
+
+#### `tg contacts notes list`
+
+
+
+```sh
+tg contacts notes list <person>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `person` | obligatorio |  |
+
+#### `tg contacts notes show`
+
+
+
+```sh
+tg contacts notes show <person> <id>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `person` | obligatorio |  |
+| `id` | obligatorio |  |
+
+#### `tg contacts notes add`
+
+
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg contacts notes add <person> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `person` | obligatorio |  |
+
+| Opción | Qué hace |
+|---|---|
+| `--file <path>` | leer el texto de la nota desde un archivo; si se omite o se indica -, leer stdin. |
+
+#### `tg contacts notes edit`
+
+
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg contacts notes edit <person> <id> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `person` | obligatorio |  |
+| `id` | obligatorio |  |
+
+| Opción | Qué hace |
+|---|---|
+| `--file <path>` | leer el texto de la nota desde un archivo; si se omite o se indica -, leer stdin. |
+| `--revision <number>` | la revisión que leíste antes de editar. |
+
+#### `tg contacts notes remove`
+
+
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg contacts notes remove <person> <id>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `person` | obligatorio |  |
+| `id` | obligatorio |  |
+
 ### `tg contacts add`
 
 añade un contacto; `contacts list` sigue mostrando solo personas con un chat individual
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg contacts add <person>
@@ -683,7 +1065,7 @@ tg contacts add <person>
 
 elimina un contacto; conserva el chat, pero puede perderse el nombre que le asignaste
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg contacts remove <person>
@@ -697,7 +1079,7 @@ tg contacts remove <person>
 
 impide que una persona te escriba; no necesita ser contacto
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg contacts block <person>
@@ -711,7 +1093,7 @@ tg contacts block <person>
 
 permite que una persona bloqueada vuelva a escribirte
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg contacts unblock <person>
@@ -723,9 +1105,9 @@ tg contacts unblock <person>
 
 ### `tg contacts rename`
 
-asigna un nombre propio a una persona; solo tú lo ves
+renombrar el contacto en la libreta de direcciones del servicio de mensajería; usa contacts alias para un nombre local privado
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg contacts rename <person> <first-name> [last-name]
@@ -741,7 +1123,7 @@ tg contacts rename <person> <first-name> [last-name]
 
 carga números y añade los usuarios que el servicio reconoce
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg contacts import <file>
@@ -791,13 +1173,14 @@ tg messages list <chat> [options]
 | `--before-time <time>` | solo mensajes anteriores a esta fecha ISO 8601 o intervalo anterior como 2h / 1d. |
 | `--after-id <id>` | solo mensajes posteriores a este identificador. |
 | `--after-time <time>` | solo mensajes posteriores a esta fecha ISO 8601 o intervalo anterior como 2h / 1d. |
+| `--topic <id>` | solo este tema del foro; leer hacia atrás desde su mensaje más reciente o --before-id. |
 | `--transcribe` | transcribe notas de voz pendientes mediante el servicio o un modelo local; puede tardar minutos. |
 | `--model <id>` | modelo de voz descargado para --transcribe; `models audio list` muestra los disponibles. |
 | `--mark-read` | también marca como leído hasta el mensaje más reciente mostrado; la otra persona lo ve. |
 
 ### `tg messages search`
 
-busca en lo leído, descargado o guardado por serve; opcionalmente descarga mensajes nuevos con --sync-first
+buscar en el almacenamiento local y en el servidor del servicio de mensajería (--backend); opcionalmente descargar mensajes nuevos con --sync-first
 
 ```sh
 tg messages search [query] [options]
@@ -818,46 +1201,24 @@ tg messages search [query] [options]
 | `--thread-messages <n>` | como máximo este número de mensajes en cada contexto de hilo (predeterminado: 50). |
 | `--thread-bytes <n>` | como máximo este número de bytes de mensajes completos y vínculos en cada contexto (predeterminado: 65536). |
 | `--thread-within <duration>` | mensajes dentro de este intervalo a ambos lados del resultado (predeterminado: 1d). |
+| `--backend <archive\|server\|both>` | dónde buscar: el archivo local, el servidor del servicio de mensajería o ambos (predeterminado: both). |
+| `--server-time <duration>` | dejar de esperar al servidor tras este tiempo (predeterminado: 5s). |
 | `--chat <chat>` | solo este chat, igual que chat: en la consulta; título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 | `--source <messenger>` | todas las cuentas de este servicio guardadas, personal, bots o all; igual que in: en la consulta. |
 | `--limit <n>` | cuántos. |
 | `--newest` | recientes primero en lugar de mejores coincidencias. |
+| `--exact` | las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas. |
 | `--context <n>` | mensajes anteriores y posteriores a cada resultado; 2 en terminal, 0 en otros casos. |
 | `--language <lucene\|legacy>` | lenguaje de consulta: Lucene estricto o búsqueda aproximada heredada. |
 | `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
 | `--regex` | interpreta el texto como expresión regular sin distinguir mayúsculas; comprueba todos los textos guardados. |
 | `--saved <name\|id>` | ejecuta una búsqueda guardada o una ejecución anterior; las opciones escritas aquí sustituyen a las suyas. |
 
-### `tg messages stats`
-
-cuántos mensajes guardados coinciden, por chat, remitente, día u hora; solo el archivo local; opcionalmente descarga mensajes nuevos con --sync-first
-
-```sh
-tg messages stats [query] [options]
-```
-
-| Argumento | | Qué es |
-|---|---|---|
-| `query` | opcional | consulta estricta de Lucene, como en messages search; sin consulta cuenta todos los mensajes guardados; con --saved, palabras adicionales unidas con AND. |
-
-| Opción | Qué hace |
-|---|---|
-| `--sync-first` | primero descarga los mensajes nuevos dentro de los límites de chats, tiempo y mensajes. |
-| `--max-chats <n>` | actualiza como máximo este número de chats (predeterminado: 5). |
-| `--sync-time <duration>` | deja de descargar tras este tiempo (predeterminado: 30s). |
-| `--max-messages <n>` | descarga como máximo este número de mensajes en total (predeterminado: 500). |
-| `--by <chat\|sender\|day\|hour>` | por qué contar (predeterminado: chat). |
-| `--chat <chat>` | solo este chat, igual que chat: en la consulta; título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
-| `--source <messenger>` | todas las cuentas de este servicio guardadas, personal, bots o all; igual que in: en la consulta. |
-| `--limit <n>` | cuántas filas. |
-| `--timezone <zone>` | zona horaria IANA para los días y horas del calendario. |
-| `--saved <name\|id>` | cuenta lo que coincide con una búsqueda guardada o una ejecución anterior; las opciones escritas aquí sustituyen a las suyas. |
-
 ### `tg messages send`
 
 envía texto; si omites [text], lo lee por stdin
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg messages send <chat> [text] [options]
@@ -872,6 +1233,8 @@ tg messages send <chat> [text] [options]
 |---|---|
 | `--topic <id>` | envía a este tema de foro; no disponible en mensajeros sin temas. |
 | `--reply-to <message>` | responde al mensaje indicado por su identificador dentro del mismo chat. |
+| `--comment-to <post>` | comentar esta publicación del canal; el comentario va a su grupo de discusión. |
+| `--send-as <id>` | publicar como una de las identidades que enumera `chats send-as`; obligatorio cuando el chat publica como otra identidad de forma predeterminada. |
 | `--send-id <id>` | reintenta un envío de resultado desconocido sin arriesgar una segunda copia. |
 | `--silent` | entrega sin notificación. |
 | `--no-preview` | no muestra vista previa de enlaces. |
@@ -882,6 +1245,10 @@ tg messages send <chat> [text] [options]
 | `--voice <file>` | envía Ogg Opus como nota de voz, sin texto ni otros adjuntos. |
 | `--allow-any-file` | permite enviar archivos incluso de carpetas ocultas, \~/.ssh o carpetas del propio CLI. |
 | `--at-time <time>` | programa el envío en el servicio, aunque el equipo esté apagado: 2026-09-25T09:00 (hora local) o dentro de 30m, 2h, 1d. |
+| `--spoiler` | ocultar --photo o el vídeo tras un spoiler hasta que se pulse. |
+| `--caption-above` | mostrar el texto encima de --photo o --file, en lugar de debajo. |
+| `--filename <name>` | el nombre que ven los demás para --file, en lugar de su nombre en el disco. |
+| `--html` | texto HTML: <b>, <i>, <a href>, <code>. |
 
 ### `tg messages show`
 
@@ -893,7 +1260,7 @@ tg messages show <chat> [message]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados; también localizador msg: sin identificador posterior. |
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados; o un localizador msg: sin identificador de mensaje posterior. |
 | `message` | opcional | identificador del mensaje. |
 
 ### `tg messages context`
@@ -906,7 +1273,7 @@ tg messages context <chat> [message] [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados; también localizador msg: sin identificador posterior. |
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados; o un localizador msg: sin identificador de mensaje posterior. |
 | `message` | opcional | identificador del mensaje. |
 
 | Opción | Qué hace |
@@ -937,6 +1304,7 @@ tg messages download <chat> [message] [options]
 | `--output-dir <dir>` | carpeta de destino; se crea si falta. Predeterminada: `.`. |
 | `--all` | todos los archivos del chat, recientes primero; repite para continuar. |
 | `--pause <duration>` | con --all, pausa entre páginas para respetar límites del servicio. Predeterminada: `1s`. |
+| `--extract` | leer las capas de texto de los archivos que esta descarga vincula al índice de contenido local. |
 
 ### `tg messages transcribe`
 
@@ -960,7 +1328,7 @@ tg messages transcribe <chat> <message> [options]
 
 cambia tu mensaje; puede que la otra persona ya haya leído el anterior
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg messages edit <chat> <message> [text] [options]
@@ -975,12 +1343,13 @@ tg messages edit <chat> <message> [text] [options]
 | Opción | Qué hace |
 |---|---|
 | `--md` | interpreta el Markdown de este mensajero; consulta la guía de formato para la sintaxis admitida. |
+| `--html` | texto HTML: <b>, <i>, <a href>, <code>. |
 
 ### `tg messages delete`
 
 elimina mensajes solo para ti; con --for-everyone, para todos
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg messages delete <chat> <messages> [options]
@@ -1000,7 +1369,7 @@ tg messages delete <chat> <messages> [options]
 
 reenvía un mensaje a otro chat
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg messages forward <chat> <message> [options]
@@ -1015,13 +1384,14 @@ tg messages forward <chat> <message> [options]
 |---|---|
 | `--to <chat>` | chat de destino, por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 | `--silent` | entrega sin notificar. |
+| `--send-as <id>` | publicar como una de las identidades que enumera `chats send-as` para el chat --to; obligatorio cuando el chat publica como otra identidad de forma predeterminada. |
 | `--send-id <id>` | reintenta un reenvío de resultado desconocido sin arriesgar otra copia. |
 
 ### `tg messages pin`
 
 fija un mensaje sin aviso, salvo con --notify
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg messages pin <chat> <message> [options]
@@ -1040,7 +1410,7 @@ tg messages pin <chat> <message> [options]
 
 deja de fijar un mensaje
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg messages unpin <chat> <message>
@@ -1073,8 +1443,26 @@ tg messages link <chat> [message]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados; también localizador msg: sin identificador posterior. |
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados; o un localizador msg: sin identificador de mensaje posterior. |
 | `message` | opcional | identificador del mensaje. |
+
+### `tg messages comments`
+
+los comentarios de una publicación del canal, del más antiguo al más reciente; están en su grupo de discusión
+
+```sh
+tg messages comments <chat> <post> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | el canal: un chat por su título o parte de él, su identificador, @username o `me` para Mensajes guardados. |
+| `post` | obligatorio | el identificador del mensaje de la publicación en el canal. |
+
+| Opción | Qué hace |
+|---|---|
+| `--limit <n>` | cuántos. |
+| `--before-id <id>` | solo comentarios anteriores al comentario con este identificador. |
 
 ### `tg messages links`
 
@@ -1097,7 +1485,7 @@ reacciones a mensajes
 
 añade tu reacción, sustituyendo la anterior
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg reactions add <chat> <message> <emoji>
@@ -1113,7 +1501,7 @@ tg reactions add <chat> <message> <emoji>
 
 retira tu reacción
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg reactions remove <chat> <message>
@@ -1145,7 +1533,7 @@ tg polls show <chat> <message>
 
 vota o retira el voto; es visible salvo en encuestas anónimas
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg polls vote <chat> <message> [answers] [options]
@@ -1165,7 +1553,7 @@ tg polls vote <chat> <message> [answers] [options]
 
 cierra tu encuesta; no se puede votar ni reabrir
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg polls close <chat> <message>
@@ -1180,7 +1568,7 @@ tg polls close <chat> <message>
 
 envía una encuesta como mensaje; pública salvo con --anonymous
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg polls create <chat> <question> <answers> [options]
@@ -1199,6 +1587,7 @@ tg polls create <chat> <question> <answers> [options]
 | `--anonymous` | oculta quién votó por cada opción. |
 | `--revote` | permite cambiar el voto. |
 | `--silent` | envía sin notificación. |
+| `--send-as <id>` | publicar como una de las identidades que enumera `chats send-as`; obligatorio cuando el chat publica como otra identidad de forma predeterminada. |
 | `--send-id <id>` | reintenta crear una encuesta de resultado desconocido sin duplicarla. |
 
 ## `tg models`
@@ -1371,7 +1760,7 @@ tg topics search <chat> <text> [options]
 
 activa temas de foro; solo el propietario, con conversión explícita para un grupo básico
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg topics enable <chat> [options]
@@ -1389,7 +1778,7 @@ tg topics enable <chat> [options]
 
 crea un tema con nombre en un foro existente; nunca activa ni convierte un grupo implícitamente
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg topics create <chat> <title> [options]
@@ -1397,12 +1786,49 @@ tg topics create <chat> <title> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `chat` | obligatorio | un chat: título o parte de él, identificador, @username o `me` para Mensajes guardados. |
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 | `title` | obligatorio | el título del tema, hasta 128 bytes UTF-8. |
 
 | Opción | Qué hace |
 |---|---|
 | `--send-id <id>` | identifica este intento de creación; rechaza un identificador ya enviado o de resultado desconocido. |
+
+### `tg topics edit`
+
+renombrar, cerrar o reabrir un tema del foro
+
+**Changes something in Telegram.**
+
+```sh
+tg topics edit <chat> <topic> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+| `topic` | obligatorio | el identificador del tema de `topics list`. |
+
+| Opción | Qué hace |
+|---|---|
+| `--title <title>` | el nuevo título, como máximo 128 bytes UTF-8. |
+| `--closed <on\|off>` | on cierra el tema a nuevos mensajes; off lo vuelve a abrir. |
+| `--pinned <on\|off>` | on fija el tema al principio de la lista; off lo desfija. |
+| `--hidden <on\|off>` | on oculta el tema General de la lista de temas; off lo muestra. |
+
+### `tg topics order`
+
+colocar los temas fijados en este orden; no fija ni desfija ninguno
+
+**Changes something in Telegram.**
+
+```sh
+tg topics order <chat> <topic>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+| `topic` | obligatorio | los identificadores de los temas fijados, del primero al último. |
 
 ## `tg watch`
 
@@ -1506,10 +1932,54 @@ tg store status [chat]
 
 ### `tg store fetch`
 
-descarga el historial, recientes primero; repite para continuar
+descargar el historial de un chat al almacenamiento local, primero los mensajes más recientes; ejecutar de nuevo para continuar; --all descarga todos los chats
 
 ```sh
-tg store fetch <chat> [options]
+tg store fetch [chat] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | opcional | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--all` | todos los chats, primero los activos más recientemente — lo que necesita la búsqueda; los últimos 90d salvo que se indique --since-time o --last. |
+| `--limit <n>` | como máximo este número de mensajes en esta ejecución, por chat con --all; 1000 si no se indica. |
+| `--page-size <n>` | mensajes por petición; 100 si se omite. |
+| `--pause <duration>` | pausa entre páginas para respetar límites. Predeterminada: `1s`. |
+| `--since-time <time>` | se detiene al llegar a mensajes anteriores al momento indicado: ISO 8601 o 2h / 1d atrás. |
+| `--last <n>` | se detiene cuando tiene guardados los n mensajes más recientes. |
+| `--catch-up` | preparar la búsqueda local después de descargar; anula searchCatchUp. |
+| `--no-catch-up` | omitir la preparación local después de esta descarga. |
+| `--catch-up-chunks <n>` | como máximo este número de fragmentos de vectores locales. |
+| `--catch-up-messages <n>` | omitir una reconstrucción del grafo con más mensajes que este número. |
+| `--catch-up-time <duration>` | tiempo disponible para la preparación local, 30s de forma predeterminada. |
+| `--background` | ejecuta como tarea que continúa al finalizar el comando; consúltala con `store jobs show`. |
+| `--estimate` | solo estima mensajes, peticiones y minutos pendientes usando el archivo local, sin peticiones. |
+
+### `tg store gaps`
+
+inspeccionar las lagunas internas de cobertura registradas y descargar explícitamente los datos que faltan
+
+#### `tg store gaps plan`
+
+plan de cobertura local; los identificadores de mensajes ausentes no implican por sí solos que falte historial
+
+```sh
+tg store gaps plan <chat>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+#### `tg store gaps repair`
+
+descargar datos de lagunas internas con límites y volver a comprobar la cobertura; nunca eliminar los mensajes no encontrados
+
+```sh
+tg store gaps repair <chat> [options]
 ```
 
 | Argumento | | Qué es |
@@ -1518,13 +1988,18 @@ tg store fetch <chat> [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--limit <n>` | máximo de mensajes por ejecución; 1000 por defecto. |
-| `--page-size <n>` | mensajes por petición; 100 por defecto. |
-| `--pause <duration>` | pausa entre páginas para respetar límites. Predeterminada: `1s`. |
-| `--since-time <time>` | detiene al llegar a mensajes anteriores a esta fecha ISO 8601 o intervalo anterior como 2h / 1d. |
-| `--last <n>` | detiene cuando ya contiene los n mensajes más recientes. |
-| `--background` | ejecuta como tarea que continúa al finalizar el comando; consúltala con `store jobs show`. |
-| `--estimate` | solo estima mensajes, peticiones y minutos pendientes usando el archivo local, sin peticiones. |
+| `--limit <n>` | total de mensajes en esta reparación, 500 de forma predeterminada. |
+| `--max-gaps <n>` | como máximo este número de lagunas, 5 de forma predeterminada. |
+| `--repair-time <duration>` | tiempo disponible para la reparación, 30s de forma predeterminada. Predeterminado: `30s`. |
+| `--page-size <n>` | mensajes por página del proveedor. |
+| `--pause <duration>` | pausa entre páginas del proveedor. Predeterminado: `1s`. |
+| `--fingerprint <hash>` | rechazar si este plan de cobertura previamente revisado ha cambiado. |
+| `--catch-up` | preparar la búsqueda local después de reparar; anula searchCatchUp. |
+| `--no-catch-up` | omitir la preparación de la búsqueda local después de reparar. |
+| `--catch-up-chunks <n>` | máximo de fragmentos locales que se preparan. |
+| `--catch-up-messages <n>` | máximo de mensajes almacenados que se leen para la preparación. |
+| `--catch-up-time <duration>` | tiempo de preparación dentro del tiempo restante de la reparación. |
+| `--background` | reparar mediante el mecanismo existente de trabajos del almacenamiento; consultar store jobs show. |
 
 ### `tg store jobs`
 
@@ -1972,9 +2447,13 @@ tg attachments extract [options]
 | Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | solo los archivos de este chat; chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+| `--from-dir <dir>` | asociar archivos de este directorio sin recorrer subdirectorios; requiere --chat. |
+| `--cursor <cursor>` | continuar desde el cursor devuelto por una extracción con límites. |
 | `--download` | primero guarda en --output-dir, desde el servicio, los archivos que todavía no se han descargado. |
 | `--output-dir <dir>` | con --download, dónde guardarlos; se crea si no existe. |
 | `--limit <n>` | lee como máximo este número de archivos; vuelve a ejecutarlo para continuar. |
+| `--ocr` | llamar explícitamente a models.ocr para extraer texto en lotes de imágenes y PDF escaneados. |
+| `--concurrency <n>` | remoto: peticiones simultáneas (predeterminado: 4). |
 
 ### `tg attachments list`
 
@@ -2018,9 +2497,28 @@ tg attachments text set <chat> [message] [options]
 
 tus propias etiquetas en chats, personas y mensajes, guardadas en el archivo local y nunca enviadas; tag: en una búsqueda las encuentra
 
+### `tg tags auto`
+
+generar etiquetas locales de grupos y canales a partir de metadatos en caché mediante reglas de palabras clave
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg tags auto [options]
+```
+
+| Opción | Qué hace |
+|---|---|
+| `--chat <chat>` | un grupo o canal almacenado; repetir para seleccionar varios. Predeterminado: ``. |
+| `--limit <number>` | procesar como máximo el número indicado de chats, de 1 a 500. Predeterminado: `50`. |
+| `--refresh-metadata` | leer las descripciones actuales del servicio de mensajería antes de clasificar. |
+| `--dry-run` | previsualizar la clasificación a partir de la caché sin modificar el almacenamiento. |
+
 ### `tg tags add`
 
 pone etiquetas a un chat, una persona o un mensaje
+
+**Solo hace cambios en este equipo.**
 
 ```sh
 tg tags add <tag> [options]
@@ -2040,6 +2538,8 @@ tg tags add <tag> [options]
 
 quita etiquetas de un chat, una persona o un mensaje
 
+**Solo hace cambios en este equipo.**
+
 ```sh
 tg tags remove <tag> [options]
 ```
@@ -2053,6 +2553,7 @@ tg tags remove <tag> [options]
 | `--chat <chat>` | el chat del que quitar etiquetas, o el chat de --message; chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 | `--contact <person>` | la persona de la que quitar etiquetas: identificador, @username o nombre, tal como la conoce el archivo local. |
 | `--message <message>` | el mensaje del que quitar etiquetas: su identificador en --chat, o un localizador msg: solo. |
+| `--source <manual\|auto>` | eliminar solo la atribución a este origen. |
 
 ### `tg tags list`
 
@@ -2065,11 +2566,302 @@ tg tags list [options]
 | Opción | Qué hace |
 |---|---|
 | `--tag <tag>` | solo esta etiqueta. |
+| `--source <manual\|auto>` | solo etiquetas atribuidas a este origen. |
 | `--type <names>` | solo lo etiquetado de este tipo: chat, contact o message. |
+
+## `tg metadata`
+
+descripciones de grupos y canales en caché para las etiquetas automáticas locales
+
+### `tg metadata get`
+
+
+
+```sh
+tg metadata get [options]
+```
+
+| Opción | Qué hace |
+|---|---|
+| `--chat <chat>` | un chat almacenado. |
+
+### `tg metadata refresh`
+
+
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg metadata refresh [options]
+```
+
+| Opción | Qué hace |
+|---|---|
+| `--chat <chat>` | un grupo o canal almacenado; repetir para varios. Predeterminado: ``. |
+| `--limit <number>` | procesar como máximo el número indicado de chats, de 1 a 500. Predeterminado: `50`. |
+
+## `tg stats`
+
+estadísticas sobre mensajes, chats y sus autores
+
+### `tg stats messages`
+
+estadísticas de mensajes del almacenamiento local
+
+#### `tg stats messages show`
+
+cuántos mensajes guardados coinciden, por chat, remitente, día u hora; solo el archivo local; opcionalmente descarga mensajes nuevos con --sync-first
+
+```sh
+tg stats messages show [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | opcional | consulta estricta de Lucene, como en messages search; sin consulta cuenta todos los mensajes guardados; con --saved, palabras adicionales unidas con AND. |
+
+| Opción | Qué hace |
+|---|---|
+| `--sync-first` | primero descarga los mensajes nuevos dentro de los límites de chats, tiempo y mensajes. |
+| `--max-chats <n>` | actualiza como máximo este número de chats (predeterminado: 5). |
+| `--sync-time <duration>` | deja de descargar tras este tiempo (predeterminado: 30s). |
+| `--max-messages <n>` | descarga como máximo este número de mensajes en total (predeterminado: 500). |
+| `--by <chat\|sender\|day\|hour>` | por qué contar (predeterminado: chat). |
+| `--chat <chat>` | solo este chat, igual que chat: en la consulta; título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+| `--source <messenger>` | todas las cuentas de este servicio guardadas, personal, bots o all; igual que in: en la consulta. |
+| `--limit <n>` | cuántas filas. |
+| `--timezone <zone>` | zona horaria IANA para los días y horas del calendario. |
+| `--exact` | las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas. |
+| `--saved <name\|id>` | cuenta lo que coincide con una búsqueda guardada o una ejecución anterior; las opciones escritas aquí sustituyen a las suyas. |
+
+#### `tg stats messages top`
+
+clasificar los mensajes almacenados por una medida o una puntuación explicable; los contadores son instantáneas y se desconoce su vigencia
+
+```sh
+tg stats messages top [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | opcional | una consulta Lucene estricta; si se omite, selecciona todos los mensajes almacenados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--sync-first` | primero descarga los mensajes nuevos dentro de los límites de chats, tiempo y mensajes. |
+| `--max-chats <n>` | actualiza como máximo este número de chats (predeterminado: 5). |
+| `--sync-time <duration>` | deja de descargar tras este tiempo (predeterminado: 30s). |
+| `--max-messages <n>` | descarga como máximo este número de mensajes en total (predeterminado: 500). |
+| `--measure <name>` | métrica de clasificación; no se combina con score ni weights. Uno de: `views`, `reactions`, `forwards`, `comments`, `replies`, `thread-size`. |
+| `--score <preset>` | helpful/active para autores; engaging para cualquiera de los dos tipos de objetivo. Uno de: `helpful`, `active`, `engaging`. |
+| `--weights <json>` | el conjunto completo de pesos de los componentes; sustituye los pesos predefinidos. |
+| `--message-kind <kind>` | seleccionar antes de clasificar todos los mensajes o aquellos cuya condición de publicación o comentario esté confirmada. Uno de: `all`, `posts`, `comments`. |
+| `--chat <chat>` | solo este chat: su título o parte de él, su identificador, @username o `me` para Mensajes guardados. |
+| `--source <messenger>` | todas las cuentas disponibles de este servicio de mensajería; personal, bots o all. |
+| `--timezone <zone>` | zona horaria IANA para fechas y días activos. |
+| `--exact` | las palabras sin campo coinciden en su forma exacta en lugar de por su raíz. |
+| `--limit <n>` | filas clasificadas, 1–100. |
+| `--saved <name\|id>` | ejecutar una consulta guardada o una ejecución de clasificación; las opciones introducidas sustituyen las almacenadas. |
+
+#### `tg stats messages evidence`
+
+una página con límites de mensajes o pares de respuestas que contribuyen a un componente de clasificación
+
+```sh
+tg stats messages evidence <message> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `message` | obligatorio | el localizador canónico del mensaje de la fila de clasificación. |
+
+| Opción | Qué hace |
+|---|---|
+| `--selection <json>` | la selección de clasificación resuelta que devuelve drilldown. |
+| `--component <name>` | el componente de clasificación expuesto. |
+| `--limit <n>` | filas de evidencia, 1–100; 20 si no se indica. |
+| `--cursor <cursor>` | continuar con el mismo componente y la misma huella de las evidencias almacenadas. |
+
+### `tg stats contacts`
+
+estadísticas sobre los autores humanos
+
+#### `tg stats contacts top`
+
+clasificar a los autores humanos de los mensajes almacenados por una medida o una puntuación explicable; los contadores son instantáneas y se desconoce su vigencia
+
+```sh
+tg stats contacts top [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | opcional | una consulta Lucene estricta; si se omite, selecciona todos los mensajes almacenados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--sync-first` | primero descarga los mensajes nuevos dentro de los límites de chats, tiempo y mensajes. |
+| `--max-chats <n>` | actualiza como máximo este número de chats (predeterminado: 5). |
+| `--sync-time <duration>` | deja de descargar tras este tiempo (predeterminado: 30s). |
+| `--max-messages <n>` | descarga como máximo este número de mensajes en total (predeterminado: 500). |
+| `--measure <name>` | métrica de clasificación; no se combina con score ni weights. Uno de: `messages`, `words`, `reactions`, `replies`, `answers`, `answer-time`, `threads`, `active-days`. |
+| `--score <preset>` | helpful/active para autores; engaging para cualquiera de los dos tipos de objetivo. Uno de: `helpful`, `active`, `engaging`. |
+| `--weights <json>` | el conjunto completo de pesos de los componentes; sustituye los pesos predefinidos. |
+| `--message-kind <kind>` | seleccionar antes de clasificar todos los mensajes o aquellos cuya condición de publicación o comentario esté confirmada. Uno de: `all`, `posts`, `comments`. |
+| `--chat <chat>` | solo este chat: su título o parte de él, su identificador, @username o `me` para Mensajes guardados. |
+| `--source <messenger>` | todas las cuentas disponibles de este servicio de mensajería; personal, bots o all. |
+| `--timezone <zone>` | zona horaria IANA para fechas y días activos. |
+| `--exact` | las palabras sin campo coinciden en su forma exacta en lugar de por su raíz. |
+| `--limit <n>` | filas clasificadas, 1–100. |
+| `--saved <name\|id>` | ejecutar una consulta guardada o una ejecución de clasificación; las opciones introducidas sustituyen las almacenadas. |
+| `--min-messages <n>` | mínimo de mensajes seleccionados por autor; 1 o 5 para engaging. |
+
+#### `tg stats contacts evidence`
+
+una página con límites de mensajes o pares de respuestas que contribuyen a un componente de clasificación
+
+```sh
+tg stats contacts evidence <person> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `person` | obligatorio | el identificador nativo exacto de la persona de la fila de clasificación. |
+
+| Opción | Qué hace |
+|---|---|
+| `--selection <json>` | la selección de clasificación resuelta que devuelve drilldown. |
+| `--component <name>` | el componente de clasificación expuesto. |
+| `--limit <n>` | filas de evidencia, 1–100; 20 si no se indica. |
+| `--cursor <cursor>` | continuar con el mismo componente y la misma huella de las evidencias almacenadas. |
+
+### `tg stats chats`
+
+estadísticas sobre un chat
+
+#### `tg stats chats show`
+
+las cifras de un grupo o canal en un periodo: mensajes, miembros activos, respuestas, reacciones, preguntas contestadas, entradas y salidas; se cuentan a partir del archivo local, y las entradas y salidas se piden al servicio
+
+```sh
+tg stats chats show <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--since-time <time>` | fecha ISO 8601 o intervalo anterior como 2h / 1d; hace 7 días por defecto. |
+| `--by <day\|week>` | también una fila por día o semana natural (las semanas empiezan el lunes). |
+| `--timezone <zone>` | zona horaria IANA para los días del calendario. |
+
+#### `tg stats chats official`
+
+lo que Telegram calcula para un grupo o canal que administras: totales comparados con el periodo anterior, participantes destacados y cada gráfico como series JSON; el servicio de mensajería elige el periodo
+
+```sh
+tg stats chats official <chat>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+### `tg stats tasks`
+
+estadísticas de las tareas
+
+#### `tg stats tasks show`
+
+por chat: cuántas tareas están abiertas, la más antigua y la mediana del tiempo hasta el cierre
+
+```sh
+tg stats tasks show [options]
+```
+
+| Opción | Qué hace |
+|---|---|
+| `--chat <chat>` | solo este chat: su título o parte de él, su identificador, @username o `me` para Mensajes guardados. |
+| `--type <name>` | solo este tipo: question, request, mention o promise. |
+
+### `tg stats charts`
+
+los datos de un gráfico de las estadísticas de un chat y, opcionalmente, una imagen SVG o PNG de tema oscuro
+
+```sh
+tg stats charts <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--chart-kind <messages\|active\|membership>` | qué dibujar: mensajes, autores activos o entradas y salidas. Predeterminado: `messages`. |
+| `--by <day\|week>` | un punto por día o semana del calendario (las semanas empiezan el lunes). Predeterminado: `day`. |
+| `--since-time <time>` | fecha ISO 8601 o intervalo anterior como 2h / 1d; hace 7 días por defecto. |
+| `--timezone <zone>` | zona horaria IANA para los días del calendario. |
+| `--output <file>` | guardar una imagen de tema oscuro en un nuevo archivo .svg o .png. |
+
+## `tg tasks`
+
+lo que requiere tu atención —preguntas sin respuesta, menciones, peticiones y promesas— guardado en el almacenamiento local; review y serve lo añaden
+
+### `tg tasks list`
+
+tareas, primero las más antiguas, con el mensaje al que apunta cada una
+
+```sh
+tg tasks list [options]
+```
+
+| Opción | Qué hace |
+|---|---|
+| `--state <state>` | solo tareas en este estado: open, done o dismissed. |
+| `--chat <chat>` | solo las tareas de este chat: su título o parte de él, su identificador, @username o `me` para Mensajes guardados. |
+| `--type <names>` | solo estos tipos, separados por comas: question, request, mention, promise. |
+| `--before-time <time>` | solo tareas abiertas antes de esta fecha ISO 8601 o de hace 2h / 1d. |
+| `--limit <n>` | cuántos. |
+
+### `tg tasks add`
+
+añadir una tarea para un mensaje que las reglas no detectan — una promesa o una petición
+
+```sh
+tg tasks add <message> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `message` | obligatorio | un localizador de mensaje, msg:<provider>/<account>/<chat>/<message>, tal como lo muestra review --json. |
+
+| Opción | Qué hace |
+|---|---|
+| `--type <name>` | tipo de tarea: question, request, mention o promise. |
+
+### `tg tasks close`
+
+cerrar una tarea: done o dismissed si no necesita respuesta; una tarea cerrada permanece cerrada
+
+```sh
+tg tasks close <task> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `task` | obligatorio | el identificador de la tarea tal como lo muestra tasks list. |
+
+| Opción | Qué hace |
+|---|---|
+| `--as <state>` | cómo se cierra: done o dismissed — no necesita respuesta. |
+| `--reason <text>` | el motivo, guardado con la tarea — no-reply-needed, por ejemplo. |
 
 ## `tg searches`
 
-búsquedas guardadas e historial de messages search y messages stats, guardados en el archivo local; --saved ejecuta una
+búsquedas guardadas e historial de messages search y stats messages show en el almacenamiento local; --saved ejecuta una
 
 ### `tg searches create`
 
@@ -2090,11 +2882,13 @@ tg searches create <name> [query] [options]
 | `--source <messenger>` | todas las cuentas de este servicio guardadas, personal, bots o all; igual que in: en la consulta. |
 | `--limit <n>` | cuántos. |
 | `--newest` | recientes primero en lugar de mejores coincidencias. |
+| `--exact` | las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas. |
 | `--context <n>` | mensajes anteriores y posteriores a cada resultado. |
 | `--language <lucene\|legacy>` | lenguaje de consulta: Lucene estricto o búsqueda aproximada heredada. |
 | `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
 | `--regex` | interpreta el texto como expresión regular sin distinguir mayúsculas; comprueba todos los textos guardados. |
-| `--by <chat\|sender\|day\|hour>` | por qué cuenta messages stats --saved. |
+| `--by <chat\|sender\|day\|hour>` | por qué criterio agrupa el recuento stats messages show --saved. |
+| `--selection <json>` | guardar la consulta de clasificación principal resuelta y sus opciones a partir de una vista detallada. |
 | `--replace` | sobrescribe una búsqueda guardada con el mismo nombre. |
 
 ### `tg searches show`
@@ -2155,7 +2949,7 @@ las esperas que Telegram pidió respetar a este perfil y un bloqueo de sus escri
 
 ### `tg flood clear`
 
-las olvida y levanta el bloqueo cuando Telegram ya no limita la cuenta; no cambia nada en Telegram
+olvidarlos, levantar el bloqueo y la regulación del ritmo del perfil una vez que Telegram ya no limite la cuenta; no cambia nada allí
 
 ```sh
 tg flood clear
@@ -2164,6 +2958,166 @@ tg flood clear
 ## `tg replies`
 
 reglas que responden mensajes por ti, guardadas en un archivo de este perfil
+
+### `tg replies add`
+
+añadir una regla con todos los valores predeterminados explícitos, desactivada hasta que la edites y actives
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg replies add <id>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `id` | obligatorio | letras minúsculas, dígitos y -; único en este perfil. |
+
+### `tg replies on`
+
+activar una regla de respuesta; su plantilla debe estar lista
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg replies on <id>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `id` | obligatorio | el identificador de la regla. |
+
+### `tg replies off`
+
+desactivar una regla de respuesta
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg replies off <id>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `id` | obligatorio | el identificador de la regla. |
+
+### `tg replies edit`
+
+cambiar solo los campos indicados de una regla de respuesta; las listas se sustituyen completas
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg replies edit <id> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `id` | obligatorio | el identificador de la regla. |
+
+| Opción | Qué hace |
+|---|---|
+| `--do <actions>` | acciones: reply, task o ambas, separadas por comas. |
+| `--kinds <kinds>` | tipos de chat: dialog, group; separados por comas, vacío para cualquiera. |
+| `--chats <ids>` | solo estos identificadores de chat, separados por comas; vacío para cualquiera. |
+| `--not-chats <ids>` | excluir estos identificadores de chat, separados por comas; vacío borra la lista. |
+| `--words <words>` | coincidir con cualquiera de estas palabras completas, separadas por comas; vacío borra la lista. |
+| `--question` | coincidir solo con preguntas. |
+| `--no-question` | no exigir una pregunta. |
+| `--mentions-me` | exigir que te mencionen o que respondan a tu mensaje. |
+| `--no-mentions-me` | no exigir que te mencionen ni que respondan a tu mensaje. |
+| `--people <ids>` | solo estos identificadores de remitentes, separados por comas; vacío para cualquiera. |
+| `--not-people <ids>` | excluir estos identificadores de remitentes, separados por comas; vacío borra la lista. |
+| `--contacts-only` | coincidir solo con contactos. |
+| `--no-contacts-only` | no exigir que el remitente sea un contacto. |
+| `--template <text>` | la plantilla de respuesta. |
+| `--model <mode>` | modo de plantilla antiguo: fill-only o may-reword; usa bloques ai en su lugar. |
+| `--as-reply` | enviar como respuesta al mensaje coincidente. |
+| `--no-as-reply` | enviar sin vincular al mensaje coincidente. |
+| `--per-chat <limit>` | como máximo esta cantidad por chat, como 1/12h. |
+| `--per-person <limit>` | como máximo esta cantidad por persona, como 1/1d. |
+| `--outside <hours>` | responder fuera de este intervalo en formato de 24 horas, como 09:00-19:00. |
+| `--days <days>` | días del intervalo de trabajo, como mon-fri o sat,sun. |
+| `--timezone <zone>` | zona horaria IANA del intervalo de trabajo. |
+| `--no-hours` | borrar el intervalo de trabajo. |
+
+### `tg replies audience`
+
+mostrar la audiencia de respuestas del perfil o sustituir los campos indicados; los probadores siguen limitando las respuestas
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg replies audience [options]
+```
+
+| Opción | Qué hace |
+|---|---|
+| `--reply <mode>` | responder a todos o solo a los remitentes y chats de la lista: all, listed. |
+| `--allow-people <ids>` | sustituir los identificadores de remitentes permitidos, separados por comas; vacío borra la lista. |
+| `--allow-chats <ids>` | sustituir los identificadores de chats permitidos, separados por comas; vacío borra la lista. |
+| `--deny-people <ids>` | sustituir los identificadores de remitentes prohibidos, separados por comas; vacío borra la lista; la prohibición tiene prioridad. |
+| `--deny-chats <ids>` | sustituir los identificadores de chats prohibidos, separados por comas; vacío borra la lista; la prohibición tiene prioridad. |
+
+### `tg replies consents`
+
+consentimiento para los modelos de respuesta una vez por perfil y endpoint, con exclusiones por chat
+
+#### `tg replies consents show`
+
+mostrar el consentimiento para el modelo de respuesta y las exclusiones de chats; nunca llama a un modelo
+
+```sh
+tg replies consents show
+```
+
+#### `tg replies consents grant`
+
+permitir que los datos de mensajes entrantes se envíen al modelo de respuesta configurado para este perfil; se conservan las exclusiones de chats
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg replies consents grant
+```
+
+#### `tg replies consents revoke`
+
+revocar de inmediato el consentimiento del perfil para el modelo de respuesta; se conservan las exclusiones de chats
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg replies consents revoke
+```
+
+#### `tg replies consents deny`
+
+evitar que los datos entrantes de este chat se envíen al modelo de respuesta
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg replies consents deny <chat>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | el identificador nativo del chat, usado tal como se escribe; nunca se resuelve mediante la red. |
+
+#### `tg replies consents allow`
+
+eliminar la exclusión de este chat del modelo; no concede consentimiento al perfil
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg replies consents allow <chat>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | el identificador nativo del chat, usado tal como se escribe; nunca se resuelve mediante la red. |
 
 ### `tg replies test`
 
@@ -2180,6 +3134,7 @@ tg replies test [rule] [options]
 | Opción | Qué hace |
 |---|---|
 | `--since-time <time>` | desde esta fecha ISO 8601 o intervalo anterior como 2h / 1d; hace 7d por defecto. |
+| `--ai` | llamar al modelo de respuesta configurado con datos de mensajes almacenados; requiere consentimiento para el modelo de respuesta, de lo contrario usa la alternativa. |
 
 ### `tg replies pause`
 
@@ -2353,7 +3308,7 @@ tg config set <setting> <value> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | obligatorio | uno de: limit, timeoutMs, color, senderColors, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, transcribeWith, speechModel, catchUpMarksRead, embeddingProvider, embeddingModel, embeddingBaseUrl, embeddingDims, analysisProvider, analysisModel, analysisBaseUrl, proxy, readOtherBots, updateCheck, skillHint, searchStemmers.cyrillic, searchStemmers.latin. |
+| `setting` | obligatorio | uno de: limit, timeoutMs, color, senderColors, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, requestsPerMinute, transcribeWith, speechModel, catchUpMarksRead, searchCatchUp, embeddingProvider, embeddingModel, embeddingBaseUrl, embeddingDims, analysisProvider, analysisModel, analysisBaseUrl, models, proxy, readOtherBots, updateCheck, skillHint, searchStemmers.cyrillic, searchStemmers.latin. |
 | `value` | obligatorio | número, true o false; para allow, lista como send,reaction. |
 
 | Opción | Qué hace |
@@ -2374,7 +3329,7 @@ tg config unset <setting> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | obligatorio | uno de: limit, timeoutMs, color, senderColors, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, transcribeWith, speechModel, catchUpMarksRead, embeddingProvider, embeddingModel, embeddingBaseUrl, embeddingDims, analysisProvider, analysisModel, analysisBaseUrl, proxy, readOtherBots, updateCheck, skillHint, searchStemmers.cyrillic, searchStemmers.latin. |
+| `setting` | obligatorio | uno de: limit, timeoutMs, color, senderColors, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, requestsPerMinute, transcribeWith, speechModel, catchUpMarksRead, searchCatchUp, embeddingProvider, embeddingModel, embeddingBaseUrl, embeddingDims, analysisProvider, analysisModel, analysisBaseUrl, models, proxy, readOtherBots, updateCheck, skillHint, searchStemmers.cyrillic, searchStemmers.latin. |
 
 | Opción | Qué hace |
 |---|---|
@@ -2415,13 +3370,17 @@ tg doctor report create [options]
 
 comandos, opciones y códigos de salida en JSON; consulta una ruta de comando por llamada
 
+### `tg commands schema`
+
+argv y esquemas de resultados de un comando, efectos, permisos y orientación sobre reintentos
+
 ```sh
-tg commands [path]
+tg commands schema <path>
 ```
 
 | Argumento | | Qué es |
 |---|---|---|
-| `path` | opcional | una ruta de comando, por ejemplo: messages search; consulta los demás grupos en llamadas separadas. |
+| `path` | obligatorio | una ruta de comando, por ejemplo: stats messages show. |
 
 ## `tg complete`
 
@@ -2457,12 +3416,14 @@ tg mcp [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--confirm-send` | muestra al propietario un formulario antes de cada escritura. |
-| `--allow-dangerous` | sin formulario antes de eliminar si el nivel es ask. |
+| `--permission <key=level>` | sobrescribir un permiso solo para este servidor; repetir para más claves. |
+| `--confirm-send` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
+| `--allow-dangerous` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
 | `--allow-send` | obsoleta: deciden los permisos del perfil; se conserva para compatibilidad. |
 | `--allow-mark-read` | obsoleta: deciden los permisos del perfil. |
 | `--allow-delete` | obsoleta: deciden los permisos del perfil. |
-| `--http` | sirve por HTTP en 127.0.0.1 para ChatGPT y Claude en el navegador, detrás de tu túnel; cada escritura pregunta antes. |
+| `--http` | servir mediante HTTP en 127.0.0.1 para ChatGPT y Claude en el navegador, detrás de tu túnel. |
+| `--http-confirmation <mode>` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
 | `--port <port>` | puerto local para --http (predeterminado 8765). |
 | `--public-url <url>` | dirección https del túnel que usan las aplicaciones del navegador, p. ej. https://<name>.ts.net. |
 | `--revoke` | olvida todos los inicios de sesión concedidos a aplicaciones del navegador; cada una debe volver a iniciar sesión. |
@@ -2477,8 +3438,9 @@ tg mcp config [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--confirm-send` | muestra al propietario un formulario antes de cada escritura. |
-| `--allow-dangerous` | sin formulario antes de eliminar si el nivel es ask. |
+| `--permission <key=level>` | sobrescribir un permiso solo para este servidor; repetir para más claves. |
+| `--confirm-send` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
+| `--allow-dangerous` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
 | `--allow-send` | obsoleta: deciden los permisos del perfil; se conserva para compatibilidad. |
 | `--allow-mark-read` | obsoleta: deciden los permisos del perfil. |
 | `--allow-delete` | obsoleta: deciden los permisos del perfil. |
@@ -2500,11 +3462,12 @@ tg mcp setup <client> [options]
 | Opción | Qué hace |
 |---|---|
 | `--allow-writes` | confirma que este perfil ofrece herramientas de escritura. |
-| `--confirm-send` | muestra al propietario un formulario del servidor antes de cada escritura. |
-| `--allow-dangerous` | omite el formulario antes de eliminar con nivel de permiso ask. |
-| `--allow-send` | ya no se usa: los permisos del perfil deciden; se conserva para que las configuraciones anteriores arranquen. |
-| `--allow-mark-read` | ya no se usa: los permisos del perfil deciden. |
-| `--allow-delete` | ya no se usa: los permisos del perfil deciden. |
+| `--permission <key=level>` | sobrescribir un permiso solo para este servidor; repetir para más claves. |
+| `--confirm-send` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
+| `--allow-dangerous` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
+| `--allow-send` | obsoleta: deciden los permisos del perfil; se conserva para compatibilidad. |
+| `--allow-mark-read` | obsoleta: deciden los permisos del perfil. |
+| `--allow-delete` | obsoleta: deciden los permisos del perfil. |
 
 ### `tg mcp doctor`
 
@@ -2516,8 +3479,9 @@ tg mcp doctor [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--confirm-send` | muestra al propietario un formulario antes de cada escritura. |
-| `--allow-dangerous` | sin formulario antes de eliminar si el nivel es ask. |
+| `--permission <key=level>` | sobrescribir un permiso solo para este servidor; repetir para más claves. |
+| `--confirm-send` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
+| `--allow-dangerous` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
 | `--allow-send` | obsoleta: deciden los permisos del perfil; se conserva para compatibilidad. |
 | `--allow-mark-read` | obsoleta: deciden los permisos del perfil. |
 | `--allow-delete` | obsoleta: deciden los permisos del perfil. |
@@ -2598,7 +3562,7 @@ tg bot chats show <chat>
 
 saca el bot del chat; solo un administrador puede volver a añadirlo
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg bot chats leave <chat>
@@ -2612,7 +3576,7 @@ tg bot chats leave <chat>
 
 muestra durante segundos la acción del bot, como escribir o enviar foto
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg bot chats action <chat> <action>
@@ -2643,7 +3607,7 @@ tg bot chats admins list <chat>
 
 convierte a un miembro en administrador con estos permisos
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg bot chats admins add <chat> <person> [options]
@@ -2663,7 +3627,7 @@ tg bot chats admins add <chat> <person> [options]
 
 retira permisos de administrador; sigue siendo miembro
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg bot chats admins remove <chat> <person>
@@ -2682,7 +3646,7 @@ personas de un chat donde el bot es administrador
 
 elimina una persona del chat, conservando sus mensajes
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg bot chats members remove <chat> <person> [options]
@@ -2748,7 +3712,7 @@ tg bot chats rules unset <chat> <key>
 
 revisa como bot mensajes y entradas nuevos según las reglas y ejecuta lo permitido
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg bot chats moderate <chat> [options]
@@ -2774,7 +3738,7 @@ mensajes de los chats del bot
 
 envía como bot; sin [text], lee por stdin
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg bot messages send <chat> [text] [options]
@@ -2830,7 +3794,7 @@ tg bot messages show <chat> <message>
 
 sustituye el texto de un mensaje del bot
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg bot messages edit <chat> <message> <text> [options]
@@ -2851,7 +3815,7 @@ tg bot messages edit <chat> <message> <text> [options]
 
 elimina mensajes donde el bot tiene permiso; irreversible
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg bot messages delete <chat> <messages> [options]
@@ -2870,7 +3834,7 @@ tg bot messages delete <chat> <messages> [options]
 
 fija sin aviso salvo con --notify
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg bot messages pin <chat> <message> [options]
@@ -2889,7 +3853,7 @@ tg bot messages pin <chat> <message> [options]
 
 deja de fijar un mensaje
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg bot messages unpin <chat> <message>
@@ -2994,6 +3958,8 @@ envíos, ediciones y eliminaciones del bot desde este equipo; identificadores y 
 
 #### `tg bot sends list`
 
+
+
 ```sh
 tg bot sends list
 ```
@@ -3019,7 +3985,7 @@ respuestas a botones bajo los mensajes del bot
 
 responde por identificador callback; --notification muestra un aviso solo a la persona, --text cambia el mensaje del botón
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg bot callbacks answer <callback> [options]
@@ -3050,7 +4016,7 @@ tg bot commands list
 
 sustituye todo el menú; cada comando como name=description, por ejemplo start=Begin
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg bot commands set <commands>
@@ -3064,7 +4030,7 @@ tg bot commands set <commands>
 
 vacía el menú
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg bot commands clear
@@ -3086,7 +4052,7 @@ tg bot webhooks list
 
 envía actualizaciones a HTTPS; rechaza si ya hay otro configurado
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg bot webhooks set <url> [options]
@@ -3105,7 +4071,7 @@ tg bot webhooks set <url> [options]
 
 deja de enviar a esa dirección; sin webhooks, `bot watch` funciona de nuevo
 
-**Hace cambios en Telegram.**
+**Changes something in Telegram.**
 
 ```sh
 tg bot webhooks delete <url>
@@ -3181,8 +4147,8 @@ tg bot mcp [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--confirm-send` | muestra al propietario un formulario antes de cada escritura. |
-| `--allow-dangerous` | sin formulario antes de eliminar si el nivel es ask. |
+| `--confirm-send` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
+| `--allow-dangerous` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
 | `--allow-send` | obsoleta: deciden los permisos del perfil; se conserva para compatibilidad. |
 | `--allow-delete` | obsoleta: deciden los permisos del perfil. |
 | `--allow-moderate` | obsoleta: deciden los permisos del perfil. |
@@ -3197,8 +4163,8 @@ tg bot mcp config [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--confirm-send` | muestra al propietario un formulario antes de cada escritura. |
-| `--allow-dangerous` | sin formulario antes de eliminar si el nivel es ask. |
+| `--confirm-send` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
+| `--allow-dangerous` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
 | `--allow-send` | obsoleta: deciden los permisos del perfil; se conserva para compatibilidad. |
 | `--allow-delete` | obsoleta: deciden los permisos del perfil. |
 | `--allow-moderate` | obsoleta: deciden los permisos del perfil. |
@@ -6843,7 +7809,7 @@ tg skill install [options]
 
 ## Códigos de salida
 
-Decide según el código, no según el texto: el texto puede cambiar, el código no.
+Elige la rama según el código, no según el texto: el texto puede cambiar, el código no.
 
 | Código | Cuándo |
 |---|---|
@@ -6864,5 +7830,5 @@ Decide según el código, no según el texto: el texto puede cambiar, el código
 | `130` | `cancelled` |
 | `1` | cualquier otro caso |
 
-Solo `0` significa que se completó la operación. `14` (`outcome_unknown`) significa que un mensaje **puede**
-haber llegado; repite solo con el mismo `--send-id` para que Telegram descarte una segunda copia.
+`0` y solo `0` significa que la operación se completó. `14` (`outcome_unknown`) significa que un mensaje **puede**
+haberse enviado: repítelo solo con el mismo `--send-id`, que Telegram usa para descartar una segunda copia.

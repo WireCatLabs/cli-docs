@@ -7,7 +7,7 @@ WireCat has two ways to search one local archive. **Message search** finds the m
 
 This is the technical page. For everyday use, read the [Telegram search guide](./tg/search.md) or the [MAX search guide](./max/search.md) and their archive guides. The shared search engine is released in tg 0.28 (cli-messaging 0.149.0) and max 0.29 ([cli-messaging 0.152.0](https://github.com/leemour/cli-messaging/tree/v0.152.0)), including tags, saved searches, file-content search and stem settings.
 
-Archive preparation and the coverage additions below are available in tg 0.35.0 (cli-messaging 0.177.0) and max 0.34.0 (cli-messaging 0.176.0). The linked tool guides remain reviewed at tg 0.28.0 and max 0.29.0.
+Archive preparation and the coverage additions below are available in tg 0.35.0 (cli-messaging 0.177.0) and max 0.34.0 (cli-messaging 0.176.0). The linked tool guides are reviewed at tg 0.35.0 and max 0.34.0.
 
 <ArchitectureDiagram name="searchPaths" lang="en" />
 
@@ -16,7 +16,7 @@ Archive preparation and the coverage additions below are available in tg 0.35.0 
 | Question | Entry point | What it returns | Preparation |
 | --- | --- | --- | --- |
 | “Where did Alice say invoice, in October, with a PDF?” | `messages search` | Matching messages, locators and optional nearby context | Stored history; a ready word index for queries with words |
-| “How many messages per day mention the budget?” | `messages stats` | Counts by chat, sender, day or hour | The same as message search |
+| “How many messages per day mention the budget?” | `stats messages show` | Counts by chat, sender, day or hour | The same as message search |
 | “Where did we discuss renting a flat?” | `conversations search` | Ranked conversations, the matching piece and how it matched | A conversation build; embeddings for matches by meaning |
 | “What else was about the same thing?” | `conversations related` | Conversations nearest to the one a message is in | Embeddings; no model runs |
 | “Which discussion does this message belong to?” | `conversations show` / `messages links` | The conversation and the chosen chain of parents | A conversation build |
@@ -63,7 +63,7 @@ If the word index is not ready, a query with words fails with `index_not_ready`,
 
 The JSON answer includes the language, field and preset versions, the time zone, the order, `wordsReady`, and account and chat coverage, even with no hits. `lastSyncedAt` is the oldest time a chat in scope was last fetched by `store fetch`, or `null` if one never was. `inventoryComplete` says every account in scope has at some point listed all its chats; it is knowledge about the past, not a promise about now. `coverage` also reports the stored messages and chats in scope (`messages`, `coveredChats`), counts never-fetched and behind chats in `chats`, lists up to ten `attention` chats, and names `next`, the one command that would improve the answer. When no message is found and `next` is set, an agent runs it or asks the owner before concluding that the message does not exist.
 
-`messages stats` runs the same query and counts each matching message once, grouped by chat, sender, calendar day or hour. A successful search or count writes its query and options, never its results, to a local history of the newest 1,000 runs; saved searches are named entries that are parsed again on every run.
+`stats messages show` runs the same query and counts each matching message once, grouped by chat, sender, calendar day or hour. A successful search or count writes its query and options, never its results, to a local history of the newest 1,000 runs; saved searches are named entries that are parsed again on every run.
 
 Legacy discovery (`--language legacy`) and the legacy JavaScript `--regex` mode remain explicit and separate from strict semantics.
 

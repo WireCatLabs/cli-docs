@@ -60,16 +60,18 @@ MAX_TOKEN="$(cat /path/to/token)" max chats list --json
 
 ```sh
 max account show      # кто вы: id, имя, телефон
-max session end       # забыть токен на этой машине
+max session end       # выйти из MAX и забыть токен на этой машине
 ```
 
-`session end` elimina el token **localmente** y no avisa al servidor. La sesión abierta en el navegador sigue funcionando; la respuesta lo indica:
+`session end` primero termina la sesión en el servidor de MAX y después borra el token de este ordenador. La respuesta indica el resultado:
 
 ```json
-{ "profile": "default", "forgotten": true, "revokedOnServer": false }
+{ "profile": "default", "forgotten": true, "revokedOnServer": true }
 ```
 
-Es una diferencia importante: olvidar un token que el servidor sigue aceptando no equivale a revocarlo.
+**Si iniciaste sesión con un token de una pestaña de web.max.ru, comparten la misma sesión:** `session end` también cierra la sesión de MAX de esa pestaña.
+
+Si MAX no responde, se conserva el token para que puedas repetir el comando. Un token que MAX ya no acepta se borra de inmediato: ya no queda una sesión que cerrar.
 
 ## Perfiles
 

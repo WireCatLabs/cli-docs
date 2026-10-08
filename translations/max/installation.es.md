@@ -1,6 +1,7 @@
 ---
 title: "Instalación"
 ---
+
 `max` es un solo comando. Se instala como un paquete npm normal, funciona con Node y Bun, no compila nada al instalarse ni inicia el servicio en segundo plano. `max serve` se inicia después con el primer comando normal que lo necesita; setup no lo inicia (`serve` en [configuration.md](./configuration.md)).
 
 ## Requisitos
@@ -149,7 +150,7 @@ Desde el código fuente: `git pull && pnpm install && pnpm build`.
 La desinstalación elimina el comando, pero conserva los datos:
 
 ```sh
-max session end                        # забыть токен ДО удаления команды
+max session end                        # выйти и забыть токен ДО удаления команды
 max <бот> bot auth remove              # и токен каждого бота
 npm uninstall -g @leemour/max-cli
 rm -rf ~/.config/max-cli ~/.local/share/max-cli ~/.cache/max-cli ~/.local/share/cli-messaging

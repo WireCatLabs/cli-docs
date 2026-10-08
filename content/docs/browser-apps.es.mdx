@@ -8,12 +8,7 @@ Busca mensajes, resume conversaciones y prepara respuestas desde el navegador. T
 que ejecuta el CLI y da al servidor una dirección HTTPS pública. El dispositivo del navegador
 no necesita Tailscale.
 
-**Estado de pruebas:** el propietario confirmó lectura y envío de Telegram en Claude web el
-7 de octubre de 2026. OpenAI web, MAX en el navegador y la instalación en cada SO aún necesitan
-una prueba completa. Los ejemplos corresponden a las versiones revisadas: Telegram v0.28.0 y MAX v0.29.0.
-Inician un servidor para leer y redactar; enviar sigue dependiendo de permisos y confirmación.
 
-<ArchitectureDiagram name="remote" lang="es" />
 
 ## Antes de empezar
 
@@ -31,7 +26,8 @@ Inician un servidor para leer y redactar; enviar sigue dependiendo de permisos y
 
 Elige tu SO abajo. **El primer bloque va en la ventana 1; el segundo en la ventana 2.**
 Cuando la segunda ventana lo pida, pega el origen HTTPS real que imprime Funnel, sin `/mcp`.
-Conserva el puerto público, como `:8443`, si aparece. Empieza por leer y redactar; los permisos de envío se explican abajo.
+Conserva el puerto público, como `:8443`, si aparece. Los comandos permiten enviar durante
+este proceso; lee la explicación de permisos de abajo.
 
 <PlatformSetupTabs>
 
@@ -54,7 +50,7 @@ Ejecuta **la ventana 2 con tu usuario habitual**, que inició sesión en el mens
 
 ```powershell
 $mcpPublicUrl = Read-Host 'HTTPS origin from Funnel (no /mcp)'
-tg.cmd mcp --http --port 8765 --public-url $mcpPublicUrl
+tg.cmd mcp --http --port 8765 --public-url $mcpPublicUrl --permission messages.send=allow
 ```
 
 Para MAX, cambia `tg.cmd` por `max.cmd` en la ventana 2. Ejecuta ambos procesos en Windows.
@@ -76,7 +72,7 @@ TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg mcp --http --port 8765 --public-url "$mcpPublicUrl"
+tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
 ```
 
 Para MAX, cambia `tg` por `max` en la ventana 2.
@@ -98,7 +94,7 @@ sudo tailscale funnel 8765
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg mcp --http --port 8765 --public-url "$mcpPublicUrl"
+tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
 ```
 
 Para MAX, cambia `tg` por `max` en la ventana 2. No ejecutes el servidor del mensajero con `sudo`.
@@ -110,17 +106,16 @@ Para MAX, cambia `tg` por `max` en la ventana 2. No ejecutes el servidor del men
 El servidor escucha en `127.0.0.1:8765` e imprime un código de acceso de un solo uso.
 El perfil precede al comando: `tg work mcp` o, en Windows, `tg.cmd work mcp`.
 
-## Permisos y envío
+## Elegir qué puede hacer el asistente
 
-En estas versiones revisadas, **cada escritura por HTTP necesita el formulario de confirmación
-del servidor**, incluso con el permiso guardado `allow`. Aprobar en la app no sustituye ese
-formulario. Si la app no admite formularios MCP (elicitation), usa lectura y borradores.
+Los comandos permiten enviar durante este proceso con `--permission messages.send=allow`, sin
+cambiar los ajustes guardados. La app controla sus aprobaciones. Por MCP, `ask` no fuerza una
+confirmación del servidor. Para solo leer, elige un perfil con permisos de lectura.
 
-Los ejemplos de inicio no cambian permisos. El borrador queda en tu conversación con el agente
-hasta que pidas enviarlo y se complete la confirmación requerida. Antes de habilitar escrituras,
-consulta [los permisos de Telegram](./tg/configuration.md) o [MAX](./max/configuration.md).
-Las versiones nuevas tienen otras opciones de permisos HTTP; consulta la referencia de tu versión
-en vez de añadir opciones no admitidas a estos comandos.
+La aprobación de la app y la del servidor son preguntas distintas. Si siempre permites una herramienta
+en la app y el servidor, otra llamada puede enviar sin volver a preguntar. Pide un borrador para revisar
+el texto antes. Siguen activos los destinatarios permitidos y el límite por hora.
+Consulta los ejemplos de [permisos](./permissions.md).
 
 ## Conectar Codex / ChatGPT web o Claude
 
@@ -177,11 +172,15 @@ Funnel admite los puertos públicos `443`, `8443` y `10000`
 
 - **No conecta:** abre el origen con `/.well-known/oauth-protected-resource/mcp` añadido.
   Debe mostrar JSON. Si no, comprueba Funnel, su autorización y el puerto local.
-- **Lee pero no envía tras aprobar en la app:** comprueba los dos flags de arriba y el permiso
-  efectivo. `ask` sigue necesitando formulario; rechazarlo no envía nada.
+- **Lee pero no envía tras aprobar en la app:** comprueba los permisos de inicio y el permiso
+  efectivo. `deny` y `readonly` impiden cambios en el servidor; revisa también las aprobaciones de la app.
 - **PowerShell rechaza scripts:** usa `tg.cmd` o `max.cmd`. Si no encuentra el comando, abre una
   ventana nueva y comprueba la instalación del CLI; no cambies la política de ejecución de todo el sistema.
 - **Sin herramientas:** `tg mcp doctor` o `max mcp doctor` verifica el handshake local, no el
   túnel ni el acceso al mensajero. Un `account show` explícito verifica esa cuenta.
 - **Puerto ocupado:** cambia el puerto local y apunta Funnel al mismo número. Para dos servidores,
   asigna también puertos HTTPS públicos distintos, como arriba.
+
+## Cómo funciona la conexión
+
+<ArchitectureDiagram name="remote" lang="es" />

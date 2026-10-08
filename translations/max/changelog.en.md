@@ -1,22 +1,132 @@
 ---
 title: "Changelog"
 ---
+
 Notable changes to `@leemour/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
+
+## 0.34.0 — 08.10.2026
+
+### New
+
+- **`max chats update --photo` sets the photo of a group or channel** ([groups](./groups.md)).
+- **`max chats folders order` changes the folder order.** The mandatory “All chats” folder comes first, followed by the named folders, then the remaining folders in their previous order ([usage](./usage.md)).
+- **Your own names and notes about people: `max contacts alias` and `max contacts notes`.** They stay on this computer and are not sent to MAX; `contacts show --with-notes` displays them and `contacts list --search-notes` searches them ([usage](./usage.md#свои-имена-и-заметки-о-людях)).
+- **Automatic group and channel tags: `max metadata refresh` and `max tags auto`** — based on names and descriptions, without reading messages; your tags remain untouched ([search](./search.md#метки)).
+- **`max store fetch --all` downloads all chats** — the last 90 days of each; `--background` runs it in the background. Search reports how many messages and chats it checked and how many chats have not been downloaded or are behind; `coverage.next` in JSON gives the agent the command to run before concluding that a message is absent.
+- **Reply and discussion metrics use saved MAX reply links.** Incomplete data leaves a link unknown instead of assuming one.
+- The [rankings guide](./rankings.md) explains metrics, scores, coverage, saved selections and evidence.
+- New guides explain [attachments](./attachments.md), [speech recognition](./audio-recognition.md) and [external model setup](./external-models.md).
+
+### Changed — may break scripts
+
+- **`max session end` logs out of MAX rather than just forgetting the token here** — like `tg session end`. `revokedOnServer` is now `true`. If the token was copied from a web.max.ru tab, that tab is logged out too ([sessions](./sessions.md)).
+
+- **`max messages search` in one chat also searches the MAX server.** With `--chat` or `chat:` and words, it searches both archive and server by default (`--backend both`), finding messages not yet downloaded. Server results are checked against the same query; each message has a `source`. `--backend archive` searches only the archive; `--server-time` sets how long to wait for the server (5 seconds). Without a chat, only the archive is searched ([search](./search.md)).
+  What to consider: searching one chat can now connect to MAX; `--backend archive` keeps it local.
+
+### Fixed
+
+- **Ready-made MCP requests use the available `max_read` and `max_write`**, replacing the old names of individual tools. Their searches check `coverage.next` before concluding that a message is absent.
+
+- **Saved selections retain exclusive date boundaries when rerun**, excluding messages exactly on a boundary. Unsupported folder operations are no longer offered to the agent through MCP.
+
+- **`max serve --timeout` shuts down the server.** When time runs out, the connection, unfinished login and background tasks end; the process exits with the timeout code.
+
+## 0.33.0 — 07.10.2026
+
+### New
+
+- **`max stats messages top` and `max stats contacts top` rank saved messages and their authors**, and each entry’s `evidence` shows which messages account for its ranking. All calculations use the local copy; nothing is sent to MAX. `searches create --selection` saves such a ranking as a search.
+
+### Changed — may break scripts
+
+- **Each profile now shares one request rate to MAX across all `max` processes.** Previously, simultaneous commands, background `store fetch`, `mcp` and `serve` each paused independently, collectively contacting MAX more often. They now share one allowance: 10 requests in a burst, then 20 per minute.
+  Why: MAX blocks accounts for excessive requests, and parallel tasks multiplied them.
+  What to consider: bulk downloads running in parallel take longer; a command that would wait more than 5 minutes for its turn exits immediately with code `8`. Change the rate with `requestsPerMinute` or `MAX_REQUESTS_PER_MINUTE`; `0` disables it. See [limits.md](./limits.md) for limits.
+- **`max messages send` no longer has the `--comment-to` option.** It appeared in 0.32.0 with shared Telegram code, but in MAX it only failed with code 2.
+  What to consider: a script passing `--comment-to` still gets code 2, now with an unknown-option message.
+
+## 0.32.0 — 07.10.2026
+
+### New
+
+- **Photos and scans in attachments can be processed in batches using a selected model.** By default, the agent still reads them itself and saves text with `attachments text set`. Batch processing uses `attachments extract --ocr` with the model from `models.ocr` and `--concurrency`; recognized text enters the existing `content:` search.
+  What to consider: `--ocr` sends files to the selected model provider, so it must be enabled explicitly. The cache accounts for both file and model; an API failure does not overwrite the agent’s text or the existing index.
+
+### Changed — may break scripts
+
+- **`max contacts profile` shows a person’s previous names in the new `aliases` field.** Previously, the local copy kept only the current name: a new name from a message or contact sync overwrote the old one.
+  Why: someone who changed their name is easier to recognize by a previous name.
+  What to consider: the `--json` response now includes `aliases`, a list of `{ name, firstSeenAt, lastSeenAt, source }` ordered from oldest to newest. `source: messages` means a name from saved messages; it is approximate. The list stays empty until the copy has observed a name change. `from:` searches only the current name. [People](./people.md).
+- **`max messages send` gained `--comment-to`, but it does not work in MAX: the command fails with code 2 and sends nothing.** The option is shared with Telegram, where it posts a comment under a channel post.
+  What to consider: MAX does not support comments under channel posts; do not use this option in scripts.
+
+## 0.31.0 — 07.10.2026
+
+### New
+
+- **Search preparation and archive repair.** Text extraction through MCP, `attachments extract --from-dir` and `messages download --extract`; hash checks for changed files. `store fetch --catch-up` prepares the graph and installed local vectors within set limits; it is off by default. `store gaps plan/repair` and MCP show recorded interior gaps and explicitly download them using limits and jobs. Unknown edges and ambiguous pages do not count as a complete archive.
+
+- **Member lists of tracked groups are updated daily while MAX server runs.** `chats members fetch --track` is available; tracking does not extend the server’s idle timeout.
+
+- **`max setup` is easier to read.** Each step has a heading such as `[1/4] This computer`, with an indented account of what happened below it; questions and the QR code appear under their step, with blank lines around the code. The result is an aligned table whose first row gives the command to start with. `--json` output and its keys are unchanged; `--quiet` still hides the steps.
+
+- **Auto-reply templates use Liquid and separate `ai` blocks.** `models.replies` selects the provider; `replies consents` grants consent for a profile and endpoint, with exclusions for individual chats. Ordinary `replies test` does not call a model; `--ai` explicitly passes saved data. Old templates retain fallback text with a warning. Sending remains restricted by `testers` and `replies.send`; see the [guide](./replies.md).
+- **`max serve` opens tasks from auto-reply rules.** View them with `max tasks list` or the MCP prompt `open-tasks`; creating a task sends nothing.
+- **Browser connections are documented for Windows, macOS and Linux.** The guide distinguishes Tailscale from the server, provides PowerShell commands and explains temporary send permissions, connecting Codex web, running two messengers and stopping individual tunnels. [Connection](./remote.md).
+
+- **Settings, permissions and profiles have separate explanations.** Guides start with everyday tasks, file locations and examples; the full reference remains available.
+
+### Changed — may break scripts
+
+- SDK 0.161.0 contract: headless mode, input/output and time limits, command schemas, field selection, previews and rules for retrying writes. Statistics use `stats <ресурс> <вид>` without the old aliases.
+- MCP uses three tools for search, read and write instead of a separate tool for each command; there are no server confirmation forms. Profile permissions and separate moderation rules remain in effect.
+- Settings are split into a short guide and a full reference; a user-facing CLI contract page and an agent skill check in CI have been added.
+
+- **Statistics now use `stats messages show`, `stats chats show` and `stats tasks show`.** The old paths `messages stats`, `chats stats`, `tasks stats` are removed; update commands and exact permissions to `stats.messages.show`, `stats.chats.show`, `stats.tasks.show`. MCP tools are now named `max_stats_messages_show`, `max_stats_chats_show`, `max_stats_tasks_show`.
+- **Syntax errors return code 2 and a structured JSON error.** Scripts expecting the previous code 1 or plain text must update their error handling.
+
+- **The first settings load creates config.json.** An existing file is not overwritten; environment variables and command options are not saved into it. config show can now create the file, and ordinary values show the defaults file as their source.
+- **Word and phrase searches find word forms.** Queries in scripts may return more messages. For the previous exact matching, use exact: or --exact; an explicit text: still searches word forms. The archive’s language settings determine matching.
+
+### Fixed
+
+- **Search preparation respects the ban on writing links.** `conversations.links: readonly` or `deny` stops catch-up after downloading and during gap repair before connecting or starting a job. Explicit `--no-catch-up` still permits ordinary history reads under profile rules.
+
+- Person context finds direct conversations without recorded membership when the conversation ID matches the person ID; recent messages in both directions are available again.
+- MCP documentation uses current command paths and permissions without the removed confirmation forms.
+
+- When a write is interrupted, the original `outcome_unknown`, `operationId` and retry details returned by the command are preserved: the shared library is updated to 0.161.0.
+
+- **A command timeout during a Bot API write preserves an unknown outcome.** The operation may have completed; check its state before retrying.
+
+- **MAX MCP does not offer unsupported forum tools.** Command search no longer offers editing and reordering Telegram topics.
+
+## 0.30.0 — 06.10.2026
+
+### New
+
+- **`max stats charts --output activity.png` saves a dark-theme PNG chart.** SVG remains available; images are written only to new files. MCP `max_stats_charts` with `format: "png"` returns an image together with JSON, without connecting to MAX or writing files. Without `format`, MCP still returns JSON.
+- **Auto-reply rules can be edited with `max replies add|edit|on|off` and `audience`.** A new rule is off until explicitly enabled; changes are saved only locally, without sending messages. Auto-replies remain restricted to test accounts; the `testers` list is still set in the file. [Auto-replies](./replies.md).
+- **`max tasks` shows what is waiting for your reply.** `max review` maintains a task in the local copy for an unanswered question or a message mentioning you, and closes it when you reply; these tasks are now visible. `max tasks list` shows them with a message link; `max tasks add <сообщение> --type promise` adds what rules miss; `max tasks close <задача> --as done|dismissed` closes a task permanently; `max tasks stats` counts them by chat. MCP `max_tasks_list`, `max_tasks_add`, `max_tasks_close`, `max_tasks_stats` give the agent the same capabilities. Everything stays on this machine; nothing goes to MAX. Writes require `tasks.add` and `tasks.close` permissions.
+  What to consider: MCP has four more tools; `max serve` does not yet open tasks in MAX. [What is waiting for your reply](./groups.md#что-ждёт-вашего-ответа).
+- **Semantic search covers long messages in full.** Before embedding, messages longer than about 1200 characters are split into overlapping chunks, so semantic search reads the whole message rather than just its beginning. Previously built chats are considered stale: rebuild them with `conversations build` or `search --refresh` (cli-messaging 0.153.0; the store moves to version 21, which older builds can still write).
+- **MCP performs permitted writes from web clients without server forms.** `--http-confirmation permissions` follows permission levels: `allow` requires no server form, while `ask` requires one. By default, a form remains mandatory for every write. Repeated `--permission ключ=уровень` overrides permissions only while the server runs, without changing settings. App confirmation is separate and is not checked by the server.
+  What to consider: in this mode, the browser agent performs anything the profile permits at `allow`, including sending messages, without a form; check permissions before enabling it. [Connection](./remote.md).
+
+### Fixed
+
+- **MCP member-tracking tool descriptions account for manual collection in MAX.** They no longer promise daily list reads through `serve` or offer the unavailable `fetch --track`. The group list and saved snapshots are still read from the local store.
 
 ## 0.29.0 — 06.10.2026
 
 ### New
 
 - **`max chats tracking list|show|add|remove` manages the groups tracked for member changes.** Inspect saved member-count snapshots, add a group without fetching immediately, or remove it while keeping its history. Use `max chats members fetch` to record members. MAX `serve` does not yet fetch members daily: repeat collection manually or on your own schedule.
-
 - **Person profiles.** `max contacts profile <человек>` shows what MAX reports about a person: name, link, description, account creation time (`registered`, as reported by MAX), and whether they have their own photo. For each shared chat it shows their stored message count, first and last message. When MAX supplies a phone number, only its last four digits appear; `--show-phone` reveals it in full. One additional MAX request beyond `contacts show`. MCP: `max_contacts_profile`.
-
 - **Rule-based replies, only to test accounts.** `max serve` answers incoming messages using rules in `<профиль>.replies.json`, only for people listed in `testers` and only with `permissions.replies.send allow`. Commands: `max replies test`, `pause`, `resume`, `status`. See [docs/replies.md](./replies.md).
-
 - `max contacts context <человек> --chat <чат>` (repeatable) returns their recent messages in each chat, with time and text for an agent to summarise. `-v` adds ids and links; `--limit` applies per chat; `--refresh` first reads the chat's latest page from MAX.
-
 - Uses cli-messaging 0.152.0.
-
 - **`max contacts check <человек>` checks whether a person looks like a bot.** It scores the profile and stored messages (no messages, a link as the first message, identical text in several chats), with a source for each reason. Public spammer lists cover Telegram only, so they are not queried for MAX. `max chats members audit
   --deep <n>` checks the first n members in the same way, one per second.
 
@@ -29,43 +139,28 @@ Notable changes to `@leemour/max-cli`, one section per version, newest first. Ve
 - **`max chats stats <чат>` reports group or channel activity over a period.** Messages, active authors, replies, reactions, top posts, questions and response times, joins and departures. It calculates from the local store and asks MAX for joins and departures. With incomplete stored history, figures are lower bounds and the command suggests a `store fetch` to fill the gaps.
 
 - **Search reads file text.** `attachments extract` retains TXT, DOCX and PDF text layers; `content:` searches it. DOCX/PDF require optional `mammoth`/`unpdf`; an agent reads photos and scans and saves the result with `attachments text set`. By default it reads only downloaded files; `--download --output-dir` explicitly downloads them first.
-
 - **Refresh before searching and follow reply chains.** `--sync-first` bounds fetching to five chats, 500 messages and 30 seconds; incomplete refresh does not hide local results. `--thread` adds a bounded reply graph with link provenance; without a graph it uses chronological context.
-
 - **Conversation search accepts strict filters and explicit account scope.** `--filter` limits conversations before ranking; at least one message must match the entire filter. `--source` explicitly widens scope. An agent can link messages entirely over MCP: the `link-conversations` instructions, batches, storing links and rebuilding the graph.
-
 - **Configure embedding and analysis models independently per profile.** Local vectors and your own agent remain the defaults. An external service receives text only when explicitly selected; `build --analyze --chat` asks for consent and remembers it for the account, chat and service until revoked.
 
 - **Local tags: `max tags add`, `remove` and `list`.** Tag a chat (`--chat`), person (`--contact`) or message (`--message`); `tag:<метка>` finds tagged messages. Tags stay in the local archive and never go to MAX. A tag is 1–32 Latin letters, digits or hyphens. The same actions are available to agents over MCP. See [Message search](./search.md).
-
 - **Saved searches: `max searches` and `--saved`.** `max searches create <имя> [запрос]` saves a query with its options; `max messages search --saved <имя>` and `max messages stats --saved <имя>` run it. Words added to `--saved` narrow the query; command-line options replace saved ones. `searches list`, `show`, `history`, `delete` and `clear` inspect and clean saved searches and history. The query for `messages search` is now optional when `--saved` is given.
-
 - **`max contacts context <человек>` shows what the archive knows about a person.** Shared chats, the latest messages in both directions, recent messages and mentions. It reads the archive and marks nothing read. `max contacts link` records that a MAX and a Telegram account belong to the same person, so `context` includes both; `max contacts unlink` reverses it. Since `context` returns message text, `permissions.messages: deny` also blocks it.
-
 - **`max store repair` repairs archive structure without deleting data.** It keeps a table with a different shape as a copy alongside the replacement and names it in the result. `--dry-run` previews changes without applying them. `max store copies delete <имя>` deletes one retained copy. See [Archive](./archive.md).
-
 - **Search can use word stems when enabled.** `max config set searchStemmers.cyrillic russian` and `searchStemmers.latin spanish` (or `english`) configure the whole archive, all profiles and both messengers. Run `max store reindex` afterwards.
-
 - **`max flood clear` forgets remembered waits and lifts send holds.** They appear in `max server status`, in the new `flood` field. MAX does not yet report a wait duration, so this is empty for a personal MAX account. The login cooldown shown by `max doctor` still protects against frequent logins. There is deliberately no MCP tool: an agent must not lift a restriction.
-
 - **Three search guides.** [Message search](./search.md) covers everyday searches by words, people, dates, files, links and tags; [topic search](./topic-search.md) covers conversations, vectors and text sent to external models; [query language](./query-language.md) is the reference.
 
 ### Changed — may break scripts
 
-- **Local e5-small meaning search drops weak matches before combining them with word results.** Cosine similarity must exceed 0.80; word matches remain. Results may be shorter, and a result previously found by both methods may now be a word-only match.
-
-- **The archive gains attachment-text and analysis-consent tables.** Local schema migration runs on first opening; existing messages remain. Back up a large archive before updating.
+- **Semantic search with local e5-small discards weak matches before combining them with word matches.** Cosine similarity must exceed 0.80; word matches remain. Results may be shorter, and a result found by both methods may become a word-only match.
+- **The archive gains attachment-text and analysis-consent tables.** This is a local migration on first opening; old messages are retained. Back up a large archive before updating.
 
 - **The archive now retains every successful `messages search` and `messages stats` query, from both CLI and MCP.** It stores the query and options, never result messages, keeping the latest 1,000 runs. This powers `searches history` and `--saved`. If queries must not stay on disk, use `--no-record` or `max config set record false`; `max searches clear` empties history and keeps saved searches.
-
 - **The archive migrates to a new schema on first use.** It gains tables for tags, saved searches and word stems; `max store migrate` finishes the stem index for existing messages. On large archives, `store migrate` and `store reindex` take longer. The store is shared with `tg`; older `max` and `tg` versions can still open it.
-
 - **`max inbox`, `inbox --new`, `review` and `chats list --unread` (including `--search` and `--kind`) inspect all chats MAX returned at login, instead of the newest 200.** Previously unread chats lower in the list were silently skipped. Each run still processes at most 20 chats, naming the rest in `skipped N chats`. `partial: true` now means only that MAX did not return every chat at login.
-
 - **`max chats list` reports `hasMore: true` on the last nonempty page when MAX returned an incomplete chat list.** Previously the list appeared complete. Scripts paging until `hasMore: false` stop on the empty page.
-
-- **`max messages list` and `max store fetch` no longer treat a short page as the start of a chat.** MAX does not report whether older messages exist; even mid-history a page may be shorter than `--limit`. After a short page, `max` requests one older message: if it exists, `hasMore: true`; otherwise history has reached its start. This adds one MAX request per short page, and `hasMore` is true more often.
-
+- **`max messages list` and `max store fetch` no longer treat a short page as the start of a chat.** MAX does not report whether older messages exist, and a page can be shorter than `--limit` even in the middle of a conversation. After a short page, `max` now requests one older message: if it exists, `hasMore: true`; if not, this is the start of the chat. What to consider: this adds one MAX request per short page, and `hasMore` is more often `true`.
 - **`max config set` and `config unset` accept `searchStemmers.cyrillic` and `searchStemmers.latin`; `config show --json` exposes them in the new `storeSettings` field.** These settings live in the archive rather than the settings file, so `--defaults`, `--personal` and `--bot` are refused; they cannot be changed under `MAX_PROFILE_LOCK`.
 
 ### Fixed
@@ -77,11 +172,8 @@ Notable changes to `@leemour/max-cli`, one section per version, newest first. Ve
 - **A message locator from another account no longer opens a same-numbered message in the current account.** `messages show/context` refuses it; MCP accepts `offline: true` for ordinary local context.
 
 - **Strict `text:/…/` regex search matches words the same way as word search.** Previously `text:/Квартир.*/` and `text:/счёт/` missed stored words because of case and the letter ё. `body:` remains case-sensitive.
-
 - **Strict-search errors explain what to do.** `~` suggests `--language legacy` and `слово*`; a short prefix such as `к*` names the 10,000-word limit and asks for a longer prefix; `index_not_ready` reports index progress and the exact `max store migrate` command.
-
 - **MCP does not retain query history when recording is disabled.** Previously `record: false` disabled history only in the CLI.
-
 ## 0.28.0 — 04.10.2026
 
 ### New
@@ -151,8 +243,8 @@ Notable changes to `@leemour/max-cli`, one section per version, newest first. Ve
 
 ### Fixed
 
-- **`messages list`, `inbox` and `review` with `--transcribe` download recordings through the reading connection.** Previously a second MAX login was opened. Download finishes before the connection closes; local recognition starts after it closes. Without explicit `--mark-read`, nothing is marked read.
-- **`review --unanswered` considers stored and newly recognized voice-question transcripts.** Previously, an empty-text question was discarded before transcription. MCP has the same fix. Original message text is unchanged; unrecognized recordings leave the review incomplete.
+- **`messages list`, `inbox` and `review` with `--transcribe` download the recording through the reading connection.** Previously, a second login to MAX was opened. The recording is downloaded before the connection closes, and local recognition starts after it closes. Nothing is marked as read without an explicit `--mark-read`.
+- **`review --unanswered` takes into account saved and new transcripts of voice questions.** Previously, a question with empty text was dropped before transcription. The same fix applies in MCP; the original message text does not change, and unrecognized recordings leave the review incomplete.
 
 - **`max chats show` explains differing member counts accurately.** The list may exclude your account or be incomplete. The command reports both counts without claiming a download failure. JSON and the original member list remain intact.
 
@@ -185,7 +277,7 @@ Notable changes to `@leemour/max-cli`, one section per version, newest first. Ve
 
 ### Changed — may break scripts
 
-- **`max chats check` is replaced by `max chats moderate`:** shared rules and moderation with Telegram. `--since-time` accepts a timestamp or `30m`/`2h`/`1d`, replacing the previous message-ID `--since`; JSON is now `{ chatId, rows }`. Each run reads up to 1,000 messages. Rule levels are `deny|readonly|ask|allow`; old `forbid` and `flag|confirm` values are read as `deny` and `ask`. The saved check position moves from the session into the existing rules file, so the first run continues from that position. CLI and personal-account MCP share the position; MCP tool names and flags remain unchanged. Joining by link is named `join` in `chats events`.
+- **`max chats check` is replaced by `max chats moderate`:** shared rules and moderation with Telegram. `--since-time` accepts a time or `30m`/`2h`/`1d`, replacing the former `--since` with a message number; JSON is now `{ chatId, rows }`. Each run reads up to 1000 messages. Rule levels are `deny|readonly|ask|allow`; old `forbid` and `flag|confirm` are read as `deny` and `ask`. The saved check position moves from the session to the existing rules file, so the first run resumes there. CLI and personal MCP use the same position; MCP tool names and flags are preserved. In `chats events`, joining via a link is called `join`.
 
 - **`max upgrade --json` always includes `restarted`.** In MAX this is an empty array: the server restart policy is unchanged. Version checks and no-update results use the same response shape as installation; previous fields remain. Scripts that validate the exact set of keys must account for the additional field.
 
@@ -226,7 +318,9 @@ Notable changes to `@leemour/max-cli`, one section per version, newest first. Ve
 ### New
 
 - **`max serve` and chat-management commands save names and chats in shared local storage.** The old profile cache is no longer opened. A complete chat list marks departed chats; an empty response preserves the previous list.
+
 - **Contact commands and shared read commands save data in shared local storage.** Name resolution and `contacts sync` no longer require the old profile cache; synchronization still returns counts only. Deleting the old file does not reset the sync position. Run `max contacts sync` to fetch the complete list again.
+
 - **`max mcp` releases its search model after 10 minutes without searches.** Agent `conversations_search` no longer holds about 1 GB throughout the session. The next search reloads the model in about a second (cli-messaging 0.110.0).
 - **Chat and person completion uses the selected account's shared store.** The old cache is unnecessary. Tab still never connects to MAX; bot commands suggest chats from their local list.
 - **`max mcp setup codex|claude-code` and `max mcp doctor`** add local MCP to the selected client and check startup and available tools. Installation requires `--allow-writes` if the profile offers writes; this approval changes no permissions and does not verify MAX login.
@@ -236,12 +330,13 @@ Notable changes to `@leemour/max-cli`, one section per version, newest first. Ve
 ### Changed — may break scripts
 
 - **`messages send --topic` and `polls create --topic` clearly reject MAX destinations.** This shared option addresses Telegram forum topics, unsupported by MAX. No message or poll is sent; ordinary calls without `--topic` are unchanged.
+
 - **`max doctor --json` reports the shared store in `store` and the old file in `legacyCache`.** It no longer opens the old cache or checks its schema. Scripts reading `cache` must switch to `store`. Delete old files manually and fetch history with `max store fetch`.
 - **MCP reads the shared message store.** Search, contacts, chat resources and transcripts use `messages.db` under the profile account. The old cache is no longer opened. Reading history saves searchable messages. Voice attachments have `kind: "voice"`. Tool names and parameters are unchanged.
 - **`inbox` and `review` use shared command and message formats.** Replace `--since` with `--since-time`. `review --unanswered` accepts durations (`4h`, `1d`), not a number of hours. JSON voice attachments use `kind: "voice"` instead of `"audio"`. `--all` includes muted and archived chats. The first inbox run migrates the previous `inbox --new` position. Review pages backwards and returns at most 300 messages per chat, marking incomplete results. Update script commands and JSON checks.
 - **Personal-account transcripts are saved in shared storage.** `messages transcribe`, `inbox`, `review` and MCP use the same account-scoped text as `messages list`. Old profile-cache transcripts are not migrated; an explicit `--transcribe` request recreates them using a downloaded model.
 - **`max <бот> bot people show` becomes `max <бот> bot contacts show`**, with MCP tool `max_bot_contacts_show`. Together with `bot messages search|between`, these commands are shared with `tg`; options and responses are unchanged.
-- **`max <бот> bot chats check` becomes `max <бот> bot chats moderate`**, shared with `tg`. `--since` becomes `--since-time`, still accepting `2h`, `1d`. JSON changes from a list to `{ chatId, rows }`; MCP tool is `max_bot_chats_moderate`. Rules and check positions remain in the same files. Consent `flag` now behaves like `confirm`: ask, or proceed with `--allow-dangerous`.
+- **`max <бот> bot chats check` is now `max <бот> bot chats moderate`** — sharing the name and command with `tg`. `--since` is now `--since-time` (still accepting `2h`, `1d`); the `--json` response is `{ chatId, rows }` instead of a list; the MCP tool is `max_bot_chats_moderate`. Rules and the previous check position remain in the same files. Consent level `flag` now means the same as `confirm`: ask you, or act with `--allow-dangerous`.
 - **`max <бот> bot mcp` grants access according to bot profile settings, rather than flags.** Without flags, agents can write unless `readOnly: true` or `allow` restricts them. Deletion uses a confirmation form; `--allow-dangerous` removes it. `--allow-send`, `--allow-delete` and `--allow-moderate` are accepted with warnings but grant nothing. Set `readOnly: true` to retain read-only access. The server is now shared with `tg`.
 - **`max bot messages search` matches words, best matches first**, instead of substrings newest first; use `--newest` for the old order. All words are required. `"фраза"`, `-слово`, `а OR б` and filters `from:`, `chat:`, `after:`, `before:`, `has:` are supported; typos are corrected with a stderr notice. Words need not be quoted; `--from` remains repeatable. Bot search does not support `in:`; it searches its own copy and copies permitted by `readOtherBots`.
 
@@ -266,12 +361,12 @@ Most personal-account commands are now shared with tg: identical options and `--
   --allow-dangerous`** deletes departed chats and messages.
 - **`max bot auth`, `max bot list`, `max bot chats list`, `max bot recipients` and `max bot sends list` are shared with tg** through cli-messaging, with identical responses and hints. Tokens, recipients and logs retain their locations.
 - **`max cache clear --left`** deletes only departed chats and their messages from the profile cache.
-- **`max messages search --regex`** searches saved text with a regular expression. **`messages show|context msg:…`** accepts a search locator without a separate message ID.
+- **`max messages search --regex`** — one regular expression across all saved text. **`messages show|context msg:…`** — a message from a `search` link, without a separate ID.
 - **`max polls show <чат> <сообщение>`** reads a poll, answer IDs and vote counts without changing anything.
 - **`max polls create --send-id`** safely retries poll creation after a missing response without creating a second poll.
-- **`max messages send --photo <путь>`** sends `.jpg .png .webp` as a photo, like tg. `send` also exposes `--no-preview`, but rejects it because MAX does not support it.
-- **`max skill install`** installs a versioned agent skill into `~/.claude/skills/max-cli/` for Claude Code and `~/.agents/skills/max-cli/` for Codex and Gemini CLI. Use `--for claude` or `--for agents` for one destination. `max skill show` is unchanged.
-- **Agents automatically learn about the skill.** With `AI_AGENT` or `CLAUDECODE` set, a missing or outdated skill produces a once-daily stderr hint for `max skill install`, without affecting stdout. Disable with `max config set skillHint false --defaults`.
+- **`max messages send --photo <путь>`** — send `.jpg .png .webp` as a photo, as in tg. `--no-preview` is also available on `send`, but MAX does not support it and the command refuses.
+- **`max skill install`** installs the agent skill with one command: in `~/.claude/skills/max-cli/` for Claude Code and in `~/.agents/skills/max-cli/` for Codex and Gemini CLI, with the `max` version number. `--for claude` or `--for agents` installs into just one directory. `max skill show` prints the same content as before.
+- **The agent learns about the skill automatically.** If `AI_AGENT` or `CLAUDECODE` is set and the skill is missing or older than `max`, one line about `max skill install` appears in stderr once a day. Nothing is added to stdout. Disable it with `max config set skillHint false --defaults`.
 - **`max mcp` and `max bot mcp` expose `max://skill`** and mention it in agent instructions.
 - **`max messages delete` returns `operationId`**, also found in `max sends list`. MCP `max_messages_delete` does too. Options are unchanged.
 - **Every send-log record includes `operationId`**, grouping records for one send, edit, deletion or chat change. For a message send, it equals `sendId`.
@@ -280,7 +375,7 @@ Most personal-account commands are now shared with tg: identical options and `--
 ### Changed — may break scripts
 
 - **`max messages search` matches words, best results first.** Use `--newest` for the former newest-first order. Queries support `"фраза"`, `-слово`, `OR`, `from:`, `chat:`, `after:`/`before:` and `has:`. Typos are corrected with a stderr notice. `--context <n>` shows neighboring messages. JSON adds `match` and `score`.
-- **`max bot updates watch` becomes `max bot watch`**, matching tg and personal `max watch`. Without `--events`, only new messages appear; with it, each line identifies its event (`{ "event": "message" | "edit" | "delete" | "callback" | "joined" | … }`) instead of exposing raw MAX events. `--timeout` ends normally with code `0`. Read-only bot profiles may watch updates. Resume positions are unchanged.
+- **`max bot updates watch` is now `max bot watch`**, like in tg and the personal `max watch`. Without `--events`, only new messages are printed; with `--events`, all events are printed, and each line names its event (`{ "event": "message" | "edit" | "delete" | "callback" | "joined" | … }`) instead of a raw MAX event. `--timeout` ends it normally with code `0`. `watch` is now allowed for read-only bot profiles: receiving events is reading. The resume marker is unchanged.
 - **`bot webhooks list` returns `{ url, types }`**, not MAX-specific fields. `bot callbacks answer --text` no longer reads stdin through `-`. `bot commands`, `bot callbacks` and `bot webhooks` are shared with tg. `webhooks set --secret-stdin` prompts only after permission checks.
 - **Node 22.16 or later is required**, or Bun as before. If Linux Node uses an outdated system SQLite, `max` restarts using bundled SQLite from `@leemour/cli-messaging-sqlite` before reading or sending. Official Node builds and Bun need no change.
 - **`max store` is shared between tg and max.** `store fetch` writes to shared storage and pages MAX as before: 30 messages, 5–10-second pauses, up to 40 pages per run. This gives both messengers one store and consistent `messages`, `conversations` and `store` reads. The old cache is not migrated; refetch history. Also:
@@ -290,38 +385,45 @@ Most personal-account commands are now shared with tg: identical options and `--
   - `store export --format md` becomes `--format markdown`; `jsonl` is unchanged. Missing ranges are reported by `store status` rather than export stderr. Existing files are never overwritten.
   - `store fetch` no longer prints a ready-made export command.
   - If two messages share a millisecond and a page boundary separates them, `store fetch` can rarely miss the earlier one.
-- **`max messages list|show|context|search` are shared with tg.** `--offline` and `search` read the shared store, providing the same options and responses. At this release, `max mcp` message and chat readers still use the old max cache, so MCP and terminal offline results may differ. The new store fills after an online run; old max data and transcripts are not migrated. Also:
+- **`max messages list|show|context|search` are shared tg and max commands.** `--offline` and `search` read from the shared local copy, the same one used by tg.
+  Why: the same options and responses as tg, and one copy for reading.
+  What to consider: message and chat reading tools in `max mcp` still read the old max copy, so an agent using MCP and a terminal command with `--offline` may give different answers. The copy starts filling on the first run without `--offline` after updating; the old max copy is not migrated into it, including transcripts of voice messages heard before updating. Also:
   - Voice attachments use `"kind": "voice"`, not `"audio"`; `inbox` and `review` still use `"audio"` in this release.
   - `messages list --before` and `--after` split into `--before-id`, `--before-time`, `--after-id`, `--after-time`; `messages context` uses `--before-n`, `--after-n`. Old options produce unknown-option errors.
-  - `messages list --before-id` excludes its anchor. Offline, it requires a locally stored message ID.
-  - `messages list --transcribe --json` omits `transcribeProblem`; stderr explains failures. Offline, `unheard` is empty. Audio uses a separate connection, causing a second MAX login with `--no-serve`.
-  - Speech models are found in `~/.cache/cli-common/models/audio`, shared with tg. Redownload or move models from `~/.cache/max-cli/models/audio`.
+  - `messages list --before-id` excludes that message itself; with `--offline`, only `--before-id` works, and only with a message ID from the local copy;
+  - `messages list --transcribe --json` no longer returns `transcribeProblem`: the reason appears in stderr; with `--offline`, `unheard` is empty. Voice messages are downloaded through a separate connection — with `--no-serve`, this is a second MAX login;
+  - `max` looks for speech models in `~/.cache/cli-common/models/audio`, the same directory as tg; a model downloaded into `~/.cache/max-cli/models/audio` must be downloaded again or moved;
   - `messages search` matches words and prefixes (`квартир` finds “квартира”), rather than arbitrary three-letter substrings. `--chat` accepts a stored chat title.
-- **`max chats list|show` and `max contacts list|show` are shared with tg.** Offline reads use shared storage with identical options and responses. It fills after the first online run; the old cache is not migrated, so initial offline reads return `not_found`. Also:
-  - `chats list --search|--kind|--unread` checks the 200 newest chats online and reports older chats on stderr; offline it checks all stored chats.
+- **`max chats list|show` and `max contacts list|show` are shared tg and max commands.** Their `--offline` reads from the shared local copy, the same one used by tg.
+  Why: the same options and responses as tg.
+  What to consider: the copy starts filling on the first run without `--offline` after updating; the old max copy is not migrated into it, and until then `--offline` returns `not_found`. Also:
+  - `chats list --search|--kind|--unread` without `--offline` searches the 200 most recent chats and writes to stderr if older chats existed; with `--offline`, it searches all saved chats;
   - `chats show --offline` omits `description`, `access`, `settings`, available only from MAX.
   - Invalid `--kind` values now report `--kind is one of dialog, group, channel, saved`.
   - `cache clear` also clears this account from shared storage; `contacts sync` fetches everything into it.
-- **`max messages send|edit|forward` are shared with tg.** JSON `send` returns `{sendId, operationId, message}`, plus `scheduledFor` with `--at-time`; `forward` also returns `{sendId, operationId, message}`; `edit` returns `{operationId, message}`, instead of an unwrapped message. MCP `max_messages_send`, `max_messages_edit`, `max_messages_forward` match. `max_messages_edit` drops `markdown`; `max_messages_forward` drops `send_id`. Read the message under `message` rather than at the root. `send` supports one `--file` and one `--photo`, not repeated files. An unknown scheduled-send outcome suggests `messages scheduled` without naming the chat.
+- **`max messages send|edit|forward` are shared tg and max commands.** `--json` responses: `send` returns `{sendId, operationId, message}` (with `scheduledFor` when using `--at-time`); `forward` also returns `{sendId, operationId, message}`; `edit` returns `{operationId, message}`, instead of an unwrapped message. MCP tools `max_messages_send`, `max_messages_edit` and `max_messages_forward` return the same shapes; `max_messages_edit` no longer has `markdown`, and `max_messages_forward` no longer has `send_id`.
+  Why: the same options and responses as tg, with an action ID matching the send log.
+  What to consider: scripts reading the message from the response root must now read `message`. `send` no longer accepts several `--file` attachments for one message: one attachment from `--file` and one from `--photo`. If a send with `--at-time` gets no response, the error recommends `messages scheduled` without naming a chat.
 - **`max polls` is shared with tg.** `polls vote|close --json` returns `{operationId, poll}`, with `poll` shaped as `{chatId, messageId, question, answers: [{id, text, voters, chosen}], closed, multiple,
   anonymous, voters}`. `polls create` returns `{sendId, operationId, message}`. MCP `max_polls_vote`, `max_polls_close`, `max_polls_create` match. `max_polls_create` replaces `revote` with `silent`.
-- **Reactions, pins and read receipts share tg's JSON format**, including `operationId`:
+- **`--json` responses for reactions, pinning and marking read are shared with tg**, and each includes `operationId`, the ID of that action as in the send log:
   - `reactions add|remove`: `{operationId, chatId, messageId, reaction}`, your reaction or `null`; message counts remain available through `messages list`.
   - `messages pin|unpin`: `{operationId, chatId, messageId, pinned}`, with `pinned` as `true` or `false`.
   - `chats mark-read`: `{operationId, chatId, until}`, with `null` meaning through the latest message.
 
   MCP `max_reactions_add`, `max_reactions_remove`, `max_messages_pin`, `max_messages_unpin`, `max_chats_mark_read` match.
-- **`max messages unpin <чат> <сообщение>`** now requires a message ID, like tg and pin. MAX has one pin and removes it regardless of the supplied ID. MCP `max_messages_unpin` also requires `message`. Calls to `messages unpin <чат>` must add any message ID from that chat.
+- **`max messages unpin <чат> <сообщение>`** now requires a message number, like `pin` and tg. MAX has one pinned message per chat; that message is unpinned regardless of the number supplied. MCP tool `max_messages_unpin` also requires `message`.
+  What to consider: `messages unpin <чат>` without a number fails — add any message number from that chat.
 - **`max serve --detach` and `max serve --stop` are removed**, replaced by `max server start` and `max server stop`. `serve` handles foreground work; `max server` controls background work. Update scripts and manually written services.
-- **`max server status --json` matches tg:** `byHand` becomes `by` (`hand`, `command`, `server`, `unit`), with added `log`, `unit`, `stale` for a crashed server's marker. `max server start`, `stop`, `restart` return `{ started, by, pid, startedAt, log }` and `{ stopped, by, pid }`; `socket` is removed.
-- **`max messages send --at` becomes `--at-time`**, consistent across time-taking commands. Scripts using `--at` receive unknown-option errors. MCP `max_messages_send` parameter `at` remains unchanged.
-- **`--markdown` is removed in favor of `--md`** for sending, `messages edit` and all formatting reads. Update scripts using the old name.
+- **`max server status --json` returns the same fields as tg**: `byHand` becomes `by` (`hand` means manually started, `command` means started by a command, `server` means `max server start`, `unit` means a service); added fields are `log`, `unit` and `stale` (the server crashed and left a marker). `max server start`, `stop` and `restart` respond as in tg: `{ started, by, pid, startedAt, log }` and `{ stopped, by, pid }`; `socket` is removed.
+- **`max messages send --at` is now `--at-time`**, as in every tg and max command whose option accepts a time. Scripts using `--at` get an “unknown option” error — replace it with `--at-time`. MCP parameter `at` in `max_messages_send` is unchanged.
+- **`--markdown` is removed; use `--md`** in `messages send`, `messages edit` and everywhere markup is read. This name is used in all tg and max commands; scripts with `--markdown` get an “unknown option” error — replace it with `--md`.
 - **`max sends list --json` renames `cid` to `sendId`, a string instead of a number**, matching `outcome_unknown` and `--send-id`. Older records are displayed in the new format too.
-- **Run events (`--trace`, `--record`, `max runs show`) use the shared tg/max format.** Send IDs are `send`, not `cid`; MAX error keys are `providerError`, not `maxError`, in events, `run.json` and error `details`.
+- **Run records (`--trace`, `--record`, `max runs show`) use a shared tg and max format.** An event’s send ID is called `send`, not `cid`; the MAX failure field is `providerError`, not `maxError`, in events, `run.json` and the `details` of a `--json` error.
 - **`max bot` returns `outcome_unknown` (code `14`) for write responses 502, 503 or 504**, previously `provider_unavailable` (code `12`). Gateway responses do not prove whether MAX executed the request; it may have succeeded. Scripts retrying code `12` could duplicate writes. For code `14`, check the result first. Reads still retry and return `provider_unavailable`.
 - **Bot commands use shared tg names; old names are removed.** `max bot messages get <сообщение>` → `messages show <чат> <сообщение>`; `messages edit|delete` also take chat first. `bot chats get` → `chats show`; `bot chats pin|unpin` → `messages pin|unpin <чат> <сообщение>`. `--format markdown|html` becomes `--md` or `--html`. `--type` is removed: use `--photo`, `--voice`, or `--as-file` for video documents. `chats action` accepts `typing`, `photo`, `video`, `voice`, `file`. Sends and edits return `{ operationId, message }`. Deletion asks for approval; `--allow-dangerous` supplies it. MCP names are `max_bot_chats_show`, `max_bot_messages_show`, `max_bot_messages_pin`, `max_bot_messages_unpin`.
-- **`max bot members` and `max bot admins` become `max bot chats members` and `max bot chats admins`**, matching tg. `admins add` replaces `--permissions` with `--can`, accepting `max chats admins add` words (`read`, `members`, `admins`, `info`, `pin`, `link`, `edit`, `delete`), and `--alias` with `--title`. Calls/statistics permissions are unavailable. `admins list` returns `{ id, name, username, role,
-  rights, title }`. MCP: `max_bot_chats_members_list|add|remove`, `max_bot_chats_admins_list`.
+- **`max bot members` and `max bot admins` are now `max bot chats members` and `max bot chats admins`**, as in tg. `admins add` takes `--can` with the values from `max chats admins add` (`read`, `members`, `admins`, `info`, `pin`, `link`, `edit`, `delete`) instead of `--permissions`, and `--title` instead of `--alias`. `--can` has no “calls” or “statistics” rights. `admins list` returns `{ id, name, username, role,
+  rights, title }`. MCP tools: `max_bot_chats_members_list|add|remove`, `max_bot_chats_admins_list`.
 - **Local-only changes are now classified as writes.** `config set`, `unset`, `chats rules set`, `unset`, `recipients add`, `remove`, `clear`, and bot `auth set`, `remove`, `chats rules set`, `unset`, `recipients add`, `remove`, `clear` write configuration, rules, recipient lists or keyring entries, never MAX. The [Command reference](./commands.md) labels them “Changes data only on this computer”; `max commands` shows them in `writes`. Read-only filters using `max commands --json` now exclude them.
 
 ### Fixed
@@ -337,14 +439,14 @@ Most personal-account commands are now shared with tg: identical options and `--
 
 ### Changed — may break scripts
 
-Commands follow one naming rule: resource, then action. Old names return “unknown command” or “unknown option”, code `1`, without performing anything.
+Commands follow one naming rule: subject first, then action. Old names no longer work — `max` returns “unknown command” or “unknown option” with code `1` and does nothing.
 
 - **`max backup messages` → `max store fetch`.** Download starts immediately; `--estimate` only calculates (previously downloading required `--run`). Each run still handles up to `--max-pages` pages, default 40, with the same pauses. `--pause` requires a duration (`5s`, `500ms`); unitless numbers refuse. `--since` and `--last` are optional: repeated runs otherwise reach the beginning, resuming where they stopped.
 - **`max export messages` → `max store export`.**
 - **`--cid` → `--send-id`** for `messages send` and `messages forward`. `outcome_unknown` uses `sendId`; MCP `max_messages_send` and `max_messages_forward` rename `cid` to `send_id`.
 - **`max chats read` → `max chats mark-read`**; MCP `max_chats_read` → `max_chats_mark_read`.
 - **`max chats settings` is removed.** `max chats show` displays `settings`, `description`, `access`; `max chats link show` still displays invites. Change settings with `max chats update <чат> --all-can-pin on|off` and other flags.
-- **`max update` → `max upgrade`**, including update hints.
+- **`max update` → `max upgrade`**, and the new-version notice now names `max upgrade`.
 - **`max recipients off` → `max recipients clear`**, response `off` → `cleared`; **`max bot recipients off` → `max bot recipients clear`**.
 - **`max account sessions end-others` → `max account sessions end --others`**; omitting `--others` refuses.
 
@@ -357,9 +459,9 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 
 ### Changed — may break scripts
 
-- **Shared storage upgrades to schema 6** (cli-messaging 0.49.0). The first `max` run upgrades `messages.db`. Older tg versions then refuse the file; install the same-day or newer release with `npm install -g @leemour/tg-cli@latest`. MAX commands are unchanged.
+- **The shared message store moves to version 6** (cli-messaging 0.49.0). The first `max` run updates `messages.db`; after that, `tg` versions older than the one released that day refuse to open the file and ask you to update — `npm install -g @leemour/tg-cli@latest`. `max` commands are unchanged.
 - **`--all-bots` requires permission to read other bots.** Configure `readOtherBots` in `bot` with `max <имя> config set --bot readOtherBots true`, or a profile list. Otherwise the command refuses with code `5` and an enabling command.
-- **Ambiguous person candidates are sorted by name**, unnamed people first, instead of cache order. Error wording is unchanged.
+- **When a name matches several people, candidates are sorted by name**, with unnamed people first; previously they followed cache order. The error text is unchanged.
 
 ### New
 
@@ -372,12 +474,17 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 
 ### Changed — may break scripts
 
-- **Closing polls through `max mcp` requires `edit`**, rather than `reaction`. Closing edits the poll message, and `max polls close` already required `edit`; agent and human permissions now agree. With restricted `allow`, add `edit` to expose `max_polls_close`. Unrestricted profiles are unchanged. See [MCP guide](./mcp.md).
+- **An agent using `max mcp` closes a poll only if the profile permits `edit`.** Previously, `reaction` was enough.
+  Why: closing edits the poll message, and `max polls close` always required `edit` — the agent and a person had different permissions for the same action.
+  What to consider: if the profile’s `allow` includes `reaction` but not `edit`, the agent no longer sees `max_polls_close`; add `edit` to let it close polls. If `allow` is unset, nothing changes. See [docs/mcp.md](./mcp.md).
 
 ### Fixed
 
-- **`max mcp --confirm-send` starts when only `mcpTools` enables writes.** Previously it required an `--allow-*` flag, potentially leaving contacts, groups and profile changes without confirmation. Without `--confirm-send`, behavior is unchanged; add it to approve each change.
-- **`max <бот> bot messages search --limit N` reports further matches.** Previously `hasMore: false` was always returned and `limit` came from configuration instead of `N`, causing scripts and agents to stop early. Now `hasMore: true` is returned when matches exceed `N`.
+- **`max mcp --confirm-send` starts when account changes are enabled only through `mcpTools`.** Previously, the flag also required one of `--allow-*`, or the server would not start.
+  Why it matters: a server with only `mcpTools` therefore ran without a confirmation form — the agent could add and remove contacts, create groups and change the profile without asking you.
+  What to consider: without `--confirm-send`, behavior is unchanged. Add the flag to the server startup command to see a form before every change.
+- **`max <бот> bot messages search --limit N` reports when more matches exist.** Previously, responses always had `hasMore: false`, and `limit` came from settings rather than your `N`.
+  What to consider: a script or agent relying on `hasMore` to continue searching stopped on the first page and missed matches. It now receives `hasMore: true` when there are more than `N` matches.
 
 ## 0.18.1 — 28.09.2026
 
@@ -394,33 +501,40 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 
 ### Fixed
 
-- **`max contacts rename` actually changes names.** MAX previously returned success without changing anything when `lastName` was omitted. It is now always sent, `null` when absent, matching the web client. Repeat `contacts rename` attempts made through 0.17.x.
+- **`max contacts rename` now renames contacts.** Previously, MAX reported success but the name remained unchanged.
+  Why: without `lastName`, MAX silently changes nothing. `lastName` is now always sent (`null` if no surname), as in the web client.
+  What to consider: names “changed” through 0.17.x were not actually changed — rename them again.
 
 ## 0.17.1 — 28.09.2026
 
 ### Fixed
 
 - **Invalid `--limit`, `--last`, `--max-pages` errors repeat your input** for `messages list`, `inbox`, `backup`, `sends list` and bots. `--limit abc` previously reported `NaN`; 0.17.0 fixed only paginated lists.
-- **`runs list` and `sends list` truncated by `--limit` report `hasMore: true`** and the requested limit rather than a misleading `hasMore: false`, preventing scripts from stopping early.
-- **Renamed contacts use your chosen name**, matching the MAX app, instead of the person's own name after `contacts
-  rename` or an app rename.
+- **`runs list` and `sends list` truncated by `--limit` report `hasMore: true`.** Previously, responses had `hasMore: false`, and `limit` differed from the number requested.
+  What to consider: scripts using `hasMore` to decide whether to keep reading previously stopped on the first page.
+- **A contact you renamed appears under the name you chose**, as in the MAX app. Previously, `max` showed the person’s own name even if you renamed them with `contacts
+  rename` or in the app.
 
 ## 0.17.0 — 28.09.2026
 
 ### Changed — may break scripts
 
-- **Every JSON list becomes `{items, page, limit, hasMore}` rather than an array.** Applies to `account sessions list`, `chats members list`, `chats folders list`, `messages scheduled`, `messages download`, `messages context`, `models audio list`, `recipients list`, `sends list`, `runs list`, `chats check`, `chats events` and all bot lists. Previously there were three shapes, including `{events, more}`. Read `.items`. Unpaginated lists use page 1 and returned count as limit. `bot members list` and `bot admins list` also return `marker`; `user_id` becomes a string. `bot messages get` returns the message rather than a one-element array. `--jsonl` and human tables are unchanged. MCP matches; `page`, `limit` and `hasMore` are part of the shared list wrapper.
+- **Every list in `--json` is an object `{items, page, limit, hasMore}`, rather than an array.** This now applies to `account sessions list`, `chats members list`, `chats folders list`, `messages scheduled`, `messages download`, `messages context`, `models audio list`, `recipients list`, `sends list`, `runs list`, `chats check`, `chats events` and all bot lists. Previously, some returned arrays, and `chats events` returned `{events, more}`.
+  Why: lists came in three different shapes, so scripts and agents had to remember each command’s shape.
+  What to consider: scripts that read an array must now read `.items`. For a list without pages, `page` is 1 and `limit` is the number of returned rows. `bot members list` and `bot admins list` also include `marker`, and their `user_id` is now a string. `bot messages get` returns the message itself, rather than a one-item array. `--jsonl` and human-readable tables are unchanged. MCP follows the same format.
 
 ### New
 
-- **`max doctor` and `max config show` include bots** in all local profiles, marked personal, bot or both. `doctor` shows bot token source, seen-chat count and paths; `doctor --online` identifies the bot through the API. Bot profiles now receive appropriate `max <имя> bot …` hints rather than `session start`.
+- **`max doctor` and `max config show` recognize bots.** The profile list includes all profiles on this computer, marked as personal account, bot or both. Bot profiles were previously missing. `doctor` shows the bot token’s source (without the token itself), how many chats the bot has seen and where profile files are; `doctor --online` asks Bot API who owns the token.
+  What to consider: for bot profiles, `doctor` and personal commands no longer suggest `session start`; they name the appropriate `max <имя> bot …` command.
 - **MCP `max_status` and `max_bot_status`** report the server profile, token presence and enabled writes. Neither writes; `max_status` never logs into MAX.
-- **Tab completion understands bots**, suggesting their seen chats and all profile names, including bot profiles.
+- **Tab completion recognizes bots.** For bot commands, it suggests chats the bot has seen rather than personal account chats; for the first word, it suggests all profiles, including bot profiles.
 - **Bot commands support diagnostics like personal commands.** `max <имя> bot … --trace` prints each request's operation, chat/message, HTTP status and duration. `--record` saves runs; failures save automatically. Read with `max runs list`, `max runs show`. File uploads (`--file`) were not recorded until 0.18.0.
 - **Separate `personal` and `bot` settings**, each with `defaults` and `profiles`. `max config set --personal|--bot` writes sections; `max config show --bot` shows bot values and source keys such as `config file: bot.profiles.test`. More specific values win: section profile, profile, section defaults, global `defaults`. Old files retain behavior. See [Configuration](./configuration.md).
 - **Optional bot hourly limits:** `max <имя> config set --bot sendsPerHour 200`. Bots remain unlimited by default.
 - **`max config set defaultProfile <имя>`** chooses the implicit profile, previously always `default`.
-- **Profile photos, custom contact names and blocking.** `max account update --photo <файл>` changes your photo; `max contacts rename <кто> <имя> [фамилия]` sets a name visible only to you; `max contacts block <кто>` and `unblock` work even outside contacts. Safeguards match `account update` and `contacts add`. Renaming did not actually work in this version; fixed in 0.18.0.
+- **Profile photos, your own name for a contact, and blocking.** `max account update --photo <файл>` sets a new profile photo. `max contacts rename <кто> <имя> [фамилия]` gives a person a name only you see. `max contacts block <кто>` and `unblock` block and unblock people, even those not in your contacts.
+  What to consider: all use the same checks as `account update` and `contacts add`. In this version, `contacts rename` did not actually change names — fixed in 0.18.0.
 - **Channels:** `max chats create <название> --channel` creates a private channel. Invite with `max chats link show`; direct addition may be rejected by MAX.
 - **Admin read and invite-link rights:** `max chats admins add <чат> <кто> --can read,link`. A bot without `read` cannot read group messages.
 - **Relative times** for `--since`, `--before`, `--after`: `30m`, `2h`, `1d`, as in `max review --since 1d`, replacing the former exact-time requirement.
@@ -430,10 +544,10 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 - **Your chat changes appear immediately.** After `max chats update`, `chats settings`, `chats link
   reset`, `chats show` and `chats list` previously showed old titles for minutes because MAX does not echo changes and `max serve` ignored the returned chat. It now applies it as it already did sent messages.
 - **`max export messages` no longer warns about missing history before 1970-01-01 after a complete `backup`.**
-- **Invalid `--limit` and `--page` errors show the original input**, not `NaN`.
+- **Errors in `--limit` and `--page` repeat what you typed.** Previously, an error for `--limit abc` referred to the input as `NaN`.
 - **Reset invite links in `chats inspect` and `chats join` return not found** (`not_found`, code 6) instead of an opaque MAX opcode rejection. Update scripts expecting another code.
 - **`max config show` and `max doctor` omit phantom `<имя>.moderation` profiles**, previously confused with moderation-rule files.
-- **Unknown subcommands name the unknown word, not the profile.** `max work bot auth status` now identifies `status`, not `work` as a profile-parsing issue.
+- **Subcommand errors name the unknown word rather than the profile.** Previously, `max work bot auth status` said `work` was read as a profile name, although the unknown word was `status`.
 - **`max config show` displays `transcribeModel`**, previously omitted.
 
 ### Removed
@@ -446,18 +560,20 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 
 - **Bot people and conversations:** `max <имя> bot people show <кто>` shows where someone posted and their direct chat; `bot messages search --from <кто>` finds posts by people; `bot messages between <кто> <кто>` finds chats where everyone posted. All data comes from this computer's seen messages; `--all-bots` reads all bot copies.
 - **Bot group checks:** `max <имя> bot chats check <чат>` applies `bot chats rules show|set|unset` to messages and members, using joins saved by `bot updates watch`. Removed people cannot return through invites unless `--no-ban` is used; Bot API cannot undo the ban. Account ages are unavailable, so those rules do not run.
-- **Polls:** `max messages list` displays questions, IDs in `[скобках]`, votes and your ✓. `max polls vote <чат> <сообщение> <вариант>…` votes, `--retract` withdraws, `max polls close` closes your poll, `max polls create` creates one. MCP `max_polls_vote`, `max_polls_create` require `--allow-send`. Invalid closed polls, excess choices or disallowed revotes refuse locally. web.max.ru does not display polls; creation warns about it.
+- **Polls.** `max messages list` shows a poll as text: question, options with IDs in `[скобках]`, votes and ✓ beside your choice. `max polls vote <чат> <сообщение> <вариант>…` votes, `--retract` retracts a vote, `max polls close` closes your own poll, and `max polls create` creates one. MCP has `max_polls_vote` and `max_polls_create`, only with `--allow-send`.
+  What to consider: `max` rejects anything the web client would reject — closed polls, too many options, or a second vote without permission to revote — without sending anything. web.max.ru does not display polls, and `polls create` reminds you of this.
 - **`max <имя> bot mcp`** connects an agent to a bot, read-only by default in this release. Writes require `--allow-send`, `--allow-delete`, `--allow-moderate`, with `--confirm-send` for forms. Commands enforce recipients and logs; rule actions needing confirmation share one form. See [Bot MCP](./bot.md#бот-для-агента-mcp).
 
 ### Changed — may break scripts
 
-- **`max bot api get-updates` uses `--poll-timeout`** for its API `timeout`. Previously `--timeout` was consumed as the whole-command budget and never reached MAX. Update long-poll scripts.
+- **The `timeout` parameter of `max bot api get-updates` now uses `--poll-timeout`.** Previously, the operation’s `--timeout` never reached MAX: `--timeout` is the command’s overall deadline.
+  What to consider: scripts passing `--timeout` for long polling must switch to `--poll-timeout`.
 
 ### Fixed
 
 - **Automatically started `max serve` is replaced on the first newer-version command**, rather than rejecting new operations, such as voting, until `max server stop`.
 - **A different build with the same version also replaces its server.** A manually started server rejects unfamiliar operations with a `max server stop` hint.
-- **`max bot api get-updates --limit …` works**, rather than interpreting the API limit as a CLI configuration setting.
+- **`max bot api get-updates --limit …` works.** Previously, the operation’s `--limit` was mistaken for a `max` setting and the command refused.
 
 ## 0.15.0 — 27.09.2026
 
@@ -468,8 +584,9 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 - **Roles and invites:** `max chats members list` labels `owner`, `admin`, `member`; `max chats link show <чат>` shows invites.
 - **Personal-account video and voice:** `max messages send <чат> --file ролик.mp4` sends in-chat video (`.mp4 .mov .webm .mkv`); `max messages send <чат> --voice
   заметка.ogg` sends voice with waveform and duration. Use `--as-file` for the old video-document behavior. Voice requires Ogg Opus; other formats receive an `ffmpeg` conversion hint. See [Personal account guide](./usage.md).
-- **Inline voice transcripts:** `max messages list <чат> --transcribe` and `max inbox
-  --transcribe` transcribe locally, shown with 🎤 or JSON `transcript`. MCP `transcribe: true` works in `max_messages_list`, `max_inbox`. Existing transcripts show without a flag; new ones require a downloaded model.
+- **Voice messages appear as text directly in the list.** `max messages list <чат> --transcribe` and `max inbox
+  --transcribe` transcribe the displayed voice messages on this computer; text appears under the message with a 🎤 icon, and in `--json` under `transcript`. MCP uses `transcribe: true` in `max_messages_list` and `max_inbox`.
+  What to consider: previously transcribed messages show text even without the flag. Transcription requires a downloaded model.
 - **More bot commands:** `max <имя> bot messages send --file <путь>` attaches images, video, audio or files; `bot uploads put` uploads only. `bot members list|add|remove`, `bot admins list|add|remove` manage membership; `bot comments list|get|send|edit|delete` handles channel comments; `bot callbacks answer` handles buttons; `bot commands
   list|set|clear` manages menus; `bot webhooks list|set|delete` manages webhooks. See [Bots](./bot.md). `webhooks set` rejects another configured address because MAX delivers to both instead of replacing one.
 - **Bot local storage:** read, sent and received messages are saved. `max <имя> bot messages list <чат> --offline` and `messages get --offline` read without a network; `bot messages search <текст>` searches. Deletions performed by the bot or observed through `updates watch` remove local messages. Storage contains message text.
@@ -479,7 +596,8 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 
 ### Changed — may break scripts
 
-- **`max bot messages list` is oldest first**, matching personal lists, instead of newest first. Bot-sent messages are marked own messages. Scripts reading the first row as newest must change.
+- **`max bot messages list` prints older messages first**, like `max messages list`. Previously, new messages came first. Messages sent by the bot are now marked as its own.
+  What to consider: scripts taking the first row as the newest message now get the oldest.
 
 ### Fixed
 
@@ -492,12 +610,13 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/leemour/max-cli/blob/v0.29.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
-- **Convenient bot commands:** `max <имя> bot messages send <чат> <текст>` accepts chat IDs, `user:<номер>` or a known title; `edit`, `delete`, `list`, `get` are available. `max <имя> bot chats list` lists seen chats; `chats get|pin|unpin|leave|action` manages them. `max bot list` lists profiles with bot tokens. MAX has no bot-chat listing, so the CLI remembers seen chats itself.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/leemour/max-cli/blob/v0.34.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
+  Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).
-- **Group moderation data:** `max review --unanswered [часы]` finds questions unanswered by you or admins; `max review --chat <чат>` reviews one chat. `max chats events <чат>` shows joins, departures, additions and removals. `max chats members list
-  <чат>` returns all group/channel members with registration and last-seen times. `max chats
-  rules show|set|unset <чат>` manages rules in one local file like configuration.
+- **Group moderation: what is happening.** `max review --unanswered [часы]` shows group questions neither you nor admins have answered yet; `max review --chat <чат>` reviews one chat. `max chats events <чат>` shows who joined, left, was added or removed. `max chats members list
+  <чат>` lists all group or channel members, with registration date and last seen. `max chats
+  rules show|set|unset <чат>` manages group moderation rules in one file, like `config set`.
 
 ### Fixed
 
@@ -510,7 +629,8 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 - **`max review` gathers commitments:** all messages, including yours, in chats active since the prior review, or 3 days without `--since`. `--transcribe` processes audio; the response gives the next review boundary. Incomplete data is explicitly marked; do not treat it as complete ([Review guide](./usage.md#обзор-кто-кому-что-должен)).
 - **MCP `max_review` and `/review`** organize what you owe, await and need to clarify, checking work groups before declaring overdue items and drafting reminders. Reminders require approval ([MCP prompts](./mcp.md#команды-и-чаты-по-)).
 - **`max mcp config` prints configuration for Claude Desktop, Cursor and other clients**, with absolute paths for Windows and applications missing terminal `PATH` ([Connection guide](./mcp.md#подключение)).
-- **`max doctor` checks installation:** runtime, installation path, visibility in a new terminal, keyring/SQLite loading and downloaded speech models. Missing `PATH` entries receive PowerShell or `export` fixes. If `max` itself is absent, use `npx @leemour/max-cli doctor` ([Troubleshooting](./troubleshooting.md#max-не-находится-после-установки)).
+- **`max doctor` checks the installation:** what runs `max`, where it is installed, whether a new terminal will find it, whether the keyring and SQLite load, and whether a speech model is downloaded.
+  What to consider: if the command directory is not on `PATH`, `doctor` prints a command to fix it — for PowerShell on Windows and `export` on Linux and macOS. If `max` itself is not found, run `npx @leemour/max-cli doctor` ([troubleshooting.md](./troubleshooting.md#max-не-находится-после-установки)).
 - **`max doctor --online` checks MAX connectivity:** one login, one chat and MCP startup, without sending.
 - **`max models audio download` checks the model after download.** Missing-model errors explain its language and alternative models with sizes.
 
@@ -544,8 +664,10 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 - **Every failed command gets a run record**, including invalid flags, preflight checks and non-network commands (`models`, `server`, `watch`), previously only failures reaching MAX. Only command words are recorded, not arguments or message text ([Diagnostics](./diagnostics.md)).
 - **`max backup messages --run` explains storage and export.** Messages are in local storage; `max export messages` creates a file. Its ready-made command appears at the end and in `export`.
 - **Background `max serve` enforces read-only, actions, recipients and hourly limits and logs sends.** `config set` takes effect without restart. It does not start with `MAX_TOKEN`.
-- **`max serve` requests folders, banners, calls, stickers and reactions like web.max.ru**, and subsequent logins request only changes since the previous timestamp. This reduces differences from the web client. All requests read only; responses are neither shown nor saved. One-off commands omit them ([Network behavior](./security.md#что-уходит-в-сеть)).
-- **The server skips malformed incoming MAX messages**, warns once and continues, instead of potentially stopping.
+- **After login, `max serve` requests the same data as a web.max.ru tab:** folders, banners, call history, sticker sets and reactions. **It also logs in again the same way:** it sends MAX the previous login time and asks only for changed chats, rather than the whole list.
+  Why: the less `max` differs from the web client, the fewer reasons MAX has to notice it.
+  What to consider: all of this is read-only; responses are neither displayed nor saved. One-off commands do not do this ([security.md](./security.md#что-уходит-в-сеть)).
+- **The background server survives a malformed incoming MAX message:** it skips the message, writes one line about it and keeps running. Previously, such a message could stop the server.
 
 ### Changed — may break scripts
 
@@ -566,28 +688,32 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 
 ### Security
 
-- **Tokens from `MAX_TOKEN` stay there.** Rotated tokens are not saved to keyring/files; stderr reports this. `max doctor` identifies `credentials.json` when using file storage.
+- **A token from `MAX_TOKEN` stays only there.** If MAX issues a new session token, `max` writes it neither to the keyring nor to a file, and reports this in stderr. `max doctor` names `credentials.json` if that file stores the token instead of the keyring.
 - **`max session start` masks phone numbers**, like `max account show`. Ctrl-C at the token prompt returns `130`.
-- **The server never hands out tokens** to clients requesting login data; they check the keyring themselves.
+- **The background server does not give the token** to commands asking it for login information: they do not need it and consult the keyring instead.
 - **Network limits:** decompressed MAX frames are capped at 32 MiB. Connections and downloads have timeouts. `max messages download` requires HTTPS, rejects local-machine/network URLs even after redirects, and caps files at 4 GiB and transcription audio at 32 MiB. Message links are untrusted.
 - **Local storage permissions:** database, `-wal`, `-shm` files use `0600`; directories `0700`. Existing permissions are corrected on opening. Reports replace chat/message IDs with labels.
 - **Untrusted text uses one line with visible controls** in feeds, tables, candidates, Markdown and `messages download` paths. Filenames lose control and text-direction characters; only `http` and `https` become Markdown links.
 - **Completion inserts only IDs**, displaying names beside them because titles and `@имя` come from other people and must not become shell code.
 - **`max cache clear` without a profile respects the default and `MAX_PROFILE`.**
-- **Release hardening:** exact dependency versions, clean builds before packaging, no test helpers, and a dedicated publish step that does not install or execute dependencies.
+- **Releases are stricter.** Dependency versions are pinned exactly; the package is built from scratch before each packaging step, without test helpers; publishing is done in a separate step that neither installs nor runs dependencies.
 
 ## 0.10.0 — 25.09.2026
 
 ### New
 
 - **`max doctor report` and `max doctor report create`** explain report contents or create a content-free file with next steps. This release used email; 0.11.0 moved to GitHub ([Reporting problems](./troubleshooting.md#как-сообщить-о-проблеме)).
-- **`max backup messages <чат> --since <дата> | --last <n>`** downloads earlier history. Without `--run`, it only estimates. With it, it pages backwards 30 messages at a time, up to 40 pages with pauses, resuming later ([History download](./archive.md#скачать-историю)).
-- **`max doctor` shows the emulated web-client version**, warning if checked over 60 days ago because MAX may reject old clients ([Troubleshooting](./troubleshooting.md)).
-- **`max server start|stop|status|restart`** manages the background server separately, like `max session`. `status` shows running state, start time, version and MAX connection, suggesting `restart` when outdated. `max serve --detach` and `--stop` still work here ([Server guide](./archive.md#новые-сообщения-сразу-max-serve-и-max-watch)).
-- **History requests use the web client's five fields**, and login requests 15 chats like web.max.ru, fetching the rest separately. Previously it used an extra field and requested 40 chats. This reduces detectable differences; chat results are unchanged, and channel testing confirmed reads still send no read receipts.
-- **Device descriptions use this computer's timezone, language and OS**, instead of every installation claiming Chrome on Linux in Madrid.
+- **`max backup messages <чат> --since <дата> | --last <n>` downloads more chat history into the local copy.**
+  What to consider: without `--run`, the command only shows an estimate and sends nothing. With `--run`, it pages backwards through 30 messages at a time with pauses, up to 40 pages per run, and resumes from the same position on the next run ([usage.md](./archive.md#скачать-историю)).
+- **`max doctor` shows which MAX web-client version `max` identifies as**, and warns if that version was read more than 60 days ago.
+  Why: MAX may stop accepting an old client version ([troubleshooting.md](./troubleshooting.md)).
+- **`max server start|stop|status|restart` manages the background server as a separate component**, like `max session`. `status` shows whether the server runs, since when, its version and whether it is connected to MAX; it suggests `restart` when the server’s version is older than `max`. `max serve --detach` and `--stop` still work ([usage.md](./archive.md#новые-сообщения-сразу-max-serve-и-max-watch)).
+- **History reads send the same five fields as the web client**, and login requests 15 chats from MAX, like a web.max.ru tab, then retrieves the rest in one request. Previously, `max` added a field the web client does not send and requested 40 chats at a time.
+  Why: the less `max` differs from the web client, the fewer reasons MAX has to notice it.
+  What to consider: the chat list is unchanged. Checked on a channel with unread messages: reading still marks nothing as read.
+- **The device description comes from your computer:** time zone, system language and operating system are specific to each installation, as in a browser. Previously, every `max` installation identified as the same Chrome on Linux in the Madrid time zone.
 - **`max serve` sends one hidden-tab-style service event** 20 seconds after login: chat list shown, with account ID and time, no content or titles. One-off commands do not send it ([Network behavior](./security.md#что-уходит-в-сеть)).
-- **Folder titles longer than 20 characters are rejected locally**, instead of sending a request MAX would reject.
+- **`max` rejects overly long folder titles itself** — no more than 20 characters, the limit MAX accepts. Previously, the request went to MAX and came back rejected.
 
 ### Changed — may break scripts
 
@@ -595,7 +721,8 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 
 ### Fixed
 
-- **An inaccessible keyring is distinguished from missing login.** Previously logged-in profiles with unreadable tokens, such as under cron, receive keyring guidance rather than another login hint, avoiding unnecessary new devices ([Recipes](./recipes.md)).
+- **An unavailable keyring is no longer mistaken for being logged out.** If a profile has logged in on this computer but its token is not visible — for example, from cron — `max` and `max doctor` say the keyring is probably the cause. Previously they suggested logging in again.
+  Why it matters: a new login in this case adds an unnecessary new device to the account ([recipes.md](./recipes.md)).
 - **Failed runs save without `--record`**, including MAX key (`login.token`), warning codes, crash location, runtime version and OS, never text. Background logs use timestamped JSON lines ([Diagnostics](./diagnostics.md)).
 - **`max chats read --until` marks only through its message**, rather than using current time and marking newer messages read. `messages list --mark-read` is fixed too; others may previously have seen receipts for unread messages.
 
@@ -603,7 +730,9 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 
 ### New
 
-- **MAX traffic matches the web client's address, binary frames, compression and updated device/browser versions**, replacing the old text-frame format. This is harder to distinguish and supports binary audio/video-note fields. Commands/output are unchanged; voice sending follows in later releases. Login still fetches full chat lists here, creating extra traffic.
+- **`max` talks to MAX like the web client:** the same address, binary frames and compression as web.max.ru, and the same device description with updated app and browser versions. Previously, `max` sent text frames in an old format.
+  Why: the old format made `max` easiest to distinguish from the web client. Also, voice and round video messages need a byte field the old format could not send.
+  What to consider: commands and output are unchanged. Sending voice messages is planned for later versions. For now, MAX sends the entire chat list at each login rather than only changes: this works but adds traffic.
 - **Automatically started `max serve` restarts after updating `max`.** Manually started servers remain old until `max serve --stop` and a restart.
 
 ## 0.8.0 — 25.09.2026
@@ -615,19 +744,23 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 - **`max serve --detach` starts in the background and returns once connected; `max serve
   --stop` stops it.** Manual servers stop only with Ctrl-C or `--stop`; `max
   session end` leaves them running.
-- **`allow` profile permissions:** `max work config set allow send,reaction` permits sends/reactions only. Twelve names range from `send` to `sessions`. Without a list all remain allowed. Rejections return `5` before connecting, with a permission-setting command. MCP hides forbidden tools ([Permissions](./usage.md#что-профилю-можно)).
+- **The `allow` setting defines what a profile can do.** `max work config set allow send,reaction` lets the profile only send messages and react. There are twelve names, from `send` to `sessions`.
+  What to consider: without a list, everything is allowed, as before. Forbidden actions fail with code `5` before connecting, and the error names a command to permit them. In `max mcp`, the agent does not see tools the profile does not permit ([usage.md](./usage.md#что-профилю-можно)).
 - **`max messages send … --at <время>`** schedules on MAX's server, even with the computer off. Accepts `2026-09-25T09:00` locally or `30m`, `2h`, `1d`. `max messages scheduled <чат>` lists the queue; MCP uses `at` in `max_messages_send` and `max_messages_scheduled`. Cancellation is app-only ([Scheduled sends](./usage.md#отправить-позже)).
 - **`max chats read <чат>` and `max messages list … --mark-read`** send explicit visible read receipts. MCP needs `max mcp --allow-mark-read`; normal reads remain invisible ([Reading](./usage.md#чтение)).
-- **`max export messages <чат> --format jsonl|md`** exports local JSONL or Markdown with `--since`, `--output`, without querying MAX. Missing ranges are reported on stderr; output files are owner-only ([Export](./archive.md#выгрузить-в-файл)).
-- **`max messages delete <чат> <id…> --allow-dangerous`** deletes up to 10 messages, locally by default or for everyone with `--for-everyone`. MCP `max mcp --allow-delete` deletes only for you. Permission is mandatory; each deletion counts toward `sendsPerHour` ([Deletion](./usage.md#удаление)).
+- **`max export messages <чат> --format jsonl|md` exports a conversation from the local copy** to JSONL or Markdown, with `--since` and `--output`. It does not contact MAX.
+  What to consider: the command reports missing local data in stderr. The file from `--output` is accessible only to you ([usage.md](./archive.md#выгрузить-в-файл)).
+- **`max messages delete <чат> <id…> --allow-dangerous` deletes messages**, up to 10 at a time. By default, only for you; with `--for-everyone`, for everyone in the chat. MCP uses `max mcp --allow-delete`, only “for me”.
+  What to consider: without `--allow-dangerous`, the command refuses. Each deleted message counts towards `sendsPerHour` ([usage.md](./usage.md#удаление)).
 
 ### Fixed
 
-- **Upgrades preserve read history through schema migration**, instead of clearing it on schema changes. This release changes the schema and preserves messages; chats/people are refreshed on login.
+- **Updating `max` no longer erases history you have read.** Previously, every new version changing the local-copy structure discarded all saved messages. Messages now migrate into the new copy.
+  What to consider: this release itself changes the copy’s structure, and history is retained. Chats and people are fetched again on the next login, as before.
 - **After server login rejection, commands wait 10 minutes before starting another server**, rather than repeatedly triggering rejected logins. `max session
   start` clears the wait.
 - **`max watch` sees messages sent by `max` itself**, previously missing because MAX does not echo to the sending connection.
-- **Concurrent commands preserve local login data.** Previously two of three runs reported “the local record did not take this login”, losing chats, members and sync state. Writes now wait their turn.
+- **Simultaneous `max` commands no longer lose login data in the local copy.** Previously, two out of three simultaneous commands reported “the local record did not take this login” and failed to save chats, members and the sync marker. The second now waits for the first to finish writing.
 
 ### Security
 
@@ -639,15 +772,18 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 
 - **`max reactions remove <чат> <id>`** removes your reaction.
 - **Groups and channels under `max chats`:** inspect invites, join, leave, create, add/remove members/admins, rename, change settings and reset invites. Join requests appeared here but were removed in 0.17.0 because MAX has none. Changes are visible and pass send safeguards ([Group guide](./usage.md#группы-и-каналы)).
-- **`max update` uses the installation package manager**; `--check` only checks. Terminal users receive daily version hints, never agents/scripts. Disable with `updateCheck: false` in `defaults` ([Updates](./installation.md#обновление-и-удаление)).
+- **`max update` updates `max` with the package manager used to install it;** `--check` only reports whether a newer version exists.
+  What to consider: once a day, a person in a terminal sees a new-version notice; agents and scripts never do. Disable it with `updateCheck: false` in `defaults` ([installation.md](./installation.md#обновление-и-удаление)).
 - **Tab completion for zsh, bash, fish and PowerShell:** `source <(max complete zsh)`, offering commands, flags, values and local chats/people without connecting ([Completion](./commands.md#max-complete)).
 - **`max mcp` exposes the same profile to MCP clients**, including Claude Desktop and Cursor ([MCP guide](./mcp.md)). Read-only unless `--allow-send`; sends use the same checks as `max messages send`.
-- **`max mcp --allow-send --confirm-send`** shows destination title/ID and text before each send. Nothing goes without approval; clients without forms fail ([Confirmation](./mcp.md#подтверждение-формой-от-самого-сервера)).
+- **`max mcp --allow-send --confirm-send` shows a form before every send:** which chat (title and ID) and what will be sent.
+  What to consider: nothing is sent without your “yes”; a client unable to show forms receives an error ([docs/mcp.md](./mcp.md#права-профиля-управляют-инструментами)).
 - **`max messages send … --file <путь>`** sends photos/files; several photos use one message in this release.
 
 ### Security
 
-- **Untrusted content cannot control terminals.** Messages, names, titles, filenames or reactions containing controls previously could erase and overwrite output. They now display as `\x1b` in feeds, tables, errors and completion. JSON remains unchanged, already escaping them.
+- **Other people’s text no longer controls the terminal.** A message, sender name, chat title, filename or reaction containing control characters could erase a line and print over existing `max` output. These characters are now displayed as `\x1b` in feeds, tables, errors and Tab suggestions.
+  What to consider: JSON is unchanged — it already escaped them.
 
 ## 0.6.0 — 24.09.2026
 
@@ -657,13 +793,15 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 - **`max messages send … --reply-to <id>`** replies to a message.
 - **`max messages send … --markdown` (or `--md`)** formats `**жирный**`, `_курсив_`, `~~зачёркнутый~~` and `` `код` ``. Without a flag, text stays literal.
 - **`max reactions add <чат> <id> <эмодзи>`** sets a reaction, replacing yours.
-- **`messages list`, `show`, `context` display reactions**, such as `👍 3  🔥 1  (you: 🔥)`, or JSON `reactions`. One extra read request per page; offline reactions are `null` because not stored.
+- **Reactions are visible while reading:** `messages list`, `show` and `context` print `👍 3  🔥 1  (you: 🔥)` under a message; JSON has a `reactions` field.
+  What to consider: this adds one read-only request per page. With `--offline`, reactions are absent (`null`) because they are not stored.
 - **Send logs and optional recipients:** `max sends list` logs attempts without content; `max recipients add|remove|list|off` restricts chats, rejecting code `7`. `readOnly` rejects `5`. See [Security](./security.md) for scope and limitations.
 - **`max session start qr | qr-chrome | sms | token`** logs in without copying browser tokens. `qr` renders in the terminal, or browser if narrow; `qr-chrome` and `sms` open web.max.ru in separate Chrome, Chromium, Edge or Brave windows. Without a method, import manually or by pipe as before.
 
 ### Changed — may break scripts
 
-- **Default hourly sends are limited to 30 (`sendsPerHour`).** `max messages send` returns `8` beyond that, previously unlimited. Scripts intentionally sending more must raise the setting.
+- **Sending has an hourly limit: 30 messages by default (`sendsPerHour`).** Above this limit, `max messages send` fails with code `8`. Previously there was no limit.
+  What to consider: scripts sending more must raise `sendsPerHour` in settings.
 
 ## 0.5.0 — 24.09.2026
 
@@ -678,8 +816,9 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 
 ### Fixed
 
-- **`--offline` works.** Previously commands ignored it: reads contacted MAX, and `max --offline messages send` **sent messages**. Now reads use storage while sends/downloads refuse. `--offline messages send` on 0.4.0 or earlier did go through.
-- **Configuration errors explain unknown fields, valid names and accepted values**, replacing validation-library errors.
+- **`--offline` works.** Previously, no command received the flag: reads still contacted MAX, and `max --offline messages send` **sent a message**. Reads now use saved data, while sending and downloading refuse with `--offline`.
+  What to consider: if you ran `--offline messages send` on 0.4.0 or earlier, the message was sent.
+- **Settings-file errors are explained plainly:** which setting is unknown, which settings exist and what values are accepted. Previously, they were validation-library messages.
 - **Run-log failures (`--record`) no longer crash commands.** A stderr warning, even with `--quiet`, leaves the normal result and exit code intact.
 
 ### Security
@@ -699,7 +838,8 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 
 ### Changed — may break scripts
 
-- **List `--query` becomes `--search`**, introduced in 0.3.0 but omitted from its original notes. Update scripts to avoid errors.
+- **The `--query` flag for lists is renamed to `--search`.** This change was already included in 0.3.0 but was missing from its release notes.
+  What to consider: scripts using `--query` get an error — replace it with `--search`.
 
 ### Fixed
 
@@ -719,9 +859,11 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 
 ### Changed — may break scripts
 
-- **`-v` is output detail; version becomes `max -V`.** **`--trace`** replaces former `--verbose` request tracing. Scripts using `max -v` for the version must use `-V`; update tracing calls accordingly.
+- **`-v` now means output verbosity; the version is `max -V`.** **`--trace`** enables request lines in stderr — this was previously `--verbose`.
+  What to consider: scripts using `max -v` for the version or `--verbose` for tracing must switch to `-V` and `--trace`.
 - **List `--query` becomes `--search`**, originally omitted from these notes.
-- **Local cache upgrades to schema 4 and rebuilds on first run.** Read history is not preserved in this release; read it again.
+- **The local copy moves to schema 4 and is rebuilt on first run.**
+  What to consider: history read in this version is not retained — you must read it again.
 
 ### Fixed
 
@@ -734,7 +876,7 @@ Commands follow one naming rule: resource, then action. Old names return “unkn
 ### New
 
 - **`max messages send --silent`** requests sends without notifications. Its actual effect was not observed in this release because doing so required messaging a real person.
-- **First login exchanges the token:** MAX returns a session token, replacing the imported browser token in the keyring once.
+- **The token is exchanged on first login.** MAX responds to login with its own token, and `max` stores it in the keyring instead of the one pasted from the browser. This happens once.
 
 ### Fixed
 

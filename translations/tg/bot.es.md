@@ -1,6 +1,7 @@
 ---
 title: "Bots de Telegram"
 ---
+
 `tg bot` utiliza un bot con la [Bot API oficial de Telegram](https://core.telegram.org/bots/api) y su token. Es independiente de tu cuenta: el bot tiene nombre, chats y token propios. `tg …` sin `bot` sigue actuando como tú ([uso](./usage.md)).
 
 Crea el bot con [@BotFather](https://t.me/BotFather) en Telegram para obtener el token.
@@ -252,15 +253,15 @@ claude mcp add sales-bot -- tg sales bot mcp
 tg sales bot mcp config          # the entry for Claude Desktop, Cursor and others
 ```
 
-El agente accede a lo que permiten los permisos del perfil del bot, bajo `bot.`: los chats que
-el bot ha visto, mensajes, administradores, menú de comandos, registro y lista de destinatarios.
-Si el perfil permite escribir, puede enviar y editar mensajes como el bot, fijarlos, mostrar
-«escribiendo», responder a botones, borrar mensajes y expulsar miembros.
-`permissions.bot: readonly` bloquea la escritura salvo que una regla más específica la permita.
-Un borrado con nivel `ask` muestra un formulario de confirmación; un permiso explícito
-`permissions.bot.messages.delete: allow` o `--allow-dangerous` omite ese formulario salvo
-que esté activado `--confirm-send`. `--confirm-send` exige confirmar cada operación de escritura.
-`tg_bot_status` indica qué perfil usa el servidor y qué herramientas de escritura están disponibles.
+El agente obtiene lo que permiten los permisos del perfil del bot en `bot.`: los chats que el bot ha visto,
+mensajes, administradores, el menú de comandos, el registro y la lista de destinatarios y, salvo que el perfil sea de
+solo lectura, escritura como el bot: enviar, editar, fijar, «escribiendo», responder a botones, borrar y eliminar miembros.
+`permissions.bot: readonly` bloquea las escrituras salvo que una regla más específica permita una. Para borrar,
+`ask` y `allow` permiten una escritura MCP solicitada sin un formulario del servidor; `deny` y `readonly`
+la bloquean. Las opciones antiguas de confirmación no tienen efecto. El consentimiento independiente para las reglas de moderación sigue
+aplicándose: las acciones que lo requieren devuelven un plan para que el propietario lo apruebe mediante la CLI.
+`tg_bot_read` (`command: "status"`) indica en nombre de qué perfil
+actúa el servidor y qué herramientas de escritura están activadas.
 
 Cada escritura ejecuta el mismo comando que usarías tú: se aplican destinatarios y registro del bot. Cambiar token, webhooks, menú y destinatarios sigue correspondiéndote a ti.
 

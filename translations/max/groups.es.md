@@ -10,7 +10,7 @@ Las órdenes que modifican grupos devuelven `operationId` en JSON; después de c
 
 ## Trabajar con un agente
 
-Un agente con acceso al terminal, como Claude Code o Codex, puede usar la [habilidad](https://github.com/leemour/max-cli/blob/v0.29.0/README.md#навык-для-агентов-с-терминалом). Sin acceso al terminal, usa el [servidor MCP](./mcp.md), por ejemplo en Claude Desktop. Cursor admite ambas opciones. A continuación: tu petición, el comando del agente y el resultado.
+Un agente con acceso al terminal, como Claude Code o Codex, puede usar la [habilidad](https://github.com/leemour/max-cli/blob/v0.34.0/README.md#навык-для-агентов-с-терминалом). Sin acceso al terminal, usa el [servidor MCP](./mcp.md), por ejemplo en Claude Desktop. Cursor admite ambas opciones. A continuación: tu petición, el comando del agente y el resultado.
 
 ### La mañana del administrador: quién espera respuesta
 
@@ -51,11 +51,10 @@ max chats rules set "Поход" consent.delete ask        # но перед у�
 
 ```text
 Вы:     Проверь «Поход».
-Агент:  (max_chats_check)
-        — форма: «delete message … from Олег for everyone (invites)?» —
-Вы:     Да.
-Агент:  Удалено одно сообщение с приглашением от Олега. Олег отмечен: аккаунту 2 дня.
-        Остальное в порядке.
+Агент:  (max_write, command: "chats check")
+        Найдено приглашение. Правила требуют отдельного согласия: действие оставлено планом.
+        Для выполнения в терминале: max chats moderate "Поход" --allow-dangerous --json
+Вы:     Выполняю эту команду.
 ```
 
 En el terminal, `max chats moderate "Поход"` hace la misma pregunta: `[y/N]`.
@@ -78,7 +77,7 @@ No hace falta un agente: la comprobación es una orden normal. Dos veces al día
 0 9,21 * * * max chats moderate "Поход" --allow-dangerous >> ~/max-check.log 2>&1
 ```
 
-Sin `--allow-dangerous`, cron solo planifica las acciones de nivel `ask` y espera tu aprobación. Consulta [Programación](./recipes.md#как-запускать-по-расписанию) para configurar `PATH` y `XDG_RUNTIME_DIR`, necesarios para encontrar Node y tu sesión.
+Sin `--allow-dangerous`, las acciones de cron con nivel `ask` solo se planifican y esperan tu respuesta. Consulta en [recipes.md](./recipes.md#как-запускать-по-расписанию) las líneas `PATH` y `XDG_RUNTIME_DIR` que necesita `max` para encontrar Node y tu sesión en cron.
 
 ## Acciones disponibles
 
@@ -91,10 +90,24 @@ Sin `--allow-dangerous`, cron solo planifica las acciones de nivel `ask` y esper
 | `max chats moderate <чат>` | Comprobar reglas y ejecutar lo permitido |
 | `max chats members add\|remove`, `admins add\|remove` | Gestionar miembros y administradores |
 | `max chats link show\|reset <чат>` | Enlace de invitación; `reset` crea uno e invalida el anterior |
-| `max chats update` | Ajustes, título y descripción; leerlos con `max chats show` |
+| `max chats update` | Ajustes, título, descripción y foto; consulta los ajustes con `max chats show` |
 | `max messages delete --for-everyone`, `pin`, `unpin` | Borrar para todos, fijar o desfijar |
 
-Los agentes sin terminal disponen de `max_review` con `unanswered_after_hours`, `max_chats_events`, `max_chats_members`, `max_chats_rules` y `max_chats_check` ([MCP](./mcp.md)).
+Un agente sin terminal puede usar las herramientas MCP equivalentes: `max_read` (`command: "review"`) con `unanswered_after_hours`, `max_read` (`command: "chats events"`), `max_read` (`command: "chats members"`), `max_read` (`command: "chats rules"`) y `max_write` (`command: "chats check"`) ([mcp.md](./mcp.md)).
+
+## Qué necesita tu respuesta
+
+`max review` mantiene una lista de tareas en la copia local; `max serve` todavía no abre tareas en MAX. Una pregunta sin respuesta o un mensaje que te menciona por tu nombre abre una tarea; tu respuesta la cierra. La tarea enlaza al mensaje sin copiar su texto.
+
+```sh
+max tasks list --state open                               # что ждёт ответа, старые сверху
+max tasks list --chat "Поход" --type question,mention
+max tasks add msg:max/<вы>/<чат>/<сообщение> --type promise   # то, чего правила не видят
+max tasks close <задача> --as dismissed --reason no-reply-needed
+max stats tasks show                                           # открытые по чатам, самая старая, медиана до закрытия
+```
+
+Las tareas cerradas siguen cerradas y las descartadas no vuelven a aparecer. Solo tu respuesta cierra una tarea; la de un administrador todavía no lo hace y las menciones mediante `@ник` no se detectan. Las herramientas MCP equivalentes son `max_read` (`command: "tasks list"`), `max_write` (`command: "tasks add"`), `max_write` (`command: "tasks close"`) y `max_read` (`command: "stats tasks show"`) ([mcp.md](./mcp.md)).
 
 ## Reglas
 
@@ -122,7 +135,7 @@ El consentimiento decide si se ejecuta:
 - `ask`: preguntar en el terminal; sin respuesta, la acción espera. `--allow-dangerous` permite esas acciones en esta ejecución.
 - `allow`: inmediatamente.
 
-Los archivos anteriores se admiten: `forbid` pasa a `deny`; `flag` y `confirm`, a `ask`. MCP conserva `max_chats_check` y el formulario de confirmación.
+Los archivos antiguos se siguen leyendo: `forbid` pasa a ser `deny`, y `flag` y `confirm` pasan a ser `ask`. MCP llama a `max_write` con `command: "chats check"`; las acciones con nivel de consentimiento `ask` permanecen como planes, sin formularios de confirmación del servidor.
 
 `chats moderate --json` devuelve `{ chatId, rows }`. `--since-time` acepta una fecha ISO 8601 o `30m`, `2h`, `1d`, no un ID de mensaje; no cambia el punto guardado. Ese punto se guarda junto a las reglas; el anterior, de la sesión, se migra automáticamente antes de la primera ejecución. CLI y MCP personal comparten el mismo punto.
 
@@ -140,12 +153,45 @@ moderate`. Puede impedir el regreso por invitación a las personas expulsadas, a
 - **Una incorporación requiere toda la lista de miembros** para conocer la antigüedad de la cuenta; en grupos grandes puede necesitar decenas de solicitudes.
 - **No hay vigilancia automática.** Solo se comprueba cuando tú, tu agente por encargo o tu programación lo iniciáis.
 
-## Revisión de miembros
+## Estadísticas para administradores de grupos
 
-`max chats members audit <чат>` lee los miembros del grupo y muestra señales de cuentas sospechosas. `--budget` limita las páginas y `--min-score`, la puntuación mínima. Es una pista para que una persona revise: no se elimina a nadie y se excluyen los administradores y el propietario; `more` indica que la lista está incompleta y `unknown`, señales desconocidas. MAX no ofrece todas las señales de Telegram. Con `--offline` la revisión no está disponible.
+`max stats chats show` cuenta mensajes, remitentes activos, respuestas, hilos, reacciones y preguntas respondidas del periodo elegido a partir del almacenamiento local. `--by day` o `--by week` añade un desglose por días o semanas naturales; la semana empieza el lunes y `--timezone` establece la zona horaria. Las vistas de publicaciones de canales solo aparecen si MAX las proporcionó y se guardaron con los mensajes. Un recuento ausente no significa cero. Las reacciones se cuentan con los datos guardados, sin volver a consultarlas para cada publicación. Las preguntas se identifican como en `review --unanswered`.
 
-`--deep <n>` comprueba además a los primeros n miembros por completo, uno por segundo: su perfil y lo que escribieron en los chats guardados. Las listas públicas de spammers solo cubren cuentas Telegram, por lo que MAX no las consulta y lo indica en la respuesta.
+Una ejecución normal también consulta a MAX los eventos de entrada y salida. Con `--offline`, esos eventos no se solicitan, por lo que no aparece `members`. Es distinto de `memberCounts`: las instantáneas diarias guardadas del número de miembros siguen disponibles sin conexión.
+
+Si `complete` es `false`, los datos están incompletos: los totales reflejan solo el historial disponible y las medianas y proporciones pueden diferir de los resultados de todo el grupo. `fetch` sugiere un comando para descargar los mensajes que faltan. Un historial de eventos incompleto también limita los recuentos de entradas y salidas. Ni siquiera un historial de mensajes completo permite reconstruir perfiles anteriores o listas de miembros de días anteriores al inicio de la recopilación.
 
 ### Instantáneas de miembros
 
-`max chats members fetch` guarda la lista de miembros localmente; `--budget` limita las páginas. Las instantáneas repetidas muestran entradas, salidas y cambios de perfil con `max chats members history`. Las salidas solo se registran tras leer la lista completa. `--since-time` fija el inicio del historial, y `--offline` permite leerlo sin conectar. Las instantáneas MAX se recogen mediante comandos explícitos: la revisión diaria desde el servicio de fondo aún no está disponible.
+`max chats members fetch` guarda miembros en el almacenamiento local: sus perfiles, cambios, el número diario de miembros y el resultado de la comprobación de integridad. `--budget` limita las páginas. Una lista incompleta no marca a nadie como salido: para ello se necesita toda la lista disponible y un número conocido de miembros del grupo que no supere el número obtenido. En MAX, las listas suelen ser parciales; aumentar el presupuesto solo ayuda cuando el servidor proporciona realmente más páginas.
+
+`chats tracking add` añade un grupo al seguimiento. `chats tracking list` muestra los grupos seguidos; `show` muestra el estado del grupo y las instantáneas del número de miembros de los últimos 30 días. `add` no obtiene los miembros de inmediato; `remove` detiene el seguimiento y conserva el historial recopilado. El servidor de MAX recopila diariamente los miembros de los grupos seguidos mientras está en marcha. Añadir un grupo al seguimiento no inicia el servidor ni prolonga su tiempo límite de inactividad; consulta los detalles más abajo.
+
+`max chats members history` muestra las entradas, salidas y cambios de perfil guardados en orden cronológico; `--since-time` limita el periodo. No contacta con MAX. La fecha de entrada procede de MAX si se conoce; de lo contrario, es la primera vez que se detectó a la persona. La fecha de salida es la primera instantánea completa sin ella, no el momento exacto de su salida. La primera consulta establece la composición inicial; esas personas no necesariamente entraron ese día. `chats members list --offline` muestra la última lista de miembros guardada completa; las consultas parciales no la sustituyen. Si todavía no hay una instantánea completa, la lista puede estar vacía aunque ya haya perfiles y eventos guardados. Los perfiles y el historial permanecen en el almacenamiento local junto a los mensajes.
+
+`max chats members audit` consulta los miembros y muestra señales de cuentas sospechosas. `--budget` limita las páginas y `--min-score` establece la puntuación mínima. Es una pista para que una persona la revise: no se elimina a nadie, se excluyen los administradores y el propietario, `more` indica una lista incompleta y `unknown` indica señales desconocidas. MAX no proporciona todas las señales de Telegram. Esta comprobación no está disponible con `--offline`. «No escribió» significa que no se encontraron mensajes de esa persona en el historial local; no demuestra que nunca escribiera en el grupo.
+
+`--deep <n>` comprueba además en profundidad a los primeros n miembros, uno por segundo: su perfil y hasta 1000 mensajes guardados de cada uno. Las listas públicas de spam solo cubren cuentas de Telegram, por lo que no se consultan para MAX, y la respuesta lo explica.
+
+### Informe semanal de tu grupo
+
+«Поход» es un grupo ficticio del ejemplo siguiente. Primero descarga sus mensajes con `store fetch` si todavía no están guardados; después guarda los miembros actuales y prepara un informe:
+
+```sh
+max chats tracking add "Поход" --json
+max chats members fetch "Поход" --json
+max stats chats show "Поход" --since-time 7d --by day --timezone Europe/Madrid --json
+max chats members history "Поход" --since-time 7d --offline --json
+max chats tracking show "Поход" --offline --json
+max chats members audit "Поход" --json
+```
+
+Pide al agente que indique el número de mensajes y remitentes activos, las preguntas sin respuesta, los cambios de miembros y los días con instantáneas. Conserva los indicadores de datos incompletos en el informe: `complete`, `more`, `unknown` y los días sin instantáneas. Repite la recopilación de miembros para el siguiente informe; el primero no puede mostrar salidas anteriores a la primera lista de miembros guardada.
+
+## Historial diario de miembros
+
+Añade un grupo con `max chats tracking add <группа>` o ejecuta `max chats members fetch <группа> --track`. Mientras el servidor de MAX está en marcha, obtiene los miembros de los grupos seguidos por primera vez un minuto después de conectarse y después una vez al día. `max chats tracking list` muestra los grupos seguidos y sus últimos recuentos guardados.
+
+El seguimiento no inicia el servidor ni prolonga su tiempo límite de inactividad. Mantén `max server` en marcha de forma continua para obtener un historial diario. Si ya se han guardado los miembros hoy en UTC, incluso con una respuesta parcial, se omite la consulta automática; puedes repetirla manualmente con `max chats members fetch <группа>`. Una lista incompleta no demuestra que los miembros ausentes hayan salido.
+
+`max chats tracking remove <группа>` detiene las consultas automáticas futuras; el historial guardado sigue disponible mediante `max chats members history <группа>`.

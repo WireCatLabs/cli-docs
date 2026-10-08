@@ -21,7 +21,7 @@ Hay dos formas de obtenerlo:
 
 La aplicación solo se guarda después de que Telegram acepte el inicio de sesión.
 
-## Iniciar sesión
+## Inicio de sesión
 
 ```sh
 tg session start           # a QR code in the terminal
@@ -104,7 +104,7 @@ En equipos sin almacén de claves (habitual en contenedores), la aplicación se 
 
 > ⚠ **En Linux se accede al almacén de claves mediante `XDG_RUNTIME_DIR`.** cron, ssh y algunos clientes MCP inician `tg` sin ella, por lo que todos los comandos indican que no se encuentran las credenciales "although it has logged in on this machine". **No vuelvas a iniciar sesión:** añadirías otro dispositivo sin resolver el entorno. Define `XDG_RUNTIME_DIR` ([solución de problemas](./troubleshooting.md#no-telegram-app-credentials-found--although-it-has-logged-in-on-this-machine)).
 
-## Siguientes pasos
+## Siguiente paso
 
 - [Primeros pasos](./usage.md): los primeros comandos.
 - [Configuración](./configuration.md): ajustes y orden de prioridad.

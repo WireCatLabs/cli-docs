@@ -1,44 +1,72 @@
 ---
-title: Bot API completa
-description: Todos los métodos de las Bot API oficiales de Telegram y MAX desde la CLI.
+title: "Bots y Bot API"
+description: "Conecta un bot para respuestas, informes y tareas de grupos."
 ---
 
-**Todos los métodos de la Bot API están disponibles desde la CLI.** La interfaz nativa completa
-complementa los comandos sencillos para mensajes, archivos y administración de chats. Telegram
-cubre los 185 métodos del esquema fijado de Bot API 10.3; MAX cubre las 33 operaciones de su esquema oficial.
+Un bot tiene su propio nombre, cuenta y chats. Puede publicar informes, responder solicitudes
+o ayudar a gestionar un grupo. Sin `bot`, los comandos usan tu cuenta personal.
 
-Usa Telegram CLI **0.25.0 o posterior** y MAX CLI **0.25.0 o posterior**. Consulta la [instalación](./installation.mdx).
+## Conectar un bot
 
-## Descubre todos los métodos
+Crea un bot de Telegram con [BotFather](https://t.me/BotFather) o sigue las
+[instrucciones de MAX](https://business.max.ru/self). Guarda el token con entrada oculta:
 
 ```sh
-tg sales bot api --help
-max sales bot api --help
-tg sales bot api get-me --json
-max sales bot api get-my-info --json
+tg support bot auth set
+max support bot auth set
 ```
 
-La primera palabra es el perfil de tu bot. La ayuda `--help` de cada método enumera sus campos
-nativos. Los nombres y parámetros siguen la API del proveedor y pueden diferir entre Telegram y MAX.
+`support` es el nombre que eliges para el perfil. Conecta solo el mensajero que uses.
+No pongas el token en comandos, capturas ni chats. Comprueba el bot conectado:
 
-## Solicitudes y respuestas nativas
+```sh
+tg support bot me
+max support bot me
+```
 
-Los parámetros son opciones o JSON mediante `--body`, `--body-file` o stdin. El parámetro nativo
-`timeout` se llama `--poll-timeout`; `--timeout` limita el comando completo. Las respuestas conservan
-la estructura del proveedor; los enteros fuera del rango seguro de JavaScript se representan como cadenas.
+## Elegir un chat
 
-Algunos métodos requieren permisos del bot o capacidades concretas de la plataforma. Las escrituras
-usan los permisos del perfil, la comprobación de destinatarios y el registro. Pasa las credenciales
-por stdin o por un archivo JSON protegido, nunca por argumentos. Los métodos que devuelven tokens
-requieren `--store-token <profile>`: el token se guarda solo en el almacén de claves del sistema
-y stdout muestra un recibo.
+Añade el bot al grupo o canal, o inicia una conversación desde tu cuenta personal.
+El bot solo accede a chats y mensajes permitidos por el mensajero, no a tu historial personal.
+En Telegram, la persona debe iniciar la conversación antes de recibir mensajes del bot.
 
-## CLI y MCP
+El identificador llega en actualizaciones recibidas o un chat que consultas explícitamente.
+Las guías de [Telegram](./tg/bot.md) y [MAX](./max/bot.md) explican cómo encontrarlo.
+Usa el título guardado en comandos posteriores cuando esté disponible.
 
-La API nativa completa es una **interfaz CLI**. MCP ofrece herramientas separadas para tareas
-habituales, no una herramienta por cada método. Un agente con terminal puede usar `tg bot api`
-o `max bot api` para las operaciones restantes.
+## Enviar una respuesta o informe
 
-Más detalles: [bots de Telegram](https://github.com/leemour/tg-cli/blob/v0.25.0/docs/bot.md),
-[bots de MAX](https://github.com/leemour/max-cli/blob/v0.25.0/docs/bot.md),
-[Telegram Bot API](https://core.telegram.org/bots/api), [MAX Bot API](https://dev.max.ru/docs-api).
+```sh
+tg support bot messages send "Equipo" "El informe está listo"
+max support bot messages send "Equipo" "El informe está listo"
+```
+
+Sustituye chat y texto por el mensaje deseado. Es un envío real desde el bot.
+También puedes enviar archivos, responder mensajes y gestionar chats si tiene los derechos necesarios.
+No concedas derechos de administrador para acciones que no los requieren.
+
+## Automatizar con cuidado
+
+Un asistente puede preparar borradores e informes o usar el bot en un proceso.
+Dale los [permisos](./permissions.md) necesarios y decide sus destinatarios.
+Revisa los mensajes importantes antes de enviarlos. Webhooks y consultas de actualizaciones
+alimentan otras aplicaciones; cambiarlos puede interrumpir una integración existente.
+
+MCP ofrece herramientas comunes para bots. Un asistente con terminal también puede usar el CLI.
+Consulta [cómo conectar un asistente](./mcp.md).
+
+## Una acción que no aparece entre los comandos habituales
+
+La interfaz nativa Bot API expone los métodos definidos por el mensajero. Empieza con ayuda:
+
+```sh
+tg support bot api --help
+max support bot api --help
+tg support bot api get-me --json
+max support bot api get-my-info --json
+```
+
+Elige un método y usa `--help` para sus campos y ejemplos. Telegram y MAX usan nombres y
+entradas distintos. JSON y formatos de respuesta son para integraciones; consulta la guía del bot.
+
+[API oficial Telegram](https://core.telegram.org/bots/api) · [MAX](https://dev.max.ru/docs-api)

@@ -7,7 +7,7 @@ WireCat tiene dos formas de buscar en un mismo archivo local. **La búsqueda de 
 
 Esta es la página técnica. Para el uso diario, lee las guías de búsqueda de [Telegram](./tg/search.md) y [MAX](./max/search.md) y sus páginas del archivo. El motor de búsqueda compartido está publicado en tg 0.28 (cli-messaging 0.149.0) y max 0.29 ([cli-messaging 0.152.0](https://github.com/leemour/cli-messaging/tree/v0.152.0)), con etiquetas, búsquedas guardadas, búsqueda en archivos y ajustes de raíces de palabras.
 
-La preparación del archivo y las ampliaciones de cobertura descritas abajo están disponibles en tg 0.35.0 (cli-messaging 0.177.0) y max 0.34.0 (cli-messaging 0.176.0). Las guías enlazadas siguen revisadas para tg 0.28.0 y max 0.29.0.
+La preparación del archivo y las ampliaciones de cobertura descritas abajo están disponibles en tg 0.35.0 (cli-messaging 0.177.0) y max 0.34.0 (cli-messaging 0.176.0). Las guías enlazadas están revisadas para tg 0.35.0 y max 0.34.0.
 
 <ArchitectureDiagram name="searchPaths" lang="es" />
 
@@ -16,7 +16,7 @@ La preparación del archivo y las ampliaciones de cobertura descritas abajo est�
 | Pregunta | Comando | Qué devuelve | Qué hace falta antes |
 | --- | --- | --- | --- |
 | «¿Dónde dijo Alice factura, en octubre, con un PDF?» | `messages search` | Mensajes que coinciden, sus localizadores y, si quieres, los mensajes vecinos | Historial guardado; índice de palabras listo para consultas con palabras |
-| «¿Cuántos mensajes al día mencionan el presupuesto?» | `messages stats` | Recuentos por chat, remitente, día u hora | Lo mismo que la búsqueda de mensajes |
+| «¿Cuántos mensajes al día mencionan el presupuesto?» | `stats messages show` | Recuentos por chat, remitente, día u hora | Lo mismo que la búsqueda de mensajes |
 | «¿Dónde hablamos de alquilar un piso?» | `conversations search` | Conversaciones ordenadas, el fragmento que coincide y cómo coincidió | Conversaciones construidas; vectores para coincidir por significado |
 | «¿Qué más trató lo mismo?» | `conversations related` | Las conversaciones más cercanas a la de un mensaje | Vectores; no se ejecuta ningún modelo |
 | «¿A qué conversación pertenece este mensaje?» | `conversations show` / `messages links` | La conversación y la cadena de padres elegida | Conversaciones construidas |
@@ -63,7 +63,7 @@ Si el índice de palabras no está listo, una consulta con palabras falla con `i
 
 La respuesta JSON incluye las versiones del lenguaje, los campos y los presets, la zona horaria, el orden, `wordsReady` y la cobertura de cuentas y chats, incluso sin resultados. `lastSyncedAt` es la hora más antigua en que un chat del alcance se descargó por última vez con `store fetch`, o `null` si alguno nunca se descargó. `inventoryComplete` indica que cada cuenta del alcance entregó alguna vez su lista completa de chats; es un dato del pasado, no una promesa sobre el presente. `coverage` también indica los mensajes y chats guardados del alcance (`messages`, `coveredChats`), cuenta los chats nunca descargados o atrasados en `chats`, enumera hasta diez chats en `attention` y nombra `next`, el comando que mejoraría la respuesta. Si no encuentra el mensaje y `next` está definido, el agente lo ejecuta o pregunta al dueño antes de concluir que el mensaje no existe.
 
-`messages stats` ejecuta la misma consulta y cuenta cada mensaje una vez, por chat, remitente, día de calendario u hora. Una búsqueda o recuento correcto guarda su consulta y opciones, nunca sus resultados, en un historial local de las 1000 ejecuciones más recientes; las búsquedas guardadas son entradas con nombre que se analizan de nuevo en cada ejecución.
+`stats messages show` ejecuta la misma consulta y cuenta cada mensaje una vez, por chat, remitente, día de calendario u hora. Una búsqueda o recuento correcto guarda su consulta y opciones, nunca sus resultados, en un historial local de las 1000 ejecuciones más recientes; las búsquedas guardadas son entradas con nombre que se analizan de nuevo en cada ejecución.
 
 La búsqueda anterior (`--language legacy`) y el modo JavaScript `--regex` siguen siendo explícitos y separados de la semántica estricta.
 

@@ -11,7 +11,7 @@ If it is not listed, start with `--trace`: it shows whether requests reached MAX
 | Code | Name | Usual meaning |
 |---|---|---|
 | `1` | `generic_failure` | Misspelled command or a failure inside `max` |
-| `2` | `validation_error` | Invalid value or option combination; a name matches several chats |
+| `2` | `validation_error` | A value or option combination `max` does not accept; a name matches several chats |
 | `3` | `configuration_error` | Invalid `config.json`, or local storage was upgraded by a newer version |
 | `4` | `authentication_error` | Not logged in, session ended, or keyring inaccessible |
 | `5` | `permission_error` | Read-only profile or action absent from `allow` |
@@ -23,7 +23,7 @@ If it is not listed, start with `--trace`: it shows whether requests reached MAX
 | `11` | `provider_error` | MAX rejected the request |
 | `12` | `provider_unavailable` | Failure on MAX's side |
 | `13` | `invalid_response` | Response `max` could not parse |
-| `14` | `outcome_unknown` | Disconnection after sending, or a bot write received gateway status 502, 503 or 504; it may have succeeded |
+| `14` | `outcome_unknown` | The connection broke after sending, or the `max bot` gateway returned 502, 503 or 504 for a change: the message may have been sent |
 | `130` | `cancelled` | Ctrl-C or declining confirmation |
 
 ## Start with `max doctor`
@@ -34,15 +34,15 @@ max doctor
 
 In `--json`, `store` shows the shared store path, schema, chat count and message count. The check neither creates nor upgrades storage. `legacyCache` only reports whether an old cache file exists; if so, `doctor` gives its path for manual deletion.
 
-It reports prerequisites **without connecting to MAX**, unless `--online` is set: token presence and source; keyring entry and directory overrides; login count and latest login; every local profile, personal, bot or both; shared store schema and counts of saved chats and messages; run directory; and the MAX web-client version being emulated, with the date it was checked. If that date is over 60 days old, it warns that MAX may stop accepting the old version; updating `max` may help.
+It prints the prerequisites for any command **without connecting to MAX** (unless `--online` is specified): whether a token exists and where it comes from; the keychain entry and whether environment variables override it; the number of sign-ins and the latest one; all profiles on this computer, personal, bot or both; the shared storage schema; saved chat and message counts; the run directory; and the MAX web-client version `max` identifies as, with the date it was inspected. If that date is over 60 days old, `max doctor` warns that MAX may stop accepting the old version; updating `max` may help.
 
 It **answers even when everything else is broken**. A profile without a session appears as a result, not an error; exit code remains `0`.
 
-Tokens are never printed, only their presence and source.
+The token is never printed, only whether it exists and where it comes from.
 
 For a bot profile, `max <имя> doctor` reports its token source, count of seen chats and profile file locations: state, cache, runs, bot files, send log and shared message store.
 
-It also shows the runtime (Node or Bun and its path), installation package manager, which `max` a new terminal will find, whether keyring and SQLite modules load, and whether a speech model is downloaded. If the command directory is absent from `PATH`, `max doctor` prints exact fixes: PowerShell commands on Windows or an `export` line on Linux and macOS.
+It also shows the runtime used for `max` (Node or Bun and its location), the package manager used for installation, which `max` command a new terminal will find, whether the keychain and SQLite load, and whether a speech model is downloaded. If the directory containing `max` is absent from `PATH`, `max doctor` prints the exact commands to add it: PowerShell commands on Windows, or an `export` line on Linux and macOS.
 
 ### Online health check
 
@@ -81,7 +81,7 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 
 **Linux and macOS.** npm's command directory is `$(npm prefix -g)/bin`. `max doctor` prints `export PATH=…`; add it to `~/.zshrc` or `~/.bashrc`.
 
-**Another `max` is earlier on `PATH`.** `max doctor` shows its path. Use the full path to this tool, or move its directory earlier.
+**Another `max` is on `PATH`.** If an unrelated program with the same name appears earlier in `PATH`, `max doctor` shows its path. Invoke our tool by its full path or put its directory earlier.
 
 ## “no session for profile "default"”
 
@@ -117,13 +117,15 @@ max shop bot messages list -100
 
 ## “no token found for profile "default", although it has logged in on this machine”
 
-Code `4`: this profile has logged in here, but the token cannot be read. Usually the password store is unreachable because the command runs from cron, SSH or another environment without `XDG_RUNTIME_DIR`. **Do not log in again:** this adds another device without fixing the next run's environment. `max doctor` reports token visibility; see [Scheduled commands](./recipes.md) for cron setup.
+Exit code `4`. This profile has signed in on this computer before, but the token cannot be read. Usually `max` cannot reach the password store: the command runs from cron, over SSH or in another environment without `XDG_RUNTIME_DIR`. **Do not sign in again**: that adds another device to your account, and the same environment still will not be able to read the token next time. `max doctor` shows whether it can see the token; see [recipes.md](./recipes.md) for cron setup.
 
 ## “MAX refused this profile's last login for too many attempts”
 
 Code `8`: MAX rejected excessive login attempts. `max` remembers the rejection and does not log in until the stated time, including commands, `max session start` and the background server. Consecutive refusals increase the wait: 1 minute, 5 minutes, 30 minutes, 1 hour, 6 hours, then 1 day. Successful login resets it.
 
 **Wait.** An early login is another attempt counted by MAX; repeated attempts can prolong restrictions. Reduce scheduled login frequency. `max doctor` shows the pause expiry.
+
+See [limits.md](./limits.md) for request pacing, waits and simultaneous commands.
 
 The background server (`max serve`, `max server start`) stops after any authentication rejection rather than retrying. It still reconnects after network failures.
 
@@ -257,11 +259,11 @@ Code `3`: another CLI, such as `tg`, or a newer `max`, upgraded the shared store
 
 ## “nothing recorded for profile … yet — run the command once without --offline”
 
-Code `6`: `--offline` and `messages search` only read local data, and this profile has not saved any yet. Run an online command first, such as `max chats list`.
+Code `6`. `--offline` uses only the local copy, and this profile has not yet retrieved anything into it. First run a command with a connection, for example `max chats list`.
 
 ## `messages search` finds nothing
 
-Search only reads data saved on this machine; it never queries MAX. An empty result means “not stored”, not “never said”. Read the chat (`max messages list <чат>`) or fetch history with `max store fetch <чат>`, then search again ([Local storage](./archive.md)).
+Searching all chats reads the local archive; word search in one specified chat also queries the MAX server. Empty results do not prove a message is absent. Check `coverage.next` in the `--json` response: run the suggested command or ask for permission, then search again. `max store fetch --all --background` starts downloading all chats; `max store fetch <чат>` downloads one ([archive.md](./archive.md), [search.md](./search.md)).
 
 ## “max serve is already running for profile …”
 
@@ -286,17 +288,17 @@ max doctor report          # что попадёт в отчёт и чего в 
 max doctor report create   # записать отчёт в файл и показать, как его отправить
 ```
 
-`create` writes `max-report-<время>.json` in the current directory with permissions `0600`. It includes version, runtime and system, doctor information, the latest failed run and the last 20 write actions. It excludes message text, chat titles, names, phone numbers and tokens. Chat and message IDs are replaced with labels, consistent within one report but different in the next. Failed runs are saved automatically, even without `--record` ([Diagnostics](./diagnostics.md)). Use `--run <id>` for another run; find IDs with `max runs list`.
+`create` writes `max-report-<время>.json` in the current directory (permissions `0600`). It contains the version, environment and system, the same information as `max doctor`, the latest failed run and the last 20 write actions. It contains no message text, chat names, personal names, phone numbers or token. Chat and message IDs are replaced with labels: the same chat has the same label within one report and a different label in the next. Failed runs are saved automatically, even without `--record` ([diagnostics.md](./diagnostics.md)). To use another run, pass `--run <id>`; `max runs list` shows IDs.
 
-The command prints a link to a new [GitHub issue](https://github.com/leemour/max-cli/issues) with a prepared title and body. A GitHub account is required. Drag the report file into the issue body, describe your action and the result, then click “Submit new issue”.
+The command then prints a link for opening a new issue at [github.com/leemour/max-cli/issues](https://github.com/leemour/max-cli/issues), with the title and draft text already filled in. You need a GitHub account. Drag the report file into the text field, describe what you did and what happened, then click “Submit new issue”.
 
-Issues and attachments are public.
+GitHub issues and attached files are public.
 
 ⚠ Never attach `~/.cache/max-cli/` or `~/.local/share/cli-messaging/`: they contain message text.
 
 ## Remembered rate limit
 
-If a messenger specifies a wait time, `max` remembers it for the operation and chat. A retry before it expires immediately refuses with code `8`, without contacting the messenger. MAX does not yet report such a time, so nothing is remembered and sends are not held for a personal MAX account. A login pause protects against frequent logins; `max doctor` shows its duration.
+If the messenger specifies a wait time, `max` remembers it for the operation and chat. A retry before it expires immediately returns code `8` without contacting the messenger. MAX does not currently specify such times, so no hold is recorded for a personal MAX account and sends are not held. A sign-in cooldown in `max` protects against frequent sign-ins; `max doctor` shows its duration.
 
 Remembered waits and send holds appear in `max server status` (`flood`). `max flood
 clear` forgets them without changing anything in MAX. Run it only when MAX is no longer limiting the account. MCP has no such command: an agent must not clear a limit to retry.

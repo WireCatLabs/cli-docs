@@ -1,6 +1,7 @@
 ---
 title: "Installation"
 ---
+
 `max` is one command. It installs as an ordinary npm package, runs under Node and Bun, compiles nothing during installation and does not start the background service. Background `max serve` starts later with the first normal command that needs it; setup does not start it (`serve` in [configuration.md](./configuration.md)).
 
 ## Requirements
@@ -149,7 +150,7 @@ For a source installation, use `git pull && pnpm install && pnpm build`.
 Uninstalling removes the command, but not your data:
 
 ```sh
-max session end                        # забыть токен ДО удаления команды
+max session end                        # выйти и забыть токен ДО удаления команды
 max <бот> bot auth remove              # и токен каждого бота
 npm uninstall -g @leemour/max-cli
 rm -rf ~/.config/max-cli ~/.local/share/max-cli ~/.cache/max-cli ~/.local/share/cli-messaging

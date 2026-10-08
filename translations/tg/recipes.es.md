@@ -135,7 +135,9 @@ Escribe en Telegram: **solo después de tu aprobación**. Este ejemplo es para u
 
 > Lee los últimos 20 mensajes del chat con @example_user y propón una respuesta a su última pregunta. No la envíes: muéstrame el texto.
 
-Después de aprobarla, el agente la envía: `tg messages send @example_user "…"`. Un agente sin terminal se conecta con `tg mcp --confirm-send`: antes de cada envío ves el chat y el texto, y lo apruebas o rechazas ([MCP](./mcp.md)).
+Cuando das tu aprobación, el agente lo envía: `tg messages send @example_user "…"`. Un agente sin terminal
+se conecta con `tg mcp`; deja `tg_write` sin aprobación previa en el cliente para que te pregunte antes de cada envío
+([mcp.md](./mcp.md)).
 
 ## Un grupo que administras
 

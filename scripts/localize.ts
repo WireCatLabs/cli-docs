@@ -173,7 +173,6 @@ export function localizeTool(root: string, tool: Tool) {
   for (const file of pages) {
     const slug = file.slice(0, -3)
     const original = readFileSync(join(source, file), "utf8")
-    writeFileSync(join(target, file), siteLinks(contentLanguage(corrected(original, slug, tool.lang), tool.lang), "en"))
     for (const lang of languages) {
       const overview = join(root, "translations/overviews", `${tool.name}.${lang}.md`)
       const path = join(translations, `${slug}.${lang}.md`)
@@ -188,19 +187,19 @@ export function localizeTool(root: string, tool: Tool) {
       }
       if (!existsSync(path)) {
         problems.push(`${tool.name}/${slug}.${lang}: missing translation`)
-        if (lang !== "en") writeFileSync(destination, siteLinks(contentLanguage(original, tool.lang), lang))
+        writeFileSync(destination, siteLinks(contentLanguage(original, tool.lang), lang))
         continue
       }
       if (hashes[`${tool.name}/${slug}.${lang}`] !== fingerprint(original)) {
         problems.push(`${tool.name}/${slug}.${lang}: source changed; translation needs review`)
-        if (lang !== "en") writeFileSync(destination, siteLinks(contentLanguage(original, tool.lang), lang))
+        writeFileSync(destination, siteLinks(contentLanguage(original, tool.lang), lang))
         continue
       }
       const translated = readFileSync(path, "utf8")
       const errors = translationProblems(original, translated)
       if (errors.length) {
         problems.push(`${tool.name}/${slug}.${lang}: ${errors.join(", ")}`)
-        if (lang !== "en") writeFileSync(destination, siteLinks(contentLanguage(original, tool.lang), lang))
+        writeFileSync(destination, siteLinks(contentLanguage(original, tool.lang), lang))
         continue
       }
       writeFileSync(

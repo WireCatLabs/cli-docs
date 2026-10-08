@@ -2,7 +2,26 @@
 title: "Buscar mensajes"
 ---
 
-`max messages search` encuentra mensajes en el archivo local: la copia de tus chats que `max` guarda en este equipo. Por defecto no se conecta a MAX ni marca nada como leído. Un mensaje que `max` no ha descargado no se puede encontrar, así que descarga antes el historial: `max store fetch <чат>` ([archivo local](./archive.md)).
+`max messages search` busca en el archivo local, la copia de tus chats que `max` guarda en este ordenador. Al buscar en un solo chat, también consulta al servidor de MAX ([más abajo](#поиск-на-сервере-max---backend)). No marca nada como leído.
+
+## Primero, prepara el archivo
+
+Para obtener buenos resultados, necesitas descargar los chats. El servidor de MAX solo busca en un chat concreto. Todo lo demás utiliza únicamente el archivo: buscar en todos los chats, contar con `stats`, buscar por temas, `has:`, `filename:`, regex, presets, etiquetas y formas de palabras. Empieza por descargar todos los chats:
+
+```sh
+max store fetch --all --background     # последние 90 дней каждого чата, в фоне
+max store jobs show                    # сколько уже скачано
+```
+
+Usa `--since-time 365d` para retroceder más en el historial, o `max store fetch Друзья` para un solo chat ([archivo](./archive.md)). Cada ejecución descarga como máximo 1200 mensajes por chat de forma predeterminada; repite el comando para continuar. Después, `max serve` mantiene el archivo actualizado.
+
+Cada búsqueda indica qué ha consultado. Si al archivo le puede faltar historial o no se encuentra nada, una línea en el terminal muestra cuántos mensajes y chats se han consultado, cuántos chats no se han descargado o están desactualizados y el comando para solucionarlo:
+
+```text
+searched 12,430 messages in 37 chats — 5 never fetched; `max store fetch --all --background` fetches them
+```
+
+Con `--json`, la misma información aparece en `coverage`: `messages`, `chats`, hasta diez chats en `attention` y `next`. Si un agente no encuentra nada y hay un comando en `next`, debe ejecutarlo (o preguntarte) antes de afirmar que el mensaje no existe.
 
 Esta página trata las búsquedas del día a día. Otras tres páginas van más allá:
 
@@ -16,13 +35,27 @@ Escribe la consulta entre comillas simples para que la terminal no toque sus com
 
 ```sh
 max messages search счёт
-max messages search '"счёт оплачен"'             # точная фраза
+max messages search '"счёт оплачен"'             # слова подряд
 max messages search 'кафе OR библиотека'
 max messages search '(кафе OR библиотека) NOT шумно'
 max messages search 'квартир*'                   # все слова, которые начинаются на «квартир»
 ```
 
-Las palabras escritas una junto a otra deben aparecer todas en el mensaje. Una palabra encuentra esa misma palabra sin distinguir mayúsculas ni acentos; `ё` y `е` se consideran iguales. Otra forma de una palabra es una palabra distinta: `квартира` no encuentra «квартиру»; el prefijo `квартир*` encuentra ambas. No se adivina nada: no se corrigen erratas ni se buscan palabras parecidas.
+Todas las palabras consecutivas de la consulta deben aparecer en el mensaje. La búsqueda reconoce formas de palabras: `квартира` encuentra «квартиру». Las comillas conservan el orden de las palabras, pero también permiten otras formas. Para buscar una forma exacta, usa `exact:квартира` o añade `--exact` para las palabras sin un campo explícito. Un `text:` explícito sigue buscando formas de palabras. No se distingue entre mayúsculas y minúsculas, marcas de acento, `ё` y `е`. Las erratas no se corrigen automáticamente. Las formas dependen de la configuración de idioma del archivo.
+
+## Búsqueda en el servidor de MAX: `--backend`
+
+```sh
+max messages search 'счёт' --chat "Книжный клуб"                    # архив и сервер MAX
+max messages search 'счёт' --chat "Книжный клуб" --backend server   # только то, что нашёл сервер
+max messages search 'счёт' --backend archive                        # только архив
+```
+
+El servidor de MAX solo busca en un chat. Cuando la consulta especifica un chat (`--chat` o `chat:`) e incluye palabras, `max` consulta tanto al servidor como al archivo de forma predeterminada (`--backend both`). Si no se especifica un chat, no consulta al servidor; los resultados proceden del archivo.
+
+El servidor también busca por el comienzo de una palabra, pero no reconoce otras formas: `книгу` no encuentra «книга». Por eso, `max` trata sus resultados como candidatos: los guarda en el archivo y los comprueba con tu consulta según las reglas del archivo. `exact:`, `-слово`, las comillas y el orden de los resultados funcionan igual que sin el servidor, y los mensajes no se duplican. `max` espera al servidor como máximo 5 segundos (`--server-time`, hasta 60 segundos) y no marca nada como leído.
+
+Con `--json`, cada mensaje tiene un `source` (`archive`, `server` o `both`), y el bloque `server` indica qué ha devuelto el servidor. Al buscar en ambas fuentes, si el servidor no está disponible o el perfil es de solo lectura, se mantienen los resultados del archivo. Un `--backend server` explícito falla si el perfil no permite buscar en el servidor. El permiso necesario es `messages.server-search`.
 
 ## Personas y chats
 
@@ -84,13 +117,24 @@ max tags remove work --chat "Книжный клуб"
 
 Una etiqueta es tu propia marca en un chat, una persona o un mensaje (`--message <id> --chat <чат>`). Se guarda en el archivo local y nunca se envía a MAX. `tag:work` encuentra los mensajes con la etiqueta `work`, los mensajes de un chat con esa etiqueta y los mensajes de una persona con esa etiqueta. Tiene entre 1 y 32 caracteres: letras latinas a–z, números y guiones.
 
+Puedes generar etiquetas de grupos y canales automáticamente a partir de su título, nombre de usuario y descripción, sin leer mensajes ni utilizar un modelo:
+
+```sh
+max metadata refresh --chat "Книжный клуб"   # прочитать описание чата из MAX (сам чат не меняется)
+max tags auto --dry-run                      # что получилось бы, без записи
+max tags auto                                # записать автоматические метки
+max tags list --source auto                  # только автоматические
+```
+
+El etiquetado automático conserva tus etiquetas: al repetirlo, solo elimina las etiquetas automáticas obsoletas. Si añades manualmente una etiqueta que ya se había añadido de forma automática, pasa a ser tuya.
+
 ## Búsquedas guardadas e historial
 
 ```sh
 max searches create meetings 'библиотека OR кафе' --chat "Книжный клуб"
 max messages search --saved meetings
 max messages search --saved meetings 'date:today'   # слова добавляются через AND
-max messages stats --saved meetings --by day
+max stats messages show --saved meetings --by day
 max searches list
 max searches history --limit 10
 max messages search --saved 42                   # строка истории, по её номеру
@@ -102,16 +146,16 @@ Cada búsqueda y recuento que termina bien se guarda en el historial: la consult
 
 Las búsquedas guardadas y el historial están en el archivo compartido por `max` y `tg`: ambos ven las mismas entradas, y `delete` o `clear` en uno las cambia también en el otro. Las etiquetas permanecen vinculadas a su cuenta.
 
-## Contar: `messages stats`
+## Contar mensajes: `stats messages show`
 
 ```sh
-max messages stats счёт                          # сколько в каждом чате
-max messages stats 'date:7d' --by sender
-max messages stats 'from:me' --by day --timezone Europe/Madrid
-max messages stats --by hour                     # все сохранённые сообщения
+max stats messages show счёт                          # сколько в каждом чате
+max stats messages show 'date:7d' --by sender
+max stats messages show 'from:me' --by day --timezone Europe/Madrid
+max stats messages show --by hour                     # все сохранённые сообщения
 ```
 
-`messages stats` cuenta los mensajes que `messages search` encontraría con la misma consulta, cada uno una vez. `--by chat` (el valor predeterminado) y `--by sender` ponen primero los mayores; `--by day` y `--by hour` van en orden. Si algunos chats no están guardados enteros, los números son un mínimo, y stderr indica cuántos chats son.
+`stats messages show` cuenta una sola vez cada mensaje que encontraría `messages search` con la misma consulta. `--by chat` (la opción predeterminada) y `--by sender` muestran primero los recuentos más altos; `--by day` y `--by hour` usan el orden cronológico. Si algunos chats solo están guardados en parte, las cifras son un límite inferior, y stderr indica cuántos chats están incompletos.
 
 ## Si no se encuentra nada
 
@@ -119,13 +163,15 @@ Una respuesta vacía significa «no está en el archivo en el que buscaste», no
 
 Para buscar en todas las cuentas del archivo local, añade `--source all`. `--newest` ordena por fecha en lugar de por relevancia, y `--context 2` muestra dos mensajes alrededor de cada resultado.
 
-## Para scripts y agentes
+## Scripts y agentes
 
-`--json` devuelve un objeto con los mensajes y lo que se buscó; `--jsonl` emite solo los mensajes. En MCP, `max_messages_search` y `max_messages_stats` aceptan las mismas consultas, y `max_tags_*` y `max_searches_*` gestionan etiquetas y búsquedas guardadas. Los campos de la respuesta, el modo anterior `--language legacy` y `--regex` están en el [lenguaje de consulta](./query-language.md).
+`--json` devuelve un objeto con los mensajes y la cobertura de la búsqueda; `--jsonl` devuelve solo mensajes, uno por línea. En MCP, `max_read` (`command: "messages search"`) y `max_read` (`command: "stats messages show"`) aceptan las mismas consultas. Los comandos `tags` y `searches`, mediante `max_read`/`max_write`, gestionan las etiquetas y las búsquedas guardadas. Consulta el [lenguaje de consultas](./query-language.md) para ver los campos de respuesta, el modo anterior `--language legacy` y `--regex`.
 
-Por defecto, la búsqueda lee el archivo local. `--sync-first` descarga de forma explícita los mensajes nuevos antes de buscar y no marca nada como leído: como máximo 5 chats, 500 mensajes y 30 segundos. Cambia estos límites con `--max-chats`, `--max-messages` y `--sync-time`. Si la actualización falla o queda incompleta, se conservan los resultados locales, con la cobertura desactualizada y los detalles de la actualización.
+La búsqueda de palabras en un chat concreto consulta tanto al archivo como al servidor de MAX de forma predeterminada; sin un chat concreto, solo consulta al archivo. `--backend archive` mantiene la búsqueda local. `--sync-first` descarga primero los mensajes nuevos, sin marcar nada como leído: como máximo 5 chats, 500 mensajes y 30 segundos. Ajusta estos límites con `--max-chats`, `--max-messages` y `--sync-time`. Una actualización incompleta o fallida conserva los resultados locales e informa de la cobertura desactualizada y del resultado de la actualización.
 
 `content:договор` busca palabras en el texto guardado de un adjunto. La extracción admite archivos de texto, DOCX y PDF con capa de texto. Tu agente lee fotos y escaneos y guarda su texto mediante `attachments text set`. Si hay varios adjuntos, indica `--attachment`, numerado desde 1.
+
+De forma predeterminada, el agente lee fotos y documentos escaneados con sus propias herramientas de OCR o visión y después escribe el texto en este índice. `attachments list --needs-text` devuelve la ruta guardada, el localizador del mensaje y el número de adjunto. Comprueba la entrada con una búsqueda `content:`. Si el agente funciona en remoto, una ruta en el servidor MCP no le proporciona el archivo: necesita acceso al archivo para leerlo.
 
 ```sh
 max attachments extract --chat "Книжный клуб" --download --output-dir ./files
@@ -136,6 +182,24 @@ max attachments text set "Книжный клуб" 204 --text-file ./scan.txt
 
 `--download` requiere `--output-dir`; sin ellos, la extracción lee los archivos conservados. `list` muestra las rutas conservadas y el estado del texto, no su contenido.
 
+Para procesar archivos en lote, puedes elegir explícitamente una API mediante la pasarela compartida de modelos. Indica el proveedor y un modelo de visión disponible en `models.ocr`; guarda la clave con el comando habitual `models text key set`. En el ejemplo, sustituye `your-vision-model` por el nombre de tu modelo.
+
+```sh
+max config set models.ocr.provider openai
+max config set models.ocr.model your-vision-model
+max models text key set openai
+max attachments extract --chat "Книжный клуб" --ocr --concurrency 4 --limit 100 --json
+```
+
+`--ocr` envía imágenes a la API elegida; sin esta opción, no se llama a ningún modelo. Puedes configurar entre 1 y 8 solicitudes simultáneas, con 4 de forma predeterminada. El límite de archivos es de 1 a 500, con 100 de forma predeterminada; `cursor` permite continuar un recorrido limitado. Los PDF escaneados requieren los paquetes opcionales `unpdf` y `@napi-rs/canvas`; se procesan como máximo 20 páginas por documento. Las páginas con una capa de texto se procesan localmente. Las ejecuciones posteriores utilizan el hash del archivo y el modelo elegido. Si el OCR falla o se cancela, se conservan el texto escrito por el agente y el índice anterior. Comprueba `failed` y los estados de cada archivo; al alcanzar un límite del proveedor, esta ejecución deja de realizar nuevas solicitudes a la API. `--offline` no se puede combinar con `--ocr`.
+
 `--thread` sigue el grafo de respuestas guardado; en `messages context` sustituye a los mensajes vecinos en orden cronológico. Los valores predeterminados son 8 saltos, 50 mensajes, 65 536 bytes y un día alrededor de cada resultado. Cámbialos con `--thread-hops`, `--thread-messages`, `--thread-bytes` y `--thread-within`. Sin grafo, vuelve al contexto cronológico; los enlaces desactualizados se marcan y no se recorren.
 
 La extracción de PDF necesita el paquete opcional `unpdf`; DOCX necesita `mammoth`, instalado junto a `max`. Para una instalación global con npm: `npm install -g unpdf mammoth`. Si falta un paquete, la orden lo indica; un agente puede aportar el texto.
+## Preparar los archivos y el historial local
+
+`max attachments extract --chat <чат> --from-dir ./files` lee archivos de la carpeta indicada sin recorrer otras carpetas. Necesita una coincidencia inequívoca con el archivo original o un conjunto completo de archivos con los nombres asignados por el descargador. No combines `--from-dir` con `--download` ni con `--output-dir`. `max messages download <чат> <id> --extract` extrae inmediatamente el texto solo de los archivos que ha descargado; `--all --extract` hace lo mismo para todos los archivos descargados en esa ejecución. Mediante `max_write`, `attachments extract` devuelve los resultados del procesamiento sin el texto de los archivos; usa `cursor` para continuar un recorrido limitado. Los cambios en los bytes se detectan mediante el hash, y se conserva el texto escrito por el agente.
+
+Después de descargar, `max store fetch <чат> --catch-up` prepara el grafo y los vectores locales únicamente de ese chat. La preparación está desactivada de forma predeterminada; la configuración del perfil `searchCatchUp: true` la activa, y `--no-catch-up` la desactiva para una ejecución. Límites: `--catch-up-chunks 500 --catch-up-messages 10000 --catch-up-time 30s`. El modelo no se descarga automáticamente y no se llama a ningún proveedor remoto. El campo `prepared` indica por separado si la preparación ha terminado: el historial descargado se conserva aunque la preparación esté incompleta.
+
+`max store gaps plan <чат>` muestra localmente los huecos entre los intervalos de cobertura registrados. Los saltos en los números de mensaje y los periodos sin actividad no implican por sí solos que falte historial. Los límites desconocidos del archivo permanecen en `unknown`. Después de revisar el plan, `max store gaps repair <чат> --fingerprint <хеш>` descarga explícitamente los huecos internos. Los límites predeterminados son 5 huecos, 500 mensajes y 30 segundos; ajústalos con `--max-gaps`, `--limit`, `--repair-time`, `--page-size` y `--pause`. Al repetir el comando, se comprueban los huecos restantes sin eliminar mensajes por su mera ausencia en la respuesta. Las páginas ambiguas con mensajes de la misma marca de tiempo quedan incompletas. `--background` inicia un trabajo que puedes consultar o cancelar con `store jobs show`, `store jobs list` y `store jobs cancel`. En MCP, encuentra estos comandos con `max_tools_search`, ejecuta el plan y consulta los trabajos mediante `max_read`, y realiza las reparaciones mediante `max_write`. La reparación requiere el permiso `store.gaps.repair` y permiso para leer mensajes; la planificación no se conecta al servidor.

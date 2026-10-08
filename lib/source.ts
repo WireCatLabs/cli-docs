@@ -54,12 +54,6 @@ const markdownUrls = new Map(
 export const docsLlms = llms(source, {
   renderPage: async (page) => {
     const tool = toolOf(page.slugs)
-    const label =
-      page.locale === "ru"
-        ? "Версия документации"
-        : page.locale === "es"
-          ? "Versión de documentación"
-          : "Documentation version"
     // Processed MDX indents nested tabs as code. Expand the authored installation guide instead,
     // preserving runnable fences and making every messenger/OS branch readable to agents.
     const raw = await page.data.getText("raw")
@@ -81,6 +75,6 @@ export const docsLlms = llms(source, {
         (pathname) => markdownUrls.get(pathname),
       ),
     )
-    return `# ${page.data.title} (${page.url})\n\n${tool?.docsRef ? `${label}: ${tool.docsRef}\n\n` : ""}${markdown}`
+    return `# ${page.data.title} (${page.url})\n\n${markdown}`
   },
 })

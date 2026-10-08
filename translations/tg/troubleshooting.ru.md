@@ -6,10 +6,10 @@ title: "Решение проблем"
 
 ## По коду завершения
 
-| Код | Имя | Типичная причина | Подробнее |
+| Код | Название | Что обычно означает | Где |
 |---|---|---|---|
 | `1` | `generic_failure` | опечатка в команде или сбой `tg` | [неизвестная команда](#error-unknown-command-), [сообщить](#report-a-problem) |
-| `2` | `validation_error` | неверное значение, сочетание параметров или несколько подходящих чатов | [значения](#--limit-takes-a-whole-number-from-1-upwards), [чаты](#-matches-3-chats--name-one-by-its-id) |
+| `2` | `validation_error` | значение или сочетание параметров, которое `tg` не принимает; имя, совпадающее с несколькими чатами | [значения](#--limit-takes-a-whole-number-from-1-upwards), [несколько чатов](#-matches-3-chats--name-one-by-its-id) |
 | `3` | `configuration_error` | ошибка `config.json`, прокси отказал или недоступен, либо база новее `tg` | [настройки](#-is-not-a-valid-config), [прокси](#the-proxy--cannot-be-reached-or--refused), [база](#the-message-store-was-written-by-a-newer-version-) |
 | `4` | `authentication_error` | нет входа, сессия завершена или хранилище ключей недоступно | [нет сессии](#no-session-for-profile-default--run-tg-setup) |
 | `5` | `permission_error` | отказ `permissions` профиля или Telegram | [разрешения](#profile--does-not-let--write-or-profile--denies-), [Telegram](#telegram-refused-), [PEER_FLOOD](#telegram-limited-this-accounts-messages-as-spam-peer_flood) |
@@ -45,7 +45,9 @@ tg doctor --online
 - **Linux и macOS.** Каталог — `$(npm prefix -g)/bin`. Добавьте его в `PATH` через `~/.zshrc` или `~/.bashrc`: `export PATH="$(npm prefix -g)/bin:$PATH"`.
 - **Windows.** Каталог показывает `npm prefix -g`, обычно `%APPDATA%\npm`. Проверьте наличие в `$env:Path`. Терминал, открытый до установки Node, не видит обновлённый `PATH`: откройте новый.
 - **PowerShell сообщает «running scripts is disabled on this system».** npm устанавливает `tg.ps1` рядом с `tg.cmd`, а PowerShell по умолчанию запрещает скрипты. Используйте `tg.cmd` или разрешите скрипты своему пользователю: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`.
-- **Раньше находится другой `tg`.** `which -a tg` или `Get-Command tg -All` в PowerShell перечислит варианты. Используйте полный путь или поставьте нужный каталог первым.
+- **Другая `tg` находится первой.** Другая программа тоже может называться `tg`. `which -a tg` (или
+  `Get-Command tg -All` в PowerShell) показывает все; вызовите нашу по полному пути или поставьте её папку
+  первой.
 
 Без установки доступна команда `npx @leemour/tg-cli doctor`.
 
@@ -95,7 +97,10 @@ XDG_RUNTIME_DIR=/run/user/$(id -u) tg chats list
 
 ## my.telegram.org сообщил о создании приложения, но его нет
 
-Код `13` при `tg session start --app auto`. Сайт не имеет API: веб-форма изменилась или ответила неожиданно. Остальные ошибки сайта дают код `11` с его сообщением. Используйте обычный `tg session start`: сайт откроется в браузере, затем вставьте идентификатор и хеш ([Данные приложения](./sessions.md#the-app-from-mytelegramorg)).
+Код выхода `13` во время `tg session start --app auto`. У сайта нет API, поэтому `tg` работает с его веб-
+формой, а она изменилась или ответила неожиданно. Другие ошибки сайта дают код выхода
+`11` с ответом сайта. Вместо этого используйте обычный способ: `tg session start` открывает сайт в вашем
+браузере, а вы вставляете идентификатор и хеш приложения ([sessions.md](./sessions.md#the-app-from-mytelegramorg)).
 
 ## Результат относится к другому профилю
 
@@ -103,7 +108,10 @@ XDG_RUNTIME_DIR=/run/user/$(id -u) tg chats list
 
 ## Ошибка «is not a valid config»
 
-Код `3`. В `config.json` неизвестная `tg` настройка или неверный тип значения. Ошибка указывает настройку и профиль. Она не игнорируется, чтобы не применять молча неверные значения. Исправьте файл или выполните `tg config unset <setting>` ([Настройки](./configuration.md#a-typo-is-an-error-not-a-default)).
+Код выхода `3`. В `config.json` есть неизвестная `tg` настройка или значение неправильного типа. Ошибка
+называет настройку и профиль, в котором она задана. Это намеренный отказ: молча проигнорированная настройка
+может стоить полдня. Исправьте её вручную или удалите через `tg config unset <setting>`
+([configuration.md](./configuration-reference.md#a-typo-is-an-error-not-a-default)).
 
 ## Неверное значение --limit
 
@@ -143,6 +151,8 @@ XDG_RUNTIME_DIR=/run/user/$(id -u) tg chats list
 
 Команда сама выжидает запрос до 10 секунд, не больше двух раз, и сообщает об этом в stderr: «Telegram asks to wait 3 s before … — waiting, then going on». `serve` и `watch` ждут до 2 минут. Более долгое ожидание завершает команду этой ошибкой. `tg` также запоминает ожидание: пока оно не закончится, та же команда сразу завершается ошибкой, не обращаясь к Telegram снова, а `tg doctor` и `tg server status` показывают его в `flood`.
 
+Как сочетаются ограничение частоты, ожидание и параллельные команды: [limits.md](./limits.md).
+
 ## Telegram ограничил сообщения аккаунта как спам (PEER_FLOOD)
 
 Код `5`. Telegram ограничивает аккаунт, который написал слишком многим людям не из своих контактов. Читать он по-прежнему может. Напишите @SpamBot в приложении Telegram: он скажет, до какого срока. Новые отправки только ухудшают положение, поэтому `tg` задерживает все отправки на час и сообщает об этом; каждый новый отказ начинает час заново. `tg doctor` показывает задержку в `flood.sendBlock`. Когда @SpamBot скажет, что ограничение снято, `tg flood clear` снимет задержку вместе с любым ожиданием, которое запомнил `tg`. Отказ замороженного аккаунта задерживает отправки так же — до даты, названной Telegram; `tg doctor --online` устанавливает и снимает эту задержку.
@@ -157,7 +167,10 @@ XDG_RUNTIME_DIR=/run/user/$(id -u) tg chats list
 
 ## Профиль запрещает действие
 
-Код `5` до отправки в Telegram. Отказ `permissions`: `deny` запрещает даже чтение, `readonly` — изменения. Ошибка указывает ключ, источник и разрешающую команду ([Настройки](./configuration.md#what-a-profile-may-do)). Агент должен спросить вас, а не менять настройку.
+Код выхода `5`, до отправки чего-либо в Telegram. `permissions` профиля запретили действие: `deny`
+запрещает и чтение, `readonly` запрещает изменение. Ошибка указывает ключ, где он задан, и
+команду, разрешающую действие ([configuration.md](./configuration-reference.md#what-a-profile-may-do)). Агент должен
+остановиться и спросить вас, а не менять настройку.
 
 ## Действие требует подтверждения
 
@@ -177,7 +190,10 @@ XDG_RUNTIME_DIR=/run/user/$(id -u) tg chats list
 
 ## Не удаётся подключиться к Telegram
 
-Код `10`. Нет сети, мешает firewall, прокси или DNS, либо соединение оборвалось. Код в скобках уточняет причину: `ECONNREFUSED`, `ENOTFOUND`, `ETIMEDOUT`. Локальные команды работают без сети: `tg --offline chats list`. Если Telegram заблокирован, задайте прокси ([Настройки](./configuration.md#through-a-proxy)).
+Код выхода `10`. Соединение не удалось установить или оно прервалось: нет сети, мешает межсетевой экран, прокси или DNS.
+Код в скобках указывает причину (`ECONNREFUSED`, `ENOTFOUND`, `ETIMEDOUT`). Команды, отвечающие из
+хранилища, работают без сети: `tg --offline chats list`. Там, где Telegram заблокирован, настройте
+прокси ([configuration.md](./configuration-reference.md#through-a-proxy)).
 
 ## Прокси недоступен или отказал
 
@@ -209,7 +225,9 @@ tg messages send <chat> "<the same text>" --send-id <id from the error>
 tg --timeout 30s --trace chats list
 ```
 
-`--timeout` охватывает всю команду, включая вход, закрывает соединение и завершает с кодом `9`. В `--trace` строка `→` без `←` означает запрос без ответа: проблема сети или Telegram ([Диагностика](./diagnostics.md)).
+`--timeout` охватывает всю команду, включая вход, и завершает её с кодом выхода `9` после закрытия
+соединения. В `--trace` строка `→` без последующей `←` означает запрос, который ушёл, но так и не
+получил ответ: причина в сети или Telegram, а не в `tg` ([diagnostics.md](./diagnostics.md)).
 
 Если результат выведен, но команда не выходит, это сбой. Через пять секунд `tg` перечисляет открытые ресурсы (`tg: finished, but … stayed open`) и выходит. Приложите эту строку к обращению. `watch`, `serve`, `mcp` должны работать до остановки.
 

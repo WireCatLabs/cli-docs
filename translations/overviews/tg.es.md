@@ -46,7 +46,7 @@ Reserva unos cinco minutos. Primero el comando pide el número y un código reci
 >
 > Es el registro del programa que se conecta a Telegram, aquí el CLI `tg`. Rellenas un formulario sin desarrollar ni descargar otra aplicación. Telegram entrega `api_id` y `api_hash` para identificar el programa; el QR o código confirma después el acceso a tu cuenta. El comando puede registrar u obtener estas credenciales. [Explicación y método manual](/es/docs/tg/sessions#the-app-from-mytelegramorg).
 
-El archivo local contiene solo lo que hayas leído o descargado; no incluye automáticamente todo tu historial. La búsqueda consulta ese archivo. Para un periodo concreto, elige chat y cantidad siguiendo la [guía del archivo](/es/docs/tg/archive).
+El archivo local contiene solo lo que hayas leído o descargado; no incluye automáticamente todo tu historial. Por defecto, la búsqueda por palabras consulta el archivo local y el mensajero (`--backend both`); usa `--backend archive` para consultar solo el archivo. El lenguaje de consulta predeterminado es Lucene estricto; `--language legacy` recupera la coincidencia anterior y la corrección de erratas. Prepara el historial antes de buscar solo en el archivo, contar o clasificar, y comprueba la cobertura antes de considerar que un resultado vacío demuestra que no existe un mensaje. Consulta [búsqueda](/es/docs/tg/search).
 
 ## Qué probar después de conectar
 
@@ -71,6 +71,14 @@ comandos específicos. Puedes limitar el acceso del agente: consulta [acceso y s
 | Consultar qué admiten los bots de Telegram | [Bots: funciones disponibles](/es/docs/tg/bot) |
 | Resolver un error | [Solución de problemas](/es/docs/tg/troubleshooting) |
 | Consultar un comando o parámetro concreto | [Referencia de comandos](/es/docs/tg/commands) |
+| Gestionar contactos, alias y notas privadas | [Personas](/es/docs/tg/people) |
+| Comparar actividad y comprobar pruebas de una clasificación | [Clasificaciones](/es/docs/tg/rankings) |
+| Enviar, descargar y leer archivos | [Comandos de archivos](/es/docs/tg/usage) |
+| Transcribir notas de voz localmente | [Comandos de voz](/es/docs/tg/usage) |
+| Configurar API opcionales de modelos | [Ajustes de modelos](/es/docs/tg/configuration-reference) |
+| Limitar lectura, escritura y confirmaciones | [Permisos](/es/docs/tg/permissions) |
+| Elegir un perfil personal o de bot | [Perfiles y bots](/es/docs/tg/profiles) |
+| Consultar tipos y prioridad de ajustes | [Referencia de configuración](/es/docs/tg/configuration-reference) |
 
 La barra izquierda contiene las páginas de este apartado. La derecha muestra las secciones de
 la página abierta. La referencia sirve para consultar opciones concretas; para empezar, basta con la instalación y las tareas cotidianas.

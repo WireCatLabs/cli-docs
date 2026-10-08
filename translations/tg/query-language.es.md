@@ -2,9 +2,11 @@
 title: "Lenguaje de consulta de la búsqueda"
 ---
 
-La referencia de las consultas de `tg messages search`, `tg messages stats` y las búsquedas guardadas. Para ejemplos del día a día, empieza por [buscar mensajes](./search.md).
+La referencia de consultas de `tg messages search`, `tg stats messages show` y búsquedas guardadas. Para ejemplos cotidianos, empieza por la [búsqueda de mensajes](./search.md).
 
-El lenguaje es un perfil estricto de la sintaxis de consultas de Apache Lucene: palabras, frases, AND/OR/NOT, grupos, campos, intervalos, comodines con límites y expresiones regulares. La [referencia completa](https://github.com/leemour/cli-messaging/blob/v0.149.0/docs/search/query-language.md) (en ruso) contiene las tablas generadas de campos, operadores, filtros preparados y límites, y ejemplos ejecutables; la [especificación técnica](https://github.com/leemour/cli-messaging/blob/v0.149.0/docs/search/query-language-spec.md) describe la gramática y el compilador.
+El lenguaje es un perfil estricto de la sintaxis de consultas de Apache Lucene: palabras, frases, AND/OR/NOT, grupos, campos, intervalos, comodines con límites y expresiones regulares. La [referencia completa](https://github.com/leemour/cli-messaging/blob/v0.164.0/docs/search/query-language.md) (en ruso) contiene las tablas generadas de campos, operadores, filtros preparados y límites, y ejemplos ejecutables; la [especificación técnica](https://github.com/leemour/cli-messaging/blob/v0.164.0/docs/search/query-language-spec.md) describe la gramática y el compilador.
+
+Las palabras y frases sin campo coinciden con formas de las palabras. `--exact` selecciona formas exactas para palabras sin campo; `text:` explícito sigue buscando formas. Los ajustes de idioma del archivo afectan a las coincidencias.
 
 ## Operadores
 
@@ -30,6 +32,7 @@ El lenguaje es un perfil estricto de la sintaxis de consultas de Apache Lucene: 
 | Campo | Encuentra | Ejemplo |
 |---|---|---|
 | `text` | palabras del mensaje (el campo predeterminado) | `text:invoice` |
+| `exact` | la forma exacta de una palabra o frase | `exact:piso`, `exact:"invoice paid"` |
 | `body` | todo el texto original, distinguiendo mayúsculas | `body:/.*invoice.*/` |
 | `from` | el remitente, por nombre, @usuario o id; `me` eres tú | `from:"Alice Synthetic"` |
 | `chat` | el chat, por título, @usuario o id | `chat:"Book club"` |
@@ -97,7 +100,7 @@ Un error incluye la posición del problema en la consulta y una pista.
 
 ## En MCP
 
-`tg_messages_search` acepta la consulta como `text`, o como árbol sintáctico versionado en `ast` (no ambos); `language` elige `lucene` o `legacy`, y `timezone`, la zona del calendario. `chat` acepta un id o un nombre guardado; `source`, `newest`, `context` y `limit` funcionan como las opciones del comando; `saved` ejecuta una búsqueda guardada. El historial de consultas sigue al servidor: `tg mcp --no-record`, o `record` con valor `false`, deja fuera sus llamadas. La respuesta tiene los mismos campos que `--json`. `tg_messages_stats` cuenta las mismas consultas.
+`tg_read` (`command: "messages search"`) acepta la consulta como `text` o como un árbol sintáctico versionado en `ast` (no ambos); `language` elige `lucene` o `legacy`, y `timezone` la zona horaria del calendario. `chat` acepta un ID o nombre guardado; `source`, `newest`, `context` y `limit` funcionan como las opciones del comando; `saved` ejecuta una búsqueda guardada. El historial de consultas sigue al servidor: `tg mcp --no-record`, o `record` definido como `false`, deja sus llamadas fuera. La respuesta tiene los mismos campos que `--json`. `tg_read` (`command: "stats messages show"`) cuenta las mismas consultas.
 
 ## Los modos anteriores
 
@@ -117,6 +120,10 @@ tg messages search --regex 'invoice\s+\d+' --json
 
 `--thread` sigue el grafo de respuestas guardado; en `messages context` sustituye a los mensajes vecinos en orden cronológico. Los valores predeterminados son 8 saltos, 50 mensajes, 65 536 bytes y un día alrededor de cada resultado. Cámbialos con `--thread-hops`, `--thread-messages`, `--thread-bytes` y `--thread-within`. Sin grafo, vuelve al contexto cronológico; los enlaces desactualizados se marcan y no se recorren.
 
-Por defecto, la búsqueda lee el archivo local. `--sync-first` descarga de forma explícita los mensajes nuevos antes de buscar y no marca nada como leído: como máximo 5 chats, 500 mensajes y 30 segundos. Cambia estos límites con `--max-chats`, `--max-messages` y `--sync-time`. Si la actualización falla o queda incompleta, se conservan los resultados locales, con la cobertura desactualizada y los detalles de la actualización.
+La búsqueda por palabras consulta Telegram y el archivo local de forma predeterminada; `--backend archive` la limita a los datos locales.
+`--sync-first` descarga explícitamente los mensajes nuevos antes de buscar y
+no marca ninguno como leído: como máximo 5 chats, 500 mensajes y 30 segundos. Cambia estos límites con `--max-chats`,
+`--max-messages`, `--sync-time`. Una actualización fallida o incompleta conserva los resultados locales con información sobre la cobertura desactualizada y
+los detalles de la actualización.
 
 MCP usa `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` y `sync_first`. `sync_first` solo está disponible con `messages.sync-first: allow`. Un `messages_context` normal con `offline: true` lee los mensajes guardados.
