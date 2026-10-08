@@ -145,7 +145,7 @@ memo notes import --no-embed
 Для поиска вручную:
 
 ```sh
-memo notes search 'budget' --json
+memo search notes 'budget' --json
 ```
 
 В результатах указаны найденный файл, ссылка на источник и первая совпавшая строка.
@@ -249,13 +249,13 @@ ID в другом аккаунте не выбирает тот же источ
 ### Найдите и удалите метки
 
 ```sh
-memo notes search 'budget' --tag work --json
-memo search 'tag:follow-up' --all --json
+memo search notes 'budget' --tag work --json
+memo search all 'tag:follow-up' --json
 memo tags list --tag work --json
 memo tags remove work --note note:NOTE_ID
 ```
 
-Первый запрос ищет заметки с тегом; второй — сохранённые источники во всех аккаунтах.
+Первый запрос ищет заметки с тегом; второй — сообщения, почту и заметки вместе.
 Проверьте тип источника и аккаунт в результате. Удаление метки оставляет источник на месте.
 Добавление существующей метки или удаление отсутствующей не создаёт повторного изменения.
 

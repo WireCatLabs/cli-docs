@@ -15,9 +15,9 @@ Archive preparation and the coverage additions below are available in tg 0.35.0 
 
 | Question | Entry point | What it returns | Preparation |
 | --- | --- | --- | --- |
-| “Where did Alice say invoice, in October, with a PDF?” | `messages search` | Matching messages, locators and optional nearby context | Stored history; a ready word index for queries with words |
+| “Where did Alice say invoice, in October, with a PDF?” | `search messages` | Matching messages, locators and optional nearby context | Stored history; a ready word index for queries with words |
 | “How many messages per day mention the budget?” | `stats messages show` | Counts by chat, sender, day or hour | The same as message search |
-| “Where did we discuss renting a flat?” | `conversations search` | Ranked conversations, the matching piece and how it matched | A conversation build; embeddings for matches by meaning |
+| “Where did we discuss renting a flat?” | `search conversations` | Ranked conversations, the matching piece and how it matched | A conversation build; embeddings for matches by meaning |
 | “What else was about the same thing?” | `conversations related` | Conversations nearest to the one a message is in | Embeddings; no model runs |
 | “Which discussion does this message belong to?” | `conversations show` / `messages links` | The conversation and the chosen chain of parents | A conversation build |
 | “What was around this exact message?” | `messages context` / search `--context` | Neighbours in time, in the same account and chat | Stored history only |
@@ -50,9 +50,9 @@ The pipeline:
 The fields are `text`, `exact`, `body`, `from`, `chat`, `date`, `kind`, `has`, `topic`, `in`, `preset`, `filename`, `mime`, `size` and `tag`. File fields match a message when at least one of its attachments matches, by the name, size and type the messenger reported; MAX reports no type, so `mime:` finds nothing there. `tag:` reads the owner's local tags on the message, its chat or its sender. `date:` also takes `today`, `yesterday` and offsets such as `7d`, counted from the moment the query runs. Fuzzy, proximity, boost and interval operators are refused with an explicit error.
 
 ```sh
-tg messages search 'invoice AND has:file' --source all --context 2 --json
-max messages search 'chat:"Project team" AND date:[2026-10-01 TO 2026-10-31]' --timezone Europe/Madrid --json
-tg messages search 'filename:*.pdf size>1MB date:7d' --json
+tg search messages 'invoice AND has:file' --source all --context 2 --json
+max search messages 'chat:"Project team" AND date:[2026-10-01 TO 2026-10-31]' --timezone Europe/Madrid --json
+tg search messages 'filename:*.pdf size>1MB date:7d' --json
 ```
 
 `text` matches normalized words; `body` addresses the original full text, case-sensitive. `body:/.*invoice.*/` expresses a substring condition. A date without a time is a calendar day in the chosen zone; an inclusive upper day includes the whole day, and days when clocks change are not assumed to last 24 hours.
@@ -83,7 +83,7 @@ The stemmers are a store-wide setting, shared by every profile, tg and MAX: `sea
 
 ### Server search beside the archive
 
-`messages search` can also ask the messenger's own search: tg asks Telegram by default (since tg 0.34), and max asks MAX's server for a search that names one chat. The server's matching is its own and not documented — measured on test accounts, Telegram matches whole words and Russian word forms but not word beginnings, and MAX matches word beginnings but not word forms. So the server's results are only candidates: they are saved into the archive, and the same strict query then runs once over the archive and the new rows. `exact:`, `-word`, phrases, filters and the ranking keep their meaning, and a message is never listed twice. A candidate the strict query rejects is kept but not shown.
+`search messages` can also ask the messenger's own search: tg asks Telegram by default (since tg 0.34), and max asks MAX's server for a search that names one chat. The server's matching is its own and not documented — measured on test accounts, Telegram matches whole words and Russian word forms but not word beginnings, and MAX matches word beginnings but not word forms. So the server's results are only candidates: they are saved into the archive, and the same strict query then runs once over the archive and the new rows. `exact:`, `-word`, phrases, filters and the ranking keep their meaning, and a message is never listed twice. A candidate the strict query rejects is kept but not shown.
 
 Only what narrows the candidates is sent: the required words and phrases, one chat, a sender with that chat, and dates; negations, wildcards, regular expressions and filters stay local. At most three server calls run in parallel within 5 seconds (`--server-time`); a later answer is dropped, and nothing is marked read. Each hit says where it came from (`source`: `archive`, `server` or `both`), and a `server` block says what the server returned and why it was skipped or stopped. `--backend archive` searches only the archive; `stats` never asks the server, since the server counts by its own rules.
 
@@ -149,7 +149,7 @@ The run made 42,417 pieces and grew the store by 292 MB. Three workers gave only
 
 ## 5. Hybrid conversation retrieval
 
-`conversations search` takes a question in natural language, not a Lucene query. It runs two branches:
+`search conversations` takes a question in natural language, not a Lucene query. It runs two branches:
 
 - **Meaning:** embed the question with the selected model, scan the vectors of current builds in scope and keep each conversation's best piece.
 - **Words:** take the question's words, join them with OR over the word index and map the matching messages to built conversations.
@@ -163,7 +163,7 @@ Vectors are SQLite blobs scanned in pages and scored in JavaScript. There is no 
 `conversations related` uses the mean of a conversation's current vectors as the query and searches every built chat. No model runs, so it needs no download.
 
 ```sh
-tg conversations search "Where did we discuss renting a flat?" --chat "Project team" --json
+tg search conversations "Where did we discuss renting a flat?" --chat "Project team" --json
 max conversations related "Project team" 4521 --json
 ```
 
@@ -173,7 +173,7 @@ max conversations related "Project team" 4521 --json
 
 - **Edits.** A result whose piece changed after it was embedded is marked `stale: true`; its score is for the old text until the next build and embedding.
 - **Deletions.** A deleted message keeps its row, so a later sync cannot bring it back, but loses its text: in the row, the search copy, the edit history, transcripts and every vector of a piece that held it, unless a current piece without a deleted message still uses the same text.
-- **Catch-up.** `conversations build` and `embed` without `--chat`, and `conversations search --refresh`, build and embed on this machine the chats that changed or were never built: at most 20 chats and 2,000 pieces a run by default (`--max-chats`, `--max-chunks`). They never download a model; a remote model is only ever used per chat, with the owner's yes. MCP offers the same catch-up as `conversations_refresh`.
+- **Catch-up.** `conversations build` and `embed` without `--chat`, and `search conversations --refresh`, build and embed on this machine the chats that changed or were never built: at most 20 chats and 2,000 pieces a run by default (`--max-chats`, `--max-chunks`). They never download a model; a remote model is only ever used per chat, with the owner's yes. MCP offers the same catch-up as `conversations_refresh`.
 
 ## 7. Evidence and context for an agent
 

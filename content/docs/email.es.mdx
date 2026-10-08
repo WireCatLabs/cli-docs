@@ -59,7 +59,7 @@ El ejemplo usa una cuenta de Himalaya llamada `gmail`; sustituye el nombre y la 
 
 `name` es el nombre de la cuenta en Himalaya; `address` es la dirección de tu buzón en Memo.
 Para varios buzones, añade una entrada por cuenta en `mail.accounts`. Al importar, `--account`
-selecciona el nombre de Himalaya, como `gmail`. Al buscar, `--account` selecciona la dirección,
+selecciona el nombre de Himalaya, como `gmail`. Los resultados de búsqueda identifican el buzón por su dirección,
 como `you@example.com`. Las direcciones que vinculas a personas son las de remitentes o
 destinatarios, no otras cuentas en las que tengas que iniciar sesión.
 
@@ -103,15 +103,16 @@ Usa Memo para encontrar el acuerdo de presupuesto en la cuenta de correo que eli
 Muestra los correos, sus autores y las referencias. Explica el periodo importado y qué datos faltan.
 ```
 
-Para limitar la búsqueda a un buzón, sustituye la dirección:
+Para buscar en el correo importado:
 
 ```sh
-memo search 'budget' --provider email --account you@example.com --json
+memo search mail 'budget' --json
 ```
 
-`--all` incluye otras cuentas y notas solo si lo pides explícitamente. El resultado identifica
-el buzón y las fuentes; que no haya resultados fuera del periodo importado no demuestra que
-no exista correo allí.
+`search mail` busca en el correo importado. Los resultados pueden pertenecer a varios buzones;
+comprueba sus referencias y pide al agente que conserve los de la dirección que elijas.
+`search all` también busca mensajes y notas; `skipped` indica qué tipo no se pudo buscar.
+Que falten resultados fuera del periodo importado no demuestra que no exista correo allí.
 
 ## Etiqueta correos y guarda notas sobre ellos
 
@@ -146,7 +147,7 @@ Un resultado vacío de una importación parcial no demuestra que no hubiera acue
 
 - **No hay cuenta:** comprueba el nombre de Himalaya y su entrada en `mail.accounts`.
 - **Solo se importó parte del periodo:** repite la importación; `--max` limita los mensajes nuevos por ejecución.
-- **Se buscó en otro buzón:** selecciona `--provider email` y `--account` explícitamente.
+- **Hay resultados de otro buzón:** comprueba las referencias y conserva la dirección correcta.
 - **Falta correo en el contexto de una persona:** comprueba la dirección exacta, su enlace y el historial importado.
 
 Continúa con [notas y etiquetas de fuentes](./memo.mdx#create-your-own-notes) para guardar

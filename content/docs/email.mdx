@@ -59,7 +59,7 @@ The example uses a Himalaya account named `gmail`; replace the name and address 
 
 `name` is the account label in Himalaya; `address` is your mailbox's address in Memo's store.
 To use several mailboxes, add one entry per account to `mail.accounts`. On import, `--account`
-selects the Himalaya name, such as `gmail`. On search, `--account` selects the mailbox address,
+selects the Himalaya name, such as `gmail`. Search results identify mailboxes by their addresses,
 such as `you@example.com`. Addresses you link to people later are the senders/recipients,
 not additional accounts you must log into.
 
@@ -100,15 +100,16 @@ Use Memo to find the budget agreement in the mail account I choose.
 Show the matching emails, who wrote them and their source references. Explain the imported date range and any missing data.
 ```
 
-For a search limited to one mailbox, replace the address:
+To search imported email:
 
 ```sh
-memo search 'budget' --provider email --account you@example.com --json
+memo search mail 'budget' --json
 ```
 
-`--all` includes other stored accounts and notes only when you explicitly request it. The result
-identifies the mailbox and sources; no hits outside the imported date window do not establish
-that no email exists there.
+`search mail` searches imported email. Results can include more than one mailbox; check each
+source reference and ask your agent to keep the results from the address you choose.
+`search all` also searches messages and notes; `skipped` identifies any kind it could not search.
+Missing hits outside the imported date window do not establish that no email exists there.
 
 ## Label emails and keep notes about them
 
@@ -143,7 +144,7 @@ An empty result from a partial import does not prove there were no agreements.
 
 - **No mail account:** check the Himalaya account name and its entry in `mail.accounts`.
 - **Only part of the period imported:** rerun the import; `--max` bounds new messages per run.
-- **The wrong mailbox was searched:** select `--provider email` and `--account` explicitly.
+- **Results include another mailbox:** check the source references and keep the intended address.
 - **Mail is missing from person context:** check the exact email identity link and imported history.
 
 Continue with [notes and source labels](./memo.mdx#create-your-own-notes) to keep your own context

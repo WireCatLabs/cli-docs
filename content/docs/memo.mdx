@@ -141,7 +141,7 @@ Show the matching text and source file for each useful result. Tell me if any fi
 For a manual search:
 
 ```sh
-memo notes search 'budget' --json
+memo search notes 'budget' --json
 ```
 
 The results identify the matching file, a source reference and the first matching line. Open
@@ -241,13 +241,13 @@ In ordinary Markdown, a `#word` in text is not automatically a tag.
 ### Find and remove labels
 
 ```sh
-memo notes search 'budget' --tag work --json
-memo search 'tag:follow-up' --all --json
+memo search notes 'budget' --tag work --json
+memo search all 'tag:follow-up' --json
 memo tags list --tag work --json
 memo tags remove work --note note:NOTE_ID
 ```
 
-The first query searches tagged notes; the second searches stored sources across accounts.
+The first query searches tagged notes; the second searches messages, mail and notes together.
 Check the source type/account in the result. Removing a label leaves the source intact.
 Adding an existing label or removing an absent one does not create a second change.
 

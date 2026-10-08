@@ -26,7 +26,7 @@ GROUPS = [{'key': 'personal',
              'tg review --since-time 7d'),
             ('Find it, even with a typo.',
              'Search your local chat archive by full words, partial words or approximate spelling.',
-             'tg messages search "contract"'),
+             'tg search messages "contract"'),
             ('News from your subscriptions.',
              'Ask your agent for a digest of the channels you follow, on the topics you choose, with links to the '
              'posts.',

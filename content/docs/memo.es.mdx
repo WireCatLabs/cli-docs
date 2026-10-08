@@ -144,7 +144,7 @@ Muestra el texto coincidente y el archivo de origen de cada resultado útil. Ind
 Para buscar manualmente:
 
 ```sh
-memo notes search 'budget' --json
+memo search notes 'budget' --json
 ```
 
 Los resultados identifican el archivo, una referencia de origen y la primera línea coincidente.
@@ -248,14 +248,13 @@ el formato Markdown usa `tags:`. En Markdown normal, un `#word` no es automátic
 ### Encuentra y elimina etiquetas
 
 ```sh
-memo notes search 'budget' --tag work --json
-memo search 'tag:follow-up' --all --json
+memo search notes 'budget' --tag work --json
+memo search all 'tag:follow-up' --json
 memo tags list --tag work --json
 memo tags remove work --note note:NOTE_ID
 ```
 
-La primera consulta busca notas etiquetadas; la segunda busca fuentes almacenadas en todas
-las cuentas. Comprueba el tipo de fuente y la cuenta. Quitar la etiqueta deja intacta la fuente.
+La primera consulta busca notas etiquetadas; la segunda busca mensajes, correo y notas juntos. Comprueba el tipo de fuente y la cuenta. Quitar la etiqueta deja intacta la fuente.
 Añadir una existente o quitar una ausente no crea un segundo cambio.
 
 ## Pide el contexto que necesitas

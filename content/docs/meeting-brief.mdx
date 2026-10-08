@@ -73,10 +73,10 @@ A useful briefing separates confirmed decisions, unresolved questions and source
 After [installation](./installation.mdx), login and a bounded [history fetch](./tg/archive.md), search your saved Telegram conversations with the same query syntax. Replace the synthetic chat name and phrases with your task:
 
 ```sh
-tg messages search 'chat:"Atlas project" AND ("deadline confirmed" OR "final invoice")' --json
+tg search messages 'chat:"Atlas project" AND ("deadline confirmed" OR "final invoice")' --json
 ```
 
-`messages search` reads the local archive. Login alone does not download all historical messages. Use source locators returned by **your own** search with `tg messages context`; the `demo` locators above belong only to the fixture. The [command reference](./tg/commands.md) and [search guide](./tg/search.md) document the reviewed Telegram release and supported options.
+`search messages` reads the local archive. Login alone does not download all historical messages. Use source locators returned by **your own** search with `tg messages context`; the `demo` locators above belong only to the fixture. The [command reference](./tg/commands.md) and [search guide](./tg/search.md) document the reviewed Telegram release and supported options.
 
 Then ask your agent:
 

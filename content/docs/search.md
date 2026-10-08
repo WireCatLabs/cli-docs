@@ -6,18 +6,30 @@ description: "Find a message, a decision or a whole discussion."
 You can look for a remembered word, a phrase, a person or a discussion whose exact wording
 you no longer remember. Start with the messages already saved on your computer.
 
+## Search everything at once
+
+When you do not know where something was written — a chat, an email or your own notes — search
+all of them together:
+
+```sh
+tg search all invoice
+max search all invoice
+```
+
+Each result says whether it is a message, an email or a note. The sections below search one kind.
+
 ## Find a word or phrase
 
 ```sh
-tg messages search invoice
-max messages search invoice
+tg search messages invoice
+max search messages invoice
 ```
 
 For an exact phrase, keep the quotes inside the query:
 
 ```sh
-tg messages search 'exact:"final invoice"'
-max messages search 'exact:"final invoice"'
+tg search messages 'exact:"final invoice"'
+max search messages 'exact:"final invoice"'
 ```
 
 Results link back to messages. Ask your assistant to show nearby messages before interpreting
@@ -26,8 +38,8 @@ an agreement: one line may miss a correction or a later answer.
 ## Narrow the conversation
 
 ```sh
-tg messages search invoice --chat "Project"
-max messages search invoice --chat "Project"
+tg search messages invoice --chat "Project"
+max search messages invoice --chat "Project"
 ```
 
 You can also filter by person, date or attachments. The [Telegram](./tg/search.md) and

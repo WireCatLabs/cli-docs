@@ -61,7 +61,7 @@ Guides: [Telegram groups](./tg/groups.md) · [MAX groups](./max/groups.md)
 | What you can do | Commands |
 |---|---|
 | Keep a local archive of the chats you choose | `store fetch` |
-| Search it offline by words, sender, date and chat, with typo-tolerant matching | `messages search` |
+| Search it offline by words, sender, date and chat, with typo-tolerant matching | `search messages` |
 | Separate the threads of a busy group by replies and mentions | `conversations` |
 | Export a chat as Markdown or JSON lines; back up the whole archive | `store export`, `store backup` |
 | Unread messages from every chat in one list | `inbox` |

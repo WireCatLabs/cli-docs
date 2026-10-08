@@ -15,9 +15,9 @@ La preparación del archivo y las ampliaciones de cobertura descritas abajo est�
 
 | Pregunta | Comando | Qué devuelve | Qué hace falta antes |
 | --- | --- | --- | --- |
-| «¿Dónde dijo Alice factura, en octubre, con un PDF?» | `messages search` | Mensajes que coinciden, sus localizadores y, si quieres, los mensajes vecinos | Historial guardado; índice de palabras listo para consultas con palabras |
+| «¿Dónde dijo Alice factura, en octubre, con un PDF?» | `search messages` | Mensajes que coinciden, sus localizadores y, si quieres, los mensajes vecinos | Historial guardado; índice de palabras listo para consultas con palabras |
 | «¿Cuántos mensajes al día mencionan el presupuesto?» | `stats messages show` | Recuentos por chat, remitente, día u hora | Lo mismo que la búsqueda de mensajes |
-| «¿Dónde hablamos de alquilar un piso?» | `conversations search` | Conversaciones ordenadas, el fragmento que coincide y cómo coincidió | Conversaciones construidas; vectores para coincidir por significado |
+| «¿Dónde hablamos de alquilar un piso?» | `search conversations` | Conversaciones ordenadas, el fragmento que coincide y cómo coincidió | Conversaciones construidas; vectores para coincidir por significado |
 | «¿Qué más trató lo mismo?» | `conversations related` | Las conversaciones más cercanas a la de un mensaje | Vectores; no se ejecuta ningún modelo |
 | «¿A qué conversación pertenece este mensaje?» | `conversations show` / `messages links` | La conversación y la cadena de padres elegida | Conversaciones construidas |
 | «¿Qué había alrededor de este mensaje?» | `messages context` / `--context` en la búsqueda | Vecinos en el tiempo, en la misma cuenta y chat | Solo el historial guardado |
@@ -50,9 +50,9 @@ El proceso:
 Los campos son `text`, `exact`, `body`, `from`, `chat`, `date`, `kind`, `has`, `topic`, `in`, `preset`, `filename`, `mime`, `size` y `tag`. Los campos de archivo coinciden cuando al menos un adjunto coincide, por el nombre, tamaño y tipo que informó el mensajero; MAX no informa el tipo, así que allí `mime:` no encuentra nada. `tag:` lee las etiquetas locales del dueño en el mensaje, su chat o su remitente. `date:` también acepta `today`, `yesterday` y desplazamientos como `7d`, contados desde el momento de la consulta. Los operadores difusos, de proximidad, de peso y de intervalos se rechazan con un error explícito.
 
 ```sh
-tg messages search 'invoice AND has:file' --source all --context 2 --json
-max messages search 'chat:"Project team" AND date:[2026-10-01 TO 2026-10-31]' --timezone Europe/Madrid --json
-tg messages search 'filename:*.pdf size>1MB date:7d' --json
+tg search messages 'invoice AND has:file' --source all --context 2 --json
+max search messages 'chat:"Project team" AND date:[2026-10-01 TO 2026-10-31]' --timezone Europe/Madrid --json
+tg search messages 'filename:*.pdf size>1MB date:7d' --json
 ```
 
 `text` compara palabras normalizadas; `body` se refiere al texto original completo, distinguiendo mayúsculas. `body:/.*invoice.*/` expresa una condición de subcadena. Una fecha sin hora es un día de calendario en la zona elegida; un día superior inclusivo incluye el día entero, y los días de cambio de hora no se suponen de 24 horas.
@@ -83,7 +83,7 @@ Los stemmers son un ajuste de todo el almacén, compartido por cada perfil, tg y
 
 ### Búsqueda en el servidor junto al archivo
 
-`messages search` también puede preguntar a la búsqueda del propio mensajero: tg pregunta a Telegram por defecto (desde tg 0.34), y max pregunta al servidor de MAX cuando la consulta nombra un chat. Las reglas de coincidencia del servidor son suyas y no están documentadas. En cuentas de prueba, Telegram encontró palabras completas y formas rusas de las palabras, pero no comienzos de palabra; MAX, comienzos de palabra, pero no otras formas. Por eso la respuesta del servidor son solo candidatos: se guardan en el archivo y la misma consulta estricta se ejecuta una vez sobre el archivo y las filas nuevas. `exact:`, `-palabra`, las frases, los filtros y el orden conservan su significado, y un mensaje nunca aparece dos veces. Un candidato que la consulta estricta rechaza se guarda, pero no se muestra.
+`search messages` también puede preguntar a la búsqueda del propio mensajero: tg pregunta a Telegram por defecto (desde tg 0.34), y max pregunta al servidor de MAX cuando la consulta nombra un chat. Las reglas de coincidencia del servidor son suyas y no están documentadas. En cuentas de prueba, Telegram encontró palabras completas y formas rusas de las palabras, pero no comienzos de palabra; MAX, comienzos de palabra, pero no otras formas. Por eso la respuesta del servidor son solo candidatos: se guardan en el archivo y la misma consulta estricta se ejecuta una vez sobre el archivo y las filas nuevas. `exact:`, `-palabra`, las frases, los filtros y el orden conservan su significado, y un mensaje nunca aparece dos veces. Un candidato que la consulta estricta rechaza se guarda, pero no se muestra.
 
 Solo se envía lo que reduce los candidatos: las palabras y frases obligatorias, un chat, un remitente con ese chat y las fechas; las negaciones, los comodines, las expresiones regulares y los filtros siguen siendo locales. Como máximo tres llamadas al servidor corren en paralelo, dentro de 5 segundos (`--server-time`); una respuesta posterior se descarta y nada se marca como leído. Cada resultado dice de dónde viene (`source`: `archive`, `server` o `both`), y un bloque `server` dice qué devolvió el servidor y por qué se omitió o se detuvo. `--backend archive` busca solo en el archivo; `stats` nunca pregunta al servidor, que cuenta según sus propias reglas.
 
@@ -149,7 +149,7 @@ La ejecución produjo 42 417 fragmentos y el almacén creció 292 MB. Tres proce
 
 ## 5. Búsqueda híbrida de conversaciones
 
-`conversations search` recibe una pregunta en lenguaje natural, no una consulta Lucene. Ejecuta dos ramas:
+`search conversations` recibe una pregunta en lenguaje natural, no una consulta Lucene. Ejecuta dos ramas:
 
 - **Significado:** convertir la pregunta en vector con el modelo elegido, recorrer los vectores de las construcciones actuales del alcance y quedarse con el mejor fragmento de cada conversación.
 - **Palabras:** tomar las palabras de la pregunta, unirlas con OR sobre el índice de palabras y asignar los mensajes encontrados a conversaciones construidas.
@@ -163,7 +163,7 @@ Los vectores son blobs de SQLite que se recorren por páginas y se puntúan en J
 `conversations related` usa como consulta la media de los vectores actuales de una conversación y busca en todos los chats construidos. No se ejecuta ningún modelo, así que no hace falta descargarlo.
 
 ```sh
-tg conversations search "Where did we discuss renting a flat?" --chat "Project team" --json
+tg search conversations "Where did we discuss renting a flat?" --chat "Project team" --json
 max conversations related "Project team" 4521 --json
 ```
 
@@ -173,7 +173,7 @@ max conversations related "Project team" 4521 --json
 
 - **Ediciones.** Un resultado cuyo fragmento cambió después de calcular el vector se marca `stale: true`; su puntuación corresponde al texto anterior hasta la siguiente construcción y cálculo.
 - **Eliminaciones.** Un mensaje eliminado conserva su fila, para que una sincronización posterior no lo traiga de vuelta, pero pierde su texto: en la fila, en la copia de búsqueda, en el historial de ediciones, en las transcripciones y en todos los vectores de los fragmentos que lo contenían, salvo que un fragmento actual sin mensajes eliminados use el mismo texto.
-- **Puesta al día.** `conversations build` y `embed` sin `--chat`, y `conversations search --refresh`, construyen y calculan en este equipo los chats que cambiaron o nunca se construyeron: por defecto, como mucho 20 chats y 2000 fragmentos por ejecución (`--max-chats`, `--max-chunks`). Nunca descargan un modelo; un modelo remoto solo se usa por chat y con el sí del dueño. MCP ofrece la misma puesta al día como `conversations_refresh`.
+- **Puesta al día.** `conversations build` y `embed` sin `--chat`, y `search conversations --refresh`, construyen y calculan en este equipo los chats que cambiaron o nunca se construyeron: por defecto, como mucho 20 chats y 2000 fragmentos por ejecución (`--max-chats`, `--max-chunks`). Nunca descargan un modelo; un modelo remoto solo se usa por chat y con el sí del dueño. MCP ofrece la misma puesta al día como `conversations_refresh`.
 
 ## 7. Pruebas y contexto para un agente
 

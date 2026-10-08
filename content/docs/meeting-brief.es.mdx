@@ -73,10 +73,10 @@ Un resumen útil separa decisiones, preguntas abiertas y mensajes de origen. Est
 Después de la [instalación](./installation.mdx), el inicio de sesión y una [descarga acotada del historial](./tg/archive.md), busca en las conversaciones guardadas de Telegram con la misma sintaxis. Sustituye el chat y las frases por los de tu tarea:
 
 ```sh
-tg messages search 'chat:"Atlas project" AND ("deadline confirmed" OR "final invoice")' --json
+tg search messages 'chat:"Atlas project" AND ("deadline confirmed" OR "final invoice")' --json
 ```
 
-`messages search` lee el archivo local. Iniciar sesión no descarga todo el historial. Usa con `tg messages context` los localizadores de **tu propia** búsqueda; los localizadores `demo` anteriores solo pertenecen al conjunto de prueba. La [referencia de comandos](./tg/commands.md) y la [guía de búsqueda](./tg/search.md) documentan la versión revisada de Telegram y sus opciones.
+`search messages` lee el archivo local. Iniciar sesión no descarga todo el historial. Usa con `tg messages context` los localizadores de **tu propia** búsqueda; los localizadores `demo` anteriores solo pertenecen al conjunto de prueba. La [referencia de comandos](./tg/commands.md) y la [guía de búsqueda](./tg/search.md) documentan la versión revisada de Telegram y sus opciones.
 
 Después pide al agente:
 
