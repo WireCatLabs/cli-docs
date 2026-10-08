@@ -46,3 +46,10 @@ flags into concrete examples. Native references remain generated.
 Screenshots are local, ignored review evidence in
 `.docs-tooling/reports/reader-next-pass/`. Preview serves this checkout's export on port 3000.
 No publication was performed.
+
+Manual inspection caught that plain `.md` strips the HTML disclosure wrapper. Converted only
+the three feature pages to MDX without changing public routes, and made the existing browser
+check require five disclosure controls before expanding the inventories.
+
+After the MDX correction, the six affected onboarding checks passed again. Final export
+link/SEO checks passed; manual inspection confirmed five controls and a visible table after click.

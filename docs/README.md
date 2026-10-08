@@ -35,7 +35,7 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | How do I find a message or agreement? | `search.md` | Task guide | Lead with an agent request; keep terminal syntax optional |
 | How do I connect a browser AI app? | `browser-apps.mdx` | Connection guide | Preserve current web setup instructions |
 | How do I ask for a useful result? | `prompting.md` | Task guidance | Cross-link to worked examples instead of duplicating dialogues |
-| Can it do my task in Telegram or MAX? | `features.md` | Capability orientation | Verify differences; link task homes, not only command lists |
+| Can it do my task in Telegram or MAX? | `features.mdx` | Capability orientation | Verify differences; link task homes, not only command lists |
 | Which connection does my AI app need? | `mcp.md` | Explanation/setup | Explain the decision before client configuration |
 | How do I discover a bot method? | `bot-api.md` | Reference orientation | Link messenger-specific bot prerequisites and use cases |
 | What can read or change my data? | `security.md` | Explanation | Lead with user decisions, then verified detail |
