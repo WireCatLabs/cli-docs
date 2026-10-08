@@ -32,7 +32,7 @@ export const aboutCopy = {
       {
         title: "How we fund the project",
         paragraphs: [
-          "We develop custom AI workflows, bots and integrations for people and organisations. These projects support the ongoing development and maintenance of our open-source tools.",
+          "We develop custom AI workflows, assistants and bots built with LangGraph, and integrations for people and organisations. These projects support the ongoing development and maintenance of our open-source tools.",
           "If you are exploring an integration for your own workflow, we would be happy to discuss it. You can reach us by email or Telegram.",
         ],
       },
@@ -99,7 +99,7 @@ export const aboutCopy = {
       {
         title: "Как мы поддерживаем проект",
         paragraphs: [
-          "Мы разрабатываем ИИ-сценарии, ботов и интеграции на заказ для людей и организаций. Такие проекты поддерживают развитие и сопровождение наших инструментов с открытым кодом.",
+          "Мы разрабатываем AI workflows, ассистентов и ботов на LangGraph, а также интеграции на заказ для людей и организаций. Такие проекты поддерживают развитие и сопровождение наших инструментов с открытым кодом.",
           "Если вы рассматриваете интеграцию для своей работы, будем рады обсудить её. С нами можно связаться по почте или в Telegram.",
         ],
       },
@@ -166,7 +166,7 @@ export const aboutCopy = {
       {
         title: "Cómo financiamos el proyecto",
         paragraphs: [
-          "Desarrollamos procesos de IA, bots e integraciones a medida para personas y organizaciones. Estos proyectos sostienen el desarrollo y mantenimiento de nuestras herramientas de código abierto.",
+          "Desarrollamos flujos de trabajo de IA, asistentes y bots con LangGraph, e integraciones a medida para personas y organizaciones. Estos proyectos sostienen el desarrollo y mantenimiento de nuestras herramientas de código abierto.",
           "Si estás valorando una integración para tu trabajo, nos encantará hablar de ella. Puedes contactarnos por correo electrónico o Telegram.",
         ],
       },

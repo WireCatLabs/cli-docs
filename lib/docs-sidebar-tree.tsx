@@ -24,6 +24,7 @@ import {
   LayoutGrid,
   ListChecks,
   LockKeyhole,
+  Mail,
   MessageSquare,
   Mic,
   Network,
@@ -44,6 +45,7 @@ import {
 
 export const sidebarIcons = {
   features: LayoutGrid,
+  memo: Mail,
   attachments: Paperclip,
   "audio-recognition": Mic,
   "external-models": BrainCircuit,
