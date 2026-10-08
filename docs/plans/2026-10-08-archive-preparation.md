@@ -19,7 +19,9 @@ coverage/next command before concluding that a message does not exist.
 
 Passed locally: lint, 208 unit tests, search-language bundle check, reviewed-release sync/production
 export, links and SEO. HTML and Markdown exports in all three locales contain the preparation commands,
-release boundaries and coverage fields. PR CI and deployment are pending.
+release boundaries and coverage fields. PR and deployment evidence are tracked in
+[website PR #71](https://github.com/leemour/cli-docs/pull/71) and the repository
+[deployment runs](https://github.com/leemour/cli-docs/actions/workflows/deploy.yml).
 No live messenger actions are needed for this documentation change.
 
 ## Remaining translation review
