@@ -6,6 +6,11 @@ Use these rules when writing or reviewing WireCat guides. They help readers iden
 
 Before drafting, identify who opens the page, in what situation, and what they want to achieve. The first paragraph briefly explains when to use the page and what the reader will be able to do or understand after it. State a prerequisite or limitation there only when it changes the next action. Do not open with package internals or a list of command names.
 
+Order the opening around the reader: first explain what the page covers and how WireCat
+supports that task; then state what the reader will gain. After that, introduce the tool used
+for the task and define it before giving instructions. Do not start by telling the reader to
+use an unexplained product or command name.
+
 Keep the title short and specific, such as **File attachments**. A description adds useful context rather than repeating the title. Put the useful outcome before implementation detail. Prefer concrete examples and plain language; distinguish sending a file, downloading its bytes, reading its content and indexing recognized text.
 
 ## Keep release evidence out of user guides
