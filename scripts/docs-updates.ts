@@ -109,6 +109,7 @@ export async function checkToolRelease(tool: Tool, getJson: JsonRequest = reques
       ...pages
         .filter((path) => path !== "docs/meta.json" && path !== "docs/README.md")
         .map((path) => `${path}: review translations, correction matches, examples and incoming anchors`),
+      "Check that CHANGELOG.md contains this released version, and review docs/roadmap.md even when plans are unchanged. Update docs/release-notes-review.json for the chosen docsRef and run pnpm docs:release-notes.",
       "Check shared installation, scenario adapters and copied playground commands against released CLI help.",
       "Refresh pnpm docs:contracts and run pnpm docs:check against the reviewed release.",
       "Run pnpm docs:localize, lint, test, search:check, typecheck, build, check:links and browser tests.",

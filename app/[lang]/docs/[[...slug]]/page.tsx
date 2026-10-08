@@ -11,12 +11,15 @@ import { createRelativeLink } from "fumadocs-ui/mdx"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { CommandReferenceIndex } from "@/components/command-reference-index"
 import { DocsContentsHint } from "@/components/docs-contents-hint"
 import { DocsDisclosures } from "@/components/docs-disclosures"
 import { DocsTocPopover } from "@/components/docs-toc-popover"
 import { getMDXComponents } from "@/components/mdx"
 import { StructuredData } from "@/components/structured-data"
 import { installationReferenceTitle, ToolInstallationIntro } from "@/components/tool-installation-intro"
+import { guideOrientation } from "@/lib/guide-orientation"
+import { commandReferences } from "@/lib/remark-doc-usability"
 import {
   documentationDescription,
   documentationTitle,
@@ -57,10 +60,24 @@ export default async function Page(props: Props) {
         ? "mcp"
         : undefined
   const repoPath =
-    page.slugs.at(-1) === "changelog" ? "CHANGELOG.md" : `docs/${page.slugs.slice(1).join("/") || "index"}.md`
+    page.slugs.at(-1) === "changelog"
+      ? "CHANGELOG.md"
+      : page.slugs.at(-1)?.startsWith("commands-")
+        ? "docs/commands.md"
+        : `docs/${page.slugs.slice(1).join("/") || "index"}.md`
 
-  const toc =
-    guide === "installation"
+  const commandIndex = tool && page.slugs.at(-1) === "commands"
+  const commandRaw = commandIndex ? await page.data.getText("raw") : ""
+  const commandNames = [...commandReferences(commandRaw)]
+  const commandAliases = [
+    ...new Set([
+      ...page.data.toc.map((item) => decodeURIComponent(item.url.slice(1))),
+      ...[...commandRaw.matchAll(/<a id="([^"<>]+)"\s*\/>/g)].map((match) => match[1]),
+    ]),
+  ]
+  const toc = commandIndex
+    ? []
+    : guide === "installation"
       ? [
           { title: ui.installGuide, url: "#agent-installation", depth: 2 },
           { title: installationReferenceTitle(lang), url: "#installation-reference", depth: 2 },
@@ -92,7 +109,9 @@ export default async function Page(props: Props) {
       <DocsDisclosures />
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription className="mb-0">{description}</DocsDescription>
-      {["commands", "configuration"].includes(page.slugs.at(-1) ?? "") && <DocsContentsHint lang={lang} />}
+      {(page.slugs.at(-1)?.startsWith("commands-") || page.slugs.at(-1) === "configuration") && (
+        <DocsContentsHint lang={lang} />
+      )}
       <div className="flex flex-row gap-2 items-center border-b pb-6">
         <MarkdownCopyButton markdownUrl={markdownUrl} />
         <ViewOptionsPopover
@@ -115,8 +134,23 @@ export default async function Page(props: Props) {
         </Link>
       )}
       <DocsBody lang={written}>
+        {guideOrientation(page.slugs, lang) && (
+          <p data-guide-orientation lang={lang}>
+            {guideOrientation(page.slugs, lang)}
+          </p>
+        )}
         {guide === "installation" && tool && <ToolInstallationIntro tool={tool} lang={lang} />}
-        <MDX components={getMDXComponents({ a: createRelativeLink(source, page) })} />
+        {commandIndex && tool ? (
+          <CommandReferenceIndex
+            tool={tool.name}
+            lang={lang}
+            markdownUrl={markdownUrl}
+            commands={commandNames}
+            aliases={commandAliases}
+          />
+        ) : (
+          <MDX components={getMDXComponents({ a: createRelativeLink(source, page) })} />
+        )}
       </DocsBody>
     </DocsPage>
   )

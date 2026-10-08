@@ -119,3 +119,15 @@ describe("source packets and diagrams", () => {
     expect(svg).not.toBe(diagramSvg(chart, "page:2"))
   })
 })
+
+it("checks every non-executable shorthand alternative instead of hiding unknown commands", () => {
+  const program: Program = {
+    cli: "tg",
+    globalOptions: [],
+    commands: [{ ...leaf(["config"]), commands: [leaf(["config", "show"]), leaf(["config", "set"])] }],
+  }
+  expect(validateInvocation("tg config show/set", program, false)?.kind).toBe("syntax")
+  expect(validateInvocation("tg config show/unknown", program, false)?.kind).toBe("invalid")
+  expect(validateInvocation("tg config show/set --unknown", program, false)?.kind).toBe("invalid")
+  expect(validateInvocation(commandSegments("tg [profile] resource action")[0], program, true)?.kind).toBe("syntax")
+})

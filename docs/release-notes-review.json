@@ -1,0 +1,14 @@
+{
+  "tg": {
+    "version": "v0.35.0",
+    "roadmapSha256": "1254373e615b652cbfaba46ae822a9204217744292a240f6d5c96218f54bcac2",
+    "reviewedAt": "2026-10-08",
+    "conclusion": "Forum-topic sending and private person notes are already shipped and are no longer future work. Multi-photo sending and chat notes remain planned."
+  },
+  "max": {
+    "version": "v0.34.0",
+    "roadmapSha256": "570fc0c6a1b61c4235d46d443bd9b1839b1b66b4d89b789937dfd3585bfb19b3",
+    "reviewedAt": "2026-10-08",
+    "conclusion": "Keep optional no-local-store mode, event actions, round videos/password actions, standalone installers and account-only chat removal as future work; reviewed against the published roadmap and command contract."
+  }
+}

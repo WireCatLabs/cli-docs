@@ -18,7 +18,7 @@ for (const lang of ["en", "ru", "es"]) {
       for (const path of [
         lang === "en" ? "/" : `/${lang}`,
         `/${lang}/docs/tg/installation`,
-        `/${lang}/docs/max/commands`,
+        `/${lang}/docs/max/commands-personal`,
       ]) {
         const response = await page.goto(path)
         expect(response?.status(), path).toBe(200)
@@ -129,7 +129,7 @@ for (const lang of ["en", "ru", "es"]) {
       page,
     }) => {
       await page.setViewportSize({ width: 390, height: 844 })
-      await page.goto(`/${lang}/docs/${tool}/commands`)
+      await page.goto(`/${lang}/docs/${tool}/commands-personal`)
       const tables = page.locator(".docs-reference-table")
       expect(await tables.count()).toBeGreaterThan(10)
       expect(await tables.first().getAttribute("role")).toBe("group")
@@ -140,7 +140,7 @@ for (const lang of ["en", "ru", "es"]) {
       expect(tree.nodes.filter((node) => node.role?.value === "table")).toHaveLength(
         await page.locator(".prose table").count(),
       )
-      const heading = page.locator(".prose h3[id]").last()
+      const heading = page.locator(".prose h2[id]").last()
       const id = await heading.getAttribute("id")
       await page.goto(`/${lang}/docs/${tool}/commands#${id}`)
       await expect(heading).toBeInViewport()

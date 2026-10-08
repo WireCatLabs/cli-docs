@@ -1,63 +1,65 @@
 ---
 title: "Bots and Bot API"
-description: "Connect a bot, choose a chat and use it for replies, reports or group tasks."
+description: "Use a bot through your agent or terminal for messages, files, events and group tasks."
 ---
 
-A bot has its own name, account and chats. Use it to publish reports, answer requests or help
-manage a group. Commands without `bot` still use your personal account.
+Bot API is the official way to control a Telegram or MAX bot from a program. With WireCat,
+you can ask your agent to use it or run commands yourself: reply as the bot, publish reports
+and help with group tasks.
 
-## Connect a bot
+This page explains what a bot can do, how to connect it and how to check access before your first task.
+A bot has its own account, name and permissions. It does not gain access to your private conversations.
 
-Create a Telegram bot through [BotFather](https://t.me/BotFather), or follow the
-[MAX bot setup](https://business.max.ru/self). Then save its token at a hidden prompt:
+
+<a id="connect-a-bot" />
+
+<a id="choose-a-chat" />
+
+<a id="send-a-reply-or-a-report" />
+
+<a id="automate-carefully" />
+
+<a id="a-method-missing-from-the-convenient-commands" />
+
+## What a bot can do
+
+- **Messages:** send replies and posts, edit and delete its messages, and add buttons.
+- **Files and media:** send and receive documents, photos and other attachments supported by the messenger.
+- **Incoming events:** receive new messages and button clicks for your agent or program to handle.
+- **Groups and channels:** work with members, pinned messages and settings where it has the required permissions.
+- **Bot setup:** check its identity, set its command list and configure event delivery.
+
+Available methods and attachment types differ between Telegram and MAX. A bot sees only what the messenger allows. Continuous auto-replies require a running event handler; a single command does not start one.
+
+## Connect your bot
+
+First create a bot using the [Telegram guide](./tg/bot.md) or [MAX guide](./max/bot.md). Then save its token at a hidden terminal prompt:
 
 ```sh
 tg support bot auth set
 max support bot auth set
 ```
 
-`support` is a name you choose for the bot profile. Connect only the messenger you use.
-Do not put the token in a command, screenshot or chat. Check which bot is connected:
+`support` is the bot profile name you choose. Run the command for your messenger. Enter the token locally; do not send it in a message to your agent. Check which bot is connected:
 
 ```sh
 tg support bot me
 max support bot me
 ```
 
-## Choose a chat
+Expect your bot's name and identifier. Then add it to the target group or channel, or start a private conversation with it. Telegram users must start the bot before it can message them.
 
-Add the bot to your group or channel, or start a conversation with it from your personal account.
-A bot can work only with the chats and messages the messenger lets it access. It does not gain
-access to your personal chat history. Telegram users must start the bot before it can message them.
+## Give your agent a task
 
-The bot learns chat identifiers from received updates or a chat you explicitly inspect.
-See the [Telegram bot guide](./tg/bot.md) or [MAX bot guide](./max/bot.md) to find the right chat.
-Use its saved title in later commands where available.
-
-## Send a reply or a report
-
-```sh
-tg support bot messages send "Team" "The report is ready"
-max support bot messages send "Team" "The report is ready"
+```text prompt
+Use the connected support bot: check its identity and the events it can access. Suggest how to prepare a report for my group. Show the chosen chat and draft the message. Don't send anything yet.
 ```
 
-Replace the chat and text with what you intend to send. This is a real message from the bot.
-You can also send files, reply to a message and manage chats when the bot has the required rights.
-Do not give administrator rights for actions that do not need them.
+The agent should show the bot, selected chat and draft. Review the text and recipient, then authorise sending separately. Finding a chat and sending: [Telegram](./tg/bot.md) or [MAX](./max/bot.md).
 
-## Automate carefully
+## When you need the full API
 
-An assistant can draft replies, prepare reports or use the bot in a workflow. Give it the
-[permissions](./permissions.md) it needs and decide which recipients it may contact.
-For important messages, ask to review the text first. Webhooks and update polling feed other
-applications; changing them can interrupt an existing integration.
-
-MCP offers tools for common bot tasks. An assistant with terminal access can also use the CLI.
-[Connecting an assistant](./mcp.md) explains these choices.
-
-## A method missing from the convenient commands?
-
-The native Bot API interface exposes the methods defined by each messenger. Start with help:
+Common tasks have convenient commands such as `bot messages send`. Less common operations can use the whole native Bot API: 185 Telegram methods and 33 MAX operations in the pinned schemas.
 
 ```sh
 tg support bot api --help
@@ -66,8 +68,6 @@ tg support bot api get-me --json
 max support bot api get-my-info --json
 ```
 
-Choose a method, then use its `--help` for fields and examples. Telegram and MAX use different
-method names and inputs. Native JSON input and detailed response formats are for integrations;
-read the messenger's bot guide before using them.
+Each method's help explains its fields. Names and inputs follow the provider API. The full API is available through the command line; MCP offers separate tools for common tasks. An agent with terminal access can use both interfaces.
 
-[Telegram official API](https://core.telegram.org/bots/api) · [MAX official API](https://dev.max.ru/docs-api)
+[Telegram bot setup and tasks](./tg/bot.md) · [MAX bot setup and tasks](./max/bot.md). Official methods: [Telegram](https://core.telegram.org/bots/api) and [MAX](https://dev.max.ru/docs-api).

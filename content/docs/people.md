@@ -19,17 +19,14 @@ and questions still open. The answer should say which history was available.
 
 ## Who they are
 
-For a quick lookup in the reviewed Telegram release, use `contacts show`. MAX also provides
-a fuller profile:
+Both messengers provide a profile with the person's identity and shared conversations:
 
 ```sh
-tg contacts show @example_user
+tg contacts profile @example_user
 max contacts profile 20000002
 ```
 
-These are different commands. Telegram v0.28.0 does not provide `contacts profile` or
-`contacts check`. MAX v0.29.0 does. Use the command for your messenger; the same command name
-in a newer release is not evidence that your installed version supports it.
+Use `contacts show` for a shorter lookup. The available profile fields depend on what the messenger shares with your account.
 
 ## What they wrote
 
@@ -50,20 +47,19 @@ MAX additionally supports restricting context to a chat:
 max contacts context 20000002 --chat "Team" --limit 10
 ```
 
-Telegram v0.28.0 has no `--chat` option on this command. Ask the agent to read the named
-conversation instead; [reading messages](./tg/usage.md#reading) explains that path.
+Telegram also supports `contacts context --chat` in the reviewed release. Name the chats that matter so the agent can keep the answer focused.
 
 ## Does the account look like a bot
 
-This check is available in the reviewed MAX release:
+Both messengers support an account check:
 
 ```sh
+tg contacts check @example_user
 max contacts check 20000002
 ```
 
 Read the reasons and missing evidence alongside the score. A signal is a clue, not proof
-that a person is fraudulent. Telegram v0.28.0 has no corresponding command; don't substitute
-a guessed invocation.
+that a person is fraudulent. Telegram can also consult public spam registries; the person's ID is sent to them. Use `--no-registries` to skip those lookups.
 
 ## The same person in both messengers
 

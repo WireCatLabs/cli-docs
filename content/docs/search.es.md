@@ -16,7 +16,7 @@ El agente puede elegir cómo buscar aunque solo recuerdes parte de una frase o s
 
 Se admite contenido de archivos de texto, Word y PDF con capa de texto. Las fotos y escaneos
 necesitan reconocimiento de texto primero; pídeselo al agente. Detalles: [archivos de Telegram](./tg/search.md#for-scripts-and-agents)
-y [MAX](./max/search.md#para-scripts-y-agentes). Para encontrar personas, consulta [Personas](./people.md).
+y [MAX](./max/search.md#scripts-y-agentes). Para encontrar personas, consulta [Personas](./people.md).
 
 Para formas de palabras, errores de escritura y búsqueda por significado, consulta [Cómo funciona la búsqueda](./search-architecture.mdx).
 

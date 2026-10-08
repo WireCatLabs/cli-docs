@@ -93,3 +93,12 @@ interface language using reviewed files in its own `translations/{tool}/` direct
 installed after sync, with per-locale source fingerprints and checks that preserve command examples,
 inline literals, heading structure and link destinations. Released originals stay in ignored
 `content/upstream/`. Portal start pages and reviewed source corrections are kept separately.
+
+
+## Portal command presentation
+
+The release-owned `commands.md` remains the complete source and Markdown reference. After
+localization the portal derives `commands-personal`, `commands-bot` and `commands-admin` pages
+from those same sections. The `/commands` HTML route is a lightweight choice of references;
+existing command hashes redirect to their partition. Edit native commands at the source, not
+these derived files. Shared global options and exit codes appear in every part.

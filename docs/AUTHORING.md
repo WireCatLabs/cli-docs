@@ -48,6 +48,14 @@ Lead with the user outcome. Package names, dependency lists and implementation d
 later unless the page's explicit audience needs them immediately. Use the existing inline term
 explanations where useful; the sentence should remain readable without opening a popover.
 
+The owner's review adds these practical requirements:
+
+- Define what the feature is and why to use it before steps or a list of methods.
+- Call a CLI a command-line tool; explain login as granting a device access to the chosen account.
+- Introduce practice data by the action and benefit: what to click and what the reader learns.
+- List user capabilities before exhaustive references, and make detailed explanations discoverable.
+- Judge progress by improved pages and reader tasks, alongside code and release checks.
+
 ## Build the middle around progress
 
 For an ordinary task guide, use the following order when relevant:

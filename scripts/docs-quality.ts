@@ -79,8 +79,21 @@ export function validateInvocation(
   program: Program,
   executable: boolean,
 ): { reason: string; kind: Finding["kind"] } | null {
-  if (/\[options\]|\[profile\]|<command>|<resource>|<verb>|\.\.\.|…/.test(text))
+  const syntaxText = text.replace(/\\([[\]])/g, "$1")
+  if (/\[(?:options|profile|профиль|perfil)\]|<command>|<resource>|<verb>|\.\.\.|…/.test(syntaxText))
     return { kind: "syntax", reason: "Command syntax illustration" }
+  if (!executable) {
+    const shorthand = /(?<![\w:/])(?:--)?[a-z][a-z-]*(?:\/(?:--)?[a-z][a-z-]*)+(?![\w/])/g
+    const match = shorthand.exec(text)
+    if (match) {
+      for (const alternative of match[0].split("/")) {
+        const expanded = text.slice(0, match.index) + alternative + text.slice(match.index + match[0].length)
+        const finding = validateInvocation(expanded, program, false)
+        if (finding && finding.kind !== "syntax") return finding
+      }
+      return { kind: "syntax", reason: "Reviewed shorthand alternatives, not a runnable command" }
+    }
+  }
   let entries: ReturnType<typeof parse>
   try {
     entries = parse(
@@ -241,7 +254,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     for (const file of filesIn(join(root, "content/docs"))) {
       if (
         file.includes(`/content/docs/${tool.name === "tg" ? "max" : "tg"}/`) ||
-        /\/(commands|changelog|roadmap)(?:\.[a-z]{2})?\.md$/.test(file)
+        /\/(commands(?:-(?:personal|bot|admin))?|changelog|roadmap)(?:\.[a-z]{2})?\.md$/.test(file)
       )
         continue
       for (const example of examples(readFileSync(file, "utf8"))) {

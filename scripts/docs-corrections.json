@@ -908,5 +908,30 @@
         }
       ]
     }
+  },
+  {
+    "tool": "tg",
+    "slug": "from-tgcli",
+    "reason": "tags list has no --chat; only add/remove target a chat. Separate the valid command references.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`tg tags add/remove/list --chat`",
+          "after": "`tg tags add --chat`, `tg tags remove --chat`, `tg tags list`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`tg tags add/remove/list --chat`",
+          "after": "`tg tags add --chat`, `tg tags remove --chat`, `tg tags list`"
+        }
+      ],
+      "es": [
+        {
+          "before": "`tg tags add/remove/list --chat`",
+          "after": "`tg tags add --chat`, `tg tags remove --chat`, `tg tags list`"
+        }
+      ]
+    }
   }
 ]

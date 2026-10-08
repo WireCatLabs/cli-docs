@@ -35,6 +35,7 @@ The wrapper never uploads the pack; a subsequent AI workflow uses its selected p
 pnpm sync
 pnpm docs:contracts
 pnpm docs:check
+pnpm docs:release-notes
 pnpm docs:quality
 ```
 
@@ -134,3 +135,14 @@ owner's shared `.agents/skills` and Claude `.claude/skills` directories point ag
 maintained rules. Refresh those copies after editing the skill. A TypeScript LSP is not installed:
 semantic navigation requires a compatible client integration; this work uses existing TypeScript
 checks and targeted source searches without changing the project's compiler version.
+
+
+## Release-note and roadmap review
+
+`pnpm docs:release-notes` runs after sync in CI and production documentation deployment. It
+requires the pinned version to be the newest released changelog entry with substantive notes,
+and requires a versioned roadmap review in `docs/release-notes-review.json`. Changing the version
+or roadmap invalidates that record. The reviewer removes already-shipped work from future
+plans or records that plans are unchanged, then stores the source fingerprint and conclusion.
+Preview builds from an explicit nonrelease ref use the existing preview path. This is a portal
+publication gate; the CLI repositories keep their own separate publish checks.

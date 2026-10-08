@@ -1,5 +1,7 @@
 # Documentation index and ownership
 
+The active page-by-page content plan is [reader documentation refresh](plans/2026-10-08-reader-documentation-refresh.md).
+
 Start with [authoring rules](AUTHORING.md) before writing or reviewing a page. The
 [documentation system plan](plans/2026-10-07-documentation-system.md) records the manual baseline,
 implementation order and validation gaps. [STRUCTURE.md](STRUCTURE.md) defines tool page files

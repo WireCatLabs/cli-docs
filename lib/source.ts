@@ -4,6 +4,7 @@ import { metaSchema, pageSchema } from "fumadocs-core/source/schema"
 import { applyMdxPreset } from "fumadocs-mdx/config"
 import { defineDocs } from "fumadocs-mdx/macro"
 import { expandDocTerms } from "./doc-terms-markdown"
+import { guideOrientation } from "./guide-orientation"
 import { i18n } from "./i18n"
 import { installationMarkdown } from "./installation-markdown"
 import { resolveDocumentationLink, rewriteMarkdownLinks } from "./markdown-links"
@@ -63,10 +64,14 @@ export const docsLlms = llms(source, {
       (page.slugs.length === 1 && page.slugs[0] === "installation")
         ? raw
         : await page.data.getText("processed")
-    const body = text
-      .replace(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/, "")
-      .replace("<InstallationGuide />", installationMarkdown(page.locale ?? i18n.defaultLanguage))
-      .replace(/<MeetingGuide\s+lang="(?:en|ru|es)"\s*\/>/, meetingMarkdown(page.locale ?? i18n.defaultLanguage))
+    const body =
+      (guideOrientation(page.slugs, page.locale ?? i18n.defaultLanguage)
+        ? `${guideOrientation(page.slugs, page.locale ?? i18n.defaultLanguage)}\n\n`
+        : "") +
+      text
+        .replace(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/, "")
+        .replace("<InstallationGuide />", installationMarkdown(page.locale ?? i18n.defaultLanguage))
+        .replace(/<MeetingGuide\s+lang="(?:en|ru|es)"\s*\/>/, meetingMarkdown(page.locale ?? i18n.defaultLanguage))
     const markdown = rewriteMarkdownLinks(expandDocTerms(body, page.locale ?? i18n.defaultLanguage), (href) =>
       resolveDocumentationLink(
         href,

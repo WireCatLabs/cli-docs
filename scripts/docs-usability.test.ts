@@ -96,7 +96,7 @@ describe("documentation command references", () => {
     remarkDocUsability(indexes)(tree, { path: "/project/content/docs/tg/installation.ru.md" })
     const result = JSON.stringify(tree)
     expect(result.match(/command-reference/g)).toHaveLength(1)
-    expect(result).toContain("/ru/docs/tg/commands#tg-doctor")
+    expect(result).toContain("/ru/docs/tg/commands-personal#tg-doctor")
     expect(tree.children[2].type).toBe("code")
   })
   it("keeps a source section closed, with its original anchor and every executable example", () => {

@@ -16,7 +16,7 @@ Your agent can choose a search method even if you remember only part of a phrase
 
 Content search supports text files, Word and PDFs with text layers. Scans and photos need text
 recognition first; ask your agent to do that. Details: [Telegram files](./tg/search.md#for-scripts-and-agents)
-and [MAX](./max/search.md#for-scripts-and-agents). See [People](./people.md) for finding a person.
+and [MAX](./max/search.md). See [People](./people.md) for finding a person.
 
 For word forms, typo handling and meaning-based search, see [How search works](./search-architecture.mdx).
 

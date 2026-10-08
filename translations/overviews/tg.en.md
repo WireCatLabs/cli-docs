@@ -3,7 +3,7 @@ title: "Telegram: start here"
 description: "Connect your Telegram account to an agent, or use it from a terminal."
 ---
 
-`tg` lets your AI agent read Telegram, find messages and help you reply. It works with **your
+`tg` is a command-line tool that lets your AI agent read Telegram, find messages and help you reply. It works with **your
 personal account** and its chats. You can also use it yourself with terminal commands.
 It runs on Windows, macOS and Linux.
 

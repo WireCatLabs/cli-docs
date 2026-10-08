@@ -26,17 +26,14 @@ El agente debe indicar qué historial estaba disponible.
 
 ## Quién es
 
-Para una consulta breve en la versión revisada de Telegram, usa `contacts show`. MAX también
-ofrece un perfil más completo:
+Ambos mensajeros ofrecen un perfil con la identidad y conversaciones compartidas:
 
 ```sh
-tg contacts show @example_user
+tg contacts profile @example_user
 max contacts profile 20000002
 ```
 
-Son comandos distintos. Telegram v0.28.0 no ofrece `contacts profile` ni `contacts check`;
-MAX v0.29.0 sí. Usa el comando de tu mensajero: que exista en una versión nueva no significa
-que tu versión instalada lo admita.
+Usa `contacts show` para una consulta breve. Los campos del perfil dependen de lo que el mensajero comparte con tu cuenta.
 
 ## Qué escribió
 
@@ -57,19 +54,19 @@ MAX también permite limitar el contexto a un chat:
 max contacts context 20000002 --chat "Team" --limit 10
 ```
 
-Telegram v0.28.0 no tiene la opción `--chat` en este comando. Pide al agente que lea ese chat
-por separado; [leer mensajes](./tg/usage.md#reading) explica ese camino.
+Telegram también admite `contacts context --chat` en la versión revisada. Indica los chats pertinentes para centrar la respuesta.
 
 ## Parece un bot
 
-Esta comprobación está disponible en la versión revisada de MAX:
+Ambos mensajeros admiten comprobar una cuenta:
 
 ```sh
+tg contacts check @example_user
 max contacts check 20000002
 ```
 
 Lee los motivos y los datos que faltan junto con la puntuación. Una señal es una pista, no una
-prueba de fraude. Telegram v0.28.0 no tiene un comando equivalente; no inventes una llamada.
+prueba de fraude. Telegram también puede consultar listas públicas de spam, enviándoles el ID de la persona. Usa `--no-registries` para omitir esas consultas.
 
 ## La misma persona en los dos mensajeros
 

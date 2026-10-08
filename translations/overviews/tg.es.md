@@ -3,7 +3,7 @@ title: "Telegram: empieza aquí"
 description: "Conecta tu cuenta de Telegram a un agente o úsala desde la terminal."
 ---
 
-`tg` permite que tu agente de IA lea Telegram, encuentre mensajes y te ayude a responder. Trabaja
+`tg` es un instrumento de línea de comandos que permite que tu agente de IA lea Telegram, encuentre mensajes y te ayude a responder. Trabaja
 con **tu cuenta personal** y sus chats. También puedes usarlo directamente con comandos en la
 terminal. Funciona en Windows, macOS y Linux.
 

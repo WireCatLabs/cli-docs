@@ -43,6 +43,8 @@ jobs:
       - run: pnpm lint
       - run: pnpm test
       - run: pnpm sync ${REF:+--ref "$REF"}
+      - run: pnpm docs:release-notes
+        if: env.REF == ''
       - run: pnpm docs:contracts
       - run: |
           if [ -n "$REF" ]; then
