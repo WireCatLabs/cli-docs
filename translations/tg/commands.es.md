@@ -94,6 +94,15 @@ tg setup [options]
 
 la cuenta conectada
 
+### `tg account list`
+
+todos los perfiles de este ordenador y sus cuentas; no consulta el mensajero
+
+```sh
+tg account list
+```
+
+
 ### `tg account show`
 
 cuenta con la que inició sesión el perfil; solo muestra las cuatro últimas cifras del teléfono

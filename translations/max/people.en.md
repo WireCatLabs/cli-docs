@@ -28,7 +28,7 @@ The command shows what MAX reports about the person and how many of their messag
   "usernames": [],
   "bio": "Книги и велосипед",
   "phone": "***0123",
-  "flags": {},
+  "flags": { "bot": false },
   "registered": { "at": "2021-03-14T00:00:00.000Z", "source": "max", "precision": "day" },
   "hasPhoto": true,
   "seen": "2026-10-08T07:12:00.000Z",
@@ -46,7 +46,7 @@ The command shows what MAX reports about the person and how many of their messag
 ```
 
 - **`registered`**: the account creation date reported by MAX itself (`source: max`). It is not an estimate.
-- **`flags`** is empty: MAX does not provide “bot”, “scammer” or “verified” markers for personal accounts.
+- **`flags`**: `bot: true` identifies a bot. MAX does not provide scammer or verified flags for personal accounts.
 - **`hasPhoto`**: whether the person has a profile photo.
 - **`seen`**: the last time the person was in MAX, or `online`. MAX is asked separately on each call; the field is absent when MAX supplies no presence.
 - **`phone`**: only the last four digits, and only if MAX shows you the number. `--show-phone` prints the full number. The MCP tool always hides it.

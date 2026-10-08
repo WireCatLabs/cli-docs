@@ -89,6 +89,15 @@ max setup [options]
 
 the logged-in account
 
+### `max account list`
+
+every profile on this computer, and the account each is logged in as; asks the messenger nothing
+
+```sh
+max account list
+```
+
+
 ### `max account show`
 
 who this profile is logged in as; the phone number shows its last four digits
@@ -827,6 +836,44 @@ max chats clear <chat> [options]
 |---|---|
 | `--allow-dangerous` | go ahead without the question an ask level puts before a deletion. |
 
+### `max chats start`
+
+start a bot, as its Start button does; the bot sees that you started it
+
+**Changes something in MAX.**
+
+```sh
+max chats start <bot> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `bot` | required | the chat with the bot — its id or its name — or the bot's link, even one never opened. |
+
+| Option | What it does |
+|---|---|
+| `--payload <text>` | the start parameter the bot reads; a link's own ?start= when not given. |
+
+
+### `max chats app`
+
+the address that opens a bot's mini app, signed in as you — keep it to yourself
+
+**Changes something in MAX.**
+
+```sh
+max chats app <bot> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `bot` | required | the chat with the bot: its id or its name. |
+
+| Option | What it does |
+|---|---|
+| `--start <param>` | the start parameter the app reads. |
+
+
 ## `max contacts`
 
 people you have a one-to-one chat with
@@ -1476,6 +1523,23 @@ max messages unpin <chat> <message>
 |---|---|---|
 | `chat` | required | a chat: its id, or part of its title. |
 | `message` | required | the message id. |
+
+### `max messages press`
+
+press a bot's button under a message; the bot sees that you pressed it
+
+**Changes something in MAX.**
+
+```sh
+max messages press <chat> <message> <button>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: its id, or part of its title. |
+| `message` | required | the id of the message with the buttons. |
+| `button` | required | its number as `messages show` prints it, or its exact text. |
+
 
 ## `max store`
 

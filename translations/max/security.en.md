@@ -62,7 +62,7 @@ Only full-disk encryption protects against someone who obtains the disk — see 
 ## Actions the tool never takes on its own
 
 - **Reading does not mark messages read unless requested.** Fetching history and marking it read are separate protocol operations. Only `max chats mark-read` and `messages list --mark-read` send the latter; tests verify ordinary reading does not.
-- **It sends nothing you did not request.** Only `messages send|edit|delete|forward|pin|unpin`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `session end`, `chats join|leave|create|update`, `chats members|admins …`, `chats link reset`, `chats folders create|update|delete|order`, `chats moderate` (within group rules), `chats mark-read` and `messages list --mark-read` make changes, and each does only what your command line specifies. `max commands --json` marks these as `mutates`.
+- **It sends nothing you did not request.** Only `messages send|edit|delete|forward|pin|unpin|press`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `session end`, `chats join|leave|create|update|start|app`, `chats members|admins …`, `chats link reset`, `chats folders create|update|delete|order`, `chats moderate` (within group rules), `chats mark-read` and `messages list --mark-read` make changes, and each does only what your command line specifies. `max commands --json` marks these as `mutates`.
 - **Deletion requires confirmation by default.** The `ask` level for `messages.delete` requires a terminal answer or `--allow-dangerous`; explicit `allow` deletes without a question. Deleting for everyone also requires `--for-everyone`; the shared MCP tool does not permit this.
 - **Phone numbers do not come from command-line arguments.** `contacts lookup` prompts or reads from a pipe; `contacts import` reads a file. Command lines are visible to `ps` and shell history. Errors, the send journal and run records contain no phone numbers; `max session start` and `max account show` mask them.
 - **It does not log messages.** Neither truncated nor hashed; see [diagnostics.md](./diagnostics.md).
@@ -148,7 +148,7 @@ Each login adds a device to the MAX app's session list. You can end it there.
 
 ## Unofficial protocol
 
-MAX publishes no personal-account API. Protocol knowledge comes from observed live connections or others' reverse engineering; each operation records its source ([`protocol.md`](https://github.com/leemour/max-cli/blob/v0.36.0/docs/dev/protocol.md), “Where it came from” column).
+MAX publishes no personal-account API. Protocol knowledge comes from observed live connections or others' reverse engineering; each operation records its source ([`protocol.md`](https://github.com/leemour/max-cli/blob/v0.37.0/docs/dev/protocol.md), “Where it came from” column).
 
 **This can stop working without warning.** If it does, the command reports it on stderr instead of quietly returning an empty list.
 

@@ -77,6 +77,8 @@ max chats list
 
 Cada perfil tiene su token y estado propios. La copia local de mensajes es compartida; sus datos se separan por cuenta.
 
+`max account list` muestra cada perfil de este ordenador y su cuenta sin consultar MAX.
+
 ## Leer
 
 ```sh
@@ -410,6 +412,27 @@ web.max.ru no muestra encuestas: indica «Actualiza MAX…». Solo pueden verse 
 
 Otros miembros pueden ver tu voto si la encuesta no es anónima. El comando rechaza localmente los votos no válidos como el cliente web: encuesta cerrada, varias opciones donde solo se permite una, segundo voto donde no se puede cambiar el voto o ID de opción inexistente. Votar, cerrar y crear encuestas pasan las mismas comprobaciones que enviar: un voto se trata como una reacción, cerrar como editar y una encuesta nueva como un mensaje. Las encuestas nuevas y los cierres cuentan para `sendsPerHour`; los votos, como las reacciones, no. Los votos no se repiten automáticamente. Para agentes, `max_write` (`command: "polls vote"`) y `max_write` (`command: "polls create"`) en `max mcp` requieren `permissions`; `max_write` (`command: "polls close"`) requiere el permiso de escritura `polls.close` ([mcp.md](./mcp.md)).
 
+### Botones de bots
+
+```sh
+max messages show <бот> 100000000000000001            # кнопки под сообщением: [1 Да] [2 Нет]
+max messages press <бот> 100000000000000001 2         # нажать вторую кнопку
+max messages press <бот> 100000000000000001 "Да"      # или по её тексту
+```
+
+El bot ve quién pulsó. Solo se pulsan botones de callback normales. Para otros tipos, el comando explica la siguiente acción: la dirección de un enlace aparece bajo el mensaje; usa `messages send` para un botón de texto y `chats app` para una miniaplicación.
+
+```sh
+max chats start <бот>                                 # запустить бота, как кнопка «Начать»
+max chats start <бот> --payload ref1                  # с параметром, как ссылка max.ru/<бот>?start=ref1
+max chats start https://max.ru/<бот>?start=ref1       # по ссылке — и бота, которому вы ещё не писали
+max chats app <бот>                                   # адрес мини-приложения бота
+```
+
+`chats start` acepta un chat de bot o su enlace, incluso si aún no está en tu lista; aparecerá su chat. Se rechazan enlaces a personas. Iniciar es un mensaje tuyo y pasa las mismas comprobaciones de envío. `chats app` imprime una dirección que inicia sesión como tú: mantenla privada. Quien la abra entra como tú. `max` no la escribe en registros ni archivos.
+
+Si se pierde la respuesta al inicio o pulsación, `outcome_unknown` (salida 14) indica que el bot ya pudo actuar. Comprueba su respuesta antes de repetir; no hay reintento automático. Nunca se pulsan botones de compartir teléfono o ubicación. Las pulsaciones pasan comprobaciones de reacción y no cuentan en `sendsPerHour`. Los botones se ven en mensajes leídos de MAX y no están en la copia local.
+
 ### Contactos, perfil y carpetas
 
 ```sh
@@ -709,6 +732,6 @@ max stats charts synthetic-group --chart-kind messages --by day --timezone Europ
 
 JSON contiene `chart`; al guardar una imagen, también contiene `chartFile` con la ruta y el tamaño. Las imágenes solo se escriben en archivos nuevos, sin sobrescribir. Las fechas ausentes quedan como huecos y los datos incompletos se indican en la descripción y la imagen. `membership` requiere eventos del chat en línea y no está disponible con `--offline`. MCP `max_read` (`command: "stats charts"`) devuelve JSON del almacenamiento local sin conectarse ni escribir archivos; `format: "png"` añade una imagen PNG y JSON con `chart` y el tamaño de `image`. Allí no están disponibles las entradas y salidas. La lectura respeta el permiso `messages`. No se admiten `--jsonl` ni imágenes en stdout.
 
-![Gráfico con datos ficticios](https://raw.githubusercontent.com/leemour/max-cli/v0.36.0/docs/images/stats-charts.png)
+![Gráfico con datos ficticios](https://raw.githubusercontent.com/leemour/max-cli/v0.37.0/docs/images/stats-charts.png)
 
 Clasificaciones de mensajes y autores: [métricas, puntuaciones y evidence](./rankings.md).

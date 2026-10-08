@@ -4,6 +4,18 @@ title: "Historial de cambios"
 
 Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.38.0 — 08.10.2026
+
+### Novedades
+
+- **`tg account list`** muestra todos los perfiles del ordenador, su cuenta y nombre. No consulta Telegram.
+
+### Correcciones
+
+- **`tg session start` indica «Already logged in»** si la sesión funciona y no se pidió nada; ofrece `session end` para iniciar de nuevo. Antes parecía un inicio sin código. `--json` añade `alreadyLoggedIn`.
+- **`tg session start phone --sms` continúa el inicio** cuando Telegram no puede enviar SMS (`SEND_CODE_UNAVAILABLE`): lo indica y pide el código que ya envió a la aplicación.
+- **`tg` y grupos sin subcomando (`tg account`, `tg chats`) vuelven a mostrar ayuda** en el terminal en lugar de `✗ (outputHelp)`. Scripts y `--json` reciben `validation_error` pidiendo un comando.
+
 ## 0.37.0 — 08.10.2026
 
 ### Novedades

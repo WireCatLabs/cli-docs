@@ -28,7 +28,7 @@ El comando muestra lo que MAX informa sobre la persona y cuántos mensajes suyos
   "usernames": [],
   "bio": "Книги и велосипед",
   "phone": "***0123",
-  "flags": {},
+  "flags": { "bot": false },
   "registered": { "at": "2021-03-14T00:00:00.000Z", "source": "max", "precision": "day" },
   "hasPhoto": true,
   "seen": "2026-10-08T07:12:00.000Z",
@@ -46,7 +46,7 @@ El comando muestra lo que MAX informa sobre la persona y cuántos mensajes suyos
 ```
 
 - **`registered`**: la fecha de creación de la cuenta según el propio MAX (`source: max`). No es una estimación.
-- **`flags`** está vacío: MAX no proporciona marcas como «bot», «estafador» o «verificado» para cuentas personales.
+- **`flags`**: `bot: true` identifica un bot. MAX no proporciona marcas de estafador o verificado para cuentas personales.
 - **`hasPhoto`**: si la persona tiene foto de perfil.
 - **`seen`**: cuándo estuvo la persona en MAX por última vez, o `online`. Se consulta MAX aparte en cada llamada; el campo no aparece si MAX no comunica presencia.
 - **`phone`**: solo los últimos cuatro dígitos, y únicamente si MAX te muestra el número. `--show-phone` imprime el número completo. La herramienta MCP siempre lo oculta.

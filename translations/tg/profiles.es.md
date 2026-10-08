@@ -13,6 +13,8 @@ Pon el perfil antes del comando:
 tg work config show
 ```
 
+`tg account list` muestra todos los perfiles de este ordenador y la cuenta de cada uno; `tg <profile> session end` cierra la sesión de uno.
+
 Sin un nombre, las herramientas usan el perfil predeterminado. Un ajuste en `profiles.work` se aplica a
 ese perfil; los valores de `defaults` se usan cuando no tiene uno propio.
 Los perfiles no son usuarios independientes del sistema operativo: un asistente con acceso a archivos sin restricciones

@@ -77,6 +77,8 @@ max chats list
 
 Each profile has its own token and state. The local message store is shared, with data separated by account.
 
+`max account list` shows every profile on this computer and its account without contacting MAX.
+
 ## Reading
 
 ```sh
@@ -411,6 +413,27 @@ web.max.ru does not display polls; it shows “Update MAX…” instead. People 
 
 Other members can see your vote unless the poll is anonymous. The command rejects invalid votes locally as the web client does: a closed poll, multiple choices in a single-choice poll, a second vote when revoting is forbidden, or a nonexistent choice ID. Voting, closing and creating polls pass the same checks as sending: a vote is treated like a reaction, closing like an edit, and a new poll like a message. New polls and closing count toward `sendsPerHour`; votes, like reactions, do not. Votes are not retried automatically. For agents, `max_write` (`command: "polls vote"`) and `max_write` (`command: "polls create"`) in `max mcp` require `permissions`; `max_write` (`command: "polls close"`) requires the write permission `polls.close` ([mcp.md](./mcp.md)).
 
+### Bot buttons
+
+```sh
+max messages show <бот> 100000000000000001            # кнопки под сообщением: [1 Да] [2 Нет]
+max messages press <бот> 100000000000000001 2         # нажать вторую кнопку
+max messages press <бот> 100000000000000001 "Да"      # или по её тексту
+```
+
+The bot sees who pressed. Only ordinary callback buttons are pressed. For other kinds, the command explains the next action: a link's address appears under the message; use `messages send` for a text button and `chats app` for a mini app.
+
+```sh
+max chats start <бот>                                 # запустить бота, как кнопка «Начать»
+max chats start <бот> --payload ref1                  # с параметром, как ссылка max.ru/<бот>?start=ref1
+max chats start https://max.ru/<бот>?start=ref1       # по ссылке — и бота, которому вы ещё не писали
+max chats app <бот>                                   # адрес мини-приложения бота
+```
+
+`chats start` accepts a bot chat or bot link, including a bot missing from your chat list; its chat will appear. Links to people are refused. Starting is a message from you and uses the same send checks. `chats app` prints an address that signs in as you: keep it private. Anyone opening it enters as you. The address is not written to logs or files by `max`.
+
+After a lost start/press reply, `outcome_unknown` (exit 14) means the bot may already have acted. Check its reply before repeating; there is no automatic retry. Contact and location buttons are never pressed. Presses use reaction checks and do not count toward `sendsPerHour`. Buttons are visible in messages read from MAX, and are absent from the local copy.
+
 ### Contacts, profile and folders
 
 ```sh
@@ -710,6 +733,6 @@ max stats charts synthetic-group --chart-kind messages --by day --timezone Europ
 
 JSON contains `chart`; when saving an image, it also contains `chartFile` with its path and size. Images are written only to new files, without overwriting. Missing dates remain gaps; incomplete data is marked in the description and image. `membership` requires online chat events and is unavailable with `--offline`. MCP `max_read` (`command: "stats charts"`) returns JSON from local storage without connecting or writing files; `format: "png"` adds a PNG image and JSON with `chart` and the size of `image`. Joins and leaves are unavailable there. Reading follows `messages` permission. `--jsonl` and images in stdout are unavailable.
 
-![Chart using fictional data](https://raw.githubusercontent.com/leemour/max-cli/v0.36.0/docs/images/stats-charts.png)
+![Chart using fictional data](https://raw.githubusercontent.com/leemour/max-cli/v0.37.0/docs/images/stats-charts.png)
 
 Message and author rankings: [metrics, scores and evidence](./rankings.md).
