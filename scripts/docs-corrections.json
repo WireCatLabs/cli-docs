@@ -1107,5 +1107,55 @@
         }
       ]
     }
+  },
+  {
+    "tool": "tg",
+    "slug": "mcp",
+    "reason": "Explain catalogue coverage and link exact command syntax beside the full MCP tool list.",
+    "replacements": {
+      "en": [
+        {
+          "before": "## Tools\n",
+          "after": "## Tools\n\n\n**Command coverage.** These tools give the agent access to most everyday command-line operations: messages, chats, contacts, attachments, conversation analysis and statistics. The search tool returns available commands with their argument schemas and effects; availability follows provider support and profile permissions. Use the [complete command reference](./commands.md) for syntax and parameters. Execute the command path offered by the catalogue through the read or write tool; account login and interactive installation are performed in the terminal."
+        }
+      ],
+      "ru": [
+        {
+          "before": "## Инструменты\n",
+          "after": "## Инструменты\n\n\n**Покрытие команд.** Эти инструменты дают агенту доступ к большинству повседневных операций командной строки: сообщениям, чатам, контактам, вложениям, анализу обсуждений и статистике. Инструмент поиска возвращает доступные команды с параметрами и последствиями; набор определяется поддержкой мессенджера и правами профиля. Точный синтаксис и параметры — в [полном справочнике команд](./commands.md). Выполняйте команду, предложенную каталогом, через инструмент чтения или изменения; вход в аккаунт и интерактивная установка выполняются в терминале."
+        }
+      ],
+      "es": [
+        {
+          "before": "## Herramientas\n",
+          "after": "## Herramientas\n\n\n**Cobertura de comandos.** Estas herramientas cubren la mayoría de operaciones habituales: mensajes, chats, contactos, adjuntos, conversaciones y estadísticas. La búsqueda devuelve comandos disponibles con parámetros y efectos según el mensajero y los permisos. Consulta sintaxis y parámetros en la [referencia completa](./commands.md). Ejecuta la ruta ofrecida por el catálogo mediante lectura o escritura; acceso a la cuenta e instalación interactiva se realizan en el terminal."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "mcp",
+    "reason": "Explain catalogue coverage and link exact command syntax beside the full MCP tool list.",
+    "replacements": {
+      "en": [
+        {
+          "before": "## Tools\n",
+          "after": "## Tools\n\n\n**Command coverage.** These tools give the agent access to most everyday command-line operations: messages, chats, contacts, attachments, conversation analysis and statistics. The search tool returns available commands with their argument schemas and effects; availability follows provider support and profile permissions. Use the [complete command reference](./commands.md) for syntax and parameters. Execute the command path offered by the catalogue through the read or write tool; account login and interactive installation are performed in the terminal."
+        }
+      ],
+      "ru": [
+        {
+          "before": "## Инструменты\n",
+          "after": "## Инструменты\n\n\n**Покрытие команд.** Эти инструменты дают агенту доступ к большинству повседневных операций командной строки: сообщениям, чатам, контактам, вложениям, анализу обсуждений и статистике. Инструмент поиска возвращает доступные команды с параметрами и последствиями; набор определяется поддержкой мессенджера и правами профиля. Точный синтаксис и параметры — в [полном справочнике команд](./commands.md). Выполняйте команду, предложенную каталогом, через инструмент чтения или изменения; вход в аккаунт и интерактивная установка выполняются в терминале."
+        }
+      ],
+      "es": [
+        {
+          "before": "## Herramientas\n",
+          "after": "## Herramientas\n\n\n**Cobertura de comandos.** Estas herramientas cubren la mayoría de operaciones habituales: mensajes, chats, contactos, adjuntos, conversaciones y estadísticas. La búsqueda devuelve comandos disponibles con parámetros y efectos según el mensajero y los permisos. Consulta sintaxis y parámetros en la [referencia completa](./commands.md). Ejecuta la ruta ofrecida por el catálogo mediante lectura o escritura; acceso a la cuenta e instalación interactiva se realizan en el terminal."
+        }
+      ]
+    }
   }
 ]

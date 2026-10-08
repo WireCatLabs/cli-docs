@@ -1,5 +1,18 @@
 const purpose = {
   en: {
+    installation:
+      "This guide covers installing the messenger tool and connecting your account. You will be able to run it yourself or ask an agent to use your chats, then verify the account and first results.",
+    "query-language":
+      "This is the reference for writing message-search queries. You will be able to combine words, people, chats, dates and file conditions, check the query syntax and interpret the returned matches.",
+    "from-tgcli":
+      "This guide helps you move from tgcli to tg. You will find equivalent commands, understand the differences and choose what to run for your existing tasks.",
+    "commands-personal":
+      "This reference covers personal-account commands. Use it to find the exact command, arguments and options for login, reading, searching, files and sending.",
+    "commands-bot":
+      "This reference covers bot commands and the Bot API. Use it to look up authentication, messages, events and method parameters for the bot you control.",
+    "commands-admin":
+      "This reference covers group administration commands. Use it to look up member, invitation, permission and moderation options before making a change.",
+
     people:
       "Identify a person and recover what you have discussed before replying. This guide explains the available context, account signals and the limits of incomplete history.",
     remote:
@@ -39,11 +52,24 @@ const purpose = {
     troubleshooting:
       "Find the symptom you are seeing and follow its recovery steps. The aim is to get the tool working again and check the result; keep the error text if you need help reporting a problem.",
     changelog:
-      "See what changed in the reviewed releases: new capabilities, fixes and changes that may affect your commands. Start with your installed version, then use the linked guide for the feature you want to try.",
+      "See what changed in releases: new capabilities, fixes and changes that may affect your commands. Start with your installed version, then use the linked guide for the feature you want to try.",
     roadmap:
       "See what is planned and what is still unavailable. These are development priorities rather than promised dates; the changelog records what has actually shipped.",
   },
   ru: {
+    installation:
+      "Это руководство по установке инструмента и подключению аккаунта мессенджера. Вы сможете запускать его сами или поручать агенту работу с чатами, затем проверите аккаунт и первые результаты.",
+    "query-language":
+      "Здесь собран синтаксис запросов для поиска сообщений. Вы сможете сочетать слова, людей, чаты, даты и условия по файлам, проверять запрос и понимать найденные совпадения.",
+    "from-tgcli":
+      "Это руководство по переходу с tgcli на tg. Вы найдёте соответствующие команды, разберётесь в различиях и выберете команды для своих привычных задач.",
+    "commands-personal":
+      "Здесь собраны команды личного аккаунта. Вы найдёте точную команду, аргументы и параметры для входа, чтения, поиска, файлов и отправки.",
+    "commands-bot":
+      "Здесь собраны команды бота и методы Bot API. Вы сможете найти параметры подключения, сообщений, событий и нужного метода для своего бота.",
+    "commands-admin":
+      "Здесь собраны команды администрирования групп. Вы сможете найти параметры участников, приглашений, прав и модерации перед изменением.",
+
     people:
       "Вспомните, кто вам написал и что вы обсуждали, прежде чем отвечать. Здесь описаны доступный контекст, признаки аккаунта и ограничения неполной истории.",
     remote:
@@ -83,11 +109,24 @@ const purpose = {
     troubleshooting:
       "Найдите свою ошибку или симптом и выполните шаги восстановления. Цель — вернуть инструмент в рабочее состояние и проверить результат; сохраните текст ошибки, если потребуется помощь с отчётом о проблеме.",
     changelog:
-      "Узнайте, что изменилось в проверенных выпусках: новые возможности, исправления и изменения, влияющие на команды. Начните со своей установленной версии, затем откройте инструкцию для функции, которую хотите попробовать.",
+      "Узнайте, что изменилось в выпусках: новые возможности, исправления и изменения, влияющие на команды. Начните со своей установленной версии, затем откройте инструкцию для функции, которую хотите попробовать.",
     roadmap:
       "Посмотрите, что планируется и чего пока нет. Это приоритеты разработки, а не обещанные даты; уже выпущенные изменения перечислены в истории версий.",
   },
   es: {
+    installation:
+      "Esta guía explica cómo instalar la herramienta y conectar la cuenta. Podrás ejecutarla o pedir al agente trabajar con tus chats y comprobar la cuenta y los primeros resultados.",
+    "query-language":
+      "Esta referencia explica la sintaxis de búsqueda. Podrás combinar palabras, personas, chats, fechas y archivos, comprobar consultas e interpretar resultados.",
+    "from-tgcli":
+      "Esta guía explica la migración de tgcli a tg. Encontrarás comandos equivalentes, diferencias y opciones para tus tareas habituales.",
+    "commands-personal":
+      "Esta referencia reúne comandos de cuenta personal. Consulta argumentos y opciones de acceso, lectura, búsqueda, archivos y envío.",
+    "commands-bot":
+      "Esta referencia reúne comandos del bot y métodos Bot API. Consulta parámetros de autenticación, mensajes, eventos y métodos para tu bot.",
+    "commands-admin":
+      "Esta referencia reúne comandos administrativos. Consulta opciones de miembros, invitaciones, permisos y moderación antes de cambiar algo.",
+
     people:
       "Identifica a una persona y recupera lo hablado antes de responder. Esta guía explica el contexto disponible, las señales de la cuenta y los límites de un historial incompleto.",
     remote:
@@ -127,7 +166,7 @@ const purpose = {
     troubleshooting:
       "Encuentra tu error o síntoma y sigue los pasos de recuperación. El objetivo es volver a usar el instrumento y comprobar el resultado; conserva el texto del error si necesitas ayuda para informar del problema.",
     changelog:
-      "Consulta lo que cambió en las versiones revisadas: capacidades, correcciones y cambios que afectan a comandos. Empieza por tu versión instalada y abre la guía de la función que quieras probar.",
+      "Consulta lo que cambió en las versiones: capacidades, correcciones y cambios que afectan a comandos. Empieza por tu versión instalada y abre la guía de la función que quieras probar.",
     roadmap:
       "Consulta lo previsto y lo que aún falta. Son prioridades de desarrollo, no fechas prometidas; el historial de versiones registra lo que ya se publicó.",
   },

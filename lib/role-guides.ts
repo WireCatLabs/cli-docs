@@ -27,7 +27,7 @@ const pages = {
   ru: {
     bot: {
       intro:
-        "Бот — отдельный аккаунт мессенджера, который принимает сообщения и выполняет заданные действия: отвечает пользователям, публикует объявления и показывает кнопки. С помощью инструмента командной строки вы или ваш ИИ-агент можете действовать от имени своего бота. Это удобно для обращений клиентов, новостей сообщества и записи на мероприятия. Ниже вы подключите бота, проверите доступ к чату и подготовите первое сообщение.",
+        "На этой странице вы подключите бота к инструменту командной строки, проверите доступ к чату и подготовите первое сообщение. Бот — отдельный аккаунт мессенджера, который принимает сообщения и выполняет заданные действия: отвечает пользователям, публикует объявления и показывает кнопки. С помощью инструмента командной строки вы или ваш ИИ-агент можете действовать от имени своего бота. Это удобно для обращений клиентов, новостей сообщества и записи на мероприятия. ",
       sections: [
         [
           "bot-check",
@@ -73,7 +73,7 @@ const pages = {
   en: {
     bot: {
       intro:
-        "A bot is a separate messenger account that receives messages and performs configured actions: answering people, publishing announcements and showing buttons. You or your AI agent can use the command-line tool to act on behalf of your bot. This helps with customer enquiries, community updates and event registration. Below you will connect the bot, check chat access and prepare its first message.",
+        "This page guides you through connecting your bot, checking chat access and preparing its first message. A bot is a separate messenger account that receives messages and performs configured actions: answering people, publishing announcements and showing buttons. You or your AI agent can use the command-line tool to act on behalf of your bot. This helps with customer enquiries, community updates and event registration. ",
       sections: [
         [
           "bot-check",
@@ -119,7 +119,7 @@ const pages = {
   es: {
     bot: {
       intro:
-        "Un bot es una cuenta independiente que recibe mensajes y ejecuta acciones: responde, publica anuncios y muestra botones. Tú o tu agente de IA podéis actuar en su nombre con la herramienta de línea de comandos. Sirve para consultas de clientes, novedades de una comunidad e inscripciones. Abajo conectarás el bot, comprobarás acceso y prepararás el primer mensaje.",
+        "Aquí conectarás tu bot, comprobarás acceso al chat y prepararás el primer mensaje. Un bot es una cuenta independiente que recibe mensajes y ejecuta acciones: responde, publica anuncios y muestra botones. Tú o tu agente de IA podéis actuar en su nombre con la herramienta de línea de comandos. Sirve para consultas de clientes, novedades de una comunidad e inscripciones. ",
       sections: [
         [
           "bot-check",

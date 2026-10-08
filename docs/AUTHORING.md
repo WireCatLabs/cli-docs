@@ -231,3 +231,31 @@ useful, then this page’s outcomes. Put creation and first connection before an
 assumes a connected bot. Verify messenger-specific identity commands rather than substituting
 the executable name. Omit repeated role-navigation links on bot pages; link another task only
 where the reader needs that destination.
+
+Agent connection pages orient readers to the outcome, briefly define an agent and CLI, then
+route by intent: browser/mobile chat, local terminal agent, MCP application, existing connection
+or installation. Use one messenger example with a substitution convention, one setup command
+with agent names, and only client-specific differences afterward. Do not repeat messenger
+commands or build a table of identical setup rows.
+
+Explain bot-token sharing as a choice: sending it to an agent puts the credential into that
+conversation history. Prefer running the hidden-input command personally when possible, without
+a categorical claim that the user cannot share it. Keep short optional creation instructions
+in a disclosure and preserve them in the Markdown counterpart.
+
+## Mandatory opening order for every public page
+
+1. State what the page is about and the situation it addresses.
+2. State the concrete result the reader will get by reading it.
+3. Define unfamiliar terms needed for that result, then explain why or how the feature works
+   only when that explanation helps the task.
+4. Proceed to instructions, examples or the reference entries appropriate to the page.
+
+Check the rendered opening, including metadata, portal task/orientation layers and imported
+native text. Do not treat a technical command, package inventory or unexplained protocol name
+as the opening. References explain what readers can look up; history/roadmap pages explain the
+scope of released/planned changes. No unnecessary tutorial steps on those page types.
+
+People use the tg/max CLI tools, not a WireCat executable. Name the relevant command-line tool
+in task instructions. WireCat may identify the documentation site or project; preserve actual
+URLs, service filenames and source references rather than mechanically rewriting identifiers.

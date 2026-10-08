@@ -12,7 +12,7 @@ for (const file of walk("content/docs")) {
   const lines = readFileSync(file, "utf8").split("\n")
   lines.forEach((line, index) => {
     const editorialArtifact =
-      /If the command is missing, update|Если команды нет, обновите|Si falta el comando, actualiza|The owner confirmed|Владелец подтвердил|El propietario confirmó|What was checked|Что проверено|Qué se ha comprobado|has not been established here|подтверждённого пути пока нет/i
+      /If the command is missing, update|Если команды нет, обновите|Si falta el comando, actualiza|The owner confirmed|Владелец подтвердил|El propietario confirmó|What was checked|Что проверено|Qué se ha comprobado|has not been established here|подтверждённого пути пока нет|Use WireCat|Используйте WireCat|Usa WireCat/i
     if (editorialArtifact.test(line)) findings.push(`${file}:${index + 1}: editorial artifact: ${line.trim()}`)
     const text = line.replace(/https?:\/\/[^\s)"<>]+/g, "")
     // WireCat packages currently use 0.x releases. Ignore addresses such as 127.0.0.1.

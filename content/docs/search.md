@@ -1,10 +1,9 @@
 ---
-title: "Search"
+title: "Searching"
 description: "Find a message, person, chat or file using words, word forms, typos or meaning."
 ---
 
-Find what you need in Telegram or MAX: a message, agreement, person, chat or document.
-Your agent can choose a search method even if you remember only part of a phrase or its subject.
+This page helps you find messages, agreements, people, chats and documents in Telegram or MAX. You will learn what you can search, how to choose a search method and how to check the source messages, even when you remember only part of a phrase or its subject.
 
 **What you can search:**
 

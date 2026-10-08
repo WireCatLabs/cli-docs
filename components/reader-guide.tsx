@@ -29,6 +29,16 @@ export function ReaderGuide({ slugs, lang }: { slugs: string[]; lang: string }) 
           <p>
             <a href={guide.setup.url}>{guide.setup.create}</a>
           </p>
+          {guide.setup.creationDetails && (
+            <details data-botfather-help>
+              <summary>{guide.setup.creationDetails.title}</summary>
+              <ol>
+                {guide.setup.creationDetails.steps.map((step) => (
+                  <li key={step}>{step}</li>
+                ))}
+              </ol>
+            </details>
+          )}
           <p>
             <Link href={`/${lang}/docs/installation`}>{guide.setup.install} →</Link>
           </p>

@@ -1,11 +1,33 @@
 ---
-title: "MCP and documentation"
-description: "What MCP adds, how to connect each agent, and how an agent reads the WireCat docs."
+title: "MCP and skills"
+description: "Understand the MCP server and agent instructions, choose a connection and discover supported actions."
 ---
 
-<DocTerm term="mcp" lang="en" label="MCP" /> connects your assistant to messenger tools: listing chats, finding messages and preparing replies. This page helps you choose between command-line access and MCP, connect your client and verify its permissions. The MCP server is included in `tg` and `max`; log into your messenger account before using it.
+Connect an AI assistant to your messenger and give it the instructions it needs to work with your chats. This page explains MCP and skills, helps you choose a connection, and shows where to find the tools and their permissions.
 
-Using ChatGPT or Claude in a browser? Start with the [browser connection guide](./browser-apps.mdx), which walks through the public address and sign-in. Technical client settings are below.
+## What the MCP server does
+
+**MCP** is a way for AI agents to talk to a server and ask it to perform your tasks. Our MCP server gives your assistant access to the connected messenger: chats, messages, shared files, searches and reports. You ask for a result; the assistant calls the server, which performs the action through the messenger tool.
+
+The server is included in the command-line tool and **must be running while the assistant uses it**. A local client can start it on your computer. For a browser or mobile chat, keep it running on a computer or server and connect through a public HTTPS address with authentication. Follow the [browser/mobile setup guide](./browser-apps.mdx) for that connection.
+
+## How the agent finds and runs actions
+
+The server exposes a small set of tools instead of making you choose from hundreds of commands. First the agent finds an action and its arguments; then it runs that action. For example, to find an agreement it discovers message search, executes it and opens the matching messages.
+
+Examples below use Telegram names. For MAX, replace `tg` with `max`, including tool and configuration names.
+
+| Tool | What it does |
+|---|---|
+| `tg_tools_search` | Finds the command for a task and tells the agent its arguments and effects. This searches available actions, not your messages. |
+| `tg_read` | Runs a discovered read action: list chats, search messages, read files or build a report. |
+| `tg_write` | Runs a discovered change: send a message, save extracted text or manage a group, within the profile’s permissions. |
+
+## What the skill does
+
+A **skill** is an instruction file for your agent: which tools to use, how to gather context, check sources and prepare a result. MCP provides access to actions; the skill explains how to use them for a task. The skill contains guidance, not your account credentials.
+
+We provide instructions with the installed tool. [Connect your agent](./agents.mdx) explains how to add them; `tg skill show` displays them. An agent with terminal access can use the instructions and run the CLI directly.
 
 ## CLI, skill or MCP?
 
@@ -32,7 +54,6 @@ In a terminal where the installed command works:
 
 ```sh
 codex mcp add tg -- tg mcp
-codex mcp add max -- max mcp
 codex mcp list
 ```
 
@@ -45,7 +66,6 @@ and put them into `[mcp_servers.tg]` or `[mcp_servers.max]`; Codex uses TOML, no
 
 ```sh
 claude mcp add --scope user tg -- tg mcp
-claude mcp add --scope user max -- max mcp
 claude mcp list
 ```
 
@@ -71,7 +91,6 @@ Restart the client and check that the server's tools are available.
 
 ```sh
 gemini mcp add --scope user tg tg mcp
-gemini mcp add --scope user max max mcp
 gemini mcp list
 ```
 
@@ -87,10 +106,16 @@ YAML; do not paste the whole `mcpServers` JSON object into it. Restart Hermes to
 
 ## What the agent can do
 
-Available actions follow the profile's permissions. Use a read-only profile for a connection that cannot change messages. The app controls its own
-approval prompts; the MCP server cannot verify that a person accepted them.
-For a read-only profile and the full tool list, see [Telegram MCP](./tg/mcp.md) or [MAX MCP](./max/mcp.md).
-Ask the agent to list five chats as the first connection check.
+MCP covers most everyday CLI operations: read and search chats, inspect people and groups, work with message attachments, prepare reports, send replies and manage groups when permitted.
+
+For full command syntax and MCP-specific availability, use the messenger references:
+
+- [Telegram MCP tools and coverage](./tg/mcp.md#tools) · [Telegram command reference](./tg/commands.md).
+- [MAX MCP tools and coverage](./max/mcp.md#инструменты) · [MAX command reference](./max/commands.md).
+
+The available catalogue is determined by the messenger and profile permissions. Ask the agent to discover an action through the search tool; its result provides the supported command and arguments. A read-only profile excludes changes. The app controls its approval prompts.
+
+After connecting, ask for five recent chats. Continue with [First tasks](./first-tasks.md).
 
 ## Documentation for your agent
 
@@ -105,9 +130,7 @@ The messenger MCP servers access your account. Documentation access is separate:
 Try: **“Read https://wirecat.dev/llms.txt, find the Telegram inbox documentation and use it to
 summarise my unread messages.”** If your agent cannot fetch URLs, copy the page's Markdown into the chat.
 
-WireCat currently provides these Markdown resources, without a hosted documentation MCP endpoint.
-You do not need another server to read them. A documentation MCP would add search and page retrieval
-as tools; it would be a separate service from `tg mcp` and `max mcp`.
+These Markdown pages can be read directly. Give the agent the index or the page it needs; no additional documentation server is required.
 
 If a connection fails, check the full paths, the Node version, and that client and terminal use the
 same profile and configuration directories. Each [Telegram](./tg/mcp.md) / [MAX](./max/mcp.md)

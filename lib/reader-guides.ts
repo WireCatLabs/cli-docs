@@ -293,7 +293,7 @@ export function readerGuideMarkdown(slugs: string[], lang: string) {
   }
   let text = `${guide.intro}\n\n${guide.showRoleNavigation ? guide.roleNavigation.links.map((link) => `[${link.label}](/${lang}/docs/${link.page})`).join(" · ") : ""}\n\n`
   if (guide.setup)
-    text += `## ${guide.setup.title}\n\n[${guide.setup.create}](${guide.setup.url})\n\n[${guide.setup.install}](/${lang}/docs/installation)\n\n${guide.setup.steps.map((step, i) => `${i + 1}. ${step}`).join("\n")}\n\n\`\`\`sh\n${guide.setup.commands.join("\n")}\n\`\`\`\n\n${guide.setup.result}\n\n`
+    text += `## ${guide.setup.title}\n\n[${guide.setup.create}](${guide.setup.url})\n\n${guide.setup.creationDetails ? `**${guide.setup.creationDetails.title}**\n\n${guide.setup.creationDetails.steps.map((step, i) => `${i + 1}. ${step}`).join("\n")}\n\n` : ""}[${guide.setup.install}](/${lang}/docs/installation)\n\n${guide.setup.steps.map((step, i) => `${i + 1}. ${step}`).join("\n")}\n\n\`\`\`sh\n${guide.setup.commands.join("\n")}\n\`\`\`\n\n${guide.setup.result}\n\n`
   for (const section of guide.sections.slice(0, guide.fixture ? 1 : undefined)) text += sectionMarkdown(section)
   if (guide.fixture) {
     const fixture = guide.fixture

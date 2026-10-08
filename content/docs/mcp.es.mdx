@@ -1,11 +1,33 @@
 ---
-title: "MCP y documentación"
-description: "Qué aporta MCP, cómo conectar cada agente y cómo leer la documentación de WireCat."
+title: "MCP y skills"
+description: "Entiende el servidor MCP y las instrucciones del agente, elige una conexión y consulta las acciones disponibles."
 ---
 
-<DocTerm term="mcp" lang="es" label="MCP" /> conecta al asistente con herramientas del mensajero: listar chats, encontrar mensajes y preparar respuestas. Aquí elegirás entre acceso por línea de comandos y MCP, conectarás tu cliente y comprobarás los permisos. El servidor MCP viene con `tg` y `max`; inicia sesión en tu cuenta antes de usarlo.
+Conecta tu asistente al mensajero y dale instrucciones para trabajar con tus chats. Aquí conocerás MCP y los skills, elegirás una conexión y encontrarás las herramientas y sus permisos.
 
-¿Usas ChatGPT o Claude en el navegador? Empieza por la [conexión paso a paso](./browser-apps.mdx), que explica la dirección pública y el acceso. Los ajustes técnicos de clientes están abajo.
+## Qué hace el servidor MCP
+
+**MCP** permite a los agentes hablar con un servidor para realizar tus tareas. Nuestro servidor da acceso al mensajero conectado: chats, mensajes, archivos adjuntos, búsqueda e informes. Tú pides un resultado; el asistente llama una herramienta y el servidor realiza la acción.
+
+El servidor está incluido en la herramienta de línea de comandos y **debe funcionar mientras el asistente lo utiliza**. Una aplicación local puede iniciarlo en tu ordenador. Para navegador o móvil, se mantiene en un ordenador o servidor y se conecta con una dirección HTTPS pública y autenticación. Sigue la [guía de navegador y móvil](./browser-apps.mdx).
+
+## Cómo encuentra y ejecuta acciones el agente
+
+El servidor ofrece pocas herramientas: el agente descubre primero la acción y sus parámetros, y después la ejecuta. Para encontrar un acuerdo, descubre la búsqueda de mensajes, la ejecuta y abre los resultados.
+
+Los ejemplos usan nombres de Telegram. Para MAX cambia `tg` por `max`, también en nombres de herramientas y ajustes.
+
+| Herramienta | Función |
+|---|---|
+| `tg_tools_search` | Descubre la acción, parámetros y efectos. Busca acciones disponibles, no mensajes. |
+| `tg_read` | Ejecuta una lectura: chats, búsqueda de mensajes, archivos o informes. |
+| `tg_write` | Ejecuta cambios: enviar, guardar texto extraído o gestionar grupos según los permisos. |
+
+## Qué hace un skill
+
+Un **skill** enseña al agente qué herramientas elegir, cómo reunir contexto, comprobar fuentes y preparar resultados. MCP permite ejecutar acciones; el skill explica cómo usarlas. No contiene credenciales.
+
+Las instrucciones vienen con la herramienta. [Conectar tu agente](./agents.mdx) explica cómo añadirlas; `tg skill show` muestra el texto. Con terminal, el agente puede seguirlas y ejecutar la CLI directamente.
 
 ## ¿CLI, skill o MCP?
 
@@ -32,7 +54,6 @@ En una terminal donde ya funcione el comando:
 
 ```sh
 codex mcp add tg -- tg mcp
-codex mcp add max -- max mcp
 codex mcp list
 ```
 
@@ -45,7 +66,6 @@ en `[mcp_servers.tg]` o `[mcp_servers.max]`. Codex utiliza TOML.
 
 ```sh
 claude mcp add --scope user tg -- tg mcp
-claude mcp add --scope user max -- max mcp
 claude mcp list
 ```
 
@@ -71,7 +91,6 @@ Reinicia el cliente y comprueba las herramientas disponibles.
 
 ```sh
 gemini mcp add --scope user tg tg mcp
-gemini mcp add --scope user max max mcp
 gemini mcp list
 ```
 
@@ -87,10 +106,16 @@ JSON `mcpServers` entero. Reinicia Hermes.
 
 ## Qué puede hacer el agente
 
-Las acciones dependen de los permisos del perfil. La aplicación gestiona sus aprobaciones;
-el servidor comprueba prohibiciones, destinatarios y límites. Consulta [Permisos](./permissions.mdx), los perfiles
-de lectura y la lista completa de herramientas en [Telegram MCP](./tg/mcp.md) o [MAX MCP](./max/mcp.md).
-Pide listar cinco chats como primera comprobación.
+MCP cubre la mayoría de operaciones habituales: leer y buscar mensajes, consultar personas y grupos, trabajar con adjuntos, crear informes, responder y administrar grupos con permisos.
+
+Consulta sintaxis y disponibilidad MCP en las referencias:
+
+- [Herramientas y cobertura MCP de Telegram](./tg/mcp.md#tools) · [Comandos de Telegram](./tg/commands.md).
+- [Herramientas y cobertura MCP de MAX](./max/mcp.md#инструменты) · [Comandos de MAX](./max/commands.md).
+
+El catálogo depende del mensajero y del perfil. Pide descubrir la acción: el resultado muestra comando y parámetros. Un perfil de solo lectura excluye cambios. La aplicación controla sus confirmaciones.
+
+Después de conectar pide cinco chats recientes. Sigue con [Primeras tareas](./first-tasks.md).
 
 ## Documentación para tu agente
 
@@ -106,9 +131,7 @@ Prueba: **«Lee https://wirecat.dev/llms.txt, busca la documentación de los men
 de Telegram y úsala para resumir mis mensajes sin leer».** Si no puede abrir URL, pega el Markdown
 de la página en el chat.
 
-WireCat ofrece estos recursos Markdown; todavía no tiene un servidor MCP de documentación
-publicado. No necesitas otro servidor para leer las páginas. Un MCP de documentación añadiría
-búsqueda y lectura como herramientas, en un servicio separado de `tg mcp` y `max mcp`.
+Estas páginas Markdown se leen directamente. Da al agente el índice o la página necesaria; no hace falta otro servidor de documentación.
 
 Si falla la conexión, comprueba las rutas, Node y que cliente y terminal usan el mismo perfil
 y los mismos directorios. Los detalles están en la referencia MCP de [Telegram](./tg/mcp.md)

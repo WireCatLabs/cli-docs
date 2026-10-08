@@ -3,8 +3,7 @@ title: "Buscar"
 description: "Encuentra mensajes, personas, chats o archivos por palabras, formas, errores de escritura o significado."
 ---
 
-Encuentra lo que necesitas en Telegram o MAX: un mensaje, acuerdo, persona, chat o documento.
-El agente puede elegir cómo buscar aunque solo recuerdes parte de una frase o su tema.
+Esta página te ayuda a encontrar mensajes, acuerdos, personas, chats y documentos en Telegram o MAX. Aprenderás qué buscar, cómo elegir el método y cómo comprobar las fuentes aunque solo recuerdes parte de una frase o el tema.
 
 **Qué puedes buscar:**
 
