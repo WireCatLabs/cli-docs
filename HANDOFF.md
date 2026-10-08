@@ -47,17 +47,18 @@ logo and highlights Getting started in the header and sidebar on all shared guid
 
 ### 2. Release sources
 
-Verified release boundary, 2026-10-08: default `pnpm sync` uses **max v0.29.0** and **tg v0.28.0**,
-the reviewed pins in `tools.json`. MAX 0.34.0 and TG 0.35.0 are published; the shared search architecture
-page documents their archive preparation and coverage additions in EN/RU/ES. Moving tool guide pins
-still requires reviewing every changed translation/fingerprint and portal correction (README).
-Use the pinned refs for checks; `--ref main` is only a preview. The release/translation follow-up is
-tracked in [the archive-preparation record](docs/plans/2026-10-08-archive-preparation.md).
+Verified release boundary, 2026-10-08: default `pnpm sync` uses **max v0.34.0** and **tg v0.35.0**,
+the reviewed pins in `tools.json`. The full tool guides and start pages are reviewed in EN/RU/ES;
+source fingerprints and portal errata move with these tags. The shared search architecture page
+uses the same release boundary. Use the pinned refs for checks; `--ref main` is only a preview.
+The completed translation scope and validation are recorded in
+[the guide review](docs/reviews/2026-10-08-reviewed-tool-guides.md) and
+[the archive-preparation record](docs/plans/2026-10-08-archive-preparation.md).
 
 ### 3. Translations of the tools' pages
 
-The full tool guides are translated into English, Russian and Spanish by Codex agents using the
-same model. Durable files live in `translations/{tool}/{slug}.{lang}.md`, with concise start pages
+The full tool guides are available in English, Russian and Spanish. Changed prose is reviewed
+against the released source before publication; translation drafts alone do not approve a fingerprint. Durable files live in `translations/{tool}/{slug}.{lang}.md`, with concise start pages
 in `translations/overviews/`. `pnpm sync` captures untouched release pages in ignored
 `content/upstream/`, then validates and installs translations. Source fingerprints in
 `translations/sources.json` are specific to each translated locale; a release change requires

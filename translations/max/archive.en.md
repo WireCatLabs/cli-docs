@@ -6,7 +6,7 @@ Everything `max` reads stays on your computer, so you can answer offline, search
 
 ## What is stored
 
-Read data is saved locally so you can use it without a network connection:
+Read data is saved locally so commands can answer without a network connection:
 
 ```sh
 max chats list --offline      # только из локальной копии, никуда не подключаться
@@ -17,7 +17,7 @@ max store clear --left --allow-dangerous  # удалить их из общей 
 
 A chat you left or were removed from disappears from `chats list` and `chats show` on the next login. Its messages remain in local storage. `max store clear --left --allow-dangerous` deletes both the chat and its messages; without `--allow-dangerous`, the command only reports how much it would delete. If you rejoin, the chat reappears in the list.
 
-`chats list|show` and `contacts list|show` save data in the shared store used by `tg`. It starts filling on your first run without `--offline` after upgrading; the old `max` cache is not migrated. `chats show` gets group settings (`description`, `access`, `settings`) only from MAX, so these fields are absent with `--offline`.
+`chats list|show` and `contacts list|show` store retrieved data in the shared copy also used by `tg`. It starts filling on the first run without `--offline` after the update; the previous `max` copy is not migrated into it. `chats show` obtains group settings (`description`, `access`, `settings`) only from MAX, so `--offline` responses omit them.
 
 Normal commands still query MAX: login already returns chats and contacts, so answering only from storage would deliberately miss changes. Use `--offline` when there is no network or when you do not want to connect.
 
@@ -33,22 +33,23 @@ The old profile cache is no longer opened or migrated into the shared store. `ma
 max store fetch Друзья --since-time 2026-01-01
 max store fetch Друзья --last 500
 max store fetch Друзья --background      # в фоне; `max store jobs show <id>` следит за ним
+max store fetch --all                    # все чаты, самые активные первыми: последние 90 дней
 ```
 
 It pages backwards like the web client's scroll-up behavior: 30 messages at a time, starting from the oldest already downloaded. Each page is followed by a pause between `--pause` and twice that duration (default `5s`, giving 5–10 seconds, similar to a person scrolling). A run downloads at most `--limit` messages (default 1,200, or 40 pages). Running the same command again resumes where it stopped and skips downloaded data. Without `--since-time` or `--last`, repeated runs continue to the beginning. `--since-time` and `--last` cannot be combined. `--since-time` accepts ISO 8601 or a relative time (`30d`). Ctrl-C or `--timeout` stops after the current page, preserving downloaded data.
 
-If MAX specifies a wait time, the command waits. Any other error stops it without retrying the request. `store fetch` does not read reactions or mark messages as read. `--estimate` is unsupported for MAX: MAX message IDs do not let it count missing messages.
+If MAX reports too many requests, the command stops. The response does not tell `max` how long to wait, so `max` neither waits nor retries. It also stops on any other error. Downloaded history is preserved, and the next run resumes from the same point ([limits.md](./limits.md)). `store fetch` does not read reactions or mark anything as read. `--estimate` is unavailable for MAX: MAX message IDs cannot tell you how much history is missing.
 
 Downloaded data goes into the shared store used by `tg`; `max store info` shows its path. `max store status` shows message counts and fully downloaded ranges for each chat. The older `max` cache is not migrated; download its history again.
 
 `max store jobs list` shows background downloads; `max store jobs cancel <id>` stops one.
 
-Store maintenance:
+Maintain the local database file:
 
 - `max store check` — file integrity, search indexes, disk space and stale chats.
 - `max store backup <файл>` — back up the live store without overwriting an existing file; `max store restore <файл>` restores it and keeps the previous file alongside. With `--encrypt`, the copy is compressed and encrypted with a password — see [Password](#пароль);
 - `max store reindex` — rebuild the search index, typo dictionary and word stems without losing messages.
-- `max store migrate` — upgrade the file to this version's schema and complete indexes for older messages.
+- `max store migrate` upgrades the file to this `max` version’s schema and adds indexes for older messages.
 
 ### Exporting to a file
 
@@ -88,7 +89,7 @@ max store export --all --to ~/max-всё
 
 ## Search
 
-`max messages search` finds saved messages by words, sender, chat, date, files, links and your tags. By default it reads only the archive; `--sync-first` first fetches a bounded set of new messages from MAX without marking them read. The [message search guide](./search.md) also covers saved searches and counts. An empty result means “not in this archive”: fetch the chat first.
+`max messages search` finds saved messages by words, sender, chat, date, files, links and your tags. Word search in one specified chat also queries the MAX server by default; without a chat, or with `--backend archive`, it reads only the archive. `--sync-first` first downloads new messages from MAX within limits without marking them as read. See [message search](./search.md) for the guide, saved searches and counts. Empty results do not prove that a message is absent: check `coverage.next` and download missing history before searching again.
 
 ## Conversations within a group
 
@@ -136,6 +137,6 @@ max watch --events --jsonl  # ещё правки, удаления и реак�
 
 ## Archive maintenance
 
-`max store migrate` completes indexes; `max store reindex` rebuilds them. `store info` and `store check` report word and stem index readiness. Having a stem index does not itself change strict search matching. `config set searchStemmers.cyrillic` accepts `russian` or `none`; `config set searchStemmers.latin` accepts `spanish`, `english` or `none`. `none` disables stems for that alphabet. Then run `store reindex`. This setting is shared across all profiles and both messengers, so `--defaults`, `--personal` and `--bot` do not apply, and it cannot be changed under `MAX_PROFILE_LOCK`.
+`max store migrate` adds missing indexes; `max store reindex` rebuilds them. `store info` and `store check` show word and stem index readiness. Strict search uses stems to match word forms; `exact:` and `--exact` choose exact forms. `config set searchStemmers.cyrillic` accepts `russian` or `none`; `config set searchStemmers.latin` accepts `spanish`, `english` or `none`. `none` disables stemming for that alphabet. Then run `store reindex`. This setting is shared by all profiles and both messengers, so `--defaults`, `--personal` and `--bot` do not apply, and it cannot be changed under `MAX_PROFILE_LOCK`.
 
 `max store repair --dry-run --json` previews structural repairs and rolls changes back; `store repair` applies them without deleting data. An incompatible table is retained as a copy; the response lists rows and columns that could not be transferred. Keep the copy until you have checked the result. `store repair` lists copy names (`copies` in `--json`); `store copies delete <точное имя>` deletes only the named copy. Stop processes using the archive before repairing its structure.

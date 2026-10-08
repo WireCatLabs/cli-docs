@@ -24,9 +24,11 @@ release boundaries and coverage fields. PR and deployment evidence are tracked i
 [deployment runs](https://github.com/leemour/cli-docs/actions/workflows/deploy.yml).
 No live messenger actions are needed for this documentation change.
 
-## Remaining translation review
+## Completed guide review
 
-Keep `tools.json` at TG v0.28.0 and MAX v0.29.0. Review every changed tool guide in every affected
-locale, update source fingerprints and exact portal corrections, then move the pins together with
-translations. `pnpm sync` uses the reviewed tags and does not upgrade them when a CLI is published.
-The shared technical page names the newer releases independently, so readers can identify the boundary.
+The owner requested the full guide update after the shared architecture page shipped. `tools.json`
+now pins TG v0.35.0 and MAX v0.34.0 together with the reviewed EN/RU/ES translations, source
+fingerprints, start pages and exact portal corrections. All released guide pages are represented.
+The generated Telegram Bot API appendix retains its explicitly labeled English source.
+See [the guide review record](../reviews/2026-10-08-reviewed-tool-guides.md) for scope and checks.
+`pnpm sync` continues to use reviewed tags; a future CLI release does not automatically advance them.

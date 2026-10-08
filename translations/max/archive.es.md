@@ -6,7 +6,7 @@ Lo que `max` lee permanece en tu ordenador para consultar sin red, buscar y expo
 
 ## Qué se guarda
 
-Los datos leídos se conservan para responder sin conexión:
+Los datos consultados se guardan localmente para poder responder sin conexión:
 
 ```sh
 max chats list --offline      # только из локальной копии, никуда не подключаться
@@ -17,7 +17,7 @@ max store clear --left --allow-dangerous  # удалить их из общей 
 
 Un chat del que sales o te expulsan desaparece de `chats list` y `chats show` en el siguiente acceso. Sus mensajes permanecen en la copia; `max store clear --left --allow-dangerous` los elimina junto al chat. Sin `--allow-dangerous`, solo informa de cuánto borraría. Si vuelves al chat, reaparece en la lista.
 
-`chats list|show` y `contacts list|show` guardan datos en el almacén compartido con `tg`. Se llena desde la primera ejecución sin `--offline` tras actualizar; la copia anterior de `max` no se migra. `chats show` solo obtiene de MAX los ajustes (`description`, `access`, `settings`), ausentes sin conexión.
+`chats list|show` y `contacts list|show` guardan los datos consultados en la copia compartida que también utiliza `tg`. Se empieza a llenar en la primera ejecución sin `--offline` después de la actualización; la copia anterior de `max` no se traslada a ella. `chats show` obtiene los ajustes del grupo (`description`, `access`, `settings`) únicamente de MAX, por lo que las respuestas con `--offline` los omiten.
 
 Las órdenes normales siguen consultando MAX: el acceso ya devuelve chats y contactos. Responder solo con la copia impediría conocer cambios. Usa `--offline` cuando no tengas red o no quieras conectar.
 
@@ -33,17 +33,18 @@ La caché antigua del perfil ya no se abre ni se migra al almacén compartido. S
 max store fetch Друзья --since-time 2026-01-01
 max store fetch Друзья --last 500
 max store fetch Друзья --background      # в фоне; `max store jobs show <id>` следит за ним
+max store fetch --all                    # все чаты, самые активные первыми: последние 90 дней
 ```
 
-Recorre páginas de 30 mensajes, como desplazarse hacia arriba en la versión web, desde el más antiguo descargado. Entre páginas espera entre `--pause` y el doble, por defecto `5s`, es decir, 5–10 segundos. Cada ejecución obtiene hasta `--limit` mensajes, por defecto 1.200 o 40 páginas. Al repetir continúa donde terminó y omite lo guardado. Sin `--since-time` ni `--last`, las ejecuciones llegan al inicio; ambas opciones son incompatibles. `--since-time` acepta ISO 8601 o tiempo relativo (`30d`). Ctrl-C o `--timeout` detienen después de la página actual, conservando los datos.
+Recorre el historial hacia atrás como al desplazarte hacia arriba en la versión web: 30 mensajes por página, desde el mensaje descargado más antiguo. Entre páginas espera desde `--pause` hasta el doble de ese tiempo (valor predeterminado `5s`, es decir, de 5 a 10 segundos, aproximadamente el ritmo de una persona que recorre el chat en una pestaña). Cada ejecución descarga como máximo `--limit` mensajes (1200 de forma predeterminada, o 40 páginas). Al repetir el mismo comando, continúa donde se detuvo y omite los mensajes ya descargados. Sin `--since-time` ni `--last`, las ejecuciones continúan hasta el principio del chat; `--since-time` y `--last` no se pueden combinar. `--since-time` acepta una fecha ISO 8601 o una duración relativa (`30d`). Ctrl-C o `--timeout` detienen la descarga después de la página actual y conservan lo descargado.
 
-Si MAX indica una espera, se respeta. Otro error detiene sin repetir la solicitud. `store fetch` no lee reacciones ni marca mensajes leídos. `--estimate` no funciona para MAX porque sus IDs no permiten contar mensajes pendientes.
+Si MAX indica que hay demasiadas solicitudes, el comando se detiene. La respuesta no indica a `max` cuánto debe esperar, por lo que `max` no espera ni repite la solicitud. También se detiene ante cualquier otro error. El historial descargado se conserva y la siguiente ejecución continúa desde el mismo punto ([limits.md](./limits.md)). `store fetch` no lee reacciones ni marca nada como leído. `--estimate` no está disponible para MAX: los ID de mensajes de MAX no permiten contar cuánto historial falta.
 
 Los datos van al almacén compartido con `tg`; `max store info` muestra su ruta. `max store status` indica cantidades y tramos completos por chat. La copia antigua de `max` no se migra: descarga de nuevo el historial.
 
 `max store jobs list` muestra descargas en segundo plano; `max store jobs cancel <id>` las detiene.
 
-Mantenimiento:
+Mantener el archivo de la base de datos local:
 
 - `max store check`: integridad, índices de búsqueda, espacio y chats desactualizados.
 - `max store backup <файл>`: copia del archivo en uso, sin sobrescribir. `max store restore <файл>` restaura y conserva el anterior al lado. Con `--encrypt`, la copia se comprime y se cifra con contraseña; consulta [Contraseña](#пароль).
@@ -88,7 +89,7 @@ max store export --all --to ~/max-всё
 
 ## Buscar
 
-`max messages search` encuentra mensajes guardados por palabras, remitente, chat, fecha, archivos, enlaces y tus etiquetas. Por defecto solo lee el archivo; `--sync-first` primero descarga un conjunto limitado de mensajes nuevos de MAX sin marcarlos como leídos. La [guía de búsqueda de mensajes](./search.md) también explica las búsquedas guardadas y los recuentos. Un resultado vacío significa «no está en este archivo»: descarga primero el chat.
+`max messages search` encuentra mensajes guardados por palabras, remitente, chat, fecha, archivos, enlaces y tus etiquetas. La búsqueda de palabras en un chat concreto también consulta al servidor de MAX de forma predeterminada; sin chat o con `--backend archive`, solo lee el archivo. `--sync-first` descarga primero mensajes nuevos de MAX dentro de unos límites sin marcarlos como leídos. Consulta [búsqueda de mensajes](./search.md) para ver la guía, las búsquedas guardadas y los recuentos. Un resultado vacío no demuestra que el mensaje no exista: comprueba `coverage.next` y descarga el historial que falte antes de volver a buscar.
 
 ## Conversaciones dentro de un grupo
 
@@ -98,9 +99,9 @@ En un grupo activo hay varias conversaciones a la vez. `max conversations` agrup
 
 Una orden normal conecta, ejecuta y termina. `max serve` mantiene una conexión y distribuye mensajes nuevos a quienes escuchan.
 
-**No hace falta iniciarlo manualmente.** La primera orden que necesita MAX lo inicia en segundo plano si falta y continúa con su conexión propia; las siguientes usan el servidor. **Se detiene tras 15 minutos sin uso.** Su registro está en `<профиль>.serve.log`, junto al estado del perfil, permisos 600. Desactiva el inicio con `--no-serve` una vez, o `max config set serve false` permanentemente. `max session end` detiene primero un servidor iniciado automáticamente.
+**No tienes que iniciarlo manualmente.** El primer comando que necesita MAX inicia `max serve` en segundo plano si no está en marcha y continúa usando su propia conexión; los siguientes utilizan el servidor. **Este servidor se detiene tras 15 minutos sin uso.** Su registro es `<профиль>.serve.log`, junto al estado del perfil (permisos 600). Desactívalo con `--no-serve` para una ejecución o con `max config set serve false` de forma permanente. `max session end` primero detiene el servidor del perfil si lo inició un comando.
 
-**Los servidores manuales (`max serve`, `max server start`) solo se detienen con Ctrl-C o `max server stop`**, no por inactividad, cierre de sesión ni otras peticiones. Un inicio manual sustituye al automático. Puedes elegir `--idle` explícitamente. `max session start` detiene cualquier servidor del perfil, entra y lo reinicia con la sesión nueva, manteniendo una conexión a la vez.
+**Un servidor iniciado manualmente (`max serve`, `max server start`) solo se detiene con Ctrl-C o `max server stop`**, no por inactividad, por `max session end` ni por otras solicitudes al socket. Si ya hay un servidor en segundo plano iniciado por un comando, ejecutar `max serve` manualmente lo sustituye. Puedes elegir `--idle` explícitamente. `max session start` detiene cualquier servidor del perfil, inicia sesión y lo vuelve a iniciar con la sesión nueva: solo hay una conexión con MAX en cada momento.
 
 ```sh
 max serve                   # вручную, в одном терминале; Ctrl-C — остановить
@@ -119,14 +120,14 @@ max watch --events --jsonl  # ещё правки, удаления и реак�
 ```
 
 - **Tras actualizar `max`**, el servidor automático se sustituye solo. Uno manual mantiene la versión hasta reiniciar; `max server status` lo muestra y `max server restart` lo resuelve.
-- **Como servicio.** Tras `max server install`, inicio y parada usan systemd o launchd. El servicio ejecuta `max serve` sin tiempo de inactividad. Si MAX rechaza el acceso, **no** reinicia para evitar más intentos. `max server status` muestra servicio y registro.
+- **Usar un servicio.** Después de `max server install`, `max server start` inicia el servidor mediante systemd o launchd y `max server stop` lo detiene allí. El servicio ejecuta `max serve`, un servidor iniciado manualmente sin cierre por inactividad. Si MAX rechaza el inicio de sesión, el servicio **no** reinicia el servidor: cada reintento supondría otro inicio de sesión. `max server status` muestra el servicio y la ubicación de su registro.
 - **Uno por perfil.** Un segundo `max serve` rechaza iniciarse. El socket junto al estado tiene 600, accesible solo al propietario.
-- **Comportamiento de una pestaña web.max.ru:** ping cada 30 segundos, respuestas a pings y confirmación de recepción. **No marca leído** ni envía mensajes.
+- **Su comportamiento en la red es como el de una pestaña de web.max.ru:** un ping cada 30 segundos, respuestas a los pings de MAX y confirmaciones de recepción de cada mensaje entrante. **No marca nada como leído** ni envía mensajes.
 - **Si MAX desconecta**, reintenta tras 1, 2, 4… segundos, hasta un minuto de espera; `max watch` lo indica en stderr. Un token rechazado detiene con error de autenticación.
 - **Una conexión compartida por perfil.** Comandos, `max mcp` y `max watch` usan la del servidor para leer, enviar y reaccionar. Los controles de envío siguen en el comando. Si falta, se inicia y espera; con `serve: false`, el comando conecta directamente. Un segundo servidor rechaza antes de entrar.
-- El servidor actualiza mensajes, lecturas desde el móvil y cambios de chats. Si no puede aplicar un evento, como un borrado, vuelve a entrar en segundo plano, como máximo una vez por minuto.
+- El servidor mantiene actualizado el estado de su sesión: tiene en cuenta mensajes nuevos, chats leídos en el teléfono y cambios en los chats. Si MAX informa de algo que no puede aplicar (mensajes eliminados), vuelve a iniciar sesión en segundo plano, como máximo una vez por minuto.
 - **Con `--events`, cambia el formato:** `{"event": "message", "message": …}`, `{"event": "edit", "message": …}`, `{"event": "delete", "chatId", "chatTitle", "messageId"}`, `{"event": "reaction", "chatId", "chatTitle", "messageId", "reactions"}`. Sin la opción, una línea por mensaje. `max watch` no muestra quién escribe: MAX solo lo envía a quien tenga abierto ese chat.
-- **Solo ve mensajes mientras ambos estén conectados.** Tras una interrupción, una línea `status` con `connected: true` indica recuperar lo perdido con `max inbox --since-time <время из поля at предыдущей строки status>`.
+- **`max watch` solo ve lo que llega mientras tanto él como el servidor están conectados.** Los mensajes que llegan durante una desconexión de MAX se pierden en ese flujo. Una línea `status` con `connected: true` después de una desconexión indica que debes recuperar lo omitido: `max inbox --since-time <время из поля at предыдущей строки status>`.
 
 ## Siguiente paso
 
@@ -136,6 +137,6 @@ max watch --events --jsonl  # ещё правки, удаления и реак�
 
 ## Mantenimiento del archivo
 
-`max store migrate` completa los índices; `max store reindex` los reconstruye. `store info` y `store check` indican si los índices de palabras y raíces están listos. Tener un índice de raíces no cambia por sí solo la coincidencia estricta. `config set searchStemmers.cyrillic` acepta `russian` o `none`; `config set searchStemmers.latin` acepta `spanish`, `english` o `none`. `none` desactiva las raíces para ese alfabeto. Después ejecuta `store reindex`. Este ajuste es común a todos los perfiles y ambos mensajeros: no admite `--defaults`, `--personal` ni `--bot`, y no puede cambiarse con `MAX_PROFILE_LOCK`.
+`max store migrate` completa los índices; `max store reindex` los reconstruye. `store info` y `store check` muestran si los índices de palabras y raíces están listos. La búsqueda estricta usa raíces para encontrar formas de palabras; `exact:` y `--exact` eligen formas exactas. `config set searchStemmers.cyrillic` acepta `russian` o `none`; `config set searchStemmers.latin` acepta `spanish`, `english` o `none`. `none` desactiva las raíces para ese alfabeto. Después, ejecuta `store reindex`. Este ajuste se comparte entre todos los perfiles y ambos mensajeros, por lo que no se aplican `--defaults`, `--personal` ni `--bot`, y no se puede cambiar bajo `MAX_PROFILE_LOCK`.
 
 `max store repair --dry-run --json` muestra las reparaciones de estructura y revierte los cambios; `store repair` las aplica sin borrar datos. Una tabla incompatible se conserva como copia; la respuesta enumera las filas y columnas que no pudieron trasladarse. Conserva la copia hasta comprobar el resultado. `store repair` indica los nombres de las copias (`copies` en `--json`); `store copies delete <точное имя>` borra solo la indicada. Detén los procesos que usen el archivo antes de reparar su estructura.

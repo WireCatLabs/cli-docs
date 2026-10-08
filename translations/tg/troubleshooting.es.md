@@ -6,10 +6,10 @@ Busca el síntoma que ves en pantalla y sigue los pasos. Con `--json`, cada erro
 
 ## Según el código de salida
 
-| Código | Nombre | Significado habitual | Dónde consultar |
+| Código | Nombre | Qué suele significar | Dónde |
 |---|---|---|---|
 | `1` | `generic_failure` | error en el nombre del comando o fallo de `tg` | [comando desconocido](#error-unknown-command-), [informar del problema](#report-a-problem) |
-| `2` | `validation_error` | valor o combinación de opciones no admitidos; nombre que coincide con varios chats | [valores](#--limit-takes-a-whole-number-from-1-upwards), [varios chats](#-matches-3-chats--name-one-by-its-id) |
+| `2` | `validation_error` | un valor o una combinación de opciones que `tg` no acepta; un nombre que coincide con varios chats | [valores](#--limit-takes-a-whole-number-from-1-upwards), [varios chats](#-matches-3-chats--name-one-by-its-id) |
 | `3` | `configuration_error` | `config.json` incorrecto, el proxy rechazó la conexión o no responde, o archivo local más reciente que este `tg` | [configuración](#-is-not-a-valid-config), [proxy](#the-proxy--cannot-be-reached-or--refused), [archivo local](#the-message-store-was-written-by-a-newer-version-) |
 | `4` | `authentication_error` | sin sesión, sesión finalizada o almacén de claves inaccesible | [sin sesión](#no-session-for-profile-default--run-tg-setup) |
 | `5` | `permission_error` | rechazado por `permissions` o por Telegram | [no permitido](#profile--does-not-let--write-or-profile--denies-), [rechazo de Telegram](#telegram-refused-), [PEER_FLOOD](#telegram-limited-this-accounts-messages-as-spam-peer_flood) |
@@ -45,7 +45,9 @@ La carpeta donde npm instala los comandos no está en `PATH`.
 - **Linux y macOS:** es `$(npm prefix -g)/bin`. Añádela a `PATH` en `~/.zshrc` o `~/.bashrc`: `export PATH="$(npm prefix -g)/bin:$PATH"`.
 - **Windows:** npm instala comandos en la carpeta indicada por `npm prefix -g`, normalmente `%APPDATA%\npm`. Comprueba que esté en `$env:Path`. Una terminal abierta antes de instalar Node no ve el nuevo `PATH`: abre otra.
 - **PowerShell indica "running scripts is disabled on this system".** npm instala `tg.ps1` junto a `tg.cmd` y PowerShell bloquea scripts por defecto. Ejecuta `tg.cmd`, que siempre funciona, o permite scripts para tu usuario: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`.
-- **Hay otro `tg` antes en la ruta.** `which -a tg` (o `Get-Command tg -All` en PowerShell) muestra todos. Ejecuta el nuestro mediante su ruta completa o coloca su carpeta primero.
+- **Otra `tg` aparece primero.** Otro programa también puede llamarse `tg`. `which -a tg` (o
+  `Get-Command tg -All` en PowerShell) los enumera todos; ejecuta el nuestro por su ruta completa o coloca su carpeta
+  primero.
 
 También funciona sin instalar: `npx @leemour/tg-cli doctor`.
 
@@ -103,7 +105,10 @@ Código `13` durante `tg session start --app auto`. El sitio no tiene API y `tg`
 
 ## "… is not a valid config"
 
-Código `3`. `config.json` contiene un ajuste desconocido para `tg` o un valor de tipo incorrecto. El error identifica ajuste y perfil. Se rechaza intencionadamente: ignorarlo ocultaría el problema. Corrígelo manualmente o quítalo con `tg config unset <setting>` ([configuración](./configuration.md#a-typo-is-an-error-not-a-default)).
+Código de salida `3`. `config.json` contiene un ajuste que `tg` no conoce o un valor de tipo incorrecto. El error
+indica el ajuste y el perfil al que pertenece. Se rechaza deliberadamente: un ajuste ignorado en silencio
+puede costarte medio día. Corrígelo a mano o elimínalo con `tg config unset <setting>`
+([configuration.md](./configuration-reference.md#a-typo-is-an-error-not-a-default)).
 
 ## "--limit takes a whole number from 1 upwards"
 
@@ -144,6 +149,8 @@ Código `8`. Es el límite propio de Telegram (FLOOD_WAIT). Espera ese tiempo; e
 
 Un comando espera una petición de hasta 10 segundos, dos veces como máximo, y lo indica en stderr: "Telegram asks to wait 3 s before … — waiting, then going on". `serve` y `watch` esperan hasta 2 minutos. Una espera más larga termina el comando con este error. `tg` también recuerda la espera: hasta que acaba, el mismo comando falla al instante sin volver a preguntar a Telegram, y `tg doctor` y `tg server status` la muestran en `flood`.
 
+Cómo encajan el ritmo, las esperas y los comandos paralelos: [limits.md](./limits.md).
+
 ## "Telegram limited this account's messages as spam (PEER_FLOOD)"
 
 Código `5`. Telegram limita una cuenta que ha escrito a demasiadas personas que no son sus contactos. Puede seguir leyendo. Escribe a @SpamBot desde una aplicación de Telegram: te dice hasta cuándo dura. Volver a enviar lo empeora, así que `tg` retiene todos los envíos durante una hora y lo indica; cada nuevo rechazo reinicia la hora. `tg doctor` muestra la retención en `flood.sendBlock`. Cuando @SpamBot diga que el límite ha terminado, `tg flood clear` la levanta, junto con cualquier espera que `tg` recuerde. El rechazo a una cuenta congelada retiene los envíos del mismo modo, hasta la fecha que indica Telegram; `tg doctor --online` activa y levanta esa retención.
@@ -158,7 +165,10 @@ Código `7`. La lista de destinatarios está activa y el chat no figura en ella.
 
 ## "profile … does not let … write" or "profile … denies …"
 
-Código `5`, antes de enviar nada a Telegram. Los `permissions` del perfil lo rechazan: `deny` bloquea también lectura; `readonly` bloquea cambios. El error indica clave, origen y comando para permitirlo ([configuración](./configuration.md#what-a-profile-may-do)). El agente debe detenerse y preguntarte, sin modificar el ajuste.
+Código de salida `5`, antes de enviar nada a Telegram. Los `permissions` del perfil rechazaron la acción: `deny`
+bloquea también la lectura y `readonly` bloquea un cambio. El error indica la clave, dónde se configuró y el
+comando que permite la acción ([configuration.md](./configuration-reference.md#what-a-profile-may-do)). El agente debe
+detenerse y preguntarte, no cambiar el ajuste.
 
 ## "… asks before it acts"
 
@@ -178,7 +188,10 @@ Código `12`. Fallo de Telegram. `tg` no cambió nada; reintenta pasado un minut
 
 ## "cannot reach Telegram (…)"
 
-Código `10`. No se pudo conectar o se interrumpió: red, cortafuegos, proxy o DNS. El código entre paréntesis identifica la causa (`ECONNREFUSED`, `ENOTFOUND`, `ETIMEDOUT`). Los comandos del archivo local funcionan sin red: `tg --offline chats list`. Donde Telegram está bloqueado, configura un proxy ([configuración](./configuration.md#through-a-proxy)).
+Código de salida `10`. No se pudo establecer la conexión o se interrumpió: falta de red, un cortafuegos, un proxy o DNS.
+El código entre paréntesis indica la causa (`ECONNREFUSED`, `ENOTFOUND`, `ETIMEDOUT`). Los comandos que responden desde
+el almacenamiento funcionan sin red: `tg --offline chats list`. Si Telegram está bloqueado, configura un
+proxy ([configuration.md](./configuration-reference.md#through-a-proxy)).
 
 ## "the proxy … cannot be reached" or "… refused"
 

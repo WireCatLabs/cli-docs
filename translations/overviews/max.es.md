@@ -59,6 +59,8 @@ Pide a tu agente que revise los mensajes pendientes, encuentre un mensaje, recue
 prepare una respuesta. La búsqueda usa Lucene estricto por defecto; `--language legacy` conserva la búsqueda anterior con correcciones. Leer **no marca los mensajes como leídos**. Enviar, eliminar y realizar
 otros cambios requiere comandos específicos; puedes limitar el acceso del agente.
 
+Por defecto, la búsqueda por palabras consulta el archivo local y el mensajero (`--backend both`); usa `--backend archive` para consultar solo el archivo. El lenguaje de consulta predeterminado es Lucene estricto; `--language legacy` recupera la coincidencia anterior y la corrección de erratas. Prepara el historial antes de buscar solo en el archivo, contar o clasificar, y comprueba la cobertura antes de considerar que un resultado vacío demuestra que no existe un mensaje. La búsqueda en el servidor de MAX necesita un chat. Los recuentos, las clasificaciones y las consultas que el servidor no admite usan el historial guardado. [Guía de búsqueda](/es/docs/max/search).
+
 ## Encuentra la guía para tu tarea
 
 | Tarea | Guía |
@@ -72,6 +74,14 @@ otros cambios requiere comandos específicos; puedes limitar el acceso del agent
 | Encontrar una petición preparada para el agente | [Recetas de uso](/es/docs/max/recipes) |
 | Resolver un error | [Solución de problemas](/es/docs/max/troubleshooting) |
 | Consultar un comando o parámetro concreto | [Referencia de comandos](/es/docs/max/commands) |
+| Gestionar contactos, alias y notas privadas | [Personas](/es/docs/max/people) |
+| Comparar actividad y comprobar pruebas de una clasificación | [Clasificaciones](/es/docs/max/rankings) |
+| Enviar, descargar y leer archivos | [Adjuntos](/es/docs/max/attachments) |
+| Transcribir notas de voz localmente | [Transcripción de voz](/es/docs/max/audio-recognition) |
+| Configurar API opcionales de modelos | [Modelos externos](/es/docs/max/external-models) |
+| Limitar lectura, escritura y confirmaciones | [Permisos](/es/docs/max/permissions) |
+| Elegir un perfil personal o de bot | [Perfiles y bots](/es/docs/max/profiles) |
+| Consultar tipos y prioridad de ajustes | [Referencia de configuración](/es/docs/max/configuration-reference) |
 
 La barra izquierda contiene las guías comunes y las páginas de Telegram y MAX. La derecha muestra las secciones de la página
 actual. Empieza con la instalación; usa la referencia detallada cuando tengas una tarea concreta.

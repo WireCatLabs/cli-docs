@@ -2,16 +2,17 @@
 title: "Search query language"
 ---
 
-The reference for queries of `max messages search`, `max messages stats` and saved searches. For
-everyday examples start with [message search](./search.md).
+Reference for queries in `max messages search`, `max stats messages show` and saved searches. See [message search](./search.md) for everyday examples.
 
 The language is a strict profile of Apache Lucene's query syntax: words, phrases, AND/OR/NOT,
 groups, fields, ranges, bounded wildcards and regular expressions. The
-[full reference](https://github.com/leemour/cli-messaging/blob/v0.149.0/docs/search/query-language.md)
+[full reference](https://github.com/leemour/cli-messaging/blob/v0.164.0/docs/search/query-language.md)
 (in Russian) has the generated tables of fields, operators, presets and limits, and executable
 examples; the
-[technical specification](https://github.com/leemour/cli-messaging/blob/v0.149.0/docs/search/query-language-spec.md)
+[technical specification](https://github.com/leemour/cli-messaging/blob/v0.164.0/docs/search/query-language-spec.md)
 describes the grammar and the compiler.
+
+Words and phrases without a field match word forms. `--exact` selects exact forms for words without a field; an explicit `text:` still matches word forms. The archive language settings affect matching.
 
 ## Operators
 
@@ -40,6 +41,7 @@ Fuzzy `~`, proximity, boosts and intervals are refused with an error, not ignore
 | Field | Finds | Example |
 |---|---|---|
 | `text` | message words (the default field) | `text:счёт` |
+| `exact` | Exact word or phrase form | `exact:квартира`, `exact:"счёт оплачен"` |
 | `body` | the whole original text, case-sensitive | `body:/.*счёт.*/` |
 | `from` | sender by name, @username or id; `me` means you | `from:"Алиса Тестова"` |
 | `chat` | chat by title, @username or id | `chat:"Книжный клуб"` |
@@ -121,7 +123,7 @@ An error carries the position of the problem in the query and a hint.
 
 ## In MCP
 
-`max_messages_search` accepts the query as `text` or as a versioned syntax tree in `ast` (not both); `language` selects `lucene` or `legacy`, and `timezone` sets the calendar time zone. `chat` accepts an id or stored name; `source`, `newest`, `context` and `limit` work like the command options. `record: false` excludes the call from query history. The answer has the same fields as `--json`. `max_messages_stats` counts matches of the same queries.
+`max_read` (`command: "messages search"`) accepts a query as `text` or as a versioned syntax tree in `ast`, but not both. `language` selects `lucene` or `legacy`; `timezone` sets the calendar time zone. `chat` accepts an ID or saved title; `source`, `newest`, `context` and `limit` work like the command options. `record: false` prevents the call from being recorded in query history. The response has the same fields as `--json`. `max_read` (`command: "stats messages show"`) counts using the same queries.
 
 ## The older modes
 
@@ -146,11 +148,6 @@ time and size limits. `--regex` cannot be combined with `--language lucene`.
 `--thread-messages`, `--thread-bytes`, `--thread-within`. Without a graph it falls back to chronological context;
 stale links are marked and not traversed.
 
-Search reads the local archive by default. `--sync-first` explicitly fetches new messages before searching and
-marks nothing read: at most 5 chats, 500 messages and 30 seconds. Change these bounds with `--max-chats`,
-`--max-messages`, `--sync-time`. Failed or incomplete refresh retains local results with stale coverage and refresh
-details.
+Searching for words in one specified chat queries both the archive and the MAX server by default; without a specified chat, it queries only the archive. `--backend archive` keeps the search local. `--sync-first` downloads new messages first, without marking anything as read: at most 5 chats, 500 messages and 30 seconds. Adjust these limits with `--max-chats`, `--max-messages` and `--sync-time`. An incomplete or failed update preserves local results and reports outdated coverage and the update outcome.
 
-MCP uses `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` and `sync_first`. `sync_first`
-is exposed only with `messages.sync-first: allow`. Ordinary `messages_context` with `offline: true` reads stored
-messages.
+MCP uses `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` and `sync_first`. `sync_first` is available only with `messages.sync-first: allow`. `max_read` with `command: "messages context"` and `arguments: { offline: true }` reads saved data.

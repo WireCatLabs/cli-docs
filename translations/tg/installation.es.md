@@ -1,6 +1,7 @@
 ---
 title: "Instalación"
 ---
+
 `tg` es un comando que se instala como un paquete npm normal. No compila nada durante la instalación: SQLite viene incluido en el entorno de ejecución, por lo que no hay módulos nativos que compilar. Tampoco inicia procesos en segundo plano por su cuenta. Una instalación global con npm puede instalar las instrucciones del agente y, en Windows, reparar el PATH del usuario. Nunca inicia sesión ni lee chats durante la instalación.
 
 ## Requisitos

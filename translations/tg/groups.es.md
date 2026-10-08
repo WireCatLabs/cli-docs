@@ -90,9 +90,23 @@ cron no tiene terminal y a menudo no define `XDG_RUNTIME_DIR`, sin la cual `tg` 
 | `tg chats link show\|reset <chat>` | consultar el enlace de invitación; `reset` crea otro y el anterior deja de funcionar |
 | `tg messages delete --for-everyone`, `pin`, `unpin` | eliminar para todos o fijar mensajes |
 
-Un agente sin terminal dispone de las operaciones de lectura mediante herramientas MCP: `tg_review` con `unanswered`, `tg_chats_events`, `tg_chats_members`, `tg_chats_inspect` ([MCP](./mcp.md)).
+Un agente sin terminal obtiene las funciones de lectura como herramientas MCP: `tg_read` (`command: "review"`) con `unanswered`, `tg_read` (`command: "chats events"`), `tg_read` (`command: "chats members"`), `tg_read` (`command: "chats inspect"`) ([mcp.md](./mcp.md)).
 
 `create`, `join`, `leave`, `update`, `link reset`, `members` y `admins` producen cambios visibles para el grupo: al crear un grupo se avisa a los añadidos, y al entrar o salir aparece un mensaje en el chat. Cada operación pasa por los permisos del perfil y la protección de envíos; cada persona añadida cuenta para el límite por hora ([seguridad](./security.md#the-send-guard)).
+
+## Qué espera tu respuesta
+
+`review` y `serve` mantienen una lista de tareas en el almacén local. Una pregunta sin respuesta y un mensaje que te menciona por nombre abren una tarea; tu respuesta la cierra. La tarea apunta al mensaje y nunca lo copia.
+
+```sh
+tg tasks list --state open                                # what waits on you, oldest first
+tg tasks list --chat "Hiking" --type question,mention
+tg tasks add msg:telegram/<you>/<chat>/<message> --type promise   # what the rules cannot see
+tg tasks close <task> --as dismissed --reason no-reply-needed
+tg stats tasks show                                            # open per chat, the oldest, the median time to close
+```
+
+Una tarea cerrada sigue cerrada y una descartada nunca vuelve. Solo tus respuestas cierran una tarea, no las de un administrador; no se detectan las menciones por `@username`. El agente obtiene lo mismo con herramientas MCP: `tg_read` (`command: "tasks list"`), `tg_write` (`command: "tasks add"`), `tg_write` (`command: "tasks close"`), `tg_read` (`command: "stats tasks show"`) ([mcp.md](./mcp.md)).
 
 ## Reglas
 
@@ -117,7 +131,7 @@ tg chats moderate "Hiking"                         # judge what is new since the
 
 La acción de cada regla es `report`, `delete` o `remove`. Para ejecutar `delete` o `remove`, se consulta el nivel del grupo en `consent.delete` y `consent.remove`: `deny` nunca actúa, `readonly` solo informa, `ask` pregunta por cada acción (predeterminado; `--allow-dangerous` aprueba todas) y `allow` la ejecuta. Cada acción sigue pasando por la protección de envíos y su límite por hora. La ejecución se detiene después de `--max-actions` (10). La siguiente continúa donde se detuvo; `--since-time` consulta un momento que elijas y no cambia ese punto guardado.
 
-Por MCP, `tg_chats_moderate` solo actúa si el nivel es `allow`; las acciones que requieren aprobación se enumeran sin ejecutarlas. `newAccount` no está disponible: Telegram no indica la antigüedad de una cuenta.
+Por MCP, `tg_write` (`command: "chats moderate"`) actúa solo donde el nivel es `allow`; las acciones que requieren preguntar se enumeran para ti, pero no se ejecutan. No se ofrece `newAccount`: Telegram no indica la antigüedad de la cuenta.
 
 ## Limitaciones
 
@@ -126,18 +140,56 @@ Por MCP, `tg_chats_moderate` solo actúa si el nivel es `allow`; las acciones qu
 - **Nada vigila el grupo por su cuenta.** La revisión se ejecuta cuando la inicias tú, un agente por petición tuya o una tarea programada.
 - **Se aplican los límites de Telegram.** Leer todos los miembros de un grupo grande requiere muchas peticiones. Una respuesta `FLOOD_WAIT` indica cuánto debes esperar ([solución de problemas](./troubleshooting.md#telegram-asks-to-wait-n-s-before-the-next-request)).
 
-## Estadísticas de actividad
+## Estadísticas para administradores de grupos
 
 ```sh
-tg chats stats <chat> --since-time 7d --by day --timezone Europe/Madrid --json
-tg chats stats <chat> --offline --json
+tg stats chats show <chat> --since-time 7d --by day --timezone Europe/Madrid --json
+tg stats chats show <chat> --offline --json
 ```
 
-Cuenta, a partir del almacén local, los mensajes, los remitentes activos, las respuestas, los hilos, las reacciones, las publicaciones más destacadas y las preguntas contestadas. El comando en línea también pide a Telegram las entradas y salidas del grupo; `--offline` y la herramienta MCP `tg_chats_stats` omiten `members`. Si `complete` es false, las cifras son un mínimo; ejecuta el `store fetch` que se sugiere.
+`tg stats chats show` cuenta mensajes, remitentes activos, respuestas, hilos, reacciones y preguntas respondidas durante un periodo desde el almacén local. `--by day` o `--by week` añade filas de calendario; las semanas empiezan el lunes y `--timezone` fija su zona horaria. Las vistas, reenvíos y comentarios aparecen solo donde Telegram proporcionó los recuentos y se guardaron con las publicaciones. Un recuento ausente no significa cero. Las reacciones usan los recuentos guardados sin actualizar cada publicación. Las preguntas siguen las mismas reglas que `review --unanswered`. Son cifras calculadas localmente; el comando no solicita las estadísticas oficiales de administración de Telegram.
 
-## Revisar miembros sospechosos
+El comando en línea también consulta a Telegram los eventos de entrada y salida. `--offline` y MCP `tg_read` (`command: "stats chats show"`) omiten `members`, el resumen de esos eventos. Es distinto de `memberCounts`: instantáneas diarias guardadas del tamaño del grupo, disponibles también sin conexión.
 
-`tg chats members audit <chat>` enumera los miembros con señales propias de un bot y los motivos; `--budget` limita el número de páginas y `--min-score` fija el umbral. No elimina a nadie y excluye a los administradores y al propietario. `more` indica que la lista es parcial, y `unknown` nombra las señales que no están disponibles. No funciona con `--offline`; las puntuaciones requieren revisión humana.
+Cuando `complete` es false, el historial disponible está incompleto: los totales abarcan solo lo leído, y las medianas y proporciones pueden diferir de las del grupo completo. El campo `fetch` propone un comando para descargar los mensajes que faltan. Un historial de eventos incompleto también limita los recuentos de entradas y salidas. Ni siquiera un historial completo de mensajes puede reconstruir perfiles anteriores de miembros ni listas diarias previas al inicio del registro.
 
-Se recogen de Telegram los indicadores de bot, estafa, cuenta falsa, cuenta eliminada y foto, y los datos de entrada y de quién invitó, cuando Telegram los proporciona.
-Consulta `unknown` para ver qué datos no están disponibles; las puntuaciones siguen requiriendo revisión humana.
+### Estadísticas de Telegram
+
+```sh
+tg stats chats official <chat> --json
+```
+
+Telegram calcula estadísticas para los administradores de supergrupos y canales suficientemente grandes, las mismas de la pantalla Estadísticas de sus aplicaciones. `tg stats chats official` las consulta e imprime un objeto JSON. Telegram elige el periodo, indicado como `period`. Cada total incluye el valor del periodo anterior.
+
+- Un supergrupo (`kind: "group"`) tiene miembros, mensajes, lectores y autores, los principales autores, administradores e invitadores, y 8 gráficos: crecimiento, miembros, nuevos miembros por origen, idiomas, mensajes, acciones, horas y días de la semana.
+- Un canal (`kind: "channel"`) tiene seguidores, vistas, compartidos y reacciones por publicación y por historia, cuántos seguidores tienen notificaciones activadas, publicaciones recientes con sus recuentos y 12 gráficos.
+
+Cada gráfico es una lista de series sobre sus valores `x`: `date` (un día, `YYYY-MM-DD`), `time` (ISO 8601) o `number`. Si Telegram no puede proporcionar un gráfico, aparece como `{ "error": ... }` y los demás siguen disponibles. El comando solo lee: no envía, marca como leído ni cambia nada. Se rechaza `--jsonl`.
+
+Telegram responde solo para un chat donde te muestra estadísticas. En un grupo básico, un chat que no administras o uno demasiado pequeño, el comando falla con un error de permisos o validación. Una ejecución requiere unas 10 a 17 solicitudes: la ficha del chat, las estadísticas y cada gráfico que Telegram envía después. Indica el chat por `@username` o ID: un título se busca primero en tu lista de chats, lo que añade una solicitud por cada 100 chats. Telegram guarda las estadísticas en un servidor propio, así que la primera ejecución añade una clave de acceso para ese servidor al archivo de sesión; nunca se imprime.
+
+### Instantáneas de miembros y cambios
+
+`tg chats members fetch` lee los miembros al almacén local y registra perfiles, cambios, el recuento del día y si la lectura fue completa. `--budget` limita las páginas. Tras una lectura parcial no se registra a nadie como salido: eso exige leer toda la lista disponible y conocer un recuento del grupo no superior al número leído. Un presupuesto mayor no evita los límites de Telegram para las listas de miembros.
+
+`--track` añade el grupo a la lista de seguimiento. `chats tracking list` muestra todos los grupos seguidos; `show` muestra el estado de uno y los recuentos diarios de los últimos 30 días. `add` inicia el seguimiento sin descargar de inmediato; `remove` detiene las descargas diarias y conserva el historial registrado. Mientras funciona `tg serve`, descarga los grupos uno a uno, inicia la primera ronda un minuto después de conectarse y omite los ya descargados en el día UTC actual. El seguimiento no inicia `serve`; si estuvo detenido varios días, la siguiente ejecución registra una instantánea nueva en lugar de rellenar los días perdidos.
+
+`tg chats members history` muestra las entradas, salidas y cambios de perfil registrados, de más antiguo a más nuevo; `--since-time` limita el periodo. Nunca consulta Telegram. Una entrada usa la hora de Telegram si se conoce; si no, la primera vez que se vio a la persona. Una salida se fecha en la primera instantánea completa sin ella, no en el momento exacto de su marcha. La primera descarga registra la lista inicial: esas personas no necesariamente entraron ese día. `chats members list --offline` lee la última lista guardada completa; las lecturas parciales no la sustituyen. Sin una instantánea completa, esta lista puede estar vacía aunque ya se hayan registrado algunos perfiles y eventos. Los perfiles y el historial permanecen en el almacén local junto a los mensajes.
+
+`tg chats members audit` enumera miembros con señales de bot y sus motivos; `--budget` limita las páginas y `--min-score` fija el umbral. No elimina a nadie y excluye a los administradores y al propietario. `more` indica una lista parcial y `unknown` nombra señales no disponibles. No funciona con `--offline`; las puntuaciones necesitan revisión humana. Telegram proporciona datos de bot, scam, fake, deleted, foto, entrada e invitador cuando están disponibles. «Nunca escribió» significa que no se encontraron mensajes en el historial local, no demuestra que esa persona nunca escribiera en el grupo.
+
+`--deep <n>` comprueba también a los primeros n miembros en detalle, a uno por segundo: su perfil, su foto de perfil más antigua, hasta 1000 mensajes guardados de cada uno y dos listas públicas de spam, Combot CAS y lols.bot. Se envía el ID de cada miembro a esas listas. La comprobación completa aparece en `check` de cada miembro revisado.
+
+### Un informe semanal de tu grupo
+
+«Hiking Club» es un grupo ficticio de ejemplo. Descarga primero sus mensajes con `store fetch` si aún no están guardados; después registra la lista actual de miembros y prepara el informe:
+
+```sh
+tg chats members fetch "Hiking Club" --track --json
+tg stats chats show "Hiking Club" --since-time 7d --by day --timezone Europe/Madrid --json
+tg chats members history "Hiking Club" --since-time 7d --offline --json
+tg chats tracking show "Hiking Club" --offline --json
+tg chats members audit "Hiking Club" --json
+```
+
+Pide al agente que incluya mensajes, remitentes activos, preguntas sin respuesta, cambios de miembros y días con instantáneas. Mantén visibles en el informe `complete`, `more`, `unknown` y los huecos entre instantáneas. Deja `tg serve` funcionando o repite las descargas de miembros para los informes siguientes; el primer informe no puede mostrar salidas anteriores a la primera lista registrada.

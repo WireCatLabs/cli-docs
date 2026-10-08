@@ -1,18 +1,19 @@
 ---
 title: "Recetas: tu agente y tus conversaciones"
 ---
+
 Encarga a Claude Code o Codex resúmenes de no leídos, informes, compromisos, recordatorios de preguntas pendientes y comprobaciones de grupos. Cada receta incluye petición, permisos y programación.
 
 ## Preparación inicial
 
 1. Instala `max` e inicia sesión: [Instalación](./installation.md), [Sesiones](./sessions.md).
-2. Instala las instrucciones del agente:
+2. Instala un skill para que el agente sepa utilizar `max`:
 
    ```sh
    max skill install
    ```
 
-   La skill se guarda en las carpetas de Claude Code, Codex y Gemini CLI.
+   El skill se instala en las carpetas de Claude Code, Codex y Gemini CLI.
 3. Guarda las peticiones en archivos, por ejemplo `~/max-recipes/`; las órdenes programadas las leen de allí.
 
 Si usas MCP en Claude Desktop, Cursor u otro cliente, no necesitas skill. Conecta el servidor (`max mcp config` imprime su configuración) y usa `/catch-up`, `/review`, `/reply`, `/find` ([Peticiones MCP](./mcp.md#команды-и-чаты-по-)).
@@ -53,7 +54,7 @@ max recipients add "Иван Петров"       # и писать только 
   30 8 * * * claude -p "$(cat ~/max-recipes/morning.md)" --allowedTools "Bash(max inbox:*)" >> ~/max-recipes/morning.log 2>&1
   ```
 
-  Cron tiene un entorno casi vacío, lo que puede causar dos fallos en Linux:
+  Las tareas de cron se ejecutan en un entorno casi vacío, lo que causa dos problemas para `max` en Linux:
 
   - **`node: not found`, código 127.** Node de nvm, fnm o volta no está en el `PATH` del sistema que conoce cron.
   - **`no token found for profile "default", although it has logged in on this machine`, código 4.** `max` no alcanza el llavero. **No vuelvas a iniciar sesión:** el problema está en el entorno.
@@ -65,7 +66,7 @@ max recipients add "Иван Петров"       # и писать только 
   XDG_RUNTIME_DIR=/run/user/1000
   ```
 
-  El llavero es accesible mientras tengas sesión en el sistema. Prueba manualmente la primera ejecución y revisa el registro. [Modo sin interacción de Claude](https://code.claude.com/docs/en/headless).
+  El almacén de contraseñas está disponible mientras tienes una sesión abierta en el sistema operativo. Comprueba la primera ejecución manualmente y revisa el registro. Consulta el modo `-p` en la [documentación de Claude](https://code.claude.com/docs/en/headless).
 
 - **Cron con `codex exec`:**
 
@@ -73,7 +74,7 @@ max recipients add "Иван Петров"       # и писать только 
   30 8 * * * codex exec --sandbox danger-full-access "$(cat ~/max-recipes/morning.md)" >> ~/max-recipes/morning.log 2>&1
   ```
 
-  [Modo sin interacción de Codex](https://learn.chatgpt.com/docs/non-interactive-mode).
+  Consulta el modo sin interacción en la [documentación de Codex](https://learn.chatgpt.com/docs/non-interactive-mode).
 - **Dentro de Claude Code abierto:** `/loop` o «recuérdamelo a las 15:00». Solo funciona mientras la sesión sigue abierta ([Programación](https://code.claude.com/docs/en/scheduled-tasks)).
 
 Las rutinas de Claude en la nube no sirven aquí: se ejecutan en otro ordenador, sin tu `max` ni tu sesión.
@@ -134,7 +135,7 @@ Escribe: **solo después de tu aprobación**. Para conversación interactiva, no
 
 > Lee los últimos 20 mensajes con Iván Petrov y propón una respuesta a su última pregunta. No la envíes; muéstrame el texto.
 
-Tras aprobar, envía con `max messages send "Иван Петров" "…"`. Sin terminal, usa `max mcp --allow-send --confirm-send` para ver destino y texto antes de aceptar o rechazar ([MCP](./mcp.md)).
+Cuando das tu consentimiento, el agente envía el mensaje: `max messages send "Иван Петров" "…"`. Un agente sin terminal se conecta mediante `max mcp`: pídele que muestre primero un borrador y configura las confirmaciones de llamadas en la aplicación del agente. Los permisos del perfil limitan las operaciones de escritura ([mcp.md](./mcp.md)).
 
 ## Un grupo que administras
 

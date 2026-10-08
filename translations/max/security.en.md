@@ -1,6 +1,7 @@
 ---
 title: "What is stored on disk and what never is"
 ---
+
 This tool accesses private conversations. Explaining what it records is a central part of its documentation.
 
 What `max` and `tg` share — the local copy of conversations, protection against wrong sends, agent permissions, other people's text on screen, what others on the machine can see, and how to report a vulnerability — is described on the [shared security page](https://wirecat.dev/ru/docs/security). This page covers only what is specific to MAX.
@@ -61,18 +62,18 @@ Only full-disk encryption protects against someone who obtains the disk — see 
 ## Actions the tool never takes on its own
 
 - **Reading does not mark messages read unless requested.** Fetching history and marking it read are separate protocol operations. Only `max chats mark-read` and `messages list --mark-read` send the latter; tests verify ordinary reading does not.
-- **Nothing unrequested is sent.** Only `messages send|edit|delete|forward|pin|unpin`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `chats join|leave|create|update`, `chats members|admins …`, `chats link reset`, `chats folders create|update|delete`, `chats moderate` (only actions allowed by group rules), `chats mark-read` and `messages list --mark-read` change anything. Each performs only the operation in the command line. `max commands --json` labels them `mutates`.
+- **It sends nothing you did not request.** Only `messages send|edit|delete|forward|pin|unpin`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `session end`, `chats join|leave|create|update`, `chats members|admins …`, `chats link reset`, `chats folders create|update|delete|order`, `chats moderate` (within group rules), `chats mark-read` and `messages list --mark-read` make changes, and each does only what your command line specifies. `max commands --json` marks these as `mutates`.
 - **Deletion requires confirmation by default.** The `ask` level for `messages.delete` requires a terminal answer or `--allow-dangerous`; explicit `allow` deletes without a question. Deleting for everyone also requires `--for-everyone`; the shared MCP tool does not permit this.
 - **Phone numbers do not come from command-line arguments.** `contacts lookup` prompts or reads from a pipe; `contacts import` reads a file. Command lines are visible to `ps` and shell history. Errors, the send journal and run records contain no phone numbers; `max session start` and `max account show` mask them.
-- **Messages are not logged.** Neither truncated text nor a hash is logged; see [diagnostics.md](./diagnostics.md).
-- **Connections use no intermediary.** Exact destinations are listed under [network traffic](#что-уходит-в-сеть). `max` has no telemetry of its own; `max serve` sends MAX one service event like a hidden web-client tab, as explained there.
+- **It does not log messages.** Neither truncated nor hashed; see [diagnostics.md](./diagnostics.md).
+- **It does not use intermediaries.** See [What goes over the network](#что-уходит-в-сеть) for the destinations `max` connects to. `max` has no telemetry of its own; `max serve` sends MAX one service event like a hidden web-version tab, as described there.
 - **Only `max serve` holds a connection.** The first command needing MAX starts it in the background; it stops after 15 idle minutes. Disable this with `max config set serve false`.
 
 ## Preventing sends to the wrong place
 
 Why protection against wrong sends is needed and how it works is described on the [shared page](https://wirecat.dev/ru/docs/security). Before each write — a message, reaction, edit, forward or deletion — `max` checks four safeguards, then logs the attempt:
 
-| Safeguard | How to enable | Rejection |
+| Check | How to enable | Denial |
 |---|---|---|
 | forbid message writes, except more specific grants | `max agent config set permissions.messages readonly`; restrict other resources separately | code `5`, no connection |
 | permit sends while forbidding other message writes | first `max agent config set permissions.messages readonly`, then `max agent config set permissions.messages.send allow`; other resources and more specific rules remain | code `5` for forbidden actions, no connection |
@@ -84,7 +85,7 @@ Why protection against wrong sends is needed and how it works is described on th
 
 Each bot has its own recipient list (`max <имя> bot recipients add <чат>`) and log (`max <имя> bot sends list`). **Every** write passes them, including `messages send`, `messages pin` and `bot api`, preventing a generic API call from bypassing safeguards. Edits and deletions take the chat first: `max` fetches the message and refuses if it belongs to another chat. This comparison is unavailable for a chat addressed as `user:<id>`. Logs contain chat, action, outcome and text length, but not text. Bots have no hourly limit unless configured in `bot`: `max <имя> config set --bot sendsPerHour 200`.
 
-**Background `max serve` enforces the same checks**, including for programs connecting directly to its socket instead of through `max`. It accepts only requests known to `max`, in their expected form; deleting an entire chat, for example, is rejected. `config set` changes take effect immediately without a server restart.
+**The background server `max serve` performs the same checks** for everything passing through it, including requests from programs connected directly to its socket rather than through `max`. It accepts only requests known to `max`, in the form `max` sends them; for example, it rejects deleting an entire chat. Changes made with `config set` apply immediately without restarting the server.
 
 Account changes — contacts, profile, folders and sessions — also respect read-only mode. Recipient lists and hourly limits do not apply because these actions have no destination chat or message recipient. They are logged as `account` with the action, without names, numbers or titles.
 
@@ -124,10 +125,10 @@ Personal-account traffic contains no tool name or custom user-agent; the user-ag
 
 `max` is not an official MAX app. The [MAX user agreement](https://legal.max.ru/ps), revision dated September 9, 2026, section 4.3.7, disallows automated programs without company permission. An account used with `max` may therefore be restricted; it may also be linked to government services and family communications.
 
-Practical precautions:
+Recommended practices:
 
+- **Use MAX normally in a browser or on your phone alongside `max`.** An account that only answers `max` requests looks different from one used by a person.
 - **Continue using MAX normally in the browser or on your phone alongside `max`.** An account used only for CLI requests behaves differently from a person's account.
-- **Avoid a constant stream of requests.** Read when needed rather than polling every minute.
 
 The same notice appears once on stderr when a profile first logs in through `max setup` or `max session start`.
 
@@ -147,23 +148,23 @@ Each login adds a device to the MAX app's session list. You can end it there.
 
 ## Unofficial protocol
 
-MAX publishes no personal-account API. Protocol knowledge comes from observed live connections or others' reverse engineering; each operation records its source ([`protocol.md`](https://github.com/leemour/max-cli/blob/v0.29.0/docs/dev/protocol.md), “Where it came from” column).
+MAX publishes no personal-account API. Protocol knowledge comes from observed live connections or others' reverse engineering; each operation records its source ([`protocol.md`](https://github.com/leemour/max-cli/blob/v0.34.0/docs/dev/protocol.md), “Where it came from” column).
 
 **This can stop working without warning.** If it does, the command reports it on stderr instead of quietly returning an empty list.
 
 ## If a token leaks
 
 ```sh
-max session end        # забыть локально
+max session end        # выйти из MAX и забыть локально
 ```
 
-This is **not enough**: `session end` does not notify the server, so the session remains valid. Revoke it in the official client's device list, where it was created.
+`session end` ends this session on the MAX server, making a leaked token stop working. If MAX does not respond, the command reports it and keeps the token; retry the command.
 
 `max account sessions end --others --yes` ends **every other session**, including your phone app, which will require login again. Ending one session is unsupported because MAX provides no session ID. If MAX rotates this session's token in response, `max` saves it to the keyring before reporting success.
 
 ## Next steps
 
 - [Shared security page](https://wirecat.dev/ru/docs/security) — what is the same in `max` and `tg`, and how to report a vulnerability
-- [Diagnostics](./diagnostics.md) — exactly what is and is not logged.
-- [Sessions](./sessions.md) — keyring, `MAX_TOKEN`, and forgetting versus revoking.
-- [MCP guide](./mcp.md) — agent capabilities and permission flags.
+- [diagnostics.md](./diagnostics.md): what is recorded and what is never recorded
+- [sessions.md](./sessions.md): keychain, `MAX_TOKEN` and what `session end` does
+- [mcp.md](./mcp.md): what an agent can do through the MCP server and what each flag enables

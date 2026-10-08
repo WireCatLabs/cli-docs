@@ -1,6 +1,7 @@
 ---
 title: "Cómo usar tg"
 ---
+
 Desde el primer inicio de sesión hasta enviar mensajes, en el orden en que lo necesitarás. La [referencia de comandos](./commands.md) contiene todos los comandos y opciones; esta guía explica cómo combinarlos.
 
 Cada comando realiza una tarea, imprime la respuesta y termina. Solo `tg watch`, `tg serve` y `tg mcp` permanecen activos, y cada uno lo indica.
@@ -17,8 +18,6 @@ tg setup                  # guided app registration, login and agent skill
 tg chats list --limit 5   # your newest chats
 tg messages list me       # Saved Messages, the latest 20
 ```
-
-No necesitas nada más para leer mensajes.
 
 Antes de continuar, reserva unos cinco minutos para la configuración. Descargar historial es una decisión aparte: elige el chat y la cantidad antes de `tg store fetch <chat> --last 100`. Un agente puede leer `tg skill show` antes de iniciar sesión; usa `tg setup --agent codex` para elegir su skill. `tg setup --help` explica las opciones.
 
@@ -110,12 +109,15 @@ se distingue de `messages links`, que explica las relaciones entre conversacione
 ```sh
 tg messages list "Book club"                    # the latest 20, oldest first
 tg messages list "Book club" --limit 50
+tg messages list "Hiking" --topic 12            # one forum topic; topics list shows the ids
 tg messages show "Book club" 4242               # one message
 tg messages context "Book club" 4242            # it, and 5 messages either side
 tg messages context "Book club" 4242 --before-n 2 --after-n 10
 ```
 
 En `context`, el mensaje consultado se marca con `◀` en la terminal y `"anchor": true` en JSON.
+
+`--topic` lee hacia atrás desde el mensaje más reciente del tema o desde `--before-id`. Se rechaza el tema General (`1`): Telegram no asigna un ID de tema a sus mensajes, así que lee el chat completo. Con `--offline`, `--topic` selecciona los mensajes guardados de ese tema.
 
 ### Qué necesita respuesta
 
@@ -128,7 +130,7 @@ tg inbox --new --jsonl       # the same for a script: one message per line
 
 `inbox` muestra mensajes de otras personas, nunca los tuyos, indicando su chat. Omite chats silenciados y archivados salvo que te mencionen o respondan; `--all` los incluye. Por stderr indica cuántos omitió.
 
-**`inbox --new` actualiza un punto guardado.** El siguiente `--new` continúa donde terminó el anterior, mostrando cada mensaje una vez. El primero revisa las últimas 24 horas. `inbox` sin `--new` e `inbox --since-time` no cambian el punto. El `inbox` normal devuelve lo mismo hasta que leas los mensajes en la aplicación, porque no los marca como leídos.
+**`inbox --new` mueve un punto guardado.** El siguiente `--new` empieza donde terminó este, de modo que cada mensaje se muestra una vez. El primer `--new` mira 24 horas atrás. `inbox` sin `--new` e `inbox --since-time` no mueven el punto. `inbox` normal devuelve lo mismo hasta que los mensajes se lean en la aplicación, ya que no marca nada como leído.
 
 Cada ejecución lee como máximo 20 chats. Los demás aparecen por stderr y en `skipped`, con el comando para consultar uno. Si un chat tiene más de `--limit` pendientes, muestra los más recientes e indica por stderr cómo leer el resto.
 
@@ -151,7 +153,7 @@ tg review --unanswered                     # questions nobody answered in 24 hou
 tg review --chat "Neighbours" --unanswered 4h
 ```
 
-`--unanswered [hours]` conserva solo preguntas pendientes para ti o los administradores. Una pregunta contiene `?` (no cuenta dentro de enlaces) o responde a ti o a un administrador. Se considera contestada si tú o un administrador respondéis o sois los siguientes en hablar tras quien preguntó. Omite preguntas más recientes que el intervalo indicado (24 horas por defecto) para dar tiempo a responder. Si no se conocen los administradores, lo avisa y solo cuenta tus respuestas.
+`--unanswered [hours]` conserva solo las preguntas pendientes de ti o de los administradores de un grupo. Una pregunta es un mensaje con `?` (no cuenta el `?` de un enlace) o una respuesta a ti o a un administrador. Se considera respondida cuando tú o un administrador respondéis a ella o sois los siguientes en hablar tras quien preguntó. Se excluyen las preguntas de menos horas que las indicadas (24 por defecto): aún no ha habido tiempo para responder. Si no se conocen los administradores del grupo, el comando lo indica y solo cuentan tus respuestas.
 
 Las transcripciones guardadas también participan en este filtro. Añade `--transcribe` para
 reconocer audios sin transcripción guardada antes de seleccionar preguntas sin respuesta.
@@ -206,7 +208,12 @@ tg contacts list --order name --search ann
 tg contacts show @example_user         # their bio and the chats you share
 tg contacts lookup                     # who has a phone number — asks for it, or reads it from stdin
 tg contacts sync                       # your whole Telegram contact list into the local store
+tg contacts profile @example_user      # flags, last seen, registered, messages per shared chat
+tg contacts context @example_user --chat "Book club"   # their latest messages there
+tg contacts check @example_user        # does the account look like a bot or a spammer
 ```
+
+Más sobre una persona y qué envía `contacts check` a cada destino: [people.md](./people.md).
 
 `contacts list` muestra personas con un chat individual. `contacts sync` guarda también el resto de tus contactos de Telegram. `contacts lookup` nunca acepta el teléfono como argumento: pásalo por stdin o escríbelo cuando lo solicite.
 
@@ -260,7 +267,7 @@ tg messages search "contract" --chat "Book club"
 tg messages search "invoice.*(march|april)" --regex
 ```
 
-Las búsquedas de chats y contactos necesitan **al menos tres caracteres**. `messages search` consulta el archivo local con el [perfil estricto de Lucene](./search.md): `invoic*` busca prefijos; `invoic` es un término exacto. No se conecta a Telegram: consulta lo descargado o guardado por `serve`. Usa `--language legacy` para las coincidencias aproximadas anteriores. Cuando encuentres el chat, usa su identificador.
+La búsqueda de chats y contactos necesita **al menos tres caracteres**. `messages search` utiliza el [perfil estricto de Lucene](./search.md): `invoice` encuentra también otras formas de la palabra, `invoic*` coincide con comienzos y `exact:invoice` solo con esa forma. Lee lo descargado o guardado por `serve` y consulta también la búsqueda de Telegram (`--backend archive` para buscar solo en el archivo). Usa `--language legacy` para el comportamiento de búsqueda anterior. Una vez encontrado el chat, usa su ID.
 
 ## Enviar
 
@@ -271,10 +278,12 @@ tg messages send me "a note to myself"
 tg messages send "Book club" "See you at 7" --silent       # no notification
 tg messages send "Book club" "a link, no card" --no-preview
 tg messages send "Book club" "**Bold** and _italic_" --md  # Telegram Markdown
+tg messages send "Book club" "<b>Bold</b> and <i>italic</i>" --html
 ```
 
-`--md` usa el formato de Telegram: `**bold**` o `*bold*`, `_italic_`, `__underline__`, `~~struck~~` o `~struck~`, `||spoiler||`, código en línea, bloques de código con lenguaje, `[label](https://example.com)` y citas que empiezan por `> `. Se pueden combinar estilos; el código y los bloques pre no pueden combinarse con otras entidades, ni los enlaces o las citas anidarse dentro de otros enlaces o citas. Sin la opción, el texto se envía tal cual.
-Una barra invertida escapa una marca; `_` y `*` dentro de una palabra quedan literales. Las marcas en línea sin cerrar quedan literales; un bloque de código sin cerrar se rechaza. Los enlaces admiten URL absolutas http, https y mailto. `messages edit` y los pies de archivos usan el mismo formato. En Telegram, `__text__` significa subrayado; en MAX, negrita. En Telegram, un solo `*text*` ahora significa negrita.
+`--md` utiliza el formato de Telegram: `**bold**` o `*bold*`, `_italic_`, `__underline__`, `~~struck~~` o `~struck~`, `||spoiler||`, código en línea, bloques de código con un lenguaje, `[label](https://example.com)` y líneas de cita que empiezan por `> `. Los estilos pueden anidarse; code/pre no puede anidarse con otras entidades, los enlaces no pueden anidarse entre sí y las citas tampoco. Sin la opción, el texto queda tal como lo escribes. Una barra inversa escapa un marcador; `_` y `*` dentro de una palabra se mantienen literales. Los marcadores en línea sin cerrar quedan literales; se rechaza un bloque de código sin cerrar. Los enlaces admiten URL absolutas http, https y mailto. `messages edit` y los pies de medios usan el mismo formato. En Telegram, `__text__` es subrayado; en MAX, `__text__` es negrita. Un solo `*text*` ahora es negrita en Telegram.
+
+`--html` interpreta el texto como HTML de Telegram, el mismo que el de Bot API: `<b>`, `<i>`, `<u>`, `<s>`, `<a href>`, `<code>`, `<pre language="…">`, `<blockquote>` y `<tg-spoiler>`. Los saltos de línea y los espacios se mantienen tal como los escribes. Se rechaza un enlace de mención (`tg://user?id=`) o un emoji personalizado. `--md` y `--html` no se pueden combinar. `messages edit` también acepta `--html`.
 
 ### Texto desde stdin
 
@@ -303,9 +312,12 @@ tg messages send "Book club" --photo picture.jpg              # recompressed by 
 tg messages send "Book club" --file trip.mp4                  # a video plays in the chat
 tg messages send "Book club" --file trip.mp4 --as-file        # the same video as a file to download
 tg messages send "Book club" --voice note.ogg                 # a voice message, alone, with no text
+tg messages send "Book club" --file 3f9a.pdf --filename "Report Q3.pdf"   # the name others see
 ```
 
-`--photo` acepta `.jpg`, `.png` o `.webp`. Con `--file`, un `.mp4` o `.mov` se envía como vídeo salvo que añadas `--as-file`. `--voice` acepta Ogg Opus (`.ogg`, `.oga`, `.opus`) y se envía solo: sin texto ni otros archivos. Los archivos y carpetas ocultos, `~/.ssh`, las carpetas de `tg` y el archivo local se rechazan salvo con `--allow-any-file`, porque suelen contener claves y tokens.
+`--photo` acepta `.jpg`, `.png` o `.webp`. Un `.mp4` o `.mov` pasado con `--file` se envía como vídeo salvo que añadas `--as-file`. `--voice` acepta un archivo Ogg Opus (`.ogg`, `.oga`, `.opus`) y se envía solo: sin texto ni otro archivo. Se rechazan los archivos y carpetas ocultos, `~/.ssh`, las carpetas de `tg` y el almacén local salvo que añadas `--allow-any-file`: ahí se guardan claves y tokens.
+
+`--spoiler` difumina una foto o un vídeo hasta que se pulsa; no se puede aplicar a un documento ni a un mensaje de voz. `--caption-above` muestra el texto encima de la foto o el archivo. Telegram solo permite a los bots impedir el reenvío de un mensaje individual; para proteger el contenido, activa el ajuste del propio chat en Telegram.
 
 ### Responder a un mensaje
 
@@ -314,6 +326,29 @@ tg messages send "Book club" "Agreed" --reply-to 4242
 ```
 
 Una respuesta es un envío: admite todas sus opciones.
+
+### Comentarios de un canal
+
+```sh
+tg messages comments "Rozetked" 27644              # the comments under post 27644, oldest first
+tg messages comments "Rozetked" 27644 --before-id 3732413
+tg messages send "My channel" "Thanks!" --comment-to 120
+```
+
+Los comentarios están en el grupo de discusión del canal: la respuesta lo identifica como `discussion`, y el comentario es una respuesta allí, por lo que la lista de destinatarios y el límite por hora lo contabilizan para ese grupo. Una publicación cuyo canal no tenga grupo de discusión o esté cerrada a comentarios termina con el código `6`.
+
+### Publicar como un canal
+
+En un grupo donde puedas publicar como uno de tus canales, consulta primero los remitentes disponibles y elige uno:
+
+```sh
+tg chats send-as "Book club"
+tg messages send "Book club" "Meeting moved to 8" --send-as <id from the list>
+```
+
+La lista siempre te incluye, y `default` señala la opción guardada del grupo; leerla no cambia nada. Se rechaza un ID que no esté en la lista. `--send-as` también funciona con archivos, `tg messages forward` y `tg polls create`; para un reenvío, la lista corresponde al chat de `--to`. Para repetir una operación con resultado desconocido, pasa el mismo `--send-as` junto con `--send-id`.
+
+Un grupo puede tener un canal guardado como remitente por defecto; Telegram lo hace para el grupo de discusión de tu canal. Allí, un envío, reenvío o encuesta **sin** `--send-as` se rechaza (código `2`) para evitar publicarlo como el canal: el error indica `--send-as <your id>` para publicar como tú y `--send-as <channel id>` para publicar como el canal.
 
 ### Si no se conoce el resultado
 
@@ -329,7 +364,7 @@ Los reenvíos y encuestas también incluyen ese identificador. Repetir sin él e
 ### Editar, reenviar, fijar y eliminar
 
 ```sh
-tg messages edit "Book club" 4242 "the corrected text"      # your own message; --md as in a send
+tg messages edit "Book club" 4242 "the corrected text"      # your own message; --md or --html as in a send
 tg messages forward "Book club" 4242 --to me                # checked against the chat it goes to
 tg messages pin "Book club" 4242                            # quiet unless --notify
 tg messages unpin "Book club" 4242
@@ -339,7 +374,7 @@ tg messages delete me 4242 --allow-dangerous --for-everyone
 
 Una edición llega a personas que quizá ya leyeron el texto anterior. Un reenvío es un mensaje nuevo y pasa por la misma protección aplicada al chat de destino. Las eliminaciones no se pueden deshacer: por eso preguntan primero. Responde `y` o añade `--allow-dangerous`. En supergrupos y canales Telegram solo elimina para todos; allí solo funciona `--for-everyone`.
 
-**Cuentan para el límite por hora:** mensajes, reenvíos, ediciones, mensajes fijados con aviso y cada mensaje eliminado. No cuentan reacciones ni fijados sin aviso.
+**Qué cuenta para el límite por hora:** un mensaje, un reenvío, una edición, una fijación con notificación, una nueva encuesta, el cierre de una encuesta y cada mensaje eliminado. No cuentan una reacción, un voto ni una fijación silenciosa.
 
 ### Reacciones y encuestas
 
@@ -353,13 +388,14 @@ tg polls create "Book club" "Which day?" Monday Tuesday --anonymous
 tg polls close "Book club" 4250            # your own poll; it cannot be reopened
 ```
 
-Al leer un chat, las reacciones aparecen bajo el mensaje: `👍 3  🔥 1  (you: 🔥)`. En encuestas públicas, tu voto muestra tu nombre a todos. Vota usando los identificadores de `polls show`, nunca la posición de la respuesta. `--multiple` permite varias respuestas. Solo se puede cambiar el voto si la encuesta se creó con `--revote`.
+Al leer un chat, las reacciones aparecen bajo el mensaje: `👍 3  🔥 1  (you: 🔥)`. Votar en una encuesta pública muestra tu nombre a todos en el chat. Vota con los ID que imprime `polls show`, nunca por la posición de una respuesta. `--multiple` permite elegir varias respuestas. Solo se puede cambiar el voto en una encuesta creada con `--revote`. Se rechazan antes de enviar nada: votar en una encuesta cerrada, elegir dos respuestas en una de respuesta única, cambiar o retirar un voto definitivo y usar `--retract` sin haber votado; también se rechaza cerrar una encuesta ajena.
 
 ### Marcar un chat como leído
 
 ```sh
 tg chats mark-read "Book club"               # up to the newest message
 tg chats mark-read "Book club" --until 4242  # only up to this one
+tg chats mark-read "Hiking" --topic 12       # only this forum topic
 tg messages list "Book club" --mark-read     # read it, and mark it read up to the newest shown
 ```
 
@@ -372,9 +408,11 @@ tg chats folders list                              # your folders, in the order 
 tg chats folders create "Trips" --chat "Hiking" --chat @kate
 tg chats folders update "Trips" --title "Travel" --add "Climbing" --remove @kate
 tg chats folders delete "Travel"                   # the chats stay
+tg chats folders order "Travel" "Work"             # these first; the rest keep their order after them
+tg chats folders join https://t.me/addlist/AbCdEf  # a folder someone shared: joins every chat in it
 ```
 
-Las carpetas se indican por identificador o título exacto. Solo tú las ves; los cambios siguen pasando por los controles como cambios de `account`.
+Una carpeta se indica por su ID o su título exacto. Solo tú ves tus carpetas; cada cambio pasa igualmente por las comprobaciones como un cambio de `account`. `join` es distinto: las personas de esos chats ven que te has unido, como con `tg chats join`. «Todos los chats» mantiene su posición con `order`.
 
 ### Funciones aún no disponibles
 
@@ -396,7 +434,7 @@ Estos comandos solo leen. `events` consulta mensajes de servicio: quién hizo qu
 
 Los siguientes hacen cambios visibles para los miembros:
 
-Para un foro, usa `tg topics enable <chat>` y `tg topics create <chat> <title>`. Un grupo básico requiere `--upgrade --yes`; conserva el nuevo identificador de chat devuelto. Si no sabes si se creó un tema, consulta `topics list` en vez de crearlo otra vez. Envía al tema con `tg messages send <chat> <text> --topic <id>` o `tg polls create <chat> <question> <answers> --topic <id>`.
+Para un foro, usa `tg topics enable <chat>` y `tg topics create <chat> <title>`. Un grupo básico exige `--upgrade --yes`; conserva el nuevo ID de chat devuelto por la conversión. Si el resultado de la creación es desconocido, lee `topics list` en lugar de repetirla. Envía al ID del tema con `tg messages send <chat> <text> --topic <id>` o `tg polls create <chat> <question> <answers> --topic <id>`. `tg topics edit <chat> <id> --title <new>` renombra un tema, `--closed on` / `--closed off` lo cierra a mensajes nuevos o lo reabre, `--pinned on` / `--pinned off` lo fija arriba o lo desfija, y en el tema General (ID 1), `--hidden on` / `--hidden off` lo oculta de la lista de temas o lo vuelve a mostrar. `tg topics order <chat> <id...>` coloca los temas fijados en ese orden; no fija ni desfija ninguno. Es seguro repetir cualquiera de estas acciones.
 
 ```sh
 tg chats create "Hiking 2027" @olga 12345          # a supergroup; the people added are told
@@ -407,13 +445,25 @@ tg chats update "Hiking 2027" --title "Hiking 2028" --description "routes and da
 tg chats update "Hiking 2027" --all-can-pin off --only-admins-add on
 tg chats link show "Hiking 2027"                   # the invite link, if you may see it
 tg chats link reset "Hiking 2027"                  # a new one; the old one stops working
+tg chats link create "Hiking 2027" --approval --expire-time 7d --max-uses 20   # another link; who joins asks first
+tg chats update "Hiking 2027" --join-approval on   # everyone asks first, by any link
+tg chats requests list "Hiking 2027"               # who asked to join, newest first
+tg chats requests list "Hiking 2027" --search Ana  # by name; or --link <link>, never both
+tg chats requests accept "Hiking 2027" 67890       # let them in; decline turns them away
+tg chats requests decline "Hiking 2027" --all      # every pending request at once; --link narrows it
+tg chats link list "Hiking 2027"                   # your links, with how many joined and how many wait
+tg chats link revoke "Hiking 2027" https://t.me/+AbCd   # stop one link
 tg chats members add "Hiking 2027" @kate 67890     # they are told
 tg chats members remove "Hiking 2027" @kate        # their messages stay
 tg chats admins add "Hiking 2027" @kate --can pin,delete
 tg chats admins remove "Hiking 2027" @kate
 ```
 
-Los grupos nuevos son siempre supergrupos. Si la privacidad de alguien impide añadirlo, aparece en `providerMetadata.notAdded`; el grupo se crea igualmente. Si requiere aprobación de administradores para entrar, indica que envió la solicitud. Cada operación pasa por los controles como cambio de `chat`; cada persona añadida cuenta para el límite por hora.
+Un grupo nuevo siempre es un supergrupo. Si los ajustes de privacidad de alguien impiden añadirlo, aparece en la respuesta en `providerMetadata.notAdded`; el grupo se crea igualmente. `chats join` en un grupo donde los administradores aprueban las entradas devuelve `requested: true` y termina con el código `0`: la solicitud se ha enviado y entrarás cuando la acepten. Cada acción pasa por las comprobaciones como un cambio de `chat`, y cada persona añadida cuenta para el límite por hora.
+
+`chats link create` crea otro enlace de invitación sin avisar a nadie: `--approval` exige aprobación para entrar por él, `--expire-time` fija su caducidad (`2026-12-01T09:00`, o dentro de `30m`, `2h`, `7d`) y `--max-uses` permite entrar como máximo a ese número de personas. `chats update --join-approval on` exige aprobación para todos, sea cual sea el enlace utilizado.
+
+En un grupo con aprobación de entradas, `chats requests list` muestra las solicitudes pendientes con la nota enviada por cada persona; solo las ven los administradores, y leerlas no avisa a nadie. `accept` y `decline` resuelven una por el ID de la lista. Una solicitud aceptada cuenta para el límite por hora; una rechazada, no. La lista de destinatarios solo comprueba el grupo. Si alguien ya es miembro, se devuelve `already: true`; una solicitud que ya no existe termina con el código `6`. `--all` resuelve todas las pendientes o, con `--link`, las de un enlace; primero se cuentan y, si aceptarlas superaría el límite por hora, se rechaza antes de admitir a nadie. `chats link list` muestra solo tus enlaces; al revocar el enlace principal del grupo, Telegram genera uno nuevo que aparece en la respuesta.
 
 `chats update` cambia título, descripción y los dos ajustes disponibles de Telegram en una operación; devuelve el estado actualizado, igual que `chats show`. Las reglas de moderación —`chats rules` y `chats moderate`— se explican en [administrar grupos](./groups.md#rules), junto a las demás funciones de administración.
 
@@ -513,7 +563,7 @@ tg store export "Project Alpha" --format markdown --output alpha.md
 tg store backup ~/tg-store.db                     # a copy of the store, while it is in use
 ```
 
-Los comandos normales siguen consultando Telegram. `--offline` sirve cuando no hay red o prefieres no conectarte; rechaza envíos. Consulta descarga, exportación, búsqueda, copia y servicio en [archivo local](./archive.md).
+Un comando normal sigue consultando Telegram. `--offline` sirve cuando no hay red o no quieres conectarte; se rechaza un envío con `--offline`. Descarga, exportación, búsqueda, copia de seguridad y servicio: [archive.md](./archive.md).
 
 ## Configuración y permisos del perfil
 
@@ -529,15 +579,42 @@ tg config set sendsPerHour 10
 
 `permissions` determina lo que puede hacer el perfil por comando: `deny`, `readonly`, `ask` o `allow`. Por defecto se permite todo; eliminar mensajes y cerrar sesiones requiere confirmación. Un rechazo devuelve código `5` y el error indica el comando para permitirlo. **El archivo no admite secretos.** Consulta todos los ajustes y variables en [configuración](./configuration.md).
 
-## Siguientes pasos
+## Siguiente paso
 
 - [Archivo local](./archive.md): buscar, descargar historiales, exportar y hacer copias.
 - [Configuración](./configuration.md): ajustes y permisos.
 - [Seguridad](./security.md): datos en disco y controles de envío.
 - [Ejemplos prácticos](./recipes.md): tareas diarias para un agente.
 
+## Perfil de una persona
+
+`tg contacts profile <person>` muestra lo que Telegram dice de una persona y su actividad en los chats que compartís:
+
+- todos los nombres de usuario, la biografía, el cumpleaños si lo muestra y el número de teléfono si Telegram te lo muestra: sus cuatro últimas cifras, salvo que añadas `--show-phone`;
+- las marcas de Telegram: `bot`, `verified`, `premium`, `scam`, `fake`, `restricted`, `deleted`, `support`;
+- `seen`: `online`, una hora o `recently`, `week`, `month` si la privacidad oculta la hora, y `hidden` si Telegram no indica nada;
+- `contact` y `mutualContact`, y cuántos grupos compartís (`commonChatsCount`);
+- `registered`: cuándo se creó la cuenta, siempre con su origen: `telegram` (el mes que Telegram indica cuando te escribe por primera vez) o `estimate` (estimación a partir del ID de cuenta y una tabla de la comunidad; no hay estimaciones posteriores a diciembre de 2024);
+- `hasPhoto`: una foto propia; no cuenta la que tú le hayas asignado;
+- para cada chat compartido, cuántos mensajes de esa persona contiene tu almacén local, el primero y el último. `complete: false` significa que el almacén no contiene todo el chat, así que el recuento es un mínimo.
+
+Consulta a Telegram exactamente lo mismo que `contacts show` y no avisa a la persona. Con `--offline`, responde desde el almacén.
+
+## ¿Es un bot esta cuenta?
+
+`tg contacts check <person>` valora si una persona puede ser un bot, una cuenta falsa o un spammer y enumera cada motivo con su origen:
+
+- las marcas de Telegram: bot, scam, fake, deleted;
+- el perfil: sin foto, nombre de usuario o biografía; un nombre extraño, una cuenta reciente o una primera foto de los últimos 30 días;
+- hasta 1000 mensajes guardados: no se encuentra ninguno, un enlace en el mensaje guardado más antiguo si todos los guardados caben en el límite, o el mismo texto en varios chats;
+- dos listas públicas de spam, Combot CAS y lols.bot, a las que se envía el ID de la persona.
+
+`--no-registries` omite las listas públicas; el perfil y las fotos se siguen consultando a Telegram. `--offline` no consulta nada en línea y valora solo las pruebas guardadas. Una lista no disponible o que rechaza la consulta aparece como `unknown`, y las demás comprobaciones continúan. Si tienes una clave de Combot API, guárdala en `TG_CAS_API_KEY` o en la entrada del llavero `registries:cas`; por ahora, CAS responde sin clave. La puntuación es una pista, nunca un veredicto.
+
 ## Contexto local de una persona
 
 `tg contacts context <person>` lee los mensajes guardados y los chats compartidos de las identidades vinculadas, sin conectarse ni marcar nada como leído. `complete:false` y `notRead` muestran huecos en el archivo. `contacts link <person> max:<id>` y `contacts unlink` mantienen los vínculos locales entre identidades; no cambian la libreta de direcciones de Telegram.
+
+`tg contacts context <person> --chat <chat> --chat <chat>` muestra los mensajes más recientes de esa persona en cada chat indicado, de más antiguo a más nuevo, solo con hora y texto: lo bastante breve para que un agente de IA lo resuma. `--limit` es por chat (20 por defecto); `-v` añade ID, enlaces a cada mensaje, remitente y a qué responde; `-vv` lo muestra todo. `--refresh` consulta primero Telegram: una búsqueda por remitente por chat. No se marca nada como leído.
 
 `contacts context` devuelve el texto de los mensajes y por eso sigue los permisos de `messages`; la escritura de vínculos entre identidades sigue controlada por `contacts`.

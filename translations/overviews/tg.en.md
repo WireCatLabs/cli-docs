@@ -55,7 +55,7 @@ First, the command asks for your phone number and a code sent in Telegram to obt
 Reading **does not mark messages as read**. Sending, deleting and other changes require separate
 commands. You can restrict the agent's access: see [access and safety](/en/docs/tg/security).
 
-Search uses only saved history. The default matches exact words; use `--language legacy` for forgiving matching and typo correction. The [search guide](/en/docs/tg/search) explains filters, dates and archive coverage.
+Word search asks both the local archive and the messenger by default (`--backend both`); use `--backend archive` for local-only results. Strict Lucene is the default query language; `--language legacy` restores the previous matching and typo correction. Prepare saved history before archive-only search, counting or rankings, and check coverage before treating an empty result as proof that a message is absent. See [search](/en/docs/tg/search).
 
 ## Find the guide for your task
 
@@ -70,6 +70,14 @@ Search uses only saved history. The default matches exact words; use `--language
 | Check what Telegram bots currently support | [Bots: available capabilities](/en/docs/tg/bot) |
 | Fix an error | [Troubleshooting](/en/docs/tg/troubleshooting) |
 | Look up an exact command or option | [Command reference](/en/docs/tg/commands) |
+| Manage contacts, aliases and private notes | [People](/en/docs/tg/people) |
+| Compare activity and inspect ranking evidence | [Rankings](/en/docs/tg/rankings) |
+| Send, download and read files | [File commands](/en/docs/tg/usage) |
+| Transcribe voice messages locally | [Voice commands](/en/docs/tg/usage) |
+| Configure optional model APIs | [Model settings](/en/docs/tg/configuration-reference) |
+| Restrict reads, writes and confirmations | [Permissions](/en/docs/tg/permissions) |
+| Choose a personal or bot profile | [Profiles and bots](/en/docs/tg/profiles) |
+| Look up setting types and precedence | [Configuration reference](/en/docs/tg/configuration-reference) |
 
 The left sidebar keeps Getting started and expandable Telegram/MAX guides available. The right sidebar lists sections of the current
 page. Use the command reference when you need an exact option; installation and everyday tasks are enough to get started.
