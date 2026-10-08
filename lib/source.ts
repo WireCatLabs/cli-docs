@@ -55,7 +55,7 @@ export const docsLlms = llms(source, {
     // Processed MDX indents nested tabs as code. Expand authored setup guides instead,
     // preserving runnable fences, explanations and every OS branch for agents.
     const text = await page.data.getText(
-      page.slugs.length === 1 && ["installation", "memo"].includes(page.slugs[0]) ? "raw" : "processed",
+      page.slugs.length === 1 && ["installation", "memo", "email"].includes(page.slugs[0]) ? "raw" : "processed",
     )
     const body = text
       .replace(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/, "")

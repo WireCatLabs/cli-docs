@@ -125,3 +125,49 @@ Production build/TypeScript, lint, links and SEO passed. Browser checks cover en
 light/dark: purpose/gain, prompt clipboard contents, keyboard tooltip open/close/focus return,
 Windows tab, file formats, Markdown parity, overflow and axe. Mobile English capture was visually
 reviewed; no claim of independent human usability testing is made.
+
+## Separate notes and email guides — 9 October 2026
+
+The owner requested separate task homes and fuller linking, notes and tagging coverage.
+`/{lang}/docs/memo` remains the installation/notes home, titled Notes and files.
+`/{lang}/docs/email` covers mail and links to Memo installation in notes; it does not duplicate
+npm instructions. Both pages state their reader situation, purpose and gains. Both are in
+the sidebar with distinct NotebookPen/Mail icons, and link contextually to each other and people.
+Previous notes/install/person-context/add-email URLs and anchors remain usable; add-email is
+now a short bridge to the email guide. Common aliases support the same install/notes/tag links
+in every locale. All three languages retain no public release-version text.
+
+Notes distinguishes imported files from notes created in Memo, and covers subjects (person,
+message and other stored records), multiple subjects, read/edit/remove with revision checks,
+export metadata and source labels. Tag examples include notes, messages, contact identities,
+linked people and subfolders. Contact selection through an account is distinguished from a
+linked person's UID. The UID location was verified as `messages.person.uid` in Memo context;
+`contacts profile` is not advertised as exposing that identifier.
+
+Email covers named Himalaya accounts versus mailbox-address search scope, multiple account
+configuration, bounded imports, linking a correspondent's email identity, scoped search, tags
+on mail messages/threads and notes attached to an email. Account linking records person identity;
+it is distinct from authenticating accounts or combining mailboxes. Existing People guidance
+now links to both guides and correctly distinguishes a selected profile from linked context.
+
+Runtime source: Memo 0.2.1 / cli-messaging 0.205.0, using the published package and
+`src/notes/command.ts`, `src/tags/command.ts`, `src/mail/command.ts`, `src/context/command.ts`.
+Account selection is checked in `dist/store/scope.js`; labels in the shared knowledge store.
+The pinned Telegram/MAX guides use cli-messaging 0.196.0/0.197.0 respectively; published `dist/services/people.js`,
+`dist/services/person-profile.js` and command discovery verify the identity/profile references.
+Current Memo main was inspected separately; ongoing refactoring is not treated as released
+behavior. Public text consistently says notes and does not claim that Memo note IDs and
+messenger contact-note IDs are interchangeable.
+
+An isolated fixture seeded fictional Telegram/mail identities and messages. Verified manual
+identity linking, notes on people/messages, multiple subjects, stale-revision rejection, tags
+on notes/messages/contacts/people/mail threads/subfolders, mail account isolation, scoped mail
+search, context, export and removal. No live account was used.
+
+Validation: 31 documentation tests, build/TypeScript, lint, links and SEO. Both guides were
+browser-checked in en/ru/es × desktop/mobile × light/dark for gains, copied prompts, new workflow
+coverage, sidebar, install/people anchors, overflow and axe. Every command/prompt fence is
+compared byte-for-byte with the authored source in both Markdown twins. Locale checks retain
+executable examples, inline literals and destinations, treating prompt prose separately.
+People's newly introduced examples/literals match in every language; existing localized chat
+names in older examples are preserved rather than being relabelled as new regressions.

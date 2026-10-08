@@ -1,17 +1,19 @@
 ---
-title: "Email and notes"
-description: "Install Memo, connect a folder of files or an Obsidian vault, and help your agent find information with sources."
+title: "Notes and files"
+description: "Import files, write notes about people and messages, and find them again with tags."
 ---
 
-Memo helps your agent find information spread across files, notes, email and messages. Use
-this guide when you want to find a past decision or gather context before a conversation.
-It explains how to install Memo, choose the sources to include and check what your agent finds.
+Use Memo when you want your agent to find something in your files or remember context about
+a person or message. This guide explains how to install Memo, import folders and create your
+own notes.
 
 After following the guide, you will be able to:
 
-- connect a folder of text files or an Obsidian vault and search its contents;
-- add email and use it alongside downloaded messenger history;
-- ask your agent for a brief with source references and recognise missing data.
+- import folders and search your files with source references;
+- create, edit and export notes about a person or message;
+- organise notes, messages and contacts with tags.
+
+Email has a separate guide: [connect and use email](./email.mdx). It uses the same Memo installation.
 
 ## Before you start
 
@@ -143,112 +145,138 @@ The results identify the matching file, a source reference and the first matchin
 the file to check the detail. If no result appears, try a word you know is in one of your files
 and inspect the import report; a file that was not imported cannot appear in the search.
 
-## Add email
+## Create your own notes
 
-Memo reads email through [Himalaya](https://github.com/pimalaya/himalaya), a separate mail
-program. Your mail account is configured there; Memo uses its name and address without needing
-a separate copy of the mail password. Ask your agent to help:
+There are two ways a note reaches Memo. **Imported notes** come from your files; edit the
+original file and import it again. **Your own notes** are written in Memo's local store and
+can be about a person, message, project, task or another note. Creating one does not send
+anything to a contact or change the message it refers to.
 
-```text prompt
-Help me connect the mail account I choose through Himalaya and add it to Memo.
-Explain the account setup, then import mail from the date I choose.
-Show the import result and tell me whether I need another run to finish that period.
-```
-
-The account must work in Himalaya before Memo can import its mail. For manual configuration:
-
-Add `mail.accounts` to Memo's configuration, keeping any existing settings. Default file locations:
-
-| OS | Configuration file |
-| --- | --- |
-| Linux | `~/.config/cli-memo/config.json` |
-| macOS | `~/Library/Preferences/cli-memo/config.json` |
-| Windows | `%APPDATA%\cli-memo\Config\config.json` |
-
-`MEMO_CONFIG_DIR` overrides the directory; on Linux, `XDG_CONFIG_HOME` also affects the default.
-The example uses a Himalaya account named `gmail`; replace the name and address with yours.
-
-```json
-{
-  "mail": {
-    "accounts": [{ "name": "gmail", "address": "you@example.com" }]
-  }
-}
-```
-
-Gmail is the default mode and imports All Mail. For another IMAP provider, configure
-`"mode": "imap"` and `"folders": ["INBOX", "Archive"]` in the account entry, using your
-mailbox's actual folder names.
-
-```sh
-memo mail import --account gmail --since 2026-09-01 --json
-```
-
-Choose the first date you want to include. Each run reads at most 200 new messages by default;
-run it again to continue if the result says the import is incomplete. The mailbox is read-only:
-import does not send email or mark it read. Imported mail is stored locally; rerunning import
-can remove the stored text of mail that has disappeared from the source.
-
-Link an email address to its messenger identity explicitly with `tg contacts link` or
-`max contacts link`; matching names alone do not identify the same person. See
-[working with people](./people.md) for messenger contact tasks.
-
-## Ask for the context you need
-
-Once your sources are connected, ask for context about a person. Replace the name:
+Ask your agent to add a note about the person or message you choose:
 
 ```text prompt
-Use Memo to gather context about Rin Example before our meeting: recent messages, email,
-linked notes and open tasks. Include the sources and tell me what data is missing.
+Save a note in Memo that Rin Example prefers morning meetings and link it to that person.
+Show me the saved note and its source reference so I can check it.
 ```
 
-To associate an imported file note with a person, replace the name and file path:
+For manual use, replace the person and text with yours:
 
 ```sh
-memo note telegram:"Rin Example" /path/to/notes/people/Rin.md
-```
-
-The file must already be imported. A name mentioned in ordinary text does not create a link;
-associate the note explicitly or use a supported link such as `[[Rin Example]]` in Obsidian.
-
-The agent can use these commands to gather person context or search across imported sources:
-
-```sh
-memo context telegram:"Rin Example" --json
-memo search 'budget' --all --json
-```
-
-`--all` explicitly searches every stored account and imported notes. Check the returned source
-references and coverage before relying on an answer. Missing history, mail outside the imported
-window or unresolved note links can leave the result incomplete. Add `--account <id>` to
-`context` when several accounts of that provider exist.
-
-You can also save your own note about the person:
-
-```sh
-memo notes add 'Prefers morning meetings' --about telegram:'Rin Example'
+memo notes add 'Prefers morning meetings' --about telegram:'Rin Example' --json
 memo notes list --about telegram:'Rin Example' --json
 ```
 
-These notes live in the local store. Writing them does not change an imported file;
-`memo notes export` is a separate, explicit action to write files.
+For a note about a message, copy the full source reference from a search or context result.
+The numbers below are illustrative; replace the whole `msg:telegram/1/77/42` reference with yours:
+
+```sh
+memo notes add 'Check the revised budget' --about 'msg:telegram/1/77/42' --json
+```
+
+One note can have several subjects: repeat `--about` for each one. Use `max:<name or id>` or
+`email:<address>` for another identity. A stored object can also be named by its `person:`,
+`entity:`, `task:` or `note:` reference. The subject must exist in the store; a matching name
+alone does not establish that two accounts belong to one person.
+
+### Read, edit and remove a note
+
+Creation returns a note ID. Replace `NOTE_ID` with it; the returned `revision` is the current
+revision of the note. Read that value before editing and replace `1` below with it:
+
+```sh
+memo notes show note:NOTE_ID --json
+memo notes edit NOTE_ID --revision 1 --text 'Prefers early morning meetings'
+```
+
+The revision check prevents your edit from overwriting a newer one. If it changed, reread the
+note before editing. If you no longer need a note you created, you can remove it:
+
+```sh
+memo notes remove NOTE_ID
+```
+
+### Export your notes to files
+
+Export writes the notes you created in Memo to a folder you choose:
+
+```sh
+memo notes export --to /path/to/exported-notes --format markdown
+```
+
+Use `--format obsidian` for Obsidian files. Exported files carry `memo-id` and `memo-hash` metadata
+so importing that folder does not create duplicate notes. If you edited an exported file yourself,
+export leaves it alone and reports the conflict.
+
+## Tag your sources
+
+A tag is a short label you choose, such as `work` or `follow-up`. It helps you find related
+sources without rewriting them. Ask your agent to tag the exact notes, messages or contacts
+you choose, then show the labels it saved.
+
+Use IDs and source references returned by your own searches. `NOTE_ID`, `PERSON_UID` and
+`FOLDER_ID` below are placeholders; the numeric message/contact/account IDs are illustrative.
+
+| What to label | Command |
+| --- | --- |
+| A note | `memo tags add work --note note:NOTE_ID` |
+| A stored message | `memo tags add follow-up --message 'msg:telegram/1/77/42'` |
+| A contact identity selected through an account | `memo tags add work --contact 101 --provider telegram --account 1` |
+| A linked person | `memo tags add work --person PERSON_UID` |
+| Notes in a subfolder | `memo tags add project --folder FOLDER_ID --path Projects` |
+
+A **contact** identifies someone in a provider; the account selects the local view used to find them. A **person** combines the
+identities you linked explicitly. Obtain the person's identifier (UID) from `messages.person.uid`
+in `memo context ... --json`; see [linking identities](./people.md#link-your-accounts). A full message
+reference includes the provider, account, chat and message, so the same numeric ID in another
+account does not select the same source.
+
+Tags contain 1–32 letters a–z, digits or hyphens; case is ignored. Labels live in the local
+store and do not change source files, mailbox flags or Gmail labels. File tags are also imported:
+Obsidian understands inline `#tags` and the `tags:` field; the Markdown format uses `tags:`.
+In ordinary Markdown, a `#word` in text is not automatically a tag.
+
+### Find and remove labels
+
+```sh
+memo notes search 'budget' --tag work --json
+memo search 'tag:follow-up' --all --json
+memo tags list --tag work --json
+memo tags remove work --note note:NOTE_ID
+```
+
+The first query searches tagged notes; the second searches stored sources across accounts.
+Check the source type/account in the result. Removing a label leaves the source intact.
+Adding an existing label or removing an absent one does not create a second change.
+
+## Ask for the context you need
+
+An imported file can be about a person as well as containing their name. Associate it explicitly:
+
+```sh
+memo note telegram:"Rin Example" /path/to/notes/people/Rin.md
+memo notes about telegram:"Rin Example" --json
+memo context telegram:"Rin Example" --json
+```
+
+The file must already be imported. Ordinary text mentions do not create a person link.
+`notes about` shows related notes; `context` also gathers stored messages and mail for linked
+identities. See [linking accounts](./people.md#link-your-accounts) and [Email](./email.mdx).
+
+## Add email
+
+For mail accounts, imports and linking an address to a person, continue with [Email](./email.mdx).
 
 ## Check the result
 
-A useful answer names the source files, messages or email behind each important detail. Open
-a source to verify an agreement or date. The agent should explain gaps such as a mail period
-that has not been imported, unreadable files or an unresolved person link. A missing result
-does not prove there was no agreement.
+A saved note should have an ID, text and links to the subjects you selected. A tag listing
+should identify the intended note, message, contact or person. For imported files, open the
+original to check the text. If a source was not imported or a person link is unresolved, ask
+the agent to explain the gap rather than treat the result as complete.
 
 ## If something is missing
 
-- **Command not found:** check `memo --help` in the agent's terminal and reopen it after installation.
-- **No notes found:** check `memo folders list`, rerun `memo notes import --no-embed` and inspect the import result.
-- **No mail account:** check that `mail.accounts` names an account configured in Himalaya.
-- **Wrong or ambiguous person:** use the provider and exact ID; link identities explicitly.
-- **Incomplete context:** import the relevant notes and mail, and download missing messenger history through tg or max.
+If a note or tag is missing, check its exact ID and account. For file notes, inspect the import report and rerun the import after edits. If an edit conflicts, read the current revision before trying again.
 
-When the sources are present, continue with [preparing a meeting brief](./meeting-brief.mdx).
-For command options, run `memo --help` or a subcommand's `--help`.
-The [Memo command documentation](https://github.com/leemour/cli-memo#readme)
-also covers tasks, relationships, tags, local reminders and evidence bundles.
+Continue with [Email](./email.mdx) to import mail and link addresses to your contacts, or
+[Know your people](./people.md#link-your-accounts) to connect identities across messengers.
+For exact Memo options, use `memo --help` or a subcommand's `--help`.
