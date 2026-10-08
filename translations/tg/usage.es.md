@@ -46,6 +46,7 @@ Para CI, `TG_API_ID` y `TG_API_HASH` proporcionan la aplicación sin usar el alm
 ```sh
 tg account show                # who this profile is logged in as; the phone as its last four digits
 tg account show --show-phone   # the whole phone number
+tg account list                # every profile on this computer and the account each is logged in as
 tg account sessions list       # every device and app logged in to the account; ends nothing
 tg session end                 # log out on Telegram's side, and delete the session here
 ```
@@ -306,6 +307,8 @@ tg messages scheduled "Book club"                               # what waits to 
 `--at-time` entrega el mensaje a Telegram, que lo enviará incluso con el equipo apagado. La hora se redondea hacia abajo al minuto. Rechaza plazos inferiores a un minuto o superiores a un año. El mensaje cuenta para el límite en la hora en que Telegram lo envía. **Cancélalo o modifícalo en la aplicación de Telegram**; `tg` no lo hace.
 
 ### Archivos, fotos y voz
+
+Consulta formatos, envío, descarga, OCR del agente y texto buscable en [Archivos adjuntos](./attachments.md).
 
 ```sh
 tg messages send "Book club" "The agenda" --file agenda.pdf   # byte for byte; the text is the caption

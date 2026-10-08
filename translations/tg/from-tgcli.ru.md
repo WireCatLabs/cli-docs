@@ -17,6 +17,7 @@ title: "Переход с tgcli"
 | `auth --force-sms` | `tg session start phone --sms` |
 | `auth status` | `tg account show`, `tg doctor --online` |
 | `auth logout` | `tg session end` |
+| `accounts list` | `tg account list` |
 | `accounts add`, `--account <id>` | профиль: `tg work chats list` или `TG_PROFILE=work` ([profiles.md](./profiles.md)) |
 | `config get/set/unset` | `tg config show/set/unset` ([configuration.md](./configuration.md)) |
 | настройка `proxy`, `TELEGRAM_PROXY` | настройка `proxy`, `TG_PROXY` ([configuration-reference.md](./configuration-reference.md#through-a-proxy)) |

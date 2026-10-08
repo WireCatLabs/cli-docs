@@ -21,6 +21,7 @@ Hay dos formas de obtenerlo:
 
 La aplicación solo se guarda después de que Telegram acepte el inicio de sesión.
 
+
 ## Inicio de sesión
 
 ```sh
@@ -42,7 +43,7 @@ App keys: in the keyring
 Next:     tg chats list · tg server install to keep the archive current
 ```
 
-El código suele llegar a la aplicación Telegram. `--sms` pide un SMS, pero Telegram decide; la CLI indica cómo se envió realmente.
+El código suele llegar a la aplicación Telegram. `--sms` pide un SMS, pero Telegram decide; la CLI indica cómo se envió realmente. Si Telegram no puede enviar un SMS, `tg` lo indica y pide el código que ya envió a la aplicación.
 
 ### Cuando un agente inicia la sesión
 

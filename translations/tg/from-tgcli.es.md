@@ -17,6 +17,7 @@ Todos los comandos aceptan `--json` ([cli-contract.md](./cli-contract.md)).
 | `auth --force-sms` | `tg session start phone --sms` |
 | `auth status` | `tg account show`, `tg doctor --online` |
 | `auth logout` | `tg session end` |
+| `accounts list` | `tg account list` |
 | `accounts add`, `--account <id>` | un perfil: `tg work chats list` o `TG_PROFILE=work` ([profiles.md](./profiles.md)) |
 | `config get/set/unset` | `tg config show/set/unset` ([configuration.md](./configuration.md)) |
 | ajuste `proxy`, `TELEGRAM_PROXY` | ajuste `proxy`, `TG_PROXY` ([configuration-reference.md](./configuration-reference.md#through-a-proxy)) |
