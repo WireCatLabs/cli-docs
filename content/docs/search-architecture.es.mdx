@@ -3,7 +3,7 @@ title: Cómo funciona la búsqueda
 description: "La parte técnica de la búsqueda de mensajes y la búsqueda por temas: índices, grafo de conversaciones, vectores, orden de resultados, frescura y mediciones."
 ---
 
-Esta página explica cómo se relacionan búsqueda de mensajes, búsqueda por significado y comprobación de fuentes. Para una tarea cotidiana empieza por [Búsqueda](./search.md). Las referencias corresponden a las dependencias publicadas en Telegram 0.38.0 (`cli-messaging` 0.196.0) y MAX 0.37.0 (`cli-messaging` 0.197.0).
+Aprende a encontrar un mensaje exacto, una conversación por tema y sus fuentes. Para probarlo, abre la guía de **[Telegram](./tg/search.md)** o **[MAX](./max/search.md)**, con comandos y ejemplos. Abajo explicamos las formas de palabras, las erratas y cuándo ayuda la búsqueda por significado.
 
 <ArchitectureDiagram name="searchPaths" lang="es" />
 
@@ -23,7 +23,14 @@ La búsqueda estricta interpreta la consulta, resuelve personas y chats, selecci
 
 ### Formas de las palabras
 
-Palabras y frases sin campo pueden coincidir con variantes. `exact:` y `--exact` eligen formas exactas donde se admiten. Esto no corrige erratas: la corrección pertenece al modo separado `--language legacy`. Tener el índice listo no la añade a Lucene estricto.
+La búsqueda puede encontrar formas distintas: «piso» puede encontrar «pisos». Si no recuerdas la escritura exacta, pide al agente que tenga en cuenta las erratas: «Usa tg CLI para encontrar mensajes sobre la presentacion, teniendo en cuenta errores de escritura». Para MAX cambia `tg` por `max`. El agente elige el modo adecuado.
+
+<details>
+<summary>Si escribes los comandos tú mismo</summary>
+
+`messages search` usa Lucene estricto por defecto: reconoce formas, pero no corrige erratas. Añade `--language legacy` para corregirlas; usa `exact:` o `--exact` para formas literales donde se admitan. Sintaxis: [Telegram](./tg/query-language.md) y [MAX](./max/query-language.md).
+
+</details>
 
 ### Búsqueda en el servidor junto al archivo
 
@@ -80,10 +87,12 @@ La [práctica de búsqueda](./search-playground.mdx) usa datos sintéticos para 
 
 | Componente | Dependencia Telegram | Dependencia MAX |
 | --- | --- | --- |
-| `src/search/query.ts` | [0.196.0](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/search/query.ts) | [0.197.0](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/search/query.ts) |
-| `src/search/stem.ts` | [0.196.0](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/search/stem.ts) | [0.197.0](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/search/stem.ts) |
-| `src/services/messages.ts` | [0.196.0](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/services/messages.ts) | [0.197.0](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/services/messages.ts) |
-| `src/services/conversations.ts` | [0.196.0](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/services/conversations.ts) | [0.197.0](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/services/conversations.ts) |
-| `src/services/embeddings.ts` | [0.196.0](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/services/embeddings.ts) | [0.197.0](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/services/embeddings.ts) |
-| `src/services/evidence.ts` | [0.196.0](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/services/evidence.ts) | [0.197.0](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/services/evidence.ts) |
-| `src/store/store.ts` | [0.196.0](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/store/store.ts) | [0.197.0](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/store/store.ts) |
+| `src/search/query.ts` | [Código](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/search/query.ts) | [Código](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/search/query.ts) |
+| `src/search/stem.ts` | [Código](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/search/stem.ts) | [Código](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/search/stem.ts) |
+| `src/services/messages.ts` | [Código](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/services/messages.ts) | [Código](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/services/messages.ts) |
+| `src/services/conversations.ts` | [Código](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/services/conversations.ts) | [Código](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/services/conversations.ts) |
+| `src/services/embeddings.ts` | [Código](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/services/embeddings.ts) | [Código](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/services/embeddings.ts) |
+| `src/services/evidence.ts` | [Código](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/services/evidence.ts) | [Código](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/services/evidence.ts) |
+| `src/store/store.ts` | [Código](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/store/store.ts) | [Código](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/store/store.ts) |
+
+¿Quieres probarlo? Sigue los ejemplos de búsqueda para **[Telegram](./tg/search.md)** o **[MAX](./max/search.md)**.

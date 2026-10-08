@@ -3,7 +3,7 @@ title: Как устроен поиск
 description: "Техническая сторона поиска сообщений и поиска по темам — индексы, граф разговоров, векторы, порядок результатов, свежесть и замеры."
 ---
 
-Эта страница объясняет, как связаны поиск сообщений, поиск обсуждений по смыслу и проверка источников. Для повседневной задачи начните с [Поиска](./search.md). Ссылки на реализацию ниже соответствуют зависимостям выпущенных Telegram 0.38.0 (`cli-messaging` 0.196.0) и MAX 0.37.0 (`cli-messaging` 0.197.0).
+Вы узнаете, как искать точное сообщение, находить обсуждение по теме и проверять исходные сообщения. Чтобы сразу попробовать поиск, откройте инструкцию для **[Telegram](./tg/search.md)** или **[MAX](./max/search.md)**: там есть команды и примеры. Ниже — объяснение, почему поиск находит разные формы слов, как учитывает опечатки и когда нужен поиск по смыслу.
 
 <ArchitectureDiagram name="searchPaths" lang="ru" />
 
@@ -23,7 +23,14 @@ description: "Техническая сторона поиска сообщен�
 
 ### Формы слов
 
-Слова и фразы без поля могут находиться с учётом форм слов. `exact:` и `--exact` выбирают точные формы там, где это поддерживается. Это не исправление опечатки. Опечатки исправляются в отдельном режиме поиска `--language legacy`; готовность индекса слов сама по себе не добавляет их исправление в строгий Lucene.
+Поиск учитывает формы слов: «квартира» может находить «квартиру» и «квартиры». Если не уверены в написании, попросите агента искать с учётом опечаток: «Используй tg CLI: найди сообщения про презинтацию, учитывай опечатки». Для MAX замените `tg` на `max`. Агент выбирает подходящий режим; вам не нужно запоминать его название.
+
+<details>
+<summary>Если вводите команду самостоятельно</summary>
+
+В команде `messages search` строгий язык Lucene включён по умолчанию. Он учитывает формы слов, но не исправляет опечатки. Для поиска с исправлением добавьте `--language legacy`; для точной формы используйте `exact:` или `--exact`, где они поддерживаются. Синтаксис: [Telegram](./tg/query-language.md) и [MAX](./max/query-language.md).
+
+</details>
 
 ### Поиск на сервере рядом с архивом
 
@@ -80,10 +87,12 @@ description: "Техническая сторона поиска сообщен�
 
 | Компонент | Зависимость Telegram | Зависимость MAX |
 | --- | --- | --- |
-| `src/search/query.ts` | [0.196.0](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/search/query.ts) | [0.197.0](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/search/query.ts) |
-| `src/search/stem.ts` | [0.196.0](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/search/stem.ts) | [0.197.0](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/search/stem.ts) |
-| `src/services/messages.ts` | [0.196.0](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/services/messages.ts) | [0.197.0](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/services/messages.ts) |
-| `src/services/conversations.ts` | [0.196.0](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/services/conversations.ts) | [0.197.0](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/services/conversations.ts) |
-| `src/services/embeddings.ts` | [0.196.0](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/services/embeddings.ts) | [0.197.0](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/services/embeddings.ts) |
-| `src/services/evidence.ts` | [0.196.0](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/services/evidence.ts) | [0.197.0](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/services/evidence.ts) |
-| `src/store/store.ts` | [0.196.0](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/store/store.ts) | [0.197.0](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/store/store.ts) |
+| `src/search/query.ts` | [Исходник](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/search/query.ts) | [Исходник](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/search/query.ts) |
+| `src/search/stem.ts` | [Исходник](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/search/stem.ts) | [Исходник](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/search/stem.ts) |
+| `src/services/messages.ts` | [Исходник](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/services/messages.ts) | [Исходник](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/services/messages.ts) |
+| `src/services/conversations.ts` | [Исходник](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/services/conversations.ts) | [Исходник](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/services/conversations.ts) |
+| `src/services/embeddings.ts` | [Исходник](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/services/embeddings.ts) | [Исходник](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/services/embeddings.ts) |
+| `src/services/evidence.ts` | [Исходник](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/services/evidence.ts) | [Исходник](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/services/evidence.ts) |
+| `src/store/store.ts` | [Исходник](https://github.com/leemour/cli-messaging/blob/v0.196.0/src/store/store.ts) | [Исходник](https://github.com/leemour/cli-messaging/blob/v0.197.0/src/store/store.ts) |
+
+Готовы попробовать? Перейдите к примерам поиска в **[Telegram](./tg/search.md)** или **[MAX](./max/search.md)**.

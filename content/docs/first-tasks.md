@@ -20,54 +20,39 @@ If you still need setup, start with [installation](./installation.mdx) or
 
 ## Your first five minutes
 
-Choose one request and name your messenger: Telegram or MAX.
+Choose one request. For MAX, replace «tg CLI» with «max CLI» and Telegram with MAX. In an AI chat connected through MCP, ask it to use the connected Telegram or MAX tool.
 
 **Who needs my reply?**
 
 ```text prompt
-Check my unread messages in Telegram. Tell me which questions need my reply and show the source messages. Only read: don't send anything or mark messages read.
+Use tg CLI. Check my unread messages in Telegram. Tell me which questions need my reply and show the source messages. Only read: don't send anything or mark messages read.
 ```
 
 **What happened today?**
 
 ```text prompt
-Summarise today's messages in five of my active chats. One line per chat, with important questions separately. Say which chats you checked. Read only.
+Use tg CLI. Summarise today's messages in five of my active chats. One line per chat, with important questions separately. Say which chats you checked. Read only.
 ```
 
 **Find something**
 
 ```text prompt
-Find the last link someone sent me in my five most recent chats. Show the message and chat. Read only.
+Use tg CLI. Find the last link someone sent me in my five most recent chats. Show the message and chat. Read only.
 ```
 
 You get a short answer with messages you can open or identify. Start with a few chats so you can check the result.
 
 ## Find an older agreement
 
-```text prompt
-Find the price we agreed in the renovation group last month. Check later replies in case it changed. Show the confirmation and source messages. If history is missing, tell me before fetching more.
-```
-
-Expect the confirmed amount and the message behind it. If the agent finds only a proposal, the answer should say so. Missing local history is a reason to fetch that period, not proof that you never agreed.
-[Find a message or decision](./search.md).
+Ready for a deeper task? The [Telegram guide](./tg/usage.md) and [MAX guide](./max/usage.md) show how to compare changes during an absence, gather materials and check commitments. For a particular word or topic, open [Search](./search.md).
 
 ## Draft a reply
 
-```text prompt
-Read my conversation with the contractor. What are they waiting for from me? Draft a short reply based on our agreements. Don't invent a deadline and don't send it.
-```
-
-The draft stays in your agent chat. Review the recipient, facts and wording. You can ask for a shorter or warmer version before sending.
-
-```text prompt
-Send exactly the draft I approved to the contractor's private chat you just identified. Don't send it to the group or anyone else.
-```
-
-Sending is a separate step and still depends on your tool's permissions. If the agent cannot identify the recipient uniquely, choose the chat first.
+Ask for a draft first and check its recipient and facts. [Writing requests](./prompting.mdx) explains how to supply context and authorise sending separately.
 
 ## Prepare for a meeting
 
-Try the meeting scenario in [Demo](./meeting-brief.mdx), then use your own project and chats. Ask for decisions, open questions and an agenda; tell the agent where else important agreements might be.
+[Demo](./meeting-brief.mdx) walks through a ready-made scenario showing how the agent gathers decisions, questions and an agenda.
 
 ## Check the answer
 

@@ -24,12 +24,13 @@
     "docs:quality": "node --experimental-strip-types scripts/docs-quality.ts",
     "docs:lint": "markdownlint-cli2",
     "docs:spell": "cspell lint --config cspell.json --no-progress",
-    "docs:check": "pnpm docs:lint && pnpm docs:quality --strict",
+    "docs:check": "pnpm docs:lint && pnpm docs:versions && pnpm docs:quality --strict",
     "docs:wiki:install": "sh scripts/codewiki-install.sh",
     "docs:wiki": ".docs-tooling/codewiki-venv/bin/python scripts/codewiki-trial.py",
     "docs:wiki:review": "python3 scripts/codewiki-review.py",
     "docs:release-notes": "node --experimental-strip-types scripts/release-notes.ts",
-    "docs:report-fixture": "node scripts/docs-report-fixture.mjs"
+    "docs:report-fixture": "node scripts/docs-report-fixture.mjs",
+    "docs:versions": "node scripts/check-doc-versions.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

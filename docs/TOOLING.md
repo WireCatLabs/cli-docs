@@ -154,3 +154,10 @@ After capturing the reviewed packages with `pnpm docs:contracts`, run
 a new synthetic SQLite store and fixed clock, with no messenger connection. The JSON evidence
 is saved under `.docs-tooling/reports/approved-proposals/`. A complete stored reply graph must
 not be interpreted as complete archive coverage.
+
+## Current-version reader guides
+
+`pnpm docs:versions` checks public guides for package release-number prose and pinned package
+installation commands. It runs within `pnpm docs:check`. Changelog and roadmap history, immutable
+source URLs, local addresses and runtime prerequisites are excluded. Native-page wording is
+adjusted through explicit corrections so a release sync cannot silently reintroduce old text.

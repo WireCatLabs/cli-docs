@@ -46,7 +46,7 @@ continuar y comprobar el historial: [Telegram](./tg/archive.md#fetch-a-chats-his
 Empieza por pedir al agente:
 
 ```text prompt
-Encuentra dónde acordamos el plazo de la reforma en el grupo y mi chat con el contratista. Muestra el acuerdo final, revisa respuestas posteriores y cita los mensajes. Si falta historial, dime qué hay que descargar. No envíes nada.
+Usa tg CLI. Encuentra dónde acordamos el plazo de la reforma en el grupo y mi chat con el contratista. Muestra el acuerdo final, revisa respuestas posteriores y cita los mensajes. Si falta historial, dime qué hay que descargar. No envíes nada.
 ```
 
 Deberías obtener la fecha acordada y sus mensajes de origen. Si solo fue una propuesta o cambió después, el agente debe indicarlo. No necesitas conocer la sintaxis de búsqueda.
@@ -82,8 +82,8 @@ Hay varias formas de buscar mensajes:
 
 - **Palabra o frase exacta:** si recuerdas cómo se escribió. Usa `exact:` para una coincidencia literal.
 - **Parte de una palabra:** `piso*` encuentra palabras que empiezan así, como «piso» y «pisos».
-- **Formas y raíces compartidas:** «piso» puede encontrar «pisos». La búsqueda automática por raíces está disponible en `tg` 0.33+ y `max` 0.32+; depende del idioma y del índice configurado.
-- **Errores de escritura:** el modo `legacy` puede ampliar la consulta y corregir palabras desconocidas según el vocabulario guardado. El agente puede elegirlo si la escritura es aproximada.
+- **Formas y raíces compartidas:** «piso» puede encontrar «pisos». Depende del idioma y del índice configurado.
+- **Errores de escritura:** pide al agente que admita escritura aproximada. La búsqueda puede corregir palabras desconocidas según el vocabulario guardado; el agente elige el modo adecuado.
 - **Significado:** si recuerdas el tema, como «el plazo de la reforma que acordamos», pero no las palabras. Necesita un índice de discusiones preparado.
 
 Formas, coincidencias exactas, índices y búsqueda por significado: **[Cómo funciona la búsqueda](./search-architecture.mdx)**.

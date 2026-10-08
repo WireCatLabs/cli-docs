@@ -1,9 +1,9 @@
 ---
-title: ChatGPT, Claude en el navegador
-description: "Conecta Telegram y MAX a un chat de ChatGPT o Claude, desde los primeros comandos hasta comprobar la conexión."
+title: Chats de IA en el navegador y el móvil
+description: "Conecta Telegram y MAX a ChatGPT o Claude en el navegador o la aplicación móvil. No necesitas sus aplicaciones de escritorio."
 ---
 
-Usa Telegram y MAX directamente desde un **chat de ChatGPT o claude.ai en el navegador**: busca mensajes, reúne contexto o prepara respuestas. Se configura con unos comandos y añadiendo una dirección en los ajustes del chat. Después de configurarla en el navegador, usa la conexión también en ChatGPT o Claude móvil: entra en la misma cuenta, activa la herramienta en el chat y haz la misma petición.
+Usa Telegram y MAX desde un chat de IA en el navegador o la aplicación móvil: encuentra mensajes, reúne contexto y prepara respuestas. Se configura con unos comandos y una dirección en los ajustes del chat. No necesitas instalar ChatGPT o Claude en el ordenador. Sirve cualquier chat de IA que permita conectar tu propio servidor MCP; elige tu aplicación abajo.
 
 Esta guía conecta el mensajero que elijas y lo comprueba con una petición sobre tus chats. Un programa en tu ordenador accede al mensajero; ChatGPT o Claude llega a ese programa <DocTerm term="public-address" lang="es" label="mediante una dirección pública" />. <DocTerm term="mcp" lang="es" label="MCP" /> es el modo de conectar estas herramientas al asistente. A continuación obtendremos la dirección y la añadiremos a la aplicación.
 
@@ -119,9 +119,15 @@ El perfil precede al comando: `tg work mcp` o, en Windows, `tg.cmd work mcp`.
 
 <a id="conectar-codex--chatgpt-web-o-claude" />
 
-## 3. Añadir la conexión a ChatGPT o Claude
+<a id="3-añadir-la-conexión-a-chatgpt-o-claude" />
+
+## 3. Añadir la conexión a tu chat de IA
 
 Añade **`/mcp` a la dirección HTTPS**. Por ejemplo, `https://ordenador.red.ts.net` pasa a ser `https://ordenador.red.ts.net/mcp`. Es la dirección de la conexión, no la web de Telegram o MAX. Crea una conexión distinta para cada mensajero.
+
+<Tabs items={["ChatGPT", "Claude", "Gemini", "DeepSeek"]}>
+
+<Tab value="ChatGPT" keepMounted>
 
 ### ChatGPT
 
@@ -129,11 +135,41 @@ Añade **`/mcp` a la dirección HTTPS**. Por ejemplo, `https://ordenador.red.ts.
 2. Elige <DocTerm term="oauth" lang="es" label="OAuth" />. Si se ofrece, selecciona el registro automático (**DCR**). Usa el código de un solo uso de la ventana 2 para entrar.
 3. Instala el plugin, abre un chat **Work** y selecciónalo con `@`. Después escribe peticiones normales. [Instrucciones oficiales de OpenAI](https://developers.openai.com/plugins/quickstart).
 
+</Tab>
+
+<Tab value="Claude" keepMounted>
+
 ### Claude
 
 1. En claude.ai, abre **Customize → Connectors → + Add → Add custom connector**. Introduce el nombre y la dirección con `/mcp`, y pulsa **Continue**.
 2. Elige iniciar sesión y **Register automatically**, si se ofrece. Termina de añadir el conector y conecta con el código de la ventana 2.
 3. En el chat, pulsa **+ → Connectors** para activarlo. También funciona en Claude móvil. En una cuenta de trabajo puede tener que añadirlo primero el administrador: [instrucciones oficiales de Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
+
+</Tab>
+
+<Tab value="Gemini" keepMounted>
+
+### Gemini
+
+1. En [gemini.google.com](https://gemini.google.com), abre **Settings → Connected Apps**. Si no aparece, mira en **Personal Intelligence → Connected Apps**.
+2. En **Custom apps**, pulsa **Add a custom app**, pega la dirección terminada en `/mcp` y pulsa **Next**.
+3. Conecta con el código de un solo uso de la ventana 2. Escribe `@` en el chat y selecciona la conexión. Después también puedes usarla en Gemini móvil.
+
+Si no aparece Custom apps: Google exige actualmente una cuenta personal, tener al menos 18 años, estar en EE. UU., activar **Keep Activity** y usar inglés. [Requisitos e instrucciones de Google](https://support.google.com/gemini/answer/17209137?hl=en-yt).
+
+</Tab>
+
+<Tab value="DeepSeek" keepMounted>
+
+### DeepSeek
+
+DeepSeek ofrece [Harness](https://www.deepseek.com/en/harness/), un cliente aparte con interfaz web y soporte MCP. Se configura de forma distinta al chat habitual de chat.deepseek.com.
+
+Para usar un modelo DeepSeek, elige un cliente compatible con ese modelo y MCP. En el ordenador donde se ejecuta `tg` o `max`, añade una conexión local con la [guía MCP](./mcp.mdx); no necesitas dirección pública. Harness tiene [instrucciones MCP](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/mcp/mcp-client/README.md). Aquí no hay un procedimiento confirmado de conexión OAuth directa en el chat habitual de DeepSeek.
+
+</Tab>
+
+</Tabs>
 
 Antes de introducir el código, comprueba el nombre de la aplicación. El código funciona una vez durante 10 minutos; cinco intentos incorrectos requieren reiniciar el servidor.
 

@@ -12,7 +12,15 @@ for (const lang of ["en", "ru", "es"]) {
         await expect(guide.locator(".docs-copy").first()).toBeEnabled()
         const reference = page.locator("[data-technical-reference]")
         await expect(reference).not.toHaveAttribute("open", "")
-        if (route === "rankings") await expect(page.locator("[data-report-fixture] tbody tr")).toHaveCount(3)
+        if (route === "rankings") {
+          await expect(page.locator("[data-report-fixture] tbody tr")).toHaveCount(3)
+          await expect(page.locator("[data-report-activity] li")).toHaveCount(7)
+          await expect(page.locator("[data-report-fixture]")).toContainText("684")
+          const dailyCounts = await page.locator("[data-report-activity] li > span:first-child").allTextContents()
+          const groupCounts = await page.locator("[data-report-fixture] tbody td:nth-child(2)").allTextContents()
+          expect(dailyCounts.reduce((sum, value) => sum + Number(value), 0)).toBe(684)
+          expect(groupCounts.reduce((sum, value) => sum + Number(value), 0)).toBe(684)
+        }
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
         const scan = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze()
         expect(scan.violations).toEqual([])
@@ -28,7 +36,7 @@ for (const lang of ["en", "ru", "es"]) {
         expect(text).toContain(tool === "tg" ? "Telegram" : "MAX")
         expect(text).toContain(route === "usage" ? `${tool} messages send` : `${tool} stats`)
         expect(text).not.toContain("<ReaderGuide")
-        if (route === "rankings") expect(text).toContain("103")
+        if (route === "rankings") expect(text).toContain("684")
       }
     })
   }

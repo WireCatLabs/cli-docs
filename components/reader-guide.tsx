@@ -22,6 +22,24 @@ export function ReaderGuide({ slugs, lang }: { slugs: string[]; lang: string }) 
         <section data-report-fixture>
           <h2 id="task-incomplete-history">{guide.fixture.title}</h2>
           <p>{guide.fixture.intro}</p>
+          <p className="rounded-xl border bg-fd-muted p-4 font-medium">{guide.fixture.totals}</p>
+          <figure className="my-6 rounded-xl border p-4" data-report-activity>
+            <figcaption className="mb-4 font-medium">{guide.fixture.activityTitle}</figcaption>
+            <ol className="m-0 grid list-none grid-cols-7 gap-2 p-0" aria-label={guide.fixture.activityTitle}>
+              {guide.fixture.activity.map((count, index) => (
+                <li key={count} className="flex min-w-0 flex-col items-center gap-2">
+                  <span className="text-xs tabular-nums">{count}</span>
+                  <div className="flex h-28 w-full items-end justify-center" aria-hidden="true">
+                    <div
+                      className="w-full max-w-10 rounded-t bg-fd-primary"
+                      style={{ height: `${(count / 135) * 100}%` }}
+                    />
+                  </div>
+                  <span className="text-xs">{index + 1}</span>
+                </li>
+              ))}
+            </ol>
+          </figure>
           {/* biome-ignore lint/a11y/useSemanticElements: A named scrolling region keeps the example table usable without adding a landmark. */}
           <div
             className="docs-reference-table overflow-auto"

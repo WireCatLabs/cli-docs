@@ -8,7 +8,7 @@ is stored about a person and links back to the sources, so you or your AI agent 
 a meeting or check an agreement. Import your notes and mail first; Memo does not download
 Telegram or MAX history itself.
 
-This guide covers **Memo 0.2.0**. Memo is an early-stage tool, available as `@leemour/cli-memo`.
+This guide covers **Memo**. Memo is an early-stage tool, available as `@leemour/cli-memo`.
 
 ## Install Memo
 
@@ -17,11 +17,11 @@ For messenger context, [install Telegram or MAX](./installation.mdx) and downloa
 you need with that tool. Memo reads their shared local store on the same computer.
 
 ```sh
-npm install -g @leemour/cli-memo@0.2.0
+npm install -g @leemour/cli-memo
 memo --version
 ```
 
-The version check should print `0.2.0`. An agent with terminal access can run `memo` once it is
+The check should print the installed Memo version. An agent with terminal access can run `memo` once it is
 on the agent's PATH; give it this guide for the commands below.
 
 ## Add your notes
@@ -132,5 +132,5 @@ These notes live in the local store. Writing them does not change an imported fi
 
 When the sources are present, continue with [preparing a meeting brief](./meeting-brief.mdx).
 For command options, run `memo --help` or a subcommand's `--help`.
-The [Memo 0.2.0 source documentation](https://github.com/leemour/cli-memo/blob/v0.2.0/README.md)
+The [Memo source documentation](https://github.com/leemour/cli-memo/blob/v0.2.0/README.md)
 also covers tasks, relationships, tags, local reminders and evidence bundles.

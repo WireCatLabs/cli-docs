@@ -8,7 +8,7 @@ Reúne los datos almacenados sobre una persona con enlaces a sus fuentes, para q
 agente de IA podáis preparar una reunión o comprobar un acuerdo. Importa primero tus notas
 y el correo: Memo no descarga por sí mismo el historial de Telegram o MAX.
 
-Esta guía describe **Memo 0.2.0**. Es una herramienta en una etapa temprana de desarrollo,
+Esta guía describe **Memo**. Es una herramienta en una etapa temprana de desarrollo,
 disponible como `@leemour/cli-memo`.
 
 ## Instala Memo
@@ -18,11 +18,11 @@ Para incluir contexto de mensajes, [instala Telegram o MAX](./installation.mdx) 
 el historial necesario con esa herramienta. Memo lee su almacén local compartido en el mismo ordenador.
 
 ```sh
-npm install -g @leemour/cli-memo@0.2.0
+npm install -g @leemour/cli-memo
 memo --version
 ```
 
-La comprobación de versión debe mostrar `0.2.0`. Un agente con acceso al terminal puede
+La comprobación debe mostrar la versión instalada de Memo. Un agente con acceso al terminal puede
 usar `memo` cuando la orden está disponible en su PATH; dale esta guía con las órdenes siguientes.
 
 ## Añade tus notas
@@ -134,5 +134,5 @@ Estas notas viven en el almacén local. Escribirlas no cambia un archivo importa
 
 Cuando las fuentes estén disponibles, continúa con [preparar una reunión](./meeting-brief.mdx).
 Consulta las opciones con `memo --help` o el `--help` de una suborden.
-La [documentación original de Memo 0.2.0](https://github.com/leemour/cli-memo/blob/v0.2.0/README.md)
+La [documentación original de Memo](https://github.com/leemour/cli-memo/blob/v0.2.0/README.md)
 también describe tareas, relaciones, etiquetas, recordatorios locales y conjuntos de fuentes.

@@ -183,3 +183,19 @@ behavior claims or major restructuring as proposals with an exact before quote, 
 text and a page link. Do not mark proposals implemented, and do not silently change a reviewed
 release contract to make an example pass. Native source pages remain owned by the messenger repos;
 portal orientation and explicit contextual errata must remain traceable.
+
+## Current capabilities, examples and starting requests
+
+User guides describe the latest supported behavior. Do not put package release numbers in
+prose, headings, source-link labels or installation commands. Install the current package without
+a version suffix. Keep release numbers in changelogs, internal reviewed contracts and immutable
+evidence links. Keep necessary runtime requirements (such as the minimum Node.js version).
+
+Begin terminal-agent prompts with “Use tg CLI” or “Use max CLI” and explain the substitution on
+shared pages. Browser MCP examples should name the connected tool instead. First tasks is a quick
+start; messenger usage guides should offer deeper tasks rather than repeat the same requests.
+
+Illustrative reports can use fictional, coherent numbers without a “demo” badge. Introduce them
+as an example, never as a measurement of the reader’s actual account. Give a chart a readable
+caption, visible values and an equivalent Markdown table. Follow totals with interpretation and
+a useful next request; put coverage details after the value of the report is clear.

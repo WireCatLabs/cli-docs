@@ -46,7 +46,7 @@ resuming and checking history: [Telegram](./tg/archive.md#fetch-a-chats-history)
 Start by asking your agent:
 
 ```text prompt
-Find where we agreed the renovation deadline in the group and my chat with the contractor. Show the final agreement, check later replies and cite the messages. If history is missing, tell me what needs fetching. Don't send anything.
+Use tg CLI. Find where we agreed the renovation deadline in the group and my chat with the contractor. Show the final agreement, check later replies and cite the messages. If history is missing, tell me what needs fetching. Don't send anything.
 ```
 
 You should get the agreed date and the messages behind it. If the date was only proposed or later changed, the answer should make that clear. You do not need to know the search syntax.
@@ -82,8 +82,8 @@ Message search offers several approaches:
 
 - **A word or exact phrase:** when you remember the wording. Use `exact:` for literal matching.
 - **Part of a word:** `flat*` finds words starting with that part, such as “flat” and “flats”.
-- **Word forms and shared stems:** “invoice” can find “invoices” with English stemming configured. Automatic stem matching is available in `tg` 0.33+ and `max` 0.32+; results depend on the language and configured index.
-- **Typos:** `legacy` mode can expand a query and correct unknown words using the saved conversation's vocabulary. Your agent can choose it when the spelling is approximate.
+- **Word forms and shared stems:** “invoice” can find “invoices” with English stemming configured. Results depend on the language and configured index.
+- **Typos:** ask your agent to allow approximate spelling. Search can correct unknown words using the saved conversation’s vocabulary; the agent chooses the appropriate mode.
 - **Meaning:** when you remember the subject, such as “the renovation deadline we agreed”, rather than the words. This needs a prepared discussion index.
 
 Word forms, exact matching, indexes and meaning-based search: **[How search works](./search-architecture.mdx)**.
