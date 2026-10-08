@@ -199,3 +199,10 @@ Illustrative reports can use fictional, coherent numbers without a “demo” ba
 as an example, never as a measurement of the reader’s actual account. Give a chart a readable
 caption, visible values and an equivalent Markdown table. Follow totals with interpretation and
 a useful next request; put coverage details after the value of the report is clear.
+
+Do not hide most of a task guide inside a single disclosure. Use separate existing personal-account,
+bot and administration pages for those reader contexts, with visible links between them. Keep
+commands beside report examples and retain detailed native references visibly below the task layer.
+Report examples should cover group information, participant/post rankings, person context and
+anti-bot signals when the reviewed tool supports them. Explain the chosen metric and the next
+useful action, not only how many items were counted.

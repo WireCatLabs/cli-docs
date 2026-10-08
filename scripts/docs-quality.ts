@@ -5,6 +5,7 @@ import type { CommandInfo, OptionInfo } from "@leemour/cli-core/commands"
 import { fromMarkdown } from "mdast-util-from-markdown"
 import { parse, quote } from "shell-quote"
 import { demoScenarioIds } from "../lib/demo-scenarios.ts"
+import { readerGuideMarkdown } from "../lib/reader-guides.ts"
 
 export type Program = { cli: string; commands: CommandInfo[]; globalOptions: OptionInfo[] }
 export type Example = { text: string; line: number; executable: boolean }
@@ -257,7 +258,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
         /\/(commands(?:-(?:personal|bot|admin))?|changelog|roadmap)(?:\.[a-z]{2})?\.md$/.test(file)
       )
         continue
-      for (const example of examples(readFileSync(file, "utf8"))) {
+      const readerPage = /\/(tg|max)\/(usage|rankings|bot|groups)(?:\.(ru|es))?\.md$/.exec(file)
+      const presentation = readerPage ? readerGuideMarkdown([readerPage[1], readerPage[2]], readerPage[3] ?? "en") : ""
+      for (const example of examples(`${readFileSync(file, "utf8")}\n${presentation}`)) {
         for (const segment of commandSegments(example.text)) {
           if (!new RegExp(`\\b${tool.name}\\b`).test(segment)) continue
           checkedExamples++

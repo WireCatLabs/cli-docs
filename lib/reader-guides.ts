@@ -1,4 +1,7 @@
-type TaskSection = { id: string; title: string; prompt: string; result: string; page: string; link: string }
+import { type ReportTask, reportTasks } from "./report-tasks.ts"
+import { roleGuide, roleLabels } from "./role-guides.ts"
+
+type TaskSection = ReportTask
 const copy = {
   en: {
     intro:
@@ -192,9 +195,16 @@ const copy = {
 }
 
 export function readerGuide(slugs: string[], lang: string) {
-  if (slugs.length !== 2 || !["tg", "max"].includes(slugs[0]) || !["usage", "rankings"].includes(slugs[1])) return
+  if (
+    slugs.length !== 2 ||
+    !["tg", "max"].includes(slugs[0]) ||
+    !["usage", "rankings", "bot", "groups"].includes(slugs[1])
+  )
+    return
   const words = copy[lang === "ru" || lang === "es" ? lang : "en"]
   const rankings = slugs[1] === "rankings"
+  const role = roleGuide(slugs[0], slugs[1], lang)
+  const roles = roleLabels(lang)
   const sections: TaskSection[] = (rankings ? [words.rankingsection] : words.usage).map(
     ([id, title, prompt, result, page, link]) => ({
       id: `task-${id}`,
@@ -205,6 +215,7 @@ export function readerGuide(slugs: string[], lang: string) {
       link,
     }),
   )
+  if (rankings) sections.push(...reportTasks(slugs[0], lang))
   const locale = lang === "ru" || lang === "es" ? lang : "en"
   const titles = {
     en: ["Everyday tasks", "Conversation reports"],
@@ -226,11 +237,23 @@ export function readerGuide(slugs: string[], lang: string) {
     ],
   }
   return {
-    title: titles[locale][rankings ? 1 : 0],
-    description: `${slugs[0] === "tg" ? "Telegram" : "MAX"}: ${descriptions[locale][rankings ? 1 : 0]}`,
-    intro: rankings ? words.rankingintro : words.intro,
-    sections,
-    reference: words.reference,
+    title: role?.title ?? (rankings ? titles[locale][1] : roles.usage),
+    description: `${slugs[0] === "tg" ? "Telegram" : "MAX"}: ${role?.intro ?? descriptions[locale][rankings ? 1 : 0]}`,
+    intro:
+      role?.intro ??
+      (rankings
+        ? `${words.rankingintro} ${{ ru: "В командах ниже подставьте свои названия чатов, имена и даты.", en: "Replace chat names, people and dates in the commands below with your own.", es: "Sustituye nombres, chats y fechas en los comandos por los tuyos." }[locale]}`
+        : words.intro),
+    sections: role?.sections ?? sections,
+    roleNavigation: {
+      label: roles.nav,
+      links: (["usage", "bot", "groups"] as const).map((page) => ({
+        page: `${slugs[0]}/${page}`,
+        label: roles[page],
+        current: page === slugs[1],
+      })),
+    },
+    reference: roles.reference,
     fixture: rankings
       ? {
           title: words.fixturetitle,
@@ -258,12 +281,19 @@ export function readerGuide(slugs: string[], lang: string) {
 export function readerGuideMarkdown(slugs: string[], lang: string) {
   const guide = readerGuide(slugs, lang)
   if (!guide) return ""
-  let text = `${guide.intro}\n\n`
-  for (const section of guide.sections)
-    text += `## ${section.title}\n\n\`\`\`text prompt\n${section.prompt}\n\`\`\`\n\n${section.result}\n\n[${section.link}](/${lang}/docs/${section.page})\n\n`
+  const sectionMarkdown = (section: ReportTask) => {
+    let result = `## ${section.title}\n\n\`\`\`text prompt\n${section.prompt}\n\`\`\`\n\n${section.result}\n\n`
+    if (section.example)
+      result += `| ${section.example.headers.join(" | ")} |\n| ${section.example.headers.map(() => "---").join(" | ")} |\n${section.example.rows.map((row) => `| ${row.join(" | ")} |`).join("\n")}\n\n${section.example.note}\n\n`
+    if (section.commands) result += `\`\`\`sh\n${section.commands.join("\n")}\n\`\`\`\n\n`
+    return `${result}[${section.link}](/${lang}/docs/${section.page})\n\n`
+  }
+  let text = `${guide.intro}\n\n${guide.roleNavigation.links.map((link) => `[${link.label}](/${lang}/docs/${link.page})`).join(" · ")}\n\n`
+  for (const section of guide.sections.slice(0, guide.fixture ? 1 : undefined)) text += sectionMarkdown(section)
   if (guide.fixture) {
     const fixture = guide.fixture
     text += `## ${fixture.title}\n\n${fixture.intro}\n\n**${fixture.totals}**\n\n### ${fixture.activityTitle}\n\n| ${lang === "ru" ? "День октября" : lang === "es" ? "Día de octubre" : "October day"} | ${fixture.headers[1]} |\n| --- | --- |\n${fixture.activity.map((count, i) => `| ${i + 1} | ${count} |`).join("\n")}\n\n| ${fixture.headers.join(" | ")} |\n| ${fixture.headers.map(() => "---").join(" | ")} |\n${fixture.rows.map((row) => `| ${row.join(" | ")} |`).join("\n")}\n\n${fixture.outcome}\n\n${fixture.limit}\n\n[${fixture.next}](/${lang}/docs/search)\n\n`
   }
+  if (guide.fixture) for (const section of guide.sections.slice(1)) text += sectionMarkdown(section)
   return `${text}## ${guide.reference}\n\n`
 }

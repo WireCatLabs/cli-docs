@@ -167,10 +167,10 @@ export default async function Page(props: Props) {
         {taskGuide ? (
           <>
             <ReaderGuide slugs={page.slugs} lang={lang} />
-            <details id="technical-reference" className="docs-disclosure" data-technical-reference>
-              <summary lang={lang}>{taskGuide.reference}</summary>
+            <section id="technical-reference" data-technical-reference>
+              <h2 lang={lang}>{taskGuide.reference}</h2>
               <MDX components={getMDXComponents({ a: createRelativeLink(source, page) })} />
-            </details>
+            </section>
           </>
         ) : commandIndex && tool ? (
           <CommandReferenceIndex

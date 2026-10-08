@@ -110,10 +110,12 @@ these derived files. Shared global options and exit codes appear in every part.
 
 ## Task presentation beside released references
 
-The usage and rankings routes have a portal-owned task layer in `lib/reader-guides.ts`, rendered
-by `components/reader-guide.tsx`. It supplies localized requests, results and the synthetic report
-example. The full reviewed native guide is a disclosure below it. `DocsDisclosures` reveals its
-sections for old hashes and TOC navigation. Markdown prepends the same task data and keeps all
+The usage, bot, groups and rankings routes have a portal-owned task layer in `lib/reader-guides.ts`, rendered
+by `components/reader-guide.tsx`. Personal account, bots and administration are separate existing
+page homes, linked through a role navigation. `lib/role-guides.ts` owns role tasks;
+`lib/report-tasks.ts` owns report requests, example tables and checked commands.
+The full reviewed native guide is visible below the reader tasks, without a closed disclosure.
+Existing native anchors remain available. Markdown prepends the same task data and keeps all
 native reference text; source imports and release fingerprints remain unchanged.
 
 Title, description and sidebar labels use the task layer where supplied. To edit a reader task,
