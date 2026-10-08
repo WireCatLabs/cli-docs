@@ -1,5 +1,5 @@
 ---
-title: "People"
+title: "Know your people"
 description: "Learn who someone is from your own Telegram and MAX accounts: their profile, where you talk, what they wrote, whether the account looks like a bot — and auto-replies by your rules."
 ---
 

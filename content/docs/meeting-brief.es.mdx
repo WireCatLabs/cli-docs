@@ -1,17 +1,17 @@
 ---
-title: "Reproduce un resumen de Telegram para una reunión"
+title: "Demo sin instalar"
 description: "Reproduce una búsqueda local, revisa las fuentes y prepara una reunión con un conjunto de datos controlado."
 ---
 
-Este recorrido usa los mensajes sintéticos del buscador de prueba de WireCat y su motor real de consultas. No accede a ninguna cuenta, usa credenciales, envía mensajes ni llama a un proveedor de IA. El resultado muestra evidencia recuperada, no un caso de cliente ni una respuesta de Telegram en vivo.
+Prueba un resumen para una reunión con una conversación de Telegram de muestra. No necesitas instalar ni conectar nada: pulsa el botón y revisa los mensajes usados.
 
-## Ejecuta el ejemplo controlado
+## Probar en el navegador
 
-Necesitas Node 22.16+ o 24+ y una copia del [repositorio del sitio WireCat](https://github.com/leemour/cli-docs). Desde su directorio raíz, ejecuta:
+<MeetingBriefDemo lang="es" />
 
-```sh
-node --experimental-strip-types scripts/reproduce-meeting-brief.mjs
-```
+## Revisar las fuentes
+
+El resumen usa una muestra fija y búsqueda local. No es una respuesta de IA sobre tu propia cuenta. Abajo están las fuentes recuperadas.
 
 <div lang="en">
 
@@ -89,3 +89,11 @@ Para MAX, consulta su [propia guía de búsqueda](./max/search.md); sus opciones
 ## Reproducibilidad y límites
 
 Los mensajes y el script están versionados con el sitio. Los tests comparan la salida con esta guía en los tres idiomas. Anota el commit al repetirlo. El ejemplo demuestra consultas y contexto limitado, no un historial completo, un benchmark de la CLI en vivo ni la precisión de un modelo de IA. Este recorrido no envía nada.
+
+## Reproducir con código (opcional)
+
+Para desarrolladores: puedes obtener las mismas fuentes desde el [repositorio del sitio](https://github.com/leemour/cli-docs):
+
+```sh
+node --experimental-strip-types scripts/reproduce-meeting-brief.mjs
+```

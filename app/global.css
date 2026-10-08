@@ -126,3 +126,18 @@ html > body[data-scroll-locked] {
     animation: none;
   }
 }
+
+.docs-contents-desktop {
+  display: none;
+}
+.docs-contents-mobile {
+  display: inline;
+}
+@media (min-width: 80rem) {
+  .docs-contents-desktop {
+    display: inline;
+  }
+  .docs-contents-mobile {
+    display: none;
+  }
+}

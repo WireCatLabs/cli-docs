@@ -1,17 +1,17 @@
 ---
-title: "Reproduce a Telegram meeting brief"
+title: "Demo, no install"
 description: "Reproduce a local search, inspect message sources and build a meeting brief from a controlled dataset."
 ---
 
-This walkthrough uses WireCat’s synthetic search-playground dataset and its actual query engine. It reads no account, uses no login credentials, sends no messages and calls no AI provider. The result is retrieval evidence, not a measured customer outcome or a live Telegram response.
+Try a meeting brief from a sample Telegram conversation. Nothing to install or connect: click the button, then inspect the messages used to prepare the brief.
 
-## Run the controlled example
+## Try it here
 
-Use Node 22.16+ or 24+ and a checkout of the [WireCat site repository](https://github.com/leemour/cli-docs). From its root, run:
+<MeetingBriefDemo lang="en" />
 
-```sh
-node --experimental-strip-types scripts/reproduce-meeting-brief.mjs
-```
+## Check the sources
+
+The brief uses a fixed sample and local search. It is not an AI-generated answer from your own Telegram account. The retrieval evidence is shown below.
 
 <div lang="en">
 
@@ -89,3 +89,11 @@ For MAX, use its [own search reference](./max/search.md); do not assume Telegram
 ## Reproducibility and limits
 
 The dataset and runner are versioned with the site; automated tests compare the output with this guide in all three languages. Record the repository commit when reproducing it. It demonstrates query matching and a bounded context window, not message-history completeness, a live CLI benchmark or an AI model’s accuracy. Nothing is sent by this walkthrough.
+
+## Reproduce with code (optional)
+
+For developers, the same evidence can be reproduced from the [site repository](https://github.com/leemour/cli-docs):
+
+```sh
+node --experimental-strip-types scripts/reproduce-meeting-brief.mjs
+```

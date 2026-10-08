@@ -1,0 +1,68 @@
+---
+title: "Permisos"
+description: "Elige qué acciones puede realizar el asistente."
+---
+
+Los permisos pertenecen a un perfil: ajustes para una cuenta o bot. Empieza leyendo y
+permite cambios cuando hagan falta. Consulta [perfiles y bots](./profiles.md).
+
+## Elegir el nivel de acceso
+
+| Nivel | Qué ocurre |
+|---|---|
+| `deny` | Se rechaza la acción, incluso leer. |
+| `readonly` | Permite leer, pero no cambiar. |
+| `ask` | Un cambio pregunta en el terminal. |
+| `allow` | Puede ejecutarse sin otra pregunta. |
+
+Un rechazo indica que debes revisar acción y ajustes, no que la conexión esté rota.
+No pidas al asistente que elimine una restricción solo para terminar una tarea.
+
+## Permitir una acción
+
+```sh
+tg work config set permissions.messages.send ask
+max work config set permissions.messages.send ask
+```
+
+Cambia `work` por tu perfil. Para permitir lectura y rechazar cambios de forma predeterminada:
+
+```sh
+tg work config set permissions.messages readonly
+max work config set permissions.messages readonly
+```
+
+Las claves más específicas tienen prioridad. `permissions.messages.send ask` permite enviar;
+cámbiala a `readonly` para impedirlo. Revisa las demás excepciones con `config show`.
+
+Esto controla mensajes. Reacciones y administración tienen claves propias. Consulta los ejemplos
+completos de solo lectura en [Telegram](./tg/configuration.md) y [MAX](./max/configuration.md).
+
+## Permisos del bot
+
+Los permisos y límites pertenecen a la sección del bot. Para confirmar envíos en el terminal:
+
+```sh
+tg support config set permissions.bot.messages.send ask --bot
+max support config set permissions.bot.messages.send ask --bot
+tg support config set sendsPerHour 30 --bot
+max support config set sendsPerHour 30 --bot
+```
+
+## Limitar destinatarios y envíos repetidos
+
+La lista de destinatarios limita los chats a los que puede enviar el perfil. Un límite por hora
+ayuda a detener un bucle. Siguen activos aunque se permita el comando.
+Las instrucciones están en la seguridad de [Telegram](./tg/security.md) y [MAX](./max/security.md).
+
+## Cambiar temporalmente un servidor MCP
+
+Añade `--permission messages.send=allow` al inicio del servidor para permitir enviar durante
+ese proceso. No cambia los ajustes guardados. Por MCP, `ask` no exige formulario del servidor: la app
+controla sus aprobaciones y puede permitir otra llamada sin preguntar. Usa `deny` o `readonly` para impedir cambios. Consulta [la conexión web](./browser-apps.mdx).
+
+## Límites y reglas detalladas
+
+Un asistente con acceso a archivos de configuración o a un terminal sin restricciones puede
+cambiar estos permisos. Lee [Seguridad](./security.md) antes de darle ese acceso.
+Las claves y reglas anidadas están en la referencia de configuración del mensajero.

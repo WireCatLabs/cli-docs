@@ -49,3 +49,8 @@ __pycache__/
 # Private local WireCat review skills and evidence.
 /.agents/skills/
 /.audit/
+
+# Generated design previews and local decision-server state.
+/.impeccable/questions/
+/.impeccable/review/
+/.impeccable/mocks/

@@ -11,6 +11,7 @@ import { createRelativeLink } from "fumadocs-ui/mdx"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { DocsContentsHint } from "@/components/docs-contents-hint"
 import { DocsDisclosures } from "@/components/docs-disclosures"
 import { DocsTocPopover } from "@/components/docs-toc-popover"
 import { getMDXComponents } from "@/components/mdx"
@@ -90,12 +91,8 @@ export default async function Page(props: Props) {
       />
       <DocsDisclosures />
       <DocsTitle>{page.data.title}</DocsTitle>
-      {tool?.docsRef && (
-        <p className="text-xs text-fd-muted-foreground">
-          {{ en: "Documentation", ru: "Документация", es: "Documentación" }[lang]}: {tool.docsRef}
-        </p>
-      )}
       <DocsDescription className="mb-0">{description}</DocsDescription>
+      {["commands", "configuration"].includes(page.slugs.at(-1) ?? "") && <DocsContentsHint lang={lang} />}
       <div className="flex flex-row gap-2 items-center border-b pb-6">
         <MarkdownCopyButton markdownUrl={markdownUrl} />
         <ViewOptionsPopover

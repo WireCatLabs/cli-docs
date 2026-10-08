@@ -9,6 +9,10 @@ export function DocsTocPopover() {
   const items = useTOCItems()
   const { locale } = useI18n()
   const title = { en: "On this page", ru: "На этой странице", es: "En esta página" }[locale ?? "en"] ?? "On this page"
+  const action =
+    { en: "Contents · tap to open", ru: "Оглавление · нажмите, чтобы открыть", es: "Índice · pulsa para abrir" }[
+      locale ?? "en"
+    ] ?? "Contents · tap to open"
   const details = useRef<HTMLDetailsElement>(null)
   useEffect(() => {
     if (!items.length) return
@@ -32,7 +36,7 @@ export function DocsTocPopover() {
     >
       <details ref={details} className="group">
         <summary className="flex h-10 cursor-pointer list-none items-center justify-between px-4 text-sm text-fd-muted-foreground md:px-6">
-          {title}
+          {action}
           <ChevronDown className="size-4 group-open:rotate-180" aria-hidden="true" />
         </summary>
         <ul className="absolute inset-x-0 max-h-72 overflow-auto border-t bg-fd-background px-4 py-3 text-sm shadow-lg">

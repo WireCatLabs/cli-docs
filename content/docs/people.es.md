@@ -1,5 +1,5 @@
 ---
-title: "Personas"
+title: "Conoce a tu gente"
 description: "Averigua quién es alguien desde tus propias cuentas de Telegram y MAX: su perfil, dónde habláis, qué escribió, si la cuenta parece un bot — y respuestas automáticas con tus reglas."
 ---
 

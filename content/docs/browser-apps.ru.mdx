@@ -1,5 +1,5 @@
 ---
-title: ChatGPT, Codex и Claude в браузере
+title: "ChatGPT и Claude в браузере"
 description: Подключите Telegram или MAX через HTTPS с входом — инструкции для Windows, macOS и Linux.
 ---
 
@@ -7,14 +7,7 @@ description: Подключите Telegram или MAX через HTTPS с вхо
 поддерживают HTTP MCP с OAuth. **Tailscale устанавливается отдельно** на компьютер с CLI;
 он даёт серверу публичный адрес HTTPS. На устройстве с браузером Tailscale не нужен.
 
-**Статус проверки:** владелец подтвердил чтение и отправку Telegram в Claude web 07.10.2026.
-OpenAI web, MAX в браузере и установка на каждой ОС ещё требуют полного прогона.
-Для чтения нужны `tg` 0.27+ или `max` 0.28+. Команды отправки ниже требуют `max` 0.30+
-или `tg` 0.30 (следующий выпуск). Пока эта версия TG не опубликована, используйте проверенную
-сборку либо уберите `--http-confirmation permissions --permission messages.send=allow` для чтения.
-Перед запуском проверьте версию.
 
-<ArchitectureDiagram name="remote" lang="ru" />
 
 ## До начала
 
@@ -55,7 +48,7 @@ OpenAI web, MAX в браузере и установка на каждой ОС
 
 ```powershell
 $mcpPublicUrl = Read-Host 'HTTPS origin from Funnel (no /mcp)'
-tg.cmd mcp --http --port 8765 --public-url $mcpPublicUrl --http-confirmation permissions --permission messages.send=allow
+tg.cmd mcp --http --port 8765 --public-url $mcpPublicUrl --permission messages.send=allow
 ```
 
 Для MAX замените `tg.cmd` на `max.cmd` в окне 2. Оба процесса запускайте в Windows.
@@ -78,7 +71,7 @@ TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --http-confirmation permissions --permission messages.send=allow
+tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
 ```
 
 Для MAX замените `tg` на `max` в окне 2.
@@ -100,7 +93,7 @@ sudo tailscale funnel 8765
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --http-confirmation permissions --permission messages.send=allow
+tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
 ```
 
 Для MAX замените `tg` на `max` в окне 2. Не запускайте сервер мессенджера с `sudo`.
@@ -112,24 +105,17 @@ tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --http-confirmation permi
 Сервер слушает `127.0.0.1:8765` и печатает одноразовый код входа. Имя профиля ставится перед
 командой: например, `tg work mcp`, а в Windows — `tg.cmd work mcp`.
 
-## Права и отправка
+## Выбрать права ассистента
 
-По умолчанию **каждая HTTP-запись требует серверную форму**, даже при сохранённом `allow`.
-Подтверждение вызова в приложении — отдельный вопрос, который не заменяет эту форму.
-Приложение без MCP elicitation в этом режиме может только читать.
+Команды выше разрешают отправку этому процессу через `--permission messages.send=allow`.
+Сохранённые настройки не меняются. Приложение управляет собственными подтверждениями.
+Через MCP уровень `ask` не требует подтверждения сервера. Для подключения только на чтение
+выберите профиль с такими правами.
 
-Команды выше включают `--http-confirmation permissions`: эффективный `allow` выполняется
-без серверной формы, `ask` требует её, `deny` / `readonly` ограничивают доступ.
-`--permission messages.send=allow` разрешает отправку только этому процессу и не меняет
-сохранённые настройки. Список получателей и лимит в час продолжают действовать.
-Приложение может спрашивать перед вызовом, но при постоянном разрешении инструмента следующий
-вызов может отправить без нового вопроса. Просите черновик явно, если хотите сначала проверить текст.
-
-Повторяйте `--permission ключ=уровень` для других команд. Широкий `messages=allow` заменяет
-сохранённые права ресурса, но встроенные подтверждения остаются: для удаления нужно отдельное
-`messages.delete=allow`. `--yes` не обходит форму HTTP.
-См. [права Telegram](./tg/configuration.md), [права MAX](./max/configuration.md).
-При временных правах MAX подключается напрямую; уже работающий `max serve` сохраняет права профиля.
+Подтверждение в приложении и на сервере — разные вопросы. Если инструмент постоянно разрешён
+в приложении и на сервере, следующий вызов может отправить без нового вопроса. Просите черновик,
+если хотите сначала проверить текст. Список разрешённых получателей и лимит в час действуют.
+Примеры настройки доступа — в разделе [Права](./permissions.md).
 
 ## Подключить Codex / ChatGPT web или Claude
 
@@ -186,11 +172,15 @@ tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --http-confirmation permi
 
 - **Нет подключения:** откройте origin с `/.well-known/oauth-protected-resource/mcp`.
   Должен появиться JSON. Иначе проверьте Funnel, разрешение и локальный порт.
-- **Чтение работает, отправка падает после подтверждения:** проверьте два флага запуска выше
-  и эффективные права. При `ask` всё ещё нужна серверная форма; отказ ничего не отправляет.
+- **Чтение работает, отправка падает после подтверждения:** проверьте права запуска
+  и эффективные права. `deny` и `readonly` запрещают изменения на сервере; проверьте также подтверждения приложения.
 - **PowerShell запрещает скрипты:** используйте `tg.cmd` или `max.cmd`. Если команда не найдена,
   откройте новое окно и проверьте установку CLI; менять политику выполнения всей системы не нужно.
 - **Нет инструментов:** `tg mcp doctor` или `max mcp doctor` проверяет локальный handshake,
   а не туннель и вход в аккаунт. Явный `account show` проверяет подключение к аккаунту.
 - **Порт занят:** смените локальный порт и направьте Funnel на тот же номер. Для двух серверов
   выберите также разные публичные порты, как показано выше.
+
+## Как устроено подключение
+
+<ArchitectureDiagram name="remote" lang="ru" />
