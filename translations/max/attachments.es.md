@@ -6,7 +6,7 @@ title: "Adjuntos: envío, descarga y extracción de contenido"
 Elige cómo enviar o descargar un adjunto, consulta qué archivos lee la propia CLI, qué dependencias necesitas y cuándo pedir a un agente o modelo externo que lea un archivo. Después de la extracción, puedes guardar el texto para buscarlo: `content:` encuentra el mensaje original.
 
 
-El envío entrega un archivo al chat, la descarga guarda sus bytes y la extracción obtiene su contenido para leerlo y buscarlo. Son funciones distintas: puedes enviar y descargar un XLSX, aunque el extractor integrado todavía no lee sus celdas.
+El envío entrega un archivo al chat, la descarga guarda sus bytes y la extracción obtiene su contenido para leerlo y buscarlo. Son funciones distintas: un escaneo descargado aún necesita OCR; un documento digital puede leerse localmente sin modelo.
 
 
 ## Qué puedes enviar
@@ -57,28 +57,34 @@ Por defecto, el agente lee los escaneos y las fotos con sus propias herramientas
 
 | Formato | Mediante software local | API explícita: `extract --ocr` | Cuándo necesitas un agente |
 | --- | --- | --- | --- |
-| TXT, MD, MARKDOWN, CSV, TSV, JSON, LOG | Lee texto UTF-8 sin paquetes adicionales | Sigue leyendo localmente | El agente detecta la codificación y convierte a UTF-8; todavía no hay detección automática integrada |
-| Otros archivos con MIME `text/*` o `application/json` | Lee texto UTF-8 | Sigue leyendo localmente | Si no hay MIME y la extensión no es compatible, hace falta un lector externo |
+| TXT, MD, MARKDOWN, CSV, TSV, JSON, LOG | Lee UTF-8, UTF-16 con BOM y codificaciones antiguas detectadas con confianza | Sigue leyendo localmente | La codificación ambigua requiere revisión y conversión por el agente |
+| Otros archivos con MIME `text/*` o `application/json` | Lee texto con las mismas reglas de codificación | Sigue leyendo localmente | Si falta MIME y la extensión no se admite, usa un lector externo |
 | DOCX | Extrae texto con `mammoth` | Sigue leyendo localmente | Esta extracción no reconoce imágenes incrustadas ni conserva el diseño exacto |
 | PDF con capa de texto | Extrae texto con `unpdf` | Lee las páginas de texto localmente | Comprobar el orden de columnas, las tablas y la precisión del texto extraído |
 | PDF con páginas escaneadas o mixtas | Sin texto: `needs-agent`; la extracción normal lee la capa de texto existente en un PDF mixto | Lee el texto de las páginas; convierte las páginas sin texto en imágenes con `unpdf` y `@napi-rs/canvas` y las reconoce con un modelo | La vía habitual para escaneos; también cuando falta un motor, hay límites o falla la API |
 | JPG, JPEG, PNG, WEBP | `needs-agent` | Envía una imagen compatible a un modelo de visión | Por defecto, el propio agente la lee |
 | GIF, HEIC, TIF, TIFF, BMP | `needs-agent`, sin conversión integrada | El OCR automático no admite estos formatos | El agente necesita un visor adecuado o convertir a PNG/JPEG/WEBP |
 | DOC, PPT, XLS | Sin lector integrado para los formatos binarios antiguos | No añade un lector para estos formatos | Convertir con una aplicación ofimática instalada y leer el texto o las páginas |
-| ODT, ODS, XLSX, PPTX | Sin extractor integrado específico | No añade un lector para estos formatos | Leer con una biblioteca específica o exportar el documento, las hojas o las diapositivas con una herramienta disponible |
+| ODT | Lee localmente texto y tablas del documento | Sigue leyendo localmente | Las imágenes y el diseño exacto requieren al agente |
+| ODS, XLSX | Lee hojas en orden, coordenadas y valores guardados; marca fórmulas sin calcularlas | Sigue leyendo localmente | Revisar gráficos, fórmulas sin valor guardado y estructura visual |
+| PPTX | Lee texto de diapositivas en orden | Sigue leyendo localmente | Las imágenes, diagramas y el diseño exacto requieren al agente |
 | RTF | Sin extractor integrado específico | No añade un lector de RTF | Convertir con un programa que entienda las instrucciones y la codificación de RTF |
-| EPUB | Sin extractor integrado específico | No añade un lector de EPUB | Leer los capítulos en el orden del libro con una herramienta de EPUB |
+| EPUB | Lee el texto de capítulos en el orden del libro | Sigue leyendo localmente | Revisar imágenes y diseños complejos |
 | ZIP | No recorre el contenido del archivo comprimido | No reconoce su contenido | Consultar la lista de archivos, extraer los necesarios y procesar cada uno según su formato |
 | Mensaje de voz | Modelo de voz local aparte: `messages transcribe` | Este OCR no reconoce voz | Configurar el modelo y el idioma; consulta [transcripción de voz](./audio-recognition.md) |
-| Otros archivos de audio, vídeo, animación y stickers | El extractor de texto de adjuntos no los lee | Este OCR no los reconoce | Para cualquier audio hacen falta una herramienta de voz disponible y un formato adecuado; para vídeo, el audio o fotogramas individuales |
+| Otros archivos con MIME `text/*` o `application/json` | Lee texto con las mismas reglas de codificación | Sigue leyendo localmente | Si falta MIME y la extensión no se admite, usa un lector externo |
 
 Aquí CSV y JSON se convierten en texto para buscar, no en tablas estructuradas de la base de datos. HTML/XML con MIME de texto se lee como código fuente, no como una página en el navegador. La extracción de PDF/DOCX guarda texto, no el diseño original. El OCR puede equivocarse en cifras, orden de lectura y formato; comprueba los datos importantes en el original.
 
+
+Detectar una codificación antigua requiere confianza; el texto corto o ambiguo queda para el agente. Los bytes originales no cambian. Los intentos fallidos pueden repetirse y se protege el texto guardado por el agente. ODT, ODS, XLSX, PPTX y EPUB se limitan a 1000 partes y 50 MiB descomprimidos, con un máximo de 10 MiB por parte XML/HTML de texto. Los archivos dañados o parciales no se indexan como texto completo.
 
 Las notas de voz se procesan aparte de los documentos: el modelo de voz se descarga una vez y después funciona localmente. Los comandos, la selección de idioma y los límites se explican en [transcripción de voz](./audio-recognition.md).
 
 
 ## Dependencias necesarias
+
+La lectura de texto, ODT, ODS, XLSX, PPTX y EPUB ya está incluida en la CLI. Los paquetes opcionales siguientes sirven para PDF, DOCX y convertir páginas PDF en imágenes.
 
 
 | Tarea | Paquete |

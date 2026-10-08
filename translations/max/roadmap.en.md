@@ -6,6 +6,8 @@ Plans for `max`. The order is approximate and may change. Suggest ideas in [GitH
 
 ## Coming soon
 
+- **Files for remote AI agents.** Transfer retained attachments through MCP so the agent can open documents/scans and save their text into the search index.
+
 - **Optional local storage.** A setting that makes `max` save nothing to disk and retrieve everything from MAX.
 
 ## Later

@@ -6,7 +6,7 @@ title: "Attachments: sending, downloading and extracting content"
 Choose how to send or download an attachment, learn which files the CLI reads itself, which dependencies you need and when to ask an agent or external model to read a file. After extraction, you can save the text for search: `content:` finds the original message.
 
 
-Sending delivers a file to a chat, downloading saves its bytes, and extraction obtains its content for reading and search. These are separate capabilities: you can send and download an XLSX file, although the built-in extractor cannot yet read its cells.
+Sending delivers a file to a chat, downloading saves its bytes, and extraction obtains its content for reading and search. These are separate capabilities: a downloaded scan still needs OCR, while a digital document can be read locally without a model.
 
 
 ## What you can send
@@ -57,17 +57,19 @@ By default, the agent reads scans and photos with its own tools. `attachments ex
 
 | Format | Programmatically, locally | Explicit API: `extract --ocr` | When an agent is needed |
 | --- | --- | --- | --- |
-| TXT, MD, MARKDOWN, CSV, TSV, JSON, LOG | Reads UTF-8 text without extra packages | Still reads locally | The agent detects the encoding and converts to UTF-8; automatic detection is not built in yet |
-| Other files with MIME type `text/*` or `application/json` | Reads UTF-8 text | Still reads locally | If the MIME type is absent and the extension is unsupported, an external reader is needed |
+| TXT, MD, MARKDOWN, CSV, TSV, JSON, LOG | Reads UTF-8, BOM-marked UTF-16 and confidently detected legacy encodings | Still reads locally | Ambiguous encoding needs agent inspection and conversion |
+| Other files with MIME type `text/*` or `application/json` | Reads text with the same encoding rules | Still reads locally | If MIME is absent and the extension is unsupported, use an external reader |
 | DOCX | Extracts text with `mammoth` | Still reads locally | This extraction does not recognize embedded images or preserve the exact layout |
 | PDF with a text layer | Extracts text with `unpdf` | Reads text pages locally | Check column order, tables and extracted text accuracy |
 | PDF with scanned or mixed pages | Without text: `needs-agent`; ordinary extraction reads the existing text layer in a mixed PDF | Reads page text; converts pages without text to images using `unpdf` and `@napi-rs/canvas`, then uses a model to recognize them | The usual route for scans; also when an engine is unavailable, limits apply or an API fails |
 | JPG, JPEG, PNG, WEBP | `needs-agent` | Sends a supported image to a vision model | By default, the agent reads it itself |
 | GIF, HEIC, TIF, TIFF, BMP | `needs-agent`, without built-in conversion | Automatic OCR of these formats is unsupported | The agent needs a suitable viewer or conversion to PNG/JPEG/WEBP |
 | DOC, PPT, XLS | No built-in reader for older binary formats | Does not add a reader for these formats | Convert with an installed office application, then read the text or pages |
-| ODT, ODS, XLSX, PPTX | No dedicated built-in extractor | Does not add a reader for these formats | Read with a dedicated library or export the document, sheets or slides using an available tool |
+| ODT | Reads document text and tables locally | Still reads locally | Images and exact layout need the agent |
+| ODS, XLSX | Reads sheets in order, cell coordinates and stored values; marks formulas without calculating them | Still reads locally | Charts, formulas without saved values and visual structure need inspection |
+| PPTX | Reads slide text in order | Still reads locally | Images, diagrams and exact layout need the agent |
 | RTF | No dedicated built-in extractor | Does not add an RTF reader | Convert with a program that understands RTF commands and encoding |
-| EPUB | No dedicated built-in extractor | Does not add an EPUB reader | Read chapters in book order using an EPUB tool |
+| EPUB | Reads chapter text in book order | Still reads locally | Images and complex layout need inspection |
 | ZIP | Does not traverse the archive contents | Does not recognize archive contents | List the files, unpack those needed and process each according to its format |
 | Voice message | Separate local speech model: `messages transcribe` | This OCR does not recognize speech | Configure the model and language; see [voice transcription](./audio-recognition.md) |
 | Other audio, video, animation and sticker files | Not read by the attachment text extractor | Not recognized by this OCR | Arbitrary audio needs an available speech tool and a suitable format; video needs audio or individual frames |
@@ -75,10 +77,14 @@ By default, the agent reads scans and photos with its own tools. `attachments ex
 CSV and JSON become searchable text here, not structured database tables. HTML/XML with a text MIME type is read as source text, not as a browser page. PDF/DOCX extraction saves text, not the original layout. OCR can make mistakes in numbers, reading order and formatting; verify important information against the original.
 
 
+Legacy encoding detection requires confidence; short or ambiguous text remains for the agent. Source bytes stay unchanged. Failed local reads can retry, and saved agent text remains protected. ODT, ODS, XLSX, PPTX and EPUB are bounded to 1000 parts and 50 MiB expanded, with at most 10 MiB per text XML/HTML part. Malformed or partial files are not indexed as completely read text.
+
 Voice messages are processed separately from documents: the speech model is downloaded once and then runs locally. Commands, language selection and limits are covered in [voice transcription](./audio-recognition.md).
 
 
 ## Required dependencies
+
+Text, ODT, ODS, XLSX, PPTX and EPUB reading is already included in the CLI. The optional packages below are needed for PDF, DOCX and rendering PDF pages.
 
 
 | Task | Package |

@@ -33,6 +33,7 @@ y los códigos de salida. Consulta cada ruta de comando en una llamada separada;
 ```sh
 tg session start                        # QR code: Settings → Devices → Link Desktop Device
 tg session start phone                  # phone number, the code Telegram sends, your 2FA password
+tg session start phone --sms            # the same, asking for the code by SMS instead of in the app
 tg session start --qr-file login.png    # the QR code as a picture, for an agent to show you
 ```
 
@@ -386,6 +387,7 @@ tg polls vote "Book club" 4250 <answer id>
 tg polls vote "Book club" 4250 --retract
 tg polls create "Book club" "Which day?" Monday Tuesday --anonymous
 tg polls close "Book club" 4250            # your own poll; it cannot be reopened
+tg polls create "Book club" "2+2?" 3 4 5 --quiz --correct 2 --solution "Four."   # a quiz; a vote is final
 ```
 
 Al leer un chat, las reacciones aparecen bajo el mensaje: `👍 3  🔥 1  (you: 🔥)`. Votar en una encuesta pública muestra tu nombre a todos en el chat. Vota con los ID que imprime `polls show`, nunca por la posición de una respuesta. `--multiple` permite elegir varias respuestas. Solo se puede cambiar el voto en una encuesta creada con `--revote`. Se rechazan antes de enviar nada: votar en una encuesta cerrada, elegir dos respuestas en una de respuesta única, cambiar o retirar un voto definitivo y usar `--retract` sin haber votado; también se rechaza cerrar una encuesta ajena.
@@ -405,14 +407,20 @@ La otra persona lo ve. Pasa por los controles como acción `read` y no cuenta pa
 
 ```sh
 tg chats folders list                              # your folders, in the order the app shows them
+tg chats folders show "Trips"                      # one folder, with the names of its chats
 tg chats folders create "Trips" --chat "Hiking" --chat @kate
 tg chats folders update "Trips" --title "Travel" --add "Climbing" --remove @kate
 tg chats folders delete "Travel"                   # the chats stay
 tg chats folders order "Travel" "Work"             # these first; the rest keep their order after them
 tg chats folders join https://t.me/addlist/AbCdEf  # a folder someone shared: joins every chat in it
+tg chats folders create "Inbox" --include contacts,groups --skip muted,archived --emoji 📥
+tg chats folders update "Inbox" --exclude-chat "Noisy group" --pin @kate
+tg chats folders update "Inbox" --include none     # no kinds any more; only the chats named in it
 ```
 
 Una carpeta se indica por su ID o su título exacto. Solo tú ves tus carpetas; cada cambio pasa igualmente por las comprobaciones como un cambio de `account`. `join` es distinto: las personas de esos chats ven que te has unido, como con `tg chats join`. «Todos los chats» mantiene su posición con `order`.
+
+Una carpeta puede incluir automáticamente contacts, `non-contacts`, `groups`, `channels`, `bots` con `--include`; `--skip` excluye `muted`, read, `archived`. `--exclude-chat` excluye un chat concreto y `--pin` lo fija arriba. Al `update`, include/skip sustituyen las reglas anteriores y `--remove` quita el chat de todas las listas. Una carpeta compartida por enlace no admite reglas. `--emoji` debe ser un icono de carpeta de Telegram: los demás se descartan sin error y la respuesta muestra lo realmente guardado.
 
 ### Funciones aún no disponibles
 
@@ -466,6 +474,10 @@ Un grupo nuevo siempre es un supergrupo. Si los ajustes de privacidad de alguien
 En un grupo con aprobación de entradas, `chats requests list` muestra las solicitudes pendientes con la nota enviada por cada persona; solo las ven los administradores, y leerlas no avisa a nadie. `accept` y `decline` resuelven una por el ID de la lista. Una solicitud aceptada cuenta para el límite por hora; una rechazada, no. La lista de destinatarios solo comprueba el grupo. Si alguien ya es miembro, se devuelve `already: true`; una solicitud que ya no existe termina con el código `6`. `--all` resuelve todas las pendientes o, con `--link`, las de un enlace; primero se cuentan y, si aceptarlas superaría el límite por hora, se rechaza antes de admitir a nadie. `chats link list` muestra solo tus enlaces; al revocar el enlace principal del grupo, Telegram genera uno nuevo que aparece en la respuesta.
 
 `chats update` cambia título, descripción y los dos ajustes disponibles de Telegram en una operación; devuelve el estado actualizado, igual que `chats show`. Las reglas de moderación —`chats rules` y `chats moderate`— se explican en [administrar grupos](./groups.md#rules), junto a las demás funciones de administración.
+
+`tg topics delete <chat> <id>` elimina irreversiblemente el tema y todos sus mensajes para todos. Pregunta por defecto; `topics.delete: allow` explícito o `--allow-dangerous` omiten la pregunta. No se puede borrar el tema General.
+
+En solicitudes de entrada, `--search` busca por nombre o @username y `--link` conserva las de un enlace de invitación; Telegram no admite ambos a la vez.
 
 ## Para scripts y agentes
 

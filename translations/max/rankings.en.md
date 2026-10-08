@@ -41,6 +41,53 @@ Evidence shows messages and question/answer pairs. Counter snapshots do not beco
 
 To continue, use the same arguments plus `--cursor` from `nextCursor`. If data changes, start again without cursor. The response includes `total`, `included` and `hasMore`. The items budget is 64 KiB, preserving whole rows; use `messages show` for an oversized row. Fingerprint is limited to 50,000 rows and 8 MiB of input; narrow the chat/date range if exceeded. Selection is limited to 64 KiB.
 
+## Find questions and posts that need attention
+
+These reports are available in MAX 0.35.0. Update the installed CLI if the command is missing.
+
+After loading the relevant history, ask your agent to show club questions waiting more than a day
+and open the original messages. Reports read the stored archive; an empty result does not prove
+that there were no questions when history is incomplete.
+
+```sh
+max stats messages unanswered --chat Клуб --older-than 24h --json
+max stats contacts responses --chat Клуб --answerer 42 --answerer 73 --json
+max stats chats newcomers Клуб --since-time 2026-10-01T00:00:00Z --within 7d --json
+max stats messages discussion --chat Новости --min-views 100 --max-replies 0 --json
+```
+
+`unanswered` orders questions by age. A question contains `?` outside URLs; this is a heuristic.
+Only a direct explicit reply from another identifiable human counts. A later answer can qualify
+even when its date/text falls outside the question filter. Self-replies and a later speaker without
+a reply link do not count. `no-observed-answer` means no qualifying answer in saved history.
+
+`responses` requires repeated `--answerer`: user-selected people, without verifying their past
+administrator role. It returns response count, median and p90 latency in milliseconds; no responses
+give null timings. P90 uses the nearest rank rounded up. Without `--answerer`, unanswered/newcomer
+reports accept any other identifiable human. Bare ids require one scoped account; use
+`person:<provider>/<account>/<id>` for several accounts.
+
+`newcomers` defaults to joins in the last 30 days and questions within seven days of a known join.
+`--until-time` ends the joining cohort. First observation is not a joining date; these people enter
+`summary.unknownJoin`. Rejoining creates a separate stay. Pending help windows and incomplete
+member history remain explicit; no saved question does not mean help was unnecessary.
+
+`discussion` examines stored channel posts, comparing known cumulative views with saved direct
+discussion replies. Provider comments snapshots are separate and freshness is unknown. Missing
+counters or links are not zero. Linked discussion needs stored links and its group's history.
+
+Each row has `drilldown.command` and exact arguments. Run the indicated messages/contacts
+evidence command with `--component report` and the returned selection. Follow `nextCursor`
+with the same arguments; the observation cutoff remains fixed. Source changes require a new report.
+Evidence fits64 KiB; narrow chat/dates if the50,000-node or 8 MiB budget is exceeded. Check
+`quality.archives` and `quality.graph`, then open the locator with `messages show`.
+
+Save the returned selection with `searches create waiting --selection "$selection"` and rerun the
+same report with `--saved waiting`. Accounts, chat, question dates and answerers remain pinned;
+explicit options replace inherited values. Every run takes a new reply-observation cutoff.
+Another report kind is refused. History keeps parameters/selections, never result messages;
+evidence is not recorded.
+
 ## Saved rankings
 
 A saved selection pins allowed IDs and dates; new words narrow it. Explicit ranking parameters replace saved ones. `--sync-first` is unavailable for pinned selections. History stores parameters, not results; evidence is not recorded in history. MCP uses the same paths through `max_read`, passing selection as an object.

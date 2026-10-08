@@ -47,12 +47,12 @@ logo and highlights Getting started in the header and sidebar on all shared guid
 
 ### 2. Release sources
 
-Verified release boundary, 2026-10-08: default `pnpm sync` uses **max v0.34.0** and **tg v0.35.0**,
+Verified release boundary, 2026-10-08: default `pnpm sync` uses **max v0.35.0** and **tg v0.36.0**,
 the reviewed pins in `tools.json`. The full tool guides and start pages are reviewed in EN/RU/ES;
 source fingerprints and portal errata move with these tags. The shared search architecture page
 uses the same release boundary. Use the pinned refs for checks; `--ref main` is only a preview.
 The completed translation scope and validation are recorded in
-[the guide review](docs/reviews/2026-10-08-reviewed-tool-guides.md) and
+[the final reader-release review](docs/reviews/2026-10-08-final-reader-guides.md) and
 [the archive-preparation record](docs/plans/2026-10-08-archive-preparation.md).
 
 ### 3. Translations of the tools' pages

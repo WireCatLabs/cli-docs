@@ -14,6 +14,7 @@ Todos los comandos aceptan `--json` ([cli-contract.md](./cli-contract.md)).
 | tgcli | tg |
 |---|---|
 | `auth`, `auth --qr` | `tg session start` (QR por defecto), `tg session start phone` |
+| `auth --force-sms` | `tg session start phone --sms` |
 | `auth status` | `tg account show`, `tg doctor --online` |
 | `auth logout` | `tg session end` |
 | `accounts add`, `--account <id>` | un perfil: `tg work chats list` o `TG_PROFILE=work` ([profiles.md](./profiles.md)) |
@@ -22,7 +23,7 @@ Todos los comandos aceptan `--json` ([cli-contract.md](./cli-contract.md)).
 | `server`, `service install/start/stop/status/logs` | `tg serve`, `tg server start/stop/status/logs/install` |
 | MCP mediante HTTP (`mcp.enabled`) | `tg mcp --http` ([mcp.md](./mcp.md), [remote.md](./remote.md)) |
 | `sync --once`, `sync --follow` | `tg store fetch`, `tg serve` ([archive.md](./archive.md)) |
-| `sync jobs list/add/retry/cancel` | `tg store fetch --background`, `tg store jobs list/show/cancel` |
+| `sync jobs list/add/retry/cancel` | `tg store fetch --background`, `tg store jobs list/show/retry/cancel/clear` |
 | `owner request <id>` | `tg sends list` y `--send-id` para repetir un envío de resultado desconocido |
 | `doctor` | `tg doctor` |
 
@@ -65,11 +66,13 @@ Todos los comandos aceptan `--json` ([cli-contract.md](./cli-contract.md)).
 | `groups invite get`, `groups invite revoke` | `tg chats link show`, `tg chats link reset` |
 | `groups invite edit --request-needed` | `tg chats link create <chat> --approval`, o `tg chats update <chat> --join-approval on` |
 | `groups requests list/approve/decline` | `tg chats requests list`, `tg chats requests accept/decline <chat> <person>` |
-| `groups requests list --query`, `--link` | todavía no está en tg: `requests list` muestra todas las solicitudes pendientes |
+| `groups requests list --query`, `--link` | `tg chats requests list --search`, `--link` |
 | `groups join`, `groups leave` | `tg chats join <link>`, `tg chats leave <chat>` |
 | `folders list/create/edit/delete` | `tg chats folders list/create/update/delete` |
-| `folders create/edit --include-contacts`, `--exclude-muted` y las demás reglas | todavía no está en tg: una carpeta de tg contiene los chats que indiques |
-| `folders create/edit --exclude-chat`, `--pin-chat`, `--emoji` | todavía no está en tg |
+| `folders show` | `tg chats folders show <folder>` |
+| `folders create/edit --include-contacts … --include-bots` | `--include contacts,non-contacts,groups,channels,bots` |
+| `folders create/edit --exclude-muted`, `--exclude-read`, `--exclude-archived` | `--skip muted,read,archived` |
+| `folders create/edit --exclude-chat`, `--pin-chat`, `--emoji` | `--exclude-chat`, `--pin`, `--emoji` |
 | `folders reorder` | `tg chats folders order` |
 | `folders chats add/remove` | `tg chats folders update --add/--remove` |
 | `folders chats join` (un enlace de carpeta compartida) | `tg chats folders join <link>` |
@@ -82,4 +85,9 @@ Todos los comandos aceptan `--json` ([cli-contract.md](./cli-contract.md)).
 | `contacts tags add/rm` | `tg tags add/remove --contact` |
 | `contacts alias set/rm` | `tg contacts alias set/rm`: un nombre privado solo en este ordenador; `tg contacts rename` cambia tus contactos de Telegram |
 | `contacts notes set` | `tg contacts notes add/edit/remove`, varias notas por persona, en este ordenador solamente |
+| `metadata refresh --only-missing` | `tg metadata refresh --only-missing` |
 | `tags auto`, `metadata refresh` | `tg tags auto`, `tg metadata refresh` |
+
+
+
+

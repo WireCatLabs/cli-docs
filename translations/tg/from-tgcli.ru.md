@@ -14,6 +14,7 @@ title: "Переход с tgcli"
 | tgcli | tg |
 |---|---|
 | `auth`, `auth --qr` | `tg session start` (QR по умолчанию), `tg session start phone` |
+| `auth --force-sms` | `tg session start phone --sms` |
 | `auth status` | `tg account show`, `tg doctor --online` |
 | `auth logout` | `tg session end` |
 | `accounts add`, `--account <id>` | профиль: `tg work chats list` или `TG_PROFILE=work` ([profiles.md](./profiles.md)) |
@@ -22,7 +23,7 @@ title: "Переход с tgcli"
 | `server`, `service install/start/stop/status/logs` | `tg serve`, `tg server start/stop/status/logs/install` |
 | MCP через HTTP (`mcp.enabled`) | `tg mcp --http` ([mcp.md](./mcp.md), [remote.md](./remote.md)) |
 | `sync --once`, `sync --follow` | `tg store fetch`, `tg serve` ([archive.md](./archive.md)) |
-| `sync jobs list/add/retry/cancel` | `tg store fetch --background`, `tg store jobs list/show/cancel` |
+| `sync jobs list/add/retry/cancel` | `tg store fetch --background`, `tg store jobs list/show/retry/cancel/clear` |
 | `owner request <id>` | `tg sends list` и `--send-id` для повторения отправки с неизвестным исходом |
 | `doctor` | `tg doctor` |
 
@@ -65,11 +66,13 @@ title: "Переход с tgcli"
 | `groups invite get`, `groups invite revoke` | `tg chats link show`, `tg chats link reset` |
 | `groups invite edit --request-needed` | `tg chats link create <chat> --approval`, или `tg chats update <chat> --join-approval on` |
 | `groups requests list/approve/decline` | `tg chats requests list`, `tg chats requests accept/decline <chat> <person>` |
-| `groups requests list --query`, `--link` | пока нет в tg: `requests list` показывает все ожидающие запросы |
+| `groups requests list --query`, `--link` | `tg chats requests list --search`, `--link` |
 | `groups join`, `groups leave` | `tg chats join <link>`, `tg chats leave <chat>` |
 | `folders list/create/edit/delete` | `tg chats folders list/create/update/delete` |
-| `folders create/edit --include-contacts`, `--exclude-muted` и другие правила | пока нет в tg: папка tg содержит указанные вами чаты |
-| `folders create/edit --exclude-chat`, `--pin-chat`, `--emoji` | пока нет в tg |
+| `folders show` | `tg chats folders show <folder>` |
+| `folders create/edit --include-contacts … --include-bots` | `--include contacts,non-contacts,groups,channels,bots` |
+| `folders create/edit --exclude-muted`, `--exclude-read`, `--exclude-archived` | `--skip muted,read,archived` |
+| `folders create/edit --exclude-chat`, `--pin-chat`, `--emoji` | `--exclude-chat`, `--pin`, `--emoji` |
 | `folders reorder` | `tg chats folders order` |
 | `folders chats add/remove` | `tg chats folders update --add/--remove` |
 | `folders chats join` (ссылка на общую папку) | `tg chats folders join <link>` |
@@ -82,4 +85,9 @@ title: "Переход с tgcli"
 | `contacts tags add/rm` | `tg tags add/remove --contact` |
 | `contacts alias set/rm` | `tg contacts alias set/rm`: личное имя только на этом компьютере; `tg contacts rename` меняет ваши контакты Telegram |
 | `contacts notes set` | `tg contacts notes add/edit/remove`, несколько заметок на человека, только на этом компьютере |
+| `metadata refresh --only-missing` | `tg metadata refresh --only-missing` |
 | `tags auto`, `metadata refresh` | `tg tags auto`, `tg metadata refresh` |
+
+
+
+

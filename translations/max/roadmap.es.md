@@ -6,6 +6,8 @@ Planes para `max`. El orden es orientativo y puede cambiar. Puedes proponer idea
 
 ## Próximamente
 
+- **Archivos para agentes de IA remotos.** Transferir adjuntos guardados por MCP para que el agente abra documentos o escaneos y guarde su texto en el índice de búsqueda.
+
 - **Copia local opcional.** Un ajuste para que `max` no guarde nada en disco y consulte siempre MAX.
 
 ## Más adelante
