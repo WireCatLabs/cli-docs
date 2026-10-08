@@ -1,0 +1,150 @@
+---
+title: "Email"
+description: "Connect mail accounts, import the period you need, and link messages to the people you already know."
+---
+
+This guide explains how WireCat brings email into your agent's context: connect a mailbox,
+import the period you need and find mail alongside information about the people you know.
+Use it when you want to find a decision in email or prepare for a conversation.
+
+After following the guide, you will be able to:
+
+- connect the mailboxes you choose and import the period you need;
+- link an email address to a person you already know;
+- search and label mail with source references and check import coverage.
+
+WireCat uses Memo for these tasks. Memo is a tool that runs on your computer and imports
+email into a local, searchable copy. Your agent can use that mail together with notes and
+downloaded messenger history.
+
+## Before you start
+
+[Install Memo using the notes guide](./memo.mdx#install-memo). You do not need to import a notes
+folder to use email. Use a <DocTerm term="local-agent" lang="en" label="local AI agent" /> on the
+same computer. Memo reads mail through Himalaya; configure the mailbox there before importing.
+Messenger history is optional, but must already be downloaded if you want it in the same answer.
+
+## Add email
+
+Memo reads email through [Himalaya](https://github.com/pimalaya/himalaya), a separate mail
+program. Your mail account is configured there; Memo uses its name and address without needing
+a separate copy of the mail password. Ask your agent to help:
+
+```text prompt
+Help me connect the mail account I choose through Himalaya and add it to Memo.
+Explain the account setup, then import mail from the date I choose.
+Show the import result and tell me whether I need another run to finish that period.
+```
+
+The account must work in Himalaya before Memo can import its mail. For manual configuration:
+
+Add `mail.accounts` to Memo's configuration, keeping any existing settings. Default file locations:
+
+| OS | Configuration file |
+| --- | --- |
+| Linux | `~/.config/cli-memo/config.json` |
+| macOS | `~/Library/Preferences/cli-memo/config.json` |
+| Windows | `%APPDATA%\cli-memo\Config\config.json` |
+
+`MEMO_CONFIG_DIR` overrides the directory; on Linux, `XDG_CONFIG_HOME` also affects the default.
+The example uses a Himalaya account named `gmail`; replace the name and address with yours.
+
+```json
+{
+  "mail": {
+    "accounts": [{ "name": "gmail", "address": "you@example.com" }]
+  }
+}
+```
+
+`name` is the account label in Himalaya; `address` is your mailbox's address in Memo's store.
+To use several mailboxes, add one entry per account to `mail.accounts`. On import, `--account`
+selects the Himalaya name, such as `gmail`. On search, `--account` selects the mailbox address,
+such as `you@example.com`. Addresses you link to people later are the senders/recipients,
+not additional accounts you must log into.
+
+Gmail is the default mode and imports All Mail. For another IMAP provider, configure
+`"mode": "imap"` and `"folders": ["INBOX", "Archive"]` in the account entry, using your
+mailbox's actual folder names.
+
+```sh
+memo mail import --account gmail --since 2026-09-01 --json
+```
+
+Choose the first date you want to include. Each run reads at most 200 new messages by default;
+run it again to continue if the result says the import is incomplete. The mailbox is read-only:
+import does not send email or mark it read. Imported mail is stored locally; rerunning import
+can remove the stored text of mail that has disappeared from the source.
+
+## Link email to the same person
+
+An email address and a Telegram or MAX identity remain separate until you explicitly link
+them. Linking records that they are the same **person** in the local store; it does not log in
+to another account or combine your mailboxes. Import the mail and store the messenger contact
+first. Replace the example username and email address:
+
+```sh
+tg contacts link @example_user email:rin@example.test
+memo context telegram:"Rin Example" --json
+```
+
+For MAX, use `max contacts link` with that person's MAX ID or name. Check the returned identities
+and source references. A similar display name is not proof of identity. If several accounts of
+the requested provider are stored, use `memo context telegram:"Rin Example" --account 1 --json`
+with the account ID you actually use. See [linking and unlinking people](./people.md#link-your-accounts).
+
+## Search your mail
+
+```text prompt
+Use Memo to find the budget agreement in the mail account I choose.
+Show the matching emails, who wrote them and their source references. Explain the imported date range and any missing data.
+```
+
+For a search limited to one mailbox, replace the address:
+
+```sh
+memo search 'budget' --provider email --account you@example.com --json
+```
+
+`--all` includes other stored accounts and notes only when you explicitly request it. The result
+identifies the mailbox and sources; no hits outside the imported date window do not establish
+that no email exists there.
+
+## Label emails and keep notes about them
+
+A tag labels a source; a note stores what you want to remember about it. Both are local.
+Replace the full message reference and thread/account IDs with values from your results:
+
+```sh
+memo tags add follow-up --message 'msg:email/you%40example.com/12345/67890'
+memo tags add work --chat 12345 --provider email --account you@example.com
+memo tags list --provider email --account you@example.com --json
+```
+
+A full message reference carries its mailbox, thread and message IDs. For a thread label, both
+`--provider` and `--account` identify where the thread belongs. These labels do not change Gmail
+labels or mailbox flags. To save an assessment linked to one email:
+
+```sh
+memo notes add 'Waiting for a revised quote' --about 'msg:email/you%40example.com/12345/67890' --json
+```
+
+See [creating, editing and exporting notes](./memo.mdx#create-your-own-notes) and
+[tagging notes, contacts and messages](./memo.mdx#tag-your-sources) for the full workflow.
+
+## Check the result
+
+Check the selected mailbox, import date window and whether another run is needed. A context
+answer should list the email identity you linked and point to the relevant mail. If it does not,
+check that the address is linked, the needed date range was imported and the account was selected.
+An empty result from a partial import does not prove there were no agreements.
+
+## If mail is missing
+
+- **No mail account:** check the Himalaya account name and its entry in `mail.accounts`.
+- **Only part of the period imported:** rerun the import; `--max` bounds new messages per run.
+- **The wrong mailbox was searched:** select `--provider email` and `--account` explicitly.
+- **Mail is missing from person context:** check the exact email identity link and imported history.
+
+Continue with [notes and source labels](./memo.mdx#create-your-own-notes) to keep your own context
+about the mail you found.

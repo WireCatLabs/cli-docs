@@ -1,0 +1,153 @@
+---
+title: "Correo"
+description: "Conecta cuentas de correo, importa el periodo que necesites y vincula mensajes a las personas que ya conoces."
+---
+
+Esta guía explica cómo WireCat incorpora correo al contexto de tu agente: conectar un buzón,
+importar el periodo necesario y encontrar correos junto a información sobre las personas que conoces.
+Úsala cuando quieras encontrar una decisión en el correo o preparar una conversación.
+
+Después de seguir la guía, podrás:
+
+- conectar los buzones que elijas e importar el periodo necesario;
+- vincular una dirección a una persona que ya conoces;
+- buscar y etiquetar correo con fuentes y comprobar la cobertura de importación.
+
+WireCat utiliza Memo para estas tareas. Memo es una herramienta de tu ordenador que importa
+el correo a una copia local en la que puedes buscar. Tu agente puede usarla junto con notas
+y el historial de mensajes descargado.
+
+## Antes de empezar
+
+[Instala Memo con la guía de notas](./memo.mdx#install-memo). No necesitas importar una carpeta
+de notas para usar correo. Usa un <DocTerm term="local-agent" lang="es" label="agente de IA local" />
+en el mismo ordenador. Memo lee correo a través de Himalaya; configura allí la cuenta antes
+de importar. El historial de mensajería es opcional, pero debe descargarse antes si lo necesitas en la misma respuesta.
+
+## Añade correo
+
+Memo lee correo a través de [Himalaya](https://github.com/pimalaya/himalaya), un programa de
+correo independiente. Tu cuenta se configura allí; Memo usa su nombre y dirección sin necesitar
+otra copia de la contraseña. Pide ayuda a tu agente:
+
+```text prompt
+Ayúdame a conectar la cuenta de correo que elija a través de Himalaya y añadirla a Memo.
+Explica la configuración de la cuenta e importa el correo desde la fecha que elija.
+Muestra el resultado e indica si hace falta otra ejecución para terminar ese periodo.
+```
+
+La cuenta debe funcionar en Himalaya antes de que Memo pueda importar el correo. Para configurarlo manualmente:
+
+Añade `mail.accounts` a la configuración de Memo, conservando los ajustes existentes. Rutas predeterminadas:
+
+| OS | Archivo de configuración |
+| --- | --- |
+| Linux | `~/.config/cli-memo/config.json` |
+| macOS | `~/Library/Preferences/cli-memo/config.json` |
+| Windows | `%APPDATA%\cli-memo\Config\config.json` |
+
+`MEMO_CONFIG_DIR` cambia el directorio; en Linux, `XDG_CONFIG_HOME` también afecta a la ruta predeterminada.
+El ejemplo usa una cuenta de Himalaya llamada `gmail`; sustituye el nombre y la dirección por los tuyos.
+
+```json
+{
+  "mail": {
+    "accounts": [{ "name": "gmail", "address": "you@example.com" }]
+  }
+}
+```
+
+`name` es el nombre de la cuenta en Himalaya; `address` es la dirección de tu buzón en Memo.
+Para varios buzones, añade una entrada por cuenta en `mail.accounts`. Al importar, `--account`
+selecciona el nombre de Himalaya, como `gmail`. Al buscar, `--account` selecciona la dirección,
+como `you@example.com`. Las direcciones que vinculas a personas son las de remitentes o
+destinatarios, no otras cuentas en las que tengas que iniciar sesión.
+
+Gmail es el modo predeterminado e importa All Mail. Para otro proveedor IMAP, añade
+`"mode": "imap"` y `"folders": ["INBOX", "Archive"]` a la cuenta, con los nombres reales
+de las carpetas de tu buzón.
+
+```sh
+memo mail import --account gmail --since 2026-09-01 --json
+```
+
+Elige la fecha inicial que quieras incluir. Cada ejecución lee hasta 200 mensajes nuevos
+por defecto; repítela para continuar si el resultado indica que la importación está incompleta.
+El buzón se abre solo para lectura: importar no envía correo ni lo marca como leído.
+El correo importado se almacena localmente; repetir la importación puede eliminar del almacén
+el texto de los mensajes que hayan desaparecido de la fuente.
+
+## Vincula el correo a la misma persona
+
+<a id="link-email-to-the-same-person" />
+
+Una dirección de correo y una identidad de Telegram o MAX siguen separadas hasta que las
+vinculas explícitamente. Vincular registra que son la misma **persona** en el almacén local;
+no inicia sesión en otra cuenta ni combina tus buzones. Importa primero el correo y guarda el
+contacto del mensajero. Sustituye el usuario y la dirección:
+
+```sh
+tg contacts link @example_user email:rin@example.test
+memo context telegram:"Rin Example" --json
+```
+
+Para MAX, usa `max contacts link` con el ID o nombre de la persona. Comprueba las identidades
+y referencias devueltas. Un nombre parecido no demuestra identidad. Si hay varias cuentas
+del proveedor, usa `memo context telegram:"Rin Example" --account 1 --json` con el ID de cuenta
+que utilizas. Consulta [vincular y separar personas](./people.md#link-your-accounts).
+
+## Busca en tu correo
+
+```text prompt
+Usa Memo para encontrar el acuerdo de presupuesto en la cuenta de correo que elija.
+Muestra los correos, sus autores y las referencias. Explica el periodo importado y qué datos faltan.
+```
+
+Para limitar la búsqueda a un buzón, sustituye la dirección:
+
+```sh
+memo search 'budget' --provider email --account you@example.com --json
+```
+
+`--all` incluye otras cuentas y notas solo si lo pides explícitamente. El resultado identifica
+el buzón y las fuentes; que no haya resultados fuera del periodo importado no demuestra que
+no exista correo allí.
+
+## Etiqueta correos y guarda notas sobre ellos
+
+Una etiqueta identifica una fuente; una nota guarda lo que quieres recordar sobre ella.
+Ambas son locales. Sustituye la referencia completa del mensaje y los IDs de conversación y cuenta:
+
+```sh
+memo tags add follow-up --message 'msg:email/you%40example.com/12345/67890'
+memo tags add work --chat 12345 --provider email --account you@example.com
+memo tags list --provider email --account you@example.com --json
+```
+
+Una referencia completa lleva el buzón y los IDs de conversación y mensaje. Para etiquetar
+una conversación, `--provider` y `--account` indican a qué buzón pertenece. Estas etiquetas
+no cambian las de Gmail ni los indicadores del buzón. Para guardar una valoración de un correo:
+
+```sh
+memo notes add 'Waiting for a revised quote' --about 'msg:email/you%40example.com/12345/67890' --json
+```
+
+Consulta [crear, editar y exportar notas](./memo.mdx#create-your-own-notes) y
+[etiquetar notas, contactos y mensajes](./memo.mdx#tag-your-sources) para el proceso completo.
+
+## Comprueba el resultado
+
+Comprueba el buzón elegido, el periodo importado y si hace falta otra ejecución. Una respuesta
+de contexto debe incluir la identidad de correo vinculada y referencias a los mensajes pertinentes.
+Si faltan, comprueba el enlace de la dirección, el periodo importado y la cuenta seleccionada.
+Un resultado vacío de una importación parcial no demuestra que no hubiera acuerdos.
+
+## Si falta correo
+
+- **No hay cuenta:** comprueba el nombre de Himalaya y su entrada en `mail.accounts`.
+- **Solo se importó parte del periodo:** repite la importación; `--max` limita los mensajes nuevos por ejecución.
+- **Se buscó en otro buzón:** selecciona `--provider email` y `--account` explícitamente.
+- **Falta correo en el contexto de una persona:** comprueba la dirección exacta, su enlace y el historial importado.
+
+Continúa con [notas y etiquetas de fuentes](./memo.mdx#create-your-own-notes) para guardar
+contexto propio sobre el correo que encontraste.
