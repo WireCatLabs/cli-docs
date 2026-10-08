@@ -26,6 +26,7 @@ La aplicación solo se guarda después de que Telegram acepte el inicio de sesi�
 ```sh
 tg session start           # a QR code in the terminal
 tg session start phone     # a phone number, the code Telegram sends, and your 2FA password
+tg session start phone --sms   # the same, asking Telegram for the code by SMS
 ```
 
 **QR:** escanea el código desde Telegram: Ajustes → Dispositivos → Vincular dispositivo de escritorio. El código se renueva mientras esperas.
@@ -40,6 +41,8 @@ Session:  ~/.local/share/tg-cli/sessions/default.session
 App keys: in the keyring
 Next:     tg chats list · tg server install to keep the archive current
 ```
+
+El código suele llegar a la aplicación Telegram. `--sms` pide un SMS, pero Telegram decide; la CLI indica cómo se envió realmente.
 
 ### Cuando un agente inicia la sesión
 

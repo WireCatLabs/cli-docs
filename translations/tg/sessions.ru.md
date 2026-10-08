@@ -26,6 +26,7 @@ title: "Вход, сессии и профили"
 ```sh
 tg session start           # a QR code in the terminal
 tg session start phone     # a phone number, the code Telegram sends, and your 2FA password
+tg session start phone --sms   # the same, asking Telegram for the code by SMS
 ```
 
 **QR-код:** в приложении Telegram откройте Настройки → Устройства → Подключить устройство и отсканируйте код. Пока вы ждёте, код обновляется.
@@ -40,6 +41,8 @@ Session:  ~/.local/share/tg-cli/sessions/default.session
 App keys: in the keyring
 Next:     tg chats list · tg server install to keep the archive current
 ```
+
+Обычно код приходит в приложение Telegram. `--sms` просит SMS, но способ выбирает Telegram; CLI сообщает, как код действительно отправлен.
 
 ### Если вход запускает агент
 

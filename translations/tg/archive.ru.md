@@ -56,6 +56,9 @@ tg store jobs list                          # background jobs, newest first
 tg store jobs show                          # the newest job, and what the store now holds of its chat
 tg store jobs show <job>
 tg store jobs cancel <job>                  # stops after the current page; a later fetch resumes
+tg store jobs retry <job>                   # a failed or died job again, as a new job with the same options
+tg store jobs retry --failed                # every chat whose newest job failed or died
+tg store jobs clear                         # forget finished jobs and their logs; a running job stays
 ```
 
 ## Поиск

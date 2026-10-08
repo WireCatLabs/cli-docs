@@ -34,3 +34,8 @@ See [the guide review record](../reviews/2026-10-08-reviewed-tool-guides.md) for
 `pnpm sync` continues to use reviewed tags; a future CLI release does not automatically advance them.
 
 Full guide update and publication: [website PR #72](https://github.com/leemour/cli-docs/pull/72).
+
+
+Final release refresh: MAX v0.35.0 and Telegram v0.36.0 replace the prior reviewed pins,
+with matching EN/RU/ES tables, report guides, command references, examples and fingerprints.
+See [the final reader-guide review](../reviews/2026-10-08-final-reader-guides.md).

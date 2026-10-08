@@ -61,7 +61,7 @@ tg commands schema messages list --json
 ## Ссылки
 
 
-Мы применяем подходящие рекомендации [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) и [Command Line Interface Guidelines](https://clig.dev/), а также [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) и [Agent Skills](https://agentskills.io/specification). [Архитектура](https://github.com/leemour/tg-cli/blob/v0.35.0/docs/dev/ARCHITECTURE.md) и [общий стандарт CLI](https://github.com/leemour/cli-messaging/blob/main/docs/dev/STANDARD.md) описывают выбранный профиль применения и намеренные исключения. Мы не заявляем полную сертификацию третьей стороной.
+Мы применяем подходящие рекомендации [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) и [Command Line Interface Guidelines](https://clig.dev/), а также [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) и [Agent Skills](https://agentskills.io/specification). [Архитектура](https://github.com/leemour/tg-cli/blob/v0.36.0/docs/dev/ARCHITECTURE.md) и [общий стандарт CLI](https://github.com/leemour/cli-messaging/blob/main/docs/dev/STANDARD.md) описывают выбранный профиль применения и намеренные исключения. Мы не заявляем полную сертификацию третьей стороной.
 
 
 Обычная настройка описана в [руководстве по настройкам](./configuration.md), все ключи и переменные окружения — в [справочнике настроек](./configuration-reference.md).

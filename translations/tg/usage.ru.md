@@ -33,6 +33,7 @@ tg messages list me       # Saved Messages, the latest 20
 ```sh
 tg session start                        # QR code: Settings → Devices → Link Desktop Device
 tg session start phone                  # phone number, the code Telegram sends, your 2FA password
+tg session start phone --sms            # the same, asking for the code by SMS instead of in the app
 tg session start --qr-file login.png    # the QR code as a picture, for an agent to show you
 ```
 
@@ -385,6 +386,7 @@ tg polls vote "Book club" 4250 <answer id>
 tg polls vote "Book club" 4250 --retract
 tg polls create "Book club" "Which day?" Monday Tuesday --anonymous
 tg polls close "Book club" 4250            # your own poll; it cannot be reopened
+tg polls create "Book club" "2+2?" 3 4 5 --quiz --correct 2 --solution "Four."   # a quiz; a vote is final
 ```
 
 При чтении чата реакции отображаются под сообщением — `👍 3  🔥 1  (you: 🔥)`. Голос в публичном опросе показывает ваше имя всем участникам чата. Голосуйте по ID из `polls show`, а не по порядковому номеру ответа. `--multiple` позволяет выбирать несколько ответов. Изменить голос можно только в опросе, созданном с `--revote`. Голосование в закрытом опросе, два ответа в опросе с одним вариантом, изменение или отзыв окончательного голоса и `--retract` без голоса отклоняются до отправки; закрытие чужого опроса тоже отклоняется.
@@ -404,14 +406,20 @@ tg messages list "Book club" --mark-read     # read it, and mark it read up to t
 
 ```sh
 tg chats folders list                              # your folders, in the order the app shows them
+tg chats folders show "Trips"                      # one folder, with the names of its chats
 tg chats folders create "Trips" --chat "Hiking" --chat @kate
 tg chats folders update "Trips" --title "Travel" --add "Climbing" --remove @kate
 tg chats folders delete "Travel"                   # the chats stay
 tg chats folders order "Travel" "Work"             # these first; the rest keep their order after them
 tg chats folders join https://t.me/addlist/AbCdEf  # a folder someone shared: joins every chat in it
+tg chats folders create "Inbox" --include contacts,groups --skip muted,archived --emoji 📥
+tg chats folders update "Inbox" --exclude-chat "Noisy group" --pin @kate
+tg chats folders update "Inbox" --include none     # no kinds any more; only the chats named in it
 ```
 
 Папка указывается по ID или точному названию. Папки видите только вы; каждое изменение всё равно проходит проверки как изменение `account`. `join` отличается: участники этих чатов видят, что вы вступили, как при `tg chats join`. Папка «Все чаты» сохраняет своё место при `order`.
+
+Папка может автоматически включать типы contacts, `non-contacts`, `groups`, `channels`, `bots` через `--include`; `--skip` исключает `muted`, read, `archived`. `--exclude-chat` исключает конкретный чат, `--pin` закрепляет его сверху. При `update` include/skip заменяют прежние правила; `--remove` удаляет чат из всех списков. Общая папка по ссылке не принимает правила. `--emoji` должен быть значком папки Telegram: другой Telegram молча отбросит, и ответ покажет реально сохранённое значение.
 
 ### Чего пока нет в tg
 
@@ -465,6 +473,10 @@ tg chats admins remove "Hiking 2027" @kate
 В группе с одобрением вступления `chats requests list` показывает ожидающие заявки вместе с заметкой человека; их видят только администраторы, и чтение никого не уведомляет. `accept` и `decline` обрабатывают одну заявку по ID из списка. Одобренная заявка учитывается в почасовом лимите, отклонённая — нет; список получателей проверяет только группу. Для уже вступившего человека возвращается `already: true`, а исчезнувшая заявка приводит к коду `6`. `--all` обрабатывает все ожидающие заявки, а с `--link` — только пришедшие по одной ссылке; сначала подсчитывается их число, и одобрение сверх почасового лимита отклоняется до вступления кого-либо. `chats link list` показывает только ваши ссылки; отзыв основной ссылки группы заставляет Telegram создать новую, которую показывает ответ.
 
 `chats update` одновременно меняет название, описание и две настройки Telegram; ответ показывает текущее состояние. `chats show` выводит те же настройки. Правила `chats rules` и модерация `chats moderate` описаны в [Управлении группами](./groups.md#rules).
+
+`tg topics delete <chat> <id>` необратимо удаляет тему и все сообщения у всех. По умолчанию спрашивает; явное `topics.delete: allow` или `--allow-dangerous` пропускает вопрос. Общую тему удалить нельзя.
+
+У запросов на вступление `--search` ищет по имени или @username, а `--link` оставляет запросы по одной ссылке приглашения; одновременно Telegram их не принимает.
 
 ## Для скриптов и агентов
 
