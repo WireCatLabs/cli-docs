@@ -147,6 +147,18 @@ Muéstrame mis cinco chats recientes de Telegram y sus recuentos de mensajes sin
 Después pide un borrador o, cuando quieras enviar, indica el destinatario y el texto exacto.
 [Cómo escribir peticiones](./prompting.md) explica cómo pedir una revisión antes de enviar.
 
+<a id="connection-recovery" />
+
+## Antes funcionaba y ahora no conecta
+
+La conexión del navegador necesita que estén funcionando el ordenador del mensajero, su servidor y el túnel HTTPS. Después de suspender o reiniciar, sigue este orden:
+
+1. Activa el ordenador y comprueba la cuenta en un terminal con `tg account show` o `max account show`. En PowerShell usa `tg.cmd` o `max.cmd`. Si falla, sigue la guía de acceso de [Telegram](./tg/sessions.md) o [MAX](./max/sessions.md).
+2. Reinicia el túnel y el servidor en las dos ventanas indicadas arriba. Usa el mismo perfil y comprueba que la dirección HTTPS coincide con la del conector. Si cambió, actualiza la dirección pública del servidor y la del conector.
+3. Repite la petición de cinco chats. Si la aplicación pide conectar de nuevo, usa el nuevo código de un solo uso que muestra el servidor en ejecución.
+
+La conexión funciona cuando el asistente muestra los chats de la cuenta esperada. Si sigue fallando, las comprobaciones de abajo distinguen problemas de cuenta, túnel o aplicación. Los archivos requieren otro paso: una ruta en este ordenador no entrega el archivo al agente del navegador. Consulta la transferencia para [Telegram](./tg/remote.md) o [MAX](./max/remote.md).
+
 ## Ambos mensajeros a la vez
 
 Usa puertos locales y direcciones HTTPS públicas distintos. Por ejemplo: Telegram en local

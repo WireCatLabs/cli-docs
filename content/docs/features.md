@@ -1,13 +1,32 @@
 ---
 title: "Features"
-description: "What the Telegram and MAX CLIs can do: your whole account, groups, a searchable archive, voice to text, every Bot API method, and limits you set for your agent."
+description: "Choose a useful task: catch up on chats, find agreements, collect files or draft replies."
 ---
 
-Each tool works with one messenger: `tg` with Telegram, `max` with MAX. Everything below works in
-both, unless a row says otherwise. The commands start with `tg` or `max`; full syntax is in
-[Telegram commands](./tg/commands.md) and [MAX commands](./max/commands.md).
+Use your assistant to catch up on chats, find an agreement, collect documents or prepare a reply. This page helps you choose a task and see what a useful result looks like. `tg` and `max` are command-line tools that give the assistant access to Telegram and MAX respectively.
+
+Choose where to start:
+
+- **Catch up or draft a reply:** [First tasks](./first-tasks.md).
+- **Find an older message or words inside a document:** [Search](./search.md).
+- **Collect files or summarise voice messages:** [Requests for files and voice](./prompting.md#files-and-voice).
+- **Manage a community:** [Group administration](./group-admins.md).
+- **Work through a bot:** [Bots and Bot API](./bot-api.md).
+
+If your account is already connected, copy a request below into your agent. Otherwise, start with [installation and login](./installation.mdx). To see a worked conversation before connecting, open the [demo](./meeting-brief.mdx).
 
 ## Messages
+
+Summarise a conversation or prepare a reply you can review before sending.
+
+```text prompt
+Read my conversation with Anna from today. What needs my answer? Draft a short reply without sending it.
+```
+
+Expect a draft and the messages it is based on. If the recipient is ambiguous, clarify the chat before sending.
+
+<details>
+<summary>Commands and additional capabilities</summary>
 
 | What you can do | Commands |
 |---|---|
@@ -22,9 +41,22 @@ both, unless a row says otherwise. The commands start with `tg` or `max`; full s
 | Get a link to a message | `messages link` |
 | Mark chats as read — only when you ask | `chats mark-read` |
 
+</details>
+
 Guides: [Telegram usage](./tg/usage.md) · [MAX usage](./max/usage.md)
 
 ## Chats, contacts and account
+
+Find a person and recover the context of your previous conversations.
+
+```text prompt
+Find the designer we discussed last month. Show who recommended them and what we have already agreed.
+```
+
+Expect a clearly identified contact and supporting messages. Use separate profiles for work and personal accounts; [choosing an account](./profiles.md) explains how.
+
+<details>
+<summary>Commands and additional capabilities</summary>
 
 | What you can do | Commands |
 |---|---|
@@ -36,9 +68,22 @@ Guides: [Telegram usage](./tg/usage.md) · [MAX usage](./max/usage.md)
 | Update your profile; see every device logged in, end one | `account` |
 | Several accounts, one *profile* each | `tg work …`, `max work …` |
 
+</details>
+
 Guides: [People](./people.md) · [Telegram login and profiles](./tg/sessions.md) · [MAX sessions and profiles](./max/sessions.md)
 
 ## Groups and channels
+
+Review a group before changing its members, settings or moderation rules.
+
+```text prompt
+In my project group, list questions awaiting an administrator’s reply. Show sources; do not change anything.
+```
+
+Expect a list to review. Group changes require the relevant account rights. Moderation runs when started by you, your agent or a scheduled task.
+
+<details>
+<summary>Commands and additional capabilities</summary>
 
 | What you can do | Commands |
 |---|---|
@@ -53,10 +98,23 @@ Guides: [People](./people.md) · [Telegram login and profiles](./tg/sessions.md)
 | Forum topics: list, search, create, post into a topic — *Telegram* | `topics` |
 | A moderation rule for new accounts — *MAX* | `chats rules` |
 
+</details>
+
 Moderation runs when you, your agent or your schedule starts it; nothing watches a group by itself.
 Guides: [Telegram groups](./tg/groups.md) · [MAX groups](./max/groups.md)
 
 ## History, search and staying on top
+
+Find an older agreement or collect the important unread messages.
+
+```text prompt
+Find what we agreed about the project deadline last month. Show the agreement and any later changes.
+```
+
+Expect the answer, sources and the period checked. Search uses saved history; if the period is missing, [download the relevant chats first](./search.md).
+
+<details>
+<summary>Commands and additional capabilities</summary>
 
 | What you can do | Commands |
 |---|---|
@@ -69,12 +127,25 @@ Guides: [Telegram groups](./tg/groups.md) · [MAX groups](./max/groups.md)
 | Watch new messages as they arrive | `watch` |
 | Keep the archive current in the background | `server` |
 
+</details>
+
 Guides: [Telegram archive](./tg/archive.md) · [Telegram search](./tg/search.md) ·
 [MAX archive](./max/archive.md) · [MAX search](./max/search.md)
 
 ## Bots
 
+Use a bot for customer messages, button responses or group tasks. It has its own identity and access.
+
+```text prompt
+Check the bot’s available messages and draft answers to unanswered questions. Show each draft to me before sending.
+```
+
+Expect drafts based on messages available to that bot. Your personal account’s history is separate. Start with [bot setup and capabilities](./bot-api.md).
+
 A bot works with its own token, separate from your personal account.
+
+<details>
+<summary>Commands and additional capabilities</summary>
 
 | What you can do | Commands |
 |---|---|
@@ -85,6 +156,8 @@ A bot works with its own token, separate from your personal account.
 | Moderate a group by the same rules as your account | `bot chats moderate` |
 | Give the bot to an agent over MCP | `bot mcp config` |
 | Comments under channel posts — *MAX* | `bot comments` |
+
+</details>
 
 Guides: [Full Bot API](./bot-api.md) · [Telegram bots](./tg/bot.md) · [MAX bots](./max/bot.md)
 
@@ -112,8 +185,8 @@ Guides: [Full Bot API](./bot-api.md) · [Telegram bots](./tg/bot.md) · [MAX bot
 
 ## Not there yet
 
-- **Telegram:** several photos in one message, drafts, mute and notification settings, archiving
-  chats, pressing buttons in other bots' messages, secret chats, calls and stories.
-  [Roadmap](./tg/roadmap.md)
-- **MAX:** video notes, drafts, sending your location, setting or removing the cloud password,
-  stories and calls. [Roadmap](./max/roadmap.md)
+Current unsupported features and planned work are listed in the roadmaps for [Telegram](./tg/roadmap.md) and [MAX](./max/roadmap.md). A roadmap item is not an available capability.
+
+## Choose your next task
+
+Try [a first task](./first-tasks.md) and check that the agent shows sources and a usable result. To repeat a useful workflow, see [recurring tasks](./prompting.md#recurring-tasks). Exact syntax is in the command references for [Telegram](./tg/commands.md) and [MAX](./max/commands.md).

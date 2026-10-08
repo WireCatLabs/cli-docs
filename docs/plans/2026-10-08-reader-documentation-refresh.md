@@ -3,7 +3,7 @@
 This is the content work plan, separate from source-pack and generator experiments. The reader
 is a person using a messenger with an assistant, not someone studying the implementation.
 Existing tooling research is in the 7 October plan and 8 October reviews; it informs checks,
-not a substitute for editing pages. Current source: main `6726feb`, TG v0.35.0 / MAX v0.34.0.
+not a substitute for editing pages. Current source: main `e70b784`, TG v0.37.0 / MAX v0.36.0.
 
 ## Page work and acceptance
 
@@ -49,6 +49,12 @@ legacy anchor routing, Markdown parity, mobile/a11y and measured reference-page 
 Then review the visible pages. Release checks here govern documentation publication; they do
 not claim to replace either tool repository's separate package-publish checks.
 
-Remaining editorial passes after this batch: remote connection recovery, automation/recipes,
-files/voice handling and task-based capability orientation. Add a new guide only for a distinct
-reader question not served by the current shared and messenger pages.
+The next editorial pass is implemented in the existing shared pages:
+
+- `features`: task chooser, five copyable requests with expected results, collapsible command inventories, current roadmap links.
+- `prompting`: file access and extraction boundaries, voice summary and recognition prerequisites, a one-off digest before recurring setup, distinction from queued reminders.
+- `browser-apps`: ordered recovery after sleep/restart, account check before tunnel/app checks, observable success and remote file handoff.
+
+All three locales are maintained. Native attachment and remote-transfer guides came from main's reviewed source updates; this pass links them rather than claiming authorship of those guides.
+
+Next review: try the updated task chooser and requests with the owner, then prioritise the remaining native guide bodies by actual reader friction. Add a new guide only for a distinct reader question not served by the current shared and messenger pages.

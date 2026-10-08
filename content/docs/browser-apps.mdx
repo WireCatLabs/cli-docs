@@ -147,6 +147,18 @@ List my five most recent Telegram chats with their unread counts.
 Then ask for a draft or, when you intend to send, name the recipient and exact text.
 [Writing requests](./prompting.md) explains how to ask for review before sending.
 
+<a id="connection-recovery" />
+
+## It worked before, but stopped
+
+A browser connection needs the messenger computer, its server and the HTTPS tunnel to be running. After sleep or a restart, use this order:
+
+1. Wake the computer and check the account in a terminal with `tg account show` or `max account show`. Use `tg.cmd` or `max.cmd` in PowerShell. If this fails, follow the login guide for [Telegram](./tg/sessions.md) or [MAX](./max/sessions.md).
+2. Restart the tunnel and server using the two windows above. Use the same profile and check that the HTTPS address still matches the connector. If it changed, update the server's public URL and the connector URL.
+3. Retry the five-chat request. If the app asks you to connect again, use the new one-time code printed by the running server.
+
+Success means the assistant lists the expected account’s chats. If it still fails, the checks below help distinguish a local account problem from a tunnel or app problem. Files need one additional step: a path on this computer does not give a browser agent the file. See file transfer for [Telegram](./tg/remote.md) or [MAX](./max/remote.md).
+
 ## Run both messengers
 
 Use separate local ports and public HTTPS endpoints. For example: Telegram on local `8765`

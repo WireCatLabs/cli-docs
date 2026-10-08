@@ -76,7 +76,13 @@ If two recommendations mention the same first name, the agent should verify that
 same person before combining them. Finding a name in a message is not permission to contact them.
 [Contacts](./tg/usage.md#people).
 
+<a id="files-and-voice" />
+
 ## Find the right files
+
+For a useful file list, ask for the name, version, chat, date and the message that approves it. Finding a filename, saving a file and reading its contents are separate steps. To read it, the agent needs access to the bytes; a path on another computer is not enough.
+
+Digital documents can have extractable text; scans and photos need image recognition. Ask the agent to identify unreadable files and verify important numbers against the original. See [Telegram attachments](./tg/attachments.md) and [MAX attachments](./max/attachments.md) for supported formats and content indexing.
 
 ```text prompt
 Find the Atlas contract, invoices and presentation in the team group and my chat with Anna.
@@ -115,6 +121,36 @@ If you edit the draft, provide the full final text or make the change unambiguou
 is not uniquely identified, the agent should ask which chat you mean. Permissions can also require
 confirmation or prohibit sending; a prompt does not bypass those settings.
 [Sending](./tg/usage.md#sending) · [Permissions and send guard](./tg/security.md).
+
+## Summarise voice messages
+
+```text prompt
+Summarise Anna’s voice messages from today: decisions, dates and questions for me. Include the source for each point. If recognition is unclear, flag it rather than guessing.
+```
+
+The agent first obtains a transcript, then summarises it. Telegram can use its own transcription service or a local speech model; MAX uses a local model. The first local run needs a separately downloaded model. Ask the agent to explain the download before starting it. This can take longer than reading text.
+
+Check names, amounts and dates against the recording when they matter. A summary should identify messages it could not transcribe. Setup: [Telegram voice messages](./tg/usage.md#voice-messages) and [MAX speech recognition](./max/audio-recognition.md).
+
+<a id="recurring-tasks" />
+
+## Repeat a useful task
+
+An automatic morning digest runs the whole task again: read new messages, analyse them and produce a new result. First try it once:
+
+```text prompt
+Read yesterday’s messages in my work chats. Give me five important items with sources and unanswered questions. Only read; show the result here.
+```
+
+If the result is useful, specify the schedule and destination:
+
+```text prompt
+Help me repeat this digest on weekdays at 09:00, Madrid time. Keep the same chats and format. Explain where the task will run, how I can check its first run and how to stop it. Do not enable it yet.
+```
+
+The agent or a separate scheduler must start each run. A chat request alone does not create a schedule. If it runs on your computer, that computer must be awake and able to access the messenger. Inspect the first run and check the covered dates before relying on it. Follow the recipes for [Telegram](./tg/recipes.md) or [MAX](./max/recipes.md) for your setup.
+
+Sending a fixed reminder later is simpler: it queues the message on the messenger’s server. It does not search new messages or generate a new digest. The next section covers that case.
 
 ## Schedule reminders
 

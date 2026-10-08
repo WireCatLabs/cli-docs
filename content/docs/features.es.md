@@ -1,13 +1,32 @@
 ---
 title: "Funciones"
-description: "Qué pueden hacer los CLI de Telegram y MAX: toda tu cuenta, grupos, un archivo con búsqueda, voz a texto, todos los métodos de la Bot API y límites que fijas para tu agente."
+description: "Elige una tarea útil: revisar chats, encontrar acuerdos, reunir archivos o preparar respuestas."
 ---
 
-Cada CLI trabaja con un mensajero: `tg` con Telegram, `max` con MAX. Todo lo de abajo funciona en
-los dos, salvo que una fila diga otra cosa. Los comandos empiezan por `tg` o `max`; la sintaxis
-completa está en [comandos de Telegram](./tg/commands.md) y [comandos de MAX](./max/commands.md).
+Pide a tu asistente que revise conversaciones, encuentre un acuerdo, reúna documentos o prepare una respuesta. Esta página te ayuda a elegir una tarea y reconocer un resultado útil. `tg` y `max` son herramientas de línea de comandos que dan al asistente acceso a Telegram y MAX, respectivamente.
+
+Elige por dónde empezar:
+
+- **Ponerte al día o preparar una respuesta:** [Primeras tareas](./first-tasks.md).
+- **Encontrar un mensaje antiguo o texto dentro de un documento:** [Búsqueda](./search.md).
+- **Reunir archivos o resumir mensajes de voz:** [Peticiones para archivos y voz](./prompting.md#files-and-voice).
+- **Gestionar una comunidad:** [Administración de grupos](./group-admins.md).
+- **Trabajar con un bot:** [Bots y Bot API](./bot-api.md).
+
+Si tu cuenta ya está conectada, copia una petición de abajo a tu agente. Si aún no lo está, empieza por [instalación y acceso](./installation.mdx). Para ver una conversación antes de conectar tu cuenta, abre la [demo](./meeting-brief.mdx).
 
 ## Mensajes
+
+Entiende qué requiere tu atención y prepara una respuesta que puedas revisar antes de enviarla.
+
+```text prompt
+Lee mi conversación con Anna de hoy. ¿Qué necesita mi respuesta? Prepara una respuesta breve sin enviarla.
+```
+
+Obtendrás un borrador y los mensajes que lo respaldan. Si el destinatario es ambiguo, aclara el chat antes del envío.
+
+<details>
+<summary>Comandos y funciones adicionales</summary>
 
 | Qué puedes hacer | Comandos |
 |---|---|
@@ -22,9 +41,22 @@ completa está en [comandos de Telegram](./tg/commands.md) y [comandos de MAX](.
 | Obtener el enlace a un mensaje | `messages link` |
 | Marcar chats como leídos, solo cuando lo pides | `chats mark-read` |
 
+</details>
+
 Guías: [uso de Telegram](./tg/usage.md) · [uso de MAX](./max/usage.md)
 
 ## Chats, contactos y cuenta
+
+Encuentra a una persona y recupera el contexto de conversaciones anteriores.
+
+```text prompt
+Encuentra al diseñador del que hablamos el mes pasado. Muestra quién lo recomendó y qué hemos acordado.
+```
+
+Obtendrás un contacto identificado y mensajes que lo respaldan. Usa perfiles distintos para las cuentas personal y de trabajo: [cómo elegir una cuenta](./profiles.md).
+
+<details>
+<summary>Comandos y funciones adicionales</summary>
 
 | Qué puedes hacer | Comandos |
 |---|---|
@@ -36,9 +68,22 @@ Guías: [uso de Telegram](./tg/usage.md) · [uso de MAX](./max/usage.md)
 | Actualizar tu perfil; ver cada dispositivo con sesión abierta y cerrar uno | `account` |
 | Varias cuentas, un *perfil* para cada una | `tg work …`, `max work …` |
 
+</details>
+
 Guías: [personas](./people.md) · [acceso y perfiles de Telegram](./tg/sessions.md) · [sesiones y perfiles de MAX](./max/sessions.md)
 
 ## Grupos y canales
+
+Revisa un grupo antes de cambiar miembros, ajustes o reglas de moderación.
+
+```text prompt
+En mi grupo del proyecto, busca preguntas que esperan respuesta de un administrador. Cita las fuentes y no cambies nada.
+```
+
+Obtendrás una lista para revisar. Los cambios requieren los permisos adecuados en el grupo. La moderación se ejecuta cuando la inicias tú, tu agente o una tarea programada.
+
+<details>
+<summary>Comandos y funciones adicionales</summary>
 
 | Qué puedes hacer | Comandos |
 |---|---|
@@ -53,11 +98,24 @@ Guías: [personas](./people.md) · [acceso y perfiles de Telegram](./tg/sessions
 | Temas de foro: listar, buscar, crear, publicar en un tema — *Telegram* | `topics` |
 | Una regla de moderación para cuentas nuevas — *MAX* | `chats rules` |
 
+</details>
+
 La moderación se ejecuta cuando la inicias tú, tu agente o una tarea programada; nada vigila un
 grupo por sí solo.
 Guías: [grupos de Telegram](./tg/groups.md) · [grupos de MAX](./max/groups.md)
 
 ## Historial, búsqueda y estar al día
+
+Encuentra un acuerdo antiguo o reúne lo importante de los mensajes sin leer.
+
+```text prompt
+Busca el plazo del proyecto que acordamos el mes pasado. Muestra el acuerdo y los cambios posteriores.
+```
+
+Obtendrás la respuesta, las fuentes y el periodo revisado. La búsqueda usa el historial guardado; si falta ese periodo, [descarga primero los chats necesarios](./search.md).
+
+<details>
+<summary>Comandos y funciones adicionales</summary>
 
 | Qué puedes hacer | Comandos |
 |---|---|
@@ -70,12 +128,25 @@ Guías: [grupos de Telegram](./tg/groups.md) · [grupos de MAX](./max/groups.md)
 | Ver los mensajes nuevos según llegan | `watch` |
 | Mantener el archivo al día en segundo plano | `server` |
 
+</details>
+
 Guías: [archivo de Telegram](./tg/archive.md) · [búsqueda de Telegram](./tg/search.md) ·
 [archivo de MAX](./max/archive.md) · [búsqueda de MAX](./max/search.md)
 
 ## Bots
 
+Usa un bot para mensajes a clientes, respuestas a botones o tareas de grupo. Tiene su propia identidad y acceso.
+
+```text prompt
+Revisa los mensajes disponibles para el bot y prepara respuestas a preguntas pendientes. Muéstrame cada borrador antes de enviarlo.
+```
+
+Obtendrás borradores basados en mensajes disponibles para ese bot. El historial de tu cuenta personal es independiente. Empieza por [conexión y funciones de los bots](./bot-api.md).
+
 Un bot trabaja con su propio token, separado de tu cuenta personal.
+
+<details>
+<summary>Comandos y funciones adicionales</summary>
 
 | Qué puedes hacer | Comandos |
 |---|---|
@@ -86,6 +157,8 @@ Un bot trabaja con su propio token, separado de tu cuenta personal.
 | Moderar un grupo con las mismas reglas que tu cuenta | `bot chats moderate` |
 | Dar el bot a un agente por MCP | `bot mcp config` |
 | Comentarios bajo publicaciones de canales — *MAX* | `bot comments` |
+
+</details>
 
 Guías: [Bot API completa](./bot-api.md) · [bots de Telegram](./tg/bot.md) · [bots de MAX](./max/bot.md)
 
@@ -112,8 +185,8 @@ Guías: [Bot API completa](./bot-api.md) · [bots de Telegram](./tg/bot.md) · [
 
 ## Aún no disponible
 
-- **Telegram:** varias fotos en un mensaje, borradores, silenciar chats y ajustes de
-  notificaciones, archivar chats, pulsar botones en mensajes de otros bots, chats secretos,
-  llamadas e historias. [Hoja de ruta](./tg/roadmap.md)
-- **MAX:** videomensajes, borradores, enviar tu ubicación, configurar o quitar la contraseña en la
-  nube, historias y llamadas. [Hoja de ruta](./max/roadmap.md)
+Los límites actuales y los planes aparecen en las hojas de ruta de [Telegram](./tg/roadmap.md) y [MAX](./max/roadmap.md). Un plan no es una función disponible.
+
+## Elige la siguiente tarea
+
+Prueba [una primera tarea](./first-tasks.md) y comprueba que el agente muestre fuentes y un resultado útil. Para repetir un flujo que te sirva, consulta [tareas recurrentes](./prompting.md#recurring-tasks). La sintaxis exacta está en las referencias de [Telegram](./tg/commands.md) y [MAX](./max/commands.md).

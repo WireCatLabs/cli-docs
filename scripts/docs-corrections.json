@@ -634,31 +634,6 @@
   },
   {
     "tool": "tg",
-    "slug": "sessions",
-    "reason": "Show the real public my.telegram.org login screen and distinguish website registration from account QR authorization. Screenshot captured 2026-10-04 in a fresh unauthenticated browser; no phone, code, api_hash or QR tokens entered. Guidance verified against https://core.telegram.org/api/obtaining_api_id and https://my.telegram.org/apps.",
-    "replacements": {
-      "en": [
-        {
-          "before": "**Fill in the site automatically:**",
-          "after": "> **See the my.telegram.org login screen**\n>\n> ![Official my.telegram.org login screen with an empty phone-number field.](/telegram-app-login.png)\n>\n> This is the website login for managing your Telegram application credentials. The code arrives in Telegram, not by SMS. After login, choose **API development tools**. Authorizing the cli with a QR code comes later. [my.telegram.org](https://my.telegram.org/apps)\n\n**Fill in the site automatically:**"
-        }
-      ],
-      "ru": [
-        {
-          "before": "**Заполнить форму сайта автоматически:**",
-          "after": "> **Посмотреть экран входа my.telegram.org**\n>\n> ![Официальный экран входа my.telegram.org: поле номера телефона не заполнено.](/telegram-app-login.png)\n>\n> Это вход на сайт для получения данных приложения Telegram. Код приходит сообщением в Telegram, не по SMS. После входа выберите **API development tools**. Подтверждение доступа cli через QR-код будет следующим этапом. [my.telegram.org](https://my.telegram.org/apps)\n\n**Заполнить форму сайта автоматически:**"
-        }
-      ],
-      "es": [
-        {
-          "before": "**Rellenar el sitio automáticamente:**",
-          "after": "> **Ver la pantalla de acceso de my.telegram.org**\n>\n> ![Pantalla oficial de my.telegram.org con el campo del teléfono vacío.](/telegram-app-login.png)\n>\n> Este es el acceso al sitio para obtener las credenciales de aplicación de Telegram. El código llega por Telegram, no por SMS. Tras entrar, elige **API development tools**. La autorización del cli por QR viene después. [my.telegram.org](https://my.telegram.org/apps)\n\n**Rellenar el sitio automáticamente:**"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
     "slug": "commands",
     "reason": "Preserve the pinned native Bot API reference with an explicit localized language notice and semantic English language boundary. Owner preference question 2026-10-04; default keeps the generated schema original while translating the bot guide and surrounding documentation.",
     "replacements": {
@@ -880,6 +855,56 @@
         {
           "before": "### Archivos, fotos y voz",
           "after": "### Archivos, fotos y voz\n\nPara enviar, descargar y leer documentos, consulta [Archivos adjuntos](./attachments.md)."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "groups",
+    "reason": "Separate mutually exclusive approval flags into concrete command examples; a pipe inside a flag is illustrative shorthand, not executable syntax.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`tg chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
+          "after": "`tg chats link update <chat> <link> --approval --expire-time <time> --max-uses <n>`, `tg chats link update <chat> <link> --no-approval`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`tg chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
+          "after": "`tg chats link update <chat> <link> --approval --expire-time <time> --max-uses <n>`, `tg chats link update <chat> <link> --no-approval`"
+        }
+      ],
+      "es": [
+        {
+          "before": "`tg chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
+          "after": "`tg chats link update <chat> <link> --approval --expire-time <time> --max-uses <n>`, `tg chats link update <chat> <link> --no-approval`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "from-tgcli",
+    "reason": "tags list has no --chat; only add/remove target a chat. Separate the valid command references.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`tg tags add/remove/list --chat`",
+          "after": "`tg tags add --chat`, `tg tags remove --chat`, `tg tags list`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`tg tags add/remove/list --chat`",
+          "after": "`tg tags add --chat`, `tg tags remove --chat`, `tg tags list`"
+        }
+      ],
+      "es": [
+        {
+          "before": "`tg tags add/remove/list --chat`",
+          "after": "`tg tags add --chat`, `tg tags remove --chat`, `tg tags list`"
         }
       ]
     }

@@ -86,7 +86,13 @@ disponibilidad si no aparecen en los mensajes.
 Dos personas con el mismo nombre no son necesariamente el mismo contacto. Si faltan datos para
 identificarlas, el agente debe mantenerlas separadas o pedir una aclaración.
 
+<a id="files-and-voice" />
+
 ## Reunir documentos y elegir versiones
+
+Una lista útil debe mostrar nombre, versión, chat, fecha y mensaje de aprobación. Encontrar un nombre, guardar un archivo y leer su contenido son pasos distintos. Para leerlo, el agente necesita los bytes; una ruta en otro ordenador no los transfiere.
+
+Los documentos digitales pueden tener texto extraíble; los escaneos y las fotos necesitan reconocimiento de imágenes. Pide que señale archivos que no pudo leer y compruebe cifras importantes contra el original. Formatos e indexación: [adjuntos de Telegram](./tg/attachments.md) y [adjuntos de MAX](./max/attachments.md).
 
 Pide una selección por su estado de aprobación. El último archivo subido no siempre es el final.
 
@@ -136,6 +142,36 @@ nada a otros chats ni cambies el texto.
 Si hay dos destinatarios posibles, conviene dar el chat exacto o aclarar cuál es. Un permiso para
 enviar ese mensaje no autoriza envíos futuros. Los permisos configurados en el CLI también pueden
 exigir confirmación. [Permisos y seguridad](./tg/security.md).
+
+## Resumir mensajes de voz
+
+```text prompt
+Resume los mensajes de voz de Anna de hoy: decisiones, fechas y preguntas para mí. Cita la fuente de cada punto. Si el reconocimiento no es claro, indícalo sin adivinar.
+```
+
+El agente obtiene primero una transcripción y después la resume. Telegram puede usar su servicio de transcripción o un modelo de voz local; MAX usa un modelo local. La primera ejecución local requiere descargar el modelo por separado. Pide al agente que explique la descarga antes de iniciarla. Puede tardar más que leer texto.
+
+Comprueba nombres, importes y fechas importantes contra la grabación. El resumen debe identificar mensajes que no pudo transcribir. Configuración: [voz en Telegram](./tg/usage.md#voice-messages) y [reconocimiento de voz en MAX](./max/audio-recognition.md).
+
+<a id="recurring-tasks" />
+
+## Repetir una tarea útil
+
+Un resumen matinal automático repite toda la tarea: lee mensajes nuevos, los analiza y produce un resultado nuevo. Pruébalo primero una vez:
+
+```text prompt
+Lee los mensajes de ayer en mis chats de trabajo. Dame cinco puntos importantes con fuentes y preguntas pendientes. Solo lee y muestra el resultado aquí.
+```
+
+Si el resultado te sirve, indica el horario y el destino:
+
+```text prompt
+Ayúdame a repetir este resumen los días laborables a las 09:00, hora de Madrid. Mantén los mismos chats y formato. Explica dónde se ejecutará, cómo comprobar la primera ejecución y cómo detenerlo. No actives el horario todavía.
+```
+
+El agente o un planificador independiente debe iniciar cada ejecución. Una petición en el chat no crea por sí sola un horario. Si se ejecuta en tu ordenador, debe estar encendido y tener acceso al mensajero. Revisa el primer resultado y las fechas cubiertas antes de depender del resumen. Consulta las recetas de [Telegram](./tg/recipes.md) o [MAX](./max/recipes.md) para tu configuración.
+
+Enviar después un recordatorio fijo es más sencillo: el mensaje espera en el servidor del mensajero. No busca mensajes nuevos ni genera un resumen nuevo. El siguiente apartado trata ese caso.
 
 ## Programar recordatorios
 
