@@ -5,11 +5,14 @@ import {
   BookOpen,
   Bot,
   Cable,
+  CalendarDays,
+  ContactRound,
   Download,
   FlaskConical,
   Globe,
   History,
   Layers,
+  LayoutGrid,
   ListChecks,
   MessageSquare,
   Network,
@@ -29,6 +32,9 @@ const icons = {
   agents: Bot,
   "first-tasks": ListChecks,
   prompting: MessageSquare,
+  features: LayoutGrid,
+  people: ContactRound,
+  "meeting-brief": CalendarDays,
   architecture: Layers,
   "search-architecture": Network,
   "search-playground": FlaskConical,
@@ -66,7 +72,8 @@ export function unifiedDocsTree(tree: Root): Root {
     if (node.type !== "page") return node
     const slug = /\/docs\/(tg|max)\/?$/.test(node.url) ? "index" : (node.url.split("/").filter(Boolean).at(-1) ?? "")
     const Icon = icons[slug as keyof typeof icons]
-    return Icon ? { ...node, icon: node.icon ?? <Icon aria-hidden="true" /> } : node
+    const PageIcon = Icon ?? BookOpen
+    return { ...node, icon: node.icon ?? <PageIcon aria-hidden="true" /> }
   }
   return { ...tree, children: tree.children.map(decorate) }
 }

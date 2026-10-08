@@ -119,3 +119,7 @@ pnpm exec serve out -l 4317    # then open http://localhost:4317 — stop it by 
 ```
 
 Live: `https://wirecat.dev/`, `/ru`, `/es`; `https://wirecat.dev/llms.txt`.
+
+Documentation authoring: [rules](docs/AUTHORING.md), [task index](docs/README.md) and
+[tooling](docs/TOOLING.md). The [implementation plan](docs/plans/2026-10-07-documentation-system.md)
+records the source baseline and validation.

@@ -180,3 +180,7 @@ cli's installation reference, rather than in the copied prompt.
 [my.telegram.org/apps login page](https://my.telegram.org/apps), captured on 2026-10-04 in a fresh
 unauthenticated browser. No phone number, login code, API credentials or account QR was entered.
 Its localized captions are reviewed portal corrections for the Telegram sessions page.
+
+Documentation authoring: [rules](docs/AUTHORING.md), [task index](docs/README.md) and
+[tooling](docs/TOOLING.md). The [implementation plan](docs/plans/2026-10-07-documentation-system.md)
+records the source baseline and validation.

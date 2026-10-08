@@ -12,7 +12,9 @@
       "!next-env.d.ts",
       "!design",
       "!lib/search-language.generated.js",
-      "!lib/search-language.generated.d.ts"
+      "!lib/search-language.generated.d.ts",
+      "!.docs-tooling",
+      "!.impeccable"
     ]
   },
   "overrides": [

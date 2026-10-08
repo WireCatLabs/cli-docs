@@ -1,0 +1,26 @@
+{
+  "version": "0.2",
+  "import": ["@leemour/cli-core/cspell", "@cspell/dict-es-es/cspell-ext.json", "@cspell/dict-ru_ru/cspell-ext.json"],
+  "language": "en,en-GB,ru,es",
+  "files": ["content/docs/*.{md,mdx}"],
+  "ignoreRegExpList": ["/<[^>]+>/g", "/^---[\\s\\S]*?^---/gm"],
+  "words": [
+    "WireCat",
+    "Repomix",
+    "DeepWiki",
+    "CodeWiki",
+    "Fumadocs",
+    "Mermaid",
+    "Excalidraw",
+    "Hermes",
+    "Lucene",
+    "Shiki",
+    "ONNX",
+    "keyring",
+    "JSONL",
+    "userbot",
+    "webhooks",
+    "subcommand",
+    "frontmatter"
+  ]
+}

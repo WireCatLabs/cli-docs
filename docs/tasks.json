@@ -1,0 +1,43 @@
+[
+  {
+    "id": "connect-account",
+    "pages": ["installation.mdx", "agents.md", "first-tasks.md"],
+    "families": {
+      "tg": ["setup", "session", "account", "skill", "mcp"],
+      "max": ["setup", "session", "account", "skill", "mcp"]
+    }
+  },
+  {
+    "id": "catch-up",
+    "pages": ["first-tasks.md", "tg/usage.md", "max/usage.md"],
+    "families": { "tg": ["inbox", "review", "chats", "messages"], "max": ["inbox", "review", "chats", "messages"] }
+  },
+  {
+    "id": "find-history",
+    "pages": ["first-tasks.md", "tg/archive.md", "max/archive.md", "tg/search.md", "max/search.md"],
+    "families": { "tg": ["store", "messages", "conversations"], "max": ["store", "messages", "conversations"] }
+  },
+  {
+    "id": "prepare-meeting",
+    "pages": ["meeting-brief.mdx", "first-tasks.md", "prompting.md"],
+    "families": { "tg": ["contacts", "chats", "messages"], "max": ["contacts", "chats", "messages"] }
+  },
+  {
+    "id": "draft-reply",
+    "pages": ["first-tasks.md", "prompting.md", "security.md", "tg/usage.md", "max/usage.md"],
+    "families": {
+      "tg": ["messages", "config", "recipients", "sends"],
+      "max": ["messages", "config", "recipients", "sends"]
+    }
+  },
+  {
+    "id": "manage-group",
+    "pages": ["tg/groups.md", "max/groups.md", "tg/bot.md", "max/bot.md"],
+    "families": { "tg": ["chats", "bot"], "max": ["chats", "bot"] }
+  },
+  {
+    "id": "recover-error",
+    "pages": ["tg/troubleshooting.md", "max/troubleshooting.md", "tg/diagnostics.md", "max/diagnostics.md"],
+    "families": { "tg": ["doctor", "runs"], "max": ["doctor", "runs"] }
+  }
+]

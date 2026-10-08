@@ -7,9 +7,11 @@ import { expandDocTerms } from "./doc-terms-markdown"
 import { i18n } from "./i18n"
 import { installationMarkdown } from "./installation-markdown"
 import { resolveDocumentationLink, rewriteMarkdownLinks } from "./markdown-links"
+import { meetingMarkdown } from "./meeting-guide"
 import { rehypeCodeAccessibility } from "./rehype-code-accessibility"
 import { remarkAnchorAliases } from "./remark-anchor-aliases"
 import { remarkDocUsability } from "./remark-doc-usability"
+import { remarkMermaid } from "./remark-mermaid"
 import { docsRoute, getPageMarkdownUrl, siteUrl, toolOf } from "./shared"
 
 const docs = defineDocs({
@@ -18,7 +20,7 @@ const docs = defineDocs({
     schema: pageSchema.extend({ contentLanguage: pageSchema.shape.title.optional() }),
     // The tools' pages use fences Shiki has no grammar for (`cron`); those show as plain text.
     mdxOptions: applyMdxPreset({
-      remarkPlugins: [remarkAnchorAliases, remarkDocUsability],
+      remarkPlugins: [remarkAnchorAliases, remarkDocUsability, remarkMermaid],
       remarkImageOptions: { useImport: false },
       rehypePlugins: [rehypeCodeAccessibility],
       rehypeCodeOptions: {
@@ -60,12 +62,17 @@ export const docsLlms = llms(source, {
           : "Documentation version"
     // Processed MDX indents nested tabs as code. Expand the authored installation guide instead,
     // preserving runnable fences and making every messenger/OS branch readable to agents.
-    const text = await page.data.getText(
-      page.slugs.length === 1 && page.slugs[0] === "installation" ? "raw" : "processed",
-    )
+    const raw = await page.data.getText("raw")
+    const text =
+      /^```mermaid\b/m.test(raw) ||
+      /<MeetingGuide\b/.test(raw) ||
+      (page.slugs.length === 1 && page.slugs[0] === "installation")
+        ? raw
+        : await page.data.getText("processed")
     const body = text
       .replace(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/, "")
       .replace("<InstallationGuide />", installationMarkdown(page.locale ?? i18n.defaultLanguage))
+      .replace(/<MeetingGuide\s+lang="(?:en|ru|es)"\s*\/>/, meetingMarkdown(page.locale ?? i18n.defaultLanguage))
     const markdown = rewriteMarkdownLinks(expandDocTerms(body, page.locale ?? i18n.defaultLanguage), (href) =>
       resolveDocumentationLink(
         href,

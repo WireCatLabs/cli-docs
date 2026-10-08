@@ -43,6 +43,14 @@ jobs:
       - run: pnpm lint
       - run: pnpm test
       - run: pnpm sync ${REF:+--ref "$REF"}
+      - run: pnpm docs:contracts
+      - run: |
+          if [ -n "$REF" ]; then
+            pnpm docs:lint
+            pnpm docs:quality
+          else
+            pnpm docs:check
+          fi
       - run: pnpm typecheck
       - run: pnpm exec next build
       - run: pnpm check:links

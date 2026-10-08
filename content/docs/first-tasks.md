@@ -3,13 +3,23 @@ title: "First tasks"
 description: "Your first requests to your agent after login, then longer examples: find a decision, prepare a meeting, draft replies."
 ---
 
-You have logged in. Now give your agent a task in plain words. Start with tasks that only
-read: you see what the agent can do, and nothing changes in your account.
+You have connected your account. Now try asking your agent to find a message, catch up on a
+conversation or gather context for a meeting. You can describe the task in your own words;
+the agent chooses the commands for you.
+
+Start with one of the short requests below. You will see what the tool can find and how to check
+the messages behind an answer. The longer examples then show how to find an older agreement,
+prepare for a meeting and turn promises into draft replies.
+
+If you have not connected your account yet, start with [Install and log in](./installation.mdx).
+If the agent cannot find the tool, use [Connect your agent](./agents.md).
 
 ## Your first five minutes
 
-Copy one request into your agent. They work the same for Telegram and
-MAX; write *max* instead of *tg* if you use MAX.
+Copy one request into your agent and name the messenger you connected: Telegram (`tg`) or MAX
+(`max`). These short requests work with either messenger. The longer command examples below
+show Telegram; use the [MAX usage](./max/usage.md) and [archive](./max/archive.md) guides for
+its exact steps and supported options.
 
 **Who needs an answer from me?**
 
@@ -34,6 +44,13 @@ Use tg to look through my five most recent chats and find the last link someone 
 ```
 
 The agent reads those chats and shows the message with the link.
+
+**Check your first answer.** It should name the chats and period it checked, show source messages
+for important conclusions, and say when data is missing. If the account is not connected, return
+to [installation](./installation.mdx); if the agent cannot find the tool, use
+[Connect your agent](./agents.md). A draft stays in your conversation with the agent until you
+choose to send it. For errors, use [Telegram help](./tg/troubleshooting.md) or
+[MAX help](./max/troubleshooting.md).
 
 **Behind the scenes.** For the first request, the agent runs commands like `tg inbox --limit 5` and
 `tg chats list --limit 5`, then reads more messages where it needs context. Reading does not mark
@@ -246,4 +263,4 @@ review windows and check later messages before labelling an old promise outstand
 For prompts you can adapt, continue to [How to phrase requests](./prompting.md).
 For command syntax, use [Telegram commands](./tg/commands.md) or [MAX commands](./max/commands.md).
 
-For a fully reproducible search with actual fixture output, try the [meeting-brief walkthrough](./meeting-brief.mdx).
+See the [agent conversation demo](./meeting-brief.mdx): how the agent gathers decisions from several chats and turns them into an agenda.

@@ -4,6 +4,7 @@ import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 import GithubSlugger from "github-slugger"
 import { fromMarkdown } from "mdast-util-from-markdown"
+import { diagramStructure } from "../lib/mermaid.ts"
 
 type Tool = { name: string; lang: string }
 type Correction = {
@@ -93,7 +94,11 @@ export function withOriginalAnchors(original: string, translated: string): strin
 const fencedCode = (text: string) =>
   nodes(text)
     .filter((node) => node.type === "code")
-    .map((node) => [node.lang, node.meta, node.value])
+    .map((node) => [
+      node.lang,
+      node.lang === "mermaid" ? null : node.meta,
+      node.lang === "mermaid" ? diagramStructure(node.value ?? "") : node.value,
+    ])
 
 export function translationProblems(original: string, translated: string): string[] {
   const problems: string[] = []

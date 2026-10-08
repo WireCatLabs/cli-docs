@@ -1,22 +1,26 @@
 {
   "pages": [
+    "---Начните здесь---",
     "index",
     "installation",
     "agents",
     "first-tasks",
+    "---Что можно сделать---",
+    "prompting",
     "features",
     "people",
     "meeting-brief",
-    "prompting",
-    "architecture",
-    "search-architecture",
-    "search-playground",
+    "---Как всё устроено---",
     "mcp",
     "browser-apps",
-    "bot-api",
     "security",
+    "bot-api",
+    "search-playground",
     "---Мессенджеры---",
     "tg",
-    "max"
+    "max",
+    "---Технические подробности---",
+    "architecture",
+    "search-architecture"
   ]
 }

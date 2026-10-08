@@ -3,13 +3,23 @@ title: "Primeras tareas"
 description: "Tus primeras peticiones al agente tras iniciar sesión y después ejemplos más largos: encontrar una decisión, preparar una reunión, redactar respuestas."
 ---
 
-Ya has iniciado sesión. Ahora da a tu agente una tarea con palabras normales. Empieza por tareas
-que solo leen: ves lo que puede hacer el agente y nada cambia en tu cuenta.
+Ya has conectado tu cuenta. Ahora prueba a pedir al agente algo útil: encontrar un mensaje,
+ponerte al día en una conversación o reunir contexto para una reunión. Describe lo que necesitas
+con tus propias palabras; el agente elegirá los comandos.
+
+Empieza con una petición breve de abajo. Verás qué puede encontrar la herramienta y cómo comprobar
+los mensajes que respaldan una respuesta. Los ejemplos más largos muestran cómo encontrar un
+acuerdo antiguo, preparar una reunión y convertir compromisos en borradores de respuestas.
+
+Si todavía no has conectado tu cuenta, empieza por [Instalación e inicio de sesión](./installation.mdx).
+Si el agente no encuentra la herramienta, consulta [Conectar tu agente](./agents.md).
 
 ## Tus primeros cinco minutos
 
-Copia una petición en tu agente. Funcionan igual con Telegram y con MAX; si usas MAX, escribe
-*max* en lugar de *tg*.
+Copia una petición en tu agente e indica el mensajero que conectaste: Telegram (`tg`) o MAX
+(`max`). Estas peticiones cortas sirven para ambos. Los ejemplos detallados de comandos que
+siguen muestran Telegram; consulta las guías de [uso](./max/usage.md) y
+[archivo](./max/archive.md) de MAX para sus pasos y opciones exactos.
 
 **¿Quién necesita una respuesta mía?**
 
@@ -49,6 +59,13 @@ los límites.
   historial de ese chat. Tú decides hasta qué fecha.
 - **Pide las fuentes.** «Muéstrame los mensajes en los que te basas» obliga al agente a demostrar
   cada afirmación.
+
+**Comprueba la primera respuesta.** Debe indicar los chats y el periodo revisados, mostrar
+los mensajes originales que respaldan las conclusiones importantes y señalar los datos que
+faltan. Si la cuenta no está conectada, vuelve a [instalación](./installation.mdx); si el agente
+no encuentra la herramienta, consulta [Conecta tu agente](./agents.md). El borrador permanece
+en tu conversación con el agente hasta que decidas enviarlo. Para los errores, consulta
+[la ayuda de Telegram](./tg/troubleshooting.md) o [la de MAX](./max/troubleshooting.md).
 
 ## Ejemplos más largos
 
@@ -262,4 +279,4 @@ Para ver peticiones que puedes adaptar, sigue con [Cómo formular peticiones](./
 Para la sintaxis de los comandos, usa [los comandos de Telegram](./tg/commands.md) o
 [los comandos de MAX](./max/commands.md).
 
-Para reproducir una búsqueda con la salida real del conjunto controlado, sigue el [recorrido para preparar una reunión](./meeting-brief.mdx).
+Mira el [demo de conversación con el agente](./meeting-brief.mdx): cómo el agente reúne decisiones de varios chats y las convierte en una agenda.

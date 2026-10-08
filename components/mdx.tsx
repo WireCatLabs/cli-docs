@@ -15,6 +15,8 @@ import {
   InstallationMessengerTabs,
   InstallationOsTabs,
 } from "@/components/installation-guide"
+import { MeetingGuide } from "@/components/meeting-guide"
+import { Mermaid } from "@/components/mermaid"
 import { NodeSetupPrompt } from "@/components/node-setup-prompt"
 import { PlatformPaths } from "@/components/platform-paths"
 import { PlatformSetupTabs } from "@/components/platform-setup-tabs"
@@ -43,6 +45,8 @@ export function getMDXComponents(components?: MDXComponents) {
     h2: (props: ComponentProps<"h2"> & { "data-static-heading"?: boolean }) =>
       props["data-static-heading"] ? <h2 {...props}>{props.children}</h2> : <Heading as="h2" {...props} />,
     ArchitectureDiagram,
+    Mermaid,
+    MeetingGuide,
     InstallationGuide,
     AgentInstallPrompt,
     InstallationMessengerTabs,

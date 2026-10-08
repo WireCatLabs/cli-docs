@@ -49,3 +49,6 @@ __pycache__/
 # Private local WireCat review skills and evidence.
 /.agents/skills/
 /.audit/
+
+# Local documentation research and release contracts
+/.docs-tooling
