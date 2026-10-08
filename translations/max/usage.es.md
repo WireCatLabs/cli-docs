@@ -709,6 +709,6 @@ max stats charts synthetic-group --chart-kind messages --by day --timezone Europ
 
 JSON contiene `chart`; al guardar una imagen, también contiene `chartFile` con la ruta y el tamaño. Las imágenes solo se escriben en archivos nuevos, sin sobrescribir. Las fechas ausentes quedan como huecos y los datos incompletos se indican en la descripción y la imagen. `membership` requiere eventos del chat en línea y no está disponible con `--offline`. MCP `max_read` (`command: "stats charts"`) devuelve JSON del almacenamiento local sin conectarse ni escribir archivos; `format: "png"` añade una imagen PNG y JSON con `chart` y el tamaño de `image`. Allí no están disponibles las entradas y salidas. La lectura respeta el permiso `messages`. No se admiten `--jsonl` ni imágenes en stdout.
 
-![Gráfico con datos ficticios](https://raw.githubusercontent.com/leemour/max-cli/v0.35.0/docs/images/stats-charts.png)
+![Gráfico con datos ficticios](https://raw.githubusercontent.com/leemour/max-cli/v0.36.0/docs/images/stats-charts.png)
 
 Clasificaciones de mensajes y autores: [métricas, puntuaciones y evidence](./rankings.md).

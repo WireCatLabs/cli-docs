@@ -461,6 +461,7 @@ tg chats requests accept "Hiking 2027" 67890       # let them in; decline turns 
 tg chats requests decline "Hiking 2027" --all      # every pending request at once; --link narrows it
 tg chats link list "Hiking 2027"                   # your links, with how many joined and how many wait
 tg chats link revoke "Hiking 2027" https://t.me/+AbCd   # stop one link
+tg chats link update "Hiking 2027" https://t.me/+AbCd --no-approval --max-uses 50   # change only these
 tg chats members add "Hiking 2027" @kate 67890     # they are told
 tg chats members remove "Hiking 2027" @kate        # their messages stay
 tg chats admins add "Hiking 2027" @kate --can pin,delete
@@ -469,7 +470,7 @@ tg chats admins remove "Hiking 2027" @kate
 
 Un grupo nuevo siempre es un supergrupo. Si los ajustes de privacidad de alguien impiden añadirlo, aparece en la respuesta en `providerMetadata.notAdded`; el grupo se crea igualmente. `chats join` en un grupo donde los administradores aprueban las entradas devuelve `requested: true` y termina con el código `0`: la solicitud se ha enviado y entrarás cuando la acepten. Cada acción pasa por las comprobaciones como un cambio de `chat`, y cada persona añadida cuenta para el límite por hora.
 
-`chats link create` crea otro enlace de invitación sin avisar a nadie: `--approval` exige aprobación para entrar por él, `--expire-time` fija su caducidad (`2026-12-01T09:00`, o dentro de `30m`, `2h`, `7d`) y `--max-uses` permite entrar como máximo a ese número de personas. `chats update --join-approval on` exige aprobación para todos, sea cual sea el enlace utilizado.
+`chats link create` crea otro enlace de invitación sin avisar a nadie: `--approval` exige aprobación para entrar por él, `--expire-time` fija su caducidad (`2026-12-01T09:00`, o dentro de `30m`, `2h`, `7d`) y `--max-uses` permite entrar como máximo a ese número de personas. `chats link update` cambia esos mismos tres parámetros de un enlace adicional propio (`--no-approval` desactiva la aprobación); lo omitido queda igual y el enlace principal del grupo no puede cambiarse. `chats update --join-approval on` exige aprobación para todos, sea cual sea el enlace utilizado.
 
 En un grupo con aprobación de entradas, `chats requests list` muestra las solicitudes pendientes con la nota enviada por cada persona; solo las ven los administradores, y leerlas no avisa a nadie. `accept` y `decline` resuelven una por el ID de la lista. Una solicitud aceptada cuenta para el límite por hora; una rechazada, no. La lista de destinatarios solo comprueba el grupo. Si alguien ya es miembro, se devuelve `already: true`; una solicitud que ya no existe termina con el código `6`. `--all` resuelve todas las pendientes o, con `--link`, las de un enlace; primero se cuentan y, si aceptarlas superaría el límite por hora, se rechaza antes de admitir a nadie. `chats link list` muestra solo tus enlaces; al revocar el enlace principal del grupo, Telegram genera uno nuevo que aparece en la respuesta.
 

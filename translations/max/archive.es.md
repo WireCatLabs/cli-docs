@@ -116,7 +116,7 @@ max server uninstall        # убрать службу; сначала max serv
 max watch                   # в другом: новые сообщения по мере прихода
 max watch --jsonl           # то же для скрипта: одно сообщение на строку, как у `messages list`
 max watch --jsonl | ./on-message.sh
-max watch --events --jsonl  # ещё правки, удаления и реакции; у каждой строки поле "event"
+max watch --events --jsonl  # ещё правки, удаления, реакции, прочтения и изменения чатов; у строки поле "event"
 ```
 
 - **Tras actualizar `max`**, el servidor automático se sustituye solo. Uno manual mantiene la versión hasta reiniciar; `max server status` lo muestra y `max server restart` lo resuelve.
@@ -126,7 +126,7 @@ max watch --events --jsonl  # ещё правки, удаления и реак�
 - **Si MAX desconecta**, reintenta tras 1, 2, 4… segundos, hasta un minuto de espera; `max watch` lo indica en stderr. Un token rechazado detiene con error de autenticación.
 - **Una conexión compartida por perfil.** Comandos, `max mcp` y `max watch` usan la del servidor para leer, enviar y reaccionar. Los controles de envío siguen en el comando. Si falta, se inicia y espera; con `serve: false`, el comando conecta directamente. Un segundo servidor rechaza antes de entrar.
 - El servidor mantiene actualizado el estado de su sesión: tiene en cuenta mensajes nuevos, chats leídos en el teléfono y cambios en los chats. Si MAX informa de algo que no puede aplicar (mensajes eliminados), vuelve a iniciar sesión en segundo plano, como máximo una vez por minuto.
-- **Con `--events`, cambia el formato:** `{"event": "message", "message": …}`, `{"event": "edit", "message": …}`, `{"event": "delete", "chatId", "chatTitle", "messageId"}`, `{"event": "reaction", "chatId", "chatTitle", "messageId", "reactions"}`. Sin la opción, una línea por mensaje. `max watch` no muestra quién escribe: MAX solo lo envía a quien tenga abierto ese chat.
+- **Con `--events`, cambia el formato:** `{"event": "message", "message": …}`, `{"event": "edit", "message": …}`, `{"event": "delete", "chatId", "chatTitle", "messageId"}`, `{"event": "reaction", "chatId", "chatTitle", "messageId", "reactions"}`, `{"event": "read", "chatId", "chatTitle", "userId", "upToTime", "unreadCount"}` indica quién leyó hasta esa hora, incluido el propietario desde otro dispositivo; `{"event": "chat", "chat"}` indica cambios de nombre, miembros o salida del propietario. Marcar como no leído no genera un evento de lectura. Sin la opción, una línea por mensaje. `max watch` no muestra quién escribe: MAX solo lo envía a quien tenga abierto ese chat.
 - **`max watch` solo ve lo que llega mientras tanto él como el servidor están conectados.** Los mensajes que llegan durante una desconexión de MAX se pierden en ese flujo. Una línea `status` con `connected: true` después de una desconexión indica que debes recuperar lo omitido: `max inbox --since-time <время из поля at предыдущей строки status>`.
 
 ## Siguiente paso

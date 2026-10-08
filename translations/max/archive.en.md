@@ -116,7 +116,7 @@ max server uninstall        # убрать службу; сначала max serv
 max watch                   # в другом: новые сообщения по мере прихода
 max watch --jsonl           # то же для скрипта: одно сообщение на строку, как у `messages list`
 max watch --jsonl | ./on-message.sh
-max watch --events --jsonl  # ещё правки, удаления и реакции; у каждой строки поле "event"
+max watch --events --jsonl  # ещё правки, удаления, реакции, прочтения и изменения чатов; у строки поле "event"
 ```
 
 - **After updating `max`**, an automatically started server replaces itself with the new version. A manually started server keeps its old version until restarted. `max server status` shows this; `max server restart` fixes it.
@@ -126,7 +126,7 @@ max watch --events --jsonl  # ещё правки, удаления и реак�
 - **If MAX disconnects**, the server reconnects after 1, 2, 4… seconds, with the delay capped at one minute. `max watch` reports this on stderr. If MAX no longer accepts the token, the server stops with an authentication error.
 - **All clients share one MAX connection per profile.** Commands, `max mcp` and `max watch` do not log in independently: reads, sends and reactions use the server's connection. Send safeguards still run in the command. If no server exists, the command starts one and waits. With `serve: false` and no server, the command connects itself. A second server refuses before logging in.
 - The server keeps its session state current when messages arrive, a chat is read on your phone or a chat changes. If MAX reports something it cannot apply, such as deleted messages, it logs in again in the background, at most once a minute.
-- **With `--events`, line formats change:** `{"event": "message", "message": …}`, `{"event": "edit", "message": …}`, `{"event": "delete", "chatId", "chatTitle", "messageId"}`, `{"event": "reaction", "chatId", "chatTitle", "messageId", "reactions"}`. Without the flag, each line is a message as before. `max watch` cannot show who is typing: MAX sends typing notifications only to a client with that chat open.
+- **With `--events`, line formats change:** `{"event": "message", "message": …}`, `{"event": "edit", "message": …}`, `{"event": "delete", "chatId", "chatTitle", "messageId"}`, `{"event": "reaction", "chatId", "chatTitle", "messageId", "reactions"}`, `{"event": "read", "chatId", "chatTitle", "userId", "upToTime", "unreadCount"}` records who read through that message time, including the owner on another device; `{"event": "chat", "chat"}` records chat-name, membership or departure changes. Marking a chat unread is not a read event. Without the flag, each line is a message as before. `max watch` cannot show who is typing: MAX sends typing notifications only to a client with that chat open.
 - **`max watch` sees only messages arriving while it and the server are connected.** Messages during an outage are missed. A `status` line with `connected: true` after an outage tells you to fetch them: `max inbox --since-time <время из поля at предыдущей строки status>`.
 
 ## Next steps

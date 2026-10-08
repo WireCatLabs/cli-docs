@@ -4,6 +4,18 @@ title: "Changelog"
 
 Notable changes to `@leemour/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
+## 0.36.0 — 08.10.2026
+
+### What's new
+
+- **Files for remote agents:** `attachments show` transfers retained bytes in bounded chunks with SHA256. MCP returns complete images or binary resources, with JSON/base64 fallback. Transfer calls no model and changes no index; the agent reads the file and saves its text ([attachments](./attachments.md)).
+- **The shared library update** also adds folder reads with chat names, `metadata refresh --only-missing`, background-job retry/cleanup, observed retention cohorts and counters with explicit freshness; unknown values remain distinct from zero.
+
+### Changed — may break scripts
+
+- **`max contacts profile` fills `seen`** with the last presence time or `online` when MAX supplies presence. A field that was previously empty can now contain a value ([people](./people.md)).
+- Ranking and evidence JSON includes counter observations and freshness; evidence also supports retention-cohort selections. Check each counter's fields and selection kind before interpreting the result; unknown values or incomplete archives do not mean zero.
+
 ## 0.35.0 — 08.10.2026
 
 ### What's new
@@ -635,7 +647,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/leemour/max-cli/blob/v0.35.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/leemour/max-cli/blob/v0.36.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).

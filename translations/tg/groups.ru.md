@@ -87,6 +87,7 @@ Agent:  (tg review --chat "Hiking" --since-time 2026-09-20T00:00 --json)
 | `tg chats members add\|remove <chat> <person...>` | добавить участников (они получат уведомление; ошибки добавления перечисляются) или удалить их (сообщения сохранятся) |
 | `tg chats admins add <chat> <person> --can <rights>` | назначить администратора с правами: members, admins, info, pin, link, post, edit, delete |
 | `tg chats admins remove <chat> <person>` | снять права администратора; человек останется участником |
+| `tg chats link update <chat> <link> --approval\|--no-approval --expire-time <time> --max-uses <n>` | меняет только заданные одобрение, срок или число вступлений для своей дополнительной ссылки; укажите хотя бы одно изменение |
 | `tg chats link show\|reset <chat>` | ссылка-приглашение; `reset` создаёт новую, старая перестаёт работать |
 | `tg messages delete --for-everyone`, `pin`, `unpin` | удалить для всех, закрепить или открепить |
 

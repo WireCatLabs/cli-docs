@@ -277,3 +277,5 @@ Las páginas con marcas de tiempo ambiguas quedan pendientes. `--background` usa
 Los mismos comandos están disponibles mediante el descubrimiento de herramientas MCP y `tg_read` o `tg_write`; los metadatos de los trabajos
 están limitados al perfil. La reparación exige el permiso de escritura `store.gaps.repair` y acceso de lectura a los mensajes.
 La preparación opcional comparte el tiempo que le queda a la reparación.
+
+Un agente remoto puede recibir bytes guardados, ensamblar porciones limitadas y verificar su hash mediante [attachments show](./attachments.md). La entrega no reconoce ni indexa texto: lee todas las páginas con tus herramientas, guarda el texto con attachments text set y comprueba la búsqueda de contenido.

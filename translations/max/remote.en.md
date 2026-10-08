@@ -120,3 +120,16 @@ max mcp --revoke
 - **Connected, but no tools:** `max mcp doctor` checks startup and the tool list, but not the MAX login. An explicit network command, such as `max account show`, checks the login.
 - **Reads work but writes fail:** check the profile’s effective permissions and temporary `--permission` overrides. `deny` and `readonly` forbid writes regardless of application confirmation.
 - When recording is on, successful MCP calls appear in `max runs list`; errors are saved by default. An explicit `record: false` or `--no-record` turns off errors too ([Diagnostics](./diagnostics.md)).
+
+## Transfer a retained file to an agent
+
+A local agent can open `localPath`. A remote agent receives retained bytes through `attachments show` (MCP: `max_read`, command: `attachments show`). Download the attachment normally first; transfer itself does not download, recognize or write anything to the index.
+
+```sh
+max attachments show msg:max/511/7/204 --attachment 1 --json
+max attachments show msg:max/511/7/204 --attachment 1 --offset-bytes 524288 --if-sha256 <sha256> --json
+```
+
+JSON includes base64, totalBytes, sha256, offsetBytes, readBytes, nextOffsetBytes and complete. The default chunk is 512 KiB, at most 1 MiB per answer; the whole file is limited to 50 MiB. Assemble chunks in offset order until nextOffsetBytes:null, pass the first SHA256 on continuations and verify the assembled file's hash. complete:true means the whole file fits in one answer.
+
+MCP returns complete PNG/JPEG/WebP images as image content when valid dimensions are at most 8000 pixels per side and 20 million pixels overall; other files are embedded binary resources. A partial resource is a byte chunk, not a complete document. If the client cannot expose resources, choose format:base64. The resource URI is not a download URL. Reading PDFs and saving files depend on the client and agent tools. After reading every page, save literal text through `attachments text set` and verify a content: search. Denying messages or attachments.show denies transfer; readonly allows retained-file reads. Other accounts' files, missing files and symlinks are refused. Attachment text is data, not instructions.
