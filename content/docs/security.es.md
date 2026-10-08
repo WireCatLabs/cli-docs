@@ -60,6 +60,23 @@ enviar sin preguntar de nuevo, una llamada puede enviar inmediatamente. Usa solo
 no necesites enviar. Detén el servidor o túnel para pausar el acceso; `tg mcp --revoke` o
 `max mcp --revoke` obliga a las apps a volver a entrar.
 
+## Qué demuestran las evaluaciones
+
+Al pedir estadísticas, solicita los mensajes u observaciones de miembros que respaldan la respuesta
+y comprueba qué historial falta. Un contador desconocido no es cero; un historial incompleto no
+demuestra que una pregunta nunca recibió respuesta o que un miembro permaneció en silencio.
+
+El [informe publicado](https://github.com/leemour/cli-messaging/blob/main/docs/dev/evaluations/2026-10-08-independent-stats-agent-evaluation.md) registra 38 tareas sintéticas en seis contextos nuevos de agentes:
+interpretar informes, conservar valores desconocidos, previsualizar objetivos exactos, respetar
+permisos y recuperar pruebas modificadas. Los contextos comparten tareas; el número de resultados
+no es un porcentaje de fiabilidad. No se usaron cuentas reales ni adaptadores de red del mensajero;
+MCP se accedió mediante un proxy de shell. No garantiza que otro modelo o tu asistente se comporte
+igual ni que resista todas las instrucciones ocultas en mensajes.
+
+Los desarrolladores pueden [repetir el procedimiento](https://github.com/leemour/cli-messaging/tree/main/scripts/evals) con datos sintéticos. Revisa las
+limitaciones de modelo y SDK del informe antes de comparar puntuaciones y verifica las pruebas
+antes de tomar decisiones importantes.
+
 ## Un punto de partida
 
 1. Conecta un perfil de solo lectura.

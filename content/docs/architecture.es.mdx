@@ -275,3 +275,16 @@ MAX no publica una API para cuentas personales, así que max lleva más código 
 - MAX: [ARCHITECTURE.md](https://github.com/leemour/max-cli/blob/fff19ff/docs/dev/ARCHITECTURE.md) de max
   y las [notas del protocolo](https://github.com/leemour/max-cli/blob/fff19ff/docs/dev/protocol.md).
 - Preguntas: el [chat de soporte](https://t.me/wirecatdev).
+
+## Pruebas del comportamiento del agente
+
+La arquitectura anterior describe la instantánea del 4 de octubre. El [informe del 8 de octubre](https://github.com/leemour/cli-messaging/blob/main/docs/dev/evaluations/2026-10-08-independent-stats-agent-evaluation.md)
+registra sus propias versiones de SDK, datos sintéticos, límites de contexto, primeros fallos y
+observaciones CLI/MCP. Seis contextos contienen 38 resultados evaluados; las tareas compartidas
+hacen que estén correlacionados. No demuestran conformidad general del agente ni del adaptador
+real de red. No se registró el modelo exacto original y MCP se accedió mediante un proxy de shell.
+
+Las [herramientas de reproducción](https://github.com/leemour/cli-messaging/tree/main/scripts/evals) pertenecen a cli-messaging. Para comparar otra ejecución,
+registra el modelo, runner, SDK, reloj/semilla, prompts y primeros fallos. Las pruebas deterministas
+del transporte y los fixtures se distinguen de las pruebas independientes del modelo. La [guía de seguridad](./security.md)
+explica qué comprobar antes de confiar en una respuesta estadística del agente.

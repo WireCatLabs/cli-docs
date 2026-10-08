@@ -50,6 +50,22 @@ used on your computer.
 The local message store is not encrypted by the tools. Signing out or uninstalling does not
 necessarily remove that copy. Review stored data and exports separately when retiring a computer.
 
+## What the evaluations establish
+
+When you ask for a statistics answer, request the messages or member observations behind it and
+check which history is missing. Unknown counts are not zero, and missing history does not prove
+that a question was never answered or a member stayed silent.
+
+The [published evaluation report](https://github.com/leemour/cli-messaging/blob/main/docs/dev/evaluations/2026-10-08-independent-stats-agent-evaluation.md) records 38 synthetic task outcomes in six fresh
+agent contexts: interpreting reports, preserving unknowns, previewing exact targets, respecting
+permission refusals and recovering changed evidence. These contexts share tasks, so the outcome
+count is not a reliability percentage. No real account or native messenger network adapter was
+used; MCP was reached through a shell proxy. It does not guarantee that another model or your
+assistant will behave the same way, or resist every instruction hidden in a message.
+
+Developers can [repeat the procedure](https://github.com/leemour/cli-messaging/tree/main/scripts/evals) with synthetic data. Check the report's model and
+SDK limitations before comparing scores, and keep evidence review part of important decisions.
+
 ## Connecting from a browser
 
 [Browser setup](./browser-apps.mdx) uses an HTTPS address and a one-time code from your terminal.
