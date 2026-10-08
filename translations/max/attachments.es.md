@@ -6,7 +6,7 @@ title: "Adjuntos: envío, descarga y extracción de contenido"
 Elige cómo enviar o descargar un adjunto, consulta qué archivos lee la propia CLI, qué dependencias necesitas y cuándo pedir a un agente o modelo externo que lea un archivo. Después de la extracción, puedes guardar el texto para buscarlo: `content:` encuentra el mensaje original.
 
 
-El envío entrega un archivo al chat, la descarga guarda sus bytes y la extracción obtiene su contenido para leerlo y buscarlo. Son funciones distintas: puedes enviar y descargar un XLSX, aunque el extractor integrado todavía no lee sus celdas.
+El envío entrega un archivo al chat, la descarga guarda sus bytes y la extracción obtiene su contenido para leerlo y buscarlo. Son funciones distintas: un escaneo descargado aún necesita OCR; un documento digital puede leerse localmente sin modelo.
 
 
 ## Qué puedes enviar
@@ -66,7 +66,7 @@ Por defecto, el agente lee los escaneos y las fotos con sus propias herramientas
 | GIF, HEIC, TIF, TIFF, BMP | `needs-agent`, sin conversión integrada | El OCR automático no admite estos formatos | El agente necesita un visor adecuado o convertir a PNG/JPEG/WEBP |
 | DOC, PPT, XLS | Sin lector integrado para los formatos binarios antiguos | No añade un lector para estos formatos | Convertir con una aplicación ofimática instalada y leer el texto o las páginas |
 | ODT | Lee localmente texto y tablas del documento | Sigue leyendo localmente | Las imágenes y el diseño exacto requieren al agente |
-| ODS, XLSX | Lee hojas, valores de celdas guardados y texto en orden; no calcula fórmulas | Sigue leyendo localmente | Revisar gráficos, fórmulas sin valor guardado y estructura visual |
+| ODS, XLSX | Lee hojas en orden, coordenadas y valores guardados; marca fórmulas sin calcularlas | Sigue leyendo localmente | Revisar gráficos, fórmulas sin valor guardado y estructura visual |
 | PPTX | Lee texto de diapositivas en orden | Sigue leyendo localmente | Las imágenes, diagramas y el diseño exacto requieren al agente |
 | RTF | Sin extractor integrado específico | No añade un lector de RTF | Convertir con un programa que entienda las instrucciones y la codificación de RTF |
 | EPUB | Lee el texto de capítulos en el orden del libro | Sigue leyendo localmente | Revisar imágenes y diseños complejos |
@@ -77,7 +77,7 @@ Por defecto, el agente lee los escaneos y las fotos con sus propias herramientas
 Aquí CSV y JSON se convierten en texto para buscar, no en tablas estructuradas de la base de datos. HTML/XML con MIME de texto se lee como código fuente, no como una página en el navegador. La extracción de PDF/DOCX guarda texto, no el diseño original. El OCR puede equivocarse en cifras, orden de lectura y formato; comprueba los datos importantes en el original.
 
 
-Detectar una codificación antigua requiere confianza; el texto corto o ambiguo queda para el agente. Los bytes originales no cambian. Los intentos fallidos pueden repetirse y se protege el texto guardado por el agente. ODT, ODS, XLSX, PPTX y EPUB se limitan a1000 partes y 50 MiB descomprimidos, con un máximo de 10 MiB por parte XML/HTML de texto. Los archivos dañados o parciales no se indexan como texto completo.
+Detectar una codificación antigua requiere confianza; el texto corto o ambiguo queda para el agente. Los bytes originales no cambian. Los intentos fallidos pueden repetirse y se protege el texto guardado por el agente. ODT, ODS, XLSX, PPTX y EPUB se limitan a 1000 partes y 50 MiB descomprimidos, con un máximo de 10 MiB por parte XML/HTML de texto. Los archivos dañados o parciales no se indexan como texto completo.
 
 Las notas de voz se procesan aparte de los documentos: el modelo de voz se descarga una vez y después funciona localmente. Los comandos, la selección de idioma y los límites se explican en [transcripción de voz](./audio-recognition.md).
 
@@ -134,7 +134,7 @@ Un agente no puede abrir automáticamente cualquier archivo. Necesita acceso a `
 | PDF escaneado | Consultar el número de páginas, convertir cada una en imagen, por ejemplo con `pdftoppm`, y leer todas las imágenes con un modelo de visión |
 | DOCX/ODT y presentaciones | Leer con una biblioteca o aplicación ofimática instalada; exportar páginas para una comprobación visual si hace falta |
 | Hoja de cálculo | Leer cada hoja con una biblioteca o exportarla a CSV; conservar nombres de hojas y filas y comprobar cifras y fórmulas |
-| EPUB | Lee el texto de capítulos en el orden del libro | Sigue leyendo localmente | Revisar imágenes y diseños complejos |
+| EPUB | Leer la lista de capítulos y su HTML en el orden del libro; descomprimir por sí solo no garantiza el orden correcto |
 | ZIP | Revisar el contenido, seleccionar los archivos necesarios y aplicar a cada uno el método de lectura adecuado |
 
 Son ejemplos de herramientas posibles, no programas que la CLI instala por el agente. Si falta una herramienta necesaria, el agente debe indicar que el procesamiento está incompleto. Un agente remoto necesita recibir el propio archivo; una ruta no le da acceso.

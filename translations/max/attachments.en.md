@@ -66,7 +66,7 @@ By default, the agent reads scans and photos with its own tools. `attachments ex
 | GIF, HEIC, TIF, TIFF, BMP | `needs-agent`, without built-in conversion | Automatic OCR of these formats is unsupported | The agent needs a suitable viewer or conversion to PNG/JPEG/WEBP |
 | DOC, PPT, XLS | No built-in reader for older binary formats | Does not add a reader for these formats | Convert with an installed office application, then read the text or pages |
 | ODT | Reads document text and tables locally | Still reads locally | Images and exact layout need the agent |
-| ODS, XLSX | Reads sheets, stored cell values and text in order; does not calculate formulas | Still reads locally | Charts, formulas without saved values and visual structure need inspection |
+| ODS, XLSX | Reads sheets in order, cell coordinates and stored values; marks formulas without calculating them | Still reads locally | Charts, formulas without saved values and visual structure need inspection |
 | PPTX | Reads slide text in order | Still reads locally | Images, diagrams and exact layout need the agent |
 | RTF | No dedicated built-in extractor | Does not add an RTF reader | Convert with a program that understands RTF commands and encoding |
 | EPUB | Reads chapter text in book order | Still reads locally | Images and complex layout need inspection |
@@ -77,7 +77,7 @@ By default, the agent reads scans and photos with its own tools. `attachments ex
 CSV and JSON become searchable text here, not structured database tables. HTML/XML with a text MIME type is read as source text, not as a browser page. PDF/DOCX extraction saves text, not the original layout. OCR can make mistakes in numbers, reading order and formatting; verify important information against the original.
 
 
-Legacy encoding detection requires confidence; short or ambiguous text remains for the agent. Source bytes stay unchanged. Failed local reads can retry, and saved agent text remains protected. ODT, ODS, XLSX, PPTX and EPUB are bounded to1000 parts and 50 MiB expanded, with at most 10 MiB per text XML/HTML part. Malformed or partial files are not indexed as completely read text.
+Legacy encoding detection requires confidence; short or ambiguous text remains for the agent. Source bytes stay unchanged. Failed local reads can retry, and saved agent text remains protected. ODT, ODS, XLSX, PPTX and EPUB are bounded to 1000 parts and 50 MiB expanded, with at most 10 MiB per text XML/HTML part. Malformed or partial files are not indexed as completely read text.
 
 Voice messages are processed separately from documents: the speech model is downloaded once and then runs locally. Commands, language selection and limits are covered in [voice transcription](./audio-recognition.md).
 
@@ -134,7 +134,7 @@ An agent cannot automatically open every file. It needs access to `localPath`, a
 | Scanned PDF | Find the page count, convert each page to an image, for example with `pdftoppm`, and read every image with a vision model |
 | DOCX/ODT and presentations | Read with a library or installed office application; export pages for visual verification if needed |
 | Spreadsheet | Read each sheet with a library or export sheets to CSV; preserve sheet names and rows, and verify numbers and formulas |
-| EPUB | Reads chapter text in book order | Still reads locally | Images and complex layout need inspection |
+| EPUB | Read the chapter list and each chapter’s HTML in book order; unpacking alone does not guarantee the correct order |
 | ZIP | Inspect the contents, select the needed files and use the appropriate reading method for each |
 
 These are examples of possible tools, not programs the CLI installs for an agent. If a required tool is unavailable, the agent must report incomplete processing. A remote agent needs the file itself transferred; a path string does not provide that access.
