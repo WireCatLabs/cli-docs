@@ -82,6 +82,7 @@ export default async function Page(props: Props) {
   const taskGuide = readerGuide(page.slugs, lang)
   const toc = taskGuide
     ? [
+        ...(taskGuide.setup ? [{ title: taskGuide.setup.title, url: "#task-bot-connect", depth: 2 }] : []),
         ...taskGuide.sections.map((section) => ({ title: section.title, url: `#${section.id}`, depth: 2 })),
         ...(taskGuide.fixture ? [{ title: taskGuide.fixture.title, url: "#task-incomplete-history", depth: 2 }] : []),
         { title: taskGuide.reference, url: "#technical-reference", depth: 2 },

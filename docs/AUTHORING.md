@@ -225,3 +225,9 @@ Give metadata and the opening different jobs. The short description helps reader
 page; the opening explains their task and result. Never reuse the opening as the description.
 Check the rendered page, including portal introductions and native text, for adjacent repetitions.
 A shared reader layer must add useful orientation, not repeat the native explanation.
+
+Introduce a bot in this order: what it does, acting on its behalf through the tool, why that is
+useful, then this page’s outcomes. Put creation and first connection before any request that
+assumes a connected bot. Verify messenger-specific identity commands rather than substituting
+the executable name. Omit repeated role-navigation links on bot pages; link another task only
+where the reader needs that destination.

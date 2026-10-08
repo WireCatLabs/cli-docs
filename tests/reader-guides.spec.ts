@@ -11,7 +11,17 @@ for (const lang of ["en", "ru", "es"]) {
         const guide = page.locator("[data-reader-guide]")
         await expect(guide).toBeVisible()
         await expect(guide.locator(".docs-copy").first()).toBeEnabled()
-        await expect(guide.locator("[data-reader-roles] a")).toHaveCount(3)
+        await expect(guide.locator("[data-reader-roles] a")).toHaveCount(route === "bot" ? 0 : 3)
+        if (route === "bot") {
+          await expect(guide.locator("[data-bot-onboarding]")).toBeVisible()
+          expect(
+            await guide.evaluate((element) => {
+              const setup = element.querySelector("[data-bot-onboarding]")
+              const check = element.querySelector("[data-reader-section=task-bot-check]")
+              return Boolean(setup && check && setup.compareDocumentPosition(check) & Node.DOCUMENT_POSITION_FOLLOWING)
+            }),
+          ).toBe(true)
+        }
         const reference = page.locator("[data-technical-reference]")
         await expect(reference).toBeVisible()
         await expect(reference.locator("details")).toHaveCount(0)

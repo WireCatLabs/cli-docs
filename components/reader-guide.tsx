@@ -9,18 +9,38 @@ export function ReaderGuide({ slugs, lang }: { slugs: string[]; lang: string }) 
   return (
     <div data-reader-guide lang={lang}>
       <p>{guide.intro}</p>
-      <nav aria-label={guide.roleNavigation.label} className="not-prose my-5 flex flex-wrap gap-2" data-reader-roles>
-        {guide.roleNavigation.links.map((link) => (
-          <Link
-            key={link.page}
-            href={`/${lang}/docs/${link.page}`}
-            aria-current={link.current ? "page" : undefined}
-            className="rounded-lg border px-3 py-2 text-sm aria-[current=page]:bg-fd-muted"
-          >
-            {link.label}
-          </Link>
-        ))}
-      </nav>
+      {guide.showRoleNavigation && (
+        <nav aria-label={guide.roleNavigation.label} className="not-prose my-5 flex flex-wrap gap-2" data-reader-roles>
+          {guide.roleNavigation.links.map((link) => (
+            <Link
+              key={link.page}
+              href={`/${lang}/docs/${link.page}`}
+              aria-current={link.current ? "page" : undefined}
+              className="rounded-lg border px-3 py-2 text-sm aria-[current=page]:bg-fd-muted"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+      )}
+      {guide.setup && (
+        <section data-bot-onboarding>
+          <h2 id="task-bot-connect">{guide.setup.title}</h2>
+          <p>
+            <a href={guide.setup.url}>{guide.setup.create}</a>
+          </p>
+          <p>
+            <Link href={`/${lang}/docs/installation`}>{guide.setup.install} →</Link>
+          </p>
+          <ol>
+            {guide.setup.steps.map((step) => (
+              <li key={step}>{step}</li>
+            ))}
+          </ol>
+          <CopyText text={guide.setup.commands.join("\n")} lang={lang} />
+          <p>{guide.setup.result}</p>
+        </section>
+      )}
       {guide.sections.slice(0, guide.fixture ? 1 : undefined).map((section) => (
         <ReaderSection key={section.id} section={section} lang={lang} />
       ))}

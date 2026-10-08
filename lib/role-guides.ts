@@ -27,13 +27,13 @@ const pages = {
   ru: {
     bot: {
       intro:
-        "Настройте бота для объявлений и ответов: проверьте доступ к нужному чату, подготовьте сообщение с кнопками и выберите способ получения новых сообщений. Начните с запроса ниже; команды подключения приведены в разделе «Команды и инструкции».",
+        "Бот — отдельный аккаунт мессенджера, который принимает сообщения и выполняет заданные действия: отвечает пользователям, публикует объявления и показывает кнопки. С помощью инструмента командной строки вы или ваш ИИ-агент можете действовать от имени своего бота. Это удобно для обращений клиентов, новостей сообщества и записи на мероприятия. Ниже вы подключите бота, проверите доступ к чату и подготовите первое сообщение.",
       sections: [
         [
           "bot-check",
           "Проверить, какой бот подключён",
           "Используй {cli} CLI с профилем моего бота sales. Покажи имя бота и проверь доступ к группе «Клуб». Объясни, что он может делать и каких прав не хватает. Ничего не отправляй и не меняй.",
-          "Ожидайте имя бота, выбранную группу и понятное объяснение доступа. Если бот ещё не подключён, настройте токен по инструкции ниже; не вставляйте токен в запрос агенту.",
+          "Ожидайте имя бота, выбранную группу и понятное объяснение доступа. Имя должно совпадать с ботом, которого вы подключили выше.",
           "profiles",
           "Выбрать профиль бота",
         ],
@@ -73,13 +73,13 @@ const pages = {
   en: {
     bot: {
       intro:
-        "Set up your bot for announcements and replies: check access to the right chat, prepare a message with buttons and choose how to receive new messages. Start with the request below; connection commands follow under Commands and instructions.",
+        "A bot is a separate messenger account that receives messages and performs configured actions: answering people, publishing announcements and showing buttons. You or your AI agent can use the command-line tool to act on behalf of your bot. This helps with customer enquiries, community updates and event registration. Below you will connect the bot, check chat access and prepare its first message.",
       sections: [
         [
           "bot-check",
           "Check the connected bot",
           "Use {cli} CLI with my sales bot profile. Show the bot's name and check access to Club. Explain what it can do and which permissions are missing. Do not send or change anything.",
-          "Expect the bot's identity, selected group and access explanation. If unconnected, set its token using the instructions below; do not paste the token into an agent request.",
+          "Expect the bot's identity, selected group and access explanation. The name should match the bot you connected above.",
           "profiles",
           "Choose a bot profile",
         ],
@@ -119,13 +119,13 @@ const pages = {
   es: {
     bot: {
       intro:
-        "Configura tu bot para anuncios y respuestas: comprueba acceso al chat, prepara un mensaje con botones y elige cómo recibir mensajes nuevos. Empieza con la petición siguiente; la conexión se explica en Comandos e instrucciones.",
+        "Un bot es una cuenta independiente que recibe mensajes y ejecuta acciones: responde, publica anuncios y muestra botones. Tú o tu agente de IA podéis actuar en su nombre con la herramienta de línea de comandos. Sirve para consultas de clientes, novedades de una comunidad e inscripciones. Abajo conectarás el bot, comprobarás acceso y prepararás el primer mensaje.",
       sections: [
         [
           "bot-check",
           "Comprobar el bot conectado",
           "Usa {cli} CLI con el perfil sales de mi bot. Muestra su nombre y comprueba acceso a Club. Explica qué puede hacer y qué permisos faltan. No envíes ni cambies nada.",
-          "Recibirás identidad, grupo y explicación del acceso. Configura el token con las instrucciones siguientes si falta; no lo pegues en una petición al agente.",
+          "Recibirás identidad, grupo y explicación del acceso. El nombre debe coincidir con el bot conectado arriba.",
           "profiles",
           "Elegir perfil del bot",
         ],

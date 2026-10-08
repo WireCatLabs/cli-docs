@@ -1,3 +1,4 @@
+import { botOnboarding } from "./bot-onboarding.ts"
 import { type ReportTask, reportTasks } from "./report-tasks.ts"
 import { roleGuide, roleLabels } from "./role-guides.ts"
 
@@ -245,6 +246,8 @@ export function readerGuide(slugs: string[], lang: string) {
         ? `${words.rankingintro} ${{ ru: "В командах ниже подставьте свои названия чатов, имена и даты.", en: "Replace chat names, people and dates in the commands below with your own.", es: "Sustituye nombres, chats y fechas en los comandos por los tuyos." }[locale]}`
         : words.intro),
     sections: role?.sections ?? sections,
+    setup: slugs[1] === "bot" ? botOnboarding(slugs[0], lang) : undefined,
+    showRoleNavigation: slugs[1] !== "bot",
     roleNavigation: {
       label: roles.nav,
       links: (["usage", "bot", "groups"] as const).map((page) => ({
@@ -288,7 +291,9 @@ export function readerGuideMarkdown(slugs: string[], lang: string) {
     if (section.commands) result += `\`\`\`sh\n${section.commands.join("\n")}\n\`\`\`\n\n`
     return `${result}[${section.link}](/${lang}/docs/${section.page})\n\n`
   }
-  let text = `${guide.intro}\n\n${guide.roleNavigation.links.map((link) => `[${link.label}](/${lang}/docs/${link.page})`).join(" · ")}\n\n`
+  let text = `${guide.intro}\n\n${guide.showRoleNavigation ? guide.roleNavigation.links.map((link) => `[${link.label}](/${lang}/docs/${link.page})`).join(" · ") : ""}\n\n`
+  if (guide.setup)
+    text += `## ${guide.setup.title}\n\n[${guide.setup.create}](${guide.setup.url})\n\n[${guide.setup.install}](/${lang}/docs/installation)\n\n${guide.setup.steps.map((step, i) => `${i + 1}. ${step}`).join("\n")}\n\n\`\`\`sh\n${guide.setup.commands.join("\n")}\n\`\`\`\n\n${guide.setup.result}\n\n`
   for (const section of guide.sections.slice(0, guide.fixture ? 1 : undefined)) text += sectionMarkdown(section)
   if (guide.fixture) {
     const fixture = guide.fixture
