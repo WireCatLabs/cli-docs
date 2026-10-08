@@ -4,6 +4,43 @@ title: "Historial de cambios"
 
 Cambios destacados de `@leemour/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.36.0 — 08.10.2026
+
+### Novedades
+
+- **Archivos para agentes remotos:** `attachments show` transfiere bytes guardados por porciones limitadas con SHA256. MCP devuelve imágenes completas o recursos binarios, con alternativa JSON/base64. No llama a un modelo ni cambia el índice; el agente lee y guarda el texto ([adjuntos](./attachments.md)).
+- **La biblioteca compartida** añade lectura de carpetas con nombres de chats, `metadata refresh --only-missing`, reintento/limpieza de trabajos, cohortes de retención observadas y contadores con frescura explícita; los valores desconocidos no se sustituyen por cero.
+
+### Cambios que pueden romper scripts
+
+- **`max contacts profile` rellena `seen`** con la última hora de presencia o `online` si MAX informa de presencia. Un campo antes vacío puede contener un valor ([personas](./people.md)).
+- JSON de rankings y pruebas incluye observaciones de contadores y frescura; las pruebas admiten selecciones de cohortes de retención. Comprueba campos y tipo de selección antes de interpretar; un valor desconocido o un archivo incompleto no significa cero.
+
+## 0.35.0 — 08.10.2026
+
+### Novedades
+
+- **`max chats delete` y `max chats clear` borran el chat o sus mensajes solo para esta cuenta.**
+  Los demás los conservan. Sin `--allow-dangerous`, pregunta; sin terminal, rechaza.
+- **Texto local de adjuntos:** ODT, ODS, XLSX, PPTX, EPUB, UTF-16 con BOM y codificaciones antiguas
+  detectadas con confianza. Sin modelo; no calcula fórmulas y las imágenes quedan para el agente.
+  Estos formatos no necesitan paquetes adicionales; PDF/DOCX conservan motores opcionales ([adjuntos](./attachments.md)).
+- **Informes de administración del archivo:** preguntas sin respuesta observada, tiempo de respuesta de
+  personas elegidas, ayuda tras una entrada conocida y publicaciones vistas con poca conversación.
+  Las selecciones/pruebas muestran los mensajes; lo desconocido no demuestra ausencia de respuesta ([clasificaciones](./rankings.md)).
+- **Stickers: `max stickers list` y `max messages send --sticker <id>`.** Lista paquetes añadidos;
+  `--set <id>` muestra sus stickers e ids. Envía un sticker sin texto ni archivos.
+- **`max chats mute` y `max chats unmute`** cambian solo tus notificaciones, para siempre o con `--until 8h`.
+- **`max account privacy set`** cambia `--find-by-phone`, `--phone-number`, `--calls`,
+  `--chat-invites` (everyone, contacts, nobody) y `--hide-online on|off`; mantiene los demás ajustes.
+  MAX solo admite everyone/contacts para encontrar por teléfono; rechaza `nobody`.
+- **`max chats media`** lee fotos, vídeos, archivos, audio y enlaces del servidor con `--type` y
+  `--before-id` ([uso](./usage.md#медиа-чата)).
+- **`max calls list`** muestra llamadas entrantes, salientes, perdidas y duración, las nuevas primero.
+- **`max account privacy show`** muestra quién encuentra, ve el número, llama o añade la cuenta y
+  si se oculta el estado; usa la respuesta de acceso sin otra petición.
+
+
 ## 0.34.0 — 08.10.2026
 
 ### Novedades
@@ -606,7 +643,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/leemour/max-cli/blob/v0.34.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/leemour/max-cli/blob/v0.36.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos prácticos para bots.** `max <имя> bot messages send <чат> <текст>` envía a un chat por número, a una persona como `user:<номер>` o por el título de un chat que el bot ya ha visto; también hay `edit`, `delete`, `list` y `get`. `max <имя> bot chats list` muestra los chats que ha visto el bot; también están `chats get|pin|unpin|leave|action`. `max bot list` muestra todos los nombres con un token de bot.
   Por qué «que ha visto»: MAX no ofrece una lista de chats del bot, por lo que `max` los recuerda por su cuenta.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).

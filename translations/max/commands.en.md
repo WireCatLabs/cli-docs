@@ -144,6 +144,68 @@ max account sessions end [options]
 |---|---|
 | `--others` | every session but this one. |
 
+### `max account privacy`
+
+who may find, call or add the account
+
+#### `max account privacy show`
+
+the account's privacy settings; reading changes nothing
+
+```sh
+max account privacy show
+```
+
+#### `max account privacy set`
+
+change who may find, call or add the account; the settings not named stay
+
+**Changes something in MAX.**
+
+```sh
+max account privacy set [options]
+```
+
+| Option | Purpose |
+|---|---|
+| `--find-by-phone <who>` | who finds the account by its number: everyone, contacts or nobody. |
+| `--phone-number <who>` | who sees the number: everyone, contacts or nobody. |
+| `--calls <who>` | who may call: everyone, contacts or nobody. |
+| `--chat-invites <who>` | who may add the account to groups and channels: everyone, contacts or nobody. |
+| `--hide-online <on\|off>` | hide online status and last seen. |
+
+## `max calls`
+
+the account's calls
+
+### `max calls list`
+
+calls made and received, newest first; reading changes nothing
+
+```sh
+max calls list [options]
+```
+
+| Option | Purpose |
+|---|---|
+| `--limit <n>` | how many to show. |
+
+## `max stickers`
+
+the stickers the account has added
+
+### `max stickers list`
+
+sticker sets, or with --set the stickers in one; reading changes nothing
+
+```sh
+max stickers list [options]
+```
+
+| Option | Purpose |
+|---|---|
+| `--set <id>` | the stickers in this set. |
+
 ## `max chats`
 
 the chats this account is in
@@ -532,6 +594,19 @@ your chat folders, in the order the app shows them
 max chats folders list
 ```
 
+#### `max chats folders show`
+
+one chat folder, with the names of the chats in it
+
+```sh
+max chats folders show <folder>
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `folder` | required | the folder's id, or its title exactly. |
+
+
 #### `max chats folders create`
 
 create a chat folder
@@ -568,7 +643,7 @@ max chats folders update <folder> [options]
 |---|---|
 | `--title <title>` | a new name. |
 | `--add <chat>` | put a chat in it; repeat it for more. |
-| `--remove <chat>` | take a chat out of it; repeat it for more. |
+| `--remove <chat>` | take a chat out of it, and off its excluded and pinned lists; repeat it for more. |
 
 #### `max chats folders delete`
 
@@ -665,6 +740,92 @@ max chats moderate <chat> [options]
 | `--dry-run` | judge and plan; do nothing. |
 | `--allow-dangerous` | yes to every action whose level in the group's rules is ask. |
 | `--max-actions <n>` | at most this many actions in one run; 10 if not given. |
+
+### `max chats media`
+
+a chat's photos, videos, files, audio and links, from the messenger's server; reading marks nothing
+
+```sh
+max chats media <chat> [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `chat` | required | a chat: its id, or part of its title. |
+
+| Option | Purpose |
+|---|---|
+| `--type <names>` | only these kinds, comma-separated: photo, video, file, audio, link. |
+| `--limit <n>` | how many to show. |
+| `--before-id <id>` | read what came before this message id. |
+
+### `max chats mute`
+
+stop notifications from a chat, for good or until a time; nobody in it is told
+
+**Changes something in MAX.**
+
+```sh
+max chats mute <chat> [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `chat` | required | a chat: its id, or part of its title. |
+
+| Option | Purpose |
+|---|---|
+| `--until <time>` | only until then: 2026-09-25T09:00 (local time), or 30m, 2h, 7d from now. |
+
+### `max chats unmute`
+
+hear a muted chat again
+
+**Changes something in MAX.**
+
+```sh
+max chats unmute <chat>
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `chat` | required | a chat: its id, or part of its title. |
+
+### `max chats delete`
+
+delete a chat from this account; the others in it keep it and its messages
+
+**Changes something in MAX.**
+
+```sh
+max chats delete <chat> [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `chat` | required | a chat: its id, or part of its title. |
+
+| Option | Purpose |
+|---|---|
+| `--allow-dangerous` | go ahead without the question an ask level puts before a deletion. |
+
+### `max chats clear`
+
+delete every message in a chat for this account; the others in it keep theirs
+
+**Changes something in MAX.**
+
+```sh
+max chats clear <chat> [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `chat` | required | a chat: its id, or part of its title. |
+
+| Option | Purpose |
+|---|---|
+| `--allow-dangerous` | go ahead without the question an ask level puts before a deletion. |
 
 ## `max contacts`
 
@@ -1206,6 +1367,7 @@ max messages send <chat> [text] [options]
 | `--voice <file>` | send an Ogg Opus file as a voice message, alone, with no text. |
 | `--allow-any-file` | send a file even from a hidden folder, \~/.ssh or this CLI's own folders. |
 | `--at-time <time>` | let the messenger send it later, even with this machine off: 2026-09-25T09:00 (local time), or 30m, 2h, 1d from now. |
+| `--sticker <id>` | send this sticker, alone; `stickers list` finds its id. |
 
 ### `max messages scheduled`
 
@@ -1438,6 +1600,34 @@ max store jobs cancel <job>
 |---|---|---|
 | `job` | required | the job id. |
 
+#### `max store jobs retry`
+
+start a failed or died job again, as a new job; the fetch resumes where the store stopped
+
+```sh
+max store jobs retry [job] [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `job` | optional | the job id. |
+
+| Option | Purpose |
+|---|---|
+| `--failed` | every chat whose newest job failed or died. |
+
+
+#### `max store jobs clear`
+
+forget finished jobs and remove their logs; a running job is kept
+
+**Changes something on this computer only.**
+
+```sh
+max store jobs clear
+```
+
+
 ### `max store export`
 
 a chat's stored messages as JSON lines, oldest first; never asks the messenger
@@ -1611,9 +1801,112 @@ max stats messages show [query] [options]
 | `--exact` | bare words and quotes match their exact form only, as exact:word does; text: still matches every form. |
 | `--saved <name\|id>` | count what a saved search or an earlier run matches; options typed here replace its own. |
 
+#### `max stats messages counters`
+
+per-counter observations and bounded remote refresh
+
+
+#### `max stats messages counters show`
+
+show saved counter values and their observation freshness
+
+```sh
+max stats messages counters show [query] [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | strict Lucene query over stored messages. |
+
+| Option | Purpose |
+|---|---|
+| `--chat <chat>` | only this chat; a chat: its id, or part of its title. |
+| `--source <messenger>` | held accounts of this messenger; refresh uses the active account. |
+| `--exact` | bare words match exact forms. |
+| `--timezone <zone>` | IANA timezone for query dates. |
+| `--selection <json>` | pinned counter-targets selection from counters show; conflicts with query and scope. |
+| `--counters <names>` | distinct views,reactions,comments fields; all three by default. |
+| `--limit <n>` | messages, 1–100; 20 by default. |
+| `--max-age <duration>` | maximum fresh observation age; 24h by default. |
+
+
+#### `max stats messages counters refresh`
+
+read authoritative counters for bounded messages and update their local observations
+
+**Changes something on this computer only.**
+
+```sh
+max stats messages counters refresh [query] [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | strict Lucene query over stored messages. |
+
+| Option | Purpose |
+|---|---|
+| `--chat <chat>` | only this chat; a chat: its id, or part of its title. |
+| `--source <messenger>` | held accounts of this messenger; refresh uses the active account. |
+| `--exact` | bare words match exact forms. |
+| `--timezone <zone>` | IANA timezone for query dates. |
+| `--selection <json>` | pinned counter-targets selection from counters show; conflicts with query and scope. |
+| `--counters <names>` | distinct views,reactions,comments fields; all three by default. |
+| `--limit <n>` | messages, 1–100; 20 by default. |
+| `--max-messages <n>` | maximum messages to refresh, 1–100. |
+| `--sync-time <duration>` | remote refresh budget; 30s by default, maximum 5m. |
+| `--dry-run` | preview exact stored targets and counter capabilities without connecting. |
+
+
+#### `max stats messages unanswered`
+
+oldest detected questions without an observed qualifying explicit reply
+
+```sh
+max stats messages unanswered [query] [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | a strict Lucene query; none selects every stored message. |
+
+| Option | Purpose |
+|---|---|
+| `--chat <chat>` | only this chat; a chat: its id, or part of its title. |
+| `--source <messenger>` | every held account of this messenger; personal, bots or all. |
+| `--exact` | bare words match exact forms rather than stems. |
+| `--saved <name\|id>` | run a saved report of this kind; typed report options replace stored options. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--limit <n>` | report rows, 1–100; 20 if not given. |
+| `--answerer <id>` | a scoped human identity whose explicit reply qualifies; repeat it for more. |
+| `--older-than <duration>` | minimum age of a question without an observed qualifying answer. |
+
+#### `max stats messages discussion`
+
+viewed posts with little recorded discussion
+
+```sh
+max stats messages discussion [query] [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | a strict Lucene query; none selects every stored message. |
+
+| Option | Purpose |
+|---|---|
+| `--chat <chat>` | only this chat; a chat: its id, or part of its title. |
+| `--source <messenger>` | every held account of this messenger; personal, bots or all. |
+| `--exact` | bare words match exact forms rather than stems. |
+| `--saved <name\|id>` | run a saved report of this kind; typed report options replace stored options. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--limit <n>` | report rows, 1–100; 20 if not given. |
+| `--min-views <n>` | minimum known cumulative views. |
+| `--max-replies <n>` | maximum observed discussion replies. |
+
 #### `max stats messages top`
 
-rank stored messages by a measure or explainable score; counters are snapshots and freshness is unknown
+rank stored messages by a measure or explainable score; counters are snapshots with per-field observation freshness
 
 ```sh
 max stats messages top [query] [options]
@@ -1621,7 +1914,7 @@ max stats messages top [query] [options]
 
 | Argument | | Meaning |
 |---|---|---|
-| `query` | неrequired | a strict Lucene query; none selects every stored message. |
+| `query` | optional | a strict Lucene query; none selects every stored message. |
 
 | Option | Purpose |
 |---|---|
@@ -1642,7 +1935,7 @@ max stats messages top [query] [options]
 
 #### `max stats messages evidence`
 
-a bounded page of messages or answer pairs contributing to one ranking component
+bounded messages, answer pairs or retention members from an exact drilldown selection
 
 ```sh
 max stats messages evidence <message> [options]
@@ -1650,7 +1943,7 @@ max stats messages evidence <message> [options]
 
 | Argument | | Meaning |
 |---|---|---|
-| `message` | required | the canonical message locator from the ranking row. |
+| `message` | required | the canonical message locator, or retention cohort reference, from drilldown. |
 
 | Option | Purpose |
 |---|---|
@@ -1663,9 +1956,31 @@ max stats messages evidence <message> [options]
 
 statistics about human authors
 
+#### `max stats contacts responses`
+
+counts and median/p90 latency for selected human answering identities
+
+```sh
+max stats contacts responses [query] [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | a strict Lucene query; none selects every stored message. |
+
+| Option | Purpose |
+|---|---|
+| `--chat <chat>` | only this chat; a chat: its id, or part of its title. |
+| `--source <messenger>` | every held account of this messenger; personal, bots or all. |
+| `--exact` | bare words match exact forms rather than stems. |
+| `--saved <name\|id>` | run a saved report of this kind; typed report options replace stored options. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--limit <n>` | report rows, 1–100; 20 if not given. |
+| `--answerer <id>` | a scoped human identity whose explicit reply qualifies; repeat it for more. |
+
 #### `max stats contacts top`
 
-rank the human authors of stored messages by a measure or explainable score; counters are snapshots and freshness is unknown
+rank the human authors of stored messages by a measure or explainable score; counters are snapshots with per-field observation freshness
 
 ```sh
 max stats contacts top [query] [options]
@@ -1673,7 +1988,7 @@ max stats contacts top [query] [options]
 
 | Argument | | Meaning |
 |---|---|---|
-| `query` | неrequired | a strict Lucene query; none selects every stored message. |
+| `query` | optional | a strict Lucene query; none selects every stored message. |
 
 | Option | Purpose |
 |---|---|
@@ -1695,7 +2010,7 @@ max stats contacts top [query] [options]
 
 #### `max stats contacts evidence`
 
-a bounded page of messages or answer pairs contributing to one ranking component
+bounded messages, answer pairs or retention members from an exact drilldown selection
 
 ```sh
 max stats contacts evidence <person> [options]
@@ -1733,6 +2048,51 @@ max stats chats show <chat> [options]
 | `--since-time <time>` | ISO 8601, or 2h / 1d ago; 7 days ago if not given. |
 | `--by <day\|week>` | also one row per calendar day or week (weeks start on Monday). |
 | `--timezone <zone>` | the IANA timezone for calendar days. |
+
+#### `max stats chats newcomers`
+
+known-join members and their help within a join window
+
+```sh
+max stats chats newcomers <chat> [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `chat` | required | a chat: its id, or part of its title. |
+
+| Option | Purpose |
+|---|---|
+| `--since-time <time>` | from this ISO 8601 time, or 2h / 1d ago; 30d ago if not given. |
+| `--until-time <time>` | through this ISO 8601 time, or 2h / 1d ago. |
+| `--within <duration>` | the help window after a known newcomer join. |
+| `--saved <name\|id>` | run a saved report of this kind; typed report options replace stored options. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--limit <n>` | report rows, 1–100; 20 if not given. |
+| `--answerer <id>` | a scoped human identity whose explicit reply qualifies; repeat it for more. |
+
+#### `max stats chats retention`
+
+joining cohorts and observed checkpoint membership from saved roster observations
+
+```sh
+max stats chats retention <chat> [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `chat` | required | a chat: its id, or part of its title. |
+
+| Option | Purpose |
+|---|---|
+| `--since-time <time>` | joining period starts at ISO 8601 or a relative time; last 90 days by default. |
+| `--until-time <time>` | joining period ends at this time; now by default. |
+| `--checkpoints <durations>` | up to 10 increasing joining ages, comma separated; 1d,7d,30d by default. |
+| `--within <duration>` | activity and early departure window after joining; 7d by default. |
+| `--by <day\|week>` | group joining dates by calendar day or Monday week. One of: `day`, `week`. |
+| `--timezone <zone>` | IANA timezone for joining cohorts. |
+| `--limit <n>` | cohorts and member evidence, 1–100. |
+
 
 ### `max stats tasks`
 
@@ -2086,7 +2446,7 @@ the files of stored messages: their text in the local store, for content: in a s
 
 ### `max attachments extract`
 
-read the text of downloaded files — plain text, Word, PDF with a text layer — into the local store, for content: in a search
+read the text of downloaded files — text, PDF/DOCX text layers, ODT/ODS/XLSX/PPTX/EPUB — into the local store, for content: in a search
 
 ```sh
 max attachments extract [options]
@@ -2118,6 +2478,27 @@ max attachments list [options]
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
 | `--all` | every row, no paging. |
+
+### `max attachments show`
+
+read a bounded chunk of one retained attachment; JSON includes base64 bytes
+
+```sh
+max attachments show <chat> [message] [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `chat` | required | a chat: its id, or part of its title; or a msg: locator alone. |
+| `message` | optional | the message id. |
+
+| Option | Purpose |
+|---|---|
+| `--attachment <n>` | file position from 1; required for several files. |
+| `--offset-bytes <n>` | byte offset from 0. |
+| `--chunk-bytes <n>` | bytes to return, 1–1048576 (default524288). |
+| `--if-sha256 <hash>` | require the whole file SHA-256 from the preceding chunk. |
+
 
 ### `max attachments text`
 
@@ -2246,6 +2627,7 @@ max metadata refresh [options]
 | Option | Purpose |
 |---|---|
 | `--chat <chat>` | stored group/channel; repeat for several. Default: ``. |
+| `--only-missing` | only chats with no metadata yet; without --chat, every stored group/channel. |
 | `--limit <number>` | process up to the specified number of chats (1–500). Default: `50`. |
 
 ## `max searches`
@@ -2947,7 +3329,7 @@ max watch [options]
 
 | Option | Purpose |
 |---|---|
-| `--events` | also print edits, deletions and reactions; every line then names its event. |
+| `--events` | also print edits, deletions, reactions, reads and chat changes; every line then names its event. |
 
 ## `max config`
 

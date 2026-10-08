@@ -66,26 +66,38 @@
 .wirecat-about .about-tool-links {
   margin-top: 24px;
 }
-.wirecat-about .about-tool-links a {
+.wirecat-about .about-tool-row {
   display: grid;
-  grid-template-columns: minmax(95px, 0.7fr) minmax(0, 2fr) 18px;
+  grid-template-columns: minmax(90px, 0.8fr) minmax(0, 1.8fr) auto;
   align-items: center;
   gap: 18px;
   padding: 18px 0;
   border-top: 1px solid var(--app-line);
-  color: var(--ink);
+}
+.wirecat-about .about-tool-row p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.wirecat-about .about-tool-docs {
   font-size: 16px;
+  font-weight: 700;
   line-height: 1.5;
 }
-.wirecat-about .about-tool-links a > span:first-child {
-  font-weight: 700;
-}
-.wirecat-about .about-tool-links code {
+.wirecat-about .about-tool-docs code {
   display: block;
   margin-top: 4px;
   font-size: 13px;
   font-weight: 400;
   color: var(--ink-soft);
+}
+.wirecat-about .about-tool-source {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 600;
 }
 .wirecat-about .about-links {
   display: flex;
@@ -166,20 +178,9 @@
   font-weight: 600;
   line-height: 1.6;
 }
-.wirecat-about .about-contents,
+.wirecat-about .about-contact-desktop,
 .wirecat-about .about-contribute {
   padding: 0 12px;
-}
-.wirecat-about .about-contents a {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  min-height: 44px;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--app-line);
-  font-size: 14px;
-  line-height: 1.5;
 }
 .wirecat-about .about-contribute > a {
   display: flex;
@@ -192,38 +193,56 @@
 .wirecat-about .about-services p {
   font-size: 16px;
 }
-.wirecat-about .about-mobile-contents {
+.wirecat-about .about-contact-mobile {
   display: none;
+  padding-block: 20px;
   margin-bottom: 24px;
-  padding-block: 16px;
-  border-block: 1px solid var(--app-line);
+  border-top: 1px solid var(--app-line);
 }
-.wirecat-about .about-mobile-contents summary {
-  padding: 8px 0;
-  font-weight: 700;
-  cursor: pointer;
+.wirecat-about .about-contact-mobile h2 {
+  font-size: 17px;
 }
-.wirecat-about .about-mobile-contents nav {
-  display: grid;
-  gap: 4px;
-  margin-top: 12px;
-}
-.wirecat-about .about-mobile-contents a {
-  display: flex;
-  align-items: center;
-  min-height: 44px;
+.wirecat-about .about-contact-mobile p {
   font-size: 15px;
 }
-.wirecat-about .about-project-card dd a {
+.wirecat-about .about-contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 18px;
+}
+.wirecat-about .about-contact-actions a {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--app-line);
+  border-radius: 12px;
+  background: var(--app);
+  font-size: 14px;
+  font-weight: 600;
+}
+.wirecat-about .about-contact-actions a:hover {
+  background: var(--app-3);
+  text-decoration: none;
+}
+.wirecat-about .about-contact-actions a > svg {
+  width: 16px;
+  height: 16px;
+}
+.wirecat-about .about-intro .about-open-source {
+  margin-top: 16px;
+  scroll-margin-top: 100px;
+  color: var(--ink);
+  font-size: 16px;
 }
 @media (width < 60rem) {
-  .wirecat-about .about-mobile-contents {
+  .wirecat-about .about-contact-mobile {
     display: block;
   }
-  .wirecat-about .about-contents {
+  .wirecat-about .about-contact-desktop {
     display: none;
   }
   .wirecat-about .about-layout {
@@ -241,6 +260,14 @@
   }
 }
 @media (width < 40rem) {
+  .wirecat-about .about-tool-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px 18px;
+  }
+  .wirecat-about .about-tool-row p {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
   .wirecat-about .about-intro {
     margin-bottom: 28px;
   }
@@ -250,7 +277,7 @@
   .wirecat-about .about-project-card {
     padding: 24px;
   }
-  .wirecat-about .about-contents,
+  .wirecat-about .about-contact-desktop,
   .wirecat-about .about-contribute {
     padding-inline: 0;
   }

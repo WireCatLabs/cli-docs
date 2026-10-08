@@ -31,6 +31,7 @@ El comando muestra lo que MAX informa sobre la persona y cuántos mensajes suyos
   "flags": {},
   "registered": { "at": "2021-03-14T00:00:00.000Z", "source": "max", "precision": "day" },
   "hasPhoto": true,
+  "seen": "2026-10-08T07:12:00.000Z",
   "chats": [
     { "id": "30000003", "title": "Пример Примеров", "kind": "dialog", "theirMessages": 128,
       "firstAt": "2024-02-11T09:14:00.000Z", "lastAt": "2026-10-05T18:02:00.000Z", "complete": true },
@@ -47,6 +48,7 @@ El comando muestra lo que MAX informa sobre la persona y cuántos mensajes suyos
 - **`registered`**: la fecha de creación de la cuenta según el propio MAX (`source: max`). No es una estimación.
 - **`flags`** está vacío: MAX no proporciona marcas como «bot», «estafador» o «verificado» para cuentas personales.
 - **`hasPhoto`**: si la persona tiene foto de perfil.
+- **`seen`**: cuándo estuvo la persona en MAX por última vez, o `online`. Se consulta MAX aparte en cada llamada; el campo no aparece si MAX no comunica presencia.
 - **`phone`**: solo los últimos cuatro dígitos, y únicamente si MAX te muestra el número. `--show-phone` imprime el número completo. La herramienta MCP siempre lo oculta.
 - **`chats`**: todos los chats compartidos y cualquier otro chat donde la copia local contenga mensajes de esa persona.
 - **`aliases`**: nombres anteriores observados por la copia local, del más antiguo al más reciente. `source: profile` indica que el nombre cambió mientras la copia lo seguía; `source: messages` indica un nombre encontrado en mensajes guardados. Este último es aproximado: al descargar de nuevo un mensaje, lleva el nombre actual. Está vacío hasta que la copia local observe un cambio de nombre.

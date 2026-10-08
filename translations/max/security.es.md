@@ -148,7 +148,7 @@ Cada acceso añade un dispositivo en la lista de sesiones de MAX; puedes cerrarl
 
 ## Protocolo no oficial
 
-MAX no publica API de cuentas personales. El conocimiento del protocolo procede de mediciones reales o ingeniería inversa ajena; se registra el origen de cada operación ([protocolo (`protocol.md`)](https://github.com/leemour/max-cli/blob/v0.34.0/docs/dev/protocol.md), columna «Where it came from»).
+MAX no publica API de cuentas personales. El conocimiento del protocolo procede de mediciones reales o ingeniería inversa ajena; se registra el origen de cada operación ([protocolo (`protocol.md`)](https://github.com/leemour/max-cli/blob/v0.36.0/docs/dev/protocol.md), columna «Where it came from»).
 
 **Puede dejar de funcionar sin aviso.** En ese caso el comando indica el problema por stderr, en lugar de devolver una lista vacía como si todo funcionase.
 

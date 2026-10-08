@@ -4,6 +4,52 @@ title: "Historial de cambios"
 
 Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.37.0 — 08.10.2026
+
+### Novedades
+
+- **El agente lee por nombre los chats de una carpeta mediante MCP**, como `tg chats folders show` (`tg_read`, command: `chats folders show`).
+- **`tg chats link update <chat> <link> [--approval | --no-approval] [--expire-time] [--max-uses]` cambia uno de tus enlaces adicionales:** solo cambia lo indicado.
+- **Archivos guardados para agentes remotos:** `attachments show` transfiere porciones limitadas con SHA256 del archivo completo. MCP devuelve imágenes completas o recursos binarios con alternativa JSON/base64. No realiza OCR ni indexa; el agente lee y guarda el texto ([adjuntos](./attachments.md)).
+- La biblioteca compartida añade cohortes de retención observadas y observaciones de contadores con frescura por campo; lo desconocido queda explícito.
+
+### Cambios que pueden romper scripts
+
+- JSON de rankings y pruebas incluye observaciones de contadores y frescura; las pruebas admiten selecciones de cohortes de retención. Revisa cada campo y tipo de selección; valores desconocidos y archivos incompletos no significan cero.
+
+## 0.36.0 — 08.10.2026
+
+### Novedades
+
+- **`tg polls create --quiz --correct <n> [--solution <text>]`** crea un cuestionario:
+  una respuesta correcta por posición desde1; el voto es definitivo.
+- **Informes de administración guardados** encuentran preguntas sin respuesta observada, tiempo de
+  respuesta de personas elegidas, ayuda tras entradas conocidas y publicaciones vistas con poca conversación.
+  Cobertura/pruebas muestran los límites; el historial guarda parámetros/selecciones.
+- **`tg chats folders show <folder>`** muestra una carpeta y nombres de chats fijados/excluidos.
+  Primero usa los nombres del archivo; consulta Telegram solo para los ausentes.
+- **`tg metadata refresh --only-missing`** lee descripciones solo donde aún faltan;
+  sin `--chat`, todos los grupos/canales guardados hasta `--limit`.
+- **`tg store jobs retry <job>`** repite una tarea fallida/interrumpida con las mismas opciones;
+  `--failed` cubre cada chat cuya última tarea falló. **`tg store jobs clear`** borra tareas terminadas y registros.
+- **`tg session start phone --sms`** pide el código por SMS; Telegram decide y la CLI
+  indica la entrega real.
+- **`tg topics delete <chat> <topic>`** borra el tema y todos sus mensajes para todos.
+  Pregunta por defecto; `--allow-dangerous` omite la pregunta.
+- **Texto local de adjuntos:** ODT, ODS, XLSX, PPTX, EPUB, UTF-16 con BOM y codificaciones antiguas
+  detectadas con confianza. Sin modelo; no calcula fórmulas, las imágenes quedan para el agente ([búsqueda](./search.md)).
+- **Reglas de carpetas en `tg chats folders create|update`:** `--include` contacts, non-contacts,
+  groups, channels, bots; `--skip` muted, read, archived; `--exclude-chat`, `--pin`, `--emoji`.
+  `folders list` muestra las reglas.
+
+### Cambios — pueden romper scripts
+
+- `tg chats folders join` explica enlaces inválidos/caducados con código6;
+  `folders order` devuelve solo id y nombre.
+- `tg chats folders create|update` devuelven lo realmente guardado: Telegram descarta
+  `--emoji` si no es un icono de carpeta suyo; antes la CLI decía que se había guardado.
+
+
 ## 0.35.0 — 08.10.2026
 
 ### Novedades

@@ -5,7 +5,10 @@ reader who knows where something is for `max` knows where it is for `tg`, and so
 A tool without a page leaves it out; it does not invent a near-synonym.
 
 The pages live in the tool's own repository, in `docs/`. The portal copies them at the tool's
-latest release tag ([plan](plans/2026-10-01-portal-v1.md)).
+reviewed release tag pinned in `tools.json` ([plan](plans/2026-10-01-portal-v1.md)).
+Read [AUTHORING.md](AUTHORING.md) before drafting: every guide begins with its use case and reader result.
+A reviewed documentation-only `guideRefs` override imports one page from a full immutable commit;
+its runtime facts must remain compatible with the pinned release. Its GitHub source link uses that commit.
 
 ## The pages
 
@@ -26,6 +29,8 @@ not read in order.
   export, how long it lives.
 - `mcp.md` — the MCP server for clients without a terminal: connecting, what it can do, what is
   off until turned on.
+- `attachments.md` — sending, downloading and reading file content; format support, agent OCR,
+  explicit API extraction and searching the indexed result. Voice transcription has its own row.
 - `search.md` — everyday message search: words, people, chats, dates, files, links, tags, saved
   searches and counts. No internals.
 - `topic-search.md` — conversations for a non-technical reader: building, embedding, searching by

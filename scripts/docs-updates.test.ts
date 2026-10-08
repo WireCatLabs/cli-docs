@@ -138,9 +138,14 @@ describe("source preparation keeps review gates intact", () => {
       writeFileSync(join(root, "translations/sources.json"), "reviewed fingerprint")
       writeFileSync(join(root, "scripts/docs-corrections.json"), "reviewed errata")
       const capture = vi.fn()
-      prepareUpdates(root, [tool], [fixture], capture)
+      const withGuide = { ...tool, guideRefs: { attachments: "a".repeat(40) } }
+      prepareUpdates(root, [withGuide], [fixture], capture)
       expect(capture).toHaveBeenCalledWith(expect.objectContaining({ docsRef: "v0.25.0" }), root, undefined, true)
-      expect(JSON.parse(readFileSync(join(root, "tools.json"), "utf8"))[0].docsRef).toBe("v0.25.0")
+      const prepared = JSON.parse(readFileSync(join(root, "tools.json"), "utf8"))[0]
+      expect(prepared.docsRef).toBe("v0.25.0")
+      expect(prepared).not.toHaveProperty("guideRefs")
+      expect(capture.mock.calls[0][0]).not.toHaveProperty("guideRefs")
+      expect(withGuide.guideRefs.attachments).toBe("a".repeat(40))
       expect(readFileSync(join(root, "translations/sources.json"), "utf8")).toBe("reviewed fingerprint")
       expect(readFileSync(join(root, "scripts/docs-corrections.json"), "utf8")).toBe("reviewed errata")
       expect(tool.docsRef).toBe("v0.24.0")

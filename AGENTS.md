@@ -7,3 +7,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Documentation work
+
+Before writing or reviewing documentation, read [docs/AUTHORING.md](docs/AUTHORING.md). Every user guide opens with its use case and the result the reader will get. Keep titles short, preserve reviewed release facts, and give every sidebar page a relevant decorative icon. Read [docs/STRUCTURE.md](docs/STRUCTURE.md) for source ownership; generated messenger pages are not edited directly.

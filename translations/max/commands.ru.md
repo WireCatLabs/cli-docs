@@ -148,6 +148,68 @@ max account sessions end [options]
 |---|---|
 | `--others` | every session but this one. |
 
+### `max account privacy`
+
+кто может найти аккаунт, позвонить или добавить его
+
+#### `max account privacy show`
+
+настройки приватности аккаунта; чтение ничего не меняет
+
+```sh
+max account privacy show
+```
+
+#### `max account privacy set`
+
+изменить, кто может найти аккаунт, позвонить или добавить его; остальные настройки сохраняются
+
+**Меняет что-то в MAX.**
+
+```sh
+max account privacy set [options]
+```
+
+| Опция | Что делает |
+|---|---|
+| `--find-by-phone <who>` | кто находит аккаунт по номеру: everyone, contacts или nobody; MAX принимает everyone и contacts. |
+| `--phone-number <who>` | кто видит номер: everyone, contacts или nobody. |
+| `--calls <who>` | кто может звонить: everyone, contacts или nobody. |
+| `--chat-invites <who>` | кто добавляет аккаунт в группы и каналы: everyone, contacts или nobody. |
+| `--hide-online <on\|off>` | скрыть статус онлайн и время последнего входа. |
+
+## `max calls`
+
+звонки аккаунта
+
+### `max calls list`
+
+исходящие и входящие звонки, новые сверху; чтение ничего не меняет
+
+```sh
+max calls list [options]
+```
+
+| Опция | Что делает |
+|---|---|
+| `--limit <n>` | how many to show. |
+
+## `max stickers`
+
+стикеры, добавленные аккаунтом
+
+### `max stickers list`
+
+наборы стикеров; с --set — стикеры одного набора; чтение ничего не меняет
+
+```sh
+max stickers list [options]
+```
+
+| Опция | Что делает |
+|---|---|
+| `--set <id>` | стикеры этого набора. |
+
 ## `max chats`
 
 the chats this account is in
@@ -536,6 +598,19 @@ your chat folders, in the order the app shows them
 max chats folders list
 ```
 
+#### `max chats folders show`
+
+одна папка с названиями её чатов
+
+```sh
+max chats folders show <folder>
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `folder` | обязательный | ID папки или точное название. |
+
+
 #### `max chats folders create`
 
 create a chat folder
@@ -572,7 +647,7 @@ max chats folders update <folder> [options]
 |---|---|
 | `--title <title>` | a new name. |
 | `--add <chat>` | put a chat in it; repeat it for more. |
-| `--remove <chat>` | take a chat out of it; repeat it for more. |
+| `--remove <chat>` | убрать чат из папки, исключённых и закреплённых; для нескольких повторить. |
 
 #### `max chats folders delete`
 
@@ -669,6 +744,92 @@ max chats moderate <chat> [options]
 | `--dry-run` | judge and plan; do nothing. |
 | `--allow-dangerous` | yes to every action whose level in the group's rules is ask. |
 | `--max-actions <n>` | at most this many actions in one run; 10 if not given. |
+
+### `max chats media`
+
+фото, видео, файлы, аудио и ссылки чата с сервера; чтение ничего не отмечает
+
+```sh
+max chats media <chat> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | a chat: its id, or part of its title. |
+
+| Опция | Что делает |
+|---|---|
+| `--type <names>` | только эти типы через запятую: photo, video, file, audio, link. |
+| `--limit <n>` | how many to show. |
+| `--before-id <id>` | читать то, что старше этого id сообщения. |
+
+### `max chats mute`
+
+выключить уведомления чата насовсем или до указанного времени; участники не узнают
+
+**Меняет что-то в MAX.**
+
+```sh
+max chats mute <chat> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | a chat: its id, or part of its title. |
+
+| Опция | Что делает |
+|---|---|
+| `--until <time>` | только до указанного времени: 2026-09-25T09:00 (местное), или через 30m, 2h, 7d. |
+
+### `max chats unmute`
+
+снова включить уведомления чата
+
+**Меняет что-то в MAX.**
+
+```sh
+max chats unmute <chat>
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | a chat: its id, or part of its title. |
+
+### `max chats delete`
+
+удалить чат у этого аккаунта; у остальных чат и сообщения остаются
+
+**Меняет что-то в MAX.**
+
+```sh
+max chats delete <chat> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | a chat: its id, or part of its title. |
+
+| Опция | Что делает |
+|---|---|
+| `--allow-dangerous` | go ahead without the question an ask level puts before a deletion. |
+
+### `max chats clear`
+
+удалить все сообщения чата у этого аккаунта; у остальных сообщения остаются
+
+**Меняет что-то в MAX.**
+
+```sh
+max chats clear <chat> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | a chat: its id, or part of its title. |
+
+| Опция | Что делает |
+|---|---|
+| `--allow-dangerous` | go ahead without the question an ask level puts before a deletion. |
 
 ## `max contacts`
 
@@ -1210,6 +1371,7 @@ max messages send <chat> [text] [options]
 | `--voice <file>` | send an Ogg Opus file as a voice message, alone, with no text. |
 | `--allow-any-file` | send a file even from a hidden folder, \~/.ssh or this CLI's own folders. |
 | `--at-time <time>` | let the messenger send it later, even with this machine off: 2026-09-25T09:00 (local time), or 30m, 2h, 1d from now. |
+| `--sticker <id>` | отправить только этот стикер; его id показывает `stickers list`. |
 
 ### `max messages scheduled`
 
@@ -1442,6 +1604,34 @@ max store jobs cancel <job>
 |---|---|---|
 | `job` | обязательный | the job id. |
 
+#### `max store jobs retry`
+
+запустить неудачное или оборвавшееся задание заново; загрузка продолжается с сохранённого места
+
+```sh
+max store jobs retry [job] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `job` | необязательный | ID задания. |
+
+| Опция | Что делает |
+|---|---|
+| `--failed` | все чаты, чьё последнее задание завершилось ошибкой или оборвалось. |
+
+
+#### `max store jobs clear`
+
+забыть завершённые задания и удалить их логи; работающее задание остаётся
+
+**Меняет что-то только на этом компьютере.**
+
+```sh
+max store jobs clear
+```
+
+
 ### `max store export`
 
 a chat's stored messages as JSON lines, oldest first; never asks the messenger
@@ -1615,9 +1805,112 @@ max stats messages show [query] [options]
 | `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
 | `--saved <name\|id>` | count what a saved search or an earlier run matches; options typed here replace its own. |
 
+#### `max stats messages counters`
+
+наблюдения каждого счётчика и ограниченное обновление из мессенджера
+
+
+#### `max stats messages counters show`
+
+показать сохранённые значения счётчиков и свежесть наблюдений
+
+```sh
+max stats messages counters show [query] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | строгий запрос Lucene по сохранённым сообщениям. |
+
+| Опция | Что делает |
+|---|---|
+| `--chat <chat>` | только этот чат; укажите его ID или часть названия. |
+| `--source <messenger>` | подключённые аккаунты этого мессенджера; обновление использует активный. |
+| `--exact` | слова без операторов совпадают по точной форме. |
+| `--timezone <zone>` | часовой пояс IANA для дат запроса. |
+| `--selection <json>` | фиксированная выборка целей из counters show; несовместима с запросом и областью. |
+| `--counters <names>` | разные поля views,reactions,comments; по умолчанию все три. |
+| `--limit <n>` | сообщения, 1–100; по умолчанию 20. |
+| `--max-age <duration>` | максимальный возраст свежего наблюдения; по умолчанию 24h. |
+
+
+#### `max stats messages counters refresh`
+
+прочитать достоверные счётчики ограниченного числа сообщений и обновить локальные наблюдения
+
+**Меняет что-то только на этом компьютере.**
+
+```sh
+max stats messages counters refresh [query] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | строгий запрос Lucene по сохранённым сообщениям. |
+
+| Опция | Что делает |
+|---|---|
+| `--chat <chat>` | только этот чат; укажите его ID или часть названия. |
+| `--source <messenger>` | подключённые аккаунты этого мессенджера; обновление использует активный. |
+| `--exact` | слова без операторов совпадают по точной форме. |
+| `--timezone <zone>` | часовой пояс IANA для дат запроса. |
+| `--selection <json>` | фиксированная выборка целей из counters show; несовместима с запросом и областью. |
+| `--counters <names>` | разные поля views,reactions,comments; по умолчанию все три. |
+| `--limit <n>` | сообщения, 1–100; по умолчанию 20. |
+| `--max-messages <n>` | максимум сообщений для обновления, 1–100. |
+| `--sync-time <duration>` | время удалённого обновления; по умолчанию 30s, максимум 5m. |
+| `--dry-run` | показать точные сохранённые цели и поддерживаемые счётчики без подключения. |
+
+
+#### `max stats messages unanswered`
+
+самые старые найденные вопросы без наблюдаемого подходящего прямого ответа
+
+```sh
+max stats messages unanswered [query] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | строгий запрос Lucene; без него выбираются все сохранённые сообщения. |
+
+| Опция | Что делает |
+|---|---|
+| `--chat <chat>` | только этот чат; укажите его ID или часть названия. |
+| `--source <messenger>` | все имеющиеся аккаунты этого мессенджера; personal, bots или all. |
+| `--exact` | слова без поля совпадают в точной форме, а не по основе слова. |
+| `--saved <name\|id>` | запустить сохранённый отчёт этого вида; указанные опции заменяют сохранённые. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--limit <n>` | строк отчёта, 1–100; по умолчанию 20. |
+| `--answerer <id>` | человек в выбранной области, чей прямой ответ учитывается; для нескольких повторить. |
+| `--older-than <duration>` | минимальный возраст вопроса без наблюдаемого подходящего ответа. |
+
+#### `max stats messages discussion`
+
+просмотренные посты с малым сохранённым обсуждением
+
+```sh
+max stats messages discussion [query] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | строгий запрос Lucene; без него выбираются все сохранённые сообщения. |
+
+| Опция | Что делает |
+|---|---|
+| `--chat <chat>` | только этот чат; укажите его ID или часть названия. |
+| `--source <messenger>` | все имеющиеся аккаунты этого мессенджера; personal, bots или all. |
+| `--exact` | слова без поля совпадают в точной форме, а не по основе слова. |
+| `--saved <name\|id>` | запустить сохранённый отчёт этого вида; указанные опции заменяют сохранённые. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--limit <n>` | строк отчёта, 1–100; по умолчанию 20. |
+| `--min-views <n>` | минимум известных накопленных просмотров. |
+| `--max-replies <n>` | максимум наблюдаемых ответов в обсуждении. |
+
 #### `max stats messages top`
 
-ранжировать сохранённые сообщения по показателю или объяснимой оценке; счётчики — снимки состояния, актуальность неизвестна
+ранжировать сохранённые сообщения по метрике или объяснимой оценке; у каждого счётчика показана свежесть наблюдения
 
 ```sh
 max stats messages top [query] [options]
@@ -1646,7 +1939,7 @@ max stats messages top [query] [options]
 
 #### `max stats messages evidence`
 
-страница ограниченного размера с сообщениями или парами сообщений с ответами, участвующими в одном компоненте рейтинга
+ограниченная страница сообщений, пар ответов или участников когорты из точной выборки drilldown
 
 ```sh
 max stats messages evidence <message> [options]
@@ -1654,7 +1947,7 @@ max stats messages evidence <message> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `message` | обязательный | канонический идентификатор сообщения из строки рейтинга. |
+| `message` | обязательный | канонический адрес сообщения или ссылка когорты удержания из drilldown. |
 
 | Опция | Что делает |
 |---|---|
@@ -1667,9 +1960,31 @@ max stats messages evidence <message> [options]
 
 Статистика о человеческих авторах
 
+#### `max stats contacts responses`
+
+число ответов и медиана/p90 времени ответа выбранных людей
+
+```sh
+max stats contacts responses [query] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | строгий запрос Lucene; без него выбираются все сохранённые сообщения. |
+
+| Опция | Что делает |
+|---|---|
+| `--chat <chat>` | только этот чат; укажите его ID или часть названия. |
+| `--source <messenger>` | все имеющиеся аккаунты этого мессенджера; personal, bots или all. |
+| `--exact` | слова без поля совпадают в точной форме, а не по основе слова. |
+| `--saved <name\|id>` | запустить сохранённый отчёт этого вида; указанные опции заменяют сохранённые. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--limit <n>` | строк отчёта, 1–100; по умолчанию 20. |
+| `--answerer <id>` | человек в выбранной области, чей прямой ответ учитывается; для нескольких повторить. |
+
 #### `max stats contacts top`
 
-ранжировать людей — авторов сохранённых сообщений — по показателю или объяснимой оценке; счётчики — снимки состояния, актуальность неизвестна
+ранжировать авторов сохранённых сообщений по метрике или объяснимой оценке; у каждого счётчика показана свежесть наблюдения
 
 ```sh
 max stats contacts top [query] [options]
@@ -1699,7 +2014,7 @@ max stats contacts top [query] [options]
 
 #### `max stats contacts evidence`
 
-страница ограниченного размера с сообщениями или парами сообщений с ответами, участвующими в одном компоненте рейтинга
+ограниченная страница сообщений, пар ответов или участников когорты из точной выборки drilldown
 
 ```sh
 max stats contacts evidence <person> [options]
@@ -1737,6 +2052,51 @@ max stats chats show <chat> [options]
 | `--since-time <time>` | ISO 8601, or 2h / 1d ago; 7 days ago if not given. |
 | `--by <day\|week>` | also one row per calendar day or week (weeks start on Monday). |
 | `--timezone <zone>` | the IANA timezone for calendar days. |
+
+#### `max stats chats newcomers`
+
+участники с известным вступлением и помощь в окне после вступления
+
+```sh
+max stats chats newcomers <chat> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | a chat: its id, or part of its title. |
+
+| Опция | Что делает |
+|---|---|
+| `--since-time <time>` | с этого времени ISO 8601 или 2h / 1d назад; по умолчанию 30d назад. |
+| `--until-time <time>` | до этого времени ISO 8601 или 2h / 1d назад включительно. |
+| `--within <duration>` | окно помощи после известного вступления новичка. |
+| `--saved <name\|id>` | запустить сохранённый отчёт этого вида; указанные опции заменяют сохранённые. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--limit <n>` | строк отчёта, 1–100; по умолчанию 20. |
+| `--answerer <id>` | человек в выбранной области, чей прямой ответ учитывается; для нескольких повторить. |
+
+#### `max stats chats retention`
+
+когорты вступления и наблюдаемое участие в контрольные даты по сохранённым спискам состава
+
+```sh
+max stats chats retention <chat> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | a chat: its id, or part of its title. |
+
+| Опция | Что делает |
+|---|---|
+| `--since-time <time>` | начало периода вступления в ISO 8601 или относительное время; по умолчанию последние 90 дней. |
+| `--until-time <time>` | конец периода вступления; по умолчанию сейчас. |
+| `--checkpoints <durations>` | до 10 возрастающих сроков после вступления через запятую; по умолчанию 1d,7d,30d. |
+| `--within <duration>` | окно активности и раннего ухода после вступления; по умолчанию 7d. |
+| `--by <day\|week>` | группировать даты вступления по календарному дню или неделе с понедельника. Одно из: `day`, `week`. |
+| `--timezone <zone>` | часовой пояс IANA для когорт вступления. |
+| `--limit <n>` | когорты и доказательства участников, 1–100. |
+
 
 ### `max stats tasks`
 
@@ -2090,7 +2450,7 @@ the files of stored messages: their text in the local store, for content: in a s
 
 ### `max attachments extract`
 
-read the text of downloaded files — plain text, Word, PDF with a text layer — into the local store, for content: in a search
+сохранить текст скачанных файлов — текст, текстовые слои PDF/DOCX, ODT/ODS/XLSX/PPTX/EPUB — в локальном хранилище для поиска content:
 
 ```sh
 max attachments extract [options]
@@ -2122,6 +2482,27 @@ max attachments list [options]
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
 | `--all` | every row, no paging. |
+
+### `max attachments show`
+
+прочитать ограниченную порцию сохранённого вложения; JSON содержит байты в base64
+
+```sh
+max attachments show <chat> [message] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | чат: ID или часть названия; или только адрес msg:. |
+| `message` | необязательный | the message id. |
+
+| Опция | Что делает |
+|---|---|
+| `--attachment <n>` | позиция файла от 1; обязательна при нескольких файлах. |
+| `--offset-bytes <n>` | смещение в байтах от 0. |
+| `--chunk-bytes <n>` | число возвращаемых байтов, 1–1048576 (по умолчанию524288). |
+| `--if-sha256 <hash>` | требовать SHA-256 всего файла из предыдущей порции. |
+
 
 ### `max attachments text`
 
@@ -2250,6 +2631,7 @@ max metadata refresh [options]
 | Опция | Что делает |
 |---|---|
 | `--chat <chat>` | сохранённая группа или канал; повторите параметр для нескольких. По умолчанию: ``. |
+| `--only-missing` | только чаты без метаданных; без --chat — все сохранённые группы и каналы. |
 | `--limit <number>` | обработать не более указанного числа чатов (1–500). По умолчанию: `50`. |
 
 ## `max searches`
@@ -2951,7 +3333,7 @@ max watch [options]
 
 | Опция | Что делает |
 |---|---|
-| `--events` | also print edits, deletions and reactions; every line then names its event. |
+| `--events` | также выводить правки, удаления, реакции, прочтения и изменения чатов; каждая строка содержит вид события. |
 
 ## `max config`
 

@@ -148,6 +148,68 @@ max account sessions end [options]
 |---|---|
 | `--others` | every session but this one. |
 
+### `max account privacy`
+
+quién puede encontrar la cuenta, llamar o añadirla
+
+#### `max account privacy show`
+
+ajustes de privacidad de la cuenta; leerlos no cambia nada
+
+```sh
+max account privacy show
+```
+
+#### `max account privacy set`
+
+cambiar quién puede encontrar la cuenta, llamar o añadirla; los demás ajustes se conservan
+
+**Cambia algo en MAX.**
+
+```sh
+max account privacy set [options]
+```
+
+| Opción | Para qué sirve |
+|---|---|
+| `--find-by-phone <who>` | quién encuentra la cuenta por su número: everyone, contacts o nobody; MAX admite everyone y contacts. |
+| `--phone-number <who>` | quién ve el número: everyone, contacts o nobody. |
+| `--calls <who>` | quién puede llamar: everyone, contacts o nobody. |
+| `--chat-invites <who>` | quién puede añadir la cuenta a grupos y canales: everyone, contacts o nobody. |
+| `--hide-online <on\|off>` | ocultar el estado en línea y la última conexión. |
+
+## `max calls`
+
+llamadas de la cuenta
+
+### `max calls list`
+
+llamadas realizadas y recibidas, las más recientes primero; leerlas no cambia nada
+
+```sh
+max calls list [options]
+```
+
+| Opción | Para qué sirve |
+|---|---|
+| `--limit <n>` | how many to show. |
+
+## `max stickers`
+
+stickers añadidos a la cuenta
+
+### `max stickers list`
+
+paquetes de stickers; con --set, los stickers de uno; leerlos no cambia nada
+
+```sh
+max stickers list [options]
+```
+
+| Opción | Para qué sirve |
+|---|---|
+| `--set <id>` | los stickers de este paquete. |
+
 ## `max chats`
 
 the chats this account is in
@@ -536,6 +598,19 @@ your chat folders, in the order the app shows them
 max chats folders list
 ```
 
+#### `max chats folders show`
+
+una carpeta con los nombres de sus chats
+
+```sh
+max chats folders show <folder>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `folder` | obligatorio | ID de la carpeta o título exacto. |
+
+
 #### `max chats folders create`
 
 create a chat folder
@@ -572,7 +647,7 @@ max chats folders update <folder> [options]
 |---|---|
 | `--title <title>` | a new name. |
 | `--add <chat>` | put a chat in it; repeat it for more. |
-| `--remove <chat>` | take a chat out of it; repeat it for more. |
+| `--remove <chat>` | quitar el chat de la carpeta y de las listas de excluidos y fijados; repetir para varios. |
 
 #### `max chats folders delete`
 
@@ -669,6 +744,92 @@ max chats moderate <chat> [options]
 | `--dry-run` | judge and plan; do nothing. |
 | `--allow-dangerous` | yes to every action whose level in the group's rules is ask. |
 | `--max-actions <n>` | at most this many actions in one run; 10 if not given. |
+
+### `max chats media`
+
+fotos, vídeos, archivos, audio y enlaces del chat desde el servidor; leerlos no marca nada
+
+```sh
+max chats media <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | a chat: its id, or part of its title. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--type <names>` | solo estos tipos, separados por comas: photo, video, file, audio, link. |
+| `--limit <n>` | how many to show. |
+| `--before-id <id>` | leer lo anterior a este id de mensaje. |
+
+### `max chats mute`
+
+silenciar el chat para siempre o hasta una fecha; no se avisa a sus miembros
+
+**Cambia algo en MAX.**
+
+```sh
+max chats mute <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | a chat: its id, or part of its title. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--until <time>` | solo hasta entonces: 2026-09-25T09:00 (hora local), o dentro de 30m, 2h, 7d. |
+
+### `max chats unmute`
+
+volver a activar las notificaciones del chat
+
+**Cambia algo en MAX.**
+
+```sh
+max chats unmute <chat>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | a chat: its id, or part of its title. |
+
+### `max chats delete`
+
+eliminar el chat para esta cuenta; los demás conservan el chat y sus mensajes
+
+**Cambia algo en MAX.**
+
+```sh
+max chats delete <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | a chat: its id, or part of its title. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--allow-dangerous` | go ahead without the question an ask level puts before a deletion. |
+
+### `max chats clear`
+
+eliminar todos los mensajes del chat para esta cuenta; los demás conservan los suyos
+
+**Cambia algo en MAX.**
+
+```sh
+max chats clear <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | a chat: its id, or part of its title. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--allow-dangerous` | go ahead without the question an ask level puts before a deletion. |
 
 ## `max contacts`
 
@@ -1210,6 +1371,7 @@ max messages send <chat> [text] [options]
 | `--voice <file>` | send an Ogg Opus file as a voice message, alone, with no text. |
 | `--allow-any-file` | send a file even from a hidden folder, \~/.ssh or this CLI's own folders. |
 | `--at-time <time>` | let the messenger send it later, even with this machine off: 2026-09-25T09:00 (local time), or 30m, 2h, 1d from now. |
+| `--sticker <id>` | enviar solo este sticker; `stickers list` muestra su id. |
 
 ### `max messages scheduled`
 
@@ -1442,6 +1604,34 @@ max store jobs cancel <job>
 |---|---|---|
 | `job` | obligatorio | the job id. |
 
+#### `max store jobs retry`
+
+reiniciar un trabajo fallido o interrumpido como uno nuevo; la descarga continúa desde donde se guardó
+
+```sh
+max store jobs retry [job] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `job` | opcional | ID del trabajo. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--failed` | todos los chats cuyo último trabajo falló o se interrumpió. |
+
+
+#### `max store jobs clear`
+
+olvidar trabajos terminados y borrar sus registros; se conservan los trabajos en curso
+
+**Cambia algo solo en este ordenador.**
+
+```sh
+max store jobs clear
+```
+
+
 ### `max store export`
 
 a chat's stored messages as JSON lines, oldest first; never asks the messenger
@@ -1615,9 +1805,112 @@ max stats messages show [query] [options]
 | `--exact` | las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas. |
 | `--saved <name\|id>` | count what a saved search or an earlier run matches; options typed here replace its own. |
 
+#### `max stats messages counters`
+
+observaciones por contador y actualización remota limitada
+
+
+#### `max stats messages counters show`
+
+mostrar valores de contadores guardados y frescura de sus observaciones
+
+```sh
+max stats messages counters show [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | opcional | consulta Lucene estricta sobre mensajes guardados. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--chat <chat>` | solo este chat; indica su ID o parte de su título. |
+| `--source <messenger>` | cuentas conectadas de este mensajero; la actualización usa la activa. |
+| `--exact` | las palabras sin operadores coinciden por forma exacta. |
+| `--timezone <zone>` | zona horaria IANA para fechas de consulta. |
+| `--selection <json>` | selección fija de objetivos de counters show; incompatible con consulta y ámbito. |
+| `--counters <names>` | campos distintos views,reactions,comments; los tres por defecto. |
+| `--limit <n>` | mensajes, 1–100; 20 por defecto. |
+| `--max-age <duration>` | edad máxima de una observación reciente; 24h por defecto. |
+
+
+#### `max stats messages counters refresh`
+
+leer contadores autorizados de un número limitado de mensajes y actualizar sus observaciones locales
+
+**Cambia algo solo en este ordenador.**
+
+```sh
+max stats messages counters refresh [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | opcional | consulta Lucene estricta sobre mensajes guardados. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--chat <chat>` | solo este chat; indica su ID o parte de su título. |
+| `--source <messenger>` | cuentas conectadas de este mensajero; la actualización usa la activa. |
+| `--exact` | las palabras sin operadores coinciden por forma exacta. |
+| `--timezone <zone>` | zona horaria IANA para fechas de consulta. |
+| `--selection <json>` | selección fija de objetivos de counters show; incompatible con consulta y ámbito. |
+| `--counters <names>` | campos distintos views,reactions,comments; los tres por defecto. |
+| `--limit <n>` | mensajes, 1–100; 20 por defecto. |
+| `--max-messages <n>` | máximo de mensajes que actualizar, 1–100. |
+| `--sync-time <duration>` | tiempo de actualización remota; 30s por defecto, máximo 5m. |
+| `--dry-run` | mostrar objetivos guardados exactos y contadores admitidos sin conectar. |
+
+
+#### `max stats messages unanswered`
+
+preguntas detectadas más antiguas sin una respuesta directa válida observada
+
+```sh
+max stats messages unanswered [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | opcional | consulta Lucene estricta; si se omite, selecciona todos los mensajes almacenados. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--chat <chat>` | solo este chat; indica su ID o parte de su título. |
+| `--source <messenger>` | todas las cuentas disponibles de este servicio de mensajería; personal, bots o all. |
+| `--exact` | las palabras sin campo coinciden en su forma exacta en lugar de por su raíz. |
+| `--saved <name\|id>` | ejecutar un informe guardado de este tipo; las opciones indicadas sustituyen las guardadas. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--limit <n>` | filas del informe, 1–100; 20 por defecto. |
+| `--answerer <id>` | persona del ámbito elegido cuya respuesta directa cuenta; repetir para varias. |
+| `--older-than <duration>` | edad mínima de una pregunta sin respuesta válida observada. |
+
+#### `max stats messages discussion`
+
+publicaciones vistas con poca conversación guardada
+
+```sh
+max stats messages discussion [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | opcional | consulta Lucene estricta; si se omite, selecciona todos los mensajes almacenados. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--chat <chat>` | solo este chat; indica su ID o parte de su título. |
+| `--source <messenger>` | todas las cuentas disponibles de este servicio de mensajería; personal, bots o all. |
+| `--exact` | las palabras sin campo coinciden en su forma exacta en lugar de por su raíz. |
+| `--saved <name\|id>` | ejecutar un informe guardado de este tipo; las opciones indicadas sustituyen las guardadas. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--limit <n>` | filas del informe, 1–100; 20 por defecto. |
+| `--min-views <n>` | mínimo de vistas acumuladas conocidas. |
+| `--max-replies <n>` | máximo de respuestas observadas en la conversación. |
+
 #### `max stats messages top`
 
-clasificar los mensajes almacenados por una medida o una puntuación explicable; los contadores son instantáneas y se desconoce su vigencia
+clasificar mensajes guardados por métrica o puntuación explicable; cada contador indica la frescura de su observación
 
 ```sh
 max stats messages top [query] [options]
@@ -1646,7 +1939,7 @@ max stats messages top [query] [options]
 
 #### `max stats messages evidence`
 
-una página con límites de mensajes o pares de respuestas que contribuyen a un componente de clasificación
+página limitada de mensajes, pares de respuestas o miembros de una cohorte desde una selección drilldown exacta
 
 ```sh
 max stats messages evidence <message> [options]
@@ -1654,7 +1947,7 @@ max stats messages evidence <message> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `message` | obligatorio | localizador canónico del mensaje de la fila de clasificación. |
+| `message` | obligatorio | ubicación canónica del mensaje o referencia de cohorte de retención desde drilldown. |
 
 | Opción | Para qué sirve |
 |---|---|
@@ -1667,9 +1960,31 @@ max stats messages evidence <message> [options]
 
 estadísticas sobre los autores humanos
 
+#### `max stats contacts responses`
+
+número de respuestas y mediana/p90 del tiempo de respuesta de las personas elegidas
+
+```sh
+max stats contacts responses [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | opcional | consulta Lucene estricta; si se omite, selecciona todos los mensajes almacenados. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--chat <chat>` | solo este chat; indica su ID o parte de su título. |
+| `--source <messenger>` | todas las cuentas disponibles de este servicio de mensajería; personal, bots o all. |
+| `--exact` | las palabras sin campo coinciden en su forma exacta en lugar de por su raíz. |
+| `--saved <name\|id>` | ejecutar un informe guardado de este tipo; las opciones indicadas sustituyen las guardadas. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--limit <n>` | filas del informe, 1–100; 20 por defecto. |
+| `--answerer <id>` | persona del ámbito elegido cuya respuesta directa cuenta; repetir para varias. |
+
 #### `max stats contacts top`
 
-clasificar a los autores humanos de los mensajes almacenados por una medida o una puntuación explicable; los contadores son instantáneas y se desconoce su vigencia
+clasificar autores humanos de mensajes guardados por métrica o puntuación explicable; cada contador indica la frescura de su observación
 
 ```sh
 max stats contacts top [query] [options]
@@ -1699,7 +2014,7 @@ max stats contacts top [query] [options]
 
 #### `max stats contacts evidence`
 
-una página con límites de mensajes o pares de respuestas que contribuyen a un componente de clasificación
+página limitada de mensajes, pares de respuestas o miembros de una cohorte desde una selección drilldown exacta
 
 ```sh
 max stats contacts evidence <person> [options]
@@ -1737,6 +2052,51 @@ max stats chats show <chat> [options]
 | `--since-time <time>` | ISO 8601, or 2h / 1d ago; 7 days ago if not given. |
 | `--by <day\|week>` | also one row per calendar day or week (weeks start on Monday). |
 | `--timezone <zone>` | the IANA timezone for calendar days. |
+
+#### `max stats chats newcomers`
+
+miembros con fecha de entrada conocida y ayuda durante el plazo posterior
+
+```sh
+max stats chats newcomers <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | a chat: its id, or part of its title. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--since-time <time>` | desde esta fecha ISO 8601 o hace 2h / 1d; hace 30d por defecto. |
+| `--until-time <time>` | hasta esta fecha ISO 8601 o hace 2h / 1d, inclusive. |
+| `--within <duration>` | plazo de ayuda tras la entrada conocida de una persona nueva. |
+| `--saved <name\|id>` | ejecutar un informe guardado de este tipo; las opciones indicadas sustituyen las guardadas. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--limit <n>` | filas del informe, 1–100; 20 por defecto. |
+| `--answerer <id>` | persona del ámbito elegido cuya respuesta directa cuenta; repetir para varias. |
+
+#### `max stats chats retention`
+
+cohortes de incorporación y pertenencia observada en fechas de control a partir de listas guardadas
+
+```sh
+max stats chats retention <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | a chat: its id, or part of its title. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--since-time <time>` | inicio del período de incorporación en ISO 8601 o tiempo relativo; últimos 90 días por defecto. |
+| `--until-time <time>` | fin del período de incorporación; ahora por defecto. |
+| `--checkpoints <durations>` | hasta 10 edades crecientes desde la incorporación, separadas por comas; 1d,7d,30d por defecto. |
+| `--within <duration>` | ventana de actividad y salida temprana tras incorporarse; 7d por defecto. |
+| `--by <day\|week>` | agrupar fechas de incorporación por día o semana desde el lunes. Uno de: `day`, `week`. |
+| `--timezone <zone>` | zona horaria IANA para cohortes de incorporación. |
+| `--limit <n>` | cohortes y pruebas de miembros, 1–100. |
+
 
 ### `max stats tasks`
 
@@ -2090,7 +2450,7 @@ the files of stored messages: their text in the local store, for content: in a s
 
 ### `max attachments extract`
 
-read the text of downloaded files — plain text, Word, PDF with a text layer — into the local store, for content: in a search
+guardar el texto de archivos descargados — texto, capas de texto PDF/DOCX, ODT/ODS/XLSX/PPTX/EPUB — en el almacén local para buscar con content:
 
 ```sh
 max attachments extract [options]
@@ -2122,6 +2482,27 @@ max attachments list [options]
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
 | `--all` | every row, no paging. |
+
+### `max attachments show`
+
+leer una porción limitada de un adjunto conservado; JSON incluye bytes en base64
+
+```sh
+max attachments show <chat> [message] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat: ID o parte de su título; o solo una ubicación msg:. |
+| `message` | opcional | the message id. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--attachment <n>` | posición del archivo desde 1; obligatoria si hay varios archivos. |
+| `--offset-bytes <n>` | desplazamiento en bytes desde 0. |
+| `--chunk-bytes <n>` | bytes que devolver, 1–1048576 (por defecto524288). |
+| `--if-sha256 <hash>` | exigir el SHA-256 del archivo completo de la porción anterior. |
+
 
 ### `max attachments text`
 
@@ -2250,6 +2631,7 @@ max metadata refresh [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--chat <chat>` | grupo o canal almacenado; repite la opción para varios. Por defecto: ``. |
+| `--only-missing` | solo chats sin metadatos; sin --chat, todos los grupos/canales guardados. |
 | `--limit <number>` | procesa como máximo el número indicado de chats (1–500). Por defecto: `50`. |
 
 ## `max searches`
@@ -2951,7 +3333,7 @@ max watch [options]
 
 | Opción | Para qué sirve |
 |---|---|
-| `--events` | also print edits, deletions and reactions; every line then names its event. |
+| `--events` | mostrar también ediciones, eliminaciones, reacciones, lecturas y cambios de chats; cada línea indica su evento. |
 
 ## `max config`
 

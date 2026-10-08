@@ -61,6 +61,7 @@ tg session start [method] [options]
 |---|---|
 | `--app <how>` | solo la primera vez: cómo obtener la aplicación de my.telegram.org para el perfil. Valores: `browser`, `auto`. Predeterminado: `browser`. |
 | `--qr-file <png>` | guarda el QR en este PNG en lugar de dibujarlo, para que un agente pueda mostrártelo. |
+| `--sms` | acceso por teléfono: pedir el código por SMS; Telegram puede rechazarlo. |
 
 ### `tg session end`
 
@@ -529,6 +530,29 @@ tg chats link revoke <chat> <link>
 | `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 | `link` | obligatorio | el enlace tal como lo muestra `chats link list`. |
 
+#### `tg chats link update`
+
+cambiar uno de tus enlaces adicionales; no se puede cambiar el enlace principal del grupo
+
+**Changes something in Telegram.**
+
+```sh
+tg chats link update <chat> <link> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+| `link` | obligatorio | el enlace tal como lo muestra `chats link list`. |
+
+| Opción | Qué hace |
+|---|---|
+| `--approval` | quien quiera entrar con el enlace debe solicitarlo primero y un administrador permite su entrada. |
+| `--no-approval` | cualquiera con el enlace entra de inmediato. |
+| `--expire-time <time>` | deja de funcionar entonces: 2026-09-25T09:00 (hora local) o dentro de 30m, 2h, 7d. |
+| `--max-uses <n>` | como máximo este número de personas puede entrar con el enlace, de 1 a 99999. |
+
+
 #### `tg chats link reset`
 
 sustituye el enlace de invitación; el anterior deja de funcionar
@@ -655,6 +679,18 @@ tus carpetas, en el orden de la aplicación
 tg chats folders list
 ```
 
+#### `tg chats folders show`
+
+una carpeta con los nombres de sus chats
+
+```sh
+tg chats folders show <folder>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `folder` | obligatorio | id de la carpeta o su nombre exacto. |
+
 #### `tg chats folders create`
 
 crea una carpeta de chats
@@ -672,6 +708,11 @@ tg chats folders create <title> [options]
 | Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | chat que incluir, por identificador o nombre; repite la opción para añadir más. |
+| `--include <kinds>` | todos los chats de estos tipos: contacts, non-contacts, groups, channels, bots. |
+| `--skip <which>` | excluir los chats muted, read, archived. |
+| `--exclude-chat <chat>` | no mostrar nunca este chat en la carpeta; repetir para varios. |
+| `--pin <chat>` | fijar el chat arriba de la carpeta; repetir para varios. |
+| `--emoji <emoji>` | icono de la carpeta. |
 
 #### `tg chats folders update`
 
@@ -692,6 +733,11 @@ tg chats folders update <folder> [options]
 | `--title <title>` | nuevo nombre. |
 | `--add <chat>` | añade un chat; repite la opción para incluir más. |
 | `--remove <chat>` | quitar un chat de ella y de sus listas de excluidos y fijados; repítelo para más chats. |
+| `--include <kinds>` | todos los chats de tipo contacts, non-contacts, groups, channels, bots; sustituye la regla anterior, none la borra. |
+| `--skip <which>` | excluir los chats muted, read, archived; sustituye la regla anterior, none la borra. |
+| `--exclude-chat <chat>` | no mostrar nunca este chat en la carpeta; repetir para varios. |
+| `--pin <chat>` | fijar el chat arriba de la carpeta; repetir para varios. |
+| `--emoji <emoji>` | icono de la carpeta. |
 
 #### `tg chats folders delete`
 
@@ -1589,6 +1635,9 @@ tg polls create <chat> <question> <answers> [options]
 | `--silent` | envía sin notificación. |
 | `--send-as <id>` | publicar como una de las identidades que enumera `chats send-as`; obligatorio cuando el chat publica como otra identidad de forma predeterminada. |
 | `--send-id <id>` | reintenta crear una encuesta de resultado desconocido sin duplicarla. |
+| `--quiz` | cuestionario: una respuesta correcta y voto definitivo. |
+| `--correct <n>` | con --quiz: posición de la respuesta correcta, desde 1. |
+| `--solution <text>` | con --quiz: explicación que se ve tras responder. |
 
 ## `tg models`
 
@@ -1815,6 +1864,25 @@ tg topics edit <chat> <topic> [options]
 | `--pinned <on\|off>` | on fija el tema al principio de la lista; off lo desfija. |
 | `--hidden <on\|off>` | on oculta el tema General de la lista de temas; off lo muestra. |
 
+### `tg topics delete`
+
+eliminar un tema del foro y todos sus mensajes para todos; no se puede deshacer
+
+**Changes something in Telegram.**
+
+```sh
+tg topics delete <chat> <topic> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+| `topic` | obligatorio | el identificador del tema de `topics list`. |
+
+| Opción | Qué hace |
+|---|---|
+| `--allow-dangerous` | omite la confirmación que el nivel ask exige antes de eliminar. |
+
 ### `tg topics order`
 
 colocar los temas fijados en este orden; no fija ni desfija ninguno
@@ -2036,6 +2104,32 @@ tg store jobs cancel <job>
 | Argumento | | Qué es |
 |---|---|---|
 | `job` | obligatorio | identificador de tarea. |
+
+#### `tg store jobs retry`
+
+reintentar una tarea fallida o interrumpida como una nueva; la descarga continúa donde se detuvo el archivo
+
+```sh
+tg store jobs retry [job] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `job` | opcional | id de la tarea. |
+
+| Opción | Qué hace |
+|---|---|
+| `--failed` | cada chat cuya última tarea falló o se interrumpió. |
+
+#### `tg store jobs clear`
+
+olvidar las tareas terminadas y borrar sus registros; se conserva la tarea en curso
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg store jobs clear
+```
 
 ### `tg store export`
 
@@ -2438,7 +2532,7 @@ los archivos de los mensajes guardados: su texto en el archivo local, para conte
 
 ### `tg attachments extract`
 
-lee el texto de los archivos descargados (texto plano, Word, PDF con capa de texto) y lo guarda en el archivo local, para content: en una búsqueda
+guardar el texto de archivos descargados — texto, capas de texto PDF/DOCX, ODT/ODS/XLSX/PPTX/EPUB — en el almacén local para buscar con content:
 
 ```sh
 tg attachments extract [options]
@@ -2470,6 +2564,27 @@ tg attachments list [options]
 | `--limit <n>` | cuántos mostrar. |
 | `--page <n>` | número de página, desde 1. |
 | `--all` | todas las filas, sin paginar. |
+
+### `tg attachments show`
+
+leer una porción limitada de un adjunto conservado; JSON incluye bytes en base64
+
+```sh
+tg attachments show <chat> [message] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | required | chat: título o parte, ID, @username, o `me` para Mensajes guardados; o solo una ubicación msg:. |
+| `message` | opcional | identificador del mensaje. |
+
+| Opción | Qué hace |
+|---|---|
+| `--attachment <n>` | posición del archivo desde 1; obligatoria si hay varios archivos. |
+| `--offset-bytes <n>` | desplazamiento en bytes desde 0. |
+| `--chunk-bytes <n>` | bytes que devolver, 1–1048576 (por defecto524288). |
+| `--if-sha256 <hash>` | exigir el SHA-256 del archivo completo de la porción anterior. |
+
 
 ### `tg attachments text`
 
@@ -2598,6 +2713,7 @@ tg metadata refresh [options]
 | Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | un grupo o canal almacenado; repetir para varios. Predeterminado: ``. |
+| `--only-missing` | solo chats sin metadatos; sin --chat, todos los grupos y canales guardados. |
 | `--limit <number>` | procesar como máximo el número indicado de chats, de 1 a 500. Predeterminado: `50`. |
 
 ## `tg stats`
@@ -2634,9 +2750,112 @@ tg stats messages show [query] [options]
 | `--exact` | las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas. |
 | `--saved <name\|id>` | cuenta lo que coincide con una búsqueda guardada o una ejecución anterior; las opciones escritas aquí sustituyen a las suyas. |
 
+#### `tg stats messages counters`
+
+observaciones por contador y actualización remota limitada
+
+
+#### `tg stats messages counters show`
+
+mostrar valores de contadores guardados y frescura de sus observaciones
+
+```sh
+tg stats messages counters show [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | optional | consulta Lucene estricta sobre mensajes guardados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--chat <chat>` | solo este chat: su título o parte de él, su identificador, @username o `me` para Mensajes guardados. |
+| `--source <messenger>` | cuentas conectadas de este mensajero; la actualización usa la activa. |
+| `--exact` | las palabras sin operadores coinciden por forma exacta. |
+| `--timezone <zone>` | zona horaria IANA para fechas de consulta. |
+| `--selection <json>` | selección fija de objetivos de counters show; incompatible con consulta y ámbito. |
+| `--counters <names>` | campos distintos views,reactions,comments; los tres por defecto. |
+| `--limit <n>` | mensajes, 1–100; 20 por defecto. |
+| `--max-age <duration>` | edad máxima de una observación reciente; 24h por defecto. |
+
+
+#### `tg stats messages counters refresh`
+
+leer contadores autorizados de un número limitado de mensajes y actualizar sus observaciones locales
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg stats messages counters refresh [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | optional | consulta Lucene estricta sobre mensajes guardados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--chat <chat>` | solo este chat: su título o parte de él, su identificador, @username o `me` para Mensajes guardados. |
+| `--source <messenger>` | cuentas conectadas de este mensajero; la actualización usa la activa. |
+| `--exact` | las palabras sin operadores coinciden por forma exacta. |
+| `--timezone <zone>` | zona horaria IANA para fechas de consulta. |
+| `--selection <json>` | selección fija de objetivos de counters show; incompatible con consulta y ámbito. |
+| `--counters <names>` | campos distintos views,reactions,comments; los tres por defecto. |
+| `--limit <n>` | mensajes, 1–100; 20 por defecto. |
+| `--max-messages <n>` | máximo de mensajes que actualizar, 1–100. |
+| `--sync-time <duration>` | tiempo de actualización remota; 30s por defecto, máximo 5m. |
+| `--dry-run` | mostrar objetivos guardados exactos y contadores admitidos sin conectar. |
+
+
+#### `tg stats messages unanswered`
+
+preguntas detectadas más antiguas sin una respuesta directa válida observada
+
+```sh
+tg stats messages unanswered [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | opcional | una consulta Lucene estricta; si se omite, selecciona todos los mensajes almacenados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--chat <chat>` | solo este chat: su título o parte de él, su identificador, @username o `me` para Mensajes guardados. |
+| `--source <messenger>` | todas las cuentas disponibles de este servicio de mensajería; personal, bots o all. |
+| `--exact` | las palabras sin campo coinciden en su forma exacta en lugar de por su raíz. |
+| `--saved <name\|id>` | ejecutar un informe guardado de este tipo; las opciones indicadas sustituyen las guardadas. |
+| `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
+| `--limit <n>` | filas del informe, 1–100; 20 por defecto. |
+| `--answerer <id>` | persona del ámbito elegido cuya respuesta directa cuenta; repetir para varias. |
+| `--older-than <duration>` | edad mínima de una pregunta sin respuesta válida observada. |
+
+#### `tg stats messages discussion`
+
+publicaciones vistas con poca conversación guardada
+
+```sh
+tg stats messages discussion [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | opcional | una consulta Lucene estricta; si se omite, selecciona todos los mensajes almacenados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--chat <chat>` | solo este chat: su título o parte de él, su identificador, @username o `me` para Mensajes guardados. |
+| `--source <messenger>` | todas las cuentas disponibles de este servicio de mensajería; personal, bots o all. |
+| `--exact` | las palabras sin campo coinciden en su forma exacta en lugar de por su raíz. |
+| `--saved <name\|id>` | ejecutar un informe guardado de este tipo; las opciones indicadas sustituyen las guardadas. |
+| `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
+| `--limit <n>` | filas del informe, 1–100; 20 por defecto. |
+| `--min-views <n>` | mínimo de vistas acumuladas conocidas. |
+| `--max-replies <n>` | máximo de respuestas observadas en la conversación. |
+
 #### `tg stats messages top`
 
-clasificar los mensajes almacenados por una medida o una puntuación explicable; los contadores son instantáneas y se desconoce su vigencia
+clasificar mensajes guardados por métrica o puntuación explicable; cada contador indica la frescura de su observación
 
 ```sh
 tg stats messages top [query] [options]
@@ -2665,7 +2884,7 @@ tg stats messages top [query] [options]
 
 #### `tg stats messages evidence`
 
-una página con límites de mensajes o pares de respuestas que contribuyen a un componente de clasificación
+página limitada de mensajes, pares de respuestas o miembros de una cohorte desde una selección drilldown exacta
 
 ```sh
 tg stats messages evidence <message> [options]
@@ -2673,7 +2892,7 @@ tg stats messages evidence <message> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `message` | obligatorio | el localizador canónico del mensaje de la fila de clasificación. |
+| `message` | required | ubicación canónica del mensaje o referencia de cohorte de retención desde drilldown. |
 
 | Opción | Qué hace |
 |---|---|
@@ -2686,9 +2905,31 @@ tg stats messages evidence <message> [options]
 
 estadísticas sobre los autores humanos
 
+#### `tg stats contacts responses`
+
+número de respuestas y mediana/p90 del tiempo de respuesta de las personas elegidas
+
+```sh
+tg stats contacts responses [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | opcional | una consulta Lucene estricta; si se omite, selecciona todos los mensajes almacenados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--chat <chat>` | solo este chat: su título o parte de él, su identificador, @username o `me` para Mensajes guardados. |
+| `--source <messenger>` | todas las cuentas disponibles de este servicio de mensajería; personal, bots o all. |
+| `--exact` | las palabras sin campo coinciden en su forma exacta en lugar de por su raíz. |
+| `--saved <name\|id>` | ejecutar un informe guardado de este tipo; las opciones indicadas sustituyen las guardadas. |
+| `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
+| `--limit <n>` | filas del informe, 1–100; 20 por defecto. |
+| `--answerer <id>` | persona del ámbito elegido cuya respuesta directa cuenta; repetir para varias. |
+
 #### `tg stats contacts top`
 
-clasificar a los autores humanos de los mensajes almacenados por una medida o una puntuación explicable; los contadores son instantáneas y se desconoce su vigencia
+clasificar autores humanos de mensajes guardados por métrica o puntuación explicable; cada contador indica la frescura de su observación
 
 ```sh
 tg stats contacts top [query] [options]
@@ -2718,7 +2959,7 @@ tg stats contacts top [query] [options]
 
 #### `tg stats contacts evidence`
 
-una página con límites de mensajes o pares de respuestas que contribuyen a un componente de clasificación
+página limitada de mensajes, pares de respuestas o miembros de una cohorte desde una selección drilldown exacta
 
 ```sh
 tg stats contacts evidence <person> [options]
@@ -2756,6 +2997,51 @@ tg stats chats show <chat> [options]
 | `--since-time <time>` | fecha ISO 8601 o intervalo anterior como 2h / 1d; hace 7 días por defecto. |
 | `--by <day\|week>` | también una fila por día o semana natural (las semanas empiezan el lunes). |
 | `--timezone <zone>` | zona horaria IANA para los días del calendario. |
+
+#### `tg stats chats newcomers`
+
+miembros con fecha de entrada conocida y ayuda durante el plazo posterior
+
+```sh
+tg stats chats newcomers <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--since-time <time>` | desde esta fecha ISO 8601 o hace 2h / 1d; hace 30d por defecto. |
+| `--until-time <time>` | hasta esta fecha ISO 8601 o hace 2h / 1d, inclusive. |
+| `--within <duration>` | plazo de ayuda tras la entrada conocida de una persona nueva. |
+| `--saved <name\|id>` | ejecutar un informe guardado de este tipo; las opciones indicadas sustituyen las guardadas. |
+| `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
+| `--limit <n>` | filas del informe, 1–100; 20 por defecto. |
+| `--answerer <id>` | persona del ámbito elegido cuya respuesta directa cuenta; repetir para varias. |
+
+#### `tg stats chats retention`
+
+cohortes de incorporación y pertenencia observada en fechas de control a partir de listas guardadas
+
+```sh
+tg stats chats retention <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--since-time <time>` | inicio del período de incorporación en ISO 8601 o tiempo relativo; últimos 90 días por defecto. |
+| `--until-time <time>` | fin del período de incorporación; ahora por defecto. |
+| `--checkpoints <durations>` | hasta 10 edades crecientes desde la incorporación, separadas por comas; 1d,7d,30d por defecto. |
+| `--within <duration>` | ventana de actividad y salida temprana tras incorporarse; 7d por defecto. |
+| `--by <day\|week>` | agrupar fechas de incorporación por día o semana desde el lunes. Uno de: `day`, `week`. |
+| `--timezone <zone>` | zona horaria IANA para cohortes de incorporación. |
+| `--limit <n>` | cohortes y pruebas de miembros, 1–100. |
+
 
 #### `tg stats chats official`
 

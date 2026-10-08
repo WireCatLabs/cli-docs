@@ -122,6 +122,7 @@ ni usar un modelo:
 
 ```sh
 tg metadata refresh --chat "Book club"   # read the chat's description from Telegram; the chat is not changed
+tg metadata refresh --only-missing       # every stored group and channel with no description read yet
 tg tags auto --dry-run                   # what it would tag, without writing
 tg tags auto                             # write the automatic tags
 tg tags list --source auto               # only the automatic ones
@@ -239,6 +240,8 @@ tg attachments extract --chat "Book club" --ocr --concurrency 4 --limit 100 --js
 
 `--ocr` envía las imágenes a esa API; sin esta opción no se llama a ningún modelo. La concurrencia es de 1–8, con 4 como valor predeterminado;
 el límite de archivos es de 1–500, con 100 como valor predeterminado. Pasa el cursor devuelto para continuar el escaneo con límites.
+La extracción local también lee UTF-16 con BOM, codificaciones antiguas detectadas con confianza, ODT, ODS, XLSX, PPTX y EPUB sin modelo ni instalación adicional. Conserva el orden de hojas, diapositivas, capítulos y valores de celdas guardados; no calcula fórmulas ni lee texto en imágenes. El agente revisa o convierte codificaciones ambiguas. Los bytes originales no cambian. Límites: 1000 partes, 50 MiB descomprimidos y 10 MiB por parte XML/HTML de texto. Los resultados dañados o parciales no se indexan como completos. Las lecturas fallidas pueden repetirse; se protege el texto del agente y el texto anterior correctamente indexado.
+
 Los PDF escaneados necesitan las dependencias opcionales `unpdf` y `@napi-rs/canvas`, con un máximo de 20 páginas por documento;
 las páginas con una capa de texto se procesan localmente. Las ejecuciones repetidas reutilizan el hash del archivo y la identidad del modelo. El texto del agente y el texto
 indexado anteriormente se conservan si el OCR falla o se cancela. Revisa el número de errores y los estados de cada archivo;
@@ -274,3 +277,5 @@ Las páginas con marcas de tiempo ambiguas quedan pendientes. `--background` usa
 Los mismos comandos están disponibles mediante el descubrimiento de herramientas MCP y `tg_read` o `tg_write`; los metadatos de los trabajos
 están limitados al perfil. La reparación exige el permiso de escritura `store.gaps.repair` y acceso de lectura a los mensajes.
 La preparación opcional comparte el tiempo que le queda a la reparación.
+
+Un agente remoto puede recibir bytes guardados, ensamblar porciones limitadas y verificar su hash mediante [attachments show](./attachments.md). La entrega no reconoce ni indexa texto: lee todas las páginas con tus herramientas, guarda el texto con attachments text set y comprueba la búsqueda de contenido.

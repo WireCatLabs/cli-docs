@@ -153,3 +153,12 @@ review and a reader task; a linter cannot prove them.
 Approve a revised page when its outcome is clear, its claims match the selected release, a reader
 can recognize success or a boundary, and its next step is useful. Do not add rules that require
 more pages, more headings or more words just to raise a score.
+
+## Reviewed guide overrides and attachments
+
+Tool repositories own command behavior and native guides. The portal normally imports a reviewed release, not unreleased `main`. An explicitly reviewed documentation-only page may come from a fixed source commit while the runtime release pin stays unchanged. Such a page must describe capabilities already available in that release; its source and edit link must remain traceable. Release-update preparation retires these overrides so newer guide content is reviewed in full. Review contextual prose corrections again when their native counterpart is included in a release.
+
+Preserve URLs, incoming anchors, command tokens and code examples across edits and translations. Link new guides from a relevant existing task page and the sidebar. Every navigable sidebar page and folder needs an icon that represents its subject; icons are decorative and must not replace the label. Shared navigation belongs in `lib/docs-sidebar-tree.tsx` and `components/getting-started-links.tsx`.
+
+Explain available prerequisites and quality limits where readers need them. For attachments, distinguish automatic parsers, agent tools and explicitly configured external APIs. Put voice transcription in its own row. Never imply that passing a local path transfers a file to a remote agent.
+

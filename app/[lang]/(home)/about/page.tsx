@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Mail, MessageCircle } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { StructuredData } from "@/components/structured-data"
@@ -21,8 +21,47 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function AboutPage({ params }: Props) {
   const { lang } = await params
   const words = copyFor(lang)
-  const [purpose, tools, services, , future, open] = words.sections
+  const [purpose, tools, future, services] = words.sections
   const paragraphs = (section: typeof purpose) => section.paragraphs.map((text) => <p key={text}>{text}</p>)
+  const products = [
+    {
+      name: "Telegram",
+      command: "tg",
+      description: words.toolDescriptions.tg,
+      docs: `/${lang}/docs/tg`,
+      source: "https://github.com/leemour/tg-cli",
+    },
+    {
+      name: "MAX",
+      command: "max",
+      description: words.toolDescriptions.max,
+      docs: `/${lang}/docs/max`,
+      source: "https://github.com/leemour/max-cli",
+    },
+    {
+      name: words.emailTool,
+      command: "memo",
+      description: words.toolDescriptions.memo,
+      docs: "https://github.com/leemour/cli-memo#readme",
+      source: "https://github.com/leemour/cli-memo",
+    },
+  ]
+  const contacts = () => (
+    <>
+      <h2>{words.contactTitle}</h2>
+      <p>{words.contactText}</p>
+      <div className="about-contact-actions">
+        <a href={`mailto:${siteConfig.contacts.email}`}>
+          <Mail aria-hidden="true" />
+          {words.emailButton}
+        </a>
+        <a href={siteConfig.contacts.maintainerTelegram}>
+          <MessageCircle aria-hidden="true" />
+          {words.telegramButton}
+        </a>
+      </div>
+    </>
+  )
   return (
     <div className="wirecat-about">
       <StructuredData
@@ -42,23 +81,13 @@ export default async function AboutPage({ params }: Props) {
         <header className="about-intro">
           <h1>{words.title}</h1>
           <p className="intro">{words.intro}</p>
+          <p id="open-source" className="about-open-source">
+            <strong>{words.openSource}</strong>
+          </p>
         </header>
-        <details className="about-mobile-contents">
-          <summary>{words.project.contents}</summary>
-          <nav aria-label={words.project.contents}>
-            {[
-              ["purpose", purpose.title],
-              ["tools", tools.title],
-              ["open-source", open.title],
-              ["future", future.title],
-              ["funding", services.title],
-            ].map(([id, title]) => (
-              <a key={id} href={`#${id}`}>
-                {title}
-              </a>
-            ))}
-          </nav>
-        </details>
+        <section className="about-contact-mobile" aria-label={words.contactTitle}>
+          {contacts()}
+        </section>
         <div className="about-layout">
           <article className="about-story" aria-label={words.title}>
             <section id="purpose" className="about-purpose">
@@ -70,20 +99,19 @@ export default async function AboutPage({ params }: Props) {
               <h2>{tools.title}</h2>
               {paragraphs(tools)}
               <nav className="about-tool-links" aria-label={tools.title}>
-                <Link href={`/${lang}/docs/tg`}>
-                  <span>
-                    Telegram <code>tg</code>
-                  </span>
-                  <span>{words.toolDescriptions.tg}</span>
-                  <ArrowRight aria-hidden="true" />
-                </Link>
-                <Link href={`/${lang}/docs/max`}>
-                  <span>
-                    MAX <code>max</code>
-                  </span>
-                  <span>{words.toolDescriptions.max}</span>
-                  <ArrowRight aria-hidden="true" />
-                </Link>
+                {products.map((product) => (
+                  <div className="about-tool-row" key={product.command}>
+                    <a className="about-tool-docs" href={product.docs} aria-label={`${product.name}: ${words.docs}`}>
+                      <span>{product.name}</span>
+                      <code>{product.command}</code>
+                    </a>
+                    <p>{product.description}</p>
+                    <a className="about-tool-source" href={product.source} aria-label={`${product.name}: GitHub`}>
+                      GitHub
+                      <ArrowRight aria-hidden="true" />
+                    </a>
+                  </div>
+                ))}
               </nav>
               <div className="about-links">
                 <Link href={`/${lang}/docs/features`}>
@@ -92,24 +120,6 @@ export default async function AboutPage({ params }: Props) {
                 </Link>
                 <Link href={`/${lang}/docs/agents`}>
                   {words.agentGuide}
-                  <ArrowRight aria-hidden="true" />
-                </Link>
-              </div>
-            </section>
-            <section id="open-source" className="about-open">
-              <h2>{open.title}</h2>
-              {paragraphs(open)}
-              <div className="about-links">
-                <a href="https://github.com/leemour/tg-cli">
-                  tg · {words.source}
-                  <ArrowRight aria-hidden="true" />
-                </a>
-                <a href="https://github.com/leemour/max-cli">
-                  max · {words.source}
-                  <ArrowRight aria-hidden="true" />
-                </a>
-                <Link href={`/${lang}/docs/security`}>
-                  {words.security}
                   <ArrowRight aria-hidden="true" />
                 </Link>
               </div>
@@ -136,14 +146,13 @@ export default async function AboutPage({ params }: Props) {
                 <div>
                   <dt>{words.project.tools}</dt>
                   <dd>
-                    <Link href={`/${lang}/docs/tg`}>Telegram</Link> · <Link href={`/${lang}/docs/max`}>MAX</Link>
+                    <Link href={`/${lang}/docs/tg`}>Telegram</Link> · <Link href={`/${lang}/docs/max`}>MAX</Link> ·{" "}
+                    <a href="https://github.com/leemour/cli-memo#readme">{words.emailTool}</a>
                   </dd>
                 </div>
                 <div>
                   <dt>{words.project.license}</dt>
-                  <dd>
-                    MIT · <a href="https://github.com/leemour/tg-cli">GitHub</a>
-                  </dd>
+                  <dd>MIT</dd>
                 </div>
                 <div>
                   <dt>{words.project.maintainer}</dt>
@@ -156,30 +165,14 @@ export default async function AboutPage({ params }: Props) {
                 </div>
               </dl>
             </section>
-            <nav className="about-contents" aria-label={words.project.contents}>
-              <h2>{words.project.contents}</h2>
-              {[
-                ["purpose", purpose.title],
-                ["tools", tools.title],
-                ["open-source", open.title],
-                ["future", future.title],
-                ["funding", services.title],
-              ].map(([id, title]) => (
-                <a key={id} href={`#${id}`}>
-                  {title}
-                  <ArrowRight aria-hidden="true" />
-                </a>
-              ))}
-            </nav>
+            <section className="about-contact-desktop" aria-label={words.contactTitle}>
+              {contacts()}
+            </section>
             <section className="about-contribute">
               <h2>{words.project.contribute}</h2>
               <p>{words.project.contributeText}</p>
               <a href={`${siteConfig.repository}/issues`}>
                 {words.project.issues}
-                <ArrowRight aria-hidden="true" />
-              </a>
-              <a href={siteConfig.contacts.telegram}>
-                Telegram
                 <ArrowRight aria-hidden="true" />
               </a>
             </section>

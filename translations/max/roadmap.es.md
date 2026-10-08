@@ -6,6 +6,7 @@ Planes para `max`. El orden es orientativo y puede cambiar. Puedes proponer idea
 
 ## Próximamente
 
+
 - **Copia local opcional.** Un ajuste para que `max` no guarde nada en disco y consulte siempre MAX.
 
 ## Más adelante
@@ -13,4 +14,5 @@ Planes para `max`. El orden es orientativo y puede cambiar. Puedes proponer idea
 - **Acciones por evento.** Ejecutar tu propio comando cuando llegue un mensaje nuevo.
 - **Videomensajes circulares** y **establecer o eliminar la contraseña en la nube**.
 - **Instaladores** para cada plataforma, sin Node ni Bun.
-- **Vaciar y eliminar chats de tu propia cuenta**, con permiso explícito; no los elimina para todos.
+
+La transferencia de archivos guardados a agentes remotos está implementada: [adjuntos](./attachments.md#файл-для-удалённого-агента).

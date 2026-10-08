@@ -426,6 +426,17 @@ max contacts import книжка.csv              # строка: номер, з
 max account update --description "о себе"   # имя остаётся прежним
 max account update --photo портрет.png      # новое фото профиля
 max account sessions list                   # где ещё выполнен вход
+max account privacy show                    # кто находит по номеру, звонит, добавляет в чаты
+max stickers list                           # наборы стикеров; --set <id> — стикеры набора с их id
+max messages send 0 --sticker 51            # стикер, один, без текста
+max account privacy set --calls contacts    # звонить могут только контакты; остальное не меняется
+max account privacy set --hide-online on    # скрыть «в сети» и «был недавно»
+max chats mute "Поход"                      # без уведомлений из чата, насовсем
+max chats mute "Поход" --until 8h           # на 8 часов; или до даты: --until 2026-10-09T09:00
+max chats unmute "Поход"
+max chats clear "Поход" --allow-dangerous   # удалить все сообщения у себя; у остальных останутся
+max chats delete "Поход" --allow-dangerous  # удалить чат у себя; у остальных он останется
+max calls list                              # звонки, новые сверху
 max account sessions end --others --yes     # выйти везде, кроме этого сеанса — и на телефоне
 max chats folders list
 max chats folders create "Работа" --chat -1000 --chat "Проект"
@@ -441,6 +452,16 @@ Contact changes return `operationId` in JSON. `add` and `rename` also return `pe
 `chats folders create` and `update` return `{operationId, folder}` in JSON; `delete` returns `{operationId, folderId}`. `list` returns a page of folders. `update` requires at least one change: `--title`, `--add` or `--remove`. Identify a folder by ID or exact name; if names repeat, use its ID from `list`.
 
 `account update` returns `{operationId, account}` in JSON. The record contains `id`, `name`, `username` (`null` for MAX) and a masked `phone`. Read the description after a change with `account show`. Profile photos must be JPG, JPEG, PNG or WebP. `account sessions end --others --yes` returns `{operationId, sessions}`, the sessions that remain. If ending sessions succeeds but saving the new token or reading remaining sessions fails, the command reports an error while the journal records the completed action.
+
+### Chat media
+
+```sh
+max chats media "Поход"                           # фото, видео, файлы, аудио и ссылки, как галерея в MAX
+max chats media "Поход" --type photo,video        # только фото и видео
+max chats media "Поход" --before-id <id>          # то, что старше этого сообщения
+```
+
+The list comes from the MAX server, including media not downloaded to this computer. Reading marks nothing as read.
 
 ### Photos, video, files and voice messages
 
@@ -689,6 +710,6 @@ max stats charts synthetic-group --chart-kind messages --by day --timezone Europ
 
 JSON contains `chart`; when saving an image, it also contains `chartFile` with its path and size. Images are written only to new files, without overwriting. Missing dates remain gaps; incomplete data is marked in the description and image. `membership` requires online chat events and is unavailable with `--offline`. MCP `max_read` (`command: "stats charts"`) returns JSON from local storage without connecting or writing files; `format: "png"` adds a PNG image and JSON with `chart` and the size of `image`. Joins and leaves are unavailable there. Reading follows `messages` permission. `--jsonl` and images in stdout are unavailable.
 
-![Chart using fictional data](https://raw.githubusercontent.com/leemour/max-cli/v0.34.0/docs/images/stats-charts.png)
+![Chart using fictional data](https://raw.githubusercontent.com/leemour/max-cli/v0.36.0/docs/images/stats-charts.png)
 
 Message and author rankings: [metrics, scores and evidence](./rankings.md).

@@ -6,6 +6,7 @@ Plans for `max`. The order is approximate and may change. Suggest ideas in [GitH
 
 ## Coming soon
 
+
 - **Optional local storage.** A setting that makes `max` save nothing to disk and retrieve everything from MAX.
 
 ## Later
@@ -13,4 +14,5 @@ Plans for `max`. The order is approximate and may change. Suggest ideas in [GitH
 - **Event-triggered actions.** Run your own command when a new message arrives.
 - **Video notes**, **setting and removing a cloud password**.
 - **Installers** for each platform, without Node or Bun.
-- **Clear and delete chats for your own account**, with explicit permission; this does not delete them for everyone.
+
+Retained file transfer to remote agents is implemented: [attachments](./attachments.md#файл-для-удалённого-агента).

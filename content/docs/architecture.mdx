@@ -262,3 +262,16 @@ MAX publishes no API for personal accounts, so max carries more of its own code 
 - MAX: max's [ARCHITECTURE.md](https://github.com/leemour/max-cli/blob/fff19ff/docs/dev/ARCHITECTURE.md)
   and the [protocol notes](https://github.com/leemour/max-cli/blob/fff19ff/docs/dev/protocol.md).
 - Questions: the [support chat](https://t.me/wirecatdev).
+
+## Agent evaluation evidence
+
+The architecture above describes the 4 October snapshot. The separately dated [8 October evaluation](https://github.com/leemour/cli-messaging/blob/main/docs/dev/evaluations/2026-10-08-independent-stats-agent-evaluation.md)
+records its own SDK versions, synthetic fixtures, model-context boundaries, initial failures and
+CLI/MCP observations. Its six contexts contain 38 assessed outcomes; shared tasks make those
+outcomes correlated, and they do not establish live adapter or general agent conformance.
+The original exact model identity was not captured and MCP used a shell proxy.
+
+[Reproduction tooling](https://github.com/leemour/cli-messaging/tree/main/scripts/evals) belongs to cli-messaging. Record the model ID, runner and SDK
+versions, fixture clock/seed, prompts and first failures when comparing a new run. Deterministic
+transport/fixture tests and independent model trials are separate evidence. The [security guide](./security.md)
+explains what readers should check before trusting an agent's statistics answer.

@@ -87,6 +87,7 @@ cron no tiene terminal y a menudo no define `XDG_RUNTIME_DIR`, sin la cual `tg` 
 | `tg chats members add\|remove <chat> <person...>` | añadir personas (se les notifica y se indica quién no pudo añadirse) o eliminarlas (sus mensajes permanecen) |
 | `tg chats admins add <chat> <person> --can <rights>` | convertir a un miembro en administrador con estos permisos: members, admins, info, pin, link, post, edit, delete |
 | `tg chats admins remove <chat> <person>` | retirar permisos de administrador; sigue siendo miembro |
+| `tg chats link update <chat> <link> --approval\|--no-approval --expire-time <time> --max-uses <n>` | cambia solo la aprobación, caducidad o límite de usos indicados de tu enlace adicional; indica al menos un cambio |
 | `tg chats link show\|reset <chat>` | consultar el enlace de invitación; `reset` crea otro y el anterior deja de funcionar |
 | `tg messages delete --for-everyone`, `pin`, `unpin` | eliminar para todos o fijar mensajes |
 
