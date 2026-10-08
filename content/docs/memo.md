@@ -32,7 +32,7 @@ Obsidian is the default format; use `--format markdown` for ordinary Markdown li
 ```sh
 memo folders add /path/to/vault
 memo notes import --no-embed
-memo notes search 'budget' --json
+memo search notes 'budget' --json
 ```
 
 The first command prints a folder ID. Import copies the notes into the local store without
@@ -104,10 +104,10 @@ The agent can use these commands to gather person context or search across impor
 
 ```sh
 memo context telegram:"Rin Example" --json
-memo search 'budget' --all --json
+memo search all 'budget' --json
 ```
 
-`--all` explicitly searches every stored account and imported notes. Check the returned source
+`search all` searches messages, mail and notes together; `skipped` names any kind it could not search. Check the returned source
 references and coverage before relying on an answer. Missing history, mail outside the imported
 window or unresolved note links can leave the result incomplete. Add `--account <id>` to
 `context` when several accounts of that provider exist.

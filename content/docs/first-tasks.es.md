@@ -72,7 +72,7 @@ periodo. No envíes nada.
 ```sh
 tg chats list --search Atlas --kind group
 tg store status -1001001001001
-tg messages search 'analytics after:2026-09-01 before:2026-10-01' --chat -1001001001001 --json --language legacy
+tg search messages 'analytics after:2026-09-01 before:2026-10-01' --chat -1001001001001 --json --language legacy
 ```
 
 **Agente**
@@ -93,7 +93,7 @@ dime qué queda.
 ```sh
 tg store fetch -1001001001001 --since-time 2026-09-01 --limit 1000
 tg store status -1001001001001
-tg messages search 'analytics after:2026-09-01 before:2026-10-01' --chat -1001001001001 --json --language legacy
+tg search messages 'analytics after:2026-09-01 before:2026-10-01' --chat -1001001001001 --json --language legacy
 tg messages context -1001001001001 4312 --before-n 2 --after-n 4
 ```
 
@@ -112,7 +112,7 @@ Una descarga desde septiembre también lee el historial más reciente por el cam
 de la búsqueda reducen el resultado a septiembre.
 
 **Por qué estos comandos:** `messages list` lee una ventana de mensajes y la guarda en local;
-`store fetch` carga un tramo de historial más largo. `messages search` busca solo en lo guardado.
+`store fetch` carga un tramo de historial más largo. `search messages` busca solo en lo guardado.
 `messages context` comprueba qué se dijo alrededor de un resultado. Ni los últimos 20 mensajes ni
 una búsqueda local vacía demuestran que se haya revisado un mes. [Archivo y búsqueda](./tg/archive.md).
 

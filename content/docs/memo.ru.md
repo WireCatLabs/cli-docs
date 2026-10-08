@@ -35,7 +35,7 @@ memo --version
 ```sh
 memo folders add /path/to/vault
 memo notes import --no-embed
-memo notes search 'budget' --json
+memo search notes 'budget' --json
 ```
 
 Первая команда выводит ID папки. Импорт копирует заметки в локальное хранилище,
@@ -109,10 +109,10 @@ memo mail import --account gmail --since 2026-09-01 --json
 
 ```sh
 memo context telegram:"Rin Example" --json
-memo search 'budget' --all --json
+memo search all 'budget' --json
 ```
 
-`--all` явно включает все сохранённые аккаунты и импортированные заметки. Проверьте ссылки
+`search all` ищет сразу в сообщениях, почте и заметках; `skipped` называет то, где искать не удалось. Проверьте ссылки
 на источники и охват данных, прежде чем полагаться на ответ. Недостающая история, письма
 за пределами периода импорта и неразрешённые ссылки в заметках могут сделать результат
 неполным. Добавьте `--account <id>` к `context`, если сохранено несколько аккаунтов

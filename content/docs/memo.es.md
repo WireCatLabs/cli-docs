@@ -33,7 +33,7 @@ Obsidian es el formato predeterminado; usa `--format markdown` para enlaces Mark
 ```sh
 memo folders add /path/to/vault
 memo notes import --no-embed
-memo notes search 'budget' --json
+memo search notes 'budget' --json
 ```
 
 La primera orden muestra el ID de la carpeta. La importación copia las notas al almacén local
@@ -106,10 +106,10 @@ El agente puede reunir contexto de una persona o buscar en las fuentes importada
 
 ```sh
 memo context telegram:"Rin Example" --json
-memo search 'budget' --all --json
+memo search all 'budget' --json
 ```
 
-`--all` incluye explícitamente todas las cuentas almacenadas y las notas importadas. Revisa las
+`search all` busca a la vez en mensajes, correo y notas; `skipped` indica dónde no se pudo buscar. Revisa las
 referencias y la cobertura antes de confiar en una respuesta. El historial que falta, el correo
 fuera del periodo importado o los enlaces de notas sin resolver pueden dejar un resultado incompleto.
 Añade `--account <id>` a `context` si hay varias cuentas almacenadas del mismo proveedor.

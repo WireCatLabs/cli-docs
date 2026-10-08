@@ -62,7 +62,7 @@ Guías: [grupos de Telegram](./tg/groups.md) · [grupos de MAX](./max/groups.md)
 | Qué puedes hacer | Comandos |
 |---|---|
 | Guardar un archivo local de los chats que elijas | `store fetch` |
-| Buscar en él sin conexión por palabras, remitente, fecha y chat, con tolerancia a errores de escritura | `messages search` |
+| Buscar en él sin conexión por palabras, remitente, fecha y chat, con tolerancia a errores de escritura | `search messages` |
 | Separar los hilos de un grupo con mucha actividad por respuestas y menciones | `conversations` |
 | Exportar un chat como Markdown o líneas JSON; hacer una copia de seguridad de todo el archivo | `store export`, `store backup` |
 | Los mensajes sin leer de todos los chats en una sola lista | `inbox` |
