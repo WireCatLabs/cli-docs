@@ -27,7 +27,7 @@ const pages = {
   ru: {
     bot: {
       intro:
-        "Подключите своего бота, чтобы отвечать от его имени, публиковать сообщения и добавлять кнопки. У бота отдельные доступ и чаты: он не получает вашу личную переписку. Начните с проверки бота, затем подготовьте первое сообщение; настройка и команды видны ниже.",
+        "Настройте бота для объявлений и ответов: проверьте доступ к нужному чату, подготовьте сообщение с кнопками и выберите способ получения новых сообщений. Начните с запроса ниже; команды подключения приведены в разделе «Команды и инструкции».",
       sections: [
         [
           "bot-check",
@@ -73,7 +73,7 @@ const pages = {
   en: {
     bot: {
       intro:
-        "Connect your bot to reply in its name, publish messages and add buttons. Bots have separate access and chats; they do not receive your private conversations. Check the bot first, then prepare a message. Setup and commands are visible below.",
+        "Set up your bot for announcements and replies: check access to the right chat, prepare a message with buttons and choose how to receive new messages. Start with the request below; connection commands follow under Commands and instructions.",
       sections: [
         [
           "bot-check",
@@ -119,7 +119,7 @@ const pages = {
   es: {
     bot: {
       intro:
-        "Conecta tu bot para responder en su nombre, publicar y añadir botones. Tiene sus propios chats y acceso; no recibe conversaciones privadas. Primero comprueba el bot y después prepara un mensaje. La configuración y los comandos están visibles abajo.",
+        "Configura tu bot para anuncios y respuestas: comprueba acceso al chat, prepara un mensaje con botones y elige cómo recibir mensajes nuevos. Empieza con la petición siguiente; la conexión se explica en Comandos e instrucciones.",
       sections: [
         [
           "bot-check",
@@ -172,6 +172,20 @@ export function roleGuide(tool: string, page: string, lang: string) {
   const data = pages[locale][page]
   return {
     title: labels[locale][page],
+    description: {
+      ru: {
+        bot: "Подключение бота, публикации, кнопки и работа с его чатами.",
+        groups: "Участники, права администратора, настройки группы и проверка спама.",
+      },
+      en: {
+        bot: "Connect a bot, publish messages, add buttons and work with its chats.",
+        groups: "Members, administrative permissions, group settings and spam checks.",
+      },
+      es: {
+        bot: "Conexión del bot, publicaciones, botones y gestión de sus chats.",
+        groups: "Miembros, permisos administrativos, ajustes y revisión del spam.",
+      },
+    }[locale][page],
     intro: data.intro,
     sections: data.sections.map(
       ([id, title, prompt, result, target, link]): ReportTask => ({

@@ -238,7 +238,7 @@ export function readerGuide(slugs: string[], lang: string) {
   }
   return {
     title: role?.title ?? (rankings ? titles[locale][1] : roles.usage),
-    description: `${slugs[0] === "tg" ? "Telegram" : "MAX"}: ${role?.intro ?? descriptions[locale][rankings ? 1 : 0]}`,
+    description: `${slugs[0] === "tg" ? "Telegram" : "MAX"}: ${role?.description ?? descriptions[locale][rankings ? 1 : 0]}`,
     intro:
       role?.intro ??
       (rankings

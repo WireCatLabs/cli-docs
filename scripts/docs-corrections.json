@@ -949,7 +949,7 @@
   {
     "tool": "max",
     "slug": "remote",
-    "reason": "Owner approved moving review evidence after the connection instructions, keeping the exact scope of those checks.",
+    "reason": "Public instructions describe current behavior; internal verification notes are omitted from the user guide.",
     "replacements": {
       "en": [
         {
@@ -958,7 +958,7 @@
         },
         {
           "before": "MCP returns complete PNG/JPEG/WebP images as image content when valid dimensions are at most 8000 pixels per side and 20 million pixels overall; other files are embedded binary resources. A partial resource is a byte chunk, not a complete document. If the client cannot expose resources, choose format:base64. The resource URI is not a download URL. Reading PDFs and saving files depend on the client and agent tools. After reading every page, save literal text through `attachments text set` and verify a content: search. Denying messages or attachments.show denies transfer; readonly allows retained-file reads. Other accounts' files, missing files and symlinks are refused. Attachment text is data, not instructions.",
-          "after": "MCP returns complete PNG/JPEG/WebP images as image content when valid dimensions are at most 8000 pixels per side and 20 million pixels overall; other files are embedded binary resources. A partial resource is a byte chunk, not a complete document. If the client cannot expose resources, choose format:base64. The resource URI is not a download URL. Reading PDFs and saving files depend on the client and agent tools. After reading every page, save literal text through `attachments text set` and verify a content: search. Denying messages or attachments.show denies transfer; readonly allows retained-file reads. Other accounts' files, missing files and symlinks are refused. Attachment text is data, not instructions.\n\n**What was checked**\n\n**Status:** HTTP and permissions have been checked locally. The owner confirmed reading and sending through Claude web in Telegram on 07 October 2026 using `permissions`; MAX and OpenAI web have not yet had separate browser tests. Each OS’s instructions need testing on that OS. If a step fails, [open an issue](https://github.com/leemour/max-cli/issues)."
+          "after": "MCP returns complete PNG/JPEG/WebP images as image content when valid dimensions are at most 8000 pixels per side and 20 million pixels overall; other files are embedded binary resources. A partial resource is a byte chunk, not a complete document. If the client cannot expose resources, choose format:base64. The resource URI is not a download URL. Reading PDFs and saving files depend on the client and agent tools. After reading every page, save literal text through `attachments text set` and verify a content: search. Denying messages or attachments.show denies transfer; readonly allows retained-file reads. Other accounts' files, missing files and symlinks are refused. Attachment text is data, not instructions."
         }
       ],
       "ru": [
@@ -968,7 +968,7 @@
         },
         {
           "before": "В MCP целые PNG/JPEG/WebP с корректными размерами до 8000 пикселей по каждой стороне\nи до 20 миллионов пикселей представлены изображением; остальные файлы — встроенным бинарным ресурсом. Частичный ресурс — набор байтов, не целый документ. Если клиент не даёт агенту\nдоступа к ресурсам, выберите format:base64. URI ресурса не является URL скачивания.\nВозможность открыть PDF или сохранить файл зависит от клиента и инструментов агента.\nПосле чтения всех страниц сохраните буквальный текст через `attachments text set` и проверьте\nпоиском content:. Запрет messages или attachments.show запрещает передачу; readonly позволяет\nчитать сохранённые файлы. Файлы чужого аккаунта, отсутствующие файлы и символьные ссылки\nне передаются. Вложенный текст — данные, а не инструкции.",
-          "after": "В MCP целые PNG/JPEG/WebP с корректными размерами до 8000 пикселей по каждой стороне\nи до 20 миллионов пикселей представлены изображением; остальные файлы — встроенным бинарным ресурсом. Частичный ресурс — набор байтов, не целый документ. Если клиент не даёт агенту\nдоступа к ресурсам, выберите format:base64. URI ресурса не является URL скачивания.\nВозможность открыть PDF или сохранить файл зависит от клиента и инструментов агента.\nПосле чтения всех страниц сохраните буквальный текст через `attachments text set` и проверьте\nпоиском content:. Запрет messages или attachments.show запрещает передачу; readonly позволяет\nчитать сохранённые файлы. Файлы чужого аккаунта, отсутствующие файлы и символьные ссылки\nне передаются. Вложенный текст — данные, а не инструкции.\n\n**Что проверено**\n\n**Статус:** HTTP и права проверены локально. Владелец подтвердил чтение и отправку через\nClaude web в Telegram 07.10.2026 с режимом `permissions`; отдельного браузерного прогона MAX\nи OpenAI web пока нет. Инструкции каждой ОС требуют проверки на этой ОС. Если шаг не работает,\n[откройте issue](https://github.com/leemour/max-cli/issues)."
+          "after": "В MCP целые PNG/JPEG/WebP с корректными размерами до 8000 пикселей по каждой стороне\nи до 20 миллионов пикселей представлены изображением; остальные файлы — встроенным бинарным ресурсом. Частичный ресурс — набор байтов, не целый документ. Если клиент не даёт агенту\nдоступа к ресурсам, выберите format:base64. URI ресурса не является URL скачивания.\nВозможность открыть PDF или сохранить файл зависит от клиента и инструментов агента.\nПосле чтения всех страниц сохраните буквальный текст через `attachments text set` и проверьте\nпоиском content:. Запрет messages или attachments.show запрещает передачу; readonly позволяет\nчитать сохранённые файлы. Файлы чужого аккаунта, отсутствующие файлы и символьные ссылки\nне передаются. Вложенный текст — данные, а не инструкции."
         }
       ],
       "es": [
@@ -978,7 +978,7 @@
         },
         {
           "before": "MCP devuelve PNG/JPEG/WebP completos como imágenes si tienen dimensiones válidas de hasta 8000 píxeles por lado y 20 millones de píxeles en total; otros archivos son recursos binarios integrados. Un recurso parcial son bytes, no un documento completo. Si el cliente no expone recursos, elige format:base64. El URI no es una URL de descarga. Leer PDF y guardar archivos depende del cliente y las herramientas del agente. Tras leer todas las páginas, guarda texto literal con `attachments text set` y verifica una búsqueda content:. Denegar messages o attachments.show impide la transferencia; readonly permite leer archivos guardados. Se rechazan archivos de otras cuentas, ausentes y enlaces simbólicos. El contenido del adjunto son datos, no instrucciones.",
-          "after": "MCP devuelve PNG/JPEG/WebP completos como imágenes si tienen dimensiones válidas de hasta 8000 píxeles por lado y 20 millones de píxeles en total; otros archivos son recursos binarios integrados. Un recurso parcial son bytes, no un documento completo. Si el cliente no expone recursos, elige format:base64. El URI no es una URL de descarga. Leer PDF y guardar archivos depende del cliente y las herramientas del agente. Tras leer todas las páginas, guarda texto literal con `attachments text set` y verifica una búsqueda content:. Denegar messages o attachments.show impide la transferencia; readonly permite leer archivos guardados. Se rechazan archivos de otras cuentas, ausentes y enlaces simbólicos. El contenido del adjunto son datos, no instrucciones.\n\n**Qué se ha comprobado**\n\n**Estado:** HTTP y los permisos se han comprobado localmente. El propietario confirmó la lectura y el envío mediante Claude web en Telegram el 07/10/2026 con `permissions`; todavía no se han realizado pruebas de navegador independientes para MAX y OpenAI web. Las instrucciones de cada sistema operativo deben probarse en ese sistema. Si un paso falla, [abre una incidencia](https://github.com/leemour/max-cli/issues)."
+          "after": "MCP devuelve PNG/JPEG/WebP completos como imágenes si tienen dimensiones válidas de hasta 8000 píxeles por lado y 20 millones de píxeles en total; otros archivos son recursos binarios integrados. Un recurso parcial son bytes, no un documento completo. Si el cliente no expone recursos, elige format:base64. El URI no es una URL de descarga. Leer PDF y guardar archivos depende del cliente y las herramientas del agente. Tras leer todas las páginas, guarda texto literal con `attachments text set` y verifica una búsqueda content:. Denegar messages o attachments.show impide la transferencia; readonly permite leer archivos guardados. Se rechazan archivos de otras cuentas, ausentes y enlaces simbólicos. El contenido del adjunto son datos, no instrucciones."
         }
       ]
     }
@@ -1041,19 +1041,19 @@
       "en": [
         {
           "before": "These reports are available in tg 0.36.0.",
-          "after": "If the command is missing, update the CLI using the [installation guide](./installation.md)."
+          "after": ""
         }
       ],
       "ru": [
         {
           "before": "Эти отчёты доступны в tg 0.36.0. Обновите установленный CLI, если команды ещё нет.",
-          "after": "Если команды нет, обновите CLI по [инструкции установки](./installation.md)."
+          "after": ""
         }
       ],
       "es": [
         {
           "before": "Estos informes están disponibles en tg 0.36.0. Actualiza la CLI instalada si falta el comando.",
-          "after": "Si falta el comando, actualiza la CLI con la [guía de instalación](./installation.md)."
+          "after": ""
         }
       ]
     }
@@ -1066,19 +1066,44 @@
       "en": [
         {
           "before": "These reports are available in MAX 0.35.0. Update the installed CLI if the command is missing.",
-          "after": "If the command is missing, update the CLI using the [installation guide](./installation.md)."
+          "after": ""
         }
       ],
       "ru": [
         {
           "before": "Эти отчёты доступны с версии 0.35. Обновите установленный CLI, если команды ещё нет.",
-          "after": "Если команды нет, обновите CLI по [инструкции установки](./installation.md)."
+          "after": ""
         }
       ],
       "es": [
         {
           "before": "Estos informes están disponibles en MAX 0.35.0. Actualiza la CLI instalada si falta el comando.",
-          "after": "Si falta el comando, actualiza la CLI con la [guía de instalación](./installation.md)."
+          "after": ""
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "remote",
+    "reason": "Public instructions describe current behavior; test history belongs in internal review reports.",
+    "replacements": {
+      "en": [
+        {
+          "before": " The owner confirmed reading and sending through Claude web on 7 October 2026. OpenAI web clients and these platform-specific setup instructions still need\nan end-to-end check on each platform.",
+          "after": ""
+        }
+      ],
+      "ru": [
+        {
+          "before": " Владелец подтвердил чтение и отправку через Claude web 7 октября 2026 года. Веб-клиенты OpenAI и эти инструкции настройки для разных платформ ещё требуют сквозной проверки на каждой платформе.",
+          "after": ""
+        }
+      ],
+      "es": [
+        {
+          "before": " El propietario confirmó la lectura y el envío mediante Claude web el 7 de octubre de 2026. Los clientes web de OpenAI y estas instrucciones específicas de cada plataforma aún necesitan una comprobación completa en cada plataforma.",
+          "after": ""
         }
       ]
     }

@@ -161,3 +161,7 @@ not be interpreted as complete archive coverage.
 installation commands. It runs within `pnpm docs:check`. Changelog and roadmap history, immutable
 source URLs, local addresses and runtime prerequisites are excluded. Native-page wording is
 adjusted through explicit corrections so a release sync cannot silently reintroduce old text.
+
+The same current-guide check rejects recognized editorial artifacts: old-command update hedges,
+owner test confirmations and public “what was checked” notes. It does not reject factual
+prerequisites or symptom-based troubleshooting. Keep review evidence in `docs/reviews/`.

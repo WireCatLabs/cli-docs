@@ -206,3 +206,22 @@ commands beside report examples and retain detailed native references visibly be
 Report examples should cover group information, participant/post rankings, person context and
 anti-bot signals when the reviewed tool supports them. Explain the chosen metric and the next
 useful action, not only how many items were counted.
+
+## Publish facts, not editorial history
+
+Public guides assume the current tool version. State supported behavior and the steps to use it.
+Remove “if this command is missing, update”, “we have not tested this”, “the owner confirmed”,
+“this still needs a platform check”, and explanations of how an author reached the wording.
+Review dates, test provenance, uncertainties and unfinished research belong in internal reports.
+When a capability lacks evidence, omit the claim and document the supported path.
+
+Keep actual prerequisites and observable behavior: account permissions, supported clients,
+required indexes, archive coverage and defined errors. Explain these as concrete conditions or
+recovery steps rather than a vague “it may not work”. Do not invent support or hide a factual
+limitation to make prose sound confident. Installation/update instructions belong on their task
+pages; unrelated feature guides should not hedge around obsolete releases.
+
+Give metadata and the opening different jobs. The short description helps readers choose a
+page; the opening explains their task and result. Never reuse the opening as the description.
+Check the rendered page, including portal introductions and native text, for adjacent repetitions.
+A shared reader layer must add useful orientation, not repeat the native explanation.
