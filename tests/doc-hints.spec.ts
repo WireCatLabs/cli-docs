@@ -135,7 +135,7 @@ for (const lang of languages) {
       { label: "skill", page: "agents" },
       { label: "MCP", page: "mcp" },
     ]
-    await expect(page.locator(".docs-term-trigger")).toHaveCount(4)
+    await expect(page.locator(".docs-term-trigger")).toHaveCount(5)
     for (const definition of definitions) {
       const prefix = { en: "More about", ru: "Подробнее", es: "Más sobre" }[lang]
       const trigger = page.getByRole("button", { name: `${prefix}: ${definition.label}`, exact: true })

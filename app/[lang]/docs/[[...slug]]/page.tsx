@@ -18,7 +18,7 @@ import { DocsTocPopover } from "@/components/docs-toc-popover"
 import { getMDXComponents } from "@/components/mdx"
 import { StructuredData } from "@/components/structured-data"
 import { installationReferenceTitle, ToolInstallationIntro } from "@/components/tool-installation-intro"
-import { guideOrientation } from "@/lib/guide-orientation"
+import { guideOrientation, guideStartLink } from "@/lib/guide-orientation"
 import { commandReferences } from "@/lib/remark-doc-usability"
 import {
   documentationDescription,
@@ -137,6 +137,11 @@ export default async function Page(props: Props) {
         {guideOrientation(page.slugs, lang) && (
           <p data-guide-orientation lang={lang}>
             {guideOrientation(page.slugs, lang)}
+          </p>
+        )}
+        {guideStartLink(page.slugs, lang) && (
+          <p lang={lang}>
+            <Link href={guideStartLink(page.slugs, lang)?.href ?? ""}>{guideStartLink(page.slugs, lang)?.label} →</Link>
           </p>
         )}
         {guide === "installation" && tool && <ToolInstallationIntro tool={tool} lang={lang} />}

@@ -7,7 +7,7 @@ Tu cuenta está conectada. Pide al agente que encuentre un mensaje, resuma una c
 prepare una respuesta. Describe lo que necesitas; el agente elige los comandos.
 
 Si aún falta configurar algo, empieza por [instalación](./installation.mdx) o
-[conectar al agente](./agents.md). Puedes ver el proceso antes de probarlo en [Demo](./meeting-brief.mdx).
+[conectar al agente](./agents.mdx). Puedes ver el proceso antes de probarlo en [Demo](./meeting-brief.mdx).
 
 
 <a id="ejemplos-más-largos" />
@@ -73,4 +73,4 @@ Prueba el escenario de reunión en [Demo](./meeting-brief.mdx), luego usa tu pro
 
 La respuesta debe indicar los chats y el periodo revisados, los mensajes que respaldan los hechos importantes y el historial que falta. Si no lo hace, pide una aclaración.
 
-[Más ejemplos de peticiones](./prompting.md) · [Ayuda de Telegram](./tg/troubleshooting.md) · [Ayuda de MAX](./max/troubleshooting.md)
+[Más ejemplos de peticiones](./prompting.mdx) · [Ayuda de Telegram](./tg/troubleshooting.md) · [Ayuda de MAX](./max/troubleshooting.md)

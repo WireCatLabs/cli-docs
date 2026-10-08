@@ -3,8 +3,7 @@ title: "Profiles and bots"
 description: "Keep accounts, bot logins and their settings separate."
 ---
 
-A profile gives an account or bot a name and its own settings. Use it when you have more than
-one account, want separate assistant permissions, or work with a bot.
+Use profiles when you have multiple accounts, a bot or different access settings for your assistants. A profile gives an account or bot a name and its own settings. This page shows how to choose the right one and distinguish a bot command from a personal-account command.
 
 ## Choose a profile
 
@@ -30,10 +29,10 @@ max support bot api get-my-info --json
 ```
 
 These commands require an already connected bot profile. The bot's account and rights come
-from the messenger, not from your personal account. [Bots](./bot-api.md) explains setup and examples.
+from the messenger, not from your personal account. [Bots](./bot-api.mdx) explains setup and examples.
 
 ## Settings and access
 
-[Configuration](./configuration.md) explains saved values, environment variables and flags.
-[Permissions](./permissions.md) controls what each profile may do.
+[Configuration](./configuration.mdx) explains saved values, environment variables and flags.
+[Permissions](./permissions.mdx) controls what each profile may do.
 For login, use the [Telegram](./tg/sessions.md) or [MAX](./max/sessions.md) guide.

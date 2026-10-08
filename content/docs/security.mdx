@@ -3,12 +3,11 @@ title: Security
 description: Control the assistant's access, understand where your messages go, and know the limits of those controls.
 ---
 
-WireCat works with your own Telegram or MAX account. Start with reading, decide which actions
-you want to allow, and keep your computer and account login private.
+Connecting WireCat gives an assistant a way to work with your Telegram or MAX account. This page helps you decide which actions to allow, understand where messages and login data are stored, and check the limits of these protections. Start with reading and expand access when a task needs it.
 
 ## Decide what the assistant can do
 
-[Permissions](./permissions.md) can let an assistant read, ask before changing something, or
+[Permissions](./permissions.mdx) can let an assistant read, ask before changing something, or
 refuse an action. You can also restrict recipients and set an hourly send limit. These controls
 are useful for preventing a mistaken send or a loop that sends too many messages.
 
@@ -20,7 +19,7 @@ Reading messages does not mark them as read; that is a separate action.
 
 ## Where your information goes
 
-The tools run on your computer and connect to your messenger. They keep a local copy of the
+The tools run on your computer and connect to your messenger. They keep <DocTerm term="local-archive" lang="en" label="a local copy" /> of the
 messages they read, so search and summaries can use that history later.
 
 Your chosen AI assistant receives the messages you ask it to work with. If you use an online
@@ -51,6 +50,8 @@ The local message store is not encrypted by the tools. Signing out or uninstalli
 necessarily remove that copy. Review stored data and exports separately when retiring a computer.
 
 ## What the evaluations establish
+
+<DocTerm term="evals" lang="en" label="Agent evaluations" /> check how an assistant uses sources and permissions on test tasks. Below is one published evaluation and its limits.
 
 When you ask for a statistics answer, request the messages or member observations behind it and
 check which history is missing. Unknown counts are not zero, and missing history does not prove

@@ -1,5 +1,26 @@
 const purpose = {
   en: {
+    people:
+      "Identify a person and recover what you have discussed before replying. This guide explains the available context, account signals and the limits of incomplete history.",
+    remote:
+      "Connect your messenger tools to a chat in a browser or an assistant on another device. This page gives the messenger-specific startup and file-transfer details; use the shared guide below for your first connection.",
+    mcp: "This is the technical reference for connecting a client to this messenger through MCP. Use it to check tools, settings and permissions; the shared guide below helps you choose and set up a connection first.",
+    configuration:
+      "Keep settings you would otherwise repeat on every command. This guide explains their locations and priority so you can change a value and check which setting takes effect.",
+    "configuration-reference":
+      "Use this reference to look up an exact setting name, default or environment variable. For a first change, start with the settings guide below.",
+    permissions:
+      "Choose which actions your assistant may perform for this account or bot. Check the access level, recipient restrictions and confirmation behavior before enabling changes.",
+    profiles:
+      "Choose the right account or bot when you have more than one. This guide explains named profiles and their settings so a task runs with the intended account.",
+    rankings:
+      "Use saved history to understand activity and find discussions needing attention. This page explains reports, sources and missing data; a low count in an incomplete archive is not a verdict about a person.",
+    "cli-contract":
+      "This reference is for script authors and agents: output formats, errors, permissions and command discovery. For ordinary messenger tasks, begin with the shared task guide below.",
+    limits:
+      "Understand why the messenger asks a command to wait and what you can check before retrying. This guide distinguishes messenger rate limits from your own sending limits.",
+    replies:
+      "Configure and test rules for replying to test accounts. This is a limited automatic-response workflow; the guide explains the allowed audience, permissions and how to stop it.",
     sessions:
       "Connect the tool to your messenger account so your agent can read the chats you choose and help with replies. This guide explains login, checking the connection and managing or ending a session. Login adds an authorised device; it does not download all your chat history.",
     usage:
@@ -23,6 +44,27 @@ const purpose = {
       "See what is planned and what is still unavailable. These are development priorities rather than promised dates; the changelog records what has actually shipped.",
   },
   ru: {
+    people:
+      "Вспомните, кто вам написал и что вы обсуждали, прежде чем отвечать. Здесь описаны доступный контекст, признаки аккаунта и ограничения неполной истории.",
+    remote:
+      "Подключите инструменты мессенджера к чату в браузере или ассистенту на другом устройстве. Здесь — особенности запуска и передачи файлов для этого мессенджера; для первого подключения начните с пошаговой инструкции ниже.",
+    mcp: "Это техническая справка по подключению клиента к этому мессенджеру через MCP. Здесь можно проверить инструменты, настройки и права; выбрать и настроить первое подключение поможет общая инструкция ниже.",
+    configuration:
+      "Сохраните настройки, которые иначе пришлось бы повторять в каждой команде. Здесь описаны их расположение и приоритет, чтобы изменить значение и проверить, какая настройка действует.",
+    "configuration-reference":
+      "В этом справочнике можно найти точное имя настройки, значение по умолчанию или переменную окружения. Для первого изменения начните с руководства по настройкам ниже.",
+    permissions:
+      "Выберите действия, разрешённые ассистенту для этого аккаунта или бота. Перед изменениями проверьте уровень доступа, ограничения получателей и порядок подтверждений.",
+    profiles:
+      "Выберите нужный аккаунт или бота, если их несколько. Здесь описаны именованные профили и их настройки, чтобы задача выполнялась от нужного аккаунта.",
+    rankings:
+      "По сохранённой истории оцените активность и найдите обсуждения, которым нужно внимание. Здесь объясняются отчёты, источники и пропуски данных; малое число сообщений в неполном архиве не является оценкой человека.",
+    "cli-contract":
+      "Этот справочник предназначен для авторов скриптов и агентов: форматы ответа, ошибки, права и поиск команд. Для обычных задач с мессенджером начните с руководства ниже.",
+    limits:
+      "Разберитесь, почему мессенджер просит команду подождать и что проверить перед повтором. Здесь объясняется разница между ограничениями мессенджера и вашими лимитами отправки.",
+    replies:
+      "Настройте и проверьте правила ответа тестовым аккаунтам. Это ограниченный сценарий автоответов; здесь описаны допустимые получатели, права и способ остановить работу.",
     sessions:
       "Подключите инструмент к своему аккаунту мессенджера, чтобы агент мог читать выбранные чаты и помогать с ответами. Здесь вы пройдёте вход, проверите подключение и узнаете, как управлять сессией или завершить её. Вход добавляет разрешённое устройство; всю историю чатов он не скачивает.",
     usage:
@@ -46,6 +88,27 @@ const purpose = {
       "Посмотрите, что планируется и чего пока нет. Это приоритеты разработки, а не обещанные даты; уже выпущенные изменения перечислены в истории версий.",
   },
   es: {
+    people:
+      "Identifica a una persona y recupera lo hablado antes de responder. Esta guía explica el contexto disponible, las señales de la cuenta y los límites de un historial incompleto.",
+    remote:
+      "Conecta las herramientas a un chat del navegador o un asistente en otro dispositivo. Aquí están los detalles de arranque y transferencia del mensajero; para la primera conexión empieza por la guía paso a paso enlazada.",
+    mcp: "Esta es la referencia técnica de MCP para este mensajero. Consulta herramientas, ajustes y permisos; la guía común enlazada te ayuda a elegir y configurar la primera conexión.",
+    configuration:
+      "Guarda ajustes que repetirías en cada comando. Esta guía explica su ubicación y prioridad para cambiar un valor y comprobar cuál se aplica.",
+    "configuration-reference":
+      "Consulta aquí el nombre exacto de un ajuste, su valor predeterminado o variable de entorno. Para el primer cambio empieza por la guía enlazada.",
+    permissions:
+      "Elige qué acciones puede realizar el asistente con esta cuenta o bot. Comprueba nivel de acceso, destinatarios y confirmaciones antes de permitir cambios.",
+    profiles:
+      "Elige la cuenta o bot correcto cuando tengas varios. Esta guía explica perfiles y ajustes para que la tarea use la cuenta prevista.",
+    rankings:
+      "Usa el historial guardado para entender la actividad y encontrar conversaciones que necesitan atención. Aquí se explican informes, fuentes y datos ausentes; un recuento bajo en un archivo incompleto no es un juicio sobre una persona.",
+    "cli-contract":
+      "Esta referencia es para autores de scripts y agentes: formatos de salida, errores, permisos y consulta de comandos. Para tareas habituales empieza por la guía enlazada.",
+    limits:
+      "Entiende por qué el mensajero pide esperar y qué comprobar antes de reintentar. Esta guía distingue los límites del mensajero de tus propios límites de envío.",
+    replies:
+      "Configura y prueba reglas de respuesta a cuentas de prueba. Es un flujo limitado de respuestas automáticas; aquí se explica la audiencia, los permisos y cómo detenerlo.",
     sessions:
       "Conecta el instrumento a tu cuenta para que el agente pueda leer los chats que elijas y ayudarte a responder. Esta guía explica el acceso, su comprobación y cómo gestionar o cerrar una sesión. Iniciar sesión añade un dispositivo autorizado; no descarga todo el historial.",
     usage:
@@ -73,4 +136,57 @@ export function guideOrientation(slugs: string[], lang: string): string | undefi
   if (slugs.length !== 2 || !["tg", "max"].includes(slugs[0])) return
   const text = purpose[lang === "ru" || lang === "es" ? lang : "en"]
   return text[slugs[1] as keyof typeof text]
+}
+
+/** A beginner task entry beside native details, shared by HTML and Markdown exports. */
+export function guideStartLink(slugs: string[], lang: string) {
+  if (slugs.length !== 2 || !["tg", "max"].includes(slugs[0])) return
+  const destinations: Record<string, string> = {
+    remote: "browser-apps",
+    mcp: "mcp",
+    people: "people",
+    rankings: "group-admins",
+    "cli-contract": "first-tasks",
+    configuration: "configuration",
+    "configuration-reference": "configuration",
+    permissions: "permissions",
+    profiles: "profiles",
+    limits: `${slugs[0]}/troubleshooting`,
+    replies: "prompting#recurring-tasks",
+    "audio-recognition": "prompting#files-and-voice",
+    "external-models": "security",
+    "topic-search": "search",
+  }
+  const page = destinations[slugs[1]]
+  if (!page) return
+  const labels: Record<string, [string, string, string]> = {
+    "browser-apps": ["Connect ChatGPT or Claude", "Подключить ChatGPT или Claude", "Conectar ChatGPT o Claude"],
+    mcp: ["Choose a connection method", "Выбрать способ подключения", "Elegir cómo conectar"],
+    people: ["Recover your conversation context", "Вспомнить контекст общения", "Recuperar el contexto"],
+    "group-admins": [
+      "Review questions and group activity",
+      "Проверить вопросы и активность группы",
+      "Revisar preguntas y actividad",
+    ],
+    "first-tasks": ["Try your first task", "Попробовать первую задачу", "Probar una primera tarea"],
+    configuration: ["Change and check settings", "Изменить и проверить настройки", "Cambiar y comprobar ajustes"],
+    permissions: ["Choose assistant permissions", "Выбрать права ассистента", "Elegir permisos del asistente"],
+    profiles: ["Choose an account or bot", "Выбрать аккаунт или бота", "Elegir cuenta o bot"],
+    "max/troubleshooting": ["Restore the MAX connection", "Восстановить подключение MAX", "Restablecer MAX"],
+    "tg/troubleshooting": [
+      "Restore the Telegram connection",
+      "Восстановить подключение Telegram",
+      "Restablecer Telegram",
+    ],
+    "prompting#recurring-tasks": ["Repeat a useful task", "Повторять полезную задачу", "Repetir una tarea útil"],
+    "prompting#files-and-voice": [
+      "Work with files and voice",
+      "Работать с файлами и голосовыми",
+      "Trabajar con archivos y voz",
+    ],
+    security: ["Check where your data goes", "Проверить, куда попадают данные", "Comprobar dónde van tus datos"],
+    search: ["Find a message or discussion", "Найти сообщение или обсуждение", "Encontrar mensajes o conversaciones"],
+  }
+  const label = labels[page][lang === "ru" ? 1 : lang === "es" ? 2 : 0]
+  return { href: `/${lang}/docs/${page}`, label }
 }

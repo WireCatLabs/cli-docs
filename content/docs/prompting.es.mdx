@@ -3,20 +3,9 @@ title: "Cómo formular peticiones"
 description: "Pide búsquedas, contexto, documentos y respuestas indicando el alcance y las acciones permitidas."
 ---
 
-Empieza por el resultado que buscas: «Encuentra el presupuesto aprobado de Atlas» o «Prepara la
-reunión de mañana». No necesitas recordar comandos ni argumentos; el agente debe descubrirlos.
-Añade contexto cuando cambie dónde tiene que buscar, cómo debe responder o qué puede hacer.
+Esta página explica cómo pedir al asistente que encuentre mensajes, reúna contexto, trabaje con documentos y prepare respuestas. Aprenderás a dar una tarea clara y comprobar el resultado: qué encontró, qué mensajes lo respaldan y qué sigue sin saberse.
 
-Una fórmula útil: **tarea + dónde buscar + periodo + resultado + acciones permitidas**.
-No hace falta rellenar todos los campos para una pregunta sencilla.
-
-```text prompt
-En «Atlas · equipo», encuentra el importe acordado para la analítica en septiembre de 2026.
-Muéstrame la propuesta y la confirmación con sus fuentes. Si falta historial, indícalo.
-No envíes nada.
-```
-
-¿Prefieres ver un diálogo completo? Abre [Primeras tareas](./first-tasks.md).
+Empieza por lo que quieres obtener, por ejemplo: «¿Qué me pidió Anna que hiciera ayer?». Para una tarea sencilla puede bastar. El agente elige los comandos. Si aún no has probado la conexión, empieza por [Primeras tareas](./first-tasks.md).
 
 ## Encontrar un dato antiguo
 
@@ -149,7 +138,7 @@ exigir confirmación. [Permisos y seguridad](./tg/security.md).
 Resume los mensajes de voz de Anna de hoy: decisiones, fechas y preguntas para mí. Cita la fuente de cada punto. Si el reconocimiento no es claro, indícalo sin adivinar.
 ```
 
-El agente obtiene primero una transcripción y después la resume. Telegram puede usar su servicio de transcripción o un modelo de voz local; MAX usa un modelo local. La primera ejecución local requiere descargar el modelo por separado. Pide al agente que explique la descarga antes de iniciarla. Puede tardar más que leer texto.
+El agente obtiene primero una transcripción y después la resume. Telegram puede usar su servicio de transcripción o <DocTerm term="speech-model" lang="es" label="un modelo de voz local" />; MAX usa un modelo local. La primera ejecución local requiere descargar el modelo por separado. Pide al agente que explique la descarga antes de iniciarla. Puede tardar más que leer texto.
 
 Comprueba nombres, importes y fechas importantes contra la grabación. El resumen debe identificar mensajes que no pudo transcribir. Configuración: [voz en Telegram](./tg/usage.md#voice-messages) y [reconocimiento de voz en MAX](./max/audio-recognition.md).
 

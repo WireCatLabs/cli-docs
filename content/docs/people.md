@@ -5,7 +5,7 @@ description: "Recall who someone is and what you discussed before replying, usin
 
 Someone has written to you, but you don't remember where you met or what you agreed. Ask your
 agent to find the person, collect your previous conversations and show the messages behind its
-answer. You need a [connected account](./installation.mdx) and an [agent](./agents.md).
+answer. You need a [connected account](./installation.mdx) and an [agent](./agents.mdx).
 
 ## Ask your agent
 
@@ -82,5 +82,5 @@ when you need exact options. The version differences above refer to this site's 
 Auto-replies are a separate task that can send messages. Start with [MAX auto-replies](./max/replies.md)
 if you want to configure them; reading a person's history does not turn them on.
 
-Once you know the context, ask for a [draft reply](./prompting.md#draft-a-reply-then-decide-whether-to-send)
+Once you know the context, ask for a [draft reply](./prompting.mdx#draft-a-reply-then-decide-whether-to-send)
 and review the wording before authorising a send.

@@ -3,17 +3,28 @@ title: "Features"
 description: "Choose a useful task: catch up on chats, find agreements, collect files or draft replies."
 ---
 
-Use your assistant to catch up on chats, find an agreement, collect documents or prepare a reply. This page helps you choose a task and see what a useful result looks like. `tg` and `max` are command-line tools that give the assistant access to Telegram and MAX respectively.
+WireCat gives your AI assistant access to Telegram and MAX. This page shows which tasks you can ask it to do and helps you choose a ready-made request to try a capability.
 
-Choose where to start:
+The essentials:
 
-- **Catch up or draft a reply:** [First tasks](./first-tasks.md).
-- **Find an older message or words inside a document:** [Search](./search.md).
-- **Collect files or summarise voice messages:** [Requests for files and voice](./prompting.md#files-and-voice).
-- **Manage a community:** [Group administration](./group-admins.md).
-- **Work through a bot:** [Bots and Bot API](./bot-api.md).
+- **Catch up on conversations:** important unread messages, unanswered questions and meeting context — [First tasks](./first-tasks.md).
+- **Find what you need:** messages, agreements, people and text inside files — [Search](./search.md).
+- **Prepare a reply:** a draft based on the conversation, sent after review — [Writing requests](./prompting.mdx).
+- **Work with files and voice:** collect documents, choose versions and summarise recordings — [request examples](./prompting.mdx#files-and-voice).
+- **Help with groups and bots:** member questions, moderation rules and bot messages — [groups](./group-admins.md) and [bots](./bot-api.mdx).
 
-If your account is already connected, copy a request below into your agent. Otherwise, start with [installation and login](./installation.mdx). To see a worked conversation before connecting, open the [demo](./meeting-brief.mdx).
+## A fuller overview
+
+- **Messages:** read, reply, edit and forward; send files, react, create polls and schedule reminders.
+- **Search and history:** download selected chats to <DocTerm term="local-archive" lang="en" label="a local archive" />, match typos and related words, filter by date and author, export history and gather summaries.
+- **Documents and voice:** download attachments, extract text from supported formats, transfer a retained file to a remote agent and transcribe voice messages with <DocTerm term="speech-model" lang="en" label="a speech model" />.
+- **People and accounts:** find contacts, recover conversation context, organise folders and use <DocTerm term="profile" lang="en" label="separate profiles" /> for multiple accounts.
+- **Communities and bots:** manage members and invites with administrator rights, check moderation rules and use the Bot API. Forum topics are available in Telegram; bot comments under channel posts are available in MAX.
+- **Access control:** allow reading, choose permitted changes and limit recipients and sending frequency. [Set permissions](./permissions.mdx).
+
+## Try it on your task
+
+If your account is connected, copy a request from the relevant section below. Otherwise, start with [installation and login](./installation.mdx). The [demo](./meeting-brief.mdx) shows an agent conversation without connecting an account. Expand the blocks below the examples for exact commands and additional capabilities.
 
 ## Messages
 
@@ -140,7 +151,7 @@ Use a bot for customer messages, button responses or group tasks. It has its own
 Check the bot’s available messages and draft answers to unanswered questions. Show each draft to me before sending.
 ```
 
-Expect drafts based on messages available to that bot. Your personal account’s history is separate. Start with [bot setup and capabilities](./bot-api.md).
+Expect drafts based on messages available to that bot. Your personal account’s history is separate. Start with [bot setup and capabilities](./bot-api.mdx).
 
 A bot works with its own token, separate from your personal account.
 
@@ -159,14 +170,14 @@ A bot works with its own token, separate from your personal account.
 
 </details>
 
-Guides: [Full Bot API](./bot-api.md) · [Telegram bots](./tg/bot.md) · [MAX bots](./max/bot.md)
+Guides: [Full Bot API](./bot-api.mdx) · [Telegram bots](./tg/bot.md) · [MAX bots](./max/bot.md)
 
 ## Built for agents
 
-- **A skill** teaches Claude Code, Codex, Cursor, Gemini CLI and Hermes the commands.
-  [Connect your agent](./agents.md)
-- **An MCP server** for Claude Desktop and other clients. It follows the profile’s permissions; choose a read-only profile or ask before writes.
-  [MCP](./mcp.md)
+- <DocTerm term="skill" lang="en" label="A skill" /> gives your agent instructions for the commands and common tasks.
+  [Connect your agent](./agents.mdx)
+- <DocTerm term="mcp" lang="en" label="An MCP server" /> for Claude Desktop and other clients. It follows the profile’s permissions; choose read-only access or allow the actions needed. Confirmation prompts are controlled by your AI app.
+  [MCP](./mcp.mdx)
 - **Predictable output** — every command can return one JSON value, and each kind of failure has
   its own exit code, so scripts and agents can react to it.
 - **Self-description** — `tg commands --json` lists every command and option, so an agent can look
@@ -189,4 +200,4 @@ Current unsupported features and planned work are listed in the roadmaps for [Te
 
 ## Choose your next task
 
-Try [a first task](./first-tasks.md) and check that the agent shows sources and a usable result. To repeat a useful workflow, see [recurring tasks](./prompting.md#recurring-tasks). Exact syntax is in the command references for [Telegram](./tg/commands.md) and [MAX](./max/commands.md).
+Try [a first task](./first-tasks.md) and check that the agent shows sources and a usable result. To repeat a useful workflow, see [recurring tasks](./prompting.mdx#recurring-tasks). Exact syntax is in the command references for [Telegram](./tg/commands.md) and [MAX](./max/commands.md).

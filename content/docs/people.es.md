@@ -5,7 +5,7 @@ description: "Recuerda quién te escribió y qué hablasteis antes de responder,
 
 Alguien te escribe, pero no recuerdas dónde os conocisteis ni qué acordasteis. Pide al agente
 que encuentre a la persona, reúna las conversaciones anteriores y muestre los mensajes de origen.
-Necesitas una [cuenta conectada](./installation.mdx) y un [agente](./agents.md).
+Necesitas una [cuenta conectada](./installation.mdx) y un [agente](./agents.mdx).
 
 
 <a id="si-la-cuenta-parece-un-bot" />
@@ -89,5 +89,5 @@ Las diferencias anteriores corresponden a las versiones revisadas de este sitio.
 Las respuestas automáticas son una tarea aparte que puede enviar mensajes. Empieza por
 [las respuestas automáticas de MAX](./max/replies.md) para configurarlas; leer el historial no las activa.
 
-Cuando conozcas el contexto, pide [un borrador](./prompting.md#revisar-compromisos-y-preparar-respuestas)
+Cuando conozcas el contexto, pide [un borrador](./prompting.mdx#revisar-compromisos-y-preparar-respuestas)
 y revisa el texto antes de autorizar el envío.

@@ -4,7 +4,7 @@ import { metaSchema, pageSchema } from "fumadocs-core/source/schema"
 import { applyMdxPreset } from "fumadocs-mdx/config"
 import { defineDocs } from "fumadocs-mdx/macro"
 import { expandDocTerms } from "./doc-terms-markdown"
-import { guideOrientation } from "./guide-orientation"
+import { guideOrientation, guideStartLink } from "./guide-orientation"
 import { i18n } from "./i18n"
 import { installationMarkdown } from "./installation-markdown"
 import { resolveDocumentationLink, rewriteMarkdownLinks } from "./markdown-links"
@@ -67,6 +67,9 @@ export const docsLlms = llms(source, {
     const body =
       (guideOrientation(page.slugs, page.locale ?? i18n.defaultLanguage)
         ? `${guideOrientation(page.slugs, page.locale ?? i18n.defaultLanguage)}\n\n`
+        : "") +
+      (guideStartLink(page.slugs, page.locale ?? i18n.defaultLanguage)
+        ? `[${guideStartLink(page.slugs, page.locale ?? i18n.defaultLanguage)?.label}](${guideStartLink(page.slugs, page.locale ?? i18n.defaultLanguage)?.href})\n\n`
         : "") +
       text
         .replace(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/, "")

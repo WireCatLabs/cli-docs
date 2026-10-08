@@ -1,32 +1,44 @@
 ---
 title: ChatGPT, Claude en el navegador
-description: Conecta Telegram o MAX mediante HTTPS con OAuth, con instrucciones para Windows, macOS y Linux.
+description: "Conecta Telegram y MAX a un chat de ChatGPT o Claude, desde los primeros comandos hasta comprobar la conexión."
 ---
 
-Busca mensajes, resume conversaciones y prepara respuestas desde el navegador. Tanto `tg` como
-`max` ofrecen MCP por HTTP con OAuth. **Tailscale se instala por separado** en el ordenador
-que ejecuta el CLI y da al servidor una dirección HTTPS pública. El dispositivo del navegador
-no necesita Tailscale.
+Usa Telegram y MAX directamente desde un **chat de ChatGPT o claude.ai en el navegador**: busca mensajes, reúne contexto o prepara respuestas. Se configura con unos comandos y añadiendo una dirección en los ajustes del chat. En Claude también puedes usar la conexión desde la [aplicación móvil](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
 
+Esta guía conecta el mensajero que elijas y lo comprueba con una petición sobre tus chats. Un programa en tu ordenador accede al mensajero; ChatGPT o Claude llega a ese programa <DocTerm term="public-address" lang="es" label="mediante una dirección pública" />. <DocTerm term="mcp" lang="es" label="MCP" /> es el modo de conectar estas herramientas al asistente. A continuación obtendremos la dirección y la añadiremos a la aplicación.
 
 ## Antes de empezar
 
-- [Instala Telegram o MAX](./installation.mdx) e inicia sesión con tu usuario habitual del SO.
-  Para configurar sin agente local: `tg setup --agent none` o `max setup --agent none`.
-- Instala [Tailscale](https://tailscale.com/download) e inicia sesión. Activa MagicDNS,
-  certificados HTTPS y [Funnel](https://tailscale.com/docs/features/tailscale-funnel) en tu red.
-  El primer comando Funnel puede imprimir un enlace para autorizar esta configuración.
-- Mantén el ordenador despierto y ambas ventanas de terminal abiertas mientras uses el conector.
-- Tu app o espacio de trabajo debe admitir servidores MCP personalizados. Consulta las
-  [instrucciones de OpenAI](https://developers.openai.com/plugins/quickstart) o de
-  [Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
+- Instala la [herramienta de línea de comandos de Telegram o MAX](./installation.mdx) e inicia sesión en tu cuenta. No necesitas un agente local para usar el navegador: `tg setup --agent none` o `max setup --agent none`.
+- Haz la configuración inicial en el ordenador que ejecuta la herramienta y mantenlo encendido durante el uso. Al final explicamos la opción de un servidor siempre encendido.
+- Tu cuenta de ChatGPT o Claude debe permitir añadir una conexión propia. Si no aparece esa opción en tu cuenta de trabajo, consulta al administrador. Las [instrucciones de OpenAI](https://developers.openai.com/plugins/quickstart) y de [Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) muestran las opciones actuales.
 
-## Iniciar el túnel y el servidor
+En el siguiente paso instalaremos el programa para obtener la dirección pública y explicaremos dónde hacer clic.
 
-Elige tu SO abajo. **El primer bloque va en la ventana 1; el segundo en la ventana 2.**
-Cuando la segunda ventana lo pida, pega el origen HTTPS real que imprime Funnel, sin `/mcp`.
-Conserva el puerto público, como `:8443`, si aparece. Los comandos permiten enviar durante
-este proceso; lee la explicación de permisos de abajo.
+## 1. Preparar una dirección pública
+
+Usaremos **Tailscale**, un programa que hace accesible por internet la conexión de tu ordenador. No hace falta instalarlo en el móvil ni en otro dispositivo donde abras el chat.
+
+### Instalar Tailscale e iniciar sesión
+
+1. Abre la [página de descarga](https://tailscale.com/download) y elige Windows, macOS o Linux.
+2. En Windows o macOS, descarga y ejecuta el instalador y abre la aplicación. Pulsa el icono de Tailscale junto al reloj en Windows o en la barra superior de macOS, y elige **Log in**. Para Linux, sigue las [instrucciones de instalación y acceso](https://tailscale.com/download/linux).
+3. En el navegador que se abre, inicia sesión o crea una cuenta de Tailscale y confirma la conexión del ordenador. Debe aparecer en la [lista de dispositivos](https://console.tailscale.com/admin/machines).
+
+### Habilitar la dirección segura
+
+1. Abre la [sección DNS de Tailscale](https://console.tailscale.com/admin/dns).
+2. En **MagicDNS**, pulsa **Enable MagicDNS** si está desactivado. Así el ordenador tendrá un nombre para su dirección.
+3. En **HTTPS Certificates**, pulsa **Enable HTTPS** y acepta el aviso mostrado. Esto habilita direcciones seguras; consulta las [instrucciones de Tailscale](https://tailscale.com/docs/how-to/set-up-https-certificates).
+4. El primer comando del siguiente paso puede mostrar un enlace para activar **Funnel**, la función de acceso público. Ábrelo, entra con la misma cuenta y confirma la activación. Tailscale prepara automáticamente el certificado y el permiso. Si no tienes acceso, un administrador puede abrir **Access controls → Funnel → Add Funnel to policy**: [instrucciones de Funnel](https://tailscale.com/docs/features/tailscale-funnel).
+
+<a id="iniciar-el-túnel-y-el-servidor" />
+
+## 2. Obtener la dirección e iniciar la conexión
+
+Elige tu sistema operativo y <DocTerm term="terminal" lang="es" label="abre dos ventanas de terminal" />. **Pega el primer bloque en la ventana 1**: mostrará una dirección como `https://ordenador.red.ts.net`. Si primero muestra un enlace de autorización, completa el punto 4 anterior y vuelve aquí.
+
+**Pega el segundo bloque en la ventana 2** e introduce la dirección HTTPS cuando la pida, sin `/mcp`. Conserva `:8443` si aparece. Deja ambas ventanas abiertas. Estos comandos permiten enviar durante la conexión; [cómo elegir los permisos](#elegir-qué-puede-hacer-el-asistente) se explica abajo.
 
 <PlatformSetupTabs>
 
@@ -105,36 +117,25 @@ Para MAX, cambia `tg` por `max` en la ventana 2. No ejecutes el servidor del men
 El servidor escucha en `127.0.0.1:8765` e imprime un código de acceso de un solo uso.
 El perfil precede al comando: `tg work mcp` o, en Windows, `tg.cmd work mcp`.
 
-## Elegir qué puede hacer el asistente
+<a id="conectar-codex--chatgpt-web-o-claude" />
 
-Los comandos permiten enviar durante este proceso con `--permission messages.send=allow`, sin
-cambiar los ajustes guardados. La app controla sus aprobaciones. Por MCP, `ask` no fuerza una
-confirmación del servidor. Para solo leer, elige un perfil con permisos de lectura.
+## 3. Añadir la conexión a ChatGPT o Claude
 
-La aprobación de la app y la del servidor son preguntas distintas. Si siempre permites una herramienta
-en la app y el servidor, otra llamada puede enviar sin volver a preguntar. Pide un borrador para revisar
-el texto antes. Siguen activos los destinatarios permitidos y el límite por hora.
-Consulta los ejemplos de [permisos](./permissions.md).
+Añade **`/mcp` a la dirección HTTPS**. Por ejemplo, `https://ordenador.red.ts.net` pasa a ser `https://ordenador.red.ts.net/mcp`. Es la dirección de la conexión, no la web de Telegram o MAX. Crea una conexión distinta para cada mensajero.
 
-## Conectar Codex / ChatGPT web o Claude
+### ChatGPT
 
-Para el conector, **añade `/mcp` al origen Funnel**. Cada mensajero necesita su propio conector.
-Elige OAuth; no copies un token manualmente.
+1. Abre **Plugins → + Add custom MCP server**, ponle un nombre como «Mi Telegram» y pega la dirección con `/mcp`.
+2. Elige <DocTerm term="oauth" lang="es" label="OAuth" />. Si se ofrece, selecciona el registro automático (**DCR**). Usa el código de un solo uso de la ventana 2 para entrar.
+3. Instala el plugin, abre un chat **Work** y selecciónalo con `@`. Después escribe peticiones normales. [Instrucciones oficiales de OpenAI](https://developers.openai.com/plugins/quickstart).
 
-**Codex / ChatGPT web:** abre **Plugins → + Add custom MCP server**, crea un plugin y escribe
-la URL `/mcp` y OAuth. Elige DCR si se ofrece una elección de registro; el servidor anuncia
-DCR y S256. Conecta con el código de la terminal, instala el plugin y actívalo en un chat Work
-o menciónalo con `@`. El `config.toml` local de Codex no configura esta conexión web.
-Consulta las [instrucciones de OpenAI](https://developers.openai.com/plugins/quickstart) y sus
-[requisitos OAuth](https://developers.openai.com/plugins/build/auth).
+### Claude
 
-**Claude:** añade un conector personalizado en **Customize → Connectors → + Add**, pega la URL
-`/mcp` y conecta con el código impreso por el servidor del mensajero.
-Consulta las [instrucciones actuales](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
+1. En claude.ai, abre **Customize → Connectors → + Add → Add custom connector**. Introduce el nombre y la dirección con `/mcp`, y pulsa **Continue**.
+2. Elige iniciar sesión y **Register automatically**, si se ofrece. Termina de añadir el conector y conecta con el código de la ventana 2.
+3. En el chat, pulsa **+ → Connectors** para activarlo. También funciona en Claude móvil. En una cuenta de trabajo puede tener que añadirlo primero el administrador: [instrucciones oficiales de Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
 
-Antes de introducir el código, comprueba que la página de acceso nombra la app deseada como
-destino. Los códigos funcionan una vez durante 10 minutos. Cinco errores bloquean el acceso
-hasta reiniciar el servidor.
+Antes de introducir el código, comprueba el nombre de la aplicación. El código funciona una vez durante 10 minutos; cinco intentos incorrectos requieren reiniciar el servidor.
 
 ## Probar primero la lectura
 
@@ -145,7 +146,18 @@ Muéstrame mis cinco chats recientes de Telegram y sus recuentos de mensajes sin
 ```
 
 Después pide un borrador o, cuando quieras enviar, indica el destinatario y el texto exacto.
-[Cómo escribir peticiones](./prompting.md) explica cómo pedir una revisión antes de enviar.
+[Cómo escribir peticiones](./prompting.mdx) explica cómo pedir una revisión antes de enviar.
+
+## Elegir qué puede hacer el asistente
+
+Los comandos permiten enviar durante este proceso con `--permission messages.send=allow`, sin
+cambiar los ajustes guardados. La app controla sus aprobaciones. Por MCP, `ask` no fuerza una
+confirmación del servidor. Para solo leer, elige un perfil con permisos de lectura.
+
+La aprobación de la app y la del servidor son preguntas distintas. Si siempre permites una herramienta
+en la app y el servidor, otra llamada puede enviar sin volver a preguntar. Pide un borrador para revisar
+el texto antes. Siguen activos los destinatarios permitidos y el límite por hora.
+Consulta los ejemplos de [permisos](./permissions.mdx).
 
 <a id="connection-recovery" />
 
@@ -195,3 +207,11 @@ Funnel admite los puertos públicos `443`, `8443` y `10000`
 ## Cómo funciona la conexión
 
 <ArchitectureDiagram name="remote" lang="es" />
+
+## Conectar sin mantener encendido el portátil
+
+Puedes instalar `tg` o `max` en un servidor que esté siempre en marcha y conectar ChatGPT o Claude a su dirección. Así podrás usar tu mensajero desde el chat aunque el portátil esté apagado.
+
+Instala la herramienta en el servidor, inicia sesión en la cuenta elegida, arranca la conexión MCP y proporciona una dirección HTTPS pública. Configura el inicio automático tras un reinicio: tanto el programa del mensajero como el acceso público deben seguir funcionando. El servidor necesita su propio inicio de sesión; la instalación del portátil no lo conecta automáticamente.
+
+Prueba esta opción después de que funcione en tu ordenador. Consulta la conexión remota para [Telegram](./tg/remote.md) y [MAX](./max/remote.md). Repite la petición de cinco chats: si funciona con el portátil apagado, el servidor mantiene la conexión.

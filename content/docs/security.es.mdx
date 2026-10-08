@@ -3,12 +3,11 @@ title: Seguridad
 description: Elige el acceso del asistente, entiende adónde van tus mensajes y conoce los límites de los controles.
 ---
 
-WireCat trabaja con tu propia cuenta de Telegram o MAX. Empieza leyendo, decide qué acciones
-permitir y protege tu ordenador y el acceso al mensajero.
+Conectar WireCat permite al asistente trabajar con tu cuenta de Telegram o MAX. Esta página te ayuda a elegir acciones permitidas, saber dónde se guardan mensajes y datos de acceso y entender los límites de las protecciones. Empieza por la lectura y amplía el acceso cuando la tarea lo necesite.
 
 ## Elegir qué puede hacer el asistente
 
-Los [permisos](./permissions.md) permiten leer, pedir confirmación antes de cambiar algo o
+Los [permisos](./permissions.mdx) permiten leer, pedir confirmación antes de cambiar algo o
 rechazar una acción. También puedes limitar destinatarios y envíos por hora. Estos controles
 ayudan a evitar un envío equivocado o un bucle que envía demasiados mensajes.
 
@@ -43,7 +42,7 @@ las rutas exactas de tu ordenador.
   como información, pero un modelo puede entenderlo mal. Limita los envíos y revisa acciones importantes.
 - **Información compartida con otro servicio.** El permiso para leer un chat no controla cómo
   guarda datos el proveedor de IA. Comparte solo el contexto necesario.
-- **Acciones ya realizadas.** Un mensaje puede verse antes de borrarlo. Borrar una copia local
+- **Acciones ya realizadas.** Un mensaje puede verse antes de borrarlo. Borrar <DocTerm term="local-archive" lang="es" label="una copia local" />
   no borra las copias de destinatarios u otros servicios.
 
 Las herramientas no cifran el historial local. Cerrar sesión o desinstalar no necesariamente
@@ -61,6 +60,8 @@ no necesites enviar. Detén el servidor o túnel para pausar el acceso; `tg mcp 
 `max mcp --revoke` obliga a las apps a volver a entrar.
 
 ## Qué demuestran las evaluaciones
+
+Las <DocTerm term="evals" lang="es" label="evaluaciones del agente" /> comprueban fuentes y permisos en tareas de prueba. A continuación se explica una evaluación publicada y sus límites.
 
 Al pedir estadísticas, solicita los mensajes u observaciones de miembros que respaldan la respuesta
 y comprueba qué historial falta. Un contador desconocido no es cero; un historial incompleto no

@@ -28,20 +28,24 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | --- | --- | --- | --- |
 | What is WireCat and where do I start? | `index.mdx` | Orientation | Check claims and scope against both reviewed releases |
 | How do I install and connect my account? | `installation.mdx` | Tutorial | Keep the first-success path above optional recovery/detail |
-| Why does my agent not see the tool? | `agents.md` | Setup/recovery | Preserve the “usually already connected” distinction |
+| Why does my agent not see the tool? | `agents.mdx` | Setup/recovery | Preserve the “usually already connected” distinction |
 | What should I ask first? | `first-tasks.md` | Tutorial/task hub | Pilot catch-up, older-history search and draft workflows here |
 | What do my accounts know about a person? | `people.md` | Task guide | Review source and data boundaries |
 | Can I see what the agent does? | `meeting-brief.mdx` | Interactive demo | Reuse reviewed meeting, inbox and search scenarios with sources |
 | How do I find a message or agreement? | `search.md` | Task guide | Lead with an agent request; keep terminal syntax optional |
 | How do I connect a browser AI app? | `browser-apps.mdx` | Connection guide | Preserve current web setup instructions |
-| How do I ask for a useful result? | `prompting.md` | Task guidance | Cross-link to worked examples instead of duplicating dialogues |
+| How do I ask for a useful result? | `prompting.mdx` | Task guidance | Cross-link to worked examples instead of duplicating dialogues |
 | Can it do my task in Telegram or MAX? | `features.mdx` | Capability orientation | Verify differences; link task homes, not only command lists |
-| Which connection does my AI app need? | `mcp.md` | Explanation/setup | Explain the decision before client configuration |
-| How do I discover a bot method? | `bot-api.md` | Reference orientation | Link messenger-specific bot prerequisites and use cases |
-| What can read or change my data? | `security.md` | Explanation | Lead with user decisions, then verified detail |
+| Which connection does my AI app need? | `mcp.mdx` | Explanation/setup | Explain the decision before client configuration |
+| How do I discover a bot method? | `bot-api.mdx` | Reference orientation | Link messenger-specific bot prerequisites and use cases |
+| What can read or change my data? | `security.mdx` | Explanation | Lead with user decisions, then verified detail |
 | Can I try search without connecting? | `search-playground.mdx` | Interactive explanation | Keep sample behavior and limitations accurate |
 | How do the tools work internally? | `architecture.mdx` | Technical explanation | Trial beautiful-mermaid on one existing diagram |
 | How do search and conversation processing work? | `search-architecture.mdx` | Technical explanation | Reconcile playground description; keep source/release boundary |
+| How do I check questions and activity in my group? | `group-admins.md` | Task guide | Start with a request and sources; inspect coverage before changes |
+| How do I save or override settings? | `configuration.mdx` | Configuration guide | Explain when settings matter and how to verify the effective value |
+| What may the assistant change? | `permissions.mdx` | Access guide | Distinguish terminal confirmation, MCP permissions and app approval |
+| Which account or bot will run the task? | `profiles.md` | Account selection | Explain named profiles before configuration syntax |
 
 ## Messenger pages
 

@@ -189,14 +189,21 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  margin-inline: 0.1em 0.25em;
+  position: relative;
+  width: 14px;
+  height: 14px;
+  margin: 0;
   padding: 0;
   border-radius: 50%;
   vertical-align: -0.12em;
   color: var(--color-fd-muted-foreground);
   cursor: help;
+}
+/* Keep the inline icon compact while allowing a larger pointer target. */
+.docs-term-trigger::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
 }
 .docs-term-trigger:hover,
 .docs-term-trigger[data-popup-open] {

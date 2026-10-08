@@ -162,3 +162,24 @@ Preserve URLs, incoming anchors, command tokens and code examples across edits a
 
 Explain available prerequisites and quality limits where readers need them. For attachments, distinguish automatic parsers, agent tools and explicitly configured external APIs. Put voice transcription in its own row. Never imply that passing a local path transfers a file to a remote agent.
 
+
+## Reader review refinements
+
+Use the information pyramid on overview pages: key capabilities in a short list, a fuller list
+grouped by reader tasks, then worked examples and exact commands. On a connection guide, explain
+what chat or application the reader will use and what the finished connection enables. Give the
+simple connection model before introducing the implementation program. Explain unfamiliar setup
+steps where they are performed, including the UI labels and what successful completion looks like.
+
+Use a term hint at the first useful unfamiliar term, not on every repeated word. Definitions
+needed to understand the task stay in the prose; a popup offers extra context and a specific guide.
+Keep the info icon directly beside its term with no layout padding; preserve the following text’s
+ordinary space. Explanations must also survive Markdown export and keyboard/touch interaction.
+Agent names are examples, not a closed compatibility list: distinguish prepared setup integrations
+from the general requirement for command-line or MCP tool access.
+
+For a corpus review, fix clear wording, structure and navigation issues directly. Record disputed
+behavior claims or major restructuring as proposals with an exact before quote, proposed after
+text and a page link. Do not mark proposals implemented, and do not silently change a reviewed
+release contract to make an example pass. Native source pages remain owned by the messenger repos;
+portal orientation and explicit contextual errata must remain traceable.

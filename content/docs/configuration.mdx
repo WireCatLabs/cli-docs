@@ -3,8 +3,7 @@ title: "Configuration"
 description: "Save common settings instead of repeating options."
 ---
 
-`tg` and `max` are configurable. You can save everyday settings, change a value for one command,
-or choose a different profile. Permissions are explained separately in [Permissions](./permissions.md).
+Save the settings you use repeatedly, such as how many results to show or which account to use. This page explains when to change settings, how to make a change for one command and how to check the effective value. If your first tasks already work, you can leave the defaults; assistant access is configured in [Permissions](./permissions.mdx).
 
 ## The file
 
@@ -33,7 +32,7 @@ computer uses a custom directory.
 - **File:** a value stays saved for later commands. `tg config set limit 50` saves a result limit.
 - **Environment variable:** a terminal can select a profile or command time limit for its session.
   For example, `TG_PROFILE` or `MAX_PROFILE` chooses a profile. Not every setting has a variable.
-- **Command option:** a flag such as `--limit 5` changes only this invocation.
+- **Command option:** a <DocTerm term="flag" lang="en" label="flag" /> such as `--limit 5` changes only this invocation.
 
 ## Which value wins?
 

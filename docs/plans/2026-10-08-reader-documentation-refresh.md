@@ -58,3 +58,14 @@ The next editorial pass is implemented in the existing shared pages:
 All three locales are maintained. Native attachment and remote-transfer guides came from main's reviewed source updates; this pass links them rather than claiming authorship of those guides.
 
 Next review: try the updated task chooser and requests with the owner, then prioritise the remaining native guide bodies by actual reader friction. Add a new guide only for a distinct reader question not served by the current shared and messenger pages.
+
+## Whole-corpus editorial pass
+
+Owner review expanded this pass to all 87 page routes in three locales. The maintained
+[editorial register](../reviews/2026-10-08-documentation-editorial-pass.md) records the scope,
+concrete changes and validation. [Disputed proposals](../reviews/2026-10-08-editorial-proposals.md)
+keep before/after quotes and page links separate from implemented work.
+
+This pass improves the existing shared task homes, first-use term explanations and native-guide
+entry paths. It preserves reviewed command contracts and generated references. Remaining large
+source rewrites and behavior claims are proposals, not silently assumed current facts.

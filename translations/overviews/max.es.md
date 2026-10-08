@@ -3,7 +3,7 @@ title: "MAX: empieza aquí"
 description: "Conecta tu cuenta personal de MAX o un bot a tu agente."
 ---
 
-`max` permite que tu agente de IA lea MAX, encuentre mensajes y te ayude a responder. También
+`max` es una herramienta de línea de comandos que permite que tu agente de IA lea MAX, encuentre mensajes y te ayude a responder. También
 puedes usarlo directamente desde la terminal. Funciona en Windows, macOS y Linux.
 
 Estás en la documentación de **MAX**. Usa el selector de mensajero de arriba para abrir Telegram.

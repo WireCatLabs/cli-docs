@@ -3,9 +3,9 @@ title: "How to phrase requests"
 description: "Prompts for search, meeting context, contacts, files, drafts and reminders."
 ---
 
-Tell the agent what you want to find or accomplish. It should choose commands and arguments from
-the installed CLI's skill and help; you do not need to write a command sequence in every prompt.
-See [First tasks](./first-tasks.md) for short requests and the results to expect.
+This page explains how to ask an assistant to find messages, gather context, work with documents and draft replies. You will learn to give it a clear task and check the result: what it found, which messages support the answer and what remains unknown.
+
+Start with what you want, such as “What did Anna ask me to do yesterday?” A simple task can be that short. The agent chooses the commands. If you have not tried your messenger connection yet, start with [First tasks](./first-tasks.md).
 
 ## Add detail when it changes the result
 
@@ -128,7 +128,7 @@ confirmation or prohibit sending; a prompt does not bypass those settings.
 Summarise Anna’s voice messages from today: decisions, dates and questions for me. Include the source for each point. If recognition is unclear, flag it rather than guessing.
 ```
 
-The agent first obtains a transcript, then summarises it. Telegram can use its own transcription service or a local speech model; MAX uses a local model. The first local run needs a separately downloaded model. Ask the agent to explain the download before starting it. This can take longer than reading text.
+The agent first obtains a transcript, then summarises it. Telegram can use its own transcription service or <DocTerm term="speech-model" lang="en" label="a local speech model" />; MAX uses a local model. The first local run needs a separately downloaded model. Ask the agent to explain the download before starting it. This can take longer than reading text.
 
 Check names, amounts and dates against the recording when they matter. A summary should identify messages it could not transcribe. Setup: [Telegram voice messages](./tg/usage.md#voice-messages) and [MAX speech recognition](./max/audio-recognition.md).
 

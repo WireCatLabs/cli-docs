@@ -86,7 +86,7 @@ or restart Codex. [Codex skills guide](https://learn.chatgpt.com/docs/build-skil
 
 ### Cursor
 
-Use **Agent** with terminal access, then ask it to use `tg` or `max`. If it cannot find the skill,
+Use **Agent** with <DocTerm term="terminal" lang="en" label="terminal access" />, then ask it to use `tg` or `max`. If it cannot find the skill,
 ask it to read `skill show`. [Cursor skills guide](https://cursor.com/help/customization/skills).
 
 ### Claude Code
@@ -116,10 +116,18 @@ a new session. The tool must be installed on the computer or server where OpenCl
 
 <a id="other-clients" />
 
+<a id="other-agents" />
+
+### Another agent
+
+The examples above are not a closed list. Any assistant with command-line access can use `tg` or `max`. Give it the output of `tg skill show` or `max skill show`, or ask it to read the documentation. It can check available commands with `--help`.
+
+For assistants using MCP, follow [MCP setup](./mcp.mdx); for a browser chat, use [browser connection](./browser-apps.mdx). Ready-made installation choices cover specific clients; other agents use their own instruction or tool settings.
+
 ## Ready for your first task
 
 When the agent can show your account and chats, continue with [First tasks](./first-tasks.md).
 You will find copyable requests for catching up, finding an agreement and drafting replies.
 
-If your agent cannot run commands, use [MCP](./mcp.md) or give it
-[the Markdown documentation](./mcp.md#documentation-for-your-agent).
+If your agent cannot run commands, use [MCP](./mcp.mdx) or give it
+[the Markdown documentation](./mcp.mdx#documentation-for-your-agent).

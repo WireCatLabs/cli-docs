@@ -3,17 +3,28 @@ title: "Funciones"
 description: "Elige una tarea útil: revisar chats, encontrar acuerdos, reunir archivos o preparar respuestas."
 ---
 
-Pide a tu asistente que revise conversaciones, encuentre un acuerdo, reúna documentos o prepare una respuesta. Esta página te ayuda a elegir una tarea y reconocer un resultado útil. `tg` y `max` son herramientas de línea de comandos que dan al asistente acceso a Telegram y MAX, respectivamente.
+WireCat da a tu asistente de IA acceso a Telegram y MAX. Esta página muestra qué tareas puedes pedirle y te ayuda a elegir una petición lista para probar una función.
 
-Elige por dónde empezar:
+Lo principal:
 
-- **Ponerte al día o preparar una respuesta:** [Primeras tareas](./first-tasks.md).
-- **Encontrar un mensaje antiguo o texto dentro de un documento:** [Búsqueda](./search.md).
-- **Reunir archivos o resumir mensajes de voz:** [Peticiones para archivos y voz](./prompting.md#files-and-voice).
-- **Gestionar una comunidad:** [Administración de grupos](./group-admins.md).
-- **Trabajar con un bot:** [Bots y Bot API](./bot-api.md).
+- **Ponerte al día:** mensajes importantes sin leer, preguntas pendientes y contexto para reuniones — [Primeras tareas](./first-tasks.md).
+- **Encontrar lo necesario:** mensajes, acuerdos, personas y texto dentro de archivos — [Búsqueda](./search.md).
+- **Preparar una respuesta:** un borrador basado en la conversación, enviado después de revisarlo — [peticiones al agente](./prompting.mdx).
+- **Trabajar con archivos y voz:** reunir documentos, elegir versiones y resumir grabaciones — [ejemplos](./prompting.mdx#files-and-voice).
+- **Ayudar con grupos y bots:** preguntas de miembros, reglas de moderación y mensajes del bot — [grupos](./group-admins.md) y [bots](./bot-api.mdx).
 
-Si tu cuenta ya está conectada, copia una petición de abajo a tu agente. Si aún no lo está, empieza por [instalación y acceso](./installation.mdx). Para ver una conversación antes de conectar tu cuenta, abre la [demo](./meeting-brief.mdx).
+## Un resumen más completo
+
+- **Mensajes:** leer, responder, editar y reenviar; enviar archivos, reaccionar, crear encuestas y programar recordatorios.
+- **Búsqueda e historial:** descargar chats elegidos al <DocTerm term="local-archive" lang="es" label="archivo local" />, buscar con erratas y palabras relacionadas, filtrar por fecha y autor, exportar historial y reunir resúmenes.
+- **Documentos y voz:** descargar adjuntos, extraer texto de formatos compatibles, transferir un archivo guardado a un agente remoto y transcribir voz con <DocTerm term="speech-model" lang="es" label="un modelo de voz" />.
+- **Personas y cuentas:** encontrar contactos, recuperar el contexto, organizar carpetas y usar <DocTerm term="profile" lang="es" label="perfiles distintos" /> para varias cuentas.
+- **Comunidades y bots:** gestionar miembros e invitaciones con permisos de administrador, revisar reglas de moderación y usar la Bot API. Telegram admite temas de foro; MAX, comentarios del bot bajo publicaciones de canales.
+- **Control de acceso:** permitir lectura, elegir cambios autorizados y limitar destinatarios y frecuencia de envío. [Configurar permisos](./permissions.mdx).
+
+## Probarlo con tu tarea
+
+Si tu cuenta está conectada, copia una petición del apartado adecuado. Si no, empieza por [instalación y acceso](./installation.mdx). La [demo](./meeting-brief.mdx) muestra una conversación con el agente sin conectar una cuenta. Despliega los bloques bajo los ejemplos para ver comandos exactos y funciones adicionales.
 
 ## Mensajes
 
@@ -141,7 +152,7 @@ Usa un bot para mensajes a clientes, respuestas a botones o tareas de grupo. Tie
 Revisa los mensajes disponibles para el bot y prepara respuestas a preguntas pendientes. Muéstrame cada borrador antes de enviarlo.
 ```
 
-Obtendrás borradores basados en mensajes disponibles para ese bot. El historial de tu cuenta personal es independiente. Empieza por [conexión y funciones de los bots](./bot-api.md).
+Obtendrás borradores basados en mensajes disponibles para ese bot. El historial de tu cuenta personal es independiente. Empieza por [conexión y funciones de los bots](./bot-api.mdx).
 
 Un bot trabaja con su propio token, separado de tu cuenta personal.
 
@@ -160,13 +171,13 @@ Un bot trabaja con su propio token, separado de tu cuenta personal.
 
 </details>
 
-Guías: [Bot API completa](./bot-api.md) · [bots de Telegram](./tg/bot.md) · [bots de MAX](./max/bot.md)
+Guías: [Bot API completa](./bot-api.mdx) · [bots de Telegram](./tg/bot.md) · [bots de MAX](./max/bot.md)
 
 ## Pensado para agentes
 
-- **Un skill** enseña los comandos a Claude Code, Codex, Cursor, Gemini CLI y Hermes.
-  [Conectar tu agente](./agents.md)
-- **Un servidor MCP** para Claude Desktop y otros clientes. Usa los permisos del perfil: puedes limitarlo a lectura o pedir confirmación antes de escribir. [MCP](./mcp.md)
+- <DocTerm term="skill" lang="es" label="Un skill" /> da al agente instrucciones para los comandos y tareas habituales.
+  [Conectar tu agente](./agents.mdx)
+- <DocTerm term="mcp" lang="es" label="Un servidor MCP" /> para Claude Desktop y otros clientes. Usa los permisos del perfil: puedes limitarlo a lectura o permitir las acciones necesarias. Las confirmaciones dependen de la aplicación de IA. [MCP](./mcp.mdx)
 - **Salida predecible**: cada comando puede devolver un único valor JSON, y cada tipo de fallo
   tiene su propio código de salida, así que los scripts y los agentes pueden reaccionar a él.
 - **Autodescripción**: `tg commands --json` lista cada comando y cada opción, así que un agente
@@ -189,4 +200,4 @@ Los límites actuales y los planes aparecen en las hojas de ruta de [Telegram](.
 
 ## Elige la siguiente tarea
 
-Prueba [una primera tarea](./first-tasks.md) y comprueba que el agente muestre fuentes y un resultado útil. Para repetir un flujo que te sirva, consulta [tareas recurrentes](./prompting.md#recurring-tasks). La sintaxis exacta está en las referencias de [Telegram](./tg/commands.md) y [MAX](./max/commands.md).
+Prueba [una primera tarea](./first-tasks.md) y comprueba que el agente muestre fuentes y un resultado útil. Para repetir un flujo que te sirva, consulta [tareas recurrentes](./prompting.mdx#recurring-tasks). La sintaxis exacta está en las referencias de [Telegram](./tg/commands.md) y [MAX](./max/commands.md).

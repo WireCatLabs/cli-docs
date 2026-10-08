@@ -181,7 +181,7 @@ tg's profiles, max's account and its bots — keyed by provider and account.
   instead of installed, which cut its load cost from about 200 ms to about 6 ms per process.
 
 The store keeps message text so it can answer without the network. It is not encrypted;
-[security](./security.md) says what that means for you.
+[security](./security.mdx) says what that means for you.
 
 ## Patterns that hold it together
 
@@ -273,5 +273,5 @@ The original exact model identity was not captured and MCP used a shell proxy.
 
 [Reproduction tooling](https://github.com/leemour/cli-messaging/tree/main/scripts/evals) belongs to cli-messaging. Record the model ID, runner and SDK
 versions, fixture clock/seed, prompts and first failures when comparing a new run. Deterministic
-transport/fixture tests and independent model trials are separate evidence. The [security guide](./security.md)
+transport/fixture tests and independent model trials are separate evidence. The [security guide](./security.mdx)
 explains what readers should check before trusting an agent's statistics answer.

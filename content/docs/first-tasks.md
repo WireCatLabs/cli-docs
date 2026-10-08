@@ -7,7 +7,7 @@ Your account is connected. Ask your agent to find a message, catch up on a conve
 prepare a reply. Describe what you need in your own words; the agent chooses the commands.
 
 If you still need setup, start with [installation](./installation.mdx) or
-[connecting your agent](./agents.md). To see the flow before trying it, open [Demo](./meeting-brief.mdx).
+[connecting your agent](./agents.mdx). To see the flow before trying it, open [Demo](./meeting-brief.mdx).
 
 
 <a id="longer-examples" />
@@ -73,4 +73,4 @@ Try the meeting scenario in [Demo](./meeting-brief.mdx), then use your own proje
 
 Look for the checked chats and period, source messages for important conclusions, and any missing history. An answer without those details is worth a follow-up.
 
-[More request examples](./prompting.md) · [Telegram help](./tg/troubleshooting.md) · [MAX help](./max/troubleshooting.md)
+[More request examples](./prompting.mdx) · [Telegram help](./tg/troubleshooting.md) · [MAX help](./max/troubleshooting.md)

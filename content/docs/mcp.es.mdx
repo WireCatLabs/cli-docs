@@ -3,14 +3,9 @@ title: "MCP y documentación"
 description: "Qué aporta MCP, cómo conectar cada agente y cómo leer la documentación de WireCat."
 ---
 
-> **¿Usas ChatGPT o Claude en el navegador? [Configura la conexión →](./browser-apps.mdx)**
-> Aquí tienes el inicio del servidor, el acceso y ejemplos de uso.
+<DocTerm term="mcp" lang="es" label="MCP" /> conecta al asistente con herramientas del mensajero: listar chats, encontrar mensajes y preparar respuestas. Aquí elegirás entre acceso por línea de comandos y MCP, conectarás tu cliente y comprobarás los permisos. El servidor MCP viene con `tg` y `max`; inicia sesión en tu cuenta antes de usarlo.
 
-**MCP ofrece herramientas para tu cuenta al agente:** listar chats, leer mensajes entrantes,
-buscar, preparar respuestas y ejecutar acciones permitidas por el perfil. El cliente descubre
-nombres, parámetros y resultados estructurados. El servidor viene incluido en `tg` y `max`.
-
-**MCP (Model Context Protocol)** permite a una aplicación de IA descubrir y ejecutar herramientas. Aquí el **cliente** es tu aplicación de IA y el **servidor** es el proceso local `tg mcp` o `max mcp` que ofrece las herramientas. Conectar MCP no registra una cuenta ni inicia sesión; completa el acceso al mensajero primero.
+¿Usas ChatGPT o Claude en el navegador? Empieza por la [conexión paso a paso](./browser-apps.mdx), que explica la dirección pública y el acceso. Los ajustes técnicos de clientes están abajo.
 
 ## ¿CLI, skill o MCP?
 
@@ -22,7 +17,7 @@ nombres, parámetros y resultados estructurados. El servidor viene incluido en `
 | MCP por HTTP | Las mismas herramientas para ChatGPT o Claude en el navegador, tras tu propio túnel | Chateas en el navegador — [ChatGPT y Claude en el navegador](./browser-apps.mdx) |
 | Markdown | Explicaciones y referencia de comandos | El agente necesita consultar cómo funciona algo |
 
-Con una terminal, empieza con [un skill](./agents.md). MCP es opcional y respeta los mismos
+Con una terminal, empieza con [un skill](./agents.mdx). MCP es opcional y respeta los mismos
 permisos del perfil que el CLI. El inicio de sesión y la descarga del archivo se hacen por separado.
 
 ## Antes de conectar
@@ -93,7 +88,7 @@ JSON `mcpServers` entero. Reinicia Hermes.
 ## Qué puede hacer el agente
 
 Las acciones dependen de los permisos del perfil. La aplicación gestiona sus aprobaciones;
-el servidor comprueba prohibiciones, destinatarios y límites. Consulta [Permisos](./permissions.md), los perfiles
+el servidor comprueba prohibiciones, destinatarios y límites. Consulta [Permisos](./permissions.mdx), los perfiles
 de lectura y la lista completa de herramientas en [Telegram MCP](./tg/mcp.md) o [MAX MCP](./max/mcp.md).
 Pide listar cinco chats como primera comprobación.
 
