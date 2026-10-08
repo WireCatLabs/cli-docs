@@ -2,9 +2,11 @@
 title: "Lenguaje de consulta de la búsqueda"
 ---
 
-La referencia de las consultas de `max messages search`, `max messages stats` y las búsquedas guardadas. Para ejemplos del día a día, empieza por [buscar mensajes](./search.md).
+Referencia de consultas de `max messages search`, `max stats messages show` y búsquedas guardadas. Consulta ejemplos cotidianos en [búsqueda de mensajes](./search.md).
 
-El lenguaje es un perfil estricto de la sintaxis de consultas de Apache Lucene: palabras, frases, AND/OR/NOT, grupos, campos, intervalos, comodines con límites y expresiones regulares. La [referencia completa](https://github.com/leemour/cli-messaging/blob/v0.149.0/docs/search/query-language.md) (en ruso) contiene las tablas generadas de campos, operadores, filtros preparados y límites, y ejemplos ejecutables; la [especificación técnica](https://github.com/leemour/cli-messaging/blob/v0.149.0/docs/search/query-language-spec.md) describe la gramática y el compilador.
+El lenguaje es un perfil estricto de la sintaxis de consultas de Apache Lucene: palabras, frases, AND/OR/NOT, grupos, campos, intervalos, comodines con límites y expresiones regulares. La [referencia completa](https://github.com/leemour/cli-messaging/blob/v0.164.0/docs/search/query-language.md) (en ruso) contiene las tablas generadas de campos, operadores, filtros preparados y límites, y ejemplos ejecutables; la [especificación técnica](https://github.com/leemour/cli-messaging/blob/v0.164.0/docs/search/query-language-spec.md) describe la gramática y el compilador.
+
+Las palabras y frases sin campo buscan formas de palabras. `--exact` selecciona formas exactas para palabras sin campo; un `text:` explícito sigue buscando formas de palabras. La configuración de idioma del archivo afecta a la coincidencia.
 
 ## Operadores
 
@@ -30,6 +32,7 @@ El lenguaje es un perfil estricto de la sintaxis de consultas de Apache Lucene: 
 | Campo | Encuentra | Ejemplo |
 |---|---|---|
 | `text` | palabras del mensaje (campo predeterminado) | `text:счёт` |
+| `exact` | Forma exacta de una palabra o frase | `exact:квартира`, `exact:"счёт оплачен"` |
 | `body` | todo el texto original, distinguiendo mayúsculas | `body:/.*счёт.*/` |
 | `from` | remitente por nombre, @username o id; `me` eres tú | `from:"Алиса Тестова"` |
 | `chat` | chat por título, @username o id | `chat:"Книжный клуб"` |
@@ -97,7 +100,7 @@ Un error incluye la posición del problema en la consulta y una pista.
 
 ## En MCP
 
-`max_messages_search` acepta la consulta como `text` o como árbol sintáctico versionado en `ast` (no ambos); `language` elige `lucene` o `legacy`, y `timezone` establece la zona horaria del calendario. `chat` admite un id o un nombre guardado; `source`, `newest`, `context` y `limit` funcionan como las opciones de la orden. `record: false` excluye la llamada del historial de consultas. La respuesta tiene los mismos campos que `--json`. `max_messages_stats` cuenta las coincidencias de esas mismas consultas.
+`max_read` (`command: "messages search"`) acepta una consulta como `text` o como árbol sintáctico con versión en `ast`, pero no ambos. `language` elige `lucene` o `legacy`; `timezone` establece la zona horaria del calendario. `chat` acepta un ID o un título guardado; `source`, `newest`, `context` y `limit` funcionan como las opciones del comando. `record: false` evita que la llamada se registre en el historial de consultas. La respuesta tiene los mismos campos que `--json`. `max_read` (`command: "stats messages show"`) cuenta con las mismas consultas.
 
 ## Los modos anteriores
 
@@ -117,6 +120,6 @@ max messages search --regex 'invoice\s+\d+' --json
 
 `--thread` sigue el grafo de respuestas guardado; en `messages context` sustituye a los mensajes vecinos en orden cronológico. Los valores predeterminados son 8 saltos, 50 mensajes, 65 536 bytes y un día alrededor de cada resultado. Cámbialos con `--thread-hops`, `--thread-messages`, `--thread-bytes` y `--thread-within`. Sin grafo, vuelve al contexto cronológico; los enlaces desactualizados se marcan y no se recorren.
 
-Por defecto, la búsqueda lee el archivo local. `--sync-first` descarga de forma explícita los mensajes nuevos antes de buscar y no marca nada como leído: como máximo 5 chats, 500 mensajes y 30 segundos. Cambia estos límites con `--max-chats`, `--max-messages` y `--sync-time`. Si la actualización falla o queda incompleta, se conservan los resultados locales, con la cobertura desactualizada y los detalles de la actualización.
+La búsqueda de palabras en un chat concreto consulta tanto al archivo como al servidor de MAX de forma predeterminada; sin un chat concreto, solo consulta al archivo. `--backend archive` mantiene la búsqueda local. `--sync-first` descarga primero los mensajes nuevos, sin marcar nada como leído: como máximo 5 chats, 500 mensajes y 30 segundos. Ajusta estos límites con `--max-chats`, `--max-messages` y `--sync-time`. Una actualización incompleta o fallida conserva los resultados locales e informa de la cobertura desactualizada y del resultado de la actualización.
 
-MCP usa `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` y `sync_first`. `sync_first` solo está disponible con `messages.sync-first: allow`. Un `messages_context` normal con `offline: true` lee los mensajes guardados.
+MCP utiliza `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` y `sync_first`. `sync_first` solo está disponible con `messages.sync-first: allow`. `max_read` con `command: "messages context"` y `arguments: { offline: true }` lee los datos guardados.

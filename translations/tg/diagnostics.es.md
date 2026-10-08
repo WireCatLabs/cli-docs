@@ -101,7 +101,7 @@ tg runs list --limit 100 --json | jq '[.items[] | select(.requests > 10) | {comm
 
 `tg runs show <run-id>` muestra los mismos eventos como tabla, sin los campos repetidos en cada línea. El archivo completo está en la carpeta que indica `tg runs path <run-id>`.
 
-## Siguientes pasos
+## Siguiente paso
 
 - [Solución de problemas](./troubleshooting.md): qué significa cada error y cómo resolverlo.
 - [Seguridad](./security.md): qué se guarda en disco.

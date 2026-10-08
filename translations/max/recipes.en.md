@@ -1,6 +1,7 @@
 ---
 title: "Recipes: your agent and your conversations"
 ---
+
 Delegate regular MAX tasks to Claude Code or Codex: unread summaries, chat reports, commitments, unanswered-message reminders and checks on groups you manage. Each recipe includes a prompt, required permissions and scheduling instructions.
 
 ## One-time setup
@@ -53,7 +54,7 @@ max recipients add "Иван Петров"       # и писать только 
   30 8 * * * claude -p "$(cat ~/max-recipes/morning.md)" --allowedTools "Bash(max inbox:*)" >> ~/max-recipes/morning.log 2>&1
   ```
 
-  Cron runs with a nearly empty environment. On Linux, this can cause two problems:
+  Cron jobs run in an almost empty environment, causing two problems for `max` on Linux:
 
   - **`node: not found`, code 127.** Node installed through nvm, fnm or volta is outside the system `PATH` known to cron.
   - **`no token found for profile "default", although it has logged in on this machine`, code 4.** `max` cannot access the password store. **Do not log in again:** this is an environment issue, not an invalid session.
@@ -73,7 +74,7 @@ max recipients add "Иван Петров"       # и писать только 
   30 8 * * * codex exec --sandbox danger-full-access "$(cat ~/max-recipes/morning.md)" >> ~/max-recipes/morning.log 2>&1
   ```
 
-  See [Codex non-interactive mode](https://learn.chatgpt.com/docs/non-interactive-mode).
+  See the [Codex documentation](https://learn.chatgpt.com/docs/non-interactive-mode) for noninteractive mode.
 - **An open Claude Code session:** use `/loop` or ask “remind me at 15:00”. This works while the session remains open ([Claude scheduling](https://code.claude.com/docs/en/scheduled-tasks)).
 
 Claude cloud routines do not work for this setup: they run elsewhere and cannot access your computer's `max` session.
@@ -134,7 +135,7 @@ Writes to MAX: **only after your confirmation**. This recipe is for an interacti
 
 > Read the last 20 messages with Ivan Petrov and suggest a reply to his latest question. Do not send it; show me the text.
 
-Once you approve, the agent sends with `max messages send "Иван Петров" "…"`. An agent without a terminal connects through `max mcp --allow-send --confirm-send`: before every send, you see the chat and text and accept or decline ([MCP guide](./mcp.md)).
+Once you agree, the agent sends the message itself: `max messages send "Иван Петров" "…"`. An agent without a terminal connects through `max mcp`: ask it to show a draft first and configure tool-call confirmations in the agent application. Profile permissions limit writes ([mcp.md](./mcp.md)).
 
 ## A group you manage
 

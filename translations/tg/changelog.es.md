@@ -1,8 +1,283 @@
 ---
 title: "Historial de cambios"
 ---
+
 Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.35.0 — 08.10.2026
+
+### Novedades
+
+- **`tg chats requests list --search <name>` o `--link <link>` reduce las solicitudes** por nombre o a las
+  que llegaron mediante un enlace; Telegram no permite ambas condiciones a la vez.
+- **`tg polls show` indica si una encuesta es un cuestionario (`quiz`), si se puede cambiar el voto (`revote`) y si la
+  creaste tú (`creator`)**; solo su creador puede cerrarla.
+- **`tg polls vote` y `tg polls close` rechazan antes de enviar lo que Telegram rechazaría**: una encuesta cerrada, dos
+  respuestas en una encuesta de una sola respuesta, cambiar o retirar un voto definitivo, `--retract` sin un voto previo y
+  cerrar la encuesta de otra persona. Los rechazos de Telegram ahora indican qué hacer en lugar de «Telegram refused: X», y
+  un tiempo de espera agotado al leer la encuesta ya no indica que el voto podría haberse enviado.
+- **`tg chats requests accept|decline <chat> --all [--link <link>]` responde a todas las solicitudes pendientes a la vez, y
+  `tg chats link list` / `tg chats link revoke` muestran y revocan tus enlaces de invitación.** Una aceptación con `--all` se contabiliza
+  frente al límite por hora antes de permitir la entrada a nadie.
+- **Las clasificaciones conservan los enlaces de respuesta de Telegram y las discusiones vinculadas de canales**, por lo que las medidas de conversación usan esos
+  enlaces cuando están disponibles; los enlaces ambiguos de temas de foro siguen siendo desconocidos.
+- [La guía de clasificaciones](./rankings.md) explica las medidas, puntuaciones, cobertura, selecciones guardadas y evidencias.
+  Volver a ejecutar una selección guardada ahora conserva los límites de fecha exclusivos.
+- **`tg store fetch --all` descarga todos los chats**: los últimos 90 días de cada uno, primero los activos más recientemente;
+  `--background` lo ejecuta como un trabajo. La búsqueda lo necesita: [prepara tu archivo](./search.md#prepare-your-archive-first).
+- **Tus propios nombres y notas sobre personas: `tg contacts alias` y `tg contacts notes`**, guardados solo en este
+  ordenador; `contacts show --with-notes` y `contacts list --search-notes` los muestran y permiten buscarlos
+  ([personas](./people.md#your-own-names-and-notes-contacts-alias-contacts-notes)).
+- **Etiquetas automáticas para grupos y canales: `tg metadata refresh` y `tg tags auto`**, a partir del título y
+  la descripción, sin modificar tus propias etiquetas ([búsqueda](./search.md#tags)).
+
+### Cambios que pueden afectar a scripts
+
+- **Cada búsqueda indica qué datos consultó.** Una línea del terminal muestra los mensajes y chats consultados, los chats nunca
+  descargados o desactualizados y el comando para solucionarlo; `coverage.next` en JSON indica al agente qué ejecutar.
+
+- **La búsqueda por palabras ahora consulta Telegram y el archivo local de forma predeterminada (`--backend both`).**
+  Antes buscaba solo en el archivo salvo que se eligiera otro backend. Ahora la búsqueda puede conectarse a Telegram;
+  usa `--backend archive` para buscar solo localmente. Los recuentos con `stats`, la búsqueda por temas y las consultas que el servidor
+  no puede responder siguen leyendo solo el archivo.
+
+- **`tg chats join` para un grupo cuyos administradores aprueban las entradas responde `requested: true` y termina con `0`**, en lugar
+  del código `11`: la solicitud ya se enviaba antes. Un script que interpretaba la salida 11 como «solicitud enviada» ahora lee
+  `requested`.
+
+## 0.34.0 — 07.10.2026
+
+### Novedades
+
+- **`tg stats messages top` y `tg stats contacts top` clasifican los mensajes almacenados y sus autores**, y
+  `evidence` bajo cada comando muestra los mensajes que sustentan un puesto en la clasificación. Solo leen el almacenamiento local y
+  no consultan Telegram; `searches create --selection` guarda esa clasificación como una búsqueda.
+- **Cada perfil tiene ahora un ritmo de solicitudes compartido por todos los procesos `tg` que lo usan.** Dos comandos simultáneos,
+  trabajos `store fetch` en segundo plano, `mcp` y `serve` antes regulaban su ritmo por separado, por lo que ejecutar varios
+  multiplicaba la frecuencia de solicitudes; ahora comparten un cupo: una ráfaga de 20 y después una solicitud por segundo. Una
+  espera solicitada por Telegram bloquea todo el perfil, y una solicitud que tendría que esperar más de 5 minutos falla de
+  inmediato con el código de salida `8`. Los trabajos masivos ejecutados en paralelo tardan más. `requestsPerMinute` o
+  `TG_REQUESTS_PER_MINUTE` cambia el ritmo; [limits.md](./limits.md) explica todas las reglas.
+- **`tg messages send --html` y `tg messages edit --html` leen el HTML de Telegram** — `<b>`, `<i>`, `<u>`, `<s>`,
+  `<a href>`, `<code>`, `<pre>`, `<blockquote>`, `<tg-spoiler>` — conservando los saltos de línea tal como los escribiste
+  ([uso](./usage.md#sending)).
+- **`tg messages send --file … --filename <name>`** envía el archivo con el nombre que ven los demás.
+- **`tg messages list <chat> --topic <id>` lee un tema del foro**, hacia atrás desde su mensaje más reciente o `--before-id`.
+- **`tg chats folders order` coloca las carpetas en el orden que indiques**, y **`tg chats folders join <link>`** añade una
+  carpeta compartida mediante un enlace `t.me/addlist/` y entra en todos sus chats.
+- **`tg chats link create <chat>` crea otro enlace de invitación: `--approval` exige solicitar la entrada primero,
+  `--expire-time` y `--max-uses` lo limitan; `tg chats update --join-approval on|off` exige que todos soliciten
+  la entrada primero.** Ambas opciones funcionan tanto en grupos privados como públicos.
+- **`tg chats requests list <chat>` muestra quién pidió entrar en un grupo que exige aprobación, y `tg chats requests
+  accept|decline <chat> <person>` responde a una solicitud.** Solo los administradores ven las solicitudes; una aceptada cuenta para el
+  límite por hora como un miembro añadido.
+
+- **`tg messages search --backend both` consulta Telegram y el archivo.** Los resultados de Telegram se guardan
+  y se comprueban con la misma consulta, por lo que `exact:`, `-word` y la clasificación conservan su significado; cada mensaje indica
+  si procede del archivo, de Telegram o de ambos. `--backend server` muestra solo los resultados de Telegram;
+  `--server-time` limita la espera (5 s). La opción predeterminada sigue siendo el archivo ([búsqueda](./search.md)).
+
+- **`tg chats mark-read <chat> --topic <id>` marca un tema del foro como leído**, hasta `--until` o su mensaje más
+  reciente, y deja el resto del chat como estaba.
+
+- **`tg topics edit <chat> <topic>` renombra (`--title`), cierra o reabre (`--closed on|off`) y fija o desfija
+  (`--pinned on|off`) un tema del foro, y oculta o muestra el tema General (`--hidden on|off`); `tg topics order
+  <chat> <topic...>` ordena los temas fijados.** Repetir cualquiera de los dos comandos es seguro.
+
+- **`tg messages send --spoiler` difumina una foto o un vídeo hasta que se pulse, y `--caption-above` coloca el texto
+  encima.** Se rechaza un spoiler en un documento o mensaje de voz.
+
+- **`tg chats send-as <chat>` enumera las identidades con las que puedes publicar en un grupo, y `--send-as <id>` publica como una de
+  ellas** en `tg messages send` (incluidos archivos), `tg messages forward` y `tg polls create`. La lista siempre
+  te incluye y marca la elección guardada del grupo; leerla no cambia nada. Se rechaza un identificador que no esté en la lista.
+
+### Cambios que pueden afectar a scripts
+
+- **Se rechaza un envío, reenvío o encuesta sin `--send-as` a un grupo que publica como un canal de forma predeterminada** (salida
+  `2`), en lugar de enviarlo como ese canal. El error indica `--send-as <your id>` para publicar como tú y
+  `--send-as <channel id>` para publicar como el canal.
+
+## 0.33.0 — 07.10.2026
+
+- **`tg contacts profile` y `tg contacts check` estiman la antigüedad de cuentas creadas hasta agosto de 2026.** La
+  tabla que estima el mes de registro a partir del identificador de cuenta terminaba en noviembre de 2025, por lo que las cuentas más recientes no tenían
+  estimación. Los identificadores de finales de 2025 ahora dan fechas hasta cuatro meses posteriores, más próximas a la creación real.
+  Las estimaciones de 2026 tienen un margen de error de unos tres meses; `source: "estimate"` sigue marcando cada estimación.
+- **OCR de adjuntos mediante la pasarela compartida.** Los agentes suelen leer las imágenes y documentos escaneados por su cuenta y
+  guardar el texto mediante `attachments text set`. El procesamiento masivo explícito usa `attachments extract --ocr`,
+  `models.ocr` y `--concurrency` con límites; el texto completo entra en el índice `content:` existente.
+  La caché por hash y modelo evita llamadas repetidas, y los fallos conservan el texto del agente y el texto indexado anterior.
+
+## 0.32.0 — 07.10.2026
+
+### Novedades
+
+- **`tg messages comments <channel> <post>` lee los comentarios de una publicación del canal, y `tg messages send
+  --comment-to <post>` escribe uno.** Los comentarios están en el grupo de discusión del canal; una publicación sin él da la salida `6`.
+- **`tg contacts profile` enumera nombres y nombres de usuario anteriores** en `aliases`, primero los más antiguos, con un enlace `t.me`
+  para un nombre de usuario anterior. El almacenamiento local ahora conserva un nombre o nombre de usuario cuando cambia. Consulta
+  [Personas](./people.md).
+
+## 0.31.0 — 07.10.2026
+
+### Novedades
+
+- Extracción de archivos mediante MCP, directorios explícitos y `messages download --extract`; los archivos modificados
+  se comprueban por el hash del contenido. La preparación local opcional con límites sigue a las descargas de historial y está desactivada
+  de forma predeterminada. `store gaps plan` y `store gaps repair` inspeccionan las lagunas internas registradas y las
+  reparan explícitamente con límites y trabajos reanudables; los extremos desconocidos y las páginas ambiguas quedan pendientes.
+
+- **`tg stats chats official <chat>`**: estadísticas de Telegram para un supergrupo o canal que administras, tal como
+  las muestran sus aplicaciones: totales comparados con el periodo anterior, autores destacados, administradores y personas que invitan (supergrupos), publicaciones
+  recientes y proporción de notificaciones (canales), y cada gráfico como series JSON. Solo lectura. Funciona donde Telegram te muestra
+  estadísticas; en otros casos falla con un error de permiso o validación. Consulta [Grupos que administras](./groups.md).
+- cli-messaging 0.162.0 también incorpora `store gaps repair`, las opciones de preparación de `store fetch`,
+  `messages download --extract` y `attachments extract --from-dir` / `--cursor`.
+
+- **La configuración, los permisos y los perfiles tienen guías separadas.** La configuración empieza con las ubicaciones de archivos y las tareas habituales; la referencia completa de ajustes sigue disponible.
+
+### Cambios que pueden afectar a scripts
+
+- La configuración se divide en una guía breve y una referencia completa de claves, tipos, valores predeterminados, ámbitos y variables de entorno.
+  El contrato público de la CLI describe la ejecución sin interacción, los esquemas, límites, vistas previas y reglas de reintento.
+- Validación en CI de los metadatos portables de la habilidad, la versión instalada, las rutas de comandos y la cobertura de claves de configuración.
+  El inicio de sesión nativo y las preguntas opcionales de configuración respetan la política compartida de ausencia de entrada interactiva.
+
+- **La primera resolución de ajustes crea config.json.** Se conservan los archivos existentes; no se guardan las sustituciones del entorno ni de las opciones. config show ahora puede crear el archivo, y los valores habituales indican los valores predeterminados del archivo como su origen.
+- **Las búsquedas de palabras y frases incluyen formas de palabras.** Las consultas en scripts pueden devolver más mensajes. Usa exact: o --exact para el comportamiento anterior de coincidencia exacta; text: explícito sigue admitiendo formas de palabras. Los ajustes de idioma del archivo afectan a las coincidencias.
+
+### Correcciones
+
+- La preparación de búsqueda respeta readonly o la denegación de `conversations.links` antes de descargar o poner
+  la preparación en cola, incluida la reparación de lagunas. `--no-catch-up` explícito sigue permitiendo las lecturas de historial autorizadas.
+
+- El contexto de una persona encuentra diálogos privados sin miembros registrados cuando el identificador del diálogo es el de la
+  persona, recuperando los mensajes directos y el último mensaje en cada dirección en los almacenamientos de Telegram existentes.
+- Las operaciones de escritura interrumpidas conservan su resultado desconocido, el identificador de operación y la información de reintento; comprueba
+  el resultado antes de reintentar una escritura de la Bot API cuyo tiempo de espera se haya agotado.
+
+## 0.30.0 — 07.10.2026
+
+### Cambios que pueden afectar a scripts
+
+- **`tg mcp` ofrece al agente tres herramientas en lugar de una por comando: `tg_tools_search`, `tg_read` y
+  `tg_write`.** El agente encuentra un comando por palabras y lo ejecuta como
+  `{ "command": "messages list", "arguments": { … } }`, con los mismos argumentos y la misma respuesta que
+  su antigua herramienta. `tg bot mcp` funciona igual: `tg_bot_tools_search`, `tg_bot_read`, `tg_bot_write`.
+  Motivo: el agente leía unas 80 descripciones de herramientas antes de su primera pregunta.
+  Qué debes revisar: los nombres antiguos (`tg_messages_send`, `tg_status` y los demás) ya no funcionan, ni
+  las reglas de cliente que los nombran; permite `tg_read` y, si quieres, `tg_write` en tu cliente
+  ([MCP](./mcp.md)).
+
+- **Las escrituras mediante MCP no muestran un formulario de confirmación: deciden solo los permisos del perfil.** El nivel
+  `ask` actúa como `allow` mediante MCP, tanto por stdin/stdout como por `--http`.
+  Motivo: los formularios fallaban en muchos clientes y entorpecían el trabajo.
+  Qué debes revisar: con los permisos predeterminados, un agente ahora puede borrar tus propios mensajes; establece
+  `tg config set permissions.messages.delete readonly` para impedirlo. Las acciones que las reglas de un grupo quieren
+  confirmar quedan a tu cargo. `--confirm-send`, `--allow-dangerous` y `--http-confirmation` (de
+  0.30.0) se aceptan con una advertencia y no cambian nada; `tg mcp config` ya no las escribe.
+
+- **Las estadísticas usan `stats messages show`, `stats chats show` y `stats tasks show`.**
+  Se eliminan las rutas antiguas `messages stats`, `chats stats` y `tasks stats`. Actualiza los comandos
+  y los permisos exactos a `stats.messages.show`, `stats.chats.show`, `stats.tasks.show`.
+  MCP: usa `tg_read` con la misma ruta de comando.
+- **Los errores de análisis devuelven la salida 2 con un validation_error estructurado.** Los scripts que esperan
+  texto libre o la salida 1 deben actualizar su gestión de errores.
+
+### Novedades
+
+- **`tg setup` es más fácil de seguir.** Cada paso es un encabezado, `[1/5] This computer`, y lo sucedido
+  aparece debajo con sangría; las preguntas y el código QR están bajo su paso, con una línea en blanco alrededor del código.
+  El resumen final alinea sus etiquetas y coloca arriba el comando que debes probar primero. La salida `--json` y sus claves
+  no cambian; `--quiet` sigue ocultando los pasos.
+
+- **Una lista de lo que requiere tu atención.** Desde 0.29.0, `review` y `serve` guardan una tarea en el almacenamiento local para una
+  pregunta sin respuesta y un mensaje que te menciona por tu nombre, y la cierran cuando respondes; ahora
+  puedes verlas. `tg tasks list` muestra cada una con el mensaje al que apunta; `tg tasks add <message> --type
+  promise` añade lo que las reglas no detectan; `tg tasks close <task> --as done|dismissed` cierra una definitivamente;
+  `tg stats tasks show` las cuenta por chat. Estos comandos no envían nada. MCP: usa `tg_read` o `tg_write` con la misma ruta de comando.
+
+- **Las reglas de respuesta se pueden editar desde la CLI y usan plantillas Liquid con bloques ai opcionales.**
+  `replies add|edit|on|off` cambia las reglas y `replies audience` cambia las listas de permitidos y prohibidos del perfil.
+  `models.replies` selecciona el proveedor; `replies consents` concede consentimiento por perfil y endpoint con
+  exclusiones por identificadores nativos de chats. `replies test` habitual muestra las instrucciones y la alternativa sin llamadas;
+  `--ai` envía explícitamente datos almacenados. Las plantillas antiguas conservan su alternativa literal con advertencias.
+  El envío sigue limitado a los probadores y replies.send; consulta [archivo](./archive.md#tester-only-reply-rules).
+
+- **Las escrituras MCP pueden ejecutarse desde clientes web sin formularios del servidor.** Los niveles de permisos del perfil
+  se aplican por igual a HTTP y stdio; `ask` y `allow` permiten la escritura MCP solicitada. Repite
+  `--permission key=level` para sobrescribir permisos de este proceso del servidor sin editar la configuración.
+  La aprobación de la aplicación es independiente y el servidor no puede verificarla. [Configuración en el navegador](./remote.md).
+
+- **Los gráficos se pueden guardar como PNG.** `tg stats charts <chat> --output activity.png` guarda un gráfico de tema oscuro
+  en un archivo nuevo; SVG sigue disponible. En MCP, `tg_read` con `command: "stats charts"` y `format: "png"`
+  devuelve una imagen y JSON sin conectarse a Telegram ni escribir un archivo.
+- **El prompt MCP open-tasks enumera las tareas pendientes.** Llama a review para actualizarlas
+  y después las enumera con un filtro `chat` opcional; solo cierra tareas tras la aprobación y no envía nada.
+- **La configuración en el navegador cubre Windows, macOS y Linux.** La guía distingue los comandos de PowerShell y
+  del terminal, los permisos temporales de envío, el inicio de sesión web de Codex, dos servidores simultáneos
+  y cómo detener túneles individuales. [Configuración en el navegador](./remote.md).
+
+### Correcciones
+
+- **Las fechas de registro estimadas son más precisas para las cuentas creadas en 2022–2025.** Cuando Telegram no da el
+  mes, `contacts profile` lo estima a partir del identificador; ahora la estimación se basa en 212 fechas de registro reales. Las cuentas
+  de 2022 ya no parecen unos nueve meses más recientes de lo que son: el error típico de las estimaciones es de uno a dos meses.
+  Los identificadores hasta noviembre de 2025 ahora reciben una estimación; los más nuevos siguen sin ella.
+
+- **`tg serve` y `tg watch` terminan correctamente al detenerlos con SIGTERM o Ctrl-C.** Antes salían con 1 y
+  `database is not open`, y se perdían las actualizaciones y contactos que seguían llegando: la biblioteca de Telegram
+  cerraba el archivo de inicio de sesión al recibir la señal, antes de que el comando terminara de usarlo. Ahora el comando
+  lo cierra una sola vez después de guardar lo recibido.
+
+- `chats show` da el recuento real de miembros de un supergrupo, que la lista de chats de Telegram mostraba como ausente o
+  desactualizado, y la tarjeta o el enlace de invitación de un grupo da el recuento de un grupo básico en lugar de 0. La lista de miembros
+  también incluye ahora el recuento del grupo, por lo que `chats members fetch` podrá determinar quién salió de un supergrupo cuando
+  tg pase a la siguiente biblioteca compartida.
+
+## 0.29.0 — 06.10.2026
+
+### Novedades
+
+- **Los mensajes largos se buscan por significado en su totalidad.** Un mensaje de más de unos 1200 caracteres se divide
+  en fragmentos solapados antes de generar sus vectores, por lo que `messages search` por significado lee todo el mensaje, no solo su
+  comienzo. Los chats construidos antes se consideran desactualizados, y `conversations build` o `search --refresh` los reconstruye
+  (cli-messaging 0.153.0; el almacenamiento pasa a la versión 21, en la que las versiones anteriores aún pueden escribir).
+
+- **El perfil de una persona.** `tg contacts profile <person>` muestra lo que Telegram informa sobre alguien: cada
+  nombre de usuario, biografía, cumpleaños, las marcas de Telegram (bot, verificado, premium, estafa, falso, restringido, eliminado),
+  su última conexión (`recently`, `week` y `month` ya no se muestran como ocultos), si sois
+  contactos mutuos, cuándo se creó la cuenta (el mes de Telegram o una estimación por identificador, siempre
+  etiquetada), si tiene una foto propia y, para cada chat que compartís, cuántos de sus
+  mensajes están almacenados, el primero y el último. El teléfono muestra sus cuatro últimas cifras salvo que se indique `--show-phone`.
+  No consulta Telegram más que `contacts show`. MCP: `tg_contacts_profile`.
+- **Registra la pertenencia a grupos a lo largo del tiempo.** `tg chats members fetch <chat>` guarda perfiles, cambios de miembros
+  y un recuento diario; `--budget` limita las páginas y nadie se registra como ausente tras una lectura parcial.
+  `--track` inicia descargas diarias mientras se ejecuta `tg serve`. `chats tracking list|show|add|remove` gestiona los
+  grupos seguidos; detener el seguimiento conserva el historial registrado. `chats members history --since-time` lee
+  entradas, salidas y cambios de perfil registrados sin contactar con Telegram. La primera instantánea registra
+  una base inicial, no demuestra que todas las personas entraran ese día; los días omitidos no se reconstruyen.
+  `chats members list --offline` lee la última lista completa guardada. Usa cli-messaging 0.152.0.
+- `tg contacts context <person> --chat <chat>` (repítelo para más chats) devuelve sus mensajes más recientes en cada chat,
+  solo con la hora y el texto, para que un agente los resuma; `-v` añade identificadores y enlaces, `--limit` se aplica por chat, y `--refresh`
+  consulta primero Telegram con una búsqueda por remitente en cada chat.
+- **¿Es esta cuenta un bot?** `tg contacts check <person>` puntúa a una persona a partir de las marcas de Telegram, su
+  perfil y foto más antigua, lo que escribió y guarda el almacenamiento, y las listas públicas de spam Combot CAS y
+  lols.bot, a las que se envía su identificador; `--no-registries` omite las listas. `tg chats members audit --deep <n>` ejecuta
+  la misma comprobación para los primeros n miembros, uno por segundo. Cada motivo indica su origen; es una pista, nunca un
+  veredicto.
+
+### Correcciones
+
+- **La ayuda explica qué leen las comprobaciones de miembros y dónde se conectan.** `--no-registries` omite las listas públicas de
+  bloqueos, pero sigue solicitando a Telegram el perfil y las fotos de la persona; `--offline` es el modo solo
+  local. Las comprobaciones detalladas inspeccionan como máximo 1,000 mensajes almacenados por persona y hacen solicitudes individuales para
+  los miembros seleccionados. `contacts context --chat --refresh` se conecta explícitamente antes de leer el almacenamiento.
+- **`contacts profile` ya no estima la fecha de registro de las cuentas más recientes.** La tabla de identificadores termina en
+  diciembre de 2024 y no permite distinguir un identificador más nuevo de 2025 de uno de 2026; estos identificadores ahora no reciben estimación, en lugar
+  de una fecha que podría ser años anterior a la real.
+- **`tg mcp --http`: Claude y ChatGPT pueden completar el inicio de sesión.** La página de acceso hacía que el navegador enviara el formulario
+  como si no tuviera origen, y `tg` lo rechazaba con «Origin not allowed». Ahora el inicio de sesión funciona (cli-messaging 0.152.0).
 ## 0.28.0 — 06.10.2026
 
 ### Novedades
@@ -53,7 +328,6 @@ Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la m�
 - **`messages delete` comprueba primero que los identificadores pertenecen al chat.** En un chat privado o un grupo básico, Telegram numera los mensajes por cuenta y elimina solo por número, así que un identificador de otro chat (o el número del otro lado para el mismo mensaje) eliminaba un mensaje allí. Ahora cualquier identificador que no esté en el chat indicado detiene toda la eliminación con código 2, y no se elimina nada.
 - `text:/…/` en una búsqueda estricta normaliza las letras igual que el índice de palabras, así que `text:/Квартир.*/` y `text:/счёт/` encuentran las palabras que antes no encontraban. Un error de búsqueda indica qué hacer en su lugar: `~` remite a `--language legacy`, un prefijo demasiado corto para expandirse propone uno más largo, y un índice todavía en construcción indica el `tg store migrate` exacto.
 - Dos `tg serve` iniciados en el mismo instante para un perfil ya no pueden ejecutarse a la vez.
-
 ## 0.27.0 — 04.10.2026
 
 ### Novedades
@@ -189,6 +463,7 @@ Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la m�
 ### Novedades
 
 - **`tg messages evidence <chat>` y `tg_messages_evidence` por MCP** preparan un paquete limitado de fuentes del archivo local para un resumen del agente, sin conectar ni marcar como leído. Incluyen localizadores, huellas, cobertura explícita y cursor para páginas anteriores. Los mensajes completos caben en 64 KiB de elementos JSON; `--limit` acepta 1–100.
+
 - **`tg <name> bot contacts show --refresh`** tiene la misma ayuda que `max`, sin nombrar el servicio (cli-messaging 0.109.0).
 - **La documentación de bots está completa** ([bots](./bot.md)): identificadores de chats, archivos y límites, y códigos de salida para scripts.
 - **`tg <name> bot contacts show`, `bot messages search` y `bot messages between`** consultan lo guardado en este equipo. Consulta [archivo del bot](./bot.md#what-the-bot-kept).
@@ -213,6 +488,7 @@ Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la m�
 ### Correcciones
 
 - **Los rechazos de escritura del bot indican un comando de configuración válido** con `--bot` y la clave de permiso (cli-messaging 0.111.0). Antes colocaban `config` dentro de `bot`, donde no existe.
+
 - **Los comandos locales ya no dicen que cambian Telegram.** `config set` y `unset`, `chats rules set` y `unset`, `recipients add`, `remove` y `clear`, y `auth set`, `auth remove`, `recipients add`, `remove` y `clear` del bot solo modifican configuración, reglas, listas o almacén de claves. La [referencia](./commands.md) indica "Changes something on this computer only.". Siguen siendo escrituras en `tg commands`. `chats moderate` y `session end` siguen indicando cambios en Telegram.
 - **`tg contacts show` incluye el chat individual** entre los compartidos, recientes primero. Antes solo mostraba grupos porque la lista de chats comunes de Telegram solo incluye grupos.
 
@@ -272,10 +548,13 @@ Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la m�
 ### Correcciones
 
 - **`tg chats list` ya no duplica chats fijados.** Al incluir archivados, las páginas de Telegram repetían fijados más adelante; en una cuenta se duplicaban 8 de 1361. El título también coincidía consigo mismo dos veces y podía rechazarse como ambiguo.
+
 - **`tg server stop` y Ctrl-C terminan `serve` y `watch` correctamente.** serve se cerraba antes de limpiar el bloqueo y `tg server status` mostraba `stale` después de cada parada.
 - **`tg server` en una copia de desarrollo no toca la unidad systemd instalada.** Un repositorio con `TG_STATE_DIR` o base de datos propia obtiene otro nombre de unidad; la instalación conserva `tg-serve-<profile>.service`.
 - **Los chats abandonados ya no aparecen en `chats list --offline`.** Desaparecen cuando `tg chats list` consulta la lista completa; sus mensajes permanecen hasta `tg store clear --left` y vuelven si te unes de nuevo.
+
 - **Dos rechazos explican qué hacer.** Si intentas volver a añadir a alguien que salió o fue eliminado y no sois contactos mutuos, indica enviarle el enlace (`tg chats link show <chat>`). Si nombras por identificador a alguien que la cuenta nunca vio, indica usar @username o leer primero un chat compartido.
+
 - **Los argumentos rechazados por la biblioteca ya no repiten lo escrito.** Su error podía revelar títulos o enlaces. Ahora identifica el tipo de entrada incorrecta cuando puede —chat al que no perteneces, enlace de mensaje o invitación, teléfono, código o contraseña— o informa de que Telegram rechazó un argumento.
 - **Las conversaciones se muestran en inglés.** Los mensajes propios aparecen como `you` y los días como `26 September 2026`; antes estaban en ruso.
 - **Chats y mensajes no encontrados devuelven `not_found`** y chats de tipo inadecuado devuelven `validation_error`. Antes eran fallos desconocidos con código 1 y texto de la biblioteca que podía repetir títulos.
@@ -349,7 +628,9 @@ Cambios visibles para otros que pasan por la protección como `messages send`: s
 
 ### Cambios que pueden afectar a scripts
 
-- **La base de datos compartida pasa al esquema 6** (cli-messaging 0.49.0). La primera ejecución actualiza `messages.db`; un `max` anterior al publicado ese día lo rechaza y pide actualizar: `npm install -g @leemour/max-cli@latest`. Los comandos propios de `tg` no cambian.
+- **El almacenamiento compartido de mensajes pasa a la versión 6** (cli-messaging 0.49.0). La primera ejecución de `tg` actualiza
+  `messages.db`; un `max` anterior al publicado el mismo día lo rechaza y pide
+  actualizarse: `npm install -g @leemour/max-cli@latest`. No cambia nada en los comandos propios de `tg`.
 
 ## 0.12.0 — 30.09.2026
 
@@ -374,7 +655,9 @@ Cambios visibles para otros que pasan por la protección como `messages send`: s
 
 - **Transcripción local.** `tg models audio list` y `tg models audio download <id>` descargan una vez Parakeet v3 (25 idiomas, predeterminado), GigaAM v3 o GigaAM v3 CTC (ruso) en `~/.cache/cli-common/models/audio`, carpeta compartida. `tg messages transcribe` consulta Telegram y usa modelo local si falta Premium; `--local` y `--model <id>` omiten Telegram. `transcribeWith` (`auto`, `messenger`, `local`) y `speechModel` definen los valores. Nunca descarga automáticamente.
 - **`tg messages send --photo <path>` o `--file <path>`**, con texto como leyenda, y `photo` y `file` en `tg_messages_send`. Rechaza ocultos, `~/.ssh`, carpetas propias y base local salvo `--allow-any-file`; por MCP no hay excepción. El registro guarda tipo y tamaño, no nombre. Reintentar con `--send-id` conserva una copia (comprobado con una foto).
+
 - **`tg update` reinicia el servidor con el nuevo tg**, para no conservar código antiguo; si serve se inició manualmente, indica que debes reiniciarlo. **`tg server status` avisa si serve es anterior a tg**, igual que max-cli.
+
 - **`tg chats events <chat> [--since] [--event]`** y `tg_chats_events` muestran entradas, salidas, añadidos, eliminados y responsables, creación y renombrado de chat o mensajes fijados; últimos siete días por defecto. Máximo diez páginas por ejecución; `more` indica datos adicionales.
 
 ## 0.9.0 — 29.09.2026
@@ -384,7 +667,9 @@ Cambios visibles para otros que pasan por la protección como `messages send`: s
 - **`tg session start` indica quién inició sesión, ubicación de la sesión, origen de claves y siguiente paso** en frases. `--json` añade `session` y `appKeys` (`environment`, `keyring` o `file`, nunca las claves).
 - **`tg chats list --search <text> --kind <kind> --unread`**, igual en `tg_chats_list`. Los filtros combinados se aplican a los 200 recientes; `--search` exige tres caracteres.
 - **`tg messages list --after <id-or-time>`** avanza desde identificador o fecha (`2h`, `1d`, ISO 8601), antiguos primero. `after` en `tg_messages_list`.
-- **`tg messages send --silent --no-preview --md`** sin aviso, sin tarjeta de enlace y con formato de Telegram `**bold**`, `_italic_`, `~~struck~~` y `` `code` ``. MCP admite `silent`, `no_preview` y `markdown`. El registro solo guarda longitud.
+- **`tg messages send --silent --no-preview --md`**: sin notificación ni tarjeta de vista previa del enlace,
+  y con `**bold**`, `_italic_`, `~~struck~~` y `` `code` `` como formato de Telegram. La herramienta de envío MCP
+  acepta `silent`, `no_preview` y `markdown`. El registro de envíos sigue guardando solo la longitud.
 - **`tg messages send --at <time>`** programa en Telegram para `2h`, `1d` o `2026-10-01T09:00` local. `tg messages scheduled <chat>` (MCP `tg_messages_scheduled`) enumera pendientes. Nunca se reintenta un programado: rechaza `--send-id`.
 
 ### Cambios que pueden afectar a scripts

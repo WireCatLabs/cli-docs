@@ -1,6 +1,7 @@
 ---
 title: "Cómo usar tu cuenta personal"
 ---
+
 Esta página explica tu cuenta personal. Para bots que utilizan la Bot API oficial, consulta [bots](./bot.md).
 
 Cada comando realiza una tarea, imprime el resultado y termina. Solo [`max serve`](./archive.md#новые-сообщения-сразу-max-serve-и-max-watch) mantiene conexión: lo inicia en segundo plano el primer comando que necesita MAX y se detiene tras 15 minutos sin actividad.
@@ -18,9 +19,7 @@ max setup --agent codex  # QR-вход и навык агента
 max chats list           # ваши чаты
 ```
 
-La configuración puede tardar unos cinco minutos. Comprueba hasta cinco chats sin iniciar un servicio en segundo plano. El historial se descarga aparte tras elegir el chat y la cantidad. Antes de iniciar sesión, el agente lee `max skill show`, disponible sin sesión.
-
-`max skill show link-conversations` imprime el skill compartido para vincular conversaciones del archivo; no requiere otro inicio de sesión.
+La configuración puede tardar unos cinco minutos. El comando comprueba hasta cinco chats sin iniciar un servicio en segundo plano. El historial se descarga por separado después de elegir el chat y la cantidad. Antes de iniciar sesión, el agente lee `max skill show`, disponible sin sesión. `max skill show link-conversations` muestra el skill compartido para vincular conversaciones del archivo; no requiere otro inicio de sesión.
 
 ## Iniciar sesión
 
@@ -50,13 +49,13 @@ max account show                # номер телефона — только �
 max account show --show-phone   # номер целиком
 ```
 
-Para olvidar la sesión en este equipo:
+Cerrar sesión en MAX y olvidar la sesión en este ordenador:
 
 ```sh
 max session end
 ```
 
-`session end` elimina el token **localmente** sin avisar a MAX: la sesión creada en el navegador sigue activa. La respuesta lo indica: `revokedOnServer: false`.
+`session end` termina la sesión en el servidor de MAX (`revokedOnServer: true`). Si copiaste el token de una pestaña de web.max.ru, también se cierra la sesión de esa pestaña.
 
 ## El perfil es la primera palabra
 
@@ -92,13 +91,13 @@ max messages list "Иван Петров"     # или по имени чата
 max messages list 0 --limit 50
 ```
 
-Indica el chat por **identificador o parte del título**. Si coincide con dos chats, se muestran candidatos en lugar de adivinar: enviar al equivocado no se puede deshacer.
+Identifica el chat por **su ID o parte del título**. Si el fragmento coincide con dos chats, el comando no adivina y muestra los candidatos: enviar al chat equivocado es irreversible.
 
 `contacts show` acepta **identificador, `@username` o nombre parcial**, sin elegir entre dos coincidencias. Encuentra a cualquier persona conocida por la copia local, incluidos miembros de grupos que no son contactos. Devuelve nombre, `@username` y chats compartidos, recientes primero. Solo lee; encontrar a alguien no le envía mensajes.
 
 `chats show` devuelve los campos de `chats list` y `members`, con los participantes salvo tú. En canales, `members` es `null`: MAX solo envía cuatro suscriptores entre miles y no serían una lista completa.
 
-Mensajes pendientes y lo recibido desde la última revisión:
+Los mensajes no leídos de todos los chats y los recibidos desde la última comprobación:
 
 ```sh
 max inbox                               # непрочитанное — по счётчику MAX, у каждого сообщения чат
@@ -108,11 +107,11 @@ max inbox --since-time 2026-09-24T09:00 # разовый взгляд с это�
 max inbox --all                         # и чаты без звука, и архив
 ```
 
-**`max inbox` no marca como leído**, así que devuelve lo mismo hasta leer en la aplicación. Para tareas programadas utiliza `--new`: guarda el progreso del perfil y lo avanza solo después de imprimir. La primera revisión abarca 24 horas. `--since-time` no cambia ese punto. No muestra mensajes propios. Si un chat supera `--limit` (20 por defecto), muestra los recientes e indica por stderr cómo leer el resto. Cada ejecución lee hasta 20 chats; los demás aparecen por stderr y en `skipped`.
+**`max inbox` no marca nada como leído**, por lo que devuelve lo mismo hasta que leas los mensajes en la aplicación. Para ejecutarlo de forma programada, usa `--new`: la posición se guarda en el perfil y solo avanza cuando se imprime la salida. El primer `--new` revisa las últimas 24 horas. `--since-time` no cambia esa posición. No se muestran tus propios mensajes. Si hay más de `--limit` mensajes en un chat (20 de forma predeterminada), se muestran los más recientes y stderr indica un comando para leer el resto. Cada ejecución lee como máximo 20 chats; los restantes aparecen en stderr y en `skipped`.
 
 Omite silenciados y archivados salvo menciones o respuestas a ti; indica cuántos por stderr. `--all` los incluye.
 
-Un mensaje y su contexto requieren chat e identificador (los siguientes son ficticios):
+Un mensaje y su contexto: el chat y el ID del mensaje son obligatorios (los ID son ficticios):
 
 ```sh
 max messages show -1000 100000000000000001
@@ -121,7 +120,7 @@ max messages context -1000 100000000000000001 --before-n 3 --after-n 3
 
 El mensaje consultado se marca con `◀` o `"anchor": true` en JSON. Si no existe, por eliminación o chat incorrecto, devuelve no encontrado, no otro mensaje. `--before-id` de `messages list` funciona con cualquier identificador porque contiene la hora. También puedes usar un localizador `msg:…` de `messages search`, sin identificador posterior.
 
-Guarda fotos, archivos, vídeos y audio en una carpeta, la actual por defecto:
+Los adjuntos del mensaje —fotos, archivos, vídeos y audio— se guardan en una carpeta (la actual de forma predeterminada):
 
 ```sh
 max messages download -1000 100000000000000001 --output-dir ~/Downloads
@@ -141,7 +140,9 @@ Los archivos conservan el nombre; los demás adjuntos usan `<id сообщени
 
 ### Voz a texto
 
-Se transcribe **en tu equipo**, sin enviar la grabación. Descarga una vez el modelo mediante un comando separado:
+Consulta la selección de modelos, los comandos y los límites en la [guía de reconocimiento de voz](./audio-recognition.md).
+
+Los mensajes de voz se transcriben **en tu ordenador**: las grabaciones no se envían a ningún sitio. Descarga el modelo de reconocimiento una vez con un comando independiente:
 
 ```sh
 max models audio list                # какие модели есть, какие скачаны, какая по умолчанию (*)
@@ -161,18 +162,18 @@ Tiempos en un portátil Ryzen AI 9 HX 470 con un hilo. Elige otro modelo para un
 
 El texto se guarda bajo tu cuenta en la base compartida `messages.db`, usada por `messages list`, `messages transcribe`, `inbox`, `review` y MCP. Repetir con el id del chat y el mismo modelo responde de inmediato, sin red ni reconocimiento. Las transcripciones del antiguo caché de perfil no se migran; `--transcribe` las genera de nuevo. La grabación se descarga mediante la conexión de lectura y esta se cierra antes del reconocimiento local. No hace falta un segundo acceso. Se necesitan unos 700 MB de memoria (`parakeet-v3`, 1,3 GB).
 
-Para transcribir la voz mostrada en un chat o la bandeja:
+Transcribir los mensajes de voz de los resultados del chat o de la bandeja de entrada en una ejecución:
 
 ```sh
 max messages list "Иван Петров" --transcribe
 max inbox --transcribe
 ```
 
-`--transcribe` solo procesa la voz mostrada sin texto; `--model` elige para esa ejecución. Primero descarga grabaciones, cierra la conexión y después inicia el modelo. El texto aparece con 🎤 o como `transcript` en `--json`. Los fallos aparecen en `unheard` con explicación por stderr; los mensajes se muestran igualmente. Si falta el modelo, indica cómo descargarlo sin hacerlo automáticamente. Se guardan en `~/.cache/cli-common/models/audio`, compartidos por `max` y `tg`.
+`--transcribe` procesa solo los mensajes de voz mostrados que todavía no tienen texto; `--model` elige el modelo para una ejecución. Primero `max` descarga todas las grabaciones necesarias y después cierra la conexión antes de ejecutar el modelo. El texto aparece bajo el mensaje de voz con el icono 🎤, o en `transcript` con `--json`. Las transcripciones fallidas se enumeran en `unheard`, con el motivo en stderr; los mensajes se muestran igualmente. Si el modelo no está descargado, el comando indica cómo descargarlo, pero no lo hace automáticamente. Los modelos se guardan en `~/.cache/cli-common/models/audio`, una copia compartida por `max` y `tg`.
 
 Las transcripciones guardadas se muestran sin opción. Con `--offline` no se transcriben nuevas notas porque no se pueden descargar.
 
-**Leer no marca como leído.** Son operaciones distintas y existe una prueba que lo verifica. Puedes hacerlo explícitamente y la otra persona lo verá:
+**Leer no marca nada como leído.** El protocolo separa la obtención del historial de la marca de lectura. La segunda operación no se envía salvo que la pidas, y una prueba lo verifica. Puedes marcar explícitamente un chat como leído; la otra persona lo verá:
 
 ```sh
 max chats mark-read "Иван Петров"                  # до последнего сообщения
@@ -250,26 +251,26 @@ max messages search "договор"            # по тексту сообще
 max messages search "договор" --chat 42  # в одном чате
 ```
 
-La búsqueda requiere **tres caracteres como mínimo**. Con `--search`, `--kind` o `--unread`, `chats list` examina todos los chats que MAX proporcionó al iniciar sesión y avisa (`partial`) si no los proporcionó todos; con `--offline`, examina todos los guardados.
+El texto de búsqueda debe tener **al menos tres caracteres**: dos letras coinciden con demasiados elementos para resultar útiles. `chats list` con `--search`, `--kind` o `--unread` revisa todos los chats que MAX proporcionó al iniciar sesión e indica `partial` si MAX no los proporcionó todos. Con `--offline`, revisa todos los chats guardados.
 
-Utiliza después **el identificador**, que aparece en la salida y no cambia:
+Cuando encuentres el chat, utiliza su **ID** de la salida; no cambia:
 
 ```sh
 max messages list 42 --limit 20
 max messages send 42 "текст"
 ```
 
-También admite título parcial, incluido `max messages search --chat`: busca entre chats guardados sin conectarse. Por defecto usa Lucene estricto: palabras completas y un patrón explícito para prefijos, como `квартир*`. La búsqueda anterior con correcciones está disponible con `--language legacy`; `--regex` es un modo independiente sin distinguir mayúsculas. Consulta la [guía de búsqueda](./search.md).
+También se acepta parte del título, incluso en `max messages search --chat`. Los nombres se buscan entre los chats guardados y la búsqueda en un chat también consulta al servidor de MAX (`--backend archive` usa solo el archivo). La búsqueda utiliza Lucene estricto de forma predeterminada: una palabra encuentra otras formas, un prefijo requiere un patrón explícito como `квартир*` y `exact:квартира` busca solo la forma exacta. La búsqueda antigua con correcciones está disponible mediante `--language legacy`; `--regex` es un modo independiente de expresiones regulares que no distingue mayúsculas. Consulta [búsqueda](./search.md).
 
 ### Cuántos mensajes coinciden
 
-`max messages stats` cuenta mensajes del archivo local sin conectarse a MAX. Sin consulta, cuenta todos los mensajes guardados de la cuenta actual; con consulta, las coincidencias de Lucene estricto, igual que `messages search`. Cada mensaje se cuenta una sola vez.
+`max stats messages show` cuenta mensajes del archivo local sin conectarse a MAX. Sin consulta, cuenta todos los mensajes guardados de la cuenta actual; con consulta, cuenta las coincidencias de Lucene estricto como `messages search`. Cada mensaje se cuenta una sola vez.
 
 ```sh
-max messages stats "договор" --by chat --json
-max messages stats --by sender --chat "Работа" --limit 10 --json
-max messages stats --by day --timezone Europe/Madrid --json
-max messages stats --by hour --timezone UTC --jsonl
+max stats messages show "договор" --by chat --json
+max stats messages show --by sender --chat "Работа" --limit 10 --json
+max stats messages show --by day --timezone Europe/Madrid --json
+max stats messages show --by hour --timezone UTC --jsonl
 ```
 
 `--by` agrupa por chat, remitente, día natural u hora. `--limit` limita las filas, y `total` es el número de todos los mensajes que coinciden. En un archivo incompleto, las cifras son un límite inferior: revisa `coverage` y `completeness` antes de tomar la ausencia de coincidencias como prueba. Para incluir todas las cuentas de MAX guardadas, añade `--source max` explícitamente; sin él, los demás perfiles no entran en el resultado. El JSON contiene `by`, `items`, `total`, `page`, `limit`, `hasMore`, `query`, `coverage` y `completeness`; JSONL imprime las filas de `items`.
@@ -285,6 +286,21 @@ max contacts sync     # забыть, где остановились, и заб
 ```
 
 Es una reparación para una copia desincronizada o reiniciada tras cambio de esquema, no una operación habitual. Devuelve cantidades, sin nombres, teléfonos ni descripciones.
+
+### Tus nombres y notas sobre personas
+
+```sh
+max contacts alias set "Борис Тестов" Боря          # своё имя для человека, только на этом компьютере
+max contacts alias rm "Борис Тестов"
+max contacts notes add "Борис Тестов" --file note.txt   # или текст из stdin
+max contacts notes list "Борис Тестов"
+max contacts notes edit "Борис Тестов" <id> --revision 1 --file note.txt
+max contacts notes remove "Борис Тестов" <id>
+max contacts show "Борис Тестов" --with-notes
+max contacts list --search-notes квартира           # люди, в чьих заметках есть это слово
+```
+
+Los nombres personalizados y las notas permanecen en la copia local de esta cuenta y no se envían a MAX. `contacts rename` cambia un nombre en la agenda de MAX; es una operación distinta. Los comandos pueden encontrar a una persona por tu nombre personalizado salvo que coincida con el de otra; en ese caso, usa un ID. `--revision` protege frente a la edición de una nota desactualizada.
 
 ## Enviar
 
@@ -392,7 +408,7 @@ chosen}], closed, multiple, anonymous, voters}`. En `vote` y `close`, está bajo
 
 web.max.ru no muestra encuestas: indica «Actualiza MAX…». Solo pueden verse en aplicaciones móviles o de escritorio.
 
-Los demás participantes ven el voto salvo que la encuesta sea anónima. El comando rechaza localmente, como el cliente web, encuestas cerradas, varias opciones en encuestas de respuesta única, segundos votos prohibidos e ids de opción inexistentes. Votar, cerrar y crear usan las mismas comprobaciones que enviar: el voto es una reacción, cerrar una edición y crear un mensaje. `sendsPerHour` cuenta creación y cierre, pero no votos ni reacciones. Nunca repite votos automáticamente. Para agentes, `max_polls_vote` y `max_polls_create` en `max mcp` usan `permissions`; `max_polls_close` necesita escritura en `polls.close` ([mcp.md](./mcp.md)).
+Otros miembros pueden ver tu voto si la encuesta no es anónima. El comando rechaza localmente los votos no válidos como el cliente web: encuesta cerrada, varias opciones donde solo se permite una, segundo voto donde no se puede cambiar el voto o ID de opción inexistente. Votar, cerrar y crear encuestas pasan las mismas comprobaciones que enviar: un voto se trata como una reacción, cerrar como editar y una encuesta nueva como un mensaje. Las encuestas nuevas y los cierres cuentan para `sendsPerHour`; los votos, como las reacciones, no. Los votos no se repiten automáticamente. Para agentes, `max_write` (`command: "polls vote"`) y `max_write` (`command: "polls create"`) en `max mcp` requieren `permissions`; `max_write` (`command: "polls close"`) requiere el permiso de escritura `polls.close` ([mcp.md](./mcp.md)).
 
 ### Contactos, perfil y carpetas
 
@@ -403,6 +419,8 @@ max contacts remove 20000002
 max contacts rename 20000002 "Соседка" "Анна" # своё имя для человека; он его не видит
 max contacts block 20000002                 # больше не сможет вам писать
 max contacts unblock 20000002
+max contacts profile 20000002               # профиль, дата создания, его сообщения по общим чатам
+max contacts check 20000002                 # похож ли на бота; подробнее — people.md
 max contacts import книжка.csv              # строка: номер, запятая, табуляция или точка с запятой, имя
 max account update --description "о себе"   # имя остаётся прежним
 max account update --photo портрет.png      # новое фото профиля
@@ -412,6 +430,7 @@ max chats folders list
 max chats folders create "Работа" --chat -1000 --chat "Проект"
 max chats folders update "Работа" --title "Офис" --add -2000 --remove -1000
 max chats folders delete "Офис"             # чаты остаются
+max chats folders order "Офис" "Семья"      # после «Все чаты»: эти две, затем остальные
 ```
 
 No introduzcas teléfonos en argumentos, visibles en `ps` e historial. Contactos sin chat no aparecen en `contacts list`, pero sí en `contacts show <id>`. Se puede bloquear a alguien que no es contacto. MAX no permite nombre corto (`@имя`) en cuentas personales: devuelve «This name is unavailable». Las carpetas tienen máximo 20 caracteres; `max` rechaza nombres más largos sin enviar. `import` entrega a MAX teléfonos ajenos.
@@ -432,7 +451,7 @@ max messages send 0 --photo снимок.png                # фото
 max messages send 0 --voice заметка.ogg              # голосовое сообщение
 ```
 
-Con `--file`, `.jpg .jpeg .png .webp .gif` se envían como foto; `.mp4 .mov .webm .mkv`, vídeo; el resto, archivo. `--as-file` conserva como archivo incluso vídeos. `--photo` acepta `.jpg .png .webp`. Se permite un adjunto `--file` y otro `--photo`, pero **vídeos y archivos deben ir solos**; se rechaza antes de subir. El texto es opcional. Si falla la subida, no se envía. No admite varios archivos por mensaje. Rechaza `--no-preview`: el cliente MAX tampoco lo admite.
+Con `--file`, `.jpg .jpeg .png .webp .gif` se envían como fotos, `.mp4 .mov .webm .mkv` como vídeos y el resto como archivos. Con `--as-file`, el adjunto de `--file` se envía como archivo, también si es un vídeo. `--photo` solo admite `.jpg .png .webp`. Un mensaje puede contener un adjunto de `--file` y otro de `--photo`; **los vídeos y archivos deben enviarse solos**, y el comando rechaza las combinaciones no válidas antes de subirlos. El texto es opcional. Si la subida falla, no se envía nada. Actualmente `max` no envía varios archivos en un mensaje. `--no-preview` no está disponible en MAX: su propio cliente no lo permite y el comando lo rechaza.
 
 `--voice` envía una nota con duración y forma de onda, sin texto ni otros archivos. Requiere Ogg Opus, como MAX; convierte otro audio primero:
 
@@ -466,6 +485,7 @@ max chats members remove "Поход" "Боря"
 max chats admins add "Поход" "Аня" --can members,pin
 max chats admins remove "Поход" "Аня"              # снять права; участником остаётся
 max chats update "Поход" --title "Поход-2026" --description "в июле"
+max chats update "Поход" --photo обложка.jpg    # новое фото группы
 max chats show "Поход"                           # настройки группы — в поле settings
 max chats update "Поход" --all-can-pin off       # поменять одну
 max chats link show "Поход"                      # ссылка-приглашение, если вам её видно
@@ -500,7 +520,7 @@ max chats rules unset "Поход" consent.delete          # вернуть зн
 
 Se guardan localmente junto a la configuración; la respuesta indica el archivo. El primer `set` guarda todas las reglas predeterminadas. Puedes editarlo manualmente; `rules show` avisa si hay errores.
 
-Por defecto las reglas solo informan (`report`). También pueden eliminar mensajes (`delete`) o personas (`remove`). `consent.delete` y `consent.remove` controlan cada acción: `deny`, nunca; `readonly`, solo informar; `ask`, preguntar (predeterminado); `allow`, sin preguntas. `--allow-dangerous` permite acciones de nivel `ask` en esta ejecución. En archivos anteriores, `forbid` equivale a `deny`; `flag` y `confirm`, a `ask`.
+De forma predeterminada, ninguna regla actúa; solo informa (`report`). Una regla también puede hacer lo siguiente: `delete` elimina un mensaje y `remove` elimina a una persona. El nivel de permiso se establece por separado para cada acción (`consent.delete`, `consent.remove`): `deny`, nunca; `readonly`, solo informar; `ask`, preguntar (predeterminado); `allow`, sin preguntar. `--allow-dangerous` permite acciones de nivel `ask` durante esa ejecución. Los antiguos `forbid`, `flag` y `confirm` de los archivos se leen como `deny`, `ask` y `ask`.
 
 #### Revisar el grupo
 
@@ -515,13 +535,13 @@ Revisa lo nuevo desde el último control, o las últimas 24 horas la primera vez
 
 Las reglas y consentimiento deciden qué hacer. Por defecto solo informa. Cada fila indica hallazgo, persona, regla, acción y resultado: `reported`, informado; `done`, ejecutado; `planned`, pendiente de opción o aprobación con comando manual; `forbidden`, prohibido por reglas; `declined`, rechazado por ti; `refused`, bloqueado por perfil o límite; `skipped`, no procesado.
 
-La respuesta JSON es `{ chatId, rows }`. Se leen hasta 1000 mensajes por comprobación. El punto guardado está en el archivo de reglas; el anterior, de la sesión, se migra automáticamente. `--since-time` y `--dry-run` no lo cambian. MCP personal comparte ese punto y conserva `max_chats_check`.
+En JSON, la respuesta es `{ chatId, rows }`. Cada comprobación lee hasta 1000 mensajes. La posición guardada está en el archivo de reglas; una posición antigua de la sesión se migra automáticamente. `--since-time` y `--dry-run` no la avanzan. MCP de cuentas personales usa la misma posición al guardar `max_write` (`command: "chats check"`).
 
 Máximo 10 acciones (`--max-actions`). Las eliminaciones cuentan por hora; al alcanzar el límite se pospone el resto. Si queda algo pendiente, continúa desde el primero la próxima vez. Una persona eliminada puede volver por enlace; esta cuenta no permite bloquear su regreso.
 
 MAX no tiene solicitudes de entrada: los grupos son abiertos o usan invitaciones.
 
-## Para scripts y agentes
+## Scripts y agentes
 
 ```sh
 max chats list --json
@@ -642,7 +662,7 @@ max config set --defaults permissions.contacts readonly
 
 Los niveles `deny`, `readonly`, `ask` y `allow` se aplican en CLI y MCP. La clave más específica tiene prioridad: permitir eliminar no permite enviar. Con `ask`, la terminal pregunta y JSON exige una opción explícita de confirmación. `allow` no pregunta. El ejemplo no cambia otros recursos ni límites. Convierte `readOnly`, `allow` y `mcpTools` mediante `config migrate`; previsualiza con `config migrate --dry-run`. Consulta [configuration.md](./configuration.md).
 
-## Siguientes pasos
+## Siguiente paso
 
 - [Referencia de comandos](./commands.md): generada desde el programa.
 - [Configuración](./configuration.md): todos los ajustes.
@@ -652,38 +672,13 @@ Los niveles `deny`, `readonly`, `ask` y `allow` se aplican en CLI y MCP. La clav
 
 `account show --json` conserva los campos MAX `id`, `name`, `phone` y `description`, añadiendo `username: null` para el formato compartido. El teléfono sigue oculto; `--show-phone` lo revela explícitamente completo.
 
-## Perfil de una persona
+## Personas
 
-`max contacts profile <человек>` muestra lo que MAX informa sobre una persona y cuánto escribe en los chats comunes:
-
-- nombre, enlace de usuario y descripción;
-- `registered`: cuándo se creó la cuenta, según el propio MAX (`source: max`);
-- `hasPhoto`: si tiene foto propia;
-- en cada chat común, cuántos mensajes suyos hay en la copia local y cuáles son el primero y el último.
-  `complete: false` significa que el chat no está guardado por completo y que la cifra es un mínimo.
-
-El comando hace una solicitud a MAX adicional a las de `contacts show` y no avisa a la persona. MAX no proporciona etiquetas como «bot» o «estafador» para cuentas personales, por lo que `flags` está vacío. Con `--offline`, la respuesta se obtiene de la copia local.
-
-## ¿Parece un bot?
-
-`max contacts check <человек>` evalúa a una persona en busca de indicios de bot, cuenta falsa o spammer. Cada motivo indica su fuente:
-
-- perfil: falta foto, nombre de usuario o descripción, nombre extraño;
-- mensajes guardados: no ha escrito, el primer mensaje es un enlace, repite el mismo texto en varios chats.
-
-Las listas públicas de spam (Combot CAS y lols.bot) solo incluyen cuentas de Telegram. No se consultan para MAX y la respuesta lo explica; el identificador de la persona no se envía a ningún sitio. `--offline` solo lee lo guardado. La puntuación es una orientación, no una conclusión.
-
-## Contexto local de una persona
-
-`max contacts context <человек>` lee mensajes guardados y chats comunes de identidades vinculadas, sin conectarse ni marcar como leído. `complete: false` y `notRead` señalan lagunas del archivo. `max contacts link <человек> telegram:<id>` vincula identidades de MAX y Telegram; `contacts unlink` elimina el vínculo. Es una escritura en el grafo local de contactos y no cambia la agenda de MAX.
-
-`max contacts context <человек> --chat <чат> --chat <чат>` devuelve sus últimos mensajes en cada chat indicado, de antiguos a nuevos, solo con hora y texto: un formato breve para que un agente de IA pueda resumirlos. `--limit` se aplica a cada chat (20 por defecto); `-v` añade identificadores, enlaces a mensajes, remitente y referencia de respuesta; `-vv` incluye todo. `--refresh` primero lee el chat en MAX: obtiene los mensajes de esa persona de la última página del chat, ya que MAX no puede buscar por remitente. No se marca nada como leído.
-
-`contacts context` devuelve textos de mensajes y por ello respeta los permisos de `messages`; los vínculos locales de identidades respetan los de `contacts`.
+`contacts profile`, `contacts context`, `contacts check` y `contacts link` muestran lo que MAX y la copia local saben sobre una persona, sus mensajes recientes por chat y si parece un bot: [people.md](./people.md).
 
 ## Gráficos de estadísticas
 
-`max stats charts` devuelve la descripción de un gráfico en JSON. `--output activity.svg` también guarda un SVG con tema oscuro. Indica como argumento un chat encontrado mediante `max chats list`. `--chart-kind messages` muestra mensajes; `active`, autores activos; `membership`, entradas y salidas. `--by day` o `week` establece el periodo; la semana empieza el lunes. `--timezone` se aplica a las fechas del calendario.
+`max stats charts` devuelve una descripción del gráfico en JSON. `--output activity.svg` también guarda un SVG con tema oscuro; `--output activity.png` guarda un PNG. Pasa como argumento del comando un chat encontrado con `max chats list`. `--chart-kind messages` muestra mensajes, `active` autores activos y `membership` entradas y salidas. `--by day` o `week` establece el periodo; las semanas empiezan el lunes. `--timezone` se aplica a las fechas del calendario.
 
 El nombre de chat `synthetic-group` de este ejemplo es ficticio:
 
@@ -691,6 +686,8 @@ El nombre de chat `synthetic-group` de este ejemplo es ficticio:
 max stats charts synthetic-group --chart-kind messages --by day --timezone Europe/Madrid --output activity.svg --json
 ```
 
-El JSON contiene `chart` y, al guardar una imagen, también `chartFile` con ruta y tamaño. El SVG solo se escribe en un archivo nuevo, sin sobrescribir. Una fecha ausente queda como hueco; los datos incompletos se señalan en la descripción y la imagen. `membership` requiere eventos del chat en línea y no está disponible con `--offline`. MCP `max_stats_charts` devuelve JSON del archivo local, sin conectarse ni escribir archivos; no incluye entradas y salidas. La lectura respeta el permiso `messages`. PNG, `--jsonl` y la imagen por stdout aún no están disponibles.
+JSON contiene `chart`; al guardar una imagen, también contiene `chartFile` con la ruta y el tamaño. Las imágenes solo se escriben en archivos nuevos, sin sobrescribir. Las fechas ausentes quedan como huecos y los datos incompletos se indican en la descripción y la imagen. `membership` requiere eventos del chat en línea y no está disponible con `--offline`. MCP `max_read` (`command: "stats charts"`) devuelve JSON del almacenamiento local sin conectarse ni escribir archivos; `format: "png"` añade una imagen PNG y JSON con `chart` y el tamaño de `image`. Allí no están disponibles las entradas y salidas. La lectura respeta el permiso `messages`. No se admiten `--jsonl` ni imágenes en stdout.
 
-![Gráfico con datos ficticios](https://raw.githubusercontent.com/leemour/max-cli/v0.29.0/docs/images/stats-charts.png)
+![Gráfico con datos ficticios](https://raw.githubusercontent.com/leemour/max-cli/v0.34.0/docs/images/stats-charts.png)
+
+Clasificaciones de mensajes y autores: [métricas, puntuaciones y evidence](./rankings.md).

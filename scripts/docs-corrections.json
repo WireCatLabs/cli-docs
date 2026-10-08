@@ -18,7 +18,7 @@
       ],
       "es": [
         {
-          "before": "`--unanswered [hours]` conserva solo preguntas pendientes para ti o los administradores. Una pregunta contiene `?` (no cuenta dentro de enlaces) o responde a ti o a un administrador. Se considera contestada si tú o un administrador respondéis o sois los siguientes en hablar tras quien preguntó. Omite preguntas más recientes que el intervalo indicado (24 horas por defecto) para dar tiempo a responder. Si no se conocen los administradores, lo avisa y solo cuenta tus respuestas.",
+          "before": "`--unanswered [hours]` conserva solo las preguntas pendientes de ti o de los administradores de un grupo. Una pregunta es un mensaje con `?` (no cuenta el `?` de un enlace) o una respuesta a ti o a un administrador. Se considera respondida cuando tú o un administrador respondéis a ella o sois los siguientes en hablar tras quien preguntó. Se excluyen las preguntas de menos horas que las indicadas (24 por defecto): aún no ha habido tiempo para responder. Si no se conocen los administradores del grupo, el comando lo indica y solo cuentan tus respuestas.",
           "after": "`--unanswered [duration]` conserva solo preguntas pendientes para ti o los administradores. Una pregunta contiene `?` (no cuenta dentro de enlaces) o responde a ti o a un administrador. Se considera contestada si tú o un administrador respondéis o sois los siguientes en hablar tras quien preguntó. Omite preguntas más recientes que el intervalo indicado (24 horas por defecto) para dar tiempo a responder. Si no se conocen los administradores, lo avisa y solo cuenta tus respuestas. Usa una duración como `4h` o `1d`; no se admite un número de horas sin unidad."
         }
       ]
@@ -397,31 +397,6 @@
   },
   {
     "tool": "tg",
-    "slug": "configuration",
-    "reason": "Beginner context audit: define configuration or diagnostic vocabulary and explain when the reader needs this reference before introducing flags, precedence or traces.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Every setting, every variable, and which one wins. No setting can hold a secret: the file has no\nfield for a session, an app hash, a phone number or a chat id.",
-          "after": "You can start using `tg` without creating a configuration file. A **flag** is an option added to a command, such as `--limit 5`. A **default** is the value used when you omit it. An **environment variable** is a named setting supplied by your terminal or agent process. Save settings in a file when you want to reuse the same values across commands.\n\nEvery setting, every variable, and which one wins. No setting can hold a secret: the file has no\nfield for a session, an app hash, a phone number or a chat id."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Все настройки, переменные окружения и порядок их приоритета. Секреты в файле настроек не хранятся: в нём нет полей для сессии, хеша приложения, номера телефона или идентификатора чата.",
-          "after": "Пользоваться `tg` можно без создания файла настроек. **Флаг** — параметр после команды, например `--limit 5`. **Значение по умолчанию** используется, если параметр не указан. **Переменная окружения** — именованная настройка, которую терминал или процесс агента передаёт программе. Файл настроек нужен, когда вы хотите повторно использовать одни и те же значения в разных командах.\n\nВсе настройки, переменные окружения и порядок их приоритета. Секреты в файле настроек не хранятся: в нём нет полей для сессии, хеша приложения, номера телефона или идентификатора чата."
-        }
-      ],
-      "es": [
-        {
-          "before": "Todos los ajustes, variables y prioridades. La configuración no admite secretos: no tiene campos para sesiones, hash de aplicación, teléfonos ni identificadores de chats.",
-          "after": "Puedes usar `tg` sin crear un archivo de configuración. Un **indicador** es una opción del comando, como `--limit 5`. El **valor predeterminado** se usa si no la indicas. Una **variable de entorno** es un ajuste con nombre que tu terminal o agente pasa al programa. Guarda ajustes en un archivo cuando quieras reutilizarlos entre comandos.\n\nTodos los ajustes, variables y prioridades. La configuración no admite secretos: no tiene campos para sesiones, hash de aplicación, teléfonos ni identificadores de chats."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
     "slug": "diagnostics",
     "reason": "Beginner context audit: define configuration or diagnostic vocabulary and explain when the reader needs this reference before introducing flags, precedence or traces.",
     "replacements": {
@@ -441,31 +416,6 @@
         {
           "before": "Si un comando falla o tarda demasiado, `tg` puede mostrar lo que hizo, guardar un registro y convertirlo en un informe para adjuntar a una incidencia. Ninguno de esos registros contiene texto de mensajes.",
           "after": "Esta página ayuda a entender un fallo o un comando lento. Empieza con `tg doctor`: comprueba la instalación local sin conectar al mensajero. Una **traza** muestra operaciones durante la ejecución; un **registro de ejecución** guarda información de diagnóstico para revisarla después. No son copias de tus conversaciones. Los ejemplos explican qué modo elegir.\n\nSi un comando falla o tarda demasiado, `tg` puede mostrar lo que hizo, guardar un registro y convertirlo en un informe para adjuntar a una incidencia. Ninguno de esos registros contiene texto de mensajes."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "configuration",
-    "reason": "Beginner context audit: define configuration or diagnostic vocabulary and explain when the reader needs this reference before introducing flags, precedence or traces.",
-    "replacements": {
-      "en": [
-        {
-          "before": "No configuration is required. Without a file or environment variables, built-in defaults apply. A configuration file is useful when you want to stop repeating the same flag.",
-          "after": "You can start using `max` without creating a configuration file. A **flag** is an option added to a command, such as `--limit 5`. A **default** is the value used when you omit it. An **environment variable** is a named setting supplied by your terminal or agent process. Save settings in a file when you want to reuse the same values across commands.\n\nNo configuration is required. Without a file or environment variables, built-in defaults apply. A configuration file is useful when you want to stop repeating the same flag."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Настраивать ничего не обязательно: без файла и без переменных всё работает на встроенных\nзначениях. Файл нужен тогда, когда надоело повторять один и тот же флаг.",
-          "after": "Пользоваться `max` можно без создания файла настроек. **Флаг** — параметр после команды, например `--limit 5`. **Значение по умолчанию** используется, если параметр не указан. **Переменная окружения** — именованная настройка, которую терминал или процесс агента передаёт программе. Файл настроек нужен, когда вы хотите повторно использовать одни и те же значения в разных командах.\n\nНастраивать ничего не обязательно: без файла и без переменных всё работает на встроенных\nзначениях. Файл нужен тогда, когда надоело повторять один и тот же флаг."
-        }
-      ],
-      "es": [
-        {
-          "before": "No necesitas configurar nada: sin archivo ni variables funcionan los valores iniciales. El archivo sirve para evitar repetir opciones.",
-          "after": "Puedes usar `max` sin crear un archivo de configuración. Un **indicador** es una opción del comando, como `--limit 5`. El **valor predeterminado** se usa si no la indicas. Una **variable de entorno** es un ajuste con nombre que tu terminal o agente pasa al programa. Guarda ajustes en un archivo cuando quieras reutilizarlos entre comandos.\n\nNo necesitas configurar nada: sin archivo ni variables funcionan los valores iniciales. El archivo sirve para evitar repetir opciones."
         }
       ]
     }
@@ -736,25 +686,225 @@
   },
   {
     "tool": "tg",
-    "slug": "remote",
-    "reason": "Release validation October 6: old OpenAI developer-mode URL returns 404; current official custom MCP setup guide returns 200. Preserve reviewed source/translation fingerprints and fix delivered links through exact errata.",
+    "slug": "changelog",
+    "reason": "TG v0.34.0 already used backend both through cli-messaging 0.171.0. v0.35.0 corrects guide descriptions, not the default; verified in release source and upstream correction PR351.",
     "replacements": {
       "en": [
         {
-          "before": "[ChatGPT developer mode](https://developers.openai.com/api/docs/guides/developer-mode) or",
-          "after": "[ChatGPT developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server) or"
+          "before": "- **Word search now asks Telegram as well as the local archive by default (`--backend both`).**\n  Previously it searched only the archive unless a backend was chosen. Search can now connect to Telegram;\n  use `--backend archive` for local-only searches. Counting with `stats`, topic search and queries the server\n  cannot answer still read only the archive.\n",
+          "after": "- **The search guides now correctly describe the existing default (`--backend both`).** Word search asks Telegram as well as the local archive, as it already did in 0.34.0. Use `--backend archive` for local-only searches. Counting with `stats`, topic search and queries the server cannot answer still read only the archive.\n"
         }
       ],
       "ru": [
         {
-          "before": "[режим разработчика ChatGPT](https://developers.openai.com/api/docs/guides/developer-mode) или",
-          "after": "[режим разработчика ChatGPT](https://developers.openai.com/api/docs/guides/custom-mcp-server) или"
+          "before": "- **Поиск по словам теперь по умолчанию обращается к Telegram и локальному архиву (`--backend both`).**\n  Раньше он искал только в архиве, если не был выбран другой источник. Теперь поиск может подключаться к Telegram;\n  используйте `--backend archive` для поиска только локально. Подсчёт через `stats`, поиск по темам и запросы, на которые сервер\n  не может ответить, по-прежнему читают только архив.\n",
+          "after": "- **Руководства по поиску теперь верно описывают существующее значение по умолчанию (`--backend both`).** Поиск по словам обращается к Telegram и локальному архиву, как уже в 0.34.0. Для поиска только в архиве используйте `--backend archive`. Подсчёты через `stats`, поиск тем и запросы, которые сервер не поддерживает, по-прежнему читают только архив.\n"
         }
       ],
       "es": [
         {
-          "before": "Añade la dirección del túnel con `/mcp`, por ejemplo `https://<device>.<network>.ts.net/mcp`, como conector MCP remoto. Consulta las instrucciones de la aplicación: [modo desarrollador de ChatGPT](https://developers.openai.com/api/docs/guides/developer-mode) o [conectores personalizados de Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp). La página de acceso pide el código que aparece en tu terminal. Caduca a los diez minutos; tras cada acceso se muestra un código nuevo. Cinco códigos incorrectos bloquean el acceso hasta que se reinicie el servidor.",
-          "after": "Añade la dirección del túnel con `/mcp`, por ejemplo `https://<device>.<network>.ts.net/mcp`, como conector MCP remoto. Consulta las instrucciones de la aplicación: [modo desarrollador de ChatGPT](https://developers.openai.com/api/docs/guides/custom-mcp-server) o [conectores personalizados de Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp). La página de acceso pide el código que aparece en tu terminal. Caduca a los diez minutos; tras cada acceso se muestra un código nuevo. Cinco códigos incorrectos bloquean el acceso hasta que se reinicie el servidor."
+          "before": "- **La búsqueda por palabras ahora consulta Telegram y el archivo local de forma predeterminada (`--backend both`).**\n  Antes buscaba solo en el archivo salvo que se eligiera otro backend. Ahora la búsqueda puede conectarse a Telegram;\n  usa `--backend archive` para buscar solo localmente. Los recuentos con `stats`, la búsqueda por temas y las consultas que el servidor\n  no puede responder siguen leyendo solo el archivo.\n",
+          "after": "- **Las guías de búsqueda ahora describen correctamente el valor predeterminado existente (`--backend both`).** La búsqueda por palabras consulta Telegram y el archivo local, como ya hacía en 0.34.0. Usa `--backend archive` para buscar solo localmente. Los recuentos con `stats`, la búsqueda de temas y las consultas que el servidor no puede resolver siguen leyendo solo el archivo.\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "changelog",
+    "reason": "Correct historical v0.34 backend default; immutable tag note contradicts cli-messaging 0.171.0 command descriptor.",
+    "replacements": {
+      "en": [
+        {
+          "before": "- **`tg messages search --backend both` asks Telegram as well as the archive.** Telegram's results are saved\n  and checked by the same query, so `exact:`, `-word` and the ranking keep their meaning; each message says\n  whether it came from the archive, Telegram or both. `--backend server` shows Telegram's results alone;\n  `--server-time` bounds the wait (5 s). The default stays the archive ([search](./search.md)).\n",
+          "after": "- **`tg messages search --backend both` asks Telegram as well as the archive.** Telegram's results are saved\n  and checked by the same query, so `exact:`, `-word` and the ranking keep their meaning; each message says\n  whether it came from the archive, Telegram or both. `--backend server` shows Telegram's results alone;\n  `--server-time` bounds the wait (5 s). The default is `both` ([search](./search.md)).\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "- **`tg messages search --backend both` обращается к Telegram и архиву.** Результаты Telegram сохраняются\n  и проверяются тем же запросом, поэтому `exact:`, `-word` и ранжирование сохраняют своё значение; каждое сообщение указывает,\n  пришло ли оно из архива, Telegram или обоих источников. `--backend server` показывает только результаты Telegram;\n  `--server-time` ограничивает ожидание (5 с). Источником по умолчанию остаётся архив ([поиск](./search.md)).\n",
+          "after": "- **`tg messages search --backend both` обращается к Telegram и архиву.** Результаты Telegram сохраняются\n  и проверяются тем же запросом, поэтому `exact:`, `-word` и ранжирование сохраняют своё значение; каждое сообщение указывает,\n  пришло ли оно из архива, Telegram или обоих источников. `--backend server` показывает только результаты Telegram;\n  `--server-time` ограничивает ожидание (5 с). По умолчанию используется `both` ([поиск](./search.md)).\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "- **`tg messages search --backend both` consulta Telegram y el archivo.** Los resultados de Telegram se guardan\n  y se comprueban con la misma consulta, por lo que `exact:`, `-word` y la clasificación conservan su significado; cada mensaje indica\n  si procede del archivo, de Telegram o de ambos. `--backend server` muestra solo los resultados de Telegram;\n  `--server-time` limita la espera (5 s). La opción predeterminada sigue siendo el archivo ([búsqueda](./search.md)).\n",
+          "after": "- **`tg messages search --backend both` consulta Telegram y el archivo.** Los resultados de Telegram se guardan\n  y se comprueban con la misma consulta, por lo que `exact:`, `-word` y la clasificación conservan su significado; cada mensaje indica\n  si procede del archivo, de Telegram o de ambos. `--backend server` muestra solo los resultados de Telegram;\n  `--server-time` limita la espera (5 s). El valor predeterminado es `both` ([búsqueda](./search.md)).\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "from-tgcli",
+    "reason": "Released TG v0.35 supports join request filters --search and --link; upstream docs correction PR354 confirms adapter and command descriptor.",
+    "replacements": {
+      "en": [
+        {
+          "before": "| `groups requests list --query`, `--link` | not in tg yet: `requests list` shows every pending request |\n",
+          "after": "| `groups requests list --query`, `--link` | `tg chats requests list <chat> --search <text>` or `--link <link>`; Telegram does not accept both filters together |\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "| `groups requests list --query`, `--link` | пока нет в tg: `requests list` показывает все ожидающие запросы |\n",
+          "after": "| `groups requests list --query`, `--link` | `tg chats requests list <chat> --search <text>` или `--link <link>`; Telegram не принимает оба фильтра вместе |\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "| `groups requests list --query`, `--link` | todavía no está en tg: `requests list` muestra todas las solicitudes pendientes |\n",
+          "after": "| `groups requests list --query`, `--link` | `tg chats requests list <chat> --search <text>` o `--link <link>`; Telegram no admite ambos filtros a la vez |\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "roadmap",
+    "reason": "Join-request name/link filters shipped in v0.35.0 and are no longer future work; source PR354. Folder rules remain future for this released TG adapter.",
+    "replacements": {
+      "en": [
+        {
+          "before": "- **Join requests by name or by link** — find one request among many.\n",
+          "after": "\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "- **Запросы на вступление по имени или ссылке** — найти один запрос среди многих.\n",
+          "after": "\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "- **Solicitudes de entrada por nombre o enlace**: encontrar una solicitud entre muchas.\n",
+          "after": "\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "commands",
+    "reason": "MAX v0.34.0 client folders.order always prepends All chats and appends omitted folders. Generic shared command help omits this MAX requirement; verified published client.js and release probe notes.",
+    "replacements": {
+      "en": [
+        {
+          "before": "put folders in this order; the ones not named keep theirs after them\n",
+          "after": "put the named folders in this order after All chats, which remains first; folders not named follow in their existing relative order\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "расположить папки в этом порядке; неуказанные папки сохранят свой порядок после них\n",
+          "after": "расположить указанные папки в этом порядке после «Все чаты», которая остаётся первой; неуказанные папки идут следом в прежнем относительном порядке\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "colocar las carpetas en este orden; las que no se nombran conservan su orden después de ellas\n",
+          "after": "ordenar las carpetas indicadas después de Todos los chats, que permanece primero; las carpetas no indicadas siguen en su orden relativo anterior\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "commands",
+    "reason": "Declining join requests is exempt from hourly send accounting in released request guard; generic --all help incorrectly reuses acceptance wording.",
+    "replacements": {
+      "en": [
+        {
+          "before": "#### `tg chats requests decline`\n\nturn the request away\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests decline <chat> [person] [options]\n```\n\n| Argument | | What it is |\n|---|---|---|\n| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | What it does |\n|---|---|\n| `--all` | every pending request, counted against the hourly limit first. |\n",
+          "after": "#### `tg chats requests decline`\n\nturn the request away\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests decline <chat> [person] [options]\n```\n\n| Argument | | What it is |\n|---|---|---|\n| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | What it does |\n|---|---|\n| `--all` | decline every pending request; declining does not count toward the hourly sending limit. |\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "#### `tg chats requests decline`\n\nотклонить запрос\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests decline <chat> [person] [options]\n```\n\n| Аргумент | | Описание |\n|---|---|---|\n| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |\n| `person` | необязательный | кто запросил вступление: идентификатор из `chats requests list`. |\n\n| Параметр | Назначение |\n|---|---|\n| `--all` | все ожидающие запросы; сначала проверяются с учётом почасового лимита. |\n",
+          "after": "#### `tg chats requests decline`\n\nотклонить запрос\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests decline <chat> [person] [options]\n```\n\n| Аргумент | | Описание |\n|---|---|---|\n| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |\n| `person` | необязательный | кто запросил вступление: идентификатор из `chats requests list`. |\n\n| Параметр | Назначение |\n|---|---|\n| `--all` | отклонить все ожидающие заявки; отклонения не учитываются в часовом лимите отправок. |\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "#### `tg chats requests decline`\n\nrechazar la solicitud\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests decline <chat> [person] [options]\n```\n\n| Argumento | | Qué es |\n|---|---|---|\n| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |\n| `person` | opcional | quien solicitó entrar: un identificador de `chats requests list`. |\n\n| Opción | Qué hace |\n|---|---|\n| `--all` | todas las solicitudes pendientes, contabilizadas primero frente al límite por hora. |\n",
+          "after": "#### `tg chats requests decline`\n\nrechazar la solicitud\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests decline <chat> [person] [options]\n```\n\n| Argumento | | Qué es |\n|---|---|---|\n| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |\n| `person` | opcional | quien solicitó entrar: un identificador de `chats requests list`. |\n\n| Opción | Qué hace |\n|---|---|\n| `--all` | rechazar todas las solicitudes pendientes; los rechazos no cuentan para el límite horario de envíos. |\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "usage",
+    "reason": "Clarify conditional confirmation: released per-command permissions ask/deny/readonly can require approval or block sends; default sending is allowed.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Sending does not ask for confirmation: you already supplied the recipient and text in the command.",
+          "after": "By default, sending needs no extra confirmation because the command specifies the recipient and text. Per-command permissions can require approval or block sending; see [Permissions](./permissions.md)."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Подтверждения отправка не просит: адресат и текст уже написаны в строке, которую вы набрали.",
+          "after": "По умолчанию отправка не требует дополнительного подтверждения: адресат и текст уже указаны в команде. Права конкретной команды могут потребовать подтверждения или запретить отправку; см. [Права](./permissions.md)."
+        }
+      ],
+      "es": [
+        {
+          "before": "No pide confirmación: destinatario y texto ya están en el comando.",
+          "after": "Por defecto, el envío no requiere confirmación adicional porque el comando ya indica el destinatario y el texto. Los permisos de cada comando pueden exigir aprobación o bloquear el envío; consulta [Permisos](./permissions.md)."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "usage",
+    "reason": "Published TG profile.js rounded registration estimate table ends August 2026, not December 2024; align usage with released people guide.",
+    "replacements": {
+      "en": [
+        {
+          "before": "community table; past December 2024 there is no estimate",
+          "after": "rounded table ending in August 2026; newer ids get no estimate"
+        }
+      ],
+      "ru": [
+        {
+          "before": "таблицы сообщества; для дат после декабря 2024 года оценки нет",
+          "after": "округлённой таблицы, заканчивающейся августом 2026 года; более новые ID не получают оценки"
+        }
+      ],
+      "es": [
+        {
+          "before": "una tabla de la comunidad; no hay estimaciones posteriores a diciembre de 2024",
+          "after": "una tabla redondeada que termina en agosto de 2026; los ID posteriores no reciben estimación"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "usage",
+    "reason": "Scope repeat safety to topic edits and ordering; released guide explicitly forbids blindly replaying topic creation after unknown outcome.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Repeating any of these is safe.",
+          "after": "Repeating topic edits and ordering is safe. After an unknown creation outcome, inspect the topic list before creating again."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Любое из этих действий можно безопасно повторять.",
+          "after": "Правку и порядок тем можно безопасно повторять. Если исход создания неизвестен, сначала проверьте список тем, прежде чем создавать снова."
+        }
+      ],
+      "es": [
+        {
+          "before": "Es seguro repetir cualquiera de estas acciones.",
+          "after": "Es seguro repetir las ediciones y el orden de temas. Tras una creación de resultado desconocido, comprueba la lista de temas antes de crear de nuevo."
         }
       ]
     }

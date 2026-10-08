@@ -1,6 +1,7 @@
 ---
 title: "MAX bots"
 ---
+
 `max bot` works with a bot through the official [MAX Bot API](https://dev.max.ru/docs-api), using its bot token. It is separate from your personal account: a bot has its own name, chats and token. `max …` without `bot` uses your personal account ([Personal account guide](./usage.md)).
 
 Create a bot at [business.max.ru](https://business.max.ru/self). MAX issues bots only to verified organizations, individual entrepreneurs and registered self-employed people. Every bot undergoes moderation.
@@ -101,7 +102,7 @@ max sales bot messages pin "Команда продаж" mid.0000019a7f3c21de --
 max sales bot messages unpin "Команда продаж" mid.0000019a7f3c21de
 ```
 
-Always specify a message together with its chat. This keeps commands consistent between `max` and `tg`, where message IDs are only unique within a chat. `max` will not touch a message from a different chat. `--html` formats text as HTML; it cannot be combined with `--md`. Deletion asks for confirmation; `--allow-dangerous` answers yes. Pinning is silent by default; `--notify` notifies members. A send response contains the message and `operationId`, identifying its log record.
+Always identify a message together with its chat. This keeps commands consistent between `max` and `tg`, where message IDs are scoped to a chat. `max` does not modify a message from another chat. `--html` supplies HTML text; `--md` and `--html` cannot be combined. Deletion prompts for confirmation; `--allow-dangerous` answers yes. Pinning is silent by default; `--notify` notifies members. A send response contains the message itself and `operationId`, the identifier of that write in the log.
 
 If the connection drops during a send, `max` does not retry automatically. It reports an unknown outcome (code `14`). Check the chat before sending again.
 
@@ -301,7 +302,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Path and query parameters become flags; the body is JSON in `--body`, `--body -` (from a pipe) or `--body-file`. `--body-file -` also reads stdin. The native `timeout` parameter is named `--poll-timeout`; the global `--timeout` limits the whole command. The shared `--store-token <profile>` option is unavailable for current MAX methods: each rejects it before performing the operation. Before sending, the body is checked against the schema. Errors identify the field and expected type without exposing its value. See [Bot API coverage](https://github.com/leemour/max-cli/blob/v0.29.0/docs/dev/bot-api-coverage.md) for all operations and their read/write classification.
+Path and query parameters become flags; the body is JSON in `--body`, `--body -` (from a pipe) or `--body-file`. `--body-file -` also reads stdin. The native `timeout` parameter is named `--poll-timeout`; the global `--timeout` limits the whole command. The shared `--store-token <profile>` option is unavailable for current MAX methods: each rejects it before performing the operation. Before sending, the body is checked against the schema. Errors identify the field and expected type without exposing its value. See [Bot API coverage](https://github.com/leemour/max-cli/blob/v0.34.0/docs/dev/bot-api-coverage.md) for all operations and their read/write classification.
 
 ## Scripts and agents
 
@@ -333,13 +334,13 @@ claude mcp add sales-bot -- max sales bot mcp
 max sales bot mcp config          # запись для Claude Desktop, Cursor и других
 ```
 
-The bot profile determines agent access: bot details, seen chats, messages, search, people, members and admins, comments, command menu, logs and recipients. Unless read-only, it also allows sending, editing, pinning, typing indicators, comments, callback answers, deletion, adding and removing members, and rule-based checks (`max_bot_chats_moderate`). `max_bot_status` shows the profile, token source, bot owner and enabled write tools.
+The agent can access what the bot profile permits: the bot, chats it has seen, messages, search, people, members and administrators, comments, command menus, the log and recipient list. If the profile is not read-only, it can also write as the bot: send, edit, pin, indicate typing, comment, answer buttons, delete, add or remove members, and check a chat against its rules (`max_bot_write` (`command: "chats moderate"`)). `max_bot_read` (`command: "status"`) shows which profile the server represents, where the token comes from, which bot it is and which write tools are enabled.
 
 - `permissions.bot: readonly` makes the agent read only unless more specific permissions override it;
 - to allow only sends and comments, set `permissions.bot: readonly`, then `permissions.bot.messages.send: allow`; check for other more specific permissions;
-- deleting a message or comment defaults to `ask`: the agent shows a form; explicit `allow` for `permissions.bot.messages.delete`, or server startup with `--allow-dangerous`, removes that form unless `--confirm-send` is enabled;
-- actions that chat rules require you to confirm appear in one form;
-- `--confirm-send` shows a form before every write.
+- Deleting a message or comment defaults to level `ask`: the requested write is allowed without a server confirmation form; `deny` and `readonly` forbid it.
+- Actions that chat rules require you to confirm remain plans for the owner.
+- Older confirmation flags do not change access.
 
 `--allow-send`, `--allow-delete` and `--allow-moderate` no longer grant permissions. The server accepts them with a warning.
 

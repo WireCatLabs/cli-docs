@@ -80,23 +80,23 @@ El resultado se escribe **en cualquier salida**, incluso si falla antes de conec
 
 ## Lo que nunca se registra
 
-Esta es la garantía principal del diagnóstico.
+Este es el objetivo principal de esta página.
 
-| Registrado | Nunca registrado |
+| Se registra | Nunca se registra |
 |---|---|
-| Operación, código, número de solicitud | Título del chat |
+| Operación, código de operación, número de solicitud | Nombre del chat |
 | ID del chat, envío (`send`) y mensaje | Nombre de una persona |
-| Bytes enviados y recibidos | Texto del mensaje |
-| Milisegundos de respuesta | Teléfono |
-| Cantidades de chats, contactos y mensajes | Token |
+| Número de bytes enviados y recibidos | Texto del mensaje |
+| Milisegundos que tardó la respuesta | Número de teléfono |
+| Número de chats, contactos y mensajes devueltos | Token |
 | Código y clave corta MAX como `login.token` | Texto del error de MAX |
 | Código de aviso como `reactions_unread` | Texto del aviso |
-| En un fallo: tipo y ubicación del código | Texto del error del fallo |
+| En caso de fallo: tipo de error y líneas de código donde ocurrió | Texto del error en caso de fallo |
 | Versión, entorno (`node` o `bun`), sistema | Ruta personal del usuario |
 
-**Ni recortado ni como hash.** Los eventos se construyen con campos explícitos, no filtrando una copia de la solicitud; un campo inesperado no puede entrar en el registro. Ninguna rama de registro accede al `token` de `session.login`.
+**Ni truncado ni como hash.** El evento se construye con campos nombrados explícitamente, en lugar de filtrar una copia de la solicitud: un campo no previsto no puede llegar al registro. `session.login` tiene un campo `token`, y ninguna rama del código accede a él.
 
-Los IDs sí se incluyen deliberadamente: un ID de chat es un número opaco sin utilidad fuera de su sesión, pero necesario para investigar una conversación concreta.
+Los identificadores, en cambio, se incluyen deliberadamente: el ID del chat es un número opaco, inútil sin la sesión a la que pertenece. Es lo que hace útil el diagnóstico, porque un problema real suele referirse a una conversación concreta.
 
 El texto de error MAX puede citar lo enviado, incluido el mensaje. Solo se registra una clave con letras latinas minúsculas, números, puntos y guiones, como `proto.payload`; otros valores se omiten.
 

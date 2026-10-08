@@ -91,4 +91,39 @@ describe("released documentation translations", () => {
       rmSync(root, { recursive: true, force: true })
     }
   })
+  it("applies native-language errata to a reviewed overlay of a generated foreign-language reference", () => {
+    const root = mkdtempSync(join(tmpdir(), "wirecat-native-overlay-"))
+    try {
+      for (const path of ["content/upstream/max", "content/docs/max", "translations/max", "scripts"])
+        mkdirSync(join(root, path), { recursive: true })
+      writeFileSync(join(root, "content/upstream/max/commands.md"), original)
+      writeFileSync(join(root, "content/upstream/max/meta.json"), JSON.stringify({ title: "MAX", pages: ["commands"] }))
+      for (const lang of ["en", "ru", "es"])
+        writeFileSync(join(root, `translations/max/commands.${lang}.md`), lang === "ru" ? translated : original)
+      writeFileSync(
+        join(root, "translations/sources.json"),
+        JSON.stringify(
+          Object.fromEntries(["en", "ru", "es"].map((lang) => [`max/commands.${lang}`, fingerprint(original)])),
+        ),
+      )
+      writeFileSync(
+        join(root, "scripts/docs-corrections.json"),
+        JSON.stringify([
+          {
+            tool: "max",
+            slug: "commands",
+            reason: "Reviewed erratum",
+            replacements: {
+              ru: [{ before: "Сохраните", after: "Используйте" }],
+            },
+          },
+        ]),
+      )
+      expect(localizeTool(root, { name: "max", lang: "ru" })).toEqual([])
+      expect(readFileSync(join(root, "content/docs/max/commands.ru.md"), "utf8")).toContain("Используйте")
+      expect(readFileSync(join(root, "content/docs/max/commands.md"), "utf8")).toContain("Keep")
+    } finally {
+      rmSync(root, { recursive: true, force: true })
+    }
+  })
 })

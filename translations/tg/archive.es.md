@@ -38,6 +38,8 @@ tg store fetch "Book club"                    # run again to continue where it s
 tg store fetch "Book club" --since-time 30d   # only back to 30 days ago
 tg store fetch "Book club" --last 5000        # only until the newest 5000 are held
 tg store fetch "Book club" --limit 5000       # up to 5000 messages in this run
+tg store fetch --all                          # every chat, most recently active first: the last 90 days
+tg store fetch --all --since-time 365d        # every chat, back to a year ago
 ```
 
 `store fetch` lee y guarda el historial por páginas, empezando por lo más reciente. **Puede reanudarse:** después de cada página registra lo que ya contiene, por lo que detenerlo no pierde datos. Ctrl-C, `--timeout`, el límite `--limit`, `--since-time`, `--last` y una espera larga exigida por Telegram detienen la descarga; la siguiente ejecución omite lo que ya está guardado. `--since-time` y `--last` indican hasta dónde retroceder: utiliza una de las dos, no ambas.
@@ -191,17 +193,66 @@ the message store was written by a newer version (schema N, needs at least M; th
 
 Ejecuta `tg upgrade`. No se pierde ningún dato del archivo.
 
-## Siguientes pasos
+## Siguiente paso
 
 - [Ejemplos prácticos](./recipes.md): búsquedas y exportaciones en el trabajo diario de un agente.
 - [Seguridad](./security.md): implicaciones del archivo local para la privacidad de tus mensajes.
 
 ## Reparación y mantenimiento de índices
 
-`tg store migrate` construye los índices sin terminar; `tg store reindex` los reconstruye. `store info` y `store check` muestran si los índices de palabras y raíces están listos. Un índice de raíces por sí solo no cambia las coincidencias de la búsqueda estricta. `tg config set searchStemmers.cyrillic russian` y `searchStemmers.latin spanish` definen los lematizadores del almacén compartido (`none` desactiva uno; para el alfabeto latino también está disponible `english`); ejecuta después `store reindex`. El ajuste afecta a ambos mensajeros y a todos los perfiles; un proceso bloqueado a un perfil no puede cambiarlo.
+`tg store migrate` completa los índices pendientes; `tg store reindex` los reconstruye. `store info` y
+`store check` muestran si los índices de palabras y raíces están listos. La búsqueda estricta usa raíces para las formas de palabras; `exact:` y `--exact` seleccionan formas exactas.
+`tg config set searchStemmers.cyrillic russian` y `searchStemmers.latin spanish` configuran los algoritmos de raíces del almacenamiento compartido
+(`none` desactiva uno; `english` también está disponible para el alfabeto latino); ejecuta `store reindex` después.
+El ajuste afecta a ambos servicios de mensajería y a todos los perfiles; un proceso limitado a un perfil no puede cambiarlo.
 
 `tg store repair --dry-run --json` muestra una vista previa de la reparación estructural y la deshace. `store repair` la aplica sin eliminar datos: las tablas que no coinciden se conservan como copias, y la respuesta nombra las filas y columnas que quedan en ellas. Revisa las copias conservadas antes de eliminar una con `store copies delete <exact name>`; `store repair` las nombra en su respuesta. Detén los procesos que usan el almacén antes de reparar.
 
 ## Reglas de respuesta solo para probadores
 
 `tg replies test [rule] --since-time 7d --json` simula qué recibirían los mensajes guardados; nunca envía nada. Las reglas están en el archivo de respuestas del perfil. `replies status`, `pause` y `resume` las consultan y controlan. Para que `serve` compartido responda de verdad, se necesitan tanto el permiso explícito `replies.send:allow` como una lista `testers` configurada. El envío está denegado por defecto; si falta la lista de probadores o está vacía, no se responde a nadie. Se ignoran las ediciones, los mensajes anteriores al inicio y los mensajes ya respondidos. `ask` no puede enviar desde un servicio desatendido.
+
+Crea una regla desactivada con `tg replies add away`, edítala con `replies edit away --template` y después
+usa `replies on away` u `off away`. Las reglas de respuesta activadas necesitan una plantilla no vacía. La edición cambia
+solo los campos indicados; las listas se sustituyen por valores separados por comas y una cadena vacía borra una lista. Las opciones
+incluyen `--do reply,task`, `--kinds`, `--chats`, `--not-chats`, `--words`, `--question` /
+`--no-question`, `--mentions-me` / `--no-mentions-me`, `--people`, `--not-people`, `--contacts-only` /
+`--no-contacts-only`, `--as-reply` / `--no-as-reply`, `--per-chat`, `--per-person` y los campos de horario
+`--outside`, `--days`, `--timezone` (`--no-hours` los borra). La primera configuración del horario requiere
+los tres campos. Las ediciones inválidas conservan el archivo, las otras reglas, los probadores y el historial de respuestas.
+
+`tg replies audience` muestra la audiencia del perfil; `--reply all|listed`, `--allow-people`,
+`--allow-chats`, `--deny-people` y `--deny-chats` sustituyen los campos indicados. La prohibición tiene prioridad; listed con
+una lista de permitidos vacía no responde a nadie. Los probadores limitan las respuestas además de la audiencia. La tarea
+local de una regla puede abrirse aunque se prohíba responder.
+
+Las plantillas usan las variables Liquid `sender.firstName`, `sender.name`, `chat.title`, `chat.kind` y
+`now` en la zona horaria del horario de trabajo de la regla (UTC si no hay ninguna), con filtros como `default` y
+`date`. Se rechazan las variables y filtros desconocidos; se prohíben las etiquetas de archivos y el acceso a prototipos, y
+se limitan el tiempo de renderizado, la asignación de memoria y la longitud de salida. El mensaje entrante nunca es una variable.
+Solo un bloque ai puede llamar a un modelo; su contenido es la instrucción y el mensaje se envía por separado como datos:
+
+```liquid
+Thanks, {{ sender.firstName | default: "there" }}.
+{% ai %}Briefly acknowledge this; I will answer tomorrow.{% else %}I will answer tomorrow.{% endai %}
+```
+
+La salida del modelo sustituye solo su bloque y no se analiza de nuevo. Si faltan configuración o consentimiento,
+si una llamada falla o se rechaza la salida, se usa la rama else; sin ella se omite la respuesta. El texto
+externo sigue siendo el del propietario con sus sustituciones habituales. Los marcadores antiguos y los archivos may-reword
+conservan su alternativa literal rellenada con advertencias; los archivos nuevos no necesitan un campo model.
+
+Elige `models.replies.provider`, `.model` y, opcionalmente, `.baseUrl`; `models.default` es la
+alternativa y `provider off` desactiva un propósito. Los ajustes de análisis existentes siguen admitidos.
+`config set` / `unset` aceptan campos con notación de puntos; `config show` indica el origen de cada uno. Las claves siguen en
+`models text key set`; los endpoints personalizados usan su clave de host y puerto, nunca la de un proveedor público.
+
+`tg replies consents show|grant|revoke` controla el consentimiento para el modelo por separado del permiso de envío.
+Grant permite explícitamente que los datos entrantes se envíen al proveedor configurado en todo este perfil,
+salvo los identificadores nativos de chats excluidos con `replies consents deny`; `allow` elimina una exclusión sin
+conceder consentimiento. Las exclusiones se conservan tras grant/revoke. Otro endpoint necesita un nuevo consentimiento.
+Los cambios de consentimiento, configuración, pausa, regla y audiencia durante una llamada al modelo se comprueban antes de enviar.
+
+`tg replies test` muestra las instrucciones y la alternativa sin llamar a un modelo. `tg replies test --ai` envía explícitamente
+datos de mensajes almacenados al modelo autorizado por consentimiento, pero no envía una respuesta al servicio de mensajería ni cambia
+el historial de respuestas; no se puede combinar con `--offline`.

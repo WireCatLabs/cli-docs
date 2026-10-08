@@ -146,12 +146,4 @@ tg conversations search "renting a flat" --provider openai
 
 ## Для агентов
 
-В MCP `tg_conversations_list`, `tg_conversations_show`, `tg_conversations_search`,
-`tg_conversations_related` и `tg_conversations_status` читают собранное; `tg_conversations_refresh`
-догоняет изменения на этом компьютере. MCP предоставляет `tg_conversations_batches_status`, `tg_conversations_batches_next`,
-`tg_conversations_links_add`, `tg_conversations_links_clear` и `tg_conversations_build`, а также готовый запрос
-`link-conversations`. Сообщите стоимость пакетов и получите согласие владельца до чтения пакетов. Сохранение связей
-требует `conversations.links`; после этого, в том числе после удаления связей, соберите чат заново. Настройки удалённых эмбеддингов также
-действуют на поиск через MCP и могут отправлять текст запроса.
-Техническая сторона — правила, части, векторы и ранжирование — описана на странице
-[Как устроен поиск](https://wirecat.dev/en/docs/search-architecture).
+В MCP `tg_read` (`command: "conversations list"`), `tg_read` (`command: "conversations show"`), `tg_read` (`command: "conversations search"`), `tg_read` (`command: "conversations related"`) и `tg_read` (`command: "conversations status"`) читают построенные данные; `tg_write` (`command: "conversations refresh"`) обновляет их на этом компьютере. MCP предоставляет `tg_read` (`command: "conversations batches status"`), `tg_read` (`command: "conversations batches next"`), `tg_write` (`command: "conversations links add"`), `tg_write` (`command: "conversations links clear"`) и `tg_write` (`command: "conversations build"`), а также промпт `link-conversations`. Перед чтением пакетов сообщите стоимость и получите согласие владельца. Сохранённым связям нужно право `conversations.links`; затем перестройте данные, в том числе после удаления связей. Настройки внешних эмбеддингов влияют и на поиск MCP и могут отправлять текст запроса. Технические детали — правила, фрагменты, векторы и ранжирование — описаны в разделе [как работает поиск](https://wirecat.dev/en/docs/search-architecture).

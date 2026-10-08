@@ -1,34 +1,85 @@
 ---
-title: "ChatGPT o Claude en el navegador"
+title: "ChatGPT, Codex o Claude en el navegador"
 ---
 
-`tg mcp --http` ofrece las mismas herramientas en `127.0.0.1`, detrás de tu túnel HTTPS. El servidor HTTP tiene su propio acceso OAuth para un único propietario; no hace falta un proxy de autenticación aparte. La conexión local por stdin/stdout sigue funcionando como antes. La configuración en el navegador no se ha probado de principio a fin.
+`tg mcp --http` ofrece las mismas herramientas en `127.0.0.1` a través de tu túnel HTTPS. El servidor HTTP tiene su propio inicio de sesión OAuth para un propietario; no necesita un proxy de autenticación aparte. La conexión local mediante stdin/stdout sigue funcionando como antes. El propietario confirmó la lectura y el envío mediante Claude web el 7 de octubre de 2026. Los clientes web de OpenAI y estas instrucciones específicas de cada plataforma aún necesitan una comprobación completa en cada plataforma.
 
 ## Iniciar el túnel y el servidor
 
-Primero configura Telegram con `tg setup --agent none`. Mantén el equipo encendido mientras uses el conector. Por ejemplo, instala [Tailscale](https://tailscale.com/download), activa [Funnel](https://tailscale.com/kb/1223/funnel) y ejecuta:
+Instala primero la CLI e inicia sesión en tu mensajero ([instalación](./installation.md)). Usa el mismo usuario del sistema y el mismo perfil para la configuración y el servidor MCP. Cuando haga falta, coloca el perfil antes del comando: `tg work mcp`. Tailscale se instala por separado; tanto `tg` como `max` admiten esta configuración.
 
-```sh
-tailscale funnel 8765
+Instala [Tailscale](https://tailscale.com/download), inicia sesión y activa [Funnel](https://tailscale.com/docs/features/tailscale-funnel): tu tailnet debe tener habilitados MagicDNS, los certificados HTTPS y el permiso de Funnel. El primer comando de Funnel puede mostrar un enlace de aprobación. Mantén abiertas dos ventanas de terminal. Cuando se indique, copia en la segunda el origen HTTPS que imprime, sin `/mcp` ni otra ruta. Conserva un puerto público explícito, como `:8443`, en ese origen. El servidor escucha en `127.0.0.1:8765` e imprime un código de inicio de sesión de un solo uso; nunca necesita permisos de administrador. Solo el túnel puede necesitar permisos elevados. Estos comandos habilitan el envío para este proceso del servidor mediante `--permission messages.send=allow`; consulta los permisos más abajo.
+
+### Windows (PowerShell)
+
+Instala la aplicación de Tailscale para Windows e inicia sesión desde su menú de la bandeja del sistema. Abre una ventana nueva de PowerShell tras instalar Node.js, la CLI y Tailscale para que vea el PATH actualizado. Usa `.cmd` para los lanzadores CLI de npm y evita errores de la política de ejecución de PowerShell. Si aún no has completado la configuración, ejecuta `tg.cmd setup --agent none` en una ventana normal de PowerShell.
+
+Primera ventana: ejecuta PowerShell como administrador para Funnel. El operador de llamada `&` permite el espacio de la ruta de instalación predeterminada; adapta la ruta si instalaste Tailscale en otro lugar.
+
+```powershell
+& "$env:ProgramFiles\Tailscale\tailscale.exe" funnel 8765
 ```
 
-En otra terminal, usa la dirección HTTPS que mostró Funnel, sin ruta:
+Segunda ventana: PowerShell normal con el usuario que inició sesión en Telegram:
 
-```sh
-tg mcp --http --public-url https://<device>.<network>.ts.net --port 8765
+```powershell
+$mcpPublicUrl = Read-Host 'Paste the HTTPS origin printed by Funnel (no /mcp)'
+tg.cmd mcp --http --port 8765 --public-url $mcpPublicUrl --permission messages.send=allow
 ```
 
-Si hace falta, pon delante un perfil: `tg work mcp --http --public-url https://<device>.<network>.ts.net`. El puerto local predeterminado es `8765`. El servidor muestra en la terminal un código de propietario de un solo uso.
+Usa Windows nativo para ambos procesos. WSL es un entorno aparte: no se puede dar por hecho que un túnel de Windows dirigido al loopback de Windows llegue a un servidor dentro de WSL.
+
+### macOS (Terminal)
+
+Instala la aplicación Tailscale e inicia sesión. Su CLI viene incluida; usa esta ruta cuando `tailscale` no esté en PATH ([guía de la CLI](https://tailscale.com/docs/reference/tailscale-cli?tab=macos)). Primera ventana de Terminal:
+
+```sh
+TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8765
+```
+
+Segunda ventana de Terminal, con el mismo usuario que ejecutó `tg setup --agent none`. Funciona tanto en zsh como en bash:
+
+```sh
+printf 'Paste the HTTPS origin printed by Funnel (no /mcp): '
+IFS= read -r mcpPublicUrl
+tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+```
+
+### Linux (Terminal)
+
+Instala Tailscale siguiendo las [instrucciones para Linux](https://tailscale.com/download/linux) e inicia sesión con `sudo tailscale up`. Primera ventana de terminal:
+
+```sh
+sudo tailscale funnel 8765
+```
+
+Segunda ventana de terminal: usa tu usuario normal, sin `sudo`, para que `tg` encuentre la sesión creada por `tg setup --agent none`:
+
+```sh
+printf 'Paste the HTTPS origin printed by Funnel (no /mcp): '
+IFS= read -r mcpPublicUrl
+tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+```
+
+## Ejecutar MAX y Telegram juntos
+
+Cada servidor necesita su propio puerto local y endpoint HTTPS público. Por ejemplo, deja Telegram en el puerto local `8765` y público `443`; ejecuta un segundo comando de Funnel con `--https=8443 8766` y MAX con `--port 8766`. Usa el segundo origen de Funnel, incluido `:8443`, para `--public-url` de MAX y su URL de conexión terminada en `/mcp`. Invoca Tailscale como se indica arriba para tu plataforma. Funnel admite los puertos públicos `443`, `8443` y `10000` ([referencia](https://tailscale.com/docs/reference/tailscale-cli/funnel)).
 
 ## Conectar la aplicación
 
-Añade la dirección del túnel con `/mcp`, por ejemplo `https://<device>.<network>.ts.net/mcp`, como conector MCP remoto. Consulta las instrucciones de la aplicación: [modo desarrollador de ChatGPT](https://developers.openai.com/api/docs/guides/developer-mode) o [conectores personalizados de Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp). La página de acceso pide el código que aparece en tu terminal. Caduca a los diez minutos; tras cada acceso se muestra un código nuevo. Cinco códigos incorrectos bloquean el acceso hasta que se reinicie el servidor.
+Añade la dirección del túnel con `/mcp`, por ejemplo `https://<device>.<network>.ts.net/mcp`, como conexión MCP remota. Consulta las instrucciones de la aplicación: [servidores MCP personalizados de OpenAI](https://developers.openai.com/plugins/quickstart) o [conexiones personalizadas de Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp). La página de inicio de sesión pide el código de tu terminal. Caduca a los diez minutos; tras cada inicio de sesión se imprime uno nuevo. Cinco códigos erróneos bloquean el acceso hasta reiniciar el servidor.
 
-Los `permissions` del perfil siguen decidiendo qué herramientas están disponibles. Toda escritura por HTTP requiere un formulario de confirmación, incluso con `allow`, `--yes` o `--allow-dangerous`. Un cliente sin formularios no puede realizar esa escritura. Elige `readonly` o `deny` para los recursos que el conector no debe cambiar; consulta la [configuración](./configuration.md).
+Los `permissions` del perfil determinan qué comandos están disponibles. `deny` y `readonly` bloquean las escrituras; `ask` y `allow` permiten una escritura solicitada mediante MCP sin formulario del servidor. La aprobación de la propia aplicación es independiente y depende de sus ajustes.
+
+## Permisos para este proceso del servidor
+
+Repite `--permission key=level` para modificar los permisos solo para este proceso del servidor. Por ejemplo, añade `--permission messages.send=allow` para habilitar envíos desde un perfil de solo lectura. `--permission messages=allow` sustituye los permisos guardados para el recurso de mensajes; puedes habilitar la eliminación aparte con `--permission messages.delete=allow`. La configuración guardada, las restricciones de destinatarios y los límites por hora no cambian. Para levantar una prohibición de lectura, indica el recurso o comando con nivel `allow`. Consulta las claves de permisos en [configuración](./configuration.md).
+
+En ChatGPT / Codex web, abre **Plugins**, elige **+ Add custom MCP server** y crea un plugin con la dirección `/mcp` y OAuth. Conecta con el código del terminal, instala el plugin y actívalo en tu chat de Work (o menciónalo con `@`). El `config.toml` local de Codex no configura esta conexión web. La disponibilidad puede depender de tu cuenta o espacio de trabajo. Usa el registro dinámico de clientes (DCR) cuando se ofrezca; este servidor anuncia DCR y el desafío de código S256. Las tres herramientas funcionan sin prompts, recursos ni solicitudes de entrada de MCP. Sigue la [guía de conexión de OpenAI](https://developers.openai.com/plugins/quickstart) y los [requisitos de OAuth](https://developers.openai.com/plugins/build/auth).
 
 ## Detener o revocar el acceso
 
-Pulsa Ctrl-C en ambas terminales para detener el servidor y el túnel. Los accesos ya hechos desde el navegador se conservan tras un reinicio normal del servidor. Para olvidar todos los accesos desde el navegador de un perfil:
+Pulsa Ctrl-C en ambos terminales con procesos en primer plano para detener el servidor y este túnel. Vuelve a iniciarlos con los mismos comandos; las sesiones de navegador existentes sobreviven a un reinicio normal del servidor. Si usaste Funnel con `--bg`, Ctrl-C no detiene esa ruta en segundo plano: consulta `tailscale funnel status` y desactiva solo su puerto público, por ejemplo `tailscale funnel --https=443 off`. Usa la invocación de tu plataforma indicada arriba y permisos elevados si hacen falta. Evita `funnel reset` cuando otro servidor use Funnel: borra todas las rutas. Detener solo MCP deja la ruta configurada, pero las herramientas no están disponibles. Revocar el acceso del navegador es independiente de detener un proceso. Para olvidar todas las sesiones del navegador de un perfil:
 
 ```sh
 tg mcp --revoke --json

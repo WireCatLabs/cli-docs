@@ -13,7 +13,4 @@ Planes para `max`. El orden es orientativo y puede cambiar. Puedes proponer idea
 - **Acciones por evento.** Ejecutar tu propio comando cuando llegue un mensaje nuevo.
 - **Videomensajes circulares** y **establecer o eliminar la contraseña en la nube**.
 - **Instaladores** para cada plataforma, sin Node ni Bun.
-
-## No está previsto
-
-- **Eliminar chats.**
+- **Vaciar y eliminar chats de tu propia cuenta**, con permiso explícito; no los elimina para todos.

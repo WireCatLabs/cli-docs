@@ -66,8 +66,11 @@ Los caracteres de control, los saltos de línea en nombres y los títulos de cha
 ## Qué pasa por la red
 
 - **Telegram**, por MTProto para comandos de la cuenta personal, incluidos fotos y archivos. Los comandos de bots usan la Bot API por HTTPS; `bot store fetch` usa una sesión MTProto separada del bot para el historial.
-- **npm**, una vez al día desde la terminal para comprobar versiones y al ejecutar `tg upgrade`. `updateCheck` o `TG_NO_UPDATE_CHECK=1` desactiva la comprobación ([configuración](./configuration.md)).
-- **my.telegram.org**, solo durante `tg setup` o `tg session start`: en el navegador o mediante `tg` con `--app auto`. Las aplicaciones creadas por `tg` se llaman `tg-cli` y usan la página de GitHub del proyecto como dirección.
+- **npm**, una vez al día en un terminal para comprobar si hay una versión más reciente de `tg`, y al ejecutar `tg upgrade`.
+  `updateCheck` o `TG_NO_UPDATE_CHECK=1` desactiva esta comprobación ([configuration.md](./configuration.md)).
+- **my.telegram.org**, solo durante `tg setup` o `tg session start`: se abre en tu navegador o, con `--app auto`,
+  lo controla `tg`. Una aplicación que `tg` crea allí lleva el título `tg-cli` y usa la página de GitHub de este proyecto como
+  dirección.
 - **Hugging Face y GitHub**, solo al ejecutar `tg models audio download` o `tg models text download`. La voz nunca se envía allí: el modelo local se ejecuta en este equipo.
 - **Los servicios de embeddings configurados** reciben texto de conversaciones de `conversations embed` tras tu consentimiento, y el texto de las consultas de `conversations search` remotas, incluidas las búsquedas por MCP. Los embeddings locales no envían texto.
 - **Los servicios de análisis configurados** reciben lotes limitados de mensajes solo con `conversations build --analyze --chat`, tras un consentimiento limitado a la cuenta, el chat y el proveedor; una construcción normal no envía nada.
@@ -91,7 +94,7 @@ Cada inicio añade un dispositivo en Telegram → Ajustes → Dispositivos.
 1. En Telegram → Ajustes → Dispositivos, termina la sesión creada por `tg`. También puedes ejecutar `tg session end` en este equipo: termina la sesión en Telegram y elimina el archivo.
 2. Inicia sesión de nuevo: `tg session start`.
 
-## Siguientes pasos
+## Siguiente paso
 
 - [Página de seguridad común](https://wirecat.dev/en/docs/security): el archivo local, la protección de envíos, agentes y MCP, e informar de una vulnerabilidad.
 - [Diagnóstico](./diagnostics.md): qué se registra exactamente y qué nunca se registra.
