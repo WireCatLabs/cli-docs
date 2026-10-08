@@ -146,6 +146,8 @@ export function prepareUpdates(root: string, tools: Tool[], updates: ReleaseUpda
     const tool = proposed.find((tool) => tool.name === update.tool)
     if (!tool || tool.docsRef !== update.current || !newerVersion(update.latest, update.current))
       throw new Error("Release proposal is stale or would not advance the reviewed version")
+    // A new release must be reviewed in full, without old prose hiding changed guide content.
+    delete tool.guideRefs
     capture({ ...tool, docsRef: update.latest }, root, undefined, true)
     tool.docsRef = update.latest
   }

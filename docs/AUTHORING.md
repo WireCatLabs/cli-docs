@@ -10,7 +10,7 @@ Keep the title short and specific, such as **File attachments**. A description a
 
 ## Keep facts and navigation trustworthy
 
-Tool repositories own command behavior and native guides. The portal normally imports a reviewed release, not unreleased `main`. An explicitly reviewed documentation-only page may come from a fixed source commit while the runtime release pin stays unchanged. Such a page must describe capabilities already available in that release; its source and edit link must remain traceable.
+Tool repositories own command behavior and native guides. The portal normally imports a reviewed release, not unreleased `main`. An explicitly reviewed documentation-only page may come from a fixed source commit while the runtime release pin stays unchanged. Such a page must describe capabilities already available in that release; its source and edit link must remain traceable. Release-update preparation retires these overrides so newer guide content is reviewed in full. Review contextual prose corrections again when their native counterpart is included in a release.
 
 Preserve URLs, incoming anchors, command tokens and code examples across edits and translations. Link new guides from a relevant existing task page and the sidebar. Every navigable sidebar page and folder needs an icon that represents its subject; icons are decorative and must not replace the label. Shared navigation belongs in `lib/docs-sidebar-tree.tsx` and `components/getting-started-links.tsx`.
 
