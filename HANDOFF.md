@@ -6,7 +6,7 @@
 [wirecat.dev](https://wirecat.dev): **WireCat — AI Messaging with CLI tools for agents**. It is a
 static [Fumadocs](https://fumadocs.dev) site (Next.js export) in English, Russian and Spanish. It
 writes no tool's pages itself: `pnpm sync` copies each tool's `docs/` from its repository at its
-newest release tag. Cloudflare Pages serves it; GitHub Actions builds and deploys it. How to run it:
+reviewed `docsRef` tag in `tools.json`. Cloudflare Pages serves it; GitHub Actions builds and deploys it. How to run it:
   [README.md](README.md).
 
 The portal now also owns shared getting-started, installation, agent and MCP guides in
@@ -47,9 +47,12 @@ logo and highlights Getting started in the header and sidebar on all shared guid
 
 ### 2. Release sources
 
-Verified on 2026-10-02: default `pnpm sync` succeeds from **max v0.22.0** and **tg v0.21.0**.
-The earlier missing-`meta.json` blocker for max v0.21.0 is resolved. Use the default release refs
-for checks; `--ref main` is only for a preview of unreleased tool changes.
+Verified release boundary, 2026-10-08: default `pnpm sync` uses **max v0.29.0** and **tg v0.28.0**,
+the reviewed pins in `tools.json`. MAX 0.34.0 and TG 0.35.0 are published; the shared search architecture
+page documents their archive preparation and coverage additions in EN/RU/ES. Moving tool guide pins
+still requires reviewing every changed translation/fingerprint and portal correction (README).
+Use the pinned refs for checks; `--ref main` is only a preview. The release/translation follow-up is
+tracked in [the archive-preparation record](docs/plans/2026-10-08-archive-preparation.md).
 
 ### 3. Translations of the tools' pages
 

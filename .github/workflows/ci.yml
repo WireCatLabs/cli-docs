@@ -31,7 +31,7 @@ jobs:
       - run: pnpm check:links
       - run: pnpm check:seo
       - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm exec playwright test tests/site-quality.spec.ts tests/mobile-delivery.spec.ts tests/onboarding-merge.spec.ts tests/stable-home.spec.ts tests/browser-platform-setup.spec.ts tests/documentation-diagrams.spec.ts
+      - run: pnpm exec playwright test tests/site-quality.spec.ts tests/mobile-delivery.spec.ts tests/onboarding-merge.spec.ts tests/stable-home.spec.ts tests/browser-platform-setup.spec.ts tests/documentation-diagrams.spec.ts tests/about-project.spec.ts
         env:
           PLAYWRIGHT_EXPORT: "1"
 
