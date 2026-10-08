@@ -3,7 +3,7 @@ title: ChatGPT, Claude en el navegador
 description: "Conecta Telegram y MAX a un chat de ChatGPT o Claude, desde los primeros comandos hasta comprobar la conexión."
 ---
 
-Usa Telegram y MAX directamente desde un **chat de ChatGPT o claude.ai en el navegador**: busca mensajes, reúne contexto o prepara respuestas. Se configura con unos comandos y añadiendo una dirección en los ajustes del chat. En Claude también puedes usar la conexión desde la [aplicación móvil](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
+Usa Telegram y MAX directamente desde un **chat de ChatGPT o claude.ai en el navegador**: busca mensajes, reúne contexto o prepara respuestas. Se configura con unos comandos y añadiendo una dirección en los ajustes del chat. Después de configurarla en el navegador, usa la conexión también en ChatGPT o Claude móvil: entra en la misma cuenta, activa la herramienta en el chat y haz la misma petición.
 
 Esta guía conecta el mensajero que elijas y lo comprueba con una petición sobre tus chats. Un programa en tu ordenador accede al mensajero; ChatGPT o Claude llega a ese programa <DocTerm term="public-address" lang="es" label="mediante una dirección pública" />. <DocTerm term="mcp" lang="es" label="MCP" /> es el modo de conectar estas herramientas al asistente. A continuación obtendremos la dirección y la añadiremos a la aplicación.
 
@@ -215,3 +215,48 @@ Puedes instalar `tg` o `max` en un servidor que esté siempre en marcha y conect
 Instala la herramienta en el servidor, inicia sesión en la cuenta elegida, arranca la conexión MCP y proporciona una dirección HTTPS pública. Configura el inicio automático tras un reinicio: tanto el programa del mensajero como el acceso público deben seguir funcionando. El servidor necesita su propio inicio de sesión; la instalación del portátil no lo conecta automáticamente.
 
 Prueba esta opción después de que funcione en tu ordenador. Consulta la conexión remota para [Telegram](./tg/remote.md) y [MAX](./max/remote.md). Repite la petición de cinco chats: si funciona con el portátil apagado, el servidor mantiene la conexión.
+
+<details>
+<summary>Servidor Linux: mantener la conexión tras salir y reiniciar</summary>
+
+1. Usa el mismo usuario normal de Linux para instalar, entrar en el mensajero y ejecutar el servicio. Instala Node.js, CLI y Tailscale e inicia sesión con ese usuario. Comprueba primero la petición de cinco chats con el arranque normal de arriba.
+2. Ejecuta `tg mcp config` o `max mcp config`. Usa la ruta absoluta de Node de `command` y la entrada del CLI de `args`; conserva el perfil indicado. No guardes contraseñas ni tokens del bot en el servicio.
+3. Crea `~/.config/systemd/user/wirecat-mcp.service`. Sustituye rutas y dirección pública por valores reales. Los directorios de configuración y estado deben coincidir con los del acceso comprobado:
+
+```ini
+[Unit]
+Description=WireCat messenger connection
+
+[Service]
+Type=simple
+WorkingDirectory=%h
+ExecStart=/absolute/path/to/node /absolute/path/to/cli-entry.js mcp --http --port 8765 --public-url https://server.tailnet.ts.net
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target
+```
+
+4. Activa el servicio con los comandos siguientes. Un administrador también debe permitir servicios sin sesión activa, por ejemplo con `loginctl enable-linger wirecat`. Consulta [servicios systemd](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html) y [lingering](https://www.freedesktop.org/software/systemd/man/latest/loginctl.html).
+
+```sh
+systemctl --user daemon-reload
+systemctl --user enable --now wirecat-mcp.service
+systemctl --user status wirecat-mcp.service
+```
+
+5. Ejecuta `tailscale funnel --bg 8765` en el servidor, con los permisos necesarios. La [referencia de Funnel](https://tailscale.com/docs/reference/tailscale-cli/funnel#effects-of-rebooting-and-restarting) explica cómo vuelve tras reiniciar. Su puerto debe coincidir con el servicio MCP.
+6. Comprueba el acceso del servicio a la misma sesión y al almacén de claves desbloqueado. Un endpoint HTTP activo no prueba el acceso a la cuenta. Si falla tras reiniciar, restablece el acceso al almacén de claves; no copies credenciales al archivo.
+7. Cierra SSH, apaga el portátil y repite la petición desde la aplicación. Repítela tras reiniciar el servidor. Cuenta y dirección pública deben funcionar sin arrancar manualmente un terminal.
+
+Para parar o desactivar el inicio automático:
+
+```sh
+systemctl --user stop wirecat-mcp.service
+systemctl --user disable wirecat-mcp.service
+```
+
+`journalctl --user -u wirecat-mcp.service -n 30` ayuda a diagnosticar. Puede mostrar el código de conexión de un solo uso: úsalo para entrar y no publiques el registro completo. Otras plataformas usan su gestor de servicios con las mismas comprobaciones de cuenta y rutas.
+
+</details>

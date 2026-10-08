@@ -3,7 +3,7 @@ title: ChatGPT, Claude in the browser
 description: "Connect Telegram and MAX to a ChatGPT or Claude chat, from the first commands to a working connection."
 ---
 
-Use Telegram and MAX directly from a **ChatGPT or claude.ai chat in your browser**: find a message, gather context or draft a reply. Setup takes a few commands and adding an address in your chat settings. In Claude, you can also use the connection in the [mobile app](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
+Use Telegram and MAX directly from a **ChatGPT or claude.ai chat in your browser**: find a message, gather context or draft a reply. Setup takes a few commands and adding an address in your chat settings. After setting it up in the browser, use the connection in the mobile ChatGPT or Claude app too: sign into the same account, enable the connected tool in your chat and make the same request.
 
 This guide connects your chosen messenger and checks it with a request for your own chats. A program on your computer talks to the messenger; ChatGPT or Claude reaches that program <DocTerm term="public-address" lang="en" label="through a public address" />. <DocTerm term="mcp" lang="en" label="MCP" /> is the way these tools connect to an assistant. Below, we will obtain the address and add it to the app.
 
@@ -216,3 +216,48 @@ You can install `tg` or `max` on a separate server that stays running, and conne
 Install the tool on the server, sign into the chosen account, start its MCP connection and provide a public HTTPS address. Configure automatic startup after a reboot: both the messenger program and public access must remain running. The server needs its own account login; your laptop installation does not connect it automatically.
 
 Try this after the connection works on your computer. See remote setup for [Telegram](./tg/remote.md) and [MAX](./max/remote.md). Repeat the five-chat request after setup: if it works with your laptop off, the server is providing the connection.
+
+<details>
+<summary>Linux server: keep the connection running after logout and reboot</summary>
+
+1. Use one ordinary Linux user for installation, messenger login and the service. Install Node.js, the CLI and Tailscale, then log into the messenger as that user. First verify the five-chat request using the foreground commands above.
+2. Run `tg mcp config` or `max mcp config`. Take the absolute Node path from `command` and the CLI entry path from `args`; preserve a named profile if present. Do not put account passwords or bot tokens in the service file.
+3. Create `~/.config/systemd/user/wirecat-mcp.service`. Replace the two paths and public address in this template with the actual values. Use the same configuration/state directories as your successful login:
+
+```ini
+[Unit]
+Description=WireCat messenger connection
+
+[Service]
+Type=simple
+WorkingDirectory=%h
+ExecStart=/absolute/path/to/node /absolute/path/to/cli-entry.js mcp --http --port 8765 --public-url https://server.tailnet.ts.net
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target
+```
+
+4. Enable the service with the commands below. An administrator must also enable lingering for that user, for example `loginctl enable-linger wirecat`, so user services can run without an active login. See [systemd services](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html) and [lingering](https://www.freedesktop.org/software/systemd/man/latest/loginctl.html).
+
+```sh
+systemctl --user daemon-reload
+systemctl --user enable --now wirecat-mcp.service
+systemctl --user status wirecat-mcp.service
+```
+
+5. On the server, start the public address in the background with `tailscale funnel --bg 8765`, using the elevation required by your installation. The [Funnel reference](https://tailscale.com/docs/reference/tailscale-cli/funnel#effects-of-rebooting-and-restarting) explains how it resumes after reboot. Its port must match the MCP service.
+6. Check that the service can access the same login and unlocked keyring. A running HTTP endpoint does not prove the messenger account is accessible. If login fails after reboot, restore the user’s keyring access; do not solve it by copying credentials into the unit.
+7. Close the SSH session, turn your laptop off and retry the chat request from the app. Repeat after a server reboot. Both the account access and the public address should work without a manual terminal launch.
+
+To stop or disable automatic startup:
+
+```sh
+systemctl --user stop wirecat-mcp.service
+systemctl --user disable wirecat-mcp.service
+```
+
+`journalctl --user -u wirecat-mcp.service -n 30` helps diagnose startup. It can include the one-time app connection code; use that code for your own sign-in and do not publish the full log. Other server platforms use their own service manager with the same account/path checks.
+
+</details>

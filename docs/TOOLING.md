@@ -146,3 +146,11 @@ or roadmap invalidates that record. The reviewer removes already-shipped work fr
 plans or records that plans are unchanged, then stores the source fingerprint and conclusion.
 Preview builds from an explicit nonrelease ref use the existing preview path. This is a portal
 publication gate; the CLI repositories keep their own separate publish checks.
+
+## Synthetic report example
+
+After capturing the reviewed packages with `pnpm docs:contracts`, run
+`pnpm docs:report-fixture` to check the report example against both released dependencies. It uses
+a new synthetic SQLite store and fixed clock, with no messenger connection. The JSON evidence
+is saved under `.docs-tooling/reports/approved-proposals/`. A complete stored reply graph must
+not be interpreted as complete archive coverage.

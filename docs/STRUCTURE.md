@@ -107,3 +107,15 @@ localization the portal derives `commands-personal`, `commands-bot` and `command
 from those same sections. The `/commands` HTML route is a lightweight choice of references;
 existing command hashes redirect to their partition. Edit native commands at the source, not
 these derived files. Shared global options and exit codes appear in every part.
+
+## Task presentation beside released references
+
+The usage and rankings routes have a portal-owned task layer in `lib/reader-guides.ts`, rendered
+by `components/reader-guide.tsx`. It supplies localized requests, results and the synthetic report
+example. The full reviewed native guide is a disclosure below it. `DocsDisclosures` reveals its
+sections for old hashes and TOC navigation. Markdown prepends the same task data and keeps all
+native reference text; source imports and release fingerprints remain unchanged.
+
+Title, description and sidebar labels use the task layer where supplied. To edit a reader task,
+change that layer; to change command behavior or native syntax, use the owning repository and
+reviewed source workflow. Explicit editorial errata remain in `scripts/docs-corrections.json`.

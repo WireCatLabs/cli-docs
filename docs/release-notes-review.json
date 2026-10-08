@@ -1,12 +1,12 @@
 {
   "tg": {
-    "version": "v0.37.0",
+    "version": "v0.38.0",
     "roadmapSha256": "21e24e9019734f89f4822ca7030fe471409681bd4282a3371b2ec26cb869ec28",
     "reviewedAt": "2026-10-08",
     "conclusion": "Folder rules and retained file transfer have shipped. Multi-photo sending and chat notes remain planned; private person notes are available."
   },
   "max": {
-    "version": "v0.36.0",
+    "version": "v0.37.0",
     "roadmapSha256": "c13195461dad27b1494ef3d3ec153aa7d9e89fd9fa34dee65af7292934791de0",
     "reviewedAt": "2026-10-08",
     "conclusion": "Retained file transfer and account-only chat removal have shipped. Optional local storage, event-triggered actions, video notes, cloud-password actions and installers remain planned."

@@ -9,6 +9,7 @@ import { i18n } from "./i18n"
 import { installationMarkdown } from "./installation-markdown"
 import { resolveDocumentationLink, rewriteMarkdownLinks } from "./markdown-links"
 import { meetingMarkdown } from "./meeting-guide"
+import { readerGuide, readerGuideMarkdown } from "./reader-guides"
 import { rehypeCodeAccessibility } from "./rehype-code-accessibility"
 import { remarkAnchorAliases } from "./remark-anchor-aliases"
 import { remarkDocUsability } from "./remark-doc-usability"
@@ -65,7 +66,9 @@ export const docsLlms = llms(source, {
         ? raw
         : await page.data.getText("processed")
     const body =
-      (guideOrientation(page.slugs, page.locale ?? i18n.defaultLanguage)
+      readerGuideMarkdown(page.slugs, page.locale ?? i18n.defaultLanguage) +
+      (!readerGuideMarkdown(page.slugs, page.locale ?? i18n.defaultLanguage) &&
+      guideOrientation(page.slugs, page.locale ?? i18n.defaultLanguage)
         ? `${guideOrientation(page.slugs, page.locale ?? i18n.defaultLanguage)}\n\n`
         : "") +
       (guideStartLink(page.slugs, page.locale ?? i18n.defaultLanguage)
@@ -83,6 +86,6 @@ export const docsLlms = llms(source, {
         (pathname) => markdownUrls.get(pathname),
       ),
     )
-    return `# ${page.data.title} (${page.url})\n\n${markdown}`
+    return `# ${readerGuide(page.slugs, page.locale ?? i18n.defaultLanguage)?.title ?? page.data.title} (${page.url})\n\n${markdown}`
   },
 })

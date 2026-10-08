@@ -51,6 +51,18 @@ necessarily remove that copy. Review stored data and exports separately when ret
 
 ## What the evaluations establish
 
+Before relying on an answer, check:
+
+- the messages or observations supporting its main claims;
+- the chats and dates checked, including missing history;
+- whether unknown counts were left unknown rather than turned into zero;
+- which actions actually completed, especially sending or changing a group.
+
+If something is missing, ask the assistant to show its sources and verify the later conversation.
+
+<details>
+<summary>Technical evaluation report and method</summary>
+
 <DocTerm term="evals" lang="en" label="Agent evaluations" /> check how an assistant uses sources and permissions on test tasks. Below is one published evaluation and its limits.
 
 When you ask for a statistics answer, request the messages or member observations behind it and
@@ -66,6 +78,8 @@ assistant will behave the same way, or resist every instruction hidden in a mess
 
 Developers can [repeat the procedure](https://github.com/leemour/cli-messaging/tree/main/scripts/evals) with synthetic data. Check the report's model and
 SDK limitations before comparing scores, and keep evidence review part of important decisions.
+
+</details>
 
 ## Connecting from a browser
 

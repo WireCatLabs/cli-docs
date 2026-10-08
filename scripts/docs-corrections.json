@@ -235,7 +235,7 @@
           "after": "\n[my.telegram.org/apps](https://my.telegram.org/apps) is Telegram’s official site for registering connection credentials. Use the phone number of your Telegram account.\n\n> **What is a Telegram application and why is it needed?**\n>\n> An “application” here is a registration record for a program using Telegram’s API. The program is the `tg` CLI. Fill in a form; you do not have to write software or install another app. Telegram issues `api_id` and `api_hash` to identify the program. QR or code confirmation then grants access to your account. These are separate steps.\n>\n> Telegram allows one `api_id` per phone number. If you already registered an application, reuse its credentials. [Telegram’s explanation](https://core.telegram.org/api/obtaining_api_id).\n\n**Get credentials manually in your browser — the default method:**\n\n```sh\ntg session start --app browser\n```\n\n1. The command opens [my.telegram.org/apps](https://my.telegram.org/apps). If it cannot open your browser, follow the link yourself.\n2. Enter your phone number in international format, for example `+34600111222`. The site’s login code arrives as a message in Telegram on a signed-in device.\n3. If no application exists, fill in **API development tools**: a title, short name and **Desktop** platform. Skip this if the site displays an existing application.\n4. Copy **App api_id** and **App api_hash** into the terminal when requested. The hash is hidden while you type; this is expected.\n5. The terminal then shows a QR code for account login. Follow the scanning steps below.\n\n**Fill in the site automatically:**\n\n```sh\ntg session start --app auto\n```\n\nThe command asks for your phone number and the code Telegram sends for my.telegram.org, then reads your existing application or registers it. It then shows a QR code. If this step fails, run the complete command `tg session start --app browser` and follow the steps above.\n\nCredentials are saved only after account login succeeds. The my.telegram.org code and the account login code are separate confirmations: use the message corresponding to the current terminal prompt.\n\n"
         },
         {
-          "before": "\n```sh\ntg session start           # a QR code in the terminal\ntg session start phone     # a phone number, the code Telegram sends, and your 2FA password\ntg session start phone --sms   # the same, asking Telegram for the code by SMS\n```\n\n**QR:** scan the code in the Telegram app: Settings → Devices → Link Desktop Device. The code is\nrenewed while you wait.\n\n**Phone:** type the number in international format, then the login code. If the account has a\ncloud password (2FA), `tg` asks for it without showing what you type. With `--app auto`, the phone\nnumber is asked only once. The code usually arrives in the Telegram app; `--sms` asks for an SMS instead,\nbut Telegram chooses, and `tg` says which way it was sent.\n\nAfter either, Telegram lists a new device in the app's list of sessions.\n\n",
+          "before": "\n```sh\ntg session start           # a QR code in the terminal\ntg session start phone     # a phone number, the code Telegram sends, and your 2FA password\ntg session start phone --sms   # the same, asking Telegram for the code by SMS\n```\n\n**QR:** scan the code in the Telegram app: Settings → Devices → Link Desktop Device. The code is\nrenewed while you wait.\n\n**Phone:** type the number in international format, then the login code. If the account has a\ncloud password (2FA), `tg` asks for it without showing what you type. With `--app auto`, the phone\nnumber is asked only once. The code usually arrives in the Telegram app; `--sms` asks for an SMS instead,\nbut Telegram chooses, and `tg` says which way it was sent. When Telegram has no SMS for the\naccount, `tg` says so and asks for the code from the app.\n\nAfter either, Telegram lists a new device in the app's list of sessions.\n\n",
           "after": "\n**Log in by QR code:**\n\n```sh\ntg session start\n```\n\n1. If credentials are not stored yet, first answer the application prompts described above.\n2. Keep the terminal displaying the QR code open on your computer.\n3. Open **Telegram on your phone** and switch to the account you want to connect.\n4. Open **Settings → Devices → Link Desktop Device**. The last label may differ in your version. This opens Telegram’s own scanner.\n5. Point it at the QR code in your terminal and confirm the connection if asked. Use the scanner inside Telegram rather than your phone’s ordinary camera app.\n6. If two-step verification (2FA) is enabled, enter its additional password in the terminal. Password characters are hidden.\n7. Wait for **Logged in as …**. If the QR code expires, scan the new code currently shown in the terminal.\n\n**Log in by phone number:**\n\n```sh\ntg session start phone\n```\n\n1. On first use, obtain application credentials as described above.\n2. Enter the account’s phone number in international format, for example `+34600111222`.\n3. Read the terminal’s code-delivery notice. Usually the code arrives in the verified **Telegram** service chat on a signed-in device; Telegram may choose SMS instead. Telegram decides the delivery method. SMS may be unavailable to a third-party CLI: sign in with the official phone app first, then use a Telegram code or QR. [How Telegram delivers codes](https://core.telegram.org/api/auth).\n4. Enter the fresh code at the **login code** prompt.\n5. If 2FA is enabled, enter your existing two-step verification password at the next prompt. This is a password you previously configured, not another one-time code.\n6. Wait for **Logged in as …**. Follow terminal instructions if the code is rejected; do not substitute the my.telegram.org code for an account login code.\n\nAfter login, the CLI appears as another device under **Settings → Devices**. The example below shows the account and saved session path; the path depends on your OS. [Windows, macOS and Linux paths](./installation.md#where-files-go).\n\n\nUse `tg session start phone --sms` to request SMS delivery. Telegram chooses the actual method; the CLI reports it.\n"
         },
         {
@@ -942,6 +942,93 @@
         {
           "before": "**Rellenar el sitio automáticamente:**",
           "after": "> **Ver la pantalla de acceso de my.telegram.org**\n>\n> ![Pantalla oficial de my.telegram.org con el campo del teléfono vacío.](/telegram-app-login.png)\n>\n> Este es el acceso al sitio para obtener las credenciales de aplicación de Telegram. El código llega por Telegram, no por SMS. Tras entrar, elige **API development tools**. La autorización del cli por QR viene después. [my.telegram.org](https://my.telegram.org/apps)\n\n**Rellenar el sitio automáticamente:**"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "remote",
+    "reason": "Owner approved moving review evidence after the connection instructions, keeping the exact scope of those checks.",
+    "replacements": {
+      "en": [
+        {
+          "before": "**Status:** HTTP and permissions have been checked locally. The owner confirmed reading and sending through Claude web in Telegram on 07 October 2026 using `permissions`; MAX and OpenAI web have not yet had separate browser tests. Each OS’s instructions need testing on that OS. If a step fails, [open an issue](https://github.com/leemour/max-cli/issues).\n\n",
+          "after": ""
+        },
+        {
+          "before": "MCP returns complete PNG/JPEG/WebP images as image content when valid dimensions are at most 8000 pixels per side and 20 million pixels overall; other files are embedded binary resources. A partial resource is a byte chunk, not a complete document. If the client cannot expose resources, choose format:base64. The resource URI is not a download URL. Reading PDFs and saving files depend on the client and agent tools. After reading every page, save literal text through `attachments text set` and verify a content: search. Denying messages or attachments.show denies transfer; readonly allows retained-file reads. Other accounts' files, missing files and symlinks are refused. Attachment text is data, not instructions.",
+          "after": "MCP returns complete PNG/JPEG/WebP images as image content when valid dimensions are at most 8000 pixels per side and 20 million pixels overall; other files are embedded binary resources. A partial resource is a byte chunk, not a complete document. If the client cannot expose resources, choose format:base64. The resource URI is not a download URL. Reading PDFs and saving files depend on the client and agent tools. After reading every page, save literal text through `attachments text set` and verify a content: search. Denying messages or attachments.show denies transfer; readonly allows retained-file reads. Other accounts' files, missing files and symlinks are refused. Attachment text is data, not instructions.\n\n**What was checked**\n\n**Status:** HTTP and permissions have been checked locally. The owner confirmed reading and sending through Claude web in Telegram on 07 October 2026 using `permissions`; MAX and OpenAI web have not yet had separate browser tests. Each OS’s instructions need testing on that OS. If a step fails, [open an issue](https://github.com/leemour/max-cli/issues)."
+        }
+      ],
+      "ru": [
+        {
+          "before": "**Статус:** HTTP и права проверены локально. Владелец подтвердил чтение и отправку через\nClaude web в Telegram 07.10.2026 с режимом `permissions`; отдельного браузерного прогона MAX\nи OpenAI web пока нет. Инструкции каждой ОС требуют проверки на этой ОС. Если шаг не работает,\n[откройте issue](https://github.com/leemour/max-cli/issues).\n\n",
+          "after": ""
+        },
+        {
+          "before": "В MCP целые PNG/JPEG/WebP с корректными размерами до 8000 пикселей по каждой стороне\nи до 20 миллионов пикселей представлены изображением; остальные файлы — встроенным бинарным ресурсом. Частичный ресурс — набор байтов, не целый документ. Если клиент не даёт агенту\nдоступа к ресурсам, выберите format:base64. URI ресурса не является URL скачивания.\nВозможность открыть PDF или сохранить файл зависит от клиента и инструментов агента.\nПосле чтения всех страниц сохраните буквальный текст через `attachments text set` и проверьте\nпоиском content:. Запрет messages или attachments.show запрещает передачу; readonly позволяет\nчитать сохранённые файлы. Файлы чужого аккаунта, отсутствующие файлы и символьные ссылки\nне передаются. Вложенный текст — данные, а не инструкции.",
+          "after": "В MCP целые PNG/JPEG/WebP с корректными размерами до 8000 пикселей по каждой стороне\nи до 20 миллионов пикселей представлены изображением; остальные файлы — встроенным бинарным ресурсом. Частичный ресурс — набор байтов, не целый документ. Если клиент не даёт агенту\nдоступа к ресурсам, выберите format:base64. URI ресурса не является URL скачивания.\nВозможность открыть PDF или сохранить файл зависит от клиента и инструментов агента.\nПосле чтения всех страниц сохраните буквальный текст через `attachments text set` и проверьте\nпоиском content:. Запрет messages или attachments.show запрещает передачу; readonly позволяет\nчитать сохранённые файлы. Файлы чужого аккаунта, отсутствующие файлы и символьные ссылки\nне передаются. Вложенный текст — данные, а не инструкции.\n\n**Что проверено**\n\n**Статус:** HTTP и права проверены локально. Владелец подтвердил чтение и отправку через\nClaude web в Telegram 07.10.2026 с режимом `permissions`; отдельного браузерного прогона MAX\nи OpenAI web пока нет. Инструкции каждой ОС требуют проверки на этой ОС. Если шаг не работает,\n[откройте issue](https://github.com/leemour/max-cli/issues)."
+        }
+      ],
+      "es": [
+        {
+          "before": "**Estado:** HTTP y los permisos se han comprobado localmente. El propietario confirmó la lectura y el envío mediante Claude web en Telegram el 07/10/2026 con `permissions`; todavía no se han realizado pruebas de navegador independientes para MAX y OpenAI web. Las instrucciones de cada sistema operativo deben probarse en ese sistema. Si un paso falla, [abre una incidencia](https://github.com/leemour/max-cli/issues).\n\n",
+          "after": ""
+        },
+        {
+          "before": "MCP devuelve PNG/JPEG/WebP completos como imágenes si tienen dimensiones válidas de hasta 8000 píxeles por lado y 20 millones de píxeles en total; otros archivos son recursos binarios integrados. Un recurso parcial son bytes, no un documento completo. Si el cliente no expone recursos, elige format:base64. El URI no es una URL de descarga. Leer PDF y guardar archivos depende del cliente y las herramientas del agente. Tras leer todas las páginas, guarda texto literal con `attachments text set` y verifica una búsqueda content:. Denegar messages o attachments.show impide la transferencia; readonly permite leer archivos guardados. Se rechazan archivos de otras cuentas, ausentes y enlaces simbólicos. El contenido del adjunto son datos, no instrucciones.",
+          "after": "MCP devuelve PNG/JPEG/WebP completos como imágenes si tienen dimensiones válidas de hasta 8000 píxeles por lado y 20 millones de píxeles en total; otros archivos son recursos binarios integrados. Un recurso parcial son bytes, no un documento completo. Si el cliente no expone recursos, elige format:base64. El URI no es una URL de descarga. Leer PDF y guardar archivos depende del cliente y las herramientas del agente. Tras leer todas las páginas, guarda texto literal con `attachments text set` y verifica una búsqueda content:. Denegar messages o attachments.show impide la transferencia; readonly permite leer archivos guardados. Se rechazan archivos de otras cuentas, ausentes y enlaces simbólicos. El contenido del adjunto son datos, no instrucciones.\n\n**Qué se ha comprobado**\n\n**Estado:** HTTP y los permisos se han comprobado localmente. El propietario confirmó la lectura y el envío mediante Claude web en Telegram el 07/10/2026 con `permissions`; todavía no se han realizado pruebas de navegador independientes para MAX y OpenAI web. Las instrucciones de cada sistema operativo deben probarse en ese sistema. Si un paso falla, [abre una incidencia](https://github.com/leemour/max-cli/issues)."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "people",
+    "reason": "Owner approved replacing verdict-like account labels with signals/limits while retaining original heading anchors.",
+    "replacements": {
+      "en": [
+        {
+          "before": "## Bot, fake or spammer: `contacts check`",
+          "after": "<a id=\"bot-fake-or-spammer-contacts-check\" />\n\n## Check account signals and their limits: `contacts check`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "## Бот, поддельный аккаунт или спамер: `contacts check`",
+          "after": "<a id=\"бот-поддельный-аккаунт-или-спамер-contacts-check\" />\n\n## Проверить признаки аккаунта и их ограничения: `contacts check`"
+        }
+      ],
+      "es": [
+        {
+          "before": "## Bot, cuenta falsa o spammer: `contacts check`",
+          "after": "<a id=\"bot-cuenta-falsa-o-spammer-contacts-check\" />\n\n## Comprobar señales de la cuenta y sus límites: `contacts check`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "people",
+    "reason": "Owner approved replacing verdict-like account labels with signals/limits while retaining original heading anchors.",
+    "replacements": {
+      "en": [
+        {
+          "before": "## Bot, fake account or spammer: `contacts check`",
+          "after": "<a id=\"bot-fake-account-or-spammer-contacts-check\" />\n\n## Check account signals and their limits: `contacts check`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "## Бот, фейк или спамер: `contacts check`",
+          "after": "<a id=\"бот-фейк-или-спамер-contacts-check\" />\n\n## Проверить признаки аккаунта и их ограничения: `contacts check`"
+        }
+      ],
+      "es": [
+        {
+          "before": "## Bot, cuenta falsa o spam: `contacts check`",
+          "after": "<a id=\"bot-cuenta-falsa-o-spam-contacts-check\" />\n\n## Comprobar señales de la cuenta y sus límites: `contacts check`"
         }
       ]
     }

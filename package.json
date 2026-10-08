@@ -28,7 +28,8 @@
     "docs:wiki:install": "sh scripts/codewiki-install.sh",
     "docs:wiki": ".docs-tooling/codewiki-venv/bin/python scripts/codewiki-trial.py",
     "docs:wiki:review": "python3 scripts/codewiki-review.py",
-    "docs:release-notes": "node --experimental-strip-types scripts/release-notes.ts"
+    "docs:release-notes": "node --experimental-strip-types scripts/release-notes.ts",
+    "docs:report-fixture": "node scripts/docs-report-fixture.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import siteConfig from "../site.config.json"
+import { readerGuide } from "./reader-guides"
 import seoCopy from "./seo-copy.json"
 import { appName, siteUrl, tools } from "./shared"
 import { homePath } from "./site-routes"
@@ -65,10 +66,12 @@ export function documentationTitle(lang: string, slugs: string[], authored: stri
   const tool = tools.find((candidate) => candidate.name === slugs[0])
   if (!tool) return authored
   if (slugs.length === 1) return seoWords(lang).toolTitles[tool.name as "tg" | "max"]
-  return `${authored} — ${tool.name}`
+  return `${readerGuide(slugs, lang)?.title ?? authored} — ${tool.name}`
 }
 
 export function documentationDescription(lang: string, slugs: string[], authored?: string): string {
+  const taskDescription = readerGuide(slugs, lang)?.description
+  if (taskDescription) return taskDescription
   if (authored?.trim()) return authored
   const [tool, slug] = slugs
   const description = seoWords(lang).reference[slug as keyof typeof seoCopy.en.reference]

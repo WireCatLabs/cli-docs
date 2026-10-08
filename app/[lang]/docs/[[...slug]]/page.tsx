@@ -16,9 +16,11 @@ import { DocsContentsHint } from "@/components/docs-contents-hint"
 import { DocsDisclosures } from "@/components/docs-disclosures"
 import { DocsTocPopover } from "@/components/docs-toc-popover"
 import { getMDXComponents } from "@/components/mdx"
+import { ReaderGuide } from "@/components/reader-guide"
 import { StructuredData } from "@/components/structured-data"
 import { installationReferenceTitle, ToolInstallationIntro } from "@/components/tool-installation-intro"
 import { guideOrientation, guideStartLink } from "@/lib/guide-orientation"
+import { readerGuide } from "@/lib/reader-guides"
 import { commandReferences } from "@/lib/remark-doc-usability"
 import {
   documentationDescription,
@@ -49,7 +51,9 @@ export default async function Page(props: Props) {
     { name: seoWords(lang).homeLabel, pathname: homePath(lang) },
     { name: seoWords(lang).docsLabel, pathname: `/${lang}/docs` },
     ...(tool ? [{ name: tool.name === "tg" ? "Telegram" : "MAX", pathname: `/${lang}/docs/${tool.name}` }] : []),
-    ...(page.slugs.length > (tool ? 1 : 0) ? [{ name: page.data.title, pathname: page.url }] : []),
+    ...(page.slugs.length > (tool ? 1 : 0)
+      ? [{ name: readerGuide(page.slugs, lang)?.title ?? page.data.title, pathname: page.url }]
+      : []),
   ]
   const written = page.data.contentLanguage ?? tool?.lang ?? lang
   const ui = wordsFor(lang).navigation
@@ -75,15 +79,23 @@ export default async function Page(props: Props) {
       ...[...commandRaw.matchAll(/<a id="([^"<>]+)"\s*\/>/g)].map((match) => match[1]),
     ]),
   ]
-  const toc = commandIndex
-    ? []
-    : guide === "installation"
-      ? [
-          { title: ui.installGuide, url: "#agent-installation", depth: 2 },
-          { title: installationReferenceTitle(lang), url: "#installation-reference", depth: 2 },
-          ...page.data.toc,
-        ]
-      : page.data.toc
+  const taskGuide = readerGuide(page.slugs, lang)
+  const toc = taskGuide
+    ? [
+        ...taskGuide.sections.map((section) => ({ title: section.title, url: `#${section.id}`, depth: 2 })),
+        ...(taskGuide.fixture ? [{ title: taskGuide.fixture.title, url: "#task-incomplete-history", depth: 2 }] : []),
+        { title: taskGuide.reference, url: "#technical-reference", depth: 2 },
+        ...page.data.toc,
+      ]
+    : commandIndex
+      ? []
+      : guide === "installation"
+        ? [
+            { title: ui.installGuide, url: "#agent-installation", depth: 2 },
+            { title: installationReferenceTitle(lang), url: "#installation-reference", depth: 2 },
+            ...page.data.toc,
+          ]
+        : page.data.toc
 
   return (
     <DocsPage
@@ -104,10 +116,17 @@ export default async function Page(props: Props) {
       }}
     >
       <StructuredData
-        data={pageStructuredData({ lang, pathname: page.url, title: page.data.title, description, breadcrumbs, tool })}
+        data={pageStructuredData({
+          lang,
+          pathname: page.url,
+          title: taskGuide?.title ?? page.data.title,
+          description,
+          breadcrumbs,
+          tool,
+        })}
       />
       <DocsDisclosures />
-      <DocsTitle>{page.data.title}</DocsTitle>
+      <DocsTitle>{taskGuide?.title ?? page.data.title}</DocsTitle>
       <DocsDescription className="mb-0">{description}</DocsDescription>
       {(page.slugs.at(-1)?.startsWith("commands-") || page.slugs.at(-1) === "configuration") && (
         <DocsContentsHint lang={lang} />
@@ -134,18 +153,26 @@ export default async function Page(props: Props) {
         </Link>
       )}
       <DocsBody lang={written}>
-        {guideOrientation(page.slugs, lang) && (
+        {!taskGuide && guideOrientation(page.slugs, lang) && (
           <p data-guide-orientation lang={lang}>
             {guideOrientation(page.slugs, lang)}
           </p>
         )}
-        {guideStartLink(page.slugs, lang) && (
+        {!taskGuide && guideStartLink(page.slugs, lang) && (
           <p lang={lang}>
             <Link href={guideStartLink(page.slugs, lang)?.href ?? ""}>{guideStartLink(page.slugs, lang)?.label} →</Link>
           </p>
         )}
         {guide === "installation" && tool && <ToolInstallationIntro tool={tool} lang={lang} />}
-        {commandIndex && tool ? (
+        {taskGuide ? (
+          <>
+            <ReaderGuide slugs={page.slugs} lang={lang} />
+            <details id="technical-reference" className="docs-disclosure" data-technical-reference>
+              <summary lang={lang}>{taskGuide.reference}</summary>
+              <MDX components={getMDXComponents({ a: createRelativeLink(source, page) })} />
+            </details>
+          </>
+        ) : commandIndex && tool ? (
           <CommandReferenceIndex
             tool={tool.name}
             lang={lang}

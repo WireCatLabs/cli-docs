@@ -41,6 +41,7 @@ import {
   Webhook,
   Wrench,
 } from "lucide-react"
+import { readerGuide } from "./reader-guides"
 
 export const sidebarIcons = {
   features: LayoutGrid,
@@ -106,7 +107,9 @@ export function unifiedDocsTree(tree: Root): Root {
     if (node.type !== "page") return node
     const slug = /\/docs\/(tg|max)\/?$/.test(node.url) ? "index" : (node.url.split("/").filter(Boolean).at(-1) ?? "")
     const Icon = sidebarIcons[slug as keyof typeof sidebarIcons] ?? FileText
-    return { ...node, icon: node.icon ?? <Icon aria-hidden="true" /> }
+    const task = /^\/(en|ru|es)\/docs\/(tg|max)\/(usage|rankings)\/?$/.exec(node.url)
+    const title = task ? readerGuide([task[2], task[3]], task[1])?.title : undefined
+    return { ...node, name: title ?? node.name, icon: node.icon ?? <Icon aria-hidden="true" /> }
   }
   return { ...tree, children: tree.children.map(decorate) }
 }

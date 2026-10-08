@@ -3,7 +3,7 @@
 This is the content work plan, separate from source-pack and generator experiments. The reader
 is a person using a messenger with an assistant, not someone studying the implementation.
 Existing tooling research is in the 7 October plan and 8 October reviews; it informs checks,
-not a substitute for editing pages. Current source: main `e70b784`, TG v0.37.0 / MAX v0.36.0.
+not a substitute for editing pages. Current source: main `e30a07a`, TG v0.38.0 / MAX v0.37.0.
 
 ## Page work and acceptance
 
@@ -69,3 +69,5 @@ keep before/after quotes and page links separate from implemented work.
 This pass improves the existing shared task homes, first-use term explanations and native-guide
 entry paths. It preserves reviewed command contracts and generated references. Remaining large
 source rewrites and behavior claims are proposals, not silently assumed current facts.
+
+The owner-approved eight proposals are implemented; see [results and evidence](../reviews/2026-10-08-approved-editorial-changes.md).
