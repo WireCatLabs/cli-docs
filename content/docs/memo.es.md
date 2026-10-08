@@ -1,29 +1,55 @@
 ---
-title: "Correo y notas con Memo"
-description: "Reúne correo, notas en Markdown e historial de mensajes para preparar una conversación o encontrar una decisión anterior."
+title: "Correo y notas"
+description: "Ayuda a tu agente a preparar un resumen con correo, notas y mensajes, con enlaces que puedas comprobar."
 ---
 
-Usa Memo cuando el contexto que necesitas está repartido entre mensajes, correo y notas.
-Reúne los datos almacenados sobre una persona con enlaces a sus fuentes, para que tú o tu
-agente de IA podáis preparar una reunión o comprobar un acuerdo. Importa primero tus notas
-y el correo: Memo no descarga por sí mismo el historial de Telegram o MAX.
+Antes de una reunión, puede que necesites una decisión de un chat, un detalle de un correo y
+una nota que guardaste. Esta página explica cómo conectar esas fuentes con Memo para que tu
+agente reúna el contexto en un solo lugar. Aprenderás a añadir notas y correo, pedir un resumen
+sobre una persona y comprobar las fuentes de la respuesta. Tú eliges las carpetas y cuentas
+que incluyes; el historial de mensajes debe descargarse antes con tg o max.
 
-Esta guía describe **Memo 0.2.0**. Es una herramienta en una etapa temprana de desarrollo,
-disponible como `@leemour/cli-memo`.
+## Antes de empezar
+
+Usa un agente de IA con acceso al terminal en el ordenador donde están tus notas y el historial
+de mensajes. Puedes empezar solo con notas y añadir correo después. Para incluir mensajes,
+[conecta Telegram o MAX](./installation.mdx) y descarga el historial necesario.
+
+## Pruébalo con tu agente
+
+Sustituye la persona y la carpeta por las tuyas:
+
+> Ayúdame a configurar Memo para mi carpeta de notas y la cuenta de correo que elija. Después
+> prepara un resumen sobre Rin Example antes de nuestra reunión: mensajes recientes, correo,
+> notas vinculadas y tareas abiertas. Incluye enlaces a las fuentes e indica qué datos faltan.
+
+Tu agente instala Memo, registra la carpeta que elijas e importa sus notas. Si añades correo,
+lo lee a través de una cuenta configurada en Himalaya. Estas importaciones guardan una copia
+local; no editan las notas originales, envían correo ni lo marcan como leído. Después, el
+agente reúne lo que el almacén local contiene sobre la persona.
+
+## Comprueba el resultado
+
+El resumen debe enlazar los mensajes, correos o notas de los que procede cada detalle relevante.
+Abre una fuente para comprobar un acuerdo o una fecha. El agente también debe explicar las
+carencias: por ejemplo, un periodo de correo sin importar o un enlace a una persona que no se
+ha resuelto. Un resultado vacío por sí solo no demuestra que no hubiera acuerdos.
+
+Los apartados siguientes incluyen los pasos de configuración y las órdenes para ti o tu agente.
 
 ## Instala Memo
 
-Necesitas Node.js 22.16 o posterior en la serie 22.x, o Node.js 24 o posterior, con npm.
+Necesitas Node.js con npm; la [guía de instalación](./installation.mdx) explica cómo configurarlos.
 Para incluir contexto de mensajes, [instala Telegram o MAX](./installation.mdx) y descarga
 el historial necesario con esa herramienta. Memo lee su almacén local compartido en el mismo ordenador.
 
 ```sh
-npm install -g @leemour/cli-memo@0.2.0
-memo --version
+npm install -g @leemour/cli-memo
+memo --help
 ```
 
-La comprobación de versión debe mostrar `0.2.0`. Un agente con acceso al terminal puede
-usar `memo` cuando la orden está disponible en su PATH; dale esta guía con las órdenes siguientes.
+La ayuda debe mostrar las órdenes de Memo. Si funciona en el terminal del agente, este puede
+encontrar Memo. Dale esta guía con los pasos siguientes.
 
 ## Añade tus notas
 
@@ -97,11 +123,6 @@ Consulta la guía para [trabajar con personas](./people.md).
 
 ## Pide el contexto que necesitas
 
-Dale a tu agente una petición como esta, sustituyendo el nombre:
-
-> Usa Memo para reunir lo que sabemos de Rin Example antes de nuestra reunión: mensajes recientes,
-> correo, notas vinculadas y tareas abiertas. Incluye enlaces a las fuentes e indica qué datos faltan.
-
 El agente puede reunir contexto de una persona o buscar en las fuentes importadas:
 
 ```sh
@@ -126,7 +147,7 @@ Estas notas viven en el almacén local. Escribirlas no cambia un archivo importa
 
 ## Si falta algo
 
-- **Orden no encontrada:** comprueba `memo --version` en el terminal del agente y vuelve a abrirlo tras la instalación.
+- **Orden no encontrada:** comprueba `memo --help` en el terminal del agente y vuelve a abrirlo tras la instalación.
 - **No hay notas:** comprueba `memo folders list`, repite `memo notes import --no-embed` y revisa el resultado.
 - **No hay cuenta de correo:** comprueba que `mail.accounts` nombra una cuenta configurada en Himalaya.
 - **Persona incorrecta o nombre ambiguo:** usa el proveedor y el ID exacto; vincula las identidades explícitamente.
@@ -134,5 +155,5 @@ Estas notas viven en el almacén local. Escribirlas no cambia un archivo importa
 
 Cuando las fuentes estén disponibles, continúa con [preparar una reunión](./meeting-brief.mdx).
 Consulta las opciones con `memo --help` o el `--help` de una suborden.
-La [documentación original de Memo 0.2.0](https://github.com/leemour/cli-memo/blob/v0.2.0/README.md)
+La [documentación de órdenes de Memo](https://github.com/leemour/cli-memo#readme)
 también describe tareas, relaciones, etiquetas, recordatorios locales y conjuntos de fuentes.

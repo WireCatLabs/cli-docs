@@ -1,28 +1,55 @@
 ---
-title: "Email and notes with Memo"
-description: "Bring email, Markdown notes and messenger history together to prepare for a conversation or find a past decision."
+title: "Email and notes"
+description: "Help your agent prepare a brief from your email, notes and messages, with links you can check."
 ---
 
-Use Memo when the context you need is spread across messages, email and notes. It gathers what
-is stored about a person and links back to the sources, so you or your AI agent can prepare for
-a meeting or check an agreement. Import your notes and mail first; Memo does not download
-Telegram or MAX history itself.
+Before a meeting, you may need a decision from a chat, a detail from an email and a note you
+saved earlier. This page shows how to connect those sources with Memo so your agent can gather
+the context in one place. By the end, you can add your notes and email, ask for a brief about a
+person, and check the sources behind the answer. You choose which folders and mail accounts
+to include; messenger history must already be downloaded through tg or max.
 
-This guide covers **Memo 0.2.0**. Memo is an early-stage tool, available as `@leemour/cli-memo`.
+## Before you start
+
+Use an AI agent with terminal access on the computer where your notes and messenger history
+are stored. You can start with notes alone and add email later. To include messages,
+[connect Telegram or MAX](./installation.mdx) and download the relevant history.
+
+## Try it with your agent
+
+Replace the person and folder with your own:
+
+> Help me set up Memo for my notes folder and the mail account I choose. Then prepare a brief
+> about Rin Example before our meeting: recent messages, email, linked notes and open tasks.
+> Include links to the sources and tell me what data is missing.
+
+Your agent installs Memo, registers the folder you choose and imports its notes. If you add
+email, it reads it through a mail account configured in Himalaya. These imports save a local
+copy; they do not edit the original notes, send email or mark it read. The agent then gathers
+what the local store holds about the person.
+
+## Check the result
+
+The brief should point to the messages, emails or notes behind each relevant detail. Open a
+source to check an agreement or date. The agent should also explain gaps, such as a mail
+period that has not been imported or a note whose person link is unresolved. An empty result
+alone does not show that there were no agreements.
+
+The sections below give the setup steps and commands for you or your agent.
 
 ## Install Memo
 
-You need Node.js 22.16 or later in the 22.x series, or Node.js 24 or later, with npm.
+You need Node.js with npm; the [installation guide](./installation.mdx) explains how to set them up.
 For messenger context, [install Telegram or MAX](./installation.mdx) and download the history
 you need with that tool. Memo reads their shared local store on the same computer.
 
 ```sh
-npm install -g @leemour/cli-memo@0.2.0
-memo --version
+npm install -g @leemour/cli-memo
+memo --help
 ```
 
-The version check should print `0.2.0`. An agent with terminal access can run `memo` once it is
-on the agent's PATH; give it this guide for the commands below.
+The help command should list Memo's commands. If it works in the agent's terminal, the agent
+can find Memo. Give it this guide for the steps below.
 
 ## Add your notes
 
@@ -95,11 +122,6 @@ Link an email address to its messenger identity explicitly with `tg contacts lin
 
 ## Ask for the context you need
 
-Give your agent a request like this, replacing the name:
-
-> Use Memo to gather what we know about Rin Example before our meeting: recent messages,
-> email, linked notes and open tasks. Include links to the sources and say what data is missing.
-
 The agent can use these commands to gather person context or search across imported sources:
 
 ```sh
@@ -124,7 +146,7 @@ These notes live in the local store. Writing them does not change an imported fi
 
 ## If something is missing
 
-- **Command not found:** check `memo --version` in the agent's terminal and reopen it after installation.
+- **Command not found:** check `memo --help` in the agent's terminal and reopen it after installation.
 - **No notes found:** check `memo folders list`, rerun `memo notes import --no-embed` and inspect the import result.
 - **No mail account:** check that `mail.accounts` names an account configured in Himalaya.
 - **Wrong or ambiguous person:** use the provider and exact ID; link identities explicitly.
@@ -132,5 +154,5 @@ These notes live in the local store. Writing them does not change an imported fi
 
 When the sources are present, continue with [preparing a meeting brief](./meeting-brief.mdx).
 For command options, run `memo --help` or a subcommand's `--help`.
-The [Memo 0.2.0 source documentation](https://github.com/leemour/cli-memo/blob/v0.2.0/README.md)
+The [Memo command documentation](https://github.com/leemour/cli-memo#readme)
 also covers tasks, relationships, tags, local reminders and evidence bundles.

@@ -8,6 +8,14 @@ Before drafting, identify who opens the page, in what situation, and what they w
 
 Keep the title short and specific, such as **File attachments**. A description adds useful context rather than repeating the title. Put the useful outcome before implementation detail. Prefer concrete examples and plain language; distinguish sending a file, downloading its bytes, reading its content and indexing recognized text.
 
+## Keep release evidence out of user guides
+
+Keep reviewed tool versions, source commits and exact dependency pins in `tools.json` and
+maintainer review records. User guides use unversioned installation commands and explain what
+the reader can do; do not add release numbers, a reviewed-version banner or exact-version output.
+Link runtime setup to the installation guide. Release notes and compatibility references retain
+version details when those details are the page's purpose.
+
 ## Keep facts and navigation trustworthy
 
 Tool repositories own command behavior and native guides. The portal normally imports a reviewed release, not unreleased `main`. An explicitly reviewed documentation-only page may come from a fixed source commit while the runtime release pin stays unchanged. Such a page must describe capabilities already available in that release; its source and edit link must remain traceable. Release-update preparation retires these overrides so newer guide content is reviewed in full. Review contextual prose corrections again when their native counterpart is included in a release.
@@ -19,3 +27,16 @@ Explain available prerequisites and quality limits where readers need them. For 
 ## Check the result
 
 Run the affected tool's documentation checks and the portal's lint, type checks, tests, localization, build and link checks. Verify the rendered sidebar on desktop and mobile and review the opening paragraph in each affected language. Tests should protect a real reader outcome or contract, not merely repeat implementation details. Keep unrelated checkout changes intact.
+
+## Review reader progress before publishing
+
+Before approving a guide, record the answers to these questions in its maintainer review:
+
+- Who opens it, for which task, and what can they do after reading?
+- Does the opening state that situation and outcome in plain language?
+- Is the first useful request or action reachable before optional command and configuration detail?
+- Can the reader recognize success and incomplete results, then choose a next step?
+- Does the guide keep release evidence in maintainer records and preserve the same reader path in every language?
+
+Technical checks validate builds, links, examples and presentation. Passing them does not approve
+the prose; review the opening, first action and result in each language before merging.

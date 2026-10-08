@@ -45,3 +45,47 @@ Current main does not expose the uncommitted shared checkout's `docs:contracts` 
 `docs:check` commands. The release-package fixture and documented-command source review
 supplement the available repository checks. Mail configuration/import was reviewed in
 source and command help, not tested against a live mailbox.
+
+## Reader-focused revision
+
+The owner requested a clearer statement of the page's purpose and reader gain, and no
+public version mentions. The guide now opens with the pre-meeting situation and what the
+reader learns: connect selected notes/email, ask for a person brief and check its sources.
+The first action is a natural-language agent request; expected results and missing-data
+interpretation precede manual installation and configuration detail. Notes-only use is
+explicit, and the terminal/local-history prerequisite is stated before the request.
+
+The same sequence and outcomes were reviewed in English, Russian and Spanish. Tool/runtime
+version prose, the pinned installation example, exact-version output and version-labelled
+source link were removed from the public guide. Reviewed source versions remain in this
+maintainer record. Existing section anchors remain available.
+
+### Why the standards did not prevent the problem
+
+- Main already had the reader-task and outcome rule in `docs/AUTHORING.md`. The original
+  opening described the product's function, but the first action was a version-pinned
+  installation; the useful agent request appeared after setup detail. The editorial
+  review did not apply the standard to the whole reading path.
+- Main CI validates lint, tests, sync, typecheck, build, links, SEO and browser behavior.
+  Those checks do not assess whether the reader understands what they will gain or
+  encounters a useful first request early. Technical success was treated as approval
+  of the prose.
+- The fuller authoring workflow, index/tooling docs, skill source and docs-quality/contract
+  scripts are present as uncommitted work in the owner's shared checkout. Current main
+  contains the shorter authoring guide, but not that full workflow. Its proposed quality
+  checker covers command references/examples and task destinations, not prose usefulness.
+- The shipped standard required reviewed runtime facts but did not explicitly prohibit
+  public release banners and pinned install examples. The distinction between internal
+  evidence and reader-facing instructions needed to be stated.
+
+The authoring guide now explicitly keeps release evidence in maintainer records and
+requires a recorded review of reader situation, outcome, first action, observable success,
+missing data and localized reading path. This is a manual editorial gate; it does not
+pretend that a keyword or heading check can certify useful prose.
+
+Revision validation: lint, production build (including TypeScript), localization, links and
+SEO passed. Browser checks passed for all locales, desktop/mobile and light/dark: the agent
+request precedes installation detail, no public version text remains, About navigation and
+sidebar still work, and Markdown twins and axe checks pass. Commands and runtime behavior
+were unchanged apart from unversioned installation and using help to check availability;
+the earlier isolated source/behavior verification remains applicable.
