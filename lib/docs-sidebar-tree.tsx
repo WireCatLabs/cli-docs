@@ -23,6 +23,7 @@ import {
   LayoutGrid,
   ListChecks,
   LockKeyhole,
+  Mail,
   MessageSquare,
   Mic,
   Network,
@@ -45,6 +46,7 @@ import { readerGuide } from "./reader-guides"
 
 export const sidebarIcons = {
   features: LayoutGrid,
+  memo: Mail,
   attachments: Paperclip,
   "audio-recognition": Mic,
   "external-models": BrainCircuit,

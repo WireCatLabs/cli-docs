@@ -42,7 +42,7 @@ export default async function AboutPage({ params }: Props) {
       name: words.emailTool,
       command: "memo",
       description: words.toolDescriptions.memo,
-      docs: "https://github.com/leemour/cli-memo#readme",
+      docs: `/${lang}/docs/memo`,
       source: "https://github.com/leemour/cli-memo",
     },
   ]
@@ -147,7 +147,7 @@ export default async function AboutPage({ params }: Props) {
                   <dt>{words.project.tools}</dt>
                   <dd>
                     <Link href={`/${lang}/docs/tg`}>Telegram</Link> · <Link href={`/${lang}/docs/max`}>MAX</Link> ·{" "}
-                    <a href="https://github.com/leemour/cli-memo#readme">{words.emailTool}</a>
+                    <Link href={`/${lang}/docs/memo`}>{words.emailTool}</Link>
                   </dd>
                 </div>
                 <div>
