@@ -22,7 +22,7 @@ Puntuación v1: `100 × sum(weight × value / maximum) / sum(weight)`. Los máxi
 
 `--message-kind posts|comments` selecciona un tipo de mensaje confirmado antes del recuento. Las filas antiguas sin información de relaciones siguen siendo desconocidas. Las consultas usan Lucene estricto; funcionan `--chat`, `--source`, `--exact` y `--timezone`. El límite es de 1 a 100 filas. Las métricas de respuestas requieren un intervalo de fechas positivo común; se rechazan las ramas de fechas ambiguas.
 
-Los contadores de vistas, reacciones y reenvíos son instantáneas acumuladas cuya actualidad se desconoce. Los filtros de fechas seleccionan mensajes, no las reacciones del periodo. Un valor desconocido es distinto de cero. El total de reacciones de un autor puede ser parcial: la respuesta muestra cuántas instantáneas son conocidas y desconocidas. `--sync-first` comprueba permisos y descarga mensajes nuevos dentro de los límites indicados, pero no actualiza los contadores de mensajes antiguos. Se devuelve explícitamente la cobertura del archivo y del grafo de relaciones.
+Los contadores de vistas, reacciones y reenvíos son instantáneas acumuladas. Vistas, reacciones y comentarios indican frescura por campo; registros antiguos quedan unknown y reenvíos no tienen observación propia. Los filtros de fechas seleccionan mensajes, no las reacciones del periodo. Un valor desconocido es distinto de cero. El total de reacciones de un autor puede ser parcial: la respuesta muestra cuántas instantáneas son conocidas y desconocidas. `--sync-first` comprueba permisos y descarga mensajes nuevos dentro de los límites indicados, pero no actualiza los contadores de mensajes antiguos. Se devuelve explícitamente la cobertura del archivo y del grafo de relaciones.
 
 Una «respuesta a una pregunta» es una heurística: la pregunta contiene `?` después de eliminar las URL, y cuenta la primera respuesta directa de otra persona conocida. No cuentan las respuestas a uno mismo ni las identidades de canales. Las palabras son secuencias de letras o dígitos sin URL; los días activos usan la zona horaria elegida.
 
@@ -76,7 +76,7 @@ incompleto de miembros; no tener preguntas guardadas no significa que no hiciera
 
 `discussion` examina publicaciones guardadas de canales y compara vistas acumuladas conocidas
 con respuestas directas guardadas. Las instantáneas de comments se muestran por separado;
-su antigüedad es desconocida. No se sustituyen por cero los contadores o enlaces ausentes.
+su frescura se indica por campo; sin hora de observación es unknown. No se sustituyen por cero los contadores o enlaces ausentes.
 Una discusión enlazada necesita enlaces guardados y el historial de su grupo.
 
 Cada fila incluye `drilldown.command` y argumentos exactos. Ejecuta el comando evidence
@@ -97,3 +97,30 @@ nunca los mensajes resultantes; no registra las pruebas.
 Una selection guardada fija los ID y las fechas permitidos; las palabras nuevas reducen la selección. Los parámetros explícitos de clasificación sustituyen a los guardados. `--sync-first` no está disponible para selecciones fijadas. El historial guarda parámetros, no resultados; evidence no se registra en el historial. MCP usa las mismas rutas mediante `max_read`, pasando selection como objeto.
 
 [Especificación compartida detallada](https://github.com/leemour/cli-messaging/blob/main/docs/rankings.md) y [estándar de CLI](https://github.com/leemour/cli-messaging/blob/main/docs/dev/STANDARD.md).
+
+## Retención a partir de listas observadas
+
+Pide al agente que muestre qué recién llegados de Club seguían observados tras uno, siete y treinta días y quiénes escribieron en su primera semana. Se necesitan fechas de incorporación conocidas y listas guardadas; la primera aparición no sustituye la fecha de entrada. Los registros antiguos no reciben listas inventadas.
+
+```sh
+max stats chats retention Клуб --checkpoints 1d,7d,30d --within 7d --timezone Europe/Madrid --json
+```
+
+Por defecto se agrupan las entradas de los últimos 90 días por semanas desde el lunes. `--by day`, `--since-time` y `--until-time` cambian las cohortes. Elige hasta diez duraciones de control positivas y crecientes. Cada control usa la primera lista guardada en la fecha objetivo o después, dentro de las siguientes 24 horas; las pruebas muestran hora y demora. Una lista parcial puede demostrar presencia, pero solo una lista completa demuestra ausencia. Sin observación válida el resultado es unknown; un control futuro es pending. La tasa usa el denominador observable y muestra eligible, unknown y pending aparte. Estos controles no prueban una pertenencia ininterrumpida.
+
+La salida ocurre después de la última presencia observada y como máximo en la primera ausencia completa. Si el intervalo cruza el fin de la primera semana, se desconoce la salida temprana. Una reincorporación inicia otra estancia. Un mensaje guardado demuestra actividad observada; sin mensaje solo hay no-observed-message. `archiveCovered` indica la cobertura del período; datos incompletos no permiten deducir el porcentaje de miembros silenciosos de todo el grupo. Copia el `drilldown` de una cohorte en `stats messages evidence --component report`. Las páginas de pruebas se limitan a 64 KiB; la selección fija la fecha de cálculo y nuevas observaciones requieren otro informe.
+
+## Comprobar y actualizar contadores
+
+Pide al agente que compruebe la edad de vistas y reacciones, muestre una vista previa de hasta veinte mensajes y actualice esos objetivos exactos. Las fechas de envío y guardado no establecen la fecha de observación del contador.
+
+```sh
+max stats messages counters show --chat Клуб --counters views,reactions --max-age 24h --limit 20 --json
+max stats messages counters refresh --chat Клуб --counters views,reactions --max-messages 20 --sync-time 30s --dry-run --json
+```
+
+`show` lee el archivo localmente. Cada campo indica valor, observedAt, origen, edad y freshness: fresh, stale o unknown; el umbral predeterminado es de 24 horas. Un valor ausente no es cero y actualizar vistas no renueva reacciones. La selección devuelta fija ubicaciones exactas; pasa su JSON con `--selection`, sin otra consulta ni opciones de ámbito.
+
+`refresh` lee el mensajero y guarda observaciones localmente. Requiere un `--chat` explícito o una selección y usa solo la cuenta activa. Por defecto: veinte mensajes y 30 segundos; máximo: 100 mensajes y cinco minutos. Dry-run muestra objetivos exactos y campos admitidos sin conectar. Requiere permiso de lectura de mensajes y escritura `stats.messages.counters.refresh`. MAX admite views y reactions; comments no está admitido. Los campos ausentes y errores parciales quedan explícitos. No envía mensajes, no marca lecturas, no incrementa vistas y conserva textos, respuestas, adjuntos y mensajes eliminados. Un escritor antiguo que cambie un valor sin observación deja su frescura en unknown.
+
+Tras actualizar, repite show para la selección devuelta y revisa las fechas de cada campo. Los contadores acumulados siguen sin indicar las vistas o reacciones recibidas durante el período del filtro de fechas.

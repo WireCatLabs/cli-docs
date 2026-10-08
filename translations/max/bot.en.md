@@ -302,7 +302,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Path and query parameters become flags; the body is JSON in `--body`, `--body -` (from a pipe) or `--body-file`. `--body-file -` also reads stdin. The native `timeout` parameter is named `--poll-timeout`; the global `--timeout` limits the whole command. The shared `--store-token <profile>` option is unavailable for current MAX methods: each rejects it before performing the operation. Before sending, the body is checked against the schema. Errors identify the field and expected type without exposing its value. See [Bot API coverage](https://github.com/leemour/max-cli/blob/v0.35.0/docs/dev/bot-api-coverage.md) for all operations and their read/write classification.
+Path and query parameters become flags; the body is JSON in `--body`, `--body -` (from a pipe) or `--body-file`. `--body-file -` also reads stdin. The native `timeout` parameter is named `--poll-timeout`; the global `--timeout` limits the whole command. The shared `--store-token <profile>` option is unavailable for current MAX methods: each rejects it before performing the operation. Before sending, the body is checked against the schema. Errors identify the field and expected type without exposing its value. See [Bot API coverage](https://github.com/leemour/max-cli/blob/v0.36.0/docs/dev/bot-api-coverage.md) for all operations and their read/write classification.
 
 ## Scripts and agents
 

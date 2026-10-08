@@ -4,6 +4,19 @@ title: "Historial de cambios"
 
 Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.37.0 — 08.10.2026
+
+### Novedades
+
+- **El agente lee por nombre los chats de una carpeta mediante MCP**, como `tg chats folders show` (`tg_read`, command: `chats folders show`).
+- **`tg chats link update <chat> <link> [--approval | --no-approval] [--expire-time] [--max-uses]` cambia uno de tus enlaces adicionales:** solo cambia lo indicado.
+- **Archivos guardados para agentes remotos:** `attachments show` transfiere porciones limitadas con SHA256 del archivo completo. MCP devuelve imágenes completas o recursos binarios con alternativa JSON/base64. No realiza OCR ni indexa; el agente lee y guarda el texto ([adjuntos](./attachments.md)).
+- La biblioteca compartida añade cohortes de retención observadas y observaciones de contadores con frescura por campo; lo desconocido queda explícito.
+
+### Cambios que pueden romper scripts
+
+- JSON de rankings y pruebas incluye observaciones de contadores y frescura; las pruebas admiten selecciones de cohortes de retención. Revisa cada campo y tipo de selección; valores desconocidos y archivos incompletos no significan cero.
+
 ## 0.36.0 — 08.10.2026
 
 ### Novedades
