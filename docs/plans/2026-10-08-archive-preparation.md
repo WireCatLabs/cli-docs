@@ -32,3 +32,5 @@ fingerprints, start pages and exact portal corrections. All released guide pages
 The generated Telegram Bot API appendix retains its explicitly labeled English source.
 See [the guide review record](../reviews/2026-10-08-reviewed-tool-guides.md) for scope and checks.
 `pnpm sync` continues to use reviewed tags; a future CLI release does not automatically advance them.
+
+Full guide update and publication: [website PR #72](https://github.com/leemour/cli-docs/pull/72).

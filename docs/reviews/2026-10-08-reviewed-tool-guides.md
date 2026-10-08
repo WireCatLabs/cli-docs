@@ -69,13 +69,14 @@ rather than prematurely to the generated source in the tool's nominal language.
 
 ## Validation
 
-Publication requires successful reviewed-release sync, per-locale fingerprints and preservation,
-lint, unit tests, search bundle checks, type checking, static build, HTML/Markdown links, SEO and
-production browser tests. Offline contract inspection covers all 856 published command reference
+Passed locally: reviewed-release sync, per-locale fingerprints and preservation, lint, 209 unit
+tests, search bundle checks, type checking, static build, HTML/Markdown links, SEO and all 83
+production browser tests. All 180 localized HTML/Markdown guide pairs carry the reviewed version. Offline contract inspection covers all 856 published command reference
 entries without missing commands or options. The temporary parser flagged 45 localized syntax illustrations/heredocs and 105 cases requiring
 manual review. These reduce to command alternatives, profile placeholders, shell policy patterns,
 quoted search wildcards and stdin examples; their concrete commands were checked against the
 contract. They were not executed as messenger commands.
 
 No live messenger action was performed for this documentation update. Publication and live website
-verification are tracked by the linked pull request and deployment workflow.
+verification are tracked in [website PR #72](https://github.com/leemour/cli-docs/pull/72) and the
+[deployment workflow](https://github.com/leemour/cli-docs/actions/workflows/deploy.yml).
