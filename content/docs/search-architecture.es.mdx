@@ -7,6 +7,8 @@ WireCat tiene dos formas de buscar en un mismo archivo local. **La búsqueda de 
 
 Esta es la página técnica. Para el uso diario, lee las guías de búsqueda de [Telegram](./tg/search.md) y [MAX](./max/search.md) y sus páginas del archivo. El motor de búsqueda compartido está publicado en tg 0.28 (cli-messaging 0.149.0) y max 0.29 ([cli-messaging 0.152.0](https://github.com/leemour/cli-messaging/tree/v0.152.0)), con etiquetas, búsquedas guardadas, búsqueda en archivos y ajustes de raíces de palabras.
 
+La preparación del archivo y las ampliaciones de cobertura descritas abajo están disponibles en tg 0.35.0 (cli-messaging 0.177.0) y max 0.34.0 (cli-messaging 0.176.0). Las guías enlazadas siguen revisadas para tg 0.28.0 y max 0.29.0.
+
 <ArchitectureDiagram name="searchPaths" lang="es" />
 
 ## Elige la vía adecuada
@@ -27,6 +29,8 @@ Un tema de foro del mensajero, una conversación inferida y una ventana de mensa
 Las lecturas, las descargas explícitas de historial y la captura en segundo plano guardan los mensajes en un único almacén SQLite compartido. La búsqueda lee esta copia local y no descarga por su cuenta el historial de los chats; además puede pedir candidatos a la búsqueda del propio mensajero (abajo). Los identificadores de proveedor, cuenta, chat y mensaje separan mensajes con el mismo número de fuentes distintas, y cada resultado lleva un localizador completo para que un agente vuelva al original.
 
 El almacén guarda el texto original de cada mensaje y, aparte, su texto normalizado para buscar. También registra qué tramos del historial de cada chat tiene. Un índice, una construcción o un vector no prueban que un chat se descargara entero.
+
+Una buena búsqueda necesita chats descargados. `store fetch --all --background` empieza a descargar los últimos 90 días de cada chat; añade `--since-time 365d` para ir más atrás. Por defecto, cada ejecución descarga como máximo 1000 mensajes por chat en tg o 1200 en max; repítela para continuar historiales largos. Los recuentos, la búsqueda por temas, los filtros y las búsquedas de MAX sin un chat nombrado siguen leyendo el archivo. Un chat descargado hasta un límite de tiempo puede seguir como `partial`; ese estado por sí solo no establece `coverage.next`.
 
 La búsqueda de mensajes empieza en la cuenta activa. `--source all` o `in:all` la amplía a todas las cuentas del almacén; un proveedor la reduce. Los nombres se resuelven dentro de ese alcance, y un autor o chat ambiguo pide un identificador más preciso. La búsqueda por temas lee una sola cuenta: sus conversaciones construidas, opcionalmente un chat y un límite de tiempo.
 
@@ -57,7 +61,7 @@ Cuando todas las ramas exigen palabras, los resultados se ordenan por BM25 sobre
 
 Si el índice de palabras no está listo, una consulta con palabras falla con `index_not_ready`, la parte ya construida y el comando que lo termina; nunca recurre a buscar subcadenas. La longitud de la consulta, la profundidad del árbol, el tamaño del autómata, la expansión del vocabulario (10 000 palabras), los candidatos, los bytes leídos, el trabajo y el tiempo están acotados. Superar un límite es un error, nunca un resultado recortado en silencio.
 
-La respuesta JSON incluye las versiones del lenguaje, los campos y los presets, la zona horaria, el orden, `wordsReady` y la cobertura de cuentas y chats, incluso sin resultados. `lastSyncedAt` es la hora más antigua en que un chat del alcance se descargó por última vez con `store fetch`, o `null` si alguno nunca se descargó. `inventoryComplete` indica que cada cuenta del alcance entregó alguna vez su lista completa de chats; es un dato del pasado, no una promesa sobre el presente.
+La respuesta JSON incluye las versiones del lenguaje, los campos y los presets, la zona horaria, el orden, `wordsReady` y la cobertura de cuentas y chats, incluso sin resultados. `lastSyncedAt` es la hora más antigua en que un chat del alcance se descargó por última vez con `store fetch`, o `null` si alguno nunca se descargó. `inventoryComplete` indica que cada cuenta del alcance entregó alguna vez su lista completa de chats; es un dato del pasado, no una promesa sobre el presente. `coverage` también indica los mensajes y chats guardados del alcance (`messages`, `coveredChats`), cuenta los chats nunca descargados o atrasados en `chats`, enumera hasta diez chats en `attention` y nombra `next`, el comando que mejoraría la respuesta. Si no encuentra el mensaje y `next` está definido, el agente lo ejecuta o pregunta al dueño antes de concluir que el mensaje no existe.
 
 `messages stats` ejecuta la misma consulta y cuenta cada mensaje una vez, por chat, remitente, día de calendario u hora. Una búsqueda o recuento correcto guarda su consulta y opciones, nunca sus resultados, en un historial local de las 1000 ejecuciones más recientes; las búsquedas guardadas son entradas con nombre que se analizan de nuevo en cada ejecución.
 
@@ -191,6 +195,7 @@ Código del motor en [`cli-messaging` v0.148.2](https://github.com/leemour/cli-m
 
 | Responsabilidad | Implementación |
 | --- | --- |
+| Preparación del archivo y ampliaciones de cobertura (v0.174.0) | [Servicio del archivo](https://github.com/leemour/cli-messaging/blob/v0.174.0/src/services/archive.ts), [comando de descarga](https://github.com/leemour/cli-messaging/blob/v0.174.0/src/cli/messenger/backfill-command.ts) y [resumen de cobertura](https://github.com/leemour/cli-messaging/blob/v0.174.0/src/cli/messenger/archive-summary.ts) |
 | Análisis, validación, alcance y cobertura | [Servicio de búsqueda de mensajes](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/services/messages-search.ts) y [ejecutor Lucene para SQLite](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/store/sqlite/lucene.ts) |
 | Índice de palabras y vocabulario | [Coincidencia de palabras](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/store/sqlite/words.ts) y [llenado del índice](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/store/sqlite/search-index.ts) |
 | Vínculos del grafo y ciclo de construcción | [Reglas de vínculos](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/conversations/link.ts), [servicio de conversaciones](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/services/conversations.ts) y [persistencia de construcciones](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/store/sqlite/conversations.ts) |

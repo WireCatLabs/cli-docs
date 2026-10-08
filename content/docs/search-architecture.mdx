@@ -7,6 +7,8 @@ WireCat has two ways to search one local archive. **Message search** finds the m
 
 This is the technical page. For everyday use, read the [Telegram search guide](./tg/search.md) or the [MAX search guide](./max/search.md) and their archive guides. The shared search engine is released in tg 0.28 (cli-messaging 0.149.0) and max 0.29 ([cli-messaging 0.152.0](https://github.com/leemour/cli-messaging/tree/v0.152.0)), including tags, saved searches, file-content search and stem settings.
 
+Archive preparation and the coverage additions below are available in tg 0.35.0 (cli-messaging 0.177.0) and max 0.34.0 (cli-messaging 0.176.0). The linked tool guides remain reviewed at tg 0.28.0 and max 0.29.0.
+
 <ArchitectureDiagram name="searchPaths" lang="en" />
 
 ## Choose the right path
@@ -27,6 +29,8 @@ A messenger's native forum topic, an inferred conversation and a window of neigh
 Reads, explicit history fetches and background capture write messages into one shared SQLite store. Search reads this local copy and never downloads a chat's history on its own; it can also ask the messenger's own search for candidates (below). Provider, account, chat and message identifiers keep equally numbered messages from different sources apart, and every result carries a qualified locator, so an agent can return to the original.
 
 The store keeps each message's original text and, separately, its normalized text for search. It also records which ranges of each chat's history it holds. An index, a build or a vector does not prove that a whole chat was downloaded.
+
+Good search needs downloaded chats. `store fetch --all --background` starts downloading the last 90 days of every chat; add `--since-time 365d` to go further back. Each run fetches at most 1,000 messages per chat in tg or 1,200 in max by default; repeat it to continue busy histories. Counts, topic search, filters and MAX searches without a named chat still read the archive. A chat fetched to a time window can remain `partial`; that status alone does not set `coverage.next`.
 
 Message search starts in the active account. `--source all` or `in:all` widens it to every account in the store; a provider narrows that. Names resolve inside the chosen scope, and an ambiguous author or chat asks for a more precise identifier. Topic search reads one account: its built conversations, optionally one chat and a time boundary.
 
@@ -57,7 +61,7 @@ When every branch requires words, results are ranked by BM25 over the word index
 
 If the word index is not ready, a query with words fails with `index_not_ready`, the share already built and the command that finishes it; it never falls back to substring matching. Query length, tree depth, automaton size, vocabulary expansion (10,000 words), candidates, scanned bytes, work and time are bounded. Exceeding a budget is an error, never a silently shorter result.
 
-The JSON answer includes the language, field and preset versions, the time zone, the order, `wordsReady`, and account and chat coverage, even with no hits. `lastSyncedAt` is the oldest time a chat in scope was last fetched by `store fetch`, or `null` if one never was. `inventoryComplete` says every account in scope has at some point listed all its chats; it is knowledge about the past, not a promise about now.
+The JSON answer includes the language, field and preset versions, the time zone, the order, `wordsReady`, and account and chat coverage, even with no hits. `lastSyncedAt` is the oldest time a chat in scope was last fetched by `store fetch`, or `null` if one never was. `inventoryComplete` says every account in scope has at some point listed all its chats; it is knowledge about the past, not a promise about now. `coverage` also reports the stored messages and chats in scope (`messages`, `coveredChats`), counts never-fetched and behind chats in `chats`, lists up to ten `attention` chats, and names `next`, the one command that would improve the answer. When no message is found and `next` is set, an agent runs it or asks the owner before concluding that the message does not exist.
 
 `messages stats` runs the same query and counts each matching message once, grouped by chat, sender, calendar day or hour. A successful search or count writes its query and options, never its results, to a local history of the newest 1,000 runs; saved searches are named entries that are parsed again on every run.
 
@@ -191,6 +195,7 @@ Engine source at [`cli-messaging` v0.148.2](https://github.com/leemour/cli-messa
 
 | Responsibility | Implementation |
 | --- | --- |
+| Archive preparation and coverage additions (v0.174.0) | [Archive service](https://github.com/leemour/cli-messaging/blob/v0.174.0/src/services/archive.ts), [fetch command](https://github.com/leemour/cli-messaging/blob/v0.174.0/src/cli/messenger/backfill-command.ts) and [coverage summary](https://github.com/leemour/cli-messaging/blob/v0.174.0/src/cli/messenger/archive-summary.ts) |
 | Parse, validate, scope and coverage | [Message search service](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/services/messages-search.ts) and [Lucene SQLite executor](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/store/sqlite/lucene.ts) |
 | Word index and vocabulary | [Word matching](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/store/sqlite/words.ts) and [index filling](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/store/sqlite/search-index.ts) |
 | Graph links and build lifecycle | [Link rules](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/conversations/link.ts), [conversation service](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/services/conversations.ts) and [build persistence](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/store/sqlite/conversations.ts) |
