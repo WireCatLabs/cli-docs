@@ -321,9 +321,9 @@ const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] }>> = {
         {
           label: "two separate paths",
           boxes: [
-            { name: "messages search", note: "Lucene query → word index + metadata → matching messages", tone: "tool" },
+            { name: "search messages", note: "Lucene query → word index + metadata → matching messages", tone: "tool" },
             {
-              name: "conversations search",
+              name: "search conversations",
               note: "graph build → chunks → embeddings → meaning + words",
               tone: "tool",
             },
@@ -355,12 +355,12 @@ const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] }>> = {
           label: "два отдельных пути",
           boxes: [
             {
-              name: "messages search",
+              name: "search messages",
               note: "запрос Lucene → word index + metadata → совпавшие сообщения",
               tone: "tool",
             },
             {
-              name: "conversations search",
+              name: "search conversations",
               note: "построение графа → chunks → embeddings → смысл + слова",
               tone: "tool",
             },
@@ -392,12 +392,12 @@ const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] }>> = {
           label: "dos vías separadas",
           boxes: [
             {
-              name: "messages search",
+              name: "search messages",
               note: "consulta Lucene → índice de palabras + metadatos → mensajes coincidentes",
               tone: "tool",
             },
             {
-              name: "conversations search",
+              name: "search conversations",
               note: "grafo → fragmentos → embeddings → significado + palabras",
               tone: "tool",
             },
@@ -486,7 +486,7 @@ const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] }>> = {
           boxes: [{ name: "embeddings", note: "e5-small by default, cached by model and content hash", tone: "core" }],
         },
         {
-          label: "conversations search",
+          label: "search conversations",
           boxes: [
             { name: "meaning", note: "question vector against chunk vectors" },
             { name: "words", note: "question words joined with OR" },
@@ -505,7 +505,7 @@ const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] }>> = {
           boxes: [{ name: "embeddings", note: "по умолчанию e5-small, кеш по модели и хешу текста", tone: "core" }],
         },
         {
-          label: "conversations search",
+          label: "search conversations",
           boxes: [
             { name: "смысл", note: "вектор вопроса против векторов chunks" },
             { name: "слова", note: "слова вопроса, соединённые через OR" },
@@ -530,7 +530,7 @@ const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] }>> = {
           boxes: [{ name: "embeddings", note: "e5-small por defecto, en caché por modelo y hash", tone: "core" }],
         },
         {
-          label: "conversations search",
+          label: "search conversations",
           boxes: [
             { name: "significado", note: "vector de la pregunta frente a los de los fragmentos" },
             { name: "palabras", note: "palabras de la pregunta unidas con OR" },

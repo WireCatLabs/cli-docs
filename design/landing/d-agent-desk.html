@@ -221,7 +221,7 @@
       <div class="run"><code>tg inbox</code><p><b>The morning look.</b> Other people's unread messages in every chat. Nothing gets marked read.</p></div>
       <div class="run"><code>tg review --unanswered 1d</code><p><b>Questions left hanging.</b> Asked at least a day ago, still without an answer.</p></div>
       <div class="run"><code>tg messages send me "Call Mum" --at-time 2026-10-02T18:00</code><p><b>Reminders.</b> Lands in your Saved Messages. Telegram sends it, even with the laptop shut.</p></div>
-      <div class="run"><code>tg messages search "paid" --chat "Lisbon trip"</code><p><b>Money and dates.</b> Searches every message kept on your computer, without connecting.</p></div>
+      <div class="run"><code>tg search messages "paid" --chat "Lisbon trip"</code><p><b>Money and dates.</b> Searches every message kept on your computer, without connecting.</p></div>
       <div class="run"><code>tg messages transcribe "Mum" 8812 --local</code><p><b>Voice notes as text.</b> By Telegram, or by a speech model on your machine.</p></div>
       <div class="run"><code>tg watch</code><p><b>As it happens.</b> New messages arrive in your agent the moment they land.</p></div>
       <div class="run"><code>tg store export "Project Alpha" --format markdown</code><p><b>A whole chat as a document.</b> For a weekly report, or for a model to read in one go.</p></div>
@@ -311,10 +311,10 @@
       ],
     },
     {
-      title: "Lisbon money", hint: "tg messages search",
+      title: "Lisbon money", hint: "tg search messages",
       steps: [
         { ask: "Who owes who from the Lisbon trip?" },
-        { tool: 'tg messages search <b>"paid"</b> --chat "Lisbon trip"', out: j(`{"items": [{"senderName": "Ana", "text": "Paid the hotel, 240", "timestamp": "2026-09-14T22:10:00+02:00"},
+        { tool: 'tg search messages <b>"paid"</b> --chat "Lisbon trip"', out: j(`{"items": [{"senderName": "Ana", "text": "Paid the hotel, 240", "timestamp": "2026-09-14T22:10:00+02:00"},
            {"senderName": "Ben", "text": "paid dinner 96", "timestamp": "2026-09-15T23:41:00+02:00"},
            {"outgoing": true, "text": "I paid the taxi, 60", "timestamp": "2026-09-16T08:05:00+02:00"}],
  "hasMore": false}`) },
