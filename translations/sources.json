@@ -1,8 +1,8 @@
 {
   "max/archive.en": "2476cf7aad77b1cb8407b2497415fa6d0dcde2ff6025e5aa50ca56b66f854014",
   "max/archive.es": "2476cf7aad77b1cb8407b2497415fa6d0dcde2ff6025e5aa50ca56b66f854014",
-  "max/attachments.en": "2b151b0e128302eeb7572ab8a74298b2c09a98683f5528fb9ccf3485a0f9441a",
-  "max/attachments.es": "2b151b0e128302eeb7572ab8a74298b2c09a98683f5528fb9ccf3485a0f9441a",
+  "max/attachments.en": "9c9633c04fa84bcea04b217a7ce9bb7aea5e60b8bf70a8cac339abeb71b2509c",
+  "max/attachments.es": "9c9633c04fa84bcea04b217a7ce9bb7aea5e60b8bf70a8cac339abeb71b2509c",
   "max/audio-recognition.en": "8c363ed5000c6abd59f894e6c3739472550f34292f55bf26285ebcea85371734",
   "max/audio-recognition.es": "8c363ed5000c6abd59f894e6c3739472550f34292f55bf26285ebcea85371734",
   "max/bot.en": "b603d77fcc95c10ef52cfe3a725cf7162f1fa54411f8012d8a9ac8e676e0bb7d",
@@ -115,5 +115,7 @@
   "tg/troubleshooting.es": "14b302a3cdfce324fdcae4519e7c79ea1eec0abe95e62e3090a22a3322af55a7",
   "tg/troubleshooting.ru": "14b302a3cdfce324fdcae4519e7c79ea1eec0abe95e62e3090a22a3322af55a7",
   "tg/usage.es": "6f019b9f2bd52ee5ba992c84a23b4649b4f9d5e3d4dd5f679b9edb813491d6d9",
-  "tg/usage.ru": "6f019b9f2bd52ee5ba992c84a23b4649b4f9d5e3d4dd5f679b9edb813491d6d9"
+  "tg/usage.ru": "6f019b9f2bd52ee5ba992c84a23b4649b4f9d5e3d4dd5f679b9edb813491d6d9",
+  "tg/attachments.ru": "3213ecf0ee4b9b10b802650cbc3b59c820b5ff10fd25282243df67acec6a7037",
+  "tg/attachments.es": "3213ecf0ee4b9b10b802650cbc3b59c820b5ff10fd25282243df67acec6a7037"
 }

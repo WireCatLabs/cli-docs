@@ -1,7 +1,7 @@
 /**
  * Fills `content/docs/<tool>/` from each tool's repository at its reviewed release tag (or newest tag for unpinned tools): the pages in
  * `docs/`, its `meta.json` sidebar and the changelog. Never `main` — it can describe what is not
- * released yet.
+ * released yet. Reviewed prose-only guide overrides use fixed commits and do not change the runtime pin.
  *
  *   pnpm sync
  *   pnpm sync --ref main    a preview of what the next release will show; never for the published site
@@ -21,7 +21,17 @@ export type Tool = {
   package: string
   lang: string
   docsRef?: string
+  guideRefs?: Record<string, string>
   summary: Record<string, string>
+}
+
+/** A preview uses its requested ref; published prose overrides must be immutable. */
+export function reviewedGuideRefs(tool: Tool, previewRef?: string): [string, string][] {
+  const entries = Object.entries(previewRef ? {} : (tool.guideRefs ?? {}))
+  for (const [slug, ref] of entries)
+    if (!/^[a-z][a-z-]*$/.test(slug) || !/^[a-f0-9]{40}$/.test(ref))
+      throw new Error(`${tool.repo}: guide overrides require a page slug and immutable commit`)
+  return entries
 }
 
 const VERSION_TAG = /^refs\/tags\/v(\d+)\.(\d+)\.(\d+)$/
@@ -124,15 +134,22 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
 
     const docs = join(checkout, "docs")
     const files = readdirSync(docs).filter((name) => name.endsWith(".md") && name !== "README.md")
+    const guides = new Map<string, { text: string; ref: string }>()
+    for (const [slug, guideRef] of reviewedGuideRefs(tool, ref)) {
+      run("git", ["fetch", "--depth", "1", "origin", guideRef], checkout)
+      guides.set(`${slug}.md`, { text: run("git", ["show", `${guideRef}:docs/${slug}.md`], checkout), ref: guideRef })
+      if (!files.includes(`${slug}.md`)) files.push(`${slug}.md`)
+    }
     const pages = new Set(files.map((name) => name.slice(0, -3)))
     const destination = join(root, captureOnly ? "content/upstream" : "content/docs", tool.name)
     rmSync(destination, { recursive: true, force: true })
     mkdirSync(destination, { recursive: true })
 
     for (const file of files) {
-      const page = toPage(readFileSync(join(docs, file), "utf8"), {
+      const guide = guides.get(file)
+      const page = toPage(guide?.text ?? readFileSync(join(docs, file), "utf8"), {
         repo: tool.repo,
-        tag,
+        tag: guide?.ref ?? tag,
         pages,
         from: `docs/${file}`,
       })
@@ -149,6 +166,11 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
     }
     // root: each tool is a tab of its own in the sidebar, not a folder under the others.
     const meta = JSON.parse(readFileSync(join(docs, "meta.json"), "utf8")) as Record<string, unknown>
+    const sidebar = meta.pages as string[]
+    for (const file of guides.keys()) {
+      const slug = file.slice(0, -3)
+      if (!sidebar.includes(slug)) sidebar.splice(sidebar.indexOf("search") + 1, 0, slug)
+    }
     writeFileSync(join(destination, "meta.json"), `${JSON.stringify({ ...meta, root: true }, null, 2)}\n`)
     if (!captureOnly && existsSync(join(docs, "design")))
       cpSync(join(docs, "design"), join(root, "public", tool.name), {

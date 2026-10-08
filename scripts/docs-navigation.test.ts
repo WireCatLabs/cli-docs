@@ -1,7 +1,8 @@
+import { readdirSync, readFileSync } from "node:fs"
 import type { Root } from "fumadocs-core/page-tree"
 import { describe, expect, it } from "vitest"
 import { isGettingStarted, messengerHref } from "../lib/docs-navigation"
-import { unifiedDocsTree } from "../lib/docs-sidebar-tree"
+import { sidebarIcons, unifiedDocsTree } from "../lib/docs-sidebar-tree"
 
 const pages = ["tg", "tg/installation", "tg/mcp", "max", "max/installation", "max/mcp", "max/bot"]
 
@@ -73,5 +74,26 @@ describe("one persistent documentation sidebar", () => {
     expect(original.children[1]).toMatchObject({ root: true })
     expect(original.children[0]).not.toHaveProperty("icon")
     expect(original.children[1]).toMatchObject({ children: [{ url: "/ru/docs/tg/sessions" }] })
+  })
+})
+
+// This inventory is available before sync in CI, unlike ignored generated tool pages.
+describe("sidebar icon coverage", () => {
+  it("assigns a specific subject icon to every shared and translated tool page", () => {
+    const shared = JSON.parse(readFileSync(new URL("../content/docs/meta.json", import.meta.url), "utf8")) as {
+      pages: string[]
+    }
+    const slugs = new Set(shared.pages.filter((slug) => !slug.startsWith("---") && !["tg", "max"].includes(slug)))
+    for (const tool of ["tg", "max"])
+      for (const file of readdirSync(new URL(`../translations/${tool}/`, import.meta.url)))
+        if (/\.(en|ru|es)\.md$/.test(file)) slugs.add(file.replace(/\.(en|ru|es)\.md$/, ""))
+    for (const slug of slugs) {
+      expect(sidebarIcons, `Missing subject icon for ${slug}`).toHaveProperty(slug)
+      const tree = unifiedDocsTree({
+        name: "Docs",
+        children: [{ type: "page", name: slug, url: `/en/docs/tg/${slug}` }],
+      })
+      expect(tree.children[0]).toHaveProperty("icon")
+    }
   })
 })

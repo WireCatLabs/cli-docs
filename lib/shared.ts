@@ -3,7 +3,7 @@ import siteConfig from "@/site.config.json"
 import tools from "@/tools.json"
 import { i18n } from "./i18n"
 
-export type Tool = (typeof tools)[number]
+export type Tool = (typeof tools)[number] & { guideRefs?: Record<string, string> }
 export { tools }
 
 export const appName = siteConfig.name

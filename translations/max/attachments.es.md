@@ -1,19 +1,14 @@
 ---
-title: "Adjuntos: envío, descarga y extracción de contenido"
+title: "Archivos adjuntos"
 ---
 
-
-Elige cómo enviar o descargar un adjunto, consulta qué archivos lee la propia CLI, qué dependencias necesitas y cuándo pedir a un agente o modelo externo que lea un archivo. Después de la extracción, puedes guardar el texto para buscarlo: `content:` encuentra el mensaje original.
-
+Usa esta página para enviar un documento, descargar un adjunto o encontrar texto dentro de un archivo. Aprenderás qué formatos se leen automáticamente, cuándo necesitas un agente o una API externa y cómo guardar el texto reconocido para que `content:` encuentre el mensaje original.
 
 El envío entrega un archivo al chat, la descarga guarda sus bytes y la extracción obtiene su contenido para leerlo y buscarlo. Son funciones distintas: un escaneo descargado aún necesita OCR; un documento digital puede leerse localmente sin modelo.
 
-
 ## Qué puedes enviar
 
-
 La tabla muestra cómo elige la CLI el tipo de adjunto. La aceptación y el procesamiento de un archivo concreto también dependen de MAX. El envío requiere una orden explícita; extraer texto no envía nada al chat.
-
 
 | Archivo | Cuenta personal: `messages send --file` | Bot: `bot messages send --file` |
 | --- | --- | --- |
@@ -26,12 +21,9 @@ La tabla muestra cómo elige la CLI el tipo de adjunto. La aceptación y el proc
 
 `--voice` es una vía específica para mensajes de voz en Ogg Opus, no para cualquier audio. Una cuenta personal envía la nota de voz por separado, sin texto ni otros adjuntos. Las imágenes se identifican por su extensión, también con `--file`; aquí `--as-file` cambia cómo se envía un vídeo, pero no convierte una imagen en documento. Consulta [envío](./usage.md) y [bots](./bot.md).
 
-
 ## Qué puedes descargar
 
-
 Esta sección se aplica a las cuentas personales. La descarga guarda bytes; no extrae texto ni convierte un documento a otro formato.
-
 
 | Adjunto del mensaje | `messages download` |
 | --- | --- |
@@ -48,12 +40,13 @@ max attachments list --chat "Учебная группа" --needs-text --json
 
 El `localPath` guardado está disponible en la máquina donde se ejecuta la CLI. La ruta por sí sola no transfiere el archivo a un agente remoto: el agente necesita acceso al archivo o una transferencia aparte de sus bytes.
 
+## Archivos para un agente remoto
+
+Un agente en este ordenador puede abrir el `localPath` guardado. Un agente en otra máquina necesita los bytes del archivo y herramientas de lectura: una ruta no los transfiere. Consulta las capacidades de tu cliente de IA y el [método de conexión remota](./remote.md). Recibir el archivo, leerlo y guardar texto en el índice son pasos separados.
 
 ## Cómo se lee el contenido
 
-
 Por defecto, el agente lee los escaneos y las fotos con sus propias herramientas. `attachments extract --ocr` activa explícitamente una API para el reconocimiento en lote. Sin esta opción, la extracción no llama a ningún modelo. Comprueba si tu versión instalada incluye la opción con `max attachments extract --help`.
-
 
 | Formato | Mediante software local | API explícita: `extract --ocr` | Cuándo necesitas un agente |
 | --- | --- | --- | --- |
@@ -76,16 +69,13 @@ Por defecto, el agente lee los escaneos y las fotos con sus propias herramientas
 
 Aquí CSV y JSON se convierten en texto para buscar, no en tablas estructuradas de la base de datos. HTML/XML con MIME de texto se lee como código fuente, no como una página en el navegador. La extracción de PDF/DOCX guarda texto, no el diseño original. El OCR puede equivocarse en cifras, orden de lectura y formato; comprueba los datos importantes en el original.
 
-
 Detectar una codificación antigua requiere confianza; el texto corto o ambiguo queda para el agente. Los bytes originales no cambian. Los intentos fallidos pueden repetirse y se protege el texto guardado por el agente. ODT, ODS, XLSX, PPTX y EPUB se limitan a 1000 partes y 50 MiB descomprimidos, con un máximo de 10 MiB por parte XML/HTML de texto. Los archivos dañados o parciales no se indexan como texto completo.
 
 Las notas de voz se procesan aparte de los documentos: el modelo de voz se descarga una vez y después funciona localmente. Los comandos, la selección de idioma y los límites se explican en [transcripción de voz](./audio-recognition.md).
 
-
 ## Dependencias necesarias
 
 La lectura de texto, ODT, ODS, XLSX, PPTX y EPUB ya está incluida en la CLI. Los paquetes opcionales siguientes sirven para PDF, DOCX y convertir páginas PDF en imágenes.
-
 
 | Tarea | Paquete |
 | --- | --- |
@@ -97,9 +87,7 @@ La lectura de texto, ODT, ODS, XLSX, PPTX y EPUB ya está incluida en la CLI. Lo
 
 Los paquetes son opcionales y no se instalan automáticamente con la CLI. `engine-missing` significa que falta el paquete necesario o no se puede cargar. No es un rechazo del modelo de IA. `unpdf` lee los PDF y sus capas de texto, pero por sí solo no hace OCR de un escaneo.
 
-
 Instala el paquete en un entorno donde la CLI pueda cargarlo. Para una instalación global con npm en el mismo prefijo:
-
 
 ```sh
 npm install -g unpdf mammoth @napi-rs/canvas
@@ -107,9 +95,7 @@ npm install -g unpdf mammoth @napi-rs/canvas
 
 Para una instalación local, añade los paquetes necesarios al mismo proyecto. Con otro gestor de paquetes, una instalación global en un entorno aparte no garantiza que estén disponibles: repite la extracción tras instalarlos y comprueba que desaparece `engine-missing`. El renderizado se verificó con `unpdf` 1.8.1 y `@napi-rs/canvas` 1.0.10; un `unpdf` antiguo puede leer texto sin ofrecer las funciones de renderizado necesarias.
 
-
 ## Agente: leer y guardar
-
 
 ```sh
 max attachments list --chat "Учебная группа" --needs-text --json
@@ -120,12 +106,9 @@ max messages search 'content:умножение' --chat "Учебная груп
 
 La numeración de `--attachment` empieza en 1. Conserva el idioma original y el orden de páginas; no sustituyas una transcripción por un resumen. No marques todo el PDF como leído si solo has procesado una página. El texto escrito por el agente está protegido frente a la sobrescritura por la extracción automática.
 
-
 ### Qué hace exactamente el agente
 
-
 Un agente no puede abrir automáticamente cualquier archivo. Necesita acceso a `localPath`, un programa para leer o convertir el formato y, para imágenes, un modelo con visión. Elige un método disponible, comprueba que el resultado esté completo y guarda el texto mediante `text set`.
-
 
 | Archivo original | Cómo puede obtener texto el agente |
 | --- | --- |
@@ -139,9 +122,7 @@ Un agente no puede abrir automáticamente cualquier archivo. Necesita acceso a `
 
 Son ejemplos de herramientas posibles, no programas que la CLI instala por el agente. Si falta una herramienta necesaria, el agente debe indicar que el procesamiento está incompleto. Un agente remoto necesita recibir el propio archivo; una ruta no le da acceso.
 
-
 ### De qué depende la calidad
-
 
 | Método | Qué afecta al resultado |
 | --- | --- |
@@ -151,15 +132,11 @@ Son ejemplos de herramientas posibles, no programas que la CLI instala por el ag
 
 Una API no es necesariamente más precisa que un agente: pueden usar modelos similares. Aquí sus ventajas son una cola controlada, el procesamiento en paralelo y la reutilización de resultados. Un agente puede combinar la lectura precisa de texto mediante software con comprobaciones visuales de las partes difíciles. Para un documento digital, primero obtén su texto original en vez de reconocer una imagen. Con cualquier OCR, comprueba cifras, nombres y tablas importantes en el original.
 
-
 ## API: procesamiento en lote elegido explícitamente
-
 
 Un modelo externo puede leer texto en imágenes compatibles y páginas PDF escaneadas. La CLI le envía una imagen de cada página necesaria, recibe el texto literal y lo guarda en el mismo índice `content:`. Los PDF con capa de texto y los DOCX siguen usando lectura mediante software; elegir una API no añade compatibilidad con formatos antiguos de Office ni ZIP.
 
-
 Necesitas un modelo de visión, su endpoint y una clave API. La configuración paso a paso de OpenAI, Anthropic y servidores compatibles, el almacenamiento de claves y la tarea `models.ocr` se explican en la [guía de modelos externos](./external-models.md). Después de configurar:
-
 
 ```sh
 max attachments extract --chat "Учебная группа" --ocr --concurrency 4 --limit 20 --json
@@ -167,9 +144,7 @@ max attachments extract --chat "Учебная группа" --ocr --concurrency
 
 La extracción repetida usa el hash del archivo y el destino del modelo; conserva el texto válido guardado si hay errores, cancelación o respuestas incompletas. No sobrescribe el texto del agente. Las imágenes y páginas escaneadas solo se envían al proveedor con `--ocr` explícito; las llamadas se cobran según sus condiciones. `--offline --ocr` no se pueden combinar; no hay cambio automático del agente a la API.
 
-
 El límite de extracción es de 50 MiB por archivo; el texto local se limita a 2 millones de caracteres. El OCR por API admite PDF de hasta 20 páginas e imágenes de hasta 4 MiB y 20 millones de píxeles, sin superar 8000 píxeles por lado. La concurrencia de archivos es de 1–8, con 4 por defecto; las páginas de un mismo archivo se procesan secuencialmente. Por defecto la API procesa hasta 100 archivos; `--limit` admite 1–500. Continúa con el `cursor` devuelto. Una respuesta 429 del proveedor detiene las siguientes llamadas API de esa ejecución, sin reintentos. El comando devuelve estados y enlaces a mensajes, no el texto reconocido completo.
-
 
 La descarga, extracción y búsqueda se explican con más detalle en [búsqueda](./search.md). Esta descripción corresponde al código de la CLI; que exista un comando no significa que se haya probado cada archivo posible de ese formato con MAX real.
 

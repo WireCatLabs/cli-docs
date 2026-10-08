@@ -99,7 +99,7 @@ export default async function Page(props: Props) {
           markdownUrl={markdownUrl}
           {...(tool
             ? {
-                githubUrl: `https://github.com/${tool.repo}/blob/${tool.docsRef ?? "main"}/${repoPath}`,
+                githubUrl: `https://github.com/${tool.repo}/blob/${tool.guideRefs?.[page.slugs.at(-1) ?? ""] ?? tool.docsRef ?? "main"}/${repoPath}`,
               }
             : {})}
         />
