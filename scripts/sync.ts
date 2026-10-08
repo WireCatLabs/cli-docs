@@ -181,6 +181,20 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
     captureUpstream(root, tool)
     const untranslated = localizeTool(root, tool)
     if (untranslated.length) throw new Error(`Documentation localization failed:\n${untranslated.join("\n")}`)
+    if (process.env.WIRECAT_RELEASE_DRAFT_PREVIEW === "1") {
+      const labels = {
+        en: "**Release draft preview.** These guide changes are being prepared for the next CLI release.",
+        ru: "**Предпросмотр релизного черновика.** Изменения этих руководств готовятся к следующему релизу CLI.",
+        es: "**Vista previa del borrador.** Estos cambios se preparan para la próxima versión del CLI.",
+      }
+      for (const slug of ["groups", "rankings"])
+        if (guides.has(`${slug}.md`))
+          for (const [lang, label] of Object.entries(labels)) {
+            const path = join(destination, `${slug}${lang === "en" ? "" : `.${lang}`}.md`)
+            const text = readFileSync(path, "utf8")
+            writeFileSync(path, text.replace(/^(---\n[\s\S]*?\n---\n)/, `$1\n> ${label}\n`))
+          }
+    }
   } finally {
     rmSync(checkout, { recursive: true, force: true })
   }
