@@ -22,10 +22,10 @@ export const aboutCopy = {
         ],
       },
       {
-        title: "Custom bots and integrations",
+        title: "How we fund the project",
         paragraphs: [
-          "We can also build a bot for your team or connect an AI agent to the services you already use.",
-          "That might be a support bot that answers from your knowledge base, an assistant for your team, reminders, or an integration with your CRM. We start with the task and the information the bot needs, then choose how to build it.",
+          "We earn money through custom AI workflows, bots and integrations. This work helps us keep developing the open-source tools.",
+          "If you need an assistant connected to your knowledge base, messenger or existing services, tell us about the task. Scope, hosting and maintenance depend on the project.",
         ],
       },
       {
@@ -49,6 +49,18 @@ export const aboutCopy = {
         ],
       },
     ],
+    project: {
+      title: "The project at a glance",
+      description: "Open-source tools for conversations and knowledge.",
+      tools: "Available today",
+      license: "Licence",
+      maintainer: "Maintainer",
+      contents: "On this page",
+      contribute: "Ideas and contributions",
+      contributeText: "Suggest an integration, report a problem or help improve the tools.",
+      issues: "Discuss the project on GitHub",
+      contact: "Talk about the project",
+    },
     toolDescriptions: {
       tg: "Read and search conversations from your Telegram account.",
       max: "Connect your MAX account, work with bots and manage groups.",
@@ -84,10 +96,10 @@ export const aboutCopy = {
         ],
       },
       {
-        title: "Боты и интеграции на заказ",
+        title: "Как проект зарабатывает",
         paragraphs: [
-          "Мы также можем создать бота для вашей команды или подключить ИИ-агента к сервисам, которыми вы уже пользуетесь.",
-          "Например, бота поддержки с вашей базой знаний, помощника для команды, напоминания или интеграцию с CRM. Сначала разберёмся в задаче и нужных данных, затем выберем способ реализации.",
+          "Мы зарабатываем на разработке ИИ-сценариев, ботов и интеграций на заказ. Эта работа помогает развивать инструменты с открытым кодом.",
+          "Если вам нужен ассистент, связанный с базой знаний, мессенджером или существующими сервисами, расскажите о задаче. Объём работ, размещение и сопровождение зависят от проекта.",
         ],
       },
       {
@@ -111,6 +123,18 @@ export const aboutCopy = {
         ],
       },
     ],
+    project: {
+      title: "Коротко о проекте",
+      description: "Инструменты с открытым кодом для переписок и знаний.",
+      tools: "Уже доступны",
+      license: "Лицензия",
+      maintainer: "Автор",
+      contents: "На этой странице",
+      contribute: "Идеи и участие",
+      contributeText: "Предложите интеграцию, сообщите о проблеме или помогите улучшить инструменты.",
+      issues: "Обсудить проект на GitHub",
+      contact: "Поговорить о проекте",
+    },
     toolDescriptions: {
       tg: "Читайте переписки своего аккаунта Telegram и ищите сообщения.",
       max: "Подключите аккаунт MAX, работайте с ботами и управляйте группами.",
@@ -146,10 +170,10 @@ export const aboutCopy = {
         ],
       },
       {
-        title: "Bots e integraciones a medida",
+        title: "Cómo financiamos el proyecto",
         paragraphs: [
-          "También podemos crear un bot para tu equipo o conectar un agente de IA con los servicios que ya utilizas.",
-          "Por ejemplo, un bot de soporte que consulte tu base de conocimientos, un asistente interno, recordatorios o una integración con tu CRM. Primero entendemos la tarea y los datos necesarios; después elegimos cómo desarrollarlo.",
+          "Obtenemos ingresos creando procesos de IA, bots e integraciones a medida. Este trabajo ayuda a desarrollar las herramientas de código abierto.",
+          "Si necesitas un asistente conectado a tu base de conocimientos, aplicaciones de mensajería o servicios existentes, cuéntanos la tarea. El alcance, el alojamiento y el mantenimiento dependen del proyecto.",
         ],
       },
       {
@@ -173,6 +197,18 @@ export const aboutCopy = {
         ],
       },
     ],
+    project: {
+      title: "El proyecto de un vistazo",
+      description: "Herramientas de código abierto para conversaciones y conocimiento.",
+      tools: "Disponible hoy",
+      license: "Licencia",
+      maintainer: "Responsable",
+      contents: "En esta página",
+      contribute: "Ideas y contribuciones",
+      contributeText: "Propón una integración, informa de un problema o ayuda a mejorar las herramientas.",
+      issues: "Hablar del proyecto en GitHub",
+      contact: "Hablar del proyecto",
+    },
     toolDescriptions: {
       tg: "Consulta las conversaciones de tu cuenta de Telegram y busca mensajes.",
       max: "Conecta tu cuenta de MAX, usa bots y administra grupos.",
