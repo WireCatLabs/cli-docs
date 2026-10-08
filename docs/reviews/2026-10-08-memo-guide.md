@@ -89,3 +89,39 @@ request precedes installation detail, no public version text remains, About navi
 sidebar still work, and Markdown twins and axe checks pass. Commands and runtime behavior
 were unchanged apart from unversioned installation and using help to check availability;
 the earlier isolated source/behavior verification remains applicable.
+
+## First-reader follow-up — 9 October 2026
+
+The guide now states its purpose and lists what the reader will be able to do before setup.
+Installation follows the shared Telegram/MAX pattern: a copyable agent request, optional manual
+instructions and remembered OS tabs. The prompt uses only Memo's supported help/installation
+commands; it does not borrow messenger setup, doctor or skill commands.
+
+The first useful task is searching a folder, so mail and messenger accounts are optional.
+The prose defines folders, recursive subfolder reading and Obsidian vaults, and explains that
+Obsidian stores ordinary Markdown files. Separate examples select Markdown and Obsidian formats.
+A file-format table distinguishes text, spreadsheets, office/ebook formats and optional PDF/DOCX
+readers. It explains scanned-PDF text recognition and unsupported legacy DOC/XLS files.
+
+The existing DocTerm component supplies local-agent, CLI, runtime/install and terminal explanations,
+plus new vault/Markdown terms. Core meanings also remain in the page prose. Shared CLI/Node/npm
+explanations now cover Memo as well as messenger tools. Locale routes and prior section anchors
+remain stable. Memo sources use MDX for the existing components; raw Markdown export keeps all
+OS branches, copyable requests and expanded tooltip definitions.
+
+Source recheck: npm currently publishes Memo 0.2.1, tag commit
+`1018122866ebaf3cb908c77f6c9cd182a9865f05`, with cli-messaging 0.205.0.
+The tag comparison changes dependency/version alignment, not Memo's file importer or command
+implementations. File discovery is verified in `src/notes/files.ts`; supported extraction limits
+and missing-reader/scan behavior are covered by `src/notes/documents.test.ts` and the README.
+No release versions are added to the public guide.
+
+An isolated fixture, rerun with the current published package, registered ordinary Markdown and
+Obsidian folders, imported TXT/Markdown/CSV content, found nested files, excluded `.obsidian`,
+returned source references and preserved originals. Documentation component/localization tests:
+31 passed. Localization compared executable examples, inline literals, structure and destinations;
+natural-language prompt fences were reviewed separately and their text preserved in copy controls.
+Production build/TypeScript, lint, links and SEO passed. Browser checks cover en/ru/es × 1440/390 ×
+light/dark: purpose/gain, prompt clipboard contents, keyboard tooltip open/close/focus return,
+Windows tab, file formats, Markdown parity, overflow and axe. Mobile English capture was visually
+reviewed; no claim of independent human usability testing is made.

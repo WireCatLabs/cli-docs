@@ -52,10 +52,10 @@ const markdownUrls = new Map(
 export const docsLlms = llms(source, {
   renderPage: async (page) => {
     const tool = toolOf(page.slugs)
-    // Processed MDX indents nested tabs as code. Expand the authored installation guide instead,
-    // preserving runnable fences and making every messenger/OS branch readable to agents.
+    // Processed MDX indents nested tabs as code. Expand authored setup guides instead,
+    // preserving runnable fences, explanations and every OS branch for agents.
     const text = await page.data.getText(
-      page.slugs.length === 1 && page.slugs[0] === "installation" ? "raw" : "processed",
+      page.slugs.length === 1 && ["installation", "memo"].includes(page.slugs[0]) ? "raw" : "processed",
     )
     const body = text
       .replace(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/, "")
