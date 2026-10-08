@@ -11,9 +11,9 @@ Mode: Read. Owner direction: a lively project About page; landing concepts are a
 
 ## Direction contract
 
-THESIS: tell the open-source project's story with useful project context.
-OWN-WORLD: WireCat purple, green-tinted neutrals, Unbounded headings, Onest paragraphs, fine rules and compact editorial columns.
-STORY: why the project exists, the tools available today, open source, future plans, then a short funding note.
-FIRST VIEWPORT: compact About title and introduction; the project story starts immediately beside a small facts panel with tools, MIT licence and maintainer. No showcase hero or primary demo CTA.
-FORM: owner-directed refinement of the incumbent About article; seed b789bcd2 belongs to the archived homepage concepts and does not govern this About composition. Native section links provide wayfinding.
+THESIS: explain WireCat's purpose and direction, with straightforward ways to reach its maintainer.
+OWN-WORLD: incumbent WireCat purple, semantic green neutrals, Unbounded headings, Onest copy and compact article/sidebar layout.
+STORY: open-source identity, project purpose, today's messages/email/notes connections, future integrations around owned data and productivity, then how custom work sustains development.
+FIRST VIEWPORT: compact title and intro with one bold open-source statement; article beside project facts and contact text/buttons. Mobile contact follows the intro. No contents menu or separate open-source block.
+FORM: owner-directed refinement of the existing About article; archived homepage seed b789bcd2 supplies no About comp. Tools have distinct docs/source links.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance.
