@@ -60,6 +60,18 @@ describe("documentation command references", () => {
     })
     expect(tree.children[1]).toMatchObject({ type: "code", value: "Logged in as a user." })
   })
+  it("keeps compact prompts copyable and preserves their Markdown source", () => {
+    const markdown = "```text prompt compact\nFind the agreement and show its source.\n```"
+    const tree = fromMarkdown(markdown)
+    remarkDocUsability()(tree, { path: "/project/content/docs/index.es.mdx" })
+    expect(tree.children[0]).toMatchObject({
+      data: {
+        hName: "agent-prompt",
+        hProperties: { text: "Find the agreement and show its source.", language: "es", compact: true },
+      },
+      children: [{ type: "code", value: "Find the agreement and show its source.", meta: "prompt compact" }],
+    })
+  })
   it("keeps browser-login screenshots in an accessible closed disclosure", () => {
     const tree = fromMarkdown(
       "> **See the my.telegram.org login screen**\n>\n> ![Empty login form](/telegram-app-login.png)\n>\n> Website login comes before account authorization.\n",

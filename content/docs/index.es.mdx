@@ -4,7 +4,7 @@ description: "Deja que tu agente de IA lea, busque y responda tus mensajes de Te
 ---
 
 Da a tu <DocTerm term="agent" lang="es" label="agente de IA" /> acceso a tu cuenta de Telegram o MAX. Le preguntas con palabras
-normales —*«¿quién sigue esperando mi respuesta?»*, *«¿qué acordamos con Marco en septiembre?»*— y
+normales —`¿quién sigue esperando mi respuesta?`, `¿qué acordamos con Marco en septiembre?`— y
 el agente lee tus chats y responde. Como prueba, te muestra los mensajes que ha usado.
 
 Funciona con un programa de terminal (<DocTerm term="cli" lang="es" label="cli" />) para tu mensajero: `tg` para Telegram, `max` para MAX.
@@ -18,20 +18,43 @@ medio. Tu agente solo ve los mensajes que lee para una tarea.
 
 ## Qué puedes pedir
 
-- **Ponerte al día** — «Resume mis mensajes sin leer y dime quién necesita una respuesta».
-- **Encontrar** — «Busca el precio que acordamos en el grupo Atlas y muéstrame el mensaje».
-- **Preparar** — «Prepara una agenda para mi llamada con Anna a partir de los chats de esta semana».
-- **Hacer seguimiento** — «¿Qué prometí esta semana? Redacta las respuestas, no las envíes».
-- **Mensajes personales a muchas personas** — «Escribe a todos los que preguntaron por el taller
-  esta semana. Haz cada mensaje personal, según lo que preguntó cada uno. Enséñame antes los
-  borradores».
+**Ponerte al día**
+
+```text prompt compact
+Resume mis mensajes sin leer y dime quién necesita una respuesta.
+```
+
+**Encontrar**
+
+```text prompt compact
+Busca el precio acordado en Atlas y muéstrame el mensaje.
+```
+
+**Preparar**
+
+```text prompt compact
+Prepara la agenda de mi llamada con Anna a partir de los chats de esta semana.
+```
+
+**Hacer seguimiento**
+
+```text prompt compact
+¿Qué prometí esta semana? Redacta respuestas, no las envíes.
+```
+
+**Mensajes personales a muchas personas**
+
+```text prompt compact
+Redacta una respuesta personal para cada persona que preguntó por el taller.
+```
 
 ## Qué incluye
 
 - **Toda tu cuenta** — mensajes, chats, grupos, contactos, encuestas: lo que haces en la app.
 - **Tu historial, con búsqueda sin conexión** — un archivo local de los chats que elijas.
-- **Mensajes de voz a texto** — en tu propio ordenador.
 - **Todos los métodos de la Bot API** — los 185 de Telegram y los 33 de MAX.
+- **Administrar grupos** — revisa la actividad, gestiona miembros y modera grupos donde tengas permisos de administrador.
+- **Mensajes de voz a texto** — en tu propio ordenador.
 - **Límites que tú fijas** — solo lectura, preguntar antes de enviar, solo chats elegidos.
 
 [Todas las funciones →](./features.mdx)
@@ -48,9 +71,9 @@ El <DocTerm term="skill" lang="es" label="skill" /> instalado da al agente instr
 Con eso basta para empezar. Más adelante, cuando lo necesites:
 
 - [Formular peticiones](./prompting.mdx) — consigue mejores respuestas de tu agente.
-- [Conectar tu asistente de IA](./agents.mdx) — si tu agente no encuentra el comando `tg` o `max`.
+- [Conectar tu agente de IA](./agents.mdx) — si tu agente no encuentra el comando `tg` o `max`.
 - <DocTerm term="mcp" lang="es" label="MCP" />: [MCP y skills](./mcp.mdx) — para Claude Desktop y otros clientes sin terminal.
-- ChatGPT, Claude u otro chat de IA en el navegador o el móvil: [Chats de IA en el navegador y el móvil](./browser-apps.mdx) — tu propio túnel y un código de acceso de un solo uso.
+- ChatGPT, Claude u otro chat de IA en el navegador o el móvil: [Usar desde la web o el móvil](./browser-apps.mdx) — tu propio túnel y un código de acceso de un solo uso.
 
 ## ¿Telegram o MAX?
 
