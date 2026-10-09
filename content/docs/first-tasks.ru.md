@@ -70,7 +70,7 @@ description: "Первые запросы агенту после входа, з
 ```sh
 tg chats list --search Atlas --kind group
 tg store status -1001001001001
-tg messages search 'analytics after:2026-09-01 before:2026-10-01' --chat -1001001001001 --json --language legacy
+tg search messages 'analytics after:2026-09-01 before:2026-10-01' --chat -1001001001001 --json --language legacy
 ```
 
 **Агент:**
@@ -91,7 +91,7 @@ tg messages search 'analytics after:2026-09-01 before:2026-10-01' --chat -100100
 ```sh
 tg store fetch -1001001001001 --since-time 2026-09-01 --limit 1000
 tg store status -1001001001001
-tg messages search 'analytics after:2026-09-01 before:2026-10-01' --chat -1001001001001 --json --language legacy
+tg search messages 'analytics after:2026-09-01 before:2026-10-01' --chat -1001001001001 --json --language legacy
 tg messages context -1001001001001 4312 --before-n 2 --after-n 4
 ```
 
@@ -109,7 +109,7 @@ tg messages context -1001001001001 4312 --before-n 2 --after-n 4
 сентября по пути назад читает и более новую историю, а фильтры поиска сужают результат до сентября.
 
 **Почему эти команды:** `messages list` читает окно сообщений и сохраняет их локально;
-`store fetch` заполняет более длинный отрезок истории. `messages search` ищет только по
+`store fetch` заполняет более длинный отрезок истории. `search messages` ищет только по
 сохранённому. `messages context` проверяет, что говорили вокруг найденного сообщения. Ни последние
 20 сообщений, ни пустой локальный поиск не доказывают, что месяц проверен.
 [Архив и поиск](./tg/archive.md).

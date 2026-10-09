@@ -33,7 +33,7 @@ const groups = [
       [
         "Search years of history offline.",
         "In the copy of your chats kept on your computer.",
-        'tg messages search "contract"',
+        'tg search messages "contract"',
       ],
       [
         "Voice notes as text.",

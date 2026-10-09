@@ -10,64 +10,117 @@ Group-changing commands return `operationId` in JSON. After creating, joining, u
 
 ## Working with an agent
 
-An agent with terminal access, such as Claude Code or Codex, can use the [skill](https://github.com/leemour/max-cli/blob/v0.37.0/README.md#навык-для-агентов-с-терминалом). Without terminal access, use the [MCP server](./mcp.md), for example in Claude Desktop. Cursor supports both approaches. Below: your request, the agent’s command and the result.
+An agent with terminal access, such as Claude Code or Codex, can use the [skill](https://github.com/leemour/max-cli/blob/f7acc0c66d2389c94e9e46af24c469298b2b3ee6/README.md#навык-для-агентов-с-терминалом). Without terminal access, use the [MCP server](./mcp.md), for example in Claude Desktop. Cursor supports both approaches. Below: your request, the agent’s command and the result.
 
-### An admin's morning: who needs an answer
+<a id="an-admins-morning-who-needs-an-answer" />
 
-```text
-Вы:     Что в «Поход» осталось без ответа?
-Агент:  (max review --chat "Поход" --unanswered 4h --json)
-        Без ответа больше 4 часов — 3 вопроса:
-        · Лена, 08:12 — «Во сколько выезд в субботу?»
-        · Артём, вчера 22:40 — ответ на ваш пост про маршрут: «А палатки общие?»
-        · Ира, вчера 19:05 — «Кто везёт котелок?»
-        На остальные ответили вы или админы.
+### An admin's morning: who is waiting for an answer
+
+Start with questions that have been waiting for you or the admins.
+
+**Your request:**
+
+> What in Поход has been waiting for an answer for more than four hours?
+
+**Command:**
+
+```sh
+max review --chat "Поход" --unanswered 4h --json
 ```
 
-A question is a message containing “?” or a reply to your message or an admin's message. It counts as answered if you or an admin reply to it, or are the first to speak after the person who asked. A “?” inside a link does not count as a question.
+**Example agent answer:**
 
-### This week's new members
+> **3 questions are waiting for an answer.**
+>
+> | Person | Question | Waiting |
+> | --- | --- | --- |
+> | Lena | What time do we leave on Saturday? | 6 hours |
+> | Sam | Are the tents shared? | 12 hours |
+> | Ira | Who will bring the cooking pot? | 15 hours |
+>
+> Open a question to check the surrounding conversation.
 
-```text
-Вы:     Кто вступил в «Поход» за неделю? Есть подозрительные?
-Агент:  (max chats events "Поход" --type add --json)
-        (max chats members list "Поход" --all --json)
-        За неделю добавили 4 человек:
-        · Катя Смирнова — добавила Лена, аккаунту 3 года
-        · Олег — вступил сам, аккаунту 2 дня
-        · …
-        Стоит посмотреть: Олег — аккаунт совсем новый.
+These are `review` rules: a question mark outside a link, or a reply to you/an admin, can open a question. Your or an admin’s reply or next message can close it. The [statistics report](./rankings.md) counts linked direct answers and can give a different result.
+
+<a id="this-weeks-new-members" />
+
+### Newcomers this week
+
+Review joining events. A new account is a reason to check, not proof of spam.
+
+**Your request:**
+
+> Who joined Поход this week? Show anyone worth reviewing.
+
+**Command:**
+
+```sh
+max chats events "Поход" --type add --since-time 7d --json
 ```
+
+**Example agent answer:**
+
+> | Newcomer | How they joined |
+> | --- | --- |
+> | Kate | Added by Lena |
+> | Oleg | Joined himself |
+>
+> Review Oleg’s available profile information before drawing conclusions. Account age alone is not grounds for removal.
+
+Events cover available history only. The current member list can be checked separately.
 
 ### Removing spam with your confirmation
 
-Set up the rules once:
+Preview what the rules propose before applying any action.
+
+**Your request:**
+
+> Check Поход for spam. Show the proposed actions first.
+
+**Command:**
 
 ```sh
-max chats rules set "Поход" invites delete            # приглашения в чужие чаты — удалять
-max chats rules set "Поход" newAccount.days 3         # аккаунт моложе трёх дней — отмечать
-max chats rules set "Поход" consent.delete ask        # но перед удалением — спросить меня
+max chats moderate "Поход" --dry-run --json
 ```
 
-```text
-Вы:     Проверь «Поход».
-Агент:  (max_write, command: "chats check")
-        Найдено приглашение. Правила требуют отдельного согласия: действие оставлено планом.
-        Для выполнения в терминале: max chats moderate "Поход" --allow-dangerous --json
-Вы:     Выполняю эту команду.
+**Example agent answer:**
+
+> | Finding | Proposed action | Status |
+> | --- | --- | --- |
+> | Invite link | Delete the message | Preview only |
+>
+> Nothing was deleted. Confirm the specific message if you want to apply the action.
+
+Applying an action requires your request and the profile's permissions. A preview does not authorise deletion.
+
+<a id="a-weekly-group-summary" />
+
+### A weekly report
+
+Ask for a short recap of decisions, commitments and open questions.
+
+**Your request:**
+
+> Summarise the week in Поход.
+
+**Command:**
+
+```sh
+max review --chat "Поход" --since-time 7d --json
 ```
 
-In a terminal, `max chats moderate "Поход"` asks the same question itself: `[y/N]`.
+**Example agent answer:**
 
-### A weekly group summary
-
-```text
-Вы:     Сделай итог недели по «Поход».
-Агент:  (max review --chat "Поход" --since-time 2026-09-20T00:00 --json)
-        Решили: выезд 4 октября, в 7:00 от метро.
-        Взяли на себя: Лена — продукты, Артём — палатки.
-        Висит: кто везёт котелок — спросили трижды, ответа нет.
-```
+> **Decided:** leave at 7:00 from the station.
+>
+> **Committed:**
+>
+> - Lena — food.
+> - Sam — tents.
+>
+> **Still open:** who will bring the cooking pot.
+>
+> I can show the source messages if you want to verify the recap.
 
 ### Scheduled checks
 
@@ -92,6 +145,8 @@ Without `--allow-dangerous`, cron actions at level `ask` are only planned and wa
 | `max chats link show\|reset <чат>` | Invite link; `reset` creates a new one and invalidates the old one |
 | `max chats update` | Settings, title, description and photo; read settings with `max chats show` |
 | `max messages delete --for-everyone`, `pin`, `unpin` | Delete for everyone, pin or unpin |
+| `max chats requests list <чат>` | Requests to join a channel with approval; admins can see them, request times are unknown |
+| `max chats requests accept\|decline <чат> <человек>` | Accept or decline one request; bulk acceptance and `--link` filters are unsupported |
 
 An agent without a terminal can use the equivalent MCP tools: `max_read` (`command: "review"`) with `unanswered_after_hours`, `max_read` (`command: "chats events"`), `max_read` (`command: "chats members"`), `max_read` (`command: "chats rules"`) and `max_write` (`command: "chats check"`) ([mcp.md](./mcp.md)).
 
@@ -100,11 +155,23 @@ An agent without a terminal can use the equivalent MCP tools: `max_read` (`comma
 `max review` maintains a task list in the local copy; `max serve` does not yet open tasks in MAX. An unanswered question or a message mentioning you by name opens a task; your reply closes it. A task links to the message without copying its text.
 
 ```sh
-max tasks list --state open                               # что ждёт ответа, старые сверху
+max tasks list --state open
+```
+
+```sh
 max tasks list --chat "Поход" --type question,mention
-max tasks add msg:max/<вы>/<чат>/<сообщение> --type promise   # то, чего правила не видят
+```
+
+```sh
+max tasks add msg:max/<вы>/<чат>/<сообщение> --type promise
+```
+
+```sh
 max tasks close <задача> --as dismissed --reason no-reply-needed
-max stats tasks show                                           # открытые по чатам, самая старая, медиана до закрытия
+```
+
+```sh
+max stats tasks show
 ```
 
 Closed tasks stay closed, and dismissed tasks do not reappear. Only your reply closes a task; an administrator’s reply does not yet do so, and `@ник` mentions are not detected. Equivalent MCP tools are `max_read` (`command: "tasks list"`), `max_write` (`command: "tasks add"`), `max_write` (`command: "tasks close"`) and `max_read` (`command: "stats tasks show"`) ([mcp.md](./mcp.md)).
@@ -146,8 +213,9 @@ moderate`. Unlike the personal account, it can ban removed members so they canno
 
 ## Limitations
 
+- **Group membership has no approval queue.** Groups are open or invite-only. Channel join requests use the commands above.
+
 - **Personal accounts cannot ban.** A removed member can return through an invite link. Reset the link (`max chats link reset`) or use a bot check, which can ban.
-- **No join requests.** MAX groups are either public or invite-only; there is no approval workflow for new members.
 - **At most 10 actions per check** (`--max-actions`). Deletions count toward the hourly send limit; once it is reached, remaining actions wait for the next check.
 - **Up to 1,000 messages per CLI check.** If there are more, the next check continues from that position.
 - **One join means reading the full member list.** To find a new member's account age, the check reads every member; in a large group this can require dozens of MAX requests.
@@ -155,11 +223,29 @@ moderate`. Unlike the personal account, it can ban removed members so they canno
 
 ## Statistics for group administrators
 
-`max stats chats show` counts messages, active senders, replies, threads, reactions and answered questions for the selected period from local storage. `--by day` or `--by week` adds a calendar day or week breakdown; weeks start on Monday, and `--timezone` sets the time zone. Channel post views appear only if MAX provided them and they were saved with messages. A missing count does not mean zero. Reactions use saved data, without fresh requests for every post. Questions are identified as in `review --unanswered`.
+See the week’s messages, people who wrote and replies. For questions about who answers, who needs help and whether newcomers stay, open [Statistics](./rankings.md).
 
-A normal run also reads join and leave events from MAX. With `--offline`, those events are not requested, so `members` is absent. It differs from `memberCounts`: saved daily member-count snapshots remain available offline.
+**Your request:**
 
-If `complete` is `false`, data is incomplete: totals reflect only available history, and medians and proportions may differ from results for the entire group. `fetch` suggests a command for downloading missing messages. Incomplete event history also limits join and leave counts. Even complete message history cannot reconstruct earlier member profiles or member lists from days before collection began.
+> Show Поход’s activity this week and point out gaps in the history.
+
+**Command:**
+
+```sh
+max stats chats show "Поход" --since-time 7d --offline --json
+```
+
+**Example agent answer:**
+
+> | Metric | In available history |
+> | --- | ---: |
+> | Messages | 120 |
+> | People who wrote | 18 |
+> | Replies | 30 |
+>
+> History is incomplete: these are observed counts. This local request did not fetch joining or leaving events.
+
+Without `--offline`, the CLI also fetches joining and leaving events. Saved daily member observations remain available locally. The first report cannot reconstruct past member lists.
 
 ### Member snapshots
 
@@ -179,10 +265,25 @@ If `complete` is `false`, data is incomplete: totals reflect only available hist
 
 ```sh
 max chats tracking add "Поход" --json
+```
+
+```sh
 max chats members fetch "Поход" --json
+```
+
+```sh
 max stats chats show "Поход" --since-time 7d --by day --timezone Europe/Madrid --json
+```
+
+```sh
 max chats members history "Поход" --since-time 7d --offline --json
+```
+
+```sh
 max chats tracking show "Поход" --offline --json
+```
+
+```sh
 max chats members audit "Поход" --json
 ```
 

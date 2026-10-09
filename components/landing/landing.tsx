@@ -69,11 +69,11 @@ function sessionsFor(t: (text: string) => string, c: (text: string) => string): 
     },
     {
       title: t("Lisbon money"),
-      hint: "tg messages search",
+      hint: "tg search messages",
       steps: [
         { ask: t("Who owes who from the Lisbon trip?") },
         {
-          tool: c('tg messages search <b>"paid"</b> --chat "Lisbon trip"'),
+          tool: c('tg search messages <b>"paid"</b> --chat "Lisbon trip"'),
           out: c(`{"items": [{"senderName": "Ana", "text": "Paid the hotel, 240", "timestamp": "2026-09-14T22:10:00+02:00"},
            {"senderName": "Ben", "text": "paid dinner 96", "timestamp": "2026-09-15T23:41:00+02:00"},
            {"outgoing": true, "text": "I paid the taxi, 60", "timestamp": "2026-09-16T08:05:00+02:00"}],
@@ -364,7 +364,7 @@ export function Landing({ lang }: { lang: string }) {
               <span className="dot"></span>
               <div>
                 <h3>{t("Who owes who")}</h3>
-                <code className="chip">{c('tg messages search "paid" --chat "Lisbon trip"')}</code>
+                <code className="chip">{c('tg search messages "paid" --chat "Lisbon trip"')}</code>
                 <p className="why">
                   {t(
                     "Payments are scattered across a week of trip chat. Your agent finds them in the copy of your chats on your computer and does the sums.",
@@ -378,7 +378,7 @@ export function Landing({ lang }: { lang: string }) {
                   <div className="meta">13:30</div>
                 </div>
                 <div className="msg bot">
-                  <span className="ran">tg messages search "paid" --chat "Lisbon trip"</span>
+                  <span className="ran">tg search messages "paid" --chat "Lisbon trip"</span>
                   <p>{t("Found 3 payments, €396 in total, €132 each:")}</p>
                   <table>
                     <thead>
@@ -709,7 +709,7 @@ export function Landing({ lang }: { lang: string }) {
             <div>
               <dt>{t("Fast")}</dt>
               <dd>{t("Search runs on the copy of your chats on your computer. No network, no waiting.")}</dd>
-              <code>{c('tg messages search "contract" --offline')}</code>
+              <code>{c('tg search messages "contract" --offline')}</code>
             </div>
             <div>
               <dt>{t("Always current")}</dt>

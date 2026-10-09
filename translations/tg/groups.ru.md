@@ -10,54 +10,122 @@ title: "Управление группами"
 
 Агенту с доступом к терминалу (например, Claude Code или Codex) нужен [skill](./recipes.md#once-first). Без доступа к терминалу можно использовать [MCP-сервер](./mcp.md), например в Claude Desktop или Cursor. Ниже показаны ваши запросы, команды агента и результат.
 
-### Утро администратора: кто ждёт ответа
+<a id="утро-администратора-кто-ждёт-ответа" />
 
-```text
-You:    What is still unanswered in "Hiking"?
-Agent:  (tg review --chat "Hiking" --unanswered 4h --json)
-        Unanswered for more than 4 hours — 3 questions:
-        · Lena, 08:12 — "What time do we leave on Saturday?"
-        · Artem, yesterday 22:40 — a reply to your post about the route: "Are the tents shared?"
-        · Ira, yesterday 19:05 — "Who brings the pot?"
-        You or the admins answered the rest.
+### Утро админа: кто ждёт ответа
+
+Начните с вопросов, которые давно ждут вас или админов.
+
+**Ваш запрос:**
+
+> Что в «Hiking» осталось без ответа больше четырёх часов?
+
+**Команда:**
+
+```sh
+tg review --chat "Hiking" --unanswered 4h --json
 ```
 
-Вопросом считается сообщение со знаком `?` или ответ вам либо администратору. Знак `?` внутри ссылки не учитывается. Вопрос считается закрытым, если вы или администратор ответили на него либо написали следующее сообщение после автора вопроса. Если Telegram не сообщает список администраторов, учитываются только ваши ответы; команда предупреждает об этом.
+**Пример ответа агента:**
 
-### Новые участники за неделю
+> **3 вопроса ждут ответа.**
+>
+> | Участник | Вопрос | Ожидание |
+> | --- | --- | --- |
+> | Лена | Во сколько выезд в субботу? | 6 часов |
+> | Артём | Палатки общие? | 12 часов |
+> | Ира | Кто возьмёт котелок? | 15 часов |
+>
+> Откройте вопрос, чтобы проверить переписку вокруг него.
 
-```text
-You:    Who joined "Hiking" this week?
-Agent:  (tg chats events "Hiking" --type join,add --json)
-        Five people:
-        · Kate — added by Lena, Tuesday
-        · Oleg — joined by the link, Wednesday
-        · …
+Это правила `review`: вопросом считается «?» вне ссылки или ответ вам/админу. Прямой ответ либо следующая реплика вас/админа может закрыть вопрос. [Статистический отчёт](./rankings.md) считает только связанные прямые ответы и может дать другой результат.
+
+<a id="новые-участники-за-неделю" />
+
+### Новенькие за неделю
+
+Посмотрите события вступления; возраст аккаунта — повод проверить человека, а не доказательство спама.
+
+**Ваш запрос:**
+
+> Кто вступил в «Hiking» за неделю? Покажи, кого стоит проверить.
+
+**Команда:**
+
+```sh
+tg chats events "Hiking" --type join,add --since-time 7d --json
 ```
 
-`chats events` читает служебные сообщения группы и показывает события, сохранившиеся в истории Telegram: кто вступил, вышел, кого добавили или удалили и кто это сделал. `tg chats members list` выводит всех участников с ролями и временем последнего появления.
+**Пример ответа агента:**
+
+> | Новичок | Как появился |
+> | --- | --- |
+> | Катя | Добавлена Леной |
+> | Олег | Вступил сам |
+>
+> Для проверки Олега откройте доступные сведения о нём. Только по возрасту аккаунта удалять нельзя.
+
+События показывают только доступную историю. Текущий список участников можно проверить отдельно.
 
 ### Если приглашение стало публичным
 
-```text
-You:    The invite link to "Hiking" ended up in a public chat. Replace it, and stop members adding people.
-Agent:  (tg chats link reset "Hiking" --json)
-        (tg chats update "Hiking" --only-admins-add on --json)
-        Done: the old link no longer works, the new one is https://t.me/+…, and only admins can add
-        people now.
+Замените ссылку-приглашение, если вы попросили об этом.
+
+**Ваш запрос:**
+
+> Ссылка Hiking попала посторонним. Замени её и разреши добавлять людей только админам.
+
+**Заменить ссылку:**
+
+```sh
+tg chats link reset "Hiking" --json
 ```
 
-`link reset` возвращает текущее состояние группы вместе с новой ссылкой. `chats update` тоже возвращает состояние, поэтому агент может рассказать об изменениях без повторного чтения группы.
+**Ограничить добавление участников:**
 
-### Итоги недели
-
-```text
-You:    Sum up the week in "Hiking".
-Agent:  (tg review --chat "Hiking" --since-time 2026-09-20T00:00 --json)
-        Decided: we leave on 4 October, at 7:00 from the station.
-        Taken on: Lena — food, Artem — tents.
-        Open: who brings the pot — asked three times, no answer.
+```sh
+tg chats update "Hiking" --only-admins-add on --json
 ```
+
+**Пример ответа агента:**
+
+> | Настройка | Результат |
+> | --- | --- |
+> | Старая ссылка | Заменена |
+> | Добавление участников | Только админы |
+>
+> Новая ссылка находится в запрошенном результате; передайте её только нужным людям.
+
+Эти команды изменяют группу. Запрос в примере разрешает оба изменения.
+
+<a id="итоги-недели" />
+
+### Недельный отчёт по группе
+
+Попросите короткий итог: решения, обязательства и открытые вопросы.
+
+**Ваш запрос:**
+
+> Сделай итог недели по «Hiking».
+
+**Команда:**
+
+```sh
+tg review --chat "Hiking" --since-time 7d --json
+```
+
+**Пример ответа агента:**
+
+> **Решили:** выезд в 7:00 от станции.
+>
+> **Взяли на себя:**
+>
+> - Лена — продукты.
+> - Артём — палатки.
+>
+> **Открыто:** кто возьмёт котелок.
+>
+> Покажу исходные сообщения, если нужно проверить итог.
 
 ### Проверка по расписанию
 
@@ -100,11 +168,23 @@ Agent:  (tg review --chat "Hiking" --since-time 2026-09-20T00:00 --json)
 `review` и `serve` ведут список задач в локальном хранилище. Вопрос без ответа и сообщение, упоминающее вас по имени, открывают задачу; ваш ответ закрывает её. Задача ссылается на сообщение и никогда не копирует его.
 
 ```sh
-tg tasks list --state open                                # what waits on you, oldest first
+tg tasks list --state open
+```
+
+```sh
 tg tasks list --chat "Hiking" --type question,mention
-tg tasks add msg:telegram/<you>/<chat>/<message> --type promise   # what the rules cannot see
+```
+
+```sh
+tg tasks add msg:telegram/<you>/<chat>/<message> --type promise
+```
+
+```sh
 tg tasks close <task> --as dismissed --reason no-reply-needed
-tg stats tasks show                                            # open per chat, the oldest, the median time to close
+```
+
+```sh
+tg stats tasks show
 ```
 
 Закрытая задача остаётся закрытой, а отклонённая больше не возвращается. Задачу закрывают только ваши ответы — не ответы администратора; упоминание через `@username` не распознаётся. Агент получает то же через инструменты MCP: `tg_read` (`command: "tasks list"`), `tg_write` (`command: "tasks add"`), `tg_write` (`command: "tasks close"`), `tg_read` (`command: "stats tasks show"`) ([mcp.md](./mcp.md)).
@@ -114,13 +194,31 @@ tg stats tasks show                                            # open per chat, 
 Правила группы задают, что ищет `tg chats moderate` и какие действия разрешены. Они хранятся в файле профиля, отдельно от Telegram. Фонового наблюдения нет: правила применяются только при запуске `chats moderate`.
 
 ```sh
-tg chats rules show "Hiking"                       # the defaults, marked not saved, until the first change
-tg chats rules set "Hiking" links delete           # a message with a link is deleted
-tg chats rules set "Hiking" blocked 12345,67890    # these people…
-tg chats rules set "Hiking" blockedPeople remove   # …are removed when they write or join
-tg chats rules set "Hiking" consent.delete allow   # delete without asking
-tg chats moderate "Hiking" --dry-run               # what it would do, doing nothing
-tg chats moderate "Hiking"                         # judge what is new since the last run, and act
+tg chats rules show "Hiking"
+```
+
+```sh
+tg chats rules set "Hiking" links delete
+```
+
+```sh
+tg chats rules set "Hiking" blocked 12345,67890
+```
+
+```sh
+tg chats rules set "Hiking" blockedPeople remove
+```
+
+```sh
+tg chats rules set "Hiking" consent.delete allow
+```
+
+```sh
+tg chats moderate "Hiking" --dry-run
+```
+
+```sh
+tg chats moderate "Hiking"
 ```
 
 | Правило | Что проверяется |
@@ -143,16 +241,29 @@ tg chats moderate "Hiking"                         # judge what is new since the
 
 ## Статистика для администраторов групп
 
+Посмотрите сообщения, участников переписки и ответы за неделю. Чтобы узнать, кто отвечает, кому нужна помощь и остаются ли новички, откройте [Статистику](./rankings.md).
+
+**Ваш запрос:**
+
+> Покажи активность Hiking за неделю и пробелы в истории.
+
+**Команда:**
+
 ```sh
-tg stats chats show <chat> --since-time 7d --by day --timezone Europe/Madrid --json
-tg stats chats show <chat> --offline --json
+tg stats chats show "Hiking" --since-time 7d --offline --json
 ```
 
-`tg stats chats show` считает по локальному хранилищу сообщения, активных отправителей, ответы, ветки обсуждений, реакции и отвеченные вопросы за период. `--by day` или `--by week` добавляет строки календаря; недели начинаются в понедельник, а `--timezone` задаёт часовой пояс. Просмотры, пересылки и комментарии появляются, только если Telegram предоставил счётчики и они сохранены с постами. Отсутствующий счётчик не означает ноль. Реакции используют сохранённые числа без обновления каждого поста. Вопросы определяются по тем же правилам, что `review --unanswered`. Это локально рассчитанные показатели; команда не запрашивает официальную статистику администраторов Telegram.
+**Пример ответа агента:**
 
-Онлайн-команда также запрашивает у Telegram события вступления и выхода. `--offline` и MCP `tg_read` (`command: "stats chats show"`) не включают `members`, сводку этих событий. Это отличается от `memberCounts`: сохранённых ежедневных снимков численности группы, доступных и офлайн.
+> | Показатель | В доступной истории |
+> | --- | ---: |
+> | Сообщения | 120 |
+> | Участники переписки | 18 |
+> | Ответы | 30 |
+>
+> История неполная: это наблюдаемые значения. Этот локальный запрос не загружал события вступления и выхода.
 
-Если `complete` равен false, доступная история неполна: суммы охватывают только прочитанное, а медианы и доли могут отличаться от показателей всей группы. Поле `fetch` предлагает команду для загрузки недостающих сообщений. Неполная история событий также ограничивает подсчёт вступлений и выходов. Даже полная история сообщений не позволяет восстановить профили участников и ежедневные списки за время до начала записи.
+Без `--offline` CLI также загружает события вступления и выхода. Сохранённые ежедневные наблюдения остаются доступны локально. Первый отчёт не может восстановить прошлые списки участников.
 
 ### Статистика самого Telegram
 
@@ -187,9 +298,21 @@ Telegram отвечает только для чата, в котором пок
 
 ```sh
 tg chats members fetch "Hiking Club" --track --json
+```
+
+```sh
 tg stats chats show "Hiking Club" --since-time 7d --by day --timezone Europe/Madrid --json
+```
+
+```sh
 tg chats members history "Hiking Club" --since-time 7d --offline --json
+```
+
+```sh
 tg chats tracking show "Hiking Club" --offline --json
+```
+
+```sh
 tg chats members audit "Hiking Club" --json
 ```
 

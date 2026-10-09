@@ -68,7 +68,7 @@ confirmation. Check the local archive first; tell me if it lacks that period. Do
 ```sh
 tg chats list --search Atlas --kind group
 tg store status -1001001001001
-tg messages search 'analytics after:2026-09-01 before:2026-10-01' --chat -1001001001001 --json --language legacy
+tg search messages 'analytics after:2026-09-01 before:2026-10-01' --chat -1001001001001 --json --language legacy
 ```
 
 **Agent**
@@ -89,7 +89,7 @@ tell me what remains.
 ```sh
 tg store fetch -1001001001001 --since-time 2026-09-01 --limit 1000
 tg store status -1001001001001
-tg messages search 'analytics after:2026-09-01 before:2026-10-01' --chat -1001001001001 --json --language legacy
+tg search messages 'analytics after:2026-09-01 before:2026-10-01' --chat -1001001001001 --json --language legacy
 tg messages context -1001001001001 4312 --before-n 2 --after-n 4
 ```
 
@@ -108,7 +108,7 @@ A fetch from September also reads newer history on its way back, while the searc
 the result to September.
 
 **Why these commands:** `messages list` reads a window of messages and stores them locally;
-`store fetch` fills a larger stretch of history. `messages search` searches only what is stored.
+`store fetch` fills a larger stretch of history. `search messages` searches only what is stored.
 `messages context` checks what was said around a match. Neither the latest 20 messages nor an empty
 local search proves that a month has been checked. [Archive and search](./tg/archive.md).
 
