@@ -1,7 +1,7 @@
 .wirecat-docs {
   --docs-accent: #5963b7;
-  --docs-link: #465797;
-  --docs-quote-link: #4a5b9e;
+  --docs-link: #314fba;
+  --docs-quote-link: #314fba;
   --docs-tint: #f8f9fa;
   --docs-bar: #f2f3f5;
   --docs-outline: #e0e4e9;
@@ -9,8 +9,8 @@
 }
 .dark .wirecat-docs {
   --docs-accent: #a8b3f1;
-  --docs-link: #9eacd2;
-  --docs-quote-link: #7984ad;
+  --docs-link: #b0c2ff;
+  --docs-quote-link: #b0c2ff;
   --docs-tint: #17191c;
   --docs-bar: #1d2024;
   --docs-outline: #34393f;
@@ -262,4 +262,37 @@
 /* Accordions, tabs and disclosures are clickable. */
 .wirecat-docs :is(button:not(:disabled), summary, [role="tab"]) {
   cursor: pointer;
+}
+
+/* Short requests share one row with an icon-only copy button. */
+.docs-snippet-compact {
+  display: flex;
+  align-items: center;
+  margin-block: 0.5rem 1rem;
+  border-radius: 6px;
+  position: relative;
+}
+.docs-snippet-compact pre {
+  order: -1;
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem 0.75rem;
+  white-space: pre;
+  line-height: 1.5;
+}
+.docs-snippet-compact .docs-snippet-bar {
+  flex: none;
+  padding: 0.35rem 0.5rem;
+  border: 0;
+  background: transparent;
+}
+.docs-snippet-compact .docs-copy {
+  padding: 0.25rem;
+}
+.docs-snippet-compact .docs-copy-status {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  padding: 0.15rem 0.5rem;
+  background: var(--docs-tint);
 }

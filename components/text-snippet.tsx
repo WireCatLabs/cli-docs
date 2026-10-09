@@ -16,11 +16,13 @@ export function CopyText({
   lang,
   kind = "command",
   tracking,
+  compact = false,
 }: {
   text: string
   lang: string
   kind?: "prompt" | "command"
   tracking?: InstallationEventContext
+  compact?: boolean
 }) {
   const words = wordsFor(lang).onboarding
   const label = (labels[lang as keyof typeof labels] ?? labels.en)[kind]
@@ -34,9 +36,9 @@ export function CopyText({
   }, [status])
   const Icon = kind === "prompt" ? MessageSquareText : Terminal
   return (
-    <div className={`not-prose docs-snippet docs-${kind}`}>
+    <div className={`not-prose docs-snippet docs-${kind}${compact ? " docs-snippet-compact" : ""}`}>
       <div className="docs-snippet-bar">
-        <span className="docs-snippet-label">
+        <span className={compact ? "sr-only" : "docs-snippet-label"}>
           <Icon size={15} aria-hidden="true" />
           {label}
         </span>
@@ -56,7 +58,7 @@ export function CopyText({
           }}
         >
           {status === "copied" ? <Check size={15} aria-hidden="true" /> : <Copy size={15} aria-hidden="true" />}
-          {status === "copied" ? words.copied : words.copy}
+          <span className={compact ? "sr-only" : undefined}>{status === "copied" ? words.copied : words.copy}</span>
         </button>
       </div>
       <pre>
@@ -72,10 +74,12 @@ export function CopyText({
 export function AgentPrompt({
   text,
   language = "en",
+  compact = false,
 }: {
   text: string
   language?: string
+  compact?: boolean
   children?: React.ReactNode
 }) {
-  return <CopyText text={text} lang={language} kind="prompt" />
+  return <CopyText text={text} lang={language} kind="prompt" compact={compact} />
 }

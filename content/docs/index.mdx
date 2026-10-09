@@ -3,8 +3,8 @@ title: "Getting started"
 description: "Let your AI agent read, search and answer your Telegram and MAX messages, from your own account on your own computer."
 ---
 
-Give your <DocTerm term="agent" lang="en" label="AI agent" /> access to your Telegram or MAX account. You ask in plain words — *"who is
-still waiting for my answer?"*, *"what did we agree with Marco in September?"* — and the agent
+Give your <DocTerm term="agent" lang="en" label="AI agent" /> access to your Telegram or MAX account. You ask in plain words — `who is
+still waiting for my answer?`, `what did we agree with Marco in September?` — and the agent
 reads your chats and answers, with the messages it used as proof.
 
 It works through a command line tool (<DocTerm term="cli" lang="en" label="cli" />) for your messenger: `tg` for Telegram, `max` for MAX. You
@@ -18,19 +18,43 @@ sees only the messages it reads for a task.
 
 ## What you can ask
 
-- **Catch up** — "Summarise my unread messages and tell me who needs an answer."
-- **Find** — "Find the price we agreed in the Atlas group and show the message."
-- **Prepare** — "Prepare an agenda for my call with Anna from this week's chats."
-- **Follow up** — "What did I promise this week? Draft the replies, don't send them."
-- **Personal messages to many people** — "Write to everyone who asked about the workshop this week.
-  Make each message personal, using what they asked. Show me the drafts first."
+**Catch up**
+
+```text prompt compact
+Summarise unread messages and tell me who needs an answer.
+```
+
+**Find**
+
+```text prompt compact
+Find the price we agreed in Atlas and show the message.
+```
+
+**Prepare**
+
+```text prompt compact
+Prepare an agenda for my call with Anna from this week’s chats.
+```
+
+**Follow up**
+
+```text prompt compact
+What did I promise this week? Draft replies, don’t send them.
+```
+
+**Personal messages to many people**
+
+```text prompt compact
+Draft a personal reply to each person who asked about the workshop.
+```
 
 ## What it covers
 
 - **Your whole account** — messages, chats, groups, contacts, polls: what you do in the app.
 - **Your history, searchable offline** — a local archive of the chats you choose.
-- **Voice messages to text** — on your own computer.
 - **Every Bot API method** — all 185 for Telegram, all 33 for MAX.
+- **Group administration** — review activity, manage members and moderate groups where you have admin rights.
+- **Voice messages to text** — on your own computer.
 - **Limits you set** — read-only, ask before sending, chosen chats only.
 
 [All features →](./features.mdx)
@@ -49,7 +73,7 @@ That is all you need to start. Later, when you need them:
 - [Writing requests](./prompting.mdx) — get better answers from your agent.
 - [Connect your AI assistant](./agents.mdx) — if your agent does not see the `tg` or `max` command.
 - <DocTerm term="mcp" lang="en" label="MCP" />: [MCP and skills](./mcp.mdx) — for Claude Desktop and other clients without a terminal.
-- ChatGPT, Claude or another AI chat in a browser or on your phone: [AI chats in the browser and on your phone](./browser-apps.mdx) — your own tunnel and a one-time login code.
+- ChatGPT, Claude or another AI chat in a browser or on your phone: [Use from web or mobile](./browser-apps.mdx) — your own tunnel and a one-time login code.
 
 ## Telegram or MAX?
 
