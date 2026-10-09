@@ -2,7 +2,8 @@
 
 The active page-by-page content plan is [reader documentation refresh](plans/2026-10-08-reader-documentation-refresh.md).
 
-Start with [authoring rules](AUTHORING.md) before writing or reviewing a page. The
+Start with [authoring rules](AUTHORING.md), the [approved terminology](TERMINOLOGY.md) and
+the [PR and release review workflow](REVIEWING.md) before writing or reviewing a page. The
 [documentation system plan](plans/2026-10-07-documentation-system.md) records the manual baseline,
 implementation order and validation gaps. [STRUCTURE.md](STRUCTURE.md) defines tool page files
 and sidebar rules; [DESIGN.md](DESIGN.md) covers presentation.
@@ -35,7 +36,7 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | How do I find a message or agreement? | `search.md` | Task guide | Lead with an agent request; keep terminal syntax optional |
 | How do I connect a browser AI app? | `browser-apps.mdx` | Connection guide | Preserve current web setup instructions |
 | How do I ask for a useful result? | `prompting.mdx` | Task guidance | Cross-link to worked examples instead of duplicating dialogues |
-| Should my agent draft replies, or should a rule answer by itself? | `drafts-and-templates.mdx` | Task guide and explanation | Keep template facts in step with the tools' auto-reply guides |
+| How do I review a reply in my messaging app or use an auto-reply template? | `drafts-and-templates.mdx` | Task guide and explanation | Keep template facts in step with the tools' auto-reply guides |
 | Can it do my task in Telegram or MAX? | `features.mdx` | Capability orientation | Verify differences; link task homes, not only command lists |
 | Which connection does my AI app need? | `mcp.mdx` | Explanation/setup | Explain the decision before client configuration |
 | How do I discover a bot method? | `bot-api.mdx` | Reference orientation | Link messenger-specific bot prerequisites and use cases |

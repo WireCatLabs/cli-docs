@@ -8,6 +8,12 @@ a clear destination without making it a prerequisite for ordinary tasks.
 This is the authoring standard for new and revised documentation. Existing pages are improved
 in priority order, not mechanically rewritten to match a template.
 
+Use [TERMINOLOGY.md](TERMINOLOGY.md) for the approved reader vocabulary and
+[REVIEWING.md](REVIEWING.md) for PR and release review. Use AI agent/agent consistently;
+keep literal command and configuration names intact. Task guides assume the reader has already
+connected an account and an agent: explain setup on onboarding pages, and repeat it elsewhere
+only when the task is to connect or repair that connection.
+
 ## Decide what the page is for
 
 Before drafting, write one sentence answering: **Who opens this page, in what situation, to get

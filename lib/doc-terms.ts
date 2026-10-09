@@ -44,19 +44,19 @@ const terms = {
     en: {
       title: "AI agent",
       description:
-        "An AI assistant you give tasks to in everyday language, such as Claude Code, Codex or Cursor. It can use connected tools to find messages, summarise conversations and prepare replies. It gets access to your conversations after you connect your account.",
+        "An AI agent you give tasks to in everyday language, such as Claude Code, Codex or Cursor. It can use connected tools to find messages, summarise conversations and prepare replies. It gets access to your conversations after you connect your account.",
       page: "agents",
     },
     ru: {
       title: "ИИ-агент",
       description:
-        "ИИ-помощник, которому вы задаёте задачи обычным языком: например, Claude Code, Codex или Cursor. Он может пользоваться подключёнными инструментами, чтобы искать сообщения, разбирать переписки и готовить ответы. Доступ к переписке появляется после подключения вашего аккаунта.",
+        "ИИ-агент, которому вы задаёте задачи обычным языком: например, Claude Code, Codex или Cursor. Он может пользоваться подключёнными инструментами, чтобы искать сообщения, разбирать переписки и готовить ответы. Доступ к переписке появляется после подключения вашего аккаунта.",
       page: "agents",
     },
     es: {
       title: "Agente de IA",
       description:
-        "Un asistente de IA al que pides tareas con tus propias palabras, como Claude Code, Codex o Cursor. Usa herramientas conectadas para buscar mensajes, resumir conversaciones y preparar respuestas. Accede a tus conversaciones después de que conectes tu cuenta.",
+        "Un agente de IA al que pides tareas con tus propias palabras, como Claude Code, Codex o Cursor. Usa herramientas conectadas para buscar mensajes, resumir conversaciones y preparar respuestas. Accede a tus conversaciones después de que conectes tu cuenta.",
       page: "agents",
     },
   },
@@ -84,19 +84,19 @@ const terms = {
     en: {
       title: "MCP",
       description:
-        "A way to connect tools to an AI assistant. The agent can then request chats or messages through that connection. This works with clients such as Claude Desktop, where the agent does not run terminal commands directly.",
+        "A way to connect tools to an AI agent. The agent can then request chats or messages through that connection. This works with clients such as Claude Desktop, where the agent does not run terminal commands directly.",
       page: "mcp",
     },
     ru: {
       title: "MCP",
       description:
-        "Способ подключить инструменты к ИИ-помощнику. После подключения агент может запрашивать чаты и сообщения через это соединение. Такой вариант подходит, например, для Claude Desktop, где агент не запускает команды терминала напрямую.",
+        "Способ подключить инструменты к ИИ-агенту. После подключения агент может запрашивать чаты и сообщения через это соединение. Такой вариант подходит, например, для Claude Desktop, где агент не запускает команды терминала напрямую.",
       page: "mcp",
     },
     es: {
       title: "MCP",
       description:
-        "Una forma de conectar herramientas a un asistente de IA. Después, el agente puede solicitar chats o mensajes mediante esa conexión. Sirve para clientes como Claude Desktop, donde el agente no ejecuta comandos de terminal directamente.",
+        "Una forma de conectar herramientas a un agente de IA. Después, el agente puede solicitar chats o mensajes mediante esa conexión. Sirve para clientes como Claude Desktop, donde el agente no ejecuta comandos de terminal directamente.",
       page: "mcp",
     },
   },
@@ -104,19 +104,19 @@ const terms = {
     en: {
       title: "Local agent",
       description:
-        "An AI assistant that can run commands on your computer, for example Claude Code, Codex, Cursor or Gemini CLI. A chat in the browser without terminal access cannot install the cli for you.",
+        "An AI agent that can run commands on your computer, for example Claude Code, Codex, Cursor or Gemini CLI. A chat in the browser without terminal access cannot install the cli for you.",
       page: "agents",
     },
     ru: {
       title: "Локальный агент",
       description:
-        "ИИ-помощник, который может запускать команды на вашем компьютере, например Claude Code, Codex, Cursor или Gemini CLI. Чат в браузере без доступа к терминалу не сможет установить cli за вас.",
+        "ИИ-агент, который может запускать команды на вашем компьютере, например Claude Code, Codex, Cursor или Gemini CLI. Чат в браузере без доступа к терминалу не сможет установить cli за вас.",
       page: "agents",
     },
     es: {
       title: "Agente local",
       description:
-        "Un asistente de IA que puede ejecutar comandos en tu ordenador, por ejemplo Claude Code, Codex, Cursor o Gemini CLI. Un chat en el navegador sin acceso a la terminal no puede instalar el cli por ti.",
+        "Un agente de IA que puede ejecutar comandos en tu ordenador, por ejemplo Claude Code, Codex, Cursor o Gemini CLI. Un chat en el navegador sin acceso a la terminal no puede instalar el cli por ti.",
       page: "agents",
     },
   },
@@ -244,7 +244,7 @@ const terms = {
     en: {
       title: "Connector",
       description:
-        "What Claude and ChatGPT call a tool you add from outside: you give the app an address, sign in once, and the assistant can then call that tool in your chats. The name may be plugin, app or connector, depending on the AI client.",
+        "What Claude and ChatGPT call a tool you add from outside: you give the app an address, sign in once, and the agent can then call that tool in your chats. The name may be plugin, app or connector, depending on the AI client.",
       page: "browser-apps",
     },
     ru: {
@@ -256,7 +256,7 @@ const terms = {
     es: {
       title: "Conector",
       description:
-        "Así llaman Claude y ChatGPT a una herramienta que añades desde fuera: le das a la app una dirección, inicias sesión una vez y el asistente puede usarla en tus chats. El nombre puede ser plugin, aplicación o conector según el cliente de IA.",
+        "Así llaman Claude y ChatGPT a una herramienta que añades desde fuera: le das a la app una dirección, inicias sesión una vez y el agente puede usarla en tus chats. El nombre puede ser plugin, aplicación o conector según el cliente de IA.",
       page: "browser-apps",
     },
   },
@@ -264,7 +264,7 @@ const terms = {
     en: {
       title: "Compatible agents",
       description:
-        "Guides cover Claude Code, Codex, Cursor, Gemini CLI, Hermes and OpenClaw. Other assistants can use these tools too if they can run commands or connect through MCP. The agent guide explains both routes.",
+        "Guides cover Claude Code, Codex, Cursor, Gemini CLI, Hermes and OpenClaw. Other agents can use these tools too if they can run commands or connect through MCP. The agent guide explains both routes.",
       page: "agents",
     },
     ru: {
@@ -276,7 +276,7 @@ const terms = {
     es: {
       title: "Agentes compatibles",
       description:
-        "Hay guías para Claude Code, Codex, Cursor, Gemini CLI, Hermes y OpenClaw. Otros asistentes también pueden usar las herramientas si ejecutan comandos o se conectan mediante MCP. La guía explica ambas opciones.",
+        "Hay guías para Claude Code, Codex, Cursor, Gemini CLI, Hermes y OpenClaw. Otros agentes también pueden usar las herramientas si ejecutan comandos o se conectan mediante MCP. La guía explica ambas opciones.",
       page: "agents",
     },
   },
@@ -444,7 +444,7 @@ const terms = {
     en: {
       title: "Agent evaluations",
       description:
-        "Test tasks used to observe how an assistant handles sources, permissions and missing data. Passing examples does not guarantee the same result on every real conversation.",
+        "Test tasks used to observe how an agent handles sources, permissions and missing data. Passing examples does not guarantee the same result on every real conversation.",
       page: "security",
     },
     ru: {
@@ -456,7 +456,7 @@ const terms = {
     es: {
       title: "Evaluaciones del agente",
       description:
-        "Tareas de prueba que observan cómo usa el asistente las fuentes, permisos y datos incompletos. Superarlas no garantiza el mismo resultado en toda conversación real.",
+        "Tareas de prueba que observan cómo usa el agente las fuentes, permisos y datos incompletos. Superarlas no garantiza el mismo resultado en toda conversación real.",
       page: "security",
     },
   },

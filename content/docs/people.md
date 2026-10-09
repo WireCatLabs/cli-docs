@@ -3,11 +3,7 @@ title: "People"
 description: "Recall who someone is and what you discussed before replying, using your own Telegram or MAX history."
 ---
 
-This page is about the people you talk to in Telegram and MAX. Use it when someone writes to you
-and you don't remember where you met or what you agreed. By the end, you will be able to ask your
-agent who the person is, what you discussed and whether the account looks like a bot, with the
-messages behind each answer. You will also be able to keep one person's Telegram and MAX accounts
-together. You need a [connected account](./installation.mdx) and an [agent](./agents.mdx).
+Recall who a person is and what you discussed before replying. Ask your agent how you know them, what you agreed and which account signals are available, with the messages behind each answer. You can also keep one person’s Telegram and MAX accounts together.
 
 ## What a person is here
 

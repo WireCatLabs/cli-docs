@@ -3,11 +3,7 @@ title: "Personas"
 description: "Recuerda quién te escribió y qué hablasteis antes de responder, usando tu historial de Telegram o MAX."
 ---
 
-Esta página trata de las personas con las que hablas en Telegram y MAX. Sirve cuando alguien te
-escribe y no recuerdas dónde os conocisteis ni qué acordasteis. Al terminar, podrás pedir al agente
-quién es, qué hablasteis y si la cuenta parece un bot, con los mensajes que respaldan cada respuesta.
-También podrás unir las cuentas de Telegram y MAX de una misma persona. Necesitas una
-[cuenta conectada](./installation.mdx) y un [agente](./agents.mdx).
+Recuerda quién te escribió y qué hablasteis antes de responder. Pide a tu agente que explique de qué conoces a esa persona, qué acordasteis y qué datos de la cuenta están disponibles, con los mensajes que respaldan cada respuesta. También puedes unir las cuentas de Telegram y MAX de una misma persona.
 
 ## Qué es una persona aquí
 

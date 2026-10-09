@@ -41,7 +41,10 @@ describe("one persistent documentation sidebar", () => {
   const original: Root = {
     name: "Docs",
     children: [
+      { type: "separator", name: "Начните здесь" },
       { type: "page", name: "Install", url: "/ru/docs/installation" },
+      { type: "separator", name: "Что можно сделать" },
+      { type: "page", name: "Search", url: "/ru/docs/search" },
       {
         type: "folder",
         name: "Telegram",
@@ -57,9 +60,9 @@ describe("one persistent documentation sidebar", () => {
       },
     ],
   }
-  it("keeps shared pages and both tools in one root, instead of selecting a different tree per route", () => {
+  it("keeps task pages and both tools while leaving onboarding to the Getting started banner", () => {
     const tree = unifiedDocsTree(original)
-    expect(tree.children.map((item) => item.name)).toEqual(["Install", "Telegram", "MAX"])
+    expect(tree.children.map((item) => item.name)).toEqual(["Что можно сделать", "Search", "Telegram", "MAX"])
     for (const item of tree.children) {
       if (item.type === "folder") {
         expect(item.root).toBe(false)
@@ -67,13 +70,36 @@ describe("one persistent documentation sidebar", () => {
         expect(item.children[0]).toHaveProperty("icon")
       }
     }
-    expect(tree.children[1]).toMatchObject({ index: { url: "/ru/docs/tg" } })
+    expect(tree.children[2]).toMatchObject({ index: { url: "/ru/docs/tg" } })
   })
   it("does not modify the source tree used by breadcrumbs, Markdown and search", () => {
     unifiedDocsTree(original)
-    expect(original.children[1]).toMatchObject({ root: true })
-    expect(original.children[0]).not.toHaveProperty("icon")
-    expect(original.children[1]).toMatchObject({ children: [{ url: "/ru/docs/tg/sessions" }] })
+    expect(original.children[4]).toMatchObject({ root: true })
+    expect(original.children[1]).not.toHaveProperty("icon")
+    expect(original.children[4]).toMatchObject({ children: [{ url: "/ru/docs/tg/sessions" }] })
+  })
+  it("removes the duplicate onboarding group in every locale and preserves task links", () => {
+    for (const [lang, heading] of [
+      ["en", "Start here"],
+      ["ru", "Начните здесь"],
+      ["es", "Empieza aquí"],
+    ]) {
+      const tree = unifiedDocsTree({
+        name: "Docs",
+        children: [
+          { type: "separator", name: heading },
+          ...["", "/installation", "/agents", "/first-tasks", "/search", "/drafts-and-templates"].map((slug) => ({
+            type: "page" as const,
+            name: slug,
+            url: `/${lang}/docs${slug}`,
+          })),
+        ],
+      })
+      expect(tree.children.map((node) => (node.type === "page" ? node.url : node.name))).toEqual([
+        `/${lang}/docs/search`,
+        `/${lang}/docs/drafts-and-templates`,
+      ])
+    }
   })
 })
 
