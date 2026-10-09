@@ -12,6 +12,7 @@ describe("selected editorial production snapshots", () => {
       expect(pages.examples).toMatch(/tg search messages/)
       expect(pages.examples).toMatch(/max search messages/)
       expect(pages.home).toContain(`href="/${lang}/docs/agents"`)
+      for (const page of Object.values(pages)) expect(page).toContain('href="/llms.txt"')
       expect(pages.home).toContain("<!--email_off-->")
       expect(pages.home).toContain('class="section outcomes5 outcomes5-simple"')
     })
