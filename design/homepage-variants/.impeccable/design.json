@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-06T23:25:29.272160+00:00",
+  "title": "Design System: WireCat homepage comparison prototypes",
+  "extensions": {
+    "shadows": [
+      {
+        "name": "demo-ambient",
+        "value": "0 14px 32px #1828220d",
+        "purpose": "Subtle elevation on demonstrations."
+      },
+      {
+        "name": "button-hover",
+        "value": "0 5px 15px #18282218",
+        "purpose": "Primary action hover."
+      }
+    ],
+    "motion": [
+      {
+        "name": "answer-in",
+        "value": "opacity .65 \u2192 1; blur(1px) \u2192 blur(0); .24s cubic-bezier(.16,1,.3,1)",
+        "purpose": "Example and workflow result changes."
+      },
+      {
+        "name": "button-state",
+        "value": ".18s ease-out",
+        "purpose": "Background and shadow transitions."
+      },
+      {
+        "name": "toast-state",
+        "value": "transform .2s",
+        "purpose": "Copy feedback transition."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wide",
+        "value": "1600px"
+      },
+      {
+        "name": "compact-desktop",
+        "value": "1050px"
+      },
+      {
+        "name": "mobile",
+        "value": "760px"
+      },
+      {
+        "name": "narrow-mobile",
+        "value": "374px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Connect action in hero and setup navigation.",
+      "html": "<a class=\"ds-button\" href=\"#connect\">Connect your agent</a>",
+      "css": ":host{--bg:#f1f4f2;--paper:#fff;--soft:#e6ece8;--ink:#182822;--muted:#4c5e55;--line:#cbd6cf;--accent:#5145df;--accent-soft:#eeeafd;--on-accent:#fff;font-family:Onest,sans-serif;color:var(--ink)}.ds-button{display:inline-flex;align-items:center;justify-content:center;gap:14px;background:var(--accent);color:var(--on-accent);border:0;border-radius:999px;padding:14px 23px;text-decoration:none;font:650 16px/1.4 Onest,sans-serif;min-height:48px;transition:background .18s ease-out,box-shadow .18s ease-out}.ds-button:hover{background:color-mix(in srgb,var(--accent) 86%,var(--ink));box-shadow:0 5px 15px #18282218}:is(button,a,select):focus-visible{outline:3px solid var(--accent);outline-offset:5px}"
+    },
+    {
+      "name": "Small action",
+      "kind": "button",
+      "refersTo": "button-small",
+      "description": "Compact Connect action in the header.",
+      "html": "<a class=\"ds-button ds-small\" href=\"#connect\">Connect</a>",
+      "css": ":host{--bg:#f1f4f2;--paper:#fff;--soft:#e6ece8;--ink:#182822;--muted:#4c5e55;--line:#cbd6cf;--accent:#5145df;--accent-soft:#eeeafd;--on-accent:#fff;font-family:Onest,sans-serif;color:var(--ink)}.ds-button{display:inline-flex;align-items:center;justify-content:center;gap:14px;background:var(--accent);color:var(--on-accent);border:0;border-radius:999px;padding:14px 23px;text-decoration:none;font:650 16px/1.4 Onest,sans-serif;min-height:48px;transition:background .18s ease-out,box-shadow .18s ease-out}.ds-button:hover{background:color-mix(in srgb,var(--accent) 86%,var(--ink));box-shadow:0 5px 15px #18282218}.ds-small{padding:10px 18px;min-height:40px}:is(button,a,select):focus-visible{outline:3px solid var(--accent);outline-offset:5px}"
+    },
+    {
+      "name": "Text link",
+      "kind": "button",
+      "description": "Secondary navigation to examples and guides.",
+      "html": "<a class=\"ds-link\" href=\"#uses\">See what it can do<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a>",
+      "css": ":host{--bg:#f1f4f2;--paper:#fff;--soft:#e6ece8;--ink:#182822;--muted:#4c5e55;--line:#cbd6cf;--accent:#5145df;--accent-soft:#eeeafd;--on-accent:#fff;font-family:Onest,sans-serif;color:var(--ink)}.ds-link{display:inline-flex;align-items:center;gap:9px;font:600 15px Onest,sans-serif;color:var(--accent);text-decoration:none}.ds-link:hover{text-decoration:underline}.ds-link svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}:is(button,a,select):focus-visible{outline:3px solid var(--accent);outline-offset:5px}"
+    },
+    {
+      "name": "Demo surface",
+      "kind": "card",
+      "refersTo": "demo",
+      "description": "Prompt and result surface with source disclosure.",
+      "html": "<section class=\"ds-demo\"><div class=\"ds-top\">Your agent \u00b7 Telegram + MAX</div><div class=\"ds-panel\"><p class=\"ds-prompt\">Check what Tom has already sent and draft the right follow-up.</p><h3>A follow-up that reflects what happened</h3><p>Tom already sent the first results.</p><details><summary>Inspect the source messages</summary><p>First results are attached. The remaining two cases are blocked on staging access.</p></details></div></section>",
+      "css": ":host{--bg:#f1f4f2;--paper:#fff;--soft:#e6ece8;--ink:#182822;--muted:#4c5e55;--line:#cbd6cf;--accent:#5145df;--accent-soft:#eeeafd;--on-accent:#fff;font-family:Onest,sans-serif;color:var(--ink)}.ds-demo{background:var(--paper);border:1px solid var(--line);border-radius:15px;overflow:hidden;box-shadow:0 14px 32px #1828220d;font:16px/1.65 Onest,sans-serif}.ds-top{padding:16px 22px;border-bottom:1px solid var(--line);font-size:13px;color:var(--muted)}.ds-panel{padding:25px 28px}.ds-prompt{background:var(--soft);border-radius:12px;padding:16px 18px;margin:0 0 27px}.ds-panel h3{font-size:23px;line-height:1.4;margin:0 0 17px}.ds-panel details{border-top:1px solid var(--line);margin-top:19px;padding-top:13px}.ds-panel summary{font-size:14px;font-weight:600;color:var(--muted);cursor:pointer}.ds-panel summary:hover{color:var(--ink)}.ds-panel summary:focus-visible{outline:3px solid var(--accent);outline-offset:5px}"
+    },
+    {
+      "name": "Comparison navigation",
+      "kind": "nav",
+      "description": "Local preview selection, separate from product navigation.",
+      "html": "<nav class=\"ds-review\" aria-label=\"Homepage preview navigation\"><a href=\"/\">All six approaches</a><label>Compare <select aria-label=\"Homepage approach\"><option>Put your agent to work</option><option>Memory for your messengers</option></select></label></nav>",
+      "css": ":host{--bg:#f1f4f2;--paper:#fff;--soft:#e6ece8;--ink:#182822;--muted:#4c5e55;--line:#cbd6cf;--accent:#5145df;--accent-soft:#eeeafd;--on-accent:#fff;font-family:Onest,sans-serif;color:var(--ink)}.ds-review{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:11px 30px;border-bottom:1px solid var(--line);font:13px Onest,sans-serif;background:var(--paper)}.ds-review a{color:inherit;font-weight:650;text-underline-offset:5px}.ds-review label{display:flex;gap:10px;align-items:center}.ds-review select{max-width:280px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:6px;padding:5px 9px;font:13px Onest,sans-serif}:is(button,a,select):focus-visible{outline:3px solid var(--accent);outline-offset:5px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The request, the context, a useful result.",
+    "overview": "This scene uses Persuade mode: help people who already use AI agents see a useful messaging task and reach setup. It preserves WireCat's monogram, purple accent, green surfaces, Unbounded headings and Onest body. These six comparison prototypes do not select a replacement identity or govern production pages.",
+    "keyCharacteristics": [
+      "Large, compact display headings beside readable task evidence.",
+      "Quiet surfaces and dividers; accent identifies actions and meaningful text.",
+      "Complete local examples with expandable sources and an explicit setup ending."
+    ],
+    "rules": [
+      {
+        "name": "The Role Continuity Rule",
+        "body": "Theme changes preserve surface and action roles across all six pages.",
+        "section": "colors"
+      }
+    ],
+    "dos": [
+      "**Do** preserve shared color roles, fonts and components when comparing these six compositions.",
+      "**Do** keep result sources inspectable and setup links concrete.",
+      "**Do** preserve keyboard tab selection, visible focus and reduced-motion behavior."
+    ],
+    "donts": [
+      "**Don't** treat this exploration as a selected production identity.",
+      "**Don't** add fabricated customer evidence or imply these illustrative controls perform live actions.",
+      "**Don't** inherit incidental per-variant copy, hero sizing or section order as global brand rules."
+    ]
+  }
+}

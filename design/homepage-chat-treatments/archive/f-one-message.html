@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WireCat One Message</title>
+<meta name="description" content="From 214 unread to one message from your agent.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,500..900&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: dusk wallpaper with wires; a before/after slider leads, then one day with your agent, hour by hour. */
+  :root {
+    --wall: #c8c9d9; --wall-ink: #b4b6ca;
+    --ink: #15151f; --ink-soft: #444659;
+    --me: #2f37d9; --me-ink: #ffffff;
+    --bot: #ffffff; --bot-ink: #15151f; --bot-soft: #626479;
+    --phone: #f4f4f8; --phone-line: #e1e2ea; --badge: #e5484d; --badge-mute: #a3a5b5;
+    --panel: #15151f; --panel-2: #20202d; --panel-ink: #eeeef6; --panel-soft: #a6a8bc;
+    --display: "Anybody", "Onest", system-ui, sans-serif;
+    --body: "Onest", system-ui, sans-serif;
+    --code: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    --gutter: clamp(16px, 4vw, 48px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --wall: #1a1b26; --wall-ink: #262838; --ink: #eeeef6; --ink-soft: #b2b4c8;
+      --me: #4b53f0; --bot: #262736; --bot-ink: #eeeef6; --bot-soft: #a6a8bc;
+      --phone: #20212c; --phone-line: #2e2f3d; --panel: #101018; --panel-2: #1a1a25;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --wall: #1a1b26; --wall-ink: #262838; --ink: #eeeef6; --ink-soft: #b2b4c8;
+    --me: #4b53f0; --bot: #262736; --bot-ink: #eeeef6; --bot-soft: #a6a8bc;
+    --phone: #20212c; --phone-line: #2e2f3d; --panel: #101018; --panel-2: #1a1a25;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; background-color: var(--wall); color: var(--ink); font: 400 17px/1.55 var(--body); -webkit-font-smoothing: antialiased; }
+  ::selection { background: var(--me); color: var(--me-ink); }
+  a { color: inherit; text-underline-offset: 0.2em; }
+  :focus-visible { outline: 2px solid var(--me); outline-offset: 3px; border-radius: 6px; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding-inline: var(--gutter); }
+  header.top { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 22px; }
+  .mark { display: inline-flex; align-items: center; gap: 10px; font: 800 22px/1 var(--display); font-stretch: 120%; letter-spacing: -0.01em; text-decoration: none; }
+  .mark svg { width: 30px; height: 30px; }
+  nav { display: flex; gap: clamp(14px, 3vw, 28px); font-weight: 500; font-size: 15px; }
+  nav a { text-decoration: none; color: var(--ink-soft); }
+  nav a:hover { color: var(--ink); }
+
+  .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 480px); gap: clamp(32px, 6vw, 80px); align-items: center; padding-block: clamp(20px, 4vw, 56px) clamp(64px, 9vw, 120px); }
+  h1 { font: 900 clamp(48px, 7vw, 100px)/0.88 var(--display); font-stretch: 62%; text-transform: uppercase; margin: 0 0 24px; text-wrap: balance; }
+  h1 s { text-decoration-thickness: 0.08em; text-decoration-color: var(--me); color: var(--ink-soft); }
+  h1 span { color: var(--me); }
+  .lede { font-size: clamp(18px, 1.6vw, 21px); color: var(--ink-soft); margin: 0 0 32px; max-width: 32em; }
+  .lede b { color: var(--ink); font-weight: 600; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; }
+  .cmd { display: inline-flex; align-items: center; gap: 14px; min-width: 0; max-width: 100%; background: var(--panel); color: var(--panel-ink); border-radius: 999px; padding: 6px 6px 6px 20px; font: 400 15px/1 var(--code); }
+  .cmd code { font: inherit; white-space: nowrap; overflow-x: auto; padding-block: 4px; }
+  .cmd code::before { content: "$ "; color: var(--panel-soft); }
+  .copy { flex: none; border: 0; cursor: pointer; border-radius: 999px; padding: 10px 16px; background: var(--panel-ink); color: var(--panel); font: 600 13px/1 var(--body); }
+  .copy:hover, .copy[data-done] { background: var(--me); color: var(--me-ink); }
+  .btn { display: inline-flex; align-items: center; min-height: 50px; padding: 0 24px; border-radius: 999px; background: var(--me); color: var(--me-ink); text-decoration: none; font: 600 16px/1 var(--body); }
+  .tagline { margin-top: 22px; font-size: 14px; color: var(--ink-soft); }
+  .tagline b { color: var(--ink); }
+
+  /* Before / after */
+  .compare { position: relative; border-radius: 30px; overflow: hidden; height: 600px; background: var(--phone); box-shadow: 0 40px 80px -44px rgba(10, 10, 30, 0.6); --cut: 34%; touch-action: pan-y; }
+  .side { position: absolute; inset: 0; padding: 22px 18px; }
+  .before { background: var(--phone); }
+  .after { background-color: var(--wall); clip-path: inset(0 0 0 var(--cut)); }
+  .side-label { position: absolute; top: 14px; font: 700 11px/1 var(--body); letter-spacing: 0.14em; text-transform: uppercase; padding: 7px 10px; border-radius: 999px; z-index: 2; }
+  .before .side-label { left: 14px; background: var(--badge); color: #fff; }
+  .after .side-label { right: 14px; background: var(--me); color: var(--me-ink); }
+  .list { list-style: none; margin: 34px 0 0; padding: 0; }
+  .list li { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 2px; border-bottom: 1px solid var(--phone-line); }
+  .ava { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: #fff; font: 700 16px/1 var(--body); }
+  .list b { display: block; font-weight: 600; font-size: 15px; }
+  .list div span { display: block; color: var(--bot-soft); font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .badge { min-width: 24px; height: 24px; padding: 0 7px; border-radius: 12px; background: var(--badge); color: #fff; font: 600 12.5px/24px var(--body); text-align: center; font-variant-numeric: tabular-nums; }
+  .badge.mute { background: var(--badge-mute); }
+  .after-inner { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 22px 18px; gap: 8px; }
+  .msg { max-width: 92%; padding: 11px 14px 8px; border-radius: 18px; font-size: 15px; line-height: 1.5; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); }
+  .msg p { margin: 0; } .msg p + p, .msg p + ul, .msg ul + p { margin-top: 6px; }
+  .msg ul { margin: 0; padding-left: 18px; }
+  .bot { align-self: flex-start; background: var(--bot); color: var(--bot-ink); border-bottom-left-radius: 6px; }
+  .me { align-self: flex-end; background: var(--me); color: var(--me-ink); border-bottom-right-radius: 6px; }
+  .meta { font-size: 11.5px; opacity: 0.7; text-align: right; margin-top: 3px; }
+  .ran { display: block; font: 500 11.5px/1.4 var(--code); color: var(--bot-soft); margin-bottom: 4px; overflow-wrap: anywhere; }
+  .handle { position: absolute; top: 0; bottom: 0; left: var(--cut); width: 0; z-index: 3; pointer-events: none; }
+  .handle::before { content: ""; position: absolute; top: 0; bottom: 0; left: -1.5px; width: 3px; background: var(--me); }
+  .knob { position: absolute; top: 50%; left: -24px; width: 48px; height: 48px; margin-top: -24px; border-radius: 50%; background: var(--me); display: grid; place-items: center; box-shadow: 0 6px 20px -6px rgba(0, 0, 0, 0.5); }
+  .knob svg { width: 24px; height: 24px; }
+  .range { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; z-index: 4; margin: 0; }
+  .range:focus-visible + .handle .knob { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+  /* A day */
+  section { padding-block: clamp(64px, 9vw, 120px); }
+  h2 { font: 900 clamp(36px, 5vw, 68px)/0.92 var(--display); font-stretch: 62%; text-transform: uppercase; margin: 0 0 16px; text-wrap: balance; }
+  .intro { color: var(--ink-soft); font-size: 19px; max-width: 36em; margin: 0 0 clamp(40px, 6vw, 72px); }
+  .day { position: relative; display: grid; gap: clamp(36px, 5vw, 64px); }
+  .day::before { content: ""; position: absolute; left: 88px; top: 8px; bottom: 8px; width: 3px; border-radius: 3px; background: color-mix(in srgb, var(--ink) 14%, transparent); }
+  .hour { display: grid; grid-template-columns: 70px 36px minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 0 20px; align-items: start; }
+  .time { font: 900 34px/1 var(--display); font-stretch: 70%; text-align: right; font-variant-numeric: tabular-nums; }
+  .dot { width: 17px; height: 17px; border-radius: 50%; background: var(--wall); border: 3px solid var(--me); margin: 8px 0 0 10px; position: relative; z-index: 1; }
+  .hour h3 { margin: 0 0 6px; font: 800 clamp(24px, 2.6vw, 34px)/1 var(--display); font-stretch: 75%; text-transform: uppercase; }
+  .hour p.why { margin: 0 0 12px; color: var(--ink-soft); }
+  .hour code.chip { display: inline-block; font: 500 13px/1.45 var(--code); background: var(--panel); color: var(--panel-ink); padding: 8px 12px; border-radius: 10px; overflow-wrap: anywhere; }
+  .hour code.chip::before { content: "$ "; color: var(--panel-soft); }
+  .thread { display: flex; flex-direction: column; gap: 8px; }
+  .js .reveal { opacity: 0.001; transform: translateY(14px); transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+  .js .reveal.seen { opacity: 1; transform: none; }
+
+  .dark { background: var(--panel); color: var(--panel-ink); }
+  .dark .intro { color: var(--panel-soft); }
+  .connect { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .lane { background: var(--panel-2); border-radius: 22px; padding: 22px; display: flex; flex-direction: column; gap: 12px; }
+  .lane h3 { margin: 0; font: 800 26px/1 var(--display); font-stretch: 75%; text-transform: uppercase; }
+  .lane p { margin: 0; color: var(--panel-soft); font-size: 15.5px; }
+  .lane .cmd { background: var(--panel); margin-top: auto; justify-content: space-between; }
+  .limits { margin-top: 44px; color: var(--panel-soft); max-width: 46em; }
+  .tools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .tool { background: var(--bot); color: var(--bot-ink); border-radius: 26px; padding: clamp(22px, 3vw, 34px); display: flex; flex-direction: column; gap: 14px; }
+  .tool-name { font: 900 60px/0.9 var(--display); font-stretch: 70%; }
+  .tool-name small { display: block; font: 600 14px/1.3 var(--body); color: var(--bot-soft); margin-top: 8px; }
+  .tool p { margin: 0; }
+  .tool .cmd { margin-top: auto; }
+  .tool-links { display: flex; gap: 18px; font-weight: 600; font-size: 15px; }
+  .close { text-align: center; }
+  .close .cta { justify-content: center; margin-top: 28px; }
+  footer { padding-block: 28px 44px; font-size: 14px; color: var(--ink-soft); }
+  footer .wrap { display: flex; justify-content: space-between; gap: 14px 28px; flex-wrap: wrap; }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: minmax(0, 1fr); }
+    .hour { grid-template-columns: 56px 30px minmax(0, 1fr); }
+    .hour .thread { grid-column: 3; margin-top: 16px; }
+    .day::before { left: 70px; }
+    .time { font-size: 26px; }
+    .connect, .tools { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 520px) {
+    nav a.hide-sm { display: none; }
+    .compare { height: 560px; }
+    .cmd { font-size: 13.5px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .js .reveal { opacity: 1; transform: none; transition: none; }
+  }
+</style>
+</head>
+<body>
+<header class="top wrap">
+  <a class="mark" href="#">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="16" fill="var(--me)"/><path d="M9 21V11l4 4 3-4 3 4 4-4v10" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/></svg>
+    WireCat
+  </a>
+  <nav aria-label="Site">
+    <a href="#day">A day with it</a>
+    <a class="hide-sm" href="#connect">Connect</a>
+    <a href="https://wirecat.dev/en/docs/tg">Docs</a>
+    <a class="hide-sm" href="https://github.com/leemour/tg-cli">GitHub</a>
+  </nav>
+</header>
+
+<main class="wrap hero">
+  <div>
+    <h1><s>214 unread.</s> <span>One message from your agent.</span></h1>
+    <p class="lede">WireCat lets Claude Code, Codex or Cursor read your own <b>Telegram and MAX</b> and boil them down to what needs you. Then it does the follow-ups: replies, reminders, sums, transcripts.</p>
+    <div class="cta">
+      <span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copy</button></span>
+      <a class="btn" href="#connect">Connect your agent</a>
+    </div>
+    <p class="tagline"><b>AI messaging with CLI tools for agents.</b> Free, open source, on your own computer.</p>
+  </div>
+
+  <div class="compare" id="compare">
+    <div class="side before" aria-label="Without WireCat">
+      <span class="side-label">Without</span>
+      <ul class="list">
+        <li><span class="ava" style="background:#5b6ee1">W</span><div><b>Work · all hands</b><span>Lena: slides are in the drive, pls ch…</span></div><span class="badge">128</span></li>
+        <li><span class="ava" style="background:#2e9d6a">H</span><div><b>Hiking club</b><span>Max: who has the second tent?</span></div><span class="badge mute">57</span></li>
+        <li><span class="ava" style="background:#d07a2c">B</span><div><b>Book club</b><span>Anna: is Friday still on?</span></div><span class="badge">4</span></li>
+        <li><span class="ava" style="background:#7a5bd6">L</span><div><b>Lisbon trip</b><span>Ben: paid dinner 96</span></div><span class="badge">12</span></li>
+        <li><span class="ava" style="background:#c0477a">M</span><div><b>Mum</b><span>Voice message 0:42</span></div><span class="badge">1</span></li>
+        <li><span class="ava" style="background:#3d8bbf">O</span><div><b>Oleg</b><span>can you approve the tag before 11?</span></div><span class="badge">1</span></li>
+        <li><span class="ava" style="background:#8a8f5c">R</span><div><b>Residents</b><span>casino bonus 500% click here</span></div><span class="badge mute">9</span></li>
+        <li><span class="ava" style="background:#5c6e7a">P</span><div><b>Pablo</b><span>any news on the invoice?</span></div><span class="badge">2</span></li>
+      </ul>
+    </div>
+    <div class="side after" aria-label="With WireCat">
+      <span class="side-label">With WireCat</span>
+      <div class="after-inner">
+        <div class="msg bot">
+          <span class="ran">tg inbox --new · tg review --unanswered</span>
+          <p><b>Good morning. Four things need you:</b></p>
+          <ul><li>Oleg needs the release tag approved before 11.</li><li>Anna asks if Friday is still on.</li><li>Pablo has waited 3 days about the invoice.</li><li>Mum's voice note: <i>call me when you land.</i></li></ul>
+          <p>You owe Ana €72 for Lisbon. The other 206 messages can wait.</p>
+          <div class="meta">08:00</div>
+        </div>
+        <div class="msg me"><p>Tell Anna yes. Remind me about Pablo at 2.</p><div class="meta">08:03</div></div>
+      </div>
+    </div>
+    <input class="range" type="range" min="0" max="100" value="34" id="cut" aria-label="Compare without and with WireCat">
+    <div class="handle"><span class="knob"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg></span></div>
+  </div>
+</main>
+
+<section id="day" style="padding-top:0">
+  <div class="wrap">
+    <h2>A day with your agent</h2>
+    <p class="intro">Each moment is one question and one command. You ask in words. Your agent runs <code>tg</code> and answers.</p>
+    <div class="day">
+      <div class="hour reveal"><span class="time">08:00</span><span class="dot"></span>
+        <div><h3>The morning summary</h3><p class="why">Set once as a schedule. Your agent checks what came in overnight and writes you one message.</p><code class="chip">tg inbox --new</code></div>
+        <div class="thread"><div class="msg bot"><p>Four things need you. Oleg's tag is the urgent one. 206 messages can wait.</p><div class="meta">08:00</div></div></div></div>
+      <div class="hour reveal"><span class="time">11:20</span><span class="dot"></span>
+        <div><h3>A voice note in a meeting</h3><p class="why">Read it instead of leaving the room. The speech model can run on your own machine.</p><code class="chip">tg messages transcribe "Mum" 8812 --local</code></div>
+        <div class="thread"><div class="msg me"><p>What did Mum say?</p></div><div class="msg bot"><p>"Is your flight still at six? Call me when you land, and don't forget Granddad's birthday on Sunday."</p><div class="meta">11:20</div></div></div></div>
+      <div class="hour reveal"><span class="time">13:30</span><span class="dot"></span>
+        <div><h3>Who owes who</h3><p class="why">Your agent finds the payments in the chat and does the sums.</p><code class="chip">tg messages search "paid" --chat "Lisbon trip"</code></div>
+        <div class="thread"><div class="msg me"><p>Settle Lisbon for me.</p></div><div class="msg bot"><p>Ana paid €240, Ben €96, you €60. That's €132 each: you send Ana €72, Ben sends her €36. Post it in the chat?</p><div class="meta">13:30</div></div></div></div>
+      <div class="hour reveal"><span class="time">14:00</span><span class="dot"></span>
+        <div><h3>The reminder you asked for</h3><p class="why">Scheduled on Telegram's side this morning. It arrives even if your laptop was closed.</p><code class="chip">tg messages send me "Answer Pablo about the invoice" --at-time 2026-10-02T14:00</code></div>
+        <div class="thread"><div class="msg bot"><p>Saved Messages: Answer Pablo about the invoice.</p><div class="meta">14:00</div></div></div></div>
+      <div class="hour reveal"><span class="time">18:00</span><span class="dot"></span>
+        <div><h3>Questions left hanging</h3><p class="why">In the groups you run: who asked something and never got an answer.</p><code class="chip">tg review --chat "Hiking club" --unanswered</code></div>
+        <div class="thread"><div class="msg bot"><p>Two questions in Hiking club have waited more than a day: who has the second tent, and what time the bus leaves.</p><div class="meta">18:00</div></div></div></div>
+      <div class="hour reveal"><span class="time">21:30</span><span class="dot"></span>
+        <div><h3>Who owes what this week</h3><p class="why">Everything said since the last review, yours too, sorted for you.</p><code class="chip">tg review --since-time 7d</code></div>
+        <div class="thread"><div class="msg bot"><p><b>You owe:</b> Anna the invoice, by today.<br><b>Waiting on others:</b> Boris, the mock-up.<br><b>Needs clarifying:</b> who brings the samples to Project Alpha.</p><div class="meta">21:30</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="dark" id="connect">
+  <div class="wrap">
+    <h2>Connect your agent in one line</h2>
+    <p class="intro">Each tool ships with an agent skill and an MCP server.</p>
+    <div class="connect">
+      <div class="lane"><h3>Claude Code · Codex · Gemini CLI</h3><p>Installs the skill: which commands exist and how to use them.</p><span class="cmd"><code>tg skill install</code><button class="copy" type="button" data-copy="tg skill install">Copy</button></span></div>
+      <div class="lane"><h3>Claude Desktop · Cursor</h3><p>Prints the MCP entry for your settings, with ready prompts: /catch-up, /review, /reply, /find.</p><span class="cmd"><code>tg mcp config</code><button class="copy" type="button" data-copy="tg mcp config">Copy</button></span></div>
+      <div class="lane"><h3>Any model</h3><p>Every docs page as plain Markdown, in one list.</p><span class="cmd"><code>wirecat.dev/llms.txt</code><button class="copy" type="button" data-copy="https://wirecat.dev/llms.txt">Copy</button></span></div>
+    </div>
+    <p class="limits">Reading marks nothing read. You choose which chats it may write to and how often it sends.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Telegram and MAX, the same commands</h2>
+    <p class="intro">Learn one and you know the other.</p>
+    <div class="tools">
+      <article class="tool"><div class="tool-name">tg<small>Telegram</small></div><p>A Telegram client for the terminal and for AI agents, on your own account.</p><span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copy</button></span><div class="tool-links"><a href="https://wirecat.dev/en/docs/tg">Docs</a><a href="https://github.com/leemour/tg-cli">GitHub</a><a href="https://www.npmjs.com/package/@leemour/tg-cli">npm</a></div></article>
+      <article class="tool"><div class="tool-name">max<small>MAX Messenger</small></div><p>Your MAX bots through the official Bot API, and your personal account.</p><span class="cmd"><code>npm i -g @leemour/max-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/max-cli">Copy</button></span><div class="tool-links"><a href="https://wirecat.dev/ru/docs/max">Docs</a><a href="https://github.com/leemour/max-cli">GitHub</a><a href="https://www.npmjs.com/package/@leemour/max-cli">npm</a></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="close" style="padding-top:0">
+  <div class="wrap">
+    <h2>Tomorrow, wake up to one message</h2>
+    <div class="cta"><span class="cmd"><code>npm i -g @leemour/tg-cli && tg session start && tg skill install</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli && tg session start && tg skill install">Copy</button></span></div>
+  </div>
+</section>
+
+<footer><div class="wrap"><span>WireCat · MIT licence · Docs for models at <a href="https://wirecat.dev/llms.txt">/llms.txt</a> · Windows, macOS, Linux</span><span>English · Русский · Español</span></div></footer>
+
+<script src="patterns.js"></script>
+<script>
+  document.documentElement.classList.add("js")
+  const paintWall = () => {
+    const ink = getComputedStyle(document.documentElement).getPropertyValue("--wall-ink").trim()
+    WirePatterns.apply(document.body, "wires", ink)
+    WirePatterns.apply(document.querySelector(".after"), "wires", ink)
+  }
+  paintWall()
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", paintWall)
+
+  const compare = document.getElementById("compare")
+  const cut = document.getElementById("cut")
+  const setCut = (v) => compare.style.setProperty("--cut", `${v}%`)
+  cut.addEventListener("input", () => setCut(cut.value))
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches
+  if (!still) {
+    let touched = false
+    cut.addEventListener("pointerdown", () => { touched = true }, { once: true })
+    const start = performance.now()
+    const sweep = (now) => {
+      if (touched) return
+      const t = Math.min(1, (now - start) / 2200)
+      const ease = 1 - Math.pow(1 - t, 4)
+      const v = 92 - ease * (92 - 34)
+      setCut(v); cut.value = v
+      if (t < 1) requestAnimationFrame(sweep)
+    }
+    setCut(92); cut.value = 92
+    setTimeout(() => requestAnimationFrame(sweep), 600)
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) { e.target.classList.add("seen"); io.unobserve(e.target) }
+  }, { threshold: 0.2 })
+  for (const el of document.querySelectorAll(".reveal")) io.observe(el)
+
+  for (const button of document.querySelectorAll("[data-copy]")) {
+    button.addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText(button.dataset.copy) } catch {
+        const range = document.createRange(); range.selectNodeContents(button.previousElementSibling)
+        getSelection().removeAllRanges(); getSelection().addRange(range)
+      }
+      button.textContent = "Copied"; button.dataset.done = ""
+      setTimeout(() => { button.textContent = "Copy"; delete button.dataset.done }, 1600)
+    })
+  }
+</script>
+</body>
+</html>

@@ -7,10 +7,10 @@ for (const lang of ["en", "ru", "es"]) {
     page.on("request", (request) => requests.push(request.url()))
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto(lang === "en" ? "/" : `/${lang}`)
-    await expect(page.locator(".sp-input")).toBeEditable()
+    await expect(page.locator("[data-mini-query]")).toBeAttached()
     await page.waitForTimeout(1200)
     expect(requests.filter((url) => /\/docs\/|\/fonts\/docs-inter\//.test(url))).toEqual([])
-    await page.locator(`.site-header nav a[href="/${lang}/docs/tg"]`).click()
+    await page.locator(`.integration-table a[href="/${lang}/docs/tg"]`).click()
     await expect(page).toHaveURL(new RegExp(`/${lang}/docs/tg$`))
     await expect(page.locator("main h1")).toBeVisible()
     await expect.poll(() => requests.some((url) => url.includes("/fonts/docs-inter/"))).toBe(true)
@@ -81,7 +81,7 @@ test("blocked analytics providers leave landing interactions usable", async ({ p
     else await route.abort()
   })
   await page.goto("https://wirecat.dev/")
-  await expect(page.locator(".sp-input")).toBeEditable()
+  await expect(page.locator("[data-mini-query]")).toBeAttached()
   await page.locator('.site-header nav a[href="/en/about"]').click()
   await expect(page.locator("h1")).toBeVisible()
   await expect(page).toHaveURL("https://wirecat.dev/en/about")
@@ -144,20 +144,20 @@ for (const lang of ["en", "ru", "es"]) {
           ym: (browser.ym?.a ?? []).map((item) => Array.from(item)).filter((item) => item[1] === "reachGoal"),
         }
       })
-    await page.locator(".hero .agent-connect summary").click()
-    await page.locator(".hero .connect-choice").first().click()
+    await page.locator(".hero [data-connect]>summary").click()
+    await page.locator(".hero .copy-agent").click()
     expect((await events()).ga).toEqual([
       ["event", "installation_command_copy", { tool: "tg", locale: lang, surface: "hero" }],
     ])
     await page.evaluate(() => {
       ;(window as typeof window & { failAuditCopy?: boolean }).failAuditCopy = true
     })
-    await page.locator(".hero .connect-choice").nth(1).click()
+    await page.locator(".hero .copy-agent").click()
     expect((await events()).ga).toHaveLength(1)
     await page.evaluate(() => {
       ;(window as typeof window & { failAuditCopy?: boolean }).failAuditCopy = false
     })
-    await page.locator(".hero .connect-choice").nth(1).click()
+    await page.locator(".hero .copy-agent").click()
     expect((await events()).ga).toHaveLength(2)
     expect((await events()).ym).toHaveLength(2)
     if (lang === "en")

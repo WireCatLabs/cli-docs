@@ -1,0 +1,367 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-09T00:01:52.833060+00:00",
+  "title": "Design System: WireCat conversational hero treatments",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Purple action",
+        "tonalRamp": [
+          "oklch(15% 0.23044 273.36)",
+          "oklch(26% 0.23044 273.36)",
+          "oklch(38% 0.23044 273.36)",
+          "oklch(49% 0.23044 273.36)",
+          "oklch(61% 0.23044 273.36)",
+          "oklch(72% 0.23044 273.36)",
+          "oklch(84% 0.23044 273.36)",
+          "oklch(95% 0.23044 273.36)"
+        ]
+      },
+      "primary-soft": {
+        "role": "primary",
+        "displayName": "Pale purple",
+        "tonalRamp": [
+          "oklch(15% 0.02143 283.13)",
+          "oklch(26% 0.02143 283.13)",
+          "oklch(38% 0.02143 283.13)",
+          "oklch(49% 0.02143 283.13)",
+          "oklch(61% 0.02143 283.13)",
+          "oklch(72% 0.02143 283.13)",
+          "oklch(84% 0.02143 283.13)",
+          "oklch(95% 0.02143 283.13)"
+        ]
+      },
+      "neutral-bg": {
+        "role": "neutral",
+        "displayName": "Green canvas",
+        "tonalRamp": [
+          "oklch(15% 0.00413 157.18)",
+          "oklch(26% 0.00413 157.18)",
+          "oklch(38% 0.00413 157.18)",
+          "oklch(49% 0.00413 157.18)",
+          "oklch(61% 0.00413 157.18)",
+          "oklch(72% 0.00413 157.18)",
+          "oklch(84% 0.00413 157.18)",
+          "oklch(95% 0.00413 157.18)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "tonalRamp": [
+          "oklch(15% 0.00000 89.88)",
+          "oklch(26% 0.00000 89.88)",
+          "oklch(38% 0.00000 89.88)",
+          "oklch(49% 0.00000 89.88)",
+          "oklch(61% 0.00000 89.88)",
+          "oklch(72% 0.00000 89.88)",
+          "oklch(84% 0.00000 89.88)",
+          "oklch(95% 0.00000 89.88)"
+        ]
+      },
+      "soft": {
+        "role": "neutral",
+        "displayName": "Soft conversation inset",
+        "tonalRamp": [
+          "oklch(15% 0.00999 155.09)",
+          "oklch(26% 0.00999 155.09)",
+          "oklch(38% 0.00999 155.09)",
+          "oklch(49% 0.00999 155.09)",
+          "oklch(61% 0.00999 155.09)",
+          "oklch(72% 0.00999 155.09)",
+          "oklch(84% 0.00999 155.09)",
+          "oklch(95% 0.00999 155.09)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "tonalRamp": [
+          "oklch(15% 0.02442 168.98)",
+          "oklch(26% 0.02442 168.98)",
+          "oklch(38% 0.02442 168.98)",
+          "oklch(49% 0.02442 168.98)",
+          "oklch(61% 0.02442 168.98)",
+          "oklch(72% 0.02442 168.98)",
+          "oklch(84% 0.02442 168.98)",
+          "oklch(95% 0.02442 168.98)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "tonalRamp": [
+          "oklch(15% 0.02640 163.55)",
+          "oklch(26% 0.02640 163.55)",
+          "oklch(38% 0.02640 163.55)",
+          "oklch(49% 0.02640 163.55)",
+          "oklch(61% 0.02640 163.55)",
+          "oklch(72% 0.02640 163.55)",
+          "oklch(84% 0.02640 163.55)",
+          "oklch(95% 0.02640 163.55)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "tonalRamp": [
+          "oklch(15% 0.01611 154.43)",
+          "oklch(26% 0.01611 154.43)",
+          "oklch(38% 0.01611 154.43)",
+          "oklch(49% 0.01611 154.43)",
+          "oklch(61% 0.01611 154.43)",
+          "oklch(72% 0.01611 154.43)",
+          "oklch(84% 0.01611 154.43)",
+          "oklch(95% 0.01611 154.43)"
+        ]
+      },
+      "result-bg": {
+        "role": "secondary",
+        "displayName": "Result bg",
+        "tonalRamp": [
+          "oklch(15% 0.01730 159.12)",
+          "oklch(26% 0.01730 159.12)",
+          "oklch(38% 0.01730 159.12)",
+          "oklch(49% 0.01730 159.12)",
+          "oklch(61% 0.01730 159.12)",
+          "oklch(72% 0.01730 159.12)",
+          "oklch(84% 0.01730 159.12)",
+          "oklch(95% 0.01730 159.12)"
+        ]
+      },
+      "result-line": {
+        "role": "secondary",
+        "displayName": "Result line",
+        "tonalRamp": [
+          "oklch(15% 0.04821 153.70)",
+          "oklch(26% 0.04821 153.70)",
+          "oklch(38% 0.04821 153.70)",
+          "oklch(49% 0.04821 153.70)",
+          "oklch(61% 0.04821 153.70)",
+          "oklch(72% 0.04821 153.70)",
+          "oklch(84% 0.04821 153.70)",
+          "oklch(95% 0.04821 153.70)"
+        ]
+      },
+      "result-ink": {
+        "role": "secondary",
+        "displayName": "Result ink",
+        "tonalRamp": [
+          "oklch(15% 0.09366 158.01)",
+          "oklch(26% 0.09366 158.01)",
+          "oklch(38% 0.09366 158.01)",
+          "oklch(49% 0.09366 158.01)",
+          "oklch(61% 0.09366 158.01)",
+          "oklch(72% 0.09366 158.01)",
+          "oklch(84% 0.09366 158.01)",
+          "oklch(95% 0.09366 158.01)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "conversation": {
+        "displayName": "Conversational reply",
+        "purpose": "Current complete conversations use 14px/1.6 at all viewport sizes; compact padding and 436px/470px caps bound the initial scene."
+      }
+    },
+    "shadows": [
+      {
+        "name": "button-hover",
+        "value": "0 4px 12px #26343824",
+        "purpose": "Inherited action hover."
+      },
+      {
+        "name": "setup-panel",
+        "value": "0 14px 32px #0d0f1024",
+        "purpose": "Inherited setup dropdown."
+      },
+      {
+        "name": "continuation-cue",
+        "value": "0 3px 8px #18282224",
+        "purpose": "Pulse resting shadow; reaches 0 6px 14px #18282235 at midpoint."
+      }
+    ],
+    "motion": [
+      {
+        "name": "panel-in",
+        "value": "panel-in .2s cubic-bezier(.16,1,.3,1)",
+        "purpose": "Inherited scenario entrance; disabled with reduced motion."
+      },
+      {
+        "name": "conversation-pulse",
+        "value": "conversation-pulse 2.4s ease-in-out infinite",
+        "purpose": "Repeats while each cue is visible, including hover/focus. Reduced motion disables the pulse and smooth scrolling; activation hides the used cue."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "hero-stack",
+        "value": "1000px"
+      },
+      {
+        "name": "mobile",
+        "value": "650px"
+      },
+      {
+        "name": "role-rail-and-trust-stack",
+        "value": "760px"
+      }
+    ],
+    "selectedComposition": {
+      "route": "/landing-editorial",
+      "selectedAt": "2026-10-09",
+      "aliases": [
+        "/landing",
+        "/bubbles"
+      ],
+      "alternatives": [
+        "/landing-workspace",
+        "/landing-folds"
+      ],
+      "outcomesSurface": "Full-width paper band with existing internal container and columns; dark uses the paper token."
+    },
+    "productionAdaptation": {
+      "locales": [
+        "en",
+        "ru",
+        "es"
+      ],
+      "entryRoutes": [
+        "/",
+        "/ru",
+        "/es"
+      ],
+      "localizedRoutes": [
+        "/{lang}/features",
+        "/{lang}/examples"
+      ],
+      "client": "components/landing/editorial.tsx",
+      "generator": "scripts/export-editorial.mjs",
+      "snapshots": [
+        "lib/editorial/en.json",
+        "lib/editorial/ru.json",
+        "lib/editorial/es.json",
+        "lib/editorial/editorial.css"
+      ],
+      "behavior": "Locale menu, native Next navigation/theme, cleaned-up listeners, local search parser and installation analytics preserve the selected world.",
+      "privateCollections": "81 design links and 58 library records stay outside public export/sitemap; pnpm design:serve restores five ports.",
+      "reference": "design/homepage-chat-treatments/RELEASE.md"
+    }
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "html": "<button class=\"ds-primary\">Connect your agent</button>",
+      "css": ".ds-primary{font:650 14px Onest,sans-serif;background:var(--button);color:var(--button-ink);border:0;border-radius:999px;padding:12px 20px;min-height:45px;cursor:pointer;transition:box-shadow .18s ease-out}.ds-primary:hover{box-shadow:0 4px 12px #26343824}.ds-primary:focus-visible{outline:3px solid var(--accent);outline-offset:4px}",
+      "description": "Inherited purple setup action."
+    },
+    {
+      "name": "Provider segment",
+      "kind": "chip",
+      "refersTo": "provider-selected",
+      "html": "<button class=\"ds-provider\" aria-pressed=\"true\">Telegram</button>",
+      "css": ".ds-provider{font:650 12px Onest,sans-serif;background:var(--paper);color:var(--accent);border:0;border-radius:999px;padding:6px 10px;min-height:29px;cursor:pointer}.ds-provider:focus-visible{outline:3px solid var(--accent);outline-offset:4px}",
+      "description": "Pressed provider in the shared toolbar."
+    },
+    {
+      "name": "User bubble",
+      "kind": "card",
+      "refersTo": "user-bubble",
+      "html": "<div class=\"ds-user\"><p>Check the design group and my DMs with Tom too. He may have sent the results there.</p></div>",
+      "css": ".ds-user{width:86%;margin-left:auto;background:var(--button);color:var(--button-ink);border-radius:12px 12px 3px 12px;padding:11px 14px}.ds-user p{margin:0;font:14px/1.6 Onest,sans-serif}@media(max-width:650px){.ds-user{width:94%;padding:10px 12px}}",
+      "description": "Current compact prompt bubble; complete request retained."
+    },
+    {
+      "name": "Agent bubble",
+      "kind": "card",
+      "refersTo": "assistant-bubble",
+      "html": "<div class=\"ds-agent\"><p>Good call. <b>Tom has already tested the payments</b>\u2014he confirmed that in your DMs. He still needs production access for the remaining check.</p></div>",
+      "css": ".ds-agent{background:var(--soft);color:var(--ink);border-radius:3px 12px 12px 12px;padding:13px 15px;font:14px/1.6 Onest,sans-serif}.ds-agent p{margin:0}@media(max-width:650px){.ds-agent{padding:12px}}",
+      "description": "Current compact reply bubble; plain/flow variants remove fill and padding."
+    },
+    {
+      "name": "Quiet activity",
+      "kind": "custom",
+      "refersTo": "quiet-activity",
+      "html": "<details class=\"ds-activity\"><summary>Read the project group</summary><div class=\"ds-tool-details\">Original commands and JSON</div></details>",
+      "css": ".ds-activity{border:0;background:none}.ds-activity summary{display:flex;align-items:center;gap:8px;font:12px/1.5 Onest,sans-serif;color:var(--muted);min-height:28px;cursor:pointer;list-style:none}.ds-activity summary::-webkit-details-marker{display:none}.ds-activity summary:focus-visible{outline:3px solid var(--accent);outline-offset:4px}.ds-tool-details{background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:7px;margin-top:11px;padding:8px 13px;font:12px/1.65 monospace}",
+      "description": "Collapsed activity retained by assistant, messenger and thread; selected bubbles and examples expose the first command separately."
+    },
+    {
+      "name": "Continuation cue",
+      "kind": "button",
+      "description": "38px cue within current compact conversation; continuous pulse while visible, disabled by reduced motion.",
+      "html": "<button class=\"ds-down\" aria-label=\"Show the next messages\" aria-expanded=\"false\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"m6 9 6 6 6-6\"/></svg></button>",
+      "css": ".ds-down{width:38px;height:38px;display:grid;place-items:center;background:var(--button);color:var(--button-ink);border:1px solid var(--line);border-radius:50%;box-shadow:0 3px 9px #18282212;animation:ds-pulse 2.4s ease-in-out infinite;cursor:pointer}.ds-down svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7}.ds-down:hover{background:var(--button);filter:brightness(1.06)}.ds-down:focus-visible{outline:3px solid var(--accent);outline-offset:4px}@keyframes ds-pulse{0%,100%{opacity:1;transform:translateY(0) scale(1);box-shadow:0 3px 8px #18282224}50%{opacity:.78;transform:translateY(3px) scale(1.08);box-shadow:0 6px 14px #18282235}}@media(prefers-reduced-motion:reduce){.ds-down{animation:none}}"
+    },
+    {
+      "name": "Visible command disclosure",
+      "kind": "custom",
+      "description": "Read-only completed calls appear in every bubble exchange. Soft, console and ledger variants frame the first command and true remaining count; no hero JSON. Snippet labels are placeholders. In the selected compact composition, the count stays nowrap, uncapped and nonshrinking at minimum height 28px; CLI text wraps.",
+      "html": "<details class=\"ds-command-list\"><summary><span class=\"ds-command-line\"><svg class=\"ds-command-check\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"m3 8 3 3 7-7\"/></svg><code>First command name</code></span><span class=\"ds-call-count\">Remaining call count</span></summary><div class=\"ds-additional\"><code>Remaining command names</code></div></details>",
+      "css": ".ds-command-list{background:var(--soft);border:1px solid var(--line);border-radius:8px;color:var(--muted);font:12px/1.65 Onest,sans-serif}.ds-command-list summary{display:flex;align-items:center;gap:12px;padding:10px 12px;min-height:44px;cursor:pointer;list-style:none}.ds-command-line{display:flex;gap:8px;min-width:0;flex:1}.ds-command-check{width:15px;height:15px;stroke:#24704b;stroke-width:2;fill:none;flex-shrink:0;margin-top:2px}.ds-command-list code{font:12px/1.65 monospace;white-space:normal;overflow-wrap:anywhere;min-width:0;color:var(--ink)}.ds-call-count{margin-left:auto;color:var(--accent);background:var(--paper);border-radius:5px;padding:5px 7px;font-size:11px}.ds-additional{display:grid;padding:4px 12px 12px;border-top:1px solid var(--line)}.ds-command-list summary:focus-visible{outline:3px solid var(--accent);outline-offset:4px}.ds-command-list.ds-console{background:#192320;border-color:#35443e}.ds-console code{color:#e6eee9}.ds-console .ds-command-check{stroke:#84d6aa}.ds-console .ds-call-count{background:#2c343f;color:#c5c9ff}.ds-command-list.ds-ledger{background:var(--paper);border-radius:6px}.ds-ledger .ds-call-count{background:var(--accent-soft)}@media(max-width:650px){.ds-command-list summary{padding:10px;gap:8px}.ds-command-list code{font-size:11px}.ds-call-count{font-size:11px;padding:5px;max-width:67px;text-align:right;white-space:normal}} .ds-command-list .ds-call-count{white-space:nowrap;max-width:none;flex-shrink:0;min-height:28px;padding-inline:7px}"
+    },
+    {
+      "name": "Role capability disclosure",
+      "kind": "custom",
+      "description": "Editorial keeps three capabilities visible and three more in this native disclosure.",
+      "html": "<details class=\"ds-role-more\"><summary>3 more capabilities</summary><dl><dt>Voice notes as text</dt><dd>Read a transcript, then ask for the questions and next steps.</dd></dl></details>",
+      "css": ".ds-role-more{margin-top:12px;border-top:1px solid var(--line);font-family:Onest,sans-serif;color:var(--ink)}.ds-role-more summary{display:flex;align-items:center;justify-content:space-between;min-height:44px;font-size:13px;color:var(--accent);font-weight:600;cursor:pointer;list-style:none}.ds-role-more dt{font-size:14px;font-weight:650;line-height:1.5;margin-bottom:4px}.ds-role-more dd{font-size:13px;line-height:1.65;margin:0;color:var(--muted)}.ds-role-more summary:focus-visible{outline:3px solid var(--accent);outline-offset:4px}"
+    },
+    {
+      "name": "Optional sample search",
+      "kind": "card",
+      "description": "Compact query preview precedes a native disclosure containing the functional sample search in the application.",
+      "html": "<div class=\"ds-query-preview\"><code>Atlas AND (invoice OR budget)<br>AND has:file</code></div><details class=\"ds-query-try\"><summary>Try a query on sample messages</summary><label for=\"ds-query\">Search the sample messages</label><textarea id=\"ds-query\" rows=\"2\">Atlas AND (invoice OR budget) AND has:file</textarea></details>",
+      "css": ".ds-query-preview{padding:12px 14px;background:var(--soft);border-radius:5px;color:var(--ink);margin:14px 0 6px}.ds-query-preview code{font:12px/1.7 ui-monospace,monospace}.ds-query-try{border-bottom:1px solid var(--line);margin:0 0 12px;color:var(--ink);font:12px Onest,sans-serif}.ds-query-try summary{min-height:44px;display:flex;align-items:center;color:var(--muted);font-weight:600;cursor:pointer;list-style:none}.ds-query-try label{display:block;margin:8px 0}.ds-query-try textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:5px;font:12px/1.6 ui-monospace,monospace;background:var(--paper);color:var(--ink);resize:vertical}.ds-query-try summary:focus-visible,.ds-query-try textarea:focus-visible{outline:3px solid var(--accent);outline-offset:4px}"
+    },
+    {
+      "name": "Trust item",
+      "kind": "custom",
+      "description": "Compact icon/heading/description/link treatment in the strip before the calculator.",
+      "html": "<article class=\"ds-trust\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><ellipse cx=\"12\" cy=\"5\" rx=\"8\" ry=\"3\"/><path d=\"M4 5v14c0 4 16 4 16 0V5M4 12c0 4 16 4 16 0\"/></svg><div><h3>Your data</h3><p>Your messaging archive stays on your computer. Content passed to your agent follows its model settings.</p></div></article>",
+      "css": ".ds-trust{display:flex;gap:16px;align-items:flex-start;font-family:Onest,sans-serif;color:var(--ink)}.ds-trust>svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.7;flex-shrink:0;margin-top:3px}.ds-trust h3{font:700 17px/1.5 Onest,sans-serif;margin:0 0 6px}.ds-trust p{font-size:13px;line-height:1.7;color:var(--muted);margin:0 0 12px;max-width:48ch}@media(max-width:650px){.ds-trust p{font-size:14px}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Memory",
+    "overview": "The current landing keeps the Memory heading, purple/green palette and Unbounded/Onest pairing, with tighter conversation and section density. Content, proximity and quiet horizontal rules join the page; separate frames belong to useful controls and conversation details rather than every section.\n\nThe owner selected `/landing-editorial` on 2026-10-09 as the canonical composition: open role lists, simple outcomes and compact bubbles. Workspace (role rail/unframed agent prose) and folds (expandable role rows/continuous conversation) remain alternatives in the studio and library. Four scenarios and three complete exchanges remain available in each conversation. Earlier designs are preserved references, not new heading or brand authority.",
+    "keyCharacteristics": [
+      "Compact conversation text and bounded scrolling.",
+      "Three uses followed by concise question/result outcomes.",
+      "Quiet rules with restrained functional frames.",
+      "Trust and an editable estimate lead to setup."
+    ],
+    "rules": [
+      {
+        "name": "The Complete Conversation Rule",
+        "body": "Reduce padding and initial viewport height without removing message content, source evidence or either follow-up.",
+        "section": "layout"
+      },
+      {
+        "name": "The Purposeful Frame Rule",
+        "body": "Use proximity and quiet rules to join sections; reserve rounded surfaces for conversation, commands and functional controls.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Six Capabilities Rule",
+        "body": "Retain six capabilities for every role: three visible plus three disclosed in editorial, six in the workspace panel, and six inside each fold.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Do preserve the Memory heading and existing purple-green identity.",
+      "Do retain complete three-turn conversations within the compact viewport.",
+      "Do place trust before the unchanged calculator and setup.",
+      "Do preserve bot-history limits, owner decisions and accurate model-processing wording."
+    ],
+    "donts": [
+      "Don\u2019t promote older heading, radius or section scales into the current compact composition.",
+      "Don\u2019t claim agent processing is necessarily local.",
+      "Don\u2019t replace full-width catalogue sections with half-width previews."
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+# Compact roles, visible calls and useful closing panels
+
+User rejects the oversized previous feature variants and the first-question closing panel, requests shown creative alternatives, continuous arrow pulse, tool blocks in follow-ups, removal of Browse all examples and command surfaces with checkmarks. Keep selected Memory/Outcomes/Chat bubbles identity and purple/green light/dark palettes. Persuade. Existing pinned code-led world; three explicit structure variants, no new identity tournament.
+
+SPATIAL THESIS: one short feature introduction, then Personal account / Bots / Administer groups at equal salience. Four concise capabilities per role. Smaller role headings (20px) and 13–15px details, 24–29px section intervals rather than 50–65px proof sections. Three alternatives: role columns with closed capability details; compact horizontal role chapters with 2x2 capability groups; comparison table with the same roles, transposed into role chapters on mobile. Shared agent features, email/Markdown and setup are short supporting rows. All three roles remain visible and in Personal→Bots→Admin DOM order on mobile.
+
+Routes: /features-roles, /features-chapters, /features-compare; comparison /features-compact. Earlier /feature-variants and /features preserved. Source compact-features.mjs; stylesheet refinement-3.css.
+
+HOMEPAGE: /bubbles uses soft inset commands and access-panel replacement. Three additional complete pages pair command and closing variants: /home-access (soft+access), /home-connect (console+CLI/MCP paths), /home-notes (checked list+Markdown note). /refinement-options displays the command and closing panels together for fast comparison. Access tabs describe profile modes; they do not alter a live account. Connection paths point to skills/MCP guides. Notes are an illustrative draft based on Atlas context, written by the existing agent into Markdown, not a native hosted WireCat notes app.
+
+COMMANDS: restore the completed-command checkmark; first command and true remaining-call count sit inside a distinct surface. Expansion shows command names, no JSON in hero; Examples preserves exact JSON. Follow-up tool blocks use original scenario read-only calls: design/DM reads then payment context for context; recommendation contexts then rechecks for search; transcribe then budget context for inbox; design-message reads/rechecks for draft commitments. Never select the source commitments send step for draft-only third turn. All third-turn requests retain drafts/owner decisions.
+
+MOTION: previous pulse ended after nine seconds; the new 2.4-second pulse repeats while the cue is visible, including hover/focus, with opacity/scale/vertical motion and a soft offset shadow. Each used cue hides; next one appears after follow-up. Reduced motion disables animation and smooth scrolling. Four scenarios/two successive follow-ups remain.
+
+CLOSING: preserve the left Give your agent somewhere useful to start block. Replace right Try a first question, Copy request and processing disclosure with useful role-specific panels. Remove Browse all examples; keep contextual examples links/footer navigation. Earlier archives and production app untouched.
+
+Quality bar is selected Bubbles/Outcomes identity plus user-required compact density and visible role hierarchy. Final review must judge those criteria, not reproduce the rejected oversized feature topology. Current captures will be in .impeccable/review/iteration-three. Documentation update runs after final reviewer as required by skill.

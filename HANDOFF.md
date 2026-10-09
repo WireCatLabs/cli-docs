@@ -123,3 +123,12 @@ pnpm exec serve out -l 4317    # then open http://localhost:4317 — stop it by 
 ```
 
 Live: `https://wirecat.dev/`, `/ru`, `/es`; `https://wirecat.dev/llms.txt`.
+
+## Editorial landing release — 2026-10-09
+
+Release checkout: `feat/editorial-homepage-20261009`, based on production `10842bf`.
+This isolates the landing work from the older development checkout and its uncommitted documentation changes.
+The selected editorial page is exported to localized production HTML/CSS with `pnpm landing:export`.
+Home, features and examples use the new scoped layout; About and documentation keep their existing shell.
+All design collections and their URL inventory are preserved under `design/`; run `pnpm design:serve`.
+Private studio/library/variant routes must not enter `public/`, the sitemap or the production export.

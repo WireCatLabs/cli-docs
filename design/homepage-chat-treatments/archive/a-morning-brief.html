@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WireCat Morning Brief</title>
+<meta name="description" content="Your AI agent reads every Telegram and MAX chat. You read one page.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap">
+<style>
+  /* Layout: a cobalt counter; the product is a thermal receipt that prints on it. */
+  :root {
+    --desk: #2340d8;
+    --desk-deep: #1a31b0;
+    --desk-line: #4a63e4;
+    --on-desk: #f3f5ff;
+    --on-desk-soft: #c3ccff;
+    --paper: #fdfdfb;
+    --paper-shade: #ecebe6;
+    --thermal: #26203d;
+    --thermal-soft: #6a6384;
+    --flag: #ffb43d;
+    --flag-ink: #2b1c00;
+    --display: "Bricolage Grotesque", "Hanken Grotesk", system-ui, sans-serif;
+    --body: "Hanken Grotesk", system-ui, sans-serif;
+    --receipt: "Martian Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+    --gutter: clamp(16px, 4vw, 48px);
+    --measure: 1180px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --desk: #101c63; --desk-deep: #0b144a; --desk-line: #24348a;
+      --on-desk: #eef0ff; --on-desk-soft: #aab5f2;
+      --paper: #e8e7e1; --paper-shade: #d4d2ca; --thermal: #221c38; --thermal-soft: #5b5574;
+      --flag: #ffb43d; --flag-ink: #2b1c00;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --desk: #101c63; --desk-deep: #0b144a; --desk-line: #24348a;
+    --on-desk: #eef0ff; --on-desk-soft: #aab5f2;
+    --paper: #e8e7e1; --paper-shade: #d4d2ca; --thermal: #221c38; --thermal-soft: #5b5574;
+    --flag: #ffb43d; --flag-ink: #2b1c00;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--desk);
+    color: var(--on-desk);
+    font: 400 17px/1.55 var(--body);
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--flag); color: var(--flag-ink); }
+  a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+  :focus-visible { outline: 2px solid var(--flag); outline-offset: 3px; border-radius: 4px; }
+  .wrap { max-width: var(--measure); margin: 0 auto; padding-inline: var(--gutter); }
+
+  header.top {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding-block: 22px;
+  }
+  .mark { font: 800 22px/1 var(--display); letter-spacing: -0.02em; text-decoration: none; }
+  .mark span { color: var(--flag); }
+  nav { display: flex; gap: clamp(14px, 3vw, 28px); font-weight: 500; font-size: 15px; }
+  nav a { text-decoration: none; color: var(--on-desk-soft); }
+  nav a:hover { color: var(--on-desk); }
+
+  .hero {
+    display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(32px, 6vw, 88px); align-items: start;
+    padding-block: clamp(24px, 6vw, 72px) clamp(56px, 8vw, 112px);
+  }
+  h1 {
+    font: 800 clamp(44px, 6.4vw, 88px)/0.95 var(--display);
+    letter-spacing: -0.035em; margin: 0 0 28px; text-wrap: balance;
+  }
+  h1 em { font-style: normal; color: var(--flag); }
+  .lede { font-size: clamp(18px, 1.6vw, 21px); color: var(--on-desk-soft); max-width: 34em; margin: 0 0 36px; }
+  .lede strong { color: var(--on-desk); font-weight: 600; }
+
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: stretch; }
+  .cmd {
+    display: inline-flex; align-items: center; gap: 14px; min-width: 0;
+    background: var(--desk-deep); border: 1px solid var(--desk-line); border-radius: 10px;
+    padding: 6px 6px 6px 18px; font: 400 15px/1 var(--receipt); color: var(--on-desk);
+  }
+  .cmd code { white-space: nowrap; overflow-x: auto; font: inherit; padding-block: 4px; }
+  .cmd code::before { content: "$ "; color: var(--on-desk-soft); }
+  .copy {
+    flex: none; border: 0; border-radius: 7px; cursor: pointer;
+    background: var(--on-desk); color: var(--desk-deep);
+    font: 600 13px/1 var(--body); padding: 10px 14px;
+    transition: background 0.2s;
+  }
+  .copy:hover { background: var(--flag); color: var(--flag-ink); }
+  .copy[data-done] { background: var(--flag); color: var(--flag-ink); }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
+    background: var(--flag); color: var(--flag-ink); border-radius: 10px;
+    font: 700 16px/1 var(--body); padding: 0 22px; min-height: 50px;
+    box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.45);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn svg { width: 18px; height: 18px; }
+  .fineprint { margin-top: 26px; font-size: 14px; color: var(--on-desk-soft); }
+  .fineprint b { color: var(--on-desk); font-weight: 600; }
+
+  /* The printer and its receipt */
+  .printer { position: relative; justify-self: center; width: min(100%, 430px); }
+  .slot {
+    position: relative; z-index: 2; height: 30px; border-radius: 14px 14px 6px 6px;
+    background: linear-gradient(var(--desk-deep), var(--desk-deep)) padding-box;
+    border: 1px solid var(--desk-line);
+    box-shadow: 0 14px 30px -12px rgba(0, 0, 0, 0.55), inset 0 -8px 0 rgba(0, 0, 0, 0.25);
+  }
+  .slot::after {
+    content: ""; position: absolute; left: 22px; right: 22px; bottom: 8px; height: 4px;
+    border-radius: 4px; background: #000a;
+  }
+  .feed { position: relative; margin: -12px 14px 0; overflow: hidden; padding-bottom: 40px; }
+  .receipt {
+    position: relative; background: var(--paper); color: var(--thermal);
+    font: 400 12.5px/1.65 var(--receipt); padding: 34px 24px 22px;
+    box-shadow: 0 30px 50px -24px rgba(0, 0, 0, 0.6);
+    background-image: linear-gradient(90deg, transparent 0 96%, var(--paper-shade) 100%);
+  }
+  .receipt::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -12px; height: 12px;
+    background:
+      linear-gradient(-45deg, transparent 8px, var(--paper) 0) 0 0 / 16px 12px repeat-x,
+      linear-gradient(45deg, transparent 8px, var(--paper) 0) 0 0 / 16px 12px repeat-x;
+  }
+  .receipt.printing { animation: feed 1.5s steps(22, end) both; }
+  @keyframes feed { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+  .r-head { text-align: center; margin-bottom: 14px; }
+  .r-head .r-brand { font: 800 26px/1 var(--display); letter-spacing: 0.06em; }
+  .r-head .r-title { letter-spacing: 0.32em; font-weight: 600; margin-top: 6px; }
+  .r-meta { display: flex; justify-content: space-between; color: var(--thermal-soft); }
+  .r-rule { border: 0; border-top: 1.5px dashed var(--thermal-soft); margin: 10px 0; opacity: 0.7; }
+  .r-cmd { color: var(--thermal-soft); }
+  .r-sec { display: flex; justify-content: space-between; font-weight: 600; letter-spacing: 0.08em; margin-top: 4px; }
+  .r-row { display: flex; justify-content: space-between; gap: 12px; padding-left: 2ch; }
+  .r-row > :first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .r-quote { padding-left: 4ch; color: var(--thermal-soft); margin-bottom: 6px; }
+  .r-flag { background: var(--flag); color: var(--flag-ink); padding: 0 6px; font-weight: 600; }
+  .r-total { display: flex; justify-content: space-between; font-weight: 600; font-size: 14px; }
+  .r-bar { height: 44px; margin: 14px auto 6px; width: 86%; }
+  .r-bar rect { fill: var(--thermal); }
+  .r-thanks { text-align: center; color: var(--thermal-soft); font-size: 11px; letter-spacing: 0.06em; }
+  .keys { display: flex; justify-content: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+  .key {
+    border: 1px solid var(--desk-line); background: var(--desk-deep); color: var(--on-desk-soft);
+    font: 600 13px/1 var(--receipt); padding: 10px 14px; border-radius: 8px; cursor: pointer;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35); transition: transform 0.08s, box-shadow 0.08s, color 0.2s;
+  }
+  .key:hover { color: var(--on-desk); }
+  .key:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0, 0, 0, 0.35); }
+  .key[aria-pressed="true"] { color: var(--flag-ink); background: var(--flag); border-color: var(--flag); }
+
+  /* What you get: the itemised bill */
+  section { padding-block: clamp(72px, 10vw, 136px); }
+  .band { background: var(--desk-deep); }
+  h2 {
+    font: 800 clamp(34px, 4.6vw, 60px)/1 var(--display); letter-spacing: -0.03em;
+    margin: 0 0 18px; text-wrap: balance; max-width: 16em;
+  }
+  .sub { color: var(--on-desk-soft); max-width: 38em; margin: 0 0 56px; font-size: 19px; }
+  .bill { list-style: none; margin: 0; padding: 0; border-top: 1.5px dashed var(--desk-line); }
+  .bill li {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 32px; align-items: baseline;
+    padding-block: 26px; border-bottom: 1.5px dashed var(--desk-line);
+  }
+  .bill h3 {
+    margin: 0; font: 700 clamp(22px, 2.4vw, 30px)/1.15 var(--display); letter-spacing: -0.015em;
+    display: flex; gap: 14px; align-items: baseline; min-width: 0;
+  }
+  .bill h3::after {
+    content: ""; flex: 1; border-bottom: 2px dotted var(--desk-line); transform: translateY(-6px); min-width: 24px;
+  }
+  .bill code { font: 400 14px/1.4 var(--receipt); color: var(--flag); white-space: nowrap; }
+  .bill p { grid-column: 1 / -1; margin: 0; color: var(--on-desk-soft); max-width: 46em; }
+  .bill-total {
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 24px; padding-top: 28px;
+    font: 700 clamp(20px, 2.2vw, 26px)/1.2 var(--display);
+  }
+  .bill-total span:last-child { color: var(--flag); }
+  .limits { margin-top: 40px; font-size: 16px; color: var(--on-desk-soft); }
+
+  /* Connect */
+  .connect { display: grid; gap: 14px; }
+  .lane {
+    display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 16px 32px; align-items: center;
+    background: var(--paper); color: var(--thermal); border-radius: 4px; padding: 26px 28px;
+    box-shadow: 0 18px 40px -26px rgba(0, 0, 0, 0.7);
+  }
+  .lane h3 { margin: 0 0 4px; font: 700 22px/1.2 var(--display); letter-spacing: -0.01em; }
+  .lane p { margin: 0; color: var(--thermal-soft); font-size: 15px; }
+  .lane .cmd { background: var(--thermal); border-color: var(--thermal); color: var(--paper); justify-self: end; max-width: 100%; }
+  .lane .cmd code::before { color: #9a93b5; }
+
+  /* Tools */
+  .tools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
+  .stub {
+    position: relative; background: var(--paper); color: var(--thermal); padding: 30px 28px 34px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .stub::before, .stub::after {
+    content: ""; position: absolute; left: 0; right: 0; height: 12px;
+    background:
+      linear-gradient(-45deg, transparent 8px, var(--paper) 0) 0 0 / 16px 12px repeat-x,
+      linear-gradient(45deg, transparent 8px, var(--paper) 0) 0 0 / 16px 12px repeat-x;
+  }
+  .stub::before { top: -12px; transform: scaleY(-1); }
+  .stub::after { bottom: -12px; }
+  .stub-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .stub-name { font: 800 48px/1 var(--display); letter-spacing: -0.03em; }
+  .stub-for { font: 600 12px/1 var(--receipt); letter-spacing: 0.18em; color: var(--thermal-soft); }
+  .stub p { margin: 0; font-size: 16px; }
+  .stub ul { margin: 0; padding: 0; list-style: none; font: 400 13px/1.9 var(--receipt); color: var(--thermal-soft); }
+  .stub ul li::before { content: "+ "; color: var(--thermal); }
+  .stub .cmd { background: var(--thermal); border-color: var(--thermal); color: var(--paper); margin-top: auto; }
+  .stub .cmd code::before { color: #9a93b5; }
+  .stub-links { display: flex; gap: 18px; font-weight: 600; font-size: 15px; }
+
+  .close { text-align: left; }
+  .close h2 { max-width: 13em; }
+  .steps { display: grid; gap: 12px; margin: 36px 0 0; padding: 0; list-style: none; max-width: 640px; }
+  .steps li { display: grid; grid-template-columns: 3ch minmax(0, 1fr); gap: 12px; align-items: center; }
+  .steps li > span { font: 600 14px/1 var(--receipt); color: var(--on-desk-soft); }
+  .steps .cmd { justify-content: space-between; }
+
+  footer { border-top: 1.5px dashed var(--desk-line); padding-block: 32px 48px; color: var(--on-desk-soft); font-size: 14px; }
+  footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px 28px; }
+  footer nav { font-size: 14px; }
+
+  @media (max-width: 880px) {
+    .hero { grid-template-columns: minmax(0, 1fr); }
+    .printer { order: 2; }
+    .lane { grid-template-columns: minmax(0, 1fr); }
+    .lane .cmd { justify-self: start; }
+    .tools { grid-template-columns: minmax(0, 1fr); gap: 44px; }
+  }
+  @media (max-width: 520px) {
+    body { font-size: 16px; }
+    nav.site a.hide-sm { display: none; }
+    .receipt { padding-inline: 16px; font-size: 11.5px; }
+    .bill li { grid-template-columns: minmax(0, 1fr); }
+    .bill h3::after { display: none; }
+    .cmd { font-size: 13.5px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .receipt.printing { animation: none; }
+    .btn, .copy { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top wrap">
+  <a class="mark" href="#">Wire<span>Cat</span></a>
+  <nav class="site" aria-label="Site">
+    <a href="#get">What you get</a>
+    <a class="hide-sm" href="#connect">Connect</a>
+    <a href="https://wirecat.dev/en/docs/tg">Docs</a>
+    <a class="hide-sm" href="https://github.com/leemour/tg-cli">GitHub</a>
+  </nav>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div>
+      <h1>Your agent reads every chat. <em>You read one page.</em></h1>
+      <p class="lede">
+        WireCat hands your own <strong>Telegram and MAX</strong> to Claude Code, Codex or Cursor.
+        Overnight it sorts the noise, flags who is waiting on you, turns voice notes into text,
+        and answers the ones you tell it to.
+      </p>
+      <div class="cta">
+        <span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copy</button></span>
+        <a class="btn" href="#connect">Connect your agent
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+      <p class="fineprint"><b>AI messaging with CLI tools for agents.</b> Free and open source, on Windows, macOS and Linux.</p>
+    </div>
+
+    <div class="printer" aria-label="A brief printed by your agent">
+      <div class="slot"></div>
+      <div class="feed">
+        <div class="receipt printing" id="receipt" aria-live="polite"></div>
+      </div>
+      <div class="keys" role="group" aria-label="Print another receipt">
+        <button class="key" type="button" data-print="brief" aria-pressed="true">Brief</button>
+        <button class="key" type="button" data-print="search" aria-pressed="false">Search</button>
+        <button class="key" type="button" data-print="voice" aria-pressed="false">Voice note</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="band" id="get">
+    <div class="wrap">
+      <h2>Everything your messenger made you do by hand</h2>
+      <p class="sub">Ask in plain words. Your agent runs the command, reads the answer and gets back to you.</p>
+      <ul class="bill">
+        <li><h3>Tells you who is waiting</h3><code>tg review --unanswered</code>
+          <p>Every chat where someone asked and you never answered, with how long they have waited.</p></li>
+        <li><h3>Reads the inbox for you</h3><code>tg inbox --new</code>
+          <p>Only what arrived since the last look. Muted groups stay quiet unless they mention you.</p></li>
+        <li><h3>Finds that message from March</h3><code>tg messages search</code>
+          <p>Your chats live in a copy on your computer. Search years of history, even on a plane.</p></li>
+        <li><h3>Turns voice notes into text</h3><code>tg messages transcribe --local</code>
+          <p>By Telegram, or by a speech model on your own machine in 25 languages.</p></li>
+        <li><h3>Sends later, with the laptop shut</h3><code>tg messages send --at 2h</code>
+          <p>Telegram itself delivers it at the time you set.</p></li>
+        <li><h3>Watches while you work</h3><code>tg watch</code>
+          <p>New messages, edits and reactions as they happen, so your agent can react first.</p></li>
+        <li><h3>Keeps your MAX groups clean</h3><code>max bot chats check</code>
+          <p>Spam, stranger links and flood removed by your rules, through the official MAX Bot API.</p></li>
+        <li><h3>Hands you the whole chat</h3><code>tg export --format markdown</code>
+          <p>Any conversation as a transcript you or a model can read in one go.</p></li>
+      </ul>
+      <div class="bill-total"><span>Messages you had to scroll through</span><span>0</span></div>
+      <p class="limits">You decide which chats it may write to and how often it may send. Or give it a read-only profile and let it only tell you.</p>
+    </div>
+  </section>
+
+  <section id="connect">
+    <div class="wrap">
+      <h2>One command and your agent knows how</h2>
+      <p class="sub">Each tool ships with an agent skill and an MCP server. Pick where your agent lives.</p>
+      <div class="connect">
+        <div class="lane">
+          <div><h3>Claude Code, Codex, Gemini CLI</h3><p>Installs the skill that teaches your agent every command.</p></div>
+          <span class="cmd"><code>tg skill install</code><button class="copy" type="button" data-copy="tg skill install">Copy</button></span>
+        </div>
+        <div class="lane">
+          <div><h3>Claude Desktop, Cursor and other MCP clients</h3><p>Prints the entry to paste into your client's settings.</p></div>
+          <span class="cmd"><code>tg mcp config</code><button class="copy" type="button" data-copy="tg mcp config">Copy</button></span>
+        </div>
+        <div class="lane">
+          <div><h3>Any other model</h3><p>Every docs page as plain Markdown, in one list.</p></div>
+          <span class="cmd"><code>wirecat.dev/llms.txt</code><button class="copy" type="button" data-copy="https://wirecat.dev/llms.txt">Copy</button></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <h2>Two messengers, the same commands</h2>
+      <p class="sub">Learn one and you know the other. Your account, on your computer.</p>
+      <div class="tools">
+        <article class="stub">
+          <div class="stub-head"><span class="stub-name">tg</span><span class="stub-for">TELEGRAM</span></div>
+          <p>A Telegram client for the terminal and for AI agents, on your own account.</p>
+          <ul><li>inbox, review, search, watch</li><li>voice notes to text</li><li>scheduled and silent sends</li></ul>
+          <span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copy</button></span>
+          <div class="stub-links"><a href="https://wirecat.dev/en/docs/tg">Docs</a><a href="https://github.com/leemour/tg-cli">GitHub</a><a href="https://www.npmjs.com/package/@leemour/tg-cli">npm</a></div>
+        </article>
+        <article class="stub">
+          <div class="stub-head"><span class="stub-name">max</span><span class="stub-for">MAX MESSENGER</span></div>
+          <p>Your MAX bots through the official Bot API, and your personal account.</p>
+          <ul><li>write as your bot or as you</li><li>group moderation by your rules</li><li>a bot MCP server for agents</li></ul>
+          <span class="cmd"><code>npm i -g @leemour/max-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/max-cli">Copy</button></span>
+          <div class="stub-links"><a href="https://wirecat.dev/ru/docs/max">Docs</a><a href="https://github.com/leemour/max-cli">GitHub</a><a href="https://www.npmjs.com/package/@leemour/max-cli">npm</a></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="close">
+    <div class="wrap">
+      <h2>Read your first brief tomorrow morning</h2>
+      <ol class="steps">
+        <li><span>1</span><span class="cmd"><code>npm i -g @leemour/tg-cli</code><button class="copy" type="button" data-copy="npm i -g @leemour/tg-cli">Copy</button></span></li>
+        <li><span>2</span><span class="cmd"><code>tg session start</code><button class="copy" type="button" data-copy="tg session start">Copy</button></span></li>
+        <li><span>3</span><span class="cmd"><code>tg skill install</code><button class="copy" type="button" data-copy="tg skill install">Copy</button></span></li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>WireCat · MIT licence · Docs for models at <a href="https://wirecat.dev/llms.txt">/llms.txt</a></span>
+    <nav aria-label="Footer"><a href="https://github.com/leemour/tg-cli">tg on GitHub</a><a href="https://github.com/leemour/max-cli">max on GitHub</a><a href="#">English · Русский · Español</a></nav>
+  </div>
+</footer>
+
+<script>
+  const receipts = {
+    brief: `
+      <div class="r-head"><div class="r-brand">WIRECAT</div><div class="r-title">MORNING BRIEF</div></div>
+      <div class="r-meta"><span>THU 02 OCT</span><span>08:02</span></div>
+      <hr class="r-rule"><div class="r-cmd">$ tg review --unanswered</div><hr class="r-rule">
+      <div class="r-sec"><span>WAITING ON YOU</span><span class="r-flag">3</span></div>
+      <div class="r-row"><span>Anna · Book club</span><span>2h</span></div>
+      <div class="r-quote">"Are we still on for Friday?"</div>
+      <div class="r-row"><span>Oleg · Release team</span><span>40m</span></div>
+      <div class="r-quote">"Can you approve the tag?"</div>
+      <div class="r-row"><span>Mum</span><span>1d</span></div>
+      <div class="r-quote">voice 0:42 → "Call me when you land"</div>
+      <hr class="r-rule">
+      <div class="r-sec"><span>HANDLED</span><span>2</span></div>
+      <div class="r-row"><span>Replied to Dasha</span><span>23:14</span></div>
+      <div class="r-row"><span>Standup note, sends</span><span>09:00</span></div>
+      <hr class="r-rule">
+      <div class="r-row" style="padding-left:0"><span>Muted, no mentions</span><span>211</span></div>
+      <hr class="r-rule">
+      <div class="r-total"><span>TO READ</span><span>3</span></div>`,
+    search: `
+      <div class="r-head"><div class="r-brand">WIRECAT</div><div class="r-title">FOUND IT</div></div>
+      <div class="r-meta"><span>THU 02 OCT</span><span>08:05</span></div>
+      <hr class="r-rule"><div class="r-cmd">$ tg messages search wifi --chat Dasha</div><hr class="r-rule">
+      <div class="r-sec"><span>FLAT · DASHA</span><span>14 MAR</span></div>
+      <div class="r-quote" style="padding-left:2ch">"New wifi is Kitchen-5G, password on the fridge: hedgehog-42"</div>
+      <div class="r-sec"><span>FLAT · DASHA</span><span>02 FEB</span></div>
+      <div class="r-quote" style="padding-left:2ch">"The router is resetting itself again"</div>
+      <hr class="r-rule">
+      <div class="r-row" style="padding-left:0"><span>Searched offline</span><span>4 yrs</span></div>
+      <div class="r-row" style="padding-left:0"><span>Asked Telegram</span><span>never</span></div>
+      <hr class="r-rule">
+      <div class="r-total"><span>MATCHES</span><span>2</span></div>`,
+    voice: `
+      <div class="r-head"><div class="r-brand">WIRECAT</div><div class="r-title">VOICE NOTE</div></div>
+      <div class="r-meta"><span>THU 02 OCT</span><span>08:07</span></div>
+      <hr class="r-rule"><div class="r-cmd">$ tg messages transcribe Mum 8812 --local</div><hr class="r-rule">
+      <div class="r-sec"><span>MUM</span><span>0:42</span></div>
+      <div class="r-quote" style="padding-left:2ch">"Hi love, just checking your flight is still at six. Call me when you land, and don't forget Granddad's birthday is on Sunday."</div>
+      <hr class="r-rule">
+      <div class="r-row" style="padding-left:0"><span>Model</span><span>on this laptop</span></div>
+      <div class="r-row" style="padding-left:0"><span>Sent to a server</span><span>nothing</span></div>
+      <hr class="r-rule">
+      <div class="r-total"><span>TO DO</span><span>2</span></div>`,
+  }
+  const tail = (seed) => {
+    let bars = ""
+    let x = 0
+    for (let i = 0; x < 300; i++) {
+      const w = 1 + ((seed.charCodeAt(i % seed.length) * (i + 7)) % 4)
+      if (i % 2 === 0) bars += `<rect x="${x}" y="0" width="${w}" height="44"/>`
+      x += w + 1
+    }
+    return `<svg class="r-bar" viewBox="0 0 300 44" preserveAspectRatio="none" aria-hidden="true">${bars}</svg>
+      <div class="r-thanks">YOUR AGENT READ IT SO YOU DIDN'T HAVE TO</div>`
+  }
+  const receipt = document.getElementById("receipt")
+  const print = (name) => {
+    receipt.innerHTML = receipts[name] + tail(name)
+    receipt.classList.remove("printing")
+    void receipt.offsetWidth
+    receipt.classList.add("printing")
+    for (const key of document.querySelectorAll("[data-print]")) {
+      key.setAttribute("aria-pressed", String(key.dataset.print === name))
+    }
+  }
+  print("brief")
+  for (const key of document.querySelectorAll("[data-print]")) {
+    key.addEventListener("click", () => print(key.dataset.print))
+  }
+
+  for (const button of document.querySelectorAll("[data-copy]")) {
+    button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.copy)
+      } catch {
+        const range = document.createRange()
+        range.selectNodeContents(button.previousElementSibling)
+        getSelection().removeAllRanges()
+        getSelection().addRange(range)
+      }
+      button.textContent = "Copied"
+      button.dataset.done = ""
+      setTimeout(() => { button.textContent = "Copy"; delete button.dataset.done }, 1600)
+    })
+  }
+</script>
+</body>
+</html>

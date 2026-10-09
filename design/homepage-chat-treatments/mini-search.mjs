@@ -1,0 +1,7 @@
+import {searchDemo,messages} from '../../lib/search-playground/engine.ts'
+const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))
+for(const panel of document.querySelectorAll('[data-mini-search]')){
+ const input=panel.querySelector('[data-mini-query]'),status=panel.querySelector('[data-mini-status]'),results=panel.querySelector('[data-mini-results]'),presets=Array.from(panel.querySelectorAll('[data-search-preset]'))
+ const render=()=>{presets.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.searchPreset===input.value)));try{const hits=searchDemo(input.value);status.textContent=hits.length?`${hits.length} matching ${hits.length===1?'message':'messages'} · showing ${Math.min(hits.length,1)}`:'No matches. Try a broader query.';results.innerHTML=hits.slice(0,1).map(({message})=>`<div class="mini-hit"><b>${esc(message.from)} · ${esc(message.chat)}</b><p>${esc(message.text)}</p><small>${message.provider==='telegram'?'Telegram':'MAX'} · ${esc(message.date.slice(0,10))}${message.has.includes('file')?' · file':''}</small></div>`).join('');input.removeAttribute('aria-invalid')}catch(error){status.textContent=`Check the query: ${error.message}`;results.innerHTML='';input.setAttribute('aria-invalid','true')}}
+ input.addEventListener('input',render);presets.forEach(button=>button.addEventListener('click',()=>{input.value=button.dataset.searchPreset;render()}));render()
+}

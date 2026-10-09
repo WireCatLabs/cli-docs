@@ -1,6 +1,6 @@
-import { Landing } from "@/components/landing"
+import { Editorial } from "@/components/landing/editorial"
 import { StructuredData } from "@/components/structured-data"
-import en from "@/lib/landing/en.json"
+import en from "@/lib/editorial/en.json"
 import { pageStructuredData, seoWords } from "@/lib/seo"
 
 export default function Root() {
@@ -15,7 +15,7 @@ export default function Root() {
           description: words.homeDescription,
         })}
       />
-      <Landing {...en} lang="en" />
+      <Editorial html={en.home} lang="en" />
     </>
   )
 }

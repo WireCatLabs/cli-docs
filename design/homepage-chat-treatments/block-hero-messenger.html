@@ -1,0 +1,521 @@
+<!doctype html><html lang="en" class="light" data-palette="classic"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Hero · Messenger conversation · WireCat Memory variants</title><link rel="icon" href="/icon.svg"><link rel="stylesheet" href="/production-landing.css"><link rel="stylesheet" href="/production-theme.css"><link rel="stylesheet" href="/production-footer.css"><link rel="stylesheet" href="/base.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/refinement.css"><link rel="stylesheet" href="/chat.css"><link rel="stylesheet" href="/updates.css"><link rel="stylesheet" href="/feature-variants.css"><link rel="stylesheet" href="/refinement-3.css"><link rel="stylesheet" href="/landing-4.css"><script src="/setup-prompts.js" defer></script><script src="/interactions.js" defer></script><script src="/landing-search.js" defer></script><script src="/studio.js" defer></script></head><body><a class="skip" href="#main">Skip to content</a><main id="main" class="block-canvas landing4" aria-label="Hero · Messenger conversation"><h1 class="sr-only">Block preview</h1><h2 class="sr-only">Hero · Messenger conversation</h2><section class="hero wrap memory-hero"><div class="hero-copy"><h1>Memory for your messages.<br><em>Context for your agent.</em></h1><p class="lede">Find what was said, catch up on what matters and reply with the full context. WireCat connects the AI agent you already use to your conversations and notes.</p><div class="hero-actions"><details class="connect-dropdown" data-connect><summary class="button ">Connect your agent<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="connect-panel"><p class="connect-intro">Copy a setup request into your AI agent.</p><div class="connect-provider" role="group" aria-label="Choose messenger for setup"><button type="button" data-connect-provider="tg" aria-pressed="true">Telegram</button><button type="button" data-connect-provider="max" aria-pressed="false">MAX</button></div><p class="prompt-label">Ask your agent to install and connect</p><pre class="agent-prompt">Install tg with npm install -g @leemour/tg-cli.
+Read tg setup --help, explain the setup steps and allow about five minutes, then help me run tg setup.
+Run tg doctor and suggest next steps.
+Before installation, check Node.js 22.16+ (22.x) or 24+ and npm; help me install them if needed.
+At the end, offer to install the tg skill for my agent.</pre><button class="button copy-agent" type="button" data-copy="Install tg with npm install -g @leemour/tg-cli.
+Read tg setup --help, explain the setup steps and allow about five minutes, then help me run tg setup.
+Run tg doctor and suggest next steps.
+Before installation, check Node.js 22.16+ (22.x) or 24+ and npm; help me install them if needed.
+At the end, offer to install the tg skill for my agent.">Copy request for your agent<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></svg></button><details class="manual-install"><summary>Or copy the terminal command</summary><div class="command"><code>npm install -g @leemour/tg-cli && tg skill install --for all</code><button type="button" data-copy="npm install -g @leemour/tg-cli && tg skill install --for all" aria-label="Copy terminal installation command"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></svg></button></div></details><a class="text-link connect-guide" href="https://wirecat.dev/en/docs/installation#tg">Setup and sign-in guide<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a><p class="connect-small">The request runs in your agent. Signing in adds a device to your account.</p></div></details></div><div class="connector-list" aria-label="Messenger and email tools"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 18-7-5 17-5-6-4 3 1-6 10-6-8 8Z"/></svg>Telegram</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14v11h-8l-5 4V6Z"/><path d="m9 13 2-3 2 3 2-3"/></svg>MAX</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/></svg>Email</span></div><p class="micro">Free, open-source tools that run on your computer.</p></div><section class="memory-demo chat-widget" aria-label="AI conversation examples"><h2 class="sr-only">Try a conversation with your agent</h2><div class="memory-demo-top"><div class="messenger-contact"><span class="contact-avatar"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M12 3v4M8 12h1m6 0h1M9 16h6"/></svg></span><span><b>Your agent</b><small>With WireCat · your messages connected</small></span></div><div class="demo-providers" role="group" aria-label="Messenger in this example"><button type="button" data-demo-provider="tg" aria-pressed="true">Telegram</button><button type="button" data-demo-provider="max" aria-pressed="false">MAX</button></div></div><div class="memory-tabs" role="tablist" aria-label="Choose a conversation"><button type="button" role="tab" id="messenger-tab-context" aria-controls="messenger-panel-context" aria-selected="true" tabindex="0" data-hero-case="context">Before a call</button><button type="button" role="tab" id="messenger-tab-search" aria-controls="messenger-panel-search" aria-selected="false" tabindex="-1" data-hero-case="search">Recommendations</button><button type="button" role="tab" id="messenger-tab-commitments" aria-controls="messenger-panel-commitments" aria-selected="false" tabindex="-1" data-hero-case="commitments">Draft a reply</button></div><div class="memory-panel" role="tabpanel" id="messenger-panel-context" aria-labelledby="messenger-tab-context" ><div class="dialogue-provider" data-dialogue-provider="tg" ><div class="chat-scene treatment-messenger command-ledger" tabindex="0" role="region" aria-label="Example conversation"><div class="chat-turn user-turn"><span class="chat-person">You</span><div class="user-message"><p>Get me ready for tomorrow’s Atlas call. What needs deciding?</p><button type="button" data-copy="Use tg cli. Get me ready for tomorrow’s Atlas call. What needs deciding?" aria-label="Copy this request"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></svg></button></div></div><details class="quiet-tools"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m7 9 3 3-3 3m6 0h4"/></svg><span>Read project chats and DMs</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="tool-details"><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>tg chats list <b>--search "Atlas"</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"101"</span>,
+      <span class="k">"title"</span>: <span class="s">"Atlas · team"</span>,
+      <span class="k">"kind"</span>: <span class="s">"group"</span>
+    },
+    {
+      <span class="k">"id"</span>: <span class="s">"102"</span>,
+      <span class="k">"title"</span>: <span class="s">"Atlas · design"</span>,
+      <span class="k">"kind"</span>: <span class="s">"group"</span>
+    }
+  ],
+  <span class="k">"hasMore"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>tg review <b>--chat "Atlas · team" --since-time 7d</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"chats"</span>: [
+    {
+      <span class="k">"title"</span>: <span class="s">"Atlas · team"</span>,
+      <span class="k">"messages"</span>: [
+        {
+          <span class="k">"id"</span>: <span class="s">"48210"</span>,
+          <span class="k">"senderName"</span>: <span class="s">"Anna"</span>,
+          <span class="k">"text"</span>: <span class="s">"We’re launching on Friday."</span>,
+          <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+        },
+        {
+          <span class="k">"id"</span>: <span class="s">"48211"</span>,
+          <span class="k">"senderName"</span>: <span class="s">"Marco"</span>,
+          <span class="k">"text"</span>: <span class="s">"Anna needs the final copy by Thursday."</span>,
+          <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+        },
+        {
+          <span class="k">"id"</span>: <span class="s">"48212"</span>,
+          <span class="k">"senderName"</span>: <span class="s">"Tom"</span>,
+          <span class="k">"text"</span>: <span class="s">"Tom needs staging access."</span>,
+          <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+        }
+      ],
+      <span class="k">"more"</span>: <span class="n">false</span>
+    }
+  ],
+  <span class="k">"skipped"</span>: [],
+  <span class="k">"partial"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>tg review <b>--chat "Atlas · design" --since-time 7d</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"chats"</span>: [
+    {
+      <span class="k">"title"</span>: <span class="s">"Atlas · design"</span>,
+      <span class="k">"messages"</span>: [
+        {
+          <span class="k">"id"</span>: <span class="s">"48210"</span>,
+          <span class="k">"senderName"</span>: <span class="s">"Anna"</span>,
+          <span class="k">"text"</span>: <span class="s">"The design is ready. We’re still waiting for the final copy."</span>,
+          <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+        }
+      ],
+      <span class="k">"more"</span>: <span class="n">false</span>
+    }
+  ],
+  <span class="k">"skipped"</span>: [],
+  <span class="k">"partial"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>tg chats list <b>--search "Tom"</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"503"</span>,
+      <span class="k">"title"</span>: <span class="s">"Tom"</span>,
+      <span class="k">"kind"</span>: <span class="s">"private"</span>
+    }
+  ],
+  <span class="k">"hasMore"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>tg messages list <b>503 --limit 30</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"48210"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Tom"</span>,
+      <span class="k">"text"</span>: <span class="s">"Test payments work. I still need access to production."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+    }
+  ],
+  <span class="k">"hasMore"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>tg messages search <b>"Atlas" --chat 503 --language legacy</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"48210"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Tom"</span>,
+      <span class="k">"text"</span>: <span class="s">"Test payments work. I still need access to production."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+    }
+  ],
+  <span class="k">"hasMore"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>tg messages context <b>503 48210 --before-n 2 --after-n 2</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"48210"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Tom"</span>,
+      <span class="k">"text"</span>: <span class="s">"Test payments work. I still need access to production."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+    },
+    {
+      <span class="k">"id"</span>: <span class="s">"48211"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Tom"</span>,
+      <span class="k">"text"</span>: <span class="s">"I need access to production."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+    }
+  ],
+  <span class="k">"hasMore"</span>: <span class="n">false</span>
+}</pre></details></div></details><div class="chat-turn assistant-turn"><span class="chat-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M12 3v4M8 12h1m6 0h1M9 16h6"/></svg></span><div class="assistant-message"><span class="chat-person">Your agent</span><p>We’re aiming for Friday’s launch. I’d use the call to settle <b>two things:</b></p><ul><li><b>Final copy.</b> Anna needs it by Thursday.</li><li><b>Access for Tom.</b> His payment tests work, but he still needs production access to finish the check.</li></ul><p>The design is ready, so I wouldn’t spend the call revisiting it. Agree who handles those two items and when they’ll be done.</p><details class="chat-sources"><summary>Source messages<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><details class="chat-source"><summary>Tom · Telegram</summary><blockquote>Test payments work. I still need access to production.</blockquote></details><details class="chat-source"><summary>Anna · Atlas · team · Telegram</summary><blockquote>We’re launching on Friday.</blockquote></details><details class="chat-source"><summary>Marco · Atlas · team · Telegram</summary><blockquote>Anna needs the final copy by Thursday.</blockquote></details></details></div></div><details class="chat-next"><summary>Continue the chat<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="chat-turn user-turn"><span class="chat-person">You</span><div class="user-message"><p>So Tom has already tested the payments?</p><button type="button" data-copy="Use tg cli. So Tom has already tested the payments?" aria-label="Copy this request"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></svg></button></div></div><div class="chat-turn assistant-turn"><span class="chat-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M12 3v4M8 12h1m6 0h1M9 16h6"/></svg></span><div class="assistant-message"><span class="chat-person">Your agent</span><p>Yes—he confirmed that in your DMs. The group message only showed the access problem.</p><p>I’d ask <b>who can give him production access</b>, rather than asking him to start testing again.</p></div></div></details></div></div><div class="dialogue-provider" data-dialogue-provider="max" hidden><div class="chat-scene treatment-messenger command-ledger" tabindex="0" role="region" aria-label="Example conversation"><div class="chat-turn user-turn"><span class="chat-person">You</span><div class="user-message"><p>Get me ready for tomorrow’s Atlas call. What needs deciding?</p><button type="button" data-copy="Use max cli. Get me ready for tomorrow’s Atlas call. What needs deciding?" aria-label="Copy this request"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></svg></button></div></div><details class="quiet-tools"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m7 9 3 3-3 3m6 0h4"/></svg><span>Read project chats and DMs</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="tool-details"><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>max chats list <b>--search "Atlas"</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"101"</span>,
+      <span class="k">"title"</span>: <span class="s">"Atlas · team"</span>,
+      <span class="k">"kind"</span>: <span class="s">"group"</span>
+    },
+    {
+      <span class="k">"id"</span>: <span class="s">"102"</span>,
+      <span class="k">"title"</span>: <span class="s">"Atlas · design"</span>,
+      <span class="k">"kind"</span>: <span class="s">"group"</span>
+    }
+  ],
+  <span class="k">"hasMore"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>max review <b>--chat "Atlas · team" --since-time 7d</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"chats"</span>: [
+    {
+      <span class="k">"title"</span>: <span class="s">"Atlas · team"</span>,
+      <span class="k">"messages"</span>: [
+        {
+          <span class="k">"id"</span>: <span class="s">"48210"</span>,
+          <span class="k">"senderName"</span>: <span class="s">"Anna"</span>,
+          <span class="k">"text"</span>: <span class="s">"We’re launching on Friday."</span>,
+          <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+        },
+        {
+          <span class="k">"id"</span>: <span class="s">"48211"</span>,
+          <span class="k">"senderName"</span>: <span class="s">"Marco"</span>,
+          <span class="k">"text"</span>: <span class="s">"Anna needs the final copy by Thursday."</span>,
+          <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+        },
+        {
+          <span class="k">"id"</span>: <span class="s">"48212"</span>,
+          <span class="k">"senderName"</span>: <span class="s">"Tom"</span>,
+          <span class="k">"text"</span>: <span class="s">"Tom needs staging access."</span>,
+          <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+        }
+      ],
+      <span class="k">"more"</span>: <span class="n">false</span>
+    }
+  ],
+  <span class="k">"skipped"</span>: [],
+  <span class="k">"partial"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>max review <b>--chat "Atlas · design" --since-time 7d</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"chats"</span>: [
+    {
+      <span class="k">"title"</span>: <span class="s">"Atlas · design"</span>,
+      <span class="k">"messages"</span>: [
+        {
+          <span class="k">"id"</span>: <span class="s">"48210"</span>,
+          <span class="k">"senderName"</span>: <span class="s">"Anna"</span>,
+          <span class="k">"text"</span>: <span class="s">"The design is ready. We’re still waiting for the final copy."</span>,
+          <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+        }
+      ],
+      <span class="k">"more"</span>: <span class="n">false</span>
+    }
+  ],
+  <span class="k">"skipped"</span>: [],
+  <span class="k">"partial"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>max chats list <b>--search "Tom"</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"503"</span>,
+      <span class="k">"title"</span>: <span class="s">"Tom"</span>,
+      <span class="k">"kind"</span>: <span class="s">"private"</span>
+    }
+  ],
+  <span class="k">"hasMore"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>max messages list <b>503 --limit 30</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"48210"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Tom"</span>,
+      <span class="k">"text"</span>: <span class="s">"Test payments work. I still need access to production."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+    }
+  ],
+  <span class="k">"hasMore"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>max messages search <b>"Atlas" --chat 503 --language legacy</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"48210"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Tom"</span>,
+      <span class="k">"text"</span>: <span class="s">"Test payments work. I still need access to production."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+    }
+  ],
+  <span class="k">"hasMore"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>max messages context <b>503 48210 --before-n 2 --after-n 2</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"48210"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Tom"</span>,
+      <span class="k">"text"</span>: <span class="s">"Test payments work. I still need access to production."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+    },
+    {
+      <span class="k">"id"</span>: <span class="s">"48211"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Tom"</span>,
+      <span class="k">"text"</span>: <span class="s">"I need access to production."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+    }
+  ],
+  <span class="k">"hasMore"</span>: <span class="n">false</span>
+}</pre></details></div></details><div class="chat-turn assistant-turn"><span class="chat-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M12 3v4M8 12h1m6 0h1M9 16h6"/></svg></span><div class="assistant-message"><span class="chat-person">Your agent</span><p>We’re aiming for Friday’s launch. I’d use the call to settle <b>two things:</b></p><ul><li><b>Final copy.</b> Anna needs it by Thursday.</li><li><b>Access for Tom.</b> His payment tests work, but he still needs production access to finish the check.</li></ul><p>The design is ready, so I wouldn’t spend the call revisiting it. Agree who handles those two items and when they’ll be done.</p><details class="chat-sources"><summary>Source messages<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><details class="chat-source"><summary>Tom · MAX</summary><blockquote>Test payments work. I still need access to production.</blockquote></details><details class="chat-source"><summary>Anna · Atlas · team · MAX</summary><blockquote>We’re launching on Friday.</blockquote></details><details class="chat-source"><summary>Marco · Atlas · team · MAX</summary><blockquote>Anna needs the final copy by Thursday.</blockquote></details></details></div></div><details class="chat-next"><summary>Continue the chat<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="chat-turn user-turn"><span class="chat-person">You</span><div class="user-message"><p>So Tom has already tested the payments?</p><button type="button" data-copy="Use max cli. So Tom has already tested the payments?" aria-label="Copy this request"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></svg></button></div></div><div class="chat-turn assistant-turn"><span class="chat-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M12 3v4M8 12h1m6 0h1M9 16h6"/></svg></span><div class="assistant-message"><span class="chat-person">Your agent</span><p>Yes—he confirmed that in your DMs. The group message only showed the access problem.</p><p>I’d ask <b>who can give him production access</b>, rather than asking him to start testing again.</p></div></div></details></div></div></div><div class="memory-panel" role="tabpanel" id="messenger-panel-search" aria-labelledby="messenger-tab-search" hidden><div class="dialogue-provider" data-dialogue-provider="tg" ><div class="chat-scene treatment-messenger command-ledger" tabindex="0" role="region" aria-label="Example conversation"><div class="chat-turn user-turn"><span class="chat-person">You</span><div class="user-message"><p>Find the SQL courses people recommended. I want practice and feedback on mistakes.</p><button type="button" data-copy="Use tg cli. Find the SQL courses people recommended. I want practice and feedback on mistakes." aria-label="Copy this request"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></svg></button></div></div><details class="quiet-tools"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m7 9 3 3-3 3m6 0h4"/></svg><span>Searched Telegram and MAX recommendations</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="tool-details"><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>tg messages search <b>"SQL" --source all --limit 10 --language legacy</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"48210"</span>,
+      <span class="k">"chatId"</span>: <span class="s">"601"</span>,
+      <span class="k">"chat"</span>: <span class="s">"Analytics · community"</span>,
+      <span class="k">"messenger"</span>: <span class="s">"tg"</span>,
+      <span class="k">"date"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>,
+      <span class="k">"text"</span>: <span class="s">"Took a SQL workshop: weekly exercises and feedback from the instructor."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Daria"</span>
+    },
+    {
+      <span class="k">"id"</span>: <span class="s">"67210"</span>,
+      <span class="k">"chatId"</span>: <span class="s">"701"</span>,
+      <span class="k">"chat"</span>: <span class="s">"Team · learning"</span>,
+      <span class="k">"messenger"</span>: <span class="s">"max"</span>,
+      <span class="k">"date"</span>: <span class="s">"2026-10-02T12:00:00Z"</span>,
+      <span class="k">"text"</span>: <span class="s">"The SQL video course helped with basics, but nobody reviewed my work."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T12:00:00Z"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Alex"</span>
+    }
+  ],
+  <span class="k">"hasMore"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>tg messages context <b>msg:telegram/900001/601/48210 --before-n 1 --after-n 1</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"48210"</span>,
+      <span class="k">"chatId"</span>: <span class="s">"601"</span>,
+      <span class="k">"chat"</span>: <span class="s">"Analytics · community"</span>,
+      <span class="k">"messenger"</span>: <span class="s">"tg"</span>,
+      <span class="k">"date"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>,
+      <span class="k">"text"</span>: <span class="s">"Took a SQL workshop: weekly exercises and feedback from the instructor."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Daria"</span>
+    },
+    {
+      <span class="k">"id"</span>: <span class="s">"48211"</span>,
+      <span class="k">"chatId"</span>: <span class="s">"601"</span>,
+      <span class="k">"chat"</span>: <span class="s">"Analytics · community"</span>,
+      <span class="k">"messenger"</span>: <span class="s">"tg"</span>,
+      <span class="k">"date"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>,
+      <span class="k">"text"</span>: <span class="s">"The workshop reviews mistakes. Don’t expect advanced topics."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Daria"</span>
+    }
+  ]
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>max messages context <b>msg:max/900001/701/67210 --before-n 1 --after-n 1</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"67210"</span>,
+      <span class="k">"chatId"</span>: <span class="s">"701"</span>,
+      <span class="k">"chat"</span>: <span class="s">"Team · learning"</span>,
+      <span class="k">"messenger"</span>: <span class="s">"max"</span>,
+      <span class="k">"date"</span>: <span class="s">"2026-10-02T12:00:00Z"</span>,
+      <span class="k">"text"</span>: <span class="s">"The SQL video course helped with basics, but nobody reviewed my work."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T12:00:00Z"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Alex"</span>
+    },
+    {
+      <span class="k">"id"</span>: <span class="s">"67211"</span>,
+      <span class="k">"chatId"</span>: <span class="s">"701"</span>,
+      <span class="k">"chat"</span>: <span class="s">"Team · learning"</span>,
+      <span class="k">"messenger"</span>: <span class="s">"max"</span>,
+      <span class="k">"date"</span>: <span class="s">"2026-10-02T12:00:00Z"</span>,
+      <span class="k">"text"</span>: <span class="s">"Easy to watch at your own pace; I had to find practice exercises elsewhere."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T12:00:00Z"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Alex"</span>
+    }
+  ]
+}</pre></details></div></details><div class="chat-turn assistant-turn"><span class="chat-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M12 3v4M8 12h1m6 0h1M9 16h6"/></svg></span><div class="assistant-message"><span class="chat-person">Your agent</span><p>I’d look at the <b>workshop first.</b> Someone who took it confirms weekly exercises and feedback on mistakes.</p><p>The video course sounds useful for learning at your own pace, but the reviewer says nobody checked their work. That makes it a weaker fit for what you want.</p><p>Before choosing, ask the workshop organizers about the level and assignment reviews. The messages don’t confirm the current price or availability.</p><details class="chat-sources"><summary>Source messages<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><details class="chat-source"><summary>Daria · Analytics · community · Telegram</summary><blockquote>Took a SQL workshop: weekly exercises and feedback from the instructor.</blockquote></details><details class="chat-source"><summary>Alex · Team · learning · MAX</summary><blockquote>The SQL video course helped with basics, but nobody reviewed my work.</blockquote></details></details></div></div><details class="chat-next"><summary>Continue the chat<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="chat-turn user-turn"><span class="chat-person">You</span><div class="user-message"><p>Do they actually review mistakes, or just give exercises?</p><button type="button" data-copy="Use tg cli. Do they actually review mistakes, or just give exercises?" aria-label="Copy this request"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></svg></button></div></div><div class="chat-turn assistant-turn"><span class="chat-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M12 3v4M8 12h1m6 0h1M9 16h6"/></svg></span><div class="assistant-message"><span class="chat-person">Your agent</span><p>A follow-up message explicitly says <b>the workshop reviews mistakes.</b> It also says not to expect advanced topics.</p><p>That’s a stronger match than the video course, where the participant had to find practice elsewhere.</p></div></div></details></div></div><div class="dialogue-provider" data-dialogue-provider="max" hidden><div class="chat-scene treatment-messenger command-ledger" tabindex="0" role="region" aria-label="Example conversation"><div class="chat-turn user-turn"><span class="chat-person">You</span><div class="user-message"><p>Find the SQL courses people recommended. I want practice and feedback on mistakes.</p><button type="button" data-copy="Use max cli. Find the SQL courses people recommended. I want practice and feedback on mistakes." aria-label="Copy this request"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></svg></button></div></div><details class="quiet-tools"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m7 9 3 3-3 3m6 0h4"/></svg><span>Searched Telegram and MAX recommendations</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="tool-details"><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>max messages search <b>"SQL" --source all --limit 10 --language legacy</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"48210"</span>,
+      <span class="k">"chatId"</span>: <span class="s">"601"</span>,
+      <span class="k">"chat"</span>: <span class="s">"Analytics · community"</span>,
+      <span class="k">"messenger"</span>: <span class="s">"tg"</span>,
+      <span class="k">"date"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>,
+      <span class="k">"text"</span>: <span class="s">"Took a SQL workshop: weekly exercises and feedback from the instructor."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Daria"</span>
+    },
+    {
+      <span class="k">"id"</span>: <span class="s">"67210"</span>,
+      <span class="k">"chatId"</span>: <span class="s">"701"</span>,
+      <span class="k">"chat"</span>: <span class="s">"Team · learning"</span>,
+      <span class="k">"messenger"</span>: <span class="s">"max"</span>,
+      <span class="k">"date"</span>: <span class="s">"2026-10-02T12:00:00Z"</span>,
+      <span class="k">"text"</span>: <span class="s">"The SQL video course helped with basics, but nobody reviewed my work."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T12:00:00Z"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Alex"</span>
+    }
+  ],
+  <span class="k">"hasMore"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>tg messages context <b>msg:telegram/900001/601/48210 --before-n 1 --after-n 1</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"48210"</span>,
+      <span class="k">"chatId"</span>: <span class="s">"601"</span>,
+      <span class="k">"chat"</span>: <span class="s">"Analytics · community"</span>,
+      <span class="k">"messenger"</span>: <span class="s">"tg"</span>,
+      <span class="k">"date"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>,
+      <span class="k">"text"</span>: <span class="s">"Took a SQL workshop: weekly exercises and feedback from the instructor."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Daria"</span>
+    },
+    {
+      <span class="k">"id"</span>: <span class="s">"48211"</span>,
+      <span class="k">"chatId"</span>: <span class="s">"601"</span>,
+      <span class="k">"chat"</span>: <span class="s">"Analytics · community"</span>,
+      <span class="k">"messenger"</span>: <span class="s">"tg"</span>,
+      <span class="k">"date"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>,
+      <span class="k">"text"</span>: <span class="s">"The workshop reviews mistakes. Don’t expect advanced topics."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Daria"</span>
+    }
+  ]
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>max messages context <b>msg:max/900001/701/67210 --before-n 1 --after-n 1</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"67210"</span>,
+      <span class="k">"chatId"</span>: <span class="s">"701"</span>,
+      <span class="k">"chat"</span>: <span class="s">"Team · learning"</span>,
+      <span class="k">"messenger"</span>: <span class="s">"max"</span>,
+      <span class="k">"date"</span>: <span class="s">"2026-10-02T12:00:00Z"</span>,
+      <span class="k">"text"</span>: <span class="s">"The SQL video course helped with basics, but nobody reviewed my work."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T12:00:00Z"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Alex"</span>
+    },
+    {
+      <span class="k">"id"</span>: <span class="s">"67211"</span>,
+      <span class="k">"chatId"</span>: <span class="s">"701"</span>,
+      <span class="k">"chat"</span>: <span class="s">"Team · learning"</span>,
+      <span class="k">"messenger"</span>: <span class="s">"max"</span>,
+      <span class="k">"date"</span>: <span class="s">"2026-10-02T12:00:00Z"</span>,
+      <span class="k">"text"</span>: <span class="s">"Easy to watch at your own pace; I had to find practice exercises elsewhere."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T12:00:00Z"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Alex"</span>
+    }
+  ]
+}</pre></details></div></details><div class="chat-turn assistant-turn"><span class="chat-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M12 3v4M8 12h1m6 0h1M9 16h6"/></svg></span><div class="assistant-message"><span class="chat-person">Your agent</span><p>I’d look at the <b>workshop first.</b> Someone who took it confirms weekly exercises and feedback on mistakes.</p><p>The video course sounds useful for learning at your own pace, but the reviewer says nobody checked their work. That makes it a weaker fit for what you want.</p><p>Before choosing, ask the workshop organizers about the level and assignment reviews. The messages don’t confirm the current price or availability.</p><details class="chat-sources"><summary>Source messages<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><details class="chat-source"><summary>Daria · Analytics · community · Telegram</summary><blockquote>Took a SQL workshop: weekly exercises and feedback from the instructor.</blockquote></details><details class="chat-source"><summary>Alex · Team · learning · MAX</summary><blockquote>The SQL video course helped with basics, but nobody reviewed my work.</blockquote></details></details></div></div><details class="chat-next"><summary>Continue the chat<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="chat-turn user-turn"><span class="chat-person">You</span><div class="user-message"><p>Do they actually review mistakes, or just give exercises?</p><button type="button" data-copy="Use max cli. Do they actually review mistakes, or just give exercises?" aria-label="Copy this request"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></svg></button></div></div><div class="chat-turn assistant-turn"><span class="chat-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M12 3v4M8 12h1m6 0h1M9 16h6"/></svg></span><div class="assistant-message"><span class="chat-person">Your agent</span><p>A follow-up message explicitly says <b>the workshop reviews mistakes.</b> It also says not to expect advanced topics.</p><p>That’s a stronger match than the video course, where the participant had to find practice elsewhere.</p></div></div></details></div></div></div><div class="memory-panel" role="tabpanel" id="messenger-panel-commitments" aria-labelledby="messenger-tab-commitments" hidden><div class="dialogue-provider" data-dialogue-provider="tg" ><div class="chat-scene treatment-messenger command-ledger" tabindex="0" role="region" aria-label="Example conversation"><div class="chat-turn user-turn"><span class="chat-person">You</span><div class="user-message"><p>Who needs my reply? And check whether Tom already sent the design before I nudge him.</p><button type="button" data-copy="Use tg cli. Who needs my reply? And check whether Tom already sent the design before I nudge him." aria-label="Copy this request"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></svg></button></div></div><details class="quiet-tools"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m7 9 3 3-3 3m6 0h4"/></svg><span>Checked commitments and Tom’s messages</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="tool-details"><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>tg review <b>--since-time 7d --all --unanswered</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"chats"</span>: [
+    {
+      <span class="k">"title"</span>: <span class="s">"Atlas"</span>,
+      <span class="k">"messages"</span>: [
+        {
+          <span class="k">"id"</span>: <span class="s">"48210"</span>,
+          <span class="k">"senderName"</span>: <span class="s">"Anna"</span>,
+          <span class="k">"text"</span>: <span class="s">"Marco: please confirm the budget."</span>,
+          <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+        },
+        {
+          <span class="k">"id"</span>: <span class="s">"48211"</span>,
+          <span class="k">"senderName"</span>: <span class="s">"Marco"</span>,
+          <span class="k">"text"</span>: <span class="s">"Customer: when is delivery?"</span>,
+          <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+        }
+      ],
+      <span class="k">"more"</span>: <span class="n">false</span>
+    }
+  ],
+  <span class="k">"skipped"</span>: [],
+  <span class="k">"partial"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>tg review <b>--since-time 7d --all</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"chats"</span>: [
+    {
+      <span class="k">"title"</span>: <span class="s">"Atlas"</span>,
+      <span class="k">"messages"</span>: [
+        {
+          <span class="k">"id"</span>: <span class="s">"48210"</span>,
+          <span class="k">"senderName"</span>: <span class="s">"Anna"</span>,
+          <span class="k">"text"</span>: <span class="s">"You: I’ll send Anna the invoice by Friday."</span>,
+          <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+        },
+        {
+          <span class="k">"id"</span>: <span class="s">"48211"</span>,
+          <span class="k">"senderName"</span>: <span class="s">"Marco"</span>,
+          <span class="k">"text"</span>: <span class="s">"Tom: I’ll send the design on Wednesday."</span>,
+          <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+        },
+        {
+          <span class="k">"id"</span>: <span class="s">"48212"</span>,
+          <span class="k">"senderName"</span>: <span class="s">"Tom"</span>,
+          <span class="k">"text"</span>: <span class="s">"Customer: Friday works for me."</span>,
+          <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+        }
+      ],
+      <span class="k">"more"</span>: <span class="n">false</span>
+    }
+  ],
+  <span class="k">"skipped"</span>: [],
+  <span class="k">"partial"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>tg chats list <b>--search "Tom"</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"503"</span>,
+      <span class="k">"title"</span>: <span class="s">"Tom"</span>,
+      <span class="k">"kind"</span>: <span class="s">"private"</span>
+    }
+  ],
+  <span class="k">"hasMore"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>tg messages list <b>503 --limit 30</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"48210"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Tom"</span>,
+      <span class="k">"text"</span>: <span class="s">"Here’s the first design draft. I’ll finalise it after your feedback."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+    }
+  ],
+  <span class="k">"hasMore"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>tg messages search <b>"design" --chat 503 --language legacy</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"48210"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Tom"</span>,
+      <span class="k">"text"</span>: <span class="s">"Here’s the first design draft. I’ll finalise it after your feedback."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+    }
+  ],
+  <span class="k">"hasMore"</span>: <span class="n">false</span>
+}</pre></details></div></details><div class="chat-turn assistant-turn"><span class="chat-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M12 3v4M8 12h1m6 0h1M9 16h6"/></svg></span><div class="assistant-message"><span class="chat-person">Your agent</span><p>Anna is waiting for the invoice, Marco needs your budget decision, and the customer needs delivery confirmation.</p><p><b>Tom has already sent a first draft.</b> I’d follow up about the final version instead:</p><blockquote>Tom, thanks for the first draft! When can you send the final version with our feedback incorporated?</blockquote><p>The budget still needs your decision. I haven’t assumed it’s approved or sent any replies.</p><details class="chat-sources"><summary>Source messages<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><details class="chat-source"><summary>Tom · Telegram</summary><blockquote>Here’s the first design draft. I’ll finalise it after your feedback.</blockquote></details><details class="chat-source"><summary>Marco · Atlas · Telegram</summary><blockquote>Tom: I’ll send the design on Wednesday.</blockquote></details></details></div></div><details class="chat-next"><summary>Continue the chat<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="chat-turn user-turn"><span class="chat-person">You</span><div class="user-message"><p>Keep the customer and Anna replies as drafts. What would you say to Tom?</p><button type="button" data-copy="Use tg cli. Keep the customer and Anna replies as drafts. What would you say to Tom?" aria-label="Copy this request"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></svg></button></div></div><div class="chat-turn assistant-turn"><span class="chat-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M12 3v4M8 12h1m6 0h1M9 16h6"/></svg></span><div class="assistant-message"><span class="chat-person">Your agent</span><p>I’d keep it short and acknowledge the work he sent:</p><blockquote>Tom, thanks for the first draft! When can you send the final version with our feedback incorporated?</blockquote><p>That asks for what’s still missing without implying he hasn’t done anything.</p></div></div></details></div></div><div class="dialogue-provider" data-dialogue-provider="max" hidden><div class="chat-scene treatment-messenger command-ledger" tabindex="0" role="region" aria-label="Example conversation"><div class="chat-turn user-turn"><span class="chat-person">You</span><div class="user-message"><p>Who needs my reply? And check whether Tom already sent the design before I nudge him.</p><button type="button" data-copy="Use max cli. Who needs my reply? And check whether Tom already sent the design before I nudge him." aria-label="Copy this request"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></svg></button></div></div><details class="quiet-tools"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m7 9 3 3-3 3m6 0h4"/></svg><span>Checked commitments and Tom’s messages</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="tool-details"><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>max review <b>--since-time 7d --all --unanswered</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"chats"</span>: [
+    {
+      <span class="k">"title"</span>: <span class="s">"Atlas"</span>,
+      <span class="k">"messages"</span>: [
+        {
+          <span class="k">"id"</span>: <span class="s">"48210"</span>,
+          <span class="k">"senderName"</span>: <span class="s">"Anna"</span>,
+          <span class="k">"text"</span>: <span class="s">"Marco: please confirm the budget."</span>,
+          <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+        },
+        {
+          <span class="k">"id"</span>: <span class="s">"48211"</span>,
+          <span class="k">"senderName"</span>: <span class="s">"Marco"</span>,
+          <span class="k">"text"</span>: <span class="s">"Customer: when is delivery?"</span>,
+          <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+        }
+      ],
+      <span class="k">"more"</span>: <span class="n">false</span>
+    }
+  ],
+  <span class="k">"skipped"</span>: [],
+  <span class="k">"partial"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>max review <b>--since-time 7d --all</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"chats"</span>: [
+    {
+      <span class="k">"title"</span>: <span class="s">"Atlas"</span>,
+      <span class="k">"messages"</span>: [
+        {
+          <span class="k">"id"</span>: <span class="s">"48210"</span>,
+          <span class="k">"senderName"</span>: <span class="s">"Anna"</span>,
+          <span class="k">"text"</span>: <span class="s">"You: I’ll send Anna the invoice by Friday."</span>,
+          <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+        },
+        {
+          <span class="k">"id"</span>: <span class="s">"48211"</span>,
+          <span class="k">"senderName"</span>: <span class="s">"Marco"</span>,
+          <span class="k">"text"</span>: <span class="s">"Tom: I’ll send the design on Wednesday."</span>,
+          <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+        },
+        {
+          <span class="k">"id"</span>: <span class="s">"48212"</span>,
+          <span class="k">"senderName"</span>: <span class="s">"Tom"</span>,
+          <span class="k">"text"</span>: <span class="s">"Customer: Friday works for me."</span>,
+          <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+        }
+      ],
+      <span class="k">"more"</span>: <span class="n">false</span>
+    }
+  ],
+  <span class="k">"skipped"</span>: [],
+  <span class="k">"partial"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>max chats list <b>--search "Tom"</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"503"</span>,
+      <span class="k">"title"</span>: <span class="s">"Tom"</span>,
+      <span class="k">"kind"</span>: <span class="s">"private"</span>
+    }
+  ],
+  <span class="k">"hasMore"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>max messages list <b>503 --limit 30</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"48210"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Tom"</span>,
+      <span class="k">"text"</span>: <span class="s">"Here’s the first design draft. I’ll finalise it after your feedback."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+    }
+  ],
+  <span class="k">"hasMore"</span>: <span class="n">false</span>
+}</pre></details><details class="tool walkthrough-step"><summary><span class="state"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></span><code>max messages search <b>"design" --chat 503 --language legacy</b></code><svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></summary><span class="tool-output-label">Tool output · JSON</span><pre>{
+  <span class="k">"items"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"48210"</span>,
+      <span class="k">"senderName"</span>: <span class="s">"Tom"</span>,
+      <span class="k">"text"</span>: <span class="s">"Here’s the first design draft. I’ll finalise it after your feedback."</span>,
+      <span class="k">"timestamp"</span>: <span class="s">"2026-10-02T09:00:00Z"</span>
+    }
+  ],
+  <span class="k">"hasMore"</span>: <span class="n">false</span>
+}</pre></details></div></details><div class="chat-turn assistant-turn"><span class="chat-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M12 3v4M8 12h1m6 0h1M9 16h6"/></svg></span><div class="assistant-message"><span class="chat-person">Your agent</span><p>Anna is waiting for the invoice, Marco needs your budget decision, and the customer needs delivery confirmation.</p><p><b>Tom has already sent a first draft.</b> I’d follow up about the final version instead:</p><blockquote>Tom, thanks for the first draft! When can you send the final version with our feedback incorporated?</blockquote><p>The budget still needs your decision. I haven’t assumed it’s approved or sent any replies.</p><details class="chat-sources"><summary>Source messages<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><details class="chat-source"><summary>Tom · MAX</summary><blockquote>Here’s the first design draft. I’ll finalise it after your feedback.</blockquote></details><details class="chat-source"><summary>Marco · Atlas · MAX</summary><blockquote>Tom: I’ll send the design on Wednesday.</blockquote></details></details></div></div><details class="chat-next"><summary>Continue the chat<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="chat-turn user-turn"><span class="chat-person">You</span><div class="user-message"><p>Keep the customer and Anna replies as drafts. What would you say to Tom?</p><button type="button" data-copy="Use max cli. Keep the customer and Anna replies as drafts. What would you say to Tom?" aria-label="Copy this request"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></svg></button></div></div><div class="chat-turn assistant-turn"><span class="chat-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M12 3v4M8 12h1m6 0h1M9 16h6"/></svg></span><div class="assistant-message"><span class="chat-person">Your agent</span><p>I’d keep it short and acknowledge the work he sent:</p><blockquote>Tom, thanks for the first draft! When can you send the final version with our feedback incorporated?</blockquote><p>That asks for what’s still missing without implying he hasn’t done anything.</p></div></div></details></div></div></div><div class="chat-window-bottom"><span>Try a question about your own conversations</span><a href="/examples">More examples<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a></div></section></section></main><div class="toast" role="status" aria-live="polite"></div></body></html>
