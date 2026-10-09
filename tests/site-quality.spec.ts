@@ -4,26 +4,23 @@ import { expect, test } from "@playwright/test"
 test.setTimeout(90000)
 
 for (const lang of ["en", "ru", "es"]) {
-  test(`${lang}: landing and long references render without accessibility or browser failures`, async ({ page }) => {
-    // Six full-page axe scans include the generated command reference (~1.8 MB HTML).
-    test.setTimeout(180000)
-    const errors: string[] = []
-    const failed: string[] = []
-    page.on("pageerror", (error) => errors.push(error.message))
-    page.on("response", (response) => {
-      if (response.status() >= 400) failed.push(`${response.status()} ${response.url()}`)
-    })
+  const home = lang === "en" ? "/" : `/${lang}`
+  for (const path of [home, `/${lang}/docs/tg/installation`, `/${lang}/docs/max/commands-personal`]) {
     for (const width of [1440, 390]) {
-      await page.setViewportSize({ width, height: 1000 })
-      for (const path of [
-        lang === "en" ? "/" : `/${lang}`,
-        `/${lang}/docs/tg/installation`,
-        `/${lang}/docs/max/commands-personal`,
-      ]) {
+      test(`${lang}: ${path} at ${width}px renders without accessibility or browser failures`, async ({ page }) => {
+        // A full-page axe scan of a generated command reference is slow on CI runners.
+        test.setTimeout(180000)
+        const errors: string[] = []
+        const failed: string[] = []
+        page.on("pageerror", (error) => errors.push(error.message))
+        page.on("response", (response) => {
+          if (response.status() >= 400) failed.push(`${response.status()} ${response.url()}`)
+        })
+        await page.setViewportSize({ width, height: 1000 })
         const response = await page.goto(path)
         expect(response?.status(), path).toBe(200)
         await page.evaluate(() => document.fonts.ready)
-        if (path === (lang === "en" ? "/" : `/${lang}`)) await expect(page.locator("[data-mini-query]")).toBeAttached()
+        if (path === home) await expect(page.locator("[data-mini-query]")).toBeAttached()
         await expect(page.locator("h1")).toHaveCount(1)
         await expect(page.locator("main")).toHaveCount(1)
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), path).toBe(true)
@@ -31,11 +28,11 @@ for (const lang of ["en", "ru", "es"]) {
           .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa", "best-practice"])
           .analyze()
         expect(result.violations, `${path} at ${width}px`).toEqual([])
-      }
+        expect(errors).toEqual([])
+        expect(failed).toEqual([])
+      })
     }
-    expect(errors).toEqual([])
-    expect(failed).toEqual([])
-  })
+  }
 }
 
 test("documentation search loads on demand and mobile navigation dismisses with Escape", async ({ page }) => {
