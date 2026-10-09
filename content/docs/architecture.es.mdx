@@ -33,7 +33,7 @@ dos suelen salir el mismo día.
 
 **La regla del paquete común: nada en él conoce un mensajero.** Una regla del linter rechaza cualquier
 import de `@mtcute/*`, `ws` o de una carpeta de adaptador dentro de `src/` de cli-messaging
-([biome.json](https://github.com/leemour/cli-messaging/blob/c7cd479/biome.json)). Lo que solo tiene un
+([la configuración del linter](https://github.com/leemour/cli-messaging/blob/c7cd479/biome.json)). Lo que solo tiene un
 mensajero viaja en un campo `providerMetadata` de los tipos comunes.
 
 ## Un comando, de principio a fin
@@ -108,7 +108,7 @@ services: (base) => ({
 Un mensajero se incorpora escribiendo dos cosas: un **adaptador**, que habla con el mensajero, y una
 descripción **`Messenger`**, que se lo presenta a los comandos comunes — el nombre de la aplicación,
 el nombre del proveedor en el almacén, cómo conectar, cómo paginar el historial. No se modifica
-cli-messaging. La guía completa es [ADAPTERS.md](https://github.com/leemour/cli-messaging/blob/c7cd479/docs/dev/ADAPTERS.md).
+cli-messaging. La guía completa es la [guía de adaptadores](https://github.com/leemour/cli-messaging/blob/c7cd479/docs/dev/ADAPTERS.md).
 
 **Un núcleo obligatorio y grupos opcionales.** `MessengerCore` — `self`, `me`, `resolve`, `chat`,
 `send`, `logout`, `close` — es obligatorio. Todo lo demás va en grupos: `ServerReads`,
@@ -267,12 +267,11 @@ MAX no publica una API para cuentas personales, así que max lleva más código 
 
 ## Contribuir: por dónde empezar
 
-- Un mensajero nuevo: [ADAPTERS.md](https://github.com/leemour/cli-messaging/blob/c7cd479/docs/dev/ADAPTERS.md),
+- Un mensajero nuevo: la [guía de adaptadores](https://github.com/leemour/cli-messaging/blob/c7cd479/docs/dev/ADAPTERS.md),
   y después los casos de contrato.
-- El código común: [ARCHITECTURE.md](https://github.com/leemour/cli-messaging/blob/c7cd479/docs/dev/ARCHITECTURE.md)
-  de cli-messaging.
-- Telegram: [ARCHITECTURE.md](https://github.com/leemour/tg-cli/blob/4a36e85/docs/dev/ARCHITECTURE.md) de tg.
-- MAX: [ARCHITECTURE.md](https://github.com/leemour/max-cli/blob/fff19ff/docs/dev/ARCHITECTURE.md) de max
+- El código común: las [notas de arquitectura de cli-messaging](https://github.com/leemour/cli-messaging/blob/c7cd479/docs/dev/ARCHITECTURE.md).
+- Telegram: las [notas de arquitectura de tg](https://github.com/leemour/tg-cli/blob/4a36e85/docs/dev/ARCHITECTURE.md).
+- MAX: las [notas de arquitectura de max](https://github.com/leemour/max-cli/blob/fff19ff/docs/dev/ARCHITECTURE.md)
   y las [notas del protocolo](https://github.com/leemour/max-cli/blob/fff19ff/docs/dev/protocol.md).
 - Preguntas: el [chat de soporte](https://t.me/wirecatdev).
 

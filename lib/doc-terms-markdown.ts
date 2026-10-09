@@ -10,7 +10,7 @@ export function expandDocTerms(markdown: string, lang: string): string {
   const visit = (node: Node) => {
     if ((node.type === "html" || node.type === "text") && node.position) {
       const pattern =
-        /<(\/?)(DocTerm|NodeSetupPrompt|MeetingBriefDemo|AgentInstallPrompt|InstallationMessengerTabs|InstallationOsTabs|PlatformSetupTabs|Screenshot|Tabs|Tab|Steps|Step|Accordions|Accordion)\b([^>]*)>/g
+        /<(\/?)(DocTerm|NodeSetupPrompt|MeetingBriefDemo|AgentInstallPrompt|InstallationMessengerTabs|InstallationOsTabs|PlatformSetupTabs|Screenshot|Tabs|Tab|Steps|Step|Accordions|Accordion|Callout)\b([^>]*)>/g
       const authored = markdown.slice(node.position.start.offset, node.position.end.offset)
       for (const match of authored.matchAll(pattern)) {
         const props = Object.fromEntries([...match[3].matchAll(/(\w+)="([^"]*)"/g)].map((attr) => [attr[1], attr[2]]))
@@ -33,6 +33,8 @@ export function expandDocTerms(markdown: string, lang: string): string {
             text = `**${props.value}**\n`
           } else if (match[2] === "Accordion" && props.title) {
             text = `### ${props.title}\n`
+          } else if (match[2] === "Callout" && props.title) {
+            text = `**${props.title}**\n`
           }
         }
         const start = (node.position.start.offset ?? 0) + (match.index ?? 0)
@@ -53,4 +55,25 @@ export function expandDocTerms(markdown: string, lang: string): string {
   for (const item of replacements.toReversed())
     result = result.slice(0, item.start) + item.text + result.slice(item.end)
   return result
+}
+
+const CONTAINER = /^( *)<(\/?)(Tabs|Tab|Steps|Step|Accordions|Accordion|Callout)\b[^>]*?(\/?)>\s*$/
+
+/**
+ * Processed MDX indents a component's children two spaces per level, and four spaces make a Markdown
+ * code block: links inside an info box or a tab were never rewritten and agents read the steps as code.
+ */
+export function dedentDocComponents(markdown: string): string {
+  let depth = 0
+  return markdown
+    .split("\n")
+    .map((line) => {
+      const tag = CONTAINER.exec(line)
+      if (tag?.[2]) depth = Math.max(0, depth - 1)
+      const indent = " ".repeat(depth * 2)
+      const out = line.startsWith(indent) ? line.slice(indent.length) : line
+      if (tag && !tag[2] && !tag[4]) depth++
+      return out
+    })
+    .join("\n")
 }

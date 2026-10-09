@@ -1,22 +1,15 @@
 ---
 title: "Configuración"
-description: "Guarda ajustes habituales para no repetir opciones."
+description: "Dónde está el archivo de ajustes, cómo ver y cambiar un valor y dónde está la lista completa de ajustes de Telegram y MAX."
 ---
 
-Guarda ajustes que repites, como cuántos resultados mostrar o qué cuenta usar. Aquí verás cuándo cambiarlos, cómo modificar una sola ejecución y cómo comprobar el valor efectivo. Si las primeras tareas ya funcionan, puedes mantener los valores predeterminados; el acceso del asistente se configura en [Permisos](./permissions.mdx).
+Esta página trata de los ajustes de las herramientas de línea de comandos `tg` y `max`: los valores que usa un comando cuando no los indicas, como cuántos resultados mostrar. Al terminar sabrás dónde se guardan, cómo comprobarlos y cambiarlos, y dónde cada mensajero enumera todos sus ajustes. Los valores predeterminados sirven a la mayoría; cambia un ajuste cuando repites siempre la misma opción o quieres valores distintos para distintas cuentas.
 
-## El archivo
+Dos términos. El **archivo de ajustes** (`config.json`) guarda estos valores en tu ordenador. Un <DocTerm term="profile" lang="es" label="perfil" /> es una cuenta o un bot con nombre, como `work`, con sus propios valores; los valores de `defaults` se aplican a todos los perfiles. Los datos de inicio de sesión nunca se guardan en este archivo, y lo que puede hacer tu asistente se define en [Permisos](./permissions.mdx).
 
-Las herramientas crean un `config.json` inicial con valores predeterminados cuando ejecutas
-por primera vez un comando que lee ajustes. Conservan un archivo existente. Consulta su ruta y valores:
+## Dónde está el archivo
 
-```sh
-tg config show
-max config show
-```
-
-Edita el archivo o usa `config set` y `config unset`. No guardes credenciales en él; usa los comandos
-de acceso y configuración del proveedor de modelos.
+La herramienta crea el archivo con valores habituales la primera vez que un comando lee los ajustes, y conserva un archivo existente tal como está.
 
 | Sistema | Telegram | MAX |
 |---|---|---|
@@ -24,22 +17,25 @@ de acceso y configuración del proveedor de modelos.
 | macOS | `~/Library/Preferences/tg-cli/config.json` | `~/Library/Preferences/max-cli/config.json` |
 | Windows | `%APPDATA%\tg-cli\Config\config.json` | `%APPDATA%\max-cli\Config\config.json` |
 
-En PowerShell usa `tg.cmd` y `max.cmd`. Los comandos muestran la ruta real si has elegido otra carpeta.
+`config show` muestra la ruta real, que cambia si tu ordenador usa otro directorio. En PowerShell escribe `tg.cmd` o `max.cmd`.
 
-## Tres maneras de ajustar un valor
+## Comprobar y cambiar un ajuste
 
-- **Archivo:** guarda un valor para futuras ejecuciones. `tg config set limit 50` guarda el límite de resultados.
-- **Variable de entorno:** el terminal puede seleccionar perfil o tiempo límite para su sesión.
-  Por ejemplo, `TG_PROFILE` o `MAX_PROFILE` elige perfil. No todos los ajustes tienen variable.
-- **Opción del comando:** <DocTerm term="flag" lang="es" label="un flag" /> como `--limit 5` cambia solo esa ejecución.
+```sh
+tg config show
+tg config set limit 50
+tg work config set limit 10
+tg config set sendsPerHour 10 --defaults
+tg config unset limit
+```
 
-## Qué valor gana
+`config show` enumera cada ajuste con su valor y de dónde viene. `config set` guarda un valor para el perfil actual, para un perfil con nombre como `work` o, con `--defaults`, para todos los perfiles. Comprueba el valor antes de escribirlo, así que un error tipográfico se rechaza en lugar de guardarse. `config unset` elimina un valor para que vuelva a aplicarse el predeterminado. Para MAX, escribe `max` en lugar de `tg`. También puedes editar el archivo a mano.
 
-Primero la opción del comando, después la variable de entorno, el valor del perfil seleccionado,
-los `defaults` compartidos y el valor incorporado. Solo participan las formas compatibles con ese
-ajuste; la referencia del mensajero las enumera.
+## ¿Qué valor gana?
 
-## Un ejemplo pequeño
+Una opción del comando como `--limit 5` (<DocTerm term="flag" lang="es" label="un flag" />) cambia solo esa ejecución. Gana a una variable de entorno; después vienen el valor del perfil en el archivo, `defaults` y el valor integrado. Algunos ajustes no tienen opción ni variable; la referencia de cada mensajero indica cuáles existen.
+
+## Un ejemplo
 
 ```json
 {
@@ -48,17 +44,38 @@ ajuste; la referencia del mensajero las enumera.
 }
 ```
 
-`tg work chats list` o `max work chats list` usa 50. Añade `--limit 5` para obtener cinco solo esa vez.
-Al quitar el valor del perfil vuelve a aplicar el valor compartido.
+`tg work chats list` muestra 50 resultados, los demás perfiles 20, y `--limit 5` muestra cinco en un solo comando.
 
-## Qué puedes configurar
+<details id="full-example" className="docs-disclosure">
+<summary>Un ejemplo más completo con perfiles, bots y permisos</summary>
 
-Resultados, colores, registro de ejecuciones, límites de envío y proveedores de modelos.
-Las referencias de [Telegram](./tg/configuration.md) y [MAX](./max/configuration.md) enumeran valores
-y opciones compatibles. Comprueba el resultado con `config show` después de un cambio.
+```json
+{
+  "defaultProfile": "personal",
+  "defaults": { "limit": 20, "keepRunsForDays": 14, "updateCheck": true },
+  "profiles": {
+    "personal": { "limit": 50, "color": true },
+    "work": { "limit": 10, "record": true, "permissions": { "messages": "readonly" } }
+  },
+  "personal": { "defaults": { "sendsPerHour": 30 } },
+  "bot": { "profiles": { "shop": { "sendsPerHour": 200 } } }
+}
+```
+
+- `defaultProfile` se usa cuando un comando no indica perfil.
+- `defaults` se aplica a todos los perfiles; `profiles.<nombre>`, a uno.
+- `personal` se aplica solo a los comandos de tu propia cuenta; `bot`, solo a los comandos `tg <nombre> bot …` y `max <nombre> bot …`.
+- `work` guarda un registro de cada ejecución y solo puede leer mensajes.
+
+</details>
+
+## Todos los ajustes de Telegram y MAX
+
+Las dos herramientas comparten la mayoría de los ajustes, como `limit`, `sendsPerHour`, `record` y `permissions`. Algunos existen solo en una: por ejemplo, `proxy` en Telegram y `serve` en MAX. Cada mensajero documenta los suyos:
+
+- **Telegram:** [guía de configuración de Telegram](./tg/configuration.md) · [todos los ajustes de Telegram, sus valores predeterminados y variables de entorno](./tg/configuration-reference.md).
+- **MAX:** [guía de configuración de MAX](./max/configuration.md) · [todos los ajustes de MAX, sus valores predeterminados y variables de entorno](./max/configuration-reference.md).
 
 ## Perfiles y bots
 
-Un perfil guarda ajustes de una cuenta o bot. Pon su nombre antes del comando, como
-`tg work config show`. Añade `bot` después del nombre para trabajar como bot.
-Consulta [Perfiles y bots](./profiles.md).
+Pon el nombre del perfil antes del comando, como `tg work config show`. Añade `bot` después para trabajar como bot en lugar de con tu cuenta personal. [Perfiles y bots](./profiles.md) explica cómo elegirlos y cambiar entre ellos.

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { docTerm } from "../lib/doc-terms"
-import { expandDocTerms } from "../lib/doc-terms-markdown"
+import { dedentDocComponents, expandDocTerms } from "../lib/doc-terms-markdown"
 import { wordsFor } from "../lib/words"
 
 describe("documentation explanations for Markdown readers", () => {
@@ -34,4 +34,28 @@ describe("documentation explanations for Markdown readers", () => {
       expect(result).toContain(`\`\`\`mdx\n${prompt}\n\`\`\``)
     },
   )
+})
+
+describe("dedentDocComponents", () => {
+  it("lifts tab and callout content out of the indentation that made it a code block", () => {
+    const processed = [
+      '<Callout type="info" title="Browser?">',
+      "  Follow the [guide](./browser-apps.mdx).",
+      "</Callout>",
+      "",
+      '<Tabs items={["A"]}>',
+      '  <Tab value="A">',
+      "    Add a connection with the [MCP guide](./mcp.mdx).",
+      "",
+      "    ```json",
+      '    { "a": { "b": 1 } }',
+      "    ```",
+      "  </Tab>",
+      "</Tabs>",
+    ].join("\n")
+    const out = dedentDocComponents(processed)
+    expect(out).toContain("\nFollow the [guide](./browser-apps.mdx).")
+    expect(out).toContain("\nAdd a connection with the [MCP guide](./mcp.mdx).")
+    expect(out).toContain('\n{ "a": { "b": 1 } }')
+  })
 })

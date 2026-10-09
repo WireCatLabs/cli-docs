@@ -5,9 +5,37 @@ description: "Entiende el servidor MCP y las instrucciones del agente, elige una
 
 Conecta tu asistente al mensajero y dale instrucciones para trabajar con tus chats. Aquí conocerás MCP y los skills, elegirás una conexión y encontrarás las herramientas y sus permisos.
 
+## Qué es MCP
+
+**MCP (Model Context Protocol)** es un estándar abierto para conectar aplicaciones de IA con
+herramientas. Funciona como un enchufe universal: una aplicación compatible con MCP puede usar
+cualquier servidor MCP sin una integración propia. El estándar está publicado en [modelcontextprotocol.io](https://modelcontextprotocol.io/).
+
+Participan dos partes:
+
+- El **cliente** es tu aplicación de IA, por ejemplo Claude Desktop, ChatGPT, Cursor o Gemini CLI.
+  Pregunta al servidor qué herramientas hay y llama a una cuando tu petición la necesita.
+- El **servidor** es `tg mcp` o `max mcp`, parte de la herramienta de línea de comandos. Se ejecuta
+  en tu ordenador o en un servidor al que un chat del navegador llega por una dirección HTTPS pública.
+
+Mediante MCP, la IA solo puede usar las herramientas que ofrece el servidor, y solo dentro de los
+[permisos](./permissions.mdx) del perfil: un perfil de solo lectura no puede enviar. Conectar MCP no
+inicia sesión en tu mensajero por ti; inicias sesión una vez con la herramienta de línea de comandos.
+Tampoco descarga todo tu archivo.
+
+Un agente con terminal, como Claude Code o Codex, no necesita MCP: puede ejecutar los comandos `tg` y
+`max` directamente, y un **skill** le explica cómo. Una aplicación de IA sin terminal, como Claude
+Desktop o un chat del navegador, usa MCP. La [comparación de abajo](#cli-skill-o-mcp) te ayuda a elegir.
+
+<Callout type="info" title="¿Usas un chat de IA en el navegador o en el móvil?">
+
+ChatGPT, Claude y otros chats web se conectan mediante una dirección HTTPS pública: sigue la [guía de navegador y móvil](./browser-apps.mdx).
+
+</Callout>
+
 ## Qué hace el servidor MCP
 
-**MCP** permite a los agentes hablar con un servidor para realizar tus tareas. Nuestro servidor da acceso al mensajero conectado: chats, mensajes, archivos adjuntos, búsqueda e informes. Tú pides un resultado; el asistente llama una herramienta y el servidor realiza la acción.
+Nuestro servidor da acceso al mensajero conectado: chats, mensajes, archivos adjuntos, búsqueda e informes. Tú pides un resultado; el asistente llama una herramienta y el servidor realiza la acción.
 
 El servidor está incluido en la herramienta de línea de comandos y **debe funcionar mientras el asistente lo utiliza**. Una aplicación local puede iniciarlo en tu ordenador. Para navegador o móvil, se mantiene en un ordenador o servidor y se conecta con una dirección HTTPS pública y autenticación. Sigue la [guía de navegador y móvil](./browser-apps.mdx).
 
@@ -34,9 +62,9 @@ Las instrucciones vienen con la herramienta. [Conectar tu agente](./agents.mdx) 
 | Conexión | Qué ofrece | Cuándo elegirla |
 |---|---|---|
 | CLI | Comandos de terminal con resultados JSON | Tu agente ya tiene una terminal local |
-| Skill + CLI | Instrucciones de comandos y flujos de trabajo | Usas Codex, Cursor Agent, Claude Code, Gemini CLI, Hermes u OpenClaw |
-| MCP | Herramientas con parámetros directamente en el cliente | Usas Claude Desktop o prefieres su interfaz de herramientas |
-| MCP por HTTP | Las mismas herramientas para ChatGPT o Claude en el navegador, tras tu propio túnel | Chateas en el navegador — [ChatGPT y Claude en el navegador](./browser-apps.mdx) |
+| Skill + CLI | Instrucciones de comandos y flujos de trabajo | Tu agente puede ejecutar comandos en la terminal, por ejemplo Codex, Cursor Agent, Claude Code, Gemini CLI, Hermes u OpenClaw |
+| MCP | Herramientas con parámetros directamente en el cliente | Tu aplicación de IA no tiene terminal, por ejemplo Claude Desktop, o prefieres su interfaz de herramientas |
+| MCP por HTTP | Las mismas herramientas para un chat de IA en el navegador, como ChatGPT o Claude, tras tu propio túnel | Chateas en el navegador — [ChatGPT y Claude en el navegador](./browser-apps.mdx) |
 | Markdown | Explicaciones y referencia de comandos | El agente necesita consultar cómo funciona algo |
 
 Con una terminal, empieza con [un skill](./agents.mdx). MCP es opcional y respeta los mismos

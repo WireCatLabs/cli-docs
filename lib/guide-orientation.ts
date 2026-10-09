@@ -191,7 +191,7 @@ export function guideStartLink(slugs: string[], lang: string) {
     permissions: "permissions",
     profiles: "profiles",
     limits: `${slugs[0]}/troubleshooting`,
-    replies: "prompting#recurring-tasks",
+    replies: "drafts-and-templates",
     "audio-recognition": "prompting#files-and-voice",
     "external-models": "security",
     "topic-search": "search",
@@ -217,7 +217,11 @@ export function guideStartLink(slugs: string[], lang: string) {
       "Восстановить подключение Telegram",
       "Restablecer Telegram",
     ],
-    "prompting#recurring-tasks": ["Repeat a useful task", "Повторять полезную задачу", "Repetir una tarea útil"],
+    "drafts-and-templates": [
+      "Choose drafts or auto-replies",
+      "Выбрать черновики или автоответы",
+      "Elegir borradores o respuestas automáticas",
+    ],
     "prompting#files-and-voice": [
       "Work with files and voice",
       "Работать с файлами и голосовыми",

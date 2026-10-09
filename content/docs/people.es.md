@@ -3,9 +3,37 @@ title: "Personas"
 description: "Recuerda quién te escribió y qué hablasteis antes de responder, usando tu historial de Telegram o MAX."
 ---
 
-Alguien te escribe, pero no recuerdas dónde os conocisteis ni qué acordasteis. Pide al agente
-que encuentre a la persona, reúna las conversaciones anteriores y muestre los mensajes de origen.
-Necesitas una [cuenta conectada](./installation.mdx) y un [agente](./agents.mdx).
+Esta página trata de las personas con las que hablas en Telegram y MAX. Sirve cuando alguien te
+escribe y no recuerdas dónde os conocisteis ni qué acordasteis. Al terminar, podrás pedir al agente
+quién es, qué hablasteis y si la cuenta parece un bot, con los mensajes que respaldan cada respuesta.
+También podrás unir las cuentas de Telegram y MAX de una misma persona. Necesitas una
+[cuenta conectada](./installation.mdx) y un [agente](./agents.mdx).
+
+## Qué es una persona aquí
+
+Una persona es alguien que tu cuenta ha visto en un chat: en un chat privado o en un grupo que
+compartís. Las herramientas la reconocen por su cuenta del mensajero —su ID y, en Telegram, su
+`@username`— y por lo que guarda de ella el historial de tu ordenador.
+
+Una persona no tiene que estar en tus contactos. Los contactos son la agenda del mensajero: las
+personas que añadiste, a menudo por número de teléfono. Alguien que escribió en un grupo común es una
+persona aquí aunque nunca la añadieras. `contacts list` muestra las personas con las que tienes un chat
+privado. Añadir, renombrar o eliminar un contacto es otra acción y cambia tu cuenta del mensajero.
+
+También puedes guardar contexto privado sobre una persona. Se queda en tu ordenador y nunca llega al
+mensajero:
+
+- **Tu propio nombre para ella.** Los comandos podrán encontrarla por ese nombre. Se aplica a la
+  cuenta seleccionada y no cambia su nombre en tus contactos.
+- **Notas.** Texto libre sobre la persona en el que tú o tu agente podréis buscar después.
+
+Los comandos están en la [guía de personas de Telegram](./tg/people.md#your-own-names-and-notes-contacts-alias-contacts-notes)
+y en la [referencia de MAX](./max/commands.md#max-contacts-alias).
+
+La misma persona suele tener una cuenta en Telegram y otra en MAX. Las herramientas las tratan como
+dos personas hasta que las **vinculas**: registras en tu ordenador que ambas cuentas son de la misma
+persona. Después, el resumen de lo que escribió incluye sus mensajes de los dos mensajeros.
+Consulta [la misma persona en los dos mensajeros](#link-your-accounts).
 
 <a id="pídeselo-a-tu-agente" />
 
@@ -119,9 +147,11 @@ Si sabes que dos cuentas pertenecen a la misma persona, puedes guardar el víncu
 tg contacts link @example_user max:"Example User"
 ```
 
-Después, `contacts context` reúne las identidades vinculadas. `contacts profile` describe la
-identidad seleccionada del mensajero. Un nombre igual no basta; solo cuenta lo que registras tú.
-`contacts unlink` elimina esa asociación local.
+Las dos cuentas deben estar ya en el historial de este ordenador, así que usa `tg` y `max` en el
+mismo ordenador. Después, `contacts context` sin `--chat` reúne las identidades vinculadas.
+`contacts context --chat` y `contacts profile` muestran solo la identidad seleccionada del mensajero.
+Un nombre igual no basta; solo cuenta lo que registras tú. `contacts unlink` elimina esa asociación
+local.
 
 ### Vincula una dirección de correo
 
@@ -162,8 +192,10 @@ no obedece peticiones que haya dentro.
 
 ## Respuestas automáticas por tus reglas
 
-Las respuestas automáticas son una tarea aparte que puede enviar mensajes. Empieza por
-[las respuestas automáticas de MAX](./max/replies.md) para configurarlas; leer el historial no las activa.
+Las respuestas automáticas son una tarea aparte que puede enviar mensajes; leer el historial de
+una persona no las activa. [Borradores y plantillas](./drafts-and-templates.mdx) explica en qué se
+diferencian de un borrador que te muestra el agente. La configuración está en
+[las respuestas automáticas de Telegram](./tg/replies.md) y [las de MAX](./max/replies.md).
 
 Cuando conozcas el contexto, pide [un borrador](./prompting.mdx#revisar-compromisos-y-preparar-respuestas)
 y revisa el texto antes de autorizar el envío.

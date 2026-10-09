@@ -1,11 +1,11 @@
 ---
 title: AI chats in the browser and on your phone
-description: "Connect Telegram and MAX to ChatGPT or Claude in your browser or mobile app. You do not need their desktop apps."
+description: "Connect Telegram and MAX to an AI chat such as ChatGPT, Claude or Gemini in your browser or mobile app. You do not need their desktop apps."
 ---
 
 Use Telegram and MAX from an AI chat in your browser or mobile app: find messages, gather context and prepare replies. Setup takes a few commands and adding an address in your chat settings. You do not need to install the ChatGPT or Claude desktop apps. Any AI chat that lets you connect your own MCP server can use this connection; choose your app below.
 
-This guide connects your chosen messenger and checks it with a request for your own chats. A program on your computer talks to the messenger; ChatGPT or Claude reaches that program <DocTerm term="public-address" lang="en" label="through a public address" />. <DocTerm term="mcp" lang="en" label="MCP" /> is the way these tools connect to an assistant. Below, we will obtain the address and add it to the app.
+This guide connects your chosen messenger and checks it with a request for your own chats. A program on your computer talks to the messenger; your AI chat reaches that program <DocTerm term="public-address" lang="en" label="through a public address" />. <DocTerm term="mcp" lang="en" label="MCP" /> is the way these tools connect to an assistant. Below, we will obtain the address and add it to the app.
 
 ## Before starting
 
@@ -251,7 +251,7 @@ for its connector. Funnel's permitted public ports are `443`, `8443` and `10000`
 
 ## Connect without keeping your laptop awake
 
-You can install `tg` or `max` on a separate server that stays running, and connect ChatGPT or Claude to its address. You can then use your messenger from the chat while your laptop is off.
+You can install `tg` or `max` on a separate server that stays running, and connect your AI chat to its address. You can then use your messenger from the chat while your laptop is off.
 
 Install the tool on the server, sign into the chosen account, start its MCP connection and provide a public HTTPS address. Configure automatic startup after a reboot: both the messenger program and public access must remain running. The server needs its own account login; your laptop installation does not connect it automatically.
 

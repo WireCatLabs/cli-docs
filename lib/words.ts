@@ -5,7 +5,6 @@ export type Words = {
   source: string
   install: string
   inLanguage: (language: string) => string
-  agents: string
   navigation: {
     start: string
     installation: string
@@ -51,7 +50,6 @@ export const words: Record<string, Words> = {
     source: "Source",
     install: "Install",
     inLanguage: (language) => `This page is in ${languageName.en?.[language] ?? language}.`,
-    agents: "For agents: every page as Markdown in /llms.txt and /llms-full.txt.",
     navigation: {
       start: "Getting started",
       installation: "Install and log in",
@@ -66,7 +64,7 @@ export const words: Record<string, Words> = {
       menu: "Open documentation menu",
       installGuide: "Install with your agent",
       installGuideDescription:
-        "A step-by-step guide for Codex, Cursor, Claude Code, Gemini CLI and Hermes, or your terminal.",
+        "A step-by-step guide for your AI agent, for example Claude Code, Codex, Cursor or Gemini CLI, or your terminal.",
       mcpGuideDescription: "What MCP gives your agent, how to connect your client, and how to read these docs.",
     },
     onboarding: {
@@ -97,7 +95,6 @@ At the end, offer to install the ${tool} skill for my agent.`,
     source: "Исходный код",
     install: "Установка",
     inLanguage: (language) => `Эта страница на ${languageName.ru?.[language] ?? language} языке.`,
-    agents: "Для агентов: каждая страница в Markdown — /llms.txt и /llms-full.txt.",
     navigation: {
       start: "Начало работы",
       installation: "Установка и вход",
@@ -112,7 +109,7 @@ At the end, offer to install the ${tool} skill for my agent.`,
       menu: "Открыть меню документации",
       installGuide: "Установить с помощью агента",
       installGuideDescription:
-        "Пошаговый путь для Codex, Cursor, Claude Code, Gemini CLI и Hermes или установки в терминале.",
+        "Пошаговый путь для вашего ИИ-агента, например Claude Code, Codex, Cursor или Gemini CLI, или установки в терминале.",
       mcpGuideDescription: "Что MCP даёт агенту, как подключить свой клиент и как читать эти доки.",
     },
     onboarding: {
@@ -144,7 +141,6 @@ At the end, offer to install the ${tool} skill for my agent.`,
     source: "Código fuente",
     install: "Instalar",
     inLanguage: (language) => `Esta página está en ${languageName.es?.[language] ?? language}.`,
-    agents: "Para agentes: cada página en Markdown en /llms.txt y /llms-full.txt.",
     navigation: {
       start: "Primeros pasos",
       installation: "Instalar e iniciar sesión",
@@ -159,7 +155,7 @@ At the end, offer to install the ${tool} skill for my agent.`,
       menu: "Abrir el menú de documentación",
       installGuide: "Instalar con tu agente",
       installGuideDescription:
-        "Guía paso a paso para Codex, Cursor, Claude Code, Gemini CLI y Hermes, o para la terminal.",
+        "Guía paso a paso para tu agente de IA, por ejemplo Claude Code, Codex, Cursor o Gemini CLI, o para la terminal.",
       mcpGuideDescription: "Qué aporta MCP, cómo conectar tu cliente y cómo leer esta documentación.",
     },
     onboarding: {

@@ -3,7 +3,7 @@ title: How search works
 description: "The technical side of message search and topic search — indexes, the conversation graph, vectors, ranking, freshness and measurements."
 ---
 
-Learn how to find an exact message, locate a discussion by topic and check its sources. To try it now, open the **[Telegram](./tg/search.md)** or **[MAX](./max/search.md)** search guide for commands and examples. Below we explain the indexes, word forms, server search, the conversation graph, vectors, ranking and freshness behind those commands.
+This page explains how search works inside `tg` and `max`, for readers who want to know why a search finds a message or misses it. By the end, you will know which kind of search fits a question and what each one needs prepared. To search right away, open the **[Telegram](./tg/search.md)** or **[MAX](./max/search.md)** search guide for commands and examples. Below we explain the indexes, word forms, server search, the conversation graph, vectors, ranking and freshness behind those commands.
 
 There are two ways to search one local archive. **Message search** finds the messages that satisfy a strict query. **Topic search** finds conversations by meaning and shared words. They share the archive and nothing else: the conversation graph and the vectors are optional stages that message search never reads.
 

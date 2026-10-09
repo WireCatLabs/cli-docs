@@ -1,22 +1,15 @@
 ---
 title: "Configuration"
-description: "Save common settings instead of repeating options."
+description: "Find the settings file, view and change a value, and open the full list of settings for Telegram or MAX."
 ---
 
-Save the settings you use repeatedly, such as how many results to show or which account to use. This page explains when to change settings, how to make a change for one command and how to check the effective value. If your first tasks already work, you can leave the defaults; assistant access is configured in [Permissions](./permissions.mdx).
+This page is about the settings of the `tg` and `max` command-line tools: the values a command uses when you do not give them, such as how many results to show. By the end, you will know where your settings are stored, how to check and change them, and where each messenger lists every available setting. The defaults work for most people; change a setting when you keep repeating the same option or want different values for different accounts.
 
-## The file
+Two terms help here. The **settings file** (`config.json`) keeps these values on your computer. A <DocTerm term="profile" lang="en" label="profile" /> is a named account or bot, such as `work`, with its own values; values under `defaults` apply to every profile. Login data is never stored in this file, and what your assistant may do is set in [Permissions](./permissions.mdx).
 
-The tools create a starter `config.json` with common defaults when you first run a command that
-loads settings. An existing file is preserved. Use these commands to see its path and current values:
+## Where the file is
 
-```sh
-tg config show
-max config show
-```
-
-You can edit the file or use `config set` and `config unset`. Keep login credentials out of it;
-use the login and model-provider setup commands instead.
+The tool creates the file with common defaults the first time a command reads settings, and keeps an existing file as it is.
 
 | System | Telegram | MAX |
 |---|---|---|
@@ -24,23 +17,25 @@ use the login and model-provider setup commands instead.
 | macOS | `~/Library/Preferences/tg-cli/config.json` | `~/Library/Preferences/max-cli/config.json` |
 | Windows | `%APPDATA%\tg-cli\Config\config.json` | `%APPDATA%\max-cli\Config\config.json` |
 
-Use `tg.cmd` and `max.cmd` in PowerShell. The commands above show the actual location if your
-computer uses a custom directory.
+`config show` prints the actual path, which differs if your computer uses a custom directory. In PowerShell, type `tg.cmd` or `max.cmd`.
 
-## Three ways to set a value
+## Check and change a setting
 
-- **File:** a value stays saved for later commands. `tg config set limit 50` saves a result limit.
-- **Environment variable:** a terminal can select a profile or command time limit for its session.
-  For example, `TG_PROFILE` or `MAX_PROFILE` chooses a profile. Not every setting has a variable.
-- **Command option:** a <DocTerm term="flag" lang="en" label="flag" /> such as `--limit 5` changes only this invocation.
+```sh
+tg config show
+tg config set limit 50
+tg work config set limit 10
+tg config set sendsPerHour 10 --defaults
+tg config unset limit
+```
+
+`config show` lists every setting with its value and where that value came from. `config set` saves a value for the current profile, for a named profile such as `work`, or with `--defaults` for every profile. It checks the value before writing, so a typo is refused instead of saved. `config unset` removes a value so the default applies again. For MAX, write `max` instead of `tg`. You can also edit the file by hand.
 
 ## Which value wins?
 
-A command option wins over an environment variable, then the selected profile's saved value,
-then shared file defaults, then the built-in value. Only the supported ways of setting that
-particular value take part. Each messenger's reference lists them.
+A command option such as `--limit 5` (a <DocTerm term="flag" lang="en" label="flag" />) changes only that run. It wins over an environment variable, then the profile's value in the file, then `defaults`, then the built-in value. Some settings have no option or environment variable; each messenger's reference says which ones exist.
 
-## A small configuration
+## An example
 
 ```json
 {
@@ -49,17 +44,38 @@ particular value take part. Each messenger's reference lists them.
 }
 ```
 
-`tg work chats list` or `max work chats list` uses 50. Add `--limit 5` to get five for that command.
-Removing the profile's value lets the shared default apply again.
+`tg work chats list` shows 50 results, other profiles show 20, and `--limit 5` shows five for one command.
 
-## What can I configure?
+<details id="full-example" className="docs-disclosure">
+<summary>A fuller example with profiles, bots and permissions</summary>
 
-Common settings include the number of results, colour, recording, send limits and model providers.
-Read the [Telegram settings reference](./tg/configuration.md) or [MAX settings reference](./max/configuration.md)
-for the available values and supported overrides. Use `config show` after a change to check the result.
+```json
+{
+  "defaultProfile": "personal",
+  "defaults": { "limit": 20, "keepRunsForDays": 14, "updateCheck": true },
+  "profiles": {
+    "personal": { "limit": 50, "color": true },
+    "work": { "limit": 10, "record": true, "permissions": { "messages": "readonly" } }
+  },
+  "personal": { "defaults": { "sendsPerHour": 30 } },
+  "bot": { "profiles": { "shop": { "sendsPerHour": 200 } } }
+}
+```
+
+- `defaultProfile` is used when a command names no profile.
+- `defaults` apply to every profile; `profiles.<name>` to one profile.
+- `personal` applies only to commands for your own account; `bot` only to `tg <name> bot …` and `max <name> bot …` commands.
+- `work` keeps a record of every run and may only read messages.
+
+</details>
+
+## All settings for Telegram and MAX
+
+The two tools share most settings, such as `limit`, `sendsPerHour`, `record` and `permissions`. Some exist in only one of them: for example, `proxy` in Telegram and `serve` in MAX. Each messenger documents its own:
+
+- **Telegram:** [Telegram configuration guide](./tg/configuration.md) · [every Telegram setting, default and environment variable](./tg/configuration-reference.md).
+- **MAX:** [MAX configuration guide](./max/configuration.md) · [every MAX setting, default and environment variable](./max/configuration-reference.md).
 
 ## Profiles and bots
 
-A profile keeps settings for one account or bot. Put its name before the command, such as
-`tg work config show`. Add `bot` to work as a bot rather than your personal account.
-[Profiles and bots](./profiles.md) explains choosing and switching them.
+Put a profile's name before the command, such as `tg work config show`. Add `bot` after it to work as a bot rather than your personal account. [Profiles and bots](./profiles.md) explains choosing and switching them.
