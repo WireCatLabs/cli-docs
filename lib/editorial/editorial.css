@@ -12250,6 +12250,67 @@ html.dark .wirecat-editorial .button.secondary:is(:hover, :focus-visible) {
   }
 }
 
+/* Soft frame: neutral structural lines disappear gently at both ends. */
+.wirecat-editorial .landing5 {
+  --fade-rule: color-mix(in srgb, var(--ink) 16%, transparent);
+}
+.wirecat-editorial:has(main.landing5)::before {
+  display: none;
+}
+.wirecat-editorial .landing5 .hero.memory-hero {
+  position: relative;
+}
+.wirecat-editorial .landing5 .hero.memory-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0 -16px;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, transparent, var(--fade-rule) 20%, var(--fade-rule) 75%, transparent) left / 1px 100%
+    no-repeat;
+}
+.wirecat-editorial .landing5 .hero.memory-hero::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(38.63636% + 4.77px);
+  width: 1px;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, var(--fade-rule) 18%, var(--fade-rule) 78%, transparent);
+}
+.wirecat-editorial .landing5 .section-heading5 {
+  position: relative;
+}
+.wirecat-editorial .landing5 .section-heading5::after {
+  content: "";
+  position: absolute;
+  top: -32px;
+  left: -16px;
+  right: -16px;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--fade-rule) 18%, var(--fade-rule) 82%, transparent);
+}
+.wirecat-editorial main.landing5 .roles5,
+.wirecat-editorial main.landing5 .outcomes5 {
+  border-top-color: transparent;
+}
+@media (max-width: 1000px) {
+  .wirecat-editorial .landing5 .hero.memory-hero::after {
+    display: none;
+  }
+}
+@media (max-width: 650px) {
+  .wirecat-editorial .landing5 .hero.memory-hero::before {
+    inset-inline: -9px;
+  }
+  .wirecat-editorial .landing5 .section-heading5::after {
+    left: -9px;
+    right: -9px;
+  }
+}
+
 .wirecat-editorial .editorial-language {
   position: relative;
   font-size: 12px;
