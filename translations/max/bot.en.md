@@ -143,10 +143,10 @@ max sales bot chats admins remove "Команда продаж" 4815162342
 ```sh
 max sales bot messages list "Команда продаж" --offline
 max sales bot messages show "Команда продаж" mid.0000019a7f3c21de --offline
-max sales bot messages search "итоги недели"
+max sales bot search messages "итоги недели"
 ```
 
-Search matches words, with best matches first; `--newest` puts recent matches first. All words are required. `"фраза"`, `-слово`, `а OR б` and the filters `from:`, `chat:`, `after:`, `before:`, `has:` work as in `max messages search --language legacy`, including typo correction. For strict search across the shared archive, use [regular search](./search.md) with `in:bots`.
+Search matches words, with best matches first; `--newest` puts recent matches first. All words are required. `"фраза"`, `-слово`, `а OR б` and the filters `from:`, `chat:`, `after:`, `before:`, `has:` work as in `max search messages --language legacy`, including typo correction. For strict search across the shared archive, use [regular search](./search.md) with `in:bots`.
 
 Download older chat history into the local store:
 
@@ -165,8 +165,8 @@ People are found in the same copy. Use an ID, `@username` or part of a name. If 
 ```sh
 max sales bot contacts show @ann                 # где писала, и её личный чат с ботом
 max sales bot contacts show @ann --refresh       # сначала перечитать личный чат у MAX
-max sales bot messages search --from @ann        # всё, что она написала
-max sales bot messages search "счёт" --from @ann --from Борис
+max sales bot search messages --from @ann        # всё, что она написала
+max sales bot search messages "счёт" --from @ann --from Борис
 max sales bot messages between @ann Борис --limit 20
 ```
 
@@ -177,11 +177,11 @@ max sales bot messages between @ann Борис --limit 20
 ```sh
 max shop config set --bot readOtherBots true          # боту shop можно читать всех ботов
 max shop config set --bot readOtherBots news,support  # или только этих
-max shop bot messages search заказ --bots news        # и тогда — явно, в команде
+max shop bot search messages заказ --bots news        # и тогда — явно, в команде
 max shop bot contacts show @ann --all-bots            # все, кого разрешено
 ```
 
-`--all-bots` and `--bots` are supported by `messages search`, `contacts show` and `messages between`. Without `readOtherBots`, both refuse with code `5` and name the command that enables access. Through `max <имя> bot mcp`, the equivalent fields (`all_bots`, `bots`) are offered only when access is permitted.
+`--all-bots` and `--bots` are supported by `search messages`, `contacts show` and `messages between`. Without `readOtherBots`, both refuse with code `5` and name the command that enables access. Through `max <имя> bot mcp`, the equivalent fields (`all_bots`, `bots`) are offered only when access is permitted.
 
 ## Updates
 
@@ -302,7 +302,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Path and query parameters become flags; the body is JSON in `--body`, `--body -` (from a pipe) or `--body-file`. `--body-file -` also reads stdin. The native `timeout` parameter is named `--poll-timeout`; the global `--timeout` limits the whole command. The shared `--store-token <profile>` option is unavailable for current MAX methods: each rejects it before performing the operation. Before sending, the body is checked against the schema. Errors identify the field and expected type without exposing its value. See [Bot API coverage](https://github.com/leemour/max-cli/blob/v0.38.1/docs/dev/bot-api-coverage.md) for all operations and their read/write classification.
+Path and query parameters become flags; the body is JSON in `--body`, `--body -` (from a pipe) or `--body-file`. `--body-file -` also reads stdin. The native `timeout` parameter is named `--poll-timeout`; the global `--timeout` limits the whole command. The shared `--store-token <profile>` option is unavailable for current MAX methods: each rejects it before performing the operation. Before sending, the body is checked against the schema. Errors identify the field and expected type without exposing its value. See [Bot API coverage](https://github.com/leemour/max-cli/blob/v0.39.0/docs/dev/bot-api-coverage.md) for all operations and their read/write classification.
 
 ## Scripts and agents
 

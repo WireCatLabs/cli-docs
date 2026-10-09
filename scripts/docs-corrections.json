@@ -662,24 +662,36 @@
   {
     "tool": "tg",
     "slug": "changelog",
-    "reason": "TG v0.34.0 already used backend both through cli-messaging 0.171.0. v0.35.0 corrects guide descriptions, not the default; verified in release source and upstream correction PR351.",
+    "reason": "TG v0.34.0 already used backend both through cli-messaging 0.171.0. v0.35.0 corrects guide descriptions, not the default; verified in release source and upstream correction PR351. The release note about PDF pages ends mid-sentence; it is completed from the attachments guide.",
     "replacements": {
       "en": [
         {
           "before": "- **Word search now asks Telegram as well as the local archive by default (`--backend both`).**\n  Previously it searched only the archive unless a backend was chosen. Search can now connect to Telegram;\n  use `--backend archive` for local-only searches. Counting with `stats`, topic search and queries the server\n  cannot answer still read only the archive.\n",
           "after": "- **The search guides now correctly describe the existing default (`--backend both`).** Word search asks Telegram as well as the local archive, as it already did in 0.34.0. Use `--backend archive` for local-only searches. Counting with `stats`, topic search and queries the server cannot answer still read only the archive.\n"
+        },
+        {
+          "before": "Remote agents can read\n",
+          "after": "Remote agents can read it page by page when their client cannot open PDFs.\n"
         }
       ],
       "ru": [
         {
           "before": "- **Поиск по словам теперь по умолчанию обращается к Telegram и локальному архиву (`--backend both`).**\n  Раньше он искал только в архиве, если не был выбран другой источник. Теперь поиск может подключаться к Telegram;\n  используйте `--backend archive` для поиска только локально. Подсчёт через `stats`, поиск по темам и запросы, на которые сервер\n  не может ответить, по-прежнему читают только архив.\n",
           "after": "- **Руководства по поиску теперь верно описывают существующее значение по умолчанию (`--backend both`).** Поиск по словам обращается к Telegram и локальному архиву, как уже в 0.34.0. Для поиска только в архиве используйте `--backend archive`. Подсчёты через `stats`, поиск тем и запросы, которые сервер не поддерживает, по-прежнему читают только архив.\n"
+        },
+        {
+          "before": "Удалённые агенты могут читать\n",
+          "after": "Удалённые агенты могут читать его постранично, если их клиент не открывает PDF.\n"
         }
       ],
       "es": [
         {
           "before": "- **La búsqueda por palabras ahora consulta Telegram y el archivo local de forma predeterminada (`--backend both`).**\n  Antes buscaba solo en el archivo salvo que se eligiera otro backend. Ahora la búsqueda puede conectarse a Telegram;\n  usa `--backend archive` para buscar solo localmente. Los recuentos con `stats`, la búsqueda por temas y las consultas que el servidor\n  no puede responder siguen leyendo solo el archivo.\n",
           "after": "- **Las guías de búsqueda ahora describen correctamente el valor predeterminado existente (`--backend both`).** La búsqueda por palabras consulta Telegram y el archivo local, como ya hacía en 0.34.0. Usa `--backend archive` para buscar solo localmente. Los recuentos con `stats`, la búsqueda de temas y las consultas que el servidor no puede resolver siguen leyendo solo el archivo.\n"
+        },
+        {
+          "before": "Los agentes remotos pueden leer\n",
+          "after": "Los agentes remotos pueden leerlo página a página si su cliente no abre PDF.\n"
         }
       ]
     }
@@ -837,24 +849,36 @@
   {
     "tool": "tg",
     "slug": "groups",
-    "reason": "Separate mutually exclusive approval flags into concrete command examples; a pipe inside a flag is illustrative shorthand, not executable syntax.",
+    "reason": "Separate mutually exclusive approval flags into concrete command examples; a pipe inside a flag is illustrative shorthand, not executable syntax. tg refuses --approval together with --max-uses, so the limit goes with --no-approval. Topic search moved to `tg search topics`; `tg topics search` no longer exists.",
     "replacements": {
       "en": [
         {
           "before": "`tg chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
-          "after": "`tg chats link update <chat> <link> --approval --expire-time <time> --max-uses <n>`, `tg chats link update <chat> <link> --no-approval`"
+          "after": "`tg chats link update <chat> <link> --approval --expire-time <time>`, `tg chats link update <chat> <link> --no-approval --max-uses <n>`"
+        },
+        {
+          "before": "| `tg topics list\\|search <chat>` | a forum group's topics |",
+          "after": "| `tg topics list <chat>`, `tg search topics <chat> <text>` | a forum group's topics; search finds them by title |"
         }
       ],
       "ru": [
         {
           "before": "`tg chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
-          "after": "`tg chats link update <chat> <link> --approval --expire-time <time> --max-uses <n>`, `tg chats link update <chat> <link> --no-approval`"
+          "after": "`tg chats link update <chat> <link> --approval --expire-time <time>`, `tg chats link update <chat> <link> --no-approval --max-uses <n>`"
+        },
+        {
+          "before": "| `tg topics list\\|search <chat>` | темы группы-форума |",
+          "after": "| `tg topics list <chat>`, `tg search topics <chat> <text>` | темы группы-форума; поиск находит их по названию |"
         }
       ],
       "es": [
         {
           "before": "`tg chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
-          "after": "`tg chats link update <chat> <link> --approval --expire-time <time> --max-uses <n>`, `tg chats link update <chat> <link> --no-approval`"
+          "after": "`tg chats link update <chat> <link> --approval --expire-time <time>`, `tg chats link update <chat> <link> --no-approval --max-uses <n>`"
+        },
+        {
+          "before": "| `tg topics list\\|search <chat>` | temas de un grupo de foro |",
+          "after": "| `tg topics list <chat>`, `tg search topics <chat> <text>` | temas de un grupo de foro; la búsqueda los encuentra por título |"
         }
       ]
     }
@@ -862,24 +886,36 @@
   {
     "tool": "tg",
     "slug": "from-tgcli",
-    "reason": "tags list has no --chat; only add/remove target a chat. Separate the valid command references.",
+    "reason": "tags list has no --chat; only add/remove target a chat. Separate the valid command references. Topic search moved to `tg search topics`.",
     "replacements": {
       "en": [
         {
           "before": "`tg tags add/remove/list --chat`",
           "after": "`tg tags add --chat`, `tg tags remove --chat`, `tg tags list`"
+        },
+        {
+          "before": "| `topics list/search` | `tg topics list/search <chat>` |",
+          "after": "| `topics list/search` | `tg topics list <chat>`, `tg search topics <chat> <text>` |"
         }
       ],
       "ru": [
         {
           "before": "`tg tags add/remove/list --chat`",
           "after": "`tg tags add --chat`, `tg tags remove --chat`, `tg tags list`"
+        },
+        {
+          "before": "| `topics list/search` | `tg topics list/search <chat>` |",
+          "after": "| `topics list/search` | `tg topics list <chat>`, `tg search topics <chat> <text>` |"
         }
       ],
       "es": [
         {
           "before": "`tg tags add/remove/list --chat`",
           "after": "`tg tags add --chat`, `tg tags remove --chat`, `tg tags list`"
+        },
+        {
+          "before": "| `topics list/search` | `tg topics list/search <chat>` |",
+          "after": "| `topics list/search` | `tg topics list <chat>`, `tg search topics <chat> <text>` |"
         }
       ]
     }
@@ -887,36 +923,36 @@
   {
     "tool": "max",
     "slug": "security",
-    "reason": "Reader review: use a concise title and explain the page scope before native storage details; no behavior or command change.",
+    "reason": "Reader review: name the reader's question in the title (the shared page is already titled Security) and state the page scope before native storage details; no behavior or command change.",
     "replacements": {
       "en": [
         {
           "before": "title: \"What is stored on disk and what never is\"",
-          "after": "title: \"Security\""
+          "after": "title: \"MAX security: what reaches the disk and the network\""
         },
         {
           "before": "This tool accesses private conversations. Explaining what it records is a central part of its documentation.",
-          "after": "This page covers MAX-specific behavior: login credentials, sending limits and network connections."
+          "after": "This page explains where `max` keeps the MAX login token and other data on your computer, what it sends over the network, and which checks stop a send to the wrong place."
         }
       ],
       "ru": [
         {
           "before": "title: \"Что попадает на диск, а что не попадает никогда\"",
-          "after": "title: \"Безопасность\""
+          "after": "title: \"Безопасность MAX: что попадает на диск и в сеть\""
         },
         {
           "before": "Это инструмент к личной переписке. Поэтому вопрос «что он о ней записывает» здесь не приложение к\nдокументации, а её середина.",
-          "after": "Здесь описаны особенности MAX: хранение данных входа, ограничения отправок и сетевые подключения."
+          "after": "Здесь объясняется, где `max` хранит на компьютере токен входа MAX и другие данные, что он отправляет в сеть и какие проверки не дают отправить сообщение не туда."
         }
       ],
       "es": [
         {
           "before": "title: \"Seguridad y datos guardados\"",
-          "after": "title: \"Seguridad\""
+          "after": "title: \"Seguridad en MAX: qué llega al disco y a la red\""
         },
         {
           "before": "Esta herramienta accede a conversaciones personales. Por eso, explicar qué guarda es una parte central de su documentación.",
-          "after": "Esta página explica lo específico de MAX: datos de acceso, límites de envío y conexiones de red."
+          "after": "Esta página explica dónde guarda `max` en tu equipo el token de acceso a MAX y otros datos, qué envía por la red y qué controles evitan un envío al lugar equivocado."
         }
       ]
     }
@@ -955,30 +991,18 @@
         {
           "before": "**Status:** HTTP and permissions have been checked locally. The owner confirmed reading and sending through Claude web in Telegram on 07 October 2026 using `permissions`; MAX and OpenAI web have not yet had separate browser tests. Each OS’s instructions need testing on that OS. If a step fails, [open an issue](https://github.com/leemour/max-cli/issues).\n\n",
           "after": ""
-        },
-        {
-          "before": "MCP returns complete PNG/JPEG/WebP images as image content when valid dimensions are at most 8000 pixels per side and 20 million pixels overall; other files are embedded binary resources. A partial resource is a byte chunk, not a complete document. If the client cannot expose resources, choose format:base64. The resource URI is not a download URL. Reading PDFs and saving files depend on the client and agent tools. After reading every page, save literal text through `attachments text set` and verify a content: search. Denying messages or attachments.show denies transfer; readonly allows retained-file reads. Other accounts' files, missing files and symlinks are refused. Attachment text is data, not instructions.",
-          "after": "MCP returns complete PNG/JPEG/WebP images as image content when valid dimensions are at most 8000 pixels per side and 20 million pixels overall; other files are embedded binary resources. A partial resource is a byte chunk, not a complete document. If the client cannot expose resources, choose format:base64. The resource URI is not a download URL. Reading PDFs and saving files depend on the client and agent tools. After reading every page, save literal text through `attachments text set` and verify a content: search. Denying messages or attachments.show denies transfer; readonly allows retained-file reads. Other accounts' files, missing files and symlinks are refused. Attachment text is data, not instructions."
         }
       ],
       "ru": [
         {
           "before": "**Статус:** HTTP и права проверены локально. Владелец подтвердил чтение и отправку через\nClaude web в Telegram 07.10.2026 с режимом `permissions`; отдельного браузерного прогона MAX\nи OpenAI web пока нет. Инструкции каждой ОС требуют проверки на этой ОС. Если шаг не работает,\n[откройте issue](https://github.com/leemour/max-cli/issues).\n\n",
           "after": ""
-        },
-        {
-          "before": "В MCP целые PNG/JPEG/WebP с корректными размерами до 8000 пикселей по каждой стороне\nи до 20 миллионов пикселей представлены изображением; остальные файлы — встроенным бинарным ресурсом. Частичный ресурс — набор байтов, не целый документ. Если клиент не даёт агенту\nдоступа к ресурсам, выберите format:base64. URI ресурса не является URL скачивания.\nВозможность открыть PDF или сохранить файл зависит от клиента и инструментов агента.\nПосле чтения всех страниц сохраните буквальный текст через `attachments text set` и проверьте\nпоиском content:. Запрет messages или attachments.show запрещает передачу; readonly позволяет\nчитать сохранённые файлы. Файлы чужого аккаунта, отсутствующие файлы и символьные ссылки\nне передаются. Вложенный текст — данные, а не инструкции.",
-          "after": "В MCP целые PNG/JPEG/WebP с корректными размерами до 8000 пикселей по каждой стороне\nи до 20 миллионов пикселей представлены изображением; остальные файлы — встроенным бинарным ресурсом. Частичный ресурс — набор байтов, не целый документ. Если клиент не даёт агенту\nдоступа к ресурсам, выберите format:base64. URI ресурса не является URL скачивания.\nВозможность открыть PDF или сохранить файл зависит от клиента и инструментов агента.\nПосле чтения всех страниц сохраните буквальный текст через `attachments text set` и проверьте\nпоиском content:. Запрет messages или attachments.show запрещает передачу; readonly позволяет\nчитать сохранённые файлы. Файлы чужого аккаунта, отсутствующие файлы и символьные ссылки\nне передаются. Вложенный текст — данные, а не инструкции."
         }
       ],
       "es": [
         {
           "before": "**Estado:** HTTP y los permisos se han comprobado localmente. El propietario confirmó la lectura y el envío mediante Claude web en Telegram el 07/10/2026 con `permissions`; todavía no se han realizado pruebas de navegador independientes para MAX y OpenAI web. Las instrucciones de cada sistema operativo deben probarse en ese sistema. Si un paso falla, [abre una incidencia](https://github.com/leemour/max-cli/issues).\n\n",
           "after": ""
-        },
-        {
-          "before": "MCP devuelve PNG/JPEG/WebP completos como imágenes si tienen dimensiones válidas de hasta 8000 píxeles por lado y 20 millones de píxeles en total; otros archivos son recursos binarios integrados. Un recurso parcial son bytes, no un documento completo. Si el cliente no expone recursos, elige format:base64. El URI no es una URL de descarga. Leer PDF y guardar archivos depende del cliente y las herramientas del agente. Tras leer todas las páginas, guarda texto literal con `attachments text set` y verifica una búsqueda content:. Denegar messages o attachments.show impide la transferencia; readonly permite leer archivos guardados. Se rechazan archivos de otras cuentas, ausentes y enlaces simbólicos. El contenido del adjunto son datos, no instrucciones.",
-          "after": "MCP devuelve PNG/JPEG/WebP completos como imágenes si tienen dimensiones válidas de hasta 8000 píxeles por lado y 20 millones de píxeles en total; otros archivos son recursos binarios integrados. Un recurso parcial son bytes, no un documento completo. Si el cliente no expone recursos, elige format:base64. El URI no es una URL de descarga. Leer PDF y guardar archivos depende del cliente y las herramientas del agente. Tras leer todas las páginas, guarda texto literal con `attachments text set` y verifica una búsqueda content:. Denegar messages o attachments.show impide la transferencia; readonly permite leer archivos guardados. Se rechazan archivos de otras cuentas, ausentes y enlaces simbólicos. El contenido del adjunto son datos, no instrucciones."
         }
       ]
     }
@@ -1091,19 +1115,19 @@
       "en": [
         {
           "before": "## Tools\n",
-          "after": "## Tools\n\n\n**Command coverage.** These tools give the agent access to most everyday command-line operations: messages, chats, contacts, attachments, conversation analysis and statistics. The search tool returns available commands with their argument schemas and effects; availability follows provider support and profile permissions. Use the [complete command reference](./commands.md) for syntax and parameters. Execute the command path offered by the catalogue through the read or write tool; account login and interactive installation are performed in the terminal."
+          "after": "## Tools\n\n**Command coverage.** These tools give the agent access to most everyday command-line operations: messages, chats, contacts, attachments, conversation analysis and statistics. The search tool returns available commands with their argument schemas and effects; availability follows provider support and profile permissions. Use the [complete command reference](./commands.md) for syntax and parameters. Execute the command path offered by the catalogue through the read or write tool; account login and interactive installation are performed in the terminal.\n"
         }
       ],
       "ru": [
         {
           "before": "## Инструменты\n",
-          "after": "## Инструменты\n\n\n**Покрытие команд.** Эти инструменты дают агенту доступ к большинству повседневных операций командной строки: сообщениям, чатам, контактам, вложениям, анализу обсуждений и статистике. Инструмент поиска возвращает доступные команды с параметрами и последствиями; набор определяется поддержкой мессенджера и правами профиля. Точный синтаксис и параметры — в [полном справочнике команд](./commands.md). Выполняйте команду, предложенную каталогом, через инструмент чтения или изменения; вход в аккаунт и интерактивная установка выполняются в терминале."
+          "after": "## Инструменты\n\n**Покрытие команд.** Эти инструменты дают агенту доступ к большинству повседневных операций командной строки: сообщениям, чатам, контактам, вложениям, анализу обсуждений и статистике. Инструмент поиска возвращает доступные команды с параметрами и последствиями; набор определяется поддержкой мессенджера и правами профиля. Точный синтаксис и параметры — в [полном справочнике команд](./commands.md). Выполняйте команду, предложенную каталогом, через инструмент чтения или изменения; вход в аккаунт и интерактивная установка выполняются в терминале.\n"
         }
       ],
       "es": [
         {
           "before": "## Herramientas\n",
-          "after": "## Herramientas\n\n\n**Cobertura de comandos.** Estas herramientas cubren la mayoría de operaciones habituales: mensajes, chats, contactos, adjuntos, conversaciones y estadísticas. La búsqueda devuelve comandos disponibles con parámetros y efectos según el mensajero y los permisos. Consulta sintaxis y parámetros en la [referencia completa](./commands.md). Ejecuta la ruta ofrecida por el catálogo mediante lectura o escritura; acceso a la cuenta e instalación interactiva se realizan en el terminal."
+          "after": "## Herramientas\n\n**Cobertura de comandos.** Estas herramientas cubren la mayoría de operaciones habituales: mensajes, chats, contactos, adjuntos, conversaciones y estadísticas. La búsqueda devuelve comandos disponibles con parámetros y efectos según el mensajero y los permisos. Consulta sintaxis y parámetros en la [referencia completa](./commands.md). Ejecuta la ruta ofrecida por el catálogo mediante lectura o escritura; acceso a la cuenta e instalación interactiva se realizan en el terminal.\n"
         }
       ]
     }
@@ -1129,7 +1153,293 @@
       "en": [
         {
           "before": "An isolated test used an additional adapter to turn SSE responses into JSON; that adapter\nis not shipped in the CLI. OAuth and tool-discovery checks do not prove that an agent can read PDFs.\n",
-          "after": ""
+          "after": "OAuth and tool-discovery checks do not prove that an agent can read PDFs.\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "roadmap",
+    "reason": "The release roadmap places the note that private names and notes for people are already supported under the max catch-up item; it belongs under the related item about notes on chats.",
+    "replacements": {
+      "en": [
+        {
+          "before": "keeps beside its tags.\n",
+          "after": "keeps beside its tags.\n  [Private names and notes for people](./people.md#your-own-names-and-notes-contacts-alias-contacts-notes) are already supported.\n"
+        },
+        {
+          "before": "bot and opening its mini app.\n  [Private names and notes for people](./people.md#your-own-names-and-notes-contacts-alias-contacts-notes) are already supported.\n",
+          "after": "bot and opening its mini app.\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "хранит рядом со своими тегами.\n",
+          "after": "хранит рядом со своими тегами.\n  [Свои имена и заметки о людях](./people.md#your-own-names-and-notes-contacts-alias-contacts-notes) уже доступны.\n"
+        },
+        {
+          "before": "запуск бота и его мини-приложения.\n  [Свои имена и заметки о людях](./people.md#your-own-names-and-notes-contacts-alias-contacts-notes) уже доступны.\n",
+          "after": "запуск бота и его мини-приложения.\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "guarda junto a sus etiquetas.\n",
+          "after": "guarda junto a sus etiquetas.\n  Los [nombres y notas personales](./people.md#your-own-names-and-notes-contacts-alias-contacts-notes) ya están disponibles.\n"
+        },
+        {
+          "before": "iniciar bots y abrir mini apps.\n  Los [nombres y notas personales](./people.md#your-own-names-and-notes-contacts-alias-contacts-notes) ya están disponibles.\n",
+          "after": "iniciar bots y abrir mini apps.\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "troubleshooting",
+    "reason": "`messages search` became `search messages`, which changed the heading anchor; keep the published anchor so existing links still open this section.",
+    "replacements": {
+      "en": [
+        {
+          "before": "\n## `search messages` finds nothing\n",
+          "after": "\n<a id=\"messages-search-finds-nothing\" />\n\n## `search messages` finds nothing\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "\n## `search messages` ничего не находит\n",
+          "after": "\n<a id=\"messages-search-finds-nothing\" />\n\n<a id=\"messages-search-ничего-не-находит\" />\n\n## `search messages` ничего не находит\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "\n## `search messages` no encuentra nada\n",
+          "after": "\n<a id=\"messages-search-finds-nothing\" />\n\n<a id=\"messages-search-no-encuentra-nada\" />\n\n## `search messages` no encuentra nada\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "changelog",
+    "reason": "The source placeholders <слова>, <состояние> and <операция> are Russian; English and Spanish readers get placeholders in their language. Command tokens are unchanged.",
+    "replacements": {
+      "en": [
+        {
+          "before": "- **`max search all \"<слова>\"` searches",
+          "after": "- **`max search all \"<words>\"` searches"
+        },
+        {
+          "before": "- **`max store jobs list --state <состояние>`** shows jobs matching `running`, `done`, `failed`, `cancelled` or `died`.",
+          "after": "- **`max store jobs list --state <state>`** shows only background jobs in that state: `running`, `done`, `failed`, `cancelled` or `died`."
+        },
+        {
+          "before": "`max bot api <операция>` calls",
+          "after": "`max bot api <operation>` calls"
+        }
+      ],
+      "es": [
+        {
+          "before": "- **`max search all \"<слова>\"` busca",
+          "after": "- **`max search all \"<palabras>\"` busca"
+        },
+        {
+          "before": "- **`max store jobs list --state <состояние>`** muestra tareas `running`, `done`, `failed`, `cancelled` o `died`.",
+          "after": "- **`max store jobs list --state <estado>`** muestra solo las tareas en segundo plano en ese estado: `running`, `done`, `failed`, `cancelled` o `died`."
+        },
+        {
+          "before": "`max bot api <операция>` ejecuta",
+          "after": "`max bot api <operación>` ejecuta"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "commands",
+    "reason": "`tg messages search`, `tg conversations search`, `tg topics search` and `tg bot messages search` were replaced by `tg search messages`, `tg search conversations`, `tg search topics` and `tg bot search messages`. Keep the published anchors of the removed commands pointing at their replacements so existing links still land on the right entry.",
+    "replacements": {
+      "en": [
+        {
+          "before": "\n### `tg search messages`\n",
+          "after": "\n<a id=\"tg-messages-search\" />\n\n### `tg search messages`\n"
+        },
+        {
+          "before": "\n### `tg search conversations`\n",
+          "after": "\n<a id=\"tg-conversations-search\" />\n\n### `tg search conversations`\n"
+        },
+        {
+          "before": "\n### `tg search topics`\n",
+          "after": "\n<a id=\"tg-topics-search\" />\n\n### `tg search topics`\n"
+        },
+        {
+          "before": "\n#### `tg bot search messages`\n",
+          "after": "\n<a id=\"tg-bot-messages-search\" />\n\n#### `tg bot search messages`\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "\n### `tg search messages`\n",
+          "after": "\n<a id=\"tg-messages-search\" />\n\n### `tg search messages`\n"
+        },
+        {
+          "before": "\n### `tg search conversations`\n",
+          "after": "\n<a id=\"tg-conversations-search\" />\n\n### `tg search conversations`\n"
+        },
+        {
+          "before": "\n### `tg search topics`\n",
+          "after": "\n<a id=\"tg-topics-search\" />\n\n### `tg search topics`\n"
+        },
+        {
+          "before": "\n#### `tg bot search messages`\n",
+          "after": "\n<a id=\"tg-bot-messages-search\" />\n\n#### `tg bot search messages`\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "\n### `tg search messages`\n",
+          "after": "\n<a id=\"tg-messages-search\" />\n\n### `tg search messages`\n"
+        },
+        {
+          "before": "\n### `tg search conversations`\n",
+          "after": "\n<a id=\"tg-conversations-search\" />\n\n### `tg search conversations`\n"
+        },
+        {
+          "before": "\n### `tg search topics`\n",
+          "after": "\n<a id=\"tg-topics-search\" />\n\n### `tg search topics`\n"
+        },
+        {
+          "before": "\n#### `tg bot search messages`\n",
+          "after": "\n<a id=\"tg-bot-messages-search\" />\n\n#### `tg bot search messages`\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "bot",
+    "reason": "Placeholders in the reader's language for the generic Bot API command; drop a dated manual test report from the guide while keeping the fact that MAX's documentation and server behaviour differ. Command tokens are unchanged.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`max <бот> bot api <операция>`. Pass",
+          "after": "`max <bot> bot api <operation>`. Pass"
+        },
+        {
+          "before": "`max bot api <операция>`. Commands",
+          "after": "`max bot api <operation>`. Commands"
+        },
+        {
+          "before": "Adding a member through `bot chats members add` was checked on 3 October 2026: an administrator bot added a member who was absent, and the personal account confirmed the result. [MAX documentation](https://dev.max.ru/docs-api) says this method was removed on 30 September, but the server still performs it in the tested group.",
+          "after": "An administrator bot can add a member with `bot chats members add`. [MAX documentation](https://dev.max.ru/docs-api) lists this method as removed, but the MAX server can still perform it."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Добавление участника через `bot chats members add` проверено 3 октября 2026 года:\nбот-админ добавил отсутствовавшего участника, результат подтверждён личным аккаунтом.\n[Документация MAX](https://dev.max.ru/docs-api) объявляет этот метод удалённым с 30 сентября,\nно в проверенной группе сервер продолжает выполнять его.",
+          "after": "Бот-админ может добавить участника через `bot chats members add`.\n[Документация MAX](https://dev.max.ru/docs-api) объявляет этот метод удалённым,\nно сервер MAX может продолжать его выполнять."
+        }
+      ],
+      "es": [
+        {
+          "before": "`max <бот> bot api <операция>`. Los",
+          "after": "`max <bot> bot api <operación>`. Los"
+        },
+        {
+          "before": "`max bot api <операция>` expone",
+          "after": "`max bot api <operación>` expone"
+        },
+        {
+          "before": "La incorporación de miembros con `bot chats members add` se comprobó el 3 de octubre de 2026: un bot administrador añadió a un miembro ausente y la cuenta personal confirmó el resultado. La [documentación de MAX](https://dev.max.ru/docs-api) declara este método eliminado desde el 30 de septiembre, pero el servidor sigue ejecutándolo en el grupo comprobado.",
+          "after": "Un bot administrador puede añadir miembros con `bot chats members add`. La [documentación de MAX](https://dev.max.ru/docs-api) declara este método eliminado, pero el servidor de MAX puede seguir ejecutándolo."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "limits",
+    "reason": "Public guides state behaviour, not how it was tested: drop the test-provenance parenthetical. The send-id deduplication fact is unchanged.",
+    "replacements": {
+      "en": [
+        {
+          "before": " and does not create a second message (verified with a retry after 15 minutes).",
+          "after": " and does not create a second message."
+        }
+      ],
+      "ru": [
+        {
+          "before": "MAX узнаёт и второго сообщения не создаёт (проверено на повторе через 15 минут).",
+          "after": "MAX узнаёт и второго сообщения не создаёт."
+        }
+      ],
+      "es": [
+        {
+          "before": " y no crea un segundo mensaje (comprobado con un reintento después de 15 minutos).",
+          "after": " y no crea un segundo mensaje."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "attachments",
+    "reason": "Public guides carry no package versions or test provenance: keep the real limitation (an older unpdf may lack page rendering) and drop the tested versions and the 'not tested against live MAX' hedge. No version is presented as a minimum.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Rendering was verified with `unpdf` 1.8.1 and `@napi-rs/canvas` 1.0.10; an older `unpdf` may read text but lack the necessary rendering functions.",
+          "after": "An older `unpdf` may read text but lack the functions needed to render pages; if rendering fails, update `unpdf` and `@napi-rs/canvas`."
+        },
+        {
+          "before": " This description matches the CLI source code; the existence of a command does not mean every possible file of that format has been tested against live MAX.\n",
+          "after": "\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "Для рендеринга проверены `unpdf` 1.8.1 и `@napi-rs/canvas` 1.0.10; старый `unpdf` может читать\nтекст, но не предоставлять необходимые функции рендеринга.",
+          "after": "Старый `unpdf` может читать текст, но не уметь отрисовывать страницы; если рендеринг не работает,\nобновите `unpdf` и `@napi-rs/canvas`."
+        },
+        {
+          "before": "\nОписание соответствует исходному коду CLI; наличие команды не означает, что каждый\nвозможный файл данного формата проверен на реальном MAX.\n",
+          "after": "\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "El renderizado se verificó con `unpdf` 1.8.1 y `@napi-rs/canvas` 1.0.10; un `unpdf` antiguo puede leer texto sin ofrecer las funciones de renderizado necesarias.",
+          "after": "Un `unpdf` antiguo puede leer texto sin ofrecer las funciones necesarias para convertir páginas en imágenes; si falla, actualiza `unpdf` y `@napi-rs/canvas`."
+        },
+        {
+          "before": " Esta descripción corresponde al código de la CLI; que exista un comando no significa que se haya probado cada archivo posible de ese formato con MAX real.\n",
+          "after": "\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "troubleshooting",
+    "reason": "The search command was renamed to search messages, which changed this heading's anchor; keep the old anchor so existing links still land here.",
+    "replacements": {
+      "en": [
+        {
+          "before": "## `search messages` finds nothing",
+          "after": "<a id=\"messages-search-ничего-не-находит\" />\n\n## `search messages` finds nothing"
+        }
+      ],
+      "ru": [
+        {
+          "before": "## `search messages` ничего не находит",
+          "after": "<a id=\"messages-search-ничего-не-находит\" />\n\n## `search messages` ничего не находит"
+        }
+      ],
+      "es": [
+        {
+          "before": "## `search messages` no encuentra nada",
+          "after": "<a id=\"messages-search-ничего-не-находит\" />\n\n## `search messages` no encuentra nada"
         }
       ]
     }
@@ -1137,20 +1447,48 @@
   {
     "tool": "max",
     "slug": "commands",
-    "reason": "Shared CLI schemas list legacy bulk/link flags; MAX rejects them. Describe current provider constraints without changing the schema.",
+    "reason": "`max messages search`, `max conversations search` and `max bot messages search` were replaced by `max search messages`, `max search conversations` and `max bot search messages`. Keep the old anchors so existing links land on the replacement.",
     "replacements": {
       "en": [
         {
-          "before": "#### `max chats requests list`\n\nwho asked to join, newest first; only admins see them, and reading tells nobody\n\n```sh\nmax chats requests list <chat> [options]\n```\n\n| Argument | | Meaning |\n|---|---|---|\n| `chat` | required | a chat: its id, or part of its title. |\n\n| Option | Purpose |\n|---|---|\n| `--limit <n>` | how many. |\n| `--search <text>` | only people whose name or @username has this. |\n| `--link <link>` | only people who asked through this invite link; not with --search. |\n",
-          "after": "#### `max chats requests list`\n\nwho asked to join, newest first; only admins see them, and reading tells nobody\n\n```sh\nmax chats requests list <chat> [options]\n```\n\n| Argument | | Meaning |\n|---|---|---|\n| `chat` | required | a chat: its id, or part of its title. |\n\n| Option | Purpose |\n|---|---|\n| `--limit <n>` | how many. |\n| `--search <text>` | only people whose name or @username has this. |\n| `--link <link>` | not supported by MAX; rejected before the request. |\n"
+          "before": "\n### `max search messages`\n",
+          "after": "\n<a id=\"max-messages-search\" />\n\n### `max search messages`\n"
         },
         {
-          "before": "#### `max chats requests accept`\n\nlet them in; the group sees them join\n\n**Changes something in MAX.**\n\n```sh\nmax chats requests accept <chat> [person] [options]\n```\n\n| Argument | | Meaning |\n|---|---|---|\n| `chat` | required | a chat: its id, or part of its title. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | Purpose |\n|---|---|\n| `--all` | every pending request, counted against the hourly limit first. |\n| `--link <link>` | with --all: only the requests made by this invite link. |\n",
-          "after": "#### `max chats requests accept`\n\nlet them in; the group sees them join\n\n**Changes something in MAX.**\n\n```sh\nmax chats requests accept <chat> [person] [options]\n```\n\n| Argument | | Meaning |\n|---|---|---|\n| `chat` | required | a chat: its id, or part of its title. |\n| `person` | optional | an id from `chats requests list`; MAX requires a specific person. |\n\n| Option | Purpose |\n|---|---|\n| `--all` | not supported by MAX; select one person instead. |\n| `--link <link>` | not supported by MAX; rejected before the request. |\n"
+          "before": "\n### `max search conversations`\n",
+          "after": "\n<a id=\"max-conversations-search\" />\n\n### `max search conversations`\n"
         },
         {
-          "before": "#### `max chats requests decline`\n\nturn the request away\n\n**Changes something in MAX.**\n\n```sh\nmax chats requests decline <chat> [person] [options]\n```\n\n| Argument | | Meaning |\n|---|---|---|\n| `chat` | required | a chat: its id, or part of its title. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | Purpose |\n|---|---|\n| `--all` | every pending request, counted against the hourly limit first. |\n| `--link <link>` | with --all: only the requests made by this invite link. |\n\n### `max chats folders`\n\nyour chat folders\n",
-          "after": "#### `max chats requests decline`\n\nturn the request away\n\n**Changes something in MAX.**\n\n```sh\nmax chats requests decline <chat> [person] [options]\n```\n\n| Argument | | Meaning |\n|---|---|---|\n| `chat` | required | a chat: its id, or part of its title. |\n| `person` | optional | an id from `chats requests list`; MAX requires a specific person. |\n\n| Option | Purpose |\n|---|---|\n| `--all` | not supported by MAX; select one person instead. |\n| `--link <link>` | not supported by MAX; rejected before the request. |\n\n### `max chats folders`\n\nyour chat folders\n"
+          "before": "\n#### `max bot search messages`\n",
+          "after": "\n<a id=\"max-bot-messages-search\" />\n\n#### `max bot search messages`\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "\n### `max search messages`\n",
+          "after": "\n<a id=\"max-messages-search\" />\n\n### `max search messages`\n"
+        },
+        {
+          "before": "\n### `max search conversations`\n",
+          "after": "\n<a id=\"max-conversations-search\" />\n\n### `max search conversations`\n"
+        },
+        {
+          "before": "\n#### `max bot search messages`\n",
+          "after": "\n<a id=\"max-bot-messages-search\" />\n\n#### `max bot search messages`\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "\n### `max search messages`\n",
+          "after": "\n<a id=\"max-messages-search\" />\n\n### `max search messages`\n"
+        },
+        {
+          "before": "\n### `max search conversations`\n",
+          "after": "\n<a id=\"max-conversations-search\" />\n\n### `max search conversations`\n"
+        },
+        {
+          "before": "\n#### `max bot search messages`\n",
+          "after": "\n<a id=\"max-bot-messages-search\" />\n\n#### `max bot search messages`\n"
         }
       ]
     }

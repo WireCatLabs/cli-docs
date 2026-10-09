@@ -44,6 +44,8 @@ The saved `localPath` is available on the machine running the CLI. A path alone 
 
 An agent on this computer can open the saved `localPath`. An agent on another machine needs the file bytes and suitable readers: a path does not transfer them. Check your AI client’s capabilities and [remote connection method](./remote.md). Receiving a file, reading it and saving text in the index are separate steps.
 
+A remote agent can receive a saved PDF through `attachments show`; if the client does not open PDFs, show each page with `--page`. Viewing a page requires the optional PDF engines; rendering is local, and the agent recognizes the text. If the image is not visible, use MCP `format: base64` and display the PNG with the agent’s own tools. Example and limits: [reading a PDF with a remote agent](./remote.md#читать-pdf-без-сохранения-файла-у-агента).
+
 ## How content is read
 
 By default, the agent reads scans and photos with its own tools. `attachments extract --ocr` explicitly enables an API for bulk recognition. Without this flag, extraction does not call a model. Check whether your installed version supports the flag with `max attachments extract --help`.
@@ -101,7 +103,7 @@ For a local installation, add the required packages to the same project. With an
 max attachments list --chat "Учебная группа" --needs-text --json
 # Агент открывает localPath, читает все страницы и сохраняет буквальный текст в scan.txt.
 max attachments text set "Учебная группа" 204 --attachment 1 --text-file ./scan.txt --json
-max messages search 'content:умножение' --chat "Учебная группа" --offline --json
+max search messages 'content:умножение' --chat "Учебная группа" --offline --json
 ```
 
 `--attachment` numbering starts at 1. Preserve the original language and page order; do not replace a transcription with a summary. Do not mark an entire PDF as read after processing just one page. Agent-written text is protected from being overwritten by automatic extraction.

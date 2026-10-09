@@ -9,14 +9,7 @@
       "ru": "MAX в терминале: боты через официальный Bot API и ваш личный аккаунт.",
       "es": "MAX Messenger desde la terminal: bots con la Bot API oficial y tu cuenta personal."
     },
-    "docsRef": "v0.38.1",
-    "guideRefs": {
-      "groups": "f7acc0c66d2389c94e9e46af24c469298b2b3ee6",
-      "rankings": "f7acc0c66d2389c94e9e46af24c469298b2b3ee6",
-      "search": "0ea6d48eb20b72bda128e37f931ecd4de3de10f0",
-      "archive": "0ea6d48eb20b72bda128e37f931ecd4de3de10f0",
-      "usage": "0ea6d48eb20b72bda128e37f931ecd4de3de10f0"
-    }
+    "docsRef": "v0.39.0"
   },
   {
     "name": "tg",
@@ -28,13 +21,6 @@
       "ru": "Клиент Telegram для терминала и ИИ-агентов, с вашим собственным аккаунтом.",
       "es": "Un cliente de Telegram para la terminal y para agentes de IA, con tu propia cuenta."
     },
-    "docsRef": "v0.39.1",
-    "guideRefs": {
-      "groups": "676a30a94acbd4b48446410776911dfdfffa84e6",
-      "rankings": "676a30a94acbd4b48446410776911dfdfffa84e6",
-      "search": "2b78fd8b6998c63b45ef79ec82a1e2698ae3931a",
-      "archive": "2b78fd8b6998c63b45ef79ec82a1e2698ae3931a",
-      "usage": "2b78fd8b6998c63b45ef79ec82a1e2698ae3931a"
-    }
+    "docsRef": "v0.40.1"
   }
 ]

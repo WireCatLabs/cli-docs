@@ -2,7 +2,7 @@
 title: "Lenguaje de consulta de la búsqueda"
 ---
 
-Referencia de consultas de `max messages search`, `max stats messages show` y búsquedas guardadas. Consulta ejemplos cotidianos en [búsqueda de mensajes](./search.md).
+Referencia de consultas de `max search messages`, `max stats messages show` y búsquedas guardadas. Consulta ejemplos cotidianos en [búsqueda de mensajes](./search.md).
 
 El lenguaje es un perfil estricto de la sintaxis de consultas de Apache Lucene: palabras, frases, AND/OR/NOT, grupos, campos, intervalos, comodines con límites y expresiones regulares. La [referencia completa](https://github.com/leemour/cli-messaging/blob/v0.164.0/docs/search/query-language.md) (en ruso) contiene las tablas generadas de campos, operadores, filtros preparados y límites, y ejemplos ejecutables; la [especificación técnica](https://github.com/leemour/cli-messaging/blob/v0.164.0/docs/search/query-language-spec.md) describe la gramática y el compilador.
 
@@ -100,13 +100,13 @@ Un error incluye la posición del problema en la consulta y una pista.
 
 ## En MCP
 
-`max_read` (`command: "messages search"`) acepta una consulta como `text` o como árbol sintáctico con versión en `ast`, pero no ambos. `language` elige `lucene` o `legacy`; `timezone` establece la zona horaria del calendario. `chat` acepta un ID o un título guardado; `source`, `newest`, `context` y `limit` funcionan como las opciones del comando. `record: false` evita que la llamada se registre en el historial de consultas. La respuesta tiene los mismos campos que `--json`. `max_read` (`command: "stats messages show"`) cuenta con las mismas consultas.
+`max_read` (`command: "search messages"`) acepta una consulta como `text` o como árbol sintáctico con versión en `ast`, pero no ambos. `language` elige `lucene` o `legacy`; `timezone` establece la zona horaria del calendario. `chat` acepta un ID o un título guardado; `source`, `newest`, `context` y `limit` funcionan como las opciones del comando. `record: false` evita que la llamada se registre en el historial de consultas. La respuesta tiene los mismos campos que `--json`. `max_read` (`command: "stats messages show"`) cuenta con las mismas consultas.
 
 ## Los modos anteriores
 
 ```sh
-max messages search 'from:alice after:7d invoice -draft' --language legacy --json
-max messages search --regex 'invoice\s+\d+' --json
+max search messages 'from:alice after:7d invoice -draft' --language legacy --json
+max search messages --regex 'invoice\s+\d+' --json
 ```
 
 `--language legacy` conserva los filtros anteriores y su corrección de erratas. `--regex` es un modo aparte: una expresión regular de JavaScript, sin distinguir mayúsculas, sobre el texto completo, en un proceso aislado con límites de tiempo y tamaño. `--regex` no se puede combinar con `--language lucene`.

@@ -2,7 +2,7 @@
 title: "Lenguaje de consulta de la búsqueda"
 ---
 
-La referencia de consultas de `tg messages search`, `tg stats messages show` y búsquedas guardadas. Para ejemplos cotidianos, empieza por la [búsqueda de mensajes](./search.md).
+La referencia de consultas de `tg search messages`, `tg stats messages show` y búsquedas guardadas. Para ejemplos cotidianos, empieza por la [búsqueda de mensajes](./search.md).
 
 El lenguaje es un perfil estricto de la sintaxis de consultas de Apache Lucene: palabras, frases, AND/OR/NOT, grupos, campos, intervalos, comodines con límites y expresiones regulares. La [referencia completa](https://github.com/leemour/cli-messaging/blob/v0.164.0/docs/search/query-language.md) (en ruso) contiene las tablas generadas de campos, operadores, filtros preparados y límites, y ejemplos ejecutables; la [especificación técnica](https://github.com/leemour/cli-messaging/blob/v0.164.0/docs/search/query-language-spec.md) describe la gramática y el compilador.
 
@@ -100,13 +100,13 @@ Un error incluye la posición del problema en la consulta y una pista.
 
 ## En MCP
 
-`tg_read` (`command: "messages search"`) acepta la consulta como `text` o como un árbol sintáctico versionado en `ast` (no ambos); `language` elige `lucene` o `legacy`, y `timezone` la zona horaria del calendario. `chat` acepta un ID o nombre guardado; `source`, `newest`, `context` y `limit` funcionan como las opciones del comando; `saved` ejecuta una búsqueda guardada. El historial de consultas sigue al servidor: `tg mcp --no-record`, o `record` definido como `false`, deja sus llamadas fuera. La respuesta tiene los mismos campos que `--json`. `tg_read` (`command: "stats messages show"`) cuenta las mismas consultas.
+`tg_read` (`command: "search messages"`) acepta la consulta como `text` o como un árbol sintáctico versionado en `ast` (no ambos); `language` elige `lucene` o `legacy`, y `timezone` la zona horaria del calendario. `chat` acepta un ID o nombre guardado; `source`, `newest`, `context` y `limit` funcionan como las opciones del comando; `saved` ejecuta una búsqueda guardada. El historial de consultas sigue al servidor: `tg mcp --no-record`, o `record` definido como `false`, deja sus llamadas fuera. La respuesta tiene los mismos campos que `--json`. `tg_read` (`command: "stats messages show"`) cuenta las mismas consultas.
 
 ## Los modos anteriores
 
 ```sh
-tg messages search 'from:alice after:7d invoice -draft' --language legacy --json
-tg messages search --regex 'invoice\s+\d+' --json
+tg search messages 'from:alice after:7d invoice -draft' --language legacy --json
+tg search messages --regex 'invoice\s+\d+' --json
 ```
 
 `--language legacy` conserva los filtros anteriores y su corrección de erratas. `--regex` es un modo aparte: una expresión regular de JavaScript, sin distinguir mayúsculas, sobre el texto completo, en un proceso aislado con límites de tiempo y tamaño. `--regex` no se puede combinar con `--language lucene`.

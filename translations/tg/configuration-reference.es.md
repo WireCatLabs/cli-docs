@@ -93,7 +93,7 @@ Limita todo el comando y no es una clave del archivo de configuración; `timeout
 | `skillHint` | `true` | aviso, como máximo diario, para agentes cuya skill de tg falta o es anterior al comando; solo en `defaults` | ninguna |
 | `readOtherBots` | `false` | solo perfiles de bot: si `tg bot` puede leer lo guardado por otros bots en este equipo; `true` o una lista de perfiles ([bots](./bot.md)) | ninguna; `--all-bots` y `--bots` lo solicitan, el ajuste lo permite |
 | `proxy` | ninguno | el servidor SOCKS5, HTTP `CONNECT` o MTProxy a través del cual se llega a Telegram ([más abajo](#through-a-proxy)) | `TG_PROXY` |
-| `searchStemmers.cyrillic`, `searchStemmers.latin` | `russian`, `english,spanish` | Idiomas de raíces compartidos: `russian` o `none`; `english`, `spanish`, ambos por coma o `none`. Véase [archivo](./archive.md#repair-and-index-maintenance). | ninguna |
+| `searchStemmers.cyrillic`, `searchStemmers.latin` | `russian`, `english,spanish` | los idiomas de raíces de palabras de todo el almacén, para ambos CLI y todos los perfiles: `russian` o `none`; `english`, `spanish`, ambos separados por coma, o `none` ([archivo local](./archive.md#repair-and-index-maintenance)) | ninguna |
 
 `defaultProfile`, en el nivel superior, indica el perfil utilizado cuando ni la primera palabra ni `TG_PROFILE` especifican uno. La primera palabra (`tg work …`) y `TG_PROFILE` tienen prioridad sobre él.
 
@@ -274,7 +274,7 @@ Las claves desconocidas y los tipos inválidos son errores. Los valores predeter
 | `analysisProvider` | `agent`, `openai`, `anthropic` | perfil |
 | `models` | objetos por propósito descritos abajo | perfil |
 | `searchStemmers.cyrillic` | `russian`, `none` | almacenamiento compartido, mediante `config set` |
-| `searchStemmers.latin` | `english`, `spanish`, ambos separados por coma, `none` | archivo compartido, mediante `config set` |
+| `searchStemmers.latin` | `english`, `spanish`, ambos separados por coma, `none` | almacenamiento compartido, mediante `config set` |
 
 ### Modelos por finalidad
 

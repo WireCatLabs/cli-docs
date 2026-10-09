@@ -243,9 +243,9 @@ tg --timeout 30s --trace chats list
 
 ## Для профиля пока нет сохранённых данных
 
-Код `6`. `--offline`, `messages search`, `store status`, `store export` читают только локальную базу, а профиль ещё ничего не сохранил. Сначала выполните онлайн-команду, например `tg chats list`.
+Код `6`. `--offline`, `search messages`, `store status`, `store export` читают только локальную базу, а профиль ещё ничего не сохранил. Сначала выполните онлайн-команду, например `tg chats list`.
 
-## `messages search` ничего не находит
+## `search messages` ничего не находит
 
 Поиск не запрашивает Telegram. Пустой результат означает отсутствие сохранённых данных, а не самого сообщения. Прочитайте чат (`tg messages list <chat>`) или загрузите историю через `tg store fetch`, затем повторите ([Поиск](./archive.md#search)). `tg store check` показывает отстающие чаты.
 

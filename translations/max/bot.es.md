@@ -142,10 +142,10 @@ max sales bot chats admins remove "Команда продаж" 4815162342
 ```sh
 max sales bot messages list "Команда продаж" --offline
 max sales bot messages show "Команда продаж" mid.0000019a7f3c21de --offline
-max sales bot messages search "итоги недели"
+max sales bot search messages "итоги недели"
 ```
 
-La búsqueda usa palabras, mejores coincidencias primero; `--newest` prioriza recientes. Exige todas las palabras y admite `"фраза"`, `-слово`, `а OR б`, `from:`, `chat:`, `after:`, `before:`, `has:`, igual que `max messages search --language legacy`, corrigiendo erratas. Para una búsqueda estricta en el archivo compartido, usa la [búsqueda normal](./search.md) con `in:bots`.
+La búsqueda usa palabras, mejores coincidencias primero; `--newest` prioriza recientes. Exige todas las palabras y admite `"фраза"`, `-слово`, `а OR б`, `from:`, `chat:`, `after:`, `before:`, `has:`, igual que `max search messages --language legacy`, corrigiendo erratas. Para una búsqueda estricta en el archivo compartido, usa la [búsqueda normal](./search.md) con `in:bots`.
 
 Para incluir también el historial antiguo del chat en la copia, descárgalo:
 
@@ -164,8 +164,8 @@ Busca personas por ID, `@username` o nombre parcial. Si coinciden dos, `max` mue
 ```sh
 max sales bot contacts show @ann                 # где писала, и её личный чат с ботом
 max sales bot contacts show @ann --refresh       # сначала перечитать личный чат у MAX
-max sales bot messages search --from @ann        # всё, что она написала
-max sales bot messages search "счёт" --from @ann --from Борис
+max sales bot search messages --from @ann        # всё, что она написала
+max sales bot search messages "счёт" --from @ann --from Борис
 max sales bot messages between @ann Борис --limit 20
 ```
 
@@ -176,11 +176,11 @@ max sales bot messages between @ann Борис --limit 20
 ```sh
 max shop config set --bot readOtherBots true          # боту shop можно читать всех ботов
 max shop config set --bot readOtherBots news,support  # или только этих
-max shop bot messages search заказ --bots news        # и тогда — явно, в команде
+max shop bot search messages заказ --bots news        # и тогда — явно, в команде
 max shop bot contacts show @ann --all-bots            # все, кого разрешено
 ```
 
-`--all-bots`, `--bots` funcionan con `messages search`, `contacts show`, `messages between`. Sin `readOtherBots` rechazan con `5` y una orden para permitirlo. En `max <имя> bot mcp`, `all_bots` y `bots` solo aparecen cuando está permitido.
+`--all-bots`, `--bots` funcionan con `search messages`, `contacts show`, `messages between`. Sin `readOtherBots` rechazan con `5` y una orden para permitirlo. En `max <имя> bot mcp`, `all_bots` y `bots` solo aparecen cuando está permitido.
 
 ## Actualizaciones
 
@@ -301,7 +301,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Ruta y consulta se pasan como opciones, cuerpo JSON en `--body`, `--body -` o `--body-file`. `--body-file -` también lee stdin. El parámetro nativo `timeout` se llama `--poll-timeout`; la opción global `--timeout` limita el comando completo. La opción compartida `--store-token <profile>` no está disponible para los métodos MAX actuales: todos la rechazan antes de ejecutar la operación. Se valida antes de enviar; errores indican campo y tipo esperado sin exponer valor. Consulta [Cobertura API](https://github.com/leemour/max-cli/blob/v0.38.1/docs/dev/bot-api-coverage.md).
+Ruta y consulta se pasan como opciones, cuerpo JSON en `--body`, `--body -` o `--body-file`. `--body-file -` también lee stdin. El parámetro nativo `timeout` se llama `--poll-timeout`; la opción global `--timeout` limita el comando completo. La opción compartida `--store-token <profile>` no está disponible para los métodos MAX actuales: todos la rechazan antes de ejecutar la operación. Se valida antes de enviar; errores indican campo y tipo esperado sin exponer valor. Consulta [Cobertura API](https://github.com/leemour/max-cli/blob/v0.39.0/docs/dev/bot-api-coverage.md).
 
 ## Scripts y agentes
 

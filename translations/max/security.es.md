@@ -62,7 +62,7 @@ Frente a quien extrae el disco solo protege el cifrado completo del disco: consu
 ## Qué no hace la herramienta
 
 - **No marca mensajes como leídos sin petición.** Obtener historial y marcarlo leído son operaciones distintas. Solo `max chats mark-read` y `messages list --mark-read` envían la segunda; hay pruebas de que la lectura normal no lo hace.
-- **No envía nada que no hayas pedido.** Solo cambian algo `messages send|edit|delete|forward|pin|unpin|press`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `session end`, `chats join|leave|create|update|start|app`, `chats members|admins …`, `chats link reset`, `chats folders create|update|delete|order`, `chats moderate` (dentro de las reglas del grupo), `chats mark-read` y `messages list --mark-read`, y cada comando hace solo lo que indica la línea que has escrito. `max commands --json` los marca como `mutates`.
+- **No envía nada que no hayas pedido.** Solo cambian algo `messages send|edit|delete|forward|pin|unpin|press`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `session end`, `chats join|leave|create|update|start|app`, `chats members|admins …`, `chats requests accept|decline`, `chats link reset`, `chats folders create|update|delete|order`, `chats moderate` (dentro de las reglas del grupo), `chats mark-read` y `messages list --mark-read`, y cada comando hace solo lo que indica la línea que has escrito. `max commands --json` los marca como `mutates`.
 - **Eliminar exige confirmación por defecto.** `ask` en `messages.delete` requiere respuesta en la terminal o `--allow-dangerous`; un `allow` explícito elimina sin preguntar. Para borrar para todos también se necesita `--for-everyone`; la herramienta compartida de MCP no lo permite.
 - **No recibe teléfonos por argumentos de comando.** `contacts lookup` pregunta o lee de una tubería; `contacts import` lee un archivo. `ps` y el historial muestran los argumentos. Los errores y registros no contienen teléfonos; `max session start` y `max account show` los ocultan.
 - **No registra mensajes.** Ni truncados ni como hash; consulta [diagnostics.md](./diagnostics.md).
@@ -110,7 +110,7 @@ El token no se pasa como argumento, pero el texto de un mensaje sí, y se ve en 
 | `https://web.max.ru` en perfil Chromium temporal | `session start qr-chrome`, `session start sms`, `setup --method qr-chrome|sms` |
 | Hugging Face y GitHub para modelos de voz | solo `max models audio download`; la voz se procesa localmente |
 | Hugging Face, archivos del modelo de texto | Solo `max models text download`; el modelo local no envía mensajes |
-| Servicio externo de vectores configurado | `conversations embed` envía texto de conversaciones tras el consentimiento; `conversations search`, incluido MCP, envía la pregunta al seleccionar un servicio externo |
+| Servicio externo de vectores configurado | `conversations embed` envía texto de conversaciones tras el consentimiento; `search conversations`, incluido MCP, envía la pregunta al seleccionar un servicio externo |
 | Servicio compatible con OpenAI o Anthropic configurado | `conversations build --analyze --chat` envía lotes limitados tras el consentimiento para la cuenta, el chat y el servicio |
 | `https://platform-api2.max.ru`, Bot API oficial, token en `Authorization` | solo `max bot` |
 | registro npm para comprobar versiones | `max upgrade` y una vez al día desde terminal; se desactiva con `updateCheck: false` |
@@ -148,7 +148,7 @@ Cada acceso añade un dispositivo en la lista de sesiones de MAX; puedes cerrarl
 
 ## Protocolo no oficial
 
-MAX no publica API de cuentas personales. El conocimiento del protocolo procede de mediciones reales o ingeniería inversa ajena; se registra el origen de cada operación ([protocolo (`protocol.md`)](https://github.com/leemour/max-cli/blob/v0.38.1/docs/dev/protocol.md), columna «Where it came from»).
+MAX no publica API de cuentas personales. El conocimiento del protocolo procede de mediciones reales o ingeniería inversa ajena; se registra el origen de cada operación ([protocolo (`protocol.md`)](https://github.com/leemour/max-cli/blob/v0.39.0/docs/dev/protocol.md), columna «Where it came from»).
 
 **Puede dejar de funcionar sin aviso.** En ese caso el comando indica el problema por stderr, en lugar de devolver una lista vacía como si todo funcionase.
 

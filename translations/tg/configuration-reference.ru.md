@@ -93,7 +93,7 @@ tg work config show
 | `skillHint` | `true` | уведомление агенту об отсутствующем или устаревшем skill для tg, не чаще раза в день; только в `defaults` | нет |
 | `readOtherBots` | `false` | только для бота: разрешено ли `tg bot` читать данные, сохранённые другими ботами на этом компьютере; `true` или список имён профилей ([Бот Telegram](./bot.md)) | нет; `--all-bots` и `--bots` запрашивают доступ, а настройка его разрешает |
 | `proxy` | не задано | сервер SOCKS5, HTTP `CONNECT` или MTProxy для подключения к Telegram ([ниже](#through-a-proxy)) | `TG_PROXY` |
-| `searchStemmers.cyrillic`, `searchStemmers.latin` | `russian`, `english,spanish` | Языки основ общего архива: `russian` или `none`; `english`, `spanish`, оба через запятую или `none`. См. [архив](./archive.md#repair-and-index-maintenance). | нет |
+| `searchStemmers.cyrillic`, `searchStemmers.latin` | `russian`, `english,spanish` | языки основ слов для всей базы, обоих CLI и всех профилей: `russian` или `none`; `english`, `spanish`, оба через запятую или `none` ([Локальная база](./archive.md#repair-and-index-maintenance)) | нет |
 
 Поле `defaultProfile` верхнего уровня задаёт профиль, если он не указан первым словом команды или через `TG_PROFILE`. Первое слово (`tg work …`) и `TG_PROFILE` имеют приоритет над ним.
 
@@ -279,7 +279,7 @@ tg setup
 | `analysisProvider` | `agent`, `openai`, `anthropic` | профиль |
 | `models` | объекты назначений, описанные ниже | профиль |
 | `searchStemmers.cyrillic` | `russian`, `none` | общее хранилище, через `config set` |
-| `searchStemmers.latin` | `english`, `spanish`, оба через запятую, `none` | общий архив, через `config set` |
+| `searchStemmers.latin` | `english`, `spanish`, оба через запятую, `none` | общее хранилище, через `config set` |
 
 ### Модели по назначению
 

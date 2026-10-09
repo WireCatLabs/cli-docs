@@ -115,7 +115,7 @@ Writes to MAX: **no**. Permit: `Bash(max messages list:*)`.
 
 ## Commitments and follow-ups
 
-Writes to MAX: **no**. Permit: `Bash(max review:*)`, `Bash(max messages context:*)`, `Bash(max messages search:*)`.
+Writes to MAX: **no**. Permit: `Bash(max review:*)`, `Bash(max messages context:*)`, `Bash(max search messages:*)`.
 
 > Run `max review --new --transcribe --json` (the first time it covers 3 days, then everything since the previous `--new`; each chat has its own point). Make three lists: what I owe, what I am waiting for, and what needs clarification. For each item, include its chat, date and supporting message IDs; include a deadline only if explicitly stated. Before calling anything overdue, check whether it was completed later or in work groups. If `"complete": false`, explain what is missing. End with the outstanding items.
 

@@ -2,7 +2,7 @@
 title: "Язык поисковых запросов"
 ---
 
-Справочник запросов для `tg messages search`, `tg stats messages show` и сохранённых поисков. Для повседневных примеров начните с [поиска сообщений](./search.md).
+Справочник запросов для `tg search messages`, `tg stats messages show` и сохранённых поисков. Для повседневных примеров начните с [поиска сообщений](./search.md).
 
 Язык — строгое подмножество синтаксиса запросов Apache Lucene: слова, фразы, AND/OR/NOT,
 группы, поля, диапазоны, ограниченные подстановочные знаки и регулярные выражения.
@@ -130,13 +130,13 @@ title: "Язык поисковых запросов"
 
 ## В MCP
 
-`tg_read` (`command: "messages search"`) принимает запрос как `text` или как версионированное синтаксическое дерево в `ast` (не оба сразу); `language` выбирает `lucene` или `legacy`, `timezone` — часовой пояс календаря. `chat` принимает ID или сохранённое имя; `source`, `newest`, `context` и `limit` работают как параметры команды; `saved` запускает сохранённый поиск. История запросов подчиняется настройкам сервера: `tg mcp --no-record` или `record`, равный `false`, исключает его вызовы из истории. Ответ содержит те же поля, что `--json`. `tg_read` (`command: "stats messages show"`) считает те же запросы.
+`tg_read` (`command: "search messages"`) принимает запрос как `text` или как версионированное синтаксическое дерево в `ast` (не оба сразу); `language` выбирает `lucene` или `legacy`, `timezone` — часовой пояс календаря. `chat` принимает ID или сохранённое имя; `source`, `newest`, `context` и `limit` работают как параметры команды; `saved` запускает сохранённый поиск. История запросов подчиняется настройкам сервера: `tg mcp --no-record` или `record`, равный `false`, исключает его вызовы из истории. Ответ содержит те же поля, что `--json`. `tg_read` (`command: "stats messages show"`) считает те же запросы.
 
 ## Прежние режимы
 
 ```sh
-tg messages search 'from:alice after:7d invoice -draft' --language legacy --json
-tg messages search --regex 'invoice\s+\d+' --json
+tg search messages 'from:alice after:7d invoice -draft' --language legacy --json
+tg search messages --regex 'invoice\s+\d+' --json
 ```
 
 `--language legacy` сохраняет прежние фильтры и исправление опечаток. `--regex` — отдельный

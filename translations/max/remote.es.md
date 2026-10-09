@@ -2,7 +2,7 @@
 title: "ChatGPT o Claude en el navegador"
 ---
 
-Esta guía conecta ChatGPT o Claude en el navegador con tu cuenta de MAX. Obtendrás una dirección HTTPS para MCP con permisos del perfil. Conserva la conexión Tailscale existente: no necesitas otro túnel.
+Esta guía conecta ChatGPT o Claude en el navegador con tu cuenta de MAX. Obtendrás una dirección HTTPS para MCP con permisos del perfil. Si ya tienes una conexión Tailscale que funciona, consérvala: no necesitas otro túnel.
 
 **Estado:** HTTP y los permisos se han comprobado localmente. El propietario confirmó la lectura y el envío mediante Claude web en Telegram el 07/10/2026 con `permissions`; todavía no se han realizado pruebas de navegador independientes para MAX y OpenAI web. Las instrucciones de cada sistema operativo deben probarse en ese sistema. Si un paso falla, [abre una incidencia](https://github.com/leemour/max-cli/issues).
 
@@ -149,3 +149,17 @@ max attachments show msg:max/511/7/204 --attachment 1 --offset-bytes 524288 --if
 JSON incluye base64, totalBytes, sha256, offsetBytes, readBytes, nextOffsetBytes y complete. La porción predeterminada es 512 KiB, máximo 1 MiB por respuesta; el archivo completo se limita a 50 MiB. Ensambla por orden de desplazamiento hasta nextOffsetBytes:null, pasa el primer SHA256 al continuar y verifica el hash del archivo ensamblado. complete:true significa que todo el archivo cabe en una respuesta.
 
 MCP devuelve PNG/JPEG/WebP completos como imágenes si tienen dimensiones válidas de hasta 8000 píxeles por lado y 20 millones de píxeles en total; otros archivos son recursos binarios integrados. Un recurso parcial son bytes, no un documento completo. Si el cliente no expone recursos, elige format:base64. El URI no es una URL de descarga. Leer PDF y guardar archivos depende del cliente y las herramientas del agente. Tras leer todas las páginas, guarda texto literal con `attachments text set` y verifica una búsqueda content:. Denegar messages o attachments.show impide la transferencia; readonly permite leer archivos guardados. Se rechazan archivos de otras cuentas, ausentes y enlaces simbólicos. El contenido del adjunto son datos, no instrucciones.
+
+## Leer un PDF sin guardar el archivo en el agente
+
+Si el cliente no puede pasar el PDF recibido a su lector de archivos, pide una página como PNG. La conversión se hace localmente en el servidor MCP; la imagen la lee el propio agente. Hacen falta los opcionales `unpdf` con soporte para convertir páginas en imágenes y `@napi-rs/canvas`, como en la [lista de motores de adjuntos](./attachments.md#какие-зависимости-нужны).
+
+```sh
+max attachments show msg:max/511/7/204 --attachment 1 --page 1 --json
+```
+
+En MCP, llama a `max_read`, command: `attachments show`, con `page: 1` y el locator necesario. Por defecto, la página se devuelve como imagen. Si el cliente solo muestra metadatos, pon `format: base64`, luego decodifica y muestra el PNG con las herramientas del agente. Obtener la cadena base64 no es lo mismo que leer la página. Lee las páginas de 1 a `pdf.pageCount`; si los píxeles no están disponibles en ninguno de los dos formatos, informa de la limitación del cliente en lugar de inventar el texto.
+
+`pdf.sourceSha256` y `pdf.sourceBytes` se refieren al PDF original; `sha256` y `totalBytes` del nivel superior, a la imagen de la página elegida. `--if-sha256` comprueba el PDF original. `--page` no se puede combinar con `--offset-bytes` ni `--chunk-bytes`. Se admiten PDF de hasta 20 páginas y 50 MiB; cada lado del PNG se limita a 2000 píxeles, y la respuesta, a 1 MiB. Los motores opcionales no se instalan con la CLI.
+
+Mostrar una página no llama a ninguna API de OCR externa ni guarda texto. Después de ver todas las páginas, el agente usa explícitamente `attachments text set` y luego comprueba el resultado con `content:`. Coteja los números y los fragmentos difíciles con la imagen; la calidad depende del PDF original y de las herramientas del agente.

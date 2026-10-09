@@ -112,7 +112,7 @@ max account show [options]
 
 | Опция | Что делает |
 |---|---|
-| `--show-phone` | print the whole phone number. |
+| `--show-phone` | показать номер телефона целиком. |
 
 ### `max account update`
 
@@ -201,7 +201,7 @@ max calls list [options]
 
 | Опция | Что делает |
 |---|---|
-| `--limit <n>` | how many to show. |
+| `--limit <n>` | сколько показать. |
 
 ## `max stickers`
 
@@ -233,9 +233,9 @@ max chats list [options]
 
 | Опция | Что делает |
 |---|---|
-| `--limit <n>` | how many to show. |
-| `--page <n>` | which page, starting at 1. |
-| `--all` | every row, no paging. |
+| `--limit <n>` | сколько показать. |
+| `--page <n>` | какая страница, начиная с 1. |
+| `--all` | все строки, без страниц. |
 | `--search <text>` | only chats whose name contains this; at least 3 characters. |
 | `--kind <kind>` | only chats of this kind: dialog, group, channel, saved. |
 | `--unread` | only chats with unread messages. |
@@ -250,7 +250,7 @@ max chats show <chat>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 ### `max chats events`
 
@@ -262,11 +262,11 @@ max chats events <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 | Опция | Что делает |
 |---|---|
-| `--since-time <time>` | ISO 8601, or 2h / 1d ago; 7 days ago if not given. |
+| `--since-time <time>` | ISO 8601 или 2h / 1d назад; если не указано — 7 дней назад. |
 | `--type <names>` | only these, comma-separated: join, leave, add, remove, create, title, pin. |
 
 ### `max chats inspect`
@@ -307,7 +307,7 @@ max chats mark-read <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 | Опция | Что делает |
 |---|---|
@@ -326,7 +326,7 @@ max chats leave <chat>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 ### `max chats create`
 
@@ -361,13 +361,13 @@ max chats members list <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 | Опция | Что делает |
 |---|---|
-| `--limit <n>` | how many to show. |
-| `--page <n>` | which page, starting at 1. |
-| `--all` | every row, no paging. |
+| `--limit <n>` | сколько показать. |
+| `--page <n>` | какая страница, начиная с 1. |
+| `--all` | все строки, без страниц. |
 
 #### `max chats members audit`
 
@@ -379,7 +379,7 @@ max chats members audit <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 | Опция | Что делает |
 |---|---|
@@ -397,7 +397,7 @@ max chats members history <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 | Опция | Что делает |
 |---|---|
@@ -413,7 +413,7 @@ max chats members fetch <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 | Опция | Что делает |
 |---|---|
@@ -432,8 +432,8 @@ max chats members add <chat> <person> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
-| `person` | обязательный | an id, or part of a name. |
+| `chat` | обязательный | чат: его ID или часть названия. |
+| `person` | обязательный | ID или часть имени. |
 
 | Опция | Что делает |
 |---|---|
@@ -451,8 +451,8 @@ max chats members remove <chat> <person>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
-| `person` | обязательный | an id, or part of a name. |
+| `chat` | обязательный | чат: его ID или часть названия. |
+| `person` | обязательный | ID или часть имени. |
 
 ### `max chats tracking`
 
@@ -476,7 +476,7 @@ max chats tracking show <chat>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 #### `max chats tracking add`
 
@@ -488,7 +488,7 @@ max chats tracking add <chat>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 #### `max chats tracking remove`
 
@@ -500,7 +500,7 @@ max chats tracking remove <chat>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 ### `max chats admins`
 
@@ -518,8 +518,8 @@ max chats admins add <chat> <person> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
-| `person` | обязательный | an id, or part of a name. |
+| `chat` | обязательный | чат: его ID или часть названия. |
+| `person` | обязательный | ID или часть имени. |
 
 | Опция | Что делает |
 |---|---|
@@ -537,8 +537,8 @@ max chats admins remove <chat> <person>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
-| `person` | обязательный | an id, or part of a name. |
+| `chat` | обязательный | чат: его ID или часть названия. |
+| `person` | обязательный | ID или часть имени. |
 
 ### `max chats update`
 
@@ -552,7 +552,7 @@ max chats update <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 | Опция | Что делает |
 |---|---|
@@ -579,7 +579,7 @@ max chats link show <chat>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 #### `max chats link reset`
 
@@ -593,15 +593,15 @@ max chats link reset <chat>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 ### `max chats requests`
 
-заявки на вступление с одобрением администратора
+заявки на вступление в канал MAX, где нужно одобрение
 
 #### `max chats requests list`
 
-кто подал заявку, новое сверху; доступно администраторам, чтение без уведомления
+ожидающие заявки на вступление в канал MAX, где нужно одобрение; только для администраторов; requestedAt равен null
 
 ```sh
 max chats requests list <chat> [options]
@@ -609,13 +609,13 @@ max chats requests list <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | Чат: название, ID или @username. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
-| Параметр | Что делает |
+| Опция | Что делает |
 |---|---|
-| `--limit <n>` | Количество результатов. |
-| `--search <text>` | Поиск по имени или @username. |
-| `--link <link>` | Фильтр по ссылке-приглашению; MAX не поддерживает. |
+| `--limit <n>` | сколько результатов. |
+| `--search <text>` | только люди, у которых имя или @username содержит этот текст. |
+| `--link <link>` | MAX не поддерживает; вместо этого ищите по имени. |
 
 #### `max chats requests accept`
 
@@ -629,13 +629,13 @@ max chats requests accept <chat> [person] [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | Чат: название, ID или @username. |
-| `person` | необязательный | ID из `chats requests list`; для MAX нужен конкретный человек. |
+| `chat` | обязательный | чат: его ID или часть названия. |
+| `person` | необязательный | кто подал заявку: ID из `chats requests list`. |
 
-| Параметр | Что делает |
+| Опция | Что делает |
 |---|---|
-| `--all` | Все заявки; MAX не поддерживает. |
-| `--link <link>` | Фильтр по ссылке-приглашению; MAX не поддерживает. |
+| `--all` | MAX не поддерживает; выберите одного человека из chats requests list. |
+| `--link <link>` | MAX не поддерживает; выберите одного человека из chats requests list. |
 
 #### `max chats requests decline`
 
@@ -649,13 +649,13 @@ max chats requests decline <chat> [person] [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | Чат: название, ID или @username. |
-| `person` | необязательный | ID из `chats requests list`; для MAX нужен конкретный человек. |
+| `chat` | обязательный | чат: его ID или часть названия. |
+| `person` | необязательный | кто подал заявку: ID из `chats requests list`. |
 
-| Параметр | Что делает |
+| Опция | Что делает |
 |---|---|
-| `--all` | Все заявки; MAX не поддерживает. |
-| `--link <link>` | Фильтр по ссылке-приглашению; MAX не поддерживает. |
+| `--all` | MAX не поддерживает; выберите одного человека из chats requests list. |
+| `--link <link>` | MAX не поддерживает; выберите одного человека из chats requests list. |
 
 ### `max chats folders`
 
@@ -712,7 +712,7 @@ max chats folders update <folder> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `folder` | обязательный | folder id, or its title exactly. |
+| `folder` | обязательный | ID папки или её точное название. |
 
 | Опция | Что делает |
 |---|---|
@@ -732,7 +732,7 @@ max chats folders delete <folder>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `folder` | обязательный | folder id, or its title exactly. |
+| `folder` | обязательный | ID папки или её точное название. |
 
 #### `max chats folders order`
 
@@ -762,7 +762,7 @@ max chats rules show <chat>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 #### `max chats rules set`
 
@@ -776,7 +776,7 @@ max chats rules set <chat> <key> <value>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 | `key` | обязательный | one of: trusted, blocked, blockedNames, links, invites, forwards, blockedPeople, flood.messages, flood.minutes, flood.action, newAccount.days, newAccount.action, consent.delete, consent.remove. |
 | `value` | обязательный | the new value; a list is comma-separated. |
 
@@ -792,7 +792,7 @@ max chats rules unset <chat> <key>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 | `key` | обязательный | one of: trusted, blocked, blockedNames, links, invites, forwards, blockedPeople, flood.messages, flood.minutes, flood.action, newAccount.days, newAccount.action, consent.delete, consent.remove. |
 
 ### `max chats moderate`
@@ -807,14 +807,14 @@ max chats moderate <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 | Опция | Что делает |
 |---|---|
 | `--since-time <time>` | judge what came after this ISO 8601 time, or 2h / 1d ago; the saved point stays. |
-| `--dry-run` | judge and plan; do nothing. |
+| `--dry-run` | оценить и составить план; ничего не делать. |
 | `--allow-dangerous` | yes to every action whose level in the group's rules is ask. |
-| `--max-actions <n>` | at most this many actions in one run; 10 if not given. |
+| `--max-actions <n>` | не больше стольких действий за один запуск; если не указано — 10. |
 
 ### `max chats media`
 
@@ -826,12 +826,12 @@ max chats media <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 | Опция | Что делает |
 |---|---|
 | `--type <names>` | только эти типы через запятую: photo, video, file, audio, link. |
-| `--limit <n>` | how many to show. |
+| `--limit <n>` | сколько показать. |
 | `--before-id <id>` | читать то, что старше этого id сообщения. |
 
 ### `max chats mute`
@@ -846,7 +846,7 @@ max chats mute <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 | Опция | Что делает |
 |---|---|
@@ -864,7 +864,7 @@ max chats unmute <chat>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 ### `max chats delete`
 
@@ -878,11 +878,11 @@ max chats delete <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 | Опция | Что делает |
 |---|---|
-| `--allow-dangerous` | go ahead without the question an ask level puts before a deletion. |
+| `--allow-dangerous` | удалить без вопроса, который задаёт уровень ask. |
 
 ### `max chats clear`
 
@@ -896,11 +896,11 @@ max chats clear <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 | Опция | Что делает |
 |---|---|
-| `--allow-dangerous` | go ahead without the question an ask level puts before a deletion. |
+| `--allow-dangerous` | удалить без вопроса, который задаёт уровень ask. |
 
 ### `max chats start`
 
@@ -954,9 +954,9 @@ max contacts list [options]
 
 | Опция | Что делает |
 |---|---|
-| `--limit <n>` | how many to show. |
-| `--page <n>` | which page, starting at 1. |
-| `--all` | every row, no paging. |
+| `--limit <n>` | сколько показать. |
+| `--page <n>` | какая страница, начиная с 1. |
+| `--all` | все строки, без страниц. |
 | `--order <recent\|name>` | newest conversation first, or alphabetical. По умолчанию: `recent`. |
 | `--search <text>` | только люди, у которых имя, локальный псевдоним или @username содержит этот текст. |
 | `--search-notes <text>` | только люди, в личных заметках о которых есть этот текст. |
@@ -971,7 +971,7 @@ max contacts show <person> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `person` | обязательный | their id, @username, or part of their name. |
+| `person` | обязательный | ID, @username или часть имени. |
 
 | Опция | Что делает |
 |---|---|
@@ -987,11 +987,11 @@ max contacts profile <person> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `person` | обязательный | their id, @username, or part of their name. |
+| `person` | обязательный | ID, @username или часть имени. |
 
 | Опция | Что делает |
 |---|---|
-| `--show-phone` | print the whole phone number. |
+| `--show-phone` | показать номер телефона целиком. |
 
 ### `max contacts alias`
 
@@ -1136,7 +1136,7 @@ max contacts add <person>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `person` | обязательный | person id — `contacts lookup` finds one — or part of a known name. |
+| `person` | обязательный | ID человека (его находит `contacts lookup`) или часть известного имени. |
 
 ### `max contacts remove`
 
@@ -1150,7 +1150,7 @@ max contacts remove <person>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `person` | обязательный | person id — `contacts lookup` finds one — or part of a known name. |
+| `person` | обязательный | ID человека (его находит `contacts lookup`) или часть известного имени. |
 
 ### `max contacts block`
 
@@ -1164,7 +1164,7 @@ max contacts block <person>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `person` | обязательный | person id — `contacts lookup` finds one — or part of a known name. |
+| `person` | обязательный | ID человека (его находит `contacts lookup`) или часть известного имени. |
 
 ### `max contacts unblock`
 
@@ -1178,7 +1178,7 @@ max contacts unblock <person>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `person` | обязательный | person id — `contacts lookup` finds one — or part of a known name. |
+| `person` | обязательный | ID человека (его находит `contacts lookup`) или часть известного имени. |
 
 ### `max contacts rename`
 
@@ -1192,7 +1192,7 @@ max contacts rename <person> <first-name> [last-name]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `person` | обязательный | person id — `contacts lookup` finds one — or part of a known name. |
+| `person` | обязательный | ID человека (его находит `contacts lookup`) или часть известного имени. |
 | `first-name` | обязательный | the name you want to see for them. |
 | `last-name` | необязательный |  |
 
@@ -1220,7 +1220,7 @@ max contacts context <person> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `person` | обязательный | their id, @username, or part of their name. |
+| `person` | обязательный | ID, @username или часть имени. |
 
 | Опция | Что делает |
 |---|---|
@@ -1239,7 +1239,7 @@ max contacts check <person> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `person` | обязательный | their id, @username, or part of their name. |
+| `person` | обязательный | ID, @username или часть имени. |
 
 | Опция | Что делает |
 |---|---|
@@ -1255,7 +1255,7 @@ max contacts link <person> <other>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `person` | обязательный | their id, @username, or part of their name. |
+| `person` | обязательный | ID, @username или часть имени. |
 | `other` | обязательный | the same in another messenger of the store, as <messenger>:<person> — max:Ana. |
 
 ### `max contacts unlink`
@@ -1284,54 +1284,18 @@ max messages list <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 | Опция | Что делает |
 |---|---|
-| `--limit <n>` | how many. |
-| `--before-id <id>` | only messages older than this message id. |
+| `--limit <n>` | сколько результатов. |
+| `--before-id <id>` | только сообщения старше сообщения с этим ID. |
 | `--before-time <time>` | only messages older than this ISO 8601 time, or 2h / 1d ago. |
 | `--after-id <id>` | only messages newer than this message id. |
 | `--after-time <time>` | only messages newer than this ISO 8601 time, or 2h / 1d ago. |
 | `--transcribe` | turn voice messages not heard yet into text — by the messenger, or a model on this machine; can take minutes. |
 | `--model <id>` | which downloaded speech model hears them, with --transcribe; `models audio list` shows them. |
 | `--mark-read` | also mark the chat read up to the newest message shown; the other person sees it. |
-
-### `max messages search`
-
-поиск в локальном хранилище и на сервере мессенджера (--backend); по желанию загружает новые сообщения с --sync-first
-
-```sh
-max messages search [query] [options]
-```
-
-| Аргумент | | Что это |
-|---|---|---|
-| `query` | необязательный | strict Lucene query: words, "phrases", AND/OR/NOT, field groups and date ranges; --language legacy keeps discovery; with --saved, more words AND-ed to it. |
-
-| Опция | Что делает |
-|---|---|
-| `--sync-first` | first fetch new messages within the chat, time and message bounds. |
-| `--max-chats <n>` | refresh at most this many chats (default: 5). |
-| `--sync-time <duration>` | stop fetching after this long (default: 30s). |
-| `--max-messages <n>` | fetch at most this many messages total (default: 500). |
-| `--thread` | the stored reply chain and replies instead of time neighbours; falls back when no graph exists. |
-| `--thread-hops <n>` | at most this many links from the hit (default: 8). |
-| `--thread-messages <n>` | at most this many messages in each thread context (default: 50). |
-| `--thread-bytes <n>` | at most this many bytes of whole messages and links in each context (default: 65536). |
-| `--thread-within <duration>` | messages within this long either side of the hit (default: 1d). |
-| `--backend <archive\|server\|both>` | где искать: локальный архив, сервер мессенджера или оба (по умолчанию: both). |
-| `--server-time <duration>` | прекратить ожидание ответа сервера через это время (по умолчанию: 5s). |
-| `--chat <chat>` | only this chat — the same as chat: in the query; a chat: its id, or part of its title. |
-| `--source <messenger>` | every account of this messenger held in the store; personal, bots or all — the same as in: in the query. |
-| `--limit <n>` | how many. |
-| `--newest` | newest first instead of best first. |
-| `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
-| `--context <n>` | messages before and after each hit; 2 in the terminal, 0 otherwise. |
-| `--language <lucene\|legacy>` | the query language: strict Lucene or legacy discovery. |
-| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
-| `--regex` | the words are one regular expression, case-insensitive, tested against every stored text. |
-| `--saved <name\|id>` | run a saved search or an earlier run; options typed here replace its own. |
 
 ### `max messages show`
 
@@ -1343,8 +1307,8 @@ max messages show <chat> [message]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title; or a msg: locator, with no message id after it. |
-| `message` | необязательный | the message id. |
+| `chat` | обязательный | чат: его ID или часть названия; или локатор msg: без ID сообщения в конце. |
+| `message` | необязательный | ID сообщения. |
 
 ### `max messages context`
 
@@ -1356,16 +1320,16 @@ max messages context <chat> [message] [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title; or a msg: locator, with no message id after it. |
-| `message` | необязательный | the message id. |
+| `chat` | обязательный | чат: его ID или часть названия; или локатор msg: без ID сообщения в конце. |
+| `message` | необязательный | ID сообщения. |
 
 | Опция | Что делает |
 |---|---|
-| `--thread` | the stored reply chain and replies instead of time neighbours; falls back when no graph exists. |
-| `--thread-hops <n>` | at most this many links from the hit (default: 8). |
-| `--thread-messages <n>` | at most this many messages in each thread context (default: 50). |
-| `--thread-bytes <n>` | at most this many bytes of whole messages and links in each context (default: 65536). |
-| `--thread-within <duration>` | messages within this long either side of the hit (default: 1d). |
+| `--thread` | сохранённая цепочка ответов вместо соседних по времени сообщений; без графа — прежнее поведение. |
+| `--thread-hops <n>` | не больше стольких связей от совпадения (по умолчанию: 8). |
+| `--thread-messages <n>` | не больше стольких сообщений в контексте каждой ветки (по умолчанию: 50). |
+| `--thread-bytes <n>` | не больше стольких байт целых сообщений и связей в каждом контексте (по умолчанию: 65536). |
+| `--thread-within <duration>` | сообщения в пределах этого времени до и после совпадения (по умолчанию: 1d). |
 | `--before-n <n>` | how many before it. По умолчанию: `5`. |
 | `--after-n <n>` | how many after it. По умолчанию: `5`. |
 
@@ -1379,8 +1343,8 @@ max messages links <chat> <message>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
-| `message` | обязательный | the message id. |
+| `chat` | обязательный | чат: его ID или часть названия. |
+| `message` | обязательный | ID сообщения. |
 
 ### `max messages link`
 
@@ -1392,8 +1356,8 @@ max messages link <chat> [message]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title; or a msg: locator, with no message id after it. |
-| `message` | необязательный | the message id. |
+| `chat` | обязательный | чат: его ID или часть названия; или локатор msg: без ID сообщения в конце. |
+| `message` | необязательный | ID сообщения. |
 
 ### `max messages download`
 
@@ -1405,7 +1369,7 @@ max messages download <chat> [message] [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 | `message` | необязательный | the message id; left out with --all. |
 
 | Опция | Что делает |
@@ -1426,12 +1390,12 @@ max messages evidence <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 | Опция | Что делает |
 |---|---|
 | `--limit <n>` | how many, 1–100. |
-| `--before-id <id>` | only messages older than this message id. |
+| `--before-id <id>` | только сообщения старше сообщения с этим ID. |
 
 ### `max messages transcribe`
 
@@ -1443,7 +1407,7 @@ max messages transcribe <chat> <message> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | chat id, or part of a chat name. |
+| `chat` | обязательный | ID чата или часть названия. |
 | `message` | обязательный | id of a voice message. |
 
 | Опция | Что делает |
@@ -1462,8 +1426,8 @@ max messages send <chat> [text] [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
-| `text` | необязательный | the message. |
+| `chat` | обязательный | чат: его ID или часть названия. |
+| `text` | необязательный | сообщение. |
 
 | Опция | Что делает |
 |---|---|
@@ -1471,9 +1435,9 @@ max messages send <chat> [text] [options]
 | `--reply-to <message>` | answer this message, by its id in the same chat. |
 | `--send-as <id>` | публиковать от имени одной из сущностей в списке `chats send-as`; обязательно, если чат по умолчанию публикует от другого имени. |
 | `--send-id <id>` | repeat a send whose outcome was unknown, without risking a second copy. |
-| `--silent` | deliver without a notification. |
+| `--silent` | доставить без уведомления. |
 | `--no-preview` | no preview card for a link in the text. |
-| `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
+| `--md` | читать текст как Markdown этого мессенджера; поддерживаемый синтаксис — в его руководстве по форматированию. |
 | `--file <file>` | attach a file; the text becomes its caption. |
 | `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption. |
 | `--as-file` | send the --file as a file to download, a video included. |
@@ -1492,7 +1456,7 @@ max messages scheduled <chat>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 ### `max messages edit`
 
@@ -1506,13 +1470,13 @@ max messages edit <chat> <message> [text] [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 | `message` | обязательный | the id of your own message. |
 | `text` | необязательный | the new text; without it, read from stdin. |
 
 | Опция | Что делает |
 |---|---|
-| `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
+| `--md` | читать текст как Markdown этого мессенджера; поддерживаемый синтаксис — в его руководстве по форматированию. |
 
 ### `max messages delete`
 
@@ -1526,13 +1490,13 @@ max messages delete <chat> <messages> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 | `messages` | обязательный | the message ids, at most 10. |
 
 | Опция | Что делает |
 |---|---|
 | `--for-everyone` | delete for everyone in the chat, not only for you — they cannot get it back. |
-| `--allow-dangerous` | go ahead without the question an ask level puts before a deletion. |
+| `--allow-dangerous` | удалить без вопроса, который задаёт уровень ask. |
 
 ### `max messages forward`
 
@@ -1547,7 +1511,7 @@ max messages forward <chat> <message> [options]
 | Аргумент | | Что это |
 |---|---|---|
 | `chat` | обязательный | the chat the message is in: a chat: its id, or part of its title. |
-| `message` | обязательный | the message id. |
+| `message` | обязательный | ID сообщения. |
 
 | Опция | Что делает |
 |---|---|
@@ -1568,8 +1532,8 @@ max messages pin <chat> <message> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
-| `message` | обязательный | the message id. |
+| `chat` | обязательный | чат: его ID или часть названия. |
+| `message` | обязательный | ID сообщения. |
 
 | Опция | Что делает |
 |---|---|
@@ -1587,8 +1551,8 @@ max messages unpin <chat> <message>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
-| `message` | обязательный | the message id. |
+| `chat` | обязательный | чат: его ID или часть названия. |
+| `message` | обязательный | ID сообщения. |
 
 ### `max messages press`
 
@@ -1621,7 +1585,7 @@ max store status [chat]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | необязательный | a chat: its id, or part of its title. |
+| `chat` | необязательный | чат: его ID или часть названия. |
 
 ### `max store fetch`
 
@@ -1633,7 +1597,7 @@ max store fetch [chat] [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | необязательный | a chat: its id, or part of its title. |
+| `chat` | необязательный | чат: его ID или часть названия. |
 
 | Опция | Что делает |
 |---|---|
@@ -1665,7 +1629,7 @@ max store gaps plan <chat>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 #### `max store gaps repair`
 
@@ -1677,7 +1641,7 @@ max store gaps repair <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 | Опция | Что делает |
 |---|---|
@@ -1706,7 +1670,7 @@ background fetch jobs, newest first
 max store jobs list [options]
 ```
 
-| Параметр | Что делает |
+| Опция | Что делает |
 |---|---|
 | `--state <state>` | Только задачи в состоянии `running`, `done`, `failed`, `cancelled` или `died`. |
 
@@ -1919,17 +1883,17 @@ max stats messages show [query] [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `query` | необязательный | a strict Lucene query, as for messages search; none counts every stored message; with --saved, more words AND-ed to it. |
+| `query` | необязательный | строгий запрос Lucene, как для search messages; без него учитываются все сохранённые сообщения; с --saved слова добавляются к нему через AND. |
 
 | Опция | Что делает |
 |---|---|
-| `--sync-first` | first fetch new messages within the chat, time and message bounds. |
-| `--max-chats <n>` | refresh at most this many chats (default: 5). |
-| `--sync-time <duration>` | stop fetching after this long (default: 30s). |
-| `--max-messages <n>` | fetch at most this many messages total (default: 500). |
+| `--sync-first` | сначала скачать новые сообщения в пределах чата, времени и числа сообщений. |
+| `--max-chats <n>` | обновить не больше стольких чатов (по умолчанию: 5). |
+| `--sync-time <duration>` | прекратить скачивание через это время (по умолчанию: 30s). |
+| `--max-messages <n>` | скачать не больше стольких сообщений всего (по умолчанию: 500). |
 | `--by <chat\|sender\|day\|hour>` | what to count by (default: chat). |
-| `--chat <chat>` | only this chat — the same as chat: in the query; a chat: its id, or part of its title. |
-| `--source <messenger>` | every account of this messenger held in the store; personal, bots or all — the same as in: in the query. |
+| `--chat <chat>` | только этот чат — то же, что chat: в запросе; чат: его ID или часть названия. |
+| `--source <messenger>` | все аккаунты этого мессенджера в архиве; personal, bots или all — то же, что in: в запросе. |
 | `--limit <n>` | how many rows. |
 | `--timezone <zone>` | the IANA timezone for calendar days and hours. |
 | `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
@@ -2010,9 +1974,9 @@ max stats messages unanswered [query] [options]
 | `--source <messenger>` | все имеющиеся аккаунты этого мессенджера; personal, bots или all. |
 | `--exact` | слова без поля совпадают в точной форме, а не по основе слова. |
 | `--saved <name\|id>` | запустить сохранённый отчёт этого вида; указанные опции заменяют сохранённые. |
-| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
 | `--limit <n>` | строк отчёта, 1–100; по умолчанию 20. |
-| `--answerer <id>` | человек в выбранной области, чей прямой ответ учитывается; для нескольких повторить. |
+| `--answerer <person>` | сохранённое имя, псевдоним, @username, ID или person:provider/account/id; при неоднозначном имени нужно выбрать; для нескольких повторить. |
 | `--older-than <duration>` | минимальный возраст вопроса без наблюдаемого подходящего ответа. |
 
 #### `max stats messages discussion`
@@ -2033,7 +1997,7 @@ max stats messages discussion [query] [options]
 | `--source <messenger>` | все имеющиеся аккаунты этого мессенджера; personal, bots или all. |
 | `--exact` | слова без поля совпадают в точной форме, а не по основе слова. |
 | `--saved <name\|id>` | запустить сохранённый отчёт этого вида; указанные опции заменяют сохранённые. |
-| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
 | `--limit <n>` | строк отчёта, 1–100; по умолчанию 20. |
 | `--min-views <n>` | минимум известных накопленных просмотров. |
 | `--max-replies <n>` | максимум наблюдаемых ответов в обсуждении. |
@@ -2052,10 +2016,10 @@ max stats messages top [query] [options]
 
 | Опция | Что делает |
 |---|---|
-| `--sync-first` | first fetch new messages within the chat, time and message bounds. |
-| `--max-chats <n>` | refresh at most this many chats (default: 5). |
-| `--sync-time <duration>` | stop fetching after this long (default: 30s). |
-| `--max-messages <n>` | fetch at most this many messages total (default: 500). |
+| `--sync-first` | сначала скачать новые сообщения в пределах чата, времени и числа сообщений. |
+| `--max-chats <n>` | обновить не больше стольких чатов (по умолчанию: 5). |
+| `--sync-time <duration>` | прекратить скачивание через это время (по умолчанию: 30s). |
+| `--max-messages <n>` | скачать не больше стольких сообщений всего (по умолчанию: 500). |
 | `--measure <name>` | метрика ранжирования; не сочетается с score или weights. Одно из: `views`, `reactions`, `forwards`, `comments`, `replies`, `thread-size`. |
 | `--score <preset>` | helpful/active для авторов; engaging для обоих типов объектов. Одно из: `helpful`, `active`, `engaging`. |
 | `--weights <json>` | полный набор весов компонентов; заменяет веса предустановки. |
@@ -2108,9 +2072,9 @@ max stats contacts responses [query] [options]
 | `--source <messenger>` | все имеющиеся аккаунты этого мессенджера; personal, bots или all. |
 | `--exact` | слова без поля совпадают в точной форме, а не по основе слова. |
 | `--saved <name\|id>` | запустить сохранённый отчёт этого вида; указанные опции заменяют сохранённые. |
-| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
 | `--limit <n>` | строк отчёта, 1–100; по умолчанию 20. |
-| `--answerer <id>` | человек в выбранной области, чей прямой ответ учитывается; для нескольких повторить. |
+| `--answerer <person>` | сохранённое имя, псевдоним, @username, ID или person:provider/account/id; при неоднозначном имени нужно выбрать; для нескольких повторить. |
 
 #### `max stats contacts top`
 
@@ -2126,10 +2090,10 @@ max stats contacts top [query] [options]
 
 | Опция | Что делает |
 |---|---|
-| `--sync-first` | first fetch new messages within the chat, time and message bounds. |
-| `--max-chats <n>` | refresh at most this many chats (default: 5). |
-| `--sync-time <duration>` | stop fetching after this long (default: 30s). |
-| `--max-messages <n>` | fetch at most this many messages total (default: 500). |
+| `--sync-first` | сначала скачать новые сообщения в пределах чата, времени и числа сообщений. |
+| `--max-chats <n>` | обновить не больше стольких чатов (по умолчанию: 5). |
+| `--sync-time <duration>` | прекратить скачивание через это время (по умолчанию: 30s). |
+| `--max-messages <n>` | скачать не больше стольких сообщений всего (по умолчанию: 500). |
 | `--measure <name>` | метрика ранжирования; не сочетается с score или weights. Одно из: `messages`, `words`, `reactions`, `replies`, `answers`, `answer-time`, `threads`, `active-days`. |
 | `--score <preset>` | helpful/active для авторов; engaging для обоих типов объектов. Одно из: `helpful`, `active`, `engaging`. |
 | `--weights <json>` | полный набор весов компонентов; заменяет веса предустановки. |
@@ -2175,13 +2139,13 @@ max stats chats show <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 | Опция | Что делает |
 |---|---|
-| `--since-time <time>` | ISO 8601, or 2h / 1d ago; 7 days ago if not given. |
+| `--since-time <time>` | ISO 8601 или 2h / 1d назад; если не указано — 7 дней назад. |
 | `--by <day\|week>` | also one row per calendar day or week (weeks start on Monday). |
-| `--timezone <zone>` | the IANA timezone for calendar days. |
+| `--timezone <zone>` | часовой пояс IANA для календарных дней. |
 
 #### `max stats chats newcomers`
 
@@ -2193,7 +2157,7 @@ max stats chats newcomers <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 | Опция | Что делает |
 |---|---|
@@ -2201,9 +2165,9 @@ max stats chats newcomers <chat> [options]
 | `--until-time <time>` | до этого времени ISO 8601 или 2h / 1d назад включительно. |
 | `--within <duration>` | окно помощи после известного вступления новичка. |
 | `--saved <name\|id>` | запустить сохранённый отчёт этого вида; указанные опции заменяют сохранённые. |
-| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
 | `--limit <n>` | строк отчёта, 1–100; по умолчанию 20. |
-| `--answerer <id>` | человек в выбранной области, чей прямой ответ учитывается; для нескольких повторить. |
+| `--answerer <person>` | сохранённое имя, псевдоним, @username, ID или person:provider/account/id; при неоднозначном имени нужно выбрать; для нескольких повторить. |
 
 #### `max stats chats retention`
 
@@ -2215,7 +2179,7 @@ max stats chats retention <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 | Опция | Что делает |
 |---|---|
@@ -2255,14 +2219,14 @@ max stats charts <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 
 | Опция | Что делает |
 |---|---|
 | `--chart-kind <messages\|active\|membership>` | what to draw: messages, active authors, or joins and leaves. По умолчанию: `messages`. |
 | `--by <day\|week>` | one point per calendar day or week (weeks start on Monday). По умолчанию: `day`. |
-| `--since-time <time>` | ISO 8601, or 2h / 1d ago; 7 days ago if not given. |
-| `--timezone <zone>` | the IANA timezone for calendar days. |
+| `--since-time <time>` | ISO 8601 или 2h / 1d назад; если не указано — 7 дней назад. |
+| `--timezone <zone>` | часовой пояс IANA для календарных дней. |
 | `--output <file>` | записать изображение с тёмным оформлением в новый файл .svg или .png. |
 
 ## `max tasks`
@@ -2271,7 +2235,7 @@ max stats charts <chat> [options]
 
 ### `max tasks list`
 
-задачи, сначала самые старые, с сообщением, на которое указывает каждая
+задачи, сначала самые старые, с их источником — сообщением или заметкой
 
 ```sh
 max tasks list [options]
@@ -2283,11 +2247,11 @@ max tasks list [options]
 | `--chat <chat>` | только задачи этого чата; укажите его ID или часть названия. |
 | `--type <names>` | только эти типы через запятую: question, request, mention, promise. |
 | `--before-time <time>` | только задачи, открытые до этого времени в ISO 8601 или до момента 2h / 1d назад. |
-| `--limit <n>` | how many. |
+| `--limit <n>` | сколько результатов. |
 
 ### `max tasks add`
 
-добавить задачу для сообщения, которое правила не распознают — обещания или просьбы
+добавить задачу для сохранённого сообщения или заметки — обещания или просьбы
 
 ```sh
 max tasks add <message> [options]
@@ -2295,7 +2259,7 @@ max tasks add <message> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `message` | обязательный | идентификатор сообщения msg:<provider>/<account>/<chat>/<message>, как в выводе review --json. |
+| `message` | обязательный | идентификатор сообщения msg:<provider>/<account>/<chat>/<message> или note:<id>. |
 
 | Опция | Что делает |
 |---|---|
@@ -2332,14 +2296,14 @@ max conversations build [options]
 
 | Опция | Что делает |
 |---|---|
-| `--chat <chat>` | a chat: its id, or part of its title. |
+| `--chat <chat>` | чат: его ID или часть названия. |
 | `--analyze` | link batches using the configured analysis provider; requires --chat and remembers consent for this chat/provider. |
 | `--provider <provider>` | analysis: agent, openai or anthropic. |
 | `--model <model>` | analysis model; overrides analysisModel. |
 | `--base-url <url>` | analysis API endpoint; overrides analysisBaseUrl. |
 | `--size <n>` | analysis answer messages per batch, 10–200; default 50. |
 | `--max-tokens <n>` | analysis input/output reservation cap per run; default 100000. |
-| `--max-chats <n>` | at most this many chats in one run; 20 if not given. |
+| `--max-chats <n>` | не больше стольких чатов за один запуск; если не указано — 20. |
 
 ### `max conversations list`
 
@@ -2351,9 +2315,9 @@ max conversations list [options]
 
 | Опция | Что делает |
 |---|---|
-| `--chat <chat>` | a chat: its id, or part of its title. |
+| `--chat <chat>` | чат: его ID или часть названия. |
 | `--since-time <time>` | only those that started at this ISO 8601 time, or 30m / 2h / 1d ago, or later. |
-| `--limit <n>` | how many. |
+| `--limit <n>` | сколько результатов. |
 
 ### `max conversations show`
 
@@ -2378,16 +2342,16 @@ max conversations related <chat> <message> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 | `message` | обязательный | a message id in that chat. |
 
 | Опция | Что делает |
 |---|---|
-| `--limit <n>` | how many. |
-| `--model <model>` | local: a model id from `models text list` (default: e5-small); remote: the provider's model. |
-| `--provider <provider>` | embedding provider: local or openai; flags override profile settings. |
-| `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
-| `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
+| `--limit <n>` | сколько результатов. |
+| `--model <model>` | локально: ID модели из `models text list` (по умолчанию: e5-small); удалённо: модель провайдера. |
+| `--provider <provider>` | провайдер векторов: local или openai; опции важнее настроек профиля. |
+| `--base-url <url>` | сервер с /v1/embeddings как у OpenAI: Gemini, Jina или Ollama и LM Studio на этом компьютере. |
+| `--dims <n>` | удалённо: размер вектора — нужен с --base-url; укорачивает вектор модели OpenAI. |
 
 ### `max conversations status`
 
@@ -2399,42 +2363,11 @@ max conversations status [options]
 
 | Опция | Что делает |
 |---|---|
-| `--chat <chat>` | only this chat: a chat: its id, or part of its title. |
-| `--model <model>` | local: a model id from `models text list` (default: e5-small); remote: the provider's model. |
-| `--provider <provider>` | embedding provider: local or openai; flags override profile settings. |
-| `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
-| `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
-
-### `max conversations search`
-
-the conversations nearest to a query in meaning and in words, best first, in one chat or every one — meaning after `conversations embed`; runs on this machine
-
-```sh
-max conversations search <query> [options]
-```
-
-| Аргумент | | Что это |
-|---|---|---|
-| `query` | обязательный | what to look for, in your own words, in any language the model reads. |
-
-| Опция | Что делает |
-|---|---|
-| `--model <model>` | local: a model id from `models text list` (default: e5-small); remote: the provider's model. |
-| `--provider <provider>` | embedding provider: local or openai; flags override profile settings. |
-| `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
-| `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
-| `--max-chats <n>` | at most this many chats; 5 with --sync-first, 20 with --refresh if not given. |
-| `--max-chunks <n>` | at most this many chunks embedded in one run; 2000 if not given. |
-| `--sync-first` | first fetch new messages within the chat, time and message bounds. |
-| `--sync-time <duration>` | stop fetching after this long (default: 30s). |
-| `--max-messages <n>` | fetch at most this many messages total (default: 500). |
-| `--chat <chat>` | only this chat: a chat: its id, or part of its title. |
-| `--since-time <time>` | only those still going at this ISO 8601 time, or 30m / 2h / 1d ago, or later. |
-| `--filter <query>` | strict Lucene filter: any message in a conversation must match; does not change the meaning query. |
-| `--source <source>` | accounts to search: personal, bots, all, or a provider; defaults to the active account. |
-| `--timezone <zone>` | IANA timezone for filter dates; system timezone by default. |
-| `--limit <n>` | how many. |
-| `--refresh` | first build and embed, on this machine, the chats in scope that changed or were never built — within --max-chats and --max-chunks. |
+| `--chat <chat>` | только этот чат: его ID или часть названия. |
+| `--model <model>` | локально: ID модели из `models text list` (по умолчанию: e5-small); удалённо: модель провайдера. |
+| `--provider <provider>` | провайдер векторов: local или openai; опции важнее настроек профиля. |
+| `--base-url <url>` | сервер с /v1/embeddings как у OpenAI: Gemini, Jina или Ollama и LM Studio на этом компьютере. |
+| `--dims <n>` | удалённо: размер вектора — нужен с --base-url; укорачивает вектор модели OpenAI. |
 
 ### `max conversations batches`
 
@@ -2450,7 +2383,7 @@ max conversations batches status [options]
 
 | Опция | Что делает |
 |---|---|
-| `--chat <chat>` | a chat: its id, or part of its title. |
+| `--chat <chat>` | чат: его ID или часть названия. |
 | `--size <n>` | messages to answer per batch, 10–200; 50 by default. |
 
 #### `max conversations batches next`
@@ -2463,7 +2396,7 @@ max conversations batches next [options]
 
 | Опция | Что делает |
 |---|---|
-| `--chat <chat>` | a chat: its id, or part of its title. |
+| `--chat <chat>` | чат: его ID или часть названия. |
 | `--size <n>` | messages to answer per batch, 10–200; 50 by default. |
 
 ### `max conversations links`
@@ -2492,7 +2425,7 @@ max conversations links clear [options]
 
 | Опция | Что делает |
 |---|---|
-| `--chat <chat>` | a chat: its id, or part of its title. |
+| `--chat <chat>` | чат: его ID или часть названия. |
 | `--model <model>` | only the answers this model gave. |
 
 ### `max conversations consents`
@@ -2530,16 +2463,16 @@ max conversations embed [options]
 
 | Опция | Что делает |
 |---|---|
-| `--chat <chat>` | a chat: its id, or part of its title. |
-| `--model <model>` | local: a model id from `models text list` (default: e5-small); remote: the provider's model. |
-| `--provider <provider>` | embedding provider: local or openai; flags override profile settings. |
-| `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
-| `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
+| `--chat <chat>` | чат: его ID или часть названия. |
+| `--model <model>` | локально: ID модели из `models text list` (по умолчанию: e5-small); удалённо: модель провайдера. |
+| `--provider <provider>` | провайдер векторов: local или openai; опции важнее настроек профиля. |
+| `--base-url <url>` | сервер с /v1/embeddings как у OpenAI: Gemini, Jina или Ollama и LM Studio на этом компьютере. |
+| `--dims <n>` | удалённо: размер вектора — нужен с --base-url; укорачивает вектор модели OpenAI. |
 | `--workers <n>` | local: sessions in parallel, each with its own copy of the model (\~0.7 GB each). |
 | `--threads <n>` | local: threads in all (default: min(8, cores)). |
-| `--concurrency <n>` | remote: requests at once (default: 4). |
+| `--concurrency <n>` | удалённо: запросов одновременно (по умолчанию: 4). |
 | `--max-tokens <n>` | remote: stop before a run that could send more tokens than this. |
-| `--max-chats <n>` | at most this many chats in one run; 20 if not given. |
+| `--max-chats <n>` | не больше стольких чатов за один запуск; если не указано — 20. |
 | `--max-chunks <n>` | at most this many chunks embedded in one run; 2000 if not given, and no limit with --chat. |
 
 #### `max conversations embed status`
@@ -2552,11 +2485,11 @@ max conversations embed status [options]
 
 | Опция | Что делает |
 |---|---|
-| `--chat <chat>` | a chat: its id, or part of its title. |
-| `--model <model>` | local: a model id from `models text list` (default: e5-small); remote: the provider's model. |
-| `--provider <provider>` | embedding provider: local or openai; flags override profile settings. |
-| `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
-| `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
+| `--chat <chat>` | чат: его ID или часть названия. |
+| `--model <model>` | локально: ID модели из `models text list` (по умолчанию: e5-small); удалённо: модель провайдера. |
+| `--provider <provider>` | провайдер векторов: local или openai; опции важнее настроек профиля. |
+| `--base-url <url>` | сервер с /v1/embeddings как у OpenAI: Gemini, Jina или Ollama и LM Studio на этом компьютере. |
+| `--dims <n>` | удалённо: размер вектора — нужен с --base-url; укорачивает вектор модели OpenAI. |
 
 #### `max conversations embed clear`
 
@@ -2568,11 +2501,11 @@ max conversations embed clear [options]
 
 | Опция | Что делает |
 |---|---|
-| `--chat <chat>` | a chat: its id, or part of its title. |
-| `--model <model>` | local: a model id from `models text list` (default: e5-small); remote: the provider's model. |
-| `--provider <provider>` | embedding provider: local or openai; flags override profile settings. |
-| `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
-| `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
+| `--chat <chat>` | чат: его ID или часть названия. |
+| `--model <model>` | локально: ID модели из `models text list` (по умолчанию: e5-small); удалённо: модель провайдера. |
+| `--provider <provider>` | провайдер векторов: local или openai; опции важнее настроек профиля. |
+| `--base-url <url>` | сервер с /v1/embeddings как у OpenAI: Gemini, Jina или Ollama и LM Studio на этом компьютере. |
+| `--dims <n>` | удалённо: размер вектора — нужен с --base-url; укорачивает вектор модели OpenAI. |
 
 ## `max attachments`
 
@@ -2595,7 +2528,7 @@ max attachments extract [options]
 | `--output-dir <dir>` | with --download, where to save them; created if missing. |
 | `--limit <n>` | read at most this many files; run it again to continue. |
 | `--ocr` | явно вызвать models.ocr для массового извлечения текста из изображений и сканированных PDF. |
-| `--concurrency <n>` | remote: requests at once (default: 4). |
+| `--concurrency <n>` | удалённо: запросов одновременно (по умолчанию: 4). |
 
 ### `max attachments list`
 
@@ -2609,9 +2542,9 @@ max attachments list [options]
 |---|---|
 | `--chat <chat>` | only this chat's files; a chat: its id, or part of its title. |
 | `--needs-text` | only files saved here whose text nobody has yet: what an agent reads and writes back. |
-| `--limit <n>` | how many to show. |
-| `--page <n>` | which page, starting at 1. |
-| `--all` | every row, no paging. |
+| `--limit <n>` | сколько показать. |
+| `--page <n>` | какая страница, начиная с 1. |
+| `--all` | все строки, без страниц. |
 
 ### `max attachments show`
 
@@ -2624,11 +2557,12 @@ max attachments show <chat> [message] [options]
 | Аргумент | | Что это |
 |---|---|---|
 | `chat` | обязательный | чат: ID или часть названия; или только адрес msg:. |
-| `message` | необязательный | the message id. |
+| `message` | необязательный | ID сообщения. |
 
 | Опция | Что делает |
 |---|---|
 | `--attachment <n>` | позиция файла от 1; обязательна при нескольких файлах. |
+| `--page <n>` | отрисовать одну страницу PDF в PNG, от 1; нужен необязательный unpdf/canvas, без OCR. |
 | `--offset-bytes <n>` | смещение в байтах от 0. |
 | `--chunk-bytes <n>` | число возвращаемых байтов, 1–1048576 (по умолчанию524288). |
 | `--if-sha256 <hash>` | требовать SHA-256 всего файла из предыдущей порции. |
@@ -2648,8 +2582,8 @@ max attachments text set <chat> [message] [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title; or a msg: locator, with no message id after it. |
-| `message` | необязательный | the message id. |
+| `chat` | обязательный | чат: его ID или часть названия; или локатор msg: без ID сообщения в конце. |
+| `message` | необязательный | ID сообщения. |
 
 | Опция | Что делает |
 |---|---|
@@ -2764,13 +2698,148 @@ max metadata refresh [options]
 | `--only-missing` | только чаты без метаданных; без --chat — все сохранённые группы и каналы. |
 | `--limit <number>` | обработать не более указанного числа чатов (1–500). По умолчанию: `50`. |
 
+## `max search`
+
+поиск по тексту: search all — во всём, что хранит локальное хранилище, или поиск по одному ресурсу
+
+### `max search all`
+
+поиск во всём, что хранит локальное хранилище, — сообщения мессенджеров, почта и заметки, — лучшие совпадения сначала; начните отсюда, если не знаете, где это было написано
+
+```sh
+max search all <query> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | обязательный | строгий запрос Lucene: слова, "фразы", AND/OR/NOT, группы полей и диапазоны дат. |
+
+| Опция | Что делает |
+|---|---|
+| `--only <resources>` | только эти ресурсы через запятую: messages, mail, notes. |
+| `--limit <n>` | сколько результатов. |
+| `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word. |
+| `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
+
+### `max search messages`
+
+поиск сообщений мессенджера в локальном хранилище и на сервере мессенджера (--backend); по желанию загружает новые сообщения с --sync-first
+
+```sh
+max search messages [query] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | strict Lucene query: words, "phrases", AND/OR/NOT, field groups and date ranges; --language legacy keeps discovery; with --saved, more words AND-ed to it. |
+
+| Опция | Что делает |
+|---|---|
+| `--sync-first` | сначала скачать новые сообщения в пределах чата, времени и числа сообщений. |
+| `--max-chats <n>` | обновить не больше стольких чатов (по умолчанию: 5). |
+| `--sync-time <duration>` | прекратить скачивание через это время (по умолчанию: 30s). |
+| `--max-messages <n>` | скачать не больше стольких сообщений всего (по умолчанию: 500). |
+| `--thread` | сохранённая цепочка ответов вместо соседних по времени сообщений; без графа — прежнее поведение. |
+| `--thread-hops <n>` | не больше стольких связей от совпадения (по умолчанию: 8). |
+| `--thread-messages <n>` | не больше стольких сообщений в контексте каждой ветки (по умолчанию: 50). |
+| `--thread-bytes <n>` | не больше стольких байт целых сообщений и связей в каждом контексте (по умолчанию: 65536). |
+| `--thread-within <duration>` | сообщения в пределах этого времени до и после совпадения (по умолчанию: 1d). |
+| `--backend <archive\|server\|both>` | где искать: локальный архив, сервер мессенджера или оба (по умолчанию: both). |
+| `--server-time <duration>` | прекратить ожидание ответа сервера через это время (по умолчанию: 5s). |
+| `--chat <chat>` | только этот чат — то же, что chat: в запросе; чат: его ID или часть названия. |
+| `--source <messenger>` | все аккаунты этого мессенджера в архиве; personal, bots или all — то же, что in: в запросе. |
+| `--type <text\|voice\|file>` | только сообщения этого типа: только текст, голосовое сообщение или файл. |
+| `--limit <n>` | сколько результатов. |
+| `--newest` | сначала новые, а не лучшие совпадения. |
+| `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
+| `--context <n>` | messages before and after each hit; 2 in the terminal, 0 otherwise. |
+| `--language <lucene\|legacy>` | язык запроса: строгий Lucene или прежний поиск legacy. |
+| `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
+| `--regex` | слова — одно регулярное выражение без учёта регистра, проверяется по всем сохранённым текстам. |
+| `--saved <name\|id>` | run a saved search or an earlier run; options typed here replace its own. |
+
+### `max search mail`
+
+поиск в почте, импортированной в локальное хранилище, — её загружает memo mail import
+
+```sh
+max search mail [query] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | строгий запрос Lucene: слова, "фразы", AND/OR/NOT, группы полей и диапазоны дат. |
+
+| Опция | Что делает |
+|---|---|
+| `--chat <chat>` | только эта почтовая цепочка, по ID или теме. |
+| `--limit <n>` | сколько результатов. |
+| `--newest` | сначала новые, а не лучшие совпадения. |
+| `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
+| `--context <n>` | сколько сообщений показать до и после каждого совпадения; 2 в терминале, иначе 0. |
+| `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
+
+### `max search notes`
+
+поиск по заметкам — написанным в memo или импортированным из папки с заметками — по словам и, с локальной текстовой моделью, по смыслу; у каждого совпадения указано, что его нашло и на что оно ссылается
+
+```sh
+max search notes <query> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | обязательный | строгий запрос Lucene: слова, "фразы", AND/OR/NOT, tag: и диапазоны дат. |
+
+| Опция | Что делает |
+|---|---|
+| `--type <internal\|file>` | только заметки, написанные в memo, или только заметки из папки. |
+| `--folder <id>` | только эта папка с заметками, по её ID; для нескольких повторите. |
+| `--tag <tag>` | только заметки с этим тегом. |
+| `--filter <query>` | запрос, которому должно также соответствовать каждое совпадение; на поиск по смыслу он не влияет. |
+| `--limit <n>` | сколько результатов. |
+| `--offset <n>` | пропустить столько результатов — для следующей страницы. |
+| `--exact` | только слова в написанной форме; по смыслу не ищется. |
+| `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
+
+### `max search conversations`
+
+the conversations nearest to a query in meaning and in words, best first, in one chat or every one — meaning after `conversations embed`; runs on this machine
+
+```sh
+max search conversations <query> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | обязательный | what to look for, in your own words, in any language the model reads. |
+
+| Опция | Что делает |
+|---|---|
+| `--model <model>` | локально: ID модели из `models text list` (по умолчанию: e5-small); удалённо: модель провайдера. |
+| `--provider <provider>` | провайдер векторов: local или openai; опции важнее настроек профиля. |
+| `--base-url <url>` | сервер с /v1/embeddings как у OpenAI: Gemini, Jina или Ollama и LM Studio на этом компьютере. |
+| `--dims <n>` | удалённо: размер вектора — нужен с --base-url; укорачивает вектор модели OpenAI. |
+| `--max-chats <n>` | at most this many chats; 5 with --sync-first, 20 with --refresh if not given. |
+| `--max-chunks <n>` | at most this many chunks embedded in one run; 2000 if not given. |
+| `--sync-first` | сначала скачать новые сообщения в пределах чата, времени и числа сообщений. |
+| `--sync-time <duration>` | прекратить скачивание через это время (по умолчанию: 30s). |
+| `--max-messages <n>` | скачать не больше стольких сообщений всего (по умолчанию: 500). |
+| `--chat <chat>` | только этот чат: его ID или часть названия. |
+| `--since-time <time>` | only those still going at this ISO 8601 time, or 30m / 2h / 1d ago, or later. |
+| `--filter <query>` | strict Lucene filter: any message in a conversation must match; does not change the meaning query. |
+| `--source <source>` | accounts to search: personal, bots, all, or a provider; defaults to the active account. |
+| `--timezone <zone>` | IANA timezone for filter dates; system timezone by default. |
+| `--limit <n>` | сколько результатов. |
+| `--refresh` | first build and embed, on this machine, the chats in scope that changed or were never built — within --max-chats and --max-chunks. |
+
 ## `max searches`
 
-сохранённые поиски и история messages search и stats messages show в локальном хранилище; --saved выполняет один
+сохранённые поиски и история search messages и stats messages show в локальном хранилище; --saved выполняет один
 
 ### `max searches create`
 
-save a search under a name without running it; messages search --saved <name> runs it
+сохранить поиск под именем, не выполняя его; search messages --saved <name> выполняет его
 
 ```sh
 max searches create <name> [query] [options]
@@ -2779,19 +2848,19 @@ max searches create <name> [query] [options]
 | Аргумент | | Что это |
 |---|---|---|
 | `name` | обязательный | up to 64 letters a–z, digits and hyphens, not only digits. |
-| `query` | необязательный | the query, as for messages search; none matches every stored message. |
+| `query` | необязательный | запрос, как для search messages; без него подходят все сохранённые сообщения. |
 
 | Опция | Что делает |
 |---|---|
-| `--chat <chat>` | only this chat — the same as chat: in the query; a chat: its id, or part of its title. |
-| `--source <messenger>` | every account of this messenger held in the store; personal, bots or all — the same as in: in the query. |
-| `--limit <n>` | how many. |
-| `--newest` | newest first instead of best first. |
+| `--chat <chat>` | только этот чат — то же, что chat: в запросе; чат: его ID или часть названия. |
+| `--source <messenger>` | все аккаунты этого мессенджера в архиве; personal, bots или all — то же, что in: в запросе. |
+| `--limit <n>` | сколько результатов. |
+| `--newest` | сначала новые, а не лучшие совпадения. |
 | `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
 | `--context <n>` | messages before and after each hit. |
-| `--language <lucene\|legacy>` | the query language: strict Lucene or legacy discovery. |
-| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
-| `--regex` | the words are one regular expression, case-insensitive, tested against every stored text. |
+| `--language <lucene\|legacy>` | язык запроса: строгий Lucene или прежний поиск legacy. |
+| `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
+| `--regex` | слова — одно регулярное выражение без учёта регистра, проверяется по всем сохранённым текстам. |
 | `--by <chat\|sender\|day\|hour>` | по чему группирует подсчёт stats messages show --saved. |
 | `--selection <json>` | сохранить полностью определённый исходный запрос рейтинга и параметры из детализации. |
 | `--replace` | overwrite a saved search of the same name. |
@@ -2806,7 +2875,7 @@ max searches show <name|id>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `name\|id` | обязательный | a saved search's name, or the id of any row of searches history. |
+| `name\|id` | обязательный | имя сохранённого поиска или ID любой строки истории searches. |
 
 ### `max searches list`
 
@@ -2826,7 +2895,7 @@ max searches history [options]
 
 | Опция | Что делает |
 |---|---|
-| `--limit <n>` | how many. |
+| `--limit <n>` | сколько результатов. |
 
 ### `max searches delete`
 
@@ -2838,7 +2907,7 @@ max searches delete <name|id>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `name\|id` | обязательный | a saved search's name, or the id of any row of searches history. |
+| `name\|id` | обязательный | имя сохранённого поиска или ID любой строки истории searches. |
 
 ### `max searches clear`
 
@@ -2958,8 +3027,8 @@ max polls show <chat> <message>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
-| `message` | обязательный | the id of the message that carries the poll. |
+| `chat` | обязательный | чат: его ID или часть названия. |
+| `message` | обязательный | ID сообщения с опросом. |
 
 ### `max polls vote`
 
@@ -2973,8 +3042,8 @@ max polls vote <chat> <message> [answers] [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
-| `message` | обязательный | the id of the message that carries the poll. |
+| `chat` | обязательный | чат: его ID или часть названия. |
+| `message` | обязательный | ID сообщения с опросом. |
 | `answers` | необязательный | answer ids, as `polls show` prints them. |
 
 | Опция | Что делает |
@@ -2993,7 +3062,7 @@ max polls close <chat> <message>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 | `message` | обязательный | the id of your own message that carries the poll. |
 
 ### `max polls create`
@@ -3008,7 +3077,7 @@ max polls create <chat> <question> <answers> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 | `question` | обязательный | the question. |
 | `answers` | обязательный | two answers or more. |
 
@@ -3038,8 +3107,8 @@ max reactions add <chat> <message> <emoji>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
-| `message` | обязательный | the message id. |
+| `chat` | обязательный | чат: его ID или часть названия. |
+| `message` | обязательный | ID сообщения. |
 | `emoji` | обязательный | one emoji, for example 👍. |
 
 ### `max reactions remove`
@@ -3054,8 +3123,8 @@ max reactions remove <chat> <message>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat: its id, or part of its title. |
-| `message` | обязательный | the message id. |
+| `chat` | обязательный | чат: его ID или часть названия. |
+| `message` | обязательный | ID сообщения. |
 
 ## `max recipients`
 
@@ -3081,7 +3150,7 @@ max recipients add <chat>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | chat id, or part of a chat name. |
+| `chat` | обязательный | ID чата или часть названия. |
 
 ### `max recipients remove`
 
@@ -3121,7 +3190,7 @@ max sends list [options]
 
 | Опция | Что делает |
 |---|---|
-| `--limit <n>` | how many to show. |
+| `--limit <n>` | сколько показать. |
 
 ## `max inbox`
 
@@ -3154,7 +3223,7 @@ max review [options]
 | Опция | Что делает |
 |---|---|
 | `--since-time <time>` | where the last review ended — ISO 8601, or 2h / 1d ago; 3 days ago if not given. |
-| `--chat <chat>` | only this chat: a chat: its id, or part of its title. |
+| `--chat <chat>` | только этот чат: его ID или часть названия. |
 | `--kind <kinds>` | only chats of these kinds, comma-separated: dialog, group, channel, saved. |
 | `--unanswered [duration]` | only questions to you or a group's admins that nobody answered, asked at least this long ago — 4h, 1d; 24h if not given. |
 | `--all` | muted and archived chats too — left out unless they mention you or reply to you. |
@@ -3395,7 +3464,7 @@ max server start [options]
 
 | Опция | Что делает |
 |---|---|
-| `--idle <duration>` | stop after this long with nobody using it — 15m, 1h. |
+| `--idle <duration>` | остановиться, если им никто не пользуется столько времени — 15m, 1h. |
 
 ### `max server stop`
 
@@ -3415,7 +3484,7 @@ max server restart [options]
 
 | Опция | Что делает |
 |---|---|
-| `--idle <duration>` | stop after this long with nobody using it — 15m, 1h. |
+| `--idle <duration>` | остановиться, если им никто не пользуется столько времени — 15m, 1h. |
 
 ### `max server status`
 
@@ -3512,9 +3581,9 @@ max config set <setting> <value> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--defaults` | change what every profile gets, rather than this profile. |
-| `--personal` | only for personal accounts — the personal section of the file. |
-| `--bot` | only for bots — the bot section of the file. |
+| `--defaults` | изменить значение для всех профилей, а не только для этого. |
+| `--personal` | только для личных аккаунтов — раздел personal в файле. |
+| `--bot` | только для ботов — раздел bot в файле. |
 
 ### `max config unset`
 
@@ -3532,9 +3601,9 @@ max config unset <setting> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--defaults` | change what every profile gets, rather than this profile. |
-| `--personal` | only for personal accounts — the personal section of the file. |
-| `--bot` | only for bots — the bot section of the file. |
+| `--defaults` | изменить значение для всех профилей, а не только для этого. |
+| `--personal` | только для личных аккаунтов — раздел personal в файле. |
+| `--bot` | только для ботов — раздел bot в файле. |
 
 ## `max doctor`
 
@@ -3591,7 +3660,7 @@ max runs show <run-id>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `run-id` | обязательный | an id from `max runs list`. |
+| `run-id` | обязательный | ID из `max runs list`. |
 
 ### `max runs path`
 
@@ -3603,7 +3672,7 @@ max runs path <run-id>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `run-id` | обязательный | an id from `max runs list`. |
+| `run-id` | обязательный | ID из `max runs list`. |
 
 ## `max skill`
 
@@ -3685,11 +3754,11 @@ max mcp [options]
 |---|---|
 | `--permission <key=level>` | переопределить разрешение только для этого сервера; повторите для нескольких ключей. |
 | `--allow-dangerous` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-send` | deprecated: use permissions.messages.send in config; does not grant access. |
+| `--allow-send` | устарело: используйте permissions.messages.send в настройках; доступа не даёт. |
 | `--confirm-send` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-mark-read` | deprecated: use permissions.chats.mark-read in config; does not grant access. |
-| `--allow-delete` | deprecated: use permissions.messages.delete in config; does not grant access. |
-| `--allow-moderate` | deprecated: use permissions.chats.moderate and group rules; does not grant access. |
+| `--allow-mark-read` | устарело: используйте permissions.chats.mark-read в настройках; доступа не даёт. |
+| `--allow-delete` | устарело: используйте permissions.messages.delete в настройках; доступа не даёт. |
+| `--allow-moderate` | устарело: используйте permissions.chats.moderate и правила группы; доступа не даёт. |
 | `--http` | предоставлять HTTP-сервер на 127.0.0.1 для ChatGPT и Claude в браузере через ваш туннель; действуют права профиля. |
 | `--http-confirmation <mode>` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
 | `--port <port>` | the local port for --http (default 8765). |
@@ -3708,11 +3777,11 @@ max mcp config [options]
 |---|---|
 | `--permission <key=level>` | переопределить разрешение только для этого сервера; повторите для нескольких ключей. |
 | `--allow-dangerous` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-send` | deprecated: use permissions.messages.send in config; does not grant access. |
+| `--allow-send` | устарело: используйте permissions.messages.send в настройках; доступа не даёт. |
 | `--confirm-send` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-mark-read` | deprecated: use permissions.chats.mark-read in config; does not grant access. |
-| `--allow-delete` | deprecated: use permissions.messages.delete in config; does not grant access. |
-| `--allow-moderate` | deprecated: use permissions.chats.moderate and group rules; does not grant access. |
+| `--allow-mark-read` | устарело: используйте permissions.chats.mark-read в настройках; доступа не даёт. |
+| `--allow-delete` | устарело: используйте permissions.messages.delete в настройках; доступа не даёт. |
+| `--allow-moderate` | устарело: используйте permissions.chats.moderate и правила группы; доступа не даёт. |
 
 ### `max mcp setup`
 
@@ -3733,11 +3802,11 @@ max mcp setup <client> [options]
 | `--allow-writes` | acknowledge that this profile offers writing tools. |
 | `--permission <key=level>` | переопределить разрешение только для этого сервера; повторите для нескольких ключей. |
 | `--allow-dangerous` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-send` | deprecated: use permissions.messages.send in config; does not grant access. |
+| `--allow-send` | устарело: используйте permissions.messages.send в настройках; доступа не даёт. |
 | `--confirm-send` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-mark-read` | deprecated: use permissions.chats.mark-read in config; does not grant access. |
-| `--allow-delete` | deprecated: use permissions.messages.delete in config; does not grant access. |
-| `--allow-moderate` | deprecated: use permissions.chats.moderate and group rules; does not grant access. |
+| `--allow-mark-read` | устарело: используйте permissions.chats.mark-read в настройках; доступа не даёт. |
+| `--allow-delete` | устарело: используйте permissions.messages.delete в настройках; доступа не даёт. |
+| `--allow-moderate` | устарело: используйте permissions.chats.moderate и правила группы; доступа не даёт. |
 
 ### `max mcp doctor`
 
@@ -3751,11 +3820,11 @@ max mcp doctor [options]
 |---|---|
 | `--permission <key=level>` | переопределить разрешение только для этого сервера; повторите для нескольких ключей. |
 | `--allow-dangerous` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-send` | deprecated: use permissions.messages.send in config; does not grant access. |
+| `--allow-send` | устарело: используйте permissions.messages.send в настройках; доступа не даёт. |
 | `--confirm-send` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-mark-read` | deprecated: use permissions.chats.mark-read in config; does not grant access. |
-| `--allow-delete` | deprecated: use permissions.messages.delete in config; does not grant access. |
-| `--allow-moderate` | deprecated: use permissions.chats.moderate and group rules; does not grant access. |
+| `--allow-mark-read` | устарело: используйте permissions.chats.mark-read в настройках; доступа не даёт. |
+| `--allow-delete` | устарело: используйте permissions.messages.delete в настройках; доступа не даёт. |
+| `--allow-moderate` | устарело: используйте permissions.chats.moderate и правила группы; доступа не даёт. |
 
 ## `max bot`
 
@@ -3827,7 +3896,7 @@ max bot chats show <chat>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
+| `chat` | обязательный | ID чата, user:<id> для человека или название чата, который видел этот бот. |
 
 #### `max bot chats leave`
 
@@ -3841,7 +3910,7 @@ max bot chats leave <chat>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat id, or the title of a chat this bot has seen. |
+| `chat` | обязательный | ID чата или название чата, который видел этот бот. |
 
 #### `max bot chats action`
 
@@ -3855,7 +3924,7 @@ max bot chats action <chat> <action>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
+| `chat` | обязательный | ID чата, user:<id> для человека или название чата, который видел этот бот. |
 | `action` | обязательный | what the chat sees. Одно из: `typing`, `photo`, `video`, `voice`, `file`. |
 
 #### `max bot chats admins`
@@ -3872,7 +3941,7 @@ max bot chats admins list <chat>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat id, or the title of a chat this bot has seen. |
+| `chat` | обязательный | ID чата или название чата, который видел этот бот. |
 
 #### `max bot chats admins add`
 
@@ -3886,8 +3955,8 @@ max bot chats admins add <chat> <person> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat id, or the title of a chat this bot has seen. |
-| `person` | обязательный | the person's user id. |
+| `chat` | обязательный | ID чата или название чата, который видел этот бот. |
+| `person` | обязательный | ID пользователя. |
 
 | Опция | Что делает |
 |---|---|
@@ -3906,8 +3975,8 @@ max bot chats admins remove <chat> <person>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat id, or the title of a chat this bot has seen. |
-| `person` | обязательный | the person's user id. |
+| `chat` | обязательный | ID чата или название чата, который видел этот бот. |
+| `person` | обязательный | ID пользователя. |
 
 #### `max bot chats members`
 
@@ -3925,8 +3994,8 @@ max bot chats members remove <chat> <person> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat id, or the title of a chat this bot has seen. |
-| `person` | обязательный | the person's user id. |
+| `chat` | обязательный | ID чата или название чата, который видел этот бот. |
+| `person` | обязательный | ID пользователя. |
 
 | Опция | Что делает |
 |---|---|
@@ -3946,7 +4015,7 @@ max bot chats members list <chat> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--limit <n>` | how many, up to 100. |
+| `--limit <n>` | сколько, до 100. |
 | `--marker <marker>` | continue from here. |
 
 #### `max bot chats members add`
@@ -3978,7 +4047,7 @@ max bot chats rules show <chat>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a group's id, or the title of a group this bot has seen. |
+| `chat` | обязательный | ID группы или название группы, которую видел этот бот. |
 
 #### `max bot chats rules set`
 
@@ -3992,8 +4061,8 @@ max bot chats rules set <chat> <key> <value>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a group's id, or the title of a group this bot has seen. |
-| `key` | обязательный | the rule. |
+| `chat` | обязательный | ID группы или название группы, которую видел этот бот. |
+| `key` | обязательный | правило. |
 | `value` | обязательный | its new value. |
 
 #### `max bot chats rules unset`
@@ -4008,8 +4077,8 @@ max bot chats rules unset <chat> <key>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a group's id, or the title of a group this bot has seen. |
-| `key` | обязательный | the rule. |
+| `chat` | обязательный | ID группы или название группы, которую видел этот бот. |
+| `key` | обязательный | правило. |
 
 #### `max bot chats moderate`
 
@@ -4023,15 +4092,15 @@ max bot chats moderate <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a group's id, or the title of a group this bot has seen. |
+| `chat` | обязательный | ID группы или название группы, которую видел этот бот. |
 
 | Опция | Что делает |
 |---|---|
 | `--since-time <time>` | judge what came after this ISO 8601 time, or 2h / 1d ago; the saved point stays. |
-| `--dry-run` | judge and plan; do nothing. |
+| `--dry-run` | оценить и составить план; ничего не делать. |
 | `--allow-dangerous` | yes to every action whose level in the group's rules is ask. |
 | `--no-ban` | remove without banning; by default a removed person cannot come back by the link. |
-| `--max-actions <n>` | at most this many actions in one run; 10 if not given. |
+| `--max-actions <n>` | не больше стольких действий за один запуск; если не указано — 10. |
 
 ### `max bot messages`
 
@@ -4049,14 +4118,14 @@ max bot messages send <chat> [text] [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
-| `text` | необязательный | the message. |
+| `chat` | обязательный | ID чата, user:<id> для человека или название чата, который видел этот бот. |
+| `text` | необязательный | сообщение. |
 
 | Опция | Что делает |
 |---|---|
 | `--reply-to <message>` | answer this message, by its id in the same chat. |
-| `--silent` | deliver without a notification. |
-| `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
+| `--silent` | доставить без уведомления. |
+| `--md` | читать текст как Markdown этого мессенджера; поддерживаемый синтаксис — в его руководстве по форматированию. |
 | `--html` | the text is HTML: <b>, <i>, <a href>, <code>. |
 | `--file <file>` | attach a file; the text becomes its caption. |
 | `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption. |
@@ -4074,7 +4143,7 @@ max bot messages list <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
+| `chat` | обязательный | ID чата, user:<id> для человека или название чата, который видел этот бот. |
 
 | Опция | Что делает |
 |---|---|
@@ -4090,8 +4159,8 @@ max bot messages show <chat> <message>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
-| `message` | обязательный | message id. |
+| `chat` | обязательный | ID чата, user:<id> для человека или название чата, который видел этот бот. |
+| `message` | обязательный | ID сообщения. |
 
 #### `max bot messages edit`
 
@@ -4105,13 +4174,13 @@ max bot messages edit <chat> <message> <text> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
-| `message` | обязательный | message id. |
+| `chat` | обязательный | ID чата, user:<id> для человека или название чата, который видел этот бот. |
+| `message` | обязательный | ID сообщения. |
 | `text` | обязательный | the new text. |
 
 | Опция | Что делает |
 |---|---|
-| `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
+| `--md` | читать текст как Markdown этого мессенджера; поддерживаемый синтаксис — в его руководстве по форматированию. |
 | `--html` | the text is HTML: <b>, <i>, <a href>, <code>. |
 
 #### `max bot messages delete`
@@ -4126,7 +4195,7 @@ max bot messages delete <chat> <messages> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
+| `chat` | обязательный | ID чата, user:<id> для человека или название чата, который видел этот бот. |
 | `messages` | обязательный | message ids. |
 
 | Опция | Что делает |
@@ -4145,8 +4214,8 @@ max bot messages pin <chat> <message> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
-| `message` | обязательный | message id. |
+| `chat` | обязательный | ID чата, user:<id> для человека или название чата, который видел этот бот. |
+| `message` | обязательный | ID сообщения. |
 
 | Опция | Что делает |
 |---|---|
@@ -4164,28 +4233,8 @@ max bot messages unpin <chat> <message>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
-| `message` | обязательный | message id. |
-
-#### `max bot messages search`
-
-search the messages this bot has read, sent or received on this machine — the local copy only, best match first; every word must appear; "a phrase", -word, a OR b, from: chat: after: before: has:; by text, by --from, or both
-
-```sh
-max bot messages search [query] [options]
-```
-
-| Аргумент | | Что это |
-|---|---|---|
-| `query` | необязательный | the words to find. |
-
-| Опция | Что делает |
-|---|---|
-| `--all-bots` | also read every other bot's copy on this machine that readOtherBots allows. |
-| `--bots <profiles>` | also read these bots' copies, comma separated — each allowed by readOtherBots. |
-| `--limit <n>` | how many. |
-| `--newest` | newest first instead of best first. |
-| `--from <who>` | only what this person wrote — an id, @username or part of a name; repeat it for any of several. |
+| `chat` | обязательный | ID чата, user:<id> для человека или название чата, который видел этот бот. |
+| `message` | обязательный | ID сообщения. |
 
 #### `max bot messages between`
 
@@ -4201,9 +4250,33 @@ max bot messages between <people> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--all-bots` | also read every other bot's copy on this machine that readOtherBots allows. |
-| `--bots <profiles>` | also read these bots' copies, comma separated — each allowed by readOtherBots. |
+| `--all-bots` | также читать копии всех других ботов на этом компьютере, которые разрешает readOtherBots. |
+| `--bots <profiles>` | также читать копии этих ботов, через запятую — каждый должен быть разрешён в readOtherBots. |
 | `--limit <n>` | how many of the latest messages from each chat. |
+
+### `max bot search`
+
+поиск по тексту в локальной копии этого бота
+
+#### `max bot search messages`
+
+search the messages this bot has read, sent or received on this machine — the local copy only, best match first; every word must appear; "a phrase", -word, a OR b, from: chat: after: before: has:; by text, by --from, or both
+
+```sh
+max bot search messages [query] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | the words to find. |
+
+| Опция | Что делает |
+|---|---|
+| `--all-bots` | также читать копии всех других ботов на этом компьютере, которые разрешает readOtherBots. |
+| `--bots <profiles>` | также читать копии этих ботов, через запятую — каждый должен быть разрешён в readOtherBots. |
+| `--limit <n>` | сколько результатов. |
+| `--newest` | сначала новые, а не лучшие совпадения. |
+| `--from <who>` | only what this person wrote — an id, @username or part of a name; repeat it for any of several. |
 
 ### `max bot recipients`
 
@@ -4403,8 +4476,8 @@ max bot contacts show <who> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--all-bots` | also read every other bot's copy on this machine that readOtherBots allows. |
-| `--bots <profiles>` | also read these bots' copies, comma separated — each allowed by readOtherBots. |
+| `--all-bots` | также читать копии всех других ботов на этом компьютере, которые разрешает readOtherBots. |
+| `--bots <profiles>` | также читать копии этих ботов, через запятую — каждый должен быть разрешён в readOtherBots. |
 | `--limit <n>` | how many messages from the private chat. |
 | `--refresh` | read the private chat with them again from the messenger first — one request. |
 
@@ -4422,7 +4495,7 @@ max bot store fetch <chat> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | a chat id, or the title of a chat this bot has seen. |
+| `chat` | обязательный | ID чата или название чата, который видел этот бот. |
 
 | Опция | Что делает |
 |---|---|
@@ -4444,9 +4517,9 @@ max bot mcp [options]
 |---|---|
 | `--confirm-send` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
 | `--allow-dangerous` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-send` | no longer used — the profile's permissions decide; kept so an old setup still starts. |
-| `--allow-delete` | no longer used — the profile's permissions decide. |
-| `--allow-moderate` | no longer used — the profile's permissions decide. |
+| `--allow-send` | больше не используется — решают права профиля; оставлено, чтобы старая настройка запускалась. |
+| `--allow-delete` | больше не используется — решают права профиля. |
+| `--allow-moderate` | больше не используется — решают права профиля. |
 
 #### `max bot mcp config`
 
@@ -4460,9 +4533,9 @@ max bot mcp config [options]
 |---|---|
 | `--confirm-send` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
 | `--allow-dangerous` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-send` | no longer used — the profile's permissions decide; kept so an old setup still starts. |
-| `--allow-delete` | no longer used — the profile's permissions decide. |
-| `--allow-moderate` | no longer used — the profile's permissions decide. |
+| `--allow-send` | больше не используется — решают права профиля; оставлено, чтобы старая настройка запускалась. |
+| `--allow-delete` | больше не используется — решают права профиля. |
+| `--allow-moderate` | больше не используется — решают права профиля. |
 
 ### `max bot me`
 
@@ -4490,7 +4563,7 @@ max bot comments list <message> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--limit <n>` | how many, up to 100. |
+| `--limit <n>` | сколько, до 100. |
 
 #### `max bot comments get`
 
@@ -4561,7 +4634,7 @@ max bot comments delete <message> <comment> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--allow-dangerous` | skip confirmation for bot.messages.delete at level ask. |
+| `--allow-dangerous` | не спрашивать подтверждение для bot.messages.delete на уровне ask. |
 
 ### `max bot uploads`
 
@@ -4617,8 +4690,8 @@ max bot api edit-my-commands [options]
 
 | Опция | Что делает |
 |---|---|
-| `--body <json>` | the request body as JSON; - reads it from stdin. |
-| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+| `--body <json>` | тело запроса в JSON; - читает его из stdin. |
+| `--body-file <path>` | тело запроса из файла JSON; - означает stdin. |
 
 #### `max bot api get-chat`
 
@@ -4644,9 +4717,9 @@ max bot api edit-chat [options]
 
 | Опция | Что делает |
 |---|---|
-| `--chat-id <value>` | Chat or channel identifier. |
-| `--body <json>` | the request body as JSON; - reads it from stdin. |
-| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+| `--chat-id <value>` | ID чата или канала. |
+| `--body <json>` | тело запроса в JSON; - читает его из stdin. |
+| `--body-file <path>` | тело запроса из файла JSON; - означает stdin. |
 
 #### `max bot api send-action`
 
@@ -4660,9 +4733,9 @@ max bot api send-action [options]
 
 | Опция | Что делает |
 |---|---|
-| `--chat-id <value>` | Chat identifier. |
-| `--body <json>` | the request body as JSON; - reads it from stdin. |
-| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+| `--chat-id <value>` | ID чата. |
+| `--body <json>` | тело запроса в JSON; - читает его из stdin. |
+| `--body-file <path>` | тело запроса из файла JSON; - означает stdin. |
 
 #### `max bot api get-pinned-message`
 
@@ -4689,8 +4762,8 @@ max bot api pin-message [options]
 | Опция | Что делает |
 |---|---|
 | `--chat-id <value>` | Chat identifier where message should be pinned. |
-| `--body <json>` | the request body as JSON; - reads it from stdin. |
-| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+| `--body <json>` | тело запроса в JSON; - читает его из stdin. |
+| `--body-file <path>` | тело запроса из файла JSON; - означает stdin. |
 
 #### `max bot api unpin-message`
 
@@ -4716,7 +4789,7 @@ max bot api get-membership [options]
 
 | Опция | Что делает |
 |---|---|
-| `--chat-id <value>` | Chat or channel identifier. |
+| `--chat-id <value>` | ID чата или канала. |
 
 #### `max bot api leave-chat`
 
@@ -4730,7 +4803,7 @@ max bot api leave-chat [options]
 
 | Опция | Что делает |
 |---|---|
-| `--chat-id <value>` | Chat or channel identifier. |
+| `--chat-id <value>` | ID чата или канала. |
 
 #### `max bot api get-admins`
 
@@ -4742,7 +4815,7 @@ max bot api get-admins [options]
 
 | Опция | Что делает |
 |---|---|
-| `--chat-id <value>` | Chat or channel identifier. |
+| `--chat-id <value>` | ID чата или канала. |
 
 #### `max bot api post-admins`
 
@@ -4756,9 +4829,9 @@ max bot api post-admins [options]
 
 | Опция | Что делает |
 |---|---|
-| `--chat-id <value>` | Chat or channel identifier. |
-| `--body <json>` | the request body as JSON; - reads it from stdin. |
-| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+| `--chat-id <value>` | ID чата или канала. |
+| `--body <json>` | тело запроса в JSON; - читает его из stdin. |
+| `--body-file <path>` | тело запроса из файла JSON; - означает stdin. |
 
 #### `max bot api delete-admins`
 
@@ -4772,7 +4845,7 @@ max bot api delete-admins [options]
 
 | Опция | Что делает |
 |---|---|
-| `--chat-id <value>` | Chat or channel identifier. |
+| `--chat-id <value>` | ID чата или канала. |
 | `--user-id <value>` | User identifier. |
 
 #### `max bot api get-members`
@@ -4785,7 +4858,7 @@ max bot api get-members [options]
 
 | Опция | Что делает |
 |---|---|
-| `--chat-id <value>` | Chat or channel identifier. |
+| `--chat-id <value>` | ID чата или канала. |
 | `--user-ids <value>` | Comma-separated list of users identifiers to get their membership. When this parameter is passed, both `count` and `marker` are ignored. |
 | `--marker <value>` | Marker. |
 | `--count <value>` | Count. |
@@ -4802,9 +4875,9 @@ max bot api add-members [options]
 
 | Опция | Что делает |
 |---|---|
-| `--chat-id <value>` | Chat identifier. |
-| `--body <json>` | the request body as JSON; - reads it from stdin. |
-| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+| `--chat-id <value>` | ID чата. |
+| `--body <json>` | тело запроса в JSON; - читает его из stdin. |
+| `--body-file <path>` | тело запроса из файла JSON; - означает stdin. |
 
 #### `max bot api remove-member`
 
@@ -4818,7 +4891,7 @@ max bot api remove-member [options]
 
 | Опция | Что делает |
 |---|---|
-| `--chat-id <value>` | Chat or channel identifier. |
+| `--chat-id <value>` | ID чата или канала. |
 | `--user-id <value>` | User id to remove from chat or channel. |
 | `--block <value>` | Set to `true` if user should be blocked in chat. |
 
@@ -4842,8 +4915,8 @@ max bot api subscribe [options]
 
 | Опция | Что делает |
 |---|---|
-| `--body <json>` | the request body as JSON; - reads it from stdin. |
-| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+| `--body <json>` | тело запроса в JSON; - читает его из stdin. |
+| `--body-file <path>` | тело запроса из файла JSON; - означает stdin. |
 
 #### `max bot api unsubscribe`
 
@@ -4906,8 +4979,8 @@ max bot api send-message [options]
 | `--user-id <value>` | Fill this parameter if you want to send message to user. |
 | `--chat-id <value>` | Fill this if you send message to chat or channel. |
 | `--disable-link-preview <value>` | If `false`, server will not generate media preview for links in text. |
-| `--body <json>` | the request body as JSON; - reads it from stdin. |
-| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+| `--body <json>` | тело запроса в JSON; - читает его из stdin. |
+| `--body-file <path>` | тело запроса из файла JSON; - означает stdin. |
 
 #### `max bot api edit-message`
 
@@ -4922,8 +4995,8 @@ max bot api edit-message [options]
 | Опция | Что делает |
 |---|---|
 | `--message-id <value>` | Editing message identifier. |
-| `--body <json>` | the request body as JSON; - reads it from stdin. |
-| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+| `--body <json>` | тело запроса в JSON; - читает его из stdin. |
+| `--body-file <path>` | тело запроса из файла JSON; - означает stdin. |
 
 #### `max bot api delete-message`
 
@@ -4938,7 +5011,7 @@ max bot api delete-message [options]
 | Опция | Что делает |
 |---|---|
 | `--message-id <value>` | Deleting message identifier. |
-| `--allow-dangerous` | skip confirmation for bot.messages.delete at level ask. |
+| `--allow-dangerous` | не спрашивать подтверждение для bot.messages.delete на уровне ask. |
 
 #### `max bot api get-message-by-id`
 
@@ -4962,7 +5035,7 @@ max bot api get-comments [options]
 
 | Опция | Что делает |
 |---|---|
-| `--message-id <value>` | Message identifier (`mid`) of the commented message. |
+| `--message-id <value>` | ID (`mid`) комментируемого сообщения. |
 | `--comment-ids <value>` | Comma-separated list of comment ids to get. |
 | `--before <value>` | Comments before timestamp. |
 | `--after <value>` | Comments after timestamp. |
@@ -4980,10 +5053,10 @@ max bot api send-comment [options]
 
 | Опция | Что делает |
 |---|---|
-| `--message-id <value>` | Message identifier (`mid`) of the commented message. |
+| `--message-id <value>` | ID (`mid`) комментируемого сообщения. |
 | `--disable-link-preview <value>` | If `false`, server will not generate media preview for links in text. |
-| `--body <json>` | the request body as JSON; - reads it from stdin. |
-| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+| `--body <json>` | тело запроса в JSON; - читает его из stdin. |
+| `--body-file <path>` | тело запроса из файла JSON; - означает stdin. |
 
 #### `max bot api edit-comment`
 
@@ -4997,10 +5070,10 @@ max bot api edit-comment [options]
 
 | Опция | Что делает |
 |---|---|
-| `--message-id <value>` | Message identifier (`mid`) of the commented message. |
+| `--message-id <value>` | ID (`mid`) комментируемого сообщения. |
 | `--comment-id <value>` | Editing comment identifier. |
-| `--body <json>` | the request body as JSON; - reads it from stdin. |
-| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+| `--body <json>` | тело запроса в JSON; - читает его из stdin. |
+| `--body-file <path>` | тело запроса из файла JSON; - означает stdin. |
 
 #### `max bot api delete-comment`
 
@@ -5014,9 +5087,9 @@ max bot api delete-comment [options]
 
 | Опция | Что делает |
 |---|---|
-| `--message-id <value>` | Message identifier (`mid`) of the commented message. |
+| `--message-id <value>` | ID (`mid`) комментируемого сообщения. |
 | `--comment-id <value>` | Deleting comment identifier. |
-| `--allow-dangerous` | skip confirmation for bot.messages.delete at level ask. |
+| `--allow-dangerous` | не спрашивать подтверждение для bot.messages.delete на уровне ask. |
 
 #### `max bot api get-comment-by-id`
 
@@ -5028,7 +5101,7 @@ max bot api get-comment-by-id [options]
 
 | Опция | Что делает |
 |---|---|
-| `--message-id <value>` | Message identifier (`mid`) of the commented message. |
+| `--message-id <value>` | ID (`mid`) комментируемого сообщения. |
 | `--comment-id <value>` | Comment identifier (`mid`) to get single comment in channel. |
 
 #### `max bot api get-video-attachment-details`
@@ -5057,8 +5130,8 @@ max bot api answer-on-callback [options]
 |---|---|
 | `--callback-id <value>` | Identifies a button clicked by user. Bot receives this identifier after user pressed button as part of `MessageCallbackUpdate`. |
 | `--disable-link-preview <value>` | If `true`, server will not generate media preview for links in updated message text. |
-| `--body <json>` | the request body as JSON; - reads it from stdin. |
-| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+| `--body <json>` | тело запроса в JSON; - читает его из stdin. |
+| `--body-file <path>` | тело запроса из файла JSON; - означает stdin. |
 
 #### `max bot api get-updates`
 

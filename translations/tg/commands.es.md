@@ -503,7 +503,7 @@ tg chats link create <chat> [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--approval` | Entrar requiere aprobación; no hay límite de usos. |
+| `--approval` | quien quiera entrar con el enlace debe solicitarlo primero y un administrador permite su entrada; el enlace deja de tener límite de usos. |
 | `--expire-time <time>` | deja de funcionar entonces: 2026-09-25T09:00 (hora local) o dentro de 30m, 2h, 7d. |
 | `--max-uses <n>` | como máximo este número de personas puede entrar con el enlace, de 1 a 99999. |
 
@@ -541,7 +541,7 @@ tg chats link revoke <chat> <link>
 
 #### `tg chats link update`
 
-cambiar tu enlace de invitación, incluido el principal
+cambiar uno de tus enlaces de invitación, también el principal del grupo
 
 **Changes something in Telegram.**
 
@@ -556,9 +556,9 @@ tg chats link update <chat> <link> [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--approval` | Entrar requiere aprobación; no hay límite de usos. |
+| `--approval` | quien quiera entrar con el enlace debe solicitarlo primero y un administrador permite su entrada; el enlace deja de tener límite de usos. |
 | `--no-approval` | cualquiera con el enlace entra de inmediato. |
-| `--expire-time <time>` | Caducidad: 2026-09-25T09:00 local o 30m, 2h, 7d; `never` la elimina. |
+| `--expire-time <time>` | deja de funcionar entonces: 2026-09-25T09:00 (hora local) o dentro de 30m, 2h, 7d; `never` quita la caducidad. |
 | `--max-uses <n>` | como máximo este número de personas puede entrar con el enlace, de 1 a 99999. |
 
 
@@ -1233,42 +1233,6 @@ tg messages list <chat> [options]
 | `--model <id>` | modelo de voz descargado para --transcribe; `models audio list` muestra los disponibles. |
 | `--mark-read` | también marca como leído hasta el mensaje más reciente mostrado; la otra persona lo ve. |
 
-### `tg messages search`
-
-buscar en el almacenamiento local y en el servidor del servicio de mensajería (--backend); opcionalmente descargar mensajes nuevos con --sync-first
-
-```sh
-tg messages search [query] [options]
-```
-
-| Argumento | | Qué es |
-|---|---|---|
-| `query` | opcional | consulta estricta de Lucene: palabras, "frases", AND/OR/NOT, grupos de campos e intervalos de fechas; --language legacy conserva la búsqueda aproximada; con --saved, palabras adicionales unidas con AND. |
-
-| Opción | Qué hace |
-|---|---|
-| `--sync-first` | primero descarga los mensajes nuevos dentro de los límites de chats, tiempo y mensajes. |
-| `--max-chats <n>` | actualiza como máximo este número de chats (predeterminado: 5). |
-| `--sync-time <duration>` | deja de descargar tras este tiempo (predeterminado: 30s). |
-| `--max-messages <n>` | descarga como máximo este número de mensajes en total (predeterminado: 500). |
-| `--thread` | la cadena de respuestas guardada y sus respuestas en lugar de los mensajes cercanos en el tiempo; recurre a estos si no existe el grafo. |
-| `--thread-hops <n>` | como máximo este número de vínculos desde el resultado (predeterminado: 8). |
-| `--thread-messages <n>` | como máximo este número de mensajes en cada contexto de hilo (predeterminado: 50). |
-| `--thread-bytes <n>` | como máximo este número de bytes de mensajes completos y vínculos en cada contexto (predeterminado: 65536). |
-| `--thread-within <duration>` | mensajes dentro de este intervalo a ambos lados del resultado (predeterminado: 1d). |
-| `--backend <archive\|server\|both>` | dónde buscar: el archivo local, el servidor del servicio de mensajería o ambos (predeterminado: both). |
-| `--server-time <duration>` | dejar de esperar al servidor tras este tiempo (predeterminado: 5s). |
-| `--chat <chat>` | solo este chat, igual que chat: en la consulta; título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
-| `--source <messenger>` | todas las cuentas de este servicio guardadas, personal, bots o all; igual que in: en la consulta. |
-| `--limit <n>` | cuántos. |
-| `--newest` | recientes primero en lugar de mejores coincidencias. |
-| `--exact` | las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas. |
-| `--context <n>` | mensajes anteriores y posteriores a cada resultado; 2 en terminal, 0 en otros casos. |
-| `--language <lucene\|legacy>` | lenguaje de consulta: Lucene estricto o búsqueda aproximada heredada. |
-| `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
-| `--regex` | interpreta el texto como expresión regular sin distinguir mayúsculas; comprueba todos los textos guardados. |
-| `--saved <name\|id>` | ejecuta una búsqueda guardada o una ejecución anterior; las opciones escritas aquí sustituyen a las suyas. |
-
 ### `tg messages send`
 
 envía texto; si omites [text], lo lee por stdin
@@ -1441,6 +1405,7 @@ tg messages forward <chat> <message> [options]
 | `--silent` | entrega sin notificar. |
 | `--send-as <id>` | publicar como una de las identidades que enumera `chats send-as` para el chat --to; obligatorio cuando el chat publica como otra identidad de forma predeterminada. |
 | `--send-id <id>` | reintenta un reenvío de resultado desconocido sin arriesgar otra copia. |
+| `--topic <id>` | reenvía a este tema de foro del chat --to. |
 
 ### `tg messages pin`
 
@@ -1592,15 +1557,15 @@ quién votó por qué, lo más reciente primero; no disponible en encuestas anó
 tg polls voters <chat> <message> [options]
 ```
 
-| Argumento | | Significado |
+| Argumento | | Qué es |
 |---|---|---|
-| `chat` | obligatorio | Chat: nombre, ID o @username. |
-| `message` | obligatorio | ID del mensaje de la encuesta. |
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+| `message` | obligatorio | el identificador del mensaje que contiene la encuesta. |
 
-| Opción | Función |
+| Opción | Qué hace |
 |---|---|
-| `--answer <id>` | Solo quienes eligieron esta respuesta; ID de `polls show`. |
-| `--limit <n>` | Número de resultados. |
+| `--answer <id>` | solo quienes eligieron esta respuesta, con el ID que muestra `polls show`. |
+| `--limit <n>` | cuántos. |
 
 ### `tg polls vote`
 
@@ -1665,7 +1630,7 @@ tg polls create <chat> <question> <answers> [options]
 | `--quiz` | cuestionario: una respuesta correcta y voto definitivo. |
 | `--correct <n>` | con --quiz: posición de la respuesta correcta, desde 1. |
 | `--solution <text>` | con --quiz: explicación que se ve tras responder. |
-| `--close-time <delay>` | Cierre automático tras 5s–10m, por ejemplo 90s o 5m. |
+| `--close-time <delay>` | la encuesta se cierra sola este tiempo después del envío: de 5s a 10m, como 90s o 5m. |
 
 ## `tg models`
 
@@ -1814,24 +1779,18 @@ tg topics list <chat> [options]
 | `--page <n>` | número de página, desde 1. |
 | `--all` | todas las filas, sin paginar. |
 
-### `tg topics search`
+### `tg topics show`
 
-temas del foro cuyos títulos coinciden
+un tema de foro: su título, su estado y su última actividad
 
 ```sh
-tg topics search <chat> <text> [options]
+tg topics show <chat> <topic>
 ```
 
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
-| `text` | obligatorio | palabras del título del tema. |
-
-| Opción | Qué hace |
-|---|---|
-| `--limit <n>` | cuántos mostrar. |
-| `--page <n>` | número de página, desde 1. |
-| `--all` | todas las filas, sin paginar. |
+| `topic` | obligatorio | el identificador del tema, de `topics list`. |
 
 ### `tg topics enable`
 
@@ -2109,9 +2068,9 @@ descargas en segundo plano, recientes primero
 tg store jobs list [options]
 ```
 
-| Opción | Función |
+| Opción | Qué hace |
 |---|---|
-| `--state <state>` | Solo tareas `running`, `done`, `failed`, `cancelled` o `died`. |
+| `--state <state>` | solo las tareas en este estado. Uno de: `running`, `done`, `failed`, `cancelled`, `died`. |
 
 #### `tg store jobs show`
 
@@ -2216,7 +2175,7 @@ tg store check
 
 ### `tg store migrate`
 
-actualizar el esquema y normalizar e indexar mensajes y notas, incluidas sus raíces
+actualiza el esquema a esta versión y normaliza, indexa y extrae las raíces de los mensajes y notas anteriores
 
 ```sh
 tg store migrate
@@ -2224,7 +2183,7 @@ tg store migrate
 
 ### `tg store reindex`
 
-reconstruir índices de palabras, erratas, raíces, archivos y notas sin perder datos
+reconstruye el índice de palabras, su vocabulario de erratas, las raíces, el índice de palabras de los archivos y los índices de las notas a partir de lo guardado, sin perder nada
 
 ```sh
 tg store reindex
@@ -2388,37 +2347,6 @@ tg conversations status [options]
 | `--provider <provider>` | proveedor de vectores: local u openai; las opciones tienen prioridad sobre los ajustes del perfil. |
 | `--base-url <url>` | servidor compatible con /v1/embeddings de OpenAI: Gemini, Jina, Ollama o LM Studio local. |
 | `--dims <n>` | remoto: tamaño vectorial; necesario con --base-url y reduce el de modelos OpenAI. |
-
-### `tg conversations search`
-
-conversaciones más próximas por significado y palabras, mejores primero, en uno o todos los chats; significado tras `conversations embed`, en este equipo
-
-```sh
-tg conversations search <query> [options]
-```
-
-| Argumento | | Qué es |
-|---|---|---|
-| `query` | obligatorio | qué buscar, con tus palabras, en un idioma que entienda el modelo. |
-
-| Opción | Qué hace |
-|---|---|
-| `--model <model>` | local: identificador de `models text list` (predeterminado: e5-small); remoto: modelo del proveedor. |
-| `--provider <provider>` | proveedor de vectores: local u openai; las opciones tienen prioridad sobre los ajustes del perfil. |
-| `--base-url <url>` | servidor compatible con /v1/embeddings de OpenAI: Gemini, Jina, Ollama o LM Studio local. |
-| `--dims <n>` | remoto: tamaño vectorial; necesario con --base-url y reduce el de modelos OpenAI. |
-| `--max-chats <n>` | como máximo este número de chats; 5 con --sync-first y 20 con --refresh por defecto. |
-| `--max-chunks <n>` | como máximo este número de fragmentos con vector calculado en una ejecución; 2000 por defecto. |
-| `--sync-first` | primero descarga los mensajes nuevos dentro de los límites de chats, tiempo y mensajes. |
-| `--sync-time <duration>` | deja de descargar tras este tiempo (predeterminado: 30s). |
-| `--max-messages <n>` | descarga como máximo este número de mensajes en total (predeterminado: 500). |
-| `--chat <chat>` | solo este chat, por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
-| `--since-time <time>` | solo conversaciones aún activas desde esta fecha ISO 8601 o intervalo anterior como 30m / 2h / 1d. |
-| `--filter <query>` | filtro estricto de Lucene: algún mensaje de la conversación debe cumplirlo; no cambia la consulta por significado. |
-| `--source <source>` | cuentas en las que buscar: personal, bots, all o un proveedor; por defecto, la cuenta activa. |
-| `--timezone <zone>` | zona horaria IANA para las fechas del filtro; por defecto, la del sistema. |
-| `--limit <n>` | cuántos. |
-| `--refresh` | primero analiza y calcula vectores, en este equipo, de los chats del alcance que cambiaron o nunca se analizaron, dentro de --max-chats y --max-chunks. |
 
 ### `tg conversations batches`
 
@@ -2613,6 +2541,7 @@ tg attachments show <chat> [message] [options]
 | Opción | Qué hace |
 |---|---|
 | `--attachment <n>` | posición del archivo desde 1; obligatoria si hay varios archivos. |
+| `--page <n>` | renderiza una página del PDF como PNG, desde 1; unpdf/canvas opcionales, sin OCR. |
 | `--offset-bytes <n>` | desplazamiento en bytes desde 0. |
 | `--chunk-bytes <n>` | bytes que devolver, 1–1048576 (por defecto524288). |
 | `--if-sha256 <hash>` | exigir el SHA-256 del archivo completo de la porción anterior. |
@@ -2766,7 +2695,7 @@ tg stats messages show [query] [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `query` | opcional | consulta estricta de Lucene, como en messages search; sin consulta cuenta todos los mensajes guardados; con --saved, palabras adicionales unidas con AND. |
+| `query` | opcional | consulta estricta de Lucene, como en search messages; sin consulta cuenta todos los mensajes guardados; con --saved, palabras adicionales unidas con AND. |
 
 | Opción | Qué hace |
 |---|---|
@@ -2859,7 +2788,7 @@ tg stats messages unanswered [query] [options]
 | `--saved <name\|id>` | ejecutar un informe guardado de este tipo; las opciones indicadas sustituyen las guardadas. |
 | `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
 | `--limit <n>` | filas del informe, 1–100; 20 por defecto. |
-| `--answerer <id>` | persona del ámbito elegido cuya respuesta directa cuenta; repetir para varias. |
+| `--answerer <person>` | nombre guardado, alias, @username, ID o person:provider/account/id; los nombres ambiguos requieren elegir; repetir para varias. |
 | `--older-than <duration>` | edad mínima de una pregunta sin respuesta válida observada. |
 
 #### `tg stats messages discussion`
@@ -2957,7 +2886,7 @@ tg stats contacts responses [query] [options]
 | `--saved <name\|id>` | ejecutar un informe guardado de este tipo; las opciones indicadas sustituyen las guardadas. |
 | `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
 | `--limit <n>` | filas del informe, 1–100; 20 por defecto. |
-| `--answerer <id>` | persona del ámbito elegido cuya respuesta directa cuenta; repetir para varias. |
+| `--answerer <person>` | nombre guardado, alias, @username, ID o person:provider/account/id; los nombres ambiguos requieren elegir; repetir para varias. |
 
 #### `tg stats contacts top`
 
@@ -3050,7 +2979,7 @@ tg stats chats newcomers <chat> [options]
 | `--saved <name\|id>` | ejecutar un informe guardado de este tipo; las opciones indicadas sustituyen las guardadas. |
 | `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
 | `--limit <n>` | filas del informe, 1–100; 20 por defecto. |
-| `--answerer <id>` | persona del ámbito elegido cuya respuesta directa cuenta; repetir para varias. |
+| `--answerer <person>` | nombre guardado, alias, @username, ID o person:provider/account/id; los nombres ambiguos requieren elegir; repetir para varias. |
 
 #### `tg stats chats retention`
 
@@ -3130,7 +3059,7 @@ lo que requiere tu atención —preguntas sin respuesta, menciones, peticiones y
 
 ### `tg tasks list`
 
-tareas, primero las más antiguas, con el mensaje al que apunta cada una
+tareas, primero las más antiguas, con su mensaje o nota de origen
 
 ```sh
 tg tasks list [options]
@@ -3146,7 +3075,7 @@ tg tasks list [options]
 
 ### `tg tasks add`
 
-añadir una tarea para un mensaje que las reglas no detectan — una promesa o una petición
+añadir una tarea para un mensaje o una nota guardados — una promesa o una petición
 
 ```sh
 tg tasks add <message> [options]
@@ -3154,7 +3083,7 @@ tg tasks add <message> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `message` | obligatorio | un localizador de mensaje, msg:<provider>/<account>/<chat>/<message>, tal como lo muestra review --json. |
+| `message` | obligatorio | un localizador de mensaje, msg:<provider>/<account>/<chat>/<message>, o note:<id>. |
 
 | Opción | Qué hace |
 |---|---|
@@ -3177,13 +3106,167 @@ tg tasks close <task> [options]
 | `--as <state>` | cómo se cierra: done o dismissed — no necesita respuesta. |
 | `--reason <text>` | el motivo, guardado con la tarea — no-reply-needed, por ejemplo. |
 
+## `tg search`
+
+buscar por texto: search all para todo lo que guarda el almacenamiento local, o un solo recurso
+
+### `tg search all`
+
+buscar en todo lo que guarda el almacenamiento local — mensajes del servicio de mensajería, correo y notas —, mejores coincidencias primero; empieza aquí si no sabes dónde se escribió algo
+
+```sh
+tg search all <query> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | obligatorio | consulta estricta de Lucene: palabras, "frases", AND/OR/NOT, grupos de campos e intervalos de fechas. |
+
+| Opción | Qué hace |
+|---|---|
+| `--only <resources>` | solo estos, separados por comas: messages, mail, notes. |
+| `--limit <n>` | cuántos. |
+| `--exact` | las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word. |
+| `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
+
+### `tg search messages`
+
+buscar mensajes del servicio de mensajería en el almacenamiento local y en su servidor (--backend); opcionalmente descargar mensajes nuevos con --sync-first
+
+```sh
+tg search messages [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | opcional | consulta estricta de Lucene: palabras, "frases", AND/OR/NOT, grupos de campos e intervalos de fechas; --language legacy conserva la búsqueda aproximada; con --saved, palabras adicionales unidas con AND. |
+
+| Opción | Qué hace |
+|---|---|
+| `--sync-first` | primero descarga los mensajes nuevos dentro de los límites de chats, tiempo y mensajes. |
+| `--max-chats <n>` | actualiza como máximo este número de chats (predeterminado: 5). |
+| `--sync-time <duration>` | deja de descargar tras este tiempo (predeterminado: 30s). |
+| `--max-messages <n>` | descarga como máximo este número de mensajes en total (predeterminado: 500). |
+| `--thread` | la cadena de respuestas guardada y sus respuestas en lugar de los mensajes cercanos en el tiempo; recurre a estos si no existe el grafo. |
+| `--thread-hops <n>` | como máximo este número de vínculos desde el resultado (predeterminado: 8). |
+| `--thread-messages <n>` | como máximo este número de mensajes en cada contexto de hilo (predeterminado: 50). |
+| `--thread-bytes <n>` | como máximo este número de bytes de mensajes completos y vínculos en cada contexto (predeterminado: 65536). |
+| `--thread-within <duration>` | mensajes dentro de este intervalo a ambos lados del resultado (predeterminado: 1d). |
+| `--backend <archive\|server\|both>` | dónde buscar: el archivo local, el servidor del servicio de mensajería o ambos (predeterminado: both). |
+| `--server-time <duration>` | dejar de esperar al servidor tras este tiempo (predeterminado: 5s). |
+| `--chat <chat>` | solo este chat, igual que chat: en la consulta; título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+| `--source <messenger>` | todas las cuentas de este servicio guardadas, personal, bots o all; igual que in: en la consulta. |
+| `--type <text\|voice\|file>` | solo mensajes de este tipo: solo texto, un mensaje de voz o un archivo. |
+| `--limit <n>` | cuántos. |
+| `--newest` | recientes primero en lugar de mejores coincidencias. |
+| `--exact` | las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas. |
+| `--context <n>` | mensajes anteriores y posteriores a cada resultado; 2 en terminal, 0 en otros casos. |
+| `--language <lucene\|legacy>` | lenguaje de consulta: Lucene estricto o búsqueda aproximada heredada. |
+| `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
+| `--regex` | interpreta el texto como expresión regular sin distinguir mayúsculas; comprueba todos los textos guardados. |
+| `--saved <name\|id>` | ejecuta una búsqueda guardada o una ejecución anterior; las opciones escritas aquí sustituyen a las suyas. |
+
+### `tg search mail`
+
+buscar en el correo importado al almacenamiento local; memo mail import lo trae
+
+```sh
+tg search mail [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | opcional | consulta estricta de Lucene: palabras, "frases", AND/OR/NOT, grupos de campos e intervalos de fechas. |
+
+| Opción | Qué hace |
+|---|---|
+| `--chat <chat>` | solo este hilo de correo, por identificador o asunto. |
+| `--limit <n>` | cuántos. |
+| `--newest` | recientes primero en lugar de mejores coincidencias. |
+| `--exact` | las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas. |
+| `--context <n>` | mensajes anteriores y posteriores a cada resultado; 2 en terminal, 0 en otros casos. |
+| `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
+
+### `tg search notes`
+
+buscar en las notas — escritas en memo o importadas de una carpeta de notas — por palabras y, con el modelo de texto local, por significado; cada resultado indica qué lo encontró y a qué enlaza
+
+```sh
+tg search notes <query> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | obligatorio | consulta estricta de Lucene: palabras, "frases", AND/OR/NOT, tag: e intervalos de fechas. |
+
+| Opción | Qué hace |
+|---|---|
+| `--type <internal\|file>` | solo notas escritas en memo, o solo notas de una carpeta. |
+| `--folder <id>` | solo esta carpeta de notas, por su identificador; repite para incluir varias. |
+| `--tag <tag>` | solo notas con esta etiqueta. |
+| `--filter <query>` | una consulta que también debe cumplir cada resultado; no cambia la búsqueda por significado. |
+| `--limit <n>` | cuántos. |
+| `--offset <n>` | omite este número de resultados, para la página siguiente. |
+| `--exact` | solo las palabras tal como están escritas; no se busca por significado. |
+| `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
+
+### `tg search conversations`
+
+conversaciones más próximas por significado y palabras, mejores primero, en uno o todos los chats; significado tras `conversations embed`, en este equipo
+
+```sh
+tg search conversations <query> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | obligatorio | qué buscar, con tus palabras, en un idioma que entienda el modelo. |
+
+| Opción | Qué hace |
+|---|---|
+| `--model <model>` | local: identificador de `models text list` (predeterminado: e5-small); remoto: modelo del proveedor. |
+| `--provider <provider>` | proveedor de vectores: local u openai; las opciones tienen prioridad sobre los ajustes del perfil. |
+| `--base-url <url>` | servidor compatible con /v1/embeddings de OpenAI: Gemini, Jina, Ollama o LM Studio local. |
+| `--dims <n>` | remoto: tamaño vectorial; necesario con --base-url y reduce el de modelos OpenAI. |
+| `--max-chats <n>` | como máximo este número de chats; 5 con --sync-first y 20 con --refresh por defecto. |
+| `--max-chunks <n>` | como máximo este número de fragmentos con vector calculado en una ejecución; 2000 por defecto. |
+| `--sync-first` | primero descarga los mensajes nuevos dentro de los límites de chats, tiempo y mensajes. |
+| `--sync-time <duration>` | deja de descargar tras este tiempo (predeterminado: 30s). |
+| `--max-messages <n>` | descarga como máximo este número de mensajes en total (predeterminado: 500). |
+| `--chat <chat>` | solo este chat, por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+| `--since-time <time>` | solo conversaciones aún activas desde esta fecha ISO 8601 o intervalo anterior como 30m / 2h / 1d. |
+| `--filter <query>` | filtro estricto de Lucene: algún mensaje de la conversación debe cumplirlo; no cambia la consulta por significado. |
+| `--source <source>` | cuentas en las que buscar: personal, bots, all o un proveedor; por defecto, la cuenta activa. |
+| `--timezone <zone>` | zona horaria IANA para las fechas del filtro; por defecto, la del sistema. |
+| `--limit <n>` | cuántos. |
+| `--refresh` | primero analiza y calcula vectores, en este equipo, de los chats del alcance que cambiaron o nunca se analizaron, dentro de --max-chats y --max-chunks. |
+
+### `tg search topics`
+
+temas del foro cuyos títulos coinciden
+
+```sh
+tg search topics <chat> <text> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+| `text` | obligatorio | palabras del título del tema. |
+
+| Opción | Qué hace |
+|---|---|
+| `--limit <n>` | cuántos mostrar. |
+| `--page <n>` | número de página, desde 1. |
+| `--all` | todas las filas, sin paginar. |
+
 ## `tg searches`
 
-búsquedas guardadas e historial de messages search y stats messages show en el almacenamiento local; --saved ejecuta una
+búsquedas guardadas e historial de search messages y stats messages show en el almacenamiento local; --saved ejecuta una
 
 ### `tg searches create`
 
-guarda una búsqueda con un nombre sin ejecutarla; messages search --saved <name> la ejecuta
+guarda una búsqueda con un nombre sin ejecutarla; search messages --saved <name> la ejecuta
 
 ```sh
 tg searches create <name> [query] [options]
@@ -3192,7 +3275,7 @@ tg searches create <name> [query] [options]
 | Argumento | | Qué es |
 |---|---|---|
 | `name` | obligatorio | hasta 64 letras a–z, cifras y guiones, no solo cifras. |
-| `query` | opcional | la consulta, como en messages search; sin consulta coincide con todos los mensajes guardados. |
+| `query` | opcional | la consulta, como en search messages; sin consulta coincide con todos los mensajes guardados. |
 
 | Opción | Qué hace |
 |---|---|
@@ -4182,26 +4265,6 @@ tg bot messages unpin <chat> <message>
 | `chat` | obligatorio | identificador de chat, user:<id> para personas o título de un chat visto por el bot. |
 | `message` | obligatorio | identificador de mensaje. |
 
-#### `tg bot messages search`
-
-busca solo en la copia local del bot, mejores coincidencias primero; todas las palabras; admite "a phrase", -word, a OR b, from: chat: after: before: has:. Por texto, --from o ambos
-
-```sh
-tg bot messages search [query] [options]
-```
-
-| Argumento | | Qué es |
-|---|---|---|
-| `query` | opcional | palabras que buscar. |
-
-| Opción | Qué hace |
-|---|---|
-| `--all-bots` | también lee las copias de otros bots permitidas por readOtherBots. |
-| `--bots <profiles>` | también lee estos bots, separados por comas; todos deben estar permitidos por readOtherBots. |
-| `--limit <n>` | cuántos. |
-| `--newest` | recientes primero en lugar de mejores coincidencias. |
-| `--from <who>` | solo mensajes de esta persona, por identificador, @username o nombre parcial; repite para incluir varias. |
-
 #### `tg bot messages between`
 
 mensajes de dos o más personas en chats donde todas han escrito, según copia local, agrupados por chat y antiguos primero; --limit cuenta por chat. Los chats comunes se deducen de lo guardado, no de listas de miembros de Telegram
@@ -4219,6 +4282,30 @@ tg bot messages between <people> [options]
 | `--all-bots` | también lee las copias de otros bots permitidas por readOtherBots. |
 | `--bots <profiles>` | también lee estos bots, separados por comas; todos deben estar permitidos por readOtherBots. |
 | `--limit <n>` | cantidad de mensajes recientes por chat. |
+
+### `tg bot search`
+
+encontrar por texto lo que guarda la copia local de este bot
+
+#### `tg bot search messages`
+
+busca solo en la copia local del bot, mejores coincidencias primero; todas las palabras; admite "a phrase", -word, a OR b, from: chat: after: before: has:. Por texto, --from o ambos
+
+```sh
+tg bot search messages [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | opcional | palabras que buscar. |
+
+| Opción | Qué hace |
+|---|---|
+| `--all-bots` | también lee las copias de otros bots permitidas por readOtherBots. |
+| `--bots <profiles>` | también lee estos bots, separados por comas; todos deben estar permitidos por readOtherBots. |
+| `--limit <n>` | cuántos. |
+| `--newest` | recientes primero en lugar de mejores coincidencias. |
+| `--from <who>` | solo mensajes de esta persona, por identificador, @username o nombre parcial; repite para incluir varias. |
 
 ### `tg bot recipients`
 

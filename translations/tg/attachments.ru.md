@@ -53,6 +53,12 @@ tg attachments list --chat "Study group" --needs-text --json
 Скачивание не перезаписывает существующий файл. `localPath` — путь на компьютере с CLI;
 удалённому агенту нужен доступ к байтам, а не только к строке пути.
 
+Удалённый агент может получить сохранённый PDF через `attachments show` или, если его клиент
+не открывает PDF, запросить каждую страницу через `--page`. Для этого нужны необязательные
+локальные движки отрисовки; текст распознаёт сам агент. Если содержимое изображения недоступно,
+запросите в MCP `format: base64` и покажите PNG средствами агента. Пример и ограничения — в разделе
+[чтение PDF удалённым агентом](./remote.md#read-pdf-pages-without-a-local-file-handoff).
+
 ## Как читается содержимое
 
 По умолчанию агент читает сканы и картинки своими средствами OCR или зрения. API OCR
@@ -110,7 +116,7 @@ npm install -g unpdf mammoth
 tg attachments extract --chat "Study group" --download --output-dir ./files
 tg attachments list --chat "Study group" --needs-text
 tg attachments text set "Study group" 204 --text-file ./scan.txt
-tg messages search 'content:worksheet' --chat "Study group" --backend archive
+tg search messages 'content:worksheet' --chat "Study group" --backend archive
 ```
 
 Агенту нужна программа чтения или преобразования, а для сканов — зрение. Он может извлечь

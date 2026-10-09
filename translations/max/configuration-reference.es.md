@@ -128,7 +128,7 @@ La migración conserva los permisos efectivos, los ajustes MAX y los puntos de m
 | `serve` | Iniciar `max serve` si se necesita y no existe. No inicia con `MAX_TOKEN`. Solo personal | `--serve`, `--no-serve` | `true` |
 | `keepRunsForDays` | Días de conservación de ejecuciones | — | `30` |
 | `readOnly`, `allow`, `mcpTools` | ajustes antiguos compatibles; `config migrate` los convierte en `permissions` | — | no se pueden cambiar tras migrar |
-| `sendsPerHour` | Límite horario, incluidos reenvíos, ediciones, fijados con aviso, borrados y personas añadidas; superar devuelve `8`. **Bots** solo usan la sección `bot`; sin ella no tienen límite | — | `30`; sin límite para bots |
+| `sendsPerHour` | Límite horario, incluidos reenvíos, ediciones, fijados con aviso, borrados, personas añadidas y solicitudes de entrada aceptadas; superar devuelve `8`. **Bots** solo usan la sección `bot`; sin ella no tienen límite | — | `30`; sin límite para bots |
 | `requestsPerMinute` | Peticiones por minuto del perfil a MAX, tras las primeras 10 seguidas, compartidas entre todos los procesos de ese perfil; `0` significa sin límite. `MAX_REQUESTS_PER_MINUTE` prevalece sobre el archivo ([limits.md](./limits.md)) | `MAX_REQUESTS_PER_MINUTE` | `20` |
 | `readOtherBots` | Leer copias de otros bots al pedir `--all-bots` o `--bots`: `false`, `true` para todos o lista de perfiles. **Solo `bot`** | —; `--all-bots` y `--bots` lo piden, el campo lo permite | `false` |
 | `updateCheck` | Consultar npm una vez al día y avisar en el terminal. **Solo `defaults`**, la versión es común | —; lo desactivan `MAX_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER`, `CI` | `true` |

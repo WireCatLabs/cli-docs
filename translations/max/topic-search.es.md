@@ -24,8 +24,8 @@ Cada conversación es una lista de mensajes, del más antiguo al más reciente. 
 max conversations build --chat "Книжный клуб"   # найти разговоры; ещё раз — после того, как скачано больше
 max models text download e5-small               # один раз: 135 МБ, общая папка с tg
 max conversations embed --chat "Книжный клуб"   # продолжает с места, где остановился
-max conversations search "где встречаемся" --chat "Книжный клуб"
-max conversations search "аренда квартиры"      # во всех построенных чатах
+max search conversations "где встречаемся" --chat "Книжный клуб"
+max search conversations "аренда квартиры"      # во всех построенных чатах
 ```
 
 1. **Build** identifica las conversaciones del chat. Un nuevo `build` sustituye al anterior: toma el número de conversación de un `list` reciente, en vez de conservarlo.
@@ -57,7 +57,7 @@ Los mensajes nuevos se incorporan a una conversación solo tras el siguiente `bu
 max conversations status                         # что отстало, по чатам
 max conversations build                          # все изменившиеся чаты и группы, ни разу не построенные
 max conversations embed                          # все построенные чаты, где остались куски
-max conversations search "аренда квартиры" --refresh   # сначала догнать, потом искать
+max search conversations "аренда квартиры" --refresh   # сначала догнать, потом искать
 ```
 
 `status` cuenta, para cada chat construido, los mensajes que `build` aún no ha visto (nuevos, editados o eliminados), los fragmentos con vectores actuales, obsoletos o ausentes y los grupos nunca construidos. Si cambian las reglas en una versión nueva, `status` y `max store check` identifican los chats construidos con reglas anteriores: vuelve a construirlos. Sin `--chat`, `build`, `embed` y `search --refresh` procesan como máximo 20 chats (`--max-chats`) y calculan como máximo 2000 fragmentos (`--max-chunks`) por ejecución; repite para continuar. Nunca descargan un modelo.
@@ -96,11 +96,11 @@ Un servicio puede calcular los vectores en su lugar, con tu propia clave:
 ```sh
 max models text key set openai
 max conversations embed --chat "Книжный клуб" --provider openai
-max conversations search "аренда квартиры" --provider openai
+max search conversations "аренда квартиры" --provider openai
 ```
 
 El texto de las conversaciones del chat se envía entonces a ese servicio, y cada búsqueda le envía tu pregunta. Antes de enviar nada, `embed` indica el número de fragmentos, el máximo de tokens y el coste máximo, y espera tu consentimiento (`--yes` en scripts; `--max-tokens` fija un límite). `--base-url` admite cualquier servidor con la API de vectores de OpenAI (`/v1/embeddings`), como Ollama o LM Studio en tu equipo, junto con `--model` y `--dims`. `max models text key remove openai` elimina la clave.
 
 ## Para agentes
 
-En MCP, `max_read` (`command: "conversations list"`), `max_read` (`command: "conversations show"`), `max_read` (`command: "conversations search"`), `max_read` (`command: "conversations related"`) y `max_read` (`command: "conversations status"`) leen el índice construido; `max_write` (`command: "conversations refresh"`) lo actualiza en este ordenador. Mediante MCP, el agente obtiene las instrucciones `link-conversations`, estima el trabajo con `max_read` (`command: "conversations batches status"`) y espera el consentimiento del propietario para ese chat. Después lee `max_read` (`command: "conversations batches next"`), guarda las respuestas mediante `max_write` (`command: "conversations links add"`) y reconstruye el grafo mediante `max_write` (`command: "conversations build"`). `max_write` (`command: "conversations links clear"`) elimina las respuestas del agente; después también hay que reconstruir el grafo. Las operaciones de escritura requieren `conversations.links`. La configuración de vectores externos también se aplica a la búsqueda MCP: la pregunta se envía al servicio elegido. Consulta los detalles técnicos —reglas, fragmentos, vectores y orden de resultados— en [cómo funciona la búsqueda](https://wirecat.dev/ru/docs/search-architecture).
+En MCP, `max_read` (`command: "conversations list"`), `max_read` (`command: "conversations show"`), `max_read` (`command: "search conversations"`), `max_read` (`command: "conversations related"`) y `max_read` (`command: "conversations status"`) leen el índice construido; `max_write` (`command: "conversations refresh"`) lo actualiza en este ordenador. Mediante MCP, el agente obtiene las instrucciones `link-conversations`, estima el trabajo con `max_read` (`command: "conversations batches status"`) y espera el consentimiento del propietario para ese chat. Después lee `max_read` (`command: "conversations batches next"`), guarda las respuestas mediante `max_write` (`command: "conversations links add"`) y reconstruye el grafo mediante `max_write` (`command: "conversations build"`). `max_write` (`command: "conversations links clear"`) elimina las respuestas del agente; después también hay que reconstruir el grafo. Las operaciones de escritura requieren `conversations.links`. La configuración de vectores externos también se aplica a la búsqueda MCP: la pregunta se envía al servicio elegido. Consulta los detalles técnicos —reglas, fragmentos, vectores y orden de resultados— en [cómo funciona la búsqueda](https://wirecat.dev/ru/docs/search-architecture).

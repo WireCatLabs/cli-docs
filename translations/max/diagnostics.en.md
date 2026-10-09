@@ -140,6 +140,6 @@ Every run is then recorded, and `--no-record` disables recording for one invocat
 
 ## Reference for scripts
 
-`max commands --json` lists commands, global options and exit codes without connecting to an account. Use `max commands messages search --json` for one command or `max commands messages --json` for a group; both retain global options and exit codes. Words after `commands` specify one path; inspect different groups in separate calls. `cli` is the tool name, `version` is the installed package version, and `contract` is the shared JSON contract version (`0`). It changes when response fields change incompatibly; updating a package does not itself change `contract`. Scripts can read individual fields instead of comparing the entire JSON to a saved string.
+`max commands --json` lists commands, global options and exit codes without connecting to an account. Use `max commands search messages --json` for one command or `max commands messages --json` for a group; both retain global options and exit codes. Words after `commands` specify one path; inspect different groups in separate calls. `cli` is the tool name, `version` is the installed package version, and `contract` is the shared JSON contract version (`0`). It changes when response fields change incompatibly; updating a package does not itself change `contract`. Scripts can read individual fields instead of comparing the entire JSON to a saved string.
 
 Search and counts save queries separately from runs; see query history and --no-record in [search](./search.md).

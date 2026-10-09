@@ -2,7 +2,7 @@
 title: "Search query language"
 ---
 
-Reference for queries in `max messages search`, `max stats messages show` and saved searches. See [message search](./search.md) for everyday examples.
+Reference for queries in `max search messages`, `max stats messages show` and saved searches. See [message search](./search.md) for everyday examples.
 
 The language is a strict profile of Apache Lucene's query syntax: words, phrases, AND/OR/NOT,
 groups, fields, ranges, bounded wildcards and regular expressions. The
@@ -123,13 +123,13 @@ An error carries the position of the problem in the query and a hint.
 
 ## In MCP
 
-`max_read` (`command: "messages search"`) accepts a query as `text` or as a versioned syntax tree in `ast`, but not both. `language` selects `lucene` or `legacy`; `timezone` sets the calendar time zone. `chat` accepts an ID or saved title; `source`, `newest`, `context` and `limit` work like the command options. `record: false` prevents the call from being recorded in query history. The response has the same fields as `--json`. `max_read` (`command: "stats messages show"`) counts using the same queries.
+`max_read` (`command: "search messages"`) accepts a query as `text` or as a versioned syntax tree in `ast`, but not both. `language` selects `lucene` or `legacy`; `timezone` sets the calendar time zone. `chat` accepts an ID or saved title; `source`, `newest`, `context` and `limit` work like the command options. `record: false` prevents the call from being recorded in query history. The response has the same fields as `--json`. `max_read` (`command: "stats messages show"`) counts using the same queries.
 
 ## The older modes
 
 ```sh
-max messages search 'from:alice after:7d invoice -draft' --language legacy --json
-max messages search --regex 'invoice\s+\d+' --json
+max search messages 'from:alice after:7d invoice -draft' --language legacy --json
+max search messages --regex 'invoice\s+\d+' --json
 ```
 
 `--language legacy` keeps the earlier filters and its correction of typos. `--regex` is a separate

@@ -44,6 +44,8 @@ El `localPath` guardado está disponible en la máquina donde se ejecuta la CLI.
 
 Un agente en este ordenador puede abrir el `localPath` guardado. Un agente en otra máquina necesita los bytes del archivo y herramientas de lectura: una ruta no los transfiere. Consulta las capacidades de tu cliente de IA y el [método de conexión remota](./remote.md). Recibir el archivo, leerlo y guardar texto en el índice son pasos separados.
 
+Puedes pasar un PDF guardado a un agente remoto con `attachments show` y, si el cliente no abre PDF, mostrar cada página con `--page`. Para ver una página hacen falta motores PDF opcionales; la representación es local y el texto lo reconoce el agente. Si la imagen no se ve, usa `format: base64` de MCP y muestra el PNG con las herramientas del agente. Ejemplo y limitaciones: [lectura de PDF por un agente remoto](./remote.md#читать-pdf-без-сохранения-файла-у-агента).
+
 ## Cómo se lee el contenido
 
 Por defecto, el agente lee los escaneos y las fotos con sus propias herramientas. `attachments extract --ocr` activa explícitamente una API para el reconocimiento en lote. Sin esta opción, la extracción no llama a ningún modelo. Comprueba si tu versión instalada incluye la opción con `max attachments extract --help`.
@@ -101,7 +103,7 @@ Para una instalación local, añade los paquetes necesarios al mismo proyecto. C
 max attachments list --chat "Учебная группа" --needs-text --json
 # Агент открывает localPath, читает все страницы и сохраняет буквальный текст в scan.txt.
 max attachments text set "Учебная группа" 204 --attachment 1 --text-file ./scan.txt --json
-max messages search 'content:умножение' --chat "Учебная группа" --offline --json
+max search messages 'content:умножение' --chat "Учебная группа" --offline --json
 ```
 
 La numeración de `--attachment` empieza en 1. Conserva el idioma original y el orden de páginas; no sustituyas una transcripción por un resumen. No marques todo el PDF como leído si solo has procesado una página. El texto escrito por el agente está protegido frente a la sobrescritura por la extracción automática.

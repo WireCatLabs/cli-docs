@@ -931,7 +931,7 @@ max chats events "Поход" --type add,remove --since-time 2026-09-01T00:00
 
 **Otras personas ven** entradas, salidas, miembros añadidos y cambios de nombre. `inspect`, `link show`, `events`, `members list` y `requests list` solo leen.
 
-**Las solicitudes de entrada** existen en canales con aprobación, no en grupos privados. `chats join` envía la solicitud y devuelve `requested: true`; el canal aparece tras aceptarla un administrador. `requests list` muestra solicitantes sin hora (`requestedAt: null`). MAX rechaza `--all` y el filtro `--link`. Los cambios usan los controles de envío: se rechazan en solo lectura, respetan destinatarios y se registran sin títulos ni enlaces. `create` y `members add` cuentan por cada invitado en el límite horario. Con destinatarios restringidos, cada chat privado debe estar permitido. No hay reintentos automáticos; repetir `create` crea otro grupo.
+**Las solicitudes de entrada** existen en canales con aprobación, no en grupos privados. `chats join` envía la solicitud y devuelve `requested: true`; el canal aparece tras aceptarla un administrador. `requests list` muestra solicitantes sin hora (`requestedAt: null`). MAX no permite responder a todas a la vez (`--all`) ni filtrarlas por enlace (`--link`); el comando rechaza estas opciones. Los cambios usan los controles de envío: se rechazan en solo lectura, respetan destinatarios y se registran sin títulos ni enlaces. `create` y `members add` cuentan por cada invitado en el límite horario. Con destinatarios restringidos, cada chat privado debe estar permitido. No hay reintentos automáticos; repetir `create` crea otro grupo.
 
 Los cambios de grupos devuelven `operationId` en JSON. `create`, `join`, `update` y `link reset` incluyen la ficha en `chat`; `leave` devuelve `chatId`. Añadir miembros devuelve `{operationId, chatId, added, notAdded}`; eliminarlos, `{operationId, chatId, removed}`. Tras una respuesta correcta de MAX, `notAdded` está vacío: MAX no proporciona una lista de fallos parciales; rechazar una incorporación devuelve un error. `admins` devuelve `personId`; `admins add` también incluye `rights` sin duplicados. `link show` conserva `{chatId, title, link}`.
 
@@ -1164,6 +1164,6 @@ max stats charts synthetic-group --chart-kind messages --by day --timezone Europ
 
 JSON contiene `chart`; al guardar una imagen, también contiene `chartFile` con la ruta y el tamaño. Las imágenes solo se escriben en archivos nuevos, sin sobrescribir. Las fechas ausentes quedan como huecos y los datos incompletos se indican en la descripción y la imagen. `membership` requiere eventos del chat en línea y no está disponible con `--offline`. MCP `max_read` (`command: "stats charts"`) devuelve JSON del almacenamiento local sin conectarse ni escribir archivos; `format: "png"` añade una imagen PNG y JSON con `chart` y el tamaño de `image`. Allí no están disponibles las entradas y salidas. La lectura respeta el permiso `messages`. No se admiten `--jsonl` ni imágenes en stdout.
 
-![Gráfico con datos ficticios](https://raw.githubusercontent.com/leemour/max-cli/0ea6d48eb20b72bda128e37f931ecd4de3de10f0/docs/images/stats-charts.png)
+![Gráfico con datos ficticios](https://raw.githubusercontent.com/leemour/max-cli/v0.39.0/docs/images/stats-charts.png)
 
 Clasificaciones de mensajes y autores: [métricas, puntuaciones y evidence](./rankings.md).
