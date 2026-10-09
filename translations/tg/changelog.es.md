@@ -4,6 +4,65 @@ title: "Historial de cambios"
 
 Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.40.1 — 09.10.2026
+
+### Correcciones
+
+- **`tg search all` no encontraba nada en un almacén nuevo.** Solo buscaba en las cuentas ya guardadas en el almacén, así que antes del primer guardado no buscaba en ningún sitio; ahora siempre incluye la cuenta de este perfil y consulta al servidor como `tg search messages`.
+- **`tg search mail` sin correo importado devuelve un resultado vacío** con una nota en stderr, en lugar de fallar.
+- **Se descartan las notas encontradas solo por una coincidencia débil de significado**, así que una palabra poco común ya no devuelve todas las notas.
+
+## 0.40.0 — 09.10.2026
+
+### Novedades
+
+- **`tg topics show <chat> <topic>` muestra un tema del foro**: su título, si está cerrado o fijado, los mensajes no leídos y la última actividad.
+- **`tg messages forward --topic <id>` reenvía a un tema del foro** del grupo de `--to`. Primero se comprueba el tema, como con `messages send --topic`; el tema 1 es General.
+- **`tg attachments show --page 1` devuelve una página de un PDF guardado como PNG.** Los agentes remotos pueden leer
+
+### Cambios que pueden afectar a scripts
+
+- **El `--answerer` de las estadísticas acepta nombres guardados, alias y @username.** La resolución es local, en las cuentas del historial elegido; un nombre ambiguo devuelve los candidatos de la selección. Un nombre desconocido ahora falla en lugar de producir una identidad inventada con cero respuestas. Usa `person:provider/account/id` para elegir explícitamente un ID opaco no observado. Las filas de respuestas incluyen `identityKnown`; un ID sin observaciones tiene `identityKnown: false` y `status: unknown`. Cero respuestas observadas no demuestran inactividad ([estadísticas](./rankings.md)).
+
+- **Toda la búsqueda pasó a `tg search`.** Los comandos antiguos ya no existen:
+
+  | Antes | Ahora |
+  |---|---|
+  | `tg messages search` | `tg search messages` |
+  | `tg messages search --source email` | `tg search mail` |
+  | `tg conversations search` | `tg search conversations` |
+  | `tg topics search <chat> <text>` | `tg search topics <chat> <text>` |
+  | `tg bot messages search` | `tg bot search messages` |
+
+  Las herramientas para agentes se movieron igual: `search messages`, `search conversations`, `search topics` y el nuevo `search all`, por el que conviene empezar.
+- **`tg search messages` nunca devuelve correo.** Una búsqueda guardada que nombra `in:email` ahora pide `tg search mail`.
+- **Los permisos con el nombre de las rutas antiguas** (`messages.search`, `conversations.search`, `topics.search`) detienen `tg search` hasta que `tg config migrate` los renombra, conservando sus niveles.
+
+## 0.39.1 — 08.10.2026
+
+### Correcciones
+
+- La biblioteca compartida de mensajería queda fijada en 0.205.0, la misma que Memo y MAX, para una instalación coordinada.
+
+## 0.39.0 — 08.10.2026
+
+### Novedades
+
+- **`tg polls create --close-time 5m` cierra la encuesta sola** ese tiempo después de enviarla, de 5 segundos a 10 minutos.
+- **`tg polls voters <chat> <message> [--answer <id>]` muestra quién votó qué** en una encuesta que no es anónima. Cuando Telegram responde que primero debes votar o que un canal oculta a sus votantes, el error lo dice.
+- **`tg chats link update --expire-time never` quita la caducidad de un enlace.** También se puede cambiar el enlace propio del grupo; la ayuda ya no dice lo contrario.
+- **`tg store jobs list --state <state>`** muestra solo los trabajos en segundo plano en curso, terminados, fallidos, cancelados o interrumpidos.
+
+### Cambios que pueden afectar a scripts
+
+- **`tg chats link create` y `update` rechazan `--approval` junto con `--max-uses`.** Telegram quitaba el límite de usos al activar la aprobación, sin avisar; ahora eliges uno de los dos.
+- **Las palabras latinas se buscan por sus raíces del inglés y del español a la vez.** Antes, solo del español, así que las formas inglesas ("budgets" → "budget") coincidían peor. A tener en cuenta: tras actualizar, el índice de raíces se reconstruye solo —un almacén pequeño al abrirse, uno grande poco a poco: `tg serve` lo completa en segundo plano y `tg store migrate`, de una vez. Hasta que esté listo, la búsqueda coincide con las formas exactas, lo indica en stderr y `query.stemming.applied` es `false` en el JSON. El índice de raíces del texto latino ocupa aproximadamente el doble. Un `searchStemmers.latin` que hayas fijado tú se mantiene, y `tg store reindex` lo sigue aplicando. Actualiza también `max`: una versión antigua, al abrir el almacén reconstruido, responde a una búsqueda por raíces con "upgrade this tool" ([archivo](./archive.md#repair-and-index-maintenance)).
+- **Las notas sobre una persona (`tg contacts notes`) aparecen en cada perfil que la ve.** Antes, solo en el perfil donde se escribieron. Por qué: las notas son tuyas, no de una cuenta; el almacén compartido las guarda ahora aparte de los mensajes, junto con las notas de `memo`. A tener en cuenta: con varios perfiles de Telegram, las notas de una persona de todos ellos aparecen ahora juntas. Los alias (`contacts alias`) siguen valiendo solo en su propio perfil.
+
+### Correcciones
+
+- **`tg polls voters --answer <id>` indica la respuesta** de cada voto; antes los mostraba sin respuesta. Sin `--answer`, ya no dice que quedan más votantes cuando los ha mostrado todos.
+
 ## 0.38.0 — 08.10.2026
 
 ### Novedades

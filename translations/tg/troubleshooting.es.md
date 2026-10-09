@@ -239,9 +239,9 @@ Código `3`. Otro CLI o un `tg` más reciente actualizó el archivo de forma inc
 
 ## "nothing recorded for profile … yet — run the command once without --offline"
 
-Código `6`. `--offline`, `messages search`, `store status` y `store export` solo consultan el archivo local y este perfil todavía no ha guardado nada. Ejecuta primero un comando en línea, como `tg chats list`.
+Código `6`. `--offline`, `search messages`, `store status` y `store export` solo consultan el archivo local y este perfil todavía no ha guardado nada. Ejecuta primero un comando en línea, como `tg chats list`.
 
-## `messages search` no encuentra nada
+## `search messages` no encuentra nada
 
 Solo busca lo guardado en este equipo, nunca en Telegram. Vacío significa «no guardado», no «nunca se dijo». Lee el chat (`tg messages list <chat>`) o descarga el historial con `tg store fetch` y busca de nuevo ([archivo local](./archive.md#search)). `tg store check` identifica chats desactualizados.
 

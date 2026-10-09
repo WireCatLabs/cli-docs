@@ -107,7 +107,7 @@ Escribe en Telegram: **no**. Permite: `Bash(tg messages list:*)`.
 
 ## Quién debe qué
 
-Escribe en Telegram: **no**. Permite: `Bash(tg review:*)`, `Bash(tg messages context:*)`, `Bash(tg messages search:*)`.
+Escribe en Telegram: **no**. Permite: `Bash(tg review:*)`, `Bash(tg messages context:*)`, `Bash(tg search messages:*)`.
 
 > Ejecuta `tg review --new --json` (la primera vez, los últimos 3 días; después, desde el último `--new`, con un punto por chat). Separa el resultado en tres listas: lo que debo hacer, lo que espero de otros y lo que necesita aclaración. Indica chat, fecha e identificadores de los mensajes que respaldan cada punto; añade un plazo solo si se mencionó. Antes de considerar algo vencido, comprueba si se completó después. Al final, enumera los pendientes.
 
@@ -123,9 +123,9 @@ Escribe en Telegram: **no**. Permite: `Bash(tg chats list:*)`, `Bash(tg messages
 
 ## Encontrar algo que se dijo
 
-Escribe en Telegram: **no**. Permite: `Bash(tg messages search:*)`, `Bash(tg messages context:*)`.
+Escribe en Telegram: **no**. Permite: `Bash(tg search messages:*)`, `Bash(tg messages context:*)`.
 
-> Busca "invoice" con `tg messages search invoice --json`. Para cada resultado, consulta `tg messages context <locator> --json` e indica quién dijo qué y cuándo.
+> Busca "invoice" con `tg search messages invoice --json`. Para cada resultado, consulta `tg messages context <locator> --json` e indica quién dijo qué y cuándo.
 
 La búsqueda solo lee lo guardado en este equipo. Para consultar todo el historial de un chat, descárgalo primero; son peticiones desde tu cuenta, así que hazlo tú: `tg store fetch <chat>` ([archivo local](./archive.md)).
 

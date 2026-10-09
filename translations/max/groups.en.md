@@ -10,7 +10,7 @@ Group-changing commands return `operationId` in JSON. After creating, joining, u
 
 ## Working with an agent
 
-An agent with terminal access, such as Claude Code or Codex, can use the [skill](https://github.com/leemour/max-cli/blob/f7acc0c66d2389c94e9e46af24c469298b2b3ee6/README.md#навык-для-агентов-с-терминалом). Without terminal access, use the [MCP server](./mcp.md), for example in Claude Desktop. Cursor supports both approaches. Below: your request, the agent’s command and the result.
+An agent with terminal access, such as Claude Code or Codex, can use the [skill](https://github.com/leemour/max-cli/blob/v0.39.0/README.md#навык-для-агентов-с-терминалом). Without terminal access, use the [MCP server](./mcp.md), for example in Claude Desktop. Cursor supports both approaches. Below: your request, the agent’s command and the result.
 
 <a id="an-admins-morning-who-needs-an-answer" />
 
@@ -145,6 +145,7 @@ Without `--allow-dangerous`, cron actions at level `ask` are only planned and wa
 | `max chats link show\|reset <чат>` | Invite link; `reset` creates a new one and invalidates the old one |
 | `max chats update` | Settings, title, description and photo; read settings with `max chats show` |
 | `max messages delete --for-everyone`, `pin`, `unpin` | Delete for everyone, pin or unpin |
+| `max chats requests list\|accept\|decline <чат>` | Requests to join a channel that needs approval: who is asking, let them in, turn them away |
 | `max chats requests list <чат>` | Requests to join a channel with approval; admins can see them, request times are unknown |
 | `max chats requests accept\|decline <чат> <человек>` | Accept or decline one request; bulk acceptance and `--link` filters are unsupported |
 
@@ -213,9 +214,8 @@ moderate`. Unlike the personal account, it can ban removed members so they canno
 
 ## Limitations
 
-- **Group membership has no approval queue.** Groups are open or invite-only. Channel join requests use the commands above.
-
 - **Personal accounts cannot ban.** A removed member can return through an invite link. Reset the link (`max chats link reset`) or use a bot check, which can ban.
+- **Join requests exist only for a channel with approval.** A private group has no approval: the link lets people in at once. In a channel with approval, `chats join` only sends a request (`requested: true`). `chats requests list` does not show when someone asked: MAX does not report it. You cannot answer everyone at once or pick requests by link.
 - **At most 10 actions per check** (`--max-actions`). Deletions count toward the hourly send limit; once it is reached, remaining actions wait for the next check.
 - **Up to 1,000 messages per CLI check.** If there are more, the next check continues from that position.
 - **One join means reading the full member list.** To find a new member's account age, the check reads every member; in a large group this can require dozens of MAX requests.

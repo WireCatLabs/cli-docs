@@ -125,7 +125,7 @@ Migration preserves effective permissions, MAX settings and moderation checkpoin
 | `serve` | Start `max serve` in the background when a command needs MAX and no server exists. Never starts with `MAX_TOKEN`. Personal accounts only | `--serve`, `--no-serve` | `true` |
 | `keepRunsForDays` | Run-record retention in days | — | `30` |
 | `readOnly`, `allow`, `mcpTools` | legacy settings read for compatibility; `config migrate` converts them to `permissions` | — | cannot be changed after migration |
-| `sendsPerHour` | Hourly limit including messages, forwards, edits, pins with notifications, deleted messages and members added to groups; exceeding it refuses with code `8`. **Bots** use only the `bot` section; without it, bots have no limit | — | `30`; unlimited for bots |
+| `sendsPerHour` | Hourly limit including messages, forwards, edits, pins with notifications, deleted messages, members added to groups and accepted join requests; exceeding it refuses with code `8`. **Bots** use only the `bot` section; without it, bots have no limit | — | `30`; unlimited for bots |
 | `requestsPerMinute` | Requests per minute the profile makes to MAX, after the initial burst of 10, shared across all processes using this profile; `0` means unlimited. `MAX_REQUESTS_PER_MINUTE` overrides the file ([limits.md](./limits.md)) | `MAX_REQUESTS_PER_MINUTE` | `20` |
 | `readOtherBots` | Permit another bot's local data when requested with `--all-bots` or `--bots`: `false`, `true` for all bots, or a list of bot profiles. **Only in `bot`** | —; `--all-bots` and `--bots` request it, the field permits it | `false` |
 | `updateCheck` | Check npm once a day for a newer version and report it in the terminal. **Only in `defaults`**, because the program version is shared by all profiles | —; turned off by `MAX_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER`, `CI` | `true` |
@@ -157,9 +157,7 @@ max config set defaultProfile work      # какой профиль без пе�
 
 Values are checked with the same schema used for reading, **before writing**: `max config set limit 0` is refused and the file stays unchanged. `serve`, `senderColors`, `catchUpMarksRead`, `searchCatchUp` and `mcpTools` are not accepted with `--bot`: bots have no server, sender colors or unread state, and legacy `mcpTools` applies only to personal accounts.
 
-
-`searchStemmers.cyrillic` (`russian` or `none`) and `searchStemmers.latin` (`spanish`, `english` or
-`none`) are stored in the shared message archive, not the configuration file: they apply to every profile and both messengers. They therefore reject `--defaults`, `--personal` and `--bot`, and cannot be changed under `MAX_PROFILE_LOCK`. `config unset` restores the built-in value. After changing them, run `max store reindex` — see [Archive maintenance](./archive.md#обслуживание-архива).
+`searchStemmers.cyrillic` (`russian` or `none`) and `searchStemmers.latin` (`english`, `spanish`, both comma-separated — the default — or `none`) are stored in the shared message archive, not the configuration file: they apply to every profile and both messengers. They therefore reject `--defaults`, `--personal` and `--bot`, and cannot be changed under `MAX_PROFILE_LOCK`. `config unset` restores the built-in value. After changing them, run `max store reindex` — see [Archive maintenance](./archive.md#обслуживание-архива).
 
 ## Typos are errors, not ignored settings
 

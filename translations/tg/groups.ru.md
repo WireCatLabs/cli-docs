@@ -145,9 +145,11 @@ tg review --chat "Hiking" --since-time 7d --json
 | `tg chats events <chat>` | кто вступил, вышел, кого добавили или удалили и кто это сделал; по умолчанию за 7 дней |
 | `tg chats members list <chat>` | все участники, их роли и время последнего появления |
 | `tg topics list\|search <chat>` | темы группы-форума |
+| `tg topics show <chat> <id>` | одна тема: название, закрыта или закреплена, число непрочитанных, последняя активность |
 | `tg topics enable <chat>` | включить форум; обычная группа требует `--upgrade --yes`, результат содержит новый идентификатор чата |
 | `tg topics create <chat> <title>` | создать тему; при неизвестном результате проверить `topics list` вместо повтора |
 | `tg messages send <chat> <text> --topic <id>`, `tg polls create <chat> <question> <answers> --topic <id>` | отправить сообщение или опрос в тему форума |
+| `tg messages forward <chat> <message> --to <forum> --topic <id>` | переслать сообщение в тему форума из `--to` |
 | `tg chats inspect <link>` | куда ведёт публичная ссылка или приглашение; без вступления |
 | `tg chats create <title> [person...]` | новая супергруппа; с `--channel` — канал |
 | `tg chats join <link>`, `tg chats leave <chat>` | вступить по ссылке или выйти |

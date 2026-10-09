@@ -69,8 +69,14 @@ tg commands schema messages list --json
 ## Ссылки
 
 
-Мы применяем подходящие рекомендации [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) и [Command Line Interface Guidelines](https://clig.dev/), а также [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) и [Agent Skills](https://agentskills.io/specification). [Архитектура](https://github.com/leemour/tg-cli/blob/v0.38.0/docs/dev/ARCHITECTURE.md) и [общий стандарт CLI](https://github.com/leemour/cli-messaging/blob/main/docs/dev/STANDARD.md) описывают выбранный профиль применения и намеренные исключения. Мы не заявляем полную сертификацию третьей стороной.
+Мы применяем подходящие рекомендации [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) и [Command Line Interface Guidelines](https://clig.dev/), а также [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) и [Agent Skills](https://agentskills.io/specification). [Архитектура](https://github.com/leemour/tg-cli/blob/v0.40.1/docs/dev/ARCHITECTURE.md) и [общий стандарт CLI](https://github.com/leemour/cli-messaging/blob/main/docs/dev/STANDARD.md) описывают выбранный профиль применения и намеренные исключения. Мы не заявляем полную сертификацию третьей стороной.
 
 
 Обычная настройка описана в [руководстве по настройкам](./configuration.md), все ключи и переменные окружения — в [справочнике настроек](./configuration-reference.md).
 
+
+## Неоднозначные имена
+
+Статистику можно запросить по названию чата или имени человека. Агент найдёт чат через `chats list`, а человека — через `contacts show` / `contacts list` или рейтинг сохранённых авторов `stats contacts top`. При нескольких совпадениях нужен выбор; при неудачном поиске агент должен объяснить, какие сведения помогут. Неразрешённое имя не доказывает, что человек не ответил ни на один вопрос. Результат по выбранному ID описывает только доступную историю.
+
+Статистический `--answerer` разрешает сохранённые имена, свои имена и @username локально в выбранных аккаунтах. Неизвестное имя возвращает `not_found`; неоднозначное — `validation_error` с кандидатами из выборки. Для явно указанного ID без наблюдений строки ответов содержат `identityKnown: false` и `status: unknown`; ноль замеченных ответов не доказывает бездействия. Числовой ID без аккаунта требует одного выбранного аккаунта, а явный `person:provider/account/id` должен принадлежать запросу.

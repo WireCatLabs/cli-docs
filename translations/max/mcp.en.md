@@ -4,7 +4,7 @@ title: "MCP server"
 
 `max mcp` exposes a profile to an agent through [MCP](https://modelcontextprotocol.io), using stdin/stdout by default. `--http --public-url` exposes tools on a local port behind your HTTPS tunnel. The server is included with `max`; no separate installation is needed.
 
-**When you need it.** Claude Code, Codex and other agents with a terminal can use `max` directly with the [agent instructions](https://github.com/leemour/max-cli/blob/v0.37.0/README.md#для-скриптов-и-агентов). MCP is for clients without a terminal, such as Claude Desktop and Cursor chat, and for people who want the client to apply profile permissions to every operation. ChatGPT and Claude in a browser connect through `--http`; see [remote.md](./remote.md).
+**When you need it.** Claude Code, Codex and other agents with a terminal can use `max` directly with the [agent instructions](https://github.com/leemour/max-cli/blob/v0.39.0/README.md#для-скриптов-и-агентов). MCP is for clients without a terminal, such as Claude Desktop and Cursor chat, and for people who want the client to apply profile permissions to every operation. ChatGPT and Claude in a browser connect through `--http`; see [remote.md](./remote.md).
 
 ## Connecting
 

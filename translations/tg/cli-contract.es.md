@@ -69,8 +69,14 @@ Los desarrolladores tienen [el entorno y las instrucciones de reproducción](htt
 ## Referencias
 
 
-Aplicamos las recomendaciones pertinentes de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) y [Command Line Interface Guidelines](https://clig.dev/), además de [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/leemour/tg-cli/blob/v0.38.0/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/leemour/cli-messaging/blob/main/docs/dev/STANDARD.md) describen el perfil de aplicación y las excepciones intencionadas. No afirmamos una certificación completa por terceros.
+Aplicamos las recomendaciones pertinentes de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) y [Command Line Interface Guidelines](https://clig.dev/), además de [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/leemour/tg-cli/blob/v0.40.1/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/leemour/cli-messaging/blob/main/docs/dev/STANDARD.md) describen el perfil de aplicación y las excepciones intencionadas. No afirmamos una certificación completa por terceros.
 
 
 Consulta la [guía de configuración](./configuration.md) para los ajustes habituales y la [referencia de configuración](./configuration-reference.md) para todas las claves y variables de entorno.
 
+
+## Nombres ambiguos
+
+Puedes pedir estadísticas con el nombre de un chat o de una persona. El agente puede encontrar el chat con `chats list`, y a la persona con `contacts show` / `contacts list` o con el ranking de autores guardados de `stats contacts top`. Si hay varias coincidencias, hace falta elegir; si la búsqueda falla, el agente debe explicar qué dato identificativo ayudaría. Un nombre sin resolver no demuestra que alguien no respondiera a ninguna pregunta. Los resultados para un ID elegido describen solo el historial disponible.
+
+El `--answerer` de las estadísticas resuelve localmente, en las cuentas seleccionadas, los nombres guardados, los alias y los @username. Un nombre desconocido devuelve `not_found`; uno ambiguo, `validation_error` con los candidatos de la selección. Un ID explícito no observado produce filas de respuestas con `identityKnown: false` y `status: unknown`; cero respuestas observadas no demuestra inactividad. Un ID numérico sin cuenta requiere una sola cuenta seleccionada, y un `person:provider/account/id` explícito debe pertenecer a la consulta.

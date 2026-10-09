@@ -10,7 +10,7 @@ Las órdenes que modifican grupos devuelven `operationId` en JSON; después de c
 
 ## Trabajar con un agente
 
-Un agente con acceso al terminal, como Claude Code o Codex, puede usar la [habilidad](https://github.com/leemour/max-cli/blob/f7acc0c66d2389c94e9e46af24c469298b2b3ee6/README.md#навык-для-агентов-с-терминалом). Sin acceso al terminal, usa el [servidor MCP](./mcp.md), por ejemplo en Claude Desktop. Cursor admite ambas opciones. A continuación: tu petición, el comando del agente y el resultado.
+Un agente con acceso al terminal, como Claude Code o Codex, puede usar la [habilidad](https://github.com/leemour/max-cli/blob/v0.39.0/README.md#навык-для-агентов-с-терминалом). Sin acceso al terminal, usa el [servidor MCP](./mcp.md), por ejemplo en Claude Desktop. Cursor admite ambas opciones. A continuación: tu petición, el comando del agente y el resultado.
 
 <a id="la-mañana-del-administrador-quién-espera-respuesta" />
 
@@ -143,6 +143,7 @@ Sin `--allow-dangerous`, las acciones de cron con nivel `ask` solo se planifican
 | `max chats link show\|reset <чат>` | Enlace de invitación; `reset` crea uno e invalida el anterior |
 | `max chats update` | Ajustes, título, descripción y foto; consulta los ajustes con `max chats show` |
 | `max messages delete --for-everyone`, `pin`, `unpin` | Borrar para todos, fijar o desfijar |
+| `max chats requests list\|accept\|decline <чат>` | Solicitudes para entrar en un canal con aprobación: quién lo pide, dejarle entrar, rechazarle |
 | `max chats requests list <чат>` | Solicitudes para un canal con aprobación; las ven los administradores, se desconoce la fecha |
 | `max chats requests accept\|decline <чат> <человек>` | Aceptar o rechazar una solicitud; no admite aceptación masiva ni filtros `--link` |
 
@@ -211,9 +212,8 @@ moderate`. Puede impedir el regreso por invitación a las personas expulsadas, a
 
 ## Límites
 
-- **Los grupos no tienen cola de aprobación.** Son públicos o accesibles por invitación. Los comandos anteriores gestionan solicitudes para canales.
-
 - **La cuenta personal no puede vetar el regreso.** Una persona expulsada puede volver por invitación. Renueva el enlace (`max chats link reset`) o utiliza un bot.
+- **Las solicitudes de ingreso solo existen en un canal con aprobación.** Un grupo privado no tiene aprobación: con el enlace se entra al momento. En un canal con aprobación, `chats join` solo envía la solicitud (`requested: true`). `chats requests list` no muestra cuándo lo pidió alguien: MAX no lo informa. No se puede responder a todos a la vez ni elegir solicitudes por enlace.
 - **Máximo 10 acciones por comprobación** (`--max-actions`). Los borrados cuentan en el límite horario; el resto espera.
 - **Hasta 1000 mensajes por comprobación en CLI.** La siguiente continúa desde el punto anterior.
 - **Una incorporación requiere toda la lista de miembros** para conocer la antigüedad de la cuenta; en grupos grandes puede necesitar decenas de solicitudes.

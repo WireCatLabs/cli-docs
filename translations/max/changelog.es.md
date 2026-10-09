@@ -4,6 +4,63 @@ title: "Historial de cambios"
 
 Cambios destacados de `@leemour/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.39.0 — 09.10.2026
+
+### Novedades
+
+- **`max attachments show --page 1` devuelve una página de un PDF guardado como PNG.** Un agente remoto puede leer todas las páginas con su propia visión y guardar el texto para la búsqueda. Necesita los opcionales `unpdf` y `@napi-rs/canvas`; no se llama a ninguna API de OCR ni se escribe nada en el índice por sí solo. Si un cliente MCP solo muestra los metadatos del recurso, pide `format: base64` y muestra el PNG con las herramientas del agente.
+
+- **`max search all "<слова>"` busca a la vez en todo lo que se guarda en esta máquina**: mensajes de MAX y Telegram, el correo importado por memo y las notas. Cada resultado indica qué es: un mensaje, un correo o una nota. `--only notes` (o `messages`, `mail`) acota la búsqueda.
+- **`max search mail` y `max search notes`** buscan en un solo tipo. Las notas se encuentran por palabras y, si está descargado el modelo de texto local, por significado; `--type internal` (escritas en memo) o `file` (de una carpeta de notas).
+- **`max search messages --type voice`** (o `text`, `file`) encuentra solo esos mensajes.
+
+### Cambios que pueden romper scripts
+
+- **El `--answerer` de las estadísticas acepta nombres guardados, tus propios nombres y @username.** La búsqueda se hace localmente en las cuentas del historial elegido; si es ambigua, devuelve los candidatos. Un nombre desconocido ahora da error en lugar de un informe con cero respuestas para un ID inventado. Para un ID de texto desconocido elegido explícitamente, usa `person:provider/account/id`. Responses incluye ahora `identityKnown`; un ID sin observaciones recibe `false` y `status: unknown`. Cero respuestas observadas no demuestra que no hubiera actividad ([estadísticas](./rankings.md)).
+
+- **Toda la búsqueda pasó a `max search`.** Los comandos antiguos ya no existen:
+
+  | Antes | Ahora |
+  |---|---|
+  | `max messages search` | `max search messages` |
+  | `max messages search --source email` | `max search mail` |
+  | `max conversations search` | `max search conversations` |
+  | `max bot messages search` | `max bot search messages` |
+
+  Las herramientas para agentes se movieron igual: `search messages`, `search conversations` y el nuevo `search all`, por el que conviene empezar.
+- **`max search messages` ya no devuelve correo.** Una búsqueda guardada con `in:email` ahora pide `max search mail`.
+- **Los permisos con las rutas antiguas** (`messages.search`, `conversations.search`) detienen `max search` hasta que `max config migrate` los renombra con los mismos niveles.
+
+### Correcciones
+
+- **La ayuda de las solicitudes de ingreso indica claramente los límites de MAX.** Ya no ofrece `--all` ni `--link` como operaciones disponibles ni promete un orden por tiempo; las comprobaciones de rechazo se mantienen.
+
+## 0.38.1 — 08.10.2026
+
+### Novedades
+
+- **`max chats requests list|accept|decline` muestra y gestiona las solicitudes para entrar en un canal.** `--search` acota la lista por nombre. MAX no informa de cuándo se hizo la solicitud: `requestedAt` es `null` en el JSON. El filtro `--link` y la acción masiva `--all` no se admiten y se rechazan antes de cualquier petición.
+
+### Correcciones
+
+- La biblioteca compartida se actualizó a 0.205.0 para que MAX, Telegram y Memo usen una misma versión del archivo local. El esquema de las notas y los enlaces no cambian.
+
+## 0.38.0 — 08.10.2026
+
+### Novedades
+
+- **`max store jobs list --state <состояние>`** muestra solo los trabajos en segundo plano en ese estado: `running`, `done`, `failed`, `cancelled` o `died`.
+
+### Cambios que pueden romper scripts
+
+- **Las palabras latinas se buscan por las raíces del inglés y del español a la vez.** Antes, solo del español, así que las formas inglesas (“budgets” → “budget”) se encontraban peor. A tener en cuenta: tras actualizar, el índice de raíces se reconstruye solo. Un archivo pequeño, nada más abrirse; uno grande, poco a poco: `max serve` lo completa en segundo plano y `max store migrate`, de una vez. Mientras el índice no está listo, la búsqueda usa las formas exactas de las palabras y lo indica en stderr, y en el JSON `query.stemming.applied` es `false`. El índice de raíces del texto latino ocupa aproximadamente el doble. Si fijaste `searchStemmers.latin` tú mismo, tu ajuste se mantiene y `max store reindex` lo sigue aplicando. Actualiza también `tg`: una versión antigua que abre el archivo reconstruido responde a las búsquedas por raíces con «actualiza el programa» ([archivo](./archive.md#обслуживание-архива)).
+
+- **Las notas sobre una persona (`max contacts notes`) se ven en cada perfil donde se ve a esa persona.** Antes, una nota solo se veía en el perfil donde se escribió. Por qué: las notas son tuyas, no de una cuenta; el archivo compartido las guarda ahora aparte de los mensajes, junto con las notas de `memo`. A tener en cuenta: si tienes varios perfiles de MAX, las notas sobre una persona de todos ellos aparecen ahora juntas. Tus propios nombres (`contacts alias`) siguen valiendo solo en su perfil.
+
+### Correcciones
+
+- **`max chats join` ya no presenta una solicitud como un ingreso.** Si un canal aprueba quién entra, el comando solo envía la solicitud y ahora responde `requested: true` en lugar de la ficha del canal, y con `max serve` en marcha ese canal no aparece en la lista de chats hasta que se acepta la solicitud ([grupos](./groups.md)).
+
 ## 0.37.0 — 08.10.2026
 
 ### Novedades
@@ -665,7 +722,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/leemour/max-cli/blob/v0.37.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/leemour/max-cli/blob/v0.39.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos prácticos para bots.** `max <имя> bot messages send <чат> <текст>` envía a un chat por número, a una persona como `user:<номер>` o por el título de un chat que el bot ya ha visto; también hay `edit`, `delete`, `list` y `get`. `max <имя> bot chats list` muestra los chats que ha visto el bot; también están `chats get|pin|unpin|leave|action`. `max bot list` muestra todos los nombres con un token de bot.
   Por qué «que ha visto»: MAX no ofrece una lista de chats del bot, por lo que `max` los recuerda por su cuenta.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).
