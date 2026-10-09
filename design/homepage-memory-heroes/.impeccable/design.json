@@ -1,0 +1,307 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-08T01:32:29.996669+00:00",
+  "title": "Design System: WireCat Memory hero variants",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Purple",
+        "tonalRamp": [
+          "oklch(15% 0.23044 273.36)",
+          "oklch(26% 0.23044 273.36)",
+          "oklch(38% 0.23044 273.36)",
+          "oklch(49% 0.23044 273.36)",
+          "oklch(61% 0.23044 273.36)",
+          "oklch(72% 0.23044 273.36)",
+          "oklch(84% 0.23044 273.36)",
+          "oklch(95% 0.23044 273.36)"
+        ]
+      },
+      "primary-soft": {
+        "role": "primary",
+        "displayName": "Pale purple",
+        "tonalRamp": [
+          "oklch(15% 0.02143 283.13)",
+          "oklch(26% 0.02143 283.13)",
+          "oklch(38% 0.02143 283.13)",
+          "oklch(49% 0.02143 283.13)",
+          "oklch(61% 0.02143 283.13)",
+          "oklch(72% 0.02143 283.13)",
+          "oklch(84% 0.02143 283.13)",
+          "oklch(95% 0.02143 283.13)"
+        ]
+      },
+      "neutral-bg": {
+        "role": "neutral",
+        "displayName": "Green canvas",
+        "tonalRamp": [
+          "oklch(15% 0.00413 157.18)",
+          "oklch(26% 0.00413 157.18)",
+          "oklch(38% 0.00413 157.18)",
+          "oklch(49% 0.00413 157.18)",
+          "oklch(61% 0.00413 157.18)",
+          "oklch(72% 0.00413 157.18)",
+          "oklch(84% 0.00413 157.18)",
+          "oklch(95% 0.00413 157.18)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "tonalRamp": [
+          "oklch(15% 0.00000 89.88)",
+          "oklch(26% 0.00000 89.88)",
+          "oklch(38% 0.00000 89.88)",
+          "oklch(49% 0.00000 89.88)",
+          "oklch(61% 0.00000 89.88)",
+          "oklch(72% 0.00000 89.88)",
+          "oklch(84% 0.00000 89.88)",
+          "oklch(95% 0.00000 89.88)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "tonalRamp": [
+          "oklch(15% 0.02442 168.98)",
+          "oklch(26% 0.02442 168.98)",
+          "oklch(38% 0.02442 168.98)",
+          "oklch(49% 0.02442 168.98)",
+          "oklch(61% 0.02442 168.98)",
+          "oklch(72% 0.02442 168.98)",
+          "oklch(84% 0.02442 168.98)",
+          "oklch(95% 0.02442 168.98)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted ink",
+        "tonalRamp": [
+          "oklch(15% 0.02640 163.55)",
+          "oklch(26% 0.02640 163.55)",
+          "oklch(38% 0.02640 163.55)",
+          "oklch(49% 0.02640 163.55)",
+          "oklch(61% 0.02640 163.55)",
+          "oklch(72% 0.02640 163.55)",
+          "oklch(84% 0.02640 163.55)",
+          "oklch(95% 0.02640 163.55)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Divider",
+        "tonalRamp": [
+          "oklch(15% 0.01611 154.43)",
+          "oklch(26% 0.01611 154.43)",
+          "oklch(38% 0.01611 154.43)",
+          "oklch(49% 0.01611 154.43)",
+          "oklch(61% 0.01611 154.43)",
+          "oklch(72% 0.01611 154.43)",
+          "oklch(84% 0.01611 154.43)",
+          "oklch(95% 0.01611 154.43)"
+        ]
+      },
+      "soft": {
+        "role": "neutral",
+        "displayName": "Soft inset",
+        "tonalRamp": [
+          "oklch(15% 0.00999 155.09)",
+          "oklch(26% 0.00999 155.09)",
+          "oklch(38% 0.00999 155.09)",
+          "oklch(49% 0.00999 155.09)",
+          "oklch(61% 0.00999 155.09)",
+          "oklch(72% 0.00999 155.09)",
+          "oklch(84% 0.00999 155.09)",
+          "oklch(95% 0.00999 155.09)"
+        ]
+      },
+      "result-bg": {
+        "role": "secondary",
+        "displayName": "Result green",
+        "tonalRamp": [
+          "oklch(15% 0.01730 159.12)",
+          "oklch(26% 0.01730 159.12)",
+          "oklch(38% 0.01730 159.12)",
+          "oklch(49% 0.01730 159.12)",
+          "oklch(61% 0.01730 159.12)",
+          "oklch(72% 0.01730 159.12)",
+          "oklch(84% 0.01730 159.12)",
+          "oklch(95% 0.01730 159.12)"
+        ]
+      },
+      "result-line": {
+        "role": "secondary",
+        "displayName": "Result border",
+        "tonalRamp": [
+          "oklch(15% 0.04821 153.70)",
+          "oklch(26% 0.04821 153.70)",
+          "oklch(38% 0.04821 153.70)",
+          "oklch(49% 0.04821 153.70)",
+          "oklch(61% 0.04821 153.70)",
+          "oklch(72% 0.04821 153.70)",
+          "oklch(84% 0.04821 153.70)",
+          "oklch(95% 0.04821 153.70)"
+        ]
+      },
+      "result-ink": {
+        "role": "secondary",
+        "displayName": "Result ink",
+        "tonalRamp": [
+          "oklch(15% 0.09366 158.01)",
+          "oklch(26% 0.09366 158.01)",
+          "oklch(38% 0.09366 158.01)",
+          "oklch(49% 0.09366 158.01)",
+          "oklch(61% 0.09366 158.01)",
+          "oklch(72% 0.09366 158.01)",
+          "oklch(84% 0.09366 158.01)",
+          "oklch(95% 0.09366 158.01)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Memory display",
+        "purpose": "Shared hero heading."
+      },
+      "transcript": {
+        "displayName": "Original dialogue",
+        "purpose": "Requests and replies; increases to 15px on mobile."
+      }
+    },
+    "shadows": [
+      {
+        "name": "button-hover",
+        "value": "0 4px 12px #26343824",
+        "purpose": "Primary and secondary button hover."
+      },
+      {
+        "name": "setup-panel",
+        "value": "0 14px 32px #0d0f1024",
+        "purpose": "Setup dropdown above page content."
+      }
+    ],
+    "motion": [
+      {
+        "name": "button-hover",
+        "value": "box-shadow .18s ease-out",
+        "purpose": "Soft button hover transition."
+      },
+      {
+        "name": "panel-in",
+        "value": "panel-in .2s cubic-bezier(.16,1,.3,1)",
+        "purpose": "Scenario panel entrance; reduced-motion disables it."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "hero-stack",
+        "value": "1000px"
+      },
+      {
+        "name": "compact-layout",
+        "value": "900px"
+      },
+      {
+        "name": "mobile",
+        "value": "650px"
+      },
+      {
+        "name": "narrow-mobile",
+        "value": "374px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Pill action for connecting or copying a setup request.",
+      "html": "<button class=\"ds-primary\">Connect to your agent</button>",
+      "css": ".ds-primary{font:650 14px Onest,sans-serif;background:var(--button);color:var(--button-ink);padding:12px 20px;min-height:45px;border:0;border-radius:999px;cursor:pointer;transition:box-shadow .18s ease-out}.ds-primary:hover{box-shadow:0 4px 12px #26343824}.ds-primary:focus-visible{outline:3px solid var(--accent);outline-offset:4px}"
+    },
+    {
+      "name": "Secondary action",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Bordered supporting action.",
+      "html": "<button class=\"ds-secondary\">Setup guide</button>",
+      "css": ".ds-secondary{font:650 14px Onest,sans-serif;background:var(--paper);color:var(--accent);padding:12px 20px;min-height:45px;border:1px solid var(--line);border-radius:999px;cursor:pointer;transition:box-shadow .18s ease-out}.ds-secondary:hover{box-shadow:0 4px 12px #26343824}.ds-secondary:focus-visible{outline:3px solid var(--accent);outline-offset:4px}"
+    },
+    {
+      "name": "Scenario selection",
+      "kind": "nav",
+      "refersTo": "scenario-tab-selected",
+      "description": "The selected scenario within the original-conversation demonstration.",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\" aria-label=\"Example\"><button class=\"ds-tab\" role=\"tab\" aria-selected=\"true\">Prepare for a call</button></div>",
+      "css": ".ds-tabs{display:flex;gap:5px;padding:9px 12px;border-bottom:1px solid var(--line)}.ds-tab{font:650 12px Onest,sans-serif;padding:10px;min-height:37px;border:0;border-radius:7px;background:var(--accent-soft);color:var(--accent);cursor:pointer}.ds-tab:hover{background:var(--soft)}.ds-tab:focus-visible{outline:3px solid var(--accent);outline-offset:4px}"
+    },
+    {
+      "name": "Provider selection",
+      "kind": "chip",
+      "refersTo": "provider-selected",
+      "description": "Pressed provider segment in the hero toolbar.",
+      "html": "<div class=\"ds-providers\" role=\"group\" aria-label=\"Messenger\"><button class=\"ds-provider\" aria-pressed=\"true\">Telegram</button><button class=\"ds-provider\" aria-pressed=\"false\">MAX</button></div>",
+      "css": ".ds-providers{display:inline-flex;gap:3px;padding:3px;background:var(--soft);border:1px solid var(--line);border-radius:999px}.ds-provider{font:12px Onest,sans-serif;padding:6px 10px;min-height:29px;border:0;border-radius:999px;background:transparent;color:var(--ink);cursor:pointer}.ds-provider[aria-pressed=true]{background:var(--paper);font-weight:650;color:var(--accent)}.ds-provider:focus-visible{outline:3px solid var(--accent);outline-offset:4px}"
+    },
+    {
+      "name": "Transcript request",
+      "kind": "card",
+      "refersTo": "transcript-request",
+      "description": "Original user request, explicitly labeled and aligned right on a purple inset.",
+      "html": "<div class=\"ds-request\"><div class=\"ds-request-role\">Your request</div><p>Gather the decisions, risks and open questions for tomorrow\u2019s Atlas call.</p></div>",
+      "css": ".ds-request{width:90%;margin:20px 0 24px auto;background:var(--accent-soft);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:17px 18px}.ds-request-role{font:700 13px/1.5 Onest,sans-serif;color:var(--accent);margin-bottom:12px}.ds-request p{margin:0;font:14px/1.65 Onest,sans-serif}@media(max-width:650px){.ds-request{width:96%;padding:15px;margin:18px 0 23px auto}.ds-request p{font-size:15px}}"
+    },
+    {
+      "name": "Agent response",
+      "kind": "card",
+      "refersTo": "transcript-response",
+      "description": "Original reply on a separate full-width bordered surface.",
+      "html": "<div class=\"ds-response\"><div class=\"ds-response-role\">Agent response</div><p>Tom already sent the first draft.</p></div>",
+      "css": ".ds-response{width:100%;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:18px;margin:24px 0;font:14px/1.65 Onest,sans-serif}.ds-response-role{font:700 13px/1.5 Onest,sans-serif;margin:0 0 17px;border-bottom:1px solid var(--line);padding-bottom:12px}.ds-response p{margin:10px 0}@media(max-width:650px){.ds-response{padding:16px;margin:23px 0;font-size:15px}.ds-response-role{padding-bottom:11px;margin-bottom:15px}}"
+    },
+    {
+      "name": "Tool console",
+      "kind": "custom",
+      "refersTo": "tool-console",
+      "description": "Consecutive original commands grouped with count and explicitly labeled expandable JSON payloads.",
+      "html": "<section class=\"ds-console\" aria-label=\"Tool calls\"><div class=\"ds-tool-role\"><span>Tool calls</span><small>1 command</small></div><details class=\"ds-tool\"><summary><code>tg</code></summary><span class=\"ds-output-label\">Tool output \u00b7 JSON</span><pre>{}</pre></details></section>",
+      "css": ".ds-console{margin:20px 0 24px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px 15px;color:var(--ink)}.ds-tool-role{display:flex;align-items:center;gap:9px;font:700 12px/1.5 Onest,sans-serif;color:var(--muted);margin:0 0 11px}.ds-tool-role small{margin-left:auto;font-size:11px;font-weight:400}.ds-tool{padding:10px 0}.ds-tool summary{display:flex;align-items:center;gap:8px;cursor:pointer;font:12px Onest,sans-serif}.ds-tool code{font:12px ui-monospace,Consolas,monospace}.ds-tool summary:focus-visible{outline:3px solid var(--accent);outline-offset:4px}.ds-output-label{display:block;margin-top:15px;font:600 12px Onest,sans-serif;color:var(--muted)}.ds-tool pre{font:12px/1.7 monospace;white-space:pre-wrap;overflow-wrap:anywhere;padding:15px;background:var(--soft);border-radius:5px;margin:14px 0 0}@media(max-width:650px){.ds-console{padding:13px;margin:20px 0}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Memory",
+    "overview": "This scoped system records the finished prototype in this directory. It retains the selected Outcomes page: expressive headings, a muted green canvas, purple actions and compact evidence from conversations. The heading and the original AI-agent dialogue share the first viewport; the interface makes requests, executed tools, replies and source messages visually distinct.\n\nThe three variants change how the same original exchanges are disclosed. The wider page retains the Outcomes examples, six Why features, setup controls and production footer. This record describes their shared visual vocabulary; it does not replace the repository's broader design authority.",
+    "keyCharacteristics": [
+      "Purple actions on quiet green and white surfaces.",
+      "Unbounded headings with Onest reading text.",
+      "Original conversation evidence with progressive disclosure.",
+      "Rounded inset surfaces, thin dividers and restrained shadows."
+    ],
+    "rules": [
+      {
+        "name": "The Semantic Surface Rule",
+        "body": "Label every request, tool group and reply. Requests use a right-aligned purple inset; consecutive tools share a muted console; replies use a separate full-width bordered surface. Preserve these role distinctions when adapting the original markup.",
+        "section": "colors"
+      },
+      {
+        "name": "The Reading Role Rule",
+        "body": "Keep code in monospace and source labels subordinate to request and reply text. Do not flatten the conversation into a single typographic treatment.",
+        "section": "typography"
+      }
+    ],
+    "dos": [
+      "Do preserve the original requests, executed tools, replies and quoted source messages when changing disclosure layout.",
+      "Do distinguish conversation roles through explicit labels, alignment and separate surfaces.",
+      "Do retain the visible selected and pressed states of scenario and provider controls.",
+      "Do keep focus outlines visible on links, buttons and disclosure summaries.",
+      "Do retain the shared Outcomes vocabulary and inherited footer when extending these variants."
+    ],
+    "donts": [
+      "Don't allow older badge classes or duplicate IDs to restyle the imported transcript.",
+      "Don't style original tool calls as decorative result claims.",
+      "Don't promote variant-specific disclosure order into a repository-wide design rule."
+    ]
+  }
+}

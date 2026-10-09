@@ -1,9 +1,76 @@
 ---
-title: "Поиск сообщений"
+title: "Поиск"
 ---
 
-`tg messages search` находит сообщения в локальном архиве — копии ваших чатов, которую tg хранит на этом
-компьютере, — а также обращается к поиску Telegram ([ниже](#asking-telegram-too---backend)). Команда не помечает сообщения прочитанными.
+Весь поиск — в одной группе команд, `tg search`. Если не знаете, где было написано, начните с
+`search all`: он ищет сразу в сообщениях, почте и заметках, которые хранятся на этом компьютере, и у
+каждой находки пишет, что это — сообщение (`msg:…`) или заметка (`note:…`). Прочитанным поиск ничего не
+помечает.
+
+```sh
+tg search all 'lease agreement'                   # messages, mail and notes, best match first
+```
+
+```sh
+tg search all 'lease' --only messages,notes       # without mail
+```
+
+```sh
+tg search messages 'lease' --chat "Book club"     # Telegram messages only, never mail
+```
+
+```sh
+tg search mail 'invoice'                          # only the mail memo mail import brought in
+```
+
+```sh
+tg search notes 'budget' --type internal          # only notes written in memo
+```
+
+```sh
+tg search conversations 'moving to the country'   # conversations close in meaning
+```
+
+```sh
+tg search topics "Hiking" "gear"                  # topic titles in one forum group
+```
+
+`search messages` никогда не возвращает почту, а `search mail` — сообщения мессенджеров; вместе их
+ищет только `search all`. `--type` у `search messages` оставляет только текст, голосовые или файлы
+(`text|voice|file`), у `search notes` — заметки из memo или из папки (`internal|file`). Если в запросе
+есть поле, которого у почты или заметок нет (`chat:`, `from:`), `search all` пропускает их и говорит
+об этом.
+
+Почта и заметки попадают в архив через [memo](https://github.com/leemour/cli-memo): `memo mail import`
+и `memo import`. Без них `search all` ищет только сообщения.
+
+Дальше на этой странице — поиск сообщений, `tg search messages`. Поиск в одном чате спрашивает ещё и
+сервер Telegram ([ниже](#asking-telegram-too---backend)).
+## Попробуйте поиск в одном чате
+
+Начните с фразы и одного чата. В примере поиск читает сохранённую историю, не обращаясь к мессенджеру.
+
+**Ваш запрос:**
+
+> Найди сообщение «invoice paid» в чате Book club. Покажи совпадение и пробелы в истории.
+
+**Команда:**
+
+```sh
+tg search messages '"invoice paid"' --chat "Book club" --backend archive --json
+```
+
+**Пример ответа агента:**
+
+> **Найдено одно сообщение в сохранённой истории.**
+>
+> | Участник | Сообщение |
+> | --- | --- |
+> | Alice Synthetic | Invoice paid yesterday. |
+>
+> История неполная: другие совпадения могут отсутствовать. Могу открыть это сообщение и переписку вокруг него.
+
+Пустой результат не доказывает, что сообщения никогда не было. Проверьте пробелы в истории, прежде чем расширять поиск. Все примеры на странице вымышлены.
 
 ## Сначала подготовьте архив
 
@@ -13,6 +80,9 @@ title: "Поиск сообщений"
 
 ```sh
 tg store fetch --all --background     # the last 90 days of every chat, as a background job
+```
+
+```sh
 tg store jobs show                    # how far it got
 ```
 
@@ -46,11 +116,23 @@ searched 12,430 messages in 37 chats — 5 never fetched; `tg store fetch --all 
 ## Слова и фразы
 
 ```sh
-tg messages search invoice
-tg messages search '"invoice paid"'              # words together
-tg messages search 'cafe OR library'
-tg messages search '(cafe OR library) NOT loud'
-tg messages search 'invoic*'                     # every word that starts with "invoic"
+tg search messages invoice
+```
+
+```sh
+tg search messages '"invoice paid"'              # words together
+```
+
+```sh
+tg search messages 'cafe OR library'
+```
+
+```sh
+tg search messages '(cafe OR library) NOT loud'
+```
+
+```sh
+tg search messages 'invoic*'                     # every word that starts with "invoic"
 ```
 
 Все слова, записанные рядом в запросе, должны присутствовать в сообщении. Поиск учитывает словоформы согласно
@@ -62,12 +144,27 @@ tg messages search 'invoic*'                     # every word that starts with "
 ## Люди и чаты
 
 ```sh
-tg messages search 'from:"Alice Synthetic" invoice'
-tg messages search 'from:("Alice Synthetic" OR "Bob Synthetic") library'
-tg messages search 'from:me date:7d'             # what you wrote this week
-tg messages search 'chat:"Book club" library'
-tg messages search library --chat "Book club"    # the same, as an option
-tg messages search 'passport kind:private'       # one-to-one chats only
+tg search messages 'from:"Alice Synthetic" invoice'
+```
+
+```sh
+tg search messages 'from:("Alice Synthetic" OR "Bob Synthetic") library'
+```
+
+```sh
+tg search messages 'from:me date:7d'             # what you wrote this week
+```
+
+```sh
+tg search messages 'chat:"Book club" library'
+```
+
+```sh
+tg search messages library --chat "Book club"    # the same, as an option
+```
+
+```sh
+tg search messages 'passport kind:private'       # one-to-one chats only
 ```
 
 `kind:` принимает `private`, `group`, `channel`, `saved` («Избранное») и `bot`. `topic:` ограничивает поиск одной
@@ -76,10 +173,19 @@ tg messages search 'passport kind:private'       # one-to-one chats only
 ## Даты
 
 ```sh
-tg messages search 'date:today'
-tg messages search 'library date:yesterday'
-tg messages search 'invoice date:7d'             # from 7 days ago until now; also 30m, 2h
-tg messages search 'invoice date:[2026-01-01 TO 2026-02-01}' --timezone Europe/Madrid
+tg search messages 'date:today'
+```
+
+```sh
+tg search messages 'library date:yesterday'
+```
+
+```sh
+tg search messages 'invoice date:7d'             # from 7 days ago until now; also 30m, 2h
+```
+
+```sh
+tg search messages 'invoice date:[2026-01-01 TO 2026-02-01}' --timezone Europe/Madrid
 ```
 
 `today`, `yesterday` и календарные даты — это дни в часовом поясе вашего компьютера; `--timezone` выбирает
@@ -88,14 +194,35 @@ tg messages search 'invoice date:[2026-01-01 TO 2026-02-01}' --timezone Europe/M
 ## Файлы и ссылки
 
 ```sh
-tg messages search 'has:file'
-tg messages search 'filename:*.pdf'
-tg messages search 'filename:*contract*'         # part of the name
-tg messages search 'size>10MB'
-tg messages search 'mime:image'                  # any picture sent as a file
-tg messages search 'mime:"application/pdf"'      # quote a full type
-tg messages search 'has:photo chat:"Book club"'
-tg messages search 'has:link AND "github.com"'   # a link to a site
+tg search messages 'has:file'
+```
+
+```sh
+tg search messages 'filename:*.pdf'
+```
+
+```sh
+tg search messages 'filename:*contract*'         # part of the name
+```
+
+```sh
+tg search messages 'size>10MB'
+```
+
+```sh
+tg search messages 'mime:image'                  # any picture sent as a file
+```
+
+```sh
+tg search messages 'mime:"application/pdf"'      # quote a full type
+```
+
+```sh
+tg search messages 'has:photo chat:"Book club"'
+```
+
+```sh
+tg search messages 'has:link AND "github.com"'   # a link to a site
 ```
 
 Файл находится по имени, размеру и типу, даже если в сообщении нет текста. `filename:` сравнивает
@@ -106,8 +233,11 @@ tg messages search 'has:link AND "github.com"'   # a link to a site
 ## Пароли, коды и карты
 
 ```sh
-tg messages search 'preset:secret kind:saved'    # something that looks like a password or token
-tg messages search 'preset:card'
+tg search messages 'preset:secret kind:saved'    # something that looks like a password or token
+```
+
+```sh
+tg search messages 'preset:card'
 ```
 
 Пресет находит сообщения, которые *похожи* на пароль, код входа, ключ API, номер карты или IBAN,
@@ -118,10 +248,25 @@ tg messages search 'preset:card'
 
 ```sh
 tg tags add work --chat "Book club"
+```
+
+```sh
 tg tags add work --contact "Bob Synthetic"
+```
+
+```sh
 tg tags list --tag work --type chat
-tg messages search 'tag:work invoice'
-tg messages search 'invoice NOT tag:work'
+```
+
+```sh
+tg search messages 'tag:work invoice'
+```
+
+```sh
+tg search messages 'invoice NOT tag:work'
+```
+
+```sh
 tg tags remove work --chat "Book club"
 ```
 
@@ -135,9 +280,21 @@ tg tags remove work --chat "Book club"
 
 ```sh
 tg metadata refresh --chat "Book club"   # read the chat's description from Telegram; the chat is not changed
+```
+
+```sh
 tg metadata refresh --only-missing       # every stored group and channel with no description read yet
+```
+
+```sh
 tg tags auto --dry-run                   # what it would tag, without writing
+```
+
+```sh
 tg tags auto                             # write the automatic tags
+```
+
+```sh
 tg tags list --source auto               # only the automatic ones
 ```
 
@@ -148,12 +305,30 @@ tg tags list --source auto               # only the automatic ones
 
 ```sh
 tg searches create meetings 'library OR cafe' --chat "Book club"
-tg messages search --saved meetings
-tg messages search --saved meetings 'date:today'  # extra words are added with AND
+```
+
+```sh
+tg search messages --saved meetings
+```
+
+```sh
+tg search messages --saved meetings 'date:today'  # extra words are added with AND
+```
+
+```sh
 tg stats messages show --saved meetings --by day
+```
+
+```sh
 tg searches list
+```
+
+```sh
 tg searches history --limit 10
-tg messages search --saved 42                    # a row of the history, by its number
+```
+
+```sh
+tg search messages --saved 42                    # a row of the history, by its number
 ```
 
 `searches create` сохраняет запрос с его параметрами и ничего не запускает; для существующего имени нужен `--replace`.
@@ -172,12 +347,21 @@ tg messages search --saved 42                    # a row of the history, by its 
 
 ```sh
 tg stats messages show invoice                        # how many in each chat
+```
+
+```sh
 tg stats messages show 'date:7d' --by sender
+```
+
+```sh
 tg stats messages show 'from:me' --by day --timezone Europe/Madrid
+```
+
+```sh
 tg stats messages show --by hour                      # every stored message
 ```
 
-`stats messages show` подсчитывает сообщения, которые нашла бы команда `messages search` с тем же запросом, каждое ровно один раз.
+`stats messages show` подсчитывает сообщения, которые нашла бы команда `search messages` с тем же запросом, каждое ровно один раз.
 `--by chat` (по умолчанию) и `--by sender` выводят сначала наибольшие значения; `--by day` и `--by hour` выводят результаты
 в хронологическом порядке. Если некоторые чаты сохранены не полностью, эти числа — нижняя граница, а stderr сообщает,
 сколько таких чатов.
@@ -189,9 +373,15 @@ Telegram может искать в своей копии ваших чатов,
 `--backend archive` ищет только в архиве.
 
 ```sh
-tg messages search 'invoice' --backend both
-tg messages search 'invoice chat:"Book club" from:Olga' --backend both
-tg messages search 'invoice date:2026-09' --backend server --server-time 10s
+tg search messages 'invoice' --backend both
+```
+
+```sh
+tg search messages 'invoice chat:"Book club" from:Olga' --backend both
+```
+
+```sh
+tg search messages 'invoice date:2026-09' --backend server --server-time 10s
 ```
 
 Telegram сам решает, что соответствует слову, и не документирует эти правила. Поэтому tg рассматривает его ответ как
@@ -224,7 +414,7 @@ Telegram: без сети, разрешения или слов команда �
 ## Для скриптов и агентов
 
 `--json` возвращает один объект с сообщениями и сведениями о проверенных данных; `--jsonl` передаёт потоком
-только сообщения. В MCP `tg_read` (`command: "messages search"`) и `tg_read` (`command: "stats messages show"`) принимают те же запросы, а команды `tags` и
+только сообщения. В MCP `tg_read` (`command: "search all"` или `"search messages"`) и `tg_read` (`command: "stats messages show"`) принимают те же запросы, а команды `tags` и
 `searches` через `tg_read`/`tg_write` управляют тегами и сохранёнными поисками. Поля ответа,
 старый режим `--language legacy` и `--regex` описаны в разделе [язык запросов](./query-language.md).
 
@@ -245,8 +435,17 @@ Telegram: без сети, разрешения или слов команда �
 
 ```sh
 tg attachments extract --chat "Book club" --download --output-dir ./files
-tg messages search 'content:invoice'
+```
+
+```sh
+tg search messages 'content:invoice'
+```
+
+```sh
 tg attachments list --chat "Book club" --needs-text
+```
+
+```sh
 tg attachments text set "Book club" 204 --text-file ./scan.txt
 ```
 
@@ -258,8 +457,17 @@ tg attachments text set "Book club" 204 --text-file ./scan.txt
 
 ```sh
 tg config set models.ocr.provider openai
+```
+
+```sh
 tg config set models.ocr.model your-vision-model
+```
+
+```sh
 tg models text key set openai
+```
+
+```sh
 tg attachments extract --chat "Book club" --ocr --concurrency 4 --limit 100 --json
 ```
 

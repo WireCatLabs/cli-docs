@@ -4,14 +4,60 @@ title: "Local storage: contents, updates and exports"
 
 Everything `max` reads stays on your computer, so you can answer offline, search and export it. This page explains what is stored, how to keep it current, how to download earlier history and how to export it.
 
+## Check and fill one chat
+
+Check what is saved before downloading more. Limit the download to the chat and period you need.
+
+**Your request:**
+
+> Check the saved history for Книжный клуб. Download the last 30 days for that chat, then tell me whether any gaps remain.
+
+**Check saved history:**
+
+```sh
+max store status "Книжный клуб" --json
+```
+
+**Download the selected period:**
+
+```sh
+max store fetch "Книжный клуб" --since-time 30d --json
+```
+
+**Check again:**
+
+```sh
+max store status "Книжный клуб" --json
+```
+
+**Example agent answer:**
+
+> | Check | Before | After |
+> | --- | --- | --- |
+> | Saved messages | 30 | 300 |
+> | Requested 30-day message history | Gaps | Held without gaps |
+>
+> This result covers the selected period, not the chat’s entire past.
+
+If the download stops at a limit or a provider wait, run it again to continue, then check coverage. A finished command does not by itself prove complete history. These counts are fictional.
+
 ## What is stored
 
 Read data is saved locally so commands can answer without a network connection:
 
 ```sh
 max chats list --offline      # только из локальной копии, никуда не подключаться
+```
+
+```sh
 max messages send 0 "текст" --offline   # отказ: из копии отправить нельзя
+```
+
+```sh
 max store clear --left        # посмотреть, сколько данных покинутых чатов можно удалить
+```
+
+```sh
 max store clear --left --allow-dangerous  # удалить их из общей копии
 ```
 
@@ -31,8 +77,17 @@ The old profile cache is no longer opened or migrated into the shared store. `ma
 
 ```sh
 max store fetch Друзья --since-time 2026-01-01
+```
+
+```sh
 max store fetch Друзья --last 500
+```
+
+```sh
 max store fetch Друзья --background      # в фоне; `max store jobs show <id>` следит за ним
+```
+
+```sh
 max store fetch --all                    # все чаты, самые активные первыми: последние 90 дней
 ```
 
@@ -57,6 +112,9 @@ Export conversations from local storage as JSONL (the same objects as `messages 
 
 ```sh
 max store export Друзья --format markdown --output друзья.md
+```
+
+```sh
 max store export 111 --format jsonl --since-time 2026-09-01 > чат.jsonl
 ```
 
@@ -68,7 +126,13 @@ Export **never connects to the network** and includes only downloaded or previou
 
 ```sh
 max store export Друзья Работа --to ~/max-архив
+```
+
+```sh
 max store export --kind group --to ~/max-группы
+```
+
+```sh
 max store export --all --to ~/max-всё
 ```
 
@@ -89,7 +153,7 @@ max store export --all --to ~/max-всё
 
 ## Search
 
-`max messages search` finds saved messages by words, sender, chat, date, files, links and your tags. Word search in one specified chat also queries the MAX server by default; without a chat, or with `--backend archive`, it reads only the archive. `--sync-first` first downloads new messages from MAX within limits without marking them as read. See [message search](./search.md) for the guide, saved searches and counts. Empty results do not prove that a message is absent: check `coverage.next` and download missing history before searching again.
+`max search messages` finds saved messages by words, sender, chat, date, files, links and your tags. Word search in one specified chat also queries the MAX server by default; without a chat, or with `--backend archive`, it reads only the archive. `--sync-first` first downloads new messages from MAX within limits without marking them as read. See [message search](./search.md) for the guide, saved searches and counts. Empty results do not prove that a message is absent: check `coverage.next` and download missing history before searching again.
 
 ## Conversations within a group
 
@@ -137,6 +201,6 @@ max watch --events --jsonl  # ещё правки, удаления, реакц�
 
 ## Archive maintenance
 
-`max store migrate` completes indexes; `max store reindex` rebuilds them. `store info` and `store check` show word/stem readiness. Strict search matches word forms; `exact:` and `--exact` choose literal forms. `config set searchStemmers.cyrillic` accepts `russian` or `none`; `config set searchStemmers.latin` accepts `english`, `spanish`, both comma-separated (the default `english,spanish`) or `none`. After your own change, run `store reindex`. An update changing the default automatically rebuilds stems; until ready, search uses exact forms and reports that. `max serve` fills the index in the background, `store migrate` immediately. The setting is shared by all profiles and both messengers: `--defaults`, `--personal` and `--bot` do not apply, and `MAX_PROFILE_LOCK` prevents changes.
+`max store migrate` adds missing indexes; `max store reindex` rebuilds them. `store info` and `store check` show word and stem index readiness. Strict search uses stems to match word forms; `exact:` and `--exact` choose exact forms. `config set searchStemmers.cyrillic` accepts `russian` or `none`; `config set searchStemmers.latin` accepts `english`, `spanish` or both, separated by a comma (default `english,spanish`); `none` disables stemming for that alphabet. After choosing your own setting, run `store reindex`. After an update changes the default, searches use exact word forms until stems are ready and report this boundary; `max serve` builds them in the background, or `store migrate` immediately. This setting is shared by all profiles and both messengers, so `--defaults`, `--personal` and `--bot` do not apply, and it cannot be changed under `MAX_PROFILE_LOCK`.
 
 `max store repair --dry-run --json` previews structural repairs and rolls changes back; `store repair` applies them without deleting data. An incompatible table is retained as a copy; the response lists rows and columns that could not be transferred. Keep the copy until you have checked the result. `store repair` lists copy names (`copies` in `--json`); `store copies delete <точное имя>` deletes only the named copy. Stop processes using the archive before repairing its structure.

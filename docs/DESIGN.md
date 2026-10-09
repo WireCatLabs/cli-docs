@@ -230,3 +230,18 @@ scenario answers, feature labels, timeline and footer headings use Onest. Headin
 removed except in the hero. Agent installation prompts use npm, explicitly install/load the
 skill, and verify persistent/current-shell PATH on Windows and npm's bin directory on Unix.
 The manual PowerShell entry point remains available.
+
+## Selected editorial landing — 2026-10-09
+
+The selected production composition is Memory → personal/bot/admin lists → outcomes on white
+paper → tools → nine reasons → open-source/data/agent trust → editable estimate → connection CTA.
+The Memory heading, purple/green palette and compact Unbounded/Onest typography are preserved.
+Conversation content stays complete with visible checked calls, source evidence and two follow-ups.
+The middle outcomes section is a full-width paper band; remaining-call badges stay on one line,
+letting command text wrap at narrow widths. English, Russian and Spanish use the same composition.
+
+Features and examples are public localized pages. Design variants and the library stay outside
+the published build. [Detailed design rules](../design/homepage-chat-treatments/DESIGN.md),
+[all preserved URLs and index links](../design/homepage-chat-treatments/DESIGN-LINKS.md),
+and the source snapshots are committed with this release. Restore local previews with
+`pnpm design:serve`; regenerate production snapshots with `pnpm landing:export`.

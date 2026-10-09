@@ -260,6 +260,7 @@ People use the tg/max CLI tools, not a WireCat executable. Name the relevant com
 in task instructions. WireCat may identify the documentation site or project; preserve actual
 URLs, service filenames and source references rather than mechanically rewriting identifiers.
 
+Run checks appropriate to the change locally, including the affected tool's documentation checks and the portal's localization checks when changing imported guides. Use the local browser smoke suite and targeted tests for changed behavior; see [local documentation checks](DEVELOPMENT.md). CI owns the complete build, link, SEO and browser suites. Verify the rendered sidebar on desktop and mobile and review the opening paragraph in each affected language. Tests should protect a real reader outcome or contract, not merely repeat implementation details. Keep unrelated checkout changes intact.
 
 ## Review reader progress before publishing
 

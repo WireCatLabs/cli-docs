@@ -1,0 +1,470 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-08T00:55:05.793466+00:00",
+  "title": "Design System: WireCat Memory comparisons",
+  "extensions": {
+    "colorMeta": {
+      "button": {
+        "role": "primary",
+        "displayName": "Button",
+        "canonical": "#4b53f0",
+        "tonalRamp": [
+          "oklch(15% 0.2304 273.36)",
+          "oklch(26% 0.2304 273.36)",
+          "oklch(38% 0.2304 273.36)",
+          "oklch(49% 0.2304 273.36)",
+          "oklch(61% 0.2304 273.36)",
+          "oklch(72% 0.2304 273.36)",
+          "oklch(84% 0.2304 273.36)",
+          "oklch(95% 0.2304 273.36)"
+        ]
+      },
+      "button-ink": {
+        "role": "neutral",
+        "displayName": "Button Ink",
+        "canonical": "#fff",
+        "tonalRamp": [
+          "oklch(15% 0.0000 89.88)",
+          "oklch(26% 0.0000 89.88)",
+          "oklch(38% 0.0000 89.88)",
+          "oklch(49% 0.0000 89.88)",
+          "oklch(61% 0.0000 89.88)",
+          "oklch(72% 0.0000 89.88)",
+          "oklch(84% 0.0000 89.88)",
+          "oklch(95% 0.0000 89.88)"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Accent",
+        "canonical": "#4b53f0",
+        "tonalRamp": [
+          "oklch(15% 0.2304 273.36)",
+          "oklch(26% 0.2304 273.36)",
+          "oklch(38% 0.2304 273.36)",
+          "oklch(49% 0.2304 273.36)",
+          "oklch(61% 0.2304 273.36)",
+          "oklch(72% 0.2304 273.36)",
+          "oklch(84% 0.2304 273.36)",
+          "oklch(95% 0.2304 273.36)"
+        ]
+      },
+      "accent-soft": {
+        "role": "primary",
+        "displayName": "Accent Soft",
+        "canonical": "#eeefff",
+        "tonalRamp": [
+          "oklch(15% 0.0214 283.13)",
+          "oklch(26% 0.0214 283.13)",
+          "oklch(38% 0.0214 283.13)",
+          "oklch(49% 0.0214 283.13)",
+          "oklch(61% 0.0214 283.13)",
+          "oklch(72% 0.0214 283.13)",
+          "oklch(84% 0.0214 283.13)",
+          "oklch(95% 0.0214 283.13)"
+        ]
+      },
+      "wall": {
+        "role": "neutral",
+        "displayName": "Wall",
+        "canonical": "#f1f4f2",
+        "tonalRamp": [
+          "oklch(15% 0.0041 157.18)",
+          "oklch(26% 0.0041 157.18)",
+          "oklch(38% 0.0041 157.18)",
+          "oklch(49% 0.0041 157.18)",
+          "oklch(61% 0.0041 157.18)",
+          "oklch(72% 0.0041 157.18)",
+          "oklch(84% 0.0041 157.18)",
+          "oklch(95% 0.0041 157.18)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#fff",
+        "tonalRamp": [
+          "oklch(15% 0.0000 89.88)",
+          "oklch(26% 0.0000 89.88)",
+          "oklch(38% 0.0000 89.88)",
+          "oklch(49% 0.0000 89.88)",
+          "oklch(61% 0.0000 89.88)",
+          "oklch(72% 0.0000 89.88)",
+          "oklch(84% 0.0000 89.88)",
+          "oklch(95% 0.0000 89.88)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#182822",
+        "tonalRamp": [
+          "oklch(15% 0.0244 168.98)",
+          "oklch(26% 0.0244 168.98)",
+          "oklch(38% 0.0244 168.98)",
+          "oklch(49% 0.0244 168.98)",
+          "oklch(61% 0.0244 168.98)",
+          "oklch(72% 0.0244 168.98)",
+          "oklch(84% 0.0244 168.98)",
+          "oklch(95% 0.0244 168.98)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "canonical": "#4c5e55",
+        "tonalRamp": [
+          "oklch(15% 0.0264 163.55)",
+          "oklch(26% 0.0264 163.55)",
+          "oklch(38% 0.0264 163.55)",
+          "oklch(49% 0.0264 163.55)",
+          "oklch(61% 0.0264 163.55)",
+          "oklch(72% 0.0264 163.55)",
+          "oklch(84% 0.0264 163.55)",
+          "oklch(95% 0.0264 163.55)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "canonical": "#ccd7cf",
+        "tonalRamp": [
+          "oklch(15% 0.0161 154.43)",
+          "oklch(26% 0.0161 154.43)",
+          "oklch(38% 0.0161 154.43)",
+          "oklch(49% 0.0161 154.43)",
+          "oklch(61% 0.0161 154.43)",
+          "oklch(72% 0.0161 154.43)",
+          "oklch(84% 0.0161 154.43)",
+          "oklch(95% 0.0161 154.43)"
+        ]
+      },
+      "soft": {
+        "role": "neutral",
+        "displayName": "Soft",
+        "canonical": "#e5ece7",
+        "tonalRamp": [
+          "oklch(15% 0.0100 155.09)",
+          "oklch(26% 0.0100 155.09)",
+          "oklch(38% 0.0100 155.09)",
+          "oklch(49% 0.0100 155.09)",
+          "oklch(61% 0.0100 155.09)",
+          "oklch(72% 0.0100 155.09)",
+          "oklch(84% 0.0100 155.09)",
+          "oklch(95% 0.0100 155.09)"
+        ]
+      },
+      "teal-accent": {
+        "role": "primary",
+        "displayName": "Teal Accent",
+        "canonical": "#236b63",
+        "tonalRamp": [
+          "oklch(15% 0.0714 184.77)",
+          "oklch(26% 0.0714 184.77)",
+          "oklch(38% 0.0714 184.77)",
+          "oklch(49% 0.0714 184.77)",
+          "oklch(61% 0.0714 184.77)",
+          "oklch(72% 0.0714 184.77)",
+          "oklch(84% 0.0714 184.77)",
+          "oklch(95% 0.0714 184.77)"
+        ]
+      },
+      "blue-accent": {
+        "role": "primary",
+        "displayName": "Blue Accent",
+        "canonical": "#315baf",
+        "tonalRamp": [
+          "oklch(15% 0.1422 262.42)",
+          "oklch(26% 0.1422 262.42)",
+          "oklch(38% 0.1422 262.42)",
+          "oklch(49% 0.1422 262.42)",
+          "oklch(61% 0.1422 262.42)",
+          "oklch(72% 0.1422 262.42)",
+          "oklch(84% 0.1422 262.42)",
+          "oklch(95% 0.1422 262.42)"
+        ]
+      },
+      "warm-accent": {
+        "role": "primary",
+        "displayName": "Warm Accent",
+        "canonical": "#5145df",
+        "tonalRamp": [
+          "oklch(15% 0.2235 278.23)",
+          "oklch(26% 0.2235 278.23)",
+          "oklch(38% 0.2235 278.23)",
+          "oklch(49% 0.2235 278.23)",
+          "oklch(61% 0.2235 278.23)",
+          "oklch(72% 0.2235 278.23)",
+          "oklch(84% 0.2235 278.23)",
+          "oklch(95% 0.2235 278.23)"
+        ]
+      },
+      "dark-wall": {
+        "role": "neutral",
+        "displayName": "Dark Wall",
+        "canonical": "#131718",
+        "tonalRamp": [
+          "oklch(15% 0.0065 214.45)",
+          "oklch(26% 0.0065 214.45)",
+          "oklch(38% 0.0065 214.45)",
+          "oklch(49% 0.0065 214.45)",
+          "oklch(61% 0.0065 214.45)",
+          "oklch(72% 0.0065 214.45)",
+          "oklch(84% 0.0065 214.45)",
+          "oklch(95% 0.0065 214.45)"
+        ]
+      },
+      "dark-paper": {
+        "role": "neutral",
+        "displayName": "Dark Paper",
+        "canonical": "#0d0f10",
+        "tonalRamp": [
+          "oklch(15% 0.0039 229.07)",
+          "oklch(26% 0.0039 229.07)",
+          "oklch(38% 0.0039 229.07)",
+          "oklch(49% 0.0039 229.07)",
+          "oklch(61% 0.0039 229.07)",
+          "oklch(72% 0.0039 229.07)",
+          "oklch(84% 0.0039 229.07)",
+          "oklch(95% 0.0039 229.07)"
+        ]
+      },
+      "dark-ink": {
+        "role": "neutral",
+        "displayName": "Dark Ink",
+        "canonical": "#e9eeec",
+        "tonalRamp": [
+          "oklch(15% 0.0060 170.44)",
+          "oklch(26% 0.0060 170.44)",
+          "oklch(38% 0.0060 170.44)",
+          "oklch(49% 0.0060 170.44)",
+          "oklch(61% 0.0060 170.44)",
+          "oklch(72% 0.0060 170.44)",
+          "oklch(84% 0.0060 170.44)",
+          "oklch(95% 0.0060 170.44)"
+        ]
+      },
+      "dark-muted": {
+        "role": "neutral",
+        "displayName": "Dark Muted",
+        "canonical": "#a7b1ae",
+        "tonalRamp": [
+          "oklch(15% 0.0120 176.19)",
+          "oklch(26% 0.0120 176.19)",
+          "oklch(38% 0.0120 176.19)",
+          "oklch(49% 0.0120 176.19)",
+          "oklch(61% 0.0120 176.19)",
+          "oklch(72% 0.0120 176.19)",
+          "oklch(84% 0.0120 176.19)",
+          "oklch(95% 0.0120 176.19)"
+        ]
+      },
+      "dark-line": {
+        "role": "neutral",
+        "displayName": "Dark Line",
+        "canonical": "#2a3034",
+        "tonalRamp": [
+          "oklch(15% 0.0111 236.98)",
+          "oklch(26% 0.0111 236.98)",
+          "oklch(38% 0.0111 236.98)",
+          "oklch(49% 0.0111 236.98)",
+          "oklch(61% 0.0111 236.98)",
+          "oklch(72% 0.0111 236.98)",
+          "oklch(84% 0.0111 236.98)",
+          "oklch(95% 0.0111 236.98)"
+        ]
+      },
+      "dark-accent": {
+        "role": "primary",
+        "displayName": "Dark Accent",
+        "canonical": "#9ea4ff",
+        "tonalRamp": [
+          "oklch(15% 0.1305 279.87)",
+          "oklch(26% 0.1305 279.87)",
+          "oklch(38% 0.1305 279.87)",
+          "oklch(49% 0.1305 279.87)",
+          "oklch(61% 0.1305 279.87)",
+          "oklch(72% 0.1305 279.87)",
+          "oklch(84% 0.1305 279.87)",
+          "oklch(95% 0.1305 279.87)"
+        ]
+      },
+      "dark-accent-soft": {
+        "role": "primary",
+        "displayName": "Dark Accent Soft",
+        "canonical": "#202333",
+        "tonalRamp": [
+          "oklch(15% 0.0304 275.89)",
+          "oklch(26% 0.0304 275.89)",
+          "oklch(38% 0.0304 275.89)",
+          "oklch(49% 0.0304 275.89)",
+          "oklch(61% 0.0304 275.89)",
+          "oklch(72% 0.0304 275.89)",
+          "oklch(84% 0.0304 275.89)",
+          "oklch(95% 0.0304 275.89)"
+        ]
+      },
+      "dark-soft": {
+        "role": "neutral",
+        "displayName": "Dark Soft",
+        "canonical": "#1c2023",
+        "tonalRamp": [
+          "oklch(15% 0.0083 240.23)",
+          "oklch(26% 0.0083 240.23)",
+          "oklch(38% 0.0083 240.23)",
+          "oklch(49% 0.0083 240.23)",
+          "oklch(61% 0.0083 240.23)",
+          "oklch(72% 0.0083 240.23)",
+          "oklch(84% 0.0083 240.23)",
+          "oklch(95% 0.0083 240.23)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Memory display",
+        "purpose": "Hero introduction."
+      },
+      "body": {
+        "displayName": "Reading text",
+        "purpose": "Prompts, answers and explanations."
+      }
+    },
+    "shadows": [
+      {
+        "name": "action-hover",
+        "value": "0 4px 12px #26343824",
+        "purpose": "Action hover feedback."
+      },
+      {
+        "name": "setup-dropdown",
+        "value": "0 14px 32px #0d0f1024",
+        "purpose": "Floating setup disclosure."
+      }
+    ],
+    "motion": [
+      {
+        "name": "panel-in",
+        "value": ".2s cubic-bezier(.16,1,.3,1)",
+        "purpose": "Tab panel reveal; disabled by reduced-motion preference."
+      },
+      {
+        "name": "action-hover",
+        "value": "box-shadow .18s ease-out",
+        "purpose": "Action hover transition."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "evidence",
+        "value": "1100px"
+      },
+      {
+        "name": "hero",
+        "value": "900px"
+      },
+      {
+        "name": "mobile",
+        "value": "650px"
+      },
+      {
+        "name": "narrow",
+        "value": "374px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "description": "Primary action from the local Memory prototype.",
+      "html": "<button class=\"ds-primary\">Connect your agent</button>",
+      "css": ".ds-primary{font:650 14px Onest,sans-serif;background:var(--button,#4b53f0);color:var(--button-ink,#fff);padding:12px 20px;border:0;border-radius:999px;min-height:45px;cursor:pointer;transition:box-shadow .18s ease-out}.ds-primary:hover{box-shadow:0 4px 12px #26343824}.ds-primary:focus-visible{outline:3px solid var(--accent,#4b53f0);outline-offset:4px}",
+      "refersTo": "button-primary"
+    },
+    {
+      "name": "Secondary action",
+      "kind": "button",
+      "description": "Secondary action from the local Memory prototype.",
+      "html": "<a class=\"ds-secondary\" href=\"https://wirecat.dev/en/docs/installation\">Installation guide</a>",
+      "css": ".ds-secondary{display:inline-flex;font:650 14px Onest,sans-serif;background:var(--paper,#fff);color:var(--accent,#4b53f0);padding:12px 20px;border:1px solid var(--line,#ccd7cf);border-radius:999px;text-decoration:none;transition:box-shadow .18s ease-out}.ds-secondary:hover{box-shadow:0 4px 12px #26343824}.ds-secondary:focus-visible{outline:3px solid var(--accent,#4b53f0);outline-offset:4px}",
+      "refersTo": "button-secondary"
+    },
+    {
+      "name": "Task tab",
+      "kind": "chip",
+      "description": "Task tab from the local Memory prototype.",
+      "html": "<button class=\"ds-tab\" role=\"tab\" aria-selected=\"true\">Prepare for a call</button>",
+      "css": ".ds-tab{font:650 13px Onest,sans-serif;padding:10px 12px;min-height:37px;border:0;border-radius:7px;background:var(--accent-soft,#eeefff);color:var(--accent,#4b53f0);cursor:pointer}.ds-tab:hover{background:var(--soft,#e5ece7)}.ds-tab:focus-visible{outline:3px solid var(--accent,#4b53f0);outline-offset:4px}",
+      "refersTo": "task-tab-selected"
+    },
+    {
+      "name": "Prompt surface",
+      "kind": "card",
+      "description": "Prompt surface from the local Memory prototype.",
+      "html": "<div class=\"ds-prompt\">Find a decision from last week and show me the messages behind it.</div>",
+      "css": ".ds-prompt{font:15px/1.6 Onest,sans-serif;padding:15px 16px;border:1px solid var(--line,#ccd7cf);border-radius:8px;background:var(--soft,#e5ece7);color:var(--ink,#182822)}.ds-prompt:hover{border-color:var(--accent,#4b53f0)}.ds-prompt:focus-visible{outline:3px solid var(--accent,#4b53f0);outline-offset:4px}",
+      "refersTo": "prompt"
+    },
+    {
+      "name": "Source disclosure",
+      "kind": "custom",
+      "description": "Source disclosure from the local Memory prototype.",
+      "html": "<details class=\"ds-source\"><summary>Messages behind the result</summary><blockquote>Open the full walkthrough to inspect the source evidence.</blockquote></details>",
+      "css": ".ds-source{font:13px/1.65 Onest,sans-serif;border-top:1px solid var(--line,#ccd7cf);padding-top:11px;color:var(--ink,#182822)}.ds-source summary{cursor:pointer;font-weight:650}.ds-source summary:hover{color:var(--accent,#4b53f0)}.ds-source summary:focus-visible{outline:3px solid var(--accent,#4b53f0);outline-offset:4px}.ds-source blockquote{margin:10px 0 0;color:var(--muted,#4c5e55)}.ds-source:focus-visible{outline:3px solid var(--accent,#4b53f0);outline-offset:4px}"
+    },
+    {
+      "name": "Page navigation",
+      "kind": "nav",
+      "description": "Page navigation from the local Memory prototype.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Site navigation\"><a href=\"https://wirecat.dev/en/docs/tg\">Telegram</a><a href=\"https://wirecat.dev/en/docs/max\">MAX</a><a href=\"https://wirecat.dev/en/about\">About</a></nav>",
+      "css": ".ds-nav{display:flex;gap:21px;font:13px Onest,sans-serif;color:var(--ink,#182822)}.ds-nav a{text-decoration:none;color:inherit}.ds-nav a:hover{text-decoration:underline}.ds-nav a:focus-visible{outline:3px solid var(--accent,#4b53f0);outline-offset:4px}.ds-nav:focus-visible{outline:3px solid var(--accent,#4b53f0);outline-offset:4px}"
+    },
+    {
+      "name": "Timing assumption",
+      "kind": "input",
+      "description": "Timing assumption from the local Memory prototype.",
+      "html": "<label class=\"ds-field\">Read a message manually, seconds <input class=\"ds-input\" type=\"number\" min=\"0\" step=\".5\" value=\"4\"></label>",
+      "css": ".ds-field{display:flex;gap:12px;align-items:center;font:12px Onest,sans-serif;color:var(--ink,#182822)}.ds-input{width:65px;padding:5px;background:var(--paper,#fff);border:1px solid var(--line,#ccd7cf);border-radius:4px;font:12px Onest,sans-serif;color:var(--ink,#182822)}.ds-input:hover{border-color:var(--accent,#4b53f0)}.ds-input:focus-visible{outline:3px solid var(--accent,#4b53f0);outline-offset:4px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Memory",
+    "overview": "Memory is a local comparison system built around readable conversation evidence: a compact statement beside a worked result, with the messages behind it available on demand. Paper surfaces, restrained strokes and rounded controls keep the demonstrations legible against the faint illustrated wall.\n\nThis file describes only the finished prototypes in this directory. The owner selected the Memory headline and layout; the four comparison variants and light palettes are still alternatives, not a selected production identity. Production, earlier prototypes and the repository design system remain outside this record.",
+    "keyCharacteristics": [
+      "Evidence beside the result, with full transcripts one page away.",
+      "Onest reading text and Unbounded display headings.",
+      "Four light palettes; one unchanged production dark palette.",
+      "Pill actions, stroked paper panels and restrained disclosure controls."
+    ],
+    "rules": [
+      {
+        "name": "The Common Dark Rule",
+        "body": "Changing the light palette never changes the dark palette. Primary actions keep the production button color; links use the separate dark accent.",
+        "section": "colors"
+      },
+      {
+        "name": "The Readable Evidence Rule",
+        "body": "Display typography introduces the task; prompts, answers, sources and tool calls use reading or code typography.",
+        "section": "typography"
+      },
+      {
+        "name": "The Disclosure Depth Rule",
+        "body": "Ordinary content stays flat. The setup dropdown alone uses a floating shadow and an open stacking level above adjacent setup controls.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep results and their source disclosures visually connected.",
+      "Do use the same production dark roles in every comparison variant.",
+      "Do retain keyboard tabs, visible focus and Escape focus return in setup dropdowns.",
+      "Do preserve the production footer\u2019s content and layout through its existing rendering transformations."
+    ],
+    "donts": [
+      "Don\u2019t promote an unselected comparison palette or benefit grouping into production identity.",
+      "Don\u2019t make header links or Connect controls scroll to homepage sections.",
+      "Don\u2019t apply the inherited circular step badge to full transcript wrappers.",
+      "Don\u2019t invent message evidence, tool syntax or performance claims."
+    ]
+  }
+}

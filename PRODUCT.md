@@ -19,9 +19,10 @@ agents that read the docs as Markdown.
 ## Product Purpose
 
 WireCat's mission is to help people and AI agents work with conversations, remember agreements
-and turn messages into useful actions. Telegram and MAX are the tools available today; other
-messengers, email and knowledge-base integrations such as Obsidian and Notion are planned (owner,
-2026-10-04). About describes an open-source project building and connecting tools for knowledge
+and turn messages into useful actions. WireCat supplies the Telegram and MAX tools available today.
+The user's existing agent can also use the separate Himalaya email tool and read or update Markdown
+notes in Obsidian or another editor; these workflows are publicly usable today. Other messengers
+and Notion integrations remain planned. About describes an open-source project building and connecting tools for knowledge
 and conversations; personal project enquiries go to the configured maintainer Telegram.
 
 
@@ -57,7 +58,7 @@ sets limits (allowed chats, sends per hour, read-only profiles) — a fact, stat
   live watch of new messages; CLI and MCP share profile permissions; most writes are allowed by default, while deletion asks for confirmation. Read-only permissions and confirmation forms can restrict access.
 - Safety by design: nothing is sent, marked read or deleted unless the command asked for it.
 - Site languages: English, Russian, Spanish. Tool guides are localized from reviewed releases; the generated Telegram Bot API method appendix retains its English descriptions with an explicit locale-specific notice.
-- Hero headline (implemented): "Never search a chat again. Just ask."
+- Hero headline (implemented): "Memory for your messages. Context for your agent." The selected editorial landing is released in English, Russian and Spanish, with reviewed localized copy. Its open Personal/Bots/Admin capability lists, paper outcomes band, complete conversations, trust strip and editable estimate retain the owner-selected composition.
 
 ## Brand Commitments
 

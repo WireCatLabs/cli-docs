@@ -4,14 +4,60 @@ title: "Copia local: contenido, actualización y exportación"
 
 Lo que `max` lee permanece en tu ordenador para consultar sin red, buscar y exportar. Esta página explica qué guarda, cómo mantenerlo actualizado y cómo descargar y exportar el historial.
 
+## Comprueba y completa un chat
+
+Comprueba qué se ha guardado antes de descargar más. Limita la descarga al chat y periodo que necesitas.
+
+**Tu petición:**
+
+> Comprueba el historial guardado de Книжный клуб. Descarga los últimos 30 días de ese chat y dime si quedan lagunas.
+
+**Consultar el historial guardado:**
+
+```sh
+max store status "Книжный клуб" --json
+```
+
+**Descargar el periodo elegido:**
+
+```sh
+max store fetch "Книжный клуб" --since-time 30d --json
+```
+
+**Comprobar de nuevo:**
+
+```sh
+max store status "Книжный клуб" --json
+```
+
+**Ejemplo de respuesta del agente:**
+
+> | Comprobación | Antes | Después |
+> | --- | --- | --- |
+> | Mensajes guardados | 30 | 300 |
+> | Historial solicitado de 30 días | Lagunas | Guardado sin lagunas |
+>
+> Este resultado cubre el periodo elegido, no todo el pasado del chat.
+
+Si la descarga se detiene por un límite o una espera del servidor, repítela para continuar y comprueba la cobertura. Que el comando termine no demuestra por sí solo que el historial esté completo. Los recuentos son ficticios.
+
 ## Qué se guarda
 
 Los datos consultados se guardan localmente para poder responder sin conexión:
 
 ```sh
 max chats list --offline      # только из локальной копии, никуда не подключаться
+```
+
+```sh
 max messages send 0 "текст" --offline   # отказ: из копии отправить нельзя
+```
+
+```sh
 max store clear --left        # посмотреть, сколько данных покинутых чатов можно удалить
+```
+
+```sh
 max store clear --left --allow-dangerous  # удалить их из общей копии
 ```
 
@@ -31,8 +77,17 @@ La caché antigua del perfil ya no se abre ni se migra al almacén compartido. S
 
 ```sh
 max store fetch Друзья --since-time 2026-01-01
+```
+
+```sh
 max store fetch Друзья --last 500
+```
+
+```sh
 max store fetch Друзья --background      # в фоне; `max store jobs show <id>` следит за ним
+```
+
+```sh
 max store fetch --all                    # все чаты, самые активные первыми: последние 90 дней
 ```
 
@@ -57,6 +112,9 @@ Exporta la copia en JSONL, con los objetos de `messages list --jsonl`, o Markdow
 
 ```sh
 max store export Друзья --format markdown --output друзья.md
+```
+
+```sh
 max store export 111 --format jsonl --since-time 2026-09-01 > чат.jsonl
 ```
 
@@ -68,7 +126,13 @@ La exportación **no se conecta a nada**; solo incluye datos leídos o descargad
 
 ```sh
 max store export Друзья Работа --to ~/max-архив
+```
+
+```sh
 max store export --kind group --to ~/max-группы
+```
+
+```sh
 max store export --all --to ~/max-всё
 ```
 
@@ -89,7 +153,7 @@ max store export --all --to ~/max-всё
 
 ## Buscar
 
-`max messages search` encuentra mensajes guardados por palabras, remitente, chat, fecha, archivos, enlaces y tus etiquetas. La búsqueda de palabras en un chat concreto también consulta al servidor de MAX de forma predeterminada; sin chat o con `--backend archive`, solo lee el archivo. `--sync-first` descarga primero mensajes nuevos de MAX dentro de unos límites sin marcarlos como leídos. Consulta [búsqueda de mensajes](./search.md) para ver la guía, las búsquedas guardadas y los recuentos. Un resultado vacío no demuestra que el mensaje no exista: comprueba `coverage.next` y descarga el historial que falte antes de volver a buscar.
+`max search messages` encuentra mensajes guardados por palabras, remitente, chat, fecha, archivos, enlaces y tus etiquetas. La búsqueda de palabras en un chat concreto también consulta al servidor de MAX de forma predeterminada; sin chat o con `--backend archive`, solo lee el archivo. `--sync-first` descarga primero mensajes nuevos de MAX dentro de unos límites sin marcarlos como leídos. Consulta [búsqueda de mensajes](./search.md) para ver la guía, las búsquedas guardadas y los recuentos. Un resultado vacío no demuestra que el mensaje no exista: comprueba `coverage.next` y descarga el historial que falte antes de volver a buscar.
 
 ## Conversaciones dentro de un grupo
 
@@ -137,6 +201,6 @@ max watch --events --jsonl  # ещё правки, удаления, реакц�
 
 ## Mantenimiento del archivo
 
-`max store migrate` completa índices y `max store reindex` los reconstruye. `store info` y `store check` muestran su estado. La búsqueda estricta reconoce formas; `exact:` y `--exact` eligen formas exactas. `config set searchStemmers.cyrillic` admite `russian` o `none`; `config set searchStemmers.latin` admite `english`, `spanish`, ambos separados por coma (por defecto `english,spanish`) o `none`. Tras un ajuste propio ejecuta `store reindex`. Si una actualización cambia el valor predeterminado, las raíces se reconstruyen automáticamente; hasta completarlas la búsqueda usa formas exactas y lo indica. `max serve` completa en segundo plano y `store migrate` inmediatamente. Es compartido: `--defaults`, `--personal` y `--bot` no se aplican; `MAX_PROFILE_LOCK` impide cambiarlo.
+`max store migrate` completa los índices; `max store reindex` los reconstruye. `store info` y `store check` muestran si los índices de palabras y raíces están listos. La búsqueda estricta usa raíces para encontrar formas de palabras; `exact:` y `--exact` eligen formas exactas. `config set searchStemmers.cyrillic` acepta `russian` o `none`; `config set searchStemmers.latin` admite `english`, `spanish` o ambos separados por una coma (por defecto `english,spanish`); `none` desactiva las raíces para ese alfabeto. Tras elegir tu ajuste, ejecuta `store reindex`. Si una actualización cambia el valor predeterminado, las búsquedas usan formas exactas hasta que las raíces estén listas y lo indican; `max serve` las construye en segundo plano, o `store migrate` inmediatamente. Este ajuste se comparte entre todos los perfiles y ambos mensajeros, por lo que no se aplican `--defaults`, `--personal` ni `--bot`, y no se puede cambiar bajo `MAX_PROFILE_LOCK`.
 
 `max store repair --dry-run --json` muestra las reparaciones de estructura y revierte los cambios; `store repair` las aplica sin borrar datos. Una tabla incompatible se conserva como copia; la respuesta enumera las filas y columnas que no pudieron trasladarse. Conserva la copia hasta comprobar el resultado. `store repair` indica los nombres de las copias (`copies` en `--json`); `store copies delete <точное имя>` borra solo la indicada. Detén los procesos que usen el archivo antes de reparar su estructura.
