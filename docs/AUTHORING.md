@@ -259,3 +259,17 @@ scope of released/planned changes. No unnecessary tutorial steps on those page t
 People use the tg/max CLI tools, not a WireCat executable. Name the relevant command-line tool
 in task instructions. WireCat may identify the documentation site or project; preserve actual
 URLs, service filenames and source references rather than mechanically rewriting identifiers.
+
+
+## Review reader progress before publishing
+
+Before approving a guide, record the answers to these questions in its maintainer review:
+
+- Who opens it, for which task, and what can they do after reading?
+- Does the opening state that situation and outcome in plain language?
+- Is the first useful request or action reachable before optional command and configuration detail?
+- Can the reader recognize success and incomplete results, then choose a next step?
+- Does the guide keep release evidence in maintainer records and preserve the same reader path in every language?
+
+Technical checks validate builds, links, examples and presentation. Passing them does not approve
+the prose; review the opening, first action and result in each language before merging.

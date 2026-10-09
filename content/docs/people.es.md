@@ -68,6 +68,8 @@ max contacts check 20000002
 Lee los motivos y los datos que faltan junto con la puntuación. Una señal es una pista, no una
 prueba de fraude. Telegram también puede consultar listas públicas de spam, enviándoles el ID de la persona. Usa `--no-registries` para omitir esas consultas.
 
+<a id="link-your-accounts" />
+
 ## La misma persona en los dos mensajeros
 
 Si sabes que dos cuentas pertenecen a la misma persona, puedes guardar el vínculo localmente:
@@ -78,6 +80,23 @@ tg contacts link @example_user max:"Example User"
 
 Las identidades vinculadas pueden aportar contexto a `contacts context`. Un nombre igual no basta.
 Vincula solo cuentas identificadas; `contacts unlink` elimina esa asociación local.
+
+### Vincula una dirección de correo
+
+[Importa el correo](./email.mdx) primero y vincula una dirección conocida al contacto almacenado:
+
+```sh
+tg contacts link @example_user email:rin@example.test
+```
+
+Sustituye el usuario y la dirección por las identidades reales de la persona. Comprueba las
+identidades devueltas: coincidir en el nombre no basta. Vincular cambia el registro local de la
+persona, no los inicios de sesión ni los buzones. `contacts unlink` separa la identidad indicada si el enlace es incorrecto.
+
+Para guardar contexto propio sobre la persona, consulta [crear notas](./memo.mdx#create-your-own-notes).
+La [guía de notas y etiquetas](./memo.mdx#tag-your-sources) explica etiquetas sobre contactos,
+personas vinculadas y mensajes. Las órdenes de notas del mensajero se describen en
+[Telegram](./tg/commands.md#tg-contacts-notes) y [MAX](./max/commands.md#max-contacts-notes).
 
 ## Qué cambia en MAX
 

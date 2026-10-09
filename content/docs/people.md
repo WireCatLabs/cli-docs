@@ -61,6 +61,8 @@ max contacts check 20000002
 Read the reasons and missing evidence alongside the score. A signal is a clue, not proof
 that a person is fraudulent. Telegram can also consult public spam registries; the person's ID is sent to them. Use `--no-registries` to skip those lookups.
 
+<a id="link-your-accounts" />
+
 ## The same person in both messengers
 
 If you know two accounts belong to the same person, you can record that link locally:
@@ -71,6 +73,23 @@ tg contacts link @example_user max:"Example User"
 
 Linked identities can then contribute to `contacts context`. A shared name alone is not a match.
 Only link accounts you have identified; `contacts unlink` removes that local association.
+
+### Link an email identity
+
+[Import your email](./email.mdx) first, then link a known address to the stored messenger contact:
+
+```sh
+tg contacts link @example_user email:rin@example.test
+```
+
+Replace the username and address with the person's actual identities. Check the returned identities;
+a matching name is not enough. Linking changes the local person record, not your logins or mailboxes.
+`contacts unlink` separates the identity you name if a link is wrong.
+
+To keep private context about a person, see [create notes](./memo.mdx#create-your-own-notes).
+The [notes and source tags guide](./memo.mdx#tag-your-sources) explains labels on a contact identity,
+a linked person or a specific message. Messenger contact-note commands are documented in
+[Telegram commands](./tg/commands.md#tg-contacts-notes) and [MAX commands](./max/commands.md#max-contacts-notes).
 
 ## What differs in MAX
 

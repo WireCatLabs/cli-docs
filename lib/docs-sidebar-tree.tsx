@@ -27,6 +27,7 @@ import {
   MessageSquare,
   Mic,
   Network,
+  NotebookPen,
   Paperclip,
   Reply,
   Route,
@@ -46,7 +47,8 @@ import { readerGuide } from "./reader-guides"
 
 export const sidebarIcons = {
   features: LayoutGrid,
-  memo: Mail,
+  memo: NotebookPen,
+  email: Mail,
   attachments: Paperclip,
   "audio-recognition": Mic,
   "external-models": BrainCircuit,

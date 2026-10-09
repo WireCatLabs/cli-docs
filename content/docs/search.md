@@ -40,6 +40,18 @@ If the limit is reached, that month's history may still be incomplete. Instructi
 resuming and checking history: [Telegram](./tg/archive.md#fetch-a-chats-history) and
 [MAX](./max/archive.md#downloading-history).
 
+## Search everything at once
+
+When you do not know where something was written — a chat, an email or your own notes — search
+all of them together:
+
+```sh
+tg search all invoice
+max search all invoice
+```
+
+Each result says whether it is a message, an email or a note. The sections below search one kind.
+
 ## Find a word or phrase
 
 Start by asking your agent:
@@ -54,8 +66,8 @@ You should get the agreed date and the messages behind it. If the date was only 
 <summary>Optional: commands for the terminal</summary>
 
 ```sh
-tg messages search invoice
-max messages search invoice
+tg search messages invoice
+max search messages invoice
 ```
 
 </details>
@@ -66,8 +78,8 @@ For an exact phrase, keep the quotes inside the query:
 <summary>Optional: commands for the terminal</summary>
 
 ```sh
-tg messages search 'exact:"final invoice"'
-max messages search 'exact:"final invoice"'
+tg search messages 'exact:"final invoice"'
+max search messages 'exact:"final invoice"'
 ```
 
 </details>
@@ -96,8 +108,8 @@ chat-title and person-name lookup can behave differently.
 <summary>Optional: commands for the terminal</summary>
 
 ```sh
-tg messages search invoice --chat "Project"
-max messages search invoice --chat "Project"
+tg search messages invoice --chat "Project"
+max search messages invoice --chat "Project"
 ```
 
 </details>

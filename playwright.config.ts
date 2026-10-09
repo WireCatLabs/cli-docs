@@ -1,11 +1,16 @@
 import { defineConfig } from "@playwright/test"
+
+const port = Number(process.env.PLAYWRIGHT_PORT ?? "4319")
+const baseURL = `http://localhost:${port}`
+
 export default defineConfig({
   testDir: "./tests",
-  use: { baseURL: "http://localhost:4319", trace: "retain-on-failure" },
+  use: { baseURL, trace: "retain-on-failure" },
   webServer: {
-    command: process.env.PLAYWRIGHT_EXPORT === "1" ? "node scripts/serve-export.mjs out 4319" : "pnpm dev --port 4319",
+    command:
+      process.env.PLAYWRIGHT_EXPORT === "1" ? `node scripts/serve-export.mjs out ${port}` : `pnpm dev --port ${port}`,
     // The first docs request compiles the docs route on the dev server; waiting here keeps that out of test timeouts.
-    url: "http://localhost:4319/en/docs/installation",
+    url: `${baseURL}/en/docs/installation`,
     reuseExistingServer: false,
     timeout: 60000,
   },

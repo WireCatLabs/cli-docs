@@ -40,6 +40,18 @@ max store fetch "Project" --since-time 30d --limit 1000
 продолжению и проверке истории: [Telegram](./tg/archive.md#fetch-a-chats-history) и
 [MAX](./max/archive.md#скачать-историю).
 
+## Искать сразу везде
+
+Если неизвестно, где это было написано — в чате, в письме или в ваших заметках, — ищите во всём
+сразу:
+
+```sh
+tg search all invoice
+max search all invoice
+```
+
+У каждого результата указано, что это: сообщение, письмо или заметка. Разделы ниже ищут в одном виде.
+
 ## Найти слово или фразу
 
 Начните с запроса агенту:
@@ -54,8 +66,8 @@ max store fetch "Project" --since-time 30d --limit 1000
 <summary>Дополнительно: команды для терминала</summary>
 
 ```sh
-tg messages search счёт
-max messages search счёт
+tg search messages счёт
+max search messages счёт
 ```
 
 </details>
@@ -66,8 +78,8 @@ max messages search счёт
 <summary>Дополнительно: команды для терминала</summary>
 
 ```sh
-tg messages search 'exact:"счёт оплачен"'
-max messages search 'exact:"счёт оплачен"'
+tg search messages 'exact:"счёт оплачен"'
+max search messages 'exact:"счёт оплачен"'
 ```
 
 </details>
@@ -96,8 +108,8 @@ max messages search 'exact:"счёт оплачен"'
 <summary>Дополнительно: команды для терминала</summary>
 
 ```sh
-tg messages search счёт --chat "Проект"
-max messages search счёт --chat "Проект"
+tg search messages счёт --chat "Проект"
+max search messages счёт --chat "Проект"
 ```
 
 </details>

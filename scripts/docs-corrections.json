@@ -1035,56 +1035,6 @@
   },
   {
     "tool": "tg",
-    "slug": "rankings",
-    "reason": "Current user guides omit package release numbers; release history stays in changelog.",
-    "replacements": {
-      "en": [
-        {
-          "before": "These reports are available in tg 0.36.0.",
-          "after": ""
-        }
-      ],
-      "ru": [
-        {
-          "before": "Эти отчёты доступны в tg 0.36.0. Обновите установленный CLI, если команды ещё нет.",
-          "after": ""
-        }
-      ],
-      "es": [
-        {
-          "before": "Estos informes están disponibles en tg 0.36.0. Actualiza la CLI instalada si falta el comando.",
-          "after": ""
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "rankings",
-    "reason": "Current user guides omit package release numbers; release history stays in changelog.",
-    "replacements": {
-      "en": [
-        {
-          "before": "These reports are available in MAX 0.35.0. Update the installed CLI if the command is missing.",
-          "after": ""
-        }
-      ],
-      "ru": [
-        {
-          "before": "Эти отчёты доступны с версии 0.35. Обновите установленный CLI, если команды ещё нет.",
-          "after": ""
-        }
-      ],
-      "es": [
-        {
-          "before": "Estos informes están disponibles en MAX 0.35.0. Actualiza la CLI instalada si falta el comando.",
-          "after": ""
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
     "slug": "remote",
     "reason": "Public instructions describe current behavior; test history belongs in internal review reports.",
     "replacements": {

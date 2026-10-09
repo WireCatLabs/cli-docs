@@ -10,64 +10,115 @@ Las órdenes que modifican grupos devuelven `operationId` en JSON; después de c
 
 ## Trabajar con un agente
 
-Un agente con acceso al terminal, como Claude Code o Codex, puede usar la [habilidad](https://github.com/leemour/max-cli/blob/v0.38.1/README.md#навык-для-агентов-с-терминалом). Sin acceso al terminal, usa el [servidor MCP](./mcp.md), por ejemplo en Claude Desktop. Cursor admite ambas opciones. A continuación: tu petición, el comando del agente y el resultado.
+Un agente con acceso al terminal, como Claude Code o Codex, puede usar la [habilidad](https://github.com/leemour/max-cli/blob/f7acc0c66d2389c94e9e46af24c469298b2b3ee6/README.md#навык-для-агентов-с-терминалом). Sin acceso al terminal, usa el [servidor MCP](./mcp.md), por ejemplo en Claude Desktop. Cursor admite ambas opciones. A continuación: tu petición, el comando del agente y el resultado.
 
-### La mañana del administrador: quién espera respuesta
+<a id="la-mañana-del-administrador-quién-espera-respuesta" />
 
-```text
-Вы:     Что в «Поход» осталось без ответа?
-Агент:  (max review --chat "Поход" --unanswered 4h --json)
-        Без ответа больше 4 часов — 3 вопроса:
-        · Лена, 08:12 — «Во сколько выезд в субботу?»
-        · Артём, вчера 22:40 — ответ на ваш пост про маршрут: «А палатки общие?»
-        · Ира, вчера 19:05 — «Кто везёт котелок?»
-        На остальные ответили вы или админы.
+### Revisión de la mañana: quién espera una respuesta
+
+Empieza por las preguntas que esperan una respuesta tuya o de los administradores.
+
+**Tu petición:**
+
+> ¿Qué preguntas de Поход llevan más de cuatro horas esperando respuesta?
+
+**Comando:**
+
+```sh
+max review --chat "Поход" --unanswered 4h --json
 ```
 
-Una pregunta contiene «?» o responde a un mensaje tuyo o de un administrador. Se considera contestada si tú o un administrador respondéis, o sois los primeros en hablar después de quien preguntó. Un «?» dentro de un enlace no cuenta.
+**Ejemplo de respuesta del agente:**
+
+> **3 preguntas esperan una respuesta.**
+>
+> | Persona | Pregunta | Espera |
+> | --- | --- | --- |
+> | Lena | ¿A qué hora salimos el sábado? | 6 horas |
+> | Sam | ¿Compartimos las tiendas? | 12 horas |
+> | Ira | ¿Quién llevará la olla? | 15 horas |
+>
+> Abre una pregunta para revisar el contexto de la conversación.
+
+Estas son las reglas de `review`: un signo de interrogación fuera de un enlace, o una respuesta a ti o a un administrador, puede abrir una pregunta. Tu respuesta o la de un administrador, incluso el siguiente mensaje, puede cerrarla. El [informe estadístico](./rankings.md) cuenta respuestas directas vinculadas y puede dar otro resultado.
 
 ### Nuevos miembros de la semana
 
-```text
-Вы:     Кто вступил в «Поход» за неделю? Есть подозрительные?
-Агент:  (max chats events "Поход" --type add --json)
-        (max chats members list "Поход" --all --json)
-        За неделю добавили 4 человек:
-        · Катя Смирнова — добавила Лена, аккаунту 3 года
-        · Олег — вступил сам, аккаунту 2 дня
-        · …
-        Стоит посмотреть: Олег — аккаунт совсем новый.
+Revisa los eventos de entrada. Una cuenta nueva merece revisión; su edad no demuestra que sea spam.
+
+**Tu petición:**
+
+> ¿Quién se unió a Поход esta semana? Muéstrame a quién conviene revisar.
+
+**Comando:**
+
+```sh
+max chats events "Поход" --type add --since-time 7d --json
 ```
+
+**Ejemplo de respuesta del agente:**
+
+> | Nuevo miembro | Cómo entró |
+> | --- | --- |
+> | Kate | Añadido por Lena |
+> | Oleg | Entró por su cuenta |
+>
+> Revisa la información disponible del perfil de Oleg antes de sacar conclusiones. La edad de la cuenta no basta para expulsarlo.
+
+Los eventos solo cubren el historial disponible. Puedes consultar la lista actual de miembros por separado.
 
 ### Limpiar spam con tu confirmación
 
-Configura las reglas una vez:
+Consulta las propuestas de las reglas antes de aplicar acciones.
+
+**Tu petición:**
+
+> Revisa el spam en Поход. Primero muéstrame las acciones propuestas.
+
+**Comando:**
 
 ```sh
-max chats rules set "Поход" invites delete            # приглашения в чужие чаты — удалять
-max chats rules set "Поход" newAccount.days 3         # аккаунт моложе трёх дней — отмечать
-max chats rules set "Поход" consent.delete ask        # но перед удалением — спросить меня
+max chats moderate "Поход" --dry-run --json
 ```
 
-```text
-Вы:     Проверь «Поход».
-Агент:  (max_write, command: "chats check")
-        Найдено приглашение. Правила требуют отдельного согласия: действие оставлено планом.
-        Для выполнения в терминале: max chats moderate "Поход" --allow-dangerous --json
-Вы:     Выполняю эту команду.
+**Ejemplo de respuesta del agente:**
+
+> | Hallazgo | Acción propuesta | Estado |
+> | --- | --- | --- |
+> | Enlace de invitación | Eliminar el mensaje | Solo vista previa |
+>
+> No se ha eliminado nada. Confirma el mensaje concreto si quieres aplicar la acción.
+
+Aplicar una acción requiere tu petición y los permisos del perfil. La vista previa no autoriza la eliminación.
+
+<a id="informe-semanal-del-grupo" />
+
+### Resumen semanal
+
+Pide un resumen de decisiones, compromisos y preguntas pendientes.
+
+**Tu petición:**
+
+> Resume la semana en Поход.
+
+**Comando:**
+
+```sh
+max review --chat "Поход" --since-time 7d --json
 ```
 
-En el terminal, `max chats moderate "Поход"` hace la misma pregunta: `[y/N]`.
+**Ejemplo de respuesta del agente:**
 
-### Informe semanal del grupo
-
-```text
-Вы:     Сделай итог недели по «Поход».
-Агент:  (max review --chat "Поход" --since-time 2026-09-20T00:00 --json)
-        Решили: выезд 4 октября, в 7:00 от метро.
-        Взяли на себя: Лена — продукты, Артём — палатки.
-        Висит: кто везёт котелок — спросили трижды, ответа нет.
-```
+> **Decidido:** salir a las 7:00 desde la estación.
+>
+> **Compromisos:**
+>
+> - Lena — comida.
+> - Sam — tiendas.
+>
+> **Pendiente:** quién llevará la olla.
+>
+> Puedo mostrar los mensajes originales para comprobar el resumen.
 
 ### Comprobaciones programadas
 
@@ -92,6 +143,8 @@ Sin `--allow-dangerous`, las acciones de cron con nivel `ask` solo se planifican
 | `max chats link show\|reset <чат>` | Enlace de invitación; `reset` crea uno e invalida el anterior |
 | `max chats update` | Ajustes, título, descripción y foto; consulta los ajustes con `max chats show` |
 | `max messages delete --for-everyone`, `pin`, `unpin` | Borrar para todos, fijar o desfijar |
+| `max chats requests list <чат>` | Solicitudes para un canal con aprobación; las ven los administradores, se desconoce la fecha |
+| `max chats requests accept\|decline <чат> <человек>` | Aceptar o rechazar una solicitud; no admite aceptación masiva ni filtros `--link` |
 
 Un agente sin terminal puede usar las herramientas MCP equivalentes: `max_read` (`command: "review"`) con `unanswered_after_hours`, `max_read` (`command: "chats events"`), `max_read` (`command: "chats members"`), `max_read` (`command: "chats rules"`) y `max_write` (`command: "chats check"`) ([mcp.md](./mcp.md)).
 
@@ -100,11 +153,23 @@ Un agente sin terminal puede usar las herramientas MCP equivalentes: `max_read` 
 `max review` mantiene una lista de tareas en la copia local; `max serve` todavía no abre tareas en MAX. Una pregunta sin respuesta o un mensaje que te menciona por tu nombre abre una tarea; tu respuesta la cierra. La tarea enlaza al mensaje sin copiar su texto.
 
 ```sh
-max tasks list --state open                               # что ждёт ответа, старые сверху
+max tasks list --state open
+```
+
+```sh
 max tasks list --chat "Поход" --type question,mention
-max tasks add msg:max/<вы>/<чат>/<сообщение> --type promise   # то, чего правила не видят
+```
+
+```sh
+max tasks add msg:max/<вы>/<чат>/<сообщение> --type promise
+```
+
+```sh
 max tasks close <задача> --as dismissed --reason no-reply-needed
-max stats tasks show                                           # открытые по чатам, самая старая, медиана до закрытия
+```
+
+```sh
+max stats tasks show
 ```
 
 Las tareas cerradas siguen cerradas y las descartadas no vuelven a aparecer. Solo tu respuesta cierra una tarea; la de un administrador todavía no lo hace y las menciones mediante `@ник` no se detectan. Las herramientas MCP equivalentes son `max_read` (`command: "tasks list"`), `max_write` (`command: "tasks add"`), `max_write` (`command: "tasks close"`) y `max_read` (`command: "stats tasks show"`) ([mcp.md](./mcp.md)).
@@ -146,8 +211,9 @@ moderate`. Puede impedir el regreso por invitación a las personas expulsadas, a
 
 ## Límites
 
+- **Los grupos no tienen cola de aprobación.** Son públicos o accesibles por invitación. Los comandos anteriores gestionan solicitudes para canales.
+
 - **La cuenta personal no puede vetar el regreso.** Una persona expulsada puede volver por invitación. Renueva el enlace (`max chats link reset`) o utiliza un bot.
-- **No hay solicitudes de incorporación.** Los grupos son públicos o accesibles por invitación, sin aprobación previa.
 - **Máximo 10 acciones por comprobación** (`--max-actions`). Los borrados cuentan en el límite horario; el resto espera.
 - **Hasta 1000 mensajes por comprobación en CLI.** La siguiente continúa desde el punto anterior.
 - **Una incorporación requiere toda la lista de miembros** para conocer la antigüedad de la cuenta; en grupos grandes puede necesitar decenas de solicitudes.
@@ -155,11 +221,29 @@ moderate`. Puede impedir el regreso por invitación a las personas expulsadas, a
 
 ## Estadísticas para administradores de grupos
 
-`max stats chats show` cuenta mensajes, remitentes activos, respuestas, hilos, reacciones y preguntas respondidas del periodo elegido a partir del almacenamiento local. `--by day` o `--by week` añade un desglose por días o semanas naturales; la semana empieza el lunes y `--timezone` establece la zona horaria. Las vistas de publicaciones de canales solo aparecen si MAX las proporcionó y se guardaron con los mensajes. Un recuento ausente no significa cero. Las reacciones se cuentan con los datos guardados, sin volver a consultarlas para cada publicación. Las preguntas se identifican como en `review --unanswered`.
+Consulta los mensajes, las personas que escribieron y las respuestas de la semana. Para saber quién responde, quién necesita ayuda y si los nuevos miembros se quedan, abre [Estadísticas](./rankings.md).
 
-Una ejecución normal también consulta a MAX los eventos de entrada y salida. Con `--offline`, esos eventos no se solicitan, por lo que no aparece `members`. Es distinto de `memberCounts`: las instantáneas diarias guardadas del número de miembros siguen disponibles sin conexión.
+**Tu petición:**
 
-Si `complete` es `false`, los datos están incompletos: los totales reflejan solo el historial disponible y las medianas y proporciones pueden diferir de los resultados de todo el grupo. `fetch` sugiere un comando para descargar los mensajes que faltan. Un historial de eventos incompleto también limita los recuentos de entradas y salidas. Ni siquiera un historial de mensajes completo permite reconstruir perfiles anteriores o listas de miembros de días anteriores al inicio de la recopilación.
+> Muéstrame la actividad de Поход esta semana y las lagunas del historial.
+
+**Comando:**
+
+```sh
+max stats chats show "Поход" --since-time 7d --offline --json
+```
+
+**Ejemplo de respuesta del agente:**
+
+> | Métrica | En el historial disponible |
+> | --- | ---: |
+> | Mensajes | 120 |
+> | Personas que escribieron | 18 |
+> | Respuestas | 30 |
+>
+> El historial está incompleto: estos son recuentos observados. Esta consulta local no descargó eventos de entrada o salida.
+
+Sin `--offline`, el CLI también descarga eventos de entrada y salida. Las observaciones diarias de miembros guardadas siguen disponibles localmente. El primer informe no puede reconstruir listas de miembros anteriores.
 
 ### Instantáneas de miembros
 
@@ -179,10 +263,25 @@ Si `complete` es `false`, los datos están incompletos: los totales reflejan sol
 
 ```sh
 max chats tracking add "Поход" --json
+```
+
+```sh
 max chats members fetch "Поход" --json
+```
+
+```sh
 max stats chats show "Поход" --since-time 7d --by day --timezone Europe/Madrid --json
+```
+
+```sh
 max chats members history "Поход" --since-time 7d --offline --json
+```
+
+```sh
 max chats tracking show "Поход" --offline --json
+```
+
+```sh
 max chats members audit "Поход" --json
 ```
 

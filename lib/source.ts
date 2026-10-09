@@ -62,7 +62,7 @@ export const docsLlms = llms(source, {
     const text =
       /^```mermaid\b/m.test(raw) ||
       /<MeetingGuide\b/.test(raw) ||
-      (page.slugs.length === 1 && page.slugs[0] === "installation")
+      (page.slugs.length === 1 && ["installation", "memo", "email"].includes(page.slugs[0]))
         ? raw
         : await page.data.getText("processed")
     const body =

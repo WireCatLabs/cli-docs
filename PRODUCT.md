@@ -44,7 +44,7 @@ sets limits (allowed chats, sends per hour, read-only profiles) — a fact, stat
 - Install: `npm install -g @leemour/tg-cli` / `@leemour/max-cli`. Node 22.16+ (22.x) or 24+ with npm; Bun is also supported. Windows, macOS, Linux.
 - Connect an agent: `tg skill install` (Claude Code, Codex, Gemini CLI), `tg mcp config` (MCP
   clients), `https://wirecat.dev/llms.txt` (any model).
-- Daily use: `tg inbox`, `tg review --unanswered`, `tg messages search`, `tg watch`, `tg export
+- Daily use: `tg inbox`, `tg review --unanswered`, `tg search messages`, `tg watch`, `tg export
   --format markdown`, `tg messages transcribe --local`, `tg messages send --at 2h`.
 - Both add bots through each messenger's official Bot API (every method: 185 Telegram, 33 MAX) and
   group moderation by the owner's rules. Differences per tool: `content/docs/features.mdx`.

@@ -40,6 +40,18 @@ Si se alcanza el límite, el historial del mes puede seguir incompleto. Instrucc
 continuar y comprobar el historial: [Telegram](./tg/archive.md#fetch-a-chats-history) y
 [MAX](./max/archive.md#descargar-el-historial).
 
+## Buscar en todo a la vez
+
+Si no sabes dónde se escribió algo — en un chat, un correo o tus propias notas —, busca en todo a la
+vez:
+
+```sh
+tg search all invoice
+max search all invoice
+```
+
+Cada resultado indica si es un mensaje, un correo o una nota. Las secciones siguientes buscan en un solo tipo.
+
 ## Encontrar una palabra o frase
 
 Empieza por pedir al agente:
@@ -54,8 +66,8 @@ Deberías obtener la fecha acordada y sus mensajes de origen. Si solo fue una pr
 <summary>Opcional: comandos para el terminal</summary>
 
 ```sh
-tg messages search factura
-max messages search factura
+tg search messages factura
+max search messages factura
 ```
 
 </details>
@@ -66,8 +78,8 @@ Para una frase exacta, conserva las comillas dentro de la consulta:
 <summary>Opcional: comandos para el terminal</summary>
 
 ```sh
-tg messages search 'exact:"factura final"'
-max messages search 'exact:"factura final"'
+tg search messages 'exact:"factura final"'
+max search messages 'exact:"factura final"'
 ```
 
 </details>
@@ -96,8 +108,8 @@ buscar nombres de chats o personas puede funcionar de otra forma.
 <summary>Opcional: comandos para el terminal</summary>
 
 ```sh
-tg messages search factura --chat "Proyecto"
-max messages search factura --chat "Proyecto"
+tg search messages factura --chat "Proyecto"
+max search messages factura --chat "Proyecto"
 ```
 
 </details>

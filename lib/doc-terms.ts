@@ -1,4 +1,45 @@
 const terms = {
+  vault: {
+    en: {
+      title: "Obsidian vault",
+      description:
+        "A folder of notes that Obsidian opens as one workspace. The notes are Markdown files on your computer, often organised in subfolders. Memo reads these files; it does not need Obsidian to be open.",
+      page: "memo",
+    },
+    ru: {
+      title: "Хранилище Obsidian",
+      description:
+        "Папка заметок, которую Obsidian открывает как одно рабочее пространство. Заметки — это файлы Markdown на компьютере, часто разложенные по подпапкам. Memo читает эти файлы; держать Obsidian открытым не нужно.",
+      page: "memo",
+    },
+    es: {
+      title: "Bóveda de Obsidian",
+      description:
+        "Una carpeta de notas que Obsidian abre como un espacio de trabajo. Las notas son archivos Markdown en tu ordenador, a menudo organizados en subcarpetas. Memo lee esos archivos; no necesita que Obsidian esté abierto.",
+      page: "memo",
+    },
+  },
+  markdown: {
+    en: {
+      title: "Markdown",
+      description:
+        "Plain-text files, usually ending in .md or .markdown, with simple marks for headings, lists and links. You can open them in a text editor. Obsidian stores its notes in this format.",
+      page: "memo",
+    },
+    ru: {
+      title: "Markdown",
+      description:
+        "Текстовые файлы, обычно с расширением .md или .markdown, с простыми обозначениями заголовков, списков и ссылок. Их можно открыть в текстовом редакторе. Obsidian хранит заметки в этом формате.",
+      page: "memo",
+    },
+    es: {
+      title: "Markdown",
+      description:
+        "Archivos de texto, normalmente con extensión .md o .markdown, con marcas sencillas para títulos, listas y enlaces. Puedes abrirlos en un editor de texto. Obsidian guarda sus notas en este formato.",
+      page: "memo",
+    },
+  },
+
   agent: {
     en: {
       title: "AI agent",
@@ -23,19 +64,19 @@ const terms = {
     en: {
       title: "CLI",
       description:
-        "A program that runs through text commands. Here, tg connects to Telegram and max connects to MAX. Your agent runs the commands for your task; you do not need to memorise them to get started.",
+        "A program that runs through text commands, such as tg, max or memo. Your agent runs the commands for your task; you do not need to memorise them to get started.",
       page: "installation",
     },
     ru: {
       title: "CLI",
       description:
-        "Программа, которую запускают текстовыми командами. Здесь tg подключается к Telegram, а max — к MAX. Агент выполняет команды для вашей задачи; чтобы начать, вам не нужно запоминать их.",
+        "Программа, которую запускают текстовыми командами, например tg, max или memo. Агент выполняет команды для вашей задачи; чтобы начать, вам не нужно запоминать их.",
       page: "installation",
     },
     es: {
       title: "CLI",
       description:
-        "Un programa que se ejecuta con comandos de texto. Aquí tg conecta con Telegram y max con MAX. El agente ejecuta los comandos necesarios para tu tarea; no tienes que aprenderlos de memoria para empezar.",
+        "Un programa que se ejecuta con comandos de texto, como tg, max o memo. El agente ejecuta los comandos necesarios para tu tarea; no tienes que aprenderlos de memoria para empezar.",
       page: "installation",
     },
   },
@@ -103,19 +144,19 @@ const terms = {
     en: {
       title: "Node.js",
       description:
-        "The program that runs the Telegram and MAX tools on your computer. The numbers beside its name are the supported versions. Your agent can check what is installed and install a suitable version.",
+        "The program that runs tools such as tg, max and memo on your computer. Your agent can check whether it is installed and help set it up.",
       page: "installation#nodejs",
     },
     ru: {
       title: "Node.js",
       description:
-        "Программа, которая нужна для запуска инструментов Telegram и MAX на вашем компьютере. Числа рядом с названием — подходящие версии. Агент может проверить, что уже установлено, и поставить нужную версию.",
+        "Программа для запуска инструментов tg, max и memo на вашем компьютере. Агент может проверить, установлена ли она, и помочь с настройкой.",
       page: "installation#nodejs",
     },
     es: {
       title: "Node.js",
       description:
-        "El programa que ejecuta las herramientas de Telegram y MAX en tu ordenador. Los números junto al nombre indican las versiones compatibles. Tu agente puede comprobar qué está instalado e instalar una versión adecuada.",
+        "El programa que ejecuta herramientas como tg, max y memo en tu ordenador. Tu agente puede comprobar si está instalado y ayudarte a configurarlo.",
       page: "installation#nodejs",
     },
   },
@@ -123,19 +164,19 @@ const terms = {
     en: {
       title: "npm",
       description:
-        "A package installer that comes with Node.js. Your agent uses it to download and install the tool for your messenger, and to update it later.",
+        "A package installer that comes with Node.js. Your agent uses it to download and install tools such as tg, max and memo, and to update it later.",
       page: "installation#nodejs",
     },
     ru: {
       title: "npm",
       description:
-        "Установщик программ, который входит в Node.js. С его помощью агент скачает и установит инструмент для выбранного мессенджера, а позже сможет обновить его.",
+        "Установщик программ, который входит в Node.js. С его помощью агент скачает и установит инструменты tg, max и memo, а позже сможет обновить его.",
       page: "installation#nodejs",
     },
     es: {
       title: "npm",
       description:
-        "Un instalador de paquetes que viene con Node.js. El agente lo usa para descargar e instalar la herramienta de tu mensajero y actualizarla más adelante.",
+        "Un instalador de paquetes que viene con Node.js. El agente lo usa para descargar e instalar herramientas como tg, max y memo y actualizarla más adelante.",
       page: "installation#nodejs",
     },
   },

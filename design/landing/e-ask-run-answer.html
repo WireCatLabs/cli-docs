@@ -211,8 +211,8 @@
         <li><code>tg messages send me "Call Mum" --at-time 2h</code><span>a reminder in Saved Messages</span></li>
         <li><code>tg messages send "Team" "Minutes" --file minutes.pdf --at-time 2026-10-05T09:00</code><span>on Monday at nine</span></li></ul></div>
       <div class="job"><h3>Find</h3><p>Searches the copy on your computer. No connection needed.</p><ul>
-        <li><code>tg messages search "contract"</code><span>every word, across all chats</span></li>
-        <li><code>tg messages search "paid" --chat "Lisbon trip"</code><span>in one chat</span></li>
+        <li><code>tg search messages "contract"</code><span>every word, across all chats</span></li>
+        <li><code>tg search messages "paid" --chat "Lisbon trip"</code><span>in one chat</span></li>
         <li><code>tg store export "Project Alpha" --format markdown</code><span>a whole chat as a document</span></li></ul></div>
       <div class="job"><h3>Listen</h3><p>Voice notes as text, by Telegram or on your machine.</p><ul>
         <li><code>tg messages transcribe "Mum" 8812 --local</code><span>one voice note</span></li>
@@ -298,7 +298,7 @@
     },
     {
       q: "Who owes who from the Lisbon trip?",
-      cmd: 'tg messages search <b>"paid"</b> --chat "Lisbon trip"',
+      cmd: 'tg search messages <b>"paid"</b> --chat "Lisbon trip"',
       out: `{"items": [{"senderName": "Ana", "text": "Paid the hotel, 240", …},
            {"senderName": "Ben", "text": "paid dinner 96", …},
            {"outgoing": true, "text": "I paid the taxi, 60", …}],
@@ -322,7 +322,7 @@
     },
     {
       q: "When did Anna and I agree to meet?",
-      cmd: 'tg messages search <b>"meet"</b> --chat "Anna"',
+      cmd: 'tg search messages <b>"meet"</b> --chat "Anna"',
       out: `{"items": [{"senderName": "Anna", "text": "Saturday 11:00 at the market, then?",
              "timestamp": "2026-09-24T19:12:00+02:00", …},
            {"outgoing": true, "text": "Deal, see you there", …}],
