@@ -3,7 +3,7 @@ title: "Funciones"
 description: "Elige una tarea útil: revisar chats, encontrar acuerdos, reunir archivos o preparar respuestas."
 ---
 
-Las herramientas de línea de comandos `tg` y `max` dan a tu asistente acceso a Telegram y MAX. Esta página muestra qué tareas puedes pedirle y te ayuda a elegir una petición lista para probar una función.
+Las herramientas de línea de comandos `tg` y `max` dan a tu agente acceso a Telegram y MAX. Elige una tarea y copia una petición para probarla.
 
 Lo principal:
 
@@ -26,7 +26,7 @@ Lo principal:
 
 Si tu cuenta está conectada, copia una petición del apartado adecuado. Si no, empieza por [instalación y acceso](./installation.mdx). La [demo](./meeting-brief.mdx) muestra una conversación con el agente sin conectar una cuenta. Despliega los bloques bajo los ejemplos para ver comandos exactos y funciones adicionales.
 
-Cada herramienta funciona con un mensajero: `tg` con Telegram, `max` con MAX. Las peticiones nombran `tg`; para MAX, escribe `max`. Todo lo siguiente funciona en ambos, salvo que una fila diga lo contrario. Los comandos de las tablas empiezan por `tg` o `max`.
+Cada herramienta funciona con un servicio de mensajería: `tg` con Telegram, `max` con MAX. Las peticiones nombran `tg`; para MAX, escribe `max`. Todo lo siguiente funciona en ambos, salvo que una fila diga lo contrario. Los comandos de las tablas empiezan por `tg` o `max`.
 
 ## Mensajes
 
@@ -51,7 +51,7 @@ Obtendrás un borrador y los mensajes que lo respaldan. Si el destinatario es am
 | Reaccionar a mensajes | `reactions` |
 | Crear encuestas, votar, cerrar las tuyas | `polls` |
 | Pasar mensajes de voz a texto en tu propio ordenador | `messages transcribe` |
-| Obtener el enlace a un mensaje | `messages link` |
+| Obtener un localizador y un enlace del servicio de mensajería cuando esté disponible | `messages link` |
 | Marcar chats como leídos, solo cuando lo pides | `chats mark-read` |
 
 </details>
@@ -66,7 +66,7 @@ Encuentra a una persona y recupera el contexto de conversaciones anteriores.
 Usa tg CLI. Encuentra al diseñador del que hablamos el mes pasado. Muestra quién lo recomendó y qué hemos acordado.
 ```
 
-Obtendrás un contacto identificado y mensajes que lo respaldan. Usa perfiles distintos para las cuentas personal y de trabajo: [cómo elegir una cuenta](./profiles.md).
+Obtendrás una persona identificada y mensajes que lo respaldan. Usa perfiles distintos para las cuentas personal y de trabajo: [cómo elegir una cuenta](./profiles.md).
 
 <details>
 <summary>Comandos y funciones adicionales</summary>
@@ -77,7 +77,7 @@ Obtendrás un contacto identificado y mensajes que lo respaldan. Usa perfiles di
 | Crear, cambiar y eliminar carpetas de chats | `chats folders` |
 | Contactos: buscar, añadir, renombrar, bloquear, importar | `contacts` |
 | Quién es alguien, qué escribió, si la cuenta parece un bot | `contacts profile`, `context`, `check` |
-| Respuestas automáticas con tus reglas, solo a cuentas de prueba | `replies` |
+| Respuestas automáticas con tus reglas, a la audiencia que elijas | `replies` |
 | Actualizar tu perfil; ver cada dispositivo con sesión abierta y cerrar uno | `account` |
 | Varias cuentas, un *perfil* para cada una | `tg work …`, `max work …` |
 
@@ -105,7 +105,7 @@ Obtendrás una lista para revisar. Los cambios requieren los permisos adecuados 
 | Unirte y salir; mostrar o renovar el enlace de invitación | `chats join`, `leave`, `link` |
 | Añadir y quitar miembros; nombrar administradores y fijar sus permisos | `chats members`, `chats admins` |
 | Ver quién se unió, salió o fue expulsado | `chats events` |
-| Encontrar preguntas que nadie respondió en el grupo | `review --unanswered` |
+| Encontrar preguntas que esperan tu respuesta o la de un administrador | `review --unanswered` |
 | Cambiar el título, la descripción y los ajustes | `chats update` |
 | Reglas de moderación: enlaces, invitaciones, reenvíos, mensajes masivos, personas bloqueadas | `chats rules`, `chats moderate` |
 | Temas de foro: listar, buscar, crear, publicar en un tema — *Telegram* | `topics` |
@@ -125,7 +125,7 @@ Encuentra un acuerdo antiguo o reúne lo importante de los mensajes sin leer.
 Usa tg CLI. Busca el plazo del proyecto que acordamos el mes pasado. Muestra el acuerdo y los cambios posteriores.
 ```
 
-Obtendrás la respuesta, las fuentes y el periodo revisado. La búsqueda de palabras también pregunta al servidor del mensajero, pero la búsqueda por significado y los recuentos usan el historial guardado; si falta ese periodo, [descarga primero los chats necesarios](./search.md#descarga-primero-el-historial-de-los-chats-pertinentes).
+Obtendrás la respuesta, las fuentes y el periodo revisado. Por defecto, las búsquedas de palabras en Telegram y en un solo chat de MAX pueden consultar también el servidor del servicio. La búsqueda por significado y los recuentos usan el historial guardado; si falta ese periodo, [descarga primero los chats necesarios](./search.md#descarga-primero-el-historial-de-los-chats-pertinentes).
 
 <details>
 <summary>Comandos y funciones adicionales</summary>
@@ -133,7 +133,7 @@ Obtendrás la respuesta, las fuentes y el periodo revisado. La búsqueda de pala
 | Qué puedes hacer | Comandos |
 |---|---|
 | Guardar un archivo local de los chats que elijas | `store fetch` |
-| Buscar por palabras, remitente, fecha y chat; la búsqueda de palabras también pregunta al servidor del mensajero | `search messages` |
+| Buscar por palabras, remitente, fecha y chat; la búsqueda en el servidor está disponible en Telegram y en un solo chat de MAX | `search messages` |
 | Separar los hilos de un grupo con mucha actividad por respuestas y menciones | `conversations` |
 | Exportar un chat como Markdown o líneas JSON; hacer una copia de seguridad de todo el archivo | `store export`, `store backup` |
 | Los mensajes sin leer de todos los chats en una sola lista | `inbox` |
@@ -164,7 +164,8 @@ Un bot trabaja con su propio token, separado de tu cuenta personal.
 | Qué puedes hacer | Comandos |
 |---|---|
 | Todos los métodos de la Bot API oficial: los 185 de Telegram y los 33 de MAX | `bot api` |
-| Enviar, editar, eliminar y fijar mensajes; buscar en los mensajes del bot | `bot messages` |
+| Enviar, editar, eliminar y fijar mensajes | `bot messages` |
+| Buscar mensajes disponibles para el bot | `bot search messages` |
 | Responder a pulsaciones de botones; definir el menú de comandos del bot; gestionar webhooks | `bot callbacks`, `bot commands`, `bot webhooks` |
 | Gestionar administradores y miembros de un grupo | `bot chats admins`, `bot chats members` |
 | Moderar un grupo con las mismas reglas que tu cuenta | `bot chats moderate` |
@@ -178,7 +179,7 @@ Guías: [Bot API completa](./bot-api.mdx) · [bots de Telegram](./tg/bot.md) · 
 ## Pensado para agentes
 
 - <DocTerm term="skill" lang="es" label="Un skill" /> da al agente instrucciones para los comandos y tareas habituales.
-  [Conectar tu asistente de IA](./agents.mdx)
+  [Conectar tu agente de IA](./agents.mdx)
 - <DocTerm term="mcp" lang="es" label="Un servidor MCP" /> para Claude Desktop y otros clientes. Usa los permisos del perfil: puedes limitarlo a lectura o permitir las acciones necesarias. Las confirmaciones dependen de la aplicación de IA. [MCP](./mcp.mdx)
 - **Salida predecible**: cada comando puede devolver un único valor JSON, y cada tipo de fallo
   tiene su propio código de salida, así que los scripts y los agentes pueden reaccionar a él.
@@ -191,7 +192,7 @@ Guías: [Bot API completa](./bot-api.mdx) · [bots de Telegram](./tg/bot.md) · 
 - **Una lista de destinatarios**: los chats a los que este perfil puede enviar.
 - **Un límite por hora** de envíos, 30 por defecto.
 - **Un registro de envíos**: cada intento de envío, sin el texto del mensaje.
-- **Un bloqueo de perfil** que mantiene a un agente en una sola cuenta.
+- **Un bloqueo de perfil** rechaza comandos que eligen otro perfil. Un agente que pueda cambiar su entorno puede quitarlo; consulta [los límites de los controles](./security.mdx#lo-que-la-protección-no-puede-impedir).
 
 [Qué permite el inicio de sesión y cómo limitarlo](./installation.mdx) ·
 [seguridad de Telegram](./tg/security.md) · [seguridad de MAX](./max/security.md)

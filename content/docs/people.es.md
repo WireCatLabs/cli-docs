@@ -13,8 +13,7 @@ compartís. Las herramientas la reconocen por su cuenta del mensajero —su ID y
 
 Una persona no tiene que estar en tus contactos. Los contactos son la agenda del mensajero: las
 personas que añadiste, a menudo por número de teléfono. Alguien que escribió en un grupo común es una
-persona aquí aunque nunca la añadieras. `contacts list` muestra las personas con las que tienes un chat
-privado. Añadir, renombrar o eliminar un contacto es otra acción y cambia tu cuenta del mensajero.
+persona aquí aunque nunca la añadieras. `contacts list` enumera los contactos disponibles a través del servicio de mensajería seleccionado. Añadir, renombrar o eliminar un contacto es otra acción y cambia tu cuenta del mensajero.
 
 También puedes guardar contexto privado sobre una persona. Se queda en tu ordenador y nunca llega al
 mensajero:
@@ -64,7 +63,7 @@ Los campos del perfil dependen de lo que el mensajero comparte con tu cuenta:
 - **Fecha de registro:** siempre indica su origen. Telegram envía el mes cuando alguien te escribe
   por primera vez; si no, `tg` la calcula a partir del ID de la cuenta y la marca como `estimate`.
   El cálculo cubre cuentas creadas hasta agosto de 2026; las más nuevas no reciben fecha antes que
-  una equivocada. MAX da el día exacto, así que `max` lo muestra para todos.
+  una equivocada. MAX puede proporcionar el día exacto; `max` lo muestra cuando está disponible.
 - **Nombres anteriores:** nombres y usuarios que vio tu historial guardado, en `aliases`, del más
   antiguo al más nuevo, con un enlace `t.me` para un usuario antiguo de Telegram. Un nombre tomado
   de mensajes guardados indica `source: messages` y es aproximado: un mensaje descargado de nuevo
@@ -170,7 +169,7 @@ personas vinculadas y mensajes. Las órdenes de notas del mensajero se describen
 
 | | Telegram (`tg`) | MAX (`max`) |
 |---|---|---|
-| Fecha de registro | el mes de Telegram tras un primer contacto; si no, un cálculo | el día exacto, de MAX |
+| Fecha de registro | el mes de Telegram tras un primer contacto; si no, un cálculo | el día exacto, cuando MAX lo proporciona |
 | Marcas como estafa, falsa, verificada, premium | se muestran | MAX no las envía para cuentas personales |
 | `--refresh` | busca en cada chat los mensajes de la persona | lee la página más reciente de cada chat |
 | Listas públicas de spam | se consultan, salvo con `--no-registries` | no se consultan |
@@ -181,8 +180,7 @@ Las opciones exactas están en la [referencia de Telegram](./tg/commands.md) y l
 ## Cuando un agente lee estas respuestas
 
 Con el [servidor MCP](./mcp.mdx) conectado, el agente obtiene el mismo perfil, contexto y comprobación.
-El texto de los mensajes en estas respuestas lo escribieron otras personas. Tu agente lo resume y
-no obedece peticiones que haya dentro.
+El texto de los mensajes en estas respuestas lo escribieron otras personas. Pide al agente que lo trate como fuente e ignore las peticiones incluidas en él. Las protecciones del CLI no controlan todas las acciones del agente.
 
 <a id="respuestas-automáticas-con-tus-reglas" />
 

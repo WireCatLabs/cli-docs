@@ -2,7 +2,26 @@
 title: "Statistics"
 ---
 
-See which messages attracted attention, who needs an answer and how group membership changes. Reports use saved history. If the relevant messages are missing, [download the history](./archive.md) first.
+Use this page when you manage or follow a group or channel and want facts: which messages attract attention, who answers questions, which questions still need replies, and whether newcomers stay. You will learn what to ask your AI agent, which command it uses, what the answer looks like and where counts can mislead you.
+
+Terms used below:
+
+- **Saved history** — the messages `max` keeps on this computer. Every report counts only these messages. If the period you need is missing, [download history](./archive.md) first.
+- **Observed** — seen in saved history. Undownloaded replies, joins or reactions are not counted: a missing value is unknown, rather than zero.
+- **Counter** — a count MAX stores with a message, such as views or reactions.
+
+## What you can find out
+
+| Question | Command |
+| --- | --- |
+| Which messages received the most reactions? | `max stats messages top` |
+| Who answers questions most often? | `max stats contacts top` |
+| Which questions are waiting for answers? | `max stats messages unanswered` |
+| How quickly does a person reply? | `max stats contacts responses` |
+| Did newcomers receive help? | `max stats chats newcomers` |
+| Do newcomers stay? | `max stats chats retention` |
+| Which posts received views but no discussion? | `max stats messages discussion` |
+| How recent are views and reactions? | `max stats messages counters show` |
 
 The requests, names and results below are fictional examples. Replace the chat name with yours. Tables show how an agent can present its answer; commands with `--json` return data for it.
 
@@ -163,7 +182,7 @@ max stats chats retention "Поход" --checkpoints 1d,7d,30d --within 7d --tim
 >
 > The denominators differ, so these percentages are not a complete retention curve. No observed message does not prove that someone was silent.
 
-This needs known joining dates and saved member lists. Absence from a partial list remains unknown. [Member observations](./groups.md) help collect data for later reports.
+Known join dates and saved member lists are required. A missing person in an incomplete list remains unknown; [saved group member lists](./groups.md#снимки-участников) help gather data for future reports.
 
 ## Posts without discussion
 
@@ -263,6 +282,6 @@ An empty report with incomplete history does not establish that there were no qu
 
 ## More control
 
-You can select a period, choose a measure or combined score, and save a selection for another report. Scoring formulas, exact evidence arguments and page limits live in the [shared statistics specification](https://github.com/leemour/cli-messaging/blob/main/docs/rankings.md) and [command reference](./commands.md).
+You can choose a period, dimension and composite score, and save a cohort for repeat reports. Score formulas, exact evidence arguments and page limits are in the [shared statistics specification](https://github.com/leemour/cli-messaging/blob/main/docs/rankings.md) and [statistics command reference](./commands.md#max-stats).
 
 To verify a finding, ask the agent to open the question, answer or members behind that report row. Before the next report, [check archive coverage](./archive.md).

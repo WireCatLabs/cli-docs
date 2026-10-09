@@ -1,16 +1,31 @@
 ---
-title: "Sessions and profiles"
+title: "Login, sessions and profiles"
 ---
 
-A session consists of your MAX account token and a stable device identity. The token is stored in the operating-system keyring; everything else lives in a file beside the configuration.
+<a id="откуда-берётся-токен" />
+<a id="проверить-и-забыть" />
+<a id="если-ключницы-нет" />
+<a id="сколько-живёт-токен" />
+
+Use this page when connecting `max` to a MAX account for the first time, adding a second account or recovering from “no session”. You will learn to log in, check which account is connected, log out, and locate the saved data that keeps the login available.
+
+Terms used below:
+
+- **Session** — this computer's `max` login to your MAX account, consisting of a token and device identity. MAX lists it as another device in the app.
+- **Token** — the credential MAX issues at login. It can read your chats; treat it as a password. `max` keeps it in the keyring.
+- **Device identity** — how `max` identifies itself to MAX, consistently across commands. It is saved beside other state files.
+- **Keyring** — the operating system's password storage.
+- **Profile** — a named login with its own token, state and settings. Without a name, `max` uses `default`. You need another profile for another account or separate restrictions ([profiles](#профили)).
+
+Do not confuse `max session` and `max account sessions`. `max session` — login of `max` itself; `max account sessions` lists all other devices and applications signed into your account.
 
 ## First run
 
 `max setup --agent codex` checks local directories, guides you through QR login, checks your account and up to five chats, and installs the agent skill. Agent choices: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Without a parameter, an interactive terminal asks you; machine mode skips skill installation. `max skill show` is available before login.
 
-Allow about five minutes. Download history separately after choosing a chat and how much to fetch; setup does not start the background service. Running it again checks the existing session. `--method token|qr|qr-chrome|sms` selects the method for a fresh login; setup defaults to `qr`. QR and browser login require a person at the local terminal. Do not pass a token as an argument. If setup is interrupted, run it again. For an expired token, explicitly run `max session start qr`; if the keychain is unavailable, first fix the environment as instructed.
+Allow about five minutes. History downloads separately after you choose a chat and volume; setup does not start a background service. Repeating setup checks the existing session. `--method token|qr|qr-chrome|sms` selects a new login method; default `qr`. QR and browser methods require a person at the local terminal. Do not pass a token as an argument. Repeat interrupted setup. For an expired token, explicitly run `max session start qr`; if the keyring is unavailable, follow the environment repair guidance first.
 
-## Getting a token
+## Log in
 
 `max session start <способ>` supports four login methods. Whichever method you use, the token is saved to the keyring only after MAX accepts it.
 
@@ -27,13 +42,13 @@ max session start qr
 
 **`qr-chrome` and `sms` are the most cautious methods.** web.max.ru handles login in a real browser, so MAX sees its own web client. The browser uses a separate temporary profile, not yours. Once web.max.ru is logged in, the window closes and the profile is deleted, including when you press Ctrl-C. Closing the window does not end the session; it is like closing a tab. The browser is detected automatically; set `MAX_BROWSER` to use another. Snap-packaged browsers are unsupported because they use their own `/tmp` directory.
 
-**`qr` requests a code through our own connection**, which imitates the web client. It works without a browser, but it is not the actual web client.
+**`qr` requests a MAX code over `max`'s own connection**, identifying as a web client. It works without a browser, but is not the actual web client.
 
-**SMS login works only through a browser.** When our connection requests an SMS, MAX requires a CAPTCHA that can only be completed on the web page.
+**login via SMS - only through the browser.** When SMS asks for a `max` connection, MAX requires a captcha, and it can only be completed on the page.
 
 After any of these three methods, a new device appears in the MAX app's session list. If your account has a cloud password, `qr` prompts for it without showing what you type, up to three times. After that, you must scan the code again.
 
-All three methods require a person at the terminal; otherwise the command refuses with exit code 2. Scripts and agents can use `token`. These methods also refuse while `MAX_TOKEN` is set, because it takes precedence over the keyring and would override the new session.
+All three require a person at the terminal; otherwise they return code 2. An AI agent without a terminal can use `token`. While `MAX_TOKEN` is set, these three methods also refuse: it overrides the keyring and would hide the new session.
 
 ### Importing a token manually
 
@@ -56,11 +71,13 @@ For CI and one-off runs, use the environment variable. It **takes precedence ove
 MAX_TOKEN="$(cat /path/to/token)" max chats list --json
 ```
 
-## Checking and forgetting a session
+## Check and exit
 
 ```sh
-max account show      # кто вы: id, имя, телефон
-max session end       # выйти из MAX и забыть токен на этой машине
+max account show             # под кем выполнен вход: id, имя, последние четыре цифры телефона
+max account list             # все профили на этом компьютере и аккаунт каждого
+max account sessions list    # все устройства и приложения, вошедшие в аккаунт; ничего не завершает
+max session end              # выйти из MAX и забыть токен на этой машине
 ```
 
 `session end` first ends the session on the MAX server, then erases the token on this computer. The response reports the outcome:
@@ -73,9 +90,15 @@ max session end       # выйти из MAX и забыть токен на эт
 
 If MAX does not respond, the token is kept so you can retry the command. A token MAX no longer accepts is erased immediately: there is no remaining session to end.
 
+## How long does a session last?
+
+The token's lifetime is unknown: MAX does not report it. It continues working after the web.max.ru tab is closed. When MAX stops accepting it, log in again with `max session start`.
+
+`max` does not limit logins, but counts them for each profile. `max doctor` shows the count.
+
 ## Profiles
 
-Each profile has its own token and state; the local message store is shared, with data separated by account. Select a profile with the **first word**, rather than a flag:
+Each profile keeps its own token and state; the shared local archive identifies the account for each message. Name a profile as the **first word**, rather than a flag:
 
 ```sh
 max chats list              # профиль default
@@ -83,7 +106,9 @@ max personal chats list     # профиль personal
 export MAX_PROFILE=personal # или на всю сессию оболочки
 ```
 
-The rule: **the first word is a profile name unless it matches a command name.** A profile cannot be named `chats`, `runs` or `session`; creation rejects these names with an explanation. Otherwise, `max chats` would silently mean “profile chats, without a command”.
+Rule: **The first word is profile unless it matches the name command.** Therefore a profile cannot be named `chats`, `runs` or `session` - `max session start` and `max setup` reject such a name. Otherwise, `max chats` would silently mean “chats profile without command”. The name consists of Latin letters, numbers, periods, hyphens and underscores and begins with a letter or number.
+
+Order, first match wins: first word, `MAX_PROFILE`, `defaultProfile` in the settings file, then `default`.
 
 If the first word is not a command and no command follows it, the program explains what happened instead of silently displaying help:
 
@@ -92,34 +117,32 @@ If the first word is not a command and no command follows it, the program explai
 Run `max --help` for the commands, or `max nonsense account show` if "nonsense" is your profile.
 ```
 
+**`MAX_PROFILE_LOCK` assigns the process to one profile.** Specify it where the agent is running, and the first word or `MAX_PROFILE` with the name of another profile will be rejected (return code `5`). Without it, the agent could choose a profile with fewer restrictions.
+
+Why each profile is needed and how the profile works with the bot - in the [profiles and bots](./profiles.md) section.
+
 ## Storage locations
 
-| Item | Location |
-|---|---|
+| Data | Location |
+| --- | --- |
 | Token | OS keyring, service `max-cli`, entry named after the profile |
+| Token without a keyring | `credentials.json` beside settings, permissions `0600` |
+| CI token | `MAX_TOKEN`; overrides keyring |
 | Bot token | OS keyring, service `max-cli`, entry `bot:<профиль>`; or `MAX_BOT_TOKEN` |
-| Chats seen by a bot | `~/.local/share/max-cli/bots/` |
-| Device, login counter, `viewerId` | `~/.local/share/max-cli/profiles/<профиль>.json`, permissions `0600` |
-| Configuration | `~/.config/max-cli/config.json` |
+| Chats observed by bots | `~/.local/share/max-cli/bots/` |
+| Device, login count, `viewerId` | `~/.local/share/max-cli/profiles/<профиль>.json`, permissions `0600` |
+| Settings | `~/.config/max-cli/config.json` |
+
+Directories for macOS and Windows are listed in the section [where everything goes](./installation.md#куда-всё-ложится).
 
 **The device identity is saved on the first read**, before it is used. A client that presents itself to MAX as a new device on every command does not behave like a real client; server-side sessions are tied to that identity.
 
-> ⚠ `MAX_CONFIG_DIR`, `MAX_STATE_DIR` and `MAX_CACHE_DIR` also change the keyring entry by changing the underlying service name. A session saved with these variables is **invisible** to a command run without them, and vice versa. Either set them consistently or leave them unset.
+On a machine without a keyring (a typical container), recording fails - then the token is placed in the file `credentials.json` next to the settings, with the rights `0600`, and command says this in one line on stderr. In CI, it is more correct not to rely on either one or the other and pass `MAX_TOKEN`.
 
-## When no keyring is available
-
-On a machine without a keyring, such as a typical container, saving the token there fails. It is then stored in `credentials.json` beside the configuration, with permissions `0600`, and the command reports this in one line on stderr.
-
-For CI, pass `MAX_TOKEN` instead of relying on either storage method.
-
-## Token lifetime
-
-The token's lifetime is unknown: MAX does not report it. It continues working after the web.max.ru tab is closed. When MAX stops accepting it, log in again with `max session start`.
-
-`max` does not limit logins, but counts them for each profile. `max doctor` shows the count.
+> ⚠ `MAX_CONFIG_DIR`, `MAX_STATE_DIR` and `MAX_CACHE_DIR` also change the keyring service name. A session saved with these variables is **not visible** to a command run without them, and vice versa. Set them consistently or leave them unset everywhere.
 
 ## Next steps
 
-- [Personal account guide](./usage.md) — your first commands.
-- [Configuration](./configuration.md) — settings and precedence.
-- [Security](./security.md) — what is stored on disk and what never is.
+- [Read the first chats](./usage.md)
+- [Settings and the order in which they are applied](./configuration.md)
+- [What gets on the disk and what never gets](./security.md)

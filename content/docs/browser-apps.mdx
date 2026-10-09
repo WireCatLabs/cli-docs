@@ -3,9 +3,9 @@ title: Use from web or mobile
 description: "Connect Telegram and MAX to an AI chat such as ChatGPT, Claude or Gemini in your browser or mobile app. You do not need their desktop apps."
 ---
 
-Use Telegram and MAX from an AI chat in your browser or mobile app: find messages, gather context and prepare replies. Setup takes a few commands and adding an address in your chat settings. You do not need to install the ChatGPT or Claude desktop apps. Any AI chat that lets you connect your own MCP server can use this connection; choose your app below.
+Use Telegram and MAX from an AI chat in your browser or mobile app: find messages, gather context and prepare replies. Setup takes a few commands and adding an address in your chat settings. You do not need to install the ChatGPT or Claude desktop apps. The app must support remote MCP over HTTP and OAuth sign-in compatible with this server; choose your app below.
 
-This guide connects your chosen messenger and checks it with a request for your own chats. A program on your computer talks to the messenger; your AI chat reaches that program <DocTerm term="public-address" lang="en" label="through a public address" />. <DocTerm term="mcp" lang="en" label="MCP" /> is the way these tools connect to an assistant. Below, we will obtain the address and add it to the app.
+This guide connects your chosen messenger and checks it with a request for your own chats. A program on your computer talks to the messenger; your AI chat reaches that program <DocTerm term="public-address" lang="en" label="through a public address" />. <DocTerm term="mcp" lang="en" label="MCP" /> is the way these tools connect to an agent. Below, we will obtain the address and add it to the app. Keep the computer, the CLI’s MCP server and the HTTPS tunnel running while you use the connection. The messenger’s desktop app is not required.
 
 ## Before starting
 
@@ -188,13 +188,15 @@ List my five most recent Telegram chats with their unread counts.
 Then ask for a draft or, when you intend to send, name the recipient and exact text.
 [Writing requests](./prompting.mdx) explains how to ask for review before sending.
 
-## Choose what the assistant may do
+<a id="choose-what-the-assistant-may-do" />
+
+## Choose what the agent may do
 
 The examples above allow sending for this running server with `--permission messages.send=allow`.
 Your saved settings stay the same. The app controls its own approval prompts. Over MCP,
-`ask` does not force a server confirmation. For a connection that only reads, use a read-only profile.
+`ask` does not force a server confirmation. For a connection that only reads, use a read-only profile and remove `--permission messages.send=allow` from the startup command.
 
-The app's approval and the server's permission checks are separate. If you always allow a tool in the
+The app's approval settings and the server's permission checks are separate controls. If you always allow a tool in the
 app and the server permits it, another call can send without asking again. Ask for a draft when
 you want to review the text first. Recipient restrictions and hourly limits still apply.
 See [permissions](./permissions.mdx) for examples and how to change access.
@@ -203,13 +205,13 @@ See [permissions](./permissions.mdx) for examples and how to change access.
 
 ## It worked before, but stopped
 
-A browser connection needs the messenger computer, its server and the HTTPS tunnel to be running. After sleep or a restart, use this order:
+A browser connection needs the computer running the command-line tool, its MCP server and the HTTPS tunnel. After sleep or a restart, use this order:
 
 1. Wake the computer and check the account in a terminal with `tg account show` or `max account show`. Use `tg.cmd` or `max.cmd` in PowerShell. If this fails, follow the login guide for [Telegram](./tg/sessions.md) or [MAX](./max/sessions.md).
 2. Restart the tunnel and server using the two windows above. Use the same profile and check that the HTTPS address still matches the connector. If it changed, update the server's public URL and the connector URL.
 3. Retry the five-chat request. If the app asks you to connect again, use the new one-time code printed by the running server.
 
-Success means the assistant lists the expected account’s chats. If it still fails, the checks below help distinguish a local account problem from a tunnel or app problem. Files need one additional step: a path on this computer does not give a browser agent the file. See file transfer for [Telegram](./tg/remote.md) or [MAX](./max/remote.md).
+Success means the agent lists the expected account’s chats. If it still fails, the checks below help distinguish a local account problem from a tunnel or app problem. Files need one additional step: a path on this computer does not give a browser agent the file. See file transfer for [Telegram](./tg/remote.md) or [MAX](./max/remote.md).
 
 ## Run both messengers
 
@@ -253,7 +255,7 @@ for its connector. Funnel's permitted public ports are `443`, `8443` and `10000`
 
 You can install `tg` or `max` on a separate server that stays running, and connect your AI chat to its address. You can then use your messenger from the chat while your laptop is off.
 
-Install the tool on the server, sign into the chosen account, start its MCP connection and provide a public HTTPS address. Configure automatic startup after a reboot: both the messenger program and public access must remain running. The server needs its own account login; your laptop installation does not connect it automatically.
+Install the tool on the server, sign into the chosen account, start its MCP connection and provide a public HTTPS address. Configure automatic startup after a reboot: both the CLI’s MCP server and its HTTPS tunnel must remain running. The server needs its own account login; your laptop installation does not connect it automatically.
 
 Try this after the connection works on your computer. See remote setup for [Telegram](./tg/remote.md) and [MAX](./max/remote.md). Repeat the five-chat request after setup: if it works with your laptop off, the server is providing the connection.
 

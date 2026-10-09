@@ -2,11 +2,41 @@
 title: "Lenguaje de consulta de la búsqueda"
 ---
 
-La referencia de consultas de `tg search messages`, `tg stats messages show` y búsquedas guardadas. Para ejemplos cotidianos, empieza por la [búsqueda de mensajes](./search.md).
+<a id="en-mcp" />
+<a id="los-modos-anteriores" />
+<a id="in-mcp" />
+<a id="the-older-modes" />
 
-El lenguaje es un perfil estricto de la sintaxis de consultas de Apache Lucene: palabras, frases, AND/OR/NOT, grupos, campos, intervalos, comodines con límites y expresiones regulares. La [referencia completa](https://github.com/leemour/cli-messaging/blob/v0.164.0/docs/search/query-language.md) (en ruso) contiene las tablas generadas de campos, operadores, filtros preparados y límites, y ejemplos ejecutables; la [especificación técnica](https://github.com/leemour/cli-messaging/blob/v0.164.0/docs/search/query-language-spec.md) describe la gramática y el compilador.
+Si utilizas un agente de IA con tg, no necesitas aprender este lenguaje: describe lo que quieres con palabras sencillas y el agente escribe la consulta. Esta página es para personas que escriben búsquedas por sí mismas y para cualquiera que desee todos los filtros: operadores exactos, todos los campos, ajustes preestablecidos, reglas de fecha y límites.
 
-Las palabras y frases sin campo coinciden con formas de las palabras. `--exact` selecciona formas exactas para palabras sin campo; `text:` explícito sigue buscando formas. Los ajustes de idioma del archivo afectan a las coincidencias.
+Es la referencia para las consultas de `tg search messages`, `tg search all`, `tg stats messages show`, búsquedas guardadas y el `--filter` de [búsqueda de tema](./topic-search.md). Para ejemplos cotidianos, comience con [búsqueda de mensajes](./search.md).
+
+Términos utilizados en esta página:
+
+- **Consulta**: el texto que buscas, por ejemplo `invoice from:me date:7d`.
+- **Campo**: un nombre y dos puntos que limitan una parte de la consulta a una propiedad de un mensaje, como `from:` (el remitente) o `date:` (cuando se envió). Las palabras sin campo buscan en el texto del mensaje.
+- **Operador**: palabra o signo que une condiciones, como `AND`, `OR` y `NOT`.
+- **Formas de palabras**: la misma palabra con diferentes terminaciones. `piso` y `pisos` son formas de una palabra.
+
+El lenguaje es un perfil estricto de la sintaxis de consulta de Apache Lucene: palabras, frases, Y/O/NO, grupos, campos, rangos, comodines acotados y expresiones regulares. "Estricto" significa que cualquier cosa que no admita es un error y nunca se ignora silenciosamente. La [referencia completa](https://github.com/leemour/cli-messaging/blob/v0.212.0/docs/search/query-language.md) (en ruso) tiene las tablas generadas de campos, operadores, ajustes preestablecidos y límites, y ejemplos ejecutables; la [especificación técnica](https://github.com/leemour/cli-messaging/blob/v0.212.0/docs/search/query-language-spec.md) describe la gramática y el compilador.
+
+## Qué puede hacer
+
+| Quieres | Escribir |
+|---|---|
+| mensajes con todas estas palabras, en cualquier forma | `invoice paid` |
+| estas palabras juntas, en este orden | `"invoice paid"` |
+| una palabra u otra, sin tercera | `(cafe OR library) NOT loud` |
+| sólo esta forma exacta de una palabra | `exact:piso` o `--exact` para cada palabra sin campo |
+| palabras que empiezan con algo | `invo*` |
+| un remitente, un chat, una especie de chat | `from:me`, `chat:"Book club"`, `kind:private` |
+| un período | `date:7d`, `date:[2026-01-01 TO 2026-02-01}` |
+| archivos por nombre, tipo o tamaño | `filename:*.pdf`, `mime:image`, `size>10MB` |
+| texto que parece una contraseña, una tarjeta o un teléfono | `preset:secret`, `preset:card` |
+| tus propias etiquetas | `tag:work` |
+| un patrón | `text:/pass(port)?/` |
+
+Las palabras y frases sin campo coinciden con las formas de las palabras. `--exact` selecciona formas exactas para palabras sin campo; un `text:` explícito sigue buscando formas de palabra. La configuración de idioma del archivo local decide qué formas coinciden ([formas de palabra](./archive.md#repair-and-index-maintenance)).
 
 ## Operadores
 
@@ -25,7 +55,7 @@ Las palabras y frases sin campo coinciden con formas de las palabras. `--exact` 
 | comodín | `invo*`, `te?t` | `*` cualquier número de caracteres, `?` uno |
 | expresión regular | `text:/pass(port)?/` | una expresión regular de Lucene con límites |
 
-`alpha OR beta gamma` significa `(alpha OR beta) AND gamma`; `alpha OR beta AND gamma` significa `alpha OR (beta AND gamma)`. Usa paréntesis para evitar dudas. `and`, `or` y `not` en minúsculas son palabras normales. Una consulta con solo `NOT` no encuentra nada: añade una condición positiva, por ejemplo `kind:group NOT preset:secret`. La coincidencia difusa `~`, la proximidad, la relevancia ponderada y los intervalos se rechazan con un error; no se ignoran.
+`alpha OR beta gamma` significa `(alpha OR beta) AND gamma`; `alpha OR beta AND gamma` significa `alpha OR (beta AND gamma)`. Usa paréntesis para dejar claro el orden. Las minúsculas `and`, `or`, `not` son palabras sencillas. Una consulta con solo `NOT` no encuentra nada: proporcione una condición positiva, por ejemplo `kind:group NOT preset:secret`. La búsqueda difusa `~`, la proximidad, los pesos y los intervalos se rechazan con un error, no se ignoran. Los errores tipográficos no se corrigen: para detectar varias terminaciones, utilice un comodín como `invo*`.
 
 ## Campos
 
@@ -48,11 +78,13 @@ Las palabras y frases sin campo coinciden con formas de las palabras. `--exact` 
 | `size` | el tamaño de un archivo adjunto, en bytes o en KB/MB/GB de 1024 | `size>10MB` |
 | `tag` | tu propia etiqueta local en el mensaje, su chat o su remitente | `tag:work` |
 
-Los nombres de campo distinguen mayúsculas. Un campo, valor o combinación desconocidos son un error, nunca una respuesta vacía ni texto normal. Un nombre que el archivo local no conoce no se busca en Telegram.
+Los nombres de los campos distinguen entre mayúsculas y minúsculas. Un campo, valor o combinación desconocidos es un error, nunca una respuesta vacía y nunca texto sin formato. Un nombre que el archivo local no conoce no se busca en Telegram.
 
 `kind:bot` selecciona un chat con un bot; `in:bots` selecciona los archivos de las cuentas de `tg bot`. `topic:` necesita exactamente un chat en `chat:` o `--chat`, porque los números de tema se repiten entre grupos. `filename`, `mime` y `size` coinciden con un mensaje cuando al menos uno de sus archivos coincide. `/` inicia una expresión regular, así que pon un tipo completo entre comillas: `mime:"application/pdf"`.
 
 ## Filtros preparados
+
+Un ajuste preestablecido busca texto por su forma. Úselo para encontrar una contraseña, un código o un número de tarjeta que alguien envió.
 
 | Filtro | Un candidato es |
 |---|---|
@@ -84,46 +116,33 @@ El texto se normaliza antes de indexarlo y buscarlo: minúsculas y sin tildes. U
 
 `text:/pay/` coincide con la palabra completa pay, no con payment. `body:/pay/` coincide solo con un mensaje cuyo texto entero es pay, distinguiendo mayúsculas; para encontrarla en cualquier parte, usa `body:/.*pay.*/`. Es la sintaxis de expresiones regulares de Lucene, sin anticipaciones de JavaScript, referencias hacia atrás, anclas ni opciones.
 
-En un archivo grande, un prefijo corto como `a*` puede abarcar más de 10 000 palabras y se rechaza; alárgalo. Las consultas largas, el anidamiento profundo, los patrones grandes y los recorridos lentos se rechazan con `query_limit`, no se recortan: limita el chat, las fechas o el patrón.
+En un archivo grande, un prefijo corto como `a*` puede ampliarse a más de 10.000 palabras y se rechaza; alargarlo. Las consultas largas, el anidamiento profundo, los patrones grandes y los escaneos lentos se rechazan con `query_limit`, no se acortan: limita el chat, las fechas o el patrón.
+
+### Una expresión regular de JavaScript: `--regex`
+
+```sh
+tg search messages --regex 'invoice\s+\d+' --json
+```
+
+`--regex` es un modo separado. Las palabras que proporciona son una expresión regular de JavaScript, no una consulta en este idioma. No distingue entre mayúsculas y minúsculas, se prueba con el texto completo de cada mensaje almacenado y se ejecuta en un trabajador aislado con límites de tiempo y tamaño. Una búsqueda guardada mantiene su `--regex`; no puede agregar `--regex` cuando ejecuta uno con `--saved`.
 
 ## La respuesta
 
 `--json` devuelve `{ items, page, limit, hasMore, corrections, completeness, wordsReady, query, coverage }`, aunque no haya coincidencias. `--jsonl` emite solo los elementos.
 
-- `query`: la versión del lenguaje, la zona horaria y el orden usados.
-- `coverage`: en qué cuentas y chats se buscó. `lastSyncedAt` es el momento más antiguo en que `store fetch` descargó un chat del ámbito, o `null` si alguno no se descargó nunca. `inventoryComplete` significa que cada cuenta del ámbito ha listado alguna vez todos sus chats; no garantiza un historial completo.
-- `completeness`: por chat, si su historial guardado llega al principio y si tiene huecos.
-- `wordsReady`: si el índice de palabras está completo. Cuando es `false`, una consulta con palabras falla con `index_not_ready` y el comando que lo termina, `tg store migrate`; una consulta sin palabras se ejecuta.
-- `hasMore` se refiere a la página, no a si Telegram tiene más.
+- `query`: la versión del idioma, la zona horaria y el orden utilizado.
+- `coverage`: qué cuentas y chats se buscaron. `lastSyncedAt` es la vez más antigua que `store fetch` recuperó un chat dentro del alcance, `null` si algún chat nunca lo fue. `inventoryComplete` significa que cada cuenta dentro del alcance ha enumerado una vez todos sus chats; no promete una historia completa.
+- `completeness`: por chat, si su historial almacenado llega al inicio y tiene huecos.
+- `wordsReady`: si el índice de palabras está completo. Cuando es `false`, una consulta con palabras falla con `index_not_ready` y el comando que la finaliza, `tg store migrate`; se ejecuta una consulta sin palabras.
+- `hasMore` se trata de la página, no de si Telegram tiene más capacidad.
 
 Un error incluye la posición del problema en la consulta y una pista.
 
-## En MCP
+## Sobre MCP
 
-`tg_read` (`command: "search messages"`) acepta la consulta como `text` o como un árbol sintáctico versionado en `ast` (no ambos); `language` elige `lucene` o `legacy`, y `timezone` la zona horaria del calendario. `chat` acepta un ID o nombre guardado; `source`, `newest`, `context` y `limit` funcionan como las opciones del comando; `saved` ejecuta una búsqueda guardada. El historial de consultas sigue al servidor: `tg mcp --no-record`, o `record` definido como `false`, deja sus llamadas fuera. La respuesta tiene los mismos campos que `--json`. `tg_read` (`command: "stats messages show"`) cuenta las mismas consultas.
+Cuando un agente busca en el servidor MCP de tg, `tg_read` (`command: "search messages"`) toma la consulta como `text`, o como un árbol de sintaxis versionado en `ast` (no ambos), y `timezone` para la zona del calendario. `chat` toma una identificación o un nombre almacenado; `source`, `newest`, `context` y `limit` funcionan como lo hacen las opciones del comando; `saved` ejecuta una búsqueda guardada. `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` y `sync_first` coinciden con las opciones `--thread…` y `--sync-first`; `sync_first` se ofrece únicamente con `messages.sync-first: allow`. La respuesta tiene los mismos campos que `--json`. `tg_read` (`command: "stats messages show"`) cuenta las mismas consultas. El historial de consultas sigue al servidor: `tg mcp --no-record`, o `record` configurado en `false`, mantiene sus llamadas fuera.
 
-## Los modos anteriores
+## Próximo
 
-```sh
-tg search messages 'from:alice after:7d invoice -draft' --language legacy --json
-tg search messages --regex 'invoice\s+\d+' --json
-```
-
-`--language legacy` conserva los filtros anteriores y su corrección de erratas. `--regex` es un modo aparte: una expresión regular de JavaScript, sin distinguir mayúsculas, sobre el texto completo, en un proceso aislado con límites de tiempo y tamaño. `--regex` no se puede combinar con `--language lucene`.
-
-| Anterior | Estricto |
-|---|---|
-| `after:2026-01-01` | `date:[2026-01-01 TO *]` |
-| `before:2026-02-01` | `date:[* TO 2026-02-01}` |
-| `after:7d` | `date:7d` |
-| prefijo y corrección de erratas automáticos | `invo*` de forma explícita; erratas solo en `--language legacy` |
-
-`--thread` sigue el grafo de respuestas guardado; en `messages context` sustituye a los mensajes vecinos en orden cronológico. Los valores predeterminados son 8 saltos, 50 mensajes, 65 536 bytes y un día alrededor de cada resultado. Cámbialos con `--thread-hops`, `--thread-messages`, `--thread-bytes` y `--thread-within`. Sin grafo, vuelve al contexto cronológico; los enlaces desactualizados se marcan y no se recorren.
-
-La búsqueda por palabras consulta Telegram y el archivo local de forma predeterminada; `--backend archive` la limita a los datos locales.
-`--sync-first` descarga explícitamente los mensajes nuevos antes de buscar y
-no marca ninguno como leído: como máximo 5 chats, 500 mensajes y 30 segundos. Cambia estos límites con `--max-chats`,
-`--max-messages`, `--sync-time`. Una actualización fallida o incompleta conserva los resultados locales con información sobre la cobertura desactualizada y
-los detalles de la actualización.
-
-MCP usa `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` y `sync_first`. `sync_first` solo está disponible con `messages.sync-first: allow`. Un `messages_context` normal con `offline: true` lee los mensajes guardados.
+- [Búsqueda de mensajes](./search.md): búsquedas diarias, búsquedas guardadas y conteo.
+- [Búsqueda de tema](./topic-search.md): busca una discusión por su significado cuando no conoces sus palabras.

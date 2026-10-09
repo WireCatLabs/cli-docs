@@ -8,21 +8,21 @@ const labels = {
     title: "Local agent",
     close: "Close explanation",
     screenshot: "See the my.telegram.org login screen",
-    copy: "Copy: Prompt",
+    copy: "Copy: Request",
   },
   ru: {
     local: "Подробнее: ИИ-агента",
     title: "Локальный агент",
     close: "Закрыть пояснение",
     screenshot: "Посмотреть экран входа my.telegram.org",
-    copy: "Скопировать: Промпт",
+    copy: "Скопировать: Запрос",
   },
   es: {
     local: "Más sobre: agente de IA",
     title: "Agente local",
     close: "Cerrar explicación",
     screenshot: "Ver la pantalla de acceso de my.telegram.org",
-    copy: "Copiar: Prompt",
+    copy: "Copiar: Petición",
   },
 }
 

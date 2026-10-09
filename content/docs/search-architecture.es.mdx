@@ -20,7 +20,7 @@ Busca mensajes si recuerdas palabras, persona, fecha o tipo de archivo. Busca co
 | «¿Dónde hablamos de alquilar un piso?» | `search conversations` | Conversaciones ordenadas, el fragmento que coincide y cómo coincidió | Conversaciones construidas; vectores para coincidir por significado |
 | «¿Qué más trató lo mismo?» | `conversations related` | Las conversaciones más cercanas a la de un mensaje | Vectores; no se ejecuta ningún modelo |
 | «¿A qué conversación pertenece este mensaje?» | `conversations show` / `messages links` | La conversación y la cadena de padres elegida | Conversaciones construidas |
-| «¿Qué había alrededor de este mensaje?» | `messages context` / `--context` en la búsqueda | Vecinos en el tiempo, en la misma cuenta y chat | Solo el historial guardado |
+| «¿Qué había alrededor de este mensaje?» | `messages context` / `--context` en la búsqueda | Vecinos en el tiempo, en la misma cuenta y chat | Historial guardado para `--context` de búsqueda; `messages context` puede leer en línea sin `--offline` |
 
 Un tema de foro del mensajero, una conversación inferida y una ventana de mensajes vecinos son tres cosas distintas. Una conversación puede unir mensajes lejanos; los mensajes vecinos pueden pertenecer a discusiones distintas.
 
@@ -166,7 +166,7 @@ Las dos listas se combinan con reciprocal rank fusion: cada lista suma `1 / (60 
 
 Sin un modelo local descargado, la búsqueda responde solo por palabras e indica `"meaning": "unavailable"`; nunca descarga un modelo ni cambia a uno remoto. Un chat con vectores solo de otro modelo queda fuera de la rama de significado y aparece en `embeddedOnlyElsewhere`. Un chat nunca construido no devuelve nada aquí.
 
-Los vectores son blobs de SQLite que se recorren por páginas y se puntúan en JavaScript. No hay índice de vecinos aproximados ni base de datos vectorial aparte: el trabajo total crece con los fragmentos del alcance. Siempre aparecen vecinos cercanos aunque el archivo no tenga la respuesta, así que verifica los mensajes originales.
+Los vectores son blobs de SQLite que se recorren por páginas y se puntúan en JavaScript. No hay índice de vecinos aproximados ni base de datos vectorial aparte: el trabajo total crece con los fragmentos del alcance. Pueden aparecer vecinos cercanos aunque el archivo no tenga la respuesta, así que verifica los mensajes originales.
 
 `conversations related` usa como consulta la media de los vectores actuales de una conversación y busca en todos los chats construidos. No se ejecuta ningún modelo, así que no hace falta descargarlo.
 
@@ -199,7 +199,7 @@ El navegador no abre ninguna cuenta ni ejecuta construcción de conversaciones, 
 
 ## Mapa del código
 
-Código del motor en [`cli-messaging`](https://github.com/WireCatLabs/cli-messaging/tree/v0.211.0), la biblioteca compartida de tg y max. Son referencias de implementación, no promesas de rendimiento.
+Código del motor en [`cli-messaging`](https://github.com/WireCatLabs/cli-messaging/tree/v0.211.0), la biblioteca compartida de tg y max. Son referencias a una instantánea revisada, no a la versión instalada ni promesas de rendimiento.
 
 | Responsabilidad | Implementación |
 | --- | --- |

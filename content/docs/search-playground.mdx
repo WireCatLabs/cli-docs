@@ -45,7 +45,7 @@ Lucene syntax combines words with fields and logical operators. Start with `invo
 
 Choose **Date** for today's date, the current month or the five-day sample window. The inserted query uses `date:YYYY-MM-DD` for a day or `date:[START TO END]` for an inclusive range. An asterisk leaves one end open; braces exclude the boundary. For example, the **Before tomorrow** suggestion uses `date:{* TO YYYY-MM-DD}` with tomorrow's date.
 
-This playground implements the supported WireCat Lucene fields, rather than every Apache Lucene feature. Fuzzy matching (`~`), boosting (`^`) and planned fields such as `filename:` are unavailable here. An unfinished or unsupported query keeps the previous valid results visible and marks the problem; it does not silently broaden the search.
+This playground implements the supported WireCat Lucene fields, rather than every Apache Lucene feature. Fuzzy matching (`~`), boosting (`^`) and fields such as `filename:` are unavailable here. An unfinished or unsupported query keeps the previous valid results visible and marks the problem; it does not silently broaden the search.
 
 ## Search your own archive
 

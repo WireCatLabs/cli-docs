@@ -2,15 +2,36 @@
 title: "Managing your groups"
 ---
 
-`max` helps group admins find unanswered questions, see who joined and how old their accounts are, and remove spam using rules you choose. By default it only reports issues. Deleting messages or removing members requires your permission.
+Use this page when you administer a MAX group and want help managing it. You will learn to find unanswered questions, inspect joins and who added members, summarise the week, handle spam under your rules and track membership history. By default, `max` flags violations; deleting a message or removing someone requires your permission.
 
-Everything here uses your personal account in groups where you are an admin. See the [Personal account guide](./usage.md#группы-и-каналы) for command examples and the [Command reference](./commands.md) for every option.
+These actions use your personal account in groups you administer. Terms used below:
 
-Group-changing commands return `operationId` in JSON. After creating, joining, updating or resetting a link, the chat record is in `chat`. If the title or description changed but the settings request did not complete, the result is `outcome_unknown`. Read the group with `chats show` before retrying: the change may have applied partially.
+- **Administrator** — a member permitted to manage a group. Some commands count only your replies and administrator replies.
+- **Local archive** — messages saved on this computer. Reports and tasks see only downloaded history.
+- **Task** — something awaiting you, such as an unanswered question. `max` opens and closes tasks locally.
+- **Rules** — what `max chats moderate` checks, such as links or flooding, and which actions it may take.
+- **Member snapshot** — a list saved on one day. Comparing snapshots shows joins and departures.
+
+## What you can do
+
+| Task | Command |
+| --- | --- |
+| Find questions that are waiting to be answered | `max review --unanswered` |
+| See who joined, left, added or removed | `max chats events` |
+| Sum up the week: decisions, promises, open questions | `max review --since-time 7d` |
+| Keep a list of what's waiting for you | `max tasks list` |
+| Remove spam according to your own rules | `max chats rules set`, `max chats moderate` |
+| Replace leaked invitation link | `max chats link reset` |
+| Let people in or turn them away | `max chats requests list\|accept\|decline` |
+| View activity for the week | `max stats chats show` |
+| Save list of participants every day | `max chats members fetch --track` |
+| Find members who look like bots or spammers | `max chats members audit` |
+
+The full list of commands for groups is [below](#что-можно). Details about each - [groups and channels in the user manual](./usage.md#группы-и-каналы); each option is in the [command reference](./commands.md).
 
 ## Working with an agent
 
-An agent with terminal access, such as Claude Code or Codex, can use the [skill](https://github.com/leemour/max-cli/blob/v0.39.0/README.md#навык-для-агентов-с-терминалом). Without terminal access, use the [MCP server](./mcp.md), for example in Claude Desktop. Cursor supports both approaches. Below: your request, the agent’s command and the result.
+An AI agent (such as Claude Code, Codex, Cursor, or Gemini CLI) can perform these checks for you. An agent with a terminal needs [max skill](https://github.com/leemour/max-cli/blob/v0.41.0/README.md#навык-для-агентов-с-терминалом); agent in an application without a terminal - [MCP server](./mcp.md). Below is your request, agent command and result.
 
 <a id="an-admins-morning-who-needs-an-answer" />
 
@@ -68,6 +89,37 @@ max chats events "Поход" --type add --since-time 7d --json
 > Review Oleg’s available profile information before drawing conclusions. Account age alone is not grounds for removal.
 
 Events cover available history only. The current member list can be checked separately.
+
+### Link leaked
+
+Change the invitation link only if you ask for it.
+
+**Your request:**
+
+> The invitation link to “Hike” has leaked. Replace it and allow only admins to add people.
+
+**Replace link:**
+
+```sh
+max chats link reset "Поход" --json
+```
+
+**Limit adding participants:**
+
+```sh
+max chats update "Поход" --only-admins-add on --json
+```
+
+**Example agent answer:**
+
+> | Setting | Result |
+> | --- | --- |
+> | Previous invitation link | Replaced |
+> | Who may add members | Administrators only |
+>
+> The result includes the new link; share it only with people who need it.
+
+These commands change the group. The example request authorises both changes; asking only to inspect a link does not.
 
 ### Removing spam with your confirmation
 
@@ -130,30 +182,35 @@ No agent is required: moderation is an ordinary command. Run it twice a day, all
 0 9,21 * * * max chats moderate "Поход" --allow-dangerous >> ~/max-check.log 2>&1
 ```
 
-Without `--allow-dangerous`, cron actions at level `ask` are only planned and wait for you. See [recipes.md](./recipes.md#как-запускать-по-расписанию) for the `PATH` and `XDG_RUNTIME_DIR` lines needed for `max` to find Node and your sign-in in cron.
+Without `--allow-dangerous` in cron, actions at level `ask` are just planned and waiting for you. The lines `PATH` and `XDG_RUNTIME_DIR`, without which `max` will not find Node and your login in cron, are in the section [how to run on a schedule](./recipes.md#как-запускать-по-расписанию).
 
 ## Available actions
 
-| Command | Purpose |
+| command | What does |
 |---|---|
-| `max review --chat <чат> --unanswered [длительность]` | Questions you and the admins have not answered within that duration, for example `4h`; default `24h` |
-| `max chats events <чат>` | Who joined, left, was added or removed, and by whom; past 7 days by default |
-| `max chats members list <чат>` | A page of members returned by MAX (`--all` for all available, up to 5,000): owner and admins (a role may still be stale immediately after `admins add`), account creation time and last seen time |
-| `max chats rules show\|set\|unset <чат>` | Group rules |
-| `max chats moderate <чат>` | Check against the rules and perform permitted actions |
-| `max chats members add\|remove`, `admins add\|remove` | Manage members and admins |
-| `max chats requests list <чат>` | Requests to join a channel with approval; admins can see them, request times are unknown |
-| `max chats requests accept\|decline <чат> <человек>` | Accept or decline one request; `--all` and `--link` are not supported |
-| `max chats link show\|reset <чат>` | Invite link; `reset` creates a new one and invalidates the old one |
-| `max chats requests list\|accept\|decline <чат>` | Join requests for a channel with approval: who is asking, let them in, decline |
-| `max chats update` | Settings, title, description and photo; read settings with `max chats show` |
-| `max messages delete --for-everyone`, `pin`, `unpin` | Delete for everyone, pin or unpin |
+| `max review --chat <чат> --unanswered [длительность]` | questions that you and the admins did not answer within the specified time (for example, `4h`; default `24h`) |
+| `max chats events <чат>` | who entered, left, who was added and removed, by whom; by default 7 days |
+| `max chats members list <чат>` | page of participants from MAX (`--all` - all available, up to 5000): who is the owner and admins (immediately after `admins add` the role may be the same), when the account was created, when it was online |
+| `max chats rules show\|set\|unset <чат>` | group rules |
+| `max chats moderate <чат>` | checking according to the rules; does what the rules allow |
+| `max chats members add\|remove`, `admins add\|remove` | members and admins |
+| `max chats requests list <чат>` | applications to the channel with approval; admins see, application time is unknown |
+| `max chats requests accept\|decline <чат> <человек>` | accept or reject one application; `--all` and `--link` are not supported |
+| `max chats link show\|reset <чат>` | invitation link; `reset` - new, old stops working |
+| `max chats inspect <ссылка>` | where the invitation or public link leads; does not enter anywhere |
+| `max chats create`, `max chats join <ссылка>`, `max chats leave <чат>` | create a group, join via link, exit |
+| `max chats update` | settings, title, description, photo, who can pin (`--all-can-pin`) and add people (`--only-admins-add`); read settings - `max chats show` |
+| `max messages delete --for-everyone`, `pin`, `unpin` | delete for everyone, pin |
 
-An agent without a terminal can use the equivalent MCP tools: `max_read` (`command: "review"`) with `unanswered_after_hours`, `max_read` (`command: "chats events"`), `max_read` (`command: "chats members"`), `max_read` (`command: "chats rules"`) and `max_write` (`command: "chats check"`) ([mcp.md](./mcp.md)).
+An agent connected via [MCP server](./mcp.md) can execute the same commands within the scope of profile rights.
+
+Group-changing commands return `operationId` in JSON. After creating, joining, updating or resetting a link, the chat record is in `chat`. If the title or description changed but the settings request did not complete, the result is `outcome_unknown`. Read the group with `chats show` before retrying: the change may have applied partially.
 
 ## What needs your reply
 
 `max review` maintains a task list in the local copy; `max serve` does not yet open tasks in MAX. An unanswered question or a message mentioning you by name opens a task; your reply closes it. A task links to the message without copying its text.
+
+See what awaits you, the old ones on top, and then only questions and mentions in one group:
 
 ```sh
 max tasks list --state open
@@ -163,6 +220,8 @@ max tasks list --state open
 max tasks list --chat "Поход" --type question,mention
 ```
 
+Add something that the rules don't see, like your promise, or close a task that doesn't need to be answered:
+
 ```sh
 max tasks add msg:max/<вы>/<чат>/<сообщение> --type promise
 ```
@@ -171,15 +230,59 @@ max tasks add msg:max/<вы>/<чат>/<сообщение> --type promise
 max tasks close <задача> --as dismissed --reason no-reply-needed
 ```
 
+See open tasks by chat, the oldest and median time until closed:
+
 ```sh
 max stats tasks show
 ```
 
-Closed tasks stay closed, and dismissed tasks do not reappear. Only your reply closes a task; an administrator’s reply does not yet do so, and `@ник` mentions are not detected. Equivalent MCP tools are `max_read` (`command: "tasks list"`), `max_write` (`command: "tasks add"`), `max_write` (`command: "tasks close"`) and `max_read` (`command: "stats tasks show"`) ([mcp.md](./mcp.md)).
+A closed task stays closed and a dismissed task does not reappear. Only your reply closes the task; administrator replies are not yet counted, and an `@ник` mention is not detected. The same commands are available through MCP.
 
 ## Rules
 
-Rules are stored on your computer, separately for each group. The first `set` writes the full set of rules with their defaults.
+Group rules define what `max chats moderate` checks and may do. Each group's rules stay on this computer and never go to MAX. The first `set` saves all rules with defaults. There is no background monitoring: checks happen only when `chats moderate` runs.
+
+Show the rules. Before the first change, these are the default values, marked as unsaved:
+
+```sh
+max chats rules show "Поход"
+```
+
+Delete a message with a link:
+
+```sh
+max chats rules set "Поход" links delete
+```
+
+Block these people by number...
+
+```sh
+max chats rules set "Поход" blocked 12345,67890
+```
+
+...and delete them when they write or enter:
+
+```sh
+max chats rules set "Поход" blockedPeople remove
+```
+
+Delete without asking you:
+
+```sh
+max chats rules set "Поход" consent.delete allow
+```
+
+See what the test would do without doing anything:
+
+```sh
+max chats moderate "Поход" --dry-run
+```
+
+Check what's new from the last run and act:
+
+```sh
+max chats moderate "Поход"
+```
 
 | Rule | Default | Meaning |
 |---|---|---|
@@ -203,14 +306,14 @@ Consent determines whether the action is performed:
 - `ask` — ask in the terminal; without an answer, the action waits. `--allow-dangerous` authorizes these actions for this run;
 - `allow` — act immediately.
 
-Older files can still be read: `forbid` becomes `deny`, and `flag` and `confirm` become `ask`. MCP calls `max_write` with `command: "chats check"`; actions at consent level `ask` remain plans, with no server confirmation forms.
+Old files are read: `forbid` becomes `deny`, `flag` and `confirm` - `ask`. An agent connected via MCP operates only where the level is `allow`; level `ask` actions remain the plan for you, there are no server forms.
 
 `chats moderate --json` returns `{ chatId, rows }`. `--since-time` accepts an ISO 8601 time or `30m`, `2h`, `1d`, not a message ID, and does not advance the saved position. The next-check position is stored with the rules; the old session position is migrated automatically before the first run. CLI and personal-account MCP share this position.
 
 ## Using a bot
 
-If your bot is an admin in the group, it can perform the same check: `max <бот> bot chats
-moderate`. Unlike the personal account, it can ban removed members so they cannot return through an invite link. It cannot see account age. See [bot.md](./bot.md#проверка-чата-по-правилам).
+An administrator bot in the group can run the same check: `max <бот> bot chats
+moderate`. Unlike a personal account, it can ban removed users from returning through an invitation link. It cannot access account age. See [bot group checks](./bot.md#проверка-чата-по-правилам).
 
 ## Limitations
 
@@ -249,11 +352,15 @@ Without `--offline`, the CLI also fetches joining and leaving events. Saved dail
 
 ### Member snapshots
 
-`max chats members fetch` reads members into local storage, saving profiles, changes, daily member counts and completeness checks. `--budget` limits pages. An incomplete list marks nobody as having left: that requires the entire available list and a known group member count no greater than the number retrieved. MAX lists are often partial; a larger budget helps only when the server actually provides more pages.
+`max chats members fetch` reads participants into a local copy: saves their profiles, changes, number of participants per day and the result of the completeness check. `--budget` limits the number of pages. If the list is incomplete, no one is recorded as having left: this requires the entire available list and a known number of group members, not exceeding the number of people read. In MAX, lists are often partial; increasing the budget only helps where the server actually serves the remaining pages.
 
-`chats tracking add` adds a group to tracking. `chats tracking list` shows tracked groups; `show` shows group state and member-count snapshots for the last 30 days. `add` does not retrieve members immediately; `remove` stops tracking and preserves collected history. The MAX server collects tracked group membership daily while running. Adding tracking does not start the server or extend its idle timeout; see below.
+<a id="ежедневная-история-состава"></a>
 
-`max chats members history` shows saved joins, leaves and profile changes in chronological order; `--since-time` limits the period. It does not contact MAX. Join time comes from MAX when known, otherwise it is the first observation of the person. Leave time is the first complete snapshot without them, not their exact departure time. The first retrieval establishes the initial membership; those people did not necessarily join that day. `chats members list --offline` shows the latest fully saved membership list; partial retrievals do not replace it. If there has not yet been a complete snapshot, this list may be empty even when individual profiles and events are saved. Profiles and history remain in local storage alongside messages.
+To collect the lineup every day, add the group to the watch list: `max chats tracking add <группа>` (does not read participants right away) or `max chats members fetch <группа> --track`. While `max server` is running, it receives the composition of the monitored groups: the first time a minute after connecting, then once a day. If the composition is already saved today in UTC, including an incomplete response, the automatic receipt is skipped; You can repeat it manually via `max chats members fetch <группа>`.
+
+Tracking does not start the server or prolong its idle timeout: for daily history, keep `max server` running at all times. `max chats tracking list` shows the groups being monitored and the last number of participants saved; `show` - group status and snapshots of the number of participants over the last 30 days. `max chats tracking remove <группа>` stops automatic receiving; the accumulated history remains accessible through `max chats members history`.
+
+`max chats members history` lists saved joins, departures and profile changes chronologically; `--since-time` limits the period. It never contacts MAX. A join uses MAX's timestamp when available, otherwise first observation. Departure time is the first complete snapshot missing the person, rather than their exact departure. The initial list does not mean everyone joined that day. `chats members list --offline` shows the latest complete saved membership; partial reads do not replace it. Without a complete snapshot, the list can be empty even when individual profiles and events exist. Profiles and history remain beside messages in the local archive.
 
 `max chats members audit` reads members and shows signals of suspicious accounts. `--budget` limits pages, and `--min-score` sets the minimum score. This is a hint for human review: nobody is removed, administrators and the owner are excluded, `more` means an incomplete list, and `unknown` means unknown signals. MAX does not provide every Telegram signal. This check is unavailable with `--offline`. “Never wrote” means no messages from the person were found in local history; it does not prove they never posted in the group.
 
@@ -261,7 +368,7 @@ Without `--offline`, the CLI also fetches joining and leaving events. Saved dail
 
 ### Weekly report for your group
 
-“Поход” below is a fictional example group. First download its messages with `store fetch` if they are not yet stored, then save current membership and prepare a report:
+“Hike” below is a fictitious example group. First, download its messages via `store fetch`, if they are not already in a local copy, then save the current composition and prepare a report:
 
 ```sh
 max chats tracking add "Поход" --json
@@ -288,11 +395,3 @@ max chats members audit "Поход" --json
 ```
 
 Ask the agent to report message and active-sender counts, unanswered questions, membership changes and days with member snapshots. Keep incompleteness indicators in the report: `complete`, `more`, `unknown` and missing daily snapshots. Repeat membership collection for the next report; the first report cannot show departures before the first saved membership list.
-
-## Daily membership history
-
-Add a group with `max chats tracking add <группа>` or run `max chats members fetch <группа> --track`. While the MAX server runs, it retrieves tracked group membership first one minute after connecting, then daily. `max chats tracking list` shows tracked groups and their latest saved counts.
-
-Tracking does not start the server or extend its idle timeout. Keep `max server` running continuously for daily history. If membership has already been saved today in UTC, including a partial response, automatic retrieval is skipped; retry manually with `max chats members fetch <группа>`. Incomplete membership does not prove absent members have left.
-
-`max chats tracking remove <группа>` stops future automatic retrieval; saved history remains available through `max chats members history <группа>`.

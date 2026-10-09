@@ -11,7 +11,7 @@ After following the guide, you will be able to:
 
 - import folders and search your files with source references;
 - create, edit and export notes about a person or message;
-- organise notes, messages and contacts with tags.
+- organise notes, messages and people with tags.
 
 WireCat uses Memo for these tasks. Memo is a tool that runs on your computer to import and
 search files and keep notes linked to their subjects. Your agent can run its commands for you.
@@ -153,7 +153,7 @@ and inspect the import report; a file that was not imported cannot appear in the
 There are two ways a note reaches Memo. **Imported notes** come from your files; edit the
 original file and import it again. **Your own notes** are written in Memo's local store and
 can be about a person, message, project, task or another note. Creating one does not send
-anything to a contact or change the message it refers to.
+anything to that person or change the message it refers to.
 
 Ask your agent to add a note about the person or message you choose:
 
@@ -213,22 +213,21 @@ export leaves it alone and reports the conflict.
 ## Tag your sources
 
 A tag is a short label you choose, such as `work` or `follow-up`. It helps you find related
-sources without rewriting them. Ask your agent to tag the exact notes, messages or contacts
+sources without rewriting them. Ask your agent to tag the exact notes, messages or people
 you choose, then show the labels it saved.
 
 Use IDs and source references returned by your own searches. `NOTE_ID`, `PERSON_UID` and
-`FOLDER_ID` below are placeholders; the numeric message/contact/account IDs are illustrative.
+`FOLDER_ID` below are placeholders; the numeric message/identity/account IDs are illustrative.
 
 | What to label | Command |
 | --- | --- |
 | A note | `memo tags add work --note note:NOTE_ID` |
 | A stored message | `memo tags add follow-up --message 'msg:telegram/1/77/42'` |
-| A contact identity selected through an account | `memo tags add work --contact 101 --provider telegram --account 1` |
+| A stored messenger identity selected through an account | `memo tags add work --contact 101 --provider telegram --account 1` |
 | A linked person | `memo tags add work --person PERSON_UID` |
 | Notes in a subfolder | `memo tags add project --folder FOLDER_ID --path Projects` |
 
-A **contact** identifies someone in a provider; the account selects the local view used to find them. A **person** combines the
-identities you linked explicitly. Obtain the person's identifier (UID) from `messages.person.uid`
+`--contact` selects a stored identity in the messenger and account you name. The person does not need to be saved in your address book. `--person` selects the **person** whose identities you linked explicitly. Obtain the person's identifier (UID) from `messages.person.uid`
 in `memo context ... --json`; see [linking identities](./people.md#link-your-accounts). A full message
 reference includes the provider, account, chat and message, so the same numeric ID in another
 account does not select the same source.
@@ -272,7 +271,7 @@ For mail accounts, imports and linking an address to a person, continue with [Em
 ## Check the result
 
 A saved note should have an ID, text and links to the subjects you selected. A tag listing
-should identify the intended note, message, contact or person. For imported files, open the
+should identify the intended note, message, messenger identity or linked person. For imported files, open the
 original to check the text. If a source was not imported or a person link is unresolved, ask
 the agent to explain the gap rather than treat the result as complete.
 
@@ -280,6 +279,6 @@ the agent to explain the gap rather than treat the result as complete.
 
 If a note or tag is missing, check its exact ID and account. For file notes, inspect the import report and rerun the import after edits. If an edit conflicts, read the current revision before trying again.
 
-Continue with [Email](./email.mdx) to import mail and link addresses to your contacts, or
+Continue with [Email](./email.mdx) to import mail and link addresses to people you know, or
 [People](./people.md#link-your-accounts) to connect identities across messengers.
 For exact Memo options, use `memo --help` or a subcommand's `--help`.

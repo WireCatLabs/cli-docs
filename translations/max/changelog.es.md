@@ -4,6 +4,23 @@ title: "Historial de cambios"
 
 Cambios destacados de `@leemour/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.41.0 — 09.10.2026
+
+### Cambios que pueden romper scripts
+
+- **Las reglas responden a todos los destinatarios que coinciden hasta que limitas la audiencia; desaparece la lista separada `testers`.** `max replies audience --reply listed --allow-people <id>` limita la audiencia a esas personas; `--deny-people` y `--deny-chats` excluyen destinatarios. No se envía nada mientras `permissions.replies.send` no sea `allow`; las reglas nuevas permanecen desactivadas hasta que las activas. Antes, el destinatario debía estar tanto en `testers` como en la audiencia, y ambas listas causaban confusión. Un archivo que todavía incluye `testers` sigue respondiendo exactamente a las mismas personas: pasan a la lista permitida (si la audiencia ya era `listed`, solo a las también permitidas por ella). Se eliminan los chats permitidos de ese archivo para evitar responder a todos sus miembros; las prohibiciones se mantienen. La siguiente edición con `max replies` reescribe el archivo sin `testers`.
+- **`max replies status --json` ya no incluye `testers`**; los contadores `audience` muestran a quién se puede responder. En `max replies test` y `serve`, los remitentes fuera de la audiencia se omiten con el motivo «not on the allow list» en vez de «not a test account».
+
+### Correcciones
+
+- **`max mcp config` incluye `MESSAGING_STORE` y `XDG_RUNTIME_DIR` en la configuración del cliente**, igual que `tg`. Un cliente que iniciaba el servidor con un entorno reducido no podía acceder al llavero en Linux y respondía «sin sesión»; con un `MESSAGING_STORE` propio buscaba en otro archivo. Ejecuta de nuevo `max mcp config` y sustituye la entrada del cliente.
+
+## 0.40.0 — 09.10.2026
+
+### Cambios que pueden romper scripts
+
+- **El almacén de mensajes elimina las copias conservadas para versiones antiguas** (versión del almacén 28, cli-messaging 0.212.0). Las notas, notas sobre contactos, relaciones y entidades anteriores al nuevo sistema se trasladan una vez a las nuevas tablas durante la actualización. Después, las versiones antiguas de max, tg y memo rechazan abrirlo con «upgrade this tool»: actualiza las tres herramientas juntas.
+
 ## 0.39.0 — 09.10.2026
 
 ### Novedades
@@ -119,7 +136,6 @@ Cambios destacados de `@leemour/max-cli`, con una sección por versión, recient
 - **`max account privacy show`** muestra quién encuentra, ve el número, llama o añade la cuenta y
   si se oculta el estado; usa la respuesta de acceso sin otra petición.
 
-
 ## 0.34.0 — 08.10.2026
 
 ### Novedades
@@ -167,7 +183,7 @@ Cambios destacados de `@leemour/max-cli`, con una sección por versión, recient
 ### Novedades
 
 - **Las fotos y los escaneos de adjuntos se pueden reconocer por lotes con el modelo elegido.** Por defecto, el agente sigue leyéndolos por sí mismo y guarda el texto con `attachments text set`. Para procesarlos por lotes, usa `attachments extract --ocr` con el modelo de `models.ocr` y `--concurrency`; el texto reconocido entra en la búsqueda existente con `content:`.
-  Ten en cuenta: `--ocr` envía archivos al proveedor del modelo elegido, por lo que debe activarse de forma explícita. La caché tiene en cuenta el archivo y el modelo; un fallo de la API no sobrescribe el texto del agente ni el índice anterior.
+  Ten en cuenta: `--ocr` envía archivos al proveedor del modelo elegido, por lo que debe activarse de forma explícita. La caché tiene en cuental archivo y el modelo; un fallo de la API no sobrescribe el texto del agente ni el índice anterior.
 
 ### Cambios que pueden romper scripts
 
@@ -366,7 +382,7 @@ Cambios destacados de `@leemour/max-cli`, con una sección por versión, recient
 
 - **El rechazo `poll.already.voted` explica cómo cambiar el voto.** Si la encuesta lo permite, ejecuta primero `polls vote <chat> <message> --retract` en el mismo perfil y elige después otra respuesta.
 
-- **`max messages download --timeout` también cierra el flujo HTTP del adjunto.** Antes podía seguir descargando tras vencer el tiempo del comando, hasta otro límite de inactividad. Ahora el cierre del adaptador cancela sus flujos y elimina el archivo incompleto.
+- **`max messages download --timeout` también cierra el flujo HTTP del adjunto.** Antes podía seguir descargando tras vencer el tiempo del comando, hasta otro límite de inactividad. Ahora el cierre del adaptador cancela sus flujos y eliminal archivo incompleto.
 
 ## 0.25.0 — 03.10.2026
 
@@ -722,7 +738,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/leemour/max-cli/blob/v0.39.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/leemour/max-cli/blob/v0.41.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos prácticos para bots.** `max <имя> bot messages send <чат> <текст>` envía a un chat por número, a una persona como `user:<номер>` o por el título de un chat que el bot ya ha visto; también hay `edit`, `delete`, `list` y `get`. `max <имя> bot chats list` muestra los chats que ha visto el bot; también están `chats get|pin|unpin|leave|action`. `max bot list` muestra todos los nombres con un token de bot.
   Por qué «que ha visto»: MAX no ofrece una lista de chats del bot, por lo que `max` los recuerda por su cuenta.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).
@@ -800,7 +816,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Seguridad
 
-- **El token de `MAX_TOKEN` se queda solo ahí.** Si MAX emite un token de sesión nuevo, `max` no lo escribe ni en el llavero ni en un archivo, y avisa en stderr. `max doctor` indica el archivo `credentials.json` si el token se guarda allí en lugar de en el llavero.
+- **El token de `MAX_TOKEN` se queda solo ahí.** Si MAX emite un token de sesión nuevo, `max` no lo escribe ni en el llavero ni en un archivo, y avisa en stderr. `max doctor` indical archivo `credentials.json` si el token se guarda allí en lugar de en el llavero.
 - **`max session start` oculta el teléfono**, como `max account show`. Ctrl-C al pedir token termina con `130`.
 - **El servidor en segundo plano no entrega el token** a los comandos que le consultan sobre el inicio de sesión: no lo necesitan y consultan el llavero.
 - **Límites de red.** Tramas MAX descomprimidas hasta 32 MiB; conexión y descargas no esperan indefinidamente. `max messages download` solo HTTPS, sin equipo local ni red privada, incluso tras redirecciones; máximo 4 GiB, voz para transcripción 32 MiB. Los enlaces provienen de terceros y pueden apuntar a cualquier lugar.
@@ -880,11 +896,11 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 - **`max reactions remove <чат> <id>` retira tu reacción.**
 - **Grupos y canales bajo `max chats`:** inspeccionar invitación, entrar, salir, crear, añadir/expulsar, administrar, renombrar, ajustes y renovar enlace. Las solicitudes se retiraron en 0.17.0 porque MAX no las tiene. Los cambios son visibles y pasan los controles de envío ([Grupos](./usage.md#группы-и-каналы)).
 - **`max update` actualiza `max` con el gestor de paquetes con el que se instaló;** `--check` solo indica si existe una versión más reciente.
-  Ten en cuenta: una persona en el terminal ve el aviso de nueva versión una vez al día; los agentes y scripts nunca lo ven. Desactívalo con `updateCheck: false` en `defaults` ([installation.md](./installation.md#обновление-и-удаление)).
+  Ten en cuenta: una persona en el terminal ve el aviso de nueva versión una vez al día; los agentes y scripts nunca lo ven. Desactívalo con `updateCheck: false` en `defaults` ([installation.md](./installation.md#обновление)).
 - **Tab en zsh/bash/fish/PowerShell:** `source <(max complete zsh)`, órdenes, indicadores, valores, chats/personas locales sin MAX ([Autocompletar](./commands.md#max-complete)).
 - **`max mcp` conecta el perfil por MCP** para clientes sin terminal, como Claude Desktop, o mediante MCP en Cursor ([MCP](./mcp.md)). Solo lectura sin `--allow-send`; envío con controles de `max messages send`.
 - **`max mcp --allow-send --confirm-send` muestra un formulario antes de cada envío:** a qué chat (título e ID) y qué se enviará.
-  Ten en cuenta: sin tu «sí», no se envía nada; un cliente que no pueda mostrar formularios recibe un error ([docs/mcp.md](./mcp.md#права-профиля-управляют-инструментами)).
+  Ten en cuenta: sin tu «sí», no se envía nada; un cliente que no pueda mostrar formularios recibe un error ([docs/mcp.md](./mcp.md#что-может-агент)).
 - **`max messages send … --file <путь>` envía fotos/archivos**, varias fotos en un mensaje.
 
 ### Seguridad
@@ -999,7 +1015,7 @@ Primera versión que se puede compartir.
 - **Siete órdenes sobre MAX real:** `session start|end`, `account show`, `chats list`, `contacts list`, `messages list`, `messages send`.
 - **Perfil primero:** `max personal chats list`. Cuentas independientes con token, estado y copia propios; también `MAX_PROFILE`.
 - **Token en el almacén del sistema**, no archivo ni argumento. Aún sin entrada por teléfono: `max session start` obtiene el del cliente oficial.
-- **Modo máquina:** `--json` da un valor en stdout, también automáticamente sin terminal. Error stderr, stdout vacío. Decide por código de salida: [Referencia `docs/commands.md`](./commands.md).
+- **Modo máquina:** `--json` da un valor en stdout, también automáticamente sin terminal. Error stderr, stdout vacío. Decide por código de salida: [Referencia docs/commands.md](./commands.md).
 - **Diagnóstico sin contenido:** `--verbose` petición por línea; `--record` conserva 30 días; `max runs list|show|path` lee. Por defecto nada registrado.
 - **Copia local:** lecturas guardadas; `--offline` sin conexión; `max cache clear` elimina.
 - **`~/.config/max-cli/config.json`**, prioridad indicador → variable → archivo → integrado. Erratas son errores explícitos.

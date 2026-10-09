@@ -3,7 +3,7 @@ title: "Group admins"
 description: "Keep up with questions, understand participation and manage your group."
 ---
 
-This page is for people who run a Telegram or MAX group. By the end, you will be able to find questions awaiting a reply, understand activity and review who is in your group. It starts with requests for a read-only report, then explains how to check the result before changing members or moderation rules. Your account or bot needs the appropriate group rights for changes.
+If you run a group, use a report to find questions awaiting a reply, understand activity and review who is in your group. Start with a reading task and check its sources before changing members or moderation rules. Your account or bot needs the appropriate group rights for changes.
 
 ## Find what needs attention
 
@@ -13,7 +13,7 @@ Review yesterday’s messages in my project group. List questions still awaiting
 
 Review the questions, checked period and cited messages. If history is missing, [download the relevant chats](./search.md) before treating the report as complete.
 
-Ask your assistant to review unanswered questions and mentions, with links to the messages.
+Ask your agent to review unanswered questions and mentions, with links to the messages.
 Read [Telegram group tasks](./tg/groups.md) or [MAX group tasks](./max/groups.md) for the commands.
 
 ```sh

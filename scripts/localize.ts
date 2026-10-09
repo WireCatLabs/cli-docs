@@ -119,6 +119,20 @@ export function translationProblems(original: string, translated: string): strin
       ),
     ].sort()
   if (JSON.stringify(literals(original)) !== JSON.stringify(literals(translated))) problems.push("Inline code changed")
+  const frontmatterKeys = (text: string) =>
+    [...(text.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/)?.[1] ?? "").matchAll(/^([a-zA-Z][\w-]*):/gm)]
+      .map((match) => match[1])
+      .sort()
+  if (JSON.stringify(frontmatterKeys(original)) !== JSON.stringify(frontmatterKeys(translated)))
+    problems.push("Frontmatter keys changed")
+  // Translate reader text inside disclosures, while retaining the tags that make them work.
+  const presentationTags = (text: string) =>
+    nodes(text)
+      .filter((node) => node.type === "html")
+      .flatMap((node) => [...(node.value ?? "").matchAll(/<\/?(details|summary|div|span|img|br)\b[^>]*>/g)])
+      .map((match) => `${match[0].startsWith("</") ? "/" : ""}${match[1]}`)
+  if (JSON.stringify(presentationTags(original)) !== JSON.stringify(presentationTags(translated)))
+    problems.push("HTML presentation tags changed")
   const links = (text: string) =>
     nodes(text)
       .filter((node) => node.type === "link" || node.type === "image" || node.type === "definition")

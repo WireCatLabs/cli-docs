@@ -2,7 +2,15 @@
 title: "Permisos"
 ---
 
-Los permisos se aplican a un perfil: un conjunto de ajustes para una cuenta o un bot. Empieza con acceso de lectura y permite cambios según los necesites. Consulta [Perfiles y bots](./profiles.md).
+Esta página es necesaria antes de permitir que un agente de IA, script u otra persona trabaje con su cuenta MAX a través de `max`. Te muestra cómo decidir para cada perfil qué sólo se puede leer, qué se puede preguntar antes y qué se puede hacer sin que te lo pregunten. Después de leerlo, puedes hacer que el perfil sea de solo lectura, permitir una acción, como enviar, y sabrás qué controles siguen vigentes.
+
+Palabras que aparecen en la página:
+
+- **Perfil** es un conjunto de configuraciones con nombre para una cuenta o bot, por ejemplo `work` ([perfiles y bots](./profiles.md)).
+- **Clave de permiso**: el nombre de un comando o grupo de comandos, por ejemplo `messages` o `messages.send`. Cuanto más larga sea la clave, más precisa será.
+- **Nivel de acceso** - qué sucede cuando se ejecuta el comando: `deny`, `readonly`, `ask` o `allow`.
+
+Comience leyendo y permita cambios según sea necesario.
 
 ## Elegir un nivel de acceso
 
@@ -13,7 +21,7 @@ Los permisos se aplican a un perfil: un conjunto de ajustes para una cuenta o un
 | `ask` | Los cambios piden confirmación en el terminal. |
 | `allow` | La acción puede ejecutarse sin otra confirmación. |
 
-Si se deniega una acción, revisa la acción y los ajustes. No significa que haya un problema de conexión. No pidas al asistente que elimine la restricción solo para completar la tarea.
+Si se deniega una acción, revisa la acción y los ajustes. No significa que haya un problema de conexión. No pidas al agente que elimine la restricción solo para completar la tarea.
 
 ## Permitir una acción
 
@@ -29,7 +37,7 @@ max work config set permissions.messages readonly
 
 Una clave más específica tiene prioridad: `permissions.messages.send ask` mantiene la confirmación antes de enviar en el terminal y permite enviar mediante MCP. Para prohibir el envío, establece esta clave en `readonly`. Comprueba las demás excepciones con `config show`.
 
-Estos permisos se aplican a los mensajes. Las reacciones y la gestión de chats tienen claves independientes. Consulta ejemplos completos de perfiles de solo lectura en la [referencia de configuración](./configuration-reference.md).
+Estos son derechos de mensajes. Las reacciones y la gestión del chat tienen claves independientes. Todas las claves y un perfil de solo lectura de ejemplo se encuentran en [directorio de derechos de acceso](./configuration-reference.md#права-доступа).
 
 ## Permisos del bot
 
@@ -42,7 +50,7 @@ max support config set sendsPerHour 30 --bot
 
 ## Limitar los destinatarios y los envíos repetidos
 
-La lista de destinatarios limita los chats a los que puede enviar el perfil. El límite por hora ayuda a detener bucles de envío. Estas comprobaciones se aplican incluso si el comando está permitido. Consulta los comandos para gestionarlas en [Seguridad](./security.md).
+La lista de destinatarios limita los chats a los que puede enviar un perfil. El límite horario ayuda a detener el ciclo de envío. Estas comprobaciones también se aplican a un comando permitido. Comandos de control: en la sección [protección contra envío al lugar equivocado](./security.md#защита-от-отправки-не-туда).
 
 ## Cambiar temporalmente los permisos del servidor MCP
 
@@ -50,4 +58,4 @@ Añade `--permission messages.send=allow` al iniciar el servidor para permitir q
 
 ## Limitaciones y reglas detalladas
 
-Un asistente con acceso a los archivos de configuración o a un terminal sin restricciones puede cambiar estos permisos. Lee [Seguridad](./security.md) antes de darle ese acceso. La referencia de configuración del mensajero describe los permisos anidados y las claves exactas de los comandos.
+Un agente con acceso a los archivos de configuración o a un terminal sin restricciones puede cambiar estos permisos. Antes de dar ese acceso, consulta [seguridad](./security.md). Los permisos anidados y las claves exactas se explican en la [referencia de permisos](./configuration-reference.md#права-доступа).

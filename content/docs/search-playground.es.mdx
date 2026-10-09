@@ -45,7 +45,7 @@ La sintaxis Lucene combina palabras con campos y operadores lógicos. Empieza co
 
 Elige **Fecha** para insertar la fecha de hoy, el mes actual o los cinco días de la demo. La consulta usa `date:YYYY-MM-DD` para un día o `date:[START TO END]` para un intervalo con ambos límites incluidos. Un asterisco deja un extremo abierto; las llaves excluyen el límite. Por ejemplo, **Antes de mañana** inserta `date:{* TO YYYY-MM-DD}` con la fecha de mañana.
 
-Esta demo implementa los campos Lucene compatibles con WireCat, no todas las funciones de Apache Lucene. La coincidencia difusa (`~`), la ponderación (`^`) y los campos previstos como `filename:` no están disponibles aquí. Una consulta incompleta o no compatible mantiene visibles los últimos resultados válidos y señala el problema; la búsqueda no amplía la consulta automáticamente.
+Esta demo implementa los campos Lucene compatibles con WireCat, no todas las funciones de Apache Lucene. La coincidencia difusa (`~`), la ponderación (`^`) y los campos como `filename:` no están disponibles aquí. Una consulta incompleta o no compatible mantiene visibles los últimos resultados válidos y señala el problema; la búsqueda no amplía la consulta automáticamente.
 
 ## Busca en tu propio archivo
 

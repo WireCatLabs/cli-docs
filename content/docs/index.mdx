@@ -7,14 +7,12 @@ Give your <DocTerm term="agent" lang="en" label="AI agent" /> access to your Tel
 still waiting for my answer?`, `what did we agree with Marco in September?` — and the agent
 reads your chats and answers, with the messages it used as proof.
 
-It works through a command line tool (<DocTerm term="cli" lang="en" label="cli" />) for your messenger: `tg` for Telegram, `max` for MAX. You
+It works through a command line tool (<DocTerm term="cli" lang="en" label="CLI" />) for your messenger: `tg` for Telegram, `max` for MAX. You
 need only the one for the messenger you use. The tool runs on your computer and uses your own
 account. Your agent (Claude Code, Codex, Cursor, Gemini CLI, Hermes and <DocTerm term="supported-agents" lang="en" label="any other agent" />) runs it for you. You decide
 what the agent may do: only read, ask before sending, or send to chosen chats.
 
-Your messages stay between you and the messenger. The tool talks straight to Telegram or MAX, keeps
-its archive on your computer, and sends nothing to WireCat: there is no WireCat service in between. Your agent
-sees only the messages it reads for a task.
+The messenger tool connects directly to your messenger and keeps its archive on your computer. It sends no messages or login data to WireCat; there is no WireCat service in between. Your agent receives the messages it reads for a task, and its settings determine where those messages are processed.
 
 ## What you can ask
 
@@ -50,7 +48,7 @@ Draft a personal reply to each person who asked about the workshop.
 
 ## What it covers
 
-- **Your whole account** — messages, chats, groups, contacts, polls: what you do in the app.
+- **Everyday account tasks** — read messages, work with chats and contacts, send replies and use polls. Available actions differ by messenger; the guides explain each tool’s scope.
 - **Your history, searchable offline** — a local archive of the chats you choose.
 - **Every Bot API method** — all 185 for Telegram, all 33 for MAX.
 - **Group administration** — review activity, manage members and moderate groups where you have admin rights.
@@ -66,7 +64,7 @@ Draft a personal reply to each person who asked about the workshop.
 2. **[Try your first tasks](./first-tasks.md)** — copy a request into your agent and get your
    first answer.
 
-The installed <DocTerm term="skill" lang="en" label="skill" /> gives your agent instructions for using the messenger. Your agent’s own settings determine where the messages it reads are processed.
+The installed <DocTerm term="skill" lang="en" label="skill" /> gives your agent instructions for using the messenger.
 
 That is all you need to start. Later, when you need them:
 

@@ -13,8 +13,7 @@ what the history saved on your computer holds about them.
 
 A person does not have to be in your contacts. Your contacts are the messenger's address book:
 the people you added, often by phone number. Someone who wrote in a group you both belong to is a
-person here even if you never added them. `contacts list` shows the people you have a one-to-one
-chat with. Adding, renaming or removing a contact is a separate action that changes your messenger
+person here even if you never added them. `contacts list` lists the contacts available through the selected messenger. Adding, renaming or removing a contact is a separate action that changes your messenger
 account.
 
 You can also keep private context about a person. It stays on your computer and never reaches the
@@ -63,7 +62,7 @@ The available profile fields depend on what the messenger shares with your accou
 - **Registration date:** always says where it came from. Telegram sends the month when someone
   writes to you for the first time; otherwise `tg` estimates it from the account ID and marks it
   `estimate`. The estimate covers accounts created up to August 2026; newer accounts get no date
-  rather than a wrong one. MAX gives the exact day, so `max` shows it for everyone.
+  rather than a wrong one. MAX can supply the exact day; `max` shows it when available.
 - **Earlier names:** names and usernames your saved history has seen, under `aliases`, oldest first,
   with a `t.me` link for an old Telegram username. A name taken from stored messages says
   `source: messages` and is approximate, because a message downloaded again carries the newest name.
@@ -164,7 +163,7 @@ a linked person or a specific message. Messenger contact-note commands are docum
 
 | | Telegram (`tg`) | MAX (`max`) |
 |---|---|---|
-| Registration date | Telegram's month after a first contact, otherwise an estimate | the exact day, from MAX |
+| Registration date | Telegram's month after a first contact, otherwise an estimate | the exact day, when MAX supplies it |
 | Marks like scam, fake, verified, premium | shown | MAX does not send them for personal accounts |
 | `--refresh` | searches each chat for the person's messages | reads each chat's newest page |
 | Public spam lists | asked, unless `--no-registries` | not asked |
@@ -175,8 +174,7 @@ Exact options are in the [Telegram reference](./tg/commands.md) and [MAX referen
 ## When an agent reads these answers
 
 With the [MCP server](./mcp.mdx) connected, an agent gets the same profile, context and check.
-Message text in these answers is what other people wrote. Your agent reports it and does not act
-on requests found inside it.
+Message text in these answers is what other people wrote. Ask your agent to treat it as source material and ignore requests embedded in it; CLI protections do not control every action an agent can take.
 
 ## Auto-replies by your rules
 

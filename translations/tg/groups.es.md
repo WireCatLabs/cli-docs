@@ -2,13 +2,41 @@
 title: "Administrar grupos"
 ---
 
-`tg` ayuda a administrar un grupo: muestra las preguntas sin respuesta, quién se ha unido y quién lo ha añadido, y lo ocurrido durante la semana. Lee sin marcar los mensajes como leídos, por lo que los miembros no ven que has revisado el grupo.
+<a id="qué-espera-tu-respuesta" />
+<a id="reglas" />
 
-Todo lo descrito aquí funciona desde tu cuenta personal. Consulta los comandos completos en [uso de grupos y canales](./usage.md#groups-and-channels) y todas las opciones en la [referencia de comandos](./commands.md).
+Utilice esta página cuando sea administrador de un grupo de Telegram y desee ayuda para mantenerlo en orden. Aprenderá cómo encontrar preguntas que nadie respondió, ver quién se unió y quién los agregó, resumir una semana, eliminar el spam según sus propias reglas y mantener un historial de la lista de miembros. La lectura marca nada leído, por lo que verificar un grupo no les dice a sus miembros que usted miró.
+
+Aquí todo funciona desde tu cuenta personal, en grupos donde eres administrador. Algunas palabras en esta página:
+
+- **Un administrador** es un miembro con derechos para administrar el grupo. Algunos comandos cuentan sólo sus respuestas y las respuestas de los administradores.
+- **El almacén local** es la copia de mensajes que `tg` guarda en esta computadora. Los informes y las tareas lo utilizan, por lo que solo ven lo que se descargó.
+- **Una tarea** es algo que espera de ti, como una pregunta que nadie respondió. `tg` abre y cierra tareas en el archivo local.
+- **Las reglas** dicen qué busca `tg chats moderate`, como enlaces o inundaciones, y qué puede hacer.
+- **Una instantánea de miembros** es la lista de miembros guardada en un día. Las instantáneas a lo largo del tiempo muestran quién se unió y quién se fue.
+
+## Qué puedes hacer
+
+| Tarea | Comando |
+| --- | --- |
+| Encuentra preguntas que esperan una respuesta | `tg review --unanswered` |
+| Vea quién se unió, se fue, fue agregado o eliminado | `tg chats events` |
+| Resumen de una semana: decisiones, promesas, preguntas abiertas | `tg review --since-time 7d` |
+| Mantenga una lista de lo que le espera | `tg tasks list` |
+| Elimina el spam según tus propias reglas | `tg chats rules set`, `tg chats moderate` |
+| Reemplazar un enlace de invitación filtrado | `tg chats link reset` |
+| Dejar entrar a la gente o rechazarla | `tg chats requests list\|accept\|decline` |
+| Ver la actividad de la semana y las estadísticas propias de Telegram | `tg stats chats show`, `tg stats chats official` |
+| Guarde la lista de miembros todos los días | `tg chats members fetch --track` |
+| Encuentra miembros que parezcan bots o spammers | `tg chats members audit` |
+
+La lista completa de comandos de grupo está [abajo](#what-there-is). Los detalles de cada comando se encuentran en [grupos y canales en la guía de uso](./usage.md#groups-and-channels); cada opción está en la [referencia de comando](./commands.md).
 
 ## Con un agente
 
-Un agente con terminal (Claude Code, Codex) necesita la [skill](./recipes.md#once-first); uno sin terminal (Claude Desktop, Cursor) necesita el [servidor MCP](./mcp.md). Los ejemplos siguientes muestran qué pedir, qué comando ejecuta el agente y qué devuelve.
+Su agente de IA (por ejemplo, Claude Code, Codex, Cursor o Gemini CLI) puede ejecutar estas comprobaciones por usted. Un agente con una terminal necesita la [skill tg](./recipes.md#once-first); un agente en una aplicación sin terminal necesita el [servidor MCP](./mcp.md). A continuación: lo que usted dice, lo que ejecuta el agente y lo que obtiene a cambio.
+
+Los nombres, mensajes y resultados a continuación son ficticios. Los comandos están separados de la respuesta: el agente lee los datos y los presenta.
 
 ### Revisión de la mañana: quién espera una respuesta
 
@@ -16,7 +44,7 @@ Empieza por las preguntas que esperan una respuesta tuya o de los administradore
 
 **Tu petición:**
 
-> ¿Qué preguntas de Hiking llevan más de cuatro horas esperando respuesta?
+> Usa tg CLI. ¿Qué preguntas de Hiking llevan más de cuatro horas esperando respuesta?
 
 **Comando:**
 
@@ -44,7 +72,7 @@ Revisa los eventos de entrada. Una cuenta nueva merece revisión; su edad no dem
 
 **Tu petición:**
 
-> ¿Quién se unió a Hiking esta semana? Muéstrame a quién conviene revisar.
+> Usa tg CLI. ¿Quién se unió a Hiking esta semana? Muéstrame a quién conviene revisar.
 
 **Comando:**
 
@@ -69,7 +97,7 @@ Reemplaza el enlace de invitación cuando hayas pedido ese cambio.
 
 **Tu petición:**
 
-> Se filtró el enlace de Hiking. Reemplázalo y permite que solo los administradores añadan miembros.
+> Usa tg CLI. Se filtró el enlace de Hiking. Reemplázalo y permite que solo los administradores añadan miembros.
 
 **Reemplazar el enlace:**
 
@@ -94,13 +122,39 @@ tg chats update "Hiking" --only-admins-add on --json
 
 Estos comandos cambian el grupo. La petición del ejemplo autoriza ambos cambios; una petición para consultar el enlace no lo haría.
 
+### Limpieza de spam con tu aprobación
+
+Primero vea lo que sugieren las reglas, sin ninguna acción.
+
+**Tu petición:**
+
+> Usa tg CLI. Verifique Hiking en busca de spam. No borres nada todavía; mostrar las sugerencias.
+
+**Comando:**
+
+```sh
+tg chats moderate "Hiking" --dry-run --json
+```
+
+**Ejemplo de respuesta del agente:**
+
+> **Acción sugerida:** eliminar un mensaje con un enlace de invitación.
+>
+> | Encontrado | Sugerencia | Estado |
+> | --- | --- | --- |
+> | Enlace de invitación | Eliminar el mensaje | Solo vista previa |
+>
+> No se eliminó nada. Confirma el mensaje concreto antes de aplicar la acción.
+
+Las acciones reales necesitan tu solicitud y los permisos del perfil. Una vista previa no da permiso para eliminar.
+
 ### Resumen semanal
 
 Pide un resumen de decisiones, compromisos y preguntas pendientes.
 
 **Tu petición:**
 
-> Resume la semana en Hiking.
+> Usa tg CLI. Resume la semana en Hiking.
 
 **Comando:**
 
@@ -129,39 +183,44 @@ No necesitas un agente para obtener las preguntas pendientes: basta con ejecutar
 0 9,21 * * * tg review --chat "Hiking" --unanswered --json >> ~/hiking-open.jsonl 2>> ~/tg-cron.log
 ```
 
-cron no tiene terminal y a menudo no define `XDG_RUNTIME_DIR`, sin la cual `tg` no puede acceder al almacén de claves: consulta [tareas programadas](./recipes.md#running-on-a-schedule).
+cron no tiene terminal y, a menudo, no tiene `XDG_RUNTIME_DIR`, sin el cual `tg` no puede acceder al llavero: consulte [ejecución programada](./recipes.md#running-on-a-schedule).
 
 ## Funciones disponibles
 
 | Comando | Qué hace |
 |---|---|
-| `tg review --chat <chat> --unanswered [duration]` | preguntas que tú y los administradores no habéis respondido durante ese tiempo: `4h`, `1d`; 24 horas por defecto |
-| `tg chats events <chat>` | quién se unió, salió, fue añadido o eliminado, y quién realizó la acción; últimos 7 días por defecto |
-| `tg chats members list <chat>` | todos los miembros, su función y cuándo se conectaron por última vez |
-| `tg topics list\|search <chat>` | temas de un grupo de foro |
-| `tg topics show <chat> <id>` | un tema: título, si está cerrado o fijado, mensajes sin leer, última actividad |
-| `tg topics enable <chat>` | activa un foro; un grupo básico requiere `--upgrade --yes` y devuelve un nuevo identificador de chat |
-| `tg topics create <chat> <title>` | crea un tema; si el resultado es desconocido, consulta `topics list` en vez de repetir |
-| `tg messages send <chat> <text> --topic <id>`, `tg polls create <chat> <question> <answers> --topic <id>` | envía un mensaje o una encuesta a un tema de foro |
-| `tg messages forward <chat> <message> --to <forum> --topic <id>` | reenvía un mensaje a un tema del foro de `--to` |
-| `tg chats inspect <link>` | destino de un enlace público o de invitación, sin unirse |
-| `tg chats create <title> [person...]` | nuevo grupo (supergrupo), o canal con `--channel` |
-| `tg chats join <link>`, `tg chats leave <chat>` | unirse mediante enlace o salir |
-| `tg chats update <chat>` | cambiar título, descripción y permisos para fijar mensajes (`--all-can-pin`) o añadir miembros (`--only-admins-add`) |
-| `tg chats members add\|remove <chat> <person...>` | añadir personas (se les notifica y se indica quién no pudo añadirse) o eliminarlas (sus mensajes permanecen) |
-| `tg chats admins add <chat> <person> --can <rights>` | convertir a un miembro en administrador con estos permisos: members, admins, info, pin, link, post, edit, delete |
-| `tg chats admins remove <chat> <person>` | retirar permisos de administrador; sigue siendo miembro |
-| `tg chats link update <chat> <link> --approval\|--no-approval --expire-time <time> --max-uses <n>` | cambia solo la aprobación, caducidad o límite de usos indicados de tu enlace adicional; indica al menos un cambio |
-| `tg chats link show\|reset <chat>` | consultar el enlace de invitación; `reset` crea otro y el anterior deja de funcionar |
-| `tg messages delete --for-everyone`, `pin`, `unpin` | eliminar para todos o fijar mensajes |
+| `tg review --chat <chat> --unanswered [duration]` | preguntas que usted y los administradores no han respondido durante tanto tiempo: `4h`, `1d`; 24 horas por defecto |
+| `tg chats events <chat>` | quién se incorporó, se fue, fue añadido o eliminado, y por quién; 7 días por defecto |
+| `tg chats members list <chat>` | todos los miembros del grupo, con su rol y cuándo fueron vistos por última vez |
+| `tg topics list <chat>`, `tg search topics <chat> <text>` | los temas de un grupo de foro; la búsqueda los encuentra por título |
+| `tg topics show <chat> <id>` | un tema: título, cerrado o fijado, recuento de no leídos, última actividad |
+| `tg topics enable <chat>` | habilitar un foro; un grupo básico requiere `--upgrade --yes` y devuelve una nueva identificación de chat |
+| `tg topics create <chat> <title>` | crear un tema; después de un resultado desconocido marque `topics list` en lugar de repetir |
+| `tg messages send <chat> <text> --topic <id>`, `tg polls create <chat> <question> <answers> --topic <id>` | enviar un mensaje o encuesta sobre un tema del foro |
+| `tg messages forward <chat> <message> --to <forum> --topic <id>` | reenviar un mensaje a un tema del foro `--to` |
+| `tg chats inspect <link>` | adónde conduce una invitación o un enlace público; no se une a nada |
+| `tg chats create <title> [person...]` | un nuevo grupo (un supergrupo) o un canal con `--channel` |
+| `tg chats join <link>`, `tg chats leave <chat>` | unirse por un enlace, salir |
+| `tg chats update <chat>` | el título, la descripción y si los miembros pueden fijar (`--all-can-pin`) o agregar personas (`--only-admins-add`) |
+| `tg chats members add\|remove <chat> <person...>` | agregar personas (se les dice; se nombra a quienes no se pudieron agregar) o eliminarlas (sus mensajes permanecen) |
+| `tg chats admins add <chat> <person> --can <rights>` | convertir a un miembro en administrador con estos derechos: miembros, administradores, información, fijar, vincular, publicar, editar, eliminar |
+| `tg chats admins remove <chat> <person>` | retirar los permisos de administrador; sigue siendo miembro |
+| `tg chats link update <chat> <link> --approval\|--no-approval --expire-time <time> --max-uses <n>` | cambiar solo la aprobación, el vencimiento o el límite de uso proporcionados de su enlace de invitación adicional; suministrar al menos un cambio |
+| `tg chats link show\|reset <chat>` | el enlace de invitación; `reset` hace uno nuevo y el viejo deja de funcionar |
+| `tg chats requests list\|accept\|decline <chat>` | solicitudes para unirse a un grupo que necesita la aprobación de un administrador: quién preguntó, déjelo entrar, rechace; `--all` responde a todas las solicitudes |
+| `tg chats rules show\|set\|unset <chat>` | las reglas del grupo |
+| `tg chats moderate <chat>` | comprobar el grupo según sus reglas; hace lo que permiten las reglas |
+| `tg messages delete --for-everyone`, `pin`, `unpin` | eliminar para todos, pin |
 
-Un agente sin terminal obtiene las funciones de lectura como herramientas MCP: `tg_read` (`command: "review"`) con `unanswered`, `tg_read` (`command: "chats events"`), `tg_read` (`command: "chats members"`), `tg_read` (`command: "chats inspect"`) ([mcp.md](./mcp.md)).
+Un agente conectado a través del [servidor MCP](./mcp.md) puede ejecutar los mismos comandos, siempre que los permisos del perfil lo permitan.
 
-`create`, `join`, `leave`, `update`, `link reset`, `members` y `admins` producen cambios visibles para el grupo: al crear un grupo se avisa a los añadidos, y al entrar o salir aparece un mensaje en el chat. Cada operación pasa por los permisos del perfil y la protección de envíos; cada persona añadida cuenta para el límite por hora ([seguridad](./security.md#the-send-guard)).
+`create`, `join`, `leave`, `update`, `link reset`, `members` y `admins` cambian algo que ven los miembros del grupo: un nuevo grupo les dice a las personas agregadas, y se muestra una entrada o salida en el chat. Cada uno pasa por los permisos del perfil y el control de envío, y cada persona agregada cuenta para el límite por hora (consulte [el control de envío](./security.md#the-send-guard)).
 
-## Qué espera tu respuesta
+## Lo que te espera
 
-`review` y `serve` mantienen una lista de tareas en el almacén local. Una pregunta sin respuesta y un mensaje que te menciona por nombre abren una tarea; tu respuesta la cierra. La tarea apunta al mensaje y nunca lo copia.
+`review` y `serve` mantienen una lista de tareas en el archivo local. Una pregunta que nadie respondió y un mensaje que lo menciona por su nombre abre una tarea; tu respuesta lo cierra. Una tarea apunta a su mensaje y nunca lo copia.
+
+Vea lo que le espera, primero el mayor, luego solo preguntas y menciones en un grupo:
 
 ```sh
 tg tasks list --state open
@@ -171,6 +230,8 @@ tg tasks list --state open
 tg tasks list --chat "Hiking" --type question,mention
 ```
 
+Agregue lo que las reglas no pueden ver, como una promesa que hizo, o cierre una tarea que no necesita respuesta:
+
 ```sh
 tg tasks add msg:telegram/<you>/<chat>/<message> --type promise
 ```
@@ -179,61 +240,83 @@ tg tasks add msg:telegram/<you>/<chat>/<message> --type promise
 tg tasks close <task> --as dismissed --reason no-reply-needed
 ```
 
+Vea las tareas abiertas por chat, la más antigua y el tiempo medio para cerrar:
+
 ```sh
 tg stats tasks show
 ```
 
-Una tarea cerrada sigue cerrada y una descartada nunca vuelve. Solo tus respuestas cierran una tarea, no las de un administrador; no se detectan las menciones por `@username`. El agente obtiene lo mismo con herramientas MCP: `tg_read` (`command: "tasks list"`), `tg_write` (`command: "tasks add"`), `tg_write` (`command: "tasks close"`), `tg_read` (`command: "stats tasks show"`) ([mcp.md](./mcp.md)).
+Una tarea cerrada permanece cerrada y una tarea descartada nunca regresa. Solo sus propias respuestas cierran una tarea (las de un administrador no) y no se ve una mención de `@username`. Un agente conectado a través de MCP recibe los mismos comandos.
 
-## Reglas
+## Normas
 
-Las reglas del grupo definen qué busca `tg chats moderate` y qué puede hacer. Se guardan en un archivo del perfil, nunca en Telegram. No hay vigilancia automática en segundo plano: las reglas solo se aplican al ejecutar `chats moderate`.
+Las reglas de un grupo dicen qué busca `tg chats moderate` y qué puede hacer al respecto. Viven en un archivo de este perfil, nunca en Telegram, y nada vigila al grupo en segundo plano: una regla actúa sólo cuando ejecutas `chats moderate`.
+
+Muestra las reglas. Hasta el primer cambio, son los valores predeterminados, marcados como no guardados:
 
 ```sh
 tg chats rules show "Hiking"
 ```
 
+Eliminar un mensaje que tiene un enlace:
+
 ```sh
 tg chats rules set "Hiking" links delete
 ```
+
+Bloquear a estas personas por id...
 
 ```sh
 tg chats rules set "Hiking" blocked 12345,67890
 ```
 
+…y eliminarlos cuando escriban o se unan:
+
 ```sh
 tg chats rules set "Hiking" blockedPeople remove
 ```
+
+Eliminar sin preguntarte primero:
 
 ```sh
 tg chats rules set "Hiking" consent.delete allow
 ```
 
+Vea lo que haría el cheque, sin hacerlo:
+
 ```sh
 tg chats moderate "Hiking" --dry-run
 ```
+
+Compruebe qué hay de nuevo desde la última ejecución y actúe:
 
 ```sh
 tg chats moderate "Hiking"
 ```
 
-| Regla | Qué detecta |
-|---|---|
-| `links`, `invites`, `forwards` | mensajes con enlaces, invitaciones a otro grupo o mensajes reenviados |
-| `blocked`, `blockedNames`, `blockedPeople` | personas por identificador o parte del nombre, y qué hacer con ellas |
-| `flood.messages`, `flood.minutes`, `flood.action` | más de cierta cantidad de mensajes de una persona en un intervalo de minutos |
-| `trusted` | personas sobre las que nunca se actúa; tampoco se actúa sobre ti ni sobre los administradores |
+| Regla | Predeterminado | Lo que busca |
+|---|---|---|
+| `links`, `invites`, `forwards` | `report` | un mensaje con un enlace, un enlace de invitación a otro grupo, un mensaje reenviado |
+| `blocked`, `blockedNames` | — | personas por id, o por parte de su nombre, separados por comas |
+| `blockedPeople` | `report` | qué hacer con un mensaje o unirse a una persona bloqueada |
+| `flood.messages`, `flood.minutes`, `flood.action` | 5, 1, `report` | más que tantos mensajes de una persona en tantos minutos |
+| `trusted` | — | personas sobre las que nunca se actúa; tampoco se actúa sobre administradores ni sobre ti |
+| `consent.delete`, `consent.remove` | `ask` | hasta donde permites cada acción |
 
-La acción de cada regla es `report`, `delete` o `remove`. Para ejecutar `delete` o `remove`, se consulta el nivel del grupo en `consent.delete` y `consent.remove`: `deny` nunca actúa, `readonly` solo informa, `ask` pregunta por cada acción (predeterminado; `--allow-dangerous` aprueba todas) y `allow` la ejecuta. Cada acción sigue pasando por la protección de envíos y su límite por hora. La ejecución se detiene después de `--max-actions` (10). La siguiente continúa donde se detuvo; `--since-time` consulta un momento que elijas y no cambia ese punto guardado.
+La acción de cada regla es `report`, `delete` o `remove`. Si ocurre un `delete` o un `remove` es el nivel del grupo, `consent.delete` y `consent.remove`: `deny` nunca, `readonly` solo informa, `ask` le pregunta sobre cada uno (el valor predeterminado; `--allow-dangerous` dice sí a todos), `allow` lo hace. Cada acción sigue pasando por el control de envío y su límite horario, y una ejecución se detiene después de `--max-actions` (10). La siguiente ejecución comienza donde se detuvo ésta; `--since-time` mira un momento propio y deja ese punto donde está.
 
-Por MCP, `tg_write` (`command: "chats moderate"`) actúa solo donde el nivel es `allow`; las acciones que requieren preguntar se enumeran para ti, pero no se ejecutan. No se ofrece `newAccount`: Telegram no indica la antigüedad de la cuenta.
+Un agente conectado a través de MCP actúa únicamente cuando un nivel es `allow`; lo que pide aparece en la lista, no se hace. `newAccount` no se ofrece: Telegram no dice la antigüedad de una cuenta.
+
+## Con un bot
+
+Si su bot es administrador del grupo, puede ejecutar la misma verificación: `tg <bot> bot chats moderate`. Una persona que el bot elimina no puede volver a través del enlace a menos que agregue `--no-ban`. El bot solo juzga los mensajes que vio o importó en esta computadora, y no juzga las uniones. Consulte [moderar un grupo con un bot](./bot.md#moderating-a-group-by-its-rules).
 
 ## Limitaciones
 
-- **El historial de Telegram es la fuente.** `chats events` y `review` ven lo que todavía contiene el historial; si un administrador elimina un mensaje de servicio, también desaparece para estos comandos.
-- **Solo se conocen los administradores si Telegram los indica.** En caso contrario, `review --unanswered` solo cuenta tus respuestas y lo avisa.
-- **Nada vigila el grupo por su cuenta.** La revisión se ejecuta cuando la inicias tú, un agente por petición tuya o una tarea programada.
-- **Se aplican los límites de Telegram.** Leer todos los miembros de un grupo grande requiere muchas peticiones. Una respuesta `FLOOD_WAIT` indica cuánto debes esperar ([solución de problemas](./troubleshooting.md#telegram-asks-to-wait-n-s-before-the-next-request)).
+- **El historial de Telegram es el récord.** `chats events` y `review` ven lo que aún contiene el historial del chat; un mensaje de servicio que un administrador eliminó también desapareció para ellos.
+- **Los administradores se conocen solo donde dice Telegram.** Sin ellos, `review --unanswered` cuenta solo tus respuestas y lo dice.
+- **Nada vigila un grupo por sí solo.** Se ejecuta una verificación cuando usted, un agente a petición suya o su horario la ejecutan.
+- **Se aplican límites de tarifas de Telegram.** Leer a cada miembro de un grupo grande representa muchas solicitudes; una respuesta `FLOOD_WAIT` dice cuánto tiempo esperar (ver [cuando Telegram pide esperar](./troubleshooting.md#telegram-asks-to-wait-n-s-before-the-next-request)).
 
 ## Estadísticas para administradores de grupos
 
@@ -241,7 +324,7 @@ Consulta los mensajes, las personas que escribieron y las respuestas de la seman
 
 **Tu petición:**
 
-> Muéstrame la actividad de Hiking esta semana y las lagunas del historial.
+> Usa tg CLI. Muéstrame la actividad de Hiking esta semana y las lagunas del historial.
 
 **Comando:**
 

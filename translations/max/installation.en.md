@@ -2,7 +2,21 @@
 title: "Installation"
 ---
 
-`max` is one command. It installs as an ordinary npm package, runs under Node and Bun, compiles nothing during installation and does not start the background service. Background `max serve` starts later with the first normal command that needs it; setup does not start it (`serve` in [configuration.md](./configuration.md)).
+<a id="обычный-способ" />
+<a id="первый-запуск-и-инструкция-для-агента" />
+<a id="обновление-и-удаление" />
+
+Use this page to install `max`, move it to another computer, update it or uninstall it. You will learn to check that the command runs and locate its saved files. Connecting your MAX account is the next step, covered separately.
+
+Terms used below:
+
+- **npm package** — how `max` is distributed. npm, pnpm or Bun downloads **`@leemour/max-cli`** and installs the **`max`** command.
+- **Node** or **Bun** — the runtime executing `max`; install one first.
+- **PATH** — directories a terminal searches for commands. Running `max` by name requires its directory on PATH.
+- **Keyring** — the operating system's password storage, where `max` keeps the account token.
+- **Skill** — instructions teaching your AI agent how to use `max`.
+
+The installation does not compile anything: a ready-made binary is used to access the keyring. It does not run a background service, does not log into your account, and does not read chats. The background `max serve` appears later: it is launched by the first regular command that needs MAX (setup does not launch it; it is the `serve` setting in [settings](./configuration.md)).
 
 ## Requirements
 
@@ -10,9 +24,15 @@ title: "Installation"
 - **Or Bun 1.3+** to run the command
 - Linux, macOS or Windows
 
-OS keyring access uses a prebuilt binary, so there is nothing to compile. If the machine has no keyring, the token is stored in a file beside the configuration, and the command tells you in one line.
+Without a keyring, `max` saves the token in a file beside settings and prints a one-line notice.
 
-## Standard installation
+## Install
+
+```sh
+npm install -g @leemour/max-cli
+pnpm add -g @leemour/max-cli
+bun add -g @leemour/max-cli
+```
 
 Run without installing:
 
@@ -22,72 +42,42 @@ pnpm dlx @leemour/max-cli --help
 bunx @leemour/max-cli --help
 ```
 
-Install permanently:
-
-```sh
-npm install -g @leemour/max-cli
-pnpm add -g @leemour/max-cli
-bun add -g @leemour/max-cli
-```
-
-The package is **`@leemour/max-cli`**; the command it installs is **`max`**.
-
-Check the installation:
+Check that everything is in place:
 
 ```sh
 max --version
 max --help              # список команд
+max doctor              # где лежат файлы и есть ли вход; к MAX не подключается
 ```
 
-If installation succeeded but `max` cannot be found, `npx @leemour/max-cli doctor` explains why and which command to run ([Troubleshooting](./troubleshooting.md#max-не-находится-после-установки)).
+If the installation is successful, but `max` is not located, `npx @leemour/max-cli doctor` will tell you why and what command to execute ([`max` is not located after installation](./troubleshooting.md#max-не-находится-после-установки)).
 
-## From source
+## First run
 
-Use this if you are changing the code or want a version before its release.
+`max --help` and `max setup --help` work immediately after installation. `max skill show` also works before login; `max commands --json` lists commands and options.
 
-```sh
-git clone git@github.com:leemour/max-cli.git
-cd max-cli
-pnpm install
-pnpm build
-```
-
-Then either put the command on your `PATH`:
+Run the setup in a local terminal:
 
 ```sh
-pnpm link --global      # теперь работает просто `max`
-```
-
-Or run it by its path without linking:
-
-```sh
-node dist/bin/max.js --help
-```
-
-Check the installation:
-
-```sh
-max --version
-max --help              # список команд
-```
-
-The unscoped name (`max-cli`) has belonged to another package since 2018, so the scope is required.
-
-## First run and instructions for your agent
-
-```sh
-max --help
-max setup --help
-max commands --json
-max skill show                    # доступно до входа
 max setup --agent codex            # QR-вход и навык агента
+max setup --help                   # примеры и способы входа
 ```
 
-Allow about five minutes. `setup` checks your account and up to five chats, reusing an existing session. Download history separately after choosing a chat and how much to fetch. Setup does not start the background service. Agent choices: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. To install the skill separately, use `max skill install --for all`. For login methods and recovery, see [sessions.md](./sessions.md).
+`--agent` selects where to install the skill: `codex`, `cursor`, `claude`, `gemini`, `all` or `none`. Allow about five minutes: `setup` logs in and checks your account and up to five chats. Download history separately after choosing the chat and amount. Setup does not start a background service; repeating it reuses the existing session. Install the skill separately with `max skill install --for all`. See [login instructions](./sessions.md) for methods and interrupted login.
 
-**Global npm installation** also installs the agent skill. All supported environments are selected by default; `MAX_INSTALL_AGENT=codex|cursor|claude|gemini|all|none` selects an environment or disables skill installation. Check `max skill show` before login. Local package installation and `npx` do not change PATH or install the skill.
+**Global npm installation** also installs the skill for all supported agents by default. `MAX_INSTALL_AGENT=codex|cursor|claude|gemini|all|none` selects an agent or disables skill installation. Local package installation and `npx` neither change PATH nor install the skill.
 
-**Windows.** Use `npm.cmd install -g @leemour/max-cli`. If npm allows installation scripts, the package adds its folder to the user's PATH while preserving existing entries and leaves a working `.cmd` launcher. A new terminal finds `max` by name. An already-open terminal or agent must refresh its environment: an npm child process cannot change its parent terminal's PATH.
+### Windows: one command installation
+
+Run in PowerShell when Node.js 22.16+ or 24+ is already installed:
+
+```powershell
+& ([scriptblock]::Create((Invoke-RestMethod 'https://wirecat.dev/install.ps1'))) -Tool max -Agent all
+```
+
+The installer installs the npm package, preserves existing user PATH entries, adds npm's command directory once, updates the current PowerShell PATH and installs the skill. It verifies `max` runs by name. `-Agent codex|cursor|claude|gemini|all|none` chooses skill destinations. Repeating it updates the skill without duplicating PATH or changing PowerShell execution policy.
+
+With npm, use `npm.cmd install -g @leemour/max-cli`. If installation scripts are permitted, the package adds its directory to user PATH without removing existing entries and provides a working `.cmd` launcher. Open a new terminal: npm cannot update the PATH of the terminal that launched it.
 
 If npm skipped the installation script, run repair from the installed package:
 
@@ -99,28 +89,63 @@ max skill install --for all
 max --version
 ```
 
-Repair preserves other PATH entries and does not change PowerShell's permanent policy. Repeating it creates no duplicates. Use `max doctor` for diagnostics; repair options are described in [troubleshooting.md](./troubleshooting.md#max-не-находится-после-установки).
+Repair preserves other PATH entries and permanent PowerShell policy. Repeating it creates no duplicate entries. Use `max doctor` for diagnostics; see [`max` not found after installation](./troubleshooting.md#max-не-находится-после-установки) for alternatives.
+
+The first commands for reading chats are in the [login and first commands](./usage.md#вход) section.
+
+## From source
+
+This is necessary if you are editing code or want a version that has not yet been released.
+
+```sh
+git clone git@github.com:leemour/max-cli.git
+cd max-cli
+pnpm install
+pnpm build
+```
+
+Then either add the command to PATH:
+
+```sh
+pnpm link --global      # теперь работает просто `max`
+```
+
+Or run it by its path without linking:
+
+```sh
+node dist/bin/max.js --help
+```
+
+The package is named with the scope `@leemour/`: the name `max-cli` without the scope is occupied by someone else's package.
 
 ## Where files are stored
 
-Settings and state directories follow your operating system’s conventions:
+Three directories follow operating system conventions, and two more are shared with other tools:
 
-| Purpose | Linux | macOS | Windows | Contents |
-|---|---|---|---|---|
-| Configuration | `~/.config/max-cli/` | `~/Library/Preferences/max-cli/` | `%APPDATA%\max-cli\Config\` | `config.json`, and a token file if there is no keyring |
-| State | `~/.local/share/max-cli/` | `~/Library/Application Support/max-cli/` | `%LOCALAPPDATA%\max-cli\Data\` | `profiles/<имя>.json`, `bots/` with chats seen by bots and their send logs, and a `runs/` directory with run records |
+| What | Linux | macOS | Windows |
+|---|---|---|---|
+| settings | `~/.config/max-cli/` | `~/Library/Preferences/max-cli/` | `%APPDATA%\max-cli\Config\` |
+| state | `~/.local/share/max-cli/` | `~/Library/Application Support/max-cli/` | `%LOCALAPPDATA%\max-cli\Data\` |
+| cache | `~/.cache/max-cli/` | `~/Library/Caches/max-cli/` | `%LOCALAPPDATA%\max-cli\Cache\` |
+| shared local archive | `~/.local/share/cli-messaging/messages.db` | under `~/Library/Application Support/cli-messaging/` | under `%LOCALAPPDATA%\cli-messaging\Data\` |
+| speech recognition models | `~/.cache/cli-common/models/audio/` | under `~/Library/Caches/cli-common/` | under `%LOCALAPPDATA%\cli-common\Cache\` |
+
+- **settings** — `config.json`, plus `credentials.json` containing a token only when no keyring is available.
+- **state** — `profiles/<имя>.json` (device and login count), `bots/` (observed bot chats and send journals), run records (`runs/`) and `inbox --new` cursors (`inbox/`).
+- **shared local archive** — shared with tools using the same library, including [tg-cli](https://github.com/leemour/tg-cli); see [local archive](./archive.md).
+- **speech-recognition downloads** — fetched only by your explicit `max models audio download` for [voice transcription](./audio-recognition.md).
 
 `max doctor` shows the exact paths on your machine.
 
 **The token is stored in the operating-system keyring**, rather than a file when a keyring is available. `config.json` has no token field, and the configuration schema will reject one.
 
-Override `max` directories with `MAX_CONFIG_DIR` and `MAX_STATE_DIR`. The shared store is separate; `MESSAGING_STORE` selects its file. `max doctor` shows the exact path.
+Each location can be overridden with an environment variable: `MAX_CONFIG_DIR`, `MAX_STATE_DIR`, `MAX_CACHE_DIR`, `MESSAGING_STORE` (the shared copy file itself) and `CLI_COMMON_CACHE_DIR` (models).
 
-> ⚠ **These variables also change the keyring entry.** A session saved with `MAX_CONFIG_DIR` is invisible to a command run without it: the service name used to store the token changes. This is useful for temporary profiles and tests, but once cost the owner half an hour of “no session” errors despite having a valid token. Either set the variables consistently or leave them unset.
+> ⚠ **Directory variables also change the keyring service name.** A session saved with `MAX_CONFIG_DIR`, `MAX_STATE_DIR` or `MAX_CACHE_DIR` is invisible to commands run without them, producing “no session” despite a saved login. This isolates temporary profiles and tests. Set the variables consistently or leave them unset everywhere.
 
 ## Shell completion
 
-Tab completes commands, actions, flags and their values. Where a chat or person is expected, it suggests an ID from the selected account in shared storage, with the chat title or person's name alongside it. Add one line to your shell configuration:
+Tab completes commands, actions, flags and their values. For a chat or person, it inserts an id from the selected account's local archive and displays the name alongside. Add a line to your shell configuration:
 
 ```sh
 echo 'source <(max complete zsh)' >> ~/.zshrc      # zsh
@@ -132,32 +157,39 @@ For PowerShell, add `max complete powershell | Out-String | Invoke-Expression` t
 
 Tab **never connects to MAX**: connecting on every keypress would log into the account hundreds of times. Chat and person names come from shared `messages.db` for the selected profile account. Before the account is known or storage exists, only commands and flags are completed. Bot commands suggest chats from their local chat list. Chats are suggested by ID with their titles alongside: a title containing a space would otherwise reach `max` as two words.
 
-## Updating and uninstalling
+## Update
 
 ```sh
 max upgrade           # тем же менеджером пакетов, которым max поставлен: pnpm, npm или bun
 max upgrade --check   # только сказать, есть ли новее; ничего не ставит
 ```
 
+`max upgrade` does not directly restart `max serve`. An automatically started server is replaced by the first command using the new version. A manually started server keeps running old code until you run `max server restart`. `max` never updates itself automatically.
+
 ### Upgrade JSON response
 
-`max upgrade --check --json` reports current and available versions without installing anything. The shared response contains `current`, `latest`, `newer`, `installer`, `command`, `updated` and `restarted`, a list of profiles whose servers restarted after the upgrade. On a version check, when no update is available or when no server restarts, this is an empty array; existing fields remain. MAX still does not automatically restart servers after upgrading. Scripts that validate an exact set of keys must account for the new `restarted` field.
+`max upgrade --check --json` reports the current and available version without installation. The answer contains `current`, `latest`, `newer`, `installer`, `command`, `updated` and `restarted`. `restarted` - list of profiles whose servers were restarted after the update; for `max` it is always empty.
 
-Once a day, `max` checks npm for a newer version. If one exists, it prints one line to stderr after the command, only for a person using a terminal: not with `--json`, pipes, `--quiet` or `CI`. Disable this with `max config set updateCheck false --defaults`. `max` never updates itself automatically.
+Once a day, `max` checks npm for updates and prints a one-line stderr notice after a command, only for a person using a terminal: never with `--json`, pipes, `--quiet` or `CI`. Disable it with `max config set updateCheck false --defaults`.
 
 For a source installation, use `git pull && pnpm install && pnpm build`.
 
-Uninstalling removes the command, but not your data:
+## Removal
+
+Uninstalling removes the command, not its data. Log out before removing `max`. `sales` is an example bot profile; repeat that line for each connected bot.
 
 ```sh
+max server uninstall                   # если ставили фоновую службу
 max session end                        # выйти и забыть токен ДО удаления команды
-max <бот> bot auth remove              # и токен каждого бота
+max sales bot auth remove              # забыть токен бота из профиля sales
 npm uninstall -g @leemour/max-cli
-rm -rf ~/.config/max-cli ~/.local/share/max-cli ~/.cache/max-cli ~/.local/share/cli-messaging
+rm -rf ~/.config/max-cli ~/.local/share/max-cli ~/.cache/max-cli
 ```
 
 `max session end` and `bot auth remove` delete tokens from the keyring. If you uninstall the command first, its keyring entry remains. It is harmless, but still stored there.
 
+Other tools may use the shared local archive. Remove `~/.local/share/cli-messaging/` only when no tool still needs its saved messages.
+
 ## Next steps
 
-[Personal account guide](./usage.md) — log in and run your first commands.
+[Login to your account and execute the first commands](./usage.md#вход).

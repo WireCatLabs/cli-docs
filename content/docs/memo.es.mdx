@@ -11,7 +11,7 @@ Después de seguir la guía, podrás:
 
 - importar carpetas y buscar en archivos con referencias de origen;
 - crear, editar y exportar notas sobre una persona o mensaje;
-- organizar notas, mensajes y contactos con etiquetas.
+- organizar notas, mensajes y personas con etiquetas.
 
 WireCat utiliza Memo para estas tareas. Memo es una herramienta que se ejecuta en tu ordenador
 para importar y buscar archivos y guardar notas vinculadas a sus temas. Tu agente puede ejecutar
@@ -42,8 +42,8 @@ Lee memo --help y https://wirecat.dev/es/docs/memo para conocer las órdenes.
 Comprueba que memo --help funciona en tu terminal y ayúdame a conectar la carpeta que elija.
 ```
 
-El agente instala la <DocTerm term="cli" lang="es" label="CLI" /> y comprueba la orden `memo`.
-Memo no tiene un paso de inicio de sesión en el mensajero; tú eliges las carpetas y configuras
+El agente instala la <DocTerm term="cli" lang="es" label="CLI" /> y comprueba el comando `memo`.
+Memo no tiene un paso de inicio de sesión en el servicio de mensajería; tú eliges las carpetas y configuras
 el correo por separado. El navegador muestra las instrucciones; la instalación ocurre en tu ordenador.
 
 <Accordions>
@@ -74,7 +74,7 @@ memo --help
 </Tab>
 </InstallationOsTabs>
 
-La ayuda debe mostrar las órdenes de Memo. Si la orden no se encuentra, vuelve a abrir el
+La ayuda debe mostrar los comandos de Memo. Si no se encuentra el comando, vuelve a abrir el
 terminal tras instalarlo. [Ayuda para configurar Node.js y npm](./installation.mdx#nodejs).
 
 </Accordion>
@@ -157,7 +157,7 @@ que está en un archivo y revisa el informe de importación: un archivo sin impo
 
 Una nota llega a Memo de dos formas. Las **notas importadas** proceden de archivos: edita el
 original y vuelve a importarlo. Tus **propias notas** se escriben en el almacén local de Memo
-sobre una persona, mensaje, proyecto, tarea u otra nota. Crearlas no envía nada al contacto ni
+sobre una persona, mensaje, proyecto, tarea u otra nota. Crearlas no envía nada a esa persona ni
 cambia el mensaje al que se refieren.
 
 Pide a tu agente una nota sobre la persona o mensaje que elijas:
@@ -221,21 +221,20 @@ lo deja intacto e informa del conflicto.
 
 Una etiqueta es un nombre corto que eliges, como `work` o `follow-up`. Ayuda a encontrar
 fuentes relacionadas sin reescribirlas. Pide al agente que etiquete las notas, mensajes o
-contactos que elijas y te muestre las etiquetas guardadas.
+personas que elijas y te muestre las etiquetas guardadas.
 
 Usa los IDs y referencias de tus propias búsquedas. `NOTE_ID`, `PERSON_UID` y `FOLDER_ID` son
-marcadores; los IDs numéricos de mensajes, contactos y cuentas son ilustrativos.
+marcadores; los IDs numéricos de mensajes, identidades y cuentas son ilustrativos.
 
 | Qué etiquetar | Orden |
 | --- | --- |
 | Una nota | `memo tags add work --note note:NOTE_ID` |
 | Un mensaje almacenado | `memo tags add follow-up --message 'msg:telegram/1/77/42'` |
-| Un contacto seleccionado mediante una cuenta | `memo tags add work --contact 101 --provider telegram --account 1` |
+| Una identidad guardada en la cuenta de un servicio de mensajería | `memo tags add work --contact 101 --provider telegram --account 1` |
 | Una persona vinculada | `memo tags add work --person PERSON_UID` |
 | Notas en una subcarpeta | `memo tags add project --folder FOLDER_ID --path Projects` |
 
-Un **contacto** identifica a alguien en un proveedor; la cuenta elige los datos locales donde encontrarlo. Una **persona** reúne
-las identidades que vinculaste explícitamente. Obtén su identificador (UID) del campo
+`--contact` selecciona una identidad guardada en el servicio de mensajería y la cuenta que indiques. No exige que la persona esté en tu libreta de direcciones. `--person` selecciona la **persona** cuyas identidades vinculaste explícitamente. Obtén su identificador (UID) del campo
 `messages.person.uid` de `memo context ... --json`; consulta [vincular identidades](./people.md#link-your-accounts). La referencia
 completa de un mensaje contiene proveedor, cuenta, chat y mensaje: el mismo ID numérico en
 otra cuenta no selecciona la misma fuente.
@@ -279,7 +278,7 @@ Consulta [Correo](./email.mdx) para las cuentas, importaciones y enlaces de dire
 ## Comprueba el resultado
 
 Una nota guardada debe tener ID, texto y enlaces a los temas elegidos. La lista de etiquetas
-debe identificar la nota, mensaje, contacto o persona correctos. Para archivos importados,
+debe identificar la nota, mensaje, identidad o persona vinculada correctos. Para archivos importados,
 abre el original y comprueba el texto. Si una fuente no se importó o un enlace a una persona
 no se resolvió, pide al agente que explique la carencia en vez de dar el resultado por completo.
 
@@ -287,6 +286,6 @@ no se resolvió, pide al agente que explique la carencia en vez de dar el result
 
 Si falta una nota o etiqueta, comprueba su ID y cuenta. Para notas de archivo, revisa el informe y repite la importación tras editar. Si una edición entra en conflicto, lee la revisión actual antes de volver a intentarlo.
 
-Continúa con [Correo](./email.mdx) para importar mensajes y vincular direcciones a tus contactos,
-o [trabajar con personas](./people.md#link-your-accounts) para vincular identidades entre mensajeros.
-Consulta las opciones exactas en `memo --help` o el `--help` de una suborden.
+Continúa con [Correo](./email.mdx) para importar mensajes y vincular direcciones a personas que conoces,
+o [trabajar con personas](./people.md#link-your-accounts) para vincular identidades entre servicios de mensajería.
+Consulta las opciones exactas en `memo --help` o el `--help` de un subcomando.

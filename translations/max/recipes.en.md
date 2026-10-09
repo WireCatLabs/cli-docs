@@ -2,33 +2,54 @@
 title: "Recipes: your agent and your conversations"
 ---
 
-Delegate regular MAX tasks to Claude Code or Codex: unread summaries, chat reports, commitments, unanswered-message reminders and checks on groups you manage. Each recipe includes a prompt, required permissions and scheduling instructions.
+Use these recipes for recurring MAX tasks with your AI agent, such as unread summaries, chat reports, commitments, unanswered requests and group checks. Each includes a ready-made request, a command and whether it changes MAX. You will learn to schedule tasks and set restrictions enforced by `max`.
+
+Terms used below:
+
+- **Agent** — your AI agent running commands on this computer.
+- **Skill** — instructions for using `max`; `max skill install` puts them where the agent looks.
+- **MCP client** — an agent application without terminal access, such as Claude Desktop; it calls `max mcp` tools instead of commands.
+- **Noninteractive mode** — the agent receives one request, executes it and exits: Claude Code `-p` or `codex exec`.
+- **cron** — the Linux/macOS scheduler running commands at specified times.
+
+## What you can do
+
+| Recipe | Writes to MAX | Suitable for schedule |
+|---|---|---|
+| [Morning Brief](#утренняя-сводка) | no | yes |
+| [Weekly work chat report](#недельный-отчёт-по-рабочему-чату) | no | yes |
+| [Who owes whom](#кто-кому-должен) | no | yes |
+| [To whom you did not answer](#кому-вы-не-ответили) | no | yes |
+| [Find what was said](#найти-что-было-сказано) | no | yes |
+| [Draft answer](#черновик-ответа) | only after your “yes” | no |
+| [Group you lead](#группа-которую-вы-ведёте) | only if allowed by group rules | yes |
 
 ## One-time setup
 
-1. Install `max` and log in: [Installation](./installation.md), [Sessions](./sessions.md).
-2. Give your agent instructions for `max` by installing its skill:
+1. Install `max` and log in: see [installation](./installation.md) and [login and sessions](./sessions.md).
+2. Install the skill for your agent:
 
    ```sh
    max skill install
    ```
 
-   The skill is installed into Claude Code, Codex and Gemini CLI directories.
-3. Save recipe prompts to files, for example in `~/max-recipes/`. The scheduling commands below read these files.
+The skill goes to Claude Code (`~/.claude/skills/max-cli/`) and Codex/Gemini CLI (`~/.agents/skills/max-cli/`). `max skill show` prints it for agents using other locations.
 
-In Claude Desktop or other clients using MCP, including Cursor, a skill is not required. Connect the MCP server (`max mcp config` prints a configuration entry) and use `/catch-up`, `/review`, `/reply` and `/find` ([MCP prompts](./mcp.md#команды-и-чаты-по-)).
+3. Save recipe requests in files, such as `~/max-recipes/`. The schedules below read those files.
+
+The MCP client does not need the skill. Connect the MCP server (`max mcp config` prints an entry for its settings) and call the ready-made commands - `/catch-up`, `/review`, `/reply`, `/find`. See [ready command MCP servers](./mcp.md#команды-и-чаты-по-).
 
 ## Agent permissions
 
-A scheduled agent runs without you, so enforce restrictions in settings rather than the prompt. An agent may misunderstand “do not send anything”; a configuration restriction is enforced by the program.
+A scheduled agent runs while you are away. Set restrictions in configuration the agent cannot edit: a request such as “send nothing” can be misinterpreted, whereas the tool enforces its permissions.
 
-**Agent-level restrictions.** Claude Code in `-p` mode runs only commands permitted by `--allowedTools`. Without `max messages send` in the list, the agent cannot call it:
+**Prohibition at the agent level.** This is a setting for the agent itself. For example, Claude Code in `-p` mode only runs the command from `--allowedTools`. If `max messages send` is not in the list, the agent cannot call it:
 
 ```sh
 claude -p "$(cat ~/max-recipes/morning.md)" --allowedTools "Bash(max inbox:*)"
 ```
 
-Codex has no equivalent list. Its default sandbox blocks network access and file writes, both needed by `max` to connect and save local data. These examples use `--sandbox danger-full-access`, with sends restricted through `max` settings.
+Codex does not have such a list. Its sandbox by default closes the network and file writing, and `max` needs both: connect to MAX and save what it reads to its copy. Therefore, Codex starts with `--sandbox danger-full-access`, and sending is limited by the `max` settings below.
 
 **Restrictions in `max`** apply to every agent:
 
@@ -41,32 +62,34 @@ max config set sendsPerHour 5          # или: не больше пяти со
 max recipients add "Иван Петров"       # и писать только в эти чаты
 ```
 
-`readonly` restricts each named resource for both you and the agent. More specific keys such as `permissions.messages.send: allow` take precedence: remove these grants if the profile should only read. Legacy `readOnly` cannot be changed after migration. Remove your own restriction with `max config unset permissions.<ресурс>` to restore inherited settings and defaults. `max sends list` includes all send attempts, including refusals.
+`readonly` restricts only its named resource: restricting `messages` does not block reactions, voting or chat changes. The loop sets every resource. A more specific key such as `permissions.messages.send: allow` takes precedence; remove such allowances for a read-only profile. After migration, legacy `readOnly` cannot be changed.
+
+`permissions` also affects your own commands until removed with `max config unset permissions.<ресурс>`, restoring inherited settings and defaults. Use a separate profile to restrict only the agent. `max sends list` records every send attempt, including rejected ones. See [send protections](./security.md#защита-от-отправки-не-туда) and [permissions](./configuration-reference.md#права-доступа).
 
 **Reading does not reveal your activity.** None of the commands below marks messages read, so other people do not see that the agent opened the chat.
 
 ## Scheduling
 
-- **Claude Desktop scheduled tasks.** They run on your computer and can access `max` and your session. A missed run while the computer slept executes once after waking. See [Claude scheduled-task documentation](https://code.claude.com/docs/en/desktop-scheduled-tasks).
-- **Cron with `claude -p`.** No app is needed; the computer must be on at the scheduled time:
+- **Claude Desktop - scheduled tasks.** The task runs on your computer, so `max` and your login are available to it. The skipped run (the computer was sleeping) is executed once after waking up. See [Claude scheduled tasks](https://code.claude.com/docs/en/desktop-scheduled-tasks).
+- **cron and `claude -p`.** Without an application, on any computer that is turned on at this time:
 
   ```cron
   30 8 * * * claude -p "$(cat ~/max-recipes/morning.md)" --allowedTools "Bash(max inbox:*)" >> ~/max-recipes/morning.log 2>&1
   ```
 
-  Cron jobs run in an almost empty environment, causing two problems for `max` on Linux:
+Cron jobs run in an almost empty environment. On Linux this breaks `max` in two ways:
 
-  - **`node: not found`, code 127.** Node installed through nvm, fnm or volta is outside the system `PATH` known to cron.
-  - **`no token found for profile "default", although it has logged in on this machine`, code 4.** `max` cannot access the password store. **Do not log in again:** this is an environment issue, not an invalid session.
+- **`node: not found`, code 127.** The Node supplied via nvm, fnm or Volta is not in the system `PATH`, and cron knows only the system one.
+  - **`no token found for profile "default", although it has logged in on this machine`, code 4.** `max` cannot reach the system password storage and does not see the token. **Don't login again**: login is fine, it's a matter of the environment.
 
-  Add both lines at the start of `crontab -e`, using your values: get the directory from `dirname "$(which node)"` and the number from `id -u`:
+Both lines go to the beginning of `crontab -e`, with their own values. The folder is from `dirname "$(which node)"`, the number is from `id -u`:
 
   ```cron
   PATH=/home/ivan/.nvm/versions/node/v24.19.0/bin:/home/ivan/.local/bin:/usr/local/bin:/usr/bin:/bin
   XDG_RUNTIME_DIR=/run/user/1000
   ```
 
-  The password store remains accessible while you are logged into the operating system. Test the first run manually and check the log. See [Claude headless mode](https://code.claude.com/docs/en/headless) for `-p`.
+The password store is available while you are logged in. Check the first run with your hands and look in the log. See [Claude's noninteractive mode](https://code.claude.com/docs/en/headless).
 
 - **Cron with `codex exec`.** The equivalent for Codex:
 
@@ -74,10 +97,10 @@ max recipients add "Иван Петров"       # и писать только 
   30 8 * * * codex exec --sandbox danger-full-access "$(cat ~/max-recipes/morning.md)" >> ~/max-recipes/morning.log 2>&1
   ```
 
-  See the [Codex documentation](https://learn.chatgpt.com/docs/non-interactive-mode) for noninteractive mode.
-- **An open Claude Code session:** use `/loop` or ask “remind me at 15:00”. This works while the session remains open ([Claude scheduling](https://code.claude.com/docs/en/scheduled-tasks)).
+See [Codex noninteractive mode](https://learn.chatgpt.com/docs/non-interactive-mode).
+- **Inside an open session Claude Code** - `/loop` or “remind me at 15:00”. Works while the session is open. See [Claude Code Scheduled Tasks](https://code.claude.com/docs/en/scheduled-tasks).
 
-Claude cloud routines do not work for this setup: they run elsewhere and cannot access your computer's `max` session.
+Claude's cloud tasks (routines) are not suitable: they are executed on another computer where `max` and your login do not exist.
 
 ## Morning summary
 
@@ -85,7 +108,7 @@ Writes to MAX: **no**. Permit: `Bash(max inbox:*)`.
 
 > Run `max inbox --new --json`. Group messages by chat. Give each chat one line: who is writing and what they need. Put items needing a response today first. Combine advertisements and service notifications into one final line.
 
-`--new` shows each message once: `max` saves its position — separately for each chat — and resumes from there on the next run. The first run covers the past 24 hours.
+`--new` shows each message once. `max` remembers where it left off in each chat, and the next run starts from that place. The very first run looks at the last 24 hours.
 
 ### Where “new” starts
 
@@ -93,11 +116,11 @@ Writes to MAX: **no**. Permit: `Bash(max inbox:*)`.
 - `max inbox --new` — since the previous `--new` run. Only `max` knows this point; your contacts do not see it.
 - `max inbox --since-time 2d` — the past two days; the saved point does not move.
 
-None of them marks messages as read. If you need that, add `--mark-read` or turn on `catchUpMarksRead` in [settings](./configuration.md) — then the other person sees that you have read the messages.
+None of them mark messages as read. If needed, add `--mark-read` or enable `catchUpMarksRead` in [settings](./configuration.md). Then the interlocutor will see what you have read.
 
 ### Direct chats, groups and channels separately
 
-`--kind` keeps only chats of the given kind: `dialog` for direct chats, `group` for groups, `channel` for channels. You can run a channel summary and a conversation summary separately, at different times — each chat has its own point, and one run does not hide what the other has not shown yet:
+`--kind` leaves only chats of the required type: `dialog` - personal, `group` - groups, `channel` - channels. The channel summary and conversation summary can be run separately, at different times. Each chat has its own point, and one run does not hide what the other has not yet shown:
 
 ```cron
 30 8 * * * claude -p "$(cat ~/max-recipes/morning.md)" --allowedTools "Bash(max inbox:*)"
@@ -117,9 +140,9 @@ Writes to MAX: **no**. Permit: `Bash(max messages list:*)`.
 
 Writes to MAX: **no**. Permit: `Bash(max review:*)`, `Bash(max messages context:*)`, `Bash(max search messages:*)`.
 
-> Run `max review --new --transcribe --json` (the first time it covers 3 days, then everything since the previous `--new`; each chat has its own point). Make three lists: what I owe, what I am waiting for, and what needs clarification. For each item, include its chat, date and supporting message IDs; include a deadline only if explicitly stated. Before calling anything overdue, check whether it was completed later or in work groups. If `"complete": false`, explain what is missing. End with the outstanding items.
+> Run `max review --new --transcribe --json` (initially the past 3 days, then since each chat's previous `--new`). Group what I owe, replies I await and matters to clarify. Include chat, date and source message ids; give a deadline only when stated. Before calling something overdue, check later messages and work groups for completion. If `"complete": false`, explain missing coverage. Finish with unresolved items.
 
-For the next review, repeat the request and include previous outstanding items; the agent checks them first. A chat that was not read in full keeps its point and comes up again. In Claude Desktop and other MCP clients, use `/review` ([MCP prompts](./mcp.md#команды-и-чаты-по-)).
+`--transcribe` first translates voice messages into text; this may take minutes. The next review is the same request plus unclosed items from the past: the agent will check them first. A chat that has not been read in full will save its point and come again. In the MCP client this is command `/review`.
 
 ## People you have not answered
 
@@ -129,27 +152,35 @@ Writes to MAX: **no**. Permit: `Bash(max chats list:*)`, `Bash(max messages list
 
 > Run `max chats list --kind dialog --limit 30 --json`. For each chat active in the past 7 days, read `max messages list <id чата> --limit 5 --json`. Show chats whose latest message is not mine and contains a question or request: who it is with, the topic and days elapsed.
 
+## Find what was said
+
+Writes to MAX: **no**. Allow: `Bash(max search messages:*)`, `Bash(max messages context:*)`.
+
+> Find invoice messages using `max search messages счёт --json`. For each match, read `max messages context <locator> --json` and explain who said what and when.
+
+By default, the search is carried out both on the copy on this computer and on the MAX server. The local copy contains only what `max` has already saved. To search your entire chat history locally, first download it. This is a request from your account, so make it yourself: `max store fetch <чат>`. See [download history](./archive.md#скачать-историю).
+
 ## Drafting a reply
 
 Writes to MAX: **only after your confirmation**. This recipe is for an interactive conversation, not a schedule.
 
 > Read the last 20 messages with Ivan Petrov and suggest a reply to his latest question. Do not send it; show me the text.
 
-Once you agree, the agent sends the message itself: `max messages send "Иван Петров" "…"`. An agent without a terminal connects through `max mcp`: ask it to show a draft first and configure tool-call confirmations in the agent application. Profile permissions limit writes ([mcp.md](./mcp.md)).
+When you agree, the agent sends himself: `max messages send "Иван Петров" "…"`. The MCP client connects via `max mcp`. Don't let the client pre-approve `max_write` and he will ask you before every submission. The profile rights still limit the recording. See [MCP Server](./mcp.md).
 
 ## A group you manage
 
 Writes to MAX: **only as permitted by group rules**. Permit: `Bash(max review:*)`, `Bash(max chats events:*)`, `Bash(max chats members list:*)`, `Bash(max chats moderate:*)`.
 
-> Run `max review --chat "Поход" --unanswered 4h --json` and `max chats moderate "Поход" --dry-run
-> --json`. Briefly list who is waiting for answers, what the rule check found and its proposed actions. Do not delete anything; list the commands that would perform the actions if I approve.
+> Run `max review --chat "Поход" --unanswered 4h --json`, `max chats events "Поход" --since-time
+7d --json` and `max chats moderate "Поход" --dry-run --json`. Summarise questions awaiting replies, authors and waiting times; joins/additions this week and who added them; and rule violations with proposed actions. Send no replies and remove nobody: list commands for my approval.
 
-See [Managing groups](./groups.md) for all scenarios and rules.
+With `--dry-run` command `chats moderate` only makes a plan. Without it, it acts within the group rules, so remove `Bash(max chats moderate:*)` from the list if the agent should never act. All scenarios and rules are [groups that you lead](./groups.md).
 
 ## Related collections
 
-There are no ready-made MAX recipe collections yet. For Telegram:
+There are no ready-made recipes for MAX yet. For Telegram there is; their requests are also suitable for `max`, if you replace the tools with command:
 
-- [Telegram MCP complete guide](https://mcp.directory/blog/telegram-mcp-complete-guide-2026) — morning inbox triage, reply drafts, channel summaries and cross-chat search. Prompts also work for `max` if tools are replaced with commands.
-- [pioh/tg](https://github.com/pioh/tg) — Claude Code and Codex with a personal Telegram account: summaries every N minutes, “remind me if I have not replied to Mom in 15 minutes”, and watching people and chats.
-- [Gorgias MCP cookbook](https://github.com/gorgias/mcp-cookbook) — support recipes with a useful structure: each states whether it writes anything and what to customize.
+- [Telegram MCP: complete guide](https://mcp.directory/blog/telegram-mcp-complete-guide-2026) - morning analysis of incoming messages, draft replies, channel summary, search in several chats.
+- [pioh/tg](https://github.com/pioh/tg) - AI agent with a personal Telegram account: summary once every N minutes, “remind me if I haven’t answered my mom in 15 minutes,” monitoring people and chats.
+- [Gorgias MCP cookbook](https://github.com/gorgias/mcp-cookbook) - recipes for the support service, but well organized: everyone is told whether he is writing something, and what to correct for himself.

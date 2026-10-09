@@ -2,15 +2,15 @@
 title: "Próximas mejoras"
 ---
 
-Lo que llegará a `tg`, en el orden previsto de implementación. Ese orden puede cambiar. Puedes proponer ideas y mejoras en [las incidencias](https://github.com/leemour/tg-cli/issues).
+Esta página enumera lo que está planeado para `tg` y aún no está incluido. Léelo antes de crear una solución alternativa para una característica faltante: es posible que ya esté en camino. El orden es aproximado y puede cambiar. Para sugerir algo, abra un [problema en GitHub](https://github.com/leemour/tg-cli/issues).
 
-- **Más formas de enviar** — varias fotos en un mensaje ([uso](./usage.md#not-in-tg-yet)).
-- **Notas propias sobre chats** — lo que [tgcli](./from-tgcli.md) guarda junto a sus etiquetas.
-- **Funciones que `max` incorporó en octubre** — silenciar chats, privacidad, llamadas, medios, stickers, borrar o vaciar chats para ti, foto del grupo, botones del bot, iniciar bots y abrir mini apps.
-  Los [nombres y notas personales](./people.md#your-own-names-and-notes-contacts-alias-contacts-notes) ya están disponibles.
+## Próximo
 
-Consulta los cambios de cada versión publicada en el [historial de cambios](./changelog.md).
+- **Envío más rico.** Varias fotos en un solo mensaje. Hasta entonces, consulte [lo que tg no puede enviar todavía](./usage.md#not-in-tg-yet).
 
-La transferencia de archivos guardados a agentes de IA remotos está implementada: [guía de adjuntos](./attachments.md).
-Los agentes cuyos clientes no pueden abrir PDF pueden recibir páginas sueltas como imágenes:
-[lectura remota de PDF](./remote.md#read-pdf-pages-without-a-local-file-handoff).
+## Más tarde
+
+- **Tus propias notas en los chats.** Notas privadas en un chat, como las que [tgcli](https://github.com/kfastov/tgcli) guarda junto a sus etiquetas. Los nombres privados y notas para personas ya funcionan: [tus propios nombres y notas para personas](./people.md#your-own-names-and-notes-contacts-alias-contacts-notes).
+- **Lo que `max` puede hacer y `tg` todavía no.** Silenciar un chat, configuración de privacidad, historial de llamadas, medios de un chat, stickers, eliminar o borrar un chat para usted mismo, una foto de grupo, presionar los botones de un bot, iniciar un bot y abrir su mini aplicación.
+
+Lo que cambió cada versión lanzada se encuentra en el [registro de cambios](./changelog.md).

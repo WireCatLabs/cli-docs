@@ -4,6 +4,19 @@ title: "Historial de cambios"
 
 Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.42.0 — 09.10.2026
+
+### Cambios que pueden afectar a scripts
+
+- **Las respuestas automáticas responden a todas las personas que coinciden con sus reglas, a menos que limite la audiencia; la lista separada `testers` desapareció.** `tg replies audience --reply listed --allow-people <ids>` responde solo a personas seleccionadas;   `--deny-people` y `--deny-chats` dejan algunos fuera. No se envía nada hasta que `permissions.replies.send` sea `allow` y una nueva regla estará desactivada hasta que la active. Un archivo de reglas que todavía tiene `testers` sigue respondiendo exactamente a las mismas personas: se convierten en las personas permitidas (solo aquellas que la audiencia también permitió, si ya era `listed`). Los chats permitidos en dicho archivo se eliminan porque abrirían respuestas a todos los participantes en esos chats; Las listas de denegación permanecen. El archivo se reescribe sin `testers` en su próxima edición de `tg replies`.
+- **`tg replies status --json` ya no tiene `testers`**; los recuentos `audience` dicen quién puede ser respondido. En `tg replies test` y `serve`, un remitente fuera de la audiencia se omite con "no en la lista de permitidos" en lugar de "no es una cuenta de prueba".
+
+## 0.41.0 — 09.10.2026
+
+### Cambios que pueden afectar a scripts
+
+- **El almacén de mensajes elimina las copias guardadas para versiones anteriores** (versión del archivo local 28, cli-messaging 0.212.0).   Las notas, notas de contacto, relaciones y entidades escritas antes de la refactorización de notas se copian en sus nuevas tablas una vez, durante la actualización. Después, un tg, max o memo más antiguo rechazal archivo local con "actualizar esta herramienta": actualiza los tres juntos.
+
 ## 0.40.1 — 09.10.2026
 
 ### Corregido
@@ -178,7 +191,7 @@ Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la m�
 - **`tg messages send --html` y `tg messages edit --html` leen el HTML de Telegram** — `<b>`, `<i>`, `<u>`, `<s>`,
   `<a href>`, `<code>`, `<pre>`, `<blockquote>`, `<tg-spoiler>` — conservando los saltos de línea tal como los escribiste
   ([uso](./usage.md#sending)).
-- **`tg messages send --file … --filename <name>`** envía el archivo con el nombre que ven los demás.
+- **`tg messages send --file … --filename <name>`** envíal archivo con el nombre que ven los demás.
 - **`tg messages list <chat> --topic <id>` lee un tema del foro**, hacia atrás desde su mensaje más reciente o `--before-id`.
 - **`tg chats folders order` coloca las carpetas en el orden que indiques**, y **`tg chats folders join <link>`** añade una
   carpeta compartida mediante un enlace `t.me/addlist/` y entra en todos sus chats.
@@ -257,7 +270,7 @@ Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la m�
 
 - La configuración se divide en una guía breve y una referencia completa de claves, tipos, valores predeterminados, ámbitos y variables de entorno.
   El contrato público de la CLI describe la ejecución sin interacción, los esquemas, límites, vistas previas y reglas de reintento.
-- Validación en CI de los metadatos portables de la habilidad, la versión instalada, las rutas de comandos y la cobertura de claves de configuración.
+- Validación en CI de los metadatos portables de la skill, la versión instalada, las rutas de comandos y la cobertura de claves de configuración.
   El inicio de sesión nativo y las preguntas opcionales de configuración respetan la política compartida de ausencia de entrada interactiva.
 
 - **La primera resolución de ajustes crea config.json.** Se conservan los archivos existentes; no se guardan las sustituciones del entorno ni de las opciones. config show ahora puede crear el archivo, y los valores habituales indican los valores predeterminados del archivo como su origen.
@@ -319,7 +332,7 @@ Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la m�
   `models.replies` selecciona el proveedor; `replies consents` concede consentimiento por perfil y endpoint con
   exclusiones por identificadores nativos de chats. `replies test` habitual muestra las instrucciones y la alternativa sin llamadas;
   `--ai` envía explícitamente datos almacenados. Las plantillas antiguas conservan su alternativa literal con advertencias.
-  El envío sigue limitado a los probadores y replies.send; consulta [archivo](./archive.md#tester-only-reply-rules).
+  El envío sigue limitado a los probadores y replies.send; consulta [archivo](./archive.md#reply-rules).
 
 - **Las escrituras MCP pueden ejecutarse desde clientes web sin formularios del servidor.** Los niveles de permisos del perfil
   se aplican por igual a HTTP y stdio; `ask` y `allow` permiten la escritura MCP solicitada. Repite
@@ -344,7 +357,7 @@ Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la m�
 
 - **`tg serve` y `tg watch` terminan correctamente al detenerlos con SIGTERM o Ctrl-C.** Antes salían con 1 y
   `database is not open`, y se perdían las actualizaciones y contactos que seguían llegando: la biblioteca de Telegram
-  cerraba el archivo de inicio de sesión al recibir la señal, antes de que el comando terminara de usarlo. Ahora el comando
+  cerrabal archivo de inicio de sesión al recibir la señal, antes de que el comando terminara de usarlo. Ahora el comando
   lo cierra una sola vez después de guardar lo recibido.
 
 - `chats show` da el recuento real de miembros de un supergrupo, que la lista de chats de Telegram mostraba como ausente o
@@ -399,12 +412,12 @@ Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la m�
 
 ### Novedades
 
-- **Buscar el texto dentro de los archivos.** `attachments extract` indexa el texto plano conservado y las capas de texto de Word y PDF para las consultas `content:`. Word y PDF necesitan los paquetes opcionales `mammoth` y `unpdf`; un agente lee los escaneos y las fotos y guarda su texto con `attachments text set`. `--download --output-dir` descarga expresamente los archivos que faltan.
+- **Buscar el texto dentro de los archivos.** `attachments extract` indexa el texto plano conservado y las capas de texto de Word y PDF para las consultas `content:`. Word y PDF necesitan los paquetes opcionales `mammoth`, `unpdf` y `@napi-rs/canvas`; un agente lee los escaneos y las fotos y guarda su texto con `attachments text set`. `--download --output-dir` descarga expresamente los archivos que faltan.
 - **Actualizar antes de buscar y seguir las respuestas.** `--sync-first` descarga dentro de unos límites predeterminados de cinco chats, 500 mensajes y 30 segundos; si la actualización queda incompleta, se conservan los resultados locales y se informa de que la cobertura está desactualizada. `--thread` sigue un grafo acotado de respuestas guardadas con el origen de cada vínculo y, si no existe, recurre al contexto temporal.
 - **Filtrar conversaciones y elegir el alcance de cuentas.** `--filter` usa Lucene estricto y se aplica antes de ordenar; un mismo mensaje debe cumplir todo el filtro. `--source` amplía el alcance de forma explícita. MCP ofrece ahora lotes para que el agente vincule conversaciones, la escritura de vínculos, la reconstrucción y el prompt `link-conversations`.
 - **Configurar por separado, por perfil, los vectores semánticos y el análisis.** Los vectores locales y el agente del propietario siguen siendo los valores predeterminados. Los proveedores remotos reciben texto solo si los eliges; `build --analyze --chat` pide y recuerda el consentimiento por cuenta, chat y proveedor hasta que se revoca. Un ajuste de vectores semánticos remotos también envía el texto de las consultas de búsqueda de MCP.
 
-- **`tg` se conecta a través de un proxy: SOCKS5, HTTP `CONNECT` o MTProxy.** Se configura por perfil con `tg config set proxy <url>` (o `tg config set proxy -` para pegar uno con contraseña o secreto de MTProxy, que se guarda en el almacén de claves del sistema y nunca en el archivo de configuración) o para una sola ejecución con `TG_PROXY`. Los comandos de la Bot API usan el mismo proxy SOCKS5 o HTTP; con un MTProxy se conectan directamente, y `tg doctor` lo indica. Un proxy que rechaza la conexión o no responde falla en el acto con `configuration_error` (código 3), así que nunca parece que Telegram esté caído.
+- **`tg` se conecta a través de un proxy: SOCKS5, HTTP `CONNECT` o MTProxy.** Se configura por perfil con `tg config set proxy <url>` (o `tg config set proxy -` para pegar uno con contraseña o secreto de MTProxy, que se guarda en el llavero del sistema y nunca en el archivo de configuración) o para una sola ejecución con `TG_PROXY`. Los comandos de la Bot API usan el mismo proxy SOCKS5 o HTTP; con un MTProxy se conectan directamente, y `tg doctor` lo indica. Un proxy que rechaza la conexión o no responde falla en el acto con `configuration_error` (código 3), así que nunca parece que Telegram esté caído.
 - **`tg doctor` indica qué ha comprobado realmente.** El inicio de sesión aparece como `not checked` hasta que añades `--online`, y cada archivo o carpeta privados que otros usuarios pueden leer se nombra con el `chmod` que lo corrige; `doctor` nunca cambia los permisos por sí mismo. `tg doctor --online` también compara el reloj de este equipo con el de Telegram (aviso a partir de 10 segundos) e indica si la cuenta está activa, congelada (con sus fechas y el enlace de apelación), bloqueada, eliminada o con la sesión cerrada. `tg doctor` y `tg server status` muestran como `flood` las esperas que Telegram pidió respetar a este perfil y cualquier bloqueo de sus escrituras.
 - **`tg flood clear`** olvida esas esperas y levanta el bloqueo de escrituras, cuando Telegram ya no limita la cuenta. Nunca se conecta. Los agentes no tienen herramienta MCP para ello, a propósito.
 - **Etiquetas: tus propias marcas en un chat, una persona o un mensaje**, guardadas en el almacén local y nunca enviadas. `tg tags add <tag…> --chat <chat> | --contact <person> | --message <message>`, `tags remove` con el mismo destino y `tags list`. `tag:<tag>` en una búsqueda encuentra lo etiquetado. MCP: `tags_list`, `tags_add`, `tags_remove`.
@@ -461,7 +474,7 @@ Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la m�
 - `config set permissions` rechaza las claves de comandos desconocidos, también dentro de un objeto completo, con código 2. Los archivos existentes avisan y continúan; `config unset` puede eliminar una clave desconocida antigua.
 - `store fetch --page-size` por encima de 100 se rechaza antes de conectarse. Vuelve a ejecutar `store fetch <chat>` para corregir una marca incorrecta de inicio del historial cuando existen mensajes anteriores.
 
-- **`tg serve` termina con código 12 (`provider_unavailable`) cuando existe una sesión guardada pero las credenciales de la aplicación no están disponibles**, por ejemplo mientras el almacén de claves del inicio de sesión está bloqueado. Systemd lo reintenta tras 30 segundos; en macOS hace falta `tg server start`. Los demás comandos y los perfiles sin sesión guardada siguen terminando con código 4.
+- **`tg serve` termina con código 12 (`provider_unavailable`) cuando existe una sesión guardada pero las credenciales de la aplicación no están disponibles**, por ejemplo mientras el llavero del inicio de sesión está bloqueado. Systemd lo reintenta tras 30 segundos; en macOS hace falta `tg server start`. Los demás comandos y los perfiles sin sesión guardada siguen terminando con código 4.
 - **`tg serve` y `tg watch` se niegan a iniciarse con código 4 (`authentication_error`) si la sesión ya estaba revocada.** Comprueban el inicio de sesión antes de indicar que están listos. Una sesión revocada después del inicio sigue necesitando una comprobación aparte.
 - **El servicio en segundo plano ya no se reinicia con ese código.** En systemd, el código 4 impide el reinicio. En macOS, launchd no puede excluir un código de salida concreto, así que el agente ya no se reinicia tras ningún fallo. Ejecuta de nuevo `tg server install` para actualizar la unidad; después de `tg session start`, ejecuta `tg server start`.
 
@@ -535,7 +548,7 @@ Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la m�
   nativos, cuerpos JSON/stdin y cargas multipart anidadas comparten validación y controles de escritura.
   Los métodos destructivos piden confirmación por defecto; las escrituras sin respuesta no se reintentan.
   Las credenciales de bots gestionados requieren un destino explícito `--store-token <profile>`
-  y se guardan solo en el almacén de claves del sistema; stdout contiene un recibo de almacenamiento.
+  y se guardan solo en el llavero del sistema; stdout contiene un recibo de almacenamiento.
 
 ## 0.24.0 — 03.10.2026
 
@@ -606,14 +619,14 @@ Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la m�
 
 - **Los rechazos de escritura del bot indican un comando de configuración válido** con `--bot` y la clave de permiso (cli-messaging 0.111.0). Antes colocaban `config` dentro de `bot`, donde no existe.
 
-- **Los comandos locales ya no dicen que cambian Telegram.** `config set` y `unset`, `chats rules set` y `unset`, `recipients add`, `remove` y `clear`, y `auth set`, `auth remove`, `recipients add`, `remove` y `clear` del bot solo modifican configuración, reglas, listas o almacén de claves. La [referencia](./commands.md) indica "Changes something on this computer only.". Siguen siendo escrituras en `tg commands`. `chats moderate` y `session end` siguen indicando cambios en Telegram.
+- **Los comandos locales ya no dicen que cambian Telegram.** `config set` y `unset`, `chats rules set` y `unset`, `recipients add`, `remove` y `clear`, y `auth set`, `auth remove`, `recipients add`, `remove` y `clear` del bot solo modifican configuración, reglas, listas o llavero. La [referencia](./commands.md) indica "Changes something on this computer only.". Siguen siendo escrituras en `tg commands`. `chats moderate` y `session end` siguen indicando cambios en Telegram.
 - **`tg contacts show` incluye el chat individual** entre los compartidos, recientes primero. Antes solo mostraba grupos porque la lista de chats comunes de Telegram solo incluye grupos.
 
 ## 0.21.0 — 01.10.2026
 
 ### Novedades
 
-- **`tg bot`**: bots de Telegram mediante la Bot API oficial y su token: `bot auth set|show|remove`, `bot list [--check]`, `bot chats list`, `bot recipients list|add|remove|clear` y `bot sends list`, como en `max bot`. Permite varios bots con nombres propios; el token se guarda como `bot:<name>` en el almacén de claves o en `TG_BOT_TOKEN`. Consulta [bots](./bot.md).
+- **`tg bot`**: bots de Telegram mediante la Bot API oficial y su token: `bot auth set|show|remove`, `bot list [--check]`, `bot chats list`, `bot recipients list|add|remove|clear` y `bot sends list`, como en `max bot`. Permite varios bots con nombres propios; el token se guarda como `bot:<name>` en el llavero o en `TG_BOT_TOKEN`. Consulta [bots](./bot.md).
 - **`tg conversations batches status|next --chat <chat> [--size <n>]`**: divide un grupo en lotes para que tu agente de IA vincule los mensajes en conversaciones. `status` indica los mensajes y lotes pendientes; `next` imprime el siguiente lote. tg no llama a ningún modelo.
 - **`tg skill install [--for claude|agents|all]`** guarda la guía de tg donde la buscan Claude Code y otros agentes. Si un agente ejecuta tg sin tenerla instalada, se avisa una vez al día por stderr; `tg config set skillHint false --defaults` lo desactiva.
 - **`tg store clear --left`** elimina del archivo local los chats abandonados y sus mensajes. Requiere `--allow-dangerous`; sin ella solo indica cuánto eliminaría.
@@ -637,7 +650,7 @@ Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la m�
 - **`tg account show` muestra las cuatro últimas cifras del teléfono** y el número completo con `--show-phone`. `tg_account_show` siempre muestra solo las cuatro últimas.
 - **`tg messages forward --send-id`.** Reintenta un reenvío sin respuesta con el identificador del error; Telegram conserva una copia, igual que en envíos. `--json` incluye `sendId`; `tg_messages_forward` acepta `send_id`.
 - **`tg messages edit --md`** formatea como `messages send --md`; `tg_messages_edit` acepta `markdown`.
-- **Mantenimiento del archivo local: `tg store info`, `check`, `migrate`, `backup`, `restore`.** `info` indica ubicación de `messages.db`, tamaño, esquema y filas. `check` comprueba integridad, claves externas, índices y espacio libre; identifica chats cuyo historial termina antes del último mensaje y no repara nada. `migrate` actualiza y normaliza mensajes anteriores. `backup <file>` copia el archivo en uso con acceso solo para ti, sin sobrescribir. `restore <file>` restaura una copia y conserva al lado el archivo sustituido; rechaza si `tg serve` está activo o algún proceso tiene la base abierta. La base se comparte con max-cli: reinicia después los `serve` y `mcp` activos de ambos CLI.
+- **Mantenimiento del archivo local: `tg store info`, `check`, `migrate`, `backup`, `restore`.** `info` indica ubicación de `messages.db`, tamaño, esquema y filas. `check` comprueba integridad, claves externas, índices y espacio libre; identifica chats cuyo historial termina antes del último mensaje y no repara nada. `migrate` actualiza y normaliza mensajes anteriores. `backup <file>` copial archivo en uso con acceso solo para ti, sin sobrescribir. `restore <file>` restaura una copia y conserva al lado el archivo sustituido; rechaza si `tg serve` está activo o algún proceso tiene la base abierta. La base se comparte con max-cli: reinicia después los `serve` y `mcp` activos de ambos CLI.
 - **Cada escritura tiene identificador propio, `operationId`.** Envios, ediciones, reenvíos, eliminaciones, mensajes fijados, reacciones, marcado como leído y votos lo incluyen en `--json` y MCP, registro de envíos y `--trace`, para seguir una operación desde respuesta a registro. En envíos, `operationId` equivale a `sendId`.
 - **Unos 16 MB menos al instalar:** cli-messaging 0.60.0 incluye su capa de base de datos en lugar de depender de ella.
 
@@ -865,7 +878,7 @@ Primera publicación en npm.
 
 ### Novedades
 
-- **Inicio de sesión** por QR o teléfono (`tg session start`); credenciales de my.telegram.org obtenidas desde navegador o automáticamente (`--app auto`) y guardadas en el almacén de claves.
+- **Inicio de sesión** por QR o teléfono (`tg session start`); credenciales de my.telegram.org obtenidas desde navegador o automáticamente (`--app auto`) y guardadas en el llavero.
 - **Lectura:** `account show`, `chats list|show`, `contacts list|show`, `messages list|show|context`.
 - **Envíos** con `messages send` y `messages reply`, protegidos por destinatarios, perfiles de solo lectura, registro de intentos (`tg sends`) y `--send-id` para reintentar resultados desconocidos sin duplicar.
 - **Archivo local:** guarda cada lectura en una base compartida; `--offline` la consulta, `messages search` busca, `backfill` la llena, `watch` y `serve` la actualizan, `sync status` y `export` la leen.
