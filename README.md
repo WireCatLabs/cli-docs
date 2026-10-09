@@ -1,7 +1,7 @@
 # cli-docs
 
 The documentation site for the owner's command line tools, at [wirecat.dev](https://wirecat.dev) — today
-[max](https://github.com/leemour/max-cli) and [tg](https://github.com/leemour/tg-cli). Built with
+[max](https://github.com/WireCatLabs/max-cli) and [tg](https://github.com/WireCatLabs/tg-cli). Built with
 [Fumadocs](https://fumadocs.dev) as a static site, in English, Russian and Spanish, and readable by
 agents: `/llms.txt`, `/llms-full.txt` and a Markdown copy of every page.
 
@@ -61,7 +61,7 @@ Fonts and licences remain local in `public/fonts/`; contacts are configured in `
 3. Add it to [tools.json](tools.json): name, repository, npm package, the language its pages are
    written in, and a one-line summary in English, Russian and Spanish.
 4. In its release workflow, after publishing, send the signal that rebuilds this site:
-   `gh api repos/leemour/cli-docs/dispatches -f event_type=docs` with a token allowed to do that.
+   `gh api repos/WireCatLabs/cli-docs/dispatches -f event_type=docs` with a token allowed to do that.
 
 ## Deploying
 

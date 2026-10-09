@@ -1,4 +1,4 @@
-# Source: leemour/tg-cli install/windows.ps1; mirrored for the Windows install entry point.
+# Source: WireCatLabs/tg-cli install/windows.ps1; mirrored for the Windows install entry point.
 param(
     [ValidateSet('tg', 'max')][string] $Tool = 'tg',
     [ValidateSet('all', 'codex', 'cursor', 'claude', 'gemini', 'none')][string] $Agent = 'all',

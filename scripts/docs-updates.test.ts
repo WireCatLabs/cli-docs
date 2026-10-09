@@ -16,7 +16,7 @@ import {
 
 const tool = {
   name: "tg",
-  repo: "leemour/tg-cli",
+  repo: "WireCatLabs/tg-cli",
   package: "@leemour/tg-cli",
   lang: "en",
   docsRef: "v0.24.0",
@@ -30,8 +30,8 @@ const fixture: ReleaseUpdate = {
   latest: "v0.25.0",
   npm: "0.25.0",
   published: true,
-  releaseUrl: "https://github.com/leemour/tg-cli/releases/tag/v0.25.0",
-  compareUrl: "https://github.com/leemour/tg-cli/compare/v0.24.0...v0.25.0",
+  releaseUrl: "https://github.com/WireCatLabs/tg-cli/releases/tag/v0.25.0",
+  compareUrl: "https://github.com/WireCatLabs/tg-cli/compare/v0.24.0...v0.25.0",
   pages: ["docs/search.md"],
   changesComplete: true,
   review: ["Review translations"],
@@ -99,24 +99,24 @@ describe("deduplicated release notifications", () => {
     const get = vi.fn(async (_url: string, _init?: RequestInit) => [
       { number: 5, title: "[Docs] Review released CLI updates", body: "Owner-written issue" },
     ])
-    await notifyUpdates("leemour/cli-docs", [], get)
+    await notifyUpdates("WireCatLabs/cli-docs", [], get)
     expect(get).toHaveBeenCalledTimes(1)
   })
   it("creates one tracking issue and updates it only when the report changes", async () => {
     const marker = "<!-- wirecat-docs-release-check -->"
     const get = vi.fn(async (_url: string, _init?: RequestInit) => [])
-    await notifyUpdates("leemour/cli-docs", [fixture], get)
+    await notifyUpdates("WireCatLabs/cli-docs", [fixture], get)
     expect(get.mock.calls).toHaveLength(2)
     const body = `${marker}\n\n${updateReport([fixture])}`
     const unchanged = vi.fn(async (_url: string, _init?: RequestInit) => [
       { number: 12, title: "[Docs] Review released CLI updates", body },
     ])
-    await notifyUpdates("leemour/cli-docs", [fixture], unchanged)
+    await notifyUpdates("WireCatLabs/cli-docs", [fixture], unchanged)
     expect(unchanged).toHaveBeenCalledTimes(1)
     const changed = vi.fn(async (_url: string, _init?: RequestInit) => [
       { number: 12, title: "[Docs] Review released CLI updates", body: marker },
     ])
-    await notifyUpdates("leemour/cli-docs", [fixture], changed)
+    await notifyUpdates("WireCatLabs/cli-docs", [fixture], changed)
     expect(changed.mock.calls).toHaveLength(2)
     expect(changed.mock.calls[1][0].endsWith("/12")).toBe(true)
   })
@@ -124,7 +124,7 @@ describe("deduplicated release notifications", () => {
     const get = vi.fn(async (_url: string, _init?: RequestInit) => [
       { number: 12, title: "[Docs] Review released CLI updates", body: "<!-- wirecat-docs-release-check -->" },
     ])
-    await notifyUpdates("leemour/cli-docs", [], get)
+    await notifyUpdates("WireCatLabs/cli-docs", [], get)
     expect(get.mock.calls).toHaveLength(2)
   })
 })

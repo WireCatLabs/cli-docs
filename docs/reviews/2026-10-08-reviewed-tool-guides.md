@@ -10,8 +10,8 @@ worktree. The owner's active landing worktree was preserved.
 
 | Tool | Previous reviewed tag | New tag | Release source commit | Messaging dependency |
 |---|---|---|---|---|
-| Telegram | v0.28.0 | [v0.35.0](https://github.com/leemour/tg-cli/releases/tag/v0.35.0) | `25a63521663be3fb8d81bbc542d0244f97d53b25` | 0.177.0 |
-| MAX | v0.29.0 | [v0.34.0](https://github.com/leemour/max-cli/releases/tag/v0.34.0) | `f35530e8db73f0e5d01cd9b753b991e763377cf1` | 0.176.0 |
+| Telegram | v0.28.0 | [v0.35.0](https://github.com/WireCatLabs/tg-cli/releases/tag/v0.35.0) | `25a63521663be3fb8d81bbc542d0244f97d53b25` | 0.177.0 |
+| MAX | v0.29.0 | [v0.34.0](https://github.com/WireCatLabs/max-cli/releases/tag/v0.34.0) | `f35530e8db73f0e5d01cd9b753b991e763377cf1` | 0.176.0 |
 
 Both releases use cli-core 0.17.2. GitHub tags, npm versions and published provenance were verified
 in the consumer release work. Installed command contracts were captured again from the exact npm
@@ -78,5 +78,5 @@ quoted search wildcards and stdin examples; their concrete commands were checked
 contract. They were not executed as messenger commands.
 
 No live messenger action was performed for this documentation update. Publication and live website
-verification are tracked in [website PR #72](https://github.com/leemour/cli-docs/pull/72) and the
-[deployment workflow](https://github.com/leemour/cli-docs/actions/workflows/deploy.yml).
+verification are tracked in [website PR #72](https://github.com/WireCatLabs/cli-docs/pull/72) and the
+[deployment workflow](https://github.com/WireCatLabs/cli-docs/actions/workflows/deploy.yml).

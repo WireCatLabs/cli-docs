@@ -73,7 +73,7 @@ Las palabras y las frases entre comillas en `text`, el campo por defecto, encuen
 
 Las formas de las palabras no corrigen erratas. La búsqueda estricta, el modo por defecto, no corrige erratas ni en Telegram ni en MAX: `presupesto` no encuentra `presupuesto`. Prueba un comodín con la parte de la que estás seguro (`presup*`) o la búsqueda por temas por significado. Solo el modo anterior `--language legacy` corrige erratas automáticamente. Si se lo pides a un agente, describe lo que recuerdas; él puede elegir estas vías por ti.
 
-Medimos tres formas de encontrar las variantes en treebanks de Universal Dependencies, con 102 palabras por idioma ([resultados de la medición](https://github.com/leemour/cli-messaging/blob/bench/stemming-vs-trigrams/bench/stemming/results.md)). *Encontrados* es la proporción de mensajes relevantes que devuelve la búsqueda; *correctos* es la proporción de resultados devueltos que son relevantes.
+Medimos tres formas de encontrar las variantes en treebanks de Universal Dependencies, con 102 palabras por idioma ([resultados de la medición](https://github.com/WireCatLabs/cli-messaging/blob/bench/stemming-vs-trigrams/bench/stemming/results.md)). *Encontrados* es la proporción de mensajes relevantes que devuelve la búsqueda; *correctos* es la proporción de resultados devueltos que son relevantes.
 
 | Coincidencia | Ruso: encontrados | Ruso: correctos | Español: encontrados | Español: correctos |
 | --- | --- | --- | --- | --- |
@@ -141,7 +141,7 @@ Antes de calcular, el texto de cada fragmento se reconstruye a partir de los men
 
 ### Mediciones
 
-100 000 mensajes en tres idiomas, de 5 a 40 palabras cada uno, como un solo chat; AMD Ryzen AI 9 HX 470 (24 hilos), 30 GB de RAM, Linux, Node 24 y Bun 1.3; medido el 2 de octubre de 2026 ([medición](https://github.com/leemour/cli-messaging/blob/v0.148.2/bench/embeddings/README.md)).
+100 000 mensajes en tres idiomas, de 5 a 40 palabras cada uno, como un solo chat; AMD Ryzen AI 9 HX 470 (24 hilos), 30 GB de RAM, Linux, Node 24 y Bun 1.3; medido el 2 de octubre de 2026 ([medición](https://github.com/WireCatLabs/cli-messaging/blob/v0.148.2/bench/embeddings/README.md)).
 
 | Paso | Entorno | Tiempo | Memoria máxima |
 | --- | --- | --- | --- |
@@ -199,18 +199,18 @@ El navegador no abre ninguna cuenta ni ejecuta construcción de conversaciones, 
 
 ## Mapa del código
 
-Código del motor en [`cli-messaging`](https://github.com/leemour/cli-messaging/tree/v0.211.0), la biblioteca compartida de tg y max. Son referencias de implementación, no promesas de rendimiento.
+Código del motor en [`cli-messaging`](https://github.com/WireCatLabs/cli-messaging/tree/v0.211.0), la biblioteca compartida de tg y max. Son referencias de implementación, no promesas de rendimiento.
 
 | Responsabilidad | Implementación |
 | --- | --- |
-| Preparación del archivo y cobertura | [Servicio del archivo](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/services/archive.ts), [comando de descarga](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/cli/messenger/backfill-command.ts) y [resumen de cobertura](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/cli/messenger/archive-summary.ts) |
-| Análisis, validación, alcance y cobertura | [Analizador de consultas](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/search/query.ts), [servicio de búsqueda de mensajes](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/services/messages-search.ts) y [ejecutor Lucene para SQLite](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/store/sqlite/lucene.ts) |
-| Índice de palabras, vocabulario y raíces | [Coincidencia de palabras](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/store/sqlite/words.ts), [llenado del índice](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/store/sqlite/search-index.ts) y [raíces de palabras](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/search/stem.ts) |
-| Candidatos del servidor | [Búsqueda en el servidor](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/services/server-search.ts) |
-| Vínculos del grafo y ciclo de construcción | [Reglas de vínculos](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/conversations/link.ts), [servicio de conversaciones](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/services/conversations.ts) y [persistencia de construcciones](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/store/sqlite/conversations.ts) |
-| Fragmentos y almacenamiento de vectores | [Fragmentación](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/conversations/chunks.ts) y [almacenamiento y puntuación de vectores](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/store/sqlite/vectors.ts) |
-| Modelos, combinación y frescura | [Servicio de vectores](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/services/embeddings.ts), [catálogo de modelos](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/embeddings/models.ts) y [grupo de procesos](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/embeddings/pool.ts) |
-| Contrato del paquete de pruebas | [Servicio de pruebas](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/services/evidence.ts) |
+| Preparación del archivo y cobertura | [Servicio del archivo](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/archive.ts), [comando de descarga](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/cli/messenger/backfill-command.ts) y [resumen de cobertura](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/cli/messenger/archive-summary.ts) |
+| Análisis, validación, alcance y cobertura | [Analizador de consultas](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/search/query.ts), [servicio de búsqueda de mensajes](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/messages-search.ts) y [ejecutor Lucene para SQLite](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/lucene.ts) |
+| Índice de palabras, vocabulario y raíces | [Coincidencia de palabras](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/words.ts), [llenado del índice](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/search-index.ts) y [raíces de palabras](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/search/stem.ts) |
+| Candidatos del servidor | [Búsqueda en el servidor](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/server-search.ts) |
+| Vínculos del grafo y ciclo de construcción | [Reglas de vínculos](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/conversations/link.ts), [servicio de conversaciones](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/conversations.ts) y [persistencia de construcciones](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/conversations.ts) |
+| Fragmentos y almacenamiento de vectores | [Fragmentación](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/conversations/chunks.ts) y [almacenamiento y puntuación de vectores](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/vectors.ts) |
+| Modelos, combinación y frescura | [Servicio de vectores](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/embeddings.ts), [catálogo de modelos](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/embeddings/models.ts) y [grupo de procesos](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/embeddings/pool.ts) |
+| Contrato del paquete de pruebas | [Servicio de pruebas](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/evidence.ts) |
 
 La gramática exacta, los campos, los presets y los límites están en la referencia del lenguaje de consulta de [Telegram](./tg/query-language.md) o [MAX](./max/query-language.md). La preparación y las opciones están en las guías del archivo de [Telegram](./tg/archive.md) y [MAX](./max/archive.md).
 
