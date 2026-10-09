@@ -73,7 +73,7 @@ tg search messages 'filename:*.pdf size>1MB date:7d' --json
 
 Формы слов — не исправление опечаток. Строгий поиск, режим по умолчанию, не исправляет опечатки ни в Telegram, ни в MAX: `презинтация` не найдёт `презентация`. Попробуйте шаблон по надёжной части слова (`презент*`) или поиск по темам по смыслу. Опечатки автоматически исправляет только прежний режим `--language legacy`. Если просите агента, опишите, что помните; эти способы он выберет сам.
 
-Мы сравнили три способа находить формы слов на корпусах Universal Dependencies, по 102 слова на язык ([результаты замеров](https://github.com/leemour/cli-messaging/blob/bench/stemming-vs-trigrams/bench/stemming/results.md)). *Найдено* — доля нужных сообщений, которые вернул поиск; *верно* — доля нужных среди возвращённых.
+Мы сравнили три способа находить формы слов на корпусах Universal Dependencies, по 102 слова на язык ([результаты замеров](https://github.com/WireCatLabs/cli-messaging/blob/bench/stemming-vs-trigrams/bench/stemming/results.md)). *Найдено* — доля нужных сообщений, которые вернул поиск; *верно* — доля нужных среди возвращённых.
 
 | Сопоставление | Русский: найдено | Русский: верно | Испанский: найдено | Испанский: верно |
 | --- | --- | --- | --- | --- |
@@ -141,7 +141,7 @@ tg conversations embed status --chat "Project team" --json
 
 ### Замеры
 
-100 000 сообщений на трёх языках, по 5–40 слов, одним чатом; AMD Ryzen AI 9 HX 470 (24 потока), 30 ГБ памяти, Linux, Node 24 и Bun 1.3; замерено 2 октября 2026 года ([замеры](https://github.com/leemour/cli-messaging/blob/v0.148.2/bench/embeddings/README.md)).
+100 000 сообщений на трёх языках, по 5–40 слов, одним чатом; AMD Ryzen AI 9 HX 470 (24 потока), 30 ГБ памяти, Linux, Node 24 и Bun 1.3; замерено 2 октября 2026 года ([замеры](https://github.com/WireCatLabs/cli-messaging/blob/v0.148.2/bench/embeddings/README.md)).
 
 | Шаг | Среда | Время | Пик памяти |
 | --- | --- | --- | --- |
@@ -199,18 +199,18 @@ max conversations related "Project team" 4521 --json
 
 ## Карта исходников
 
-Исходники движка — в [`cli-messaging`](https://github.com/leemour/cli-messaging/tree/v0.211.0), общей библиотеке tg и max. Это ссылки на реализацию, а не обещания производительности.
+Исходники движка — в [`cli-messaging`](https://github.com/WireCatLabs/cli-messaging/tree/v0.211.0), общей библиотеке tg и max. Это ссылки на реализацию, а не обещания производительности.
 
 | Задача | Реализация |
 | --- | --- |
-| Подготовка архива и охват | [Сервис архива](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/services/archive.ts), [команда загрузки](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/cli/messenger/backfill-command.ts) и [сводка охвата](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/cli/messenger/archive-summary.ts) |
-| Разбор, проверка, охват и полнота | [Разбор запроса](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/search/query.ts), [сервис поиска сообщений](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/services/messages-search.ts) и [исполнитель Lucene для SQLite](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/store/sqlite/lucene.ts) |
-| Индекс слов, словарь и основы | [Сопоставление слов](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/store/sqlite/words.ts), [заполнение индекса](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/store/sqlite/search-index.ts) и [основы слов](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/search/stem.ts) |
-| Кандидаты с сервера | [Поиск на сервере](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/services/server-search.ts) |
-| Связи графа и жизненный цикл построения | [Правила связей](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/conversations/link.ts), [сервис разговоров](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/services/conversations.ts) и [хранение построений](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/store/sqlite/conversations.ts) |
-| Куски и хранение векторов | [Нарезка](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/conversations/chunks.ts) и [хранение и оценка векторов](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/store/sqlite/vectors.ts) |
-| Модели, объединение и свежесть | [Сервис векторов](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/services/embeddings.ts), [каталог моделей](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/embeddings/models.ts) и [пул процессов](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/embeddings/pool.ts) |
-| Контракт пакета доказательств | [Сервис доказательств](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/services/evidence.ts) |
+| Подготовка архива и охват | [Сервис архива](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/archive.ts), [команда загрузки](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/cli/messenger/backfill-command.ts) и [сводка охвата](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/cli/messenger/archive-summary.ts) |
+| Разбор, проверка, охват и полнота | [Разбор запроса](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/search/query.ts), [сервис поиска сообщений](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/messages-search.ts) и [исполнитель Lucene для SQLite](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/lucene.ts) |
+| Индекс слов, словарь и основы | [Сопоставление слов](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/words.ts), [заполнение индекса](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/search-index.ts) и [основы слов](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/search/stem.ts) |
+| Кандидаты с сервера | [Поиск на сервере](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/server-search.ts) |
+| Связи графа и жизненный цикл построения | [Правила связей](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/conversations/link.ts), [сервис разговоров](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/conversations.ts) и [хранение построений](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/conversations.ts) |
+| Куски и хранение векторов | [Нарезка](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/conversations/chunks.ts) и [хранение и оценка векторов](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/vectors.ts) |
+| Модели, объединение и свежесть | [Сервис векторов](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/embeddings.ts), [каталог моделей](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/embeddings/models.ts) и [пул процессов](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/embeddings/pool.ts) |
+| Контракт пакета доказательств | [Сервис доказательств](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/evidence.ts) |
 
 Точная грамматика, поля, preset и пределы — в справке по языку запросов [Telegram](./tg/query-language.md) или [MAX](./max/query-language.md). Подготовка и опции — на страницах архива [Telegram](./tg/archive.md) и [MAX](./max/archive.md).
 

@@ -29,21 +29,21 @@ export default async function AboutPage({ params }: Props) {
       command: "tg",
       description: words.toolDescriptions.tg,
       docs: `/${lang}/docs/tg`,
-      source: "https://github.com/leemour/tg-cli",
+      source: "https://github.com/WireCatLabs/tg-cli",
     },
     {
       name: "MAX",
       command: "max",
       description: words.toolDescriptions.max,
       docs: `/${lang}/docs/max`,
-      source: "https://github.com/leemour/max-cli",
+      source: "https://github.com/WireCatLabs/max-cli",
     },
     {
       name: words.emailTool,
       command: "memo",
       description: words.toolDescriptions.memo,
       docs: `/${lang}/docs/memo`,
-      source: "https://github.com/leemour/cli-memo",
+      source: "https://github.com/WireCatLabs/cli-memo",
     },
   ]
   const contacts = () => (

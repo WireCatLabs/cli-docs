@@ -252,7 +252,7 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
                     <Popover.Popup className="sp-help-content" initialFocus={false}>
                       <p>{text.syntaxHelp}</p>
                       <code>AND · OR · NOT · chat: · from: · date: · has: · in: · text:</code>
-                      <a href="https://github.com/leemour/cli-messaging/blob/main/docs/search/query-language.md">
+                      <a href="https://github.com/WireCatLabs/cli-messaging/blob/main/docs/search/query-language.md">
                         {text.reference} ↗
                       </a>
                     </Popover.Popup>
@@ -606,11 +606,11 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
         <div className="sp-footnote">
           <p>{text.scope}</p>
           <div>
-            <a href="https://github.com/leemour/max-cli/blob/main/docs/search.md">
+            <a href="https://github.com/WireCatLabs/max-cli/blob/main/docs/search.md">
               MAX {text.reference}
               <ArrowUpRight size={13} aria-hidden />
             </a>
-            <a href="https://github.com/leemour/tg-cli/blob/main/docs/search.md">
+            <a href="https://github.com/WireCatLabs/tg-cli/blob/main/docs/search.md">
               Telegram {text.reference}
               <ArrowUpRight size={13} aria-hidden />
             </a>
