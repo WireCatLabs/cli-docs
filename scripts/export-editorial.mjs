@@ -40,6 +40,12 @@ for (const lang of ["en", "ru", "es"]) {
         /(<div class="mini-search-results"[^>]*>)[\s\S]*?(<\/div><p class="feature-caption">)/,
         '$1</div><p class="feature-caption">',
       )
+    // Give every copy control the same success icon without replacing its label.
+    html = html.replace(/(<button\b[^>]*\bdata-copy="[^"]*"[^>]*>)([\s\S]*?)(<\/button>)/g, (_, open, body, close) => {
+      const icon =
+        '<svg class="copy-success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>'
+      return open + body.replace("<svg ", '<svg class="copy-idle-icon" ') + icon + close
+    })
     const protectedBlocks = []
     html = html.replace(/<(pre|code)\b[\s\S]*?<\/\1>/g, (block) => {
       protectedBlocks.push(block)
@@ -150,6 +156,16 @@ for (const lang of ["en", "ru", "es"]) {
       )
     )
       throw Error(`Private link in ${kind}/${lang}`)
+    // Keep the animated underline on the label, leaving adjacent icons untouched.
+    html = html.replace(/(<a\b[^>]*>)([\s\S]*?)(<\/a>)/g, (_, open, body, close) => {
+      if (/class="[^"]*\b(?:button|brand|wirecat-brand|skip)\b/.test(open)) return open + body + close
+      const label = body.replace(/<svg\b[\s\S]*?<\/svg>/g, "").trim()
+      if (!label || label.includes("<")) return open + body + close
+      const link = /class="/.test(open)
+        ? open.replace('class="', 'class="animated-text-link ')
+        : open.replace("<a", '<a class="animated-text-link"')
+      return link + body.replace(label, `<span class="link-label">${label}</span>`) + close
+    })
     pages[kind] = `<a class="skip" href="#main">${ui[lang].skip}</a>${html}`
   }
   await writeFile(new URL(`../lib/editorial/${lang}.json`, import.meta.url), `${JSON.stringify(pages, null, 2)}\n`)
@@ -167,6 +183,7 @@ const files = [
   "refinement-3.css",
   "landing-4.css",
   "landing-5.css",
+  "interactions.css",
 ]
 const combined = postcss.parse(
   (await Promise.all(files.map((name) => readFile(new URL(name, sourceDir), "utf8")))).join("\n"),

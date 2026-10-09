@@ -61,7 +61,42 @@ export function Editorial({ html, lang }: { html: string; lang: string }) {
     const controller = new AbortController()
     const signal = controller.signal
     let toastTimer: ReturnType<typeof setTimeout> | undefined
+    const copyTimers = new Map<HTMLElement, ReturnType<typeof setTimeout>>()
+    const copyLabels = new Map<HTMLElement, string | null>()
+    const scrollFrames = new Map<HTMLElement, number>()
+    const reveals = new Set<Animation>()
+    const cancelScroll = (scene: HTMLElement) => {
+      const frame = scrollFrames.get(scene)
+      if (frame !== undefined) cancelAnimationFrame(frame)
+      scrollFrames.delete(scene)
+    }
+    const interruptScroll = (event: Event) => {
+      if (!(event.target instanceof Element)) return
+      const scene = event.target.closest<HTMLElement>(".chat-scene")
+      if (scene) cancelScroll(scene)
+    }
+    root.addEventListener("wheel", interruptScroll, { passive: true, signal })
+    root.addEventListener("touchstart", interruptScroll, { passive: true, signal })
+    root.addEventListener("keydown", interruptScroll, { signal })
+    const resetCopy = (button: HTMLElement) => {
+      clearTimeout(copyTimers.get(button))
+      copyTimers.delete(button)
+      delete button.dataset.copied
+      const label = copyLabels.get(button)
+      if (label == null) button.removeAttribute("aria-label")
+      else button.setAttribute("aria-label", label)
+    }
     const all = <T extends HTMLElement>(selector: string) => Array.from(root.querySelectorAll<T>(selector))
+    const cueObserver = new IntersectionObserver((entries) => {
+      for (const entry of entries) entry.target.classList.toggle("cue-in-view", entry.isIntersecting)
+    })
+    for (const cue of all<HTMLElement>(".scroll-invitation")) {
+      cue.classList.add("cue-observed")
+      cueObserver.observe(cue)
+    }
+    const updateVisibility = () => root.classList.toggle("is-page-hidden", document.hidden)
+    document.addEventListener("visibilitychange", updateVisibility, { signal })
+    updateVisibility()
     const notify = (message: string) => {
       const toast = root.querySelector<HTMLElement>(".toast")
       if (!toast) return
@@ -76,7 +111,10 @@ export function Editorial({ html, lang }: { html: string; lang: string }) {
         : element.closest(".setup")
           ? ("closing" as const)
           : ("hero" as const)
-    for (const button of all<HTMLButtonElement>("[data-copy]")) prepareInstallationButton(button)
+    for (const button of all<HTMLButtonElement>("[data-copy]")) {
+      prepareInstallationButton(button)
+      copyLabels.set(button, button.getAttribute("aria-label"))
+    }
     for (const code of all<HTMLElement>("pre,code")) code.tabIndex = 0
     const selectTab = (button: HTMLElement, focus = false) => {
       const list = button.closest('[role="tablist"]')
@@ -165,6 +203,13 @@ export function Editorial({ html, lang }: { html: string; lang: string }) {
           try {
             await navigator.clipboard.writeText(button.dataset.copy)
             if (signal.aborted) return
+            clearTimeout(copyTimers.get(button))
+            button.dataset.copied = ""
+            button.setAttribute("aria-label", words.copied)
+            copyTimers.set(
+              button,
+              setTimeout(() => resetCopy(button), 3000),
+            )
             notify(words.copied)
             const selectedProvider = button
               .closest("[data-connect]")
@@ -194,9 +239,13 @@ export function Editorial({ html, lang }: { html: string; lang: string }) {
             const text = menu.querySelector<HTMLElement>(".agent-prompt")
             const copy = menu.querySelector<HTMLElement>(".copy-agent")
             if (text) text.textContent = prompt
-            if (copy) copy.dataset.copy = prompt
+            if (copy) {
+              resetCopy(copy)
+              copy.dataset.copy = prompt
+            }
             const command = menu.querySelector<HTMLButtonElement>(".command [data-copy]")
             if (command) {
+              resetCopy(command)
               command.dataset.copy = `npm install -g @leemour/${tool}-cli && ${tool} skill install --for all`
               prepareInstallationButton(command)
               const code = menu.querySelector<HTMLElement>(".command code")
@@ -209,16 +258,46 @@ export function Editorial({ html, lang }: { html: string; lang: string }) {
         if (button.hasAttribute("data-reveal-next")) {
           const next = root.querySelector<HTMLElement>(`#${CSS.escape(button.getAttribute("aria-controls") ?? "")}`)
           const scene = button.closest<HTMLElement>(".chat-scene")
-          if (next && scene) {
+          if (next && scene && next.hidden) {
+            cancelScroll(scene)
+            const start = scene.scrollTop
             next.hidden = false
-            next.focus({ preventScroll: true })
             button.setAttribute("aria-expanded", "true")
             const cue = button.closest<HTMLElement>(".scroll-invitation")
             if (cue) cue.hidden = true
-            scene.scrollTo({
-              top: next.getBoundingClientRect().top - scene.getBoundingClientRect().top + scene.scrollTop - 18,
-              behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
-            })
+            scene.scrollTop = start
+            const top = Math.max(
+              0,
+              Math.min(
+                next.getBoundingClientRect().top - scene.getBoundingClientRect().top + scene.scrollTop - 18,
+                scene.scrollHeight - scene.clientHeight,
+              ),
+            )
+            if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+              scene.scrollTop = top
+              next.focus({ preventScroll: true })
+            } else {
+              const reveal = next.animate([{ opacity: 0 }, { opacity: 1 }], {
+                duration: 280,
+                delay: 100,
+                easing: "cubic-bezier(.16, 1, .3, 1)",
+                fill: "backwards",
+              })
+              reveals.add(reveal)
+              reveal.addEventListener("finish", () => reveals.delete(reveal), { once: true })
+              const began = performance.now()
+              const duration = Math.min(480, 320 + Math.abs(top - start) / 4)
+              const advance = (now: number) => {
+                const progress = Math.min(1, (now - began) / duration)
+                scene.scrollTop = start + (top - start) * (1 - (1 - progress) ** 3)
+                if (progress < 1) scrollFrames.set(scene, requestAnimationFrame(advance))
+                else {
+                  scrollFrames.delete(scene)
+                  next.focus({ preventScroll: true })
+                }
+              }
+              scrollFrames.set(scene, requestAnimationFrame(advance))
+            }
           }
         }
         if (button.dataset.searchPreset) {
@@ -357,7 +436,11 @@ export function Editorial({ html, lang }: { html: string; lang: string }) {
     calculate()
     return () => {
       controller.abort()
+      cueObserver.disconnect()
+      for (const scene of scrollFrames.keys()) cancelScroll(scene)
+      for (const reveal of reveals) reveal.cancel()
       clearTimeout(toastTimer)
+      for (const button of copyTimers.keys()) resetCopy(button)
     }
   }, [lang, setTheme, router, html])
   return <div className="wirecat-editorial" ref={rootRef} dangerouslySetInnerHTML={{ __html: html }} />

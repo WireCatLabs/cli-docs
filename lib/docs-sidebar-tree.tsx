@@ -50,6 +50,7 @@ export const sidebarIcons = {
   features: LayoutGrid,
   memo: NotebookPen,
   email: Mail,
+  zoom: Video,
   attachments: Paperclip,
   "audio-recognition": Mic,
   "external-models": BrainCircuit,

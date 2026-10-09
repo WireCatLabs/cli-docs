@@ -589,7 +589,18 @@
     "Use max cli, find the current Atlas contract, invoices and presentation. Check project groups and direct messages.": "Используй max cli: найди актуальные договор, счета и презентацию Atlas в группах проекта и личной переписке.",
     "Use tg cli, remind me in two hours to check the invoice and in six hours to resolve open questions.": "Используй tg cli: напомни через два часа проверить счёт, а через шесть — решить открытые вопросы.",
     "Use max cli, remind me in two hours to check the invoice and in six hours to resolve open questions.": "Используй max cli: напомни через два часа проверить счёт, а через шесть — решить открытые вопросы.",
-    "In one hour, ask Anna for the final copy and Tom for the payment status. Message each privately.": "Через час попроси Анну прислать финальный текст, а Тома — статус оплаты. Напиши каждому лично."
+    "In one hour, ask Anna for the final copy and Tom for the payment status. Message each privately.": "Через час попроси Анну прислать финальный текст, а Тома — статус оплаты. Напиши каждому лично.",
+    "Continue": "Продолжить",
+    "Connected sources": "Подключённые источники",
+    "Meetings": "Встречи",
+    "Documentation": "Документация",
+    "Guides": "Руководства",
+    "For AI agents": "Для ИИ-агентов",
+    "Telegram docs": "Telegram — документация",
+    "MAX docs": "MAX — документация",
+    "Memo docs": "Memo — документация",
+    "Email docs": "Почта — документация",
+    "Zoom docs": "Zoom — документация"
   },
   "es": {
     "Use tg cli, gather context for tomorrow’s Atlas call: decisions, risks and": "Usa tg cli, reúne el contexto para la llamada de Atlas de mañana: decisiones, riesgos y",
@@ -1180,6 +1191,17 @@
     "Daria": "Daria",
     "Tom:": "Tom:",
     "Anna:": "Anna:",
-    "Marco:": "Marco:"
+    "Marco:": "Marco:",
+    "Continue": "Continuar",
+    "Connected sources": "Fuentes conectadas",
+    "Meetings": "Reuniones",
+    "Documentation": "Documentación",
+    "Guides": "Guías",
+    "For AI agents": "Para agentes de IA",
+    "Telegram docs": "Docs de Telegram",
+    "MAX docs": "Docs de MAX",
+    "Memo docs": "Docs de Memo",
+    "Email docs": "Docs de correo",
+    "Zoom docs": "Docs de Zoom"
   }
 }
