@@ -131,7 +131,7 @@ for (const lang of languages) {
         label: { en: "AI agent", ru: "ИИ-агенту", es: "agente de IA" }[lang],
         page: "agents",
       },
-      { label: "cli", page: "installation" },
+      { label: "CLI", page: "installation" },
       { label: "skill", page: "agents" },
       { label: "MCP", page: "mcp" },
     ]

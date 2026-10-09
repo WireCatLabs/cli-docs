@@ -1462,5 +1462,62 @@
         }
       ]
     }
+  },
+  {
+    "tool": "max",
+    "slug": "rankings",
+    "reason": "Keep historical incoming links and current released cross-links at the corresponding task section.",
+    "replacements": {
+      "es": [
+        {
+          "before": "\n## Antigüedad de los recuentos\n",
+          "after": "\n<a id=\"свежесть-счётчиков\" />\n\n## Antigüedad de los recuentos\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "rankings",
+    "reason": "Keep historical incoming links and current released cross-links at the corresponding task section.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "\n## Насколько свежи счётчики\n",
+          "after": "\n<a id=\"check-and-refresh-counters\" />\n\n## Насколько свежи счётчики\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "\n## Antigüedad de los recuentos\n",
+          "after": "\n<a id=\"check-and-refresh-counters\" />\n\n## Antigüedad de los recuentos\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "attachments",
+    "reason": "Bare relative guide URL is not normalized by the site link mapper; make its guide-relative path explicit.",
+    "replacements": {
+      "en": [
+        {
+          "before": "](usage.md)",
+          "after": "](./usage.md)"
+        }
+      ],
+      "ru": [
+        {
+          "before": "](usage.md)",
+          "after": "](./usage.md)"
+        }
+      ],
+      "es": [
+        {
+          "before": "](usage.md)",
+          "after": "](./usage.md)"
+        }
+      ]
+    }
   }
 ]
