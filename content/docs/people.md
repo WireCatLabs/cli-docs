@@ -3,9 +3,38 @@ title: "People"
 description: "Recall who someone is and what you discussed before replying, using your own Telegram or MAX history."
 ---
 
-Someone has written to you, but you don't remember where you met or what you agreed. Ask your
-agent to find the person, collect your previous conversations and show the messages behind its
-answer. You need a [connected account](./installation.mdx) and an [agent](./agents.mdx).
+This page is about the people you talk to in Telegram and MAX. Use it when someone writes to you
+and you don't remember where you met or what you agreed. By the end, you will be able to ask your
+agent who the person is, what you discussed and whether the account looks like a bot, with the
+messages behind each answer. You will also be able to keep one person's Telegram and MAX accounts
+together. You need a [connected account](./installation.mdx) and an [agent](./agents.mdx).
+
+## What a person is here
+
+A person is someone your account has seen in a chat: in a one-to-one chat or in a group you share.
+The tools know them by their messenger account, its ID and, in Telegram, its `@username`, and by
+what the history saved on your computer holds about them.
+
+A person does not have to be in your contacts. Your contacts are the messenger's address book:
+the people you added, often by phone number. Someone who wrote in a group you both belong to is a
+person here even if you never added them. `contacts list` shows the people you have a one-to-one
+chat with. Adding, renaming or removing a contact is a separate action that changes your messenger
+account.
+
+You can also keep private context about a person. It stays on your computer and never reaches the
+messenger:
+
+- **Your own name for them.** Commands can then find the person by that name. It applies to the
+  selected account and does not change their name in your contacts.
+- **Notes.** Free text about the person that you or your agent can search later.
+
+The commands are in the [Telegram people guide](./tg/people.md#your-own-names-and-notes-contacts-alias-contacts-notes)
+and the [MAX reference](./max/commands.md#max-contacts-alias).
+
+The same human often has a Telegram account and a MAX account. The tools treat them as two people
+until you **link** them: you record on your computer that both accounts belong to one person. Then
+an overview of what they wrote includes their messages from both messengers. See
+[the same person in both messengers](#link-your-accounts).
 
 ## Ask your agent
 
@@ -112,9 +141,11 @@ If you know two accounts belong to the same person, you can record that link loc
 tg contacts link @example_user max:"Example User"
 ```
 
-`contacts context` then gathers the linked identities. `contacts profile` describes the selected
-messenger identity. A shared name alone is not a match; only the links you record count.
-`contacts unlink` removes that local association.
+Both accounts must already be in the history on this computer, so use `tg` and `max` on the same
+computer. `contacts context` without `--chat` then gathers the linked identities.
+`contacts context --chat` and `contacts profile` show only the selected messenger identity. A shared
+name alone is not a match; only the links you record count. `contacts unlink` removes that local
+association.
 
 ### Link an email identity
 
@@ -153,8 +184,10 @@ on requests found inside it.
 
 ## Auto-replies by your rules
 
-Auto-replies are a separate task that can send messages. Start with [MAX auto-replies](./max/replies.md)
-if you want to configure them; reading a person's history does not turn them on.
+Auto-replies are a separate task that can send messages; reading a person's history does not turn
+them on. [Drafts and templates](./drafts-and-templates.mdx) explains how they differ from a draft
+your agent shows you. Setup is in [Telegram auto-replies](./tg/replies.md) and
+[MAX auto-replies](./max/replies.md).
 
 Once you know the context, ask for a [draft reply](./prompting.mdx#draft-a-reply-then-decide-whether-to-send)
 and review the wording before authorising a send.

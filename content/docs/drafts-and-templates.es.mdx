@@ -1,0 +1,157 @@
+---
+title: "Borradores y plantillas"
+description: "Deja que el agente prepare respuestas que apruebas una a una, o escribe plantillas de respuesta automática para las personas que permitas."
+---
+
+Esta página trata de dos formas de responder mensajes con ayuda: un borrador que prepara tu agente
+y una plantilla que responde sola. Sirve cuando quieres ayuda con las respuestas y tienes que
+decidir cuánto delegar. Al terminar, podrás pedir borradores que apruebas uno a uno y escribir una
+plantilla de respuesta automática con tu propio texto y, si quieres, una parte escrita por un modelo.
+
+Aquí importan dos términos:
+
+- **Un borrador** es una respuesta que el agente escribe y te muestra. No se envía nada hasta que
+  apruebas el texto exacto y el chat de destino.
+- **Una plantilla** es el texto de una regla de respuesta automática. El servidor en segundo plano
+  (`tg serve` o `max serve`) la rellena y la envía por su cuenta, sin preguntarte, pero solo a las
+  personas que permitas y solo después de que actives el envío. Las plantillas usan Liquid, un
+  lenguaje pequeño para texto con huecos, como el nombre de quien escribe.
+
+| | Borrador | Plantilla |
+|---|---|---|
+| Quién escribe el texto | tu agente, para este mensaje | tú, una vez, para muchos mensajes |
+| Cuándo se envía | cuando apruebas ese texto y ese chat | cuando una regla coincide, sin nadie a quien preguntar |
+| Quién lo recibe | el chat que apruebas | solo las personas que permitas |
+| Dónde se configura | en una petición al agente | en una regla de respuesta automática de tu perfil |
+
+## Borradores: el agente escribe, tú apruebas
+
+Necesitas una [cuenta conectada](./installation.mdx) y un [agente](./agents.mdx). El agente lee la
+conversación, escribe una respuesta y te la muestra. A un agente conectado mediante
+[MCP](./mcp.mdx) se le indica que un borrador, o «deberíamos responder», no es una petición de envío:
+solo puede enviar el texto exacto que pediste, en el chat exacto. Para cualquier agente, lo que de
+verdad detiene un envío son los [permisos](./permissions.mdx) del perfil: un rechazo, como un perfil
+de solo lectura o un destinatario no permitido, es definitivo.
+
+Los ejemplos usan Telegram. Para MAX, escribe «Usa max CLI» en lugar de «Usa tg CLI».
+
+Responder en un chat:
+
+```text prompt
+Usa tg CLI. Lee los mensajes recientes de mi chat con Anna y prepara una respuesta a su última
+pregunta. Que sea breve y use solo hechos de nuestra conversación. Muéstrame el borrador; no lo envíes.
+```
+
+Responder a preguntas que siguen esperando:
+
+```text prompt
+Usa tg CLI. Enumera las preguntas que me hicieron esta semana y que no he respondido, de la más
+antigua a la más reciente. Para cada una, muestra el chat y el mensaje y prepara una respuesta breve.
+No envíes nada ni marques nada como leído.
+```
+
+Recordar a otros lo que prometieron:
+
+```text prompt
+Usa tg CLI. Revisa mis chats desde el lunes: qué debo yo, qué me deben y qué hay que aclarar.
+Prepara como máximo cinco recordatorios, cada uno con su chat y su texto. Muéstramelos; no envíes ninguno.
+```
+
+Cuando un borrador esté bien, apruébalo con el texto exacto y el destinatario, por ejemplo: «Envía
+exactamente ese borrador al chat privado de Anna». Si cambias la redacción, da el texto final
+completo. Tus [permisos](./permissions.mdx) siguen aplicándose: un perfil puede exigir confirmación o
+prohibir el envío, y una petición no lo evita. Hay más ejemplos en
+[cómo formular peticiones](./prompting.mdx#revisar-compromisos-y-preparar-respuestas).
+
+Si tu aplicación de IA está conectada mediante [MCP](./mcp.mdx), la herramienta también ofrece
+peticiones listas para responder en un chat y revisar compromisos. Siguen la misma regla: primero
+borradores, y el envío solo después de que lo apruebes.
+
+## Plantillas: reglas que responden solas
+
+Una regla de respuesta automática dice cuándo responder, por ejemplo fuera del horario laboral, y su
+plantilla dice qué enviar. Antes de que salga una respuesta:
+
+- quien escribe debe estar entre las personas a las que permites recibir respuestas automáticas;
+- el envío debe estar permitido en los [permisos](./permissions.mdx) del perfil con
+  `permissions.replies.send allow`; `ask` cuenta como no, porque el servidor en segundo plano no tiene
+  a quién preguntar;
+- cada regla tiene un límite por chat y por persona, por ejemplo una respuesta por chat cada 12 horas.
+
+`replies test` muestra qué habrían respondido las reglas a tus mensajes guardados. No envía nada.
+
+### Qué puede usar una plantilla
+
+| Variable | Qué contiene |
+|---|---|
+| `sender.name` | el nombre completo de quien escribe |
+| `sender.firstName` | la primera palabra de ese nombre |
+| `chat.title` | el título del chat |
+| `chat.kind` | el tipo de chat, como `dialog` o `group` |
+| `now` | la hora actual, en la zona horaria de la regla, o UTC si la regla no tiene horario |
+
+Funcionan los filtros estándar de Liquid, como `default` para un valor vacío y `date` para una hora:
+`{{ now | date: "%H:%M" }}`. También funcionan condiciones como `{% if chat.kind == "dialog" %}`.
+
+El texto del mensaje entrante nunca es una variable de la plantilla. Una variable o un filtro
+desconocidos hacen que la plantilla no sea válida, y entonces no se envía respuesta. Una plantilla no
+puede leer archivos, y su tiempo, memoria y longitud están limitados.
+
+### Ejemplos
+
+Un mensaje de ausencia:
+
+```liquid
+¡Gracias, {{ sender.firstName | default: "de verdad" }}! Estoy fuera hasta el lunes y responderé entonces.
+```
+
+Una respuesta fuera del horario laboral. El horario pertenece a la regla, no a la plantilla:
+configúralo con `replies edit` y las opciones `--outside`, `--days` y `--timezone`. Así `now` usa esa
+zona horaria:
+
+```liquid
+Hola, {{ sender.firstName | default: "qué tal" }}: aquí son las {{ now | date: "%H:%M" }}. Respondo los días laborables de 9:00 a 19:00.
+```
+
+Una parte escrita por un modelo, con tu propio texto como respaldo:
+
+```liquid
+¡Gracias, {{ sender.firstName | default: "de verdad" }}!
+{% ai %}Confirma brevemente que recibí el mensaje; responderé mañana.{% else %}Responderé mañana.{% endai %}
+```
+
+### Una parte escrita por un modelo
+
+Un modelo solo puede escribir lo que hay dentro de `{% ai %}…{% endai %}`; todo lo de fuera es tu
+texto. El cuerpo del bloque es una instrucción para el modelo. El mensaje entrante llega al modelo
+por separado, como datos, nunca como parte de la instrucción. La respuesta del modelo se usa como
+texto normal.
+
+El texto después de `{% else %}` es el respaldo. Se envía cuando no hay modelo configurado, no hay
+consentimiento, la llamada falla o la respuesta del modelo se rechaza por estar vacía, ser demasiado
+larga o repetir el mensaje entrante. Sin `else`, ese mensaje se queda sin respuesta y se registra el
+motivo. Los bloques no se pueden anidar.
+
+Usar un modelo requiere su propio consentimiento, aparte del permiso de envío. El consentimiento deja
+que los datos de los mensajes entrantes lleguen al proveedor del modelo que elegiste, para todo el
+perfil:
+
+```sh
+tg replies consents show
+tg replies consents grant
+tg replies consents revoke
+max replies consents show
+max replies consents grant
+max replies consents revoke
+```
+
+`replies consents deny` con el ID de un chat mantiene sus mensajes lejos del modelo. Un proveedor o
+endpoint nuevo necesita consentimiento otra vez. `replies test --ai` envía mensajes guardados al
+modelo para que veas su texto; sigue sin enviar nada al mensajero.
+
+## Configurarlo
+
+Empieza por los borradores: solo necesitan una cuenta conectada. Para escribir reglas, sigue
+[las respuestas automáticas de Telegram](./tg/replies.md) o [las de MAX](./max/replies.md), que
+explican cómo crear una regla, elegir quién puede recibir respuestas, configurar el modelo y pausarlo
+todo a la vez.

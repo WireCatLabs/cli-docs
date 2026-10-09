@@ -1,0 +1,153 @@
+---
+title: "Drafts and templates"
+description: "Let your agent prepare replies you approve one by one, or write auto-reply templates that answer people you allow."
+---
+
+This page is about two ways to answer messages with help: a draft your agent prepares for you, and
+a template that answers by itself. Use it when you want help with replies and need to decide how
+much to hand over. By the end, you will be able to ask for drafts you approve one by one, and write
+an auto-reply template with your own text and, if you want, a part written by a model.
+
+Two terms matter here:
+
+- **A draft** is a reply your agent writes and shows you. Nothing is sent until you approve the
+  exact text and the chat it goes to.
+- **A template** is the text of an auto-reply rule. The background server (`tg serve` or
+  `max serve`) fills it in and sends it on its own, without asking you, but only to people you
+  allow and only after you turn sending on. Templates use Liquid, a small language for text with
+  placeholders such as a sender's name.
+
+| | Draft | Template |
+|---|---|---|
+| Who writes the text | your agent, for this one message | you, once, for many messages |
+| When it is sent | after you approve that exact text and chat | when a rule matches, with nobody to ask |
+| Who receives it | the chat you approve | only people you allow |
+| Where you set it up | a request to your agent | an auto-reply rule in your profile |
+
+## Drafts: the agent writes, you approve
+
+You need a [connected account](./installation.mdx) and an [agent](./agents.mdx). The agent reads
+the conversation, writes a reply and shows it to you. An agent connected through [MCP](./mcp.mdx)
+is told that a draft, or "we should reply", is not a request to send: it may send only the exact text
+you asked for, in the exact chat. For any agent, what actually stops a send is the profile's
+[permissions](./permissions.mdx): a refusal, such as a read-only profile or a recipient that is not
+allowed, is final.
+
+The examples use Telegram. For MAX, write "Use max CLI" instead of "Use tg CLI".
+
+Reply in one chat:
+
+```text prompt
+Use tg CLI. Read the recent messages in my chat with Anna and draft a reply to her last question.
+Keep it short and use only facts from our conversation. Show me the draft; don't send it.
+```
+
+Answer questions that are still waiting for you:
+
+```text prompt
+Use tg CLI. List the questions people asked me this week that I have not answered, oldest first.
+For each one, show the chat and the message, and draft a short answer. Send nothing and mark
+nothing as read.
+```
+
+Remind people of what they promised:
+
+```text prompt
+Use tg CLI. Review my chats since Monday: what I owe, what others owe me and what needs clarifying.
+Draft at most five reminders, each with its chat and text. Show them to me; send none.
+```
+
+When a draft is right, approve it with the exact text and recipient, for example "Send exactly that
+draft to Anna's direct chat." If you change the wording, give the full final text. Your
+[permissions](./permissions.mdx) still apply: a profile can require confirmation or forbid sending,
+and a request does not bypass that. More examples are in
+[how to phrase requests](./prompting.mdx#draft-a-reply-then-decide-whether-to-send).
+
+If your AI app is connected through [MCP](./mcp.mdx), the tool also offers ready-made prompts for
+replying in a chat and for reviewing commitments. They follow the same rule: drafts first, a send
+only after you approve.
+
+## Templates: rules that answer by themselves
+
+An auto-reply rule says when to answer, for example outside working hours, and its template says
+what to send. Before any reply goes out:
+
+- the sender must be among the people you allow to receive auto-replies;
+- sending must be allowed in the profile's [permissions](./permissions.mdx) with
+  `permissions.replies.send allow`; `ask` counts as no, because the background server has nobody
+  to ask;
+- every rule has a limit per chat and per person, such as one reply per chat in 12 hours.
+
+`replies test` shows what the rules would have answered in your saved messages. It sends nothing.
+
+### What a template can use
+
+| Variable | What it holds |
+|---|---|
+| `sender.name` | the sender's full name |
+| `sender.firstName` | the first word of the sender's name |
+| `chat.title` | the chat's title |
+| `chat.kind` | the kind of chat, such as `dialog` or `group` |
+| `now` | the current time, in the rule's time zone, or UTC when the rule has no working hours |
+
+Standard Liquid filters work, such as `default` for an empty value and `date` for a time:
+`{{ now | date: "%H:%M" }}`. Conditions such as `{% if chat.kind == "dialog" %}` work too.
+
+The incoming message's text is never a template variable. An unknown variable or filter makes the
+template invalid, and then no reply is sent. A template cannot read files, and its time, memory
+and length are limited.
+
+### Examples
+
+An away message:
+
+```liquid
+Thanks, {{ sender.firstName | default: "there" }}! I'm away until Monday and will reply then.
+```
+
+A reply outside working hours. The hours belong to the rule, not to the template: set them with
+`replies edit` and the options `--outside`, `--days` and `--timezone`. Then `now` is in that time zone:
+
+```liquid
+Hi {{ sender.firstName | default: "there" }}, it's {{ now | date: "%H:%M" }} here. I answer on weekdays from 9:00 to 19:00.
+```
+
+A part written by a model, with your own text as a fallback:
+
+```liquid
+Thanks, {{ sender.firstName | default: "there" }}!
+{% ai %}Briefly confirm you got the message; I will answer tomorrow.{% else %}I will answer tomorrow.{% endai %}
+```
+
+### A part written by a model
+
+A model may write only what is inside `{% ai %}…{% endai %}`; everything outside it is your text.
+The block's body is an instruction to the model. The incoming message goes to the model separately,
+as data, never as part of the instruction. The model's answer is used as plain text.
+
+The text after `{% else %}` is the fallback. It is sent when no model is set up, when there is no
+consent, when the call fails, or when the model's answer is refused because it is empty, too long or
+repeats the incoming message. Without an `else`, that message gets no reply and the reason is
+recorded. Blocks cannot be nested.
+
+Using a model needs its own consent, separate from the right to send. Consent lets incoming message
+data go to the model provider you chose, for the whole profile:
+
+```sh
+tg replies consents show
+tg replies consents grant
+tg replies consents revoke
+max replies consents show
+max replies consents grant
+max replies consents revoke
+```
+
+`replies consents deny` with a chat ID keeps that chat's messages away from the model. A new provider
+or endpoint needs consent again. `replies test --ai` sends saved messages to the model so you can see
+its text; it still sends nothing to the messenger.
+
+## Set it up
+
+Start with drafts: they need nothing beyond a connected account. To write rules, follow
+[Telegram auto-replies](./tg/replies.md) or [MAX auto-replies](./max/replies.md), which cover
+creating a rule, choosing who may receive replies, the model settings and how to pause everything at once.
