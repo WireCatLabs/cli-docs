@@ -5,6 +5,7 @@
   "scripts": {
     "sync": "node --experimental-strip-types scripts/sync.ts",
     "docs:localize": "node --experimental-strip-types scripts/localize.ts",
+    "docs:translation": "node --experimental-strip-types scripts/translation.ts",
     "dev": "next dev",
     "build": "pnpm sync && next build",
     "start": "serve out",
