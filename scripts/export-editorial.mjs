@@ -185,6 +185,7 @@ const files = [
   "landing-5.css",
   "interactions.css",
   "home-lines.css",
+  "headline-glow.css",
 ]
 const combined = postcss.parse(
   (await Promise.all(files.map((name) => readFile(new URL(name, sourceDir), "utf8")))).join("\n"),

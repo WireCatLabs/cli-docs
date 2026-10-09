@@ -878,9 +878,6 @@ export function Landing({ lang }: { lang: string }) {
                   <a href="https://github.com/WireCatLabs/max-cli">{t("max on GitHub")}</a>
                 </li>
                 <li>
-                  <a href="https://github.com/WireCatLabs/tg-cli/issues">{t("Report a problem")}</a>
-                </li>
-                <li>
                   <a href={`/${lang}/docs/tg/security`}>{t("Security")}</a>
                 </li>
               </ul>

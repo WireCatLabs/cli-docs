@@ -90,7 +90,7 @@ export function Editorial({ html, lang }: { html: string; lang: string }) {
     const cueObserver = new IntersectionObserver((entries) => {
       for (const entry of entries) entry.target.classList.toggle("cue-in-view", entry.isIntersecting)
     })
-    for (const cue of all<HTMLElement>(".scroll-invitation")) {
+    for (const cue of all<HTMLElement>(".scroll-invitation, .landing5 .hero-copy h1 em")) {
       cue.classList.add("cue-observed")
       cueObserver.observe(cue)
     }
