@@ -2,8 +2,34 @@
 title: "Buscar mensajes"
 ---
 
-`tg messages search` encuentra mensajes en el archivo local, la copia de tus chats que tg guarda en este
+`tg search messages` encuentra mensajes en el archivo local, la copia de tus chats que tg guarda en este
 ordenador, y también consulta la búsqueda de Telegram ([más abajo](#asking-telegram-too---backend)). No marca ningún mensaje como leído.
+
+## Prueba una búsqueda concreta
+
+Empieza por una frase y un chat. Este ejemplo busca en el historial guardado sin consultar el mensajero.
+
+**Tu petición:**
+
+> Encuentra el mensaje que dice «invoice paid» en Book club. Muestra la coincidencia y las lagunas del historial.
+
+**Comando:**
+
+```sh
+tg search messages '"invoice paid"' --chat "Book club" --backend archive --json
+```
+
+**Ejemplo de respuesta del agente:**
+
+> **Un mensaje coincide en el historial guardado.**
+>
+> | Persona | Mensaje |
+> | --- | --- |
+> | Alice Synthetic | Invoice paid yesterday. |
+>
+> El historial está incompleto: pueden faltar otras coincidencias. Puedo abrir el mensaje y la conversación que lo rodea.
+
+Un resultado vacío no demuestra que el mensaje nunca existiera. Revisa las lagunas del historial antes de ampliar la búsqueda. Los ejemplos de esta página son ficticios.
 
 ## Prepara primero tu archivo
 
@@ -13,6 +39,9 @@ lo haya descargado, pero todo lo demás consulta solo el archivo: los recuentos 
 
 ```sh
 tg store fetch --all --background     # the last 90 days of every chat, as a background job
+```
+
+```sh
 tg store jobs show                    # how far it got
 ```
 
@@ -43,11 +72,23 @@ Escribe la consulta entre comillas simples para que la terminal no toque sus com
 ## Palabras y frases
 
 ```sh
-tg messages search invoice
-tg messages search '"invoice paid"'              # words together
-tg messages search 'cafe OR library'
-tg messages search '(cafe OR library) NOT loud'
-tg messages search 'invoic*'                     # every word that starts with "invoic"
+tg search messages invoice
+```
+
+```sh
+tg search messages '"invoice paid"'              # words together
+```
+
+```sh
+tg search messages 'cafe OR library'
+```
+
+```sh
+tg search messages '(cafe OR library) NOT loud'
+```
+
+```sh
+tg search messages 'invoic*'                     # every word that starts with "invoic"
 ```
 
 Todas las palabras consecutivas de la consulta deben estar en el mensaje. La búsqueda incluye formas de palabras según
@@ -59,12 +100,27 @@ Los errores tipográficos no se corrigen automáticamente.
 ## Personas y chats
 
 ```sh
-tg messages search 'from:"Alice Synthetic" invoice'
-tg messages search 'from:("Alice Synthetic" OR "Bob Synthetic") library'
-tg messages search 'from:me date:7d'             # what you wrote this week
-tg messages search 'chat:"Book club" library'
-tg messages search library --chat "Book club"    # the same, as an option
-tg messages search 'passport kind:private'       # one-to-one chats only
+tg search messages 'from:"Alice Synthetic" invoice'
+```
+
+```sh
+tg search messages 'from:("Alice Synthetic" OR "Bob Synthetic") library'
+```
+
+```sh
+tg search messages 'from:me date:7d'             # what you wrote this week
+```
+
+```sh
+tg search messages 'chat:"Book club" library'
+```
+
+```sh
+tg search messages library --chat "Book club"    # the same, as an option
+```
+
+```sh
+tg search messages 'passport kind:private'       # one-to-one chats only
 ```
 
 `kind:` admite `private`, `group`, `channel`, `saved` (Mensajes guardados) y `bot`. `topic:` se limita a un tema del foro de un grupo; necesita ese grupo en `chat:` o `--chat`.
@@ -72,10 +128,19 @@ tg messages search 'passport kind:private'       # one-to-one chats only
 ## Fechas
 
 ```sh
-tg messages search 'date:today'
-tg messages search 'library date:yesterday'
-tg messages search 'invoice date:7d'             # from 7 days ago until now; also 30m, 2h
-tg messages search 'invoice date:[2026-01-01 TO 2026-02-01}' --timezone Europe/Madrid
+tg search messages 'date:today'
+```
+
+```sh
+tg search messages 'library date:yesterday'
+```
+
+```sh
+tg search messages 'invoice date:7d'             # from 7 days ago until now; also 30m, 2h
+```
+
+```sh
+tg search messages 'invoice date:[2026-01-01 TO 2026-02-01}' --timezone Europe/Madrid
 ```
 
 `today`, `yesterday` y las fechas del calendario son días en la zona horaria de tu equipo; `--timezone` elige otra. En un intervalo, `[` y `]` incluyen ese día; `{` y `}` lo excluyen.
@@ -83,14 +148,35 @@ tg messages search 'invoice date:[2026-01-01 TO 2026-02-01}' --timezone Europe/M
 ## Archivos y enlaces
 
 ```sh
-tg messages search 'has:file'
-tg messages search 'filename:*.pdf'
-tg messages search 'filename:*contract*'         # part of the name
-tg messages search 'size>10MB'
-tg messages search 'mime:image'                  # any picture sent as a file
-tg messages search 'mime:"application/pdf"'      # quote a full type
-tg messages search 'has:photo chat:"Book club"'
-tg messages search 'has:link AND "github.com"'   # a link to a site
+tg search messages 'has:file'
+```
+
+```sh
+tg search messages 'filename:*.pdf'
+```
+
+```sh
+tg search messages 'filename:*contract*'         # part of the name
+```
+
+```sh
+tg search messages 'size>10MB'
+```
+
+```sh
+tg search messages 'mime:image'                  # any picture sent as a file
+```
+
+```sh
+tg search messages 'mime:"application/pdf"'      # quote a full type
+```
+
+```sh
+tg search messages 'has:photo chat:"Book club"'
+```
+
+```sh
+tg search messages 'has:link AND "github.com"'   # a link to a site
 ```
 
 Un archivo se encuentra por su nombre, tamaño y tipo aunque el mensaje no tenga texto. `filename:` compara el nombre completo, sin distinguir mayúsculas ni tildes. Los tamaños usan KB, MB y GB de 1024. `has:` también admite `attachment`, `video`, `audio`, `voice`, `sticker`, `contact`, `location` y `poll`. Un enlace cuenta tanto si está en el texto como si solo aparece en su vista previa.
@@ -98,8 +184,11 @@ Un archivo se encuentra por su nombre, tamaño y tipo aunque el mensaje no tenga
 ## Contraseñas, códigos y tarjetas
 
 ```sh
-tg messages search 'preset:secret kind:saved'    # something that looks like a password or token
-tg messages search 'preset:card'
+tg search messages 'preset:secret kind:saved'    # something that looks like a password or token
+```
+
+```sh
+tg search messages 'preset:card'
 ```
 
 Un filtro preparado encuentra mensajes que *parecen* una contraseña, un código de acceso, una clave de API, un número de tarjeta o IBAN, un pasaporte, un teléfono, un correo electrónico o un enlace. Solo comprueba la forma: no demuestra que una contraseña funcione ni que una tarjeta sea real. La lista completa está en el [lenguaje de consulta](./query-language.md#presets).
@@ -108,10 +197,25 @@ Un filtro preparado encuentra mensajes que *parecen* una contraseña, un código
 
 ```sh
 tg tags add work --chat "Book club"
+```
+
+```sh
 tg tags add work --contact "Bob Synthetic"
+```
+
+```sh
 tg tags list --tag work --type chat
-tg messages search 'tag:work invoice'
-tg messages search 'invoice NOT tag:work'
+```
+
+```sh
+tg search messages 'tag:work invoice'
+```
+
+```sh
+tg search messages 'invoice NOT tag:work'
+```
+
+```sh
 tg tags remove work --chat "Book club"
 ```
 
@@ -122,9 +226,21 @@ ni usar un modelo:
 
 ```sh
 tg metadata refresh --chat "Book club"   # read the chat's description from Telegram; the chat is not changed
+```
+
+```sh
 tg metadata refresh --only-missing       # every stored group and channel with no description read yet
+```
+
+```sh
 tg tags auto --dry-run                   # what it would tag, without writing
+```
+
+```sh
 tg tags auto                             # write the automatic tags
+```
+
+```sh
 tg tags list --source auto               # only the automatic ones
 ```
 
@@ -135,12 +251,30 @@ que ya se asignó automáticamente, pasa a ser tuya.
 
 ```sh
 tg searches create meetings 'library OR cafe' --chat "Book club"
-tg messages search --saved meetings
-tg messages search --saved meetings 'date:today'  # extra words are added with AND
+```
+
+```sh
+tg search messages --saved meetings
+```
+
+```sh
+tg search messages --saved meetings 'date:today'  # extra words are added with AND
+```
+
+```sh
 tg stats messages show --saved meetings --by day
+```
+
+```sh
 tg searches list
+```
+
+```sh
 tg searches history --limit 10
-tg messages search --saved 42                    # a row of the history, by its number
+```
+
+```sh
+tg search messages --saved 42                    # a row of the history, by its number
 ```
 
 `searches create` guarda una consulta con sus opciones y no ejecuta nada; un nombre que ya existe necesita `--replace`. Las opciones que escribes con `--saved` sustituyen a las guardadas. El texto guardado se vuelve a leer en cada ejecución, así que `date:7d` siempre significa los últimos 7 días. `searches show` muestra una y `searches delete` elimina una.
@@ -153,12 +287,21 @@ Las búsquedas guardadas y el historial están en el archivo local que comparten
 
 ```sh
 tg stats messages show invoice                        # how many in each chat
+```
+
+```sh
 tg stats messages show 'date:7d' --by sender
+```
+
+```sh
 tg stats messages show 'from:me' --by day --timezone Europe/Madrid
+```
+
+```sh
 tg stats messages show --by hour                      # every stored message
 ```
 
-`stats messages show` cuenta los mensajes que encontraría `messages search` con la misma consulta, cada uno una sola vez.
+`stats messages show` cuenta los mensajes que encontraría `search messages` con la misma consulta, cada uno una sola vez.
 `--by chat` (la opción predeterminada) y `--by sender` muestran primero los recuentos más altos; `--by day` y `--by hour` siguen
 el orden cronológico. Si algunos chats no están almacenados por completo, las cifras son un límite inferior y stderr indica
 cuántos chats están incompletos.
@@ -170,9 +313,15 @@ Telegram y el archivo en una sola ejecución (`--backend both`). `--backend serv
 `--backend archive` busca únicamente en el archivo.
 
 ```sh
-tg messages search 'invoice' --backend both
-tg messages search 'invoice chat:"Book club" from:Olga' --backend both
-tg messages search 'invoice date:2026-09' --backend server --server-time 10s
+tg search messages 'invoice' --backend both
+```
+
+```sh
+tg search messages 'invoice chat:"Book club" from:Olga' --backend both
+```
+
+```sh
+tg search messages 'invoice date:2026-09' --backend server --server-time 10s
 ```
 
 Telegram decide por su cuenta qué coincide con una palabra y no documenta sus reglas. Por eso tg trata su respuesta como
@@ -201,7 +350,7 @@ Para buscar en todas las cuentas del archivo local, añade `--source all`. `--ne
 ## Para scripts y agentes
 
 `--json` devuelve un objeto con los mensajes y los datos consultados; `--jsonl` transmite
-solo los mensajes. En MCP, `tg_read` (`command: "messages search"`) y `tg_read` (`command: "stats messages show"`) aceptan las mismas consultas, y los comandos `tags` y
+solo los mensajes. En MCP, `tg_read` (`command: "search messages"`) y `tg_read` (`command: "stats messages show"`) aceptan las mismas consultas, y los comandos `tags` y
 `searches` mediante `tg_read`/`tg_write` gestionan las etiquetas y las búsquedas guardadas. Los campos de la respuesta,
 el modo antiguo `--language legacy` y `--regex` se describen en el [lenguaje de consultas](./query-language.md).
 
@@ -220,8 +369,17 @@ agente remoto; el agente necesita acceso al archivo para leerlo.
 
 ```sh
 tg attachments extract --chat "Book club" --download --output-dir ./files
-tg messages search 'content:invoice'
+```
+
+```sh
+tg search messages 'content:invoice'
+```
+
+```sh
 tg attachments list --chat "Book club" --needs-text
+```
+
+```sh
 tg attachments text set "Book club" 204 --text-file ./scan.txt
 ```
 
@@ -233,8 +391,17 @@ en `models.ocr` y usa el comando habitual de credenciales `models text key set`.
 
 ```sh
 tg config set models.ocr.provider openai
+```
+
+```sh
 tg config set models.ocr.model your-vision-model
+```
+
+```sh
 tg models text key set openai
+```
+
+```sh
 tg attachments extract --chat "Book club" --ocr --concurrency 4 --limit 100 --json
 ```
 

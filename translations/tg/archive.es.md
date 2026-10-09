@@ -4,6 +4,43 @@ title: "Archivo local de mensajes"
 
 `tg` guarda lo que lee en una base de datos SQLite: el **archivo local**. Las búsquedas, exportaciones y `--offline` consultan ese archivo sin pedir datos a Telegram. Esta página explica qué guarda, cómo llenarlo y cómo mantenerlo actualizado.
 
+## Comprueba y completa un chat
+
+Comprueba qué se ha guardado antes de descargar más. Limita la descarga al chat y periodo que necesitas.
+
+**Tu petición:**
+
+> Comprueba el historial guardado de Book club. Descarga los últimos 30 días de ese chat y dime si quedan lagunas.
+
+**Consultar el historial guardado:**
+
+```sh
+tg store status "Book club" --json
+```
+
+**Descargar el periodo elegido:**
+
+```sh
+tg store fetch "Book club" --since-time 30d --json
+```
+
+**Comprobar de nuevo:**
+
+```sh
+tg store status "Book club" --json
+```
+
+**Ejemplo de respuesta del agente:**
+
+> | Comprobación | Antes | Después |
+> | --- | --- | --- |
+> | Mensajes guardados | 30 | 300 |
+> | Historial solicitado de 30 días | Lagunas | Guardado sin lagunas |
+>
+> Este resultado cubre el periodo elegido, no todo el pasado del chat.
+
+Si la descarga se detiene por un límite o una espera del servidor, repítela para continuar y comprueba la cobertura. Que el comando termine no demuestra por sí solo que el historial esté completo. Los recuentos son ficticios.
+
 ## Qué se guarda
 
 - **Cada lectura.** Los chats vistos por `chats list`, los mensajes leídos por `messages list`, `messages context` e `inbox`, y los mensajes que envías.
@@ -24,6 +61,9 @@ Guarda el texto completo de cada mensaje que haya visto. Solo tu usuario puede l
 
 ```sh
 tg store status                  # per chat: messages stored, the oldest and newest, the stretches held completely
+```
+
+```sh
 tg store status "Book club"      # one chat
 ```
 
@@ -33,12 +73,33 @@ Un tramo «completo» es una secuencia de mensajes sin huecos. Leer mensajes sue
 
 ```sh
 tg store fetch "Book club" --estimate         # what a full fetch would still cost; asks Telegram nothing
+```
+
+```sh
 tg store fetch "Book club"                    # fetch it, newest to oldest
+```
+
+```sh
 tg store fetch "Book club"                    # run again to continue where it stopped
+```
+
+```sh
 tg store fetch "Book club" --since-time 30d   # only back to 30 days ago
+```
+
+```sh
 tg store fetch "Book club" --last 5000        # only until the newest 5000 are held
+```
+
+```sh
 tg store fetch "Book club" --limit 5000       # up to 5000 messages in this run
+```
+
+```sh
 tg store fetch --all                          # every chat, most recently active first: the last 90 days
+```
+
+```sh
 tg store fetch --all --since-time 365d        # every chat, back to a year ago
 ```
 
@@ -52,25 +113,59 @@ Una descarga larga puede ejecutarse como una tarea que continúa después de fin
 
 ```sh
 tg store fetch "Book club" --background     # prints the job id
+```
+
+```sh
 tg store jobs list                          # background jobs, newest first
+```
+
+```sh
+tg store jobs list --state failed           # only failed ones: running, done, failed, cancelled or died
+```
+
+```sh
 tg store jobs show                          # the newest job, and what the store now holds of its chat
+```
+
+```sh
 tg store jobs show <job>
+```
+
+```sh
 tg store jobs cancel <job>                  # stops after the current page; a later fetch resumes
+```
+
+```sh
 tg store jobs retry <job>                   # a failed or died job again, as a new job with the same options
+```
+
+```sh
 tg store jobs retry --failed                # every chat whose newest job failed or died
+```
+
+```sh
 tg store jobs clear                         # forget finished jobs and their logs; a running job stays
 ```
 
 ## Buscar
 
-`tg messages search` encuentra mensajes guardados por sus palabras, remitente, chat, fecha, archivos, enlaces y tus propias etiquetas; por defecto nunca consulta Telegram. `--sync-first` descarga primero, de forma explícita, los mensajes nuevos. La guía es [búsqueda de mensajes](./search.md), con búsquedas guardadas y recuentos. Una respuesta vacía significa «no está en este archivo»: descarga primero el chat.
+`tg search messages` encuentra mensajes guardados por sus palabras, remitente, chat, fecha, archivos, enlaces y tus propias etiquetas; la búsqueda de palabras también puede consultar Telegram. `--backend archive` lee solo mensajes guardados. `--sync-first` descarga primero, de forma explícita, los mensajes nuevos. La guía es [búsqueda de mensajes](./search.md), con búsquedas guardadas y recuentos. Una respuesta vacía significa «no está en este archivo»: descarga primero el chat.
 
 ## Exportar
 
 ```sh
 tg store export "Book club" --jsonl > book-club.jsonl       # one message per line, oldest first
+```
+
+```sh
 tg store export "Book club" --json > book-club.json         # { "items": [...] }
+```
+
+```sh
 tg store export "Book club" --format markdown > book-club.md   # a transcript: a heading per day, replies and forwards quoted
+```
+
+```sh
 tg store export "Book club" --output book-club.jsonl --since-time 7d     # the last week, into a file only you can read
 ```
 
@@ -82,7 +177,13 @@ La exportación solo escribe lo guardado y nunca consulta Telegram. Comprueba pr
 
 ```sh
 tg store export "Book club" "Work" --to ~/tg-export   # a JSON-lines file per chat, and manifest.json
+```
+
+```sh
 tg store export --kind group --to ~/tg-groups          # every stored group
+```
+
+```sh
 tg store export --all --to ~/tg-all                    # every stored chat of this account
 ```
 
@@ -124,9 +225,21 @@ El agente puede citar los localizadores del paquete. tg no genera resúmenes. Tr
 
 ```sh
 tg --offline chats list
+```
+
+```sh
 tg --offline messages list "Book club" --limit 50
+```
+
+```sh
 tg --offline messages show "Book club" 4242
+```
+
+```sh
 tg --offline messages context "Book club" 4242
+```
+
+```sh
 tg --offline contacts list
 ```
 
@@ -144,9 +257,21 @@ Si el perfil todavía no ha leído nada, falla con código de salida `6`: "nothi
 
 ```sh
 tg server start       # start serve in the background; answers once it listens
+```
+
+```sh
 tg server status      # whether it runs, since when, who started it
+```
+
+```sh
 tg server logs -n 50  # its latest log lines
+```
+
+```sh
 tg server stop
+```
+
+```sh
 tg server restart
 ```
 
@@ -156,7 +281,13 @@ Para mantenerlo activo entre inicios de sesión, instálalo como servicio de usu
 
 ```sh
 tg server install      # writes ~/.config/systemd/user/tg-serve-<profile>.service; starts nothing
+```
+
+```sh
 tg server start        # starts it — through the unit, now that there is one
+```
+
+```sh
 tg server status
 systemctl --user enable tg-serve-default    # only if it should start at every login
 ```
@@ -174,10 +305,25 @@ En macOS, el agente se guarda en `~/Library/LaunchAgents/`.
 
 ```sh
 tg store info                          # where the file is, its size, its schema, how many rows; changes nothing
+```
+
+```sh
 tg store check                         # integrity, search indexes, disk, and which chats are behind; changes nothing
+```
+
+```sh
 tg store backup ~/tg-store.db          # a copy of the store, while it is in use; --encrypt for a password
+```
+
+```sh
 tg store restore ~/tg-store.db         # put a backup in place of the store
+```
+
+```sh
 tg store migrate                       # bring the store up to this version's schema
+```
+
+```sh
 tg store clear --left --allow-dangerous  # delete the chats you have left, with their messages
 ```
 
@@ -205,8 +351,7 @@ Ejecuta `tg upgrade`. No se pierde ningún dato del archivo.
 
 `tg store migrate` completa los índices pendientes; `tg store reindex` los reconstruye. `store info` y
 `store check` muestran si los índices de palabras y raíces están listos. La búsqueda estricta usa raíces para las formas de palabras; `exact:` y `--exact` seleccionan formas exactas.
-`tg config set searchStemmers.cyrillic russian` y `searchStemmers.latin spanish` configuran los algoritmos de raíces del almacenamiento compartido
-(`none` desactiva uno; `english` también está disponible para el alfabeto latino); ejecuta `store reindex` después.
+`tg config set searchStemmers.cyrillic russian` y `searchStemmers.latin english,spanish` configuran las raíces del almacenamiento compartido. Para el alfabeto latino se admite `english`, `spanish` o ambos (por defecto); `none` las desactiva. Ejecuta `store reindex` tras elegir tu ajuste. Si una actualización cambia el valor predeterminado, las raíces se reconstruyen automáticamente: hasta que estén listas, la búsqueda usa formas exactas y lo indica. `tg serve` termina en segundo plano, y `store migrate` inmediatamente.
 El ajuste afecta a ambos servicios de mensajería y a todos los perfiles; un proceso limitado a un perfil no puede cambiarlo.
 
 `tg store repair --dry-run --json` muestra una vista previa de la reparación estructural y la deshace. `store repair` la aplica sin eliminar datos: las tablas que no coinciden se conservan como copias, y la respuesta nombra las filas y columnas que quedan en ellas. Revisa las copias conservadas antes de eliminar una con `store copies delete <exact name>`; `store repair` las nombra en su respuesta. Detén los procesos que usan el almacén antes de reparar.

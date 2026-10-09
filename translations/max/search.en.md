@@ -2,7 +2,33 @@
 title: "Message search"
 ---
 
-`max messages search` searches the local archive, the copy of your chats that `max` keeps on this computer. Searching one chat also queries the MAX server ([below](#поиск-на-сервере-max---backend)). It does not mark anything as read.
+`max search messages` searches the local archive, the copy of your chats that `max` keeps on this computer. Searching one chat also queries the MAX server ([below](#поиск-на-сервере-max---backend)). It does not mark anything as read.
+
+## Try a focused search
+
+Start with a phrase and one chat. This example searches saved history without asking the messenger.
+
+**Your request:**
+
+> Find the message saying “счёт оплачен” in Книжный клуб. Show the match and any gaps in the history.
+
+**Command:**
+
+```sh
+max search messages '"счёт оплачен"' --chat "Книжный клуб" --backend archive --json
+```
+
+**Example agent answer:**
+
+> **One matching message in saved history.**
+>
+> | Person | Message |
+> | --- | --- |
+> | Алиса Тестова | Счёт оплачен вчера. |
+>
+> History is incomplete: other matches may be missing. I can open this message and its surrounding conversation.
+
+An empty result is not proof that the message never existed. Check the reported history gaps before broadening the search. The examples on this page are fictional.
 
 ## Prepare your archive first
 
@@ -10,6 +36,9 @@ Good search requires downloaded chats. The MAX server searches only one specifie
 
 ```sh
 max store fetch --all --background     # последние 90 дней каждого чата, в фоне
+```
+
+```sh
 max store jobs show                    # сколько уже скачано
 ```
 
@@ -37,11 +66,23 @@ examples; use your own chats and people.
 ## Words and phrases
 
 ```sh
-max messages search счёт
-max messages search '"счёт оплачен"'             # слова подряд
-max messages search 'кафе OR библиотека'
-max messages search '(кафе OR библиотека) NOT шумно'
-max messages search 'квартир*'                   # все слова, которые начинаются на «квартир»
+max search messages счёт
+```
+
+```sh
+max search messages '"счёт оплачен"'             # слова подряд
+```
+
+```sh
+max search messages 'кафе OR библиотека'
+```
+
+```sh
+max search messages '(кафе OR библиотека) NOT шумно'
+```
+
+```sh
+max search messages 'квартир*'                   # все слова, которые начинаются на «квартир»
 ```
 
 All adjacent query words must appear in the message. Search matches word forms: `квартира` finds «квартиру». Quotes preserve word order but also allow other forms. For an exact form, use `exact:квартира` or add `--exact` for words without an explicit field. An explicit `text:` still matches word forms. Case, stress marks, `ё` and `е` are treated alike. Typos are not corrected automatically. Word forms depend on the archive language settings.
@@ -49,9 +90,15 @@ All adjacent query words must appear in the message. Search matches word forms: 
 ## Search the MAX server: `--backend`
 
 ```sh
-max messages search 'счёт' --chat "Книжный клуб"                    # архив и сервер MAX
-max messages search 'счёт' --chat "Книжный клуб" --backend server   # только то, что нашёл сервер
-max messages search 'счёт' --backend archive                        # только архив
+max search messages 'счёт' --chat "Книжный клуб"                    # архив и сервер MAX
+```
+
+```sh
+max search messages 'счёт' --chat "Книжный клуб" --backend server   # только то, что нашёл сервер
+```
+
+```sh
+max search messages 'счёт' --backend archive                        # только архив
 ```
 
 The MAX server searches only one chat. When a query specifies one chat (`--chat` or `chat:`) and contains words, `max` queries both the server and the archive by default (`--backend both`). Without a specified chat, it does not query the server; results come from the archive.
@@ -63,12 +110,27 @@ With `--json`, each message has a `source` (`archive`, `server` or `both`), and 
 ## People and chats
 
 ```sh
-max messages search 'from:"Алиса Тестова" счёт'
-max messages search 'from:("Алиса Тестова" OR "Борис Тестов") библиотека'
-max messages search 'from:me date:7d'            # что вы писали за неделю
-max messages search 'chat:"Книжный клуб" библиотека'
-max messages search библиотека --chat "Книжный клуб"   # то же, опцией
-max messages search 'паспорт kind:private'       # только личные переписки
+max search messages 'from:"Алиса Тестова" счёт'
+```
+
+```sh
+max search messages 'from:("Алиса Тестова" OR "Борис Тестов") библиотека'
+```
+
+```sh
+max search messages 'from:me date:7d'            # что вы писали за неделю
+```
+
+```sh
+max search messages 'chat:"Книжный клуб" библиотека'
+```
+
+```sh
+max search messages библиотека --chat "Книжный клуб"   # то же, опцией
+```
+
+```sh
+max search messages 'паспорт kind:private'       # только личные переписки
 ```
 
 `kind:` accepts `private` (private chats), `group`, `channel`, `saved` (Saved Messages) and `bot`.
@@ -76,10 +138,19 @@ max messages search 'паспорт kind:private'       # только личн�
 ## Dates
 
 ```sh
-max messages search 'date:today'
-max messages search 'библиотека date:yesterday'
-max messages search 'счёт date:7d'               # от 7 дней назад до сейчас; также 30m, 2h
-max messages search 'счёт date:[2026-01-01 TO 2026-02-01}' --timezone Europe/Madrid
+max search messages 'date:today'
+```
+
+```sh
+max search messages 'библиотека date:yesterday'
+```
+
+```sh
+max search messages 'счёт date:7d'               # от 7 дней назад до сейчас; также 30m, 2h
+```
+
+```sh
+max search messages 'счёт date:[2026-01-01 TO 2026-02-01}' --timezone Europe/Madrid
 ```
 
 `today`, `yesterday` and calendar dates are days in your computer's time zone; `--timezone` picks
@@ -88,13 +159,31 @@ another. In a range, `[` and `]` include that day, `{` and `}` exclude it.
 ## Files and links
 
 ```sh
-max messages search 'has:file'
-max messages search 'filename:*.pdf'
-max messages search 'filename:*договор*'         # часть имени
-max messages search 'size>10MB'
-max messages search 'size:[1KB TO 300KB]'
-max messages search 'has:photo chat:"Книжный клуб"'
-max messages search 'has:link AND "github.com"'  # ссылка на сайт
+max search messages 'has:file'
+```
+
+```sh
+max search messages 'filename:*.pdf'
+```
+
+```sh
+max search messages 'filename:*договор*'         # часть имени
+```
+
+```sh
+max search messages 'size>10MB'
+```
+
+```sh
+max search messages 'size:[1KB TO 300KB]'
+```
+
+```sh
+max search messages 'has:photo chat:"Книжный клуб"'
+```
+
+```sh
+max search messages 'has:link AND "github.com"'  # ссылка на сайт
 ```
 
 A file is found by name and size even when the message has no text. `filename:` compares the whole name, ignoring case, accents and `ё`. Sizes use KB, MB and GB of 1,024. MAX does not report the file type, so search by extension: `filename:*.pdf`, rather than `mime:`. `has:` also accepts `attachment`, `video`, `audio`, `voice`, `sticker`, `contact`, `location` and `poll`. A link counts whether it appears in the text or only in a link card.
@@ -102,8 +191,11 @@ A file is found by name and size even when the message has no text. `filename:` 
 ## Passwords, codes and cards
 
 ```sh
-max messages search 'preset:secret kind:saved'   # что-то похожее на пароль или токен в Избранном
-max messages search 'preset:card'
+max search messages 'preset:secret kind:saved'   # что-то похожее на пароль или токен в Избранном
+```
+
+```sh
+max search messages 'preset:card'
 ```
 
 A preset finds messages that *look like* a password, a login code, an API key, a card or IBAN number, a
@@ -114,10 +206,25 @@ works or a card is real. The full list is in the [query language](./query-langua
 
 ```sh
 max tags add work --chat "Книжный клуб"
+```
+
+```sh
 max tags add work --contact "Борис Тестов"
+```
+
+```sh
 max tags list --tag work --type chat
-max messages search 'tag:work счёт'
-max messages search 'счёт NOT tag:work'
+```
+
+```sh
+max search messages 'tag:work счёт'
+```
+
+```sh
+max search messages 'счёт NOT tag:work'
+```
+
+```sh
 max tags remove work --chat "Книжный клуб"
 ```
 
@@ -127,8 +234,17 @@ Group and channel tags can be generated automatically from their title, username
 
 ```sh
 max metadata refresh --chat "Книжный клуб"   # прочитать описание чата из MAX (сам чат не меняется)
+```
+
+```sh
 max tags auto --dry-run                      # что получилось бы, без записи
+```
+
+```sh
 max tags auto                                # записать автоматические метки
+```
+
+```sh
 max tags list --source auto                  # только автоматические
 ```
 
@@ -138,12 +254,30 @@ Automatic tagging leaves your tags intact: rerunning it removes only outdated au
 
 ```sh
 max searches create meetings 'библиотека OR кафе' --chat "Книжный клуб"
-max messages search --saved meetings
-max messages search --saved meetings 'date:today'   # слова добавляются через AND
+```
+
+```sh
+max search messages --saved meetings
+```
+
+```sh
+max search messages --saved meetings 'date:today'   # слова добавляются через AND
+```
+
+```sh
 max stats messages show --saved meetings --by day
+```
+
+```sh
 max searches list
+```
+
+```sh
 max searches history --limit 10
-max messages search --saved 42                   # строка истории, по её номеру
+```
+
+```sh
+max search messages --saved 42                   # строка истории, по её номеру
 ```
 
 `searches create` saves a query with its options and runs nothing; an existing name needs `--replace`.
@@ -158,12 +292,21 @@ Saved searches and history live in the archive shared by `max` and `tg`: both se
 
 ```sh
 max stats messages show счёт                          # сколько в каждом чате
+```
+
+```sh
 max stats messages show 'date:7d' --by sender
+```
+
+```sh
 max stats messages show 'from:me' --by day --timezone Europe/Madrid
+```
+
+```sh
 max stats messages show --by hour                     # все сохранённые сообщения
 ```
 
-`stats messages show` counts each message that `messages search` would find with the same query once. `--by chat` (the default) and `--by sender` sort the highest counts first; `--by day` and `--by hour` use chronological order. If some chats are only partly saved, the counts are lower bounds, and stderr reports how many chats are incomplete.
+`stats messages show` counts each message that `search messages` would find with the same query once. `--by chat` (the default) and `--by sender` sort the highest counts first; `--by day` and `--by hour` use chronological order. If some chats are only partly saved, the counts are lower bounds, and stderr reports how many chats are incomplete.
 
 ## When nothing is found
 
@@ -174,7 +317,7 @@ relevance, and `--context 2` shows two messages around each one found.
 
 ## Scripts and agents
 
-`--json` returns one object containing messages and search coverage; `--jsonl` returns only messages, one per line. In MCP, `max_read` (`command: "messages search"`) and `max_read` (`command: "stats messages show"`) accept the same queries. The `tags` and `searches` commands, through `max_read`/`max_write`, manage tags and saved searches. See the [query language](./query-language.md) for response fields, the older `--language legacy` mode and `--regex`.
+`--json` returns one object containing messages and search coverage; `--jsonl` returns only messages, one per line. In MCP, `max_read` (`command: "search messages"`) and `max_read` (`command: "stats messages show"`) accept the same queries. The `tags` and `searches` commands, through `max_read`/`max_write`, manage tags and saved searches. See the [query language](./query-language.md) for response fields, the older `--language legacy` mode and `--regex`.
 
 Searching for words in one specified chat queries both the archive and the MAX server by default; without a specified chat, it queries only the archive. `--backend archive` keeps the search local. `--sync-first` downloads new messages first, without marking anything as read: at most 5 chats, 500 messages and 30 seconds. Adjust these limits with `--max-chats`, `--max-messages` and `--sync-time`. An incomplete or failed update preserves local results and reports outdated coverage and the update outcome.
 
@@ -184,8 +327,17 @@ By default, the agent reads photos and scans with its own OCR or vision tools, t
 
 ```sh
 max attachments extract --chat "Книжный клуб" --download --output-dir ./files
-max messages search 'content:договор'
+```
+
+```sh
+max search messages 'content:договор'
+```
+
+```sh
 max attachments list --chat "Книжный клуб" --needs-text
+```
+
+```sh
 max attachments text set "Книжный клуб" 204 --text-file ./scan.txt
 ```
 
@@ -195,8 +347,17 @@ For bulk processing, you can explicitly choose an API through the shared model g
 
 ```sh
 max config set models.ocr.provider openai
+```
+
+```sh
 max config set models.ocr.model your-vision-model
+```
+
+```sh
 max models text key set openai
+```
+
+```sh
 max attachments extract --chat "Книжный клуб" --ocr --concurrency 4 --limit 100 --json
 ```
 
