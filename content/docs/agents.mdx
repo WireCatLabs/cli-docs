@@ -55,12 +55,10 @@ The **skill** is an instruction file that teaches the agent how to use the tool.
 
 Where each agent looks for the skill file:
 
-| Agent | Skill file | Install only for it |
-|---|---|---|
-| Codex, Cursor Agent, Gemini CLI | `~/.agents/skills/tg-cli/SKILL.md` | `tg skill install --for agents` |
-| Claude Code | `~/.claude/skills/tg-cli/SKILL.md` | `tg skill install --for claude` |
-| Hermes | `~/.hermes/skills/tg-cli/SKILL.md` | save `tg skill show`, see [Hermes](#hermes) |
-| OpenClaw | `~/.agents/skills/tg-cli/SKILL.md` | `tg skill install --for agents`, see [OpenClaw](#openclaw) |
+- **Codex, Cursor Agent, Gemini CLI**: `~/.agents/skills/tg-cli/SKILL.md`; install only for them with `tg skill install --for agents`.
+- **Claude Code**: `~/.claude/skills/tg-cli/SKILL.md`; install only for it with `tg skill install --for claude`.
+- **Hermes**: `~/.hermes/skills/tg-cli/SKILL.md`; save the output of `tg skill show`, see [Hermes](#hermes).
+- **OpenClaw**: `~/.agents/skills/tg-cli/SKILL.md`; `tg skill install --for agents`, see [OpenClaw](#openclaw).
 
 `~` is your home folder, also on Windows. Without `--for`, `skill install` writes both the
 `.agents` and the `.claude` copy.

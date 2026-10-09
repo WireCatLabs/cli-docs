@@ -55,12 +55,10 @@ tg skill install
 
 Где каждый агент ищет файл навыка:
 
-| Агент | Файл навыка | Установить только для него |
-|---|---|---|
-| Codex, Cursor Agent, Gemini CLI | `~/.agents/skills/tg-cli/SKILL.md` | `tg skill install --for agents` |
-| Claude Code | `~/.claude/skills/tg-cli/SKILL.md` | `tg skill install --for claude` |
-| Hermes | `~/.hermes/skills/tg-cli/SKILL.md` | сохранить `tg skill show`, см. [Hermes](#hermes) |
-| OpenClaw | `~/.agents/skills/tg-cli/SKILL.md` | `tg skill install --for agents`, см. [OpenClaw](#openclaw) |
+- **Codex, Cursor Agent, Gemini CLI**: `~/.agents/skills/tg-cli/SKILL.md`; только для них — `tg skill install --for agents`.
+- **Claude Code**: `~/.claude/skills/tg-cli/SKILL.md`; только для него — `tg skill install --for claude`.
+- **Hermes**: `~/.hermes/skills/tg-cli/SKILL.md`; сохраните вывод `tg skill show`, см. [Hermes](#hermes).
+- **OpenClaw**: `~/.agents/skills/tg-cli/SKILL.md`; `tg skill install --for agents`, см. [OpenClaw](#openclaw).
 
 `~` — ваша домашняя папка, в том числе на Windows. Без `--for` команда `skill install` записывает
 обе копии: в `.agents` и в `.claude`.

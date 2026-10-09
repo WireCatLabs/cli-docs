@@ -23,6 +23,6 @@ for (const lang of ["en", "ru", "es"])
       const locale = lang === "en" ? "" : `${lang}/`
       const md = await request.get(`/llms.mdx/docs/${locale}${tool}/commands/content.md`)
       expect(md.ok()).toBe(true)
-      expect(await md.text()).toContain(`${tool} messages search`)
+      expect(await md.text()).toContain(`${tool} search messages`)
     })
   }
