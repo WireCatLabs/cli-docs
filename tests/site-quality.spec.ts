@@ -232,9 +232,9 @@ for (const lang of ["en", "ru", "es"]) {
 
 test("the public project contact opts out of an unnecessary edge email decoder", async ({ request }) => {
   const html = await (await request.get("/")).text()
-  expect(html).toMatch(
-    /<!--email_off--><a href="mailto:hello@wirecat\.dev">[\s\S]*?hello@wirecat\.dev<\/a><!--\/email_off-->/,
-  )
+  const contact = html.match(/<!--email_off-->([\s\S]*?)<!--\/email_off-->/)?.[1]
+  expect(contact).toMatch(/^<a\b[^>]*href="mailto:hello@wirecat\.dev"[^>]*>[\s\S]*<\/a>$/)
+  expect(contact?.replace(/<[^>]+>/g, "").trim()).toBe("hello@wirecat.dev")
 })
 
 for (const lang of ["en", "ru", "es"]) {
