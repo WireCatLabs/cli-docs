@@ -41,8 +41,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
-      - run: pnpm test
       - run: pnpm sync ${REF:+--ref "$REF"}
+      - run: pnpm test
       - run: pnpm docs:release-notes
         if: env.REF == ''
       - run: pnpm docs:contracts
