@@ -1,0 +1,165 @@
+/* Immediate control feedback, shared by the released landing, features and examples. */
+.button,
+.chat-down,
+[data-copy],
+button:not(:disabled),
+summary,
+.text-link {
+  transition: background-color 160ms ease-out, color 160ms ease-out,
+    border-color 160ms ease-out, box-shadow 160ms ease-out;
+}
+.button:is(:hover, :focus-visible),
+.dark .button:is(:hover, :focus-visible),
+.button.copy-agent:is(:hover, :focus-visible),
+.chat-down:is(:hover, :focus-visible) {
+  background: color-mix(in srgb, var(--button) 82%, var(--button-ink));
+  color: var(--button-ink);
+  box-shadow: 0 4px 10px #18282226;
+  filter: none;
+}
+.button:active,
+.dark .button:active,
+.button.copy-agent:active,
+.chat-down:active {
+  background: color-mix(in srgb, var(--button) 82%, var(--ink));
+  color: var(--button-ink);
+  box-shadow: inset 0 2px 4px color-mix(in srgb, var(--ink) 20%, transparent);
+}
+.connect-dropdown[open] > .button,
+.dark .connect-dropdown[open] > .button {
+  background: color-mix(in srgb, var(--button) 85%, var(--ink));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--button-ink) 35%, transparent);
+}
+.button.secondary:is(:hover, :focus-visible),
+.dark .button.secondary:is(:hover, :focus-visible) {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+button:not(.button, .chat-down, :disabled):is(:hover, :focus-visible) {
+  background-color: var(--accent-soft);
+  color: var(--accent);
+}
+button:not(.button, .chat-down, :disabled):active {
+  background-color: color-mix(in srgb, var(--accent-soft) 85%, var(--accent));
+  box-shadow: inset 0 1px 3px #18282226;
+}
+.text-link {
+  text-decoration: none;
+  transition: color 160ms ease-out;
+}
+.text-link:is(:hover, :focus-visible) {
+  color: var(--accent);
+  text-decoration: none;
+}
+.text-link > svg,
+summary > svg:last-child,
+.chat-down > svg {
+  transition: translate 200ms cubic-bezier(.16, 1, .3, 1), transform 200ms cubic-bezier(.16, 1, .3, 1);
+}
+.text-link:is(:hover, :focus-visible) > svg { translate: 3px 0; }
+.text-link:active > svg { translate: 5px 0; }
+summary:is(:hover, :focus-visible) > svg:last-child,
+.chat-down:is(:hover, :focus-visible) > svg { translate: 0 2px; }
+.role5-more > summary:is(:hover, :focus-visible),
+.role5-folds > details > summary:is(:hover, :focus-visible),
+.capability-row > summary:is(:hover, :focus-visible),
+.hero-command-list > summary:is(:hover, :focus-visible),
+.query5-try > summary:is(:hover, :focus-visible) {
+  background-color: var(--accent-soft);
+  color: var(--accent);
+}
+:is(button, summary, .text-link):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+/* Animate the invitation independently: hovering cannot restart its entrance. */
+.chat-down,
+.chat-down:hover,
+.chat-down:focus-visible { animation: none; opacity: 1; }
+.scroll-invitation { animation: none; }
+.scroll-invitation.cue-observed {
+  animation: conversation-appear 650ms cubic-bezier(.22, 1, .36, 1) both,
+    conversation-hint 2.8s 650ms ease-in-out infinite;
+  animation-play-state: paused;
+}
+.scroll-invitation.cue-in-view { animation-play-state: running; }
+.scroll-invitation:is(:hover, :focus-within),
+.is-page-hidden .scroll-invitation { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .scroll-invitation.cue-observed { animation: none; }
+  .text-link > svg, summary > svg:last-child, .chat-down > svg {
+    transition: none;
+    translate: none;
+  }
+}
+
+/* Whole-row links in integrations and the compact conversation footer. */
+.integration-table > a,
+.integration-table > details > summary {
+  transition: background-color 160ms ease-out, color 160ms ease-out;
+}
+.integration-table > a:is(:hover, :focus-visible),
+.integration-table > details > summary:is(:hover, :focus-visible) {
+  background-color: var(--accent-soft);
+  color: var(--accent);
+}
+.integration-table > a > svg:last-child,
+.chat-window-bottom a > svg,
+.memory-demo-top a > svg,
+.demo-bottom a > svg,
+.integration-table > details > summary::after {
+  transition: translate 200ms cubic-bezier(.16, 1, .3, 1);
+}
+.integration-table > a:is(:hover, :focus-visible) > svg:last-child,
+.chat-window-bottom a:is(:hover, :focus-visible) > svg,
+.memory-demo-top a:is(:hover, :focus-visible) > svg,
+.demo-bottom a:is(:hover, :focus-visible) > svg {
+  translate: 3px 0;
+}
+.integration-table > details > summary:is(:hover, :focus-visible)::after {
+  translate: 0 2px;
+}
+.integration-table > a:active { background-color: var(--soft); }
+.integration-table > a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .integration-table > a > svg:last-child,
+  .chat-window-bottom a > svg,
+  .memory-demo-top a > svg,
+  .demo-bottom a > svg,
+  .integration-table > details > summary::after {
+    transition: none;
+    translate: none;
+  }
+}
+
+/* The continuation owns its scroll timing; browser anchoring must not jump it. */
+.chat-scene { scroll-behavior: auto; overflow-anchor: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .text-link { transition: color 160ms ease-out; }
+}
+
+/* Draw the underline under the words in body, menu and footer links. */
+a.animated-text-link,
+a.animated-text-link:is(:hover, :focus-visible),
+.footer-host .foot a.animated-text-link:is(:hover, :focus-visible),
+.footer-host .lang-menu a.animated-text-link:is(:hover, :focus-visible) {
+  text-decoration: none;
+  background-image: none;
+}
+.animated-text-link > .link-label {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 0% 1px;
+  transition: background-size 240ms cubic-bezier(.16, 1, .3, 1);
+}
+.animated-text-link:is(:hover, :focus-visible) > .link-label {
+  background-size: 100% 1px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animated-text-link > .link-label { transition: none; }
+}

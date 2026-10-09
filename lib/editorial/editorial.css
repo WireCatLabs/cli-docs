@@ -9022,25 +9022,26 @@ html.dark .wirecat-editorial .message-role > svg {
   }
 }
 
-.wirecat-editorial .chat-down,
-.wirecat-editorial .chat-down:hover,
-.wirecat-editorial .chat-down:focus-visible {
-  animation: conversation-pulse 2.4s ease-in-out infinite;
+.wirecat-editorial .scroll-invitation {
+  animation:
+    conversation-appear 650ms cubic-bezier(0.22, 1, 0.36, 1) both,
+    conversation-hint 2.8s 650ms ease-in-out infinite;
 }
-.wirecat-editorial .chat-down:hover {
-  filter: brightness(1.06);
+@keyframes conversation-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
-@keyframes conversation-pulse {
+@keyframes conversation-hint {
   0%,
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1);
-    box-shadow: 0 3px 8px #18282224;
   }
   50% {
-    opacity: 0.78;
-    transform: translateY(3px) scale(1.08);
-    box-shadow: 0 6px 14px #18282235;
+    opacity: 0.4;
   }
 }
 .wirecat-editorial .command-line {
@@ -11900,6 +11901,353 @@ html[data-why-icons="hide"] .wirecat-editorial .reasons-nine dd {
   flex-shrink: 0;
   min-height: 28px;
   padding-inline: 7px;
+}
+
+/* Clear, fixed-size continuation and copy feedback. */
+.wirecat-editorial .chat-down {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: auto;
+  min-width: 132px;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font:
+    600 13px / 1 Onest,
+    sans-serif;
+  transform: none;
+  transition:
+    background-color 160ms,
+    filter 160ms;
+}
+.wirecat-editorial .chat-down:hover,
+.wirecat-editorial .chat-down:focus-visible {
+  transform: none;
+}
+.wirecat-editorial [data-copy] {
+  transition:
+    background-color 160ms,
+    color 160ms,
+    box-shadow 160ms;
+}
+.wirecat-editorial [data-copy] .copy-success-icon {
+  display: none;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.wirecat-editorial [data-copy][data-copied] .copy-idle-icon {
+  display: none;
+}
+.wirecat-editorial [data-copy][data-copied] .copy-success-icon {
+  display: inline-block;
+}
+.wirecat-editorial [data-copy]:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.wirecat-editorial .button.copy-agent:hover {
+  background: var(--button);
+  color: var(--button-ink);
+  filter: brightness(1.12);
+}
+.wirecat-editorial [data-copy]:active {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+.wirecat-editorial [data-copy][data-copied] {
+  box-shadow: inset 0 0 0 2px var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.wirecat-editorial [data-copy]:focus-visible,
+.wirecat-editorial .chat-down:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.wirecat-editorial .connector-list {
+  flex-wrap: wrap;
+  row-gap: 12px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wirecat-editorial .chat-down,
+  .wirecat-editorial [data-copy] {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* Copy feedback uses a stroked SVG, never a filled badge. */
+.wirecat-editorial [data-copy] .copy-success-icon {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+.wirecat-editorial [data-copy] .copy-success-icon path {
+  fill: none;
+  stroke: currentColor;
+}
+.wirecat-editorial .chat-down:hover,
+.wirecat-editorial .chat-down:focus-visible {
+  animation: none;
+  opacity: 1;
+}
+/* Reuse the original brand draw, travelling highlight and expanding ring. */
+.wirecat-editorial .brand .wirecat-logo-mark {
+  overflow: visible;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.wirecat-editorial .brand .wirecat-logo-ring,
+.wirecat-editorial .brand .wirecat-logo-pulse {
+  display: inline;
+}
+.wirecat-editorial .brand .wirecat-logo-ring {
+  fill: none;
+  stroke: var(--wirecat-brand-tone);
+  stroke-width: 1.5;
+  opacity: 0;
+  transform-origin: 16px 16px;
+}
+.wirecat-editorial .brand .wirecat-logo-pulse {
+  fill: none;
+  stroke: #c9ccff;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 3 60;
+  stroke-dashoffset: 3;
+  opacity: 0;
+}
+.wirecat-editorial .brand:is(:hover, :focus-visible) .wirecat-logo-mark {
+  transform: rotate(-10deg) scale(1.06);
+}
+.wirecat-editorial .brand:is(:hover, :focus-visible) .wirecat-logo-wire {
+  animation: wirecat-draw 0.6s ease-out;
+}
+.wirecat-editorial .brand:is(:hover, :focus-visible) .wirecat-logo-pulse {
+  animation: wirecat-pulse 0.9s 0.35s ease-out;
+}
+.wirecat-editorial .brand:is(:hover, :focus-visible) .wirecat-logo-ring {
+  animation: wirecat-ring 0.9s 0.2s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wirecat-editorial .brand .wirecat-logo-mark {
+    transition: none;
+  }
+  .wirecat-editorial .brand:is(:hover, :focus-visible) .wirecat-logo-mark {
+    transform: none;
+  }
+  .wirecat-editorial .brand:is(:hover, :focus-visible) :is(.wirecat-logo-wire, .wirecat-logo-pulse, .wirecat-logo-ring),
+  .wirecat-editorial .chat-down {
+    animation: none;
+  }
+}
+
+/* Immediate control feedback, shared by the released landing, features and examples. */
+.wirecat-editorial .button,
+.wirecat-editorial .chat-down,
+.wirecat-editorial [data-copy],
+.wirecat-editorial button:not(:disabled),
+.wirecat-editorial summary,
+.wirecat-editorial .text-link {
+  transition:
+    background-color 160ms ease-out,
+    color 160ms ease-out,
+    border-color 160ms ease-out,
+    box-shadow 160ms ease-out;
+}
+.wirecat-editorial .button:is(:hover, :focus-visible),
+html.dark .wirecat-editorial .button:is(:hover, :focus-visible),
+.wirecat-editorial .button.copy-agent:is(:hover, :focus-visible),
+.wirecat-editorial .chat-down:is(:hover, :focus-visible) {
+  background: color-mix(in srgb, var(--button) 82%, var(--button-ink));
+  color: var(--button-ink);
+  box-shadow: 0 4px 10px #18282226;
+  filter: none;
+}
+.wirecat-editorial .button:active,
+html.dark .wirecat-editorial .button:active,
+.wirecat-editorial .button.copy-agent:active,
+.wirecat-editorial .chat-down:active {
+  background: color-mix(in srgb, var(--button) 82%, var(--ink));
+  color: var(--button-ink);
+  box-shadow: inset 0 2px 4px color-mix(in srgb, var(--ink) 20%, transparent);
+}
+.wirecat-editorial .connect-dropdown[open] > .button,
+html.dark .wirecat-editorial .connect-dropdown[open] > .button {
+  background: color-mix(in srgb, var(--button) 85%, var(--ink));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--button-ink) 35%, transparent);
+}
+.wirecat-editorial .button.secondary:is(:hover, :focus-visible),
+html.dark .wirecat-editorial .button.secondary:is(:hover, :focus-visible) {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.wirecat-editorial button:not(.button, .chat-down, :disabled):is(:hover, :focus-visible) {
+  background-color: var(--accent-soft);
+  color: var(--accent);
+}
+.wirecat-editorial button:not(.button, .chat-down, :disabled):active {
+  background-color: color-mix(in srgb, var(--accent-soft) 85%, var(--accent));
+  box-shadow: inset 0 1px 3px #18282226;
+}
+.wirecat-editorial .text-link {
+  text-decoration: none;
+  transition: color 160ms ease-out;
+}
+.wirecat-editorial .text-link:is(:hover, :focus-visible) {
+  color: var(--accent);
+  text-decoration: none;
+}
+.wirecat-editorial .text-link > svg,
+.wirecat-editorial summary > svg:last-child,
+.wirecat-editorial .chat-down > svg {
+  transition:
+    translate 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.wirecat-editorial .text-link:is(:hover, :focus-visible) > svg {
+  translate: 3px 0;
+}
+.wirecat-editorial .text-link:active > svg {
+  translate: 5px 0;
+}
+.wirecat-editorial summary:is(:hover, :focus-visible) > svg:last-child,
+.wirecat-editorial .chat-down:is(:hover, :focus-visible) > svg {
+  translate: 0 2px;
+}
+.wirecat-editorial .role5-more > summary:is(:hover, :focus-visible),
+.wirecat-editorial .role5-folds > details > summary:is(:hover, :focus-visible),
+.wirecat-editorial .capability-row > summary:is(:hover, :focus-visible),
+.wirecat-editorial .hero-command-list > summary:is(:hover, :focus-visible),
+.wirecat-editorial .query5-try > summary:is(:hover, :focus-visible) {
+  background-color: var(--accent-soft);
+  color: var(--accent);
+}
+.wirecat-editorial :is(button, summary, .text-link):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+/* Animate the invitation independently: hovering cannot restart its entrance. */
+.wirecat-editorial .chat-down,
+.wirecat-editorial .chat-down:hover,
+.wirecat-editorial .chat-down:focus-visible {
+  animation: none;
+  opacity: 1;
+}
+.wirecat-editorial .scroll-invitation {
+  animation: none;
+}
+.wirecat-editorial .scroll-invitation.cue-observed {
+  animation:
+    conversation-appear 650ms cubic-bezier(0.22, 1, 0.36, 1) both,
+    conversation-hint 2.8s 650ms ease-in-out infinite;
+  animation-play-state: paused;
+}
+.wirecat-editorial .scroll-invitation.cue-in-view {
+  animation-play-state: running;
+}
+.wirecat-editorial .scroll-invitation:is(:hover, :focus-within),
+.wirecat-editorial .is-page-hidden .scroll-invitation {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wirecat-editorial .scroll-invitation.cue-observed {
+    animation: none;
+  }
+  .wirecat-editorial .text-link > svg,
+  .wirecat-editorial summary > svg:last-child,
+  .wirecat-editorial .chat-down > svg {
+    transition: none;
+    translate: none;
+  }
+}
+
+/* Whole-row links in integrations and the compact conversation footer. */
+.wirecat-editorial .integration-table > a,
+.wirecat-editorial .integration-table > details > summary {
+  transition:
+    background-color 160ms ease-out,
+    color 160ms ease-out;
+}
+.wirecat-editorial .integration-table > a:is(:hover, :focus-visible),
+.wirecat-editorial .integration-table > details > summary:is(:hover, :focus-visible) {
+  background-color: var(--accent-soft);
+  color: var(--accent);
+}
+.wirecat-editorial .integration-table > a > svg:last-child,
+.wirecat-editorial .chat-window-bottom a > svg,
+.wirecat-editorial .memory-demo-top a > svg,
+.wirecat-editorial .demo-bottom a > svg,
+.wirecat-editorial .integration-table > details > summary::after {
+  transition: translate 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.wirecat-editorial .integration-table > a:is(:hover, :focus-visible) > svg:last-child,
+.wirecat-editorial .chat-window-bottom a:is(:hover, :focus-visible) > svg,
+.wirecat-editorial .memory-demo-top a:is(:hover, :focus-visible) > svg,
+.wirecat-editorial .demo-bottom a:is(:hover, :focus-visible) > svg {
+  translate: 3px 0;
+}
+.wirecat-editorial .integration-table > details > summary:is(:hover, :focus-visible)::after {
+  translate: 0 2px;
+}
+.wirecat-editorial .integration-table > a:active {
+  background-color: var(--soft);
+}
+.wirecat-editorial .integration-table > a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wirecat-editorial .integration-table > a > svg:last-child,
+  .wirecat-editorial .chat-window-bottom a > svg,
+  .wirecat-editorial .memory-demo-top a > svg,
+  .wirecat-editorial .demo-bottom a > svg,
+  .wirecat-editorial .integration-table > details > summary::after {
+    transition: none;
+    translate: none;
+  }
+}
+
+/* The continuation owns its scroll timing; browser anchoring must not jump it. */
+.wirecat-editorial .chat-scene {
+  scroll-behavior: auto;
+  overflow-anchor: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wirecat-editorial .text-link {
+    transition: color 160ms ease-out;
+  }
+}
+
+/* Draw the underline under the words in body, menu and footer links. */
+.wirecat-editorial a.animated-text-link,
+.wirecat-editorial a.animated-text-link:is(:hover, :focus-visible),
+.wirecat-editorial .footer-host .foot a.animated-text-link:is(:hover, :focus-visible),
+.wirecat-editorial .footer-host .lang-menu a.animated-text-link:is(:hover, :focus-visible) {
+  text-decoration: none;
+  background-image: none;
+}
+.wirecat-editorial .animated-text-link > .link-label {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 0% 1px;
+  transition: background-size 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.wirecat-editorial .animated-text-link:is(:hover, :focus-visible) > .link-label {
+  background-size: 100% 1px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wirecat-editorial .animated-text-link > .link-label {
+    transition: none;
+  }
 }
 
 .wirecat-editorial .editorial-language {
