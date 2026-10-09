@@ -591,6 +591,68 @@ max chats link reset <chat>
 |---|---|---|
 | `chat` | required | a chat: its id, or part of its title. |
 
+### `max chats requests`
+
+requests to join a group that needs an admin's approval
+
+#### `max chats requests list`
+
+who asked to join, newest first; only admins see them, and reading tells nobody
+
+```sh
+max chats requests list <chat> [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `chat` | required | a chat: its id, or part of its title. |
+
+| Option | Purpose |
+|---|---|
+| `--limit <n>` | how many. |
+| `--search <text>` | only people whose name or @username has this. |
+| `--link <link>` | only people who asked through this invite link; not with --search. |
+
+#### `max chats requests accept`
+
+let them in; the group sees them join
+
+**Changes something in MAX.**
+
+```sh
+max chats requests accept <chat> [person] [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `chat` | required | a chat: its id, or part of its title. |
+| `person` | optional | who asked: an id from `chats requests list`. |
+
+| Option | Purpose |
+|---|---|
+| `--all` | every pending request, counted against the hourly limit first. |
+| `--link <link>` | with --all: only the requests made by this invite link. |
+
+#### `max chats requests decline`
+
+turn the request away
+
+**Changes something in MAX.**
+
+```sh
+max chats requests decline <chat> [person] [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `chat` | required | a chat: its id, or part of its title. |
+| `person` | optional | who asked: an id from `chats requests list`. |
+
+| Option | Purpose |
+|---|---|
+| `--all` | every pending request, counted against the hourly limit first. |
+| `--link <link>` | with --all: only the requests made by this invite link. |
+
 ### `max chats folders`
 
 your chat folders
@@ -962,7 +1024,7 @@ max contacts alias rm <person>
 
 ### `max contacts notes`
 
-your private notes on a stored contact, scoped to this account
+your private notes on a stored contact, the same in every account that sees them
 
 #### `max contacts notes list`
 
@@ -1637,8 +1699,12 @@ background fetch jobs
 background fetch jobs, newest first
 
 ```sh
-max store jobs list
+max store jobs list [options]
 ```
+
+| Option | Purpose |
+|---|---|
+| `--state <state>` | only jobs in this state. One of: `running`, `done`, `failed`, `cancelled`, `died`. |
 
 #### `max store jobs show`
 
@@ -1745,7 +1811,7 @@ max store check
 
 ### `max store migrate`
 
-bring the store up to this build's schema, then normalize, index and stem the messages stored before it
+bring the store up to this build's schema, then normalize, index and stem the messages and notes stored before it
 
 ```sh
 max store migrate
@@ -1753,7 +1819,7 @@ max store migrate
 
 ### `max store reindex`
 
-rebuild the word index, its typo vocabulary, the stems and the files' word index from the stored messages; loses no message
+rebuild the word index, its typo vocabulary, the stems, the files' word index and the notes' indexes from what is stored; loses nothing
 
 ```sh
 max store reindex

@@ -1,14 +1,14 @@
 {
   "tg": {
-    "version": "v0.38.0",
-    "roadmapSha256": "21e24e9019734f89f4822ca7030fe471409681bd4282a3371b2ec26cb869ec28",
-    "reviewedAt": "2026-10-08",
-    "conclusion": "Folder rules and retained file transfer have shipped. Multi-photo sending and chat notes remain planned; private person notes are available."
+    "version": "v0.39.1",
+    "roadmapSha256": "f0b7046bb04563dc0f3b4b03047a9b296ce86092f91919669049bcd30dbf6409",
+    "reviewedAt": "2026-10-09",
+    "conclusion": "Poll voters and timed closing, never-expiring invitation updates and job filters have shipped. Latin stems and owner-wide person notes are documented. Several-photo sending, chat notes and the listed MAX parity tasks remain planned."
   },
   "max": {
-    "version": "v0.37.0",
+    "version": "v0.38.1",
     "roadmapSha256": "c13195461dad27b1494ef3d3ec153aa7d9e89fd9fa34dee65af7292934791de0",
-    "reviewedAt": "2026-10-08",
-    "conclusion": "Retained file transfer and account-only chat removal have shipped. Optional local storage, event-triggered actions, video notes, cloud-password actions and installers remain planned."
+    "reviewedAt": "2026-10-09",
+    "conclusion": "Channel join-request list/accept/decline and job-state filters have shipped. Latin stems and owner-wide person notes are documented. The unchanged roadmap still lists optional local storage, event-driven actions, video notes, cloud-password actions and installers."
   }
 }

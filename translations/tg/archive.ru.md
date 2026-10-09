@@ -53,6 +53,7 @@ tg store fetch --all --since-time 365d        # every chat, back to a year ago
 ```sh
 tg store fetch "Book club" --background     # prints the job id
 tg store jobs list                          # background jobs, newest first
+tg store jobs list --state failed           # only failed ones: running, done, failed, cancelled or died
 tg store jobs show                          # the newest job, and what the store now holds of its chat
 tg store jobs show <job>
 tg store jobs cancel <job>                  # stops after the current page; a later fetch resumes
@@ -203,11 +204,7 @@ the message store was written by a newer version (schema N, needs at least M; th
 
 ## Восстановление и обслуживание индексов
 
-`tg store migrate` достраивает незавершённые индексы; `tg store reindex` перестраивает их. `store info` и
-`store check` показывают готовность индексов слов и основ. Строгий поиск использует основы для словоформ; `exact:` и `--exact` выбирают точные формы.
-`tg config set searchStemmers.cyrillic russian` и `searchStemmers.latin spanish` задают алгоритмы определения основ слов общего хранилища
-(`none` отключает один из них, для латиницы также доступен `english`); после этого выполните `store reindex`.
-Настройка влияет на оба мессенджера и все профили; процесс, ограниченный одним профилем, не может её изменить.
+`tg store migrate` достраивает индексы, `tg store reindex` перестраивает их. `store info` и `store check` показывают готовность слов и основ. Строгий поиск учитывает формы слов; `exact:` и `--exact` выбирают точные формы. `tg config set searchStemmers.cyrillic russian` и `searchStemmers.latin english,spanish` задают языки общего архива: для латиницы доступны `english`, `spanish` или оба сразу (по умолчанию), а `none` отключает основы. После собственной настройки выполните `store reindex`. Когда обновление меняет значение по умолчанию, основы перестраиваются автоматически. До готовности поиск использует точные формы и сообщает об этом. `tg serve` достраивает индекс в фоне, `store migrate` — сразу. Настройка общая для обоих мессенджеров и всех профилей; процесс с закреплённым профилем менять её не может.
 
 `tg store repair --dry-run --json` показывает структурное восстановление и откатывает его. `store repair` применяет его без удаления данных: несовпадающие таблицы сохраняются как копии, а оставшиеся в них строки и столбцы перечисляются в ответе. Проверьте сохранённые копии, прежде чем удалять их через `store copies delete <exact name>`; `store repair` называет их в ответе. Перед восстановлением остановите процессы, использующие базу.
 

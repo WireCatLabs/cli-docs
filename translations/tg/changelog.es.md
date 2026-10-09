@@ -4,6 +4,31 @@ title: "Historial de cambios"
 
 Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.39.1 — 08.10.2026
+
+### Corregido
+
+- La biblioteca compartida se fija en 0.205.0, igual que Memo y MAX, para instalación coordinada.
+
+## 0.39.0 — 08.10.2026
+
+### Novedades
+
+- **`tg polls create --close-time 5m`** cierra automáticamente tras el tiempo indicado, de 5 segundos a 10 minutos.
+- **`tg polls voters <chat> <message> [--answer <id>]`** muestra quién votó por qué en encuestas no anónimas. Explica si debes votar primero o el canal oculta votantes.
+- **`tg chats link update --expire-time never`** elimina la caducidad; también permite cambiar el enlace principal.
+- **`tg store jobs list --state <state>`** filtra tareas running, done, failed, cancelled o died.
+
+### Cambios que pueden afectar scripts
+
+- **`tg chats link create` y `update` rechazan combinar `--approval` y `--max-uses`.** Telegram quitaba el límite al activar aprobación; ahora debes elegir.
+- **Se buscan raíces inglesas y españolas juntas.** Antes solo se usaban españolas y las formas inglesas coincidían peor. La actualización reconstruye raíces automáticamente: un archivo pequeño al abrir, uno grande por partes; `tg serve` completa en segundo plano y `tg store migrate` inmediatamente. Hasta completar se buscan formas exactas, se indica en stderr y `query.stemming.applied` es `false`. El índice latino ocupa aproximadamente el doble. Se conserva tu ajuste `searchStemmers.latin`, aplicado por `tg store reindex`. Actualiza max también: una versión antigua no utiliza el índice reconstruido ([archivo](./archive.md#repair-and-index-maintenance)).
+- **Las notas de una persona (`tg contacts notes`) aparecen en todos los perfiles que la ven.** Antes solo en el perfil de creación. Se guardan aparte de mensajes, junto con notas de `memo`. Se combinan notas de varios perfiles; `contacts alias` sigue siendo propio del perfil.
+
+### Corregido
+
+- **`tg polls voters --answer <id>`** identifica la respuesta elegida. Sin `--answer` no indica más votantes si ya se mostraron todos.
+
 ## 0.38.0 — 08.10.2026
 
 ### Novedades

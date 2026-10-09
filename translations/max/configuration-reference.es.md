@@ -163,8 +163,7 @@ max config set defaultProfile work      # какой профиль без пе�
 Los valores se comprueban con el mismo esquema usado para leer, **antes de escribir**: `max config set limit 0` se rechaza y el archivo queda igual. `serve`, `senderColors`, `catchUpMarksRead`, `searchCatchUp` y `mcpTools` no se admiten con `--bot`: los bots no tienen servidor, colores de autores ni estado de no leído, y el antiguo `mcpTools` solo se aplica a cuentas personales.
 
 
-`searchStemmers.cyrillic` (`russian` o `none`) y `searchStemmers.latin` (`spanish`, `english` o
-`none`) se guardan en el archivo compartido de mensajes, no en el archivo de configuración: son comunes a todos los perfiles y a ambos mensajeros. Por ello no admiten `--defaults`, `--personal` ni `--bot`, y no pueden cambiarse bajo `MAX_PROFILE_LOCK`. `config unset` restaura el valor incorporado. Tras cambiarlos, ejecuta `max store reindex`: consulta [Mantenimiento del archivo](./archive.md#обслуживание-архива).
+`searchStemmers.cyrillic` (`russian` o `none`) y `searchStemmers.latin` (`english`, `spanish`, ambos por defecto separados por coma, o `none`) se guardan en el archivo compartido, no en la configuración. Afectan a todos los perfiles y ambos mensajeros. No se aplican `--defaults`, `--personal` ni `--bot`; `MAX_PROFILE_LOCK` impide cambiarlos. `config unset` restablece el valor integrado. Después ejecuta `max store reindex`; consulta [mantenimiento del archivo](./archive.md#обслуживание-архива).
 
 ## Las erratas son errores
 
@@ -285,4 +284,3 @@ Para cada campo, el orden es `MAX_MODELS_<НАЗНАЧЕНИЕ>_PROVIDER`, `_MOD
 
 
 Los siete campos antiguos admiten `MAX_EMBEDDING_PROVIDER`, `MAX_EMBEDDING_MODEL`, `MAX_EMBEDDING_BASE_URL`, `MAX_EMBEDDING_DIMS`, `MAX_ANALYSIS_PROVIDER`, `MAX_ANALYSIS_MODEL` y `MAX_ANALYSIS_BASE_URL`. Prevalecen sobre los valores del archivo. `MAX_MODELS_DEFAULT_PROVIDER`, `MAX_MODELS_DEFAULT_MODEL` y `MAX_MODELS_DEFAULT_BASE_URL` configuran los campos comunes del nuevo formato; sustituye `DEFAULT` por una tarea como `ANALYSIS`. Una variable vacía no sobrescribe ajustes. Un valor inválido devuelve configuration_error.
-

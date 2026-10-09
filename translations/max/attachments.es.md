@@ -147,4 +147,3 @@ La extracción repetida usa el hash del archivo y el destino del modelo; conserv
 El límite de extracción es de 50 MiB por archivo; el texto local se limita a 2 millones de caracteres. El OCR por API admite PDF de hasta 20 páginas e imágenes de hasta 4 MiB y 20 millones de píxeles, sin superar 8000 píxeles por lado. La concurrencia de archivos es de 1–8, con 4 por defecto; las páginas de un mismo archivo se procesan secuencialmente. Por defecto la API procesa hasta 100 archivos; `--limit` admite 1–500. Continúa con el `cursor` devuelto. Una respuesta 429 del proveedor detiene las siguientes llamadas API de esa ejecución, sin reintentos. El comando devuelve estados y enlaces a mensajes, no el texto reconocido completo.
 
 La descarga, extracción y búsqueda se explican con más detalle en [búsqueda](./search.md). Esta descripción corresponde al código de la CLI; que exista un comando no significa que se haya probado cada archivo posible de ese formato con MAX real.
-

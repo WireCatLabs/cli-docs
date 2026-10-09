@@ -4,6 +4,28 @@ title: "Changelog"
 
 Notable changes to `@leemour/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
+## 0.38.1 — 08.10.2026
+
+### What's new
+
+- **`max chats requests list|accept|decline` lists and processes channel join requests.** `--search` filters by name. MAX provides no request time: `requestedAt` is `null`. `--link` and bulk `--all` are unsupported and rejected before the request.
+
+### Fixed
+
+- The shared library is updated to 0.205.0 so MAX, Telegram and Memo use the same archive version. Note schema and links are unchanged.
+
+## 0.38.0 — 08.10.2026
+
+### What's new
+
+- **`max store jobs list --state <состояние>`** shows jobs matching `running`, `done`, `failed`, `cancelled` or `died`.
+
+### Changed — may break scripts
+
+- **Latin words match English and Spanish stems together.** Previously only Spanish, so English forms matched worse. Updates automatically rebuild stems: small stores immediately, larger ones incrementally. `max serve` finishes in the background; `max store migrate` immediately. Until ready, search matches exact forms, reports it on stderr and returns `query.stemming.applied` = `false`. The Latin stem index is about twice as large. Your own `searchStemmers.latin` is retained and applied through `max store reindex`. Update tg too: older versions cannot use the rebuilt stems ([archive](./archive.md#обслуживание-архива)).
+
+- **Person notes (`max contacts notes`) appear in every profile that sees the person.** Before they appeared only in the originating profile. Owner notes are stored separately from messages alongside `memo` notes. Notes from multiple MAX profiles now appear together; aliases (`contacts alias`) remain account-specific.
+
 ## 0.37.0 — 08.10.2026
 
 ### What's new
@@ -669,7 +691,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/leemour/max-cli/blob/v0.37.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/leemour/max-cli/blob/v0.38.1/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).

@@ -158,8 +158,7 @@ max config set defaultProfile work      # какой профиль без пе�
 Values are checked with the same schema used for reading, **before writing**: `max config set limit 0` is refused and the file stays unchanged. `serve`, `senderColors`, `catchUpMarksRead`, `searchCatchUp` and `mcpTools` are not accepted with `--bot`: bots have no server, sender colors or unread state, and legacy `mcpTools` applies only to personal accounts.
 
 
-`searchStemmers.cyrillic` (`russian` or `none`) and `searchStemmers.latin` (`spanish`, `english` or
-`none`) are stored in the shared message archive, not the configuration file: they apply to every profile and both messengers. They therefore reject `--defaults`, `--personal` and `--bot`, and cannot be changed under `MAX_PROFILE_LOCK`. `config unset` restores the built-in value. After changing them, run `max store reindex` — see [Archive maintenance](./archive.md#обслуживание-архива).
+`searchStemmers.cyrillic` (`russian` or `none`) and `searchStemmers.latin` (`english`, `spanish`, both comma-separated by default, or `none`) live in the shared archive, not the configuration file. They apply to every profile and both messengers. `--defaults`, `--personal` and `--bot` do not apply; `MAX_PROFILE_LOCK` prevents changing them. `config unset` restores the built-in default. After changing them, run `max store reindex`; see [archive maintenance](./archive.md#обслуживание-архива).
 
 ## Typos are errors, not ignored settings
 
@@ -280,4 +279,3 @@ For each field, precedence is `MAX_MODELS_<НАЗНАЧЕНИЕ>_PROVIDER`, `_MO
 
 
 The seven legacy fields support `MAX_EMBEDDING_PROVIDER`, `MAX_EMBEDDING_MODEL`, `MAX_EMBEDDING_BASE_URL`, `MAX_EMBEDDING_DIMS`, `MAX_ANALYSIS_PROVIDER`, `MAX_ANALYSIS_MODEL` and `MAX_ANALYSIS_BASE_URL`. They take precedence over file values. `MAX_MODELS_DEFAULT_PROVIDER`, `MAX_MODELS_DEFAULT_MODEL` and `MAX_MODELS_DEFAULT_BASE_URL` set shared fields in the new format; replace `DEFAULT` with a task such as `ANALYSIS`. Empty variables do not override settings. Invalid values return configuration_error.
-

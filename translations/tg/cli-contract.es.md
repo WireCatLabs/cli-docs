@@ -69,8 +69,11 @@ Los desarrolladores tienen [el entorno y las instrucciones de reproducción](htt
 ## Referencias
 
 
-Aplicamos las recomendaciones pertinentes de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) y [Command Line Interface Guidelines](https://clig.dev/), además de [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/leemour/tg-cli/blob/v0.38.0/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/leemour/cli-messaging/blob/main/docs/dev/STANDARD.md) describen el perfil de aplicación y las excepciones intencionadas. No afirmamos una certificación completa por terceros.
+Aplicamos las recomendaciones pertinentes de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) y [Command Line Interface Guidelines](https://clig.dev/), además de [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/leemour/tg-cli/blob/v0.39.1/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/leemour/cli-messaging/blob/main/docs/dev/STANDARD.md) describen el perfil de aplicación y las excepciones intencionadas. No afirmamos una certificación completa por terceros.
 
 
 Consulta la [guía de configuración](./configuration.md) para los ajustes habituales y la [referencia de configuración](./configuration-reference.md) para todas las claves y variables de entorno.
 
+## Nombres ambiguos
+
+Puedes pedir estadísticas por nombre de chat o persona. El agente busca chats con `chats list` y personas con `contacts show`, `contacts list` o autores guardados de `stats contacts top`. Varias coincidencias requieren elegir. Si falla la búsqueda, explica qué dato identificador hace falta. Un nombre sin resolver no prueba que alguien no respondiera. El resultado del ID elegido describe solo el historial disponible.

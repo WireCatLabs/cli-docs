@@ -503,7 +503,7 @@ tg chats link create <chat> [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--approval` | quien quiera entrar con el enlace debe solicitarlo primero y un administrador permite su entrada. |
+| `--approval` | Entrar requiere aprobación; no hay límite de usos. |
 | `--expire-time <time>` | deja de funcionar entonces: 2026-09-25T09:00 (hora local) o dentro de 30m, 2h, 7d. |
 | `--max-uses <n>` | como máximo este número de personas puede entrar con el enlace, de 1 a 99999. |
 
@@ -541,7 +541,7 @@ tg chats link revoke <chat> <link>
 
 #### `tg chats link update`
 
-cambiar uno de tus enlaces adicionales; no se puede cambiar el enlace principal del grupo
+cambiar tu enlace de invitación, incluido el principal
 
 **Changes something in Telegram.**
 
@@ -556,9 +556,9 @@ tg chats link update <chat> <link> [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--approval` | quien quiera entrar con el enlace debe solicitarlo primero y un administrador permite su entrada. |
+| `--approval` | Entrar requiere aprobación; no hay límite de usos. |
 | `--no-approval` | cualquiera con el enlace entra de inmediato. |
-| `--expire-time <time>` | deja de funcionar entonces: 2026-09-25T09:00 (hora local) o dentro de 30m, 2h, 7d. |
+| `--expire-time <time>` | Caducidad: 2026-09-25T09:00 local o 30m, 2h, 7d; `never` la elimina. |
 | `--max-uses <n>` | como máximo este número de personas puede entrar con el enlace, de 1 a 99999. |
 
 
@@ -1022,7 +1022,7 @@ tg contacts alias rm <person>
 
 ### `tg contacts notes`
 
-tus notas privadas sobre un contacto almacenado, limitadas a esta cuenta
+notas privadas del contacto, compartidas por las cuentas que lo ven
 
 #### `tg contacts notes list`
 
@@ -1584,6 +1584,24 @@ tg polls show <chat> <message>
 | `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 | `message` | obligatorio | identificador del mensaje de la encuesta. |
 
+### `tg polls voters`
+
+quién votó por qué, lo más reciente primero; no disponible en encuestas anónimas
+
+```sh
+tg polls voters <chat> <message> [options]
+```
+
+| Argumento | | Significado |
+|---|---|---|
+| `chat` | obligatorio | Chat: nombre, ID o @username. |
+| `message` | obligatorio | ID del mensaje de la encuesta. |
+
+| Opción | Función |
+|---|---|
+| `--answer <id>` | Solo quienes eligieron esta respuesta; ID de `polls show`. |
+| `--limit <n>` | Número de resultados. |
+
 ### `tg polls vote`
 
 vota o retira el voto; es visible salvo en encuestas anónimas
@@ -1647,6 +1665,7 @@ tg polls create <chat> <question> <answers> [options]
 | `--quiz` | cuestionario: una respuesta correcta y voto definitivo. |
 | `--correct <n>` | con --quiz: posición de la respuesta correcta, desde 1. |
 | `--solution <text>` | con --quiz: explicación que se ve tras responder. |
+| `--close-time <delay>` | Cierre automático tras 5s–10m, por ejemplo 90s o 5m. |
 
 ## `tg models`
 
@@ -2087,8 +2106,12 @@ descargas en segundo plano
 descargas en segundo plano, recientes primero
 
 ```sh
-tg store jobs list
+tg store jobs list [options]
 ```
+
+| Opción | Función |
+|---|---|
+| `--state <state>` | Solo tareas `running`, `done`, `failed`, `cancelled` o `died`. |
 
 #### `tg store jobs show`
 
@@ -2193,7 +2216,7 @@ tg store check
 
 ### `tg store migrate`
 
-actualiza el esquema a esta versión y normaliza, indexa y extrae las raíces de los mensajes anteriores
+actualizar el esquema y normalizar e indexar mensajes y notas, incluidas sus raíces
 
 ```sh
 tg store migrate
@@ -2201,7 +2224,7 @@ tg store migrate
 
 ### `tg store reindex`
 
-reconstruye el índice de palabras, su vocabulario de erratas, las raíces y el índice de palabras de los archivos a partir de los mensajes guardados, sin perder mensajes
+reconstruir índices de palabras, erratas, raíces, archivos y notas sin perder datos
 
 ```sh
 tg store reindex

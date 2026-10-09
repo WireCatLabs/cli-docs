@@ -595,6 +595,68 @@ max chats link reset <chat>
 |---|---|---|
 | `chat` | обязательный | a chat: its id, or part of its title. |
 
+### `max chats requests`
+
+заявки на вступление с одобрением администратора
+
+#### `max chats requests list`
+
+кто подал заявку, новое сверху; доступно администраторам, чтение без уведомления
+
+```sh
+max chats requests list <chat> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | Чат: название, ID или @username. |
+
+| Параметр | Что делает |
+|---|---|
+| `--limit <n>` | Количество результатов. |
+| `--search <text>` | Поиск по имени или @username. |
+| `--link <link>` | Фильтр по ссылке-приглашению; MAX не поддерживает. |
+
+#### `max chats requests accept`
+
+принять заявку; вступление видно группе
+
+**Меняет что-то в MAX.**
+
+```sh
+max chats requests accept <chat> [person] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | Чат: название, ID или @username. |
+| `person` | необязательный | ID из `chats requests list`; для MAX нужен конкретный человек. |
+
+| Параметр | Что делает |
+|---|---|
+| `--all` | Все заявки; MAX не поддерживает. |
+| `--link <link>` | Фильтр по ссылке-приглашению; MAX не поддерживает. |
+
+#### `max chats requests decline`
+
+отклонить заявку
+
+**Меняет что-то в MAX.**
+
+```sh
+max chats requests decline <chat> [person] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | Чат: название, ID или @username. |
+| `person` | необязательный | ID из `chats requests list`; для MAX нужен конкретный человек. |
+
+| Параметр | Что делает |
+|---|---|
+| `--all` | Все заявки; MAX не поддерживает. |
+| `--link <link>` | Фильтр по ссылке-приглашению; MAX не поддерживает. |
+
 ### `max chats folders`
 
 your chat folders
@@ -966,7 +1028,7 @@ max contacts alias rm <person>
 
 ### `max contacts notes`
 
-ваши личные заметки о сохранённом контакте, ограниченные этим аккаунтом
+ваши личные заметки о сохранённом контакте, общие для всех аккаунтов, где он виден
 
 #### `max contacts notes list`
 
@@ -1641,8 +1703,12 @@ background fetch jobs
 background fetch jobs, newest first
 
 ```sh
-max store jobs list
+max store jobs list [options]
 ```
+
+| Параметр | Что делает |
+|---|---|
+| `--state <state>` | Только задачи в состоянии `running`, `done`, `failed`, `cancelled` или `died`. |
 
 #### `max store jobs show`
 
@@ -1749,7 +1815,7 @@ max store check
 
 ### `max store migrate`
 
-bring the store up to this build's schema, then normalize, index and stem the messages stored before it
+обновить схему архива, нормализовать сообщения и заметки, построить индексы слов и основ
 
 ```sh
 max store migrate
@@ -1757,7 +1823,7 @@ max store migrate
 
 ### `max store reindex`
 
-rebuild the word index, its typo vocabulary, the stems and the files' word index from the stored messages; loses no message
+перестроить индексы слов, опечаток, основ, файлов и заметок без удаления данных
 
 ```sh
 max store reindex

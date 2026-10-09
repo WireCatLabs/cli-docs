@@ -2,6 +2,8 @@
 title: "ChatGPT o Claude en el navegador"
 ---
 
+Esta guía conecta ChatGPT o Claude en el navegador con tu cuenta de MAX. Obtendrás una dirección HTTPS para MCP con permisos del perfil. Conserva la conexión Tailscale existente: no necesitas otro túnel.
+
 **Estado:** HTTP y los permisos se han comprobado localmente. El propietario confirmó la lectura y el envío mediante Claude web en Telegram el 07/10/2026 con `permissions`; todavía no se han realizado pruebas de navegador independientes para MAX y OpenAI web. Las instrucciones de cada sistema operativo deben probarse en ese sistema. Si un paso falla, [abre una incidencia](https://github.com/leemour/max-cli/issues).
 
 `max mcp` se comunica con la aplicación de IA mediante un canal en tu propio ordenador. ChatGPT y Claude en el navegador no pueden usarlo: se conectan desde sus servidores, por internet, a una dirección que les facilites. `max mcp --http` ofrece las mismas herramientas por HTTP con su propio acceso, y **[Tailscale Funnel](https://tailscale.com/kb/1223/funnel)** proporciona al ordenador una dirección HTTPS pública como `https://laptop.tail1234.ts.net`. No necesitas comprar un dominio.
@@ -87,6 +89,20 @@ max mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.se
 ## MAX y Telegram al mismo tiempo
 
 Cada servidor necesita un puerto local y una dirección HTTPS pública independientes. Por ejemplo, deja Telegram en el puerto local `8765` y el público `443`; inicia otro Funnel con `--https=8443 8766` y MAX con `--port 8766`. Para `--public-url` de MAX y la dirección de su conector terminada en `/mcp`, utiliza el origen del segundo túnel incluido `:8443`. Usa el comando de tu sistema operativo indicado arriba para el segundo Funnel. Los puertos públicos permitidos de Funnel son `443`, `8443` y `10000` ([referencia](https://tailscale.com/docs/reference/tailscale-cli/funnel)).
+
+## Alternativa: Cloudflare Tunnel
+
+Si usas Cloudflare, dirige un túnel con nombre al servidor MCP local. Necesitas cuenta y dominio en Cloudflare para un nombre estable. Sigue la [configuración](https://developers.cloudflare.com/tunnel/get-started/): instala `cloudflared`, crea el túnel, inicia su conector y añade un hostname como `mcp.example.com`. Usa `http://127.0.0.1:8765` como servicio local; MCP funciona en ese ordenador.
+
+Inicia el servidor en otro terminal:
+
+```sh
+max mcp --http --port 8765 --public-url https://mcp.example.com
+```
+
+Añade `https://mcp.example.com/mcp` a la aplicación con OAuth y DCR. `--public-url` es el origen público de acceso, no la dirección local ni `/mcp`. El túnel no cambia permisos. Comprueba el JSON en `https://mcp.example.com/.well-known/oauth-protected-resource/mcp`, acceso y herramientas. Detén solo el proceso dedicado del túnel, conservando otras rutas.
+
+**Límites de Quick Tunnel.** `cloudflared tunnel --url http://127.0.0.1:8765` proporciona un hostname `trycloudflare.com` sin cuenta ni dominio. [Quick Tunnels no admite SSE](https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/), que usa el servidor HTTP MCP. Utiliza Funnel o un túnel con nombre. Al reiniciar Quick Tunnel cambia el hostname y debes actualizar la URL.
 
 ## Permisos durante la ejecución del servidor
 

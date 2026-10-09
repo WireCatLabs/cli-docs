@@ -4,6 +4,28 @@ title: "Historial de cambios"
 
 Cambios destacados de `@leemour/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.38.1 — 08.10.2026
+
+### Novedades
+
+- **`max chats requests list|accept|decline` muestra y procesa solicitudes de canales.** `--search` filtra nombres. MAX no da hora: `requestedAt` es `null`. `--link` y `--all` no se admiten y se rechazan antes de consultar.
+
+### Corregido
+
+- La biblioteca compartida se actualiza a 0.205.0 para que MAX, Telegram y Memo compartan versión del archivo. No cambian el esquema de notas ni los enlaces.
+
+## 0.38.0 — 08.10.2026
+
+### Novedades
+
+- **`max store jobs list --state <состояние>`** muestra tareas `running`, `done`, `failed`, `cancelled` o `died`.
+
+### Cambios que pueden afectar scripts
+
+- **Se buscan raíces inglesas y españolas juntas.** Antes solo españolas, con peores coincidencias inglesas. Las raíces se reconstruyen automáticamente: archivos pequeños al abrir, grandes por partes; `max serve` completa en segundo plano y `max store migrate` inmediatamente. Hasta completar se buscan formas exactas, se indica en stderr y `query.stemming.applied` es `false`. El índice latino ocupa aproximadamente el doble. Se conserva `searchStemmers.latin` propio, aplicado por `max store reindex`. Actualiza tg también: una versión antigua no usa el índice reconstruido ([archivo](./archive.md#обслуживание-архива)).
+
+- **Las notas personales (`max contacts notes`) aparecen en cada perfil que ve a esa persona.** Antes solo en el perfil original. Se guardan aparte de mensajes junto con las notas `memo`. Notas de varios perfiles aparecen juntas; los alias (`contacts alias`) siguen siendo propios de cada cuenta.
+
 ## 0.37.0 — 08.10.2026
 
 ### Novedades
@@ -665,7 +687,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/leemour/max-cli/blob/v0.37.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/leemour/max-cli/blob/v0.38.1/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos prácticos para bots.** `max <имя> bot messages send <чат> <текст>` envía a un chat por número, a una persona como `user:<номер>` o por el título de un chat que el bot ya ha visto; también hay `edit`, `delete`, `list` y `get`. `max <имя> bot chats list` muestra los chats que ha visto el bot; también están `chats get|pin|unpin|leave|action`. `max bot list` muestra todos los nombres con un token de bot.
   Por qué «que ha visto»: MAX no ofrece una lista de chats del bot, por lo que `max` los recuerda por su cuenta.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).

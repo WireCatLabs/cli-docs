@@ -88,7 +88,3 @@ title: "Переход с tgcli"
 | `contacts notes set` | `tg contacts notes add/edit/remove`, несколько заметок на человека, только на этом компьютере |
 | `metadata refresh --only-missing` | `tg metadata refresh --only-missing` |
 | `tags auto`, `metadata refresh` | `tg tags auto`, `tg metadata refresh` |
-
-
-
-

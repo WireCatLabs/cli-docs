@@ -302,7 +302,7 @@ max contacts show "Борис Тестов" --with-notes
 max contacts list --search-notes квартира           # люди, в чьих заметках есть это слово
 ```
 
-Custom names and notes stay in this account’s local copy and are not sent to MAX. `contacts rename` changes a name in the MAX address book; that is a separate operation. Commands can find a person by your custom name unless it matches another person’s name; in that case use an ID. `--revision` protects against editing an outdated note.
+Aliases and notes stay in the local archive and never reach MAX. An alias applies to the chosen account; a person’s note appears in every profile that sees them. `contacts rename` changes the MAX address-book name, a different action. An alias resolves a person unless it matches another name; then use the ID. `--revision` prevents editing a note changed since you read it.
 
 ## Sending
 
@@ -520,7 +520,7 @@ See [Managing groups](./groups.md) for admin workflows, rules and limitations.
 
 ```sh
 max chats inspect https://max.ru/join/…          # что за ссылкой; не вступает
-max chats join https://max.ru/join/…             # вступить в группу или канал
+max chats join https://max.ru/join/…             # вступить; канал с одобрением ответит requested: true
 max chats leave "Семья"                          # выйти
 max chats create "Поход" "Аня" 20000002          # создать группу с людьми (имя или id)
 max chats create "Новости" --channel            # закрытый канал; люди входят по ссылке-приглашению
@@ -535,11 +535,15 @@ max chats show "Поход"                           # настройки гр�
 max chats update "Поход" --all-can-pin off       # поменять одну
 max chats link show "Поход"                      # ссылка-приглашение, если вам её видно
 max chats link reset "Поход"                     # новая ссылка; старая перестаёт работать
+max chats requests list "Канал"                  # кто просится в канал с одобрением; видят только админы
+max chats requests accept "Канал" 20000002        # впустить; decline — отказать
 max chats events "Поход"                         # кто вступил, вышел, кого добавили и удалили — за 7 дней
 max chats events "Поход" --type add,remove --since-time 2026-09-01T00:00
 ```
 
-**Other people see these changes:** joins, departures, additions and new titles. `inspect`, `link show`, `events` and `members list` only read. Changes pass send checks: read-only refuses; recipients restrict destinations; actions are logged without titles or links. `create` and `members add` count one hourly send per person because each receives a message. If recipients are restricted, each person's direct chat must be listed. Failures are not retried: repeating `create` makes another group.
+**Other people see** joining, leaving, adding members and renaming. `inspect`, `link show`, `events`, `members list` and `requests list` only read.
+
+**Join requests** exist in channels with approval enabled, not private groups. `chats join` then sends a request and returns `requested: true`; the channel appears in the list after an admin accepts it. `requests list` shows applicants, without a request time (`requestedAt: null`). MAX rejects bulk `--all` and invite-link filtering `--link`. Changes use the same checks as sending: a read-only profile refuses, recipient restrictions apply and the send journal records the action without titles or links. `create` and `members add` count once per invited person toward the hourly limit. With recipient restrictions, each person’s private chat must be allowed. Operations are not retried automatically; repeating `create` creates another group.
 
 Group changes return `operationId` in JSON. `create`, `join`, `update` and `link reset` put the chat record in `chat`; `leave` returns `chatId`. Adding members returns `{operationId, chatId, added, notAdded}`; removing them returns `{operationId, chatId, removed}`. After a successful MAX response, `notAdded` is empty: MAX does not provide a separate list of partial failures; refusing to add a person returns an error. `admins` commands return `personId`; `admins add` also returns `rights` without duplicates. `link show` retains `{chatId, title, link}`.
 
@@ -733,6 +737,6 @@ max stats charts synthetic-group --chart-kind messages --by day --timezone Europ
 
 JSON contains `chart`; when saving an image, it also contains `chartFile` with its path and size. Images are written only to new files, without overwriting. Missing dates remain gaps; incomplete data is marked in the description and image. `membership` requires online chat events and is unavailable with `--offline`. MCP `max_read` (`command: "stats charts"`) returns JSON from local storage without connecting or writing files; `format: "png"` adds a PNG image and JSON with `chart` and the size of `image`. Joins and leaves are unavailable there. Reading follows `messages` permission. `--jsonl` and images in stdout are unavailable.
 
-![Chart using fictional data](https://raw.githubusercontent.com/leemour/max-cli/v0.37.0/docs/images/stats-charts.png)
+![Chart using fictional data](https://raw.githubusercontent.com/leemour/max-cli/v0.38.1/docs/images/stats-charts.png)
 
 Message and author rankings: [metrics, scores and evidence](./rankings.md).

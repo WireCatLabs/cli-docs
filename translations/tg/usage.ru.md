@@ -385,9 +385,11 @@ tg messages delete me 4242 --allow-dangerous --for-everyone
 tg reactions add "Book club" 4242 👍       # replaces the reaction you had
 tg reactions remove "Book club" 4242
 tg polls show "Book club" 4250             # the poll and its answer ids
+tg polls voters "Book club" 4250 --answer <answer id>   # who chose it; not in an anonymous poll
 tg polls vote "Book club" 4250 <answer id>
 tg polls vote "Book club" 4250 --retract
 tg polls create "Book club" "Which day?" Monday Tuesday --anonymous
+tg polls create "Book club" "Pizza now?" yes no --close-time 5m   # closes by itself; 5s to 10m
 tg polls close "Book club" 4250            # your own poll; it cannot be reopened
 tg polls create "Book club" "2+2?" 3 4 5 --quiz --correct 2 --solution "Four."   # a quiz; a vote is final
 ```
@@ -455,7 +457,8 @@ tg chats update "Hiking 2027" --title "Hiking 2028" --description "routes and da
 tg chats update "Hiking 2027" --all-can-pin off --only-admins-add on
 tg chats link show "Hiking 2027"                   # the invite link, if you may see it
 tg chats link reset "Hiking 2027"                  # a new one; the old one stops working
-tg chats link create "Hiking 2027" --approval --expire-time 7d --max-uses 20   # another link; who joins asks first
+tg chats link create "Hiking 2027" --approval --expire-time 7d   # another link; who joins asks first
+tg chats link create "Hiking 2027" --max-uses 20   # at most 20 people join by it
 tg chats update "Hiking 2027" --join-approval on   # everyone asks first, by any link
 tg chats requests list "Hiking 2027"               # who asked to join, newest first
 tg chats requests list "Hiking 2027" --search Ana  # by name; or --link <link>, never both
@@ -472,7 +475,7 @@ tg chats admins remove "Hiking 2027" @kate
 
 Новая группа всегда создаётся как супергруппа. Если настройки приватности человека не позволяют добавить его, ответ указывает его в `providerMetadata.notAdded`; сама группа всё равно создаётся. `chats join` для группы с одобрением вступления администраторами возвращает `requested: true` и код `0`: заявка отправлена, и вы вступите после одобрения. Каждое действие проходит проверки как изменение `chat`, а каждый добавленный человек учитывается в почасовом лимите.
 
-`chats link create` создаёт дополнительную пригласительную ссылку, никого не уведомляя: `--approval` требует одобрения для вступления по ней, `--expire-time` задаёт срок действия (`2026-12-01T09:00` или через `30m`, `2h`, `7d`), а `--max-uses` допускает не более указанного числа людей. `chats link update` меняет те же три параметра одной своей дополнительной ссылки (`--no-approval` выключает одобрение); пропущенные параметры сохраняются, а основную ссылку группы менять нельзя. `chats update --join-approval on` требует одобрения для всех, независимо от использованной ссылки.
+`chats link create` создаёт дополнительную ссылку без уведомления: `--approval` требует одобрения, `--expire-time` задаёт срок (`2026-12-01T09:00` или `30m`, `2h`, `7d`), `--max-uses` ограничивает число вступлений. `chats link update` меняет эти параметры у ваших ссылок, включая основную ссылку группы; `--no-approval` выключает одобрение, `--expire-time never` убирает срок. Неуказанные параметры сохраняются. Ссылка с одобрением не имеет лимита вступлений: сочетание `--approval` и `--max-uses` отклоняется. `chats update --join-approval on` требует одобрения при вступлении по любой ссылке.
 
 В группе с одобрением вступления `chats requests list` показывает ожидающие заявки вместе с заметкой человека; их видят только администраторы, и чтение никого не уведомляет. `accept` и `decline` обрабатывают одну заявку по ID из списка. Одобренная заявка учитывается в почасовом лимите, отклонённая — нет; список получателей проверяет только группу. Для уже вступившего человека возвращается `already: true`, а исчезнувшая заявка приводит к коду `6`. `--all` обрабатывает все ожидающие заявки, а с `--link` — только пришедшие по одной ссылке; сначала подсчитывается их число, и одобрение сверх почасового лимита отклоняется до вступления кого-либо. `chats link list` показывает только ваши ссылки; отзыв основной ссылки группы заставляет Telegram создать новую, которую показывает ответ.
 

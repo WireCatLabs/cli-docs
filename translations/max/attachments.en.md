@@ -147,4 +147,3 @@ Repeated extraction uses the file hash and model target; good saved text is pres
 The extraction limit is 50 MiB per file; local text is limited to 2 million characters. API OCR accepts PDFs of up to 20 pages and images of up to 4 MiB and 20 million pixels, with neither side exceeding 8000 pixels. File concurrency is 1–8, default 4; pages within a file run sequentially. By default the API processes up to 100 files; `--limit` accepts 1–500. Continue with the returned `cursor`. A provider response of 429 stops further API calls in that run, without retries. The command returns statuses and message links, not full recognized text.
 
 Downloading, extraction and search are covered in more detail in [search](./search.md). This description matches the CLI source code; the existence of a command does not mean every possible file of that format has been tested against live MAX.
-

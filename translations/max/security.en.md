@@ -148,7 +148,7 @@ Each login adds a device to the MAX app's session list. You can end it there.
 
 ## Unofficial protocol
 
-MAX publishes no personal-account API. Protocol knowledge comes from observed live connections or others' reverse engineering; each operation records its source ([`protocol.md`](https://github.com/leemour/max-cli/blob/v0.37.0/docs/dev/protocol.md), “Where it came from” column).
+MAX publishes no personal-account API. Protocol knowledge comes from observed live connections or others' reverse engineering; each operation records its source ([`protocol.md`](https://github.com/leemour/max-cli/blob/v0.38.1/docs/dev/protocol.md), “Where it came from” column).
 
 **This can stop working without warning.** If it does, the command reports it on stderr instead of quietly returning an empty list.
 

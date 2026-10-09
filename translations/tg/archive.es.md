@@ -53,6 +53,7 @@ Una descarga larga puede ejecutarse como una tarea que continúa después de fin
 ```sh
 tg store fetch "Book club" --background     # prints the job id
 tg store jobs list                          # background jobs, newest first
+tg store jobs list --state failed           # only failed ones: running, done, failed, cancelled or died
 tg store jobs show                          # the newest job, and what the store now holds of its chat
 tg store jobs show <job>
 tg store jobs cancel <job>                  # stops after the current page; a later fetch resumes
@@ -203,11 +204,7 @@ Ejecuta `tg upgrade`. No se pierde ningún dato del archivo.
 
 ## Reparación y mantenimiento de índices
 
-`tg store migrate` completa los índices pendientes; `tg store reindex` los reconstruye. `store info` y
-`store check` muestran si los índices de palabras y raíces están listos. La búsqueda estricta usa raíces para las formas de palabras; `exact:` y `--exact` seleccionan formas exactas.
-`tg config set searchStemmers.cyrillic russian` y `searchStemmers.latin spanish` configuran los algoritmos de raíces del almacenamiento compartido
-(`none` desactiva uno; `english` también está disponible para el alfabeto latino); ejecuta `store reindex` después.
-El ajuste afecta a ambos servicios de mensajería y a todos los perfiles; un proceso limitado a un perfil no puede cambiarlo.
+`tg store migrate` completa índices y `tg store reindex` los reconstruye. `store info` y `store check` muestran su estado. La búsqueda estricta usa raíces; `exact:` y `--exact` eligen formas exactas. `tg config set searchStemmers.cyrillic russian` y `searchStemmers.latin english,spanish` configuran los idiomas del archivo compartido: `english`, `spanish` o ambos (por defecto), y `none` desactiva raíces. Tras un ajuste propio ejecuta `store reindex`. Si una actualización cambia el valor predeterminado, las raíces se reconstruyen automáticamente; hasta completarlas se buscan formas exactas y se indica. `tg serve` termina en segundo plano y `store migrate` inmediatamente. Afecta a ambos mensajeros y perfiles; un proceso con perfil bloqueado no puede cambiarlo.
 
 `tg store repair --dry-run --json` muestra una vista previa de la reparación estructural y la deshace. `store repair` la aplica sin eliminar datos: las tablas que no coinciden se conservan como copias, y la respuesta nombra las filas y columnas que quedan en ellas. Revisa las copias conservadas antes de eliminar una con `store copies delete <exact name>`; `store repair` las nombra en su respuesta. Detén los procesos que usan el almacén antes de reparar.
 

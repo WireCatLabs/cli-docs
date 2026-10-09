@@ -386,9 +386,11 @@ Una edición llega a personas que quizá ya leyeron el texto anterior. Un reenv�
 tg reactions add "Book club" 4242 👍       # replaces the reaction you had
 tg reactions remove "Book club" 4242
 tg polls show "Book club" 4250             # the poll and its answer ids
+tg polls voters "Book club" 4250 --answer <answer id>   # who chose it; not in an anonymous poll
 tg polls vote "Book club" 4250 <answer id>
 tg polls vote "Book club" 4250 --retract
 tg polls create "Book club" "Which day?" Monday Tuesday --anonymous
+tg polls create "Book club" "Pizza now?" yes no --close-time 5m   # closes by itself; 5s to 10m
 tg polls close "Book club" 4250            # your own poll; it cannot be reopened
 tg polls create "Book club" "2+2?" 3 4 5 --quiz --correct 2 --solution "Four."   # a quiz; a vote is final
 ```
@@ -456,7 +458,8 @@ tg chats update "Hiking 2027" --title "Hiking 2028" --description "routes and da
 tg chats update "Hiking 2027" --all-can-pin off --only-admins-add on
 tg chats link show "Hiking 2027"                   # the invite link, if you may see it
 tg chats link reset "Hiking 2027"                  # a new one; the old one stops working
-tg chats link create "Hiking 2027" --approval --expire-time 7d --max-uses 20   # another link; who joins asks first
+tg chats link create "Hiking 2027" --approval --expire-time 7d   # another link; who joins asks first
+tg chats link create "Hiking 2027" --max-uses 20   # at most 20 people join by it
 tg chats update "Hiking 2027" --join-approval on   # everyone asks first, by any link
 tg chats requests list "Hiking 2027"               # who asked to join, newest first
 tg chats requests list "Hiking 2027" --search Ana  # by name; or --link <link>, never both
@@ -473,7 +476,7 @@ tg chats admins remove "Hiking 2027" @kate
 
 Un grupo nuevo siempre es un supergrupo. Si los ajustes de privacidad de alguien impiden añadirlo, aparece en la respuesta en `providerMetadata.notAdded`; el grupo se crea igualmente. `chats join` en un grupo donde los administradores aprueban las entradas devuelve `requested: true` y termina con el código `0`: la solicitud se ha enviado y entrarás cuando la acepten. Cada acción pasa por las comprobaciones como un cambio de `chat`, y cada persona añadida cuenta para el límite por hora.
 
-`chats link create` crea otro enlace de invitación sin avisar a nadie: `--approval` exige aprobación para entrar por él, `--expire-time` fija su caducidad (`2026-12-01T09:00`, o dentro de `30m`, `2h`, `7d`) y `--max-uses` permite entrar como máximo a ese número de personas. `chats link update` cambia esos mismos tres parámetros de un enlace adicional propio (`--no-approval` desactiva la aprobación); lo omitido queda igual y el enlace principal del grupo no puede cambiarse. `chats update --join-approval on` exige aprobación para todos, sea cual sea el enlace utilizado.
+`chats link create` crea otro enlace sin avisar: `--approval` exige aprobación, `--expire-time` fija caducidad (`2026-12-01T09:00`, `30m`, `2h`, `7d`) y `--max-uses` limita entradas. `chats link update` cambia estos ajustes en tus enlaces, incluido el principal; `--no-approval` desactiva aprobación y `--expire-time never` elimina caducidad. Lo omitido no cambia. Un enlace con aprobación no tiene límite de usos: se rechaza combinar `--approval` y `--max-uses`. `chats update --join-approval on` exige aprobación con cualquier enlace.
 
 En un grupo con aprobación de entradas, `chats requests list` muestra las solicitudes pendientes con la nota enviada por cada persona; solo las ven los administradores, y leerlas no avisa a nadie. `accept` y `decline` resuelven una por el ID de la lista. Una solicitud aceptada cuenta para el límite por hora; una rechazada, no. La lista de destinatarios solo comprueba el grupo. Si alguien ya es miembro, se devuelve `already: true`; una solicitud que ya no existe termina con el código `6`. `--all` resuelve todas las pendientes o, con `--link`, las de un enlace; primero se cuentan y, si aceptarlas superaría el límite por hora, se rechaza antes de admitir a nadie. `chats link list` muestra solo tus enlaces; al revocar el enlace principal del grupo, Telegram genera uno nuevo que aparece en la respuesta.
 

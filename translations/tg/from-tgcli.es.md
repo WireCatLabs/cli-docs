@@ -88,7 +88,3 @@ Todos los comandos aceptan `--json` ([cli-contract.md](./cli-contract.md)).
 | `contacts notes set` | `tg contacts notes add/edit/remove`, varias notas por persona, en este ordenador solamente |
 | `metadata refresh --only-missing` | `tg metadata refresh --only-missing` |
 | `tags auto`, `metadata refresh` | `tg tags auto`, `tg metadata refresh` |
-
-
-
-

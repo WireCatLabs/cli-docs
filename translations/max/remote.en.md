@@ -2,6 +2,8 @@
 title: "ChatGPT or Claude in a browser"
 ---
 
+This page connects a browser ChatGPT or Claude agent to your MAX account. You will obtain an HTTPS MCP address controlled by profile permissions. Keep a working Tailscale connection; no second tunnel is needed.
+
 **Status:** HTTP and permissions have been checked locally. The owner confirmed reading and sending through Claude web in Telegram on 07 October 2026 using `permissions`; MAX and OpenAI web have not yet had separate browser tests. Each OS’s instructions need testing on that OS. If a step fails, [open an issue](https://github.com/leemour/max-cli/issues).
 
 `max mcp` communicates with an AI app over a channel on your own computer. Browser-based ChatGPT and Claude cannot use it directly: their servers connect over the internet to an address you provide. `max mcp --http` serves the same tools over HTTP with its own login, and **[Tailscale Funnel](https://tailscale.com/kb/1223/funnel)** gives your computer a public HTTPS address such as `https://laptop.tail1234.ts.net`. You do not need to buy a domain.
@@ -87,6 +89,20 @@ max mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.se
 ## MAX and Telegram at the same time
 
 Each server needs a separate local port and public HTTPS address. For example, keep Telegram on local `8765` and public `443`; start a second Funnel with `--https=8443 8766` and MAX with `--port 8766`. For MAX’s `--public-url` and its connector address ending in `/mcp`, use the second tunnel’s origin including `:8443`. Use your OS’s command above for the second Funnel. Allowed public Funnel ports are `443`, `8443` and `10000` ([reference](https://tailscale.com/docs/reference/tailscale-cli/funnel)).
+
+## Alternative: Cloudflare Tunnel
+
+If you use Cloudflare, route a named tunnel to the local MCP server. A stable hostname requires a Cloudflare account and a domain on Cloudflare. Follow the [named tunnel setup](https://developers.cloudflare.com/tunnel/get-started/): install `cloudflared`, create a tunnel in the dashboard, start its connector and add a hostname such as `mcp.example.com`. Set the local service to `http://127.0.0.1:8765`; run MCP on that computer.
+
+Start the server in a second terminal:
+
+```sh
+max mcp --http --port 8765 --public-url https://mcp.example.com
+```
+
+Add `https://mcp.example.com/mcp` to your AI app with OAuth and DCR. `--public-url` is the public origin for sign-in, not the local address or `/mcp` path. The tunnel does not change permissions. Check JSON at `https://mcp.example.com/.well-known/oauth-protected-resource/mcp`, then sign-in and tool discovery. Stop only the dedicated tunnel process, leaving other routes intact.
+
+**Quick Tunnel constraints.** `cloudflared tunnel --url http://127.0.0.1:8765` provides a random `trycloudflare.com` hostname without a domain or account. [Quick Tunnels do not support SSE](https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/), which the HTTP MCP server uses. Use Funnel or a named tunnel for this server. Restarting a Quick Tunnel changes its hostname, requiring a new connector URL.
 
 ## Permissions for the server’s lifetime
 

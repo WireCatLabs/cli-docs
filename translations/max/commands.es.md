@@ -595,6 +595,68 @@ max chats link reset <chat>
 |---|---|---|
 | `chat` | obligatorio | a chat: its id, or part of its title. |
 
+### `max chats requests`
+
+solicitudes de entrada con aprobación administrativa
+
+#### `max chats requests list`
+
+quién solicitó entrar, lo reciente primero; solo administradores, sin notificaciones
+
+```sh
+max chats requests list <chat> [options]
+```
+
+| Argumento | | Significado |
+|---|---|---|
+| `chat` | obligatorio | Chat: nombre, ID o @username. |
+
+| Opción | Función |
+|---|---|
+| `--limit <n>` | Número de resultados. |
+| `--search <text>` | Buscar por nombre o @username. |
+| `--link <link>` | Filtro por enlace de invitación; MAX no lo admite. |
+
+#### `max chats requests accept`
+
+aceptar; el grupo ve la entrada
+
+**Cambia algo en MAX.**
+
+```sh
+max chats requests accept <chat> [person] [options]
+```
+
+| Argumento | | Significado |
+|---|---|---|
+| `chat` | obligatorio | Chat: nombre, ID o @username. |
+| `person` | opcional | ID de `chats requests list`; en MAX elige una persona concreta. |
+
+| Opción | Función |
+|---|---|
+| `--all` | Todas las solicitudes; MAX no lo admite. |
+| `--link <link>` | Filtro por enlace de invitación; MAX no lo admite. |
+
+#### `max chats requests decline`
+
+rechazar la solicitud
+
+**Cambia algo en MAX.**
+
+```sh
+max chats requests decline <chat> [person] [options]
+```
+
+| Argumento | | Significado |
+|---|---|---|
+| `chat` | obligatorio | Chat: nombre, ID o @username. |
+| `person` | opcional | ID de `chats requests list`; en MAX elige una persona concreta. |
+
+| Opción | Función |
+|---|---|
+| `--all` | Todas las solicitudes; MAX no lo admite. |
+| `--link <link>` | Filtro por enlace de invitación; MAX no lo admite. |
+
 ### `max chats folders`
 
 your chat folders
@@ -966,7 +1028,7 @@ max contacts alias rm <person>
 
 ### `max contacts notes`
 
-tus notas privadas sobre un contacto almacenado, limitadas a esta cuenta
+notas privadas del contacto, compartidas por las cuentas que lo ven
 
 #### `max contacts notes list`
 
@@ -1641,8 +1703,12 @@ background fetch jobs
 background fetch jobs, newest first
 
 ```sh
-max store jobs list
+max store jobs list [options]
 ```
+
+| Opción | Función |
+|---|---|
+| `--state <state>` | Solo tareas `running`, `done`, `failed`, `cancelled` o `died`. |
 
 #### `max store jobs show`
 
@@ -1749,7 +1815,7 @@ max store check
 
 ### `max store migrate`
 
-bring the store up to this build's schema, then normalize, index and stem the messages stored before it
+actualizar el esquema y normalizar e indexar mensajes y notas, incluidas sus raíces
 
 ```sh
 max store migrate
@@ -1757,7 +1823,7 @@ max store migrate
 
 ### `max store reindex`
 
-rebuild the word index, its typo vocabulary, the stems and the files' word index from the stored messages; loses no message
+reconstruir índices de palabras, erratas, raíces, archivos y notas sin perder datos
 
 ```sh
 max store reindex

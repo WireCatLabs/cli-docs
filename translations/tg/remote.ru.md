@@ -2,6 +2,8 @@
 title: "ChatGPT, Codex или Claude в браузере"
 ---
 
+Эта страница помогает подключить ChatGPT или Claude в браузере к вашему Telegram. Вы получите адрес HTTPS для MCP с доступом по правам профиля. Существующее подключение Tailscale можно сохранить: второй туннель не нужен.
+
 `tg mcp --http` предоставляет те же инструменты на `127.0.0.1` через ваш HTTPS-туннель. У HTTP-сервера есть собственный вход OAuth для одного владельца; отдельный прокси для аутентификации не нужен. Локальное подключение через stdin/stdout работает как раньше. Владелец подтвердил чтение и отправку через Claude web 7 октября 2026 года. Веб-клиенты OpenAI и эти инструкции настройки для разных платформ ещё требуют сквозной проверки на каждой платформе.
 
 ## Запустите туннель и сервер
@@ -60,6 +62,20 @@ printf 'Paste the HTTPS origin printed by Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
 tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
 ```
+
+## Вместо Tailscale: Cloudflare Tunnel
+
+Если вы используете Cloudflare, направьте именованный туннель к локальному MCP-серверу. Для постоянного адреса нужны аккаунт и домен в Cloudflare. По [инструкции](https://developers.cloudflare.com/tunnel/get-started/) установите `cloudflared`, создайте туннель в панели, запустите соединение и добавьте адрес вроде `mcp.example.com`. Локальный сервис — `http://127.0.0.1:8765`; MCP работает на том же компьютере.
+
+Во втором терминале запустите сервер:
+
+```sh
+tg mcp --http --port 8765 --public-url https://mcp.example.com
+```
+
+Добавьте `https://mcp.example.com/mcp` в AI-приложение с OAuth и DCR. `--public-url` — публичный адрес для входа, а не локальный адрес или путь `/mcp`. Права профиля не меняются. Проверьте JSON по адресу `https://mcp.example.com/.well-known/oauth-protected-resource/mcp`, затем вход и инструменты. Останавливайте только выделенный процесс туннеля, сохраняя остальные маршруты.
+
+**Ограничения Quick Tunnel.** `cloudflared tunnel --url http://127.0.0.1:8765` выдаёт случайный адрес `trycloudflare.com` без аккаунта и домена. [Quick Tunnels не поддерживают SSE](https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/), используемый HTTP MCP. Для этого сервера используйте Funnel или именованный туннель. После перезапуска Quick Tunnel меняется адрес и нужно обновить URL подключения.
 
 ## Запустить MAX и Telegram вместе
 

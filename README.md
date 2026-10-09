@@ -109,7 +109,7 @@ Russian and Spanish pages label that section explicitly and mark it `lang="en"`;
 installation steps and surrounding reference remain localized. This is recorded in the reviewed
 portal corrections after source-preservation validation.
 
-Current reviewed releases: **tg v0.35.0** and **max v0.34.0**, in English, Russian and Spanish.
+Current reviewed releases: **tg v0.39.1** and **max v0.38.1**, in English, Russian and Spanish.
 The [October 8 guide review](docs/reviews/2026-10-08-reviewed-tool-guides.md) records the source boundary, translation review and retained errata.
 
 ### Keeping published documentation current

@@ -127,4 +127,3 @@ Una API puede cobrar tanto por imágenes como por texto de entrada y salida. Con
 | Límite de frecuencia | Esperar el tiempo indicado por el proveedor e iniciar otra ejecución; tras un 429 cesan las nuevas llamadas OCR de la ejecución actual |
 
 Los resultados correctos del OCR se guardan para buscar; la extracción repetida usa el hash del archivo y el destino del modelo elegido. Los errores no borran el texto válido guardado anteriormente ni sobrescriben el texto del agente. Los formatos, dependencias y límites se explican en la [guía de adjuntos](./attachments.md).
-

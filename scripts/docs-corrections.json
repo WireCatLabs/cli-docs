@@ -1157,5 +1157,52 @@
         }
       ]
     }
+  },
+  {
+    "tool": "max",
+    "slug": "remote",
+    "reason": "Public instructions retain the concrete Quick Tunnel limitation and omit isolated-test provenance.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "В изолированном тесте использовался дополнительный адаптер ответов SSE в JSON; он не входит\nв CLI. Проверка OAuth и списка инструментов не доказывает чтение PDF агентом.\n",
+          "after": ""
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "remote",
+    "reason": "Public instructions retain the concrete Quick Tunnel limitation and omit isolated-test provenance.",
+    "replacements": {
+      "en": [
+        {
+          "before": "An isolated test used an additional adapter to turn SSE responses into JSON; that adapter\nis not shipped in the CLI. OAuth and tool-discovery checks do not prove that an agent can read PDFs.\n",
+          "after": ""
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "commands",
+    "reason": "Shared CLI schemas list legacy bulk/link flags; MAX rejects them. Describe current provider constraints without changing the schema.",
+    "replacements": {
+      "en": [
+        {
+          "before": "#### `max chats requests list`\n\nwho asked to join, newest first; only admins see them, and reading tells nobody\n\n```sh\nmax chats requests list <chat> [options]\n```\n\n| Argument | | Meaning |\n|---|---|---|\n| `chat` | required | a chat: its id, or part of its title. |\n\n| Option | Purpose |\n|---|---|\n| `--limit <n>` | how many. |\n| `--search <text>` | only people whose name or @username has this. |\n| `--link <link>` | only people who asked through this invite link; not with --search. |\n",
+          "after": "#### `max chats requests list`\n\nwho asked to join, newest first; only admins see them, and reading tells nobody\n\n```sh\nmax chats requests list <chat> [options]\n```\n\n| Argument | | Meaning |\n|---|---|---|\n| `chat` | required | a chat: its id, or part of its title. |\n\n| Option | Purpose |\n|---|---|\n| `--limit <n>` | how many. |\n| `--search <text>` | only people whose name or @username has this. |\n| `--link <link>` | not supported by MAX; rejected before the request. |\n"
+        },
+        {
+          "before": "#### `max chats requests accept`\n\nlet them in; the group sees them join\n\n**Changes something in MAX.**\n\n```sh\nmax chats requests accept <chat> [person] [options]\n```\n\n| Argument | | Meaning |\n|---|---|---|\n| `chat` | required | a chat: its id, or part of its title. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | Purpose |\n|---|---|\n| `--all` | every pending request, counted against the hourly limit first. |\n| `--link <link>` | with --all: only the requests made by this invite link. |\n",
+          "after": "#### `max chats requests accept`\n\nlet them in; the group sees them join\n\n**Changes something in MAX.**\n\n```sh\nmax chats requests accept <chat> [person] [options]\n```\n\n| Argument | | Meaning |\n|---|---|---|\n| `chat` | required | a chat: its id, or part of its title. |\n| `person` | optional | an id from `chats requests list`; MAX requires a specific person. |\n\n| Option | Purpose |\n|---|---|\n| `--all` | not supported by MAX; select one person instead. |\n| `--link <link>` | not supported by MAX; rejected before the request. |\n"
+        },
+        {
+          "before": "#### `max chats requests decline`\n\nturn the request away\n\n**Changes something in MAX.**\n\n```sh\nmax chats requests decline <chat> [person] [options]\n```\n\n| Argument | | Meaning |\n|---|---|---|\n| `chat` | required | a chat: its id, or part of its title. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | Purpose |\n|---|---|\n| `--all` | every pending request, counted against the hourly limit first. |\n| `--link <link>` | with --all: only the requests made by this invite link. |\n\n### `max chats folders`\n\nyour chat folders\n",
+          "after": "#### `max chats requests decline`\n\nturn the request away\n\n**Changes something in MAX.**\n\n```sh\nmax chats requests decline <chat> [person] [options]\n```\n\n| Argument | | Meaning |\n|---|---|---|\n| `chat` | required | a chat: its id, or part of its title. |\n| `person` | optional | an id from `chats requests list`; MAX requires a specific person. |\n\n| Option | Purpose |\n|---|---|\n| `--all` | not supported by MAX; select one person instead. |\n| `--link <link>` | not supported by MAX; rejected before the request. |\n\n### `max chats folders`\n\nyour chat folders\n"
+        }
+      ]
+    }
   }
 ]
