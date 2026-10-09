@@ -3,7 +3,7 @@ import { llms, loader } from "fumadocs-core/source"
 import { metaSchema, pageSchema } from "fumadocs-core/source/schema"
 import { applyMdxPreset } from "fumadocs-mdx/config"
 import { defineDocs } from "fumadocs-mdx/macro"
-import { expandDocTerms } from "./doc-terms-markdown"
+import { dedentDocComponents, expandDocTerms } from "./doc-terms-markdown"
 import { guideOrientation, guideStartLink } from "./guide-orientation"
 import { i18n } from "./i18n"
 import { installationMarkdown } from "./installation-markdown"
@@ -64,7 +64,7 @@ export const docsLlms = llms(source, {
       /<MeetingGuide\b/.test(raw) ||
       (page.slugs.length === 1 && ["installation", "memo", "email"].includes(page.slugs[0]))
         ? raw
-        : await page.data.getText("processed")
+        : dedentDocComponents(await page.data.getText("processed"))
     const body =
       readerGuideMarkdown(page.slugs, page.locale ?? i18n.defaultLanguage) +
       (!readerGuideMarkdown(page.slugs, page.locale ?? i18n.defaultLanguage) &&
