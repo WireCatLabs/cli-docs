@@ -19,8 +19,8 @@ ficticios y no hace falta conectar una cuenta. La petición siguiente aparece de
 
 ## Obtén el resumen de la reunión
 
-Para probarlo con tus chats, copia una petición adecuada en tu [agente](./agents.mdx) con una
-[cuenta conectada](./installation.mdx). Revisará la conversación y preparará una respuesta.
+Para preparar un resumen de tus chats, copia una petición adecuada a tu agente. Revisará los
+mensajes y preparará una respuesta.
 Si falta historial, pide que descargue el periodo pertinente: [Telegram](./tg/archive.md)
 o [MAX](./max/archive.md).
 
@@ -132,7 +132,7 @@ el historial. Abre los mensajes de alrededor con `messages context` usando los l
 y localizadores: [comandos de Telegram](./tg/commands.md) y [comandos de MAX](./max/commands.md).
 
 Tu historial guardado se queda en tu ordenador, pero el texto que recibe un agente de IA sigue la
-configuración de ese agente y su modelo. Consulta [seguridad](./security.mdx) y
+configuración de ese agente. Consulta [seguridad](./security.mdx) y
 [conexión del agente](./agents.mdx).
 
 ## Reproducibilidad y límites
@@ -140,7 +140,7 @@ configuración de ese agente y su modelo. Consulta [seguridad](./security.mdx) y
 Los mensajes y el script están versionados con el sitio, y un test automático comprueba la salida
 del script. Anota el commit del repositorio al repetirlo. El ejemplo demuestra coincidencias de
 consulta y una ventana de contexto limitada, no un historial completo, una prueba de rendimiento de
-la herramienta de línea de comandos en vivo ni la precisión de un modelo de IA. Este recorrido no
+la herramienta de línea de comandos en vivo ni la precisión de las respuestas de un agente. Este recorrido no
 envía nada.
 
 ## Reproducir con código (opcional)

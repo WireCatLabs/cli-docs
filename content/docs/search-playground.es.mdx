@@ -1,13 +1,24 @@
 ---
 title: Prueba la búsqueda de mensajes
-description: Aprende los campos de búsqueda y la sintaxis Lucene con un archivo ficticio de mensajes.
+description: Encuentra mensajes, decisiones, archivos y enlaces entre tus chats; practica los filtros y comprueba el contexto.
 ---
 
-Prueba la búsqueda antes de conectar tu cuenta. Crea una consulta en 50 mensajes ficticios de Telegram/MAX repartidos entre 6 chats y abre un resultado para leer la conversación y comprobar su fuente. La demo funciona en tu dispositivo sin conectarse a ninguna cuenta.
+La búsqueda te ayuda a encontrar información entre tus chats sin recorrer cada chat. Busca un mensaje que recuerdas, una decisión, un plazo, un archivo o un enlace y reduce los resultados por palabras, persona, chat, fecha o tipo de adjunto. Abre una coincidencia para leer los mensajes que la rodean y comprobar en qué se basa una respuesta.
 
-1. Elige un filtro de chat o de tipo de mensaje, por ejemplo mensajes con enlaces.
-2. Abre una coincidencia y su contexto cercano.
-3. Cambia un filtro y compara los resultados.
+Puedes usar la búsqueda para:
+
+- Encontrar un acuerdo, un plazo o una novedad sobre un proyecto.
+- Localizar un archivo, una foto, una nota de voz o un enlace compartido.
+- Encontrar lo que dijo una persona, o limitar la búsqueda a un chat o un periodo.
+- Comprobar el mensaje original y su contexto antes de confiar en un resumen.
+
+## Prueba con mensajes de ejemplo
+
+Practica cómo combinar filtros y comprobar fuentes antes de conectar una cuenta. Esta demo contiene 50 mensajes ficticios en 6 chats, funciona en tu dispositivo y nunca se conecta a un servicio de mensajería. Los mensajes del ejemplo están en inglés: prueba `invoice`, `budget` o `coffee`.
+
+1. Empieza con una palabra o elige un filtro.
+2. Reduce los resultados por persona, chat, fecha o tipo de adjunto.
+3. Abre una coincidencia para leer su contexto, cambia un filtro y compara los resultados.
 
 Las fechas abarcan cinco días, desde anteayer hasta pasado mañana, en UTC. Escribe un campo como `has:` o `in:` para ver sus valores. Pulsa Espacio después de una palabra o un filtro completo para ver campos y operadores. Usa ↑ / ↓ y Enter para insertar una sugerencia, o Esc para cerrar la lista. Borra la consulta o elige **Todos** para explorar todos los mensajes.
 
@@ -23,9 +34,12 @@ La sintaxis Lucene combina palabras con campos y operadores lógicos. Empieza co
 | `Atlas AND (invoice OR budget)` | Mensajes sobre Atlas con invoice o budget. |
 | `invoice NOT has:file` | Mensajes con invoice sin un archivo adjunto. |
 | `"final invoice"` | Las palabras juntas, en ese orden. |
-| `invo*` | Palabras que empiezan por `invo`, como invoice. `?` sustituye un carácter. |
+| `text:cof*` | Palabras que empiezan por `cof`, incluida coffee. |
+| `text:*off*` | Palabras que contienen `off`, como coffee u office. `?` sustituye un carácter. |
 | `chat:"Client studio" AND from:Mia` | Mensajes de Mia en Client studio. Usa comillas para nombres con espacios. |
-| `in:max AND has:voice` | Mensajes de MAX con una nota de voz. Usa `in:telegram` para Telegram. |
+| `in:max AND has:voice` | Notas de voz de un servicio de mensajería elegido. Elige uno entre las sugerencias de `in:`. |
+
+`text:coffee` encuentra la palabra coffee. `text:cof` busca la palabra completa cof, por lo que no encuentra coffee; añade `*` si solo recuerdas parte de una palabra.
 
 `has:` también ofrece `attachment`, `link`, `file`, `photo`, `image`, `video`, `audio`, `sticker`, `contact`, `location` y `poll`. `has:attachment` incluye medios adjuntos; `has:link` encuentra enlaces en el texto. Puedes combinarlos: `(has:file OR has:link) AND text:budget`.
 

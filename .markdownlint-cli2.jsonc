@@ -9,6 +9,13 @@
     "MD040": true,
     "MD042": true
   },
-  "globs": ["content/docs/*.{md,mdx}", "docs/AUTHORING.md", "docs/README.md", "docs/STRUCTURE.md"],
+  "globs": [
+    "content/docs/*.{md,mdx}",
+    "docs/AUTHORING.md",
+    "docs/README.md",
+    "docs/STRUCTURE.md",
+    "docs/TERMINOLOGY.md",
+    "docs/REVIEWING.md"
+  ],
   "ignores": ["content/docs/*/", "node_modules", ".docs-tooling"]
 }

@@ -1,84 +1,57 @@
 ---
 title: "Drafts and templates"
-description: "Let your agent prepare replies you approve one by one, or write auto-reply templates that answer people you allow."
+description: "Review replies in your messaging app and use templates for auto-replies with audience controls."
 ---
 
-This page is about two ways to answer messages with help: a draft your agent prepares for you, and
-a template that answers by itself. Use it when you want help with replies and need to decide how
-much to hand over. By the end, you will be able to ask for drafts you approve one by one, and write
-an auto-reply template with your own text and, if you want, a part written by a model.
+You can use drafts in two ways: review and send them yourself in your messaging app, or ask your agent to send text you have approved. Use a template when an auto-reply rule should answer for you. A draft lets you decide about one message; a template gives a rule reusable reply text.
 
-Two terms matter here:
-
-- **A draft** is a reply your agent writes and shows you. Nothing is sent until you approve the
-  exact text and the chat it goes to.
-- **A template** is the text of an auto-reply rule. The background server (`tg serve` or
-  `max serve`) fills it in and sends it on its own, without asking you, but only to people you
-  allow and only after you turn sending on. Templates use Liquid, a small language for text with
-  placeholders such as a sender's name.
+- **A draft** is an unsent reply you can review and edit. The main workflow below puts the text in the messaging app's message box so you can check the chat and send it yourself.
+- **A template** is reusable text for an auto-reply rule. The background server fills it in when the rule matches. Its audience, sending permissions and limits control whether a reply is sent. Liquid provides placeholders such as a sender's name.
 
 | | Draft | Template |
 |---|---|---|
-| Who writes the text | your agent, for this one message | you, once, for many messages |
-| When it is sent | after you approve that exact text and chat | when a rule matches, with nobody to ask |
-| Who receives it | the chat you approve | only people you allow |
-| Where you set it up | a request to your agent | an auto-reply rule in your profile |
+| Who writes the text | your agent prepares a reply; you can edit it | you write reusable text, with an optional part written by an AI agent |
+| Who decides to send | you, for this message and chat | the rule, within its audience, permissions and limits |
+| Where you review it | the message box in your messaging app, or your agent chat | the rule's template and its test results |
 
-## Drafts: the agent writes, you approve
+<a id="drafts-the-agent-writes-you-approve" />
 
-You need a [connected account](./installation.mdx) and an [agent](./agents.mdx). The agent reads
-the conversation, writes a reply and shows it to you. An agent connected through [MCP](./mcp.mdx)
-is told that a draft, or "we should reply", is not a request to send: it may send only the exact text
-you asked for, in the exact chat. For any agent, what actually stops a send is the profile's
-[permissions](./permissions.mdx): a refusal, such as a read-only profile or a recipient that is not
-allowed, is final.
+## Review drafts in your messaging app
 
-The examples use Telegram. For MAX, write "Use max CLI" instead of "Use tg CLI".
+1. Ask your agent to prepare a reply and return the chat name and message text.
+2. Open that chat in your messaging app and paste the text into its message box.
+3. Check the recipient and wording, edit the text if needed, and press Send yourself when it is ready.
 
-Reply in one chat:
+The current personal-account tools can prepare reply text through your agent, but they do not save it directly into the messaging app's draft field. You copy and paste it yourself. Ask for text to review, rather than asking the agent to send it or claiming a draft has already appeared in the app.
 
 ```text prompt
-Use tg CLI. Read the recent messages in my chat with Anna and draft a reply to her last question.
-Keep it short and use only facts from our conversation. Show me the draft; don't send it.
+Use tg CLI. Read the recent messages in my chat with Anna and prepare a short reply to her last question. Use only facts from our chat. Return the chat name and reply text so I can paste it into the messaging app and review it there. Send nothing and mark nothing as read.
 ```
 
-Answer questions that are still waiting for you:
+Use the name of your messenger tool in the request; for example, use "Use max CLI" for MAX.
 
-```text prompt
-Use tg CLI. List the questions people asked me this week that I have not answered, oldest first.
-For each one, show the chat and the message, and draft a short answer. Send nothing and mark
-nothing as read.
-```
+### Have your agent send an approved draft
 
-Remind people of what they promised:
-
-```text prompt
-Use tg CLI. Review my chats since Monday: what I owe, what others owe me and what needs clarifying.
-Draft at most five reminders, each with its chat and text. Show them to me; send none.
-```
-
-When a draft is right, approve it with the exact text and recipient, for example "Send exactly that
-draft to Anna's direct chat." If you change the wording, give the full final text. Your
-[permissions](./permissions.mdx) still apply: a profile can require confirmation or forbid sending,
-and a request does not bypass that. More examples are in
-[how to phrase requests](./prompting.mdx#draft-a-reply-then-decide-whether-to-send).
-
-If your AI app is connected through [MCP](./mcp.mdx), the tool also offers ready-made prompts for
-replying in a chat and for reviewing commitments. They follow the same rule: drafts first, a send
-only after you approve.
+If you prefer to finish in your agent chat, review the proposed text there and approve the exact text and recipient: "Send exactly that reply to Anna's direct chat." Give the full final text if you edited it. The profile's [sending permissions](./permissions.mdx) still apply. See [more requests for preparing replies](./prompting.mdx#draft-a-reply-then-decide-whether-to-send).
 
 ## Templates: rules that answer by themselves
 
 An auto-reply rule says when to answer, for example outside working hours, and its template says
 what to send. Before any reply goes out:
 
-- the sender must be among the people you allow to receive auto-replies;
+- the rule's audience must permit the sender. [Choose who may receive auto-replies](#choose-who-may-receive-auto-replies) before enabling the rule;
 - sending must be allowed in the profile's [permissions](./permissions.mdx) with
   `permissions.replies.send allow`; `ask` counts as no, because the background server has nobody
   to ask;
 - every rule has a limit per chat and per person, such as one reply per chat in 12 hours.
 
 `replies test` shows what the rules would have answered in your saved messages. It sends nothing.
+
+### Choose who may receive auto-replies
+
+Ask your agent to restrict the audience to the people you choose and keep sending off while you review the rule. The `replies audience` command shows and changes this audience. `--reply listed` restricts it to allowed people or chats; `--allow-people` replaces the allowed sender list, and deny lists exclude recipients. Review the audience and test the rule before enabling sending.
+
+For the steps and command options, see [Telegram audience settings](./tg/replies.md#conditions-and-audience) or [MAX audience settings](./max/replies.md#редактировать-условия-и-аудиторию).
 
 ### What a template can use
 
@@ -112,26 +85,30 @@ A reply outside working hours. The hours belong to the rule, not to the template
 Hi {{ sender.firstName | default: "there" }}, it's {{ now | date: "%H:%M" }} here. I answer on weekdays from 9:00 to 19:00.
 ```
 
-A part written by a model, with your own text as a fallback:
+A part written by an AI agent, with your own text as a fallback:
 
 ```liquid
 Thanks, {{ sender.firstName | default: "there" }}!
 {% ai %}Briefly confirm you got the message; I will answer tomorrow.{% else %}I will answer tomorrow.{% endai %}
 ```
 
-### A part written by a model
+<a id="a-part-written-by-a-model" />
 
-A model may write only what is inside `{% ai %}…{% endai %}`; everything outside it is your text.
-The block's body is an instruction to the model. The incoming message goes to the model separately,
-as data, never as part of the instruction. The model's answer is used as plain text.
+### A part written by an AI agent
 
-The text after `{% else %}` is the fallback. It is sent when no model is set up, when there is no
-consent, when the call fails, or when the model's answer is refused because it is empty, too long or
+Choose the AI agent used for auto-replies in your profile's AI settings. The [Telegram settings guide](./tg/replies.md#templates-and-a-model) and [MAX settings guide](./max/replies.md#шаблоны-liquid-и-модель) explain the configuration.
+
+An AI agent may write only what is inside `{% ai %}…{% endai %}`; everything outside it is your text.
+The block's body is an instruction to the agent. The incoming message goes to the agent separately,
+as data, never as part of the instruction. The agent's answer is used as plain text.
+
+The text after `{% else %}` is the fallback. It is sent when no agent is set up, when there is no
+consent, when the call fails, or when the agent's answer is refused because it is empty, too long or
 repeats the incoming message. Without an `else`, that message gets no reply and the reason is
 recorded. Blocks cannot be nested.
 
-Using a model needs its own consent, separate from the right to send. Consent lets incoming message
-data go to the model provider you chose, for the whole profile:
+Using an AI agent needs its own consent, separate from the right to send. Consent lets incoming message
+data go to the AI provider you chose, for the whole profile:
 
 ```sh
 tg replies consents show
@@ -142,12 +119,12 @@ max replies consents grant
 max replies consents revoke
 ```
 
-`replies consents deny` with a chat ID keeps that chat's messages away from the model. A new provider
-or endpoint needs consent again. `replies test --ai` sends saved messages to the model so you can see
+`replies consents deny` with a chat ID keeps that chat's messages away from the agent. A new provider
+or endpoint needs consent again. `replies test --ai` sends saved messages to the agent so you can see
 its text; it still sends nothing to the messenger.
 
 ## Set it up
 
-Start with drafts: they need nothing beyond a connected account. To write rules, follow
+To create and test an auto-reply rule, follow
 [Telegram auto-replies](./tg/replies.md) or [MAX auto-replies](./max/replies.md), which cover
-creating a rule, choosing who may receive replies, the model settings and how to pause everything at once.
+creating a rule, choosing who may receive replies, the agent settings and how to pause everything at once.

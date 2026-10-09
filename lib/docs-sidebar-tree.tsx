@@ -117,5 +117,15 @@ export function unifiedDocsTree(tree: Root): Root {
     const title = task ? readerGuide([task[2], task[3]], task[1])?.title : undefined
     return { ...node, name: title ?? node.name, icon: node.icon ?? <Icon aria-hidden="true" /> }
   }
-  return { ...tree, children: tree.children.map(decorate) }
+  const setupPages = /^\/(en|ru|es)\/docs(?:\/(installation|agents|first-tasks))?\/?$/
+  const setupHeadings = new Set(["Start here", "Начните здесь", "Empieza aquí"])
+  return {
+    ...tree,
+    children: tree.children
+      .filter((node) => {
+        if (node.type === "page") return !setupPages.test(node.url)
+        return node.type !== "separator" || typeof node.name !== "string" || !setupHeadings.has(node.name)
+      })
+      .map(decorate),
+  }
 }

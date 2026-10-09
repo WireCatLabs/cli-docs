@@ -1,13 +1,24 @@
 ---
 title: Try message search
-description: Learn search fields and Lucene query syntax with a fictional message archive.
+description: Find messages, decisions, files and links across your chats; practise filters and check the context.
 ---
 
-Try search before connecting your account. Build a query against 50 fictional Telegram/MAX messages in 6 chats, then open a result to read the surrounding conversation and check its source. The playground runs on your device and never connects to an account.
+Search helps you find information across your chats without scrolling through them one by one. Look for a message you remember, a decision, a deadline, a file or a link, then narrow the results by words, person, chat, date or attachment type. Open a match to read the surrounding messages and check what supports an answer.
 
-1. Pick a chat or message-type filter — for example, messages with links.
-2. Open a match and its nearby context.
-3. Change a filter and compare the results.
+You can use search to:
+
+- Find an agreement, deadline or update about a project.
+- Locate a shared file, photo, voice note or link.
+- Find what a particular person said, or limit the search to one chat or time period.
+- Check the original message and nearby messages before relying on a summary.
+
+## Try it with sample messages
+
+Practise combining filters and checking sources before connecting an account. This playground contains 50 fictional messages in 6 chats, runs on your device and never connects to a messenger. The sample messages are in English: try `invoice`, `budget` or `coffee`.
+
+1. Start with a word or choose a filter.
+2. Narrow the results by person, chat, date or attachment type.
+3. Open a match to read its context, then change a filter and compare the results.
 
 Sample dates run from two days before today to two days after it and use UTC. Type a field such as `has:` or `in:` to see its values. Press Space after a word or completed filter to see fields and operators; use ↑ / ↓ and Enter to insert a suggestion, or Esc to close it. Clear the query or choose **All** to browse every message.
 
@@ -23,9 +34,12 @@ Lucene syntax combines words with fields and logical operators. Start with `invo
 | `Atlas AND (invoice OR budget)` | Atlas messages containing either invoice or budget. |
 | `invoice NOT has:file` | Invoice messages without a file attachment. |
 | `"final invoice"` | The words together, in that order. |
-| `invo*` | Words starting with `invo`, such as invoice. `?` replaces one character. |
+| `text:cof*` | Words starting with `cof`, including coffee. |
+| `text:*off*` | Words containing `off`, such as coffee or office. `?` replaces one character. |
 | `chat:"Client studio" AND from:Mia` | Messages from Mia in Client studio. Quote names containing spaces. |
-| `in:max AND has:voice` | MAX messages with a voice note. Use `in:telegram` for Telegram. |
+| `in:max AND has:voice` | Voice notes from a selected messenger. Choose a messenger from the `in:` suggestions. |
+
+`text:coffee` finds the word coffee. `text:cof` searches for the whole word cof, so it does not match coffee; add `*` when you only remember part of a word.
 
 `has:` also offers `attachment`, `link`, `file`, `photo`, `image`, `video`, `audio`, `sticker`, `contact`, `location` and `poll`. `has:attachment` includes attached media; `has:link` finds links in the message text. You can combine them: `(has:file OR has:link) AND text:budget`.
 

@@ -19,8 +19,8 @@ fictional, and no account connection is needed. The next follow-up appears after
 
 ## Get your meeting brief
 
-To try it with your chats, copy a suitable request into your [agent](./agents.mdx) with a
-[connected account](./installation.mdx). It will check the conversation and prepare an answer.
+To prepare a brief from your chats, copy a suitable request to your agent. It will check the
+messages and prepare an answer.
 If history is missing, ask it to download the relevant period: [Telegram](./tg/archive.md)
 or [MAX](./max/archive.md).
 
@@ -130,14 +130,14 @@ returned by **your own** search; the `demo` locators above belong only to the sa
 locators: [Telegram commands](./tg/commands.md) and [MAX commands](./max/commands.md).
 
 Your saved history stays on your computer, while text passed to an AI agent follows that agent's
-and model's configuration. See [security](./security.mdx) and [connecting an agent](./agents.mdx).
+configuration. See [security](./security.mdx) and [connecting an agent](./agents.mdx).
 
 ## Reproducibility and limits
 
 The dataset and runner are versioned with the site, and an automated test checks the runner's
 output. Record the repository commit when reproducing it. The example demonstrates query matching
 and a bounded context window, not message-history completeness, a live command-line tool benchmark
-or an AI model's accuracy. Nothing is sent by this walkthrough.
+or the accuracy of an agent's answers. Nothing is sent by this walkthrough.
 
 ## Reproduce with code (optional)
 

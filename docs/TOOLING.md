@@ -1,7 +1,8 @@
 # Documentation tools for people and agents
 
-Read [AUTHORING.md](AUTHORING.md) for writing decisions and [README.md](README.md) for page
-ownership. These commands run from the cli-docs checkout. Their generated files stay in ignored
+Read [AUTHORING.md](AUTHORING.md) for writing decisions, [TERMINOLOGY.md](TERMINOLOGY.md)
+for reader terms, [REVIEWING.md](REVIEWING.md) for the review workflow and [README.md](README.md)
+for page ownership. These commands run from the cli-docs checkout. Their generated files stay in ignored
 `.docs-tooling/`, separate from maintained documentation and real messenger state.
 
 ## Gather source with Repomix

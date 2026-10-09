@@ -16,14 +16,14 @@ const purpose = {
     people:
       "Identify a person and recover what you have discussed before replying. This guide explains the available context, account signals and the limits of incomplete history.",
     remote:
-      "Connect your messenger tools to a chat in a browser or an assistant on another device. This page gives the messenger-specific startup and file-transfer details; use the shared guide below for your first connection.",
+      "Connect your messenger tools to a chat in a browser or an agent on another device. This page gives the messenger-specific startup and file-transfer details; use the shared guide below for your first connection.",
     mcp: "This is the technical reference for connecting a client to this messenger through MCP. Use it to check tools, settings and permissions; the shared guide below helps you choose and set up a connection first.",
     configuration:
       "Keep settings you would otherwise repeat on every command. This guide explains their locations and priority so you can change a value and check which setting takes effect.",
     "configuration-reference":
       "Use this reference to look up an exact setting name, default or environment variable. For a first change, start with the settings guide below.",
     permissions:
-      "Choose which actions your assistant may perform for this account or bot. Check the access level, recipient restrictions and confirmation behavior before enabling changes.",
+      "Choose which actions your agent may perform for this account or bot. Check the access level, recipient restrictions and confirmation behavior before enabling changes.",
     profiles:
       "Choose the right account or bot when you have more than one. This guide explains named profiles and their settings so a task runs with the intended account.",
     rankings:
@@ -46,7 +46,7 @@ const purpose = {
     groups:
       "Manage a group you participate in: inspect its members and settings, then choose the action you need. This guide explains the supported operations and required rights so you can check the target before changing anything.",
     security:
-      "Choose what your assistant may do and understand where login data and messages are stored. This guide explains the protections, their limits and the settings you can check before granting sending or other changes.",
+      "Choose what your agent may do and understand where login data and messages are stored. This guide explains the protections, their limits and the settings you can check before granting sending or other changes.",
     recipes:
       "Give your agent a useful task without writing a command sequence yourself. These examples show requests you can adapt to your chats, the expected result and where to find the exact command details.",
     troubleshooting:
@@ -73,14 +73,14 @@ const purpose = {
     people:
       "Вспомните, кто вам написал и что вы обсуждали, прежде чем отвечать. Здесь описаны доступный контекст, признаки аккаунта и ограничения неполной истории.",
     remote:
-      "Подключите инструменты мессенджера к чату в браузере или ассистенту на другом устройстве. Здесь — особенности запуска и передачи файлов для этого мессенджера; для первого подключения начните с пошаговой инструкции ниже.",
+      "Подключите инструменты мессенджера к чату в браузере или агенту на другом устройстве. Здесь — особенности запуска и передачи файлов для этого мессенджера; для первого подключения начните с пошаговой инструкции ниже.",
     mcp: "Это техническая справка по подключению клиента к этому мессенджеру через MCP. Здесь можно проверить инструменты, настройки и права; выбрать и настроить первое подключение поможет общая инструкция ниже.",
     configuration:
       "Сохраните настройки, которые иначе пришлось бы повторять в каждой команде. Здесь описаны их расположение и приоритет, чтобы изменить значение и проверить, какая настройка действует.",
     "configuration-reference":
       "В этом справочнике можно найти точное имя настройки, значение по умолчанию или переменную окружения. Для первого изменения начните с руководства по настройкам ниже.",
     permissions:
-      "Выберите действия, разрешённые ассистенту для этого аккаунта или бота. Перед изменениями проверьте уровень доступа, ограничения получателей и порядок подтверждений.",
+      "Выберите действия, разрешённые агенту для этого аккаунта или бота. Перед изменениями проверьте уровень доступа, ограничения получателей и порядок подтверждений.",
     profiles:
       "Выберите нужный аккаунт или бота, если их несколько. Здесь описаны именованные профили и их настройки, чтобы задача выполнялась от нужного аккаунта.",
     rankings:
@@ -103,7 +103,7 @@ const purpose = {
     groups:
       "Управляйте группой, в которой участвуете: посмотрите участников и настройки, затем выберите нужное действие. Здесь описаны доступные операции и необходимые права, чтобы вы могли проверить цель перед изменением.",
     security:
-      "Выберите, что разрешено ассистенту, и узнайте, где хранятся данные входа и сообщения. Здесь объясняются защита, её ограничения и настройки, которые стоит проверить перед разрешением отправки и других изменений.",
+      "Выберите, что разрешено агенту, и узнайте, где хранятся данные входа и сообщения. Здесь объясняются защита, её ограничения и настройки, которые стоит проверить перед разрешением отправки и других изменений.",
     recipes:
       "Поручите агенту полезную задачу, не составляя последовательность команд самостоятельно. В примерах есть запросы для ваших чатов, ожидаемый результат и ссылки на точные инструкции.",
     troubleshooting:
@@ -130,14 +130,14 @@ const purpose = {
     people:
       "Identifica a una persona y recupera lo hablado antes de responder. Esta guía explica el contexto disponible, las señales de la cuenta y los límites de un historial incompleto.",
     remote:
-      "Conecta las herramientas a un chat del navegador o un asistente en otro dispositivo. Aquí están los detalles de arranque y transferencia del mensajero; para la primera conexión empieza por la guía paso a paso enlazada.",
+      "Conecta las herramientas a un chat del navegador o un agente en otro dispositivo. Aquí están los detalles de arranque y transferencia del mensajero; para la primera conexión empieza por la guía paso a paso enlazada.",
     mcp: "Esta es la referencia técnica de MCP para este mensajero. Consulta herramientas, ajustes y permisos; la guía común enlazada te ayuda a elegir y configurar la primera conexión.",
     configuration:
       "Guarda ajustes que repetirías en cada comando. Esta guía explica su ubicación y prioridad para cambiar un valor y comprobar cuál se aplica.",
     "configuration-reference":
       "Consulta aquí el nombre exacto de un ajuste, su valor predeterminado o variable de entorno. Para el primer cambio empieza por la guía enlazada.",
     permissions:
-      "Elige qué acciones puede realizar el asistente con esta cuenta o bot. Comprueba nivel de acceso, destinatarios y confirmaciones antes de permitir cambios.",
+      "Elige qué acciones puede realizar el agente con esta cuenta o bot. Comprueba nivel de acceso, destinatarios y confirmaciones antes de permitir cambios.",
     profiles:
       "Elige la cuenta o bot correcto cuando tengas varios. Esta guía explica perfiles y ajustes para que la tarea use la cuenta prevista.",
     rankings:
@@ -160,7 +160,7 @@ const purpose = {
     groups:
       "Gestiona un grupo en el que participas: consulta miembros y ajustes, y elige la acción que necesitas. Aquí se explican las operaciones y derechos necesarios para comprobar el destino antes de cambiar algo.",
     security:
-      "Elige lo que puede hacer tu asistente y conoce dónde se guardan los datos de acceso y mensajes. Aquí se explican las protecciones, sus límites y los ajustes que puedes comprobar antes de permitir envíos u otros cambios.",
+      "Elige lo que puede hacer tu agente y conoce dónde se guardan los datos de acceso y mensajes. Aquí se explican las protecciones, sus límites y los ajustes que puedes comprobar antes de permitir envíos u otros cambios.",
     recipes:
       "Da una tarea útil al agente sin escribir tú la secuencia de comandos. Los ejemplos incluyen peticiones para tus chats, el resultado esperado y enlaces a las instrucciones exactas.",
     troubleshooting:
@@ -209,7 +209,7 @@ export function guideStartLink(slugs: string[], lang: string) {
     ],
     "first-tasks": ["Try your first task", "Попробовать первую задачу", "Probar una primera tarea"],
     configuration: ["Change and check settings", "Изменить и проверить настройки", "Cambiar y comprobar ajustes"],
-    permissions: ["Choose assistant permissions", "Выбрать права ассистента", "Elegir permisos del asistente"],
+    permissions: ["Choose agent permissions", "Выбрать права агента", "Elegir permisos del agente"],
     profiles: ["Choose an account or bot", "Выбрать аккаунт или бота", "Elegir cuenta o bot"],
     "max/troubleshooting": ["Restore the MAX connection", "Восстановить подключение MAX", "Restablecer MAX"],
     "tg/troubleshooting": [
