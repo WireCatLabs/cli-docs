@@ -1,9 +1,47 @@
 ---
-title: "Message search"
+title: "Search"
 ---
 
-`max search messages` searches the local archive, the copy of your chats that `max` keeps on this computer. Searching one chat also queries the MAX server ([below](#поиск-на-сервере-max---backend)). It does not mark anything as read.
+Every search is under one group of commands, `max search`. When you don't know where something was
+written, start with `search all`: it searches the messages, mail and notes kept on this computer in one
+answer, and says what each hit is — a message (`msg:…`) or a note (`note:…`). Searching marks nothing
+read.
 
+```sh
+max search all 'договор аренды'                 # сообщения, почта и заметки, лучшее первым
+```
+
+```sh
+max search all 'договор' --only messages,notes  # без почты
+```
+
+```sh
+max search messages 'договор' --chat Друзья     # только сообщения мессенджеров, без почты
+```
+
+```sh
+max search mail 'счёт'                          # только почта, которую привёл memo mail import
+```
+
+```sh
+max search notes 'бюджет' --type internal       # только заметки, написанные в memo
+```
+
+```sh
+max search conversations 'переезд на дачу'      # разговоры, близкие по смыслу
+```
+
+`search messages` never returns mail, and `search mail` never returns messenger messages; only
+`search all` covers both. `--type` narrows `search messages` to text, voice or files
+(`text|voice|file`) and `search notes` to notes written in memo or imported from a folder
+(`internal|file`). When a query uses a field mail or notes don't have (`chat:`, `from:`), `search all`
+leaves them out and says so.
+
+Mail and notes reach the archive through [memo](https://github.com/leemour/cli-memo): `memo mail import`
+and `memo import`. Without them, `search all` searches messages only.
+
+The rest of this page is about searching messages, `max search messages`. It reads the local archive and
+asks MAX's own search too ([below](#поиск-на-сервере-max---backend)).
 ## Try a focused search
 
 Start with a phrase and one chat. This example searches saved history without asking the messenger.
@@ -317,7 +355,7 @@ relevance, and `--context 2` shows two messages around each one found.
 
 ## Scripts and agents
 
-`--json` returns one object containing messages and search coverage; `--jsonl` returns only messages, one per line. In MCP, `max_read` (`command: "search messages"`) and `max_read` (`command: "stats messages show"`) accept the same queries. The `tags` and `searches` commands, through `max_read`/`max_write`, manage tags and saved searches. See the [query language](./query-language.md) for response fields, the older `--language legacy` mode and `--regex`.
+`--json` returns one object containing messages and search coverage; `--jsonl` returns only messages, one per line. In MCP, `max_read` (`command: "search all"` or `"search messages"`) and `max_read` (`command: "stats messages show"`) accept the same queries. The `tags` and `searches` commands, through `max_read`/`max_write`, manage tags and saved searches. See the [query language](./query-language.md) for response fields, the older `--language legacy` mode and `--regex`.
 
 Searching for words in one specified chat queries both the archive and the MAX server by default; without a specified chat, it queries only the archive. `--backend archive` keeps the search local. `--sync-first` downloads new messages first, without marking anything as read: at most 5 chats, 500 messages and 30 seconds. Adjust these limits with `--max-chats`, `--max-messages` and `--sync-time`. An incomplete or failed update preserves local results and reports outdated coverage and the update outcome.
 

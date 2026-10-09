@@ -26,7 +26,7 @@ describe("reviewed landing workflows", () => {
     for (const sessions of Object.values(scenarios)) {
       expect(sessions.slice(0, 3).map((session) => session.id)).toEqual(["context", "search", "moderation"])
       const search = sessionById(sessions, "search").steps
-      expect(search.some((step) => step.tool?.includes("messages search") && step.tool.includes("--source all"))).toBe(
+      expect(search.some((step) => step.tool?.includes("search messages") && step.tool.includes("--source all"))).toBe(
         true,
       )
       const group = sessionById(sessions, "moderation").steps
@@ -52,7 +52,7 @@ describe("reviewed landing workflows", () => {
       const search = maxSession(sessionById(sessions, "search"))
       expect(
         search.steps
-          .filter((step: Step) => step.tool?.startsWith("max messages search"))
+          .filter((step: Step) => step.tool?.startsWith("max search messages"))
           .every((step: Step) => step.tool?.includes("--language legacy")),
       ).toBe(true)
       expect(search.steps.some((step: Step) => step.tool?.startsWith("tg messages context msg:telegram/"))).toBe(true)
@@ -103,7 +103,7 @@ describe("reviewed landing workflows", () => {
         const commands = sessionById(sessions, id).steps.flatMap((step) => (step.tool ? [step.tool] : []))
         const read = commands.indexOf("tg messages list 503 --limit 30")
         const search = commands.findIndex(
-          (command) => command.startsWith("tg messages search") && command.includes("--chat 503"),
+          (command) => command.startsWith("tg search messages") && command.includes("--chat 503"),
         )
         expect(read).toBeGreaterThan(0)
         expect(commands[read - 1]).toMatch(/^tg chats list --search/)
@@ -128,7 +128,7 @@ describe("reviewed landing workflows", () => {
       expect(read).toBeGreaterThan(0)
       expect(send).toBeGreaterThan(read)
       expect(bot[send - 1].ask).toBeTruthy()
-      expect(bot.some((step) => step.tool?.startsWith("tg messages search"))).toBe(false)
+      expect(bot.some((step) => step.tool?.startsWith("tg search messages"))).toBe(false)
     }
   })
 })

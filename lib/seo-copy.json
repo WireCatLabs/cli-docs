@@ -37,7 +37,7 @@
       "people": "Find people and contacts in {messenger}, inspect saved conversation evidence, and manage private aliases and notes on your computer.",
       "permissions": "Control {messenger} CLI access with per-command deny, readonly, ask and allow rules; understand CLI confirmations and MCP write behavior.",
       "profiles": "Choose and configure personal-account and bot profiles in the {messenger} CLI, including profile selection, defaults and separate login credentials.",
-      "rankings": "Rank saved {messenger} messages and people, compare activity and conversation measures, and inspect coverage and evidence behind each result."
+      "rankings": "See which {messenger} messages get attention, who needs an answer and whether newcomers stay."
     },
     "toolTitles": {
       "tg": "Telegram CLI client for AI agents",
@@ -82,7 +82,7 @@
       "people": "Находите людей и контакты в {messenger}, проверяйте сохранённые сообщения, задавайте личные псевдонимы и заметки на своём компьютере.",
       "permissions": "Управляйте доступом CLI для {messenger}: deny, readonly, ask и allow для команд, подтверждения в терминале и запись через MCP.",
       "profiles": "Выбирайте профили личного аккаунта и бота в CLI для {messenger}: приоритет выбора, общие настройки и отдельные данные входа.",
-      "rankings": "Сравнивайте сохранённые сообщения и людей в {messenger}: активность, показатели разговоров, охват и доказательства каждого результата."
+      "rankings": "Узнайте, какие сообщения в {messenger} привлекают внимание, кому нужен ответ и остаются ли новички."
     },
     "toolTitles": {
       "tg": "CLI-клиент Telegram для ИИ-агентов",
@@ -127,7 +127,7 @@
       "people": "Encuentra personas y contactos en {messenger}, consulta pruebas de conversaciones guardadas y gestiona alias y notas privadas en tu ordenador.",
       "permissions": "Controla el acceso de la CLI de {messenger} con reglas deny, readonly, ask y allow por comando; consulta las confirmaciones y las escrituras MCP.",
       "profiles": "Elige y configura perfiles personales y de bot en la CLI de {messenger}: selección, valores comunes y credenciales de acceso separadas.",
-      "rankings": "Clasifica mensajes y personas guardados de {messenger}, compara actividad y medidas de conversación y revisa cobertura y pruebas de cada resultado."
+      "rankings": "Descubre qué mensajes de {messenger} reciben atención, quién espera una respuesta y si los nuevos miembros se quedan."
     },
     "toolTitles": {
       "tg": "Cliente CLI de Telegram para agentes de IA",

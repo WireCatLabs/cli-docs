@@ -1,122 +1,268 @@
 ---
-title: "Message and author rankings"
+title: "Statistics"
 ---
 
-Statistics follow `stats → ресурс → вид`: `stats messages top` and `stats contacts top`. These commands read the local archive without connecting. Download the required history first; results describe saved data, not your entire MAX conversation history.
+See which messages attracted attention, who needs an answer and how group membership changes. Reports use saved history. If the relevant messages are missing, [download the history](./archive.md) first.
+
+The requests, names and results below are fictional examples. Replace the chat name with yours. Tables show how an agent can present its answer; commands with `--json` return data for it.
+
+## Messages people react to
+
+Find the messages with the most recorded reactions.
+
+**Your request:**
+
+> Show the three most-reacted-to messages in Поход.
+
+**Command:**
 
 ```sh
-max stats messages top 'chat:Работа date:[2026-10-01 TO 2026-10-08}' --measure reactions --limit 10 --json
-max stats contacts top --chat Работа --score helpful --min-messages 3 --json
-max stats contacts top --weights '{"messages":0.4,"active-days":0.6}' --timezone Europe/Madrid --json
+max stats messages top --chat "Поход" --measure reactions --limit 3 --json
 ```
 
-## Metrics and scores
+**Example agent answer:**
 
-Message metrics are `views`, `reactions` (default), `forwards`, `comments`, `replies` and `thread-size`. Author metrics are `messages` (default), `words`, `reactions`, `replies`, `answers`, `answer-time`, `threads` and `active-days`. Median `answer-time` is measured in milliseconds and sorted ascending; other metrics are sorted descending.
+> | Message | Reactions |
+> | --- | ---: |
+> | Packing list | 18 |
+> | Trip photos | 11 |
+> | New route | 7 |
 
-`helpful` weights answers at 0.5, replies from other people at 0.25 and reactions at 0.25. `active` weights active days at 0.6 and messages at 0.4. `engaging` weights reactions and replies from other people equally; for authors, these are per-message values, with at least five messages unless `--min-messages` is set. `--weights` replaces all weights; `--measure` cannot be combined with score/weights.
+Your agent can open the original messages so you can check the context. Counters are cumulative totals, not reactions received only during a selected period.
 
-Score v1: `100 × sum(weight × value / maximum) / sum(weight)`. Maxima are calculated over the entire eligible selection before `--limit`. A zero maximum contributes zero. Unknown values in positively weighted components exclude a row from scoring; a zero weight ignores that component. The response shows components, maxima, exclusions and data quality.
+## Who answers questions
 
-## Selection and quality
+Compare people by their observed answers to questions.
 
-`--message-kind posts|comments` selects a confirmed message type before counting. Older rows without relationship information remain unknown. Queries use strict Lucene; `--chat`, `--source`, `--exact` and `--timezone` work. The limit is 1–100 rows. Reply metrics require a common positive date range; ambiguous date branches are rejected.
+**Your request:**
 
-View, reaction and forward counts are cumulative snapshots. Views, reactions and comments disclose observation freshness per field; old records remain unknown, and forwards have no observation field. Date filters select messages, not reactions during the period. Unknown values differ from zero. An author’s reaction total may be partial: the response shows known and unknown snapshot counts. `--sync-first` checks permissions and downloads new messages within the specified limits, but does not refresh old message counters. Archive and relationship-graph coverage are returned explicitly.
+> Who answered the most questions in Поход? Show three people.
 
-An “answer” is a heuristic: the question contains `?` after URLs are removed, and the first direct reply by another known person counts. Self-replies and channel identities do not count. Words are sequences of letters/digits excluding URLs; active days use the selected time zone.
-
-## Source messages
-
-Each row includes `drilldown.selection` and exact arguments for the evidence command. Pass selection as JSON and the identifier from the row:
+**Command:**
 
 ```sh
-max stats messages evidence msg:max/fixture/room/101 --selection "$selection" --component replies --limit 20 --json
-max stats contacts evidence 42 --selection "$selection" --component answers --limit 20 --json
-max searches create weekly --selection "$selection"
-max stats contacts top --saved weekly --limit 20 --json
+max stats contacts top --chat "Поход" --measure answers --limit 3 --json
 ```
 
-Evidence shows messages and question/answer pairs. Counter snapshots do not become lists of viewers or people who reacted. An author’s `messages` component shows all selected messages even when ranking by score. Active-day evidence contains source messages, so their individual contributions do not add up to the number of distinct days.
+**Example agent answer:**
 
-To continue, use the same arguments plus `--cursor` from `nextCursor`. If data changes, start again without cursor. The response includes `total`, `included` and `hasMore`. The items budget is 64 KiB, preserving whole rows; use `messages show` for an oversized row. Fingerprint is limited to 50,000 rows and 8 MiB of input; narrow the chat/date range if exceeded. Selection is limited to 64 KiB.
+> | Person | Answers |
+> | --- | ---: |
+> | Алекс | 4 |
+> | Lena | 2 |
+> | Sam | 1 |
 
-## Find questions and posts that need attention
+Answer counts help you find examples of participation; they do not prove a person’s helpfulness.
 
-These reports are available in MAX 0.35.0. Update the installed CLI if the command is missing.
+<a id="find-questions-and-posts-that-need-attention" />
 
-After loading the relevant history, ask your agent to show club questions waiting more than a day
-and open the original messages. Reports read the stored archive; an empty result does not prove
-that there were no questions when history is incomplete.
+<a id="вопросы-и-посты-которым-нужно-внимание" />
+
+## Questions waiting for an answer
+
+Find older questions without an observed direct answer.
+
+**Your request:**
+
+> Which questions in Поход have waited more than a day?
+
+**Command:**
 
 ```sh
-max stats messages unanswered --chat Клуб --older-than 24h --json
-max stats contacts responses --chat Клуб --answerer 42 --answerer 73 --json
-max stats chats newcomers Клуб --since-time 2026-10-01T00:00:00Z --within 7d --json
-max stats messages discussion --chat Новости --min-views 100 --max-replies 0 --json
+max stats messages unanswered --chat "Поход" --older-than 24h --json
 ```
 
-`unanswered` orders questions by age. A question contains `?` outside URLs; this is a heuristic.
-Only a direct explicit reply from another identifiable human counts. A later answer can qualify
-even when its date/text falls outside the question filter. Self-replies and a later speaker without
-a reply link do not count. `no-observed-answer` means no qualifying answer in saved history.
+**Example agent answer:**
 
-`responses` requires repeated `--answerer`: user-selected people, without verifying their past
-administrator role. It returns response count, median and p90 latency in milliseconds; no responses
-give null timings. P90 uses the nearest rank rounded up. Without `--answerer`, unanswered/newcomer
-reports accept any other identifiable human. Bare ids require one scoped account; use
-`person:<provider>/<account>/<id>` for several accounts.
+> **One question has no observed answer.**
+>
+> | From | Question | Waiting |
+> | --- | --- | --- |
+> | Ira | Who will bring the cooking pot? | 2 days |
+>
+> History is incomplete: an answer may be missing from the archive.
 
-`newcomers` defaults to joins in the last 30 days and questions within seven days of a known join.
-`--until-time` ends the joining cohort. First observation is not a joining date; these people enter
-`summary.unknownJoin`. Rejoining creates a separate stay. Pending help windows and incomplete
-member history remain explicit; no saved question does not mean help was unnecessary.
+Questions are detected by a question mark outside links. A direct reply from another known person qualifies; an unrelated next message does not close the question.
 
-`discussion` examines stored channel posts, comparing known cumulative views with saved direct
-discussion replies. Provider comments snapshots are separate; each field discloses observation freshness, unknown when no observation time is available. Missing
-counters or links are not zero. Linked discussion needs stored links and its group's history.
+## How quickly someone replies
 
-Each row has `drilldown.command` and exact arguments. Run the indicated messages/contacts
-evidence command with `--component report` and the returned selection. Follow `nextCursor`
-with the same arguments; the observation cutoff remains fixed. Source changes require a new report.
-Evidence fits64 KiB; narrow chat/dates if the50,000-node or 8 MiB budget is exceeded. Check
-`quality.archives` and `quality.graph`, then open the locator with `messages show`.
+See the number of answers and waiting times for a selected person.
 
-Save the returned selection with `searches create waiting --selection "$selection"` and rerun the
-same report with `--saved waiting`. Accounts, chat, question dates and answerers remain pinned;
-explicit options replace inherited values. Every run takes a new reply-observation cutoff.
-Another report kind is refused. History keeps parameters/selections, never result messages;
-evidence is not recorded.
+**Your request:**
 
-## Saved rankings
+> How quickly does Алекс answer questions in Поход? Show an example.
 
-A saved selection pins allowed IDs and dates; new words narrow it. Explicit ranking parameters replace saved ones. `--sync-first` is unavailable for pinned selections. History stores parameters, not results; evidence is not recorded in history. MCP uses the same paths through `max_read`, passing selection as an object.
-
-[Detailed shared specification](https://github.com/leemour/cli-messaging/blob/main/docs/rankings.md) and [CLI standard](https://github.com/leemour/cli-messaging/blob/main/docs/dev/STANDARD.md).
-
-## Retention from roster observations
-
-Ask the agent to show which newcomers in Club were observed after one, seven and thirty days, and which wrote in their first week. This needs known joining dates and saved member lists; a first sighting does not replace a joining date. Old records do not acquire invented roster snapshots.
+**Command:**
 
 ```sh
-max stats chats retention Клуб --checkpoints 1d,7d,30d --within 7d --timezone Europe/Madrid --json
+max stats contacts responses --chat "Поход" --answerer "Алекс" --json
 ```
 
-By default, joins from the last 90 days are grouped into Monday weeks. `--by day`, `--since-time` and `--until-time` change the cohorts. Choose up to ten increasing positive checkpoint durations. Each checkpoint uses the first saved roster at or after its target, no later than 24 hours afterward; evidence shows the actual time and lag. A partial list can prove presence, but only a complete list proves absence. Without a suitable observation the result is unknown; a future checkpoint is pending. The retention rate uses the observable denominator, with eligible, unknown and pending counts separate. These checkpoints do not prove uninterrupted membership.
+**Example agent answer:**
 
-Departure lies after the last observed presence and at or before the first complete absence. If that interval crosses the first-week boundary, early departure is unknown. Rejoining starts a separate stay. A saved message proves observed activity; no message means only no-observed-message. `archiveCovered` reports history completeness for that window; incomplete data cannot establish a silent-member percentage for the whole group. Copy a cohort's `drilldown` to `stats messages evidence --component report`. Member evidence pages are bounded to 64 KiB; selections pin the calculation cutoff and changed observations require a new report.
+> | Metric | Result |
+> | --- | --- |
+> | Observed answers | 1 |
+> | Median waiting time | 2 days |
+> | p90 waiting time | 2 days |
+>
+> Both values come from one answer, so the sample is small. I can open the question and its linked answer.
 
-## Check and refresh counters
+The median is the middle observed waiting time; p90 is the upper boundary for about 90% of answers. Selecting a person does not establish that they were an administrator in the past.
 
-Ask the agent to check the age of views and reactions, preview at most twenty messages and refresh those exact targets. Sending and storage dates do not establish the counter observation date.
+## Help for newcomers
+
+Check whether people who recently joined received answers to their questions.
+
+**Your request:**
+
+> Did newcomers to Поход get help during their first week?
+
+**Command:**
 
 ```sh
-max stats messages counters show --chat Клуб --counters views,reactions --max-age 24h --limit 20 --json
-max stats messages counters refresh --chat Клуб --counters views,reactions --max-messages 20 --sync-time 30s --dry-run --json
+max stats chats newcomers "Поход" --within 7d --json
 ```
 
-`show` reads the archive locally. Each counter has a value, observedAt, source, age and freshness: fresh, stale or unknown; the default threshold is 24 hours. Missing is not zero, and refreshing views does not freshen reactions. The returned selection pins exact locators; pass its JSON with `--selection`, without an extra query or scope options.
+**Example agent answer:**
 
-`refresh` reads the messenger and writes observations locally. It requires an explicit `--chat` or a selection and uses only the active account. Defaults: twenty messages and 30 seconds; maximum: 100 messages and five minutes. Dry-run previews exact targets and supported fields without connecting. It needs message read permission and `stats.messages.counters.refresh` write permission. MAX supports views and reactions; comments is unsupported. Missing fields and partial errors remain explicit. It sends nothing, marks nothing read, requests no view increment and preserves message text, reply links, attachments and tombstones. A legacy writer changing a counter without an observation makes its freshness unknown.
+> | Newcomer | Questions | Answered |
+> | --- | ---: | ---: |
+> | Kate | 2 | 2 |
+> | Oleg | 1 | 0 |
+>
+> Oleg has no observed answer. One person’s joining date is unknown, so their first week was not calculated.
 
-After refresh, run show for the returned selection and inspect each field's observation date. Cumulative counts still do not reveal the views or reactions received within the date-filtered period.
+By default, the report selects joins from the last 30 days. First seeing someone in the archive does not establish their joining date.
+
+<a id="retention-from-roster-observations" />
+
+<a id="удержание-новичков" />
+
+## Do newcomers stay?
+
+Compare observed membership one day, one week and one month after joining.
+
+**Your request:**
+
+> How many Поход newcomers stayed after a day, a week and a month? Show gaps in the data.
+
+**Command:**
+
+```sh
+max stats chats retention "Поход" --checkpoints 1d,7d,30d --within 7d --timezone UTC --json
+```
+
+**Example agent answer:**
+
+> | After joining | Stayed among observable members | Unknown | Not due yet |
+> | --- | --- | ---: | ---: |
+> | 1 day | 1 of 1 — 100% | 1 | 1 |
+> | 7 days | 1 of 2 — 50% | 0 | 1 |
+> | 30 days | No observable denominator | 2 | 1 |
+>
+> The denominators differ, so these percentages are not a complete retention curve. No observed message does not prove that someone was silent.
+
+This needs known joining dates and saved member lists. Absence from a partial list remains unknown. [Member observations](./groups.md) help collect data for later reports.
+
+## Posts without discussion
+
+Find viewed posts with little recorded discussion.
+
+**Your request:**
+
+> Which posts in Новости received views but no discussion?
+
+**Command:**
+
+```sh
+max stats messages discussion --chat "Новости" --min-views 100 --max-replies 0 --json
+```
+
+**Example agent answer:**
+
+> | Post | Stored views | Observed replies |
+> | --- | ---: | ---: |
+> | New route | 240 | 0 |
+>
+> This is an absence of discussion in available history. Missing comments could change the conclusion.
+
+<a id="check-and-refresh-counters" />
+
+<a id="свежесть-счётчиков" />
+
+## How fresh are the counts?
+
+Check when views and reactions were observed separately.
+
+**Your request:**
+
+> Check the age of Поход’s view and reaction counts without refreshing anything.
+
+**Command:**
+
+```sh
+max stats messages counters show --chat "Поход" --counters views,reactions --max-age 24h --limit 20 --json
+```
+
+**Example agent answer:**
+
+> | Message field | Value | Observed |
+> | --- | ---: | --- |
+> | Views | 0 | 1 hour ago — fresh |
+> | Reactions | 0 | 3 days ago — stale |
+>
+> Fields have independent freshness. A missing value is shown as unknown, not zero.
+
+### Preview a refresh
+
+Before fetching new counters, ask for the exact messages and limits.
+
+```sh
+max stats messages counters refresh --chat "Поход" --counters views,reactions --max-messages 20 --sync-time 30s --dry-run --json
+```
+
+> **Plan:** at most 20 messages, up to 30 seconds. Views and reactions are supported.
+> This is a preview: no connection or refresh has occurred.
+
+A real refresh needs your request. It reads counters from MAX and saves observations locally; it sends no messages, marks nothing read and requests no view increment. MAX refreshes views and reactions; comments are unsupported.
+
+<a id="scope-and-quality" />
+
+<a id="names-and-unknown-response-activity" />
+
+<a id="selection-and-quality" />
+
+<a id="выборка-и-качество" />
+
+<a id="человек-по-имени-и-неизвестная-активность" />
+
+## If a name or history is unknown
+
+When several people match, the agent shows candidates and asks you to choose. Failing to identify someone does not mean zero activity. Even an explicitly selected ID without observations remains unknown: JSON exposes `identityKnown: false`, `status: unknown`.
+
+An empty report with incomplete history does not establish that there were no questions or answers. Ask the agent to open the source messages and show the available-history limits.
+
+<a id="measures-and-scores" />
+
+<a id="follow-the-evidence" />
+
+<a id="save-a-resolved-ranking" />
+
+<a id="metrics-and-scores" />
+
+<a id="source-messages" />
+
+<a id="saved-rankings" />
+
+<a id="метрики-и-оценки" />
+
+<a id="исходные-сообщения" />
+
+<a id="сохранённый-рейтинг" />
+
+## More control
+
+You can select a period, choose a measure or combined score, and save a selection for another report. Scoring formulas, exact evidence arguments and page limits live in the [shared statistics specification](https://github.com/leemour/cli-messaging/blob/main/docs/rankings.md) and [command reference](./commands.md).
+
+To verify a finding, ask the agent to open the question, answer or members behind that report row. Before the next report, [check archive coverage](./archive.md).

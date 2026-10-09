@@ -1,10 +1,42 @@
 ---
-title: "Buscar mensajes"
+title: "Búsqueda"
 ---
 
-`tg search messages` encuentra mensajes en el archivo local, la copia de tus chats que tg guarda en este
-ordenador, y también consulta la búsqueda de Telegram ([más abajo](#asking-telegram-too---backend)). No marca ningún mensaje como leído.
+Todo el texto se busca desde `tg search`. Si no recuerdas dónde estaba, empieza por `search all`: busca los mensajes, correos y notas guardados en este equipo e indica el tipo de cada resultado: mensaje (`msg:…`) o nota (`note:…`). No marca nada como leído.
 
+```sh
+tg search all 'lease agreement'                   # messages, mail and notes, best match first
+```
+
+```sh
+tg search all 'lease' --only messages,notes       # without mail
+```
+
+```sh
+tg search messages 'lease' --chat "Book club"     # Telegram messages only, never mail
+```
+
+```sh
+tg search mail 'invoice'                          # only the mail memo mail import brought in
+```
+
+```sh
+tg search notes 'budget' --type internal          # only notes written in memo
+```
+
+```sh
+tg search conversations 'moving to the country'   # conversations close in meaning
+```
+
+```sh
+tg search topics "Hiking" "gear"                  # topic titles in one forum group
+```
+
+`search messages` nunca devuelve correos, y `search mail` nunca devuelve mensajes del mensajero; solo `search all` reúne ambos. `--type` limita `search messages` a texto, voz o archivos (`text|voice|file`), y `search notes` a notas escritas en memo o importadas de una carpeta (`internal|file`). Si usas un campo que los correos o notas no tienen (`chat:`, `from:`), `search all` los omite y lo indica.
+
+Los correos y notas entran mediante [memo](https://github.com/leemour/cli-memo): `memo mail import` y `memo import`. Sin ellos, `search all` busca solo mensajes.
+
+El resto de esta página explica cómo buscar mensajes con `tg search messages`. También puede consultar el servidor del mensajero ([más abajo](#asking-telegram-too---backend)).
 ## Prueba una búsqueda concreta
 
 Empieza por una frase y un chat. Este ejemplo busca en el historial guardado sin consultar el mensajero.
@@ -350,7 +382,7 @@ Para buscar en todas las cuentas del archivo local, añade `--source all`. `--ne
 ## Para scripts y agentes
 
 `--json` devuelve un objeto con los mensajes y los datos consultados; `--jsonl` transmite
-solo los mensajes. En MCP, `tg_read` (`command: "search messages"`) y `tg_read` (`command: "stats messages show"`) aceptan las mismas consultas, y los comandos `tags` y
+solo los mensajes. En MCP, `tg_read` (`command: "search all"` o `"search messages"`) y `tg_read` (`command: "stats messages show"`) aceptan las mismas consultas, y los comandos `tags` y
 `searches` mediante `tg_read`/`tg_write` gestionan las etiquetas y las búsquedas guardadas. Los campos de la respuesta,
 el modo antiguo `--language legacy` y `--regex` se describen en el [lenguaje de consultas](./query-language.md).
 

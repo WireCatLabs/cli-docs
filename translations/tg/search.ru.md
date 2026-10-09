@@ -1,10 +1,51 @@
 ---
-title: "Поиск сообщений"
+title: "Поиск"
 ---
 
-`tg search messages` находит сообщения в локальном архиве — копии ваших чатов, которую tg хранит на этом
-компьютере, — а также обращается к поиску Telegram ([ниже](#asking-telegram-too---backend)). Команда не помечает сообщения прочитанными.
+Весь поиск — в одной группе команд, `tg search`. Если не знаете, где было написано, начните с
+`search all`: он ищет сразу в сообщениях, почте и заметках, которые хранятся на этом компьютере, и у
+каждой находки пишет, что это — сообщение (`msg:…`) или заметка (`note:…`). Прочитанным поиск ничего не
+помечает.
 
+```sh
+tg search all 'lease agreement'                   # messages, mail and notes, best match first
+```
+
+```sh
+tg search all 'lease' --only messages,notes       # without mail
+```
+
+```sh
+tg search messages 'lease' --chat "Book club"     # Telegram messages only, never mail
+```
+
+```sh
+tg search mail 'invoice'                          # only the mail memo mail import brought in
+```
+
+```sh
+tg search notes 'budget' --type internal          # only notes written in memo
+```
+
+```sh
+tg search conversations 'moving to the country'   # conversations close in meaning
+```
+
+```sh
+tg search topics "Hiking" "gear"                  # topic titles in one forum group
+```
+
+`search messages` никогда не возвращает почту, а `search mail` — сообщения мессенджеров; вместе их
+ищет только `search all`. `--type` у `search messages` оставляет только текст, голосовые или файлы
+(`text|voice|file`), у `search notes` — заметки из memo или из папки (`internal|file`). Если в запросе
+есть поле, которого у почты или заметок нет (`chat:`, `from:`), `search all` пропускает их и говорит
+об этом.
+
+Почта и заметки попадают в архив через [memo](https://github.com/leemour/cli-memo): `memo mail import`
+и `memo import`. Без них `search all` ищет только сообщения.
+
+Дальше на этой странице — поиск сообщений, `tg search messages`. Поиск в одном чате спрашивает ещё и
+сервер Telegram ([ниже](#asking-telegram-too---backend)).
 ## Попробуйте поиск в одном чате
 
 Начните с фразы и одного чата. В примере поиск читает сохранённую историю, не обращаясь к мессенджеру.
@@ -373,7 +414,7 @@ Telegram: без сети, разрешения или слов команда �
 ## Для скриптов и агентов
 
 `--json` возвращает один объект с сообщениями и сведениями о проверенных данных; `--jsonl` передаёт потоком
-только сообщения. В MCP `tg_read` (`command: "search messages"`) и `tg_read` (`command: "stats messages show"`) принимают те же запросы, а команды `tags` и
+только сообщения. В MCP `tg_read` (`command: "search all"` или `"search messages"`) и `tg_read` (`command: "stats messages show"`) принимают те же запросы, а команды `tags` и
 `searches` через `tg_read`/`tg_write` управляют тегами и сохранёнными поисками. Поля ответа,
 старый режим `--language legacy` и `--regex` описаны в разделе [язык запросов](./query-language.md).
 

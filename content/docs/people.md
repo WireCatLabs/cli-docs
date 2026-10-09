@@ -80,6 +80,8 @@ For a whole group, `chats members audit` scores every member from the member lis
 copy, and lists those with a reason. `--deep 10` then runs the full check on the ten highest, one
 person a second. It removes nobody.
 
+<a id="link-your-accounts" />
+
 ## The same person in both messengers
 
 `tg` and `max` share one local copy on your computer. When you know a Telegram account and a MAX
@@ -89,8 +91,25 @@ account belong to one person, record it:
 tg contacts link @example_user max:"Example User"
 ```
 
-`contacts profile` and `contacts context` then include both. The same name in two messengers is
+`contacts context` then gathers the linked identities. `contacts profile` describes the selected messenger identity. The same name in two messengers is
 never taken as the same person; only what you record counts. `contacts unlink` undoes it.
+
+### Link an email identity
+
+[Import your email](./email.mdx) first, then link a known address to the stored messenger contact:
+
+```sh
+tg contacts link @example_user email:rin@example.test
+```
+
+Replace the username and address with the person's actual identities. Check the returned identities;
+a matching name is not enough. Linking changes the local person record, not your logins or mailboxes.
+`contacts unlink` separates the identity you name if a link is wrong.
+
+To keep private context about a person, see [create notes](./memo.mdx#create-your-own-notes).
+The [notes and source tags guide](./memo.mdx#tag-your-sources) explains labels on a contact identity,
+a linked person or a specific message. Messenger contact-note commands are documented in
+[Telegram commands](./tg/commands.md#tg-contacts-notes) and [MAX commands](./max/commands.md#max-contacts-notes).
 
 ## What differs in MAX
 

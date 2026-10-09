@@ -11,9 +11,11 @@
     },
     "docsRef": "v0.37.0",
     "guideRefs": {
-      "search": "823c82da0cdf4e07924dfe016ddc4602754daa03",
-      "archive": "823c82da0cdf4e07924dfe016ddc4602754daa03",
-      "usage": "823c82da0cdf4e07924dfe016ddc4602754daa03"
+      "groups": "f7acc0c66d2389c94e9e46af24c469298b2b3ee6",
+      "rankings": "f7acc0c66d2389c94e9e46af24c469298b2b3ee6",
+      "search": "0ea6d48eb20b72bda128e37f931ecd4de3de10f0",
+      "archive": "0ea6d48eb20b72bda128e37f931ecd4de3de10f0",
+      "usage": "0ea6d48eb20b72bda128e37f931ecd4de3de10f0"
     }
   },
   {
@@ -28,9 +30,11 @@
     },
     "docsRef": "v0.38.0",
     "guideRefs": {
-      "search": "b34705fa1b223ea4f770250c8f18b0f02263051d",
-      "archive": "b34705fa1b223ea4f770250c8f18b0f02263051d",
-      "usage": "b34705fa1b223ea4f770250c8f18b0f02263051d"
+      "groups": "676a30a94acbd4b48446410776911dfdfffa84e6",
+      "rankings": "676a30a94acbd4b48446410776911dfdfffa84e6",
+      "search": "2b78fd8b6998c63b45ef79ec82a1e2698ae3931a",
+      "archive": "2b78fd8b6998c63b45ef79ec82a1e2698ae3931a",
+      "usage": "2b78fd8b6998c63b45ef79ec82a1e2698ae3931a"
     }
   }
 ]

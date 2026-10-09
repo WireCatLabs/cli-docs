@@ -378,6 +378,10 @@ max contacts list --search петров        # люди по имени или
 ```
 
 ```sh
+max search all "договор"                 # сообщения, почта и заметки на этом компьютере
+```
+
+```sh
 max search messages "договор"            # по тексту сообщений, которые уже прочитаны
 ```
 
@@ -466,6 +470,8 @@ max contacts show "Борис Тестов" --with-notes
 ```sh
 max contacts list --search-notes квартира           # люди, в чьих заметках есть это слово
 ```
+
+Las notas de una misma persona se ven en todos los perfiles donde aparece; los alias pertenecen a la cuenta elegida.
 
 Los nombres personalizados y las notas permanecen en la copia local de esta cuenta y no se envían a MAX. `contacts rename` cambia un nombre en la agenda de MAX; es una operación distinta. Los comandos pueden encontrar a una persona por tu nombre personalizado salvo que coincida con el de otra; en ese caso, usa un ID. `--revision` protege frente a la edición de una nota desactualizada.
 
@@ -1156,6 +1162,6 @@ max stats charts synthetic-group --chart-kind messages --by day --timezone Europ
 
 JSON contiene `chart`; al guardar una imagen, también contiene `chartFile` con la ruta y el tamaño. Las imágenes solo se escriben en archivos nuevos, sin sobrescribir. Las fechas ausentes quedan como huecos y los datos incompletos se indican en la descripción y la imagen. `membership` requiere eventos del chat en línea y no está disponible con `--offline`. MCP `max_read` (`command: "stats charts"`) devuelve JSON del almacenamiento local sin conectarse ni escribir archivos; `format: "png"` añade una imagen PNG y JSON con `chart` y el tamaño de `image`. Allí no están disponibles las entradas y salidas. La lectura respeta el permiso `messages`. No se admiten `--jsonl` ni imágenes en stdout.
 
-![Gráfico con datos ficticios](https://raw.githubusercontent.com/leemour/max-cli/823c82da0cdf4e07924dfe016ddc4602754daa03/docs/images/stats-charts.png)
+![Gráfico con datos ficticios](https://raw.githubusercontent.com/leemour/max-cli/0ea6d48eb20b72bda128e37f931ecd4de3de10f0/docs/images/stats-charts.png)
 
 Clasificaciones de mensajes y autores: [métricas, puntuaciones y evidence](./rankings.md).

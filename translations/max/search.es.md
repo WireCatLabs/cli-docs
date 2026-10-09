@@ -1,9 +1,38 @@
 ---
-title: "Buscar mensajes"
+title: "Búsqueda"
 ---
 
-`max search messages` busca en el archivo local, la copia de tus chats que `max` guarda en este ordenador. Al buscar en un solo chat, también consulta al servidor de MAX ([más abajo](#поиск-на-сервере-max---backend)). No marca nada como leído.
+Todo el texto se busca desde `max search`. Si no recuerdas dónde estaba, empieza por `search all`: busca los mensajes, correos y notas guardados en este equipo e indica el tipo de cada resultado: mensaje (`msg:…`) o nota (`note:…`). No marca nada como leído.
 
+```sh
+max search all 'договор аренды'                 # сообщения, почта и заметки, лучшее первым
+```
+
+```sh
+max search all 'договор' --only messages,notes  # без почты
+```
+
+```sh
+max search messages 'договор' --chat Друзья     # только сообщения мессенджеров, без почты
+```
+
+```sh
+max search mail 'счёт'                          # только почта, которую привёл memo mail import
+```
+
+```sh
+max search notes 'бюджет' --type internal       # только заметки, написанные в memo
+```
+
+```sh
+max search conversations 'переезд на дачу'      # разговоры, близкие по смыслу
+```
+
+`search messages` nunca devuelve correos, y `search mail` nunca devuelve mensajes del mensajero; solo `search all` reúne ambos. `--type` limita `search messages` a texto, voz o archivos (`text|voice|file`), y `search notes` a notas escritas en memo o importadas de una carpeta (`internal|file`). Si usas un campo que los correos o notas no tienen (`chat:`, `from:`), `search all` los omite y lo indica.
+
+Los correos y notas entran mediante [memo](https://github.com/leemour/cli-memo): `memo mail import` y `memo import`. Sin ellos, `search all` busca solo mensajes.
+
+El resto de esta página explica cómo buscar mensajes con `max search messages`. También puede consultar el servidor del mensajero ([más abajo](#поиск-на-сервере-max---backend)).
 ## Prueba una búsqueda concreta
 
 Empieza por una frase y un chat. Este ejemplo busca en el historial guardado sin consultar el mensajero.
@@ -308,7 +337,7 @@ Para buscar en todas las cuentas del archivo local, añade `--source all`. `--ne
 
 ## Scripts y agentes
 
-`--json` devuelve un objeto con los mensajes y la cobertura de la búsqueda; `--jsonl` devuelve solo mensajes, uno por línea. En MCP, `max_read` (`command: "search messages"`) y `max_read` (`command: "stats messages show"`) aceptan las mismas consultas. Los comandos `tags` y `searches`, mediante `max_read`/`max_write`, gestionan las etiquetas y las búsquedas guardadas. Consulta el [lenguaje de consultas](./query-language.md) para ver los campos de respuesta, el modo anterior `--language legacy` y `--regex`.
+`--json` devuelve un objeto con los mensajes y la cobertura de la búsqueda; `--jsonl` devuelve solo mensajes, uno por línea. En MCP, `max_read` (`command: "search all"` o `"search messages"`) y `max_read` (`command: "stats messages show"`) aceptan las mismas consultas. Los comandos `tags` y `searches`, mediante `max_read`/`max_write`, gestionan las etiquetas y las búsquedas guardadas. Consulta el [lenguaje de consultas](./query-language.md) para ver los campos de respuesta, el modo anterior `--language legacy` y `--regex`.
 
 La búsqueda de palabras en un chat concreto consulta tanto al archivo como al servidor de MAX de forma predeterminada; sin un chat concreto, solo consulta al archivo. `--backend archive` mantiene la búsqueda local. `--sync-first` descarga primero los mensajes nuevos, sin marcar nada como leído: como máximo 5 chats, 500 mensajes y 30 segundos. Ajusta estos límites con `--max-chats`, `--max-messages` y `--sync-time`. Una actualización incompleta o fallida conserva los resultados locales e informa de la cobertura desactualizada y del resultado de la actualización.
 

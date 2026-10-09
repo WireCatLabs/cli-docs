@@ -449,6 +449,10 @@ tg contacts list --search ann                # people by name or @username
 ```
 
 ```sh
+tg search all "contract"                     # messages, mail and notes this machine has kept
+```
+
+```sh
 tg search messages "contract"                # the text of every message this machine has kept
 ```
 

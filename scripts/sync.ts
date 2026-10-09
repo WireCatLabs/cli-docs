@@ -34,6 +34,22 @@ export function reviewedGuideRefs(tool: Tool, previewRef?: string): [string, str
   return entries
 }
 
+/** Candidate guides can build for review, but the production workflow must wait for release pins. */
+export function assertDocsReleaseReady(
+  root: string,
+  env: Readonly<Record<string, string | undefined>> = process.env,
+): void {
+  if (
+    env.GITHUB_ACTIONS === "true" &&
+    env.GITHUB_WORKFLOW === "Deploy" &&
+    existsSync(join(root, "docs/release-hold.json"))
+  ) {
+    throw new Error(
+      "Production docs are held for CLI release preparation. Complete docs/release-hold.json and remove the hold after reviewing release pins and translations.",
+    )
+  }
+}
+
 const VERSION_TAG = /^refs\/tags\/v(\d+)\.(\d+)\.(\d+)$/
 
 /** The newest `vX.Y.Z` in `git ls-remote --tags` output, compared as versions, not as text. */
@@ -187,7 +203,7 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
         ru: "**Предпросмотр релизного черновика.** Изменения этих руководств готовятся к следующему релизу CLI.",
         es: "**Vista previa del borrador.** Estos cambios se preparan para la próxima versión del CLI.",
       }
-      for (const slug of ["search", "archive", "usage"])
+      for (const slug of ["groups", "rankings", "search", "archive", "usage"])
         if (guides.has(`${slug}.md`))
           for (const [lang, label] of Object.entries(labels)) {
             const path = join(destination, `${slug}${lang === "en" ? "" : `.${lang}`}.md`)
@@ -202,6 +218,7 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const root = join(dirname(fileURLToPath(import.meta.url)), "..")
+  assertDocsReleaseReady(root)
   const tools = JSON.parse(readFileSync(join(root, "tools.json"), "utf8")) as Tool[]
   const { values } = parseArgs({
     options: { ref: { type: "string" }, tool: { type: "string" }, "capture-only": { type: "boolean", default: false } },

@@ -378,6 +378,10 @@ max contacts list --search петров        # люди по имени или
 ```
 
 ```sh
+max search all "договор"                 # сообщения, почта и заметки на этом компьютере
+```
+
+```sh
 max search messages "договор"            # по тексту сообщений, которые уже прочитаны
 ```
 
@@ -467,7 +471,9 @@ max contacts show "Борис Тестов" --with-notes
 max contacts list --search-notes квартира           # люди, в чьих заметках есть это слово
 ```
 
-Custom names and notes stay in this account’s local copy and are not sent to MAX. `contacts rename` changes a name in the MAX address book; that is a separate operation. Commands can find a person by your custom name unless it matches another person’s name; in that case use an ID. `--revision` protects against editing an outdated note.
+Notes about the same person are shared across profiles where that person is visible; aliases belong to the selected account.
+
+Custom names and notes stay in the local copy and are not sent to MAX. `contacts rename` changes a name in the MAX address book; that is a separate operation. Commands can find a person by your custom name unless it matches another person’s name; in that case use an ID. `--revision` protects against editing an outdated note.
 
 ## Sending
 
@@ -1157,6 +1163,6 @@ max stats charts synthetic-group --chart-kind messages --by day --timezone Europ
 
 JSON contains `chart`; when saving an image, it also contains `chartFile` with its path and size. Images are written only to new files, without overwriting. Missing dates remain gaps; incomplete data is marked in the description and image. `membership` requires online chat events and is unavailable with `--offline`. MCP `max_read` (`command: "stats charts"`) returns JSON from local storage without connecting or writing files; `format: "png"` adds a PNG image and JSON with `chart` and the size of `image`. Joins and leaves are unavailable there. Reading follows `messages` permission. `--jsonl` and images in stdout are unavailable.
 
-![Chart using fictional data](https://raw.githubusercontent.com/leemour/max-cli/823c82da0cdf4e07924dfe016ddc4602754daa03/docs/images/stats-charts.png)
+![Chart using fictional data](https://raw.githubusercontent.com/leemour/max-cli/0ea6d48eb20b72bda128e37f931ecd4de3de10f0/docs/images/stats-charts.png)
 
 Message and author rankings: [metrics, scores and evidence](./rankings.md).

@@ -104,7 +104,7 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
     { id: "12", text: text.deadline },
     { id: "22", text: text.budget },
   ].filter((fact) => evidence.some((message) => message.id === fact.id))
-  const command = `${tool} messages search '${(query.trim() || "in:all").replaceAll("'", "'\\''")}' --source all --newest --timezone UTC --context 2 --json`
+  const command = `${tool} search messages '${(query.trim() || "in:all").replaceAll("'", "'\\''")}' --source all --newest --timezone UTC --context 2 --json`
   const update = (value: string, position = value.length, focus = true) => {
     try {
       setPrevious({ query: value, hits: searchDemo(value) })

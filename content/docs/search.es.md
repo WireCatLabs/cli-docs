@@ -6,18 +6,30 @@ description: "Encuentra un mensaje, un acuerdo o una conversación completa."
 Busca una palabra, frase, persona o una discusión cuyo texto exacto ya no recuerdas.
 Empieza con los mensajes guardados en tu ordenador.
 
+## Buscar en todo a la vez
+
+Si no sabes dónde se escribió algo — en un chat, un correo o tus propias notas —, busca en todo a la
+vez:
+
+```sh
+tg search all invoice
+max search all invoice
+```
+
+Cada resultado indica si es un mensaje, un correo o una nota. Las secciones siguientes buscan en un solo tipo.
+
 ## Encontrar una palabra o frase
 
 ```sh
-tg messages search factura
-max messages search factura
+tg search messages factura
+max search messages factura
 ```
 
 Para una frase exacta, conserva las comillas dentro de la consulta:
 
 ```sh
-tg messages search 'exact:"factura final"'
-max messages search 'exact:"factura final"'
+tg search messages 'exact:"factura final"'
+max search messages 'exact:"factura final"'
 ```
 
 Los resultados enlazan a mensajes. Revisa los mensajes cercanos antes de interpretar un acuerdo;
@@ -26,8 +38,8 @@ una línea puede omitir una corrección o respuesta posterior.
 ## Limitar el chat
 
 ```sh
-tg messages search factura --chat "Proyecto"
-max messages search factura --chat "Proyecto"
+tg search messages factura --chat "Proyecto"
+max search messages factura --chat "Proyecto"
 ```
 
 También puedes filtrar por persona, fecha o adjuntos. Las guías de
