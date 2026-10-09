@@ -7,6 +7,9 @@ This page explains how to ask an assistant to find messages, gather context, wor
 
 Start with what you want, such as “What did Anna ask me to do yesterday?” A simple task can be that short. The agent chooses the commands. If you have not tried your messenger connection yet, start with [First tasks](./first-tasks.md).
 
+The examples use Telegram. For MAX, write “Use max CLI” instead of “Use tg CLI”. In an AI chat
+connected through MCP, ask it to use the connected Telegram or MAX tool.
+
 ## Add detail when it changes the result
 
 Use **task + scope + period + output + allowed actions** as a checklist, not a required form.
@@ -19,13 +22,13 @@ Use **task + scope + period + output + allowed actions** as a checklist, not a r
 | Output | Amount, confirmation and source messages | You need evidence or a particular format |
 | Actions | Read only; ask before a large history fetch | Sending, downloads or costly work would change the task |
 
-A short request such as “What did Anna ask me yesterday?” can be enough. Add the surname, project
-or account if there are several Annas. The agent should ask about unresolved ambiguity.
+You do not need every detail in every request. If there are several Annas, add the surname,
+project or account. The agent should ask about unresolved ambiguity.
 
 ## Find a fact in history
 
 ```text prompt
-Use tg cli to find the analytics fee we agreed in “Atlas · team” during September 2026. Show
+Use tg CLI to find the analytics fee we agreed in “Atlas · team” during September 2026. Show
 the estimate and confirmation with their source messages. Check whether the archive covers that
 period; if not, tell me what needs fetching. Don't send anything.
 ```
@@ -41,16 +44,18 @@ Approximate wording is useful: “the fee for analytics, possibly called reporti
 more search terms. You do not need the exact original phrase. Dates, participants and nearby events
 can help distinguish otherwise similar matches.
 
-**A local search does not search all of Telegram.** Reading messages saves them locally; fetching
+**An empty result is not proof.** Message search also asks Telegram's own search, and MAX's
+server when one chat is named, but those servers match words only. Counting, topic search and
+reading a whole discussion use the saved history. Reading messages saves them locally; fetching
 history adds a bounded stretch. Ask for the available coverage when completeness matters. An empty
 result in a partial archive means “not found in the available data”, not “never discussed”.
-[Archive and search](./tg/archive.md#search).
+[Archive and search](./tg/archive.md#search) · [Search](./search.md).
 
 ## Prepare for a meeting
 
 ```text prompt
-Prepare a 20-minute agenda for the Atlas call with Anna and Tom. Check the project and design
-groups plus my direct chats with those participants over the past week. Summarise decisions,
+Use tg CLI. Prepare a 20-minute agenda for the Atlas call with Anna and Tom. Check the project
+and design groups plus my direct chats with those participants over the past week. Summarise decisions,
 current risks and open questions with sources. Check whether later messages resolved old blockers.
 Read only.
 ```
@@ -62,7 +67,7 @@ budget discussion out.” If a relevant chat is unavailable, the answer should n
 ## Find a recommended contact
 
 ```text prompt
-Find accountant recommendations in my freelance and business chats from the past six months.
+Use tg CLI. Find accountant recommendations in my freelance and business chats from the past six months.
 I need ongoing bookkeeping for a business registered in Spain and payments in euros and dollars.
 Compare candidates using the actual recommendations, cite sources, and list questions still to
 ask. Draft an introductory message; don't send it. Ask before fetching a large amount of history.
@@ -85,7 +90,7 @@ For a useful file list, ask for the name, version, chat, date and the message th
 Digital documents can have extractable text; scans and photos need image recognition. Ask the agent to identify unreadable files and verify important numbers against the original. See [Telegram attachments](./tg/attachments.md) and [MAX attachments](./max/attachments.md) for supported formats and content indexing.
 
 ```text prompt
-Find the Atlas contract, invoices and presentation in the team group and my chat with Anna.
+Use tg CLI. Find the Atlas contract, invoices and presentation in the team group and my chat with Anna.
 Prefer explicitly approved versions; explain how you identified them. List older versions
 separately and flag conflicting approvals. Show source messages; don't download or forward yet.
 ```
@@ -106,7 +111,7 @@ do not overwrite existing files. [File downloads](./tg/usage.md#files).
 You want a draft you can review before anyone receives it. Name the person and ask the agent to check the conversation first. The result should be the proposed text, with uncertain facts kept out or flagged.
 
 ```text prompt
-Check what Tom has already sent about the design and what he is waiting for from me. Prepare
+Use tg CLI. Check what Tom has already sent about the design and what he is waiting for from me. Prepare
 a concise reply grounded in our conversation. Don't invent a deadline and don't send it.
 ```
 
@@ -125,7 +130,7 @@ confirmation or prohibit sending; a prompt does not bypass those settings.
 ## Summarise voice messages
 
 ```text prompt
-Summarise Anna’s voice messages from today: decisions, dates and questions for me. Include the source for each point. If recognition is unclear, flag it rather than guessing.
+Use tg CLI. Summarise Anna’s voice messages from today: decisions, dates and questions for me. Include the source for each point. If recognition is unclear, flag it rather than guessing.
 ```
 
 The agent first obtains a transcript, then summarises it. Telegram can use its own transcription service or <DocTerm term="speech-model" lang="en" label="a local speech model" />; MAX uses a local model. The first local run needs a separately downloaded model. Ask the agent to explain the download before starting it. This can take longer than reading text.
@@ -139,7 +144,7 @@ Check names, amounts and dates against the recording when they matter. A summary
 An automatic morning digest runs the whole task again: read new messages, analyse them and produce a new result. First try it once:
 
 ```text prompt
-Read yesterday’s messages in my work chats. Give me five important items with sources and unanswered questions. Only read; show the result here.
+Use tg CLI. Read yesterday’s messages in my work chats. Give me five important items with sources and unanswered questions. Only read; show the result here.
 ```
 
 If the result is useful, specify the schedule and destination:
@@ -155,7 +160,7 @@ Sending a fixed reminder later is simpler: it queues the message on the messenge
 ## Schedule reminders
 
 ```text prompt
-On Monday, 5 October 2026, send two reminders to my Saved Messages: “Open the Atlas agenda” at
+Use tg CLI. On Monday, 5 October 2026, send two reminders to my Saved Messages: “Open the Atlas agenda” at
 09:00 and “Review the Atlas decisions” at 18:00. Use Europe/Madrid time. Show me the scheduled
 times and messages after creating them. Don't send anything to the team.
 ```
@@ -173,8 +178,8 @@ or change Telegram scheduled messages in the Telegram app.
 ## Work offline
 
 ```text prompt
-Using only the local archive for my work profile, summarise Atlas decisions from September
-2026 with source messages. Make no network requests. State what history is available and what
+Use tg CLI. Use only the local archive for my work profile: summarise Atlas decisions from
+September 2026 with source messages. Make no network requests. State what history is available and what
 you cannot verify. Don't send anything or start a background service.
 ```
 
@@ -183,6 +188,20 @@ reads that would otherwise connect, and should not fetch history to improve an o
 For an export, also specify a destination and whether local file creation is allowed.
 [Offline mode](./tg/archive.md#answering-without-connecting---offline) ·
 [Export](./tg/archive.md#export).
+
+## Set rules for a customer bot
+
+```text prompt
+Use tg CLI with the sales bot. Draft a reply to the customer from the available order history.
+Confirm dates and prices only from agreed data. Pass changes to deadlines and compensation to me.
+If information is missing, draft a question. Show me every send first.
+```
+
+Name the bot and the sources it may use. History available to your personal account is not
+necessarily available to the bot. A Telegram bot cannot ask Telegram for older messages: it works
+from what it sent, received or imported on this computer.
+Rules and permissions are configured separately; the prompt text alone does not replace them.
+[Telegram bots](./tg/bot.md) · [MAX bots](./max/bot.md) · [Permissions and send guard](./tg/security.md).
 
 ## Ask for an answer you can check
 
@@ -208,8 +227,9 @@ stored, then suggest the smallest next step. Don't claim a complete search from 
 ```
 
 `messages list` is not inherently wrong for a search task: it reads and stores messages. The issue
-is whether the chosen window covers the question. `search messages` searches the local store;
-`store fetch` retrieves more history when needed. The agent should choose among them based on
+is whether the chosen window covers the question. `search messages` searches the saved history
+and also asks the messenger's own search for words; `store fetch` retrieves more history when the
+question needs complete coverage. The agent should choose among them based on
 available data, your scope and your limits. [Worked example](./first-tasks.md#find-a-decision-in-older-history).
 
 If a command fails, ask for its error and the next safe step rather than a repeated blind attempt.

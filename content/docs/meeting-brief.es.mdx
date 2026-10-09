@@ -5,22 +5,10 @@ description: "Prueba mensajes pendientes, búsqueda y reuniones: envía peticion
 
 Prueba tres tareas del agente: preparar una llamada, revisar mensajes pendientes y encontrar
 recomendaciones. Envía peticiones preparadas y mira los comandos, las respuestas y sus fuentes.
+Debajo de los escenarios verás la salida real de una búsqueda sobre mensajes de muestra y cómo
+repetir el proceso con tus propios chats.
 
-<a id="ejecuta-el-ejemplo-controlado" />
-
-<a id="revisa-la-decisión-en-contexto" />
-
-<a id="aplica-el-proceso-a-tu-archivo" />
-
-<a id="reproducibilidad-y-límites" />
-
-<a id="pide-el-contexto" />
-
-<a id="indica-dónde-más-buscar" />
-
-<a id="pruébalo-para-tu-reunión" />
-
-<a id="prepara-tu-petición" />
+<a id="probar-en-el-navegador" />
 
 ## Prueba la conversación
 
@@ -39,3 +27,126 @@ o [MAX](./max/archive.md).
 Comprueba los mensajes de origen y los chats revisados. Después afina la petición: por ejemplo,
 «Revisa también mi chat con el contratista» o «Deja solo las preguntas sobre plazos en la agenda».
 [Cómo afinar tus peticiones](./prompting.mdx).
+
+## Revisar las fuentes
+
+Los escenarios anteriores son ejemplos preparados, no respuestas de IA sobre tu propia cuenta.
+Para ver en qué se basa un resumen, abajo está la salida completa de una búsqueda local sobre una
+conversación de muestra fija del proyecto Atlas, la misma que usa el
+[campo de pruebas de búsqueda](./search-playground.mdx):
+
+<div lang="en">
+
+```json
+{
+  "dataset": "WireCat synthetic search-playground fixture",
+  "query": "chat:\"Atlas project\" AND (\"deadline confirmed\" OR \"final invoice\")",
+  "matches": [
+    {
+      "source": "msg:telegram/demo/301/13",
+      "text": "Agreed. I will send the final invoice after the review."
+    },
+    {
+      "source": "msg:telegram/demo/301/12",
+      "text": "Atlas invoice deadline confirmed: Friday, October 9."
+    }
+  ],
+  "context": [
+    {
+      "source": "msg:telegram/demo/301/11",
+      "text": "Tuesday is too early. The client needs time to review."
+    },
+    {
+      "source": "msg:telegram/demo/301/12",
+      "text": "Atlas invoice deadline confirmed: Friday, October 9."
+    },
+    {
+      "source": "msg:telegram/demo/301/13",
+      "text": "Agreed. I will send the final invoice after the review."
+    },
+    {
+      "source": "msg:telegram/demo/301/50",
+      "text": "Atlas invoice spreadsheet is ready for review."
+    },
+    {
+      "source": "msg:telegram/demo/301/52",
+      "text": "Atlas budget notes and meeting agenda: https://docs.google.com/"
+    },
+    {
+      "source": "msg:telegram/demo/301/10",
+      "text": "Atlas invoice: can we aim for Tuesday?"
+    }
+  ]
+}
+```
+
+</div>
+
+El [comando de ejecución](#reproducir-con-código-opcional) genera esta salida. Los mensajes del
+conjunto se mantienen en inglés en todos los idiomas para que el mismo comando reproduzca la misma
+evidencia. [Código del script](https://github.com/leemour/cli-docs/blob/main/scripts/reproduce-meeting-brief.mjs),
+[mensajes y ventana de contexto](https://github.com/leemour/cli-docs/blob/main/lib/search-playground/engine.ts).
+
+## Revisa la decisión en contexto
+
+Las coincidencias son el mensaje 13 («enviaré la factura final después de la revisión») y el
+mensaje 12 («plazo confirmado: viernes, 9 de octubre»). El contexto incluye la propuesta inicial
+del martes y la respuesta que la rechaza. El resumen debe indicar **el viernes, 9 de octubre como
+plazo confirmado para la factura**, con las fuentes 12 y 13. El martes fue una propuesta, no el
+acuerdo final.
+
+Un resumen útil separa decisiones confirmadas, preguntas abiertas y mensajes de origen. Este
+resultado no demuestra que se enviara la factura final: el mensaje 13 habla de una acción futura y
+el contexto es solo una ventana limitada. El script recupera mensajes; la explicación anterior
+interpreta la evidencia mostrada.
+
+## Aplica el proceso a tu archivo
+
+Después de la [instalación](./installation.mdx), el inicio de sesión y una descarga acotada del
+historial ([Telegram](./tg/archive.md), [MAX](./max/archive.md)), pide a tu agente. Sustituye el
+chat y las frases por los de tu tarea:
+
+```text prompt
+Usa tg CLI. Prepara un resumen para mi reunión sobre el proyecto Atlas. Busca en el chat "Atlas project" el plazo confirmado y la factura final, y lee los mensajes alrededor de cada coincidencia. Separa decisiones confirmadas de propuestas y preguntas sin respuesta. Cita los mensajes de origen, enumera los chats y el periodo revisados, y explica qué no demuestra la evidencia. Solo lee: no envíes nada ni marques mensajes como leídos.
+```
+
+Para MAX, cambia «tg CLI» por «max CLI».
+
+El agente puede ejecutar una búsqueda con la misma sintaxis de consulta que la muestra:
+
+```sh
+tg search messages 'chat:"Atlas project" AND ("deadline confirmed" OR "final invoice")' --json
+```
+
+```sh
+max search messages 'chat:"Atlas project" AND ("deadline confirmed" OR "final invoice")' --json
+```
+
+`search messages` lee tu historial guardado. Como la consulta nombra un chat, también consulta la
+búsqueda propia del mensajero, que puede encontrar mensajes aún no descargados; añade
+`--backend archive` para buscar solo en el historial guardado
+([Telegram](./tg/search.md#consulta-también-telegram---backend),
+[MAX](./max/search.md#búsqueda-en-el-servidor-de-max---backend)). Iniciar sesión no descarga todo
+el historial. Abre los mensajes de alrededor con `messages context` usando los localizadores de
+**tu propia** búsqueda; los localizadores `demo` anteriores solo pertenecen a la muestra. Opciones
+y localizadores: [comandos de Telegram](./tg/commands.md) y [comandos de MAX](./max/commands.md).
+
+Tu historial guardado se queda en tu ordenador, pero el texto que recibe un agente de IA sigue la
+configuración de ese agente y su modelo. Consulta [seguridad](./security.mdx) y
+[conexión del agente](./agents.mdx).
+
+## Reproducibilidad y límites
+
+Los mensajes y el script están versionados con el sitio, y un test automático comprueba la salida
+del script. Anota el commit del repositorio al repetirlo. El ejemplo demuestra coincidencias de
+consulta y una ventana de contexto limitada, no un historial completo, una prueba de rendimiento de
+la herramienta de línea de comandos en vivo ni la precisión de un modelo de IA. Este recorrido no
+envía nada.
+
+## Reproducir con código (opcional)
+
+Para desarrolladores: puedes obtener las mismas fuentes desde el [repositorio del sitio](https://github.com/leemour/cli-docs):
+
+```sh
+node --experimental-strip-types scripts/reproduce-meeting-brief.mjs
+```

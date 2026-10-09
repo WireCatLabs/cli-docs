@@ -149,7 +149,7 @@ const purpose = {
     replies:
       "Configura y prueba reglas de respuesta a cuentas de prueba. Es un flujo limitado de respuestas automáticas; aquí se explica la audiencia, los permisos y cómo detenerlo.",
     sessions:
-      "Conecta el instrumento a tu cuenta para que el agente pueda leer los chats que elijas y ayudarte a responder. Esta guía explica el acceso, su comprobación y cómo gestionar o cerrar una sesión. Iniciar sesión añade un dispositivo autorizado; no descarga todo el historial.",
+      "Conecta la herramienta a tu cuenta para que el agente pueda leer los chats que elijas y ayudarte a responder. Esta guía explica el acceso, su comprobación y cómo gestionar o cerrar una sesión. Iniciar sesión añade un dispositivo autorizado; no descarga todo el historial.",
     usage:
       "Usa tu cuenta conectada para leer conversaciones, reunir contexto y preparar o enviar respuestas. Empieza por leer, comprueba el resultado y elige después la sección de archivos, grupos o envío.",
     archive:
@@ -164,7 +164,7 @@ const purpose = {
     recipes:
       "Da una tarea útil al agente sin escribir tú la secuencia de comandos. Los ejemplos incluyen peticiones para tus chats, el resultado esperado y enlaces a las instrucciones exactas.",
     troubleshooting:
-      "Encuentra tu error o síntoma y sigue los pasos de recuperación. El objetivo es volver a usar el instrumento y comprobar el resultado; conserva el texto del error si necesitas ayuda para informar del problema.",
+      "Encuentra tu error o síntoma y sigue los pasos de recuperación. El objetivo es volver a usar la herramienta y comprobar el resultado; conserva el texto del error si necesitas ayuda para informar del problema.",
     changelog:
       "Consulta lo que cambió en las versiones: capacidades, correcciones y cambios que afectan a comandos. Empieza por tu versión instalada y abre la guía de la función que quieras probar.",
     roadmap:

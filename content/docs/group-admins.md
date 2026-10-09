@@ -17,8 +17,8 @@ Ask your assistant to review unanswered questions and mentions, with links to th
 Read [Telegram group tasks](./tg/groups.md) or [MAX group tasks](./max/groups.md) for the commands.
 
 ```sh
-tg review --unanswered 24
-max review --unanswered 24
+tg review --unanswered 24h
+max review --unanswered 24h
 ```
 
 Check the suggested replies before sending them. A report is based on the history available
@@ -39,7 +39,8 @@ outside the messages you hold. Try [search](./search.md) for a particular discus
 
 A member audit shows signals and reasons, not a verdict about a person. Review the evidence
 before removing anyone. Telegram and MAX provide different information, so some signals may
-be unavailable. [Know your people](./people.md) covers profiles and shared conversations.
+be unavailable. [Check a whole group](./people.md#does-the-account-look-like-a-bot) shows the member audit
+command; [People](./people.md) also covers profiles and shared conversations.
 
 Recorded membership history starts when you fetch snapshots. It cannot reconstruct all earlier
 joins and departures. Both tools can fetch tracked groups while their server is running. See what is recorded and when it is refreshed in the group guides for [Telegram](./tg/groups.md) and [MAX](./max/groups.md).

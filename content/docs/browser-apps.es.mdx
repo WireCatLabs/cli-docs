@@ -11,7 +11,7 @@ Esta guía conecta el mensajero que elijas y lo comprueba con una petición sobr
 
 - Instala la [herramienta de línea de comandos de Telegram o MAX](./installation.mdx) e inicia sesión en tu cuenta. No necesitas un agente local para usar el navegador: `tg setup --agent none` o `max setup --agent none`.
 - Haz la configuración inicial en el ordenador que ejecuta la herramienta y mantenlo encendido durante el uso. Al final explicamos la opción de un servidor siempre encendido.
-- Tu cuenta de ChatGPT o Claude debe permitir añadir una conexión propia. Si no aparece esa opción en tu cuenta de trabajo, consulta al administrador. Las [instrucciones de OpenAI](https://developers.openai.com/plugins/quickstart) y de [Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) muestran las opciones actuales.
+- Tu cuenta del chat de IA debe permitir añadir una conexión propia. Si no aparece esa opción en tu cuenta de trabajo, consulta al administrador. Las [instrucciones de OpenAI](https://developers.openai.com/plugins/quickstart) y de [Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) muestran las opciones actuales.
 
 En el siguiente paso instalaremos el programa para obtener la dirección pública y explicaremos dónde hacer clic.
 
@@ -117,6 +117,8 @@ Para MAX, cambia `tg` por `max` en la ventana 2. No ejecutes el servidor del men
 El servidor escucha en `127.0.0.1:8765` e imprime un código de acceso de un solo uso.
 El perfil precede al comando: `tg work mcp` o, en Windows, `tg.cmd work mcp`.
 
+Solo el servidor con `--http` tiene este acceso. Nunca dirijas un túnel a `tg mcp` o `max mcp` iniciado sin `--http`: esa conexión no tiene ningún acceso protegido.
+
 <a id="conectar-codex--chatgpt-web-o-claude" />
 
 <a id="3-añadir-la-conexión-a-chatgpt-o-claude" />
@@ -132,8 +134,10 @@ Añade **`/mcp` a la dirección HTTPS**. Por ejemplo, `https://ordenador.red.ts.
 ### ChatGPT
 
 1. Abre **Plugins → + Add custom MCP server**, ponle un nombre como «Mi Telegram» y pega la dirección con `/mcp`.
-2. Elige <DocTerm term="oauth" lang="es" label="OAuth" />. Si se ofrece, selecciona el registro automático (**DCR**). Usa el código de un solo uso de la ventana 2 para entrar.
+2. Elige <DocTerm term="oauth" lang="es" label="OAuth" />, no un token copiado a mano. Si se ofrece, selecciona el registro automático (**DCR**): el servidor admite DCR y la comprobación S256 que piden los [requisitos OAuth de OpenAI](https://developers.openai.com/plugins/build/auth). Usa el código de un solo uso de la ventana 2 para entrar.
 3. Instala el plugin, abre un chat **Work** y selecciónalo con `@`. Después escribe peticiones normales. [Instrucciones oficiales de OpenAI](https://developers.openai.com/plugins/quickstart).
+
+Los mismos pasos añaden la conexión para Codex en la web. El `config.toml` local de Codex configura solo el cliente local de Codex, no esta conexión.
 
 </Tab>
 
@@ -155,7 +159,7 @@ Añade **`/mcp` a la dirección HTTPS**. Por ejemplo, `https://ordenador.red.ts.
 2. En **Custom apps**, pulsa **Add a custom app**, pega la dirección terminada en `/mcp` y pulsa **Next**.
 3. Conecta con el código de un solo uso de la ventana 2. Escribe `@` en el chat y selecciona la conexión. Después también puedes usarla en Gemini móvil.
 
-Si no aparece Custom apps: Google exige actualmente una cuenta personal, tener al menos 18 años, estar en EE. UU., activar **Keep Activity** y usar inglés. [Requisitos e instrucciones de Google](https://support.google.com/gemini/answer/17209137?hl=en-yt).
+Si no aparece Custom apps: Google exige actualmente una cuenta personal, tener al menos 18 años, estar en EE. UU., activar **Keep Activity** y usar inglés. [Requisitos e instrucciones de Google](https://support.google.com/gemini/answer/17209137?hl=en).
 
 </Tab>
 
@@ -165,13 +169,13 @@ Si no aparece Custom apps: Google exige actualmente una cuenta personal, tener a
 
 DeepSeek ofrece [Harness](https://www.deepseek.com/en/harness/), un cliente aparte con interfaz web y soporte MCP. Se configura de forma distinta al chat habitual de chat.deepseek.com.
 
-Para usar un modelo DeepSeek, elige un cliente compatible con ese modelo y MCP. En el ordenador donde se ejecuta `tg` o `max`, añade una conexión local con la [guía MCP](./mcp.mdx); no necesitas dirección pública. Harness tiene [instrucciones MCP](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/mcp/mcp-client/README.md).
+Para usar un modelo DeepSeek, elige un cliente compatible con ese modelo y MCP. En el ordenador donde se ejecuta `tg` o `max`, añade una conexión local con la [guía MCP](./mcp.mdx); no necesitas dirección pública, así que omite los pasos 1 y 2 de esta página. Harness tiene [instrucciones MCP](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/mcp/mcp-client/README.md).
 
 </Tab>
 
 </Tabs>
 
-Antes de introducir el código, comprueba el nombre de la aplicación. El código funciona una vez durante 10 minutos; cinco intentos incorrectos requieren reiniciar el servidor.
+Antes de introducir el código, comprueba que la página de acceso nombra la aplicación que conectas. El código funciona una vez y caduca a los 10 minutos; el servidor imprime un código nuevo después de cada acceso. Tras cinco códigos incorrectos, el acceso queda bloqueado hasta que reinicies el servidor.
 
 ## Probar primero la lectura
 

@@ -11,7 +11,7 @@ This guide connects your chosen messenger and checks it with a request for your 
 
 - Install the [command-line tool for Telegram or MAX](./installation.mdx) and sign into your account. A local agent is unnecessary for browser use: `tg setup --agent none` or `max setup --agent none`.
 - Use the computer running the tool for initial setup, and keep it awake while connected. The end of this page explains an always-on server option.
-- Your ChatGPT or Claude account needs an option for adding a custom connection. If it is missing in a work account, check with your administrator. The [OpenAI instructions](https://developers.openai.com/plugins/quickstart) and [Claude instructions](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) show current options.
+- Your AI chat account needs an option for adding a custom connection. If it is missing in a work account, check with your administrator. The [OpenAI instructions](https://developers.openai.com/plugins/quickstart) and [Claude instructions](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) show current options.
 
 We will install the additional program for the public address in the next step, with instructions for what to click.
 
@@ -117,6 +117,8 @@ For MAX, replace `tg` with `max` in window 2. Do not run the messenger server wi
 The server listens on `127.0.0.1:8765` and prints a one-time login code. <DocTerm term="profile" lang="en" label="A named profile" /> goes
 before the command, for example `tg work mcp`; on Windows, `tg.cmd work mcp`.
 
+Only the `--http` server has this login. Never point a tunnel at `tg mcp` or `max mcp` started without `--http`: that connection has no login at all.
+
 <a id="add-it-to-codex--chatgpt-web-or-claude" />
 
 <a id="3-add-the-connection-to-chatgpt-or-claude" />
@@ -132,8 +134,10 @@ Append **`/mcp` to the HTTPS address**. For example, `https://computer.network.t
 ### ChatGPT
 
 1. Open **Plugins → + Add custom MCP server**, give it a name such as “My Telegram”, and paste the address with `/mcp`.
-2. Choose <DocTerm term="oauth" lang="en" label="OAuth" />. Choose automatic registration (**DCR**) if offered. Sign in with the one-time code from window 2.
+2. Choose <DocTerm term="oauth" lang="en" label="OAuth" />, not a manually copied token. Choose automatic registration (**DCR**) if offered: the server supports DCR and the S256 check that [OpenAI's OAuth requirements](https://developers.openai.com/plugins/build/auth) ask for. Sign in with the one-time code from window 2.
 3. Install the plugin, open a **Work** chat and select it with `@`. Then write ordinary requests. [Official OpenAI instructions](https://developers.openai.com/plugins/quickstart).
+
+The same steps add the connection for Codex on the web. A local Codex `config.toml` configures only the local Codex client, not this connection.
 
 </Tab>
 
@@ -155,7 +159,7 @@ Append **`/mcp` to the HTTPS address**. For example, `https://computer.network.t
 2. Under **Custom apps**, choose **Add a custom app**, paste the address ending in `/mcp` and click **Next**.
 3. Finish connecting with the one-time code from window 2. Type `@` in a chat and select the connection. Once configured, it also works in mobile Gemini.
 
-If Custom apps is missing: Google currently requires a personal account, age 18 or over, location in the US, **Keep Activity** enabled and English. [Google requirements and instructions](https://support.google.com/gemini/answer/17209137?hl=en-yt).
+If Custom apps is missing: Google currently requires a personal account, age 18 or over, location in the US, **Keep Activity** enabled and English. [Google requirements and instructions](https://support.google.com/gemini/answer/17209137?hl=en).
 
 </Tab>
 
@@ -165,13 +169,13 @@ If Custom apps is missing: Google currently requires a personal account, age 18 
 
 DeepSeek offers [Harness](https://www.deepseek.com/en/harness/), a separate client with a web interface and MCP support. Its setup differs from the ordinary chat at chat.deepseek.com.
 
-To use a DeepSeek model, choose a client supporting both that model and MCP. On the computer running `tg` or `max`, add a local connection following the [MCP guide](./mcp.mdx); no public address is needed. Harness provides [MCP configuration instructions](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/mcp/mcp-client/README.md).
+To use a DeepSeek model, choose a client supporting both that model and MCP. On the computer running `tg` or `max`, add a local connection following the [MCP guide](./mcp.mdx); no public address is needed, so skip steps 1 and 2 on this page. Harness provides [MCP configuration instructions](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/mcp/mcp-client/README.md).
 
 </Tab>
 
 </Tabs>
 
-Before entering the code, check the app name on the sign-in page. The code works once for 10 minutes; five incorrect attempts require restarting the server.
+Before entering the code, check that the sign-in page names the app you are connecting. The code works once and expires after 10 minutes; the server prints a new code after each login. After five wrong codes, login is locked until you restart the server.
 
 ## Try reading first
 

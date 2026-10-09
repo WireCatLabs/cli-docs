@@ -5,22 +5,10 @@ description: "Try inbox, search and meeting scenarios: send prepared requests, s
 
 Try three agent tasks: prepare for a call, catch up on your inbox and find recommendations
 in conversations. Send prepared requests and see the commands, answers and their sources.
+Below the scenarios, check a real search output on sample messages and learn to repeat the
+workflow with your own chats.
 
-<a id="run-the-controlled-example" />
-
-<a id="read-the-decision-in-context" />
-
-<a id="use-the-workflow-with-your-own-archive" />
-
-<a id="reproducibility-and-limits" />
-
-<a id="ask-for-the-context" />
-
-<a id="tell-it-where-else-to-look" />
-
-<a id="try-it-for-your-meeting" />
-
-<a id="build-your-request" />
+<a id="try-it-here" />
 
 ## Try the conversation
 
@@ -39,3 +27,122 @@ or [MAX](./max/archive.md).
 Check the source messages and the list of chats read. Then refine the request: for example,
 “Also check my chat with the contractor” or “Keep only deadline questions in the agenda”.
 [Refining your requests](./prompting.mdx).
+
+## Check the sources
+
+The scenarios above are scripted examples, not AI-generated answers from your own account. To see
+what a brief is built on, here is the complete output of a local search over a fixed sample
+conversation about the Atlas project, the same sample as in the [search playground](./search-playground.mdx):
+
+<div lang="en">
+
+```json
+{
+  "dataset": "WireCat synthetic search-playground fixture",
+  "query": "chat:\"Atlas project\" AND (\"deadline confirmed\" OR \"final invoice\")",
+  "matches": [
+    {
+      "source": "msg:telegram/demo/301/13",
+      "text": "Agreed. I will send the final invoice after the review."
+    },
+    {
+      "source": "msg:telegram/demo/301/12",
+      "text": "Atlas invoice deadline confirmed: Friday, October 9."
+    }
+  ],
+  "context": [
+    {
+      "source": "msg:telegram/demo/301/11",
+      "text": "Tuesday is too early. The client needs time to review."
+    },
+    {
+      "source": "msg:telegram/demo/301/12",
+      "text": "Atlas invoice deadline confirmed: Friday, October 9."
+    },
+    {
+      "source": "msg:telegram/demo/301/13",
+      "text": "Agreed. I will send the final invoice after the review."
+    },
+    {
+      "source": "msg:telegram/demo/301/50",
+      "text": "Atlas invoice spreadsheet is ready for review."
+    },
+    {
+      "source": "msg:telegram/demo/301/52",
+      "text": "Atlas budget notes and meeting agenda: https://docs.google.com/"
+    },
+    {
+      "source": "msg:telegram/demo/301/10",
+      "text": "Atlas invoice: can we aim for Tuesday?"
+    }
+  ]
+}
+```
+
+</div>
+
+The [runner command](#reproduce-with-code-optional) generates this output. The sample text stays in
+English in all site languages, so the same command reproduces the same evidence.
+[Runner source](https://github.com/leemour/cli-docs/blob/main/scripts/reproduce-meeting-brief.mjs),
+[dataset and context window](https://github.com/leemour/cli-docs/blob/main/lib/search-playground/engine.ts).
+
+## Read the decision in context
+
+The two matches are message 13 (“I will send the final invoice after the review”) and message 12
+(“deadline confirmed: Friday, October 9”). Their nearby context includes the earlier Tuesday
+proposal and the reply rejecting Tuesday. A meeting brief should therefore report
+**Friday, October 9 as the confirmed invoice deadline**, with sources 12 and 13; Tuesday was a
+proposal, not the final agreement.
+
+A useful brief separates confirmed decisions, unresolved questions and source messages. This
+result does not establish that the final invoice was sent: message 13 describes a future action,
+and the selected context is only a bounded window. The runner retrieves messages; the explanation
+above is an interpretation of the displayed evidence.
+
+## Use the workflow with your own archive
+
+After [installation](./installation.mdx), login and a bounded history fetch
+([Telegram](./tg/archive.md), [MAX](./max/archive.md)), ask your agent. Replace the chat name and
+phrases with your task:
+
+```text prompt
+Use tg CLI. Prepare a brief for my meeting about the Atlas project. Search the "Atlas project" chat for the confirmed deadline and the final invoice, and read the messages around each match. Separate confirmed decisions from proposals and unanswered questions. Cite message sources, list the chats and time window checked, and say what the evidence cannot establish. Read only; do not send or mark anything read.
+```
+
+For MAX, write “Use max CLI” instead of “Use tg CLI”.
+
+The agent may run a search with the same query syntax as the sample:
+
+```sh
+tg search messages 'chat:"Atlas project" AND ("deadline confirmed" OR "final invoice")' --json
+```
+
+```sh
+max search messages 'chat:"Atlas project" AND ("deadline confirmed" OR "final invoice")' --json
+```
+
+`search messages` reads your saved history. Because the query names one chat, it also asks the
+messenger's own search, which can find messages not yet downloaded; add `--backend archive` to
+search saved history only ([Telegram](./tg/search.md#asking-telegram-too---backend),
+[MAX](./max/search.md#search-the-max-server---backend)). Login alone does not download all
+historical messages. Open the surrounding messages with `messages context` using source locators
+returned by **your own** search; the `demo` locators above belong only to the sample. Options and
+locators: [Telegram commands](./tg/commands.md) and [MAX commands](./max/commands.md).
+
+Your saved history stays on your computer, while text passed to an AI agent follows that agent's
+and model's configuration. See [security](./security.mdx) and [connecting an agent](./agents.mdx).
+
+## Reproducibility and limits
+
+The dataset and runner are versioned with the site, and an automated test checks the runner's
+output. Record the repository commit when reproducing it. The example demonstrates query matching
+and a bounded context window, not message-history completeness, a live command-line tool benchmark
+or an AI model's accuracy. Nothing is sent by this walkthrough.
+
+## Reproduce with code (optional)
+
+For developers, the same evidence can be reproduced from the [site repository](https://github.com/leemour/cli-docs):
+
+```sh
+node --experimental-strip-types scripts/reproduce-meeting-brief.mjs
+```

@@ -51,7 +51,7 @@ Take `tg work messages send "Book club" "See you at 7"`:
    checks `permissions`, the recipient list and the hourly limit, before anything connects. Reads
    skip it. Every write attempt — sent, refused, failed or unknown — goes into the send journal,
    without its text.
-4. **The service** runs the use case. The MCP tool `tg_messages_send` calls the same method, so a
+4. **The service** runs the use case. The MCP tool `tg_write`, called with `messages send`, reaches the same method, so a
    command and a tool give the same answer, and the same error, for the same input.
 5. **The adapter** turns the call into Telegram requests and Telegram's answer into a domain
    `Message`. Two wrappers sit around it: one times each call into the run record, one saves what was

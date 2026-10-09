@@ -7,12 +7,7 @@ Alguien te escribe, pero no recuerdas dónde os conocisteis ni qué acordasteis.
 que encuentre a la persona, reúna las conversaciones anteriores y muestre los mensajes de origen.
 Necesitas una [cuenta conectada](./installation.mdx) y un [agente](./agents.mdx).
 
-
-<a id="si-la-cuenta-parece-un-bot" />
-
 <a id="pídeselo-a-tu-agente" />
-
-<a id="respuestas-automáticas-con-tus-reglas" />
 
 ## Pide al agente
 
@@ -33,7 +28,26 @@ tg contacts profile @example_user
 max contacts profile 20000002
 ```
 
-Usa `contacts show` para una consulta breve. Los campos del perfil dependen de lo que el mensajero comparte con tu cuenta.
+Usa `contacts show` para una consulta breve. Indica a la persona por su ID o parte de su nombre;
+en Telegram también sirve su `@username`. Si parte de un nombre coincide con varias personas, el
+comando las lista y se detiene. Estas lecturas usan tu cuenta y los mensajes guardados en tu
+ordenador. No se envía nada a la persona y nada se marca como leído.
+
+Los campos del perfil dependen de lo que el mensajero comparte con tu cuenta:
+
+- **Teléfono:** solo las cuatro últimas cifras, y solo si el mensajero te muestra el número.
+  `--show-phone` lo imprime entero. Un agente conectado por MCP nunca recibe el número completo.
+- **Fecha de registro:** siempre indica su origen. Telegram envía el mes cuando alguien te escribe
+  por primera vez; si no, `tg` la calcula a partir del ID de la cuenta y la marca como `estimate`.
+  El cálculo cubre cuentas creadas hasta agosto de 2026; las más nuevas no reciben fecha antes que
+  una equivocada. MAX da el día exacto, así que `max` lo muestra para todos.
+- **Nombres anteriores:** nombres y usuarios que vio tu historial guardado, en `aliases`, del más
+  antiguo al más nuevo, con un enlace `t.me` para un usuario antiguo de Telegram. Un nombre tomado
+  de mensajes guardados indica `source: messages` y es aproximado: un mensaje descargado de nuevo
+  lleva el nombre más reciente.
+- **Chats compartidos:** cuántos de sus mensajes tiene tu copia local en cada chat, y el primero y
+  el último. Si un chat no está guardado desde el principio (`complete: false`), la cifra es un
+  mínimo; `store fetch <chat>` lo completa.
 
 ## Qué escribió
 
@@ -44,17 +58,25 @@ tg contacts context @example_user --since-time 30d --limit 20
 max contacts context 20000002 --since-time 30d --limit 20
 ```
 
-El resultado puede incluir chats compartidos, mensajes recientes y menciones. Depende del historial
-guardado; que falten mensajes no demuestra que nunca hablarais de algo. Para más historial, consulta
-[el archivo de Telegram](./tg/archive.md) o [el de MAX](./max/archive.md).
-
-MAX también permite limitar el contexto a un chat:
+Sin `--chat` obtienes un resumen: los chats compartidos, el último mensaje en cada sentido, sus
+mensajes recientes y dónde lo mencionaron otros. Nombra los chats que importan para obtener sus
+mensajes más nuevos en cada uno, del más antiguo al más reciente, 20 por chat de forma predeterminada:
 
 ```sh
-max contacts context 20000002 --chat "Team" --limit 10
+tg contacts context @example_user --chat "Club de lectura" --chat "Trabajo" --limit 10
+max contacts context 20000002 --chat "Club de lectura" --chat "Trabajo" --limit 10
 ```
 
-Telegram también admite `contacts context --chat` en la versión revisada. Indica los chats pertinentes para centrar la respuesta.
+Cada mensaje es solo su hora y su texto, para que un agente lea muchos a la vez y los resuma.
+`-v` añade ids y enlaces de los mensajes; `-vv`, el mensaje completo.
+
+La respuesta sale del historial guardado y no se conecta al mensajero. Que falten mensajes no
+demuestra que nunca hablarais de algo. Con `--chat`, `--refresh` pregunta antes al mensajero:
+Telegram busca en cada chat los mensajes de esa persona; MAX lee la página más reciente de cada
+chat, porque no puede buscar por remitente. Para más historial, consulta
+[el archivo de Telegram](./tg/archive.md) o [el de MAX](./max/archive.md).
+
+<a id="si-la-cuenta-parece-un-bot" />
 
 ## Parece un bot
 
@@ -65,8 +87,27 @@ tg contacts check @example_user
 max contacts check 20000002
 ```
 
-Lee los motivos y los datos que faltan junto con la puntuación. Una señal es una pista, no una
-prueba de fraude. Telegram también puede consultar listas públicas de spam, enviándoles el ID de la persona. Usa `--no-registries` para omitir esas consultas.
+La respuesta es una puntuación y todos los motivos, cada uno con su origen: las marcas del propio
+mensajero, un perfil vacío, una cuenta nueva, solo fotos recientes, un enlace como primer mensaje o
+el mismo texto en varios chats. La puntuación es una pista, no una prueba: muchas personas reales no
+tienen foto ni biografía. `unknown` enumera las señales que no se pudieron juzgar, así que una
+puntuación baja con una lista `unknown` larga significa poco. La lista completa de motivos está en
+las guías de [Telegram](./tg/people.md) y [MAX](./max/people.md).
+
+En Telegram, `tg` también consulta dos listas públicas de spam, [Combot Anti-Spam](https://cas.chat/api)
+y [lols.bot](https://lols.bot). **Se les envía el ID de Telegram de la persona.** Usa
+`--no-registries` para omitir esas consultas. Las listas solo cubren cuentas de Telegram, así que
+`max` nunca les envía nada.
+
+Para revisar un grupo entero, `chats members audit` puntúa a cada miembro a partir de la lista de
+miembros y tu historial guardado, y lista a quienes tienen algún motivo. `--deep 10` hace después la
+comprobación completa de los diez con más puntos, una persona por segundo. El propietario y los
+administradores quedan fuera, y no se elimina a nadie:
+
+```sh
+tg chats members audit "Club de lectura" --deep 10
+max chats members audit "Club de lectura" --deep 10
+```
 
 <a id="link-your-accounts" />
 
@@ -78,8 +119,9 @@ Si sabes que dos cuentas pertenecen a la misma persona, puedes guardar el víncu
 tg contacts link @example_user max:"Example User"
 ```
 
-Las identidades vinculadas pueden aportar contexto a `contacts context`. Un nombre igual no basta.
-Vincula solo cuentas identificadas; `contacts unlink` elimina esa asociación local.
+Después, `contacts context` reúne las identidades vinculadas. `contacts profile` describe la
+identidad seleccionada del mensajero. Un nombre igual no basta; solo cuenta lo que registras tú.
+`contacts unlink` elimina esa asociación local.
 
 ### Vincula una dirección de correo
 
@@ -100,8 +142,23 @@ personas vinculadas y mensajes. Las órdenes de notas del mensajero se describen
 
 ## Qué cambia en MAX
 
-Para las opciones exactas, consulta [Telegram](./tg/commands.md) o [MAX](./max/commands.md).
-Las diferencias anteriores corresponden a las versiones revisadas de este sitio.
+| | Telegram (`tg`) | MAX (`max`) |
+|---|---|---|
+| Fecha de registro | el mes de Telegram tras un primer contacto; si no, un cálculo | el día exacto, de MAX |
+| Marcas como estafa, falsa, verificada, premium | se muestran | MAX no las envía para cuentas personales |
+| `--refresh` | busca en cada chat los mensajes de la persona | lee la página más reciente de cada chat |
+| Listas públicas de spam | se consultan, salvo con `--no-registries` | no se consultan |
+| Peticiones extra por perfil | ninguna aparte de las de `contacts show` | una por persona |
+
+Las opciones exactas están en la [referencia de Telegram](./tg/commands.md) y la [de MAX](./max/commands.md).
+
+## Cuando un agente lee estas respuestas
+
+Con el [servidor MCP](./mcp.mdx) conectado, el agente obtiene el mismo perfil, contexto y comprobación.
+El texto de los mensajes en estas respuestas lo escribieron otras personas. Tu agente lo resume y
+no obedece peticiones que haya dentro.
+
+<a id="respuestas-automáticas-con-tus-reglas" />
 
 ## Respuestas automáticas por tus reglas
 

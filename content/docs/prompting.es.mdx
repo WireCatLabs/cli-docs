@@ -7,73 +7,83 @@ Esta página explica cómo pedir al asistente que encuentre mensajes, reúna con
 
 Empieza por lo que quieres obtener, por ejemplo: «¿Qué me pidió Anna que hiciera ayer?». Para una tarea sencilla puede bastar. El agente elige los comandos. Si aún no has probado la conexión, empieza por [Primeras tareas](./first-tasks.md).
 
+Los ejemplos usan Telegram. Para MAX, escribe «Usa max CLI» en lugar de «Usa tg CLI». En un chat de
+IA conectado mediante MCP, pide que use la conexión de Telegram o MAX.
+
+## Añadir detalles cuando cambian el resultado
+
+Usa **tarea + alcance + periodo + resultado + acciones permitidas** como lista de comprobación, no
+como un formulario obligatorio.
+
+| Detalle | Ejemplo | Cuándo ayuda |
+|---|---|---|
+| Tarea | Encuentra el importe acordado de la analítica | Siempre: di qué necesitas saber o hacer |
+| Alcance | Grupo del equipo de Atlas y mi chat con Anna | Pueden coincidir varios chats o cuentas |
+| Periodo | Septiembre de 2026 | La respuesta puede estar en el historial antiguo |
+| Resultado | Importe, confirmación y mensajes de origen | Necesitas pruebas o un formato concreto |
+| Acciones | Solo leer; preguntar antes de una carga grande de historial | Enviar, descargar o un trabajo costoso cambiarían la tarea |
+
+No hace falta incluir todos los detalles en cada petición. Si hay varias Annas, añade el apellido,
+el proyecto o la cuenta. El agente debe preguntar si la ambigüedad sigue sin resolverse.
+
 ## Encontrar un dato antiguo
 
-Indica el chat o el proyecto, la fecha aproximada y las palabras que recuerdes. No hace falta
-reproducir el mensaje literalmente.
-
 ```text prompt
-Busca en los chats de Atlas qué acordamos sobre el coste de la analítica en septiembre de 2026.
-Puede que se mencionara como «medición» o «métricas». Cita la propuesta y la aceptación,
-distingue las estimaciones del importe aprobado y no envíes nada.
+Usa tg CLI para encontrar el importe de la analítica que acordamos en «Atlas · equipo» en
+septiembre de 2026. Muestra la propuesta y la confirmación con sus mensajes de origen. Comprueba si
+el archivo cubre ese periodo; si no, dime qué hay que cargar. No envíes nada.
 ```
 
-Para permitir una carga limitada de historial:
+Si ya quieres permitir la carga:
 
 ```text prompt
-Si faltan mensajes, puedes cargar únicamente el historial de «Atlas · equipo» desde el 1 de
-septiembre de 2026, con un máximo de 1000 mensajes en esta pasada. Antes de continuar con una
-carga mayor, dime qué falta y muéstrame la estimación disponible.
+Puedes cargar el historial de ese chat hasta el 1 de septiembre de 2026, con un máximo de 1000
+mensajes esta vez. Si no basta, dime qué parte falta antes de cargar más.
 ```
 
-La búsqueda de mensajes consulta el archivo local. **«No lo he encontrado» no significa «nunca
-se dijo»** si faltan datos. Leer mensajes recientes puede ser suficiente para una pregunta de hoy;
-para una búsqueda antigua, el agente debe comprobar el periodo disponible y cargar lo necesario
-dentro de tus límites. [Cómo funciona el archivo](./tg/archive.md).
+Las palabras aproximadas ayudan: «el importe de la analítica, quizá lo llamamos informes» da al
+agente más términos de búsqueda. No hace falta la frase exacta. Las fechas, los participantes y los
+hechos cercanos ayudan a distinguir resultados parecidos.
+
+**Un resultado vacío no es una prueba.** La búsqueda de mensajes también consulta la búsqueda
+propia de Telegram, y el servidor de MAX cuando se indica un solo chat, pero esos servidores solo
+buscan palabras. Los recuentos, la búsqueda por temas y la lectura de una conversación completa usan
+el historial guardado. Leer mensajes los guarda en local; cargar historial añade un tramo limitado.
+Pregunta por la cobertura disponible cuando importe que esté completo. Un resultado vacío en un
+archivo parcial significa «no encontrado en los datos disponibles», no «nunca se habló de ello».
+[Archivo y búsqueda](./tg/archive.md#search) · [Búsqueda](./search.md).
 
 ## Preparar una reunión
 
-Nombra el proyecto y las personas. Pide decisiones y cuestiones pendientes, no solo un resumen
-cronológico. Así el agente sabe qué comparar entre grupos y chats privados.
-
 ```text prompt
-Prepara la reunión de Atlas: revisa los grupos del proyecto y mis chats privados con Anna y Tom
-durante la última semana. Separa decisiones, riesgos actuales y preguntas. Si un problema se
-resolvió después en otro chat, indícalo. Propón una agenda de 20 minutos con fuentes. Solo lee.
+Usa tg CLI. Prepara una agenda de 20 minutos para la llamada de Atlas con Anna y Tom. Revisa los
+grupos del proyecto y de diseño, y mis chats privados con esos participantes durante la última
+semana. Resume decisiones, riesgos actuales y preguntas abiertas con fuentes. Comprueba si mensajes
+posteriores resolvieron bloqueos antiguos. Solo lee.
 ```
 
-Puedes precisar el resultado después:
-
-```text prompt
-Déjalo en cinco puntos para leer antes de entrar. Incluye quién debe decidir cada asunto y qué
-falta por confirmar; no conviertas las dudas en hechos.
-```
-
-Si el agente no encuentra un chat privado, debe decirlo. La ausencia de un resultado no demuestra
-que nunca hayas hablado con esa persona.
+Indica los participantes cuando decisiones importantes puedan estar en chats privados. La duración
+ayuda al agente a priorizar la agenda. Para una reunión concreta, añade su objetivo: «Céntrate en
+la preparación del lanzamiento; deja fuera el presupuesto». Si un chat relevante no está
+disponible, la respuesta debe señalar ese hueco.
 
 ## Encontrar un contacto recomendado
 
-Explica para qué necesitas a esa persona y qué condiciones importan. Los criterios ayudan a
-comparar recomendaciones sin inventar que un candidato cumple todos los requisitos.
-
 ```text prompt
-Busca recomendaciones de una gestoría en mis chats de autónomos y negocios. Trabajo desde
-España, cobro en euros y dólares y necesito un servicio mensual. Compara las recomendaciones,
-cita quién las hizo y cuándo, y enumera las condiciones que aún hay que preguntar. Prepara un
-primer mensaje, sin enviarlo.
+Usa tg CLI. Busca recomendaciones de una gestoría en mis chats de autónomos y negocios de los
+últimos seis meses. Necesito contabilidad continua para un negocio registrado en España y cobros
+en euros y dólares. Compara candidatos según las recomendaciones reales, cita las fuentes y
+enumera lo que aún hay que preguntar. Prepara un primer mensaje sin enviarlo. Pregunta antes de
+cargar mucho historial.
 ```
 
-Un siguiente paso útil:
+Son criterios útiles el país, el servicio, el idioma, las monedas y si necesitas una consulta
+puntual o un trabajo continuo. Una recomendación no confirma el precio actual, la disponibilidad ni
+la cualificación de nadie. Pide al agente que distinga la experiencia contada de lo desconocido.
 
-```text prompt
-Prioriza las recomendaciones de personas que hayan contratado el servicio. Separa experiencias
-directas de contactos compartidos sin valoración. No des por confirmados el precio ni la
-disponibilidad si no aparecen en los mensajes.
-```
-
-Dos personas con el mismo nombre no son necesariamente el mismo contacto. Si faltan datos para
-identificarlas, el agente debe mantenerlas separadas o pedir una aclaración.
+Si dos recomendaciones mencionan el mismo nombre, el agente debe comprobar que se refieren a la
+misma persona antes de combinarlas. Encontrar un nombre en un mensaje no es permiso para
+contactarlo. [Contactos](./tg/usage.md#people).
 
 <a id="files-and-voice" />
 
@@ -83,59 +93,51 @@ Una lista útil debe mostrar nombre, versión, chat, fecha y mensaje de aprobaci
 
 Los documentos digitales pueden tener texto extraíble; los escaneos y las fotos necesitan reconocimiento de imágenes. Pide que señale archivos que no pudo leer y compruebe cifras importantes contra el original. Formatos e indexación: [adjuntos de Telegram](./tg/attachments.md) y [adjuntos de MAX](./max/attachments.md).
 
-Pide una selección por su estado de aprobación. El último archivo subido no siempre es el final.
-
 ```text prompt
-Busca el contrato, las facturas y la presentación de Atlas en el grupo y en mi chat con Anna.
-Identifica las versiones aprobadas y el mensaje que confirma cada una. Muestra las antiguas
-por separado. Si hay versiones contradictorias, explica la diferencia. No descargues ni envíes
-archivos todavía.
+Usa tg CLI. Busca el contrato, las facturas y la presentación de Atlas en el grupo del equipo y en
+mi chat con Anna. Prefiere las versiones aprobadas de forma explícita y explica cómo las
+identificaste. Muestra las antiguas por separado y señala aprobaciones contradictorias. Muestra
+los mensajes de origen; no descargues ni reenvíes nada todavía.
 ```
 
-Después de revisar la lista:
+«El archivo más reciente» y «el archivo aprobado» pueden ser distintos. Di cuál necesitas. Después
+de revisar la lista, da un paso siguiente acotado:
 
 ```text prompt
-Descarga únicamente las versiones aprobadas en la carpeta «Atlas/documentos». Si algún nombre
-ya existe, no lo sobrescribas; dime qué archivo entra en conflicto. No envíes los documentos.
+Descarga el contrato y la presentación aprobados que acabas de identificar en una carpeta nueva
+llamada atlas-meeting dentro de Descargas. No descargues las facturas ni envíes archivos.
 ```
 
-La ruta y el permiso para descargar concretan el siguiente paso. Si necesitas compartirlos,
-indica después a quién, qué archivos y con qué texto. [Recetas con archivos](./tg/recipes.md).
+El agente debe comprobar el destino e indicar las rutas que realmente ha creado. Las descargas del
+CLI no sobrescriben archivos existentes. [Descarga de archivos](./tg/usage.md#files).
 
-## Revisar compromisos y preparar respuestas
+<a id="revisar-compromisos-y-preparar-respuestas" />
+
+## Preparar una respuesta y decidir si enviarla
 
 Buscas un borrador que puedas revisar antes de que lo reciba alguien. Indica la persona y pide al agente que lea primero la conversación. El resultado debe ser el texto propuesto, sin hechos no confirmados o con ellos señalados.
 
-Delimita de quién son los compromisos y pide comprobar mensajes posteriores.
-
 ```text prompt
-Revisa los acuerdos de los últimos siete días en mis chats de trabajo. Separa lo que debo hacer
-yo, lo que espero de otras personas y las preguntas abiertas. Comprueba si ya se resolvieron,
-aunque la confirmación esté en otro chat. Incluye fuentes y prepara borradores sin enviarlos.
+Usa tg CLI. Comprueba qué ha enviado ya Tom sobre el diseño y qué espera de mí. Prepara una
+respuesta breve basada en nuestra conversación. No inventes un plazo y no la envíes.
 ```
 
-Para ajustar un borrador:
+Revisa el texto antes de autorizar el envío:
 
 ```text prompt
-Haz la respuesta a Anna más breve. No prometas una fecha nueva y conserva la pregunta sobre
-la versión del contrato.
+Envía exactamente el borrador anterior al chat privado de Tom que acabas de identificar. No lo
+envíes al grupo del proyecto ni a nadie más.
 ```
 
-Para autorizar su envío después de revisarlo:
-
-```text prompt
-Envía el borrador que acabo de aprobar al chat privado de Anna que has identificado. No envíes
-nada a otros chats ni cambies el texto.
-```
-
-Si hay dos destinatarios posibles, conviene dar el chat exacto o aclarar cuál es. Un permiso para
-enviar ese mensaje no autoriza envíos futuros. Los permisos configurados en el CLI también pueden
-exigir confirmación. [Permisos y seguridad](./tg/security.md).
+Si cambias el borrador, da el texto final completo o describe el cambio sin ambigüedad. Si el
+destinatario no está identificado de forma única, el agente debe preguntar a qué chat te refieres.
+Los permisos también pueden exigir confirmación o prohibir el envío; una petición no los evita.
+[Envío](./tg/usage.md#sending) · [Permisos y protección de envíos](./tg/security.md).
 
 ## Resumir mensajes de voz
 
 ```text prompt
-Resume los mensajes de voz de Anna de hoy: decisiones, fechas y preguntas para mí. Cita la fuente de cada punto. Si el reconocimiento no es claro, indícalo sin adivinar.
+Usa tg CLI. Resume los mensajes de voz de Anna de hoy: decisiones, fechas y preguntas para mí. Cita la fuente de cada punto. Si el reconocimiento no es claro, indícalo sin adivinar.
 ```
 
 El agente obtiene primero una transcripción y después la resume. Telegram puede usar su servicio de transcripción o <DocTerm term="speech-model" lang="es" label="un modelo de voz local" />; MAX usa un modelo local. La primera ejecución local requiere descargar el modelo por separado. Pide al agente que explique la descarga antes de iniciarla. Puede tardar más que leer texto.
@@ -149,7 +151,7 @@ Comprueba nombres, importes y fechas importantes contra la grabación. El resume
 Un resumen matinal automático repite toda la tarea: lee mensajes nuevos, los analiza y produce un resultado nuevo. Pruébalo primero una vez:
 
 ```text prompt
-Lee los mensajes de ayer en mis chats de trabajo. Dame cinco puntos importantes con fuentes y preguntas pendientes. Solo lee y muestra el resultado aquí.
+Usa tg CLI. Lee los mensajes de ayer en mis chats de trabajo. Dame cinco puntos importantes con fuentes y preguntas pendientes. Solo lee y muestra el resultado aquí.
 ```
 
 Si el resultado te sirve, indica el horario y el destino:
@@ -164,62 +166,89 @@ Enviar después un recordatorio fijo es más sencillo: el mensaje espera en el s
 
 ## Programar recordatorios
 
-Da una fecha, una hora, una zona horaria y un destinatario. «Mañana por la mañana» puede ser ambiguo,
-especialmente si trabajas con personas de otros países.
-
 ```text prompt
-El lunes 5 de octubre de 2026, envíame dos recordatorios a Mensajes guardados: a las 09:00,
-«Abrir la agenda de Atlas», y a las 18:00, «Revisar los acuerdos de Atlas». Usa la hora de Madrid.
-Confirma los dos horarios y que los mensajes han quedado programados.
+Usa tg CLI. El lunes 5 de octubre de 2026, envíame dos recordatorios a Mensajes guardados:
+«Abrir la agenda de Atlas» a las 09:00 y «Revisar los acuerdos de Atlas» a las 18:00. Usa la hora
+de Europe/Madrid. Muéstrame los horarios y mensajes programados después de crearlos. No envíes
+nada al equipo.
 ```
 
-Si también quieres avisar a otras personas:
+Para recordatorios a otras personas, indica sus chats exactos y el texto de cada mensaje. Una
+programación es un envío futuro, así que «recuérdame» y «recuérdale a Anna» son acciones distintas.
+Usa una fecha y una zona horaria explícitas cuando «mañana» o «a las nueve» puedan malinterpretarse;
+el agente debe convertir la hora para el CLI y confirmártela en la zona horaria que pediste.
+
+Telegram entrega los mensajes programados aunque tu ordenador esté apagado. Si el resultado de la
+programación es incierto, el agente debe consultar la lista de mensajes programados en lugar de
+crear un segundo recordatorio. Los mensajes programados de Telegram se cancelan o cambian en la
+aplicación de Telegram. [Envíos programados](./tg/usage.md#sending-later).
+
+<a id="limitar-el-alcance-cuando-haga-falta" />
+
+## Trabajar sin conexión
 
 ```text prompt
-Programa en el grupo «Atlas · equipo» para el mismo día a las 08:45, hora de Madrid:
-«La reunión empieza a las 09:00; revisad la agenda antes». No avises a nadie por privado.
+Usa tg CLI. Usa solo el archivo local de mi perfil de trabajo: resume los acuerdos de Atlas de
+septiembre de 2026 con los mensajes de origen. No hagas peticiones de red. Indica qué historial
+está disponible y qué no puedes comprobar. No envíes nada ni inicies un servicio en segundo plano.
 ```
 
-El agente debe comprobar el resultado de la programación, no decir «listo» solo porque ha
-intentado ejecutar el comando. Si el resultado es incierto, debe consultar los mensajes programados
-antes de repetir el envío. Telegram entrega los mensajes programados aunque tu ordenador esté
-apagado. [Envíos y programación](./tg/usage.md).
+Las respuestas sin conexión dependen de los datos guardados antes. Para lecturas que de otro modo
+se conectarían, el agente debe usar el modo sin conexión del CLI y no cargar historial para
+mejorar la respuesta. Para una exportación, indica también el destino y si se permite crear
+archivos locales. [Modo sin conexión](./tg/archive.md#answering-without-connecting---offline) ·
+[Exportar](./tg/archive.md#export).
 
-## Limitar el alcance cuando haga falta
+## Fijar reglas para un bot de clientes
 
-Estas precisiones son útiles cuando afectan a la tarea; no hace falta añadirlas a cada petición.
+```text prompt
+Usa tg CLI con el bot sales. Prepara una respuesta al cliente a partir del historial disponible del
+pedido. Confirma fechas y precios solo con datos acordados. Los cambios de plazos y las
+compensaciones pásamelos a mí. Si falta información, prepara una pregunta. Muéstrame cada envío
+antes de hacerlo.
+```
 
-| Si necesitas… | Añade… |
-|---|---|
-| Usar una cuenta concreta | «Trabaja solo con mi perfil de trabajo; no cambies de cuenta». |
-| Evitar acciones visibles | «Solo lee; no envíes nada ni marques mensajes como leídos». |
-| Buscar en un lugar concreto | «Solo en estos dos grupos y en mi chat privado con Anna». |
-| Limitar una carga | «Desde el 1 de septiembre, como máximo 1000 mensajes antes de volver a consultarme». |
-| Trabajar sin conexión | «Usa solo el archivo local, sin conectar a Telegram; indica qué información falta». |
-| Revisar antes de actuar | «Prepara un borrador y espera mi aprobación antes de enviarlo». |
-| Comprobar un resultado | «Cita los mensajes que respaldan cada decisión e indica las dudas». |
+Indica el bot y las fuentes que puede usar. El historial disponible para tu cuenta personal no
+está necesariamente disponible para el bot. Un bot de Telegram no puede pedir a Telegram mensajes
+antiguos: trabaja con lo que envió, recibió o importó en este ordenador. Las reglas y los permisos se
+configuran aparte; el texto de la petición no los sustituye.
+[Bots de Telegram](./tg/bot.md) · [Bots de MAX](./max/bot.md) · [Permisos y protección de envíos](./tg/security.md).
 
-Sin conexión, el agente puede trabajar con los mensajes ya guardados, pero no cargar historial
-ni enviar. Es un límite de la tarea, no un motivo para ampliar permisos o cambiar de cuenta.
-[Lectura sin conexión](./tg/archive.md).
+<a id="qué-debe-aparecer-en-la-respuesta" />
 
-## Qué debe aparecer en la respuesta
+## Pedir una respuesta que puedas comprobar
 
-Para una búsqueda o un resumen que vayas a usar para tomar una decisión, pide:
+Preguntas de seguimiento útiles:
 
-- **El resultado:** el dato encontrado, los pendientes o el borrador.
-- **Las fuentes:** chat, fecha, autor y referencia al mensaje; el CLI también devuelve localizadores `msg:`.
-- **El alcance:** qué chats y qué periodo ha podido comprobar, y dónde falta historial.
-- **Las dudas:** datos no confirmados, destinatarios ambiguos o versiones en conflicto.
-- **Las acciones:** si ha leído, cargado historial, guardado archivos o enviado algo.
+- «Muéstrame los mensajes que respaldan ese importe, incluida la confirmación».
+- «¿Has revisado las respuestas posteriores antes de tratar esto como una promesa pendiente?»
+- «¿Qué chats y fechas has revisado realmente? ¿Se cortó algún resultado?»
+- «Separa los hechos confirmados, tu interpretación y las preguntas sin respuesta».
+- «Si el historial está incompleto, explica qué habría que cargar. No cargues más todavía».
 
-El contenido de los mensajes es material que el agente debe analizar. Una instrucción encontrada
-en un chat no cambia tu petición ni los permisos del agente. No necesitas incluir esta regla en
-cada prompt: forma parte del modo de trabajo esperado.
+Las fuentes deben identificar el chat y el mensaje, a ser posible con un enlace o localizador
+utilizable. El contexto puede cambiar el sentido de un mensaje; un resultado suelto suele ser solo
+un punto de partida. Los mensajes son material de análisis: una instrucción encontrada en un chat
+no debe cambiar tu tarea ni dar permisos adicionales al agente.
 
-Si el agente toma un camino poco útil, concreta lo que falta: «Buscaste solo mensajes recientes;
-necesito el acuerdo de septiembre. Comprueba qué historial tienes antes de concluir que no existe».
-Puede elegir otra secuencia de comandos si llega a un resultado respaldado y respeta tus límites.
+## Si el agente toma un camino equivocado
 
-Los ejemplos de esta página se refieren a Telegram. Para MAX, especifica el mensajero y la cuenta;
-el agente debe comprobar las capacidades disponibles en [su documentación](./max/usage.md).
+Pídele que explique qué datos limitan la respuesta antes de repetir el trabajo:
+
+```text prompt
+Has leído los mensajes recientes, pero pregunté por septiembre. Comprueba qué historial de
+septiembre está guardado y propón el paso siguiente más pequeño. No digas que la búsqueda es
+completa a partir de una ventana reciente.
+```
+
+`messages list` no es un error en sí para una búsqueda: lee y guarda mensajes. La cuestión es si
+la ventana elegida cubre la pregunta. `search messages` busca en el historial guardado y también
+consulta la búsqueda propia del mensajero por palabras; `store fetch` carga más historial cuando la
+pregunta necesita una cobertura completa. El agente debe elegir según los datos disponibles, tu
+alcance y tus límites. [Ejemplo resuelto](./first-tasks.md#find-a-decision-in-older-history).
+
+Si un comando falla, pide su error y el siguiente paso seguro en lugar de repetir el intento a
+ciegas. [Diagnóstico](./tg/diagnostics.md) puede registrar nombres de operaciones, IDs, recuentos
+y tiempos, pero los registros del CLI excluyen a propósito el texto de los mensajes y los argumentos
+sensibles. Sirven para informar de un error, no como transcripción completa de lo que el agente
+leyó o decidió. Revisa cualquier informe antes de compartirlo.

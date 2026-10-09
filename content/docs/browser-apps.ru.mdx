@@ -11,7 +11,7 @@ description: "Подключите Telegram и MAX к чату ChatGPT или Cl
 
 - Установите [инструмент командной строки для Telegram или MAX](./installation.mdx) и войдите в свой аккаунт. Для работы из браузера локальный агент не нужен: `tg setup --agent none` или `max setup --agent none`.
 - Для первой настройки нужен компьютер, на котором работает инструмент. Оставьте его включённым во время работы. В конце страницы есть вариант с постоянно включённым сервером.
-- В вашем ChatGPT или Claude должен быть доступен пункт добавления своего подключения. Если его нет в рабочем аккаунте, проверьте доступ у администратора; [инструкция OpenAI](https://developers.openai.com/plugins/quickstart) и [инструкция Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) показывают актуальные варианты.
+- В вашем AI-чате должен быть доступен пункт добавления своего подключения. Если его нет в рабочем аккаунте, проверьте доступ у администратора; [инструкция OpenAI](https://developers.openai.com/plugins/quickstart) и [инструкция Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) показывают актуальные варианты.
 
 Дополнительную программу для получения публичного адреса установим в следующем шаге. Ниже описано, куда нажимать.
 
@@ -60,7 +60,7 @@ description: "Подключите Telegram и MAX к чату ChatGPT или Cl
 ```
 
 ```powershell
-$mcpPublicUrl = Read-Host 'HTTPS address from Funnel (no /mcp)'
+$mcpPublicUrl = Read-Host 'HTTPS origin from Funnel (no /mcp)'
 tg.cmd mcp --http --port 8765 --public-url $mcpPublicUrl --permission messages.send=allow
 ```
 
@@ -82,7 +82,7 @@ TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8
 ```
 
 ```sh
-printf 'HTTPS address from Funnel (no /mcp): '
+printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
 tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
 ```
@@ -104,7 +104,7 @@ sudo tailscale funnel 8765
 ```
 
 ```sh
-printf 'HTTPS address from Funnel (no /mcp): '
+printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
 tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
 ```
@@ -117,6 +117,8 @@ tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.sen
 
 Сервер слушает `127.0.0.1:8765` и печатает одноразовый код входа. <DocTerm term="profile" lang="ru" label="Имя профиля" /> ставится перед
 командой: например, `tg work mcp`, а в Windows — `tg.cmd work mcp`.
+
+Такой вход есть только у сервера с `--http`. Никогда не направляйте туннель на `tg mcp` или `max mcp`, запущенный без `--http`: у такого подключения входа нет совсем.
 
 <a id="подключить-codex--chatgpt-web-или-claude" />
 
@@ -133,8 +135,10 @@ tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.sen
 ### ChatGPT
 
 1. Откройте **Plugins → + Add custom MCP server**, задайте понятное имя, например «Мой Telegram», и вставьте адрес с `/mcp`.
-2. Выберите <DocTerm term="oauth" lang="ru" label="вход OAuth" />. Если есть выбор регистрации клиента, выберите автоматическую регистрацию **DCR**. Для входа используйте одноразовый код из окна 2.
+2. Выберите <DocTerm term="oauth" lang="ru" label="вход OAuth" />, а не вручную скопированный токен. Если есть выбор регистрации клиента, выберите автоматическую регистрацию **DCR**: сервер поддерживает DCR и проверку S256, которых требуют [правила OAuth OpenAI](https://developers.openai.com/plugins/build/auth). Для входа используйте одноразовый код из окна 2.
 3. Установите созданный плагин, откройте чат **Work** и выберите его через `@`. Далее пишите обычные запросы. [Официальная инструкция OpenAI](https://developers.openai.com/plugins/quickstart).
+
+Так же подключение добавляется для Codex в браузере. Локальный `config.toml` Codex настраивает только локальный клиент Codex, а не это подключение.
 
 </Tab>
 
@@ -156,7 +160,7 @@ tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.sen
 2. В разделе **Custom apps** нажмите **Add a custom app**, вставьте адрес с `/mcp` и нажмите **Next**.
 3. Завершите подключение с одноразовым кодом из окна 2. В чате наберите `@` и выберите подключение. После настройки им можно пользоваться и в мобильном Gemini.
 
-Если раздела Custom apps нет: сейчас Google предоставляет эту функцию пользователям от 18 лет в США, с личным аккаунтом, включённой историей **Keep Activity** и английским языком. [Требования и инструкция Google](https://support.google.com/gemini/answer/17209137?hl=en-yt).
+Если раздела Custom apps нет: сейчас Google предоставляет эту функцию пользователям от 18 лет в США, с личным аккаунтом, включённой историей **Keep Activity** и английским языком. [Требования и инструкция Google](https://support.google.com/gemini/answer/17209137?hl=en).
 
 </Tab>
 
@@ -166,13 +170,13 @@ tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.sen
 
 Для работы с вашими инструментами у DeepSeek есть [Harness](https://www.deepseek.com/en/harness/) — отдельный клиент с веб-интерфейсом и поддержкой MCP. Это другой способ подключения, а не настройка обычного чата chat.deepseek.com.
 
-Если хотите пользоваться моделью DeepSeek, проще выбрать клиент с поддержкой этой модели и MCP. На компьютере с `tg` или `max` добавьте локальное подключение по [инструкции MCP](./mcp.mdx); публичный адрес для этого не нужен. Для Harness есть [инструкция по подключению MCP](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/mcp/mcp-client/README.md).
+Если хотите пользоваться моделью DeepSeek, проще выбрать клиент с поддержкой этой модели и MCP. На компьютере с `tg` или `max` добавьте локальное подключение по [инструкции MCP](./mcp.mdx); публичный адрес для этого не нужен, поэтому шаги 1 и 2 на этой странице пропустите. Для Harness есть [инструкция по подключению MCP](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/mcp/mcp-client/README.md).
 
 </Tab>
 
 </Tabs>
 
-Перед вводом кода проверьте название приложения на странице входа. Код одноразовый, действует 10 минут; после пяти неверных попыток нужно перезапустить сервер.
+Перед вводом кода проверьте, что страница входа называет приложение, которое вы подключаете. Код одноразовый и действует 10 минут; после каждого входа сервер печатает новый код. После пяти неверных кодов вход закрыт, пока вы не перезапустите сервер.
 
 ## Сначала проверить чтение
 

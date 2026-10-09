@@ -16,7 +16,7 @@ The essentials:
 ## A fuller overview
 
 - **Messages:** read, reply, edit and forward; send files, react, create polls and schedule reminders.
-- **Search and history:** download selected chats to <DocTerm term="local-archive" lang="en" label="a local archive" />, match typos and related words, filter by date and author, export history and gather summaries.
+- **Search and history:** download selected chats to <DocTerm term="local-archive" lang="en" label="a local archive" />, match word forms, filter by date and author, export history and gather summaries.
 - **Documents and voice:** download attachments, extract text from supported formats, transfer a retained file to a remote agent and transcribe voice messages with <DocTerm term="speech-model" lang="en" label="a speech model" />.
 - **People and accounts:** find contacts, recover conversation context, organise folders and use <DocTerm term="profile" lang="en" label="separate profiles" /> for multiple accounts.
 - **Communities and bots:** manage members and invites with administrator rights, check moderation rules and use the Bot API. Forum topics are available in Telegram; bot comments under channel posts are available in MAX.
@@ -26,12 +26,14 @@ The essentials:
 
 If your account is connected, copy a request from the relevant section below. Otherwise, start with [installation and login](./installation.mdx). The [demo](./meeting-brief.mdx) shows an agent conversation without connecting an account. Expand the blocks below the examples for exact commands and additional capabilities.
 
+Each tool works with one messenger: `tg` with Telegram, `max` with MAX. The requests name `tg`; for MAX, write `max` instead. Everything below works in both, unless a row says otherwise. The commands in the tables start with `tg` or `max`.
+
 ## Messages
 
 Summarise a conversation or prepare a reply you can review before sending.
 
 ```text prompt
-Read my conversation with Anna from today. What needs my answer? Draft a short reply without sending it.
+Use tg CLI. Read my conversation with Anna from today. What needs my answer? Draft a short reply without sending it.
 ```
 
 Expect a draft and the messages it is based on. If the recipient is ambiguous, clarify the chat before sending.
@@ -61,7 +63,7 @@ Guides: [Telegram usage](./tg/usage.md) · [MAX usage](./max/usage.md)
 Find a person and recover the context of your previous conversations.
 
 ```text prompt
-Find the designer we discussed last month. Show who recommended them and what we have already agreed.
+Use tg CLI. Find the designer we discussed last month. Show who recommended them and what we have already agreed.
 ```
 
 Expect a clearly identified contact and supporting messages. Use separate profiles for work and personal accounts; [choosing an account](./profiles.md) explains how.
@@ -88,7 +90,7 @@ Guides: [People](./people.md) · [Telegram login and profiles](./tg/sessions.md)
 Review a group before changing its members, settings or moderation rules.
 
 ```text prompt
-In my project group, list questions awaiting an administrator’s reply. Show sources; do not change anything.
+Use tg CLI. In my project group, list questions awaiting an administrator’s reply. Show sources; do not change anything.
 ```
 
 Expect a list to review. Group changes require the relevant account rights. Moderation runs when started by you, your agent or a scheduled task.
@@ -119,10 +121,10 @@ Guides: [Telegram groups](./tg/groups.md) · [MAX groups](./max/groups.md)
 Find an older agreement or collect the important unread messages.
 
 ```text prompt
-Find what we agreed about the project deadline last month. Show the agreement and any later changes.
+Use tg CLI. Find what we agreed about the project deadline last month. Show the agreement and any later changes.
 ```
 
-Expect the answer, sources and the period checked. Search uses saved history; if the period is missing, [download the relevant chats first](./search.md).
+Expect the answer, sources and the period checked. Word search also asks the messenger's server, but topic search and counts use saved history; if the period is missing, [download the relevant chats first](./search.md#fetch-the-relevant-chat-history-first).
 
 <details>
 <summary>Commands and additional capabilities</summary>
@@ -130,7 +132,7 @@ Expect the answer, sources and the period checked. Search uses saved history; if
 | What you can do | Commands |
 |---|---|
 | Keep a local archive of the chats you choose | `store fetch` |
-| Search it offline by words, sender, date and chat, with typo-tolerant matching | `messages search` |
+| Search by words, sender, date and chat; word search also asks the messenger's server | `search messages` |
 | Separate the threads of a busy group by replies and mentions | `conversations` |
 | Export a chat as Markdown or JSON lines; back up the whole archive | `store export`, `store backup` |
 | Unread messages from every chat in one list | `inbox` |
@@ -148,7 +150,7 @@ Guides: [Telegram archive](./tg/archive.md) · [Telegram search](./tg/search.md)
 Use a bot for customer messages, button responses or group tasks. It has its own identity and access.
 
 ```text prompt
-Check the bot’s available messages and draft answers to unanswered questions. Show each draft to me before sending.
+Use tg CLI. Check the bot’s available messages and draft answers to unanswered questions. Show each draft to me before sending.
 ```
 
 Expect drafts based on messages available to that bot. Your personal account’s history is separate. Start with [bot setup and capabilities](./bot-api.mdx).
@@ -175,7 +177,7 @@ Guides: [Full Bot API](./bot-api.mdx) · [Telegram bots](./tg/bot.md) · [MAX bo
 ## Built for agents
 
 - <DocTerm term="skill" lang="en" label="A skill" /> gives your agent instructions for the commands and common tasks.
-  [Connect your agent](./agents.mdx)
+  [Connect your AI assistant](./agents.mdx)
 - <DocTerm term="mcp" lang="en" label="An MCP server" /> for Claude Desktop and other clients. It follows the profile’s permissions; choose read-only access or allow the actions needed. Confirmation prompts are controlled by your AI app.
   [MCP](./mcp.mdx)
 - **Predictable output** — every command can return one JSON value, and each kind of failure has
@@ -195,6 +197,9 @@ Guides: [Full Bot API](./bot-api.mdx) · [Telegram bots](./tg/bot.md) · [MAX bo
 [Telegram security](./tg/security.md) · [MAX security](./max/security.md)
 
 ## Not there yet
+
+- **Telegram:** several photos in one message; muting a chat, privacy settings, call history, stickers and pressing buttons in a bot's message, which `max` already has.
+- **MAX:** video notes, setting or removing the cloud password.
 
 Current unsupported features and planned work are listed in the roadmaps for [Telegram](./tg/roadmap.md) and [MAX](./max/roadmap.md). A roadmap item is not an available capability.
 

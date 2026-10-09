@@ -74,7 +74,7 @@ export const commandGroupCopy = {
   },
   es: {
     intro:
-      "Elige la referencia para tu tarea. Empieza por Primeras tareas si estás conociendo el instrumento; aquí encontrarás comandos, argumentos y opciones exactos.",
+      "Elige la referencia para tu tarea. Empieza por Primeras tareas si estás conociendo la herramienta; aquí encontrarás comandos, argumentos y opciones exactos.",
     personal: "Cuenta personal",
     bot: "Bots",
     admin: "Administración de grupos y canales",
@@ -96,7 +96,7 @@ export function splitCommandReference(markdown: string, lang: string): Record<Co
   const starts = [...body.matchAll(/^#{2,3} `((?:tg|max)(?: [a-z0-9-]+)+)`[^\n]*$/gm)]
   if (!starts.length) throw new Error("Command reference has no command sections")
   const preambleRaw = body.slice(0, starts[0].index)
-  const options = /^## [^`].*$/m.exec(preambleRaw)
+  const options = /^(?:<a id="[^"\n]+" \/>\n\n)?## [^`].*$/m.exec(preambleRaw)
   const preamble = options ? preambleRaw.slice(options.index) : preambleRaw
   const lastStart = starts.at(-1)?.index ?? body.length
   const tail = body.slice(lastStart)

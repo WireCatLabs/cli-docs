@@ -15,15 +15,18 @@ This page helps you find messages, agreements, people, chats and documents in Te
 
 Content search supports text files, Word and PDFs with text layers. Scans and photos need text
 recognition first; ask your agent to do that. Details: [Telegram files](./tg/search.md#for-scripts-and-agents)
-and [MAX](./max/search.md). See [People](./people.md) for finding a person.
+and [MAX](./max/search.md#для-скриптов-и-агентов). See [People](./people.md) for finding a person.
 
 For word forms, typo handling and meaning-based search, see [How search works](./search-architecture.mdx).
 
 ## Fetch the relevant chat history first
 
 Before searching older messages, download the conversations for the period you need. Logging
-in does not download all history; ordinary search reads messages already saved on your computer.
-If that conversation is missing, an empty result does not mean the message was never sent.
+in does not download all history. Word search also asks the messenger's own search: `tg` asks
+Telegram on every word search, and `max` asks the MAX server when you name one chat. Everything
+else reads only the messages saved on your computer: topic search, counts, file filters and
+searches across all MAX chats. If that conversation is missing, an empty result does not mean the
+message was never sent.
 
 Ask your agent to fetch the selected chats or run your messenger's command. Replace `Project`
 with the chat title; this example downloads the past month, up to 1,000 messages per run:
@@ -54,7 +57,7 @@ Each result says whether it is a message, an email or a note. The sections below
 
 ## Find a word or phrase
 
-Start by asking your agent:
+Start by asking your agent. For MAX, write “max CLI” instead of “tg CLI”:
 
 ```text prompt
 Use tg CLI. Find where we agreed the renovation deadline in the group and my chat with the contractor. Show the final agreement, check later replies and cite the messages. If history is missing, tell me what needs fetching. Don't send anything.
@@ -93,13 +96,13 @@ Message search offers several approaches:
 
 - **A word or exact phrase:** when you remember the wording. Use `exact:` for literal matching.
 - **Part of a word:** `flat*` finds words starting with that part, such as “flat” and “flats”.
-- **Word forms and shared stems:** “invoice” can find “invoices” with English stemming configured. Results depend on the language and configured index.
-- **Typos:** ask your agent to allow approximate spelling. Search can correct unknown words using the saved conversation’s vocabulary; the agent chooses the appropriate mode.
+- **Word forms and shared stems:** “invoice” can find “invoices”. Which forms match depends on the archive's language settings.
+- **Typos:** the default search does not correct typos. Ask your agent to allow misspellings: it can switch to the older query mode, which corrects them, or search by the start of the word.
 - **Meaning:** when you remember the subject, such as “the renovation deadline we agreed”, rather than the words. This needs a prepared discussion index.
 
 Word forms, exact matching, indexes and meaning-based search: **[How search works](./search-architecture.mdx)**.
 Detailed syntax and modes: [Telegram](./tg/query-language.md#the-older-modes) and
-[MAX](./max/query-language.md#the-older-modes). These modes describe message search;
+[MAX](./max/query-language.md#прежние-режимы). These modes describe message search;
 chat-title and person-name lookup can behave differently.
 
 ## Narrow the conversation
@@ -128,9 +131,10 @@ You can also filter by person, date or attachments. The [Telegram](./tg/search.m
 
 ## If a result is missing
 
-The tools cannot find messages they have not saved. Fetch the chat's history first, then search
-again. A word search is different from a search by meaning; try both when you remember only
-roughly how something was said. Check dates, chat scope and whether history is complete.
+Word search also asks Telegram's server, or MAX's server when you name a chat. Topic search,
+counts and filters such as files or links need saved history: fetch the missing period, then
+search again. A word search is different from a search by meaning; try both when you remember
+only roughly how something was said. Check dates, chat scope and whether history is complete.
 
 ## Try without installing
 

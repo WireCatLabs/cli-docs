@@ -34,7 +34,7 @@ We provide instructions with the installed tool. [Connect your agent](./agents.m
 | Connection | What it provides | Choose it when |
 |---|---|---|
 | CLI | Commands in a terminal, with JSON results | Your agent already has a local terminal |
-| Skill + CLI | Instructions for using those commands and workflows | You use Codex, Cursor Agent, Claude Code, Gemini CLI or Hermes |
+| Skill + CLI | Instructions for using those commands and workflows | You use Codex, Cursor Agent, Claude Code, Gemini CLI, Hermes or OpenClaw |
 | MCP | Named tools and their parameters directly inside your client | You use Claude Desktop, or prefer the client's tool interface |
 | MCP over HTTP | The same tools for ChatGPT or Claude in a browser, behind your own tunnel | You chat in a browser — [ChatGPT and Claude in the browser](./browser-apps.mdx) |
 | Markdown docs | A readable explanation and command reference | You want the agent to look up how something works |
@@ -113,7 +113,7 @@ For full command syntax and MCP-specific availability, use the messenger referen
 - [Telegram MCP tools and coverage](./tg/mcp.md#tools) · [Telegram command reference](./tg/commands.md).
 - [MAX MCP tools and coverage](./max/mcp.md#инструменты) · [MAX command reference](./max/commands.md).
 
-The available catalogue is determined by the messenger and profile permissions. Ask the agent to discover an action through the search tool; its result provides the supported command and arguments. A read-only profile excludes changes. The app controls its approval prompts.
+The available catalogue is determined by the messenger and profile permissions. Ask the agent to discover an action through the search tool; its result provides the supported command and arguments. A read-only profile excludes changes. The server has no confirmation step of its own: approval prompts come from your app, and the server cannot check whether a person accepted them.
 
 After connecting, ask for five recent chats. Continue with [First tasks](./first-tasks.md).
 

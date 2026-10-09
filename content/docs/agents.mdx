@@ -45,13 +45,30 @@ Replace `codex` with `cursor`, `claude` or `gemini` for your agent. Without `--a
 
 ### Account already connected
 
-Add the instructions without repeating login:
+A global npm installation usually installs the skill already, when npm runs the package's installation scripts. If your agent already sees `tg-cli`, you can skip this step. To add or update the instructions without repeating login:
 
 ```sh
 tg skill install
 ```
 
-The **skill** is an instruction file that teaches the agent how to use the tool. The command installs it in the standard locations. Start a new agent conversation after installation.
+The **skill** is an instruction file that teaches the agent how to use the tool. It does not contain your messenger login. Start a new agent conversation after installation.
+
+Where each agent looks for the skill file:
+
+| Agent | Skill file | Install only for it |
+|---|---|---|
+| Codex, Cursor Agent, Gemini CLI | `~/.agents/skills/tg-cli/SKILL.md` | `tg skill install --for agents` |
+| Claude Code | `~/.claude/skills/tg-cli/SKILL.md` | `tg skill install --for claude` |
+| Hermes | `~/.hermes/skills/tg-cli/SKILL.md` | save `tg skill show`, see [Hermes](#hermes) |
+| OpenClaw | `~/.agents/skills/tg-cli/SKILL.md` | `tg skill install --for agents`, see [OpenClaw](#openclaw) |
+
+`~` is your home folder, also on Windows. Without `--for`, `skill install` writes both the
+`.agents` and the `.claude` copy.
+
+**After you update the tool, run `tg skill install` again**, so the instructions match the new
+version. For Hermes, or any file you saved by hand, save it from `tg skill show` again. When the agent sets
+`AI_AGENT` or `CLAUDECODE`, the tool reminds it at most once a day if its copy of the skill is
+missing or older than the tool. The reminder goes to stderr, so JSON output stays usable.
 
 <a id="check-connection" />
 
@@ -63,23 +80,38 @@ Use tg CLI. Read its instructions with tg skill show, show the connected account
 
 The account and chats should match yours. You can then continue to [First tasks](./first-tasks.md).
 
+### If it does not work
+
+- **The agent cannot find `tg`.** Ask it to run `tg --version`. If that fails, the agent's
+  terminal does not see the installed tool. Open a new terminal, or restart the agent or editor
+  after installing Node.js and the tool. On Windows, see
+  [what the installer changes](./installation.mdx#what-the-windows-installer-changes). More causes:
+  [Telegram troubleshooting](./tg/troubleshooting.md) ·
+  [MAX troubleshooting](./max/troubleshooting.md#max-не-находится-после-установки).
+- **The agent reports "no session".** The tool runs, but it finds no login. Log in with
+  `tg setup` in the same environment and profile the agent uses: the same computer user, the same
+  profile name and the same folder variables such as `TG_CONFIG_DIR`, if you set them. Details: [Telegram](./tg/troubleshooting.md#no-session-for-profile-default--run-tg-setup) ·
+  [MAX](./max/troubleshooting.md#no-session-for-profile-default).
+
 ## Notes for your agent
 
 Use these only for the extra step your client needs. The connection command above is shared.
 
 ### Codex
 
-Select `$tg-cli` in your conversation. If it is missing, open a new conversation
-or restart Codex. [Codex skills guide](https://learn.chatgpt.com/docs/build-skills).
+Use Codex locally, in its CLI or IDE extension. Select `$tg-cli` in your conversation. If it is
+missing, open a new conversation or restart Codex. [Codex skills guide](https://learn.chatgpt.com/docs/build-skills).
 
 ### Cursor
 
-Use **Agent** with <DocTerm term="terminal" lang="en" label="terminal access" />, then ask it to use the tool. If it cannot find the skill,
-ask it to read `skill show`. [Cursor skills guide](https://cursor.com/help/customization/skills).
+Use **Agent** with <DocTerm term="terminal" lang="en" label="terminal access" />, then ask it to use the tool. You can pick `tg-cli` through `/` in
+the Agent chat. If the skill is missing, restart Cursor or ask the agent to read `tg skill show`.
+You can also [connect it over MCP](./mcp.mdx#cursor-and-claude-desktop).
+[Cursor skills guide](https://cursor.com/help/customization/skills).
 
 ### Claude Code
 
-Use `/tg-cli` in a new local session.
+Use `/tg-cli` in a new local session. MCP is optional when the terminal already works.
 [Claude Code skills guide](https://code.claude.com/docs/en/skills).
 
 ### Gemini CLI
@@ -90,14 +122,24 @@ Use `gemini skills list` to see whether the skill is available. In an existing s
 ### Hermes
 
 Ask Hermes to save the exact output of `tg skill show` into
-`~/.hermes/skills/tg-cli/SKILL.md`. Then start a new session and try the check at the top.
+`~/.hermes/skills/tg-cli/SKILL.md`, keeping the frontmatter and UTF-8 text. On macOS or Linux you
+can do it yourself:
+
+```sh
+mkdir -p ~/.hermes/skills/tg-cli
+tg skill show > ~/.hermes/skills/tg-cli/SKILL.md
+```
+
+Then start a new session and try the check above. Hermes's terminal must have the tool and the
+same account login.
 [Hermes skills guide](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills/).
 
 ### OpenClaw
 
-Ask OpenClaw to save the exact output of `tg skill show` into
-`~/.openclaw/skills/tg-cli/SKILL.md`. Check that the skill is available to your agent and start
-a new session. The tool must be installed on the computer or server where OpenClaw runs.
+With its default state folder, OpenClaw also reads `~/.agents/skills`, so `tg skill install` is
+enough. If you moved that folder with `OPENCLAW_STATE_DIR`, ask OpenClaw to save the exact output of
+`tg skill show` into `skills/tg-cli/SKILL.md` inside it. Check that the skill is available to your
+agent and start a new session. The tool must be installed on the computer or server where OpenClaw runs.
 [OpenClaw skills guide](https://docs.openclaw.ai/tools/skills).
 
 <a id="other-clients" />
@@ -106,7 +148,9 @@ a new session. The tool must be installed on the computer or server where OpenCl
 
 ### Another agent
 
-The examples above are not a closed list. Any assistant with command-line access can use the tool. Give it the output of `tg skill show`, or ask it to read the documentation. It can check available commands with `--help`.
+The examples above are not a closed list. Any assistant with command-line access can use the tool. Give it the output of `tg skill show`, or give it [the Markdown documentation](./mcp.mdx#documentation-for-your-agent). It can check available commands with `--help`.
+
+A cloud agent runs on another computer. Install the tool and log in there; your local login is not available to it.
 
 For assistants using MCP, follow [MCP setup](./mcp.mdx); for a browser chat, use [browser connection](./browser-apps.mdx). Ready-made installation choices cover specific clients; other agents use their own instruction or tool settings.
 
