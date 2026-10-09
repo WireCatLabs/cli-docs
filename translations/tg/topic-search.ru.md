@@ -31,8 +31,8 @@ title: "Поиск по теме"
 tg conversations build --chat "Book club"        # find the conversations; again after fetching more
 tg models text download e5-small                 # once: 135 MB, shared with max
 tg conversations embed --chat "Book club"        # resumes where it stopped
-tg conversations search "where do we meet" --chat "Book club"
-tg conversations search "renting a flat"         # every chat you built
+tg search conversations "where do we meet" --chat "Book club"
+tg search conversations "renting a flat"         # every chat you built
 ```
 
 1. **Сборка** находит разговоры чата. Новая сборка заменяет предыдущую, поэтому берите номер
@@ -75,7 +75,7 @@ tg messages links "Book club" 204                # why that message is where it 
 tg conversations status                          # what is behind, chat by chat
 tg conversations build                           # every chat that changed, and groups never built
 tg conversations embed                           # every built chat with pieces left
-tg conversations search "renting a flat" --refresh   # catch up first, then search
+tg search conversations "renting a flat" --refresh   # catch up first, then search
 ```
 
 `status` для каждого собранного чата считает сообщения, которых сборка не видела (новые, изменённые, удалённые), и
@@ -135,7 +135,7 @@ tg models text download embeddinggemma --accept-terms
 ```sh
 tg models text key set openai
 tg conversations embed --chat "Book club" --provider openai
-tg conversations search "renting a flat" --provider openai
+tg search conversations "renting a flat" --provider openai
 ```
 
 Тогда текст разговоров чата уходит этому сервису, а каждый поиск отправляет ваш вопрос.
@@ -146,4 +146,4 @@ tg conversations search "renting a flat" --provider openai
 
 ## Для агентов
 
-В MCP `tg_read` (`command: "conversations list"`), `tg_read` (`command: "conversations show"`), `tg_read` (`command: "conversations search"`), `tg_read` (`command: "conversations related"`) и `tg_read` (`command: "conversations status"`) читают построенные данные; `tg_write` (`command: "conversations refresh"`) обновляет их на этом компьютере. MCP предоставляет `tg_read` (`command: "conversations batches status"`), `tg_read` (`command: "conversations batches next"`), `tg_write` (`command: "conversations links add"`), `tg_write` (`command: "conversations links clear"`) и `tg_write` (`command: "conversations build"`), а также промпт `link-conversations`. Перед чтением пакетов сообщите стоимость и получите согласие владельца. Сохранённым связям нужно право `conversations.links`; затем перестройте данные, в том числе после удаления связей. Настройки внешних эмбеддингов влияют и на поиск MCP и могут отправлять текст запроса. Технические детали — правила, фрагменты, векторы и ранжирование — описаны в разделе [как работает поиск](https://wirecat.dev/en/docs/search-architecture).
+В MCP `tg_read` (`command: "conversations list"`), `tg_read` (`command: "conversations show"`), `tg_read` (`command: "search conversations"`), `tg_read` (`command: "conversations related"`) и `tg_read` (`command: "conversations status"`) читают построенные данные; `tg_write` (`command: "conversations refresh"`) обновляет их на этом компьютере. MCP предоставляет `tg_read` (`command: "conversations batches status"`), `tg_read` (`command: "conversations batches next"`), `tg_write` (`command: "conversations links add"`), `tg_write` (`command: "conversations links clear"`) и `tg_write` (`command: "conversations build"`), а также промпт `link-conversations`. Перед чтением пакетов сообщите стоимость и получите согласие владельца. Сохранённым связям нужно право `conversations.links`; затем перестройте данные, в том числе после удаления связей. Настройки внешних эмбеддингов влияют и на поиск MCP и могут отправлять текст запроса. Технические детали — правила, фрагменты, векторы и ранжирование — описаны в разделе [как работает поиск](https://wirecat.dev/en/docs/search-architecture).

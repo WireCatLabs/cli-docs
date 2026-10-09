@@ -261,7 +261,7 @@ Código `3`: `tg` o un `max` más reciente actualizó el almacén común. Ejecut
 
 Código `6`. `--offline` utiliza solo la copia local y este perfil todavía no ha guardado nada en ella. Ejecuta primero un comando con conexión, por ejemplo `max chats list`.
 
-## `messages search` no encuentra nada
+## `search messages` no encuentra nada
 
 La búsqueda en todos los chats lee el archivo local; la búsqueda de palabras en un chat concreto también consulta al servidor de MAX. Un resultado vacío no demuestra que el mensaje no exista. Comprueba `coverage.next` en la respuesta de `--json`: ejecuta el comando sugerido o pide permiso y vuelve a buscar. `max store fetch --all --background` inicia la descarga de todos los chats; `max store fetch <чат>` descarga uno ([archive.md](./archive.md), [search.md](./search.md)).
 

@@ -53,6 +53,8 @@ tg attachments list --chat "Study group" --needs-text --json
 Una descarga nunca sobrescribe un archivo existente. `localPath` nombra un archivo en el ordenador
 que ejecuta la CLI; un agente remoto necesita los bytes, no solo esa ruta.
 
+Un agente remoto puede recibir un PDF guardado mediante `attachments show` o, si su cliente no abre PDF, pedir cada página con `--page`. Esto usa motores de renderizado locales opcionales; el agente reconoce el texto. Si el contenido de la imagen no es accesible, pide en MCP `format: base64` y muestra el PNG con las herramientas del agente. Consulta la [lectura de PDF por un agente remoto](./remote.md#read-pdf-pages-without-a-local-file-handoff) para ver un ejemplo y los límites.
+
 ## Cómo se lee el contenido
 
 Por defecto, el agente lee escaneos e imágenes con sus propias herramientas de OCR o visión.
@@ -110,7 +112,7 @@ y comprueba que buscar una frase encuentra el mensaje original».
 tg attachments extract --chat "Study group" --download --output-dir ./files
 tg attachments list --chat "Study group" --needs-text
 tg attachments text set "Study group" 204 --text-file ./scan.txt
-tg messages search 'content:worksheet' --chat "Study group" --backend archive
+tg search messages 'content:worksheet' --chat "Study group" --backend archive
 ```
 
 El agente necesita un lector o conversor, y herramientas de visión para los escaneos. Puede extraer

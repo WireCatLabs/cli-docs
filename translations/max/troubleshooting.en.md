@@ -261,7 +261,7 @@ Code `3`: another CLI, such as `tg`, or a newer `max`, upgraded the shared store
 
 Code `6`. `--offline` uses only the local copy, and this profile has not yet retrieved anything into it. First run a command with a connection, for example `max chats list`.
 
-## `messages search` finds nothing
+## `search messages` finds nothing
 
 Searching all chats reads the local archive; word search in one specified chat also queries the MAX server. Empty results do not prove a message is absent. Check `coverage.next` in the `--json` response: run the suggested command or ask for permission, then search again. `max store fetch --all --background` starts downloading all chats; `max store fetch <чат>` downloads one ([archive.md](./archive.md), [search.md](./search.md)).
 

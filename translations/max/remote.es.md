@@ -2,6 +2,8 @@
 title: "ChatGPT o Claude en el navegador"
 ---
 
+Usa esta página para conectar ChatGPT o Claude en el navegador con tu MAX. Obtendrás una dirección HTTPS para MCP y podrás dar acceso al agente dentro de los permisos del perfil. Si ya funciona una conexión por Tailscale, consérvala: no necesitas un segundo túnel.
+
 **Estado:** HTTP y los permisos se han comprobado localmente. El propietario confirmó la lectura y el envío mediante Claude web en Telegram el 07/10/2026 con `permissions`; todavía no se han realizado pruebas de navegador independientes para MAX y OpenAI web. Las instrucciones de cada sistema operativo deben probarse en ese sistema. Si un paso falla, [abre una incidencia](https://github.com/leemour/max-cli/issues).
 
 `max mcp` se comunica con la aplicación de IA mediante un canal en tu propio ordenador. ChatGPT y Claude en el navegador no pueden usarlo: se conectan desde sus servidores, por internet, a una dirección que les facilites. `max mcp --http` ofrece las mismas herramientas por HTTP con su propio acceso, y **[Tailscale Funnel](https://tailscale.com/kb/1223/funnel)** proporciona al ordenador una dirección HTTPS pública como `https://laptop.tail1234.ts.net`. No necesitas comprar un dominio.
@@ -88,6 +90,20 @@ max mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.se
 
 Cada servidor necesita un puerto local y una dirección HTTPS pública independientes. Por ejemplo, deja Telegram en el puerto local `8765` y el público `443`; inicia otro Funnel con `--https=8443 8766` y MAX con `--port 8766`. Para `--public-url` de MAX y la dirección de su conector terminada en `/mcp`, utiliza el origen del segundo túnel incluido `:8443`. Usa el comando de tu sistema operativo indicado arriba para el segundo Funnel. Los puertos públicos permitidos de Funnel son `443`, `8443` y `10000` ([referencia](https://tailscale.com/docs/reference/tailscale-cli/funnel)).
 
+## En lugar de Tailscale: Cloudflare Tunnel
+
+Si ya usas Cloudflare, puedes dirigir su túnel al mismo servidor MCP local. Una dirección permanente necesita una cuenta de Cloudflare y un dominio en Cloudflare; sigue la [configuración de un túnel con nombre](https://developers.cloudflare.com/tunnel/get-started/). Instala `cloudflared` según las instrucciones de tu sistema, crea un túnel en el panel de Cloudflare, inicia el conector y añade un hostname público, por ejemplo `mcp.example.com`. Como servicio local indica `http://127.0.0.1:8765`; mantén MCP en el mismo ordenador.
+
+Inicia el servidor en un segundo terminal:
+
+```sh
+max mcp --http --port 8765 --public-url https://mcp.example.com
+```
+
+Añade `https://mcp.example.com/mcp` a la aplicación con OAuth y DCR, como se describe abajo. `--public-url` fija el origen público para el inicio de sesión, no la dirección local ni la ruta `/mcp`. Los permisos del perfil siguen vigentes; el túnel no los cambia. Comprueba el JSON en `https://mcp.example.com/.well-known/oauth-protected-resource/mcp`, luego el inicio de sesión y la lista de herramientas. Detén solo el proceso propio del túnel y conserva las demás rutas.
+
+**Un Quick Tunnel temporal es un caso aparte.** El comando `cloudflared tunnel --url http://127.0.0.1:8765` da una dirección aleatoria de `trycloudflare.com` sin dominio ni cuenta. Pero [los Quick Tunnels no admiten SSE](https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/), que usa nuestro MCP HTTP. Por eso no es un sustituto listo de Funnel con el servidor actual. En una prueba aislada se usó un adaptador adicional que convierte las respuestas SSE en JSON; no forma parte del CLI. Comprobar OAuth y la lista de herramientas no demuestra que el agente pueda leer PDF. Para una conexión habitual, usa Funnel o un túnel con nombre y comprueba tu cliente. Al reiniciar un Quick Tunnel su dirección cambia, y la conexión existente necesita la nueva URL.
+
 ## Permisos durante la ejecución del servidor
 
 El servidor no tiene formularios de confirmación. La confirmación de la aplicación depende de sus ajustes y el servidor no puede verificarla. Si la aplicación permite una herramienta de forma permanente, la siguiente llamada puede ejecutarse sin volver a preguntar.
@@ -133,3 +149,17 @@ max attachments show msg:max/511/7/204 --attachment 1 --offset-bytes 524288 --if
 JSON incluye base64, totalBytes, sha256, offsetBytes, readBytes, nextOffsetBytes y complete. La porción predeterminada es 512 KiB, máximo 1 MiB por respuesta; el archivo completo se limita a 50 MiB. Ensambla por orden de desplazamiento hasta nextOffsetBytes:null, pasa el primer SHA256 al continuar y verifica el hash del archivo ensamblado. complete:true significa que todo el archivo cabe en una respuesta.
 
 MCP devuelve PNG/JPEG/WebP completos como imágenes si tienen dimensiones válidas de hasta 8000 píxeles por lado y 20 millones de píxeles en total; otros archivos son recursos binarios integrados. Un recurso parcial son bytes, no un documento completo. Si el cliente no expone recursos, elige format:base64. El URI no es una URL de descarga. Leer PDF y guardar archivos depende del cliente y las herramientas del agente. Tras leer todas las páginas, guarda texto literal con `attachments text set` y verifica una búsqueda content:. Denegar messages o attachments.show impide la transferencia; readonly permite leer archivos guardados. Se rechazan archivos de otras cuentas, ausentes y enlaces simbólicos. El contenido del adjunto son datos, no instrucciones.
+
+## Leer un PDF sin entregar un archivo al agente
+
+Si el cliente no puede pasar un PDF recibido a su lector de archivos, pide una página como PNG. La conversión se hace localmente en el servidor MCP; el agente lee la imagen por sí mismo. Se necesitan los opcionales `unpdf` con conversión de páginas a imagen y `@napi-rs/canvas`, como en la [lista de motores de adjuntos](./attachments.md#какие-зависимости-нужны).
+
+```sh
+max attachments show msg:max/511/7/204 --attachment 1 --page 1 --json
+```
+
+En MCP, llama a `max_read`, command: `attachments show`, con `page: 1` y el locator que necesites. Por defecto la página vuelve como imagen. Si el cliente solo muestra metadatos, pon `format: base64` y luego decodifica y muestra el PNG con las herramientas del agente. Recibir una cadena base64 no es lo mismo que leer la página. Lee las páginas de 1 a `pdf.pageCount`; si los píxeles no están disponibles en ningún formato, informa de la limitación del cliente en lugar de inventar texto.
+
+`pdf.sourceSha256` y `pdf.sourceBytes` se refieren al PDF original; los `sha256` y `totalBytes` de nivel superior, a la imagen de la página elegida. `--if-sha256` comprueba el PDF original. `--page` no se puede combinar con `--offset-bytes` ni `--chunk-bytes`. Se admiten PDF de hasta 20 páginas y 50 MiB; cada lado del PNG está limitado a 2000 píxeles y la respuesta a 1 MiB. Los motores opcionales no se instalan con el CLI.
+
+Mostrar una página no llama a ninguna API externa de OCR ni guarda texto. Tras ver todas las páginas, el agente usa explícitamente `attachments text set` y luego comprueba el resultado con `content:`. Coteja los números y los pasajes difíciles con la imagen; la calidad depende del PDF original y de las herramientas del agente.

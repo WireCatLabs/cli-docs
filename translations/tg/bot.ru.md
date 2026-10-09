@@ -209,8 +209,8 @@ tg sales bot webhooks delete https://bot.example.com/telegram
 
 ```sh
 tg sales bot contacts show @ann              # where Ann wrote, and her private chat with the bot
-tg sales bot messages search "price list"    # best match first; --newest for newest first
-tg sales bot messages search --from @ann     # what one person wrote
+tg sales bot search messages "price list"    # best match first; --newest for newest first
+tg sales bot search messages --from @ann     # what one person wrote
 tg sales bot messages between @ann Bob       # what both wrote, in the chats both wrote in
 ```
 

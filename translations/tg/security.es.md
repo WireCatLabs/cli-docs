@@ -72,7 +72,7 @@ Los caracteres de control, los saltos de línea en nombres y los títulos de cha
   lo controla `tg`. Una aplicación que `tg` crea allí lleva el título `tg-cli` y usa la página de GitHub de este proyecto como
   dirección.
 - **Hugging Face y GitHub**, solo al ejecutar `tg models audio download` o `tg models text download`. La voz nunca se envía allí: el modelo local se ejecuta en este equipo.
-- **Los servicios de embeddings configurados** reciben texto de conversaciones de `conversations embed` tras tu consentimiento, y el texto de las consultas de `conversations search` remotas, incluidas las búsquedas por MCP. Los embeddings locales no envían texto.
+- **Los servicios de embeddings configurados** reciben texto de conversaciones de `conversations embed` tras tu consentimiento, y el texto de las consultas de `search conversations` remotas, incluidas las búsquedas por MCP. Los embeddings locales no envían texto.
 - **Los servicios de análisis configurados** reciben lotes limitados de mensajes solo con `conversations build --analyze --chat`, tras un consentimiento limitado a la cuenta, el chat y el proveedor; una construcción normal no envía nada.
 
 No hay telemetría.

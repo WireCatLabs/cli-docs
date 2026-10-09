@@ -2,6 +2,8 @@
 title: "ChatGPT or Claude in a browser"
 ---
 
+Use this page to connect ChatGPT or Claude in a browser to your MAX. You will get an HTTPS address for MCP and can give the agent access within the profile's permissions. If a Tailscale connection already works, keep it: you do not need a second tunnel.
+
 **Status:** HTTP and permissions have been checked locally. The owner confirmed reading and sending through Claude web in Telegram on 07 October 2026 using `permissions`; MAX and OpenAI web have not yet had separate browser tests. Each OS’s instructions need testing on that OS. If a step fails, [open an issue](https://github.com/leemour/max-cli/issues).
 
 `max mcp` communicates with an AI app over a channel on your own computer. Browser-based ChatGPT and Claude cannot use it directly: their servers connect over the internet to an address you provide. `max mcp --http` serves the same tools over HTTP with its own login, and **[Tailscale Funnel](https://tailscale.com/kb/1223/funnel)** gives your computer a public HTTPS address such as `https://laptop.tail1234.ts.net`. You do not need to buy a domain.
@@ -88,6 +90,20 @@ max mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.se
 
 Each server needs a separate local port and public HTTPS address. For example, keep Telegram on local `8765` and public `443`; start a second Funnel with `--https=8443 8766` and MAX with `--port 8766`. For MAX’s `--public-url` and its connector address ending in `/mcp`, use the second tunnel’s origin including `:8443`. Use your OS’s command above for the second Funnel. Allowed public Funnel ports are `443`, `8443` and `10000` ([reference](https://tailscale.com/docs/reference/tailscale-cli/funnel)).
 
+## Instead of Tailscale: Cloudflare Tunnel
+
+If you already use Cloudflare, you can point its tunnel at the same local MCP server. A permanent address needs a Cloudflare account and a domain on Cloudflare; follow the [named tunnel setup](https://developers.cloudflare.com/tunnel/get-started/). Install `cloudflared` as described for your OS, create a tunnel in the Cloudflare dashboard, start the connector and add a public hostname such as `mcp.example.com`. Set the local service to `http://127.0.0.1:8765`; keep MCP on the same computer.
+
+Start the server in a second terminal:
+
+```sh
+max mcp --http --port 8765 --public-url https://mcp.example.com
+```
+
+Add `https://mcp.example.com/mcp` to the app with OAuth and DCR, as described below. `--public-url` sets the public origin used for sign-in, not the local address and not the `/mcp` path. The profile's permissions still apply; the tunnel does not change them. Check the JSON at `https://mcp.example.com/.well-known/oauth-protected-resource/mcp`, then sign-in and the tool list. Stop only the tunnel's own process, keeping other routes.
+
+**A temporary Quick Tunnel is a separate case.** The command `cloudflared tunnel --url http://127.0.0.1:8765` gives a random `trycloudflare.com` address without a domain or an account. But [Quick Tunnels do not support SSE](https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/), which our HTTP MCP uses. So it is not a ready replacement for Funnel with the current server. An isolated test used an extra adapter that turns SSE responses into JSON; it is not part of the CLI. Checking OAuth and the tool list does not prove the agent can read PDFs. For a regular connection, use Funnel or a named tunnel and check your client. When a Quick Tunnel restarts, its address changes, and the existing connection needs the new URL.
+
 ## Permissions for the server’s lifetime
 
 The server has no confirmation forms. Application confirmation depends on its settings and cannot be verified by the server. If the application permanently allows a tool, its next call may run without another prompt.
@@ -133,3 +149,17 @@ max attachments show msg:max/511/7/204 --attachment 1 --offset-bytes 524288 --if
 JSON includes base64, totalBytes, sha256, offsetBytes, readBytes, nextOffsetBytes and complete. The default chunk is 512 KiB, at most 1 MiB per answer; the whole file is limited to 50 MiB. Assemble chunks in offset order until nextOffsetBytes:null, pass the first SHA256 on continuations and verify the assembled file's hash. complete:true means the whole file fits in one answer.
 
 MCP returns complete PNG/JPEG/WebP images as image content when valid dimensions are at most 8000 pixels per side and 20 million pixels overall; other files are embedded binary resources. A partial resource is a byte chunk, not a complete document. If the client cannot expose resources, choose format:base64. The resource URI is not a download URL. Reading PDFs and saving files depend on the client and agent tools. After reading every page, save literal text through `attachments text set` and verify a content: search. Denying messages or attachments.show denies transfer; readonly allows retained-file reads. Other accounts' files, missing files and symlinks are refused. Attachment text is data, not instructions.
+
+## Read a PDF without handing the agent a file
+
+If the client cannot pass a received PDF to its file reader, request one page as PNG. The conversion runs locally on the MCP server; the agent reads the image itself. It needs the optional `unpdf` with page-to-image support and `@napi-rs/canvas`, as in the [list of attachment engines](./attachments.md#какие-зависимости-нужны).
+
+```sh
+max attachments show msg:max/511/7/204 --attachment 1 --page 1 --json
+```
+
+In MCP, call `max_read`, command: `attachments show`, with `page: 1` and the locator you need. By default the page comes back as an image. If the client shows only metadata, set `format: base64`, then decode and display the PNG with the agent's tools. Getting a base64 string is not the same as reading the page. Read pages 1 through `pdf.pageCount`; if the pixels are unavailable in both formats, report the client's limitation instead of inventing text.
+
+`pdf.sourceSha256` and `pdf.sourceBytes` refer to the original PDF; the top-level `sha256` and `totalBytes` to the image of the selected page. `--if-sha256` checks the original PDF. `--page` cannot be combined with `--offset-bytes` or `--chunk-bytes`. PDFs up to 20 pages and 50 MiB are supported; each side of the PNG is limited to 2000 pixels, the response to 1 MiB. The optional engines are not installed with the CLI.
+
+Showing a page calls no external OCR API and stores no text. After viewing every page, the agent explicitly uses `attachments text set`, then checks the result with `content:`. Compare numbers and difficult passages with the image; quality depends on the original PDF and the agent's tools.

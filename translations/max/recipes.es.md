@@ -115,7 +115,7 @@ Escribe: **no**. Permite `Bash(max messages list:*)`.
 
 ## Compromisos y seguimiento
 
-Escribe: **no**. Permite `Bash(max review:*)`, `Bash(max messages context:*)`, `Bash(max messages search:*)`.
+Escribe: **no**. Permite `Bash(max review:*)`, `Bash(max messages context:*)`, `Bash(max search messages:*)`.
 
 > Ejecuta `max review --new --transcribe --json` (la primera vez, 3 días; después, desde el `--new` anterior, con un punto propio por chat). Separa qué debo, qué espero de otros y qué falta aclarar. Incluye chat, fecha e IDs de apoyo; plazos solo si están expresados. Antes de señalar retrasos, comprueba si se resolvió después o en grupos de trabajo. Si `"complete": false`, indica lo que falta. Termina con los asuntos pendientes.
 

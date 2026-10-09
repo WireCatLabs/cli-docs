@@ -24,8 +24,8 @@ Cada conversación es una lista de mensajes, del más antiguo al más reciente. 
 tg conversations build --chat "Book club"        # find the conversations; again after fetching more
 tg models text download e5-small                 # once: 135 MB, shared with max
 tg conversations embed --chat "Book club"        # resumes where it stopped
-tg conversations search "where do we meet" --chat "Book club"
-tg conversations search "renting a flat"         # every chat you built
+tg search conversations "where do we meet" --chat "Book club"
+tg search conversations "renting a flat"         # every chat you built
 ```
 
 1. **Construir** (build) encuentra las conversaciones de un chat. Una nueva construcción sustituye a la anterior, así que toma el número de una conversación de un `list` reciente en lugar de guardarlo.
@@ -57,7 +57,7 @@ Los mensajes nuevos llegan a una conversación solo tras la siguiente construcci
 tg conversations status                          # what is behind, chat by chat
 tg conversations build                           # every chat that changed, and groups never built
 tg conversations embed                           # every built chat with pieces left
-tg conversations search "renting a flat" --refresh   # catch up first, then search
+tg search conversations "renting a flat" --refresh   # catch up first, then search
 ```
 
 `status` cuenta, para cada chat construido, los mensajes que la construcción no ha visto (nuevos, editados, eliminados) y los fragmentos cuyo vector está al día, desactualizado o falta, y cuántos grupos no se construyeron nunca. Sin `--chat`, `build`, `embed` y `search --refresh` toman como máximo 20 chats por ejecución (`--max-chats`) y vectorizan como máximo 2000 fragmentos por ejecución (`--max-chunks`); vuelve a ejecutarlos para continuar. Nunca descargan un modelo.
@@ -97,11 +97,11 @@ Un servicio puede calcular los vectores en su lugar, con tu propia clave:
 ```sh
 tg models text key set openai
 tg conversations embed --chat "Book club" --provider openai
-tg conversations search "renting a flat" --provider openai
+tg search conversations "renting a flat" --provider openai
 ```
 
 En ese caso, el texto de las conversaciones del chat va a ese servicio, y cada búsqueda envía tu pregunta. Antes de enviar nada, `embed` indica cuántos fragmentos, cuántos tokens como máximo y qué precio como máximo, y espera tu sí (`--yes` en scripts; `--max-tokens` fija un límite). `--base-url` acepta cualquier servidor con la API de embeddings de OpenAI, como Ollama o LM Studio en tu propio equipo, con `--model` y `--dims`. `tg models text key remove openai` olvida la clave.
 
 ## Para agentes
 
-En MCP, `tg_read` (`command: "conversations list"`), `tg_read` (`command: "conversations show"`), `tg_read` (`command: "conversations search"`), `tg_read` (`command: "conversations related"`) y `tg_read` (`command: "conversations status"`) leen los datos preparados; `tg_write` (`command: "conversations refresh"`) los pone al día en este ordenador. MCP ofrece `tg_read` (`command: "conversations batches status"`), `tg_read` (`command: "conversations batches next"`), `tg_write` (`command: "conversations links add"`), `tg_write` (`command: "conversations links clear"`) y `tg_write` (`command: "conversations build"`), además del prompt `link-conversations`. Informa del coste del lote y obtén el consentimiento del propietario antes de leer lotes. Los vínculos guardados requieren `conversations.links`; reconstruye después, también tras borrar vínculos. Los ajustes de embeddings remotos afectan también a las búsquedas MCP y pueden enviar el texto de consulta. La parte técnica — reglas, fragmentos, vectores y clasificación — está en [cómo funciona la búsqueda](https://wirecat.dev/en/docs/search-architecture).
+En MCP, `tg_read` (`command: "conversations list"`), `tg_read` (`command: "conversations show"`), `tg_read` (`command: "search conversations"`), `tg_read` (`command: "conversations related"`) y `tg_read` (`command: "conversations status"`) leen los datos preparados; `tg_write` (`command: "conversations refresh"`) los pone al día en este ordenador. MCP ofrece `tg_read` (`command: "conversations batches status"`), `tg_read` (`command: "conversations batches next"`), `tg_write` (`command: "conversations links add"`), `tg_write` (`command: "conversations links clear"`) y `tg_write` (`command: "conversations build"`), además del prompt `link-conversations`. Informa del coste del lote y obtén el consentimiento del propietario antes de leer lotes. Los vínculos guardados requieren `conversations.links`; reconstruye después, también tras borrar vínculos. Los ajustes de embeddings remotos afectan también a las búsquedas MCP y pueden enviar el texto de consulta. La parte técnica — reglas, fragmentos, vectores y clasificación — está en [cómo funciona la búsqueda](https://wirecat.dev/en/docs/search-architecture).

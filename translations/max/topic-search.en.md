@@ -28,8 +28,8 @@ agent can link what the rules leave open ([below](#связать-сообщен
 max conversations build --chat "Книжный клуб"   # найти разговоры; ещё раз — после того, как скачано больше
 max models text download e5-small               # один раз: 135 МБ, общая папка с tg
 max conversations embed --chat "Книжный клуб"   # продолжает с места, где остановился
-max conversations search "где встречаемся" --chat "Книжный клуб"
-max conversations search "аренда квартиры"      # во всех построенных чатах
+max search conversations "где встречаемся" --chat "Книжный клуб"
+max search conversations "аренда квартиры"      # во всех построенных чатах
 ```
 
 1. **Build** finds the conversations in a chat. A new `build` replaces the previous one, so take the conversation number from a fresh `list` rather than keeping it.
@@ -62,7 +62,7 @@ New messages enter a conversation only after the next `build`, and enter vectors
 max conversations status                         # что отстало, по чатам
 max conversations build                          # все изменившиеся чаты и группы, ни разу не построенные
 max conversations embed                          # все построенные чаты, где остались куски
-max conversations search "аренда квартиры" --refresh   # сначала догнать, потом искать
+max search conversations "аренда квартиры" --refresh   # сначала догнать, потом искать
 ```
 
 `status` counts, for each built chat, messages that `build` has not seen yet (new, edited or deleted), pieces with current, stale or missing vectors, and groups never built. When rules change in a new version, `status` and `max store check` identify chats built with old rules: build them again. Without `--chat`, `build`, `embed` and `search --refresh` process at most 20 chats (`--max-chats`) and embed at most 2,000 pieces (`--max-chunks`) per run; run again to continue. They never download a model.
@@ -106,11 +106,11 @@ A service can compute the vectors instead, with your own key:
 ```sh
 max models text key set openai
 max conversations embed --chat "Книжный клуб" --provider openai
-max conversations search "аренда квартиры" --provider openai
+max search conversations "аренда квартиры" --provider openai
 ```
 
 The text of the chat’s conversations then goes to that service, and each search sends it your question. Before sending anything, `embed` reports the number of pieces, maximum tokens and maximum cost, and waits for your yes (`--yes` in scripts; `--max-tokens` sets a limit). `--base-url` accepts any server with the OpenAI embeddings API (`/v1/embeddings`), such as Ollama or LM Studio on your computer, with `--model` and `--dims`. `max models text key remove openai` removes the key.
 
 ## For agents
 
-In MCP, `max_read` (`command: "conversations list"`), `max_read` (`command: "conversations show"`), `max_read` (`command: "conversations search"`), `max_read` (`command: "conversations related"`) and `max_read` (`command: "conversations status"`) read the built index; `max_write` (`command: "conversations refresh"`) brings it up to date on this computer. Through MCP, the agent gets the `link-conversations` instructions, estimates the work with `max_read` (`command: "conversations batches status"`) and waits for the owner’s consent for that chat. It then reads `max_read` (`command: "conversations batches next"`), saves answers through `max_write` (`command: "conversations links add"`) and rebuilds the graph through `max_write` (`command: "conversations build"`). `max_write` (`command: "conversations links clear"`) removes agent answers; the graph must also be rebuilt afterward. Writes require `conversations.links`. External-vector settings also apply to MCP search: the question is sent to the selected service. For the technical details—rules, chunks, vectors and result ordering—see [how search works](https://wirecat.dev/ru/docs/search-architecture).
+In MCP, `max_read` (`command: "conversations list"`), `max_read` (`command: "conversations show"`), `max_read` (`command: "search conversations"`), `max_read` (`command: "conversations related"`) and `max_read` (`command: "conversations status"`) read the built index; `max_write` (`command: "conversations refresh"`) brings it up to date on this computer. Through MCP, the agent gets the `link-conversations` instructions, estimates the work with `max_read` (`command: "conversations batches status"`) and waits for the owner’s consent for that chat. It then reads `max_read` (`command: "conversations batches next"`), saves answers through `max_write` (`command: "conversations links add"`) and rebuilds the graph through `max_write` (`command: "conversations build"`). `max_write` (`command: "conversations links clear"`) removes agent answers; the graph must also be rebuilt afterward. Writes require `conversations.links`. External-vector settings also apply to MCP search: the question is sent to the selected service. For the technical details—rules, chunks, vectors and result ordering—see [how search works](https://wirecat.dev/ru/docs/search-architecture).

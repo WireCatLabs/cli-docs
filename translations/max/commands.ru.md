@@ -595,6 +595,68 @@ max chats link reset <chat>
 |---|---|---|
 | `chat` | обязательный | a chat: its id, or part of its title. |
 
+### `max chats requests`
+
+requests to join a MAX channel needing approval
+
+#### `max chats requests list`
+
+pending requests to join a MAX channel needing approval; admins only; requestedAt is null
+
+```sh
+max chats requests list <chat> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | a chat: its id, or part of its title. |
+
+| Опция | Что делает |
+|---|---|
+| `--limit <n>` | how many. |
+| `--search <text>` | only people whose name or @username has this. |
+| `--link <link>` | not supported by MAX; use name search instead. |
+
+#### `max chats requests accept`
+
+let them in; the group sees them join
+
+**Меняет что-то в MAX.**
+
+```sh
+max chats requests accept <chat> [person] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | a chat: its id, or part of its title. |
+| `person` | необязательный | who asked: an id from `chats requests list`. |
+
+| Опция | Что делает |
+|---|---|
+| `--all` | not supported by MAX; select one person from chats requests list. |
+| `--link <link>` | not supported by MAX; select one person from chats requests list. |
+
+#### `max chats requests decline`
+
+turn the request away
+
+**Меняет что-то в MAX.**
+
+```sh
+max chats requests decline <chat> [person] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | a chat: its id, or part of its title. |
+| `person` | необязательный | who asked: an id from `chats requests list`. |
+
+| Опция | Что делает |
+|---|---|
+| `--all` | not supported by MAX; select one person from chats requests list. |
+| `--link <link>` | not supported by MAX; select one person from chats requests list. |
+
 ### `max chats folders`
 
 your chat folders
@@ -966,7 +1028,7 @@ max contacts alias rm <person>
 
 ### `max contacts notes`
 
-ваши личные заметки о сохранённом контакте, ограниченные этим аккаунтом
+your private notes on a stored contact, the same in every account that sees them
 
 #### `max contacts notes list`
 
@@ -1234,42 +1296,6 @@ max messages list <chat> [options]
 | `--transcribe` | turn voice messages not heard yet into text — by the messenger, or a model on this machine; can take minutes. |
 | `--model <id>` | which downloaded speech model hears them, with --transcribe; `models audio list` shows them. |
 | `--mark-read` | also mark the chat read up to the newest message shown; the other person sees it. |
-
-### `max messages search`
-
-поиск в локальном хранилище и на сервере мессенджера (--backend); по желанию загружает новые сообщения с --sync-first
-
-```sh
-max messages search [query] [options]
-```
-
-| Аргумент | | Что это |
-|---|---|---|
-| `query` | необязательный | strict Lucene query: words, "phrases", AND/OR/NOT, field groups and date ranges; --language legacy keeps discovery; with --saved, more words AND-ed to it. |
-
-| Опция | Что делает |
-|---|---|
-| `--sync-first` | first fetch new messages within the chat, time and message bounds. |
-| `--max-chats <n>` | refresh at most this many chats (default: 5). |
-| `--sync-time <duration>` | stop fetching after this long (default: 30s). |
-| `--max-messages <n>` | fetch at most this many messages total (default: 500). |
-| `--thread` | the stored reply chain and replies instead of time neighbours; falls back when no graph exists. |
-| `--thread-hops <n>` | at most this many links from the hit (default: 8). |
-| `--thread-messages <n>` | at most this many messages in each thread context (default: 50). |
-| `--thread-bytes <n>` | at most this many bytes of whole messages and links in each context (default: 65536). |
-| `--thread-within <duration>` | messages within this long either side of the hit (default: 1d). |
-| `--backend <archive\|server\|both>` | где искать: локальный архив, сервер мессенджера или оба (по умолчанию: both). |
-| `--server-time <duration>` | прекратить ожидание ответа сервера через это время (по умолчанию: 5s). |
-| `--chat <chat>` | only this chat — the same as chat: in the query; a chat: its id, or part of its title. |
-| `--source <messenger>` | every account of this messenger held in the store; personal, bots or all — the same as in: in the query. |
-| `--limit <n>` | how many. |
-| `--newest` | newest first instead of best first. |
-| `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
-| `--context <n>` | messages before and after each hit; 2 in the terminal, 0 otherwise. |
-| `--language <lucene\|legacy>` | the query language: strict Lucene or legacy discovery. |
-| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
-| `--regex` | the words are one regular expression, case-insensitive, tested against every stored text. |
-| `--saved <name\|id>` | run a saved search or an earlier run; options typed here replace its own. |
 
 ### `max messages show`
 
@@ -1641,8 +1667,12 @@ background fetch jobs
 background fetch jobs, newest first
 
 ```sh
-max store jobs list
+max store jobs list [options]
 ```
+
+| Опция | Что делает |
+|---|---|
+| `--state <state>` | only jobs in this state. Одно из: `running`, `done`, `failed`, `cancelled`, `died`. |
 
 #### `max store jobs show`
 
@@ -1749,7 +1779,7 @@ max store check
 
 ### `max store migrate`
 
-bring the store up to this build's schema, then normalize, index and stem the messages stored before it
+bring the store up to this build's schema, then normalize, index and stem the messages and notes stored before it
 
 ```sh
 max store migrate
@@ -1757,7 +1787,7 @@ max store migrate
 
 ### `max store reindex`
 
-rebuild the word index, its typo vocabulary, the stems and the files' word index from the stored messages; loses no message
+rebuild the word index, its typo vocabulary, the stems, the files' word index and the notes' indexes from what is stored; loses nothing
 
 ```sh
 max store reindex
@@ -1853,7 +1883,7 @@ max stats messages show [query] [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `query` | необязательный | a strict Lucene query, as for messages search; none counts every stored message; with --saved, more words AND-ed to it. |
+| `query` | необязательный | a strict Lucene query, as for search messages; none counts every stored message; with --saved, more words AND-ed to it. |
 
 | Опция | Что делает |
 |---|---|
@@ -1946,7 +1976,7 @@ max stats messages unanswered [query] [options]
 | `--saved <name\|id>` | запустить сохранённый отчёт этого вида; указанные опции заменяют сохранённые. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 | `--limit <n>` | строк отчёта, 1–100; по умолчанию 20. |
-| `--answerer <id>` | человек в выбранной области, чей прямой ответ учитывается; для нескольких повторить. |
+| `--answerer <person>` | stored name, alias, @username, ID or person:provider/account/id; ambiguous names require a choice; repeat for more. |
 | `--older-than <duration>` | минимальный возраст вопроса без наблюдаемого подходящего ответа. |
 
 #### `max stats messages discussion`
@@ -2044,7 +2074,7 @@ max stats contacts responses [query] [options]
 | `--saved <name\|id>` | запустить сохранённый отчёт этого вида; указанные опции заменяют сохранённые. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 | `--limit <n>` | строк отчёта, 1–100; по умолчанию 20. |
-| `--answerer <id>` | человек в выбранной области, чей прямой ответ учитывается; для нескольких повторить. |
+| `--answerer <person>` | stored name, alias, @username, ID or person:provider/account/id; ambiguous names require a choice; repeat for more. |
 
 #### `max stats contacts top`
 
@@ -2137,7 +2167,7 @@ max stats chats newcomers <chat> [options]
 | `--saved <name\|id>` | запустить сохранённый отчёт этого вида; указанные опции заменяют сохранённые. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 | `--limit <n>` | строк отчёта, 1–100; по умолчанию 20. |
-| `--answerer <id>` | человек в выбранной области, чей прямой ответ учитывается; для нескольких повторить. |
+| `--answerer <person>` | stored name, alias, @username, ID or person:provider/account/id; ambiguous names require a choice; repeat for more. |
 
 #### `max stats chats retention`
 
@@ -2205,7 +2235,7 @@ max stats charts <chat> [options]
 
 ### `max tasks list`
 
-задачи, сначала самые старые, с сообщением, на которое указывает каждая
+tasks, oldest first, with their message or note source
 
 ```sh
 max tasks list [options]
@@ -2221,7 +2251,7 @@ max tasks list [options]
 
 ### `max tasks add`
 
-добавить задачу для сообщения, которое правила не распознают — обещания или просьбы
+add a task for a stored message or note — a promise, a request
 
 ```sh
 max tasks add <message> [options]
@@ -2229,7 +2259,7 @@ max tasks add <message> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `message` | обязательный | идентификатор сообщения msg:<provider>/<account>/<chat>/<message>, как в выводе review --json. |
+| `message` | обязательный | a message locator, msg:<provider>/<account>/<chat>/<message>, or note:<id>. |
 
 | Опция | Что делает |
 |---|---|
@@ -2338,37 +2368,6 @@ max conversations status [options]
 | `--provider <provider>` | embedding provider: local or openai; flags override profile settings. |
 | `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
-
-### `max conversations search`
-
-the conversations nearest to a query in meaning and in words, best first, in one chat or every one — meaning after `conversations embed`; runs on this machine
-
-```sh
-max conversations search <query> [options]
-```
-
-| Аргумент | | Что это |
-|---|---|---|
-| `query` | обязательный | what to look for, in your own words, in any language the model reads. |
-
-| Опция | Что делает |
-|---|---|
-| `--model <model>` | local: a model id from `models text list` (default: e5-small); remote: the provider's model. |
-| `--provider <provider>` | embedding provider: local or openai; flags override profile settings. |
-| `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
-| `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
-| `--max-chats <n>` | at most this many chats; 5 with --sync-first, 20 with --refresh if not given. |
-| `--max-chunks <n>` | at most this many chunks embedded in one run; 2000 if not given. |
-| `--sync-first` | first fetch new messages within the chat, time and message bounds. |
-| `--sync-time <duration>` | stop fetching after this long (default: 30s). |
-| `--max-messages <n>` | fetch at most this many messages total (default: 500). |
-| `--chat <chat>` | only this chat: a chat: its id, or part of its title. |
-| `--since-time <time>` | only those still going at this ISO 8601 time, or 30m / 2h / 1d ago, or later. |
-| `--filter <query>` | strict Lucene filter: any message in a conversation must match; does not change the meaning query. |
-| `--source <source>` | accounts to search: personal, bots, all, or a provider; defaults to the active account. |
-| `--timezone <zone>` | IANA timezone for filter dates; system timezone by default. |
-| `--limit <n>` | how many. |
-| `--refresh` | first build and embed, on this machine, the chats in scope that changed or were never built — within --max-chats and --max-chunks. |
 
 ### `max conversations batches`
 
@@ -2566,7 +2565,7 @@ max attachments show <chat> [message] [options]
 | `--offset-bytes <n>` | смещение в байтах от 0. |
 | `--chunk-bytes <n>` | число возвращаемых байтов, 1–1048576 (по умолчанию524288). |
 | `--if-sha256 <hash>` | требовать SHA-256 всего файла из предыдущей порции. |
-
+| `--page <n>` | render one PDF page as PNG, from 1; optional unpdf/canvas, no OCR. |
 
 ### `max attachments text`
 
@@ -2698,13 +2697,148 @@ max metadata refresh [options]
 | `--only-missing` | только чаты без метаданных; без --chat — все сохранённые группы и каналы. |
 | `--limit <number>` | обработать не более указанного числа чатов (1–500). По умолчанию: `50`. |
 
+## `max search`
+
+find things by text: search all for everything the local store holds, or one resource
+
+### `max search all`
+
+search everything the local store holds — messenger messages, mail and notes — best match first; start here when you do not know where something was written
+
+```sh
+max search all <query> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | обязательный | strict Lucene query: words, "phrases", AND/OR/NOT, field groups and date ranges. |
+
+| Опция | Что делает |
+|---|---|
+| `--only <resources>` | only these, separated by commas: messages, mail, notes. |
+| `--limit <n>` | how many. |
+| `--exact` | bare words and quotes match their exact form only, as exact:word does. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+
+### `max search messages`
+
+search messenger messages in the local store and on the messenger's server (--backend); optionally fetches new messages with --sync-first
+
+```sh
+max search messages [query] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | strict Lucene query: words, "phrases", AND/OR/NOT, field groups and date ranges; --language legacy keeps discovery; with --saved, more words AND-ed to it. |
+
+| Опция | Что делает |
+|---|---|
+| `--sync-first` | first fetch new messages within the chat, time and message bounds. |
+| `--max-chats <n>` | refresh at most this many chats (default: 5). |
+| `--sync-time <duration>` | stop fetching after this long (default: 30s). |
+| `--max-messages <n>` | fetch at most this many messages total (default: 500). |
+| `--thread` | the stored reply chain and replies instead of time neighbours; falls back when no graph exists. |
+| `--thread-hops <n>` | at most this many links from the hit (default: 8). |
+| `--thread-messages <n>` | at most this many messages in each thread context (default: 50). |
+| `--thread-bytes <n>` | at most this many bytes of whole messages and links in each context (default: 65536). |
+| `--thread-within <duration>` | messages within this long either side of the hit (default: 1d). |
+| `--backend <archive\|server\|both>` | где искать: локальный архив, сервер мессенджера или оба (по умолчанию: both). |
+| `--server-time <duration>` | прекратить ожидание ответа сервера через это время (по умолчанию: 5s). |
+| `--chat <chat>` | only this chat — the same as chat: in the query; a chat: its id, or part of its title. |
+| `--source <messenger>` | every account of this messenger held in the store; personal, bots or all — the same as in: in the query. |
+| `--type <text\|voice\|file>` | only messages of this type: text alone, a voice message, or a file. |
+| `--limit <n>` | how many. |
+| `--newest` | newest first instead of best first. |
+| `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
+| `--context <n>` | messages before and after each hit; 2 in the terminal, 0 otherwise. |
+| `--language <lucene\|legacy>` | the query language: strict Lucene or legacy discovery. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--regex` | the words are one regular expression, case-insensitive, tested against every stored text. |
+| `--saved <name\|id>` | run a saved search or an earlier run; options typed here replace its own. |
+
+### `max search mail`
+
+search the mail imported into the local store — memo mail import brings it in
+
+```sh
+max search mail [query] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | strict Lucene query: words, "phrases", AND/OR/NOT, field groups and date ranges. |
+
+| Опция | Что делает |
+|---|---|
+| `--chat <chat>` | only this mail thread, by id or subject. |
+| `--limit <n>` | how many. |
+| `--newest` | newest first instead of best first. |
+| `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
+| `--context <n>` | messages before and after each hit; 2 in the terminal, 0 otherwise. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+
+### `max search notes`
+
+search the notes — written in memo, or imported from a notes folder — by words and, with the local text model, by meaning; each hit says which found it and what it links to
+
+```sh
+max search notes <query> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | обязательный | strict Lucene query: words, "phrases", AND/OR/NOT, tag: and date ranges. |
+
+| Опция | Что делает |
+|---|---|
+| `--type <internal\|file>` | only notes written in memo, or only notes from a folder. |
+| `--folder <id>` | only this notes folder, by its id; repeat it for more. |
+| `--tag <tag>` | only notes with this tag. |
+| `--filter <query>` | a query every hit must also match; it does not change the search by meaning. |
+| `--limit <n>` | how many. |
+| `--offset <n>` | skip this many, for the next page. |
+| `--exact` | words as written only; meaning is not searched. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+
+### `max search conversations`
+
+the conversations nearest to a query in meaning and in words, best first, in one chat or every one — meaning after `conversations embed`; runs on this machine
+
+```sh
+max search conversations <query> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | обязательный | what to look for, in your own words, in any language the model reads. |
+
+| Опция | Что делает |
+|---|---|
+| `--model <model>` | local: a model id from `models text list` (default: e5-small); remote: the provider's model. |
+| `--provider <provider>` | embedding provider: local or openai; flags override profile settings. |
+| `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
+| `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
+| `--max-chats <n>` | at most this many chats; 5 with --sync-first, 20 with --refresh if not given. |
+| `--max-chunks <n>` | at most this many chunks embedded in one run; 2000 if not given. |
+| `--sync-first` | first fetch new messages within the chat, time and message bounds. |
+| `--sync-time <duration>` | stop fetching after this long (default: 30s). |
+| `--max-messages <n>` | fetch at most this many messages total (default: 500). |
+| `--chat <chat>` | only this chat: a chat: its id, or part of its title. |
+| `--since-time <time>` | only those still going at this ISO 8601 time, or 30m / 2h / 1d ago, or later. |
+| `--filter <query>` | strict Lucene filter: any message in a conversation must match; does not change the meaning query. |
+| `--source <source>` | accounts to search: personal, bots, all, or a provider; defaults to the active account. |
+| `--timezone <zone>` | IANA timezone for filter dates; system timezone by default. |
+| `--limit <n>` | how many. |
+| `--refresh` | first build and embed, on this machine, the chats in scope that changed or were never built — within --max-chats and --max-chunks. |
+
 ## `max searches`
 
-сохранённые поиски и история messages search и stats messages show в локальном хранилище; --saved выполняет один
+сохранённые поиски и история search messages и stats messages show в локальном хранилище; --saved выполняет один
 
 ### `max searches create`
 
-save a search under a name without running it; messages search --saved <name> runs it
+save a search under a name without running it; search messages --saved <name> runs it
 
 ```sh
 max searches create <name> [query] [options]
@@ -2713,7 +2847,7 @@ max searches create <name> [query] [options]
 | Аргумент | | Что это |
 |---|---|---|
 | `name` | обязательный | up to 64 letters a–z, digits and hyphens, not only digits. |
-| `query` | необязательный | the query, as for messages search; none matches every stored message. |
+| `query` | необязательный | the query, as for search messages; none matches every stored message. |
 
 | Опция | Что делает |
 |---|---|
@@ -4101,26 +4235,6 @@ max bot messages unpin <chat> <message>
 | `chat` | обязательный | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
 | `message` | обязательный | message id. |
 
-#### `max bot messages search`
-
-search the messages this bot has read, sent or received on this machine — the local copy only, best match first; every word must appear; "a phrase", -word, a OR b, from: chat: after: before: has:; by text, by --from, or both
-
-```sh
-max bot messages search [query] [options]
-```
-
-| Аргумент | | Что это |
-|---|---|---|
-| `query` | необязательный | the words to find. |
-
-| Опция | Что делает |
-|---|---|
-| `--all-bots` | also read every other bot's copy on this machine that readOtherBots allows. |
-| `--bots <profiles>` | also read these bots' copies, comma separated — each allowed by readOtherBots. |
-| `--limit <n>` | how many. |
-| `--newest` | newest first instead of best first. |
-| `--from <who>` | only what this person wrote — an id, @username or part of a name; repeat it for any of several. |
-
 #### `max bot messages between`
 
 what two or more people wrote in the chats they have all written in — from the local copy, grouped by chat, oldest first; --limit counts per chat. Common chats are the ones this copy saw each of them write in, not a member list from MAX
@@ -4138,6 +4252,30 @@ max bot messages between <people> [options]
 | `--all-bots` | also read every other bot's copy on this machine that readOtherBots allows. |
 | `--bots <profiles>` | also read these bots' copies, comma separated — each allowed by readOtherBots. |
 | `--limit <n>` | how many of the latest messages from each chat. |
+
+### `max bot search`
+
+find what this bot's local copy holds, by text
+
+#### `max bot search messages`
+
+search the messages this bot has read, sent or received on this machine — the local copy only, best match first; every word must appear; "a phrase", -word, a OR b, from: chat: after: before: has:; by text, by --from, or both
+
+```sh
+max bot search messages [query] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | the words to find. |
+
+| Опция | Что делает |
+|---|---|
+| `--all-bots` | also read every other bot's copy on this machine that readOtherBots allows. |
+| `--bots <profiles>` | also read these bots' copies, comma separated — each allowed by readOtherBots. |
+| `--limit <n>` | how many. |
+| `--newest` | newest first instead of best first. |
+| `--from <who>` | only what this person wrote — an id, @username or part of a name; repeat it for any of several. |
 
 ### `max bot recipients`
 
