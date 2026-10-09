@@ -1,7 +1,7 @@
 .wirecat-docs {
   --docs-accent: #5963b7;
-  --docs-link: #314fba;
-  --docs-quote-link: #314fba;
+  --docs-link: #3b5bc6;
+  --docs-quote-link: #3b5bc6;
   --docs-tint: #f8f9fa;
   --docs-bar: #f2f3f5;
   --docs-outline: #e0e4e9;
@@ -10,7 +10,7 @@
 .dark .wirecat-docs {
   --docs-accent: #a8b3f1;
   --docs-link: #b0c2ff;
-  --docs-quote-link: #b0c2ff;
+  --docs-quote-link: #8090b8;
   --docs-tint: #17191c;
   --docs-bar: #1d2024;
   --docs-outline: #34393f;

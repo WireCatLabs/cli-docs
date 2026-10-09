@@ -34,3 +34,7 @@ WireCatLabs. No release pin, generated messenger guide or audit finding status c
 Local unit, lint, type checks and focused browser checks cover prompt copying, mobile
 width, localized headings, axe checks on security pages and Markdown equivalents.
 Full export, links, SEO and browser coverage run in CI before publication.
+
+The full CI callout check caught insufficient link/text contrast in light mode.
+Adjusted the brighter palette and verified session-recovery callout links in light
+and dark mode across all three locales without changing the accessibility assertion.
