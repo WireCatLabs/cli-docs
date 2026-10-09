@@ -50,3 +50,8 @@ Review branch: https://github.com/leemour/cli-docs/pull/88 (draft; publication r
 CI initially exposed an ordering error: the command partition test read generated messenger
 references before sync on a fresh checkout. Moved unit tests after sync and release-note checks;
 the test and command assertions remain unchanged.
+
+Final browser verification: 101 checks passed in the complete run; three Demo checks
+expected the old command namespace. Updated those expectations to the incoming scenario
+commands and all three passed on rerun. CI confirms the remaining failure is docs:check:
+904 command references, zero reference gaps, 36 invalid namespace examples.

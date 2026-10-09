@@ -217,7 +217,7 @@ for (const lang of ["en", "ru", "es"]) {
       await scenario.getByRole("button", { name: send, exact: true }).click()
       await expect(scenario.locator("[data-meeting-pending]")).toBeVisible()
       await expect(scenario.locator("details.tool code").first()).toContainText(
-        id === "inbox" ? "max inbox" : "max messages search",
+        id === "inbox" ? "max inbox" : "max search messages",
       )
       await expect(scenario.locator(".say")).toHaveCount(1)
     }
@@ -227,7 +227,7 @@ for (const lang of ["en", "ru", "es"]) {
     const markdown = await (await request.get(`/llms.mdx/docs/${locale}meeting-brief/content.md`)).text()
     expect(markdown).toContain("tg chats list")
     expect(markdown).toContain("max inbox")
-    expect(markdown).toContain("max messages search")
+    expect(markdown).toContain("max search messages")
     expect(markdown).not.toContain("<MeetingGuide")
     expect(markdown).toContain("```text prompt")
   })
