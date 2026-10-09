@@ -44,5 +44,9 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm sync
+      - run: pnpm exec next build
       - run: pnpm exec playwright install --with-deps chromium
+      # The dev server compiles each route on its first request; parallel workers time out waiting for it.
       - run: pnpm exec playwright test tests/heading-fonts.spec.ts tests/search-playground.spec.ts tests/doc-hints.spec.ts
+        env:
+          PLAYWRIGHT_EXPORT: "1"
