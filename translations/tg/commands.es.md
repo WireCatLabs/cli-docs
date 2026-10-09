@@ -503,7 +503,7 @@ tg chats link create <chat> [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--approval` | quien entra con él primero lo solicita y un administrador le deja pasar; entonces no tiene límite de usos. |
+| `--approval` | quien quiera entrar con el enlace debe solicitarlo primero y un administrador permite su entrada; el enlace deja de tener límite de usos. |
 | `--expire-time <time>` | deja de funcionar entonces: 2026-09-25T09:00 (hora local) o dentro de 30m, 2h, 7d. |
 | `--max-uses <n>` | como máximo este número de personas puede entrar con el enlace, de 1 a 99999. |
 
@@ -541,7 +541,7 @@ tg chats link revoke <chat> <link>
 
 #### `tg chats link update`
 
-cambia uno de tus enlaces de invitación, también el propio del grupo
+cambiar uno de tus enlaces de invitación, también el principal del grupo
 
 **Changes something in Telegram.**
 
@@ -556,10 +556,11 @@ tg chats link update <chat> <link> [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--approval` | quien entra con él primero lo solicita y un administrador le deja pasar; entonces no tiene límite de usos. |
+| `--approval` | quien quiera entrar con el enlace debe solicitarlo primero y un administrador permite su entrada; el enlace deja de tener límite de usos. |
 | `--no-approval` | cualquiera con el enlace entra de inmediato. |
 | `--expire-time <time>` | deja de funcionar entonces: 2026-09-25T09:00 (hora local) o dentro de 30m, 2h, 7d; `never` quita la caducidad. |
 | `--max-uses <n>` | como máximo este número de personas puede entrar con el enlace, de 1 a 99999. |
+
 
 #### `tg chats link reset`
 
@@ -1021,7 +1022,7 @@ tg contacts alias rm <person>
 
 ### `tg contacts notes`
 
-tus notas privadas sobre un contacto guardado, las mismas en cada cuenta que lo ve
+notas privadas del contacto, compartidas por las cuentas que lo ven
 
 #### `tg contacts notes list`
 
@@ -1404,7 +1405,7 @@ tg messages forward <chat> <message> [options]
 | `--silent` | entrega sin notificar. |
 | `--send-as <id>` | publicar como una de las identidades que enumera `chats send-as` para el chat --to; obligatorio cuando el chat publica como otra identidad de forma predeterminada. |
 | `--send-id <id>` | reintenta un reenvío de resultado desconocido sin arriesgar otra copia. |
-| `--topic <id>` | reenvía a este tema de foro del chat de --to. |
+| `--topic <id>` | reenvía a este tema de foro del chat --to. |
 
 ### `tg messages pin`
 
@@ -1550,7 +1551,7 @@ tg polls show <chat> <message>
 
 ### `tg polls voters`
 
-quién votó qué, primero lo más reciente; no en una encuesta anónima
+quién votó por qué, lo más reciente primero; no disponible en encuestas anónimas
 
 ```sh
 tg polls voters <chat> <message> [options]
@@ -1559,11 +1560,11 @@ tg polls voters <chat> <message> [options]
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
-| `message` | obligatorio | identificador del mensaje de la encuesta. |
+| `message` | obligatorio | el identificador del mensaje que contiene la encuesta. |
 
 | Opción | Qué hace |
 |---|---|
-| `--answer <id>` | solo quienes eligieron esta respuesta, tal como la muestra `polls show`. |
+| `--answer <id>` | solo quienes eligieron esta respuesta, con el ID que muestra `polls show`. |
 | `--limit <n>` | cuántos. |
 
 ### `tg polls vote`
@@ -1629,7 +1630,7 @@ tg polls create <chat> <question> <answers> [options]
 | `--quiz` | cuestionario: una respuesta correcta y voto definitivo. |
 | `--correct <n>` | con --quiz: posición de la respuesta correcta, desde 1. |
 | `--solution <text>` | con --quiz: explicación que se ve tras responder. |
-| `--close-time <delay>` | se cierra solo este tiempo después de enviarse: de 5s a 10m, como 90s o 5m. |
+| `--close-time <delay>` | la encuesta se cierra sola este tiempo después del envío: de 5s a 10m, como 90s o 5m. |
 
 ## `tg models`
 
@@ -1780,7 +1781,7 @@ tg topics list <chat> [options]
 
 ### `tg topics show`
 
-un tema del foro: su título, estado y última actividad
+un tema de foro: su título, su estado y su última actividad
 
 ```sh
 tg topics show <chat> <topic>
@@ -1789,7 +1790,7 @@ tg topics show <chat> <topic>
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
-| `topic` | obligatorio | el identificador del tema de `topics list`. |
+| `topic` | obligatorio | el identificador del tema, de `topics list`. |
 
 ### `tg topics enable`
 
@@ -2069,7 +2070,7 @@ tg store jobs list [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--state <state>` | solo los trabajos en este estado. Valores: `running`, `done`, `failed`, `cancelled`, `died`. |
+| `--state <state>` | solo las tareas en este estado. Uno de: `running`, `done`, `failed`, `cancelled`, `died`. |
 
 #### `tg store jobs show`
 
@@ -2174,7 +2175,7 @@ tg store check
 
 ### `tg store migrate`
 
-lleva el almacén al esquema de esta versión y después normaliza, indexa y extrae las raíces de los mensajes y notas guardados antes de ella
+actualiza el esquema a esta versión y normaliza, indexa y extrae las raíces de los mensajes y notas anteriores
 
 ```sh
 tg store migrate
@@ -2182,7 +2183,7 @@ tg store migrate
 
 ### `tg store reindex`
 
-reconstruye el índice de palabras, su vocabulario de erratas, las raíces, el índice de palabras de los archivos y los índices de las notas a partir de lo guardado; no se pierde nada
+reconstruye el índice de palabras, su vocabulario de erratas, las raíces, el índice de palabras de los archivos y los índices de las notas a partir de lo guardado, sin perder nada
 
 ```sh
 tg store reindex
@@ -2540,10 +2541,11 @@ tg attachments show <chat> [message] [options]
 | Opción | Qué hace |
 |---|---|
 | `--attachment <n>` | posición del archivo desde 1; obligatoria si hay varios archivos. |
+| `--page <n>` | renderiza una página del PDF como PNG, desde 1; unpdf/canvas opcionales, sin OCR. |
 | `--offset-bytes <n>` | desplazamiento en bytes desde 0. |
 | `--chunk-bytes <n>` | bytes que devolver, 1–1048576 (por defecto524288). |
 | `--if-sha256 <hash>` | exigir el SHA-256 del archivo completo de la porción anterior. |
-| `--page <n>` | renderiza una página del PDF como PNG, desde 1; unpdf/canvas opcionales, sin OCR. |
+
 
 ### `tg attachments text`
 
@@ -2786,7 +2788,7 @@ tg stats messages unanswered [query] [options]
 | `--saved <name\|id>` | ejecutar un informe guardado de este tipo; las opciones indicadas sustituyen las guardadas. |
 | `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
 | `--limit <n>` | filas del informe, 1–100; 20 por defecto. |
-| `--answerer <person>` | nombre guardado, alias, @username, ID o person:provider/account/id; un nombre ambiguo exige elegir; repítelo para añadir más. |
+| `--answerer <person>` | nombre guardado, alias, @username, ID o person:provider/account/id; los nombres ambiguos requieren elegir; repetir para varias. |
 | `--older-than <duration>` | edad mínima de una pregunta sin respuesta válida observada. |
 
 #### `tg stats messages discussion`
@@ -2884,7 +2886,7 @@ tg stats contacts responses [query] [options]
 | `--saved <name\|id>` | ejecutar un informe guardado de este tipo; las opciones indicadas sustituyen las guardadas. |
 | `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
 | `--limit <n>` | filas del informe, 1–100; 20 por defecto. |
-| `--answerer <person>` | nombre guardado, alias, @username, ID o person:provider/account/id; un nombre ambiguo exige elegir; repítelo para añadir más. |
+| `--answerer <person>` | nombre guardado, alias, @username, ID o person:provider/account/id; los nombres ambiguos requieren elegir; repetir para varias. |
 
 #### `tg stats contacts top`
 
@@ -2977,7 +2979,7 @@ tg stats chats newcomers <chat> [options]
 | `--saved <name\|id>` | ejecutar un informe guardado de este tipo; las opciones indicadas sustituyen las guardadas. |
 | `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
 | `--limit <n>` | filas del informe, 1–100; 20 por defecto. |
-| `--answerer <person>` | nombre guardado, alias, @username, ID o person:provider/account/id; un nombre ambiguo exige elegir; repítelo para añadir más. |
+| `--answerer <person>` | nombre guardado, alias, @username, ID o person:provider/account/id; los nombres ambiguos requieren elegir; repetir para varias. |
 
 #### `tg stats chats retention`
 
@@ -3057,7 +3059,7 @@ lo que requiere tu atención —preguntas sin respuesta, menciones, peticiones y
 
 ### `tg tasks list`
 
-tareas, primero las más antiguas, con su origen: un mensaje o una nota
+tareas, primero las más antiguas, con su mensaje o nota de origen
 
 ```sh
 tg tasks list [options]
@@ -3073,7 +3075,7 @@ tg tasks list [options]
 
 ### `tg tasks add`
 
-añade una tarea para un mensaje o una nota guardados: una promesa, una petición
+añadir una tarea para un mensaje o una nota guardados — una promesa o una petición
 
 ```sh
 tg tasks add <message> [options]
@@ -3081,7 +3083,7 @@ tg tasks add <message> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `message` | obligatorio | un locator de mensaje, msg:<provider>/<account>/<chat>/<message>, o note:<id>. |
+| `message` | obligatorio | un localizador de mensaje, msg:<provider>/<account>/<chat>/<message>, o note:<id>. |
 
 | Opción | Qué hace |
 |---|---|
@@ -3106,11 +3108,11 @@ tg tasks close <task> [options]
 
 ## `tg search`
 
-busca por texto: search all para todo lo que guarda el almacén local, o un solo recurso
+buscar por texto: search all para todo lo que guarda el almacenamiento local, o un solo recurso
 
 ### `tg search all`
 
-busca en todo lo que guarda el almacén local —mensajes de mensajería, correo y notas—, primero las mejores coincidencias; empieza aquí si no sabes dónde se escribió algo
+buscar en todo lo que guarda el almacenamiento local — mensajes del servicio de mensajería, correo y notas —, mejores coincidencias primero; empieza aquí si no sabes dónde se escribió algo
 
 ```sh
 tg search all <query> [options]
@@ -3118,7 +3120,7 @@ tg search all <query> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `query` | obligatorio | consulta estricta de Lucene: palabras, "frases", AND/OR/NOT, grupos de campos y rangos de fechas. |
+| `query` | obligatorio | consulta estricta de Lucene: palabras, "frases", AND/OR/NOT, grupos de campos e intervalos de fechas. |
 
 | Opción | Qué hace |
 |---|---|
@@ -3129,7 +3131,7 @@ tg search all <query> [options]
 
 ### `tg search messages`
 
-busca mensajes de mensajería en el almacén local y en el servidor del mensajero (--backend); con --sync-first descarga antes los mensajes nuevos
+buscar mensajes del servicio de mensajería en el almacenamiento local y en su servidor (--backend); opcionalmente descargar mensajes nuevos con --sync-first
 
 ```sh
 tg search messages [query] [options]
@@ -3166,7 +3168,7 @@ tg search messages [query] [options]
 
 ### `tg search mail`
 
-busca en el correo importado al almacén local; lo trae memo mail import
+buscar en el correo importado al almacenamiento local; memo mail import lo trae
 
 ```sh
 tg search mail [query] [options]
@@ -3174,11 +3176,11 @@ tg search mail [query] [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `query` | opcional | consulta estricta de Lucene: palabras, "frases", AND/OR/NOT, grupos de campos y rangos de fechas. |
+| `query` | opcional | consulta estricta de Lucene: palabras, "frases", AND/OR/NOT, grupos de campos e intervalos de fechas. |
 
 | Opción | Qué hace |
 |---|---|
-| `--chat <chat>` | solo este hilo de correo, por ID o asunto. |
+| `--chat <chat>` | solo este hilo de correo, por identificador o asunto. |
 | `--limit <n>` | cuántos. |
 | `--newest` | recientes primero en lugar de mejores coincidencias. |
 | `--exact` | las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas. |
@@ -3187,7 +3189,7 @@ tg search mail [query] [options]
 
 ### `tg search notes`
 
-busca en las notas —escritas en memo o importadas de una carpeta de notas— por palabras y, con el modelo de texto local, por significado; cada resultado indica qué lo encontró y a qué enlaza
+buscar en las notas — escritas en memo o importadas de una carpeta de notas — por palabras y, con el modelo de texto local, por significado; cada resultado indica qué lo encontró y a qué enlaza
 
 ```sh
 tg search notes <query> [options]
@@ -3195,17 +3197,17 @@ tg search notes <query> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `query` | obligatorio | consulta estricta de Lucene: palabras, "frases", AND/OR/NOT, tag: y rangos de fechas. |
+| `query` | obligatorio | consulta estricta de Lucene: palabras, "frases", AND/OR/NOT, tag: e intervalos de fechas. |
 
 | Opción | Qué hace |
 |---|---|
-| `--type <internal\|file>` | solo las notas escritas en memo, o solo las de una carpeta. |
-| `--folder <id>` | solo esta carpeta de notas, por su ID; repítelo para añadir más. |
-| `--tag <tag>` | solo las notas con esta etiqueta. |
-| `--filter <query>` | una consulta que cada resultado también debe cumplir; no cambia la búsqueda por significado. |
+| `--type <internal\|file>` | solo notas escritas en memo, o solo notas de una carpeta. |
+| `--folder <id>` | solo esta carpeta de notas, por su identificador; repite para incluir varias. |
+| `--tag <tag>` | solo notas con esta etiqueta. |
+| `--filter <query>` | una consulta que también debe cumplir cada resultado; no cambia la búsqueda por significado. |
 | `--limit <n>` | cuántos. |
-| `--offset <n>` | omite esta cantidad, para la página siguiente. |
-| `--exact` | solo las palabras tal como están escritas; no busca por significado. |
+| `--offset <n>` | omite este número de resultados, para la página siguiente. |
+| `--exact` | solo las palabras tal como están escritas; no se busca por significado. |
 | `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
 
 ### `tg search conversations`
@@ -4283,7 +4285,7 @@ tg bot messages between <people> [options]
 
 ### `tg bot search`
 
-busca por texto lo que guarda la copia local de este bot
+encontrar por texto lo que guarda la copia local de este bot
 
 #### `tg bot search messages`
 

@@ -98,3 +98,26 @@ interface language using reviewed files in its own `translations/{tool}/` direct
 installed after sync, with per-locale source fingerprints and checks that preserve command examples,
 inline literals, heading structure and link destinations. Released originals stay in ignored
 `content/upstream/`. Portal start pages and reviewed source corrections are kept separately.
+
+
+## Portal command presentation
+
+The release-owned `commands.md` remains the complete source and Markdown reference. After
+localization the portal derives `commands-personal`, `commands-bot` and `commands-admin` pages
+from those same sections. The `/commands` HTML route is a lightweight choice of references;
+existing command hashes redirect to their partition. Edit native commands at the source, not
+these derived files. Shared global options and exit codes appear in every part.
+
+## Task presentation beside released references
+
+The usage, bot, groups and rankings routes have a portal-owned task layer in `lib/reader-guides.ts`, rendered
+by `components/reader-guide.tsx`. Personal account, bots and administration are separate existing
+page homes, linked through a role navigation. `lib/role-guides.ts` owns role tasks;
+`lib/report-tasks.ts` owns report requests, example tables and checked commands.
+The full reviewed native guide is visible below the reader tasks, without a closed disclosure.
+Existing native anchors remain available. Markdown prepends the same task data and keeps all
+native reference text; source imports and release fingerprints remain unchanged.
+
+Title, description and sidebar labels use the task layer where supplied. To edit a reader task,
+change that layer; to change command behavior or native syntax, use the owning repository and
+reviewed source workflow. Explicit editorial errata remain in `scripts/docs-corrections.json`.

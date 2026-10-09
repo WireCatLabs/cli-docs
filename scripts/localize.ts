@@ -4,6 +4,8 @@ import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 import GithubSlugger from "github-slugger"
 import { fromMarkdown } from "mdast-util-from-markdown"
+import { diagramStructure } from "../lib/mermaid.ts"
+import { writeCommandSections } from "./command-sections.ts"
 
 type Tool = { name: string; lang: string }
 type Correction = {
@@ -93,7 +95,11 @@ export function withOriginalAnchors(original: string, translated: string): strin
 const fencedCode = (text: string) =>
   nodes(text)
     .filter((node) => node.type === "code")
-    .map((node) => [node.lang, node.meta, node.value])
+    .map((node) => [
+      node.lang,
+      node.lang === "mermaid" ? null : node.meta,
+      node.lang === "mermaid" ? diagramStructure(node.value ?? "") : node.value,
+    ])
 
 export function translationProblems(original: string, translated: string): string[] {
   const problems: string[] = []
@@ -217,6 +223,7 @@ export function localizeTool(root: string, tool: Tool) {
       `${JSON.stringify(localized, null, 2)}\n`,
     )
   }
+  if (!problems.length) writeCommandSections(root)
   return problems
 }
 
@@ -225,6 +232,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const tools = JSON.parse(readFileSync(join(root, "tools.json"), "utf8")) as Tool[]
   if (process.argv.includes("--capture")) for (const tool of tools) captureUpstream(root, tool)
   const problems = tools.flatMap((tool) => localizeTool(root, tool))
+  if (!problems.length) writeCommandSections(root)
   for (const problem of problems) console.error(problem)
   if (problems.length) process.exitCode = 1
   else console.log("Translations: complete, source-matched, commands and links preserved")

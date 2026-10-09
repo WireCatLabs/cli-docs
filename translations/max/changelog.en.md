@@ -6,19 +6,19 @@ Notable changes to `@leemour/max-cli`, one section per version, newest first. Ve
 
 ## 0.39.0 — 09.10.2026
 
-### What's new
+### New
 
-- **`max attachments show --page 1` returns a page of a retained PDF as PNG.** A remote agent can read every page with its own vision and save the text for search. It needs the optional `unpdf` and `@napi-rs/canvas`; no OCR API is called and nothing is written to the index by itself. If an MCP client shows only the resource's metadata, request `format: base64` and display the PNG with the agent's tools.
+- **`max attachments show --page 1` returns a page of a retained PDF as PNG.** A remote agent can read every page with its own vision and save the text for search. Requires the optional `unpdf` and `@napi-rs/canvas`; it does not start an OCR API or write to the index by itself. If the MCP client shows only resource metadata, request `format: base64` and display the PNG with the agent's own tools.
 
-- **`max search all "<слова>"` searches everything stored on this machine at once**: MAX and Telegram messages, mail imported by memo, and notes. Every hit says what it is: a message, an email or a note. `--only notes` (or `messages`, `mail`) narrows the search.
-- **`max search mail` and `max search notes`** search one kind. Notes are found by words and, if the local text model is downloaded, by meaning; `--type internal` (written in memo) or `file` (from a notes folder).
+- **`max search all "<слова>"` searches everything stored on this machine at once**: MAX and Telegram messages, mail imported by memo, and notes. Each result states its kind: message, email or note. `--only notes` (or `messages`, `mail`) narrows the search.
+- **`max search mail` and `max search notes`** search one kind. Notes are found by words and, if a local text model is downloaded, by meaning; `--type internal` (written in memo) or `file` (from the notes folder).
 - **`max search messages --type voice`** (or `text`, `file`) finds only messages of that kind.
 
 ### Changed — may break scripts
 
-- **The statistics `--answerer` accepts stored names, your own names and @usernames.** The lookup runs locally in the accounts of the selected history; when ambiguous, it returns the candidates. An unknown name now raises an error instead of reporting zero answers for an invented ID. For an explicitly selected unknown string ID, use `person:provider/account/id`. Responses gained `identityKnown`; an ID with no observations gets `false` and `status: unknown`. Zero observed answers does not prove there was no activity ([statistics](./rankings.md)).
+- **Statistics `--answerer` accepts stored names, aliases and @usernames.** Resolution is local to the accounts of the selected history; ambiguous names return candidates. An unknown name now fails instead of producing a report for a fabricated ID with zero answers. Use `person:provider/account/id` to explicitly select an unknown string ID. Responses add `identityKnown`; an ID without observations gets `false` and `status: unknown`. Zero observed answers do not prove inactivity ([statistics](./rankings.md)).
 
-- **All search moved to `max search`.** The old commands are gone:
+- **Every search moved under `max search`.** The old commands are gone:
 
   | Before | Now |
   |---|---|
@@ -27,43 +27,43 @@ Notable changes to `@leemour/max-cli`, one section per version, newest first. Ve
   | `max conversations search` | `max search conversations` |
   | `max bot messages search` | `max bot search messages` |
 
-  Agent tools moved the same way: `search messages`, `search conversations` and the new `search all`, which is the one to start with.
+  For agents the tools moved the same way: `search messages`, `search conversations` and the new `search all`, which is the place to start.
 - **`max search messages` no longer returns mail.** A saved search with `in:email` now asks for `max search mail`.
-- **Permissions with the old paths** (`messages.search`, `conversations.search`) stop `max search` until `max config migrate` renames them with the same levels.
+- **Permissions with the old paths** (`messages.search`, `conversations.search`) stop `max search` until `max config migrate` renames them, keeping their levels.
 
 ### Fixed
 
-- **The help for join requests names MAX's limits plainly.** It no longer offers `--all` or `--link` as available operations and does not promise an order by time; the refusal checks remain.
+- **Join-request help names MAX limitations explicitly.** It no longer offers `--all` or `--link` as available operations and no longer promises chronological order; the refusal checks remain.
 
 ## 0.38.1 — 08.10.2026
 
-### What's new
+### New
 
-- **`max chats requests list|accept|decline` shows and handles requests to join a channel.** `--search` narrows the list by name. MAX does not report when a request was made: `requestedAt` is `null` in JSON. The `--link` filter and the bulk `--all` are not supported and are refused before any request.
+- **`max chats requests list|accept|decline` lists and processes channel join requests.** `--search` filters by name. MAX provides no request time: `requestedAt` is `null`. `--link` and bulk `--all` are unsupported and rejected before the request.
 
 ### Fixed
 
-- The shared library was updated to 0.205.0 so that MAX, Telegram and Memo use one version of the local archive. The notes schema and links do not change.
+- The shared library is updated to 0.205.0 so MAX, Telegram and Memo use the same archive version. Note schema and links are unchanged.
 
 ## 0.38.0 — 08.10.2026
 
-### What's new
+### New
 
-- **`max store jobs list --state <состояние>`** shows only the background jobs in that state: `running`, `done`, `failed`, `cancelled` or `died`.
+- **`max store jobs list --state <состояние>`** shows jobs matching `running`, `done`, `failed`, `cancelled` or `died`.
 
 ### Changed — may break scripts
 
-- **Latin words are searched by English and Spanish stems at once.** Before, only Spanish, so English word forms (“budgets” → “budget”) were found less well. To note: after the update, the stem index rebuilds by itself. A small archive is rebuilt right when it opens, a large one bit by bit: `max serve` finishes it in the background, `max store migrate` at once. Until the index is ready, search looks for exact word forms and says so on stderr, and in JSON `query.stemming.applied` is `false`. The stem index of Latin text is about twice as large. If you set `searchStemmers.latin` yourself, your setting stays, and `max store reindex` still applies it. Update `tg` too: an older version that opens the rebuilt archive answers stemmed searches with “update the program” ([archive](./archive.md#обслуживание-архива)).
+- **Latin words match English and Spanish stems together.** Previously only Spanish, so English forms matched worse. Updates automatically rebuild stems: small stores immediately, larger ones incrementally. `max serve` finishes in the background; `max store migrate` immediately. Until ready, search matches exact forms, reports it on stderr and returns `query.stemming.applied` = `false`. The Latin stem index is about twice as large. Your own `searchStemmers.latin` is retained and applied through `max store reindex`. Update tg too: older versions cannot use the rebuilt stems ([archive](./archive.md#обслуживание-архива)).
 
-- **Notes about a person (`max contacts notes`) are visible in every profile where that person is visible.** Before, a note was visible only in the profile where it was written. Why: notes are yours, not one account's; the shared archive now keeps them apart from messages, together with notes from `memo`. To note: if you have several MAX profiles, notes about a person from all of them now appear together. Your own names (`contacts alias`) still apply only in their own profile.
+- **Person notes (`max contacts notes`) appear in every profile that sees the person.** Before they appeared only in the originating profile. Owner notes are stored separately from messages alongside `memo` notes. Notes from multiple MAX profiles now appear together; aliases (`contacts alias`) remain account-specific.
 
 ### Fixed
 
-- **`max chats join` no longer presents a request as joining.** If a channel approves who joins, the command only sends a request and now answers `requested: true` instead of the channel card, and with `max serve` running such a channel does not appear in the chat list until the request is accepted ([groups](./groups.md)).
+- **`max chats join` no longer reports a join request as joining.** If a channel approves who joins, the command only sends a request and now answers `requested: true` instead of the channel card; while `max serve` is running, such a channel does not appear in the chat list until the request is accepted ([groups](./groups.md)).
 
 ## 0.37.0 — 08.10.2026
 
-### What's new
+### New
 
 - **Bot buttons:** `messages list` and `messages show` display numbered buttons beneath a bot's message: `[1 Да] [2 Нет]`. `max messages press <чат> <сообщение> <кнопка>` selects by number or exact text; the bot sees who pressed. Only ordinary callback buttons are pressed. Phone and location sharing buttons are never pressed; other kinds explain the next step. Buttons appear in messages read from MAX and are absent from the local copy ([usage](./usage.md)).
 - **Start a bot:** `max chats start <бот> [--payload]` acts like its Start button. It accepts `https://max.ru/<бот>?start=…`, including a bot you have never messaged; its chat appears in the list. Links to people are refused. Starting is a message from you and passes send checks.
@@ -85,7 +85,7 @@ Notable changes to `@leemour/max-cli`, one section per version, newest first. Ve
 
 ## 0.36.0 — 08.10.2026
 
-### What's new
+### New
 
 - **Files for remote agents:** `attachments show` transfers retained bytes in bounded chunks with SHA256. MCP returns complete images or binary resources, with JSON/base64 fallback. Transfer calls no model and changes no index; the agent reads the file and saves its text ([attachments](./attachments.md)).
 - **The shared library update** also adds folder reads with chat names, `metadata refresh --only-missing`, background-job retry/cleanup, observed retention cohorts and counters with explicit freshness; unknown values remain distinct from zero.
@@ -97,7 +97,7 @@ Notable changes to `@leemour/max-cli`, one section per version, newest first. Ve
 
 ## 0.35.0 — 08.10.2026
 
-### What's new
+### New
 
 - **`max chats delete` and `max chats clear` remove the chat or its messages only for this account.**
   Other participants keep them. Without `--allow-dangerous`, the command asks; without a terminal it refuses.

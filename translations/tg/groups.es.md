@@ -139,7 +139,7 @@ cron no tiene terminal y a menudo no define `XDG_RUNTIME_DIR`, sin la cual `tg` 
 | `tg chats events <chat>` | quién se unió, salió, fue añadido o eliminado, y quién realizó la acción; últimos 7 días por defecto |
 | `tg chats members list <chat>` | todos los miembros, su función y cuándo se conectaron por última vez |
 | `tg topics list\|search <chat>` | temas de un grupo de foro |
-| `tg topics show <chat> <id>` | un tema: título, si está cerrado o fijado, no leídos, última actividad |
+| `tg topics show <chat> <id>` | un tema: título, si está cerrado o fijado, mensajes sin leer, última actividad |
 | `tg topics enable <chat>` | activa un foro; un grupo básico requiere `--upgrade --yes` y devuelve un nuevo identificador de chat |
 | `tg topics create <chat> <title>` | crea un tema; si el resultado es desconocido, consulta `topics list` en vez de repetir |
 | `tg messages send <chat> <text> --topic <id>`, `tg polls create <chat> <question> <answers> --topic <id>` | envía un mensaje o una encuesta a un tema de foro |

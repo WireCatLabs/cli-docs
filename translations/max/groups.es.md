@@ -140,12 +140,12 @@ Sin `--allow-dangerous`, las acciones de cron con nivel `ask` solo se planifican
 | `max chats rules show\|set\|unset <чат>` | Reglas del grupo |
 | `max chats moderate <чат>` | Comprobar reglas y ejecutar lo permitido |
 | `max chats members add\|remove`, `admins add\|remove` | Gestionar miembros y administradores |
-| `max chats link show\|reset <чат>` | Enlace de invitación; `reset` crea uno e invalida el anterior |
-| `max chats update` | Ajustes, título, descripción y foto; consulta los ajustes con `max chats show` |
-| `max messages delete --for-everyone`, `pin`, `unpin` | Borrar para todos, fijar o desfijar |
-| `max chats requests list\|accept\|decline <чат>` | Solicitudes para entrar en un canal con aprobación: quién lo pide, dejarle entrar, rechazarle |
 | `max chats requests list <чат>` | Solicitudes para un canal con aprobación; las ven los administradores, se desconoce la fecha |
 | `max chats requests accept\|decline <чат> <человек>` | Aceptar o rechazar una solicitud; no admite aceptación masiva ni filtros `--link` |
+| `max chats link show\|reset <чат>` | Enlace de invitación; `reset` crea uno e invalida el anterior |
+| `max chats requests list\|accept\|decline <чат>` | Solicitudes de entrada a un canal con aprobación: quién pide entrar, admitir, rechazar |
+| `max chats update` | Ajustes, título, descripción y foto; consulta los ajustes con `max chats show` |
+| `max messages delete --for-everyone`, `pin`, `unpin` | Borrar para todos, fijar o desfijar |
 
 Un agente sin terminal puede usar las herramientas MCP equivalentes: `max_read` (`command: "review"`) con `unanswered_after_hours`, `max_read` (`command: "chats events"`), `max_read` (`command: "chats members"`), `max_read` (`command: "chats rules"`) y `max_write` (`command: "chats check"`) ([mcp.md](./mcp.md)).
 
@@ -213,7 +213,7 @@ moderate`. Puede impedir el regreso por invitación a las personas expulsadas, a
 ## Límites
 
 - **La cuenta personal no puede vetar el regreso.** Una persona expulsada puede volver por invitación. Renueva el enlace (`max chats link reset`) o utiliza un bot.
-- **Las solicitudes de ingreso solo existen en un canal con aprobación.** Un grupo privado no tiene aprobación: con el enlace se entra al momento. En un canal con aprobación, `chats join` solo envía la solicitud (`requested: true`). `chats requests list` no muestra cuándo lo pidió alguien: MAX no lo informa. No se puede responder a todos a la vez ni elegir solicitudes por enlace.
+- **Solo los canales con aprobación tienen solicitudes de entrada.** Un grupo cerrado no tiene aprobación: con el enlace se entra directamente. En un canal con aprobación, `chats join` solo envía la solicitud (`requested: true`). `chats requests list` no muestra cuándo pidió entrar la persona: MAX no lo informa. No se puede responder a todas a la vez ni filtrar solicitudes por enlace.
 - **Máximo 10 acciones por comprobación** (`--max-actions`). Los borrados cuentan en el límite horario; el resto espera.
 - **Hasta 1000 mensajes por comprobación en CLI.** La siguiente continúa desde el punto anterior.
 - **Una incorporación requiere toda la lista de miembros** para conocer la antigüedad de la cuenta; en grupos grandes puede necesitar decenas de solicitudes.

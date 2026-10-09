@@ -13,8 +13,8 @@
       "!design",
       "!lib/search-language.generated.js",
       "!lib/search-language.generated.d.ts",
-      "!.impeccable/questions",
-      "!.impeccable/review"
+      "!.docs-tooling",
+      "!.impeccable"
     ]
   },
   "overrides": [

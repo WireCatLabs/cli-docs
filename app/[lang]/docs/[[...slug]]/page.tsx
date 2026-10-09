@@ -11,12 +11,17 @@ import { createRelativeLink } from "fumadocs-ui/mdx"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { CommandReferenceIndex } from "@/components/command-reference-index"
 import { DocsContentsHint } from "@/components/docs-contents-hint"
 import { DocsDisclosures } from "@/components/docs-disclosures"
 import { DocsTocPopover } from "@/components/docs-toc-popover"
 import { getMDXComponents } from "@/components/mdx"
+import { ReaderGuide } from "@/components/reader-guide"
 import { StructuredData } from "@/components/structured-data"
 import { installationReferenceTitle, ToolInstallationIntro } from "@/components/tool-installation-intro"
+import { guideOrientation, guideStartLink } from "@/lib/guide-orientation"
+import { readerGuide } from "@/lib/reader-guides"
+import { commandReferences } from "@/lib/remark-doc-usability"
 import {
   documentationDescription,
   documentationTitle,
@@ -46,7 +51,9 @@ export default async function Page(props: Props) {
     { name: seoWords(lang).homeLabel, pathname: homePath(lang) },
     { name: seoWords(lang).docsLabel, pathname: `/${lang}/docs` },
     ...(tool ? [{ name: tool.name === "tg" ? "Telegram" : "MAX", pathname: `/${lang}/docs/${tool.name}` }] : []),
-    ...(page.slugs.length > (tool ? 1 : 0) ? [{ name: page.data.title, pathname: page.url }] : []),
+    ...(page.slugs.length > (tool ? 1 : 0)
+      ? [{ name: readerGuide(page.slugs, lang)?.title ?? page.data.title, pathname: page.url }]
+      : []),
   ]
   const written = page.data.contentLanguage ?? tool?.lang ?? lang
   const ui = wordsFor(lang).navigation
@@ -57,16 +64,39 @@ export default async function Page(props: Props) {
         ? "mcp"
         : undefined
   const repoPath =
-    page.slugs.at(-1) === "changelog" ? "CHANGELOG.md" : `docs/${page.slugs.slice(1).join("/") || "index"}.md`
+    page.slugs.at(-1) === "changelog"
+      ? "CHANGELOG.md"
+      : page.slugs.at(-1)?.startsWith("commands-")
+        ? "docs/commands.md"
+        : `docs/${page.slugs.slice(1).join("/") || "index"}.md`
 
-  const toc =
-    guide === "installation"
-      ? [
-          { title: ui.installGuide, url: "#agent-installation", depth: 2 },
-          { title: installationReferenceTitle(lang), url: "#installation-reference", depth: 2 },
-          ...page.data.toc,
-        ]
-      : page.data.toc
+  const commandIndex = tool && page.slugs.at(-1) === "commands"
+  const commandRaw = commandIndex ? await page.data.getText("raw") : ""
+  const commandNames = [...commandReferences(commandRaw)]
+  const commandAliases = [
+    ...new Set([
+      ...page.data.toc.map((item) => decodeURIComponent(item.url.slice(1))),
+      ...[...commandRaw.matchAll(/<a id="([^"<>]+)"\s*\/>/g)].map((match) => match[1]),
+    ]),
+  ]
+  const taskGuide = readerGuide(page.slugs, lang)
+  const toc = taskGuide
+    ? [
+        ...(taskGuide.setup ? [{ title: taskGuide.setup.title, url: "#task-bot-connect", depth: 2 }] : []),
+        ...taskGuide.sections.map((section) => ({ title: section.title, url: `#${section.id}`, depth: 2 })),
+        ...(taskGuide.fixture ? [{ title: taskGuide.fixture.title, url: "#task-incomplete-history", depth: 2 }] : []),
+        { title: taskGuide.reference, url: "#technical-reference", depth: 2 },
+        ...page.data.toc,
+      ]
+    : commandIndex
+      ? []
+      : guide === "installation"
+        ? [
+            { title: ui.installGuide, url: "#agent-installation", depth: 2 },
+            { title: installationReferenceTitle(lang), url: "#installation-reference", depth: 2 },
+            ...page.data.toc,
+          ]
+        : page.data.toc
 
   return (
     <DocsPage
@@ -87,12 +117,21 @@ export default async function Page(props: Props) {
       }}
     >
       <StructuredData
-        data={pageStructuredData({ lang, pathname: page.url, title: page.data.title, description, breadcrumbs, tool })}
+        data={pageStructuredData({
+          lang,
+          pathname: page.url,
+          title: taskGuide?.title ?? page.data.title,
+          description,
+          breadcrumbs,
+          tool,
+        })}
       />
       <DocsDisclosures />
-      <DocsTitle>{page.data.title}</DocsTitle>
+      <DocsTitle>{taskGuide?.title ?? page.data.title}</DocsTitle>
       <DocsDescription className="mb-0">{description}</DocsDescription>
-      {["commands", "configuration"].includes(page.slugs.at(-1) ?? "") && <DocsContentsHint lang={lang} />}
+      {(page.slugs.at(-1)?.startsWith("commands-") || page.slugs.at(-1) === "configuration") && (
+        <DocsContentsHint lang={lang} />
+      )}
       <div className="flex flex-row gap-2 items-center border-b pb-6">
         <MarkdownCopyButton markdownUrl={markdownUrl} />
         <ViewOptionsPopover
@@ -115,8 +154,36 @@ export default async function Page(props: Props) {
         </Link>
       )}
       <DocsBody lang={written}>
+        {!taskGuide && guideOrientation(page.slugs, lang) && (
+          <p data-guide-orientation lang={lang}>
+            {guideOrientation(page.slugs, lang)}
+          </p>
+        )}
+        {!taskGuide && guideStartLink(page.slugs, lang) && (
+          <p lang={lang}>
+            <Link href={guideStartLink(page.slugs, lang)?.href ?? ""}>{guideStartLink(page.slugs, lang)?.label} →</Link>
+          </p>
+        )}
         {guide === "installation" && tool && <ToolInstallationIntro tool={tool} lang={lang} />}
-        <MDX components={getMDXComponents({ a: createRelativeLink(source, page) })} />
+        {taskGuide ? (
+          <>
+            <ReaderGuide slugs={page.slugs} lang={lang} />
+            <section id="technical-reference" data-technical-reference>
+              <h2 lang={lang}>{taskGuide.reference}</h2>
+              <MDX components={getMDXComponents({ a: createRelativeLink(source, page) })} />
+            </section>
+          </>
+        ) : commandIndex && tool ? (
+          <CommandReferenceIndex
+            tool={tool.name}
+            lang={lang}
+            markdownUrl={markdownUrl}
+            commands={commandNames}
+            aliases={commandAliases}
+          />
+        ) : (
+          <MDX components={getMDXComponents({ a: createRelativeLink(source, page) })} />
+        )}
       </DocsBody>
     </DocsPage>
   )

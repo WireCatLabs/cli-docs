@@ -1,14 +1,40 @@
 ---
 title: Prueba la búsqueda de mensajes
-description: Prueba la búsqueda de mensajes
+description: Aprende los campos de búsqueda y la sintaxis Lucene con un archivo ficticio de mensajes.
 ---
 
-Crea una consulta en un archivo ficticio de Telegram/MAX. Elige palabras, chats, personas y fechas, lee el contexto y comprueba las fuentes. La demo funciona en tu dispositivo sin conectarse a ninguna cuenta.
+Prueba la búsqueda antes de conectar tu cuenta. Crea una consulta en 50 mensajes ficticios de Telegram/MAX repartidos entre 6 chats y abre un resultado para leer la conversación y comprobar su fuente. La demo funciona en tu dispositivo sin conectarse a ninguna cuenta.
 
-Usa `has:` para buscar archivos, enlaces, fotos, vídeos, audio, mensajes de voz, stickers, contactos, ubicaciones o encuestas. El ejemplo contiene 36 mensajes en 6 chats. `has:attachment` encuentra adjuntos; `has:link`, enlaces en el texto del mensaje.
+1. Elige un filtro de chat o de tipo de mensaje, por ejemplo mensajes con enlaces.
+2. Abre una coincidencia y su contexto cercano.
+3. Cambia un filtro y compara los resultados.
+
+Las fechas abarcan cinco días, desde anteayer hasta pasado mañana, en UTC. Escribe un campo como `has:` o `in:` para ver sus valores. Pulsa Espacio después de una palabra o un filtro completo para ver campos y operadores. Usa ↑ / ↓ y Enter para insertar una sugerencia, o Esc para cerrar la lista. Borra la consulta o elige **Todos** para explorar todos los mensajes.
 
 <SearchPlayground lang="es" embedded />
 
-Consulta las guías de búsqueda de [Telegram](./tg/search.md) y [MAX](./max/search.md) para preparar el archivo y conocer los campos y las opciones.
+## Crea una consulta Lucene
 
-Consulta cómo se conectan la búsqueda estricta, los grafos y los embeddings en [cómo funciona la búsqueda](./search-architecture.mdx).
+La sintaxis Lucene combina palabras con campos y operadores lógicos. Empieza con `invoice` y añade condiciones para reducir los resultados. Escribe `AND`, `OR` y `NOT` en mayúsculas y usa paréntesis para agrupar condiciones.
+
+| Consulta | Qué encuentra |
+| --- | --- |
+| `invoice AND budget` | Mensajes con ambas palabras. |
+| `Atlas AND (invoice OR budget)` | Mensajes sobre Atlas con invoice o budget. |
+| `invoice NOT has:file` | Mensajes con invoice sin un archivo adjunto. |
+| `"final invoice"` | Las palabras juntas, en ese orden. |
+| `invo*` | Palabras que empiezan por `invo`, como invoice. `?` sustituye un carácter. |
+| `chat:"Client studio" AND from:Mia` | Mensajes de Mia en Client studio. Usa comillas para nombres con espacios. |
+| `in:max AND has:voice` | Mensajes de MAX con una nota de voz. Usa `in:telegram` para Telegram. |
+
+`has:` también ofrece `attachment`, `link`, `file`, `photo`, `image`, `video`, `audio`, `sticker`, `contact`, `location` y `poll`. `has:attachment` incluye medios adjuntos; `has:link` encuentra enlaces en el texto. Puedes combinarlos: `(has:file OR has:link) AND text:budget`.
+
+Elige **Fecha** para insertar la fecha de hoy, el mes actual o los cinco días de la demo. La consulta usa `date:YYYY-MM-DD` para un día o `date:[START TO END]` para un intervalo con ambos límites incluidos. Un asterisco deja un extremo abierto; las llaves excluyen el límite. Por ejemplo, **Antes de mañana** inserta `date:{* TO YYYY-MM-DD}` con la fecha de mañana.
+
+Esta demo implementa los campos Lucene compatibles con WireCat, no todas las funciones de Apache Lucene. La coincidencia difusa (`~`), la ponderación (`^`) y los campos previstos como `filename:` no están disponibles aquí. Una consulta incompleta o no compatible mantiene visibles los últimos resultados válidos y señala el problema; la búsqueda no amplía la consulta automáticamente.
+
+## Busca en tu propio archivo
+
+Las guías de búsqueda de [Telegram](./tg/search.md) y [MAX](./max/search.md) explican cómo preparar el archivo y buscar mensajes. Las referencias del lenguaje de consultas de [Telegram](./tg/query-language.md) y [MAX](./max/query-language.md) detallan los campos, operadores y límites compatibles.
+
+Consulta la [documentación oficial de la sintaxis Apache Lucene](https://lucene.apache.org/core/10_5_1/queryparser/org/apache/lucene/queryparser/classic/package-summary.html) para la gramática general. Las referencias de WireCat indican qué funciones admiten las herramientas. La [guía de arquitectura de búsqueda](./search-architecture.mdx) explica cómo se conectan la búsqueda de mensajes, los grafos y los embeddings.

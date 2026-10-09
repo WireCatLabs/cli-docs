@@ -1,10 +1,47 @@
 ---
 title: "Buscar"
-description: "Encuentra un mensaje, un acuerdo o una conversación completa."
+description: "Encuentra mensajes, personas, chats o archivos por palabras, formas, errores de escritura o significado."
 ---
 
-Busca una palabra, frase, persona o una discusión cuyo texto exacto ya no recuerdas.
-Empieza con los mensajes guardados en tu ordenador.
+Esta página te ayuda a encontrar mensajes, acuerdos, personas, chats y documentos en Telegram o MAX. Aprenderás qué buscar, cómo elegir el método y cómo comprobar las fuentes aunque solo recuerdes parte de una frase o el tema.
+
+**Qué puedes buscar:**
+
+- **Mensajes y discusiones** — por texto, autor, fecha, tema y mensajes cercanos.
+- **Contactos y personas** — por nombre, usuario o ID, y después recordar lo que hablasteis.
+- **Chats, grupos y canales** — por título entre los chats de tu cuenta.
+- **Archivos** — por nombre, extensión y contenido, si el texto del documento ya se extrajo y guardó.
+- **Enlaces y adjuntos** — por ejemplo, mensajes con un enlace, PDF o audio; las transcripciones se pueden buscar una vez guardado su texto.
+
+Se admite contenido de archivos de texto, Word y PDF con capa de texto. Las fotos y escaneos
+necesitan reconocimiento de texto primero; pídeselo al agente. Detalles: [archivos de Telegram](./tg/search.md#for-scripts-and-agents)
+y [MAX](./max/search.md#для-скриптов-и-агентов). Para encontrar personas, consulta [Personas](./people.md).
+
+Para formas de palabras, errores de escritura y búsqueda por significado, consulta [Cómo funciona la búsqueda](./search-architecture.mdx).
+
+## Descarga primero el historial de los chats pertinentes
+
+Antes de buscar mensajes antiguos, descarga las conversaciones del periodo que necesitas.
+Iniciar sesión no descarga todo el historial. La búsqueda de palabras también consulta la búsqueda
+del propio mensajero: `tg` pregunta a Telegram en cada búsqueda de palabras, y `max` al servidor de
+MAX cuando indicas un solo chat. Todo lo demás lee solo los mensajes guardados en tu ordenador: la
+búsqueda por significado, los recuentos, los filtros de archivos y la búsqueda en todos los chats de
+MAX. Si falta esa conversación, un resultado vacío no significa que nunca se enviara el mensaje.
+
+Pide al agente que descargue los chats elegidos o ejecuta el comando de tu mensajero. Sustituye
+`Project` por el nombre del chat; el ejemplo descarga el último mes, hasta 1000 mensajes por ejecución:
+
+```sh
+tg store fetch "Project" --since-time 30d --limit 1000
+```
+
+```sh
+max store fetch "Project" --since-time 30d --limit 1000
+```
+
+Si se alcanza el límite, el historial del mes puede seguir incompleto. Instrucciones para descargar,
+continuar y comprobar el historial: [Telegram](./tg/archive.md#fetch-a-chats-history) y
+[MAX](./max/archive.md#descargar-el-historial).
 
 ## Buscar en todo a la vez
 
@@ -20,27 +57,65 @@ Cada resultado indica si es un mensaje, un correo o una nota. Las secciones sigu
 
 ## Encontrar una palabra o frase
 
+Empieza por pedir al agente. Para MAX, escribe «max CLI» en lugar de «tg CLI»:
+
+```text prompt
+Usa tg CLI. Encuentra dónde acordamos el plazo de la reforma en el grupo y mi chat con el contratista. Muestra el acuerdo final, revisa respuestas posteriores y cita los mensajes. Si falta historial, dime qué hay que descargar. No envíes nada.
+```
+
+Deberías obtener la fecha acordada y sus mensajes de origen. Si solo fue una propuesta o cambió después, el agente debe indicarlo. No necesitas conocer la sintaxis de búsqueda.
+
+<details>
+<summary>Opcional: comandos para el terminal</summary>
+
 ```sh
 tg search messages factura
 max search messages factura
 ```
 
+</details>
+
 Para una frase exacta, conserva las comillas dentro de la consulta:
+
+<details>
+<summary>Opcional: comandos para el terminal</summary>
 
 ```sh
 tg search messages 'exact:"factura final"'
 max search messages 'exact:"factura final"'
 ```
 
+</details>
+
 Los resultados enlazan a mensajes. Revisa los mensajes cercanos antes de interpretar un acuerdo;
 una línea puede omitir una corrección o respuesta posterior.
 
+## Si no recuerdas las palabras exactas
+
+Hay varias formas de buscar mensajes:
+
+- **Palabra o frase exacta:** si recuerdas cómo se escribió. Usa `exact:` para una coincidencia literal.
+- **Parte de una palabra:** `piso*` encuentra palabras que empiezan así, como «piso» y «pisos».
+- **Formas y raíces compartidas:** «piso» puede encontrar «pisos». Qué formas coinciden depende de la configuración de idioma del archivo.
+- **Errores de escritura:** la búsqueda normal no corrige errores. Pide al agente que admita escritura aproximada: puede usar el modo de consulta anterior, que los corrige, o buscar por el comienzo de la palabra.
+- **Significado:** si recuerdas el tema, como «el plazo de la reforma que acordamos», pero no las palabras. Necesita un índice de discusiones preparado.
+
+Formas, coincidencias exactas, índices y búsqueda por significado: **[Cómo funciona la búsqueda](./search-architecture.mdx)**.
+Sintaxis y modos detallados: [Telegram](./tg/query-language.md#the-older-modes) y
+[MAX](./max/query-language.md#прежние-режимы). Estos modos describen la búsqueda de mensajes;
+buscar nombres de chats o personas puede funcionar de otra forma.
+
 ## Limitar el chat
+
+<details>
+<summary>Opcional: comandos para el terminal</summary>
 
 ```sh
 tg search messages factura --chat "Proyecto"
 max search messages factura --chat "Proyecto"
 ```
+
+</details>
 
 También puedes filtrar por persona, fecha o adjuntos. Las guías de
 [Telegram](./tg/search.md) y [MAX](./max/search.md) ofrecen ejemplos.
@@ -56,16 +131,19 @@ También puedes filtrar por persona, fecha o adjuntos. Las guías de
 
 ## Si falta un resultado
 
-La búsqueda por palabras también consulta el servidor de Telegram, o el de MAX si indicas
-un chat. La búsqueda solo en el archivo y por significado necesita historial guardado:
-descarga el período que falta y repite la consulta. Revisa fechas, chats y cobertura.
+La búsqueda de palabras también pregunta al servidor de Telegram, o al de MAX cuando indicas un
+chat. La búsqueda por significado, los recuentos y filtros como archivos o enlaces necesitan
+historial guardado: descarga el periodo que falta y vuelve a buscar. Buscar palabras y buscar por
+significado resuelven tareas distintas; prueba ambas si no recuerdas el texto preciso. Comprueba
+fechas, chats elegidos y si el historial está completo.
 
 ## Probar sin instalar
 
-Usa el [buscador de muestra](./search-playground.mdx) o la [demo de reunión](./meeting-brief.mdx).
-No leen tu cuenta.
+Usa el [buscador de muestra](./search-playground.mdx) o la [demo de reunión](./meeting-brief.mdx)
+con mensajes integrados. No leen tu cuenta.
 
 ## Consultas precisas y detalles técnicos
 
-Los filtros están en [Telegram](./tg/query-language.md) y [MAX](./max/query-language.md).
-[Cómo funciona la búsqueda](./search-architecture.mdx) explica índices, conversaciones y resultados.
+Aprende filtros y operadores en la guía de consultas de [Telegram](./tg/query-language.md) o
+[MAX](./max/query-language.md). [Cómo funciona la búsqueda](./search-architecture.mdx) explica
+la indexación, las conversaciones y el orden de los resultados.

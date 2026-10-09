@@ -48,7 +48,7 @@ sets limits (allowed chats, sends per hour, read-only profiles) — a fact, stat
 - Daily use: `tg inbox`, `tg review --unanswered`, `tg search messages`, `tg watch`, `tg export
   --format markdown`, `tg messages transcribe --local`, `tg messages send --at 2h`.
 - Both add bots through each messenger's official Bot API (every method: 185 Telegram, 33 MAX) and
-  group moderation by the owner's rules. Differences per tool: `content/docs/features.md`.
+  group moderation by the owner's rules. Differences per tool: `content/docs/features.mdx`.
 
 ## Capabilities and Constraints
 

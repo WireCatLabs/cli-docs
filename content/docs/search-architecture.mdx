@@ -3,15 +3,15 @@ title: How search works
 description: "The technical side of message search and topic search — indexes, the conversation graph, vectors, ranking, freshness and measurements."
 ---
 
-WireCat has two ways to search one local archive. **Message search** finds the messages that satisfy a strict query. **Topic search** finds conversations by meaning and shared words. They share the archive and nothing else: the conversation graph and the vectors are optional stages that message search never reads.
+Learn how to find an exact message, locate a discussion by topic and check its sources. To try it now, open the **[Telegram](./tg/search.md)** or **[MAX](./max/search.md)** search guide for commands and examples. Below we explain the indexes, word forms, server search, the conversation graph, vectors, ranking and freshness behind those commands.
 
-This is the technical page. For everyday use, read the [Telegram search guide](./tg/search.md) or the [MAX search guide](./max/search.md) and their archive guides. The shared search engine is released in tg 0.28 (cli-messaging 0.149.0) and max 0.29 ([cli-messaging 0.152.0](https://github.com/leemour/cli-messaging/tree/v0.152.0)), including tags, saved searches, file-content search and stem settings.
-
-Archive preparation and the coverage additions below are available in tg 0.35.0 (cli-messaging 0.177.0) and max 0.34.0 (cli-messaging 0.176.0). The linked tool guides are reviewed at tg 0.38.0 and max 0.37.0.
+There are two ways to search one local archive. **Message search** finds the messages that satisfy a strict query. **Topic search** finds conversations by meaning and shared words. They share the archive and nothing else: the conversation graph and the vectors are optional stages that message search never reads.
 
 <ArchitectureDiagram name="searchPaths" lang="en" />
 
 ## Choose the right path
+
+Use message search for words, people, dates and file filters. Use topic search when you remember the subject rather than the wording. Open the original messages before relying on either result.
 
 | Question | Entry point | What it returns | Preparation |
 | --- | --- | --- | --- |
@@ -26,19 +26,19 @@ A messenger's native forum topic, an inferred conversation and a window of neigh
 
 ## 1. Archive and identity
 
-Reads, explicit history fetches and background capture write messages into one shared SQLite store. Search reads this local copy and never downloads a chat's history on its own; it can also ask the messenger's own search for candidates (below). Provider, account, chat and message identifiers keep equally numbered messages from different sources apart, and every result carries a qualified locator, so an agent can return to the original.
+Reads, explicit history fetches and background capture write messages into one shared SQLite store. Search reads this local copy and never downloads a chat's history on its own; word search can also ask the messenger's own search for candidates ([below](#server-search-beside-the-archive)). Provider, account, chat and message identifiers keep equally numbered messages from different sources apart, and every result carries a qualified locator, so an agent can return to the original.
 
 The store keeps each message's original text and, separately, its normalized text for search. It also records which ranges of each chat's history it holds. An index, a build or a vector does not prove that a whole chat was downloaded.
 
-Good search needs downloaded chats. `store fetch --all --background` starts downloading the last 90 days of every chat; add `--since-time 365d` to go further back. Each run fetches at most 1,000 messages per chat in tg or 1,200 in max by default; repeat it to continue busy histories. Counts, topic search, filters and MAX searches without a named chat still read the archive. A chat fetched to a time window can remain `partial`; that status alone does not set `coverage.next`.
+Good search needs downloaded chats. `store fetch --all --background` starts downloading the last 90 days of every chat; add `--since-time 365d` to go further back. Each run fetches at most 1,000 messages per chat in tg or 1,200 in max by default; repeat it to continue busy histories. Counts, topic search, filters and MAX searches without a named chat read only the archive.
 
-Message search starts in the active account. `--source all` or `in:all` widens it to every account in the store; a provider narrows that. Names resolve inside the chosen scope, and an ambiguous author or chat asks for a more precise identifier. Topic search reads one account: its built conversations, optionally one chat and a time boundary.
+Message search starts in the active account. `--source all` or `in:all` widens it to every account in the store; a provider narrows that. Names resolve inside the chosen scope, and an ambiguous author or chat asks for a more precise identifier. Topic search also starts in the active account: its built conversations, optionally one chat and a time boundary; `--source` widens it explicitly.
 
 ## 2. Strict message search
 
 The pipeline:
 
-1. Parse the text into a versioned Boolean syntax tree that keeps source positions for errors. The grammar follows a tested profile of Apache Lucene 9.12.3 query syntax. Lucene is the query language here, not a search server or a Java index.
+1. Parse the text into a versioned Boolean syntax tree that keeps source positions for errors. The grammar follows a tested profile of Apache Lucene query syntax. Lucene is the query language here, not a search server or a Java index.
 2. Validate fields, values and operators against one registry. CLI text, MCP text and MCP syntax trees reach the same validator and service.
 3. Resolve the account scope, stored names and calendar boundaries in the chosen IANA time zone. `topic:` needs exactly one chat, because topic numbers are local to a chat.
 4. Compile the tree into parameterized SQLite. Words and phrases use an FTS5 word index over the normalized text; metadata predicates narrow the candidates.
@@ -47,7 +47,7 @@ The pipeline:
 
 <ArchitectureDiagram name="strictSearch" lang="en" />
 
-The fields are `text`, `exact`, `body`, `from`, `chat`, `date`, `kind`, `has`, `topic`, `in`, `preset`, `filename`, `mime`, `size` and `tag`. File fields match a message when at least one of its attachments matches, by the name, size and type the messenger reported; MAX reports no type, so `mime:` finds nothing there. `tag:` reads the owner's local tags on the message, its chat or its sender. `date:` also takes `today`, `yesterday` and offsets such as `7d`, counted from the moment the query runs. Fuzzy, proximity, boost and interval operators are refused with an explicit error.
+The fields are `text`, `exact`, `body`, `from`, `chat`, `date`, `kind`, `has`, `topic`, `in`, `preset`, `content`, `filename`, `mime`, `size` and `tag`. File fields match a message when at least one of its attachments matches, by the name, size and type the messenger reported; MAX reports no type, so `mime:` finds nothing there. `content:` searches text extracted from attachments or supplied by an agent. `tag:` reads the owner's local tags on the message, its chat or its sender. `date:` also takes `today`, `yesterday` and offsets such as `7d`, counted from the moment the query runs. Fuzzy, proximity, boost and interval operators are refused with an explicit error.
 
 ```sh
 tg search messages 'invoice AND has:file' --source all --context 2 --json
@@ -59,17 +59,19 @@ tg search messages 'filename:*.pdf size>1MB date:7d' --json
 
 When every branch requires words, results are ranked by BM25 over the word index, exact forms first; otherwise they come newest first. `--newest` always orders by time. Ties break on account-qualified identifiers, so pages are stable.
 
-If the word index is not ready, a query with words fails with `index_not_ready`, the share already built and the command that finishes it; it never falls back to substring matching. Query length, tree depth, automaton size, vocabulary expansion (10,000 words), candidates, scanned bytes, work and time are bounded. Exceeding a budget is an error, never a silently shorter result.
+If the word index is not ready, a query with words fails with `index_not_ready`, the share already built and the command that finishes it (`store migrate`); it never falls back to substring matching. A query without words still runs. Query length, tree depth, automaton size, vocabulary expansion (10,000 words), candidates, scanned bytes, work and time are bounded. Exceeding a budget is an error (`query_limit`), never a silently shorter result.
 
-The JSON answer includes the language, field and preset versions, the time zone, the order, `wordsReady`, and account and chat coverage, even with no hits. `lastSyncedAt` is the oldest time a chat in scope was last fetched by `store fetch`, or `null` if one never was. `inventoryComplete` says every account in scope has at some point listed all its chats; it is knowledge about the past, not a promise about now. `coverage` also reports the stored messages and chats in scope (`messages`, `coveredChats`), counts never-fetched and behind chats in `chats`, lists up to ten `attention` chats, and names `next`, the one command that would improve the answer. When no message is found and `next` is set, an agent runs it or asks the owner before concluding that the message does not exist.
+The JSON answer includes the language, field and preset versions, the time zone, the order, `wordsReady`, per-chat `completeness`, and account and chat coverage, even with no hits. `lastSyncedAt` is the oldest time a chat in scope was last fetched by `store fetch`, or `null` if one never was. `inventoryComplete` says every account in scope has at some point listed all its chats; it is knowledge about the past, not a promise about now. `coverage` also reports the stored messages and chats in scope, counts never-fetched and behind chats, lists up to ten `attention` chats, and names `next`, the one command that would improve the answer. When no message is found and `next` is set, an agent runs it or asks the owner before concluding that the message does not exist.
 
-`stats messages show` runs the same query and counts each matching message once, grouped by chat, sender, calendar day or hour. A successful search or count writes its query and options, never its results, to a local history of the newest 1,000 runs; saved searches are named entries that are parsed again on every run.
+`stats messages show` runs the same query and counts each matching message once, grouped by chat, sender, calendar day or hour. It counts the archive only. A successful search or count writes its query and options, never its results, to a local history of the newest 1,000 runs; saved searches are named entries that are parsed again on every run.
 
 Legacy discovery (`--language legacy`) and the legacy JavaScript `--regex` mode remain explicit and separate from strict semantics.
 
 ### Word forms
 
 Words and quoted phrases in `text`, the default field, match every form of their words. `квартира` finds `квартиру` and `квартиры`, and `piso` finds `pisos`. Each word is compared by its Snowball stem, taken before the word is folded (ё→е, accents removed). Quotes keep words together but still allow every form: `"оплатил счёт"` finds `оплатила счета`. Messages that contain the exact form you typed come first. For the exact form only, write `exact:квартира` or `exact:"оплатил счёт"`, or add `--exact` (MCP: `exact: true`) to treat every word without a field that way. `-квартира` excludes every form; `-exact:квартира` only the exact one. A wildcard such as `квартир*` and a `text:` regular expression still read whole words, without stems.
+
+Word forms are not typo correction. Strict search, the default, does not correct misspellings in Telegram or MAX: `presentaion` does not find `presentation`. Try a wildcard on the part you are sure of (`present*`), or topic search by meaning. Only the older `--language legacy` mode corrects typos automatically. When you ask an agent, describe what you remember; it can choose these approaches for you.
 
 We measured three ways of matching word forms on Universal Dependencies treebanks, with 102 words per language ([benchmark results](https://github.com/leemour/cli-messaging/blob/bench/stemming-vs-trigrams/bench/stemming/results.md)). *Found* is the share of relevant messages the search returns; *correct* is the share of returned results that are relevant.
 
@@ -79,13 +81,15 @@ We measured three ways of matching word forms on Universal Dependencies treebank
 | Trigram neighbors (similar spelling) | 69% | 52% | 85% | 44% |
 | Snowball stems | 88% | 84% | 96% | 69% |
 
-The stemmers are a store-wide setting, shared by every profile, tg and MAX: `searchStemmers.cyrillic` (Russian or none) and `searchStemmers.latin` (Spanish, English or none); `store reindex` applies a change, and until then a search with words reports that the stems are not ready. Some different words share a stem — `часть`/`часто`, `caso`/`casa` — and `exact:` or `--exact` separates them. The JSON answer says that stems were used: `query.stemming` names the stemmer and each word's stem, `stemsReady` sits beside `wordsReady`, and each hit carries `exact: false` when only another form matched. Stems arrived in cli-messaging 0.163.0 (tg 0.33, max 0.32).
+The stemmers are a store-wide setting, shared by every profile, tg and MAX: `searchStemmers.cyrillic` (`russian` or `none`) and `searchStemmers.latin` (`english`, `spanish`, both — the default — or `none`). `store reindex` applies your own change. While the stem index is being built, a search matches exact word forms and says so; `serve` finishes the stems in the background and `store migrate` at once. Some different words share a stem — `часть`/`часто`, `caso`/`casa` — and `exact:` or `--exact` separates them. The JSON answer says whether stems were used: `query.stemming` names the stemmer and each word's stem, `stemsReady` sits beside `wordsReady`, and each hit carries `exact: false` when only another form matched.
 
 ### Server search beside the archive
 
-`search messages` can also ask the messenger's own search: tg asks Telegram by default (since tg 0.34), and max asks MAX's server for a search that names one chat. The server's matching is its own and not documented — measured on test accounts, Telegram matches whole words and Russian word forms but not word beginnings, and MAX matches word beginnings but not word forms. So the server's results are only candidates: they are saved into the archive, and the same strict query then runs once over the archive and the new rows. `exact:`, `-word`, phrases, filters and the ranking keep their meaning, and a message is never listed twice. A candidate the strict query rejects is kept but not shown.
+`search messages` can also ask the messenger's own search, which can find messages that were never fetched. tg asks Telegram by default (`--backend both`). max asks MAX's server only when the query has words and names one chat (`--chat` or `chat:`); without a chat it answers from the archive. `--backend server` shows only the server's results, and `--backend archive` searches only the archive.
 
-Only what narrows the candidates is sent: the required words and phrases, one chat, a sender with that chat, and dates; negations, wildcards, regular expressions and filters stay local. At most three server calls run in parallel within 5 seconds (`--server-time`); a later answer is dropped, and nothing is marked read. Each hit says where it came from (`source`: `archive`, `server` or `both`), and a `server` block says what the server returned and why it was skipped or stopped. `--backend archive` searches only the archive; `stats` never asks the server, since the server counts by its own rules.
+The server's matching is its own. Telegram does not document its rules; MAX's server finds a word by its beginning but not its other forms. So the server's results are only candidates: they are saved into the archive, and the same strict query then runs once over the archive and the new rows. `exact:`, `-word`, phrases, filters and the ranking keep their meaning, and a message is never listed twice. A candidate the strict query rejects is kept but not shown.
+
+Only what narrows the candidates is sent: the required words and phrases, one chat, a sender with that chat, and dates; `OR` makes up to three server searches. Negations, wildcards, regular expressions, `has:`, `tag:` and presets stay local, and a query without words does not ask the server. The tool waits at most 5 seconds (`--server-time`, up to 60); a later answer is dropped, and nothing is marked read. Each hit says where it came from (`source`: `archive`, `server` or `both`), and a `server` block says what the server returned and why it was skipped or stopped. With `--backend both`, an unreachable server, a profile without the `messages.server-search` permission or a query without words leaves an archive answer; an explicit `--backend server` refuses instead. `stats` never asks the server, since the server counts by its own rules.
 
 ## 3. Reconstruct discussions with a message graph
 
@@ -103,9 +107,11 @@ Rules look back at most 50 messages: in a measured group, 97% of reply parents w
 
 This is a **per-chat graph of message relationships**, not a knowledge graph of people, projects and chats. Missing reply parents, incomplete history and interleaved discussions can produce imperfect grouping.
 
-Building is explicit. A new build publishes new memberships and conversation identifiers; the previous build stays readable until the new one is complete, and a failed build never exposes half a result. Each build records its rules version, so a later version can name the chats built with older rules.
+Building is explicit. A new build publishes new memberships and conversation identifiers; the previous build stays readable until the new one is complete, and a failed build never exposes half a result. Each build records its rules version, so `conversations status` and `store check` can name the chats built with older rules.
 
-Agent-assisted linking: `skill show link-conversations` gives the owner's agent its instructions; `conversations batches status` estimates the messages, batches and text; `batches next` hands out a window of 10–200 messages (50 by default) with the messages before it; `conversations links add` stores the agent's JSON answer, all or nothing. The CLI never calls a model to link messages. An answer that refers to a changed or deleted message becomes stale and is left out of later builds.
+Agent-assisted linking: `skill show link-conversations` gives the owner's agent its instructions; `conversations batches status` estimates the messages, batches and text; `batches next` hands out a window of 10–200 messages (50 by default) with the messages before it; `conversations links add` stores the agent's JSON answer, all or nothing, and `conversations links clear` drops the agent's answers for a chat. Storing answers needs the profile permission `conversations.links`. In this workflow the CLI never calls a model itself. An answer that refers to a changed or deleted message becomes stale and is left out of later builds.
+
+`conversations build --chat <chat> --analyze` is the explicit alternative: the CLI sends bounded batches to a configured OpenAI-compatible or Anthropic endpoint. It needs one named chat, reports the volume, endpoint and token limit, and asks for consent, which is remembered for that account, chat and provider until revoked (`conversations consents list`, `conversations consents revoke`). Defaults are 50 messages per batch and at most 100,000 reserved tokens per run; `--yes` grants consent in scripts.
 
 ```sh
 tg conversations build --chat "Project team"
@@ -115,13 +121,13 @@ max conversations batches status --chat "Project team" --json
 
 ## 4. Pieces and vectors
 
-The build cuts each conversation at message boundaries into pieces of about 1,200 characters, sender names included. A single oversized message stays one piece; the model's input limit may truncate it. A conversation with no text makes no piece.
+The build cuts each conversation at message boundaries into pieces of about 1,200 characters, sender names included. A single message longer than that is split into overlapping pieces, so meaning search reads all of it. A conversation with no text makes no piece.
 
 Each piece keeps its first and last message and a hash of its text. Vectors are stored by model and text hash, so identical text reuses a vector and an interrupted run resumes with what is left. Messages remain the evidence; vectors are a derived representation for retrieval.
 
-Local models run through ONNX Runtime (WebAssembly) in Node or Bun. The default is `e5-small` (multilingual-e5-small, 8-bit, 384 dimensions, MIT). `embeddinggemma` (EmbeddingGemma 300M, 4-bit, 768 dimensions) finds more but runs about seven times slower and needs its terms accepted. Model files are pinned and checksum-verified, and two models' vectors are never compared with each other.
+Local models run through ONNX Runtime (WebAssembly) in Node or Bun. The default is `e5-small` (multilingual-e5-small, 8-bit, 384 dimensions, MIT). `embeddinggemma` (EmbeddingGemma 300M, 4-bit, 768 dimensions) finds more but runs about seven times slower and downloads only with `--accept-terms`, since it comes under Google's Gemma terms. Model files are pinned and checksum-verified, and two models' vectors are never compared with each other.
 
-One local session uses `min(8, cores)` threads. `--workers` starts several sessions with the threads split between them, and `--threads` sets the total.
+One local session uses `min(8, cores)` threads. `--workers` starts several sessions with the threads split between them, each with its own copy of the model, and `--threads` sets the total.
 
 ```sh
 tg models text download e5-small
@@ -151,10 +157,12 @@ The run made 42,417 pieces and grew the store by 292 MB. Three workers gave only
 
 `search conversations` takes a question in natural language, not a Lucene query. It runs two branches:
 
-- **Meaning:** embed the question with the selected model, scan the vectors of current builds in scope and keep each conversation's best piece.
-- **Words:** take the question's words, join them with OR over the word index and map the matching messages to built conversations.
+- **Meaning:** embed the question with the selected model, scan the vectors of current builds in scope and keep each conversation's best piece. With the local `e5-small`, a meaning match needs cosine similarity above 0.80.
+- **Words:** take the question's words, join them with OR over the word index and map the matching messages to built conversations. Exact word matches stay eligible below the meaning threshold.
 
 The two ranked lists are combined by reciprocal rank fusion: each list adds `1 / (60 + rank)` to a conversation, ranks starting at one. A result reports `by: ["meaning"]`, `["words"]` or both. Its `score` is the best piece's cosine similarity, not the fusion score and not a probability that it answers the question; a result found only by words has `score: null`. Its `summary` is metadata — identifiers, dates, message and sender counts — not generated prose.
+
+`--filter 'from:me date:7d'` limits conversations before ranking: a single message in the conversation must match the whole strict query. `--source personal|bots|all|<provider>` widens the scope beyond the active account. Neither can accompany `--refresh`.
 
 With no local model downloaded, search answers by words alone and reports `"meaning": "unavailable"`; it never downloads a model or switches to a remote one. A chat embedded only with another model is left out of the meaning branch and named in `embeddedOnlyElsewhere`. A chat that was never built returns nothing here.
 
@@ -173,34 +181,37 @@ max conversations related "Project team" 4521 --json
 
 - **Edits.** A result whose piece changed after it was embedded is marked `stale: true`; its score is for the old text until the next build and embedding.
 - **Deletions.** A deleted message keeps its row, so a later sync cannot bring it back, but loses its text: in the row, the search copy, the edit history, transcripts and every vector of a piece that held it, unless a current piece without a deleted message still uses the same text.
-- **Catch-up.** `conversations build` and `embed` without `--chat`, and `search conversations --refresh`, build and embed on this machine the chats that changed or were never built: at most 20 chats and 2,000 pieces a run by default (`--max-chats`, `--max-chunks`). They never download a model; a remote model is only ever used per chat, with the owner's yes. MCP offers the same catch-up as `conversations_refresh`.
+- **Catch-up.** `conversations build` and `embed` without `--chat`, and `search conversations --refresh`, build and embed on this machine the chats that changed or were never built: at most 20 chats and 2,000 pieces a run by default (`--max-chats`, `--max-chunks`). They never download a model; a remote model is only ever used per chat, with the owner's yes. MCP offers the same catch-up as the `conversations refresh` write command.
 
 ## 7. Evidence and context for an agent
 
-After retrieval, open the original message or the reconstructed conversation. An answer should keep four things apart: an exact message match, a candidate by meaning, a relationship from the graph and the agent's own conclusion. Keep the locator, chat, date and the relevant surrounding text with each claim.
+After retrieval, open the original message or the reconstructed conversation. An answer should keep four things apart: an exact message match, a candidate by meaning, a relationship from the graph and the agent's own conclusion. Keep the locator, chat, author, date and the relevant surrounding text with each claim.
 
-`--context` follows time, not the graph. `messages links` explains graph relations and the chosen chain of parents; `conversations show` reads the grouped messages. Evidence packets add source identities, content fingerprints, bounds and truncation metadata; even so, a page of evidence cannot prove a chat's full history.
+`--context` follows time, not the graph. `--thread` follows the stored reply graph instead (by default 8 hops, 50 messages, 65,536 bytes and one day around each hit) and falls back to time order when a chat has no graph. `messages links` explains graph relations and the chosen chain of parents; `conversations show` reads the grouped messages. Evidence packets add source identities, content fingerprints, bounds and truncation metadata; even so, a page of evidence cannot prove a chat's full history. The report example in [group administration](./group-admins.md) shows why complete relationships between saved messages do not imply complete history.
 
 Reading, searching and context never mark messages read or send anything. Fetching history, building, embedding and remote providers are separate, explicit actions.
 
 ## 8. What the playground demonstrates
 
-The [interactive playground](./search-playground.mdx) runs the shared query parser over 36 fictional messages in six chats. It shows strict matching, field and value suggestions, removable filters, dates, file and link predicates, and context around a hit. An invalid edit keeps the last valid results and marks the syntax problem.
+The [interactive playground](./search-playground.mdx) runs the shared query parser over 50 fictional messages in six chats. It shows strict matching, field and value suggestions, removable filters, dates, file and link predicates, and context around a hit. An invalid edit keeps the last valid results and marks the syntax problem.
 
-The browser opens no account and runs no conversation build, embedding or live AI. Its short summaries are prepared examples shown only when their evidence is retrieved. The interface is translated; the sample messages stay in English.
+The browser opens no account and runs no conversation build, embedding or live AI. Its short summaries are prepared examples shown only when their evidence is retrieved. The interface is translated; the sample messages stay in English. Use it to learn how to inspect a source, then use the messenger guides for a real archive.
 
 ## Source map
 
-Engine source at [`cli-messaging` v0.148.2](https://github.com/leemour/cli-messaging/tree/v0.148.2). These are implementation references, not performance promises.
+Engine source in [`cli-messaging`](https://github.com/leemour/cli-messaging/tree/v0.211.0), the shared library behind both tg and max. These are implementation references, not performance promises.
 
 | Responsibility | Implementation |
 | --- | --- |
-| Archive preparation and coverage additions (v0.174.0) | [Archive service](https://github.com/leemour/cli-messaging/blob/v0.174.0/src/services/archive.ts), [fetch command](https://github.com/leemour/cli-messaging/blob/v0.174.0/src/cli/messenger/backfill-command.ts) and [coverage summary](https://github.com/leemour/cli-messaging/blob/v0.174.0/src/cli/messenger/archive-summary.ts) |
-| Parse, validate, scope and coverage | [Message search service](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/services/messages-search.ts) and [Lucene SQLite executor](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/store/sqlite/lucene.ts) |
-| Word index and vocabulary | [Word matching](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/store/sqlite/words.ts) and [index filling](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/store/sqlite/search-index.ts) |
-| Graph links and build lifecycle | [Link rules](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/conversations/link.ts), [conversation service](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/services/conversations.ts) and [build persistence](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/store/sqlite/conversations.ts) |
-| Pieces and vector storage | [Chunking](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/conversations/chunks.ts) and [vector storage and scoring](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/store/sqlite/vectors.ts) |
-| Models, fusion and freshness | [Embedding service](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/services/embeddings.ts), [model catalog](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/embeddings/models.ts) and [worker pool](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/embeddings/pool.ts) |
-| Evidence packet contract | [Evidence service](https://github.com/leemour/cli-messaging/blob/v0.148.2/src/services/evidence.ts) |
+| Archive preparation and coverage | [Archive service](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/services/archive.ts), [fetch command](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/cli/messenger/backfill-command.ts) and [coverage summary](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/cli/messenger/archive-summary.ts) |
+| Parse, validate, scope and coverage | [Query parser](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/search/query.ts), [message search service](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/services/messages-search.ts) and [Lucene SQLite executor](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/store/sqlite/lucene.ts) |
+| Word index, vocabulary and stems | [Word matching](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/store/sqlite/words.ts), [index filling](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/store/sqlite/search-index.ts) and [stemming](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/search/stem.ts) |
+| Server search candidates | [Server search](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/services/server-search.ts) |
+| Graph links and build lifecycle | [Link rules](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/conversations/link.ts), [conversation service](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/services/conversations.ts) and [build persistence](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/store/sqlite/conversations.ts) |
+| Pieces and vector storage | [Chunking](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/conversations/chunks.ts) and [vector storage and scoring](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/store/sqlite/vectors.ts) |
+| Models, fusion and freshness | [Embedding service](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/services/embeddings.ts), [model catalog](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/embeddings/models.ts) and [worker pool](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/embeddings/pool.ts) |
+| Evidence packet contract | [Evidence service](https://github.com/leemour/cli-messaging/blob/v0.211.0/src/services/evidence.ts) |
 
-For the exact grammar, fields, presets and limits, read the [query-language reference](https://github.com/leemour/cli-messaging/blob/v0.148.2/docs/search/query-language.md). For preparation and options, read the [Telegram archive](./tg/archive.md) and [MAX archive](./max/archive.md) guides.
+For the exact grammar, fields, presets and limits, read the [Telegram](./tg/query-language.md) or [MAX](./max/query-language.md) query-language reference. For preparation and options, read the [Telegram archive](./tg/archive.md) and [MAX archive](./max/archive.md) guides.
+
+Ready to try? Continue with search examples for **[Telegram](./tg/search.md)** or **[MAX](./max/search.md)**.

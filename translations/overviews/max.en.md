@@ -3,7 +3,7 @@ title: "MAX: start here"
 description: "Connect your personal MAX account or a bot to your agent."
 ---
 
-`max` lets your AI agent read MAX, find messages and help you reply. You can also use it directly
+`max` is a command-line tool that lets your AI agent read MAX, find messages and help you reply. You can also use it directly
 from a terminal. It runs on Windows, macOS and Linux.
 
 You are in the **MAX** documentation. Use the messenger switch at the top to open Telegram.
@@ -59,7 +59,7 @@ Ask your agent to catch up on unread messages, find a message, recall agreements
 reply. Reading **does not mark messages as read**. Sending, deleting and other changes require
 separate commands; you can restrict the agent's access.
 
-Word search asks both the local archive and the messenger by default (`--backend both`); use `--backend archive` for local-only results. Strict Lucene is the default query language; `--language legacy` restores the previous matching and typo correction. Prepare saved history before archive-only search, counting or rankings, and check coverage before treating an empty result as proof that a message is absent. MAX server search needs one chat. Counts, rankings and queries unsupported by the server use saved history. [Search guide](/en/docs/max/search).
+`max search all` searches messages, imported mail and notes stored on this computer at once. Message search (`max search messages`) asks both the local archive and the messenger by default (`--backend both`); use `--backend archive` for local-only results. Strict Lucene is the default query language; `--language legacy` restores the previous matching and typo correction. Prepare saved history before archive-only search, counting or rankings, and check coverage before treating an empty result as proof that a message is absent. MAX server search needs one chat. Counts, rankings and queries unsupported by the server use saved history. [Search guide](/en/docs/max/search).
 
 ## Find the guide for your task
 
@@ -82,8 +82,6 @@ Word search asks both the local archive and the messenger by default (`--backend
 | Restrict reads, writes and confirmations | [Permissions](/en/docs/max/permissions) |
 | Choose a personal or bot profile | [Profiles and bots](/en/docs/max/profiles) |
 | Look up setting types and precedence | [Configuration reference](/en/docs/max/configuration-reference) |
-
-Message search uses strict Lucene by default; `--language legacy` keeps the previous filters and typo correction.
 
 The left sidebar lists shared guides and both messengers. The right sidebar lists sections of the current page. Start
 with installation; use the detailed reference when you have a specific task.

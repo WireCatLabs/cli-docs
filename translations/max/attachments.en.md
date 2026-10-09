@@ -44,7 +44,7 @@ The saved `localPath` is available on the machine running the CLI. A path alone 
 
 An agent on this computer can open the saved `localPath`. An agent on another machine needs the file bytes and suitable readers: a path does not transfer them. Check your AI client’s capabilities and [remote connection method](./remote.md). Receiving a file, reading it and saving text in the index are separate steps.
 
-A remote agent can receive a retained PDF through `attachments show`, and if its client cannot open PDFs, it can request each page with `--page`. A page preview needs the optional PDF engines; the rendering is local, and the agent recognizes the text. If the image is not visible, use MCP `format: base64` and display the PNG with the agent's tools. Example and limits: [remote PDF reading](./remote.md#читать-pdf-без-сохранения-файла-у-агента).
+A remote agent can receive a saved PDF through `attachments show`; if the client does not open PDFs, show each page with `--page`. Viewing a page requires the optional PDF engines; rendering is local, and the agent recognizes the text. If the image is not visible, use MCP `format: base64` and display the PNG with the agent’s own tools. Example and limits: [reading a PDF with a remote agent](./remote.md#читать-pdf-без-сохранения-файла-у-агента).
 
 ## How content is read
 
@@ -149,4 +149,3 @@ Repeated extraction uses the file hash and model target; good saved text is pres
 The extraction limit is 50 MiB per file; local text is limited to 2 million characters. API OCR accepts PDFs of up to 20 pages and images of up to 4 MiB and 20 million pixels, with neither side exceeding 8000 pixels. File concurrency is 1–8, default 4; pages within a file run sequentially. By default the API processes up to 100 files; `--limit` accepts 1–500. Continue with the returned `cursor`. A provider response of 429 stops further API calls in that run, without retries. The command returns statuses and message links, not full recognized text.
 
 Downloading, extraction and search are covered in more detail in [search](./search.md). This description matches the CLI source code; the existence of a command does not mean every possible file of that format has been tested against live MAX.
-

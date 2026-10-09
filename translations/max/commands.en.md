@@ -908,11 +908,11 @@ start a bot, as its Start button does; the bot sees that you started it
 max chats start <bot> [options]
 ```
 
-| Argument | | What it is |
+| Argument | | Meaning |
 |---|---|---|
 | `bot` | required | the chat with the bot — its id or its name — or the bot's link, even one never opened. |
 
-| Option | What it does |
+| Option | Purpose |
 |---|---|
 | `--payload <text>` | the start parameter the bot reads; a link's own ?start= when not given. |
 
@@ -927,11 +927,11 @@ the address that opens a bot's mini app, signed in as you — keep it to yoursel
 max chats app <bot> [options]
 ```
 
-| Argument | | What it is |
+| Argument | | Meaning |
 |---|---|---|
 | `bot` | required | the chat with the bot: its id or its name. |
 
-| Option | What it does |
+| Option | Purpose |
 |---|---|
 | `--start <param>` | the start parameter the app reads. |
 
@@ -1560,7 +1560,7 @@ press a bot's button under a message; the bot sees that you pressed it
 max messages press <chat> <message> <button>
 ```
 
-| Argument | | What it is |
+| Argument | | Meaning |
 |---|---|---|
 | `chat` | required | a chat: its id, or part of its title. |
 | `message` | required | the id of the message with the buttons. |

@@ -1,0 +1,14 @@
+{
+  "config": {
+    "default": false,
+    "MD001": false,
+    "MD010": true,
+    "MD012": {
+      "maximum": 2
+    },
+    "MD040": true,
+    "MD042": true
+  },
+  "globs": ["content/docs/*.{md,mdx}", "docs/AUTHORING.md", "docs/README.md", "docs/STRUCTURE.md"],
+  "ignores": ["content/docs/*/", "node_modules", ".docs-tooling"]
+}

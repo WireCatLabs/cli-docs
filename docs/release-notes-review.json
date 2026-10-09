@@ -1,0 +1,14 @@
+{
+  "tg": {
+    "version": "v0.40.1",
+    "roadmapSha256": "4f57a6119b720a08da38106363fc0bad3db9b937309fe30bc7587f774aceb69c",
+    "reviewedAt": "2026-10-09",
+    "conclusion": "Every search moved under tg search, with search all, mail and notes; topic show, forwarding into a topic and PDF pages for remote agents have shipped. The roadmap adds only the remote PDF reading note. Several-photo sending, chat notes and the listed MAX parity tasks remain planned."
+  },
+  "max": {
+    "version": "v0.39.0",
+    "roadmapSha256": "17d4571882aed8bf2870a23c28783b5d78f2d1a8a35bb3517650b34ff05299b0",
+    "reviewedAt": "2026-10-09",
+    "conclusion": "Every search moved under max search, with search all, mail and notes, and PDF pages for remote agents have shipped. The roadmap adds only the remote PDF reading note; optional local storage, event-driven actions, video notes, cloud-password actions and installers remain planned."
+  }
+}

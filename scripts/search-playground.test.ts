@@ -4,7 +4,9 @@ import { join } from "node:path"
 import { searchStore } from "@leemour/cli-messaging/services"
 import { type MessageStore, openStore } from "@leemour/cli-messaging/store"
 import { afterAll, beforeAll, describe, expect, it } from "vitest"
+import { createDemoDates, demoDates } from "../lib/search-playground/dates"
 import {
+  createDemoMessages,
   demoFields,
   filterClauses,
   initialQuery,
@@ -84,18 +86,18 @@ describe("browser demo against the actual indexed SQLite search service", () => 
       "contact",
       "location",
       "poll",
-    ].flatMap((kind) => [`has:${kind}`, `Atlas has:${kind}`, `has:${kind} date:2026-10-04`]),
+    ].flatMap((kind) => [`has:${kind}`, `Atlas has:${kind}`, `has:${kind} date:${demoDates.day(-1)}`]),
     "in:MAX",
     "invoice OR budget AND Atlas",
     "Atlas NOT budget",
     "invo*",
     "text:/invo.*/",
     '"final invoice"',
-    "date:[2026-10-01 TO 2026-10-31]",
-    "date>2026-10-02",
-    "date:2026-10-03",
-    "date:2026-10-04",
-    "date:2026-10-05",
+    `date:[${demoDates.start} TO ${demoDates.end}]`,
+    `date>${demoDates.day(-3)}`,
+    `date:${demoDates.day(-2)}`,
+    `date:${demoDates.day(-1)}`,
+    `date:${demoDates.today}`,
     "text:coffee",
     "from:Mia AND text:budget",
     "from:Sam",
@@ -103,6 +105,9 @@ describe("browser demo against the actual indexed SQLite search service", () => 
     "from:Noah",
     "invoice nonexisting",
     "NOT invoice",
+    "in:max AND has:voice AND from:Mia",
+    `in:telegram AND has:file AND date:${demoDates.today}`,
+    `Atlas AND (has:file OR has:link) AND date:[${demoDates.today} TO ${demoDates.end}]`,
   ])("returns the same message ids for %s", async (query) => {
     const expected = await searchStore(store, account, {
       text: query,
@@ -188,10 +193,12 @@ describe("reversible query filters and value suggestions", () => {
     const query = "Atlas date:[2026-10-01 TO *] AND has:file"
     const options = suggestionsFor(query, 19)
     expect(suggestionsFor("date>2026-10-01", 15).find((item) => item.labelKey === "sampleDay")?.value).toBe(
-      "date:2026-10-03",
+      `date:${demoDates.today}`,
     )
     expect(options.length).toBeGreaterThan(3)
-    expect(options.find((item) => item.labelKey === "sampleDay")?.value).toBe("Atlas date:2026-10-03 AND has:file")
+    expect(options.find((item) => item.labelKey === "sampleDay")?.value).toBe(
+      `Atlas date:${demoDates.today} AND has:file`,
+    )
   })
   it("an empty query really includes every sample chat and message", async () => {
     const expected = await searchStore(store, account, {
@@ -214,7 +221,7 @@ describe("discoverable sample search paths", () => {
       expect(searchDemo(`Atlas has:${kind}`).length, kind).toBeGreaterThan(0)
       expect(searchDemo(`has:${kind} NOT Atlas`).length, kind).toBeGreaterThan(0)
     }
-    expect(searchDemo("has:link NOT has:attachment")).toHaveLength(2)
+    expect(searchDemo("has:link NOT has:attachment")).toHaveLength(4)
   })
   it("keeps concrete values out of general field completion", () => {
     const general = suggestionsFor("", 0).map((item) => item.label)
@@ -225,11 +232,54 @@ describe("discoverable sample search paths", () => {
     expect(suggestionsFor("text:", 5).map((item) => item.label)).toContain("coffee")
   })
   it("offers distinct invoice, budget, coffee and date paths", () => {
-    expect(searchDemo("text:invoice")).toHaveLength(11)
-    expect(searchDemo("text:budget")).toHaveLength(9)
-    expect(searchDemo("text:coffee")).toHaveLength(4)
-    expect(searchDemo("date:2026-10-03")).toHaveLength(8)
-    expect(searchDemo("date:2026-10-04")).toHaveLength(26)
-    expect(searchDemo("date:2026-10-05")).toHaveLength(2)
+    expect(searchDemo("text:invoice")).toHaveLength(20)
+    expect(searchDemo("text:budget")).toHaveLength(18)
+    expect(searchDemo("text:coffee")).toHaveLength(6)
+    expect(searchDemo(`date:${demoDates.day(-2)}`)).toHaveLength(8)
+    expect(searchDemo(`date:${demoDates.day(-1)}`)).toHaveLength(26)
+    expect(searchDemo(`date:${demoDates.today}`)).toHaveLength(10)
   })
+})
+
+describe("rolling sample dates", () => {
+  it.each(["2027-01-01T00:05:00Z", "2028-03-01T23:55:00Z", "2026-12-31T12:00:00Z"])(
+    "keeps 50 messages within two calendar days of %s",
+    (instant) => {
+      const dates = createDemoDates(new Date(instant))
+      const rows = createDemoMessages(dates)
+      expect(rows).toHaveLength(50)
+      expect(new Set(rows.map((row) => row.id)).size).toBe(50)
+      expect(new Set(rows.map((row) => row.chatId)).size).toBe(6)
+      for (const row of rows) {
+        expect(row.date.slice(0, 10) >= dates.start && row.date.slice(0, 10) <= dates.end).toBe(true)
+        expect(Number.isFinite(Date.parse(row.date))).toBe(true)
+      }
+      expect(rows.find((row) => row.id === "12")?.text).toContain(dates.deadline)
+    },
+  )
+  it("handles year and leap-day boundaries in UTC", () => {
+    expect(createDemoDates(new Date("2027-01-01T00:05:00Z")).start).toBe("2026-12-30")
+    const leap = createDemoDates(new Date("2028-03-01T00:00:00Z"))
+    expect(leap.day(-1)).toBe("2028-02-29")
+    expect(leap.monthEnd).toBe("2028-03-31")
+  })
+})
+
+describe("field values and Space completion", () => {
+  it("offers and inserts every has and in value", () => {
+    for (const field of ["has", "in"]) {
+      const options = suggestionsFor(`${field}:`, field.length + 1)
+      expect(options.length).toBeGreaterThan(3)
+      for (const option of options) expect(searchDemo(option.value).length, option.value).toBeGreaterThan(0)
+    }
+    expect(suggestionsFor("in:ma", 5).map((item) => item.value)).toEqual(["in:max"])
+  })
+  it.each(["invoice ", "has:file ", "in:max ", 'chat:"Client studio" ', "Atlas AND (invoice OR budget) "])(
+    "offers operators and fields after %s",
+    (query) => {
+      const options = suggestionsFor(query, query.length)
+      expect(options.map((item) => item.label)).toEqual(expect.arrayContaining(["AND", "OR", "NOT", "has:", "in:"]))
+      expect(options.find((item) => item.label === "has:")?.value).toBe(`${query}has:`)
+    },
+  )
 })

@@ -3,7 +3,7 @@ title: "MAX: empieza aquí"
 description: "Conecta tu cuenta personal de MAX o un bot a tu agente."
 ---
 
-`max` permite que tu agente de IA lea MAX, encuentre mensajes y te ayude a responder. También
+`max` es una herramienta de línea de comandos que permite que tu agente de IA lea MAX, encuentre mensajes y te ayude a responder. También
 puedes usarlo directamente desde la terminal. Funciona en Windows, macOS y Linux.
 
 Estás en la documentación de **MAX**. Usa el selector de mensajero de arriba para abrir Telegram.
@@ -56,10 +56,10 @@ Consulta [acceso y perfiles](/es/docs/max/sessions) para otros métodos de acces
 ## Qué probar después de conectar
 
 Pide a tu agente que revise los mensajes pendientes, encuentre un mensaje, recuerde acuerdos o
-prepare una respuesta. La búsqueda usa Lucene estricto por defecto; `--language legacy` conserva la búsqueda anterior con correcciones. Leer **no marca los mensajes como leídos**. Enviar, eliminar y realizar
+prepare una respuesta. Leer **no marca los mensajes como leídos**. Enviar, eliminar y realizar
 otros cambios requiere comandos específicos; puedes limitar el acceso del agente.
 
-Por defecto, la búsqueda por palabras consulta el archivo local y el mensajero (`--backend both`); usa `--backend archive` para consultar solo el archivo. El lenguaje de consulta predeterminado es Lucene estricto; `--language legacy` recupera la coincidencia anterior y la corrección de erratas. Prepara el historial antes de buscar solo en el archivo, contar o clasificar, y comprueba la cobertura antes de considerar que un resultado vacío demuestra que no existe un mensaje. La búsqueda en el servidor de MAX necesita un chat. Los recuentos, las clasificaciones y las consultas que el servidor no admite usan el historial guardado. [Guía de búsqueda](/es/docs/max/search).
+`max search all` busca a la vez en los mensajes, el correo importado y las notas guardados en este equipo. Por defecto, la búsqueda de mensajes (`max search messages`) consulta el archivo local y el mensajero (`--backend both`); usa `--backend archive` para consultar solo el archivo. El lenguaje de consulta predeterminado es Lucene estricto; `--language legacy` recupera la coincidencia anterior y la corrección de erratas. Prepara el historial antes de buscar solo en el archivo, contar o clasificar, y comprueba la cobertura antes de considerar que un resultado vacío demuestra que no existe un mensaje. La búsqueda en el servidor de MAX necesita un chat. Los recuentos, las clasificaciones y las consultas que el servidor no admite usan el historial guardado. [Guía de búsqueda](/es/docs/max/search).
 
 ## Encuentra la guía para tu tarea
 

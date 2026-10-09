@@ -3,17 +3,22 @@ title: "Group admins"
 description: "Keep up with questions, understand participation and manage your group."
 ---
 
-Use WireCat to find questions that need an answer, understand group activity and review
-membership. Start with a read-only report before enabling moderation.
+Find questions awaiting a reply, understand activity and review who is in your group. This page starts with requests for a read-only report, then explains how to check the result before changing members or moderation rules. Your account or bot needs the appropriate group rights for changes.
 
 ## Find what needs attention
+
+```text prompt
+Review yesterday’s messages in my project group. List questions still awaiting a reply, with sources. Check later messages before calling a question unanswered. Only read; do not change the group.
+```
+
+Review the questions, checked period and cited messages. If history is missing, [download the relevant chats](./search.md) before treating the report as complete.
 
 Ask your assistant to review unanswered questions and mentions, with links to the messages.
 Read [Telegram group tasks](./tg/groups.md) or [MAX group tasks](./max/groups.md) for the commands.
 
 ```sh
-tg review --unanswered 24
-max review --unanswered 24
+tg review --unanswered 24h
+max review --unanswered 24h
 ```
 
 Check the suggested replies before sending them. A report is based on the history available
@@ -34,11 +39,11 @@ outside the messages you hold. Try [search](./search.md) for a particular discus
 
 A member audit shows signals and reasons, not a verdict about a person. Review the evidence
 before removing anyone. Telegram and MAX provide different information, so some signals may
-be unavailable. [Know your people](./people.md) covers profiles and shared conversations.
+be unavailable. [Check a whole group](./people.md#does-the-account-look-like-a-bot) shows the member audit
+command; [People](./people.md) also covers profiles and shared conversations.
 
 Recorded membership history starts when you fetch snapshots. It cannot reconstruct all earlier
-joins and departures. Both tools can fetch tracked groups while their server is running. Check the messenger guide
-for what is recorded and when it is refreshed. See each messenger's group guide.
+joins and departures. Both tools can fetch tracked groups while their server is running. See what is recorded and when it is refreshed in the group guides for [Telegram](./tg/groups.md) and [MAX](./max/groups.md).
 
 ## Set rules and enable moderation
 
@@ -46,4 +51,4 @@ The CLI can help with rules, invitations and member management. Start with a pre
 which action you want and who it affects, and give the bot or profile only the rights needed.
 Removing a person or changing a link affects the group immediately.
 
-[Telegram administration](./tg/groups.md) · [MAX administration](./max/groups.md) · [Permissions](./permissions.md)
+[Telegram administration](./tg/groups.md) · [MAX administration](./max/groups.md) · [Permissions](./permissions.mdx)

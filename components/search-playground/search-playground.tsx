@@ -1,7 +1,6 @@
 "use client"
 
 import "@/lib/landing/search-playground.css"
-import { Autocomplete } from "@base-ui/react/autocomplete"
 import { Popover } from "@base-ui/react/popover"
 import {
   ArrowDown,
@@ -17,9 +16,10 @@ import {
   Sparkles,
   X,
 } from "lucide-react"
-import { useEffect, useId, useMemo, useRef, useState } from "react"
+import { type KeyboardEvent, useEffect, useId, useMemo, useRef, useState } from "react"
 import { normalize } from "@/lib/search-language.generated.js"
 import { copy } from "@/lib/search-playground/copy"
+import { demoDates } from "@/lib/search-playground/dates"
 import {
   filterClauses,
   type Hit,
@@ -65,8 +65,8 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
   const [copied, setCopied] = useState(false)
   const [copyError, setCopyError] = useState(false)
   const [tool, setTool] = useState("tg")
-  const input = useRef<HTMLInputElement>(null)
-  const highlighted = useRef<Suggestion | undefined>(undefined)
+  const input = useRef<HTMLTextAreaElement>(null)
+  const [highlightedIndex, setHighlightedIndex] = useState(-1)
   const decoration = useRef<HTMLPreElement>(null)
   const [previous, setPrevious] = useState(() => ({ query: initialQuery, hits: searchDemo(initialQuery) }))
   const section = useRef<HTMLElement>(null)
@@ -101,7 +101,13 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
     ...new Map(displayed.hits.flatMap((hit) => hit.context).map((message) => [message.id, message])).values(),
   ]
   const facts = [
-    { id: "12", text: text.deadline },
+    {
+      id: "12",
+      text: text.deadline.replace(
+        "{date}",
+        new Intl.DateTimeFormat(language, { dateStyle: "long", timeZone: "UTC" }).format(new Date(demoDates.deadline)),
+      ),
+    },
     { id: "22", text: text.budget },
   ].filter((fact) => evidence.some((message) => message.id === fact.id))
   const command = `${tool} search messages '${(query.trim() || "in:all").replaceAll("'", "'\\''")}' --source all --newest --timezone UTC --context 2 --json`
@@ -114,7 +120,8 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
     setQuery(value)
     setView("matches")
     setDetail(null)
-    setSuggestionOpen(/(?:text|chat|from|date|has|in):$/u.test(value))
+    setHighlightedIndex(-1)
+    setSuggestionOpen(value.length > 0 && suggestionsFor(value, position).length > 0)
     setCursor(position)
     setCopied(false)
     setCopyError(false)
@@ -124,10 +131,53 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
         input.current?.setSelectionRange(position, position)
       })
   }
+  const insertSuggestion = (item: Suggestion) => {
+    update(item.value, item.cursor)
+    setSuggestionOpen(/(?:text|chat|from|date|has|in):$|\s$/u.test(item.value.slice(0, item.cursor)))
+  }
+  const navigateSuggestions = (event: KeyboardEvent<HTMLElement>) => {
+    if ((event.key === "ArrowDown" || event.key === "ArrowUp") && suggestions.length) {
+      event.preventDefault()
+      setSuggestionOpen(true)
+      const next =
+        event.key === "ArrowDown"
+          ? (highlightedIndex + 1) % suggestions.length
+          : highlightedIndex < 0
+            ? suggestions.length - 1
+            : (highlightedIndex - 1 + suggestions.length) % suggestions.length
+      setHighlightedIndex(next)
+      requestAnimationFrame(() =>
+        document.getElementById(`${id}-suggestion-${next}`)?.scrollIntoView({ block: "nearest" }),
+      )
+    } else if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault()
+      if (suggestionOpen && suggestions[highlightedIndex]) insertSuggestion(suggestions[highlightedIndex])
+      else {
+        setView("matches")
+        setDetail(null)
+        setSuggestionOpen(false)
+      }
+    } else if (event.key === "Escape" || event.key === "Tab") {
+      setSuggestionOpen(false)
+      setHighlightedIndex(-1)
+      if (event.key === "Escape") input.current?.focus()
+    }
+  }
+  useEffect(() => {
+    if (!suggestionOpen) return
+    const closeOutside = (event: PointerEvent) => {
+      if (!section.current?.contains(event.target as Node)) setSuggestionOpen(false)
+    }
+    document.addEventListener("pointerdown", closeOutside)
+    return () => document.removeEventListener("pointerdown", closeOutside)
+  }, [suggestionOpen])
   const pickFilter = (name: string, value?: string) => {
     const existing = field(name)
     if (existing && value === undefined) update(replaceFilter(query, name))
-    else update(replaceFilter(query, name, value ?? ""))
+    else {
+      update(replaceFilter(query, name, value ?? ""))
+      if (value !== undefined) setSuggestionOpen(false)
+    }
   }
   useEffect(() => {
     const element = input.current
@@ -151,6 +201,22 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
     setSelected(messageId)
     setDetail("context")
   }
+  if (!ready)
+    return (
+      <div className={embedded ? "sp-docs-host" : "sp-host"}>
+        <section
+          className={`search-playground${embedded ? " sp-embedded" : ""}`}
+          id="search-playground"
+          aria-busy="true"
+          aria-label={text.title}
+        >
+          <div className="sp-heading">
+            <h2>{text.title}</h2>
+            <p>{text.intro}</p>
+          </div>
+        </section>
+      </div>
+    )
   return (
     <div className={embedded ? "sp-docs-host" : "sp-host"}>
       <section
@@ -185,7 +251,7 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
                   <Popover.Positioner sideOffset={8} align="end">
                     <Popover.Popup className="sp-help-content" initialFocus={false}>
                       <p>{text.syntaxHelp}</p>
-                      <code>AND · OR · NOT · chat: · from: · date: · has: · text:</code>
+                      <code>AND · OR · NOT · chat: · from: · date: · has: · in: · text:</code>
                       <a href="https://github.com/leemour/cli-messaging/blob/main/docs/search/query-language.md">
                         {text.reference} ↗
                       </a>
@@ -194,133 +260,122 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
                 </Popover.Portal>
               </Popover.Root>
             </div>
-            <Autocomplete.Root
-              inline
-              items={suggestions}
-              open={suggestionOpen}
-              onOpenChange={setSuggestionOpen}
-              filter={null}
-              mode="list"
-              value={query}
-              itemToStringValue={(item: Suggestion) => item.value}
-              onItemHighlighted={(item) => {
-                highlighted.current = item
-              }}
-              onValueChange={(value) => {
-                const suggestion = suggestions.find((item) => item.value === value)
-                update(value, suggestion?.cursor ?? input.current?.selectionStart ?? value.length, !!suggestion)
-              }}
-            >
-              <div className="sp-autocomplete-box">
-                <label htmlFor={`${id}-input`} className="sp-label">
-                  {text.label}
-                </label>
-                <Autocomplete.InputGroup className={`sp-input-wrap${result.error?.reason ? " sp-invalid" : ""}`}>
-                  <Search size={20} aria-hidden />
-                  <div className="sp-query-field">
-                    <pre ref={decoration} className="sp-query-decoration" aria-hidden="true">
-                      {result.error ? (
-                        <>
-                          {query.slice(0, errorStart)}
-                          <mark className="sp-query-error">{query.slice(errorStart, errorEnd) || " "}</mark>
-                          {query.slice(errorEnd)}
-                        </>
-                      ) : (
-                        query
-                      )}
-                      {"\n"}
-                    </pre>
-                    <Autocomplete.Input
-                      render={<textarea rows={1} />}
-                      role="textbox"
-                      ref={input}
-                      readOnly={!ready}
-                      id={`${id}-input`}
-                      className="sp-input"
-                      placeholder={text.placeholder}
-                      aria-expanded={undefined}
-                      aria-controls={suggestionOpen && suggestions.length > 0 ? `${id}-suggestions` : undefined}
-                      aria-invalid={!!result.error}
-                      aria-describedby={`${id}-hint`}
-                      spellCheck={false}
-                      autoComplete="off"
-                      onKeyDown={(event) => {
-                        if (event.key === "Enter" && (!suggestionOpen || !highlighted.current) && !event.shiftKey) {
-                          event.preventBaseUIHandler()
-                          event.preventDefault()
-                          setView("matches")
-                          setDetail(null)
-                          setSuggestionOpen(false)
-                        }
-                        if (event.key === "Escape") {
-                          event.preventBaseUIHandler()
-                          setSuggestionOpen(false)
-                        }
-                      }}
-                      onSelect={(event) => setCursor(event.currentTarget.selectionStart ?? query.length)}
-                      onScroll={(event) => {
-                        if (decoration.current) decoration.current.scrollTop = event.currentTarget.scrollTop
-                      }}
-                    />
-                  </div>
-                  {query && (
-                    <button
-                      type="button"
-                      className="sp-clear"
-                      aria-label={text.clear}
-                      onClick={() => {
-                        update("")
-                        setView("matches")
-                      }}
-                    >
-                      <X size={16} aria-hidden />
-                    </button>
-                  )}
-                  <button
-                    type="button"
-                    className="sp-trigger"
-                    aria-label={text.suggestionsTitle}
+            <div className="sp-autocomplete-box">
+              <label htmlFor={`${id}-input`} className="sp-label">
+                {text.label}
+              </label>
+              <div className={`sp-input-wrap${result.error?.reason ? " sp-invalid" : ""}`}>
+                <Search size={20} aria-hidden />
+                <div className="sp-query-field">
+                  <pre ref={decoration} className="sp-query-decoration" aria-hidden="true">
+                    {result.error ? (
+                      <>
+                        {query.slice(0, errorStart)}
+                        <mark className="sp-query-error">{query.slice(errorStart, errorEnd) || " "}</mark>
+                        {query.slice(errorEnd)}
+                      </>
+                    ) : (
+                      query
+                    )}
+                    {"\n"}
+                  </pre>
+                  <textarea
+                    rows={1}
+                    value={query}
+                    aria-autocomplete="list"
+                    aria-activedescendant={
+                      suggestionOpen && highlightedIndex >= 0 ? `${id}-suggestion-${highlightedIndex}` : undefined
+                    }
+                    onChange={(event) => update(event.currentTarget.value, event.currentTarget.selectionStart, false)}
+                    role="combobox"
+                    ref={input}
+                    readOnly={!ready}
+                    id={`${id}-input`}
+                    className="sp-input"
+                    placeholder={text.placeholder}
                     aria-expanded={suggestionOpen && suggestions.length > 0}
                     aria-controls={suggestionOpen && suggestions.length > 0 ? `${id}-suggestions` : undefined}
+                    aria-invalid={!!result.error}
+                    aria-describedby={`${id}-hint`}
+                    spellCheck={false}
+                    autoComplete="off"
+                    onKeyDown={navigateSuggestions}
+                    onSelect={(event) => {
+                      const position = event.currentTarget.selectionStart ?? query.length
+                      setCursor(position)
+                    }}
+                    onScroll={(event) => {
+                      if (decoration.current) decoration.current.scrollTop = event.currentTarget.scrollTop
+                    }}
+                  />
+                </div>
+                {query && (
+                  <button
+                    type="button"
+                    className="sp-clear"
+                    aria-label={text.clear}
                     onClick={() => {
-                      setCursor(input.current?.selectionStart ?? query.length)
-                      setSuggestionOpen(!suggestionOpen)
-                      input.current?.focus()
+                      update("")
+                      setView("matches")
                     }}
                   >
-                    <ArrowDown size={16} aria-hidden />
+                    <X size={16} aria-hidden />
                   </button>
-                </Autocomplete.InputGroup>
-                {suggestionOpen && suggestions.length > 0 && (
-                  <Autocomplete.Portal container={section}>
-                    <Autocomplete.Positioner className="sp-positioner" anchor={input} sideOffset={10} align="start">
-                      <Autocomplete.Popup
-                        className="sp-popup"
-                        role="presentation"
-                        initialFocus={false}
-                        finalFocus={false}
-                      >
-                        <div className="sp-popup-label">{text.suggestionsTitle}</div>
-                        <Autocomplete.List id={`${id}-suggestions`}>
-                          {(item: Suggestion) => (
-                            <Autocomplete.Item className="sp-suggestion" key={item.value} value={item}>
-                              <span>
-                                {item.labelKey
-                                  ? (text.suggestions[item.labelKey as keyof typeof text.suggestions] ?? item.label)
-                                  : item.label}
-                              </span>
-                              <small>{item.detail}</small>
-                              <ChevronRight size={14} aria-hidden />
-                            </Autocomplete.Item>
-                          )}
-                        </Autocomplete.List>
-                        <div className="sp-popup-footer">{text.keyboard}</div>
-                      </Autocomplete.Popup>
-                    </Autocomplete.Positioner>
-                  </Autocomplete.Portal>
                 )}
+                <button
+                  type="button"
+                  className="sp-trigger"
+                  aria-label={text.suggestionsTitle}
+                  aria-expanded={suggestionOpen && suggestions.length > 0}
+                  aria-controls={suggestionOpen && suggestions.length > 0 ? `${id}-suggestions` : undefined}
+                  onClick={() => {
+                    setCursor(input.current?.selectionStart ?? query.length)
+                    setSuggestionOpen(!suggestionOpen)
+                    input.current?.focus()
+                  }}
+                >
+                  <ArrowDown size={16} aria-hidden />
+                </button>
               </div>
-            </Autocomplete.Root>
+              {suggestionOpen && suggestions.length > 0 && (
+                <div className="sp-positioner">
+                  <div className="sp-popup">
+                    <div className="sp-popup-label">{text.suggestionsTitle}</div>
+                    <div
+                      id={`${id}-suggestions`}
+                      role="listbox"
+                      aria-label={text.suggestionsTitle}
+                      tabIndex={0}
+                      onKeyDown={navigateSuggestions}
+                    >
+                      {suggestions.map((item, index) => (
+                        <button
+                          type="button"
+                          role="option"
+                          tabIndex={-1}
+                          id={`${id}-suggestion-${index}`}
+                          aria-selected={highlightedIndex === index}
+                          data-highlighted={highlightedIndex === index ? "" : undefined}
+                          className="sp-suggestion"
+                          key={item.value}
+                          onPointerMove={() => setHighlightedIndex(index)}
+                          onClick={() => insertSuggestion(item)}
+                        >
+                          <span>
+                            {item.labelKey
+                              ? (text.suggestions[item.labelKey as keyof typeof text.suggestions] ?? item.label)
+                              : item.label}
+                          </span>
+                          <small>{item.detail}</small>
+                          <ChevronRight size={14} aria-hidden />
+                        </button>
+                      ))}
+                    </div>
+                    <div className="sp-popup-footer">{text.keyboard}</div>
+                  </div>
+                </div>
+              )}
+            </div>
             <p id={`${id}-hint`} className="sp-hint" role="status">
               {result.error ? `${errorHint} ${text.previous}` : text.hint}
             </p>
@@ -354,6 +409,7 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
                   value={/^\d{4}-\d{2}-\d{2}$/u.test(field("date")?.value ?? "") ? field("date")?.value : ""}
                   onChange={(event) => {
                     update(replaceFilter(query, "date", event.target.value || undefined))
+                    setSuggestionOpen(false)
                   }}
                 />
                 {field("date") && (

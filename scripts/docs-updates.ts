@@ -36,6 +36,21 @@ type JsonRequest = (url: string, init?: RequestInit) => Promise<unknown>
 type Release = { draft: boolean; prerelease: boolean; published_at: string; tag_name: string }
 type Compare = { files?: { filename: string; status: string; previous_filename?: string }[] }
 type Issue = { number: number; title: string; body?: string; pull_request?: unknown }
+type TaskMap = { id: string; pages: string[]; families: Record<string, string[]> }
+export function affectedDocumentationTasks(paths: string[], tool: string, tasks: TaskMap[]): string[] {
+  return tasks
+    .filter((task) =>
+      paths.some((path) => {
+        if (path === "package.json") return true
+        if (task.pages.some((page) => page.startsWith(`${tool}/`) && path === `docs/${page.slice(tool.length + 1)}`))
+          return true
+        return (task.families[tool] ?? []).some((family) =>
+          new RegExp(`^src/${family}(?:/|$)|^src/(?:commands|services)/${family}(?:[./-]|$)`).test(path),
+        )
+      }),
+    )
+    .map((task) => task.id)
+}
 export const requestJson: JsonRequest = async (url, init = {}) => {
   const headers: Record<string, string> = { Accept: "application/json", "User-Agent": "wirecat-docs-updates" }
   if (new URL(url).hostname === "api.github.com") {
@@ -73,6 +88,8 @@ export async function checkToolRelease(tool: Tool, getJson: JsonRequest = reques
   const delta = (await getJson(`https://api.github.com/repos/${tool.repo}/compare/${compare}`)) as Compare
   const pages = releaseChanges(delta.files ?? [])
   const complete = (delta.files?.length ?? 0) < 300
+  const taskMaps = JSON.parse(readFileSync(new URL("../docs/tasks.json", import.meta.url), "utf8")) as TaskMap[]
+  const affectedTasks = affectedDocumentationTasks(delta.files?.map((file) => file.filename) ?? [], tool.name, taskMaps)
   return {
     tool: tool.name,
     repo: tool.repo,
@@ -86,10 +103,15 @@ export async function checkToolRelease(tool: Tool, getJson: JsonRequest = reques
     changesComplete: complete,
     review: [
       ...(complete ? [] : ["GitHub may have truncated the changed-file list; inspect the full comparison."]),
+      ...(affectedTasks.length
+        ? [`Potentially affected tasks: ${affectedTasks.join(", ")}. Review their guides, source claims and diagrams.`]
+        : []),
       ...pages
         .filter((path) => path !== "docs/meta.json" && path !== "docs/README.md")
         .map((path) => `${path}: review translations, correction matches, examples and incoming anchors`),
+      "Check that CHANGELOG.md contains this released version, and review docs/roadmap.md even when plans are unchanged. Update docs/release-notes-review.json for the chosen docsRef and run pnpm docs:release-notes.",
       "Check shared installation, scenario adapters and copied playground commands against released CLI help.",
+      "Refresh pnpm docs:contracts and run pnpm docs:check against the reviewed release.",
       "Run pnpm docs:localize, lint, test, search:check, typecheck, build, check:links and browser tests.",
     ],
   }

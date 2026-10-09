@@ -50,7 +50,5 @@ __pycache__/
 /.agents/skills/
 /.audit/
 
-# Generated design previews and local decision-server state.
-/.impeccable/questions/
-/.impeccable/review/
-/.impeccable/mocks/
+# Local documentation research and release contracts
+/.docs-tooling

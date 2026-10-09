@@ -1,0 +1,137 @@
+---
+title: "MCP and skills"
+description: "Understand the MCP server and agent instructions, choose a connection and discover supported actions."
+---
+
+Connect an AI assistant to your messenger and give it the instructions it needs to work with your chats. This page explains MCP and skills, helps you choose a connection, and shows where to find the tools and their permissions.
+
+## What the MCP server does
+
+**MCP** is a way for AI agents to talk to a server and ask it to perform your tasks. Our MCP server gives your assistant access to the connected messenger: chats, messages, shared files, searches and reports. You ask for a result; the assistant calls the server, which performs the action through the messenger tool.
+
+The server is included in the command-line tool and **must be running while the assistant uses it**. A local client can start it on your computer. For a browser or mobile chat, keep it running on a computer or server and connect through a public HTTPS address with authentication. Follow the [browser/mobile setup guide](./browser-apps.mdx) for that connection.
+
+## How the agent finds and runs actions
+
+The server exposes a small set of tools instead of making you choose from hundreds of commands. First the agent finds an action and its arguments; then it runs that action. For example, to find an agreement it discovers message search, executes it and opens the matching messages.
+
+Examples below use Telegram names. For MAX, replace `tg` with `max`, including tool and configuration names.
+
+| Tool | What it does |
+|---|---|
+| `tg_tools_search` | Finds the command for a task and tells the agent its arguments and effects. This searches available actions, not your messages. |
+| `tg_read` | Runs a discovered read action: list chats, search messages, read files or build a report. |
+| `tg_write` | Runs a discovered change: send a message, save extracted text or manage a group, within the profile’s permissions. |
+
+## What the skill does
+
+A **skill** is an instruction file for your agent: which tools to use, how to gather context, check sources and prepare a result. MCP provides access to actions; the skill explains how to use them for a task. The skill contains guidance, not your account credentials.
+
+We provide instructions with the installed tool. [Connect your agent](./agents.mdx) explains how to add them; `tg skill show` displays them. An agent with terminal access can use the instructions and run the CLI directly.
+
+## CLI, skill or MCP?
+
+| Connection | What it provides | Choose it when |
+|---|---|---|
+| CLI | Commands in a terminal, with JSON results | Your agent already has a local terminal |
+| Skill + CLI | Instructions for using those commands and workflows | You use Codex, Cursor Agent, Claude Code, Gemini CLI, Hermes or OpenClaw |
+| MCP | Named tools and their parameters directly inside your client | You use Claude Desktop, or prefer the client's tool interface |
+| MCP over HTTP | The same tools for ChatGPT or Claude in a browser, behind your own tunnel | You chat in a browser — [ChatGPT and Claude in the browser](./browser-apps.mdx) |
+| Markdown docs | A readable explanation and command reference | You want the agent to look up how something works |
+
+For an agent with a terminal, start with [a skill](./agents.mdx). MCP is optional and follows the
+same profile permissions as the CLI. It does not log in for you or download the whole archive.
+
+## Before connecting
+
+[Install and log in](./installation.mdx). Run `tg mcp config` or `max mcp config`
+to print a configuration with the actual Node and CLI paths on your machine. This command prints
+settings; it does not edit your client. Desktop clients may have a different PATH from your terminal.
+
+### Codex
+
+In a terminal where the installed command works:
+
+```sh
+codex mcp add tg -- tg mcp
+codex mcp list
+```
+
+Connect only the messengers you use. Codex stores MCP settings in `~/.codex/config.toml`.
+For Windows or an IDE with a different PATH, take `command`, `args` and `env` from `mcp config`
+and put them into `[mcp_servers.tg]` or `[mcp_servers.max]`; Codex uses TOML, not `mcpServers` JSON.
+[Official Codex MCP guide](https://learn.chatgpt.com/docs/extend/mcp?surface=cli).
+
+### Claude Code
+
+```sh
+claude mcp add --scope user tg -- tg mcp
+claude mcp list
+```
+
+Use `/mcp` in a session to check status. For full paths, use the values from `mcp config`.
+[Official Claude Code MCP guide](https://code.claude.com/docs/en/mcp).
+
+### Cursor and Claude Desktop
+
+Copy the server entry printed by `tg mcp config` or `max mcp config` into the client's
+`mcpServers` settings, preserving its full paths and environment. Merge it with existing servers.
+
+| Client | Configuration file |
+|---|---|
+| Cursor, personal | `~/.cursor/mcp.json` |
+| Cursor, project | `.cursor/mcp.json` |
+| Claude Desktop, macOS | `~/Library/Application Support/Claude/claude_desktop_config.json` |
+| Claude Desktop, Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
+
+Restart the client and check that the server's tools are available.
+[Official Cursor MCP guide](https://cursor.com/help/customization/mcp).
+
+### Gemini CLI
+
+```sh
+gemini mcp add --scope user tg tg mcp
+gemini mcp list
+```
+
+For full paths and environment variables, merge the generated entry into `mcpServers` in
+`~/.gemini/settings.json`. [Official Gemini MCP guide](https://geminicli.com/docs/tools/mcp-server/).
+
+### Hermes
+
+Hermes uses `mcp_servers` in `~/.hermes/config.yaml`. Add `tg` or `max` there with the `command`,
+`args` and `env` values from the generated configuration, keeping existing settings. Hermes uses
+YAML; do not paste the whole `mcpServers` JSON object into it. Restart Hermes to load the server.
+[Official Hermes quickstart](https://hermes-agent.nousresearch.com/docs/getting-started/quickstart/).
+
+## What the agent can do
+
+MCP covers most everyday CLI operations: read and search chats, inspect people and groups, work with message attachments, prepare reports, send replies and manage groups when permitted.
+
+For full command syntax and MCP-specific availability, use the messenger references:
+
+- [Telegram MCP tools and coverage](./tg/mcp.md#tools) · [Telegram command reference](./tg/commands.md).
+- [MAX MCP tools and coverage](./max/mcp.md#инструменты) · [MAX command reference](./max/commands.md).
+
+The available catalogue is determined by the messenger and profile permissions. Ask the agent to discover an action through the search tool; its result provides the supported command and arguments. A read-only profile excludes changes. The server has no confirmation step of its own: approval prompts come from your app, and the server cannot check whether a person accepted them.
+
+After connecting, ask for five recent chats. Continue with [First tasks](./first-tasks.md).
+
+## Documentation for your agent
+
+The messenger MCP servers access your account. Documentation access is separate:
+
+| Resource | What to give your agent |
+|---|---|
+| [Page index](/llms.txt) | `https://wirecat.dev/llms.txt` — find a relevant page and follow its Markdown link |
+| [All pages](/llms-full.txt) | `https://wirecat.dev/llms-full.txt` — the full reference, for tools that can handle a large document |
+| One page | Use **Copy Markdown** or **Open** at the top of a docs page |
+
+Try: **“Read https://wirecat.dev/llms.txt, find the Telegram inbox documentation and use it to
+summarise my unread messages.”** If your agent cannot fetch URLs, copy the page's Markdown into the chat.
+
+These Markdown pages can be read directly. Give the agent the index or the page it needs; no additional documentation server is required.
+
+If a connection fails, check the full paths, the Node version, and that client and terminal use the
+same profile and configuration directories. Each [Telegram](./tg/mcp.md) / [MAX](./max/mcp.md)
+MCP reference explains the environment and troubleshooting.

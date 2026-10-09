@@ -1,0 +1,74 @@
+[
+  {
+    "id": "connect-account",
+    "pages": ["installation.mdx", "agents.mdx", "first-tasks.md"],
+    "families": {
+      "tg": ["setup", "session", "account", "skill", "mcp"],
+      "max": ["setup", "session", "account", "skill", "mcp"]
+    }
+  },
+  {
+    "id": "catch-up",
+    "pages": ["first-tasks.md", "tg/usage.md", "max/usage.md"],
+    "families": {
+      "tg": ["inbox", "review", "chats", "messages"],
+      "max": ["inbox", "review", "chats", "messages"]
+    }
+  },
+  {
+    "id": "find-history",
+    "pages": ["search.md", "first-tasks.md", "tg/archive.md", "max/archive.md", "tg/search.md", "max/search.md"],
+    "families": {
+      "tg": ["store", "messages", "conversations"],
+      "max": ["store", "messages", "conversations"]
+    }
+  },
+  {
+    "id": "prepare-meeting",
+    "pages": ["meeting-brief.mdx", "first-tasks.md", "prompting.mdx"],
+    "families": {
+      "tg": ["contacts", "chats", "messages"],
+      "max": ["contacts", "chats", "messages"]
+    }
+  },
+  {
+    "id": "draft-reply",
+    "pages": ["first-tasks.md", "prompting.mdx", "security.mdx", "tg/usage.md", "max/usage.md"],
+    "families": {
+      "tg": ["messages", "config", "recipients", "sends"],
+      "max": ["messages", "config", "recipients", "sends"]
+    }
+  },
+  {
+    "id": "manage-group",
+    "pages": [
+      "group-admins.md",
+      "tg/groups.md",
+      "max/groups.md",
+      "tg/bot.md",
+      "max/bot.md",
+      "tg/rankings.md",
+      "max/rankings.md"
+    ],
+    "families": {
+      "tg": ["chats", "bot", "stats"],
+      "max": ["chats", "bot", "stats"]
+    }
+  },
+  {
+    "id": "recover-error",
+    "pages": ["tg/troubleshooting.md", "max/troubleshooting.md", "tg/diagnostics.md", "max/diagnostics.md"],
+    "families": {
+      "tg": ["doctor", "runs"],
+      "max": ["doctor", "runs"]
+    }
+  },
+  {
+    "id": "files-and-voice",
+    "pages": ["prompting.mdx", "tg/attachments.md", "max/attachments.md", "max/audio-recognition.md"],
+    "families": {
+      "tg": ["attachments", "models", "messages"],
+      "max": ["attachments", "models", "messages"]
+    }
+  }
+]

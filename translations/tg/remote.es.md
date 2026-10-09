@@ -2,7 +2,7 @@
 title: "ChatGPT, Codex o Claude en el navegador"
 ---
 
-Usa esta página para conectar un agente de ChatGPT o Claude en el navegador con tu cuenta de Telegram. Obtendrás una dirección HTTPS para MCP con un acceso controlado por los permisos de tu perfil. Si tu conexión por Tailscale ya funciona, consérvala: no necesitas un segundo túnel.
+Esta guía conecta ChatGPT o Claude en el navegador con tu cuenta de Telegram. Obtendrás una dirección HTTPS para MCP cuyo acceso controlan los permisos del perfil. Si tu conexión de Tailscale ya funciona, consérvala: no necesitas un segundo túnel.
 
 `tg mcp --http` ofrece las mismas herramientas en `127.0.0.1` a través de tu túnel HTTPS. El servidor HTTP tiene su propio inicio de sesión OAuth para un propietario; no necesita un proxy de autenticación aparte. La conexión local mediante stdin/stdout sigue funcionando como antes. El propietario confirmó la lectura y el envío mediante Claude web el 7 de octubre de 2026. Los clientes web de OpenAI y estas instrucciones específicas de cada plataforma aún necesitan una comprobación completa en cada plataforma.
 
@@ -65,17 +65,17 @@ tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.sen
 
 ## Alternativa: Cloudflare Tunnel
 
-Si ya usas Cloudflare, dirige su túnel al mismo servidor MCP local. Un hostname estable requiere una cuenta de Cloudflare y un dominio en Cloudflare. Sigue la [configuración de un túnel con nombre](https://developers.cloudflare.com/tunnel/get-started/): instala `cloudflared` para tu sistema, crea el túnel en el panel, inicia su conector y añade un hostname público como `mcp.example.com`. Indica como servicio local `http://127.0.0.1:8765` y ejecuta MCP en ese mismo ordenador.
+Si ya usas Cloudflare, dirige su túnel al mismo servidor MCP local. Un nombre estable requiere una cuenta de Cloudflare y un dominio en Cloudflare. Sigue la [configuración de túneles con nombre](https://developers.cloudflare.com/tunnel/get-started/): instala `cloudflared` para tu sistema, crea el túnel en el panel, inicia su conector y añade un hostname público como `mcp.example.com`. Usa `http://127.0.0.1:8765` como servicio local y ejecuta MCP en ese mismo ordenador.
 
-Inicia el servidor en un segundo terminal:
+Inicia el servidor en otro terminal:
 
 ```sh
 tg mcp --http --port 8765 --public-url https://mcp.example.com
 ```
 
-Añade `https://mcp.example.com/mcp` a tu aplicación de IA con OAuth y DCR, como se describe abajo. `--public-url` es el origen público usado para iniciar sesión, no la dirección local ni la ruta `/mcp`. El túnel no cambia los permisos del perfil. Comprueba el JSON en `https://mcp.example.com/.well-known/oauth-protected-resource/mcp`, luego el inicio de sesión y el descubrimiento de herramientas. Detén solo el proceso propio de este túnel y conserva las rutas ajenas.
+Añade `https://mcp.example.com/mcp` a tu aplicación de IA con OAuth y DCR, como se describe más abajo. `--public-url` es el origen público para iniciar sesión, no la dirección local ni la ruta `/mcp`. El túnel no cambia los permisos del perfil. Comprueba el JSON en `https://mcp.example.com/.well-known/oauth-protected-resource/mcp` y después el inicio de sesión y la lista de herramientas. Detén solo el proceso dedicado de este túnel y conserva las demás rutas.
 
-**Los Quick Tunnels temporales tienen una limitación aparte.** `cloudflared tunnel --url http://127.0.0.1:8765` crea una dirección aleatoria de `trycloudflare.com` sin cuenta ni dominio. Sin embargo, [los Quick Tunnels no admiten SSE](https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/), que usa nuestro MCP HTTP. Por tanto, no son un sustituto listo de Funnel con el servidor actual. En una prueba aislada se usó un adaptador adicional que convierte las respuestas SSE en JSON; ese adaptador no se incluye en el CLI. Las comprobaciones de OAuth y de herramientas no demuestran que un agente pueda leer PDF. Para conexiones habituales, usa Funnel o un túnel con nombre y verifica tu cliente. Un Quick Tunnel obtiene un hostname nuevo al reiniciarse, y hay que actualizar la URL del conector.
+**Los Quick Tunnels temporales tienen una limitación aparte.** `cloudflared tunnel --url http://127.0.0.1:8765` crea un hostname aleatorio `trycloudflare.com` sin cuenta ni dominio. Sin embargo, [Quick Tunnels no admite SSE](https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/), que usa nuestro servidor HTTP MCP. Por eso no sustituyen a Funnel con el servidor actual. Que OAuth y la lista de herramientas funcionen no demuestra que el agente pueda leer PDF. Para conexiones habituales, usa Funnel o un túnel con nombre y comprueba tu cliente. Al reiniciarse, un Quick Tunnel obtiene otro hostname y debes actualizar la URL del conector.
 
 ## Ejecutar MAX y Telegram juntos
 
@@ -143,16 +143,16 @@ La opción explícita `attachments extract --ocr` sigue disponible para extracci
 
 Consulta los formatos y el texto buscable en [Archivos adjuntos](./attachments.md).
 
-## Leer páginas de un PDF sin entregar un archivo local
+## Leer páginas de PDF sin entregar un archivo local
 
-Si el cliente no puede pasar los bytes del PDF recibido a su lector de documentos, pide una página como PNG. El servidor MCP la renderiza localmente; el agente lee la imagen con su propia visión. Instala los opcionales `unpdf` con soporte de renderizado y `@napi-rs/canvas`, como se describe en [motores de adjuntos](./attachments.md#dependencies-and-missing-engines).
+Si el cliente no puede pasar los bytes del PDF recibido a su lector de documentos, pide una página como PNG. El servidor MCP la renderiza localmente; el agente lee la imagen con su propia visión. Instala el paquete opcional `unpdf` con soporte de renderizado y `@napi-rs/canvas` como se describe en [motores de adjuntos](./attachments.md#dependencies-and-missing-engines).
 
 ```sh
 tg attachments show msg:telegram/500/7/204 --attachment 1 --page 1 --json
 ```
 
-Usa `tg_read`, command: `attachments show`, con `page: 1` y el locator del mensaje elegido. Por defecto devuelve contenido de imagen. Si el cliente solo expone metadatos, pide `format: base64` y luego decodifica y muestra el PNG con las herramientas de imagen del agente. Recibir una cadena Base64 no es inspeccionar la imagen. Lee las páginas de 1 a `pdf.pageCount`; si ningún formato expone los píxeles, informa de la limitación del cliente en lugar de inventar texto.
+Usa `tg_read`, command: `attachments show`, con `page: 1` y la ubicación del mensaje elegido. Por defecto se devuelve contenido de imagen. Si el cliente solo expone metadatos, pide `format: base64`, luego decodifica y muestra el PNG con las herramientas de imagen del agente. Recibir una cadena Base64 no es inspección visual. Lee las páginas de la 1 a `pdf.pageCount`; si ningún formato expone los píxeles, informa de la limitación del cliente en lugar de inventar texto.
 
-`pdf.sourceSha256` y `pdf.sourceBytes` identifican el PDF original; los `sha256` y `totalBytes` de nivel superior, la imagen renderizada de la página. `--if-sha256` comprueba el PDF de origen. `--page` no se puede combinar con `--offset-bytes` ni `--chunk-bytes`. Los PDF están limitados a 20 páginas y 50 MiB, las dimensiones del PNG a 2000 píxeles por lado y cada vista previa a 1 MiB. Los motores opcionales no se instalan con el CLI.
+`pdf.sourceSha256` y `pdf.sourceBytes` identifican el PDF original; `sha256` y `totalBytes` de nivel superior identifican la imagen renderizada de la página. `--if-sha256` comprueba el PDF de origen. `--page` no se puede combinar con `--offset-bytes` ni con `--chunk-bytes`. Los PDF se limitan a 20 páginas y 50 MiB, las dimensiones del PNG a 2000 píxeles por lado y cada vista previa a 1 MiB. Los motores opcionales no se instalan con la CLI.
 
-Las vistas previas de páginas no llaman a ninguna API externa de OCR ni indexan texto. Tras ver todas las páginas, el agente llama explícitamente a `attachments text set` y verifica una consulta `content:`. Coteja los números y las maquetaciones complejas con las imágenes; la calidad depende del documento de origen y de las herramientas del agente.
+Las vistas previas de páginas no llaman a ninguna API externa de OCR ni indexan texto. Tras ver todas las páginas, el agente llama explícitamente a `attachments text set` y verifica una consulta `content:`. Comprueba los números y las disposiciones complejas con las imágenes; la calidad depende del documento de origen y de las herramientas del agente.

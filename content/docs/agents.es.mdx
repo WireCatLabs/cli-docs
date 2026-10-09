@@ -1,0 +1,159 @@
+---
+title: "Conectar tu asistente de IA"
+description: "Elige la conexión para tu aplicación de IA, conecta la herramienta y comprueba acceso a tus chats."
+---
+
+Conecta tu asistente al mensajero para encontrar mensajes, reunir contexto y preparar respuestas. Aquí elegirás cómo conectarlo, configurarás la conexión y comprobarás el resultado. Después podrás pedir tu primera tarea útil.
+
+## Qué es un agente y cómo usa la herramienta
+
+Un **agente de IA** es un asistente que utiliza herramientas para realizar una petición. Puede encontrar mensajes y resumirlos. Tú describes la tarea; el agente elige las acciones.
+
+Una **CLI** es una herramienta de línea de comandos: se controla con instrucciones de texto. Un agente con terminal puede ejecutarla en tu ordenador o servidor. Un chat sin terminal se conecta mediante **MCP**, que permite al asistente utilizar la herramienta a través de una conexión. No necesitas memorizar comandos.
+
+## Dónde quieres usar el asistente
+
+- **[En ChatGPT, Claude u otro chat de IA en el navegador o móvil](./browser-apps.mdx)** — Sigue la guía de navegador y móvil.
+- **[En Codex, Claude Code, Cursor, Gemini CLI, Hermes u OpenClaw con terminal](#connect-instructions)** — Conecta la herramienta abajo.
+- **[En una aplicación con ajustes MCP, como Claude Desktop](./mcp.mdx)** — Sigue la guía MCP.
+- **[Quiero comprobar una conexión existente](#check-connection)** — Pide la cuenta y los chats.
+- **[La herramienta o cuenta no están configuradas](./installation.mdx)** — Empieza por instalación e inicio de sesión.
+
+<a id="comprueba-la-conexión" />
+
+<a id="el-cli-ya-sugiere-instalar-el-skill" />
+
+<a id="elige-tu-agente" />
+
+<a id="indica-tu-agente-en-la-primera-configuración" />
+
+<a id="connect-instructions" />
+
+## Conecta las instrucciones
+
+Los ejemplos usan `tg` para Telegram. Para MAX cambia `tg` por `max` y el nombre del skill `tg-cli` por `max-cli`. Se aplica a todos los ejemplos y notas.
+
+### Primera conexión
+
+Ejecuta un comando en el terminal del ordenador donde trabaja el agente. Conecta la cuenta e instala las instrucciones:
+
+```sh
+tg setup --agent codex
+```
+
+Cambia `codex` por `cursor`, `claude` o `gemini`. Sin `--agent`, la configuración te permite elegir. Para Hermes, OpenClaw u otro agente, usa `none` y sigue la nota correspondiente abajo.
+
+### La cuenta ya está conectada
+
+Una instalación global con npm suele instalar ya el skill, si npm ejecuta los scripts de instalación del paquete. Si tu agente ya ve `tg-cli`, puedes saltarte este paso. Para añadir o actualizar las instrucciones sin repetir el inicio de sesión:
+
+```sh
+tg skill install
+```
+
+Un **skill** es un archivo que enseña al agente a usar la herramienta. No contiene tu acceso al mensajero. Inicia una conversación nueva después.
+
+Dónde busca cada agente el archivo del skill:
+
+- **Codex, Cursor Agent, Gemini CLI**: `~/.agents/skills/tg-cli/SKILL.md`; solo para ellos, `tg skill install --for agents`.
+- **Claude Code**: `~/.claude/skills/tg-cli/SKILL.md`; solo para él, `tg skill install --for claude`.
+- **Hermes**: `~/.hermes/skills/tg-cli/SKILL.md`; guarda la salida de `tg skill show`, ver [Hermes](#hermes).
+- **OpenClaw**: `~/.agents/skills/tg-cli/SKILL.md`; `tg skill install --for agents`, ver [OpenClaw](#openclaw).
+
+`~` es tu carpeta personal, también en Windows. Sin `--for`, `skill install` escribe las dos
+copias: en `.agents` y en `.claude`.
+
+**Después de actualizar la herramienta, vuelve a ejecutar `tg skill install`**, para que las
+instrucciones correspondan a la nueva versión. Para Hermes, o cualquier archivo guardado a mano, vuelve a
+guardarlo desde `tg skill show`. Si el agente define `AI_AGENT` o `CLAUDECODE`, la herramienta le avisa como
+máximo una vez al día cuando su copia del skill falta o es más antigua que la herramienta. El aviso
+va a stderr, así que la salida JSON sigue siendo utilizable.
+
+<a id="check-connection" />
+
+## Comprueba si está todo listo
+
+```text prompt
+Usa tg CLI. Lee las instrucciones con tg skill show, muestra la cuenta conectada y cinco chats recientes. Solo lee: no envíes nada ni marques mensajes como leídos.
+```
+
+La cuenta y los chats deben ser tuyos. Después sigue con [Primeras tareas](./first-tasks.md).
+
+### Si no funciona
+
+- **El agente no encuentra `tg`.** Pídele que ejecute `tg --version`. Si falla, el terminal del
+  agente no ve la herramienta instalada. Abre un terminal nuevo, o reinicia el agente o el editor
+  después de instalar Node.js y la herramienta. En Windows, consulta
+  [qué cambia el instalador](./installation.mdx#what-the-windows-installer-changes). Otras causas:
+  [solución de problemas de Telegram](./tg/troubleshooting.md) ·
+  [solución de problemas de MAX](./max/troubleshooting.md#max-не-находится-после-установки).
+- **El agente dice «no session».** La herramienta se ejecuta, pero no encuentra el acceso. Inicia
+  sesión con `tg setup` en el mismo entorno y perfil que usa el agente: el mismo usuario del
+  ordenador, el mismo nombre de perfil y las mismas variables de carpetas, como `TG_CONFIG_DIR`,
+  si las definiste. Detalles:
+  [Telegram](./tg/troubleshooting.md#no-session-for-profile-default--run-tg-setup) ·
+  [MAX](./max/troubleshooting.md#no-session-for-profile-default).
+
+## Notas para tu agente
+
+Aquí solo se explican pasos adicionales de cada aplicación. El comando principal es común.
+
+### Codex
+
+Usa Codex en local, en su CLI o en la extensión del IDE. Selecciona `$tg-cli` en la conversación.
+Si no aparece, abre una nueva conversación o reinicia Codex. [Guía de Codex](https://learn.chatgpt.com/docs/build-skills).
+
+### Cursor
+
+Usa **Agent** con acceso a la terminal y pídele que use la herramienta. Puedes elegir `tg-cli` con
+`/` en el chat de Agent. Si no aparece, reinicia Cursor o pide al agente que lea `tg skill show`.
+También puedes [conectarlo por MCP](./mcp.mdx#cursor-y-claude-desktop). [Guía de Cursor](https://cursor.com/help/customization/skills).
+
+### Claude Code
+
+Usa `/tg-cli` en una nueva sesión local. Si el terminal ya funciona, MCP es opcional.
+[Guía de Claude Code](https://code.claude.com/docs/en/skills).
+
+### Gemini CLI
+
+Comprueba los skills disponibles con `gemini skills list`. En una sesión abierta,
+`/skills reload` actualiza la lista. [Guía de Gemini](https://geminicli.com/docs/cli/skills/).
+
+### Hermes
+
+Pide a Hermes que guarde la salida exacta de `tg skill show` en
+`~/.hermes/skills/tg-cli/SKILL.md`, conservando el frontmatter y el texto en UTF-8. En macOS o
+Linux puedes hacerlo tú:
+
+```sh
+mkdir -p ~/.hermes/skills/tg-cli
+tg skill show > ~/.hermes/skills/tg-cli/SKILL.md
+```
+
+Después abre una nueva sesión y repite la comprobación de arriba. El terminal de Hermes debe tener
+la herramienta y el mismo acceso a la cuenta.
+[Guía de Hermes](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills/).
+
+### OpenClaw
+
+Con su carpeta de estado predeterminada, OpenClaw también lee `~/.agents/skills`, así que basta con
+`tg skill install`. Si moviste esa carpeta con `OPENCLAW_STATE_DIR`, pide a OpenClaw que guarde la
+salida exacta de `tg skill show` en `skills/tg-cli/SKILL.md` dentro de ella. Comprueba que el skill
+esté disponible para tu agente y abre una nueva sesión. La herramienta debe estar instalada en el ordenador o servidor donde se ejecuta OpenClaw.
+[Guía de OpenClaw](https://docs.openclaw.ai/tools/skills).
+
+<a id="otros-clientes" />
+
+<a id="other-agents" />
+
+### Otro agente
+
+Los ejemplos anteriores no son una lista cerrada. Cualquier asistente con acceso a la línea de comandos puede usar la herramienta. Dale la salida de `tg skill show`, o la [documentación en Markdown](./mcp.mdx#documentación-para-tu-agente). Puede consultar los comandos con `--help`.
+
+Un agente en la nube trabaja en otro ordenador. Instala allí la herramienta e inicia sesión; tu acceso local no está disponible para él.
+
+Si usa MCP, sigue la [configuración MCP](./mcp.mdx); para un chat del navegador, usa la [conexión desde el navegador](./browser-apps.mdx). Las opciones de instalación preparadas cubren clientes concretos; los demás usan sus propios ajustes de instrucciones o herramientas.
+
+## Empieza tu primera tarea
+
+Pide encontrar un acuerdo, resumir conversaciones o preparar un borrador: [Primeras tareas](./first-tasks.md). Si no encuentra la herramienta, comprueba la instalación y que el agente trabaja en el mismo ordenador. Para otro dispositivo, sigue la [guía de navegador y móvil](./browser-apps.mdx).

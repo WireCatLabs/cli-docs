@@ -3,8 +3,7 @@ title: "Perfiles y bots"
 description: "Separa cuentas, accesos de bots y ajustes."
 ---
 
-Un perfil da a una cuenta o bot un nombre y sus ajustes. Úsalo para varias cuentas,
-permisos distintos de asistentes o para trabajar con un bot.
+Usa perfiles si tienes varias cuentas, un bot o permisos distintos para tus asistentes. Un perfil da nombre y ajustes propios a una cuenta o bot. Aquí aprenderás a elegir el adecuado y distinguir un comando del bot de uno de tu cuenta personal.
 
 ## Elegir un perfil
 
@@ -29,10 +28,10 @@ max support bot api get-my-info --json
 ```
 
 Necesitas un perfil de bot conectado. Su cuenta y derechos los define el mensajero, no tu
-cuenta personal. [Bots](./bot-api.md) explica la conexión y ejemplos.
+cuenta personal. [Bots](./bot-api.mdx) explica la conexión y ejemplos.
 
 ## Ajustes y acceso
 
-[Configuración](./configuration.md) explica archivo, variables de entorno y opciones.
-[Permisos](./permissions.md) controla las acciones de cada perfil.
+[Configuración](./configuration.mdx) explica archivo, variables de entorno y opciones.
+[Permisos](./permissions.mdx) controla las acciones de cada perfil.
 Consulta el acceso de [Telegram](./tg/sessions.md) o [MAX](./max/sessions.md).

@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { join } from "node:path"
 import GithubSlugger from "github-slugger"
 import { fromMarkdown } from "mdast-util-from-markdown"
+import { commandGroup } from "./command-groups"
 
 type Node = {
   type: string
@@ -143,14 +144,14 @@ export function remarkDocUsability(indexes = loadCommandIndexes()) {
             },
           ]
         }
-        if (child.type === "inlineCode" && !/\/commands(?:\.(?:ru|es))?\.md$/.test(path)) {
+        if (child.type === "inlineCode" && !/\/commands(?:-(?:personal|bot|admin))?(?:\.(?:ru|es))?\.md$/.test(path)) {
           const match = resolveCommand(child.value ?? "", tool, indexes)
           if (match) {
             return [
               child,
               {
                 type: "link",
-                url: `/${language}/docs/${match.tool}/commands#${match.anchor}`,
+                url: `/${language}/docs/${match.tool}/commands-${commandGroup(match.command)}#${match.anchor}`,
                 title: `${reference}: ${match.command}`,
                 data: {
                   hProperties: { className: "command-reference", "aria-label": `${reference}: ${match.command}` },

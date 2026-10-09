@@ -126,4 +126,3 @@ An API may charge for images as well as input/output text. Check the selected mo
 | Rate limit | Wait the time allowed by the provider and start a separate run; after 429, new OCR calls stop for the current run |
 
 Successful OCR results are saved for search; repeated extraction uses the file hash and selected model target. Errors do not delete good text saved previously, and agent-written text is not overwritten. Formats, dependencies and limits are described in the [attachments guide](./attachments.md).
-

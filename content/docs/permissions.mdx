@@ -1,0 +1,69 @@
+---
+title: "Permissions"
+description: "Choose which actions an assistant can perform."
+---
+
+Choose which actions your assistant may perform: reading messages, sending replies or changing a group. This page helps you set access for the chosen account or bot and check limits before a real task. Permissions belong to <DocTerm term="profile" lang="en" label="a profile" />, a named set of settings for an account or bot; [Profiles](./profiles.md) explains choosing one.
+
+## Choose an access level
+
+| Level | What happens |
+|---|---|
+| `deny` | The action is refused, including reading. |
+| `readonly` | Reading works; changes are refused. |
+| `ask` | A change asks in the terminal. |
+| `allow` | The action can run without another question. |
+
+A refusal tells you to check the requested action and settings. It does not mean your account
+connection is broken. Do not ask an assistant to remove a restriction just to finish a task.
+
+## Allow one action
+
+```sh
+tg work config set permissions.messages.send ask
+max work config set permissions.messages.send ask
+```
+
+Replace `work` with your profile. For a default that allows reading messages and refuses changes:
+
+```sh
+tg work config set permissions.messages readonly
+max work config set permissions.messages readonly
+```
+
+More specific keys win. A saved `permissions.messages.send ask` still permits sending; set it
+to `readonly` to refuse sends. Check other exceptions with `config show`.
+
+This controls messages. Other actions, such as reactions or chat administration, have their own
+permission keys. Use the complete read-only profile examples in
+[Telegram configuration](./tg/configuration.md) or [MAX configuration](./max/configuration.md).
+
+## Permissions for a bot
+
+Bot permissions and limits belong to the bot section. To ask before sends in the terminal:
+
+```sh
+tg support config set permissions.bot.messages.send ask --bot
+max support config set permissions.bot.messages.send ask --bot
+tg support config set sendsPerHour 30 --bot
+max support config set sendsPerHour 30 --bot
+```
+
+## Restrict recipients and repeated sends
+
+A recipient list limits which chats the profile may send to. An hourly send limit helps stop a
+loop. These checks remain active when a particular command is allowed.
+Read the [Telegram security guide](./tg/security.md) or [MAX security guide](./max/security.md)
+for the commands to manage these controls.
+
+## A temporary change for an MCP server
+
+Add `--permission messages.send=allow` to the server startup command to allow sending for that
+process. Saved settings stay the same. Over MCP, `ask` does not require a server form: the app controls
+its own approvals and may allow a call without asking again. Use `deny` or `readonly` to refuse changes. [Browser setup](./browser-apps.mdx) explains the full connection.
+
+## Limits and detailed rules
+
+An assistant that can edit configuration files or run unrestricted terminal commands may be able
+to change these settings. Read [Security](./security.mdx) before giving that access.
+For nested permissions and exact command keys, see the messenger's configuration reference.

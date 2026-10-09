@@ -1,24 +1,4 @@
 const terms = {
-  terminal: {
-    en: {
-      title: "Terminal",
-      description:
-        "A window where programs run through text commands. On Windows, use PowerShell; on macOS or Linux, use Terminal. Your local agent can run these commands for you.",
-      page: "installation",
-    },
-    ru: {
-      title: "Терминал",
-      description:
-        "Окно для запуска программ текстовыми командами. В Windows используйте PowerShell, в macOS или Linux — Terminal. Локальный агент может выполнять команды за вас.",
-      page: "installation",
-    },
-    es: {
-      title: "Terminal",
-      description:
-        "Una ventana donde ejecutas programas con órdenes de texto. En Windows usa PowerShell; en macOS o Linux, Terminal. Tu agente local puede ejecutar las órdenes por ti.",
-      page: "installation",
-    },
-  },
   vault: {
     en: {
       title: "Obsidian vault",
@@ -264,20 +244,220 @@ const terms = {
     en: {
       title: "Connector",
       description:
-        "What Claude and ChatGPT call a tool you add from outside: you give the app an address, sign in once, and the assistant can then call that tool in your chats. ChatGPT calls it an app in developer mode.",
+        "What Claude and ChatGPT call a tool you add from outside: you give the app an address, sign in once, and the assistant can then call that tool in your chats. The name may be plugin, app or connector, depending on the AI client.",
       page: "browser-apps",
     },
     ru: {
       title: "Коннектор",
       description:
-        "Так Claude и ChatGPT называют инструмент, который вы добавляете извне: даёте приложению адрес, один раз входите, и ассистент может пользоваться этим инструментом в ваших чатах. В ChatGPT это приложение в режиме разработчика.",
+        "Так Claude и ChatGPT называют инструмент, который вы добавляете извне: даёте приложению адрес, один раз входите, и ассистент может пользоваться этим инструментом в ваших чатах. Название зависит от приложения: плагин, приложение или коннектор.",
       page: "browser-apps",
     },
     es: {
       title: "Conector",
       description:
-        "Así llaman Claude y ChatGPT a una herramienta que añades desde fuera: le das a la app una dirección, inicias sesión una vez y el asistente puede usarla en tus chats. En ChatGPT es una app del modo desarrollador.",
+        "Así llaman Claude y ChatGPT a una herramienta que añades desde fuera: le das a la app una dirección, inicias sesión una vez y el asistente puede usarla en tus chats. El nombre puede ser plugin, aplicación o conector según el cliente de IA.",
       page: "browser-apps",
+    },
+  },
+  "supported-agents": {
+    en: {
+      title: "Compatible agents",
+      description:
+        "Guides cover Claude Code, Codex, Cursor, Gemini CLI, Hermes and OpenClaw. Other assistants can use these tools too if they can run commands or connect through MCP. The agent guide explains both routes.",
+      page: "agents",
+    },
+    ru: {
+      title: "Подходящие агенты",
+      description:
+        "Есть инструкции для Claude Code, Codex, Cursor, Gemini CLI, Hermes и OpenClaw. Другие ассистенты тоже могут работать с инструментами, если умеют выполнять команды или подключаться через MCP. Оба варианта описаны на странице агентов.",
+      page: "agents",
+    },
+    es: {
+      title: "Agentes compatibles",
+      description:
+        "Hay guías para Claude Code, Codex, Cursor, Gemini CLI, Hermes y OpenClaw. Otros asistentes también pueden usar las herramientas si ejecutan comandos o se conectan mediante MCP. La guía explica ambas opciones.",
+      page: "agents",
+    },
+  },
+  terminal: {
+    en: {
+      title: "Terminal",
+      description:
+        "An app where you paste text commands and see their results. Use PowerShell on Windows or Terminal on macOS; on Linux, open your terminal app.",
+      page: "installation",
+    },
+    ru: {
+      title: "Терминал",
+      description:
+        "Приложение, куда вставляют текстовые команды и где виден результат их выполнения. В Windows используйте PowerShell, в macOS — Terminal, в Linux — приложение терминала.",
+      page: "installation",
+    },
+    es: {
+      title: "Terminal",
+      description:
+        "Una aplicación donde pegas comandos de texto y ves el resultado. En Windows usa PowerShell; en macOS, Terminal; en Linux, tu aplicación de terminal.",
+      page: "installation",
+    },
+  },
+  "public-address": {
+    en: {
+      title: "Public HTTPS address",
+      description:
+        "An internet address your AI app can reach, even when your messenger tool runs on your computer. The messenger server still requires sign-in; knowing the address alone does not grant account access.",
+      page: "browser-apps",
+    },
+    ru: {
+      title: "Публичный HTTPS-адрес",
+      description:
+        "Адрес в интернете, по которому ИИ-приложение может обратиться к программе на вашем компьютере. Сервер мессенджера по-прежнему требует входа: одного знания адреса недостаточно для доступа к аккаунту.",
+      page: "browser-apps",
+    },
+    es: {
+      title: "Dirección HTTPS pública",
+      description:
+        "Una dirección de internet desde la que la aplicación de IA llega al programa de tu ordenador. El servidor del mensajero sigue exigiendo autenticación; conocer la dirección no da acceso a la cuenta.",
+      page: "browser-apps",
+    },
+  },
+  oauth: {
+    en: {
+      title: "OAuth",
+      description:
+        "A way to sign into this connection and approve access for the named AI app. Here you use the one-time code from your messenger server, not your Telegram or MAX login code.",
+      page: "browser-apps",
+    },
+    ru: {
+      title: "OAuth",
+      description:
+        "Способ войти в подключение и разрешить доступ указанному ИИ-приложению. Здесь используется одноразовый код сервера мессенджера, а не код входа в Telegram или MAX.",
+      page: "browser-apps",
+    },
+    es: {
+      title: "OAuth",
+      description:
+        "Una forma de autenticar la conexión y autorizar a la aplicación de IA indicada. Aquí usas el código de un solo uso del servidor, no el código de acceso de Telegram o MAX.",
+      page: "browser-apps",
+    },
+  },
+  profile: {
+    en: {
+      title: "Profile",
+      description:
+        "A name for a particular account or bot and its settings, such as work. It helps you choose the right account and permissions when you have several.",
+      page: "profiles",
+    },
+    ru: {
+      title: "Профиль",
+      description:
+        "Имя для определённого аккаунта или бота и его настроек, например work. Помогает выбрать нужный аккаунт и права, когда их несколько.",
+      page: "profiles",
+    },
+    es: {
+      title: "Perfil",
+      description:
+        "Un nombre para una cuenta o bot y sus ajustes, por ejemplo work. Permite elegir la cuenta y los permisos adecuados cuando tienes varios.",
+      page: "profiles",
+    },
+  },
+  "local-archive": {
+    en: {
+      title: "Local archive",
+      description:
+        "Messages saved on the computer running the tool. Search uses this copy; only downloaded chats and periods can be checked.",
+      page: "search",
+    },
+    ru: {
+      title: "Локальный архив",
+      description:
+        "Сообщения, сохранённые на компьютере с инструментом. Поиск работает по этой копии: проверить можно только скачанные чаты и периоды.",
+      page: "search",
+    },
+    es: {
+      title: "Archivo local",
+      description:
+        "Mensajes guardados en el ordenador que ejecuta la herramienta. La búsqueda usa esta copia y solo comprueba los chats y periodos descargados.",
+      page: "search",
+    },
+  },
+  "speech-model": {
+    en: {
+      title: "Speech model",
+      description:
+        "A downloaded program component that turns recordings into text on your computer. It needs disk space and time to run; names and numbers can be misrecognised.",
+      page: "prompting#files-and-voice",
+    },
+    ru: {
+      title: "Речевая модель",
+      description:
+        "Скачиваемый компонент программы, который превращает запись в текст на вашем компьютере. Ему нужны место на диске и время на обработку; имена и числа могут распознаваться с ошибками.",
+      page: "prompting#files-and-voice",
+    },
+    es: {
+      title: "Modelo de voz",
+      description:
+        "Un componente que se descarga para convertir grabaciones en texto en tu ordenador. Necesita espacio y tiempo de procesamiento; puede interpretar mal nombres y cifras.",
+      page: "prompting#files-and-voice",
+    },
+  },
+  flag: {
+    en: {
+      title: "Command option",
+      description:
+        "An extra instruction such as --limit 5, added to a command to change that run. Supported options are listed in --help.",
+      page: "configuration",
+    },
+    ru: {
+      title: "Параметр команды",
+      description:
+        "Дополнительное указание вроде --limit 5, которое добавляют к команде, чтобы изменить этот запуск. Доступные параметры перечислены в --help.",
+      page: "configuration",
+    },
+    es: {
+      title: "Opción del comando",
+      description:
+        "Una indicación adicional como --limit 5 que cambia esa ejecución. Las opciones disponibles aparecen en --help.",
+      page: "configuration",
+    },
+  },
+  "bot-token": {
+    en: {
+      title: "Bot token",
+      description:
+        "A secret issued for your bot that authorises programs to act as that bot. It is separate from your personal-account login; store it through the bot setup command.",
+      page: "bot-api",
+    },
+    ru: {
+      title: "Токен бота",
+      description:
+        "Секретный ключ вашего бота, с которым программа может действовать от его имени. Он не связан со входом в личный аккаунт; сохраните его через команду подключения бота.",
+      page: "bot-api",
+    },
+    es: {
+      title: "Token del bot",
+      description:
+        "Una clave secreta que permite al programa actuar como tu bot. Es independiente del acceso a tu cuenta personal; guárdala con el comando de configuración del bot.",
+      page: "bot-api",
+    },
+  },
+  evals: {
+    en: {
+      title: "Agent evaluations",
+      description:
+        "Test tasks used to observe how an assistant handles sources, permissions and missing data. Passing examples does not guarantee the same result on every real conversation.",
+      page: "security",
+    },
+    ru: {
+      title: "Проверки поведения агента",
+      description:
+        "Тестовые задачи, на которых проверяют работу ассистента с источниками, правами и неполными данными. Успешные примеры не гарантируют тот же результат в любой реальной переписке.",
+      page: "security",
+    },
+    es: {
+      title: "Evaluaciones del agente",
+      description:
+        "Tareas de prueba que observan cómo usa el asistente las fuentes, permisos y datos incompletos. Superarlas no garantiza el mismo resultado en toda conversación real.",
+      page: "security",
     },
   },
 }

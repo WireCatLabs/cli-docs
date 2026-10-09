@@ -20,6 +20,14 @@ for (const lang of ["en", "ru", "es"]) {
     await expect(page.locator("main pre").filter({ hasText: "sudo tailscale funnel" })).toBeVisible()
     await page.reload()
     await expect(linux).toHaveAttribute("aria-selected", "true")
+    for (const app of ["ChatGPT", "Claude", "Gemini", "DeepSeek"]) {
+      await page.getByRole("tab", { name: app, exact: true }).click()
+      await expect(page.getByRole("heading", { name: new RegExp(`^${app}`) })).toBeVisible()
+    }
+    await page.getByRole("tab", { name: "Gemini", exact: true }).click()
+    await expect(page.getByRole("tabpanel").filter({ hasText: "Custom apps" })).toContainText("Keep Activity")
+    await page.goto(`/${lang}/docs/browser-apps#claude`)
+    await expect(page.getByRole("heading", { name: /^Claude/ })).toBeVisible()
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
     const scan = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze()
     expect(scan.violations).toEqual([])
@@ -30,6 +38,8 @@ for (const lang of ["en", "ru", "es"]) {
     expect(text).toContain("tg.cmd mcp --http")
     expect(text).toContain("TAILSCALE_BE_CLI=1")
     expect(text).toContain("sudo tailscale funnel 8765")
+    expect(text).toContain("Custom apps")
+    expect(text).toContain("Harness")
   })
 }
 

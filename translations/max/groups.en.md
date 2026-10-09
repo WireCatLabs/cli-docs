@@ -142,12 +142,12 @@ Without `--allow-dangerous`, cron actions at level `ask` are only planned and wa
 | `max chats rules show\|set\|unset <чат>` | Group rules |
 | `max chats moderate <чат>` | Check against the rules and perform permitted actions |
 | `max chats members add\|remove`, `admins add\|remove` | Manage members and admins |
+| `max chats requests list <чат>` | Requests to join a channel with approval; admins can see them, request times are unknown |
+| `max chats requests accept\|decline <чат> <человек>` | Accept or decline one request; `--all` and `--link` are not supported |
 | `max chats link show\|reset <чат>` | Invite link; `reset` creates a new one and invalidates the old one |
+| `max chats requests list\|accept\|decline <чат>` | Join requests for a channel with approval: who is asking, let them in, decline |
 | `max chats update` | Settings, title, description and photo; read settings with `max chats show` |
 | `max messages delete --for-everyone`, `pin`, `unpin` | Delete for everyone, pin or unpin |
-| `max chats requests list\|accept\|decline <чат>` | Requests to join a channel that needs approval: who is asking, let them in, turn them away |
-| `max chats requests list <чат>` | Requests to join a channel with approval; admins can see them, request times are unknown |
-| `max chats requests accept\|decline <чат> <человек>` | Accept or decline one request; bulk acceptance and `--link` filters are unsupported |
 
 An agent without a terminal can use the equivalent MCP tools: `max_read` (`command: "review"`) with `unanswered_after_hours`, `max_read` (`command: "chats events"`), `max_read` (`command: "chats members"`), `max_read` (`command: "chats rules"`) and `max_write` (`command: "chats check"`) ([mcp.md](./mcp.md)).
 
@@ -215,7 +215,7 @@ moderate`. Unlike the personal account, it can ban removed members so they canno
 ## Limitations
 
 - **Personal accounts cannot ban.** A removed member can return through an invite link. Reset the link (`max chats link reset`) or use a bot check, which can ban.
-- **Join requests exist only for a channel with approval.** A private group has no approval: the link lets people in at once. In a channel with approval, `chats join` only sends a request (`requested: true`). `chats requests list` does not show when someone asked: MAX does not report it. You cannot answer everyone at once or pick requests by link.
+- **Join requests exist only for a channel with approval.** A closed group has no approval: people join through the link immediately. In a channel with approval, `chats join` only sends a request (`requested: true`). `chats requests list` does not show when a person asked to join: MAX does not report it. You cannot answer all requests at once or select requests by link.
 - **At most 10 actions per check** (`--max-actions`). Deletions count toward the hourly send limit; once it is reached, remaining actions wait for the next check.
 - **Up to 1,000 messages per CLI check.** If there are more, the next check continues from that position.
 - **One join means reading the full member list.** To find a new member's account age, the check reads every member; in a large group this can require dozens of MAX requests.

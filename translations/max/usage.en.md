@@ -930,7 +930,9 @@ max chats events "Поход"                         # кто вступил, �
 max chats events "Поход" --type add,remove --since-time 2026-09-01T00:00
 ```
 
-**Other people see these changes:** joins, departures, additions and new titles. `inspect`, `link show`, `events` and `members list` only read. Changes pass send checks: read-only refuses; recipients restrict destinations; actions are logged without titles or links. `create` and `members add` count one hourly send per person because each receives a message. If recipients are restricted, each person's direct chat must be listed. Failures are not retried: repeating `create` makes another group.
+**Other people see** joining, leaving, adding members and renaming. `inspect`, `link show`, `events`, `members list` and `requests list` only read.
+
+**Join requests** exist in channels with approval enabled, not private groups. `chats join` then sends a request and returns `requested: true`; the channel appears in the list after an admin accepts it. `requests list` shows applicants, without a request time (`requestedAt: null`). MAX cannot answer all requests at once (`--all`) or select them by invite link (`--link`); the command refuses these options. Changes use the same checks as sending: a read-only profile refuses, recipient restrictions apply and the send journal records the action without titles or links. `create` and `members add` count once per invited person toward the hourly limit. With recipient restrictions, each person’s private chat must be allowed. Operations are not retried automatically; repeating `create` creates another group.
 
 Group changes return `operationId` in JSON. `create`, `join`, `update` and `link reset` put the chat record in `chat`; `leave` returns `chatId`. Adding members returns `{operationId, chatId, added, notAdded}`; removing them returns `{operationId, chatId, removed}`. After a successful MAX response, `notAdded` is empty: MAX does not provide a separate list of partial failures; refusing to add a person returns an error. `admins` commands return `personId`; `admins add` also returns `rights` without duplicates. `link show` retains `{chatId, title, link}`.
 

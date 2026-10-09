@@ -15,4 +15,5 @@ Plans for `max`. The order is approximate and may change. Suggest ideas in [GitH
 - **Video notes**, **setting and removing a cloud password**.
 - **Installers** for each platform, without Node or Bun.
 
-Retained file transfer to remote agents is implemented: [attachments](./attachments.md#файл-для-удалённого-агента). A PDF can be shown page by page as images when the agent's client cannot open the original file: [remote PDF reading](./remote.md#читать-pdf-без-сохранения-файла-у-агента).
+Retained file transfer to remote agents is implemented: [attachments](./attachments.md#файл-для-удалённого-агента).
+A PDF can be shown page by page as images when the agent's client does not open the original file: [reading a PDF with a remote agent](./remote.md#читать-pdf-без-сохранения-файла-у-агента).

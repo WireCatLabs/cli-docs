@@ -128,7 +128,7 @@ La migración conserva los permisos efectivos, los ajustes MAX y los puntos de m
 | `serve` | Iniciar `max serve` si se necesita y no existe. No inicia con `MAX_TOKEN`. Solo personal | `--serve`, `--no-serve` | `true` |
 | `keepRunsForDays` | Días de conservación de ejecuciones | — | `30` |
 | `readOnly`, `allow`, `mcpTools` | ajustes antiguos compatibles; `config migrate` los convierte en `permissions` | — | no se pueden cambiar tras migrar |
-| `sendsPerHour` | Límite horario, incluidos reenvíos, ediciones, fijados con aviso, borrados, personas añadidas y solicitudes de ingreso aceptadas; superar devuelve `8`. **Bots** solo usan la sección `bot`; sin ella no tienen límite | — | `30`; sin límite para bots |
+| `sendsPerHour` | Límite horario, incluidos reenvíos, ediciones, fijados con aviso, borrados, personas añadidas y solicitudes de entrada aceptadas; superar devuelve `8`. **Bots** solo usan la sección `bot`; sin ella no tienen límite | — | `30`; sin límite para bots |
 | `requestsPerMinute` | Peticiones por minuto del perfil a MAX, tras las primeras 10 seguidas, compartidas entre todos los procesos de ese perfil; `0` significa sin límite. `MAX_REQUESTS_PER_MINUTE` prevalece sobre el archivo ([limits.md](./limits.md)) | `MAX_REQUESTS_PER_MINUTE` | `20` |
 | `readOtherBots` | Leer copias de otros bots al pedir `--all-bots` o `--bots`: `false`, `true` para todos o lista de perfiles. **Solo `bot`** | —; `--all-bots` y `--bots` lo piden, el campo lo permite | `false` |
 | `updateCheck` | Consultar npm una vez al día y avisar en el terminal. **Solo `defaults`**, la versión es común | —; lo desactivan `MAX_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER`, `CI` | `true` |
@@ -162,7 +162,8 @@ max config set defaultProfile work      # какой профиль без пе�
 
 Los valores se comprueban con el mismo esquema usado para leer, **antes de escribir**: `max config set limit 0` se rechaza y el archivo queda igual. `serve`, `senderColors`, `catchUpMarksRead`, `searchCatchUp` y `mcpTools` no se admiten con `--bot`: los bots no tienen servidor, colores de autores ni estado de no leído, y el antiguo `mcpTools` solo se aplica a cuentas personales.
 
-`searchStemmers.cyrillic` (`russian` o `none`) y `searchStemmers.latin` (`english`, `spanish`, ambos separados por coma —el valor por defecto— o `none`) se guardan en el archivo compartido de mensajes, no en el archivo de configuración: son comunes a todos los perfiles y a ambos mensajeros. Por ello no admiten `--defaults`, `--personal` ni `--bot`, y no pueden cambiarse bajo `MAX_PROFILE_LOCK`. `config unset` restaura el valor incorporado. Tras cambiarlos, ejecuta `max store reindex`: consulta [Mantenimiento del archivo](./archive.md#обслуживание-архива).
+
+`searchStemmers.cyrillic` (`russian` o `none`) y `searchStemmers.latin` (`english`, `spanish`, ambos por defecto separados por coma, o `none`) se guardan en el archivo compartido, no en la configuración. Afectan a todos los perfiles y ambos mensajeros. No se aplican `--defaults`, `--personal` ni `--bot`; `MAX_PROFILE_LOCK` impide cambiarlos. `config unset` restablece el valor integrado. Después ejecuta `max store reindex`; consulta [mantenimiento del archivo](./archive.md#обслуживание-архива).
 
 ## Las erratas son errores
 
@@ -283,4 +284,3 @@ Para cada campo, el orden es `MAX_MODELS_<НАЗНАЧЕНИЕ>_PROVIDER`, `_MOD
 
 
 Los siete campos antiguos admiten `MAX_EMBEDDING_PROVIDER`, `MAX_EMBEDDING_MODEL`, `MAX_EMBEDDING_BASE_URL`, `MAX_EMBEDDING_DIMS`, `MAX_ANALYSIS_PROVIDER`, `MAX_ANALYSIS_MODEL` y `MAX_ANALYSIS_BASE_URL`. Prevalecen sobre los valores del archivo. `MAX_MODELS_DEFAULT_PROVIDER`, `MAX_MODELS_DEFAULT_MODEL` y `MAX_MODELS_DEFAULT_BASE_URL` configuran los campos comunes del nuevo formato; sustituye `DEFAULT` por una tarea como `ANALYSIS`. Una variable vacía no sobrescribe ajustes. Un valor inválido devuelve configuration_error.
-

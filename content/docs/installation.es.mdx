@@ -3,7 +3,9 @@ title: "Instalar e iniciar sesión"
 description: "Instala el CLI de Telegram o MAX, inicia sesión con el teléfono y comprueba que funciona. Unos cinco minutos."
 ---
 
-Tres pasos, unos cinco minutos: **instala** el CLI, **inicia sesión** con el teléfono y **comprueba** que funciona.
+Conecta Telegram o MAX a un agente de IA para encontrar mensajes, reunir contexto y preparar respuestas. Aquí instalarás la herramienta de línea de comandos, accederás a tu cuenta y comprobarás la lista de chats.
+
+El acceso autoriza a la herramienta como dispositivo independiente. Lo confirmas en el teléfono; puedes descargar más adelante el historial para buscar mensajes antiguos.
 
 Necesitas:
 
@@ -18,7 +20,7 @@ Elige tu sistema y tu mensajero en las pestañas de abajo. La página recuerda t
 ### Instala el CLI
 
 **Lo más fácil: pídeselo a tu <DocTerm term="local-agent" lang="es" label="agente de IA" />.** Copia la petición de tu mensajero en tu agente
-(Claude Code, Codex, Cursor, Gemini CLI o Hermes). Comprueba Node.js, instala el CLI, aprende los
+(Claude Code, Codex, Cursor, Gemini CLI, Hermes y <DocTerm term="supported-agents" lang="es" label="cualquier otro agente" />). Comprueba Node.js, instala el CLI, aprende los
 comandos y te guía en el inicio de sesión del paso 2.
 
 <a id="tg" />
@@ -221,7 +223,7 @@ max setup
 <Accordion title="¿Por qué escanear un código QR?">
 
 El código QR vincula el CLI a tu cuenta como un dispositivo nuevo, igual que MAX en el navegador.
-Tu teléfono demuestra que eres tú sin un código SMS. Sigue las indicaciones del terminal si tu cuenta requiere otra comprobación.
+Tu teléfono demuestra que eres tú sin un código SMS. Si tu cuenta tiene contraseña, el terminal te la pedirá.
 Tras iniciar sesión, el CLI aparece en **Ajustes → Dispositivos**, donde puedes cerrar su sesión en
 cualquier momento.
 
@@ -292,7 +294,7 @@ comandos `tg` o `max`.
 
 Estos controles ayudan a evitar acciones no deseadas. Un asistente con acceso completo al
 terminal o ajustes puede cambiarlos; un perfil no sustituye un entorno separado.
-[Conoce los límites](./security.md#lo-que-la-protección-no-puede-impedir).
+[Conoce los límites](./security.mdx#lo-que-la-protección-no-puede-impedir).
 
 **Tu sesión se guarda en este ordenador.** Trata la sesión guardada como una contraseña: quien la
 copie puede usar tu cuenta. Para cerrar sesión, ejecuta `tg session end` o `max session end`, o
@@ -308,7 +310,7 @@ Resume mis mensajes sin leer por chat y dime quién necesita una respuesta. Solo
 ```
 
 Después sigue con [las primeras tareas](./first-tasks.md). Si tu agente no conoce el comando `tg`
-o `max`, consulta [Conectar tu agente](./agents.md).
+o `max`, consulta [Conectar tu asistente de IA](./agents.mdx).
 
 ## Solución de problemas
 

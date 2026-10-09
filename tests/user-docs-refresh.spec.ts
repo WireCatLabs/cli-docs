@@ -5,10 +5,11 @@ for (const lang of ["en", "ru", "es"]) {
   test(`${lang}: demo works without installation and references expose contents on mobile`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 900 })
     await page.goto(`/${lang}/docs/meeting-brief`)
-    const demo = page.locator(".meeting-brief-demo")
-    await demo.getByRole("button").click()
-    await expect(demo).toContainText("msg:telegram/demo/301/12")
-    await expect(demo).toContainText("msg:telegram/demo/301/13")
+    const demo = page.locator("[data-meeting-scenario]")
+    const send = { en: "Send", ru: "Отправить", es: "Enviar" }[lang]
+    await demo.getByRole("button", { name: send, exact: true }).click()
+    await expect(demo.locator(".say")).toHaveCount(1)
+    await expect(demo.locator(".tool code").first()).toContainText("tg chats list")
     const labels = {
       en: "Open contents to find a section",
       ru: "Открыть оглавление и выбрать раздел",

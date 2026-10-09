@@ -929,7 +929,9 @@ max chats events "Поход"                         # кто вступил, �
 max chats events "Поход" --type add,remove --since-time 2026-09-01T00:00
 ```
 
-**Son cambios visibles para otros:** entrar, salir, añadir personas o renombrar. Solo leen `inspect`, `link show`, `events` y `members list`. Pasan por los mismos controles que los envíos: solo lectura rechaza cambios y la lista de destinatarios restringe chats. El registro conserva la acción sin nombres ni enlaces. `create` y `members add` cuentan una vez por persona en el límite horario: reciben un mensaje. Con la lista activa solo puedes invitar a personas cuyo chat individual esté permitido. No se reintenta tras un fallo; repetir `create` crea otro grupo.
+**Otras personas ven** entradas, salidas, miembros añadidos y cambios de nombre. `inspect`, `link show`, `events`, `members list` y `requests list` solo leen.
+
+**Las solicitudes de entrada** existen en canales con aprobación, no en grupos privados. `chats join` envía la solicitud y devuelve `requested: true`; el canal aparece tras aceptarla un administrador. `requests list` muestra solicitantes sin hora (`requestedAt: null`). MAX no permite responder a todas a la vez (`--all`) ni filtrarlas por enlace (`--link`); el comando rechaza estas opciones. Los cambios usan los controles de envío: se rechazan en solo lectura, respetan destinatarios y se registran sin títulos ni enlaces. `create` y `members add` cuentan por cada invitado en el límite horario. Con destinatarios restringidos, cada chat privado debe estar permitido. No hay reintentos automáticos; repetir `create` crea otro grupo.
 
 Los cambios de grupos devuelven `operationId` en JSON. `create`, `join`, `update` y `link reset` incluyen la ficha en `chat`; `leave` devuelve `chatId`. Añadir miembros devuelve `{operationId, chatId, added, notAdded}`; eliminarlos, `{operationId, chatId, removed}`. Tras una respuesta correcta de MAX, `notAdded` está vacío: MAX no proporciona una lista de fallos parciales; rechazar una incorporación devuelve un error. `admins` devuelve `personId`; `admins add` también incluye `rights` sin duplicados. `link show` conserva `{chatId, title, link}`.
 

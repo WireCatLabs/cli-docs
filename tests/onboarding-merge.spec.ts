@@ -12,6 +12,9 @@ for (const lang of ["en", "ru", "es"]) {
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
         if (route === "features") {
           await expect(page.locator("main table")).toHaveCount(5)
+          await expect(page.locator("main details > summary")).toHaveCount(5)
+          for (const summary of await page.locator("main details > summary").all()) await summary.click()
+          expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
           await expect(page.locator("main")).toContainText("185")
           await expect(page.locator("main")).toContainText("33")
         } else {
