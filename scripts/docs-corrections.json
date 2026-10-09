@@ -1519,5 +1519,30 @@
         }
       ]
     }
+  },
+  {
+    "tool": "tg",
+    "slug": "sessions",
+    "reason": "Show the real public my.telegram.org login screen and distinguish website registration from account QR authorization. Screenshot captured 2026-10-04 in a fresh unauthenticated browser; no phone, code, api_hash or QR tokens entered. Guidance verified against https://core.telegram.org/api/obtaining_api_id and https://my.telegram.org/apps.",
+    "replacements": {
+      "en": [
+        {
+          "before": "\n## The app from my.telegram.org\n",
+          "after": "\n## The app from my.telegram.org\n\n> **See the my.telegram.org login screen**\n>\n> ![Official my.telegram.org login screen with an empty phone-number field.](/telegram-app-login.png)\n>\n> This is the website login for managing your Telegram application credentials. The code arrives in Telegram, not by SMS. After login, choose **API development tools**. Authorizing the CLI with a QR code comes later. [my.telegram.org](https://my.telegram.org/apps)\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "\n## Приложение с my.telegram.org\n",
+          "after": "\n## Приложение с my.telegram.org\n\n> **Посмотреть экран входа my.telegram.org**\n>\n> ![Официальный экран входа my.telegram.org: поле номера телефона не заполнено.](/telegram-app-login.png)\n>\n> Это вход на сайт для получения данных приложения Telegram. Код приходит сообщением в Telegram, не по SMS. После входа выберите **API development tools**. Подтверждение доступа CLI через QR-код будет следующим этапом. [my.telegram.org](https://my.telegram.org/apps)\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "\n## La aplicación de my.telegram.org\n",
+          "after": "\n## La aplicación de my.telegram.org\n\n> **Ver la pantalla de acceso de my.telegram.org**\n>\n> ![Pantalla oficial de my.telegram.org con el campo del teléfono vacío.](/telegram-app-login.png)\n>\n> Este es el acceso al sitio para obtener las credenciales de aplicación de Telegram. El código llega por Telegram, no por SMS. Tras entrar, elige **API development tools**. La autorización del CLI por QR viene después. [my.telegram.org](https://my.telegram.org/apps)\n"
+        }
+      ]
+    }
   }
 ]
