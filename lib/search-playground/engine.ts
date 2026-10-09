@@ -548,7 +548,7 @@ const tokens = (text: string) => normalize(text).match(/[\p{L}\p{N}]+/gu) ?? []
 const inRange = (time: number, range: ReturnType<typeof dateRange>) =>
   (range.lower === undefined || (range.lowerInclusive ? time >= range.lower : time > range.lower)) &&
   (range.upper === undefined || (range.upperInclusive ? time <= range.upper : time < range.upper))
-export const compileQuery = (query: string): ((message: DemoMessage) => boolean) => {
+export const compileQuery = (query: string, archive = messages): ((message: DemoMessage) => boolean) => {
   const ast = validateFields(parseLucene(query))
   const compile = (node: QueryNode): ((message: DemoMessage) => boolean) => {
     if (node.kind === "boolean") {
@@ -591,9 +591,9 @@ export const compileQuery = (query: string): ((message: DemoMessage) => boolean)
     }
     if (node.field === "chat" || node.field === "from") {
       const matching = [
-        ...new Set(messages.map((message) => (node.field === "chat" ? message.chat : message.from))),
+        ...new Set(archive.map((message) => (node.field === "chat" ? message.chat : message.from))),
       ].filter((value) => normalize(value).includes(normalize(node.value)))
-      const chatId = messages.find((message) => message.chatId === node.value)?.chat
+      const chatId = archive.find((message) => message.chatId === node.value)?.chat
       if (node.field === "chat" && chatId) return (message) => message.chatId === node.value
       if (matching.length !== 1)
         throw new Error(
@@ -615,13 +615,13 @@ export const compileQuery = (query: string): ((message: DemoMessage) => boolean)
   return compile(ast.root)
 }
 export type Hit = { message: DemoMessage; context: DemoMessage[] }
-export const searchDemo = (query: string): Hit[] => {
-  const test = query.trim() ? compileQuery(query) : () => true
-  return messages
+export const searchDemo = (query: string, archive = messages): Hit[] => {
+  const test = query.trim() ? compileQuery(query, archive) : () => true
+  return archive
     .filter(test)
     .sort((a, b) => b.date.localeCompare(a.date))
     .map((message) => {
-      const chat = messages.filter((row) => row.chatId === message.chatId && row.provider === message.provider)
+      const chat = archive.filter((row) => row.chatId === message.chatId && row.provider === message.provider)
       const index = chat.findIndex((row) => row.id === message.id)
       return { message, context: chat.slice(Math.max(0, index - 2), index + 3) }
     })
