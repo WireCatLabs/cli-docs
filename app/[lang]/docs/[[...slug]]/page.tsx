@@ -12,7 +12,6 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { CommandReferenceIndex } from "@/components/command-reference-index"
-import { DocsContentsHint } from "@/components/docs-contents-hint"
 import { DocsDisclosures } from "@/components/docs-disclosures"
 import { DocsTocPopover } from "@/components/docs-toc-popover"
 import { getMDXComponents } from "@/components/mdx"
@@ -129,9 +128,6 @@ export default async function Page(props: Props) {
       <DocsDisclosures />
       <DocsTitle>{taskGuide?.title ?? page.data.title}</DocsTitle>
       <DocsDescription className="mb-0">{description}</DocsDescription>
-      {(page.slugs.at(-1)?.startsWith("commands-") || page.slugs.at(-1) === "configuration") && (
-        <DocsContentsHint lang={lang} />
-      )}
       <div className="flex flex-row gap-2 items-center border-b pb-6">
         <MarkdownCopyButton markdownUrl={markdownUrl} />
         <ViewOptionsPopover

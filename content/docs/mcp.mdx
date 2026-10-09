@@ -5,9 +5,37 @@ description: "Understand the MCP server and agent instructions, choose a connect
 
 Connect an AI assistant to your messenger and give it the instructions it needs to work with your chats. This page explains MCP and skills, helps you choose a connection, and shows where to find the tools and their permissions.
 
+## What MCP is
+
+**MCP (Model Context Protocol)** is an open standard for connecting AI apps to tools. It works like a
+universal plug: an app that supports MCP can use any MCP server without a custom integration. The
+standard is published at [modelcontextprotocol.io](https://modelcontextprotocol.io/).
+
+Two sides take part:
+
+- The **client** is your AI app, for example Claude Desktop, ChatGPT, Cursor or Gemini CLI. It asks the
+  server which tools exist and calls one when your request needs it.
+- The **server** is `tg mcp` or `max mcp`, part of the command-line tool. It runs on your computer, or
+  on a server that a browser chat reaches over a public HTTPS address.
+
+Through MCP, the AI can use only the tools the server offers, and only within the profile's
+[permissions](./permissions.mdx): a read-only profile cannot send. Connecting MCP does not log in to
+your messenger for you; you log in once with the command-line tool. It does not download your whole
+archive either.
+
+An agent with a terminal, such as Claude Code or Codex, does not need MCP: it can run `tg` and `max`
+commands directly, and a **skill** tells it how. An AI app without a terminal, such as Claude Desktop
+or a browser chat, uses MCP. The [comparison below](#cli-skill-or-mcp) helps you choose.
+
+<Callout type="info" title="Using an AI chat in the browser or on your phone?">
+
+ChatGPT, Claude and other web chats connect through a public HTTPS address: follow the [browser and mobile setup guide](./browser-apps.mdx).
+
+</Callout>
+
 ## What the MCP server does
 
-**MCP** is a way for AI agents to talk to a server and ask it to perform your tasks. Our MCP server gives your assistant access to the connected messenger: chats, messages, shared files, searches and reports. You ask for a result; the assistant calls the server, which performs the action through the messenger tool.
+Our MCP server gives your assistant access to the connected messenger: chats, messages, shared files, searches and reports. You ask for a result; the assistant calls the server, which performs the action through the messenger tool.
 
 The server is included in the command-line tool and **must be running while the assistant uses it**. A local client can start it on your computer. For a browser or mobile chat, keep it running on a computer or server and connect through a public HTTPS address with authentication. Follow the [browser/mobile setup guide](./browser-apps.mdx) for that connection.
 
@@ -34,9 +62,9 @@ We provide instructions with the installed tool. [Connect your agent](./agents.m
 | Connection | What it provides | Choose it when |
 |---|---|---|
 | CLI | Commands in a terminal, with JSON results | Your agent already has a local terminal |
-| Skill + CLI | Instructions for using those commands and workflows | You use Codex, Cursor Agent, Claude Code, Gemini CLI, Hermes or OpenClaw |
-| MCP | Named tools and their parameters directly inside your client | You use Claude Desktop, or prefer the client's tool interface |
-| MCP over HTTP | The same tools for ChatGPT or Claude in a browser, behind your own tunnel | You chat in a browser — [ChatGPT and Claude in the browser](./browser-apps.mdx) |
+| Skill + CLI | Instructions for using those commands and workflows | Your agent can run terminal commands, for example Codex, Cursor Agent, Claude Code, Gemini CLI, Hermes or OpenClaw |
+| MCP | Named tools and their parameters directly inside your client | Your AI app has no terminal, for example Claude Desktop, or you prefer the client's tool interface |
+| MCP over HTTP | The same tools for an AI chat in a browser, such as ChatGPT or Claude, behind your own tunnel | You chat in a browser — [ChatGPT and Claude in the browser](./browser-apps.mdx) |
 | Markdown docs | A readable explanation and command reference | You want the agent to look up how something works |
 
 For an agent with a terminal, start with [a skill](./agents.mdx). MCP is optional and follows the

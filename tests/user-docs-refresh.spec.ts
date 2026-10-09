@@ -10,13 +10,8 @@ for (const lang of ["en", "ru", "es"]) {
     await demo.getByRole("button", { name: send, exact: true }).click()
     await expect(demo.locator(".say")).toHaveCount(1)
     await expect(demo.locator(".tool code").first()).toContainText("tg chats list")
-    const labels = {
-      en: "Open contents to find a section",
-      ru: "Открыть оглавление и выбрать раздел",
-      es: "Abrir el índice para elegir una sección",
-    }
     await page.goto(`/${lang}/docs/configuration`)
-    await page.getByRole("button", { name: labels[lang as keyof typeof labels] }).click()
+    await page.locator("#nd-toc-popover summary").click()
     await expect(page.locator("#nd-toc-popover details")).toHaveAttribute("open", "")
     await page.keyboard.press("Escape")
     await expect(page.locator("#nd-toc-popover details")).not.toHaveAttribute("open", "")

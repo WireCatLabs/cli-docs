@@ -12,7 +12,9 @@ export function remarkAnchorAliases() {
       if (!node.children) return
       node.children = node.children.map((child) => {
         const alias = child.type === "html" ? /^<a id="([^"<>]+)"\s*\/>$/.exec(child.value?.trim() ?? "") : null
-        if (alias) return { type: "emphasis", children: [], data: { hName: "span", hProperties: { id: alias[1] } } }
+        // A block node, not emphasis: the Markdown copy for agents prints an empty emphasis as `**` and
+        // joins the neighbouring blocks into it.
+        if (alias) return { type: "paragraph", children: [], data: { hName: "span", hProperties: { id: alias[1] } } }
         visit(child)
         return child
       })

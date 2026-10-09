@@ -104,19 +104,19 @@ const terms = {
     en: {
       title: "Local agent",
       description:
-        "An AI assistant that can run commands on your computer: Claude Code, Codex, Cursor, Gemini CLI or Hermes. A chat in the browser without terminal access cannot install the cli for you.",
+        "An AI assistant that can run commands on your computer, for example Claude Code, Codex, Cursor or Gemini CLI. A chat in the browser without terminal access cannot install the cli for you.",
       page: "agents",
     },
     ru: {
       title: "Локальный агент",
       description:
-        "ИИ-помощник, который может запускать команды на вашем компьютере: Claude Code, Codex, Cursor, Gemini CLI или Hermes. Чат в браузере без доступа к терминалу не сможет установить cli за вас.",
+        "ИИ-помощник, который может запускать команды на вашем компьютере, например Claude Code, Codex, Cursor или Gemini CLI. Чат в браузере без доступа к терминалу не сможет установить cli за вас.",
       page: "agents",
     },
     es: {
       title: "Agente local",
       description:
-        "Un asistente de IA que puede ejecutar comandos en tu ordenador: Claude Code, Codex, Cursor, Gemini CLI o Hermes. Un chat en el navegador sin acceso a la terminal no puede instalar el cli por ti.",
+        "Un asistente de IA que puede ejecutar comandos en tu ordenador, por ejemplo Claude Code, Codex, Cursor o Gemini CLI. Un chat en el navegador sin acceso a la terminal no puede instalar el cli por ti.",
       page: "agents",
     },
   },

@@ -18,7 +18,7 @@ export const aboutCopy = {
         title: "What you can use today",
         paragraphs: [
           "Today, WireCat connects Telegram, MAX, email and notes. The tg and max tools run on your computer and let an AI agent read messages, search your history and prepare replies.",
-          "The setup guides cover Claude Code, Codex, Cursor, Gemini CLI and Hermes. You choose which agent to use and what it can access. Other agents can connect through MCP, a standard for connecting AI apps to tools.",
+          "You choose which AI agent to use and what it can access. Any agent that can run terminal commands can use the tools, and AI apps without a terminal can connect through MCP, a standard for connecting AI apps to tools. Step-by-step guides cover Claude Code, Codex, Cursor, Gemini CLI and Hermes.",
           "Memo brings email threads and Markdown notes into that context, so information about a person or project is easier to find together.",
         ],
       },
@@ -85,7 +85,7 @@ export const aboutCopy = {
         title: "Что уже можно использовать",
         paragraphs: [
           "WireCat уже объединяет Telegram, MAX, почту и заметки. Инструменты tg и max работают на вашем компьютере и позволяют ИИ-агенту читать сообщения, искать по истории и готовить ответы.",
-          "Есть инструкции для Claude Code, Codex, Cursor, Gemini CLI и Hermes. Вы выбираете агента и его права доступа. Другие агенты могут подключаться через MCP — стандарт для подключения ИИ-приложений к инструментам.",
+          "Вы выбираете ИИ-агента и его права доступа. Инструментами может пользоваться любой агент, который умеет выполнять команды в терминале, а ИИ-приложения без терминала подключаются через MCP — стандарт для подключения ИИ-приложений к инструментам. Есть пошаговые инструкции для Claude Code, Codex, Cursor, Gemini CLI и Hermes.",
           "Memo добавляет к этому контексту почтовые переписки и заметки в Markdown, чтобы сведения о человеке или проекте было проще находить вместе.",
         ],
       },
@@ -152,7 +152,7 @@ export const aboutCopy = {
         title: "Qué puedes usar hoy",
         paragraphs: [
           "WireCat ya conecta Telegram, MAX, correo electrónico y notas. Las herramientas tg y max se ejecutan en tu ordenador y permiten que un agente de IA lea mensajes, busque en tu historial y prepare respuestas.",
-          "Tenemos guías para Claude Code, Codex, Cursor, Gemini CLI y Hermes. Tú eliges el agente y sus permisos. Otros agentes pueden conectarse mediante MCP, un estándar que conecta aplicaciones de IA con herramientas.",
+          "Tú eliges el agente de IA y sus permisos. Cualquier agente que ejecute comandos en la terminal puede usar las herramientas, y las aplicaciones de IA sin terminal se conectan mediante MCP, un estándar que conecta aplicaciones de IA con herramientas. Hay guías paso a paso para Claude Code, Codex, Cursor, Gemini CLI y Hermes.",
           "Memo incorpora conversaciones de correo y notas en Markdown a ese contexto, para encontrar juntos los datos sobre una persona o proyecto.",
         ],
       },

@@ -3,7 +3,7 @@ title: "Group admins"
 description: "Keep up with questions, understand participation and manage your group."
 ---
 
-Find questions awaiting a reply, understand activity and review who is in your group. This page starts with requests for a read-only report, then explains how to check the result before changing members or moderation rules. Your account or bot needs the appropriate group rights for changes.
+This page is for people who run a Telegram or MAX group. By the end, you will be able to find questions awaiting a reply, understand activity and review who is in your group. It starts with requests for a read-only report, then explains how to check the result before changing members or moderation rules. Your account or bot needs the appropriate group rights for changes.
 
 ## Find what needs attention
 

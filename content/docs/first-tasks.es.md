@@ -3,8 +3,10 @@ title: "Primeras tareas"
 description: "Prueba una petición útil, comprueba la respuesta y sigue con búsquedas, reuniones o borradores."
 ---
 
-Tu cuenta está conectada. Pide al agente que encuentre un mensaje, resuma una conversación o
-prepare una respuesta. Describe lo que necesitas; el agente elige los comandos.
+Esta página es para el momento justo después de conectar tu cuenta: reúne las primeras peticiones
+que puedes probar con tu agente de IA. Al terminar, habrás encontrado un mensaje, resumido una
+conversación o preparado una respuesta, y sabrás comprobar que la respuesta está completa. Una
+petición es una tarea con tus propias palabras; el agente elige los comandos.
 
 Si aún falta configurar algo, empieza por [instalación](./installation.mdx) o
 [conectar al agente](./agents.mdx). Puedes ver el proceso antes de probarlo en [Demo](./meeting-brief.mdx).

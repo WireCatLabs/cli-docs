@@ -3,7 +3,7 @@ title: "Administradores de grupos"
 description: "Atiende preguntas, entiende la participación y gestiona tu grupo."
 ---
 
-Encuentra preguntas pendientes, entiende la actividad y revisa quién está en tu grupo. Empieza con peticiones de un informe de solo lectura y comprueba el resultado antes de cambiar miembros o reglas de moderación. Los cambios requieren los permisos adecuados de tu cuenta o bot en el grupo.
+Esta página es para quienes gestionan un grupo de Telegram o MAX. Al terminar, podrás encontrar preguntas pendientes, entender la actividad y revisar quién está en tu grupo. Empieza con peticiones de un informe de solo lectura y comprueba el resultado antes de cambiar miembros o reglas de moderación. Los cambios requieren los permisos adecuados de tu cuenta o bot en el grupo.
 
 ## Encontrar lo que necesita atención
 

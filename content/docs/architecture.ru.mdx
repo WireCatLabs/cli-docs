@@ -33,7 +33,7 @@ description: Как устроены tg и max — пакеты, слои, ко�
 
 **Главное правило общего пакета: в нём ничего не знает о конкретном мессенджере.** Правило линтера
 запрещает импорт `@mtcute/*`, `ws` и папок адаптеров в `src/` cli-messaging
-([biome.json](https://github.com/leemour/cli-messaging/blob/c7cd479/biome.json)). То, что есть только у
+([настройки линтера](https://github.com/leemour/cli-messaging/blob/c7cd479/biome.json)). То, что есть только у
 одного мессенджера, передаётся в поле `providerMetadata` общих типов.
 
 ## Одна команда от начала до конца
@@ -105,7 +105,7 @@ services: (base) => ({
 Чтобы подключить мессенджер, пишут две вещи: **адаптер**, который говорит с мессенджером, и
 описание **`Messenger`**, которое рассказывает о нём общим командам: имя приложения, имя провайдера
 в хранилище, как подключаться, как листать историю. cli-messaging при этом не меняют. Полное
-руководство — [ADAPTERS.md](https://github.com/leemour/cli-messaging/blob/c7cd479/docs/dev/ADAPTERS.md).
+руководство — [руководство по адаптерам](https://github.com/leemour/cli-messaging/blob/c7cd479/docs/dev/ADAPTERS.md).
 
 **Обязательное ядро и необязательные группы.** `MessengerCore` — `self`, `me`, `resolve`, `chat`,
 `send`, `logout`, `close` — обязателен. Остальное разбито на группы: `ServerReads`, `MessageEditing`,
@@ -255,12 +255,11 @@ MAX не публикует API для личных аккаунтов, поэт
 
 ## Участие в разработке: с чего начать
 
-- Новый мессенджер: [ADAPTERS.md](https://github.com/leemour/cli-messaging/blob/c7cd479/docs/dev/ADAPTERS.md),
+- Новый мессенджер: [руководство по адаптерам](https://github.com/leemour/cli-messaging/blob/c7cd479/docs/dev/ADAPTERS.md),
   затем контрактные проверки.
-- Общий код: [ARCHITECTURE.md](https://github.com/leemour/cli-messaging/blob/c7cd479/docs/dev/ARCHITECTURE.md)
-  в cli-messaging.
-- Telegram: [ARCHITECTURE.md](https://github.com/leemour/tg-cli/blob/4a36e85/docs/dev/ARCHITECTURE.md) в tg.
-- MAX: [ARCHITECTURE.md](https://github.com/leemour/max-cli/blob/fff19ff/docs/dev/ARCHITECTURE.md) в max
+- Общий код: [заметки об архитектуре cli-messaging](https://github.com/leemour/cli-messaging/blob/c7cd479/docs/dev/ARCHITECTURE.md).
+- Telegram: [заметки об архитектуре tg](https://github.com/leemour/tg-cli/blob/4a36e85/docs/dev/ARCHITECTURE.md).
+- MAX: [заметки об архитектуре max](https://github.com/leemour/max-cli/blob/fff19ff/docs/dev/ARCHITECTURE.md)
   и [заметки о протоколе](https://github.com/leemour/max-cli/blob/fff19ff/docs/dev/protocol.md).
 - Вопросы: [чат поддержки](https://t.me/wirecatdev).
 
