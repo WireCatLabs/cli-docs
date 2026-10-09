@@ -1,23 +1,40 @@
 ---
 title: Try message search
-description: "Try filters and check source messages on a small practice conversation, before connecting an account."
+description: Learn search fields and Lucene query syntax with a fictional message archive.
 ---
 
-Try search before installing or logging in: choose a chat, date or attachment type and see which messages remain. Then open nearby messages to understand the context and check a conclusion.
-
-We prepared a small training conversation for this example: 36 fictional messages from 6 Telegram and MAX chats. These are sample data for learning search; no account is needed. You will learn to narrow a query and check what supports an answer.
+Try search before connecting your account. Build a query against 50 fictional Telegram/MAX messages in 6 chats, then open a result to read the surrounding conversation and check its source. The playground runs on your device and never connects to an account.
 
 1. Pick a chat or message-type filter — for example, messages with links.
 2. Open a match and its nearby context.
 3. Change a filter and compare the results.
 
-You can also type words and filter by person (`from:`), chat (`chat:`) and date (`date:`). Choose
-`has:` to try files, links, photos, video, audio, voice messages, stickers, contacts, locations or
-polls: `has:attachment` includes attached media, while `has:link` finds links in the message text.
-The playground runs on your device and never connects to an account.
+Sample dates run from two days before today to two days after it and use UTC. Type a field such as `has:` or `in:` to see its values. Press Space after a word or completed filter to see fields and operators; use ↑ / ↓ and Enter to insert a suggestion, or Esc to close it. Clear the query or choose **All** to browse every message.
 
 <SearchPlayground lang="en" embedded />
 
-See the full [Telegram search guide](./tg/search.md) or [MAX search guide](./max/search.md) for archive setup, supported fields and command options.
+## Build a Lucene query
 
-Learn how strict search, conversation graphs and embeddings fit together on [how search works](./search-architecture.mdx).
+Lucene syntax combines words with fields and logical operators. Start with `invoice`, then add conditions to narrow the result. Use uppercase `AND`, `OR` and `NOT`, and parentheses to make the grouping clear.
+
+| Query | What it finds |
+| --- | --- |
+| `invoice AND budget` | Messages containing both words. |
+| `Atlas AND (invoice OR budget)` | Atlas messages containing either invoice or budget. |
+| `invoice NOT has:file` | Invoice messages without a file attachment. |
+| `"final invoice"` | The words together, in that order. |
+| `invo*` | Words starting with `invo`, such as invoice. `?` replaces one character. |
+| `chat:"Client studio" AND from:Mia` | Messages from Mia in Client studio. Quote names containing spaces. |
+| `in:max AND has:voice` | MAX messages with a voice note. Use `in:telegram` for Telegram. |
+
+`has:` also offers `attachment`, `link`, `file`, `photo`, `image`, `video`, `audio`, `sticker`, `contact`, `location` and `poll`. `has:attachment` includes attached media; `has:link` finds links in the message text. You can combine them: `(has:file OR has:link) AND text:budget`.
+
+Choose **Date** for today's date, the current month or the five-day sample window. The inserted query uses `date:YYYY-MM-DD` for a day or `date:[START TO END]` for an inclusive range. An asterisk leaves one end open; braces exclude the boundary. For example, the **Before tomorrow** suggestion uses `date:{* TO YYYY-MM-DD}` with tomorrow's date.
+
+This playground implements the supported WireCat Lucene fields, rather than every Apache Lucene feature. Fuzzy matching (`~`), boosting (`^`) and planned fields such as `filename:` are unavailable here. An unfinished or unsupported query keeps the previous valid results visible and marks the problem; it does not silently broaden the search.
+
+## Search your own archive
+
+Use the [Telegram search guide](./tg/search.md) or [MAX search guide](./max/search.md) to prepare your archive and run searches. The [Telegram query language reference](./tg/query-language.md) and [MAX query language reference](./max/query-language.md) describe the tools' supported fields, operators and limits.
+
+For the general grammar, read the official [Apache Lucene query parser syntax](https://lucene.apache.org/core/10_5_1/queryparser/org/apache/lucene/queryparser/classic/package-summary.html). WireCat's references define which features work in the tools. The [search architecture guide](./search-architecture.mdx) explains how message search, conversation graphs and embeddings fit together.

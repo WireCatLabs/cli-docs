@@ -1058,3 +1058,24 @@
     overflow-wrap: normal;
   }
 }
+
+:is(.wirecat-landing, .sp-docs-host) .sp-autocomplete-box {
+  position: relative;
+}
+:is(.wirecat-landing, .sp-docs-host) .sp-positioner {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  max-width: 100%;
+}
+:is(.wirecat-landing, .sp-docs-host) button.sp-suggestion {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+:is(.wirecat-landing, .sp-docs-host) button.sp-suggestion[data-highlighted] {
+  background: var(--app-line);
+}
