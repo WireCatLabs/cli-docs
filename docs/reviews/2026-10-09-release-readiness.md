@@ -44,3 +44,9 @@ was verified for the docs root, agents, MCP, Demo, notes, email and Russian sear
 Before claiming release readiness: review the new Telegram release and its translations,
 align MAX's namespace examples with a published release, verify Memo's documented commands,
 then refresh source contracts and run the strict command check on that final export.
+
+Review branch: https://github.com/leemour/cli-docs/pull/88 (draft; publication readiness gaps above).
+
+CI initially exposed an ordering error: the command partition test read generated messenger
+references before sync on a fresh checkout. Moved unit tests after sync and release-note checks;
+the test and command assertions remain unchanged.

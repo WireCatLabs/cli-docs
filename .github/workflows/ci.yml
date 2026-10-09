@@ -20,11 +20,11 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
-      - run: pnpm test
       - run: pnpm search:check
       # Translations are reviewed against released documentation, matching the deployment build.
       - run: pnpm sync
       - run: pnpm docs:release-notes
+      - run: pnpm test
       - run: pnpm docs:contracts
       - run: pnpm docs:check
       - run: pnpm typecheck
