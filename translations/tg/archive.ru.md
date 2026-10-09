@@ -4,6 +4,43 @@ title: "Локальная база"
 
 `tg` сохраняет прочитанные данные в локальной SQLite-базе. Поиск, экспорт и `--offline` работают с ней без запросов к Telegram. Здесь описано содержимое базы, загрузка истории и поддержание актуальности.
 
+## Проверьте и дополните историю чата
+
+Проверьте сохранённую историю перед загрузкой. Выберите нужный чат и период.
+
+**Ваш запрос:**
+
+> Проверь сохранённую историю Book club. Скачай последние 30 дней этого чата и скажи, остались ли пробелы.
+
+**Проверить сохранённую историю:**
+
+```sh
+tg store status "Book club" --json
+```
+
+**Скачать выбранный период:**
+
+```sh
+tg store fetch "Book club" --since-time 30d --json
+```
+
+**Проверить ещё раз:**
+
+```sh
+tg store status "Book club" --json
+```
+
+**Пример ответа агента:**
+
+> | Проверка | До | После |
+> | --- | --- | --- |
+> | Сохранено сообщений | 30 | 300 |
+> | История сообщений за нужные 30 дней | Пробелы | Сохранена без пробелов |
+>
+> Этот результат относится к выбранному периоду, а не ко всей истории чата.
+
+Если загрузка остановилась из-за предела или ожидания сервера, повторите её для продолжения, затем проверьте полноту. Успешное завершение команды само по себе не доказывает полноту истории. Числа в примере вымышлены.
+
 ## Что сохраняется
 
 - **Все прочитанные данные.** Чаты из `chats list`, сообщения из `messages list`, `messages context`, `inbox` и отправленные вами сообщения.
@@ -24,6 +61,9 @@ title: "Локальная база"
 
 ```sh
 tg store status                  # per chat: messages stored, the oldest and newest, the stretches held completely
+```
+
+```sh
 tg store status "Book club"      # one chat
 ```
 
@@ -33,12 +73,33 @@ tg store status "Book club"      # one chat
 
 ```sh
 tg store fetch "Book club" --estimate         # what a full fetch would still cost; asks Telegram nothing
+```
+
+```sh
 tg store fetch "Book club"                    # fetch it, newest to oldest
+```
+
+```sh
 tg store fetch "Book club"                    # run again to continue where it stopped
+```
+
+```sh
 tg store fetch "Book club" --since-time 30d   # only back to 30 days ago
+```
+
+```sh
 tg store fetch "Book club" --last 5000        # only until the newest 5000 are held
+```
+
+```sh
 tg store fetch "Book club" --limit 5000       # up to 5000 messages in this run
+```
+
+```sh
 tg store fetch --all                          # every chat, most recently active first: the last 90 days
+```
+
+```sh
 tg store fetch --all --since-time 365d        # every chat, back to a year ago
 ```
 
@@ -52,25 +113,59 @@ tg store fetch --all --since-time 365d        # every chat, back to a year ago
 
 ```sh
 tg store fetch "Book club" --background     # prints the job id
+```
+
+```sh
 tg store jobs list                          # background jobs, newest first
+```
+
+```sh
+tg store jobs list --state failed           # only failed ones: running, done, failed, cancelled or died
+```
+
+```sh
 tg store jobs show                          # the newest job, and what the store now holds of its chat
+```
+
+```sh
 tg store jobs show <job>
+```
+
+```sh
 tg store jobs cancel <job>                  # stops after the current page; a later fetch resumes
+```
+
+```sh
 tg store jobs retry <job>                   # a failed or died job again, as a new job with the same options
+```
+
+```sh
 tg store jobs retry --failed                # every chat whose newest job failed or died
+```
+
+```sh
 tg store jobs clear                         # forget finished jobs and their logs; a running job stays
 ```
 
 ## Поиск
 
-`tg messages search` находит сохранённые сообщения по словам, автору, чату, дате, файлам, ссылкам и вашим собственным меткам; по умолчанию он не обращается к Telegram. `--sync-first` явно загружает новые сообщения перед поиском. Подробности, включая сохранённые поиски и подсчёты, — в руководстве [Поиск сообщений](./search.md). Пустой ответ означает «нет в этом архиве»: сначала загрузите чат.
+`tg search messages` находит сохранённые сообщения по словам, автору, чату, дате, файлам, ссылкам и вашим собственным меткам; поиск слов может также обращаться к Telegram. `--backend archive` читает только сохранённые сообщения. `--sync-first` явно загружает новые сообщения перед поиском. Подробности, включая сохранённые поиски и подсчёты, — в руководстве [Поиск сообщений](./search.md). Пустой ответ означает «нет в этом архиве»: сначала загрузите чат.
 
 ## Экспорт
 
 ```sh
 tg store export "Book club" --jsonl > book-club.jsonl       # one message per line, oldest first
+```
+
+```sh
 tg store export "Book club" --json > book-club.json         # { "items": [...] }
+```
+
+```sh
 tg store export "Book club" --format markdown > book-club.md   # a transcript: a heading per day, replies and forwards quoted
+```
+
+```sh
 tg store export "Book club" --output book-club.jsonl --since-time 7d     # the last week, into a file only you can read
 ```
 
@@ -82,7 +177,13 @@ tg store export "Book club" --output book-club.jsonl --since-time 7d     # the l
 
 ```sh
 tg store export "Book club" "Work" --to ~/tg-export   # a JSON-lines file per chat, and manifest.json
+```
+
+```sh
 tg store export --kind group --to ~/tg-groups          # every stored group
+```
+
+```sh
 tg store export --all --to ~/tg-all                    # every stored chat of this account
 ```
 
@@ -124,9 +225,21 @@ tg messages evidence "Project Alpha" --before-id <nextBeforeId> --json
 
 ```sh
 tg --offline chats list
+```
+
+```sh
 tg --offline messages list "Book club" --limit 50
+```
+
+```sh
 tg --offline messages show "Book club" 4242
+```
+
+```sh
 tg --offline messages context "Book club" 4242
+```
+
+```sh
 tg --offline contacts list
 ```
 
@@ -144,9 +257,21 @@ tg --offline contacts list
 
 ```sh
 tg server start       # start serve in the background; answers once it listens
+```
+
+```sh
 tg server status      # whether it runs, since when, who started it
+```
+
+```sh
 tg server logs -n 50  # its latest log lines
+```
+
+```sh
 tg server stop
+```
+
+```sh
 tg server restart
 ```
 
@@ -156,7 +281,13 @@ tg server restart
 
 ```sh
 tg server install      # writes ~/.config/systemd/user/tg-serve-<profile>.service; starts nothing
+```
+
+```sh
 tg server start        # starts it — through the unit, now that there is one
+```
+
+```sh
 tg server status
 systemctl --user enable tg-serve-default    # only if it should start at every login
 ```
@@ -174,10 +305,25 @@ systemctl --user enable tg-serve-default    # only if it should start at every l
 
 ```sh
 tg store info                          # where the file is, its size, its schema, how many rows; changes nothing
+```
+
+```sh
 tg store check                         # integrity, search indexes, disk, and which chats are behind; changes nothing
+```
+
+```sh
 tg store backup ~/tg-store.db          # a copy of the store, while it is in use; --encrypt for a password
+```
+
+```sh
 tg store restore ~/tg-store.db         # put a backup in place of the store
+```
+
+```sh
 tg store migrate                       # bring the store up to this version's schema
+```
+
+```sh
 tg store clear --left --allow-dangerous  # delete the chats you have left, with their messages
 ```
 
@@ -205,8 +351,7 @@ the message store was written by a newer version (schema N, needs at least M; th
 
 `tg store migrate` достраивает незавершённые индексы; `tg store reindex` перестраивает их. `store info` и
 `store check` показывают готовность индексов слов и основ. Строгий поиск использует основы для словоформ; `exact:` и `--exact` выбирают точные формы.
-`tg config set searchStemmers.cyrillic russian` и `searchStemmers.latin spanish` задают алгоритмы определения основ слов общего хранилища
-(`none` отключает один из них, для латиницы также доступен `english`); после этого выполните `store reindex`.
+`tg config set searchStemmers.cyrillic russian` и `searchStemmers.latin english,spanish` задают алгоритмы определения основ слов общего хранилища. Для латиницы доступны `english`, `spanish` или оба сразу (по умолчанию); `none` отключает основы. После собственного выбора выполните `store reindex`. Если обновление меняет настройку по умолчанию, основы перестраиваются автоматически: до готовности поиск ищет точные формы и сообщает об этом. `tg serve` завершает перестроение в фоне, `store migrate` — сразу.
 Настройка влияет на оба мессенджера и все профили; процесс, ограниченный одним профилем, не может её изменить.
 
 `tg store repair --dry-run --json` показывает структурное восстановление и откатывает его. `store repair` применяет его без удаления данных: несовпадающие таблицы сохраняются как копии, а оставшиеся в них строки и столбцы перечисляются в ответе. Проверьте сохранённые копии, прежде чем удалять их через `store copies delete <exact name>`; `store repair` называет их в ответе. Перед восстановлением остановите процессы, использующие базу.

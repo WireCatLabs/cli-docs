@@ -1,0 +1,8 @@
+{
+  "reason": "Guide and shared search documentation uses the new search namespace; published MAX 0.38.1 still lacks it. Reviewed runtime refs and translations must be aligned before production publication.",
+  "scope": "Production deployment only; local review and CI builds remain available.",
+  "required": [
+    "Publish the matching MAX namespace release or backport documentation to released commands",
+    "Review MAX/TG runtime refs, retire candidate guide refs, validate exact released command contracts"
+  ]
+}

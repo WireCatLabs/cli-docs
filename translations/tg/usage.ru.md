@@ -10,18 +10,51 @@ title: "Использование tg"
 tg [profile] [options] <resource> <action> [arguments]
 ```
 
+## Прочитайте чат с агентом
+
+После подключения аккаунта попросите короткий итог переписки. Эта задача читает сообщения и ничего не отправляет.
+
+**Ваш запрос:**
+
+> Подведи итог пяти последних сообщений Book club. Покажи решения и открытые вопросы. Ничего не отправляй.
+
+**Команда:**
+
+```sh
+tg messages list "Book club" --limit 5 --json
+```
+
+**Пример ответа агента:**
+
+> **Решили:** следующая встреча в четверг в 18:00.
+>
+> **Открыто:** где встречаться.
+>
+> Могу показать сообщения, на которых основан итог. Ничего не отправлено.
+
+Итог ниже вымышлен. Попросите открыть исходные сообщения, прежде чем полагаться на интерпретацию агента. Настройка, действия с сообщениями и разрешения объясняются в разделах ниже.
+
 ## Начало работы
 
 ```sh
 npm install -g @leemour/tg-cli
+```
+
+```sh
 tg setup                  # guided app registration, login and agent skill
+```
+
+```sh
 tg chats list --limit 5   # your newest chats
+```
+
+```sh
 tg messages list me       # Saved Messages, the latest 20
 ```
 
 На настройку отведите около пяти минут. История загружается отдельно: выберите чат и объём перед `tg store fetch <chat> --last 100`. Агент может прочитать `tg skill show` без входа; `tg setup --agent codex` явно выбирает его skill. Параметры объяснены в `tg setup --help`. Для чтения больше ничего не нужно.
 
-Чтобы узнать параметры для задачи, выполните `tg commands messages search --json` для одной
+Чтобы узнать параметры для задачи, выполните `tg commands search messages --json` для одной
 команды или `tg commands messages --json` для группы. Оба ответа содержат глобальные параметры
 и коды завершения. Каждый путь команды проверяйте отдельным вызовом;
 `tg commands --json` возвращает всё дерево.
@@ -32,8 +65,17 @@ tg messages list me       # Saved Messages, the latest 20
 
 ```sh
 tg session start                        # QR code: Settings → Devices → Link Desktop Device
+```
+
+```sh
 tg session start phone                  # phone number, the code Telegram sends, your 2FA password
+```
+
+```sh
 tg session start phone --sms            # the same, asking for the code by SMS instead of in the app
+```
+
+```sh
 tg session start --qr-file login.png    # the QR code as a picture, for an agent to show you
 ```
 
@@ -45,9 +87,21 @@ tg session start --qr-file login.png    # the QR code as a picture, for an agent
 
 ```sh
 tg account show                # who this profile is logged in as; the phone as its last four digits
+```
+
+```sh
 tg account show --show-phone   # the whole phone number
+```
+
+```sh
 tg account list                # every profile on this computer and the account each is logged in as
+```
+
+```sh
 tg account sessions list       # every device and app logged in to the account; ends nothing
+```
+
+```sh
 tg session end                 # log out on Telegram's side, and delete the session here
 ```
 
@@ -59,6 +113,9 @@ tg session end                 # log out on Telegram's side, and delete the sess
 
 ```sh
 tg chats list             # profile "default"
+```
+
+```sh
 tg work chats list        # profile "work"
 export TG_PROFILE=work    # or for a whole shell session
 ```
@@ -78,7 +135,7 @@ export TG_PROFILE=work    # or for a whole shell session
 
 Если название подходит нескольким чатам, ошибка перечисляет их с идентификаторами. `tg` не угадывает: отправку в неверный чат нельзя отменить. Повторите с идентификатором. Он не меняется, поэтому используйте его дальше.
 
-`messages show` и `messages context` также принимают указатель `msg:` вместо чата и идентификатора сообщения. Его возвращает `messages search --json` для каждого результата.
+`messages show` и `messages context` также принимают указатель `msg:` вместо чата и идентификатора сообщения. Его возвращает `search messages --json` для каждого результата.
 
 Для человека (`<person>` в `contacts show`) можно указать идентификатор, `@username` или часть имени.
 
@@ -90,8 +147,17 @@ export TG_PROFILE=work    # or for a whole shell session
 
 ```sh
 tg chats list                              # newest first, archived chats included
+```
+
+```sh
 tg chats list --unread --kind group        # only groups with unread messages
+```
+
+```sh
 tg chats list --search book                # titles containing "book"; at least 3 characters
+```
+
+```sh
 tg chats show "Book club"                  # kind, unread count, last message, who is in it
 ```
 
@@ -110,10 +176,25 @@ tg chats show "Book club"                  # kind, unread count, last message, w
 
 ```sh
 tg messages list "Book club"                    # the latest 20, oldest first
+```
+
+```sh
 tg messages list "Book club" --limit 50
+```
+
+```sh
 tg messages list "Hiking" --topic 12            # one forum topic; topics list shows the ids
+```
+
+```sh
 tg messages show "Book club" 4242               # one message
+```
+
+```sh
 tg messages context "Book club" 4242            # it, and 5 messages either side
+```
+
+```sh
 tg messages context "Book club" 4242 --before-n 2 --after-n 10
 ```
 
@@ -125,8 +206,17 @@ tg messages context "Book club" 4242 --before-n 2 --after-n 10
 
 ```sh
 tg inbox                     # other people's unread messages, in every chat
+```
+
+```sh
 tg inbox --since-time 2h     # everything that came in during the last two hours
+```
+
+```sh
 tg inbox --new               # what arrived since the last --new — for scheduled runs
+```
+
+```sh
 tg inbox --new --jsonl       # the same for a script: one message per line
 ```
 
@@ -140,7 +230,13 @@ tg inbox --new --jsonl       # the same for a script: one message per line
 
 ```sh
 tg review                                  # the last 3 days
+```
+
+```sh
 tg review --since-time 2026-09-23T09:00    # from where the last review ended
+```
+
+```sh
 tg review --chat "Book club" --json
 ```
 
@@ -152,6 +248,9 @@ tg review --chat "Book club" --json
 
 ```sh
 tg review --unanswered                     # questions nobody answered in 24 hours
+```
+
+```sh
 tg review --chat "Neighbours" --unanswered 4h
 ```
 
@@ -166,10 +265,25 @@ tg review --chat "Neighbours" --unanswered 4h
 
 ```sh
 tg messages transcribe "Book club" 4242          # by Telegram where it can, else a model here
+```
+
+```sh
 tg messages transcribe "Book club" 4242 --local  # only the model on this machine
+```
+
+```sh
 tg messages list "Book club" --transcribe        # every voice message shown that has no text yet
+```
+
+```sh
 tg inbox --transcribe
+```
+
+```sh
 tg review --transcribe
+```
+
+```sh
 tg messages list "Book club" --transcribe --model gigaam-v3
 ```
 
@@ -177,6 +291,9 @@ Telegram распознаёт речь для Premium и несколько со
 
 ```sh
 tg models audio list                   # the models, which is downloaded, which is the default
+```
+
+```sh
 tg models audio download parakeet-v3   # once, checked against the sha256 this version expects
 ```
 
@@ -196,6 +313,9 @@ tg models audio download parakeet-v3   # once, checked against the sha256 this v
 
 ```sh
 tg messages download "Book club" 4242 --output-dir ~/Downloads   # one message's files
+```
+
+```sh
 tg messages download "Book club" --all --output-dir ~/tg-files   # every file of the chat, newest first
 ```
 
@@ -205,12 +325,33 @@ tg messages download "Book club" --all --output-dir ~/tg-files   # every file of
 
 ```sh
 tg contacts list                       # people you have a one-to-one chat with, newest first
+```
+
+```sh
 tg contacts list --order name --search ann
+```
+
+```sh
 tg contacts show @example_user         # their bio and the chats you share
+```
+
+```sh
 tg contacts lookup                     # who has a phone number — asks for it, or reads it from stdin
+```
+
+```sh
 tg contacts sync                       # your whole Telegram contact list into the local store
+```
+
+```sh
 tg contacts profile @example_user      # flags, last seen, registered, messages per shared chat
+```
+
+```sh
 tg contacts context @example_user --chat "Book club"   # their latest messages there
+```
+
+```sh
 tg contacts check @example_user        # does the account look like a bot or a spammer
 ```
 
@@ -222,12 +363,33 @@ tg contacts check @example_user        # does the account look like a bot or a s
 
 ```sh
 tg contacts add @example_user          # under the name they show
+```
+
+```sh
 tg contacts rename @example_user Ann "from work"   # a name only you see
+```
+
+```sh
 tg contacts remove @example_user       # the chat stays
+```
+
+```sh
 tg contacts block @example_user        # they need not be a contact
+```
+
+```sh
 tg contacts unblock @example_user
+```
+
+```sh
 tg contacts import people.txt          # one "number, name" per line; never numbers as arguments
+```
+
+```sh
 tg account update --first-name Ann --description "about me" --photo me.jpg
+```
+
+```sh
 tg account sessions end --others       # logs out every other device, your phone too; asks first
 ```
 
@@ -240,7 +402,13 @@ end` спрашивает подтверждение; `--yes` подтвержд
 
 ```sh
 tg contacts list --limit 5             # five a page
+```
+
+```sh
 tg contacts list --limit 5 --page 2    # the sixth to the tenth
+```
+
+```sh
 tg contacts list --all                 # every row, no paging
 ```
 
@@ -250,9 +418,21 @@ tg contacts list --all                 # every row, no paging
 
 ```sh
 tg messages list "Book club" --before-id 4242   # older than message 4242
+```
+
+```sh
 tg messages list "Book club" --after-id 4242    # newer than 4242, oldest first
+```
+
+```sh
 tg messages list "Book club" --after-time 2h    # what came in during the last two hours
+```
+
+```sh
 tg messages list "Book club" --after-time 2026-09-20T09:00
+```
+
+```sh
 tg messages list "Book club" --before-time 1d   # what came before this time yesterday
 ```
 
@@ -262,13 +442,29 @@ tg messages list "Book club" --before-time 1d   # what came before this time yes
 
 ```sh
 tg chats list --search book --kind group     # groups with "book" in the title
-tg contacts list --search ann                # people by name or @username
-tg messages search "contract"                # the text of every message this machine has kept
-tg messages search "contract" --chat "Book club"
-tg messages search "invoice.*(march|april)" --regex
 ```
 
-Для поиска чатов и контактов нужно **не менее трёх символов**. `messages search` использует [строгий профиль Lucene](./search.md): `invoice` находит и другие формы слова, `invoic*` — совпадения по началу, а `exact:invoice` — только эту форму. Поиск читает сообщения, загруженные или сохранённые `serve`, и также обращается к поиску Telegram (`--backend archive` — только архив). Для прежнего поведения поиска используйте `--language legacy`. Найдя чат, используйте его ID.
+```sh
+tg contacts list --search ann                # people by name or @username
+```
+
+```sh
+tg search all "contract"                     # messages, mail and notes this machine has kept
+```
+
+```sh
+tg search messages "contract"                # the text of every message this machine has kept
+```
+
+```sh
+tg search messages "contract" --chat "Book club"
+```
+
+```sh
+tg search messages "invoice.*(march|april)" --regex
+```
+
+Для поиска чатов и контактов нужно **не менее трёх символов**. `search messages` использует [строгий профиль Lucene](./search.md): `invoice` находит и другие формы слова, `invoic*` — совпадения по началу, а `exact:invoice` — только эту форму. Поиск читает сообщения, загруженные или сохранённые `serve`, и также обращается к поиску Telegram (`--backend archive` — только архив). Для прежнего поведения поиска используйте `--language legacy`. Найдя чат, используйте его ID.
 
 ## Отправка
 
@@ -276,9 +472,21 @@ tg messages search "invoice.*(march|april)" --regex
 
 ```sh
 tg messages send me "a note to myself"
+```
+
+```sh
 tg messages send "Book club" "See you at 7" --silent       # no notification
+```
+
+```sh
 tg messages send "Book club" "a link, no card" --no-preview
+```
+
+```sh
 tg messages send "Book club" "**Bold** and _italic_" --md  # Telegram Markdown
+```
+
+```sh
 tg messages send "Book club" "<b>Bold</b> and <i>italic</i>" --html
 ```
 
@@ -299,7 +507,13 @@ tg messages send "Book club" < note.txt
 
 ```sh
 tg messages send "Book club" "Tomorrow" --at-time 2026-10-01T09:00   # local time
+```
+
+```sh
 tg messages send "Book club" "In two hours" --at-time 2h        # or 30m, 1d from now
+```
+
+```sh
 tg messages scheduled "Book club"                               # what waits to be sent there
 ```
 
@@ -311,10 +525,25 @@ tg messages scheduled "Book club"                               # what waits to 
 
 ```sh
 tg messages send "Book club" "The agenda" --file agenda.pdf   # byte for byte; the text is the caption
+```
+
+```sh
 tg messages send "Book club" --photo picture.jpg              # recompressed by Telegram
+```
+
+```sh
 tg messages send "Book club" --file trip.mp4                  # a video plays in the chat
+```
+
+```sh
 tg messages send "Book club" --file trip.mp4 --as-file        # the same video as a file to download
+```
+
+```sh
 tg messages send "Book club" --voice note.ogg                 # a voice message, alone, with no text
+```
+
+```sh
 tg messages send "Book club" --file 3f9a.pdf --filename "Report Q3.pdf"   # the name others see
 ```
 
@@ -334,7 +563,13 @@ tg messages send "Book club" "Agreed" --reply-to 4242
 
 ```sh
 tg messages comments "Rozetked" 27644              # the comments under post 27644, oldest first
+```
+
+```sh
 tg messages comments "Rozetked" 27644 --before-id 3732413
+```
+
+```sh
 tg messages send "My channel" "Thanks!" --comment-to 120
 ```
 
@@ -346,6 +581,9 @@ tg messages send "My channel" "Thanks!" --comment-to 120
 
 ```sh
 tg chats send-as "Book club"
+```
+
+```sh
 tg messages send "Book club" "Meeting moved to 8" --send-as <id from the list>
 ```
 
@@ -359,6 +597,9 @@ tg messages send "Book club" "Meeting moved to 8" --send-as <id from the list>
 
 ```sh
 tg messages send "Book club" "See you at 7" --send-id <id from the error>
+```
+
+```sh
 tg messages forward "Book club" 4242 --to me --send-id <id from the error>
 ```
 
@@ -368,10 +609,29 @@ tg messages forward "Book club" 4242 --to me --send-id <id from the error>
 
 ```sh
 tg messages edit "Book club" 4242 "the corrected text"      # your own message; --md or --html as in a send
+```
+
+```sh
 tg messages forward "Book club" 4242 --to me                # checked against the chat it goes to
+```
+
+```sh
+tg messages forward "Book club" 4242 --to "Hiking" --topic 12   # into one topic of a forum
+```
+
+```sh
 tg messages pin "Book club" 4242                            # quiet unless --notify
+```
+
+```sh
 tg messages unpin "Book club" 4242
+```
+
+```sh
 tg messages delete me 4242 4243 --allow-dangerous           # at most 10, for you only
+```
+
+```sh
 tg messages delete me 4242 --allow-dangerous --for-everyone
 ```
 
@@ -383,12 +643,41 @@ tg messages delete me 4242 --allow-dangerous --for-everyone
 
 ```sh
 tg reactions add "Book club" 4242 👍       # replaces the reaction you had
+```
+
+```sh
 tg reactions remove "Book club" 4242
+```
+
+```sh
 tg polls show "Book club" 4250             # the poll and its answer ids
+```
+
+```sh
+tg polls voters "Book club" 4250 --answer <answer id>   # who chose it; not in an anonymous poll
+```
+
+```sh
 tg polls vote "Book club" 4250 <answer id>
+```
+
+```sh
 tg polls vote "Book club" 4250 --retract
+```
+
+```sh
 tg polls create "Book club" "Which day?" Monday Tuesday --anonymous
+```
+
+```sh
+tg polls create "Book club" "Pizza now?" yes no --close-time 5m   # closes by itself; 5s to 10m
+```
+
+```sh
 tg polls close "Book club" 4250            # your own poll; it cannot be reopened
+```
+
+```sh
 tg polls create "Book club" "2+2?" 3 4 5 --quiz --correct 2 --solution "Four."   # a quiz; a vote is final
 ```
 
@@ -398,8 +687,17 @@ tg polls create "Book club" "2+2?" 3 4 5 --quiz --correct 2 --solution "Four."  
 
 ```sh
 tg chats mark-read "Book club"               # up to the newest message
+```
+
+```sh
 tg chats mark-read "Book club" --until 4242  # only up to this one
+```
+
+```sh
 tg chats mark-read "Hiking" --topic 12       # only this forum topic
+```
+
+```sh
 tg messages list "Book club" --mark-read     # read it, and mark it read up to the newest shown
 ```
 
@@ -409,14 +707,41 @@ tg messages list "Book club" --mark-read     # read it, and mark it read up to t
 
 ```sh
 tg chats folders list                              # your folders, in the order the app shows them
+```
+
+```sh
 tg chats folders show "Trips"                      # one folder, with the names of its chats
+```
+
+```sh
 tg chats folders create "Trips" --chat "Hiking" --chat @kate
+```
+
+```sh
 tg chats folders update "Trips" --title "Travel" --add "Climbing" --remove @kate
+```
+
+```sh
 tg chats folders delete "Travel"                   # the chats stay
+```
+
+```sh
 tg chats folders order "Travel" "Work"             # these first; the rest keep their order after them
+```
+
+```sh
 tg chats folders join https://t.me/addlist/AbCdEf  # a folder someone shared: joins every chat in it
+```
+
+```sh
 tg chats folders create "Inbox" --include contacts,groups --skip muted,archived --emoji 📥
+```
+
+```sh
 tg chats folders update "Inbox" --exclude-chat "Noisy group" --pin @kate
+```
+
+```sh
 tg chats folders update "Inbox" --include none     # no kinds any more; only the chats named in it
 ```
 
@@ -432,11 +757,33 @@ tg chats folders update "Inbox" --include none     # no kinds any more; only the
 
 ```sh
 tg chats inspect https://t.me/+AbCdEf              # where an invite or public link leads; does not join
+```
+
+```sh
 tg chats members list "Hiking" --all               # everyone, with their role and when last seen
+```
+
+```sh
 tg chats events "Hiking"                           # who joined, left, was added or removed — 7 days
+```
+
+```sh
 tg chats events "Hiking" --type join,leave --since-time 2026-09-01T00:00
+```
+
+```sh
 tg topics list "Hiking"                            # a forum group's topics, newest activity first
-tg topics search "Hiking" "gear"
+```
+
+```sh
+tg search topics "Hiking" "gear"
+```
+
+```sh
+tg topics show "Hiking" 12                         # one topic: title, closed or pinned, last activity
+```
+
+```sh
 tg review --chat "Hiking" --unanswered             # questions nobody answered
 ```
 
@@ -448,31 +795,95 @@ tg review --chat "Hiking" --unanswered             # questions nobody answered
 
 ```sh
 tg chats create "Hiking 2027" @olga 12345          # a supergroup; the people added are told
+```
+
+```sh
 tg chats create "Trail news" --channel             # a channel; people join it by its link
+```
+
+```sh
 tg chats join https://t.me/+AbCdEf                 # by an invite link, or a public one
+```
+
+```sh
 tg chats leave "Hiking 2027"
+```
+
+```sh
 tg chats update "Hiking 2027" --title "Hiking 2028" --description "routes and dates"
+```
+
+```sh
 tg chats update "Hiking 2027" --all-can-pin off --only-admins-add on
+```
+
+```sh
 tg chats link show "Hiking 2027"                   # the invite link, if you may see it
+```
+
+```sh
 tg chats link reset "Hiking 2027"                  # a new one; the old one stops working
-tg chats link create "Hiking 2027" --approval --expire-time 7d --max-uses 20   # another link; who joins asks first
+```
+
+```sh
+tg chats link create "Hiking 2027" --approval --expire-time 7d   # another link; who joins asks first
+```
+
+```sh
+tg chats link create "Hiking 2027" --max-uses 20   # at most 20 people join by it
+```
+
+```sh
 tg chats update "Hiking 2027" --join-approval on   # everyone asks first, by any link
+```
+
+```sh
 tg chats requests list "Hiking 2027"               # who asked to join, newest first
+```
+
+```sh
 tg chats requests list "Hiking 2027" --search Ana  # by name; or --link <link>, never both
+```
+
+```sh
 tg chats requests accept "Hiking 2027" 67890       # let them in; decline turns them away
+```
+
+```sh
 tg chats requests decline "Hiking 2027" --all      # every pending request at once; --link narrows it
+```
+
+```sh
 tg chats link list "Hiking 2027"                   # your links, with how many joined and how many wait
+```
+
+```sh
 tg chats link revoke "Hiking 2027" https://t.me/+AbCd   # stop one link
+```
+
+```sh
 tg chats link update "Hiking 2027" https://t.me/+AbCd --no-approval --max-uses 50   # change only these
+```
+
+```sh
 tg chats members add "Hiking 2027" @kate 67890     # they are told
+```
+
+```sh
 tg chats members remove "Hiking 2027" @kate        # their messages stay
+```
+
+```sh
 tg chats admins add "Hiking 2027" @kate --can pin,delete
+```
+
+```sh
 tg chats admins remove "Hiking 2027" @kate
 ```
 
 Новая группа всегда создаётся как супергруппа. Если настройки приватности человека не позволяют добавить его, ответ указывает его в `providerMetadata.notAdded`; сама группа всё равно создаётся. `chats join` для группы с одобрением вступления администраторами возвращает `requested: true` и код `0`: заявка отправлена, и вы вступите после одобрения. Каждое действие проходит проверки как изменение `chat`, а каждый добавленный человек учитывается в почасовом лимите.
 
-`chats link create` создаёт дополнительную пригласительную ссылку, никого не уведомляя: `--approval` требует одобрения для вступления по ней, `--expire-time` задаёт срок действия (`2026-12-01T09:00` или через `30m`, `2h`, `7d`), а `--max-uses` допускает не более указанного числа людей. `chats link update` меняет те же три параметра одной своей дополнительной ссылки (`--no-approval` выключает одобрение); пропущенные параметры сохраняются, а основную ссылку группы менять нельзя. `chats update --join-approval on` требует одобрения для всех, независимо от использованной ссылки.
+`chats link create` создаёт дополнительную ссылку без уведомлений. `--approval` требует одобрения; `--expire-time` задаёт срок (`2026-12-01T09:00` или через `30m`, `2h`, `7d`); `--max-uses` ограничивает число вступлений. `chats link update` меняет те же параметры вашей ссылки, включая основную ссылку группы; `--no-approval` отключает одобрение, `--expire-time never` убирает срок. Пропущенные параметры сохраняются. Ссылка с одобрением не допускает ограничения числа вступлений: сочетание `--approval` и `--max-uses` отклоняется. `chats update --join-approval on` требует одобрения независимо от ссылки.
 
 В группе с одобрением вступления `chats requests list` показывает ожидающие заявки вместе с заметкой человека; их видят только администраторы, и чтение никого не уведомляет. `accept` и `decline` обрабатывают одну заявку по ID из списка. Одобренная заявка учитывается в почасовом лимите, отклонённая — нет; список получателей проверяет только группу. Для уже вступившего человека возвращается `already: true`, а исчезнувшая заявка приводит к коду `6`. `--all` обрабатывает все ожидающие заявки, а с `--link` — только пришедшие по одной ссылке; сначала подсчитывается их число, и одобрение сверх почасового лимита отклоняется до вступления кого-либо. `chats link list` показывает только ваши ссылки; отзыв основной ссылки группы заставляет Telegram создать новую, которую показывает ответ.
 
@@ -488,6 +899,9 @@ tg chats admins remove "Hiking 2027" @kate
 
 ```sh
 tg chats list --json | jq -r '.items[].id'
+```
+
+```sh
 tg messages list me --jsonl | jq -r .text     # one message per line
 ```
 
@@ -521,7 +935,7 @@ mkdir -p ~/.agents/skills/tg-cli && tg skill show > ~/.agents/skills/tg-cli/SKIL
 
 ## Отображение переписки
 
-`tg messages list` и `tg messages search` в терминале выводят переписку, а не таблицу:
+`tg messages list` и `tg search messages` в терминале выводят переписку, а не таблицу:
 
 ```text
 10:05:12  Anna
@@ -540,9 +954,21 @@ mkdir -p ~/.agents/skills/tg-cli && tg skill show > ~/.agents/skills/tg-cli/SKIL
 
 ```sh
 tg watch                           # new messages, until Ctrl-C or --timeout
+```
+
+```sh
 tg watch --jsonl                   # one message per line, as messages list --jsonl
+```
+
+```sh
 tg watch --jsonl | ./on-message.sh
+```
+
+```sh
 tg watch --events --jsonl          # edits, deletions and reactions too
+```
+
+```sh
 tg watch --jsonl --timeout 2m      # a timeout ends it normally, with exit code 0
 ```
 
@@ -552,7 +978,13 @@ tg watch --jsonl --timeout 2m      # a timeout ends it normally, with exit code 
 
 ```sh
 tg server start           # serve in the background; answers once it is connected
+```
+
+```sh
 tg server status
+```
+
+```sh
 tg server install         # a systemd user unit or a launchd agent; starts nothing
 ```
 
@@ -560,7 +992,13 @@ tg server install         # a systemd user unit or a launchd agent; starts nothi
 
 ```sh
 tg --trace chats list          # show each request on stderr, keep nothing
+```
+
+```sh
 tg --record chats list         # keep it, show nothing
+```
+
+```sh
 tg runs list                   # what was kept, newest first
 ```
 
@@ -572,9 +1010,21 @@ tg runs list                   # what was kept, newest first
 
 ```sh
 tg chats list --offline                           # only from the store, never connect
+```
+
+```sh
 tg store fetch "Project Alpha" --estimate      # how much a fetch would take
+```
+
+```sh
 tg store fetch "Project Alpha" --background       # a chat's history, as a job
+```
+
+```sh
 tg store export "Project Alpha" --format markdown --output alpha.md
+```
+
+```sh
 tg store backup ~/tg-store.db                     # a copy of the store, while it is in use
 ```
 
@@ -586,9 +1036,21 @@ tg store backup ~/tg-store.db                     # a copy of the store, while i
 
 ```sh
 tg config show                                 # every setting, and where it came from
+```
+
+```sh
 tg config set limit 50
+```
+
+```sh
 tg work config set permissions.messages readonly   # profile "work" changes no messages
+```
+
+```sh
 tg config set permissions.messages.send ask        # a yes or no before each send
+```
+
+```sh
 tg config set sendsPerHour 10
 ```
 

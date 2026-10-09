@@ -187,7 +187,7 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
         ru: "**Предпросмотр релизного черновика.** Изменения этих руководств готовятся к следующему релизу CLI.",
         es: "**Vista previa del borrador.** Estos cambios se preparan para la próxima versión del CLI.",
       }
-      for (const slug of ["groups", "rankings"])
+      for (const slug of ["groups", "rankings", "search", "archive", "usage"])
         if (guides.has(`${slug}.md`))
           for (const [lang, label] of Object.entries(labels)) {
             const path = join(destination, `${slug}${lang === "en" ? "" : `.${lang}`}.md`)

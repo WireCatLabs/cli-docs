@@ -12,7 +12,10 @@
     "docsRef": "v0.37.0",
     "guideRefs": {
       "groups": "f7acc0c66d2389c94e9e46af24c469298b2b3ee6",
-      "rankings": "f7acc0c66d2389c94e9e46af24c469298b2b3ee6"
+      "rankings": "f7acc0c66d2389c94e9e46af24c469298b2b3ee6",
+      "search": "0ea6d48eb20b72bda128e37f931ecd4de3de10f0",
+      "archive": "0ea6d48eb20b72bda128e37f931ecd4de3de10f0",
+      "usage": "0ea6d48eb20b72bda128e37f931ecd4de3de10f0"
     }
   },
   {
@@ -28,7 +31,10 @@
     "docsRef": "v0.38.0",
     "guideRefs": {
       "groups": "676a30a94acbd4b48446410776911dfdfffa84e6",
-      "rankings": "676a30a94acbd4b48446410776911dfdfffa84e6"
+      "rankings": "676a30a94acbd4b48446410776911dfdfffa84e6",
+      "search": "2b78fd8b6998c63b45ef79ec82a1e2698ae3931a",
+      "archive": "2b78fd8b6998c63b45ef79ec82a1e2698ae3931a",
+      "usage": "2b78fd8b6998c63b45ef79ec82a1e2698ae3931a"
     }
   }
 ]
