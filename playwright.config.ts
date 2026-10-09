@@ -3,7 +3,8 @@ export default defineConfig({
   testDir: "./tests",
   // Parallelize individual tests so the large audit file does not monopolize one worker.
   fullyParallel: true,
-  workers: process.env.CI ? 8 : 2,
+  // GitHub runners for public repos have 4 vCPUs; 8 workers starved the axe scans into timeouts.
+  workers: process.env.CI ? 4 : 2,
   use: { baseURL: "http://localhost:4319", trace: "retain-on-failure" },
   webServer: {
     command: process.env.PLAYWRIGHT_EXPORT === "1" ? "node scripts/serve-export.mjs out 4319" : "pnpm dev --port 4319",
