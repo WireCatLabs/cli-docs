@@ -31,7 +31,7 @@ Explain available prerequisites and quality limits where readers need them. For 
 
 ## Check the result
 
-Run the affected tool's documentation checks and the portal's lint, type checks, tests, localization, build and link checks. Verify the rendered sidebar on desktop and mobile and review the opening paragraph in each affected language. Tests should protect a real reader outcome or contract, not merely repeat implementation details. Keep unrelated checkout changes intact.
+Run checks appropriate to the change locally, including the affected tool's documentation checks and the portal's localization checks when changing imported guides. Use the local browser smoke suite and targeted tests for changed behavior; see [local documentation checks](DEVELOPMENT.md). CI owns the complete build, link, SEO and browser suites. Verify the rendered sidebar on desktop and mobile and review the opening paragraph in each affected language. Tests should protect a real reader outcome or contract, not merely repeat implementation details. Keep unrelated checkout changes intact.
 
 ## Review reader progress before publishing
 
