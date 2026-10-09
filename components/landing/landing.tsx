@@ -661,7 +661,7 @@ export function Landing({ lang }: { lang: string }) {
               </span>
               <div className="tool-links">
                 <a href={`/${lang}/docs/tg`}>{t("Docs")}</a>
-                <a href="https://github.com/leemour/tg-cli">GitHub</a>
+                <a href="https://github.com/WireCatLabs/tg-cli">GitHub</a>
                 <a href="https://www.npmjs.com/package/@leemour/tg-cli">npm</a>
               </div>
             </article>
@@ -689,7 +689,7 @@ export function Landing({ lang }: { lang: string }) {
               </span>
               <div className="tool-links">
                 <a href={`/${lang}/docs/max`}>{t("Docs")}</a>
-                <a href="https://github.com/leemour/max-cli">GitHub</a>
+                <a href="https://github.com/WireCatLabs/max-cli">GitHub</a>
                 <a href="https://www.npmjs.com/package/@leemour/max-cli">npm</a>
               </div>
             </article>
@@ -872,13 +872,13 @@ export function Landing({ lang }: { lang: string }) {
               <h4>{t("Project")}</h4>
               <ul>
                 <li>
-                  <a href="https://github.com/leemour/tg-cli">{t("tg on GitHub")}</a>
+                  <a href="https://github.com/WireCatLabs/tg-cli">{t("tg on GitHub")}</a>
                 </li>
                 <li>
-                  <a href="https://github.com/leemour/max-cli">{t("max on GitHub")}</a>
+                  <a href="https://github.com/WireCatLabs/max-cli">{t("max on GitHub")}</a>
                 </li>
                 <li>
-                  <a href="https://github.com/leemour/tg-cli/issues">{t("Report a problem")}</a>
+                  <a href="https://github.com/WireCatLabs/tg-cli/issues">{t("Report a problem")}</a>
                 </li>
                 <li>
                   <a href={`/${lang}/docs/tg/security`}>{t("Security")}</a>

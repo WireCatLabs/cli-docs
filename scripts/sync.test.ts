@@ -16,7 +16,12 @@ describe("latestTag", () => {
 })
 
 describe("toPage", () => {
-  const context = { repo: "leemour/tg-cli", tag: "v1.2.3", pages: new Set(["usage", "archive"]), from: "docs/usage.md" }
+  const context = {
+    repo: "WireCatLabs/tg-cli",
+    tag: "v1.2.3",
+    pages: new Set(["usage", "archive"]),
+    from: "docs/usage.md",
+  }
 
   it("moves the title into the frontmatter and points links at pages, the changelog or GitHub", () => {
     const page = toPage(
@@ -34,8 +39,8 @@ describe("toPage", () => {
         'title: "How to use it"',
         "---",
         "",
-        "See [archive](./archive.md#search), [what changed](./changelog.md), [the code](https://github.com/leemour/tg-cli/blob/v1.2.3/src/app.ts),",
-        "[the plan](https://github.com/leemour/tg-cli/blob/v1.2.3/docs/dev/plan.md#a) and ![logo](https://raw.githubusercontent.com/leemour/tg-cli/v1.2.3/docs/design/logo.png) or [npm](https://npmjs.com).",
+        "See [archive](./archive.md#search), [what changed](./changelog.md), [the code](https://github.com/WireCatLabs/tg-cli/blob/v1.2.3/src/app.ts),",
+        "[the plan](https://github.com/WireCatLabs/tg-cli/blob/v1.2.3/docs/dev/plan.md#a) and ![logo](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v1.2.3/docs/design/logo.png) or [npm](https://npmjs.com).",
       ].join("\n"),
     )
   })
@@ -49,7 +54,7 @@ describe("toPage", () => {
 describe("reviewed prose source", () => {
   const tool = {
     name: "tg",
-    repo: "leemour/tg-cli",
+    repo: "WireCatLabs/tg-cli",
     package: "@leemour/tg-cli",
     lang: "en",
     summary: {},

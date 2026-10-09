@@ -24,18 +24,21 @@ for (const lang of ["en", "ru", "es"]) {
         await expect(page.locator(".about-contents, .about-mobile-contents, .about-open")).toHaveCount(0)
         const telegram = page
           .locator(".about-tool-row")
-          .filter({ has: page.locator('a[href="https://github.com/leemour/tg-cli"]') })
+          .filter({ has: page.locator('a[href="https://github.com/WireCatLabs/tg-cli"]') })
         await expect(telegram.locator(".about-tool-docs")).toHaveAttribute("href", `/${lang}/docs/tg`)
         await expect(telegram.locator(".about-tool-source")).toHaveAttribute(
           "href",
-          "https://github.com/leemour/tg-cli",
+          "https://github.com/WireCatLabs/tg-cli",
         )
         const max = page
           .locator(".about-tool-row")
-          .filter({ has: page.locator('a[href="https://github.com/leemour/max-cli"]') })
+          .filter({ has: page.locator('a[href="https://github.com/WireCatLabs/max-cli"]') })
         await expect(max.locator(".about-tool-docs")).toHaveAttribute("href", `/${lang}/docs/max`)
-        await expect(max.locator(".about-tool-source")).toHaveAttribute("href", "https://github.com/leemour/max-cli")
-        await expect(page.locator('.about-tool-source[href="https://github.com/leemour/cli-memo"]')).toBeVisible()
+        await expect(max.locator(".about-tool-source")).toHaveAttribute(
+          "href",
+          "https://github.com/WireCatLabs/max-cli",
+        )
+        await expect(page.locator('.about-tool-source[href="https://github.com/WireCatLabs/cli-memo"]')).toBeVisible()
         const scan = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze()
         expect(scan.violations).toEqual([])
         await page.goto(`/${lang}/about`)

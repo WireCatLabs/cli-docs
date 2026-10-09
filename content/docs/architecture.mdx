@@ -20,12 +20,12 @@ Four packages of our own, plus two pinned builds, all published to npm under `@l
 
 | Package | What it owns |
 | --- | --- |
-| [`@leemour/cli-core`](https://github.com/leemour/cli-core/tree/8648e39) | What any command line tool needs and no messenger: output modes, the terminal renderer, the closed list of errors and their exit codes, keyring access, config files, clocks, retry, an HTTP client, a code generator for HTTP APIs, self-update. Also used by `braze-cli`, which has nothing to do with messaging. |
-| [`@leemour/cli-messaging`](https://github.com/leemour/cli-messaging/tree/c7cd479) | Everything about messaging that is not one messenger: the domain model, name resolution, the local SQLite store, the send guard, the services (use cases), the command tree, the MCP server, speech recognition, background processes. |
+| [`@leemour/cli-core`](https://github.com/WireCatLabs/cli-core/tree/8648e39) | What any command line tool needs and no messenger: output modes, the terminal renderer, the closed list of errors and their exit codes, keyring access, config files, clocks, retry, an HTTP client, a code generator for HTTP APIs, self-update. Also used by `braze-cli`, which has nothing to do with messaging. |
+| [`@leemour/cli-messaging`](https://github.com/WireCatLabs/cli-messaging/tree/c7cd479) | Everything about messaging that is not one messenger: the domain model, name resolution, the local SQLite store, the send guard, the services (use cases), the command tree, the MCP server, speech recognition, background processes. |
 | `@leemour/cli-messaging-sqlite` | SQLite 3.53 builds, loaded only where the runtime's own SQLite is too old (Bun on macOS, a Linux distribution's Node). |
 | `@leemour/cli-messaging-onnx` | ONNX Runtime as WebAssembly, for the local embedding models. Speech recognition uses `sherpa-onnx`. |
-| [`@leemour/tg-cli`](https://github.com/leemour/tg-cli/tree/4a36e85) | The Telegram adapter over [mtcute](https://github.com/mtcute/mtcute), the Telegram session, guided setup. Almost every `tg` command comes from cli-messaging. |
-| [`@leemour/max-cli`](https://github.com/leemour/max-cli/tree/fff19ff) | The MAX protocol (WebSocket, binary frames), the MAX session, the `max serve` background connection, its own MCP server over the shared services, and a separate slice for MAX's official Bot API. |
+| [`@leemour/tg-cli`](https://github.com/WireCatLabs/tg-cli/tree/4a36e85) | The Telegram adapter over [mtcute](https://github.com/mtcute/mtcute), the Telegram session, guided setup. Almost every `tg` command comes from cli-messaging. |
+| [`@leemour/max-cli`](https://github.com/WireCatLabs/max-cli/tree/fff19ff) | The MAX protocol (WebSocket, binary frames), the MAX session, the `max serve` background connection, its own MCP server over the shared services, and a separate slice for MAX's official Bot API. |
 
 Each tool pins an exact version of cli-messaging and cli-core. A change in the shared code reaches
 users through a release of the shared package and then a release of each tool; the two tools usually
@@ -33,7 +33,7 @@ ship the same day.
 
 **The one rule of the shared package: nothing in it knows a messenger.** A lint rule refuses any
 import of `@mtcute/*`, `ws` or an adapter directory under cli-messaging's `src/`
-([the lint configuration](https://github.com/leemour/cli-messaging/blob/c7cd479/biome.json)). What only one
+([the lint configuration](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/biome.json)). What only one
 messenger has travels in a `providerMetadata` field on the shared types.
 
 ## One command, start to finish
@@ -42,12 +42,12 @@ messenger has travels in a `providerMetadata` field on the shared types.
 
 Take `tg work messages send "Book club" "See you at 7"`:
 
-1. **`run()`** ([program.ts](https://github.com/leemour/cli-messaging/blob/c7cd479/src/cli/program.ts))
+1. **`run()`** ([program.ts](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/src/cli/program.ts))
    takes `work` as the profile, resolves settings in a fixed order (flag → environment → file →
    default), starts the run record and arms the `--timeout` deadline. It never throws: every outcome
    becomes an exit code.
 2. **The command** parses its own options and asks for services. It knows nothing about Telegram.
-3. **The send guard** ([guard.ts](https://github.com/leemour/cli-messaging/blob/c7cd479/src/sends/guard.ts))
+3. **The send guard** ([guard.ts](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/src/sends/guard.ts))
    checks `permissions`, the recipient list and the hourly limit, before anything connects. Reads
    skip it. Every write attempt — sent, refused, failed or unknown — goes into the send journal,
    without its text.
@@ -68,15 +68,15 @@ A one-shot command that prints its result and keeps running is treated as a defe
 
 Five layers, each calling only the ones below it:
 
-- **Domain** ([models.ts](https://github.com/leemour/cli-messaging/blob/c7cd479/src/domain/models.ts)) —
+- **Domain** ([models.ts](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/src/domain/models.ts)) —
   `Chat`, `Message`, `Person`, `Page` and the rest. Types only, no behaviour, no messenger.
 - **Adapters** — one per messenger, in its own repository:
-  [TelegramAdapter](https://github.com/leemour/tg-cli/blob/4a36e85/src/telegram/adapter.ts) in tg,
-  [maxAdapter](https://github.com/leemour/max-cli/blob/fff19ff/src/adapter/max-adapter.ts) in max.
+  [TelegramAdapter](https://github.com/WireCatLabs/tg-cli/blob/4a36e85/src/telegram/adapter.ts) in tg,
+  [maxAdapter](https://github.com/WireCatLabs/max-cli/blob/fff19ff/src/adapter/max-adapter.ts) in max.
 - **Ports** — the two interfaces the services depend on:
-  [`MessengerAdapter`](https://github.com/leemour/cli-messaging/blob/c7cd479/src/cli/messenger/port.ts)
-  and [`MessageStore`](https://github.com/leemour/cli-messaging/blob/c7cd479/src/store/store.ts).
-- **Services** ([services/](https://github.com/leemour/cli-messaging/blob/c7cd479/src/services/index.ts)) —
+  [`MessengerAdapter`](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/src/cli/messenger/port.ts)
+  and [`MessageStore`](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/src/store/store.ts).
+- **Services** ([services/](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/src/services/index.ts)) —
   messages, chats, people, inbox, archive, conversations, moderation and more, each a plain object
   made by a factory.
 - **Interface** — the CLI commands and the MCP tools.
@@ -87,7 +87,7 @@ mtcute; in max the commands may not import the protocol, the operation specs or 
 A forbidden import fails the build with a sentence saying why.
 
 **Services open what they need on first use.** A service gets its connection, store and account
-lazily ([deps.ts](https://github.com/leemour/cli-messaging/blob/c7cd479/src/services/deps.ts)), so a
+lazily ([deps.ts](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/src/services/deps.ts)), so a
 read answered from the local store never connects. A command gets services through `withServices`,
 which closes what was opened; an MCP tool builds them over its session's connection.
 
@@ -105,7 +105,7 @@ services: (base) => ({
 A messenger joins by writing two things: an **adapter**, which speaks to the messenger, and a
 **`Messenger`** description, which tells the shared commands about it — the app name, the provider
 name in the store, how to connect, how to page history. It does not edit cli-messaging. The full
-guide is the [adapter guide](https://github.com/leemour/cli-messaging/blob/c7cd479/docs/dev/ADAPTERS.md).
+guide is the [adapter guide](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/docs/dev/ADAPTERS.md).
 
 **A required core and optional groups.** `MessengerCore` — `self`, `me`, `resolve`, `chat`, `send`,
 `logout`, `close` — is required. Everything else comes in groups: `ServerReads`, `MessageEditing`,
@@ -149,10 +149,10 @@ implements `ServerReads`. A messenger that instead pushes history to the client 
 `PushedHistory.feed()` hands batches to `serve`, which saves them.
 
 **How the two tools fill the contract.** tg's adapter wraps mtcute, and one file,
-[map.ts](https://github.com/leemour/tg-cli/blob/4a36e85/src/telegram/map.ts), is the only one that
+[map.ts](https://github.com/WireCatLabs/tg-cli/blob/4a36e85/src/telegram/map.ts), is the only one that
 knows mtcute's object shapes. max's adapter sits on its own
-[`MaxClient`](https://github.com/leemour/max-cli/blob/fff19ff/src/client.ts), which owns the MAX
-protocol; [messenger.ts](https://github.com/leemour/max-cli/blob/fff19ff/src/messenger.ts) describes
+[`MaxClient`](https://github.com/WireCatLabs/max-cli/blob/fff19ff/src/client.ts), which owns the MAX
+protocol; [messenger.ts](https://github.com/WireCatLabs/max-cli/blob/fff19ff/src/messenger.ts) describes
 MAX to the shared commands, and most of max's command files are thin wrappers over the shared ones
 that add MAX's own options.
 
@@ -167,14 +167,14 @@ tg's profiles, max's account and its bots — keyed by provider and account.
   search the schema needs; the version number alone does not tell. Where it falls short, the pinned
   build takes its place: always on Bun for macOS, and on a Linux distribution's Node the command
   restarts itself with the pinned library first, before anything is read or sent
-  ([sqlite-runtime.ts](https://github.com/leemour/cli-messaging/blob/c7cd479/src/sqlite-runtime.ts)).
+  ([sqlite-runtime.ts](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/src/sqlite-runtime.ts)).
 - **One method, one transaction.** Every store method is one whole operation: one synchronous
   `BEGIN IMMEDIATE` … `COMMIT`, with no `await` in between. Two calls in the same long-running process
   cannot interleave inside a transaction. The one deliberate exception is rebuilding a chat's
   conversations, which writes a new build in short transactions and switches to it in one more, so a
   half-written build is never read.
 - **Forward-only migrations.** Numbered, additive, never edited once released
-  ([manifest.ts](https://github.com/leemour/cli-messaging/blob/c7cd479/src/store/sqlite/manifest.ts)).
+  ([manifest.ts](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/src/store/sqlite/manifest.ts)).
   A `min_compatible` version lets an older tool keep using a file a newer one migrated; raising it is
   a major version of the shared package, and both tools ship their upgrade together.
 - **Queries through Drizzle, bundled.** The query builder is bundled into the published package
@@ -205,12 +205,12 @@ The store keeps message text so it can answer without the network. It is not enc
 MAX publishes no API for personal accounts, so max carries more of its own code than tg:
 
 - **Operations declared once.** Each MAX request is declared in
-  [`src/spec/operations/`](https://github.com/leemour/max-cli/tree/fff19ff/src/spec/operations) with
+  [`src/spec/operations/`](https://github.com/WireCatLabs/max-cli/tree/fff19ff/src/spec/operations) with
   its schema and where its shape came from — measured on a live connection, captured from the web
   client, or read in someone else's reverse engineering. Wrappers in `src/generated/` are generated
   from these and never edited by hand.
 - **Binary frames, as the web client sends them.** MessagePack with LZ4 compression; the whole codec
-  is one file, [frame.ts](https://github.com/leemour/max-cli/blob/fff19ff/src/protocol/frame.ts). A
+  is one file, [frame.ts](https://github.com/WireCatLabs/max-cli/blob/fff19ff/src/protocol/frame.ts). A
   number that would lose digits comes back as a `bigint` and becomes a string above the codec.
 - **It looks like the official client.** The user agent and every field that identifies the client
   copy what web.max.ru sends; there is no custom name on the wire.
@@ -225,9 +225,9 @@ MAX publishes no API for personal accounts, so max carries more of its own code 
 ## Testing
 
 - **Tests never touch your data.** Config, state, cache and the temporary folder all live in a
-  sandbox for the run ([sandbox.ts](https://github.com/leemour/max-cli/blob/fff19ff/src/testing/sandbox.ts)).
+  sandbox for the run ([sandbox.ts](https://github.com/WireCatLabs/max-cli/blob/fff19ff/src/testing/sandbox.ts)).
 - **Contract cases for adapters.** cli-messaging ships a fixed seed, a fake adapter and contract cases
-  ([src/kit](https://github.com/leemour/cli-messaging/tree/c7cd479/src/kit)). A messenger's adapter
+  ([src/kit](https://github.com/WireCatLabs/cli-messaging/tree/c7cd479/src/kit)). A messenger's adapter
   runs the same cases over its own fake client; no case talks to a live service.
 - **Commands are tested end to end** through `run(argv, environment)`, with a scripted messenger, an
   in-memory keyring and captured streams.
@@ -254,24 +254,24 @@ MAX publishes no API for personal accounts, so max carries more of its own code 
 
 ## Contributing: where to start
 
-- A new messenger: the [adapter guide](https://github.com/leemour/cli-messaging/blob/c7cd479/docs/dev/ADAPTERS.md),
+- A new messenger: the [adapter guide](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/docs/dev/ADAPTERS.md),
   then the contract cases.
 - The shared code: the
-  [cli-messaging architecture notes](https://github.com/leemour/cli-messaging/blob/c7cd479/docs/dev/ARCHITECTURE.md).
-- Telegram: the [tg architecture notes](https://github.com/leemour/tg-cli/blob/4a36e85/docs/dev/ARCHITECTURE.md).
-- MAX: the [max architecture notes](https://github.com/leemour/max-cli/blob/fff19ff/docs/dev/ARCHITECTURE.md)
-  and the [protocol notes](https://github.com/leemour/max-cli/blob/fff19ff/docs/dev/protocol.md).
+  [cli-messaging architecture notes](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/docs/dev/ARCHITECTURE.md).
+- Telegram: the [tg architecture notes](https://github.com/WireCatLabs/tg-cli/blob/4a36e85/docs/dev/ARCHITECTURE.md).
+- MAX: the [max architecture notes](https://github.com/WireCatLabs/max-cli/blob/fff19ff/docs/dev/ARCHITECTURE.md)
+  and the [protocol notes](https://github.com/WireCatLabs/max-cli/blob/fff19ff/docs/dev/protocol.md).
 - Questions: the [support chat](https://t.me/wirecatdev).
 
 ## Agent evaluation evidence
 
-The architecture above describes the 4 October snapshot. The separately dated [8 October evaluation](https://github.com/leemour/cli-messaging/blob/main/docs/dev/evaluations/2026-10-08-independent-stats-agent-evaluation.md)
+The architecture above describes the 4 October snapshot. The separately dated [8 October evaluation](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/dev/evaluations/2026-10-08-independent-stats-agent-evaluation.md)
 records its own SDK versions, synthetic fixtures, model-context boundaries, initial failures and
 CLI/MCP observations. Its six contexts contain 38 assessed outcomes; shared tasks make those
 outcomes correlated, and they do not establish live adapter or general agent conformance.
 The original exact model identity was not captured and MCP used a shell proxy.
 
-[Reproduction tooling](https://github.com/leemour/cli-messaging/tree/main/scripts/evals) belongs to cli-messaging. Record the model ID, runner and SDK
+[Reproduction tooling](https://github.com/WireCatLabs/cli-messaging/tree/main/scripts/evals) belongs to cli-messaging. Record the model ID, runner and SDK
 versions, fixture clock/seed, prompts and first failures when comparing a new run. Deterministic
 transport/fixture tests and independent model trials are separate evidence. The [security guide](./security.mdx)
 explains what readers should check before trusting an agent's statistics answer.
