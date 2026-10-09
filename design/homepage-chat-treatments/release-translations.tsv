@@ -1,0 +1,371 @@
+Features	Возможности	Funciones
+Examples	Примеры	Ejemplos
+Docs	Документация	Documentación
+About	О проекте	Acerca del proyecto
+Email	Почта	Correo
+Connect your agent	Подключить агента	Conectar tu agente
+Copy a setup request into your AI agent.	Скопируйте запрос на настройку в своего ИИ-агента.	Copia la petición de configuración en tu agente de IA.
+Ask your agent to install and connect	Попросите агента установить и подключить	Pide a tu agente que instale y conecte
+Copy request for your agent	Скопировать запрос для агента	Copiar petición para tu agente
+Or copy the terminal command	Или скопируйте команду для терминала	O copia el comando de terminal
+Setup and sign-in guide	Установка и вход в аккаунт	Guía de instalación e inicio de sesión
+The request runs in your agent. Signing in adds a device to your account.	Запрос выполняет ваш агент. При входе в аккаунт добавляется устройство.	Tu agente ejecuta la petición. Al iniciar sesión, se añade un dispositivo a tu cuenta.
+Memory for your messages.	Память для ваших сообщений.	Memoria para tus mensajes.
+Context for your agent.	Контекст для вашего агента.	Contexto para tu agente.
+Find what was said, catch up on what matters and reply with the full context. WireCat connects the AI agent you already use to your conversations and notes.	Находите сказанное, узнавайте о важном и отвечайте с полным контекстом. WireCat подключает вашего ИИ-агента к переписке и заметкам.	Encuentra lo que se dijo, ponte al día y responde con todo el contexto. WireCat conecta el agente de IA que ya usas con tus conversaciones y notas.
+Free, open-source tools that run on your computer.	Бесплатные инструменты с открытым кодом, которые работают на вашем компьютере.	Herramientas gratuitas de código abierto que funcionan en tu ordenador.
+Try a conversation with your agent	Попробуйте диалог с агентом	Prueba una conversación con tu agente
+Your agent, in the conversation	Разговор с вашим агентом	Una conversación con tu agente
+Before a call	Перед созвоном	Antes de una llamada
+Recommendations	Рекомендации	Recomendaciones
+Draft a reply	Черновик ответа	Borrador de respuesta
+Morning briefing	Утренний обзор	Resumen de la mañana
+You	Вы	Tú
+Get me ready for tomorrow’s Atlas call. What needs deciding?	Подготовь меня к завтрашнему созвону по Atlas. Что нужно решить?	Prepárame para la llamada de Atlas de mañana. ¿Qué hay que decidir?
+Read project chats and DMs	Прочитаны чаты проекта и личные сообщения	Chats del proyecto y mensajes privados consultados
+6 more calls	Ещё 6 вызовов	6 llamadas más
+Your agent	Ваш агент	Tu agente
+We’re aiming for Friday’s launch. I’d use the call to settle	Запуск планируется на пятницу. На созвоне стоит решить	El lanzamiento está previsto para el viernes. Usaría la llamada para resolver
+ two things:	два вопроса:	dos cuestiones:
+Final copy.	Финальный текст.	Texto final.
+Anna needs it by Thursday.	Анне он нужен к четвергу.	Anna lo necesita para el jueves.
+Access for Tom.	Доступ для Тома.	Acceso para Tom.
+His payment tests work, but he still needs production access to finish the check.	Тесты оплаты работают, но для завершения проверки ему ещё нужен доступ к рабочей среде.	Sus pruebas de pago funcionan, pero aún necesita acceso a producción para terminar la comprobación.
+The design is ready, so I wouldn’t spend the call revisiting it. Agree who handles those two items and when they’ll be done.	Дизайн готов, обсуждать его заново не нужно. Определите ответственных по двум вопросам и сроки.	El diseño ya está listo. Acordad quién se ocupa de esas dos cuestiones y cuándo estarán resueltas.
+So Tom has already tested the payments?	То есть Том уже проверил оплату?	¿Entonces Tom ya ha probado los pagos?
+Checked the design group and Tom’s DMs	Проверены группа дизайна и переписка с Томом	Grupo de diseño y mensajes con Tom consultados
+3 more calls	Ещё 3 вызова	3 llamadas más
+Yes—he confirmed that in your DMs. The group message only showed the access problem.	Да, он подтвердил это в личной переписке. В группе говорилось только о проблеме с доступом.	Sí, lo confirmó en vuestros mensajes privados. En el grupo solo aparecía el problema de acceso.
+I’d ask	Я бы спросил,	Preguntaría
+who can give him production access	кто может дать ему доступ к рабочей среде	quién puede darle acceso a producción
+, rather than asking him to start testing again.	, а не просил начинать тестирование заново.	, en lugar de pedirle que vuelva a empezar las pruebas.
+Turn that into a short agenda. Don’t send anything.	Составь короткую повестку. Ничего не отправляй.	Prepara una agenda breve. No envíes nada.
+Checked the messages behind the agenda	Проверены сообщения для повестки	Mensajes de la agenda comprobados
+I’d keep the call to 20 minutes:	Я бы уложил созвон в 20 минут:	Limitaría la llamada a 20 minutos:
+7 minutes:	7 минут:	7 minutos:
+agree who grants production access and when Tom can finish the check.	решить, кто выдаст доступ и когда Том завершит проверку.	acordar quién da acceso a producción y cuándo termina Tom la comprobación.
+5 minutes:	5 минут:	5 minutos:
+agree who gets the final copy to Anna by Thursday.	решить, кто передаст Анне финальный текст к четвергу.	acordar quién entrega el texto final a Anna para el jueves.
+decide whether any remaining risk changes Friday’s launch.	решить, влияют ли оставшиеся риски на запуск в пятницу.	decidir si los riesgos pendientes afectan al lanzamiento del viernes.
+3 minutes:	3 минуты:	3 minutos:
+confirm an owner and deadline for each action.	закрепить ответственного и срок для каждого действия.	confirmar responsable y plazo de cada acción.
+This is a draft agenda. Nothing has been sent.	Это черновик повестки. Ничего не отправлено.	Es un borrador de agenda. No se ha enviado nada.
+Find the SQL courses people recommended. I want practice and feedback on mistakes.	Найди курсы SQL, которые рекомендовали в чатах. Мне нужны практика и разбор ошибок.	Busca los cursos de SQL recomendados en los chats. Quiero práctica y comentarios sobre mis errores.
+Searched Telegram and MAX recommendations	Найдены рекомендации в Telegram и MAX	Recomendaciones buscadas en Telegram y MAX
+2 more calls	Ещё 2 вызова	2 llamadas más
+I’d look at the	Я бы сначала рассмотрел	Miraría primero el
+workshop first.	практикум.	taller.
+Someone who took it confirms weekly exercises and feedback on mistakes.	Участник подтверждает еженедельные задания и разбор ошибок.	Un participante confirma que hay ejercicios semanales y comentarios sobre los errores.
+The video course sounds useful for learning at your own pace, but the reviewer says nobody checked their work. That makes it a weaker fit for what you want.	Видеокурс подходит для самостоятельного обучения, но автор отзыва пишет, что его работы никто не проверял. Он хуже соответствует вашему запросу.	El curso en vídeo parece útil para aprender a tu ritmo, pero el participante dice que nadie revisó su trabajo. Encaja menos con lo que buscas.
+Before choosing, ask the workshop organizers about the level and assignment reviews. The messages don’t confirm the current price or availability.	Перед выбором уточните уровень и проверку заданий у организаторов. Текущая цена и доступность в сообщениях не подтверждены.	Antes de elegir, pregunta por el nivel y la revisión de tareas. Los mensajes no confirman el precio ni la disponibilidad actuales.
+Do they actually review mistakes, or just give exercises?	Они действительно разбирают ошибки или только дают задания?	¿Revisan los errores o solo dan ejercicios?
+Read the discussion around both recommendations	Прочитано обсуждение обеих рекомендаций	Conversación sobre ambas recomendaciones consultada
+1 more call	Ещё 1 вызов	1 llamada más
+A follow-up message explicitly says	В следующем сообщении прямо сказано:	Un mensaje posterior confirma que
+ the workshop reviews mistakes.	на практикуме разбирают ошибки.	el taller revisa los errores.
+It also says not to expect advanced topics.	Там же предупреждают, что сложных тем ждать не стоит.	También indica que no cubre temas avanzados.
+That’s a stronger match than the video course, where the participant had to find practice elsewhere.	Это лучше подходит, чем видеокурс, участнику которого пришлось искать практику отдельно.	Encaja mejor que el curso en vídeo, donde el participante tuvo que buscar práctica por su cuenta.
+Draft a message asking whether the workshop fits what I need.	Составь сообщение, чтобы уточнить, подходит ли мне практикум.	Redacta un mensaje para preguntar si el taller encaja con lo que necesito.
+Rechecked the recommendation before drafting	Рекомендация перепроверена перед подготовкой ответа	Recomendación comprobada antes de redactar
+You could ask:	Можно спросить так:	Puedes preguntar:
+Hi! I’m looking for a course with regular exercises and feedback on mistakes. Does your workshop include individual assignment reviews? What level does it cover, and when is the next intake?	Здравствуйте! Я ищу курс с регулярными заданиями и разбором ошибок. Есть ли на вашем практикуме индивидуальная проверка работ? Какой уровень подготовки нужен и когда начинается следующий набор?	¡Hola! Busco un curso con ejercicios regulares y comentarios sobre mis errores. ¿El taller incluye revisión individual de tareas? ¿Qué nivel cubre y cuándo empieza el próximo grupo?
+That checks what matters to you without assuming the older recommendation is still current. I haven’t sent it.	Так вы уточните важное, не предполагая, что старая рекомендация всё ещё актуальна. Я ничего не отправил.	Así compruebas lo que te importa sin dar por hecho que la recomendación antigua sigue vigente. No lo he enviado.
+Who needs my reply? And check whether Tom already sent the design before I nudge him.	Кому я должен ответить? И проверь, не прислал ли Том дизайн, прежде чем напоминать ему.	¿Quién espera mi respuesta? Comprueba si Tom ya envió el diseño antes de recordárselo.
+Checked commitments and Tom’s messages	Проверены обязательства и сообщения Тома	Compromisos y mensajes de Tom comprobados
+4 more calls	Ещё 4 вызова	4 llamadas más
+Anna is waiting for the invoice, Marco needs your budget decision, and the customer needs delivery confirmation.	Анна ждёт счёт, Марко — ваше решение по бюджету, а клиент — подтверждение доставки.	Anna espera la factura, Marco necesita tu decisión sobre el presupuesto y el cliente espera confirmación de entrega.
+Tom has already sent a first draft.	Том уже прислал первый вариант.	Tom ya ha enviado un primer borrador.
+I’d follow up about the final version instead:	Я бы уточнил срок финальной версии:	Preguntaría por la versión final:
+The budget still needs your decision. I haven’t assumed it’s approved or sent any replies.	Бюджет по-прежнему требует вашего решения. Я не считал его согласованным и не отправлял ответы.	El presupuesto aún necesita tu decisión. No he dado por hecho que esté aprobado ni enviado respuestas.
+Keep the customer and Anna replies as drafts. What would you say to Tom?	Оставь ответы клиенту и Анне черновиками. Что написать Тому?	Deja las respuestas al cliente y a Anna como borradores. ¿Qué le dirías a Tom?
+Checked the first draft in Tom’s messages	Найден первый вариант в сообщениях Тома	Primer borrador comprobado en los mensajes de Tom
+I’d keep it short and acknowledge the work he sent:	Я бы написал коротко, отметив уже присланную работу:	Lo dejaría breve, reconociendo el trabajo que ya envió:
+That asks for what’s still missing without implying he hasn’t done anything.	Так вы спросите о недостающем, не создавая впечатления, что он ничего не сделал.	Así preguntas por lo que falta sin insinuar que no ha hecho nada.
+Make that a little warmer, without losing the question.	Сделай чуть теплее, сохранив вопрос.	Hazlo un poco más cercano, manteniendo la pregunta.
+Rechecked the design details before revising the draft	Перепроверены детали дизайна перед изменением черновика	Detalles del diseño comprobados antes de revisar el borrador
+Hi Tom, thanks for sending the first draft! Could you let me know when the final version with our feedback will be ready? That’ll help us plan the next step.	Привет, Том! Спасибо за первый вариант. Подскажи, когда будет готова финальная версия с нашими замечаниями? Это поможет спланировать следующий шаг.	¡Hola, Tom! Gracias por enviar el primer borrador. ¿Podrías decirme cuándo estará lista la versión final con nuestros comentarios? Así podremos planificar el siguiente paso.
+It acknowledges the work he already did and asks for the missing date. The reply is still a draft.	Ответ учитывает уже выполненную работу и уточняет недостающий срок. Это по-прежнему черновик.	Reconoce el trabajo realizado y pregunta por la fecha pendiente. La respuesta sigue siendo un borrador.
+Catch me up. Who needs my reply, and what should I handle first?	Введи меня в курс дела. Кто ждёт ответа и чем заняться сначала?	Ponme al día. ¿Quién espera mi respuesta y qué debería atender primero?
+Checked unread messages, commitments and news	Проверены непрочитанные сообщения, обязательства и новости	Mensajes sin leer, compromisos y noticias comprobados
+Marco needs your budget decision before 11:00.	Марко ждёт решения по бюджету до 11:00.	Marco necesita tu decisión sobre el presupuesto antes de las 11:00.
+I’d start there so the team can continue.	Я бы начал с этого, чтобы команда могла продолжить работу.	Empezaría por eso para que el equipo pueda avanzar.
+Anna’s meeting moved to 19:30; she’s waiting for your confirmation. Mum also sent a 42-second voice note.	Встреча с Анной перенесена на 19:30, она ждёт подтверждения. Мама прислала голосовое на 42 секунды.	La reunión de Anna pasó a las 19:30 y espera tu confirmación. Tu madre también envió una nota de voz de 42 segundos.
+The news channels have a few updates, but none needs an immediate response. I’d leave those for later.	В новостных каналах есть обновления, но срочного ответа они не требуют. Их можно оставить на потом.	Hay novedades en los canales de noticias, pero ninguna requiere respuesta inmediata. Las dejaría para después.
+What does Mum need?	Что нужно маме?	¿Qué necesita mi madre?
+Transcribed the voice note	Голосовое сообщение расшифровано	Nota de voz transcrita
+Her appointment is tomorrow, and she wants to know whether you can drive her.	Завтра у неё приём, и она хочет узнать, сможете ли вы её отвезти.	Tiene una cita mañana y quiere saber si puedes llevarla.
+I’ve transcribed the voice note. She needs an answer today; I haven’t sent a reply.	Я расшифровал голосовое. Ответ нужен сегодня; ничего не отправлено.	He transcrito la nota de voz. Necesita una respuesta hoy; no he enviado nada.
+Give me a short list of what to do first.	Дай короткий список первоочередных дел.	Dame una lista breve de lo que debo hacer primero.
+Checked the deadline behind the priority list	Проверен срок для списка приоритетов	Plazo de la lista de prioridades comprobado
+Decide on Marco’s budget	Принять решение по бюджету Марко	Decidir sobre el presupuesto de Marco
+so the team can continue.	чтобы команда могла продолжить работу.	para que el equipo pueda avanzar.
+Confirm 19:30 with Anna	Подтвердить Анне 19:30	Confirmar las 19:30 con Anna
+if the new time works for you.	если новое время вам подходит.	si te viene bien la nueva hora.
+Reply to Mum	Ответить маме	Responder a tu madre
+about driving her tomorrow.	сможете ли вы отвезти её завтра.	sobre llevarla mañana.
+The news can wait. Those are the conversations where someone needs your answer.	Новости могут подождать. В этих разговорах люди ждут вашего ответа.	Las noticias pueden esperar. Estas son las conversaciones donde alguien necesita tu respuesta.
+Try a question about your own conversations	Задайте вопрос о своей переписке	Pregunta sobre tus propias conversaciones
+More examples	Другие примеры	Más ejemplos
+Take control of your messaging.	Управляйте своей перепиской.	Toma el control de tus mensajes.
+For your own conversations, your bots and the groups you run.	Для личной переписки, ваших ботов и групп, которыми вы управляете.	Para tus conversaciones, tus bots y los grupos que administras.
+Personal account	Личный аккаунт	Cuenta personal
+Catch up, remember agreements and prepare replies in your own conversations.	Узнавайте о важном, сохраняйте договорённости и готовьте ответы в своих чатах.	Ponte al día, recuerda acuerdos y prepara respuestas en tus conversaciones.
+Unread across your chats	Непрочитанное из всех чатов	Mensajes sin leer de todos tus chats
+Bring incoming messages together without marking chats as read.	Соберите входящие сообщения, не отмечая чаты прочитанными.	Reúne los mensajes entrantes sin marcar los chats como leídos.
+Remember agreements	Помните о договорённостях	Recuerda los acuerdos
+Review what has been said since your last check, including your own messages.	Просмотрите сказанное после последней проверки, включая ваши сообщения.	Revisa lo que se dijo desde tu última consulta, incluidos tus mensajes.
+Search across chats	Поиск по чатам	Busca en todos tus chats
+Find words, people, dates and attachments in saved history.	Находите слова, людей, даты и вложения в сохранённой истории.	Busca palabras, personas, fechas y archivos en el historial guardado.
+3 more capabilities	Ещё 3 возможности	3 funciones más
+News from your channels	Новости из ваших каналов	Novedades de tus canales
+Get a digest of the topics you follow, with links to the posts.	Получите обзор интересующих тем со ссылками на публикации.	Recibe un resumen de los temas que sigues, con enlaces a las publicaciones.
+Voice notes as text	Голосовые в виде текста	Notas de voz en texto
+Read a transcript, then ask for the questions and next steps.	Прочитайте расшифровку и попросите выделить вопросы и следующие шаги.	Lee la transcripción y pide las preguntas y los próximos pasos.
+Messages at the right time	Сообщения в нужное время	Mensajes en el momento adecuado
+Schedule reminders and follow-ups that arrive even when your computer is off.	Запланируйте напоминания и сообщения, которые придут даже при выключенном компьютере.	Programa recordatorios y seguimientos que llegan incluso con el ordenador apagado.
+See it in action	Посмотреть пример	Verlo en acción
+Read the guide	Открыть руководство	Leer la guía
+Bots	Боты	Bots
+Answer customers and share updates through your bot’s own identity.	Отвечайте клиентам и отправляйте обновления от имени своего бота.	Responde a clientes y comparte novedades con la identidad de tu bot.
+Group announcements	Объявления в группах	Anuncios en grupos
+Ask your agent to send an update to the groups and channels you choose.	Попросите агента отправить обновление в выбранные группы и каналы.	Pide a tu agente que envíe una novedad a los grupos y canales que elijas.
+Personalised messages	Персональные сообщения	Mensajes personalizados
+Prepare different replies for customers using the information you provide.	Готовьте разные ответы клиентам на основе предоставленной вами информации.	Prepara respuestas distintas para cada cliente con la información que proporciones.
+Answers with context	Ответы с контекстом	Respuestas con contexto
+Use the bot’s received messages or a knowledge base before drafting a reply.	Перед подготовкой ответа используйте сообщения, полученные ботом, или базу знаний.	Consulta los mensajes recibidos por el bot o una base de conocimiento antes de redactar.
+Team notifications	Уведомления для команды	Avisos al equipo
+Share new requests, results and changes, with the files people need.	Передавайте новые запросы, результаты и изменения вместе с нужными файлами.	Comparte nuevas peticiones, resultados y cambios con los archivos necesarios.
+Buttons and clear actions	Кнопки и понятные действия	Botones y acciones claras
+Help people choose an action, open a link or answer with a tap.	Помогите людям выбрать действие, открыть ссылку или ответить одним нажатием.	Permite elegir una acción, abrir un enlace o responder con un toque.
+Control sends	Контроль отправки	Control de envíos
+Choose who the bot may contact and check which sends succeeded.	Определите, кому бот может писать, и проверяйте результат отправки.	Elige a quién puede contactar el bot y comprueba qué envíos se completaron.
+Administer groups	Управление группами	Administrar grupos
+Find unanswered questions, collect decisions and review moderation.	Находите вопросы без ответа, собирайте решения и проверяйте модерацию.	Encuentra preguntas sin respuesta, reúne decisiones y revisa la moderación.
+Unanswered questions	Вопросы без ответа	Preguntas sin respuesta
+Find questions still waiting for a useful answer.	Находите вопросы, на которые ещё нет полезного ответа.	Encuentra preguntas que aún esperan una respuesta útil.
+Membership history	История участников	Historial de miembros
+See who joined, left or was removed, and who made the change.	Узнайте, кто вступил, вышел или был удалён и кто внёс изменение.	Consulta quién entró, salió o fue eliminado y quién hizo el cambio.
+Keep discussions on track	Порядок в обсуждениях	Mantén el rumbo de las conversaciones
+Ask your agent to flag spam or conflicts so you can review them.	Попросите агента отметить спам или конфликты для вашей проверки.	Pide a tu agente que señale el spam o los conflictos para revisarlos.
+Moderation by your rules	Модерация по вашим правилам	Moderación según tus reglas
+Inspect proposed actions before applying the rules you configured.	Проверьте предложенные действия перед применением настроенных правил.	Revisa las acciones propuestas antes de aplicar las reglas configuradas.
+Discussion summaries	Итоги обсуждений	Resúmenes de conversaciones
+Collect decisions, open questions and next steps without rereading the thread.	Соберите решения, открытые вопросы и следующие шаги, не перечитывая обсуждение.	Reúne decisiones, preguntas pendientes y próximos pasos sin releer toda la conversación.
+Group management	Настройки группы	Gestión del grupo
+Handle invitations, administrator rights and invite-link updates.	Работайте с приглашениями, правами администраторов и ссылками-приглашениями.	Gestiona invitaciones, permisos de administradores y enlaces de invitación.
+What you can do	Что вы можете делать	Qué puedes hacer
+Give your agent the question. Get an answer grounded in your messages.	Задайте агенту вопрос. Получите ответ на основе вашей переписки.	Haz la pregunta a tu agente. Recibe una respuesta basada en tus mensajes.
+Find an old agreement	Найдите давнюю договорённость	Encuentra un acuerdo anterior
+“Where did we agree to meet?”	«Где мы договорились встретиться?»	«¿Dónde acordamos quedar?»
+The place and time, with the original messages and any later changes.	Место и время, исходные сообщения и последующие изменения.	El lugar y la hora, con los mensajes originales y los cambios posteriores.
+See the conversation	Посмотреть диалог	Ver la conversación
+Prepare for a conversation	Подготовьтесь к разговору	Prepárate para una conversación
+“What should I know before the call?”	«Что нужно знать перед созвоном?»	«¿Qué debo saber antes de la llamada?»
+A short brief of the decisions, blockers and questions still open.	Короткая сводка решений, препятствий и открытых вопросов.	Un resumen breve de decisiones, bloqueos y preguntas pendientes.
+Draft a reply with full context	Подготовьте ответ с полным контекстом	Redacta una respuesta con todo el contexto
+“Help me answer their latest question.”	«Помоги ответить на их последний вопрос».	«Ayúdame a responder a su última pregunta».
+A draft that takes earlier answers, changed plans and your promises into account.	Черновик, который учитывает прежние ответы, изменения планов и ваши обещания.	Un borrador que tiene en cuenta respuestas anteriores, cambios de planes y tus promesas.
+What you can use today	Что доступно уже сейчас	Qué puedes usar hoy
+Start with the tools you use. Telegram and MAX are WireCat’s messaging tools. Email through Himalaya and Markdown notes, including Obsidian, can join the same agent workflow.	Начните с привычных инструментов. Telegram и MAX — инструменты WireCat для переписки. Почта через Himalaya и Markdown-заметки, в том числе Obsidian, могут работать вместе с ними через вашего агента.	Empieza con las herramientas que usas. Telegram y MAX son las herramientas de mensajería de WireCat. El correo con Himalaya y las notas Markdown, incluidas las de Obsidian, pueden formar parte del mismo flujo con tu agente.
+More messenger connections are planned. You can use today’s tools on their own.	Планируется поддержка других мессенджеров. Нынешние инструменты можно использовать отдельно.	Está prevista la conexión con más servicios de mensajería. Puedes usar las herramientas actuales por separado.
+tg · your account, bots and groups	tg · личный аккаунт, боты и группы	tg · tu cuenta, bots y grupos
+max · your account, bots and groups	max · личный аккаунт, боты и группы	max · tu cuenta, bots y grupos
+Through the Himalaya CLI	Через Himalaya CLI	Mediante Himalaya CLI
+Obsidian and other editors	Obsidian и другие редакторы	Obsidian y otros editores
+Your notes, read and updated by your agent	Ваш агент читает и обновляет заметки	Tu agente lee y actualiza tus notas
+How does this fit together?	Как это работает вместе?	¿Cómo encaja todo?
+Your agent coordinates the tools you connect. WireCat supplies the messaging tools; Himalaya is a separate open-source email tool; Markdown notes can live in Obsidian or another editor.	Ваш агент координирует подключённые инструменты. WireCat предоставляет инструменты для переписки; Himalaya — отдельный почтовый инструмент с открытым кодом; Markdown-заметки могут находиться в Obsidian или другом редакторе.	Tu agente coordina las herramientas conectadas. WireCat aporta las de mensajería; Himalaya es una herramienta de correo independiente de código abierto; las notas Markdown pueden estar en Obsidian u otro editor.
+For example, ask your agent to collect a discussion, check the latest email and prepare an update to your project note.	Например, попросите агента собрать обсуждение, проверить последнее письмо и подготовить обновление заметки проекта.	Por ejemplo, pide a tu agente que reúna una conversación, consulte el último correo y prepare una actualización de la nota del proyecto.
+Why it works this well	Почему это работает так хорошо	Por qué funciona tan bien
+Practical tools for finding context, keeping control and checking what happened.	Инструменты для поиска контекста, контроля действий и проверки результатов.	Herramientas prácticas para encontrar contexto, mantener el control y comprobar lo ocurrido.
+Fast	Быстро	Rápido
+Search stored history on your computer without fetching each message again.	Ищите в сохранённой истории на компьютере, не загружая каждое сообщение повторно.	Busca en el historial guardado en tu ordenador sin descargar cada mensaje de nuevo.
+Runs everywhere	На любой платформе	En todas las plataformas
+Use the tools on Windows, macOS or Linux.	Используйте инструменты на Windows, macOS и Linux.	Usa las herramientas en Windows, macOS o Linux.
+Powerful search	Мощный поиск	Búsqueda potente
+Combine words, people, dates and attachments, then check surrounding messages.	Сочетайте слова, людей, даты и вложения, затем проверяйте соседние сообщения.	Combina palabras, personas, fechas y archivos; después consulta los mensajes cercanos.
+Local storage	Локальное хранение	Almacenamiento local
+Keep an archive on your computer, back it up and search it offline.	Храните архив на компьютере, делайте резервные копии и ищите без интернета.	Guarda un archivo en tu ordenador, haz copias de seguridad y busca sin conexión.
+Flexible permissions	Гибкие права доступа	Permisos flexibles
+Choose read-only access, allowed actions or confirmation before changes.	Выберите доступ только для чтения, разрешённые действия или подтверждение изменений.	Elige acceso de solo lectura, acciones permitidas o confirmación antes de los cambios.
+Always up to date	Актуальная история	Historial actualizado
+Run a background service to update history and catch up after a restart.	Фоновая служба обновляет историю и догружает сообщения после перезапуска.	Un servicio en segundo plano actualiza el historial y recupera los mensajes tras un reinicio.
+Multiple accounts and bots	Несколько аккаунтов и ботов	Varias cuentas y bots
+Keep work, personal accounts and bots in separate profiles.	Храните рабочие и личные аккаунты, а также ботов в отдельных профилях.	Mantén cuentas personales, de trabajo y bots en perfiles separados.
+Action history	История действий	Historial de acciones
+Check send attempts and recorded command runs when you need to trace an action.	Проверяйте попытки отправки и записи выполнения команд, когда нужно проследить действие.	Consulta los intentos de envío y las ejecuciones registradas para seguir una acción.
+Secure	Безопасно	Seguro
+Sign in through interactive setup, with login secrets stored in the system keyring.	Вход выполняется интерактивно, а секреты авторизации хранятся в системном хранилище ключей.	Inicia sesión de forma interactiva; los secretos de acceso se guardan en el llavero del sistema.
+See the full feature list	Все возможности	Todas las funciones
+Open source, your data and your agent	Открытый код, ваши данные и ваш агент	Código abierto, tus datos y tu agente
+Open source	Открытый код	Código abierto
+Both messaging tools are free under the MIT licence. Read the code, report an issue or contribute.	Оба инструмента бесплатны и доступны по лицензии MIT. Изучайте код, сообщайте о проблемах и участвуйте в разработке.	Ambas herramientas son gratuitas bajo la licencia MIT. Lee el código, informa de problemas o contribuye.
+Your data	Ваши данные	Tus datos
+Your messaging archive stays on your computer. You choose the accounts and permissions. Content passed to your agent follows its model settings.	Архив переписки хранится на вашем компьютере. Вы выбираете аккаунты и права доступа. Обработка данных, переданных агенту, зависит от настроек его модели.	El archivo de mensajes permanece en tu ordenador. Tú eliges las cuentas y los permisos. El contenido que recibe tu agente se procesa según la configuración de su modelo.
+Security guide	Руководство по безопасности	Guía de seguridad
+Use Claude Code, Codex, Cursor, Gemini CLI, Hermes or another agent that works with CLI tools or MCP.	Используйте Claude Code, Codex, Cursor, Gemini CLI, Hermes или другого агента, работающего с CLI или MCP.	Usa Claude Code, Codex, Cursor, Gemini CLI, Hermes u otro agente compatible con CLI o MCP.
+Agent setup guide	Подключение агента	Guía para conectar el agente
+How much time could you get back?	Сколько времени вы можете сэкономить?	¿Cuánto tiempo podrías recuperar?
+Compare your daily chat work with an agent-assisted workflow. Change the volume and the assumptions to match your day.	Сравните обычную работу в чатах с помощью агента. Измените объём работы и допущения под свой день.	Compara tu trabajo diario en chats con un flujo asistido por un agente. Ajusta el volumen y las suposiciones a tu día.
+This is an estimate, not a measured speed or accuracy claim. Setup and history downloads are excluded.	Это оценка, а не измерение скорости или точности. Настройка и загрузка истории не учитываются.	Es una estimación, no una medición de velocidad ni precisión. No incluye configuración ni descarga del historial.
+Messages per day	Сообщений в день	Mensajes al día
+Active chats per day	Активных чатов в день	Chats activos al día
+Replies per day	Ответов в день	Respuestas al día
+Edit the time assumptions	Изменить допущения по времени	Editar las suposiciones de tiempo
+Read a message manually, seconds	Чтение сообщения вручную, секунды	Leer un mensaje manualmente, segundos
+Find context per chat, seconds	Поиск контекста для чата, секунды	Buscar contexto por chat, segundos
+Write a reply manually, minutes	Написание ответа вручную, минуты	Escribir una respuesta manualmente, minutos
+Read the daily briefing, minutes	Чтение ежедневной сводки, минуты	Leer el resumen diario, minutos
+Check context per chat, seconds	Проверка контекста чата, секунды	Comprobar contexto por chat, segundos
+Review a reply draft, minutes	Проверка черновика ответа, минуты	Revisar un borrador, minutos
+Time you could free up	Время, которое можно сэкономить	Tiempo que podrías ahorrar
+minutes a day	минут в день	minutos al día
+hours over 22 working days	часа за 22 рабочих дня	horas en 22 días laborables
+Manual work	Вручную	Trabajo manual
+min	мин	min
+With your agent	С агентом	Con tu agente
+Based on the volumes and timings you entered.	На основе введённого объёма работы и времени.	Según los volúmenes y tiempos que has indicado.
+Give your agent somewhere useful to start.	Дайте агенту полезную отправную точку.	Dale a tu agente un punto de partida útil.
+Connect Telegram or MAX, then ask a question about a conversation you already have. Add email and notes when you want them in the same workflow.	Подключите Telegram или MAX и задайте вопрос о своей переписке. Добавьте почту и заметки, когда захотите работать с ними вместе.	Conecta Telegram o MAX y pregunta sobre una conversación que ya tengas. Añade correo y notas cuando quieras usarlos en el mismo flujo.
+Installation guide	Руководство по установке	Guía de instalación
+Free tools. Your existing agent or model may have its own costs.	Инструменты бесплатны. Ваш агент или модель могут иметь собственную стоимость.	Las herramientas son gratuitas. Tu agente o modelo pueden tener sus propios costes.
+Search by topic, person and date.	Ищите по теме, человеку и дате.	Busca por tema, persona y fecha.
+Combine conditions to find the message you need across your saved chats.	Сочетайте условия, чтобы найти нужное сообщение в сохранённых чатах.	Combina condiciones para encontrar el mensaje que necesitas en tus chats guardados.
+Try a query on sample messages	Попробовать на примерных сообщениях	Probar con mensajes de muestra
+Topic + files	Тема + файлы	Tema + archivos
+Person + date	Человек + дата	Persona + fecha
+Search the sample messages	Поиск по примерным сообщениям	Buscar en los mensajes de muestra
+36 fictional messages · local demo	36 вымышленных сообщений · локальный пример	36 mensajes ficticios · demostración local
+Explore the search playground	Открыть площадку поиска	Explorar el buscador
+Telegram · CLI + agent skill	Telegram · CLI + навык агента	Telegram · CLI + habilidad del agente
+Messaging tools for	Инструменты для	Herramientas de mensajería para
+your account, bots and groups.	личного аккаунта, ботов и групп.	tu cuenta, bots y grupos.
+Connect the AI agent you already use to Telegram and MAX. Choose the work it should handle.	Подключите привычного ИИ-агента к Telegram и MAX. Выберите работу, которую он будет выполнять.	Conecta el agente de IA que ya usas con Telegram y MAX. Elige qué trabajo debe realizar.
+See worked conversations	Посмотреть диалоги	Ver conversaciones completas
+Find what matters in your own conversations.	Находите важное в своей переписке.	Encuentra lo importante en tus conversaciones.
+Search messages and files	Поиск сообщений и файлов	Buscar mensajes y archivos
+Search stored history by words, person, date and chat. Read surrounding messages and download the attachments you need.	Ищите в сохранённой истории по словам, людям, датам и чатам. Читайте соседние сообщения и скачивайте нужные вложения.	Busca por palabras, persona, fecha y chat en el historial guardado. Lee los mensajes cercanos y descarga los archivos necesarios.
+Catch up and track replies	Обзоры и контроль ответов	Ponerte al día y seguir respuestas
+Bring unread messages and commitments into a briefing. See who is waiting for you and what you are waiting for.	Соберите непрочитанное и обязательства в сводку. Узнайте, кто ждёт вашего ответа и чего ждёте вы.	Reúne mensajes sin leer y compromisos en un resumen. Consulta quién espera tu respuesta y qué estás esperando tú.
+Read voice notes as text	Читайте голосовые в виде текста	Leer notas de voz como texto
+Transcribe voice messages on your computer, then ask your agent for the questions and next steps.	Расшифруйте голосовые на компьютере и попросите агента выделить вопросы и следующие шаги.	Transcribe notas de voz en tu ordenador y pide a tu agente las preguntas y los próximos pasos.
+Draft, send and schedule	Черновики, отправка и расписание	Redactar, enviar y programar
+Prepare a reply with the history in mind. Send text and files, edit or forward messages, and schedule reminders.	Готовьте ответы с учётом истории. Отправляйте текст и файлы, редактируйте и пересылайте сообщения, планируйте напоминания.	Prepara respuestas con el historial en cuenta. Envía texto y archivos, edita o reenvía mensajes y programa recordatorios.
+See an example	Посмотреть пример	Ver un ejemplo
+Guide	Руководство	Guía
+Answer and act through a bot’s own identity.	Отвечайте и действуйте от имени бота.	Responde y actúa con la identidad de un bot.
+Answer from the bot’s history	Ответы на основе истории бота	Responder con el historial del bot
+Use messages the bot previously received to prepare a reply. Check what is confirmed before promising a change.	Готовьте ответ на основе сообщений, полученных ботом. Прежде чем обещать изменение, проверьте, что подтверждено.	Prepara respuestas con los mensajes recibidos por el bot. Comprueba lo confirmado antes de prometer un cambio.
+Send updates and files	Обновления и файлы	Enviar novedades y archivos
+Send, edit, delete and pin bot messages. Share attachments and prepare customer updates.	Отправляйте, редактируйте, удаляйте и закрепляйте сообщения бота. Передавайте вложения и готовьте обновления для клиентов.	Envía, edita, elimina y fija mensajes del bot. Comparte archivos y prepara novedades para clientes.
+Handle buttons and commands	Кнопки и команды	Gestionar botones y comandos
+Respond to button presses, manage the command menu and use webhooks in the workflow you build.	Обрабатывайте нажатия кнопок, управляйте меню команд и используйте вебхуки в своих процессах.	Responde a pulsaciones de botones, gestiona el menú de comandos y usa webhooks en el flujo que construyas.
+Connect and manage	Подключение и управление	Conectar y gestionar
+Connect your agent through MCP. Use the bot’s group permissions to manage members and administrators.	Подключите агента через MCP. Используйте права бота в группе для управления участниками и администраторами.	Conecta tu agente por MCP. Usa los permisos del bot para gestionar miembros y administradores del grupo.
+Keep a group useful and organised.	Поддерживайте порядок и пользу в группе.	Mantén tu grupo útil y organizado.
+Find unanswered questions	Вопросы без ответа	Encontrar preguntas sin respuesta
+Review a group for questions that still need an answer, including the surrounding discussion.	Просмотрите вопросы без ответа в группе вместе с обсуждением вокруг них.	Revisa las preguntas pendientes del grupo junto con la conversación que las rodea.
+Preview moderation	Предварительная проверка модерации	Revisar la moderación antes de aplicarla
+Check messages against your rules and inspect proposed actions before applying them. Reviews run when you or your schedule starts them.	Проверяйте сообщения по своим правилам и просматривайте предложенные действия перед применением. Проверку запускаете вы или ваше расписание.	Comprueba los mensajes según tus reglas y revisa las acciones antes de aplicarlas. Las revisiones empiezan cuando las ejecutas tú o tu programación.
+Manage members and invites	Участники и приглашения	Gestionar miembros e invitaciones
+Add or remove members, manage administrator rights, and inspect or reset invite links.	Добавляйте и удаляйте участников, управляйте правами администраторов, проверяйте и обновляйте ссылки-приглашения.	Añade o elimina miembros, gestiona permisos de administradores y consulta o renueva enlaces de invitación.
+Organise groups and topics	Группы и темы	Organizar grupos y temas
+Update group details and settings. In Telegram, work with forum topics and topic-specific conversations.	Обновляйте сведения и настройки группы. В Telegram работайте с темами форума и перепиской внутри них.	Actualiza los datos y ajustes del grupo. En Telegram, trabaja con temas del foro y sus conversaciones.
+Built around your agent.	Для работы с вашим агентом.	Pensado para tu agente.
+Local history	Локальная история	Historial local
+Save the chats you choose and search the archive offline.	Сохраняйте выбранные чаты и ищите в архиве без интернета.	Guarda los chats que elijas y busca en el archivo sin conexión.
+Profiles and permissions	Профили и права доступа	Perfiles y permisos
+Separate accounts, limit recipients and choose read-only or confirmed changes.	Разделяйте аккаунты, ограничивайте получателей и выбирайте чтение без изменений или подтверждение действий.	Separa cuentas, limita destinatarios y elige solo lectura o cambios confirmados.
+Skills and MCP	Навыки и MCP	Habilidades y MCP
+Connect a terminal or desktop agent through the interface it uses.	Подключите агента из терминала или приложения через подходящий ему интерфейс.	Conecta un agente de terminal o escritorio mediante la interfaz que utiliza.
+Telegram documentation	Документация Telegram	Documentación de Telegram
+MAX documentation	Документация MAX	Documentación de MAX
+Add email and notes when you need them.	Добавляйте почту и заметки по мере необходимости.	Añade correo y notas cuando los necesites.
+Your agent can use Himalaya for email and read or update Markdown files in Obsidian or another editor. Start with Telegram or MAX; add more context at your own pace.	Ваш агент может использовать Himalaya для почты и читать или обновлять Markdown-файлы в Obsidian или другом редакторе. Начните с Telegram или MAX и постепенно добавляйте контекст.	Tu agente puede usar Himalaya para el correo y leer o actualizar archivos Markdown en Obsidian u otro editor. Empieza con Telegram o MAX y añade contexto a tu ritmo.
+Connect your agent.	Подключите своего агента.	Conecta tu agente.
+Install the messaging tool and give your agent its skill, or connect through MCP.	Установите инструмент для переписки и добавьте навык агенту либо подключитесь через MCP.	Instala la herramienta y añade su habilidad a tu agente, o conecta por MCP.
+See what your	Посмотрите, что умеет	Descubre lo que puede hacer
+agent can do.	ваш агент.	tu agente.
+A meeting brief, a better follow-up, a file you couldn’t find. Follow the conversation and inspect the messages behind each answer.	Сводка перед встречей, точное напоминание, потерявшийся файл. Проследите диалог и изучите сообщения, на которых основан каждый ответ.	Un resumen para una reunión, un mejor seguimiento, un archivo perdido. Sigue la conversación y consulta los mensajes detrás de cada respuesta.
+Start with a task you recognise.	Начните со знакомой задачи.	Empieza con una tarea que reconozcas.
+These worked conversations show how you could use WireCat with your own agent. Choose a task, follow the exchange and inspect the commands or source messages behind the answer. Copy a request to try it with your own conversations.	Эти диалоги показывают, как использовать WireCat со своим агентом. Выберите задачу, проследите разговор и изучите команды или исходные сообщения. Скопируйте запрос, чтобы попробовать на своей переписке.	Estas conversaciones muestran cómo usar WireCat con tu agente. Elige una tarea, sigue el intercambio y consulta los comandos o mensajes originales. Copia una petición para probarla con tus conversaciones.
+Choose a task	Выберите задачу	Elige una tarea
+Prepare for a call	Подготовка к созвону	Preparar una llamada
+Find recommendations	Поиск рекомендаций	Buscar recomendaciones
+Follow up with context	Ответ с контекстом	Dar seguimiento con contexto
+Get a morning briefing	Утренний обзор	Recibir un resumen matinal
+Review a group	Проверка группы	Revisar un grupo
+Answer a customer	Ответ клиенту	Responder a un cliente
+Collect the latest files	Последние версии файлов	Reunir los últimos archivos
+Schedule messages	Отложенные сообщения	Programar mensajes
+Explore features	Посмотреть возможности	Explorar funciones
+An agenda assembled from the relevant chats	Повестка на основе нужных чатов	Una agenda preparada con los chats relevantes
+Your agent uses the connected tools	Ваш агент использует подключённые инструменты	Tu agente usa las herramientas conectadas
+Tool output · JSON	Результат команды · JSON	Resultado del comando · JSON
+We’re aiming for Friday’s launch. Here’s what the project group has agreed:	Запуск планируется на пятницу. Вот о чём договорились в группе проекта:	El lanzamiento está previsto para el viernes. Esto es lo acordado en el grupo:
+Check the design group and my DMs with Tom too. He may have sent the results there.	Проверь также группу дизайна и мою переписку с Томом. Возможно, он прислал результаты туда.	Consulta también el grupo de diseño y mis mensajes con Tom. Puede que haya enviado allí los resultados.
+The design group and your DMs fill in the picture:	Группа дизайна и личная переписка дополняют картину:	El grupo de diseño y los mensajes privados completan el contexto:
+Make a 20-minute agenda covering risks, owners and deadlines. Don't send anything.	Составь повестку на 20 минут: риски, ответственные и сроки. Ничего не отправляй.	Prepara una agenda de 20 minutos con riesgos, responsables y plazos. No envíes nada.
+0–7 min:	0–7 мин:	0–7 min:
+7–12 min:	7–12 мин:	7–12 min:
+12–17 min:	12–17 мин:	12–17 min:
+17–20 min:	17–20 мин:	17–20 min:
+Try a task like this with your own conversations.	Попробуйте похожую задачу на своей переписке.	Prueba una tarea así con tus conversaciones.
+A comparison that uses the surrounding messages	Сравнение с учётом соседних сообщений	Una comparación que consulta los mensajes cercanos
+Read the messages around those recommendations. I want feedback on mistakes, not just videos.	Прочитай сообщения вокруг рекомендаций. Мне нужен разбор ошибок, а не только видео.	Lee los mensajes cercanos a esas recomendaciones. Quiero comentarios sobre errores, no solo vídeos.
+A reply that reflects what has already happened	Ответ, учитывающий произошедшее	Una respuesta que tiene en cuenta lo ocurrido
+Find Tom’s chat and check whether he already sent the design. Draft replies to the customer, Anna and Tom.	Найди чат Тома и проверь, не прислал ли он дизайн. Подготовь черновики клиенту, Анне и Тому.	Busca el chat de Tom y comprueba si ya envió el diseño. Prepara borradores para el cliente, Anna y Tom.
+Send Tom that draft asking about the final design. Hold the other replies.	Отправь Тому черновик с вопросом о финальном дизайне. Остальные ответы пока не отправляй.	Envía a Tom el borrador que pregunta por el diseño final. No envíes las demás respuestas.
+Priorities from messages and a transcribed voice note	Приоритеты из сообщений и расшифровки голосового	Prioridades extraídas de mensajes y una nota de voz
+Transcribe Mum’s voice note and tell me what needs doing today.	Расшифруй голосовое мамы и скажи, что нужно сделать сегодня.	Transcribe la nota de voz de mi madre y dime qué hay que hacer hoy.
+What should I tackle first in the next 15 minutes?	Чем заняться сначала в ближайшие 15 минут?	¿Qué debería atender primero en los próximos 15 minutos?
+The proposed actions are visible before you approve them	Предложенные действия видны до вашего подтверждения	Las acciones propuestas se muestran antes de aprobarlas
+Delete only those two promotional messages for everyone. Keep the question and all members.	Удали для всех только те два рекламных сообщения. Сохрани вопрос и всех участников.	Elimina para todos solo esos dos mensajes promocionales. Conserva la pregunta y a todos los miembros.
+A support reply based on the messages this bot received	Ответ на основе сообщений, полученных ботом	Una respuesta basada en los mensajes recibidos por este bot
+Send that reply from sales. I’ll check the date change myself.	Отправь этот ответ от sales. Изменение даты я уточню сам.	Envía esa respuesta desde sales. Comprobaré el cambio de fecha personalmente.
+One current document set from several conversations	Актуальный комплект документов из разных чатов	Un conjunto actualizado de documentos de varias conversaciones
+Check Anna's DMs and the design group. Use the latest versions, but keep the old ones too.	Проверь переписку с Анной и группу дизайна. Используй последние версии, сохранив старые.	Consulta los mensajes con Anna y el grupo de diseño. Usa las últimas versiones, conservando las anteriores.
+Latest versions	Последние версии	Últimas versiones
+Document	Документ	Documento
+Version	Версия	Versión
+Found in	Где найдено	Dónde se encontró
+Contract	Договор	Contrato
+Final	Финальная	Final
+Anna’s DMs	Переписка с Анной	Mensajes con Anna
+Invoice	Счёт	Factura
+First phase	Первый этап	Primera fase
+Presentation	Презентация	Presentación
+Version history	История версий	Historial de versiones
+The contract draft and presentation v2 are listed separately. Nothing is being deleted.	Черновик договора и презентация v2 перечислены отдельно. Ничего не удаляется.	El borrador del contrato y la presentación v2 se muestran aparte. No se elimina nada.
+Atlas presentation v3, with updated designs.	Презентация Atlas v3 с обновлённым дизайном.	Presentación de Atlas v3 con el diseño actualizado.
+Check the remaining invoices and download the current files into an Atlas folder. Don’t send anything.	Проверь остальные счета и скачай актуальные файлы в папку Atlas. Ничего не отправляй.	Comprueba las facturas restantes y descarga los archivos actuales en una carpeta Atlas. No envíes nada.
+In the Atlas folder	В папке Atlas	En la carpeta Atlas
+contract-final.pdf — the final contract.	contract-final.pdf — финальный договор.	contract-final.pdf — contrato final.
+invoice-phase-1.pdf — the first-phase invoice.	invoice-phase-1.pdf — счёт за первый этап.	invoice-phase-1.pdf — factura de la primera fase.
+presentation-v3.pdf — the current presentation.	presentation-v3.pdf — актуальная презентация.	presentation-v3.pdf — presentación actual.
+The second-phase invoice has not been issued. Older versions stay in chat history. Files are downloaded; nothing was sent to the customer.	Счёт за второй этап ещё не выставлен. Старые версии остаются в истории чатов. Файлы скачаны; клиенту ничего не отправлено.	La factura de la segunda fase aún no se ha emitido. Las versiones antiguas quedan en el historial. Los archivos se han descargado; no se ha enviado nada al cliente.
+A message that arrives at the right time	Сообщение, приходящее вовремя	Un mensaje que llega en el momento adecuado
+Use tg cli, gather context for tomorrow’s Atlas call: decisions, risks and questions.	Используй tg cli: собери контекст к завтрашнему созвону по Atlas — решения, риски и вопросы.	Usa tg cli para reunir contexto para la llamada de Atlas de mañana: decisiones, riesgos y preguntas.
+Use max cli, gather context for tomorrow’s Atlas call: decisions, risks and questions.	Используй max cli: собери контекст к завтрашнему созвону по Atlas — решения, риски и вопросы.	Usa max cli para reunir contexto para la llamada de Atlas de mañana: decisiones, riesgos y preguntas.
+Use tg cli, find SQL course recommendations across Telegram and MAX. I want exercises and feedback.	Используй tg cli: найди рекомендации курсов SQL в Telegram и MAX. Мне нужны задания и обратная связь.	Usa tg cli para buscar cursos de SQL recomendados en Telegram y MAX. Quiero ejercicios y comentarios.
+Use max cli, find SQL course recommendations across Telegram and MAX. I want exercises and feedback.	Используй max cli: найди рекомендации курсов SQL в Telegram и MAX. Мне нужны задания и обратная связь.	Usa max cli para buscar cursos de SQL recomendados en Telegram y MAX. Quiero ejercicios y comentarios.
+Use tg cli, find who needs my reply, what I promised and what I’m waiting on from others.	Используй tg cli: выясни, кто ждёт моего ответа, что я обещал и чего жду от других.	Usa tg cli para averiguar quién espera mi respuesta, qué prometí y qué estoy esperando de los demás.
+Use max cli, find who needs my reply, what I promised and what I’m waiting on from others.	Используй max cli: выясни, кто ждёт моего ответа, что я обещал и чего жду от других.	Usa max cli para averiguar quién espera mi respuesta, qué prometí y qué estoy esperando de los demás.
+Use tg cli, show who is waiting for my reply and which updates from my subscriptions are worth reading.	Используй tg cli: покажи, кто ждёт ответа и какие новости из подписок стоит прочитать.	Usa tg cli para mostrar quién espera mi respuesta y qué novedades de mis suscripciones merece la pena leer.
+Use max cli, show who is waiting for my reply and which updates from my subscriptions are worth reading.	Используй max cli: покажи, кто ждёт ответа и какие новости из подписок стоит прочитать.	Usa max cli para mostrar quién espera mi respuesta y qué novedades de mis suscripciones merece la pena leer.
+Use tg cli, I’m an admin of the Community group. Show violations of its rules and a proposed action plan. Don’t delete anything yet.	Используй tg cli: я администратор группы Community. Покажи нарушения правил и предложенный план действий. Пока ничего не удаляй.	Usa tg cli. Soy administrador del grupo Community. Muestra las infracciones y un plan de acción. No elimines nada todavía.
+Use max cli, I’m an admin of the Community group. Show violations of its rules and a proposed action plan. Don’t delete anything yet.	Используй max cli: я администратор группы Community. Покажи нарушения правил и предложенный план действий. Пока ничего не удаляй.	Usa max cli. Soy administrador del grupo Community. Muestra las infracciones y un plan de acción. No elimines nada todavía.
+Use tg cli, check Anna’s order questions received by the sales bot and draft replies.	Используй tg cli: проверь вопросы Анны о заказе, полученные ботом sales, и подготовь ответы.	Usa tg cli para consultar las preguntas de Anna sobre su pedido recibidas por el bot sales y preparar respuestas.
+Use max cli, check Anna’s order questions received by the sales bot and draft replies.	Используй max cli: проверь вопросы Анны о заказе, полученные ботом sales, и подготовь ответы.	Usa max cli para consultar las preguntas de Anna sobre su pedido recibidas por el bot sales y preparar respuestas.
+Use tg cli, find the current Atlas contract, invoices and presentation. Check project groups and direct messages.	Используй tg cli: найди актуальные договор, счета и презентацию Atlas в группах проекта и личной переписке.	Usa tg cli para encontrar el contrato, las facturas y la presentación actuales de Atlas. Consulta grupos y mensajes privados.
+Use max cli, find the current Atlas contract, invoices and presentation. Check project groups and direct messages.	Используй max cli: найди актуальные договор, счета и презентацию Atlas в группах проекта и личной переписке.	Usa max cli para encontrar el contrato, las facturas y la presentación actuales de Atlas. Consulta grupos y mensajes privados.
+Use tg cli, remind me in two hours to check the invoice and in six hours to resolve open questions.	Используй tg cli: напомни через два часа проверить счёт, а через шесть — решить открытые вопросы.	Usa tg cli para recordarme dentro de dos horas que revise la factura y dentro de seis que resuelva las preguntas pendientes.
+Use max cli, remind me in two hours to check the invoice and in six hours to resolve open questions.	Используй max cli: напомни через два часа проверить счёт, а через шесть — решить открытые вопросы.	Usa max cli para recordarme dentro de dos horas que revise la factura y dentro de seis que resuelva las preguntas pendientes.
+In one hour, ask Anna for the final copy and Tom for the payment status. Message each privately.	Через час попроси Анну прислать финальный текст, а Тома — статус оплаты. Напиши каждому лично.	Dentro de una hora, pide a Anna el texto final y a Tom el estado de los pagos. Escribe a cada uno por privado.
+Anna	Анна	Anna
+Marco	Марко	Marco
+Tom	Том	Tom
+Daria	Дарья	Daria
+Tom:	Том:	Tom:
+Anna:	Анна:	Anna:
+Marco:	Марко:	Marco:

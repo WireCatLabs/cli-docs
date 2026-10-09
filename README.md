@@ -38,24 +38,20 @@ PLAYWRIGHT_EXPORT=1 pnpm exec playwright test tests/site-quality.spec.ts
 
 ## Landing page
 
-The home page preserves the reviewed `design/landing/g-home*.html` design in all three languages.
-Run `node scripts/export-landing.mjs` after editing those prototypes or
-`design/landing/scenario-variants.js`; it exports trusted static markup, the eight selected
-demo sessions and scoped CSS into `lib/landing/`. The complete scenario bank is preserved in
-`docs/LANDING_SCENARIOS.md`, and marketing copy in `docs/MARKETING.md`. Production omits the design
-switches and experimental feature variants. Agent setup links lead to the shared documentation.
-`components/landing.tsx` adds demo, replay and copy interactions and cleans them up on navigation.
-The shared home layout renders `SiteHeader` and `SiteFooter` for both the landing and About;
-the exporter removes the prototype header and footer from the page body. Header navigation,
-theme switching and language selection therefore use the same components on both pages.
-Fonts, including the selected Unbounded face for Latin and Cyrillic headings, are served locally from `public/fonts/`, with their
-OFL licences. Browser icons are wired in the shared metadata; run
-`node scripts/export-favicons.mjs` (ImageMagick required) to regenerate them from `app/icon.svg`.
-Site name, URL, repository and public contacts are configured in [site.config.json](site.config.json).
-The footer uses public email/Telegram contacts; About uses `contacts.maintainerTelegram` for personal enquiries. These values are shared across languages. Edit the config and rebuild the site;
-contact changes do not require regenerating the landing snapshots.
-About is a separate localized `/{lang}/about` page; its content is in `lib/about.ts`. The export removes the old inline About section and links to this page.
-After the demo, sections are benefits, an editable time estimate, Telegram/MAX, reasons, and a concise daily timeline.
+The homepage uses the owner-selected compact editorial layout in English, Russian and Spanish.
+`pnpm landing:export` exports the reviewed source and translations from
+`design/homepage-chat-treatments/release-source.json` and `release-locales.json` into `lib/editorial/`.
+The scoped stylesheet preserves the reviewed cascade without affecting docs or About.
+`components/landing/editorial.tsx` adds agent setup, copy, scenario/provider choices, follow-ups,
+search and the editable estimate; event listeners are cleaned up on navigation.
+`/{lang}/features` and `/{lang}/examples` provide the reviewed capability and scenario pages.
+The full search playground remains at `/{lang}/docs/search-playground`.
+
+All exploratory pages stay in `design/`, outside the static export. Run `pnpm design:serve` to
+restore the five local preview collections. [The durable design inventory](design/homepage-chat-treatments/DESIGN-LINKS.md)
+records the selected page, private studio, block library and every earlier design URL.
+The original landing exporter and scenario sources remain available for About and historical reference.
+Fonts and licences remain local in `public/fonts/`; contacts are configured in `site.config.json`.
 
 ## Adding a tool
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import LandingLayout from "@/app/[lang]/(home)/layout"
+import LandingLayout from "@/app/[lang]/(editorial)/layout"
 import LocaleLayout, { generateMetadata as localeMetadata } from "@/app/[lang]/layout"
 
 const params = Promise.resolve({ lang: "en" })

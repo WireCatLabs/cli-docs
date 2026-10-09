@@ -19,7 +19,9 @@
     "test:browser": "playwright test --config=playwright.smoke.config.ts",
     "test:browser:full": "playwright test",
     "docs:updates": "node --experimental-strip-types scripts/docs-updates.ts",
-    "check:seo": "node --experimental-strip-types scripts/check-seo.ts"
+    "check:seo": "node --experimental-strip-types scripts/check-seo.ts",
+    "landing:export": "node --experimental-strip-types scripts/export-editorial.mjs",
+    "design:serve": "node scripts/serve-designs.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

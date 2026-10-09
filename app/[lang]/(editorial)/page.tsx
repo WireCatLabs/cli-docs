@@ -1,9 +1,9 @@
-import { Landing } from "@/components/landing"
+import { Editorial } from "@/components/landing/editorial"
 import { StructuredData } from "@/components/structured-data"
+import en from "@/lib/editorial/en.json"
+import es from "@/lib/editorial/es.json"
+import ru from "@/lib/editorial/ru.json"
 import { i18n } from "@/lib/i18n"
-import en from "@/lib/landing/en.json"
-import es from "@/lib/landing/es.json"
-import ru from "@/lib/landing/ru.json"
 import { pageMetadata, pageStructuredData, seoWords } from "@/lib/seo"
 
 type Props = { params: Promise<{ lang: string }> }
@@ -31,7 +31,7 @@ export default async function HomePage({ params }: Props) {
           description: words.homeDescription,
         })}
       />
-      <Landing {...content} lang={lang} />
+      <Editorial html={content.home} lang={lang} />
     </>
   )
 }

@@ -1,0 +1,58 @@
+const root=document.documentElement
+const themeButtons=Array.from(document.querySelectorAll('.theme-switch,.theme-toggle'))
+function setTheme(dark){root.classList.toggle('dark',dark);root.classList.toggle('light',!dark);themeButtons.forEach(b=>b.setAttribute('aria-label',`Switch to ${dark?'light':'dark'} theme`))}
+try{const requested=new URL(location.href).searchParams.get('theme');setTheme(requested?requested==='dark':localStorage.getItem('wirecat-memory-theme')==='dark')}catch{}
+if(new URL(location.href).searchParams.get('icons')==='0')root.dataset.whyIcons='hide'
+themeButtons.forEach(button=>button.addEventListener('click',()=>{const dark=!root.classList.contains('dark');setTheme(dark);try{localStorage.setItem('wirecat-memory-theme',dark?'dark':'light')}catch{}}))
+const palette=document.querySelector('#palette');if(palette){palette.value=root.dataset.palette;palette.addEventListener('change',()=>{root.dataset.palette=palette.value})}
+let toastTimer
+function notify(message){const t=document.querySelector('.toast');t.textContent=message;t.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('visible'),2300)}
+for(const button of document.querySelectorAll('[data-prompt]'))button.dataset.copy=button.dataset.prompt
+for(const button of document.querySelectorAll('.footer-host [data-copy]')){const tool=button.dataset.copy.includes('/max-cli')?'max':'tg';const cmd=navigator.userAgent.includes('Windows')?`& ([scriptblock]::Create((Invoke-RestMethod 'https://wirecat.dev/install.ps1'))) -Tool ${tool} -Agent all`:`npm install -g @leemour/${tool}-cli && ${tool} skill install --for all`;button.dataset.copy=cmd;const code=button.closest('.cmd')?.querySelector('code');if(code)code.textContent=cmd}
+document.querySelectorAll('[data-copy]').forEach(button=>button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(button.dataset.copy);notify(button.closest('.command,.footer-install')?'Command copied.':'Request copied. Paste it into your agent.')}catch{notify('Clipboard unavailable. Select the text and copy it manually.')}}))
+const menus=Array.from(document.querySelectorAll('[data-connect]'))
+menus.forEach(menu=>{menu.addEventListener('toggle',()=>{if(menu.open)menus.filter(m=>m!==menu).forEach(m=>{m.open=false})});menu.querySelectorAll('[data-connect-provider]').forEach(button=>button.addEventListener('click',()=>{const tool=button.dataset.connectProvider;menu.querySelectorAll('[data-connect-provider]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));const prompt=window.wirecatSetupPrompts[tool];menu.querySelector('.agent-prompt').textContent=prompt;menu.querySelector('.copy-agent').dataset.copy=prompt;const command=`npm install -g @leemour/${tool}-cli && ${tool} skill install --for all`;menu.querySelector('.command code').textContent=command;menu.querySelector('.command [data-copy]').dataset.copy=command;menu.querySelector('.connect-guide').href=`https://wirecat.dev/en/docs/installation#${tool}`}))})
+document.addEventListener('click',event=>menus.forEach(menu=>{if(menu.open&&!menu.contains(event.target))menu.open=false}))
+document.addEventListener('keydown',event=>{if(event.key==='Escape'){const menu=menus.find(m=>m.open);if(menu){menu.open=false;menu.querySelector('summary').focus();event.preventDefault()}}})
+function tabs(buttonSelector,panelSelector,key){const buttons=Array.from(document.querySelectorAll(buttonSelector));const panels=Array.from(document.querySelectorAll(panelSelector));const select=(button,focus=false)=>{buttons.forEach(b=>{const active=b===button;b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1});panels.forEach(p=>{p.hidden=p.id!==button.getAttribute('aria-controls')});if(focus)button.focus()};buttons.forEach((button,index)=>{button.addEventListener('click',()=>select(button));button.addEventListener('keydown',event=>{let next;if(event.key==='ArrowRight'||event.key==='ArrowDown')next=(index+1)%buttons.length;if(event.key==='ArrowLeft'||event.key==='ArrowUp')next=(index+buttons.length-1)%buttons.length;if(event.key==='Home')next=0;if(event.key==='End')next=buttons.length-1;if(next!==undefined){event.preventDefault();select(buttons[next],true)}})});if(key){const requested=new URL(location.href).searchParams.get('case');const selected=buttons.find(b=>b.dataset.walkthrough===requested);if(selected)select(selected)}}
+tabs('[data-hero-case]','.memory-panel');tabs('[data-walkthrough]','.walkthrough-panel',true)
+document.querySelectorAll('[data-demo-provider]').forEach(button=>button.addEventListener('click',()=>{
+ document.querySelectorAll('[data-demo-provider]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.demoProvider===button.dataset.demoProvider)))
+ document.querySelectorAll('[data-dialogue-provider]').forEach(panel=>{panel.hidden=panel.dataset.dialogueProvider!==button.dataset.demoProvider})
+}))
+document.querySelectorAll('[data-reveal-next]').forEach(button=>button.addEventListener('click',()=>{
+ const next=document.getElementById(button.getAttribute('aria-controls'))
+ const scene=button.closest('.chat-scene')
+ next.hidden=false;next.focus({preventScroll:true});button.setAttribute('aria-expanded','true');button.closest('.scroll-invitation').hidden=true
+ scene.scrollTo({top:next.getBoundingClientRect().top-scene.getBoundingClientRect().top+scene.scrollTop-18,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'})
+}))
+const exampleChoice=document.getElementById('example-choice')
+if(exampleChoice){
+ const buttons=Array.from(document.querySelectorAll('[data-walkthrough]'))
+ const sync=button=>{exampleChoice.value=button.dataset.walkthrough;const url=new URL(location.href);url.searchParams.set('case',button.dataset.walkthrough);history.replaceState(null,'',url)}
+ buttons.forEach(button=>{
+  button.addEventListener('click',()=>sync(button))
+  button.addEventListener('keydown',event=>{if(event.key==='ArrowUp'||event.key==='ArrowDown'){event.preventDefault();const index=buttons.indexOf(button);const next=buttons[(index+(event.key==='ArrowDown'?1:buttons.length-1))%buttons.length];next.click();next.focus()}})
+ })
+ exampleChoice.value=buttons.find(b=>b.getAttribute('aria-selected')==='true').dataset.walkthrough
+ exampleChoice.addEventListener('change',()=>buttons.find(b=>b.dataset.walkthrough===exampleChoice.value).click())
+}
+document.querySelectorAll('[data-exchange-demo]').forEach(demo=>{
+ const frames=Array.from(demo.querySelectorAll('[data-exchange-frame]'));let index=0
+ const previous=demo.querySelector('[data-previous-exchange]');const next=demo.querySelector('[data-next-exchange]')
+ function show(){frames.forEach((frame,i)=>{frame.hidden=i!==index});previous.disabled=index===0;next.disabled=index===frames.length-1;demo.querySelector('[data-exchange-counter]').textContent=`Exchange ${index+1} of ${frames.length}`;demo.querySelector('.hero-transcript').scrollTop=0}
+ previous.addEventListener('click',()=>{if(index>0){index--;show()}});next.addEventListener('click',()=>{if(index<frames.length-1){index++;show()}})
+})
+function calculate(){const read=(selector)=>Math.max(0,Number(document.querySelector(selector).value)||0);const m=read('[data-calc="messages"]'),c=read('[data-calc="chats"]'),r=read('[data-calc="replies"]');document.querySelectorAll('[data-calc]').forEach(input=>{document.querySelector(`[data-volume="${input.dataset.calc}"]`).textContent=input.value});const t=Object.fromEntries(Array.from(document.querySelectorAll('[data-timing]')).map(input=>[input.dataset.timing,Math.max(0,Number(input.value)||0)]));const manual=(m*t.readSeconds+c*t.contextSeconds)/60+r*t.writeMinutes;const assisted=t.summaryMinutes+c*t.checkContextSeconds/60+r*t.checkReplyMinutes;const saved=manual-assisted;document.querySelector('#saved-minutes').textContent=Math.abs(saved).toFixed(0);document.querySelector('#saved-monthly').textContent=(Math.abs(saved)*22/60).toFixed(1);document.querySelector('#manual-time').textContent=manual.toFixed(0);document.querySelector('#agent-time').textContent=assisted.toFixed(0);document.querySelector('#saving-label').textContent=saved>=0?'Time you could free up':'Manual work is faster with these assumptions'}
+if(document.querySelector('[data-calc]')){document.querySelectorAll('[data-calc],[data-timing]').forEach(input=>input.addEventListener('input',calculate));calculate()}
+
+tabs('[data-capability-tab]','.capability-library [role="tabpanel"]')
+
+for(const panel of document.querySelectorAll('.closing-access')){
+ const buttons=Array.from(panel.querySelectorAll('[data-access-tab]'))
+ const select=button=>{buttons.forEach(b=>{const selected=b===button;b.setAttribute('aria-selected',String(selected));b.tabIndex=selected?0:-1});panel.querySelectorAll('[data-access-panel]').forEach(p=>p.hidden=p.dataset.accessPanel!==button.dataset.accessTab)}
+ buttons.forEach((button,index)=>{button.addEventListener('click',()=>select(button));button.addEventListener('keydown',event=>{let next;if(event.key==='ArrowLeft'||event.key==='ArrowRight')next=buttons[1-index];if(event.key==='Home')next=buttons[0];if(event.key==='End')next=buttons[1];if(next){event.preventDefault();select(next);next.focus()}})})
+}
+
+tabs('[data-audience-tab]','[data-audience-panel]');tabs('[data-use-tab]','[data-use-panel]')
+const requestedAudience=new URL(location.href).searchParams.get('audience');if(['personal','bot','admin'].includes(requestedAudience))document.querySelector(`[data-audience-tab="${requestedAudience}"]`)?.click()

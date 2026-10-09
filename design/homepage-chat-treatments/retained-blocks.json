@@ -1,0 +1,164 @@
+[
+  {
+    "id": "retained-guided-workflow",
+    "name": "Guided · workflow",
+    "group": "Earlier compact blocks",
+    "width": "half",
+    "source": "/block-retained-guided-workflow",
+    "height": 600,
+    "description": "Preserved from http://127.0.0.1:4326/guided. Original structure and wording; reference for reuse."
+  },
+  {
+    "id": "retained-guided-outcomes",
+    "name": "Guided · outcomes",
+    "group": "Earlier compact blocks",
+    "width": "full",
+    "source": "/block-retained-guided-outcomes",
+    "height": 600,
+    "description": "Preserved from http://127.0.0.1:4326/guided. Original structure and wording; reference for reuse."
+  },
+  {
+    "id": "retained-guided-roles",
+    "name": "Guided · roles",
+    "group": "Earlier compact blocks",
+    "width": "full",
+    "source": "/block-retained-guided-roles",
+    "height": 600,
+    "description": "Preserved from http://127.0.0.1:4326/guided. Original structure and wording; reference for reuse."
+  },
+  {
+    "id": "retained-guided-trust",
+    "name": "Guided · trust",
+    "group": "Earlier compact blocks",
+    "width": "full",
+    "source": "/block-retained-guided-trust",
+    "height": 600,
+    "description": "Preserved from http://127.0.0.1:4326/guided. Original structure and wording; reference for reuse."
+  },
+  {
+    "id": "retained-workspace-workflow",
+    "name": "Workspace · workflow",
+    "group": "Earlier compact blocks",
+    "width": "half",
+    "source": "/block-retained-workspace-workflow",
+    "height": 600,
+    "description": "Preserved from http://127.0.0.1:4326/workspace. Original structure and wording; reference for reuse."
+  },
+  {
+    "id": "retained-workspace-outcomes",
+    "name": "Workspace · outcomes",
+    "group": "Earlier compact blocks",
+    "width": "full",
+    "source": "/block-retained-workspace-outcomes",
+    "height": 600,
+    "description": "Preserved from http://127.0.0.1:4326/workspace. Original structure and wording; reference for reuse."
+  },
+  {
+    "id": "retained-connections-workflow",
+    "name": "Connections · workflow",
+    "group": "Earlier compact blocks",
+    "width": "half",
+    "source": "/block-retained-connections-workflow",
+    "height": 600,
+    "description": "Preserved from http://127.0.0.1:4326/connections. Original structure and wording; reference for reuse."
+  },
+  {
+    "id": "retained-connections-outcomes",
+    "name": "Connections · outcomes",
+    "group": "Earlier compact blocks",
+    "width": "full",
+    "source": "/block-retained-connections-outcomes",
+    "height": 600,
+    "description": "Preserved from http://127.0.0.1:4326/connections. Original structure and wording; reference for reuse."
+  },
+  {
+    "id": "retained-calculator-conversation",
+    "name": "Calculator landing · conversation",
+    "group": "Earlier compact blocks",
+    "width": "half",
+    "source": "/block-retained-calculator-conversation",
+    "height": 600,
+    "description": "Preserved from http://127.0.0.1:4327/calculator. Original structure and wording; reference for reuse."
+  },
+  {
+    "id": "retained-calculator-outcomes",
+    "name": "Calculator landing · outcomes",
+    "group": "Earlier compact blocks",
+    "width": "full",
+    "source": "/block-retained-calculator-outcomes",
+    "height": 600,
+    "description": "Preserved from http://127.0.0.1:4327/calculator. Original structure and wording; reference for reuse."
+  },
+  {
+    "id": "retained-calculator-roles",
+    "name": "Calculator landing · roles",
+    "group": "Earlier compact blocks",
+    "width": "full",
+    "source": "/block-retained-calculator-roles",
+    "height": 600,
+    "description": "Preserved from http://127.0.0.1:4327/calculator. Original structure and wording; reference for reuse."
+  },
+  {
+    "id": "retained-calculator-trust",
+    "name": "Calculator landing · trust",
+    "group": "Earlier compact blocks",
+    "width": "full",
+    "source": "/block-retained-calculator-trust",
+    "height": 600,
+    "description": "Preserved from http://127.0.0.1:4327/calculator. Original structure and wording; reference for reuse."
+  },
+  {
+    "id": "retained-calculator-reasons",
+    "name": "Calculator landing · reasons",
+    "group": "Earlier compact blocks",
+    "width": "full",
+    "source": "/block-retained-calculator-reasons",
+    "height": 600,
+    "description": "Preserved from http://127.0.0.1:4327/calculator. Original structure and wording; reference for reuse."
+  },
+  {
+    "id": "retained-archive-a-morning-brief-paper-hero",
+    "name": "Morning brief · paper-hero",
+    "group": "Original newspaper concept",
+    "width": "full",
+    "source": "/block-retained-archive-a-morning-brief-paper-hero",
+    "height": 600,
+    "description": "Preserved from http://127.0.0.1:4329/archive/a-morning-brief. Original structure and wording; reference for reuse."
+  },
+  {
+    "id": "retained-archive-a-morning-brief-paper-workflow",
+    "name": "Morning brief · paper-workflow",
+    "group": "Original newspaper concept",
+    "width": "full",
+    "source": "/block-retained-archive-a-morning-brief-paper-workflow",
+    "height": 600,
+    "description": "Preserved from http://127.0.0.1:4329/archive/a-morning-brief. Original structure and wording; reference for reuse."
+  },
+  {
+    "id": "original-mockup-guided-task",
+    "name": "Original mockup · Guided task",
+    "group": "Original visual references",
+    "source": "/block-original-mockup-guided-task",
+    "width": "full",
+    "height": 850,
+    "description": "The original visual mockup you liked. Preserved as an image, not an interactive page."
+  },
+  {
+    "id": "original-mockup-product-in-action",
+    "name": "Original mockup · Product in action",
+    "group": "Original visual references",
+    "source": "/block-original-mockup-product-in-action",
+    "width": "full",
+    "height": 850,
+    "description": "The original visual mockup you liked. Preserved as an image, not an interactive page."
+  },
+  {
+    "id": "original-mockup-conversation-map",
+    "name": "Original mockup · Conversation map",
+    "group": "Original visual references",
+    "source": "/block-original-mockup-conversation-map",
+    "width": "full",
+    "height": 850,
+    "description": "The original visual mockup you liked. Preserved as an image, not an interactive page."
+  }
+]

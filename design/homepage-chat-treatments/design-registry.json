@@ -1,0 +1,361 @@
+[
+  {
+    "name": "First six approaches · port 4325",
+    "items": [
+      {
+        "name": "Your account, bots and groups",
+        "href": "http://127.0.0.1:4325/audiences"
+      },
+      {
+        "name": "The context to act",
+        "href": "http://127.0.0.1:4325/context"
+      },
+      {
+        "name": "Put your agent to work",
+        "href": "http://127.0.0.1:4325/direct"
+      },
+      {
+        "name": "Six approaches · comparison",
+        "href": "http://127.0.0.1:4325/"
+      },
+      {
+        "name": "Memory for your messengers",
+        "href": "http://127.0.0.1:4325/memory"
+      },
+      {
+        "name": "Just ask",
+        "href": "http://127.0.0.1:4325/minimal"
+      },
+      {
+        "name": "Bring the pieces together",
+        "href": "http://127.0.0.1:4325/workflow"
+      }
+    ]
+  },
+  {
+    "name": "Compact concepts and original mockups · port 4326",
+    "items": [
+      {
+        "name": "From scattered to useful",
+        "href": "http://127.0.0.1:4326/connections"
+      },
+      {
+        "name": "Memory → useful action",
+        "href": "http://127.0.0.1:4326/guided"
+      },
+      {
+        "name": "Three new approaches · comparison",
+        "href": "http://127.0.0.1:4326/"
+      },
+      {
+        "name": "Preserved original mockups",
+        "href": "http://127.0.0.1:4326/references"
+      },
+      {
+        "name": "Your agent’s workspace",
+        "href": "http://127.0.0.1:4326/workspace"
+      }
+    ]
+  },
+  {
+    "name": "Memory explorations and calculator · port 4327",
+    "items": [
+      {
+        "name": "Outcomes + time estimate",
+        "href": "http://127.0.0.1:4327/calculator"
+      },
+      {
+        "name": "All landing scenarios",
+        "href": "http://127.0.0.1:4327/examples"
+      },
+      {
+        "name": "Four Memory variants · comparison",
+        "href": "http://127.0.0.1:4327/"
+      },
+      {
+        "name": "Outcomes first",
+        "href": "http://127.0.0.1:4327/outcomes"
+      },
+      {
+        "name": "Personal · bots · admins",
+        "href": "http://127.0.0.1:4327/roles"
+      },
+      {
+        "name": "Find · check · act",
+        "href": "http://127.0.0.1:4327/workflow"
+      }
+    ]
+  },
+  {
+    "name": "Original hero conversations · port 4328",
+    "items": [
+      {
+        "name": "Finished result first",
+        "href": "http://127.0.0.1:4328/answer"
+      },
+      {
+        "name": "Original conversation",
+        "href": "http://127.0.0.1:4328/chat"
+      },
+      {
+        "name": "All landing scenarios",
+        "href": "http://127.0.0.1:4328/examples"
+      },
+      {
+        "name": "Three hero variants · comparison",
+        "href": "http://127.0.0.1:4328/"
+      },
+      {
+        "name": "Conversation in steps",
+        "href": "http://127.0.0.1:4328/walkthrough"
+      }
+    ]
+  },
+  {
+    "name": "Current and later explorations · port 4329",
+    "items": [
+      {
+        "name": "Original layout archive",
+        "href": "http://127.0.0.1:4329/archive"
+      },
+      {
+        "name": "Quiet assistant",
+        "href": "http://127.0.0.1:4329/assistant"
+      },
+      {
+        "name": "WireCat · compact landing",
+        "href": "http://127.0.0.1:4329/bubbles"
+      },
+      {
+        "name": "Examples",
+        "href": "http://127.0.0.1:4329/examples"
+      },
+      {
+        "name": "Feature layouts",
+        "href": "http://127.0.0.1:4329/feature-variants"
+      },
+      {
+        "name": "Compact role sections",
+        "href": "http://127.0.0.1:4329/features-chapters"
+      },
+      {
+        "name": "Compact feature layouts",
+        "href": "http://127.0.0.1:4329/features-compact"
+      },
+      {
+        "name": "Role comparison",
+        "href": "http://127.0.0.1:4329/features-compare"
+      },
+      {
+        "name": "Context into results",
+        "href": "http://127.0.0.1:4329/features-context"
+      },
+      {
+        "name": "Daily tasks",
+        "href": "http://127.0.0.1:4329/features-day"
+      },
+      {
+        "name": "Capability library",
+        "href": "http://127.0.0.1:4329/features-library"
+      },
+      {
+        "name": "Three role columns",
+        "href": "http://127.0.0.1:4329/features-roles"
+      },
+      {
+        "name": "Features",
+        "href": "http://127.0.0.1:4329/features"
+      },
+      {
+        "name": "Inset commands + access controls",
+        "href": "http://127.0.0.1:4329/home-access"
+      },
+      {
+        "name": "Compact console + connection paths",
+        "href": "http://127.0.0.1:4329/home-connect"
+      },
+      {
+        "name": "Checked command list + useful notes",
+        "href": "http://127.0.0.1:4329/home-notes"
+      },
+      {
+        "name": "Four chat treatments · comparison",
+        "href": "http://127.0.0.1:4329/"
+      },
+      {
+        "name": "Compact compositions and details",
+        "href": "http://127.0.0.1:4329/iteration-five"
+      },
+      {
+        "name": "Request → result rows · Agent chat connection",
+        "href": "http://127.0.0.1:4329/landing-bands-chat"
+      },
+      {
+        "name": "Request → result rows · Complex search",
+        "href": "http://127.0.0.1:4329/landing-bands-search"
+      },
+      {
+        "name": "Request → result rows · Voice note → next step",
+        "href": "http://127.0.0.1:4329/landing-bands-voice"
+      },
+      {
+        "name": "WireCat · current landing composition",
+        "href": "http://127.0.0.1:4329/landing-bands"
+      },
+      {
+        "name": "Outcome columns · Agent chat connection",
+        "href": "http://127.0.0.1:4329/landing-columns-chat"
+      },
+      {
+        "name": "Outcome columns · Complex search",
+        "href": "http://127.0.0.1:4329/landing-columns-search"
+      },
+      {
+        "name": "Outcome columns · Voice note → next step",
+        "href": "http://127.0.0.1:4329/landing-columns-voice"
+      },
+      {
+        "name": "WireCat · current landing composition",
+        "href": "http://127.0.0.1:4329/landing-columns"
+      },
+      {
+        "name": "Open and compact · Agent chat connection",
+        "href": "http://127.0.0.1:4329/landing-editorial-chat"
+      },
+      {
+        "name": "Open and compact · Complex search",
+        "href": "http://127.0.0.1:4329/landing-editorial-search"
+      },
+      {
+        "name": "Open and compact · Voice note → next step",
+        "href": "http://127.0.0.1:4329/landing-editorial-voice"
+      },
+      {
+        "name": "Open and compact",
+        "href": "http://127.0.0.1:4329/landing-editorial"
+      },
+      {
+        "name": "Expandable overview · Agent chat connection",
+        "href": "http://127.0.0.1:4329/landing-folds-chat"
+      },
+      {
+        "name": "Expandable overview · Complex search",
+        "href": "http://127.0.0.1:4329/landing-folds-search"
+      },
+      {
+        "name": "Expandable overview · Voice note → next step",
+        "href": "http://127.0.0.1:4329/landing-folds-voice"
+      },
+      {
+        "name": "Expandable overview",
+        "href": "http://127.0.0.1:4329/landing-folds"
+      },
+      {
+        "name": "Interactive outcomes · Agent chat connection",
+        "href": "http://127.0.0.1:4329/landing-tabs-chat"
+      },
+      {
+        "name": "Interactive outcomes · Complex search",
+        "href": "http://127.0.0.1:4329/landing-tabs-search"
+      },
+      {
+        "name": "Interactive outcomes · Voice note → next step",
+        "href": "http://127.0.0.1:4329/landing-tabs-voice"
+      },
+      {
+        "name": "WireCat · current landing composition",
+        "href": "http://127.0.0.1:4329/landing-tabs"
+      },
+      {
+        "name": "Focused workspace · Agent chat connection",
+        "href": "http://127.0.0.1:4329/landing-workspace-chat"
+      },
+      {
+        "name": "Focused workspace · Complex search",
+        "href": "http://127.0.0.1:4329/landing-workspace-search"
+      },
+      {
+        "name": "Focused workspace · Voice note → next step",
+        "href": "http://127.0.0.1:4329/landing-workspace-voice"
+      },
+      {
+        "name": "Focused workspace",
+        "href": "http://127.0.0.1:4329/landing-workspace"
+      },
+      {
+        "name": "WireCat · compact landing",
+        "href": "http://127.0.0.1:4329/landing"
+      },
+      {
+        "name": "Messenger conversation",
+        "href": "http://127.0.0.1:4329/messenger"
+      },
+      {
+        "name": "Command and closing-block options",
+        "href": "http://127.0.0.1:4329/refinement-options"
+      },
+      {
+        "name": "Conversation thread",
+        "href": "http://127.0.0.1:4329/thread"
+      }
+    ]
+  },
+  {
+    "name": "Original design/landing concepts",
+    "items": [
+      {
+        "name": "a morning brief",
+        "href": "http://127.0.0.1:4329/archive/a-morning-brief.html"
+      },
+      {
+        "name": "b the thread",
+        "href": "http://127.0.0.1:4329/archive/b-the-thread.html"
+      },
+      {
+        "name": "c arrivals board",
+        "href": "http://127.0.0.1:4329/archive/c-arrivals-board.html"
+      },
+      {
+        "name": "d agent desk",
+        "href": "http://127.0.0.1:4329/archive/d-agent-desk.html"
+      },
+      {
+        "name": "e ask run answer",
+        "href": "http://127.0.0.1:4329/archive/e-ask-run-answer.html"
+      },
+      {
+        "name": "f one message",
+        "href": "http://127.0.0.1:4329/archive/f-one-message.html"
+      },
+      {
+        "name": "patterns",
+        "href": "http://127.0.0.1:4329/archive/patterns.html"
+      },
+      {
+        "name": "production layout en",
+        "href": "http://127.0.0.1:4329/archive/production-layout-en.html"
+      },
+      {
+        "name": "production layout es",
+        "href": "http://127.0.0.1:4329/archive/production-layout-es.html"
+      },
+      {
+        "name": "production layout ru",
+        "href": "http://127.0.0.1:4329/archive/production-layout-ru.html"
+      }
+    ]
+  },
+  {
+    "name": "Preserved before this composition",
+    "items": [
+      {
+        "name": "Landing · before visual rework",
+        "href": "http://127.0.0.1:4329/history/landing-before-visual-rework.html"
+      },
+      {
+        "name": "Chat bubbles · before role switch",
+        "href": "http://127.0.0.1:4329/history/bubbles-before-role-switch.html"
+      }
+    ]
+  }
+]

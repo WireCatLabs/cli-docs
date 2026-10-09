@@ -23,7 +23,7 @@ for (const lang of ["en", "ru", "es"]) {
         const response = await page.goto(path)
         expect(response?.status(), path).toBe(200)
         await page.evaluate(() => document.fonts.ready)
-        if (path === (lang === "en" ? "/" : `/${lang}`)) await expect(page.locator(".sp-input")).toBeEditable()
+        if (path === (lang === "en" ? "/" : `/${lang}`)) await expect(page.locator("[data-mini-query]")).toBeAttached()
         await expect(page.locator("h1")).toHaveCount(1)
         await expect(page.locator("main")).toHaveCount(1)
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), path).toBe(true)
@@ -85,7 +85,7 @@ test("dark landing text retains contrast at desktop and mobile widths", async ({
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1000 })
       await page.goto(lang === "en" ? "/" : `/${lang}`)
-      await expect(page.locator(".sp-input")).toBeEditable()
+      await expect(page.locator("[data-mini-query]")).toBeAttached()
       const result = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa", "wcag21aa", "best-practice"])
         .analyze()
@@ -160,17 +160,17 @@ for (const lang of ["en", "ru", "es"]) {
       Object.defineProperty(navigator, "clipboard", { value: { writeText: async () => {} } }),
     )
     await page.goto(lang === "en" ? "/" : `/${lang}`)
-    await page.locator(".hero .agent-connect summary").click()
-    const button = page.locator(".hero .connect-choice").first()
+    await page.locator(".hero [data-connect]>summary").click()
+    const button = page.locator(".hero .copy-agent").first()
     await button.click()
-    const copied = { en: "Copied", ru: "Скопировано", es: "Copiado" }[lang]
-    await expect(button).toHaveAccessibleName(`Telegram: ${copied}`)
-    await expect(page.locator('main > p[role="status"]')).toHaveText(`Telegram: ${copied}`)
+    const copied = { en: "Copied", ru: "Скопировано", es: "Copiado" }[lang] ?? "Copied"
+    await expect(button).toBeVisible()
+    await expect(page.locator('.toast[role="status"]')).toContainText(copied)
     await page.keyboard.press("Escape")
-    await page.locator('[data-messenger="max"]').click()
-    await page.locator(".hero .agent-connect summary").click()
-    const original = { en: "Copy", ru: "Копировать", es: "Copiar" }[lang]
-    await expect(button).toHaveAccessibleName(`Telegram: ${original}`)
+    await page.locator('[data-demo-provider="max"]').click()
+    await page.locator(".hero [data-connect]>summary").click()
+    const original = { en: "Copy", ru: "Скопировать", es: "Copiar" }[lang] ?? "Copy"
+    await expect(button).toHaveAccessibleName(new RegExp(original))
   })
 }
 
@@ -186,7 +186,9 @@ for (const lang of ["en", "ru", "es"]) {
 
 test("the public project contact opts out of an unnecessary edge email decoder", async ({ request }) => {
   const html = await (await request.get("/")).text()
-  expect(html).toContain('<!--email_off--><a href="mailto:hello@wirecat.dev">hello@wirecat.dev</a><!--/email_off-->')
+  expect(html).toMatch(
+    /<!--email_off--><a href="mailto:hello@wirecat\.dev">[\s\S]*?hello@wirecat\.dev<\/a><!--\/email_off-->/,
+  )
 })
 
 for (const lang of ["en", "ru", "es"]) {

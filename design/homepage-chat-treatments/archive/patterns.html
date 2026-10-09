@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WireCat Wallpapers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,500..900&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: a swatch book. Pick a palette and a wallpaper; the preview shows them behind real bubbles. */
+  :root {
+    --wall: #c3cab0; --wall-ink: #aeb796;
+    --ink: #14170e; --ink-soft: #424a33;
+    --me: #2f37d9; --me-ink: #ffffff; --bot: #ffffff; --bot-ink: #14170e; --bot-soft: #626b52;
+    --panel: #14170e; --panel-ink: #f2f6e4; --panel-soft: #aab394;
+    --page: #ecede6;
+    --display: "Anybody", "Onest", system-ui, sans-serif;
+    --body: "Onest", system-ui, sans-serif;
+    --code: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  }
+  :root[data-mode="dark"] {
+    --ink: #eef3df; --ink-soft: #b5bf9c; --me: #4b53f0; --bot: #2a3220; --bot-ink: #eef3df; --bot-soft: #a2ac8a;
+    --panel: #0f130a; --page: #121510; color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink); font: 400 16px/1.5 var(--body); padding-inline: clamp(16px, 4vw, 40px); }
+  header { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding-block: 22px; }
+  header img { height: 30px; }
+  h1 { font: 900 clamp(36px, 5vw, 60px)/0.95 var(--display); font-stretch: 62%; text-transform: uppercase; margin: 12px 0 8px; }
+  h2 { font: 800 28px/1 var(--display); font-stretch: 75%; text-transform: uppercase; margin: 48px 0 16px; }
+  p.note { color: var(--ink-soft); max-width: 46em; margin: 0 0 20px; }
+  .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .chip { border: 2px solid transparent; border-radius: 999px; padding: 8px 14px 8px 8px; cursor: pointer; background: var(--bot); color: var(--bot-ink); font: 600 14px/1 var(--body); display: inline-flex; gap: 8px; align-items: center; }
+  .chip i { width: 22px; height: 22px; border-radius: 50%; display: inline-block; box-shadow: inset 0 0 0 1px #0002; }
+  .chip[aria-pressed="true"] { border-color: var(--me); }
+  .mode { border: 0; border-radius: 999px; padding: 10px 16px; cursor: pointer; background: var(--panel); color: var(--panel-ink); font: 600 14px/1 var(--body); }
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 24px; align-items: start; margin-top: 24px; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .tile { border: 3px solid transparent; border-radius: 16px; height: 120px; cursor: pointer; position: relative; background-color: var(--wall); padding: 0; overflow: hidden; }
+  .tile span { position: absolute; left: 8px; bottom: 8px; background: var(--bot); color: var(--bot-ink); font: 600 12px/1 var(--body); padding: 6px 9px; border-radius: 999px; }
+  .tile[aria-pressed="true"] { border-color: var(--me); }
+  .preview { position: sticky; top: 16px; border-radius: 28px; background-color: var(--wall); padding: clamp(20px, 3vw, 36px); min-height: 520px; display: flex; flex-direction: column; gap: 10px; }
+  .preview h3 { font: 900 clamp(34px, 4vw, 54px)/0.9 var(--display); font-stretch: 62%; text-transform: uppercase; margin: 0 0 14px; }
+  .preview h3 b { color: var(--me); font-weight: inherit; }
+  .msg { max-width: 80%; padding: 9px 13px; border-radius: 18px; font-size: 15px; }
+  .me { align-self: flex-end; background: var(--me); color: var(--me-ink); border-bottom-right-radius: 6px; }
+  .bot { align-self: flex-start; background: var(--bot); color: var(--bot-ink); border-bottom-left-radius: 6px; }
+  .ran { display: block; font: 500 12px/1.3 var(--code); color: var(--bot-soft); margin-bottom: 4px; }
+  .cmd { align-self: flex-start; margin-top: auto; background: var(--panel); color: var(--panel-ink); border-radius: 999px; padding: 12px 18px; font: 400 14px/1 var(--code); }
+  .picked { font: 500 13px/1.4 var(--code); color: var(--ink-soft); margin-top: 8px; }
+  .logos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-bottom: 64px; }
+  .logo-card { border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 18px; align-items: flex-start; }
+  .logo-card img { max-width: 100%; height: auto; }
+  .logo-card small { font: 500 12px/1 var(--code); opacity: 0.7; }
+  .on-light { background: #f4f5ef; color: #14170e; }
+  .on-dark { background: #14170e; color: #eef3df; }
+  .on-wall { background: #c3cab0; color: #14170e; }
+  .html-mark { display: inline-flex; align-items: center; gap: 10px; font: 800 22px/1 var(--display); font-stretch: 120%; letter-spacing: -0.01em; }
+  .html-mark svg { width: 30px; height: 30px; }
+  @media (max-width: 860px) { .layout { grid-template-columns: minmax(0, 1fr); } .preview { position: static; min-height: 0; } }
+</style>
+</head>
+<body>
+<header>
+  <img src="../logo/wirecat-lockup.svg" alt="WireCat" id="lockup">
+  <button class="mode" type="button" id="mode">Dark</button>
+</header>
+
+<h1>Wallpapers and palettes</h1>
+<p class="note">Muted grounds instead of the bright lime. Pick a palette, then a wallpaper. The preview shows it behind real bubbles, so you can judge how loud it is under text.</p>
+
+<div class="controls" id="palettes" role="group" aria-label="Palette"></div>
+
+<div class="layout">
+  <div class="tiles" id="tiles" role="group" aria-label="Wallpaper"></div>
+  <div>
+    <div class="preview" id="preview">
+      <h3>Ask what you missed. <b>Your agent already read it.</b></h3>
+      <div class="msg me">Who owes what from the Lisbon trip?</div>
+      <div class="msg bot"><span class="ran">tg messages search "paid" --chat "Lisbon trip"</span>Ana paid €240 for the hotel, Ben €96 for dinner, you €60 for the taxi. Split three ways that is €132 each, so you owe Ana €72 and Ben owes her €36.</div>
+      <div class="msg me">Remind me to pay her tonight.</div>
+      <div class="msg bot"><span class="ran">tg messages send me "Pay Ana €72" --at-time 2026-10-02T20:00</span>It lands in your Saved Messages at 20:00.</div>
+      <span class="cmd">$ npm i -g @leemour/tg-cli</span>
+    </div>
+    <p class="picked" id="picked"></p>
+  </div>
+</div>
+
+<h2>Logo</h2>
+<p class="note">SVG files in <code>design/logo/</code>: the mark, and the mark with the name, each for light, dark and one colour. The name is drawn as outlines, so it looks the same without the font. The last card is the HTML header, for comparison.</p>
+<div class="logos">
+  <div class="logo-card on-light"><img src="../logo/wirecat-lockup.svg" alt="WireCat" height="60" style="height:auto;width:min(100%,300px)"><img src="../logo/wirecat-mark.svg" alt="" height="64"><small>wirecat-lockup.svg · wirecat-mark.svg</small></div>
+  <div class="logo-card on-dark"><img src="../logo/wirecat-lockup-dark.svg" alt="WireCat" height="60" style="height:auto;width:min(100%,300px)"><img src="../logo/wirecat-mark-dark.svg" alt="" height="64"><small>-dark.svg</small></div>
+  <div class="logo-card on-wall"><img src="../logo/wirecat-lockup-mono.svg" alt="WireCat" height="60" style="height:auto;width:min(100%,300px)"><img src="../logo/wirecat-mark-mono.svg" alt="" height="64"><small>-mono.svg</small></div>
+  <div class="logo-card on-light"><span class="html-mark" style="transform:scale(2);transform-origin:left center;margin-block:16px"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="16" fill="#2f37d9"/><path d="M9 21V11l4 4 3-4 3 4 4-4v10" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/></svg>WireCat</span><small>HTML header at 2×, for comparison</small></div>
+</div>
+
+<script src="patterns.js"></script>
+<script>
+  const palettes = {
+    sage: { label: "Sage", light: ["#c3cab0", "#afb898"], dark: ["#1c2118", "#272d21"] },
+    fog: { label: "Fog", light: ["#cbd1cf", "#b8c0bd"], dark: ["#171b1c", "#222829"] },
+    dusk: { label: "Dusk", light: ["#c8c9d9", "#b5b7cb"], dark: ["#1a1b26", "#262838"] },
+    moss: { label: "Moss", light: ["#98a383", "#8a9575"], dark: ["#20261a", "#2c3323"] },
+    clay: { label: "Clay", light: ["#d2c9c0", "#c0b6ab"], dark: ["#1f1b18", "#2b2622"] },
+    lime: { label: "Original lime", light: ["#cddc98", "#b4c77a"], dark: ["#1b2213", "#26301a"] },
+  }
+  const root = document.documentElement
+  const state = { palette: "sage", pattern: "doodles", mode: "light" }
+  try { Object.assign(state, JSON.parse(localStorage.getItem("wirecat-wall") ?? "{}")) } catch {}
+
+  const paletteBox = document.getElementById("palettes")
+  for (const [key, p] of Object.entries(palettes)) {
+    const chip = document.createElement("button")
+    chip.className = "chip"; chip.type = "button"; chip.dataset.key = key
+    chip.innerHTML = `<i style="background:${p.light[0]}"></i>${p.label}`
+    chip.addEventListener("click", () => { state.palette = key; paint() })
+    paletteBox.append(chip)
+  }
+  const tileBox = document.getElementById("tiles")
+  for (const [key, tile] of Object.entries(WirePatterns.tiles)) {
+    const button = document.createElement("button")
+    button.className = "tile"; button.type = "button"; button.dataset.key = key
+    button.innerHTML = `<span>${tile.label}</span>`
+    button.addEventListener("click", () => { state.pattern = key; paint() })
+    tileBox.append(button)
+  }
+  document.getElementById("mode").addEventListener("click", () => { state.mode = state.mode === "light" ? "dark" : "light"; paint() })
+
+  function paint() {
+    const [wall, ink] = palettes[state.palette][state.mode]
+    root.dataset.mode = state.mode
+    root.style.setProperty("--wall", wall)
+    document.getElementById("mode").textContent = state.mode === "light" ? "Dark" : "Light"
+    document.getElementById("lockup").src = state.mode === "light" ? "../logo/wirecat-lockup.svg" : "../logo/wirecat-lockup-dark.svg"
+    for (const chip of paletteBox.children) chip.setAttribute("aria-pressed", String(chip.dataset.key === state.palette))
+    for (const tile of tileBox.children) {
+      tile.setAttribute("aria-pressed", String(tile.dataset.key === state.pattern))
+      WirePatterns.apply(tile, tile.dataset.key, ink)
+    }
+    WirePatterns.apply(document.getElementById("preview"), state.pattern, ink)
+    document.getElementById("picked").textContent = `palette: ${state.palette} (${wall}) · wallpaper: ${state.pattern} · ${state.mode}`
+    try { localStorage.setItem("wirecat-wall", JSON.stringify(state)) } catch {}
+  }
+  paint()
+</script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 {
   "en": {
-    "homeTitle": "WireCat — Telegram and MAX for your AI agent",
-    "homeDescription": "Connect your AI agent to Telegram and MAX on your computer. Search conversations, track commitments and prepare replies with open-source CLI tools.",
+    "homeTitle": "WireCat — Memory for your messages",
+    "homeDescription": "Connect your AI agent to Telegram, MAX, email and notes. Search conversations, gather context and prepare replies with free, open-source tools.",
     "homeLabel": "Home",
     "docsLabel": "Documentation",
     "socialTitle": "Your conversations. Your AI agent.",
@@ -45,8 +45,8 @@
     }
   },
   "ru": {
-    "homeTitle": "WireCat — Telegram и MAX для вашего ИИ-агента",
-    "homeDescription": "Подключите ИИ-агента к Telegram и MAX на своём компьютере. Ищите переписки, следите за договорённостями и готовьте ответы с CLI-инструментами с открытым кодом.",
+    "homeTitle": "WireCat — Память для вашей переписки",
+    "homeDescription": "Подключите ИИ-агента к Telegram, MAX, почте и заметкам. Ищите в переписке, собирайте контекст и готовьте ответы с бесплатными инструментами с открытым кодом.",
     "homeLabel": "Главная",
     "docsLabel": "Документация",
     "socialTitle": "Ваши переписки. Ваш ИИ-агент.",
@@ -90,8 +90,8 @@
     }
   },
   "es": {
-    "homeTitle": "WireCat — Telegram y MAX para tu agente de IA",
-    "homeDescription": "Conecta tu agente de IA a Telegram y MAX en tu ordenador. Busca conversaciones, sigue acuerdos y prepara respuestas con herramientas CLI de código abierto.",
+    "homeTitle": "WireCat — Memoria para tus mensajes",
+    "homeDescription": "Conecta tu agente de IA con Telegram, MAX, correo y notas. Busca conversaciones, reúne contexto y prepara respuestas con herramientas gratuitas de código abierto.",
     "homeLabel": "Inicio",
     "docsLabel": "Documentación",
     "socialTitle": "Tus conversaciones. Tu agente de IA.",
