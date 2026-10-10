@@ -163,3 +163,9 @@ a.animated-text-link:is(:hover, :focus-visible),
 @media (prefers-reduced-motion: reduce) {
   .animated-text-link > .link-label { transition: none; }
 }
+
+/* Slower press feedback for buttons; link motion remains unchanged. */
+.button, [data-copy], button:not(:disabled) { transition-duration: 320ms; }
+@media (prefers-reduced-motion: reduce) {
+  .button, [data-copy], button:not(:disabled) { transition-duration: 0s; }
+}

@@ -126,3 +126,17 @@ html > body[data-scroll-locked] {
     animation: none;
   }
 }
+
+/* Keep copy-button press feedback consistent with the public pages. */
+.docs-copy,
+.sp-copy,
+.meeting-scenario [data-prompt] {
+  transition-duration: 320ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .docs-copy,
+  .sp-copy,
+  .meeting-scenario [data-prompt] {
+    transition-duration: 0s;
+  }
+}

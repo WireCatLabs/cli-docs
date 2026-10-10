@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { CopyFeedback } from "@/components/copy-feedback"
 import { SiteAnalytics } from "@/components/site-analytics"
 import { i18n } from "@/lib/i18n"
 import { pageMetadata, seoWords } from "@/lib/seo"
@@ -18,6 +19,7 @@ export default async function Layout({
       <body className="flex flex-col min-h-screen">
         <SiteAnalytics />
         {children}
+        <CopyFeedback lang={lang} />
       </body>
     </html>
   )

@@ -68,58 +68,132 @@ html.dark .wirecat-editorial .footer-host .theme-sun {
 html.dark .wirecat-editorial .footer-host .theme-moon {
   display: none;
 }
-@media (max-width: 760px) {
-  .wirecat-editorial .site-header {
-    position: relative;
-    z-index: 20;
-    flex-wrap: wrap;
-    gap: 0;
-    padding-block: 18px;
+/* Collapse only navigation links when their actual content no longer fits. */
+.wirecat-editorial.public-site .site-header {
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 20px;
+}
+.wirecat-editorial .site-header .brand {
+  flex-shrink: 0;
+}
+.wirecat-editorial .site-header > .public-site-menu {
+  display: flex;
+  flex-shrink: 0;
+  gap: 20px;
+  align-items: center;
+}
+.wirecat-editorial.public-site .site-header > .public-site-menu > a {
+  display: inline-flex;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.wirecat-editorial .public-site-controls {
+  display: flex;
+  flex-shrink: 0;
+  margin-left: auto;
+  align-items: center;
+  gap: 12px;
+}
+.wirecat-editorial .site-header .connect-dropdown > summary {
+  width: max-content;
+  white-space: nowrap;
+}
+.wirecat-editorial .site-header [data-connect] {
+  margin-left: 0;
+}
+.wirecat-editorial .site-header.text-menu-collapsed .site-menu-toggle {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+  color: var(--ink);
+  transition: background-color 320ms ease-out;
+}
+.wirecat-editorial .site-menu-toggle:hover,
+.wirecat-editorial .site-menu-toggle[aria-expanded="true"] {
+  background: var(--soft);
+}
+.wirecat-editorial .site-header.text-menu-collapsed > .public-site-menu {
+  position: absolute;
+  top: calc(100% - 8px);
+  right: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 240px;
+  max-width: calc(100vw - 32px);
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+  box-shadow: 0 12px 30px #1427261a;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.wirecat-editorial .site-header.connect-in-menu > .public-site-menu {
+  width: min(340px, calc(100vw - 48px));
+  max-height: calc(100dvh - 110px);
+  overflow-y: auto;
+}
+.wirecat-editorial .site-header.text-menu-collapsed.menu-open > .public-site-menu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  animation: public-menu-appear 320ms ease-out;
+}
+.wirecat-editorial .site-header.text-menu-collapsed > .public-site-menu > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.wirecat-editorial .site-header .connect-panel {
+  max-width: calc(100vw - 32px);
+}
+
+.wirecat-editorial .site-header.connect-in-menu [data-connect] {
+  position: static;
+  width: 100%;
+}
+.wirecat-editorial .site-header.connect-in-menu .connect-panel {
+  position: static;
+  width: 100%;
+  max-width: none;
+  margin-top: 12px;
+}
+@media (max-width: 480px) {
+  .wirecat-editorial .site-header.wrap {
+    width: calc(100% - 32px);
+    gap: 8px;
   }
-  .wirecat-editorial .site-header .site-menu-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: auto;
-    width: 44px;
-    height: 44px;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    background: var(--paper);
-    color: var(--ink);
-    transition: background-color 180ms ease-out;
+  .wirecat-editorial .site-header .brand {
+    gap: 6px;
   }
-  .wirecat-editorial .site-menu-toggle:hover,
-  .wirecat-editorial .site-menu-toggle[aria-expanded="true"] {
-    background: var(--soft);
+  .wirecat-editorial .site-header .brand .wirecat-logo-mark {
+    width: 28px;
+    height: 28px;
   }
-  .wirecat-editorial .site-header > .public-site-menu {
-    display: none;
+  .wirecat-editorial .site-header .brand .wirecat-logo-word {
+    width: clamp(92px, calc(100vw - 228px), 148px);
   }
-  .wirecat-editorial .site-header.menu-open > .public-site-menu {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 18px;
-    width: 100%;
-    padding: 22px 0 4px;
-    align-items: center;
-    animation: public-menu-appear 180ms ease-out;
+  .wirecat-editorial .public-site-controls {
+    gap: 6px;
   }
-  .wirecat-editorial .site-header.menu-open > .public-site-menu > a:not(.button) {
-    display: inline-flex;
-    min-height: 44px;
-    align-items: center;
+  .wirecat-editorial .site-header .editorial-language summary {
+    padding-inline: 8px;
+    gap: 6px;
   }
-  .wirecat-editorial .site-header .editorial-language nav {
-    right: auto;
-    left: 0;
-  }
-  .wirecat-editorial .site-header [data-connect] {
-    margin-left: 0;
-  }
-  .wirecat-editorial .site-header .connect-popover {
-    max-width: calc(100vw - 48px);
-    right: 0;
+  .wirecat-editorial .site-header .theme-switch {
+    width: 40px;
+    height: 40px;
   }
 }
 @keyframes public-menu-appear {

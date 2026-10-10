@@ -5,6 +5,7 @@ import "@/lib/landing/scenarios.css"
 import "./meeting-scenario.css"
 import { RotateCcw, Send } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
+import { notifyCopyFeedback } from "@/lib/copy-feedback"
 import type { MeetingSession, meetingCopy } from "@/lib/meeting-guide"
 
 type Props = { sessions: { tg: MeetingSession; max: MeetingSession }[]; text: typeof meetingCopy.en }
@@ -44,8 +45,10 @@ export function MeetingScenario({ sessions, text }: Props) {
       try {
         await navigator.clipboard.writeText(button.dataset.prompt ?? "")
         setCopyStatus(text.copied)
+        notifyCopyFeedback(true)
       } catch {
         setCopyStatus(text.copyFailed)
+        notifyCopyFeedback(false)
       }
     }
     root.addEventListener("click", copy)

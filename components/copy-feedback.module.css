@@ -1,0 +1,33 @@
+.toast {
+  position: fixed;
+  z-index: 9999;
+  bottom: 20px;
+  left: 50%;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  padding: 12px 18px;
+  border-radius: 7px;
+  background: var(--color-fd-foreground, #142726);
+  color: var(--color-fd-background, #f1f5f3);
+  font-family: "Onest", system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 8px);
+  transition:
+    opacity 320ms ease-out,
+    transform 320ms ease-out,
+    visibility 320ms;
+}
+.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    transition: none;
+  }
+}

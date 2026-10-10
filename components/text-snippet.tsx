@@ -2,6 +2,7 @@
 
 import { Check, Copy, MessageSquareText, Terminal } from "lucide-react"
 import { useEffect, useState } from "react"
+import { notifyCopyFeedback } from "@/lib/copy-feedback"
 import { type InstallationEventContext, trackSiteEvent } from "@/lib/site-events"
 import { wordsFor } from "@/lib/words"
 
@@ -51,9 +52,11 @@ export function CopyText({
             try {
               await navigator.clipboard.writeText(text)
               setStatus("copied")
+              notifyCopyFeedback(true)
               if (tracking) trackSiteEvent("installation_command_copy", tracking)
             } catch {
               setStatus("failed")
+              notifyCopyFeedback(false)
             }
           }}
         >

@@ -1,5 +1,6 @@
 "use client"
 
+import { notifyCopyFeedback } from "@/lib/copy-feedback"
 import "@/lib/landing/search-playground.css"
 import { Popover } from "@base-ui/react/popover"
 import {
@@ -586,10 +587,12 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
                 try {
                   await navigator.clipboard.writeText(command)
                   setCopied(true)
+                  notifyCopyFeedback(true)
                   setCopyError(false)
                 } catch {
                   setCopied(false)
                   setCopyError(true)
+                  notifyCopyFeedback(false)
                 }
               }}
             >

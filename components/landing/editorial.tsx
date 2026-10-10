@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation"
 import { useTheme } from "next-themes"
 import { useEffect, useRef } from "react"
+import { notifyCopyFeedback } from "@/lib/copy-feedback"
 import { prepareInstallationButton } from "@/lib/installation-command"
 import { searchDemo } from "@/lib/search-playground/engine"
 import { copiedInstallationTool, trackSiteEvent } from "@/lib/site-events"
@@ -67,6 +68,41 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
       menuToggle?.setAttribute("aria-expanded", "false")
     }
     closeMenu()
+    const controls = header?.querySelector<HTMLElement>(".public-site-controls")
+    const links = header?.querySelector<HTMLElement>(".public-site-menu")
+    const connect = controls?.querySelector<HTMLElement>("[data-connect]")
+    const fitHeader = () => {
+      if (!header || !controls || !links || !menuToggle || !connect) return
+      const width = (element: Element | null | undefined) => element?.getBoundingClientRect().width ?? 0
+      const gap = Number.parseFloat(getComputedStyle(header).columnGap) || 0
+      const controlGap = Number.parseFloat(getComputedStyle(controls).columnGap) || 0
+      const linkGap = 20
+      const anchors = [...links.querySelectorAll<HTMLAnchorElement>(":scope > a")]
+      const linkWidth =
+        anchors.reduce((sum, anchor) => sum + width(anchor.querySelector(".link-label") ?? anchor), 0) +
+        linkGap * Math.max(0, anchors.length - 1)
+      const brandWidth = width(header.querySelector(".brand"))
+      const languageWidth = width(controls.querySelector(".editorial-language summary"))
+      const themeWidth = width(controls.querySelector(".theme-switch"))
+      const connectWidth = width(connect.querySelector("summary"))
+      const available = header.clientWidth
+      const controlsWidth = languageWidth + themeWidth + connectWidth + controlGap * 2
+      const collapsed = brandWidth + linkWidth + controlsWidth + gap * 2 > available
+      header.classList.toggle("text-menu-collapsed", collapsed)
+      const moveConnect = collapsed && brandWidth + controlsWidth + 44 + gap * 2 > available
+      header.classList.toggle("connect-in-menu", moveConnect)
+      const parent = moveConnect ? links : controls
+      if (connect.parentElement !== parent) parent.append(connect)
+      if (!collapsed) closeMenu()
+    }
+    const headerObserver = new ResizeObserver(fitHeader)
+    if (header && controls && links && connect) {
+      headerObserver.observe(header)
+      fitHeader()
+      document.fonts.ready.then(() => {
+        if (!signal.aborted) fitHeader()
+      })
+    }
     menuToggle?.addEventListener(
       "click",
       () => {
@@ -92,7 +128,6 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
       },
       { signal },
     )
-    let toastTimer: ReturnType<typeof setTimeout> | undefined
     const copyTimers = new Map<HTMLElement, ReturnType<typeof setTimeout>>()
     const copyLabels = new Map<HTMLElement, string | null>()
     const scrollFrames = new Map<HTMLElement, number>()
@@ -129,14 +164,6 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
     const updateVisibility = () => root.classList.toggle("is-page-hidden", document.hidden)
     document.addEventListener("visibilitychange", updateVisibility, { signal })
     updateVisibility()
-    const notify = (message: string) => {
-      const toast = root.querySelector<HTMLElement>(".toast")
-      if (!toast) return
-      toast.textContent = message
-      toast.classList.add("visible")
-      clearTimeout(toastTimer)
-      toastTimer = setTimeout(() => toast.classList.remove("visible"), 2300)
-    }
     const surface = (element: Element) =>
       element.closest(".footer-host")
         ? ("footer" as const)
@@ -242,7 +269,7 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
               button,
               setTimeout(() => resetCopy(button), 3000),
             )
-            notify(words.copied)
+            notifyCopyFeedback(true)
             const selectedProvider = button
               .closest("[data-connect]")
               ?.querySelector<HTMLElement>('[data-connect-provider][aria-pressed="true"]')?.dataset.connectProvider
@@ -251,7 +278,7 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
               (button.matches(".copy-agent") ? (selectedProvider === "max" ? "max" : "tg") : undefined)
             if (tool) trackSiteEvent("installation_command_copy", { tool, locale: lang, surface: surface(button) })
           } catch {
-            if (!signal.aborted) notify(words.unavailable)
+            if (!signal.aborted) notifyCopyFeedback(false)
           }
         }
         if (button.matches('[role="tab"]')) selectTab(button)
@@ -469,9 +496,9 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
     return () => {
       controller.abort()
       cueObserver.disconnect()
+      headerObserver.disconnect()
       for (const scene of scrollFrames.keys()) cancelScroll(scene)
       for (const reveal of reveals) reveal.cancel()
-      clearTimeout(toastTimer)
       for (const button of copyTimers.keys()) resetCopy(button)
     }
   }, [lang, setTheme, router, html])
