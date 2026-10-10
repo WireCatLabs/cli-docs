@@ -45,8 +45,7 @@ describe("browser test structure", () => {
     ).toContainEqual(expect.stringContaining("runtime loop"))
   })
   it("parses JSX browser tests without losing repeated-scan detection", () => {
-    const source =
-      header + `test('jsx', async () => { const node = <span />; for (const route of routes) { ${scan}; } });`
+    const source = `${header}test('jsx', async () => { const node = <span />; for (const route of routes) { ${scan}; } });`
     expect(browserSourceProblems(source, "widget.test.tsx")).toContainEqual(expect.stringContaining("runtime loop"))
   })
   it("does not treat comments or string examples as scan calls", () => {
