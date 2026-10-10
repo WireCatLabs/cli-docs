@@ -236,3 +236,8 @@ html.dark .wirecat-editorial .footer-host .theme-moon {
   min-height: 0;
   z-index: 30;
 }
+
+/* Brand artwork uses filled shapes; only its monogram has an explicit stroke. */
+.wirecat-editorial :is(.wirecat-logo-mark, .wirecat-logo-word) {
+  stroke: none;
+}

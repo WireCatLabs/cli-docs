@@ -28,8 +28,15 @@ jobs:
   platform:
     uses: ./.github/workflows/windows-install.yml
 
+  security:
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
+    uses: WireCatLabs/cli-core/.github/workflows/release-checks.yml@1183bfb970330989ad8acec917b14b7e6187de15
+
   deploy:
-    needs: platform
+    needs: [platform, security]
     runs-on: ubuntu-latest
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

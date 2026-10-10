@@ -48,11 +48,15 @@ También comprobamos si se encontraron mensajes útiles antes de ordenarlos: cam
 
 ## Rendimiento y recursos
 
-Medimos cuánto tarda una tarea completa, cuánta memoria usa y cómo cambia al aumentar los datos. Para la búsqueda, incluye encontrar mensajes, ordenar resultados, añadir réplicas útiles y preparar la salida.
+Comprobamos si las herramientas siguen respondiendo bien al aumentar el trabajo:
 
-Miramos el tiempo de espera habitual y las ejecuciones más lentas. Los informes pueden llamarlos **p50** (la mitad de las ejecuciones medidas termina dentro de ese tiempo) y **p95** (el 95% termina dentro de él). También comparamos la primera ejecución con las posteriores y medimos la preparación del archivo por separado de la búsqueda.
+- **Velocidad de la tarea.** Medimos la tarea completa. Para la búsqueda, incluye encontrar mensajes, ordenarlos, añadir respuestas útiles y preparar la salida.
+- **Ejecuciones habituales y lentas.** Medimos la espera habitual y los casos más lentos. Los informes usan **p50** para el tiempo en que termina la mitad de las ejecuciones medidas y **p95** para el tiempo en que termina el 95%.
+- **Archivos grandes y primeras ejecuciones.** Comprobamos la velocidad al aumentar los datos, comparamos la primera ejecución con las posteriores y medimos la preparación del archivo por separado de la búsqueda.
+- **Uso de memoria.** Medimos la memoria usada durante la tarea, también con mayores cantidades de datos.
+- **Descargas y carga.** Si una función usa un modelo descargable, medimos tamaño y tiempo de descarga, tiempo de carga y uso de memoria. Una descarga pequeña no implica necesariamente poca memoria.
 
-Si una función usa un modelo descargable, medimos tamaño y tiempo de descarga, tiempo de carga y consumo de memoria. Una descarga pequeña no implica necesariamente poca memoria. Las comparaciones registran el equipo y la carga para que un resultado de una máquina no parezca una promesa para todos los dispositivos. Los [experimentos de búsqueda](https://github.com/WireCatLabs/cli-testing/tree/main/performance/search) contienen las mediciones detalladas.
+Las comparaciones registran el equipo y la carga para que un resultado de una máquina no parezca una promesa para todos los dispositivos. Los [experimentos de búsqueda](https://github.com/WireCatLabs/cli-testing/tree/main/performance/search) contienen las mediciones detalladas.
 
 ## Seguridad y privacidad
 
@@ -70,9 +74,14 @@ Consulta los controles que puedes configurar en [seguridad](./security.mdx) y [p
 
 ## Experiencia de usuario y documentación
 
-Probamos tareas reales: ¿puede una persona encontrar la orden adecuada, entender un error y saber si la tarea terminó bien? En el sitio de documentación probamos abrir guías, seguir enlaces, usar la búsqueda y copiar instrucciones.
+Comprobamos si las personas pueden completar sus tareas y entender el resultado:
 
-Comprobamos el teclado, las pantallas móviles, la accesibilidad y todos los idiomas compatibles. Las pruebas automáticas detectan enlaces rotos, traducciones ausentes y algunos problemas de accesibilidad. Las revisiones manuales valoran si las instrucciones son legibles, los ejemplos tienen sentido y la página ofrece un siguiente paso útil.
+- **Encontrar y usar una función.** ¿Puede una persona encontrar la orden adecuada, entender un error y saber si la tarea terminó bien?
+- **Guías y ejemplos.** Probamos abrir guías, seguir enlaces, usar la búsqueda y copiar instrucciones. Las revisiones manuales valoran si los ejemplos tienen sentido y ofrecen un siguiente paso útil.
+- **Teclado, móvil y accesibilidad.** Comprobamos que la documentación se pueda usar con teclado, en pantallas pequeñas y con ayudas de accesibilidad.
+- **Idiomas.** Comprobamos todos los idiomas compatibles para detectar traducciones ausentes e instrucciones legibles que mantengan el mismo significado.
+
+Las pruebas automáticas detectan enlaces rotos, traducciones ausentes y algunos problemas de accesibilidad. Las personas revisan la claridad y la utilidad.
 
 Durante el desarrollo buscamos errores en el código, ejecutamos pruebas de funciones y comprobamos la documentación y un grupo corto de tareas de navegador. Antes de publicar, la compilación automática hace comprobaciones más amplias del sitio completo, sus enlaces y su comportamiento en el navegador. Las órdenes exactas para colaboradores están en las guías de desarrollo de los repositorios, incluida la [guía de pruebas de cli-testing](https://github.com/WireCatLabs/cli-testing/blob/main/docs/dev/TESTING.md).
 

@@ -294,7 +294,7 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
           if (menu) {
             for (const other of Array.from(menu.querySelectorAll<HTMLElement>("[data-connect-provider]")))
               other.setAttribute("aria-pressed", String(other === button))
-            const prompt = wordsFor(lang).onboarding.prompt(tool, `@leemour/${tool}-cli`)
+            const prompt = wordsFor(lang).onboarding.prompt(tool, `@wirecat/${tool}-cli`)
             const text = menu.querySelector<HTMLElement>(".agent-prompt")
             const copy = menu.querySelector<HTMLElement>(".copy-agent")
             if (text) text.textContent = prompt
@@ -305,7 +305,7 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
             const command = menu.querySelector<HTMLButtonElement>(".command [data-copy]")
             if (command) {
               resetCopy(command)
-              command.dataset.copy = `npm install -g @leemour/${tool}-cli && ${tool} skill install --for all`
+              command.dataset.copy = `npm install -g @wirecat/${tool}-cli && ${tool} skill install --for all`
               prepareInstallationButton(command)
               const code = menu.querySelector<HTMLElement>(".command code")
               if (code) code.textContent = command.dataset.copy ?? ""

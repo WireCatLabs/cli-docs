@@ -48,11 +48,15 @@ We check whether useful messages were found before sorting them, too: changing t
 
 ## Performance and resource use
 
-We measure how long a whole task takes, how much memory it uses and how that changes as the data grows. For search, that includes finding messages, sorting results, adding useful replies and preparing the output.
+We check whether tools stay responsive as the work gets larger:
 
-We look at typical waiting time and slower runs. Reports may call these **p50** (half the measured runs finish within this time) and **p95** (95% finish within it). We also compare the first run with later runs, and measure preparing an archive separately from searching it.
+- **Task speed.** We time the whole task. For search, that includes finding messages, sorting them, adding useful replies and preparing the output.
+- **Typical and slower runs.** We measure ordinary waiting time and slower cases. Reports use **p50** for the time half the measured runs finish within, and **p95** for the time 95% finish within.
+- **Larger archives and first runs.** We check how speed changes as the data grows, compare the first run with later runs, and measure preparing an archive separately from searching it.
+- **Memory use.** We measure the memory used while the task runs, including with larger amounts of data.
+- **Downloads and loading.** If a feature uses a downloadable model, we measure download size and time, loading time and memory use. A small download does not necessarily mean low memory use.
 
-If a feature uses a downloadable model, we measure download size and time, loading time and memory use. A small download does not necessarily mean low memory use. Comparisons record the computer and workload so a result from one machine is not presented as a promise for every device. The [search experiments](https://github.com/WireCatLabs/cli-testing/tree/main/performance/search) contain the detailed measurements.
+Comparisons record the computer and workload so a result from one machine is not presented as a promise for every device. The [search experiments](https://github.com/WireCatLabs/cli-testing/tree/main/performance/search) contain the detailed measurements.
 
 ## Security and privacy
 
@@ -70,9 +74,14 @@ For the controls you can set yourself, read [security](./security.mdx) and [perm
 
 ## User experience and documentation
 
-We check real tasks: can someone find the right command, understand an error and tell whether the task succeeded? For the documentation site, we try opening guides, following links, using search and copying instructions.
+We check whether people can complete their tasks and understand the result:
 
-We check keyboard use, mobile screens, accessibility and every supported language. Automatic checks find broken links, missing translations and some accessibility problems. Manual reviews check that instructions are readable, examples make sense and the page gives a useful next step.
+- **Finding and using a feature.** Can someone find the right command, understand an error and tell whether the task succeeded?
+- **Guides and examples.** We try opening guides, following links, using search and copying instructions. Manual reviews check that examples make sense and give a useful next step.
+- **Keyboard, mobile and accessibility.** We check that the documentation can be used with a keyboard, on smaller screens and with accessibility support.
+- **Languages.** We check every supported language for missing translations and readable instructions that keep the same meaning.
+
+Automatic checks find broken links, missing translations and some accessibility problems. People review clarity and usefulness.
 
 During development we check code for mistakes, run feature tests, and check documentation and a short set of browser tasks. Before publication, the automated build runs broader checks on the complete site, its links and browser behavior. Exact contributor commands live in the repositories' developer guides, including [cli-testing's testing guide](https://github.com/WireCatLabs/cli-testing/blob/main/docs/dev/TESTING.md).
 

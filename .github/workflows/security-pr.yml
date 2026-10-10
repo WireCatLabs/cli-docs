@@ -1,0 +1,13 @@
+name: Security PR
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  secrets:
+    uses: WireCatLabs/cli-core/.github/workflows/security-pr.yml@1183bfb970330989ad8acec917b14b7e6187de15

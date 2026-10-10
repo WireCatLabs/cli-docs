@@ -32,6 +32,7 @@ import {
 import { appName, getPageMarkdownUrl, toolOf } from "@/lib/shared"
 import { homePath } from "@/lib/site-routes"
 import { source } from "@/lib/source"
+import { toolInstallationGuide } from "@/lib/tool-installation"
 import { wordsFor } from "@/lib/words"
 import "@/lib/docs-usability.css"
 
@@ -92,6 +93,11 @@ export default async function Page(props: Props) {
       : guide === "installation"
         ? [
             { title: ui.installGuide, url: "#agent-installation", depth: 2 },
+            ...toolInstallationGuide(tool?.name ?? "tg", lang).sections.map((section) => ({
+              title: section.title,
+              url: `#${section.id}`,
+              depth: 3,
+            })),
             { title: installationReferenceTitle(lang), url: "#installation-reference", depth: 2 },
             ...page.data.toc,
           ]
@@ -150,7 +156,7 @@ export default async function Page(props: Props) {
         </Link>
       )}
       <DocsBody lang={written}>
-        {!taskGuide && guideOrientation(page.slugs, lang) && (
+        {!taskGuide && guide !== "installation" && guideOrientation(page.slugs, lang) && (
           <p data-guide-orientation lang={lang}>
             {guideOrientation(page.slugs, lang)}
           </p>
