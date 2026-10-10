@@ -105,7 +105,7 @@ If the connection drops during a send, `max` does not retry automatically. It re
 
 ### Files
 
-`--file` attaches a file from disk. Images, video and audio are detected by extension; other files are sent as documents. `--photo` sends an image as a photo, `--voice` sends Ogg Opus as a voice message, and `--as-file` sends video as a document. Files from hidden directories or `max`'s own directories require `--allow-any-file`. Text is optional when sending a file:
+`--file` attaches a file from disk. Images, video and audio are detected by extension; other files are sent as documents. `--photo` sends an image as a photo, `--voice` sends Ogg Opus as a voice message, and `--as-file` sends video as a document. Known credential files, `max`'s own directories and the message store require `--allow-any-file`; ordinary hidden working directories are allowed. Text is optional when sending a file:
 
 ```sh
 max sales bot messages send "Команда продаж" "Отчёт за неделю" --file report.pdf
@@ -316,7 +316,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Path and request parameters are flags, body is JSON in `--body`, `--body -` (from the pipe) or `--body-file`. `--body-file -` also reads stdin. The native parameter `timeout` is called `--poll-timeout`, and the global `--timeout` limits the entire command. The general option `--store-token <profile>` is not available for current MAX methods: they all reject it before performing the operation. Before sending, the body is checked against the schema, and the error message contains the field and what was expected in it, without the value itself. A list of all operations and which ones read and which ones write is [Bot API coverage](https://github.com/WireCatLabs/max-cli/blob/v0.43.0/docs/dev/bot-api-coverage.md).
+Path and request parameters are flags, body is JSON in `--body`, `--body -` (from the pipe) or `--body-file`. `--body-file -` also reads stdin. The native parameter `timeout` is called `--poll-timeout`, and the global `--timeout` limits the entire command. The general option `--store-token <profile>` is not available for current MAX methods: they all reject it before performing the operation. Before sending, the body is checked against the schema, and the error message contains the field and what was expected in it, without the value itself. A list of all operations and which ones read and which ones write is [Bot API coverage](https://github.com/WireCatLabs/max-cli/blob/v0.43.1/docs/dev/bot-api-coverage.md).
 
 <a id="для-скриптов-и-агентов"></a>
 

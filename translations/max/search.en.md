@@ -279,7 +279,7 @@ max attachments extract --chat "Книжный клуб" --ocr --concurrency 4 -
 
 **Files already saved.** `max attachments extract --chat <чат> --from-dir ./files` reads one folder without subfolders. It requires one uniquely matching source file or a complete set with downloader filenames. Do not combine `--from-dir` with `--download` or `--output-dir`. `max messages download <чат> <id> --extract` reads only files downloaded in this run; `--all --extract` does this for the entire run. Hashes detect changed files; agent text stays protected. Bounded MCP extraction returns a continuation `cursor` and file information, not text.
 
-`--from-dir` refuses hidden files and folders, the CLI’s own folders and the message store. MCP extraction downloads also require `output_dir` outside these locations. Local PDF text extraction allows at most 20 pages and 30 seconds.
+`--from-dir` refuses known credential files and folders, the CLI’s own folders and the message store; ordinary hidden working folders are allowed. MCP extraction downloads require `output_dir` outside protected locations. PDF text extraction has no separate page-count limit or 30-second timer; command cancellation and file-size and text-size limits still apply.
 
 ## Passwords, codes and cards
 

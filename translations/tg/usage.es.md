@@ -313,7 +313,7 @@ tg review --transcribe
 tg messages list "Book club" --transcribe --model gigaam-v3
 ```
 
-La transcripción local requiere una grabación Ogg Opus completa, mono o estéreo, de hasta 10 minutos. Divide las grabaciones más largas antes de transcribirlas.
+La transcripción local requiere una grabación Ogg Opus completa, mono o estéreo, sin un límite fijo de diez minutos. Las grabaciones más largas necesitan más memoria y tiempo de procesamiento.
 
 Telegram transcribe para cuentas Premium y algunos mensajes semanales con su prueba gratuita. Si no está disponible, lo hace un modelo local y la grabación no sale del equipo. El modelo se descarga una vez, solo cuando lo pides:
 
@@ -567,7 +567,7 @@ tg messages send "Book club" --voice note.ogg                 # a voice message,
 tg messages send "Book club" --file 3f9a.pdf --filename "Report Q3.pdf"   # the name others see
 ```
 
-`--photo` acepta `.jpg`, `.png` o `.webp`. Un `.mp4` o `.mov` pasado con `--file` se envía como vídeo salvo que añadas `--as-file`. `--voice` acepta un archivo Ogg Opus (`.ogg`, `.oga`, `.opus`) y se envía solo: sin texto ni otro archivo. Se rechazan los archivos y carpetas ocultos, `~/.ssh`, las carpetas de `tg` y el almacén local salvo que añadas `--allow-any-file`: ahí se guardan claves y tokens.
+`--photo` acepta `.jpg`, `.png` o `.webp`. Un `.mp4` o `.mov` pasado con `--file` se envía como vídeo salvo que añadas `--as-file`. `--voice` acepta un archivo Ogg Opus (`.ogg`, `.oga`, `.opus`) y se envía solo: sin texto ni otro archivo. Los archivos y carpetas conocidos de credenciales, las carpetas de `tg` y el almacén local están protegidos. Las carpetas de trabajo ocultas normales están permitidas; `--allow-any-file` en la CLI permite usar rutas protegidas.
 
 `--spoiler` difumina una foto o un vídeo hasta que se toca; un documento o un mensaje de voz no pueden aceptarlo. `--caption-above` muestra el texto encima de la foto o archivo. Solo los bots pueden proteger un mensaje para impedir que se reenvíe; Para proteger el contenido, active la configuración propia del chat en Telegram. Formatos, descargas y búsqueda de texto dentro de archivos: [archivos adjuntos](./attachments.md).
 

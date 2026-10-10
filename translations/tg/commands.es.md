@@ -26,6 +26,7 @@ toda la sesión de terminal; sin ninguna de las dos formas, el perfil es `defaul
 | `-V, --version` | muestra el número de versión. |
 | `-v, --verbose` | añade detalles: -v muestra identificadores, -vv todos los datos conocidos. Valor predeterminado: `0`. |
 | `--json` | salida para programas: un único valor JSON por stdout, nada más. |
+| `--agent-json` | JSON para agentes de IA: muestra los controles invisibles; --json normal conserva el texto. |
 | `--jsonl` | salida para programas: un objeto JSON por línea, para flujos y jq. |
 | `--quiet` | oculta los mensajes de diagnóstico, pero sigue mostrando fallos. |
 | `--trace` | registros de la conexión por stderr; nunca el contenido de mensajes. |
@@ -1245,7 +1246,7 @@ tg messages send <chat> [text] [options]
 | `--photo <file>` | adjunta .jpg, .png o .webp como foto; el texto será su leyenda. |
 | `--as-file` | envía --file como archivo descargable, incluidos vídeos. |
 | `--voice <file>` | envía Ogg Opus como nota de voz, sin texto ni otros adjuntos. |
-| `--allow-any-file` | permite enviar archivos incluso de carpetas ocultas, \~/.ssh o carpetas del propio CLI. |
+| `--allow-any-file` | enviar un archivo incluso desde carpetas de credenciales o de la propia CLI. |
 | `--at-time <time>` | programa el envío en el servicio, aunque el equipo esté apagado: 2026-09-25T09:00 (hora local) o dentro de 30m, 2h, 1d. |
 | `--spoiler` | ocultar --photo o el vídeo tras un spoiler hasta que se pulse. |
 | `--caption-above` | mostrar el texto encima de --photo o --file, en lugar de debajo. |
@@ -4131,7 +4132,7 @@ tg bot messages send <chat> [text] [options]
 | `--photo <file>` | adjunta .jpg, .png o .webp como foto; el texto será su leyenda. |
 | `--as-file` | envía --file como archivo descargable, incluidos vídeos. |
 | `--voice <file>` | envía Ogg Opus como nota de voz, sin texto ni otros adjuntos. |
-| `--allow-any-file` | permite enviar archivos incluso de carpetas ocultas, \~/.ssh o carpetas del propio CLI. |
+| `--allow-any-file` | enviar un archivo incluso desde carpetas de credenciales o de la propia CLI. |
 
 #### `tg bot messages list`
 

@@ -4,6 +4,18 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/max-cli` (`@leemour/max-cli` hasta 0.41.0), con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.43.1 — 10.10.2026
+
+### Corregido
+
+- Las descargas de adjuntos usan HTTP(S) normal y el transporte configurado, sin validación DNS independiente ni restricciones de direcciones locales. Esto mantiene la compatibilidad con VPN, proxies y redes privadas; la compatibilidad con un proxy concreto depende del transporte.
+- La extracción local de texto PDF y la vista de páginas ya no requieren dividir documentos después de 20 páginas; se elimina el plazo independiente de 30 segundos para la extracción. Se mantienen la cancelación del comando y los límites de tamaño.
+- La transcripción local de grabaciones Ogg Opus completas, mono o estéreo, ya no rechaza audio después de 10 minutos. Las grabaciones largas requieren más memoria y tiempo.
+- Vuelven a estar disponibles los adjuntos de carpetas de trabajo ocultas normales. Siguen protegidos los archivos conocidos de credenciales, las carpetas de la CLI y el almacén de mensajes.
+- La exportación Markdown conserva el formato de los mensajes; MCP conserva el Unicode original al escribir y muestra los controles de forma visible en las respuestas. Los servicios de modelos configurados permiten redirecciones normales.
+- La actualización y la configuración de MCP en Windows aceptan entradas relativas normales de PATH y entornos no estándar del procesador de comandos. El almacén de mensajes conserva su esquema anterior.
+- La guía aclara que la búsqueda con `--discover` solo lee el archivo local. La búsqueda normal en un chat también puede consultar el servidor MAX; discovery no lo consulta.
+
 ## 0.43.0 — 10.10.2026
 
 ### Novedades
@@ -770,7 +782,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.43.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.43.1/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos prácticos para bots.** `max <имя> bot messages send <чат> <текст>` envía a un chat por número, a una persona como `user:<номер>` o por el título de un chat que el bot ya ha visto; también hay `edit`, `delete`, `list` y `get`. `max <имя> bot chats list` muestra los chats que ha visto el bot; también están `chats get|pin|unpin|leave|action`. `max bot list` muestra todos los nombres con un token de bot.
   Por qué «que ha visto»: MAX no ofrece una lista de chats del bot, por lo que `max` los recuerda por su cuenta.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).
