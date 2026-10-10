@@ -187,6 +187,7 @@ for (const lang of ["en", "ru", "es"]) {
   pages.footer = pages.home.match(/<footer\b[\s\S]*?<\/footer>/)[0]
   for (const kind of ["home", "features", "examples"]) {
     pages[kind] = pages[kind]
+      .replace(/<div class="toast"[^>]*><\/div>/, "")
       .replace(/<a class="skip"[\s\S]*?<\/a>/, "")
       .replace(/<header class="wrap site-header"[\s\S]*?<\/header>/, "")
       .replace(

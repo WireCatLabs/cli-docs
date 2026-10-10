@@ -41,6 +41,28 @@ for (const lang of ["en", "ru", "es"]) {
     const menu = header.locator(".site-menu-toggle")
     const connect = header.locator("[data-connect]")
     await expect(menu).toBeHidden()
+    const links = header.locator(".public-site-menu")
+    await expect(links.locator(":scope > a").first()).toHaveCSS("font-size", "18px")
+    const desktopSpacing = await header.evaluate((node) => {
+      const brand = node.querySelector(".brand")?.getBoundingClientRect()
+      const links = node.querySelector(".public-site-menu")?.getBoundingClientRect()
+      const controls = node.querySelector(".public-site-controls")?.getBoundingClientRect()
+      if (!brand || !links || !controls) throw new Error("Missing header navigation")
+      return { brandGap: links.left - brand.right, controlsGap: controls.left - links.right }
+    })
+    expect(desktopSpacing.brandGap).toBeGreaterThan(desktopSpacing.controlsGap)
+    expect(desktopSpacing.controlsGap).toBeCloseTo(20, 0)
+    for (const selector of [".public-site-menu > a", "main a.text-link", "footer a.animated-text-link"]) {
+      const link = page.locator(`${selector}:visible`).first()
+      await link.hover()
+      await expect(link).toHaveCSS("text-decoration-line", "none")
+      await expect(link.locator(".link-label")).toHaveCSS(
+        "background-size",
+        `100% ${selector.startsWith("main") ? 2 : 1}px`,
+      )
+      await link.focus()
+      await expect(link).toHaveCSS("text-decoration-line", "none")
+    }
     let compactWithConnect = false
     for (const width of [980, 900, 850, 800, 760, 720, 680, 640, 600]) {
       await page.setViewportSize({ width, height: 900 })
@@ -76,5 +98,42 @@ for (const lang of ["en", "ru", "es"]) {
     await page.setViewportSize({ width: 1440, height: 900 })
     await expect(menu).toBeHidden()
     await expect(header.locator(".public-site-controls [data-connect] > summary")).toBeVisible()
+  })
+}
+
+for (const lang of ["en", "ru", "es"]) {
+  test(`${lang}: public pages share their shell and single link underline`, async ({ page }) => {
+    test.setTimeout(60000)
+    let sharedLinks: string[] | undefined
+    for (const suffix of ["", "/about", "/features", "/examples"]) {
+      await page.setViewportSize({ width: 1440, height: 900 })
+      await page.goto(lang === "en" && !suffix ? "/" : `/${lang}${suffix}`)
+      await expect(page.locator("header.site-header")).toHaveCount(1)
+      await expect(page.locator("footer")).toHaveCount(1)
+      await expect(page.locator("main#main")).toHaveCount(1)
+      await expect(page.locator("[data-copy-feedback]")).toHaveCount(1)
+      await expect(page.locator('.toast[role="status"]')).toHaveCount(0)
+      const links = await page
+        .locator(".public-site-menu > a, footer a:not(.footer-language a)")
+        .evaluateAll((nodes) => nodes.map((node) => `${node.textContent?.trim()}:${node.getAttribute("href")}`))
+      if (sharedLinks) expect(links).toEqual(sharedLinks)
+      else sharedLinks = links
+      for (const selector of [".public-site-menu > a", "main a.animated-text-link", "footer a.animated-text-link"]) {
+        const link = page.locator(`${selector}:visible`).first()
+        await link.hover()
+        await expect(link).toHaveCSS("text-decoration-line", "none")
+        await expect(link.locator(".link-label")).toHaveCSS(
+          "background-size",
+          `100% ${selector.startsWith("main") ? 2 : 1}px`,
+        )
+        await link.focus()
+        await expect(link).toHaveCSS("text-decoration-line", "none")
+      }
+      await page.setViewportSize({ width: 390, height: 844 })
+      await expect(page.locator(".site-menu-toggle")).toBeVisible()
+      await expect(page.locator(".site-header .editorial-language summary")).toBeVisible()
+      await expect(page.locator(".site-header .theme-switch")).toBeVisible()
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
+    }
   })
 }

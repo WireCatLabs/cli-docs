@@ -145,21 +145,25 @@ summary:is(:hover, :focus-visible) > svg:last-child,
 /* Draw the underline under the words in body, menu and footer links. */
 a.animated-text-link,
 a.animated-text-link:is(:hover, :focus-visible),
+:is(.site-header nav, main, .footer-host) a.animated-text-link,
+:is(.site-header nav, main, .footer-host) a.animated-text-link:is(:hover, :focus-visible),
 .footer-host .foot a.animated-text-link:is(:hover, :focus-visible),
 .footer-host .lang-menu a.animated-text-link:is(:hover, :focus-visible) {
   text-decoration: none;
   background-image: none;
 }
 .animated-text-link > .link-label {
+  --link-underline-width: 1px;
   background-image: linear-gradient(currentColor, currentColor);
   background-repeat: no-repeat;
   background-position: left bottom;
-  background-size: 0% 1px;
+  background-size: 0% var(--link-underline-width);
   transition: background-size 240ms cubic-bezier(.16, 1, .3, 1);
 }
 .animated-text-link:is(:hover, :focus-visible) > .link-label {
-  background-size: 100% 1px;
+  background-size: 100% var(--link-underline-width);
 }
+main .animated-text-link > .link-label { --link-underline-width: 2px; }
 @media (prefers-reduced-motion: reduce) {
   .animated-text-link > .link-label { transition: none; }
 }

@@ -11,9 +11,6 @@
 .wirecat-editorial .site-menu-toggle {
   display: none;
 }
-.wirecat-editorial .wirecat-about .about-page a.animated-text-link {
-  text-decoration: none;
-}
 .wirecat-editorial .wirecat-about .about-page .text-link {
   color: var(--accent);
 }
@@ -82,18 +79,20 @@ html.dark .wirecat-editorial .footer-host .theme-moon {
 .wirecat-editorial .site-header > .public-site-menu {
   display: flex;
   flex-shrink: 0;
+  margin-left: auto;
   gap: 20px;
   align-items: center;
 }
 .wirecat-editorial.public-site .site-header > .public-site-menu > a {
   display: inline-flex;
+  font-size: 18px;
   white-space: nowrap;
   flex-shrink: 0;
 }
 .wirecat-editorial .public-site-controls {
   display: flex;
   flex-shrink: 0;
-  margin-left: auto;
+  margin-left: 0;
   align-items: center;
   gap: 12px;
 }
@@ -138,6 +137,9 @@ html.dark .wirecat-editorial .footer-host .theme-moon {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+}
+.wirecat-editorial .site-header.text-menu-collapsed > .public-site-controls {
+  margin-left: auto;
 }
 .wirecat-editorial .site-header.connect-in-menu > .public-site-menu {
   width: min(340px, calc(100vw - 48px));
