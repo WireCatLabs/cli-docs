@@ -43,6 +43,7 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | What can read or change my data? | `security.mdx` | Explanation | Lead with user decisions, then verified detail |
 | Can I try search without connecting? | `search-playground.mdx` | Interactive explanation | Keep sample behavior and limitations accurate |
 | How do the tools work internally? | `architecture.mdx` | Technical explanation | Trial beautiful-mermaid on one existing diagram |
+| What do tests prove and how can I repeat them? | `testing.mdx` | Technical explanation | Keep evidence and reproduction paths aligned with cli-testing and owning repositories |
 | How do search and conversation processing work? | `search-architecture.mdx` | Technical explanation | Reconcile playground description; keep source/release boundary |
 | How do I check questions and activity in my group? | `group-admins.md` | Task guide | Start with a request and sources; inspect coverage before changes |
 | How do I save or override settings? | `configuration.mdx` | Configuration guide | Explain when settings matter and how to verify the effective value |

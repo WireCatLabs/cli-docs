@@ -72,6 +72,7 @@ export const sidebarIcons = {
   prompting: MessageSquare,
   "drafts-and-templates": PenLine,
   architecture: Network,
+  testing: FlaskConical,
   "search-architecture": Layers,
   "search-playground": FlaskConical,
   "bot-api": Webhook,
