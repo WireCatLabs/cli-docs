@@ -1,14 +1,8 @@
 name: Windows installation
 
 on:
-  pull_request:
-  push:
-    branches: [main]
-  repository_dispatch:
-    types: [docs]
+  workflow_call:
   workflow_dispatch:
-  schedule:
-    - cron: "37 6 * * 1"
 
 permissions:
   contents: read
