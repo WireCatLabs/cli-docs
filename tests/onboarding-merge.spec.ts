@@ -28,17 +28,28 @@ for (const lang of ["en", "ru", "es"]) {
     }
   }
 
-  test(`${lang}: installation deep links lead to tool guides and Markdown explains the common setup`, async ({
-    page,
-  }) => {
-    for (const tool of ["tg", "max"]) {
-      await page.goto(`/${lang}/docs/installation#${tool}`)
+  for (const tool of ["tg", "max"]) {
+    test(`${lang}/${tool}: installation deep links lead from landing to tool guides`, async ({ page }) => {
+      await page.goto(`/${lang}`)
+      const menu = page.locator(".site-header [data-connect]")
+      await menu.locator(":scope > summary").click()
+      await menu.locator(`[data-connect-provider="${tool}"]`).click()
+      await expect(menu.locator(".agent-prompt")).toContainText(`@wirecat/${tool}-cli`)
+      await expect(menu.locator(".command [data-copy]")).toHaveAttribute(
+        "data-copy",
+        `npm install -g @wirecat/${tool}-cli && ${tool} skill install --for all`,
+      )
+      await menu.locator(".connect-guide").click()
+      await expect(page).toHaveURL(new RegExp(`/${lang}/docs/installation#${tool}$`))
       await expect(page.locator(`main a#${tool}`)).toHaveCount(1)
       const guide = page.locator(`main a[href="/${lang}/docs/${tool}/installation"]`).first()
       await guide.click()
       await expect(page).toHaveURL(new RegExp(`/${lang}/docs/${tool}/installation$`))
       await expect(page.locator("main")).toContainText(`@wirecat/${tool}-cli`)
-    }
+    })
+  }
+
+  test(`${lang}: installation deep links and common setup are readable in Markdown`, async ({ page }) => {
     const md = await page.request.get(`/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}installation/content.md`)
     expect(md.status()).toBe(200)
     const text = await md.text()
