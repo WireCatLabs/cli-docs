@@ -42,3 +42,59 @@ for (const lang of ["en", "ru", "es"]) {
     await expect(page.locator(`#nd-sidebar a[href="/${lang}/docs/meeting-brief"] .lucide-video`)).toHaveCount(1)
   })
 }
+
+const copy = {
+  en: { indexing: "From saved content", paths: "Three paths", terms: "stemming", source: "meeting transcripts" },
+  ru: { indexing: "От сохранённого текста", paths: "Три пути", terms: "стемминг", source: "расшифровок встреч" },
+  es: {
+    indexing: "Del contenido guardado",
+    paths: "Tres vías",
+    terms: "stemming",
+    source: "transcripciones de reuniones",
+  },
+}
+
+for (const lang of ["en", "ru", "es"] as const) {
+  for (const width of [390, 1280]) {
+    test(`${lang}: search architecture stays readable at ${width}px`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme: width === 390 ? "dark" : "light" })
+      await page.setViewportSize({ width, height: 900 })
+      await page.goto(`/${lang}/docs/search-architecture`)
+      const figures = page.locator("main figure[aria-label]")
+      await expect(figures).toHaveCount(4)
+      await expect(figures.nth(0)).toContainText(copy[lang].indexing)
+      await expect(figures.nth(1)).toContainText(copy[lang].paths)
+      await expect(figures.nth(1)).toContainText("Discovery")
+      await expect(figures.nth(2)).toContainText("Snowball")
+      await expect(figures.nth(2)).toContainText("BM25")
+      await expect(page.locator("main")).toContainText(copy[lang].source)
+      await expect(page.locator(`main a[href="/${lang}/docs/search"]`)).toBeVisible()
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
+      const accessibility = await new AxeBuilder({ page }).include("main").analyze()
+      expect(accessibility.violations).toEqual([])
+      const guide = page.locator(`main a[href="/${lang}/docs/search"]`)
+      await guide.focus()
+      await expect(guide).toBeFocused()
+      if (lang === "en") {
+        await figures.nth(0).scrollIntoViewIfNeeded()
+        await page.screenshot({ path: `.docs-tooling/search-indexing-${width}.png` })
+      }
+    })
+  }
+
+  test(`${lang}: search architecture retains its meaning in Markdown`, async ({ request }) => {
+    const locale = lang === "en" ? "" : `${lang}/`
+    const response = await request.get(`/llms.mdx/docs/${locale}search-architecture/content.md`)
+    expect(response.ok()).toBe(true)
+    const markdown = await response.text()
+    expect(markdown).toContain(copy[lang].source)
+    expect(markdown).toContain(copy[lang].terms)
+    expect(markdown).toContain(copy[lang].indexing)
+    expect(markdown).toContain(copy[lang].paths)
+    expect(markdown).toContain("Snowball")
+    expect(markdown).toContain("BM25")
+    expect(markdown).toContain("search all")
+    expect(markdown).toContain("--discover")
+    expect(markdown).not.toContain("<ArchitectureDiagram")
+  })
+}

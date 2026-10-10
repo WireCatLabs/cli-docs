@@ -1,28 +1,37 @@
 ---
 title: How search works
-description: "The technical side of message search and topic search — indexes, the conversation graph, vectors, ranking, freshness and measurements."
+description: "The technical side of search: saved content, indexes, word forms and ranking."
 ---
 
-This page explains how search works inside `tg` and `max`, for readers who want to know why a search finds a message or misses it. By the end, you will know which kind of search fits a question and what each one needs prepared. To search right away, open the **[Telegram](./tg/search.md)** or **[MAX](./max/search.md)** search guide for commands and examples. Below we explain the indexes, word forms, server search, the conversation graph, vectors, ranking and freshness behind those commands.
-
-There are two ways to search one local archive. **Message search** finds the messages that satisfy a strict query. **Topic search** finds conversations by meaning and shared words. They share the archive and nothing else: the conversation graph and the vectors are optional stages that message search never reads.
-
-<ArchitectureDiagram name="searchPaths" lang="en" />
+Understand why a search finds a result or misses it: what gets indexed, how matches are ranked and how to return to the source. Search covers messages, notes and saved text from files or meeting transcripts. The examples below focus on the shared message-search engine behind `tg` and `max`. For everyday requests and commands, start with [Searching](./search.md).
 
 ## Choose the right path
 
-Use message search for words, people, dates and file filters. Use topic search when you remember the subject rather than the wording. Open the original messages before relying on either result.
+### What can be searched and connected
 
-| Question | Entry point | What it returns | Preparation |
-| --- | --- | --- | --- |
-| “Where did Alice say invoice, in October, with a PDF?” | `search messages` | Matching messages, locators and optional nearby context | Stored history; a ready word index for queries with words |
-| “How many messages per day mention the budget?” | `stats messages show` | Counts by chat, sender, day or hour | The same as message search |
-| “Where did we discuss renting a flat?” | `search conversations` | Ranked conversations, the matching piece and how it matched | A conversation build; embeddings for matches by meaning |
-| “What else was about the same thing?” | `conversations related` | Conversations nearest to the one a message is in | Embeddings; no model runs |
-| “Which discussion does this message belong to?” | `conversations show` / `messages links` | The conversation and the chosen chain of parents | A conversation build |
-| “What was around this exact message?” | `messages context` / search `--context` | Neighbours in time, in the same account and chat | Stored history for search `--context`; `messages context` can read online unless `--offline` |
+| Content | Searchable data | Connection to the source |
+| --- | --- | --- |
+| Messages and email | Saved text, sender, chat, dates and attachment metadata | A reference identifies the provider, account and message |
+| Notes | Saved note text, titles and supported filters | A note reference; stored links can connect notes to other records |
+| Files and meeting transcripts | Extracted or supplied text, once saved | Attachment text stays linked to its message; a transcript saved as a note is searched as a note |
 
-A messenger's native forum topic, an inferred conversation and a window of neighbouring messages are three different things. A conversation can join messages that are far apart; neighbouring messages can belong to unrelated discussions.
+`search all` queries messages, email and notes, then merges their ranked lists. It reports sources it skipped; it does not turn every content type into one message index. Files need text extraction, and recordings need transcription before their contents can be searched.
+
+Results can be connected through stored references and links. Message search joins messages to chats, senders and attachments for filtering. Direct reply links connect an answer to its parent message. A separate conversation build groups messages within a chat; it does not automatically group notes, files and meetings into one discussion.
+
+## Indexing overview
+
+An **index** is a prepared lookup that avoids reading every stored text for each query. The store keeps original text and source references alongside searchable copies.
+
+<ArchitectureDiagram name="searchIndexing" lang="en" />
+
+For messages, the word index supports words and phrases, and **stemming** groups word forms such as “invoice” and “invoices”. A vocabulary index uses **trigrams** (three-character pieces) to propose similarly spelled words for typo correction, then checks their edit distance. A separate raw-text trigram index supports **substring** matching in legacy search. Strict `body:` patterns can also express substring conditions, through bounded text checks. These are different matching paths; strict search does not silently fall back to the legacy substring index.
+
+**BM25** ranks word matches by how distinctive the words are and how they occur in a message. It is a ranking method, not a model download or an indexing step. Notes have their own text indexes; optional vectors support search by meaning for prepared notes and conversations.
+
+<ArchitectureDiagram name="searchPaths" lang="en" />
+
+Strict message search applies the whole query. Discovery (`--discover`) retrieves partial word matches and direct replies, then ranks them by word coverage and lexical ranks. Topic search uses built conversations, with an optional meaning branch. Strict search and discovery need no conversation build or embedding model. Open original sources and check archive coverage before treating a result as an answer.
 
 ## 1. Archive and identity
 
@@ -85,13 +94,7 @@ Words and quoted phrases in `text`, the default field, match every form of their
 
 Word forms are not typo correction. Strict search, the default, does not correct misspellings in Telegram or MAX: `presentaion` does not find `presentation`. Try a wildcard on the part you are sure of (`present*`), or topic search by meaning. Automatic typo correction is available in `--language legacy` and in discovery for ordinary keyword queries. Natural-question discovery preserves unknown terms. When you ask an agent, describe what you remember; it can choose these approaches for you.
 
-We measured three ways of matching word forms on Universal Dependencies treebanks, with 102 words per language ([benchmark results](https://github.com/WireCatLabs/cli-messaging/blob/bench/stemming-vs-trigrams/bench/stemming/results.md)). *Found* is the share of relevant messages the search returns; *correct* is the share of returned results that are relevant.
-
-| Matching | Russian: found | Russian: correct | Spanish: found | Spanish: correct |
-| --- | --- | --- | --- | --- |
-| Exact word | 26% | 99% | 39% | 87% |
-| Trigram neighbors (similar spelling) | 69% | 52% | 85% | 44% |
-| Snowball stems | 88% | 84% | 96% | 69% |
+Snowball stems recover more word forms than exact matching, but can also join unrelated words. See the [word-form benchmark](https://github.com/WireCatLabs/cli-messaging/blob/bench/stemming-vs-trigrams/bench/stemming/results.md) for the comparison with spelling-based trigram neighbors. Use `exact:` when that distinction matters.
 
 The stemmers are a store-wide setting, shared by every profile, tg and MAX: `searchStemmers.cyrillic` (`russian` or `none`) and `searchStemmers.latin` (`english`, `spanish`, both — the default — or `none`). `store reindex` applies your own change. While the stem index is being built, a search matches exact word forms and says so; `serve` finishes the stems in the background and `store migrate` at once. Some different words share a stem — `часть`/`часто`, `caso`/`casa` — and `exact:` or `--exact` separates them. The JSON answer says whether stems were used: `query.stemming` names the stemmer and each word's stem, `stemsReady` sits beside `wordsReady`, and each hit carries `exact: false` when only another form matched.
 
@@ -153,17 +156,7 @@ Before embedding, each piece's text is rebuilt from the current messages and che
 
 ### Measurements
 
-100,000 messages in three languages, 5–40 words each, as one chat; AMD Ryzen AI 9 HX 470 (24 threads), 30 GB RAM, Linux, Node 24 and Bun 1.3; measured 2 October 2026 ([benchmark](https://github.com/WireCatLabs/cli-messaging/blob/v0.148.2/bench/embeddings/README.md)).
-
-| Step | Runtime | Time | Peak memory |
-| --- | --- | --- | --- |
-| `conversations build` | Node | 3.3 s | 331 MB |
-| `conversations embed`, 1 worker | Node | 1,371 s (31 pieces/s) | 1.2 GB |
-| `conversations embed`, 3 workers | Node | 1,240 s (34 pieces/s) | 2.6 GB |
-| `conversations embed`, 1 worker | Bun | 1,329 s (32 pieces/s) | 3.2 GB |
-| `conversations embed`, 3 workers | Bun | 1,279 s (33 pieces/s) | 2.7 GB |
-
-The run made 42,417 pieces and grew the store by 292 MB. Three workers gave only 1.1× on Node and 1.04× on Bun: one session already uses 8 threads, and three workers share about the same number. A search, once the vector scan reads each page by its key: about 0.35 s in a process that keeps the model open (the MCP server), about 1.4 s for a one-shot command, of which loading the model is about 1 s.
+A [synthetic benchmark](https://github.com/WireCatLabs/cli-messaging/blob/v0.148.2/bench/embeddings/README.md) with 100,000 messages measured building, embedding and searching separately. Embedding was the expensive preparation step; extra workers increased memory use and gave little speedup. Keeping the model open reduced search startup time. Hardware, archive size and model choice affect these results; see [testing](./testing.mdx) for how we measure performance.
 
 ## 5. Hybrid conversation retrieval
 
@@ -217,6 +210,7 @@ Engine source in [`cli-messaging`](https://github.com/WireCatLabs/cli-messaging/
 
 | Responsibility | Implementation |
 | --- | --- |
+| Cross-source search and typo matching | [Search all](https://github.com/WireCatLabs/cli-messaging/blob/v0.216.0/src/services/search-all.ts), [notes search](https://github.com/WireCatLabs/cli-messaging/blob/v0.216.0/src/services/notes-search.ts), [typo correction](https://github.com/WireCatLabs/cli-messaging/blob/v0.216.0/src/search/correct.ts) and [legacy matching](https://github.com/WireCatLabs/cli-messaging/blob/v0.216.0/src/search/search.ts) |
 | Archive preparation and coverage | [Archive service](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/archive.ts), [fetch command](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/cli/messenger/backfill-command.ts) and [coverage summary](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/cli/messenger/archive-summary.ts) |
 | Parse, validate, scope and coverage | [Query parser](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/search/query.ts), [message search service](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/messages-search.ts) and [Lucene SQLite executor](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/lucene.ts) |
 | Word index, vocabulary and stems | [Word matching](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/words.ts), [index filling](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/search-index.ts) and [stemming](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/search/stem.ts) |
