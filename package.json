@@ -10,7 +10,7 @@
     "dev": "next dev",
     "build": "pnpm sync && next build",
     "start": "serve out",
-    "lint": "biome check .",
+    "lint": "biome check . && pnpm check:browser-tests",
     "lint:fix": "biome check --write .",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
@@ -37,7 +37,9 @@
     "docs:versions": "node scripts/check-doc-versions.mjs",
     "landing:export": "node --experimental-strip-types scripts/export-editorial.mjs",
     "design:serve": "node scripts/serve-designs.mjs",
-    "standards:check": "node config/wirecat/check.mjs"
+    "standards:check": "node config/wirecat/check.mjs",
+    "check:browser-tests": "node --experimental-strip-types scripts/browser-test-policy.ts",
+    "check:browser-timings": "node --experimental-strip-types scripts/browser-test-policy.ts --report playwright-report/results.json"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -79,7 +81,8 @@
     "@types/shell-quote": "1.7.5",
     "@wirecat/cli-core": "0.18.1",
     "@wirecat/cli-messaging": "0.216.0",
-    "@cspell/dict-en-gb": "5.0.34"
+    "@cspell/dict-en-gb": "5.0.34",
+    "@babel/parser": "8.0.7"
   },
   "packageManager": "pnpm@11.20.0",
   "engines": {
