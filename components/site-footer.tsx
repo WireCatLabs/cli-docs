@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation"
 import { useEffect, useRef } from "react"
 import { useThemeToggle } from "@/components/use-theme-toggle"
 import { wirecatLogoSvg } from "@/lib/brand"
+import { notifyCopyFeedback } from "@/lib/copy-feedback"
 import { prepareInstallationButton } from "@/lib/installation-command"
 import { copiedInstallationTool, trackSiteEvent } from "@/lib/site-events"
 import { homePath, localeFromPath, localizedPath } from "@/lib/site-routes"
@@ -68,14 +69,19 @@ export function SiteFooter({ html, variant = "landing" }: { html: string; varian
         try {
           await navigator.clipboard.writeText(button.dataset.copy ?? "")
           if (controller.signal.aborted) return
+          notifyCopyFeedback(true)
+          button.dataset.copied = ""
           button.textContent = { en: "Copied", ru: "Скопировано", es: "Copiado" }[lang] ?? "Copied"
           const tool = copiedInstallationTool(button.dataset.copy ?? "")
           if (tool) trackSiteEvent("installation_command_copy", { tool, locale: lang, surface: "footer" })
           clearTimeout(timer)
           timer = setTimeout(() => {
             button.textContent = label
-          }, 1600)
+            delete button.dataset.copied
+          }, 3000)
         } catch {
+          if (controller.signal.aborted) return
+          notifyCopyFeedback(false)
           const code = root.querySelector(".cmd code")
           if (code) {
             const range = document.createRange()

@@ -177,8 +177,12 @@ for (const lang of ["en", "ru", "es"]) {
     )
     .replace('<a class="brand"', '<a class="brand site-brand"')
     .replace(
-      '<nav class="public-site-menu"',
-      `<button type="button" class="site-menu-toggle" aria-expanded="false" aria-controls="public-site-menu" aria-label="${{ en: "Open menu", ru: "Открыть меню", es: "Abrir menú" }[lang]}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><nav class="public-site-menu"`,
+      '<details class="editorial-language">',
+      '</nav><div class="public-site-controls"><details class="editorial-language">',
+    )
+    .replace(
+      "</nav></header>",
+      `</div><button type="button" class="site-menu-toggle" aria-expanded="false" aria-controls="public-site-menu" aria-label="${{ en: "Open menu", ru: "Открыть меню", es: "Abrir menú" }[lang]}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button></header>`,
     )
   pages.footer = pages.home.match(/<footer\b[\s\S]*?<\/footer>/)[0]
   for (const kind of ["home", "features", "examples"]) {

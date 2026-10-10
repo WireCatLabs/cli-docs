@@ -12250,6 +12250,20 @@ html.dark .wirecat-editorial .button.secondary:is(:hover, :focus-visible) {
   }
 }
 
+/* Slower press feedback for buttons; link motion remains unchanged. */
+.wirecat-editorial .button,
+.wirecat-editorial [data-copy],
+.wirecat-editorial button:not(:disabled) {
+  transition-duration: 320ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wirecat-editorial .button,
+  .wirecat-editorial [data-copy],
+  .wirecat-editorial button:not(:disabled) {
+    transition-duration: 0s;
+  }
+}
+
 /* Soft frame: neutral structural lines disappear gently at both ends. */
 .wirecat-editorial .landing5 {
   --fade-rule: color-mix(in srgb, var(--ink) 16%, transparent);
