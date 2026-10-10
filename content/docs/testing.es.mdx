@@ -52,6 +52,8 @@ Un **candidato** es un mensaje recuperado para su posible inclusión antes del o
 | nDCG@k | ¿Qué calidad tiene el orden con grados de relevancia y mayor peso en las primeras posiciones? |
 | Recuperación de candidatos | ¿Incluye el conjunto de candidatos los resultados relevantes etiquetados antes de ordenarlos? |
 
+Cada informe debe indicar qué métricas calcula realmente. La tabla define medidas disponibles; no implica que cada ejecutor informe de todas ellas.
+
 MRR promedia `1 / rank` del primer resultado relevante y usa cero cuando no se encuentra en la salida evaluada. Declara cualquier límite de profundidad. nDCG compara el orden con relevancia graduada con un orden ideal al mismo límite.
 
 Por ejemplo, **43,8% Success@10** significa que el 43,8% de las consultas evaluadas tiene al menos un resultado relevante etiquetado entre los diez primeros. No dice si se recuperaron todos los resultados relevantes o si la respuesta aparece primero. La décima y la primera posición cuentan por igual como éxito; MRR y nDCG muestran la diferencia.
