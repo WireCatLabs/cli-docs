@@ -15,6 +15,7 @@ import { remarkAnchorAliases } from "./remark-anchor-aliases"
 import { remarkDocUsability } from "./remark-doc-usability"
 import { remarkMermaid } from "./remark-mermaid"
 import { docsRoute, getPageMarkdownUrl, siteUrl, toolOf } from "./shared"
+import { toolInstallationMarkdown } from "./tool-installation"
 
 const docs = defineDocs({
   dir: "content/docs",
@@ -65,9 +66,12 @@ export const docsLlms = llms(source, {
       (page.slugs.length === 1 && ["installation", "memo", "email"].includes(page.slugs[0]))
         ? raw
         : dedentDocComponents(await page.data.getText("processed"))
+    const installationIntro = toolInstallationMarkdown(page.slugs, page.locale ?? i18n.defaultLanguage)
     const body =
+      installationIntro +
       readerGuideMarkdown(page.slugs, page.locale ?? i18n.defaultLanguage) +
-      (!readerGuideMarkdown(page.slugs, page.locale ?? i18n.defaultLanguage) &&
+      (!installationIntro &&
+      !readerGuideMarkdown(page.slugs, page.locale ?? i18n.defaultLanguage) &&
       guideOrientation(page.slugs, page.locale ?? i18n.defaultLanguage)
         ? `${guideOrientation(page.slugs, page.locale ?? i18n.defaultLanguage)}\n\n`
         : "") +
