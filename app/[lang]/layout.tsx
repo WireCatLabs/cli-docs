@@ -5,6 +5,7 @@ import { i18n } from "@/lib/i18n"
 import { pageMetadata, seoWords } from "@/lib/seo"
 import { appName, siteUrl } from "@/lib/shared"
 import "../global.css"
+import "@/components/language-switcher.css"
 
 export default async function Layout({
   params,

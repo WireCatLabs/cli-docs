@@ -4,12 +4,12 @@ import type { Node } from "fumadocs-core/page-tree"
 import { useI18n } from "fumadocs-ui/contexts/i18n"
 import { useTreeContext } from "fumadocs-ui/contexts/tree"
 import { useDocsLayout } from "fumadocs-ui/layouts/docs"
-import { LanguageSelect } from "fumadocs-ui/layouts/shared/slots/language-select"
-import { Languages, Menu } from "lucide-react"
+import { Menu } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { type ComponentProps, useEffect } from "react"
 import { DocsSearchTrigger } from "@/components/docs-search-trigger"
+import { LanguageSwitcher } from "@/components/language-switcher"
 import { ThemeSwitch } from "@/components/theme-switch"
 import { WirecatLogo } from "@/components/wirecat-logo"
 import { isGettingStarted, messengerHref } from "@/lib/docs-navigation"
@@ -63,7 +63,7 @@ export function DocsHeader(props: ComponentProps<"header">) {
       if (
         event.key !== "Escape" ||
         event.defaultPrevented ||
-        (event.target instanceof Element && event.target.closest('[role="dialog"]'))
+        (event.target instanceof Element && event.target.closest('[role="dialog"], [data-language-switcher][open]'))
       )
         return
       const trigger = document.querySelector<HTMLButtonElement>(
@@ -98,11 +98,8 @@ export function DocsHeader(props: ComponentProps<"header">) {
       </Link>
       <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
         <DocsSearchTrigger full className="hidden w-44 md:flex" />
-        <DocsSearchTrigger className="md:hidden" />
-        <LanguageSelect aria-label={ui.language} className="gap-1.5 px-2 py-2">
-          <Languages className="hidden size-4 min-[24rem]:block" />
-          <span className="text-xs font-medium uppercase">{lang}</span>
-        </LanguageSelect>
+        <DocsSearchTrigger className="hidden min-[24rem]:block md:hidden" />
+        <LanguageSwitcher lang={lang} />
         <ThemeSwitch lang={lang} />
         {slots.sidebar && (
           <slots.sidebar.trigger aria-label={ui.menu} className="rounded-md p-2 hover:bg-fd-accent md:hidden">

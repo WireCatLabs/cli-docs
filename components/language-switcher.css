@@ -1,0 +1,101 @@
+.language-switcher-host {
+  flex-shrink: 0;
+}
+.language-switcher {
+  width: max-content;
+  position: relative;
+  flex-shrink: 0;
+  font: inherit;
+  color: var(--ink, var(--color-fd-foreground));
+}
+.language-switcher[data-language-switcher] > summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: max-content;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 1px solid var(--line, var(--color-fd-border));
+  border-radius: 999px;
+  background: var(--paper, var(--color-fd-background));
+  cursor: pointer;
+  list-style: none;
+  font-size: 14px;
+  line-height: 1;
+}
+.language-switcher[data-language-switcher] > summary::-webkit-details-marker {
+  display: none;
+}
+.language-switcher[data-language-switcher] > summary::after {
+  display: none;
+}
+.language-switcher .language-code {
+  display: inline-block;
+  flex-shrink: 0;
+  min-width: 2ch;
+  white-space: nowrap;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+.language-switcher .language-globe {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.language-switcher .language-chevron {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+.language-switcher[data-language-switcher] > .language-options {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 70;
+  display: grid;
+  min-width: 140px;
+  padding: 6px;
+  border: 1px solid var(--line, var(--color-fd-border));
+  border-radius: 12px;
+  background: var(--paper, var(--color-fd-background));
+  box-shadow: 0 8px 24px #1427261a;
+}
+.language-switcher .language-options a {
+  display: block;
+  padding: 10px;
+  border-radius: 6px;
+  color: inherit;
+  text-decoration: none;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.language-switcher .language-options a:hover {
+  background: var(--soft, var(--color-fd-accent));
+}
+.language-switcher a[aria-current="page"] {
+  font-weight: 600;
+}
+.language-switcher :is(summary, a):focus-visible {
+  outline: 2px solid var(--accent, var(--color-fd-primary));
+  outline-offset: 3px;
+}
+@media (width < 24rem) {
+  .language-switcher[data-language-switcher] > summary {
+    gap: 4px;
+    padding-inline: 6px;
+  }
+  .language-switcher .language-globe {
+    width: 14px;
+    height: 14px;
+  }
+  .language-switcher .language-chevron {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+.language-switcher[data-placement="above"] > .language-options {
+  top: auto;
+  bottom: calc(100% + 6px);
+}
