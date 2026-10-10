@@ -159,7 +159,7 @@ export default async function AboutPage({ params }: Props) {
                 </div>
                 <div>
                   <dt>{words.project.license}</dt>
-                  <dd>MIT</dd>
+                  <dd>Apache 2.0</dd>
                 </div>
                 <div>
                   <dt>{words.project.maintainer}</dt>

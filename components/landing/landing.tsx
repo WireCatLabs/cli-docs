@@ -884,7 +884,7 @@ export function Landing({ lang }: { lang: string }) {
             </div>
           </div>
           <div className="foot-bottom">
-            <span>{t("© 2026 WireCat · MIT licence · Windows, macOS, Linux")}</span>
+            <span>{t("© 2026 WireCat · Apache 2.0 licence · Windows, macOS, Linux")}</span>
             <nav className="langs" aria-label="Language">
               {languages.map(([code, name]) => (
                 <a key={code} href={`/${code}`} aria-current={code === lang ? "page" : undefined}>
