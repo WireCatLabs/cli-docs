@@ -759,7 +759,7 @@ Licensed under SIL Open Font License 1.1; see dist/charts/fonts/OFL.txt and SOUR
 PNG rasterization uses @resvg/resvg-js under MPL-2.0. Its original sources are
 available at https://github.com/thx/resvg-js/tree/v2.6.2.
 
-Browser error adapter: CliError from @leemour/cli-core (MIT).
+Browser error adapter: CliError from @wirecat/cli-core (MIT).
 MIT License
 
 Copyright (c) 2026 Viacheslav Ptsarev

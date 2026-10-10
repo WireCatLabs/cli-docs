@@ -2,7 +2,39 @@
 title: "Changelog"
 ---
 
-Notable changes to `@leemour/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
+Notable changes to `@wirecat/max-cli` (`@leemour/max-cli` through 0.41.0), one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
+
+## 0.43.0 — 10.10.2026
+
+### What's new
+
+- Message search with `--discover` or MCP `discover: true` finds partial word matches and eligible direct replies in the local archive without model downloads. Strict search remains the default; missing terms help agents check the evidence.
+
+### Changed — may break scripts
+
+- The project is now licensed under Apache 2.0. See `LICENSE` for the terms.
+
+
+## 0.42.0 — 10.10.2026
+
+### Changed — may break scripts
+
+- **The package is now `@wirecat/max-cli`, and the repository is `WireCatLabs/max-cli`.** Install with `npm install -g @wirecat/max-cli`; the `max` command stays the same. Uninstall `@leemour/max-cli` first: both packages provide `max`. There will be no new `@leemour/max-cli` versions.
+- **Deletion verifies the outcome by reading from the server.** If MAX still returns a message or verification fails, the command reports `outcome_unknown` instead of `deleted`. Read the message before retrying; acknowledging the request does not prove deletion.
+- **Local transcription accepts complete mono or stereo Ogg Opus recordings up to 10 minutes.** Split longer recordings. PDF text extraction supports at most 20 pages and 30 seconds; split larger PDFs.
+- **MCP makes hidden Unicode controls visible** in text results and write arguments, including converted formatting. Regional flags remain intact; ordinary CLI JSON preserves the original strings.
+
+### Fixed
+
+- **Attachment downloads through MCP exit without hanging.** Local text extraction no longer blocks the connection needed to download a file.
+- **`messages delete` accepts comma-separated IDs** as well as separate arguments.
+- **MCP guides describe profile permissions and approval in the agent app.** The server shows no approval forms; obsolete unused form code was removed.
+
+### Security
+
+- **Directory extraction and retained-file transfer check file locations.** Hidden files and folders, CLI-owned folders and the message store are refused, including symlink targets. MCP downloads also refuse those places; use a normal downloads folder.
+- **DOCX applies the office archive limits.** Part count, expanded size and text-part size are checked before reading.
+
 
 ## 0.41.0 — 09.10.2026
 
@@ -744,7 +776,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/leemour/max-cli/blob/v0.41.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.43.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).

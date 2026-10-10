@@ -74,7 +74,7 @@ Si la descarga se detiene por un límite o una espera del servidor, repítela pa
 
 Mantiene el texto completo de cada mensaje que ha visto. El archivo solo lo puede leer su usuario y no está cifrado ([lo que llega al disco](./security.md#what-reaches-the-disk)).
 
-**Es un único archivo para todas las cuentas y CLI de mensajería** que utilizan la misma biblioteca, como [max-cli](https://github.com/leemour/max-cli):
+**Es un único archivo para todas las cuentas y CLI de mensajería** que utilizan la misma biblioteca, como [max-cli](https://github.com/WireCatLabs/max-cli):
 
 ```text
 ~/.local/share/cli-messaging/messages.db       # Linux; MESSAGING_STORE moves it

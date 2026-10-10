@@ -217,7 +217,7 @@ for (const lang of ["en", "ru", "es"]) {
   ]
     .map(
       ([name, pkg, tool]) =>
-        `<button class="connect-choice" type="button" data-copy="npm i -g @leemour/${pkg}" aria-label="${name}: ${w.copy}"><span class="connect-choice-title"><strong>${name}</strong><span data-copy-label role="status" aria-live="polite">${w.copy}</span></span><code>npm i -g @leemour/${pkg}</code></button><a class="connect-guide" href="/${lang}/docs/installation#${tool}">${w.guide}: ${name} →</a>`,
+        `<button class="connect-choice" type="button" data-copy="npm i -g @wirecat/${pkg}" aria-label="${name}: ${w.copy}"><span class="connect-choice-title"><strong>${name}</strong><span data-copy-label role="status" aria-live="polite">${w.copy}</span></span><code>npm i -g @wirecat/${pkg}</code></button><a class="connect-guide" href="/${lang}/docs/installation#${tool}">${w.guide}: ${name} →</a>`,
     )
     .join("")
   html = html.replace(

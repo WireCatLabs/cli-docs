@@ -15,20 +15,22 @@ description: Как устроены tg и max — пакеты, слои, ко�
 
 Ссылки на пакеты и слои ниже описывают датированный снимок. Пример MCP использует текущий компактный интерфейс: [реализация MCP](https://github.com/WireCatLabs/cli-messaging/blob/v0.213.0/src/mcp/surface.ts).
 
+Названия пакетов используют текущую область `@wirecat`; ссылки на реализацию сохраняют указанный выше снимок исходников.
+
 ## Пакеты
 
 <ArchitectureDiagram name="packages" lang="ru" />
 
-Четыре собственных пакета и две закреплённые сборки, все опубликованы в npm под `@leemour`:
+Четыре собственных пакета и две закреплённые сборки, все опубликованы в npm под `@wirecat`:
 
 | Пакет | За что отвечает |
 | --- | --- |
-| [`@leemour/cli-core`](https://github.com/WireCatLabs/cli-core/tree/8648e39) | То, что нужно любому инструменту командной строки и не связано с мессенджерами: режимы вывода, отрисовка в терминале, закрытый список ошибок и их коды выхода, ключница, файлы настроек, часы, повторы, HTTP-клиент, генератор кода для HTTP API, самообновление. Его использует и `braze-cli`, который к переписке отношения не имеет. |
-| [`@leemour/cli-messaging`](https://github.com/WireCatLabs/cli-messaging/tree/c7cd479) | Всё о переписке, что не относится к одному мессенджеру: модель данных, поиск по именам, локальное хранилище SQLite, защита отправки, сервисы (сценарии), дерево команд, MCP-сервер, распознавание речи, фоновые процессы. |
-| `@leemour/cli-messaging-sqlite` | Сборки SQLite 3.53; загружаются только там, где собственный SQLite среды слишком старый (Bun на macOS, Node из дистрибутива Linux). |
-| `@leemour/cli-messaging-onnx` | ONNX Runtime в WebAssembly для локальных моделей embeddings. Распознавание речи использует `sherpa-onnx`. |
-| [`@leemour/tg-cli`](https://github.com/WireCatLabs/tg-cli/tree/4a36e85) | Адаптер Telegram поверх [mtcute](https://github.com/mtcute/mtcute), сессия Telegram, пошаговая настройка. Почти все команды `tg` приходят из cli-messaging. |
-| [`@leemour/max-cli`](https://github.com/WireCatLabs/max-cli/tree/fff19ff) | Протокол MAX (WebSocket, двоичные кадры), сессия MAX, фоновое соединение `max serve`, собственный MCP-сервер поверх общих сервисов и отдельная часть для официального Bot API MAX. |
+| [`@wirecat/cli-core`](https://github.com/WireCatLabs/cli-core/tree/8648e39) | То, что нужно любому инструменту командной строки и не связано с мессенджерами: режимы вывода, отрисовка в терминале, закрытый список ошибок и их коды выхода, ключница, файлы настроек, часы, повторы, HTTP-клиент, генератор кода для HTTP API, самообновление. Его использует и `braze-cli`, который к переписке отношения не имеет. |
+| [`@wirecat/cli-messaging`](https://github.com/WireCatLabs/cli-messaging/tree/c7cd479) | Всё о переписке, что не относится к одному мессенджеру: модель данных, поиск по именам, локальное хранилище SQLite, защита отправки, сервисы (сценарии), дерево команд, MCP-сервер, распознавание речи, фоновые процессы. |
+| `@wirecat/cli-messaging-sqlite` | Сборки SQLite 3.53; загружаются только там, где собственный SQLite среды слишком старый (Bun на macOS, Node из дистрибутива Linux). |
+| `@wirecat/cli-messaging-onnx` | ONNX Runtime в WebAssembly для локальных моделей embeddings. Распознавание речи использует `sherpa-onnx`. |
+| [`@wirecat/tg-cli`](https://github.com/WireCatLabs/tg-cli/tree/4a36e85) | Адаптер Telegram поверх [mtcute](https://github.com/mtcute/mtcute), сессия Telegram, пошаговая настройка. Почти все команды `tg` приходят из cli-messaging. |
+| [`@wirecat/max-cli`](https://github.com/WireCatLabs/max-cli/tree/fff19ff) | Протокол MAX (WebSocket, двоичные кадры), сессия MAX, фоновое соединение `max serve`, собственный MCP-сервер поверх общих сервисов и отдельная часть для официального Bot API MAX. |
 
 Каждый инструмент закрепляет точную версию cli-messaging и cli-core. Изменение общего кода доходит
 до пользователей через выпуск общего пакета, а затем выпуск каждого инструмента; обычно оба

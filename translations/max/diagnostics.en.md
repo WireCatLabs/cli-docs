@@ -178,7 +178,7 @@ max doctor report create              # о последнем неудачном
 max doctor report create --run <id>   # об этом запуске
 ```
 
-The command writes a JSON file containing `max doctor` results and the run, then prints a link to a new [GitHub issue](https://github.com/leemour/max-cli/issues). Read the file before submitting. It has no message text; chat and message ids are replaced with labels. See [reporting a problem](./troubleshooting.md#как-сообщить-о-проблеме) for its remaining contents.
+The command writes a JSON file containing `max doctor` results and the run, then prints a link to a new [GitHub issue](https://github.com/WireCatLabs/max-cli/issues). Read the file before submitting. It has no message text; chat and message ids are replaced with labels. See [reporting a problem](./troubleshooting.md#как-сообщить-о-проблеме) for its remaining contents.
 
 If there is no failed run, run the failing command again to save its error automatically.
 

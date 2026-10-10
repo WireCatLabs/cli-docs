@@ -128,7 +128,7 @@ describe("truthful structured data", () => {
       ],
     })
     expect(data["@graph"].find((node) => node["@type"] === "SoftwareSourceCode")).toMatchObject({
-      codeRepository: "https://github.com/leemour/tg-cli",
+      codeRepository: "https://github.com/WireCatLabs/tg-cli",
       version: tools[1].docsRef,
     })
     expect(JSON.stringify(data)).not.toMatch(/aggregateRating|reviewCount|downloadCount/)

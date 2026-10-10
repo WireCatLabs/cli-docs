@@ -77,7 +77,7 @@ tg work mcp config                  # another profile
     "tg": {
       "type": "stdio",
       "command": "/usr/bin/node",
-      "args": ["/usr/lib/node_modules/@leemour/tg-cli/dist/bin/tg.js", "mcp"],
+      "args": ["/usr/lib/node_modules/@wirecat/tg-cli/dist/bin/tg.js", "mcp"],
       "env": { "XDG_RUNTIME_DIR": "/run/user/1000" }
     }
   }

@@ -7,7 +7,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $testRoot = Join-Path $env:RUNNER_TEMP "WireCat install $Tool"
 $prefix = Join-Path $testRoot 'npm prefix'
-$package = "@leemour/$Tool-cli"
+$package = "@wirecat/$Tool-cli"
 $env:CI = 'true'
 foreach ($name in @('CONFIG', 'STATE', 'CACHE')) {
     [Environment]::SetEnvironmentVariable("$($Tool.ToUpper())_${name}_DIR", (Join-Path $testRoot $name), 'Process')

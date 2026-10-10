@@ -2,7 +2,7 @@
 title: "Roadmap"
 ---
 
-This page lists planned `max` features that are not available yet. Check it when a missing feature makes you look for a workaround: it may already be planned. Priorities are approximate and can change. Suggest a feature in [GitHub issues](https://github.com/leemour/max-cli/issues).
+This page lists planned `max` features that are not available yet. Check it when a missing feature makes you look for a workaround: it may already be planned. Priorities are approximate and can change. Suggest a feature in [GitHub issues](https://github.com/WireCatLabs/max-cli/issues).
 
 ## Coming soon
 

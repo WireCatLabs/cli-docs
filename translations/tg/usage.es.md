@@ -71,7 +71,7 @@ El resumen anterior es ficticio. Pídale al agente que abra los mensajes fuente 
 ## Primeros pasos
 
 ```sh
-npm install -g @leemour/tg-cli
+npm install -g @wirecat/tg-cli
 ```
 
 ```sh
@@ -312,6 +312,8 @@ tg review --transcribe
 ```sh
 tg messages list "Book club" --transcribe --model gigaam-v3
 ```
+
+La transcripción local requiere una grabación Ogg Opus completa, mono o estéreo, de hasta 10 minutos. Divide las grabaciones más largas antes de transcribirlas.
 
 Telegram transcribe para cuentas Premium y algunos mensajes semanales con su prueba gratuita. Si no está disponible, lo hace un modelo local y la grabación no sale del equipo. El modelo se descarga una vez, solo cuando lo pides:
 

@@ -73,7 +73,7 @@ Por defecto el agente lee escaneos y fotos con sus herramientas OCR o de visión
 | --- | --- | --- | --- |
 | TXT, MD, MARKDOWN, CSV, TSV, JSON, LOG | Lee UTF-8, UTF-16 con BOM y codificaciones antiguas identificadas con suficiente confianza | Sigue siendo lectura local | Una codificación ambigua requiere comprobación y conversión |
 | Otros archivos con MIME `text/*` o `application/json` | Lee texto con las mismas reglas de codificación | Sigue siendo lectura local | Sin MIME ni extensión compatible, necesita un lector externo |
-| PDF con capa de texto | Extrae texto mediante `unpdf` | Lee localmente las páginas de texto | Comprobar columnas, tablas y precisión |
+| PDF con capa de texto | Extrae texto mediante `unpdf`, hasta 20 páginas y 30 segundos | Lee localmente las páginas de texto | Comprobar columnas, tablas y precisión |
 | PDF escaneado o mixto | Sin texto: `needs-agent`; la extracción habitual lee la capa de texto disponible | Lee texto y convierte páginas sin texto a imágenes mediante `unpdf` y `@napi-rs/canvas`, después usa OCR | Vía habitual para escaneos; también si falta un paquete, hay límites o falla la API |
 | DOCX | Extrae texto mediante `mammoth` | Sigue siendo lectura local | Las imágenes y la maquetación exacta requieren revisión |
 | ODT | Lee párrafos y títulos | Sigue siendo lectura local | Las imágenes y la maquetación requieren revisión visual |
@@ -87,7 +87,7 @@ Por defecto el agente lee escaneos y fotos con sus herramientas OCR o de visión
 | Mensaje de voz | Modelo de voz local separado: `messages transcribe` | Este OCR no reconoce voz | Configurar modelo e idioma; [transcripción de voz](./audio-recognition.md) |
 | Otros audios, vídeos, animaciones y stickers | No los lee la extracción de texto de adjuntos | Este OCR no los reconoce | Audio: herramienta de voz y formato adecuados; vídeo: audio o fotogramas |
 
-CSV y JSON se convierten en texto buscable, no en tablas estructuradas de la base. HTML/XML con MIME de texto se leen como código fuente, no como páginas del navegador. La detección de codificaciones antiguas exige suficiente confianza; el agente debe revisar el texto corto o ambiguo. No cambia los bytes originales. ODT, ODS, XLSX, PPTX y EPUB admiten hasta 1000 partes y 50 MiB descomprimidos; cada parte XML/HTML de texto, hasta 10 MiB. Un archivo dañado o demasiado grande no se guarda como leído por completo. Repetir la extracción puede volver a procesar un fallo anterior; protege el texto del agente y el texto válido ya indexado. PDF y DOCX guardan el texto extraído, no la maquetación original.
+CSV y JSON se convierten en texto buscable, no en tablas estructuradas de la base. HTML/XML con MIME de texto se leen como código fuente, no como páginas del navegador. La detección de codificaciones antiguas exige suficiente confianza; el agente debe revisar el texto corto o ambiguo. No cambia los bytes originales. DOCX, ODT, ODS, XLSX, PPTX y EPUB admiten hasta 1000 partes y 50 MiB descomprimidos; cada parte XML/HTML de texto, hasta 10 MiB. Un archivo dañado o demasiado grande no se guarda como leído por completo. Repetir la extracción puede volver a procesar un fallo anterior; protege el texto del agente y el texto válido ya indexado. PDF y DOCX guardan el texto extraído, no la maquetación original.
 
 La voz se procesa por separado: el modelo de voz se descarga una vez y funciona localmente. No usa `models.ocr`. Consulta comandos, idiomas y límites en [transcripción de voz](./audio-recognition.md).
 

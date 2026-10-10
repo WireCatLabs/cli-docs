@@ -2688,7 +2688,7 @@ max search all <query> [options]
 
 ### `max search messages`
 
-buscar mensajes del servicio de mensajería en el almacenamiento local y en el servidor del servicio (--backend); opcionalmente descargar mensajes nuevos con --sync-first
+buscar mensajes del servicio de mensajería en el almacenamiento local y en el servidor del servicio (--backend); opcionalmente descargar mensajes nuevos con --sync-first; --discover busca solo en el archivo
 
 ```sh
 max search messages [query] [options]
@@ -2709,7 +2709,7 @@ max search messages [query] [options]
 | `--thread-messages <n>` | como máximo este número de mensajes en el contexto de cada hilo (predeterminado: 50). |
 | `--thread-bytes <n>` | como máximo este número de bytes de mensajes completos y enlaces en cada contexto (predeterminado: 65536). |
 | `--thread-within <duration>` | mensajes dentro de este tiempo antes y después de la coincidencia (predeterminado: 1d). |
-| `--backend <archive\|server\|both>` | dónde buscar: el archivo local, el servidor del servicio de mensajería o ambos (predeterminado: both). |
+| `--backend <archive\|server\|both>` | dónde buscar: el archivo local, el servidor del servicio de mensajería o ambos (predeterminado: both). Discovery usa solo el archivo. |
 | `--server-time <duration>` | dejar de esperar al servidor tras este tiempo (predeterminado: 5s). |
 | `--chat <chat>` | solo este chat — lo mismo que chat: en la consulta; un chat: su ID o parte de su título. |
 | `--source <messenger>` |todas las cuentas de este servicio de mensajería en el almacenamiento; personal, bots o all — lo mismo que in: en la consulta.|
@@ -2718,6 +2718,7 @@ max search messages [query] [options]
 | `--newest` | primero los más recientes en lugar de los mejores. |
 | `--exact` |las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas.|
 | `--context <n>` |mensajes antes y después de cada resultado; 2 en la terminal, 0 en caso contrario.|
+| `--discover` | encuentra coincidencias parciales y respuestas directas válidas en el archivo local; son evidencia, no respuestas confirmadas. |
 | `--language <lucene\|legacy>` | el lenguaje de consulta: Lucene estricto o la búsqueda anterior legacy. |
 | `--timezone <zone>` | la zona horaria IANA para los límites de las fechas del calendario. |
 | `--regex` | las palabras forman una expresión regular, sin distinguir mayúsculas, que se prueba con todo el texto guardado. |

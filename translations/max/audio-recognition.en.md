@@ -68,6 +68,8 @@ Text is saved under your account in the shared local archive. It appears in mess
 
 This processes voice messages identified by MAX as `kind: voice`. An MP3 or WAV sent as a document is not transcribed this way, and it does not extract speech from video. Your agent needs its own tool for such files: for example, extract the audio track, convert it to a supported format and run suitable speech recognition.
 
+Local transcription accepts a complete mono or stereo Ogg Opus recording of up to 10 minutes. Split longer recordings first.
+
 MAX and Telegram share the downloaded model folder; `CLI_COMMON_CACHE_DIR` changes its location. Downloads need disk space; recognition needs memory and processor time. Speed depends on recording length, model and computer.
 
 ## Quality

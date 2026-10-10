@@ -2,7 +2,39 @@
 title: "Historial de cambios"
 ---
 
-Cambios destacados de `@leemour/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
+Cambios destacados de `@wirecat/max-cli` (`@leemour/max-cli` hasta 0.41.0), con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
+
+## 0.43.0 — 10.10.2026
+
+### Novedades
+
+- La búsqueda de mensajes con `--discover` o MCP `discover: true` encuentra coincidencias parciales y respuestas directas válidas en el archivo local sin descargar modelos. La búsqueda estricta sigue siendo predeterminada; los términos ausentes ayudan al agente a comprobar la evidencia.
+
+### Cambios que pueden romper scripts
+
+- El proyecto usa Apache 2.0. Consulta las condiciones en `LICENSE`.
+
+
+## 0.42.0 — 10.10.2026
+
+### Cambios que pueden romper scripts
+
+- **El paquete se llama `@wirecat/max-cli` y el repositorio es `WireCatLabs/max-cli`.** Instala con `npm install -g @wirecat/max-cli`; el comando sigue siendo `max`. Desinstala primero `@leemour/max-cli`: ambos paquetes proporcionan `max`. No habrá nuevas versiones de `@leemour/max-cli`.
+- **La eliminación verifica el resultado leyendo del servidor.** Si MAX sigue devolviendo el mensaje o falla la comprobación, informa `outcome_unknown` en lugar de `deleted`. Lee el mensaje antes de repetir; la confirmación de la petición no demuestra su eliminación.
+- **La transcripción local admite Ogg Opus completo, mono o estéreo, de hasta 10 minutos.** Divide las grabaciones más largas. La extracción de texto PDF admite hasta 20 páginas y 30 segundos; divide los PDF mayores.
+- **MCP hace visibles los controles Unicode ocultos** en resultados de texto y argumentos de escritura, incluida la conversión de formato. Conserva las banderas regionales; el JSON normal de la CLI mantiene las cadenas originales.
+
+### Corregido
+
+- **Las descargas de adjuntos por MCP terminan sin quedarse bloqueadas.** La extracción local de texto ya no bloquea la conexión necesaria para descargar.
+- **`messages delete` acepta ID separados por comas** y argumentos separados.
+- **Las guías MCP explican permisos del perfil y aprobación en la aplicación del agente.** El servidor no muestra formularios de aprobación; se eliminó código obsoleto no utilizado.
+
+### Seguridad
+
+- **La extracción desde carpetas y transferencia de archivos guardados comprueban su ubicación.** Rechazan archivos y carpetas ocultos, carpetas de la CLI y el almacén de mensajes, incluidos destinos de enlaces simbólicos. Las descargas MCP tampoco escriben allí; usa una carpeta de descargas normal.
+- **DOCX aplica los límites de archivos de Office.** Comprueba número de partes, tamaño descomprimido y tamaño de las partes de texto antes de leerlas.
+
 
 ## 0.41.0 — 09.10.2026
 
@@ -738,7 +770,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/leemour/max-cli/blob/v0.41.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.43.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos prácticos para bots.** `max <имя> bot messages send <чат> <текст>` envía a un chat por número, a una persona como `user:<номер>` o por el título de un chat que el bot ya ha visto; también hay `edit`, `delete`, `list` y `get`. `max <имя> bot chats list` muestra los chats que ha visto el bot; también están `chats get|pin|unpin|leave|action`. `max bot list` muestra todos los nombres con un token de bot.
   Por qué «que ha visto»: MAX no ofrece una lista de chats del bot, por lo que `max` los recuerda por su cuenta.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).

@@ -31,9 +31,9 @@ for (const lang of ["en", "ru", "es"]) {
     expect(agentMarkdown).toContain("setup --agent codex")
     await page.setViewportSize({ width: 1280, height: 900 })
     await page.goto(`/${lang}/docs/architecture`)
-    const packages = page.locator("main figure").filter({ hasText: "@leemour/tg-cli" })
+    const packages = page.locator("main figure").filter({ hasText: "@wirecat/tg-cli" })
     await expect(packages).toHaveCount(1)
-    await expect(packages).toContainText("@leemour/cli-messaging")
+    await expect(packages).toContainText("@wirecat/cli-messaging")
     for (const slug of ["architecture", "search-architecture", "people", "meeting-brief"]) {
       const link = page.locator(`#nd-sidebar a[href="/${lang}/docs/${slug}"]`)
       await expect(link).toHaveCount(1)

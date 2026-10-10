@@ -74,7 +74,7 @@ tg store status "Book club" --json
 
 Он сохраняет полный текст каждого прочитанного сообщения. Файл доступен для чтения только вашему пользователю и не зашифрован ([то, что попадает на диск](./security.md#what-reaches-the-disk)).
 
-**Один файл используется всеми аккаунтами и CLI мессенджеров**, построенными на той же библиотеке, например [max-cli](https://github.com/leemour/max-cli):
+**Один файл используется всеми аккаунтами и CLI мессенджеров**, построенными на той же библиотеке, например [max-cli](https://github.com/WireCatLabs/max-cli):
 
 ```text
 ~/.local/share/cli-messaging/messages.db       # Linux; MESSAGING_STORE moves it

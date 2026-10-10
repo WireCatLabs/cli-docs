@@ -10,7 +10,7 @@ Use this page to install `max`, move it to another computer, update it or uninst
 
 Terms used below:
 
-- **npm package** — how `max` is distributed. npm, pnpm or Bun downloads **`@leemour/max-cli`** and installs the **`max`** command.
+- **npm package** — how `max` is distributed. npm, pnpm or Bun downloads **`@wirecat/max-cli`** and installs the **`max`** command.
 - **Node** or **Bun** — the runtime executing `max`; install one first.
 - **PATH** — directories a terminal searches for commands. Running `max` by name requires its directory on PATH.
 - **Keyring** — the operating system's password storage, where `max` keeps the account token.
@@ -29,17 +29,17 @@ Without a keyring, `max` saves the token in a file beside settings and prints a 
 ## Install
 
 ```sh
-npm install -g @leemour/max-cli
-pnpm add -g @leemour/max-cli
-bun add -g @leemour/max-cli
+npm install -g @wirecat/max-cli
+pnpm add -g @wirecat/max-cli
+bun add -g @wirecat/max-cli
 ```
 
 Run without installing:
 
 ```sh
-npx @leemour/max-cli --help
-pnpm dlx @leemour/max-cli --help
-bunx @leemour/max-cli --help
+npx @wirecat/max-cli --help
+pnpm dlx @wirecat/max-cli --help
+bunx @wirecat/max-cli --help
 ```
 
 Check that everything is in place:
@@ -50,7 +50,7 @@ max --help              # список команд
 max doctor              # где лежат файлы и есть ли вход; к MAX не подключается
 ```
 
-If the installation is successful, but `max` is not located, `npx @leemour/max-cli doctor` will tell you why and what command to execute ([`max` is not located after installation](./troubleshooting.md#max-не-находится-после-установки)).
+If the installation is successful, but `max` is not located, `npx @wirecat/max-cli doctor` will tell you why and what command to execute ([`max` is not located after installation](./troubleshooting.md#max-не-находится-после-установки)).
 
 ## First run
 
@@ -77,13 +77,13 @@ Run in PowerShell when Node.js 22.16+ or 24+ is already installed:
 
 The installer installs the npm package, preserves existing user PATH entries, adds npm's command directory once, updates the current PowerShell PATH and installs the skill. It verifies `max` runs by name. `-Agent codex|cursor|claude|gemini|all|none` chooses skill destinations. Repeating it updates the skill without duplicating PATH or changing PowerShell execution policy.
 
-With npm, use `npm.cmd install -g @leemour/max-cli`. If installation scripts are permitted, the package adds its directory to user PATH without removing existing entries and provides a working `.cmd` launcher. Open a new terminal: npm cannot update the PATH of the terminal that launched it.
+With npm, use `npm.cmd install -g @wirecat/max-cli`. If installation scripts are permitted, the package adds its directory to user PATH without removing existing entries and provides a working `.cmd` launcher. Open a new terminal: npm cannot update the PATH of the terminal that launched it.
 
 If npm skipped the installation script, run repair from the installed package:
 
 ```powershell
 $maxNpmPrefix = (npm.cmd prefix -g).Trim()
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$maxNpmPrefix\node_modules\@leemour\max-cli\install\windows.ps1" -RepairOnly -Prefix $maxNpmPrefix
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$maxNpmPrefix\node_modules\@wirecat\max-cli\install\windows.ps1" -RepairOnly -Prefix $maxNpmPrefix
 $env:Path = "$maxNpmPrefix;$env:Path"
 max skill install --for all
 max --version
@@ -98,7 +98,7 @@ The first commands for reading chats are in the [login and first commands](./usa
 This is necessary if you are editing code or want a version that has not yet been released.
 
 ```sh
-git clone git@github.com:leemour/max-cli.git
+git clone git@github.com:WireCatLabs/max-cli.git
 cd max-cli
 pnpm install
 pnpm build
@@ -116,7 +116,7 @@ Or run it by its path without linking:
 node dist/bin/max.js --help
 ```
 
-The package is named with the scope `@leemour/`: the name `max-cli` without the scope is occupied by someone else's package.
+The package is named with the scope `@wirecat/`: the name `max-cli` without the scope is occupied by someone else's package.
 
 ## Where files are stored
 
@@ -132,7 +132,7 @@ Three directories follow operating system conventions, and two more are shared w
 
 - **settings** — `config.json`, plus `credentials.json` containing a token only when no keyring is available.
 - **state** — `profiles/<имя>.json` (device and login count), `bots/` (observed bot chats and send journals), run records (`runs/`) and `inbox --new` cursors (`inbox/`).
-- **shared local archive** — shared with tools using the same library, including [tg-cli](https://github.com/leemour/tg-cli); see [local archive](./archive.md).
+- **shared local archive** — shared with tools using the same library, including [tg-cli](https://github.com/WireCatLabs/tg-cli); see [local archive](./archive.md).
 - **speech-recognition downloads** — fetched only by your explicit `max models audio download` for [voice transcription](./audio-recognition.md).
 
 `max doctor` shows the exact paths on your machine.
@@ -182,7 +182,7 @@ Uninstalling removes the command, not its data. Log out before removing `max`. `
 max server uninstall                   # если ставили фоновую службу
 max session end                        # выйти и забыть токен ДО удаления команды
 max sales bot auth remove              # забыть токен бота из профиля sales
-npm uninstall -g @leemour/max-cli
+npm uninstall -g @wirecat/max-cli
 rm -rf ~/.config/max-cli ~/.local/share/max-cli ~/.cache/max-cli
 ```
 

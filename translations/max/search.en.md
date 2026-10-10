@@ -5,7 +5,7 @@ title: "Search"
 <a id="для-скриптов-и-агентов" />
 <a id="подготовка-файлов-и-архива" />
 
-Search helps you recover a message, agreement, file or old code without scrolling through chats. This page explains searching data saved on this computer—messenger messages and mail/notes imported by [memo](https://github.com/leemour/cli-memo)—and searching the MAX server.
+Search helps you recover a message, agreement, file or old code without scrolling through chats. This page explains searching data saved on this computer—messenger messages and mail/notes imported by [memo](https://github.com/WireCatLabs/cli-memo)—and searching the MAX server.
 
 After reading it, you will be able to find messages by words, people, chats, dates, files and links, save the search and run it again, count matches and distinguish between a real “not found” and a gap in the saved history. The search does not mark anything as read.
 
@@ -15,6 +15,20 @@ Terms used below:
 - **Query** — words and conditions such as `from:` and `date:`. Your AI agent can construct it; see the [query-language reference](./query-language.md).
 - **Coverage** (`coverage`) — which saved chats/messages were searchable and which chats were never downloaded or are out of date.
 
+## When you remember the question rather than the exact words
+
+Ask your AI agent to find messages answering a question and show the evidence. For example: “Find the daily export time for project Mayak in its chat and check whether the schedule changed.” The agent can find partial word matches and direct replies, then read the messages. This needs downloaded history; no model download is required.
+
+For command-line control:
+
+```sh
+max search messages 'Во сколько ежедневная выгрузка проекта Маяк?' --discover --chat 990 --json
+```
+
+This searches the local archive only. Chat, sender and date filters stay in force. In MCP, pass `discover: true` to the message-search tool. `query.discovery` describes the bounded pool; `items[].discovery.missingTerms` lists missing words, and `parent` links a reply to its matching parent. A high score is not answer confidence: a question, proposal or old decision can rank first. Read the evidence and check [archive coverage](./archive.md) before concluding that a fact is absent.
+
+Without `--discover`, strict search remains the default. Boolean syntax, quoted phrases, wildcards, AST, `--exact` and `--newest` keep strict semantics. Discovery cannot combine with legacy, regular-expression search or `--backend server`. Meaning-based conversation search stays a separate [topic-search option](./topic-search.md).
+
 ## What you can do
 
 The entire search is in one command group, `max search`. If you don't know where it was written, start with `search all`.
@@ -22,7 +36,7 @@ The entire search is in one command group, `max search`. If you don't know where
 | Task | Command |
 |---|---|
 | Search immediately in messages, mail and notes | `max search all '<запрос>'` |
-| Search only messenger messages, in one chat - and on the MAX server | `max search messages '<запрос>'` |
+| Search messenger messages; without `--discover`, also on the MAX server in one chat | `max search messages '<запрос>'` |
 | Search only mail that was imported by memo | `max search mail '<запрос>'` |
 | Search notes from memo or folder | `max search notes '<запрос>'` |
 | Find a discussion by what it was about | `max search conversations '<вопрос>'` ([search by topic](./topic-search.md)) |
@@ -57,7 +71,7 @@ max search conversations 'переезд на дачу'      # разговор�
 
 Mail and notes are archived via memo: `memo mail import` and `memo import`. Without them, `search all` only looks for messages.
 
-The rest of this page covers `max search messages`. Searches within one chat can also query the MAX server ([below](#поиск-на-сервере-max---backend)).
+The rest of this page covers `max search messages`. Without `--discover`, searches within one chat can also query the MAX server ([below](#поиск-на-сервере-max---backend)).
 
 ## Try a focused search
 
@@ -237,7 +251,7 @@ max attachments text set "Книжный клуб" 204 --text-file ./scan.txt
 
 The `attachments extract` reads plain text files, DOCX and PDF with a text layer on this computer. `--download` requires `--output-dir`; without them, extraction reads already downloaded files. If there are several attachments in the message, indicate one through `--attachment`, starting with 1.
 
-Local extraction also reads UTF-16 with BOM, confidently detected legacy encodings, ODT, ODS, XLSX, PPTX and EPUB, without AI or additional packages. It preserves sheet/slide/chapter order and saved cell values but does not calculate formulas or read images. Your agent should check ambiguous encoding and convert it when needed. Original files stay unchanged. ODT, ODS, XLSX, PPTX and EPUB are limited to 1,000 archive parts, 50 MiB unpacked and 10 MiB per XML/HTML text part. Corrupt or incomplete reads are not indexed as complete. Failed reads can be retried; agent text and previous successful text are protected.
+Local extraction also reads UTF-16 with BOM, confidently detected legacy encodings, ODT, ODS, XLSX, PPTX and EPUB, without AI or additional packages. It preserves sheet/slide/chapter order and saved cell values but does not calculate formulas or read images. Your agent should check ambiguous encoding and convert it when needed. Original files stay unchanged. DOCX, ODT, ODS, XLSX, PPTX and EPUB are limited to 1,000 archive parts, 50 MiB unpacked and 10 MiB per XML/HTML text part. Corrupt or incomplete reads are not indexed as complete. Failed reads can be retried; agent text and previous successful text are protected.
 
 For PDF you need the optional package `unpdf`, for DOCX - `mammoth`, installed in the same place as `max`. For a global npm install: `npm install -g unpdf mammoth`. If the package is not present, command reports this; the text can be recorded by an agent.
 
@@ -264,6 +278,8 @@ max attachments extract --chat "Книжный клуб" --ocr --concurrency 4 -
 `--ocr` sends images to the chosen service; otherwise no AI call occurs. Parallelism is 1–8, default 4; file limit is 1–500, default 100. Continue with the returned `cursor`. PDF scans require optional `unpdf` and `@napi-rs/canvas`, with at most 20 pages per document. Text-layer pages stay local. File hashes and the selected model allow reuse. Agent text and prior indexed text survive errors or cancellation. Check `failed` and each file status; provider rate limits stop further calls in that run. `--offline` cannot combine with `--ocr`.
 
 **Files already saved.** `max attachments extract --chat <чат> --from-dir ./files` reads one folder without subfolders. It requires one uniquely matching source file or a complete set with downloader filenames. Do not combine `--from-dir` with `--download` or `--output-dir`. `max messages download <чат> <id> --extract` reads only files downloaded in this run; `--all --extract` does this for the entire run. Hashes detect changed files; agent text stays protected. Bounded MCP extraction returns a continuation `cursor` and file information, not text.
+
+`--from-dir` refuses hidden files and folders, the CLI’s own folders and the message store. MCP extraction downloads also require `output_dir` outside these locations. Local PDF text extraction allows at most 20 pages and 30 seconds.
 
 ## Passwords, codes and cards
 
@@ -391,7 +407,7 @@ max stats messages show --by hour                     # все сохранён�
 
 ## Search the MAX server: `--backend`
 
-The MAX server searches only one chat. When a query specifies one chat (`--chat` or `chat:`) and contains words, `max` queries both the server and the archive by default (`--backend both`). Without a specified chat, it does not query the server; results come from the archive.
+The MAX server searches only one chat. When a query specifies one chat (`--chat` or `chat:`) and contains words without `--discover`, `max` queries both the server and the archive by default (`--backend both`). Without a specified chat, it does not query the server; results come from the archive. `--discover` always reads the archive only, including with `--backend both`.
 
 ```sh
 max search messages 'счёт' --chat "Книжный клуб"                    # архив и сервер MAX

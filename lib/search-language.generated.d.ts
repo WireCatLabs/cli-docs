@@ -1,4 +1,4 @@
-import type { QueryAst, QueryNode } from '@leemour/cli-messaging/services';
+import type { QueryAst, QueryNode } from '@wirecat/cli-messaging/services';
 export type { QueryAst, QueryNode };
 export declare function parseLucene(text: string): QueryAst;
 export declare function validateFields(ast: QueryAst): QueryAst;

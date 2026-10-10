@@ -6,7 +6,7 @@ title: "Установка"
 
 Слова, которые используются на этой странице:
 
-- **пакет npm**: способ распространения `tg`. npm (или pnpm, или Bun) загружает его и помещает команду `tg` на ваш компьютер. Пакет **`@leemour/tg-cli`**; устанавливаемая команда — **`tg`**.
+- **пакет npm**: способ распространения `tg`. npm (или pnpm, или Bun) загружает его и помещает команду `tg` на ваш компьютер. Пакет **`@wirecat/tg-cli`**; устанавливаемая команда — **`tg`**.
 - **Node** или **Bun**: программа, запускающая `tg`. Сначала установите один из них.
 - **PATH**: список папок, которые просматривает ваш терминал при вводе команды. `tg` работает под своим именем только тогда, когда его папка находится в PATH.
 - **Связка ключей**: хранилище паролей вашей операционной системы. `tg` хранит там ключи вашего приложения Telegram.
@@ -23,17 +23,17 @@ title: "Установка"
 ## Установка
 
 ```sh
-npm install -g --allow-scripts=@leemour/tg-cli --foreground-scripts @leemour/tg-cli
+npm install -g --allow-scripts=@wirecat/tg-cli --foreground-scripts @wirecat/tg-cli
 # The global install puts the skill in .agents and .claude. Then: tg setup
 
-pnpm add -g @leemour/tg-cli
-bun add -g @leemour/tg-cli
+pnpm add -g @wirecat/tg-cli
+bun add -g @wirecat/tg-cli
 ```
 
 Попробовать без установки:
 
 ```sh
-npx @leemour/tg-cli --help
+npx @wirecat/tg-cli --help
 ```
 
 Проверить установку:
@@ -59,7 +59,7 @@ tg setup --help              # examples, login choices and Windows instructions
 
 `tg setup --app browser` открывает инструкции по регистрации приложения вручную; `--method phone` входит в систему по номеру телефона вместо QR-кода. Код с сайта my.telegram.org (для приложения) и код для входа в аккаунт — это два отдельных шага. Повторный запуск установки проверяет существующую сессию и не позволяет повторно войти в систему. Если вход в систему был прерван или Telegram завершил сессию, сначала завершите `tg session start`, а затем снова запустите настройку. См. [логин, сессии и профили](./sessions.md).
 
-Без глобальной установки используйте `npm exec --yes --package=@leemour/tg-cli -- tg setup --agent codex`. Затем программа установки предлагает следующие команды в той же форме.
+Без глобальной установки используйте `npm exec --yes --package=@wirecat/tg-cli -- tg setup --agent codex`. Затем программа установки предлагает следующие команды в той же форме.
 
 ### Windows: одна команда установки
 
@@ -76,7 +76,7 @@ tg setup --help              # examples, login choices and Windows instructions
 Глобальная установка npm также восстанавливает сохраненный Windows PATH и устанавливает навык, когда npm разрешает сценарий установки:
 
 ```powershell
-npm.cmd install -g --allow-scripts=@leemour/tg-cli --foreground-scripts @leemour/tg-cli
+npm.cmd install -g --allow-scripts=@wirecat/tg-cli --foreground-scripts @wirecat/tg-cli
 ```
 
 Более новые версии npm пропускают сценарии установки, если вы их не разрешите, и `--ignore-scripts` пропускает и этот. npm не может изменить PATH терминала, который его запустил, поэтому откройте новый терминал после установки npm. Установщик PowerShell, указанный выше, также обновляет текущий терминал.
@@ -90,7 +90,7 @@ npm.cmd install -g --allow-scripts=@leemour/tg-cli --foreground-scripts @leemour
 Для работы над кодом или для еще не выпущенной версии:
 
 ```sh
-git clone https://github.com/leemour/tg-cli.git
+git clone https://github.com/WireCatLabs/tg-cli.git
 cd tg-cli
 pnpm install
 pnpm build
@@ -112,7 +112,7 @@ pnpm build
 
 - **Настройки** сохраняют `config.json` и `credentials.json` только на машине без системного хранилища ключей.
 - **state** содержит логин (`sessions/<profile>.session`), записанные запуски (`runs/`), журнал отправок (`sends/`), список разрешенных получателей (`profiles/`), сохраненную точку `inbox --new` (`inbox/`), задания фоновой выборки, а также журнал и блокировку `serve`.
-- **локальное хранилище** используется совместно с другими инструментами обмена сообщениями, созданными на основе той же библиотеки, например [max-cli](https://github.com/leemour/max-cli). Страница [Локальный архив](./archive.md) описывает это.
+- **локальное хранилище** используется совместно с другими инструментами обмена сообщениями, созданными на основе той же библиотеки, например [max-cli](https://github.com/WireCatLabs/max-cli). Страница [Локальный архив](./archive.md) описывает это.
 - **модели речи** загружаются только по вашему запросу (`tg models audio download`), для `messages transcribe --local`.
 
 `tg doctor` показывает точные пути на текущем компьютере.
@@ -151,7 +151,7 @@ tg upgrade --check    # only say whether a newer version exists; installs nothin
 Раз в день при работе в терминале `tg` сообщает в stderr о новой версии в npm. При `--json`, передаче в канал, `--quiet` и в CI это сообщение отключено. Отключить его вручную: `tg config set updateCheck false
 --defaults` или `TG_NO_UPDATE_CHECK=1`.
 
-Из исходников: `git pull && pnpm install && pnpm build`. Через npx: `npx @leemour/tg-cli@latest`.
+Из исходников: `git pull && pnpm install && pnpm build`. Через npx: `npx @wirecat/tg-cli@latest`.
 
 ## Удаление
 
@@ -161,7 +161,7 @@ tg upgrade --check    # only say whether a newer version exists; installs nothin
 tg server uninstall                  # if you installed the background unit; stop it first
 tg session end                       # logs out on Telegram's side and deletes the session file
 tg support bot auth remove           # forgets the token of the bot profile "support"
-npm uninstall -g @leemour/tg-cli
+npm uninstall -g @wirecat/tg-cli
 rm -rf ~/.config/tg-cli ~/.local/share/tg-cli ~/.cache/tg-cli
 ```
 

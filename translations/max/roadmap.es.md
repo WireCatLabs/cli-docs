@@ -2,7 +2,7 @@
 title: "Hoja de ruta"
 ---
 
-Esta página contiene lo que está planeado para `max` y lo que aún no está disponible. Léelo antes de buscar una solución para la característica que falta: es posible que ya esté en los planes. El orden es aproximado y puede cambiar. Puedes enviar el tuyo en [problemas en GitHub](https://github.com/leemour/max-cli/issues).
+Esta página contiene lo que está planeado para `max` y lo que aún no está disponible. Léelo antes de buscar una solución para la característica que falta: es posible que ya esté en los planes. El orden es aproximado y puede cambiar. Puedes enviar el tuyo en [problemas en GitHub](https://github.com/WireCatLabs/max-cli/issues).
 
 ## Próximamente
 

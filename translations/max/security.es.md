@@ -150,7 +150,7 @@ Cada acceso añade un dispositivo en la lista de sesiones de MAX; puedes cerrarl
 
 ## Protocolo no oficial
 
-MAX no publica una API para cuentas de usuario. Todo lo que se sabe sobre el protocolo aquí se midió en una conexión en vivo o se leyó en la ingeniería inversa de otra persona, y para cada operación se anota exactamente de dónde vino ([descripción del protocolo](https://github.com/leemour/max-cli/blob/main/docs/dev/protocol.md), columna "De dónde vino").
+MAX no publica una API para cuentas de usuario. Todo lo que se sabe sobre el protocolo aquí se midió en una conexión en vivo o se leyó en la ingeniería inversa de otra persona, y para cada operación se anota exactamente de dónde vino ([descripción del protocolo](https://github.com/WireCatLabs/max-cli/blob/main/docs/dev/protocol.md), columna "De dónde vino").
 
 **Puede dejar de funcionar sin aviso.** En ese caso el comando indica el problema por stderr, en lugar de devolver una lista vacía como si todo funcionase.
 

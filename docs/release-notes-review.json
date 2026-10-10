@@ -1,14 +1,14 @@
 {
   "tg": {
-    "version": "v0.42.0",
-    "roadmapSha256": "f784c4c15f91aee8d5389fd91725e342ee8a9d9abde46243cba7c79746b3127f",
+    "version": "v0.44.0",
+    "roadmapSha256": "978bfe805c38732b567388b00cbe701d12721599bc2d3e8dae060fee8f83baab",
     "reviewedAt": "2026-10-10",
-    "conclusion": "Reviewed the comparison page, guide rewrite and auto-reply audience release. Multi-photo sends, private chat notes and the listed MAX parity capabilities remain planned. Personal names and notes are already available and distinguished from chat notes."
+    "conclusion": "Reviewed model-free archive discovery, exact shared dependency, package rename and intervening attachment/MCP limits. Strict defaults remain. Multi-photo sending, private chat notes and the listed MAX parity features remain planned; discovery requires neither embeddings nor a conversation build."
   },
   "max": {
-    "version": "v0.41.0",
-    "roadmapSha256": "4c0315a19821a247c813a122202541ff9e4eb60c4616029ba1ffaf4438ee83a7",
+    "version": "v0.43.0",
+    "roadmapSha256": "f1628c3c19b2ea49f41fb57147b92bb0f9d29081ed577d1be3755a8a35b2a961",
     "reviewedAt": "2026-10-10",
-    "conclusion": "Reviewed the new guide rewrite and auto-reply audience release. The roadmap still plans optional local storage, event-driven commands, video notes, cloud-password actions and installers. These capabilities are not claimed as shipped."
+    "conclusion": "Reviewed model-free archive discovery, exact shared dependency, package rename, deletion verification and intervening attachment/MCP limits. Strict defaults remain. Optional local storage, event commands, video notes, cloud-password actions and standalone installers remain planned."
   }
 }

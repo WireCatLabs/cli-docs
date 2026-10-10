@@ -13,7 +13,7 @@ Lea esta página antes de iniciar `max` por primera vez, cuando cambie a otra co
 
 Palabras que aparecen aquí:
 
-- **Paquete npm**: forma de distribuir `max`. npm, pnpm o Bun descarga el paquete y añade el comando al ordenador. El paquete se llama **`@leemour/max-cli`**; el comando, **`max`**.
+- **Paquete npm**: forma de distribuir `max`. npm, pnpm o Bun descarga el paquete y añade el comando al ordenador. El paquete se llama **`@wirecat/max-cli`**; el comando, **`max`**.
 - **Node** o **Bun**: programa que ejecuta `max`. Instala uno antes.
 - **PATH**: lista de carpetas donde el terminal busca comandos. Para ejecutar `max` por nombre, su carpeta debe estar incluida.
 - **Llavero**: almacén de contraseñas del sistema operativo donde `max` guarda el token de la cuenta.
@@ -32,17 +32,17 @@ Si no hay un llavero en la máquina, el token va al archivo al lado de la config
 ## Instalar
 
 ```sh
-npm install -g @leemour/max-cli
-pnpm add -g @leemour/max-cli
-bun add -g @leemour/max-cli
+npm install -g @wirecat/max-cli
+pnpm add -g @wirecat/max-cli
+bun add -g @wirecat/max-cli
 ```
 
 Ejecutar sin instalar:
 
 ```sh
-npx @leemour/max-cli --help
-pnpm dlx @leemour/max-cli --help
-bunx @leemour/max-cli --help
+npx @wirecat/max-cli --help
+pnpm dlx @wirecat/max-cli --help
+bunx @wirecat/max-cli --help
 ```
 
 Compruebe que todo esté en su lugar:
@@ -53,7 +53,7 @@ max --help              # список команд
 max doctor              # где лежат файлы и есть ли вход; к MAX не подключается
 ```
 
-Si la instalación se realiza correctamente y no se encuentra `max`, `npx @leemour/max-cli doctor` le dirá por qué y qué comando ejecutar ([No se encuentra `max` después de instalar ](./troubleshooting.md#max-не-находится-после-установки)).
+Si la instalación se realiza correctamente y no se encuentra `max`, `npx @wirecat/max-cli doctor` le dirá por qué y qué comando ejecutar ([No se encuentra `max` después de instalar ](./troubleshooting.md#max-не-находится-после-установки)).
 
 ## Primer ejecución
 
@@ -80,13 +80,13 @@ Ejecute en PowerShell cuando Node.js 22.16+ o 24+ ya esté instalado:
 
 El instalador instala el paquete npm, guarda las entradas de la PATH del usuario, agrega la carpeta de comandos npm una vez, actualiza la PATH del PowerShell actual e instala la habilidad. Comprueba que `max` se inicie por nombre. `-Agent codex|cursor|claude|gemini|all|none` elige dónde colocar la habilidad. Ejecutarlo nuevamente actualiza la habilidad y no duplica la PATH. No cambia la política de ejecución de PowerShell.
 
-A través de npm use `npm.cmd install -g @leemour/max-cli`. Si npm permite scripts de instalación, el paquete agrega su carpeta a la PATH del usuario, preservando las entradas existentes y deja una ejecución funcional a través de `.cmd`. El nuevo terminal encontrará `max` por su nombre. Una terminal ya abierta no verá esto: npm no puede cambiar la PATH de la terminal desde la que se inició; abra una nueva.
+A través de npm use `npm.cmd install -g @wirecat/max-cli`. Si npm permite scripts de instalación, el paquete agrega su carpeta a la PATH del usuario, preservando las entradas existentes y deja una ejecución funcional a través de `.cmd`. El nuevo terminal encontrará `max` por su nombre. Una terminal ya abierta no verá esto: npm no puede cambiar la PATH de la terminal desde la que se inició; abra una nueva.
 
 Si npm omitió el script de instalación, ejecuta la reparación del paquete instalado:
 
 ```powershell
 $maxNpmPrefix = (npm.cmd prefix -g).Trim()
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$maxNpmPrefix\node_modules\@leemour\max-cli\install\windows.ps1" -RepairOnly -Prefix $maxNpmPrefix
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$maxNpmPrefix\node_modules\@wirecat\max-cli\install\windows.ps1" -RepairOnly -Prefix $maxNpmPrefix
 $env:Path = "$maxNpmPrefix;$env:Path"
 max skill install --for all
 max --version
@@ -101,7 +101,7 @@ Los primeros comandos para leer chats se encuentran en la sección [iniciar sesi
 Esto es necesario si está editando código o desea una versión que aún no se ha publicado.
 
 ```sh
-git clone git@github.com:leemour/max-cli.git
+git clone git@github.com:WireCatLabs/max-cli.git
 cd max-cli
 pnpm install
 pnpm build
@@ -119,7 +119,7 @@ O ejecutarlo por su ruta, sin crear enlaces:
 node dist/bin/max.js --help
 ```
 
-El paquete se nombra con el alcance `@leemour/`: el nombre `max-cli` sin el alcance lo ocupa el paquete de otra persona.
+El paquete se nombra con el alcance `@wirecat/`: el nombre `max-cli` sin el alcance lo ocupa el paquete de otra persona.
 
 ## Dónde se guardan los archivos
 
@@ -135,7 +135,7 @@ Tres directorios siguen las convenciones del sistema operativo y dos más se com
 
 - **configuración** - `config.json`, y `credentials.json` con token, solo si la máquina no tiene llavero.
 - **estado** - `profiles/<имя>.json` (dispositivo y contador de entradas), `bots/` (chat visto por los bots y su registro de envío), registros de ejecución (`runs/`) y punto de referencia `inbox --new` (`inbox/`).
-- **copia compartida de mensajes** - compartida con otras herramientas en la misma biblioteca, por ejemplo [tg-cli](https://github.com/leemour/tg-cli). Se describe en la página [Archivo local](./archive.md).
+- **copia compartida de mensajes** - compartida con otras herramientas en la misma biblioteca, por ejemplo [tg-cli](https://github.com/WireCatLabs/tg-cli). Se describe en la página [Archivo local](./archive.md).
 - **Los modelos de reconocimiento de voz** se descargan solo cuando usted lo ordene (`max models audio download`), para [reconocimiento de voz](./audio-recognition.md).
 
 `max doctor` muestra las rutas exactas de este comando.
@@ -188,7 +188,7 @@ Al eliminar se elimina el comando, pero no los datos. Primero, salga mientras `m
 max server uninstall                   # если ставили фоновую службу
 max session end                        # выйти и забыть токен ДО удаления команды
 max sales bot auth remove              # забыть токен бота из профиля sales
-npm uninstall -g @leemour/max-cli
+npm uninstall -g @wirecat/max-cli
 rm -rf ~/.config/max-cli ~/.local/share/max-cli ~/.cache/max-cli
 ```
 

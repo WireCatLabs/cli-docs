@@ -6,7 +6,7 @@ Lea esta página antes de ejecutar por primera vez `tg`, o cuando lo mueva a otr
 
 Las palabras que utiliza esta página:
 
-- **paquete npm**: la forma en que se distribuye `tg`. npm (o pnpm, o Bun) lo descarga y coloca el comando `tg` en su computadora. El paquete es **`@leemour/tg-cli`**; el comando que instala es **`tg`**.
+- **paquete npm**: la forma en que se distribuye `tg`. npm (o pnpm, o Bun) lo descarga y coloca el comando `tg` en su computadora. El paquete es **`@wirecat/tg-cli`**; el comando que instala es **`tg`**.
 - **Node** o **Bun**: el programa que ejecuta `tg`. Instale uno de ellos primero.
 - **PATH**: la lista de carpetas que busca tu terminal cuando escribes un comando. `tg` funciona con su nombre simple sólo cuando su carpeta está en PATH.
 - **Llavero**: el almacén de contraseñas de tu sistema operativo. `tg` guarda las claves de la aplicación Telegram allí.
@@ -23,17 +23,17 @@ La instalación no genera nada: SQLite proviene del propio tiempo de ejecución,
 ## Instalación
 
 ```sh
-npm install -g --allow-scripts=@leemour/tg-cli --foreground-scripts @leemour/tg-cli
+npm install -g --allow-scripts=@wirecat/tg-cli --foreground-scripts @wirecat/tg-cli
 # The global install puts the skill in .agents and .claude. Then: tg setup
 
-pnpm add -g @leemour/tg-cli
-bun add -g @leemour/tg-cli
+pnpm add -g @wirecat/tg-cli
+bun add -g @wirecat/tg-cli
 ```
 
 Para probarlo sin instalarlo:
 
 ```sh
-npx @leemour/tg-cli --help
+npx @wirecat/tg-cli --help
 ```
 
 Comprueba que funciona:
@@ -59,7 +59,7 @@ tg setup --help              # examples, login choices and Windows instructions
 
 `tg setup --app browser` abre las instrucciones de registro manual de la aplicación; `--method phone` inicia sesión mediante número de teléfono en lugar de código QR. El código de my.telegram.org (para la aplicación) y el código para iniciar sesión en la cuenta son dos pasos separados. Al ejecutar la configuración nuevamente, se verifica su sesión existente y no se vuelve a iniciar sesión. Si se interrumpió un inicio de sesión o Telegram finalizó la sesión, primero finalice `tg session start` y luego ejecute la configuración nuevamente. Ver [inicio de sesión, sesiones y perfiles](./sessions.md).
 
-Sin una instalación global, utilice `npm exec --yes --package=@leemour/tg-cli -- tg setup --agent codex`. Luego, el programa de instalación sugiere los siguientes comandos de la misma forma.
+Sin una instalación global, utilice `npm exec --yes --package=@wirecat/tg-cli -- tg setup --agent codex`. Luego, el programa de instalación sugiere los siguientes comandos de la misma forma.
 
 ### Windows: un comando de instalación
 
@@ -76,7 +76,7 @@ La política de ejecución de PowerShell no cambia. El instalador elimina solo e
 Una instalación global de npm también repara el PATH de Windows guardada e instala la skill, cuando npm permite su script de instalación:
 
 ```powershell
-npm.cmd install -g --allow-scripts=@leemour/tg-cli --foreground-scripts @leemour/tg-cli
+npm.cmd install -g --allow-scripts=@wirecat/tg-cli --foreground-scripts @wirecat/tg-cli
 ```
 
 Las versiones más nuevas de npm omiten los scripts de instalación a menos que usted los permita, y `--ignore-scripts` también omite este. npm no puede cambiar el PATH del terminal que lo inició, así que abra un nuevo terminal después de una instalación de npm. El instalador de PowerShell anterior también actualiza el terminal actual.
@@ -90,7 +90,7 @@ Los primeros comandos para leer tus chats están en [iniciar sesión y los prime
 Para trabajar en el código o para una versión que aún no se ha publicado:
 
 ```sh
-git clone https://github.com/leemour/tg-cli.git
+git clone https://github.com/WireCatLabs/tg-cli.git
 cd tg-cli
 pnpm install
 pnpm build
@@ -112,7 +112,7 @@ Tres directorios siguen las convenciones del sistema operativo y dos más se com
 
 - **configuraciones** mantienen `config.json` y `credentials.json` solo en una máquina sin llavero.
 - **estado** contiene el inicio de sesión (`sessions/<profile>.session`), las ejecuciones registradas (`runs/`), el diario de envíos (`sends/`), la lista de destinatarios permitidos (`profiles/`), el punto guardado de `inbox --new` (`inbox/`), los trabajos de recuperación en segundo plano y el registro y bloqueo de `serve`.
-- **el archivo local** se comparte con otras herramientas de mensajería creadas en la misma biblioteca, como [max-cli](https://github.com/leemour/max-cli). La página [El archivo local](./archive.md) lo describe.
+- **el archivo local** se comparte con otras herramientas de mensajería creadas en la misma biblioteca, como [max-cli](https://github.com/WireCatLabs/max-cli). La página [El archivo local](./archive.md) lo describe.
 - **Los modelos de voz** se descargan solo cuando preguntas (`tg models audio download`), para `messages transcribe --local`.
 
 `tg doctor` muestra las rutas exactas en este equipo.
@@ -151,7 +151,7 @@ Después de una actualización, `tg upgrade` reinicia cada `serve` en segundo pl
 Una vez al día, en una terminal, `tg` avisa por stderr si hay una versión más reciente en npm. No muestra el aviso con `--json`, en una tubería, con `--quiet` ni en CI. Para desactivarlo: `tg config set updateCheck false
 --defaults`, o `TG_NO_UPDATE_CHECK=1`.
 
-Desde el código fuente: `git pull && pnpm install && pnpm build`. Con npx: `npx @leemour/tg-cli@latest`.
+Desde el código fuente: `git pull && pnpm install && pnpm build`. Con npx: `npx @wirecat/tg-cli@latest`.
 
 ## Desinstalación
 
@@ -161,7 +161,7 @@ Al eliminar el comando, se dejan sus datos. Primero cierre sesión, mientras `tg
 tg server uninstall                  # if you installed the background unit; stop it first
 tg session end                       # logs out on Telegram's side and deletes the session file
 tg support bot auth remove           # forgets the token of the bot profile "support"
-npm uninstall -g @leemour/tg-cli
+npm uninstall -g @wirecat/tg-cli
 rm -rf ~/.config/tg-cli ~/.local/share/tg-cli ~/.cache/tg-cli
 ```
 

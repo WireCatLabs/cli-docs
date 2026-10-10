@@ -25,7 +25,7 @@ Algunas palabras en esta página:
 | Qué mensajes obtuvieron más reacciones | `tg stats messages top` |
 | Quién responde más preguntas | `tg stats contacts top` |
 | Qué preguntas esperan respuesta | `tg stats messages unanswered` |
-| ¿Qué tan rápido responde una persona? `tg stats contacts responses` |
+| ¿Qué tan rápido responde una persona? | `tg stats contacts responses` |
 | Si los recién llegados recibieron ayuda | `tg stats chats newcomers` |
 | Si los recién llegados se quedan | `tg stats chats retention` |
 | Qué publicaciones fueron vistas pero no discutidas | `tg stats messages discussion` |
@@ -250,6 +250,6 @@ Un informe vacío con historial incompleto no demuestra que no hubiera preguntas
 
 ## Más opciones
 
-Puede seleccionar un período, elegir una medida o puntuación combinada y guardar una selección para otro informe. Las fórmulas de puntuación, los argumentos de evidencia exacta y los límites de páginas se encuentran en la [especificación de estadísticas compartidas](https://github.com/leemour/cli-messaging/blob/main/docs/rankings.md) y la [referencia de comando para estadísticas](./commands.md#tg-stats).
+Puede seleccionar un período, elegir una medida o puntuación combinada y guardar una selección para otro informe. Las fórmulas de puntuación, los argumentos de evidencia exacta y los límites de páginas se encuentran en la [especificación de estadísticas compartidas](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/rankings.md) y la [referencia de comando para estadísticas](./commands.md#tg-stats).
 
 Para verificar un resultado, pide al agente que abra la pregunta, respuesta o miembros que sustentan esa fila. Antes del siguiente informe, [comprueba la cobertura del archivo](./archive.md).

@@ -64,10 +64,10 @@ for (const lang of ["en", "ru", "es"]) {
       return `${attr}="${translated}"`
     })
     for (const tool of ["tg", "max"]) {
-      const english = wordsFor("en").onboarding.prompt(tool, `@leemour/${tool}-cli`)
+      const english = wordsFor("en").onboarding.prompt(tool, `@wirecat/${tool}-cli`)
       html = html.replaceAll(
         escapeHtml(english),
-        escapeHtml(wordsFor(lang).onboarding.prompt(tool, `@leemour/${tool}-cli`)),
+        escapeHtml(wordsFor(lang).onboarding.prompt(tool, `@wirecat/${tool}-cli`)),
       )
     }
     html = html.replace(

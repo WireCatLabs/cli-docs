@@ -62,7 +62,7 @@ max doctor --online
 La instalación terminó, pero el terminal dice que no existe el comando `max`. Puedes averiguar el motivo sin utilizarlo:
 
 ```sh
-npx @leemour/max-cli doctor
+npx @wirecat/max-cli doctor
 ```
 
 `max on PATH` indica si la encuentra; debajo aparece la solución.
@@ -76,7 +76,7 @@ $env:Path -split ';'
 
 El primer comando muestra la carpeta y el segundo lo que hay actualmente en `PATH`. Si la carpeta está en la lista pero `max` sigue sin encontrarse, cierra y vuelve a abrir el terminal: una ventana abierta antes de instalar Node no ve el nuevo `PATH`.
 
-**PowerShell: «running scripts is disabled on this system».** npm crea `max.ps1` y `npx.ps1`, bloqueados por defecto. Usa `max.cmd`, `npx.cmd` (`npx.cmd @leemour/max-cli doctor`) o permite scripts para tu usuario:
+**PowerShell: «running scripts is disabled on this system».** npm crea `max.ps1` y `npx.ps1`, bloqueados por defecto. Usa `max.cmd`, `npx.cmd` (`npx.cmd @wirecat/max-cli doctor`) o permite scripts para tu usuario:
 
 ```powershell
 Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
@@ -86,12 +86,14 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 
 **Hay otro `max` en `PATH`.** Si otro programa con el mismo nombre aparece antes en `PATH`, `max doctor` muestra su ruta. Ejecuta nuestra herramienta con la ruta completa o coloca su carpeta antes.
 
-### `npx @leemour/max-cli` instala la versión incorrecta
+<a id="npx-leemourmax-cli-instala-la-versión-incorrecta" />
+
+### `npx @wirecat/max-cli` instala la versión incorrecta
 
 `npx` conserva caché. Usa una versión explícita:
 
 ```sh
-npx @leemour/max-cli@latest --version
+npx @wirecat/max-cli@latest --version
 ```
 
 ## Inicio de sesión y perfiles
@@ -324,7 +326,7 @@ max doctor report create   # записать отчёт в файл и пока
 
 `create` escribe el archivo `max-report-<время>.json` en el directorio actual (derechos `0600`). Contiene la versión, entorno y sistema, lo mismo que muestra `max doctor`, la última ejecución que terminó en error y las últimas 20 acciones de registro. No contiene mensajes de texto, nombres de chat, nombres, números de teléfono ni tokens. Los números de chat y mensaje se reemplazan con etiquetas: dentro de un informe, la etiqueta de un chat es la misma, pero en el siguiente informe es diferente. Un inicio que finaliza con un error se guarda solo, incluso sin `--record` ([ejecución fallido](./diagnostics.md#неудачный-запуск-сохраняется-всегда)). Sobre otro ejecución: `--run <id>`, los números mostrados por `max runs list`.
 
-Después, el comando imprime un enlace para abrir una incidencia en [github.com/leemour/max-cli/issues](https://github.com/leemour/max-cli/issues), con el título y un borrador del texto ya rellenados. Necesitas una cuenta de GitHub. Arrastral archivo del informe al campo de texto, describe qué hiciste y qué ocurrió y pulsa «Submit new issue».
+Después, el comando imprime un enlace para abrir una incidencia en [github.com/WireCatLabs/max-cli/issues](https://github.com/WireCatLabs/max-cli/issues), con el título y un borrador del texto ya rellenados. Necesitas una cuenta de GitHub. Arrastral archivo del informe al campo de texto, describe qué hiciste y qué ocurrió y pulsa «Submit new issue».
 
 Las incidencias de GitHub y los archivos adjuntos son públicos.
 

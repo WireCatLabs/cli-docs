@@ -6,7 +6,7 @@ title: "Búsqueda"
 <a id="archivos-preparación-y-lagunas-del-archivo" />
 <a id="for-scripts-and-agents" />
 
-Necesitas encontrar algo que esté escrito: un mensaje, un acuerdo, un archivo que alguien envió, un código de hace meses. Esta página muestra cómo buscar todo lo que tg ha guardado en esta computadora (mensajes de Telegram y el correo y las notas que [memo](https://github.com/leemour/cli-memo) importó) y cómo realizar la búsqueda propia de Telegram al mismo tiempo.
+Necesitas encontrar algo que esté escrito: un mensaje, un acuerdo, un archivo que alguien envió, un código de hace meses. Esta página muestra cómo buscar todo lo que tg ha guardado en esta computadora (mensajes de Telegram y el correo y las notas que [memo](https://github.com/WireCatLabs/cli-memo) importó) y cómo realizar la búsqueda propia de Telegram al mismo tiempo.
 
 Después de leerlo, puede encontrar mensajes por palabras, personas, chats, fechas, archivos y enlaces, guardar una búsqueda y ejecutarla nuevamente, contar coincidencias y distinguir un "no encontrado" real de un espacio en el historial guardado. La búsqueda no marca nada leído.
 
@@ -16,6 +16,20 @@ Términos utilizados en esta página:
 - **Consulta**: lo que buscas. Pueden ser palabras simples o palabras con campos como `from:` y `date:`. Su agente de IA escribe consultas por usted; el idioma completo se encuentra en la [referencia del idioma de consulta](./query-language.md).
 - **Cobertura**: lo que se pudo ver en una búsqueda: cuántos chats y mensajes se guardaron, y qué chats nunca se descargaron o están atrasados.
 
+## Cuando recuerdas la pregunta y no las palabras exactas
+
+Pide a tu agente que encuentre mensajes que respondan a una pregunta y muestre la evidencia. Por ejemplo: «Encuentra a qué hora se ejecuta la exportación diaria de Helix en el chat del proyecto y comprueba si cambió el horario». El agente puede encontrar coincidencias parciales y respuestas directas en el archivo, y leer los mensajes antes de responder. Necesita historial descargado; no descarga un modelo.
+
+Para controlar la búsqueda desde la línea de comandos:
+
+```sh
+tg search messages 'What time does Helix export run?' --discover --chat 990 --json
+```
+
+Busca solo en el archivo local. Conserva los filtros de chat, autor y fecha. En MCP, pasa `discover: true` a la herramienta de búsqueda de mensajes. `query.discovery` describe el conjunto limitado de candidatos; `items[].discovery.missingTerms` indica términos ausentes y `parent` enlaza una respuesta con su mensaje padre. Una puntuación alta no mide la confianza en la respuesta: puede aparecer primero una pregunta, propuesta o decisión antigua. Lee la evidencia y comprueba la [cobertura del archivo](./archive.md) antes de concluir que falta un hecho.
+
+Sin `--discover`, se mantiene la búsqueda estricta. La sintaxis booleana, frases entre comillas, comodines, peticiones AST, `--exact` y `--newest` conservan el comportamiento estricto. No combina con legacy, expresiones regulares ni `--backend server`. La búsqueda semántica de conversaciones sigue siendo una [búsqueda por temas](./topic-search.md) aparte.
+
 ## Qué puedes hacer
 
 Cada búsqueda se realiza bajo un grupo de comandos, `tg search`. Cuando no sepa dónde se escribió algo, comience con `search all`.
@@ -23,7 +37,7 @@ Cada búsqueda se realiza bajo un grupo de comandos, `tg search`. Cuando no sepa
 | Tarea | Comando |
 |---|---|
 | Busque mensajes, correo y notas en una sola respuesta | `tg search all '<query>'` |
-| Buscar solo mensajes de Telegram, también en el servidor de Telegram | `tg search messages '<query>'` |
+| Buscar solo mensajes de Telegram; sin `--discover`, también en su servidor | `tg search messages '<query>'` |
 | Buscar sólo la nota de correo importada | `tg search mail '<query>'` |
 | Buscar notas escritas en memo o importadas desde una carpeta | `tg search notes '<query>'` |
 | Encuentre una discusión según de qué se trata | `tg search conversations '<question>'` ([búsqueda de tema](./topic-search.md)) |
@@ -63,7 +77,7 @@ tg search topics "Hiking" "gear"                  # topic titles in one forum gr
 
 El correo y las notas llegan al archivo local mediante memo: `memo mail import` y `memo import`. Sin ellos, `search all` busca únicamente mensajes.
 
-El resto de esta página trata sobre la búsqueda de mensajes, `tg search messages`. Lee el archivo local y también solicita la búsqueda propia de Telegram ([abajo](#asking-telegram-too---backend)).
+El resto de esta página trata sobre la búsqueda de mensajes, `tg search messages`. Sin `--discover`, lee el archivo local y también solicita la búsqueda propia de Telegram ([abajo](#asking-telegram-too---backend)).
 
 ## Prueba una búsqueda concreta
 
@@ -247,7 +261,7 @@ tg attachments text set "Book club" 204 --text-file ./scan.txt
 
 `attachments extract` lee texto sin formato, archivos de Word y PDF con una capa de texto en esta computadora. `--download` requiere `--output-dir`; sin ellos, la extracción lee los archivos ya guardados. Con varios archivos adjuntos en un mensaje, elija uno con `--attachment`, comenzando en 1.
 
-La extracción local también lee UTF-16 con marca BOM, codificaciones heredadas de alta confianza, ODT, ODS, XLSX, PPTX y EPUB sin modelo ni instalación adicional. Mantiene el orden de hojas, diapositivas y capítulos y los valores de celda guardados; no calcula fórmulas ni lee texto dentro de imágenes. Las codificaciones ambiguas necesitan que su agente las inspeccione o convierta. Los archivos fuente permanecen sin cambios. ODT, ODS, XLSX, PPTX y EPUB están limitados a 1000 partes de archivo y 50 MiB expandidos, con un máximo de 10 MiB por parte de texto XML/HTML; Los resultados parciales o con formato incorrecto no se indexan como texto completo. Se puede volver a intentar una lectura local fallida; Los textos que escribió su agente y los textos indexados anteriormente permanecen protegidos.
+La extracción local también lee UTF-16 con marca BOM, codificaciones heredadas de alta confianza, ODT, ODS, XLSX, PPTX y EPUB sin modelo ni instalación adicional. Mantiene el orden de hojas, diapositivas y capítulos y los valores de celda guardados; no calcula fórmulas ni lee texto dentro de imágenes. Las codificaciones ambiguas necesitan que su agente las inspeccione o convierta. Los archivos fuente permanecen sin cambios. DOCX, ODT, ODS, XLSX, PPTX y EPUB están limitados a 1000 partes de archivo y 50 MiB expandidos, con un máximo de 10 MiB por parte de texto XML/HTML; Los resultados parciales o con formato incorrecto no se indexan como texto completo. Se puede volver a intentar una lectura local fallida; Los textos que escribió su agente y los textos indexados anteriormente permanecen protegidos.
 
 La extracción de PDF necesita el paquete opcional `unpdf`; Word necesita `mammoth`, instalado donde está `tg`. Para una instalación global de npm: `npm install -g unpdf mammoth`. Se informa que falta un paquete; su agente puede proporcionarle el texto en su lugar.
 
@@ -274,6 +288,8 @@ tg attachments extract --chat "Book club" --ocr --concurrency 4 --limit 100 --js
 `--ocr` envía imágenes a ese servicio; sin él no se llama ningún modelo. La simultaneidad es 1–8, por defecto 4; el límite de archivos es de 1 a 500, el valor predeterminado es 100. Pase el cursor devuelto para continuar con una exploración limitada. Los PDF escaneados necesitan los `unpdf` y `@napi-rs/canvas` opcionales, con un máximo de 20 páginas por documento; las páginas con una capa de texto permanecen locales. Una repetición reutiliza el hash del archivo y la identidad del modelo. El texto que escribió su agente y el texto indexado anteriormente sobreviven a una ejecución de OCR fallida o cancelada. Verifique el recuento fallido y el estado de cada archivo; un límite de tarifa del proveedor detiene las llamadas posteriores en esa ejecución. `--offline` no se puede combinar con `--ocr`.
 
 **Archivos que ya tienes.** `tg attachments extract --chat <chat> --from-dir ./files` lee una carpeta, sin sus subcarpetas. Un archivo necesita un nombre original único o un conjunto completo de nombres de descarga. No combine `--from-dir` con `--download` o `--output-dir`. `tg messages download <chat> <id> --extract` extrae solo los archivos descargados por esta ejecución; `--all --extract` hace lo mismo para todo el lote. La extracción detecta archivos modificados mediante su hash y conservan el texto que escribió su agente. A través de MCP, una extracción limitada devuelve una continuación `cursor` y metadatos, sin texto de archivo.
+
+`--from-dir` rechaza archivos y carpetas ocultos, las carpetas de la CLI y el almacén de mensajes. Las descargas de extracción por MCP requieren `output_dir` fuera de esos lugares. La extracción local de texto PDF admite hasta 20 páginas y 30 segundos.
 
 ## Contraseñas, códigos y tarjetas
 
@@ -402,7 +418,7 @@ cuántos chats están incompletos.
 
 ## Consulta también Telegram: `--backend`
 
-Telegram puede buscar su propia copia de tus chats, incluidos los mensajes que nunca recuperaste. Por defecto, tg pregunta a Telegram y al archivo local en una sola ejecución (`--backend both`). `--backend server` muestra solo los resultados de Telegram y `--backend archive` busca solo en el archivo local.
+Telegram puede buscar su propia copia de tus chats, incluidos los mensajes que nunca recuperaste. Sin `--discover`, tg pregunta por defecto a Telegram y al archivo local en una sola ejecución (`--backend both`). `--backend server` muestra solo los resultados de Telegram y `--backend archive` busca solo en el archivo local. `--discover` siempre usa solo el archivo, incluso con `--backend both`.
 
 ```sh
 tg search messages 'invoice' --backend both

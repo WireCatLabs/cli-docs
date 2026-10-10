@@ -67,11 +67,23 @@ The JSON answer includes the language, field and preset versions, the time zone,
 
 Legacy discovery (`--language legacy`) and the legacy JavaScript `--regex` mode remain explicit and separate from strict semantics.
 
+### Questions and partial evidence
+
+Use message search with `--discover` (MCP `discover: true`) when you remember a question rather than the exact words. It searches the local archive without downloading or loading a neural model. It does not need a conversation build or embeddings.
+
+A **candidate** is a stored message selected for possible relevance before the final results are ordered. For ordinary English and Russian questions, discovery removes recognized question scaffolding, keeps the content words and retrieves partial word matches. Unknown qualifiers stay in the query. Chat, sender, date and account filters remain hard restrictions. Explicit Boolean syntax, phrases, wildcards, syntax trees, `--exact` and `--newest` keep strict behavior.
+
+**Scoring** assigns candidates a relative position. Word coverage is the fraction of retained query terms found in the message and, for a direct reply, its matching parent. Reciprocal rank fusion adds a small bonus for appearing near the front of the lexical result lists; SQLite's word index supplies their BM25 ranking. Coverage carries most of the final score. This can retrieve replies that omit the parent's topic words. The final pool is capped at 300 messages, with at most 100 proposed replies and bounded text work. There is no cross-encoder or language-model reranking step.
+
+`query.discovery` reports the actual retrieval work and truncation. Each hit names matched and missing terms; a reply's `parent` links to its matching message. These are evidence clues, not answer probabilities. A question, proposal, rejected option or old decision can rank first. Inspect the messages, surrounding context and archive coverage before answering. Discovery always uses the archive; `--backend server` is refused.
+
+See the [question planner](https://github.com/WireCatLabs/cli-messaging/blob/v0.216.0/src/search/question-plan.ts), [retrieval and ranking service](https://github.com/WireCatLabs/cli-messaging/blob/v0.216.0/src/services/messages-discovery.ts) and [synthetic evaluation](https://github.com/WireCatLabs/cli-testing/blob/63de1d7870e5d983bbc05dd253cdb66d0bbfd7cd/performance/search/model-free/FRESH-VALIDATION.md) for implementation and measured limits.
+
 ### Word forms
 
 Words and quoted phrases in `text`, the default field, match every form of their words. `квартира` finds `квартиру` and `квартиры`, and `piso` finds `pisos`. Each word is compared by its Snowball stem, taken before the word is folded (ё→е, accents removed). Quotes keep words together but still allow every form: `"оплатил счёт"` finds `оплатила счета`. Messages that contain the exact form you typed come first. For the exact form only, write `exact:квартира` or `exact:"оплатил счёт"`, or add `--exact` (MCP: `exact: true`) to treat every word without a field that way. `-квартира` excludes every form; `-exact:квартира` only the exact one. A wildcard such as `квартир*` and a `text:` regular expression still read whole words, without stems.
 
-Word forms are not typo correction. Strict search, the default, does not correct misspellings in Telegram or MAX: `presentaion` does not find `presentation`. Try a wildcard on the part you are sure of (`present*`), or topic search by meaning. Only the older `--language legacy` mode corrects typos automatically. When you ask an agent, describe what you remember; it can choose these approaches for you.
+Word forms are not typo correction. Strict search, the default, does not correct misspellings in Telegram or MAX: `presentaion` does not find `presentation`. Try a wildcard on the part you are sure of (`present*`), or topic search by meaning. Automatic typo correction is available in `--language legacy` and in discovery for ordinary keyword queries. Natural-question discovery preserves unknown terms. When you ask an agent, describe what you remember; it can choose these approaches for you.
 
 We measured three ways of matching word forms on Universal Dependencies treebanks, with 102 words per language ([benchmark results](https://github.com/WireCatLabs/cli-messaging/blob/bench/stemming-vs-trigrams/bench/stemming/results.md)). *Found* is the share of relevant messages the search returns; *correct* is the share of returned results that are relevant.
 

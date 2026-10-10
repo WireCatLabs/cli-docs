@@ -71,7 +71,7 @@ tg messages list "Book club" --limit 5 --json
 ## Начало работы
 
 ```sh
-npm install -g @leemour/tg-cli
+npm install -g @wirecat/tg-cli
 ```
 
 ```sh
@@ -312,6 +312,8 @@ tg review --transcribe
 ```sh
 tg messages list "Book club" --transcribe --model gigaam-v3
 ```
+
+Локальная расшифровка принимает полную запись Ogg Opus с одним или двумя каналами длительностью до 10 минут. Более длинную запись сначала разделите.
 
 Telegram распознаёт речь для Premium и несколько сообщений в неделю по пробной квоте. Иначе работает локальная модель без передачи записи с компьютера. Модель скачивается один раз и только по запросу:
 
