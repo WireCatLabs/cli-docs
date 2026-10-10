@@ -62,6 +62,18 @@ jobs:
       - run: pnpm exec playwright test
         env:
           PLAYWRIGHT_EXPORT: "1"
+      - name: Save browser diagnostics
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-${{ github.job }}-${{ github.run_attempt }}
+          path: |
+            playwright-report/results.json
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7
+          compression-level: 1
       - name: Cloudflare Pages
         run: |
           if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
