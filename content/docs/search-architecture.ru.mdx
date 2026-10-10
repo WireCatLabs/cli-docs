@@ -86,7 +86,7 @@ tg search messages 'filename:*.pdf size>1MB date:7d' --json
 
 `query.discovery` сообщает о выполненном поиске и усечении выборки. У каждой находки есть совпавшие и отсутствующие слова; `parent` у ответа связывает его с подходящим сообщением. Это основания для проверки, а не вероятность правильного ответа. Первым может быть вопрос, предложение, отвергнутый вариант или старое решение. Прочитайте сообщения, соседний контекст и проверьте покрытие архива перед ответом. Режим всегда читает архив; `--backend server` не допускается.
 
-Исходники: [планировщик вопросов](https://github.com/WireCatLabs/cli-messaging/blob/v0.216.0/src/search/question-plan.ts), [поиск и ранжирование](https://github.com/WireCatLabs/cli-messaging/blob/v0.216.0/src/services/messages-discovery.ts) и [синтетическая оценка](https://github.com/WireCatLabs/cli-testing/blob/63de1d7870e5d983bbc05dd253cdb66d0bbfd7cd/performance/search/model-free/FRESH-VALIDATION.md) с измерениями и ограничениями.
+Исходники: [планировщик вопросов](https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/search/question-plan.ts), [поиск и ранжирование](https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/services/messages-discovery.ts) и [синтетическая оценка](https://github.com/WireCatLabs/cli-testing/blob/63de1d7870e5d983bbc05dd253cdb66d0bbfd7cd/performance/search/model-free/FRESH-VALIDATION.md) с измерениями и ограничениями.
 
 ### Формы слов
 
@@ -208,7 +208,7 @@ max conversations related "Project team" 4521 --json
 
 | Задача | Реализация |
 | --- | --- |
-| Поиск по разным источникам и опечатки | [Search all](https://github.com/WireCatLabs/cli-messaging/blob/v0.216.0/src/services/search-all.ts), [поиск заметок](https://github.com/WireCatLabs/cli-messaging/blob/v0.216.0/src/services/notes-search.ts), [исправление опечаток](https://github.com/WireCatLabs/cli-messaging/blob/v0.216.0/src/search/correct.ts) и [поиск legacy](https://github.com/WireCatLabs/cli-messaging/blob/v0.216.0/src/search/search.ts) |
+| Поиск по разным источникам и опечатки | [Search all](https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/services/search-all.ts), [поиск заметок](https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/services/notes-search.ts), [исправление опечаток](https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/search/correct.ts) и [поиск legacy](https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/search/search.ts) |
 | Подготовка архива и охват | [Сервис архива](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/archive.ts), [команда загрузки](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/cli/messenger/backfill-command.ts) и [сводка охвата](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/cli/messenger/archive-summary.ts) |
 | Разбор, проверка, охват и полнота | [Разбор запроса](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/search/query.ts), [сервис поиска сообщений](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/messages-search.ts) и [исполнитель Lucene для SQLite](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/lucene.ts) |
 | Индекс слов, словарь и основы | [Сопоставление слов](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/words.ts), [заполнение индекса](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/search-index.ts) и [основы слов](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/search/stem.ts) |

@@ -16,7 +16,7 @@ are owned by the portal. Generated messenger guides and reviewed release pins ar
 
 ## Source evidence
 
-cli-messaging `v0.216.0`, used by the portal's reviewed tg/MAX releases:
+cli-messaging `v0.217.1`, used by the portal's reviewed tg/MAX releases:
 
 - `src/services/search-all.ts`: messages, mail and notes searched separately; rank fusion and
   skipped-source reporting. It does not create a universal message index.
@@ -59,3 +59,8 @@ Lint, type checking and 275 unit tests pass. Seven smoke cases and nine targeted
 including mobile dark theme, desktop light theme, keyboard focus, accessibility and Markdown.
 The mobile indexing diagram was visually inspected. Tests live in the existing documentation
 diagram suite so the full release workflow includes them.
+
+Concurrent main update `4b0a5b9` (reviewed compatibility releases) was merged before publication.
+The listed search/index/note source files are byte-identical between messaging v0.216.0 and
+v0.217.1. New evidence links now point at the current reviewed dependency; older inspected
+source snapshots and historical benchmark links retain their original references.
