@@ -4,11 +4,13 @@ export function Screenshot({
   alt,
   caption,
   width,
+  lang = "en",
 }: {
   src?: string
   alt: string
   caption?: string
   width?: number
+  lang?: string
 }) {
   return (
     <figure className="not-prose my-5" style={{ maxWidth: width ?? 520 }}>
@@ -17,7 +19,8 @@ export function Screenshot({
         <img src={src} alt={alt} loading="lazy" className="w-full rounded-lg border shadow-sm" />
       ) : (
         <div className="flex min-h-40 items-center justify-center rounded-lg border-2 border-dashed p-6 text-center text-sm text-fd-muted-foreground">
-          Screenshot needed: {alt}
+          {{ en: "Screenshot needed", ru: "Нужен скриншот", es: "Falta una captura" }[lang] ?? "Screenshot needed"}:{" "}
+          {alt}
         </div>
       )}
       {caption && <figcaption className="mt-2 text-sm text-fd-muted-foreground">{caption}</figcaption>}
