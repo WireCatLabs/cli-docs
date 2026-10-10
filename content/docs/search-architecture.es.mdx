@@ -1,28 +1,37 @@
 ---
 title: Cómo funciona la búsqueda
-description: "La parte técnica de la búsqueda de mensajes y la búsqueda por temas: índices, grafo de conversaciones, vectores, orden de resultados, frescura y mediciones."
+description: "La parte técnica de la búsqueda: contenido guardado, índices, formas de palabras y clasificación."
 ---
 
-Esta página explica cómo funciona la búsqueda en `tg` y `max`, para quien quiere saber por qué una búsqueda encuentra un mensaje o no lo encuentra. Al terminar, sabrás qué búsqueda conviene a cada pregunta y qué necesita preparado. Para buscar ya, abre la guía de **[Telegram](./tg/search.md)** o **[MAX](./max/search.md)**, con comandos y ejemplos. Abajo explicamos los índices, las formas de las palabras, la búsqueda en el servidor, el grafo de conversaciones, los vectores, el orden de resultados y la frescura que hay detrás de esos comandos.
-
-Hay dos formas de buscar en un mismo archivo local. **La búsqueda de mensajes** encuentra los mensajes que cumplen una consulta estricta. **La búsqueda por temas** encuentra conversaciones por significado y por palabras en común. Solo comparten el archivo: el grafo de conversaciones y los vectores son etapas opcionales que la búsqueda de mensajes nunca lee.
-
-<ArchitectureDiagram name="searchPaths" lang="es" />
+Comprende por qué una búsqueda encuentra un resultado o lo omite: qué se indexa, cómo se ordenan las coincidencias y cómo volver a la fuente. Se pueden buscar mensajes, notas y texto guardado de archivos o transcripciones de reuniones. Los ejemplos siguientes se centran en el motor de búsqueda de mensajes compartido por `tg` y `max`. Para peticiones cotidianas y comandos, empieza por [Búsqueda](./search.md).
 
 ## Elige la vía adecuada
 
-Busca mensajes si recuerdas palabras, persona, fecha o tipo de archivo. Busca conversaciones por significado si recuerdas el tema, pero no la redacción. Abre los mensajes originales antes de concluir.
+### Qué se puede buscar y conectar
 
-| Pregunta | Comando | Qué devuelve | Qué hace falta antes |
-| --- | --- | --- | --- |
-| «¿Dónde dijo Alice factura, en octubre, con un PDF?» | `search messages` | Mensajes que coinciden, sus localizadores y, si quieres, los mensajes vecinos | Historial guardado; índice de palabras listo para consultas con palabras |
-| «¿Cuántos mensajes al día mencionan el presupuesto?» | `stats messages show` | Recuentos por chat, remitente, día u hora | Lo mismo que la búsqueda de mensajes |
-| «¿Dónde hablamos de alquilar un piso?» | `search conversations` | Conversaciones ordenadas, el fragmento que coincide y cómo coincidió | Conversaciones construidas; vectores para coincidir por significado |
-| «¿Qué más trató lo mismo?» | `conversations related` | Las conversaciones más cercanas a la de un mensaje | Vectores; no se ejecuta ningún modelo |
-| «¿A qué conversación pertenece este mensaje?» | `conversations show` / `messages links` | La conversación y la cadena de padres elegida | Conversaciones construidas |
-| «¿Qué había alrededor de este mensaje?» | `messages context` / `--context` en la búsqueda | Vecinos en el tiempo, en la misma cuenta y chat | Historial guardado para `--context` de búsqueda; `messages context` puede leer en línea sin `--offline` |
+| Contenido | Datos que se pueden buscar | Conexión con la fuente |
+| --- | --- | --- |
+| Mensajes y correo | Texto guardado, remitente, chat, fechas y metadatos de adjuntos | Una referencia identifica el proveedor, la cuenta y el mensaje |
+| Notas | Texto guardado, títulos y filtros compatibles | Una referencia de nota; los enlaces guardados pueden conectarla con otros registros |
+| Archivos y transcripciones de reuniones | Texto extraído o aportado, una vez guardado | El texto del adjunto sigue vinculado al mensaje; una transcripción guardada como nota se busca como nota |
 
-Un tema de foro del mensajero, una conversación inferida y una ventana de mensajes vecinos son tres cosas distintas. Una conversación puede unir mensajes lejanos; los mensajes vecinos pueden pertenecer a discusiones distintas.
+`search all` consulta mensajes, correo y notas, y combina sus listas ordenadas. Informa de las fuentes omitidas; no convierte todos los tipos de contenido en un único índice de mensajes. Los archivos necesitan extracción de texto y las grabaciones necesitan transcripción antes de buscar su contenido.
+
+Los resultados se conectan mediante referencias y enlaces guardados. Para filtrar, la búsqueda de mensajes los une con chats, remitentes y adjuntos. Los enlaces de respuesta directa conectan una respuesta con su mensaje padre. Una construcción de conversaciones aparte agrupa mensajes dentro de un chat; no agrupa automáticamente notas, archivos y reuniones en una misma discusión.
+
+## Vista general de la indexación
+
+Un **índice** es una estructura preparada que permite buscar sin leer todos los textos guardados en cada consulta. El almacén conserva el texto original y las referencias junto a las copias para búsqueda.
+
+<ArchitectureDiagram name="searchIndexing" lang="es" />
+
+El índice de palabras de mensajes permite buscar palabras y frases; el **stemming** agrupa formas como «piso» y «pisos». Un índice del vocabulario usa **trigramas** (fragmentos de tres caracteres) para proponer palabras de escritura similar ante una errata, y después comprueba su distancia de edición. Un índice de trigramas del texto original permite buscar **subcadenas** en el modo legacy. Los patrones estrictos de `body:` también pueden expresar condiciones de subcadena mediante comprobaciones acotadas del texto. Son vías distintas; la búsqueda estricta no recurre automáticamente al índice de subcadenas legacy.
+
+**BM25** ordena las coincidencias según lo distintivas que sean las palabras y cómo aparecen en un mensaje. Es un método de clasificación, no una descarga de modelo ni un paso de indexación. Las notas tienen sus propios índices de texto; los vectores opcionales permiten buscar por significado en notas y conversaciones preparadas.
+
+<ArchitectureDiagram name="searchPaths" lang="es" />
+
+La búsqueda estricta de mensajes aplica toda la consulta. Discovery (`--discover`) recupera coincidencias parciales y respuestas directas, y las ordena por cobertura de palabras y posiciones en las listas de texto. La búsqueda por temas usa conversaciones construidas y una rama de significado opcional. La búsqueda estricta y discovery no necesitan construir conversaciones ni un modelo de vectores. Abre las fuentes y comprueba la cobertura del archivo antes de tratar un resultado como respuesta.
 
 ## 1. Archivo e identidad
 
@@ -77,7 +86,7 @@ La **puntuación** asigna una posición relativa al candidato. La cobertura de p
 
 `query.discovery` describe las búsquedas ejecutadas y el truncamiento. Cada resultado indica términos coincidentes y ausentes; `parent` enlaza una respuesta con su mensaje correspondiente. Son pistas para comprobar la evidencia, no probabilidades de una respuesta correcta. Una pregunta, propuesta, opción rechazada o decisión antigua puede aparecer primero. Lee los mensajes, su contexto y la cobertura del archivo antes de responder. Este modo siempre usa el archivo; rechaza `--backend server`.
 
-Consulta el [planificador de preguntas](https://github.com/WireCatLabs/cli-messaging/blob/v0.216.0/src/search/question-plan.ts), el [servicio de recuperación y ordenación](https://github.com/WireCatLabs/cli-messaging/blob/v0.216.0/src/services/messages-discovery.ts) y la [evaluación sintética](https://github.com/WireCatLabs/cli-testing/blob/63de1d7870e5d983bbc05dd253cdb66d0bbfd7cd/performance/search/model-free/FRESH-VALIDATION.md) para la implementación, medidas y límites.
+Consulta el [planificador de preguntas](https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/search/question-plan.ts), el [servicio de recuperación y ordenación](https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/services/messages-discovery.ts) y la [evaluación sintética](https://github.com/WireCatLabs/cli-testing/blob/63de1d7870e5d983bbc05dd253cdb66d0bbfd7cd/performance/search/model-free/FRESH-VALIDATION.md) para la implementación, medidas y límites.
 
 ### Formas de las palabras
 
@@ -85,13 +94,7 @@ Las palabras y las frases entre comillas en `text`, el campo por defecto, encuen
 
 Las formas de las palabras no corrigen erratas. La búsqueda estricta, el modo por defecto, no corrige erratas ni en Telegram ni en MAX: `presupesto` no encuentra `presupuesto`. Prueba un comodín con la parte de la que estás seguro (`presup*`) o la búsqueda por temas por significado. La corrección automática de erratas está disponible en `--language legacy` y en la búsqueda con `--discover` para consultas de palabras clave. La búsqueda por preguntas conserva los términos desconocidos. Si se lo pides a un agente, describe lo que recuerdas; él puede elegir estas vías por ti.
 
-Medimos tres formas de encontrar las variantes en treebanks de Universal Dependencies, con 102 palabras por idioma ([resultados de la medición](https://github.com/WireCatLabs/cli-messaging/blob/bench/stemming-vs-trigrams/bench/stemming/results.md)). *Encontrados* es la proporción de mensajes relevantes que devuelve la búsqueda; *correctos* es la proporción de resultados devueltos que son relevantes.
-
-| Coincidencia | Ruso: encontrados | Ruso: correctos | Español: encontrados | Español: correctos |
-| --- | --- | --- | --- | --- |
-| Palabra exacta | 26% | 99% | 39% | 87% |
-| Trigramas (escritura parecida) | 69% | 52% | 85% | 44% |
-| Raíces Snowball | 88% | 84% | 96% | 69% |
+Las raíces Snowball recuperan más formas que la coincidencia exacta, pero también pueden unir palabras sin relación. La [medición de formas de palabras](https://github.com/WireCatLabs/cli-messaging/blob/bench/stemming-vs-trigrams/bench/stemming/results.md) las compara con vecinos de escritura similar por trigramas. Usa `exact:` cuando la diferencia importe.
 
 Los stemmers son un ajuste de todo el almacén, compartido por cada perfil, tg y MAX: `searchStemmers.cyrillic` (`russian` o `none`) y `searchStemmers.latin` (`english`, `spanish`, ambos —el valor por defecto— o `none`). `store reindex` aplica un cambio tuyo. Mientras se construye el índice de raíces, una búsqueda encuentra las formas exactas y lo avisa; `serve` termina las raíces en segundo plano y `store migrate` al instante. Algunas palabras distintas comparten raíz —`часть`/`часто`, `caso`/`casa`— y `exact:` o `--exact` las separa. La respuesta JSON dice si se usaron raíces: `query.stemming` nombra el stemmer y la raíz de cada palabra, `stemsReady` está junto a `wordsReady`, y cada resultado lleva `exact: false` cuando solo coincidió otra forma.
 
@@ -153,17 +156,7 @@ Antes de calcular, el texto de cada fragmento se reconstruye a partir de los men
 
 ### Mediciones
 
-100 000 mensajes en tres idiomas, de 5 a 40 palabras cada uno, como un solo chat; AMD Ryzen AI 9 HX 470 (24 hilos), 30 GB de RAM, Linux, Node 24 y Bun 1.3; medido el 2 de octubre de 2026 ([medición](https://github.com/WireCatLabs/cli-messaging/blob/v0.148.2/bench/embeddings/README.md)).
-
-| Paso | Entorno | Tiempo | Memoria máxima |
-| --- | --- | --- | --- |
-| `conversations build` | Node | 3,3 s | 331 MB |
-| `conversations embed`, 1 proceso | Node | 1371 s (31 fragmentos/s) | 1,2 GB |
-| `conversations embed`, 3 procesos | Node | 1240 s (34 fragmentos/s) | 2,6 GB |
-| `conversations embed`, 1 proceso | Bun | 1329 s (32 fragmentos/s) | 3,2 GB |
-| `conversations embed`, 3 procesos | Bun | 1279 s (33 fragmentos/s) | 2,7 GB |
-
-La ejecución produjo 42 417 fragmentos y el almacén creció 292 MB. Tres procesos solo dieron 1,1× en Node y 1,04× en Bun: una sesión ya usa 8 hilos, y tres comparten más o menos los mismos. Una búsqueda, desde que el recorrido de vectores lee cada página por su clave: unos 0,35 s en un proceso que mantiene el modelo abierto (el servidor MCP) y unos 1,4 s para un comando puntual, de los que cargar el modelo es cerca de 1 s.
+Una [medición sintética](https://github.com/WireCatLabs/cli-messaging/blob/v0.148.2/bench/embeddings/README.md) con 100 000 mensajes evaluó por separado la construcción, los vectores y la búsqueda. Calcular vectores fue la preparación más costosa; más procesos aumentaron la memoria y aportaron poca velocidad. Mantener el modelo abierto redujo el tiempo de inicio de búsqueda. Los resultados dependen del equipo, el tamaño del archivo y el modelo; consulta [Pruebas](./testing.mdx) para la metodología.
 
 ## 5. Búsqueda híbrida de conversaciones
 
@@ -215,6 +208,7 @@ Código del motor en [`cli-messaging`](https://github.com/WireCatLabs/cli-messag
 
 | Responsabilidad | Implementación |
 | --- | --- |
+| Búsqueda entre fuentes y erratas | [Search all](https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/services/search-all.ts), [búsqueda de notas](https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/services/notes-search.ts), [corrección de erratas](https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/search/correct.ts) y [búsqueda legacy](https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/search/search.ts) |
 | Preparación del archivo y cobertura | [Servicio del archivo](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/archive.ts), [comando de descarga](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/cli/messenger/backfill-command.ts) y [resumen de cobertura](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/cli/messenger/archive-summary.ts) |
 | Análisis, validación, alcance y cobertura | [Analizador de consultas](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/search/query.ts), [servicio de búsqueda de mensajes](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/messages-search.ts) y [ejecutor Lucene para SQLite](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/lucene.ts) |
 | Índice de palabras, vocabulario y raíces | [Coincidencia de palabras](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/words.ts), [llenado del índice](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/search-index.ts) y [raíces de palabras](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/search/stem.ts) |

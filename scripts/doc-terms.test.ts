@@ -4,6 +4,17 @@ import { dedentDocComponents, expandDocTerms } from "../lib/doc-terms-markdown"
 import { wordsFor } from "../lib/words"
 
 describe("documentation explanations for Markdown readers", () => {
+  it.each(["en", "ru", "es"])("exports %s diagram steps while preserving component examples", (lang) => {
+    const component = `<ArchitectureDiagram name="strictSearch" lang="${lang}" />`
+    const code = `\`\`\`mdx\n${component}\n\`\`\``
+    const result = expandDocTerms(`${component}\n\n${code}`, lang)
+    expect(result).toContain("BM25")
+    expect(result).toContain("Snowball")
+    expect(result).toContain("--context")
+    expect(result).toContain(code)
+    expect(result.match(/<ArchitectureDiagram/g)).toHaveLength(1)
+  })
+
   it.each(["en", "ru", "es"])("keeps %s explanations while preserving code examples", (lang) => {
     const hint = `<DocTerm term="local-agent" lang="${lang}" label="Agent" />`
     const input = `Ask ${hint}.\n\n\`\`\`mdx\n${hint}\n\`\`\`\n\nUse <DocTerm term="skill" />.`

@@ -1,4 +1,5 @@
 import { fromMarkdown } from "mdast-util-from-markdown"
+import { architectureDiagramMarkdown } from "./architecture-diagrams"
 import { type DocTermId, docTerm } from "./doc-terms"
 import { agentPromptMarkdown } from "./installation-markdown"
 import { wordsFor } from "./words"
@@ -10,14 +11,16 @@ export function expandDocTerms(markdown: string, lang: string): string {
   const visit = (node: Node) => {
     if ((node.type === "html" || node.type === "text") && node.position) {
       const pattern =
-        /<(\/?)(DocTerm|NodeSetupPrompt|MeetingBriefDemo|AgentInstallPrompt|InstallationMessengerTabs|InstallationOsTabs|PlatformSetupTabs|Screenshot|Tabs|Tab|Steps|Step|Accordions|Accordion|Callout)\b([^>]*)>/g
+        /<(\/?)(ArchitectureDiagram|DocTerm|NodeSetupPrompt|MeetingBriefDemo|AgentInstallPrompt|InstallationMessengerTabs|InstallationOsTabs|PlatformSetupTabs|Screenshot|Tabs|Tab|Steps|Step|Accordions|Accordion|Callout)\b([^>]*)>/g
       const authored = markdown.slice(node.position.start.offset, node.position.end.offset)
       for (const match of authored.matchAll(pattern)) {
         const props = Object.fromEntries([...match[3].matchAll(/(\w+)="([^"]*)"/g)].map((attr) => [attr[1], attr[2]]))
         const language = props.lang ?? lang
         let text = ""
         if (!match[1]) {
-          if (match[2] === "DocTerm") {
+          if (match[2] === "ArchitectureDiagram") {
+            text = architectureDiagramMarkdown(props.name, language)
+          } else if (match[2] === "DocTerm") {
             const entry = docTerm(props.term as DocTermId, language)
             text = `${props.label ?? entry.title} (${entry.description})`
           } else if (match[2] === "MeetingBriefDemo") {
