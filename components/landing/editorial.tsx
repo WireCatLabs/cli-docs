@@ -50,7 +50,7 @@ const escapeHtml = (text: string) =>
   text.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] ?? c)
 
 /** Reviewed static HTML is committed by export-editorial; only fixture results are built here. */
-export function Editorial({ html, lang }: { html: string; lang: string }) {
+export function Editorial({ html, lang, className }: { html: string; lang: string; className?: string }) {
   const rootRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const { setTheme } = useTheme()
@@ -475,5 +475,7 @@ export function Editorial({ html, lang }: { html: string; lang: string }) {
       for (const button of copyTimers.keys()) resetCopy(button)
     }
   }, [lang, setTheme, router, html])
-  return <div className="wirecat-editorial" ref={rootRef} dangerouslySetInnerHTML={{ __html: html }} />
+  return (
+    <div className={`wirecat-editorial ${className ?? ""}`} ref={rootRef} dangerouslySetInnerHTML={{ __html: html }} />
+  )
 }

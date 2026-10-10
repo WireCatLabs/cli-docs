@@ -11,5 +11,5 @@ export function SiteHeader({ lang, html }: { lang: string; html: string }) {
     /href="[^"]*" lang="(en|ru|es)"/g,
     (_, locale: string) => `href="${localizedPath(pathname, locale)}" lang="${locale}"`,
   )
-  return <Editorial key={pathname} html={header} lang={lang} />
+  return <Editorial key={pathname} html={header} lang={lang} className="public-header" />
 }

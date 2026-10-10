@@ -154,3 +154,9 @@ html.dark .wirecat-editorial .footer-host .theme-moon {
 .wirecat-editorial.wirecat-docs-footer {
   min-height: 0;
 }
+
+/* Keep header popovers above the independently isolated editorial body. */
+.wirecat-editorial.public-header {
+  min-height: 0;
+  z-index: 30;
+}
