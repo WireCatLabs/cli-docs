@@ -241,3 +241,10 @@ html.dark .wirecat-editorial .footer-host .theme-moon {
 .wirecat-editorial :is(.wirecat-logo-mark, .wirecat-logo-word) {
   stroke: none;
 }
+
+/* Shared command tone for public install controls and the footer. */
+.wirecat-editorial .command,
+.wirecat-editorial .wirecat-landing .cmd,
+.wirecat-editorial .footer-host .footer-install .cmd {
+  background: var(--command-background);
+}

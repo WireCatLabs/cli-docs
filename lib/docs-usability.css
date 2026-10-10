@@ -63,6 +63,9 @@
   border-radius: 12px;
   background: var(--color-fd-card);
 }
+.wirecat-docs :is(.docs-command, .docs-code-block) {
+  background: var(--command-background);
+}
 .docs-prompt {
   border-color: var(--docs-outline);
   background: var(--docs-tint);
