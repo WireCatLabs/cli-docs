@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+:root {
+  --command-background: #e6e9ee;
+}
+.dark {
+  --command-background: #111318;
+}
+
 html {
   scrollbar-gutter: stable;
 }

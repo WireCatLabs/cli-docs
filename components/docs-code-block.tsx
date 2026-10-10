@@ -9,6 +9,7 @@ export function DocsCodeBlock({ children, "data-code-label": label, ...props }: 
   return (
     <CodeBlock
       {...props}
+      className={["docs-code-block", props.className].filter(Boolean).join(" ")}
       viewportProps={{ ...props.viewportProps, role: "group", "aria-label": label ?? "Code example" }}
     >
       <Pre>{children}</Pre>

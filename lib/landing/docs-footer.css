@@ -27,3 +27,8 @@
   display: inline-flex;
   color: var(--color-fd-foreground);
 }
+
+/* The landing hero wallpaper extends beyond a short footer and adds scroll space. */
+.wirecat-docs-footer::before {
+  content: none;
+}
