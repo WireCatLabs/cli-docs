@@ -153,7 +153,7 @@ a.animated-text-link:is(:hover, :focus-visible),
   background-image: none;
 }
 .animated-text-link > .link-label {
-  --link-underline-width: 1px;
+  --link-underline-width: 2px;
   background-image: linear-gradient(currentColor, currentColor);
   background-repeat: no-repeat;
   background-position: left bottom;
@@ -163,7 +163,6 @@ a.animated-text-link:is(:hover, :focus-visible),
 .animated-text-link:is(:hover, :focus-visible) > .link-label {
   background-size: 100% var(--link-underline-width);
 }
-main .animated-text-link > .link-label { --link-underline-width: 2px; }
 @media (prefers-reduced-motion: reduce) {
   .animated-text-link > .link-label { transition: none; }
 }
