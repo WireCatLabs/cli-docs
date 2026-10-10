@@ -18,21 +18,27 @@ cli-messaging — пакета, которому принадлежит файл
 
 ```mermaid Как основные сущности ссылаются друг на друга
 graph LR
-  Person["Человек"] --> Identity["Учётная запись"]
-  Organization["Организация"] --> Account["Аккаунт"]
-  Organization --> Project["Проект"]
-  Account --> Chat["Чат"]
-  Chat --> Message["Сообщение"]
-  Identity --> Message
-  Message --> Conversation["Обсуждение"]
-  Account --> Email["Письмо"]
-  Identity --> Email
-  Account --> Document["Документ"]
-  Account --> Meeting["Встреча"]
-  Identity --> Meeting
-  Meeting --> Event["Событие"]
-  Project --> Task["Задача"]
-  Project --> Decision["Решение"]
+  Person("Человек<br>name") --> Identity("Учётная запись<br>provider · username")
+  Organization("Организация<br>kind · scope") --> Account("Аккаунт<br>provider · scope")
+  Organization --> Project("Проект<br>key · type · scope")
+  Account --> Chat("Чат<br>kind · parent_chat_id")
+  Chat --> Message("Сообщение<br>sent_at · thread_root_id")
+  Identity -->|"пишет"| Message
+  Message --> Conversation("Обсуждение<br>first_at · last_at")
+  Account --> Email("Письмо<br>email_thread_id · sent_at")
+  Identity -->|"пишет"| Email
+  Account --> Document("Документ<br>kind · title")
+  Account --> Meeting("Встреча<br>started_at · event_id")
+  Identity -->|"участвует"| Meeting
+  Meeting --> Event("Событие<br>starts_at")
+  Project --> Task("Задача<br>key · type · status")
+  Project --> Decision("Решение<br>status · decided_at")
+  classDef people fill:var(--diagram-blue-bg),stroke:var(--diagram-blue-line),color:var(--diagram-blue-fg)
+  classDef sources fill:var(--diagram-green-bg),stroke:var(--diagram-green-line),color:var(--diagram-green-fg)
+  classDef work fill:var(--diagram-amber-bg),stroke:var(--diagram-amber-line),color:var(--diagram-amber-fg)
+  class Person,Identity people
+  class Account,Chat,Message,Conversation,Email,Document,Meeting sources
+  class Organization,Project,Task,Decision,Event work
 ```
 
 Словами: у человека есть учётные записи; учётные записи отправляют сообщения и письма и участвуют

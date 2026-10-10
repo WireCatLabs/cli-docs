@@ -6,3 +6,27 @@
 :root:not(.dark) {
   --color-fd-muted-foreground: #595959;
 }
+
+/* Pastel groups for Mermaid diagrams; classDef reads them so the colours follow the theme. */
+:root {
+  --diagram-blue-bg: #eff6ff;
+  --diagram-blue-line: #93c5fd;
+  --diagram-blue-fg: #1e3a8a;
+  --diagram-green-bg: #f0fdf4;
+  --diagram-green-line: #86efac;
+  --diagram-green-fg: #14532d;
+  --diagram-amber-bg: #fffbeb;
+  --diagram-amber-line: #fcd34d;
+  --diagram-amber-fg: #78350f;
+}
+.dark {
+  --diagram-blue-bg: #172554;
+  --diagram-blue-line: #3b82f6;
+  --diagram-blue-fg: #dbeafe;
+  --diagram-green-bg: #052e16;
+  --diagram-green-line: #22c55e;
+  --diagram-green-fg: #dcfce7;
+  --diagram-amber-bg: #422006;
+  --diagram-amber-line: #f59e0b;
+  --diagram-amber-fg: #fef3c7;
+}
