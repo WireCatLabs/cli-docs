@@ -116,7 +116,7 @@ tg sales bot messages send "Team" "Weekly report" --file report.pdf
 tg sales bot messages send "Team" --photo screenshot.png
 ```
 
-Los archivos de carpetas ocultas o propias de `tg` se rechazan salvo con `--allow-any-file`. El bot envía un archivo por mensaje: fotos hasta 10 MB y otros archivos hasta 50 MB ([límites de archivos](https://core.telegram.org/bots/api#sending-files)).
+Los archivos y carpetas conocidos de credenciales, las carpetas de `tg` y el almacén de mensajes están protegidos. Las carpetas de trabajo ocultas normales están permitidas; `--allow-any-file` en la CLI permite usar rutas protegidas. El bot envía un archivo por mensaje: fotos hasta 10 MB y otros archivos hasta 50 MB ([límites de archivos](https://core.telegram.org/bots/api#sending-files)).
 
 ## Chats
 

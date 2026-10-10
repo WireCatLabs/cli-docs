@@ -18,7 +18,7 @@ What any WireCat tool protects against is on the [shared page](https://wirecat.d
 
 - **The background server also checks profile limits.** Permissions, the recipient list and the hourly limit are checked by both the command and `max serve`, even for a program connecting directly to its socket ([below](#защита-от-отправки-не-туда)).
 - **Token.** `max` does not save a token from `MAX_TOKEN` or pass it to the background server. The server does not disclose tokens to socket clients ([below](#где-живёт-токен)).
-- **Network.** Files download only over HTTPS, never from this machine or local-network addresses, and within the configured size. MAX frames and decompressed data have limits; connections have timeouts ([below](#что-уходит-в-сеть)).
+- **Network.** Files download over HTTP(S) through the normal network transport, including local networks, within the configured size limit. MAX frames and decompressed data have limits; connections have timeouts ([below](#что-уходит-в-сеть)).
 - **Account.** `max` is not an official app, and the MAX rules do not allow such programs without the company's consent ([below](#правила-max-и-ваш-аккаунт)).
 
 ## Token storage
@@ -87,7 +87,7 @@ Account changes — contacts, profile, folders and sessions — also respect rea
 
 The recipient list is optional: before anything is added, any chat is allowed. An enabled but empty list allows no destinations. When enabled, `chats create <название> <люди…>` and `chats members add` accept only people whose direct chat is listed. New group members cannot see older messages unless `--history` is supplied. Scheduled messages count in their send hour. Simultaneous commands cannot exceed the limit: capacity is held from checking until MAX responds. Clearing departed-chat data does not touch the send journal.
 
-⚠ **What these checks cannot prevent.** The checks are inside `max` itself: an agent with shell access can remove them. Which external boundary to set is described on the [shared page](https://wirecat.dev/ru/docs/security). For `max`: `MAX_PROFILE_LOCK` fixes the profile, not `MAX_PROFILE`; `--file` rejects hidden files, `~/.ssh` and `max`'s own directories unless `--allow-any-file` is set.
+⚠ **What these checks cannot prevent.** The checks are inside `max` itself: an agent with shell access can remove them. Which external boundary to set is described on the [shared page](https://wirecat.dev/ru/docs/security). For `max`: `MAX_PROFILE_LOCK` fixes the profile, not `MAX_PROFILE`; `--file` rejects known credential files and folders, `max` directories and the message store unless `--allow-any-file` is set. Ordinary hidden working folders are allowed; MCP offers no bypass.
 
 ## Actions the tool never takes on its own
 
@@ -121,7 +121,7 @@ Tokens are not passed as arguments, but message text is, and it is visible in `p
 | `https://platform-api2.max.ru`, official Bot API, token in `Authorization` | Only `max bot` commands |
 | npm registry, for the latest version number | `max upgrade`, and once a day when a person runs a terminal command; disabled by `updateCheck: false` |
 
-`max messages download` uses HTTPS only and rejects local-machine and local-network destinations, including after redirects. Files are limited to 4 GiB; voice audio for transcription to 32 MiB.
+`max messages download` uses HTTP(S) and ordinary redirects without checking DNS addresses. The command does not prohibit VPNs, proxies or local addresses. Files are limited to 4 GiB; voice audio for transcription to 32 MiB.
 
 `max bot` requests identify themselves as `max-cli/<версия>`, since MAX already recognizes the bot by token. `platform-api2.max.ru` uses a Russian Ministry of Digital Development root certificate absent from Node. `max` adds it only to its own Bot API requests, without changing the system.
 

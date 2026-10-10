@@ -73,7 +73,7 @@ Un agente en esta computadora puede abrir `localPath`. Un agente en otra computa
 
 Un agente remoto puede recibir un PDF guardado a través de `attachments show`. Si su aplicación no puede abrir archivos PDF, puede solicitar cada página como una imagen con `--page`. Esto utiliza paquetes de renderizado locales opcionales; el agente lee el texto. Si no se muestra la imagen, solicite MCP `format: base64` y muestre el PNG con las herramientas del agente. Consulte [leer páginas PDF de forma remota](./remote.md#read-pdf-pages-without-a-local-file-handoff) para ver un ejemplo y sus límites.
 
-La transferencia de archivos guardados rechaza archivos y carpetas ocultos, las carpetas de la CLI y el almacén de mensajes, incluidos los destinos de enlaces simbólicos. Guarda el adjunto en una carpeta de descargas normal.
+La transferencia de archivos guardados protege los archivos y carpetas conocidos de credenciales, las carpetas de la CLI y el almacén de mensajes, incluidos los destinos de enlaces simbólicos. Las carpetas de trabajo ocultas normales están permitidas.
 
 ## Cómo se lee el contenido
 
@@ -100,7 +100,7 @@ CSV y JSON se convierten en texto con capacidad de búsqueda, no en tablas de ba
 
 Los mensajes de voz se manejan aparte de los documentos: Telegram puede proporcionar una transcripción cuando esté disponible, o `messages transcribe --local` utiliza un modelo local descargado. No utiliza `models.ocr`; consulte [mensajes de voz](./usage.md#voice-messages).
 
-La extracción local de texto PDF admite hasta 20 páginas y se detiene tras 30 segundos. Divide los PDF más grandes antes de extraer el texto.
+La extracción local de texto PDF no tiene un límite fijo de páginas ni un tiempo de espera separado de 30 segundos. Siguen aplicándose la cancelación de la llamada y los límites de tamaño del archivo y del texto.
 
 ## Dependencias y motores ausentes
 

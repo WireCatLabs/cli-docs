@@ -65,7 +65,7 @@ tg sends list                                # every attempt: sent, refused, fai
 
 En Telegram cuentan para el límite por hora: mensajes, reenvíos, ediciones, mensajes fijados con notificación, cada mensaje eliminado, grupos nuevos y cada persona añadida. No cuentan reacciones, votos, mensajes fijados sin aviso ni marcar como leído. Los reenvíos se comprueban contra el chat de destino.
 
-`TG_PROFILE_LOCK` fija el perfil allí donde el agente no puede modificar su entorno. `--file` y `--photo` rechazan archivos y carpetas ocultos, `~/.ssh`, carpetas de `tg` y la base de datos local; por MCP no hay excepción.
+`TG_PROFILE_LOCK` fija el perfil allí donde el agente no puede modificar su entorno. `--file` y `--photo` rechazan los archivos y carpetas conocidos de credenciales, las carpetas de `tg` y el almacén local, incluidos los destinos de enlaces simbólicos. Las carpetas de trabajo ocultas normales están permitidas; MCP no puede eludir la protección de estos lugares.
 
 ## Texto ajeno en tu pantalla
 

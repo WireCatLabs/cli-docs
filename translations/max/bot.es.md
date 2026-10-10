@@ -108,7 +108,7 @@ Si la conexión se interrumpe durante el envío, `max` no lo repite automáticam
 
 ### Archivos
 
-`--file` adjunta desde disco; detecta imagen, vídeo y audio por extensión, y lo demás como documento. `--photo` envía foto, `--voice` Ogg Opus como nota de voz, `--as-file` vídeo como documento. Archivos ocultos o de directorios de `max` requieren `--allow-any-file`. El texto es opcional:
+`--file` adjunta desde disco; detecta imagen, vídeo y audio por extensión, y lo demás como documento. `--photo` envía foto, `--voice` Ogg Opus como nota de voz, `--as-file` vídeo como documento. Los archivos conocidos de credenciales, los directorios de `max` y el almacén de mensajes requieren `--allow-any-file`; se permiten las carpetas de trabajo ocultas normales. El texto es opcional:
 
 ```sh
 max sales bot messages send "Команда продаж" "Отчёт за неделю" --file report.pdf
@@ -319,7 +319,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Los parámetros de ruta y consulta son opciones; el cuerpo es JSON en `--body`, `--body -` (tubería) o `--body-file`. `--body-file -` también lee stdin. El parámetro nativo `timeout` se llama `--poll-timeout`; el global `--timeout` limita todo el comando. `--store-token <profile>` no está disponible en los métodos MAX actuales: todos lo rechazan antes de ejecutar. Se valida el cuerpo contra el esquema y los errores muestran el campo y lo esperado, sin revelar su valor. Lista de operaciones y clasificación lectura/escritura: [cobertura Bot API](https://github.com/WireCatLabs/max-cli/blob/v0.43.0/docs/dev/bot-api-coverage.md).
+Los parámetros de ruta y consulta son opciones; el cuerpo es JSON en `--body`, `--body -` (tubería) o `--body-file`. `--body-file -` también lee stdin. El parámetro nativo `timeout` se llama `--poll-timeout`; el global `--timeout` limita todo el comando. `--store-token <profile>` no está disponible en los métodos MAX actuales: todos lo rechazan antes de ejecutar. Se valida el cuerpo contra el esquema y los errores muestran el campo y lo esperado, sin revelar su valor. Lista de operaciones y clasificación lectura/escritura: [cobertura Bot API](https://github.com/WireCatLabs/max-cli/blob/v0.43.1/docs/dev/bot-api-coverage.md).
 
 <a id="для-скриптов-и-агентов"></a>
 

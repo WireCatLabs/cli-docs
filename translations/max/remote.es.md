@@ -174,9 +174,9 @@ Estas aplicaciones deberán iniciar sesión nuevamente con un nuevo código. La 
 
 El agente en su computadora puede abrir el archivo guardado por `localPath`. El agente remoto no puede, por lo que obtiene los bytes almacenados mediante `attachments show` (MCP: `max_read`, comando `attachments show`).
 
-La transferencia de archivos guardados rechaza archivos y carpetas ocultos, las carpetas de la CLI y el almacén de mensajes, incluidos los destinos de enlaces simbólicos. Guarda el adjunto en una carpeta de descargas normal.
+La transferencia de archivos guardados rechaza archivos y carpetas conocidos de credenciales, las carpetas de la CLI y el almacén de mensajes, incluidos los destinos de enlaces simbólicos. Se permiten las carpetas de trabajo ocultas normales.
 
-MCP hace visibles los controles Unicode ocultos en los resultados de texto y argumentos de escritura. Los emojis de banderas regionales se conservan; el JSON normal de la CLI mantiene las cadenas originales.
+MCP hace visibles los controles Unicode ocultos en los resultados de texto. Los emojis de banderas regionales se conservan; los argumentos de escritura de MCP y el JSON normal de la CLI mantienen las cadenas originales.
 
 Primero, descargue los archivos de mensajes de la forma habitual ([que puede descargar](./attachments.md#что-можно-скачать)). El localizador del mensaje y el número de archivo adjunto encontrará `attachments list --needs-text`. Luego solicital archivo:
 
@@ -220,6 +220,6 @@ max attachments show msg:max/511/7/204 --attachment 1 --page 1 --json
 
 En MCP, llame a `max_read`, comando `attachments show`, con `page: 1` y mensajes de localizador. Por defecto, la página viene con una imagen. Si la aplicación solo muestra metadatos, solicite `format: base64`, luego decodifique y muestre el PNG usando el agente. Obtener una cadena base64 aún no muestra la página. Lea las páginas 1 a `pdf.pageCount`. Si los píxeles no están disponibles en ningún formato, informe una limitación de la aplicación en lugar de texto ficticio.
 
-`pdf.sourceSha256` y `pdf.sourceBytes` describen el PDF original; arriba `sha256` y `totalBytes` - imagen de la página. `--if-sha256` comprueba el PDF original. `--page` no se puede combinar con `--offset-bytes` o `--chunk-bytes`. El PDF puede tener hasta 20 páginas y 50 MiB; PNG: no más de 2000 píxeles en cada lado, una imagen de una página, no más de 1 MiB.
+`pdf.sourceSha256` y `pdf.sourceBytes` describen el PDF original; arriba `sha256` y `totalBytes` - imagen de la página. `--if-sha256` comprueba el PDF original. `--page` no se puede combinar con `--offset-bytes` o `--chunk-bytes`. El PDF puede tener hasta 50 MiB, sin un límite independiente de páginas; PNG: no más de 2000 píxeles en cada lado, una imagen de una página, no más de 1 MiB.
 
 La imagen de la página no llama a un servicio OCR externo y no agrega texto al índice. Después de ver todas las páginas, el agente llama a `attachments text set` y verifica la búsqueda de `content:`. Verifique números y diseños complejos con imágenes; La calidad depende del documento fuente y de las herramientas del agente.

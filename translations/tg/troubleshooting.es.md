@@ -274,11 +274,11 @@ Código de salida `3`. Otra CLI, o una `tg` más nueva, actualizó el archivo lo
 
 ### "nothing recorded for profile … yet — run the command once without --offline"
 
-Código `6`. `--offline`, `search messages`, `store status` y `store export` solo consultan el archivo local y este perfil todavía no ha guardado nada. Ejecuta primero un comando en línea, como `tg chats list`.
+Código `6`. `--offline`, `store status` y `store export` solo consultan el archivo local y este perfil todavía no ha guardado nada. Ejecuta primero un comando en línea, como `tg chats list`.
 
 ### `search messages` no encuentra nada
 
-La búsqueda lee sólo lo que esta máquina ha guardado, nunca Telegram. Una respuesta vacía significa "no guardado", no "nunca dicho". Lea el chat (`tg messages list <chat>`), o busque su historial con `tg store fetch`, luego busque nuevamente ([buscando en el archivo local](./archive.md#search)). `tg store check` dice qué chats están detrás.
+La búsqueda en el archivo (`--backend archive`, `--offline` o `--discover`) lee solo lo que esta máquina ha guardado. Sin esas opciones, la búsqueda normal por palabras también puede consultar Telegram. Un resultado vacío en un historial incompleto no demuestra que nunca se enviara el mensaje. Lee el chat (`tg messages list <chat>`) o descarga su historial con `tg store fetch` y vuelve a buscar ([búsqueda en el archivo local](./archive.md#search)). `tg store check` indica qué chats necesitan actualizarse.
 
 ### Un chat se lee como recuperado en su totalidad, pero faltan mensajes más antiguos
 

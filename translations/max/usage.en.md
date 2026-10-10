@@ -508,7 +508,7 @@ max messages list 42 --limit 20
 max messages send 42 "текст"
 ```
 
-Part of the name is also accepted there - and in `max search messages --chat`: the chat name is searched among the saved ones, and a search in one chat also asks the MAX server (`--backend archive` - archive only). The search uses [search query language](./query-language.md): the word also finds its other forms, the beginning of the word is the explicit pattern `квартир*`, only the exact form is `exact:квартира`. `--regex` - separate mode: words - one JavaScript regular expression, case insensitive. More details: [search](./search.md).
+Part of the name is also accepted there - and in `max search messages --chat`: the chat name is searched among the saved ones, and without `--discover`, a search in one chat also asks the MAX server (`--backend archive` - archive only). The search uses [search query language](./query-language.md): the word also finds its other forms, the beginning of the word is the explicit pattern `квартир*`, only the exact form is `exact:квартира`. `--regex` - separate mode: words - one JavaScript regular expression, case insensitive. More details: [search](./search.md).
 
 ### How many messages matched
 
@@ -544,7 +544,7 @@ max stats charts synthetic-group --chart-kind messages --by day --timezone Europ
 
 The JSON contains `chart`, and when saving the image, also `chartFile` with path and size. The image is written only to a new file, without overwriting. A missing date remains a gap and incomplete data is noted in the description and image. `membership` requires online chat events and is not available with `--offline`. Via MCP `max_read` (`command: "stats charts"`) returns JSON from local storage, without connecting and writing files; `format: "png"` adds a PNG and JSON image with `chart` and size `image`. Entries and exits are not available in it. Reading is subject to permission `messages`. `--jsonl` and stdout image are not available.
 
-![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.43.0/docs/images/stats-charts.png)
+![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.43.1/docs/images/stats-charts.png)
 
 Message and author rankings: [metrics, scores and evidence](./rankings.md).
 
@@ -648,7 +648,7 @@ With `--file`, `.jpg .jpeg .png .webp .gif` are sent as photos, `.mp4 .mov .webm
 ffmpeg -i запись.m4a -ac 1 -ar 48000 -c:a libopus -b:a 32k заметка.ogg
 ```
 
-Hidden files, files in hidden directories such as `~/.ssh`, and files in `max` directories are protected because they may contain keys or tokens. Use `--allow-any-file` only when intentionally sending one.
+Known credential files and folders (such as `~/.ssh`), `max` directories and the message store are protected. Ordinary hidden working folders are allowed. The CLI provides `--allow-any-file` for an explicitly selected protected file.
 
 ### Reply
 

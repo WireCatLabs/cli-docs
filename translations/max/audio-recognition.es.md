@@ -68,7 +68,7 @@ El texto se guarda bajo tu cuenta en el archivo local común. Lo ven las vistas 
 
 Se transcriben mensajes que MAX identifica como `kind: voice`. Un MP3 o WAV enviado como documento no se transcribe por esta vía, ni se extrae la voz de vídeos. El agente necesita otra herramienta: extraer el audio, convertirlo y ejecutar un modelo de voz adecuado.
 
-La transcripción local requiere una grabación Ogg Opus completa, mono o estéreo, de hasta 10 minutos. Divide las grabaciones más largas antes de transcribirlas.
+La transcripción local admite una grabación Ogg Opus completa, mono o estéreo, sin un límite de duración independiente. Las grabaciones largas requieren más memoria y tiempo de procesamiento.
 
 Los modelos comparten carpeta para MAX y Telegram; `CLI_COMMON_CACHE_DIR` cambia su ubicación. Necesitan disco para guardarse, y memoria y CPU para transcribir. La velocidad depende de la duración, el modelo y el ordenador.
 

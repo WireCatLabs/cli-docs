@@ -1017,31 +1017,6 @@
   {
     "tool": "tg",
     "slug": "troubleshooting",
-    "reason": "Released v0.42.0 search guide and command contract default to backend both; archive-only mode must be explicit.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Search reads only what this machine has kept, never Telegram. An empty answer means \"not kept\", not\n\"never said\". Read the chat (`tg messages list <chat>`), or fetch its history with `tg store fetch`,\nthen search again ([searching the store](./archive.md#search)). `tg store check` says which chats are behind.",
-          "after": "By default, word search checks stored history and Telegram. `--backend archive`, `--offline` and `--discover` use only saved messages. Counts, attachment filters and conversation search still depend on downloaded history. If the needed period is missing, read the chat (`tg messages list <chat>`) or fetch it with `tg store fetch`, then search again ([searching the archive](./archive.md#search)). `tg store check` identifies chats needing an update. An empty result in incomplete history does not prove a message was never sent."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Поиск читает только то, что сохранила эта машина, а не Telegram. Пустой ответ означает «не хранилось», а не «никогда не говорилось». Прочитайте чат (`tg messages list <chat>`) или получите его историю с помощью `tg store fetch`, затем повторите поиск ([поиск в архиве](./archive.md#search)). `tg store check` говорит, какие чаты отстают.",
-          "after": "По умолчанию поиск по словам проверяет локальную историю и Telegram. `--backend archive`, `--offline` и `--discover` используют только сохранённые сообщения. Подсчёты, фильтры вложений и поиск обсуждений зависят от скачанной истории. Если нужного периода нет, прочитайте чат (`tg messages list <chat>`) или скачайте его через `tg store fetch`, затем повторите поиск ([поиск в архиве](./archive.md#search)). `tg store check` показывает чаты, требующие обновления. Пустой результат в неполной истории не доказывает, что сообщение не отправляли."
-        }
-      ],
-      "es": [
-        {
-          "before": "La búsqueda lee sólo lo que esta máquina ha guardado, nunca Telegram. Una respuesta vacía significa \"no guardado\", no \"nunca dicho\". Lea el chat (`tg messages list <chat>`), o busque su historial con `tg store fetch`, luego busque nuevamente ([buscando en el archivo local](./archive.md#search)). `tg store check` dice qué chats están detrás.",
-          "after": "Por defecto, la búsqueda por palabras consulta el historial guardado y Telegram. `--backend archive`, `--offline` y `--discover` usan solo los mensajes guardados. Los recuentos, filtros de adjuntos y búsqueda de discusiones dependen del historial descargado. Si falta el periodo necesario, lee el chat (`tg messages list <chat>`) o impórtalo con `tg store fetch` y vuelve a buscar ([búsqueda en el archivo](./archive.md#search)). `tg store check` identifica chats pendientes de actualizar. Un resultado vacío en un historial incompleto no demuestra que nunca se enviara el mensaje."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "troubleshooting",
     "reason": "Measured released tg0.42.0 parser in isolated state with network/keyring blocked: unknown command, unknown option and missing argument all exit2 and emit validation_error JSON stderr.",
     "replacements": {
       "en": [
@@ -1546,20 +1521,6 @@
     }
   },
   {
-    "tool": "tg",
-    "slug": "troubleshooting",
-    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.44.0/docs/troubleshooting.md",
-    "reason": "Preserve the incoming native heading anchor after the npm package rename.",
-    "replacements": {
-      "en": [
-        {
-          "before": "### `npx @wirecat/tg-cli` runs an old version",
-          "after": "<a id=\"npx-leemourtg-cli-runs-an-old-version\" />\n\n### `npx @wirecat/tg-cli` runs an old version"
-        }
-      ]
-    }
-  },
-  {
     "tool": "max",
     "slug": "troubleshooting",
     "source": "https://github.com/WireCatLabs/max-cli/blob/v0.43.0/docs/troubleshooting.md",
@@ -1575,52 +1536,26 @@
   },
   {
     "tool": "max",
-    "slug": "usage",
-    "source": "https://github.com/WireCatLabs/cli-messaging/blob/v0.216.0/src/services/messages.ts#L427-L433",
-    "reason": "Archive discovery never contacts server search; qualify the existing single-chat server promise.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "а поиск в одном чате спрашивает ещё и сервер MAX",
-          "after": "а без `--discover` поиск в одном чате спрашивает ещё и сервер MAX"
-        }
-      ],
-      "en": [
-        {
-          "before": "a search in one chat also asks the MAX server",
-          "after": "without `--discover`, a search in one chat also asks the MAX server"
-        }
-      ],
-      "es": [
-        {
-          "before": "una búsqueda en un chat también solicita el servidor MAX",
-          "after": "sin `--discover`, una búsqueda en un chat también solicita el servidor MAX"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
     "slug": "troubleshooting",
-    "source": "https://github.com/WireCatLabs/cli-messaging/blob/v0.216.0/src/services/messages.ts#L427-L439",
-    "reason": "Recovery guidance must distinguish archive-only discovery/offline search from ordinary server-backed word search.",
+    "source": "https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/services/messages.ts#L427-L433",
+    "reason": "Reviewed portal correction: discovery is archive-only even for one named chat; the released native troubleshooting sentence still needs this qualification. Native usage already incorporates it.",
     "replacements": {
-      "en": [
-        {
-          "before": "`--offline`, `search messages`, `store status` and `store export` answer only from the",
-          "after": "`--offline`, `store status` and `store export` answer only from the"
-        }
-      ],
       "ru": [
         {
-          "before": "`--offline`, `search messages`, `store status`, `store export` читают только локальную базу",
-          "after": "`--offline`, `store status`, `store export` читают только локальную базу"
+          "before": "Поиск по всем чатам читает локальный архив; поиск слов в одном названном чате спрашивает ещё и сервер MAX.",
+          "after": "Поиск по всем чатам читает локальный архив; поиск слов в одном названном чате без `--discover` спрашивает ещё и сервер MAX."
+        }
+      ],
+      "en": [
+        {
+          "before": "Search all chats reads the local archive; searching for words in one named chat also asks the MAX server.",
+          "after": "Searching all chats reads the local archive; without `--discover`, searching for words in one named chat also asks the MAX server."
         }
       ],
       "es": [
         {
-          "before": "`--offline`, `search messages`, `store status` y `store export` solo consultan el archivo local",
-          "after": "`--offline`, `store status` y `store export` solo consultan el archivo local"
+          "before": "Buscar todos los chats lee el archivo local; La búsqueda de palabras en un chat con nombre también solicita al servidor MAX.",
+          "after": "La búsqueda en todos los chats lee el archivo local; sin `--discover`, la búsqueda de palabras en un chat concreto también consulta el servidor MAX."
         }
       ]
     }

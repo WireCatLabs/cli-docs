@@ -289,7 +289,7 @@ tg attachments extract --chat "Book club" --ocr --concurrency 4 --limit 100 --js
 
 **Archivos que ya tienes.** `tg attachments extract --chat <chat> --from-dir ./files` lee una carpeta, sin sus subcarpetas. Un archivo necesita un nombre original único o un conjunto completo de nombres de descarga. No combine `--from-dir` con `--download` o `--output-dir`. `tg messages download <chat> <id> --extract` extrae solo los archivos descargados por esta ejecución; `--all --extract` hace lo mismo para todo el lote. La extracción detecta archivos modificados mediante su hash y conservan el texto que escribió su agente. A través de MCP, una extracción limitada devuelve una continuación `cursor` y metadatos, sin texto de archivo.
 
-`--from-dir` rechaza archivos y carpetas ocultos, las carpetas de la CLI y el almacén de mensajes. Las descargas de extracción por MCP requieren `output_dir` fuera de esos lugares. La extracción local de texto PDF admite hasta 20 páginas y 30 segundos.
+`--from-dir` protege los archivos y carpetas conocidos de credenciales, las carpetas de la CLI y el almacén de mensajes. Las carpetas de trabajo ocultas normales están permitidas. Las descargas de extracción por MCP también requieren `output_dir` fuera de los lugares protegidos. La extracción local de texto PDF no tiene un límite fijo de páginas ni un tiempo de espera separado de 30 segundos; siguen aplicándose la cancelación del comando y los límites de tamaño del archivo y del texto.
 
 ## Contraseñas, códigos y tarjetas
 

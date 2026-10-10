@@ -144,7 +144,7 @@ La aplicación permanece conectada siempre que utilice la conexión al menos una
 
 El perfil `permissions` decide qué comandos están disponibles. El servidor no muestra formularios de aprobación; La aprobación de la aplicación es independiente y depende de su configuración.
 
-MCP hace visibles los controles Unicode ocultos en los resultados de texto y argumentos de escritura. Los emojis de banderas de subdivisiones territoriales se conservan; el JSON normal de la CLI mantiene las cadenas originales.
+MCP hace visibles los controles Unicode ocultos en los resultados de texto; los emojis de banderas de subdivisiones territoriales se conservan. Los argumentos de escritura y el JSON normal de la CLI mantienen las cadenas originales.
 
 ## Permisos para este proceso del servidor
 
@@ -220,6 +220,6 @@ tg attachments show msg:telegram/500/7/204 --attachment 1 --page 1 --json
 
 A través de MCP llamar a `tg_read`, comando `attachments show`, con `page: 1` y el localizador de mensajes. De forma predeterminada, la página vuelve como contenido de imagen. Si la aplicación solo muestra metadatos, solicite `format: base64`, luego decodifique y muestre el PNG con las herramientas de imagen del agente. Recibir una cadena base64 no equivale a ver la página. Lea las páginas 1 a `pdf.pageCount`. Si ninguno de los formatos muestra los píxeles, informe el límite de la aplicación en lugar de inventar texto.
 
-`pdf.sourceSha256` y `pdf.sourceBytes` describen el PDF original; los `sha256` y `totalBytes` de nivel superior describen la imagen de la página. `--if-sha256` comprueba el PDF original. `--page` no se puede combinar con `--offset-bytes` o `--chunk-bytes`. Los PDF pueden tener hasta 20 páginas y 50 MiB; un PNG tiene como máximo 2000 píxeles en cada lado y una imagen de página tiene como máximo 1 MiB.
+`pdf.sourceSha256` y `pdf.sourceBytes` describen el PDF original; los `sha256` y `totalBytes` de nivel superior describen la imagen de la página. `--if-sha256` comprueba el PDF original. `--page` no se puede combinar con `--offset-bytes` o `--chunk-bytes`. Los PDF pueden tener hasta 50 MiB, sin un límite fijo de páginas; un PNG tiene como máximo 2000 píxeles en cada lado y una imagen de página tiene como máximo 1 MiB.
 
 La imagen de una página no llama a ningún servicio OCR externo ni indexa ningún texto. Después de mirar cada página, el agente llama a `attachments text set` y verifica una búsqueda de `content:`. Verifique números y diseños complejos con las imágenes; La calidad depende del documento fuente y de las herramientas del agente.

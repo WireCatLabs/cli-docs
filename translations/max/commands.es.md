@@ -31,6 +31,7 @@ Se aplican a todos los comandos.
 | `-V, --version` |generar el número de versión.|
 | `-v, --verbose` |más detalle en lo que se muestra: -v ids, -vv todo lo que sabemos. Por defecto: `0`.|
 | `--json` |salida legible por máquina: un valor JSON en la salida estándar, nada más.|
+| `--agent-json` | JSON para agentes de IA: muestra los controles invisibles; --json normal conserva el texto. |
 | `--jsonl` |Salida legible por máquina: un objeto JSON por línea, para streaming y jq.|
 | `--quiet` |diagnóstico desactivado.|
 | `--trace` |una línea por solicitud en stderr: identificadores y tiempos, nunca contenido del mensaje.|
@@ -1423,7 +1424,7 @@ max messages send <chat> [text] [options]
 | `--photo <file>` |adjunte un .jpg, .png o .webp como foto; el texto se convierte en su título.|
 | `--as-file` |envíe el --file como un archivo para descargar, un video incluido.|
 | `--voice <file>` |envía un archivo Ogg Opus como mensaje de voz, solo, sin texto.|
-| `--allow-any-file` |envíe un archivo incluso desde una carpeta oculta, \~/.ssh o las propias carpetas de esta CLI.|
+| `--allow-any-file` | enviar un archivo incluso desde carpetas de credenciales o de la propia CLI. |
 | `--at-time <time>` |deja que el servicio de mensajería lo envíe más tarde, incluso con esta máquina apagada: 2026-09-25T09:00 (hora local), o dentro de 30m, 2h, 1d.|
 | `--sticker <id>` | enviar solo este sticker; `stickers list` muestra su id. |
 
@@ -4097,7 +4098,7 @@ max bot messages send <chat> [text] [options]
 | `--photo <file>` |adjunte un .jpg, .png o .webp como foto; el texto se convierte en su título.|
 | `--as-file` |envíe el --file como un archivo para descargar, un video incluido.|
 | `--voice <file>` |envía un archivo Ogg Opus como mensaje de voz, solo, sin texto.|
-| `--allow-any-file` |envíe un archivo incluso desde una carpeta oculta, \~/.ssh o las propias carpetas de esta CLI.|
+| `--allow-any-file` | enviar un archivo incluso desde carpetas de credenciales o de la propia CLI. |
 
 #### `max bot messages list`
 
