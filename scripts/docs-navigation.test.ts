@@ -60,9 +60,16 @@ describe("one persistent documentation sidebar", () => {
       },
     ],
   }
-  it("keeps task pages and both tools while leaving onboarding to the Getting started banner", () => {
+  it("keeps onboarding, task pages and both tools in one navigation tree", () => {
     const tree = unifiedDocsTree(original)
-    expect(tree.children.map((item) => item.name)).toEqual(["Что можно сделать", "Search", "Telegram", "MAX"])
+    expect(tree.children.map((item) => item.name)).toEqual([
+      "Начните здесь",
+      "Install",
+      "Что можно сделать",
+      "Search",
+      "Telegram",
+      "MAX",
+    ])
     for (const item of tree.children) {
       if (item.type === "folder") {
         expect(item.root).toBe(false)
@@ -70,7 +77,7 @@ describe("one persistent documentation sidebar", () => {
         expect(item.children[0]).toHaveProperty("icon")
       }
     }
-    expect(tree.children[2]).toMatchObject({ index: { url: "/ru/docs/tg" } })
+    expect(tree.children[4]).toMatchObject({ index: { url: "/ru/docs/tg" } })
   })
   it("does not modify the source tree used by breadcrumbs, Markdown and search", () => {
     unifiedDocsTree(original)
@@ -78,7 +85,7 @@ describe("one persistent documentation sidebar", () => {
     expect(original.children[1]).not.toHaveProperty("icon")
     expect(original.children[4]).toMatchObject({ children: [{ url: "/ru/docs/tg/sessions" }] })
   })
-  it("removes the duplicate onboarding group in every locale and preserves task links", () => {
+  it("preserves the onboarding group and task links in every locale", () => {
     for (const [lang, heading] of [
       ["en", "Start here"],
       ["ru", "Начните здесь"],
@@ -96,6 +103,11 @@ describe("one persistent documentation sidebar", () => {
         ],
       })
       expect(tree.children.map((node) => (node.type === "page" ? node.url : node.name))).toEqual([
+        heading,
+        `/${lang}/docs`,
+        `/${lang}/docs/installation`,
+        `/${lang}/docs/agents`,
+        `/${lang}/docs/first-tasks`,
         `/${lang}/docs/search`,
         `/${lang}/docs/drafts-and-templates`,
       ])
