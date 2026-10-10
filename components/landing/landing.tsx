@@ -212,8 +212,8 @@ export function Landing({ lang }: { lang: string }) {
             </p>
             <div className="cta">
               <span className="cmd">
-                <code>{c("npm i -g @leemour/tg-cli")}</code>
-                <button className="copy" type="button" data-copy="npm i -g @leemour/tg-cli">
+                <code>{c("npm i -g @wirecat/tg-cli")}</code>
+                <button className="copy" type="button" data-copy="npm i -g @wirecat/tg-cli">
                   {t("Copy")}
                 </button>
               </span>
@@ -654,15 +654,15 @@ export function Landing({ lang }: { lang: string }) {
               </div>
               <p>{t("A Telegram client for the terminal and for AI agents, on your own account.")}</p>
               <span className="cmd">
-                <code>{c("npm i -g @leemour/tg-cli")}</code>
-                <button className="copy" type="button" data-copy="npm i -g @leemour/tg-cli">
+                <code>{c("npm i -g @wirecat/tg-cli")}</code>
+                <button className="copy" type="button" data-copy="npm i -g @wirecat/tg-cli">
                   {t("Copy")}
                 </button>
               </span>
               <div className="tool-links">
                 <a href={`/${lang}/docs/tg`}>{t("Docs")}</a>
                 <a href="https://github.com/WireCatLabs/tg-cli">GitHub</a>
-                <a href="https://www.npmjs.com/package/@leemour/tg-cli">npm</a>
+                <a href="https://www.npmjs.com/package/@wirecat/tg-cli">npm</a>
               </div>
             </article>
             <article className="tool-card tool-max">
@@ -682,15 +682,15 @@ export function Landing({ lang }: { lang: string }) {
               </div>
               <p>{t("Your MAX bots through the official Bot API, and your personal account.")}</p>
               <span className="cmd">
-                <code>{c("npm i -g @leemour/max-cli")}</code>
-                <button className="copy" type="button" data-copy="npm i -g @leemour/max-cli">
+                <code>{c("npm i -g @wirecat/max-cli")}</code>
+                <button className="copy" type="button" data-copy="npm i -g @wirecat/max-cli">
                   {t("Copy")}
                 </button>
               </span>
               <div className="tool-links">
                 <a href={`/${lang}/docs/max`}>{t("Docs")}</a>
                 <a href="https://github.com/WireCatLabs/max-cli">GitHub</a>
-                <a href="https://www.npmjs.com/package/@leemour/max-cli">npm</a>
+                <a href="https://www.npmjs.com/package/@wirecat/max-cli">npm</a>
               </div>
             </article>
           </div>
@@ -753,7 +753,7 @@ export function Landing({ lang }: { lang: string }) {
             <div>
               <dt>{t("Runs everywhere")}</dt>
               <dd>{t("Windows, macOS and Linux, on Node 22 or newer. No native module to build.")}</dd>
-              <code>{c("npm i -g @leemour/tg-cli")}</code>
+              <code>{c("npm i -g @wirecat/tg-cli")}</code>
             </div>
           </dl>
         </div>
@@ -764,11 +764,11 @@ export function Landing({ lang }: { lang: string }) {
           <h2 className="big">{t("Give your agent your inbox tonight")}</h2>
           <div className="cta">
             <span className="cmd">
-              <code>{c("npm i -g @leemour/tg-cli && tg session start && tg skill install")}</code>
+              <code>{c("npm i -g @wirecat/tg-cli && tg session start && tg skill install")}</code>
               <button
                 className="copy"
                 type="button"
-                data-copy="npm i -g @leemour/tg-cli && tg session start && tg skill install"
+                data-copy="npm i -g @wirecat/tg-cli && tg session start && tg skill install"
               >
                 {t("Copy")}
               </button>
@@ -807,8 +807,8 @@ export function Landing({ lang }: { lang: string }) {
                 )}
               </p>
               <span className="cmd">
-                <code>{c("npm i -g @leemour/tg-cli")}</code>
-                <button className="copy" type="button" data-copy="npm i -g @leemour/tg-cli">
+                <code>{c("npm i -g @wirecat/tg-cli")}</code>
+                <button className="copy" type="button" data-copy="npm i -g @wirecat/tg-cli">
                   {t("Copy")}
                 </button>
               </span>

@@ -15,11 +15,11 @@ large, repetitive and needs little context beyond the rules below.
 ## 2. Orient in one call
 
 ```sh
-{ echo "## releases"; gh release list --repo leemour/tg-cli --limit 3; gh release list --repo leemour/max-cli --limit 3
+{ echo "## releases"; gh release list --repo WireCatLabs/tg-cli --limit 3; gh release list --repo WireCatLabs/max-cli --limit 3
   echo "## pinned now"; grep -n '"docsRef"' tools.json
   echo "## did the rewrite ship? (each must show MERGED and be older than the release)"
-  for p in 401 402 403; do gh pr view $p --repo leemour/tg-cli --json number,state,mergedAt --jq '"tg #\(.number) \(.state) \(.mergedAt)"'; done
-  for p in 523 524 526; do gh pr view $p --repo leemour/max-cli --json number,state,mergedAt --jq '"max #\(.number) \(.state) \(.mergedAt)"'; done
+  for p in 401 402 403; do gh pr view $p --repo WireCatLabs/tg-cli --json number,state,mergedAt --jq '"tg #\(.number) \(.state) \(.mergedAt)"'; done
+  for p in 523 524 526; do gh pr view $p --repo WireCatLabs/max-cli --json number,state,mergedAt --jq '"max #\(.number) \(.state) \(.mergedAt)"'; done
   echo "## translation rules"; sed -n '58,75p' HANDOFF.md
   echo "## helper"; sed -n '1,5p' scripts/translation.ts
   echo "## slug references to the removed page"; grep -n "from-tgcli" lib/seo-copy.json lib/guide-orientation.ts lib/docs-sidebar-tree.tsx scripts/docs-corrections.json | cut -c1-100

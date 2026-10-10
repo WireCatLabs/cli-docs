@@ -17,7 +17,7 @@ import {
 const tool = {
   name: "tg",
   repo: "WireCatLabs/tg-cli",
-  package: "@leemour/tg-cli",
+  package: "@wirecat/tg-cli",
   lang: "en",
   docsRef: "v0.24.0",
   summary: {},

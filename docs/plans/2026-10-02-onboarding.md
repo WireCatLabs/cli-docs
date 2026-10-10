@@ -20,8 +20,8 @@
   `npm exec` без глобального PATH и запуск после добавления prefix в PATH текущего процесса.
   **Проверено 2026-10-03:** max-cli 0.22.0 и tg-cli 0.22.0 прошли все четыре задания на Node
   22.16.0 и 24.21.0; основной CI сайта также прошёл.
-  [Результаты Windows](https://github.com/leemour/cli-docs/actions/runs/37078689619),
-  [PR #9](https://github.com/leemour/cli-docs/pull/9) слит в main; повторный запуск после слияния
+  [Результаты Windows](https://github.com/WireCatLabs/cli-docs/actions/runs/37078689619),
+  [PR #9](https://github.com/WireCatLabs/cli-docs/pull/9) слит в main; повторный запуск после слияния
   прошёл все четыре задания.
   Вход в реальные аккаунты и работа keyring с настоящими ключами не проверялись.
 
@@ -41,12 +41,12 @@
 ## Windows: что ещё сделать в CLI
 
 Основной CI выполняется на Ubuntu. Telegram теперь автоматически проверяет onboarding PR на
-Windows/macOS. Такой же запуск для MAX добавлен в [PR #351](https://github.com/leemour/max-cli/pull/351).
+Windows/macOS. Такой же запуск для MAX добавлен в [PR #351](https://github.com/WireCatLabs/max-cli/pull/351).
 PR #351 слит; полный набор тестов и сборка прошли на Windows/macOS.
 Windows workflow портала проверяет установку опубликованных пакетов, а не полный набор unit tests.
 Проверка портала от 2026-10-03 подтвердила запуск на Windows, обход отсутствующего PATH,
 SQLite и установку skills. Постоянное исправление пользовательского PATH теперь выполняет
-Windows-установщик; [PR #13](https://github.com/leemour/cli-docs/pull/13) слит и опубликован.
+Windows-установщик; [PR #13](https://github.com/WireCatLabs/cli-docs/pull/13) слит и опубликован.
 
 Следующий PR в каждом CLI:
 
@@ -70,23 +70,23 @@ Node предоставляет [Single executable applications](https://nodejs.
 ## Первичная команда настройки: следующий PR
 
 Для Telegram реализован `tg setup --agent codex`:
-[PR #229](https://github.com/leemour/tg-cli/pull/229). Команда проверяет каталоги, получает
+[PR #229](https://github.com/WireCatLabs/tg-cli/pull/229). Команда проверяет каталоги, получает
 ключи приложения, выполняет QR/phone-вход, проверяет пять чатов и устанавливает skill выбранного
 агента. Повторный запуск использует сессию; JSON содержит один результат. История остаётся
 отдельной командой после выбора чата и объёма. Отмена и общий таймаут закрывают соединение,
 удаляют временный QR и отменяют ожидающий ввод.
 
 Общий ввод получил AbortSignal в опубликованном cli-messaging 0.120.0
-([PR #444](https://github.com/leemour/cli-messaging/pull/444)). Локально прошли 541 тест tg-cli,
+([PR #444](https://github.com/WireCatLabs/cli-messaging/pull/444)). Локально прошли 541 тест tg-cli,
 покрытие, lint, typecheck, Bun, документация, parity и генерация команд; реальный аккаунт не
 использовался. Все проверки PR прошли, включая полный набор тестов и сборку на Windows и macOS
-([результаты](https://github.com/leemour/tg-cli/actions/runs/37082468779)). PR #229 слит в main.
+([результаты](https://github.com/WireCatLabs/tg-cli/actions/runs/37082468779)). PR #229 слит в main.
 Проверки Windows/macOS теперь запускаются автоматически на изменения onboarding и зависимостей.
 Windows-прогон выявил и помог исправить сокращение home-пути, распознавание user docs и
 Unix-only ожидания file mode; security docs описывают Windows ACL.
 
 На npm tg-cli эта команда пока не выпущена и на лендинге не предлагается. Для MAX реализована
-в [PR #351](https://github.com/leemour/max-cli/pull/351), по утверждённому владельцем плану.
+в [PR #351](https://github.com/WireCatLabs/max-cli/pull/351), по утверждённому владельцем плану.
 Остальные пункты целевого сценария:
 
 1. Проверить runtime, каталоги, наличие сессии, доступность CLI на PATH и подключение агента.
@@ -133,7 +133,7 @@ Telegram setup реализован и слит в main; публикация н
 
 ## Документация и обнаружение инструкций после установки
 
-Слит [tg-cli PR #230](https://github.com/leemour/tg-cli/pull/230): README, installation, usage,
+Слит [tg-cli PR #230](https://github.com/WireCatLabs/tg-cli/pull/230): README, installation, usage,
 config, troubleshooting, MCP, remote, security и bundled skill согласованы с guided setup.
 Корневая справка, `setup --help`, `session start --help` и справка skill дают примеры и следующие
 шаги. Агенту предлагается прочитать `tg skill show` до входа; setup возвращает эту команду
@@ -141,7 +141,7 @@ config, troubleshooting, MCP, remote, security и bundled skill согласов
 
 Проверены 547 тестов, документация, сборка, упакованный npm-артефакт и CI Linux/Windows/macOS.
 Для parity-проверки стандартного `--help` опубликован cli-messaging 0.121.0
-([PR #447](https://github.com/leemour/cli-messaging/pull/447)).
+([PR #447](https://github.com/WireCatLabs/cli-messaging/pull/447)).
 
 Обновлён и включён в коммит сайта onboarding prompt лендинга на EN/RU/ES: после установки агент читает help,
 commands и skill, затем использует setup, если команда есть в установленной версии.
@@ -150,7 +150,7 @@ commands и skill, затем использует setup, если команд�
 
 ## Выпуск и MAX: состояние 2026-10-03
 
-Telegram 0.23.0 подготовлен в [draft PR #231](https://github.com/leemour/tg-cli/pull/231).
+Telegram 0.23.0 подготовлен в [draft PR #231](https://github.com/WireCatLabs/tg-cli/pull/231).
 Все release checks и CI Linux/Windows/macOS прошли. В релиз входят также изменения отправки в
 forum topics, поэтому release skill требует отдельного live-разрешения и существующий тестовый
 forum с вторым тестовым аккаунтом. Владелец разрешил только smoke в Saved Messages.
@@ -162,7 +162,7 @@ MAX PR #351 слит: guided setup, помощь и bundled skill до вход�
 shared runner прошли 1235 тестов, coverage, Bun, docs, parity и matrix (488 tested, 63 reason,
 0 missing). Первый Windows CI выявил старые Unix mode assertions, separator classifier,
 запуск Biome `.cmd` без shell и нестабильный HTTP burst test; исправления прошли CI Linux/Windows/macOS
-([результаты](https://github.com/leemour/max-cli/actions/runs/37117782374)).
+([результаты](https://github.com/WireCatLabs/max-cli/actions/runs/37117782374)).
 Реальный аккаунт MAX не использовался. Обе новые setup-команды пока не опубликованы на npm.
 
 Основной Windows-вход теперь `https://wirecat.dev/install.ps1`: одна команда ставит CLI,
@@ -171,12 +171,12 @@ shared runner прошли 1235 тестов, coverage, Bun, docs, parity и mat
 на свой пакет; `.cmd` остаётся, execution policy не меняется. Все четыре сочетания TG/MAX и
 Node 22.16/24 прошли свежий restricted PowerShell, PATH, skills и SQLite в CI.
 
-[TG PR #235](https://github.com/leemour/tg-cli/pull/235) слит: global-only npm hook сохраняет PATH
+[TG PR #235](https://github.com/WireCatLabs/tg-cli/pull/235) слит: global-only npm hook сохраняет PATH
 и устанавливает навыки при разрешённых scripts. Project installs и npx не меняют эти настройки.
 567 tests и Windows tarball install CI прошли, включая idempotence и отключённые scripts.
 Хук ещё требует публикации пакета; standalone установщик уже работает с выпущенными версиями.
 Скрипт сайта скачан с опубликованного URL и успешно разобран PowerShell.
 
 Переключатели темы сверху и снизу и выпадающий язык в футере опубликованы через
-[PR #12](https://github.com/leemour/cli-docs/pull/12). Общий preview на localhost:4317 обновлён,
+[PR #12](https://github.com/WireCatLabs/cli-docs/pull/12). Общий preview на localhost:4317 обновлён,
 с сохранением параллельных правок сценариев и калькулятора; theme/footer проверены браузером.

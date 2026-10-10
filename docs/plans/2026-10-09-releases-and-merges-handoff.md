@@ -14,11 +14,11 @@ merge the site PRs (cli-docs #88, #92) and start the site's translation pass. Ea
 
 ```sh
 { echo "## max smoke (run from the max release worktree)"; tail -25 /home/leemour/Projects/AI/max-smoke.log
-  echo "## PRs"; gh pr view 527 --repo leemour/max-cli --json state,mergeable --jq '"max #527 \(.state) \(.mergeable)"'
-  gh pr view 88 --repo leemour/cli-docs --json state,isDraft,mergeable --jq '"site #88 \(.state) draft=\(.isDraft) \(.mergeable)"'
-  gh pr view 92 --repo leemour/cli-docs --json state,baseRefName --jq '"site #92 \(.state) base=\(.baseRefName)"'
+  echo "## PRs"; gh pr view 527 --repo WireCatLabs/max-cli --json state,mergeable --jq '"max #527 \(.state) \(.mergeable)"'
+  gh pr view 88 --repo WireCatLabs/cli-docs --json state,isDraft,mergeable --jq '"site #88 \(.state) draft=\(.isDraft) \(.mergeable)"'
+  gh pr view 92 --repo WireCatLabs/cli-docs --json state,baseRefName --jq '"site #92 \(.state) base=\(.baseRefName)"'
   echo "## npm"; for p in cli-messaging tg-cli max-cli; do echo "$p $(npm view @leemour/$p version --prefer-online)"; done
-  echo "## last releases (2-hour gap per tool)"; gh release list --repo leemour/tg-cli --limit 1; gh release list --repo leemour/max-cli --limit 1; date -u +%FT%TZ
+  echo "## last releases (2-hour gap per tool)"; gh release list --repo WireCatLabs/tg-cli --limit 1; gh release list --repo WireCatLabs/max-cli --limit 1; date -u +%FT%TZ
   echo "## worktrees"; git -C /home/leemour/Projects/AI/max-cli worktree list | grep release; git -C /home/leemour/Projects/AI/tg-cli worktree list | grep release
   echo "## last max report (shape to copy)"; cat /home/leemour/Projects/AI/max-cli/docs_ai/releases/0.40.0.md
   echo "## tg release skill, live step"; git -C /home/leemour/Projects/AI/tg-cli show origin/main:docs/dev/skills/release/SKILL.md | sed -n '/^## 5. Live/,/^## 6/p'
@@ -41,9 +41,9 @@ two-hour gap has passed, both release worktrees, the report format, and tg's liv
    `chore/release-0.41.0`, PR #527 (version and dated changelog; `release:check` 14/14 ok).
    - Read the smoke result in `/home/leemour/Projects/AI/max-smoke.log`. Every line `ok` (a known
      `SKIP` is fine) → continue. Any `FAIL` → stop and tell the owner; it stops the release.
-   - Merge #527 (`gh pr merge 527 --repo leemour/max-cli --squash`).
+   - Merge #527 (`gh pr merge 527 --repo WireCatLabs/max-cli --squash`).
    - Write `docs_ai/releases/0.41.0.md` in the max **main checkout** (`docs_ai/` is the private repo
-     `leemour/cli-private`): `Commit:` = the full sha of max `main` after the merge, `Previous: v0.40.0`,
+     `WireCatLabs/cli-private`): `Commit:` = the full sha of max `main` after the merge, `Previous: v0.40.0`,
      the gate table like 0.40.0's (release:check 14 ok; changelog accepted; docs: guides rewritten in
      #524; requirements: replies send path changed in #523 — read it against `CLAUDE.md` constraints 1, 4, 6;
      live: the smoke lines). Sign-off line, already granted: `Signed off: 2026-10-09 — owner (release
@@ -59,7 +59,7 @@ two-hour gap has passed, both release worktrees, the report format, and tg's liv
    - Then `bin/release` from a clean `main`. Check: npm shows 0.42.0.
 3. **Site.** cli-docs #88 is a draft by the owner's choice («wait and first apply fixes we find
    here»): ask whether to mark it ready and merge. After #88 merges, retarget #92 to `main`
-   (`gh pr edit 92 --repo leemour/cli-docs --base main`), let CI pass, merge.
+   (`gh pr edit 92 --repo WireCatLabs/cli-docs --base main`), let CI pass, merge.
 4. **Translation pass.** Only after both releases and #92: follow the translation handoff. It is
    large and needs little context — a fresh session, or parallel agents per tool and language.
 
@@ -90,7 +90,7 @@ if `bin/release` renumbers because a parallel session took the version, follow w
 
 ```sh
 for p in cli-messaging tg-cli max-cli; do echo "$p $(npm view @leemour/$p version --prefer-online)"; done   # 0.213.0 / 0.42.0 / 0.41.0
-gh pr view 92 --repo leemour/cli-docs --json state --jq .state                                            # MERGED
+gh pr view 92 --repo WireCatLabs/cli-docs --json state --jq .state                                            # MERGED
 ```
 
 Cleanup items from this work are listed in `/home/leemour/Projects/AI/cli-docs/CLEANUP.md`; present
