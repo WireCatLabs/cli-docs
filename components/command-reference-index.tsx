@@ -19,6 +19,16 @@ export function CommandReferenceIndex({
   const icons = { personal: UserRound, bot: Bot, admin: ShieldCheck }
   return (
     <div className="not-prose space-y-5" data-command-index>
+      {/* Remember legacy fragments before hydration can restore a URL without the hash. */}
+      <script>{`(() => {
+        const path = location.pathname;
+        const fragments = window.__wirecatCommandFragments ||= {};
+        const remember = () => {
+          if (location.pathname === path) fragments[path] = location.hash;
+        };
+        remember();
+        window.addEventListener("hashchange", remember);
+      })();`}</script>
       <CommandHashRedirect tool={tool} lang={lang} />
       <p>
         {text.intro}{" "}
@@ -55,10 +65,10 @@ export function CommandReferenceIndex({
             <li key={anchor}>
               <a
                 id={anchor}
-                className="underline"
+                className="font-mono underline"
                 href={`/${lang}/docs/${tool}/commands-${commandGroup(command)}#${anchor}`}
               >
-                <code>{command}</code>
+                {command}
               </a>
             </li>
           ))}
