@@ -525,7 +525,7 @@ max messages list 42 --limit 20
 max messages send 42 "текст"
 ```
 
-Parte del nombre también se acepta allí, y en `max search messages --chat`: el nombre del chat se busca entre los guardados, y una búsqueda en un chat también solicita el servidor MAX (`--backend archive` - solo archivo). La búsqueda utiliza [lenguaje de consulta de búsqueda](./query-language.md): la palabra encuentra sus otras formas, el comienzo de la palabra es el patrón explícito `квартир*`, solo la forma exacta es `exact:квартира`. `--regex` - modo separado: palabras - una expresión regular de JavaScript, sin distinguir entre mayúsculas y minúsculas. Más detalles: [buscar](./search.md).
+Parte del nombre también se acepta allí, y en `max search messages --chat`: el nombre del chat se busca entre los guardados, y sin `--discover`, una búsqueda en un chat también solicita el servidor MAX (`--backend archive` - solo archivo). La búsqueda utiliza [lenguaje de consulta de búsqueda](./query-language.md): la palabra encuentra sus otras formas, el comienzo de la palabra es el patrón explícito `квартир*`, solo la forma exacta es `exact:квартира`. `--regex` - modo separado: palabras - una expresión regular de JavaScript, sin distinguir entre mayúsculas y minúsculas. Más detalles: [buscar](./search.md).
 
 ### Cuántos mensajes coinciden
 
@@ -561,7 +561,7 @@ max stats charts synthetic-group --chart-kind messages --by day --timezone Europ
 
 El JSON contiene `chart`, y al guardar la imagen, también `chartFile` con ruta y tamaño. La imagen se escribe solo en un archivo nuevo, sin sobrescribirla. Una fecha que falta sigue siendo un vacío y se indican datos incompletos en la descripción y la imagen. `membership` requiere eventos de chat en línea y no está disponible con `--offline`. A través de MCP `max_read` (`command: "stats charts"`) devuelve JSON desde el almacenamiento local, sin conectarse ni escribir archivos; `format: "png"` agrega una imagen PNG y JSON con `chart` y tamaño `image`. Las entradas y salidas no están disponibles en el mismo. La lectura está sujeta al permiso `messages`. `--jsonl` y la imagen de salida estándar no están disponibles.
 
-![Gráfico sobre datos ficticios](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.43.0/docs/images/stats-charts.png)
+![Gráfico sobre datos ficticios](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.43.1/docs/images/stats-charts.png)
 
 Clasificaciones de mensajes y autores: [métricas, puntuaciones y evidence](./rankings.md).
 
@@ -665,7 +665,7 @@ Con `--file`, `.jpg .jpeg .png .webp .gif` se envían como fotos; `.mp4 .mov .we
 ffmpeg -i запись.m4a -ac 1 -ar 48000 -c:a libopus -b:a 32k заметка.ogg
 ```
 
-Un archivo de una carpeta oculta o un archivo oculto (por ejemplo, de `~/.ssh`) y los archivos de las carpetas del propio `max` no se envían: las claves y los tokens se encuentran allí. Si realmente se necesita un archivo de este tipo: `--allow-any-file`.
+Los archivos y carpetas conocidos de credenciales (como `~/.ssh`), los directorios de `max` y el almacén de mensajes están protegidos. Se permiten las carpetas de trabajo ocultas normales. La CLI ofrece `--allow-any-file` para un archivo protegido elegido expresamente.
 
 ### Respuesta
 

@@ -116,7 +116,7 @@ tg sales bot messages send "Team" "Weekly report" --file report.pdf
 tg sales bot messages send "Team" --photo screenshot.png
 ```
 
-Скрытые файлы и каталоги `tg` запрещены без `--allow-any-file`. Одно вложение на сообщение: фото до 10 МБ, остальные файлы до 50 МБ ([отправка файлов](https://core.telegram.org/bots/api#sending-files)).
+Известные файлы и папки с учётными данными, собственные папки `tg` и хранилище сообщений защищены. Обычные скрытые рабочие папки разрешены; `--allow-any-file` в CLI позволяет использовать защищённые пути. Одно вложение на сообщение: фото до 10 МБ, остальные файлы до 50 МБ ([отправка файлов](https://core.telegram.org/bots/api#sending-files)).
 
 ## Чаты
 

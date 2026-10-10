@@ -70,7 +70,7 @@ By default, your agent reads scans and photos with its own OCR or vision tools. 
 | --- | --- | --- | --- |
 | TXT, MD, MARKDOWN, CSV, TSV, JSON, LOG | Reads UTF-8, UTF-16 with BOM marker and confidently defined legacy encodings | Local reading remains | Ambiguous encoding requires agent verification and conversion |
 | Other files with MIME `text/*` or `application/json` | Reads text with the same encoding rules | Local reading remains | If MIME is not specified and the extension is not supported, an external reader is needed |
-| PDF with text layer | Retrieves text via `unpdf`, up to 20 pages and 30 seconds | Reads text pages locally | Checking the order of columns, tables and accuracy of extracted text |
+| PDF with text layer | Retrieves text via `unpdf`; the overall command timeout and file-size limits apply | Reads text pages locally | Checking the order of columns, tables and accuracy of extracted text |
 | PDF with scans or mixed pages | Without text - `needs-agent`; for a mixed PDF, normal extraction reads the existing text layer | Reads the text of pages; pages without text are converted into images via `unpdf` and `@napi-rs/canvas`, then recognized by the model | Normal path for scans; also unavailable package, restrictions or failed API |
 | DOCX | Extracts text via `mammoth` | Local reading remains | Pictures inside the document and precise layout are not recognized by this extraction |
 | ODT | Reads paragraphs and headings | Local reading remains | Pictures and precise layout require visual inspection |

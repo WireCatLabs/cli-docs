@@ -4,6 +4,17 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli` (`@leemour/tg-cli` hasta 0.42.0), con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.44.1 — 10.10.2026
+
+### Correcciones
+
+- La extracción local de texto PDF y la vista de páginas aceptan documentos de más de 20 páginas; la extracción sigue la cancelación del comando en lugar de un tiempo de espera separado de 30 segundos. Se mantienen los límites de tamaño del archivo y de la imagen.
+- La transcripción local acepta grabaciones Ogg Opus completas, mono o estéreo, de más de diez minutos. Las grabaciones largas necesitan más memoria y tiempo de procesamiento.
+- Se permiten adjuntos de carpetas de trabajo ocultas normales. Las credenciales conocidas, las carpetas de la CLI y el almacén de mensajes siguen protegidos.
+- Las exportaciones Markdown conservan el formato de los mensajes. Los argumentos de escritura MCP conservan el Unicode original, mientras que el texto devuelto sigue mostrando los controles invisibles; los servicios de modelos configurados admiten redirecciones normales.
+- La actualización y configuración de MCP en Windows admiten entradas PATH relativas normales y entornos personalizados del procesador de comandos. Esta versión mantiene el esquema existente del almacén de mensajes.
+- La guía de búsqueda distingue las solicitudes discovery u offline que consultan solo el archivo local de la búsqueda normal de palabras mediante el servidor: un archivo local vacío no implica que se haya buscado en Telegram.
+
 ## 0.44.0 — 10.10.2026
 
 ### Novedades

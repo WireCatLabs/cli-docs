@@ -174,9 +174,9 @@ Those apps must log in again with a new code. Your MAX session stays logged in.
 
 An agent on your computer can open a saved file through `localPath`. A remote agent cannot, so it receives the saved bytes through `attachments show` (MCP: `max_read`, command `attachments show`).
 
-Retained-file transfer refuses hidden files and folders, the CLI’s own folders and the message store, including symlink targets. Save the intended attachment in an ordinary downloads folder.
+Retained-file transfer refuses known credential files and folders, the CLI’s own folders and the message store, including symlink targets. Ordinary hidden working folders are allowed.
 
-MCP makes hidden Unicode controls visible in text results and write arguments. Subdivision flag emoji stay intact; ordinary CLI machine JSON preserves original strings.
+MCP makes hidden Unicode controls visible in text results. Subdivision flag emoji stay intact; MCP write arguments and ordinary CLI machine JSON preserve original strings.
 
 First download the message's files normally ([what you can download](./attachments.md#что-можно-скачать)). Use `attachments list --needs-text` to find the message locator and attachment number, then request the file:
 
@@ -220,6 +220,6 @@ max attachments show msg:max/511/7/204 --attachment 1 --page 1 --json
 
 In MCP, call `max_read`, command `attachments show`, with `page: 1` and the message locator. The page arrives as an image by default. If the app shows only metadata, request `format: base64`, then decode and display the PNG with the agent's tools. Receiving a base64 string does not mean the page has been viewed. Read pages from 1 to `pdf.pageCount`. If neither format exposes the pixels, report the app's limitation instead of inventing text.
 
-`pdf.sourceSha256` and `pdf.sourceBytes` describe the source PDF; the top-level `sha256` and `totalBytes` describe the page image. `--if-sha256` checks the source PDF. `--page` cannot be combined with `--offset-bytes` or `--chunk-bytes`. The PDF can have up to 20 pages and be up to 50 MiB; the PNG is at most 2000 pixels per side, and each page image is at most 1 MiB.
+`pdf.sourceSha256` and `pdf.sourceBytes` describe the source PDF; the top-level `sha256` and `totalBytes` describe the page image. `--if-sha256` checks the source PDF. `--page` cannot be combined with `--offset-bytes` or `--chunk-bytes`. The PDF can be up to 50 MiB, without a separate page-count limit; the PNG is at most 2000 pixels per side, and each page image is at most 1 MiB.
 
 Rendering a page image does not call an external OCR service or add text to the index. After viewing every page, the agent calls `attachments text set` and checks a `content:` search. Verify numbers and complex layouts against the images; quality depends on the source document and the agent's tools.

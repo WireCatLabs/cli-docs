@@ -34,7 +34,7 @@ La lista completa de comandos para grupos se encuentra [a continuación](#что
 
 ## Trabajar con un agente
 
-Un agente de IA (como Claude Code, Codex, Cursor o Gemini CLI) puede realizar estas comprobaciones por usted. Un agente con una terminal necesita [skill max](https://github.com/WireCatLabs/max-cli/blob/v0.43.0/README.md#навык-для-агентов-с-терминалом); agente en una aplicación sin terminal - [servidor MCP](./mcp.md). A continuación se muestra su solicitud, el comando del agente y el resultado.
+Un agente de IA (como Claude Code, Codex, Cursor o Gemini CLI) puede realizar estas comprobaciones por usted. Un agente con una terminal necesita [skill max](https://github.com/WireCatLabs/max-cli/blob/v0.43.1/README.md#навык-для-агентов-с-терминалом); agente en una aplicación sin terminal - [servidor MCP](./mcp.md). A continuación se muestra su solicitud, el comando del agente y el resultado.
 
 <a id="la-mañana-del-administrador-quién-espera-respuesta" />
 
