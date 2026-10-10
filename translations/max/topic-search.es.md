@@ -2,42 +2,126 @@
 title: "Búsqueda por tema"
 ---
 
-`max conversations` encuentra una conversación por su tema. Úsalo cuando recuerdas el asunto pero no las palabras: «¿dónde hablamos de alquilar un piso?» encuentra una conversación que dice «apartamento», «arrendamiento» y «fianza». Para palabras exactas, personas, fechas y archivos, usa [buscar mensajes](./search.md).
+<a id="qué-es-una-conversación" />
+<a id="construir-vectorizar-buscar" />
+<a id="para-agentes" />
+<a id="что-такое-разговор" />
+<a id="построить-посчитать-векторы-искать" />
+<a id="для-агентов" />
 
-No es el campo de búsqueda `topic:`, que limita los resultados a un hilo de conversación. Aquí una conversación es lo que `max` identifica por sí mismo, en cualquier chat.
+Recuerdas que discutiste algo en el chat, pero no recuerdas con qué palabras. Una búsqueda por tema encuentra dicha discusión por tema. Pregunte "¿dónde hablamos sobre alquilar un apartamento?" - y encontrará una conversación en la que estaban "alquiler", "depósito" y "arrendadora", aunque nadie escribió las palabras "alquilar un apartamento". También funciona entre idiomas: una pregunta en ruso se discute en inglés o español.
 
-La búsqueda usa los mensajes que `max` ya ha guardado. Por defecto, el grafo y los vectores se construyen en tu equipo; un servicio externo se elige explícitamente. Descarga antes el historial: `max store fetch <чат>` ([archivo local](./archive.md)).
+Después de leer esta página, puede preparar su chat para búsquedas de temas, hacer preguntas con sus propias palabras, leer los resultados y comprender cuándo es mejor realizar una búsqueda de palabras normal. La búsqueda de temas solo utiliza mensajes que `max` ya ha guardado en esta computadora, así que primero descargue el historial: `max store fetch <чат>` ([descargar historial de chat](./archive.md#скачать-историю)).
 
-## Qué es una conversación
+Términos de esta página:
 
-En un grupo activo hay varias conversaciones a la vez y sus mensajes se entremezclan. `max` los separa usando los mensajes guardados, sin consultar a MAX ni usar IA:
+- **Conversación**: discusión dentro de un chat. En un grupo activo, los mensajes de varias discusiones se intercalan. `max` las separa en listas de mensajes relacionados, del más antiguo al reciente.
+- **Fragmento**: parte de una conversación de unos 1200 caracteres. Las largas se dividen para que cada parte trate un tema.
+- **Vector**: números que representan el significado. Textos del mismo tema tienen vectores cercanos aunque cambien palabras o idioma.
+- **Modelo de búsqueda**: programa que transforma texto en vectores. Por defecto funciona en tu ordenador.
 
-- una respuesta pertenece al mensaje al que responde;
-- un mensaje que menciona a alguien, por @usuario o por nombre, va con el mensaje reciente de esa persona;
-- el siguiente mensaje de una persona, en pocos minutos, continúa el anterior.
+La búsqueda por tema no es un campo `topic:` [búsqueda de mensajes](./search.md). `topic:` deja un hilo de discusión. La conversación aquí es la que se encuentra `max`, en cualquier chat.
 
-Cada conversación es una lista de mensajes, del más antiguo al más reciente. Puede saltarse los mensajes intermedios que pertenecen a otras conversaciones. Las reglas hacen una estimación; pueden partir una conversación en dos o unir dos. Tu propio agente de IA puede enlazar lo que las reglas dejan abierto ([más abajo](#связать-сообщения-поможет-ваш-агент)).
+## ¿Qué se puede hacer?
 
-## Construir, vectorizar, buscar
+|Tarea|Comando|
+|---|---|
+|Encuentre una discusión sobre un tema, en un chat o en todos los preparados| `max search conversations "<вопрос>"` |
+|Ver conversaciones de chat, las nuevas en la parte superior| `max conversations list --chat <чат>` |
+|Leer una conversación de principio a fin| `max conversations show <id>` |
+|Abrir toda la conversación que contiene un mensaje.| `max conversations show <чат> <сообщение>` |
+|Encuentra otras conversaciones sobre lo mismo en todos los chats| `max conversations related <чат> <сообщение>` |
+|Limitar el resultado a una persona, punto o palabra| `max search conversations "<вопрос>" --filter '<запрос>'` |
+|Descubra qué está desactualizado y póngase al día| `max conversations status`, `max search conversations "<вопрос>" --refresh` |
+|Pídale a su agente de IA que vincule mensajes con mayor precisión| `max skill show link-conversations` |
+
+## ¿Buscar por tema o buscar por palabra?
+
+| |[Búsqueda por palabras](./search.md) (`max search messages`)|Buscar por tema (`max search conversations`)|
+|---|---|---|
+|¿Qué recuerdas?|palabras exactas, nombre, fecha, archivo|justo lo que se discutio|
+|lo que encuentra|mensajes individuales con tus palabras|conversaciones completas sobre tu pregunta|
+|Otras palabras sobre lo mismo|no: “apartamento” no encontrará “vivienda”|Sí|
+|Otros idiomas|No|sí, el modelo predeterminado tiene alrededor de 100 idiomas|
+|Condiciones exactas (remitente, fecha, archivo, enlace)|sí, todo el [lenguaje de consulta](./query-language.md)|sí, a través de `--filter`|
+|Preparación|descargar historia|historial de descargas, luego `build` y `embed`|
+|Se refiere a MAX|sí, al buscar en un chat con nombre|no, solo esta computadora lo lee|
+
+Búsqueda de palabras: cuando recuerda una palabra, número, nombre o archivo. Busque por tema: cuando recuerde el tema, pero no el texto, cuando la discusión se extienda a muchos mensajes cortos o cuando haya escrito en otro idioma. Si no está seguro, comience buscando por tema: también busca sus palabras, por lo que las conversaciones con ellas terminarán en la parte superior.
+
+## Pruébalo
+
+Prepara el chat una vez y luego haz tantas preguntas como quieras.
+
+**Su solicitud al agente de IA:**
+
+> En el Club de lectura, busca dónde hablamos para encontrarnos en otro lugar. Muestra la conversación.
+
+**Qué sucede paso a paso:**
 
 ```sh
-max conversations build --chat "Книжный клуб"   # найти разговоры; ещё раз — после того, как скачано больше
-max models text download e5-small               # один раз: 135 МБ, общая папка с tg
-max conversations embed --chat "Книжный клуб"   # продолжает с места, где остановился
-max search conversations "где встречаемся" --chat "Книжный клуб"
-max search conversations "аренда квартиры"      # во всех построенных чатах
+max store fetch "Книжный клуб"                  # 1. скачать историю, если её ещё нет
+max conversations build --chat "Книжный клуб"   # 2. разделить чат на разговоры
+max models text download e5-small               # 3. один раз: скачать модель, 135 МБ, общая с tg
+max conversations embed --chat "Книжный клуб"   # 4. посчитать вектор каждого куска
+max search conversations "где встречаемся" --chat "Книжный клуб"   # 5. спросить
+max conversations show 91                       # 6. прочитать найденный разговор
 ```
 
-1. **Build** identifica las conversaciones del chat. Un nuevo `build` sustituye al anterior: toma el número de conversación de un `list` reciente, en vez de conservarlo.
-2. **Embed** convierte cada conversación, o cada fragmento de una larga, en un *vector*: números que representan el significado del texto. Los textos sobre el mismo tema tienen vectores parecidos, aunque cambien las palabras o el idioma.
-3. **Search** convierte tu pregunta en un vector y encuentra las conversaciones más cercanas. También busca las palabras de la pregunta y coloca más arriba las conversaciones encontradas por ambos métodos. Cada resultado indica cómo se encontró: `"by": ["meaning"]` (por significado), `["words"]` (por palabras), o ambos.
+Los pasos 2 a 4 se realizan en su computadora y no se accede a MAX. `embed` continúa donde lo dejó. Las siguientes preguntas sólo necesitan el paso 5; cuándo repetir los pasos 2 y 4 se indica en la sección [Frescura](#свежесть).
 
-Sin un modelo descargado, la búsqueda sigue funcionando y encuentra conversaciones por palabras; la respuesta indica `"meaning": "unavailable"`. No se examina un chat que nunca se haya construido: ejecuta antes `build`.
+**Resultado de ejemplo** (ficticio):
 
-La pregunta sigue siendo texto normal. `--filter 'from:me date:7d'` limita por separado las conversaciones con una consulta estricta: al menos un mensaje debe cumplir toda la condición. Por defecto solo se busca en la cuenta activa; `--source
-personal|bots|all|<провайдер>` amplía el alcance explícitamente. Los resultados incluyen su origen y un localizador `msg:`. `--timezone` elige la zona horaria del calendario. `--filter` y `--source` no se pueden combinar con `--refresh`: construye e indexa antes los chats correspondientes. Con `e5-small` local, una coincidencia por significado exige una similitud coseno superior a 0,80; las coincidencias por palabras se mantienen. `--sync-first` descarga mensajes nuevos, mientras que `--refresh` construye el grafo y los vectores localmente.
+```text
+0.874  91  2026-09-14 18:02–18:40  23 messages · 4 people · from message 4180  (messages 4185–4192)  msg:max/500/7/4185
+0.851  64  2026-08-02 10:15–10:31  9 messages · 3 people · from message 3302  (messages 3302–3310)  msg:max/500/7/3302
+```
+
+Lo que encuentras es una pista, no una respuesta: abre la conversación y lee los mensajes antes de confiar en ella.
+
+## Cómo funciona
+
+Hay tres etapas para buscar por tema. Los dos primeros preparan el chat una vez; el tercero se realiza para cada pregunta.
+
+### 1. Compilación: dividir el chat en conversaciones
+
+`max conversations build` lee los mensajes de chat guardados del antiguo al nuevo y para cada uno decide qué mensaje anterior continúa. No se utiliza AI, el comando no accede a MAX. Las conexiones se toman en este orden:
+
+1. **Respuestas de MAX.** Un mensaje enviado como respuesta enlaza con el mensaje respondido.
+2. **Relaciones del agente**, si le pediste que conectara los mensajes ([más abajo](#связать-сообщения-поможет-ваш-агент)).
+3. **Menciones.** El mensaje enlaza con el último de la persona mencionada mediante `@username`, una mención del servicio o un nombre al principio seguido de dos puntos o coma (`anna: согласна`). Se revisan hasta 50 mensajes anteriores.
+4. **La misma persona vuelve a escribir.** Enlaza con su mensaje anterior si llegó hace menos de 5 minutos y está entre los últimos 10.
+
+Un mensaje sin conexión inicia una nueva conversación. Una conversación puede omitir mensajes entre sí si son de otras conversaciones. Las reglas se adivinan: pueden dividir una discusión en dos o unir dos en una. El nuevo `build` reemplaza al anterior, así que tome el número de conversación del nuevo `list` y no lo almacene.
+
+### 2. Incrustar: convierte cada pieza en un vector
+
+`max conversations embed` corta cada conversación en partes de unos 1200 caracteres, a lo largo de los límites de los mensajes. Cada línea del fragmento es "remitente: texto". Un mensaje más largo que una pieza se divide en partes superpuestas para que el modelo lea el mensaje largo completo, y no solo el principio. Los mensajes sin texto no añaden nada. Luego, el modelo convierte cada pieza en un vector y `max` lo almacena. El texto de la pieza en sí no se guarda por segunda vez, sólo el vector y la huella digital, lo que muestra que el texto ha cambiado.
+
+### 3. Búsqueda: por significado y por palabras al mismo tiempo
+
+`max search conversations` busca su pregunta de dos maneras y combina los resultados:
+
+- **Por significado.** Convierte también la pregunta en un vector, lo compara con los fragmentos y puntúa cada conversación por el más cercano. Con `e5-small`, exige similitud superior a 0,80 en una escala donde 1 es significado idéntico.
+- **Por palabras.** Busca cada palabra de la pregunta. Con tres letras o más también encuentra palabras que empiezan por ella (`встреч` encuentra «встреча»). No corrige erratas.
+
+Una conversación encontrada usando ambos métodos tiene un valor más alto que una conversación encontrada usando un método. Cada resultado dice cómo se encontró: `"by": ["meaning"]` (por significado), `["words"]` (por palabras) o ambos. Sin el modelo descargado, la búsqueda aún funciona, solo por palabras, y luego la respuesta es `"meaning": "unavailable"`. No se visualiza un chat que nunca se ha construido: primero `build`.
+
+**¿Por qué esto encuentra más que una búsqueda de palabras?** una búsqueda de palabras necesita la misma palabra en el mensaje. La búsqueda por significado compara de qué tratan los textos y lee un fragmento de conversación, no solo un mensaje. Por lo tanto, “¿dónde nos encontramos” puede encontrarse en una discusión en la que uno pregunta “¿la biblioteca o un café?” y otro respondió “el café de la esquina es más tranquilo”. La mitad por palabras evita que pierdas nombres exactos y palabras raras.
+
+El aspecto técnico (reglas, piezas, vectores y orden de resultados) en la página [cómo funciona la búsqueda](https://wirecat.dev/ru/docs/search-architecture).
 
 ## Leer lo encontrado
+
+En la terminal, cada resultado es una línea:
+
+- evaluación de similitud, o `—`, si se encuentra únicamente mediante palabras;
+- el número de la conversación, cuándo empezó y terminó, cuántos mensajes y personas, su primer mensaje;
+- `(messages 4185–4192)` - la pieza que mejor coincida (o el mensaje, si lo encontraste sólo por palabras): empieza a leer desde allí;
+- enlace al mensaje (`msg:…`), aceptado por `max messages show` y `max messages context`;
+- `stale`, si el texto fue modificado después de calcular el vector: la puntuación es para el texto antiguo.
+
+Con `--json` en la respuesta también están `meaning` (`searched` o `unavailable`), `model` y `readiness`: qué chats se vieron por significado, cuáles solo por palabras, cuáles están desactualizados y cuáles nunca se construyeron. Si la búsqueda está limitada por algo, stderr nombra los chats y el comando que lo arreglará, por ejemplo `conversations embed --chat <чат>`.
 
 ```sh
 max conversations list --chat "Книжный клуб" --since-time 7d
@@ -47,7 +131,54 @@ max conversations related "Книжный клуб" 204    # другие раз
 max messages links "Книжный клуб" 204           # почему сообщение там, где оно есть
 ```
 
-`related` usa los vectores que guardó `embed` y no ejecuta ningún modelo, así que responde rápido. Un resultado de búsqueda es una pista, no una respuesta: abre la conversación y lee los mensajes antes de fiarte de él.
+`related` toma los vectores que guardó `embed` y no ejecuta el modelo, por lo que responde rápidamente. Esta es una búsqueda únicamente de significado.
+
+## Ejemplos
+
+**Recuerda el tema, no las palabras.**
+
+```sh
+max search conversations "кто берёт еду на пикник"
+```
+
+La búsqueda se realiza en todos los chats preparados. Puede encontrar una conversación en la que escribieron "Tomaré sándwiches" y "Bori toma unas copas"; una búsqueda por palabras no la encontraría.
+
+**Discutido en otro idioma.**
+
+```sh
+max search conversations "аренда квартиры" --chat "Valencia expats"
+```
+
+Con el modelo predeterminado, esto también ocurre en español, sobre “piso”.
+
+**Restringido por persona y período.** `--filter` acepta estricto [lenguaje de consulta](./query-language.md). Una conversación es adecuada si al menos uno de sus mensajes cumple todas las condiciones. Todavía se busca el significado de la pregunta misma.
+
+```sh
+max search conversations "бюджет поездки" --filter 'from:"Алиса Тестова" date:30d'
+```
+
+```sh
+max search conversations "условия договора" --filter 'has:file' --timezone Europe/Madrid
+```
+
+**Comienza con un mensaje.** Encontraste un mensaje usando una búsqueda de palabras y quieres todo lo demás sobre este tema:
+
+```sh
+max search messages '"вернули залог"' --chat "Valencia expats"
+max conversations related "Valencia expats" 5120
+```
+
+**Busca también en chats de bots.** Por defecto, la búsqueda de temas se realiza en la cuenta actual. `--source personal`, `bots`, `all` o el nombre del servicio de mensajería amplía el alcance; luego cada resultado dice de qué cuenta proviene.
+
+```sh
+max search conversations "задержка доставки" --source all
+```
+
+**Descargar mensajes nuevos antes de preguntar.** `--sync-first` descarga primero los mensajes nuevos, dentro del chat, la hora y la cantidad de mensajes, como la búsqueda de mensajes.
+
+```sh
+max search conversations "где встречаемся" --chat "Книжный клуб" --sync-first
+```
 
 ## Mantenerlo al día
 
@@ -60,34 +191,37 @@ max conversations embed                          # все построенные
 max search conversations "аренда квартиры" --refresh   # сначала догнать, потом искать
 ```
 
-`status` cuenta, para cada chat construido, los mensajes que `build` aún no ha visto (nuevos, editados o eliminados), los fragmentos con vectores actuales, obsoletos o ausentes y los grupos nunca construidos. Si cambian las reglas en una versión nueva, `status` y `max store check` identifican los chats construidos con reglas anteriores: vuelve a construirlos. Sin `--chat`, `build`, `embed` y `search --refresh` procesan como máximo 20 chats (`--max-chats`) y calculan como máximo 2000 fragmentos (`--max-chunks`) por ejecución; repite para continuar. Nunca descargan un modelo.
+`status` cuenta para cada mensaje de chat creado que `build` aún no ha visto (nuevo, modificado, eliminado), piezas con un vector actual, desactualizado o faltante, y cuántos grupos nunca se han creado. Sin `--chat`, los comandos `build`, `embed` y `search --refresh` no toman más de 20 chats a la vez (`--max-chats`) y no cuentan más de 2000 piezas (`--max-chunks`); ejecutar de nuevo para continuar. No descargan el modelo. `--refresh` no se puede combinar con `--filter` y `--source`: primero cree y cuente los chats necesarios.
 
-Un resultado marcado con `"stale": true` procede de un texto que se editó después de vectorizarlo: su puntuación corresponde al texto antiguo. Cuando se elimina un mensaje, su texto también sale de los vectores.
+Cuando las reglas cambian en la nueva versión, `status` y `max store check` llaman a los chats creados según los antiguos; constrúyanlos nuevamente.
+
+Cuando se elimina un mensaje, su texto también desaparece de los vectores.
+
+`max store fetch <чат> --catch-up` puede inmediatamente después de la descarga crear conversaciones de chat y calcular vectores ([descargar el historial de chat](./archive.md#скачать-историю)).
 
 ## Deja que tu agente de IA enlace mensajes
 
-Las reglas no ven las conexiones que solo se entienden por su significado. Puede añadirlas tu propio agente de IA, el que ya usas con `max`:
+Las reglas no ven conexiones que sean comprensibles sólo por el significado. Su propio agente de IA puede agregarlos (por ejemplo, Claude Code, Codex, Cursor o Gemini CLI):
 
 ```sh
 max skill show link-conversations                     # инструкция для агента
 max conversations batches status --chat "Книжный клуб"   # сколько сообщений и пачек, сколько текста
 ```
 
-El agente lee las instrucciones, te dice cuánto texto leerá y espera tu consentimiento. Después lee el chat por lotes (`max conversations batches next`), decide a qué mensaje anterior responde cada uno y guarda la respuesta (`max conversations links add`). El siguiente `build` la tiene en cuenta. Tienen prioridad las respuestas de MAX, después las conexiones del agente y, por último, las reglas. `max conversations links clear --chat "Книжный клуб"` elimina las respuestas del agente. En este proceso con agente, `max` no llama por sí mismo a un modelo.
+El agente lee instrucciones, estima cuánto texto procesará y espera tu aprobación. Lee lotes (`max conversations batches next`), decide a qué mensaje anterior responde cada uno y guarda los enlaces (`max conversations links add`). El siguiente `build` los incorpora después de las respuestas de MAX y antes de las reglas. `max conversations links clear --chat "Книжный клуб"` los elimina; reconstruye después el chat. En este flujo, `max` no llama a un modelo directamente. El permiso `conversations.links` permite guardar enlaces.
 
-El `build` normal usa reglas y conexiones guardadas. `max conversations build --chat <чат> --analyze` envía lotes limitados al servicio compatible con OpenAI configurado o a Anthropic. Hace falta un `--chat` explícito. Antes del primer envío, la orden muestra el volumen, la dirección y el límite de tokens, y solicita consentimiento; este se guarda para esa cuenta, chat y servicio seleccionado hasta que se revoque. Por defecto hay 50 mensajes por lote y una reserva máxima de 100 000 tokens; `--yes` da consentimiento en scripts. `max conversations consents list` enumera los consentimientos; `consents revoke --chat
-<чат>` los revoca. El análisis integrado solo está disponible en CLI; las claves no se escriben en la configuración.
+`max` puede enviar él mismo los paquetes al servicio de modelos. Normal `build` utiliza reglas y conexiones guardadas; `max conversations build --chat <чат> --analyze` transfiere paquetes limitados a un servicio personalizado compatible con OpenAI o Anthropic. Se necesita un `--chat` explícito. Antes de la primera transferencia, el comando muestra el volumen, la dirección y el límite de tokens y solicita consentimiento; se guarda para la cuenta, el chat y el servicio seleccionado hasta su revocación. De forma predeterminada, el paquete es de 50 mensajes (`--size`), el límite de reserva es de 100.000 tokens por ejecución (`--max-tokens`); `--yes` da consentimiento en los guiones. `max conversations consents list` muestra su consentimiento, `consents revoke --chat <чат>` los retira. El análisis integrado sólo está disponible desde la línea de comandos, no a través de MCP; las claves no se escriben en el archivo de configuración.
 
 ## Privacidad y coste
 
-Por defecto nada sale de tu equipo. El modelo se ejecuta aquí, y un modelo solo se descarga cuando lo pides:
+De forma predeterminada, nada sale de la computadora. El modelo funciona aquí y se descarga solo con su comando:
 
 ```sh
 max models text list                             # модели и какие скачаны
 max models text download embeddinggemma --accept-terms
 ```
 
-`e5-small` es el predeterminado: pequeño y rápido, con unos 100 idiomas. `embeddinggemma` encuentra más pero es unas siete veces más lento, y solo se descarga con `--accept-terms`, porque está sujeto a las condiciones de Gemma de Google. Los vectores de dos modelos nunca se mezclan: busca con el modelo con el que vectorizaste.
+`e5-small` es el predeterminado: pequeño, rápido y con unos 100 idiomas. `embeddinggemma` encuentra más, pero es unas siete veces más lento y requiere `--accept-terms` para aceptar las condiciones de Google Gemma. No se mezclan sus vectores: busca con el modelo usado para calcularlos. stderr indica los chats calculados solo con otro modelo.
 
 En un portátil reciente, `e5-small` vectoriza unos 30 fragmentos por segundo; un grupo de 100 000 mensajes tarda algo más de 20 minutos, una sola vez. Las ejecuciones siguientes vectorizan solo lo que ha cambiado.
 
@@ -99,8 +233,9 @@ max conversations embed --chat "Книжный клуб" --provider openai
 max search conversations "аренда квартиры" --provider openai
 ```
 
-El texto de las conversaciones del chat se envía entonces a ese servicio, y cada búsqueda le envía tu pregunta. Antes de enviar nada, `embed` indica el número de fragmentos, el máximo de tokens y el coste máximo, y espera tu consentimiento (`--yes` en scripts; `--max-tokens` fija un límite). `--base-url` admite cualquier servidor con la API de vectores de OpenAI (`/v1/embeddings`), como Ollama o LM Studio en tu equipo, junto con `--model` y `--dims`. `max models text key remove openai` elimina la clave.
+Luego, el texto de las conversaciones de chat va a este servicio, y cada búsqueda le envía su pregunta. Antes de enviar algo, `embed` indica el número de piezas, el mayor número de tokens y el precio más alto y espera "sí" (`--yes` en los scripts; `--max-tokens` establece el límite). `--base-url` acepta cualquier servidor con OpenAI Vectors API (`/v1/embeddings`), como Ollama o LM Studio en su computadora, junto con `--model` y `--dims`. `max models text key remove openai` olvida la clave. La configuración de vectores externos también afecta la búsqueda que realiza su agente a través de MCP: sus preguntas también van a este servicio.
 
-## Para agentes
+## Más
 
-En MCP, `max_read` (`command: "conversations list"`), `max_read` (`command: "conversations show"`), `max_read` (`command: "search conversations"`), `max_read` (`command: "conversations related"`) y `max_read` (`command: "conversations status"`) leen el índice construido; `max_write` (`command: "conversations refresh"`) lo actualiza en este ordenador. Mediante MCP, el agente obtiene las instrucciones `link-conversations`, estima el trabajo con `max_read` (`command: "conversations batches status"`) y espera el consentimiento del propietario para ese chat. Después lee `max_read` (`command: "conversations batches next"`), guarda las respuestas mediante `max_write` (`command: "conversations links add"`) y reconstruye el grafo mediante `max_write` (`command: "conversations build"`). `max_write` (`command: "conversations links clear"`) elimina las respuestas del agente; después también hay que reconstruir el grafo. Las operaciones de escritura requieren `conversations.links`. La configuración de vectores externos también se aplica a la búsqueda MCP: la pregunta se envía al servicio elegido. Consulta los detalles técnicos —reglas, fragmentos, vectores y orden de resultados— en [cómo funciona la búsqueda](https://wirecat.dev/ru/docs/search-architecture).
+- [Buscar mensajes](./search.md) - palabras exactas, personas, fechas y archivos.
+- [Cómo funciona la búsqueda](https://wirecat.dev/ru/docs/search-architecture): el aspecto técnico de las reglas, piezas, vectores y orden de los resultados.

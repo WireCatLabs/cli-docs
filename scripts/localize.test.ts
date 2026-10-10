@@ -18,6 +18,21 @@ describe("released documentation translations", () => {
   const translated =
     '---\ntitle: "Вход"\n---\n\n## Профили\n\nСохраните `TG_PROFILE` и [вход](./sessions.md#profiles).\n\n```sh\ntg work inbox # original comment\n```\n'
 
+  it("translates metadata values without translating the title key used by navigation", () => {
+    const before = '---\ntitle: "Search"\n---\n\nSearch messages.'
+    const after = before.replace('"Search"', '"Búsqueda"').replace("Search messages.", "Busca mensajes.")
+    expect(translationProblems(before, after)).toEqual([])
+    expect(translationProblems(before, after.replace("title:", "título:"))).toContain("Frontmatter keys changed")
+  })
+  it("preserves disclosure tags while translating their labels and ignoring tags inside examples", () => {
+    const before =
+      "<details>\n<summary>More options</summary>\n\nExtra guidance.\n\n</details>\n\n```html\n<div>Example</div>\n```"
+    const after = before.replace("More options", "Más opciones").replace("Extra guidance.", "Más ayuda.")
+    expect(translationProblems(before, after)).toEqual([])
+    expect(translationProblems(before, after.replace("</details>", "</detalles>"))).toContain(
+      "HTML presentation tags changed",
+    )
+  })
   it("retains incoming section links when translated headings get new slugs", () => {
     expect(withOriginalAnchors(original, translated)).toContain('<a id="profiles" />\n\n## Профили')
     expect(translationProblems(original, translated)).toEqual([])

@@ -996,7 +996,6 @@ a private local display name in the selected account
 #### `max contacts alias set`
 
 
-
 **Changes something on this computer only.**
 
 ```sh
@@ -1009,7 +1008,6 @@ max contacts alias set <person> <alias>
 | `alias` | required |  |
 
 #### `max contacts alias rm`
-
 
 
 **Changes something on this computer only.**
@@ -1029,7 +1027,6 @@ your private notes on a stored contact, the same in every account that sees them
 #### `max contacts notes list`
 
 
-
 ```sh
 max contacts notes list <person>
 ```
@@ -1039,7 +1036,6 @@ max contacts notes list <person>
 | `person` | required |  |
 
 #### `max contacts notes show`
-
 
 
 ```sh
@@ -1052,7 +1048,6 @@ max contacts notes show <person> <id>
 | `id` | required |  |
 
 #### `max contacts notes add`
-
 
 
 **Changes something on this computer only.**
@@ -1072,7 +1067,6 @@ max contacts notes add <person> [options]
 #### `max contacts notes edit`
 
 
-
 **Changes something on this computer only.**
 
 ```sh
@@ -1090,7 +1084,6 @@ max contacts notes edit <person> <id> [options]
 | `--revision <number>` | the revision you read before editing. |
 
 #### `max contacts notes remove`
-
 
 
 **Changes something on this computer only.**
@@ -2431,13 +2424,11 @@ remembered analysis permissions for this account's chats and provider endpoints
 #### `max conversations consents list`
 
 
-
 ```sh
 max conversations consents list
 ```
 
 #### `max conversations consents revoke`
-
 
 
 ```sh
@@ -2669,7 +2660,6 @@ cached group/channel descriptions for local automatic tags
 ### `max metadata get`
 
 
-
 ```sh
 max metadata get [options]
 ```
@@ -2679,7 +2669,6 @@ max metadata get [options]
 | `--chat <chat>` | a stored chat. |
 
 ### `max metadata refresh`
-
 
 
 **Changes something on this computer only.**
@@ -3317,7 +3306,7 @@ max replies edit <id> [options]
 
 ### `max replies audience`
 
-show the profile's reply audience, or replace its named fields; testers still limit answers
+show the reply audience, who the rules may answer, or replace its named fields; a new file answers everyone a rule matches
 
 **Changes something on this computer only.**
 
@@ -4329,7 +4318,6 @@ max bot recipients clear
 what this bot sent, edited and deleted from this machine — ids and outcomes, never text
 
 #### `max bot sends list`
-
 
 
 ```sh

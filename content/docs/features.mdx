@@ -3,7 +3,7 @@ title: "Features"
 description: "Choose a useful task: catch up on chats, find agreements, collect files or draft replies."
 ---
 
-The `tg` and `max` command-line tools give your AI assistant access to Telegram and MAX. This page shows which tasks you can ask it to do and helps you choose a ready-made request to try a capability.
+The `tg` and `max` command-line tools give your AI agent access to Telegram and MAX. Choose a task below and copy a request to try it.
 
 The essentials:
 
@@ -51,7 +51,7 @@ Expect a draft and the messages it is based on. If the recipient is ambiguous, c
 | React to messages | `reactions` |
 | Create polls, vote, close your own | `polls` |
 | Turn voice messages into text on your own computer | `messages transcribe` |
-| Get a link to a message | `messages link` |
+| Get a message locator and a messenger link when available | `messages link` |
 | Mark chats as read — only when you ask | `chats mark-read` |
 
 </details>
@@ -66,7 +66,7 @@ Find a person and recover the context of your previous conversations.
 Use tg CLI. Find the designer we discussed last month. Show who recommended them and what we have already agreed.
 ```
 
-Expect a clearly identified contact and supporting messages. Use separate profiles for work and personal accounts; [choosing an account](./profiles.md) explains how.
+Expect a clearly identified person and supporting messages. Use separate profiles for work and personal accounts; [choosing an account](./profiles.md) explains how.
 
 <details>
 <summary>Commands and additional capabilities</summary>
@@ -77,7 +77,7 @@ Expect a clearly identified contact and supporting messages. Use separate profil
 | Create, change and delete chat folders | `chats folders` |
 | Contacts: find, add, rename, block, import | `contacts` |
 | Who someone is, what they wrote, whether the account looks like a bot | `contacts profile`, `context`, `check` |
-| Auto-replies by your rules, to test accounts only | `replies` |
+| Auto-replies by your rules, to the audience you choose | `replies` |
 | Update your profile; see every device logged in, end one | `account` |
 | Several accounts, one *profile* each | `tg work …`, `max work …` |
 
@@ -105,7 +105,7 @@ Expect a list to review. Group changes require the relevant account rights. Mode
 | Join and leave; show or reset the invite link | `chats join`, `leave`, `link` |
 | Add and remove members; make admins and set their rights | `chats members`, `chats admins` |
 | See who joined, left or was removed | `chats events` |
-| Find questions nobody in the group answered | `review --unanswered` |
+| Find questions awaiting your or an administrator’s reply | `review --unanswered` |
 | Change the title, description and settings | `chats update` |
 | Moderation rules: links, invites, forwards, flooding, blocked people | `chats rules`, `chats moderate` |
 | Forum topics: list, search, create, post into a topic — *Telegram* | `topics` |
@@ -124,7 +124,7 @@ Find an older agreement or collect the important unread messages.
 Use tg CLI. Find what we agreed about the project deadline last month. Show the agreement and any later changes.
 ```
 
-Expect the answer, sources and the period checked. Word search also asks the messenger's server, but topic search and counts use saved history; if the period is missing, [download the relevant chats first](./search.md#fetch-the-relevant-chat-history-first).
+Expect the answer, sources and the period checked. By default, Telegram word searches and MAX word searches within one named chat can also query the messenger’s server. Topic search and counts use saved history; if the period is missing, [download the relevant chats first](./search.md#fetch-the-relevant-chat-history-first).
 
 <details>
 <summary>Commands and additional capabilities</summary>
@@ -132,7 +132,7 @@ Expect the answer, sources and the period checked. Word search also asks the mes
 | What you can do | Commands |
 |---|---|
 | Keep a local archive of the chats you choose | `store fetch` |
-| Search by words, sender, date and chat; word search also asks the messenger's server | `search messages` |
+| Search by words, sender, date and chat; server search is available in Telegram and within one named MAX chat | `search messages` |
 | Separate the threads of a busy group by replies and mentions | `conversations` |
 | Export a chat as Markdown or JSON lines; back up the whole archive | `store export`, `store backup` |
 | Unread messages from every chat in one list | `inbox` |
@@ -163,7 +163,8 @@ A bot works with its own token, separate from your personal account.
 | What you can do | Commands |
 |---|---|
 | Every method of the official Bot API — all 185 for Telegram, all 33 for MAX | `bot api` |
-| Send, edit, delete and pin messages; search the bot's messages | `bot messages` |
+| Send, edit, delete and pin messages | `bot messages` |
+| Search messages available to the bot | `bot search messages` |
 | Answer button presses; set the bot's command menu; manage webhooks | `bot callbacks`, `bot commands`, `bot webhooks` |
 | Manage group admins and members | `bot chats admins`, `bot chats members` |
 | Moderate a group by the same rules as your account | `bot chats moderate` |
@@ -177,7 +178,7 @@ Guides: [Full Bot API](./bot-api.mdx) · [Telegram bots](./tg/bot.md) · [MAX bo
 ## Built for agents
 
 - <DocTerm term="skill" lang="en" label="A skill" /> gives your agent instructions for the commands and common tasks.
-  [Connect your AI assistant](./agents.mdx)
+  [Connect your AI agent](./agents.mdx)
 - <DocTerm term="mcp" lang="en" label="An MCP server" /> for Claude Desktop and other clients. It follows the profile’s permissions; choose read-only access or allow the actions needed. Confirmation prompts are controlled by your AI app.
   [MCP](./mcp.mdx)
 - **Predictable output** — every command can return one JSON value, and each kind of failure has
@@ -191,7 +192,7 @@ Guides: [Full Bot API](./bot-api.mdx) · [Telegram bots](./tg/bot.md) · [MAX bo
 - **A recipient list** — the chats this profile may send to.
 - **An hourly limit** on sends, 30 by default.
 - **A send journal** — every send attempt, without the message text.
-- **A profile lock** that keeps an agent on one account.
+- **A profile lock** rejects commands selecting another profile. An agent that can change its environment can remove the lock; see [the control limits](./security.mdx#what-the-guard-cannot-hold).
 
 [What the login allows and how to limit it](./installation.mdx) ·
 [Telegram security](./tg/security.md) · [MAX security](./max/security.md)

@@ -2,9 +2,21 @@
 title: "Automatic replies"
 ---
 
-`max serve` replies according to profile rules. Replies are allowed only to accounts in `testers` and only with `permissions.replies.send allow`. A new file has an empty `testers` list: nobody receives a reply until you add your test account.
+Auto-replies answer MAX messages when you cannot respond yourself, such as “I'll reply in the morning” after working hours. Use this page to create a rule with your text, choose who may receive it and test what it would answer without sending. [Drafts and reply templates](https://wirecat.dev/ru/docs/drafts-and-templates) offers ready-made texts.
 
-See [commands.md](./commands.md#max-replies) for the full reference.
+Terms used below:
+
+- **Rule** — which incoming messages match and whether to reply, open a task or do both.
+- **Template** — reusable reply text with fields such as sender name and time.
+- **Audience** — the people and chats eligible for replies, regardless of what a rule matches.
+- `max serve` — the background process receiving new messages and applying rules.
+
+Who receives the response and when something is sent:
+
+- **Anyone selected by the rules gets a response until you limit the audience.** Reply only to selected people: `max replies audience --reply listed --allow-people …`; exclude someone: `--deny-people` and `--deny-chats`.
+- **Nothing is sent until you enable sending.** Need `permissions.replies.send allow`; `ask` also prohibits sending, because there is no one to ask the background server. The new rule is also disabled until you enable it.
+
+See the [auto-reply command reference](./commands.md#max-replies).
 
 ## Create and enable a rule
 
@@ -15,7 +27,32 @@ max replies edit away --outside 09:00-19:00 --days mon-fri --timezone Europe/Mad
 max replies edit away --per-chat 1/12h --per-person 1/1d
 ```
 
-`add` creates a disabled rule with all current settings. The file `<профиль>.replies.json` is next to the `configFile` shown by `max config show --json`. Add your test account ID to its `testers` list. Rule names contain lowercase letters, digits and hyphens; duplicate IDs are rejected. A rule with action `reply` cannot be enabled without template text. Empty text is allowed for disabled rules and the `task` action.
+`add` creates a disabled rule with all current settings. `<профиль>.replies.json` lives beside `configFile` from `max config show --json`. By default, rules may reply to anyone they match. To restrict replies to selected people, enter comma-separated MAX ids; `max contacts show <имя> --json` returns the person's `id`:
+
+```sh
+max replies audience --reply listed --allow-people 1000001
+```
+
+To reply to everyone except some people or chats, leave `--reply all` and ban them:
+
+```sh
+max replies audience --deny-people 1000002 --deny-chats 1000003
+```
+
+After the first command in the file:
+
+```json
+{
+  "audience": {
+    "reply": "listed",
+    "allow": { "people": ["1000001"], "chats": [] },
+    "deny": { "people": [], "chats": [] }
+  },
+  "rules": [ … ]
+}
+```
+
+Rule names are lowercase letters, numbers, and hyphens; repeated id is rejected. A rule with action `reply` cannot be enabled without template text. For a disabled rule and action `task`, empty text is acceptable.
 
 ```sh
 max replies test --since-time 7d
@@ -24,7 +61,7 @@ max config set permissions.replies.send allow
 max serve
 ```
 
-Preview reads only saved messages. Without send permission, the server stays silent; `ask` also forbids sending because a background server has nobody to ask. `max replies off away` disables one rule.
+`replies test` reads only saved messages: does not send anything, does not change anything and does not connect to MAX. Without permission to send, the server is silent. `max replies off away` disables one rule.
 
 ## Edit conditions and audience
 
@@ -40,26 +77,28 @@ Preview reads only saved messages. Without send permission, the server stays sil
 | Limits | `--per-chat`, `--per-person`, for example `1/12h` |
 | Working hours | `--outside`, `--days`, `--timezone`, `--no-hours` |
 
-The first time you set a schedule, supply the time window, days and time zone together; later you can change one field. `--no-hours` clears the window and cannot be combined with its fields. Before writing, the original file and the complete result are validated. An invalid edit does not overwrite the file; other rules, `testers`, their order and reply history are preserved.
+The first working-hours edit requires the window, days and time zone together; later edits can change one field. `--no-hours` clears the window and cannot combine with its fields. The original file and full result are validated before writing. Invalid edits leave the file intact; other rules, audience, order and reply history are preserved.
 
-`max replies audience` shows the file’s shared audience. `--reply all` allows any audience; `--reply listed` allows only the allowlists. `--allow-people`, `--allow-chats`, `--deny-people` and `--deny-chats` replace their respective lists. Denial takes precedence over allowance. With `listed` and an empty allowlist, nobody receives replies; the command warns about this. The `testers` restriction applies on top of the audience. The `task` action opens a local task and is not limited by the reply audience.
+`max replies audience` shows the file-wide audience. A new file uses `--reply all`: anyone matched by a rule is eligible. `--reply listed` restricts replies to allowed people and chats. `--allow-people`, `--allow-chats`, `--deny-people` and `--deny-chats` replace their respective lists. Denials override allowances. An empty `listed` audience receives nothing; the command warns. A `task` action opens a local task and is not restricted by reply audience.
 
-## Liquid templates and models
+## Liquid templates and AI replies
+
+Examples of response texts for common cases and when it is better to leave a draft are on the [Drafts and response templates](https://wirecat.dev/ru/docs/drafts-and-templates) page.
 
 Available variables are `sender.firstName`, `sender.name`, `chat.title`, `chat.kind` and `now` in the rule’s time zone, or UTC when no time window is set. Filters are supported, for example `{{ now | date: "%H:%M" }}`. Incoming message text is not a template variable. Unknown variables and filters are rejected; `default` handles missing values. Templates cannot read files, and time, memory and output length are limited.
 
-A model can change only the `ai` block; text outside it remains your text with ordinary substitutions:
+AI-generated text can change only the `ai` block. Everything outside remains your template with ordinary substitutions:
 
 ```liquid
 Спасибо, {{ sender.firstName | default: "вам" }}!
 {% ai %}Коротко подтвердите получение; я отвечу завтра.{% else %}Отвечу завтра.{% endai %}
 ```
 
-The block body after substitutions is the instruction. Incoming text is sent to the model separately as data. The model’s response is not executed as Liquid; an overlong response or a complete repeat of the incoming text is rejected. If no provider is configured, consent is absent or the call fails, `else` is used. Without it, the reply is skipped with an explanation.
+After substitutions, the block body is the instruction. Incoming text goes separately to the AI provider as data. The generated response is never executed as Liquid; overlong text and an exact repeat of the incoming message are rejected. Without a configured provider, consent or a successful call, `else` supplies the reply. Without a fallback, sending is skipped with a reason.
 
 Set `models.replies.provider` (`openai` or `anthropic`), the exact model ID in `models.replies.model`, and `models.replies.baseUrl` if needed. Shared values come from `models.default`; `provider off` disables the assignment. `config set` and `config unset` accept these keys; `config show` shows each field’s source. The older `analysisProvider`, `analysisModel` and `analysisBaseUrl` still work for analysis. Store the key with `max models text key set`; for a custom server, the key name is its host with port, and the public provider key is not sent there.
 
-Model consent is separate from permission to send replies:
+Consent to share data with an AI provider is separate from permission to send replies:
 
 ```sh
 max replies consents show
@@ -73,9 +112,10 @@ max replies consents revoke
 
 ## What rules leave alone
 
-- Your own messages, channels, bots and messages sent on behalf of a chat.
-- Edited messages, already processed messages and messages that arrived before `serve` started.
-- In groups, messages that neither mention you nor reply to you, unless the rule names the group in `chats`.
+- Those whom the audience does not allow.
+- Your messages, channels, bots, messages on behalf of the chat.
+- Changed message, already processed message and what came before run `serve`.
+- In a group - a message without mentioning you or replying to you, if the rule does not name the group in `chats`.
 
 `perChat` and `perPerson` limits are required. Two autoresponders stop at the first limit.
 

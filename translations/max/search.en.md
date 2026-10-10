@@ -2,10 +2,32 @@
 title: "Search"
 ---
 
-Every search is under one group of commands, `max search`. When you don't know where something was
-written, start with `search all`: it searches the messages, mail and notes kept on this computer in one
-answer, and says what each hit is — a message (`msg:…`) or a note (`note:…`). Searching marks nothing
-read.
+<a id="для-скриптов-и-агентов" />
+<a id="подготовка-файлов-и-архива" />
+
+Search helps you recover a message, agreement, file or old code without scrolling through chats. This page explains searching data saved on this computer—messenger messages and mail/notes imported by [memo](https://github.com/leemour/cli-memo)—and searching the MAX server.
+
+After reading it, you will be able to find messages by words, people, chats, dates, files and links, save the search and run it again, count matches and distinguish between a real “not found” and a gap in the saved history. The search does not mark anything as read.
+
+Terms used below:
+
+- **Local archive** — the database saving messages read or downloaded by `max` ([local archive](./archive.md)). Most searches read only this database.
+- **Query** — words and conditions such as `from:` and `date:`. Your AI agent can construct it; see the [query-language reference](./query-language.md).
+- **Coverage** (`coverage`) — which saved chats/messages were searchable and which chats were never downloaded or are out of date.
+
+## What you can do
+
+The entire search is in one command group, `max search`. If you don't know where it was written, start with `search all`.
+
+| Task | Command |
+|---|---|
+| Search immediately in messages, mail and notes | `max search all '<запрос>'` |
+| Search only messenger messages, in one chat - and on the MAX server | `max search messages '<запрос>'` |
+| Search only mail that was imported by memo | `max search mail '<запрос>'` |
+| Search notes from memo or folder | `max search notes '<запрос>'` |
+| Find a discussion by what it was about | `max search conversations '<вопрос>'` ([search by topic](./topic-search.md)) |
+| Count matches by chats, people, days or hours | `max stats messages show '<запрос>'` |
+| Save search and run it again | `max searches create`, `max search messages --saved <имя>` |
 
 ```sh
 max search all 'договор аренды'                 # сообщения, почта и заметки, лучшее первым
@@ -31,17 +53,12 @@ max search notes 'бюджет' --type internal       # только замет�
 max search conversations 'переезд на дачу'      # разговоры, близкие по смыслу
 ```
 
-`search messages` never returns mail, and `search mail` never returns messenger messages; only
-`search all` covers both. `--type` narrows `search messages` to text, voice or files
-(`text|voice|file`) and `search notes` to notes written in memo or imported from a folder
-(`internal|file`). When a query uses a field mail or notes don't have (`chat:`, `from:`), `search all`
-leaves them out and says so.
+`search all` labels each match as a message (`msg:…`) or note (`note:…`). `search messages` excludes mail; `search mail` excludes messenger messages. Only `search all` combines them. `--type` selects text, voice or files (`text|voice|file`) for messages, or memo/folder notes for `search notes` (`internal|file`). If a field such as `chat:` or `from:` does not apply to mail or notes, `search all` skips that kind and reports it.
 
-Mail and notes reach the archive through [memo](https://github.com/leemour/cli-memo): `memo mail import`
-and `memo import`. Without them, `search all` searches messages only.
+Mail and notes are archived via memo: `memo mail import` and `memo import`. Without them, `search all` only looks for messages.
 
-The rest of this page is about searching messages, `max search messages`. It reads the local archive and
-asks MAX's own search too ([below](#поиск-на-сервере-max---backend)).
+The rest of this page covers `max search messages`. Searches within one chat can also query the MAX server ([below](#поиск-на-сервере-max---backend)).
+
 ## Try a focused search
 
 Start with a phrase and one chat. This example searches saved history without asking the messenger.
@@ -80,7 +97,7 @@ max store fetch --all --background     # последние 90 дней кажд
 max store jobs show                    # сколько уже скачано
 ```
 
-Use `--since-time 365d` to go further back, or `max store fetch Друзья` for one chat ([archive](./archive.md)). Each run downloads at most 1200 messages per chat by default; repeat the command to continue. After that, `max serve` keeps the archive up to date.
+By default, a run downloads at most 1,200 messages per chat; repeat to continue. Use `--since-time 365d` for older history or `max store fetch Друзья` for one chat ([download history](./archive.md#скачать-историю)). `max serve` then keeps the archive current.
 
 Every search reports what it searched. If the archive could contain more history or no results were found, one line in the terminal shows how many messages and chats were searched, how many chats have never been downloaded or are out of date, and the command to fix that:
 
@@ -88,15 +105,7 @@ Every search reports what it searched. If the archive could contain more history
 searched 12,430 messages in 37 chats — 5 never fetched; `max store fetch --all --background` fetches them
 ```
 
-With `--json`, the same information appears in `coverage`: `messages`, `chats`, up to ten chats in `attention`, and `next`. If an agent finds nothing while `next` is set, it should run that command (or ask you) before saying the message does not exist.
-
-This page covers everyday searches. Three more pages go further:
-
-- [Topic search](./topic-search.md) — find a discussion by what it was about, when you do not remember
-  its words.
-- [Query language](./query-language.md) — every field, operator, limit and the JSON answer.
-- [How search works](https://wirecat.dev/ru/docs/search-architecture) — the technical page: the word
-  index, the conversation graph, vectors and how results are ranked.
+With `--json` the same in `coverage`: `messages`, `chats`, up to ten chats in `attention` and `next`. If nothing is found and `next` is specified, run this command (or ask the agent) before deciding there is no message.
 
 Put the query in single quotes, so the shell leaves its quotes and brackets alone. The names below are
 examples; use your own chats and people.
@@ -125,26 +134,6 @@ max search messages 'квартир*'                   # все слова, к�
 
 All adjacent query words must appear in the message. Search matches word forms: `квартира` finds «квартиру». Quotes preserve word order but also allow other forms. For an exact form, use `exact:квартира` or add `--exact` for words without an explicit field. An explicit `text:` still matches word forms. Case, stress marks, `ё` and `е` are treated alike. Typos are not corrected automatically. Word forms depend on the archive language settings.
 
-## Search the MAX server: `--backend`
-
-```sh
-max search messages 'счёт' --chat "Книжный клуб"                    # архив и сервер MAX
-```
-
-```sh
-max search messages 'счёт' --chat "Книжный клуб" --backend server   # только то, что нашёл сервер
-```
-
-```sh
-max search messages 'счёт' --backend archive                        # только архив
-```
-
-The MAX server searches only one chat. When a query specifies one chat (`--chat` or `chat:`) and contains words, `max` queries both the server and the archive by default (`--backend both`). Without a specified chat, it does not query the server; results come from the archive.
-
-The server also matches word prefixes, but not other word forms: `книгу` will not find «книга». `max` therefore treats its results as candidates: it saves them in the archive and checks them against your query using the archive rules. `exact:`, `-слово`, quotes and result ordering work as they do without the server, and messages are not duplicated. `max` waits at most 5 seconds for the server (`--server-time`, up to 60 seconds) and marks nothing as read.
-
-With `--json`, each message has a `source` (`archive`, `server` or `both`), and the `server` block reports what the server returned. When searching both sources, an unavailable server or a read-only profile still allows archive results. An explicit `--backend server` fails if the profile does not allow server search. The required permission is `messages.server-search`.
-
 ## People and chats
 
 ```sh
@@ -171,7 +160,7 @@ max search messages библиотека --chat "Книжный клуб"   # т
 max search messages 'паспорт kind:private'       # только личные переписки
 ```
 
-`kind:` accepts `private` (private chats), `group`, `channel`, `saved` (Saved Messages) and `bot`.
+`kind:` accepts `private` (Personal), `group`, `channel`, `saved` (Favorites) and `bot`. Search in all archive accounts - `--source all`.
 
 ## Dates
 
@@ -226,6 +215,56 @@ max search messages 'has:link AND "github.com"'  # ссылка на сайт
 
 A file is found by name and size even when the message has no text. `filename:` compares the whole name, ignoring case, accents and `ё`. Sizes use KB, MB and GB of 1,024. MAX does not report the file type, so search by extension: `filename:*.pdf`, rather than `mime:`. `has:` also accepts `attachment`, `video`, `audio`, `voice`, `sticker`, `contact`, `location` and `poll`. A link counts whether it appears in the text or only in a link card.
 
+## Text inside files
+
+`content:` searches for text inside attachments: PDF, Word document, scan. First, the text needs to be extracted into the archive - this is done by `max` or your agent. More information about the files - [attachments](./attachments.md).
+
+```sh
+max attachments extract --chat "Книжный клуб" --download --output-dir ./files
+```
+
+```sh
+max search messages 'content:договор'
+```
+
+```sh
+max attachments list --chat "Книжный клуб" --needs-text
+```
+
+```sh
+max attachments text set "Книжный клуб" 204 --text-file ./scan.txt
+```
+
+The `attachments extract` reads plain text files, DOCX and PDF with a text layer on this computer. `--download` requires `--output-dir`; without them, extraction reads already downloaded files. If there are several attachments in the message, indicate one through `--attachment`, starting with 1.
+
+Local extraction also reads UTF-16 with BOM, confidently detected legacy encodings, ODT, ODS, XLSX, PPTX and EPUB, without AI or additional packages. It preserves sheet/slide/chapter order and saved cell values but does not calculate formulas or read images. Your agent should check ambiguous encoding and convert it when needed. Original files stay unchanged. ODT, ODS, XLSX, PPTX and EPUB are limited to 1,000 archive parts, 50 MiB unpacked and 10 MiB per XML/HTML text part. Corrupt or incomplete reads are not indexed as complete. Failed reads can be retried; agent text and previous successful text are protected.
+
+For PDF you need the optional package `unpdf`, for DOCX - `mammoth`, installed in the same place as `max`. For a global npm install: `npm install -g unpdf mammoth`. If the package is not present, command reports this; the text can be recorded by an agent.
+
+**Photos and scans** lack a text layer. Your agent normally uses its own OCR or vision tools, then saves text with `attachments text set`. `attachments list --needs-text` returns local paths, message links and attachment numbers, but no text. Verify by searching `content:`. A remote agent needs the actual file: a server path does not transfer it. [Attachments show](./attachments.md) can transfer saved bytes in chunks with hash verification; transfer does not recognise or index text. Save the result with `attachments text set`.
+
+**Bulk scan recognition** can use an AI provider you explicitly select. Configure a vision-capable provider/model in `models.ocr` and save the key through `models text key set`. Replace `your-vision-model` with the desired model id.
+
+```sh
+max config set models.ocr.provider openai
+```
+
+```sh
+max config set models.ocr.model your-vision-model
+```
+
+```sh
+max models text key set openai
+```
+
+```sh
+max attachments extract --chat "Книжный клуб" --ocr --concurrency 4 --limit 100 --json
+```
+
+`--ocr` sends images to the chosen service; otherwise no AI call occurs. Parallelism is 1–8, default 4; file limit is 1–500, default 100. Continue with the returned `cursor`. PDF scans require optional `unpdf` and `@napi-rs/canvas`, with at most 20 pages per document. Text-layer pages stay local. File hashes and the selected model allow reuse. Agent text and prior indexed text survive errors or cancellation. Check `failed` and each file status; provider rate limits stop further calls in that run. `--offline` cannot combine with `--ocr`.
+
+**Files already saved.** `max attachments extract --chat <чат> --from-dir ./files` reads one folder without subfolders. It requires one uniquely matching source file or a complete set with downloader filenames. Do not combine `--from-dir` with `--download` or `--output-dir`. `max messages download <чат> <id> --extract` reads only files downloaded in this run; `--all --extract` does this for the entire run. Hashes detect changed files; agent text stays protected. Bounded MCP extraction returns a continuation `cursor` and file information, not text.
+
 ## Passwords, codes and cards
 
 ```sh
@@ -272,6 +311,10 @@ Group and channel tags can be generated automatically from their title, username
 
 ```sh
 max metadata refresh --chat "Книжный клуб"   # прочитать описание чата из MAX (сам чат не меняется)
+```
+
+```sh
+max metadata refresh --only-missing          # все сохранённые группы и каналы, у которых описание ещё не читалось
 ```
 
 ```sh
@@ -346,71 +389,56 @@ max stats messages show --by hour                     # все сохранён�
 
 `stats messages show` counts each message that `search messages` would find with the same query once. `--by chat` (the default) and `--by sender` sort the highest counts first; `--by day` and `--by hour` use chronological order. If some chats are only partly saved, the counts are lower bounds, and stderr reports how many chats are incomplete.
 
+## Search the MAX server: `--backend`
+
+The MAX server searches only one chat. When a query specifies one chat (`--chat` or `chat:`) and contains words, `max` queries both the server and the archive by default (`--backend both`). Without a specified chat, it does not query the server; results come from the archive.
+
+```sh
+max search messages 'счёт' --chat "Книжный клуб"                    # архив и сервер MAX
+```
+
+```sh
+max search messages 'счёт' --chat "Книжный клуб" --backend server   # только то, что нашёл сервер
+```
+
+```sh
+max search messages 'счёт' --backend archive                        # только архив
+```
+
+The server also matches word prefixes, but not other word forms: `книгу` will not find «книга». `max` therefore treats its results as candidates: it saves them in the archive and checks them against your query using the archive rules. `exact:`, `-слово`, quotes and result ordering work as they do without the server, and messages are not duplicated. `max` waits at most 5 seconds for the server (`--server-time`, up to 60 seconds) and marks nothing as read.
+
+With `--json`, each message has a `source` (`archive`, `server` or `both`), and the `server` block reports what the server returned. When searching both sources, an unavailable server or a read-only profile still allows archive results. An explicit `--backend server` fails if the profile does not allow server search. The required permission is `messages.server-search`.
+
+## First download new: `--sync-first`
+
+```sh
+max search messages 'счёт' --chat "Книжный клуб" --sync-first
+```
+
+`--sync-first` first downloads new messages without marking anything as read: no more than 5 chats, 500 messages and 30 seconds. The limits change `--max-chats`, `--max-messages`, `--sync-time`. If the download failed or ended early, you still get the result from the archive - with a mark about outdated coverage and information about the download.
+
+## Messages around the find
+
+`--newest` orders by time rather than proximity, and `--context 2` shows two messages before and after each one found (default 2 in terminal and 0 in other modes).
+
+`--thread` replaces chronological neighbours with saved reply chains around each match, including replies to it. It also applies to `messages context`. Default limits are 8 hops, 50 messages, 65,536 bytes and one day either side, adjustable through `--thread-hops`, `--thread-messages`, `--thread-bytes` and `--thread-within`. Without links, chronological context is used. Stale links are flagged and not followed. `messages context` with `--offline` reads saved data only.
+
+## Result in JSON
+
+A terminal shows a message feed. `--json` returns one object with messages and search scope; `--jsonl` emits only messages, one per line. See [response fields](./query-language.md#ответ).
+
 ## When nothing is found
 
 An empty answer means “not in the archive you searched”, not “never sent”. `max store status` shows what is stored; `max store fetch` adds history. With `--json`, the answer reports which chats were searched and how complete they are, even without matches. If `max` asks for `max store migrate`, the word index is still being built; searches without words (`has:file`, `date:today`) already work.
 
-To search every account in the store, add `--source all`. `--newest` orders by time instead of by
-relevance, and `--context 2` shows two messages around each one found.
+**Gaps in history.** `max store gaps plan <чат>` locally identifies gaps between saved ranges. Missing message ids and quiet periods alone do not prove missing history; archive edges remain `unknown`. Review the plan, then `max store gaps repair <чат> --fingerprint <хеш>` downloads gaps. Defaults: 5 gaps, 500 messages, 30 seconds; adjust through `--max-gaps`, `--limit`, `--repair-time`, `--page-size` and `--pause`. A repeated run checks remaining gaps and never deletes a message just because MAX omitted it. Ambiguous same-time pages remain incomplete. `--background` starts a job managed through `store jobs show`, `store jobs list` and `store jobs cancel`. Repair requires `store.gaps.repair` and read permission; planning never connects. MCP discovers commands through `max_tools_search`, reads plans/jobs through `max_read`, and repairs through `max_write`.
 
-## Scripts and agents
+**Prepare topic search while downloading.** `max store fetch <чат> --catch-up` builds discussions and local vectors for only that chat after download ([topic search](./topic-search.md)). It is off by default; `searchCatchUp: true` enables it and `--no-catch-up` disables it for one run. Limits: `--catch-up-chunks 500 --catch-up-messages 10000 --catch-up-time 30s`. It neither downloads recognition files automatically nor calls a remote service. `prepared` reports preparation separately; downloaded history survives regardless.
 
-`--json` returns one object containing messages and search coverage; `--jsonl` returns only messages, one per line. In MCP, `max_read` (`command: "search all"` or `"search messages"`) and `max_read` (`command: "stats messages show"`) accept the same queries. The `tags` and `searches` commands, through `max_read`/`max_write`, manage tags and saved searches. See the [query language](./query-language.md) for response fields, the older `--language legacy` mode and `--regex`.
+## Next steps
 
-Searching for words in one specified chat queries both the archive and the MAX server by default; without a specified chat, it queries only the archive. `--backend archive` keeps the search local. `--sync-first` downloads new messages first, without marking anything as read: at most 5 chats, 500 messages and 30 seconds. Adjust these limits with `--max-chats`, `--max-messages` and `--sync-time`. An incomplete or failed update preserves local results and reports outdated coverage and the update outcome.
-
-`content:договор` searches words in the retained text of an attachment. Extraction supports plain-text files, DOCX and PDFs with text layers. Your agent reads photos and scans and saves their text through `attachments text set`. For multiple attachments, specify `--attachment`, numbered from 1.
-
-By default, the agent reads photos and scans with its own OCR or vision tools, then writes the text to this index. `attachments list --needs-text` returns the saved path, message locator and attachment number. Verify the entry with a `content:` search. If the agent runs remotely, a path on the MCP server does not give it the file: it needs access to the file to read it.
-
-```sh
-max attachments extract --chat "Книжный клуб" --download --output-dir ./files
-```
-
-```sh
-max search messages 'content:договор'
-```
-
-```sh
-max attachments list --chat "Книжный клуб" --needs-text
-```
-
-```sh
-max attachments text set "Книжный клуб" 204 --text-file ./scan.txt
-```
-
-`--download` requires `--output-dir`; without them extraction reads retained files. `list` exposes retained paths and text status, not text contents.
-
-For bulk processing, you can explicitly choose an API through the shared model gateway. Set the provider and an available vision model in `models.ocr`; store the key with the usual `models text key set` command. In the example, replace `your-vision-model` with your model name.
-
-```sh
-max config set models.ocr.provider openai
-```
-
-```sh
-max config set models.ocr.model your-vision-model
-```
-
-```sh
-max models text key set openai
-```
-
-```sh
-max attachments extract --chat "Книжный клуб" --ocr --concurrency 4 --limit 100 --json
-```
-
-`--ocr` sends images to the selected API; without it, no model is called. Concurrency can be set to 1–8 requests, with a default of 4. The file limit is 1–500, with a default of 100; `cursor` continues a bounded scan. Scanned PDFs require the optional `unpdf` and `@napi-rs/canvas` packages; at most 20 pages per document are processed. Pages with a text layer are processed locally. Repeated runs use the file hash and selected model. Agent-written text and the previous index are preserved if OCR fails or is cancelled. Check `failed` and individual file statuses; once a provider limit is reached, this run stops making new API requests. `--offline` cannot be combined with `--ocr`.
-
-`--thread` follows the stored reply graph; in `messages context` it replaces chronological neighbours. Defaults are
-8 hops, 50 messages, 65,536 bytes and one day around each hit. Change them with `--thread-hops`,
-`--thread-messages`, `--thread-bytes`, `--thread-within`. Without a graph it falls back to chronological context;
-stale links are marked and not traversed.
-
-PDF extraction needs the optional package `unpdf`; DOCX needs `mammoth`, installed alongside `max`. For a global npm installation: `npm install -g unpdf mammoth`. If a package is missing, the command reports it; an agent can supply the text instead.
-## Prepare files and the archive
-
-`max attachments extract --chat <чат> --from-dir ./files` reads files from the specified folder without traversing other folders. It requires an unambiguous match to the original file or a complete set of files named by the downloader. Do not combine `--from-dir` with `--download` or `--output-dir`. `max messages download <чат> <id> --extract` immediately extracts text only from the files it downloaded; `--all --extract` does the same for every file downloaded in that run. Through `max_write`, `attachments extract` returns processing results without file text; use `cursor` to continue a bounded scan. Changed file bytes are detected by hash, and agent-written text is preserved.
-
-After downloading, `max store fetch <чат> --catch-up` prepares the graph and local vectors for that chat only. Preparation is disabled by default; the profile setting `searchCatchUp: true` enables it, and `--no-catch-up` disables it for one run. Limits: `--catch-up-chunks 500 --catch-up-messages 10000 --catch-up-time 30s`. The model is not downloaded automatically, and no remote provider is called. The `prepared` field separately reports whether preparation finished: downloaded history is preserved even when preparation is incomplete.
-
-`max store gaps plan <чат>` shows gaps between recorded coverage ranges locally. Missing message numbers and quiet periods alone do not mean history is missing. Unknown archive boundaries remain in `unknown`. After reviewing the plan, `max store gaps repair <чат> --fingerprint <хеш>` explicitly downloads internal gaps. Defaults are at most 5 gaps, 500 messages and 30 seconds; adjust them with `--max-gaps`, `--limit`, `--repair-time`, `--page-size` and `--pause`. Rerunning checks remaining gaps without deleting messages merely because they are absent from the response. Ambiguous pages whose messages share a timestamp remain incomplete. `--background` starts a job that you can inspect or cancel with `store jobs show`, `store jobs list` and `store jobs cancel`. In MCP, find these commands with `max_tools_search`, then run the plan and read jobs through `max_read`, and perform repairs through `max_write`. Repair requires the `store.gaps.repair` permission and permission to read messages; planning does not connect to the server.
+- [Topic search](./topic-search.md) — find a discussion by what it was about, when you do not remember
+  its words.
+- [Query language](./query-language.md) — every field, operator, limit and the JSON answer.
+- [How search works](https://wirecat.dev/ru/docs/search-architecture) — the technical page: the word
+  index, the conversation graph, vectors and how results are ranked.

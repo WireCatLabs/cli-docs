@@ -102,9 +102,7 @@ interpreta la evidencia mostrada.
 
 ## Aplica el proceso a tu archivo
 
-Después de la [instalación](./installation.mdx), el inicio de sesión y una descarga acotada del
-historial ([Telegram](./tg/archive.md), [MAX](./max/archive.md)), pide a tu agente. Sustituye el
-chat y las frases por los de tu tarea:
+Pide al agente un resumen de tus chats guardados. Sustituye el chat y las frases por los de tu tarea:
 
 ```text prompt
 Usa tg CLI. Prepara un resumen para mi reunión sobre el proyecto Atlas. Busca en el chat "Atlas project" el plazo confirmado y la factura final, y lee los mensajes alrededor de cada coincidencia. Separa decisiones confirmadas de propuestas y preguntas sin respuesta. Cita los mensajes de origen, enumera los chats y el periodo revisados, y explica qué no demuestra la evidencia. Solo lee: no envíes nada ni marques mensajes como leídos.
@@ -123,7 +121,7 @@ max search messages 'chat:"Atlas project" AND ("deadline confirmed" OR "final in
 ```
 
 `search messages` lee tu historial guardado. Como la consulta nombra un chat, también consulta la
-búsqueda propia del mensajero, que puede encontrar mensajes aún no descargados; añade
+búsqueda propia del servicio de mensajería, que puede encontrar mensajes aún no descargados; añade
 `--backend archive` para buscar solo en el historial guardado
 ([Telegram](./tg/search.md#consulta-también-telegram---backend),
 [MAX](./max/search.md#búsqueda-en-el-servidor-de-max---backend)). Iniciar sesión no descarga todo

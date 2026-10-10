@@ -3,7 +3,7 @@ title: "Searching"
 description: "Find a message, person, chat or file using words, word forms, typos or meaning."
 ---
 
-This page helps you find messages, agreements, people, chats and documents in Telegram or MAX. You will learn what you can search, how to choose a search method and how to check the source messages, even when you remember only part of a phrase or its subject.
+Find messages, agreements, people, chats and documents across your chats. Learn what you can search, how to choose a search method and how to check the source messages, even when you remember only part of a phrase or its subject.
 
 **What you can search:**
 
@@ -14,18 +14,15 @@ This page helps you find messages, agreements, people, chats and documents in Te
 - **Links and attachments** — for example, messages with a link, PDF or voice note; voice transcripts become searchable once their text is saved.
 
 Content search supports text files, Word and PDFs with text layers. Scans and photos need text
-recognition first; ask your agent to do that. Details: [Telegram files](./tg/search.md#for-scripts-and-agents)
-and [MAX](./max/search.md#для-скриптов-и-агентов). See [People](./people.md) for finding a person.
+recognition first; ask your agent to do that. Details: [Telegram files](./tg/search.md#text-inside-files)
+and [MAX](./max/search.md#текст-внутри-файлов). See [People](./people.md) for finding a person.
 
 For word forms, typo handling and meaning-based search, see [How search works](./search-architecture.mdx).
 
 ## Fetch the relevant chat history first
 
 Before searching older messages, download the conversations for the period you need. Logging
-in does not download all history. Word search also asks the messenger's own search: `tg` asks
-Telegram on every word search, and `max` asks the MAX server when you name one chat. Everything
-else reads only the messages saved on your computer: topic search, counts, file filters and
-searches across all MAX chats. If that conversation is missing, an empty result does not mean the
+in does not download all history. Word search can also query the messenger’s server by default: `tg` asks Telegram for word candidates, and `max` asks MAX when you name one chat. `--backend archive` keeps word searches local. Topic search, counts and MAX searches without one named chat use saved messages. File filters are evaluated against the local archive, even when a word search also retrieves server candidates. If that conversation is missing, an empty result does not mean the
 message was never sent.
 
 Ask your agent to fetch the selected chats or run your messenger's command. Replace `Project`
@@ -41,7 +38,7 @@ max store fetch "Project" --since-time 30d --limit 1000
 
 If the limit is reached, that month's history may still be incomplete. Instructions for fetching,
 resuming and checking history: [Telegram](./tg/archive.md#fetch-a-chats-history) and
-[MAX](./max/archive.md#downloading-history).
+[MAX](./max/archive.md#скачать-историю).
 
 ## Search everything at once
 
@@ -87,7 +84,7 @@ max search messages 'exact:"final invoice"'
 
 </details>
 
-Results link back to messages. Ask your assistant to show nearby messages before interpreting
+Results link back to messages. Ask your agent to show nearby messages before interpreting
 an agreement: one line may miss a correction or a later answer.
 
 ## When you don't remember the exact wording
@@ -97,12 +94,11 @@ Message search offers several approaches:
 - **A word or exact phrase:** when you remember the wording. Use `exact:` for literal matching.
 - **Part of a word:** `flat*` finds words starting with that part, such as “flat” and “flats”.
 - **Word forms and shared stems:** “invoice” can find “invoices”. Which forms match depends on the archive's language settings.
-- **Typos:** the default search does not correct typos. Ask your agent to allow misspellings: it can switch to the older query mode, which corrects them, or search by the start of the word.
+- **Typos:** the default search does not correct typos. Ask your agent to allow misspellings: it can select `--language legacy` for typo-tolerant discovery, or search by the start of the word.
 - **Meaning:** when you remember the subject, such as “the renovation deadline we agreed”, rather than the words. This needs a prepared discussion index.
 
 Word forms, exact matching, indexes and meaning-based search: **[How search works](./search-architecture.mdx)**.
-Detailed syntax and modes: [Telegram](./tg/query-language.md#the-older-modes) and
-[MAX](./max/query-language.md#прежние-режимы). These modes describe message search;
+Detailed syntax: [Telegram](./tg/query-language.md) and [MAX](./max/query-language.md). The `--language legacy` option is listed in the command references for [Telegram](./tg/commands.md#tg-search-messages) and [MAX](./max/commands.md#max-search-messages). These modes describe message search;
 chat-title and person-name lookup can behave differently.
 
 ## Narrow the conversation
@@ -131,7 +127,7 @@ You can also filter by person, date or attachments. The [Telegram](./tg/search.m
 
 ## If a result is missing
 
-Word search also asks Telegram's server, or MAX's server when you name a chat. Topic search,
+By default, word search can also ask Telegram’s server, or MAX’s server when you name one chat. Topic search,
 counts and filters such as files or links need saved history: fetch the missing period, then
 search again. A word search is different from a search by meaning; try both when you remember
 only roughly how something was said. Check dates, chat scope and whether history is complete.

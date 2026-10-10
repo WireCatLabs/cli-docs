@@ -2,7 +2,23 @@
 title: "Mensajes de voz: reconocimiento de voz"
 ---
 
-Esta guía te ayuda a convertir los mensajes de voz de MAX en texto: elige un modelo para el idioma, descárgalo una vez y transcribe un mensaje o los mensajes de voz de unos resultados concretos. El reconocimiento se ejecuta en tu ordenador; las grabaciones no se envían a un modelo de IA externo.
+Esta página te ayuda cuando recibes una nota de voz en MAX y tú o tu agente de IA preferís leerla. Aprenderás a elegir un modelo adecuado al idioma, descargarlo una vez y convertir en texto un mensaje de voz o los de una lista.
+
+Términos que encontrarás más abajo:
+
+- **Modelo de voz**: archivo que convierte audio en texto. Se descarga una vez y después funciona sin internet.
+- **Transcripción local**: el modelo funciona en tu ordenador. La grabación no sale a un servicio externo ni al proveedor del agente y no consume límites de API.
+- **Transcripción**: texto del mensaje de voz. `max` lo guarda para no volver a procesar la misma grabación.
+
+## Qué puedes hacer
+
+| Tarea | Comando |
+| --- | --- |
+| Ver modelos, tamaños y descargas | `max models audio list` |
+| Descargar un modelo | `max models audio download <модель>` |
+| Transcribir una nota de voz | `max messages transcribe <чат> <сообщение>` |
+| Transcribir notas de la lista mostrada | `--transcribe` en `messages list` e `inbox` |
+| Elegir el modelo para siguientes ejecuciones | `max config set --defaults transcribeModel <модель>` |
 
 ## Inicio rápido
 
@@ -12,30 +28,30 @@ max models audio download gigaam-v3
 max messages transcribe "Учебная группа" 204 --json
 ```
 
-La CLI obtiene la grabación de MAX, cierra la conexión y ejecuta el modelo local. Los modelos no se descargan automáticamente al leer un chat: ejecuta primero `models audio download`. Los archivos descargados se reutilizan y se comprueban mediante su suma de verificación durante la instalación.
+`max` obtiene el audio de MAX, cierra la conexión y después ejecuta el modelo. No lo descarga automáticamente al leer un chat: ejecuta antes `models audio download`. Reutiliza los archivos descargados y comprueba su suma de verificación al instalarlos.
 
 ## Elegir un modelo
 
-| Modelo | Uso recomendado |
+| Modelo | Uso |
 | --- | --- |
-| `gigaam-v3` | Voz en ruso; modelo predeterminado |
-| `gigaam-v3-ctc` | Otra variante del modelo para ruso; la transcripción y el formato pueden variar |
-| `parakeet-v3` | Voz en varios idiomas, incluidos español, inglés y ruso; requiere más espacio y memoria |
+| `gigaam-v3` | Voz en ruso; predeterminado |
+| `gigaam-v3-ctc` | Otra variante rusa; el texto y su formato pueden variar |
+| `parakeet-v3` | Varios idiomas, incluidos español, inglés y ruso; necesita más disco y memoria |
 
-Consulta `models audio list` para ver el tamaño exacto y el estado de instalación. Elige un modelo compatible con el idioma de la grabación. Para una ejecución:
+`models audio list` muestra el tamaño exacto y las descargas. Elige un modelo que conozca el idioma de la grabación. Para una ejecución:
 
 ```sh
 max models audio download parakeet-v3
 max messages transcribe "Учебная группа" 204 --model parakeet-v3 --json
 ```
 
-Para las siguientes ejecuciones:
+Para todas las ejecuciones siguientes:
 
 ```sh
 max config set --defaults transcribeModel parakeet-v3
 ```
 
-`models audio` gestiona los modelos de voz. `models text` gestiona los modelos de búsqueda y las claves de API; es otro grupo. El ajuste de imágenes `models.ocr` no cambia el reconocimiento de voz.
+No confundas los grupos: `models audio` son modelos de voz; `models text` son modelos de búsqueda y claves de API. `models.ocr` para imágenes no afecta a la voz.
 
 ## Varios mensajes
 
@@ -44,20 +60,20 @@ max messages list "Учебная группа" --limit 20 --transcribe --json
 max inbox --transcribe --json
 ```
 
-`--transcribe` procesa los mensajes de voz de los resultados mostrados que todavía no tienen texto, en lugar de todo el historial del chat. Primero descarga las grabaciones, después cierra la conexión y realiza el reconocimiento. Si lo necesitas, usa `--model` para elegir el modelo de una ejecución.
+`--transcribe` solo procesa las notas sin texto de la lista mostrada, no todo el historial. Descarga el audio, cierra la conexión y ejecuta el modelo. `--model` elige otro para una ejecución.
 
-El texto se guarda bajo tu cuenta en la base de datos local compartida. Lo utilizan la vista de mensajes, la bandeja de entrada, el resumen y MCP. Al volver a transcribir el mismo mensaje con el mismo modelo, se puede reutilizar el resultado guardado. En JSON, el texto aparece en `transcript`; las grabaciones fallidas se enumeran en `unheard` y el motivo también aparece en stderr.
+El texto se guarda bajo tu cuenta en el archivo local común. Lo ven las vistas de mensajes, la bandeja de entrada, el resumen y el servidor MCP. Si ese mensaje ya se transcribió con el mismo modelo, `max` puede devolver el texto guardado. En JSON aparece en `transcript`. Las notas no reconocidas aparecen en `unheard` y el motivo se escribe en stderr.
 
 ## Formatos y límites
 
-Este flujo admite los mensajes de voz que MAX representa como `kind: voice`. No promete transcribir cualquier MP3/WAV enviado como documento ni extrae automáticamente el habla de los vídeos. Para esos archivos, el agente necesita otras herramientas disponibles, como extracción de la pista de audio, conversión de audio y un modelo de voz adecuado.
+Se transcriben mensajes que MAX identifica como `kind: voice`. Un MP3 o WAV enviado como documento no se transcribe por esta vía, ni se extrae la voz de vídeos. El agente necesita otra herramienta: extraer el audio, convertirlo y ejecutar un modelo de voz adecuado.
 
-Los modelos se guardan en una carpeta compartida por MAX y Telegram; `CLI_COMMON_CACHE_DIR` permite cambiarla. La descarga requiere espacio en disco y el reconocimiento necesita memoria y tiempo de procesador. La velocidad depende de la duración de la grabación, del modelo y del ordenador.
+Los modelos comparten carpeta para MAX y Telegram; `CLI_COMMON_CACHE_DIR` cambia su ubicación. Necesitan disco para guardarse, y memoria y CPU para transcribir. La velocidad depende de la duración, el modelo y el ordenador.
 
 ## Calidad
 
-El idioma, el ruido, varias personas hablando a la vez, la calidad del micrófono, el ritmo del habla, los nombres y los términos especializados afectan al resultado. Un modelo más grande no garantiza mejores resultados para un idioma concreto. Contrasta los números, nombres y acuerdos importantes con el audio. Una transcripción guardada no demuestra que todas las palabras se hayan reconocido correctamente.
+Influyen el idioma, ruido, voces simultáneas, micrófono, ritmo, nombres y términos poco comunes. Un modelo mayor no siempre es mejor para un idioma concreto. Contrasta cifras, nombres y acuerdos importantes con el audio: guardar texto no demuestra que cada palabra sea correcta.
 
-Un agente puede leer la transcripción y ayudar a encontrar errores, pero para verificarla necesita acceso a la grabación y una herramienta de reproducción o reconocimiento. Esto depende de sus herramientas. Los comandos de CLI anteriores no requieren una API externa ni consumen su cuota.
+El agente puede leer la transcripción y detectar errores. Para contrastarla con el audio necesita la grabación y herramientas propias para escucharla o reconocerla; depende del agente.
 
-Los documentos y el OCR de imágenes se explican en la [guía de adjuntos](./attachments.md). Consulta la [guía de API](./external-models.md) para configurar modelos externos.
+El texto de documentos e imágenes se explica en [adjuntos](./attachments.md). Para conectar un modelo externo por API, consulta [modelos externos](./external-models.md).

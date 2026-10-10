@@ -10,7 +10,7 @@ You can use drafts in two ways: review and send them yourself in your messaging 
 
 | | Draft | Template |
 |---|---|---|
-| Who writes the text | your agent prepares a reply; you can edit it | you write reusable text, with an optional part written by an AI agent |
+| Who writes the text | your agent prepares a reply; you can edit it | you write reusable text, with an optional AI-generated part |
 | Who decides to send | you, for this message and chat | the rule, within its audience, permissions and limits |
 | Where you review it | the message box in your messaging app, or your agent chat | the rule's template and its test results |
 
@@ -85,7 +85,7 @@ A reply outside working hours. The hours belong to the rule, not to the template
 Hi {{ sender.firstName | default: "there" }}, it's {{ now | date: "%H:%M" }} here. I answer on weekdays from 9:00 to 19:00.
 ```
 
-A part written by an AI agent, with your own text as a fallback:
+An AI-generated part, with your own text as a fallback:
 
 ```liquid
 Thanks, {{ sender.firstName | default: "there" }}!
@@ -94,21 +94,17 @@ Thanks, {{ sender.firstName | default: "there" }}!
 
 <a id="a-part-written-by-a-model" />
 
-### A part written by an AI agent
+<a id="a-part-written-by-an-ai-agent" />
 
-Choose the AI agent used for auto-replies in your profile's AI settings. The [Telegram settings guide](./tg/replies.md#templates-and-a-model) and [MAX settings guide](./max/replies.md#шаблоны-liquid-и-модель) explain the configuration.
+### AI-generated text
 
-An AI agent may write only what is inside `{% ai %}…{% endai %}`; everything outside it is your text.
-The block's body is an instruction to the agent. The incoming message goes to the agent separately,
-as data, never as part of the instruction. The agent's answer is used as plain text.
+Choose the AI provider and model identifier in your profile's settings. The identifier selects the provider's text-generating component; it does not choose the agent you chat with. The [Telegram settings guide](./tg/replies.md#templates-and-a-model) and [MAX settings guide](./max/replies.md#шаблоны-liquid-и-модель) explain these technical settings.
 
-The text after `{% else %}` is the fallback. It is sent when no agent is set up, when there is no
-consent, when the call fails, or when the agent's answer is refused because it is empty, too long or
-repeats the incoming message. Without an `else`, that message gets no reply and the reason is
-recorded. Blocks cannot be nested.
+Only the text inside `{% ai %}…{% endai %}` is generated; everything outside it is your text. The block's body supplies the instruction. The incoming message goes to the configured AI provider separately as data, never as part of that instruction. The result is used as plain text.
 
-Using an AI agent needs its own consent, separate from the right to send. Consent lets incoming message
-data go to the AI provider you chose, for the whole profile:
+The text after `{% else %}` is the fallback. It is sent when AI processing is not configured, consent is missing, the call fails, or the generated answer is refused because it is empty, too long or repeats the incoming message. Without an `else`, that message gets no reply and the reason is recorded. Blocks cannot be nested.
+
+AI processing needs its own consent, separate from the right to send. Consent permits incoming message data to go to the chosen AI provider for the whole profile:
 
 ```sh
 tg replies consents show
@@ -119,12 +115,8 @@ max replies consents grant
 max replies consents revoke
 ```
 
-`replies consents deny` with a chat ID keeps that chat's messages away from the agent. A new provider
-or endpoint needs consent again. `replies test --ai` sends saved messages to the agent so you can see
-its text; it still sends nothing to the messenger.
+`replies consents deny` with a chat ID keeps that chat's messages away from the AI provider. A new provider or API address needs consent again. `replies test --ai` sends saved messages to the configured provider so you can inspect the generated text; it sends nothing to the messenger.
 
 ## Set it up
 
-To create and test an auto-reply rule, follow
-[Telegram auto-replies](./tg/replies.md) or [MAX auto-replies](./max/replies.md), which cover
-creating a rule, choosing who may receive replies, the agent settings and how to pause everything at once.
+To create and test an auto-reply rule, follow [Telegram auto-replies](./tg/replies.md) or [MAX auto-replies](./max/replies.md). They cover creating a rule, choosing who may receive replies, configuring AI processing and pausing everything at once.

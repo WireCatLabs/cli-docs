@@ -46,7 +46,7 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | How do search and conversation processing work? | `search-architecture.mdx` | Technical explanation | Reconcile playground description; keep source/release boundary |
 | How do I check questions and activity in my group? | `group-admins.md` | Task guide | Start with a request and sources; inspect coverage before changes |
 | How do I save or override settings? | `configuration.mdx` | Configuration guide | Explain when settings matter and how to verify the effective value |
-| What may the assistant change? | `permissions.mdx` | Access guide | Distinguish terminal confirmation, MCP permissions and app approval |
+| What may the agent change? | `permissions.mdx` | Access guide | Distinguish terminal confirmation, MCP permissions and app approval |
 | Which account or bot will run the task? | `profiles.md` | Account selection | Explain named profiles before configuration syntax |
 
 ## Messenger pages

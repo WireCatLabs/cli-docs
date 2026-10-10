@@ -1,9 +1,9 @@
 ---
 title: "Permissions"
-description: "Choose which actions an assistant can perform."
+description: "Choose which actions an agent can perform."
 ---
 
-Choose which actions your assistant may perform: reading messages, sending replies or changing a group. This page helps you set access for the chosen account or bot and check limits before a real task. Permissions belong to <DocTerm term="profile" lang="en" label="a profile" />, a named set of settings for an account or bot; [Profiles](./profiles.md) explains choosing one.
+Choose which actions your agent may perform: reading messages, sending replies or changing a group. This page helps you set access for the chosen account or bot and check limits before a real task. Permissions belong to <DocTerm term="profile" lang="en" label="a profile" />, a named set of settings for an account or bot; [Profiles](./profiles.md) explains choosing one.
 
 ## Choose an access level
 
@@ -11,11 +11,11 @@ Choose which actions your assistant may perform: reading messages, sending repli
 |---|---|
 | `deny` | The action is refused, including reading. |
 | `readonly` | Reading works; changes are refused. |
-| `ask` | A change asks in the terminal. |
+| `ask` | A change requires confirmation in the terminal. |
 | `allow` | The action can run without another question. |
 
 A refusal tells you to check the requested action and settings. It does not mean your account
-connection is broken. Do not ask an assistant to remove a restriction just to finish a task.
+connection is broken. Do not ask an agent to remove a restriction just to finish a task.
 
 ## Allow one action
 
@@ -36,7 +36,7 @@ to `readonly` to refuse sends. Check other exceptions with `config show`.
 
 This controls messages. Other actions, such as reactions or chat administration, have their own
 permission keys. Use the complete read-only profile examples in
-[Telegram configuration](./tg/configuration.md) or [MAX configuration](./max/configuration.md).
+[Telegram’s permission reference](./tg/configuration-reference.md#what-a-profile-may-do) or [MAX’s permission reference](./max/configuration-reference.md#права-доступа).
 
 ## Permissions for a bot
 
@@ -59,11 +59,11 @@ for the commands to manage these controls.
 ## A temporary change for an MCP server
 
 Add `--permission messages.send=allow` to the server startup command to allow sending for that
-process. Saved settings stay the same. Over MCP, `ask` does not require a server form: the app controls
+process. Saved settings stay the same. Over MCP, `ask` does not require a confirmation form on the server: the app controls
 its own approvals and may allow a call without asking again. Use `deny` or `readonly` to refuse changes. [Browser setup](./browser-apps.mdx) explains the full connection.
 
 ## Limits and detailed rules
 
-An assistant that can edit configuration files or run unrestricted terminal commands may be able
+An agent that can edit configuration files or run unrestricted terminal commands may be able
 to change these settings. Read [Security](./security.mdx) before giving that access.
-For nested permissions and exact command keys, see the messenger's configuration reference.
+For nested permissions and exact command keys, see [Telegram](./tg/configuration-reference.md#what-a-profile-may-do) or [MAX](./max/configuration-reference.md#права-доступа).

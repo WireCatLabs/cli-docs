@@ -7,14 +7,12 @@ Da a tu <DocTerm term="agent" lang="es" label="agente de IA" /> acceso a tu cuen
 normales —`¿quién sigue esperando mi respuesta?`, `¿qué acordamos con Marco en septiembre?`— y
 el agente lee tus chats y responde. Como prueba, te muestra los mensajes que ha usado.
 
-Funciona con un programa de terminal (<DocTerm term="cli" lang="es" label="cli" />) para tu mensajero: `tg` para Telegram, `max` para MAX.
-Solo necesitas el de tu mensajero. El CLI se ejecuta en tu ordenador y usa tu propia cuenta. Tu
+Funciona con un programa de terminal (<DocTerm term="cli" lang="es" label="CLI" />) para tu servicio de mensajería: `tg` para Telegram, `max` para MAX.
+Solo necesitas el de tu servicio de mensajería. El CLI se ejecuta en tu ordenador y usa tu propia cuenta. Tu
 agente (Claude Code, Codex, Cursor, Gemini CLI, Hermes y <DocTerm term="supported-agents" lang="es" label="cualquier otro agente" />) lo ejecuta por ti. Tú decides qué puede
 hacer el agente: solo leer, preguntar antes de enviar o enviar a los chats que elijas.
 
-Tus mensajes quedan entre tú y el mensajero. El CLI se conecta directamente con Telegram o MAX,
-guarda su archivo en tu ordenador y no envía nada a WireCat: no hay ningún servicio de WireCat en
-medio. Tu agente solo ve los mensajes que lee para una tarea.
+La herramienta se conecta directamente al servicio de mensajería y guarda su archivo en tu ordenador. No envía mensajes ni datos de acceso a WireCat: no hay ningún servicio de WireCat en medio. El agente recibe los mensajes que lee para la tarea; sus ajustes determinan dónde se procesan.
 
 ## Qué puedes pedir
 
@@ -50,7 +48,7 @@ Redacta una respuesta personal para cada persona que preguntó por el taller.
 
 ## Qué incluye
 
-- **Toda tu cuenta** — mensajes, chats, grupos, contactos, encuestas: lo que haces en la app.
+- **Tareas habituales de tu cuenta** — leer mensajes, trabajar con chats y contactos, responder y usar encuestas. Las acciones disponibles varían entre servicios; las guías explican el alcance de cada herramienta.
 - **Tu historial, con búsqueda sin conexión** — un archivo local de los chats que elijas.
 - **Todos los métodos de la Bot API** — los 185 de Telegram y los 33 de MAX.
 - **Administrar grupos** — revisa la actividad, gestiona miembros y modera grupos donde tengas permisos de administrador.
@@ -66,7 +64,7 @@ Redacta una respuesta personal para cada persona que preguntó por el taller.
 2. **[Probar las primeras tareas](./first-tasks.md)** — copia una petición en tu agente y recibe
    tu primera respuesta.
 
-El <DocTerm term="skill" lang="es" label="skill" /> instalado da al agente instrucciones para usar el mensajero. Los ajustes de tu agente determinan dónde se procesan los mensajes que lee.
+El <DocTerm term="skill" lang="es" label="skill" /> instalado da al agente instrucciones para usar el servicio de mensajería.
 
 Con eso basta para empezar. Más adelante, cuando lo necesites:
 
@@ -77,8 +75,8 @@ Con eso basta para empezar. Más adelante, cuando lo necesites:
 
 ## ¿Telegram o MAX?
 
-Ambos cubren las tareas habituales; la [página de funciones](./features.mdx) explica sus diferencias. Instala el de tu mensajero, o los dos:
+Ambos cubren las tareas habituales; la [página de funciones](./features.mdx) explica sus diferencias. Instala el de tu servicio de mensajería, o los dos:
 [guía de Telegram](./tg/index.md) · [guía de MAX](./max/index.md).
 
 El selector **Telegram / MAX** de la parte superior de cada página te lleva a la misma sección del
-otro mensajero.
+otro servicio de mensajería.

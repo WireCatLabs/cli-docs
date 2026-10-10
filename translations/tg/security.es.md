@@ -2,12 +2,20 @@
 title: "Seguridad: datos guardados y protección de envíos"
 ---
 
-`tg` utiliza tu cuenta real de Telegram. Lo que comparte con todas las herramientas de WireCat (el archivo local, la protección de envíos, lo que un agente puede hacer por MCP, el texto ajeno en tu pantalla y cómo informar de una vulnerabilidad) está en la [página de seguridad común](https://wirecat.dev/en/docs/security). Esta página trata solo lo que añade Telegram: dónde se guarda la sesión, los archivos que solo escribe `tg`, con qué servidores se comunica y qué hacer si la sesión se filtra.
+Lea esta página antes de darle acceso a un agente de IA o un script a su cuenta de Telegram a través de `tg`, o cuando quiera saber qué guarda `tg` en su computadora. Explica dónde se guarda su inicio de sesión, qué escribe `tg` en el disco, con qué servidores habla, qué detiene un envío no deseado y qué hacer si se filtra su inicio de sesión. Al final podrás juzgar lo que podría hacer alguien con acceso a esta computadora, o un agente con acceso a `tg`.
+
+Palabras que utiliza esta página:
+
+- **Sesión**: el archivo que te mantiene conectado a Telegram. Quien la tenga podrá utilizar su cuenta.
+- **Archivo local**: la base de datos de tu ordenador donde `tg` y `max` guardan los mensajes que han leído. Es compartido por ambas herramientas y no está cifrado.
+- **Control de envío**: las comprobaciones por las que pasa cada cambio antes de llegar a Telegram: permisos, la lista de destinatarios permitidos y el límite de envío por hora.
+
+Lo que cada herramienta WireCat tiene en común (el archivo local, el control de envío, lo que un agente puede hacer a través de MCP, el texto de otras personas en su pantalla, cómo informar una vulnerabilidad) se encuentra en la [página de seguridad compartida](https://wirecat.dev/en/docs/security). Esta página cubre lo que solo agrega Telegram.
 
 ## Resumen
 
 - **El archivo de sesión es tu acceso.** Quien pueda leerlo usa tu cuenta, sin contraseña ni código ([más abajo](#where-the-login-lives)).
-- **Ningún comando acepta secretos como argumento:** ni el hash de la aplicación, ni la contraseña 2FA, ni el código de acceso, ni un número de teléfono.
+- **Ningún comando acepta secretos como argumento:** ni el hash de la aplicación, ni la contraseña 2FA, ni el código de inicio de sesión, ni un número de teléfono.
 - **La protección de envíos es la común:** todos los comandos y herramientas MCP comprueban `permissions`, la lista de destinatarios y `sendsPerHour` ([más abajo](#the-send-guard)).
 - **`tg` se comunica con Telegram, npm y my.telegram.org** (a través de tu proxy si configuras uno) y con los servidores de descarga de modelos o los servicios de embeddings y análisis que configures de forma explícita ([más abajo](#what-goes-over-the-network)).
 - **No protege frente a alguien que utilice tu usuario del equipo** ni frente a un agente al que se permite cambiar los ajustes.
@@ -16,11 +24,11 @@ title: "Seguridad: datos guardados y protección de envíos"
 
 | Contenido | Ubicación | Quién puede usarlo |
 |---|---|---|
-| sesión | `sessions/<profile>.session` en el directorio de estado, `0600` en carpeta `0700` | cualquiera que lea el archivo: permite acceder como una contraseña |
+| sesión | `sessions/<profile>.session` en el directorio de estado, `0600` en carpeta `0700` | cualquiera que leal archivo: permite acceder como una contraseña |
 | sesión de historial del bot | `bots/<profile>/mtproto-<bot-id>.session` en el directorio de estado | quien pueda leerla puede usar esa autorización del bot; protégela como la sesión personal |
-| identificador y hash de la aplicación | almacén de claves del sistema; `credentials.json` (`0600`) junto a la configuración si no hay almacén | solo junto con una sesión |
+| identificador y hash de la aplicación | llavero del sistema; `credentials.json` (`0600`) junto a la configuración si no hay almacén | solo junto con una sesión |
 | datos para CI | `TG_API_ID` y `TG_API_HASH` | el proceso que los tenga |
-| contraseña del proxy o secreto de MTProxy | almacén de claves del sistema, o `credentials.json`, uno por perfil y otro para `--defaults`; la configuración guarda la URL sin él | cualquiera que pueda usar el proxy con él |
+| contraseña del proxy o secreto de MTProxy | llavero del sistema, o `credentials.json`, uno por perfil y otro para `--defaults`; la configuración guarda la URL sin él | cualquiera que pueda usar el proxy con él |
 
 La sesión es la clave de autorización de Telegram. Copiar el archivo copia el acceso, sin contraseña ni código. Trátalo como una contraseña: nunca lo subas al repositorio, adjuntes ni pegues.
 
@@ -40,7 +48,7 @@ El archivo local, la configuración, los registros de ejecución, el registro de
 | unidad systemd o agente launchd, solo con `tg server install` | carpeta de unidades del usuario | comando que inicia `serve` | `0644` |
 | copia de seguridad, solo con `tg store backup` | archivo indicado | copia del archivo local completo | `0600` |
 
-Consulta las rutas exactas con `tg doctor` y las carpetas de cada sistema en [instalación](./installation.md#where-files-go).
+Las rutas exactas en esta máquina: `tg doctor`. Las carpetas de cada sistema: [dónde van los archivos](./installation.md#where-files-go).
 
 Si pierdes el equipo, cierra la sesión desde otro dispositivo: Telegram → Ajustes → Dispositivos, y termina la creada por `tg`. Así el archivo de sesión deja de servir.
 
@@ -65,15 +73,12 @@ Los caracteres de control, los saltos de línea en nombres y los títulos de cha
 
 ## Qué pasa por la red
 
-- **Telegram**, por MTProto para comandos de la cuenta personal, incluidos fotos y archivos. Los comandos de bots usan la Bot API por HTTPS; `bot store fetch` usa una sesión MTProto separada del bot para el historial.
-- **npm**, una vez al día en un terminal para comprobar si hay una versión más reciente de `tg`, y al ejecutar `tg upgrade`.
-  `updateCheck` o `TG_NO_UPDATE_CHECK=1` desactiva esta comprobación ([configuration.md](./configuration.md)).
-- **my.telegram.org**, solo durante `tg setup` o `tg session start`: se abre en tu navegador o, con `--app auto`,
-  lo controla `tg`. Una aplicación que `tg` crea allí lleva el título `tg-cli` y usa la página de GitHub de este proyecto como
-  dirección.
-- **Hugging Face y GitHub**, solo al ejecutar `tg models audio download` o `tg models text download`. La voz nunca se envía allí: el modelo local se ejecuta en este equipo.
-- **Los servicios de embeddings configurados** reciben texto de conversaciones de `conversations embed` tras tu consentimiento, y el texto de las consultas de `search conversations` remotas, incluidas las búsquedas por MCP. Los embeddings locales no envían texto.
-- **Los servicios de análisis configurados** reciben lotes limitados de mensajes solo con `conversations build --analyze --chat`, tras un consentimiento limitado a la cuenta, el chat y el proveedor; una construcción normal no envía nada.
+- **Telegram**, a través de MTProto para comandos de cuentas personales, incluidos archivos y fotos. Los comandos de bot utilizan la API de bot HTTPS; `bot store fetch` utiliza una sesión de bot MTProto separada para el historial.
+- **npm**, una vez al día en una terminal, para ver si existe un `tg` más nuevo y en `tg upgrade`.   `updateCheck` o `TG_NO_UPDATE_CHECK=1` lo apaga ([configuración](./configuration.md)).
+- **my.telegram.org**, solo durante `tg setup` o `tg session start`: abierto en su navegador, o, con `--app auto`, controlado por `tg`. Una aplicación que `tg` crea allí se titula `tg-cli` y tiene la página GitHub de este proyecto como dirección.
+- **Hugging Face y GitHub**, solo cuando ejecutas `tg models audio download` o `tg models text download`. Un mensaje de voz nunca llega allí: en esta máquina se ejecuta un modelo local.
+- **Los endpoints de embeddings configurados** reciben texto de conversación de `conversations embed` después del consentimiento y consulta de texto de `search conversations` remoto, incluidas las búsquedas de MCP. Las incrustaciones locales no envían ningún texto.
+- **Los puntos finales de análisis configurados** reciben lotes de mensajes limitados solo con `conversations build --analyze --chat`, después del consentimiento limitado a la cuenta, el chat y el proveedor; La construcción ordinaria no envía nada.
 
 No hay telemetría.
 
@@ -83,25 +88,25 @@ No hay telemetría.
 
 ## Inicio de sesión
 
-`tg setup` y `tg session start` dibujan el QR en la terminal. Queda en el historial visual, pero Telegram lo renueva mientras esperas, por lo que los antiguos no sirven. `--qr-file` lo guarda como PNG legible solo por ti y elimina el archivo al finalizar, funcione o no.
+`tg setup` y `tg session start` dibujan el QR en la terminal. Queda en el historial visual, pero Telegram lo renueva mientras esperas, por lo que los antiguos no sirven. `--qr-file` lo guarda como PNG legible solo por ti y eliminal archivo al finalizar, funcione o no.
 
 `--app auto` rellena my.telegram.org sin navegador: solicita el teléfono y el código que el sitio envía por Telegram, nada más.
 
 Cada inicio añade un dispositivo en Telegram → Ajustes → Dispositivos.
 
+## Cambios de la instalación global
+
+El postinstall global de npm instala la skill incluida en los directorios de agentes del usuario; en Windows añade la carpeta de comandos npm al PATH del usuario y elimina solo el lanzador `tg.ps1` generado por npm para este paquete. Conserva el lanzador `.cmd`. Las instalaciones de proyectos y npx no hacen estos cambios. `TG_INSTALL_AGENT=none` omite la skill. El instalador independiente de Windows hace la misma preparación aunque los scripts npm estén desactivados. No cambia la política de ejecución, el PATH del equipo, las credenciales ni el estado de la cuenta. La instalación nunca inicia sesión ni lee chats.
+
 ## Si se filtra la sesión
 
-1. En Telegram → Ajustes → Dispositivos, termina la sesión creada por `tg`. También puedes ejecutar `tg session end` en este equipo: termina la sesión en Telegram y elimina el archivo.
+1. En Telegram → Ajustes → Dispositivos, termina la sesión creada por `tg`. También puedes ejecutar `tg session end` en este equipo: termina la sesión en Telegram y eliminal archivo.
 2. Inicia sesión de nuevo: `tg session start`.
 
 ## Siguiente paso
 
-- [Página de seguridad común](https://wirecat.dev/en/docs/security): el archivo local, la protección de envíos, agentes y MCP, e informar de una vulnerabilidad.
-- [Diagnóstico](./diagnostics.md): qué se registra exactamente y qué nunca se registra.
-- [Sesiones](./sessions.md): aplicación, almacén de claves, perfiles y cierre de sesión.
-- [MCP](./mcp.md): permisos del agente y efecto de niveles y opciones.
-- [Configuración](./configuration.md): `permissions` y `sendsPerHour`.
-
-## Cambios de la instalación global
-
-El postinstall global de npm instala la skill incluida en los directorios de agentes del usuario; en Windows añade la carpeta de comandos npm al PATH del usuario y elimina solo el lanzador `tg.ps1` generado por npm para este paquete. Conserva el lanzador `.cmd`. Las instalaciones de proyectos y npx no hacen estos cambios. `TG_INSTALL_AGENT=none` omite la skill. El instalador independiente de Windows hace la misma preparación aunque los scripts npm estén desactivados. No cambia la política de ejecución, el PATH del equipo, las credenciales ni el estado de la cuenta. La instalación nunca inicia sesión ni lee chats.
+- [Página de seguridad compartida](https://wirecat.dev/en/docs/security): el archivo local, el guardia, agentes y MCP, reportando una vulnerabilidad
+- [Diagnóstico](./diagnostics.md): qué se registra exactamente y qué nunca se registra
+- [Inicio de sesión, sesiones y perfiles](./sessions.md): la aplicación, el llavero, perfiles, cerrar sesión
+- [MCP](./mcp.md): qué puede hacer un agente a través de MCP y qué cambia en cada nivel y bandera
+- [Permisos](./permissions.md): cómo configurar `permissions` y `sendsPerHour`

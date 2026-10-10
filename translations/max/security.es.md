@@ -2,9 +2,17 @@
 title: "Seguridad y datos guardados"
 ---
 
-Esta herramienta accede a conversaciones personales. Por eso, explicar qué guarda es una parte central de su documentación.
+<a id="si-el-equipo-cae-en-otras-manos" />
 
-Lo común a `max` y `tg` (la copia local de las conversaciones, la protección de envíos, los permisos del agente, el texto ajeno en pantalla, lo que ven otros en el equipo y cómo informar de una vulnerabilidad) se describe en la [página común de seguridad](https://wirecat.dev/ru/docs/security). Aquí está lo que afecta solo a MAX.
+Lea esta página antes de darle acceso a un agente o script de IA a su cuenta MAX a través de `max`, o cuando quiera saber qué almacena `max` en su computadora. Ella explica dónde se almacena la entrada, qué escribe `max` en el disco, con qué servidores contacta, qué detiene el envío no deseado y qué hacer si se filtra el token. Después de leerlo, podrás evaluar lo que puede hacer alguien con acceso a esta computadora, o un agente con acceso a `max`.
+
+Palabras que aparecen en la página:
+
+- **Token** es una cadena que te mantiene en tu cuenta MAX. Quien la tiene usa la cuenta.
+- **Archivo local compartida**: una base de datos en su computadora donde `max` y `tg` almacenan los mensajes leídos. Es común a ambas herramientas y no está cifrado.
+- **Protección contra envío**: verifica que cada cambio se realice antes de ingresar a MAX: derechos, lista de destinatarios permitidos y límite de envío por hora.
+
+Lo común a `max` y `tg` (el archivo local de las conversaciones, la protección de envíos, los permisos del agente, el texto ajeno en pantalla, lo que ven otros en el comando y cómo informar de una vulnerabilidad) se describe en la [página común de seguridad](https://wirecat.dev/ru/docs/security). Aquí está lo que afecta solo a MAX.
 
 ## Resumen: qué protege
 
@@ -55,19 +63,9 @@ Los archivos antiguos de caché del perfil ya no se abren. Si quedan, `max docto
 
 También hay contenido de conversaciones en la copia del bot, exportaciones y descargas; la lista de chats del bot contiene títulos. El resto no contiene conversaciones.
 
-### Si el equipo cae en otras manos
+### Si el comando cae en otras manos
 
 Frente a quien extrae el disco solo protege el cifrado completo del disco: consulta la [página común](https://wirecat.dev/ru/docs/security). En Windows, el acceso a los archivos depende de los permisos del directorio del usuario y de los directorios `MAX_*_DIR` elegidos; los permisos numéricos de la tabla corresponden a Unix.
-
-## Qué no hace la herramienta
-
-- **No marca mensajes como leídos sin petición.** Obtener historial y marcarlo leído son operaciones distintas. Solo `max chats mark-read` y `messages list --mark-read` envían la segunda; hay pruebas de que la lectura normal no lo hace.
-- **No envía nada que no hayas pedido.** Solo cambian algo `messages send|edit|delete|forward|pin|unpin|press`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `session end`, `chats join|leave|create|update|start|app`, `chats members|admins …`, `chats requests accept|decline`, `chats link reset`, `chats folders create|update|delete|order`, `chats moderate` (dentro de las reglas del grupo), `chats mark-read` y `messages list --mark-read`, y cada comando hace solo lo que indica la línea que has escrito. `max commands --json` los marca como `mutates`.
-- **Eliminar exige confirmación por defecto.** `ask` en `messages.delete` requiere respuesta en la terminal o `--allow-dangerous`; un `allow` explícito elimina sin preguntar. Para borrar para todos también se necesita `--for-everyone`; la herramienta compartida de MCP no lo permite.
-- **No recibe teléfonos por argumentos de comando.** `contacts lookup` pregunta o lee de una tubería; `contacts import` lee un archivo. `ps` y el historial muestran los argumentos. Los errores y registros no contienen teléfonos; `max session start` y `max account show` los ocultan.
-- **No registra mensajes.** Ni truncados ni como hash; consulta [diagnostics.md](./diagnostics.md).
-- **No utiliza intermediarios.** Consulta a dónde se conecta `max` en [Qué sale a la red](#что-уходит-в-сеть). `max` no tiene telemetría propia; `max serve` envía a MAX un evento de servicio como una pestaña oculta de la versión web, tal como se describe allí.
-- **Solo `max serve` mantiene una conexión.** Lo inicia el primer comando que necesita MAX y se detiene tras 15 minutos sin uso. Para desactivarlo: `max config set serve false`.
 
 ## Protección de envíos
 
@@ -93,6 +91,16 @@ La lista es opcional: sin destinatarios añadidos, cualquier chat; activa pero v
 
 ⚠ **Limitaciones de los controles.** Están dentro de `max`: un agente con shell puede quitarlos por sí mismo. Qué límite poner desde fuera se explica en la [página común](https://wirecat.dev/ru/docs/security). Para `max`: `MAX_PROFILE_LOCK` fija el perfil, `MAX_PROFILE` no; `--file` rechaza archivos ocultos, `~/.ssh` y los directorios de `max` mientras no se indique `--allow-any-file`.
 
+## Qué no hace la herramienta
+
+- **No marca como leído sin preguntar.** “Obtener historial” y “marcar como leído” son operaciones de protocolo diferentes. El segundo lo envían únicamente `max chats mark-read` y `messages list --mark-read`; leerlo no lo envía.
+- **No envía nada que no haya sido solicitado.** Sólo `messages send|edit|delete|forward|pin|unpin|press`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `session end`, `chats join|leave|create|update|start|app`, `chats members|admins …`, `chats requests accept|decline`, `chats link reset`, cambia algo `chats folders create|update|delete|order`, `chats moderate` (solo lo que gobierna el grupo). permitir), `chats mark-read` y `messages list --mark-read`, y cada uno hace sólo lo que está escrito en la línea escrita. `max commands --json` los marca como `mutates`.
+- **La eliminación por defecto requiere confirmación.** El nivel `ask` para `messages.delete` requiere una respuesta en el terminal o `--allow-dangerous`; explícito `allow` realiza la eliminación sin lugar a dudas. Para eliminar a todos también necesitas `--for-everyone`; La herramienta MCP general no lo permite.
+- **No toma el número de teléfono de la línea de comando.** `contacts lookup` lo solicita o lo lee desde la tubería, `contacts import` - desde el archivo: la línea de comando es vista por `ps` y el historial del shell. No hay ningún número en los errores, el registro de envío y los registros de inicio, y `max session start` y `max account show` lo muestran oculto.
+- **No escribe mensajes en el registro.** Ni en forma recortada ni en hash - consulte [diagnóstico](./diagnostics.md).
+- **No pasa por intermediarios.** Donde se conecta exactamente el `max` es en el apartado [“Qué entra a la red”](#что-уходит-в-сеть). `max` no tiene telemetría propia; `max serve` envía MAX un evento de servicio, como una pestaña oculta de la versión web; consulte en el mismo lugar.
+- **Mantiene la conexión sólo en `max serve`.** Se inicia en segundo plano con el primer comando que necesita MAX; se detiene solo después de 15 minutos sin nada que hacer. No ejecutar - `max config set serve false`.
+
 ## Texto ajeno en pantalla
 
 Los nombres, títulos y textos de otras personas no controlan la terminal: los caracteres de control e invisibles aparecen como texto, los nombres se imprimen en una línea y el autocompletado solo introduce números. Más detalles en la [página común](https://wirecat.dev/ru/docs/security).
@@ -115,7 +123,7 @@ El token no se pasa como argumento, pero el texto de un mensaje sí, y se ve en 
 | `https://platform-api2.max.ru`, Bot API oficial, token en `Authorization` | solo `max bot` |
 | registro npm para comprobar versiones | `max upgrade` y una vez al día desde terminal; se desactiva con `updateCheck: false` |
 
-`max messages download` usa https y rechaza direcciones del propio equipo o red local, también tras redirecciones. Límite de archivos: 4 GiB; voz para transcripción: 32 MiB.
+`max messages download` usa https y rechaza direcciones del propio comando o red local, también tras redirecciones. Límite de archivos: 4 GiB; voz para transcripción: 32 MiB.
 
 Las solicitudes de `max bot` se identifican como `max-cli/<версия>`: MAX ya conoce al bot por su token. El certificado de `platform-api2.max.ru` está firmado por un certificado raíz del Ministerio de Desarrollo Digital que no está incluido en Node; `max` lo añade solo a sus propias solicitudes a la Bot API y no cambia nada en el sistema.
 
@@ -132,12 +140,6 @@ Prácticas recomendadas:
 
 Se avisa una vez por stderr al iniciar sesión por primera vez con `max setup` o `max session start`.
 
-## Uso personal
-
-La herramienta guarda en tu equipo conversaciones y contactos de otras personas, incluidos los textos de los mensajes. El acceso a la base local permite acceder a esos datos. Entregar una exportación (`max store export`) a otra persona también entrega el contenido de la conversación; sus enlaces a fotos pueden abrirse sin iniciar sesión. Antes de compartir, revisa el contenido y los destinatarios. Esta página describe el funcionamiento de la herramienta y no certifica el cumplimiento legal de tu caso de uso.
-
-Los informes (`max doctor report create`) se adjuntan a incidencias **públicas** de GitHub. No contienen texto, nombres ni teléfonos; los identificadores se sustituyen por etiquetas. Revísalos antes de enviarlos.
-
 ## Inicio de sesión con navegador
 
 `session start qr-chrome` y `sms` abren un **perfil temporal**, separado de tus contraseñas y cookies. Contiene una sesión de web.max.ru y se elimina al terminar, cerrar ventana, alcanzar `--timeout` o pulsar Ctrl-C. El token se lee por canal de depuración entre proceso y navegador (`--remote-debugging-pipe`), sin puerto de red ni acceso de otros usuarios.
@@ -148,9 +150,15 @@ Cada acceso añade un dispositivo en la lista de sesiones de MAX; puedes cerrarl
 
 ## Protocolo no oficial
 
-MAX no publica API de cuentas personales. El conocimiento del protocolo procede de mediciones reales o ingeniería inversa ajena; se registra el origen de cada operación ([protocolo (`protocol.md`)](https://github.com/leemour/max-cli/blob/v0.39.0/docs/dev/protocol.md), columna «Where it came from»).
+MAX no publica una API para cuentas de usuario. Todo lo que se sabe sobre el protocolo aquí se midió en una conexión en vivo o se leyó en la ingeniería inversa de otra persona, y para cada operación se anota exactamente de dónde vino ([descripción del protocolo](https://github.com/leemour/max-cli/blob/main/docs/dev/protocol.md), columna "De dónde vino").
 
 **Puede dejar de funcionar sin aviso.** En ese caso el comando indica el problema por stderr, en lugar de devolver una lista vacía como si todo funcionase.
+
+## Uso personal
+
+La herramienta guarda en tu comando conversaciones y contactos de otras personas, incluidos los textos de los mensajes. El acceso a la base local permite acceder a esos datos. Entregar una exportación (`max store export`) a otra persona también entrega el contenido de la conversación; sus enlaces a fotos pueden abrirse sin iniciar sesión. Antes de compartir, revisa el contenido y los destinatarios. Esta página describe el funcionamiento de la herramienta y no certifica el cumplimiento legal de tu caso de uso.
+
+Los informes (`max doctor report create`) se adjuntan a incidencias **públicas** de GitHub. No contienen texto, nombres ni teléfonos; los identificadores se sustituyen por etiquetas. Revísalos antes de enviarlos.
 
 ## Si se filtra el token
 
@@ -164,7 +172,8 @@ max session end        # выйти из MAX и забыть локально
 
 ## Siguiente paso
 
-- [Página común de seguridad](https://wirecat.dev/ru/docs/security): lo que es igual en `max` y `tg`, y cómo informar de una vulnerabilidad.
-- [diagnostics.md](./diagnostics.md): qué se registra y qué no se registra nunca
-- [sessions.md](./sessions.md): almacén de claves, `MAX_TOKEN` y qué hace `session end`
-- [mcp.md](./mcp.md): qué puede hacer un agente mediante el servidor MCP y qué activa cada opción
+- [Página de seguridad general](https://wirecat.dev/ru/docs/security): Qué es lo mismo en `max` y `tg` y cómo informar una vulnerabilidad
+- [Diagnóstico](./diagnostics.md): qué se registra exactamente y qué nunca se registra
+- [Inicio de sesión, sesiones y perfiles](./sessions.md): llaveros, `MAX_TOKEN`, qué hace `session end`
+- [MCP](./mcp.md): qué puede hacer el agente a través del servidor MCP y qué activa cada flag
+- [Permisos](./permissions.md): cómo configurar `permissions` y `sendsPerHour`

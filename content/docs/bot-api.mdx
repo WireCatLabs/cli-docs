@@ -3,8 +3,7 @@ title: "Bots and Bot API"
 description: "Use a bot through your agent or terminal for messages, files, events and group tasks."
 ---
 
-This page is about using a Telegram or MAX bot through your agent or the terminal. By the end, you will know
-what a bot can do, how to connect it and how to check its access before your first task. A bot has its own account, name and permissions. It does not gain access to your private conversations,
+Use a messenger bot through your agent or the terminal to answer requests, publish updates or help with a group. Connect it and check its access before your first task. A bot has its own account, name and permissions. It does not gain access to your private conversations,
 and commands without `bot` still use your personal account.
 
 Bot API is the official way to control a Telegram or MAX bot from a program. With the `tg` and `max` command-line tools,
@@ -32,7 +31,7 @@ tg support bot auth set
 max support bot auth set
 ```
 
-`support` is the bot profile name you choose. Run the command for your messenger. Enter <DocTerm term="bot-token" lang="en" label="the token" /> locally rather than in a message to your agent: a message keeps it in that conversation's history. Keep it out of commands and screenshots too. Check which bot is connected:
+`support` is the bot profile name you choose. Run the command for your messenger. Prefer entering <DocTerm term="bot-token" lang="en" label="the token" /> yourself at the hidden terminal input above. You can choose to share it with your agent, but then it becomes part of that agent chat’s history. Keep it out of command arguments and screenshots. Check which bot is connected:
 
 ```sh
 tg support bot me
@@ -45,8 +44,10 @@ Expect your bot's name and identifier. Then add it to the target group or channe
 
 ## Give your agent a task
 
+This example uses the `support` Telegram bot profile. For MAX, replace “Use tg CLI” with “Use max CLI” and name its bot profile. In a browser chat, name the connected bot tool.
+
 ```text prompt
-Use the connected support bot: check its identity and the events it can access. Suggest how to prepare a report for my group. Show the chosen chat and draft the message. Don't send anything yet.
+Use tg CLI with the connected support bot: check its identity and the events it can access. Suggest how to prepare a report for my group. Show the chosen chat and draft the message. Don't send anything yet.
 ```
 
 The agent should show the bot, selected chat and draft. Review the text and recipient, then authorise sending separately. Finding a chat and sending: [Telegram](./tg/bot.md) or [MAX](./max/bot.md).

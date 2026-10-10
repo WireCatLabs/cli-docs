@@ -2,7 +2,15 @@
 title: "Permissions"
 ---
 
-Permissions apply to a profile: a set of settings for one account or bot. Start with read access and allow changes as needed. See [Profiles and bots](./profiles.md).
+Read this page before letting an AI agent, a script or another person use your MAX account through `max`. For each profile, you can choose which actions are read-only, which need your approval and which can run without asking. You will learn to make a read-only profile, allow an individual action such as sending, and understand the checks that still apply.
+
+Terms used below:
+
+- **Profile** — named settings for one account or bot, such as `work` ([profiles and bots](./profiles.md)).
+- **Permission key** — a command or command-group name, such as `messages` or `messages.send`. A longer key is more specific.
+- **Access level** — what happens when a command runs: `deny`, `readonly`, `ask` or `allow`.
+
+Start with reading and allow changes as needed.
 
 ## Choose an access level
 
@@ -13,7 +21,7 @@ Permissions apply to a profile: a set of settings for one account or bot. Start 
 | `ask` | Changes prompt for confirmation in the terminal. |
 | `allow` | The action can run without another confirmation. |
 
-A denial means you need to check the action and settings. It does not indicate a connection problem. Do not ask the assistant to remove the restriction just to finish the task.
+A denial means you need to check the action and settings. It does not indicate a connection problem. Do not ask the agent to remove the restriction just to finish the task.
 
 ## Allow one action
 
@@ -29,7 +37,7 @@ max work config set permissions.messages readonly
 
 A more specific key takes precedence: `permissions.messages.send ask` keeps the confirmation prompt before sending in the terminal and allows sending through MCP. To forbid sending, set this key to `readonly`. Check other exceptions with `config show`.
 
-These permissions apply to messages. Reactions and chat management have separate keys. See the [configuration reference](./configuration-reference.md) for complete read-only profile examples.
+These permissions cover messages. Reactions and chat administration have separate keys. See the [permissions reference](./configuration-reference.md#права-доступа) for all keys and a read-only profile example.
 
 ## Bot permissions
 
@@ -42,7 +50,7 @@ max support config set sendsPerHour 30 --bot
 
 ## Limit recipients and repeated sends
 
-The recipient list limits which chats the profile can send to. The hourly limit helps stop sending loops. These checks apply even when the command is allowed. See [Security](./security.md) for the commands that manage them.
+The recipient list restricts the chats a profile can send to. The hourly limit helps stop a sending loop. These checks also apply to an allowed command. See [protection against sending to the wrong place](./security.md#защита-от-отправки-не-туда) for the controls.
 
 ## Temporarily change MCP server permissions
 
@@ -50,4 +58,4 @@ Add `--permission messages.send=allow` when starting the server to allow that pr
 
 ## Limitations and detailed rules
 
-An assistant with access to configuration files or an unrestricted terminal can change these permissions. Read [Security](./security.md) before granting that access. The messenger configuration reference describes nested permissions and exact command keys.
+An agent with access to configuration files or an unrestricted terminal can change these permissions. Read [security](./security.md) before granting that access. The [permissions reference](./configuration-reference.md#права-доступа) explains nested permissions and exact command keys.

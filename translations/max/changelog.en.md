@@ -4,6 +4,23 @@ title: "Changelog"
 
 Notable changes to `@leemour/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
+## 0.41.0 — 09.10.2026
+
+### Changed — may break scripts
+
+- **Everyone selected by the rules receives auto-responses until you limit the audience; there is no longer a separate list for `testers`.** `max replies audience --reply listed --allow-people <id>` leaves only selected people, `--deny-people` and `--deny-chats` exclude some. Nothing is sent unless `permissions.replies.send` is `allow`, and the new rule is disabled until you enable it. Previously, the answer only went to those who were both in `testers` and in the audience; the two lists were confused. The file, where there is still `testers`, responds to exactly the same people: they become allowed (if the audience was already `listed`, only those whom it also allowed). Allowed chats in such a file are removed, otherwise any participant in these chats would receive a response; prohibitions remain. Without `testers`, the file will be overwritten the next time you edit via `max replies`.
+- **`max replies status --json` no longer has the `testers` field**; who can be answered is shown by counters `audience`. In `max replies test` and `serve`, a sender outside the audience is skipped with the reason “not on the allow list” instead of “not a test account”.
+
+### Fixed
+
+- **`max mcp config` transfers `MESSAGING_STORE` and `XDG_RUNTIME_DIR`** to the client configuration, as `tg` does. A client running a server with a stripped-down environment on Linux did not reach the keychain and answered “no session,” but with its own `MESSAGING_STORE` it looked in a different local archive. Run `max mcp config` again and replace the entry in the client settings.
+
+## 0.40.0 — 09.10.2026
+
+### Changed — may break scripts
+
+- **The message store deletes the copies it kept for older versions** (schema version 28, cli-messaging 0.212.0). Notes, contact notes, relationships, and entities recorded before the transition to the new notes are transferred one time to the new tables during the update. After it, the old max, tg and memo refuse to open the archive with the message “upgrade this tool” - update all three together.
+
 ## 0.39.0 — 09.10.2026
 
 ### New
@@ -53,7 +70,7 @@ Notable changes to `@leemour/max-cli`, one section per version, newest first. Ve
 
 ### Changed — may break scripts
 
-- **Latin words match English and Spanish stems together.** Previously only Spanish, so English forms matched worse. Updates automatically rebuild stems: small stores immediately, larger ones incrementally. `max serve` finishes in the background; `max store migrate` immediately. Until ready, search matches exact forms, reports it on stderr and returns `query.stemming.applied` = `false`. The Latin stem index is about twice as large. Your own `searchStemmers.latin` is retained and applied through `max store reindex`. Update tg too: older versions cannot use the rebuilt stems ([archive](./archive.md#обслуживание-архива)).
+- **Latin words use English and Spanish stems together.** Previously, only Spanish, so the English forms of words (“budgets” → “budget”) were found worse. What to consider: after an update, the stem index is built anew on its own. A small archive - immediately upon opening, a large one - little by little: `max serve` completes it in the background, `max store migrate` - immediately. While the index is not ready, the search looks for exact forms of words and writes about this to stderr, and in JSON `query.stemming.applied` is equal to `false`. The index of the stems of the Latin text is approximately twice as large. If you specified `searchStemmers.latin` yourself, your setting remains and is still applied by `max store reindex`. Update also `tg`: the old version, opening the rebuilt archive, responds to a stem search with “update the program” ([archive](./archive.md#обслуживание-архива)).
 
 - **Person notes (`max contacts notes`) appear in every profile that sees the person.** Before they appeared only in the originating profile. Owner notes are stored separately from messages alongside `memo` notes. Notes from multiple MAX profiles now appear together; aliases (`contacts alias`) remain account-specific.
 
@@ -74,8 +91,9 @@ Notable changes to `@leemour/max-cli`, one section per version, newest first. Ve
 
 ### Changed — may break scripts
 
-- **`contacts profile`: `flags` now contains `bot`**, true for bots, false for people; it was empty before.
-- **`watch --events`: `chat` lines appear only when the chat actually changes** — name, description, membership, status, photo or owner. Previously they could appear on every send through `max serve`.
+- **`contacts profile`: `bot` appeared in `flags`** - `true` for the bot, `false` for the person. Previously, `flags` was always empty.
+
+- **`watch --events`: the line `chat` comes only when something has actually changed in the chat** - name, description, participants, status, photo or owner. Previously, when `max serve` was running, it could arrive for every send.
 
 ### Fixed
 
@@ -726,7 +744,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/leemour/max-cli/blob/v0.39.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/leemour/max-cli/blob/v0.41.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).
@@ -746,7 +764,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 - **MCP `max_review` and `/review`** organize what you owe, await and need to clarify, checking work groups before declaring overdue items and drafting reminders. Reminders require approval ([MCP prompts](./mcp.md#команды-и-чаты-по-)).
 - **`max mcp config` prints configuration for Claude Desktop, Cursor and other clients**, with absolute paths for Windows and applications missing terminal `PATH` ([Connection guide](./mcp.md#подключение)).
 - **`max doctor` checks the installation:** what runs `max`, where it is installed, whether a new terminal will find it, whether the keyring and SQLite load, and whether a speech model is downloaded.
-  What to consider: if the command directory is not on `PATH`, `doctor` prints a command to fix it — for PowerShell on Windows and `export` on Linux and macOS. If `max` itself is not found, run `npx @leemour/max-cli doctor` ([troubleshooting.md](./troubleshooting.md#max-не-находится-после-установки)).
+  What to consider: if the command reference is not on `PATH`, `doctor` prints a command to fix it — for PowerShell on Windows and `export` on Linux and macOS. If `max` itself is not found, run `npx @leemour/max-cli doctor` ([troubleshooting.md](./troubleshooting.md#max-не-находится-после-установки)).
 - **`max doctor --online` checks MAX connectivity:** one login, one chat and MCP startup, without sending.
 - **`max models audio download` checks the model after download.** Missing-model errors explain its language and alternative models with sizes.
 
@@ -886,15 +904,13 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max reactions remove <чат> <id>`** removes your reaction.
-- **Groups and channels under `max chats`:** inspect invites, join, leave, create, add/remove members/admins, rename, change settings and reset invites. Join requests appeared here but were removed in 0.17.0 because MAX has none. Changes are visible and pass send safeguards ([Group guide](./usage.md#группы-и-каналы)).
-- **`max update` updates `max` with the package manager used to install it;** `--check` only reports whether a newer version exists.
-  What to consider: once a day, a person in a terminal sees a new-version notice; agents and scripts never do. Disable it with `updateCheck: false` in `defaults` ([installation.md](./installation.md#обновление-и-удаление)).
-- **Tab completion for zsh, bash, fish and PowerShell:** `source <(max complete zsh)`, offering commands, flags, values and local chats/people without connecting ([Completion](./commands.md#max-complete)).
-- **`max mcp` exposes the same profile to MCP clients**, including Claude Desktop and Cursor ([MCP guide](./mcp.md)). Read-only unless `--allow-send`; sends use the same checks as `max messages send`.
-- **`max mcp --allow-send --confirm-send` shows a form before every send:** which chat (title and ID) and what will be sent.
-  What to consider: nothing is sent without your “yes”; a client unable to show forms receives an error ([docs/mcp.md](./mcp.md#права-профиля-управляют-инструментами)).
-- **`max messages send … --file <путь>`** sends photos/files; several photos use one message in this release.
+- **`max reactions remove <чат> <id>` removes your reaction.**
+- **Groups and channels under `max chats`:** view the link, join, leave, create a group, add and remove people, assign and remove an admin, rename, change settings, re-release the link. There were also applications for membership here - they were removed in 0.17.0, because they are not in MAX. What to consider: all this is seen by other people, and each action goes through the same checks as sending ([groups and channels](./usage.md#группы-и-каналы)).
+- **`max update` updates `max` with the same package manager it was supplied with;** `--check` only tells if there is a newer version. What to consider: once a day a person sees a line in the terminal about a new version; agent and script - never. Turns off `updateCheck: false` to `defaults` ([update](./installation.md#обновление)).
+- **Addition for Tab in zsh, bash, fish and PowerShell:** `source <(max complete zsh)`. Offers commands, flags, their meanings, as well as chats and people from a local copy - without connecting to MAX ([help for `max complete`](./commands.md#max-complete)).
+- **`max mcp` - the same profile for agents via MCP**, for clients without a terminal (Claude Desktop, Cursor). Connection - [MCP server](./mcp.md). Things to consider: the server only reads until it is started with `--allow-send`; the shipment undergoes the same checks as `max messages send`.
+- **`max mcp --allow-send --confirm-send` shows the form before each submission:** to which chat (name and id) and what. What to consider: nothing goes away without your “yes”; a client that cannot display forms receives an error ([what can an agent do](./mcp.md#что-может-агент)).
+- **`max messages send … --file <путь>` sends photos and files;** several photos are sent in one message.
 
 ### Security
 
@@ -1008,14 +1024,14 @@ The first shareable version.
 ### New
 
 - **Seven commands against real MAX:** `session start|end`, `account show`, `chats list`, `contacts list`, `messages list`, `messages send`.
-- **Profile first:** `max personal chats list`; accounts have separate tokens, state and local copies. `MAX_PROFILE` selects the same profile.
-- **Tokens live in the OS keyring**, not files or arguments. Phone login is not yet available; `max session start` imports an official-client token.
-- **Machine output:** `--json` emits exactly one JSON value on stdout, also automatic without terminal stdout. Errors go to stderr with stdout empty. Branch on exit codes in the [Command reference](./commands.md), sourced from `docs/commands.md`.
-- **Content-free diagnostics:** `--verbose` displays request events; `--record` saves them for 30 days; `max runs list|show|path` reads records. Nothing is saved by default in this release.
-- **Local storage:** read data is saved; `--offline` answers without connecting; `max cache clear` clears it.
-- **Configuration in `~/.config/max-cli/config.json`**, precedence flag → environment → file → default. Unknown fields produce named errors, never silently ignored defaults.
-- **Two runtimes:** Node 22+ and Bun 1.3+, both running the built command in CI.
-- **Reading never marks read.** History and read receipts are separate protocol operations; the latter is never sent in this release, verified by tests.
-- **Sending reports uncertainty honestly:** missing responses return `outcome_unknown`, code `14`, rather than success or failure. Retry only with the same `--cid` to avoid duplicates.
-- **Personal-account MAX protocol is unofficial and reverse-engineered**, separate from Bot API. Unannounced changes produce stderr warnings instead of silent failure.
-- **Not yet supported:** phone login, attachments, reactions, edits, groups, stories or calls; text only. Personal-account mass mailings are not planned.
+- **Profile - first word:** `max personal chats list`. Several accounts live nearby, each with its own token, its own state and its own local copy. `MAX_PROFILE` sets the same.
+- **The token is stored in the operating system keychain**, and not in a file or in the command argument. What to consider: you don’t have your own login by phone number yet - `max session start` takes a token from the official client.
+- **Machine mode:** `--json` puts exactly one JSON value and nothing else on stdout; the same thing turns on itself when stdout is not a terminal. The error goes to stderr, stdout remains empty. You can branch by exit code - table in [command reference](./commands.md).
+- **Diagnostics without content:** `--verbose` shows a line per request, `--record` puts them in the run directory for 30 days, `max runs list|show|path` reads them back. By default, nothing is written.
+- **Local copy:** what you read is saved nearby; `--offline` answers from it without connecting, and `max cache clear` forgets it.
+- **Settings in `~/.config/max-cli/config.json`**, with the order “flag → environment variable → file → built-in value”. A typo in a field name is an error with the field name, not a silent omission.
+- **Two runtimes:** Node 22+ and Bun 1.3+; the assembled command is executed under both in CI.
+- **Reading does not mark anything as read.** “Get history” and “mark as read” are different protocol operations; the second is never sent, and this is checked by the test.
+- **Sending does not lie about the outcome.** If the response did not arrive - `outcome_unknown` (code `14`), and not “error” and not “sent”. What to consider: you can repeat such a sending only with the same `--cid`, otherwise the message may be sent twice.
+- **The MAX protocol is unofficial and reverse engineered:** it is not a Bot API. Things to consider: It may change without notice; then command will say this in one line to stderr, rather than crash silently.
+- **Not yet able to:** log in using a phone number, work with attachments, reactions, edits, groups, stories and calls - text only. There will be no mass mailing: this is a tool for a personal account.

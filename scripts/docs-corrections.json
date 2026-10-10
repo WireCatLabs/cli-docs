@@ -27,31 +27,6 @@
   {
     "tool": "tg",
     "slug": "usage",
-    "reason": "Cursor can have terminal access; select CLI/skill or MCP by actual client access rather than assuming Cursor lacks a terminal.",
-    "replacements": {
-      "en": [
-        {
-          "before": "An agent without one (Claude Desktop, Cursor) connects over MCP: [mcp.md](./mcp.md).",
-          "after": "For an agent without terminal access, such as Claude Desktop, use [MCP](./mcp.md). Cursor can use the CLI when terminal access is available, or connect through MCP."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Агент без терминала (Claude Desktop; в Cursor тоже доступен этот вариант) подключается через [MCP](./mcp.md).",
-          "after": "Для агента без доступа к терминалу, например Claude Desktop, используйте [MCP](./mcp.md). В Cursor можно выбрать CLI с доступом к терминалу или подключение через MCP."
-        }
-      ],
-      "es": [
-        {
-          "before": "Los agentes sin terminal (Claude Desktop, Cursor) se conectan mediante [MCP](./mcp.md).",
-          "after": "Para agentes sin acceso a terminal, como Claude Desktop, usa [MCP](./mcp.md). Cursor puede usar el CLI con acceso a terminal o conectarse mediante MCP."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "usage",
     "reason": "Shell ! inverts the exit status to zero inside then; capture the command status in else before dispatching on 14/4. Applied after preservation validation to the same literal example in every locale.",
     "replacements": {
       "en": [
@@ -70,31 +45,6 @@
         {
           "before": "if ! tg messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  case $? in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg session start\" ;;\n  esac\nfi",
           "after": "if tg messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg session start\" ;;\n  esac\nfi"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "usage",
-    "reason": "Current security/configuration/reference use per-command permissions, not a profile allow list; ask can require consent even for send.",
-    "replacements": {
-      "en": [
-        {
-          "before": "**Nothing sends unless you typed a command that sends**, and it asks no confirmation: the chat and\nthe text are already in the line you typed. Every send goes through the send guard: a read-only\nprofile, the profile's `allow` list, the list of allowed recipients and the hourly limit\n([security.md](./security.md#the-send-guard)). Every attempt is logged, never its text:\n`tg sends list`.",
-          "after": "**Sending requires a command that sends.** By default, sending needs no extra confirmation because the command specifies the chat and text. Per-command permission settings can require approval or refuse the action. Every send also checks allowed recipients and the hourly limit ([security](./security.md#the-send-guard)). Each attempt is logged without its text: `tg sends list`."
-        }
-      ],
-      "ru": [
-        {
-          "before": "**Отправка происходит только по команде отправки.** По умолчанию подтверждения нет: вы уже указали чат и текст. Каждая попытка проходит защиту: профиль только для чтения, список `allow`, разрешённые получатели и часовой лимит ([Безопасность](./security.md#the-send-guard)). Попытки записываются без текста: `tg sends list`.",
-          "after": "**Отправка происходит по команде отправки.** По умолчанию дополнительное подтверждение не нужно: вы уже указали чат и текст. Права отдельной команды могут потребовать подтверждение или запретить действие. Также проверяются разрешённые получатели и часовой лимит ([Безопасность](./security.md#the-send-guard)). Попытки записываются без текста: `tg sends list`."
-        }
-      ],
-      "es": [
-        {
-          "before": "**Nada se envía si no ejecutas un comando de envío**, y por defecto no pide confirmación: el chat y texto ya están en el comando. Cada envío pasa por los controles de perfil de solo lectura, lista `allow`, destinatarios permitidos y límite por hora ([seguridad](./security.md#the-send-guard)). Se registra cada intento, nunca el texto: `tg sends list`.",
-          "after": "**Enviar requiere ejecutar un comando de envío.** Por defecto no hace falta otra confirmación porque el comando indica el chat y el texto. Los permisos de cada comando pueden pedir aprobación o impedir la acción. También se comprueban los destinatarios permitidos y el límite por hora ([seguridad](./security.md#the-send-guard)). Se registra cada intento sin su texto: `tg sends list`."
         }
       ]
     }
@@ -143,7 +93,7 @@
       ],
       "es": [
         {
-          "before": "- Los controles de solo lectura, destinatarios y límite por hora se aplican ahora, al añadirlo a la cola.",
+          "before": "- Las protecciones de envío (solo lectura, lista de destinatarios, límite por hora) cuentan el mensaje ahora, en el momento de hacer cola.",
           "after": "- El modo de solo lectura y los destinatarios permitidos se comprueban al añadirlo a la cola. También se comprueba el límite por hora, pero el mensaje cuenta en la hora programada para el envío."
         }
       ]
@@ -162,10 +112,6 @@
         {
           "before": "- **settings** hold `config.json`, and `credentials.json` only on a machine with no keyring.",
           "after": "- **Settings** are saved in `config.json`. The Telegram app credentials normally go into the operating system’s keyring; `credentials.json` is a fallback when that keyring is unavailable.\n\n> **How are login credentials protected?**\n>\n> The Telegram app ID and hash go into macOS Keychain, Windows Credential Manager or Linux Secret Service. Keeping them outside the settings file reduces accidental exposure when you share configuration. If the keyring is unavailable, `tg` warns and uses a credentials file with restricted permissions. The Telegram session remains a separate file: anyone who can read it can use that login. Do not share it or add it to Git. See [Security](./security.md#where-the-login-lives).\n"
-        },
-        {
-          "before": "- **state** holds the login (`sessions/<profile>.session`), recorded runs (`runs/`), the journal of\n  sends (`sends/`), the list of allowed recipients (`profiles/`), `inbox --new`'s saved point\n  (`inbox/`), background fetch jobs, and `serve`'s log and lock.",
-          "after": "- **Account and activity files:** the table gives complete paths for the login session, run records, send journal, allowed recipients and saved inbox position. Background download jobs and the server lock also live in the state folder."
         }
       ],
       "ru": [
@@ -174,12 +120,8 @@
           "after": "| Данные | Linux | macOS | Windows |\n|---|---|---|---|\n| Настройки | `~/.config/tg-cli/config.json` | `~/Library/Preferences/tg-cli/config.json` | `%APPDATA%\\tg-cli\\Config\\config.json` |\n| Сессия входа в Telegram | `~/.local/share/tg-cli/sessions/<profile>.session` | `~/Library/Application Support/tg-cli/sessions/<profile>.session` | `%LOCALAPPDATA%\\tg-cli\\Data\\sessions\\<profile>.session` |\n| Записи запусков | `~/.local/share/tg-cli/runs/` | `~/Library/Application Support/tg-cli/runs/` | `%LOCALAPPDATA%\\tg-cli\\Data\\runs\\` |\n| Журнал отправок | `~/.local/share/tg-cli/sends/<profile>.jsonl` | `~/Library/Application Support/tg-cli/sends/<profile>.jsonl` | `%LOCALAPPDATA%\\tg-cli\\Data\\sends\\<profile>.jsonl` |\n| Разрешённые получатели | `~/.local/share/tg-cli/profiles/<profile>.recipients.json` | `~/Library/Application Support/tg-cli/profiles/<profile>.recipients.json` | `%LOCALAPPDATA%\\tg-cli\\Data\\profiles\\<profile>.recipients.json` |\n| Позиция чтения входящих | `~/.local/share/tg-cli/inbox/<profile>.json` | `~/Library/Application Support/tg-cli/inbox/<profile>.json` | `%LOCALAPPDATA%\\tg-cli\\Data\\inbox\\<profile>.json` |\n| Журнал фонового сервера | `~/.local/share/tg-cli/serve/<profile>.log` | `~/Library/Application Support/tg-cli/serve/<profile>.log` | `%LOCALAPPDATA%\\tg-cli\\Data\\serve\\<profile>.log` |\n| Кеш | `~/.cache/tg-cli/` | `~/Library/Caches/tg-cli/` | `%LOCALAPPDATA%\\tg-cli\\Cache\\` |\n| Локальная база сообщений | `~/.local/share/cli-messaging/messages.db` | `~/Library/Application Support/cli-messaging/messages.db` | `%LOCALAPPDATA%\\cli-messaging\\Data\\messages.db` |\n| Модели распознавания речи | `~/.cache/cli-common/models/audio/` | `~/Library/Caches/cli-common/models/audio/` | `%LOCALAPPDATA%\\cli-common\\Cache\\models\\audio\\` |\n\n`~` — ваша домашняя папка. В Windows вставьте `%APPDATA%` или `%LOCALAPPDATA%` в адресную строку Проводника. `<profile>` — имя профиля аккаунта, обычно `default`. Здесь указаны пути по умолчанию; `tg doctor` покажет фактические пути, включая переопределения."
         },
         {
-          "before": "- **Настройки**: `config.json`, а также `credentials.json`, если на компьютере нет системного хранилища ключей.",
+          "before": "- **Настройки** сохраняют `config.json` и `credentials.json` только на машине без системного хранилища ключей.",
           "after": "- **Настройки** сохраняются в `config.json`. Данные приложения Telegram обычно хранятся в системном хранилище ключей; `credentials.json` используется, если хранилище недоступно.\n\n> **Как защищены данные входа?**\n>\n> ID и хеш приложения Telegram сохраняются в Keychain на macOS, Credential Manager на Windows или Secret Service на Linux. Они отделены от настроек, чтобы снизить риск случайной передачи секретов вместе с конфигурацией. Если хранилище недоступно, `tg` предупреждает и сохраняет данные в файл с ограниченными правами доступа. Сессия Telegram остаётся отдельным файлом: доступ к нему позволяет использовать ваш вход. Не передавайте его и не добавляйте в Git. Подробнее: [Безопасность](./security.md#where-the-login-lives).\n"
-        },
-        {
-          "before": "- **Состояние**: сессия (`sessions/<profile>.session`), записи запусков (`runs/`), журнал отправок (`sends/`), разрешённые получатели (`profiles/`), сохранённая позиция `inbox --new` (`inbox/`), фоновые задания загрузки, журнал и файл блокировки `serve`.",
-          "after": "- **Данные аккаунта и работы CLI:** в таблице указаны полные пути к сессии входа, записям запусков, журналу отправок, списку разрешённых получателей и позиции чтения входящих. Фоновые задания загрузки и блокировка сервера также хранятся в каталоге данных аккаунта."
         }
       ],
       "es": [
@@ -188,12 +130,8 @@
           "after": "| Datos | Linux | macOS | Windows |\n|---|---|---|---|\n| Configuración | `~/.config/tg-cli/config.json` | `~/Library/Preferences/tg-cli/config.json` | `%APPDATA%\\tg-cli\\Config\\config.json` |\n| Sesión de Telegram | `~/.local/share/tg-cli/sessions/<profile>.session` | `~/Library/Application Support/tg-cli/sessions/<profile>.session` | `%LOCALAPPDATA%\\tg-cli\\Data\\sessions\\<profile>.session` |\n| Ejecuciones registradas | `~/.local/share/tg-cli/runs/` | `~/Library/Application Support/tg-cli/runs/` | `%LOCALAPPDATA%\\tg-cli\\Data\\runs\\` |\n| Registro de envíos | `~/.local/share/tg-cli/sends/<profile>.jsonl` | `~/Library/Application Support/tg-cli/sends/<profile>.jsonl` | `%LOCALAPPDATA%\\tg-cli\\Data\\sends\\<profile>.jsonl` |\n| Destinatarios permitidos | `~/.local/share/tg-cli/profiles/<profile>.recipients.json` | `~/Library/Application Support/tg-cli/profiles/<profile>.recipients.json` | `%LOCALAPPDATA%\\tg-cli\\Data\\profiles\\<profile>.recipients.json` |\n| Posición de lectura | `~/.local/share/tg-cli/inbox/<profile>.json` | `~/Library/Application Support/tg-cli/inbox/<profile>.json` | `%LOCALAPPDATA%\\tg-cli\\Data\\inbox\\<profile>.json` |\n| Registro del servidor | `~/.local/share/tg-cli/serve/<profile>.log` | `~/Library/Application Support/tg-cli/serve/<profile>.log` | `%LOCALAPPDATA%\\tg-cli\\Data\\serve\\<profile>.log` |\n| Caché | `~/.cache/tg-cli/` | `~/Library/Caches/tg-cli/` | `%LOCALAPPDATA%\\tg-cli\\Cache\\` |\n| Base de mensajes local | `~/.local/share/cli-messaging/messages.db` | `~/Library/Application Support/cli-messaging/messages.db` | `%LOCALAPPDATA%\\cli-messaging\\Data\\messages.db` |\n| Modelos de reconocimiento de voz | `~/.cache/cli-common/models/audio/` | `~/Library/Caches/cli-common/models/audio/` | `%LOCALAPPDATA%\\cli-common\\Cache\\models\\audio\\` |\n\n`~` es tu carpeta personal. En Windows, pega `%APPDATA%` o `%LOCALAPPDATA%` en la barra de direcciones del Explorador. `<profile>` es el nombre del perfil, normalmente `default`. Estas son las rutas predeterminadas; `tg doctor` muestra las rutas reales y sus cambios."
         },
         {
-          "before": "- **Configuración:** contiene `config.json` y, solo en equipos sin almacén de claves, `credentials.json`.",
+          "before": "- **configuraciones** mantienen `config.json` y `credentials.json` solo en una máquina sin llavero.",
           "after": "- **Configuración:** se guarda en `config.json`. Las credenciales de la aplicación Telegram normalmente van al llavero del sistema; `credentials.json` se usa si el llavero no está disponible.\n\n> **¿Cómo se protegen las credenciales?**\n>\n> El ID y hash de la aplicación se guardan en Keychain de macOS, Credential Manager de Windows o Secret Service de Linux. Separarlos de la configuración reduce el riesgo de compartirlos por accidente. Si el llavero no está disponible, `tg` avisa y usa un archivo con permisos restringidos. La sesión de Telegram sigue siendo un archivo independiente: quien lo lee puede usar ese acceso. No lo compartas ni lo añadas a Git. Consulta [Seguridad](./security.md#where-the-login-lives).\n"
-        },
-        {
-          "before": "- **Estado:** contiene la sesión (`sessions/<profile>.session`), las ejecuciones registradas (`runs/`), el registro de envíos (`sends/`), los destinatarios permitidos (`profiles/`), el punto guardado de `inbox --new` (`inbox/`), las tareas de descarga en segundo plano y el registro y bloqueo de `serve`.",
-          "after": "- **Datos de la cuenta y actividad:** la tabla muestra las rutas completas de la sesión, las ejecuciones, los envíos, los destinatarios permitidos y la posición de lectura. Las descargas en segundo plano y el bloqueo del servidor también se guardan en el directorio de estado."
         }
       ]
     }
@@ -205,43 +143,11 @@
     "replacements": {
       "ru": [
         {
-          "before": "\nДля входа нужны две составляющие:\n\n- **Приложение**: `api_id` и `api_hash` с [my.telegram.org](https://my.telegram.org/apps). Они идентифицируют программу в Telegram. `tg` сохраняет их в системном хранилище ключей.\n- **Сессия**: данные, которые Telegram выдаёт после входа. Они хранятся файлом в каталоге состояния и дают такой же доступ, как пароль.\n\n",
-          "after": "\nПеред первым входом откройте Telegram на телефоне и убедитесь, что уже вошли в нужный аккаунт. Оставьте телефон под рукой: он понадобится для кода или сканирования QR.\n\nПодключение состоит из двух шагов:\n\n1. **Получить данные приложения Telegram** — `api_id` (числовой идентификатор) и `api_hash` (секретный ключ) с [my.telegram.org](https://my.telegram.org/apps). С ними `tg` может обращаться к Telegram от имени программы. Обычно этот шаг нужен только при первом входе для выбранного профиля.\n2. **Подтвердить вход в свой аккаунт** — отсканировать QR-код или ввести код входа. После этого `tg` сохраняет **сессию**: данные авторизации, с которыми следующие команды работают без повторного входа.\n\nОба шага выполняет `tg session start`. Запускайте команду в локальном терминале: она будет запрашивать данные и ждать подтверждения с телефона.\n\n\n\n"
-        },
-        {
-          "before": "\nКаждый пользователь регистрирует своё приложение. Telegram выдаёт одно приложение на номер телефона, поэтому общий идентификатор не включён в `tg`. Данные нужны один раз для каждого профиля; `tg session start` запрашивает их только при отсутствии.\n\nЕсть два способа получить данные:\n\n- **`--app browser`** (по умолчанию) открывает [my.telegram.org/apps](https://my.telegram.org/apps). Войдите, создайте приложение, если его нет (любые название и короткое имя, платформа Desktop), и вставьте `App api_id` и `App api_hash` по запросу `tg`. Хеш при вводе скрыт.\n- **`--app auto`** заполняет сайт за вас. Команда запрашивает телефон и код, который my.telegram.org присылает сообщением в Telegram, затем получает существующее приложение или создаёт новое. У сайта нет API: `tg` работает с веб-формой. Изменения сайта могут сломать этот способ; в таком случае используйте `--app\n  browser`.\n\nДанные приложения сохраняются только после успешного входа в Telegram.\n\n",
-          "after": "\n[my.telegram.org/apps](https://my.telegram.org/apps) — официальный сайт Telegram для получения данных подключения. Войдите на нём с номером своего аккаунта Telegram.\n\n> **Что такое приложение Telegram и зачем оно нужно?**\n>\n> Здесь «приложение» — регистрационная карточка программы в API Telegram. В нашем случае подключаться к Telegram будет CLI `tg`. Вам нужно заполнить форму на сайте; программировать или устанавливать ещё одно приложение не требуется. Telegram выдаёт `api_id` и `api_hash`, по которым узнаёт программу. Подтверждение через QR или код затем даёт доступ именно к вашему аккаунту. Это разные шаги.\n>\n> Telegram позволяет получить один `api_id` на номер телефона. Если приложение уже зарегистрировано, используйте его данные; создавать второе не нужно. [Официальное объяснение Telegram](https://core.telegram.org/api/obtaining_api_id).\n\n**Получить данные вручную в браузере — способ по умолчанию:**\n\n```sh\ntg session start --app browser\n```\n\n1. Команда откроет [my.telegram.org/apps](https://my.telegram.org/apps). Если браузер не открылся, перейдите по ссылке самостоятельно.\n2. Укажите номер телефона в международном формате, например `+34600111222`. Код для входа на этот сайт приходит сообщением в уже открытый Telegram.\n3. Если приложение ещё не создано, заполните форму **API development tools**: название, короткое имя и платформу **Desktop**. Если сайт показывает существующее приложение, этот шаг пропустите.\n4. Найдите **App api_id** и **App api_hash**. Скопируйте каждое значение в терминал, когда `tg` его запросит. При вводе хеша символы не отображаются — это нормально.\n5. После этого в терминале появится QR-код для входа в аккаунт. Как его сканировать, описано ниже.\n\n**Заполнить форму сайта автоматически:**\n\n```sh\ntg session start --app auto\n```\n\nКоманда запросит номер телефона и код, пришедший в Telegram для сайта my.telegram.org, затем получит существующие данные приложения или зарегистрирует его. Дальше она покажет QR-код. Если автоматический шаг не сработал, запустите полную команду `tg session start --app browser` и пройдите шаги выше.\n\nДанные приложения сохраняются только после успешного входа в аккаунт. Код сайта my.telegram.org и код входа в аккаунт — отдельные подтверждения; используйте код из сообщения, которое относится к текущему запросу терминала.\n\n"
-        },
-        {
-          "before": "\n```sh\ntg session start           # a QR code in the terminal\ntg session start phone     # a phone number, the code Telegram sends, and your 2FA password\ntg session start phone --sms   # the same, asking Telegram for the code by SMS\n```\n\n**QR-код:** в приложении Telegram откройте Настройки → Устройства → Подключить устройство и отсканируйте код. Пока вы ждёте, код обновляется.\n\n**Телефон:** введите номер в международном формате, затем код входа. Если настроен облачный пароль (2FA), `tg` запросит его со скрытым вводом. При `--app auto` номер спрашивается только один раз.\n\nПосле входа любым способом в списке сессий Telegram появляется новое устройство.\n\n",
-          "after": "\n**Войти по QR-коду:**\n\n```sh\ntg session start\n```\n\n1. Если `tg` ещё не знает данные приложения, сначала выполните запросы из раздела выше.\n2. Оставьте терминал с QR-кодом открытым на компьютере.\n3. На телефоне откройте **Telegram** и переключитесь на аккаунт, который хотите подключить.\n4. Откройте **Настройки → Устройства → Подключить устройство**. Название последнего пункта может отличаться в вашей версии Telegram. Откроется сканер внутри Telegram.\n5. Наведите камеру на QR-код в терминале и подтвердите подключение, если Telegram попросит. Используйте сканер Telegram, а не обычное приложение камеры.\n6. Если для аккаунта включён облачный пароль — дополнительный пароль двухэтапной проверки (2FA), — введите его в терминале по запросу. Символы пароля не отображаются.\n7. Дождитесь сообщения **Logged in as …**. Если код успел устареть, сканируйте обновлённый код, который показывает терминал.\n\n**Войти по номеру телефона:**\n\n```sh\ntg session start phone\n```\n\n1. При первом запуске получите данные приложения по инструкции выше.\n2. Введите номер нужного аккаунта в международном формате, например `+34600111222`.\n3. Посмотрите сообщение терминала о способе доставки кода. Обычно код приходит в служебный чат **Telegram** на устройстве, где вы уже вошли; иногда Telegram выбирает SMS на этот номер. Способ выбирает Telegram. Для стороннего CLI SMS может быть недоступно — в этом случае сначала войдите в официальное приложение на телефоне и используйте код из Telegram или QR. [Как Telegram доставляет коды](https://core.telegram.org/api/auth).\n4. Введите свежий код в терминале, в запрос **login code**.\n5. Если включён облачный пароль (2FA), введите его по следующему запросу. Это ваш ранее настроенный пароль, а не новый одноразовый код.\n6. Дождитесь **Logged in as …**. При ошибке кода следуйте подсказке терминала; не используйте код для входа на my.telegram.org вместо кода аккаунта.\n\nПосле входа CLI появляется как новое устройство в **Настройки → Устройства**. Пример вывода ниже показывает имя аккаунта и путь к сохранённой сессии; путь зависит от ОС. [Пути для Windows, macOS и Linux](./installation.md#where-files-go).\n\n\nКоманда `tg session start phone --sms` просит SMS. Способ выбирает Telegram, CLI сообщает фактическую доставку.\n"
-        },
-        {
-          "before": "\nСессия действует до завершения через `tg session end`, список устройств Telegram или самим Telegram при превышении срока неактивности аккаунта (`authorization_ttl_days` в [API Telegram](https://core.telegram.org/method/account.setAuthorizationTTL)). Этот срок настраивается в списке устройств приложения. Профиль, используемый ежедневно, его не достигает. После завершения сессии любая команда сообщает «вход не выполнен или сессия завершена» с кодом `4`; войдите снова через `tg session start` ([Решение проблем](./troubleshooting.md#not-logged-in-or-the-session-was-ended--run-tg-session-start)).\n\n",
-          "after": "\n**У `tg` нет собственного фиксированного срока вроде «вход действует 30 дней».** Закрытие терминала или перезагрузка компьютера не завершают сохранённую сессию. Дальнейшая работа зависит от того, принимает ли её Telegram.\n\nСессия прекращается, если вы завершили её командой `tg session end`, отключили устройство в Telegram или Telegram отозвал авторизацию. Для неиспользуемых сессий действует настройка **Настройки → Устройства → Автоматически завершать старые сеансы**. Срок считается с последнего использования этой сессии, а не с первого входа.\n\nВ текущем официальном Telegram Desktop доступны интервалы неактивности **1 неделя, 1 месяц, 3 месяца, 6 месяцев и 1 год (365 дней)**. Максимальный пункт в этом меню — 1 год без активности; это не максимальная общая длительность регулярно используемого входа. Проверьте выбранное значение в своём приложении: варианты могут меняться. [Настройка в Telegram API](https://core.telegram.org/method/account.setAuthorizationTTL) и [код официального клиента](https://github.com/telegramdesktop/tdesktop/blob/dev/Telegram/SourceFiles/boxes/self_destruction_box.cpp).\n\nЕсли команда сообщает «вход не выполнен или сессия завершена» с кодом `4`, войдите заново:\n\n```sh\ntg session start\n```\n\nДля рабочего профиля выполните `tg work session start`. [Решение проблем](./troubleshooting.md#not-logged-in-or-the-session-was-ended--run-tg-session-start).\n\n"
-        },
-        {
-          "before": "\nПрофиль — отдельный вход со своими сессией, приложением, настройками, получателями и записями запусков. Имя указывается **первым словом**, а не параметром:\n\n",
+          "before": "\nПрофиль — отдельный вход со своей сессией, приложением, настройками, получателями и записями запусков. Имя указывается **первым словом**, а не параметром:\n\n",
           "after": "\nПрофиль — именованное подключение аккаунта Telegram в CLI. Обычно отдельный профиль создают для каждого номера: например, `default` для личного аккаунта и `work` для рабочего. У каждого подключения свои сессия входа, данные приложения, настройки, разрешённые получатели и записи запусков.\n\nИмя `work` — выбранная вами метка, а не номер телефона. Чтобы подключить рабочий аккаунт, выполните:\n\n```sh\ntg work session start --app browser\n```\n\nПри регистрации приложения укажите рабочий номер; при QR-входе переключите Telegram на телефоне на рабочий аккаунт. После входа проверьте, какой аккаунт связан с меткой:\n\n```sh\ntg work account show\n```\n\nОдин и тот же аккаунт тоже можно подключить в нескольких профилях; профиль сам по себе не создаёт новый аккаунт Telegram. Имя профиля указывается **первым словом после `tg`**, перед командой:\n\n"
         }
       ],
       "en": [
-        {
-          "before": "\nA login has two parts:\n\n- **the app**: an `api_id` and `api_hash` from [my.telegram.org](https://my.telegram.org/apps). They\n  identify the program to Telegram. `tg` keeps them in the OS keyring.\n- **the session**: what Telegram hands out once you log in. It is a file in the state directory, and\n  it is as good as your password.\n\n",
-          "after": "\nBefore starting, open Telegram on your phone and make sure you are signed in to the account you want to connect. Keep it nearby to read codes or scan a QR code.\n\nConnecting has two steps:\n\n1. **Get Telegram application credentials**: `api_id` (a numeric identifier) and `api_hash` (a secret key) from [my.telegram.org](https://my.telegram.org/apps). They let `tg` identify its program to Telegram. Usually you only do this on the first login for a profile.\n2. **Confirm access to your account** by scanning a QR code or entering a login code. `tg` then saves a **session**: authorization data that lets later commands work without signing in again.\n\n"
-        },
-        {
-          "before": "\nEvery user registers their own app. Telegram gives one app per phone number, so an app id is never\nshared or built into `tg`. You need it once per profile; `tg session start` asks only when the profile\nhas none.\n\nTwo ways to get it:\n\n- **`--app browser`** (the default) opens [my.telegram.org/apps](https://my.telegram.org/apps). Log\n  in there, create an app if you have none (any title and short name, platform Desktop), and paste\n  `App api_id` and `App api_hash` when `tg` asks. The hash is not shown as you type.\n- **`--app auto`** fills in the site for you. It asks your phone number and the code my.telegram.org\n  sends you as a message in Telegram, then reads your app, or creates one if you have none. The site\n  has no API, so `tg` follows its web form; a change on Telegram's side can break this. `--app\n  browser` still works then.\n\nThe app is stored only after Telegram has accepted the login.\n\n",
-          "after": "\n[my.telegram.org/apps](https://my.telegram.org/apps) is Telegram’s official site for registering connection credentials. Use the phone number of your Telegram account.\n\n> **What is a Telegram application and why is it needed?**\n>\n> An “application” here is a registration record for a program using Telegram’s API. The program is the `tg` CLI. Fill in a form; you do not have to write software or install another app. Telegram issues `api_id` and `api_hash` to identify the program. QR or code confirmation then grants access to your account. These are separate steps.\n>\n> Telegram allows one `api_id` per phone number. If you already registered an application, reuse its credentials. [Telegram’s explanation](https://core.telegram.org/api/obtaining_api_id).\n\n**Get credentials manually in your browser — the default method:**\n\n```sh\ntg session start --app browser\n```\n\n1. The command opens [my.telegram.org/apps](https://my.telegram.org/apps). If it cannot open your browser, follow the link yourself.\n2. Enter your phone number in international format, for example `+34600111222`. The site’s login code arrives as a message in Telegram on a signed-in device.\n3. If no application exists, fill in **API development tools**: a title, short name and **Desktop** platform. Skip this if the site displays an existing application.\n4. Copy **App api_id** and **App api_hash** into the terminal when requested. The hash is hidden while you type; this is expected.\n5. The terminal then shows a QR code for account login. Follow the scanning steps below.\n\n**Fill in the site automatically:**\n\n```sh\ntg session start --app auto\n```\n\nThe command asks for your phone number and the code Telegram sends for my.telegram.org, then reads your existing application or registers it. It then shows a QR code. If this step fails, run the complete command `tg session start --app browser` and follow the steps above.\n\nCredentials are saved only after account login succeeds. The my.telegram.org code and the account login code are separate confirmations: use the message corresponding to the current terminal prompt.\n\n"
-        },
-        {
-          "before": "\n```sh\ntg session start           # a QR code in the terminal\ntg session start phone     # a phone number, the code Telegram sends, and your 2FA password\ntg session start phone --sms   # the same, asking Telegram for the code by SMS\n```\n\n**QR:** scan the code in the Telegram app: Settings → Devices → Link Desktop Device. The code is\nrenewed while you wait.\n\n**Phone:** type the number in international format, then the login code. If the account has a\ncloud password (2FA), `tg` asks for it without showing what you type. With `--app auto`, the phone\nnumber is asked only once. The code usually arrives in the Telegram app; `--sms` asks for an SMS instead,\nbut Telegram chooses, and `tg` says which way it was sent. When Telegram has no SMS for the\naccount, `tg` says so and asks for the code from the app.\n\nAfter either, Telegram lists a new device in the app's list of sessions.\n\n",
-          "after": "\n**Log in by QR code:**\n\n```sh\ntg session start\n```\n\n1. If credentials are not stored yet, first answer the application prompts described above.\n2. Keep the terminal displaying the QR code open on your computer.\n3. Open **Telegram on your phone** and switch to the account you want to connect.\n4. Open **Settings → Devices → Link Desktop Device**. The last label may differ in your version. This opens Telegram’s own scanner.\n5. Point it at the QR code in your terminal and confirm the connection if asked. Use the scanner inside Telegram rather than your phone’s ordinary camera app.\n6. If two-step verification (2FA) is enabled, enter its additional password in the terminal. Password characters are hidden.\n7. Wait for **Logged in as …**. If the QR code expires, scan the new code currently shown in the terminal.\n\n**Log in by phone number:**\n\n```sh\ntg session start phone\n```\n\n1. On first use, obtain application credentials as described above.\n2. Enter the account’s phone number in international format, for example `+34600111222`.\n3. Read the terminal’s code-delivery notice. Usually the code arrives in the verified **Telegram** service chat on a signed-in device; Telegram may choose SMS instead. Telegram decides the delivery method. SMS may be unavailable to a third-party CLI: sign in with the official phone app first, then use a Telegram code or QR. [How Telegram delivers codes](https://core.telegram.org/api/auth).\n4. Enter the fresh code at the **login code** prompt.\n5. If 2FA is enabled, enter your existing two-step verification password at the next prompt. This is a password you previously configured, not another one-time code.\n6. Wait for **Logged in as …**. Follow terminal instructions if the code is rejected; do not substitute the my.telegram.org code for an account login code.\n\nAfter login, the CLI appears as another device under **Settings → Devices**. The example below shows the account and saved session path; the path depends on your OS. [Windows, macOS and Linux paths](./installation.md#where-files-go).\n\n\nUse `tg session start phone --sms` to request SMS delivery. Telegram chooses the actual method; the CLI reports it.\n"
-        },
-        {
-          "before": "\nUntil it is ended: by `tg session end`, from the list of devices in a Telegram app, or by Telegram\nitself once the session has gone unused for longer than the account's limit for inactive sessions\n(`authorization_ttl_days` in\n[Telegram's API](https://core.telegram.org/method/account.setAuthorizationTTL)), which the apps let\nyou set in the list of devices. A profile that runs every day never reaches it. When a session has\nended, every command answers \"not logged in, or the session was ended\" with exit code `4`; log in\nagain with `tg session start`\n([troubleshooting.md](./troubleshooting.md#not-logged-in-or-the-session-was-ended--run-tg-session-start)).\n\n",
-          "after": "\n**`tg` does not set a fixed lifetime such as “30 days after login”.** Closing the terminal or restarting your computer does not end the saved session. It keeps working while Telegram accepts its authorization.\n\nIt ends when you run `tg session end`, remove the device in Telegram, or Telegram revokes the authorization. Unused sessions are controlled by **Settings → Devices → Automatically terminate old sessions**. The period is measured from this session’s last use, not from its first login.\n\nThe current official Telegram Desktop offers **1 week, 1 month, 3 months, 6 months and 1 year (365 days)** of inactivity. One year is the largest choice in that menu, not a maximum total lifetime for an actively used login. Check your app’s chosen value; available choices may change. [Telegram API setting](https://core.telegram.org/method/account.setAuthorizationTTL) and [official client code](https://github.com/telegramdesktop/tdesktop/blob/dev/Telegram/SourceFiles/boxes/self_destruction_box.cpp).\n\nIf a command reports “not logged in, or the session was ended” with exit code `4`, log in again:\n\n```sh\ntg session start\n```\n\nFor a work profile, run `tg work session start`. [Troubleshooting](./troubleshooting.md#not-logged-in-or-the-session-was-ended--run-tg-session-start).\n\n"
-        },
         {
           "before": "\nA profile is a separate login: its own session, app, settings, recipients and runs. It is named by\n**the first word**, not by an option:\n\n",
           "after": "\nA profile is a named connection to a Telegram account in the CLI. Usually you use one per phone number: for example `default` for a personal account and `work` for a work account. Each connection has its own login session, application credentials, settings, allowed recipients and run records.\n\n`work` is a label you choose, not a phone number. Connect a work account with:\n\n```sh\ntg work session start --app browser\n```\n\nUse the work number to register credentials; for QR login, switch Telegram on your phone to the work account. Then check which account the label refers to:\n\n```sh\ntg work account show\n```\n\nYou can also connect the same account in multiple profiles; a profile does not create a Telegram account. The profile name is **the first word after `tg`**, before the command:\n\n"
@@ -249,49 +155,8 @@
       ],
       "es": [
         {
-          "before": "\nUn inicio de sesión tiene dos partes:\n\n- **La aplicación:** un `api_id` y un `api_hash` de [my.telegram.org](https://my.telegram.org/apps). Identifican el programa ante Telegram. `tg` los guarda en el almacén de claves del sistema operativo.\n- **La sesión:** lo que Telegram entrega después de iniciar sesión. Se guarda como archivo en el directorio de estado y permite acceder a tu cuenta igual que una contraseña.\n\n",
-          "after": "\nAntes de empezar, abre Telegram en tu teléfono y comprueba que has iniciado sesión en la cuenta que quieres conectar. Tenlo a mano para leer códigos o escanear el QR.\n\nLa conexión tiene dos pasos:\n\n1. **Obtener credenciales de la aplicación Telegram**: `api_id` (identificador numérico) y `api_hash` (clave secreta) de [my.telegram.org](https://my.telegram.org/apps). Permiten a `tg` identificar el programa ante Telegram. Normalmente solo se hace en el primer acceso de cada perfil.\n2. **Confirmar el acceso a tu cuenta** mediante QR o código. `tg` guarda una **sesión**: datos de autorización para ejecutar comandos sin volver a iniciar sesión.\n\n"
-        },
-        {
-          "before": "\nCada usuario registra su propia aplicación. Telegram proporciona una aplicación por número de teléfono; por eso `tg` no incluye ni comparte un identificador de aplicación. Se necesita una vez por perfil; `tg session start` solo lo pide si el perfil todavía no tiene uno.\n\nHay dos formas de obtenerlo:\n\n- **`--app browser`** (predeterminado) abre [my.telegram.org/apps](https://my.telegram.org/apps). Inicia sesión allí, crea una aplicación si aún no tienes una (cualquier título y nombre corto, plataforma Desktop) y pega `App api_id` y `App api_hash` cuando `tg` los solicite. El hash no se muestra mientras lo escribes.\n- **`--app auto`** rellena el sitio por ti. Solicita tu número y el código que my.telegram.org envía por Telegram; después consulta tu aplicación o crea una si no existe. El sitio no tiene API, así que `tg` utiliza el formulario web; un cambio de Telegram puede romper este proceso. En ese caso, `--app\n  browser` sigue disponible.\n\nLa aplicación solo se guarda después de que Telegram acepte el inicio de sesión.\n\n",
-          "after": "\n[my.telegram.org/apps](https://my.telegram.org/apps) es el sitio oficial de Telegram para registrar credenciales de conexión. Usa el número de tu cuenta Telegram.\n\n> **¿Qué es una aplicación Telegram y para qué sirve?**\n>\n> Aquí una «aplicación» es el registro de un programa que usa la API de Telegram. El programa es el CLI `tg`. Solo necesitas rellenar un formulario; no hace falta programar ni instalar otra aplicación. Telegram entrega `api_id` y `api_hash` para identificar el programa. El QR o código confirma después el acceso a tu cuenta. Son pasos distintos.\n>\n> Telegram permite un `api_id` por número. Si ya registraste una aplicación, reutiliza sus credenciales. [Explicación de Telegram](https://core.telegram.org/api/obtaining_api_id).\n\n**Obtener credenciales manualmente en el navegador — método predeterminado:**\n\n```sh\ntg session start --app browser\n```\n\n1. El comando abre [my.telegram.org/apps](https://my.telegram.org/apps). Si el navegador no se abre, entra mediante el enlace.\n2. Introduce el número en formato internacional, por ejemplo `+34600111222`. El código del sitio llega por mensaje a Telegram en un dispositivo donde ya has iniciado sesión.\n3. Si no hay una aplicación, rellena **API development tools**: título, nombre corto y plataforma **Desktop**. Omite este paso si ya aparece una aplicación.\n4. Copia **App api_id** y **App api_hash** en la terminal cuando se soliciten. El hash no se muestra al escribirlo; es normal.\n5. La terminal muestra un QR para acceder a tu cuenta. Sigue las instrucciones de escaneo de abajo.\n\n**Rellenar el sitio automáticamente:**\n\n```sh\ntg session start --app auto\n```\n\nEl comando pide el número y el código que Telegram envía para my.telegram.org, obtiene la aplicación existente o la registra y muestra el QR. Si falla, ejecuta el comando completo `tg session start --app browser` y sigue los pasos anteriores.\n\nLas credenciales se guardan solo tras un acceso correcto a la cuenta. El código de my.telegram.org y el código de acceso a la cuenta son confirmaciones distintas: usa el mensaje correspondiente a la petición actual de la terminal.\n\n"
-        },
-        {
-          "before": "\n```sh\ntg session start           # a QR code in the terminal\ntg session start phone     # a phone number, the code Telegram sends, and your 2FA password\ntg session start phone --sms   # the same, asking Telegram for the code by SMS\n```\n\n**QR:** escanea el código desde Telegram: Ajustes → Dispositivos → Vincular dispositivo de escritorio. El código se renueva mientras esperas.\n\n**Teléfono:** escribe el número en formato internacional y después el código de inicio de sesión. Si la cuenta tiene una contraseña en la nube (2FA), `tg` la solicita sin mostrar lo que escribes. Con `--app auto`, solo pide el número una vez.\n\nEn ambos casos, Telegram muestra un nuevo dispositivo en la lista de sesiones de la aplicación.\n\n",
-          "after": "\n**Entrar por QR:**\n\n```sh\ntg session start\n```\n\n1. Si aún no hay credenciales guardadas, responde primero a las preguntas sobre la aplicación indicadas arriba.\n2. Deja abierta la terminal con el QR en el ordenador.\n3. Abre **Telegram en tu teléfono** y selecciona la cuenta que quieres conectar.\n4. Entra en **Ajustes → Dispositivos → Vincular dispositivo de escritorio**. El último nombre puede variar según la versión. Se abrirá el escáner de Telegram.\n5. Apunta al QR de la terminal y confirma el acceso si se solicita. Usa el escáner de Telegram, no la aplicación de cámara habitual.\n6. Si tienes verificación en dos pasos (2FA), introduce su contraseña adicional en la terminal. Los caracteres no se muestran.\n7. Espera **Logged in as …**. Si el QR caduca, escanea el código actualizado de la terminal.\n\n**Entrar por número de teléfono:**\n\n```sh\ntg session start phone\n```\n\n1. La primera vez, obtén las credenciales de la aplicación como se explica arriba.\n2. Introduce el número en formato internacional, por ejemplo `+34600111222`.\n3. Lee el aviso de la terminal sobre la entrega del código. Normalmente llega al chat oficial **Telegram** en un dispositivo conectado; Telegram puede elegir SMS. Telegram decide el método. El SMS puede no estar disponible para un CLI de terceros: accede primero con la aplicación oficial del teléfono y usa un código de Telegram o QR. [Cómo Telegram entrega códigos](https://core.telegram.org/api/auth).\n4. Introduce el código reciente en la petición **login code**.\n5. Si tienes 2FA, introduce después la contraseña que configuraste anteriormente; no es otro código temporal.\n6. Espera **Logged in as …**. Si se rechaza el código, sigue las indicaciones; no uses el código de my.telegram.org como código de acceso a la cuenta.\n\nEl CLI aparece como otro dispositivo en **Ajustes → Dispositivos**. El ejemplo siguiente muestra la cuenta y la ruta de la sesión; la ruta depende del sistema. [Rutas de Windows, macOS y Linux](./installation.md#where-files-go).\n\n\nUsa `tg session start phone --sms` para pedir SMS. Telegram elige el método real; la CLI lo indica.\n"
-        },
-        {
-          "before": "\nHasta que se cierre: mediante `tg session end`, desde la lista de dispositivos de Telegram o por Telegram cuando la sesión no se utiliza durante más tiempo que el límite de inactividad de la cuenta (`authorization_ttl_days` en [la API de Telegram](https://core.telegram.org/method/account.setAuthorizationTTL)). Puedes ajustar ese límite en la lista de dispositivos. Un perfil que se utiliza a diario nunca lo alcanza. Si la sesión termina, todos los comandos responden \"not logged in, or the session was ended\" con código de salida `4`; vuelve a iniciar sesión con `tg session start` ([solución de problemas](./troubleshooting.md#not-logged-in-or-the-session-was-ended--run-tg-session-start)).\n\n",
-          "after": "\n**`tg` no establece una duración fija como «30 días desde el acceso».** Cerrar la terminal o reiniciar el ordenador no finaliza la sesión guardada. Funciona mientras Telegram acepta la autorización.\n\nFinaliza al ejecutar `tg session end`, eliminar el dispositivo en Telegram o revocar Telegram la autorización. Las sesiones sin uso dependen de **Ajustes → Dispositivos → Finalizar sesiones antiguas automáticamente**. El periodo cuenta desde el último uso de esa sesión, no desde el primer acceso.\n\nEl cliente oficial Telegram Desktop ofrece actualmente **1 semana, 1 mes, 3 meses, 6 meses y 1 año (365 días)** sin actividad. Un año es la opción máxima de ese menú, no la duración total máxima de una sesión que se utiliza. Comprueba el valor en tu aplicación; las opciones pueden cambiar. [Ajuste de la API](https://core.telegram.org/method/account.setAuthorizationTTL) y [código del cliente oficial](https://github.com/telegramdesktop/tdesktop/blob/dev/Telegram/SourceFiles/boxes/self_destruction_box.cpp).\n\nSi un comando responde “not logged in, or the session was ended” con código `4`, vuelve a entrar:\n\n```sh\ntg session start\n```\n\nPara el perfil laboral, usa `tg work session start`. [Solución de problemas](./troubleshooting.md#not-logged-in-or-the-session-was-ended--run-tg-session-start).\n\n"
-        },
-        {
           "before": "\nUn perfil es una sesión independiente, con su propia aplicación, configuración, destinatarios y ejecuciones. Su nombre es **la primera palabra** del comando, no una opción:\n\n",
           "after": "\nUn perfil es una conexión con nombre a una cuenta Telegram en el CLI. Normalmente usas uno por número: `default` para la cuenta personal y `work` para la cuenta laboral. Cada conexión tiene su sesión, credenciales de aplicación, ajustes, destinatarios permitidos y ejecuciones.\n\n`work` es una etiqueta que eliges, no un número. Conecta la cuenta laboral con:\n\n```sh\ntg work session start --app browser\n```\n\nUsa el número laboral para registrar credenciales; para el QR, cambia Telegram del teléfono a la cuenta laboral. Comprueba después qué cuenta corresponde a la etiqueta:\n\n```sh\ntg work account show\n```\n\nPuedes conectar la misma cuenta en varios perfiles; un perfil no crea una cuenta Telegram. Su nombre es **la primera palabra después de `tg`**, antes del comando:\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "archive",
-    "reason": "Explain local archive and SQLite, distinguish account login from history download, and explain empty local search results before introducing fetch/offline commands.",
-    "replacements": {
-      "en": [
-        {
-          "before": "\n`tg` keeps what it reads in a local SQLite database: the **local store**. Search, export and\n`--offline` answer from it without asking Telegram. This page covers what it keeps, how to fill it,\nand how to keep it current.\n",
-          "after": "\nThe **local message archive** is a database file on your computer. It holds conversations and messages `tg` has already read or explicitly downloaded from Telegram. SQLite is the format of that database; you do not need to install or manage a database server.\n\nLogging in does not download all chat history. A local search finds only what has been saved: an empty result does not prove the message is absent from Telegram. Fetch the required chat and time range before searching older history. `--offline` means the command uses saved data without connecting to Telegram. This page explains how to check coverage, download history and keep it current.\n"
-        }
-      ],
-      "ru": [
-        {
-          "before": "\n`tg` сохраняет прочитанные данные в локальной SQLite-базе. Поиск, экспорт и `--offline` работают с ней без запросов к Telegram. Здесь описано содержимое базы, загрузка истории и поддержание актуальности.\n",
-          "after": "\n**Локальный архив сообщений** — файл базы данных на вашем компьютере. В нём хранятся чаты и сообщения, которые `tg` уже прочитал или явно скачал из Telegram. SQLite — формат этой базы; отдельно устанавливать и обслуживать сервер базы данных не нужно.\n\nВход в аккаунт не скачивает всю историю. Локальный поиск находит только сохранённое: пустой результат ещё не означает, что сообщения нет в Telegram. Перед поиском старой переписки загрузите нужный чат и период. `--offline` означает работу с сохранёнными данными без подключения к Telegram. Здесь описано, как проверить полноту архива, скачать историю и поддерживать её актуальность.\n"
-        }
-      ],
-      "es": [
-        {
-          "before": "\n`tg` guarda lo que lee en una base de datos SQLite: el **archivo local**. Las búsquedas, exportaciones y `--offline` consultan ese archivo sin pedir datos a Telegram. Esta página explica qué guarda, cómo llenarlo y cómo mantenerlo actualizado.\n",
-          "after": "\nEl **archivo local de mensajes** es un fichero de base de datos en tu ordenador. Guarda los chats y mensajes que `tg` ya ha leído o descargado expresamente de Telegram. SQLite es el formato del archivo; no necesitas instalar ni administrar un servidor de base de datos.\n\nIniciar sesión no descarga todo el historial. La búsqueda local encuentra solo lo guardado: un resultado vacío no demuestra que el mensaje no exista en Telegram. Descarga el chat y periodo necesarios antes de buscar mensajes antiguos. `--offline` usa los datos guardados sin conectarse a Telegram. Aquí aprenderás a comprobar la cobertura, descargar historial y mantenerlo actualizado.\n"
         }
       ]
     }
@@ -303,29 +168,17 @@
     "replacements": {
       "en": [
         {
-          "before": "\nA session consists of your MAX account token and a stable device identity. The token is stored in the operating-system keyring; everything else lives in a file beside the configuration.\n",
-          "after": "\nA **session** is a saved connection to your MAX account. Its **token** is a secret authorization key: possession of it lets the CLI access that account without requesting a new login code each time. The CLI saves the token in your operating system’s protected credential store (keyring), and a separate file remembers the device so commands reuse the same connection.\n\nBefore starting, open MAX on your phone and sign in to the account you want to connect. For a first connection, use the QR instructions below; importing a token manually is an advanced alternative.\n"
-        },
-        {
           "before": "```sh\nmax session start qr\n```",
           "after": "```sh\nmax session start qr\n```\n\n1. Keep the QR code visible on your computer, in the terminal or browser window opened by the command.\n2. Open MAX on your phone and select the account you want to connect.\n3. Go to **Settings → Devices** and open its QR login scanner. Labels can vary by app version.\n4. Scan the computer’s QR code using the scanner inside MAX and confirm the connection if asked.\n5. If MAX asks for an additional account password, enter it at the terminal prompt; input is hidden.\n6. Wait for the command to finish successfully, then run `max account show` to verify the account and `max chats list --limit 5` to read a few chats.\n\n[Official MAX login instructions](https://help.max.ru/help/account/dostup_k_prophilyu/kak_voiti_v_prophil_max_esli_on_uzhe_est)."
         }
       ],
       "ru": [
         {
-          "before": "\nСессия — это токен вашего аккаунта MAX плюс устойчивая личность устройства. Токен лежит в\nключнице операционной системы, всё остальное — в файле рядом с настройками.\n",
-          "after": "\n**Сессия** — сохранённое подключение к вашему аккаунту MAX. **Токен** — секретный ключ авторизации: с ним CLI получает доступ к аккаунту без нового кода входа при каждой команде. CLI сохраняет токен в защищённом хранилище ключей операционной системы (keyring), а отдельный файл запоминает устройство, чтобы команды использовали одно подключение.\n\nПеред первым входом откройте MAX на телефоне и войдите в нужный аккаунт. Для первого подключения используйте QR по инструкции ниже; ручной импорт токена — вариант для тех, у кого уже есть этот ключ.\n"
-        },
-        {
           "before": "```sh\nmax session start qr\n```",
           "after": "```sh\nmax session start qr\n```\n\n1. Оставьте QR-код видимым на компьютере — в терминале или в окне браузера, которое открыла команда.\n2. На телефоне откройте MAX и выберите аккаунт, который хотите подключить.\n3. Перейдите в **Настройки → Устройства** и откройте сканер для входа по QR. Названия пунктов могут отличаться в вашей версии приложения.\n4. Отсканируйте QR на компьютере сканером внутри MAX и подтвердите подключение, если появится запрос.\n5. Если MAX запрашивает дополнительный пароль аккаунта, введите его по запросу терминала; символы не отображаются.\n6. Дождитесь успешного завершения команды. Проверьте аккаунт через `max account show`, затем прочитайте несколько чатов через `max chats list --limit 5`.\n\n[Официальная инструкция входа MAX](https://help.max.ru/help/account/dostup_k_prophilyu/kak_voiti_v_prophil_max_esli_on_uzhe_est)."
         }
       ],
       "es": [
-        {
-          "before": "\nUna sesión combina el token de tu cuenta de MAX con una identidad de dispositivo estable. El token se guarda en el llavero del sistema operativo; el resto, en un archivo junto a la configuración.\n",
-          "after": "\nUna **sesión** es una conexión guardada a tu cuenta MAX. Su **token** es una clave secreta de autorización: permite al CLI acceder sin pedir un código en cada comando. Se guarda en el llavero protegido del sistema operativo; un archivo independiente recuerda el dispositivo para reutilizar la conexión.\n\nAntes de empezar, abre MAX en el teléfono y entra en la cuenta que quieres conectar. Para la primera conexión, utiliza el QR de abajo; la importación manual de tokens es una alternativa avanzada.\n"
-        },
         {
           "before": "```sh\nmax session start qr\n```",
           "after": "```sh\nmax session start qr\n```\n\n1. Mantén visible el QR en el ordenador, en la terminal o en la ventana del navegador abierta por el comando.\n2. Abre MAX en el teléfono y selecciona la cuenta que quieres conectar.\n3. Ve a **Ajustes → Dispositivos** y abre el escáner de acceso por QR. Los nombres pueden variar según la versión.\n4. Escanea el QR del ordenador desde MAX y confirma la conexión si se solicita.\n5. Si MAX pide una contraseña adicional de la cuenta, introdúcela en la terminal; los caracteres se ocultan.\n6. Espera a que termine el comando, comprueba la cuenta con `max account show` y lee algunos chats con `max chats list --limit 5`.\n\n[Instrucciones oficiales de MAX](https://help.max.ru/help/account/dostup_k_prophilyu/kak_voiti_v_prophil_max_esli_on_uzhe_est)."
@@ -342,30 +195,18 @@
         {
           "before": "```sh\ntg [profile] [options] <resource> <action> [arguments]\n```",
           "after": "The following is a syntax template, not a command to copy. Replace placeholders with the values shown in the examples below.\n\n```text\ntg [profile] [options] <resource> <action> [arguments]\n```"
-        },
-        {
-          "before": "The first login also asks for your own Telegram app from my.telegram.org; `--app auto` fills in the\nsite for you. Both steps, and what is kept where: [sessions.md](./sessions.md).",
-          "after": "The first connection needs `api_id` and `api_hash`: credentials that identify the CLI program to Telegram. They come from [my.telegram.org](https://my.telegram.org/apps). Run the complete command `tg session start --app auto` to obtain them automatically, or `tg session start --app browser` to enter them from the site. Then confirm account login on your phone. [Step-by-step QR and phone instructions](./sessions.md)."
         }
       ],
       "ru": [
         {
           "before": "```sh\ntg [profile] [options] <resource> <action> [arguments]\n```",
           "after": "Ниже схема команды, а не команда для копирования. Вместо обозначений в скобках подставляют значения, как в примерах ниже.\n\n```text\ntg [profile] [options] <resource> <action> [arguments]\n```"
-        },
-        {
-          "before": "При первом входе нужны данные вашего приложения с my.telegram.org; `--app auto` заполняет сайт за вас. Оба шага и хранение данных: [Вход и сессии](./sessions.md).",
-          "after": "При первом подключении нужны `api_id` и `api_hash` — данные, по которым Telegram узнаёт программу CLI. Их получают на [my.telegram.org](https://my.telegram.org/apps). Полная команда `tg session start --app auto` получает их автоматически; `tg session start --app browser` позволяет ввести их с сайта вручную. Затем подтвердите вход в аккаунт с телефона. [Пошаговый вход по QR и номеру телефона](./sessions.md)."
         }
       ],
       "es": [
         {
           "before": "```sh\ntg [profile] [options] <resource> <action> [arguments]\n```",
           "after": "Esto es una plantilla de sintaxis, no un comando para copiar. Sustituye los marcadores por los valores de los ejemplos siguientes.\n\n```text\ntg [profile] [options] <resource> <action> [arguments]\n```"
-        },
-        {
-          "before": "El primer inicio también solicita tu aplicación de Telegram de my.telegram.org; `--app auto` rellena el sitio por ti. Consulta ambos pasos y dónde se guarda cada dato en [sesiones](./sessions.md).",
-          "after": "La primera conexión necesita `api_id` y `api_hash`: credenciales que identifican el programa CLI ante Telegram. Se obtienen en [my.telegram.org](https://my.telegram.org/apps). Usa el comando completo `tg session start --app auto` para obtenerlas automáticamente o `tg session start --app browser` para introducirlas desde el sitio. Después confirma el acceso desde el teléfono. [Pasos de acceso por QR y teléfono](./sessions.md)."
         }
       ]
     }
@@ -391,56 +232,6 @@
         {
           "before": "```sh\nmax [профиль] [опции] <ресурс> <действие> [аргументы]\n```",
           "after": "Esto es una plantilla de sintaxis, no un comando para copiar. Sustituye los marcadores por los valores de los ejemplos siguientes.\n\n```text\nmax [профиль] [опции] <ресурс> <действие> [аргументы]\n```"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "diagnostics",
-    "reason": "Beginner context audit: define configuration or diagnostic vocabulary and explain when the reader needs this reference before introducing flags, precedence or traces.",
-    "replacements": {
-      "en": [
-        {
-          "before": "When a command fails or takes too long, `tg` can show what it did, keep a record of it, and turn the\nrecord into a report you can attach to an issue. None of it holds message text.",
-          "after": "This page helps you understand what happened when a command failed or took too long. Start with `tg doctor`: it checks the local installation without contacting the messenger. A **trace** shows operations while the command runs; a **run record** saves diagnostic information to inspect later. Neither is a copy of your conversation. The examples below explain which mode to choose.\n\nWhen a command fails or takes too long, `tg` can show what it did, keep a record of it, and turn the\nrecord into a report you can attach to an issue. None of it holds message text."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Если команда завершается ошибкой или работает слишком долго, `tg` может показать выполненные операции, сохранить запись запуска и создать отчёт для обращения в поддержку. Тексты сообщений в них не попадают.",
-          "after": "Эта страница помогает понять, что произошло, если команда завершилась ошибкой или работает слишком долго. Начните с `tg doctor`: он проверит локальную установку без подключения к мессенджеру. **Трассировка** показывает операции во время работы команды, а **запись запуска** сохраняет диагностические сведения для последующего просмотра. Это не копия переписки. Ниже объясняется, какой режим выбрать.\n\nЕсли команда завершается ошибкой или работает слишком долго, `tg` может показать выполненные операции, сохранить запись запуска и создать отчёт для обращения в поддержку. Тексты сообщений в них не попадают."
-        }
-      ],
-      "es": [
-        {
-          "before": "Si un comando falla o tarda demasiado, `tg` puede mostrar lo que hizo, guardar un registro y convertirlo en un informe para adjuntar a una incidencia. Ninguno de esos registros contiene texto de mensajes.",
-          "after": "Esta página ayuda a entender un fallo o un comando lento. Empieza con `tg doctor`: comprueba la instalación local sin conectar al mensajero. Una **traza** muestra operaciones durante la ejecución; un **registro de ejecución** guarda información de diagnóstico para revisarla después. No son copias de tus conversaciones. Los ejemplos explican qué modo elegir.\n\nSi un comando falla o tarda demasiado, `tg` puede mostrar lo que hizo, guardar un registro y convertirlo en un informe para adjuntar a una incidencia. Ninguno de esos registros contiene texto de mensajes."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "diagnostics",
-    "reason": "Beginner context audit: define configuration or diagnostic vocabulary and explain when the reader needs this reference before introducing flags, precedence or traces.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Each request produces an event, with two destinations available. `--trace` displays events without storing them; `--record` stores them without displaying them. By default, nothing is displayed, and only failed runs are saved (see “Failed runs are always saved”).",
-          "after": "This page helps you understand what happened when a command failed or took too long. Start with `max doctor`: it checks the local installation without contacting the messenger. A **trace** shows operations while the command runs; a **run record** saves diagnostic information to inspect later. Neither is a copy of your conversation. The examples below explain which mode to choose.\n\nEach request produces an event, with two destinations available. `--trace` displays events without storing them; `--record` stores them without displaying them. By default, nothing is displayed, and only failed runs are saved (see “Failed runs are always saved”)."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Одно событие на запрос, два места, куда его можно направить. `--trace` показывает и ничего не\nхранит, `--record` хранит и ничего не показывает. По умолчанию ничего не показывается, а\nсохраняется только запуск, который кончился ошибкой (см. «Неудачный запуск сохраняется всегда»).",
-          "after": "Эта страница помогает понять, что произошло, если команда завершилась ошибкой или работает слишком долго. Начните с `max doctor`: он проверит локальную установку без подключения к мессенджеру. **Трассировка** показывает операции во время работы команды, а **запись запуска** сохраняет диагностические сведения для последующего просмотра. Это не копия переписки. Ниже объясняется, какой режим выбрать.\n\nОдно событие на запрос, два места, куда его можно направить. `--trace` показывает и ничего не\nхранит, `--record` хранит и ничего не показывает. По умолчанию ничего не показывается, а\nсохраняется только запуск, который кончился ошибкой (см. «Неудачный запуск сохраняется всегда»)."
-        }
-      ],
-      "es": [
-        {
-          "before": "Cada solicitud genera un evento, con dos destinos posibles. `--trace` lo muestra sin guardarlo; `--record` lo guarda sin mostrarlo. Por defecto no se muestra nada y solo se guardan ejecuciones fallidas (véase «Las ejecuciones fallidas siempre se guardan»).",
-          "after": "Esta página ayuda a entender un fallo o un comando lento. Empieza con `max doctor`: comprueba la instalación local sin conectar al mensajero. Una **traza** muestra operaciones durante la ejecución; un **registro de ejecución** guarda información de diagnóstico para revisarla después. No son copias de tus conversaciones. Los ejemplos explican qué modo elegir.\n\nCada solicitud genera un evento, con dos destinos posibles. `--trace` lo muestra sin guardarlo; `--record` lo guarda sin mostrarlo. Por defecto no se muestra nada y solo se guardan ejecuciones fallidas (véase «Las ejecuciones fallidas siempre se guardan»)."
         }
       ]
     }
@@ -516,7 +307,7 @@
           "after": "\ntg setup\n"
         },
         {
-          "before": "\nБез глобальной установки используйте `npm exec --yes --package=@leemour/tg-cli -- tg setup --agent codex`. Настройка предложит последующие команды в таком же виде.\n",
+          "before": "\nБез глобальной установки используйте `npm exec --yes --package=@leemour/tg-cli -- tg setup --agent codex`. Затем программа установки предлагает следующие команды в той же форме.\n",
           "after": "\nБез глобальной установки используйте `npm exec --yes --package=@leemour/tg-cli -- tg setup`. Настройка предложит последующие команды в таком же виде.\n"
         }
       ],
@@ -526,33 +317,8 @@
           "after": "\ntg setup\n"
         },
         {
-          "before": "\nSin instalación global, usa `npm exec --yes --package=@leemour/tg-cli -- tg setup --agent codex`. Setup propone los comandos siguientes de la misma forma.\n",
+          "before": "\nSin una instalación global, utilice `npm exec --yes --package=@leemour/tg-cli -- tg setup --agent codex`. Luego, el programa de instalación sugiere los siguientes comandos de la misma forma.\n",
           "after": "\nSin instalación global, usa `npm exec --yes --package=@leemour/tg-cli -- tg setup`. Setup propone los comandos siguientes de la misma forma.\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "usage",
-    "reason": "Use harness-neutral first-run commands. setup asks for the agent in an interactive terminal; preserve explicit option documentation and machine-mode behavior. Requested by owner 2026-10-04; checked against setup option/selectAgent implementations.",
-    "replacements": {
-      "en": [
-        {
-          "before": "\nuse `tg setup --agent codex` to select its skill explicitly. `tg setup --help` explains the flags.\n",
-          "after": "\nuse `tg setup` to choose a skill interactively. `tg setup --help` explains the flags.\n"
-        }
-      ],
-      "ru": [
-        {
-          "before": "\nНа настройку отведите около пяти минут. История загружается отдельно: выберите чат и объём перед `tg store fetch <chat> --last 100`. Агент может прочитать `tg skill show` без входа; `tg setup --agent codex` явно выбирает его skill. Параметры объяснены в `tg setup --help`. Для чтения больше ничего не нужно.\n",
-          "after": "\nНа настройку отведите около пяти минут. История загружается отдельно: выберите чат и объём перед `tg store fetch <chat> --last 100`. Агент может прочитать `tg skill show` без входа; `tg setup` предложит выбрать skill. Параметры объяснены в `tg setup --help`. Для чтения больше ничего не нужно.\n"
-        }
-      ],
-      "es": [
-        {
-          "before": "\nAntes de continuar, reserva unos cinco minutos para la configuración. Descargar historial es una decisión aparte: elige el chat y la cantidad antes de `tg store fetch <chat> --last 100`. Un agente puede leer `tg skill show` antes de iniciar sesión; usa `tg setup --agent codex` para elegir su skill. `tg setup --help` explica las opciones.\n",
-          "after": "\nAntes de continuar, reserva unos cinco minutos para la configuración. Descargar historial es una decisión aparte: elige el chat y la cantidad antes de `tg store fetch <chat> --last 100`. Un agente puede leer `tg skill show` antes de iniciar sesión; usa `tg setup` para elegir un skill en el terminal. `tg setup --help` explica las opciones.\n"
         }
       ]
     }
@@ -668,30 +434,18 @@
         {
           "before": "- **Word search now asks Telegram as well as the local archive by default (`--backend both`).**\n  Previously it searched only the archive unless a backend was chosen. Search can now connect to Telegram;\n  use `--backend archive` for local-only searches. Counting with `stats`, topic search and queries the server\n  cannot answer still read only the archive.\n",
           "after": "- **The search guides now correctly describe the existing default (`--backend both`).** Word search asks Telegram as well as the local archive, as it already did in 0.34.0. Use `--backend archive` for local-only searches. Counting with `stats`, topic search and queries the server cannot answer still read only the archive.\n"
-        },
-        {
-          "before": "Remote agents can read\n",
-          "after": "Remote agents can read it page by page when their client cannot open PDFs.\n"
         }
       ],
       "ru": [
         {
           "before": "- **Поиск по словам теперь по умолчанию обращается к Telegram и локальному архиву (`--backend both`).**\n  Раньше он искал только в архиве, если не был выбран другой источник. Теперь поиск может подключаться к Telegram;\n  используйте `--backend archive` для поиска только локально. Подсчёт через `stats`, поиск по темам и запросы, на которые сервер\n  не может ответить, по-прежнему читают только архив.\n",
           "after": "- **Руководства по поиску теперь верно описывают существующее значение по умолчанию (`--backend both`).** Поиск по словам обращается к Telegram и локальному архиву, как уже в 0.34.0. Для поиска только в архиве используйте `--backend archive`. Подсчёты через `stats`, поиск тем и запросы, которые сервер не поддерживает, по-прежнему читают только архив.\n"
-        },
-        {
-          "before": "Удалённые агенты могут читать\n",
-          "after": "Удалённые агенты могут читать его постранично, если их клиент не открывает PDF.\n"
         }
       ],
       "es": [
         {
           "before": "- **La búsqueda por palabras ahora consulta Telegram y el archivo local de forma predeterminada (`--backend both`).**\n  Antes buscaba solo en el archivo salvo que se eligiera otro backend. Ahora la búsqueda puede conectarse a Telegram;\n  usa `--backend archive` para buscar solo localmente. Los recuentos con `stats`, la búsqueda por temas y las consultas que el servidor\n  no puede responder siguen leyendo solo el archivo.\n",
           "after": "- **Las guías de búsqueda ahora describen correctamente el valor predeterminado existente (`--backend both`).** La búsqueda por palabras consulta Telegram y el archivo local, como ya hacía en 0.34.0. Usa `--backend archive` para buscar solo localmente. Los recuentos con `stats`, la búsqueda de temas y las consultas que el servidor no puede resolver siguen leyendo solo el archivo.\n"
-        },
-        {
-          "before": "Los agentes remotos pueden leer\n",
-          "after": "Los agentes remotos pueden leerlo página a página si su cliente no abre PDF.\n"
         }
       ]
     }
@@ -722,31 +476,6 @@
     }
   },
   {
-    "tool": "max",
-    "slug": "commands",
-    "reason": "MAX v0.34.0 client folders.order always prepends All chats and appends omitted folders. Generic shared command help omits this MAX requirement; verified published client.js and release probe notes.",
-    "replacements": {
-      "en": [
-        {
-          "before": "put folders in this order; the ones not named keep theirs after them\n",
-          "after": "put the named folders in this order after All chats, which remains first; folders not named follow in their existing relative order\n"
-        }
-      ],
-      "ru": [
-        {
-          "before": "расположить папки в этом порядке; неуказанные папки сохранят свой порядок после них\n",
-          "after": "расположить указанные папки в этом порядке после «Все чаты», которая остаётся первой; неуказанные папки идут следом в прежнем относительном порядке\n"
-        }
-      ],
-      "es": [
-        {
-          "before": "colocar las carpetas en este orden; las que no se nombran conservan su orden después de ellas\n",
-          "after": "ordenar las carpetas indicadas después de Todos los chats, que permanece primero; las carpetas no indicadas siguen en su orden relativo anterior\n"
-        }
-      ]
-    }
-  },
-  {
     "tool": "tg",
     "slug": "commands",
     "reason": "Declining join requests is exempt from hourly send accounting in released request guard; generic --all help incorrectly reuses acceptance wording.",
@@ -772,56 +501,6 @@
     }
   },
   {
-    "tool": "max",
-    "slug": "usage",
-    "reason": "Clarify conditional confirmation: released per-command permissions ask/deny/readonly can require approval or block sends; default sending is allowed.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Sending does not ask for confirmation: you already supplied the recipient and text in the command.",
-          "after": "By default, sending needs no extra confirmation because the command specifies the recipient and text. Per-command permissions can require approval or block sending; see [Permissions](./permissions.md)."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Подтверждения отправка не просит: адресат и текст уже написаны в строке, которую вы набрали.",
-          "after": "По умолчанию отправка не требует дополнительного подтверждения: адресат и текст уже указаны в команде. Права конкретной команды могут потребовать подтверждения или запретить отправку; см. [Права](./permissions.md)."
-        }
-      ],
-      "es": [
-        {
-          "before": "No pide confirmación: destinatario y texto ya están en el comando.",
-          "after": "Por defecto, el envío no requiere confirmación adicional porque el comando ya indica el destinatario y el texto. Los permisos de cada comando pueden exigir aprobación o bloquear el envío; consulta [Permisos](./permissions.md)."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "usage",
-    "reason": "Published TG profile.js rounded registration estimate table ends August 2026, not December 2024; align usage with released people guide.",
-    "replacements": {
-      "en": [
-        {
-          "before": "community table; past December 2024 there is no estimate",
-          "after": "rounded table ending in August 2026; newer ids get no estimate"
-        }
-      ],
-      "ru": [
-        {
-          "before": "таблицы сообщества; для дат после декабря 2024 года оценки нет",
-          "after": "округлённой таблицы, заканчивающейся августом 2026 года; более новые ID не получают оценки"
-        }
-      ],
-      "es": [
-        {
-          "before": "una tabla de la comunidad; no hay estimaciones posteriores a diciembre de 2024",
-          "after": "una tabla redondeada que termina en agosto de 2026; los ID posteriores no reciben estimación"
-        }
-      ]
-    }
-  },
-  {
     "tool": "tg",
     "slug": "usage",
     "reason": "Scope repeat safety to topic edits and ordering; released guide explicitly forbids blindly replaying topic creation after unknown outcome.",
@@ -834,13 +513,13 @@
       ],
       "ru": [
         {
-          "before": "Любое из этих действий можно безопасно повторять.",
+          "before": "Повторение любого из этих действий безопасно.",
           "after": "Правку и порядок тем можно безопасно повторять. Если исход создания неизвестен, сначала проверьте список тем, прежде чем создавать снова."
         }
       ],
       "es": [
         {
-          "before": "Es seguro repetir cualquiera de estas acciones.",
+          "before": "Las demás escrituras (fijar, reaccionar, marcar como leído, borrar, votar, carpetas, contactos) terminan igual con el código de salida `14` cuando Telegram no responde; el mensaje indica si es seguro repetir.",
           "after": "Es seguro repetir las ediciones y el orden de temas. Tras una creación de resultado desconocido, comprueba la lista de temas antes de crear de nuevo."
         }
       ]
@@ -855,67 +534,18 @@
         {
           "before": "`tg chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
           "after": "`tg chats link update <chat> <link> --approval --expire-time <time>`, `tg chats link update <chat> <link> --no-approval --max-uses <n>`"
-        },
-        {
-          "before": "| `tg topics list\\|search <chat>` | a forum group's topics |",
-          "after": "| `tg topics list <chat>`, `tg search topics <chat> <text>` | a forum group's topics; search finds them by title |"
         }
       ],
       "ru": [
         {
           "before": "`tg chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
           "after": "`tg chats link update <chat> <link> --approval --expire-time <time>`, `tg chats link update <chat> <link> --no-approval --max-uses <n>`"
-        },
-        {
-          "before": "| `tg topics list\\|search <chat>` | темы группы-форума |",
-          "after": "| `tg topics list <chat>`, `tg search topics <chat> <text>` | темы группы-форума; поиск находит их по названию |"
         }
       ],
       "es": [
         {
           "before": "`tg chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
           "after": "`tg chats link update <chat> <link> --approval --expire-time <time>`, `tg chats link update <chat> <link> --no-approval --max-uses <n>`"
-        },
-        {
-          "before": "| `tg topics list\\|search <chat>` | temas de un grupo de foro |",
-          "after": "| `tg topics list <chat>`, `tg search topics <chat> <text>` | temas de un grupo de foro; la búsqueda los encuentra por título |"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "from-tgcli",
-    "reason": "tags list has no --chat; only add/remove target a chat. Separate the valid command references. Topic search moved to `tg search topics`.",
-    "replacements": {
-      "en": [
-        {
-          "before": "`tg tags add/remove/list --chat`",
-          "after": "`tg tags add --chat`, `tg tags remove --chat`, `tg tags list`"
-        },
-        {
-          "before": "| `topics list/search` | `tg topics list/search <chat>` |",
-          "after": "| `topics list/search` | `tg topics list <chat>`, `tg search topics <chat> <text>` |"
-        }
-      ],
-      "ru": [
-        {
-          "before": "`tg tags add/remove/list --chat`",
-          "after": "`tg tags add --chat`, `tg tags remove --chat`, `tg tags list`"
-        },
-        {
-          "before": "| `topics list/search` | `tg topics list/search <chat>` |",
-          "after": "| `topics list/search` | `tg topics list <chat>`, `tg search topics <chat> <text>` |"
-        }
-      ],
-      "es": [
-        {
-          "before": "`tg tags add/remove/list --chat`",
-          "after": "`tg tags add --chat`, `tg tags remove --chat`, `tg tags list`"
-        },
-        {
-          "before": "| `topics list/search` | `tg topics list/search <chat>` |",
-          "after": "| `topics list/search` | `tg topics list <chat>`, `tg search topics <chat> <text>` |"
         }
       ]
     }
@@ -929,80 +559,18 @@
         {
           "before": "title: \"What is stored on disk and what never is\"",
           "after": "title: \"MAX security: what reaches the disk and the network\""
-        },
-        {
-          "before": "This tool accesses private conversations. Explaining what it records is a central part of its documentation.",
-          "after": "This page explains where `max` keeps the MAX login token and other data on your computer, what it sends over the network, and which checks stop a send to the wrong place."
         }
       ],
       "ru": [
         {
           "before": "title: \"Что попадает на диск, а что не попадает никогда\"",
           "after": "title: \"Безопасность MAX: что попадает на диск и в сеть\""
-        },
-        {
-          "before": "Это инструмент к личной переписке. Поэтому вопрос «что он о ней записывает» здесь не приложение к\nдокументации, а её середина.",
-          "after": "Здесь объясняется, где `max` хранит на компьютере токен входа MAX и другие данные, что он отправляет в сеть и какие проверки не дают отправить сообщение не туда."
         }
       ],
       "es": [
         {
           "before": "title: \"Seguridad y datos guardados\"",
           "after": "title: \"Seguridad en MAX: qué llega al disco y a la red\""
-        },
-        {
-          "before": "Esta herramienta accede a conversaciones personales. Por eso, explicar qué guarda es una parte central de su documentación.",
-          "after": "Esta página explica dónde guarda `max` en tu equipo el token de acceso a MAX y otros datos, qué envía por la red y qué controles evitan un envío al lugar equivocado."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "sessions",
-    "reason": "Show the real public my.telegram.org login screen and distinguish website registration from account QR authorization. Screenshot captured 2026-10-04 in a fresh unauthenticated browser; no phone, code, api_hash or QR tokens entered. Guidance verified against https://core.telegram.org/api/obtaining_api_id and https://my.telegram.org/apps.",
-    "replacements": {
-      "en": [
-        {
-          "before": "**Fill in the site automatically:**",
-          "after": "> **See the my.telegram.org login screen**\n>\n> ![Official my.telegram.org login screen with an empty phone-number field.](/telegram-app-login.png)\n>\n> This is the website login for managing your Telegram application credentials. The code arrives in Telegram, not by SMS. After login, choose **API development tools**. Authorizing the cli with a QR code comes later. [my.telegram.org](https://my.telegram.org/apps)\n\n**Fill in the site automatically:**"
-        }
-      ],
-      "ru": [
-        {
-          "before": "**Заполнить форму сайта автоматически:**",
-          "after": "> **Посмотреть экран входа my.telegram.org**\n>\n> ![Официальный экран входа my.telegram.org: поле номера телефона не заполнено.](/telegram-app-login.png)\n>\n> Это вход на сайт для получения данных приложения Telegram. Код приходит сообщением в Telegram, не по SMS. После входа выберите **API development tools**. Подтверждение доступа cli через QR-код будет следующим этапом. [my.telegram.org](https://my.telegram.org/apps)\n\n**Заполнить форму сайта автоматически:**"
-        }
-      ],
-      "es": [
-        {
-          "before": "**Rellenar el sitio automáticamente:**",
-          "after": "> **Ver la pantalla de acceso de my.telegram.org**\n>\n> ![Pantalla oficial de my.telegram.org con el campo del teléfono vacío.](/telegram-app-login.png)\n>\n> Este es el acceso al sitio para obtener las credenciales de aplicación de Telegram. El código llega por Telegram, no por SMS. Tras entrar, elige **API development tools**. La autorización del cli por QR viene después. [my.telegram.org](https://my.telegram.org/apps)\n\n**Rellenar el sitio automáticamente:**"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "remote",
-    "reason": "Public instructions describe current behavior; internal verification notes are omitted from the user guide.",
-    "replacements": {
-      "en": [
-        {
-          "before": "**Status:** HTTP and permissions have been checked locally. The owner confirmed reading and sending through Claude web in Telegram on 07 October 2026 using `permissions`; MAX and OpenAI web have not yet had separate browser tests. Each OS’s instructions need testing on that OS. If a step fails, [open an issue](https://github.com/leemour/max-cli/issues).\n\n",
-          "after": ""
-        }
-      ],
-      "ru": [
-        {
-          "before": "**Статус:** HTTP и права проверены локально. Владелец подтвердил чтение и отправку через\nClaude web в Telegram 07.10.2026 с режимом `permissions`; отдельного браузерного прогона MAX\nи OpenAI web пока нет. Инструкции каждой ОС требуют проверки на этой ОС. Если шаг не работает,\n[откройте issue](https://github.com/leemour/max-cli/issues).\n\n",
-          "after": ""
-        }
-      ],
-      "es": [
-        {
-          "before": "**Estado:** HTTP y los permisos se han comprobado localmente. El propietario confirmó la lectura y el envío mediante Claude web en Telegram el 07/10/2026 con `permissions`; todavía no se han realizado pruebas de navegador independientes para MAX y OpenAI web. Las instrucciones de cada sistema operativo deben probarse en ese sistema. Si un paso falla, [abre una incidencia](https://github.com/leemour/max-cli/issues).\n\n",
-          "after": ""
         }
       ]
     }
@@ -1059,31 +627,6 @@
   },
   {
     "tool": "tg",
-    "slug": "remote",
-    "reason": "Public instructions describe current behavior; test history belongs in internal review reports.",
-    "replacements": {
-      "en": [
-        {
-          "before": " The owner confirmed reading and sending through Claude web on 7 October 2026. OpenAI web clients and these platform-specific setup instructions still need\nan end-to-end check on each platform.",
-          "after": ""
-        }
-      ],
-      "ru": [
-        {
-          "before": " Владелец подтвердил чтение и отправку через Claude web 7 октября 2026 года. Веб-клиенты OpenAI и эти инструкции настройки для разных платформ ещё требуют сквозной проверки на каждой платформе.",
-          "after": ""
-        }
-      ],
-      "es": [
-        {
-          "before": " El propietario confirmó la lectura y el envío mediante Claude web el 7 de octubre de 2026. Los clientes web de OpenAI y estas instrucciones específicas de cada plataforma aún necesitan una comprobación completa en cada plataforma.",
-          "after": ""
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
     "slug": "mcp",
     "reason": "Explain catalogue coverage and link exact command syntax beside the full MCP tool list.",
     "replacements": {
@@ -1128,94 +671,6 @@
         {
           "before": "## Herramientas\n",
           "after": "## Herramientas\n\n**Cobertura de comandos.** Estas herramientas cubren la mayoría de operaciones habituales: mensajes, chats, contactos, adjuntos, conversaciones y estadísticas. La búsqueda devuelve comandos disponibles con parámetros y efectos según el mensajero y los permisos. Consulta sintaxis y parámetros en la [referencia completa](./commands.md). Ejecuta la ruta ofrecida por el catálogo mediante lectura o escritura; acceso a la cuenta e instalación interactiva se realizan en el terminal.\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "remote",
-    "reason": "Public instructions retain the concrete Quick Tunnel limitation and omit isolated-test provenance.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "В изолированном тесте использовался дополнительный адаптер ответов SSE в JSON; он не входит\nв CLI. Проверка OAuth и списка инструментов не доказывает чтение PDF агентом.\n",
-          "after": ""
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "remote",
-    "reason": "Public instructions retain the concrete Quick Tunnel limitation and omit isolated-test provenance.",
-    "replacements": {
-      "en": [
-        {
-          "before": "An isolated test used an additional adapter to turn SSE responses into JSON; that adapter\nis not shipped in the CLI. OAuth and tool-discovery checks do not prove that an agent can read PDFs.\n",
-          "after": "OAuth and tool-discovery checks do not prove that an agent can read PDFs.\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "roadmap",
-    "reason": "The release roadmap places the note that private names and notes for people are already supported under the max catch-up item; it belongs under the related item about notes on chats.",
-    "replacements": {
-      "en": [
-        {
-          "before": "keeps beside its tags.\n",
-          "after": "keeps beside its tags.\n  [Private names and notes for people](./people.md#your-own-names-and-notes-contacts-alias-contacts-notes) are already supported.\n"
-        },
-        {
-          "before": "bot and opening its mini app.\n  [Private names and notes for people](./people.md#your-own-names-and-notes-contacts-alias-contacts-notes) are already supported.\n",
-          "after": "bot and opening its mini app.\n"
-        }
-      ],
-      "ru": [
-        {
-          "before": "хранит рядом со своими тегами.\n",
-          "after": "хранит рядом со своими тегами.\n  [Свои имена и заметки о людях](./people.md#your-own-names-and-notes-contacts-alias-contacts-notes) уже доступны.\n"
-        },
-        {
-          "before": "запуск бота и его мини-приложения.\n  [Свои имена и заметки о людях](./people.md#your-own-names-and-notes-contacts-alias-contacts-notes) уже доступны.\n",
-          "after": "запуск бота и его мини-приложения.\n"
-        }
-      ],
-      "es": [
-        {
-          "before": "guarda junto a sus etiquetas.\n",
-          "after": "guarda junto a sus etiquetas.\n  Los [nombres y notas personales](./people.md#your-own-names-and-notes-contacts-alias-contacts-notes) ya están disponibles.\n"
-        },
-        {
-          "before": "iniciar bots y abrir mini apps.\n  Los [nombres y notas personales](./people.md#your-own-names-and-notes-contacts-alias-contacts-notes) ya están disponibles.\n",
-          "after": "iniciar bots y abrir mini apps.\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "troubleshooting",
-    "reason": "`messages search` became `search messages`, which changed the heading anchor; keep the published anchor so existing links still open this section.",
-    "replacements": {
-      "en": [
-        {
-          "before": "\n## `search messages` finds nothing\n",
-          "after": "\n<a id=\"messages-search-finds-nothing\" />\n\n## `search messages` finds nothing\n"
-        }
-      ],
-      "ru": [
-        {
-          "before": "\n## `search messages` ничего не находит\n",
-          "after": "\n<a id=\"messages-search-finds-nothing\" />\n\n<a id=\"messages-search-ничего-не-находит\" />\n\n## `search messages` ничего не находит\n"
-        }
-      ],
-      "es": [
-        {
-          "before": "\n## `search messages` no encuentra nada\n",
-          "after": "\n<a id=\"messages-search-finds-nothing\" />\n\n<a id=\"messages-search-no-encuentra-nada\" />\n\n## `search messages` no encuentra nada\n"
         }
       ]
     }
@@ -1318,128 +773,25 @@
   },
   {
     "tool": "max",
-    "slug": "bot",
-    "reason": "Placeholders in the reader's language for the generic Bot API command; drop a dated manual test report from the guide while keeping the fact that MAX's documentation and server behaviour differ. Command tokens are unchanged.",
-    "replacements": {
-      "en": [
-        {
-          "before": "`max <бот> bot api <операция>`. Pass",
-          "after": "`max <bot> bot api <operation>`. Pass"
-        },
-        {
-          "before": "`max bot api <операция>`. Commands",
-          "after": "`max bot api <operation>`. Commands"
-        },
-        {
-          "before": "Adding a member through `bot chats members add` was checked on 3 October 2026: an administrator bot added a member who was absent, and the personal account confirmed the result. [MAX documentation](https://dev.max.ru/docs-api) says this method was removed on 30 September, but the server still performs it in the tested group.",
-          "after": "An administrator bot can add a member with `bot chats members add`. [MAX documentation](https://dev.max.ru/docs-api) lists this method as removed, but the MAX server can still perform it."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Добавление участника через `bot chats members add` проверено 3 октября 2026 года:\nбот-админ добавил отсутствовавшего участника, результат подтверждён личным аккаунтом.\n[Документация MAX](https://dev.max.ru/docs-api) объявляет этот метод удалённым с 30 сентября,\nно в проверенной группе сервер продолжает выполнять его.",
-          "after": "Бот-админ может добавить участника через `bot chats members add`.\n[Документация MAX](https://dev.max.ru/docs-api) объявляет этот метод удалённым,\nно сервер MAX может продолжать его выполнять."
-        }
-      ],
-      "es": [
-        {
-          "before": "`max <бот> bot api <операция>`. Los",
-          "after": "`max <bot> bot api <operación>`. Los"
-        },
-        {
-          "before": "`max bot api <операция>` expone",
-          "after": "`max bot api <operación>` expone"
-        },
-        {
-          "before": "La incorporación de miembros con `bot chats members add` se comprobó el 3 de octubre de 2026: un bot administrador añadió a un miembro ausente y la cuenta personal confirmó el resultado. La [documentación de MAX](https://dev.max.ru/docs-api) declara este método eliminado desde el 30 de septiembre, pero el servidor sigue ejecutándolo en el grupo comprobado.",
-          "after": "Un bot administrador puede añadir miembros con `bot chats members add`. La [documentación de MAX](https://dev.max.ru/docs-api) declara este método eliminado, pero el servidor de MAX puede seguir ejecutándolo."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "limits",
-    "reason": "Public guides state behaviour, not how it was tested: drop the test-provenance parenthetical. The send-id deduplication fact is unchanged.",
-    "replacements": {
-      "en": [
-        {
-          "before": " and does not create a second message (verified with a retry after 15 minutes).",
-          "after": " and does not create a second message."
-        }
-      ],
-      "ru": [
-        {
-          "before": "MAX узнаёт и второго сообщения не создаёт (проверено на повторе через 15 минут).",
-          "after": "MAX узнаёт и второго сообщения не создаёт."
-        }
-      ],
-      "es": [
-        {
-          "before": " y no crea un segundo mensaje (comprobado con un reintento después de 15 minutos).",
-          "after": " y no crea un segundo mensaje."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "attachments",
-    "reason": "Public guides carry no package versions or test provenance: keep the real limitation (an older unpdf may lack page rendering) and drop the tested versions and the 'not tested against live MAX' hedge. No version is presented as a minimum.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Rendering was verified with `unpdf` 1.8.1 and `@napi-rs/canvas` 1.0.10; an older `unpdf` may read text but lack the necessary rendering functions.",
-          "after": "An older `unpdf` may read text but lack the functions needed to render pages; if rendering fails, update `unpdf` and `@napi-rs/canvas`."
-        },
-        {
-          "before": " This description matches the CLI source code; the existence of a command does not mean every possible file of that format has been tested against live MAX.\n",
-          "after": "\n"
-        }
-      ],
-      "ru": [
-        {
-          "before": "Для рендеринга проверены `unpdf` 1.8.1 и `@napi-rs/canvas` 1.0.10; старый `unpdf` может читать\nтекст, но не предоставлять необходимые функции рендеринга.",
-          "after": "Старый `unpdf` может читать текст, но не уметь отрисовывать страницы; если рендеринг не работает,\nобновите `unpdf` и `@napi-rs/canvas`."
-        },
-        {
-          "before": "\nОписание соответствует исходному коду CLI; наличие команды не означает, что каждый\nвозможный файл данного формата проверен на реальном MAX.\n",
-          "after": "\n"
-        }
-      ],
-      "es": [
-        {
-          "before": "El renderizado se verificó con `unpdf` 1.8.1 y `@napi-rs/canvas` 1.0.10; un `unpdf` antiguo puede leer texto sin ofrecer las funciones de renderizado necesarias.",
-          "after": "Un `unpdf` antiguo puede leer texto sin ofrecer las funciones necesarias para convertir páginas en imágenes; si falla, actualiza `unpdf` y `@napi-rs/canvas`."
-        },
-        {
-          "before": " Esta descripción corresponde al código de la CLI; que exista un comando no significa que se haya probado cada archivo posible de ese formato con MAX real.\n",
-          "after": "\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
     "slug": "troubleshooting",
     "reason": "The search command was renamed to search messages, which changed this heading's anchor; keep the old anchor so existing links still land here.",
     "replacements": {
       "en": [
         {
-          "before": "## `search messages` finds nothing",
-          "after": "<a id=\"messages-search-ничего-не-находит\" />\n\n## `search messages` finds nothing"
+          "before": "\n### `search messages` doesn't find anything\n",
+          "after": "\n<a id=\"messages-search-ничего-не-находит\" />\n\n### `search messages` doesn't find anything\n"
         }
       ],
       "ru": [
         {
-          "before": "## `search messages` ничего не находит",
-          "after": "<a id=\"messages-search-ничего-не-находит\" />\n\n## `search messages` ничего не находит"
+          "before": "\n### `search messages` ничего не находит\n",
+          "after": "\n<a id=\"messages-search-ничего-не-находит\" />\n\n### `search messages` ничего не находит\n"
         }
       ],
       "es": [
         {
-          "before": "## `search messages` no encuentra nada",
-          "after": "<a id=\"messages-search-ничего-не-находит\" />\n\n## `search messages` no encuentra nada"
+          "before": "\n### `search messages` no encuentra nada\n",
+          "after": "\n<a id=\"messages-search-ничего-не-находит\" />\n\n### `search messages` no encuentra nada\n"
         }
       ]
     }
@@ -1489,6 +841,706 @@
         {
           "before": "\n#### `max bot search messages`\n",
           "after": "\n<a id=\"max-bot-messages-search\" />\n\n#### `max bot search messages`\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "usage",
+    "reason": "Released v0.41.0 source review: Read src/adapter/max-adapter.ts:453–455; isImage branch precedes asFile check, videos check asFile !== true. Shared CLI forwards asFile from dist/cli/messenger/messages-send-command.js:68. Contract flag description broad; owning generator needs clarification but runtime contract not changed.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "С `--file` `.jpg .jpeg .png .webp .gif` уходят фотографией, `.mp4 .mov .webm .mkv` — видео,\nостальное — файлом. С `--as-file` файл из `--file` уходит файлом, видео тоже. `--photo` берёт только\n`.jpg .png .webp`. В сообщении одно вложение из `--file` и одно из `--photo`; **видео и файл — только\nсами по себе**, и команда откажет до загрузки. Текст необязателен. Если загрузка не удалась, ничего\nне отправлено. Несколько файлов в одном сообщении `max` сейчас не отправляет. `--no-preview` в MAX\nне работает: собственный клиент MAX так не умеет, и команда откажет.",
+          "after": "С `--file` `.jpg .jpeg .png .webp .gif` уходят фотографией, `.mp4 .mov .webm .mkv` — видео,\nостальное — файлом. С `--as-file` видео из `--file` уходит файлом; изображения всё равно уходят фотографиями. `--photo` берёт только\n`.jpg .png .webp`. В сообщении одно вложение из `--file` и одно из `--photo`; **видео и файл — только\nсами по себе**, и команда откажет до загрузки. Текст необязателен. Если загрузка не удалась, ничего\nне отправлено. Несколько файлов в одном сообщении `max` сейчас не отправляет. `--no-preview` в MAX\nне работает: собственный клиент MAX так не умеет, и команда откажет."
+        }
+      ],
+      "en": [
+        {
+          "before": "With `--file`, `.jpg .jpeg .png .webp .gif` are sent as photos, `.mp4 .mov .webm .mkv` as videos, and everything else as files. With `--as-file`, the `--file` attachment is sent as a file, including videos. `--photo` accepts only `.jpg .png .webp`. A message can contain one `--file` attachment and one `--photo` attachment; **videos and files must be sent alone**, and the command rejects invalid combinations before uploading. Text is optional. If upload fails, nothing is sent. `max` does not currently send multiple files in one message. `--no-preview` is unavailable in MAX: its own client cannot do this, and the command rejects it.",
+          "after": "With `--file`, `.jpg .jpeg .png .webp .gif` are sent as photos, `.mp4 .mov .webm .mkv` as videos, and everything else as files. With `--as-file`, videos from `--file` are sent as downloadable files; images are still sent as photos. `--photo` accepts only `.jpg .png .webp`. A message can contain one `--file` attachment and one `--photo` attachment; **videos and files must be sent alone**, and the command rejects invalid combinations before uploading. Text is optional. If upload fails, nothing is sent. `max` does not currently send multiple files in one message. `--no-preview` is unavailable in MAX: its own client cannot do this, and the command rejects it."
+        }
+      ],
+      "es": [
+        {
+          "before": "Con `--file`, `.jpg .jpeg .png .webp .gif` se envían como fotos; `.mp4 .mov .webm .mkv`, como vídeos; el resto, como archivos. `--as-file` envía el adjunto de `--file` como archivo, incluidos vídeos. `--photo` solo acepta `.jpg .png .webp`. Un mensaje puede incluir un adjunto de `--file` y uno de `--photo`, pero **vídeos y archivos van solos**: una combinación incompatible falla antes de cargar. El texto es opcional. Si falla la carga, no se envía nada. `max` todavía no envía varios archivos por mensaje. MAX no admite `--no-preview` y el comando lo rechaza.",
+          "after": "Con `--file`, `.jpg .jpeg .png .webp .gif` se envían como fotos; `.mp4 .mov .webm .mkv`, como vídeos; el resto, como archivos. Con `--as-file`, los vídeos de `--file` se envían como archivos; las imágenes siguen enviándose como fotos. `--photo` solo acepta `.jpg .png .webp`. Un mensaje puede incluir un adjunto de `--file` y uno de `--photo`, pero **vídeos y archivos van solos**: una combinación incompatible falla antes de cargar. El texto es opcional. Si falla la carga, no se envía nada. `max` todavía no envía varios archivos por mensaje. MAX no admite `--no-preview` y el comando lo rechaza."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "usage",
+    "reason": "Released v0.41.0 source review: Read src/commands/messages.ts:28–29 forced history:store; read src/commands/message-link.test.ts returns url:null/access:unavailable/reason:unsupported_provider and asserts never wire. No test executed.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "`max messages link <chat> <message>` или `max messages link <msg:locator>` возвращает\n`{ locator, url, access, reason }`. Личный MAX сначала проверяет сообщение в локальном архиве\nи возвращает locator; формат нативной ссылки пока не подтверждён. С `--offline` подключения нет.\nLocator другой учётной записи отклоняется. `messages links` — другая команда: она объясняет связи\nразговоров ([поиск по темам](./topic-search.md)).",
+          "after": "`max messages link <chat> <message>` или `max messages link <msg:locator>` возвращает\n`{ locator, url, access, reason }`. Личный MAX сначала проверяет сообщение в локальном архиве\nи возвращает locator без нативной ссылки. Команда читает только архив и не подключается к MAX даже без `--offline`.\nLocator другой учётной записи отклоняется. `messages links` — другая команда: она объясняет связи\nразговоров ([поиск по темам](./topic-search.md))."
+        }
+      ],
+      "en": [
+        {
+          "before": "`max messages link <chat> <message>` or `max messages link <msg:locator>` returns `{ locator, url, access, reason }`. Personal MAX first checks the message in the local archive and returns a locator; The native link format has not yet been confirmed. There is no connection with `--offline`. The other account's Locator is rejected. `messages links` is another command: it explains the connections of conversations ([search by topic](./topic-search.md)).",
+          "after": "`max messages link <chat> <message>` or `max messages link <msg:locator>` returns `{ locator, url, access, reason }`. Personal MAX checks the message in the local archive and returns a locator without a native URL. This command reads only the archive and never connects to MAX, even without `--offline`. The other account's Locator is rejected. `messages links` is another command: it explains the connections of conversations ([search by topic](./topic-search.md))."
+        }
+      ],
+      "es": [
+        {
+          "before": "`max messages link <chat> <message>` o `max messages link <msg:locator>` devuelve `{ locator, url, access, reason }`. Personal MAX primero verifica el mensaje en el archivo local y devuelve un localizador; El formato del enlace nativo aún no se ha confirmado. No hay conexión con `--offline`. Se rechaza el localizador de la otra cuenta. `messages links` es otro comando: explica las conexiones de las conversaciones ([buscar por temas](./topic-search.md)).",
+          "after": "`max messages link <chat> <message>` o `max messages link <msg:locator>` devuelve `{ locator, url, access, reason }`. En una cuenta personal de MAX, el comando comprueba el mensaje en el archivo local y devuelve su localizador sin una URL nativa. Solo lee el archivo local y no se conecta a MAX, incluso sin `--offline`. Se rechaza el localizador de la otra cuenta. `messages links` es otro comando: explica las conexiones de las conversaciones ([buscar por temas](./topic-search.md))."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "usage",
+    "reason": "Released v0.41.0 source review: Read src/scheduled.test.ts lost scheduled send emitted once, outcome_unknown references queue; reject silent; read src/spec/operations/messages.ts:129 measured scheduled protocol. Dedup assumption is irrelevant to supported nonretry contract; remove author research status without asserting platform dedup.",
+    "replacements": {
+      "ru": [
+        {
+          "before": " Схлопывает ли MAX повтор отложенного, не проверено.",
+          "after": ""
+        }
+      ],
+      "en": [
+        {
+          "before": " Scheduled-send deduplication has not been verified.",
+          "after": ""
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "usage",
+    "reason": "The released registration estimator extends through August 2026; preserve older historical changelog text.",
+    "replacements": {
+      "en": [
+        {
+          "before": "table, and there is no estimate past December 2024.",
+          "after": "table ending in August 2026; newer IDs receive no estimate."
+        }
+      ],
+      "ru": [
+        {
+          "before": "и нет оценки после декабря 2024 года.",
+          "after": "которая заканчивается августом 2026 года; для более новых ID оценки нет."
+        }
+      ],
+      "es": [
+        {
+          "before": "y no hay una estimación posterior a diciembre de 2024.",
+          "after": "que termina en agosto de 2026; los ID más recientes no reciben estimación."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "archive",
+    "reason": "Auto-reply audience changed in the reviewed release; rules no longer apply only to test accounts.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Automatic replies from `serve` to test accounts are described in [automatic replies](./replies.md).",
+          "after": "Automatic replies from `serve` follow your rules and chosen audience; see [automatic replies](./replies.md)."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Автоматические ответы от `serve` на тестовые аккаунты описаны в [автоматические ответы](./replies.md).",
+          "after": "Автоответы из `serve` следуют вашим правилам и выбранной аудитории; см. [автоответы](./replies.md)."
+        }
+      ],
+      "es": [
+        {
+          "before": "Las respuestas automáticas de `serve` a cuentas de prueba se describen en [respuestas automáticas](./replies.md).",
+          "after": "Las respuestas automáticas de `serve` siguen tus reglas y la audiencia elegida; consulta [las respuestas automáticas](./replies.md)."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "remote",
+    "reason": "Public instructions explain supported setup and recovery; author OS-verification history belongs in the review record.",
+    "replacements": {
+      "en": [
+        {
+          "before": "The setup steps for each operating system have not all been tried on that system. If a step does\nnot work, [open an issue](https://github.com/leemour/tg-cli/issues).",
+          "after": "If a setup step fails, [open an issue](https://github.com/leemour/tg-cli/issues)."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Не все этапы установки для каждой операционной системы были опробованы в этой системе. Если шаг не работает, [откройте проблему](https://github.com/leemour/tg-cli/issues).",
+          "after": "Если шаг настройки не работает, [откройте issue](https://github.com/leemour/tg-cli/issues)."
+        }
+      ],
+      "es": [
+        {
+          "before": "No se han probado todos los pasos de configuración para cada sistema operativo en ese sistema. Si un paso no funciona, [abra un problema](https://github.com/leemour/tg-cli/issues).",
+          "after": "Si falla un paso de configuración, [abre una incidencia](https://github.com/leemour/tg-cli/issues)."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "remote",
+    "reason": "Public instructions explain supported setup and recovery; author OS-verification history belongs in the review record.",
+    "replacements": {
+      "en": [
+        {
+          "before": "The steps for each operating system have not all been tested on that system. If a step fails, [open an issue](https://github.com/leemour/max-cli/issues).",
+          "after": "If a setup step fails, [open an issue](https://github.com/leemour/max-cli/issues)."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Шаги для каждой ОС проверены не на всех системах. Если шаг не работает,\n[откройте issue](https://github.com/leemour/max-cli/issues).",
+          "after": "Если шаг настройки не работает, [откройте issue](https://github.com/leemour/max-cli/issues)."
+        }
+      ],
+      "es": [
+        {
+          "before": "Los pasos para cada sistema operativo no se han probado en todos los sistemas. Si el paso no funciona, [abra el problema](https://github.com/leemour/max-cli/issues).",
+          "after": "Si falla un paso de configuración, [abre una incidencia](https://github.com/leemour/max-cli/issues)."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "troubleshooting",
+    "reason": "Released v0.42.0 search guide and command contract default to backend both; archive-only mode must be explicit.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Search reads only what this machine has kept, never Telegram. An empty answer means \"not kept\", not\n\"never said\". Read the chat (`tg messages list <chat>`), or fetch its history with `tg store fetch`,\nthen search again ([searching the store](./archive.md#search)). `tg store check` says which chats are behind.",
+          "after": "By default, word search checks stored history and Telegram. `--backend archive` uses only saved messages. Counts, attachment filters and conversation search still depend on downloaded history. If the needed period is missing, read the chat (`tg messages list <chat>`) or fetch it with `tg store fetch`, then search again ([searching the archive](./archive.md#search)). `tg store check` identifies chats needing an update. An empty result in incomplete history does not prove a message was never sent."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Поиск читает только то, что сохранила эта машина, а не Telegram. Пустой ответ означает «не хранилось», а не «никогда не говорилось». Прочитайте чат (`tg messages list <chat>`) или получите его историю с помощью `tg store fetch`, затем повторите поиск ([поиск в архиве](./archive.md#search)). `tg store check` говорит, какие чаты отстают.",
+          "after": "По умолчанию поиск по словам проверяет локальную историю и Telegram. `--backend archive` использует только сохранённые сообщения. Подсчёты, фильтры вложений и поиск обсуждений зависят от скачанной истории. Если нужного периода нет, прочитайте чат (`tg messages list <chat>`) или скачайте его через `tg store fetch`, затем повторите поиск ([поиск в архиве](./archive.md#search)). `tg store check` показывает чаты, требующие обновления. Пустой результат в неполной истории не доказывает, что сообщение не отправляли."
+        }
+      ],
+      "es": [
+        {
+          "before": "La búsqueda lee sólo lo que esta máquina ha guardado, nunca Telegram. Una respuesta vacía significa \"no guardado\", no \"nunca dicho\". Lea el chat (`tg messages list <chat>`), o busque su historial con `tg store fetch`, luego busque nuevamente ([buscando en el archivo local](./archive.md#search)). `tg store check` dice qué chats están detrás.",
+          "after": "Por defecto, la búsqueda por palabras consulta el historial guardado y Telegram. `--backend archive` usa solo los mensajes guardados. Los recuentos, filtros de adjuntos y búsqueda de discusiones dependen del historial descargado. Si falta el periodo necesario, lee el chat (`tg messages list <chat>`) o impórtalo con `tg store fetch` y vuelve a buscar ([búsqueda en el archivo](./archive.md#search)). `tg store check` identifica chats pendientes de actualizar. Un resultado vacío en un historial incompleto no demuestra que nunca se enviara el mensaje."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "troubleshooting",
+    "reason": "Measured released tg0.42.0 parser in isolated state with network/keyring blocked: unknown command, unknown option and missing argument all exit2 and emit validation_error JSON stderr.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Exit code `1`, and the help on stderr, not JSON. The first word is the profile whenever it is not a\ncommand, so a typo in a command name becomes a profile name:",
+          "after": "Unknown commands, unknown options and missing required arguments return exit code `2` (`validation_error`). With `--json`, the error is a JSON object on stderr. An unrecognised first word is interpreted as a profile name, so a command typo may be read as a profile:"
+        },
+        {
+          "before": "| `1` | `generic_failure` | a typo in a command name, or a fault in `tg` itself | [unknown command](#error-unknown-command-), [report it](#report-a-problem) |",
+          "after": "| `1` | `generic_failure` | an unexpected failure in `tg` | [report it](#report-a-problem) |"
+        },
+        {
+          "before": "| `2` | `validation_error` | a value or a combination of options `tg` does not accept; a name that fits several chats | [values](#--limit-takes-a-whole-number-from-1-upwards), [several chats](#-matches-3-chats--name-one-by-its-id) |",
+          "after": "| `2` | `validation_error` | an unknown command or option, a missing argument, invalid values or an ambiguous chat name | [unknown command](#error-unknown-command-), [values](#--limit-takes-a-whole-number-from-1-upwards), [several chats](#-matches-3-chats--name-one-by-its-id) |"
+        },
+        {
+          "before": "```text\ntg chat list\nerror: unknown command 'list'\n```",
+          "after": "```text\ntg chat list --json\n{\"error\":{\"retryable\":false,\"code\":\"validation_error\",\"message\":\"unknown command 'list' \\\"chat\\\" is not a command, so it was read as a profile name — which left \\\"list\\\" to be one.\"}}\n```"
+        }
+      ],
+      "ru": [
+        {
+          "before": "Код `1`, справка в stderr вместо JSON. Первое слово, не являющееся командой, считается профилем, поэтому опечатка может стать именем профиля:",
+          "after": "Неизвестная команда, неизвестная опция и пропущенный обязательный аргумент возвращают код `2` (`validation_error`). С `--json` ошибка выводится объектом JSON в stderr. Первое слово, не являющееся командой, считается именем профиля, поэтому опечатка может стать именем профиля:"
+        },
+        {
+          "before": "| `1` | `generic_failure` | опечатка в команде или сбой `tg` | [неизвестная команда](#error-unknown-command-), [сообщить](#report-a-problem) |",
+          "after": "| `1` | `generic_failure` | непредвиденный сбой `tg` | [сообщить](#report-a-problem) |"
+        },
+        {
+          "before": "| `2` | `validation_error` | значение или сочетание параметров, которое `tg` не принимает; имя, совпадающее с несколькими чатами | [значения](#--limit-takes-a-whole-number-from-1-upwards), [несколько чатов](#-matches-3-chats--name-one-by-its-id) |",
+          "after": "| `2` | `validation_error` | неизвестная команда или опция, пропущенный аргумент, неверное значение или неоднозначное имя чата | [неизвестная команда](#error-unknown-command-), [значения](#--limit-takes-a-whole-number-from-1-upwards), [несколько чатов](#-matches-3-chats--name-one-by-its-id) |"
+        },
+        {
+          "before": "```text\ntg chat list\nerror: unknown command 'list'\n```",
+          "after": "```text\ntg chat list --json\n{\"error\":{\"retryable\":false,\"code\":\"validation_error\",\"message\":\"unknown command 'list' \\\"chat\\\" is not a command, so it was read as a profile name — which left \\\"list\\\" to be one.\"}}\n```"
+        }
+      ],
+      "es": [
+        {
+          "before": "Código de salida `1`; muestra ayuda por stderr, no JSON. La primera palabra es el perfil si no es un comando, por lo que una errata en el comando se interpreta como perfil:",
+          "after": "Los comandos u opciones desconocidos y los argumentos obligatorios ausentes devuelven el código `2` (`validation_error`). Con `--json`, el error es un objeto JSON en stderr. Una primera palabra que no sea un comando se interpreta como nombre de perfil, así que una errata puede convertirse en un perfil:"
+        },
+        {
+          "before": "| `1` | `generic_failure` | error en el nombre del comando o fallo de `tg` | [comando desconocido](#error-unknown-command-), [informar del problema](#report-a-problem) |",
+          "after": "| `1` | `generic_failure` | un fallo inesperado de `tg` | [informar del problema](#report-a-problem) |"
+        },
+        {
+          "before": "| `2` | `validation_error` | un valor o una combinación de opciones que `tg` no acepta; un nombre que coincide con varios chats | [valores](#--limit-takes-a-whole-number-from-1-upwards), [varios chats](#-matches-3-chats--name-one-by-its-id) |",
+          "after": "| `2` | `validation_error` | comando u opción desconocidos, argumento ausente, valor inválido o nombre de chat ambiguo | [comando desconocido](#error-unknown-command-), [valores](#--limit-takes-a-whole-number-from-1-upwards), [varios chats](#-matches-3-chats--name-one-by-its-id) |"
+        },
+        {
+          "before": "```text\ntg chat list\nerror: unknown command 'list'\n```",
+          "after": "```text\ntg chat list --json\n{\"error\":{\"retryable\":false,\"code\":\"validation_error\",\"message\":\"unknown command 'list' \\\"chat\\\" is not a command, so it was read as a profile name — which left \\\"list\\\" to be one.\"}}\n```"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "troubleshooting",
+    "reason": "Keep incoming pre-rename search troubleshooting hashes after the source moved this entry under a broader help section.",
+    "replacements": {
+      "en": [
+        {
+          "before": "### `search messages` finds nothing",
+          "after": "<a id=\"messages-search-finds-nothing\" />\n\n### `search messages` finds nothing"
+        }
+      ],
+      "ru": [
+        {
+          "before": "### `search messages` ничего не находит",
+          "after": "<a id=\"messages-search-finds-nothing\" />\n\n<a id=\"messages-search-ничего-не-находит\" />\n\n### `search messages` ничего не находит"
+        }
+      ],
+      "es": [
+        {
+          "before": "### `search messages` no encuentra nada",
+          "after": "<a id=\"messages-search-finds-nothing\" />\n\n<a id=\"messages-search-no-encuentra-nada\" />\n\n### `search messages` no encuentra nada"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "usage",
+    "reason": "Released scheduled tests confirm outcome_unknown with no automatic retry; remove obsolete deduplication research caveat.",
+    "replacements": {
+      "es": [
+        {
+          "before": " No se ha probado si MAX colapsa la repetición diferida.",
+          "after": ""
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "archive",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "en": [
+        {
+          "before": "---\ntitle: \"The local store\"\n---\n\n",
+          "after": "---\ntitle: \"The local store\"\n---\n\n<a id=\"tester-only-reply-rules\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "cli-contract",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "en": [
+        {
+          "before": "---\ntitle: \"How tg behaves in scripts\"\n---\n\n",
+          "after": "---\ntitle: \"How tg behaves in scripts\"\n---\n\n<a id=\"headless-execution-and-limits\" />\n\n<a id=\"compact-results-and-discovery\" />\n\n<a id=\"previews-and-retry-safety\" />\n\n<a id=\"how-agent-behavior-is-checked\" />\n\n<a id=\"references\" />\n\n<a id=\"ambiguous-names\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "compare",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "en": [
+        {
+          "before": "---\ntitle: \"Compared with other tools\"\n---\n\n",
+          "after": "---\ntitle: \"Compared with other tools\"\n---\n\n<a id=\"login-profiles-and-the-background-service\" />\n\n<a id=\"reading-and-searching\" />\n\n<a id=\"sending\" />\n\n<a id=\"groups-and-folders\" />\n\n<a id=\"your-own-notes-on-chats-and-people\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "configuration",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "en": [
+        {
+          "before": "---\ntitle: \"Configuration\"\n---\n\n",
+          "after": "---\ntitle: \"Configuration\"\n---\n\n<a id=\"the-file\" />\n\n<a id=\"a-small-configuration\" />\n\n<a id=\"what-can-i-configure\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "diagnostics",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "en": [
+        {
+          "before": "---\ntitle: \"Diagnostics: what a command did\"\n---\n\n",
+          "after": "---\ntitle: \"Diagnostics: what a command did\"\n---\n\n<a id=\"command-discovery-for-scripts\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "people",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "en": [
+        {
+          "before": "---\ntitle: \"People\"\n---\n\n",
+          "after": "---\ntitle: \"People\"\n---\n\n<a id=\"for-agents\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "query-language",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "en": [
+        {
+          "before": "---\ntitle: \"Search query language\"\n---\n\n",
+          "after": "---\ntitle: \"Search query language\"\n---\n\n<a id=\"in-mcp\" />\n\n<a id=\"the-older-modes\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "remote",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "en": [
+        {
+          "before": "---\ntitle: \"ChatGPT, Codex or Claude in the browser\"\n---\n\n",
+          "after": "---\ntitle: \"ChatGPT, Codex or Claude in the browser\"\n---\n\n<a id=\"check-a-connection\" />\n\n<a id=\"mcp-and-host-capabilities\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "search",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "en": [
+        {
+          "before": "---\ntitle: \"Search\"\n---\n\n",
+          "after": "---\ntitle: \"Search\"\n---\n\n<a id=\"for-scripts-and-agents\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "topic-search",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "en": [
+        {
+          "before": "---\ntitle: \"Topic search\"\n---\n\n",
+          "after": "---\ntitle: \"Topic search\"\n---\n\n<a id=\"what-a-conversation-is\" />\n\n<a id=\"build-embed-search\" />\n\n<a id=\"read-what-was-found\" />\n\n<a id=\"keeping-it-current\" />\n\n<a id=\"for-agents\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "usage",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "en": [
+        {
+          "before": "---\ntitle: \"Using tg\"\n---\n\n",
+          "after": "---\ntitle: \"Using tg\"\n---\n\n<a id=\"a-persons-profile\" />\n\n<a id=\"is-this-account-a-bot\" />\n\n<a id=\"local-person-context\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "cli-contract",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "---\ntitle: \"Как max ведёт себя в скриптах\"\n---\n\n",
+          "after": "---\ntitle: \"Как max ведёт себя в скриптах\"\n---\n\n<a id=\"запуск-без-вопросов-и-ограничения\" />\n\n<a id=\"узкий-результат-и-описание-команды\" />\n\n<a id=\"предпросмотр-и-повтор-записи\" />\n\n<a id=\"как-проверяют-работу-агента\" />\n\n<a id=\"неоднозначные-имена\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "configuration-reference",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "---\ntitle: \"Справочник настроек\"\n---\n\n",
+          "after": "---\ntitle: \"Справочник настроек\"\n---\n\n<a id=\"порядок-в-котором-решается-настройка\" />\n\n<a id=\"посмотреть-что-получилось\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "configuration",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "---\ntitle: \"Настройки\"\n---\n\n",
+          "after": "---\ntitle: \"Настройки\"\n---\n\n<a id=\"файл\" />\n\n<a id=\"короткий-пример\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "diagnostics",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "---\ntitle: \"Диагностика: что команда делала\"\n---\n\n",
+          "after": "---\ntitle: \"Диагностика: что команда делала\"\n---\n\n<a id=\"показать\" />\n\n<a id=\"сохранить\" />\n\n<a id=\"что-можно-с-этим-делать\" />\n\n<a id=\"справочник-для-скриптов\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "external-models",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "---\ntitle: \"Внешние модели: настройка API\"\n---\n\n",
+          "after": "---\ntitle: \"Внешние модели: настройка API\"\n---\n\n<a id=\"какие-задачи-используют-api\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "installation",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "---\ntitle: \"Установка\"\n---\n\n",
+          "after": "---\ntitle: \"Установка\"\n---\n\n<a id=\"обычный-способ\" />\n\n<a id=\"первый-запуск-и-инструкция-для-агента\" />\n\n<a id=\"обновление-и-удаление\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "mcp",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "---\ntitle: \"MCP-сервер\"\n---\n\n",
+          "after": "---\ntitle: \"MCP-сервер\"\n---\n\n<a id=\"права-профиля-управляют-инструментами\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "people",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "---\ntitle: \"Человек: профиль, сообщения, проверка на бота\"\n---\n\n",
+          "after": "---\ntitle: \"Человек: профиль, сообщения, проверка на бота\"\n---\n\n<a id=\"для-агентов\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "query-language",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "---\ntitle: \"Язык поисковых запросов\"\n---\n\n",
+          "after": "---\ntitle: \"Язык поисковых запросов\"\n---\n\n<a id=\"в-mcp\" />\n\n<a id=\"прежние-режимы\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "search",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "---\ntitle: \"Поиск\"\n---\n\n",
+          "after": "---\ntitle: \"Поиск\"\n---\n\n<a id=\"для-скриптов-и-агентов\" />\n\n<a id=\"подготовка-файлов-и-архива\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "sessions",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "---\ntitle: \"Вход, сессии и профили\"\n---\n\n",
+          "after": "---\ntitle: \"Вход, сессии и профили\"\n---\n\n<a id=\"откуда-берётся-токен\" />\n\n<a id=\"проверить-и-забыть\" />\n\n<a id=\"если-ключницы-нет\" />\n\n<a id=\"сколько-живёт-токен\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "topic-search",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "---\ntitle: \"Поиск по темам\"\n---\n\n",
+          "after": "---\ntitle: \"Поиск по темам\"\n---\n\n<a id=\"что-такое-разговор\" />\n\n<a id=\"построить-посчитать-векторы-искать\" />\n\n<a id=\"для-агентов\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "troubleshooting",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "---\ntitle: \"Когда не работает\"\n---\n\n",
+          "after": "---\ntitle: \"Когда не работает\"\n---\n\n<a id=\"проверка-со-входом-в-max\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "usage",
+    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "---\ntitle: \"Личный аккаунт: как пользоваться\"\n---\n\n",
+          "after": "---\ntitle: \"Личный аккаунт: как пользоваться\"\n---\n\n<a id=\"ответ-и-реакция\" />\n\n<a id=\"правка-пересылка-закрепление\" />\n\n<a id=\"опросы\" />\n\n<a id=\"локальная-копия-и-новые-сообщения\" />\n\n<a id=\"настройки\" />\n\n<a id=\"человек\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "rankings",
+    "reason": "Keep historical incoming links and current released cross-links at the corresponding task section.",
+    "replacements": {
+      "es": [
+        {
+          "before": "\n## Antigüedad de los recuentos\n",
+          "after": "\n<a id=\"свежесть-счётчиков\" />\n\n## Antigüedad de los recuentos\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "rankings",
+    "reason": "Keep historical incoming links and current released cross-links at the corresponding task section.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "\n## Насколько свежи счётчики\n",
+          "after": "\n<a id=\"check-and-refresh-counters\" />\n\n## Насколько свежи счётчики\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "\n## Antigüedad de los recuentos\n",
+          "after": "\n<a id=\"check-and-refresh-counters\" />\n\n## Antigüedad de los recuentos\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "attachments",
+    "reason": "Bare relative guide URL is not normalized by the site link mapper; make its guide-relative path explicit.",
+    "replacements": {
+      "en": [
+        {
+          "before": "](usage.md)",
+          "after": "](./usage.md)"
+        }
+      ],
+      "ru": [
+        {
+          "before": "](usage.md)",
+          "after": "](./usage.md)"
+        }
+      ],
+      "es": [
+        {
+          "before": "](usage.md)",
+          "after": "](./usage.md)"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "sessions",
+    "reason": "Show the real public my.telegram.org login screen and distinguish website registration from account QR authorization. Screenshot captured 2026-10-04 in a fresh unauthenticated browser; no phone, code, api_hash or QR tokens entered. Guidance verified against https://core.telegram.org/api/obtaining_api_id and https://my.telegram.org/apps.",
+    "replacements": {
+      "en": [
+        {
+          "before": "\n## The app from my.telegram.org\n",
+          "after": "\n## The app from my.telegram.org\n\n> **See the my.telegram.org login screen**\n>\n> ![Official my.telegram.org login screen with an empty phone-number field.](/telegram-app-login.png)\n>\n> This is the website login for managing your Telegram application credentials. The code arrives in Telegram, not by SMS. After login, choose **API development tools**. Authorizing the CLI with a QR code comes later. [my.telegram.org](https://my.telegram.org/apps)\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "\n## Приложение с my.telegram.org\n",
+          "after": "\n## Приложение с my.telegram.org\n\n> **Посмотреть экран входа my.telegram.org**\n>\n> ![Официальный экран входа my.telegram.org: поле номера телефона не заполнено.](/telegram-app-login.png)\n>\n> Это вход на сайт для получения данных приложения Telegram. Код приходит сообщением в Telegram, не по SMS. После входа выберите **API development tools**. Подтверждение доступа CLI через QR-код будет следующим этапом. [my.telegram.org](https://my.telegram.org/apps)\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "\n## La aplicación de my.telegram.org\n",
+          "after": "\n## La aplicación de my.telegram.org\n\n> **Ver la pantalla de acceso de my.telegram.org**\n>\n> ![Pantalla oficial de my.telegram.org con el campo del teléfono vacío.](/telegram-app-login.png)\n>\n> Este es el acceso al sitio para obtener las credenciales de aplicación de Telegram. El código llega por Telegram, no por SMS. Tras entrar, elige **API development tools**. La autorización del CLI por QR viene después. [my.telegram.org](https://my.telegram.org/apps)\n"
         }
       ]
     }

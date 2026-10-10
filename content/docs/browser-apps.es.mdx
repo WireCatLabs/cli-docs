@@ -3,9 +3,9 @@ title: Usar desde la web o el móvil
 description: "Conecta Telegram y MAX a un chat de IA como ChatGPT, Claude o Gemini en el navegador o la aplicación móvil. No necesitas sus aplicaciones de escritorio."
 ---
 
-Usa Telegram y MAX desde un chat de IA en el navegador o la aplicación móvil: encuentra mensajes, reúne contexto y prepara respuestas. Se configura con unos comandos y una dirección en los ajustes del chat. No necesitas instalar ChatGPT o Claude en el ordenador. Sirve cualquier chat de IA que permita conectar tu propio servidor MCP; elige tu aplicación abajo.
+Usa Telegram y MAX desde un chat de IA en el navegador o la aplicación móvil: encuentra mensajes, reúne contexto y prepara respuestas. Se configura con unos comandos y una dirección en los ajustes del chat. No necesitas instalar ChatGPT o Claude en el ordenador. La aplicación debe admitir MCP remoto por HTTP y un acceso OAuth compatible con este servidor; elige tu aplicación abajo.
 
-Esta guía conecta el mensajero que elijas y lo comprueba con una petición sobre tus chats. Un programa en tu ordenador accede al mensajero; tu chat de IA llega a ese programa <DocTerm term="public-address" lang="es" label="mediante una dirección pública" />. <DocTerm term="mcp" lang="es" label="MCP" /> es el modo de conectar estas herramientas al asistente. A continuación obtendremos la dirección y la añadiremos a la aplicación.
+Esta guía conecta el servicio de mensajería que elijas y lo comprueba con una petición sobre tus chats. Un programa en tu ordenador accede al servicio de mensajería; tu chat de IA llega a ese programa <DocTerm term="public-address" lang="es" label="mediante una dirección pública" />. <DocTerm term="mcp" lang="es" label="MCP" /> es el modo de conectar estas herramientas al agente. A continuación obtendremos la dirección y la añadiremos a la aplicación. Mantén el ordenador encendido y el servidor MCP de la herramienta de línea de comandos y el túnel HTTPS en ejecución mientras uses la conexión. No necesitas la aplicación de escritorio del servicio de mensajería.
 
 ## Antes de empezar
 
@@ -53,7 +53,7 @@ los comandos npm y evitar errores de la política de ejecución. Configuración 
 
 Ejecuta **la ventana 1 como Administrador** para Funnel. `&` gestiona el espacio de la ruta
 predeterminada; cambia la ruta si instalaste Tailscale en otro lugar.
-Ejecuta **la ventana 2 con tu usuario habitual**, que inició sesión en el mensajero.
+Ejecuta **la ventana 2 con tu usuario habitual**, que inició sesión en el servicio de mensajería.
 
 ```powershell
 & "$env:ProgramFiles\Tailscale\tailscale.exe" funnel 8765
@@ -108,7 +108,7 @@ IFS= read -r mcpPublicUrl
 tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
 ```
 
-Para MAX, cambia `tg` por `max` en la ventana 2. No ejecutes el servidor del mensajero con `sudo`.
+Para MAX, cambia `tg` por `max` en la ventana 2. No ejecutes el servidor del servicio de mensajería con `sudo`.
 
 </Tab>
 
@@ -125,7 +125,7 @@ Solo el servidor con `--http` tiene este acceso. Nunca dirijas un túnel a `tg m
 
 ## 3. Añadir la conexión a tu chat de IA
 
-Añade **`/mcp` a la dirección HTTPS**. Por ejemplo, `https://ordenador.red.ts.net` pasa a ser `https://ordenador.red.ts.net/mcp`. Es la dirección de la conexión, no la web de Telegram o MAX. Crea una conexión distinta para cada mensajero.
+Añade **`/mcp` a la dirección HTTPS**. Por ejemplo, `https://ordenador.red.ts.net` pasa a ser `https://ordenador.red.ts.net/mcp`. Es la dirección de la conexión, no la web de Telegram o MAX. Crea una conexión distinta para cada servicio de mensajería.
 
 <Tabs items={["ChatGPT", "Claude", "Gemini", "DeepSeek"]}>
 
@@ -188,14 +188,16 @@ Muéstrame mis cinco chats recientes de Telegram y sus recuentos de mensajes sin
 Después pide un borrador o, cuando quieras enviar, indica el destinatario y el texto exacto.
 [Cómo escribir peticiones](./prompting.mdx) explica cómo pedir una revisión antes de enviar.
 
-## Elegir qué puede hacer el asistente
+<a id="elegir-qué-puede-hacer-el-asistente" />
+
+## Elegir qué puede hacer el agente
 
 Los comandos permiten enviar durante este proceso con `--permission messages.send=allow`, sin
 cambiar los ajustes guardados. La app controla sus aprobaciones. Por MCP, `ask` no fuerza una
-confirmación del servidor. Para solo leer, elige un perfil con permisos de lectura.
+confirmación del servidor. Para solo leer, elige un perfil de solo lectura y quita `--permission messages.send=allow` del comando de inicio.
 
-La aprobación de la app y la del servidor son preguntas distintas. Si siempre permites una herramienta
-en la app y el servidor, otra llamada puede enviar sin volver a preguntar. Pide un borrador para revisar
+Los ajustes de aprobación de la aplicación y las comprobaciones de permisos del servidor son controles separados. Si permites una herramienta
+en la aplicación y el servidor autoriza el envío, otra llamada puede enviar sin volver a preguntar. Pide un borrador para revisar
 el texto antes. Siguen activos los destinatarios permitidos y el límite por hora.
 Consulta los ejemplos de [permisos](./permissions.mdx).
 
@@ -203,15 +205,17 @@ Consulta los ejemplos de [permisos](./permissions.mdx).
 
 ## Antes funcionaba y ahora no conecta
 
-La conexión del navegador necesita que estén funcionando el ordenador del mensajero, su servidor y el túnel HTTPS. Después de suspender o reiniciar, sigue este orden:
+La conexión del navegador requiere el ordenador con la herramienta de línea de comandos, su servidor MCP y el túnel HTTPS en ejecución. Después de suspender o reiniciar, sigue este orden:
 
 1. Activa el ordenador y comprueba la cuenta en un terminal con `tg account show` o `max account show`. En PowerShell usa `tg.cmd` o `max.cmd`. Si falla, sigue la guía de acceso de [Telegram](./tg/sessions.md) o [MAX](./max/sessions.md).
 2. Reinicia el túnel y el servidor en las dos ventanas indicadas arriba. Usa el mismo perfil y comprueba que la dirección HTTPS coincide con la del conector. Si cambió, actualiza la dirección pública del servidor y la del conector.
 3. Repite la petición de cinco chats. Si la aplicación pide conectar de nuevo, usa el nuevo código de un solo uso que muestra el servidor en ejecución.
 
-La conexión funciona cuando el asistente muestra los chats de la cuenta esperada. Si sigue fallando, las comprobaciones de abajo distinguen problemas de cuenta, túnel o aplicación. Los archivos requieren otro paso: una ruta en este ordenador no entrega el archivo al agente del navegador. Consulta la transferencia para [Telegram](./tg/remote.md) o [MAX](./max/remote.md).
+La conexión funciona cuando el agente muestra los chats de la cuenta esperada. Si sigue fallando, las comprobaciones de abajo distinguen problemas de cuenta, túnel o aplicación. Los archivos requieren otro paso: una ruta en este ordenador no entrega el archivo al agente del navegador. Consulta la transferencia para [Telegram](./tg/remote.md) o [MAX](./max/remote.md).
 
-## Ambos mensajeros a la vez
+<a id="ambos-mensajeros-a-la-vez" />
+
+## Ambos servicios de mensajería a la vez
 
 Usa puertos locales y direcciones HTTPS públicas distintos. Por ejemplo: Telegram en local
 `8765` y público `443`; MAX en local `8766` y público `8443`. Para el segundo túnel, usa el
@@ -229,7 +233,7 @@ Funnel admite los puertos públicos `443`, `8443` y `10000`
   y desactiva solo esa ruta con `tailscale funnel --https=443 off` (o `8443` para el segundo servidor).
   Usa la ruta y elevación de tu SO arriba. Evita `funnel reset` si tienes otra ruta: las borra todas.
 - **Revocar acceso de apps:** `tg mcp --revoke` o `max mcp --revoke`; en PowerShell, usa
-  `tg.cmd` / `max.cmd`. Las apps deben volver a entrar; la sesión del mensajero se mantiene.
+  `tg.cmd` / `max.cmd`. Las apps deben volver a entrar; la sesión del servicio de mensajería se mantiene.
 
 ## Si algo falla
 
@@ -240,7 +244,7 @@ Funnel admite los puertos públicos `443`, `8443` y `10000`
 - **PowerShell rechaza scripts:** usa `tg.cmd` o `max.cmd`. Si no encuentra el comando, abre una
   ventana nueva y comprueba la instalación del CLI; no cambies la política de ejecución de todo el sistema.
 - **Sin herramientas:** `tg mcp doctor` o `max mcp doctor` verifica el handshake local, no el
-  túnel ni el acceso al mensajero. Un `account show` explícito verifica esa cuenta.
+  túnel ni el acceso al servicio de mensajería. Un `account show` explícito verifica esa cuenta.
 - **Puerto ocupado:** cambia el puerto local y apunta Funnel al mismo número. Para dos servidores,
   asigna también puertos HTTPS públicos distintos, como arriba.
 
@@ -250,16 +254,16 @@ Funnel admite los puertos públicos `443`, `8443` y `10000`
 
 ## Conectar sin mantener encendido el portátil
 
-Puedes instalar `tg` o `max` en un servidor que esté siempre en marcha y conectar tu chat de IA a su dirección. Así podrás usar tu mensajero desde el chat aunque el portátil esté apagado.
+Puedes instalar `tg` o `max` en un servidor que esté siempre en marcha y conectar tu chat de IA a su dirección. Así podrás usar tu servicio de mensajería desde el chat aunque el portátil esté apagado.
 
-Instala la herramienta en el servidor, inicia sesión en la cuenta elegida, arranca la conexión MCP y proporciona una dirección HTTPS pública. Configura el inicio automático tras un reinicio: tanto el programa del mensajero como el acceso público deben seguir funcionando. El servidor necesita su propio inicio de sesión; la instalación del portátil no lo conecta automáticamente.
+Instala la herramienta en el servidor, inicia sesión en la cuenta elegida, arranca la conexión MCP y proporciona una dirección HTTPS pública. Configura el inicio automático tras un reinicio: tanto el servidor MCP de la herramienta de línea de comandos como su túnel HTTPS deben seguir funcionando. El servidor necesita su propio inicio de sesión; la instalación del portátil no lo conecta automáticamente.
 
 Prueba esta opción después de que funcione en tu ordenador. Consulta la conexión remota para [Telegram](./tg/remote.md) y [MAX](./max/remote.md). Repite la petición de cinco chats: si funciona con el portátil apagado, el servidor mantiene la conexión.
 
 <details>
 <summary>Servidor Linux: mantener la conexión tras salir y reiniciar</summary>
 
-1. Usa el mismo usuario normal de Linux para instalar, entrar en el mensajero y ejecutar el servicio. Instala Node.js, CLI y Tailscale e inicia sesión con ese usuario. Comprueba primero la petición de cinco chats con el arranque normal de arriba.
+1. Usa el mismo usuario normal de Linux para instalar, entrar en el servicio de mensajería y ejecutar el servicio. Instala Node.js, CLI y Tailscale e inicia sesión con ese usuario. Comprueba primero la petición de cinco chats con el arranque normal de arriba.
 2. Ejecuta `tg mcp config` o `max mcp config`. Usa la ruta absoluta de Node de `command` y la entrada del CLI de `args`; conserva el perfil indicado. No guardes contraseñas ni tokens del bot en el servicio.
 3. Crea `~/.config/systemd/user/wirecat-mcp.service`. Sustituye rutas y dirección pública por valores reales. Los directorios de configuración y estado deben coincidir con los del acceso comprobado:
 

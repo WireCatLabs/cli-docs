@@ -2,19 +2,28 @@
 title: "Referencia de configuración"
 ---
 
+<a id="prioridad-de-los-ajustes" />
+<a id="comprobar-el-resultado" />
+<a id="порядок-в-котором-решается-настройка" />
+<a id="посмотреть-что-получилось" />
 
-Lista completa de claves, valores predeterminados, ámbitos y variables de entorno. Para la configuración habitual, empieza por la [guía](./configuration.md); consulta el [contrato de la CLI](./cli-contract.md) para las reglas de ejecución y salida.
+Esta página es necesaria cuando necesita el nombre exacto, el tipo, el valor predeterminado o el alcance de una configuración, o el nombre de una variable de entorno. Esto enumera todas las configuraciones que lee `max`, todas las formas de anularlas y qué valor gana. Para cambios regulares y un archivo de ejemplo, comience con [guía de configuración](./configuration.md). El comportamiento de los comandos, códigos de salida y retorno se describe en [contrato CLI](./cli-contract.md).
 
+Palabras que aparecen en la página:
 
-No necesitas configurar nada: sin archivo ni variables funcionan los valores iniciales. El archivo sirve para evitar repetir opciones.
+- **Sección** — parte del archivo de configuración. `defaults` es válido para todos los perfiles, `profiles.<имя>` - para un perfil, `personal.*` - sólo para comandos de cuenta personal, `bot.*` - sólo para comandos de bot.
+- **Alcance**: secciones donde la configuración es válida. Configurar fuera de su alcance es un error.
+- **Fuente**: de dónde proviene el valor actual: parámetro, variable de entorno, sección de archivo o valor integrado.
 
-## Prioridad de los ajustes
+Los ajustes no deben contener secretos: el archivo no tiene campos para tokens, números de teléfono ni identificadores de chat.
 
-**Opción → variable de entorno → archivo → valor integrado.** El mismo orden para todo el programa, definido en un solo lugar para que ningún comando pueda elegir otro.
+Un breve ejemplo de archivo y uno completo, con todos los apartados y una explicación de cada parte, lo puedes encontrar en [guía de configuración](./configuration.md#пример-файла-настроек).
 
+## Qué valor tiene prioridad
+
+**Opción → variable de entorno → archivo → valor integrado.** El mismo orden se aplica en todo el programa, sin que cada comando lo decida por separado.
 
 Dentro del archivo prevalece la **entrada más específica**. Para un comando de cuenta personal en el perfil `work`: `personal.profiles.work` → `profiles.work` → `personal.defaults` → `defaults`. Para `max work bot …`, es lo mismo con `bot` en vez de `personal`. El perfil tiene prioridad sobre la sección: la entrada de una cuenta prevalece sobre la de todas.
-
 
 ```sh
 max chats list --limit 5          # флаг: 5
@@ -24,8 +33,9 @@ MAX_PROFILE=personal max chats list   # переменная выбирает п
 # 20 — когда нет ничего
 ```
 
-Hay dos excepciones que tienen prioridad sobre ese orden. Están documentadas:
+No todas las configuraciones tienen todos los métodos. [La tabla de configuración](#файл) le indica cuáles hay.
 
+Dos excepciones son superiores a este orden:
 
 - **`MAX_TOKEN` prevalece sobre el llavero**, para CI.
 - **`MAX_CONFIG_DIR` y `MAX_STATE_DIR` cambian configuración y acceso de `max`**, incluida la entrada del llavero correspondiente al perfil.
@@ -35,54 +45,27 @@ Hay dos excepciones que tienen prioridad sobre ese orden. Están documentadas:
 ```sh
 max config show            # профиль, какие профили есть, файл и каждая настройка
 max work config show       # то же для профиля work
+max shop config show --bot # то же для команд бота shop
 max config show --json     # то же одним объектом
 ```
+
+El comando imprime el perfil seleccionado **y de dónde vino**, la ruta al archivo de configuración y si existe, los perfiles y valores efectivos de todas las configuraciones con el origen de cada uno.
 
 Cada ajuste indica su origen: `flag`, `default` o `config file:` con la clave, como `config file: bot.profiles.test`. El perfil muestra `first word`, `MAX_PROFILE`, `MAX_PROFILE_LOCK`, `config file: defaultProfile` o `default`.
 
 Con `--json`, la respuesta también incluye `storeSettings`: los ajustes del archivo compartido (`searchStemmers.*`) y su origen, `store` o `default`.
 
-`max test config show --bot` muestra los ajustes tal como los recibirá `max test bot …`: los bots tienen su propia sección y límite de envío. Si falta el archivo, al cargar la configuración se crea con los valores predeterminados habituales. No se sobrescribe un archivo existente. Si está configurada una variable `MAX_*_DIR`, el comando lo indica en stderr: esas variables dan al perfil una entrada distinta en el llavero, por lo que un inicio de sesión realizado sin ellas aparece como «sin sesión».
+`--bot` muestra las configuraciones tal como las recibirá `max <имя> bot …`: el bot tiene su propia sección y su propio límite de envío. Si el archivo no existe, al cargar la configuración primero se crea uno con los valores predeterminados habituales. El archivo existente no se sobrescribe. Si se configura una de las variables `MAX_*_DIR`, el comando lo dirá en stderr: con ellas, el perfil tiene una entrada diferente en el llavero, y un inicio de sesión realizado sin ellas parece "sin sesión".
 
+⚠ **Incluye todos los perfiles locales:** configurados, cuentas personales con sesión y bots; cada uno marcado como personal, bot o ambos.
+
+⚠ **Esto no es una verificación de estado.** El comando lee archivos: no abre el caché, no toca el llavero y no contacta a MAX. `max doctor` comprueba si la sesión está activa ([el primer paso en caso de problemas](./troubleshooting.md)).
 
 No aparecen secretos: el archivo no dispone de campos para guardarlos.
 
-## Permisos de acceso
-
-`deny` bloquea lectura y escritura; `readonly` permite lectura; `ask` requiere confirmación; `allow` realiza la acción sin preguntar. En un terminal, `ask` muestra una pregunta con «no» por defecto. En modo JSON no hay pregunta: usa `--yes`, o `--allow-dangerous` para borrar mensajes. MCP no tiene formularios de confirmación: `ask` permite la escritura solicitada, mientras `deny` y `readonly` siguen bloqueándola. `--permission ключ=уровень` sobrescribe temporalmente los permisos del proceso. Las opciones antiguas de confirmación ya no determinan el acceso; en la CLI, los niveles `ask` siguen requiriendo una respuesta o una opción explícita. Consulta [MCP](./mcp.md) para la conexión.
-
-
-Una clave más específica tiene prioridad sobre su recurso. Este ejemplo permite leer mensajes y eliminarlos sin confirmación, pero prohíbe las demás escrituras en mensajes:
-
-```json
-{ "profiles": { "work": { "permissions": { "messages": "readonly", "messages.delete": "allow" } } } }
-```
-
-Este ejemplo no limita contactos, chats, reacciones ni otros recursos. Las claves de bots empiezan por `bot`, como `bot.messages.send`. `config show` muestra los permisos efectivos y su origen. `config set` rechaza una clave de orden desconocida, también dentro de un objeto `permissions` completo, con el código 2. `config unset` permite eliminar una clave desconocida antigua. Al leer un archivo existente con una clave así, se avisa en stderr y se continúa.
-
-Los permisos de distintas secciones del archivo se combinan, pero **primero decide la sección más cercana y después la longitud de la clave**. Una clave definida en el perfil anula la misma clave y todas las que cuelgan de ella en `personal.defaults` y `defaults`. Aquí el perfil `agent` no elimina mensajes: su `messages` anula `messages.delete` de `defaults`.
-
-```json
-{
-  "defaults": { "permissions": { "messages.delete": "allow" } },
-  "profiles": { "agent": { "permissions": { "messages": "readonly" } } }
-}
-```
-
-Funciona en ambos sentidos: `messages: allow` en el perfil también anula `messages.delete: deny` de `defaults`, y entonces eliminar vuelve a preguntar, como por defecto. Los antiguos `readOnly` y `allow` se aplican en la sección donde están escritos.
-
-Puedes ver los cambios antes de convertir un archivo antiguo:
-
-```sh
-max config migrate --dry-run
-max config migrate
-```
-
-La migración conserva los permisos efectivos, los ajustes MAX y los puntos de moderación. Los niveles antiguos `forbid/flag/confirm` pasan a `deny/ask/ask`. `--dry-run` no escribe. Una vez existe `permissions`, cambiar `readOnly`, `allow` o `mcpTools` se rechaza indicando el nuevo ajuste. `MAX_PROFILE_LOCK` impide migrar el archivo completo; permite la vista previa.
-
 ## Archivo
 
-`~/.config/max-cli/config.json`, permisos `0644`. Lo escribe `max config set` o puedes editarlo.
+`~/.config/max-cli/config.json` en Linux; rutas en otros sistemas - en [guía de configuración](./configuration.md#где-лежит-файл). El primer comando para leer la configuración lo crea con `limit`, `keepRunsForDays`, `sendsPerHour`, `updateCheck` y `skillHint` en `defaults`. El archivo se crea con derechos `0600` y `max config set` lo escribe con derechos `0644`: no contiene secretos.
 
 ```json
 {
@@ -107,36 +90,37 @@ La migración conserva los permisos efectivos, los ajustes MAX y los puntos de m
 - `personal.defaults`, `personal.profiles.<имя>`: cuentas personales.
 - `bot.defaults`, `bot.profiles.<имя>`: comandos `max <имя> bot …`.
 
-| Campo | Función | Qué lo sobrescribe en una ejecución | Predeterminado |
+|Campo|¿Qué hace?|Qué se superpone para un ejecución|Por defecto|
 |---|---|---|---|
-| `defaultProfile` | Perfil sin primera palabra ni `MAX_PROFILE` | La primera palabra (`max work …`), `MAX_PROFILE` | `default` |
-| `embeddingProvider` | Modelo local (`local`, por defecto) u `openai` | `--provider` | `local` |
-| `embeddingModel` | Modelo de vectores | `--model` | Según el servicio |
-| `embeddingBaseUrl` | Dirección de la API de vectores | `--base-url` | Según el servicio |
-| `embeddingDims` | Tamaño del vector, entero de 1 a 65 536 | `--dims` | Según el modelo |
-| `analysisProvider` | Agente (`agent`), `openai` o `anthropic` | `build --provider` | `agent` |
-| `analysisModel` | Modelo de análisis | `build --model` | Ninguno; indicar explícitamente para `--analyze` |
-| `analysisBaseUrl` | Dirección de la API de análisis | `build --base-url` | Según el servicio |
-| `limit` | Registros que mostrar sin `--limit` | `--limit` | `20` |
-| `timeoutMs` | Espera para **una solicitud** | — (`--timeout` es otra cosa, ver abajo) | La del transporte |
-| `color` | Color; si falta, se detecta si es un terminal | —; si falta el campo, `NO_COLOR` desactiva el color | Detección del terminal |
-| `senderColors` | Color por autor en `max messages`; `вы` siempre cian. Requiere `color`. Solo cuenta personal | — | `false` |
-| `searchCatchUp` | Tras `store fetch` o reparar huecos, prepara el grafo y los vectores locales instalados del chat dentro de los límites indicados. No descarga modelos ni llama a proveedores remotos | `--catch-up`, `--no-catch-up` | `false` |
-| `catchUpMarksRead` | `max inbox` y `max review` marcan como leído cada chat mostrado, hasta el último mensaje mostrado. El interlocutor ve la marca. Solo cuenta personal | `--mark-read`, `--no-mark-read` | `false` |
-| `record` | Registrar cada ejecución como con `--record` | `--record`, `--no-record` | `false` |
-| `permissions` | niveles por recurso y comando: `deny`, `readonly`, `ask`, `allow`; una clave más específica tiene prioridad | —; `--yes` y `--allow-dangerous` solo responden a `ask`, no anulan `deny` | casi todo `allow`; eliminar mensajes y cerrar otras sesiones `ask`; respuestas automáticas `replies.send` `deny` |
-| `serve` | Iniciar `max serve` si se necesita y no existe. No inicia con `MAX_TOKEN`. Solo personal | `--serve`, `--no-serve` | `true` |
-| `keepRunsForDays` | Días de conservación de ejecuciones | — | `30` |
-| `readOnly`, `allow`, `mcpTools` | ajustes antiguos compatibles; `config migrate` los convierte en `permissions` | — | no se pueden cambiar tras migrar |
-| `sendsPerHour` | Límite horario, incluidos reenvíos, ediciones, fijados con aviso, borrados, personas añadidas y solicitudes de entrada aceptadas; superar devuelve `8`. **Bots** solo usan la sección `bot`; sin ella no tienen límite | — | `30`; sin límite para bots |
-| `requestsPerMinute` | Peticiones por minuto del perfil a MAX, tras las primeras 10 seguidas, compartidas entre todos los procesos de ese perfil; `0` significa sin límite. `MAX_REQUESTS_PER_MINUTE` prevalece sobre el archivo ([limits.md](./limits.md)) | `MAX_REQUESTS_PER_MINUTE` | `20` |
-| `readOtherBots` | Leer copias de otros bots al pedir `--all-bots` o `--bots`: `false`, `true` para todos o lista de perfiles. **Solo `bot`** | —; `--all-bots` y `--bots` lo piden, el campo lo permite | `false` |
-| `updateCheck` | Consultar npm una vez al día y avisar en el terminal. **Solo `defaults`**, la versión es común | —; lo desactivan `MAX_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER`, `CI` | `true` |
-| `skillHint` | Avisar al agente en stderr una vez al día si falta la skill de `max` o es antigua; sugiere `max skill install`. Detecta `AI_AGENT` o `CLAUDECODE`. **Solo `defaults`** | — | `true` |
-| `transcribeModel` | Modelo de `max messages transcribe`. **Solo `defaults`** | `--model` en `messages transcribe` y junto a `--transcribe` | `gigaam-v3` |
+| `defaultProfile` |¿Qué perfil si la primera palabra no es nada y no se especifica `MAX_PROFILE`?|primera palabra (`max work …`), `MAX_PROFILE`| `default` |
+| `limit` |¿Cuántos registros mostrar cuando no se transmite `--limit`?| `--limit` | `20` |
+| `timeoutMs` |cuánto tiempo esperar para recibir una respuesta a **una solicitud**|— (`--timeout` — otro, ver más abajo)|tomado del transporte|
+| `color` |color en terminal; sin un campo se decide en función de si es una terminal|—; sin color de campo se apaga `NO_COLOR`|por terminal|
+| `senderColors` |en `max messages` cada autor tiene su propio color; `вы` - siempre azul. Sin `color` no funciona. Solo para cuenta personal| — | `false` |
+| `catchUpMarksRead` |`max inbox` y `max review` marcan cada chat mostrado como leído, hasta el último mensaje mostrado. El interlocutor ve la marca. Solo para cuenta personal| `--mark-read`, `--no-mark-read` | `false` |
+| `searchCatchUp` |después de `store fetch` o reparación de roturas, prepara el gráfico y establece los vectores locales de este chat dentro de límites especificados. Los modelos no se descargan, no se llama a proveedores remotos. Solo para cuenta personal| `--catch-up`, `--no-catch-up` | `false` |
+| `record` |si se debe registrar cada inicio como si se transfiriera `--record` ([diagnóstico](./diagnostics.md))| `--record`, `--no-record` | `false` |
+| `keepRunsForDays` |¿Cuántos días se almacenan los registros de ejecución?| — | `30` |
+| `permissions` |niveles de derechos para recursos y comandos: `deny`, `readonly`, `ask`, `allow`; la clave más precisa tiene prioridad ([abajo](#права-доступа))|—; `--yes` y `--allow-dangerous` solo responden a `ask`, `deny` no eliminan|todo `allow`, excepto: eliminación, terminación de otras sesiones y algunos cambios irreversibles más - `ask`; respuestas automáticas `replies.send` – `deny`|
+| `sendsPerHour` |cuántos mensajes puede enviar un perfil en una hora, junto con reenvíos, ediciones, pines con notificaciones, mensajes eliminados, personas agregadas a grupos y solicitudes aceptadas de membresía; over - falla con código `8`. **El límite de bot** se establece solo en la sección `bot`; sin él el bot no está limitado ([enviar protección](./security.md#защита-от-отправки-не-туда))| — |`30`, el bot no lo tiene|
+| `requestsPerMinute` |cuántas solicitudes por minuto realiza el perfil a MAX, después de las primeras 10 seguidas, juntas en todos los procesos de este perfil; `0` - sin limitación ([límites y esperas](./limits.md))| `MAX_REQUESTS_PER_MINUTE` | `20` |
+| `serve` |¿Debo ejecutar `max serve` en segundo plano cuando el comando necesita MAX y no hay servidor? El servidor no comienza con `MAX_TOKEN`. Solo para cuenta personal| `--serve`, `--no-serve` | `true` |
+| `transcribeModel` |qué modelo `max messages transcribe` reconoce el habla. **Solo en `defaults`**|`--model` en `messages transcribe` y al lado de `--transcribe`| `gigaam-v3` |
+| `readOtherBots` |¿Puede el bot leer copias de otros bots cuando el comando lo solicita? `--all-bots` o `--bots`: `false`, `true`: todos o una lista de perfiles de bot. **Solo en la sección `bot`** ([bots](./bot.md))|—; `--all-bots` y `--bots` preguntan, el campo permite| `false` |
+| `updateCheck` |Una vez al día pregunte a npm si hay una nueva versión e infórmelo en la terminal. **Solo en `defaults`**: la versión del programa es la misma para todos los perfiles|—; apagar `MAX_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER`, `CI`| `true` |
+| `skillHint` |una vez al día decirle al agente en stderr que no tiene la habilidad `max` o que es anterior al programa y que está asignada por `max skill install`. Reconocemos al agente por la variable `AI_AGENT` o `CLAUDECODE`. **Solo en `defaults`**| — | `true` |
+| `readOnly`, `allow`, `mcpTools` |configuraciones antiguas, lea para comprobar la compatibilidad; `config migrate` los convierte a `permissions`| — |no se pueden cambiar después de la migración|
+| `embeddingProvider` |modelo local (`local`) o `openai`| `--provider` | `local` |
+| `embeddingModel` |modelo vectorial| `--model` |por servicio|
+| `embeddingBaseUrl` |Dirección API de vectores| `--base-url` |por servicio|
+| `embeddingDims` |tamaño del vector, número entero 1–65 536| `--dims` |por modelo|
+| `analysisProvider` |agente (`agent`), `openai` o `anthropic`| `build --provider` | `agent` |
+| `analysisModel` |modelo de análisis| `build --model` |No; para `--analyze` configurado explícitamente|
+| `analysisBaseUrl` |dirección API de análisis| `build --base-url` |por servicio|
+| `models` |modelos externos por propósito ([abajo](#модели-по-назначению))|variables `MAX_MODELS_*`|No|
+| `searchStemmers.cyrillic`, `searchStemmers.latin` |Lenguajes de raíces de palabras para buscar en todo el archivo general ([abajo](#языки-поиска))| — | `russian`, `english,spanish` |
 
-⚠ **`timeoutMs` y `--timeout` son distintos, y confundirlos sale caro.** `timeoutMs` es cuánto esperar **una respuesta** de MAX. `--timeout` es el tiempo para **todo el comando**. Una lectura incluye conexión, INIT, LOGIN, resolución del nombre del chat y la propia petición, por lo que su duración es un múltiplo de `timeoutMs` y nunca equivale a él.
-
+⚠ **`timeoutMs` y `--timeout` son distintos.** `timeoutMs` limita la espera de **una respuesta** de MAX. `--timeout` limita **todo el comando**. Una lectura incluye conexión, INIT, LOGIN, resolución del nombre del chat y la propia petición, por lo que su duración puede ser varias veces `timeoutMs`.
 
 Los formatos difieren deliberadamente: `timeoutMs` es un número de milisegundos en el archivo; `--timeout` exige una unidad (`30s`, `2m`, `500ms`). `--timeout 30` se rechaza para evitar confundir segundos y milisegundos, con errores de hasta treinta veces.
 
@@ -144,8 +128,66 @@ No hay campo para `--timeout`: el presupuesto corresponde a una ejecución, no a
 
 **`--page` y `--all` no tienen campos de configuración.** Guardar una página sirve una vez y molesta después. Tampoco `--order` de `max contacts list` tiene un duplicado `contactOrder`. `--limit` sí, porque es una preferencia estable.
 
-**Este archivo no tiene sitio para secretos.** El esquema no incluye campos para tokens, teléfonos ni identificadores de chat: un esquema sin sitio para un secreto es más fiable que la regla «no pongas secretos aquí».
+## Permisos de acceso
 
+`permissions` es un objeto: cada tecla es una ruta de comando, cada valor es un nivel.
+
+```json
+{ "profiles": { "work": { "permissions": { "messages": "readonly", "messages.delete": "allow" } } } }
+```
+
+| Nivel | Qué ocurre |
+|---|---|
+| `deny` | Nada, ni siquiera lectura: código `5` antes de conectar |
+| `readonly` | Permite leer; los cambios fallan con código `5` |
+| `ask` | Pide confirmación en el terminal, con «no» por defecto ([más abajo](#вопрос-перед-изменением)) |
+| `allow` | Ejecuta la acción sin preguntar |
+
+**La clave es la ruta del comando**: `messages`, `messages.delete`, `messages.send`, `reactions`, `chats.members`, `contacts`, `account.sessions.end`. Comienza con el recurso: `messages`, `reactions`, `polls`, `topics`, `chats`, `contacts`, `account`, `bot`, `conversations`, `tags`, `search`, `searches`, `tasks`, `replies`, `attachments`, `stats`, `store` o `metadata`. Las claves del bot comienzan con `bot`, por ejemplo `bot.messages.send`. `config set` rechaza una clave de comando desconocida, incluso dentro de un objeto `permissions` completo, con el código 2. `config unset` le permite eliminar una clave desconocida antigua. La lectura de un archivo existente con dicha clave advierte en stderr y continúa funcionando.
+
+**Una clave más específica anula el recurso.** El ejemplo anterior permite leer y eliminar mensajes sin confirmación y desactiva otras escrituras en mensajes. Los contactos, chats, reacciones y otros recursos no se limitan a este ejemplo. `config show` muestra los derechos actuales y su fuente.
+
+Los permisos de distintas secciones se combinan, pero **primero cuenta la sección más cercana y después la longitud de la clave**. Una clave del perfil sustituye esa clave y todas sus descendientes en `personal.defaults`, `bot.defaults` y `defaults`. El perfil `agent` del ejemplo no elimina mensajes: su `messages` sustituye `messages.delete` de `defaults`.
+
+```json
+{
+  "defaults": { "permissions": { "messages.delete": "allow" } },
+  "profiles": { "agent": { "permissions": { "messages": "readonly" } } }
+}
+```
+
+Funciona en ambos sentidos: `messages: allow` en el perfil también anula `messages.delete: deny` de `defaults`, y entonces eliminar vuelve a preguntar, como por defecto. Los antiguos `readOnly` y `allow` se aplican en la sección donde están escritos.
+
+**De forma predeterminada, todo está permitido excepto algunos cambios que son difíciles de deshacer.** Preguntado por: `messages.delete`, `bot.messages.delete`, `chats.delete`, `chats.clear`, `topics.enable`, `topics.delete` y `account.sessions.end`. Las respuestas automáticas no se envían hasta que usted permita: `replies.send` - `deny`.
+
+```sh
+max config set permissions.messages.delete allow     # удалять без вопроса
+max config set permissions.messages.send ask         # спрашивать перед каждой отправкой
+max config unset permissions.messages.delete         # вернуть значение по умолчанию
+```
+
+### Pregunta antes del cambio
+
+Con `ask`, el terminal pide confirmación con «no» por defecto. `--allow-dangerous` responde para eliminaciones irreversibles de mensajes, chats, historial o temas; `--yes`, para los demás cambios. En modo JSON no hay pregunta interactiva: se requiere una de estas opciones.
+
+### A través de MCP
+
+MCP no muestra formularios de confirmación: `ask` permite la escritura invocada; `deny` y `readonly` siguen bloqueándola. `--permission ключ=уровень` modifica temporalmente los permisos del proceso. Las antiguas opciones de confirmación ya no determinan el acceso. En la CLI, `ask` sigue requiriendo una respuesta o una opción explícita. Consulta la conexión en la [guía MCP](./mcp.md).
+
+### Configuraciones antiguas que aún funcionan
+
+`readOnly: true` se lee como `readonly` para cada recurso. La lista en `allow` (`send`, `forward`, `reaction`, `edit`, `pin`, `read`, `delete`, `groups`, `contacts`, `profile`, `folders`, `sessions`) dice `allow` para estas acciones y `readonly` para el resto; todavía pide eliminación. La clave en `permissions` de la misma partición es más importante que ambas. `mcpTools` es legible, pero el acceso ya no cambia.
+
+### Traducción de configuraciones antiguas
+
+Puedes ver los cambios antes de convertir un archivo antiguo:
+
+```sh
+max config migrate --dry-run
+max config migrate
+```
+
+La migración conserva los permisos efectivos, los ajustes MAX y los puntos de moderación. Los niveles antiguos `forbid/flag/confirm` pasan a `deny/ask/ask`. `--dry-run` no escribe. Una vez existe `permissions`, cambiar `readOnly`, `allow` o `mcpTools` se rechaza indicando el nuevo ajuste. `MAX_PROFILE_LOCK` impide migrar el archivo completo; permite la vista previa.
 
 ## Cambiar sin abrir el archivo
 
@@ -162,8 +204,9 @@ max config set defaultProfile work      # какой профиль без пе�
 
 Los valores se comprueban con el mismo esquema usado para leer, **antes de escribir**: `max config set limit 0` se rechaza y el archivo queda igual. `serve`, `senderColors`, `catchUpMarksRead`, `searchCatchUp` y `mcpTools` no se admiten con `--bot`: los bots no tienen servidor, colores de autores ni estado de no leído, y el antiguo `mcpTools` solo se aplica a cuentas personales.
 
+### Idiomas de búsqueda
 
-`searchStemmers.cyrillic` (`russian` o `none`) y `searchStemmers.latin` (`english`, `spanish`, ambos por defecto separados por coma, o `none`) se guardan en el archivo compartido, no en la configuración. Afectan a todos los perfiles y ambos mensajeros. No se aplican `--defaults`, `--personal` ni `--bot`; `MAX_PROFILE_LOCK` impide cambiarlos. `config unset` restablece el valor integrado. Después ejecuta `max store reindex`; consulta [mantenimiento del archivo](./archive.md#обслуживание-архива).
+`searchStemmers.cyrillic` (`russian` o `none`) y `searchStemmers.latin` (`english`, `spanish`, ambos separados por comas (este es el valor predeterminado) o `none`) no se almacenan en el archivo de configuración, sino en el archivo general de mensajes: son los mismos para todos los perfiles y para ambos servicios de mensajería. Por lo tanto, `--defaults`, `--personal` y `--bot` no se aceptan con ellos y no se pueden cambiar en `MAX_PROFILE_LOCK`. `config unset` devuelve el valor incorporado. Después del cambio, realice `max store reindex`; consulte [mantenimiento de archivos](./archive.md#обслуживание-архива).
 
 ## Las erratas son errores
 
@@ -180,39 +223,27 @@ Ignorar campos desconocidos ocultaría erratas y haría perder tiempo buscando p
 
 Un archivo inexistente no es un error: simplemente no has configurado la aplicación.
 
-## Comprobar el resultado
-
-Las capas pueden dificultar saber qué valor prevaleció. Esta orden lo explica:
-
-```sh
-max config show
-max config show --json
-```
-
-Muestra perfil **y origen**, ruta y existencia del archivo, perfiles disponibles y valores efectivos con su fuente.
-
-⚠ **Incluye todos los perfiles locales:** configurados, cuentas personales con sesión y bots; cada uno marcado como personal, bot o ambos.
-
-⚠ **No comprueba la conexión.** Lee archivos sin abrir la caché, consultar el llavero ni contactar con MAX. Validar una sesión requiere acceso y pertenece a otra orden.
-
 ## Variables de entorno
 
-| Variable | Función |
+|Variable|¿Qué hace?|
 |---|---|
-| `MAX_PROFILE` | Perfil para la sesión del terminal, equivalente a la primera palabra |
-| `MAX_PROFILE_LOCK` | Fija un perfil; rechaza otro mediante primera palabra o `MAX_PROFILE`, y `config set --defaults`. Solo eficaz si el agente no puede cambiar el entorno, como en MCP o un script envoltorio. Con terminal puede quitarla |
-| `MAX_TIMEOUT` | Límite de toda la orden, como `--timeout` |
-| `MAX_TOKEN` | Token directo, sin llavero, para CI y usos puntuales |
-| `MAX_BOT_TOKEN` | Token directo de `max bot` |
-| `MAX_CONFIG_DIR` | Directorio de `config.json` y token si no hay llavero |
-| `MESSAGING_STORE` | Archivo compartido de chats, mensajes y transcripciones |
-| `MAX_STATE_DIR` | Estado de perfiles y `runs/` |
-| `NO_COLOR` | Desactivar color, según la convención habitual |
-| `MAX_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER` | No consultar versiones npm; `CI` hace lo mismo |
+| `MAX_PROFILE` |perfil para toda la sesión de shell; igual que la primera palabra|
+| `MAX_PROFILE_LOCK` |bloquea el proceso en un perfil: otro perfil - con la primera palabra o mediante `MAX_PROFILE` - y `config set --defaults` son rechazados. Se conserva solo donde el agente no puede cambiar el entorno en sí: en la configuración del cliente MCP o en el script contenedor. Un agente con acceso de shell eliminará la variable misma|
+| `MAX_TIMEOUT` |restricción en todo el comando, para toda la sesión de shell; igual que `--timeout`|
+| `MAX_REQUESTS_PER_MINUTE` |Igual que `requestsPerMinute` y más fuerte que el archivo.|
+| `MAX_TOKEN` |token directamente, sin pasar por el llavero, para CI y ejecucións únicos|
+| `MAX_BOT_TOKEN` |token de bot para `max bot`, sin pasar por el llavero|
+| `MAX_CONFIG_DIR` |donde están `config.json` y, en ausencia de un llavero, un archivo con un token|
+| `MAX_STATE_DIR` |donde estan el estado de los perfiles y el catalogo `runs/`|
+| `MAX_CACHE_DIR` |sólo el caché antiguo: `max doctor` buscal archivo restante allí. Por compatibilidad, aún cambia la entrada en el llavero; para una copia compartida utilice `MESSAGING_STORE`|
+| `MESSAGING_STORE` |archivo para archivo local compartida de chats, mensajes y transcripciones|
+| `NO_COLOR` |apaga el color, como en cualquier otro programa|
+| `MAX_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER` |no preguntes a npm sobre una nueva versión; `CI` funciona de la misma manera|
+| `MAX_EMBEDDING_*`, `MAX_ANALYSIS_*`, `MAX_MODELS_*` |configuración del modelo ([abajo](#переменные-для-настроек-моделей))|
 
 Una cadena vacía equivale a no definida: `MAX_PROFILE=` es como no establecer `MAX_PROFILE`.
 
-**Solo perfil y tiempo límite tienen variables equivalentes.** Son decisiones del proceso. No habrá variables para `--json` o color: olvidarlas en el terminal cambiaría salidas sin que el comando lo pidiera.
+**No hay ninguna variable para `--json` o para el color, y esto es intencional.** Si se olvida en el shell, cambiaría la salida de un comando que no lo solicitó, y encontrarlo más tarde es más difícil que escribir una bandera.
 
 ## Configuración temporal separada
 
@@ -227,49 +258,37 @@ max setup            # этот токен не виден обычной уст
 max chats list
 ```
 
-> ⚠ También a la inversa: **la instalación habitual no ve esta sesión**. Una hora se perdió buscando una sesión válida porque las variables estaban establecidas en una ventana y no en otra.
-
-## Siguiente paso
-
-- [Referencia](./commands.md): comandos, opciones y códigos.
-- [Sesiones y perfiles](./sessions.md): acceso y llavero.
-- [Solución de problemas](./troubleshooting.md): qué hacer ante errores.
-
-`MAX_CACHE_DIR` solo corresponde a la caché antigua: `max doctor` busca allí el archivo restante. Por compatibilidad, todavía cambia la entrada del llavero; para la copia compartida nueva, usa `MESSAGING_STORE`.
-
-Los ajustes de vectores y análisis son independientes y pueden variar por perfil. `MAX_EMBEDDING_PROVIDER`, `MAX_EMBEDDING_MODEL`, `MAX_EMBEDDING_BASE_URL`, `MAX_EMBEDDING_DIMS`, `MAX_ANALYSIS_PROVIDER`, `MAX_ANALYSIS_MODEL` y `MAX_ANALYSIS_BASE_URL` sustituyen la configuración; las opciones sustituyen los ajustes. La dirección debe ser HTTP/S sin contraseña integrada, query ni fragment. El servicio externo de vectores también recibe la pregunta de una búsqueda MCP. Las claves se establecen con `models text key set openai|anthropic` y no se escriben en `config.json`. Un `build` normal no ejecuta análisis externo: requiere `--analyze` explícito.
+> ⚠ Y viceversa: **la instalación normal no ve esta sesión**. Si las variables se configuran en una ventana de terminal y no se configuran en otra, la segunda ventana dirá "sin sesión" cuando el token esté activo.
 
 ## Tipos y ámbitos de las claves
 
+El área de "perfil" incluye `defaults`, `profiles.<имя>`, `personal.defaults`, `personal.profiles.<имя>`, `bot.defaults` y `bot.profiles.<имя>`, a menos que una cadena la limite. Se rechazan las claves desconocidas y los valores del tipo incorrecto. Los valores predeterminados se dan [arriba](#файл).
 
-El ámbito «perfil» incluye `defaults`, `profiles.<имя>`, `personal.defaults`, `personal.profiles.<имя>`, `bot.defaults` y `bot.profiles.<имя>`, salvo que una fila lo restrinja. Se rechazan claves desconocidas y valores de tipo incorrecto. Los valores predeterminados se indican arriba.
-
-
-| Clave | Tipo o valor permitido | Ámbito |
+|Llave|Tipo o valor válido|Región|
 |---|---|---|
-| `defaultProfile` | Cadena con el nombre de un perfil | Raíz del archivo |
-| `limit`, `timeoutMs`, `keepRunsForDays`, `sendsPerHour` | Entero ≥ 1 | Perfil |
-| `requestsPerMinute` | Entero ≥ 0 | Perfil |
-| `color`, `record`, `readOnly` | Booleano | Perfil |
-| `senderColors`, `catchUpMarksRead`, `searchCatchUp`, `serve` | Booleano | Cuenta personal |
-| `permissions` | Objeto que asigna niveles `deny`, `readonly`, `ask`, `allow` a rutas de comandos | Perfil |
-| `allow` | Matriz de acciones permitidas; formato antiguo | Perfil |
-| `mcpTools` | Matriz de `contacts`, `polls`, `groups`, `profile`; formato antiguo | Cuenta personal |
-| `readOtherBots` | Booleano o matriz de nombres de perfiles | Solo `bot` |
-| `updateCheck`, `skillHint` | Booleano | Solo `defaults` |
-| `transcribeModel` | Identificador de texto de `max models audio list` | Solo `defaults` |
-| `embeddingProvider` | `local` u `openai` | Perfil |
-| `embeddingModel`, `analysisModel` | Cadena no vacía, de hasta 200 caracteres | Perfil |
-| `embeddingBaseUrl`, `analysisBaseUrl` | URL HTTP(S) sin credenciales, consulta ni fragmento | Perfil |
-| `embeddingDims` | Entero de 1–65 536 | Perfil |
-| `analysisProvider` | `agent`, `openai`, `anthropic` | Perfil |
-| `models` | Objeto de tareas de modelos; campos descritos abajo | Perfil |
+| `defaultProfile` |línea con nombre de perfil|raíz del archivo|
+| `limit`, `timeoutMs`, `keepRunsForDays`, `sendsPerHour` |entero ≥ 1|perfil|
+| `requestsPerMinute` |entero ≥ 0|perfil|
+| `color`, `record`, `readOnly` | boolean |perfil|
+| `senderColors`, `catchUpMarksRead`, `searchCatchUp`, `serve` | boolean |cuenta personal|
+| `permissions` |objeto de rutas y niveles de comando `deny`, `readonly`, `ask`, `allow`|perfil|
+| `allow` |variedad de acciones permitidas; formato antiguo|perfil|
+| `mcpTools` |matriz `contacts`, `polls`, `groups`, `profile`; formato antiguo|cuenta personal|
+| `readOtherBots` |booleano o conjunto de nombres de perfil|sólo `bot`|
+| `updateCheck`, `skillHint` | boolean |solo `defaults`|
+| `transcribeModel` |ID de cadena de `max models audio list`|solo `defaults`|
+| `embeddingProvider` |`local` o `openai`|perfil|
+| `embeddingModel`, `analysisModel` |cadena no vacía, no más de 200 caracteres|perfil|
+| `embeddingBaseUrl`, `analysisBaseUrl` |URL HTTP(S) sin credenciales, consulta y fragmento|perfil|
+| `embeddingDims` |entero 1–65 536|perfil|
+| `analysisProvider` | `agent`, `openai`, `anthropic` |perfil|
+| `models` |objeto de asignación de modelo; Los campos se describen a continuación.|perfil|
+| `searchStemmers.cyrillic` | `russian`, `none` |archivo general, vía `config set`|
+| `searchStemmers.latin` |`english`, `spanish`, ambos separados por comas, `none`|archivo general, vía `config set`|
 
 ### Modelos por tarea
 
-
 `models.<назначение>` solo contiene `provider`, `model` y `baseUrl`. Los nombres de tarea usan letras latinas minúsculas, cifras y guiones y empiezan por una letra. `default` define valores comunes; `analysis` y `replies` los sobrescriben campo a campo. Puedes guardar otros nombres válidos de antemano; eso no activa un caso de uso sin implementar. Sin proveedor o con `off`, las llamadas externas están desactivadas.
-
 
 | Clave | Valor permitido | Predeterminado |
 |---|---|---|
@@ -279,8 +298,15 @@ El ámbito «perfil» incluye `defaults`, `profiles.<имя>`, `personal.default
 
 Para cada campo, el orden es `MAX_MODELS_<НАЗНАЧЕНИЕ>_PROVIDER`, `_MODEL` o `_BASE_URL`, después la entrada más específica del archivo para la tarea, luego los campos antiguos `analysis*` explícitos para `analysis` y después las variables y entradas de `models.default`. Los guiones del nombre de tarea se convierten en `_` en la variable de entorno. Los tokens del proveedor no forman parte de este objeto.
 
+Las configuraciones de vectores y análisis son independientes y pueden variar según los perfiles. La dirección es HTTP/S sin contraseña, consulta ni fragmento integrados. El servicio de vectores externo también recibe la pregunta de la búsqueda MCP. Las claves se especifican a través de `models text key set openai|anthropic` y no se escriben en `config.json`. El `build` habitual no desencadena un análisis externo: se necesita un `--analyze` explícito. Los proveedores y ejemplos se encuentran en [manual de modelos externos](./external-models.md).
 
 ### Variables para configurar modelos
 
+Siete campos antiguos admiten `MAX_EMBEDDING_PROVIDER`, `MAX_EMBEDDING_MODEL`, `MAX_EMBEDDING_BASE_URL`, `MAX_EMBEDDING_DIMS`, `MAX_ANALYSIS_PROVIDER`, `MAX_ANALYSIS_MODEL`, `MAX_ANALYSIS_BASE_URL`. Actúan antes que los valores del archivo; Los parámetros del comando son más fuertes que ellos. `MAX_MODELS_DEFAULT_PROVIDER`, `MAX_MODELS_DEFAULT_MODEL`, `MAX_MODELS_DEFAULT_BASE_URL` configuran los campos generales del nuevo formato; En lugar de `DEFAULT`, puede especificar el destino, por ejemplo `ANALYSIS`. Una variable vacía no anula la configuración. `configuration_error` devuelve un valor incorrecto.
 
-Los siete campos antiguos admiten `MAX_EMBEDDING_PROVIDER`, `MAX_EMBEDDING_MODEL`, `MAX_EMBEDDING_BASE_URL`, `MAX_EMBEDDING_DIMS`, `MAX_ANALYSIS_PROVIDER`, `MAX_ANALYSIS_MODEL` y `MAX_ANALYSIS_BASE_URL`. Prevalecen sobre los valores del archivo. `MAX_MODELS_DEFAULT_PROVIDER`, `MAX_MODELS_DEFAULT_MODEL` y `MAX_MODELS_DEFAULT_BASE_URL` configuran los campos comunes del nuevo formato; sustituye `DEFAULT` por una tarea como `ANALYSIS`. Una variable vacía no sobrescribe ajustes. Un valor inválido devuelve configuration_error.
+## Siguiente paso
+
+- [Seguridad](./security.md): qué protege `permissions`, lista de destinatarios y `sendsPerHour`
+- [Perfiles e inicio de sesión](./sessions.md): cómo se estructuran los perfiles y dónde está el token
+- [Todos los comandos](./commands.md): cada comando y opción y tabla completa de códigos de retorno
+- [Resolución de problemas](./troubleshooting.md): qué hacer cuando no funciona

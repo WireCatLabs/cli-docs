@@ -20,7 +20,7 @@ Use message search for words, people, dates and file filters. Use topic search w
 | “Where did we discuss renting a flat?” | `search conversations` | Ranked conversations, the matching piece and how it matched | A conversation build; embeddings for matches by meaning |
 | “What else was about the same thing?” | `conversations related` | Conversations nearest to the one a message is in | Embeddings; no model runs |
 | “Which discussion does this message belong to?” | `conversations show` / `messages links` | The conversation and the chosen chain of parents | A conversation build |
-| “What was around this exact message?” | `messages context` / search `--context` | Neighbours in time, in the same account and chat | Stored history only |
+| “What was around this exact message?” | `messages context` / search `--context` | Neighbours in time, in the same account and chat | Stored history for search `--context`; `messages context` can read online unless `--offline` |
 
 A messenger's native forum topic, an inferred conversation and a window of neighbouring messages are three different things. A conversation can join messages that are far apart; neighbouring messages can belong to unrelated discussions.
 
@@ -199,7 +199,7 @@ The browser opens no account and runs no conversation build, embedding or live A
 
 ## Source map
 
-Engine source in [`cli-messaging`](https://github.com/WireCatLabs/cli-messaging/tree/v0.211.0), the shared library behind both tg and max. These are implementation references, not performance promises.
+Engine source in [`cli-messaging`](https://github.com/WireCatLabs/cli-messaging/tree/v0.211.0), the shared library behind both tg and max. These references describe an inspected implementation snapshot, not the installed version or a performance promise.
 
 | Responsibility | Implementation |
 | --- | --- |

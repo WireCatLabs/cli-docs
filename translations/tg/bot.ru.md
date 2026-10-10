@@ -2,16 +2,37 @@
 title: "Бот Telegram"
 ---
 
-`tg bot` работает с ботом через официальный [Bot API](https://core.telegram.org/bots/api) Telegram и его токен. Бот отделён от вашего личного аккаунта: у него свои имя, чаты и токен. Команды `tg …` без слова `bot` по-прежнему выполняются от вашего имени ([Использование](./usage.md)).
+<a id="загрузка-старых-сообщений" />
+<a id="действия-в-чате" />
+<a id="кнопки-меню-и-вебхуки" />
+<a id="для-скриптов-и-агентов" />
 
-Создайте бота через [@BotFather](https://t.me/BotFather) в Telegram и получите токен.
+Используйте эту страницу, если у вас есть бот Telegram или вы хотите его иметь, и он вам нужен, чтобы публиковать сообщения, отвечать людям, смотреть группу или поддерживать там порядок. Вы узнаете, как подключить бота к `tg`, найти его чаты, отправлять и читать сообщения от имени бота, ограничивать места, где он может писать, и передавать бота своему ИИ-агенту.
 
-Все команды и параметры: [Справочник команд](./commands.md).
+Несколько слов на этой странице:
 
-**Через cli доступны все методы Telegram Bot API:** 185 методов зафиксированной схемы
-Bot API 10.3, включая операции, для которых нет отдельной удобной команды.
-Используйте `tg <bot> bot api <method>` с флагами полей API или телом запроса в JSON; см.
-[полное руководство по API](#the-complete-bot-api). Для повседневных задач MCP предлагает отдельные инструменты.
+- **Бот** — это отдельный аккаунт Telegram, которым управляет программа. `tg bot` работает с ним через официальный [Bot API Telegram](https://core.telegram.org/bots/api). К вашей своего аккаунта это не имеет никакого отношения: у бота есть свое имя, свои чаты и свой токен, а `tg …` без слова `bot` — это все равно вы (см. [использование своего аккаунта](./usage.md)).
+- **Токен** — это пароль бота. Вы создаете бота с помощью [@BotFather](https://t.me/BotFather) в Telegram, и он дает вам токен.
+- **Имя бота** — это слово, под которым вы хотите сохранить токен бота, например `sales`. Это первое слово каждой команды бота: `tg sales bot …`.
+- **Локальная копия** — это то, что бот отправил, получил или импортировал и сохранил на этом компьютере. Telegram не предоставляет боту историю сообщений, поэтому для чтения старых сообщений используется эта копия.
+
+## Что можно сделать
+
+| Задача | Команда |
+| --- | --- |
+| Подключите бота и проверьте, что это за бот | `tg <bot> bot auth set`, `tg <bot> bot me` |
+| Отправлять, редактировать, удалять и закреплять сообщения и файлы | `tg <bot> bot messages send\|edit\|delete\|pin` |
+| Просматривайте новые сообщения, нажатия кнопок и присоединения | `tg <bot> bot watch` |
+| Читать и искать то, что увидел бот | `tg <bot> bot messages list`, `tg <bot> bot search messages` |
+| Импортировать старые сообщения канала или супергруппы | `tg <bot> bot store fetch` |
+| Управление администраторами и удаление участников | `tg <bot> bot chats admins`, `tg <bot> bot chats members remove` |
+| Поддерживайте порядок в группе по своим правилам | `tg <bot> bot chats moderate` |
+| Кнопки ответа, настройка командного меню и вебхуков | `tg <bot> bot callbacks`, `commands`, `webhooks` |
+| Ограничьте количество чатов, в которые бот может писать | `tg <bot> bot recipients` |
+| Вызов любого метода API бота | `tg <bot> bot api <method>` |
+| Подключите бота к своему ИИ-агенту | `tg <bot> bot mcp` |
+
+Каждая команда и параметр находятся в [справке по командам](./commands.md).
 
 ## Первое подключение
 
@@ -66,14 +87,6 @@ tg sales bot auth remove  # forget it
 
 Telegram включает токен в адрес каждого запроса. `tg` никогда не выводит этот адрес: ни в ошибках, ни с `--trace`, ни в записи запуска.
 
-## Чаты
-
-Telegram не предоставляет боту полный список его чатов. Поэтому `chats list` показывает **только чаты, которые бот видел на этом компьютере**.
-
-```sh
-tg sales bot chats list
-```
-
 ## Сообщения
 
 Чат задаётся идентификатором, `user:<id>` для человека или названием увиденного чата. Сообщение всегда указывается вместе с чатом: Telegram нумерует сообщения внутри каждого чата.
@@ -92,9 +105,11 @@ tg sales bot messages unpin "Team" 512
 
 `--silent` отправляет без уведомления. Максимум 4096 символов ([`sendMessage`](https://core.telegram.org/bots/api#sendmessage)). `--md` и `--html` несовместимы. Удаление спрашивает подтверждение; `--allow-dangerous` подтверждает. Закрепление тихое без `--notify`. Отправка возвращает сообщение и `operationId` записи в журнале. Telegram разрешает удалять только сообщения моложе 48 часов.
 
+Если соединение оборвалось при отправке, `tg` не повторяет её: результат неизвестен (код 14). Перед повтором проверьте чат.
+
 ### Файлы
 
-`--file` прикладывает файл с диска. Фото, видео и звук определяются по расширению; остальные отправляются файлом. `--photo` отправляет фото, `--voice` — Ogg Opus как голосовое, `--as-file` — видео как файл. Необязательный текст становится подписью:
+`--file` прикрепляет файл с диска и отправляет его как документ, независимо от его типа. `--photo` отправляет изображение `.jpg`, `.png` или `.webp` в виде фотографии, а `--voice` — файл Ogg Opus в виде голосового сообщения, отдельно, без текста. Текст становится подписью и может быть опущен:
 
 ```sh
 tg sales bot messages send "Team" "Weekly report" --file report.pdf
@@ -103,16 +118,51 @@ tg sales bot messages send "Team" --photo screenshot.png
 
 Скрытые файлы и каталоги `tg` запрещены без `--allow-any-file`. Одно вложение на сообщение: фото до 10 МБ, остальные файлы до 50 МБ ([отправка файлов](https://core.telegram.org/bots/api#sending-files)).
 
-Если соединение оборвалось при отправке, `tg` не повторяет её: результат неизвестен (код 14). Перед повтором проверьте чат.
+## Чаты
 
-**В Bot API Telegram нет команды чтения истории.** `messages list` и `messages show` отвечают по сообщениям, которые бот отправил, получил через `bot watch` или загрузил через `bot store fetch` на этом компьютере. Источник ответа указывается явно:
+Telegram не предоставляет боту полный список его чатов. Поэтому `chats list` показывает **только чаты, которые бот видел на этом компьютере**.
+
+```sh
+tg sales bot chats list
+tg sales bot chats show -1001234567890    # from Telegram; the bot remembers its title
+tg sales bot chats action "Team" typing   # typing, photo, video, voice, file — a few seconds
+tg sales bot chats leave "Team"           # only an admin can bring the bot back
+```
+
+<a id="a-chat"></a>
+
+### Администраторы и участники
+
+Бот должен быть администратором с правом назначать администраторов или удалять участников. Человек задаётся идентификатором пользователя.
+
+```sh
+tg sales bot chats admins list "Team"                                  # who runs it, and what each may do
+tg sales bot chats admins add "Team" 4815162342 --can pin,delete --title Mod
+tg sales bot chats admins remove "Team" 4815162342                     # they stay in the chat
+tg sales bot chats members remove "Team" 4815162342                    # they may come back by the link
+tg sales bot chats members remove "Team" 4815162342 --block            # they may not
+```
+
+`--can` принимает members, admins, info, pin, link, post, edit, delete. Отдельного права чтения в Telegram нет: администратор всегда читает. Назначение работает в супергруппах и каналах, титул — только в супергруппах. Bot API не позволяет получить список участников или добавить людей.
+
+## Сохранённые данные бота
+
+Все, что видел `tg sales bot watch`, хранится на этом компьютере, и эти команды читают его, не спрашивая Telegram. Человек — это идентификатор, `@username` или часть имени.
 
 ```sh
 tg sales bot messages list "Team"
 tg sales bot messages show "Team" 512
+tg sales bot contacts show @ann              # where Ann wrote, and her private chat with the bot
+tg sales bot search messages "price list"    # best match first; --newest for newest first
+tg sales bot search messages --from @ann     # what one person wrote
+tg sales bot messages between @ann Bob       # what both wrote, in the chats both wrote in
 ```
 
-## Загрузка старых сообщений
+**В Bot API Telegram нет метода чтения истории.** `messages list` и `messages show` отвечают на основе того, что отправил бот, что получил `bot watch` и что `bot store fetch` импортировал на этот компьютер, и так и говорят. Для поиска необходимо каждое слово; `"a phrase"`, `-word`, `a OR b` и фильтры `from:`, `chat:`, `after:`, `before:` и `has:` работают, опечатки отклоняются. `contacts show --refresh` отклонен: сначала импортируйте старые сообщения с `bot store fetch`.
+
+`--all-bots` и `--bots <names>` также читают копии других ботов, если `readOtherBots` профиля это позволяет.
+
+### Получение старых сообщений
 
 `bot store fetch` загружает старые сообщения канала или супергруппы в локальную копию бота. Команда создаёт отдельную сессию MTProto API Telegram с существующим токеном бота и читает номера сообщений через [channels.getMessages](https://core.telegram.org/method/channels.getMessages). Отправка и `bot watch` продолжают работать через Bot API; получение обновлений в сессии истории отключено. Команда ничего не отправляет и не отмечает прочитанным.
 
@@ -136,27 +186,64 @@ tg sales bot store fetch -1001234567890 --last 200 --pause 1s
 
 **Ограничения:** личные чаты и обычные группы не поддерживаются: номера их сообщений идут в одной последовательности для всех чатов бота. Бот должен иметь доступ к каналу или супергруппе. Удалённые сообщения и служебные номера оставляют пробелы; чтение проходит через них вплоть до номера 1. Большие пробелы могут потребовать много запросов даже при небольшом `--limit`. Лимиты Telegram для ботов действуют: короткое ожидание выполняется, длительное завершает запуск, чтобы вы могли продолжить позже.
 
-## Действия в чате
+## События в чатах бота
 
 ```sh
-tg sales bot chats show -1001234567890    # from Telegram; the bot remembers its title
-tg sales bot chats action "Team" typing   # typing, photo, video, voice, file — a few seconds
-tg sales bot chats leave "Team"           # only an admin can bring the bot back
+tg sales bot watch                       # new messages, until Ctrl-C or --timeout
+tg sales bot watch --events --jsonl      # and the rest: edits, buttons pressed, people joining and leaving
+tg sales bot watch --types message,callback_query
 ```
 
-## Администраторы и участники
+`watch` сначала сохраняет событие, затем выводит: сообщения — в локальную историю бота, нажатия кнопок — для `callbacks answer`. Следующий запуск продолжает после сохранённого обновления. Telegram хранит обновления 24 часа: более редкий запуск пропускает события. С `--events` строки имеют тип: `message`, `edit`, `callback`, `joined`, `left`, `added`, `removed`, `other`. Вступления и выходы доступны только боту-администратору. `--types` принимает имена обновлений Telegram.
 
-Бот должен быть администратором с правом назначать администраторов или удалять участников. Человек задаётся идентификатором пользователя.
+## Модерация группы по правилам
+
+Бот, являющийся администратором группы, может судить о том, что там нового, по правилам группы, как это делает `tg chats moderate` для вашего аккаунта (см. [правила для групп, которые вы запускаете](./groups.md#rules)):
 
 ```sh
-tg sales bot chats admins list "Team"                                  # who runs it, and what each may do
-tg sales bot chats admins add "Team" 4815162342 --can pin,delete --title Mod
-tg sales bot chats admins remove "Team" 4815162342                     # they stay in the chat
-tg sales bot chats members remove "Team" 4815162342                    # they may come back by the link
-tg sales bot chats members remove "Team" 4815162342 --block            # they may not
+tg sales bot chats rules set -1001234567890 invites delete   # invite links to other chats: delete
+tg sales bot chats moderate -1001234567890 --dry-run         # what breaks the rules, without acting
+tg sales bot chats moderate -1001234567890                   # act as the rules allow
 ```
 
-`--can` принимает members, admins, info, pin, link, post, edit, delete. Отдельного права чтения в Telegram нет: администратор всегда читает. Назначение работает в супергруппах и каналах, титул — только в супергруппах. Bot API не позволяет получить список участников или добавить людей.
+Бот проверяет только то, что `tg sales bot watch` сохранил или `bot store fetch` загрузил на этом компьютере. Вступления не проверяются. Удалённый участник не сможет вернуться по ссылке, если не задан `--no-ban`. Правила лежат в том же файле, что и правила профиля личного аккаунта с таким же именем.
+
+<a id="buttons-the-menu-webhooks"></a>
+
+## Кнопки
+
+Когда человек нажимает кнопку под сообщением бота, бот получает идентификатор обратного вызова и отвечает на него:
+
+```sh
+tg sales bot callbacks answer <callback> --notification "Done"   # a note only the person who pressed sees
+tg sales bot callbacks answer <callback> --text "Confirmed"      # replaces the message the button was on
+```
+
+`--text` заменяет сообщение, на кнопку которого нажали; нажатие должно быть сохранено через `bot watch`.
+
+## Командное меню
+
+Меню — это то, что люди видят после ввода `/` в чате с ботом.
+
+```sh
+tg sales bot commands set start=Begin "report=Today's report"
+tg sales bot commands list
+tg sales bot commands clear
+```
+
+Команда Telegram нуждается в описании.
+
+## Вебхуки
+
+Вебхук — это адрес, по которому Telegram отправляет все, что получает бот.
+
+```sh
+tg sales bot webhooks set https://bot.example.com/telegram --secret-stdin
+tg sales bot webhooks list
+tg sales bot webhooks delete https://bot.example.com/telegram
+```
+
+Бот содержит один вебхук; пока он установлен, `bot watch` ничего не получает, а `webhooks set` отклоняет второй адрес, пока первый не будет удален.
 
 ## Разрешённые получатели
 
@@ -176,104 +263,11 @@ tg sales bot recipients clear                 # any chat again
 tg sales bot sends list
 ```
 
-## События в чатах бота
-
-```sh
-tg sales bot watch                       # new messages, until Ctrl-C or --timeout
-tg sales bot watch --events --jsonl      # and the rest: edits, buttons pressed, people joining and leaving
-tg sales bot watch --types message,callback_query
-```
-
-`watch` сначала сохраняет событие, затем выводит: сообщения — в локальную историю бота, нажатия кнопок — для `callbacks answer`. Следующий запуск продолжает после сохранённого обновления. Telegram хранит обновления 24 часа: более редкий запуск пропускает события. С `--events` строки имеют тип: `message`, `edit`, `callback`, `joined`, `left`, `added`, `removed`, `other`. Вступления и выходы доступны только боту-администратору. `--types` принимает имена обновлений Telegram.
-
-## Кнопки, меню и вебхуки
-
-```sh
-tg sales bot callbacks answer <callback> --notification "Done"   # a note only the person who pressed sees
-tg sales bot callbacks answer <callback> --text "Confirmed"      # replaces the message the button was on
-tg sales bot commands set start=Begin "report=Today's report"    # the menu people see after /
-tg sales bot commands list
-tg sales bot commands clear
-tg sales bot webhooks set https://bot.example.com/telegram --secret-stdin
-tg sales bot webhooks list
-tg sales bot webhooks delete https://bot.example.com/telegram
-```
-
-`--text` заменяет сообщение кнопки, нажатие которой увидел `bot watch`. Команде Telegram нужно описание. У бота один вебхук: пока он задан, `bot watch` не получает события; `webhooks set` не принимает второй адрес до удаления первого.
-
-Настройки бота находятся в разделе `bot` файла конфигурации: `tg sales config set --bot sendsPerHour 200` ([Настройки](./configuration.md)).
-
-## Сохранённые данные бота
-
-Всё увиденное `tg sales bot watch` хранится на компьютере. Эти команды читают базу без запросов Telegram:
-
-```sh
-tg sales bot contacts show @ann              # where Ann wrote, and her private chat with the bot
-tg sales bot search messages "price list"    # best match first; --newest for newest first
-tg sales bot search messages --from @ann     # what one person wrote
-tg sales bot messages between @ann Bob       # what both wrote, in the chats both wrote in
-```
-
-`--all-bots` и `--bots <names>` читают копии других ботов, если это разрешено настройкой `readOtherBots` профиля. В Bot API нет чтения истории, поэтому `contacts show --refresh` запрещён; сначала загрузите старые сообщения через `bot store fetch`.
-
-## Модерация группы по правилам
-
-Бот-администратор проверяет новые сообщения по правилам группы, как `tg chats moderate` личного аккаунта:
-
-```sh
-tg sales bot chats rules set -1001234567890 invites delete   # invite links to other chats: delete
-tg sales bot chats moderate -1001234567890 --dry-run         # what breaks the rules, without acting
-tg sales bot chats moderate -1001234567890                   # act as the rules allow
-```
-
-Бот проверяет только то, что `tg sales bot watch` сохранил или `bot store fetch` загрузил на этом компьютере. Вступления не проверяются. Удалённый участник не сможет вернуться по ссылке, если не задан `--no-ban`. Правила лежат в том же файле, что и правила профиля личного аккаунта с таким же именем.
-
-## Для скриптов и агентов
-
-С `--json` данные выводятся в stdout, ошибки — в stderr с кодом завершения:
-
-| Код | Причина |
-|---|---|
-| `4` | нет токена или Telegram его отклонил |
-| `5` | действие запрещено разрешениями профиля |
-| `6` | чат не найден, например неизвестное боту название |
-| `7` | чат не разрешён или некому подтвердить уровень `ask` |
-| `8` | исчерпан `sendsPerHour` бота |
-| `14` | ответ не получен; результат изменения неизвестен |
-
-Полный список: [Справочник команд](./commands.md). Формат сообщений тот же, что у личного аккаунта.
-
-`--trace` и `--record` работают и для бота. Каждый запрос Bot API выводится в stderr без адреса, содержащего токен. Неудачные запуски сохраняются в `tg runs list` ([Диагностика](./diagnostics.md)).
-
-## Подключение бота к агенту (MCP)
-
-`tg <name> bot mcp` предоставляет агенту бота, как `tg mcp` предоставляет личный аккаунт:
-
-```sh
-claude mcp add sales-bot -- tg sales bot mcp
-tg sales bot mcp config          # the entry for Claude Desktop, Cursor and others
-```
-
-Агент получает то, что разрешает профиль бота в `bot.`: чаты, которые видел бот,
-сообщения, администраторов, меню команд, журнал и список получателей, а если профиль не
-ограничен чтением — запись от имени бота: отправку, редактирование, закрепление, «печатает», ответы на кнопки, удаление сообщений и участников.
-`permissions.bot: readonly` запрещает запись, если более конкретное правило не разрешает её. Для удаления
-`ask` и `allow` разрешают запрошенную запись MCP без серверной формы; `deny` и `readonly`
-запрещают её. Старые флаги подтверждения не действуют. Отдельное согласие на правила модерации по-прежнему
-требуется: действия, которым оно нужно, возвращают план для одобрения владельцем через CLI.
-`tg_bot_read` (`command: "status"`) сообщает, от имени какого профиля
-работает сервер и какие инструменты записи включены.
-
-Изменение выполняется той же командой, что в терминале, с получателями и журналом бота. Токен, вебхуки, меню команд и получателей меняете только вы.
-
-Бот использует для `--md` те же [правила форматирования Telegram](./usage.md#sending), что и личный аккаунт. Этот же форматтер применяется к правкам текста и подписям файлов и фотографий.
+Настройки бота, такие как часовой лимит на отправку, находятся в разделе `bot` файла конфигурации: `tg sales config set --bot sendsPerHour 200` (см. [configuration](./configuration.md)).
 
 ## Полный Bot API
 
-`tg <bot> bot api <method>` предоставляет все методы зафиксированной схемы Telegram Bot API.
-Имена методов и полей записываются через дефис: `get-me`, `get-chat --chat-id <id>`.
-`tg bot api --help` перечисляет методы, а справка каждого метода — его поля. Результаты сохраняют
-исходную структуру Telegram; целые числа за пределами безопасного диапазона JavaScript возвращаются строками.
+`tg <bot> bot api <method>` предоставляет все методы в закрепленной схеме Telegram Bot API — все 185 из них, включая операции, выходящие за рамки удобных команд бота, описанных выше. В именах методов и полей используется формат kebab-case: `get-me`, `get-chat --chat-id <id>`. `tg bot api --help` перечисляет методы; В справке каждого метода перечислены его поля. Результаты сохраняют собственную структуру Telegram; целые числа за пределами безопасного диапазона JavaScript являются строками.
 
 Передавайте поля отдельными флагами или в JSON: `--body <json>`, `--body -` (stdin)
 либо `--body-file <path>`. `--body-file -` также читает stdin. Одно поле нельзя передавать
@@ -296,3 +290,35 @@ tg sales bot mcp config          # the entry for Claude Desktop, Cursor and othe
 Профиль назначения должен принадлежать указанному боту; это проверяется до смены токена на сервере.
 После сохранения stdout содержит только профиль, идентификатор бота и `stored: "keyring"`.
 Если хранилище ключей недоступно, операция завершается отказом, не сохраняя токен в файл.
+
+<a id="for-scripts-and-agents"></a>
+
+## Когда бот отказывается или терпит неудачу
+
+Отклоненная или неудачная команда указывает причину в сообщении об ошибке и заканчивается кодом:
+
+| Код | Что случилось | Что делать |
+|---|---|---|
+| `4` | нет токена бота, или Telegram его не принял | снова запустите `bot auth set` |
+| `5` | права профиля не позволяют боту это сделать | измените разрешение, только если вы хотите его разрешить |
+| `6` | чат не найден — например, указано название, которое бот ещё не видел | используйте идентификатор чата или откройте чат с помощью `bot chats show` |
+| `7` | чата нет в списке получателей бота, или никто не ответил на вопрос на уровне `ask` | добавьте чат с `bot recipients add` или запустите команду, где можно ответить |
+| `8` | `sendsPerHour` бота израсходован | подождите или увеличьте лимит |
+| `14` | ответ сервера не получен: неизвестно, отправил ли Telegram сообщение | проверяйте чат, прежде чем повторять его |
+
+Каждый код находится в [ссылке на команду](./commands.md). `--trace` и `--record` тоже работают для бота: каждый запрос API бота представляет собой строку в stderr, а не его адрес, поскольку в нем находится токен. Неудачный запуск сохраняется и отображается в `tg runs list` (см. [диагностика](./diagnostics.md)).
+
+## Подключение бота к агенту (MCP)
+
+`tg <name> bot mcp` предоставляет бота вашему ИИ-агенту, а `tg mcp` обслуживает ваш аккаунт:
+
+```sh
+claude mcp add sales-bot -- tg sales bot mcp
+tg sales bot mcp config          # the entry for Claude Desktop, Cursor and other apps
+```
+
+Агент получает все, что позволяют разрешения профиля бота, в разделе `bot.`: чаты, которые бот видел, сообщения, администраторы, меню команд, журнал и список получателей - и, если профиль не доступен только для чтения, писать от имени бота: отправлять, редактировать, закреплять, показывать индикатор набора текста, отвечать на нажатия кнопок, удалять, удалять участников. `permissions.bot: readonly` блокирует запись, если это не разрешено более конкретным правилом. Как и в других командах, `ask` и `allow` разрешают запрошенную запись MCP без формы подтверждения на сервере; `deny` и `readonly` блокируют его. Старые флаги подтверждения не действуют. По-прежнему применяется отдельное согласие правила модерации: действия, требующие его, возвращают план, который вы можете утвердить через CLI. `tg_bot_read` (`command: "status"`) говорит, какой профиль обслуживает сервер и какие действия записи доступны.
+
+Изменение выполняется той же командой, что в терминале, с получателями и журналом отправок бота. Токен, вебхуки, меню команд и получателей меняете только вы.
+
+Бот использует для `--md` те же [правила форматирования Telegram](./usage.md#sending), что и личный аккаунт. Этот же форматтер применяется к правкам текста и подписям файлов и фотографий.

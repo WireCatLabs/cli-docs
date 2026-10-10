@@ -2,7 +2,35 @@
 title: "Estadísticas"
 ---
 
-Consulta qué mensajes recibieron atención, quién espera una respuesta y cómo cambia la composición del grupo. Los informes usan el historial guardado. Si faltan mensajes, [descarga el historial](./archive.md) primero.
+<a id="retención-a-partir-de-listas-observadas" />
+<a id="comprobar-y-actualizar-contadores" />
+<a id="selección-y-calidad" />
+<a id="measures-and-scores" />
+<a id="follow-the-evidence" />
+<a id="save-a-resolved-ranking" />
+<a id="métricas-y-puntuaciones" />
+<a id="mensajes-originales" />
+
+Esta página es necesaria cuando diriges o sigues un grupo o canal y quieres datos, no sensaciones: qué mensajes llamaron la atención, quién responde preguntas, qué preguntas aún están esperando y si quedan algún recién llegado. Aprenderá qué preguntarle al agente de IA, qué comando ejecutará, cómo será la respuesta y dónde los números pueden ser engañosos.
+
+Unas palabras que aparecerán a continuación:
+
+- **Historial guardado**: mensajes que `max` conserva en este ordenador. Cada informe solo cuenta estos datos. Si faltan los necesarios, [descarga el historial](./archive.md).
+- **Observado**: visto en ese historial. Una respuesta, entrada o reacción no descargada no se cuenta: un valor ausente es desconocido, no cero.
+- **Contador**: cifra que MAX guarda para un mensaje, como vistas o reacciones.
+
+## Lo que puedes descubrir
+
+|Pregunta|Comando|
+| --- | --- |
+|¿Qué mensajes recibieron más reacciones?| `max stats messages top` |
+|¿Quién responde las preguntas con más frecuencia?| `max stats contacts top` |
+|¿Qué preguntas esperan ser respondidas?| `max stats messages unanswered` |
+|¿Qué tan rápido responde una persona?| `max stats contacts responses` |
+|¿Recibieron ayuda los recién llegados?| `max stats chats newcomers` |
+|¿Quedan algunos recién llegados?| `max stats chats retention` |
+|¿Qué publicaciones se vieron pero no se discutieron?| `max stats messages discussion` |
+|¿Qué tan recientes son las opiniones y reacciones?| `max stats messages counters show` |
 
 Las peticiones, los nombres y los resultados son ejemplos ficticios. Sustituye el nombre del chat por el tuyo. Las tablas muestran cómo puede presentar su respuesta el agente; los comandos con `--json` le devuelven los datos.
 
@@ -12,7 +40,7 @@ Encuentra los mensajes con más reacciones guardadas.
 
 **Tu petición:**
 
-> Muéstrame los tres mensajes de Поход con más reacciones.
+> Usa max CLI. Muéstrame los tres mensajes de Поход con más reacciones.
 
 **Comando:**
 
@@ -36,7 +64,7 @@ Compara a las personas por sus respuestas observadas a preguntas.
 
 **Tu petición:**
 
-> ¿Quién respondió más preguntas en Поход? Muéstrame tres personas.
+> Usa max CLI. ¿Quién respondió más preguntas en Поход? Muéstrame tres personas.
 
 **Comando:**
 
@@ -45,14 +73,6 @@ max stats contacts top --chat "Поход" --measure answers --limit 3 --json
 ```
 
 **Ejemplo de respuesta del agente:**
-
-> | Persona | Respuestas |
-> | --- | ---: |
-> | Алекс | 4 |
-> | Lena | 2 |
-> | Sam | 1 |
-
-El número de respuestas permite encontrar ejemplos de participación; no demuestra por sí solo que una persona sea útil.
 
 <a id="find-questions-and-posts-that-need-attention" />
 
@@ -66,7 +86,7 @@ Encuentra preguntas antiguas sin respuesta directa observada.
 
 **Tu petición:**
 
-> ¿Qué preguntas de Поход llevan más de un día esperando respuesta?
+> Usa max CLI. ¿Qué preguntas de Поход llevan más de un día esperando respuesta?
 
 **Comando:**
 
@@ -92,7 +112,7 @@ Consulta cuántas respuestas se observaron y cuánto tardaron para la persona el
 
 **Tu petición:**
 
-> ¿Cuánto tarda Алекс en responder preguntas en Поход? Muéstrame un ejemplo.
+> Usa max CLI. ¿Cuánto tarda Алекс en responder preguntas en Поход? Muéstrame un ejemplo.
 
 **Comando:**
 
@@ -118,7 +138,7 @@ Comprueba si las personas recién incorporadas recibieron respuestas.
 
 **Tu petición:**
 
-> ¿Recibieron ayuda los nuevos miembros de Поход durante su primera semana?
+> Usa max CLI. ¿Recibieron ayuda los nuevos miembros de Поход durante su primera semana?
 
 **Comando:**
 
@@ -139,17 +159,13 @@ Por defecto se incluyen las incorporaciones de los últimos 30 días. La primera
 
 <a id="retention-from-roster-observations" />
 
-<a id="retención-a-partir-de-listas-observadas" />
-
-<a id="удержание-новичков" />
-
 ## ¿Se quedan los nuevos miembros?
 
 Compara la presencia observada un día, una semana y un mes después de entrar.
 
 **Tu petición:**
 
-> ¿Cuántos nuevos miembros de Поход seguían presentes después de un día, una semana y un mes? Muestra los datos que faltan.
+> Usa max CLI. ¿Cuántos nuevos miembros de Поход seguían presentes después de un día, una semana y un mes? Muestra los datos que faltan.
 
 **Comando:**
 
@@ -167,7 +183,7 @@ max stats chats retention "Поход" --checkpoints 1d,7d,30d --within 7d --tim
 >
 > Los denominadores son distintos: estos porcentajes no forman una curva completa de retención. No observar un mensaje no demuestra que una persona permaneciera en silencio.
 
-Se necesitan fechas de incorporación conocidas y listas de miembros guardadas. La ausencia en una lista parcial sigue siendo desconocida. Las [observaciones de miembros](./groups.md) ayudan a reunir datos para los próximos informes.
+Necesitamos fechas de entrada conocidas y listas guardadas de participantes. Se desconoce la ausencia de una persona en la lista incompleta; [Las listas guardadas de miembros de sus grupos](./groups.md#снимки-участников) ayudan a recopilar datos para informes futuros.
 
 ## Publicaciones sin conversación
 
@@ -175,7 +191,7 @@ Encuentra publicaciones vistas con poca conversación guardada.
 
 **Tu petición:**
 
-> ¿Qué publicaciones de Новости recibieron visitas, pero ninguna conversación?
+> Usa max CLI. ¿Qué publicaciones de Новости recibieron visitas, pero ninguna conversación?
 
 **Comando:**
 
@@ -193,17 +209,13 @@ max stats messages discussion --chat "Новости" --min-views 100 --max-repl
 
 <a id="check-and-refresh-counters" />
 
-<a id="comprobar-y-actualizar-contadores" />
-
-<a id="свежесть-счётчиков" />
-
 ## Antigüedad de los recuentos
 
 Comprueba por separado cuándo se observaron las visitas y las reacciones.
 
 **Tu petición:**
 
-> Comprueba la antigüedad de las visitas y reacciones de Поход sin actualizar nada.
+> Usa max CLI. Comprueba la antigüedad de las visitas y reacciones de Поход sin actualizar nada.
 
 **Comando:**
 
@@ -237,27 +249,9 @@ Una actualización real necesita tu petición. Consulta los recuentos en MAX y g
 
 <a id="names-and-unknown-response-activity" />
 
-<a id="selección-y-calidad" />
-
-<a id="выборка-и-качество" />
-
-<a id="человек-по-имени-и-неизвестная-активность" />
-
 ## Cuando faltan datos o no se reconoce un nombre
 
 Si coinciden varias personas, el agente muestra los candidatos y te pide elegir. No identificar a alguien no significa que su actividad sea cero. Incluso un ID seleccionado sin observaciones sigue siendo desconocido: JSON muestra `identityKnown: false`, `status: unknown`.
-
-Un informe vacío con historial incompleto no demuestra que no hubiera preguntas o respuestas. Pide al agente que abra los mensajes originales y muestre los límites del historial disponible.
-
-<a id="measures-and-scores" />
-
-<a id="follow-the-evidence" />
-
-<a id="save-a-resolved-ranking" />
-
-<a id="métricas-y-puntuaciones" />
-
-<a id="mensajes-originales" />
 
 <a id="clasificaciones-guardadas" />
 
@@ -269,6 +263,6 @@ Un informe vacío con historial incompleto no demuestra que no hubiera preguntas
 
 ## Más opciones
 
-Puedes elegir un periodo, una medida o puntuación combinada y guardar la selección para otro informe. Las fórmulas, los argumentos exactos de evidencia y los límites están en la [especificación compartida](https://github.com/leemour/cli-messaging/blob/main/docs/rankings.md) y la [referencia de comandos](./commands.md).
+Puedes elegir período, dimensión y puntuación compuesta, y guardar la selección para repetir el informe. Las fórmulas, argumentos de evidencia y límites de páginas están en la [especificación compartida de estadísticas](https://github.com/leemour/cli-messaging/blob/main/docs/rankings.md) y la [referencia de comandos](./commands.md#max-stats).
 
 Para verificar un resultado, pide al agente que abra la pregunta, respuesta o miembros que sustentan esa fila. Antes del siguiente informe, [comprueba la cobertura del archivo](./archive.md).

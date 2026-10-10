@@ -2,46 +2,123 @@
 title: "Topic search"
 ---
 
-`max conversations` finds a discussion by what it was about. Use it when you remember the subject but
-not the words: "where did we talk about renting a flat?" finds a conversation that says "apartment",
-"lease" and "deposit". For exact words, people, dates and files, use [message search](./search.md).
+<a id="что-такое-разговор" />
+<a id="построить-посчитать-векторы-искать" />
+<a id="для-агентов" />
 
-This is not the `topic:` search field, which restricts results to one discussion thread. Here a conversation is something `max` identifies itself, in any chat.
+Topic search helps when you remember what a chat discussed but cannot recall the wording. Ask where you talked about renting an apartment, and it can find messages about rent, deposits and a landlady without that exact phrase. It also works across languages: a Russian question can find an English or Spanish discussion.
 
-Search uses messages that `max` has already stored. By default the graph and vectors are built on your computer; an external service is selected explicitly. Download the history first: `max store fetch <чат>` ([archive](./archive.md)).
+After reading this page, you can prepare your chat for topic searches, ask questions in your own words, read the results, and understand when a regular word search is best. Searching for topics only uses messages that `max` has already saved on this computer, so first download the history: `max store fetch <чат>` ([download chat history](./archive.md#скачать-историю)).
 
-## What a conversation is
+Terms used below:
 
-In a busy group, several conversations run at once and their messages interleave. `max` untangles them using stored messages, without asking MAX or using AI:
+- **Discussion** — related messages within a chat, ordered oldest to newest. Several discussions can overlap in a busy group; `max` separates them.
+- **Chunk** — about 1,200 characters from a discussion. Long discussions are divided so each chunk focuses on roughly one subject.
+- **Vector** — numbers representing text meaning. Related texts have similar vectors even with different wording or languages.
+- **Embedding model** — the component turning text into vectors; it runs locally by default.
 
-- a reply belongs to the message it answers;
-- a message that mentions someone, by @username or by name, belongs with that person's recent message;
-- a person's next message, within a few minutes, continues their previous one.
+Topic search differs from the `topic:` field in [message search](./search.md). That field restricts results to a discussion thread; here `max` groups related messages itself in any chat.
 
-Each conversation is a list of messages, oldest first. It can skip the messages in between that belong
-to other conversations. The rules guess; they can split one discussion in two or join two. Your own AI
-agent can link what the rules leave open ([below](#связать-сообщения-поможет-ваш-агент)).
+## What you can do
 
-## Build, embed, search
+| Task | Command |
+|---|---|
+| Find a discussion on a topic - in one chat or in all prepared ones | `max search conversations "<вопрос>"` |
+| View chat conversations, new ones on top | `max conversations list --chat <чат>` |
+| Read one conversation from start to finish | `max conversations show <id>` |
+| Open entire conversation that contains a message | `max conversations show <чат> <сообщение>` |
+| Find other conversations about the same thing in all chats | `max conversations related <чат> <сообщение>` |
+| Limit result to person, period or word | `max search conversations "<вопрос>" --filter '<запрос>'` |
+| Find out what's outdated and catch up | `max conversations status`, `max search conversations "<вопрос>" --refresh` |
+| Ask your AI agent to link messages more accurately | `max skill show link-conversations` |
+
+## Search by topic or search by word?
+
+| | [Search by words](./search.md) (`max search messages`) | Search by topic (`max search conversations`) |
+|---|---|---|
+| What do you remember | exact words, name, date, file | just what was discussed |
+| What finds | individual messages with your words | whole conversations about your question |
+| Other words about the same | no: “apartment” will not find “housing” | yes |
+| Other languages ​​| no | yes, about 100 languages ​​for the default model |
+| Exact conditions (sender, date, file, link) | yes, all [query language](./query-language.md) | yes, via `--filter` |
+| Preparation | download history | download history, then `build` and `embed` |
+| Refers to MAX | yes, when searching in one named chat | no, only this computer reads |
+
+Use word search when you remember a word, number, name or filename. Use topic search when you remember the subject, a discussion spans many short messages, or the language differs. If unsure, try topic search: it also searches your words, keeping discussions containing them near the top.
+
+## Try it
+
+Prepare the chat once, and then ask as many questions as you like.
+
+**Your request to the AI agent:**
+
+> In the Book Club, find where we discussed to meet elsewhere. Show the conversation.
+
+**What happens step by step:**
 
 ```sh
-max conversations build --chat "Книжный клуб"   # найти разговоры; ещё раз — после того, как скачано больше
-max models text download e5-small               # один раз: 135 МБ, общая папка с tg
-max conversations embed --chat "Книжный клуб"   # продолжает с места, где остановился
-max search conversations "где встречаемся" --chat "Книжный клуб"
-max search conversations "аренда квартиры"      # во всех построенных чатах
+max store fetch "Книжный клуб"                  # 1. скачать историю, если её ещё нет
+max conversations build --chat "Книжный клуб"   # 2. разделить чат на разговоры
+max models text download e5-small               # 3. один раз: скачать модель, 135 МБ, общая с tg
+max conversations embed --chat "Книжный клуб"   # 4. посчитать вектор каждого куска
+max search conversations "где встречаемся" --chat "Книжный клуб"   # 5. спросить
+max conversations show 91                       # 6. прочитать найденный разговор
 ```
 
-1. **Build** finds the conversations in a chat. A new `build` replaces the previous one, so take the conversation number from a fresh `list` rather than keeping it.
-2. **Embed** turns each conversation, or each piece of a long one, into a *vector*: numbers that represent the text’s meaning. Texts about the same subject have similar vectors, even when the words or languages differ.
-3. **Search** turns your question into a vector and finds the nearest conversations. It also searches the question’s words and ranks conversations found by both methods higher. Each result says how it was found: `"by": ["meaning"]` (by meaning), `["words"]` (by words), or both.
+Steps 2–4 run on this computer without contacting MAX. `embed` resumes where it stopped. Later questions need only step 5; see [freshness](#свежесть) for when to repeat steps 2 and 4.
 
-Without a downloaded model, search still works and finds conversations by words; the answer then says `"meaning": "unavailable"`. A chat that has never been built is not searched: run `build` first.
+**Example result** (fictitious):
 
-The question remains ordinary text. `--filter 'from:me date:7d'` separately restricts conversations using a strict query: at least one message must match the whole condition. By default only the active account is searched; `--source
-personal|bots|all|<провайдер>` explicitly widens the scope. Results include their source and a `msg:` locator. `--timezone` selects the calendar time zone. `--filter` and `--source` cannot be combined with `--refresh`: build and index the relevant chats first. With local `e5-small`, a meaning match requires cosine similarity above 0.80; word matches remain. `--sync-first` downloads new messages, while `--refresh` builds the graph and vectors locally.
+```text
+0.874  91  2026-09-14 18:02–18:40  23 messages · 4 people · from message 4180  (messages 4185–4192)  msg:max/500/7/4185
+0.851  64  2026-08-02 10:15–10:31  9 messages · 3 people · from message 3302  (messages 3302–3310)  msg:max/500/7/3302
+```
+
+What you find is a clue, not an answer: open the conversation and read the messages before relying on it.
+
+## How it works
+
+There are three stages to searching by topic. The first two prepare the chat once; the third is performed for each question.
+
+### 1. Build: Split chat into conversations
+
+`max conversations build` reads saved messages oldest to newest and decides which previous message each continues. It uses no AI and does not contact MAX. Links are chosen in this order:
+
+1. **Explicit MAX replies.** A reply links to its original message.
+2. **Links from your agent**, if you requested them ([below](#связать-сообщения-поможет-ваш-агент)).
+3. **Mentions.** A message mentioning someone links to their latest message. It recognises `@username`, messenger-tagged mentions, and a name followed by a colon or comma (`anna: согласна`). `max` looks back at most 50 messages.
+4. **The same person writes again.** Their next message continues the previous one if it arrives within 5 minutes and the previous message is among the last 10.
+
+A message without a link starts a new discussion. Messages from other discussions can appear between its messages. The rules are estimates: they can split one discussion or combine two. A new `build` replaces the previous graph; take discussion ids from a fresh `list` rather than saving them.
+
+### 2. Embed: turn each piece into a vector
+
+`max conversations embed` divides discussions at message boundaries into chunks of about 1,200 characters, with lines formatted as sender and text. Longer messages become overlapping chunks so recognition covers the whole message. Messages without text contribute nothing. Each chunk becomes a vector, which `max` saves alongside a fingerprint to detect text changes; it does not save a second text copy.
+
+### 3. Search: by meaning and by words at the same time
+
+`max search conversations` searches for your question in two ways and combines the results:
+
+- **By meaning.** The question also becomes a vector. `max` compares it with saved chunks and ranks each discussion by its closest chunk. The default `e5-small` requires similarity above 0.80, on a scale where 1 means the same meaning.
+- **By words.** Each query word is searched in saved messages. Words of at least three characters also match longer words beginning with them (`встреч` matches the Russian word for meeting). Typos are not corrected.
+
+A discussion found by both methods ranks above one found by only one. Each result reports `"by": ["meaning"]`, `["words"]` or both. Without downloaded recognition files, word search still works and the result says `"meaning": "unavailable"`. Chats without a built graph are skipped; run `build` first.
+
+**Why this can find more:** word search needs matching words. Meaning search compares subjects across a discussion chunk, so “where do we meet” can find a choice between a library and a cafe. Combining word matches preserves exact names and uncommon words.
+
+The technical side - rules, pieces, vectors and order of results - on the page [how the search works](https://wirecat.dev/ru/docs/search-architecture).
 
 ## Read what was found
+
+In the terminal, each result is one line:
+
+- Similarity score, or `—` for a word-only match.
+- Discussion id, start/end times, message/person counts and the first message.
+- `(messages 4185–4192)`, the best matching chunk, or a message for word-only matches: start reading there.
+- A message locator (`msg:…`) accepted by `max messages show` and `max messages context`.
+- `stale` if text changed after vector calculation: the score refers to older text.
+
+`--json` also includes `meaning` (`searched` or `unavailable`), `model` and `readiness`: chats searched by meaning, by words only, stale chats and unbuilt chats. When coverage is limited, stderr names affected chats and the command to fix them, such as `conversations embed --chat <чат>`.
 
 ```sh
 max conversations list --chat "Книжный клуб" --since-time 7d
@@ -51,8 +128,54 @@ max conversations related "Книжный клуб" 204    # другие раз
 max messages links "Книжный клуб" 204           # почему сообщение там, где оно есть
 ```
 
-`related` uses the vectors `embed` stored and runs no model, so it answers quickly. A search result
-is a lead, not an answer: open the conversation and read the messages before relying on it.
+`related` takes the vectors that `embed` saved and does not run the model, so it responds quickly. This is a search for meaning only.
+
+## Examples
+
+**Remember the topic, not the words.**
+
+```sh
+max search conversations "кто берёт еду на пикник"
+```
+
+Search covers all prepared chats. It can find “I'll bring sandwiches” and “Boris has drinks” even when word search would miss them.
+
+**Discussed in another language.**
+
+```sh
+max search conversations "аренда квартиры" --chat "Valencia expats"
+```
+
+With the default model, this is also the case in Spanish - about “piso”.
+
+**Narrow by person and period.** `--filter` accepts strict [query language](./query-language.md). A conversation is suitable if at least one of its messages satisfies all the conditions. The question itself is still being sought for its meaning.
+
+```sh
+max search conversations "бюджет поездки" --filter 'from:"Алиса Тестова" date:30d'
+```
+
+```sh
+max search conversations "условия договора" --filter 'has:file' --timezone Europe/Madrid
+```
+
+**Start with one message.** You found a message using a word search and want everything else on this topic:
+
+```sh
+max search messages '"вернули залог"' --chat "Valencia expats"
+max conversations related "Valencia expats" 5120
+```
+
+**Search in bot chats too.** By default, the search for topics is carried out in the current account. `--source personal`, `bots`, `all` or the name of the messenger expands coverage; then each result says which account it is from.
+
+```sh
+max search conversations "задержка доставки" --source all
+```
+
+**Download new before asking.** `--sync-first` downloads new messages first - within the chat, time and number of messages, like message search.
+
+```sh
+max search conversations "где встречаемся" --chat "Книжный клуб" --sync-first
+```
 
 ## Keeping it current
 
@@ -65,38 +188,37 @@ max conversations embed                          # все построенные
 max search conversations "аренда квартиры" --refresh   # сначала догнать, потом искать
 ```
 
-`status` counts, for each built chat, messages that `build` has not seen yet (new, edited or deleted), pieces with current, stale or missing vectors, and groups never built. When rules change in a new version, `status` and `max store check` identify chats built with old rules: build them again. Without `--chat`, `build`, `embed` and `search --refresh` process at most 20 chats (`--max-chats`) and embed at most 2,000 pieces (`--max-chunks`) per run; run again to continue. They never download a model.
+For every built chat, `status` counts unseen new/edited/deleted messages, chunks with current/stale/missing vectors, and groups never built. Without `--chat`, `build`, `embed` and `search --refresh` process at most 20 chats (`--max-chats`) and 2,000 chunks (`--max-chunks`); repeat to continue. They never download recognition files automatically. `--refresh` cannot combine with `--filter` or `--source`; prepare the required chats separately.
 
-A result marked `"stale": true` comes from text that was edited after it was embedded: its score is
-for the old text. When a message is deleted, its text leaves the vectors too.
+If an update changes grouping rules, `status` and `max store check` identify chats built with older rules. Build them again.
+
+When a message is deleted, its text also disappears from the vectors.
+
+`max store fetch <чат> --catch-up` can immediately after downloading build chat conversations and calculate vectors ([download chat history](./archive.md#скачать-историю)).
 
 ## Let your AI agent link messages
 
-Rules cannot see connections that only make sense by meaning. Your own AI agent—the one you already use with `max`—can add them:
+The rules do not see connections that are understandable only by meaning. These can be added by your own AI agent (for example, Claude Code, Codex, Cursor or Gemini CLI):
 
 ```sh
 max skill show link-conversations                     # инструкция для агента
 max conversations batches status --chat "Книжный клуб"   # сколько сообщений и пачек, сколько текста
 ```
 
-The agent reads the instructions, tells you how much text it will read and waits for your yes. Then it reads the chat in batches (`max conversations batches next`), decides which earlier message each one answers and saves its answer (`max conversations links add`). The next `build` takes it into account. Replies from MAX take priority, then agent links, then rules. `max conversations links clear --chat "Книжный клуб"` removes the agent’s answers. In this agent workflow, `max` itself does not call a model.
+The agent reads instructions, estimates how much text it will read and waits for approval. It reads batches through `max conversations batches next`, identifies earlier messages they answer, then saves links through `max conversations links add`. The next `build` prioritises MAX replies, agent links, then rules. `max conversations links clear --chat "Книжный клуб"` removes agent links; rebuild afterwards. `max` calls no AI service in this workflow. Saving links requires `conversations.links`.
 
-Ordinary `build` uses rules and retained links. `max conversations build --chat <чат> --analyze` sends bounded batches to the configured OpenAI-compatible service or Anthropic. An explicit `--chat` is required. Before the first transmission, the command reports volume, endpoint and token limit and asks for consent; consent is retained for that account, chat and selected service until revoked. Defaults are 50 messages per batch and a maximum reservation of 100,000 tokens; `--yes` grants consent in scripts. `max conversations consents list` lists consent; `consents revoke --chat
-<чат>` revokes it. Built-in analysis is CLI-only; keys are not written to config.
+`max` can also send batches to an AI provider. Ordinary `build` uses rules and saved links; `max conversations build --chat <чат> --analyze` sends limited batches to a configured OpenAI-compatible service or Anthropic. Explicit `--chat` is required. Before first sharing, it shows volume, destination and token budget and asks for consent, saved for this account, chat and provider until revoked. Default batch size is 50 messages (`--size`), with a reserved budget of 100,000 tokens per run (`--max-tokens`); scripts confirm with `--yes`. `max conversations consents list` shows consent and `consents revoke --chat <чат>` revokes it. Built-in analysis runs only through the CLI, not MCP; keys stay out of configuration files.
 
 ## Privacy and cost
 
-By default nothing leaves your computer. The model runs here, and a model is downloaded only when you
-ask:
+By default, nothing leaves the computer. The model works here and is downloaded only by your command:
 
 ```sh
 max models text list                             # модели и какие скачаны
 max models text download embeddinggemma --accept-terms
 ```
 
-`e5-small` is the default: small and fast, about 100 languages. `embeddinggemma` finds more but runs
-about seven times slower, and downloads only with `--accept-terms`, since it comes under Google's
-Gemma terms. Vectors of two models are never mixed: search with the model you embedded with.
+`e5-small` is the small, fast default and supports about 100 languages. `embeddinggemma` can find more but is about seven times slower; downloading requires `--accept-terms` for Google Gemma terms. Their vectors are kept separate: search with the model used to calculate them. Stderr identifies chats prepared only with a different model.
 
 On a recent laptop `e5-small` embeds about 30 pieces a second; a group of 100,000 messages takes
 a little over 20 minutes, once. Later runs embed only what changed.
@@ -109,8 +231,9 @@ max conversations embed --chat "Книжный клуб" --provider openai
 max search conversations "аренда квартиры" --provider openai
 ```
 
-The text of the chat’s conversations then goes to that service, and each search sends it your question. Before sending anything, `embed` reports the number of pieces, maximum tokens and maximum cost, and waits for your yes (`--yes` in scripts; `--max-tokens` sets a limit). `--base-url` accepts any server with the OpenAI embeddings API (`/v1/embeddings`), such as Ollama or LM Studio on your computer, with `--model` and `--dims`. `max models text key remove openai` removes the key.
+This sends discussion text to that service and sends each search question too. Before sending, `embed` shows chunk count, maximum token use and estimated maximum price, then waits for approval (`--yes` in scripts; `--max-tokens` sets the budget). `--base-url` accepts an OpenAI-compatible vector server (`/v1/embeddings`), including local Ollama or LM Studio, together with `--model` and `--dims`. `max models text key remove openai` forgets the key. External vector settings also affect MCP search: your agent's questions go to this service too.
 
-## For agents
+## Next steps
 
-In MCP, `max_read` (`command: "conversations list"`), `max_read` (`command: "conversations show"`), `max_read` (`command: "search conversations"`), `max_read` (`command: "conversations related"`) and `max_read` (`command: "conversations status"`) read the built index; `max_write` (`command: "conversations refresh"`) brings it up to date on this computer. Through MCP, the agent gets the `link-conversations` instructions, estimates the work with `max_read` (`command: "conversations batches status"`) and waits for the owner’s consent for that chat. It then reads `max_read` (`command: "conversations batches next"`), saves answers through `max_write` (`command: "conversations links add"`) and rebuilds the graph through `max_write` (`command: "conversations build"`). `max_write` (`command: "conversations links clear"`) removes agent answers; the graph must also be rebuilt afterward. Writes require `conversations.links`. External-vector settings also apply to MCP search: the question is sent to the selected service. For the technical details—rules, chunks, vectors and result ordering—see [how search works](https://wirecat.dev/ru/docs/search-architecture).
+- [Message search](./search.md) - exact words, people, dates and files.
+- [How the search works](https://wirecat.dev/ru/docs/search-architecture) - the technical side of the rules, pieces, vectors and order of results.

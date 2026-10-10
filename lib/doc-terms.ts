@@ -104,19 +104,19 @@ const terms = {
     en: {
       title: "Local agent",
       description:
-        "An AI agent that can run commands on your computer, for example Claude Code, Codex, Cursor or Gemini CLI. A chat in the browser without terminal access cannot install the cli for you.",
+        "An AI agent that can run commands on your computer, for example Claude Code, Codex, Cursor or Gemini CLI. A chat in the browser without terminal access cannot install the command-line tool for you.",
       page: "agents",
     },
     ru: {
       title: "Локальный агент",
       description:
-        "ИИ-агент, который может запускать команды на вашем компьютере, например Claude Code, Codex, Cursor или Gemini CLI. Чат в браузере без доступа к терминалу не сможет установить cli за вас.",
+        "ИИ-агент, который может запускать команды на вашем компьютере, например Claude Code, Codex, Cursor или Gemini CLI. Чат в браузере без доступа к терминалу не сможет установить инструмент командной строки за вас.",
       page: "agents",
     },
     es: {
       title: "Agente local",
       description:
-        "Un agente de IA que puede ejecutar comandos en tu ordenador, por ejemplo Claude Code, Codex, Cursor o Gemini CLI. Un chat en el navegador sin acceso a la terminal no puede instalar el cli por ti.",
+        "Un agente de IA que puede ejecutar comandos en tu ordenador, por ejemplo Claude Code, Codex, Cursor o Gemini CLI. Un chat en el navegador sin acceso a la terminal no puede instalar la herramienta de línea de comandos por ti.",
       page: "agents",
     },
   },
@@ -164,19 +164,19 @@ const terms = {
     en: {
       title: "npm",
       description:
-        "A package installer that comes with Node.js. Your agent uses it to download and install tools such as tg, max and memo, and to update it later.",
+        "A package installer that comes with Node.js. Your agent uses it to download and install tools such as tg, max and memo, and to update them later.",
       page: "installation#nodejs",
     },
     ru: {
       title: "npm",
       description:
-        "Установщик программ, который входит в Node.js. С его помощью агент скачает и установит инструменты tg, max и memo, а позже сможет обновить его.",
+        "Установщик программ, который входит в Node.js. С его помощью агент скачает и установит инструменты tg, max и memo, а позже сможет обновить их.",
       page: "installation#nodejs",
     },
     es: {
       title: "npm",
       description:
-        "Un instalador de paquetes que viene con Node.js. El agente lo usa para descargar e instalar herramientas como tg, max y memo y actualizarla más adelante.",
+        "Un instalador de paquetes que viene con Node.js. El agente lo usa para descargar e instalar herramientas como tg, max y memo y actualizarlas más adelante.",
       page: "installation#nodejs",
     },
   },
@@ -250,7 +250,7 @@ const terms = {
     ru: {
       title: "Коннектор",
       description:
-        "Так Claude и ChatGPT называют инструмент, который вы добавляете извне: даёте приложению адрес, один раз входите, и ассистент может пользоваться этим инструментом в ваших чатах. Название зависит от приложения: плагин, приложение или коннектор.",
+        "Так Claude и ChatGPT называют инструмент, который вы добавляете извне: даёте приложению адрес, один раз входите, и агент может пользоваться этим инструментом в ваших чатах. Название зависит от приложения: плагин, приложение или коннектор.",
       page: "browser-apps",
     },
     es: {
@@ -270,7 +270,7 @@ const terms = {
     ru: {
       title: "Подходящие агенты",
       description:
-        "Есть инструкции для Claude Code, Codex, Cursor, Gemini CLI, Hermes и OpenClaw. Другие ассистенты тоже могут работать с инструментами, если умеют выполнять команды или подключаться через MCP. Оба варианта описаны на странице агентов.",
+        "Есть инструкции для Claude Code, Codex, Cursor, Gemini CLI, Hermes и OpenClaw. Другие агенты тоже могут работать с инструментами, если умеют выполнять команды или подключаться через MCP. Оба варианта описаны на странице агентов.",
       page: "agents",
     },
     es: {
@@ -304,19 +304,19 @@ const terms = {
     en: {
       title: "Public HTTPS address",
       description:
-        "An internet address your AI app can reach, even when your messenger tool runs on your computer. The messenger server still requires sign-in; knowing the address alone does not grant account access.",
+        "An internet address your AI app can reach, even when your messenger tool runs on your computer. The tool’s server still requires sign-in; knowing the address alone does not grant account access.",
       page: "browser-apps",
     },
     ru: {
       title: "Публичный HTTPS-адрес",
       description:
-        "Адрес в интернете, по которому ИИ-приложение может обратиться к программе на вашем компьютере. Сервер мессенджера по-прежнему требует входа: одного знания адреса недостаточно для доступа к аккаунту.",
+        "Адрес в интернете, по которому ИИ-приложение может обратиться к программе на вашем компьютере. Сервер инструмента по-прежнему требует входа: одного знания адреса недостаточно для доступа к аккаунту.",
       page: "browser-apps",
     },
     es: {
       title: "Dirección HTTPS pública",
       description:
-        "Una dirección de internet desde la que la aplicación de IA llega al programa de tu ordenador. El servidor del mensajero sigue exigiendo autenticación; conocer la dirección no da acceso a la cuenta.",
+        "Una dirección de internet desde la que la aplicación de IA llega al programa de tu ordenador. El servidor de la herramienta sigue exigiendo autenticación; conocer la dirección no da acceso a la cuenta.",
       page: "browser-apps",
     },
   },
@@ -364,19 +364,19 @@ const terms = {
     en: {
       title: "Local archive",
       description:
-        "Messages saved on the computer running the tool. Search uses this copy; only downloaded chats and periods can be checked.",
+        "Messages saved on the computer running the tool. Searches and reports using the local archive cover only stored chats and periods. Word search can also query the messenger’s server when supported and allowed.",
       page: "search",
     },
     ru: {
       title: "Локальный архив",
       description:
-        "Сообщения, сохранённые на компьютере с инструментом. Поиск работает по этой копии: проверить можно только скачанные чаты и периоды.",
+        "Сообщения, сохранённые на компьютере с инструментом. Поиск и отчёты по локальному архиву охватывают только сохранённые чаты и периоды. Поиск слов может также обращаться к серверу мессенджера, если это поддерживается и разрешено.",
       page: "search",
     },
     es: {
       title: "Archivo local",
       description:
-        "Mensajes guardados en el ordenador que ejecuta la herramienta. La búsqueda usa esta copia y solo comprueba los chats y periodos descargados.",
+        "Mensajes guardados en el ordenador que ejecuta la herramienta. Las búsquedas e informes del archivo local cubren solo los chats y periodos guardados. La búsqueda de palabras también puede consultar el servidor cuando está disponible y permitido.",
       page: "search",
     },
   },
@@ -450,7 +450,7 @@ const terms = {
     ru: {
       title: "Проверки поведения агента",
       description:
-        "Тестовые задачи, на которых проверяют работу ассистента с источниками, правами и неполными данными. Успешные примеры не гарантируют тот же результат в любой реальной переписке.",
+        "Тестовые задачи, на которых проверяют работу агента с источниками, правами и неполными данными. Успешные примеры не гарантируют тот же результат в любой реальной переписке.",
       page: "security",
     },
     es: {

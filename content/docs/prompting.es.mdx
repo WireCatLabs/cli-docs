@@ -3,7 +3,7 @@ title: "Cómo formular peticiones"
 description: "Pide búsquedas, contexto, documentos y respuestas indicando el alcance y las acciones permitidas."
 ---
 
-Esta página explica cómo pedir al asistente que encuentre mensajes, reúna contexto, trabaje con documentos y prepare respuestas. Aprenderás a dar una tarea clara y comprobar el resultado: qué encontró, qué mensajes lo respaldan y qué sigue sin saberse.
+Pide al agente que encuentre mensajes, reúna contexto, trabaje con documentos y prepare respuestas. Aprende a dar una tarea clara y comprobar el resultado: qué encontró, qué mensajes lo respaldan y qué sigue sin saberse.
 
 Empieza por lo que quieres obtener, por ejemplo: «¿Qué me pidió Anna que hiciera ayer?». Para una tarea sencilla puede bastar. El agente elige los comandos. Si aún no has probado la conexión, empieza por [Primeras tareas](./first-tasks.md).
 
@@ -67,7 +67,9 @@ ayuda al agente a priorizar la agenda. Para una reunión concreta, añade su obj
 la preparación del lanzamiento; deja fuera el presupuesto». Si un chat relevante no está
 disponible, la respuesta debe señalar ese hueco.
 
-## Encontrar un contacto recomendado
+<a id="encontrar-un-contacto-recomendado" />
+
+## Encontrar recomendaciones de un profesional
 
 ```text prompt
 Usa tg CLI. Busca recomendaciones de una gestoría en mis chats de autónomos y negocios de los
@@ -83,7 +85,7 @@ la cualificación de nadie. Pide al agente que distinga la experiencia contada d
 
 Si dos recomendaciones mencionan el mismo nombre, el agente debe comprobar que se refieren a la
 misma persona antes de combinarlas. Encontrar un nombre en un mensaje no es permiso para
-contactarlo. [Contactos](./tg/usage.md#people).
+contactarlo. [Personas](./tg/usage.md#people).
 
 <a id="files-and-voice" />
 
@@ -163,14 +165,14 @@ Si el resultado te sirve, indica el horario y el destino:
 Ayúdame a repetir este resumen los días laborables a las 09:00, hora de Madrid. Mantén los mismos chats y formato. Explica dónde se ejecutará, cómo comprobar la primera ejecución y cómo detenerlo. No actives el horario todavía.
 ```
 
-El agente o un planificador independiente debe iniciar cada ejecución. Una petición en el chat no crea por sí sola un horario. Si se ejecuta en tu ordenador, debe estar encendido y tener acceso al mensajero. Revisa el primer resultado y las fechas cubiertas antes de depender del resumen. Consulta las recetas de [Telegram](./tg/recipes.md) o [MAX](./max/recipes.md) para tu configuración.
+El agente o un planificador independiente debe iniciar cada ejecución. Una petición en el chat no crea por sí sola un horario. Si se ejecuta en tu ordenador, debe estar encendido y tener acceso al servicio de mensajería. Revisa el primer resultado y las fechas cubiertas antes de depender del resumen. Consulta las recetas de [Telegram](./tg/recipes.md) o [MAX](./max/recipes.md) para tu configuración.
 
-Enviar después un recordatorio fijo es más sencillo: el mensaje espera en el servidor del mensajero. No busca mensajes nuevos ni genera un resumen nuevo. El siguiente apartado trata ese caso.
+Enviar después un recordatorio fijo es más sencillo: el mensaje espera en el servidor del servicio de mensajería. No busca mensajes nuevos ni genera un resumen nuevo. El siguiente apartado trata ese caso.
 
 ## Programar recordatorios
 
 ```text prompt
-Usa tg CLI. El lunes 5 de octubre de 2026, envíame dos recordatorios a Mensajes guardados:
+Usa tg CLI. El próximo lunes, envíame dos recordatorios a Mensajes guardados:
 «Abrir la agenda de Atlas» a las 09:00 y «Revisar los acuerdos de Atlas» a las 18:00. Usa la hora
 de Europe/Madrid. Muéstrame los horarios y mensajes programados después de crearlos. No envíes
 nada al equipo.
@@ -212,9 +214,7 @@ antes de hacerlo.
 ```
 
 Indica el bot y las fuentes que puede usar. El historial disponible para tu cuenta personal no
-está necesariamente disponible para el bot. Un bot de Telegram no puede pedir a Telegram mensajes
-antiguos: trabaja con lo que envió, recibió o importó en este ordenador. Las reglas y los permisos se
-configuran aparte; el texto de la petición no los sustituye.
+está necesariamente disponible para el bot. La Bot API de Telegram no ofrece historial antiguo de mensajes. El comando CLI `bot store fetch` puede importar el historial accesible de canales y supergrupos al archivo local del bot; no obtiene el historial de chats privados ni de grupos básicos. El bot lee lo que envió, recibió o importó en este ordenador. Las reglas y los permisos se configuran aparte; la petición no los sustituye.
 [Bots de Telegram](./tg/bot.md) · [Bots de MAX](./max/bot.md) · [Permisos y protección de envíos](./tg/security.md).
 
 <a id="qué-debe-aparecer-en-la-respuesta" />
@@ -246,7 +246,7 @@ completa a partir de una ventana reciente.
 
 `messages list` no es un error en sí para una búsqueda: lee y guarda mensajes. La cuestión es si
 la ventana elegida cubre la pregunta. `search messages` busca en el historial guardado y también
-consulta la búsqueda propia del mensajero por palabras; `store fetch` carga más historial cuando la
+consulta la búsqueda propia del servicio de mensajería por palabras; `store fetch` carga más historial cuando la
 pregunta necesita una cobertura completa. El agente debe elegir según los datos disponibles, tu
 alcance y tus límites. [Ejemplo resuelto](./first-tasks.md#find-a-decision-in-older-history).
 

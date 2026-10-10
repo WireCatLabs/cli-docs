@@ -10,7 +10,7 @@ Puedes usar los borradores de dos formas: revisarlos y enviarlos tú mismo desde
 
 | | Borrador | Plantilla |
 |---|---|---|
-| Quién escribe el texto | tu agente prepara una respuesta; tú puedes editarla | escribes texto reutilizable, con una parte opcional escrita por un agente de IA |
+| Quién escribe el texto | tu agente prepara una respuesta; tú puedes editarla | escribes texto reutilizable, con una parte opcional generada por IA |
 | Quién decide enviar | tú, para ese mensaje y chat | la regla, dentro de su audiencia, permisos y límites |
 | Dónde lo revisas | el cuadro de mensaje de tu aplicación de mensajería o el chat con tu agente | la plantilla de la regla y sus resultados de prueba |
 
@@ -86,7 +86,7 @@ zona horaria:
 Hola, {{ sender.firstName | default: "qué tal" }}: aquí son las {{ now | date: "%H:%M" }}. Respondo los días laborables de 9:00 a 19:00.
 ```
 
-Una parte escrita por un agente de IA, con tu propio texto como respaldo:
+Una parte generada por IA, con tu propio texto como respaldo:
 
 ```liquid
 ¡Gracias, {{ sender.firstName | default: "de verdad" }}!
@@ -95,23 +95,17 @@ Una parte escrita por un agente de IA, con tu propio texto como respaldo:
 
 <a id="una-parte-escrita-por-un-modelo" />
 
-### Una parte escrita por un agente de IA
+<a id="una-parte-escrita-por-un-agente-de-ia" />
 
-Elige el agente de IA para las respuestas automáticas en la configuración de IA de tu perfil. Las guías de [Telegram](./tg/replies.md#templates-and-a-model) y [MAX](./max/replies.md#шаблоны-liquid-и-модель) explican cómo configurarlo.
+### Texto generado por IA
 
-Un agente de IA solo puede escribir lo que hay dentro de `{% ai %}…{% endai %}`; todo lo de fuera es tu
-texto. El cuerpo del bloque es una instrucción para el agente. El mensaje entrante llega al agente
-por separado, como datos, nunca como parte de la instrucción. La respuesta del agente se usa como
-texto normal.
+Elige el proveedor de IA y el identificador del modelo en los ajustes del perfil. El identificador selecciona el componente del proveedor que genera texto; no el agente con el que hablas. Las guías de [Telegram](./tg/replies.md#templates-and-a-model) y [MAX](./max/replies.md#шаблоны-liquid-и-модель) explican estos ajustes técnicos.
 
-El texto después de `{% else %}` es el respaldo. Se envía cuando no hay agente configurado, no hay
-consentimiento, la llamada falla o la respuesta del agente se rechaza por estar vacía, ser demasiado
-larga o repetir el mensaje entrante. Sin `else`, ese mensaje se queda sin respuesta y se registra el
-motivo. Los bloques no se pueden anidar.
+Solo se genera el texto dentro de `{% ai %}…{% endai %}`; todo lo de fuera es tu texto. El cuerpo del bloque proporciona la instrucción. El mensaje entrante llega al proveedor de IA configurado por separado como datos, nunca como parte de esa instrucción. El resultado se usa como texto normal.
 
-Usar un agente de IA requiere su propio consentimiento, aparte del permiso de envío. El consentimiento deja
-que los datos de los mensajes entrantes lleguen al proveedor de IA que elegiste, para todo el
-perfil:
+El texto después de `{% else %}` es el respaldo. Se envía si no está configurado el procesamiento de IA, falta consentimiento, falla la llamada o se rechaza la respuesta por estar vacía, ser demasiado larga o repetir el mensaje entrante. Sin `else`, ese mensaje se queda sin respuesta y se registra el motivo. Los bloques no se pueden anidar.
+
+El procesamiento de IA requiere su propio consentimiento, aparte del permiso de envío. El consentimiento permite enviar datos de mensajes entrantes al proveedor de IA elegido para todo el perfil:
 
 ```sh
 tg replies consents show
@@ -122,13 +116,8 @@ max replies consents grant
 max replies consents revoke
 ```
 
-`replies consents deny` con el ID de un chat mantiene sus mensajes lejos del agente. Un proveedor o
-endpoint nuevo necesita consentimiento otra vez. `replies test --ai` envía mensajes guardados al
-agente para que veas su texto; sigue sin enviar nada al mensajero.
+`replies consents deny` con el ID de un chat impide enviar sus mensajes al proveedor de IA. Un proveedor o una dirección de API nuevos necesitan otro consentimiento. `replies test --ai` envía mensajes guardados al proveedor configurado para que revises el texto generado; no envía nada al servicio de mensajería.
 
 ## Configurarlo
 
-Para crear y probar una regla de respuesta automática, sigue
-[las respuestas automáticas de Telegram](./tg/replies.md) o [las de MAX](./max/replies.md), que
-explican cómo crear una regla, elegir quién puede recibir respuestas, configurar el agente y pausarlo
-todo a la vez.
+Para crear y probar una regla de respuesta automática, sigue [las respuestas automáticas de Telegram](./tg/replies.md) o [las de MAX](./max/replies.md). Explican cómo crear una regla, elegir destinatarios, configurar el procesamiento de IA y pausarlo todo a la vez.
