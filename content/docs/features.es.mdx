@@ -1,209 +1,104 @@
 ---
 title: "Funciones"
-description: "Elige una tarea útil: revisar chats, encontrar acuerdos, reunir archivos o preparar respuestas."
+description: "Da a tu agente de IA contexto de mensajes, personas, notas y archivos, y decide qué puede hacer."
 ---
 
-Las herramientas de línea de comandos `tg` y `max` dan a tu agente acceso a Telegram y MAX. Elige una tarea y copia una petición para probarla.
+WireCat conecta tus mensajes y otras fuentes con el agente de IA que elijas. Pídele que encuentre un acuerdo, resuma un chat o prepare una respuesta usando tu historial, con fuentes que puedas comprobar. Los mensajes son el punto de partida; Memo puede añadir contexto de notas, archivos y correo.
 
-Lo principal:
+Funciones principales:
 
-- **Ponerte al día:** mensajes importantes sin leer, preguntas pendientes y contexto para reuniones — [Primeras tareas](./first-tasks.md).
-- **Encontrar lo necesario:** mensajes, acuerdos, personas y texto dentro de archivos — [Búsqueda](./search.md).
-- **Preparar una respuesta:** un borrador basado en la conversación, enviado después de revisarlo — [peticiones al agente](./prompting.mdx).
-- **Trabajar con archivos y voz:** reunir documentos, elegir versiones y resumir grabaciones — [ejemplos](./prompting.mdx#files-and-voice).
-- **Ayudar con grupos y bots:** preguntas de miembros, reglas de moderación y mensajes del bot — [grupos](./group-admins.md) y [bots](./bot-api.mdx).
+- **Tus fuentes y tu agente:** herramientas de línea de comandos o MCP para un agente compatible.
+- **Mensajes con contexto:** qué se dijo, qué cambió y quién espera una respuesta.
+- **Búsqueda con fuentes:** resultados y mensajes cercanos para comprobarlos.
+- **Personas entre cuentas:** vincula las identidades que sabes que pertenecen a la misma persona.
+- **Notas y archivos:** carpetas elegidas y notas propias en el mismo contexto local.
+- **Bots y grupos:** respuestas desde un bot y ayuda para administrar una comunidad.
+- **Control del acceso:** elige las fuentes, los permisos y dónde ejecutar las herramientas.
 
-## Un resumen más completo
+<a id="un-resumen-más-completo" />
 
-- **Mensajes:** leer, responder, editar y reenviar; enviar archivos, reaccionar, crear encuestas y programar recordatorios.
-- **Búsqueda e historial:** descargar chats elegidos al <DocTerm term="local-archive" lang="es" label="archivo local" />, buscar con formas de palabras, filtrar por fecha y autor, exportar historial y reunir resúmenes.
-- **Documentos y voz:** descargar adjuntos, extraer texto de formatos compatibles, transferir un archivo guardado a un agente remoto y transcribir voz con <DocTerm term="speech-model" lang="es" label="un modelo de voz" />.
-- **Personas y cuentas:** encontrar contactos, recuperar el contexto, organizar carpetas y usar <DocTerm term="profile" lang="es" label="perfiles distintos" /> para varias cuentas.
-- **Comunidades y bots:** gestionar miembros e invitaciones con permisos de administrador, revisar reglas de moderación y usar la Bot API. Telegram admite temas de foro; MAX, comentarios del bot bajo publicaciones de canales.
-- **Control de acceso:** permitir lectura, elegir cambios autorizados y limitar destinatarios y frecuencia de envío. [Configurar permisos](./permissions.mdx).
+<a id="pensado-para-agentes" />
 
-## Probarlo con tu tarea
+## Conecta tu agente
 
-Si tu cuenta está conectada, copia una petición del apartado adecuado. Si no, empieza por [instalación y acceso](./installation.mdx). La [demo](./meeting-brief.mdx) muestra una conversación con el agente sin conectar una cuenta. Despliega los bloques bajo los ejemplos para ver comandos exactos y funciones adicionales.
+WireCat proporciona herramientas y acceso a tus fuentes. Tu agente de IA interpreta la petición y usa esas herramientas para reunir información o realizar las acciones que permitas. Puedes cambiar de agente sin volver a crear tu archivo de mensajes o tus notas.
 
-Cada herramienta funciona con un servicio de mensajería: `tg` con Telegram, `max` con MAX. Las peticiones nombran `tg`; para MAX, escribe `max`. Todo lo siguiente funciona en ambos, salvo que una fila diga lo contrario. Los comandos de las tablas empiezan por `tg` o `max`.
+Usa un agente local con acceso al terminal o conecta una aplicación compatible mediante MCP. Las funciones disponibles dependen de la herramienta y la cuenta conectadas.
+
+[Conectar un agente de IA](./agents.mdx) · [Usar desde la web o el móvil](./browser-apps.mdx)
 
 ## Mensajes
 
-Entiende qué requiere tu atención y prepara una respuesta que puedas revisar antes de enviarla.
+Ponte al día con los mensajes sin leer, encuentra preguntas pendientes y prepara una conversación con mensajes anteriores. Pide al agente las fuentes de un resumen o una respuesta propuesta para comprobar un acuerdo antes de actuar.
 
-```text prompt
-Usa tg CLI. Lee mi conversación con Anna de hoy. ¿Qué necesita mi respuesta? Prepara una respuesta breve sin enviarla.
-```
+Un borrador en el chat con el agente y uno guardado en la aplicación de mensajería son distintos. Las herramientas actuales de cuentas personales devuelven texto para copiarlo en la aplicación de mensajería; no lo guardan directamente en su campo de borrador. Enviar es una acción separada con sus propios permisos.
 
-Obtendrás un borrador y los mensajes que lo respaldan. Si el destinatario es ambiguo, aclara el chat antes del envío.
+[Primeras tareas](./first-tasks.md) · [Borradores y plantillas](./drafts-and-templates.mdx)
 
-<details>
-<summary>Comandos y funciones adicionales</summary>
+<a id="historial-búsqueda-y-estar-al-día" />
 
-| Qué puedes hacer | Comandos |
-|---|---|
-| Leer chats y el historial de mensajes | `messages list`, `messages show` |
-| Enviar texto y archivos, responder a un mensaje | `messages send` |
-| Editar, eliminar, reenviar y fijar mensajes | `messages edit`, `delete`, `forward`, `pin` |
-| Programar un mensaje: se envía aunque tu ordenador esté apagado | `messages send --at-time` |
-| Descargar fotos, documentos y otros adjuntos | `messages download` |
-| Reaccionar a mensajes | `reactions` |
-| Crear encuestas, votar, cerrar las tuyas | `polls` |
-| Pasar mensajes de voz a texto en tu propio ordenador | `messages transcribe` |
-| Obtener un localizador y un enlace del servicio de mensajería cuando esté disponible | `messages link` |
-| Marcar chats como leídos, solo cuando lo pides | `chats mark-read` |
+## Búsqueda y fuentes
 
-</details>
+Encuentra un mensaje antiguo por palabras, persona, chat o fecha, o por significado cuando configures la búsqueda semántica. Abre los mensajes cercanos para entender el resultado. Memo permite buscar conjuntamente en mensajes guardados, notas importadas y correo.
 
-Guías: [uso de Telegram](./tg/usage.md) · [uso de MAX](./max/usage.md)
+El archivo local contiene el historial que descargaste. Un resultado vacío no demuestra que el mensaje nunca existiera: comprueba el período cubierto y los resultados de importación. La búsqueda por palabras puede funcionar localmente sin un proveedor de IA; la búsqueda por significado necesita configuración adicional.
 
-## Chats, contactos y cuenta
+[Buscar mensajes](./search.md) · [Probar la búsqueda](./search-playground.mdx) · [Buscar por significado](./tg/topic-search.md)
 
-Encuentra a una persona y recupera el contexto de conversaciones anteriores.
+<a id="chats-contactos-y-cuenta" />
 
-```text prompt
-Usa tg CLI. Encuentra al diseñador del que hablamos el mes pasado. Muestra quién lo recomendó y qué hemos acordado.
-```
+## Personas entre cuentas
 
-Obtendrás una persona identificada y mensajes que lo respaldan. Usa perfiles distintos para las cuentas personal y de trabajo: [cómo elegir una cuenta](./profiles.md).
+Reúne el contexto de una persona entre las cuentas que vincules explícitamente. Recuerda conversaciones, quién os presentó o qué notas guardaste sobre ella. Los nombres iguales no fusionan personas automáticamente.
 
-<details>
-<summary>Comandos y funciones adicionales</summary>
+La respuesta depende del historial guardado y los vínculos confirmados; pide fuentes cuando el agente saque una conclusión sobre alguien.
 
-| Qué puedes hacer | Comandos |
-|---|---|
-| Listar y buscar chats, filtrar por tipo (personas, grupos, canales) | `chats list` |
-| Crear, cambiar y eliminar carpetas de chats | `chats folders` |
-| Contactos: buscar, añadir, renombrar, bloquear, importar | `contacts` |
-| Quién es alguien, qué escribió, si la cuenta parece un bot | `contacts profile`, `context`, `check` |
-| Respuestas automáticas con tus reglas, a la audiencia que elijas | `replies` |
-| Actualizar tu perfil; ver cada dispositivo con sesión abierta y cerrar uno | `account` |
-| Varias cuentas, un *perfil* para cada una | `tg work …`, `max work …` |
+[Personas y cuentas vinculadas](./people.md)
 
-</details>
+## Notas, archivos y correo
 
-Guías: [personas](./people.md) · [acceso y perfiles de Telegram](./tg/sessions.md) · [sesiones y perfiles de MAX](./max/sessions.md)
+Memo importa carpetas elegidas, incluidas notas de Obsidian, busca en el contenido legible de archivos y guarda notas vinculadas a personas o mensajes. Los archivos importados conservan referencias a las fuentes; puedes editar y exportar tus propias notas. Las etiquetas reúnen fuentes relacionadas sin cambiar los originales.
 
-## Grupos y canales
+Memo también importa correo de cuentas configuradas. Lee el historial de mensajería ya descargado; no conecta el servicio ni descarga su historial. Algunos formatos necesitan lectores opcionales y las páginas escaneadas requieren reconocimiento de texto previo.
 
-Revisa un grupo antes de cambiar miembros, ajustes o reglas de moderación.
-
-```text prompt
-Usa tg CLI. En mi grupo del proyecto, busca preguntas que esperan respuesta de un administrador. Cita las fuentes y no cambies nada.
-```
-
-Obtendrás una lista para revisar. Los cambios requieren los permisos adecuados en el grupo. La moderación se ejecuta cuando la inicias tú, tu agente o una tarea programada.
-
-<details>
-<summary>Comandos y funciones adicionales</summary>
-
-| Qué puedes hacer | Comandos |
-|---|---|
-| Crear un grupo o un canal | `chats create` |
-| Ver adónde lleva un enlace de invitación sin unirte | `chats inspect` |
-| Unirte y salir; mostrar o renovar el enlace de invitación | `chats join`, `leave`, `link` |
-| Añadir y quitar miembros; nombrar administradores y fijar sus permisos | `chats members`, `chats admins` |
-| Ver quién se unió, salió o fue expulsado | `chats events` |
-| Encontrar preguntas que esperan tu respuesta o la de un administrador | `review --unanswered` |
-| Cambiar el título, la descripción y los ajustes | `chats update` |
-| Reglas de moderación: enlaces, invitaciones, reenvíos, mensajes masivos, personas bloqueadas | `chats rules`, `chats moderate` |
-| Temas de foro: listar, buscar, crear, publicar en un tema — *Telegram* | `topics` |
-| Una regla de moderación para cuentas nuevas — *MAX* | `chats rules` |
-
-</details>
-
-La moderación se ejecuta cuando la inicias tú, tu agente o una tarea programada; nada vigila un
-grupo por sí solo.
-Guías: [grupos de Telegram](./tg/groups.md) · [grupos de MAX](./max/groups.md)
-
-## Historial, búsqueda y estar al día
-
-Encuentra un acuerdo antiguo o reúne lo importante de los mensajes sin leer.
-
-```text prompt
-Usa tg CLI. Busca el plazo del proyecto que acordamos el mes pasado. Muestra el acuerdo y los cambios posteriores.
-```
-
-Obtendrás la respuesta, las fuentes y el periodo revisado. Por defecto, las búsquedas de palabras en Telegram y en un solo chat de MAX pueden consultar también el servidor del servicio. La búsqueda por significado y los recuentos usan el historial guardado; si falta ese periodo, [descarga primero los chats necesarios](./search.md#descarga-primero-el-historial-de-los-chats-pertinentes).
-
-<details>
-<summary>Comandos y funciones adicionales</summary>
-
-| Qué puedes hacer | Comandos |
-|---|---|
-| Guardar un archivo local de los chats que elijas | `store fetch` |
-| Buscar por palabras, remitente, fecha y chat; la búsqueda en el servidor está disponible en Telegram y en un solo chat de MAX | `search messages` |
-| Separar los hilos de un grupo con mucha actividad por respuestas y menciones | `conversations` |
-| Exportar un chat como Markdown o líneas JSON; hacer una copia de seguridad de todo el archivo | `store export`, `store backup` |
-| Los mensajes sin leer de todos los chats en una sola lista | `inbox` |
-| Quién espera tu respuesta y qué esperas tú | `review` |
-| Ver los mensajes nuevos según llegan | `watch` |
-| Mantener el archivo al día en segundo plano | `server` |
-
-</details>
-
-Guías: [archivo de Telegram](./tg/archive.md) · [búsqueda de Telegram](./tg/search.md) ·
-[archivo de MAX](./max/archive.md) · [búsqueda de MAX](./max/search.md)
+[Notas y archivos](./memo.mdx) · [Correo](./email.mdx)
 
 ## Bots
 
-Usa un bot para mensajes a clientes, respuestas a botones o tareas de grupo. Tiene su propia identidad y acceso.
+Usa la identidad propia de un bot para mensajes, respuestas a botones y tareas de una comunidad. Un agente puede operar el bot mediante los comandos compatibles de la Bot API. Su acceso difiere del de tu cuenta personal: no puede leer tus chats privados ni asumir el historial de tu cuenta.
 
-```text prompt
-Usa tg CLI. Revisa los mensajes disponibles para el bot y prepara respuestas a preguntas pendientes. Muéstrame cada borrador antes de enviarlo.
-```
+Las reglas y plantillas de respuesta automática pueden procesar los mensajes entrantes elegidos mientras su proceso esté activo, dentro de la audiencia y los límites configurados.
 
-Obtendrás borradores basados en mensajes disponibles para ese bot. El historial de tu cuenta personal es independiente. Empieza por [conexión y funciones de los bots](./bot-api.mdx).
+[Configurar bots y conocer sus funciones](./bot-api.mdx) · [Plantillas de respuesta automática](./drafts-and-templates.mdx)
 
-Un bot trabaja con su propio token, separado de tu cuenta personal.
+## Grupos y canales
 
-<details>
-<summary>Comandos y funciones adicionales</summary>
+Pide al agente que revise preguntas pendientes, ayude con miembros e invitaciones o aplique reglas de moderación. Los cambios requieren derechos de administrador de la cuenta y permisos de la herramienta. La moderación continua necesita un proceso activo o una programación; instalar una herramienta no la inicia automáticamente.
 
-| Qué puedes hacer | Comandos |
-|---|---|
-| Todos los métodos de la Bot API oficial: los 185 de Telegram y los 33 de MAX | `bot api` |
-| Enviar, editar, eliminar y fijar mensajes | `bot messages` |
-| Buscar mensajes disponibles para el bot | `bot search messages` |
-| Responder a pulsaciones de botones; definir el menú de comandos del bot; gestionar webhooks | `bot callbacks`, `bot commands`, `bot webhooks` |
-| Gestionar administradores y miembros de un grupo | `bot chats admins`, `bot chats members` |
-| Moderar un grupo con las mismas reglas que tu cuenta | `bot chats moderate` |
-| Dar el bot a un agente por MCP | `bot mcp config` |
-| Comentarios bajo publicaciones de canales — *MAX* | `bot comments` |
+[Administrar grupos](./group-admins.md) · [Grupos de Telegram](./tg/groups.md) · [Grupos de MAX](./max/groups.md)
 
-</details>
+<a id="límites-que-tú-fijas" />
 
-Guías: [Bot API completa](./bot-api.mdx) · [bots de Telegram](./tg/bot.md) · [bots de MAX](./max/bot.md)
+## Tus datos y permisos
 
-## Pensado para agentes
+Las herramientas guardan historial y notas en el ordenador o servidor donde se ejecutan. La copia local permite buscar sin volver a descargar los datos. Las actualizaciones en segundo plano necesitan que esa máquina y el proceso correspondiente sigan activos.
 
-- <DocTerm term="skill" lang="es" label="Un skill" /> da al agente instrucciones para los comandos y tareas habituales.
-  [Conectar tu agente de IA](./agents.mdx)
-- <DocTerm term="mcp" lang="es" label="Un servidor MCP" /> para Claude Desktop y otros clientes. Usa los permisos del perfil: puedes limitarlo a lectura o permitir las acciones necesarias. Las confirmaciones dependen de la aplicación de IA. [MCP](./mcp.mdx)
-- **Salida predecible**: cada comando puede devolver un único valor JSON, y cada tipo de fallo
-  tiene su propio código de salida, así que los scripts y los agentes pueden reaccionar a él.
-- **Autodescripción**: `tg commands --json` lista cada comando y cada opción, así que un agente
-  puede consultar lo que necesita en lugar de adivinarlo.
+Elige las cuentas, el historial y las carpetas disponibles y configura los permisos para cambios y envíos. El almacenamiento local no significa que el proveedor de IA no reciba datos: el contenido recuperado puede entrar en la petición del agente. Los controles de la CLI tampoco limitan otros accesos del agente a tu ordenador.
 
-## Límites que tú fijas
+[Dónde instalar](./installation.mdx) · [Permisos](./permissions.mdx) · [Seguridad y flujo de datos](./security.mdx)
 
-- **Permisos por perfil**: solo lectura, preguntar antes de un cambio o permitir.
-- **Una lista de destinatarios**: los chats a los que este perfil puede enviar.
-- **Un límite por hora** de envíos, 30 por defecto.
-- **Un registro de envíos**: cada intento de envío, sin el texto del mensaje.
-- **Un bloqueo de perfil** rechaza comandos que eligen otro perfil. Un agente que pueda cambiar su entorno puede quitarlo; consulta [los límites de los controles](./security.mdx#lo-que-la-protección-no-puede-impedir).
+<a id="probarlo-con-tu-tarea" />
 
-[Qué permite el inicio de sesión y cómo limitarlo](./installation.mdx) ·
-[seguridad de Telegram](./tg/security.md) · [seguridad de MAX](./max/security.md)
+<a id="aún-no-disponible" />
 
-## Aún no disponible
+<a id="elige-la-siguiente-tarea" />
 
-- **Telegram:** varias fotos en un mensaje; silenciar un chat, ajustes de privacidad, historial de llamadas, stickers y pulsar botones en el mensaje de un bot, que `max` ya tiene.
-- **MAX:** videomensajes circulares, activar o quitar la contraseña en la nube.
+## Detalles de las herramientas
 
-Los límites actuales y los planes aparecen en las hojas de ruta de [Telegram](./tg/roadmap.md) y [MAX](./max/roadmap.md). Un plan no es una función disponible.
+Las operaciones de cada servicio, diferencias de compatibilidad y sintaxis exacta están en sus guías:
 
-## Elige la siguiente tarea
+- **Telegram:** [uso diario](./tg/usage.md), [búsqueda](./tg/search.md), [archivo](./tg/archive.md), [bots](./tg/bot.md) y [comandos](./tg/commands.md).
+- **MAX:** [uso diario](./max/usage.md), [búsqueda](./max/search.md), [archivo](./max/archive.md), [bots](./max/bot.md) y [comandos](./max/commands.md).
+- **Memo:** [notas y archivos](./memo.mdx) y [correo](./email.mdx).
 
-Prueba [una primera tarea](./first-tasks.md) y comprueba que el agente muestre fuentes y un resultado útil. Para repetir un flujo que te sirva, consulta [tareas recurrentes](./prompting.mdx#recurring-tasks). La sintaxis exacta está en las referencias de [Telegram](./tg/commands.md) y [MAX](./max/commands.md).
+Las futuras fuentes y tareas se describen en las hojas de ruta; una integración prevista todavía no es una función disponible. Empieza con [una primera tarea](./first-tasks.md) y comprueba las fuentes del resultado.

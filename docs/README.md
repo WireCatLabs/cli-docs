@@ -28,7 +28,7 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | Reader question | Current home | Page job | Next editorial action |
 | --- | --- | --- | --- |
 | What is WireCat and where do I start? | `index.mdx` | Orientation | Check claims and scope against both reviewed releases |
-| How do I install and connect my account? | `installation.mdx` | Tutorial | Keep the first-success path above optional recovery/detail |
+| Where do the tools run and what does setup involve? | `installation.mdx` | Setup explanation and tool-guide hub | Explain runtime, source connection, data preparation and agent access; keep exact installation in tool guides |
 | Why does my agent not see the tool? | `agents.mdx` | Setup/recovery | Preserve the “usually already connected” distinction |
 | What should I ask first? | `first-tasks.md` | Tutorial/task hub | Pilot catch-up, older-history search and draft workflows here |
 | What do my accounts know about a person? | `people.md` | Task guide | Review source and data boundaries |
@@ -37,7 +37,7 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | How do I connect a browser AI app? | `browser-apps.mdx` | Connection guide | Preserve current web setup instructions |
 | How do I ask for a useful result? | `prompting.mdx` | Task guidance | Cross-link to worked examples instead of duplicating dialogues |
 | How do I review a reply in my messaging app or use an auto-reply template? | `drafts-and-templates.mdx` | Task guide and explanation | Keep template facts in step with the tools' auto-reply guides |
-| Can it do my task in Telegram or MAX? | `features.mdx` | Capability orientation | Verify differences; link task homes, not only command lists |
+| What does WireCat enable with my agent and sources? | `features.mdx` | Project capability orientation | Lead with messages and source-backed context, then people, notes/files, bots, groups and control; link tool-specific operations |
 | Which connection does my AI app need? | `mcp.mdx` | Explanation/setup | Explain the decision before client configuration |
 | How do I discover a bot method? | `bot-api.mdx` | Reference orientation | Link messenger-specific bot prerequisites and use cases |
 | What can read or change my data? | `security.mdx` | Explanation | Lead with user decisions, then verified detail |

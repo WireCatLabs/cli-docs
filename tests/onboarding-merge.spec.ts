@@ -2,7 +2,7 @@ import AxeBuilder from "@axe-core/playwright"
 import { expect, test } from "@playwright/test"
 
 for (const lang of ["en", "ru", "es"]) {
-  test(`${lang}: improved features and installation retain the shared sidebar and mobile layout`, async ({ page }) => {
+  test(`${lang}: project features and installation retain the shared sidebar and mobile layout`, async ({ page }) => {
     test.setTimeout(120000)
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 900 })
@@ -10,16 +10,18 @@ for (const lang of ["en", "ru", "es"]) {
         await page.goto(`/${lang}/docs/${route}`)
         await page.evaluate(() => document.fonts.ready)
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
+        const main = page.locator("main")
         if (route === "features") {
-          await expect(page.locator("main table")).toHaveCount(5)
-          await expect(page.locator("main details > summary")).toHaveCount(5)
-          for (const summary of await page.locator("main details > summary").all()) await summary.click()
-          expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
-          await expect(page.locator("main")).toContainText("185")
-          await expect(page.locator("main")).toContainText("33")
+          await expect(main.locator("table")).toHaveCount(0)
+          for (const target of ["agents", "search", "people", "memo", "bot-api", "group-admins", "permissions"]) {
+            await expect(main.locator(`a[href="/${lang}/docs/${target}"]`).first()).toBeVisible()
+          }
         } else {
-          await expect(page.getByRole("tab", { name: "Telegram", exact: true }).first()).toBeEnabled()
-          await expect(page.locator(".docs-term-trigger").first()).toBeEnabled()
+          for (const target of ["tg/installation", "max/installation", "memo#install-memo"]) {
+            await expect(main.locator(`a[href="/${lang}/docs/${target}"]`).first()).toBeVisible()
+          }
+          await expect(main.locator(".docs-term-trigger").first()).toBeEnabled()
+          await expect(main.locator("pre").filter({ hasText: "node --version" }).first()).toBeVisible()
         }
         const scan = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze()
         expect(scan.violations, `${route} ${width}`).toEqual([])
@@ -27,35 +29,26 @@ for (const lang of ["en", "ru", "es"]) {
     }
   })
 
-  test(`${lang}: messenger deep links select all tabs; Windows choice survives reload and uses npm`, async ({
+  test(`${lang}: installation deep links lead to tool guides and Markdown explains the common setup`, async ({
     page,
   }) => {
-    await page.goto(`/${lang}/docs/installation#max`)
-    const messenger = page.getByRole("tab", { name: "MAX", exact: true }).first()
-    await expect(messenger).toHaveAttribute("aria-selected", "true")
-    await expect(page.locator(".docs-prompt").filter({ hasText: "npm install -g @leemour/max-cli" })).toBeVisible()
-    await page.getByRole("tab", { name: "Windows", exact: true }).click()
-    await expect(
-      page.locator("main pre").filter({ hasText: "npm.cmd install -g --allow-scripts=@leemour/max-cli" }),
-    ).toBeVisible()
-    await page.reload()
-    await expect(page.getByRole("tab", { name: "Windows", exact: true })).toHaveAttribute("aria-selected", "true")
-    await expect(page.getByRole("tab", { name: "MAX", exact: true }).first()).toHaveAttribute("aria-selected", "true")
-    await page.evaluate(() => {
-      window.location.hash = "tg"
-    })
-    await expect(page.getByRole("tab", { name: "Telegram", exact: true }).first()).toHaveAttribute(
-      "aria-selected",
-      "true",
-    )
-    await expect(
-      page.locator("main pre").filter({ hasText: "npm.cmd install -g --allow-scripts=@leemour/tg-cli" }),
-    ).toBeVisible()
+    for (const tool of ["tg", "max"]) {
+      await page.goto(`/${lang}/docs/installation#${tool}`)
+      await expect(page.locator(`main a#${tool}`)).toHaveCount(1)
+      const guide = page.locator(`main a[href="/${lang}/docs/${tool}/installation"]`).first()
+      await guide.click()
+      await expect(page).toHaveURL(new RegExp(`/${lang}/docs/${tool}/installation$`))
+      await expect(page.locator("main")).toContainText(`@leemour/${tool}-cli`)
+    }
     const md = await page.request.get(`/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}installation/content.md`)
     expect(md.status()).toBe(200)
     const text = await md.text()
-    expect(text).not.toMatch(/<(?:AgentInstallPrompt|Screenshot|Tabs|Tab|Steps|Step|Accordion)/)
-    expect(text).toContain("npm.cmd install -g --allow-scripts=@leemour/max-cli")
-    expect(text).toContain("/screenshots/telegram/my-telegram-credentials.png")
+    expect(text).not.toMatch(/<(?:DocTerm|NodeSetupPrompt|Tabs|Tab|Steps|Step|Accordion)/)
+    expect(text).toContain("node --version")
+    expect(text).toContain("npm --version")
+    expect(text).toContain("memo")
+    expect(text).toContain("tg/installation")
+    expect(text).toContain("max/installation")
+    expect(text).toContain("MCP")
   })
 }
