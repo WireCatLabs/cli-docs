@@ -2,11 +2,10 @@ import AxeBuilder from "@axe-core/playwright"
 import { expect, test } from "@playwright/test"
 
 for (const lang of ["en", "ru", "es"]) {
-  test(`${lang}: project features and installation retain the shared sidebar and mobile layout`, async ({ page }) => {
-    test.setTimeout(120000)
-    for (const width of [1440, 390]) {
-      await page.setViewportSize({ width, height: 900 })
-      for (const route of ["features", "installation"]) {
+  for (const width of [1440, 390]) {
+    for (const route of ["features", "installation"]) {
+      test(`${lang}/${route}: shared sidebar and layout at ${width}px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 })
         await page.goto(`/${lang}/docs/${route}`)
         await page.evaluate(() => document.fonts.ready)
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
@@ -25,9 +24,9 @@ for (const lang of ["en", "ru", "es"]) {
         }
         const scan = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze()
         expect(scan.violations, `${route} ${width}`).toEqual([])
-      }
+      })
     }
-  })
+  }
 
   test(`${lang}: installation deep links lead to tool guides and Markdown explains the common setup`, async ({
     page,
