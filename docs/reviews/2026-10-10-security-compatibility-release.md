@@ -1,6 +1,6 @@
 # Security compatibility release review
 
-Prepared against current portal main `85e3a4c1867eb38c511b51f357723dacd8117c9d`, including the deployment security prerequisite. Runtime pins are the registry-confirmed and tagged MAX 0.43.1 and TG 0.44.1. Both select messaging 0.217.1 and core 0.19.3, preserving the older store schema.
+Prepared against current portal main `988b8e96ef4e9ef758d168bf446cd5e15517c263`, including the deployment security prerequisite and release-only full validation. Runtime pins are the registry-confirmed and tagged MAX 0.43.1 and TG 0.44.1. Both select messaging 0.217.1 and core 0.19.3, preserving the older store schema.
 
 The reader can process longer local documents/recordings and use ordinary hidden working folders, VPNs and private download networks. Known credentials, application state, the message store, caller cancellation and finite file/pixel/image budgets remain protected. Long audio still needs more memory and time. External API OCR retains its separate twenty-page limit. MCP returned text exposes controls; writes and ordinary machine JSON preserve originals. No promise covers every proxy configuration: configured transport determines support.
 
