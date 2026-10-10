@@ -1,99 +1,79 @@
 ---
 title: Pruebas
-description: "Comprobaciones funcionales, evaluaciones de búsqueda, seguridad y recorridos del lector: qué demuestran y cómo repetirlas."
+description: Cómo comprobamos que las funciones sirven, las herramientas son rápidas, los datos privados siguen privados y las personas completan sus tareas.
 ---
 
-Al evaluar o modificar `tg` y `max`, usa comprobaciones distintas para corrección, velocidad, seguridad y facilidad de uso. Esta guía explica qué evidencia aporta cada una y dónde reproducirla. Las comprobaciones automáticas cubren casos definidos; superarlas no demuestra que toda búsqueda encuentre una respuesta ni que todas las cuentas y dispositivos se comporten igual.
+Probamos todos nuestros paquetes, especialmente las herramientas cliente de línea de comandos (CLI) que usan personas y agentes de IA. Aquí puedes ver qué comprobamos antes de que te llegue una actualización: si las funciones sirven, las tareas son rápidas y los datos privados se tratan de forma segura. Cada paquete necesita pruebas acordes con su función, sea una biblioteca compartida, una herramienta cliente o el sitio de documentación.
 
 ## Qué comprobamos
 
-| Área | Qué verifica una comprobación | Cómo lo comprobamos |
-| --- | --- | --- |
-| Funcionalidad | Salidas, errores y códigos de terminación esperados; filtros de cuenta, chat, autor y fecha | Pruebas unitarias, integración con almacenes aislados y contratos CLI/MCP |
-| Compatibilidad | Los cambios compartidos funcionan en ambas herramientas y entornos compatibles | Pruebas de adopción, Node.js/Bun, plataformas e instalación de paquetes |
-| Calidad de búsqueda | Se recuperan fuentes relevantes y se ordenan de forma útil | Preguntas sintéticas con mensajes relevantes etiquetados, consultas negativas y métricas de clasificación |
-| Rendimiento | Latencia y consumo de recursos con una carga definida | Consultas cronometradas, escalado del archivo y mediciones separadas de descarga, incorporación y consulta |
-| Seguridad | Se respetan límites concretos de permisos, privacidad y entradas; los analizadores detectan candidatos para revisión | Pruebas negativas, análisis de secretos, dependencias y código, e investigación manual |
-| Experiencia de usuario (UX) | El lector completa una tarea y entiende el resultado | Recorridos en navegador, teclado y móvil, accesibilidad y revisión editorial |
+| Área | Qué comprobamos |
+| --- | --- |
+| Funcionalidad | Las funciones hacen lo prometido, devuelven resultados correctos y explican los fallos con claridad. |
+| Compatibilidad | Los paquetes funcionan juntos, las actualizaciones conservan los datos existentes y las herramientas cliente se instalan y ejecutan en los sistemas compatibles. |
+| Calidad de búsqueda | La búsqueda encuentra fuentes útiles y coloca los mejores resultados cerca del principio. |
+| Rendimiento | Las tareas habituales terminan pronto, incluso con archivos grandes, sin consumo excesivo de memoria ni descargas. |
+| Seguridad | Las credenciales no aparecen en registros ni repositorios, los datos compartidos con agentes se ajustan a la petición y las acciones respetan los permisos. |
+| Experiencia de usuario (UX) | Las personas encuentran una función, entienden lo ocurrido y completan su tarea. |
 
-La cobertura indica cuánto código ejecutan las pruebas. No mide la relevancia de búsqueda, la utilidad de una guía ni la ausencia de vulnerabilidades.
+Combinamos comprobaciones automáticas con revisiones manuales. Superar las pruebas aporta evidencia para los casos comprobados; no garantiza que toda situación posible funcione.
 
 ## Funcionalidad y paquetes publicados
 
-Las pruebas de implementación permanecen junto al código. `cli-messaging` comprueba el análisis compartido de consultas, almacenamiento, migraciones, búsqueda y permisos. `tg-cli` y `max-cli` comprueban sus adaptadores y la adopción del comportamiento compartido. Las cuentas sintéticas y los almacenes temporales permiten reproducir regresiones sin mensajes personales.
+Comprobamos las partes de un paquete por separado y después cómo funcionan juntas. Para las CLI cliente también instalamos y ejecutamos el paquete que recibiría un usuario. Así detectamos problemas que pueden pasar desapercibidos en el entorno del desarrollador, como un archivo ausente o una opción que nunca llega a la biblioteca compartida.
 
-Las pruebas de búsqueda separan las coincidencias estrictas de `--discover`, comprueban los filtros obligatorios tanto en el mensaje coincidente como en la respuesta recuperada, la sintaxis explícita y los límites de trabajo. La [arquitectura de búsqueda](./search-architecture.mdx) explica estos contratos. Una respuesta solo es útil si sigue cumpliendo el alcance solicitado.
+Por ejemplo, una búsqueda limitada a un chat no debe devolver mensajes de otro. Si lo que buscas está en una respuesta a otro mensaje, también debe respetar el autor y la fecha solicitados. Las coincidencias exactas y las búsquedas de fuentes relacionadas se comprueban por separado; la [arquitectura de búsqueda](./search-architecture.mdx) explica su funcionamiento.
 
-[cli-testing](https://github.com/WireCatLabs/cli-testing) contiene comprobaciones reutilizables que acceden desde fuera a ejecutables compilados, servidores MCP o paquetes publicados, además de investigación entre herramientas. Sus pruebas unitarias comprueban el ejecutor; son distintas de ejecutar una batería contra una herramienta. Su [arquitectura](https://github.com/WireCatLabs/cli-testing/blob/main/docs/dev/ARCHITECTURE.md) y [plan](https://github.com/WireCatLabs/cli-testing/blob/main/docs/dev/BACKLOG.md) indican los grupos y su estado de implementación.
+Las pruebas de cada paquete permanecen junto a su código. Las herramientas compartidas de pruebas y los experimentos están en [cli-testing](https://github.com/WireCatLabs/cli-testing). Los cambios de una biblioteca compartida también necesitan comprobaciones en las herramientas cliente que la usan. Por ejemplo, la [comprobación de búsqueda de paquetes publicados](https://github.com/WireCatLabs/cli-testing/blob/main/performance/search/released/README.md) ejecuta las herramientas reales de Telegram y MAX con mensajes ficticios y acceso a red bloqueado.
 
-La [comprobación de búsqueda publicada](https://github.com/WireCatLabs/cli-testing/blob/main/performance/search/released/README.md) instala paquetes elegidos explícitamente, crea un archivo sintético y ejecuta los binarios con acceso a red bloqueado. Comprueba recuperación de respuestas, aislamiento del autor y búsqueda estricta sin cambios; es una comprobación pequeña del contrato, separada de la evaluación de relevancia.
-
-En una copia de desarrollo de `tg-cli` o `max-cli`, ejecuta:
-
-```sh
-pnpm lint
-pnpm typecheck
-pnpm test:coverage
-pnpm release:check
-```
-
-`release:check` compila y comprueba el contrato de publicación; no prueba una cuenta en vivo. La verificación de paquetes anterior es una ejecución separada bajo demanda.
+Las comprobaciones habituales se ejecutan automáticamente durante el desarrollo. Las comparaciones largas de velocidad y las pruebas con cuentas reales se ejecutan aparte. Las pruebas cotidianas usan datos ficticios y almacenamiento temporal; las de cuentas reales usan cuentas de prueba autorizadas y sus resultados privados no se publican.
 
 ## Calidad de búsqueda y clasificación
 
-Un **candidato** es un mensaje recuperado para su posible inclusión antes del orden definitivo. La recuperación de candidatos y la clasificación necesitan mediciones distintas: un clasificador no puede promover una respuesta que nunca se recuperó.
+Encontrar un mensaje sobre un tema es distinto de encontrar la respuesta. Probamos preguntas con respuestas conocidas, preguntas sin respuesta en el archivo y réplicas que contienen la respuesta sin repetir las palabras de la pregunta.
 
-| Métrica | Qué pregunta responde |
+También comprobamos el orden. Una respuesta útil en primera posición ahorra más trabajo que la misma respuesta en décima posición.
+
+| Medida | Qué nos indica |
 | --- | --- |
-| Success@k, también Hit@k | ¿Hay al menos un resultado relevante etiquetado entre las primeras *k* posiciones? |
-| Recall@k | ¿Qué proporción de todos los resultados relevantes etiquetados aparece en esas posiciones? |
-| Precision@k | ¿Qué proporción de esas posiciones contiene resultados relevantes? |
-| Mean reciprocal rank (MRR) | ¿En qué posición aparece el primer resultado relevante, promediada entre consultas? |
-| nDCG@k | ¿Qué calidad tiene el orden con grados de relevancia y mayor peso en las primeras posiciones? |
-| Recuperación de candidatos | ¿Incluye el conjunto de candidatos los resultados relevantes etiquetados antes de ordenarlos? |
+| Success@10 | Con qué frecuencia aparece al menos un resultado útil entre los diez primeros. |
+| Recall@10 | Qué proporción del material relevante conocido aparece entre los diez primeros. |
+| Precision@10 | Qué proporción de los diez primeros resultados es relevante. |
+| MRR | Lo cerca que está del principio el primer resultado relevante. |
+| nDCG@10 | Si los resultados más útiles aparecen primero cuando unos son mejores que otros. |
 
-Cada informe debe indicar qué métricas calcula realmente. La tabla define medidas disponibles; no implica que cada ejecutor informe de todas ellas.
+Por ejemplo, **43,8% Success@10** significa que el 43,8% de las preguntas probadas tenía al menos un resultado relevante entre los diez primeros. No significa que se encontraran todos los mensajes relevantes ni que la respuesta estuviera primero.
 
-MRR promedia `1 / rank` del primer resultado relevante y usa cero cuando no se encuentra en la salida evaluada. Declara cualquier límite de profundidad. nDCG compara el orden con relevancia graduada con un orden ideal al mismo límite.
-
-Por ejemplo, **43,8% Success@10** significa que el 43,8% de las consultas evaluadas tiene al menos un resultado relevante etiquetado entre los diez primeros. No dice si se recuperaron todos los resultados relevantes o si la respuesta aparece primero. La décima y la primera posición cuentan por igual como éxito; MRR y nDCG muestran la diferencia.
-
-Las etiquetas deben distinguir una respuesta real de un mensaje que solo menciona el tema. Incluye preguntas sin respuesta, calificadores desconocidos, formulaciones engañosas y respuestas sin las palabras clave de la pregunta. Las coincidencias parciales son posibles fuentes, no prueba de que exista una respuesta.
-
-Usa ejemplos de desarrollo para encontrar fallos y un conjunto separado para evaluar cambios. Cuando un ejemplo ha influido en la implementación, pasa a ser evidencia de desarrollo. Registra consultas, etiquetas, límite de candidatos, compilación y reglas de agregación para comparar porcentajes. La [guía de evaluación](https://github.com/WireCatLabs/cli-testing/blob/main/performance/search/combined-search-evaluation.md) y el [índice de experimentos](https://github.com/WireCatLabs/cli-testing/blob/main/performance/search/README.md) contienen la investigación reproducible.
+También comprobamos si se encontraron mensajes útiles antes de ordenarlos: cambiar el orden no recupera una respuesta ausente. Las preguntas usadas para mejorar la búsqueda se separan de las nuevas preguntas usadas para evaluarla. Cada informe indica qué medidas incluye. La [guía de evaluación de búsqueda](https://github.com/WireCatLabs/cli-testing/blob/main/performance/search/combined-search-evaluation.md) explica los cálculos y experimentos.
 
 ## Rendimiento y recursos
 
-Mide la consulta completa y sus etapas: recuperación, puntuación, ampliación con respuestas y salida. La **puntuación** asigna un valor de relevancia; la **reclasificación** cambia el orden de candidatos ya recuperados. Una puntuación rápida no garantiza por sí sola una orden rápida.
+Medimos cuánto tarda una tarea completa, cuánta memoria usa y cómo cambia al aumentar los datos. Para la búsqueda, incluye encontrar mensajes, ordenar resultados, añadir réplicas útiles y preparar la salida.
 
-Informa de la latencia mediana (**p50**) y aquella por debajo de la cual termina el 95% de las ejecuciones medidas (**p95**), junto con tamaño del archivo, número de consultas y candidatos, equipo, entorno, compilación y estado frío o caliente. Registra el máximo de memoria del proceso, no solo el tamaño de los pesos de un modelo. Mide la incorporación de datos por separado. Si se usa un modelo, separa bytes y tiempo de descarga, estado de caché, tiempo de carga y memoria.
+Miramos el tiempo de espera habitual y las ejecuciones más lentas. Los informes pueden llamarlos **p50** (la mitad de las ejecuciones medidas termina dentro de ese tiempo) y **p95** (el 95% termina dentro de él). También comparamos la primera ejecución con las posteriores y medimos la preparación del archivo por separado de la búsqueda.
 
-Los [experimentos de búsqueda](https://github.com/WireCatLabs/cli-testing/tree/main/performance/search) comparan enfoques de clasificación y tamaños de archivos. Se ejecutan bajo demanda, fuera del paquete publicado del ejecutor. Las mediciones sintéticas describen esa carga y ese equipo; compara configuraciones en las mismas condiciones antes de elegir un modo predeterminado.
+Si una función usa un modelo descargable, medimos tamaño y tiempo de descarga, tiempo de carga y consumo de memoria. Una descarga pequeña no implica necesariamente poca memoria. Las comparaciones registran el equipo y la carga para que un resultado de una máquina no parezca una promesa para todos los dispositivos. Los [experimentos de búsqueda](https://github.com/WireCatLabs/cli-testing/tree/main/performance/search) contienen las mediciones detalladas.
 
 ## Seguridad y privacidad
 
-Las comprobaciones de seguridad prueban acciones denegadas, entradas incorrectas, aislamiento de cuentas y límites de recursos. El análisis de secretos, dependencias y código produce hallazgos para revisión; un análisis limpio no demuestra ausencia de vulnerabilidades. El [método de seguridad](https://github.com/WireCatLabs/cli-testing/blob/main/docs/security/METHOD.md) define la auditoría y el tratamiento de la evidencia.
+Comprobamos qué podría exponer tus datos o hacer que una herramienta hiciera algo que no pediste:
 
-Los ejemplos sin conexión usan datos sintéticos, configuración y almacenamiento aislados. El acceso a red o credenciales debe fallar en una comprobación que promete ejecución sin conexión. Las baterías en vivo y con agentes requieren una configuración privada de pruebas seleccionada explícitamente y autorización; no se ejecutan automáticamente sobre la cuenta del propietario. Los resultados de auditorías operativas y de cuentas privadas permanecen privados. La investigación pública usa datos sintéticos.
+- **Credenciales en registros.** Las contraseñas, los tokens de acceso y los códigos de inicio de sesión no deben aparecer en registros, informes de errores ni resultados enviados a un agente de IA.
+- **Secretos en repositorios.** Revisamos archivos e historial de cambios para detectar credenciales o datos privados guardados por accidente antes de publicar el código.
+- **Datos enviados a agentes.** Los resultados deben contener los datos pedidos para la tarea y el contexto elegido. Preguntar por un chat no debe exponer chats ajenos, otras cuentas ni datos de inicio de sesión.
+- **Acciones y permisos.** Leer un mensaje no debe enviar otro. Comprobamos que un agente no pueda hacer un cambio prohibido y que las instrucciones ocultas en un mensaje no concedan permisos adicionales.
+- **Entradas y archivos inesperados.** Revisamos cómo se manejan peticiones incorrectas, archivos dañados o muy grandes y nombres que podrían guardar una descarga fuera de la carpeta elegida. Estos casos deben tratarse de forma segura y respetar los límites.
 
-Consulta los controles del usuario y sus límites en [seguridad](./security.mdx) y [permisos](./permissions.mdx). Los permisos de la CLI no restringen acciones de un agente mediante otras herramientas.
+Usamos datos ficticios y credenciales de prueba, revisamos salidas y registros, analizamos repositorios y comprobamos dependencias para detectar problemas de seguridad conocidos. Algunas cuestiones necesitan que una persona siga lo que hace el código; un análisis automático por sí solo no demuestra que nada pueda filtrarse. El [método de seguridad](https://github.com/WireCatLabs/cli-testing/blob/main/docs/security/METHOD.md) describe el procedimiento detallado.
+
+Consulta los controles que puedes configurar en [seguridad](./security.mdx) y [permisos](./permissions.mdx). El acceso de un agente mediante otras herramientas necesita sus propios controles.
 
 ## Experiencia de usuario y documentación
 
-Las pruebas de navegador siguen recorridos del lector: abrir una guía, navegar, probar la búsqueda, copiar órdenes de instalación y leer Markdown. Las comprobaciones específicas cubren teclado, diseño móvil, idiomas y accesibilidad. El análisis automático de accesibilidad detecta problemas concretos; la lectura y revisión manual evalúan claridad, utilidad y comprensión de resultados incompletos.
+Probamos tareas reales: ¿puede una persona encontrar la orden adecuada, entender un error y saber si la tarea terminó bien? En el sitio de documentación probamos abrir guías, seguir enlaces, usar la búsqueda y copiar instrucciones.
 
-Las comprobaciones de documentación validan enlaces, ejemplos, estructura por idioma, huellas de fuentes y contratos de órdenes revisados. La revisión editorial lee todo el texto modificado en cada idioma. Que las traducciones tengan la misma estructura no demuestra que su significado sea correcto.
+Comprobamos el teclado, las pantallas móviles, la accesibilidad y todos los idiomas compatibles. Las pruebas automáticas detectan enlaces rotos, traducciones ausentes y algunos problemas de accesibilidad. Las revisiones manuales valoran si las instrucciones son legibles, los ejemplos tienen sentido y la página ofrece un siguiente paso útil.
 
-En `cli-docs`, ejecuta estas comprobaciones locales:
+Durante el desarrollo buscamos errores en el código, ejecutamos pruebas de funciones y comprobamos la documentación y un grupo corto de tareas de navegador. Antes de publicar, la compilación automática hace comprobaciones más amplias del sitio completo, sus enlaces y su comportamiento en el navegador. Las órdenes exactas para colaboradores están en las guías de desarrollo de los repositorios, incluida la [guía de pruebas de cli-testing](https://github.com/WireCatLabs/cli-testing/blob/main/docs/dev/TESTING.md).
 
-```sh
-pnpm lint
-pnpm typecheck
-pnpm test
-pnpm docs:check
-pnpm test:browser
-```
-
-La orden local de navegador ejecuta los recorridos esenciales; CI ejecuta la exportación completa, enlaces, SEO y pruebas de navegador más amplias. Para cambios fuera de esos recorridos, ejecuta directamente la prueba afectada. Otros repositorios publican sus órdenes en la [guía de pruebas de cli-testing](https://github.com/WireCatLabs/cli-testing/blob/main/docs/dev/TESTING.md) y en su documentación para colaboradores.
-
-Al comparar resultados, separa fallos funcionales, cambios de relevancia, regresiones de rendimiento y hallazgos pendientes. Elige la siguiente comprobación según el comportamiento modificado y conserva sus entradas y evidencia para que otro colaborador pueda repetirla.
+Para explorar una comprobación concreta, sigue los enlaces a las herramientas de pruebas o a los experimentos. Sus informes deben mostrar qué se probó, qué salió bien y qué necesita atención.

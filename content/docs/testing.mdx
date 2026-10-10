@@ -1,99 +1,79 @@
 ---
 title: Testing
-description: "Functional checks, search benchmarks, security review and reader journeys — what their results prove and how to repeat them."
+description: How we check that features work, tools stay fast, private data stays private and people can complete their tasks.
 ---
 
-When evaluating or changing `tg` and `max`, use different checks for correctness, speed, safety and usability. This guide explains the evidence each check provides and where to reproduce it. Automated checks cover defined cases; passing them does not establish that every search finds an answer or that every account and device behaves identically.
+We test all our packages, especially the client command-line tools (CLIs) people and AI agents use. Here you can see what we check before an update reaches you: whether features work, tasks stay fast and private data is handled safely. Each package needs checks that match its job, whether it is a shared library, a client tool or the documentation site.
 
 ## What we test
 
-| Area | What a check verifies | How we check it |
-| --- | --- | --- |
-| Functionality | Commands return the expected output, errors and exit codes; account, chat, author and date filters hold | Unit tests, isolated store integration tests and CLI/MCP contract tests |
-| Compatibility | Shared changes work in both tools and supported runtimes | Consumer adoption tests, Node.js/Bun checks, platform and package installation jobs |
-| Search quality | Relevant evidence is retrieved and ordered usefully | Synthetic questions with labelled relevant messages, negative queries and ranking metrics |
-| Performance | Latency and resource use under a defined workload | Timed query runs, archive scaling and separate download, ingestion and query measurements |
-| Security | Specific permission, privacy and input boundaries hold; scanners identify review candidates | Negative tests, secret/dependency/static scans and manual investigation |
-| User experience (UX) | A reader can complete a task and understand the result | Browser journeys, keyboard and mobile checks, accessibility checks and editorial review |
+| Area | What we check |
+| --- | --- |
+| Functionality | Features do what they promise, return the right results and explain failures clearly. |
+| Compatibility | Packages work together, updates preserve existing data, and client tools install and run on supported systems. |
+| Search quality | Search finds useful sources and puts the best results near the top. |
+| Performance | Everyday tasks finish promptly, including with large archives, without excessive memory use or downloads. |
+| Security | Credentials stay out of logs and repositories, data shared with agents stays within the request, and actions respect permissions. |
+| User experience (UX) | People can find a feature, understand what happened and complete their task. |
 
-Coverage reports show how much code tests execute. They do not measure search relevance, the usability of a guide or the absence of vulnerabilities.
+We combine automatic checks with manual reviews. Passing tests gives evidence for the cases checked; it does not guarantee every possible situation will work.
 
 ## Functionality and released packages
 
-Implementation tests stay with their code. `cli-messaging` checks shared parsing, storage, migrations, search and permissions. `tg-cli` and `max-cli` check their adapters and adoption of the shared behavior. Tests use synthetic accounts and temporary stores so a regression can be reproduced without personal messages.
+We check individual parts of a package, then check how they work together. For client CLIs, we also install and run the package a user would receive. This catches problems that can disappear in a developer's setup, such as a missing file or an option that never reaches the shared library.
 
-Search checks distinguish strict matching from explicit `--discover`, test hard filters on both a matching message and a retrieved reply, and check explicit query syntax and bounded work. The [search architecture](./search-architecture.mdx) explains these contracts. A reply containing an answer is useful only if it still satisfies the requested scope.
+For example, a search restricted to one chat must not return messages from another chat. An answer found in a reply must still obey the requested author and date. Exact matching and searches for related evidence are checked separately; the [search architecture](./search-architecture.mdx) explains how they work.
 
-[cli-testing](https://github.com/WireCatLabs/cli-testing) owns reusable checks that drive built binaries, MCP servers or published packages from outside, plus cross-tool research. Its own unit tests verify the runner; they are separate from executing a suite against a tool. Suite groups and their implementation status are recorded in its [architecture](https://github.com/WireCatLabs/cli-testing/blob/main/docs/dev/ARCHITECTURE.md) and [backlog](https://github.com/WireCatLabs/cli-testing/blob/main/docs/dev/BACKLOG.md).
+Tests for a package stay alongside its code. Shared testing tools and experiments live in [cli-testing](https://github.com/WireCatLabs/cli-testing). Changes to a shared library also need checks in the client tools that use it. The [published-package search check](https://github.com/WireCatLabs/cli-testing/blob/main/performance/search/released/README.md), for example, runs the actual Telegram and MAX tools against fictional messages with network access blocked.
 
-The [released search check](https://github.com/WireCatLabs/cli-testing/blob/main/performance/search/released/README.md) installs explicitly selected packages, seeds a synthetic archive and runs the actual binaries with network access blocked. It checks reply retrieval, author isolation and unchanged strict search; it is a small contract check, separate from relevance benchmarks.
-
-In a `tg-cli` or `max-cli` contributor checkout, the focused functional checks are:
-
-```sh
-pnpm lint
-pnpm typecheck
-pnpm test:coverage
-pnpm release:check
-```
-
-`release:check` builds and checks the release contract; it is not a live account test. The package verification above is a separate on-demand run.
+Routine checks run automatically during development. Longer performance comparisons and checks using real accounts run separately. Everyday tests use fictional data and temporary storage; real-account checks use approved test accounts, and private results are not published.
 
 ## Search quality and ranking
 
-A **candidate** is a message retrieved for possible inclusion before the final ordering. The candidate stage and the ranking stage need separate measurements: a ranker cannot promote an answer that retrieval never found.
+Finding a message about a topic is different from finding the answer. We test questions with known answers, questions with no answer in the archive, and replies that contain the answer without repeating the question's words.
 
-| Metric | Question it answers |
+We also check the order. A useful answer in first place saves more work than the same answer in tenth place.
+
+| Measure | What it tells us |
 | --- | --- |
-| Success@k, also called Hit@k | Does at least one labelled relevant result occur in the first *k* positions? |
-| Recall@k | What fraction of all labelled relevant results occurs in those positions? |
-| Precision@k | What fraction of those positions contains relevant results? |
-| Mean reciprocal rank (MRR) | How early does the first relevant result appear, averaged across queries? |
-| nDCG@k | How good is the ordering when relevance has grades, giving higher positions more weight? |
-| Candidate recall | Did the retrieved candidate pool include the labelled relevant results before ranking? |
+| Success@10 | How often at least one useful result appears in the first ten. |
+| Recall@10 | How much of the known relevant material appears in the first ten. |
+| Precision@10 | What share of the first ten results is relevant. |
+| MRR | How close to the top the first relevant result appears. |
+| nDCG@10 | Whether the most useful results appear first when some results are better than others. |
 
-Each report must name the metrics it actually computes. This table defines available measures; it does not imply that every runner reports all of them.
+For example, **43.8% Success@10** means that 43.8% of the tested questions had at least one relevant result in the first ten. It does not mean every relevant message was found or that the answer was first.
 
-MRR averages `1 / rank` for the first relevant result, using zero when none is found within the evaluated output. Declare any cutoff. nDCG compares the graded ordering with an ideal ordering at the same cutoff.
-
-For example, **43.8% Success@10** means that 43.8% of evaluated queries have at least one labelled relevant result in the first ten. It says nothing about retrieving every relevant result or placing the answer first. A result at position ten counts as success just as a result at position one does; MRR and nDCG expose that difference.
-
-Labels must distinguish an actual answer from a message merely mentioning the topic. Include questions with no answer, unknown qualifiers, misleading wording and replies whose answer omits the question's keywords. Partial hits are evidence candidates, not proof that an answer exists.
-
-Use development fixtures to find failures, then a separate evaluation set to assess changes. Once a fixture has influenced the implementation, it is development evidence. Record the query set, labels, candidate limit, build and aggregation rules so percentages remain comparable. The [search evaluation guide](https://github.com/WireCatLabs/cli-testing/blob/main/performance/search/combined-search-evaluation.md) and [experiment index](https://github.com/WireCatLabs/cli-testing/blob/main/performance/search/README.md) contain the reproducible research.
+We check whether useful messages were found before sorting them, too: changing their order cannot recover a missing answer. Questions used to improve search are kept separate from fresh questions used to assess it. Each report says which measures it includes. The [search evaluation guide](https://github.com/WireCatLabs/cli-testing/blob/main/performance/search/combined-search-evaluation.md) explains the calculations and experiments.
 
 ## Performance and resource use
 
-Measure the whole query as well as individual stages: retrieval, scoring, reply expansion and output. **Scoring** assigns a relevance value; **reranking** reorders already retrieved candidates. A fast scoring stage alone does not guarantee a fast command.
+We measure how long a whole task takes, how much memory it uses and how that changes as the data grows. For search, that includes finding messages, sorting results, adding useful replies and preparing the output.
 
-Report median latency (**p50**) and the latency below which 95% of measured runs finish (**p95**), with archive size, query count, candidate counts, hardware, runtime, build and cold or warm state. Record peak process memory, rather than only the size of model weights. Measure ingestion separately from querying. If a model is used, report download bytes/time, cache state, loading time and memory as separate costs.
+We look at typical waiting time and slower runs. Reports may call these **p50** (half the measured runs finish within this time) and **p95** (95% finish within it). We also compare the first run with later runs, and measure preparing an archive separately from searching it.
 
-[Search experiments](https://github.com/WireCatLabs/cli-testing/tree/main/performance/search) compare ranking approaches and archive sizes. They run on demand, outside the published test-runner package. Synthetic timings describe that workload and machine; compare configurations under the same conditions before choosing a default.
+If a feature uses a downloadable model, we measure download size and time, loading time and memory use. A small download does not necessarily mean low memory use. Comparisons record the computer and workload so a result from one machine is not presented as a promise for every device. The [search experiments](https://github.com/WireCatLabs/cli-testing/tree/main/performance/search) contain the detailed measurements.
 
 ## Security and privacy
 
-Security checks exercise denied actions, malformed input, account isolation and resource limits. Secret, dependency and static-code scans provide findings for review; a clean scan does not prove vulnerability-free software. The [security method](https://github.com/WireCatLabs/cli-testing/blob/main/docs/security/METHOD.md) defines the audit workflow and evidence handling.
+We check what could expose your data or let a tool do something you did not request:
 
-Offline fixtures use synthetic data and isolated configuration and storage. Network or credential access should fail in a check that promises offline execution. Live and agent suites require an explicitly selected private test setup and authorization; they do not run automatically against the owner's account. Operational audit results and private-account evidence stay private. Public research uses synthetic data.
+- **Credentials in logs.** Passwords, access tokens and login codes should not appear in logs, error reports or results sent to an AI agent.
+- **Secrets in repositories.** We check files and change history for accidentally committed credentials or private data before publishing code.
+- **Data sent to agents.** Results should contain the data requested for the task and its selected context. Asking about one chat should not expose unrelated chats, other accounts or login details.
+- **Actions and permissions.** Reading a message should not send one. We check that an agent cannot make a forbidden change, and that instructions hidden in a message do not grant extra permissions.
+- **Unexpected input and files.** We review how tools handle invalid requests, damaged or very large files, and file names that could save a download outside the chosen folder. These cases should fail safely and respect limits.
 
-For user-facing controls and their boundaries, read [security](./security.mdx) and [permissions](./permissions.mdx). A CLI permission check does not constrain actions an agent performs through other tools.
+We use fictional data and test credentials, inspect outputs and logs, scan repositories, and review dependencies for known security problems. Some issues need a person to trace what the code does; an automatic scan alone cannot prove that nothing can leak. The [security method](https://github.com/WireCatLabs/cli-testing/blob/main/docs/security/METHOD.md) has the detailed procedure.
+
+For the controls you can set yourself, read [security](./security.mdx) and [permissions](./permissions.mdx). An agent's access through other tools needs its own controls.
 
 ## User experience and documentation
 
-Browser tests exercise reader paths: opening a guide, navigating, trying the query playground, copying installation commands and reading Markdown output. Targeted checks cover keyboard interaction, mobile layout, localization and accessibility. Automated accessibility checks catch specific issues; manual reading and task review assess clarity, useful guidance and understandable incomplete results.
+We check real tasks: can someone find the right command, understand an error and tell whether the task succeeded? For the documentation site, we try opening guides, following links, using search and copying instructions.
 
-Documentation checks validate links, examples, locale structure, source fingerprints and reviewed command contracts. Editorial review reads the changed prose in every language. Matching translations structurally does not prove that their meaning is correct.
+We check keyboard use, mobile screens, accessibility and every supported language. Automatic checks find broken links, missing translations and some accessibility problems. Manual reviews check that instructions are readable, examples make sense and the page gives a useful next step.
 
-In `cli-docs`, use these local checks:
+During development we check code for mistakes, run feature tests, and check documentation and a short set of browser tasks. Before publication, the automated build runs broader checks on the complete site, its links and browser behavior. Exact contributor commands live in the repositories' developer guides, including [cli-testing's testing guide](https://github.com/WireCatLabs/cli-testing/blob/main/docs/dev/TESTING.md).
 
-```sh
-pnpm lint
-pnpm typecheck
-pnpm test
-pnpm docs:check
-pnpm test:browser
-```
-
-The local browser command runs the smoke suite; CI runs the full export, links, SEO and broader browser suite. Run an affected browser test directly for changes outside the smoke paths. Other repositories publish their own commands in [cli-testing's testing guide](https://github.com/WireCatLabs/cli-testing/blob/main/docs/dev/TESTING.md) and their contributor documentation.
-
-When comparing results, keep functional failures, relevance changes, performance regressions and unresolved review findings separate. Choose the next check from the behavior being changed, then preserve its inputs and evidence so another contributor can repeat it.
+To explore a particular check, follow the linked testing tools or experiments. Their reports should show what was tested, what passed and what still needs attention.
