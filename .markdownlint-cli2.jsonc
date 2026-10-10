@@ -1,13 +1,6 @@
 {
   "config": {
-    "default": false,
-    "MD001": false,
-    "MD010": true,
-    "MD012": {
-      "maximum": 2
-    },
-    "MD040": true,
-    "MD042": true
+    "extends": "./config/wirecat/markdownlint.json"
   },
   "globs": [
     "content/docs/*.{md,mdx}",
