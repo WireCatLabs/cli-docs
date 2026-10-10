@@ -111,7 +111,7 @@ for (const lang of ["en", "ru", "es"]) {
       await expect(page.locator("[data-copy-feedback]")).toHaveCount(1)
       await expect(page.locator('.toast[role="status"]')).toHaveCount(0)
       const links = await page
-        .locator(".public-site-menu > a, footer a:not(.footer-language a)")
+        .locator(".public-site-menu > a, footer a:not([data-language-switcher] a)")
         .evaluateAll((nodes) => nodes.map((node) => `${node.textContent?.trim()}:${node.getAttribute("href")}`))
       if (sharedLinks) expect(links).toEqual(sharedLinks)
       else sharedLinks = links

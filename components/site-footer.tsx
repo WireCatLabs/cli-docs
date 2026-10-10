@@ -5,9 +5,11 @@ import { useEffect, useRef } from "react"
 import { useThemeToggle } from "@/components/use-theme-toggle"
 import { wirecatLogoSvg } from "@/lib/brand"
 import { notifyCopyFeedback } from "@/lib/copy-feedback"
+import { bindDisclosureMenus } from "@/lib/disclosure-menus"
 import { prepareInstallationButton } from "@/lib/installation-command"
+import { languageSwitcherHtml } from "@/lib/language-switcher"
 import { copiedInstallationTool, trackSiteEvent } from "@/lib/site-events"
-import { homePath, localeFromPath, localizedPath } from "@/lib/site-routes"
+import { homePath, localeFromPath } from "@/lib/site-routes"
 import siteConfig from "@/site.config.json"
 
 const escapeHtml = (value: string) =>
@@ -45,18 +47,20 @@ export function SiteFooter({ html, variant = "landing" }: { html: string; varian
         `<div class="footer-install"><span class="footer-install-label">${escapeHtml(installLabel)}</span>${command}</div><div class="foot-bottom">`,
       )
   }
+  footerHtml = footerHtml.replace(
+    /<details class="language-switcher editorial-language"[\s\S]*?<\/details>/,
+    languageSwitcherHtml(lang, pathname),
+  )
   footerHtml = footerHtml.replaceAll('href="/en"', 'href="/"')
   const rootRef = useRef<HTMLDivElement>(null)
   useThemeToggle(rootRef, localeFromPath(pathname))
+  // biome-ignore lint/correctness/useExhaustiveDependencies: A new route replaces the footer language subtree and requires fresh listeners.
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
     const controller = new AbortController()
     let timer: ReturnType<typeof setTimeout> | undefined
-    for (const link of root.querySelectorAll<HTMLAnchorElement>(".footer-language a")) {
-      const locale = localeFromPath(new URL(link.href).pathname)
-      link.href = localizedPath(pathname, locale)
-    }
+    bindDisclosureMenus(root, "[data-language-switcher]", controller.signal)
     const brand = root.querySelector<HTMLAnchorElement>(".foot-brand > a")
     if (brand) brand.href = homePath(lang)
     for (const code of root.querySelectorAll<HTMLElement>(".cmd code")) code.tabIndex = 0

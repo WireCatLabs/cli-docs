@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import { useTheme } from "next-themes"
 import { useEffect, useRef } from "react"
 import { notifyCopyFeedback } from "@/lib/copy-feedback"
+import { bindDisclosureMenus } from "@/lib/disclosure-menus"
 import { prepareInstallationButton } from "@/lib/installation-command"
 import { searchDemo } from "@/lib/search-playground/engine"
 import { copiedInstallationTool, trackSiteEvent } from "@/lib/site-events"
@@ -114,7 +115,11 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
     document.addEventListener(
       "keydown",
       (event) => {
-        if (event.key === "Escape" && header?.classList.contains("menu-open")) {
+        if (
+          event.key === "Escape" &&
+          header?.classList.contains("menu-open") &&
+          !(event.target instanceof Element && event.target.closest("[data-language-switcher][open]"))
+        ) {
           closeMenu()
           menuToggle?.focus()
         }
@@ -441,36 +446,7 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
       },
       { signal },
     )
-    const menus = all<HTMLDetailsElement>("[data-connect],.editorial-language")
-    for (const menu of menus)
-      menu.addEventListener(
-        "toggle",
-        () => {
-          if (menu.open) for (const other of menus) if (other !== menu) other.open = false
-        },
-        { signal },
-      )
-    document.addEventListener(
-      "click",
-      (event) => {
-        for (const menu of menus)
-          if (menu.open && event.target instanceof Node && !menu.contains(event.target)) menu.open = false
-      },
-      { signal },
-    )
-    document.addEventListener(
-      "keydown",
-      (event) => {
-        if (event.key === "Escape") {
-          const menu = menus.find((m) => m.open)
-          if (menu) {
-            menu.open = false
-            menu.querySelector<HTMLElement>("summary")?.focus()
-          }
-        }
-      },
-      { signal },
-    )
+    bindDisclosureMenus(root, "[data-connect],[data-language-switcher]", signal)
     const parameters = new URL(location.href)
     const initialScenario = all<HTMLElement>("[data-hero-case]").find(
       (b) => b.dataset.heroCase === parameters.searchParams.get("scenario"),

@@ -184,13 +184,9 @@ html.dark .wirecat-editorial .footer-host .theme-moon {
     height: 28px;
   }
   .wirecat-editorial .site-header .brand .wirecat-logo-word {
-    width: clamp(92px, calc(100vw - 228px), 148px);
+    width: clamp(92px, calc(100vw - 276px), 148px);
   }
   .wirecat-editorial .public-site-controls {
-    gap: 6px;
-  }
-  .wirecat-editorial .site-header .editorial-language summary {
-    padding-inline: 8px;
     gap: 6px;
   }
   .wirecat-editorial .site-header .theme-switch {
@@ -247,4 +243,13 @@ html.dark .wirecat-editorial .footer-host .theme-moon {
 .wirecat-editorial .wirecat-landing .cmd,
 .wirecat-editorial .footer-host .footer-install .cmd {
   background: var(--command-background);
+}
+
+@media (width < 24rem) {
+  .wirecat-editorial .site-header.wrap {
+    gap: 6px;
+  }
+  .wirecat-editorial .site-header .brand .wirecat-logo-word {
+    width: 72px;
+  }
 }

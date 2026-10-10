@@ -6,9 +6,11 @@ import { documentationFonts } from "@/lib/docs-fonts"
 import "@/lib/docs-fonts.css"
 import { DocsHeader } from "@/components/docs-header"
 import { DocsProvider } from "@/components/docs-provider"
+import { DocsSearchTrigger } from "@/components/docs-search-trigger"
 import { DocsSidebarFolder } from "@/components/docs-sidebar-folder"
 import { DocsSidebarItem } from "@/components/docs-sidebar-item"
 import { DocsSidebarTitle } from "@/components/docs-sidebar-title"
+import { DocsLanguageSwitcher, LanguageSwitcherText } from "@/components/language-switcher"
 import { SiteFooter } from "@/components/site-footer"
 import { unifiedDocsTree } from "@/lib/docs-sidebar-tree"
 import en from "@/lib/editorial/en.json"
@@ -39,9 +41,18 @@ export default async function Layout({
         {...options}
         tree={unifiedDocsTree(source.getPageTree(lang))}
         tabs={false}
-        slots={{ header: DocsHeader, navTitle: DocsSidebarTitle }}
+        slots={{
+          header: DocsHeader,
+          navTitle: DocsSidebarTitle,
+          languageSelect: { root: DocsLanguageSwitcher, text: LanguageSwitcherText },
+        }}
         sidebar={{
-          banner: <DocsSidebarTitle className="mb-3 block px-2 font-semibold md:hidden" />,
+          banner: (
+            <div className="grid gap-3 md:hidden">
+              <DocsSidebarTitle className="block px-2 font-semibold" />
+              <DocsSearchTrigger full className="flex w-full" />
+            </div>
+          ),
           components: { Item: DocsSidebarItem, Folder: DocsSidebarFolder },
         }}
         containerProps={{

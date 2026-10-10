@@ -1,6 +1,7 @@
 /** Export the owner-selected editorial source. Private variants never enter public/. */
 import { readFile, writeFile } from "node:fs/promises"
 import postcss from "postcss"
+import { languageSwitcherHtml } from "../lib/language-switcher.ts"
 import { wordsFor } from "../lib/words.ts"
 
 const sourceDir = new URL("../design/homepage-chat-treatments/", import.meta.url)
@@ -81,38 +82,14 @@ for (const lang of ["en", "ru", "es"]) {
     )
     html = html.replace('aria-label="WireCat previews"', 'aria-label="WireCat"')
     const suffix = kind === "home" ? "" : `/${kind}`
-    const menu = `<details class="editorial-language"><summary aria-label="${ui[lang].language}">${lang.toUpperCase()}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><nav aria-label="${ui[lang].language}">${[
-      ["en", "English"],
-      ["ru", "Русский"],
-      ["es", "Español"],
-    ]
-      .map(
-        ([locale, label]) =>
-          `<a href="${!suffix && locale === "en" ? "/" : `/${locale}${suffix}`}" lang="${locale}" ${locale === lang ? 'aria-current="page"' : ""}>${label}</a>`,
-      )
-      .join("")}</nav></details>`
+    const menu = languageSwitcherHtml(lang, suffix || "/")
     html = html.replace(
       '<button type="button" class="theme-switch"',
       `${menu}<button type="button" class="theme-switch"`,
     )
     html = html.replace(/href="https:\/\/wirecat.dev\/en"/g, `href="${lang === "en" ? "/" : `/${lang}`}"`)
     html = html.replace(/href="https:\/\/wirecat\.dev\/([^"]*)"/g, (_, path) => `href="/${path}"`)
-    html = html.replace(
-      /(<details class="lang footer-language">[\s\S]*?<div class="lang-menu">)[\s\S]*?(<\/div><\/details>)/,
-      (_, start, end) =>
-        start +
-        [
-          ["en", "English"],
-          ["ru", "Русский"],
-          ["es", "Español"],
-        ]
-          .map(
-            ([locale, label]) =>
-              `<a href="${!suffix && locale === "en" ? "/" : `/${locale}${suffix}`}" lang="${locale}" ${locale === lang ? 'aria-current="page"' : ""}>${label}</a>`,
-          )
-          .join("") +
-        end,
-    )
+    html = html.replace(/<details class="lang footer-language">[\s\S]*?<\/details>/, menu)
     html = html.replaceAll('aria-label="Language"', `aria-label="${ui[lang].language}"`)
     html = html.replace(/(<a href="mailto:[^"]*">[\s\S]*?<\/a>)/g, "<!--email_off-->$1<!--/email_off-->")
     // Correctly annotate fixtures and identifiers that intentionally remain in English.
@@ -177,8 +154,8 @@ for (const lang of ["en", "ru", "es"]) {
     )
     .replace('<a class="brand"', '<a class="brand site-brand"')
     .replace(
-      '<details class="editorial-language">',
-      '</nav><div class="public-site-controls"><details class="editorial-language">',
+      '<details class="language-switcher editorial-language" data-language-switcher>',
+      '</nav><div class="public-site-controls"><details class="language-switcher editorial-language" data-language-switcher>',
     )
     .replace(
       "</nav></header>",
@@ -252,7 +229,7 @@ combined.walkDecls((d) => {
 })
 const reset =
   ".wirecat-editorial {position:relative;isolation:isolate;min-height:100vh;font:15px/1.55 Onest,sans-serif;color:var(--ink);background:var(--bg)}.wirecat-editorial :where(h1,h2,h3,h4,p,ul,ol,dl,pre,blockquote){margin:0;padding:0}.wirecat-editorial ul{list-style:disc}.wirecat-editorial ol{list-style:decimal}.wirecat-editorial summary{display:list-item}.wirecat-editorial [hidden]{display:none!important}\n"
-const extras = `\n.wirecat-editorial .editorial-language{position:relative;font-size:12px}.wirecat-editorial .editorial-language>summary{display:flex;gap:5px;align-items:center;min-height:34px;padding:5px 8px;border:1px solid var(--line);border-radius:5px;background:var(--paper)}.wirecat-editorial .editorial-language>summary::after{display:none}.wirecat-editorial .editorial-language svg{width:12px;height:12px}.wirecat-editorial .editorial-language>nav{position:absolute;right:0;top:100%;z-index:70;display:grid;gap:0;padding:6px;background:var(--paper);border:1px solid var(--line);border-radius:5px;min-width:140px}.wirecat-editorial .editorial-language nav a{padding:9px;text-decoration:none}.wirecat-editorial .editorial-language a[aria-current=page]{color:var(--accent)}.wirecat-editorial .site-header{flex-wrap:wrap}.wirecat-editorial .site-header nav{flex-wrap:wrap}@media(max-width:650px){.wirecat-editorial .site-header{gap:10px}.wirecat-editorial .site-header nav{gap:7px}.wirecat-editorial .site-header .brand .wirecat-logo-word{width:78px}.wirecat-editorial .site-header .brand .wirecat-logo-mark{width:24px;height:24px}.wirecat-editorial .site-header .connect-dropdown>summary{padding-inline:8px;max-width:150px;font-size:11px}.wirecat-editorial .site-header .theme-switch{width:28px;height:28px}.wirecat-editorial .site-header .editorial-language>summary{min-height:28px;padding:4px 6px}}\n`
+const extras = `\n.wirecat-editorial .site-header{flex-wrap:wrap}.wirecat-editorial .site-header nav{flex-wrap:wrap}@media(max-width:650px){.wirecat-editorial .site-header{gap:10px}.wirecat-editorial .site-header nav{gap:7px}.wirecat-editorial .site-header .brand .wirecat-logo-word{width:78px}.wirecat-editorial .site-header .brand .wirecat-logo-mark{width:24px;height:24px}.wirecat-editorial .site-header .connect-dropdown>summary{padding-inline:8px;max-width:150px;font-size:11px}.wirecat-editorial .site-header .theme-switch{width:28px;height:28px}}\n`
 await writeFile(
   new URL("../lib/editorial/editorial.css", import.meta.url),
   "/* Generated by scripts/export-editorial.mjs. Reviewed cascade isolated from docs and About. */\n/* biome-ignore-all lint/style/noDescendingSpecificity: Preserve the reviewed isolated prototype cascade. */\n/* biome-ignore-all lint/complexity/noImportantStyles: Preserve hidden states, reduced motion and the approved prototype cascade. */\n" +
