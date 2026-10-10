@@ -968,7 +968,7 @@ Filas de memorias que esperan ser indexadas: los triggers las encolan, JS normal
 
 ### Eventos y reuniones
 
-Los eventos del dueño, y el registro que cada app de reuniones tiene de ellos.
+Los eventos del dueño, y el registro que cada app de reuniones tiene de ellos. `MessageStore.meetings` implementa tanto `MeetingStore` como el opcional `MeetingTranscriptStore` de `@wirecat/cli-meetings`. `appendTranscripts` se ejecuta en una sola transacción inmediata y casa la cuenta numérica con el id externo de la ocurrencia. Los campos de creación explícitos solo se aplican a una ocurrencia que falta; una ocurrencia eliminada se rechaza con `not_found`. Añadir cambia solo las versiones y filas de la transcripción y conserva los campos de la ocurrencia, eventos, series, cursores y demás partes. Repetir la misma fuente y hash coincide con el historial conservado sin reactivarlo. Las filas quedan sin enlazar a participantes, y la respuesta confirma identidades sin contar creadas ni omitidas. `MessageStore.meetings` implementa además `MeetingReadCapabilities`, aparte del puerto común de reuniones. `meetingMetadata` y `transcriptMetadata` leen metadatos dentro de su ámbito; `transcripts` y `transcriptRows` paginan por id de revisión y posición de la frase. Los límites van de 1 a 1000 y `hasMore` usa una fila de más. Los padres eliminados se rechazan con `not_found`; las revisiones sustituidas conservadas requieren `includeHistorical`. `maxReadBytes` vale 4 MiB por defecto y limita el texto UTF-8 guardado y los metadatos de la página elegida, incluida la fila de más y los padres devueltos. La comprobación previa y la lectura completa comparten una instantánea de lectura, sin vaciar las colas de escritura. Las páginas demasiado grandes se rechazan; la evidencia nunca se recorta. Este límite cuenta los bytes TEXT guardados, no la memoria total ni el JSON final; quien llama sigue limitando la salida. La cancelación es cooperativa: la señal se comprueba antes y entre consultas y tras leer valores. Una consulta SQLite síncrona en curso termina antes de informar la cancelación; quien llama espera la lectura antes de cerrar su conexión.
 
 #### `event_series`
 
@@ -1051,13 +1051,13 @@ Una ocurrencia: pasó una vez, en un momento.
 
 #### `meeting_participants`
 
-Una persona en una reunión, tal como esa reunión la vio; el nombre y el correo se quedan con esta reunión.
+Una persona en una reunión, tal como esa reunión la vio; el nombre y el correo se quedan con esta reunión. Una identidad marcada explícitamente con `associatePerson: true` sigue la vía normal de clave estable: identidad, persona y presencia en la cuenta. Sin la marca o con false, los invitados quedan sin nuevos enlaces a persona o cuenta; los enlaces que hizo el dueño se conservan. Una identidad antigua sin enlace a persona recibe su enlace inicial al importarse de nuevo; los enlaces del dueño no se tocan. Las etiquetas de reunión nunca fusionan identidades ni resuelven nombres de documentos, y una clave estable ausente se rechaza en lugar de adivinarla por nombre o correo.
 
 | Columna | Tipo | Significado |
 | --- | --- | --- |
 | `id` | integer, PK | Clave primaria. |
 | `meeting_id` | integer, not null → `meetings.id` | la `meeting` a la que pertenece |
-| `identity_id` | integer, not null → `identities.id` | con clave por el id de usuario del proveedor; si no, el correo; si no, name@meeting |
+| `identity_id` | integer, not null → `identities.id` | por el proveedor y el id externo de identidad que se pasa |
 | `display_name` | text | el nombre mostrado en esta reunión; un cambio de nombre posterior no lo cambia |
 | `email` | text | la dirección que da el proveedor, cuando la da |
 | `role` | text | host, co-host, attendee, panelist, guest |

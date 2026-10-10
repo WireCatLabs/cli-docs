@@ -34,7 +34,7 @@ for (const lang of ["en", "ru", "es"]) {
     const packages = page.locator("main figure").filter({ hasText: "@wirecat/tg-cli" })
     await expect(packages).toHaveCount(1)
     await expect(packages).toContainText("@wirecat/cli-messaging")
-    for (const slug of ["architecture", "search-architecture", "people", "meeting-brief"]) {
+    for (const slug of ["architecture", "search-architecture", "data-model", "people", "meeting-brief"]) {
       const link = page.locator(`#nd-sidebar a[href="/${lang}/docs/${slug}"]`)
       await expect(link).toHaveCount(1)
       await expect(link.locator("svg")).toHaveCount(1)
@@ -98,3 +98,16 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(markdown).not.toContain("<ArchitectureDiagram")
   })
 }
+
+test("en: the data model diagram enlarges and Esc closes it", async ({ page }) => {
+  await page.goto("/en/docs/data-model")
+  const dialog = page.getByRole("dialog")
+  // The served button looks the same before its click handler is attached, so retry until a click opens it.
+  await expect(async () => {
+    await page.getByRole("button", { name: "Enlarge diagram" }).first().click({ timeout: 1_000 })
+    await expect(dialog).toBeVisible({ timeout: 1_000 })
+  }).toPass()
+  await expect(dialog.getByRole("button", { name: "Close" })).toBeVisible()
+  await page.keyboard.press("Escape")
+  await expect(dialog).toHaveCount(0)
+})

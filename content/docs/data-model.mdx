@@ -953,7 +953,7 @@ Rows of memories waiting to be indexed: triggers enqueue, JS normalizes, stems a
 
 ### Events and meetings
 
-The owner's events, and each meeting app's record of them.
+The owner's events, and each meeting app's record of them. `MessageStore.meetings` implements both `MeetingStore` and the optional `MeetingTranscriptStore` from `@wirecat/cli-meetings`. `appendTranscripts` runs in one immediate transaction, matching the numeric account and external occurrence id. Explicit creation fields apply only to a missing occurrence; a deleted occurrence rejects with `not_found`. Appending changes only transcript versions and rows, preserving existing occurrence fields, events, series, cursors and other parts. Source/hash replay matches retained history without reactivating it. Rows are detached from participants, and the returned details acknowledge identities without created/skipped counts. `MessageStore.meetings` implements `MeetingReadCapabilities` in addition to the shared meeting port. `meetingMetadata` and `transcriptMetadata` read scoped metadata; `transcripts` and `transcriptRows` use revision-id and cue-position seek pages. Limits are 1–1000 and `hasMore` uses one lookahead row. Deleted parents reject with `not_found`; retained superseded revisions require `includeHistorical`. `maxReadBytes` defaults to 4 MiB and bounds the raw stored UTF-8 text and metadata of the selected page, including lookahead and returned parents. Preflight and full reads share one read snapshot, without draining write queues. Oversized pages reject; evidence is never truncated. This budget covers stored TEXT bytes, rather than total heap use or rendered JSON; callers still bound output. Cancellation is cooperative: the signal is checked before and between queries and after value reads. An active synchronous SQLite query completes before cancellation is reported; callers await the read before closing its connection.
 
 #### `event_series`
 
@@ -1036,13 +1036,13 @@ One occurrence: it happened once, at one time.
 
 #### `meeting_participants`
 
-One person in one meeting, as that meeting saw them; the name and email stay with this meeting.
+One person in one meeting, as that meeting saw them; the name and email stay with this meeting. An identity explicitly marked `associatePerson: true` uses the normal stable-key identity, person and account-presence path. Omitted or false flags keep guests without new person or account associations; existing owner links are retained. An older identity missing its person link receives its own initial link when ingested again; existing owner links remain intact. Meeting labels never merge identities or resolve document names, and an absent stable identity key is rejected rather than guessed from a name or email.
 
 | Column | Type | Meaning |
 | --- | --- | --- |
 | `id` | integer, PK | Primary key. |
 | `meeting_id` | integer, not null → `meetings.id` | the `meeting` it belongs to |
-| `identity_id` | integer, not null → `identities.id` | keyed by the provider's user id, else email, else name@meeting |
+| `identity_id` | integer, not null → `identities.id` | keyed by the provider and supplied external identity id |
 | `display_name` | text | the name shown in this meeting; a later rename does not change it |
 | `email` | text | the address the provider gives, when it gives one |
 | `role` | text | host, co-host, attendee, panelist, guest |
