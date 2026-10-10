@@ -81,7 +81,11 @@ for (const theme of ["light", "dark"]) {
     await page.emulateMedia({ colorScheme: "light" })
     await page.goto("/en/docs/search-playground")
     await page.locator("#search-playground").waitFor()
-    if (theme === "dark") await page.locator(".theme-toggle:visible").first().click()
+    if (theme === "dark") {
+      const toggle = page.locator(".theme-toggle:visible").first()
+      await expect(toggle).toHaveAttribute("aria-label", "Switch to dark theme")
+      await toggle.click()
+    }
     await expect(page.locator("html")).toHaveClass(theme === "dark" ? /dark/ : /light/)
     const results = await new AxeBuilder({ page })
       .include("#search-playground")
