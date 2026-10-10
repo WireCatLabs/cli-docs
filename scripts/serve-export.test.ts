@@ -1,7 +1,7 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
-import { gzipSync } from "node:zlib"
+import { gunzipSync, gzipSync } from "node:zlib"
 import { expect, it } from "vitest"
 import { serveExport } from "./serve-export.mjs"
 
@@ -26,7 +26,7 @@ it("serves rebuilt HTML and CSS instead of stale compressed responses", async ()
   }
 })
 
-it("serves precompressed search assets as JSON without compressing them twice", async () => {
+it("serves compressed search assets as gzip files independently of HTTP encoding", async () => {
   const directory = mkdtempSync(join(tmpdir(), "wirecat-search-export-"))
   const data = { type: "i18n", data: { es: { content: "café y mensajes" } } }
   mkdirSync(join(directory, "api/search"), { recursive: true })
@@ -34,9 +34,9 @@ it("serves precompressed search assets as JSON without compressing them twice", 
   const server = await serveExport(directory)
   try {
     const response = await fetch(`${server.url}/api/search/es`)
-    expect(response.headers.get("Content-Encoding")).toBe("gzip")
-    expect(response.headers.get("Content-Type")).toContain("application/json")
-    expect(await response.json()).toEqual(data)
+    expect(response.headers.get("Content-Encoding")).toBeNull()
+    expect(response.headers.get("Content-Type")).toBe("application/gzip")
+    expect(JSON.parse(gunzipSync(new Uint8Array(await response.arrayBuffer())).toString())).toEqual(data)
   } finally {
     await server.close()
     rmSync(directory, { recursive: true, force: true })

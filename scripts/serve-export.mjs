@@ -57,8 +57,7 @@ export async function serveExport(directory, { port = 0, gzip = true } = {}) {
     // Mirror public/_headers for precompressed static search responses.
     const encodedSearch = file && pathname.startsWith("/api/search/") && body[0] === 0x1f && body[1] === 0x8b
     if (encodedSearch) {
-      headers["Content-Type"] = "application/json; charset=utf-8"
-      headers["Content-Encoding"] = "gzip"
+      headers["Content-Type"] = "application/gzip"
     }
     const compress =
       !encodedSearch &&

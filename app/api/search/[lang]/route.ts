@@ -10,7 +10,7 @@ export function generateStaticParams() {
 
 /**
  * One language per compressed file: Pages limits uploaded assets to 25 MiB.
- * The static host supplies Content-Encoding via public/_headers.
+ * The client decodes the gzip asset independently of HTTP transfer encoding.
  */
 export async function GET(_request: Request, { params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params

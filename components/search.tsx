@@ -1,6 +1,5 @@
 "use client"
 import { useDocsSearch } from "fumadocs-core/search/client"
-import { staticClient } from "fumadocs-core/search/client/orama-static"
 import {
   SearchDialog,
   SearchDialogClose,
@@ -14,12 +13,13 @@ import {
 } from "fumadocs-ui/components/dialog/search"
 import { useI18n } from "fumadocs-ui/contexts/i18n"
 import { usePathname } from "next/navigation"
+import { compressedStaticClient } from "@/lib/compressed-search-client"
 import { preferredSearchTool } from "@/lib/search-intents"
 
 export default function DefaultSearchDialog(props: SharedProps) {
   const { locale } = useI18n() // (optional) for i18n
   const pathname = usePathname()
-  const baseClient = staticClient({ locale, from: `/api/search/${locale ?? "en"}` })
+  const baseClient = compressedStaticClient({ locale, from: `/api/search/${locale ?? "en"}` })
   const { search, setSearch, query } = useDocsSearch({
     client: {
       deps: [...(baseClient.deps ?? []), pathname],
