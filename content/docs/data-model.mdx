@@ -13,7 +13,31 @@ It describes the schema as read on 10 October 2026, at a fixed commit of cli-mes
 package that owns the file. Every column with its meaning is in the
 [schema reference](https://github.com/WireCatLabs/cli-messaging/blob/d874547/docs/storage/schema.md).
 
-## Entities
+## Key entities
+
+```mermaid How the main entities point at each other
+graph LR
+  Person["Person"] --> Identity["Identity"]
+  Organization["Organization"] --> Account["Account"]
+  Organization --> Project["Project"]
+  Account --> Chat["Chat"]
+  Chat --> Message["Message"]
+  Identity --> Message
+  Message --> Conversation["Conversation"]
+  Account --> Email["Email"]
+  Identity --> Email
+  Account --> Document["Document"]
+  Account --> Meeting["Meeting"]
+  Identity --> Meeting
+  Meeting --> Event["Event"]
+  Project --> Task["Task"]
+  Project --> Decision["Decision"]
+```
+
+In words: a person has identities; identities send messages and emails and take part in
+meetings. An organization holds accounts and projects. Each account brings its chats, emails,
+documents and meetings; chats hold messages, and messages group into conversations. A meeting
+belongs to an event. A project holds tasks and decisions.
 
 ### People and identities
 
@@ -88,30 +112,6 @@ that approval. Separately, every tool an agent calls is logged with its access t
 without the text of its arguments.
 
 ## How they connect
-
-```mermaid How the main entities point at each other
-graph LR
-  Person["Person"] --> Identity["Identity"]
-  Organization["Organization"] --> Account["Account"]
-  Organization --> Project["Project"]
-  Account --> Chat["Chat"]
-  Chat --> Message["Message"]
-  Identity --> Message
-  Message --> Conversation["Conversation"]
-  Account --> Email["Email"]
-  Identity --> Email
-  Account --> Document["Document"]
-  Account --> Meeting["Meeting"]
-  Identity --> Meeting
-  Meeting --> Event["Event"]
-  Project --> Task["Task"]
-  Project --> Decision["Decision"]
-```
-
-In words: a person has identities; identities send messages and emails and take part in
-meetings. An organization holds accounts and projects. Each account brings its chats, emails,
-documents and meetings; chats hold messages, and messages group into conversations. A meeting
-belongs to an event. A project holds tasks and decisions.
 
 Four tables connect anything to anything, so none of the entities above needs a column for
 every other:

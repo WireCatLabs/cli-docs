@@ -14,7 +14,31 @@ Describe el esquema tal como se leyó el 10 de octubre de 2026, en un commit fij
 el paquete dueño del archivo. Cada columna con su significado está en la
 [referencia del esquema](https://github.com/WireCatLabs/cli-messaging/blob/d874547/docs/storage/schema.md).
 
-## Entidades
+## Entidades clave
+
+```mermaid Cómo se apuntan entre sí las entidades principales
+graph LR
+  Person["Persona"] --> Identity["Identidad"]
+  Organization["Organización"] --> Account["Cuenta"]
+  Organization --> Project["Proyecto"]
+  Account --> Chat["Chat"]
+  Chat --> Message["Mensaje"]
+  Identity --> Message
+  Message --> Conversation["Conversación"]
+  Account --> Email["Correo"]
+  Identity --> Email
+  Account --> Document["Documento"]
+  Account --> Meeting["Reunión"]
+  Identity --> Meeting
+  Meeting --> Event["Evento"]
+  Project --> Task["Tarea"]
+  Project --> Decision["Decisión"]
+```
+
+En palabras: una persona tiene identidades; las identidades envían mensajes y correos y participan
+en reuniones. Una organización agrupa cuentas y proyectos. Cada cuenta trae sus chats, correos,
+documentos y reuniones; los chats contienen mensajes, y los mensajes se agrupan en conversaciones.
+Una reunión pertenece a un evento. Un proyecto contiene tareas y decisiones.
 
 ### Personas e identidades
 
@@ -96,30 +120,6 @@ ocurre sin esa aprobación. Aparte, cada herramienta que llama un agente queda r
 nivel de acceso y su objetivo, sin el texto de sus argumentos.
 
 ## Cómo se conectan
-
-```mermaid Cómo se apuntan entre sí las entidades principales
-graph LR
-  Person["Persona"] --> Identity["Identidad"]
-  Organization["Organización"] --> Account["Cuenta"]
-  Organization --> Project["Proyecto"]
-  Account --> Chat["Chat"]
-  Chat --> Message["Mensaje"]
-  Identity --> Message
-  Message --> Conversation["Conversación"]
-  Account --> Email["Correo"]
-  Identity --> Email
-  Account --> Document["Documento"]
-  Account --> Meeting["Reunión"]
-  Identity --> Meeting
-  Meeting --> Event["Evento"]
-  Project --> Task["Tarea"]
-  Project --> Decision["Decisión"]
-```
-
-En palabras: una persona tiene identidades; las identidades envían mensajes y correos y participan
-en reuniones. Una organización agrupa cuentas y proyectos. Cada cuenta trae sus chats, correos,
-documentos y reuniones; los chats contienen mensajes, y los mensajes se agrupan en conversaciones.
-Una reunión pertenece a un evento. Un proyecto contiene tareas y decisiones.
 
 Cuatro tablas conectan cualquier cosa con cualquier otra, así que ninguna entidad de arriba
 necesita una columna para cada una de las demás:
