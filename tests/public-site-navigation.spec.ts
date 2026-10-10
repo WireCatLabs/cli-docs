@@ -56,10 +56,7 @@ for (const lang of ["en", "ru", "es"]) {
       const link = page.locator(`${selector}:visible`).first()
       await link.hover()
       await expect(link).toHaveCSS("text-decoration-line", "none")
-      await expect(link.locator(".link-label")).toHaveCSS(
-        "background-size",
-        `100% ${selector.startsWith("main") ? 2 : 1}px`,
-      )
+      await expect(link.locator(".link-label")).toHaveCSS("background-size", "100% 2px")
       await link.focus()
       await expect(link).toHaveCSS("text-decoration-line", "none")
     }
@@ -103,7 +100,7 @@ for (const lang of ["en", "ru", "es"]) {
 
 for (const lang of ["en", "ru", "es"]) {
   test(`${lang}: public pages share their shell and single link underline`, async ({ page }) => {
-    test.setTimeout(60000)
+    test.setTimeout(120000)
     let sharedLinks: string[] | undefined
     for (const suffix of ["", "/about", "/features", "/examples"]) {
       await page.setViewportSize({ width: 1440, height: 900 })
@@ -119,15 +116,14 @@ for (const lang of ["en", "ru", "es"]) {
       if (sharedLinks) expect(links).toEqual(sharedLinks)
       else sharedLinks = links
       for (const selector of [".public-site-menu > a", "main a.animated-text-link", "footer a.animated-text-link"]) {
-        const link = page.locator(`${selector}:visible`).first()
-        await link.hover()
-        await expect(link).toHaveCSS("text-decoration-line", "none")
-        await expect(link.locator(".link-label")).toHaveCSS(
-          "background-size",
-          `100% ${selector.startsWith("main") ? 2 : 1}px`,
-        )
-        await link.focus()
-        await expect(link).toHaveCSS("text-decoration-line", "none")
+        for (const link of await page.locator(`${selector}:visible`).all()) {
+          await link.hover()
+          await expect(link).toHaveCSS("text-decoration-line", "none")
+          await expect(link.locator(".link-label")).toHaveCSS("background-size", "100% 2px")
+          await link.focus()
+          await expect(link).toHaveCSS("text-decoration-line", "none")
+          await expect(link.locator(".link-label")).toHaveCSS("background-size", "100% 2px")
+        }
       }
       await page.setViewportSize({ width: 390, height: 844 })
       await expect(page.locator(".site-menu-toggle")).toBeVisible()

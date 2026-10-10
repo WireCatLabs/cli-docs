@@ -117,9 +117,6 @@
   font-size: 15px;
   font-weight: 700;
 }
-.wirecat-about .about-page a:hover {
-  text-decoration: underline;
-}
 .wirecat-about .about-page a:focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 5px;

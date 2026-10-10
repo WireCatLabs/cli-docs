@@ -101,8 +101,12 @@ export default async function AboutPage({ params }: Props) {
               <nav className="about-tool-links" aria-label={tools.title}>
                 {products.map((product) => (
                   <div className="about-tool-row" key={product.command}>
-                    <a className="about-tool-docs" href={product.docs} aria-label={`${product.name}: ${words.docs}`}>
-                      <span>{product.name}</span>
+                    <a
+                      className="about-tool-docs animated-text-link"
+                      href={product.docs}
+                      aria-label={`${product.name}: ${words.docs}`}
+                    >
+                      <span className="link-label">{product.name}</span>
                       <code>{product.command}</code>
                     </a>
                     <p>{product.description}</p>
@@ -153,8 +157,17 @@ export default async function AboutPage({ params }: Props) {
                 <div>
                   <dt>{words.project.tools}</dt>
                   <dd>
-                    <Link href={`/${lang}/docs/tg`}>Telegram</Link> · <Link href={`/${lang}/docs/max`}>MAX</Link> ·{" "}
-                    <Link href={`/${lang}/docs/memo`}>{words.emailTool}</Link>
+                    <Link className="animated-text-link" href={`/${lang}/docs/tg`}>
+                      <span className="link-label">Telegram</span>
+                    </Link>{" "}
+                    ·{" "}
+                    <Link className="animated-text-link" href={`/${lang}/docs/max`}>
+                      <span className="link-label">MAX</span>
+                    </Link>{" "}
+                    ·{" "}
+                    <Link className="animated-text-link" href={`/${lang}/docs/memo`}>
+                      <span className="link-label">{words.emailTool}</span>
+                    </Link>
                   </dd>
                 </div>
                 <div>
@@ -164,8 +177,8 @@ export default async function AboutPage({ params }: Props) {
                 <div>
                   <dt>{words.project.maintainer}</dt>
                   <dd>
-                    <a href={siteConfig.contacts.maintainerTelegram}>
-                      Viacheslav Ptsarev
+                    <a className="animated-text-link" href={siteConfig.contacts.maintainerTelegram}>
+                      <span className="link-label">Viacheslav Ptsarev</span>
                       <ArrowRight aria-hidden="true" />
                     </a>
                   </dd>
