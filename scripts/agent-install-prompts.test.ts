@@ -4,8 +4,8 @@ import { wordsFor } from "../lib/words"
 describe("agent installation requests", () => {
   for (const lang of ["en", "ru", "es"]) {
     it.each(["tg", "max"])(`${lang}: gives a short, platform-neutral setup request for %s`, (tool) => {
-      const prompt = wordsFor(lang).onboarding.prompt(tool, `@leemour/${tool}-cli`)
-      expect(prompt).toContain(`npm install -g @leemour/${tool}-cli`)
+      const prompt = wordsFor(lang).onboarding.prompt(tool, `@wirecat/${tool}-cli`)
+      expect(prompt).toContain(`npm install -g @wirecat/${tool}-cli`)
       expect(prompt).toContain(`${tool} setup --help`)
       expect(prompt).toContain(`${tool} setup`)
       expect(prompt).toContain(`${tool} doctor`)

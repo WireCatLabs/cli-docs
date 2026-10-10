@@ -38,3 +38,41 @@ for (const lang of ["en", "ru", "es"]) {
     await expect(page.getByRole("heading", { name: title, exact: true }).first()).toBeVisible()
   })
 }
+
+const manualInstall = { en: "Or install it yourself", ru: "Или установите самостоятельно", es: "O instálalo tú mismo" }
+for (const lang of ["en", "ru", "es"] as const) {
+  for (const theme of ["light", "dark"] as const) {
+    test(`${lang}: Memo requests use the command background in ${theme} mode`, async ({ page, context }) => {
+      await context.grantPermissions(["clipboard-read", "clipboard-write"])
+      await page.emulateMedia({ colorScheme: theme })
+      await page.setViewportSize({ width: 390, height: 900 })
+      await page.goto(`/${lang}/docs/memo`)
+      const prompt = page.locator("main .docs-prompt").filter({ hasText: "npm install -g @wirecat/cli-memo" }).first()
+      await expect(prompt).toBeVisible()
+      await page.getByRole("button", { name: manualInstall[lang], exact: true }).click()
+      const command = page
+        .locator("main .docs-code-block")
+        .filter({ hasText: "npm install -g @wirecat/cli-memo" })
+        .first()
+      await expect(command).toBeVisible()
+      const background = await command.evaluate((element) => getComputedStyle(element).backgroundColor)
+      expect(background).not.toBe("rgba(0, 0, 0, 0)")
+      expect(await prompt.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe(background)
+      expect(
+        await prompt.locator(".docs-snippet-bar").evaluate((element) => getComputedStyle(element).backgroundColor),
+      ).toBe("rgba(0, 0, 0, 0)")
+      await prompt.locator("button.docs-copy").click()
+      const request = await prompt.locator("code").innerText()
+      await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toBe(request)
+      expect(request).not.toContain("@leemour/")
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
+      const response = await page.request.get(`/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}memo/content.md`)
+      expect(response.ok()).toBe(true)
+      const markdown = await response.text()
+      expect(markdown).toContain("npm install -g @wirecat/cli-memo")
+      expect(markdown).toContain("npm.cmd install -g @wirecat/cli-memo")
+      expect(markdown).not.toContain("@leemour/")
+      if (lang === "en") await page.screenshot({ path: `.docs-tooling/memo-request-${theme}.png` })
+    })
+  }
+}

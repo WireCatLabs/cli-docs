@@ -63,12 +63,12 @@
   border-radius: 12px;
   background: var(--color-fd-card);
 }
-.wirecat-docs :is(.docs-command, .docs-code-block) {
+.wirecat-docs :is(.docs-command, .docs-code-block, .docs-prompt) {
   background: var(--command-background);
 }
 .docs-prompt {
   border-color: var(--docs-outline);
-  background: var(--docs-tint);
+  background: var(--command-background);
 }
 .docs-snippet-bar {
   display: flex;
@@ -82,7 +82,7 @@
 .docs-prompt .docs-snippet-bar {
   color: var(--docs-prompt-label);
   border-color: var(--docs-outline);
-  background: var(--docs-bar);
+  background: transparent;
 }
 .docs-snippet-label,
 .docs-copy {
@@ -297,5 +297,5 @@
   top: 100%;
   right: 0;
   padding: 0.15rem 0.5rem;
-  background: var(--docs-tint);
+  background: var(--command-background);
 }

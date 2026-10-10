@@ -55,7 +55,7 @@ describe("reviewed prose source", () => {
   const tool = {
     name: "tg",
     repo: "WireCatLabs/tg-cli",
-    package: "@leemour/tg-cli",
+    package: "@wirecat/tg-cli",
     lang: "en",
     summary: {},
     docsRef: "v0.36.0",

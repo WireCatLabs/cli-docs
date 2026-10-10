@@ -46,7 +46,7 @@ export function InstallationMessengerTabs({ children }: { children: ReactNode })
 export function AgentInstallPrompt({ tool }: { tool: "tg" | "max" }) {
   const { locale } = useI18n()
   const lang = locale ?? "en"
-  const pkg = tools.find((item) => item.name === tool)?.package ?? `@leemour/${tool}-cli`
+  const pkg = tools.find((item) => item.name === tool)?.package ?? `@wirecat/${tool}-cli`
   return (
     <div className="not-prose my-4">
       <CopyText
