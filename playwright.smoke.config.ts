@@ -10,5 +10,5 @@ export default defineConfig(fullConfig, {
     "search-playground.spec.ts",
     "browser-platform-setup.spec.ts",
   ],
-  grep: /English root is complete|demo choices and return-home|term explanation opens on hover|messenger deep links select all tabs|same query playground works|Windows visitors start/,
+  grep: /English root is complete|demo choices and return-home|term explanation opens on hover|installation deep links lead to tool guides|same query playground works|Windows visitors start/,
 })
