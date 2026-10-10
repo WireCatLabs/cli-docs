@@ -30,6 +30,12 @@ html {
   height: calc(var(--fd-docs-height) - var(--fd-docs-row-2));
 }
 
+/* At the document footer the sticky sidebar can be partly above the viewport.
+   Let scrolling past its edge return to the document instead of trapping the wheel. */
+.wirecat-docs #nd-sidebar [data-id$="-viewport"] {
+  overscroll-behavior-y: auto;
+}
+
 .wirecat-landing.wirecat-docs-footer {
   min-height: 0;
 }

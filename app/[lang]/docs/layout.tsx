@@ -9,7 +9,6 @@ import { DocsProvider } from "@/components/docs-provider"
 import { DocsSidebarFolder } from "@/components/docs-sidebar-folder"
 import { DocsSidebarItem } from "@/components/docs-sidebar-item"
 import { DocsSidebarTitle } from "@/components/docs-sidebar-title"
-import { GettingStartedLinks } from "@/components/getting-started-links"
 import { SiteFooter } from "@/components/site-footer"
 import { unifiedDocsTree } from "@/lib/docs-sidebar-tree"
 import en from "@/lib/editorial/en.json"
@@ -42,12 +41,7 @@ export default async function Layout({
         tabs={false}
         slots={{ header: DocsHeader, navTitle: DocsSidebarTitle }}
         sidebar={{
-          banner: (
-            <>
-              <DocsSidebarTitle className="mb-3 block px-2 font-semibold md:hidden" />
-              <GettingStartedLinks lang={lang} />
-            </>
-          ),
+          banner: <DocsSidebarTitle className="mb-3 block px-2 font-semibold md:hidden" />,
           components: { Item: DocsSidebarItem, Folder: DocsSidebarFolder },
         }}
         containerProps={{

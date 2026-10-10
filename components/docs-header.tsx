@@ -26,7 +26,10 @@ const pageUrls = (nodes: readonly Node[]): string[] =>
 export function MessengerSwitch({ lang, pages }: { lang: string; pages: string[] }) {
   const pathname = usePathname()
   return (
-    <nav aria-label={wordsFor(lang).navigation.messenger} className="flex items-center gap-1 rounded-lg border p-1">
+    <nav
+      aria-label={wordsFor(lang).navigation.messenger}
+      className="flex items-center gap-0 rounded-lg border p-0.5 min-[24rem]:gap-1 min-[24rem]:p-1"
+    >
       {[
         { name: "tg", label: "Telegram" },
         { name: "max", label: "MAX" },
@@ -37,7 +40,7 @@ export function MessengerSwitch({ lang, pages }: { lang: string; pages: string[]
             key={tool.name}
             href={messengerHref(pathname, lang, tool.name, pages)}
             aria-current={active ? "page" : undefined}
-            className={`rounded-md px-2 py-1 text-xs font-medium transition-colors sm:px-3 sm:text-sm ${active ? "bg-fd-primary text-fd-primary-foreground" : "text-fd-muted-foreground hover:bg-fd-accent hover:text-fd-foreground"}`}
+            className={`rounded-md px-1 py-1 text-xs font-medium transition-colors min-[24rem]:px-2 sm:px-3 sm:text-sm ${active ? "bg-fd-primary text-fd-primary-foreground" : "text-fd-muted-foreground hover:bg-fd-accent hover:text-fd-foreground"}`}
           >
             {tool.label}
           </Link>
@@ -80,7 +83,7 @@ export function DocsHeader(props: ComponentProps<"header">) {
     <header
       {...props}
       id="nd-subnav"
-      className="sticky top-0 z-40 flex h-14 items-center gap-2 border-b bg-fd-background/95 px-3 backdrop-blur-sm [grid-area:header] sm:gap-4 sm:px-5"
+      className="sticky top-0 z-40 flex h-14 items-center gap-1 border-b bg-fd-background/95 px-2 backdrop-blur-sm [grid-area:header] min-[24rem]:gap-2 min-[24rem]:px-3 sm:gap-4 sm:px-5"
     >
       <Link href={homePath(lang)} className="wirecat-brand shrink-0">
         <WirecatLogo />
@@ -97,7 +100,7 @@ export function DocsHeader(props: ComponentProps<"header">) {
         <DocsSearchTrigger full className="hidden w-44 md:flex" />
         <DocsSearchTrigger className="md:hidden" />
         <LanguageSelect aria-label={ui.language} className="gap-1.5 px-2 py-2">
-          <Languages className="size-4" />
+          <Languages className="hidden size-4 min-[24rem]:block" />
           <span className="text-xs font-medium uppercase">{lang}</span>
         </LanguageSelect>
         <ThemeSwitch lang={lang} />

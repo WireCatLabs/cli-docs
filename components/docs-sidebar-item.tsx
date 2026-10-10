@@ -3,14 +3,10 @@
 import type { Item } from "fumadocs-core/page-tree"
 import { SidebarItem, useFolderDepth } from "fumadocs-ui/components/sidebar/base"
 import { usePathname } from "next/navigation"
-import { isGettingStarted } from "@/lib/docs-navigation"
 
 export function DocsSidebarItem({ item }: { item: Item }) {
   const pathname = usePathname()
   const depth = useFolderDepth()
-  const isOverview = /^\/(en|ru|es)\/docs\/?$/.test(item.url)
-  // These pages stay in the fixed icon menu above the scrolling messenger guides.
-  if (isOverview || isGettingStarted(item.url)) return null
   const exact = pathname.replace(/\/$/, "") === item.url.replace(/\/$/, "")
   const active = exact
   return (
