@@ -1,5 +1,6 @@
 import assert from "node:assert/strict"
 import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs"
+import { createRequire } from "node:module"
 import { tmpdir } from "node:os"
 import { join, resolve } from "node:path"
 import { pathToFileURL } from "node:url"
@@ -7,9 +8,13 @@ import { pathToFileURL } from "node:url"
 const root = resolve(".docs-tooling/releases")
 const results = []
 const reviewed = JSON.parse(readFileSync("tools.json", "utf8"))
-for (const { name: tool, docsRef } of reviewed) {
+for (const { name: tool, docsRef, package: packageName } of reviewed) {
   const version = docsRef.replace(/^v/, "")
-  const base = join(root, `${tool}-v${version}`, "node_modules/@leemour/cli-messaging/dist")
+  const require = createRequire(join(root, `${tool}-v${version}`, "node_modules", packageName, "package.json"))
+  const manifest = require("./package.json")
+  const messaging = Object.keys(manifest.dependencies).find((name) => name.endsWith("/cli-messaging"))
+  assert.ok(messaging, "Reviewed release must declare its messaging dependency")
+  const base = resolve(require.resolve(`${messaging}/services`), "../..")
   const { openStore } = await import(pathToFileURL(join(base, "store/index.js")))
   const { storedDeps, adminStatisticsService } = await import(pathToFileURL(join(base, "services/index.js")))
   const account = { provider: "fixture", account: "synthetic-owner" }

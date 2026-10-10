@@ -8,7 +8,7 @@ title: "Búsqueda"
 <a id="для-скриптов-и-агентов" />
 <a id="подготовка-файлов-и-архива" />
 
-Esta página te ayuda a encontrar mensajes, acuerdos, archivos o códigos antiguos. Explica cómo buscar en lo que `max` conserva en este ordenador: mensajes MAX, correo y notas importados por [memo](https://github.com/leemour/cli-memo), y cómo consultar el servidor MAX.
+Esta página te ayuda a encontrar mensajes, acuerdos, archivos o códigos antiguos. Explica cómo buscar en lo que `max` conserva en este ordenador: mensajes MAX, correo y notas importados por [memo](https://github.com/WireCatLabs/cli-memo), y cómo consultar el servidor MAX.
 
 Después de leerlo, podrás encontrar mensajes por palabras, personas, chats, fechas, archivos y enlaces, guardar la búsqueda y ejecutarla nuevamente, contar coincidencias y distinguir entre un “no encontrado” real y un vacío en el historial guardado. La búsqueda no marca nada como leído.
 
@@ -18,6 +18,20 @@ Términos de esta página:
 - **Consulta**: lo que busca: palabras normales o palabras con campos como `from:` y `date:`. Un agente de IA escribe solicitudes por usted; todo el idioma está en [referencia del idioma de consulta](./query-language.md).
 - **Cobertura** (`coverage`): qué pudo ver la búsqueda: cuántos chats y mensajes están guardados y qué chats nunca se descargaron o se quedaron atrás.
 
+## Cuando recuerdas la pregunta y no las palabras exactas
+
+Pide a tu agente de IA que encuentre mensajes que respondan a una pregunta y muestre la evidencia. Por ejemplo: «Encuentra a qué hora se ejecuta la exportación diaria del proyecto Mayak en su chat y comprueba si cambió el horario». Puede encontrar coincidencias parciales y respuestas directas, y después leer los mensajes. Necesita historial descargado; no requiere descargar un modelo.
+
+Para controlar la búsqueda desde la línea de comandos:
+
+```sh
+max search messages 'Во сколько ежедневная выгрузка проекта Маяк?' --discover --chat 990 --json
+```
+
+Busca solo en el archivo local. Conserva las restricciones de chat, autor y fecha. En MCP, pasa `discover: true` a la herramienta de búsqueda de mensajes. `query.discovery` describe el conjunto limitado; `items[].discovery.missingTerms` indica palabras ausentes y `parent` enlaza una respuesta con el mensaje padre correspondiente. Una puntuación alta no mide la confianza en la respuesta: puede aparecer primero una pregunta, propuesta o decisión antigua. Lee la evidencia y comprueba la [cobertura del archivo](./archive.md) antes de concluir que falta un hecho.
+
+Sin `--discover`, la búsqueda estricta sigue siendo la predeterminada. Sintaxis booleana, frases entre comillas, comodines, AST, `--exact` y `--newest` conservan sus reglas estrictas. No combina con legacy, expresiones regulares ni `--backend server`. La búsqueda semántica de conversaciones permanece como [búsqueda por temas](./topic-search.md) aparte.
+
 ## ¿Qué se puede hacer?
 
 Toda la búsqueda se realiza en un grupo de comandos, `max search`. Si no sabes dónde fue escrito, comienza con `search all`.
@@ -25,7 +39,7 @@ Toda la búsqueda se realiza en un grupo de comandos, `max search`. Si no sabes 
 |Tarea|Comando|
 |---|---|
 |Busque inmediatamente en mensajes, correo y notas.| `max search all '<запрос>'` |
-|Busque solo mensajes de Messenger, en un chat y en el servidor MAX| `max search messages '<запрос>'` |
+|Buscar solo mensajes del servicio; sin `--discover`, también en el servidor MAX en un chat| `max search messages '<запрос>'` |
 |Buscar solo correo importado mediante memo| `max search mail '<запрос>'` |
 |Buscar notas desde una nota o carpeta| `max search notes '<запрос>'` |
 |Encuentre una discusión basada en su tema.|`max search conversations '<вопрос>'` ([búsqueda por temas](./topic-search.md))|
@@ -60,7 +74,7 @@ max search conversations 'переезд на дачу'      # разговор�
 
 memo importa correo y notas al archivo: `memo mail import` y `memo import`. Sin esas importaciones, `search all` solo busca mensajes.
 
-Más adelante en esta página, busque mensajes, `max search messages`. Una búsqueda en un chat también solicita el servidor MAX ([a continuación](#поиск-на-сервере-max---backend)).
+Más adelante en esta página, busque mensajes, `max search messages`. Sin `--discover`, una búsqueda en un chat también solicita el servidor MAX ([a continuación](#поиск-на-сервере-max---backend)).
 
 ## Intenta buscar en un chat
 
@@ -238,7 +252,7 @@ max attachments text set "Книжный клуб" 204 --text-file ./scan.txt
 
 `attachments extract` lee archivos de texto sin formato, DOCX y PDF con una capa de texto en esta computadora. `--download` requiere `--output-dir`; sin ellos, la extracción lee los archivos ya descargados. Si hay varios archivos adjuntos en el mensaje, indique uno hasta `--attachment`, comenzando por 1.
 
-La extracción local también lee UTF-16 con BOM, codificaciones antiguas definidas con seguridad, ODT, ODS, XLSX, PPTX y EPUB, sin modelo y sin instalación adicional. Se conserva el orden de las hojas, diapositivas y capítulos, al igual que los valores de celda guardados; las fórmulas no se calculan, el texto dentro de las imágenes no es legible. Su agente debe verificar o traducir la codificación ambigua. Los archivos fuente no cambian. Para ODT, ODS, XLSX, PPTX y EPUB, el límite es 1000 partes del archivo y 50 MiB en formato descomprimido, no más de 10 MiB por una parte de texto XML/HTML; los resultados corruptos o incompletos no se indexan como texto completo. Se puede volver a intentar una lectura local fallida; El texto del agente y el índice bueno anterior están protegidos.
+La extracción local también lee UTF-16 con BOM, codificaciones antiguas definidas con seguridad, ODT, ODS, XLSX, PPTX y EPUB, sin modelo y sin instalación adicional. Se conserva el orden de las hojas, diapositivas y capítulos, al igual que los valores de celda guardados; las fórmulas no se calculan, el texto dentro de las imágenes no es legible. Su agente debe verificar o traducir la codificación ambigua. Los archivos fuente no cambian. Para DOCX, ODT, ODS, XLSX, PPTX y EPUB, el límite es 1000 partes del archivo y 50 MiB en formato descomprimido, no más de 10 MiB por una parte de texto XML/HTML; los resultados corruptos o incompletos no se indexan como texto completo. Se puede volver a intentar una lectura local fallida; El texto del agente y el índice bueno anterior están protegidos.
 
 Para PDF necesita el paquete opcional `unpdf`, para DOCX - `mammoth`, instalado en el mismo lugar que `max`. Al instalar npm globalmente: `npm install -g unpdf mammoth`. Si el paquete no está presente, el comando lo informa; el texto puede ser grabado por un agente.
 
@@ -265,6 +279,8 @@ max attachments extract --chat "Книжный клуб" --ocr --concurrency 4 -
 `--ocr` transfiere imágenes al servicio seleccionado; sin él, el modelo no se llama. Simultáneamente: de 1 a 8 solicitudes, por defecto 4. Límite de archivos: de 1 a 500, por defecto 100; `cursor` de la respuesta continúa con el bypass limitado. Los escaneos de PDF requieren `unpdf` y `@napi-rs/canvas` opcionales; no se procesan más de 20 páginas por documento. Las páginas con una capa de texto siguen siendo locales. La repetición utiliza el hash del archivo y el modelo seleccionado. El texto del agente y el índice anterior se conservan en caso de error o cancelación del OCR. Verifique `failed` y los estados de archivos individuales; Una vez que el proveedor está limitado, se detienen las nuevas solicitudes de esa ejecución. `--offline` no es compatible con `--ocr`.
 
 **Archivos que ya tienes.** `max attachments extract --chat <чат> --from-dir ./files` lee una carpeta, sin subcarpetas. Necesita un archivo fuente que coincida de forma única o un conjunto completo de archivos con nombres de cargador. No combine `--from-dir` con `--download` o `--output-dir`. `max messages download <чат> <id> --extract` solo extrae texto de los archivos descargados en esta ejecución; `--all --extract` hace lo mismo durante todo el ejecución. Los archivos modificados son visibles mediante hash y el texto registrado por el agente se guarda. A través de MCP, la recuperación limitada devuelve `cursor` para continuación e información sobre los archivos, sin su texto.
+
+`--from-dir` rechaza archivos y carpetas ocultos, las carpetas de la CLI y el almacén de mensajes. Las descargas de extracción por MCP requieren `output_dir` fuera de esos lugares. La extracción local de texto PDF admite hasta 20 páginas y 30 segundos.
 
 ## Contraseñas, códigos y tarjetas
 
@@ -388,7 +404,7 @@ max stats messages show --by hour                     # все сохранён�
 
 ## Búsqueda en el servidor de MAX: `--backend`
 
-El servidor de MAX solo busca en un chat. Cuando la consulta especifica un chat (`--chat` o `chat:`) e incluye palabras, `max` consulta tanto al servidor como al archivo de forma predeterminada (`--backend both`). Si no se especifica un chat, no consulta al servidor; los resultados proceden del archivo.
+El servidor de MAX solo busca en un chat. Cuando la consulta especifica un chat (`--chat` o `chat:`) e incluye palabras sin `--discover`, `max` consulta tanto al servidor como al archivo de forma predeterminada (`--backend both`). Si no se especifica un chat, no consulta al servidor; los resultados proceden del archivo. `--discover` siempre usa solo el archivo, incluso con `--backend both`.
 
 ```sh
 max search messages 'счёт' --chat "Книжный клуб"                    # архив и сервер MAX

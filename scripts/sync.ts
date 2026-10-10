@@ -12,7 +12,7 @@ import { tmpdir } from "node:os"
 import { dirname, join, normalize } from "node:path"
 import { fileURLToPath } from "node:url"
 import { parseArgs } from "node:util"
-import { structureProblems } from "@leemour/cli-core/release"
+import { structureProblems } from "@wirecat/cli-core/release"
 import { captureUpstream, localizeTool } from "./localize.ts"
 
 export type Tool = {

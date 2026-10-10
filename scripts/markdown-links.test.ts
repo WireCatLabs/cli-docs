@@ -64,8 +64,8 @@ describe("exported Markdown destinations", () => {
 
   it.each(["en", "ru", "es"])("exports actionable install prompts for both providers in %s", (lang) => {
     const text = installationMarkdown(lang)
-    expect(text).toContain("@leemour/tg-cli")
-    expect(text).toContain("@leemour/max-cli")
+    expect(text).toContain("@wirecat/tg-cli")
+    expect(text).toContain("@wirecat/max-cli")
     expect(text).toContain("[#tg]")
     expect(text).toContain("[#max]")
     expect(text).toContain("tg setup --help")

@@ -176,7 +176,7 @@ for (const lang of ["en", "ru", "es"]) {
     await page.locator(`main a[href="/${lang}/docs/tg/installation"]`).first().click()
     await expect(page).toHaveURL(`https://wirecat.dev/${lang}/docs/tg/installation`)
     await page.locator("main details#tg > summary").click()
-    const install = page.locator("main .docs-prompt").filter({ hasText: "@leemour/tg-cli" })
+    const install = page.locator("main .docs-prompt").filter({ hasText: "@wirecat/tg-cli" })
     await install.locator("button.docs-copy").click()
     expect((await events()).ga[guideIndex + 1]).toEqual([
       "event",

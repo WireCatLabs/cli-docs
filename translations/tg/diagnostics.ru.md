@@ -108,7 +108,7 @@ tg doctor report create                   # about the newest failed run
 tg doctor report create --run <run-id>    # about this one
 ```
 
-Он записывает файл JSON — то, что показывает `tg doctor` плюс запуск — и говорит, куда его отправить: новая задача на [github.com/leemour/tg-cli/issues](https://github.com/leemour/tg-cli/issues/new). Прочтите его, прежде чем отправить. Он не содержит текста сообщения, и каждый идентификатор отображается в виде метки, а не номера Telegram. [Как сообщить о проблеме](./troubleshooting.md#report-a-problem) перечисляет все, что содержится в файле.
+Он записывает файл JSON — то, что показывает `tg doctor` плюс запуск — и говорит, куда его отправить: новая задача на [github.com/WireCatLabs/tg-cli/issues](https://github.com/WireCatLabs/tg-cli/issues/new). Прочтите его, прежде чем отправить. Он не содержит текста сообщения, и каждый идентификатор отображается в виде метки, а не номера Telegram. [Как сообщить о проблеме](./troubleshooting.md#report-a-problem) перечисляет все, что содержится в файле.
 
 Если записи неудачного запуска нет, повторите проблемную команду: ошибка сохранится автоматически.
 

@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
-import type { CommandInfo, OptionInfo } from "@leemour/cli-core/commands"
+import type { CommandInfo, OptionInfo } from "@wirecat/cli-core/commands"
 import { fromMarkdown } from "mdast-util-from-markdown"
 import { parse, quote } from "shell-quote"
 import { demoScenarioIds } from "../lib/demo-scenarios.ts"

@@ -1,5 +1,5 @@
 {
-  "extends": ["@leemour/cli-core/biome"],
+  "extends": ["@wirecat/cli-core/biome"],
   "files": {
     "includes": [
       "**",

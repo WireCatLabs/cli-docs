@@ -108,7 +108,7 @@ tg doctor report create                   # about the newest failed run
 tg doctor report create --run <run-id>    # about this one
 ```
 
-Escribe un archivo JSON (lo que muestra `tg doctor` más la ejecución) y dice dónde enviarlo: un nuevo número en [github.com/leemour/tg-cli/issues](https://github.com/leemour/tg-cli/issues/new). Léelo antes de enviarlo. No contiene ningún texto de mensaje y cada identificación aparece como una etiqueta, no como un número de Telegram. [Cómo informar un problema](./troubleshooting.md#report-a-problem) enumera todo lo que contiene el archivo.
+Escribe un archivo JSON (lo que muestra `tg doctor` más la ejecución) y dice dónde enviarlo: un nuevo número en [github.com/WireCatLabs/tg-cli/issues](https://github.com/WireCatLabs/tg-cli/issues/new). Léelo antes de enviarlo. No contiene ningún texto de mensaje y cada identificación aparece como una etiqueta, no como un número de Telegram. [Cómo informar un problema](./troubleshooting.md#report-a-problem) enumera todo lo que contiene el archivo.
 
 Si no hay ejecuciones fallidas guardadas, vuelve a ejecutar el comando que falla; el fallo se guardará automáticamente.
 

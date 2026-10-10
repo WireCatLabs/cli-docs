@@ -15,20 +15,22 @@ los grafos de conversaciones y los embeddings es otra guía: [arquitectura de la
 
 Las referencias a paquetes y capas describen la instantánea fechada. El ejemplo MCP utiliza la interfaz compacta actual: [implementación MCP](https://github.com/WireCatLabs/cli-messaging/blob/v0.213.0/src/mcp/surface.ts).
 
+Los nombres de paquetes usan el ámbito actual `@wirecat`; los enlaces de implementación conservan la instantánea de código indicada arriba.
+
 ## Paquetes
 
 <ArchitectureDiagram name="packages" lang="es" />
 
-Cuatro paquetes propios y dos builds fijados, todos publicados en npm bajo `@leemour`:
+Cuatro paquetes propios y dos builds fijados, todos publicados en npm bajo `@wirecat`:
 
 | Paquete | De qué se ocupa |
 | --- | --- |
-| [`@leemour/cli-core`](https://github.com/WireCatLabs/cli-core/tree/8648e39) | Lo que necesita cualquier herramienta de línea de comandos y ningún mensajero: modos de salida, el renderizado en terminal, la lista cerrada de errores y sus códigos de salida, el llavero, archivos de configuración, relojes, reintentos, un cliente HTTP, un generador de código para APIs HTTP, la autoactualización. También lo usa `braze-cli`, que no tiene nada que ver con mensajería. |
-| [`@leemour/cli-messaging`](https://github.com/WireCatLabs/cli-messaging/tree/c7cd479) | Todo lo de mensajería que no es de un mensajero concreto: el modelo de dominio, la resolución de nombres, el almacén local SQLite, la protección de envíos, los servicios (casos de uso), el árbol de comandos, el servidor MCP, el reconocimiento de voz, los procesos en segundo plano. |
-| `@leemour/cli-messaging-sqlite` | Builds de SQLite 3.53, cargados solo donde el SQLite del entorno es demasiado antiguo (Bun en macOS, el Node de una distribución Linux). |
-| `@leemour/cli-messaging-onnx` | ONNX Runtime como WebAssembly, para los modelos locales de embeddings. El reconocimiento de voz usa `sherpa-onnx`. |
-| [`@leemour/tg-cli`](https://github.com/WireCatLabs/tg-cli/tree/4a36e85) | El adaptador de Telegram sobre [mtcute](https://github.com/mtcute/mtcute), la sesión de Telegram, la configuración guiada. Casi todos los comandos de `tg` vienen de cli-messaging. |
-| [`@leemour/max-cli`](https://github.com/WireCatLabs/max-cli/tree/fff19ff) | El protocolo MAX (WebSocket, tramas binarias), la sesión de MAX, la conexión en segundo plano `max serve`, su propio servidor MCP sobre los servicios comunes y una parte aparte para la Bot API oficial de MAX. |
+| [`@wirecat/cli-core`](https://github.com/WireCatLabs/cli-core/tree/8648e39) | Lo que necesita cualquier herramienta de línea de comandos y ningún mensajero: modos de salida, el renderizado en terminal, la lista cerrada de errores y sus códigos de salida, el llavero, archivos de configuración, relojes, reintentos, un cliente HTTP, un generador de código para APIs HTTP, la autoactualización. También lo usa `braze-cli`, que no tiene nada que ver con mensajería. |
+| [`@wirecat/cli-messaging`](https://github.com/WireCatLabs/cli-messaging/tree/c7cd479) | Todo lo de mensajería que no es de un mensajero concreto: el modelo de dominio, la resolución de nombres, el almacén local SQLite, la protección de envíos, los servicios (casos de uso), el árbol de comandos, el servidor MCP, el reconocimiento de voz, los procesos en segundo plano. |
+| `@wirecat/cli-messaging-sqlite` | Builds de SQLite 3.53, cargados solo donde el SQLite del entorno es demasiado antiguo (Bun en macOS, el Node de una distribución Linux). |
+| `@wirecat/cli-messaging-onnx` | ONNX Runtime como WebAssembly, para los modelos locales de embeddings. El reconocimiento de voz usa `sherpa-onnx`. |
+| [`@wirecat/tg-cli`](https://github.com/WireCatLabs/tg-cli/tree/4a36e85) | El adaptador de Telegram sobre [mtcute](https://github.com/mtcute/mtcute), la sesión de Telegram, la configuración guiada. Casi todos los comandos de `tg` vienen de cli-messaging. |
+| [`@wirecat/max-cli`](https://github.com/WireCatLabs/max-cli/tree/fff19ff) | El protocolo MAX (WebSocket, tramas binarias), la sesión de MAX, la conexión en segundo plano `max serve`, su propio servidor MCP sobre los servicios comunes y una parte aparte para la Bot API oficial de MAX. |
 
 Cada herramienta fija una versión exacta de cli-messaging y cli-core. Un cambio en el código común
 llega a los usuarios con una versión del paquete común y después una versión de cada herramienta; las

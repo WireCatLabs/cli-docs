@@ -134,7 +134,7 @@ Personal-account traffic contains no tool name or custom user-agent; the user-ag
 Recommended practices:
 
 - **Use MAX normally in a browser or on your phone alongside `max`.** An account that only answers `max` requests looks different from one used by a person.
-- **Continue using MAX normally in the browser or on your phone alongside `max`.** An account used only for CLI requests behaves differently from a person's account.
+- **Do not turn `max` into a continuous stream of requests.** Read when needed, rather than every minute on a schedule.
 
 The same notice appears once on stderr when a profile first logs in through `max setup` or `max session start`.
 
@@ -148,7 +148,7 @@ Each login adds a device to the MAX app's session list. You can end it there.
 
 ## Unofficial protocol
 
-MAX does not publish an API for user accounts. Everything that is known about the protocol here was either measured on a live connection, or read in someone else’s reverse engineering - and for each operation it is written down exactly where it came from ([protocol description](https://github.com/leemour/max-cli/blob/main/docs/dev/protocol.md), column “Where it came from”).
+MAX does not publish an API for user accounts. Everything that is known about the protocol here was either measured on a live connection, or read in someone else’s reverse engineering - and for each operation it is written down exactly where it came from ([protocol description](https://github.com/WireCatLabs/max-cli/blob/main/docs/dev/protocol.md), column “Where it came from”).
 
 **This can stop working without warning.** If it does, the command reports it on stderr instead of quietly returning an empty list.
 

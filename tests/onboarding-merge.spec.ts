@@ -38,7 +38,7 @@ for (const lang of ["en", "ru", "es"]) {
       const guide = page.locator(`main a[href="/${lang}/docs/${tool}/installation"]`).first()
       await guide.click()
       await expect(page).toHaveURL(new RegExp(`/${lang}/docs/${tool}/installation$`))
-      await expect(page.locator("main")).toContainText(`@leemour/${tool}-cli`)
+      await expect(page.locator("main")).toContainText(`@wirecat/${tool}-cli`)
     }
     const md = await page.request.get(`/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}installation/content.md`)
     expect(md.status()).toBe(200)

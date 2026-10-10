@@ -42,7 +42,7 @@ Si la conexión Tailscale ya está funcionando, manténgala: no es necesario un 
 | Claude | Cualquier plan; en el gratuito, un conector propio | [Conectores personalizados](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |
 | Gemini | Solo para adultos en EE. UU. con una cuenta personal de Google; no disponible en Rusia ni Europa | [Aplicaciones conectadas](https://support.google.com/gemini/answer/17209137?hl=en) |
 
-Los pasos para cada sistema operativo no se han probado en todos los sistemas. Si el paso no funciona, [abra el problema](https://github.com/leemour/max-cli/issues).
+Los pasos para cada sistema operativo no se han probado en todos los sistemas. Si el paso no funciona, [abra el problema](https://github.com/WireCatLabs/max-cli/issues).
 
 ## 1. Preparar Tailscale
 
@@ -173,6 +173,10 @@ Estas aplicaciones deberán iniciar sesión nuevamente con un nuevo código. La 
 ## Transferir un archivo guardado al agente
 
 El agente en su computadora puede abrir el archivo guardado por `localPath`. El agente remoto no puede, por lo que obtiene los bytes almacenados mediante `attachments show` (MCP: `max_read`, comando `attachments show`).
+
+La transferencia de archivos guardados rechaza archivos y carpetas ocultos, las carpetas de la CLI y el almacén de mensajes, incluidos los destinos de enlaces simbólicos. Guarda el adjunto en una carpeta de descargas normal.
+
+MCP hace visibles los controles Unicode ocultos en los resultados de texto y argumentos de escritura. Los emojis de banderas regionales se conservan; el JSON normal de la CLI mantiene las cadenas originales.
 
 Primero, descargue los archivos de mensajes de la forma habitual ([que puede descargar](./attachments.md#что-можно-скачать)). El localizador del mensaje y el número de archivo adjunto encontrará `attachments list --needs-text`. Luego solicital archivo:
 

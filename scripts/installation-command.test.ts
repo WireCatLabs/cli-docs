@@ -10,8 +10,14 @@ describe("ready installation commands", () => {
   })
   it.each(["tg", "max"])("includes skill installation on Unix for %s", (tool) => {
     expect(readyInstallationCommand(`npm install -g @leemour/${tool}-cli`, false)).toBe(
-      `npm install -g @leemour/${tool}-cli && ${tool} skill install --for all`,
+      `npm install -g @wirecat/${tool}-cli && ${tool} skill install --for all`,
     )
+  })
+  it.each(["tg", "max"])("recognizes the published WireCat package for %s", (tool) => {
+    expect(readyInstallationCommand(`npm install -g @wirecat/${tool}-cli`, false)).toBe(
+      `npm install -g @wirecat/${tool}-cli && ${tool} skill install --for all`,
+    )
+    expect(readyInstallationCommand(`npm install -g @wirecat/${tool}-cli`, true)).toContain(`-Tool ${tool} -Agent all`)
   })
   it("leaves unrelated copy commands unchanged", () => {
     expect(readyInstallationCommand("tg chats list", true)).toBe("tg chats list")

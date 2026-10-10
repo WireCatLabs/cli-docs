@@ -297,8 +297,8 @@
           "after": "\ntg setup\n"
         },
         {
-          "before": "\nWithout a global installation, use `npm exec --yes --package=@leemour/tg-cli -- tg setup --agent codex`.\n",
-          "after": "\nWithout a global installation, use `npm exec --yes --package=@leemour/tg-cli -- tg setup`.\n"
+          "before": "\nWithout a global installation, use `npm exec --yes --package=@wirecat/tg-cli -- tg setup --agent codex`.\n",
+          "after": "\nWithout a global installation, use `npm exec --yes --package=@wirecat/tg-cli -- tg setup`.\n"
         }
       ],
       "ru": [
@@ -307,8 +307,8 @@
           "after": "\ntg setup\n"
         },
         {
-          "before": "\nБез глобальной установки используйте `npm exec --yes --package=@leemour/tg-cli -- tg setup --agent codex`. Затем программа установки предлагает следующие команды в той же форме.\n",
-          "after": "\nБез глобальной установки используйте `npm exec --yes --package=@leemour/tg-cli -- tg setup`. Настройка предложит последующие команды в таком же виде.\n"
+          "before": "\nБез глобальной установки используйте `npm exec --yes --package=@wirecat/tg-cli -- tg setup --agent codex`. Затем программа установки предлагает следующие команды в той же форме.\n",
+          "after": "\nБез глобальной установки используйте `npm exec --yes --package=@wirecat/tg-cli -- tg setup`. Настройка предложит последующие команды в таком же виде.\n"
         }
       ],
       "es": [
@@ -317,8 +317,8 @@
           "after": "\ntg setup\n"
         },
         {
-          "before": "\nSin una instalación global, utilice `npm exec --yes --package=@leemour/tg-cli -- tg setup --agent codex`. Luego, el programa de instalación sugiere los siguientes comandos de la misma forma.\n",
-          "after": "\nSin instalación global, usa `npm exec --yes --package=@leemour/tg-cli -- tg setup`. Setup propone los comandos siguientes de la misma forma.\n"
+          "before": "\nSin una instalación global, utilice `npm exec --yes --package=@wirecat/tg-cli -- tg setup --agent codex`. Luego, el programa de instalación sugiere los siguientes comandos de la misma forma.\n",
+          "after": "\nSin instalación global, usa `npm exec --yes --package=@wirecat/tg-cli -- tg setup`. Setup propone los comandos siguientes de la misma forma.\n"
         }
       ]
     }
@@ -971,20 +971,20 @@
     "replacements": {
       "en": [
         {
-          "before": "The setup steps for each operating system have not all been tried on that system. If a step does\nnot work, [open an issue](https://github.com/leemour/tg-cli/issues).",
-          "after": "If a setup step fails, [open an issue](https://github.com/leemour/tg-cli/issues)."
+          "before": "The setup steps for each operating system have not all been tried on that system. If a step does\nnot work, [open an issue](https://github.com/WireCatLabs/tg-cli/issues).",
+          "after": "If a setup step fails, [open an issue](https://github.com/WireCatLabs/tg-cli/issues)."
         }
       ],
       "ru": [
         {
-          "before": "Не все этапы установки для каждой операционной системы были опробованы в этой системе. Если шаг не работает, [откройте проблему](https://github.com/leemour/tg-cli/issues).",
-          "after": "Если шаг настройки не работает, [откройте issue](https://github.com/leemour/tg-cli/issues)."
+          "before": "Не все этапы установки для каждой операционной системы были опробованы в этой системе. Если шаг не работает, [откройте проблему](https://github.com/WireCatLabs/tg-cli/issues).",
+          "after": "Если шаг настройки не работает, [откройте issue](https://github.com/WireCatLabs/tg-cli/issues)."
         }
       ],
       "es": [
         {
-          "before": "No se han probado todos los pasos de configuración para cada sistema operativo en ese sistema. Si un paso no funciona, [abra un problema](https://github.com/leemour/tg-cli/issues).",
-          "after": "Si falla un paso de configuración, [abre una incidencia](https://github.com/leemour/tg-cli/issues)."
+          "before": "No se han probado todos los pasos de configuración para cada sistema operativo en ese sistema. Si un paso no funciona, [abra un problema](https://github.com/WireCatLabs/tg-cli/issues).",
+          "after": "Si falla un paso de configuración, [abre una incidencia](https://github.com/WireCatLabs/tg-cli/issues)."
         }
       ]
     }
@@ -996,20 +996,20 @@
     "replacements": {
       "en": [
         {
-          "before": "The steps for each operating system have not all been tested on that system. If a step fails, [open an issue](https://github.com/leemour/max-cli/issues).",
-          "after": "If a setup step fails, [open an issue](https://github.com/leemour/max-cli/issues)."
+          "before": "The steps for each operating system have not all been tested on that system. If a step fails, [open an issue](https://github.com/WireCatLabs/max-cli/issues).",
+          "after": "If a setup step fails, [open an issue](https://github.com/WireCatLabs/max-cli/issues)."
         }
       ],
       "ru": [
         {
-          "before": "Шаги для каждой ОС проверены не на всех системах. Если шаг не работает,\n[откройте issue](https://github.com/leemour/max-cli/issues).",
-          "after": "Если шаг настройки не работает, [откройте issue](https://github.com/leemour/max-cli/issues)."
+          "before": "Шаги для каждой ОС проверены не на всех системах. Если шаг не работает,\n[откройте issue](https://github.com/WireCatLabs/max-cli/issues).",
+          "after": "Если шаг настройки не работает, [откройте issue](https://github.com/WireCatLabs/max-cli/issues)."
         }
       ],
       "es": [
         {
-          "before": "Los pasos para cada sistema operativo no se han probado en todos los sistemas. Si el paso no funciona, [abra el problema](https://github.com/leemour/max-cli/issues).",
-          "after": "Si falla un paso de configuración, [abre una incidencia](https://github.com/leemour/max-cli/issues)."
+          "before": "Los pasos para cada sistema operativo no se han probado en todos los sistemas. Si el paso no funciona, [abra el problema](https://github.com/WireCatLabs/max-cli/issues).",
+          "after": "Si falla un paso de configuración, [abre una incidencia](https://github.com/WireCatLabs/max-cli/issues)."
         }
       ]
     }
@@ -1022,19 +1022,19 @@
       "en": [
         {
           "before": "Search reads only what this machine has kept, never Telegram. An empty answer means \"not kept\", not\n\"never said\". Read the chat (`tg messages list <chat>`), or fetch its history with `tg store fetch`,\nthen search again ([searching the store](./archive.md#search)). `tg store check` says which chats are behind.",
-          "after": "By default, word search checks stored history and Telegram. `--backend archive` uses only saved messages. Counts, attachment filters and conversation search still depend on downloaded history. If the needed period is missing, read the chat (`tg messages list <chat>`) or fetch it with `tg store fetch`, then search again ([searching the archive](./archive.md#search)). `tg store check` identifies chats needing an update. An empty result in incomplete history does not prove a message was never sent."
+          "after": "By default, word search checks stored history and Telegram. `--backend archive`, `--offline` and `--discover` use only saved messages. Counts, attachment filters and conversation search still depend on downloaded history. If the needed period is missing, read the chat (`tg messages list <chat>`) or fetch it with `tg store fetch`, then search again ([searching the archive](./archive.md#search)). `tg store check` identifies chats needing an update. An empty result in incomplete history does not prove a message was never sent."
         }
       ],
       "ru": [
         {
           "before": "Поиск читает только то, что сохранила эта машина, а не Telegram. Пустой ответ означает «не хранилось», а не «никогда не говорилось». Прочитайте чат (`tg messages list <chat>`) или получите его историю с помощью `tg store fetch`, затем повторите поиск ([поиск в архиве](./archive.md#search)). `tg store check` говорит, какие чаты отстают.",
-          "after": "По умолчанию поиск по словам проверяет локальную историю и Telegram. `--backend archive` использует только сохранённые сообщения. Подсчёты, фильтры вложений и поиск обсуждений зависят от скачанной истории. Если нужного периода нет, прочитайте чат (`tg messages list <chat>`) или скачайте его через `tg store fetch`, затем повторите поиск ([поиск в архиве](./archive.md#search)). `tg store check` показывает чаты, требующие обновления. Пустой результат в неполной истории не доказывает, что сообщение не отправляли."
+          "after": "По умолчанию поиск по словам проверяет локальную историю и Telegram. `--backend archive`, `--offline` и `--discover` используют только сохранённые сообщения. Подсчёты, фильтры вложений и поиск обсуждений зависят от скачанной истории. Если нужного периода нет, прочитайте чат (`tg messages list <chat>`) или скачайте его через `tg store fetch`, затем повторите поиск ([поиск в архиве](./archive.md#search)). `tg store check` показывает чаты, требующие обновления. Пустой результат в неполной истории не доказывает, что сообщение не отправляли."
         }
       ],
       "es": [
         {
           "before": "La búsqueda lee sólo lo que esta máquina ha guardado, nunca Telegram. Una respuesta vacía significa \"no guardado\", no \"nunca dicho\". Lea el chat (`tg messages list <chat>`), o busque su historial con `tg store fetch`, luego busque nuevamente ([buscando en el archivo local](./archive.md#search)). `tg store check` dice qué chats están detrás.",
-          "after": "Por defecto, la búsqueda por palabras consulta el historial guardado y Telegram. `--backend archive` usa solo los mensajes guardados. Los recuentos, filtros de adjuntos y búsqueda de discusiones dependen del historial descargado. Si falta el periodo necesario, lee el chat (`tg messages list <chat>`) o impórtalo con `tg store fetch` y vuelve a buscar ([búsqueda en el archivo](./archive.md#search)). `tg store check` identifica chats pendientes de actualizar. Un resultado vacío en un historial incompleto no demuestra que nunca se enviara el mensaje."
+          "after": "Por defecto, la búsqueda por palabras consulta el historial guardado y Telegram. `--backend archive`, `--offline` y `--discover` usan solo los mensajes guardados. Los recuentos, filtros de adjuntos y búsqueda de discusiones dependen del historial descargado. Si falta el periodo necesario, lee el chat (`tg messages list <chat>`) o impórtalo con `tg store fetch` y vuelve a buscar ([búsqueda en el archivo](./archive.md#search)). `tg store check` identifica chats pendientes de actualizar. Un resultado vacío en un historial incompleto no demuestra que nunca se enviara el mensaje."
         }
       ]
     }
@@ -1541,6 +1541,86 @@
         {
           "before": "\n## La aplicación de my.telegram.org\n",
           "after": "\n## La aplicación de my.telegram.org\n\n> **Ver la pantalla de acceso de my.telegram.org**\n>\n> ![Pantalla oficial de my.telegram.org con el campo del teléfono vacío.](/telegram-app-login.png)\n>\n> Este es el acceso al sitio para obtener las credenciales de aplicación de Telegram. El código llega por Telegram, no por SMS. Tras entrar, elige **API development tools**. La autorización del CLI por QR viene después. [my.telegram.org](https://my.telegram.org/apps)\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "troubleshooting",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.44.0/docs/troubleshooting.md",
+    "reason": "Preserve the incoming native heading anchor after the npm package rename.",
+    "replacements": {
+      "en": [
+        {
+          "before": "### `npx @wirecat/tg-cli` runs an old version",
+          "after": "<a id=\"npx-leemourtg-cli-runs-an-old-version\" />\n\n### `npx @wirecat/tg-cli` runs an old version"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "troubleshooting",
+    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.43.0/docs/troubleshooting.md",
+    "reason": "Preserve the incoming native heading anchor after the npm package rename.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "### `npx @wirecat/max-cli` ставит не ту версию",
+          "after": "<a id=\"npx-leemourmax-cli-ставит-не-ту-версию\" />\n\n### `npx @wirecat/max-cli` ставит не ту версию"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "usage",
+    "source": "https://github.com/WireCatLabs/cli-messaging/blob/v0.216.0/src/services/messages.ts#L427-L433",
+    "reason": "Archive discovery never contacts server search; qualify the existing single-chat server promise.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "а поиск в одном чате спрашивает ещё и сервер MAX",
+          "after": "а без `--discover` поиск в одном чате спрашивает ещё и сервер MAX"
+        }
+      ],
+      "en": [
+        {
+          "before": "a search in one chat also asks the MAX server",
+          "after": "without `--discover`, a search in one chat also asks the MAX server"
+        }
+      ],
+      "es": [
+        {
+          "before": "una búsqueda en un chat también solicita el servidor MAX",
+          "after": "sin `--discover`, una búsqueda en un chat también solicita el servidor MAX"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "troubleshooting",
+    "source": "https://github.com/WireCatLabs/cli-messaging/blob/v0.216.0/src/services/messages.ts#L427-L439",
+    "reason": "Recovery guidance must distinguish archive-only discovery/offline search from ordinary server-backed word search.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`--offline`, `search messages`, `store status` and `store export` answer only from the",
+          "after": "`--offline`, `store status` and `store export` answer only from the"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`--offline`, `search messages`, `store status`, `store export` читают только локальную базу",
+          "after": "`--offline`, `store status`, `store export` читают только локальную базу"
+        }
+      ],
+      "es": [
+        {
+          "before": "`--offline`, `search messages`, `store status` y `store export` solo consultan el archivo local",
+          "after": "`--offline`, `store status` y `store export` solo consultan el archivo local"
         }
       ]
     }

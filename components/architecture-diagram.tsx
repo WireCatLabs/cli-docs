@@ -16,14 +16,14 @@ const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] }>> = {
       rows: [
         {
           boxes: [
-            { name: "@leemour/tg-cli", note: "Telegram adapter, login, setup", tone: "tool" },
-            { name: "@leemour/max-cli", note: "MAX protocol, session, max serve, Bot API", tone: "tool" },
+            { name: "@wirecat/tg-cli", note: "Telegram adapter, login, setup", tone: "tool" },
+            { name: "@wirecat/max-cli", note: "MAX protocol, session, max serve, Bot API", tone: "tool" },
           ],
         },
         {
           boxes: [
             {
-              name: "@leemour/cli-messaging",
+              name: "@wirecat/cli-messaging",
               note: "domain, services, store, send guard, commands, MCP",
               tone: "shared",
             },
@@ -32,7 +32,7 @@ const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] }>> = {
         {
           boxes: [
             {
-              name: "@leemour/cli-core",
+              name: "@wirecat/cli-core",
               note: "output, errors and exit codes, keyring, config, codegen",
               tone: "core",
             },
@@ -53,14 +53,14 @@ const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] }>> = {
       rows: [
         {
           boxes: [
-            { name: "@leemour/tg-cli", note: "адаптер Telegram, вход, настройка", tone: "tool" },
-            { name: "@leemour/max-cli", note: "протокол MAX, сессия, max serve, Bot API", tone: "tool" },
+            { name: "@wirecat/tg-cli", note: "адаптер Telegram, вход, настройка", tone: "tool" },
+            { name: "@wirecat/max-cli", note: "протокол MAX, сессия, max serve, Bot API", tone: "tool" },
           ],
         },
         {
           boxes: [
             {
-              name: "@leemour/cli-messaging",
+              name: "@wirecat/cli-messaging",
               note: "модель, сервисы, хранилище, защита отправки, команды, MCP",
               tone: "shared",
             },
@@ -69,7 +69,7 @@ const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] }>> = {
         {
           boxes: [
             {
-              name: "@leemour/cli-core",
+              name: "@wirecat/cli-core",
               note: "вывод, ошибки и коды выхода, ключница, настройки, генератор",
               tone: "core",
             },
@@ -90,14 +90,14 @@ const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] }>> = {
       rows: [
         {
           boxes: [
-            { name: "@leemour/tg-cli", note: "adaptador de Telegram, acceso, configuración", tone: "tool" },
-            { name: "@leemour/max-cli", note: "protocolo MAX, sesión, max serve, Bot API", tone: "tool" },
+            { name: "@wirecat/tg-cli", note: "adaptador de Telegram, acceso, configuración", tone: "tool" },
+            { name: "@wirecat/max-cli", note: "protocolo MAX, sesión, max serve, Bot API", tone: "tool" },
           ],
         },
         {
           boxes: [
             {
-              name: "@leemour/cli-messaging",
+              name: "@wirecat/cli-messaging",
               note: "dominio, servicios, almacén, protección de envíos, comandos, MCP",
               tone: "shared",
             },
@@ -106,7 +106,7 @@ const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] }>> = {
         {
           boxes: [
             {
-              name: "@leemour/cli-core",
+              name: "@wirecat/cli-core",
               note: "salida, errores y códigos de salida, llavero, configuración, codegen",
               tone: "core",
             },

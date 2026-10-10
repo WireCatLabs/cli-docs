@@ -182,7 +182,7 @@ max doctor report create              # о последнем неудачном
 max doctor report create --run <id>   # об этом запуске
 ```
 
-El comando escribe un archivo JSON (lo que muestra y ejecuta `max doctor`) e imprime un enlace al nuevo problema en [github.com/leemour/max-cli/issues](https://github.com/leemour/max-cli/issues). Leal archivo antes de enviarlo. No contiene textos de mensajes y los números de chats y mensajes se reemplazan por etiquetas. ¿Qué más contiene? En la sección [cómo informar un problema](./troubleshooting.md#как-сообщить-о-проблеме).
+El comando escribe un archivo JSON (lo que muestra y ejecuta `max doctor`) e imprime un enlace al nuevo problema en [github.com/WireCatLabs/max-cli/issues](https://github.com/WireCatLabs/max-cli/issues). Leal archivo antes de enviarlo. No contiene textos de mensajes y los números de chats y mensajes se reemplazan por etiquetas. ¿Qué más contiene? En la sección [cómo informar un problema](./troubleshooting.md#как-сообщить-о-проблеме).
 
 Si no se realiza ningún inicio fallido, vuelva a ejecutar el comando fallido: el error persistirá.
 

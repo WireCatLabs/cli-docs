@@ -13,6 +13,6 @@ export function installationMarkdown(lang: string): string {
 }
 
 export function agentPromptMarkdown(tool: string, lang: string): string {
-  const pkg = tools.find((item) => item.name === tool)?.package ?? `@leemour/${tool}-cli`
+  const pkg = tools.find((item) => item.name === tool)?.package ?? `@wirecat/${tool}-cli`
   return `\`\`\`text\n${wordsFor(lang).onboarding.prompt(tool, pkg)}\n\`\`\``
 }

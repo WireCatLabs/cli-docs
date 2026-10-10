@@ -28,7 +28,7 @@ describe("documentation explanations for Markdown readers", () => {
       const input = `<Tabs items={["Telegram", "MAX"]}>\n\n<Tab value="MAX">\n\n${prompt}\n\n<Screenshot src="/screenshots/example.png" alt="API screen" />\n\n</Tab>\n\n</Tabs>\n\n\`\`\`mdx\n${prompt}\n\`\`\``
       const result = expandDocTerms(input, lang)
       expect(result).toContain("**MAX**")
-      expect(result).toContain(wordsFor(lang).onboarding.prompt("max", "@leemour/max-cli"))
+      expect(result).toContain(wordsFor(lang).onboarding.prompt("max", "@wirecat/max-cli"))
       expect(result).toContain("![API screen](/screenshots/example.png)")
       expect(result).not.toContain("<Tabs")
       expect(result).toContain(`\`\`\`mdx\n${prompt}\n\`\`\``)

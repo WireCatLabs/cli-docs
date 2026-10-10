@@ -67,11 +67,13 @@ La carpeta donde npm instala los comandos no está en `PATH`.
   `Get-Command tg -All` en PowerShell) los enumera todos; ejecuta el nuestro por su ruta completa o coloca su carpeta
   primero.
 
-También funciona sin instalar: `npx @leemour/tg-cli doctor`.
+También funciona sin instalar: `npx @wirecat/tg-cli doctor`.
 
-### `npx @leemour/tg-cli` ejecuta una versión antigua
+<a id="npx-leemourtg-cli-ejecuta-una-versión-antigua" />
 
-npx conserva lo descargado. Solicita la última: `npx @leemour/tg-cli@latest`.
+### `npx @wirecat/tg-cli` ejecuta una versión antigua
+
+npx conserva lo descargado. Solicita la última: `npx @wirecat/tg-cli@latest`.
 
 ## Inicio de sesión y perfiles
 
@@ -306,6 +308,6 @@ tg doctor report create --run <id>    # about another run; ids from tg runs list
 
 `create` escribe `tg-report-<time>.json` en la carpeta actual (o `--output`), que solo usted puede leer. Contiene la versión, el tiempo de ejecución y el sistema, lo que responde `tg doctor`, la ejecución fallida más reciente (la operación, duración y código de error de cada solicitud) y los últimos 20 intentos de envío, solo el resultado y la duración. Cada ID de chat, mensaje y cuenta se reemplaza por una etiqueta que no significa nada fuera del archivo. No contiene texto de mensaje, títulos de chat, nombres, números de teléfono, credenciales de sesión o aplicación. Una ejecución fallida se mantiene sola, incluso sin `--record` ([ejecuciones fallidas](./diagnostics.md#a-failed-run-is-always-kept)).
 
-Envíalo como nueva incidencia en [GitHub](https://github.com/leemour/tg-cli/issues/new): explica qué hiciste y qué ocurrió y adjuntal archivo. Tanto la incidencia como el archivo son públicos: revísalo antes.
+Envíalo como nueva incidencia en [GitHub](https://github.com/WireCatLabs/tg-cli/issues/new): explica qué hiciste y qué ocurrió y adjuntal archivo. Tanto la incidencia como el archivo son públicos: revísalo antes.
 
 ⚠ Nunca adjuntes el directorio de estado, la sesión ni `~/.local/share/cli-messaging/`: contienen tu acceso y tus mensajes.

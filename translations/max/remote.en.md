@@ -42,7 +42,7 @@ If your Tailscale connection already works, keep it; you do not need a second tu
 | Claude | Any plan; free accounts allow one custom connector | [Custom connectors](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |
 | Gemini | Only adults in the US with a personal Google account; unavailable in Russia and Europe | [Connected apps](https://support.google.com/gemini/answer/17209137?hl=en) |
 
-The steps for each operating system have not all been tested on that system. If a step fails, [open an issue](https://github.com/leemour/max-cli/issues).
+The steps for each operating system have not all been tested on that system. If a step fails, [open an issue](https://github.com/WireCatLabs/max-cli/issues).
 
 ## 1. Prepare Tailscale
 
@@ -173,6 +173,10 @@ Those apps must log in again with a new code. Your MAX session stays logged in.
 ## Transfer a retained file to an agent
 
 An agent on your computer can open a saved file through `localPath`. A remote agent cannot, so it receives the saved bytes through `attachments show` (MCP: `max_read`, command `attachments show`).
+
+Retained-file transfer refuses hidden files and folders, the CLI’s own folders and the message store, including symlink targets. Save the intended attachment in an ordinary downloads folder.
+
+MCP makes hidden Unicode controls visible in text results and write arguments. Subdivision flag emoji stay intact; ordinary CLI machine JSON preserves original strings.
 
 First download the message's files normally ([what you can download](./attachments.md#что-можно-скачать)). Use `attachments list --needs-text` to find the message locator and attachment number, then request the file:
 

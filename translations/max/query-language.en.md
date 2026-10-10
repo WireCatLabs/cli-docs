@@ -16,7 +16,7 @@ Terms used below:
 - **Operator** — a word or symbol combining conditions: `AND`, `OR`, `NOT`.
 - **Word forms** — variations of one word, such as “apartment” and “apartments”.
 
-This language implements a strict subset of Apache Lucene syntax: words, phrases, AND/OR/NOT, groups, fields, ranges, limited patterns and regular expressions. Unsupported syntax causes an error rather than being silently skipped. The [full reference](https://github.com/leemour/cli-messaging/blob/v0.212.0/docs/search/query-language.md) contains generated field/operator/preset/limit tables and verified examples; the [technical specification](https://github.com/leemour/cli-messaging/blob/v0.212.0/docs/search/query-language-spec.md) describes grammar and compilation.
+This language implements a strict subset of Apache Lucene syntax: words, phrases, AND/OR/NOT, groups, fields, ranges, limited patterns and regular expressions. Unsupported syntax causes an error rather than being silently skipped. The [full reference](https://github.com/WireCatLabs/cli-messaging/blob/v0.212.0/docs/search/query-language.md) contains generated field/operator/preset/limit tables and verified examples; the [technical specification](https://github.com/WireCatLabs/cli-messaging/blob/v0.212.0/docs/search/query-language-spec.md) describes grammar and compilation.
 
 ## What the language can do
 

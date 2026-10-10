@@ -1,8 +1,8 @@
 import { mkdtempSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
-import { searchStore } from "@leemour/cli-messaging/services"
-import { type MessageStore, openStore } from "@leemour/cli-messaging/store"
+import { searchStore } from "@wirecat/cli-messaging/services"
+import { type MessageStore, openStore } from "@wirecat/cli-messaging/store"
 import { afterAll, beforeAll, describe, expect, it } from "vitest"
 import { createDemoDates, demoDates } from "../lib/search-playground/dates"
 import {

@@ -561,7 +561,7 @@ max stats charts synthetic-group --chart-kind messages --by day --timezone Europ
 
 El JSON contiene `chart`, y al guardar la imagen, también `chartFile` con ruta y tamaño. La imagen se escribe solo en un archivo nuevo, sin sobrescribirla. Una fecha que falta sigue siendo un vacío y se indican datos incompletos en la descripción y la imagen. `membership` requiere eventos de chat en línea y no está disponible con `--offline`. A través de MCP `max_read` (`command: "stats charts"`) devuelve JSON desde el almacenamiento local, sin conectarse ni escribir archivos; `format: "png"` agrega una imagen PNG y JSON con `chart` y tamaño `image`. Las entradas y salidas no están disponibles en el mismo. La lectura está sujeta al permiso `messages`. `--jsonl` y la imagen de salida estándar no están disponibles.
 
-![Gráfico sobre datos ficticios](https://raw.githubusercontent.com/leemour/max-cli/v0.41.0/docs/images/stats-charts.png)
+![Gráfico sobre datos ficticios](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.43.0/docs/images/stats-charts.png)
 
 Clasificaciones de mensajes y autores: [métricas, puntuaciones y evidence](./rankings.md).
 
@@ -759,9 +759,11 @@ La eliminación no se puede cancelar, por lo que `messages.delete` tiene el nive
 
 La eliminación pasa por los mismos controles que el envío. **Cada mensaje eliminado se cuenta en `sendsPerHour`** como un envío, y no se pueden eliminar más de 10 a la vez: muchas eliminaciones seguidas son similares a la automatización, en la que MAX bloquea una cuenta. El contenido eliminado desaparece tanto del caché local como de la búsqueda.
 
+Los ID pueden pasarse como argumentos separados o separados por comas. Tras confirmar la petición de eliminación, la herramienta lee los mensajes del servidor. Si un mensaje sigue presente o falla la comprobación, devuelve `outcome_unknown` en lugar de `deleted`. Compruébalo con `messages show` antes de repetir; la eliminación no se reintenta automáticamente.
+
 ### Si se desconoce el resultado
 
-Sin respuesta, el comando devuelve `outcome_unknown` (código `14`), **ni «enviado» ni «error»**: el mensaje pudo enviarse. El error incluye `--send-id`, identificador para reintentar sin crear una segunda copia:
+Al enviar, si no llega respuesta, el comando devuelve `outcome_unknown` (código `14`), **ni «enviado» ni «error»**: el mensaje pudo enviarse. El error incluye `--send-id`, identificador para reintentar sin crear una segunda copia:
 
 ```sh
 max messages send 0 "текст" --send-id 1789784741828

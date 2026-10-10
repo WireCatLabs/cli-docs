@@ -48,7 +48,7 @@ Si su conexión Tailscale ya funciona, consérvela; No necesitas un segundo tún
 | Claudio | cualquier; un conector personalizado en el plan gratuito | [conectores personalizados](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |
 | Géminis | sólo adultos en EE.UU. con una cuenta personal de Google | [aplicaciones conectadas](https://support.google.com/gemini/answer/17209137?hl=en) |
 
-No se han probado todos los pasos de configuración para cada sistema operativo en ese sistema. Si un paso no funciona, [abra un problema](https://github.com/leemour/tg-cli/issues).
+No se han probado todos los pasos de configuración para cada sistema operativo en ese sistema. Si un paso no funciona, [abra un problema](https://github.com/WireCatLabs/tg-cli/issues).
 
 ## Iniciar el túnel y el servidor
 
@@ -143,6 +143,8 @@ La aplicación abre la página de inicio de sesión `tg`. Verifica la línea que
 La aplicación permanece conectada siempre que utilice la conexión al menos una vez cada 30 días; renueva su inicio de sesión por sí mismo. Después de 30 días sin uso, pide un nuevo código.
 
 El perfil `permissions` decide qué comandos están disponibles. El servidor no muestra formularios de aprobación; La aprobación de la aplicación es independiente y depende de su configuración.
+
+MCP hace visibles los controles Unicode ocultos en los resultados de texto y argumentos de escritura. Los emojis de banderas de subdivisiones territoriales se conservan; el JSON normal de la CLI mantiene las cadenas originales.
 
 ## Permisos para este proceso del servidor
 

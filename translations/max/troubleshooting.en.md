@@ -55,7 +55,7 @@ max doctor --online
 Installation succeeded, but the terminal cannot find `max`. Diagnose without that command:
 
 ```sh
-npx @leemour/max-cli doctor
+npx @wirecat/max-cli doctor
 ```
 
 `max on PATH` reports whether it was found; the note below explains the fix.
@@ -69,7 +69,7 @@ $env:Path -split ';'
 
 The first command shows the directory; the second shows current `PATH`. If the directory is listed but `max` remains missing, reopen the terminal. A window opened before installing Node does not see the updated `PATH`.
 
-**PowerShell says “running scripts is disabled on this system”.** npm creates `max.ps1` and `npx.ps1`; PowerShell normally restricts scripts. Use `max.cmd` and `npx.cmd`, which are unaffected (`npx.cmd @leemour/max-cli doctor`), or permit scripts for your user account:
+**PowerShell says “running scripts is disabled on this system”.** npm creates `max.ps1` and `npx.ps1`; PowerShell normally restricts scripts. Use `max.cmd` and `npx.cmd`, which are unaffected (`npx.cmd @wirecat/max-cli doctor`), or permit scripts for your user account:
 
 ```powershell
 Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
@@ -79,12 +79,14 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 
 **On `PATH` there is another `max`.** If previously in `PATH` there is someone else’s program with the same name, `max doctor` will name its path. Call ours using the full path or put its directory earlier.
 
-### `npx @leemour/max-cli` installs the wrong version
+<a id="npx-leemourmax-cli-installs-the-wrong-version" />
+
+### `npx @wirecat/max-cli` installs the wrong version
 
 `npx` caches packages. An explicit version bypasses that cache:
 
 ```sh
-npx @leemour/max-cli@latest --version
+npx @wirecat/max-cli@latest --version
 ```
 
 ## Login and profiles
@@ -317,7 +319,7 @@ max doctor report create   # записать отчёт в файл и пока
 
 `create` writes `max-report-<время>.json` in the current directory with permissions `0600`. It contains version, runtime/system, doctor results, the latest failed run and the latest 20 write actions. It excludes message text, chat/person names, phone numbers and tokens. Chat/message ids become consistent labels within the report but different labels in another report. Failed runs save automatically without `--record` ([failed runs](./diagnostics.md#неудачный-запуск-сохраняется-всегда)). Select another run with `--run <id>`; `max runs list` shows ids.
 
-The command then prints a link for opening a new issue at [github.com/leemour/max-cli/issues](https://github.com/leemour/max-cli/issues), with the title and draft text already filled in. You need a GitHub account. Drag the report file into the text field, describe what you did and what happened, then click “Submit new issue”.
+The command then prints a link for opening a new issue at [github.com/WireCatLabs/max-cli/issues](https://github.com/WireCatLabs/max-cli/issues), with the title and draft text already filled in. You need a GitHub account. Drag the report file into the text field, describe what you did and what happened, then click “Submit new issue”.
 
 GitHub issues and attached files are public.
 

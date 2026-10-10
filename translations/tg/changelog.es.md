@@ -2,7 +2,38 @@
 title: "Historial de cambios"
 ---
 
-Cambios destacados de `@leemour/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
+Cambios destacados de `@wirecat/tg-cli` (`@leemour/tg-cli` hasta 0.42.0), con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
+
+## 0.44.0 — 10.10.2026
+
+### Novedades
+
+- La búsqueda de mensajes con `--discover` o MCP `discover: true` encuentra coincidencias parciales y respuestas directas válidas en el archivo local sin descargar modelos. La búsqueda estricta sigue siendo predeterminada; los términos ausentes ayudan al agente a comprobar la evidencia.
+
+
+## 0.43.1 — 10.10.2026
+
+### Cambios que pueden romper scripts
+
+- **El proyecto usa Apache License 2.0.** Consulta las condiciones en `LICENSE`.
+
+## 0.43.0 — 10.10.2026
+
+### Cambios que pueden romper scripts
+
+- **El paquete se llama `@wirecat/tg-cli` y el repositorio es `WireCatLabs/tg-cli`.** Instala con `npm install -g @wirecat/tg-cli`; el comando sigue siendo `tg`. Desinstala primero `@leemour/tg-cli`: ambos paquetes proporcionan `tg`. No habrá nuevas versiones de `@leemour/tg-cli`.
+- La transcripción local admite grabaciones Ogg Opus completas, mono o estéreo, de hasta 10 minutos. Divide las más largas. La extracción de texto PDF admite hasta 20 páginas y 30 segundos.
+- MCP muestra controles invisibles en resultados de texto y argumentos de escritura, incluida la conversión de formato. Los emojis de banderas de subdivisiones territoriales se conservan; el JSON normal de la CLI mantiene las cadenas originales.
+
+### Corregido
+
+- Tras actualizar, el reinicio del servidor invoca Node directamente con argumentos separados y conserva el entorno elegido, incluidas rutas con espacios en Windows. Omite nombres de perfil inválidos en archivos de bloqueo.
+
+### Seguridad
+
+- La extracción desde carpetas y transferencia de adjuntos guardados rechazan rutas ocultas, carpetas de la CLI y el almacén de mensajes, incluidos enlaces simbólicos. Las descargas MCP tampoco escriben allí.
+- DOCX usa el lector limitado de archivos de Office antes de cargar el contenido del documento.
+
 
 ## 0.42.0 — 09.10.2026
 

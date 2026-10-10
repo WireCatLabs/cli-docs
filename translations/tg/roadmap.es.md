@@ -2,7 +2,7 @@
 title: "Próximas mejoras"
 ---
 
-Esta página enumera lo que está planeado para `tg` y aún no está incluido. Léelo antes de crear una solución alternativa para una característica faltante: es posible que ya esté en camino. El orden es aproximado y puede cambiar. Para sugerir algo, abra un [problema en GitHub](https://github.com/leemour/tg-cli/issues).
+Esta página enumera lo que está planeado para `tg` y aún no está incluido. Léelo antes de crear una solución alternativa para una característica faltante: es posible que ya esté en camino. El orden es aproximado y puede cambiar. Para sugerir algo, abra un [problema en GitHub](https://github.com/WireCatLabs/tg-cli/issues).
 
 ## Próximo
 

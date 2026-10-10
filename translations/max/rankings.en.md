@@ -282,6 +282,6 @@ An empty report with incomplete history does not establish that there were no qu
 
 ## More control
 
-You can choose a period, dimension and composite score, and save a cohort for repeat reports. Score formulas, exact evidence arguments and page limits are in the [shared statistics specification](https://github.com/leemour/cli-messaging/blob/main/docs/rankings.md) and [statistics command reference](./commands.md#max-stats).
+You can choose a period, dimension and composite score, and save a cohort for repeat reports. Score formulas, exact evidence arguments and page limits are in the [shared statistics specification](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/rankings.md) and [statistics command reference](./commands.md#max-stats).
 
 To verify a finding, ask the agent to open the question, answer or members behind that report row. Before the next report, [check archive coverage](./archive.md).
