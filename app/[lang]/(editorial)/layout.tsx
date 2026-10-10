@@ -6,10 +6,10 @@ import en from "@/lib/editorial/en.json"
 import es from "@/lib/editorial/es.json"
 import ru from "@/lib/editorial/ru.json"
 import "@/lib/landing/about.css"
-import "@/components/public-site.css"
 import { landingFonts } from "@/lib/landing-fonts"
 import "@/lib/landing/fonts.css"
 import "@/lib/editorial/editorial.css"
+import "@/components/public-site.css"
 
 export default async function Layout({
   children,
