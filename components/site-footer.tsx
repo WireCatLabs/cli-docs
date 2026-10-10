@@ -29,12 +29,14 @@ export function SiteFooter({ html, variant = "landing" }: { html: string; varian
       es: "Telegram · CLI + skill del agente",
     }[lang] ?? "Telegram · CLI + agent skill"
   const command = html.match(/<span class="cmd">[\s\S]*?<\/span>/)?.[0]
-  let footerHtml = html.replace(/(<div class="foot-brand">[\s\S]*?<\/p>)/, (brand) => `${brand}${contacts}`)
+  let footerHtml = html.includes('class="foot-contacts"')
+    ? html
+    : html.replace(/(<div class="foot-brand">[\s\S]*?<\/p>)/, (brand) => `${brand}${contacts}`)
   footerHtml = footerHtml.replace(
     /<a class="mark"[^>]*>[\s\S]*?<\/a>/,
     `<a class="wirecat-brand" href="${homePath(lang)}"><span class="wirecat-logo" role="img" aria-label="WireCat">${wirecatLogoSvg}</span></a>`,
   )
-  if (command) {
+  if (command && !footerHtml.includes('class="footer-install"')) {
     footerHtml = footerHtml
       .replace(command, "")
       .replace(

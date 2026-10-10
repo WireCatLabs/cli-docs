@@ -1,15 +1,14 @@
 .wirecat-about {
-  background: var(--wall);
+  background: var(--bg);
 }
 .wirecat-about .about-page {
-  max-width: 1180px;
   padding-block: clamp(32px, 4vw, 56px) 56px;
 }
 .wirecat-about .about-intro {
   max-width: 800px;
   margin-bottom: 36px;
 }
-.wirecat-landing .wirecat-about .about-page h1 {
+.wirecat-editorial .wirecat-about .about-page h1 {
   margin: 0 0 20px;
   font-size: clamp(30px, 3.6vw, 46px);
   line-height: 1.2;
@@ -32,7 +31,7 @@
 }
 .wirecat-about .about-story > section {
   padding: 32px 0;
-  border-top: 1px solid var(--app-line);
+  border-top: 1px solid var(--line);
   scroll-margin-top: 100px;
 }
 .wirecat-about .about-page h2 {
@@ -48,7 +47,7 @@
   margin: 0 0 18px;
   font-size: 17px;
   line-height: 1.75;
-  color: var(--ink-soft);
+  color: var(--muted);
 }
 .wirecat-about .about-page p:last-child {
   margin-bottom: 0;
@@ -56,9 +55,9 @@
 .wirecat-about .about-purpose .about-statement {
   margin: 24px 0 0;
   padding: 24px;
-  border: 1px solid var(--app-line);
+  border: 1px solid var(--line);
   border-radius: 12px;
-  background: var(--app-3);
+  background: var(--soft);
   color: var(--ink);
   font-size: 20px;
   line-height: 1.6;
@@ -72,7 +71,7 @@
   align-items: center;
   gap: 18px;
   padding: 18px 0;
-  border-top: 1px solid var(--app-line);
+  border-top: 1px solid var(--line);
 }
 .wirecat-about .about-tool-row p {
   margin: 0;
@@ -89,7 +88,7 @@
   margin-top: 4px;
   font-size: 13px;
   font-weight: 400;
-  color: var(--ink-soft);
+  color: var(--muted);
 }
 .wirecat-about .about-tool-source {
   display: inline-flex;
@@ -106,7 +105,7 @@
   margin-top: 24px;
 }
 .wirecat-about .about-page a {
-  color: var(--ink);
+  color: var(--accent);
   text-underline-offset: 5px;
 }
 .wirecat-about .about-links a,
@@ -136,13 +135,13 @@
 }
 .wirecat-about .about-project-card {
   padding: 28px;
-  border: 1px solid var(--app-line);
+  border: 1px solid var(--line);
   border-radius: 16px;
-  background: var(--app);
+  background: var(--paper);
   box-shadow: 0 12px 30px color-mix(in srgb, var(--ink) 5%, transparent);
 }
 .wirecat-about .about-project-card .wirecat-logo {
-  --wirecat-brand-tone: var(--me);
+  --wirecat-brand-tone: var(--accent);
   display: inline-flex;
   width: auto;
   height: 32px;
@@ -162,14 +161,14 @@
 }
 .wirecat-about .about-project-card dl > div {
   padding: 14px 0;
-  border-top: 1px solid var(--app-line);
+  border-top: 1px solid var(--line);
 }
 .wirecat-about .about-project-card dl > div:last-child {
   padding-bottom: 0;
 }
 .wirecat-about .about-project-card dt {
   margin-bottom: 5px;
-  color: var(--ink-soft);
+  color: var(--muted);
   font-size: 13px;
 }
 .wirecat-about .about-project-card dd {
@@ -197,7 +196,7 @@
   display: none;
   padding-block: 20px;
   margin-bottom: 24px;
-  border-top: 1px solid var(--app-line);
+  border-top: 1px solid var(--line);
 }
 .wirecat-about .about-contact-mobile h2 {
   font-size: 17px;
@@ -218,14 +217,14 @@
   gap: 8px;
   min-height: 44px;
   padding: 10px 14px;
-  border: 1px solid var(--app-line);
+  border: 1px solid var(--line);
   border-radius: 12px;
-  background: var(--app);
+  background: var(--paper);
   font-size: 14px;
   font-weight: 600;
 }
 .wirecat-about .about-contact-actions a:hover {
-  background: var(--app-3);
+  background: var(--soft);
   text-decoration: none;
 }
 .wirecat-about .about-contact-actions a > svg {
@@ -256,7 +255,7 @@
   .wirecat-about .about-contribute {
     grid-column: 1 / -1;
     padding-block: 24px 0;
-    border-top: 1px solid var(--app-line);
+    border-top: 1px solid var(--line);
   }
 }
 @media (width < 40rem) {

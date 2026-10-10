@@ -10,6 +10,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { type ComponentProps, useEffect } from "react"
 import { DocsSearchTrigger } from "@/components/docs-search-trigger"
+import { ThemeSwitch } from "@/components/theme-switch"
 import { WirecatLogo } from "@/components/wirecat-logo"
 import { isGettingStarted, messengerHref } from "@/lib/docs-navigation"
 import { homePath } from "@/lib/site-routes"
@@ -99,7 +100,7 @@ export function DocsHeader(props: ComponentProps<"header">) {
           <Languages className="size-4" />
           <span className="text-xs font-medium uppercase">{lang}</span>
         </LanguageSelect>
-        {slots.themeSwitch && <slots.themeSwitch className="hidden sm:flex" />}
+        <ThemeSwitch lang={lang} />
         {slots.sidebar && (
           <slots.sidebar.trigger aria-label={ui.menu} className="rounded-md p-2 hover:bg-fd-accent md:hidden">
             <Menu className="size-4" />

@@ -217,7 +217,7 @@
     "Usage": "Использование",
     "All commands": "Все команды",
     "Troubleshooting": "Если что-то не так",
-    "AI agents": "ИИ-ассистенты",
+    "AI agents": "ИИ-агенты",
     "Connect your agent": "Подключить ассистента",
     "MCP server": "MCP-сервер",
     "Recipes": "Рецепты",
@@ -600,7 +600,8 @@
     "MAX docs": "MAX — документация",
     "Memo docs": "Memo — документация",
     "Email docs": "Почта — документация",
-    "Zoom docs": "Zoom — документация"
+    "Zoom docs": "Zoom — документация",
+    "Memory for your messages, notes, and meetings. CLI access for your AI agent.": "Память для ваших сообщений, заметок и встреч. Доступ через CLI для вашего ИИ-агента."
   },
   "es": {
     "Use tg cli, gather context for tomorrow’s Atlas call: decisions, risks and": "Usa tg cli, reúne el contexto para la llamada de Atlas de mañana: decisiones, riesgos y",
@@ -1202,6 +1203,7 @@
     "MAX docs": "Docs de MAX",
     "Memo docs": "Docs de Memo",
     "Email docs": "Docs de correo",
-    "Zoom docs": "Docs de Zoom"
+    "Zoom docs": "Docs de Zoom",
+    "Memory for your messages, notes, and meetings. CLI access for your AI agent.": "Memoria para tus mensajes, notas y reuniones. Acceso por CLI para tu agente de IA."
   }
 }

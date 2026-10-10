@@ -50,7 +50,7 @@ const escapeHtml = (text: string) =>
   text.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] ?? c)
 
 /** Reviewed static HTML is committed by export-editorial; only fixture results are built here. */
-export function Editorial({ html, lang }: { html: string; lang: string }) {
+export function Editorial({ html, lang, className }: { html: string; lang: string; className?: string }) {
   const rootRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const { setTheme } = useTheme()
@@ -60,6 +60,38 @@ export function Editorial({ html, lang }: { html: string; lang: string }) {
     const words = copyWords[lang as keyof typeof copyWords] ?? copyWords.en
     const controller = new AbortController()
     const signal = controller.signal
+    const header = root.querySelector<HTMLElement>(".site-header")
+    const menuToggle = header?.querySelector<HTMLButtonElement>(".site-menu-toggle")
+    const closeMenu = () => {
+      header?.classList.remove("menu-open")
+      menuToggle?.setAttribute("aria-expanded", "false")
+    }
+    closeMenu()
+    menuToggle?.addEventListener(
+      "click",
+      () => {
+        const open = header?.classList.toggle("menu-open") ?? false
+        menuToggle.setAttribute("aria-expanded", String(open))
+      },
+      { signal },
+    )
+    document.addEventListener(
+      "keydown",
+      (event) => {
+        if (event.key === "Escape" && header?.classList.contains("menu-open")) {
+          closeMenu()
+          menuToggle?.focus()
+        }
+      },
+      { signal },
+    )
+    document.addEventListener(
+      "click",
+      (event) => {
+        if (event.target instanceof Node && header && !header.contains(event.target)) closeMenu()
+      },
+      { signal },
+    )
     let toastTimer: ReturnType<typeof setTimeout> | undefined
     const copyTimers = new Map<HTMLElement, ReturnType<typeof setTimeout>>()
     const copyLabels = new Map<HTMLElement, string | null>()
@@ -90,7 +122,7 @@ export function Editorial({ html, lang }: { html: string; lang: string }) {
     const cueObserver = new IntersectionObserver((entries) => {
       for (const entry of entries) entry.target.classList.toggle("cue-in-view", entry.isIntersecting)
     })
-    for (const cue of all<HTMLElement>(".scroll-invitation")) {
+    for (const cue of all<HTMLElement>(".scroll-invitation, .landing5 .hero-copy h1 em")) {
       cue.classList.add("cue-observed")
       cueObserver.observe(cue)
     }
@@ -443,5 +475,7 @@ export function Editorial({ html, lang }: { html: string; lang: string }) {
       for (const button of copyTimers.keys()) resetCopy(button)
     }
   }, [lang, setTheme, router, html])
-  return <div className="wirecat-editorial" ref={rootRef} dangerouslySetInnerHTML={{ __html: html }} />
+  return (
+    <div className={`wirecat-editorial ${className ?? ""}`} ref={rootRef} dangerouslySetInnerHTML={{ __html: html }} />
+  )
 }

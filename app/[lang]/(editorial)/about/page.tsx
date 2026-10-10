@@ -77,7 +77,7 @@ export default async function AboutPage({ params }: Props) {
           ],
         })}
       />
-      <main className="wrap about-page">
+      <main id="main" className="wrap about-page">
         <header className="about-intro">
           <h1>{words.title}</h1>
           <p className="intro">{words.intro}</p>
@@ -106,20 +106,24 @@ export default async function AboutPage({ params }: Props) {
                       <code>{product.command}</code>
                     </a>
                     <p>{product.description}</p>
-                    <a className="about-tool-source" href={product.source} aria-label={`${product.name}: GitHub`}>
-                      GitHub
+                    <a
+                      className="about-tool-source animated-text-link text-link"
+                      href={product.source}
+                      aria-label={`${product.name}: GitHub`}
+                    >
+                      <span className="link-label">GitHub</span>
                       <ArrowRight aria-hidden="true" />
                     </a>
                   </div>
                 ))}
               </nav>
               <div className="about-links">
-                <Link href={`/${lang}/docs/features`}>
-                  {words.docs}
+                <Link className="animated-text-link text-link" href={`/${lang}/docs/features`}>
+                  <span className="link-label">{words.docs}</span>
                   <ArrowRight aria-hidden="true" />
                 </Link>
-                <Link href={`/${lang}/docs/agents`}>
-                  {words.agentGuide}
+                <Link className="animated-text-link text-link" href={`/${lang}/docs/agents`}>
+                  <span className="link-label">{words.agentGuide}</span>
                   <ArrowRight aria-hidden="true" />
                 </Link>
               </div>
@@ -131,8 +135,11 @@ export default async function AboutPage({ params }: Props) {
             <section id="funding" className="about-services">
               <h2>{services.title}</h2>
               {paragraphs(services)}
-              <a className="about-contact-link" href={siteConfig.contacts.maintainerTelegram}>
-                {words.project.contact}
+              <a
+                className="about-contact-link animated-text-link text-link"
+                href={siteConfig.contacts.maintainerTelegram}
+              >
+                <span className="link-label">{words.project.contact}</span>
                 <ArrowRight aria-hidden="true" />
               </a>
             </section>
@@ -171,8 +178,8 @@ export default async function AboutPage({ params }: Props) {
             <section className="about-contribute">
               <h2>{words.project.contribute}</h2>
               <p>{words.project.contributeText}</p>
-              <a href={`${siteConfig.repository}/issues`}>
-                {words.project.issues}
+              <a className="animated-text-link text-link" href={`${siteConfig.repository}/issues`}>
+                <span className="link-label">{words.project.issues}</span>
                 <ArrowRight aria-hidden="true" />
               </a>
             </section>

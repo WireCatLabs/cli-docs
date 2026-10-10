@@ -168,6 +168,28 @@ for (const lang of ["en", "ru", "es"]) {
     })
     pages[kind] = `<a class="skip" href="#main">${ui[lang].skip}</a>${html}`
   }
+  pages.header = pages.home
+    .match(/<header class="wrap site-header"[\s\S]*?<\/header>/)[0]
+    .replace(/<a\b[^>]*href="\/(?:en|ru|es)\/features"[^>]*>[\s\S]*?<\/a>/, "")
+    .replace(
+      '<nav aria-label="Site navigation">',
+      '<nav class="public-site-menu" id="public-site-menu" aria-label="Site navigation">',
+    )
+    .replace('<a class="brand"', '<a class="brand site-brand"')
+    .replace(
+      '<nav class="public-site-menu"',
+      `<button type="button" class="site-menu-toggle" aria-expanded="false" aria-controls="public-site-menu" aria-label="${{ en: "Open menu", ru: "Открыть меню", es: "Abrir menú" }[lang]}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><nav class="public-site-menu"`,
+    )
+  pages.footer = pages.home.match(/<footer\b[\s\S]*?<\/footer>/)[0]
+  for (const kind of ["home", "features", "examples"]) {
+    pages[kind] = pages[kind]
+      .replace(/<a class="skip"[\s\S]*?<\/a>/, "")
+      .replace(/<header class="wrap site-header"[\s\S]*?<\/header>/, "")
+      .replace(
+        /<div class="wirecat-landing footer-host"><div class="site-footer-shell site-footer-landing">[\s\S]*?<\/footer><\/div><\/div>/,
+        "",
+      )
+  }
   await writeFile(new URL(`../lib/editorial/${lang}.json`, import.meta.url), `${JSON.stringify(pages, null, 2)}\n`)
 }
 const files = [
@@ -185,6 +207,7 @@ const files = [
   "landing-5.css",
   "interactions.css",
   "home-lines.css",
+  "headline-glow.css",
 ]
 const combined = postcss.parse(
   (await Promise.all(files.map((name) => readFile(new URL(name, sourceDir), "utf8")))).join("\n"),
