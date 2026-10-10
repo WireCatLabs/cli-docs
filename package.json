@@ -39,7 +39,8 @@
     "design:serve": "node scripts/serve-designs.mjs",
     "standards:check": "node config/wirecat/check.mjs",
     "check:browser-tests": "node --experimental-strip-types scripts/browser-test-policy.ts",
-    "check:browser-timings": "node --experimental-strip-types scripts/browser-test-policy.ts --report playwright-report/results.json"
+    "check:browser-timings": "node --experimental-strip-types scripts/browser-test-policy.ts --report playwright-report/results.json",
+    "ci:quick": "pnpm exec vitest run --exclude scripts/command-groups.test.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
