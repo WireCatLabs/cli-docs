@@ -12,15 +12,14 @@ import { DocsSidebarTitle } from "@/components/docs-sidebar-title"
 import { GettingStartedLinks } from "@/components/getting-started-links"
 import { SiteFooter } from "@/components/site-footer"
 import { unifiedDocsTree } from "@/lib/docs-sidebar-tree"
-import en from "@/lib/landing/en.json"
-import es from "@/lib/landing/es.json"
-import ru from "@/lib/landing/ru.json"
+import en from "@/lib/editorial/en.json"
+import es from "@/lib/editorial/es.json"
+import ru from "@/lib/editorial/ru.json"
 import { baseOptions } from "@/lib/layout.shared"
 import { source } from "@/lib/source"
 import "@/lib/landing/fonts.css"
-import "@/lib/landing/landing.css"
-import "@/lib/landing/theme.css"
-import "@/lib/landing/footer.css"
+import "@/lib/editorial/editorial.css"
+import "@/components/public-site.css"
 import "@/lib/landing/docs-footer.css"
 
 export default async function Layout({
@@ -61,8 +60,10 @@ export default async function Layout({
       >
         {children}
       </DocsLayout>
-      <div className="wirecat-landing wirecat-docs-footer">
-        <SiteFooter html={content.footerHtml} variant="docs" />
+      <div className="wirecat-editorial wirecat-docs-footer">
+        <div className="wirecat-landing footer-host">
+          <SiteFooter html={content.footer} variant="docs" />
+        </div>
       </div>
     </DocsProvider>
   )

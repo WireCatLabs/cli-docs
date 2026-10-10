@@ -60,6 +60,38 @@ export function Editorial({ html, lang }: { html: string; lang: string }) {
     const words = copyWords[lang as keyof typeof copyWords] ?? copyWords.en
     const controller = new AbortController()
     const signal = controller.signal
+    const header = root.querySelector<HTMLElement>(".site-header")
+    const menuToggle = header?.querySelector<HTMLButtonElement>(".site-menu-toggle")
+    const closeMenu = () => {
+      header?.classList.remove("menu-open")
+      menuToggle?.setAttribute("aria-expanded", "false")
+    }
+    closeMenu()
+    menuToggle?.addEventListener(
+      "click",
+      () => {
+        const open = header?.classList.toggle("menu-open") ?? false
+        menuToggle.setAttribute("aria-expanded", String(open))
+      },
+      { signal },
+    )
+    document.addEventListener(
+      "keydown",
+      (event) => {
+        if (event.key === "Escape" && header?.classList.contains("menu-open")) {
+          closeMenu()
+          menuToggle?.focus()
+        }
+      },
+      { signal },
+    )
+    document.addEventListener(
+      "click",
+      (event) => {
+        if (event.target instanceof Node && header && !header.contains(event.target)) closeMenu()
+      },
+      { signal },
+    )
     let toastTimer: ReturnType<typeof setTimeout> | undefined
     const copyTimers = new Map<HTMLElement, ReturnType<typeof setTimeout>>()
     const copyLabels = new Map<HTMLElement, string | null>()

@@ -1,0 +1,156 @@
+.wirecat-editorial .about-project-card dd a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* One shell for the homepage, About, and public editorial pages. */
+.wirecat-editorial.public-site {
+  min-height: 100vh;
+}
+.wirecat-editorial .site-menu-toggle {
+  display: none;
+}
+.wirecat-editorial .wirecat-about .about-page a.animated-text-link {
+  text-decoration: none;
+}
+.wirecat-editorial .wirecat-about .about-page .text-link {
+  color: var(--accent);
+}
+.wirecat-editorial .wirecat-about .text-link svg {
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.wirecat-editorial .wirecat-about .text-link:is(:hover, :focus-visible) svg {
+  transform: translateX(3px);
+}
+.wirecat-editorial .wirecat-about .about-contact-actions a {
+  transition:
+    background-color 180ms ease-out,
+    border-color 180ms ease-out;
+}
+.wirecat-editorial .wirecat-about .about-contact-actions a:active {
+  background: var(--accent-soft);
+}
+.wirecat-editorial .footer-host .wirecat-logo {
+  display: inline-flex;
+  align-items: center;
+  color: var(--ink);
+}
+.wirecat-editorial .footer-host .wirecat-logo-mark {
+  width: 28px;
+  height: 28px;
+}
+.wirecat-editorial .footer-host .wirecat-logo-word {
+  width: 104px;
+  height: 24px;
+}
+.wirecat-editorial .footer-host .theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink);
+  transition: background-color 180ms ease-out;
+}
+.wirecat-editorial .footer-host .theme-toggle:hover {
+  background: var(--soft);
+}
+.wirecat-editorial .footer-host .theme-sun {
+  display: none;
+}
+html.dark .wirecat-editorial .footer-host .theme-sun {
+  display: block;
+}
+html.dark .wirecat-editorial .footer-host .theme-moon {
+  display: none;
+}
+@media (max-width: 760px) {
+  .wirecat-editorial .site-header {
+    position: relative;
+    z-index: 20;
+    flex-wrap: wrap;
+    gap: 0;
+    padding-block: 18px;
+  }
+  .wirecat-editorial .site-header .site-menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--paper);
+    color: var(--ink);
+    transition: background-color 180ms ease-out;
+  }
+  .wirecat-editorial .site-menu-toggle:hover,
+  .wirecat-editorial .site-menu-toggle[aria-expanded="true"] {
+    background: var(--soft);
+  }
+  .wirecat-editorial .site-header > .public-site-menu {
+    display: none;
+  }
+  .wirecat-editorial .site-header.menu-open > .public-site-menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    width: 100%;
+    padding: 22px 0 4px;
+    align-items: center;
+    animation: public-menu-appear 180ms ease-out;
+  }
+  .wirecat-editorial .site-header.menu-open > .public-site-menu > a:not(.button) {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+  }
+  .wirecat-editorial .site-header .editorial-language nav {
+    right: auto;
+    left: 0;
+  }
+  .wirecat-editorial .site-header [data-connect] {
+    margin-left: 0;
+  }
+  .wirecat-editorial .site-header .connect-popover {
+    max-width: calc(100vw - 48px);
+    right: 0;
+  }
+}
+@keyframes public-menu-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wirecat-editorial .site-header.menu-open > .public-site-menu {
+    animation: none;
+  }
+  .wirecat-editorial .wirecat-about .text-link svg {
+    transition: none;
+    transform: none;
+  }
+}
+
+.wirecat-editorial.public-site > .wirecat-editorial {
+  min-height: 0;
+}
+.wirecat-editorial .wirecat-about .wirecat-logo-mark {
+  width: 28px;
+  height: 28px;
+}
+.wirecat-editorial .wirecat-about .wirecat-logo-word {
+  width: 104px;
+  height: 24px;
+}
+.wirecat-editorial.wirecat-docs-footer {
+  min-height: 0;
+}
