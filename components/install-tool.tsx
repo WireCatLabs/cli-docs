@@ -7,7 +7,17 @@ import { CopyText } from "@/components/text-snippet"
 import type { Tool } from "@/lib/shared"
 import { wordsFor } from "@/lib/words"
 
-export function InstallTool({ tool, lang, terminal = true }: { tool: Tool; lang: string; terminal?: boolean }) {
+export function InstallTool({
+  tool,
+  lang,
+  terminal = true,
+  request,
+}: {
+  tool: Tool
+  lang: string
+  terminal?: boolean
+  request?: string
+}) {
   const words = wordsFor(lang)
   const ui = words.onboarding
   const [open, setOpen] = useState(false)
@@ -34,7 +44,7 @@ export function InstallTool({ tool, lang, terminal = true }: { tool: Tool; lang:
         <CopyText
           kind="prompt"
           lang={lang}
-          text={ui.prompt(tool.name, tool.package)}
+          text={request ?? ui.prompt(tool.name, tool.package)}
           tracking={{ tool: tool.name as "tg" | "max", locale: lang, surface: "installation" }}
         />
         <Link href={`/${lang}/docs/agents`} className="inline-block text-sm">

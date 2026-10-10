@@ -1,66 +1,54 @@
 import Link from "next/link"
-import { DocTerm } from "@/components/doc-term"
 import { InstallTool } from "@/components/install-tool"
+import { CopyText } from "@/components/text-snippet"
 import type { Tool } from "@/lib/shared"
-import { wordsFor } from "@/lib/words"
-
-const copy = {
-  en: {
-    prefix: "Install with your",
-    agent: "local agent",
-    intro:
-      "or in a terminal. The cli is an npm package for Windows, macOS and Linux. Your agent can install it and help you log in.",
-    steps:
-      "Open the block below and copy the request to your agent. After login, verify your account and a few chats. Downloading older history is a separate step.",
-    tasks: "Try your first tasks",
-    requests: "How to phrase requests",
-    reference: "Manual setup and technical details",
-  },
-  ru: {
-    prefix: "Установите cli с помощью",
-    agent: "локального агента",
-    intro: "или в терминале. Это npm-пакет для Windows, macOS и Linux. Агент поможет установить cli и войти в аккаунт.",
-    steps:
-      "Раскройте блок ниже и скопируйте запрос агенту. После входа проверьте свой аккаунт и несколько чатов. Загрузка старой истории — отдельный шаг.",
-    tasks: "Попробовать первые задачи",
-    requests: "Как формулировать запросы",
-    reference: "Самостоятельная установка и технические детали",
-  },
-  es: {
-    prefix: "Instala el cli con tu",
-    agent: "agente local",
-    intro:
-      "o en la terminal. Es un paquete npm para Windows, macOS y Linux. El agente puede instalarlo y ayudarte a iniciar sesión.",
-    steps:
-      "Abre el bloque de abajo y copia la petición en tu agente. Después de iniciar sesión, comprueba tu cuenta y algunos chats. Descargar el historial antiguo es un paso aparte.",
-    tasks: "Probar las primeras tareas",
-    requests: "Cómo formular peticiones",
-    reference: "Instalación manual y detalles técnicos",
-  },
-}
+import { toolInstallationGuide } from "@/lib/tool-installation"
 
 export function installationReferenceTitle(lang: string) {
-  return (copy[lang as keyof typeof copy] ?? copy.en).reference
+  return toolInstallationGuide("tg", lang).reference
 }
 
 export function ToolInstallationIntro({ tool, lang }: { tool: Tool; lang: string }) {
-  const text = copy[lang as keyof typeof copy] ?? copy.en
+  const guide = toolInstallationGuide(tool.name, lang)
   return (
     <>
-      <p>
-        {text.prefix} <DocTerm term="local-agent" label={text.agent} lang={lang} /> {text.intro}
-      </p>
-      <h2 id="agent-installation">{wordsFor(lang).navigation.installGuide}</h2>
-      <p>{text.steps}</p>
-      <div className="not-prose my-5">
-        <InstallTool tool={tool} lang={lang} />
-      </div>
-      <p>
-        <Link href={`/${lang}/docs/first-tasks`}>{text.tasks} →</Link>
-        {" · "}
-        <Link href={`/${lang}/docs/prompting`}>{text.requests}</Link>
-      </p>
-      <h2 id="installation-reference">{text.reference}</h2>
+      <p>{guide.intro}</p>
+      <h2 id="agent-installation">{guide.title}</h2>
+      {guide.sections.map((section) => (
+        <section key={section.id} aria-labelledby={section.id}>
+          <h3 id={section.id}>{section.title}</h3>
+          {section.paragraphs.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+          {section.command && <CopyText lang={lang} text={section.command} />}
+          {section.request && (
+            <div className="not-prose my-5">
+              <InstallTool tool={tool} lang={lang} request={section.request} />
+            </div>
+          )}
+          {section.steps && (
+            <ol>
+              {section.steps.map((step) => (
+                <li key={step}>{step}</li>
+              ))}
+            </ol>
+          )}
+          {section.fallback && (
+            <>
+              <h4>{section.fallback.title}</h4>
+              {section.fallback.paragraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </>
+          )}
+          {section.links.map((link) => (
+            <p key={link.href}>
+              <Link href={link.href}>{link.label} →</Link>
+            </p>
+          ))}
+        </section>
+      ))}
+      <h2 id="installation-reference">{guide.reference}</h2>
     </>
   )
 }
