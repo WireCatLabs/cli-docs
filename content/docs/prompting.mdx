@@ -1,9 +1,9 @@
 ---
 title: "How to phrase requests"
-description: "Prompts for search, meeting context, contacts, files, drafts and reminders."
+description: "Requests for search, meeting context, people, files, drafts and reminders."
 ---
 
-This page explains how to ask an assistant to find messages, gather context, work with documents and draft replies. You will learn to give it a clear task and check the result: what it found, which messages support the answer and what remains unknown.
+Ask your agent to find messages, gather context, work with documents and draft replies. Learn to give it a clear task and check the result: what it found, which messages support the answer and what remains unknown.
 
 Start with what you want, such as “What did Anna ask me to do yesterday?” A simple task can be that short. The agent chooses the commands. If you have not tried your messenger connection yet, start with [First tasks](./first-tasks.md).
 
@@ -64,7 +64,9 @@ Specify participants when important decisions may be in direct chats. A duration
 prioritise the agenda. For a narrow meeting, add its purpose: “Focus on launch readiness; leave
 budget discussion out.” If a relevant chat is unavailable, the answer should name that gap.
 
-## Find a recommended contact
+<a id="find-a-recommended-contact" />
+
+## Find recommendations for a professional
 
 ```text prompt
 Use tg CLI. Find accountant recommendations in my freelance and business chats from the past six months.
@@ -79,7 +81,7 @@ availability or qualifications. Ask the agent to distinguish reported experience
 
 If two recommendations mention the same first name, the agent should verify that they refer to the
 same person before combining them. Finding a name in a message is not permission to contact them.
-[Contacts](./tg/usage.md#people).
+[People](./tg/usage.md#people).
 
 <a id="files-and-voice" />
 
@@ -124,7 +126,7 @@ the project group or anyone else.
 
 If you edit the draft, provide the full final text or make the change unambiguous. If the recipient
 is not uniquely identified, the agent should ask which chat you mean. Permissions can also require
-confirmation or prohibit sending; a prompt does not bypass those settings.
+confirmation or prohibit sending; a request does not bypass those settings.
 [Sending](./tg/usage.md#sending) · [Permissions and send guard](./tg/security.md).
 
 For more draft requests, and for replies that a rule sends without asking you, see
@@ -163,7 +165,7 @@ Sending a fixed reminder later is simpler: it queues the message on the messenge
 ## Schedule reminders
 
 ```text prompt
-Use tg CLI. On Monday, 5 October 2026, send two reminders to my Saved Messages: “Open the Atlas agenda” at
+Use tg CLI. Next Monday, send two reminders to my Saved Messages: “Open the Atlas agenda” at
 09:00 and “Review the Atlas decisions” at 18:00. Use Europe/Madrid time. Show me the scheduled
 times and messages after creating them. Don't send anything to the team.
 ```
@@ -201,9 +203,8 @@ If information is missing, draft a question. Show me every send first.
 ```
 
 Name the bot and the sources it may use. History available to your personal account is not
-necessarily available to the bot. A Telegram bot cannot ask Telegram for older messages: it works
-from what it sent, received or imported on this computer.
-Rules and permissions are configured separately; the prompt text alone does not replace them.
+necessarily available to the bot. The Telegram Bot API does not provide old message history. The CLI’s `bot store fetch` can import accessible channel or supergroup history into the bot’s local archive; it cannot retrieve the history of private chats or basic groups. The bot reads what it sent, received or imported on this computer.
+Rules and permissions are configured separately; the request alone does not replace them.
 [Telegram bots](./tg/bot.md) · [MAX bots](./max/bot.md) · [Permissions and send guard](./tg/security.md).
 
 ## Ask for an answer you can check

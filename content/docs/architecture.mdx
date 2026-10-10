@@ -12,6 +12,9 @@ It describes the code as read on 4 October 2026. Links to source point at fixed 
 keep showing what this page describes after the code moves on. How search, conversation graphs and
 embeddings work is a separate guide: [search architecture](./search-architecture.mdx).
 
+
+The package and layer evidence below describes the dated snapshot. The MCP example uses the current compact interface, documented in [the MCP surface](https://github.com/WireCatLabs/cli-messaging/blob/v0.213.0/src/mcp/surface.ts).
+
 ## Packages
 
 <ArchitectureDiagram name="packages" lang="en" />
@@ -124,8 +127,7 @@ whose ids are not small integers pages its history by time instead.
 **A send has an identity.** Each send gets a `sendId`, passed to the messenger as the client's own
 message id where it has one, so the server drops a repeat. When the request went out and no answer
 came back, the adapter throws `outcome_unknown` — not `network_error`, which would say the message
-did not go. Repeating the send with the same `sendId` gives one message, not two. In max, the single
-retry reuses the same id because MAX was measured to deduplicate by it.
+did not go. Repeating the send with the same `sendId` gives one message, not two. An explicit retry must reuse the same id; MAX was measured to deduplicate by it. Automatic retries are not implied.
 
 **Errors are translated at the border.** Every library error becomes one code from cli-core's closed
 list, each with its own exit code, so a script can branch on `$?`:
@@ -175,8 +177,8 @@ tg's profiles, max's account and its bots — keyed by provider and account.
   half-written build is never read.
 - **Forward-only migrations.** Numbered, additive, never edited once released
   ([manifest.ts](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/src/store/sqlite/manifest.ts)).
-  A `min_compatible` version lets an older tool keep using a file a newer one migrated; raising it is
-  a major version of the shared package, and both tools ship their upgrade together.
+  A `min_compatible` version lets an older tool keep using a file a newer one migrated; raising it requires
+  a compatibility-breaking release and coordinated upgrades of both tools.
 - **Queries through Drizzle, bundled.** The query builder is bundled into the published package
   instead of installed, which cut its load cost from about 200 ms to about 6 ms per process.
 
@@ -196,7 +198,7 @@ The store keeps message text so it can answer without the network. It is not enc
 - **One permission model, one guard**, used by every command, every MCP tool and, in max, by the
   background `max serve` process for anything that passes through it.
 - **Runs are recorded without content.** A run record holds the command's words, ids, counts and
-  timings; messages, tokens and phone numbers never reach a log, a fixture or a document.
+  timings. Private message text, tokens and phone numbers are excluded from diagnostic records; documentation and tests use synthetic examples.
 - **Generated, then checked.** The command reference (`commands.md`), max's operation wrappers and
   the Bot API types are generated; CI fails when the committed copy drifts from the generator.
 
@@ -247,7 +249,7 @@ MAX publishes no API for personal accounts, so max carries more of its own code 
   process waits up to 5 seconds for the lock. Large writes are kept in bounded batches.
 - **No vector index.** Conversation search compares vectors in JavaScript, page by page; the work grows
   with the number of chunks in scope ([details](./search-architecture.mdx)).
-- **Guards live inside the tool.** They stop a model talked into sending, not an agent with a shell
+- **Guards live inside the tool.** They stop an agent talked into sending, not an agent with a shell
   that sets out to change the settings. A sandbox or a separate OS user is the outside boundary.
 - **The local store is not encrypted.** Whole-disk encryption is the protection against a lost
   computer.

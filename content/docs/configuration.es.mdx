@@ -3,9 +3,9 @@ title: "Configuración"
 description: "Dónde está el archivo de ajustes, cómo ver y cambiar un valor y dónde está la lista completa de ajustes de Telegram y MAX."
 ---
 
-Esta página trata de los ajustes de las herramientas de línea de comandos `tg` y `max`: los valores que usa un comando cuando no los indicas, como cuántos resultados mostrar. Al terminar sabrás dónde se guardan, cómo comprobarlos y cambiarlos, y dónde cada mensajero enumera todos sus ajustes. Los valores predeterminados sirven a la mayoría; cambia un ajuste cuando repites siempre la misma opción o quieres valores distintos para distintas cuentas.
+Guarda ajustes para las herramientas de línea de comandos y evita repetir las mismas opciones en cada ejecución, como cuántos resultados mostrar. Aprende dónde se guardan, cómo comprobarlos y cambiarlos, y dónde cada servicio de mensajería enumera todos sus ajustes. Los valores predeterminados sirven a la mayoría; cambia un ajuste cuando repites siempre la misma opción o quieres valores distintos para distintas cuentas.
 
-Dos términos. El **archivo de ajustes** (`config.json`) guarda estos valores en tu ordenador. Un <DocTerm term="profile" lang="es" label="perfil" /> es una cuenta o un bot con nombre, como `work`, con sus propios valores; los valores de `defaults` se aplican a todos los perfiles. Los datos de inicio de sesión nunca se guardan en este archivo, y lo que puede hacer tu asistente se define en [Permisos](./permissions.mdx).
+Dos términos. El **archivo de ajustes** (`config.json`) guarda estos valores en tu ordenador. Un <DocTerm term="profile" lang="es" label="perfil" /> es una configuración con nombre para la conexión de una cuenta o bot, como `work`, con sus propios valores; los valores de `defaults` se aplican a todos los perfiles. Los datos de inicio de sesión nunca se guardan en este archivo, y lo que puede hacer tu agente se define en [Permisos](./permissions.mdx).
 
 ## Dónde está el archivo
 
@@ -33,7 +33,7 @@ tg config unset limit
 
 ## ¿Qué valor gana?
 
-Una opción del comando como `--limit 5` (<DocTerm term="flag" lang="es" label="un flag" />) cambia solo esa ejecución. Gana a una variable de entorno; después vienen el valor del perfil en el archivo, `defaults` y el valor integrado. Algunos ajustes no tienen opción ni variable; la referencia de cada mensajero indica cuáles existen.
+Una opción del comando como `--limit 5` (<DocTerm term="flag" lang="es" label="un flag" />) cambia solo esa ejecución. Gana a una variable de entorno; después vienen el valor del perfil en el archivo, `defaults` y el valor integrado. Algunos ajustes no tienen opción ni variable; la referencia de cada servicio de mensajería indica cuáles existen.
 
 ## Un ejemplo
 
@@ -71,7 +71,7 @@ Una opción del comando como `--limit 5` (<DocTerm term="flag" lang="es" label="
 
 ## Todos los ajustes de Telegram y MAX
 
-Las dos herramientas comparten la mayoría de los ajustes, como `limit`, `sendsPerHour`, `record` y `permissions`. Algunos existen solo en una: por ejemplo, `proxy` en Telegram y `serve` en MAX. Cada mensajero documenta los suyos:
+Las dos herramientas comparten la mayoría de los ajustes, como `limit`, `sendsPerHour`, `record` y `permissions`. Algunos existen solo en una: por ejemplo, `proxy` en Telegram y `serve` en MAX. Cada servicio de mensajería documenta los suyos:
 
 - **Telegram:** [guía de configuración de Telegram](./tg/configuration.md) · [todos los ajustes de Telegram, sus valores predeterminados y variables de entorno](./tg/configuration-reference.md).
 - **MAX:** [guía de configuración de MAX](./max/configuration.md) · [todos los ajustes de MAX, sus valores predeterminados y variables de entorno](./max/configuration-reference.md).

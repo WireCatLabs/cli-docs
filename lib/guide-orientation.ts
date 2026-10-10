@@ -4,8 +4,8 @@ const purpose = {
       "This guide covers installing the messenger tool and connecting your account. You will be able to run it yourself or ask an agent to use your chats, then verify the account and first results.",
     "query-language":
       "This is the reference for writing message-search queries. You will be able to combine words, people, chats, dates and file conditions, check the query syntax and interpret the returned matches.",
-    "from-tgcli":
-      "This guide helps you move from tgcli to tg. You will find equivalent commands, understand the differences and choose what to run for your existing tasks.",
+    compare:
+      "Compare Telegram tools by their supported tasks, connection options and licences so you can choose the one that fits your needs.",
     "commands-personal":
       "This reference covers personal-account commands. Use it to find the exact command, arguments and options for login, reading, searching, files and sending.",
     "commands-bot":
@@ -33,7 +33,7 @@ const purpose = {
     limits:
       "Understand why the messenger asks a command to wait and what you can check before retrying. This guide distinguishes messenger rate limits from your own sending limits.",
     replies:
-      "Configure and test rules for replying to test accounts. This is a limited automatic-response workflow; the guide explains the allowed audience, permissions and how to stop it.",
+      "Configure auto-reply rules and choose who may receive them. Test the template and matching conditions, check permissions and learn how to stop automatic replies.",
     sessions:
       "Connect the tool to your messenger account so your agent can read the chats you choose and help with replies. This guide explains login, checking the connection and managing or ending a session. Login adds an authorised device; it does not download all your chat history.",
     usage:
@@ -61,8 +61,7 @@ const purpose = {
       "Это руководство по установке инструмента и подключению аккаунта мессенджера. Вы сможете запускать его сами или поручать агенту работу с чатами, затем проверите аккаунт и первые результаты.",
     "query-language":
       "Здесь собран синтаксис запросов для поиска сообщений. Вы сможете сочетать слова, людей, чаты, даты и условия по файлам, проверять запрос и понимать найденные совпадения.",
-    "from-tgcli":
-      "Это руководство по переходу с tgcli на tg. Вы найдёте соответствующие команды, разберётесь в различиях и выберете команды для своих привычных задач.",
+    compare: "Сравните инструменты Telegram по задачам, вариантам подключения и лицензиям, чтобы выбрать подходящий.",
     "commands-personal":
       "Здесь собраны команды личного аккаунта. Вы найдёте точную команду, аргументы и параметры для входа, чтения, поиска, файлов и отправки.",
     "commands-bot":
@@ -90,7 +89,7 @@ const purpose = {
     limits:
       "Разберитесь, почему мессенджер просит команду подождать и что проверить перед повтором. Здесь объясняется разница между ограничениями мессенджера и вашими лимитами отправки.",
     replies:
-      "Настройте и проверьте правила ответа тестовым аккаунтам. Это ограниченный сценарий автоответов; здесь описаны допустимые получатели, права и способ остановить работу.",
+      "Настройте правила автоответов и выберите получателей. Проверьте шаблон и условия, разрешения и способ остановить автоматические ответы.",
     sessions:
       "Подключите инструмент к своему аккаунту мессенджера, чтобы агент мог читать выбранные чаты и помогать с ответами. Здесь вы пройдёте вход, проверите подключение и узнаете, как управлять сессией или завершить её. Вход добавляет разрешённое устройство; всю историю чатов он не скачивает.",
     usage:
@@ -118,8 +117,8 @@ const purpose = {
       "Esta guía explica cómo instalar la herramienta y conectar la cuenta. Podrás ejecutarla o pedir al agente trabajar con tus chats y comprobar la cuenta y los primeros resultados.",
     "query-language":
       "Esta referencia explica la sintaxis de búsqueda. Podrás combinar palabras, personas, chats, fechas y archivos, comprobar consultas e interpretar resultados.",
-    "from-tgcli":
-      "Esta guía explica la migración de tgcli a tg. Encontrarás comandos equivalentes, diferencias y opciones para tus tareas habituales.",
+    compare:
+      "Compara las herramientas de Telegram por sus tareas, conexiones y licencias para elegir la que necesitas.",
     "commands-personal":
       "Esta referencia reúne comandos de cuenta personal. Consulta argumentos y opciones de acceso, lectura, búsqueda, archivos y envío.",
     "commands-bot":
@@ -147,7 +146,7 @@ const purpose = {
     limits:
       "Entiende por qué el mensajero pide esperar y qué comprobar antes de reintentar. Esta guía distingue los límites del mensajero de tus propios límites de envío.",
     replies:
-      "Configura y prueba reglas de respuesta a cuentas de prueba. Es un flujo limitado de respuestas automáticas; aquí se explica la audiencia, los permisos y cómo detenerlo.",
+      "Configura reglas de respuesta automática y elige destinatarios. Prueba la plantilla y las condiciones, comprueba permisos y aprende a detener las respuestas.",
     sessions:
       "Conecta la herramienta a tu cuenta para que el agente pueda leer los chats que elijas y ayudarte a responder. Esta guía explica el acceso, su comprobación y cómo gestionar o cerrar una sesión. Iniciar sesión añade un dispositivo autorizado; no descarga todo el historial.",
     usage:

@@ -6,9 +6,9 @@ import { type InstallationEventContext, trackSiteEvent } from "@/lib/site-events
 import { wordsFor } from "@/lib/words"
 
 const labels = {
-  en: { prompt: "Prompt", command: "Command" },
-  ru: { prompt: "Промпт", command: "Команда" },
-  es: { prompt: "Prompt", command: "Comando" },
+  en: { prompt: "Request", command: "Command" },
+  ru: { prompt: "Запрос", command: "Команда" },
+  es: { prompt: "Petición", command: "Comando" },
 }
 
 export function CopyText({

@@ -3,9 +3,7 @@ title: "Primeras tareas"
 description: "Prueba una petición útil, comprueba la respuesta y sigue con búsquedas, reuniones o borradores."
 ---
 
-Esta página es para el momento justo después de conectar tu cuenta: reúne las primeras peticiones
-que puedes probar con tu agente de IA. Al terminar, habrás encontrado un mensaje, resumido una
-conversación o preparado una respuesta, y sabrás comprobar que la respuesta está completa. Una
+Una vez conectada tu cuenta, prueba una primera petición con tu agente de IA. Encuentra un mensaje, resume un chat o prepara una respuesta y comprueba que esté completa. Una
 petición es una tarea con tus propias palabras; el agente elige los comandos.
 
 Si aún falta configurar algo, empieza por [instalación](./installation.mdx) o

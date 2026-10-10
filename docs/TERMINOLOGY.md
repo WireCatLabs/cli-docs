@@ -39,6 +39,7 @@ actual product UI labels exactly. [AUTHORING.md](AUTHORING.md) covers page struc
 | Allowed actions | permissions | разрешения | permisos | Controls what the tool may do. Keep permissions distinct from an agent's instructions and from permission to send data to an AI provider. |
 | Named account and settings | profile | профиль | perfil | A named tool configuration for an account or bot. Do not use profile and account interchangeably. |
 | Service processing AI requests | AI provider | провайдер ИИ | proveedor de IA | The configured service that receives data for AI processing. Explain this term when external data sharing matters; a provider is not another name for the agent. |
+| Configured text-generation component | model identifier (technical setting) | идентификатор модели (техническая настройка) | identificador del modelo (ajuste técnico) | The name used by an AI provider to select a text-generating component. This is a configuration value, not the agent the reader chats with. Preserve `models.replies.model` and other actual keys. |
 
 ## Technical words and protected text
 

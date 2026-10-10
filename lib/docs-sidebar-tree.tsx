@@ -63,7 +63,7 @@ export const sidebarIcons = {
   "configuration-reference": SlidersHorizontal,
   "cli-contract": FileCode2,
   limits: Gauge,
-  "from-tgcli": ArrowRightLeft,
+  compare: ArrowRightLeft,
   replies: Reply,
   index: BookOpen,
   installation: Download,

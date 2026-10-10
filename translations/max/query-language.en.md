@@ -2,17 +2,39 @@
 title: "Search query language"
 ---
 
-Reference for queries in `max search messages`, `max stats messages show` and saved searches. See [message search](./search.md) for everyday examples.
+<a id="в-mcp" />
+<a id="прежние-режимы" />
 
-The language is a strict profile of Apache Lucene's query syntax: words, phrases, AND/OR/NOT,
-groups, fields, ranges, bounded wildcards and regular expressions. The
-[full reference](https://github.com/leemour/cli-messaging/blob/v0.164.0/docs/search/query-language.md)
-(in Russian) has the generated tables of fields, operators, presets and limits, and executable
-examples; the
-[technical specification](https://github.com/leemour/cli-messaging/blob/v0.164.0/docs/search/query-language-spec.md)
-describes the grammar and the compiler.
+When using `max` through an AI agent, describe what you want in ordinary words and let the agent form the search query. Use this reference when typing searches yourself or looking up exact operators, every field, presets, date rules and limits.
 
-Words and phrases without a field match word forms. `--exact` selects exact forms for words without a field; an explicit `text:` still matches word forms. The archive language settings affect matching.
+This is help for the queries `max search messages`, `max search all`, `max stats messages show`, saved searches and `--filter` [search by topic](./topic-search.md). Examples for every day - in [message search](./search.md).
+
+Terms used below:
+
+- **Query** — what you search for, such as `счёт from:me date:7d`.
+- **Field** — a name followed by a colon, targeting a message property: `from:` for sender or `date:` for date. Unqualified words search message text.
+- **Operator** — a word or symbol combining conditions: `AND`, `OR`, `NOT`.
+- **Word forms** — variations of one word, such as “apartment” and “apartments”.
+
+This language implements a strict subset of Apache Lucene syntax: words, phrases, AND/OR/NOT, groups, fields, ranges, limited patterns and regular expressions. Unsupported syntax causes an error rather than being silently skipped. The [full reference](https://github.com/leemour/cli-messaging/blob/v0.212.0/docs/search/query-language.md) contains generated field/operator/preset/limit tables and verified examples; the [technical specification](https://github.com/leemour/cli-messaging/blob/v0.212.0/docs/search/query-language-spec.md) describes grammar and compilation.
+
+## What the language can do
+
+| Need | Write |
+|---|---|
+| messages with all these words, in any form | `счёт оплачен` |
+| these words in a row, in this order | `"счёт оплачен"` |
+| one word or another, without a third | `(кафе OR библиотека) NOT шумно` |
+| only this form of the word | `exact:квартира`, or `--exact` for all words without a field |
+| words that start with something | `квартир*` |
+| sender, chat, chat type | `from:me`, `chat:"Книжный клуб"`, `kind:private` |
+| period | `date:7d`, `date:[2026-01-01 TO 2026-02-01}` |
+| files by name or size | `filename:*.pdf`, `size>10MB` |
+| text similar to password, card or phone | `preset:secret`, `preset:card` |
+| your own tags | `tag:work` |
+| template | `text:/pass(port)?/` |
+
+Unqualified words and phrases match word forms. `--exact` selects exact forms for unqualified words; explicit `text:` still matches forms. Archive language settings determine which forms match ([word forms](./archive.md#обслуживание-архива)).
 
 ## Operators
 
@@ -31,10 +53,7 @@ Words and phrases without a field match word forms. `--exact` selects exact form
 | wildcard | `квартир*`, `т?кст` | `*` any characters, `?` one |
 | regex | `text:/pass(port)?/` | a bounded Lucene regular expression |
 
-`alpha OR beta gamma` means `(alpha OR beta) AND gamma`; `alpha OR beta AND gamma` means
-`alpha OR (beta AND gamma)`. Use brackets for clarity. Lowercase `and`, `or`, `not` are plain words. A
-query with only `NOT` finds nothing: give a positive condition, for example `kind:group NOT preset:secret`.
-Fuzzy `~`, proximity, boosts and intervals are refused with an error, not ignored.
+`alpha OR beta gamma` means `(alpha OR beta) AND gamma`; `alpha OR beta AND gamma` means `alpha OR (beta AND gamma)`. Use parentheses for clarity. Lowercase `and`, `or`, `not` are ordinary words. A lone `NOT` query finds nothing; add a positive condition such as `kind:group NOT preset:secret`. Fuzzy search `~`, word proximity, boosts and intervals produce errors rather than being skipped. Typos are not corrected; use a pattern such as `квартир*` for different endings.
 
 ## Fields
 
@@ -63,6 +82,8 @@ answer and never plain text. A name that the archive does not know is not looked
 `kind:bot` selects a chat with a bot; `in:bots` selects the archives of `max bot`. `topic:` requires exactly one chat in `chat:` or `--chat`: topic numbers repeat across chats. `filename`, `mime` and `size` match a message if at least one of its files matches. MAX does not report file types, so `mime:` finds nothing here: search by extension.
 
 ## Presets
+
+Preset finds text based on its type. With it you can find a password, code or card number that someone sent.
 
 | Preset | A candidate is |
 |---|---|
@@ -105,6 +126,14 @@ lengthen it. Long
 queries, deep nesting, large patterns and slow scans are refused with `query_limit`, not cut short:
 narrow the chat, the dates or the pattern.
 
+### JavaScript Regular Expression: `--regex`
+
+```sh
+max search messages --regex 'invoice\s+\d+' --json
+```
+
+`--regex` - separate mode. The words after command are a single JavaScript regular expression, not a query in that language. It is case-insensitive, checked against the full text of each stored message, and executed in an isolated process with time and size limits. A saved search stores its `--regex`; You cannot add `--regex` when running with `--saved`.
+
 ## The answer
 
 `--json` returns `{ items, page, limit, hasMore, corrections, completeness, wordsReady, query, coverage }`,
@@ -121,33 +150,11 @@ even when nothing matched. `--jsonl` streams the items only.
 
 An error carries the position of the problem in the query and a hint.
 
-## In MCP
+## Via MCP
 
-`max_read` (`command: "search messages"`) accepts a query as `text` or as a versioned syntax tree in `ast`, but not both. `language` selects `lucene` or `legacy`; `timezone` sets the calendar time zone. `chat` accepts an ID or saved title; `source`, `newest`, `context` and `limit` work like the command options. `record: false` prevents the call from being recorded in query history. The response has the same fields as `--json`. `max_read` (`command: "stats messages show"`) counts using the same queries.
+Through the `max` MCP server, `max_read` (`command: "search messages"`) accepts either `text` or a versioned syntax tree in `ast`, not both. `timezone` sets the calendar zone. `chat` accepts an id or saved name; `source`, `newest`, `context` and `limit` match command options; `saved` runs a saved search. `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` and `sync_first` match `--thread…` and `--sync-first`; `sync_first` requires `messages.sync-first: allow`. Results use the same fields as `--json`. `max_read` (`command: "stats messages show"`) counts the same queries. `record: false` disables request-history recording.
 
-## The older modes
+## Next steps
 
-```sh
-max search messages 'from:alice after:7d invoice -draft' --language legacy --json
-max search messages --regex 'invoice\s+\d+' --json
-```
-
-`--language legacy` keeps the earlier filters and its correction of typos. `--regex` is a separate
-mode: a JavaScript regular expression, case-insensitive, over the full text, in an isolated worker with
-time and size limits. `--regex` cannot be combined with `--language lucene`.
-
-| Legacy | Strict |
-|---|---|
-| `after:2026-01-01` | `date:[2026-01-01 TO *]` |
-| `before:2026-02-01` | `date:[* TO 2026-02-01}` |
-| `after:7d` | `date:7d` |
-| automatic prefix and typo correction | `квартир*` explicitly; typos only in `--language legacy` |
-
-`--thread` follows the stored reply graph; in `messages context` it replaces chronological neighbours. Defaults are
-8 hops, 50 messages, 65,536 bytes and one day around each hit. Change them with `--thread-hops`,
-`--thread-messages`, `--thread-bytes`, `--thread-within`. Without a graph it falls back to chronological context;
-stale links are marked and not traversed.
-
-Searching for words in one specified chat queries both the archive and the MAX server by default; without a specified chat, it queries only the archive. `--backend archive` keeps the search local. `--sync-first` downloads new messages first, without marking anything as read: at most 5 chats, 500 messages and 30 seconds. Adjust these limits with `--max-chats`, `--max-messages` and `--sync-time`. An incomplete or failed update preserves local results and reports outdated coverage and the update outcome.
-
-MCP uses `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` and `sync_first`. `sync_first` is available only with `messages.sync-first: allow`. `max_read` with `command: "messages context"` and `arguments: { offline: true }` reads saved data.
+- [Message search](./search.md) - search for every day, saved searches and counting.
+- [Search by topic](./topic-search.md) - find a discussion by meaning when you don’t remember the words.

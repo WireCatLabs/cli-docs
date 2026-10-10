@@ -12,6 +12,9 @@ Describe el código leído el 4 de octubre de 2026. Los enlaces al código apunt
 que siguen mostrando lo que describe esta página aunque el código cambie. Cómo funcionan la búsqueda,
 los grafos de conversaciones y los embeddings es otra guía: [arquitectura de la búsqueda](./search-architecture.mdx).
 
+
+Las referencias a paquetes y capas describen la instantánea fechada. El ejemplo MCP utiliza la interfaz compacta actual: [implementación MCP](https://github.com/WireCatLabs/cli-messaging/blob/v0.213.0/src/mcp/surface.ts).
+
 ## Paquetes
 
 <ArchitectureDiagram name="packages" lang="es" />
@@ -128,8 +131,7 @@ por tiempo.
 **Un envío tiene identidad.** Cada envío recibe un `sendId`, que se pasa al mensajero como id propio
 del cliente cuando lo admite, así el servidor descarta una repetición. Si la petición salió y no
 llegó respuesta, el adaptador lanza `outcome_unknown` — no `network_error`, que diría que el mensaje
-no salió. Repetir el envío con el mismo `sendId` da un mensaje, no dos. En max, el único reintento
-reutiliza el mismo id porque se midió que MAX elimina duplicados con él.
+no salió. Repetir el envío con el mismo `sendId` da un mensaje, no dos. Un reintento explícito debe reutilizar el mismo id: se midió que MAX elimina duplicados con él. Esto no implica reintentos automáticos.
 
 **Los errores se traducen en la frontera.** Cada error de una biblioteca se convierte en un código de
 la lista cerrada de cli-core, cada uno con su código de salida, para que un script pueda decidir por
@@ -181,8 +183,7 @@ los perfiles de tg, la cuenta de max y sus bots — con clave por proveedor y cu
 - **Migraciones solo hacia delante.** Numeradas, aditivas, nunca editadas una vez publicadas
   ([manifest.ts](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/src/store/sqlite/manifest.ts)).
   Una versión `min_compatible` permite que una herramienta antigua siga usando un archivo que migró una
-  nueva; subirla es una versión mayor del paquete común, y las dos herramientas publican su
-  actualización juntas.
+  nueva; subirla requiere una publicación que cambie la compatibilidad y actualizaciones coordinadas de ambas herramientas.
 - **Consultas con Drizzle, empaquetado.** El constructor de consultas va empaquetado dentro del
   paquete publicado en lugar de instalarse, lo que bajó su coste de carga de unos 200 ms a unos 6 ms
   por proceso.
@@ -203,8 +204,7 @@ El almacén guarda el texto de los mensajes para responder sin red. No está cif
 - **Un modelo de permisos, una protección**, usados por cada comando, cada herramienta MCP y, en max,
   por el proceso en segundo plano `max serve` para todo lo que pasa por él.
 - **Las ejecuciones se registran sin contenido.** Un registro guarda las palabras del comando, ids,
-  recuentos y tiempos; los mensajes, tokens y teléfonos nunca llegan a un log, un fixture o un
-  documento.
+  recuentos y tiempos. El texto privado de mensajes, tokens y teléfonos se excluyen de los registros de diagnóstico; la documentación y los tests usan ejemplos ficticios.
 - **Generado y comprobado.** La referencia de comandos (`commands.md`), los envoltorios de operaciones
   de max y los tipos de la Bot API se generan; CI falla si la copia confirmada se aparta del
   generador.
@@ -259,7 +259,7 @@ MAX no publica una API para cuentas personales, así que max lleva más código 
   hacen en lotes acotados.
 - **Sin índice vectorial.** La búsqueda de conversaciones compara vectores en JavaScript, página a
   página; el trabajo crece con el número de fragmentos en el ámbito ([detalles](./search-architecture.mdx)).
-- **Las protecciones viven dentro de la herramienta.** Frenan a un modelo convencido para enviar, no a
+- **Las protecciones viven dentro de la herramienta.** Frenan a un agente convencido para enviar, no a
   un agente con shell que decide cambiar la configuración. Un sandbox o un usuario del sistema aparte
   es el límite externo.
 - **El almacén local no está cifrado.** El cifrado de disco completo protege frente a un ordenador

@@ -14,9 +14,11 @@ export default async function HomePage({ params }: Props) {
     return (
       <>
         <meta httpEquiv="refresh" content="0;url=/" />
-        <p>
-          <a href="/">WireCat — English homepage</a>
-        </p>
+        <main id="main">
+          <p>
+            <a href="/">WireCat — English homepage</a>
+          </p>
+        </main>
       </>
     )
   const content = lang === "ru" ? ru : lang === "es" ? es : en

@@ -4,7 +4,6 @@ title: "Команды"
 
 <!-- Generated from the command tree by scripts/commands.ts. Do not edit; run `pnpm generate`. -->
 
-
 Все команды, параметры и коды выхода. Эта страница **генерируется из самой программы**, поэтому она
 не может описывать несуществующую версию.
 
@@ -99,7 +98,6 @@ tg setup [options]
 ```sh
 tg account list
 ```
-
 
 ### `tg account show`
 
@@ -487,7 +485,7 @@ tg chats link show <chat>
 
 #### `tg chats link create`
 
-создать ещё одну ссылку приглашения; никто не узнает о ней, пока вы ею не поделитесь
+создать ещё одну ссылку запросы; никто не узнает о ней, пока вы ею не поделитесь
 
 **Changes something in Telegram.**
 
@@ -507,7 +505,7 @@ tg chats link create <chat> [options]
 
 #### `tg chats link list`
 
-ваши ссылки приглашения, сначала новые, с числом вступивших и ожидающих
+ваши ссылки запросы, сначала новые, с числом вступивших и ожидающих
 
 ```sh
 tg chats link list <chat> [options]
@@ -558,7 +556,6 @@ tg chats link update <chat> <link> [options]
 | `--no-approval` | любой со ссылкой сразу вступает. |
 | `--expire-time <time>` | время прекращения действия: 2026-09-25T09:00 (местное время) или через 30m, 2h, 7d; `never` снимает срок действия. |
 | `--max-uses <n>` | не более указанного числа людей смогут вступить по ссылке, от 1 до 99999. |
-
 
 #### `tg chats link reset`
 
@@ -614,7 +611,7 @@ tg chats requests accept <chat> [person] [options]
 | Параметр | Назначение |
 |---|---|
 | `--all` | все ожидающие запросы; сначала проверяются с учётом почасового лимита. |
-| `--link <link>` | с --all: только запросы по этой ссылке приглашения. |
+| `--link <link>` | с --all: только запросы по этой ссылке запросы. |
 
 #### `tg chats requests decline`
 
@@ -634,7 +631,7 @@ tg chats requests decline <chat> [person] [options]
 | Параметр | Назначение |
 |---|---|
 | `--all` | все ожидающие запросы; сначала проверяются с учётом почасового лимита. |
-| `--link <link>` | с --all: только запросы по этой ссылке приглашения. |
+| `--link <link>` | с --all: только запросы по этой ссылке запросы. |
 
 ### `tg chats admins`
 
@@ -930,7 +927,7 @@ tg contacts context <person> [options]
 
 ### `tg contacts check`
 
-похож ли человек на бота, фальшивый аккаунт или спамера: профиль, его сообщения в хранилище и публичные списки блокировок (Combot Anti-Spam (CAS), lols.bot), в которые отправляется его идентификатор — подсказка, а не окончательный вывод
+похож ли человек на бота, фальшивый аккаунт или спамера: профиль, его сообщения в хранилище и публичные списки блокировок (Combot Anti-Spam (CAS), lols.bot), в которые отправляется его идентификатор — готовый запрос, а не окончательный вывод
 
 ```sh
 tg contacts check <person> [options]
@@ -959,7 +956,7 @@ tg contacts link <person> <other>
 
 ### `tg contacts unlink`
 
-отменить contacts link для одной учётной записи: она снова считается отдельным человеком
+отменить contacts link для одного аккаунта: она снова считается отдельным человеком
 
 ```sh
 tg contacts unlink <person>
@@ -991,8 +988,6 @@ tg contacts sync
 
 #### `tg contacts alias set`
 
-
-
 **Изменяет данные только на этом компьютере.**
 
 ```sh
@@ -1005,8 +1000,6 @@ tg contacts alias set <person> <alias>
 | `alias` | обязателен |  |
 
 #### `tg contacts alias rm`
-
-
 
 **Изменяет данные только на этом компьютере.**
 
@@ -1024,8 +1017,6 @@ tg contacts alias rm <person>
 
 #### `tg contacts notes list`
 
-
-
 ```sh
 tg contacts notes list <person>
 ```
@@ -1035,8 +1026,6 @@ tg contacts notes list <person>
 | `person` | обязателен |  |
 
 #### `tg contacts notes show`
-
-
 
 ```sh
 tg contacts notes show <person> <id>
@@ -1048,8 +1037,6 @@ tg contacts notes show <person> <id>
 | `id` | обязателен |  |
 
 #### `tg contacts notes add`
-
-
 
 **Изменяет данные только на этом компьютере.**
 
@@ -1066,8 +1053,6 @@ tg contacts notes add <person> [options]
 | `--file <path>` | читать текст заметки из файла; без параметра или с - читать stdin. |
 
 #### `tg contacts notes edit`
-
-
 
 **Изменяет данные только на этом компьютере.**
 
@@ -1086,8 +1071,6 @@ tg contacts notes edit <person> <id> [options]
 | `--revision <number>` | номер ревизии, которую вы прочитали перед редактированием. |
 
 #### `tg contacts notes remove`
-
-
 
 **Изменяет данные только на этом компьютере.**
 
@@ -1788,7 +1771,7 @@ tg topics show <chat> <topic>
 | Аргумент | | Описание |
 |---|---|---|
 | `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `topic` | обязателен | идентификатор темы из `topics list`. |
+| `topic` | обязательный | идентификатор темы из `topics list`. |
 
 ### `tg topics enable`
 
@@ -2348,7 +2331,7 @@ tg conversations status [options]
 
 ### `tg conversations batches`
 
-пакеты переписки для вашего AI-агента: на какое раннее сообщение отвечает каждое
+пакеты переписки для вашего ИИ-агента: на какое раннее сообщение отвечает каждое
 
 #### `tg conversations batches status`
 
@@ -2411,15 +2394,11 @@ tg conversations links clear [options]
 
 #### `tg conversations consents list`
 
-
-
 ```sh
 tg conversations consents list
 ```
 
 #### `tg conversations consents revoke`
-
-
 
 ```sh
 tg conversations consents revoke [options]
@@ -2544,7 +2523,6 @@ tg attachments show <chat> [message] [options]
 | `--chunk-bytes <n>` | число возвращаемых байтов, 1–1048576 (по умолчанию524288). |
 | `--if-sha256 <hash>` | требовать SHA-256 всего файла из предыдущей порции. |
 
-
 ### `tg attachments text`
 
 текст одного файла в том виде, в каком его прочитал агент
@@ -2649,8 +2627,6 @@ tg tags list [options]
 
 ### `tg metadata get`
 
-
-
 ```sh
 tg metadata get [options]
 ```
@@ -2660,8 +2636,6 @@ tg metadata get [options]
 | `--chat <chat>` | сохранённый чат. |
 
 ### `tg metadata refresh`
-
-
 
 **Изменяет данные только на этом компьютере.**
 
@@ -2713,7 +2687,6 @@ tg stats messages show [query] [options]
 
 наблюдения каждого счётчика и ограниченное обновление из мессенджера
 
-
 #### `tg stats messages counters show`
 
 показать сохранённые значения счётчиков и свежесть наблюдений
@@ -2736,7 +2709,6 @@ tg stats messages counters show [query] [options]
 | `--counters <names>` | разные поля views,reactions,comments; по умолчанию все три. |
 | `--limit <n>` | сообщения, 1–100; по умолчанию 20. |
 | `--max-age <duration>` | максимальный возраст свежего наблюдения; по умолчанию 24h. |
-
 
 #### `tg stats messages counters refresh`
 
@@ -2764,7 +2736,6 @@ tg stats messages counters refresh [query] [options]
 | `--max-messages <n>` | максимум сообщений для обновления, 1–100. |
 | `--sync-time <duration>` | время удалённого обновления; по умолчанию 30s, максимум 5m. |
 | `--dry-run` | показать точные сохранённые цели и поддерживаемые счётчики без подключения. |
-
 
 #### `tg stats messages unanswered`
 
@@ -3000,7 +2971,6 @@ tg stats chats retention <chat> [options]
 | `--by <day\|week>` | группировать даты вступления по календарному дню или неделе с понедельника. Одно из: `day`, `week`. |
 | `--timezone <zone>` | часовой пояс IANA для когорт вступления. |
 | `--limit <n>` | когорты и доказательства участников, 1–100. |
-
 
 #### `tg stats chats official`
 
@@ -3442,7 +3412,7 @@ tg replies edit <id> [options]
 
 ### `tg replies audience`
 
-показать аудиторию ответов профиля или заменить указанные поля; список тестировщиков по-прежнему ограничивает ответы
+показать ответной аудитории, кому могут отвечать правила, или заменить ее именованные поля; новый файл отвечает всем, кому соответствует правило
 
 **Изменяет данные только на этом компьютере.**
 
@@ -4360,8 +4330,6 @@ tg bot recipients clear
 отправки, правки и удаления бота с компьютера: идентификаторы и результат, без текста
 
 #### `tg bot sends list`
-
-
 
 ```sh
 tg bot sends list

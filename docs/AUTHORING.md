@@ -1,6 +1,6 @@
 # Writing documentation for WireCat
 
-Write first for people who want their messenger to work with an AI assistant. They may not know
+Write first for people who want their messenger to work with an AI agent. They may not know
 what a terminal, CLI, profile, local archive, skill or MCP server is. Explain those terms when the
 reader needs them. Developers and agents also need exact reference material; give that material
 a clear destination without making it a prerequisite for ordinary tasks.

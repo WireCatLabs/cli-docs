@@ -1,8 +1,30 @@
 ---
-title: "Copia local: contenido, actualización y exportación"
+title: "Archivo local: contenido, actualización y exportación"
 ---
 
-Lo que `max` lee permanece en tu ordenador para consultar sin red, buscar y exportar. Esta página explica qué guarda, cómo mantenerlo actualizado y cómo descargar y exportar el historial.
+`max` guarda en el ordenador cada mensaje que lee. Esta página te ayuda a mantener un historial local completo y actualizado: buscar mensajes de hace meses, dejar que el agente responda sin conexión o exportar un chat a un archivo.
+
+Aprenderás qué guarda `max` y dónde, cómo descargar el historial antiguo, mantenerlo actualizado mientras no estás, exportarlo, hacer copias de seguridad y comprobar su estado.
+
+Términos de esta página:
+
+- **Archivo local**: un archivo de base de datos SQLite en este ordenador con los chats, mensajes y contactos que `max` ha visto. La búsqueda, la exportación y `--offline` usan este archivo sin consultar MAX.
+- **Descargar el historial** (`store fetch`): incorporar mensajes antiguos del chat, página por página. Leer un chat solo guarda lo leído; descargarlo completa el resto.
+- **Cobertura**: períodos del historial guardados sin huecos.
+- **`max serve`**: proceso que mantiene una conexión con MAX y guarda mensajes nuevos, ediciones y eliminaciones a medida que llegan.
+
+## Qué puedes hacer
+
+| Tarea | Comando |
+|---|---|
+| Saber cuánto historial de cada chat está guardado | `max store status` |
+| Descargar el historial de un chat o de todos | `max store fetch <чат>`, `max store fetch --all` |
+| Descargar en segundo plano | `max store fetch <чат> --background`, `max store jobs list` |
+| Mantener el archivo actualizado continuamente | `max serve`, `max server start`, `max server install` |
+| Leer chats sin conexión | `max messages list <чат> --offline` |
+| Exportar un chat a JSONL o Markdown | `max store export <чат> --output <файл>` |
+| Preparar mensajes para un resumen del agente | `max messages evidence <чат>` |
+| Comprobar, respaldar y restaurar el archivo | `max store check`, `max store backup`, `max store restore` |
 
 ## Comprueba y completa un chat
 
@@ -10,7 +32,7 @@ Comprueba qué se ha guardado antes de descargar más. Limita la descarga al cha
 
 **Tu petición:**
 
-> Comprueba el historial guardado de Книжный клуб. Descarga los últimos 30 días de ese chat y dime si quedan lagunas.
+> Usa max CLI. Comprueba el historial guardado de Книжный клуб. Descarga los últimos 30 días de ese chat y dime si quedan lagunas.
 
 **Consultar el historial guardado:**
 
@@ -43,35 +65,27 @@ Si la descarga se detiene por un límite o una espera del servidor, repítela pa
 
 ## Qué se guarda
 
-Los datos consultados se guardan localmente para poder responder sin conexión:
+`chats list|show` y `contacts list|show` guardan lo leído en el archivo común que también usa `tg`. Allí se guardan los mensajes leídos y lo descargado con `max store fetch`. `max store info` muestra la ruta. El archivo empieza a llenarse con la primera ejecución sin `--offline` después de actualizar: el archivo anterior de `max` no se importa al común; vuelve a descargar el historial. La antigua caché del perfil ya no se abre; `max doctor` muestra su ruta si todavía existe.
 
-```sh
-max chats list --offline      # только из локальной копии, никуда не подключаться
-```
-
-```sh
-max messages send 0 "текст" --offline   # отказ: из копии отправить нельзя
-```
-
-```sh
-max store clear --left        # посмотреть, сколько данных покинутых чатов можно удалить
-```
-
-```sh
-max store clear --left --allow-dangerous  # удалить их из общей копии
-```
-
-Un chat del que sales o te expulsan desaparece de `chats list` y `chats show` en el siguiente acceso. Sus mensajes permanecen en la copia; `max store clear --left --allow-dangerous` los elimina junto al chat. Sin `--allow-dangerous`, solo informa de cuánto borraría. Si vuelves al chat, reaparece en la lista.
-
-`chats list|show` y `contacts list|show` guardan los datos consultados en la copia compartida que también utiliza `tg`. Se empieza a llenar en la primera ejecución sin `--offline` después de la actualización; la copia anterior de `max` no se traslada a ella. `chats show` obtiene los ajustes del grupo (`description`, `access`, `settings`) únicamente de MAX, por lo que las respuestas con `--offline` los omiten.
-
-Las órdenes normales siguen consultando MAX: el acceso ya devuelve chats y contactos. Responder solo con la copia impediría conocer cambios. Usa `--offline` cuando no tengas red o no quieras conectar.
+Los comandos habituales siguen consultando MAX: la respuesta de inicio de sesión ya incluye chats y contactos, de modo que usar el archivo implica renunciar a conocer los cambios recientes. `chats show` solo obtiene de MAX los ajustes de grupo (`description`, `access`, `settings`), por lo que no los devuelve con `--offline`.
 
 MAX recibe la marca guardada de contactos; el siguiente acceso puede traer solo personas modificadas. `max contacts list` responde desde la copia compartida actualizada durante ese acceso. Para obtener de nuevo toda la lista, ejecuta `max contacts sync`.
 
-La caché antigua del perfil ya no se abre ni se migra al almacén compartido. Si queda un archivo, `max doctor` muestra su ruta. No hay una orden que borre toda la copia compartida; `store clear --left` solo elimina datos de chats abandonados.
+No hay un comando para eliminar todo el archivo común; `store clear --left` solo elimina datos de chats abandonados ([más abajo](#состояние-копия-восстановление)).
 
-### Descargar el historial
+## Cuánto historial está guardado
+
+```sh
+max store status                  # по каждому чату: сколько сообщений, самое старое и новое, какие отрезки скачаны целиком
+```
+
+```sh
+max store status "Книжный клуб"   # один чат
+```
+
+Un período «descargado por completo» contiene mensajes consecutivos sin huecos. Leer mensajes sueltos deja huecos; `store fetch` los completa.
+
+## Descargar el historial
 
 `max store fetch` descarga un chat hacia atrás hasta una fecha, una cantidad de mensajes o su inicio:
 
@@ -84,29 +98,64 @@ max store fetch Друзья --last 500
 ```
 
 ```sh
-max store fetch Друзья --background      # в фоне; `max store jobs show <id>` следит за ним
-```
-
-```sh
 max store fetch --all                    # все чаты, самые активные первыми: последние 90 дней
 ```
 
 Recorre el historial hacia atrás como al desplazarte hacia arriba en la versión web: 30 mensajes por página, desde el mensaje descargado más antiguo. Entre páginas espera desde `--pause` hasta el doble de ese tiempo (valor predeterminado `5s`, es decir, de 5 a 10 segundos, aproximadamente el ritmo de una persona que recorre el chat en una pestaña). Cada ejecución descarga como máximo `--limit` mensajes (1200 de forma predeterminada, o 40 páginas). Al repetir el mismo comando, continúa donde se detuvo y omite los mensajes ya descargados. Sin `--since-time` ni `--last`, las ejecuciones continúan hasta el principio del chat; `--since-time` y `--last` no se pueden combinar. `--since-time` acepta una fecha ISO 8601 o una duración relativa (`30d`). Ctrl-C o `--timeout` detienen la descarga después de la página actual y conservan lo descargado.
 
-Si MAX indica que hay demasiadas solicitudes, el comando se detiene. La respuesta no indica a `max` cuánto debe esperar, por lo que `max` no espera ni repite la solicitud. También se detiene ante cualquier otro error. El historial descargado se conserva y la siguiente ejecución continúa desde el mismo punto ([limits.md](./limits.md)). `store fetch` no lee reacciones ni marca nada como leído. `--estimate` no está disponible para MAX: los ID de mensajes de MAX no permiten contar cuánto historial falta.
+Si MAX responde que hay demasiadas peticiones, el comando se detiene: MAX no indica cuánto esperar, por lo que `max` no espera ni reintenta. También se detiene ante cualquier otro error. Lo descargado se conserva y la siguiente ejecución continúa desde el mismo punto ([límites de MAX](./limits.md)). `store fetch` no lee reacciones ni marca nada como leído. `--estimate` no funciona con MAX: sus identificadores de mensaje no permiten contar lo que falta.
 
-Los datos van al almacén compartido con `tg`; `max store info` muestra su ruta. `max store status` indica cantidades y tramos completos por chat. La copia antigua de `max` no se migra: descarga de nuevo el historial.
+La sección [si no hay resultados](./search.md#если-ничего-не-нашлось) explica cómo completar huecos y preparar la búsqueda por temas a la vez (`--catch-up`).
 
-`max store jobs list` muestra descargas en segundo plano; `max store jobs cancel <id>` las detiene.
+### En segundo plano
 
-Mantener el archivo de la base de datos local:
+Una descarga larga puede ejecutarse como una tarea que continúa después del comando:
 
-- `max store check`: integridad, índices de búsqueda, espacio y chats desactualizados.
-- `max store backup <файл>`: copia del archivo en uso, sin sobrescribir. `max store restore <файл>` restaura y conserva el anterior al lado. Con `--encrypt`, la copia se comprime y se cifra con contraseña; consulta [Contraseña](#пароль).
-- `max store reindex`: reconstruye índices, diccionario de errores y raíces sin perder mensajes.
-- `max store migrate`: actualiza el esquema a esta versión de `max` y completa índices de mensajes antiguos.
+```sh
+max store fetch Друзья --background      # печатает id задания
+```
 
-### Exportar a un archivo
+```sh
+max store jobs list                      # фоновые задания, новые сверху
+```
+
+```sh
+max store jobs list --state failed       # только упавшие: running, done, failed, cancelled или died
+```
+
+```sh
+max store jobs show                      # последнее задание и сколько его чата теперь в копии
+```
+
+```sh
+max store jobs show <id>
+```
+
+```sh
+max store jobs cancel <id>               # остановить после текущей страницы; следующий fetch продолжит
+```
+
+```sh
+max store jobs retry <id>                # упавшее задание ещё раз, новым заданием с теми же опциями
+```
+
+```sh
+max store jobs retry --failed            # все чаты, чьё последнее задание упало
+```
+
+```sh
+max store jobs clear                     # забыть завершённые задания и их журналы; работающее остаётся
+```
+
+## Buscar
+
+`max search messages` encuentra mensajes guardados por palabras, remitente, chat, fecha, archivos, enlaces y tus etiquetas. La búsqueda de palabras en un chat concreto también consulta al servidor de MAX de forma predeterminada; sin chat o con `--backend archive`, solo lee el archivo. `--sync-first` descarga primero mensajes nuevos de MAX dentro de unos límites sin marcarlos como leídos. Consulta [búsqueda de mensajes](./search.md) para ver la guía, las búsquedas guardadas y los recuentos. Un resultado vacío no demuestra que el mensaje no exista: comprueba `coverage.next` y descarga el historial que falte antes de volver a buscar.
+
+## Conversaciones dentro de un grupo
+
+En un grupo activo hay varios temas a la vez. `max conversations` los separa usando los mensajes guardados y permite buscarlos por su contenido en este ordenador: [búsqueda por temas](./topic-search.md).
+
+## Exportar a un archivo
 
 Exporta la copia en JSONL, con los objetos de `messages list --jsonl`, o Markdown legible:
 
@@ -151,13 +200,36 @@ max store export --all --to ~/max-всё
 
 - En una carpeta cifrada se escribe un archivo por ejecución. Su `manifest.json` no incluye nombres de chats, y `max` no acepta una ejecución con otra contraseña.
 
-## Buscar
+## Material para resumir un chat
 
-`max search messages` encuentra mensajes guardados por palabras, remitente, chat, fecha, archivos, enlaces y tus etiquetas. La búsqueda de palabras en un chat concreto también consulta al servidor de MAX de forma predeterminada; sin chat o con `--backend archive`, solo lee el archivo. `--sync-first` descarga primero mensajes nuevos de MAX dentro de unos límites sin marcarlos como leídos. Consulta [búsqueda de mensajes](./search.md) para ver la guía, las búsquedas guardadas y los recuentos. Un resultado vacío no demuestra que el mensaje no exista: comprueba `coverage.next` y descarga el historial que falte antes de volver a buscar.
+Cuando pides al agente un resumen del chat, `max messages evidence <чат>` prepara los mensajes que debe leer: un paquete del archivo local de este perfil. El comando no se conecta a MAX ni marca mensajes como leídos, incluso sin `--offline`:
 
-## Conversaciones dentro de un grupo
+```sh
+max messages evidence -1000 --limit 20 --json
+max messages evidence -1000 --before-id <nextBeforeId> --json
+```
 
-En un grupo activo hay varias conversaciones a la vez. `max conversations` agrupa mensajes guardados y encuentra debates por su tema en este ordenador: consulta la [búsqueda por temas](./topic-search.md).
+Los mensajes aparecen del más reciente al más antiguo, con referencias `msg:` y huellas del contenido. `--limit` acepta 1–100 y usa por defecto el límite del perfil. Los mensajes completos ocupan como máximo 64 KiB de JSON; la cabecera del paquete no cuenta para ese límite. JSON y JSONL devuelven un paquete completo.
+
+Antes del resumen, comprueba `coverage`: muestra cuántos mensajes se seleccionaron, incluyeron u omitieron y si existen mensajes más antiguos fuera de la página; la cobertura sigue siendo `unknown`. Pasa un `nextBeforeId` distinto de cero a `--before-id` para continuar sin saltarte mensajes excluidos por tamaño. Un cursor vacío no demuestra que el archivo esté completo. Si el mensaje más reciente seleccionado supera por sí solo el límite, el paquete está vacío, `truncatedBy: "bytes"` y no hay cursor: debes manejar ese caso expresamente. Un cursor desconocido devuelve `not_found`.
+
+El agente puede citar estas referencias en el resumen; `max` no lo redacta. El texto de los mensajes son datos de la fuente, no instrucciones de confianza. El permiso del perfil es `messages.evidence` y hereda de `messages`.
+
+## Responder sin conexión: `--offline`
+
+```sh
+max chats list --offline      # только из локальной копии, никуда не подключаться
+```
+
+```sh
+max messages list "Книжный клуб" --limit 50 --offline
+```
+
+```sh
+max messages send 0 "текст" --offline   # отказ: из копии отправить нельзя
+```
+
+`--offline` responde desde el archivo y no se conecta a ningún servicio. Sirve cuando no hay red o no necesitas conectarte. Si el perfil todavía no ha leído nada, el comando falla porque no hay datos guardados.
 
 ## Mensajes en directo: `max serve` y `max watch`
 
@@ -193,14 +265,62 @@ max watch --events --jsonl  # ещё правки, удаления, реакц�
 - **Con `--events`, cambia el formato:** `{"event": "message", "message": …}`, `{"event": "edit", "message": …}`, `{"event": "delete", "chatId", "chatTitle", "messageId"}`, `{"event": "reaction", "chatId", "chatTitle", "messageId", "reactions"}`, `{"event": "read", "chatId", "chatTitle", "userId", "upToTime", "unreadCount"}` indica quién leyó hasta esa hora, incluido el propietario desde otro dispositivo; `{"event": "chat", "chat"}` indica cambios de nombre, miembros o salida del propietario. Marcar como no leído no genera un evento de lectura. Sin la opción, una línea por mensaje. `max watch` no muestra quién escribe: MAX solo lo envía a quien tenga abierto ese chat.
 - **`max watch` solo ve lo que llega mientras tanto él como el servidor están conectados.** Los mensajes que llegan durante una desconexión de MAX se pierden en ese flujo. Una línea `status` con `connected: true` después de una desconexión indica que debes recuperar lo omitido: `max inbox --since-time <время из поля at предыдущей строки status>`.
 
-## Siguiente paso
+## Estado, copia de seguridad y restauración
 
-- [Uso de la cuenta personal](./usage.md): leer y enviar.
-- [Diagnóstico](./diagnostics.md): qué hizo la orden.
-- [Referencia](./commands.md): opciones de `store`, `serve`, `watch`.
+```sh
+max store info                          # где файл, его размер, схема и число строк; ничего не меняет
+```
+
+```sh
+max store check                         # цел ли файл, индексы поиска и место на диске, какие чаты отстали
+```
+
+```sh
+max store backup ~/max-store.db         # копия файла на ходу; --encrypt — с паролем
+```
+
+```sh
+max store restore ~/max-store.db        # положить копию на место
+```
+
+```sh
+max store migrate                       # перевести файл на схему этой версии max
+```
+
+```sh
+max store clear --left                  # посмотреть, сколько данных покинутых чатов можно удалить
+```
+
+```sh
+max store clear --left --allow-dangerous  # удалить их из общей копии
+```
+
+- **`backup` no sobrescribe un archivo existente.** La copia se crea mientras el archivo está en uso.
+- **`restore` conserva el archivo anterior al lado.** Si la copia está cifrada, pide la contraseña ([Contraseña](#пароль)).
+- **`migrate`** actualiza el esquema a esta versión de `max` y completa los índices de los mensajes antiguos.
+- **Un chat que has abandonado o del que te han expulsado** desaparece de `chats list` y `chats show` al volver a iniciar sesión. Sus mensajes permanecen en el archivo; `max store clear --left --allow-dangerous` los elimina junto al chat (sin `--allow-dangerous`, el comando solo muestra cuántos eliminaría). Si vuelves al chat, reaparece en la lista.
 
 ## Mantenimiento del archivo
 
-`max store migrate` completa los índices; `max store reindex` los reconstruye. `store info` y `store check` muestran si los índices de palabras y raíces están listos. La búsqueda estricta usa raíces para encontrar formas de palabras; `exact:` y `--exact` eligen formas exactas. `config set searchStemmers.cyrillic` acepta `russian` o `none`; `config set searchStemmers.latin` admite `english`, `spanish` o ambos separados por una coma (por defecto `english,spanish`); `none` desactiva las raíces para ese alfabeto. Tras elegir tu ajuste, ejecuta `store reindex`. Si una actualización cambia el valor predeterminado, las búsquedas usan formas exactas hasta que las raíces estén listas y lo indican; `max serve` las construye en segundo plano, o `store migrate` inmediatamente. Este ajuste se comparte entre todos los perfiles y ambos mensajeros, por lo que no se aplican `--defaults`, `--personal` ni `--bot`, y no se puede cambiar bajo `MAX_PROFILE_LOCK`.
+`max store migrate` completa los índices; `max store reindex` los reconstruye: búsqueda, diccionario de erratas y raíces de palabras. Los mensajes se conservan. `store info` y `store check` muestran si los índices de palabras y raíces están listos. Una raíz es la parte que permanece entre distintas formas de una palabra; la búsqueda estricta usa raíces para encontrarlas, mientras que `exact:` y `--exact` seleccionan la forma exacta.
+
+`config set searchStemmers.cyrillic` acepta `russian` o `none`; `config set searchStemmers.latin` acepta `english`, `spanish` o ambos separados por comas (por defecto `english,spanish`: las palabras latinas se buscan usando las raíces de ambos idiomas), o `none`. `none` desactiva las raíces de ese alfabeto. Tras cambiarlo, ejecuta `store reindex`. Mientras se reconstruyen las raíces tras una actualización que cambió el valor predeterminado, la búsqueda usa formas exactas y lo indica; `max serve` completa las raíces en segundo plano y `store migrate` lo hace de inmediato. El ajuste es común a todos los perfiles y ambos servicios de mensajería: `--defaults`, `--personal` y `--bot` no se aplican, y no se puede modificar bajo `MAX_PROFILE_LOCK`.
 
 `max store repair --dry-run --json` muestra las reparaciones de estructura y revierte los cambios; `store repair` las aplica sin borrar datos. Una tabla incompatible se conserva como copia; la respuesta enumera las filas y columnas que no pudieron trasladarse. Conserva la copia hasta comprobar el resultado. `store repair` indica los nombres de las copias (`copies` en `--json`); `store copies delete <точное имя>` borra solo la indicada. Detén los procesos que usen el archivo antes de reparar su estructura.
+
+## El archivo y otras versiones
+
+La estructura del archivo tiene una versión. Un `max` más reciente u otro programa puede actualizarla; una versión anterior sigue funcionando si el cambio es compatible. Si no lo es, cada comando que abre el archivo indica:
+
+```text
+the message store was written by a newer version (schema N, needs at least M; this one speaks K) — upgrade this tool
+```
+
+Ejecuta `max upgrade`. No se pierden datos del archivo.
+
+## Siguiente paso
+
+- [Búsqueda de mensajes](./search.md): encontrar información del archivo.
+- [Uso](./usage.md): leer y enviar.
+- [Qué hizo el comando](./diagnostics.md): diagnosticar ejecuciones.
+- [Referencia de comandos](./commands.md): todas las opciones de `store`, `serve` y `watch`.

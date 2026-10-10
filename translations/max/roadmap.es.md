@@ -2,12 +2,11 @@
 title: "Hoja de ruta"
 ---
 
-Planes para `max`. El orden es orientativo y puede cambiar. Puedes proponer ideas en [incidencias](https://github.com/leemour/max-cli/issues).
+Esta página contiene lo que está planeado para `max` y lo que aún no está disponible. Léelo antes de buscar una solución para la característica que falta: es posible que ya esté en los planes. El orden es aproximado y puede cambiar. Puedes enviar el tuyo en [problemas en GitHub](https://github.com/leemour/max-cli/issues).
 
 ## Próximamente
 
-
-- **Copia local opcional.** Un ajuste para que `max` no guarde nada en disco y consulte siempre MAX.
+- **Archivo local opcional.** Un ajuste para que `max` no guarde nada en disco y consulte siempre MAX.
 
 ## Más adelante
 
@@ -15,5 +14,4 @@ Planes para `max`. El orden es orientativo y puede cambiar. Puedes proponer idea
 - **Videomensajes circulares** y **establecer o eliminar la contraseña en la nube**.
 - **Instaladores** para cada plataforma, sin Node ni Bun.
 
-La transferencia de archivos guardados a agentes remotos está implementada: [adjuntos](./attachments.md#файл-для-удалённого-агента).
-Un PDF se puede mostrar página a página como imágenes si el cliente del agente no abre el archivo original: [lectura de PDF por un agente remoto](./remote.md#читать-pdf-без-сохранения-файла-у-агента).
+Lo que ha cambiado en cada versión lanzada se encuentra en [historial de cambios](./changelog.md).

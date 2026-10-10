@@ -2,11 +2,41 @@
 title: "Lenguaje de consulta de la búsqueda"
 ---
 
-Referencia de consultas de `max search messages`, `max stats messages show` y búsquedas guardadas. Consulta ejemplos cotidianos en [búsqueda de mensajes](./search.md).
+<a id="en-mcp" />
+<a id="los-modos-anteriores" />
+<a id="в-mcp" />
+<a id="прежние-режимы" />
 
-El lenguaje es un perfil estricto de la sintaxis de consultas de Apache Lucene: palabras, frases, AND/OR/NOT, grupos, campos, intervalos, comodines con límites y expresiones regulares. La [referencia completa](https://github.com/leemour/cli-messaging/blob/v0.164.0/docs/search/query-language.md) (en ruso) contiene las tablas generadas de campos, operadores, filtros preparados y límites, y ejemplos ejecutables; la [especificación técnica](https://github.com/leemour/cli-messaging/blob/v0.164.0/docs/search/query-language-spec.md) describe la gramática y el compilador.
+Si trabaja con `max` a través de un agente de IA, no necesita aprender este idioma: diga con palabras comunes lo que está buscando y el agente creará la solicitud. Esta página es para quienes escriben la búsqueda ellos mismos y para quienes necesitan todos los filtros: operadores exactos, todos los campos, ajustes preestablecidos, reglas de fecha y límites.
 
-Las palabras y frases sin campo buscan formas de palabras. `--exact` selecciona formas exactas para palabras sin campo; un `text:` explícito sigue buscando formas de palabras. La configuración de idioma del archivo afecta a la coincidencia.
+Esta es una ayuda para las consultas `max search messages`, `max search all`, `max stats messages show`, búsquedas guardadas y `--filter` [búsqueda por tema](./topic-search.md). Ejemplos para todos los días: en [búsqueda de mensajes](./search.md).
+
+Términos de esta página:
+
+- **Consulta**: texto de búsqueda, como `счёт from:me date:7d`.
+- **Campo**: nombre con dos puntos que filtra una propiedad: `from:` (remitente), `date:` (fecha). Las palabras sin campo buscan en el texto del mensaje.
+- **Operador**: palabra o signo que combina condiciones: `AND`, `OR`, `NOT`.
+- **Formas de palabra**: distintas terminaciones, como «casa» y «casas».
+
+Idioma: un perfil estricto de la sintaxis de Apache Lucene: palabras, frases, Y/O/NO, grupos, campos, rangos, patrones limitados y expresiones regulares. "Estricto" significa que cualquier cosa que no sea compatible es un error, no una parte que se omite silenciosamente. [La ayuda completa](https://github.com/leemour/cli-messaging/blob/v0.212.0/docs/search/query-language.md) contiene tablas generadas de campos, operadores, ajustes preestablecidos y límites y ejemplos verificables; [La especificación técnica](https://github.com/leemour/cli-messaging/blob/v0.212.0/docs/search/query-language-spec.md) describe la gramática y el compilador.
+
+## Qué puede hacer el idioma
+
+|Necesito|Escribir|
+|---|---|
+|mensajes con todas estas palabras, en cualquier forma| `счёт оплачен` |
+|estas palabras seguidas, en este orden| `"счёт оплачен"` |
+|una palabra u otra, sin tercera| `(кафе OR библиотека) NOT шумно` |
+|solo esta forma de la palabra|`exact:квартира` o `--exact` para todas las palabras sin campo|
+|palabras que empiezan con algo| `квартир*` |
+|remitente, chat, tipo de chat| `from:me`, `chat:"Книжный клуб"`, `kind:private` |
+|período| `date:7d`, `date:[2026-01-01 TO 2026-02-01}` |
+|archivos por nombre o tamaño| `filename:*.pdf`, `size>10MB` |
+|texto similar a una contraseña, tarjeta o teléfono| `preset:secret`, `preset:card` |
+|tus propias etiquetas| `tag:work` |
+|muestra| `text:/pass(port)?/` |
+
+Las palabras y frases sin campo buscan distintas formas de palabra. `--exact` selecciona formas exactas para las palabras sin campo; `text:` explícito sigue buscando formas. Las coincidencias dependen del idioma configurado en el archivo ([formas de palabra](./archive.md#обслуживание-архива)).
 
 ## Operadores
 
@@ -25,7 +55,7 @@ Las palabras y frases sin campo buscan formas de palabras. `--exact` selecciona 
 | comodín | `квартир*`, `т?кст` | `*` cualquier número de caracteres, `?` uno |
 | expresión regular | `text:/pass(port)?/` | una expresión regular de Lucene con límites |
 
-`alpha OR beta gamma` significa `(alpha OR beta) AND gamma`; `alpha OR beta AND gamma` significa `alpha OR (beta AND gamma)`. Usa paréntesis para evitar dudas. `and`, `or` y `not` en minúsculas son palabras normales. Una consulta con solo `NOT` no encuentra nada: añade una condición positiva, por ejemplo `kind:group NOT preset:secret`. La coincidencia difusa `~`, la proximidad, la relevancia ponderada y los intervalos se rechazan con un error; no se ignoran.
+`alpha OR beta gamma` significa `(alpha OR beta) AND gamma`; `alpha OR beta AND gamma` - `alpha OR (beta AND gamma)`. Utilice paréntesis para mayor claridad. `and`, `or`, `not` en minúsculas: palabras comunes. La consulta desde un `NOT` no encuentra nada: agregue una condición positiva, por ejemplo `kind:group NOT preset:secret`. La búsqueda difusa `~`, la proximidad de palabras, los pesos y los intervalos dan un error en lugar de omitirse. Los errores tipográficos no se pueden corregir: para captar diferentes finales, escriba un patrón como `квартир*`.
 
 ## Campos
 
@@ -54,6 +84,8 @@ Los nombres de campo distinguen mayúsculas. Un campo, valor o combinación desc
 
 ## Filtros preparados
 
+Preset busca texto según su tipo. Con él podrás encontrar una contraseña, código o número de tarjeta que alguien envió.
+
 | Filtro | Un candidato es |
 |---|---|
 | `password` | una etiqueta de contraseña seguida de un valor |
@@ -74,7 +106,7 @@ Un filtro preparado señala un candidato por su forma. No verifica una contrase�
 
 ## Fechas
 
-`--timezone` acepta una zona IANA como `Europe/Madrid`; sin ella se usa la zona del equipo, que se devuelve en la respuesta. Una fecha sin hora es un día natural completo. Un límite superior inclusivo incluye todo ese día; uno exclusivo lo excluye; un día con cambio de hora puede durar 23 o 25 horas.
+`--timezone` acepta una zona IANA como `Europe/Madrid`; sin ella se usa la zona del comando, que se devuelve en la respuesta. Una fecha sin hora es un día natural completo. Un límite superior inclusivo incluye todo ese día; uno exclusivo lo excluye; un día con cambio de hora puede durar 23 o 25 horas.
 
 `date:today` y `date:yesterday` son días naturales. `date:7d` significa desde hace 7 días hasta ahora (también `30m`, `2h`); `date>=7d` y `date:[30d TO 7d}` funcionan en comparaciones e intervalos, contados desde el momento en que se ejecuta la consulta. Una hora exacta va entre comillas, con segundos y desplazamiento horario: `date>="2026-01-01T10:00:00+02:00"`.
 
@@ -85,6 +117,14 @@ Antes de indexarlo y buscarlo, el texto se convierte a minúsculas y pierde los 
 `text:/счёт/` coincide con la palabra completa «счёт», pero no con «счётом». `body:/счёт/` coincide solo con un mensaje cuyo texto completo es «счёт», distinguiendo mayúsculas; para encontrarla en cualquier posición, usa `body:/.*счёт.*/`, y para el comienzo de una frase, `body:/.*[Сс]чёт.*/`. Es la sintaxis de expresiones regulares de Lucene, sin lookaround, referencias inversas, anclas ni indicadores de JavaScript.
 
 En un archivo grande, un prefijo corto como `к*` puede abarcar más de 10 000 palabras y se rechaza; alárgalo. Las consultas largas, el anidamiento profundo, los patrones grandes y los recorridos lentos se rechazan con `query_limit`, no se recortan: limita el chat, las fechas o el patrón.
+
+### Expresión regular de JavaScript: `--regex`
+
+```sh
+max search messages --regex 'invoice\s+\d+' --json
+```
+
+`--regex` - modo separado. Las palabras después del comando son una única expresión regular de JavaScript, no una consulta en ese idioma. No distingue entre mayúsculas y minúsculas, se compara con el texto completo de cada mensaje almacenado y se ejecuta en un proceso aislado con límites de tiempo y tamaño. Una búsqueda guardada almacena su `--regex`; no puede agregar `--regex` al comenzar desde `--saved`.
 
 ## La respuesta
 
@@ -98,28 +138,11 @@ En un archivo grande, un prefijo corto como `к*` puede abarcar más de 10 000 p
 
 Un error incluye la posición del problema en la consulta y una pista.
 
-## En MCP
+## A través de MCP
 
-`max_read` (`command: "search messages"`) acepta una consulta como `text` o como árbol sintáctico con versión en `ast`, pero no ambos. `language` elige `lucene` o `legacy`; `timezone` establece la zona horaria del calendario. `chat` acepta un ID o un título guardado; `source`, `newest`, `context` y `limit` funcionan como las opciones del comando. `record: false` evita que la llamada se registre en el historial de consultas. La respuesta tiene los mismos campos que `--json`. `max_read` (`command: "stats messages show"`) cuenta con las mismas consultas.
+Mediante MCP, `max_read` (`command: "search messages"`) acepta la consulta como `text` o como árbol de sintaxis con versión en `ast`, nunca ambos; `timezone` elige la zona del calendario. `chat` acepta ID o nombre guardado; `source`, `newest`, `context` y `limit` corresponden a las opciones del comando. `saved` ejecuta una búsqueda guardada. `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` y `sync_first` corresponden a `--thread…` y `--sync-first`; `sync_first` requiere `messages.sync-first: allow`. Devuelve los mismos campos que `--json`. `max_read` (`command: "stats messages show"`) cuenta las mismas consultas. `record: false` evita registrar la llamada en el historial.
 
-## Los modos anteriores
+## Más
 
-```sh
-max search messages 'from:alice after:7d invoice -draft' --language legacy --json
-max search messages --regex 'invoice\s+\d+' --json
-```
-
-`--language legacy` conserva los filtros anteriores y su corrección de erratas. `--regex` es un modo aparte: una expresión regular de JavaScript, sin distinguir mayúsculas, sobre el texto completo, en un proceso aislado con límites de tiempo y tamaño. `--regex` no se puede combinar con `--language lucene`.
-
-| Anterior | Estricto |
-|---|---|
-| `after:2026-01-01` | `date:[2026-01-01 TO *]` |
-| `before:2026-02-01` | `date:[* TO 2026-02-01}` |
-| `after:7d` | `date:7d` |
-| prefijo y corrección de erratas automáticos | `квартир*` de forma explícita; erratas solo en `--language legacy` |
-
-`--thread` sigue el grafo de respuestas guardado; en `messages context` sustituye a los mensajes vecinos en orden cronológico. Los valores predeterminados son 8 saltos, 50 mensajes, 65 536 bytes y un día alrededor de cada resultado. Cámbialos con `--thread-hops`, `--thread-messages`, `--thread-bytes` y `--thread-within`. Sin grafo, vuelve al contexto cronológico; los enlaces desactualizados se marcan y no se recorren.
-
-La búsqueda de palabras en un chat concreto consulta tanto al archivo como al servidor de MAX de forma predeterminada; sin un chat concreto, solo consulta al archivo. `--backend archive` mantiene la búsqueda local. `--sync-first` descarga primero los mensajes nuevos, sin marcar nada como leído: como máximo 5 chats, 500 mensajes y 30 segundos. Ajusta estos límites con `--max-chats`, `--max-messages` y `--sync-time`. Una actualización incompleta o fallida conserva los resultados locales e informa de la cobertura desactualizada y del resultado de la actualización.
-
-MCP utiliza `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` y `sync_first`. `sync_first` solo está disponible con `messages.sync-first: allow`. `max_read` con `command: "messages context"` y `arguments: { offline: true }` lee los datos guardados.
+- [Búsqueda de mensajes](./search.md): busca todos los días, búsquedas guardadas y contando.
+- [Buscar por tema](./topic-search.md): encuentre una discusión por significado cuando no recuerde las palabras.

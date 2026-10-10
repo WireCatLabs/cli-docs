@@ -1,9 +1,9 @@
 ---
 title: "Permisos"
-description: "Elige qué acciones puede realizar el asistente."
+description: "Elige qué acciones puede realizar el agente."
 ---
 
-Elige qué puede hacer tu asistente: leer mensajes, enviar respuestas o cambiar un grupo. Esta página te ayuda a configurar el acceso para una cuenta o bot y comprobar los límites antes de una tarea. Los permisos pertenecen a <DocTerm term="profile" lang="es" label="un perfil" />, un conjunto de ajustes con nombre para una cuenta o bot; [Perfiles](./profiles.md) explica cómo elegirlo.
+Elige qué puede hacer tu agente: leer mensajes, enviar respuestas o cambiar un grupo. Esta página te ayuda a configurar el acceso para una cuenta o bot y comprobar los límites antes de una tarea. Los permisos pertenecen a <DocTerm term="profile" lang="es" label="un perfil" />, un conjunto de ajustes con nombre para una cuenta o bot; [Perfiles](./profiles.md) explica cómo elegirlo.
 
 ## Elegir el nivel de acceso
 
@@ -11,11 +11,11 @@ Elige qué puede hacer tu asistente: leer mensajes, enviar respuestas o cambiar 
 |---|---|
 | `deny` | Se rechaza la acción, incluso leer. |
 | `readonly` | Permite leer, pero no cambiar. |
-| `ask` | Un cambio pregunta en el terminal. |
+| `ask` | Un cambio requiere confirmación en el terminal. |
 | `allow` | Puede ejecutarse sin otra pregunta. |
 
 Un rechazo indica que debes revisar acción y ajustes, no que la conexión esté rota.
-No pidas al asistente que elimine una restricción solo para terminar una tarea.
+No pidas al agente que elimine una restricción solo para terminar una tarea.
 
 ## Permitir una acción
 
@@ -35,7 +35,7 @@ Las claves más específicas tienen prioridad. `permissions.messages.send ask` p
 cámbiala a `readonly` para impedirlo. Revisa las demás excepciones con `config show`.
 
 Esto controla mensajes. Reacciones y administración tienen claves propias. Consulta los ejemplos
-completos de solo lectura en [Telegram](./tg/configuration.md) y [MAX](./max/configuration.md).
+completos de solo lectura en las referencias de permisos de [Telegram](./tg/configuration-reference.md#what-a-profile-may-do) y [MAX](./max/configuration-reference.md#права-доступа).
 
 ## Permisos del bot
 
@@ -57,11 +57,11 @@ Las instrucciones están en la seguridad de [Telegram](./tg/security.md) y [MAX]
 ## Cambiar temporalmente un servidor MCP
 
 Añade `--permission messages.send=allow` al inicio del servidor para permitir enviar durante
-ese proceso. No cambia los ajustes guardados. Por MCP, `ask` no exige formulario del servidor: la app
+ese proceso. No cambia los ajustes guardados. Por MCP, `ask` no exige un formulario de confirmación en el servidor: la app
 controla sus aprobaciones y puede permitir otra llamada sin preguntar. Usa `deny` o `readonly` para impedir cambios. Consulta [la conexión web](./browser-apps.mdx).
 
 ## Límites y reglas detalladas
 
-Un asistente con acceso a archivos de configuración o a un terminal sin restricciones puede
+Un agente con acceso a archivos de configuración o a un terminal sin restricciones puede
 cambiar estos permisos. Lee [Seguridad](./security.mdx) antes de darle ese acceso.
-Las claves y reglas anidadas están en la referencia de configuración del mensajero.
+Las claves y reglas anidadas están en las referencias de [Telegram](./tg/configuration-reference.md#what-a-profile-may-do) y [MAX](./max/configuration-reference.md#права-доступа).

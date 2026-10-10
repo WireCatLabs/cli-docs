@@ -2,10 +2,16 @@
 title: "Límites, esperas y trabajos en segundo plano"
 ---
 
-Telegram limita la frecuencia con la que una cuenta puede hacer solicitudes. Si haces demasiadas, responde «espera N
-segundos» (FLOOD_WAIT); si sigues enviando solicitudes durante la espera, esta aumenta. Si escribes a demasiados desconocidos,
-limita la cuenta por spam. `tg` regula el ritmo de cada perfil, espera el tiempo que pide Telegram
-cuando es corto y se detiene cuando es largo. Esta página reúne todas estas reglas.
+Utilice esta página cuando un comando espera, se detiene con un error de límite de velocidad o cuando planea descargar una gran cantidad de historial o ejecutar varios comandos a la vez. Explica qué tan rápido `tg` habla con Telegram, por qué a veces espera y qué hacer cuando se detiene. Al final sabrás qué esperas son normales, cómo cambiar el ritmo y cuándo volver a intentarlo.
+
+Palabras que utiliza esta página:
+
+- **Ritmo**: cuántas solicitudes puede enviar un perfil a Telegram por minuto. `tg` mantiene todos los perfiles debajo.
+- **FLOOD_WAIT**: Respuesta de Telegram "espera N segundos". Si sigues preguntando durante la espera, las esperas crecen.
+- **Límite de spam** (PEER_FLOOD): Telegram limita una cuenta que escribe a demasiados extraños.
+- **Trabajo en segundo plano**: una descarga que continúa ejecutándose después de que finaliza el comando que la inició.
+
+`tg` espera esperas cortas de Telegram y se detiene cuando la espera es larga.
 
 ## El ritmo: un cupo por perfil
 
@@ -57,12 +63,9 @@ hacer nada; `tg flood clear` la levanta antes si sabes que Telegram ya no limita
 
 ## Operaciones de escritura
 
-- **30 envíos por hora** por perfil de forma predeterminada (`sendsPerHour`), contados entre todos los procesos; consulta
-  [security.md](./security.md#the-send-guard).
-- **El límite por spam (PEER_FLOOD)** y una cuenta congelada bloquean todas las operaciones de escritura; la lectura sigue funcionando. Consulta
-  [troubleshooting.md](./troubleshooting.md).
-- `tg` nunca repite un envío si no se sabe si ha llegado; consulta
-  [usage.md](./usage.md#when-the-outcome-is-unknown).
+- **30 envíos por hora** por perfil de forma predeterminada (`sendsPerHour`), contados en todos los procesos; ver [el control de envío](./security.md#the-send-guard).
+- **Límite de spam (PEER_FLOOD)** y una cuenta congelada retiene cada escritura; Lee todavía funciona. Consulte [solución de problemas](./troubleshooting.md).
+- `tg` nunca repite un envío que puede haber llegado o no; ver [cuando se desconoce el resultado](./usage.md#when-the-outcome-is-unknown).
 
 ## Lecturas masivas
 
@@ -73,15 +76,12 @@ hacer nada; `tg flood clear` la levanta antes si sabes que Telegram ya no limita
 
 ## Trabajos en segundo plano
 
-`store fetch --background` y `store gaps repair --background` inician un trabajo que continúa después de terminar el comando:
-un trabajo por chat a la vez, cada uno en su propio proceso y todos con el mismo ritmo del perfil. `tg store jobs
-list` los muestra, y `tg store jobs cancel <job>` detiene uno después de su página actual. Consulta
-[archive.md](./archive.md#in-the-background).
+`store fetch --background` y `store gaps repair --background` inician un trabajo que dura más que el comando: un trabajo por chat a la vez, cada uno en su propio proceso, todo al mismo ritmo del perfil. `tg store jobs
+list` los muestra, `tg store jobs cancel <job>` se detiene uno después de su página actual. Consulte [descarga en segundo plano](./archive.md#in-the-background).
 
 ## Bots
 
-Los límites propios de la Bot API de un bot son independientes de los de la cuenta. `tg` respeta el `retry_after` que Telegram
-devuelve; una espera larga termina la ejecución. Consulta [bot.md](./bot.md).
+Los propios límites de Bot API de un bot son independientes de los de la cuenta. `tg` respeta los envíos de Telegram `retry_after`; uno largo termina la ejecución. Ver [bots](./bot.md).
 
 ## Un inicio de sesión, varios procesos
 

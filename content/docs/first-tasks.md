@@ -3,9 +3,7 @@ title: "First tasks"
 description: "Try a useful request, check the answer and move on to search, meeting context or draft replies."
 ---
 
-This page is for the moment right after you connect your account: it gives you first requests to
-try with your AI agent. By the end, you will have found a message, caught up on a conversation or
-prepared a reply, and you will know how to check that the answer is complete. A request is a task
+Once your account is connected, try a first request with your AI agent. Find a message, catch up on a chat or prepare a reply, then check that the answer is complete. A request is a task
 in your own words; the agent chooses the commands.
 
 If you still need setup, start with [installation](./installation.mdx) or

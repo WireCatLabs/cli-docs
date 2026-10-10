@@ -54,7 +54,13 @@ export async function serveExport(directory, { port = 0, gzip = true } = {}) {
     const body = bodyFile ? readFileSync(bodyFile) : Buffer.from("Not found")
     const extension = extname(bodyFile ?? ".txt")
     const headers = { "Content-Type": types[extension] ?? "application/octet-stream", "Cache-Control": "no-store" }
+    // Mirror public/_headers for precompressed static search responses.
+    const encodedSearch = file && pathname.startsWith("/api/search/") && body[0] === 0x1f && body[1] === 0x8b
+    if (encodedSearch) {
+      headers["Content-Type"] = "application/gzip"
+    }
     const compress =
+      !encodedSearch &&
       gzip &&
       /gzip/.test(request.headers["accept-encoding"] ?? "") &&
       /\.(html|md|txt|json|js|css|svg)$/.test(extension)

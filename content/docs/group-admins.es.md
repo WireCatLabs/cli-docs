@@ -3,7 +3,7 @@ title: "Administradores de grupos"
 description: "Atiende preguntas, entiende la participación y gestiona tu grupo."
 ---
 
-Esta página es para quienes gestionan un grupo de Telegram o MAX. Al terminar, podrás encontrar preguntas pendientes, entender la actividad y revisar quién está en tu grupo. Empieza con peticiones de un informe de solo lectura y comprueba el resultado antes de cambiar miembros o reglas de moderación. Los cambios requieren los permisos adecuados de tu cuenta o bot en el grupo.
+Si gestionas un grupo, usa un informe para encontrar preguntas pendientes, entender la actividad y revisar quién está en tu grupo. Empieza con peticiones de un informe de solo lectura y comprueba el resultado antes de cambiar miembros o reglas de moderación. Los cambios requieren los permisos adecuados de tu cuenta o bot en el grupo.
 
 ## Encontrar lo que necesita atención
 
@@ -13,7 +13,7 @@ Revisa los mensajes de ayer en mi grupo del proyecto. Enumera preguntas que sigu
 
 Comprueba las preguntas, el periodo y los mensajes citados. Si falta historial, [descarga los chats necesarios](./search.md) antes de considerar completo el informe.
 
-Pide al asistente preguntas pendientes y menciones con enlaces a mensajes.
+Pide al agente preguntas pendientes y menciones con enlaces a mensajes.
 Los comandos están en las guías de [Telegram](./tg/groups.md) y [MAX](./max/groups.md).
 
 ```sh

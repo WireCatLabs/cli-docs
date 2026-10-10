@@ -2,12 +2,21 @@
 title: "Respuestas automáticas"
 ---
 
-`tg serve` puede responder a mensajes entrantes según las reglas que escribas. Dos condiciones evitan que escriba a personas a las que no querías responder:
+Esta página trata sobre cómo responder mensajes de Telegram automáticamente cuando no puedes responder personalmente; por ejemplo, un breve "Responderé por la mañana" a las personas que escriben fuera del horario laboral. Al final, tienes una respuesta automática funcional: una regla con tu texto de respuesta, una opción de quién puede recibirlo, una forma de verificar qué respondería antes de enviar algo y textos listos para usar de [Borradores y plantillas de respuesta](https://wirecat.dev/en/docs/drafts-and-templates).
 
-- **Solo responde a cuentas de prueba.** La respuesta se envía solo a un remitente incluido en `testers` del archivo de reglas. Un archivo nuevo tiene `testers` vacío, así que nadie recibe respuestas hasta que añadas tu cuenta de prueba.
-- **El envío está desactivado hasta que lo actives.** `permissions.replies.send` debe ser `allow`. `ask` equivale a un no, porque un servidor en segundo plano no tiene a quién preguntar.
+Algunas palabras utilizadas a continuación:
 
-Las listas completas de opciones están en [commands.md](./commands.md#tg-replies).
+- Una **regla** dice qué mensajes entrantes responder y qué hacer: responder, abrir una tarea o ambas cosas.
+- Una **plantilla** es el texto de respuesta. Puede incluir el nombre del remitente y la hora.
+- La **audiencia** es la lista de personas y chats que pueden obtener una respuesta, independientemente de lo que diga una regla.
+- `tg serve` es el proceso en segundo plano que recibe nuevos mensajes y aplica las reglas.
+
+Quién recibe una respuesta y cuándo se envía algo:
+
+- **Las respuestas van a todas las personas que coincidan con tus reglas, a menos que limites la audiencia.** Responde solo a personas seleccionadas con `tg replies audience --reply listed --allow-people …`, o omite algunas con `--deny-people` y `--deny-chats`.
+- **No se envía nada hasta que activas el envío.** `permissions.replies.send` debe ser `allow`. `ask` cuenta como no, porque un servidor en segundo plano no tiene a quién preguntar. Las reglas nuevas permanecen desactivadas hasta que las activas.
+
+Las listas de opciones completas se encuentran en [los comandos de respuesta automática](./commands.md#tg-replies).
 
 ## Crear y activar una regla
 
@@ -18,10 +27,29 @@ tg replies edit away --outside 09:00-19:00 --days mon-fri --timezone Europe/Madr
 tg replies edit away --per-chat 1/12h --per-person 1/1d
 ```
 
-`add` crea una regla desactivada con todos los ajustes escritos. Las reglas están en `<profile>.replies.json`, en la misma carpeta que el `configFile` indicado por `tg config show --json`. Añade el ID de tu cuenta de prueba a `testers`:
+`add` crea una regla que está desactivada, con cada configuración escrita. Las reglas se encuentran en `<profile>.replies.json`, en la misma carpeta que el `configFile` que nombra `tg config show --json`. Por defecto, las reglas responden a todas las personas con las que coinciden. Para responder solo a personas seleccionadas, indique sus ID de Telegram, separados por comas; `tg contacts show <name> --json` imprime la identificación de una persona como `id`:
+
+```sh
+tg replies audience --reply listed --allow-people 1000001
+```
+
+Para responder a todos excepto a algunas personas o chats, mantén `--reply all` y niégalos:
+
+```sh
+tg replies audience --deny-people 1000002 --deny-chats -1002000002
+```
+
+Después del primer comando, el archivo contiene:
 
 ```json
-{ "testers": [{ "id": "1000001" }], "rules": [ … ] }
+{
+  "audience": {
+    "reply": "listed",
+    "allow": { "people": ["1000001"], "chats": [] },
+    "deny": { "people": [], "chats": [] }
+  },
+  "rules": [ … ]
+}
 ```
 
 Los ID de reglas usan letras minúsculas, dígitos y `-`, y cada uno es único. Una regla que responde no se puede activar con una plantilla vacía.
@@ -51,11 +79,13 @@ tg serve
 | Límites | `--per-chat`, `--per-person`, como `1/12h` |
 | Horario de trabajo | `--outside`, `--days`, `--timezone`, `--no-hours` |
 
-La primera vez que definas el horario de trabajo, indica juntos la franja, los días y la zona horaria; después puedes cambiar uno solo. Una edición incorrecta no sobrescribe el archivo; las demás reglas, `testers` y el registro de respuestas se conservan.
+La primera vez que establezcas el horario laboral, indica la ventana, los días y la zona horaria juntos; después de eso puedes cambiar uno. Una edición incorrecta no sobrescribe el archivo y las demás reglas, la audiencia y el registro de lo respondido permanecen como estaban.
 
-`tg replies audience` muestra a quién puede responder el archivo completo. `--reply all` permite a cualquiera; `--reply listed`, solo a las listas permitidas. `--allow-people`, `--allow-chats`, `--deny-people` y `--deny-chats` sustituyen esas listas, y una prohibición prevalece sobre un permiso. `testers` sigue aplicándose además de la audiencia. La acción `task` abre una tarea en este ordenador y no está limitada por la audiencia.
+`tg replies audience` muestra a quién pueden responder todas las reglas del archivo. Un nuevo archivo es `--reply all`: responde a cualquiera que coincida con una regla. `--reply listed` responde sólo a las personas y chats permitidos. `--allow-people`, `--allow-chats`, `--deny-people` y `--deny-chats` reemplazan esas listas, y una denegación prevalece sobre una asignación. Una acción `task` abre una tarea en esta computadora y no está limitada por la audiencia.
 
 ## Plantillas y un modelo
+
+En [Borradores y plantillas de respuesta](https://wirecat.dev/en/docs/drafts-and-templates) se encuentran ejemplos de textos de respuesta para casos comunes y cuándo conservar un borrador.
 
 Una plantilla puede usar `sender.firstName`, `sender.name`, `chat.title`, `chat.kind` y `now` (en la zona horaria de la regla, o UTC sin horario de trabajo), con filtros como `{{ now | date: "%H:%M" }}`. El texto del mensaje entrante no es una variable de plantilla. Se rechazan las variables y filtros desconocidos.
 
@@ -84,9 +114,10 @@ tg replies consents allow -1002000002
 
 ## A qué nunca responde una regla
 
+- Cualquiera que la audiencia no permita.
 - Tus propios mensajes, canales, bots y mensajes enviados en nombre de un chat.
-- Un mensaje editado, uno ya procesado y todo lo que llegó antes de iniciar `serve`.
-- En un grupo, un mensaje que no te menciona ni te responde, salvo que la regla incluya ese grupo en `chats`.
+- Un mensaje editado, un mensaje ya manejado y cualquier cosa que haya llegado antes de que comenzara `serve`.
+- En un grupo, un mensaje que no te menciona ni te responde, a menos que la regla nombre ese grupo en `chats`.
 
 Cada regla debe tener límites `perChat` y `perPerson`, de modo que dos sistemas de respuesta automática que se respondan entre sí se detengan al alcanzar el primer límite.
 

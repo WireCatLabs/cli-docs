@@ -1,4 +1,5 @@
 import { searchIndex } from "@/lib/search-index"
+import { staticSearchResponse } from "@/lib/static-search-response"
 
 export const revalidate = false
 export const dynamicParams = false
@@ -8,11 +9,11 @@ export function generateStaticParams() {
 }
 
 /**
- * One language per file: Cloudflare Pages refuses files over 25 MiB, which the three together
- * passed, and a reader only ever searches their own language.
+ * One language per compressed file: Pages limits uploaded assets to 25 MiB.
+ * The client decodes the gzip asset independently of HTTP transfer encoding.
  */
 export async function GET(_request: Request, { params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
   const all = (await (await searchIndex.staticGET()).json()) as { type: string; data: Record<string, unknown> }
-  return Response.json({ type: all.type, data: { [lang]: all.data[lang] } })
+  return staticSearchResponse({ type: all.type, data: { [lang]: all.data[lang] } })
 }

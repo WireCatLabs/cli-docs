@@ -1,16 +1,35 @@
 ---
-title: "Sesiones y perfiles"
+title: "Inicio de sesión, sesiones y perfiles"
 ---
 
-Una sesión combina el token de tu cuenta de MAX con una identidad de dispositivo estable. El token se guarda en el llavero del sistema operativo; el resto, en un archivo junto a la configuración.
+<a id="cómo-obtener-el-token" />
+<a id="comprobar-y-olvidar-la-sesión" />
+<a id="si-no-hay-llavero" />
+<a id="cuánto-dura-el-token" />
+<a id="откуда-берётся-токен" />
+<a id="проверить-и-забыть" />
+<a id="если-ключницы-нет" />
+<a id="сколько-живёт-токен" />
+
+Lea esta página cuando conecte `max` por primera vez a una cuenta MAX, agregue una segunda cuenta o `max` diga que no hay inicio de sesión. Al final, usted sabe cómo iniciar sesión, cómo comprobar quién ha iniciado sesión, cómo cerrar sesión y dónde almacena `max` lo que necesita para mantener su inicio de sesión en su lugar.
+
+Primero, las palabras que aparecen aquí:
+
+- **Sesión**: acceso de `max` a tu cuenta MAX en este ordenador. Incluye un token y una identidad de dispositivo; aparece como otro dispositivo en la aplicación.
+- **Token**: cadena que MAX entrega al iniciar sesión. Permite leer tus chats: trátala como una contraseña. `max` la guarda en el llavero.
+- **Identidad de dispositivo**: cómo se identifica `max` ante MAX; mantiene el mismo dispositivo entre comandos. Se guarda junto al estado.
+- **Llavero**: almacén de contraseñas del sistema operativo.
+- **Perfil**: nombre de una sesión local con su token, estado y ajustes. Sin nombre, `max` usa `default`. Necesitas otro perfil para otra cuenta o restricciones distintas ([perfiles](#профили)).
+
+No confunda `max session` y `max account sessions`. `max session` — entrada del propio `max`; `max account sessions` enumera todos los demás dispositivos y aplicaciones que hayan iniciado sesión en su cuenta.
 
 ## Primer inicio
 
 `max setup --agent codex` comprueba los directorios locales, guía el acceso con QR, comprueba la cuenta y hasta cinco chats e instala el skill del agente. Opciones: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Sin opción pregunta en el terminal; en modo máquina omite el skill. `max skill show` se puede leer antes de iniciar sesión.
 
-Reserva unos cinco minutos. El historial se descarga aparte, tras elegir el chat y la cantidad; setup no inicia el servicio en segundo plano. Al repetirlo comprueba la sesión existente. `--method token|qr|qr-chrome|sms` elige el método para una sesión nueva; por defecto usa `qr`. El QR y el navegador requieren una persona en el terminal local. No pases el token como argumento. Si se interrumpe, repite setup. Si el token caducó, ejecuta explícitamente `max session start qr`; si el llavero no está disponible, corrige primero el entorno según el aviso.
+Tarda unos cinco minutos. La historia se descarga por separado luego de seleccionar el chat y el volumen; La instalación no inicia el servicio en segundo plano. Al reiniciar se comprueba la sesión existente. `--method token|qr|qr-chrome|sms` selecciona el nuevo método de entrada; de forma predeterminada, la configuración toma `qr`. QR y navegador requieren una persona en la terminal local. No pase el token como argumento. Si se interrumpe la configuración, repita la configuración. Si el token ha caducado, ejecute explícitamente `max session start qr`; Si el llavero es inaccesible, primero corrija el entorno de acuerdo con las indicaciones.
 
-## Cómo obtener el token
+## Entrada
 
 `max session start <способ>` permite iniciar sesión de cuatro maneras. En todos los casos, el token solo se guarda en el llavero después de que MAX lo acepte.
 
@@ -27,13 +46,13 @@ max session start qr
 
 **`qr-chrome` y `sms` son los métodos más conservadores.** El acceso lo realiza web.max.ru en un navegador real: MAX ve su propio cliente web. Se utiliza un perfil temporal separado del tuyo. Cuando termina el acceso, se cierra la ventana y se elimina el perfil, también al pulsar Ctrl-C. Cerrar la ventana no termina la sesión: es como cerrar una pestaña. El navegador se detecta automáticamente; puedes elegir otro con `MAX_BROWSER`. Los navegadores instalados por snap no sirven porque tienen su propio directorio `/tmp`.
 
-**`qr` solicita el código a MAX mediante nuestra propia conexión**, que se presenta como un cliente web. Funciona sin navegador, pero no es el cliente web oficial.
+**`qr` solicita código de MAX con su propia conexión `max`**, haciéndose pasar por un cliente web. Funciona sin navegador, pero ya no es un cliente web real.
 
-**El acceso por SMS solo funciona desde el navegador.** Si nuestra conexión solicita el SMS, MAX exige un CAPTCHA que solo se puede completar en la página.
+**Inicie sesión mediante SMS: solo a través del navegador.** Cuando el SMS solicita una conexión `max`, MAX requiere un captcha y solo se puede completar en la página.
 
 Tras cualquiera de esos tres métodos, aparece un dispositivo nuevo en la lista de sesiones de MAX. Si la cuenta tiene una contraseña en la nube, `qr` la solicita sin mostrarla, con hasta tres intentos; después hay que volver a escanear el código.
 
-Los tres métodos necesitan a una persona en la terminal; de lo contrario, el comando termina con código 2. Para scripts y agentes queda `token`. También se rechazan si está definida `MAX_TOKEN`: esa variable tiene prioridad sobre el llavero y ocultaría la sesión nueva.
+Los tres métodos requieren una persona ante el terminal; sin ella, fallan con código 2. Un agente sin terminal debe usar `token`. Si está definido `MAX_TOKEN`, los tres también fallan: tiene prioridad sobre el llavero e impediría usar la sesión nueva.
 
 ### Introducir el token manualmente
 
@@ -44,7 +63,7 @@ max session start
 MAX token: ▏          # ввод не отображается
 ```
 
-**El token no se pasa como argumento.** Cualquier proceso del equipo puede ver los argumentos con `ps`, y quedan en el historial de la shell. Por eso se solicita sin mostrar lo que escribes o, sin terminal, se lee desde una tubería:
+**El token no se pasa como argumento.** Cualquier proceso del comando puede ver los argumentos con `ps`, y quedan en el historial de la shell. Por eso se solicita sin mostrar lo que escribes o, sin terminal, se lee desde una tubería:
 
 ```sh
 pass show max/token | max session start
@@ -56,11 +75,13 @@ Para CI y ejecuciones puntuales hay una variable con **prioridad sobre el llaver
 MAX_TOKEN="$(cat /path/to/token)" max chats list --json
 ```
 
-## Comprobar y olvidar la sesión
+## Verificar y salir
 
 ```sh
-max account show      # кто вы: id, имя, телефон
-max session end       # выйти из MAX и забыть токен на этой машине
+max account show             # под кем выполнен вход: id, имя, последние четыре цифры телефона
+max account list             # все профили на этом компьютере и аккаунт каждого
+max account sessions list    # все устройства и приложения, вошедшие в аккаунт; ничего не завершает
+max session end              # выйти из MAX и забыть токен на этой машине
 ```
 
 `session end` primero termina la sesión en el servidor de MAX y después borra el token de este ordenador. La respuesta indica el resultado:
@@ -73,9 +94,15 @@ max session end       # выйти из MAX и забыть токен на эт
 
 Si MAX no responde, se conserva el token para que puedas repetir el comando. Un token que MAX ya no acepta se borra de inmediato: ya no queda una sesión que cerrar.
 
+## ¿Cuánto dura una sesión?
+
+Su duración es desconocida: MAX no la comunica. Sigue funcionando después de cerrar la pestaña de web.max.ru. Cuando MAX deje de aceptarlo, vuelve a iniciar sesión con `max session start`.
+
+`max` no limita el número de accesos, pero los cuenta por perfil; `max doctor` muestra el contador.
+
 ## Perfiles
 
-Cada perfil guarda su token y estado propios; la copia de mensajes es compartida, con datos separados por cuenta. Se indica como **primera palabra**, no con una opción:
+El perfil almacena su token y su estado; Se comparte el archivo local de los mensajes, con los datos de la cuenta. El perfil se llama **primera palabra**, no una bandera:
 
 ```sh
 max chats list              # профиль default
@@ -83,7 +110,9 @@ max personal chats list     # профиль personal
 export MAX_PROFILE=personal # или на всю сессию оболочки
 ```
 
-Regla: **la primera palabra es un perfil si no coincide con el nombre de un comando.** No puedes llamar a un perfil `chats`, `runs` o `session`: se rechaza al crearlo, cuando todavía se puede explicar el conflicto. De lo contrario, `max chats` podría interpretarse como «perfil chats sin comando».
+Regla: **La primera palabra es perfil a menos que sea la misma que el nombre del comando.** Por lo tanto, un perfil no puede llamarse `chats`, `runs` o `session`; `max session start` y `max setup` rechazan dicho nombre. De lo contrario, `max chats` significaría silenciosamente "perfil de chat sin comando". El nombre consta de letras latinas, números, puntos, guiones y guiones bajos y comienza con una letra o un número.
+
+Ordene, la primera coincidencia gana: primera palabra, `MAX_PROFILE`, `defaultProfile` en el archivo de configuración, luego `default`.
 
 Si la primera palabra no es un comando y tampoco aparece otro después, el programa explica lo ocurrido en lugar de limitarse a mostrar la ayuda:
 
@@ -92,34 +121,34 @@ Si la primera palabra no es un comando y tampoco aparece otro después, el progr
 Run `max --help` for the commands, or `max nonsense account show` if "nonsense" is your profile.
 ```
 
+**`MAX_PROFILE_LOCK` asigna el proceso a un perfil.** Especifíquelo donde se está ejecutando el agente y se rechazará la primera palabra o `MAX_PROFILE` con el nombre de otro perfil (código de retorno `5`). Sin él, el agente podría elegir un perfil con menos restricciones.
+
+Por qué se necesita cada perfil y cómo funciona el perfil con el bot - en la sección [perfiles y bots](./profiles.md).
+
 ## Dónde se guarda cada dato
 
-| Dato | Ubicación |
+| Qué | Dónde |
 |---|---|
-| token | Llavero del sistema, servicio `max-cli`, entrada con el nombre del perfil |
-| token del bot | Llavero del sistema, servicio `max-cli`, entrada `bot:<профиль>`; o `MAX_BOT_TOKEN` |
-| chats vistos por el bot | `~/.local/share/max-cli/bots/` |
-| dispositivo, contador de accesos y `viewerId` | `~/.local/share/max-cli/profiles/<профиль>.json`, permisos `0600` |
-| configuración | `~/.config/max-cli/config.json` |
+| Token | Llavero del sistema, servicio `max-cli`, entrada con el nombre del perfil |
+| Token sin llavero | `credentials.json` junto a los ajustes, modo `0600` |
+| Token para CI | `MAX_TOKEN`, con prioridad sobre el llavero |
+| Token de bot | Llavero, servicio `max-cli`, entrada `bot:<профиль>`; o `MAX_BOT_TOKEN` |
+| Chats vistos por bots | `~/.local/share/max-cli/bots/` |
+| Dispositivo, contador de inicios, `viewerId` | `~/.local/share/max-cli/profiles/<профиль>.json`, modo `0600` |
+| Ajustes | `~/.config/max-cli/config.json` |
+
+Los directorios para macOS y Windows se enumeran en la sección [donde todo va](./installation.md#куда-всё-ложится).
 
 **La identidad del dispositivo se guarda en la primera lectura**, antes de utilizarse. Presentarse como un dispositivo nuevo con cada comando no reproduce el comportamiento de un cliente real: las sesiones del servidor están vinculadas a esa identidad.
 
-> ⚠ `MAX_CONFIG_DIR`, `MAX_STATE_DIR` y `MAX_CACHE_DIR` también cambian la entrada del llavero, porque cambia el nombre del servicio. Una sesión guardada con estas variables **no es visible** para un comando ejecutado sin ellas, y viceversa. Úsalas siempre o no las uses.
+En una máquina sin un llavero (un contenedor típico), la grabación falla; luego el token se coloca en el archivo `credentials.json` al lado de la configuración, con los derechos `0600`, y el comando dice esto en una línea en stderr. En CI, es mejor no confiar ni en uno ni en el otro y pasar `MAX_TOKEN`.
 
-## Si no hay llavero
-
-Si el equipo no tiene llavero, como suele ocurrir en un contenedor, el token se guarda en `credentials.json`, junto a la configuración, con permisos `0600`. El comando lo indica en una línea en stderr.
-
-En CI es preferible no depender del llavero ni del archivo y proporcionar `MAX_TOKEN`.
-
-## Cuánto dura el token
-
-Su duración es desconocida: MAX no la comunica. Sigue funcionando después de cerrar la pestaña de web.max.ru. Cuando MAX deje de aceptarlo, vuelve a iniciar sesión con `max session start`.
-
-`max` no limita el número de accesos, pero los cuenta por perfil; `max doctor` muestra el contador.
+> ⚠ `MAX_CONFIG_DIR`, `MAX_STATE_DIR` y `MAX_CACHE_DIR` también transfieren la entrada en el porta llaves: el nombre cambia
+> servicios. Una sesión guardada con estas variables **no es visible** para un comando iniciado sin ellas, y
+> viceversa. O instálalos siempre o nunca.
 
 ## Siguiente paso
 
-- [Uso cotidiano](./usage.md): los primeros comandos.
-- [Configuración](./configuration.md): ajustes y orden de prioridad.
-- [Seguridad](./security.md): qué se guarda en disco y qué nunca se guarda.
+- [Leer los primeros chats de](./usage.md)
+- [Configuraciones y el orden en que se aplican](./configuration.md)
+- [Lo que termina en el disco y lo que nunca termina](./security.md)

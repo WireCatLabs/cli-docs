@@ -3,12 +3,12 @@ title: "MCP and skills"
 description: "Understand the MCP server and agent instructions, choose a connection and discover supported actions."
 ---
 
-Connect an AI assistant to your messenger and give it the instructions it needs to work with your chats. This page explains MCP and skills, helps you choose a connection, and shows where to find the tools and their permissions.
+Connect an AI agent to your messenger and give it the instructions it needs to work with your chats. This page explains MCP and skills, helps you choose a connection, and shows where to find the tools and their permissions.
 
 ## What MCP is
 
 **MCP (Model Context Protocol)** is an open standard for connecting AI apps to tools. It works like a
-universal plug: an app that supports MCP can use any MCP server without a custom integration. The
+universal plug: an app that supports MCP can use a compatible MCP server without a custom integration. The
 standard is published at [modelcontextprotocol.io](https://modelcontextprotocol.io/).
 
 Two sides take part:
@@ -35,9 +35,9 @@ ChatGPT, Claude and other web chats connect through a public HTTPS address: foll
 
 ## What the MCP server does
 
-Our MCP server gives your assistant access to the connected messenger: chats, messages, shared files, searches and reports. You ask for a result; the assistant calls the server, which performs the action through the messenger tool.
+Our MCP server gives your agent access to the connected messenger: chats, messages, shared files, searches and reports. You ask for a result; the agent calls the server, which performs the action through the messenger tool.
 
-The server is included in the command-line tool and **must be running while the assistant uses it**. A local client can start it on your computer. For a browser or mobile chat, keep it running on a computer or server and connect through a public HTTPS address with authentication. Follow the [browser/mobile setup guide](./browser-apps.mdx) for that connection.
+The server is included in the command-line tool and **must be running while the agent uses it**. A local client can start it on your computer. For a browser or mobile chat, keep it running on a computer or server and connect through a public HTTPS address with authentication. Follow the [browser/mobile setup guide](./browser-apps.mdx) for that connection.
 
 ## How the agent finds and runs actions
 

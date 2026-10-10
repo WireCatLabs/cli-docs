@@ -2,7 +2,28 @@
 title: "Diagnóstico: qué hizo un comando"
 ---
 
-Si un comando falla o tarda demasiado, `tg` puede mostrar lo que hizo, guardar un registro y convertirlo en un informe para adjuntar a una incidencia. Ninguno de esos registros contiene texto de mensajes.
+<a id="descubrir-comandos-desde-scripts" />
+<a id="command-discovery-for-scripts" />
+
+Utilice esta página cuando un comando falle, se cuelgue o tarde demasiado y quiera ver por qué. Al final, puede observar las solicitudes de un comando a medida que ocurren, mantener un registro de una ejecución, verificar su instalación y enviar un informe de problema que no contenga ningún mensaje de texto.
+
+Algunas palabras que utiliza esta página:
+
+- Una **ejecución** es una llamada de `tg`, desde el inicio hasta la salida.
+- Un **registro de ejecución** es una carpeta que guarda lo que hizo una ejecución: su comando, su resultado y una línea por solicitud a Telegram. Nunca contiene texto, nombres o títulos de mensajes.
+- **`tg doctor`** comprueba la instalación: la versión, el inicio de sesión, la configuración y el archivo local.
+- Un **informe de problema** es un archivo JSON creado a partir de `tg doctor` y una ejecución fallida. Lo adjuntas a un problema.
+
+## Qué puedes hacer
+
+| Tarea | Comando | ¿Guarda algo? |
+|---|---|---|
+| Vea cada solicitud a medida que sucede | `tg --trace …` | no, imprime solo en stderr |
+| Mantenga un registro de una ejecución | `tg --record …` | sí, un registro de ejecución |
+| Encuentra una ejecución fallida más tarde | `tg runs list` | una ejecución fallida se mantiene sola |
+| Mantenga un registro de cada ejecución | `tg config set record true` | sí, cada ejecución |
+| Verifique la instalación | `tg doctor`, `tg doctor --online` | no |
+| Hacer un informe de problema | `tg doctor report create` | sí, un archivo que envías |
 
 ## Ver las operaciones: `--trace`
 
@@ -17,7 +38,7 @@ tg --trace messages list "Book club" --limit 5
 ← messages.list    chat -1001234567890  118ms  5 messages
 ```
 
-También transmite los registros de la biblioteca de Telegram subyacente. stdout no cambia, por lo que una tubería sigue recibiendo solo datos.
+También pasa por las líneas de registro de la biblioteca de Telegram que se encuentran debajo. stdout no cambia, por lo que una tubería todavía obtiene solo datos.
 
 ## Guardar una ejecución: `--record`
 
@@ -25,19 +46,21 @@ También transmite los registros de la biblioteca de Telegram subyacente. stdout
 tg --record chats list
 tg runs list                 # recorded runs, newest first
 tg runs show <run-id>        # one run: its outcome, and one line per operation
-tg runs path <run-id>        # the directory that holds it
+tg runs path <run-id>        # the folder that holds it
 ```
 
-Cada ejecución es un directorio en `runs/<day>/` dentro del directorio de estado (`~/.local/share/tg-cli/runs/` en Linux), cuyo nombre incluye la hora y el comando. Contiene dos archivos:
+Un registro de ejecución es una carpeta en `runs/<day>/` en la carpeta de estado (`~/.local/share/tg-cli/runs/` en Linux). Su nombre es la hora y el comando. Contiene dos archivos:
 
 - `run.json`: comando, perfil, versiones de `tg`, Node y sistema, hora de inicio y fin, número de peticiones, resultado y código de error.
 - `events.jsonl`: las mismas operaciones que muestra `--trace`, una por línea.
 
 ## Las ejecuciones fallidas siempre se guardan
 
-Si un comando termina con error, se guarda aunque no uses `--record`, con `"keptBecauseFailed": true` en `run.json`. Se aplica a todos los comandos y errores: opciones incorrectas, comandos desconocidos, comprobaciones previas y comandos que no se conectan (`models`, `server`, `upgrade`). Un fallo anterior al inicio del comando, como una configuración que no se puede cargar, se guarda con el nombre `tg`. Solo se conservan las palabras del comando, como `messages list`, nunca sus argumentos.
+Cuando un comando termina con un error, su ejecución se mantiene incluso sin `--record`. `run.json` entonces tiene `"keptBecauseFailed": true`. Esto es cierto para cada comando y cada error: una mala opción, un comando desconocido, una verificación antes de cualquier trabajo y comandos que nunca se conectan (`models`, `server`, `upgrade`). Un error antes de que se iniciara el comando, como un archivo de configuración que no se carga, se mantiene como una ejecución denominada `tg`. El registro contiene sólo las palabras del comando, como `messages list`, nunca lo que siguió.
 
-Una ejecución correcta no deja registro de diagnóstico salvo que lo solicites; las consultas de búsqueda y estadísticas correctas tienen un historial aparte. Así siempre hay un fallo que adjuntar a un informe, y el historial de consultas tiene sus propios controles. `--no-record` o `"record": false` en la configuración también desactivan el registro de fallos.
+Una ejecución exitosa no deja registro a menos que usted lo solicite. Por lo tanto, un informe de problema siempre tiene un error al adjuntarlo. `--no-record`, o `"record": false` en la configuración, también desactiva esto.
+
+Las búsquedas y consultas de estadísticas exitosas mantienen su propio historial, además de los registros de ejecución. Tiene sus propios controles: ver [búsquedas guardadas e historial](./search.md#saved-searches-and-history).
 
 ## Cuándo registrar todas las ejecuciones
 
@@ -46,7 +69,7 @@ tg config set record true          # this profile
 tg --no-record chats list          # but not this one
 ```
 
-Con ese ajuste se guardan todas. El comportamiento predeterminado es intencional: una ejecución correcta no se registra sin pedirlo. Registrar a quién lees y cuándo crearía un diario personal que nadie ha solicitado.
+Luego se mantiene cada ejecución. De forma predeterminada, una ejecución que funcionó no se escribe hasta que usted la solicita. Una herramienta de mensajería que guarda una carpeta de a quién lees y cuándo sería un diario de tu vida que nadie pidió.
 
 ## Cuánto se conservan
 
@@ -54,14 +77,14 @@ Con ese ajuste se guardan todas. El comportamiento predeterminado es intencional
 
 ## Qué nunca contiene un registro
 
-Un registro de ejecución y `--trace` incluyen nombres de operaciones, identificadores, cantidades, duraciones y códigos de error. Nunca incluyen:
+Un registro de ejecución y `--trace` contienen el nombre, los identificadores, los recuentos, las duraciones y los códigos de error de una operación. Nunca llevan:
 
 - texto ni leyendas de mensajes;
 - títulos de chats, nombres de personas ni nombres de usuario;
 - **lo que introduces como `<chat>`**, ya que suele ser un título;
 - números de teléfono, códigos de inicio de sesión, contraseñas 2FA, sesiones ni hash de la aplicación.
 
-Lo mismo se aplica a los informes creados a partir de registros.
+Lo mismo ocurre con un informe elaborado a partir de una ejecución.
 
 ## Comprobar la instalación: `tg doctor`
 
@@ -70,13 +93,13 @@ tg doctor              # connects to nothing
 tg doctor --online     # also connects once and reads the account; sends nothing to Telegram
 ```
 
-Muestra versión, entorno de ejecución, perfil, configuración, existencia de sesión y credenciales (nunca sus valores), si `TG_*_DIR` ha cambiado la entrada del almacén de claves, el archivo local (ruta, versión, número de chats y mensajes), los envíos de la última hora y las ejecuciones guardadas.
+Muestra versión, entorno de ejecución, perfil, configuración, existencia de sesión y credenciales (nunca sus valores), si `TG_*_DIR` ha cambiado la entrada del llavero, el archivo local (ruta, versión, número de chats y mensajes), los envíos de la última hora y las ejecuciones guardadas.
 
-- **`login`** aparece como `not checked` sin `--online`. Que haya un archivo de sesión en disco no significa que Telegram siga aceptándolo. Con `--online` es `ok` o `failed`, con una sugerencia.
-- **`files`** y **`telegram.session.files`** nombran cada archivo o carpeta privados que otros usuarios de este equipo pueden leer: la sesión, el almacén, sus archivos SQLite `-wal` y `-shm`, el registro de envíos y la carpeta de ejecuciones. Cada uno incluye el comando `chmod` que lo corrige. `doctor` nunca cambia los permisos por sí mismo. En Windows no se comprueba.
-- **`online.clock`** (con `--online`) compara el reloj de este equipo con el de Telegram. `skewMs` es positivo cuando este equipo va adelantado. Avisa (`ok: false`) a partir de 10 segundos. Telegram rechaza una petición con una hora más de 30 segundos por delante de su propio reloj.
-- **`online.standing`** (con `--online`) es `active`, `frozen`, `banned`, `deactivated` o `revoked`, o `unknown` cuando la respuesta de Telegram no permite saberlo. Una cuenta congelada puede leer, pero no escribir. Se indican la fecha en que se congeló, la fecha en que Telegram la eliminará y el enlace de apelación, cuando Telegram los proporciona. Volver a iniciar sesión no reabre una cuenta que Telegram ha cerrado.
-- **`flood`** enumera las esperas que Telegram ha pedido respetar a este perfil (`deadlines`) y un bloqueo de sus envíos (`sendBlock`). `doctor` solo lee, con una excepción: **`doctor --online` escribe el bloqueo por congelación.** Si ve la cuenta congelada, bloquea los envíos hasta la fecha que indica Telegram; si la ve activa, levanta ese bloqueo. Nunca levanta un bloqueo por un límite de spam: eso lo hace `tg flood clear`.
+- **`login`** es `not checked` sin `--online`. Un archivo de sesión en el disco no significa que Telegram todavía lo acepte. Con `--online` es `ok` o `failed`, con una pista.
+- **`files`** y **`telegram.session.files`** nombran cada archivo o carpeta privada que otros usuarios de esta máquina pueden leer: la sesión, el almacén, sus archivos SQLite `-wal` y `-shm`, el diario de envío y la carpeta de ejecuciones. Cada uno tiene el comando `chmod` que lo soluciona. `doctor` nunca cambia el modo de un archivo. Windows no está marcado.
+- **`online.clock`** (con `--online`) compara el reloj de esta computadora con el de Telegram.   `skewMs` es positivo cuando esta computadora está por delante. Avisa (`ok: false`) a los 10 segundos. Telegram rechaza una solicitud enviada más de 30 segundos antes de su propio reloj.
+- **`online.standing`** (con `--online`) es `active`, `frozen`, `banned`, `deactivated` o `revoked`, o `unknown` cuando la respuesta de Telegram no pudo decirlo. Una cuenta congelada puede leer pero no escribir. Cuando Telegram los proporciona, incluye la fecha en que se congeló la cuenta, la fecha en que Telegram la eliminará y el enlace de apelación. Iniciar sesión nuevamente no vuelve a abrir una cuenta cerrada de Telegram.
+- **`flood`** enumera las esperas que Telegram le pidió a este perfil que mantuviera (`deadlines`) y una retención en sus envíos (`sendBlock`). `doctor` solo lee, con una excepción: **`doctor --online` escribe la retención congelada.** Cuando lee la cuenta como congelada, retiene los envíos hasta la fecha de Telegram. Cuando lo lee como activo, levanta esa retención. Nunca elimina la retención de un límite de spam: `tg flood clear` lo hace.
 
 ## Crear un informe de problema
 
@@ -85,7 +108,7 @@ tg doctor report create                   # about the newest failed run
 tg doctor report create --run <run-id>    # about this one
 ```
 
-Escribe un archivo JSON con lo que muestra `tg doctor` y la ejecución, e indica dónde enviarlo: una nueva incidencia en [GitHub](https://github.com/leemour/tg-cli/issues/new). Revísalo antes de enviarlo. No contiene texto de mensajes, y cada identificador aparece como una etiqueta, no como el número de Telegram.
+Escribe un archivo JSON (lo que muestra `tg doctor` más la ejecución) y dice dónde enviarlo: un nuevo número en [github.com/leemour/tg-cli/issues](https://github.com/leemour/tg-cli/issues/new). Léelo antes de enviarlo. No contiene ningún texto de mensaje y cada identificación aparece como una etiqueta, no como un número de Telegram. [Cómo informar un problema](./troubleshooting.md#report-a-problem) enumera todo lo que contiene el archivo.
 
 Si no hay ejecuciones fallidas guardadas, vuelve a ejecutar el comando que falla; el fallo se guardará automáticamente.
 
@@ -103,11 +126,5 @@ tg runs list --limit 100 --json | jq '[.items[] | select(.requests > 10) | {comm
 
 ## Siguiente paso
 
-- [Solución de problemas](./troubleshooting.md): qué significa cada error y cómo resolverlo.
-- [Seguridad](./security.md): qué se guarda en disco.
-
-## Descubrir comandos desde scripts
-
-`tg commands --json` enumera comandos, opciones globales y códigos de salida sin conectar una cuenta. `cli` identifica la herramienta, `version` es la versión instalada del paquete y `contract` es la versión del contrato JSON compartido (`0`). Cambia cuando hay modificaciones incompatibles en los campos de respuesta; actualizar el paquete por sí solo no cambia `contract`. Los scripts pueden consultar campos individuales en vez de comparar todo el JSON con una cadena guardada.
-
-El historial de consultas de búsqueda y estadísticas es independiente de los registros de ejecución; consulta [el historial de consultas y --no-record](./search.md).
+- [Qué significa un error y qué hacer](./troubleshooting.md)
+- [Lo que llega al disco](./security.md)

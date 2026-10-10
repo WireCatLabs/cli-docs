@@ -4,7 +4,6 @@ title: "Referencia de comandos"
 
 <!-- Generated from the command tree by scripts/commands.ts. Do not edit; run `pnpm generate`. -->
 
-
 Todos los comandos, opciones y códigos de salida. Esta página se **genera a partir del propio programa**, por lo que
 no puede describir una versión que no existe.
 
@@ -96,12 +95,11 @@ la cuenta conectada
 
 ### `tg account list`
 
-todos los perfiles de este ordenador y sus cuentas; no consulta el mensajero
+todos los perfiles de este ordenador y sus cuentas; no consulta el servicio de mensajería
 
 ```sh
 tg account list
 ```
-
 
 ### `tg account show`
 
@@ -352,7 +350,7 @@ tg chats mark-read <chat> [options]
 | Opción | Qué hace |
 |---|---|
 | `--until <message>` | solo hasta este identificador de mensaje; hasta el más reciente por defecto. |
-| `--topic <id>` | marca como leído solo este tema del foro; no disponible en mensajeros sin temas. |
+| `--topic <id>` | marca como leído solo este tema del foro; no disponible en servicios de mensajería sin temas. |
 
 ### `tg chats tracking`
 
@@ -560,7 +558,6 @@ tg chats link update <chat> <link> [options]
 | `--no-approval` | cualquiera con el enlace entra de inmediato. |
 | `--expire-time <time>` | deja de funcionar entonces: 2026-09-25T09:00 (hora local) o dentro de 30m, 2h, 7d; `never` quita la caducidad. |
 | `--max-uses <n>` | como máximo este número de personas puede entrar con el enlace, de 1 a 99999. |
-
 
 #### `tg chats link reset`
 
@@ -957,7 +954,7 @@ tg contacts link <person> <other>
 | Argumento | | Qué es |
 |---|---|---|
 | `person` | obligatorio | identificador, @username o parte del nombre. |
-| `other` | obligatorio | la misma persona en otro mensajero del archivo local, como <messenger>:<person>: max:Ana. |
+| `other` | obligatorio | la misma persona en otro servicio de mensajería del archivo local, como <messenger>:<person>: max:Ana. |
 
 ### `tg contacts unlink`
 
@@ -969,7 +966,7 @@ tg contacts unlink <person>
 
 | Argumento | | Qué es |
 |---|---|---|
-| `person` | obligatorio | identificador, @username o parte del nombre; <messenger>:<person> para otro mensajero. |
+| `person` | obligatorio | identificador, @username o parte del nombre; <messenger>:<person> para otro servicio de mensajería. |
 
 ### `tg contacts lookup`
 
@@ -993,8 +990,6 @@ un nombre visible local y privado en la cuenta seleccionada
 
 #### `tg contacts alias set`
 
-
-
 **Solo hace cambios en este equipo.**
 
 ```sh
@@ -1007,8 +1002,6 @@ tg contacts alias set <person> <alias>
 | `alias` | obligatorio |  |
 
 #### `tg contacts alias rm`
-
-
 
 **Solo hace cambios en este equipo.**
 
@@ -1026,8 +1019,6 @@ notas privadas del contacto, compartidas por las cuentas que lo ven
 
 #### `tg contacts notes list`
 
-
-
 ```sh
 tg contacts notes list <person>
 ```
@@ -1037,8 +1028,6 @@ tg contacts notes list <person>
 | `person` | obligatorio |  |
 
 #### `tg contacts notes show`
-
-
 
 ```sh
 tg contacts notes show <person> <id>
@@ -1050,8 +1039,6 @@ tg contacts notes show <person> <id>
 | `id` | obligatorio |  |
 
 #### `tg contacts notes add`
-
-
 
 **Solo hace cambios en este equipo.**
 
@@ -1068,8 +1055,6 @@ tg contacts notes add <person> [options]
 | `--file <path>` | leer el texto de la nota desde un archivo; si se omite o se indica -, leer stdin. |
 
 #### `tg contacts notes edit`
-
-
 
 **Solo hace cambios en este equipo.**
 
@@ -1088,8 +1073,6 @@ tg contacts notes edit <person> <id> [options]
 | `--revision <number>` | la revisión que leíste antes de editar. |
 
 #### `tg contacts notes remove`
-
-
 
 **Solo hace cambios en este equipo.**
 
@@ -1250,14 +1233,14 @@ tg messages send <chat> [text] [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--topic <id>` | envía a este tema de foro; no disponible en mensajeros sin temas. |
+| `--topic <id>` | envía a este tema de foro; no disponible en servicios de mensajería sin temas. |
 | `--reply-to <message>` | responde al mensaje indicado por su identificador dentro del mismo chat. |
 | `--comment-to <post>` | comentar esta publicación del canal; el comentario va a su grupo de discusión. |
 | `--send-as <id>` | publicar como una de las identidades que enumera `chats send-as`; obligatorio cuando el chat publica como otra identidad de forma predeterminada. |
 | `--send-id <id>` | reintenta un envío de resultado desconocido sin arriesgar una segunda copia. |
 | `--silent` | entrega sin notificación. |
 | `--no-preview` | no muestra vista previa de enlaces. |
-| `--md` | interpreta el Markdown de este mensajero; consulta la guía de formato para la sintaxis admitida. |
+| `--md` | interpreta el Markdown de este servicio de mensajería; consulta la guía de formato para la sintaxis admitida. |
 | `--file <file>` | adjunta un archivo; el texto será su leyenda. |
 | `--photo <file>` | adjunta .jpg, .png o .webp como foto; el texto será su leyenda. |
 | `--as-file` | envía --file como archivo descargable, incluidos vídeos. |
@@ -1361,7 +1344,7 @@ tg messages edit <chat> <message> [text] [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--md` | interpreta el Markdown de este mensajero; consulta la guía de formato para la sintaxis admitida. |
+| `--md` | interpreta el Markdown de este servicio de mensajería; consulta la guía de formato para la sintaxis admitida. |
 | `--html` | texto HTML: <b>, <i>, <a href>, <code>. |
 
 ### `tg messages delete`
@@ -1547,7 +1530,7 @@ tg polls show <chat> <message>
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
-| `message` | obligatorio | identificador del mensaje de la encuesta. |
+| `message` | obligatorio | el identificador del mensaje que contiene la encuesta. |
 
 ### `tg polls voters`
 
@@ -1620,7 +1603,7 @@ tg polls create <chat> <question> <answers> [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--topic <id>` | envía a este tema de foro; no disponible en mensajeros sin temas. |
+| `--topic <id>` | envía a este tema de foro; no disponible en servicios de mensajería sin temas. |
 | `--multiple` | permite elegir varias respuestas. |
 | `--anonymous` | oculta quién votó por cada opción. |
 | `--revote` | permite cambiar el voto. |
@@ -1790,7 +1773,7 @@ tg topics show <chat> <topic>
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
-| `topic` | obligatorio | el identificador del tema, de `topics list`. |
+| `topic` | obligatorio | el identificador del tema de `topics list`. |
 
 ### `tg topics enable`
 
@@ -2191,7 +2174,7 @@ tg store reindex
 
 ### `tg store backup`
 
-copia el archivo local mientras está en uso, sin sobrescribir
+copial archivo local mientras está en uso, sin sobrescribir
 
 ```sh
 tg store backup <file> [options]
@@ -2413,15 +2396,11 @@ permisos de análisis recordados para los chats de esta cuenta y las direcciones
 
 #### `tg conversations consents list`
 
-
-
 ```sh
 tg conversations consents list
 ```
 
 #### `tg conversations consents revoke`
-
-
 
 ```sh
 tg conversations consents revoke [options]
@@ -2546,7 +2525,6 @@ tg attachments show <chat> [message] [options]
 | `--chunk-bytes <n>` | bytes que devolver, 1–1048576 (por defecto524288). |
 | `--if-sha256 <hash>` | exigir el SHA-256 del archivo completo de la porción anterior. |
 
-
 ### `tg attachments text`
 
 el texto de un archivo, tal como lo leyó un agente
@@ -2633,7 +2611,7 @@ tg tags remove <tag> [options]
 
 ### `tg tags list`
 
-lo etiquetado: los chats y mensajes de esta cuenta, y las personas de su mensajero
+lo etiquetado: los chats y mensajes de esta cuenta, y las personas de su servicio de mensajería
 
 ```sh
 tg tags list [options]
@@ -2651,8 +2629,6 @@ descripciones de grupos y canales en caché para las etiquetas automáticas loca
 
 ### `tg metadata get`
 
-
-
 ```sh
 tg metadata get [options]
 ```
@@ -2662,8 +2638,6 @@ tg metadata get [options]
 | `--chat <chat>` | un chat almacenado. |
 
 ### `tg metadata refresh`
-
-
 
 **Solo hace cambios en este equipo.**
 
@@ -2715,7 +2689,6 @@ tg stats messages show [query] [options]
 
 observaciones por contador y actualización remota limitada
 
-
 #### `tg stats messages counters show`
 
 mostrar valores de contadores guardados y frescura de sus observaciones
@@ -2731,14 +2704,13 @@ tg stats messages counters show [query] [options]
 | Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | solo este chat: su título o parte de él, su identificador, @username o `me` para Mensajes guardados. |
-| `--source <messenger>` | cuentas conectadas de este mensajero; la actualización usa la activa. |
+| `--source <messenger>` | cuentas conectadas de este servicio de mensajería; la actualización usa la activa. |
 | `--exact` | las palabras sin operadores coinciden por forma exacta. |
 | `--timezone <zone>` | zona horaria IANA para fechas de consulta. |
 | `--selection <json>` | selección fija de objetivos de counters show; incompatible con consulta y ámbito. |
 | `--counters <names>` | campos distintos views,reactions,comments; los tres por defecto. |
 | `--limit <n>` | mensajes, 1–100; 20 por defecto. |
 | `--max-age <duration>` | edad máxima de una observación reciente; 24h por defecto. |
-
 
 #### `tg stats messages counters refresh`
 
@@ -2757,7 +2729,7 @@ tg stats messages counters refresh [query] [options]
 | Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | solo este chat: su título o parte de él, su identificador, @username o `me` para Mensajes guardados. |
-| `--source <messenger>` | cuentas conectadas de este mensajero; la actualización usa la activa. |
+| `--source <messenger>` | cuentas conectadas de este servicio de mensajería; la actualización usa la activa. |
 | `--exact` | las palabras sin operadores coinciden por forma exacta. |
 | `--timezone <zone>` | zona horaria IANA para fechas de consulta. |
 | `--selection <json>` | selección fija de objetivos de counters show; incompatible con consulta y ámbito. |
@@ -2766,7 +2738,6 @@ tg stats messages counters refresh [query] [options]
 | `--max-messages <n>` | máximo de mensajes que actualizar, 1–100. |
 | `--sync-time <duration>` | tiempo de actualización remota; 30s por defecto, máximo 5m. |
 | `--dry-run` | mostrar objetivos guardados exactos y contadores admitidos sin conectar. |
-
 
 #### `tg stats messages unanswered`
 
@@ -3002,7 +2973,6 @@ tg stats chats retention <chat> [options]
 | `--by <day\|week>` | agrupar fechas de incorporación por día o semana desde el lunes. Uno de: `day`, `week`. |
 | `--timezone <zone>` | zona horaria IANA para cohortes de incorporación. |
 | `--limit <n>` | cohortes y pruebas de miembros, 1–100. |
-
 
 #### `tg stats chats official`
 
@@ -3444,7 +3414,7 @@ tg replies edit <id> [options]
 
 ### `tg replies audience`
 
-mostrar la audiencia de respuestas del perfil o sustituir los campos indicados; los probadores siguen limitando las respuestas
+mostrar a la audiencia de respuesta, a quién pueden responder las reglas, o reemplazar sus campos nombrados; un nuevo archivo responde a todos los que coinciden con una regla
 
 **Solo hace cambios en este equipo.**
 
@@ -4154,7 +4124,7 @@ tg bot messages send <chat> [text] [options]
 |---|---|
 | `--reply-to <message>` | responde al mensaje indicado por su identificador dentro del mismo chat. |
 | `--silent` | entrega sin notificación. |
-| `--md` | interpreta el Markdown de este mensajero; consulta la guía de formato para la sintaxis admitida. |
+| `--md` | interpreta el Markdown de este servicio de mensajería; consulta la guía de formato para la sintaxis admitida. |
 | `--html` | texto HTML: <b>, <i>, <a href>, <code>. |
 | `--file <file>` | adjunta un archivo; el texto será su leyenda. |
 | `--photo <file>` | adjunta .jpg, .png o .webp como foto; el texto será su leyenda. |
@@ -4209,7 +4179,7 @@ tg bot messages edit <chat> <message> <text> [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--md` | interpreta el Markdown de este mensajero; consulta la guía de formato para la sintaxis admitida. |
+| `--md` | interpreta el Markdown de este servicio de mensajería; consulta la guía de formato para la sintaxis admitida. |
 | `--html` | texto HTML: <b>, <i>, <a href>, <code>. |
 
 #### `tg bot messages delete`
@@ -4362,8 +4332,6 @@ tg bot recipients clear
 envíos, ediciones y eliminaciones del bot desde este equipo; identificadores y resultados, nunca texto
 
 #### `tg bot sends list`
-
-
 
 ```sh
 tg bot sends list
@@ -4537,7 +4505,7 @@ tg bot store fetch <chat> [options]
 |---|---|
 | `--limit <n>` | máximo de mensajes en esta ejecución; 1000 si se omite. |
 | `--page-size <n>` | mensajes por petición; 100 si se omite. |
-| `--pause <duration>` | espera entre páginas para respetar los límites del mensajero. Por defecto: `1s`. |
+| `--pause <duration>` | espera entre páginas para respetar los límites del servicio de mensajería. Por defecto: `1s`. |
 | `--since-time <time>` | se detiene al llegar a mensajes anteriores al momento indicado: ISO 8601 o 2h / 1d atrás. |
 | `--last <n>` | se detiene cuando tiene guardados los n mensajes más recientes. |
 | `--from <link>` | empieza en este enlace de mensaje, incluido; de lo contrario usa el mensaje más reciente conocido. |

@@ -13,6 +13,7 @@
     "lint:fix": "biome check --write .",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
+    "check:assets": "node scripts/check-export-size.mjs",
     "check:links": "node --experimental-strip-types scripts/check-links.ts",
     "prepare": "lefthook install || true",
     "search:generate": "node scripts/build-search-language.mjs",
