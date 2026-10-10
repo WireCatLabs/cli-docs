@@ -132,3 +132,10 @@ remain manually reviewable, rather than claimed executable. Both released synthe
 Browser smoke passes 10 cases; the affected diagram/onboarding suite passes all three locales.
 The post-rebase smoke suite also passes all ten cases, including the shared installation path.
 Full export, links, SEO, accessibility and the wider browser suite run in CI before merge.
+
+The first full portal CI run passed export, links, SEO and 81 of 84 broad browser cases. Three
+installation-intent cases still targeted the retired shared tabs. They now follow the shared guide
+to the tool guide and verify the actual successful-copy event. The agent request control retains
+the existing tool/locale/surface event, with no clipboard text. All three cases pass against a
+local production export; analytics are deliberately disabled in the dev server. A fresh dependency
+checkout also passes lint, parser verification and types with the new core hook/config paths.
