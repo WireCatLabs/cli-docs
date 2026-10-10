@@ -170,7 +170,13 @@ for (const lang of ["en", "ru", "es"]) {
     await expect
       .poll(async () => (await events()).ga[guideIndex])
       .toEqual(["event", "setup_guide_open", { tool: "tg", locale: lang, surface: "hero" }])
-    const install = page.locator('[role="tabpanel"] .docs-prompt').filter({ hasText: "@leemour/tg-cli" })
+    const beforeGenericCopy = await events()
+    await page.locator("main .docs-prompt").filter({ hasText: "WireCat" }).first().locator("button.docs-copy").click()
+    expect(await events()).toEqual(beforeGenericCopy)
+    await page.locator(`main a[href="/${lang}/docs/tg/installation"]`).first().click()
+    await expect(page).toHaveURL(`https://wirecat.dev/${lang}/docs/tg/installation`)
+    await page.locator("main details#tg > summary").click()
+    const install = page.locator("main .docs-prompt").filter({ hasText: "@leemour/tg-cli" })
     await install.locator("button.docs-copy").click()
     expect((await events()).ga[guideIndex + 1]).toEqual([
       "event",

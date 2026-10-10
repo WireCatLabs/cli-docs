@@ -31,7 +31,12 @@ export function InstallTool({ tool, lang, terminal = true }: { tool: Tool; lang:
       </summary>
       <div className="space-y-4 border-t p-5">
         <p className="text-sm text-fd-muted-foreground">{ui.paste}</p>
-        <CopyText kind="prompt" lang={lang} text={ui.prompt(tool.name, tool.package)} />
+        <CopyText
+          kind="prompt"
+          lang={lang}
+          text={ui.prompt(tool.name, tool.package)}
+          tracking={{ tool: tool.name as "tg" | "max", locale: lang, surface: "installation" }}
+        />
         <Link href={`/${lang}/docs/agents`} className="inline-block text-sm">
           {words.navigation.agents} →
         </Link>
