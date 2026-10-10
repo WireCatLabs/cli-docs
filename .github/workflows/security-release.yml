@@ -1,0 +1,16 @@
+name: Security release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+  security-events: write
+
+jobs:
+  checks:
+    uses: WireCatLabs/cli-core/.github/workflows/release-checks.yml@1183bfb970330989ad8acec917b14b7e6187de15
+    with:
+      dependencies: true
+      languages: '["actions","javascript-typescript"]'
