@@ -3,11 +3,12 @@ import { expect, test } from "@playwright/test"
 
 const titles = { en: "File attachments", ru: "Файловые вложения", es: "Archivos adjuntos" }
 for (const lang of ["en", "ru", "es"] as const) {
-  test(`${lang}: attachment guides explain the result and retain icons on desktop and mobile`, async ({ page }) => {
-    test.setTimeout(120000)
-    for (const width of [1440, 390]) {
-      await page.setViewportSize({ width, height: 900 })
-      for (const tool of ["tg", "max"]) {
+  for (const width of [1440, 390]) {
+    for (const tool of ["tg", "max"]) {
+      test(`${lang}/${tool}: attachments at ${width}px retain explanatory content and sidebar icons`, async ({
+        page,
+      }) => {
+        await page.setViewportSize({ width, height: 900 })
         await page.goto(`/${lang}/docs/${tool}/attachments`)
         await expect(page.locator("main h1")).toHaveText(titles[lang])
         await expect(page.locator("main")).toContainText("content:")
@@ -29,12 +30,12 @@ for (const lang of ["en", "ru", "es"] as const) {
         if (width === 390) await page.keyboard.press("Escape")
         const result = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze()
         expect(result.violations).toEqual([])
-      }
+        const markdown = await page.request.get(
+          `/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}${tool}/attachments/content.md`,
+        )
+        expect(markdown.status()).toBe(200)
+        expect(await markdown.text()).toContain("models.ocr")
+      })
     }
-    const markdown = await page.request.get(
-      `/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}tg/attachments/content.md`,
-    )
-    expect(markdown.status()).toBe(200)
-    expect(await markdown.text()).toContain("models.ocr")
-  })
+  }
 }

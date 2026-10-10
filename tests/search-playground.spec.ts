@@ -76,18 +76,20 @@ test("filter shortcuts open their suggestions and clipboard copies the actual qu
   expect(command).toContain("--timezone UTC")
 })
 
-test("search controls and results meet automated accessibility checks in both themes", async ({ page }) => {
-  await page.goto("/en/docs/search-playground")
-  await page.locator("#search-playground").waitFor()
-  for (let theme = 0; theme < 2; theme++) {
+for (const theme of ["light", "dark"]) {
+  test(`search controls and results meet automated accessibility checks in ${theme}`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "light" })
+    await page.goto("/en/docs/search-playground")
+    await page.locator("#search-playground").waitFor()
+    if (theme === "dark") await page.locator(".theme-toggle:visible").first().click()
+    await expect(page.locator("html")).toHaveClass(theme === "dark" ? /dark/ : /light/)
     const results = await new AxeBuilder({ page })
       .include("#search-playground")
       .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
       .analyze()
     expect(results.violations).toEqual([])
-    await page.locator(".theme-toggle:visible").first().click()
-  }
-})
+  })
+}
 
 test("invalid edits keep the last valid results and mark the incorrect span", async ({ page }) => {
   await page.goto("/en/docs/search-playground")

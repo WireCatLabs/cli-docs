@@ -90,11 +90,11 @@ test("blocked analytics providers leave landing interactions usable", async ({ p
 })
 
 for (const lang of ["en", "ru", "es"]) {
-  test(`${lang}: shared architecture and security pages retain mobile contrast in both themes`, async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 })
-    for (const theme of ["light", "dark"] as const) {
-      await page.emulateMedia({ colorScheme: theme, reducedMotion: "reduce" })
-      for (const path of ["architecture", "security"]) {
+  for (const theme of ["light", "dark"] as const) {
+    for (const path of ["architecture", "security"]) {
+      test(`${lang}/${path}: mobile contrast in ${theme}`, async ({ page }) => {
+        await page.setViewportSize({ width: 390, height: 844 })
+        await page.emulateMedia({ colorScheme: theme, reducedMotion: "reduce" })
         await page.goto(`/${lang}/docs/${path}`)
         await page.evaluate(() => document.fonts.ready)
         await expect(page.locator("h1")).toHaveCount(1)
@@ -103,9 +103,9 @@ for (const lang of ["en", "ru", "es"]) {
           .withTags(["wcag2a", "wcag2aa", "wcag21aa", "best-practice"])
           .analyze()
         expect(result.violations, `${lang}/${path} ${theme}`).toEqual([])
-      }
+      })
     }
-  })
+  }
 }
 
 for (const lang of ["en", "ru", "es"]) {

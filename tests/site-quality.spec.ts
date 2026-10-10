@@ -76,10 +76,10 @@ test("agent resources stay native documents when opened from the landing", async
   expect(await response.text()).toContain("https://wirecat.dev/en/docs/tg/installation")
 })
 
-test("dark landing text retains contrast at desktop and mobile widths", async ({ page }) => {
-  await page.emulateMedia({ colorScheme: "dark", reducedMotion: "reduce" })
-  for (const lang of ["en", "ru", "es"]) {
-    for (const width of [1440, 390]) {
+for (const lang of ["en", "ru", "es"]) {
+  for (const width of [1440, 390]) {
+    test(`${lang}: dark landing contrast at ${width}px`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme: "dark", reducedMotion: "reduce" })
       await page.setViewportSize({ width, height: 1000 })
       await page.goto(lang === "en" ? "/" : `/${lang}`)
       await expect(page.locator("[data-mini-query]")).toBeAttached()
@@ -87,9 +87,9 @@ test("dark landing text retains contrast at desktop and mobile widths", async ({
         .withTags(["wcag2a", "wcag2aa", "wcag21aa", "best-practice"])
         .analyze()
       expect(result.violations, `${lang} dark at ${width}px`).toEqual([])
-    }
+    })
   }
-})
+}
 
 test("documentation preloads its licensed font without adding it to landing downloads", async ({ request }) => {
   for (const lang of ["en", "ru", "es"]) {
@@ -238,12 +238,12 @@ test("the public project contact opts out of an unnecessary edge email decoder",
 })
 
 for (const lang of ["en", "ru", "es"]) {
-  test(`${lang}: session recovery links remain distinguishable inside callouts`, async ({ page }) => {
-    for (const colorScheme of ["light", "dark"] as const) {
+  for (const colorScheme of ["light", "dark"] as const) {
+    test(`${lang}: session recovery links remain distinguishable in ${colorScheme}`, async ({ page }) => {
       await page.emulateMedia({ colorScheme })
       await page.goto(`/${lang}/docs/tg/sessions`)
       await expect(page.locator("html")).toHaveClass(colorScheme === "dark" ? /dark/ : /light/)
       expect((await new AxeBuilder({ page }).withRules(["link-in-text-block"]).analyze()).violations).toEqual([])
-    }
-  })
+    })
+  }
 }

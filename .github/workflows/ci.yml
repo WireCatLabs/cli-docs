@@ -36,6 +36,7 @@ jobs:
       - run: pnpm exec playwright test tests/site-quality.spec.ts tests/mobile-delivery.spec.ts tests/onboarding-merge.spec.ts tests/stable-home.spec.ts tests/browser-platform-setup.spec.ts tests/documentation-diagrams.spec.ts tests/about-project.spec.ts tests/user-docs-refresh.spec.ts tests/command-reference.spec.ts tests/file-attachments.spec.ts tests/reader-security.spec.ts tests/reader-guides.spec.ts
         env:
           PLAYWRIGHT_EXPORT: "1"
+      - run: pnpm check:browser-timings
       - name: Save browser diagnostics
         if: always()
         continue-on-error: true
@@ -68,6 +69,7 @@ jobs:
       - run: pnpm exec playwright test tests/heading-fonts.spec.ts tests/search-playground.spec.ts tests/doc-hints.spec.ts
         env:
           PLAYWRIGHT_EXPORT: "1"
+      - run: pnpm check:browser-timings
       - name: Save browser diagnostics
         if: always()
         continue-on-error: true
