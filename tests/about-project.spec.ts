@@ -9,7 +9,7 @@ for (const lang of ["en", "ru", "es"]) {
         await page.setViewportSize({ width, height: 1000 })
         await page.goto(`/${lang}/about`)
         await expect(page.locator("html")).toHaveClass(colorScheme === "dark" ? /dark/ : /light/)
-        await expect(page.locator(".about-project-card")).toContainText("MIT")
+        await expect(page.locator(".about-project-card")).toContainText("Apache 2.0")
         await expect(page.locator(".about-project-card")).toContainText("Viacheslav Ptsarev")
         expect((await page.locator(".about-intro").boundingBox())?.height).toBeLessThan(300)
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)

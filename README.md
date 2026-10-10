@@ -73,7 +73,7 @@ it did not deploy. Run it by hand with `ref: main` to publish what the tools are
 
 ## Licence
 
-MIT.
+[Apache License 2.0](LICENSE).
 
 The landing time estimate lives in `components/time-savings.tsx` and `lib/time-savings.ts`. Its timing assumptions are editable, and it shows when manual work would be quicker. Daily/monthly figures are scenario estimates, not product benchmarks.
 

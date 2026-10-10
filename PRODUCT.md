@@ -68,7 +68,7 @@ sets limits (allowed chats, sends per hour, read-only profiles) — a fact, stat
 
 ## Evidence on Hand
 
-- Real: MIT licence, both tools on npm, CI, MCP server and agent skill, `/llms.txt`.
+- Real: Apache 2.0 licence, both tools on npm, CI, MCP server and agent skill, `/llms.txt`.
 - Allowed (owner, 2026-10-02): sample conversations and terminal sessions with invented names,
   shown plainly with no "example" label (owner, 2026-10-02: "don't mark chats as examples"). The
   output shape comes from a real `tg inbox --json`.

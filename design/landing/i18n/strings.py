@@ -332,7 +332,7 @@ TEXT = {
     "max on GitHub": ("max на GitHub", "max en GitHub"),
     "Report a problem": ("Сообщить о проблеме", "Informar de un problema"),
     "Security": ("Безопасность", "Seguridad"),
-    "© 2026 WireCat · MIT licence · Windows, macOS, Linux": ("© 2026 WireCat · лицензия MIT · Windows, macOS, Linux", "© 2026 WireCat · licencia MIT · Windows, macOS, Linux"),
+    "© 2026 WireCat · Apache 2.0 licence · Windows, macOS, Linux": ("© 2026 WireCat · лицензия Apache 2.0 · Windows, macOS, Linux", "© 2026 WireCat · licencia Apache 2.0 · Windows, macOS, Linux"),
     "Headline 1/8": ("Заголовок 1/8", "Titular 1/8"),
 }
 
@@ -524,9 +524,9 @@ TEXT.update({
         "Развиваем открыто",
         "Desarrollo abierto"
     ],
-    "The source code is on GitHub under the MIT licence. You can inspect how the tools handle data, read the security model, report a problem or contribute a change. The CLI runs on your computer; you choose your agent and which conversations it can access.": [
-        "Исходный код доступен на GitHub под лицензией MIT. Можно проверить, как инструменты работают с данными, прочитать модель безопасности, сообщить о проблеме или предложить изменение. CLI работает на вашем компьютере; вы выбираете агента и доступные ему переписки.",
-        "El código está en GitHub con licencia MIT. Puedes revisar cómo se tratan los datos, leer el modelo de seguridad, comunicar un problema o contribuir. El CLI se ejecuta en tu ordenador; tú eliges el agente y las conversaciones a las que accede."
+    "The source code is on GitHub under the Apache 2.0 licence. You can inspect how the tools handle data, read the security model, report a problem or contribute a change. The CLI runs on your computer; you choose your agent and which conversations it can access.": [
+        "Исходный код доступен на GitHub под лицензией Apache 2.0. Можно проверить, как инструменты работают с данными, прочитать модель безопасности, сообщить о проблеме или предложить изменение. CLI работает на вашем компьютере; вы выбираете агента и доступные ему переписки.",
+        "El código está en GitHub con licencia Apache 2.0. Puedes revisar cómo se tratan los datos, leer el modelo de seguridad, comunicar un problema o contribuir. El CLI se ejecuta en tu ordenador; tú eliges el agente y las conversaciones a las que accede."
     ],
     "Security model": [
         "Модель безопасности",
