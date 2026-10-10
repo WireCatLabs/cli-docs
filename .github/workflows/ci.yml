@@ -1,9 +1,8 @@
-name: CI
+name: Full validation
 
 on:
-  push:
-    branches: [main]
-  pull_request:
+  workflow_call:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -82,3 +81,6 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
           compression-level: 1
+
+  windows_install:
+    uses: ./.github/workflows/windows-install.yml
