@@ -6,3 +6,54 @@
 :root:not(.dark) {
   --color-fd-muted-foreground: #595959;
 }
+
+/* Pastel groups for Mermaid diagrams; classDef reads them so the colours follow the theme. Dark stays muted. */
+:root {
+  --diagram-blue-bg: #eff6ff;
+  --diagram-blue-line: #93c5fd;
+  --diagram-blue-fg: #1e3a8a;
+  --diagram-green-bg: #f0fdf4;
+  --diagram-green-line: #86efac;
+  --diagram-green-fg: #14532d;
+  --diagram-amber-bg: #fffbeb;
+  --diagram-amber-line: #fcd34d;
+  --diagram-amber-fg: #78350f;
+  --diagram-purple-bg: #f5f3ff;
+  --diagram-purple-line: #c4b5fd;
+  --diagram-purple-fg: #4c1d95;
+  --diagram-grey-bg: #f4f4f5;
+  --diagram-grey-line: #d4d4d8;
+  --diagram-grey-fg: #3f3f46;
+  --diagram-red-bg: #fef2f2;
+  --diagram-red-line: #fca5a5;
+  --diagram-red-fg: #7f1d1d;
+}
+.dark {
+  --diagram-blue-bg: #1d2430;
+  --diagram-blue-line: #5d7396;
+  --diagram-blue-fg: #d3dcea;
+  --diagram-green-bg: #1c2621;
+  --diagram-green-line: #5f806c;
+  --diagram-green-fg: #d3e3d9;
+  --diagram-amber-bg: #2a251b;
+  --diagram-amber-line: #8f7d55;
+  --diagram-amber-fg: #ece2cc;
+  --diagram-purple-bg: #25212e;
+  --diagram-purple-line: #7a6c96;
+  --diagram-purple-fg: #e0d9ec;
+  --diagram-grey-bg: #232325;
+  --diagram-grey-line: #6b6b72;
+  --diagram-grey-fg: #e4e4e7;
+  --diagram-red-bg: #2c2020;
+  --diagram-red-line: #956565;
+  --diagram-red-fg: #eed8d8;
+}
+
+/* A card's first line is its name; the lines under it are its columns. */
+.docs-diagram .node text tspan:first-child {
+  font-weight: 700;
+}
+.docs-diagram .node text tspan + tspan {
+  font-weight: 400;
+  opacity: 0.8;
+}

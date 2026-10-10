@@ -362,21 +362,21 @@ const terms = {
   },
   "local-archive": {
     en: {
-      title: "Local archive",
+      title: "Local store",
       description:
-        "Messages saved on the computer running the tool. Searches and reports using the local archive cover only stored chats and periods. Word search can also query the messenger’s server when supported and allowed.",
+        "Messages saved on the computer running the tool. Searches and reports using the local store cover only stored chats and periods. Word search can also query the messenger’s server when supported and allowed.",
       page: "search",
     },
     ru: {
-      title: "Локальный архив",
+      title: "Локальное хранилище",
       description:
-        "Сообщения, сохранённые на компьютере с инструментом. Поиск и отчёты по локальному архиву охватывают только сохранённые чаты и периоды. Поиск слов может также обращаться к серверу мессенджера, если это поддерживается и разрешено.",
+        "Сообщения, сохранённые на компьютере с инструментом. Поиск и отчёты по локальному хранилищу охватывают только сохранённые чаты и периоды. Поиск слов может также обращаться к серверу мессенджера, если это поддерживается и разрешено.",
       page: "search",
     },
     es: {
-      title: "Archivo local",
+      title: "Almacén local",
       description:
-        "Mensajes guardados en el ordenador que ejecuta la herramienta. Las búsquedas e informes del archivo local cubren solo los chats y periodos guardados. La búsqueda de palabras también puede consultar el servidor cuando está disponible y permitido.",
+        "Mensajes guardados en el ordenador que ejecuta la herramienta. Las búsquedas e informes del almacén local cubren solo los chats y periodos guardados. La búsqueda de palabras también puede consultar el servidor cuando está disponible y permitido.",
       page: "search",
     },
   },
