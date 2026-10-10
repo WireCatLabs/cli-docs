@@ -1,0 +1,411 @@
+---
+title: Модель данных
+description: Какие сущности инструменты WireCat хранят в общей локальной копии, как они связаны и как агент сужает круг до нужного контекста, прежде чем сравнивать смысл.
+---
+
+Каждый инструмент WireCat — `tg`, `max`, `memo`, `zm` — хранит прочитанное в одном локальном
+файле SQLite, `wirecat.db`. Эта страница для разработчиков и авторов агентов, которые хотят
+делать запросы к этому файлу или понимать, что агент может в нём найти. Сначала — сущности, потом
+связи между ними, потом то, как поиск находит контекст, и только в конце — столбцы, по которым
+стоит искать. Как копия открывается, обновляется и блокируется, описано в разделе
+[локальная копия](./architecture.mdx#локальная-копия).
+
+Страница описывает схему по состоянию на 10 октября 2026 года, на фиксированном коммите
+cli-messaging — пакета, которому принадлежит файл. Все столбцы с их значением перечислены в
+[справочнике схемы](https://github.com/WireCatLabs/cli-messaging/blob/f41b64f/docs/storage/schema-v2.md).
+
+## Сущности
+
+### Люди и учётные записи
+
+**Человек** (person) — это один живой человек. **Учётная запись** (identity) — то, как его знает
+один источник: пользователь Telegram, пользователь MAX, адрес почты, участник Zoom. У одного
+человека много учётных записей; каждая принадлежит не более чем одному человеку, и рядом хранится,
+каким способом и с какой уверенностью их связали. Прежние версии профиля сохраняются. **Бот** (bot) —
+ИИ-агент или скрипт, который работает в копии: он может владеть проектами, брать задачи и писать
+заметки. Бот самого мессенджера — это учётная запись, а не бот.
+
+### Организации и проекты
+
+**Организация** — компания, команда, семья или сообщество. **Проект** — место для задач с коротким
+ключом (`MEET`), типом (работа, клиент, личное, открытый код, другое) и необязательной
+организацией. Рабочие аккаунты и проекты принадлежат организации; семья — тоже организация.
+
+### Аккаунты и чаты
+
+**Аккаунт** — одно подключение владельца: аккаунт мессенджера, почтовый ящик, Zoom, папка с
+заметками. **Чат** принадлежит одному аккаунту. Чаты вкладываются друг в друга: тема форума лежит
+внутри своей группы, группа обсуждения — под своим каналом. Ветка — другое: она висит на корневом
+сообщении внутри одного чата, как комментарии под постом канала.
+
+### Сообщения и обсуждения
+
+**Сообщение** принадлежит чату, его отправляет учётная запись. При правке прежний текст
+сохраняется, а сообщение, удалённое в источнике, сохраняет строку без текста. **Обсуждение** —
+группа сообщений одного чата, относящихся к одному разговору; его собирают заново по ответам,
+упоминаниям и продолжениям от того же отправителя
+([как они собираются](./search-architecture.mdx#3-разговоры-как-граф-сообщений)).
+
+### Почта
+
+**Письмо** принадлежит цепочке писем и одному аккаунту. Отправитель и каждый получатель (to, cc,
+bcc) сводятся к учётным записям, поэтому письма и сообщения одного человека сходятся на одном
+человеке. Папки и ярлыки — это почтовые ящики; одно письмо может лежать в нескольких.
+
+### Документы, заметки и воспоминания
+
+**Документ** существует сам по себе: файл в папке заметок, страница, страница вики. **Заметка** —
+короткий текст, который человек или бот написал об одной вещи: человеке, чате, встрече, задаче;
+комментарии к задаче — тоже заметки. **Воспоминание** (memory) — вывод агента: сводка, дневной
+дайджест, факт, предпочтение. Вывод может быть ошибочным, поэтому воспоминание всегда несёт свои
+доказательства, уверенность и статус (предложено, подтверждено, устарело, заменено).
+
+### События и встречи
+
+**Событие** — запись владельца о том, что произошло, без полей конкретного сервиса. **Встреча** —
+один её раз, как его записало приложение для встреч: участники, расшифровки, чат встречи и
+сводки. Встреча указывает на своё событие, поэтому записи об одном звонке из разных источников
+сходятся на одном событии. У повторяющихся событий и повторяющихся встреч есть своя серия.
+
+### Задачи и решения
+
+**Задача** принадлежит проекту и называется ключом и номером (`MEET-12`). Её тип — ошибка,
+функция, рутина, вопрос, просьба, упоминание или обещание: заданный кем-то вопрос — задача типа
+«вопрос», данное кем-то обещание — задача типа «обещание». Люди и боты назначаются на задачу в
+роли (исполнитель, ревьюер, наблюдатель), и каждое изменение — событие задачи. **Решение** — выбор,
+который действует, пока его не заменит другой; его доказательства привязаны к нему.
+
+### Метки и темы
+
+**Метка** — свободный ярлык, который может поставить кто угодно. **Тема** — метка из короткого
+списка, который создаёт только владелец; агенты могут её предложить. У вещи может быть много меток
+и тем, и одну тему можно отметить как главную. Имя бывает либо меткой, либо темой, но не тем и
+другим сразу.
+
+### Предложенные и записанные действия
+
+**Предложенное действие** — то, что агент хочет сделать за пределами копии: ответить, отправить,
+забанить, создать задачу. Оно ждёт, пока человек одобрит или отклонит его. Без одобрения ничего
+внешнего не происходит. Отдельно записывается каждый инструмент, который вызвал агент, с уровнем
+доступа и целью, но без текста аргументов.
+
+## Как они связаны
+
+```mermaid Как основные сущности ссылаются друг на друга
+graph LR
+  Person["Человек"] --> Identity["Учётная запись"]
+  Organization["Организация"] --> Account["Аккаунт"]
+  Organization --> Project["Проект"]
+  Account --> Chat["Чат"]
+  Chat --> Message["Сообщение"]
+  Identity --> Message
+  Message --> Conversation["Обсуждение"]
+  Account --> Email["Письмо"]
+  Identity --> Email
+  Account --> Document["Документ"]
+  Account --> Meeting["Встреча"]
+  Identity --> Meeting
+  Meeting --> Event["Событие"]
+  Project --> Task["Задача"]
+  Project --> Decision["Решение"]
+```
+
+Словами: у человека есть учётные записи; учётные записи отправляют сообщения и письма и участвуют
+во встречах. Организация объединяет аккаунты и проекты. Каждый аккаунт приносит свои чаты, письма,
+документы и встречи; в чатах лежат сообщения, а сообщения складываются в обсуждения. Встреча
+относится к событию. В проекте лежат задачи и решения.
+
+Четыре таблицы связывают что угодно с чем угодно, поэтому ни одной сущности выше не нужен столбец
+для каждой другой:
+
+- **Связи** (links) соединяют две вещи и называют вид связи: задачу-вопрос с сообщением, которое
+  на него ответило (`answered-by`), решение или воспоминание с его доказательством (`evidence`),
+  вещь с тем, из чего она сделана (`created-from`), задачу с людьми, сообщениями, письмами и
+  встречами, которых она касается.
+- **Отметки** (taggings) ставят метку или тему на любую вещь.
+- **Заметки** привязывают текст человека к любой вещи.
+- **Псевдонимы** (aliases) дают любой вещи другие имена: прозвище, имя контакта в одном
+  мессенджере, короткое имя проекта. Их читают сопоставление имён и поиск.
+
+**Область** (scope) — `personal` или `work`. Её задают у аккаунтов, организаций и проектов, а то,
+что в них лежит, наследует её: чат берёт область своего аккаунта, если не задал свою, а
+воспоминание берёт область своих доказательств. Рабочий вопрос читает только рабочие данные и
+никогда не затянет личный чат.
+
+## Как поиск находит контекст
+
+Чтобы найти контекст для агента, нужны три шага, в таком порядке.
+
+1. **Сузить таблицами.** Человек, проект, аккаунт, время и область — это столбцы с индексами, так
+   что первый шаг — обычный SQL. Короткий путь — индекс участия: по строке на каждое сообщение,
+   письмо, встречу, задачу или документ, где человек участвовал, с его ролью, временем и областью.
+   «Всё, что Alice Example делала по работе в этом месяце» — один диапазон по индексу.
+2. **Искать слова и смысл только среди кандидатов.** У каждого вида текста свой индекс слов и
+   основ: сообщения, письма, вложения, документы, заметки, воспоминания и встречи. Затем векторы
+   ранжируют по смыслу, а каждый кусок текста несёт область, аккаунт, проект и время своего
+   источника, поэтому перебор векторов сначала фильтрует, а потом сравнивает. Как устроены слова,
+   основы и векторы, объясняет страница [как работает поиск](./search-architecture.mdx#4-куски-и-векторы).
+3. **Расширить по связям.** От найденного идти по цепочке ответов, к обсуждению, к корню ветки, к
+   цепочке писем или к встрече, из которой пришла строка расшифровки, и по связям, которые на него
+   указывают.
+
+```sql
+SELECT subject_type, subject_id, role, occurred_at
+FROM involvements
+WHERE person_id = :person AND scope = 'work' AND occurred_at >= :since
+ORDER BY occurred_at DESC
+LIMIT 50
+```
+
+Векторы бывают у длинных текстов: обсуждений, документов, писем, текста вложений, заметок,
+расшифровок и сводок встреч, событий и задач. У отдельного сообщения своего вектора нет: его
+находят по словам или по смыслу через его обсуждение. Текст режется на куски, а вектор каждого
+куска хранится один раз на модель и хеш текста, так что один и тот же текст не векторизуется
+дважды.
+
+Индекс участия производный: его собирают заново из отправителей, получателей, участников,
+исполнителей и подтверждённых связей, и в нём нет ничего сверх них.
+
+## Ключевые столбцы
+
+Только столбцы, по которым читатель будет фильтровать или соединять. Время — в миллисекундах
+эпохи. Пара `<name>_type` и `<name>_id` указывает на строку любой таблицы: `person`, `message`,
+`task`.
+
+**Источники и люди**
+
+| Таблица | Искать по |
+| --- | --- |
+| `accounts` | `provider`, `scope`, `organization_id` |
+| `persons` | `name` |
+| `identities` | `provider`, `external_id`, `username`, `name` |
+| `identity_links` | `identity_id`, `person_id`, `confidence` |
+| `organizations` | `kind`, `scope` |
+| `bots` | `name`, `kind`, `owner_person_id` |
+
+**Чаты, сообщения и почта**
+
+| Таблица | Искать по |
+| --- | --- |
+| `chats` | `account_id`, `kind`, `parent_chat_id`, `scope`, `last_message_at` |
+| `messages` | `chat_id`, `sender_identity_id`, `sent_at`, `thread_root_id`, `reply_to_external_id`, `deleted_at` |
+| `conversations` | `chat_id`, `first_at`, `last_at` |
+| `emails` | `account_id`, `email_thread_id`, `from_identity_id`, `sent_at` |
+| `email_recipients` | `email_id`, `identity_id`, `role` |
+
+**Документы, заметки и воспоминания**
+
+| Таблица | Искать по |
+| --- | --- |
+| `documents` | `account_id`, `kind`, `title`, `extension`, `deleted_at` |
+| `notes` | `notable_type`, `notable_id`, `author_type`, `author_id` |
+| `memories` | `kind`, `subject_type`, `subject_id`, `status`, `scope` |
+
+**События и встречи**
+
+| Таблица | Искать по |
+| --- | --- |
+| `events` | `starts_at`, `event_series_id` |
+| `meetings` | `account_id`, `event_id`, `started_at`, `host_identity_id` |
+| `meeting_participants` | `meeting_id`, `identity_id`, `role` |
+| `meeting_transcript_rows` | `meeting_transcript_id`, `speaker_participant_id`, `start_ms` |
+
+**Задачи, решения и действия**
+
+| Таблица | Искать по |
+| --- | --- |
+| `projects` | `key`, `type`, `organization_id`, `scope` |
+| `tasks` | `project_id`, `key`, `type`, `status`, `due_at`, `parent_id` |
+| `task_assignments` | `task_id`, `assignee_type`, `assignee_id`, `role` |
+| `decisions` | `project_id`, `status`, `decided_at`, `supersedes_id` |
+| `proposed_actions` | `status`, `kind`, `target_type`, `target_id` |
+
+**Связи и поиск**
+
+| Таблица | Искать по |
+| --- | --- |
+| `links` | `from_type`, `from_id`, `to_type`, `to_id`, `kind` |
+| `taggings` | `tag_id`, `taggable_type`, `taggable_id`, `main` |
+| `tags` | `name`, `kind` |
+| `aliases` | `aliasable_type`, `aliasable_id`, `name_folded` |
+| `involvements` | `person_id`, `identity_id`, `occurred_at`, `scope`, `subject_type`, `subject_id` |
+| `chunks` | `chunkable_type`, `chunkable_id`, `scope`, `occurred_at`, `content_hash` |
+| `embeddings` | `model`, `content_hash` |
+
+<details id="conventions" className="docs-disclosure">
+<summary>Соглашения об именах и все таблицы</summary>
+
+- Таблицы во множественном числе, в snake_case. Первичный ключ — `id`; внешний ключ —
+  `<singular>_id`.
+- `external_id` — собственный id строки в источнике; id другой вещи в источнике —
+  `<thing>_external_id`.
+- `created_at` и `updated_at` говорят, когда строку сохранили и изменили в этом файле. Время
+  событий в мире носит свои имена: `sent_at`, `joined_at`, `started_at`, `due_at`.
+- `deleted_at` значит «исчезло в источнике». Синхронизация никогда не удаляет строку; это делает
+  только команда владельца.
+- Указатель на строку любой таблицы — текст `<name>_type`, имя таблицы в единственном числе, и
+  целое `<name>_id`. Кто сделал вещь или владеет ею — `person` или `bot`.
+- У того, по чему ищут, свой столбец; `metadata` — JSON для того, по чему не ищут.
+- У флагов нет приставки `is_`. Время — целые числа в миллисекундах эпохи.
+- У каждого внешнего ключа и у каждой пары `_type`/`_id` есть индекс.
+
+Все таблицы и их столбцы, по областям:
+
+**Источники**
+
+| Таблица | Столбцы |
+| --- | --- |
+| `accounts` | `id`, `provider`, `external_id`, `name`, `created_at`, `settings`, `status`, `updated_at`, `scope`, `organization_id` |
+| `sync_cursors` | `account_id`, `key`, `value`, `updated_at`, `created_at` |
+| `sync_ranges` | `chat_id`, `from_key`, `to_key`, `created_at`, `updated_at` |
+| `fetch_leases` | `chat_id`, `anchor`, `holder`, `expires_at` |
+| `bot_updates` | `id`, `account_id`, `external_id`, `kind`, `payload`, `received_at`, `handled_at`, `error`, `replayed_at`, `created_at` |
+| `syncs` | `id`, `account_id`, `kind`, `started_at`, `finished_at`, `status`, `counts`, `error`, `created_at`, `updated_at` |
+
+**Люди, организации и боты**
+
+| Таблица | Столбцы |
+| --- | --- |
+| `persons` | `id`, `name`, `owner`, `created_at`, `updated_at` |
+| `identities` | `id`, `provider`, `external_id`, `username`, `name`, `bot`, `phone_hmac`, `metadata`, `created_at`, `updated_at`, `description` |
+| `identity_links` | `identity_id`, `person_id`, `method`, `confidence`, `created_at`, `author`, `source`, `updated_at` |
+| `identity_link_events` | `id`, `identity_id`, `from_person_id`, `to_person_id`, `method`, `created_at`, `author` |
+| `identity_revisions` | `id`, `identity_id`, `name`, `username`, `description`, `marks`, `created_at` |
+| `account_identities` | `account_id`, `identity_id`, `created_at`, `last_messaged_at`, `updated_at` |
+| `aliases` | `id`, `aliasable_type`, `aliasable_id`, `account_id`, `name`, `name_folded`, `display`, `source`, `created_at`, `updated_at` |
+| `identities_fts` | полнотекстовый индекс по `name`, `username` |
+| `organizations` | `id`, `kind`, `name`, `scope`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
+| `bots` | `id`, `name`, `kind`, `description`, `owner_person_id`, `model`, `token_digest`, `last_seen_at`, `disabled_at`, `metadata`, `created_at`, `updated_at` |
+
+**Чаты и сообщения**
+
+| Таблица | Столбцы |
+| --- | --- |
+| `chats` | `id`, `account_id`, `external_id`, `kind`, `title`, `unread_count`, `last_message_at`, `participants_count`, `metadata`, `updated_at`, `username`, `membership_state`, `searchable`, `message_count`, `members_tracked_at`, `description`, `details_fetched_at`, `created_at`, `parent_chat_id`, `scope` |
+| `chat_members` | `chat_id`, `identity_id`, `created_at` |
+| `member_stays` | `id`, `chat_id`, `identity_id`, `first_seen_at`, `last_seen_at`, `joined_at`, `invited_by_identity_id`, `role`, `left_at`, `created_at`, `updated_at` |
+| `member_counts` | `chat_id`, `date`, `reported_count`, `listed_count`, `complete_list`, `created_at` |
+| `messages` | `id`, `chat_id`, `account_id`, `external_id`, `thread_external_id`, `sender_identity_id`, `sender_chat_external_id`, `sender_name`, `sent_at`, `edited_at`, `deleted_at`, `text`, `reply_to_external_id`, `reply_to`, `forward`, `outgoing`, `reactions`, `metadata`, `created_at`, `source`, `normalized_text`, `normalizer_version`, `mentions`, `updated_at`, `thread_root_id` |
+| `message_revisions` | `id`, `message_id`, `text`, `edited_at`, `created_at` |
+| `message_links` | `id`, `chat_id`, `message_id`, `parent_id`, `source`, `kind`, `confidence`, `method`, `version`, `batch`, `build`, `created_at`, `stale_at`, `updated_at` |
+| `message_counter_observations` | `message_id`, `counter`, `value`, `created_at`, `source` |
+| `message_transcripts` | `id`, `message_id`, `chat_id`, `message_external_id`, `text`, `source`, `heard_at`, `created_at`, `updated_at` |
+| `chats_fts` | полнотекстовый индекс по `title` |
+| `messages_fts` | полнотекстовый индекс по `text` |
+| `message_words` | полнотекстовый индекс по `normalized_text`, `scope` |
+| `message_stems` | полнотекстовый индекс по `stems`, `scope` |
+| `message_stems_pending` | `id` |
+
+**Почта**
+
+| Таблица | Столбцы |
+| --- | --- |
+| `email_threads` | `id`, `account_id`, `external_id`, `subject`, `last_email_at`, `emails_count`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
+| `emails` | `id`, `account_id`, `email_thread_id`, `external_id`, `subject`, `from_identity_id`, `from_address`, `from_name`, `sent_at`, `received_at`, `in_reply_to`, `references`, `body_text`, `body_html`, `snippet`, `outgoing`, `read`, `flagged`, `draft`, `size`, `headers`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
+| `email_recipients` | `id`, `email_id`, `identity_id`, `address`, `name`, `role`, `position`, `created_at`, `updated_at` |
+| `mailboxes` | `id`, `account_id`, `external_id`, `name`, `kind`, `created_at`, `updated_at` |
+| `email_mailboxes` | `email_id`, `mailbox_id`, `created_at` |
+| `email_words` | полнотекстовый индекс по `normalized_text`, `scope` |
+| `email_stems` | полнотекстовый индекс по `stems`, `scope` |
+| `email_index_pending` | `id`, `indexable_type` |
+
+**Вложения**
+
+| Таблица | Столбцы |
+| --- | --- |
+| `attachments` | `id`, `attachable_type`, `attachable_id`, `position`, `kind`, `mime`, `name`, `title`, `url`, `size`, `width`, `height`, `duration`, `provider_ref`, `local_path`, `text`, `normalized_text`, `extraction`, `extractor`, `extraction_error`, `content_sha256`, `extracted_at`, `created_at`, `updated_at` |
+| `attachment_words` | полнотекстовый индекс по `normalized_text` |
+
+**Документы, заметки и воспоминания**
+
+| Таблица | Столбцы |
+| --- | --- |
+| `documents` | `id`, `account_id`, `external_id`, `kind`, `title`, `location`, `file_name`, `extension`, `url`, `storage`, `local_path`, `mime`, `size`, `content_hash`, `front_matter`, `body`, `normalized_text`, `extraction`, `extraction_error`, `language`, `revision`, `export_path`, `external_created_at`, `external_updated_at`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
+| `document_revisions` | `id`, `document_id`, `body`, `revision`, `created_at` |
+| `document_words` | полнотекстовый индекс по `normalized_text`, `scope` |
+| `document_stems` | полнотекстовый индекс по `stems`, `scope` |
+| `document_index_pending` | `id`, `indexable_type` |
+| `notes` | `id`, `notable_type`, `notable_id`, `title`, `body`, `author_type`, `author_id`, `revision`, `created_at`, `updated_at`, `deleted_at` |
+| `note_revisions` | `id`, `note_id`, `body`, `revision`, `created_at` |
+| `note_words` | полнотекстовый индекс по `normalized_text`, `scope` |
+| `note_stems` | полнотекстовый индекс по `stems`, `scope` |
+| `note_index_pending` | `id`, `indexable_type` |
+| `memories` | `id`, `kind`, `body`, `subject_type`, `subject_id`, `author_type`, `author_id`, `model`, `confidence`, `status`, `last_verified_at`, `supersedes_id`, `scope`, `created_at`, `updated_at` |
+| `memory_words` | полнотекстовый индекс по `normalized_text`, `scope` |
+| `memory_stems` | полнотекстовый индекс по `stems`, `scope` |
+| `memory_index_pending` | `id`, `indexable_type` |
+
+**События и встречи**
+
+| Таблица | Столбцы |
+| --- | --- |
+| `event_series` | `id`, `title`, `recurrence`, `origin`, `created_at`, `updated_at` |
+| `events` | `id`, `event_series_id`, `title`, `description`, `location`, `starts_at`, `ends_at`, `timezone`, `origin`, `created_at`, `updated_at`, `deleted_at` |
+| `meeting_series` | `id`, `account_id`, `external_id`, `event_series_id`, `title`, `description`, `kind`, `recurrence`, `host_identity_id`, `join_url`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
+| `meetings` | `id`, `account_id`, `meeting_series_id`, `event_id`, `external_id`, `title`, `description`, `location`, `join_url`, `started_at`, `ended_at`, `duration_ms`, `timezone`, `host_identity_id`, `participants_count`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
+| `meeting_participants` | `id`, `meeting_id`, `identity_id`, `display_name`, `email`, `role`, `joined_at`, `left_at`, `duration_ms`, `sessions`, `external_id`, `metadata`, `created_at`, `updated_at` |
+| `meeting_transcripts` | `id`, `meeting_id`, `source`, `format`, `language`, `content_hash`, `external_created_at`, `superseded_at`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
+| `meeting_transcript_rows` | `id`, `meeting_transcript_id`, `position`, `start_ms`, `end_ms`, `speaker_participant_id`, `speaker_name`, `text`, `normalized_text`, `metadata`, `created_at` |
+| `meeting_chat_messages` | `id`, `meeting_id`, `external_id`, `sent_at`, `sender_participant_id`, `sender_name`, `recipient`, `text`, `normalized_text`, `metadata`, `created_at`, `updated_at` |
+| `meeting_summaries` | `id`, `meeting_id`, `source`, `title`, `overview`, `sections`, `next_steps`, `content`, `doc_url`, `external_created_at`, `external_updated_at`, `metadata`, `created_at`, `updated_at` |
+| `meeting_words` | полнотекстовый индекс по `normalized_text`, `scope` |
+| `meeting_stems` | полнотекстовый индекс по `stems`, `scope` |
+| `meeting_index_pending` | `id`, `indexable_type` |
+
+**Задачи**
+
+| Таблица | Столбцы |
+| --- | --- |
+| `reminders` | `id`, `task_id`, `account_id`, `due_at`, `timezone`, `state`, `revision`, `lease_until`, `receipt`, `created_at`, `updated_at` |
+| `projects` | `id`, `key`, `name`, `description`, `type`, `organization_id`, `scope`, `owner_type`, `owner_id`, `tasks_count`, `status`, `created_at`, `updated_at`, `deleted_at` |
+| `tasks` | `id`, `project_id`, `number`, `key`, `title`, `description`, `type`, `status`, `priority`, `parent_id`, `due_at`, `started_at`, `closed_at`, `closed_by_type`, `closed_by_id`, `close_reason`, `author_type`, `author_id`, `source`, `resolution`, `verdict`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
+| `task_assignments` | `id`, `task_id`, `assignee_type`, `assignee_id`, `role`, `created_at`, `updated_at` |
+| `task_events` | `id`, `task_id`, `actor_type`, `actor_id`, `kind`, `changes`, `created_at` |
+| `decisions` | `id`, `project_id`, `statement`, `status`, `decided_at`, `supersedes_id`, `confirmed_by_type`, `confirmed_by_id`, `source`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
+
+**Агенты и действия**
+
+| Таблица | Столбцы |
+| --- | --- |
+| `proposed_actions` | `id`, `kind`, `account_id`, `target_type`, `target_id`, `payload`, `reason`, `status`, `proposed_by_type`, `proposed_by_id`, `decided_by_type`, `decided_by_id`, `decided_at`, `executed_at`, `result`, `error`, `verdict`, `created_at`, `updated_at` |
+| `agent_actions` | `id`, `actor_type`, `actor_id`, `tool`, `tier`, `target_type`, `target_id`, `status`, `error`, `started_at`, `finished_at`, `created_at` |
+
+**Метки, связи и сохранённые поиски**
+
+| Таблица | Столбцы |
+| --- | --- |
+| `tags` | `id`, `name`, `kind`, `created_at`, `updated_at` |
+| `auto_tag_claims` | `chat_id`, `tag_id`, `algorithm`, `score`, `fields`, `created_at`, `updated_at` |
+| `links` | `id`, `from_type`, `from_id`, `to_type`, `to_id`, `kind`, `anchor`, `source`, `target_text`, `target_folded`, `role`, `evidence`, `metadata`, `confirmed`, `created_at`, `author`, `updated_at` |
+| `searches` | `id`, `name`, `command`, `params`, `language`, `version`, `fields_version`, `created_at`, `last_run_at`, `runs`, `updated_at` |
+| `taggings` | `id`, `tag_id`, `taggable_type`, `taggable_id`, `main`, `source`, `author_type`, `author_id`, `created_at`, `updated_at` |
+
+**Куски, векторы и состояние поиска**
+
+| Таблица | Столбцы |
+| --- | --- |
+| `conversations` | `id`, `chat_id`, `first_message_id`, `build`, `first_at`, `last_at`, `message_count`, `built_at`, `algorithm_version`, `created_at`, `updated_at` |
+| `conversation_messages` | `conversation_id`, `message_id` |
+| `conversation_state` | `chat_id`, `enabled_at`, `built_at`, `algorithm_version`, `current_build` |
+| `conversation_chunks` | `conversation_id`, `ordinal`, `first_message_id`, `last_message_id`, `content_hash`, `text_start`, `text_end` |
+| `embeddings` | `model`, `content_hash`, `dims`, `vector`, `created_at`, `updated_at` |
+| `search_index_state` | `name`, `watermark`, `filled_through`, `terms_through`, `normalizer_version`, `built_at`, `analyzer` |
+| `search_terms` | `term`, `length` |
+| `search_term_trigrams` | `trigram`, `length`, `term` |
+| `involvements` | `id`, `person_id`, `identity_id`, `subject_type`, `subject_id`, `role`, `occurred_at`, `scope`, `account_id`, `project_id`, `created_at` |
+| `chunks` | `id`, `chunkable_type`, `chunkable_id`, `position`, `start_offset`, `end_offset`, `content_hash`, `scope`, `account_id`, `project_id`, `occurred_at`, `created_at`, `updated_at` |
+
+**Сам файл**
+
+| Таблица | Столбцы |
+| --- | --- |
+| `schema_migrations` | `version`, `min_compatible`, `applied_at` |
+| `store_settings` | `key`, `value`, `at` |
+
+[Справочник схемы](https://github.com/WireCatLabs/cli-messaging/blob/f41b64f/docs/storage/schema-v2.md)
+перечисляет каждый столбец, ограничение и индекс.
+
+</details>
+
+Чтобы увидеть эти таблицы в работе, прочитайте, [как работает поиск](./search-architecture.mdx);
+чтобы увидеть, как копия встроена в инструменты, — [архитектуру](./architecture.mdx).
