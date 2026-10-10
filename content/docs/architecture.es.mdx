@@ -167,7 +167,7 @@ comunes que añaden las opciones propias de MAX.
 
 ## El almacén local
 
-Un archivo SQLite, `~/.local/share/cli-messaging/messages.db`, guarda todos los mensajeros y cuentas —
+Un archivo SQLite, `~/.local/share/cli-messaging/wirecat.db` en Linux (`MESSAGING_STORE` indica otra ruta), guarda todos los mensajeros y cuentas —
 los perfiles de tg, la cuenta de max y sus bots — con clave por proveedor y cuenta.
 
 - **Dos entornos.** Abre `node:sqlite` en Node y `bun:sqlite` en Bun, cada uno con import dinámico,

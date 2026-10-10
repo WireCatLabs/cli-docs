@@ -163,7 +163,7 @@ MAX; [messenger.ts](https://github.com/WireCatLabs/max-cli/blob/fff19ff/src/mess
 
 ## Локальное хранилище
 
-Один файл SQLite, `~/.local/share/cli-messaging/messages.db`, хранит все мессенджеры и аккаунты —
+Один файл SQLite, `~/.local/share/cli-messaging/wirecat.db` в Linux (`MESSAGING_STORE` указывает другой путь), хранит все мессенджеры и аккаунты —
 профили tg, аккаунт max и его ботов — с ключом по провайдеру и аккаунту.
 
 - **Две среды.** Под Node открывается `node:sqlite`, под Bun — `bun:sqlite`, каждый динамическим

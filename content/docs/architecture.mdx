@@ -160,7 +160,7 @@ that add MAX's own options.
 
 ## The local store
 
-One SQLite file, `~/.local/share/cli-messaging/messages.db`, holds every messenger and account —
+One SQLite file, `~/.local/share/cli-messaging/wirecat.db` on Linux (`MESSAGING_STORE` points elsewhere), holds every messenger and account —
 tg's profiles, max's account and its bots — keyed by provider and account.
 
 - **Two runtimes.** It opens `node:sqlite` under Node and `bun:sqlite` under Bun, each by dynamic
