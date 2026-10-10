@@ -12,7 +12,7 @@ las columnas por las que vale la pena consultar. Cómo se abre, migra y bloquea 
 
 Describe el esquema tal como se leyó el 10 de octubre de 2026, en un commit fijo de cli-messaging,
 el paquete dueño del archivo. Cada columna con su significado está en la
-[referencia del esquema](https://github.com/WireCatLabs/cli-messaging/blob/d874547/docs/storage/schema.md).
+[referencia del esquema](https://github.com/WireCatLabs/cli-messaging/blob/a900d7d/docs/storage/schema.md).
 
 ## Entidades clave
 
@@ -403,13 +403,14 @@ Todas las tablas y sus columnas, por área:
 | `conversations` | `id`, `chat_id`, `first_message_id`, `build`, `first_at`, `last_at`, `message_count`, `built_at`, `algorithm_version`, `created_at`, `updated_at` |
 | `conversation_messages` | `conversation_id`, `message_id` |
 | `conversation_state` | `chat_id`, `enabled_at`, `built_at`, `algorithm_version`, `current_build` |
-| `conversation_chunks` | `conversation_id`, `ordinal`, `first_message_id`, `last_message_id`, `content_hash`, `text_start`, `text_end` |
 | `embeddings` | `model`, `content_hash`, `dims`, `vector`, `created_at`, `updated_at` |
 | `search_index_state` | `name`, `watermark`, `filled_through`, `terms_through`, `normalizer_version`, `built_at`, `analyzer` |
 | `search_terms` | `term`, `length` |
 | `search_term_trigrams` | `trigram`, `length`, `term` |
 | `involvements` | `id`, `person_id`, `identity_id`, `subject_type`, `subject_id`, `role`, `occurred_at`, `scope`, `account_id`, `project_id`, `created_at` |
+| `involvement_pending` | `id`, `indexable_type` |
 | `chunks` | `id`, `chunkable_type`, `chunkable_id`, `position`, `start_offset`, `end_offset`, `content_hash`, `scope`, `account_id`, `project_id`, `occurred_at`, `created_at`, `updated_at` |
+| `chunk_messages` | `chunk_id`, `first_message_id`, `last_message_id`, `text_start`, `text_end` |
 
 **El archivo**
 
@@ -418,7 +419,7 @@ Todas las tablas y sus columnas, por área:
 | `schema_migrations` | `version`, `min_compatible`, `applied_at` |
 | `store_settings` | `key`, `value`, `at` |
 
-La [referencia del esquema](https://github.com/WireCatLabs/cli-messaging/blob/d874547/docs/storage/schema.md)
+La [referencia del esquema](https://github.com/WireCatLabs/cli-messaging/blob/a900d7d/docs/storage/schema.md)
 lista cada columna, restricción e índice.
 
 </details>

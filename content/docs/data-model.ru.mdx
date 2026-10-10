@@ -12,7 +12,7 @@ description: Какие сущности инструменты WireCat хран
 
 Страница описывает схему по состоянию на 10 октября 2026 года, на фиксированном коммите
 cli-messaging — пакета, которому принадлежит файл. Все столбцы с их значением перечислены в
-[справочнике схемы](https://github.com/WireCatLabs/cli-messaging/blob/d874547/docs/storage/schema.md).
+[справочнике схемы](https://github.com/WireCatLabs/cli-messaging/blob/a900d7d/docs/storage/schema.md).
 
 ## Ключевые сущности
 
@@ -395,13 +395,14 @@ LIMIT 50
 | `conversations` | `id`, `chat_id`, `first_message_id`, `build`, `first_at`, `last_at`, `message_count`, `built_at`, `algorithm_version`, `created_at`, `updated_at` |
 | `conversation_messages` | `conversation_id`, `message_id` |
 | `conversation_state` | `chat_id`, `enabled_at`, `built_at`, `algorithm_version`, `current_build` |
-| `conversation_chunks` | `conversation_id`, `ordinal`, `first_message_id`, `last_message_id`, `content_hash`, `text_start`, `text_end` |
 | `embeddings` | `model`, `content_hash`, `dims`, `vector`, `created_at`, `updated_at` |
 | `search_index_state` | `name`, `watermark`, `filled_through`, `terms_through`, `normalizer_version`, `built_at`, `analyzer` |
 | `search_terms` | `term`, `length` |
 | `search_term_trigrams` | `trigram`, `length`, `term` |
 | `involvements` | `id`, `person_id`, `identity_id`, `subject_type`, `subject_id`, `role`, `occurred_at`, `scope`, `account_id`, `project_id`, `created_at` |
+| `involvement_pending` | `id`, `indexable_type` |
 | `chunks` | `id`, `chunkable_type`, `chunkable_id`, `position`, `start_offset`, `end_offset`, `content_hash`, `scope`, `account_id`, `project_id`, `occurred_at`, `created_at`, `updated_at` |
+| `chunk_messages` | `chunk_id`, `first_message_id`, `last_message_id`, `text_start`, `text_end` |
 
 **Сам файл**
 
@@ -410,7 +411,7 @@ LIMIT 50
 | `schema_migrations` | `version`, `min_compatible`, `applied_at` |
 | `store_settings` | `key`, `value`, `at` |
 
-[Справочник схемы](https://github.com/WireCatLabs/cli-messaging/blob/d874547/docs/storage/schema.md)
+[Справочник схемы](https://github.com/WireCatLabs/cli-messaging/blob/a900d7d/docs/storage/schema.md)
 перечисляет каждый столбец, ограничение и индекс.
 
 </details>
