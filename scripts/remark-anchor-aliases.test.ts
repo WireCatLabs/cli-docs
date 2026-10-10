@@ -14,3 +14,12 @@ it("preserves standard and self-closing legacy anchors while leaving other HTML 
   ])
   expect(tree.children[2]).toEqual(unsafe)
 })
+
+it("avoids duplicate IDs when an upstream alias repeats a heading or another alias", () => {
+  const tree = fromMarkdown(
+    '<a id="current-section"></a>\n\n## Current section\n\n<a id="old-section" />\n\n<a id="old-section"></a>',
+  )
+  remarkAnchorAliases()(tree)
+  expect(tree.children.map((node) => node.type)).toEqual(["heading", "paragraph"])
+  expect(tree.children[1].data).toEqual({ hName: "span", hProperties: { id: "old-section" } })
+})
