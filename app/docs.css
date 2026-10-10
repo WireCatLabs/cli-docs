@@ -48,3 +48,12 @@
   --diagram-red-line: #956565;
   --diagram-red-fg: #eed8d8;
 }
+
+/* A card's first line is its name; the lines under it are its columns. */
+.docs-diagram .node text tspan:first-child {
+  font-weight: 700;
+}
+.docs-diagram .node text tspan + tspan {
+  font-weight: 400;
+  opacity: 0.8;
+}
