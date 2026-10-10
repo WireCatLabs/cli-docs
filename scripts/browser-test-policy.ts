@@ -30,7 +30,10 @@ const isTestCall = (node: Node, names: Set<string>): boolean => {
 
 /** Enforce direct scan calls in each test callback; outer loops may generate independent cases. */
 export function browserSourceProblems(source: string, file = "test.spec.ts"): string[] {
-  const root = parse(source, { sourceType: "module", plugins: ["typescript"] }) as unknown as Node
+  const root = parse(source, {
+    sourceType: "unambiguous",
+    plugins: file.endsWith("x") ? ["typescript", "jsx"] : ["typescript"],
+  }) as unknown as Node
   const problems: string[] = []
   if (!source.includes("@axe-core/playwright")) return problems
   const testNames = new Set(["test"])
@@ -133,7 +136,7 @@ export function checkBrowserSources(directory: string): string[] {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     const path = join(directory, entry.name)
     if (entry.isDirectory() && !entry.name.startsWith(".")) return checkBrowserSources(path)
-    return entry.isFile() && entry.name.endsWith(".spec.ts")
+    return entry.isFile() && /\.(spec|test)\.[cm]?[jt]sx?$/.test(entry.name)
       ? browserSourceProblems(readFileSync(path, "utf8"), path)
       : []
   })
