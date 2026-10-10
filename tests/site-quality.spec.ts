@@ -162,7 +162,7 @@ for (const lang of ["en", "ru", "es"]) {
     await button.click()
     const copied = { en: "Copied", ru: "Скопировано", es: "Copiado" }[lang] ?? "Copied"
     await expect(button).toBeVisible()
-    await expect(page.locator('.toast[role="status"]')).toContainText(copied)
+    await expect(page.locator('[data-copy-feedback][role="status"]')).toContainText(copied)
     await page.keyboard.press("Escape")
     await page.locator('[data-demo-provider="max"]').click()
     await page.locator(".hero [data-connect]>summary").click()
