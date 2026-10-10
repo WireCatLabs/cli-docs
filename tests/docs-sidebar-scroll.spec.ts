@@ -32,26 +32,38 @@ for (const lang of ["en", "ru", "es"]) {
     await expect(page).toHaveURL(new RegExp(`/${lang}/docs/installation/?$`))
   })
 
-  test(`${lang}: mobile sidebar scrolls all navigation in one viewport`, async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 })
-    await page.goto(`/${lang}/docs/bot-api`)
-    const menu = page.locator('#nd-subnav button[aria-controls="nd-sidebar-mobile"]')
-    await menu.click()
-    const sidebar = page.locator("#nd-sidebar-mobile")
-    const viewport = sidebar.locator('[data-id$="-viewport"]')
-    await expect(viewport).toHaveCount(1)
-    for (const slug of ["", "/installation", "/agents", "/first-tasks", "/features", "/prompting", "/mcp", "/testing"])
-      await expect(viewport.locator(`a[href="/${lang}/docs${slug}"]`)).toHaveCount(1)
-    await viewport.evaluate((element) => {
-      element.scrollTop = element.scrollHeight
+  for (const width of [390, 320]) {
+    test(`${lang}: mobile sidebar scrolls all navigation in one viewport at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 844 })
+      await page.goto(`/${lang}/docs/bot-api`)
+      const menu = page.locator('#nd-subnav button[aria-controls="nd-sidebar-mobile"]')
+      await expect(menu).toBeInViewport({ ratio: 1 })
+      await menu.click()
+      const sidebar = page.locator("#nd-sidebar-mobile")
+      const viewport = sidebar.locator('[data-id$="-viewport"]')
+      await expect(viewport).toHaveCount(1)
+      for (const slug of [
+        "",
+        "/installation",
+        "/agents",
+        "/first-tasks",
+        "/features",
+        "/prompting",
+        "/mcp",
+        "/testing",
+      ])
+        await expect(viewport.locator(`a[href="/${lang}/docs${slug}"]`)).toHaveCount(1)
+      await viewport.evaluate((element) => {
+        element.scrollTop = element.scrollHeight
+      })
+      await expect(viewport.locator(`a[href="/${lang}/docs/testing"]`)).toBeInViewport()
+      await viewport.evaluate((element) => {
+        element.scrollTop = 0
+      })
+      await expect(viewport.locator(`a[href="/${lang}/docs/installation"]`)).toBeInViewport()
+      await page.keyboard.press("Escape")
+      await expect(menu).toHaveAttribute("aria-expanded", "false")
+      await expect(menu).toBeFocused()
     })
-    await expect(viewport.locator(`a[href="/${lang}/docs/testing"]`)).toBeInViewport()
-    await viewport.evaluate((element) => {
-      element.scrollTop = 0
-    })
-    await expect(viewport.locator(`a[href="/${lang}/docs/installation"]`)).toBeInViewport()
-    await page.keyboard.press("Escape")
-    await expect(menu).toHaveAttribute("aria-expanded", "false")
-    await expect(menu).toBeFocused()
-  })
+  }
 }
