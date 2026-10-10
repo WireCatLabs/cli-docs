@@ -32,28 +32,28 @@ graph LR
   Meeting --> Event("Event<br>starts_at")
   Project --> Task("Task<br>key · type · status")
   Project --> Decision("Decision<br>status · decided_at")
-  Memory("Memory<br>kind · status") -.->|"evidence"| Message
-  Tag("Tag<br>name · kind") -.->|"tags"| Task
+  Tag("Tag<br>name · kind") -.->|"any entity"| Account
+  Memory("Memory<br>kind · status") -.->|"any entity"| Account
   classDef people fill:var(--diagram-blue-bg),stroke:var(--diagram-blue-line),color:var(--diagram-blue-fg)
   classDef sources fill:var(--diagram-green-bg),stroke:var(--diagram-green-line),color:var(--diagram-green-fg)
   classDef account fill:var(--diagram-grey-bg),stroke:var(--diagram-grey-line),color:var(--diagram-grey-fg)
   classDef knowledge fill:var(--diagram-purple-bg),stroke:var(--diagram-purple-line),color:var(--diagram-purple-fg)
   classDef work fill:var(--diagram-amber-bg),stroke:var(--diagram-amber-line),color:var(--diagram-amber-fg)
-  classDef tag fill:var(--diagram-rose-bg),stroke:var(--diagram-rose-line),color:var(--diagram-rose-fg)
+  classDef connect fill:var(--diagram-red-bg),stroke:var(--diagram-red-line),color:var(--diagram-red-fg)
   class Person,Identity people
   class Chat,Message,Conversation,Email sources
   class Account account
-  class Document,Meeting,Event,Memory knowledge
+  class Document,Meeting,Event knowledge
   class Organization,Project,Task,Decision work
-  class Tag tag
+  class Memory,Tag connect
 ```
 
 In words: a person has identities; identities send messages and emails and take part in
 meetings. An organization holds accounts and projects. Each account brings its chats, emails,
 documents and meetings; chats hold messages, and messages group into conversations. A meeting
-belongs to an event. A project holds tasks and decisions. Dotted arrows go through the connecting tables: a memory
-points at its evidence, and a tag can sit on any thing, not only a task. Colours group the cards:
-people, chats and mail, the account they came through, documents and meetings, work, tags.
+belongs to an event. A project holds tasks and decisions. A memory and a tag can sit on any entity, so their dotted lines say "any entity"; the line
+to Account stands for all of them. Colours group the cards: people, chats and mail, the account
+they came through, documents and meetings, work, and the two that attach to anything.
 
 ### People and identities
 

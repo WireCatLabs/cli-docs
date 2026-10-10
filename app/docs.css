@@ -24,9 +24,9 @@
   --diagram-grey-bg: #f4f4f5;
   --diagram-grey-line: #d4d4d8;
   --diagram-grey-fg: #3f3f46;
-  --diagram-rose-bg: #fff1f2;
-  --diagram-rose-line: #fda4af;
-  --diagram-rose-fg: #881337;
+  --diagram-red-bg: #fef2f2;
+  --diagram-red-line: #fca5a5;
+  --diagram-red-fg: #7f1d1d;
 }
 .dark {
   --diagram-blue-bg: #1d2430;
@@ -44,7 +44,7 @@
   --diagram-grey-bg: #232325;
   --diagram-grey-line: #6b6b72;
   --diagram-grey-fg: #e4e4e7;
-  --diagram-rose-bg: #2b2125;
-  --diagram-rose-line: #8f6774;
-  --diagram-rose-fg: #ecd8df;
+  --diagram-red-bg: #2c2020;
+  --diagram-red-line: #956565;
+  --diagram-red-fg: #eed8d8;
 }

@@ -33,29 +33,29 @@ graph LR
   Meeting --> Event("Evento<br>starts_at")
   Project --> Task("Tarea<br>key · type · status")
   Project --> Decision("Decisión<br>status · decided_at")
-  Memory("Memoria<br>kind · status") -.->|"prueba"| Message
-  Tag("Etiqueta<br>name · kind") -.->|"etiqueta"| Task
+  Tag("Etiqueta<br>name · kind") -.->|"cualquier entidad"| Account
+  Memory("Memoria<br>kind · status") -.->|"cualquier entidad"| Account
   classDef people fill:var(--diagram-blue-bg),stroke:var(--diagram-blue-line),color:var(--diagram-blue-fg)
   classDef sources fill:var(--diagram-green-bg),stroke:var(--diagram-green-line),color:var(--diagram-green-fg)
   classDef account fill:var(--diagram-grey-bg),stroke:var(--diagram-grey-line),color:var(--diagram-grey-fg)
   classDef knowledge fill:var(--diagram-purple-bg),stroke:var(--diagram-purple-line),color:var(--diagram-purple-fg)
   classDef work fill:var(--diagram-amber-bg),stroke:var(--diagram-amber-line),color:var(--diagram-amber-fg)
-  classDef tag fill:var(--diagram-rose-bg),stroke:var(--diagram-rose-line),color:var(--diagram-rose-fg)
+  classDef connect fill:var(--diagram-red-bg),stroke:var(--diagram-red-line),color:var(--diagram-red-fg)
   class Person,Identity people
   class Chat,Message,Conversation,Email sources
   class Account account
-  class Document,Meeting,Event,Memory knowledge
+  class Document,Meeting,Event knowledge
   class Organization,Project,Task,Decision work
-  class Tag tag
+  class Memory,Tag connect
 ```
 
 En palabras: una persona tiene identidades; las identidades envían mensajes y correos y participan
 en reuniones. Una organización agrupa cuentas y proyectos. Cada cuenta trae sus chats, correos,
 documentos y reuniones; los chats contienen mensajes, y los mensajes se agrupan en conversaciones.
-Una reunión pertenece a un evento. Un proyecto contiene tareas y decisiones. Las flechas punteadas pasan por las tablas que conectan:
-una memoria apunta a su prueba, y una etiqueta puede estar en cualquier cosa, no solo en una tarea.
-Los colores agrupan las tarjetas: personas, chats y correo, la cuenta por la que llegaron,
-documentos y reuniones, trabajo, etiquetas.
+Una reunión pertenece a un evento. Un proyecto contiene tareas y decisiones. Una memoria y una etiqueta pueden estar en cualquier entidad, por eso sus líneas punteadas dicen
+«cualquier entidad»; la línea a la cuenta las representa a todas. Los colores agrupan las tarjetas:
+personas, chats y correo, la cuenta por la que llegaron, documentos y reuniones, trabajo, y lo que
+se une a cualquier cosa.
 
 ### Personas e identidades
 
