@@ -55,6 +55,7 @@ jobs:
           fi
       - run: pnpm typecheck
       - run: pnpm exec next build
+      - run: pnpm check:assets
       - run: pnpm check:links
       - run: pnpm check:seo
       - run: pnpm exec playwright install --with-deps chromium

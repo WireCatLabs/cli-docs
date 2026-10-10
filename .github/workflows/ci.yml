@@ -29,6 +29,7 @@ jobs:
       - run: pnpm docs:check
       - run: pnpm typecheck
       - run: pnpm exec next build
+      - run: pnpm check:assets
       - run: pnpm check:links
       - run: pnpm check:seo
       - run: pnpm exec playwright install --with-deps chromium
@@ -49,6 +50,7 @@ jobs:
       - run: pnpm sync
       - run: pnpm docs:release-notes
       - run: pnpm exec next build
+      - run: pnpm check:assets
       - run: pnpm exec playwright install --with-deps chromium
       # The dev server compiles each route on its first request; parallel workers time out waiting for it.
       - run: pnpm exec playwright test tests/heading-fonts.spec.ts tests/search-playground.spec.ts tests/doc-hints.spec.ts
