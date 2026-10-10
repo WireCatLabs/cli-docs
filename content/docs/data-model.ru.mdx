@@ -33,18 +33,29 @@ graph LR
   Meeting --> Event("Событие<br>starts_at")
   Project --> Task("Задача<br>key · type · status")
   Project --> Decision("Решение<br>status · decided_at")
+  Memory("Воспоминание<br>kind · status") -.->|"основание"| Message
+  Tag("Метка<br>name · kind") -.->|"метит"| Task
   classDef people fill:var(--diagram-blue-bg),stroke:var(--diagram-blue-line),color:var(--diagram-blue-fg)
   classDef sources fill:var(--diagram-green-bg),stroke:var(--diagram-green-line),color:var(--diagram-green-fg)
+  classDef account fill:var(--diagram-grey-bg),stroke:var(--diagram-grey-line),color:var(--diagram-grey-fg)
+  classDef knowledge fill:var(--diagram-purple-bg),stroke:var(--diagram-purple-line),color:var(--diagram-purple-fg)
   classDef work fill:var(--diagram-amber-bg),stroke:var(--diagram-amber-line),color:var(--diagram-amber-fg)
+  classDef tag fill:var(--diagram-rose-bg),stroke:var(--diagram-rose-line),color:var(--diagram-rose-fg)
   class Person,Identity people
-  class Account,Chat,Message,Conversation,Email,Document,Meeting sources
-  class Organization,Project,Task,Decision,Event work
+  class Chat,Message,Conversation,Email sources
+  class Account account
+  class Document,Meeting,Event,Memory knowledge
+  class Organization,Project,Task,Decision work
+  class Tag tag
 ```
 
 Словами: у человека есть учётные записи; учётные записи отправляют сообщения и письма и участвуют
 во встречах. Организация объединяет аккаунты и проекты. Каждый аккаунт приносит свои чаты, письма,
 документы и встречи; в чатах лежат сообщения, а сообщения складываются в обсуждения. Встреча
-относится к событию. В проекте лежат задачи и решения.
+относится к событию. В проекте лежат задачи и решения. Пунктирные стрелки идут через связующие таблицы: воспоминание
+указывает на своё основание, а метка может стоять на любой вещи, не только на задаче. Цвета
+группируют карточки: люди, чаты и почта, аккаунт, через который они пришли, документы и встречи,
+работа, метки.
 
 ### Люди и учётные записи
 
@@ -172,74 +183,11 @@ LIMIT 50
 Индекс участия производный: его собирают заново из отправителей, получателей, участников,
 исполнителей и подтверждённых связей, и в нём нет ничего сверх них.
 
-## Ключевые столбцы
+## Таблицы
 
-Только столбцы, по которым читатель будет фильтровать или соединять. Время — в миллисекундах
-эпохи. Пара `<name>_type` и `<name>_id` указывает на строку любой таблицы: `person`, `message`,
-`task`.
+Все таблицы копии по областям, с типом и значением каждого столбца. Время — в миллисекундах эпохи. В [справочнике схемы](https://github.com/WireCatLabs/cli-messaging/blob/v0.218.0/docs/storage/schema.md) есть ещё все ограничения и индексы.
 
-**Источники и люди**
-
-| Таблица | Искать по |
-| --- | --- |
-| `accounts` | `provider`, `scope`, `organization_id` |
-| `persons` | `name` |
-| `identities` | `provider`, `external_id`, `username`, `name` |
-| `identity_links` | `identity_id`, `person_id`, `confidence` |
-| `organizations` | `kind`, `scope` |
-| `bots` | `name`, `kind`, `owner_person_id` |
-
-**Чаты, сообщения и почта**
-
-| Таблица | Искать по |
-| --- | --- |
-| `chats` | `account_id`, `kind`, `parent_chat_id`, `scope`, `last_message_at` |
-| `messages` | `chat_id`, `sender_identity_id`, `sent_at`, `thread_root_id`, `reply_to_external_id`, `deleted_at` |
-| `conversations` | `chat_id`, `first_at`, `last_at` |
-| `emails` | `account_id`, `email_thread_id`, `from_identity_id`, `sent_at` |
-| `email_recipients` | `email_id`, `identity_id`, `role` |
-
-**Документы, заметки и воспоминания**
-
-| Таблица | Искать по |
-| --- | --- |
-| `documents` | `account_id`, `kind`, `title`, `extension`, `deleted_at` |
-| `notes` | `notable_type`, `notable_id`, `author_type`, `author_id` |
-| `memories` | `kind`, `subject_type`, `subject_id`, `status`, `scope` |
-
-**События и встречи**
-
-| Таблица | Искать по |
-| --- | --- |
-| `events` | `starts_at`, `event_series_id` |
-| `meetings` | `account_id`, `event_id`, `started_at`, `host_identity_id` |
-| `meeting_participants` | `meeting_id`, `identity_id`, `role` |
-| `meeting_transcript_rows` | `meeting_transcript_id`, `speaker_participant_id`, `start_ms` |
-
-**Задачи, решения и действия**
-
-| Таблица | Искать по |
-| --- | --- |
-| `projects` | `key`, `type`, `organization_id`, `scope` |
-| `tasks` | `project_id`, `key`, `type`, `status`, `due_at`, `parent_id` |
-| `task_assignments` | `task_id`, `assignee_type`, `assignee_id`, `role` |
-| `decisions` | `project_id`, `status`, `decided_at`, `supersedes_id` |
-| `proposed_actions` | `status`, `kind`, `target_type`, `target_id` |
-
-**Связи и поиск**
-
-| Таблица | Искать по |
-| --- | --- |
-| `links` | `from_type`, `from_id`, `to_type`, `to_id`, `kind` |
-| `taggings` | `tag_id`, `taggable_type`, `taggable_id`, `main` |
-| `tags` | `name`, `kind` |
-| `aliases` | `aliasable_type`, `aliasable_id`, `name_folded` |
-| `involvements` | `person_id`, `identity_id`, `occurred_at`, `scope`, `subject_type`, `subject_id` |
-| `chunks` | `chunkable_type`, `chunkable_id`, `scope`, `occurred_at`, `content_hash` |
-| `embeddings` | `model`, `content_hash` |
-
-<details id="conventions" className="docs-disclosure">
-<summary>Соглашения об именах и все таблицы</summary>
+**Соглашения об именах**
 
 - Таблицы во множественном числе, в snake_case. Первичный ключ — `id`; внешний ключ —
   `<singular>_id`.
@@ -255,166 +203,1398 @@ LIMIT 50
 - У флагов нет приставки `is_`. Время — целые числа в миллисекундах эпохи.
 - У каждого внешнего ключа и у каждой пары `_type`/`_id` есть индекс.
 
-Все таблицы и их столбцы, по областям:
+{/* tables:start — generated by pnpm docs:data-model */}
 
-**Источники**
+### Источники
 
-| Таблица | Столбцы |
-| --- | --- |
-| `accounts` | `id`, `provider`, `external_id`, `name`, `created_at`, `settings`, `status`, `updated_at`, `scope`, `organization_id` |
-| `sync_cursors` | `account_id`, `key`, `value`, `updated_at`, `created_at` |
-| `sync_ranges` | `chat_id`, `from_key`, `to_key`, `created_at`, `updated_at` |
-| `fetch_leases` | `chat_id`, `anchor`, `holder`, `expires_at` |
-| `bot_updates` | `id`, `account_id`, `external_id`, `kind`, `payload`, `received_at`, `handled_at`, `error`, `replayed_at`, `created_at` |
-| `syncs` | `id`, `account_id`, `kind`, `started_at`, `finished_at`, `status`, `counts`, `error`, `created_at`, `updated_at` |
+Каждая интеграция — это аккаунт; каждый запуск синхронизации записывается в журнал.
 
-**Люди, организации и боты**
+#### `accounts`
 
-| Таблица | Столбцы |
-| --- | --- |
-| `persons` | `id`, `name`, `owner`, `created_at`, `updated_at` |
-| `identities` | `id`, `provider`, `external_id`, `username`, `name`, `bot`, `phone_hmac`, `metadata`, `created_at`, `updated_at`, `description` |
-| `identity_links` | `identity_id`, `person_id`, `method`, `confidence`, `created_at`, `author`, `source`, `updated_at` |
-| `identity_link_events` | `id`, `identity_id`, `from_person_id`, `to_person_id`, `method`, `created_at`, `author` |
-| `identity_revisions` | `id`, `identity_id`, `name`, `username`, `description`, `marks`, `created_at` |
-| `account_identities` | `account_id`, `identity_id`, `created_at`, `last_messaged_at`, `updated_at` |
-| `aliases` | `id`, `aliasable_type`, `aliasable_id`, `account_id`, `name`, `name_folded`, `display`, `source`, `created_at`, `updated_at` |
-| `identities_fts` | полнотекстовый индекс по `name`, `username` |
-| `organizations` | `id`, `kind`, `name`, `scope`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
-| `bots` | `id`, `name`, `kind`, `description`, `owner_person_id`, `model`, `token_digest`, `last_seen_at`, `disabled_at`, `metadata`, `created_at`, `updated_at` |
+Каждая интеграция, которую подключает владелец: аккаунт мессенджера, почтовый ящик, Zoom, папка заметок.
 
-**Чаты и сообщения**
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `provider` | text, not null | Мессенджер, к которому относится аккаунт, строчным именем, например `telegram` или `max`; список открыт, поэтому новым адаптерам не нужны изменения. |
+| `external_id` | text, not null | собственный id источника для него |
+| `name` | text | Отображаемое имя аккаунта, как его сообщает мессенджер; NULL, если неизвестно. |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `settings` | text | JSON: настройки интеграции, например путь и формат папки |
+| `status` | text | active, paused, failed |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+| `scope` | text, not null | `personal` или `work`; что запрос контекста может читать для данной цели, чтобы рабочий вопрос никогда не затягивал личные чаты |
+| `organization_id` | integer → `organizations.id` | организация, к которой относится рабочий аккаунт |
 
-| Таблица | Столбцы |
-| --- | --- |
-| `chats` | `id`, `account_id`, `external_id`, `kind`, `title`, `unread_count`, `last_message_at`, `participants_count`, `metadata`, `updated_at`, `username`, `membership_state`, `searchable`, `message_count`, `members_tracked_at`, `description`, `details_fetched_at`, `created_at`, `parent_chat_id`, `scope` |
-| `chat_members` | `chat_id`, `identity_id`, `created_at` |
-| `member_stays` | `id`, `chat_id`, `identity_id`, `first_seen_at`, `last_seen_at`, `joined_at`, `invited_by_identity_id`, `role`, `left_at`, `created_at`, `updated_at` |
-| `member_counts` | `chat_id`, `date`, `reported_count`, `listed_count`, `complete_list`, `created_at` |
-| `messages` | `id`, `chat_id`, `account_id`, `external_id`, `thread_external_id`, `sender_identity_id`, `sender_chat_external_id`, `sender_name`, `sent_at`, `edited_at`, `deleted_at`, `text`, `reply_to_external_id`, `reply_to`, `forward`, `outgoing`, `reactions`, `metadata`, `created_at`, `source`, `normalized_text`, `normalizer_version`, `mentions`, `updated_at`, `thread_root_id` |
-| `message_revisions` | `id`, `message_id`, `text`, `edited_at`, `created_at` |
-| `message_links` | `id`, `chat_id`, `message_id`, `parent_id`, `source`, `kind`, `confidence`, `method`, `version`, `batch`, `build`, `created_at`, `stale_at`, `updated_at` |
-| `message_counter_observations` | `message_id`, `counter`, `value`, `created_at`, `source` |
-| `message_transcripts` | `id`, `message_id`, `chat_id`, `message_external_id`, `text`, `source`, `heard_at`, `created_at`, `updated_at` |
-| `chats_fts` | полнотекстовый индекс по `title` |
-| `messages_fts` | полнотекстовый индекс по `text` |
-| `message_words` | полнотекстовый индекс по `normalized_text`, `scope` |
-| `message_stems` | полнотекстовый индекс по `stems`, `scope` |
-| `message_stems_pending` | `id` |
-| `member_observations` | `id`, `chat_id`, `observed_at`, `started_at`, `complete`, `reported_count`, `listed_count`, `source`, `created_at`, `updated_at` |
-| `member_observation_members` | `member_observation_id`, `identity_id`, `member_stay_id` |
+#### `sync_cursors`
 
-**Почта**
+Для каждого аккаунта — что синхронизация помнит между запусками: маркер изменений, когда список последний раз был полным.
 
-| Таблица | Столбцы |
-| --- | --- |
-| `email_threads` | `id`, `account_id`, `external_id`, `subject`, `last_email_at`, `emails_count`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
-| `emails` | `id`, `account_id`, `email_thread_id`, `external_id`, `subject`, `from_identity_id`, `from_address`, `from_name`, `sent_at`, `received_at`, `in_reply_to`, `references`, `body_text`, `body_html`, `snippet`, `outgoing`, `read`, `flagged`, `draft`, `size`, `headers`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
-| `email_recipients` | `id`, `email_id`, `identity_id`, `address`, `name`, `role`, `position`, `created_at`, `updated_at` |
-| `mailboxes` | `id`, `account_id`, `external_id`, `name`, `kind`, `created_at`, `updated_at` |
-| `email_mailboxes` | `email_id`, `mailbox_id`, `created_at` |
-| `email_words` | полнотекстовый индекс по `normalized_text`, `scope` |
-| `email_stems` | полнотекстовый индекс по `stems`, `scope` |
-| `email_index_pending` | `id`, `indexable_type` |
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `account_id` | integer, not null → `accounts.id` | аккаунт интеграции, через который это пришло |
+| `key` | text, not null | Имя того, что синхронизация помнит для этого аккаунта, например `chat_list_complete`, `history_start:&lt;chatId>`, `fetched:&lt;chatId>` или маркер изменений источника. |
+| `value` | text, not null | Запомненное значение в виде текста (маркер изменений, id сообщения, список JSON); числа вызывающий код кодирует сам. |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
 
-**Вложения**
+#### `sync_ranges`
 
-| Таблица | Столбцы |
-| --- | --- |
-| `attachments` | `id`, `attachable_type`, `attachable_id`, `position`, `kind`, `mime`, `name`, `title`, `url`, `size`, `width`, `height`, `duration`, `provider_ref`, `local_path`, `text`, `normalized_text`, `extraction`, `extractor`, `extraction_error`, `content_sha256`, `extracted_at`, `created_at`, `updated_at` |
-| `attachment_words` | полнотекстовый индекс по `normalized_text` |
+Отрезки истории каждого чата, которые хранятся полностью, чтобы загрузка знала, чего не хватает.
 
-**Документы, заметки и воспоминания**
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `chat_id` | integer, not null → `chats.id` | `chat`, к которому это относится |
+| `from_key` | integer, not null | Наименьший ключ порядка источника (id сообщения Telegram) отрезка чата, который хранится полностью; сообщения, которых внутри него нет, были удалены. |
+| `to_key` | integer, not null | Наибольший ключ порядка источника этого полного отрезка; сообщения вне всех отрезков просто ещё не загружались. |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
 
-| Таблица | Столбцы |
-| --- | --- |
-| `documents` | `id`, `account_id`, `external_id`, `kind`, `title`, `location`, `file_name`, `extension`, `url`, `storage`, `local_path`, `mime`, `size`, `content_hash`, `front_matter`, `body`, `normalized_text`, `extraction`, `extraction_error`, `language`, `revision`, `export_path`, `external_created_at`, `external_updated_at`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
-| `document_revisions` | `id`, `document_id`, `body`, `revision`, `created_at` |
-| `document_words` | полнотекстовый индекс по `normalized_text`, `scope` |
-| `document_stems` | полнотекстовый индекс по `stems`, `scope` |
-| `document_index_pending` | `id`, `indexable_type` |
-| `notes` | `id`, `notable_type`, `notable_id`, `title`, `body`, `author_type`, `author_id`, `revision`, `created_at`, `updated_at`, `deleted_at` |
-| `note_revisions` | `id`, `note_id`, `body`, `revision`, `created_at` |
-| `note_words` | полнотекстовый индекс по `normalized_text`, `scope` |
-| `note_stems` | полнотекстовый индекс по `stems`, `scope` |
-| `note_index_pending` | `id`, `indexable_type` |
-| `memories` | `id`, `kind`, `body`, `subject_type`, `subject_id`, `author_type`, `author_id`, `model`, `confidence`, `status`, `last_verified_at`, `supersedes_id`, `scope`, `created_at`, `updated_at` |
-| `memory_words` | полнотекстовый индекс по `normalized_text`, `scope` |
-| `memory_stems` | полнотекстовый индекс по `stems`, `scope` |
-| `memory_index_pending` | `id`, `indexable_type` |
+#### `fetch_leases`
 
-**События и встречи**
+Кто сейчас загружает отрезок чата, чтобы два процесса не загружали одни и те же страницы.
 
-| Таблица | Столбцы |
-| --- | --- |
-| `event_series` | `id`, `title`, `recurrence`, `origin`, `created_at`, `updated_at` |
-| `events` | `id`, `event_series_id`, `title`, `description`, `location`, `starts_at`, `ends_at`, `timezone`, `origin`, `created_at`, `updated_at`, `deleted_at` |
-| `meeting_series` | `id`, `account_id`, `external_id`, `event_series_id`, `title`, `description`, `kind`, `recurrence`, `host_identity_id`, `join_url`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
-| `meetings` | `id`, `account_id`, `meeting_series_id`, `event_id`, `external_id`, `title`, `description`, `location`, `join_url`, `started_at`, `ended_at`, `duration_ms`, `timezone`, `host_identity_id`, `participants_count`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
-| `meeting_participants` | `id`, `meeting_id`, `identity_id`, `display_name`, `email`, `role`, `joined_at`, `left_at`, `duration_ms`, `sessions`, `external_id`, `metadata`, `created_at`, `updated_at` |
-| `meeting_transcripts` | `id`, `meeting_id`, `source`, `format`, `language`, `content_hash`, `external_created_at`, `superseded_at`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
-| `meeting_transcript_rows` | `id`, `meeting_transcript_id`, `position`, `start_ms`, `end_ms`, `speaker_participant_id`, `speaker_name`, `text`, `normalized_text`, `metadata`, `created_at` |
-| `meeting_chat_messages` | `id`, `meeting_id`, `external_id`, `sent_at`, `sender_participant_id`, `sender_name`, `recipient`, `text`, `normalized_text`, `metadata`, `created_at`, `updated_at` |
-| `meeting_summaries` | `id`, `meeting_id`, `source`, `title`, `overview`, `sections`, `next_steps`, `content`, `doc_url`, `external_created_at`, `external_updated_at`, `metadata`, `created_at`, `updated_at` |
-| `meeting_words` | полнотекстовый индекс по `normalized_text`, `scope` |
-| `meeting_stems` | полнотекстовый индекс по `stems`, `scope` |
-| `meeting_index_pending` | `id`, `indexable_type` |
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `chat_id` | integer, not null → `chats.id` | `chat`, к которому это относится |
+| `anchor` | text, not null | Какой отрезок или какая работа чата загружается, в виде метки, например `gaps`, чтобы два процесса никогда не загружали одни и те же страницы. |
+| `holder` | text, not null | Случайный id (UUID) процесса, который сейчас держит аренду. |
+| `expires_at` | integer, not null | Когда аренда истекает (миллисекунды эпохи); после этого отрезок может взять другой держатель. |
 
-**Задачи**
+#### `bot_updates`
 
-| Таблица | Столбцы |
-| --- | --- |
-| `reminders` | `id`, `task_id`, `account_id`, `due_at`, `timezone`, `state`, `revision`, `lease_until`, `receipt`, `created_at`, `updated_at` |
-| `projects` | `id`, `key`, `name`, `description`, `type`, `organization_id`, `account_id`, `scope`, `owner_type`, `owner_id`, `tasks_count`, `status`, `created_at`, `updated_at`, `deleted_at` |
-| `tasks` | `id`, `project_id`, `number`, `key`, `title`, `description`, `type`, `status`, `priority`, `parent_id`, `due_at`, `started_at`, `closed_at`, `closed_by_type`, `closed_by_id`, `close_reason`, `author_type`, `author_id`, `source`, `package_id`, `source_locator`, `source_kind`, `source_group`, `resolution`, `verdict`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
-| `task_assignments` | `id`, `task_id`, `assignee_type`, `assignee_id`, `role`, `created_at`, `updated_at` |
-| `task_events` | `id`, `task_id`, `actor_type`, `actor_id`, `kind`, `changes`, `created_at` |
-| `decisions` | `id`, `project_id`, `statement`, `status`, `decided_at`, `supersedes_id`, `confirmed_by_type`, `confirmed_by_id`, `source`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
+Каждое обновление, которое аккаунт бота получил через Bot API, в том виде, в каком пришло, чтобы его можно было изучить и воспроизвести.
 
-**Агенты и действия**
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `account_id` | integer, not null → `accounts.id` | аккаунт бота |
+| `external_id` | text, not null | id обновления |
+| `kind` | text, not null | сообщение, нажатие кнопки, изменение участников, … |
+| `payload` | text, not null | JSON, точно как получен |
+| `received_at` | integer, not null | когда пришло обновление |
+| `handled_at` | integer | null, пока не обработано |
+| `error` | text | почему обработка не удалась |
+| `replayed_at` | integer | когда его последний раз воспроизводили |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
 
-| Таблица | Столбцы |
-| --- | --- |
-| `proposed_actions` | `id`, `kind`, `account_id`, `target_type`, `target_id`, `payload`, `reason`, `status`, `proposed_by_type`, `proposed_by_id`, `decided_by_type`, `decided_by_id`, `decided_at`, `executed_at`, `result`, `error`, `verdict`, `created_at`, `updated_at` |
-| `agent_actions` | `id`, `actor_type`, `actor_id`, `tool`, `tier`, `target_type`, `target_id`, `status`, `error`, `started_at`, `finished_at`, `created_at` |
+#### `syncs`
 
-**Метки, связи и сохранённые поиски**
+Один запуск синхронизации интеграции: что он сделал и чем закончился.
 
-| Таблица | Столбцы |
-| --- | --- |
-| `tags` | `id`, `name`, `kind`, `created_at`, `updated_at` |
-| `auto_tag_claims` | `chat_id`, `tag_id`, `algorithm`, `score`, `fields`, `created_at`, `updated_at` |
-| `links` | `id`, `from_type`, `from_id`, `to_type`, `to_id`, `kind`, `anchor`, `source`, `target_text`, `target_folded`, `role`, `evidence`, `metadata`, `confirmed`, `created_at`, `author`, `updated_at` |
-| `searches` | `id`, `name`, `command`, `params`, `language`, `version`, `fields_version`, `created_at`, `last_run_at`, `runs`, `updated_at` |
-| `taggings` | `id`, `tag_id`, `taggable_type`, `taggable_id`, `main`, `source`, `author_type`, `author_id`, `created_at`, `updated_at` |
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `account_id` | integer, not null → `accounts.id` | аккаунт интеграции, через который это пришло |
+| `kind` | text, not null | full, incremental, import |
+| `started_at` | integer, not null | когда запуск начался |
+| `finished_at` | integer | когда он закончился; null, пока он идёт |
+| `status` | text, not null | running, succeeded, failed |
+| `counts` | text | JSON: created, updated, deleted, skipped |
+| `error` | text | что остановило неудачный запуск, как сообщил импортёр |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
 
-**Куски, векторы и состояние поиска**
+### Люди, организации и боты
 
-| Таблица | Столбцы |
-| --- | --- |
-| `conversations` | `id`, `chat_id`, `first_message_id`, `build`, `first_at`, `last_at`, `message_count`, `built_at`, `algorithm_version`, `created_at`, `updated_at` |
-| `conversation_messages` | `conversation_id`, `message_id` |
-| `conversation_state` | `chat_id`, `enabled_at`, `built_at`, `algorithm_version`, `current_build` |
-| `embeddings` | `model`, `content_hash`, `dims`, `vector`, `created_at`, `updated_at` |
-| `search_index_state` | `name`, `watermark`, `filled_through`, `terms_through`, `normalizer_version`, `built_at`, `analyzer` |
-| `search_terms` | `term`, `length` |
-| `search_term_trigrams` | `trigram`, `length`, `term` |
-| `involvements` | `id`, `person_id`, `identity_id`, `subject_type`, `subject_id`, `role`, `occurred_at`, `scope`, `account_id`, `project_id`, `created_at` |
-| `involvement_pending` | `id`, `indexable_type` |
-| `chunks` | `id`, `chunkable_type`, `chunkable_id`, `position`, `start_offset`, `end_offset`, `content_hash`, `scope`, `account_id`, `project_id`, `occurred_at`, `created_at`, `updated_at` |
-| `chunk_messages` | `chunk_id`, `first_message_id`, `last_message_id`, `text_start`, `text_end` |
+Люди, их учётные записи в каждом источнике, организации, к которым они относятся, и агенты, которые здесь работают.
 
-**Сам файл**
+#### `persons`
 
-| Таблица | Столбцы |
-| --- | --- |
-| `schema_migrations` | `version`, `min_compatible`, `applied_at` |
-| `store_settings` | `key`, `value`, `at` |
+Один человек. У каждого человека есть учётные записи в источниках; один человек — владелец хранилища.
 
-[Справочник схемы](https://github.com/WireCatLabs/cli-messaging/blob/v0.218.0/docs/storage/schema.md)
-перечисляет каждый столбец, ограничение и индекс.
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `name` | text | Отображаемое имя человека (берётся из имени его первой учётной записи); NULL, если неизвестно. |
+| `owner` | integer, not null | 1 для человека, который владеет хранилищем; новое хранилище создаёт эту строку, поэтому она есть всегда. |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
 
-</details>
+#### `identities`
+
+Как один источник знает человека: пользователь мессенджера, адрес почты, участник встречи.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `provider` | text, not null | Мессенджер, в котором живёт учётная запись (`telegram`, `max` или любая строка, например `email`); одна учётная запись на источник, а не на аккаунт. |
+| `external_id` | text, not null | собственный id источника для него |
+| `username` | text | Публичный ник человека в этом мессенджере, без `@`; NULL, если ника нет. |
+| `name` | text | Текущее отображаемое имя человека, как его последний раз сообщил мессенджер. |
+| `bot` | integer | 1, если мессенджер говорит, что эта учётная запись — бот, 0, если говорит, что нет, NULL, если неизвестно. |
+| `phone_hmac` | text | Хеш с ключом (HMAC) номера телефона человека, чтобы находить одного и того же человека в разных мессенджерах; сам номер никогда не попадает в журнал, фикстуру или документ. Пока его не заполняет ни один инструмент. |
+| `metadata` | text | JSON: то, что присылает источник, для чего нет своего столбца и по чему нет поиска |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+| `description` | text | Что они написали о себе. |
+
+#### `identity_links`
+
+К какому человеку относится учётная запись, как это решено и насколько это точно.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `identity_id` | integer, PK → `identities.id` | учётная запись, которую связывают; одна связь на учётную запись |
+| `person_id` | integer, not null → `persons.id` | `person`, к которому это относится |
+| `method` | text, not null | Как учётная запись была отнесена к своему человеку: `initial` при первой встрече или метка вызывающего кода, например `manual` или `same-email`. |
+| `confidence` | real, not null | Насколько точна связь, от 0 до 1; 1 для каждой связи, которую пишет хранилище. |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `author` | text, not null | Кто решил связь: `ingest` для автоматической первой связи, иначе `owner` или имя программы. |
+| `source` | text | какая интеграция или какой импортёр это предложил |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `identity_link_events`
+
+Каждый перенос учётной записи от одного человека к другому, чтобы неверную связь можно было отменить.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `identity_id` | integer, not null → `identities.id` | `identity`, к которой это относится |
+| `from_person_id` | integer → `persons.id` | `person`, к которому это относится |
+| `to_person_id` | integer, not null → `persons.id` | `person`, к которому это относится |
+| `method` | text, not null | Как решён этот перенос учётной записи между людьми (`initial`, `manual`, `same-email`…); хранится, чтобы плохую связь можно было отменить. |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `author` | text, not null | Кто сделал этот перенос: `ingest`, `owner` или имя программы. |
+
+#### `identity_revisions`
+
+Каждый профиль, с которым видели человека, — новая строка, когда он отличается от предыдущего; в `identities` хранится последний.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `identity_id` | integer, not null → `identities.id` | `identity`, к которой это относится |
+| `name` | text | Отображаемое имя человека в этом снимке профиля (строка добавляется только при изменении профиля). |
+| `username` | text | Ник (без `@`) человека в этом снимке. |
+| `description` | text | Текст, который человек написал о себе, в этом снимке. |
+| `marks` | text | JSON: отметки мессенджера — бот, мошенник, фейк, удалён, есть фото — где он их дал. |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+
+#### `account_identities`
+
+Какие учётные записи видит каждый аккаунт и когда он последний раз общался с каждой один на один.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `account_id` | integer, not null → `accounts.id` | аккаунт интеграции, через который это пришло |
+| `identity_id` | integer, not null → `identities.id` | `identity`, к которой это относится |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `last_messaged_at` | integer | Самое новое сообщение их личного чата, как его последний раз вычислил `refreshRecency`: порядок контактов. |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `aliases`
+
+Другие имена для чего угодно: прозвище человека, имя контакта в одном мессенджере, короткое имя проекта. Их читают поиск и сопоставление имён.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `aliasable_type` | text, not null | что называет псевдоним: `identity`, `person`, `organization`, `chat`, `project`, `bot`, … |
+| `aliasable_id` | integer, not null | строка в таблице `aliasable_type` |
+| `account_id` | integer → `accounts.id` | задан, когда псевдоним действует только с точки зрения одного аккаунта, как имя контакта в одном мессенджере; null, когда он действует везде |
+| `name` | text, not null | псевдоним, как написан: прозвище, короткое имя, прежнее имя |
+| `name_folded` | text, not null | `name`, приведённое для сопоставления: строчные буквы, без диакритики |
+| `display` | integer, not null | 1 для псевдонима, который показывают вместо настоящего имени; не больше одного на вещь и аккаунт |
+| `source` | text, not null | владелец, агент, импорт |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `identities_fts`
+
+Полнотекстовый индекс по `name`, `username`.
+
+#### `organizations`
+
+Компания, команда, семья или сообщество, с которыми имеет дело владелец. Проекты, рабочие аккаунты и учётные записи людей относятся к одной из них.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `kind` | text, not null | company, team, family, community |
+| `name` | text, not null | название организации |
+| `scope` | text, not null | `personal` или `work`; что запрос контекста может читать для данной цели, чтобы рабочий вопрос никогда не затягивал личные чаты |
+| `metadata` | text | JSON: то, что присылает источник, для чего нет столбца и по чему нет поиска |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+| `deleted_at` | integer | исчезло в источнике; синхронизация никогда не удаляет строки физически |
+
+#### `bots`
+
+ИИ-агент или скрипт, который здесь работает: он регистрируется сам, владеет проектами и задачами, получает работу, пишет заметки. Бот мессенджера (бот Telegram) — это учётная запись, а не это.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `name` | text, not null, unique | ник, например `zm-puller` |
+| `kind` | text, not null | agent, script, integration |
+| `description` | text | для чего бот, одним предложением, написано при регистрации |
+| `owner_person_id` | integer → `persons.id` | кто его запускает |
+| `model` | text | модель, на которой он работает, если это агент |
+| `token_digest` | text | хеш его токена доступа, для случая, когда боты проходят аутентификацию |
+| `last_seen_at` | integer | последний раз, когда бот что-то здесь делал |
+| `disabled_at` | integer | задаётся, когда владелец выключает бота; бот сохраняет то, чем владеет |
+| `metadata` | text | JSON: то, что присылает источник, для чего нет столбца и по чему нет поиска |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+### Чаты и сообщения
+
+Что приносят мессенджеры.
+
+#### `chats`
+
+Место для общения в одном аккаунте: диалог, группа, канал или избранное. Чаты могут быть вложенными.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `account_id` | integer, not null → `accounts.id` | аккаунт интеграции, через который это пришло |
+| `external_id` | text, not null | собственный id источника для него |
+| `kind` | text, not null | Тип чата: `dialog` (один на один), `group`, `channel`, `saved` (заметки для себя) или `unknown`. |
+| `title` | text | Название чата, как его показывает мессенджер; NULL, если названия нет. |
+| `unread_count` | integer | Непрочитанные сообщения, о которых сообщил мессенджер; NULL значит, что мессенджер не сообщил, и это не ноль. |
+| `last_message_at` | integer | Время самого нового сообщения чата (миллисекунды эпохи); NULL, если сообщений никогда не было. |
+| `participants_count` | integer | Число участников, которое сообщил мессенджер; NULL, если не дано. |
+| `metadata` | text | JSON: то, что присылает источник, для чего нет своего столбца и по чему нет поиска |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+| `username` | text | Публичный ник чата (без `@`), если он есть, например у публичного канала. |
+| `membership_state` | text | `NULL` — неизвестно. Доступность для поиска из этого не следует: покинутый чат сохраняет свои сообщения. |
+| `searchable` | integer, not null | 1, если сообщения чата попадают в поиски, которые его не называют, 0, если их видит только поиск, который называет этот чат. |
+| `message_count` | integer, not null | Поддерживается триггерами, чтобы запрос мог выбрать, как фильтр доходит до индекса. |
+| `members_tracked_at` | integer | Когда владелец попросил `serve` загружать список участников каждый день; `NULL`, если не отслеживается. |
+| `description` | text | описание чата, как его даёт мессенджер |
+| `details_fetched_at` | integer | когда последний раз читались название, ник и описание |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `parent_chat_id` | integer → `chats.id` | чат, внутри которого находится этот: тема форума в своей группе, группа обсуждения канала, канал в рабочем пространстве |
+| `scope` | text | заменяет область аккаунта для этого чата; null берёт область аккаунта |
+
+#### `chat_members`
+
+Кто есть в чате, как аккаунт видел это последний раз: список заменяет состав чата целиком.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `chat_id` | integer, not null → `chats.id` | `chat`, к которому это относится |
+| `identity_id` | integer, not null → `identities.id` | `identity`, к которой это относится |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+
+#### `member_stays`
+
+Одно пребывание человека в группе, по спискам участников, прочитанным целиком или частично. Возвращение после выхода — новая строка. `gone_at` задаётся только по списку, прочитанному целиком: обрезанный список ничего не говорит о том, кого нет.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `chat_id` | integer, not null → `chats.id` | `chat`, к которому это относится |
+| `identity_id` | integer, not null → `identities.id` | `identity`, к которой это относится |
+| `first_seen_at` | integer, not null | Когда чтение списка участников впервые показало человека в группе для этого пребывания (миллисекунды эпохи). |
+| `last_seen_at` | integer, not null | Когда чтение списка участников последний раз показало человека в группе (миллисекунды эпохи). |
+| `joined_at` | integer | Когда, по словам мессенджера, человек вступил; `NULL`, где мессенджер этого не говорит. |
+| `invited_by_identity_id` | integer → `identities.id` | `identity`, к которой это относится |
+| `role` | text | Роль человека в группе при последнем чтении: `owner`, `admin` или `member`; NULL, если не дана. |
+| `left_at` | integer | Когда в полном списке участников впервые не оказалось человека, что закрывает это пребывание (миллисекунды эпохи); NULL, пока он ещё в группе. |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `member_counts`
+
+Размер группы раз в день: собственный счётчик мессенджера и сколько участников перечислило одно чтение.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `chat_id` | integer, not null → `chats.id` | `chat`, к которому это относится |
+| `date` | text, not null | `YYYY-MM-DD`, UTC; в SQLite нет типа даты |
+| `reported_count` | integer | число, которое сообщает мессенджер |
+| `listed_count` | integer, not null | сколько участников на самом деле вернуло одно чтение |
+| `complete_list` | integer, not null | вернуло ли это чтение весь список |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+
+#### `messages`
+
+Одно сообщение в чате, с его текстом, отправителем, ответом и веткой.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `chat_id` | integer, not null → `chats.id` | `chat`, к которому это относится |
+| `account_id` | integer, not null → `accounts.id` | аккаунт интеграции, через который это пришло |
+| `external_id` | text, not null | собственный id источника для него |
+| `thread_external_id` | text | Id мессенджера для темы или ветки внутри чата, к которой относится сообщение, если в мессенджере есть ветки. |
+| `sender_identity_id` | integer → `identities.id` | `identity`, к которой это относится |
+| `sender_chat_external_id` | text | Id мессенджера для чата, который написал сообщение (пост канала или сообщение от имени группы); NULL для человека. |
+| `sender_name` | text | Отображаемое имя отправителя, как оно указано в этом сообщении. |
+| `sent_at` | integer, not null | Когда сообщение было отправлено (миллисекунды эпохи). |
+| `edited_at` | integer | Когда мессенджер последний раз записал правку (миллисекунды эпохи); NULL для сообщения, которое никогда не менялось. |
+| `deleted_at` | integer | когда оно исчезло в источнике; строка остаётся, синхронизация никогда не удаляет строки физически |
+| `text` | text, not null | Текст сообщения точно в том виде, как получен (пустая строка, если текста нет или он удалён). |
+| `reply_to_external_id` | text | Id мессенджера для сообщения, на которое отвечает это, даже если его копия не пришла. |
+| `reply_to` | text | JSON-копия сообщения, на которое ответили, как её прислал мессенджер (id, отправитель, время, текст, вложения); NULL, если не прислана. |
+| `forward` | text | JSON-копия исходного сообщения, которое пересылает это (та же форма, что у reply_to); NULL, если это не пересылка. |
+| `outgoing` | integer | 1, если его отправил этот аккаунт, 0, если кто-то другой, NULL, если собственная учётная запись аккаунта неизвестна. |
+| `reactions` | text | JSON реакций: счётчики по каждой реакции, собственная реакция этого аккаунта и итог; NULL, если ни разу не запрашивали. |
+| `metadata` | text | JSON: то, что присылает источник, для чего нет своего столбца и по чему нет поиска |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `source` | text, not null | Как сообщение попало в хранилище, например `history`, `send`, `backfill`, `update`, `context`; только для диагностики. |
+| `normalized_text` | text | текст, приведённый для поиска: строчные буквы, без диакритики; заполняет индексатор |
+| `normalizer_version` | integer | Версия правил нормализации текста, которые создали поисковый текст сообщения (сейчас 1); NULL, пока не нормализован. |
+| `mentions` | text | JSON: люди, которых текст упоминает по id, где это говорит мессенджер; `@handle` читаются из текста. |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+| `thread_root_id` | integer → `messages.id` | сообщение, от которого идёт ветка: ветка Slack, комментарии под постом канала, ответы в теме; null вне ветки |
+
+#### `message_revisions`
+
+Прежние тексты сообщения, одна строка на правку.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `message_id` | integer, not null → `messages.id` | `message`, к которому это относится |
+| `text` | text, not null | Текст сообщения до того, как правка его заменила. |
+| `edited_at` | integer | Время правки (миллисекунды эпохи), которое было у сообщения, пока у него был этот старый текст; NULL, если до этого его не правили. |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+
+#### `message_links`
+
+Каждый кандидат на «более раннее сообщение, на которое отвечает это», и откуда он взялся.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `chat_id` | integer, not null → `chats.id` | Чат сообщения; хранится здесь, чтобы пересборка находила и удаляла старую сборку, не читая `messages`. |
+| `message_id` | integer, not null → `messages.id` | `message`, к которому это относится |
+| `parent_id` | integer → `messages.id` | `NULL`: источник говорит, что это сообщение начинает обсуждение. |
+| `source` | text, not null | Кто предложил этого родителя для сообщения: `provider` (собственный ответ мессенджера), `rule` или `agent`. |
+| `kind` | text, not null | Почему сообщение связано с родителем: `reply`, `mention`, `same_sender` (правила/источник) или `answer` (выбор агента). |
+| `confidence` | real, not null | Насколько источник уверен, что это верный родитель, от 0 до 1. |
+| `method` | text, not null | Имя правила или модель агента. |
+| `version` | text | Для связей от источника и правил — версия правил связывания, которая её записала (в виде текста); для связей агента — версия навыка агента, если дана. |
+| `batch` | text | Какой пакет агента это записал. |
+| `build` | integer | Пересборка, которая записала связь от источника или правила; `NULL` для связи агента, которая переживает пересборки. |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `stale_at` | integer | Один из концов связи изменился после её записи; не выбирается, пока не спросят снова. |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `message_counter_observations`
+
+Последнее значение счётчика просмотров, реакций или комментариев сообщения.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `message_id` | integer, not null → `messages.id` | `message`, к которому это относится |
+| `counter` | text, not null | Какой счётчик наблюдали: `views`, `reactions` или `comments`. |
+| `value` | real, not null | Значение счётчика при наблюдении (неотрицательное число). |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `source` | text, not null | Как его наблюдали: `remote_fetch` (хранилище спросило) или `remote_update` (мессенджер прислал изменение). |
+
+#### `message_transcripts`
+
+Что сказало голосовое сообщение, по ключу из чата и id сообщения, а не по строке сообщения: сообщение можно прослушать раньше, чем хранилище его получит. Производные данные — его можно прослушать снова.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `message_id` | integer → `messages.id` | задаётся, когда сообщение сохранено |
+| `chat_id` | integer, not null → `chats.id` | `chat`, к которому это относится |
+| `message_external_id` | text, not null | Id мессенджера для расшифрованного голосового сообщения; ключ такой, потому что сообщение можно прослушать раньше, чем оно сохранено. |
+| `text` | text, not null | Что сказало голосовое сообщение, по расшифровке; никогда не пусто. |
+| `source` | text, not null | Модель или мессенджер, которые его прослушали. |
+| `heard_at` | integer, not null | Когда сделана расшифровка (миллисекунды эпохи). |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `chats_fts`
+
+Полнотекстовый индекс по `title`.
+
+#### `messages_fts`
+
+Полнотекстовый индекс по `text`.
+
+#### `message_words`
+
+Полнотекстовый индекс по `normalized_text`, `scope`.
+
+#### `message_stems`
+
+Полнотекстовый индекс по `stems`, `scope`.
+
+#### `message_stems_pending`
+
+Сообщения с устаревшими основами. Её заполняют триггеры, потому что SQL не умеет выделять основы; очищает JS.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+
+#### `member_observations`
+
+Одно чтение списка участников чата: когда, был ли это весь список, сколько он сообщил и сколько вернул. По ним хранение данных узнаёт, кто был в группе на контрольную точку.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `chat_id` | integer, not null → `chats.id` | `chat`, к которому это относится |
+| `observed_at` | integer, not null | когда прочитали список участников |
+| `started_at` | integer | когда началось чтение, для списка, прочитанного по страницам |
+| `complete` | integer, not null | 1, когда чтение вернуло весь список, поэтому участника, которого в нём нет, больше нет в группе |
+| `reported_count` | integer | число, которое сообщает мессенджер |
+| `listed_count` | integer, not null | сколько участников вернуло это чтение |
+| `source` | text, not null | что его прочитало: синхронизация, команда, импорт |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `member_observation_members`
+
+Кого видело одно чтение списка участников.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `member_observation_id` | integer, not null → `member_observations.id` | `member_observation`, к которому это относится |
+| `identity_id` | integer, not null → `identities.id` | `identity`, к которой это относится |
+| `member_stay_id` | integer, not null → `member_stays.id` | пребывание, в котором был участник, когда его видели |
+
+### Почта
+
+У почты свои таблицы: цепочки, темы, получатели, почтовые ящики.
+
+#### `email_threads`
+
+Обсуждение по почте.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `account_id` | integer, not null → `accounts.id` | аккаунт интеграции, через который это пришло |
+| `external_id` | text, not null | id цепочки Gmail или вычислен из References |
+| `subject` | text | тема первого письма цепочки, без Re: и Fwd: |
+| `last_email_at` | integer | когда было отправлено самое новое письмо цепочки |
+| `emails_count` | integer, not null | сколько писем цепочки хранится |
+| `metadata` | text | JSON: то, что присылает источник, для чего нет столбца и по чему нет поиска |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+| `deleted_at` | integer | исчезло в источнике; синхронизация никогда не удаляет строки физически |
+
+#### `emails`
+
+Одно письмо.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `account_id` | integer, not null → `accounts.id` | аккаунт интеграции, через который это пришло |
+| `email_thread_id` | integer, not null → `email_threads.id` | `email_thread`, к которой это относится |
+| `external_id` | text, not null | заголовок Message-ID |
+| `subject` | text | заголовок Subject, декодированный |
+| `from_identity_id` | integer → `identities.id` | `identity`, к которой это относится |
+| `from_address` | text | адрес отправителя, строчными буквами |
+| `from_name` | text | отображаемое имя отправителя, как написано в From |
+| `sent_at` | integer | заголовок Date |
+| `received_at` | integer | когда его получил почтовый ящик владельца |
+| `in_reply_to` | text | Message-ID письма, на которое отвечает это |
+| `references` | text | JSON: заголовок References |
+| `body_text` | text | текстовое тело; берётся из HTML, если у письма нет текстовой части |
+| `body_html` | text | тело HTML, как получено |
+| `snippet` | text | первые слова тела, для списков |
+| `outgoing` | integer | 1, когда его отправил владелец |
+| `read` | integer | 1, когда оно помечено прочитанным в почтовом ящике |
+| `flagged` | integer | 1, когда оно помечено флажком или звёздочкой |
+| `draft` | integer | 1 для черновика, который ещё не отправлен |
+| `size` | integer | размер исходного письма, в байтах |
+| `headers` | text | JSON: все заголовки, как получены |
+| `metadata` | text | JSON: то, что присылает источник, для чего нет столбца и по чему нет поиска |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+| `deleted_at` | integer | исчезло в источнике; синхронизация никогда не удаляет строки физически |
+
+#### `email_recipients`
+
+Один адрес в письме.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `email_id` | integer, not null → `emails.id` | `email`, к которому это относится |
+| `identity_id` | integer → `identities.id` | `identity`, к которой это относится |
+| `address` | text, not null | адрес, строчными буквами |
+| `name` | text | отображаемое имя, написанное рядом с ним |
+| `role` | text, not null | to, cc, bcc, reply_to |
+| `position` | integer, not null | порядок внутри родителя, с 0 |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `mailboxes`
+
+Папка IMAP или ярлык Gmail. Собственные метки владельца — это отметки.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `account_id` | integer, not null → `accounts.id` | аккаунт интеграции, через который это пришло |
+| `external_id` | text, not null | собственный id источника для него |
+| `name` | text, not null | имя папки или ярлыка, как его показывает источник |
+| `kind` | text | inbox, sent, archive, label, folder |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `email_mailboxes`
+
+В каких почтовых ящиках лежит письмо; Gmail кладёт одно письмо в несколько.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `email_id` | integer, not null → `emails.id` | `email`, к которому это относится |
+| `mailbox_id` | integer, not null → `mailboxes.id` | `mailboxe`, к которому это относится |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+
+#### `email_words`
+
+Полнотекстовый индекс по `normalized_text`, `scope`.
+
+#### `email_stems`
+
+Полнотекстовый индекс по `stems`, `scope`.
+
+#### `email_index_pending`
+
+Строки писем, ждущие индексации: триггеры ставят в очередь, JS нормализует, выделяет основы и пишет индекс.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, not null | Строка, ждущая индексации. |
+| `indexable_type` | text, not null | к какой таблице относится ждущая строка |
+
+### Вложения
+
+Файлы сообщения, письма или встречи, с извлечённым из них текстом.
+
+#### `attachments`
+
+Файл сообщения, письма или встречи, с извлечённым из него текстом.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `attachable_type` | text, not null | `message`, `email` или `meeting` |
+| `attachable_id` | integer, not null | строка в таблице `attachable_type` |
+| `position` | integer, not null | порядок внутри родителя, с 0 |
+| `kind` | text, not null | Тип вложения строчными буквами, например `photo`, `video`, `file`, `voice`, `sticker`, `share`. |
+| `mime` | text | MIME-тип файла, если мессенджер его даёт. |
+| `name` | text | Имя файла, если мессенджер его даёт. |
+| `title` | text | Заголовок веб-страницы, которой поделились (для вложений `share`). |
+| `url` | text | Ссылка, которая открывает байты или страницу, которой поделились, если мессенджер её выдаёт. |
+| `size` | integer | Размер файла в байтах, если мессенджер его даёт. |
+| `width` | integer | Ширина в пикселях для изображений и видео. |
+| `height` | integer | Высота в пикселях для изображений и видео. |
+| `duration` | real | Длительность в секундах для аудио и видео. |
+| `provider_ref` | text | Непрозрачный JSON, который нужен адаптеру мессенджера, чтобы позже загрузить байты; вне этого адаптера он ничего не значит. |
+| `local_path` | text | Куда `messages download` сохранил файл на этом компьютере; NULL, если его ни разу не загружали. |
+| `text` | text | текст, извлечённый из файла |
+| `normalized_text` | text | текст, приведённый для поиска: строчные буквы, без диакритики; заполняет индексатор |
+| `extraction` | text | как получен текст: `text`, `ocr`, `agent`, `failed` |
+| `extractor` | text | Что создало текст вложения: `plain`, `docx:mammoth@1.13.0`, `pdf:unpdf@1.8.1`, движок OCR или собственная метка агента. |
+| `extraction_error` | text | Короткий код причины, почему текст не получен (например `no_text`), никогда не строка файла; NULL при успехе. |
+| `content_sha256` | text | Шестнадцатеричный SHA-256 прочитанных байтов файла, чтобы не читать неизменённый файл снова. |
+| `extracted_at` | integer | Когда был записан текст вложения (или его ошибка) (миллисекунды эпохи). |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `attachment_words`
+
+Полнотекстовый индекс по `normalized_text`.
+
+### Документы, заметки и воспоминания
+
+Документы — это самостоятельные файлы и страницы; заметки — то, что человек написал о чём-то; воспоминания — то, к какому выводу пришёл агент.
+
+#### `documents`
+
+Самостоятельный файл или страница: файл в папке заметок (md, pdf, docx, xlsx…), страница Notion, файл Drive, вики-страница memo.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `account_id` | integer, not null → `accounts.id` | папка, Notion, Drive |
+| `external_id` | text, not null | путь в папке, id страницы, id файла |
+| `kind` | text, not null | file, page, wiki |
+| `title` | text | из front matter, первого заголовка или имени файла, в этом порядке |
+| `location` | text | где он лежит в своём источнике: путь папки, папка Drive, родительская страница Notion |
+| `file_name` | text | с расширением; null для страницы, которая не файл |
+| `extension` | text | строчными буквами, без точки: md, pdf, docx |
+| `url` | text | где его открывает источник |
+| `storage` | text | local, drive, notion, web — где лежат байты |
+| `local_path` | text | копия на этой машине, если её хранят; для локальной папки — сам файл |
+| `mime` | text | тип данных, например application/pdf |
+| `size` | integer | размер файла, в байтах |
+| `content_hash` | text | хеш байтов файла; неизменённый файл не читается снова |
+| `front_matter` | text | JSON, как написано в файле |
+| `body` | text | Markdown как есть; извлечённый текст для PDF и Office; OCR для сканов |
+| `normalized_text` | text | текст, приведённый для поиска: строчные буквы, без диакритики; заполняет индексатор |
+| `extraction` | text | none, text, ocr, agent, failed |
+| `extraction_error` | text | почему текст не удалось извлечь |
+| `language` | text | определённый язык тела, кодом ISO 639-1 |
+| `revision` | integer, not null | счётчик правок, растёт при каждом изменении; правка называет версию, которую прочитала, поэтому два автора не могут перезаписать друг друга |
+| `export_path` | text | куда его экспортировал memo, для вики-страниц |
+| `external_created_at` | integer | когда, по словам источника, он создан |
+| `external_updated_at` | integer | когда, по словам источника, он последний раз изменился |
+| `metadata` | text | JSON: то, что присылает источник, для чего нет столбца и по чему нет поиска |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+| `deleted_at` | integer | исчезло в источнике; синхронизация никогда не удаляет строки физически |
+
+#### `document_revisions`
+
+Прежние тела документа.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `document_id` | integer, not null → `documents.id` | `document`, к которому это относится |
+| `body` | text, not null | тело, каким оно было до этой версии |
+| `revision` | integer, not null | счётчик правок, растёт при каждом изменении; правка называет версию, которую прочитала, поэтому два автора не могут перезаписать друг друга |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+
+#### `document_words`
+
+Полнотекстовый индекс по `normalized_text`, `scope`.
+
+#### `document_stems`
+
+Полнотекстовый индекс по `stems`, `scope`.
+
+#### `document_index_pending`
+
+Строки документов, ждущие индексации: триггеры ставят в очередь, JS нормализует, выделяет основы и пишет индекс.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, not null | Строка, ждущая индексации. |
+| `indexable_type` | text, not null | к какой таблице относится ждущая строка |
+
+#### `notes`
+
+Короткий текст о чём-то: о человеке, чате, событии, документе, задаче. Комментарии к задаче — тоже заметки.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `notable_type` | text, not null | о чём заметка: `person`, `chat`, `event`, `document`, `task`, …; заметка ни о чём конкретном — о человеке владельца |
+| `notable_id` | integer, not null | строка в таблице `notable_type` |
+| `title` | text | необязательный заголовок |
+| `body` | text, not null | заметка, в Markdown |
+| `author_type` | text | `person` или `bot` |
+| `author_id` | integer | строка в таблице `author_type` |
+| `revision` | integer, not null | счётчик правок, растёт при каждом изменении; правка называет версию, которую прочитала, поэтому два автора не могут перезаписать друг друга |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+| `deleted_at` | integer | исчезло в источнике; синхронизация никогда не удаляет строки физически |
+
+#### `note_revisions`
+
+Прежние тела заметки.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `note_id` | integer, not null → `notes.id` | `note`, к которой это относится |
+| `body` | text, not null | тело, каким оно было до этой версии |
+| `revision` | integer, not null | счётчик правок, растёт при каждом изменении; правка называет версию, которую прочитала, поэтому два автора не могут перезаписать друг друга |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+
+#### `note_words`
+
+Полнотекстовый индекс по `normalized_text`, `scope`.
+
+#### `note_stems`
+
+Полнотекстовый индекс по `stems`, `scope`.
+
+#### `note_index_pending`
+
+Строки заметок, ждущие индексации: триггеры ставят в очередь, JS нормализует, выделяет основы и пишет индекс.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, not null | Строка, ждущая индексации. |
+| `indexable_type` | text, not null | к какой таблице относится ждущая строка |
+
+#### `memories`
+
+К какому выводу пришёл агент: сводка, дневной дайджест, факт, предпочтение. Это производные данные, и они могут ошибаться, поэтому несут свои доказательства (`links` вида `evidence`), уверенность и статус; заметки — то, что написал человек.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `kind` | text, not null | summary, digest, fact, preference |
+| `body` | text, not null | текст воспоминания |
+| `subject_type` | text | о чём оно: `person`, `chat`, `meeting`, `project`, …; null для общего факта |
+| `subject_id` | integer | строка в таблице `subject_type` |
+| `author_type` | text, not null | `person` или `bot` |
+| `author_id` | integer, not null | строка в таблице `author_type` |
+| `model` | text | модель, которая его написала |
+| `confidence` | real | 0–1, как оценил автор |
+| `status` | text, not null | proposed, confirmed, stale, superseded |
+| `last_verified_at` | integer | когда его доказательства последний раз проверялись |
+| `supersedes_id` | integer → `memories.id` | воспоминание, которое заменяет это |
+| `scope` | text, not null | personal или work, по его доказательствам |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `memory_words`
+
+Полнотекстовый индекс по `normalized_text`, `scope`.
+
+#### `memory_stems`
+
+Полнотекстовый индекс по `stems`, `scope`.
+
+#### `memory_index_pending`
+
+Строки воспоминаний, ждущие индексации: триггеры ставят в очередь, JS нормализует, выделяет основы и пишет индекс.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, not null | Строка, ждущая индексации. |
+| `indexable_type` | text, not null | к какой таблице относится ждущая строка |
+
+### События и встречи
+
+События владельца и запись о них в каждом приложении для встреч.
+
+#### `event_series`
+
+Повторяющееся событие, над повторением любого отдельного источника.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `title` | text | как называется повторяющееся событие, например еженедельная синхронизация |
+| `recurrence` | text | RRULE, если известно |
+| `origin` | text, not null | auto или owner |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `events`
+
+Собственная запись владельца о том, что произошло, как человек — это запись владельца о ком-то. Не содержит полей источника: источники ссылаются на неё.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `event_series_id` | integer → `event_series.id` | `event_sery`, к которой это относится |
+| `title` | text | название владельца; заполняется из первой связанной встречи или записи календаря |
+| `description` | text | о чём событие |
+| `location` | text | где оно проходит: адрес, комната или онлайн |
+| `starts_at` | integer | когда оно начинается |
+| `ends_at` | integer | когда оно заканчивается |
+| `timezone` | text | зона IANA, в которой проходит событие, например Europe/Madrid |
+| `origin` | text, not null | auto или owner |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+| `deleted_at` | integer | исчезло в источнике; синхронизация никогда не удаляет строки физически |
+
+#### `meeting_series`
+
+Повторяющаяся или запланированная встреча источника.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `account_id` | integer, not null → `accounts.id` | аккаунт интеграции, через который это пришло |
+| `external_id` | text, not null | id встречи Zoom |
+| `event_series_id` | integer → `event_series.id` | `event_sery`, к которой это относится |
+| `title` | text | тема встречи у источника |
+| `description` | text | повестка, как её хранит источник |
+| `kind` | text | instant, scheduled, recurring |
+| `recurrence` | text | JSON, правило источника |
+| `host_identity_id` | integer → `identities.id` | `identity`, к которой это относится |
+| `join_url` | text | ссылка для входа; по ней же потом находится запись календаря |
+| `metadata` | text | JSON: то, что присылает источник, для чего нет столбца и по чему нет поиска |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+| `deleted_at` | integer | исчезло в источнике; синхронизация никогда не удаляет строки физически |
+
+#### `meetings`
+
+Одно проведение: оно было один раз, в одно время.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `account_id` | integer, not null → `accounts.id` | аккаунт интеграции, через который это пришло |
+| `meeting_series_id` | integer → `meeting_series.id` | `meeting_sery`, к которой это относится |
+| `event_id` | integer → `events.id` | задаётся связыванием событий |
+| `external_id` | text, not null | UUID проведения Zoom |
+| `title` | text | тема этого проведения |
+| `description` | text | повестка; её же несёт запись календаря |
+| `location` | text | физическая комната, если источник её называет |
+| `join_url` | text | ссылка для входа на это проведение |
+| `started_at` | integer | когда проведение началось |
+| `ended_at` | integer | когда оно закончилось |
+| `duration_ms` | integer | сколько оно длилось, в миллисекундах |
+| `timezone` | text | зона IANA, которую источник даёт для встречи |
+| `host_identity_id` | integer → `identities.id` | `identity`, к которой это относится |
+| `participants_count` | integer | сколько человек участвовало, как сообщает источник |
+| `metadata` | text | JSON: то, что присылает источник, для чего нет столбца и по чему нет поиска |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+| `deleted_at` | integer | исчезло в источнике; синхронизация никогда не удаляет строки физически |
+
+#### `meeting_participants`
+
+Один человек на одной встрече, каким его видела эта встреча; имя и почта остаются с этой встречей.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `meeting_id` | integer, not null → `meetings.id` | `meeting`, к которой это относится |
+| `identity_id` | integer, not null → `identities.id` | ключ — id пользователя у источника, иначе почта, иначе name@meeting |
+| `display_name` | text | имя, показанное на этой встрече; позднее переименование его не меняет |
+| `email` | text | адрес, который даёт источник, если даёт |
+| `role` | text | host, co-host, attendee, panelist, guest |
+| `joined_at` | integer | первый вход |
+| `left_at` | integer | последний выход |
+| `duration_ms` | integer | время на встрече, суммарно по всем входам |
+| `sessions` | text | JSON: каждый вход и выход |
+| `external_id` | text | собственный id источника для него |
+| `metadata` | text | JSON: то, что присылает источник, для чего нет столбца и по чему нет поиска |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `meeting_transcripts`
+
+Одна расшифровка встречи: от Zoom, от бота или исправленная версия, которая заменяет старую.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `meeting_id` | integer, not null → `meetings.id` | `meeting`, к которой это относится |
+| `source` | text, not null | api, file, fireflies |
+| `format` | text | vtt |
+| `language` | text | язык расшифровки, кодом ISO 639-1 |
+| `content_hash` | text | один и тот же файл, импортированный дважды, пропускается |
+| `external_created_at` | integer | когда, по словам источника, он создан |
+| `superseded_at` | integer | задаётся, когда более новая расшифровка той же встречи заменяет эту; эта сохраняется |
+| `metadata` | text | JSON: то, что присылает источник, для чего нет столбца и по чему нет поиска |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+| `deleted_at` | integer | исчезло в источнике; синхронизация никогда не удаляет строки физически |
+
+#### `meeting_transcript_rows`
+
+Одна строка расшифровки (реплика WebVTT): кто говорил, когда и что сказал.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `meeting_transcript_id` | integer, not null → `meeting_transcripts.id` | `meeting_transcript`, к которой это относится |
+| `position` | integer, not null | порядок внутри родителя, с 0 |
+| `start_ms` | integer, not null | когда начинается строка, в миллисекундах от начала записи |
+| `end_ms` | integer, not null | когда оно заканчивается |
+| `speaker_participant_id` | integer → `meeting_participants.id` | участник, чьё имя даёт реплика, найденный внутри встречи; null, если не подходит ровно один участник |
+| `speaker_name` | text | как написано в реплике |
+| `text` | text, not null | что было сказано, без префикса говорящего |
+| `normalized_text` | text | текст, приведённый для поиска: строчные буквы, без диакритики; заполняет индексатор |
+| `metadata` | text | JSON: то, что присылает источник, для чего нет столбца и по чему нет поиска |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+
+#### `meeting_chat_messages`
+
+Чат внутри встречи.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `meeting_id` | integer, not null → `meetings.id` | `meeting`, к которой это относится |
+| `external_id` | text | собственный id источника для него |
+| `sent_at` | integer, not null | когда оно отправлено |
+| `sender_participant_id` | integer → `meeting_participants.id` | `meeting_participant`, к которому это относится |
+| `sender_name` | text | имя отправителя, как его показывает чат |
+| `recipient` | text | всем или имя для личного сообщения |
+| `text` | text, not null | сообщение |
+| `normalized_text` | text | текст, приведённый для поиска: строчные буквы, без диакритики; заполняет индексатор |
+| `metadata` | text | JSON: то, что присылает источник, для чего нет столбца и по чему нет поиска |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `meeting_summaries`
+
+Сводка встречи — от ИИ источника, от бота, от владельца или от запуска LLM здесь.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `meeting_id` | integer, not null → `meetings.id` | `meeting`, к которой это относится |
+| `source` | text, not null | zoom-ai, fireflies, owner, llm |
+| `title` | text | собственный заголовок сводки |
+| `overview` | text | короткий абзац сводки |
+| `sections` | text | JSON: [\{label, text}] |
+| `next_steps` | text | JSON: [text] |
+| `content` | text | полный текст источника |
+| `doc_url` | text | ссылка на сводку у источника, если она есть |
+| `external_created_at` | integer | когда, по словам источника, он создан |
+| `external_updated_at` | integer | когда, по словам источника, он последний раз изменился |
+| `metadata` | text | JSON: то, что присылает источник, для чего нет столбца и по чему нет поиска |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `meeting_words`
+
+Полнотекстовый индекс по `normalized_text`, `scope`.
+
+#### `meeting_stems`
+
+Полнотекстовый индекс по `stems`, `scope`.
+
+#### `meeting_index_pending`
+
+Строки строк расшифровки, чата встречи и сводок, ждущие индексации: триггеры ставят в очередь, JS нормализует, выделяет основы и пишет индекс.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, not null | Строка, ждущая индексации. |
+| `indexable_type` | text, not null | к какой таблице относится ждущая строка |
+
+### Задачи
+
+Система задач и тикетов для людей и агентов: проекты с ключами, задачи с типами и приоритетами, исполнители — люди или боты, и решения, принятые по ходу. Обещание — это задача типа `promise`; вопрос — задача типа `question`, ответ на которую связан с ней.
+
+#### `reminders`
+
+Когда напомнить кому-то о задаче и было ли напоминание доставлено.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `task_id` | integer, not null → `tasks.id` | `task`, к которой это относится |
+| `account_id` | integer, not null → `accounts.id` | аккаунт интеграции, через который это пришло |
+| `due_at` | integer, not null | Когда должно сработать напоминание (миллисекунды эпохи). |
+| `timezone` | text, not null | Часовой пояс IANA, в котором запланировано напоминание, например `Europe/Madrid`. |
+| `state` | text, not null | Состояние доставки: `pending`, `leased` (занято доставщиком), `delivered` или `cancelled`. |
+| `revision` | integer, not null | счётчик правок, растёт при каждом изменении; правка называет версию, которую прочитала, поэтому два автора не могут перезаписать друг друга |
+| `lease_until` | integer | До какого времени текущий доставщик держит напоминание (миллисекунды эпохи); после этого его может занять другой. NULL, если не занято. |
+| `receipt` | text | Id, выданный доставщику при захвате, который он должен вернуть, чтобы подтвердить доставку; NULL, если не занято. |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `projects`
+
+Место для задач, с коротким ключом, с которого начинаются их id (`MEET-12`).
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `key` | text, not null, unique | заглавными буквами, например MEET |
+| `name` | text, not null | название проекта |
+| `description` | text | для чего проект |
+| `type` | text, not null | work, client, personal, oss, other; метки группируют проекты сверх этого |
+| `organization_id` | integer → `organizations.id` | `organization`, к которой это относится |
+| `account_id` | integer → `accounts.id` | аккаунт, для которого проект-входящие собирает задачи; null для собственного проекта владельца |
+| `scope` | text, not null | `personal` или `work`; что запрос контекста может читать для данной цели, чтобы рабочий вопрос никогда не затягивал личные чаты |
+| `owner_type` | text | `person` или `bot` |
+| `owner_id` | integer | строка в таблице `owner_type` |
+| `tasks_count` | integer, not null | последний выданный номер; следующая задача берёт +1 в той же транзакции |
+| `status` | text | active, archived |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+| `deleted_at` | integer | исчезло в источнике; синхронизация никогда не удаляет строки физически |
+
+#### `tasks`
+
+Задача или тикет, одинаково для людей и агентов. Всё, чего она касается, — люди, сообщения, письма, документы, встречи — это строка `links`; её метки — это отметки; её комментарии — это заметки.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `project_id` | integer, not null → `projects.id` | `project`, к которому это относится |
+| `number` | integer, not null | внутри проекта |
+| `key` | text, not null, unique | `&lt;project key>-&lt;number>`, id, которым пользуются люди и агенты |
+| `title` | text, not null | одна строка о том, что нужно сделать |
+| `description` | text | подробности, в Markdown |
+| `type` | text, not null | bug, feature, chore, question, request, mention, promise — последние четыре пакет задач находит в сообщениях |
+| `status` | text, not null | open, in_progress, blocked, done, dismissed |
+| `priority` | integer | 0 срочно … 4 низкий |
+| `parent_id` | integer → `tasks.id` | родитель подзадачи |
+| `due_at` | integer | когда она должна быть сделана |
+| `started_at` | integer | когда кто-то её начал (статус in_progress) |
+| `closed_at` | integer | когда она стала done или dismissed |
+| `closed_by_type` | text | `person` или `bot` |
+| `closed_by_id` | integer | строка в таблице `closed_by_type` |
+| `close_reason` | text | почему её закрыли, в нескольких словах, например no-reply-needed |
+| `author_type` | text, not null | `person` или `bot` |
+| `author_id` | integer, not null | строка в таблице `author_type` |
+| `source` | text, not null | владелец, агент, правило или импорт |
+| `package_id` | text, unique | собственный id задачи в пакете задач; null для задачи, созданной здесь |
+| `source_locator` | text | из чего возникла задача: указатель на сообщение, никогда не его текст |
+| `source_kind` | text | вид того, что называет `source_locator` |
+| `source_group` | text | группа, в которую её относит пакет задач |
+| `resolution` | text | чем она закончилась, словами; ответ на вопрос. Откуда пришёл ответ — это строка `links` вида `answered-by` |
+| `verdict` | text | useful или not_useful, как владелец оценил задачу, поднятую агентом; null, пока не оценена |
+| `metadata` | text | JSON: то, что присылает источник, для чего нет столбца и по чему нет поиска |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+| `deleted_at` | integer | исчезло в источнике; синхронизация никогда не удаляет строки физически |
+
+#### `task_assignments`
+
+Кто работает над задачей: человек или бот, в какой-то роли.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `task_id` | integer, not null → `tasks.id` | `task`, к которой это относится |
+| `assignee_type` | text, not null | `person` или `bot` |
+| `assignee_id` | integer, not null | строка в таблице `assignee_type` |
+| `role` | text, not null | assignee, reviewer, watcher |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `task_events`
+
+История задачи: создана, изменён статус, назначена, перенесён срок.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `task_id` | integer, not null → `tasks.id` | `task`, к которой это относится |
+| `actor_type` | text | `person` или `bot` |
+| `actor_id` | integer | строка в таблице `actor_type` |
+| `kind` | text, not null | что произошло: created, status, assigned, unassigned, due, priority, moved |
+| `changes` | text | JSON: \{field: [from, to]} |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+
+#### `decisions`
+
+Сделанный выбор, который действует, пока его не заменят: почему мы что-то делаем. Его доказательства — сообщение, строка расшифровки или документ — это `links` вида `evidence`; решение, предложенное агентом, ссылается обратно на то воспоминание через `created-from`.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `project_id` | integer → `projects.id` | `project`, к которому это относится |
+| `statement` | text, not null | решение одним предложением |
+| `status` | text, not null | proposed, accepted, superseded, reversed |
+| `decided_at` | integer | когда оно принято, по доказательствам |
+| `supersedes_id` | integer → `decisions.id` | решение, которое заменяет это |
+| `confirmed_by_type` | text | кто его принял; null, пока оно предложено |
+| `confirmed_by_id` | integer | кто его принял; null, пока оно предложено |
+| `source` | text, not null | владелец, агент, импорт |
+| `metadata` | text | JSON: то, что присылает источник, для чего нет столбца и по чему нет поиска |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+| `deleted_at` | integer | исчезло в источнике; синхронизация никогда не удаляет строки физически |
+
+### Агенты и действия
+
+Что предлагают агенты и что они сделали: каждое внешнее действие ждёт одобрения, каждый вызов инструмента записывается в журнал.
+
+#### `proposed_actions`
+
+То, что агент хочет сделать вне хранилища, — ответить, отправить, удалить, забанить, заглушить, закрепить, пригласить, создать задачу, — и что ждёт одобрения человека. Без одобрения ничего внешнего не происходит.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `kind` | text, not null | reply, send, delete, ban, mute, pin, invite, create_task, … |
+| `account_id` | integer → `accounts.id` | аккаунт, который выполнит действие |
+| `target_type` | text | на что оно действует: `message`, `chat`, `identity`, `task`, … |
+| `target_id` | integer | строка в таблице `target_type` |
+| `payload` | text | JSON: что сделать, например текст ответа |
+| `reason` | text | почему агент это предлагает |
+| `status` | text, not null | proposed, approved, rejected, executed, failed |
+| `proposed_by_type` | text, not null | `person` или `bot` |
+| `proposed_by_id` | integer, not null | строка в таблице `proposed_by_type` |
+| `decided_by_type` | text | `person` или `bot` |
+| `decided_by_id` | integer | строка в таблице `decided_by_type` |
+| `decided_at` | integer | когда его одобрили или отклонили |
+| `executed_at` | integer | когда его выполнили |
+| `result` | text | JSON: что вернул источник |
+| `error` | text | почему оно не удалось, если не удалось |
+| `verdict` | text | useful или not_useful, как владелец оценил предложение |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `agent_actions`
+
+Каждый инструмент, который агент вызвал через CLI или MCP: кто, какой инструмент, на каком уровне доступа, над чем. Журнал аудита того, что сделали агенты.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `actor_type` | text, not null | `person` или `bot` |
+| `actor_id` | integer, not null | строка в таблице `actor_type` |
+| `tool` | text, not null | команда или инструмент MCP |
+| `tier` | text, not null | read, draft, write-private, write-public, destructive, admin |
+| `target_type` | text | вид того, на что указывает `target_id`: имя таблицы в единственном числе |
+| `target_id` | integer | строка в таблице `target_type` |
+| `status` | text, not null | ok, refused, failed |
+| `error` | text | почему вызов не удался или был отклонён |
+| `started_at` | integer, not null | когда начался вызов |
+| `finished_at` | integer | когда он закончился; null, пока он идёт |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+
+### Метки, связи и сохранённые поиски
+
+Метки и темы, связи между любыми двумя вещами и сохранённые поиски.
+
+#### `tags`
+
+Имя метки, хранится один раз. Какие вещи её несут — это `taggings`.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `name` | text, not null, unique | уникально среди меток и тем, поэтому одно имя никогда не бывает и тем и другим |
+| `kind` | text, not null | `tag`: свободная метка; `topic`: о чём вещь, из короткого списка, который создаёт только владелец (агенты предлагают) |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `auto_tag_claims`
+
+Метки, которые правила ставят на чат, сопоставляя его название, ник и описание.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `chat_id` | integer, not null → `chats.id` | `chat`, к которому это относится |
+| `tag_id` | integer, not null → `tags.id` | `tag`, к которой это относится |
+| `algorithm` | text, not null | Имя и версия правил, которые назначили автоматическую метку, сейчас `keywords-v1`. |
+| `score` | real, not null | Доля полей метаданных чата (название, ник, описание), которые совпали с ключевыми словами метки: 1/3, 2/3 или 1; это не вероятность. |
+| `fields` | text, not null | JSON-список совпавших полей метаданных, из `title`, `username`, `description`. |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `links`
+
+Каждая связь между двумя вещами, которую не хранит ни один столбец. Виды: `links-to` (документ или заметка ссылается на что-то, как написано в нём), `about` (заметка или документ о человеке, проекте, …), `member-of` (чат или человек относится к проекту или организации), `labelled` (аккаунт папки → метка, путь подпапки в `anchor`, чтобы каждый документ в ней нёс метку), `answered-by` (задача-вопрос → сообщение, которое на неё ответило), `evidence` (решение или воспоминание → его источник), `created-from` (вещь → то, из чего она сделана). Виды, которые хранилище пока не пишет: `duplicate-of` (тот же вопрос, заданный снова), `related-to`, `assigned-to`.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `from_type` | text, not null | вид того, на что указывает `from_id`: имя таблицы в единственном числе |
+| `from_id` | integer, not null | строка в таблице `from_type` |
+| `to_type` | text | вид того, на что указывает `to_id`: имя таблицы в единственном числе |
+| `to_id` | integer | null, пока связь ещё никого не называет |
+| `kind` | text, not null | связь; виды перечислены в описании таблицы |
+| `anchor` | text | Заголовок или фрагмент блока внутри цели, на который указывает связь, например `#Heading` или `#^block`; NULL для всей цели. |
+| `source` | text, not null | Откуда взялась связь: `file` (написана в файле заметки), `owner` (добавлена владельцем) или `suggested` (предложена, ещё не подтверждена). |
+| `target_text` | text | Цель, как написана (например имя в заметке); хранится, пока связь никого не называет; до 500 символов. |
+| `target_folded` | text | target_text, приведённый по регистру и диакритике, без начального `@`; его сравнивают с новыми именами людей и псевдонимами, чтобы найти цель связи. |
+| `role` | text | Роль, которую называет отношение, например должность в связи `member-of`; свободный текст до 200 символов. |
+| `evidence` | text | Свободный текст о том, почему отношение верно (до 2000 символов). |
+| `metadata` | text | JSON: то, что присылает источник, для чего нет своего столбца и по чему нет поиска |
+| `confirmed` | integer, not null | 1, если владелец подтверждает связь, 0, если это только слабое, неподтверждённое предложение. |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `author` | text | `owner`, `agent`, `rule` |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `searches`
+
+Каждый запуск `search messages` и `stats messages show`, с параметрами, как их дал вызывающий, — никогда не сообщение и не результат. Строка с именем — это сохранённый поиск; одинаковый безымянный запуск считается в своей строке.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `name` | text, unique | Уникальное имя сохранённого поиска; NULL для безымянного запуска, который хранится только как история. |
+| `command` | text, not null | `search` или `stats`. |
+| `params` | text, not null | JSON, ключи отсортированы, поэтому один и тот же запуск даёт один и тот же текст. |
+| `language` | text, not null | `lucene-v1` или `legacy`. |
+| `version` | integer, not null | Версия языка поисковых запросов (сейчас 1). |
+| `fields_version` | integer, not null | Версия списка имён полей для поиска, по которому написан запрос (сейчас 2). |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `last_run_at` | integer | Когда поиск последний раз запускали (миллисекунды эпохи); NULL для сохранённого поиска, который ни разу не запускали. |
+| `runs` | integer, not null | Сколько раз запускали этот поиск. |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `taggings`
+
+Одна метка на одной вещи.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `tag_id` | integer, not null → `tags.id` | `tag`, к которой это относится |
+| `taggable_type` | text, not null | `chat`, `identity`, `message`, `email`, `document`, `note`, `person`, `organization`, `project`, `task`, `event`, … |
+| `taggable_id` | integer, not null | строка в таблице `taggable_type` |
+| `main` | integer, not null | 1 на главной теме вещи; не больше одной на вещь |
+| `source` | text, not null | откуда она: владелец, агент, auto, импорт |
+| `author_type` | text | `person` или `bot` |
+| `author_id` | integer | строка в таблице `author_type` |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+### Куски, векторы и состояние поиска
+
+Производные данные: их можно пересобрать из таблиц выше. Каждый длинный текст режется на `chunks`; у текста каждого куска одна строка в `embeddings`.
+
+#### `conversations`
+
+Группа сообщений одного чата, которые относятся к одному обсуждению, из одной сборки.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `chat_id` | integer, not null → `chats.id` | `chat`, к которому это относится |
+| `first_message_id` | integer, not null → `messages.id` | `message`, к которому это относится |
+| `build` | integer, not null | Пишется пакетами под новым номером, затем сразу становится текущей: читатели никогда не видят половину сборки. |
+| `first_at` | integer, not null | Время отправки первого сообщения обсуждения (миллисекунды эпохи). |
+| `last_at` | integer, not null | Время отправки последнего сообщения обсуждения (миллисекунды эпохи). |
+| `message_count` | integer, not null | Сколько сообщений в обсуждении. |
+| `built_at` | integer, not null | Когда выполнялась сборка, которая создала это обсуждение (миллисекунды эпохи). |
+| `algorithm_version` | integer, not null | Версия правил связывания, которые сгруппировали сообщения (сейчас 5). |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `conversation_messages`
+
+Какие сообщения входят в каждое обсуждение.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `conversation_id` | integer, not null → `conversations.id` | `conversation`, к которому это относится |
+| `message_id` | integer, not null → `messages.id` | `message`, к которому это относится |
+
+#### `conversation_state`
+
+Какие чаты включил пользователь и насколько свежи их обсуждения.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `chat_id` | integer, PK → `chats.id` | чат; одна строка на чат с включённой группировкой |
+| `enabled_at` | integer, not null | Когда владелец включил группировку обсуждений для этого чата (миллисекунды эпохи). |
+| `built_at` | integer | Когда были собраны текущие обсуждения этого чата (миллисекунды эпохи); NULL до первой сборки. |
+| `algorithm_version` | integer | Версия правил связывания текущей сборки; NULL до первой сборки. |
+| `current_build` | integer | Сборка, которую видят читатели; более высокая сейчас пишется или не удалась. |
+
+#### `embeddings`
+
+Один вектор на модель и текст: его использует любой кусок, чей `content_hash` совпадает.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `model` | text, not null | `&lt;provider>:&lt;model>:&lt;dims>` — векторы разных моделей никогда не смешиваются. |
+| `content_hash` | text, not null | Шестнадцатеричный SHA-256 текста куска, который получила модель векторов; сам текст никогда не хранится. |
+| `dims` | integer, not null | Число измерений вектора (его длина в float32). |
+| `vector` | blob, not null | Float32, little-endian, единичной длины. |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `search_index_state`
+
+Насколько построен производный поисковый индекс, одна строка на индекс. `watermark` — наибольший `pk` сообщения на момент создания индекса: строки выше него индексируют триггеры, строки до него — пакеты, дошедшие до `filled_through`.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `name` | text, PK | какой индекс описывает строка, например `message_words` |
+| `watermark` | integer, not null | Наибольший `pk` сообщения на момент создания индекса; строки выше него индексируют триггеры, строки до него — пакетное заполнение. |
+| `filled_through` | integer, not null | Наибольший `pk` сообщения, который пакетное заполнение уже проиндексировало; индекс полон, когда он доходит до отметки. |
+| `terms_through` | integer, not null | Наибольший `pk` сообщения, чьи слова есть в словаре исправления опечаток; 0 значит, что словарь не построен. |
+| `normalizer_version` | integer, not null | Версия правил нормализации текста, с которыми построен индекс. |
+| `built_at` | integer | Когда индекс закончил заполняться (миллисекунды эпохи); NULL, пока он ещё заполняется. |
+| `analyzer` | text | Выбор стеммеров и версия Snowball, которые построили строку основ (`analyzerIdentity`); NULL, пока её не займёт заполнение. |
+
+#### `search_terms`
+
+Каждое слово в поисковом индексе сообщений, для исправления опечаток.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `term` | text, PK | слово, как проиндексировано |
+| `length` | integer, not null | Число символов в слове; по нему ищут кандидатов на опечатку похожей длины. |
+
+#### `search_term_trigrams`
+
+Куски из трёх букв каждого поискового слова, чтобы находить слова, похожие на слово с опечаткой.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `trigram` | text, not null | Кусок из трёх символов известного слова; по нему ищут слова, похожие на слово с опечаткой. |
+| `length` | integer, not null | Длина в символах слова, из которого взята триграмма. |
+| `term` | text, not null | Известное поисковое слово, к которому относится триграмма (у чисел триграмм нет). |
+
+#### `involvements`
+
+Кто в чём участвовал и когда: одна строка на человека или учётную запись на сообщение, письмо, встречу, задачу или документ. Берётся из отправителей, получателей, участников, исполнителей и связей и пересобирается по желанию; превращает «всё об Alex» в один диапазон индекса.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `person_id` | integer → `persons.id` | null, пока учётная запись ни с кем не связана |
+| `identity_id` | integer → `identities.id` | `identity`, к которой это относится |
+| `subject_type` | text, not null | `message`, `email`, `meeting`, `task`, `document`, `note`, … |
+| `subject_id` | integer, not null | строка в таблице `subject_type` |
+| `role` | text, not null | sender, recipient, participant, assignee, author, mentioned, linked |
+| `occurred_at` | integer, not null | когда произошёл субъект |
+| `scope` | text, not null | `personal` или `work`, по аккаунту, чату или проекту субъекта |
+| `account_id` | integer → `accounts.id` | аккаунт интеграции, через который это пришло |
+| `project_id` | integer → `projects.id` | `project`, к которому это относится |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+
+#### `involvement_pending`
+
+Вещи, чьи строки `involvements` устарели: сообщение, чат, встреча, письмо, задача или что угодно, откуда начинается связь. Триггеры ставят в очередь; обработка очереди пересчитывает строки этой вещи.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, not null | Строка, ждущая индексации. |
+| `indexable_type` | text, not null | к какой таблице относится ждущая строка |
+
+#### `chunks`
+
+Куски более длинного текста — единица, которая получает вектор: части документа, письма, текста вложения, заметки, расшифровки или сводки встречи; короткая задача или событие — один кусок. Обсуждение из сообщений тоже режется здесь на куски, одна строка `conversation` на кусок, а `chunk_messages` говорит, какие сообщения охватывает каждый кусок; так один поиск может читать любой вид текста с фильтром по области, аккаунту, проекту и времени.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `chunkable_type` | text, not null | `document`, `email`, `attachment`, `note`, `memory`, `conversation`, `meeting_transcript`, `meeting_summary`, `event`, `task` |
+| `chunkable_id` | integer, not null | строка в таблице `chunkable_type` |
+| `position` | integer, not null | порядок внутри родителя, с 0 |
+| `start_offset` | integer, not null | где кусок начинается в тексте родителя, в символах |
+| `end_offset` | integer, not null | где он заканчивается, не включая |
+| `content_hash` | text, not null | хеш текста куска; его вектор — строка `embeddings` с этим хешем, поэтому одинаковый текст получает вектор один раз |
+| `scope` | text | копируется из аккаунта, чата или проекта родителя, чтобы векторный поиск фильтровал до сравнения; триггеры следят за изменением чата или аккаунта |
+| `account_id` | integer → `accounts.id` | копируется из родителя, фильтр для векторного поиска |
+| `project_id` | integer → `projects.id` | копируется из родителя, если он к нему относится |
+| `occurred_at` | integer | когда произошёл родитель (отправлен, проведён, написан), фильтр для векторного поиска |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `chunk_messages`
+
+Из каких сообщений вырезан кусок обсуждения. Одна строка на строку `conversation` в `chunks`; удаление любого из сообщений удаляет кусок.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `chunk_id` | integer, PK → `chunks.id` | кусок типа `conversation` |
+| `first_message_id` | integer, not null → `messages.id` | `message`, к которому это относится |
+| `last_message_id` | integer, not null → `messages.id` | `message`, к которому это относится |
+| `text_start` | integer | где кусок начинается внутри текста первого сообщения, если он начинается посреди сообщения |
+| `text_end` | integer | где он заканчивается внутри текста последнего сообщения |
+
+### Хранилище
+
+Служебные данные самого файла.
+
+#### `schema_migrations`
+
+Какие миграции применены к этому файлу.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `version` | integer, PK | номер миграции |
+| `min_compatible` | integer, not null | Самая старая версия схемы, чей код ещё может безопасно писать в файл этой версии; сборка старше неё отказывается работать с файлом. |
+| `applied_at` | integer, not null | Когда эта миграция была применена к файлу (миллисекунды эпохи). |
+
+#### `store_settings`
+
+Настройки самого файла хранилища, общие для всех профилей, tg и MAX, — в отличие от файла конфигурации профиля.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `key` | text, PK | имя настройки |
+| `value` | text, not null | Значение настройки в виде текста, общее для всех профилей и мессенджеров, которые используют этот файл хранилища. |
+| `at` | integer, not null | Когда настройка последний раз записывалась (миллисекунды эпохи). |
+
+{/* tables:end */}
 
 Чтобы увидеть эти таблицы в работе, прочитайте, [как работает поиск](./search-architecture.mdx);
 чтобы увидеть, как копия встроена в инструменты, — [архитектуру](./architecture.mdx).

@@ -7,7 +7,7 @@
   --color-fd-muted-foreground: #595959;
 }
 
-/* Pastel groups for Mermaid diagrams; classDef reads them so the colours follow the theme. */
+/* Pastel groups for Mermaid diagrams; classDef reads them so the colours follow the theme. Dark stays muted. */
 :root {
   --diagram-blue-bg: #eff6ff;
   --diagram-blue-line: #93c5fd;
@@ -18,15 +18,33 @@
   --diagram-amber-bg: #fffbeb;
   --diagram-amber-line: #fcd34d;
   --diagram-amber-fg: #78350f;
+  --diagram-purple-bg: #f5f3ff;
+  --diagram-purple-line: #c4b5fd;
+  --diagram-purple-fg: #4c1d95;
+  --diagram-grey-bg: #f4f4f5;
+  --diagram-grey-line: #d4d4d8;
+  --diagram-grey-fg: #3f3f46;
+  --diagram-rose-bg: #fff1f2;
+  --diagram-rose-line: #fda4af;
+  --diagram-rose-fg: #881337;
 }
 .dark {
-  --diagram-blue-bg: #172554;
-  --diagram-blue-line: #3b82f6;
-  --diagram-blue-fg: #dbeafe;
-  --diagram-green-bg: #052e16;
-  --diagram-green-line: #22c55e;
-  --diagram-green-fg: #dcfce7;
-  --diagram-amber-bg: #422006;
-  --diagram-amber-line: #f59e0b;
-  --diagram-amber-fg: #fef3c7;
+  --diagram-blue-bg: #1d2430;
+  --diagram-blue-line: #5d7396;
+  --diagram-blue-fg: #d3dcea;
+  --diagram-green-bg: #1c2621;
+  --diagram-green-line: #5f806c;
+  --diagram-green-fg: #d3e3d9;
+  --diagram-amber-bg: #2a251b;
+  --diagram-amber-line: #8f7d55;
+  --diagram-amber-fg: #ece2cc;
+  --diagram-purple-bg: #25212e;
+  --diagram-purple-line: #7a6c96;
+  --diagram-purple-fg: #e0d9ec;
+  --diagram-grey-bg: #232325;
+  --diagram-grey-line: #6b6b72;
+  --diagram-grey-fg: #e4e4e7;
+  --diagram-rose-bg: #2b2125;
+  --diagram-rose-line: #8f6774;
+  --diagram-rose-fg: #ecd8df;
 }

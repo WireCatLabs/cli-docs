@@ -33,18 +33,29 @@ graph LR
   Meeting --> Event("Evento<br>starts_at")
   Project --> Task("Tarea<br>key · type · status")
   Project --> Decision("Decisión<br>status · decided_at")
+  Memory("Memoria<br>kind · status") -.->|"prueba"| Message
+  Tag("Etiqueta<br>name · kind") -.->|"etiqueta"| Task
   classDef people fill:var(--diagram-blue-bg),stroke:var(--diagram-blue-line),color:var(--diagram-blue-fg)
   classDef sources fill:var(--diagram-green-bg),stroke:var(--diagram-green-line),color:var(--diagram-green-fg)
+  classDef account fill:var(--diagram-grey-bg),stroke:var(--diagram-grey-line),color:var(--diagram-grey-fg)
+  classDef knowledge fill:var(--diagram-purple-bg),stroke:var(--diagram-purple-line),color:var(--diagram-purple-fg)
   classDef work fill:var(--diagram-amber-bg),stroke:var(--diagram-amber-line),color:var(--diagram-amber-fg)
+  classDef tag fill:var(--diagram-rose-bg),stroke:var(--diagram-rose-line),color:var(--diagram-rose-fg)
   class Person,Identity people
-  class Account,Chat,Message,Conversation,Email,Document,Meeting sources
-  class Organization,Project,Task,Decision,Event work
+  class Chat,Message,Conversation,Email sources
+  class Account account
+  class Document,Meeting,Event,Memory knowledge
+  class Organization,Project,Task,Decision work
+  class Tag tag
 ```
 
 En palabras: una persona tiene identidades; las identidades envían mensajes y correos y participan
 en reuniones. Una organización agrupa cuentas y proyectos. Cada cuenta trae sus chats, correos,
 documentos y reuniones; los chats contienen mensajes, y los mensajes se agrupan en conversaciones.
-Una reunión pertenece a un evento. Un proyecto contiene tareas y decisiones.
+Una reunión pertenece a un evento. Un proyecto contiene tareas y decisiones. Las flechas punteadas pasan por las tablas que conectan:
+una memoria apunta a su prueba, y una etiqueta puede estar en cualquier cosa, no solo en una tarea.
+Los colores agrupan las tarjetas: personas, chats y correo, la cuenta por la que llegaron,
+documentos y reuniones, trabajo, etiquetas.
 
 ### Personas e identidades
 
@@ -180,74 +191,11 @@ modelo y hash del texto, así que el mismo texto nunca se vectoriza dos veces.
 El índice de participación es derivado: se reconstruye a partir de remitentes, destinatarios,
 participantes, responsables y vínculos confirmados, y no contiene nada que ellos no tengan.
 
-## Columnas clave
+## Tablas
 
-Solo las columnas por las que un lector filtraría o uniría. Los tiempos son milisegundos de época.
-Un par `<name>_type` y `<name>_id` apunta a una fila de cualquier tabla: `person`, `message`,
-`task`.
+Todas las tablas del almacén por área, con el tipo y el significado de cada columna. Los tiempos son milisegundos de época. La [referencia del esquema](https://github.com/WireCatLabs/cli-messaging/blob/v0.218.0/docs/storage/schema.md) lista además cada restricción e índice.
 
-**Fuentes y personas**
-
-| Tabla | Consultar por |
-| --- | --- |
-| `accounts` | `provider`, `scope`, `organization_id` |
-| `persons` | `name` |
-| `identities` | `provider`, `external_id`, `username`, `name` |
-| `identity_links` | `identity_id`, `person_id`, `confidence` |
-| `organizations` | `kind`, `scope` |
-| `bots` | `name`, `kind`, `owner_person_id` |
-
-**Chats, mensajes y correo**
-
-| Tabla | Consultar por |
-| --- | --- |
-| `chats` | `account_id`, `kind`, `parent_chat_id`, `scope`, `last_message_at` |
-| `messages` | `chat_id`, `sender_identity_id`, `sent_at`, `thread_root_id`, `reply_to_external_id`, `deleted_at` |
-| `conversations` | `chat_id`, `first_at`, `last_at` |
-| `emails` | `account_id`, `email_thread_id`, `from_identity_id`, `sent_at` |
-| `email_recipients` | `email_id`, `identity_id`, `role` |
-
-**Documentos, notas y memorias**
-
-| Tabla | Consultar por |
-| --- | --- |
-| `documents` | `account_id`, `kind`, `title`, `extension`, `deleted_at` |
-| `notes` | `notable_type`, `notable_id`, `author_type`, `author_id` |
-| `memories` | `kind`, `subject_type`, `subject_id`, `status`, `scope` |
-
-**Eventos y reuniones**
-
-| Tabla | Consultar por |
-| --- | --- |
-| `events` | `starts_at`, `event_series_id` |
-| `meetings` | `account_id`, `event_id`, `started_at`, `host_identity_id` |
-| `meeting_participants` | `meeting_id`, `identity_id`, `role` |
-| `meeting_transcript_rows` | `meeting_transcript_id`, `speaker_participant_id`, `start_ms` |
-
-**Tareas, decisiones y acciones**
-
-| Tabla | Consultar por |
-| --- | --- |
-| `projects` | `key`, `type`, `organization_id`, `scope` |
-| `tasks` | `project_id`, `key`, `type`, `status`, `due_at`, `parent_id` |
-| `task_assignments` | `task_id`, `assignee_type`, `assignee_id`, `role` |
-| `decisions` | `project_id`, `status`, `decided_at`, `supersedes_id` |
-| `proposed_actions` | `status`, `kind`, `target_type`, `target_id` |
-
-**Conexiones y búsqueda**
-
-| Tabla | Consultar por |
-| --- | --- |
-| `links` | `from_type`, `from_id`, `to_type`, `to_id`, `kind` |
-| `taggings` | `tag_id`, `taggable_type`, `taggable_id`, `main` |
-| `tags` | `name`, `kind` |
-| `aliases` | `aliasable_type`, `aliasable_id`, `name_folded` |
-| `involvements` | `person_id`, `identity_id`, `occurred_at`, `scope`, `subject_type`, `subject_id` |
-| `chunks` | `chunkable_type`, `chunkable_id`, `scope`, `occurred_at`, `content_hash` |
-| `embeddings` | `model`, `content_hash` |
-
-<details id="conventions" className="docs-disclosure">
-<summary>Convenciones de nombres y todas las tablas</summary>
+**Convenciones de nombres**
 
 - Las tablas van en plural y en snake_case. La clave primaria es `id`; una clave foránea es
   `<singular>_id`.
@@ -263,166 +211,1398 @@ Un par `<name>_type` y `<name>_id` apunta a una fila de cualquier tabla: `person
 - Los indicadores no llevan el prefijo `is_`. Los tiempos son enteros en milisegundos de época.
 - Cada clave foránea y cada par `_type`/`_id` tiene un índice.
 
-Todas las tablas y sus columnas, por área:
+{/* tables:start — generated by pnpm docs:data-model */}
 
-**Fuentes**
+### Fuentes
 
-| Tabla | Columnas |
-| --- | --- |
-| `accounts` | `id`, `provider`, `external_id`, `name`, `created_at`, `settings`, `status`, `updated_at`, `scope`, `organization_id` |
-| `sync_cursors` | `account_id`, `key`, `value`, `updated_at`, `created_at` |
-| `sync_ranges` | `chat_id`, `from_key`, `to_key`, `created_at`, `updated_at` |
-| `fetch_leases` | `chat_id`, `anchor`, `holder`, `expires_at` |
-| `bot_updates` | `id`, `account_id`, `external_id`, `kind`, `payload`, `received_at`, `handled_at`, `error`, `replayed_at`, `created_at` |
-| `syncs` | `id`, `account_id`, `kind`, `started_at`, `finished_at`, `status`, `counts`, `error`, `created_at`, `updated_at` |
+Cada integración es una cuenta; cada ejecución de sincronización queda registrada.
 
-**Personas, organizaciones y bots**
+#### `accounts`
 
-| Tabla | Columnas |
-| --- | --- |
-| `persons` | `id`, `name`, `owner`, `created_at`, `updated_at` |
-| `identities` | `id`, `provider`, `external_id`, `username`, `name`, `bot`, `phone_hmac`, `metadata`, `created_at`, `updated_at`, `description` |
-| `identity_links` | `identity_id`, `person_id`, `method`, `confidence`, `created_at`, `author`, `source`, `updated_at` |
-| `identity_link_events` | `id`, `identity_id`, `from_person_id`, `to_person_id`, `method`, `created_at`, `author` |
-| `identity_revisions` | `id`, `identity_id`, `name`, `username`, `description`, `marks`, `created_at` |
-| `account_identities` | `account_id`, `identity_id`, `created_at`, `last_messaged_at`, `updated_at` |
-| `aliases` | `id`, `aliasable_type`, `aliasable_id`, `account_id`, `name`, `name_folded`, `display`, `source`, `created_at`, `updated_at` |
-| `identities_fts` | índice de texto completo sobre `name`, `username` |
-| `organizations` | `id`, `kind`, `name`, `scope`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
-| `bots` | `id`, `name`, `kind`, `description`, `owner_person_id`, `model`, `token_digest`, `last_seen_at`, `disabled_at`, `metadata`, `created_at`, `updated_at` |
+Cada integración que conecta el dueño: una cuenta de mensajería, un buzón, Zoom, una carpeta de notas.
 
-**Chats y mensajes**
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `provider` | text, not null | A qué mensajería pertenece la cuenta, como nombre en minúsculas, p. ej. `telegram` o `max`; abierto, para que los adaptadores nuevos no requieran cambios. |
+| `external_id` | text, not null | el id propio que le da la fuente |
+| `name` | text | El nombre visible de la cuenta tal como lo informa la mensajería; NULL si no se conoce. |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `settings` | text | JSON: ajustes de cada integración, p. ej. la ruta y el formato de una carpeta |
+| `status` | text | active, paused, failed |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+| `scope` | text, not null | `personal` o `work`; lo que una consulta de contexto puede leer para un fin dado, para que una pregunta de trabajo nunca traiga chats privados |
+| `organization_id` | integer → `organizations.id` | la organización a la que pertenece una cuenta de trabajo |
 
-| Tabla | Columnas |
-| --- | --- |
-| `chats` | `id`, `account_id`, `external_id`, `kind`, `title`, `unread_count`, `last_message_at`, `participants_count`, `metadata`, `updated_at`, `username`, `membership_state`, `searchable`, `message_count`, `members_tracked_at`, `description`, `details_fetched_at`, `created_at`, `parent_chat_id`, `scope` |
-| `chat_members` | `chat_id`, `identity_id`, `created_at` |
-| `member_stays` | `id`, `chat_id`, `identity_id`, `first_seen_at`, `last_seen_at`, `joined_at`, `invited_by_identity_id`, `role`, `left_at`, `created_at`, `updated_at` |
-| `member_counts` | `chat_id`, `date`, `reported_count`, `listed_count`, `complete_list`, `created_at` |
-| `messages` | `id`, `chat_id`, `account_id`, `external_id`, `thread_external_id`, `sender_identity_id`, `sender_chat_external_id`, `sender_name`, `sent_at`, `edited_at`, `deleted_at`, `text`, `reply_to_external_id`, `reply_to`, `forward`, `outgoing`, `reactions`, `metadata`, `created_at`, `source`, `normalized_text`, `normalizer_version`, `mentions`, `updated_at`, `thread_root_id` |
-| `message_revisions` | `id`, `message_id`, `text`, `edited_at`, `created_at` |
-| `message_links` | `id`, `chat_id`, `message_id`, `parent_id`, `source`, `kind`, `confidence`, `method`, `version`, `batch`, `build`, `created_at`, `stale_at`, `updated_at` |
-| `message_counter_observations` | `message_id`, `counter`, `value`, `created_at`, `source` |
-| `message_transcripts` | `id`, `message_id`, `chat_id`, `message_external_id`, `text`, `source`, `heard_at`, `created_at`, `updated_at` |
-| `chats_fts` | índice de texto completo sobre `title` |
-| `messages_fts` | índice de texto completo sobre `text` |
-| `message_words` | índice de texto completo sobre `normalized_text`, `scope` |
-| `message_stems` | índice de texto completo sobre `stems`, `scope` |
-| `message_stems_pending` | `id` |
-| `member_observations` | `id`, `chat_id`, `observed_at`, `started_at`, `complete`, `reported_count`, `listed_count`, `source`, `created_at`, `updated_at` |
-| `member_observation_members` | `member_observation_id`, `identity_id`, `member_stay_id` |
+#### `sync_cursors`
 
-**Correo**
+Por cuenta, lo que una sincronización recuerda entre ejecuciones: un marcador de cambios, cuándo una lista estuvo completa por última vez.
 
-| Tabla | Columnas |
-| --- | --- |
-| `email_threads` | `id`, `account_id`, `external_id`, `subject`, `last_email_at`, `emails_count`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
-| `emails` | `id`, `account_id`, `email_thread_id`, `external_id`, `subject`, `from_identity_id`, `from_address`, `from_name`, `sent_at`, `received_at`, `in_reply_to`, `references`, `body_text`, `body_html`, `snippet`, `outgoing`, `read`, `flagged`, `draft`, `size`, `headers`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
-| `email_recipients` | `id`, `email_id`, `identity_id`, `address`, `name`, `role`, `position`, `created_at`, `updated_at` |
-| `mailboxes` | `id`, `account_id`, `external_id`, `name`, `kind`, `created_at`, `updated_at` |
-| `email_mailboxes` | `email_id`, `mailbox_id`, `created_at` |
-| `email_words` | índice de texto completo sobre `normalized_text`, `scope` |
-| `email_stems` | índice de texto completo sobre `stems`, `scope` |
-| `email_index_pending` | `id`, `indexable_type` |
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `account_id` | integer, not null → `accounts.id` | la cuenta de integración por la que llegó |
+| `key` | text, not null | Nombre de lo que una sincronización recuerda para esta cuenta, p. ej. `chat_list_complete`, `history_start:&lt;chatId>`, `fetched:&lt;chatId>`, o un marcador de cambios del proveedor. |
+| `value` | text, not null | El valor recordado como texto (un marcador de cambios, un id de mensaje, una lista JSON); quien llama codifica los números por su cuenta. |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
 
-**Adjuntos**
+#### `sync_ranges`
 
-| Tabla | Columnas |
-| --- | --- |
-| `attachments` | `id`, `attachable_type`, `attachable_id`, `position`, `kind`, `mime`, `name`, `title`, `url`, `size`, `width`, `height`, `duration`, `provider_ref`, `local_path`, `text`, `normalized_text`, `extraction`, `extractor`, `extraction_error`, `content_sha256`, `extracted_at`, `created_at`, `updated_at` |
-| `attachment_words` | índice de texto completo sobre `normalized_text` |
+Los tramos del historial de cada chat que se tienen completos, para que una descarga sepa qué falta.
 
-**Documentos, notas y memorias**
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `chat_id` | integer, not null → `chats.id` | el `chat` al que pertenece |
+| `from_key` | integer, not null | Clave de orden más baja del proveedor (el id de mensaje de Telegram) de un tramo del chat que se tiene completo; los mensajes que faltan dentro de él se borraron. |
+| `to_key` | integer, not null | Clave de orden más alta del proveedor de ese tramo completo; los mensajes fuera de todo tramo simplemente nunca se descargaron. |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
 
-| Tabla | Columnas |
-| --- | --- |
-| `documents` | `id`, `account_id`, `external_id`, `kind`, `title`, `location`, `file_name`, `extension`, `url`, `storage`, `local_path`, `mime`, `size`, `content_hash`, `front_matter`, `body`, `normalized_text`, `extraction`, `extraction_error`, `language`, `revision`, `export_path`, `external_created_at`, `external_updated_at`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
-| `document_revisions` | `id`, `document_id`, `body`, `revision`, `created_at` |
-| `document_words` | índice de texto completo sobre `normalized_text`, `scope` |
-| `document_stems` | índice de texto completo sobre `stems`, `scope` |
-| `document_index_pending` | `id`, `indexable_type` |
-| `notes` | `id`, `notable_type`, `notable_id`, `title`, `body`, `author_type`, `author_id`, `revision`, `created_at`, `updated_at`, `deleted_at` |
-| `note_revisions` | `id`, `note_id`, `body`, `revision`, `created_at` |
-| `note_words` | índice de texto completo sobre `normalized_text`, `scope` |
-| `note_stems` | índice de texto completo sobre `stems`, `scope` |
-| `note_index_pending` | `id`, `indexable_type` |
-| `memories` | `id`, `kind`, `body`, `subject_type`, `subject_id`, `author_type`, `author_id`, `model`, `confidence`, `status`, `last_verified_at`, `supersedes_id`, `scope`, `created_at`, `updated_at` |
-| `memory_words` | índice de texto completo sobre `normalized_text`, `scope` |
-| `memory_stems` | índice de texto completo sobre `stems`, `scope` |
-| `memory_index_pending` | `id`, `indexable_type` |
+#### `fetch_leases`
 
-**Eventos y reuniones**
+Quién descarga ahora un tramo de un chat, para que dos procesos no descarguen las mismas páginas.
 
-| Tabla | Columnas |
-| --- | --- |
-| `event_series` | `id`, `title`, `recurrence`, `origin`, `created_at`, `updated_at` |
-| `events` | `id`, `event_series_id`, `title`, `description`, `location`, `starts_at`, `ends_at`, `timezone`, `origin`, `created_at`, `updated_at`, `deleted_at` |
-| `meeting_series` | `id`, `account_id`, `external_id`, `event_series_id`, `title`, `description`, `kind`, `recurrence`, `host_identity_id`, `join_url`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
-| `meetings` | `id`, `account_id`, `meeting_series_id`, `event_id`, `external_id`, `title`, `description`, `location`, `join_url`, `started_at`, `ended_at`, `duration_ms`, `timezone`, `host_identity_id`, `participants_count`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
-| `meeting_participants` | `id`, `meeting_id`, `identity_id`, `display_name`, `email`, `role`, `joined_at`, `left_at`, `duration_ms`, `sessions`, `external_id`, `metadata`, `created_at`, `updated_at` |
-| `meeting_transcripts` | `id`, `meeting_id`, `source`, `format`, `language`, `content_hash`, `external_created_at`, `superseded_at`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
-| `meeting_transcript_rows` | `id`, `meeting_transcript_id`, `position`, `start_ms`, `end_ms`, `speaker_participant_id`, `speaker_name`, `text`, `normalized_text`, `metadata`, `created_at` |
-| `meeting_chat_messages` | `id`, `meeting_id`, `external_id`, `sent_at`, `sender_participant_id`, `sender_name`, `recipient`, `text`, `normalized_text`, `metadata`, `created_at`, `updated_at` |
-| `meeting_summaries` | `id`, `meeting_id`, `source`, `title`, `overview`, `sections`, `next_steps`, `content`, `doc_url`, `external_created_at`, `external_updated_at`, `metadata`, `created_at`, `updated_at` |
-| `meeting_words` | índice de texto completo sobre `normalized_text`, `scope` |
-| `meeting_stems` | índice de texto completo sobre `stems`, `scope` |
-| `meeting_index_pending` | `id`, `indexable_type` |
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `chat_id` | integer, not null → `chats.id` | el `chat` al que pertenece |
+| `anchor` | text, not null | Qué tramo o trabajo del chat se está descargando, como una etiqueta, p. ej. `gaps`, para que dos procesos nunca descarguen las mismas páginas. |
+| `holder` | text, not null | Id aleatorio (un UUID) del proceso que tiene la reserva ahora. |
+| `expires_at` | integer, not null | Cuándo vence la reserva (milisegundos de época); después, otro titular puede tomar el tramo. |
 
-**Tareas**
+#### `bot_updates`
 
-| Tabla | Columnas |
-| --- | --- |
-| `reminders` | `id`, `task_id`, `account_id`, `due_at`, `timezone`, `state`, `revision`, `lease_until`, `receipt`, `created_at`, `updated_at` |
-| `projects` | `id`, `key`, `name`, `description`, `type`, `organization_id`, `account_id`, `scope`, `owner_type`, `owner_id`, `tasks_count`, `status`, `created_at`, `updated_at`, `deleted_at` |
-| `tasks` | `id`, `project_id`, `number`, `key`, `title`, `description`, `type`, `status`, `priority`, `parent_id`, `due_at`, `started_at`, `closed_at`, `closed_by_type`, `closed_by_id`, `close_reason`, `author_type`, `author_id`, `source`, `package_id`, `source_locator`, `source_kind`, `source_group`, `resolution`, `verdict`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
-| `task_assignments` | `id`, `task_id`, `assignee_type`, `assignee_id`, `role`, `created_at`, `updated_at` |
-| `task_events` | `id`, `task_id`, `actor_type`, `actor_id`, `kind`, `changes`, `created_at` |
-| `decisions` | `id`, `project_id`, `statement`, `status`, `decided_at`, `supersedes_id`, `confirmed_by_type`, `confirmed_by_id`, `source`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
+Cada actualización que una cuenta de bot recibió por la Bot API, guardada tal como llegó, para poder inspeccionarla y reproducirla.
 
-**Agentes y acciones**
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `account_id` | integer, not null → `accounts.id` | la cuenta del bot |
+| `external_id` | text, not null | el id de la actualización |
+| `kind` | text, not null | mensaje, callback, cambio de miembro, … |
+| `payload` | text, not null | JSON, exactamente como se recibió |
+| `received_at` | integer, not null | cuándo llegó la actualización |
+| `handled_at` | integer | null hasta que se procesa |
+| `error` | text | por qué falló el procesamiento |
+| `replayed_at` | integer | cuándo se reprodujo por última vez |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
 
-| Tabla | Columnas |
-| --- | --- |
-| `proposed_actions` | `id`, `kind`, `account_id`, `target_type`, `target_id`, `payload`, `reason`, `status`, `proposed_by_type`, `proposed_by_id`, `decided_by_type`, `decided_by_id`, `decided_at`, `executed_at`, `result`, `error`, `verdict`, `created_at`, `updated_at` |
-| `agent_actions` | `id`, `actor_type`, `actor_id`, `tool`, `tier`, `target_type`, `target_id`, `status`, `error`, `started_at`, `finished_at`, `created_at` |
+#### `syncs`
 
-**Etiquetas, vínculos y búsquedas guardadas**
+Una ejecución de la sincronización de una integración: qué hizo y cómo terminó.
 
-| Tabla | Columnas |
-| --- | --- |
-| `tags` | `id`, `name`, `kind`, `created_at`, `updated_at` |
-| `auto_tag_claims` | `chat_id`, `tag_id`, `algorithm`, `score`, `fields`, `created_at`, `updated_at` |
-| `links` | `id`, `from_type`, `from_id`, `to_type`, `to_id`, `kind`, `anchor`, `source`, `target_text`, `target_folded`, `role`, `evidence`, `metadata`, `confirmed`, `created_at`, `author`, `updated_at` |
-| `searches` | `id`, `name`, `command`, `params`, `language`, `version`, `fields_version`, `created_at`, `last_run_at`, `runs`, `updated_at` |
-| `taggings` | `id`, `tag_id`, `taggable_type`, `taggable_id`, `main`, `source`, `author_type`, `author_id`, `created_at`, `updated_at` |
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `account_id` | integer, not null → `accounts.id` | la cuenta de integración por la que llegó |
+| `kind` | text, not null | full, incremental, import |
+| `started_at` | integer, not null | cuándo empezó la ejecución |
+| `finished_at` | integer | cuándo terminó; null mientras se ejecuta |
+| `status` | text, not null | running, succeeded, failed |
+| `counts` | text | JSON: creados, actualizados, borrados, omitidos |
+| `error` | text | qué detuvo una ejecución fallida, según lo informó el importador |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
 
-**Fragmentos, vectores y estado de búsqueda**
+### Personas, organizaciones y bots
 
-| Tabla | Columnas |
-| --- | --- |
-| `conversations` | `id`, `chat_id`, `first_message_id`, `build`, `first_at`, `last_at`, `message_count`, `built_at`, `algorithm_version`, `created_at`, `updated_at` |
-| `conversation_messages` | `conversation_id`, `message_id` |
-| `conversation_state` | `chat_id`, `enabled_at`, `built_at`, `algorithm_version`, `current_build` |
-| `embeddings` | `model`, `content_hash`, `dims`, `vector`, `created_at`, `updated_at` |
-| `search_index_state` | `name`, `watermark`, `filled_through`, `terms_through`, `normalizer_version`, `built_at`, `analyzer` |
-| `search_terms` | `term`, `length` |
-| `search_term_trigrams` | `trigram`, `length`, `term` |
-| `involvements` | `id`, `person_id`, `identity_id`, `subject_type`, `subject_id`, `role`, `occurred_at`, `scope`, `account_id`, `project_id`, `created_at` |
-| `involvement_pending` | `id`, `indexable_type` |
-| `chunks` | `id`, `chunkable_type`, `chunkable_id`, `position`, `start_offset`, `end_offset`, `content_hash`, `scope`, `account_id`, `project_id`, `occurred_at`, `created_at`, `updated_at` |
-| `chunk_messages` | `chunk_id`, `first_message_id`, `last_message_id`, `text_start`, `text_end` |
+Humanos, las identidades que tienen en cada fuente, las organizaciones a las que pertenecen y los agentes que trabajan aquí.
 
-**El archivo**
+#### `persons`
 
-| Tabla | Columnas |
-| --- | --- |
-| `schema_migrations` | `version`, `min_compatible`, `applied_at` |
-| `store_settings` | `key`, `value`, `at` |
+Un ser humano. Cada persona tiene identidades en las fuentes; una persona es el dueño del almacén.
 
-La [referencia del esquema](https://github.com/WireCatLabs/cli-messaging/blob/v0.218.0/docs/storage/schema.md)
-lista cada columna, restricción e índice.
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `name` | text | Nombre visible de la persona (tomado del nombre de su primera identidad); NULL si no se conoce ninguno. |
+| `owner` | integer, not null | 1 para la persona dueña del almacén; un almacén nuevo crea esa fila, así que siempre existe. |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
 
-</details>
+#### `identities`
+
+Cómo conoce una fuente a una persona: un usuario de mensajería, una dirección de correo, un participante de una reunión.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `provider` | text, not null | Mensajería donde vive la identidad (`telegram`, `max` o cualquier texto, p. ej. `email`); una identidad por proveedor, no por cuenta. |
+| `external_id` | text, not null | el id propio que le da la fuente |
+| `username` | text | El alias público de la persona en esa mensajería, sin `@`; NULL si no tiene. |
+| `name` | text | El nombre visible actual de la persona, según lo informó la mensajería por última vez. |
+| `bot` | integer | 1 si la mensajería dice que esta identidad es un bot, 0 si dice que no, NULL si no se sabe. |
+| `phone_hmac` | text | Hash con clave (HMAC) del número de teléfono de la persona, para reconocer a la misma persona en distintas mensajerías; el número en sí nunca llega a un log, un fixture ni un documento. Ninguna herramienta lo rellena todavía. |
+| `metadata` | text | JSON: lo que envía la fuente que no tiene columna propia y no se busca |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+| `description` | text | Lo que escribieron sobre sí mismos. |
+
+#### `identity_links`
+
+A qué persona pertenece una identidad, cómo se decidió y con qué certeza.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `identity_id` | integer, PK → `identities.id` | la identidad que se vincula; un vínculo por identidad |
+| `person_id` | integer, not null → `persons.id` | la `person` a la que pertenece |
+| `method` | text, not null | Cómo se asignó la identidad a su persona: `initial` al verla por primera vez, o una etiqueta de quien llama, p. ej. `manual` o `same-email`. |
+| `confidence` | real, not null | Qué tan seguro es el vínculo, de 0 a 1; 1 para cada vínculo que escribe el almacén. |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `author` | text, not null | Quién decidió el vínculo: `ingest` para el primer vínculo automático; si no, `owner` o el nombre de un programa. |
+| `source` | text | qué integración o importador lo propuso |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `identity_link_events`
+
+Cada traslado de una identidad de una persona a otra, para poder deshacer un vínculo erróneo.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `identity_id` | integer, not null → `identities.id` | la `identity` a la que pertenece |
+| `from_person_id` | integer → `persons.id` | la `person` a la que pertenece |
+| `to_person_id` | integer, not null → `persons.id` | la `person` a la que pertenece |
+| `method` | text, not null | Cómo se decidió este traslado de una identidad entre personas (`initial`, `manual`, `same-email`…), guardado para poder deshacer un vínculo erróneo. |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `author` | text, not null | Quién hizo este traslado: `ingest`, `owner` o el nombre de un programa. |
+
+#### `identity_revisions`
+
+Cada perfil con que se vio a una persona, una fila cuando difiere del anterior; `identities` guarda el más reciente.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `identity_id` | integer, not null → `identities.id` | la `identity` a la que pertenece |
+| `name` | text | El nombre visible que tenía la persona en esta instantánea de su perfil (solo se añade una fila cuando el perfil cambia). |
+| `username` | text | El alias (sin `@`) que tenía la persona en esta instantánea. |
+| `description` | text | La biografía o texto «sobre mí» que la persona escribió, en esta instantánea. |
+| `marks` | text | JSON: las marcas de la mensajería — bot, estafa, falso, borrado, tiene foto — donde las dio. |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+
+#### `account_identities`
+
+Qué identidades ve cada cuenta, y cuándo habló por última vez con cada una en privado.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `account_id` | integer, not null → `accounts.id` | la cuenta de integración por la que llegó |
+| `identity_id` | integer, not null → `identities.id` | la `identity` a la que pertenece |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `last_messaged_at` | integer | El mensaje más reciente de su chat privado, según lo calculó `refreshRecency` por última vez: el orden de los contactos. |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `aliases`
+
+Otros nombres para cualquier cosa: el apodo de una persona, el nombre de un contacto en una mensajería, el nombre corto de un proyecto. La búsqueda y la coincidencia de nombres los leen.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `aliasable_type` | text, not null | lo que nombra el alias: `identity`, `person`, `organization`, `chat`, `project`, `bot`, … |
+| `aliasable_id` | integer, not null | la fila en la tabla `aliasable_type` |
+| `account_id` | integer → `accounts.id` | se rellena cuando el alias vale solo visto desde una cuenta, como el nombre de un contacto en una mensajería; null cuando vale en todas partes |
+| `name` | text, not null | el alias tal como se escribe: un apodo, un nombre corto, un nombre anterior |
+| `name_folded` | text, not null | `name` normalizado para comparar: en minúsculas, sin acentos |
+| `display` | integer, not null | 1 para el alias que se muestra en lugar del nombre real; como mucho uno por cosa y cuenta |
+| `source` | text, not null | dueño, agente, una importación |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `identities_fts`
+
+Índice de texto completo sobre `name`, `username`.
+
+#### `organizations`
+
+Una empresa, equipo, familia o comunidad con la que trata el dueño. Los proyectos, las cuentas de trabajo y las identidades de las personas pertenecen a una.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `kind` | text, not null | empresa, equipo, familia, comunidad |
+| `name` | text, not null | el nombre de la organización |
+| `scope` | text, not null | `personal` o `work`; lo que una consulta de contexto puede leer para un fin dado, para que una pregunta de trabajo nunca traiga chats privados |
+| `metadata` | text | JSON: lo que envía la fuente que no tiene columna y no se busca |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+| `deleted_at` | integer | desaparecido en la fuente; la sincronización nunca borra de verdad |
+
+#### `bots`
+
+Un agente de IA o un script que trabaja aquí: se registra, es dueño de proyectos y tareas, recibe trabajo y escribe notas. Un bot de una mensajería (un bot de Telegram) es una identidad, no esto.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `name` | text, not null, unique | alias, p. ej. `zm-puller` |
+| `kind` | text, not null | agent, script, integration |
+| `description` | text | para qué sirve el bot, en una frase, escrita al registrarse |
+| `owner_person_id` | integer → `persons.id` | quién lo ejecuta |
+| `model` | text | el modelo sobre el que funciona, si es un agente |
+| `token_digest` | text | hash de su token de acceso, para cuando los bots se autentiquen |
+| `last_seen_at` | integer | la última vez que el bot hizo algo aquí |
+| `disabled_at` | integer | se rellena cuando el dueño apaga el bot; conserva lo que posee |
+| `metadata` | text | JSON: lo que envía la fuente que no tiene columna y no se busca |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+### Chats y mensajes
+
+Lo que traen las mensajerías.
+
+#### `chats`
+
+Un lugar para hablar en una cuenta: un diálogo, grupo, canal o mensajes guardados. Los chats pueden anidarse.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `account_id` | integer, not null → `accounts.id` | la cuenta de integración por la que llegó |
+| `external_id` | text, not null | el id propio que le da la fuente |
+| `kind` | text, not null | Tipo de chat: `dialog` (privado), `group`, `channel`, `saved` (notas para uno mismo) o `unknown`. |
+| `title` | text | El nombre del chat tal como lo muestra la mensajería; NULL si no tiene. |
+| `unread_count` | integer | Mensajes no leídos que informó la mensajería; NULL significa que la mensajería no lo dijo, lo que no es cero. |
+| `last_message_at` | integer | Hora del mensaje más reciente del chat (milisegundos de época); NULL si nunca tuvo uno. |
+| `participants_count` | integer | Número de miembros que informó la mensajería; NULL si no se dio. |
+| `metadata` | text | JSON: lo que envía la fuente que no tiene columna propia y no se busca |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+| `username` | text | El alias público del chat (sin `@`) cuando tiene uno, p. ej. un canal público. |
+| `membership_state` | text | `NULL` es desconocido. De él no se deduce si se puede buscar: un chat abandonado conserva sus mensajes. |
+| `searchable` | integer, not null | 1 si los mensajes del chat aparecen en búsquedas que no lo nombran, 0 si solo los ve una búsqueda que nombra el chat. |
+| `message_count` | integer, not null | Lo mantienen los triggers, para que una consulta pueda elegir cómo llega un filtro al índice. |
+| `members_tracked_at` | integer | Cuándo pidió el dueño a `serve` que descargue su lista de miembros a diario; `NULL` si no se sigue. |
+| `description` | text | la descripción del chat, tal como la da la mensajería |
+| `details_fetched_at` | integer | cuándo se leyeron por última vez el título, el alias y la descripción |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `parent_chat_id` | integer → `chats.id` | el chat dentro del que está este: un tema de foro en su grupo, el grupo de discusión de un canal, un canal en un espacio de trabajo |
+| `scope` | text | sustituye el ámbito de la cuenta para este chat; null toma el de la cuenta |
+
+#### `chat_members`
+
+Quién está en un chat, según lo vio la cuenta por última vez: una lista reemplaza entera la membresía del chat.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `chat_id` | integer, not null → `chats.id` | el `chat` al que pertenece |
+| `identity_id` | integer, not null → `identities.id` | la `identity` a la que pertenece |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+
+#### `member_stays`
+
+Una estancia de una persona en un grupo, a partir de listas de miembros leídas enteras o en parte. Una vuelta tras irse es una fila nueva. `gone_at` solo se rellena con una lista leída entera: una lista cortada no dice nada de quién falta.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `chat_id` | integer, not null → `chats.id` | el `chat` al que pertenece |
+| `identity_id` | integer, not null → `identities.id` | la `identity` a la que pertenece |
+| `first_seen_at` | integer, not null | Cuándo una lectura de la lista de miembros mostró por primera vez a la persona en el grupo en esta estancia (milisegundos de época). |
+| `last_seen_at` | integer, not null | Cuándo una lectura de la lista de miembros mostró por última vez a la persona en el grupo (milisegundos de época). |
+| `joined_at` | integer | Cuándo dice la mensajería que se unió; `NULL` donde no lo dice. |
+| `invited_by_identity_id` | integer → `identities.id` | la `identity` a la que pertenece |
+| `role` | text | El rol de la persona en el grupo en la última lectura: `owner`, `admin` o `member`; NULL si no se dio. |
+| `left_at` | integer | Cuándo una lista completa de miembros dejó de incluir a la persona por primera vez, cerrando esta estancia (milisegundos de época); NULL mientras sigue en ella. |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `member_counts`
+
+El tamaño de un grupo una vez al día: el recuento propio de la mensajería y cuántos miembros listó una lectura.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `chat_id` | integer, not null → `chats.id` | el `chat` al que pertenece |
+| `date` | text, not null | `YYYY-MM-DD`, UTC; SQLite no tiene tipo fecha |
+| `reported_count` | integer | el recuento que informa la mensajería |
+| `listed_count` | integer, not null | cuántos miembros devolvió de verdad una lectura |
+| `complete_list` | integer, not null | si esa lectura devolvió la lista entera |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+
+#### `messages`
+
+Un mensaje en un chat, con su texto, remitente, respuesta e hilo.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `chat_id` | integer, not null → `chats.id` | el `chat` al que pertenece |
+| `account_id` | integer, not null → `accounts.id` | la cuenta de integración por la que llegó |
+| `external_id` | text, not null | el id propio que le da la fuente |
+| `thread_external_id` | text | El id que da la mensajería al tema o hilo del chat al que pertenece el mensaje, donde la mensajería tiene hilos. |
+| `sender_identity_id` | integer → `identities.id` | la `identity` a la que pertenece |
+| `sender_chat_external_id` | text | El id que da la mensajería al chat autor del mensaje (una publicación de canal o un mensaje enviado como el grupo); NULL para una persona. |
+| `sender_name` | text | El nombre visible del remitente tal como viene en este mensaje. |
+| `sent_at` | integer, not null | Cuándo se envió el mensaje (milisegundos de época). |
+| `edited_at` | integer | Cuándo registró la mensajería la última edición (milisegundos de época); NULL para un mensaje nunca cambiado. |
+| `deleted_at` | integer | cuándo desapareció en la fuente; la fila se queda, la sincronización nunca borra de verdad |
+| `text` | text, not null | El texto del mensaje exactamente como se recibió (cadena vacía si no tiene o se borró). |
+| `reply_to_external_id` | text | El id que da la mensajería al mensaje al que este responde, aunque no se haya enviado una copia de él. |
+| `reply_to` | text | Copia JSON del mensaje respondido tal como la envió la mensajería (id, remitente, hora, texto, adjuntos); NULL si no se envió. |
+| `forward` | text | Copia JSON del mensaje original que este reenvía (misma forma que reply_to); NULL si no es un reenvío. |
+| `outgoing` | integer | 1 si lo envió esta cuenta, 0 si lo envió otra persona, NULL si no se conoce la identidad propia de la cuenta. |
+| `reactions` | text | JSON de las reacciones: recuentos por reacción, la reacción propia de esta cuenta y el total; NULL si nunca se pidieron. |
+| `metadata` | text | JSON: lo que envía la fuente que no tiene columna propia y no se busca |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `source` | text, not null | Cómo llegó el mensaje al almacén, p. ej. `history`, `send`, `backfill`, `update`, `context`; solo para diagnóstico. |
+| `normalized_text` | text | el texto normalizado para buscar: en minúsculas, sin acentos; lo rellena el indexador |
+| `normalizer_version` | integer | Versión de las reglas de normalización de texto que produjeron el texto de búsqueda del mensaje (ahora 1); NULL hasta que se normaliza. |
+| `mentions` | text | JSON: las personas que el texto menciona por id, donde la mensajería lo indica; los `@handle` se leen del texto. |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+| `thread_root_id` | integer → `messages.id` | el mensaje del que cuelga un hilo: un hilo de Slack, los comentarios bajo una publicación de canal, las respuestas en un tema; null fuera de un hilo |
+
+#### `message_revisions`
+
+Textos anteriores de un mensaje, una fila por edición.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `message_id` | integer, not null → `messages.id` | el `message` al que pertenece |
+| `text` | text, not null | El texto del mensaje antes de que una edición lo reemplazara. |
+| `edited_at` | integer | La hora de edición (milisegundos de época) que tenía el mensaje mientras tuvo este texto anterior; NULL si no se había editado antes. |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+
+#### `message_links`
+
+Cada candidato a «el mensaje anterior al que este responde», y de dónde salió.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `chat_id` | integer, not null → `chats.id` | El chat del mensaje, guardado aquí para que una reconstrucción encuentre y descarte una construcción antigua sin leer `messages`. |
+| `message_id` | integer, not null → `messages.id` | el `message` al que pertenece |
+| `parent_id` | integer → `messages.id` | `NULL`: la fuente dice que este mensaje empieza una conversación. |
+| `source` | text, not null | Quién propuso este padre para el mensaje: `provider` (la respuesta propia de la mensajería), `rule` o `agent`. |
+| `kind` | text, not null | Por qué el mensaje se vincula a su padre: `reply`, `mention`, `same_sender` (reglas/proveedor) o `answer` (elección de un agente). |
+| `confidence` | real, not null | Qué tan segura está la fuente de que este es el padre correcto, de 0 a 1. |
+| `method` | text, not null | El nombre de la regla, o el modelo del agente. |
+| `version` | text | Para vínculos de proveedor y de regla, la versión de las reglas de vinculación que lo escribió (como texto); para vínculos de agente, la versión de la skill del agente, si se dio. |
+| `batch` | text | Qué lote de agente lo escribió. |
+| `build` | integer | La reconstrucción que escribió un vínculo de proveedor o de regla; `NULL` para el de un agente, que sobrevive a las reconstrucciones. |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `stale_at` | integer | Un extremo del vínculo cambió después de escribirse; nunca se elige hasta que se vuelva a pedir. |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `message_counter_observations`
+
+El valor más reciente del contador de vistas, reacciones o comentarios de un mensaje.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `message_id` | integer, not null → `messages.id` | el `message` al que pertenece |
+| `counter` | text, not null | Qué contador se observó: `views`, `reactions` o `comments`. |
+| `value` | real, not null | El valor del contador en la observación (un número no negativo). |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `source` | text, not null | Cómo se observó: `remote_fetch` (lo pidió el almacén) o `remote_update` (la mensajería envió un cambio). |
+
+#### `message_transcripts`
+
+Lo que dijo un mensaje de voz, con clave por chat e id de mensaje en lugar de una fila de mensaje: un mensaje puede escucharse antes de que el almacén lo tenga. Derivado: puede volver a escucharse.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `message_id` | integer → `messages.id` | se rellena cuando el mensaje se guarda |
+| `chat_id` | integer, not null → `chats.id` | el `chat` al que pertenece |
+| `message_external_id` | text, not null | El id que da la mensajería al mensaje de voz transcrito; con esta clave porque un mensaje puede escucharse antes de guardarse. |
+| `text` | text, not null | Lo que dijo el mensaje de voz, transcrito; nunca vacío. |
+| `source` | text, not null | El modelo o la mensajería que lo escuchó. |
+| `heard_at` | integer, not null | Cuándo se hizo la transcripción (milisegundos de época). |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `chats_fts`
+
+Índice de texto completo sobre `title`.
+
+#### `messages_fts`
+
+Índice de texto completo sobre `text`.
+
+#### `message_words`
+
+Índice de texto completo sobre `normalized_text`, `scope`.
+
+#### `message_stems`
+
+Índice de texto completo sobre `stems`, `scope`.
+
+#### `message_stems_pending`
+
+Mensajes cuyas raíces están desactualizadas. Los triggers la llenan, porque SQL no puede extraer raíces; JS la vacía.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+
+#### `member_observations`
+
+Una lectura de la lista de miembros de un chat: cuándo, si fue la lista entera, y cuántos informó y devolvió. La retención lee de aquí la presencia en un punto de control.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `chat_id` | integer, not null → `chats.id` | el `chat` al que pertenece |
+| `observed_at` | integer, not null | cuándo se leyó la lista de miembros |
+| `started_at` | integer | cuándo empezó la lectura, para una lista leída por páginas |
+| `complete` | integer, not null | 1 cuando la lectura devolvió la lista entera, así que un miembro que falta en ella se ha ido |
+| `reported_count` | integer | el recuento que informa la mensajería |
+| `listed_count` | integer, not null | cuántos miembros devolvió esta lectura |
+| `source` | text, not null | qué la leyó: una sincronización, un comando, una importación |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `member_observation_members`
+
+A quién vio una lectura de la lista de miembros.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `member_observation_id` | integer, not null → `member_observations.id` | la `member_observation` a la que pertenece |
+| `identity_id` | integer, not null → `identities.id` | la `identity` a la que pertenece |
+| `member_stay_id` | integer, not null → `member_stays.id` | la estancia en la que estaba el miembro cuando se le vio |
+
+### Correo
+
+El correo tiene tablas propias: hilos, asuntos, destinatarios, buzones.
+
+#### `email_threads`
+
+Una conversación por correo.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `account_id` | integer, not null → `accounts.id` | la cuenta de integración por la que llegó |
+| `external_id` | text, not null | id de hilo de Gmail, o derivado de References |
+| `subject` | text | el asunto del primer correo del hilo, sin Re: ni Fwd: |
+| `last_email_at` | integer | cuándo se envió el correo más reciente del hilo |
+| `emails_count` | integer, not null | cuántos correos del hilo están guardados |
+| `metadata` | text | JSON: lo que envía la fuente que no tiene columna y no se busca |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+| `deleted_at` | integer | desaparecido en la fuente; la sincronización nunca borra de verdad |
+
+#### `emails`
+
+Un correo.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `account_id` | integer, not null → `accounts.id` | la cuenta de integración por la que llegó |
+| `email_thread_id` | integer, not null → `email_threads.id` | el `email_thread` al que pertenece |
+| `external_id` | text, not null | la cabecera Message-ID |
+| `subject` | text | la cabecera Subject, decodificada |
+| `from_identity_id` | integer → `identities.id` | la `identity` a la que pertenece |
+| `from_address` | text | la dirección del remitente, en minúsculas |
+| `from_name` | text | el nombre visible del remitente, tal como está en From |
+| `sent_at` | integer | la cabecera Date |
+| `received_at` | integer | cuándo lo recibió el buzón del dueño |
+| `in_reply_to` | text | el Message-ID al que responde este correo |
+| `references` | text | JSON: la cabecera References |
+| `body_text` | text | el cuerpo en texto plano; derivado del HTML cuando el correo no tiene parte de texto |
+| `body_html` | text | el cuerpo HTML, tal como se recibió |
+| `snippet` | text | las primeras palabras del cuerpo, para listados |
+| `outgoing` | integer | 1 cuando lo envió el dueño |
+| `read` | integer | 1 cuando está marcado como leído en el buzón |
+| `flagged` | integer | 1 cuando está marcado o destacado |
+| `draft` | integer | 1 para un borrador aún no enviado |
+| `size` | integer | el tamaño del correo en bruto, en bytes |
+| `headers` | text | JSON: todas las cabeceras, tal como se recibieron |
+| `metadata` | text | JSON: lo que envía la fuente que no tiene columna y no se busca |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+| `deleted_at` | integer | desaparecido en la fuente; la sincronización nunca borra de verdad |
+
+#### `email_recipients`
+
+Una dirección de un correo.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `email_id` | integer, not null → `emails.id` | el `email` al que pertenece |
+| `identity_id` | integer → `identities.id` | la `identity` a la que pertenece |
+| `address` | text, not null | la dirección, en minúsculas |
+| `name` | text | el nombre visible escrito junto a ella |
+| `role` | text, not null | to, cc, bcc, reply_to |
+| `position` | integer, not null | orden dentro de su padre, desde 0 |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `mailboxes`
+
+Una carpeta IMAP o una etiqueta de Gmail. Las etiquetas propias del dueño son asignaciones de etiqueta.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `account_id` | integer, not null → `accounts.id` | la cuenta de integración por la que llegó |
+| `external_id` | text, not null | el id propio que le da la fuente |
+| `name` | text, not null | el nombre de la carpeta o etiqueta tal como lo muestra el proveedor |
+| `kind` | text | inbox, sent, archive, label, folder |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `email_mailboxes`
+
+En qué buzones está un correo; Gmail pone un correo en varios.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `email_id` | integer, not null → `emails.id` | el `email` al que pertenece |
+| `mailbox_id` | integer, not null → `mailboxes.id` | el `mailboxe` al que pertenece |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+
+#### `email_words`
+
+Índice de texto completo sobre `normalized_text`, `scope`.
+
+#### `email_stems`
+
+Índice de texto completo sobre `stems`, `scope`.
+
+#### `email_index_pending`
+
+Filas de correos que esperan ser indexadas: los triggers las encolan, JS normaliza, extrae las raíces y escribe el índice.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, not null | La fila que espera ser indexada. |
+| `indexable_type` | text, not null | a qué tabla pertenece la fila en espera |
+
+### Adjuntos
+
+Archivos de un mensaje, un correo o una reunión, con su texto extraído.
+
+#### `attachments`
+
+Un archivo de un mensaje, un correo o una reunión, con su texto extraído.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `attachable_type` | text, not null | `message`, `email` o `meeting` |
+| `attachable_id` | integer, not null | la fila en la tabla `attachable_type` |
+| `position` | integer, not null | orden dentro de su padre, desde 0 |
+| `kind` | text, not null | Tipo del adjunto en minúsculas, p. ej. `photo`, `video`, `file`, `voice`, `sticker`, `share`. |
+| `mime` | text | El tipo MIME del archivo, donde la mensajería lo da. |
+| `name` | text | El nombre del archivo, donde la mensajería lo da. |
+| `title` | text | Título de una página web compartida (para adjuntos `share`). |
+| `url` | text | Un enlace que abre los bytes o la página compartida, cuando la mensajería lo entrega. |
+| `size` | integer | Tamaño del archivo en bytes, donde la mensajería lo da. |
+| `width` | integer | Ancho en píxeles para imágenes y video. |
+| `height` | integer | Alto en píxeles para imágenes y video. |
+| `duration` | real | Duración en segundos para audio y video. |
+| `provider_ref` | text | JSON opaco que el adaptador de la mensajería necesita para descargar los bytes después; no significa nada fuera de ese adaptador. |
+| `local_path` | text | Dónde guardó `messages download` el archivo en este equipo; NULL si nunca se descargó. |
+| `text` | text | el texto extraído del archivo |
+| `normalized_text` | text | el texto normalizado para buscar: en minúsculas, sin acentos; lo rellena el indexador |
+| `extraction` | text | cómo se obtuvo el texto: `text`, `ocr`, `agent`, `failed` |
+| `extractor` | text | Qué produjo el texto del adjunto: `plain`, `docx:mammoth@1.13.0`, `pdf:unpdf@1.8.1`, un motor de OCR o la etiqueta propia de un agente. |
+| `extraction_error` | text | Código corto de por qué no salió texto (p. ej. `no_text`), nunca una línea del archivo; NULL si tuvo éxito. |
+| `content_sha256` | text | SHA-256 en hexadecimal de los bytes del archivo que se leyeron, para no volver a leer un archivo sin cambios. |
+| `extracted_at` | integer | Cuándo se escribió el texto del adjunto (o su error) (milisegundos de época). |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `attachment_words`
+
+Índice de texto completo sobre `normalized_text`.
+
+### Documentos, notas y memorias
+
+Los documentos son archivos y páginas independientes; las notas son lo que una persona escribió sobre algo; las memorias son lo que concluyó un agente.
+
+#### `documents`
+
+Un archivo o página independiente: un archivo en una carpeta de notas (md, pdf, docx, xlsx…), una página de Notion, un archivo de Drive, una página wiki de memo.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `account_id` | integer, not null → `accounts.id` | la carpeta, Notion, Drive |
+| `external_id` | text, not null | ruta en la carpeta, id de página, id de archivo |
+| `kind` | text, not null | file, page, wiki |
+| `title` | text | del front matter, el primer encabezado o el nombre del archivo, en ese orden |
+| `location` | text | dónde vive en su fuente: la ruta de la carpeta, la carpeta de Drive, la página padre de Notion |
+| `file_name` | text | con su extensión; null para una página que no es un archivo |
+| `extension` | text | en minúsculas, sin el punto: md, pdf, docx |
+| `url` | text | dónde lo abre la fuente |
+| `storage` | text | local, drive, notion, web: dónde están los bytes |
+| `local_path` | text | una copia en este equipo, cuando se guarda una; para una carpeta local, el propio archivo |
+| `mime` | text | el tipo de medio, p. ej. application/pdf |
+| `size` | integer | el tamaño del archivo, en bytes |
+| `content_hash` | text | hash de los bytes del archivo; un archivo sin cambios no se vuelve a leer |
+| `front_matter` | text | JSON, tal como está escrito en el archivo |
+| `body` | text | Markdown tal cual; texto extraído para PDF y Office; OCR para escaneos |
+| `normalized_text` | text | el texto normalizado para buscar: en minúsculas, sin acentos; lo rellena el indexador |
+| `extraction` | text | none, text, ocr, agent, failed |
+| `extraction_error` | text | por qué no se pudo extraer el texto |
+| `language` | text | idioma detectado del cuerpo, como código ISO 639-1 |
+| `revision` | integer, not null | contador de ediciones, sube con cada cambio; una edición nombra la revisión que leyó, para que dos escritores no se sobrescriban |
+| `export_path` | text | dónde lo exportó memo, para páginas wiki |
+| `external_created_at` | integer | cuándo dice la fuente que se creó |
+| `external_updated_at` | integer | cuándo dice la fuente que cambió por última vez |
+| `metadata` | text | JSON: lo que envía la fuente que no tiene columna y no se busca |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+| `deleted_at` | integer | desaparecido en la fuente; la sincronización nunca borra de verdad |
+
+#### `document_revisions`
+
+Cuerpos anteriores de un documento.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `document_id` | integer, not null → `documents.id` | el `document` al que pertenece |
+| `body` | text, not null | el cuerpo tal como era antes de esa revisión |
+| `revision` | integer, not null | contador de ediciones, sube con cada cambio; una edición nombra la revisión que leyó, para que dos escritores no se sobrescriban |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+
+#### `document_words`
+
+Índice de texto completo sobre `normalized_text`, `scope`.
+
+#### `document_stems`
+
+Índice de texto completo sobre `stems`, `scope`.
+
+#### `document_index_pending`
+
+Filas de documentos que esperan ser indexadas: los triggers las encolan, JS normaliza, extrae las raíces y escribe el índice.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, not null | La fila que espera ser indexada. |
+| `indexable_type` | text, not null | a qué tabla pertenece la fila en espera |
+
+#### `notes`
+
+Texto corto sobre algo: una persona, un chat, un evento, un documento, una tarea. Los comentarios en una tarea también son notas.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `notable_type` | text, not null | de qué trata la nota: `person`, `chat`, `event`, `document`, `task`, …; una nota sobre nada en concreto trata de la persona del dueño |
+| `notable_id` | integer, not null | la fila en la tabla `notable_type` |
+| `title` | text | encabezado opcional |
+| `body` | text, not null | la nota, en Markdown |
+| `author_type` | text | `person` o `bot` |
+| `author_id` | integer | la fila en la tabla `author_type` |
+| `revision` | integer, not null | contador de ediciones, sube con cada cambio; una edición nombra la revisión que leyó, para que dos escritores no se sobrescriban |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+| `deleted_at` | integer | desaparecido en la fuente; la sincronización nunca borra de verdad |
+
+#### `note_revisions`
+
+Cuerpos anteriores de una nota.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `note_id` | integer, not null → `notes.id` | la `note` a la que pertenece |
+| `body` | text, not null | el cuerpo tal como era antes de esa revisión |
+| `revision` | integer, not null | contador de ediciones, sube con cada cambio; una edición nombra la revisión que leyó, para que dos escritores no se sobrescriban |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+
+#### `note_words`
+
+Índice de texto completo sobre `normalized_text`, `scope`.
+
+#### `note_stems`
+
+Índice de texto completo sobre `stems`, `scope`.
+
+#### `note_index_pending`
+
+Filas de notas que esperan ser indexadas: los triggers las encolan, JS normaliza, extrae las raíces y escribe el índice.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, not null | La fila que espera ser indexada. |
+| `indexable_type` | text, not null | a qué tabla pertenece la fila en espera |
+
+#### `memories`
+
+Lo que concluyó un agente: un resumen, un resumen diario, un hecho, una preferencia. Derivada y falible, por eso lleva su evidencia (`links` de tipo `evidence`), su confianza y su estado; las notas son lo que escribió una persona.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `kind` | text, not null | summary, digest, fact, preference |
+| `body` | text, not null | el texto de la memoria |
+| `subject_type` | text | de qué trata: `person`, `chat`, `meeting`, `project`, …; null para un hecho general |
+| `subject_id` | integer | la fila en la tabla `subject_type` |
+| `author_type` | text, not null | `person` o `bot` |
+| `author_id` | integer, not null | la fila en la tabla `author_type` |
+| `model` | text | el modelo que la escribió |
+| `confidence` | real | 0–1, según lo valoró el autor |
+| `status` | text, not null | proposed, confirmed, stale, superseded |
+| `last_verified_at` | integer | cuándo se comprobó su evidencia por última vez |
+| `supersedes_id` | integer → `memories.id` | la memoria que esta reemplaza |
+| `scope` | text, not null | personal o de trabajo, según su evidencia |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `memory_words`
+
+Índice de texto completo sobre `normalized_text`, `scope`.
+
+#### `memory_stems`
+
+Índice de texto completo sobre `stems`, `scope`.
+
+#### `memory_index_pending`
+
+Filas de memorias que esperan ser indexadas: los triggers las encolan, JS normaliza, extrae las raíces y escribe el índice.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, not null | La fila que espera ser indexada. |
+| `indexable_type` | text, not null | a qué tabla pertenece la fila en espera |
+
+### Eventos y reuniones
+
+Los eventos del dueño, y el registro que cada app de reuniones tiene de ellos.
+
+#### `event_series`
+
+Un evento que se repite, por encima de la recurrencia de cualquier proveedor.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `title` | text | cómo se llama el evento que se repite, p. ej. la sincronización semanal |
+| `recurrence` | text | RRULE cuando se conoce |
+| `origin` | text, not null | auto o dueño |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `events`
+
+El registro propio del dueño de algo que ocurrió, igual que una persona es el registro del dueño de alguien. No tiene campos de proveedor: las fuentes apuntan a él.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `event_series_id` | integer → `event_series.id` | la `event_sery` a la que pertenece |
+| `title` | text | el título del dueño; se rellena con la primera reunión o entrada de calendario vinculada |
+| `description` | text | de qué trata el evento |
+| `location` | text | dónde ocurre: una dirección, una sala o en línea |
+| `starts_at` | integer | cuándo empieza |
+| `ends_at` | integer | cuándo termina |
+| `timezone` | text | zona IANA en la que se celebra el evento, p. ej. Europe/Madrid |
+| `origin` | text, not null | auto o dueño |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+| `deleted_at` | integer | desaparecido en la fuente; la sincronización nunca borra de verdad |
+
+#### `meeting_series`
+
+Una reunión recurrente o programada de un proveedor.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `account_id` | integer, not null → `accounts.id` | la cuenta de integración por la que llegó |
+| `external_id` | text, not null | id de reunión de Zoom |
+| `event_series_id` | integer → `event_series.id` | la `event_sery` a la que pertenece |
+| `title` | text | el tema de la reunión en el proveedor |
+| `description` | text | el orden del día, tal como lo guarda el proveedor |
+| `kind` | text | instant, scheduled, recurring |
+| `recurrence` | text | JSON, la regla del proveedor |
+| `host_identity_id` | integer → `identities.id` | la `identity` a la que pertenece |
+| `join_url` | text | el enlace para unirse; también lo que después se compara con una entrada de calendario |
+| `metadata` | text | JSON: lo que envía la fuente que no tiene columna y no se busca |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+| `deleted_at` | integer | desaparecido en la fuente; la sincronización nunca borra de verdad |
+
+#### `meetings`
+
+Una ocurrencia: pasó una vez, en un momento.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `account_id` | integer, not null → `accounts.id` | la cuenta de integración por la que llegó |
+| `meeting_series_id` | integer → `meeting_series.id` | la `meeting_sery` a la que pertenece |
+| `event_id` | integer → `events.id` | lo rellena la vinculación de eventos |
+| `external_id` | text, not null | UUID de ocurrencia de Zoom |
+| `title` | text | el tema de esta ocurrencia |
+| `description` | text | orden del día; también lo que lleva una entrada de calendario |
+| `location` | text | una sala física, cuando el proveedor la indica |
+| `join_url` | text | el enlace para unirse a esta ocurrencia |
+| `started_at` | integer | cuándo empezó la ocurrencia |
+| `ended_at` | integer | cuándo terminó |
+| `duration_ms` | integer | cuánto duró, en milisegundos |
+| `timezone` | text | zona IANA que da el proveedor para la reunión |
+| `host_identity_id` | integer → `identities.id` | la `identity` a la que pertenece |
+| `participants_count` | integer | cuántos participaron, según informa el proveedor |
+| `metadata` | text | JSON: lo que envía la fuente que no tiene columna y no se busca |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+| `deleted_at` | integer | desaparecido en la fuente; la sincronización nunca borra de verdad |
+
+#### `meeting_participants`
+
+Una persona en una reunión, tal como esa reunión la vio; el nombre y el correo se quedan con esta reunión.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `meeting_id` | integer, not null → `meetings.id` | la `meeting` a la que pertenece |
+| `identity_id` | integer, not null → `identities.id` | con clave por el id de usuario del proveedor; si no, el correo; si no, name@meeting |
+| `display_name` | text | el nombre mostrado en esta reunión; un cambio de nombre posterior no lo cambia |
+| `email` | text | la dirección que da el proveedor, cuando la da |
+| `role` | text | host, co-host, attendee, panelist, guest |
+| `joined_at` | integer | primera entrada |
+| `left_at` | integer | última salida |
+| `duration_ms` | integer | tiempo en la reunión, sumado sobre todas las entradas |
+| `sessions` | text | JSON: cada entrada y salida |
+| `external_id` | text | el id propio que le da la fuente |
+| `metadata` | text | JSON: lo que envía la fuente que no tiene columna y no se busca |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `meeting_transcripts`
+
+Una transcripción de una reunión: la de Zoom, la de un bot o una versión corregida, que sustituye a la anterior.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `meeting_id` | integer, not null → `meetings.id` | la `meeting` a la que pertenece |
+| `source` | text, not null | api, file, fireflies |
+| `format` | text | vtt |
+| `language` | text | el idioma de la transcripción, como código ISO 639-1 |
+| `content_hash` | text | el mismo archivo importado dos veces se omite |
+| `external_created_at` | integer | cuándo dice la fuente que se creó |
+| `superseded_at` | integer | se rellena cuando una transcripción más nueva de la misma reunión reemplaza a esta; esta se conserva |
+| `metadata` | text | JSON: lo que envía la fuente que no tiene columna y no se busca |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+| `deleted_at` | integer | desaparecido en la fuente; la sincronización nunca borra de verdad |
+
+#### `meeting_transcript_rows`
+
+Una fila de una transcripción (un cue de WebVTT): quién habló, cuándo y qué dijo.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `meeting_transcript_id` | integer, not null → `meeting_transcripts.id` | la `meeting_transcript` a la que pertenece |
+| `position` | integer, not null | orden dentro de su padre, desde 0 |
+| `start_ms` | integer, not null | cuándo empieza la fila, en milisegundos desde el inicio de la grabación |
+| `end_ms` | integer, not null | cuándo termina |
+| `speaker_participant_id` | integer → `meeting_participants.id` | el participante cuyo nombre da el cue, buscado dentro de la reunión; null cuando no coincide un único participante |
+| `speaker_name` | text | tal como está escrito en el cue |
+| `text` | text, not null | lo que se dijo, sin el prefijo del hablante |
+| `normalized_text` | text | el texto normalizado para buscar: en minúsculas, sin acentos; lo rellena el indexador |
+| `metadata` | text | JSON: lo que envía la fuente que no tiene columna y no se busca |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+
+#### `meeting_chat_messages`
+
+El chat dentro de la reunión.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `meeting_id` | integer, not null → `meetings.id` | la `meeting` a la que pertenece |
+| `external_id` | text | el id propio que le da la fuente |
+| `sent_at` | integer, not null | cuándo se envió |
+| `sender_participant_id` | integer → `meeting_participants.id` | el `meeting_participant` al que pertenece |
+| `sender_name` | text | el nombre del remitente tal como lo muestra el chat |
+| `recipient` | text | todos, o un nombre para un mensaje privado |
+| `text` | text, not null | el mensaje |
+| `normalized_text` | text | el texto normalizado para buscar: en minúsculas, sin acentos; lo rellena el indexador |
+| `metadata` | text | JSON: lo que envía la fuente que no tiene columna y no se busca |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `meeting_summaries`
+
+Un resumen de una reunión, de la IA del proveedor, un bot, el dueño o un LLM ejecutado aquí.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `meeting_id` | integer, not null → `meetings.id` | la `meeting` a la que pertenece |
+| `source` | text, not null | zoom-ai, fireflies, owner, llm |
+| `title` | text | el título propio del resumen |
+| `overview` | text | el párrafo corto del resumen |
+| `sections` | text | JSON: [\{label, text}] |
+| `next_steps` | text | JSON: [text] |
+| `content` | text | el texto completo del proveedor |
+| `doc_url` | text | un enlace al resumen en el proveedor, cuando lo tiene |
+| `external_created_at` | integer | cuándo dice la fuente que se creó |
+| `external_updated_at` | integer | cuándo dice la fuente que cambió por última vez |
+| `metadata` | text | JSON: lo que envía la fuente que no tiene columna y no se busca |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `meeting_words`
+
+Índice de texto completo sobre `normalized_text`, `scope`.
+
+#### `meeting_stems`
+
+Índice de texto completo sobre `stems`, `scope`.
+
+#### `meeting_index_pending`
+
+Filas de transcripciones, chat de reuniones y resúmenes que esperan ser indexadas: los triggers las encolan, JS normaliza, extrae las raíces y escribe el índice.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, not null | La fila que espera ser indexada. |
+| `indexable_type` | text, not null | a qué tabla pertenece la fila en espera |
+
+### Tareas
+
+Un sistema de tareas y tickets para personas y agentes: proyectos con claves, tareas con tipo y prioridad, asignados que son personas o bots, y las decisiones tomadas por el camino. Una promesa es una tarea de tipo `promise`; una pregunta es una tarea de tipo `question` cuya respuesta está vinculada.
+
+#### `reminders`
+
+Cuándo recordarle a alguien una tarea, y si el recordatorio se entregó.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `task_id` | integer, not null → `tasks.id` | la `task` a la que pertenece |
+| `account_id` | integer, not null → `accounts.id` | la cuenta de integración por la que llegó |
+| `due_at` | integer, not null | Cuándo debe saltar el recordatorio (milisegundos de época). |
+| `timezone` | text, not null | Zona horaria IANA en la que se programó el recordatorio, p. ej. `Europe/Madrid`. |
+| `state` | text, not null | Estado de entrega: `pending`, `leased` (reservado por un entregador), `delivered` o `cancelled`. |
+| `revision` | integer, not null | contador de ediciones, sube con cada cambio; una edición nombra la revisión que leyó, para que dos escritores no se sobrescriban |
+| `lease_until` | integer | Hasta cuándo tiene el recordatorio el entregador actual (milisegundos de época); después, otro puede reservarlo. NULL salvo si está reservado. |
+| `receipt` | text | Id que se da al entregador al reservar, y que debe devolver para confirmar la entrega; NULL si no está reservado. |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `projects`
+
+Un lugar para tareas, con la clave corta con la que empiezan sus ids (`MEET-12`).
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `key` | text, not null, unique | en mayúsculas, p. ej. MEET |
+| `name` | text, not null | el nombre del proyecto |
+| `description` | text | para qué sirve el proyecto |
+| `type` | text, not null | work, client, personal, oss, other; las etiquetas agrupan proyectos más allá de eso |
+| `organization_id` | integer → `organizations.id` | la `organization` a la que pertenece |
+| `account_id` | integer → `accounts.id` | la cuenta para la que un proyecto bandeja de entrada reúne tareas; null para un proyecto propio del dueño |
+| `scope` | text, not null | `personal` o `work`; lo que una consulta de contexto puede leer para un fin dado, para que una pregunta de trabajo nunca traiga chats privados |
+| `owner_type` | text | `person` o `bot` |
+| `owner_id` | integer | la fila en la tabla `owner_type` |
+| `tasks_count` | integer, not null | el último número asignado; la siguiente tarea toma +1 en la misma transacción |
+| `status` | text | active, archived |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+| `deleted_at` | integer | desaparecido en la fuente; la sincronización nunca borra de verdad |
+
+#### `tasks`
+
+Una tarea o ticket, para personas y agentes por igual. Todo lo que le concierne — personas, mensajes, correos, documentos, reuniones — es una fila de `links`; sus etiquetas son asignaciones de etiqueta; sus comentarios son notas.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `project_id` | integer, not null → `projects.id` | el `project` al que pertenece |
+| `number` | integer, not null | por proyecto |
+| `key` | text, not null, unique | `&lt;project key>-&lt;number>`, el id que usan personas y agentes |
+| `title` | text, not null | una línea que dice qué hay que hacer |
+| `description` | text | el detalle, en Markdown |
+| `type` | text, not null | bug, feature, chore, question, request, mention, promise: las cuatro últimas son las que el paquete de tareas encuentra en los mensajes |
+| `status` | text, not null | open, in_progress, blocked, done, dismissed |
+| `priority` | integer | 0 urgente … 4 baja |
+| `parent_id` | integer → `tasks.id` | el padre de una subtarea |
+| `due_at` | integer | cuándo debe estar hecha |
+| `started_at` | integer | cuándo la empezó alguien (estado in_progress) |
+| `closed_at` | integer | cuándo pasó a done o dismissed |
+| `closed_by_type` | text | `person` o `bot` |
+| `closed_by_id` | integer | la fila en la tabla `closed_by_type` |
+| `close_reason` | text | por qué se cerró, en pocas palabras, p. ej. no-reply-needed |
+| `author_type` | text, not null | `person` o `bot` |
+| `author_id` | integer, not null | la fila en la tabla `author_type` |
+| `source` | text, not null | dueño, agente, regla o una importación |
+| `package_id` | text, unique | el id propio del paquete de tareas para la tarea; null para una tarea creada aquí |
+| `source_locator` | text | de dónde salió la tarea: un localizador de mensaje, nunca su texto |
+| `source_kind` | text | el tipo de cosa que nombra `source_locator` |
+| `source_group` | text | el grupo en el que la archiva el paquete de tareas |
+| `resolution` | text | cómo terminó, en palabras; la respuesta de una pregunta. De dónde vino la respuesta es una fila de `links` de tipo `answered-by` |
+| `verdict` | text | useful o not_useful, según juzgó el dueño una tarea que planteó un agente; null hasta que se juzga |
+| `metadata` | text | JSON: lo que envía la fuente que no tiene columna y no se busca |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+| `deleted_at` | integer | desaparecido en la fuente; la sincronización nunca borra de verdad |
+
+#### `task_assignments`
+
+Quién trabaja en una tarea: una persona o un bot, en un rol.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `task_id` | integer, not null → `tasks.id` | la `task` a la que pertenece |
+| `assignee_type` | text, not null | `person` o `bot` |
+| `assignee_id` | integer, not null | la fila en la tabla `assignee_type` |
+| `role` | text, not null | assignee, reviewer, watcher |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `task_events`
+
+El historial de una tarea: creada, cambio de estado, asignada, fecha límite movida.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `task_id` | integer, not null → `tasks.id` | la `task` a la que pertenece |
+| `actor_type` | text | `person` o `bot` |
+| `actor_id` | integer | la fila en la tabla `actor_type` |
+| `kind` | text, not null | qué pasó: created, status, assigned, unassigned, due, priority, moved |
+| `changes` | text | JSON: \{field: [from, to]} |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+
+#### `decisions`
+
+Una elección que se tomó y vale hasta que se reemplace: por qué hacemos algo. Su evidencia — el mensaje, la fila de transcripción o el documento — son `links` de tipo `evidence`; una decisión que propuso un agente se vincula de vuelta a esa memoria con `created-from`.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `project_id` | integer → `projects.id` | el `project` al que pertenece |
+| `statement` | text, not null | la decisión en una frase |
+| `status` | text, not null | proposed, accepted, superseded, reversed |
+| `decided_at` | integer | cuándo se tomó, según muestra la evidencia |
+| `supersedes_id` | integer → `decisions.id` | la decisión que esta reemplaza |
+| `confirmed_by_type` | text | quién la aceptó; null mientras está propuesta |
+| `confirmed_by_id` | integer | quién la aceptó; null mientras está propuesta |
+| `source` | text, not null | dueño, agente, una importación |
+| `metadata` | text | JSON: lo que envía la fuente que no tiene columna y no se busca |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+| `deleted_at` | integer | desaparecido en la fuente; la sincronización nunca borra de verdad |
+
+### Agentes y acciones
+
+Lo que proponen los agentes y lo que hicieron: toda acción externa espera aprobación, toda llamada a una herramienta queda registrada.
+
+#### `proposed_actions`
+
+Algo que un agente quiere hacer fuera del almacén — responder, enviar, borrar, banear, silenciar, fijar, invitar, crear una tarea — en espera de que una persona lo apruebe. Nada externo ocurre sin aprobación.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `kind` | text, not null | reply, send, delete, ban, mute, pin, invite, create_task, … |
+| `account_id` | integer → `accounts.id` | la cuenta que actuaría |
+| `target_type` | text | sobre qué actúa: `message`, `chat`, `identity`, `task`, … |
+| `target_id` | integer | la fila en la tabla `target_type` |
+| `payload` | text | JSON: qué hacer, p. ej. el texto de la respuesta |
+| `reason` | text | por qué lo propone el agente |
+| `status` | text, not null | proposed, approved, rejected, executed, failed |
+| `proposed_by_type` | text, not null | `person` o `bot` |
+| `proposed_by_id` | integer, not null | la fila en la tabla `proposed_by_type` |
+| `decided_by_type` | text | `person` o `bot` |
+| `decided_by_id` | integer | la fila en la tabla `decided_by_type` |
+| `decided_at` | integer | cuándo se aprobó o rechazó |
+| `executed_at` | integer | cuándo se llevó a cabo |
+| `result` | text | JSON: lo que devolvió el proveedor |
+| `error` | text | por qué falló, si falló |
+| `verdict` | text | useful o not_useful, según juzgó el dueño la propuesta |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `agent_actions`
+
+Cada herramienta que un agente llamó a través de las CLI o de MCP: quién, qué herramienta, con qué nivel de acceso, sobre qué. El registro de auditoría de lo que hicieron los agentes.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `actor_type` | text, not null | `person` o `bot` |
+| `actor_id` | integer, not null | la fila en la tabla `actor_type` |
+| `tool` | text, not null | el comando o la herramienta MCP |
+| `tier` | text, not null | read, draft, write-private, write-public, destructive, admin |
+| `target_type` | text | el tipo de cosa a la que apunta `target_id`: un nombre de tabla en singular |
+| `target_id` | integer | la fila en la tabla `target_type` |
+| `status` | text, not null | ok, refused, failed |
+| `error` | text | por qué la llamada falló o se rechazó |
+| `started_at` | integer, not null | cuándo empezó la llamada |
+| `finished_at` | integer | cuándo terminó; null mientras se ejecuta |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+
+### Etiquetas, vínculos y búsquedas guardadas
+
+Etiquetas y temas, los vínculos entre dos cosas cualesquiera, y las búsquedas guardadas.
+
+#### `tags`
+
+El nombre de una etiqueta, guardado una vez. Qué cosas la llevan está en `taggings`.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `name` | text, not null, unique | único entre etiquetas y temas, para que un nombre nunca sea ambas cosas |
+| `kind` | text, not null | `tag`: una etiqueta libre; `topic`: de qué trata una cosa, de una lista corta que solo crea el dueño (los agentes proponen) |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `auto_tag_claims`
+
+Etiquetas que las reglas ponen a un chat al comparar su título, alias y descripción.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `chat_id` | integer, not null → `chats.id` | el `chat` al que pertenece |
+| `tag_id` | integer, not null → `tags.id` | la `tag` a la que pertenece |
+| `algorithm` | text, not null | Nombre y versión de las reglas que asignaron la etiqueta automática, ahora `keywords-v1`. |
+| `score` | real, not null | Proporción de los campos de metadatos del chat (título, alias, descripción) que coincidieron con las palabras clave de la etiqueta: 1/3, 2/3 o 1; no es una probabilidad. |
+| `fields` | text, not null | Lista JSON de qué campos de metadatos coincidieron, entre `title`, `username`, `description`. |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `links`
+
+Cada conexión entre dos cosas que no guarda ninguna columna. Tipos: `links-to` (un documento o nota enlaza a algo, tal como está escrito en él), `about` (una nota o documento trata de una persona, proyecto, …), `member-of` (un chat o persona pertenece a un proyecto u organización), `labelled` (una cuenta de carpeta → una etiqueta, la ruta de la subcarpeta en `anchor`, para que todo documento debajo lleve la etiqueta), `answered-by` (una tarea pregunta → el mensaje que la respondió), `evidence` (una decisión o memoria → su fuente), `created-from` (una cosa → aquello de lo que se hizo). Tipos que el almacén aún no escribe: `duplicate-of` (la misma pregunta hecha otra vez), `related-to`, `assigned-to`.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `from_type` | text, not null | el tipo de cosa a la que apunta `from_id`: un nombre de tabla en singular |
+| `from_id` | integer, not null | la fila en la tabla `from_type` |
+| `to_type` | text | el tipo de cosa a la que apunta `to_id`: un nombre de tabla en singular |
+| `to_id` | integer | null mientras el vínculo aún no nombra a nadie |
+| `kind` | text, not null | la conexión; los tipos se listan en la descripción de la tabla |
+| `anchor` | text | El encabezado o fragmento de bloque al que apunta el vínculo dentro de su destino, como `#Heading` o `#^block`; NULL para el destino entero. |
+| `source` | text, not null | De dónde salió el vínculo: `file` (escrito en un archivo de nota), `owner` (añadido por el dueño) o `suggested` (propuesto, aún sin confirmar). |
+| `target_text` | text | El destino tal como está escrito (p. ej. un nombre en una nota), guardado mientras el vínculo no apunta a nadie; hasta 500 caracteres. |
+| `target_folded` | text | target_text normalizado en mayúsculas y acentos, sin un `@` inicial, comparado con nombres y alias de personas nuevas para resolver el vínculo. |
+| `role` | text | El rol que declara la relación, p. ej. un cargo en un vínculo `member-of`; texto libre de hasta 200 caracteres. |
+| `evidence` | text | Texto libre que dice por qué vale la relación (hasta 2000 caracteres). |
+| `metadata` | text | JSON: lo que envía la fuente que no tiene columna propia y no se busca |
+| `confirmed` | integer, not null | 1 si el dueño respalda el vínculo, 0 si es solo una propuesta débil, sin confirmar. |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `author` | text | `owner`, `agent`, `rule` |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `searches`
+
+Cada ejecución de `search messages` y `stats messages show`, con los parámetros tal como los dio quien llama, nunca un mensaje ni un resultado. Una fila con nombre es una búsqueda guardada; una ejecución idéntica sin nombre cuenta en su fila.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `name` | text, unique | El nombre único de la búsqueda guardada; NULL para una ejecución sin nombre que solo se guarda como historial. |
+| `command` | text, not null | `search` o `stats`. |
+| `params` | text, not null | JSON, con las claves ordenadas, para que la misma ejecución sea el mismo texto. |
+| `language` | text, not null | `lucene-v1` o `legacy`. |
+| `version` | integer, not null | Versión del lenguaje de consultas de búsqueda usado (ahora 1). |
+| `fields_version` | integer, not null | Versión de la lista de nombres de campos buscables para la que se escribió la consulta (ahora 2). |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `last_run_at` | integer | Cuándo se ejecutó la búsqueda por última vez (milisegundos de época); NULL para una búsqueda guardada que nunca se ejecutó. |
+| `runs` | integer, not null | Cuántas veces se ha ejecutado esta búsqueda. |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `taggings`
+
+Una etiqueta en una cosa.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `tag_id` | integer, not null → `tags.id` | la `tag` a la que pertenece |
+| `taggable_type` | text, not null | `chat`, `identity`, `message`, `email`, `document`, `note`, `person`, `organization`, `project`, `task`, `event`, … |
+| `taggable_id` | integer, not null | la fila en la tabla `taggable_type` |
+| `main` | integer, not null | 1 en el tema principal de la cosa; como mucho uno por cosa |
+| `source` | text, not null | de dónde salió: dueño, agente, auto, una importación |
+| `author_type` | text | `person` o `bot` |
+| `author_id` | integer | la fila en la tabla `author_type` |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+### Fragmentos, vectores y estado de búsqueda
+
+Derivado: se puede reconstruir a partir de las tablas de arriba. Cada texto largo se corta en `chunks`; el texto de cada fragmento tiene una fila en `embeddings`.
+
+#### `conversations`
+
+Un grupo de mensajes de un chat que pertenecen a la misma discusión, de una construcción.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `chat_id` | integer, not null → `chats.id` | el `chat` al que pertenece |
+| `first_message_id` | integer, not null → `messages.id` | el `message` al que pertenece |
+| `build` | integer, not null | Se escribe por lotes con un número nuevo y luego pasa a ser el actual de una vez: los lectores nunca ven media construcción. |
+| `first_at` | integer, not null | Hora de envío del primer mensaje de la conversación (milisegundos de época). |
+| `last_at` | integer, not null | Hora de envío del último mensaje de la conversación (milisegundos de época). |
+| `message_count` | integer, not null | Cuántos mensajes tiene la conversación. |
+| `built_at` | integer, not null | Cuándo se ejecutó la construcción que produjo esta conversación (milisegundos de época). |
+| `algorithm_version` | integer, not null | Versión de las reglas de vinculación que agruparon los mensajes (ahora 5). |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `conversation_messages`
+
+Qué mensajes tiene cada conversación.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `conversation_id` | integer, not null → `conversations.id` | la `conversation` a la que pertenece |
+| `message_id` | integer, not null → `messages.id` | el `message` al que pertenece |
+
+#### `conversation_state`
+
+Qué chats activó el usuario, y qué tan recientes son sus conversaciones.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `chat_id` | integer, PK → `chats.id` | el chat; una fila por chat con la agrupación activada |
+| `enabled_at` | integer, not null | Cuándo activó el dueño la agrupación en conversaciones para este chat (milisegundos de época). |
+| `built_at` | integer | Cuándo se construyeron las conversaciones actuales de este chat (milisegundos de época); NULL antes de la primera construcción. |
+| `algorithm_version` | integer | Versión de las reglas de vinculación de la construcción actual; NULL antes de la primera construcción. |
+| `current_build` | integer | La construcción que ven los lectores; una más alta se está escribiendo o falló. |
+
+#### `embeddings`
+
+Un vector por modelo y texto: cualquier fragmento cuyo `content_hash` coincida lo usa.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `model` | text, not null | `&lt;provider>:&lt;model>:&lt;dims>`: los vectores de modelos distintos nunca se mezclan. |
+| `content_hash` | text, not null | SHA-256 en hexadecimal del texto del fragmento que recibió el modelo de vectores; el texto en sí nunca se guarda. |
+| `dims` | integer, not null | Número de dimensiones del vector (su longitud en float32). |
+| `vector` | blob, not null | Float32, little-endian, de longitud uno. |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `search_index_state`
+
+Hasta dónde está construido un índice de búsqueda derivado, una fila por índice. `watermark` es el `pk` de mensaje más alto cuando se creó el índice: las filas por encima las indexan los triggers, las filas hasta él los lotes que han llegado a `filled_through`.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `name` | text, PK | qué índice describe la fila, p. ej. `message_words` |
+| `watermark` | integer, not null | El `pk` de mensaje más alto cuando se creó el índice; las filas por encima las indexan los triggers, las filas hasta él el llenado por lotes. |
+| `filled_through` | integer, not null | El `pk` de mensaje más alto que ha indexado hasta ahora el llenado por lotes; el índice está completo cuando llega a la marca. |
+| `terms_through` | integer, not null | El `pk` de mensaje más alto cuyas palabras están en el vocabulario de corrección de erratas; 0 significa que el vocabulario no está construido. |
+| `normalizer_version` | integer, not null | Versión de las reglas de normalización de texto con que se construyó el índice. |
+| `built_at` | integer | Cuándo terminó de llenarse el índice (milisegundos de época); NULL mientras aún se llena. |
+| `analyzer` | text | Las opciones del extractor de raíces y la versión de Snowball que construyeron la fila de raíces (`analyzerIdentity`); NULL hasta que un llenado la reclama. |
+
+#### `search_terms`
+
+Cada palabra del índice de búsqueda de mensajes, para corregir erratas.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `term` | text, PK | la palabra tal como se indexó |
+| `length` | integer, not null | Número de caracteres de la palabra, usado para encontrar candidatas a errata de longitud parecida. |
+
+#### `search_term_trigrams`
+
+Fragmentos de tres letras de cada palabra de búsqueda, para encontrar palabras que se parecen a una mal escrita.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `trigram` | text, not null | Un fragmento de tres caracteres de una palabra conocida, usado para encontrar palabras que se parecen a una mal escrita. |
+| `length` | integer, not null | Longitud en caracteres de la palabra de la que sale el trigrama. |
+| `term` | text, not null | La palabra de búsqueda conocida a la que pertenece el trigrama (los números no tienen trigramas). |
+
+#### `involvements`
+
+Quién participó en qué, y cuándo: una fila por persona o identidad por mensaje, correo, reunión, tarea o documento. Derivado de remitentes, destinatarios, participantes, asignados y vínculos, y se reconstruye cuando se quiera; convierte «todo sobre Alex» en un solo rango indexado.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `person_id` | integer → `persons.id` | null mientras la identidad no está vinculada a nadie |
+| `identity_id` | integer → `identities.id` | la `identity` a la que pertenece |
+| `subject_type` | text, not null | `message`, `email`, `meeting`, `task`, `document`, `note`, … |
+| `subject_id` | integer, not null | la fila en la tabla `subject_type` |
+| `role` | text, not null | sender, recipient, participant, assignee, author, mentioned, linked |
+| `occurred_at` | integer, not null | cuándo ocurrió el sujeto |
+| `scope` | text, not null | `personal` o `work`, según la cuenta, el chat o el proyecto del sujeto |
+| `account_id` | integer → `accounts.id` | la cuenta de integración por la que llegó |
+| `project_id` | integer → `projects.id` | el `project` al que pertenece |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+
+#### `involvement_pending`
+
+Cosas cuyas filas de `involvements` están desactualizadas: un mensaje, chat, reunión, correo, tarea o cualquier cosa de la que parte un vínculo. Los triggers las encolan; el vaciado recalcula las filas de esa cosa.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, not null | La fila que espera ser indexada. |
+| `indexable_type` | text, not null | a qué tabla pertenece la fila en espera |
+
+#### `chunks`
+
+Fragmentos de un texto más largo, la unidad que recibe un vector: tramos de un documento, un correo, el texto de un adjunto, una nota, una transcripción o un resumen de reunión; una tarea o evento corto es un solo fragmento. Una conversación de mensajes también se corta en fragmentos aquí, una fila `conversation` por fragmento, y `chunk_messages` dice qué mensajes abarca cada fragmento; así una sola búsqueda puede leer todo tipo de texto, filtrado por ámbito, cuenta, proyecto y tiempo.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `chunkable_type` | text, not null | `document`, `email`, `attachment`, `note`, `memory`, `conversation`, `meeting_transcript`, `meeting_summary`, `event`, `task` |
+| `chunkable_id` | integer, not null | la fila en la tabla `chunkable_type` |
+| `position` | integer, not null | orden dentro de su padre, desde 0 |
+| `start_offset` | integer, not null | dónde empieza el fragmento en el texto del padre, en caracteres |
+| `end_offset` | integer, not null | dónde termina, sin incluirlo |
+| `content_hash` | text, not null | hash del texto del fragmento; su vector es la fila de `embeddings` con este hash, así que un texto igual se vectoriza una vez |
+| `scope` | text | copiado de la cuenta, el chat o el proyecto del padre, para que una búsqueda vectorial filtre antes de comparar; los triggers siguen los cambios de un chat o una cuenta |
+| `account_id` | integer → `accounts.id` | copiado del padre, un filtro para la búsqueda vectorial |
+| `project_id` | integer → `projects.id` | copiado del padre cuando pertenece a uno |
+| `occurred_at` | integer | cuándo ocurrió el padre (enviado, celebrado, escrito), un filtro para la búsqueda vectorial |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `chunk_messages`
+
+De qué mensajes se corta el fragmento de una conversación. Una fila por cada fila `conversation` de `chunks`; borrar cualquiera de los mensajes borra el fragmento.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `chunk_id` | integer, PK → `chunks.id` | el fragmento, de tipo `conversation` |
+| `first_message_id` | integer, not null → `messages.id` | el `message` al que pertenece |
+| `last_message_id` | integer, not null → `messages.id` | el `message` al que pertenece |
+| `text_start` | integer | dónde empieza el fragmento dentro del texto del primer mensaje, cuando empieza a mitad de mensaje |
+| `text_end` | integer | dónde termina dentro del texto del último mensaje |
+
+### Almacén
+
+Contabilidad interna del propio archivo.
+
+#### `schema_migrations`
+
+Qué migraciones ha aplicado este archivo.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `version` | integer, PK | el número de la migración |
+| `min_compatible` | integer, not null | La versión de esquema más antigua cuyo código aún puede escribir con seguridad un archivo en esta versión; una compilación más antigua rechaza el archivo. |
+| `applied_at` | integer, not null | Cuándo se aplicó esta migración al archivo (milisegundos de época). |
+
+#### `store_settings`
+
+Ajustes del propio archivo del almacén, compartidos por todos los perfiles, tg y MAX, a diferencia del archivo de configuración de un perfil.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `key` | text, PK | el nombre del ajuste |
+| `value` | text, not null | El valor del ajuste como texto, compartido por todos los perfiles y mensajerías que usan este archivo de almacén. |
+| `at` | integer, not null | Cuándo se escribió el ajuste por última vez (milisegundos de época). |
+
+{/* tables:end */}
 
 Para ver estas tablas en acción, lee [cómo funciona la búsqueda](./search-architecture.mdx); para
 ver cómo encaja el almacén en las herramientas, lee [arquitectura](./architecture.mdx).
