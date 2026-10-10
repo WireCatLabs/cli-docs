@@ -1,5 +1,5 @@
 {
-  "extends": ["@wirecat/cli-core/biome"],
+  "extends": ["./config/wirecat/biome.base.json"],
   "files": {
     "includes": [
       "**",
@@ -14,7 +14,9 @@
       "!lib/search-language.generated.js",
       "!lib/search-language.generated.d.ts",
       "!.docs-tooling",
-      "!.impeccable"
+      "!.impeccable",
+      "!**/.worktrees",
+      "!config/wirecat"
     ]
   },
   "overrides": [
