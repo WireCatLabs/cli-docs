@@ -14,9 +14,13 @@ for (const lang of ["en", "ru", "es"])
         await expect(
           page.locator(`[data-command-index] a[href="/${lang}/docs/${tool}/commands-${group}"]`),
         ).toHaveCount(1)
+      // A fresh load, as a reader following an old link gets: changing only the hash of a page still hydrating
+      // lets the router's first replaceState drop it before the redirect reads it.
+      await page.goto("about:blank")
       await page.goto(`/${lang}/docs/${tool}/commands#${tool}-chats-members-add`)
       await expect(page).toHaveURL(new RegExp(`commands-admin#${tool}-chats-members-add$`))
       await expect(page.locator(`#${tool}-chats-members-add`)).toBeInViewport()
+      await page.goto("about:blank")
       await page.goto(`/${lang}/docs/${tool}/commands#${tool}-bot-api`)
       await expect(page).toHaveURL(new RegExp(`commands-bot#${tool}-bot-api$`))
       await expect(page.locator(`#${tool}-bot-api`)).toBeInViewport()

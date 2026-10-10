@@ -56,6 +56,7 @@ test("mobile has no horizontal overflow; theme and reduced motion remain usable"
   await page.getByRole("button", { name: "Файлы +", exact: true }).click()
   await expect(page.locator(".sp-hit")).toHaveCount(5)
   const themeToggle = page.locator(".theme-toggle:visible").first()
+  await expect(themeToggle).toHaveAttribute("title", "Включить светлую тему")
   await themeToggle.focus()
   await themeToggle.press("Enter")
   await expect(page.locator("html")).toHaveClass(/light/u)
@@ -83,7 +84,8 @@ for (const theme of ["light", "dark"]) {
     await page.locator("#search-playground").waitFor()
     if (theme === "dark") {
       const toggle = page.locator(".theme-toggle:visible").first()
-      await expect(toggle).toHaveAttribute("aria-label", "Switch to dark theme")
+      // The served markup already carries this aria-label; only the title proves the click handler is attached.
+      await expect(toggle).toHaveAttribute("title", "Switch to dark theme")
       await toggle.click()
     }
     await expect(page.locator("html")).toHaveClass(theme === "dark" ? /dark/ : /light/)
