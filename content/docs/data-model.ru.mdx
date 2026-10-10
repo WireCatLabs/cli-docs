@@ -12,7 +12,7 @@ description: Какие сущности инструменты WireCat хран
 
 Страница описывает схему по состоянию на 10 октября 2026 года, на фиксированном коммите
 cli-messaging — пакета, которому принадлежит файл. Все столбцы с их значением перечислены в
-[справочнике схемы](https://github.com/WireCatLabs/cli-messaging/blob/f41b64f/docs/storage/schema-v2.md).
+[справочнике схемы](https://github.com/WireCatLabs/cli-messaging/blob/d7b948a/docs/storage/schema-v2.md).
 
 ## Сущности
 
@@ -157,7 +157,7 @@ ORDER BY occurred_at DESC
 LIMIT 50
 ```
 
-Векторы бывают у длинных текстов: обсуждений, документов, писем, текста вложений, заметок,
+Векторы бывают у длинных текстов: обсуждений, документов, писем, текста вложений, заметок, воспоминаний,
 расшифровок и сводок встреч, событий и задач. У отдельного сообщения своего вектора нет: его
 находят по словам или по смыслу через его обсуждение. Текст режется на куски, а вектор каждого
 куска хранится один раз на модель и хеш текста, так что один и тот же текст не векторизуется
@@ -295,6 +295,8 @@ LIMIT 50
 | `message_words` | полнотекстовый индекс по `normalized_text`, `scope` |
 | `message_stems` | полнотекстовый индекс по `stems`, `scope` |
 | `message_stems_pending` | `id` |
+| `member_observations` | `id`, `chat_id`, `observed_at`, `started_at`, `complete`, `reported_count`, `listed_count`, `source`, `created_at`, `updated_at` |
+| `member_observation_members` | `member_observation_id`, `identity_id`, `member_stay_id` |
 
 **Почта**
 
@@ -357,8 +359,8 @@ LIMIT 50
 | Таблица | Столбцы |
 | --- | --- |
 | `reminders` | `id`, `task_id`, `account_id`, `due_at`, `timezone`, `state`, `revision`, `lease_until`, `receipt`, `created_at`, `updated_at` |
-| `projects` | `id`, `key`, `name`, `description`, `type`, `organization_id`, `scope`, `owner_type`, `owner_id`, `tasks_count`, `status`, `created_at`, `updated_at`, `deleted_at` |
-| `tasks` | `id`, `project_id`, `number`, `key`, `title`, `description`, `type`, `status`, `priority`, `parent_id`, `due_at`, `started_at`, `closed_at`, `closed_by_type`, `closed_by_id`, `close_reason`, `author_type`, `author_id`, `source`, `resolution`, `verdict`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
+| `projects` | `id`, `key`, `name`, `description`, `type`, `organization_id`, `account_id`, `scope`, `owner_type`, `owner_id`, `tasks_count`, `status`, `created_at`, `updated_at`, `deleted_at` |
+| `tasks` | `id`, `project_id`, `number`, `key`, `title`, `description`, `type`, `status`, `priority`, `parent_id`, `due_at`, `started_at`, `closed_at`, `closed_by_type`, `closed_by_id`, `close_reason`, `author_type`, `author_id`, `source`, `package_id`, `source_locator`, `source_kind`, `source_group`, `resolution`, `verdict`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
 | `task_assignments` | `id`, `task_id`, `assignee_type`, `assignee_id`, `role`, `created_at`, `updated_at` |
 | `task_events` | `id`, `task_id`, `actor_type`, `actor_id`, `kind`, `changes`, `created_at` |
 | `decisions` | `id`, `project_id`, `statement`, `status`, `decided_at`, `supersedes_id`, `confirmed_by_type`, `confirmed_by_id`, `source`, `metadata`, `created_at`, `updated_at`, `deleted_at` |
@@ -402,7 +404,7 @@ LIMIT 50
 | `schema_migrations` | `version`, `min_compatible`, `applied_at` |
 | `store_settings` | `key`, `value`, `at` |
 
-[Справочник схемы](https://github.com/WireCatLabs/cli-messaging/blob/f41b64f/docs/storage/schema-v2.md)
+[Справочник схемы](https://github.com/WireCatLabs/cli-messaging/blob/d7b948a/docs/storage/schema-v2.md)
 перечисляет каждый столбец, ограничение и индекс.
 
 </details>
