@@ -4,6 +4,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 
 import { tmpdir } from "node:os"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
+import { discoveryContract } from "./discovery-contract.ts"
 import { checkoutSource, sourceInstallation } from "./source-install.ts"
 import type { Tool } from "./sync.ts"
 
@@ -27,10 +28,21 @@ for (const tool of tools) {
     if (!existsSync(join(packageRoot, ".git"))) checkoutSource(tool, packageRoot)
     const head = execFileSync("git", ["rev-parse", "HEAD"], { cwd: packageRoot, encoding: "utf8" }).trim()
     if (head !== tool.docsRef) throw new Error("Source discovery checkout differs from reviewed commit")
+    const buildHome = mkdtempSync(join(tmpdir(), "wirecat-doc-build-"))
+    const userConfig = join(buildHome, "npm-user-config")
+    const globalConfig = join(buildHome, "npm-global-config")
+    writeFileSync(userConfig, "")
+    writeFileSync(globalConfig, "")
     const buildEnv: NodeJS.ProcessEnv = {
+      HOME: buildHome,
+      XDG_CONFIG_HOME: join(buildHome, "config"),
+      XDG_STATE_HOME: join(buildHome, "state"),
+      XDG_CACHE_HOME: join(buildHome, "cache"),
+      MESSAGING_STORE: join(buildHome, "wirecat.db"),
+      NPM_CONFIG_GLOBALCONFIG: globalConfig,
       PATH: process.env.PATH ?? "",
       NODE_ENV: "test",
-      NPM_CONFIG_USERCONFIG: "/dev/null",
+      NPM_CONFIG_USERCONFIG: userConfig,
     }
     execFileSync("pnpm", ["install", "--frozen-lockfile", "--ignore-scripts"], {
       cwd: packageRoot,
@@ -49,7 +61,7 @@ for (const tool of tools) {
         "--no-audit",
         "--no-fund",
         "--userconfig",
-        "/dev/null",
+        process.env.NPM_CONFIG_USERCONFIG ?? "/dev/null",
         `${tool.package}@${tool.docsRef.slice(1)}`,
       ],
       { stdio: "inherit" },
@@ -60,6 +72,9 @@ for (const tool of tools) {
     throw new Error("Installed discovery version differs from docsRef")
   const sandbox = mkdtempSync(join(tmpdir(), "wirecat-doc-discovery-"))
   const env: NodeJS.ProcessEnv = {
+    HOME: sandbox,
+    MESSAGING_STORE: join(sandbox, "wirecat.db"),
+    XDG_STATE_HOME: join(sandbox, "state"),
     NODE_ENV: "test",
     PATH: process.env.PATH ?? "",
     TMPDIR: sandbox,
@@ -77,8 +92,7 @@ for (const tool of tools) {
     ["--import", join(root, "scripts/discovery-offline.mjs"), binary, "commands", "--json"],
     { env, encoding: "utf8", timeout: 30000, maxBuffer: 15_000_000 },
   )
-  const program = JSON.parse(raw)
-  if (program.cli !== tool.name || !Array.isArray(program.commands)) throw new Error("Invalid discovery contract")
+  const program = discoveryContract(JSON.parse(raw), tool.name)
   const target = join(root, ".docs-tooling/contracts")
   mkdirSync(target, { recursive: true })
   writeFileSync(

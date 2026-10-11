@@ -126,7 +126,7 @@ describe("sidebar icon coverage", () => {
         .filter((slug) => !slug.startsWith("---") && !["tg", "max"].includes(slug))
         .map((slug) => /^\[[^\]]+\]\(\/[a-z]{2}\/docs\/([^)]+)\)$/.exec(slug)?.[1].split("/").at(-1) ?? slug),
     )
-    for (const tool of ["tg", "max", "memo"])
+    for (const tool of ["tg", "max", "memo", "zm"])
       for (const file of readdirSync(new URL(`../translations/${tool}/`, import.meta.url)))
         if (/\.(en|ru|es)\.md$/.test(file)) slugs.add(file.replace(/\.(en|ru|es)\.md$/, ""))
     for (const slug of slugs) {

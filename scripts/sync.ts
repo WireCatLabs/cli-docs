@@ -209,7 +209,8 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
     const sidebar = meta.pages as string[]
     for (const file of guides.keys()) {
       const slug = file.slice(0, -3)
-      if (!sidebar.includes(slug)) sidebar.splice(sidebar.indexOf("search") + 1, 0, slug)
+      if (!sidebar.includes(slug))
+        sidebar.splice(slug === "roadmap" ? sidebar.length : sidebar.indexOf("search") + 1, 0, slug)
     }
     writeFileSync(join(destination, "meta.json"), `${JSON.stringify({ ...meta, root: true }, null, 2)}\n`)
     if (!captureOnly && existsSync(join(docs, "design")))

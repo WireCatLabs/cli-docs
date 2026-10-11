@@ -1,0 +1,175 @@
+---
+title: "Archivo local"
+---
+
+Guarda reuniones en tu equipo: descarga las que organizaste por API, importa transcripciones,
+observa archivos nuevos y archiva grabaciones con sumas verificadas.
+
+## Dónde se guardan las reuniones
+
+Acceso, grabaciones y comandos remotos funcionan sin la base de reuniones. Importación, descarga,
+seguimiento y lectura usan el adaptador SQLite publicado: abre conexiones al necesitarlas y las
+cierra antes del resultado. `MESSAGING_STORE` elige la base compartida. Modelo, exportación y procesamiento
+vienen de `@wirecat/cli-messaging/meetings`.
+
+La base es `wirecat.db`. Abrir su ruta predeterminada elimina la antigua `messages.db` y los archivos
+`-wal` y `-shm`, sin migrarlos. Se conservan con `MESSAGING_STORE`, ruta explícita o una base antigua
+abierta por otro proceso. Una apertura posterior reintenta eliminarla cuando ese proceso termina.
+
+Elige un [perfil local](./sessions.md#select-a-local-profile) antes de importar o descargar.
+
+## Descargar reuniones organizadas
+
+`zm pull` obtiene reuniones, participantes, transcripciones y resúmenes del origen elegido. Zoom
+solo entrega transcripciones al **organizador**, con **Allow hosts to retain transcripts** activado
+([primera descarga](./zoom-app.md#before-your-first-zm-pull)).
+
+`pull --lookback-days 7` revisa siete días; `pull --since 2026-10-01` recupera transcripciones tardías
+anteriores. El cursor no garantiza esa revisión. Serializa descargas de una cuenta para evitar
+crear eventos simultáneos. Una reunión fallida no cambia el cursor y se puede reintentar.
+
+## Transcripciones descargadas
+
+Descarga del portal las reuniones a las que asististe y usa `zm import <folder>`. Se leen archivos
+ordinarios `.vtt` directamente en la carpeta, con formato `YYYY-MM-DD_HHMM_topic-slug.vtt` del
+exportador existente. Sus IDs derivan de fecha y tema normalizado, sin UUID de Zoom. Participantes
+desconocidos y nombres de hablantes se conservan sin adivinar identidades.
+
+Las horas usan UTC. `files.timezone` elige la zona IANA usada en los nombres, como `Europe/Madrid`.
+Horas ambiguas o inexistentes se rechazan. Contenidos distintos de una clave normalizada dan error:
+resuelve el conflicto antes de repetir. Un nombre inválido falla explícitamente, sin importar
+parte de la carpeta en silencio.
+
+## Observar nuevas reuniones
+
+`zm watch --source api --lookback-days 7 --jsonl` repite descargas. Una carpeta elige archivos;
+si no, se usa la configuración. Puede usar `files.folder`. El API necesita red y admite `--since`
+y solapamiento de 0–31 días. Tras guardar el cursor se usa este con el solapamiento; fallos retienen
+la primera frontera. El solapamiento se resta también del primer `--since`.
+`--interval` es la pausa entre ciclos. Perfil, origen, ajustes y cliente OAuth se capturan al
+inicio; reinicia tras cambiarlos. Los ciclos no se superponen y cierran la base antes de confirmar.
+Detén con Ctrl-C.
+
+Para una carpeta:
+
+```sh
+zm watch ./downloaded-transcripts --interval 10s --jsonl
+```
+
+Cada ciclo revisa de nuevo los archivos, incluidas correcciones antiguas, importa en serie, cierra
+la base y espera que se vacíe la salida. Intervalos de un segundo a un día. Funciona en primer plano
+hasta Ctrl-C. Sin terminal necesita `--jsonl`, no `--json`. Elige un perfil antes de empezar.
+
+Cancelar durante el cierre da hasta un segundo para entregar la confirmación completa. Una tubería
+bloqueada detiene esa entrega y no empieza otro ciclo.
+
+## Archivar grabaciones en la nube
+
+`zm` guarda vídeo, audio, transcripciones y chat disponibles. Elige reunión y destino:
+
+```sh
+zm recordings list --from 2026-10-01 --to 2026-10-10 --json
+zm recordings show example-occurrence --json
+zm recordings download example-occurrence --destination ./zoom-archive --json
+zm recordings archive verify ./zoom-archive --offline --json
+```
+
+Para historial por meses:
+
+```sh
+zm recordings sync --from 2026-01-01 --to 2026-10-10 --destination ./zoom-archive --jsonl
+```
+
+Las fechas deben estar ordenadas y abarcar como máximo diez años. Se hacen peticiones mensuales,
+se deduplican UUID y se descarga en serie. Cada JSONL confirma una reunión; resultados y archivos
+anteriores permanecen si falla otra. Repite un período para descubrir archivos nuevos. Con perfil
+se guarda progreso y registros pendientes. `--recheck-from YYYY-MM-DD` revisa fechas recientes,
+`--checkpoint` elige su archivo, `--max-pages` y `--max-entries` limitan descubrimiento.
+Sin terminal necesita `--jsonl`.
+
+Los puntos de control confirman operaciones anteriores, no integridad actual ni acceso a todas
+las grabaciones. Comprueba archivos con `recordings archive verify`. `--no-resume` examina de
+nuevo todo el período sin progreso persistente.
+
+Las listas aceptan hasta 31 días. La descarga escribe en disco sin cargar el vídeo completo.
+El límite es 20 GiB por archivo, ajustable con `--max-bytes`. `--file-ids` elige IDs separados por
+comas. Solo guarda archivos completos descargables; otros se informan aparte. Permisos, retención
+y funciones de cuenta limitan el acceso. Asistir a una reunión no garantiza acceso a su grabación.
+
+Los manifiestos contienen metadatos, tamaños y SHA-256, sin URLs firmadas ni tokens. Repetir verifica
+y omite archivos coincidentes. No sobrescribe: usa otro destino si no coinciden. Con perfil se
+conservan partes verificadas y se reanuda solo con validador fuerte y rango coincidentes. Una
+representación cambiada reinicia con seguridad. `--resume` explícito necesita perfil; `--no-resume`
+o ausencia de perfil usan partes temporales. Entradas completas permanecen tras errores posteriores.
+
+## Bloqueos y recuperación
+
+La inspección local no necesita acceso ni base. Se rechazan escritores simultáneos al destino.
+Tras un fallo, inspecciona `recordings archive locks` y revisa `recordings archive recover`.
+`--yes` quita bloqueos reconocidos de procesos terminados en este equipo; conserva activos, ajenos
+y desconocidos. Solo elimina marcadores. La continuación recupera una publicación completa si
+coinciden diario propio, parte verificada y archivo final; archivos ajenos quedan protegidos.
+
+## Copias diarias
+
+Elige destino absoluto y zona del temporizador:
+
+```sh
+zm recordings schedule create --name daily --destination /home/AliceExample/zoom-archive --from 2026-01-01 --at 03:15 --timezone Europe/Madrid --json
+zm recordings schedule list --offline --json
+zm recordings schedule run <schedule-id> --jsonl
+zm recordings schedule disable <schedule-id> --yes --json
+```
+
+Primero se muestra un plan. `--yes` instala un temporizador de usuario systemd en Linux; `--dry-run`
+prevalece. La instalación automática solo admite Linux. El temporizador sigue IANA; el descubrimiento
+usa UTC y revisa siete días por defecto. Necesita servicios de usuario systemd; los planes sirven
+en otras plataformas. Guarda perfil, client ID público, destino y rutas de configuración y ejecución,
+sin credenciales. Perfil y cliente deben seguir elegidos para ejecutar. El estado refleja la última
+operación confirmada; lista y detalles no consultan el temporizador. Desactivar conserva trabajos y archivos.
+
+## Leer e importar transcripciones archivadas
+
+Los nombres usan hashes y las identidades quedan en manifiestos:
+
+```sh
+zm recordings archive transcript ./zoom-archive --offline --json
+zm recordings archive search ./zoom-archive "example plan" --limit 100 --offline --json
+```
+
+Se verifica tamaño y SHA-256 de cada WebVTT antes de devolver pasajes. La búsqueda se detiene al
+hallar un resultado adicional al límite y no lee archivos posteriores. No necesita acceso,
+configuración ni base. `--uuid` o `--file-ids` eligen datos; `--max-bytes` ajusta 8 MiB por archivo.
+Busca texto normalizado por Unicode y minúsculas, sin nombres de hablantes. Límite 100, máximo 1000.
+`hasMore` indica otro resultado: amplía el límite o reduce reunión, archivo o consulta. No hay
+cursor. `--max-output-bytes` limita la salida; un fallo de verificación no da éxito.
+
+Para importar al perfil:
+
+```sh
+zm recordings archive import ./zoom-archive --offline --jsonl
+```
+
+Verifica todos los VTT antes de abrir la base. Límites: 8 MiB por archivo, 64 MiB totales;
+`--max-bytes` y `--max-total-bytes` los cambian. Elige `--uuid` o `--file-ids`. Añade cada reunión
+atómicamente por UUID original, conservando otras transcripciones, resúmenes, participantes y cursor.
+Correcciones retienen revisiones; hashes idénticos son idempotentes. Sin inicio conocido solo se
+añade a una reunión existente. Confirma reuniones disponibles o indica las ausentes. Si hay recibos
+exactos, muestra creación, inserciones, repeticiones y sustituciones de la misma transacción;
+los adaptadores antiguos no inventan cifras. Adiciones anteriores pueden quedar guardadas si falla otra.
+
+## Transcribir audio local
+
+Crea una transcripción independiente para una reunión guardada:
+
+```sh
+zm meetings transcribe 1 ./AliceExample.wav --model parakeet-v3 --json
+zm meetings transcribe 1 ./AliceExample.wav --model parakeet-v3 --yes --json
+```
+
+El plan verifica el archivo y describe el componente sin abrirlo. `--yes` reconoce con uno local
+instalado y añade atómicamente el resultado; `--dry-run` prevalece. No instala componentes.
+Admite PCM16 WAV mono o estéreo a 16 o 48 kHz, sin decodificar vídeo. `--models-dir` elige un directorio
+absoluto. Limita bytes, duración, segmentos y texto con `--max-bytes`, `--max-duration`, `--max-segments`
+y `--max-text-bytes`. Las marcas de tiempo indican ventanas de hasta 30 segundos; hablantes desconocidos.
+Se conservan fuentes del proveedor e historial; el recibo muestra cifras y procedencia.

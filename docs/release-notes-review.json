@@ -10,5 +10,11 @@
     "roadmapSha256": "f1628c3c19b2ea49f41fb57147b92bb0f9d29081ed577d1be3755a8a35b2a961",
     "reviewedAt": "2026-10-11",
     "conclusion": "Reviewed 0.45.2-0.45.4: word search without a chat now also asks the MAX server (one best match per chat, --backend archive keeps the old behavior), discovery search tolerates question marks, mail search reads the dedicated mail tables, background fetch drops the 30-second default deadline and store fetch --all waits out short chat-list pauses. Roadmap unchanged: none of these items was listed as planned."
+  },
+  "zm": {
+    "version": "v0.7.1",
+    "roadmapSha256": "fabb25e84e9d496cffe6060659b726d801e84a1b95852e4920eb2d52d3486a04",
+    "reviewedAt": "2026-10-11",
+    "conclusion": "Shared native file/WAV reuse preserves CLI behavior. Available: meeting metadata, transcripts, archives, evidence, person/event links, explicit keyword indexing, configured semantic search and local PCM WAV transcription. Future dedicated intake/preparation and further native archive reuse remain planned. Reviewed documentation-only search/app/roadmap overrides at f7a1dd2cb730996c4e4b239e9ff9010d6dbbc783 match released commands."
   }
 }
