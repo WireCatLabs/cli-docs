@@ -115,3 +115,12 @@ Manual browser sign-in with WireCat's included application succeeded and stored 
 refresh credentials in the OS keyring. Only the sanitized profile/storage success was observed;
 no account token or credential value was printed. This validates account connection, not native
 Docs conversion, tab fidelity or ingestion, which still require a user-selected fixture folder.
+
+## Registry verification
+
+The first publish completed successfully. npm reports public access for `@wirecat/drive-cli`.
+The version document and downloadable registry tarball match the CI-validated SHA-256 above
+exactly. Initial requests to the unqualified package metadata URL still returned cached 404s;
+a fresh-query version document returned 0.1.0. Normal npm installation must be rechecked after
+registry propagation before declaring the reader installation path verified. The native tag
+and GitHub release are `v0.1.0` on the merge above.
