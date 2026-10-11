@@ -7,9 +7,16 @@ Source distribution is intentional: Drive has no npm release or registered bundl
 The new source mode requires a full immutable commit; npm tools retain exact release checks.
 No fake release is created. Reviewed source installation must include an offline command capture.
 
-Reviewed guide/runtime source: `884162b4f1399d21dbd51c61ba68f2443eb86b7e`, merged via
+Initial reviewed guide/runtime source: `884162b4f1399d21dbd51c61ba68f2443eb86b7e`, merged via
 [Drive PR #4](https://github.com/WireCatLabs/drive-cli/pull/4) as `4f6329c`.
 The immutable source pin is retained rather than replacing it with a mutable branch or release label.
+
+Final portal pin: `256e0563766560def90dbde857c7d67f13bc72d4`,
+[Drive PR #5](https://github.com/WireCatLabs/drive-cli/pull/5). Full export exposed two Google
+Discovery root-relative documentation links; the owning provider adapter now makes them absolute,
+and its generated artifacts/reference were regenerated. Configuration distinguishes the shared
+`CLI_COMMON_CACHE_DIR` model cache from Drive's tool cache. RU/ES project links use the actual
+translated heading anchors. Fresh translation fingerprints and offline contracts pass for this pin.
 
 Reader path: Drive overview → source installation + Desktop consent → first folder sync → search
 and organization → focused recipes. Nine pages include the generated command reference, three

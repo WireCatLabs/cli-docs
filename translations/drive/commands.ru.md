@@ -1424,7 +1424,7 @@ drive api drive-files-download [options]
 | `--alt <value>` | Data format for response. |
 | `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
 | `--file-id <value>` | Required. The ID of the file to download. |
-| `--mime-type <value>` | Optional. The MIME type the file should be downloaded as. This field can only be set when downloading Google Workspace documents. For a list of supported MIME types, see [Export MIME types for Google Workspace documents](/workspace/drive/api/guides/ref-export-formats). If not set, a Google Workspace document is downloaded with a default MIME type. The default MIME type might change in the future. |
+| `--mime-type <value>` | Optional. The MIME type the file should be downloaded as. This field can only be set when downloading Google Workspace documents. For a list of supported MIME types, see [Export MIME types for Google Workspace documents](https://developers.google.com/workspace/drive/api/guides/ref-export-formats). If not set, a Google Workspace document is downloaded with a default MIME type. The default MIME type might change in the future. |
 | `--revision-id <value>` | Optional. The revision ID of the file to download. This field can only be set when downloading blob files, Google Docs, and Google Sheets. Returns `INVALID_ARGUMENT` if downloading a specific revision on the file is unsupported. |
 
 ### `drive api drive-files-empty-trash`
@@ -1464,7 +1464,7 @@ drive api drive-files-export [options]
 | `--callback <value>` | JSONP. |
 | `--alt <value>` | Data format for response. |
 | `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
-| `--mime-type <value>` | Required. The MIME type of the format requested for this export. For a list of supported MIME types, see [Export MIME types for Google Workspace documents](/workspace/drive/api/guides/ref-export-formats). |
+| `--mime-type <value>` | Required. The MIME type of the format requested for this export. For a list of supported MIME types, see [Export MIME types for Google Workspace documents](https://developers.google.com/workspace/drive/api/guides/ref-export-formats). |
 | `--file-id <value>` | The ID of the file. |
 
 ### `drive api drive-files-generate-cse-token`
@@ -1558,7 +1558,7 @@ drive api drive-files-list [options]
 | `--include-team-drive-items <value>` | Deprecated: Use `includeItemsFromAllDrives` instead. |
 | `--include-labels <value>` | A comma-separated list of IDs of labels to include in the `labelInfo` part of the response. |
 | `--include-items-from-all-drives <value>` | Whether both My Drive and shared drive items should be included in results. |
-| `--q <value>` | A query for filtering the file results. For supported syntax, see [Search for files and folders](/workspace/drive/api/guides/search-files). |
+| `--q <value>` | A query for filtering the file results. For supported syntax, see [Search for files and folders](https://developers.google.com/workspace/drive/api/guides/search-files). |
 | `--drive-id <value>` | ID of the shared drive to search. |
 
 ### `drive api drive-files-list-labels`

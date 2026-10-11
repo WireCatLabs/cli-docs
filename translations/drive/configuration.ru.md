@@ -14,7 +14,8 @@ drive config set readOnly true --defaults
 | Настройка | Назначение |
 | --- | --- |
 | `--profile NAME` | Выбрать профиль аккаунта для этой команды. |
-| `DRIVE_CONFIG_DIR`, `DRIVE_STATE_DIR`, `DRIVE_CACHE_DIR` | Изменить расположение настроек, снимков/состояния и кеша поисковых компонентов. |
+| `DRIVE_CONFIG_DIR`, `DRIVE_STATE_DIR`, `DRIVE_CACHE_DIR` | Изменить расположение настроек, снимков/состояния и кеша инструмента. |
+| `CLI_COMMON_CACHE_DIR` | Изменить общий кеш поискового компонента; используйте эту настройку при скачивании и создании векторов. |
 | `DRIVE_STORE` | Явный путь базы. Перед открытием другим инструментом сделайте копию и проверьте совместимость общих пакетов. |
 | `--read-only` | Запретить локальные и удалённые изменения для этой команды. |
 | `--offline` | Читать локальные данные; запретить синхронизацию, Google-запросы и извлечение через ИИ. |
@@ -37,5 +38,5 @@ drive config show --json
 Замените `YOUR_MODEL_ID` идентификатором провайдера. Передавайте ключ через документированную
 переменную окружения, например `DRIVE_OPENAI_API_KEY`; не сохраняйте ключи в обычных настройках
 и не отправляйте их в чат агента. Anthropic и OpenAI-совместимые адреса используют общий шлюз.
-Точные параметры есть в [справочнике настройки ИИ](https://github.com/WireCatLabs/drive-cli/blob/884162b4f1399d21dbd51c61ba68f2443eb86b7e/docs/dev/KNOWLEDGE_AND_API.md#memories-and-ai-extraction)
+Точные параметры есть в [справочнике настройки ИИ](https://github.com/WireCatLabs/drive-cli/blob/256e0563766560def90dbde857c7d67f13bc72d4/docs/dev/KNOWLEDGE_AND_API.md#memories-and-ai-extraction)
 и [справочнике команд](./commands.md). Продолжите с [извлечением записей памяти](./recipes.md#remember-a-source-backed-decision).

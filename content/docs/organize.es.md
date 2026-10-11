@@ -60,7 +60,7 @@ Una etiqueta o proyecto no debe cambiar silenciosamente la carpeta de una fuente
   escribe notas sobre personas o mensajes guardados.
 - [Personas](./people.md): comprueba contexto y conecta identidades conocidas explícitamente.
 - [Recetas Google Drive](./drive/recipes.md): etiqueta documentos, vincula registros y revisa recuerdos.
-- [Modelo de datos](./data-model.mdx#organizations-and-projects): relaciones técnicas entre proyectos y tareas.
+- [Modelo de datos](./data-model.mdx#organizaciones-y-proyectos): relaciones técnicas entre proyectos y tareas.
 
 Empieza con una fuente, una etiqueta útil y una nota. Abre su contexto otra vez para comprobar
 registros y vínculos antes de aplicar la misma organización a toda una colección.
