@@ -90,7 +90,14 @@ test("agent resources stay native documents when opened from the landing", async
   await expect(page.locator("body")).toContainText("# WireCat")
   const response = await page.request.get("/sitemap.xml")
   expect(response.status()).toBe(200)
-  expect(await response.text()).toContain("https://wirecat.dev/en/docs/tg/installation")
+  const sitemap = await response.text()
+  expect(sitemap).toContain("https://wirecat.dev/en/docs/tg/installation")
+  const index = await (await page.request.get("/llms.txt")).text()
+  for (const [, path] of sitemap.matchAll(/<loc>https:\/\/wirecat\.dev\/en\/docs(\/[^<]*)?<\/loc>/g))
+    expect(index).toContain(`https://wirecat.dev/llms.mdx/docs${path ?? ""}/content.md`)
+  const full = await (await page.request.get("/llms-full.txt")).text()
+  expect(full).toContain("(/en/docs/tg/commands)")
+  expect(full).not.toMatch(/^# .*\(\/en\/docs\/(?:[^)]*\/)?changelog\)$/m)
 })
 
 for (const lang of ["en", "ru", "es"]) {

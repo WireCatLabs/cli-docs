@@ -1,4 +1,5 @@
 import type { Node } from "fumadocs-core/page-tree"
+import { isSecondaryPage } from "@/lib/agent-docs"
 import { i18n } from "@/lib/i18n"
 import { documentationDescription } from "@/lib/seo"
 import { appName, getPageMarkdownUrl, siteUrl, tools } from "@/lib/shared"
@@ -24,15 +25,17 @@ const entry = (page: Page) => {
   return `- [${page.data.title}](${markdownLink(page)}): ${note.replace(/\s+/g, " ").trim()}`
 }
 
-const isSecondary = (page: Page) => ["changelog", "roadmap"].includes(page.slugs.at(-1) ?? "")
+const isSecondary = (page: Page) => isSecondaryPage(page.slugs)
 
 // English index in sidebar order; localized pages follow the same paths under /ru or /es.
 export function GET() {
   const pages = new Map(source.getPages(i18n.defaultLanguage).map((page) => [page.url, page]))
-  const ordered = urlsOf(source.getPageTree(i18n.defaultLanguage).children).flatMap((url) => {
+  // Sidebar order first, then pages the sidebar leaves out, so a page missing from meta.json still gets listed.
+  const inTree = urlsOf(source.getPageTree(i18n.defaultLanguage).children).flatMap((url) => {
     const page = pages.get(url)
     return page ? [page] : []
   })
+  const ordered = [...inTree, ...[...pages.values()].filter((page) => !inTree.includes(page))]
   const section = (title: string, list: Page[], intro?: string) =>
     [`## ${title}`, "", ...(intro ? [intro, ""] : []), ...list.filter((page) => !isSecondary(page)).map(entry)].join(
       "\n",
@@ -51,7 +54,7 @@ export function GET() {
     "",
     "> Command line tools that connect an AI agent (Claude Code, Codex, Cursor, Gemini CLI) to the user's Telegram and MAX accounts, notes and files. Every link below is the page as Markdown.",
     "",
-    `${siteUrl}/llms-full.txt is every English page in one file. The same pages exist in Russian and Spanish: insert the language after /llms.mdx/docs/, for example ${localized.join(" or ")}.`,
+    `${siteUrl}/llms-full.txt is every English page in one file, without changelogs and the per-group command pages. The same pages exist in Russian and Spanish: insert the language after /llms.mdx/docs/, for example ${localized.join(" or ")}.`,
     "",
     ...setup.flatMap((block) => [block, ""]),
     section("Getting started", general),
