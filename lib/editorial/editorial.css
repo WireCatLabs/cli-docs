@@ -6619,7 +6619,8 @@ html.dark .wirecat-editorial .message-role > svg {
 .wirecat-editorial .assistant-message p + p {
   margin-top: 14px;
 }
-.wirecat-editorial .assistant-message ul {
+.wirecat-editorial .assistant-message ul,
+.wirecat-editorial .assistant-message ol {
   padding-left: 19px;
   margin: 15px 0;
 }

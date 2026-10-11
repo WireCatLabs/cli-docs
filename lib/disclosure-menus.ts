@@ -15,10 +15,18 @@ export function bindDisclosureMenus(root: HTMLElement, selector: string, signal:
                 ? "above"
                 : "below"
           }
+          fitPanel(menu)
         }
       },
       { signal },
     )
+  addEventListener(
+    "resize",
+    () => {
+      for (const menu of menus) if (menu.open) fitPanel(menu)
+    },
+    { signal },
+  )
   document.addEventListener(
     "click",
     (event) => {
@@ -40,4 +48,26 @@ export function bindDisclosureMenus(root: HTMLElement, selector: string, signal:
     },
     { signal },
   )
+}
+
+// The panel's CSS anchors it to one side of its button, but where the button lands depends on the page
+// and the width, so the panel can run past the screen or a parent that clips overflow.
+function fitPanel(menu: HTMLDetailsElement) {
+  const panel = menu.querySelector<HTMLElement>(".connect-panel")
+  if (!panel) return
+  panel.style.translate = ""
+  const gutter = 16
+  let min = gutter
+  let max = innerWidth - gutter
+  for (let node = menu.parentElement; node; node = node.parentElement) {
+    if (getComputedStyle(node).overflowX === "visible") continue
+    const box = node.getBoundingClientRect()
+    min = Math.max(min, box.left)
+    max = Math.min(max, box.right)
+  }
+  const rect = panel.getBoundingClientRect()
+  let shift = 0
+  if (rect.right > max) shift = max - rect.right
+  if (rect.left + shift < min) shift = min - rect.left
+  if (shift) panel.style.translate = `${Math.round(shift)}px 0`
 }
