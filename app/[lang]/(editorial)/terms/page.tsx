@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { LegalDocumentLayout } from "@/components/legal-document-layout"
 import { StructuredData } from "@/components/structured-data"
 import { i18n } from "@/lib/i18n"
 import { pageMetadata, pageStructuredData, seoWords } from "@/lib/seo"
@@ -33,7 +34,7 @@ export default async function TermsPage({ params }: Props) {
           ],
         })}
       />
-      <main id="main" className="wrap about-page">
+      <LegalDocumentLayout lang={lang} active="terms">
         <header className="about-intro">
           <h1>{words.title}</h1>
           <p className="intro">{words.intro}</p>
@@ -49,19 +50,10 @@ export default async function TermsPage({ params }: Props) {
             </section>
           ))}
           <p>
-            <a href={`/${lang}/privacy`}>
-              {lang === "ru"
-                ? "Политика конфиденциальности"
-                : lang === "es"
-                  ? "Política de privacidad"
-                  : "Privacy Policy"}
-            </a>
-          </p>
-          <p>
             {words.contact} <a href={`mailto:${email}`}>{email}</a>
           </p>
         </article>
-      </main>
+      </LegalDocumentLayout>
     </div>
   )
 }

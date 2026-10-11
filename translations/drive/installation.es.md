@@ -2,48 +2,72 @@
 title: "Instalar y conectar"
 ---
 
-Instala la herramienta de línea de comandos Drive, conecta una cuenta Google e importa una carpeta
-pequeña para probar la búsqueda. Un **perfil** es el nombre que eliges para esa cuenta, como
-`personal` o `work`; cada comando de cuenta debe indicarlo. Google abre el navegador para que
-apruebes el acceso: no tienes que pegar tokens en la terminal ni en una conversación con el agente.
+Instala la herramienta Drive, conecta una cuenta de Google e importa una carpeta pequeña para
+comprobar la búsqueda. Un **perfil** es el nombre elegido para la cuenta, como `personal` o `work`;
+cada comando de cuenta debe indicarlo. Google abre el navegador para tu consentimiento, así que
+no pegas tokens en la terminal ni en el chat del agente.
 
-## Instalar la herramienta
+<a id="install-the-tool"></a>
 
-La distribución actual se instala desde un repositorio de código fuente. Necesitas Git, pnpm y
-Node.js 22.16+ de la rama 22.x o Node.js 24+. Abre una terminal donde se ejecuta tu agente:
+## Instalar tú mismo o pedirlo al agente
 
-```sh
-git clone https://github.com/WireCatLabs/drive-cli.git
-cd drive-cli
-pnpm install --frozen-lockfile
-pnpm build
-npm install -g .
-drive --help
-```
-
-El último comando debe mostrar la ayuda de Drive. Conserva el repositorio: el comando global
-utiliza esa instalación. Para actualizar, ejecuta `git pull` allí y repite instalación y compilación.
-En Windows, usa `npm.cmd` si PowerShell bloquea `npm.ps1`. Si lo instala un agente, pide:
+Si el agente instala la herramienta, pide:
 
 ```text prompt
-Help me install drive CLI from https://github.com/WireCatLabs/drive-cli using its installation
-instructions. Check Git, Node.js and pnpm. Ask me for the profile name and Google folder.
-I will approve sign-in in my browser. Do not request tokens or credential contents in chat.
+Use drive CLI. Install @wirecat/drive-cli from npm and check drive --help.
+Ask me for the profile name and Google folder. Follow the Google connection guide; I will approve sign-in in my browser.
+Do not request tokens or credential contents in chat.
 ```
 
 Consulta las [instrucciones oficiales del repositorio Drive](https://github.com/WireCatLabs/drive-cli/blob/main/docs/installation.md)
-para instalar desde el código fuente y actualizar.
+para instalar, actualizar y conectar Google.
+
+Necesitas [Node.js](https://nodejs.org/en/download) 22.16+ en la rama 22.x o Node.js 24+.
+Abre una terminal en el ordenador donde trabaja tu agente:
+
+```sh
+npm install -g @wirecat/drive-cli
+drive --version
+drive --help
+```
+
+El paquete contiene JavaScript compilado. No necesitas Git, pnpm ni compilar fuentes.
+`drive --help` debe mostrar los comandos. Instalar no conecta la cuenta ni importa documentos.
+En Windows usa `npm.cmd` si PowerShell bloquea `npm.ps1`. Reabre el terminal o el agente si no
+encuentra `drive` tras instalar.
+
+Si ya usas pnpm o Bun, elige una alternativa:
+
+```sh
+pnpm add -g @wirecat/drive-cli
+bun add -g @wirecat/drive-cli
+```
+
+Para probar sin instalar globalmente:
+
+```sh
+npx @wirecat/drive-cli --help
+```
+
+Para actualizar, repite `npm install -g @wirecat/drive-cli`. Para quitar el comando:
+
+```sh
+npm uninstall -g @wirecat/drive-cli
+```
+
+Desinstalar conserva ajustes locales, credenciales y documentos indexados. Para olvidar antes
+el acceso de Google, ejecuta `drive personal session end` para cada perfil conectado.
 
 ## Elegir cómo conectar
 
-Con **la aplicación Google compartida de WireCat**, cada usuario aprueba su cuenta en el navegador;
-solo el propietario configura Google Cloud. Esa es la conexión predeterminada prevista.
-La distribución actual todavía no incluye la identidad de ese cliente: hoy necesitas el JSON
-Desktop del propietario de la aplicación o crear uno siguiendo los pasos siguientes.
+Con **la aplicación Google compartida de WireCat**, apruebas tu propia cuenta en el navegador;
+solo el propietario configura Google Cloud. La identidad del cliente Desktop de WireCat está
+incluida en el CLI. Omite Google Cloud y ve a [conectar tu cuenta](#connect-your-account).
+La verificación de Google y las políticas de tu organización pueden afectar el acceso a la app.
 
-Si el propietario te entregó el JSON Desktop, omite la configuración Google Cloud y ve a
-[conectar tu cuenta](#connect-your-account). El JSON identifica la aplicación; por sí solo no le
-da acceso a tu cuenta. Ese permiso se concede por separado en el navegador.
+¿Prefieres tu propia aplicación? Crea un cliente Desktop abajo y pasa su JSON con `--client-file`.
+El JSON identifica la aplicación; por sí solo no da acceso a tu cuenta. Ese permiso se concede
+por separado en el navegador.
 
 ## Preparar el acceso Google
 
@@ -78,9 +102,11 @@ verán las personas cuando Google les pida aprobar tu aplicación.
 Si la plataforma no está configurada, pulsa **Get Started**. Completa las pantallas con un nombre
 (por ejemplo, WireCat Drive), un correo de soporte, audiencia **External** para cuentas fuera de
 la organización Workspace y un correo de contacto. Completa el paso de políticas y crea la
-configuración. Si ya existe, edita los campos en Branding. Para un lanzamiento público, el
-propietario también prepara página principal, política de privacidad y dominios autorizados.
-Esos datos de lanzamiento los configura el propietario, no cada usuario.
+configuración. Si ya existe, edita los campos en Branding. Para la app WireCat usa `https://wirecat.dev/en/docs/drive` como página principal,
+`https://wirecat.dev/en/privacy` como política de privacidad y `https://wirecat.dev/en/terms`
+como términos. Añade `wirecat.dev` en Authorized domains sin esquema ni ruta, y verifica su
+propiedad en Google Search Console con una cuenta propietaria o editora del proyecto Cloud.
+Esos datos los configura el propietario, no cada usuario.
 
 La [guía oficial de consentimiento Google](https://developers.google.com/workspace/guides/configure-oauth-consent)
 explica Branding, Audience y Data Access.
@@ -134,11 +160,22 @@ acceso. Dale al agente solo la ruta, no el contenido.
 
 ## Conectar tu cuenta
 
-Elige el nombre de perfil y sustituye la ruta del archivo:
+Publicar la aplicación Google no conecta este ordenador con tu cuenta. Cada usuario sigue
+abriendo el consentimiento y autorizando su cuenta. El cliente Desktop de WireCat identifica
+la app compartida; un cliente propio identifica tu aplicación. Ambos usan el mismo comando
+y guardan tokens en el almacén local de credenciales de cada usuario.
+
+Elige el nombre del perfil y conecta con la aplicación compartida de WireCat:
 
 ```sh
-drive personal session start --client-file /absolute/path/to/wirecat-drive-desktop.json
+drive personal session start
 drive personal session list --json
+```
+
+Para tu propia aplicación, sustituye la ruta y ejecuta:
+
+```sh
+drive personal session start --client-file /absolute/path/to/desktop-client.json
 ```
 
 En el navegador, elige la cuenta prevista y revisa los permisos. Tras aprobar, la página de

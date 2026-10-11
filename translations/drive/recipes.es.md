@@ -2,10 +2,23 @@
 title: "Recetas"
 ---
 
-Después de conectar una cuenta, estos flujos ayudan a importar un proyecto, encontrar evidencia
-y guardar contexto útil. Cada comando usa `personal`: cámbialo por tu perfil. Indícalo también
-en las solicitudes al agente. [Importación y almacenamiento](./usage.md) explica los formatos
-compatibles y las copias locales que conservan estas recetas.
+Da a tu agente una tarea completa: importar un proyecto, preparar un informe, guardar seguimientos
+o recuperar una decisión con fuentes. Cada receta vincula una petición con los comandos y las
+comprobaciones del resultado. Los ejemplos usan `personal`; sustitúyelo por tu perfil conectado.
+
+Elige si la tarea puede actualizar datos de Google, cambiar solo contexto local o modificar un
+archivo de Google. [Importación y almacenamiento](./usage.md) explica la copia guardada.
+
+## Elegir una receta
+
+| Tarea | Usa Google | Cambia datos locales | Cambia archivos de Google |
+| --- | --- | --- | --- |
+| Importar o actualizar un proyecto | Sí | Índice y copias | No |
+| Preparar un informe con la copia guardada | No | No | No |
+| Añadir etiquetas, notas o vínculos | No | Sí | No |
+| Proponer recuerdos con IA | Envía texto local al proveedor configurado | Solo con `--save` o confirmación | No |
+| Consultar comentarios o historial | Sí | Sin importación automática | No |
+| Crear o editar un Doc | Sí | Se importa al sincronizar después | Sí |
 
 ## Primera carpeta buscable sin exportaciones extra
 
@@ -44,9 +57,53 @@ drive personal search 'budget OR launch' --exact --json
 drive personal documents context DOC_ID --json
 ```
 
-Abre los enlaces Google citados para comprobar las decisiones. El resumen no cubre fuentes
+Lee los fragmentos guardados y sus metadatos para comprobar las decisiones. Abre los enlaces
+de Google cuando necesites la versión actual. El resumen no cubre fuentes
 incompatibles o sin importar. `documents get` lee un Doc accesible directamente de Google sin
 importarlo; imprime JSON Docs y no lo añade a la búsqueda.
+
+## Preparar un informe sin conexión
+
+```text prompt
+Use drive CLI with profile personal and --offline. Find budget and launch decisions in the saved
+project documents. Prepare a brief with exact passages, source titles and links, and the last sync
+information. Do not contact Google or an AI extraction provider through the CLI.
+```
+
+```sh
+drive personal --offline status --json
+drive personal --offline search 'budget OR launch' --exact --json
+drive personal --offline documents show DOC_ID --json
+drive personal --offline documents context DOC_ID --json
+```
+
+El resultado usa la última copia guardada. No debe presentar su fecha como una comprobación
+reciente de Google. `--offline` controla el CLI; un agente en la nube puede enviar la evidencia
+a su proveedor. Revisa sus propios ajustes si todo el flujo debe quedarse en tu ordenador.
+
+## Guardar todos los metadatos disponibles para uso sin conexión
+
+```text prompt
+Use drive CLI with profile personal. Fetch all metadata Google exposes for the file I select,
+save the JSON locally, and explain its fields. Read that saved file for later questions instead
+of contacting Google again. Do not download its binary contents or change Google files.
+```
+
+```sh
+drive personal files get FILE_ID --json > ./file-metadata.json
+drive personal files list --parent FOLDER_ID --json > ./folder-metadata.json
+```
+
+Estos comandos solicitan todos los campos de metadatos disponibles en Google. El primero guarda
+la respuesta de un archivo; el segundo, una página de hijos directos, incluso para formatos cuyo
+contenido no se indexa. Continúa con el token devuelto si necesitas el listado completo. Las
+funciones y políticas de Google determinan qué campos expone.
+
+Tu agente puede leer el JSON guardado sin Google. Es una copia separada que tú gestionas;
+no se importa automáticamente a la base ni se busca con `drive search`. La sincronización normal
+guarda los metadatos seleccionados descritos en [lectura sin conexión](./usage.md#read-content-and-metadata-offline).
+Listas de permisos, comentarios e historial siguen siendo operaciones API separadas. Actualiza
+o elimina estos JSON adicionales cuando ya no necesites esa versión.
 
 ## Mantener seguimientos junto a las fuentes
 

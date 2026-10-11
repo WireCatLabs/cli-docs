@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
+import { LegalDocumentLayout } from "@/components/legal-document-layout"
 import { StructuredData } from "@/components/structured-data"
 import { i18n } from "@/lib/i18n"
-import { privacyCopy } from "@/lib/privacy"
+import { googleDisclosureFor, privacyCopy } from "@/lib/privacy"
 import { pageMetadata, pageStructuredData, seoWords } from "@/lib/seo"
 import { homePath } from "@/lib/site-routes"
 import siteConfig from "@/site.config.json"
@@ -19,35 +20,7 @@ export default async function PrivacyPage({ params }: Props) {
   const { lang } = await params
   const words = copyFor(lang)
   const { email } = siteConfig.contacts
-  const googleDisclosure = {
-    en: {
-      title: "Google API Limited Use",
-      text: "WireCat’s use and transfer of information received from Google APIs adheres to the Google API Services User Data Policy, including its Limited Use requirements.",
-      policy: "Google API Services User Data Policy",
-      revoke: "Manage your Google Account connections",
-      terms: "Terms of Service",
-    },
-    ru: {
-      title: "Ограниченное использование данных Google API",
-      text: "Использование и передача WireCat информации, полученной через API Google, соответствуют политике Google API Services User Data Policy, включая требования Limited Use.",
-      policy: "Google API Services User Data Policy",
-      revoke: "Управление подключениями в аккаунте Google",
-      terms: "Условия использования",
-    },
-    es: {
-      title: "Uso limitado de las API de Google",
-      text: "El uso y la transferencia por WireCat de información recibida de las API de Google cumplen la Google API Services User Data Policy, incluidos sus requisitos de uso limitado.",
-      policy: "Google API Services User Data Policy",
-      revoke: "Gestionar las conexiones de tu cuenta de Google",
-      terms: "Términos de servicio",
-    },
-  }[lang as "en" | "ru" | "es"] ?? {
-    title: "Google API Limited Use",
-    text: "WireCat’s use and transfer of information received from Google APIs adheres to the Google API Services User Data Policy, including its Limited Use requirements.",
-    policy: "Google API Services User Data Policy",
-    revoke: "Manage your Google Account connections",
-    terms: "Terms of Service",
-  }
+  const googleDisclosure = googleDisclosureFor(lang)
   return (
     <div className="wirecat-about">
       <StructuredData
@@ -62,7 +35,7 @@ export default async function PrivacyPage({ params }: Props) {
           ],
         })}
       />
-      <main id="main" className="wrap about-page">
+      <LegalDocumentLayout lang={lang} active="privacy">
         <header className="about-intro">
           <h1>{words.title}</h1>
           <p className="intro">{words.intro}</p>
@@ -87,13 +60,10 @@ export default async function PrivacyPage({ params }: Props) {
             </p>
           </section>
           <p>
-            <a href={`/${lang}/terms`}>{googleDisclosure.terms}</a>
-          </p>
-          <p>
             {words.contact} <a href={`mailto:${email}`}>{email}</a>
           </p>
         </article>
-      </main>
+      </LegalDocumentLayout>
     </div>
   )
 }
