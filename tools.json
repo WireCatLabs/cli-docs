@@ -36,5 +36,18 @@
       "ru": "Импортируйте выбранные папки Google, ищите документы локально и сохраняйте теги, заметки и записи памяти с источниками.",
       "es": "Importa carpetas de Google, busca documentos localmente y conserva etiquetas, notas y recuerdos con fuentes."
     }
+  },
+  {
+    "name": "memo",
+    "displayName": "Memo",
+    "repo": "WireCatLabs/cli-memo",
+    "package": "@wirecat/cli-memo",
+    "lang": "en",
+    "summary": {
+      "en": "Your notes, mail and messages in one place for your AI agent: search, tags, people and memories, on your computer.",
+      "ru": "Заметки, почта и сообщения в одном месте для вашего ИИ-агента: поиск, теги, люди и память, на вашем компьютере.",
+      "es": "Tus notas, correo y mensajes en un solo lugar para tu agente de IA: búsqueda, etiquetas, personas y recuerdos, en tu ordenador."
+    },
+    "docsRef": "v0.20.0"
   }
 ]

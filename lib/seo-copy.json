@@ -41,7 +41,8 @@
     },
     "toolTitles": {
       "tg": "Telegram CLI client for AI agents",
-      "max": "MAX CLI for AI agents and bots"
+      "max": "MAX CLI for AI agents and bots",
+      "memo": "Memo: notes, mail and messages for AI agents"
     }
   },
   "ru": {
@@ -86,7 +87,8 @@
     },
     "toolTitles": {
       "tg": "CLI-клиент Telegram для ИИ-агентов",
-      "max": "MAX CLI для ИИ-агентов и ботов"
+      "max": "MAX CLI для ИИ-агентов и ботов",
+      "memo": "Memo: заметки, почта и сообщения для ИИ-агентов"
     }
   },
   "es": {
@@ -131,7 +133,8 @@
     },
     "toolTitles": {
       "tg": "Cliente CLI de Telegram para agentes de IA",
-      "max": "CLI de MAX para agentes de IA y bots"
+      "max": "CLI de MAX para agentes de IA y bots",
+      "memo": "Memo: notas, correo y mensajes para agentes de IA"
     }
   }
 }

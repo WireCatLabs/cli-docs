@@ -115,11 +115,15 @@ export const toPage = (text: string, context: Context): string => {
       title = line.slice(2).trim()
       continue
     }
+    // Link syntax that starts inside inline code is an example, not a link; a link's label may hold code.
+    const code = [...line.matchAll(/`[^`]*`/g)].map((span) => [span.index, span.index + span[0].length])
     out.push(
       line.replace(
         /(!?)\[([^\]]*)\]\(([^)\s]+)((?:\s+"[^"]*")?)\)/g,
-        (_, bang: string, label: string, link, rest) =>
-          `${bang}[${label}](${target(link, context, bang === "!")}${rest})`,
+        (whole, bang: string, label: string, link, rest, offset: number) =>
+          code.some(([start, end]) => offset > start && offset < end)
+            ? whole
+            : `${bang}[${label}](${target(link, context, bang === "!")}${rest})`,
       ),
     )
   }

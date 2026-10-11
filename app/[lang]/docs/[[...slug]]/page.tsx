@@ -15,6 +15,7 @@ import { CommandReferenceIndex } from "@/components/command-reference-index"
 import { DocsDisclosures } from "@/components/docs-disclosures"
 import { DocsTocPopover } from "@/components/docs-toc-popover"
 import { getMDXComponents } from "@/components/mdx"
+import { MemoAnchorRedirect } from "@/components/memo-anchor-redirect"
 import { ReaderGuide } from "@/components/reader-guide"
 import { StructuredData } from "@/components/structured-data"
 import { installationReferenceTitle, ToolInstallationIntro } from "@/components/tool-installation-intro"
@@ -30,7 +31,7 @@ import {
   seoLocales,
   seoWords,
 } from "@/lib/seo"
-import { appName, getPageMarkdownUrl, toolOf } from "@/lib/shared"
+import { appName, getPageMarkdownUrl, isMessenger, toolOf } from "@/lib/shared"
 import { homePath } from "@/lib/site-routes"
 import { source } from "@/lib/source"
 import { toolInstallationGuide } from "@/lib/tool-installation"
@@ -66,7 +67,7 @@ export default async function Page(props: Props) {
   const written = page.data.contentLanguage ?? tool?.lang ?? lang
   const ui = wordsFor(lang).navigation
   const guide =
-    tool && tool.distribution !== "source" && page.slugs.at(-1) === "installation"
+    tool && isMessenger(tool) && page.slugs.at(-1) === "installation"
       ? "installation"
       : tool && page.slugs.at(-1) === "mcp"
         ? "mcp"
@@ -164,6 +165,7 @@ export default async function Page(props: Props) {
           <span className="mt-1 block text-sm text-fd-muted-foreground">{ui.mcpGuideDescription}</span>
         </Link>
       )}
+      {tool?.name === "memo" && page.slugs.length === 1 && <MemoAnchorRedirect lang={lang} />}
       <DocsBody lang={written}>
         {!taskGuide && guide !== "installation" && guideOrientation(page.slugs, lang) && (
           <p data-guide-orientation lang={lang}>

@@ -16,7 +16,7 @@ disponible, y el orden puede cambiar. No hay fechas prometidas. Lo que ya funcio
 ## En curso
 
 - **Zoom**: grabaciones y transcripciones de reuniones. Consulta la [página de Zoom](./zoom.mdx).
-- **Google Drive**: documentos y archivos junto a tus [notas y archivos](./memo.mdx).
+- **Google Drive**: documentos y archivos junto a tus [notas y archivos](./memo/index.md).
 
 ## A continuación
 

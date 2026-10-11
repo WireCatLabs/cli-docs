@@ -1,9 +1,9 @@
 [
   {
-    "name": "memo",
+    "name": "email",
     "package": "@wirecat/cli-memo",
     "docsRef": "v0.11.0",
-    "pages": ["memo", "email"]
+    "pages": ["email"]
   },
   {
     "name": "zoom",

@@ -11,12 +11,12 @@ export const driveDescriptions: Record<string, Record<string, string>> = {
     security: "Understand Google Drive grants, local data retention, optional provider processing and write controls.",
   },
   ru: {
-    index: "Ищите документы Google Drive и сохраняйте локальные теги, заметки и записи памяти с источниками.",
+    index: "Ищите документы Google Drive и сохраняйте локальные теги, заметки и память с источниками.",
     installation: "Соберите Google Drive CLI из исходников и подключите аккаунт через Desktop OAuth-клиент.",
     usage:
       "Импортируйте папки Google Drive, обновляйте локальные документы и добавляйте контекст без изменения оригиналов.",
     search: "Ищите слова, теги и смысл в локальных документах Google Drive со ссылками на источники.",
-    recipes: "Готовьте обзоры, связывайте документы Google Drive с работой и проверяйте предложенные записи памяти.",
+    recipes: "Готовьте обзоры, связывайте документы Google Drive с работой и проверяйте предложенную память.",
     commands: "Находите команды Google Drive CLI, методы API, параметры и коды завершения в справочнике.",
     configuration: "Выбирайте профили Google Drive, явную общую базу, локальные запреты и необязательные настройки ИИ.",
     troubleshooting: "Восстановите вход Google Drive, проверьте пропущенные источники и исправьте пустой поиск.",

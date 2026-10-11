@@ -19,7 +19,7 @@ downloaded messenger history.
 
 ## Before you start
 
-[Install Memo using the notes guide](./memo.mdx#install-memo). You do not need to import a notes
+[Install Memo using the notes guide](./memo/installation.md). You do not need to import a notes
 folder to use email. Use a <DocTerm term="local-agent" lang="en" label="local AI agent" /> on the
 same computer. Memo reads mail through Himalaya; configure the mailbox there before importing.
 Messenger history is optional, but must already be downloaded if you want it in the same answer.
@@ -58,8 +58,8 @@ The example uses a Himalaya account named `gmail`; replace the name and address 
 ```
 
 `name` is the account label in Himalaya; `address` is your mailbox's address in Memo's store.
-To use several mailboxes, add one entry per account to `mail.accounts`. On import, `--account`
-selects the Himalaya name, such as `gmail`. Search results identify mailboxes by their addresses,
+To use several mailboxes, add one entry per account to `mail.accounts`. On import, the word after `memo mail`
+is the Himalaya name, such as `gmail`. Search results identify mailboxes by their addresses,
 such as `you@example.com`. Addresses you link to people later are the senders/recipients,
 not additional accounts you must log into.
 
@@ -69,7 +69,7 @@ mailbox's actual folder names. Gmail labels — Inbox, Important, Sent, Starred 
 imported as mailboxes and refreshed on every run.
 
 ```sh
-memo mail import --account gmail --since 2026-09-01 --json
+memo mail gmail import --since 2026-09-01 --json
 ```
 
 Choose the first date you want to include. Each run reads at most 200 new messages by default;
@@ -136,8 +136,8 @@ labels or mailbox flags. To save an assessment linked to one email:
 memo notes add 'Waiting for a revised quote' --about 'msg:email/you%40example.com/12345/67890' --json
 ```
 
-See [creating, editing and exporting notes](./memo.mdx#create-your-own-notes) and
-[tagging notes, people and messages](./memo.mdx#tag-your-sources) for the full workflow.
+See [creating, editing and exporting notes](./memo/notes.md#write-your-own-notes) and
+[tagging notes, people and messages](./memo/tags.md) for the full workflow.
 
 ## Check the result
 
@@ -153,5 +153,5 @@ An empty result from a partial import does not prove there were no agreements.
 - **Results include another mailbox:** check the source references and keep the intended address.
 - **Mail is missing from person context:** check the exact email identity link and imported history.
 
-Continue with [notes and source labels](./memo.mdx#create-your-own-notes) to keep your own context
+Continue with [notes and source labels](./memo/notes.md#write-your-own-notes) to keep your own context
 about the mail you found.

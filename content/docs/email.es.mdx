@@ -19,7 +19,7 @@ y el historial de mensajes descargado.
 
 ## Antes de empezar
 
-[Instala Memo con la guía de notas](./memo.mdx#install-memo). No necesitas importar una carpeta
+[Instala Memo con la guía de notas](./memo/installation.md). No necesitas importar una carpeta
 de notas para usar correo. Usa un <DocTerm term="local-agent" lang="es" label="agente de IA local" />
 en el mismo ordenador. Memo lee correo a través de Himalaya; configura allí la cuenta antes
 de importar. El historial de mensajería es opcional, pero debe descargarse antes si lo necesitas en la misma respuesta.
@@ -58,8 +58,8 @@ El ejemplo usa una cuenta de Himalaya llamada `gmail`; sustituye el nombre y la 
 ```
 
 `name` es el nombre de la cuenta en Himalaya; `address` es la dirección de tu buzón en Memo.
-Para varios buzones, añade una entrada por cuenta en `mail.accounts`. Al importar, `--account`
-selecciona el nombre de Himalaya, como `gmail`. Los resultados de búsqueda identifican el buzón por su dirección,
+Para varios buzones, añade una entrada por cuenta en `mail.accounts`. Al importar, la palabra después de `memo mail`
+es el nombre de Himalaya, como `gmail`. Los resultados de búsqueda identifican el buzón por su dirección,
 como `you@example.com`. Las direcciones que vinculas a personas son las de remitentes o
 destinatarios, no otras cuentas en las que tengas que iniciar sesión.
 
@@ -69,7 +69,7 @@ de las carpetas de tu buzón. Las etiquetas de Gmail (Inbox, Important, Sent, St
 se importan como buzones y se actualizan en cada ejecución.
 
 ```sh
-memo mail import --account gmail --since 2026-09-01 --json
+memo mail gmail import --since 2026-09-01 --json
 ```
 
 Elige la fecha inicial que quieras incluir. Cada ejecución lee hasta 200 mensajes nuevos
@@ -139,8 +139,8 @@ no cambian las de Gmail ni los indicadores del buzón. Para guardar una valoraci
 memo notes add 'Waiting for a revised quote' --about 'msg:email/you%40example.com/12345/67890' --json
 ```
 
-Consulta [crear, editar y exportar notas](./memo.mdx#create-your-own-notes) y
-[etiquetar notas, personas y mensajes](./memo.mdx#tag-your-sources) para el proceso completo.
+Consulta [crear, editar y exportar notas](./memo/notes.md#write-your-own-notes) y
+[etiquetar notas, personas y mensajes](./memo/tags.md) para el proceso completo.
 
 ## Comprueba el resultado
 
@@ -156,5 +156,5 @@ Un resultado vacío de una importación parcial no demuestra que no hubiera acue
 - **Hay resultados de otro buzón:** comprueba las referencias y conserva la dirección correcta.
 - **Falta correo en el contexto de una persona:** comprueba la dirección exacta, su enlace y el historial importado.
 
-Continúa con [notas y etiquetas de fuentes](./memo.mdx#create-your-own-notes) para guardar
+Continúa con [notas y etiquetas de fuentes](./memo/notes.md#write-your-own-notes) para guardar
 contexto propio sobre el correo que encontraste.

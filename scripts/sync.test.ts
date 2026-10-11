@@ -45,6 +45,12 @@ describe("toPage", () => {
     )
   })
 
+  it("leaves link syntax inside inline code alone", () => {
+    expect(toPage("# Links\n\nWrite `[label](note.md)` to link [the `archive`](archive.md).", context)).toBe(
+      '---\ntitle: "Links"\n---\n\nWrite `[label](note.md)` to link [the `archive`](./archive.md).',
+    )
+  })
+
   it("leaves code alone and quotes a title with a colon", () => {
     const page = toPage("# Usage: the basics\n\n```sh\n# a comment\n[x](usage.md)\n```\n", context)
     expect(page).toBe('---\ntitle: "Usage: the basics"\n---\n\n```sh\n# a comment\n[x](usage.md)\n```\n')

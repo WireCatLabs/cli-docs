@@ -160,8 +160,8 @@ Sustituye el usuario y la dirección por las identidades reales de la persona. C
 identidades devueltas: coincidir en el nombre no basta. Vincular cambia el registro local de la
 persona, no los inicios de sesión ni los buzones. `contacts unlink` separa la identidad indicada si el enlace es incorrecto.
 
-Para guardar contexto propio sobre la persona, consulta [crear notas](./memo.mdx#create-your-own-notes).
-La [guía de notas y etiquetas](./memo.mdx#tag-your-sources) explica etiquetas sobre contactos,
+Para guardar contexto propio sobre la persona, consulta [crear notas](./memo/notes.md#write-your-own-notes).
+La [guía de notas y etiquetas](./memo/tags.md) explica etiquetas sobre contactos,
 personas vinculadas y mensajes. Las órdenes de notas del mensajero se describen en
 [Telegram](./tg/commands.md#tg-contacts-notes) y [MAX](./max/commands.md#max-contacts-notes).
 

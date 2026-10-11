@@ -6,6 +6,7 @@ import {
   BookOpen,
   Bot,
   Braces,
+  Brain,
   BrainCircuit,
   Cable,
   ChartColumn,
@@ -22,7 +23,9 @@ import {
   KeyRound,
   Layers,
   LayoutGrid,
+  Lightbulb,
   ListChecks,
+  ListTodo,
   LockKeyhole,
   Mail,
   MessageSquare,
@@ -38,6 +41,8 @@ import {
   Settings2,
   ShieldCheck,
   SlidersHorizontal,
+  StickyNote,
+  Tag,
   Terminal,
   UserRoundCog,
   Users,
@@ -53,6 +58,12 @@ export const sidebarIcons = {
   organize: Layers,
   drive: FolderOpen,
   email: Mail,
+  mail: Mail,
+  notes: StickyNote,
+  tags: Tag,
+  tasks: ListTodo,
+  memories: Brain,
+  "how-it-works": Lightbulb,
   zoom: Video,
   attachments: Paperclip,
   "audio-recognition": Mic,
@@ -105,8 +116,9 @@ export function unifiedDocsTree(tree: Root): Root {
   const decorate = (node: Node): Node => {
     if (node.type === "folder") {
       const firstPage = node.index ?? node.children.find((child) => child.type === "page")
-      const tool = firstPage?.type === "page" ? /\/docs\/(tg|max|drive)(?:\/|$)/.exec(firstPage.url)?.[1] : undefined
-      const Icon = tool === "tg" ? Send : tool === "max" ? MessageSquare : FolderOpen
+      const tool =
+        firstPage?.type === "page" ? /\/docs\/(tg|max|drive|memo)(?:\/|$)/.exec(firstPage.url)?.[1] : undefined
+      const Icon = tool === "tg" ? Send : tool === "max" ? MessageSquare : tool === "memo" ? NotebookPen : FolderOpen
       return {
         ...node,
         root: false,
@@ -116,7 +128,7 @@ export function unifiedDocsTree(tree: Root): Root {
       }
     }
     if (node.type !== "page") return node
-    const slug = /\/docs\/(tg|max|drive)\/?$/.test(node.url)
+    const slug = /\/docs\/(tg|max|drive|memo)\/?$/.test(node.url)
       ? "index"
       : (node.url.split("/").filter(Boolean).at(-1) ?? "")
     const Icon = sidebarIcons[slug as keyof typeof sidebarIcons] ?? FileText

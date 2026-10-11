@@ -48,10 +48,20 @@ actual product UI labels exactly. [AUTHORING.md](AUTHORING.md) covers page struc
 | Evidence item | source | источник | fuente | An original document, message or other stored item; retain its location. |
 | Labeled item | tag | тег | etiqueta | A local label; not an access permission or project. |
 | Owner-written context | note | заметка | nota | What the user writes about sources or people. |
-| Reusable source-backed conclusion | memory | память | recuerdo | A fact/summary/preference with evidence and a review status; source changes can make it stale. |
+| Reusable source-backed conclusion | memory | память; запись памяти, где иначе непонятно | recuerdo | A fact/summary/preference with evidence and a review status; source changes can make it stale. |
 | Group of work records | project | проект | proyecto | Existing work record connecting tasks and evidence, distinct from a folder or tag. |
 | Action to track | task | задача | tarea | An action with its own state, distinct from a note or tag. |
 | Source collection | folder | папка | carpeta | Explain whether it is a local file folder, Google folder or messenger chat folder. |
+| Shared local file of the CLIs | local store | локальное хранилище | almacén local | The one file on the computer (`wirecat.db`) where tg, max and memo keep messages, mail, notes and records. A messenger's own pages may call its chat copy the local archive. |
+| Pointer to one stored item | reference | ссылка на источник | referencia | The typed identifier a result returns, such as `note:12` or `msg:telegram/1/77/42`. Distinct from a link written inside a note. |
+| Link inside a note | link | ссылка | enlace | A note's link to another note, a person or a message. A name in plain text is not a link. |
+| Sources behind a record | evidence | доказательство | evidencia | The references that show a memory or fact. |
+| Record of what happened | fact | факт | hecho | A statement, question, decision or promise with evidence; proposed until accepted when an agent adds it through MCP. |
+| Action an agent suggests | proposed action | предложенное действие | acción propuesta | A reply, invitation or similar an agent suggests in one account. Approving it creates a task; nothing is sent. |
+| Scheduled local prompt for a task | reminder | напоминание | recordatorio | Kept on the computer and handed to a program that asks for it; never sent to a messenger or mailbox. |
+| Company, team, family or community | organization | организация | organización | The owner's record, not tied to one messenger account. |
+| Stated tie between records | relationship | связь | relación | A person belongs to or relates to an organization or project. It never joins two accounts into one person. |
+| Version number of a note | revision | ревизия | revisión | Increases with each edit; an edit names the current revision so a newer change is not lost. |
 
 ## Technical words and protected text
 

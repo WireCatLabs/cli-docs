@@ -39,17 +39,15 @@ for (const lang of ["en", "ru", "es"]) {
   })
 }
 
-const manualInstall = { en: "Or install it yourself", ru: "Или установите самостоятельно", es: "O instálalo tú mismo" }
 for (const lang of ["en", "ru", "es"] as const) {
   for (const theme of ["light", "dark"] as const) {
     test(`${lang}: Memo requests use the command background in ${theme} mode`, async ({ page, context }) => {
       await context.grantPermissions(["clipboard-read", "clipboard-write"])
       await page.emulateMedia({ colorScheme: theme })
       await page.setViewportSize({ width: 390, height: 900 })
-      await page.goto(`/${lang}/docs/memo`)
+      await page.goto(`/${lang}/docs/memo/installation`)
       const prompt = page.locator("main .docs-prompt").filter({ hasText: "npm install -g @wirecat/cli-memo" }).first()
       await expect(prompt).toBeVisible()
-      await page.getByRole("button", { name: manualInstall[lang], exact: true }).click()
       const command = page
         .locator("main .docs-code-block")
         .filter({ hasText: "npm install -g @wirecat/cli-memo" })
@@ -66,7 +64,9 @@ for (const lang of ["en", "ru", "es"] as const) {
       await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toBe(request)
 
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
-      const response = await page.request.get(`/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}memo/content.md`)
+      const response = await page.request.get(
+        `/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}memo/installation/content.md`,
+      )
       expect(response.ok()).toBe(true)
       const markdown = await response.text()
       expect(markdown).toContain("npm install -g @wirecat/cli-memo")
