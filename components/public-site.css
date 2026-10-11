@@ -54,7 +54,8 @@
   transition: background-color 180ms ease-out;
 }
 .wirecat-editorial .footer-host .theme-toggle:hover {
-  background: var(--soft);
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 .wirecat-editorial .footer-host .theme-sun {
   display: none;
