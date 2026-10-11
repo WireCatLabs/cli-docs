@@ -13,6 +13,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ ima
   const { image } = await params
   const lang = localeOf(image.replace(/\.png$/, ""))
   const words = seoWords(lang)
+  const [memory, context] = words.socialTitle.split(/(?<=\.) /)
   const fonts = [
     {
       name: "Unbounded Latin",
@@ -41,14 +42,17 @@ export async function GET(_request: Request, { params }: { params: Promise<{ ima
         fontFamily: "Unbounded Latin, Unbounded Cyrillic",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: 20, fontSize: 36 }}>
-        <svg width="60" height="60" viewBox="0 0 32 32" aria-hidden="true">
+      <div style={{ display: "flex", alignItems: "center", gap: 28, fontSize: 60 }}>
+        <svg width="100" height="100" viewBox="0 0 32 32" aria-hidden="true">
           <circle cx="16" cy="16" r="16" fill="#4b53f0" />
           <path d="M9 21V11l4 4 3-4 3 4 4-4v10" fill="none" stroke="white" strokeWidth="2.4" strokeLinejoin="round" />
         </svg>
         WireCat
       </div>
-      <div style={{ display: "flex", fontSize: 64, lineHeight: 1.25, color: "#dddfff" }}>{words.socialTitle}</div>
+      <div style={{ display: "flex", flexDirection: "column", fontSize: 48, lineHeight: 1.3 }}>
+        <span>{memory}</span>
+        <span style={{ color: "#b8afff" }}>{context}</span>
+      </div>
       <div style={{ display: "flex", justifyContent: "space-between", fontSize: 22, color: "#d3d9db" }}>
         <span>{words.socialDescription}</span>
         <span>wirecat.dev</span>
