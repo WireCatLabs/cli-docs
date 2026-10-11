@@ -4,7 +4,7 @@
     "homeDescription": "Connect your AI agent to Telegram, MAX, email and notes. Search conversations, gather context and prepare replies with free, open-source tools.",
     "homeLabel": "Home",
     "docsLabel": "Documentation",
-    "socialTitle": "Your conversations. Your AI agent.",
+    "socialTitle": "Memory for your messages. Context for your agent.",
     "socialDescription": "Telegram, MAX, email and notes · Open-source CLI tools",
     "reference": {
       "installation": "Install the {messenger} CLI on Windows, macOS or Linux, check requirements, update it and find its local files.",
@@ -49,7 +49,7 @@
     "homeDescription": "Подключите ИИ-агента к Telegram, MAX, почте и заметкам. Ищите в переписке, собирайте контекст и готовьте ответы с бесплатными инструментами с открытым кодом.",
     "homeLabel": "Главная",
     "docsLabel": "Документация",
-    "socialTitle": "Ваши переписки. Ваш ИИ-агент.",
+    "socialTitle": "Память для ваших сообщений. Контекст для вашего агента.",
     "socialDescription": "Telegram, MAX, почта и заметки · CLI с открытым кодом",
     "reference": {
       "installation": "Установите CLI для {messenger} на Windows, macOS или Linux: требования, обновление и расположение локальных файлов.",
@@ -94,7 +94,7 @@
     "homeDescription": "Conecta tu agente de IA con Telegram, MAX, correo y notas. Busca conversaciones, reúne contexto y prepara respuestas con herramientas gratuitas de código abierto.",
     "homeLabel": "Inicio",
     "docsLabel": "Documentación",
-    "socialTitle": "Tus conversaciones. Tu agente de IA.",
+    "socialTitle": "Memoria para tus mensajes. Contexto para tu agente.",
     "socialDescription": "Telegram, MAX, correo y notas · CLI de código abierto",
     "reference": {
       "installation": "Instala la CLI de {messenger} en Windows, macOS o Linux: requisitos, actualizaciones y ubicación de los archivos locales.",
