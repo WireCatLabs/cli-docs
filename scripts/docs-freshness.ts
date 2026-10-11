@@ -9,7 +9,13 @@ import { readFileSync } from "node:fs"
 import { fileURLToPath } from "node:url"
 import { newerVersion, requestJson } from "./docs-updates.ts"
 
-export type VersionRecord = { name: string; package: string; docsRef: string; pages?: string[] }
+export type VersionRecord = {
+  name: string
+  package: string
+  docsRef: string
+  pages?: string[]
+  distribution?: string
+}
 export type Freshness = VersionRecord & { source: string; latest: string; lagging: boolean }
 
 type JsonRequest = (url: string) => Promise<unknown>
@@ -19,12 +25,15 @@ export async function checkFreshness(
   getJson: JsonRequest = requestJson,
 ): Promise<Freshness[]> {
   return Promise.all(
-    records.map(async (record) => {
-      const { version } = (await getJson(
-        `https://registry.npmjs.org/${encodeURIComponent(record.package)}/latest`,
-      )) as { version: string }
-      return { ...record, latest: version, lagging: newerVersion(version, record.docsRef) }
-    }),
+    // A tool built from source has no npm release to compare against; its docsRef is a commit.
+    records
+      .filter((record) => record.distribution !== "source")
+      .map(async (record) => {
+        const { version } = (await getJson(
+          `https://registry.npmjs.org/${encodeURIComponent(record.package)}/latest`,
+        )) as { version: string }
+        return { ...record, latest: version, lagging: newerVersion(version, record.docsRef) }
+      }),
   )
 }
 

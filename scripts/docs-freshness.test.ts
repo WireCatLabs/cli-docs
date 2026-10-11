@@ -22,6 +22,21 @@ describe("docs freshness", () => {
     expect(report).not.toContain("memo: read the changelog")
   })
 
+  it("skips a tool built from source, which has no npm release", async () => {
+    const drive = {
+      name: "drive",
+      package: "@wirecat/drive-cli",
+      docsRef: "256e056",
+      distribution: "source",
+      source: "tools.json",
+    }
+    const rows = await checkFreshness(
+      [...records, drive],
+      registry({ "@wirecat/tg-cli": "0.9.0", "@wirecat/cli-memo": "0.11.0" }),
+    )
+    expect(rows.map((row) => row.name)).toEqual(["tg", "memo"])
+  })
+
   it("names the authored pages to update when a hand-written guide lags", async () => {
     const rows = await checkFreshness(records, registry({ "@wirecat/tg-cli": "0.9.0", "@wirecat/cli-memo": "0.12.0" }))
     expect(freshnessReport(rows)).toContain("content/docs/{memo}*.mdx")
