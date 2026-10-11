@@ -36,27 +36,27 @@ export async function GET(_request: Request, { params }: { params: Promise<{ ima
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        padding: "64px 72px",
+        padding: "56px 56px",
         background: "#101617",
         color: "#ffffff",
         fontFamily: "Unbounded Latin, Unbounded Cyrillic",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: 28, fontSize: 60 }}>
-        <svg width="100" height="100" viewBox="0 0 32 32" aria-hidden="true">
-          <circle cx="16" cy="16" r="16" fill="#4b53f0" />
-          <path d="M9 21V11l4 4 3-4 3 4 4-4v10" fill="none" stroke="white" strokeWidth="2.4" strokeLinejoin="round" />
-        </svg>
-        WireCat
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 18, fontSize: 40 }}>
+          <svg width="64" height="64" viewBox="0 0 32 32" aria-hidden="true">
+            <circle cx="16" cy="16" r="16" fill="#4b53f0" />
+            <path d="M9 21V11l4 4 3-4 3 4 4-4v10" fill="none" stroke="white" strokeWidth="2.4" strokeLinejoin="round" />
+          </svg>
+          WireCat
+        </div>
+        <span style={{ fontSize: 28, color: "#d3d9db" }}>wirecat.dev</span>
       </div>
-      <div style={{ display: "flex", flexDirection: "column", fontSize: 48, lineHeight: 1.3 }}>
+      <div style={{ display: "flex", flexDirection: "column", fontSize: 56, lineHeight: 1.2, gap: 8 }}>
         <span>{memory}</span>
         <span style={{ color: "#b8afff" }}>{context}</span>
       </div>
-      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 22, color: "#d3d9db" }}>
-        <span>{words.socialDescription}</span>
-        <span>wirecat.dev</span>
-      </div>
+      <div style={{ display: "flex", fontSize: 28, color: "#d3d9db" }}>{words.socialDescription}</div>
     </div>,
     { width: 1200, height: 630, fonts },
   )
