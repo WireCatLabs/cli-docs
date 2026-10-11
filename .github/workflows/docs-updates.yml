@@ -8,6 +8,8 @@ on:
     branches: [main]
     paths:
       - tools.json
+      - authored-docs.json
+      - scripts/docs-freshness.ts
       - scripts/docs-updates.ts
       - .github/workflows/docs-updates.yml
 
@@ -35,6 +37,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
+      - name: Report which tool docs lag npm, including hand-written guides
+        continue-on-error: true
+        shell: bash
+        run: pnpm --silent docs:freshness | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Write the review report to the run summary
         if: always()
         run: |

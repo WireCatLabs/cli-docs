@@ -105,7 +105,8 @@ Russian and Spanish pages label that section explicitly and mark it `lang="en"`;
 installation steps and surrounding reference remain localized. This is recorded in the reviewed
 portal corrections after source-preservation validation.
 
-Current reviewed releases: **tg v0.40.1** and **max v0.39.0**, in English, Russian and Spanish.
+The reviewed releases are the `docsRef` values in `tools.json` (synced tools) and `authored-docs.json`
+(memo and zoom, whose guides are written here), in English, Russian and Spanish.
 The [October 8 guide review](docs/reviews/2026-10-08-reviewed-tool-guides.md) records the source boundary, translation review and retained errata.
 
 ### Keeping published documentation current
@@ -125,6 +126,10 @@ pnpm docs:updates --prepare
 ```
 
 Preparation verifies that GitHub and npm agree, captures the new upstream pages, and advances the proposed `docsRef` values. It leaves translations, correction rules and review fingerprints unchanged. Reports are written to ignored `.docs-updates/report.md` and `.docs-updates/updates.json`. Review changed pages, translate new or changed prose, and check command examples and errata before marking fingerprints reviewed. Unchanged content keeps its existing fingerprint.
+
+`pnpm docs:freshness` compares every recorded `docsRef`, in both files, with npm's latest release and
+exits non-zero when a tool's docs lag. It needs the network, so it is not part of `ci:quick` or the tests.
+After updating the memo or zoom guides, raise their `docsRef` in `authored-docs.json`.
 
 To capture one released tool without replacing the localized site pages:
 
