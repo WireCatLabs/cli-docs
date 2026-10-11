@@ -82,3 +82,9 @@ an explanation of that language boundary. It does not invent translated CLI toke
 
 No Google credentials or live Google/model actions were needed for these checks. Runtime limits
 and future provider-folder database work remain in their owning source/design, not fictional commands.
+
+The full-history security workflow flagged the pre-existing PostHog browser project token in
+commit `6331ced`, `site.config.json:11`. Its project-token type was verified without logging the
+value; [PostHog documents that type as public](https://posthog.com/docs/privacy#is-it-ok-for-my-api-key-to-be-exposed-and-public).
+An exact historical fingerprint exemption addresses this false positive; no rule, path or new
+credential is generally excluded. The new-commit scan had zero findings before the exemption.

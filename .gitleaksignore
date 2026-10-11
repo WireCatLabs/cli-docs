@@ -1,0 +1,4 @@
+# Public browser PostHog project token from the historical analytics setup (phc_, not a private key).
+# https://posthog.com/docs/privacy#is-it-ok-for-my-api-key-to-be-exposed-and-public
+# Exempt only this exact historical finding; future credentials remain scanned.
+6331ced5c1a65a6f5aff915720c7acbaf9892eae:site.config.json:generic-api-key:11
