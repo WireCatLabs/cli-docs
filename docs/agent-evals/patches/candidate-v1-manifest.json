@@ -1,12 +1,12 @@
 [
   {
-    "path": "node_modules/@leemour/cli-messaging/dist/cli/commands-command.js",
+    "path": "node_modules/@wirecat/cli-messaging/dist/cli/commands-command.js",
     "baselineSha256": "1390e06ed3516e79b86a8aa1c1a6998c4e4183466508a4df9fa485c26ad304fb",
     "candidateSha256": "d1258289cb9f0f500682b31bdd074ee0c2b9285dc36bb1bdcc899a59df31e254",
     "source": "/tmp/wirecat-messaging-discovery/dist/cli/commands-command.js"
   },
   {
-    "path": "node_modules/@leemour/tg-cli/skills/tg-cli/SKILL.md",
+    "path": "node_modules/@wirecat/tg-cli/skills/tg-cli/SKILL.md",
     "baselineSha256": "caa66fc72b58dc476b6884f18fae3bf1413b9ddbb47f1c35f6d1d1e8891b71e2",
     "candidateSha256": "0ac8382493f5dbb0c437ae3a956ebfb38815dee6d9cec899fe9b770139f9ee39",
     "source": "/tmp/wirecat-tg-discovery/skills/tg-cli/SKILL.md"

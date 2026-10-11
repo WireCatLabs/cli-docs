@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "@leemour/tg-cli": "^0.23.0"
+    "@wirecat/tg-cli": "^0.23.0"
   }
 }

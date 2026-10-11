@@ -2,7 +2,7 @@ import { siteUrl } from "./shared"
 
 export function readyInstallationCommand(command: string, windows: boolean): string {
   if (!/^npm(?:\.cmd)?\s+(?:i|install)\s+-g\s+/.test(command)) return command
-  const tool = /@(?:wirecat|leemour)\/(tg|max)-cli\b/.exec(command)?.[1]
+  const tool = /@wirecat\/(tg|max)-cli\b/.exec(command)?.[1]
   if (!tool) return command
   if (windows) return `& ([scriptblock]::Create((Invoke-RestMethod '${siteUrl}/install.ps1'))) -Tool ${tool} -Agent all`
   return `npm install -g @wirecat/${tool}-cli && ${tool} skill install --for all`

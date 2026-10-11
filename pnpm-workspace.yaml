@@ -4,8 +4,6 @@ allowBuilds:
   lefthook: true
   sharp: true
 minimumReleaseAgeExclude:
-  - '@leemour/cli-core@0.14.0 || 0.17.2'
-  - '@leemour/cli-messaging@0.128.0 || 0.168.0'
   - '@wirecat/cli-core@0.18.1'
   - '@wirecat/cli-messaging-onnx@1.0.0'
   - '@wirecat/cli-messaging-sqlite@1.0.0'

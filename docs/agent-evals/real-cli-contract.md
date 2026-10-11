@@ -8,7 +8,7 @@
 
 ```sh
 eval_runtime=$(mktemp -d /tmp/wirecat-cli-runtime.XXXXXX)
-npm install --prefix "$eval_runtime" @leemour/tg-cli@0.22.0
+npm install --prefix "$eval_runtime" @wirecat/tg-cli@0.22.0
 node scripts/agent-evals/real-cli-contract.mjs "$eval_runtime" /tmp/wirecat-cli-contract.json
 ```
 

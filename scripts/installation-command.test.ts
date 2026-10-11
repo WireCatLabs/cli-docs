@@ -3,13 +3,13 @@ import { readyInstallationCommand } from "../lib/installation-command"
 
 describe("ready installation commands", () => {
   it.each(["tg", "max"])("copies the Windows installer for %s from any install button", (tool) => {
-    const command = readyInstallationCommand(`npm i -g @leemour/${tool}-cli`, true)
+    const command = readyInstallationCommand(`npm i -g @wirecat/${tool}-cli`, true)
     expect(command).toContain("https://wirecat.dev/install.ps1")
     expect(command).toContain(`-Tool ${tool} -Agent all`)
     expect(command).not.toContain("npm exec")
   })
   it.each(["tg", "max"])("includes skill installation on Unix for %s", (tool) => {
-    expect(readyInstallationCommand(`npm install -g @leemour/${tool}-cli`, false)).toBe(
+    expect(readyInstallationCommand(`npm install -g @wirecat/${tool}-cli`, false)).toBe(
       `npm install -g @wirecat/${tool}-cli && ${tool} skill install --for all`,
     )
   })

@@ -45,7 +45,7 @@ Each fresh-run directory contains the complete supplied `agent-task.md`, the ori
 
 Baseline manifests originally hashed the prompt/chats/messages definition only. The revised initializer preserves that definition hash and additionally hashes account, people, members, permissions and discovery artifacts. Original baseline manifests were not retroactively assigned an initializer hash. Fixture seeding uses a declared fixed clock; the actual CLI uses wall clock. An npm lockfile and the evaluated initializer/launcher are archived under `patches/` for lineage.
 
-To recreate the published baseline dependencies, copy [package.json](patches/runtime-package.json.txt) and [package-lock.json](patches/runtime-package-lock.json.txt) into a new external runtime and run `npm ci --ignore-scripts`. To reconstruct evaluated candidate v1, copy [commands module v1](patches/commands-scoped-v1.js.txt) to its `node_modules/@leemour/cli-messaging/dist/cli/commands-command.js` and [skill v1](patches/tg-task-guidance-v1.md) to `node_modules/@leemour/tg-cli/skills/tg-cli/SKILL.md`. Check the candidate hashes before using it.
+To recreate the published baseline dependencies, copy [package.json](patches/runtime-package.json.txt) and [package-lock.json](patches/runtime-package-lock.json.txt) into a new external runtime and run `npm ci --ignore-scripts`. To reconstruct evaluated candidate v1, copy [commands module v1](patches/commands-scoped-v1.js.txt) to its `node_modules/@wirecat/cli-messaging/dist/cli/commands-command.js` and [skill v1](patches/tg-task-guidance-v1.md) to `node_modules/@wirecat/tg-cli/skills/tg-cli/SKILL.md`. Check the candidate hashes before using it.
 
 Prepare **new** fixture directories; the initializer refuses an existing destination:
 

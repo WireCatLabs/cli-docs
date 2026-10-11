@@ -208,7 +208,7 @@ summary; news digests remain separate future work. Permission: `messages.evidenc
    Use --language legacy for old filters/discovery; --regex remains separate bounded JavaScript iu mode.
    Use --json for query version/coverage. Empty hits do not prove a message never existed.
    --timezone selects a calendar zone; kind:bot and in:bots differ. Term/body regex differ.
-   See the [search guide](https://github.com/leemour/tg-cli/blob/main/docs/search.md).
+   See the [search guide](https://github.com/WireCatLabs/tg-cli/blob/main/docs/search.md).
 
 6. **`tg store export` exports only what was kept**, and never asks Telegram. `tg store status` says
    how much of each chat is kept.
@@ -358,7 +358,7 @@ Options:
   --regex                     the words are one regular expression,
                               case-insensitive, tested against every stored text
   -h, --help                  display help for command
-Search guide: https://github.com/leemour/cli-messaging/blob/main/docs/search/query-language.md
+Search guide: https://github.com/WireCatLabs/cli-messaging/blob/main/docs/search/query-language.md
 
 ```
 

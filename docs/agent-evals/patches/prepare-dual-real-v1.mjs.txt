@@ -16,7 +16,7 @@ const output = resolve(process.argv[3] ?? "/tmp/wirecat-cold-real-023")
 const here = dirname(fileURLToPath(import.meta.url))
 const revision = process.argv[4] ?? "v1"
 assert.ok(["v1", "v2"].includes(revision), "Fixture revision must be v1 or v2")
-const root = join(runtime, "node_modules/@leemour")
+const root = join(runtime, "node_modules/@wirecat")
 const versions = {}
 for (const name of [packageName, "cli-messaging", "cli-core"])
   versions[name] = JSON.parse(await readFile(join(root, name, "package.json"), "utf8")).version

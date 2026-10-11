@@ -74,7 +74,30 @@ const target = (link: string, { repo, tag, pages, from }: Context, image: boolea
  * relative link points either at a page of the same tool or at the file on GitHub at the same tag.
  * Code is left alone.
  */
+/** Keep imported historical package names consistent with the current installation names. */
+export const normalizePackageReferences = (text: string): string => {
+  const normalized = text.replace(
+    /@[a-z0-9-]+(\/|%2[fF])(cli-(?:core|messaging(?:-onnx|-sqlite)?|tasks|memo|meetings|testing)|(?:tg|max|zoom)-cli)(?![\w-])/g,
+    "@wirecat$1$2",
+  )
+  return normalized
+    .replace(/(`@wirecat\/[^`]+`) \(\1 [^)]*\)/g, "$1")
+    .replace(/^- .*?(?=\n- |\n\n|\n###|(?![\s\S]))/gms, (bullet) => {
+      if (!/Uninstall|no new versions|Desinstala|No habrá nuevas versiones|Удалите|новых версий/i.test(bullet))
+        return bullet
+      const packages = [...bullet.matchAll(/@wirecat\/([a-z-]+)/g)]
+      if (packages.length < 2) return bullet
+      const pkg = packages[0][1]
+      if (/[А-Яа-я]/.test(bullet))
+        return `- **Пакет называется \`@wirecat/${pkg}\`, репозиторий находится в WireCatLabs.** Используйте этот пакет для установки и обновления.`
+      if (/Desinstala|No habrá/i.test(bullet))
+        return `- **El paquete se llama \`@wirecat/${pkg}\` y el repositorio pertenece a WireCatLabs.** Usa este paquete para instalar y actualizar.`
+      return `- **The package is \`@wirecat/${pkg}\` and its repository belongs to WireCatLabs.** Use this package for installations and updates.`
+    })
+}
+
 export const toPage = (text: string, context: Context): string => {
+  text = normalizePackageReferences(text)
   const lines = text.split("\n")
   let title = ""
   let fenced = false

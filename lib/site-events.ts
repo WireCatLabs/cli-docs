@@ -82,7 +82,7 @@ export function trackSiteEvent(name: SiteEvent["name"], context: InstallationEve
 }
 
 export function copiedInstallationTool(command: string): "tg" | "max" | undefined {
-  return (/@(?:wirecat|leemour)\/(tg|max)-cli\b/.exec(command)?.[1] ?? /-Tool (tg|max)\b/.exec(command)?.[1]) as
+  return (/@wirecat\/(tg|max)-cli\b/.exec(command)?.[1] ?? /-Tool (tg|max)\b/.exec(command)?.[1]) as
     | "tg"
     | "max"
     | undefined

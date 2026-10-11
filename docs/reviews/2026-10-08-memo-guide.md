@@ -12,7 +12,7 @@ AI workflows, assistants and bots on LangGraph wording in all three languages.
 ## Sources
 
 Memo `v0.2.0` resolves to `451bc8eafa57e402402531d8bbdde7fbae6d946a`.
-The exact `@leemour/cli-memo@0.2.0` npm package was retrieved with lifecycle scripts disabled.
+The exact `@wirecat/cli-memo@0.2.0` npm package was retrieved with lifecycle scripts disabled.
 Its README's unpublished-status sentence is stale; npm availability and package version
 were verified separately. No unreleased behavior is described.
 
@@ -25,7 +25,7 @@ were verified separately. No unreleased behavior is described.
 | Search and own notes | `src/search/command.ts`, `src/notes/command.ts` |
 
 Platform configuration locations and overrides were checked in packaged
-`@leemour/cli-core@0.17.2` (`dist/paths.js`) and its `env-paths` implementation.
+`@wirecat/cli-core@0.17.2` (`dist/paths.js`) and its `env-paths` implementation.
 This is a portal entry guide, not a new generated messenger reference; `tools.json`
 remains the reviewed Telegram/MAX sync inventory.
 

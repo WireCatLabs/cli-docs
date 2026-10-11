@@ -12,7 +12,7 @@ React Aria Autocomplete is another current accessible option, but adds a second 
 
 ## Shared language and scope
 
-`pnpm search:generate` bundles the parser, registry, normalization, date boundaries and bounded NFA from pinned `@leemour/cli-messaging@0.128.0`. A build-time alias resolves only `CliError` to cli-core's pure errors module; no Node code enters the browser bundle. Generated drift verification and input fingerprint prevent an unnoticed dialect fork. Apache/MIT notices ship at `/search-language-notices.txt`.
+`pnpm search:generate` bundles the parser, registry, normalization, date boundaries and bounded NFA from pinned `@wirecat/cli-messaging@0.128.0`. A build-time alias resolves only `CliError` to cli-core's pure errors module; no Node code enters the browser bundle. Generated drift verification and input fingerprint prevent an unnoticed dialect fork. Apache/MIT notices ship at `/search-language-notices.txt`.
 
 The demo evaluator supports text/body, author/chat, date, peer kind, attachments and account/provider scope on the sample corpus. Preset/topic fields require a real archive and are explicitly unavailable here; their valid query syntax can still be copied. Results use newest order, UTC dates and two surrounding messages. They are verified against the actual indexed SQLite service, not hand-authored result arrays. The illustrative source messages remain in English; interface copy is localized.
 

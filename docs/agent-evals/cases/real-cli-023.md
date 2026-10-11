@@ -1,7 +1,7 @@
 # Fresh agents against the published CLI
 
 Run `node scripts/agent-evals/prepare-cold-real.mjs <runtime> <new-output-directory> [v1|v2]`.
-Install the external runtime with `npm install --prefix <runtime> --ignore-scripts @leemour/tg-cli@0.23.0`.
+Install the external runtime with `npm install --prefix <runtime> --ignore-scripts @wirecat/tg-cli@0.23.0`.
 Each output directory gets persistent synthetic SQLite, an executable `tg`, exact prompt, manifest and automatic JSONL trace. Use a new output directory for every run; preparation refuses an existing output directory. The default v1 reproduces the initial baseline exactly; v2 adds a separate empty Atlas · legal chat and cancellation question.
 
 The fresh agent receives only its user prompt, executable path and this execution boundary: use this launcher exclusively; do not inspect fixture files, scripts, other agents or previous runs; no package installation or other Telegram executable. Discovery through the real CLI is allowed. The launcher forces reads offline, while sends execute the real configured permission gate. Synthetic remembered account IDs are not Telegram sessions. Every fixture has `messages.send: deny`. The JavaScript preload blocks observed network primitives; it is not an OS network namespace or an online-provider test.

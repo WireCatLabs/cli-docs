@@ -14,9 +14,6 @@ for (const file of walk("content/docs")) {
     const editorialArtifact =
       /If the command is missing, update|Если команды нет, обновите|Si falta el comando, actualiza|The owner confirmed|Владелец подтвердил|El propietario confirmó|What was checked|Что проверено|Qué se ha comprobado|has not been established here|подтверждённого пути пока нет|Use WireCat|Используйте WireCat|Usa WireCat/i
     if (editorialArtifact.test(line)) findings.push(`${file}:${index + 1}: editorial artifact: ${line.trim()}`)
-    if (/@leemour(?:\/|%2[fF])/.test(line)) {
-      findings.push(`${file}:${index + 1}: use the published @wirecat package: ${line.trim()}`)
-    }
     const text = line.replace(/https?:\/\/[^\s)"<>]+/g, "")
     // WireCat packages currently use 0.x releases. Ignore addresses such as 127.0.0.1.
     if (
@@ -29,7 +26,7 @@ for (const file of walk("content/docs")) {
 }
 if (findings.length) {
   console.error(
-    `Remove old package scopes, release numbers and editorial artifacts from current user guides:\n${findings.join("\n")}`,
+    `Remove package pins, release numbers and editorial artifacts from current user guides:\n${findings.join("\n")}`,
   )
   process.exitCode = 1
-} else console.log("Current user guides: no old package scopes, pins, release-number prose or editorial artifacts")
+} else console.log("Current user guides: no package pins, release-number prose or editorial artifacts")

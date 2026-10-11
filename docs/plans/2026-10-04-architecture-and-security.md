@@ -32,15 +32,15 @@ Sources read: cli-docs `a4c1899`, cli-messaging `680d22e` (0.140.0), cli-core 0.
 
 **Packages, verified in each `package.json`:**
 
-- `@leemour/cli-core` — output modes, renderer, error model and exit codes, keyring (optional
+- `@wirecat/cli-core` — output modes, renderer, error model and exit codes, keyring (optional
   `@napi-rs/keyring`), config, clocks; plus `./http`, `./codegen`, `./update`, `./release`,
   `./skill`, `./completion`. Also used by `braze-cli` (public).
-- `@leemour/cli-messaging` — domain model, store, send guard, services, command skeleton, MCP
-  server, speech, background. Hard dependencies on `@leemour/cli-messaging-sqlite` and
-  `@leemour/cli-messaging-onnx` (both 1.0.0).
-- `@leemour/tg-cli` — adds `@mtcute/node`; its own code is the Telegram adapter, session, setup,
+- `@wirecat/cli-messaging` — domain model, store, send guard, services, command skeleton, MCP
+  server, speech, background. Hard dependencies on `@wirecat/cli-messaging-sqlite` and
+  `@wirecat/cli-messaging-onnx` (both 1.0.0).
+- `@wirecat/tg-cli` — adds `@mtcute/node`; its own code is the Telegram adapter, session, setup,
   update.
-- `@leemour/max-cli` — adds `ws`, `@msgpack/msgpack`, `lossless-json`; owns the MAX protocol,
+- `@wirecat/max-cli` — adds `ws`, `@msgpack/msgpack`, `lossless-json`; owns the MAX protocol,
   session and the official Bot API slice (`src/bot/`).
 
 **Footer and security links:**

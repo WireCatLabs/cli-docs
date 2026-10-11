@@ -73,7 +73,7 @@ describe("installation intent measurement", () => {
     expect(browser.ym).toHaveBeenCalledTimes(1)
   })
   it("recognizes the published Windows and npm installation forms", () => {
-    expect(copiedInstallationTool("npm install -g @leemour/tg-cli && tg skill install --for all")).toBe("tg")
+    expect(copiedInstallationTool("npm install -g @wirecat/tg-cli && tg skill install --for all")).toBe("tg")
     expect(copiedInstallationTool("npm install -g @wirecat/max-cli && max skill install --for all")).toBe("max")
     expect(copiedInstallationTool("& (...) -Tool max -Agent all")).toBe("max")
     expect(copiedInstallationTool("tg mcp config")).toBeUndefined()
