@@ -14,6 +14,7 @@ import { fileURLToPath } from "node:url"
 import { parseArgs } from "node:util"
 import { structureProblems } from "@wirecat/cli-core/release"
 import { captureUpstream, localizeTool } from "./localize.ts"
+import { checkoutSource, sourceInstallation } from "./source-install.ts"
 
 export type Tool = {
   name: string
@@ -23,6 +24,8 @@ export type Tool = {
   docsRef?: string
   guideRefs?: Record<string, string>
   summary: Record<string, string>
+  displayName?: string
+  distribution?: "source"
 }
 
 /** A preview uses its requested ref; published prose overrides must be immutable. */
@@ -137,20 +140,22 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
   if (!tag) throw new Error(`${tool.repo}: no vX.Y.Z tag`)
   const checkout = mkdtempSync(join(tmpdir(), `cli-docs-${tool.name}-`))
   try {
-    run("git", [
-      "-c",
-      "advice.detachedHead=false",
-      "clone",
-      "-q",
-      "--depth",
-      "1",
-      "--branch",
-      tag,
-      "--filter=blob:none",
-      "--sparse",
-      `https://github.com/${tool.repo}.git`,
-      checkout,
-    ])
+    if (!ref && sourceInstallation(tool)) checkoutSource(tool, checkout)
+    else
+      run("git", [
+        "-c",
+        "advice.detachedHead=false",
+        "clone",
+        "-q",
+        "--depth",
+        "1",
+        "--branch",
+        tag,
+        "--filter=blob:none",
+        "--sparse",
+        `https://github.com/${tool.repo}.git`,
+        checkout,
+      ])
     run("git", ["sparse-checkout", "set", "docs"], checkout)
     const problems = structureProblems(checkout)
     if (problems.length > 0) throw new Error(`${tool.repo} ${tag}:\n${problems.join("\n")}`)
@@ -183,7 +188,11 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
       })
       writeFileSync(join(destination, file), page)
     }
-    if (changelogGuide || existsSync(join(checkout, "CHANGELOG.md"))) {
+    const meta = JSON.parse(readFileSync(join(docs, "meta.json"), "utf8")) as Record<string, unknown>
+    if (
+      changelogGuide ||
+      ((meta.pages as string[]).includes("changelog") && existsSync(join(checkout, "CHANGELOG.md")))
+    ) {
       const changelog = toPage(changelogGuide?.text ?? readFileSync(join(checkout, "CHANGELOG.md"), "utf8"), {
         repo: tool.repo,
         tag: changelogGuide?.ref ?? tag,
@@ -193,7 +202,6 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
       writeFileSync(join(destination, "changelog.md"), changelog)
     }
     // root: each tool is a tab of its own in the sidebar, not a folder under the others.
-    const meta = JSON.parse(readFileSync(join(docs, "meta.json"), "utf8")) as Record<string, unknown>
     const sidebar = meta.pages as string[]
     for (const file of guides.keys()) {
       const slug = file.slice(0, -3)

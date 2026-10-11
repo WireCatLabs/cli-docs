@@ -50,6 +50,8 @@ import { readerGuide } from "./reader-guides"
 export const sidebarIcons = {
   features: LayoutGrid,
   memo: NotebookPen,
+  organize: Layers,
+  drive: FolderOpen,
   email: Mail,
   zoom: Video,
   attachments: Paperclip,
@@ -104,7 +106,7 @@ export function unifiedDocsTree(tree: Root): Root {
   const decorate = (node: Node): Node => {
     if (node.type === "folder") {
       const firstPage = node.index ?? node.children.find((child) => child.type === "page")
-      const tool = firstPage?.type === "page" ? /\/docs\/(tg|max)(?:\/|$)/.exec(firstPage.url)?.[1] : undefined
+      const tool = firstPage?.type === "page" ? /\/docs\/(tg|max|drive)(?:\/|$)/.exec(firstPage.url)?.[1] : undefined
       const Icon = tool === "tg" ? Send : tool === "max" ? MessageSquare : FolderOpen
       return {
         ...node,
@@ -115,7 +117,9 @@ export function unifiedDocsTree(tree: Root): Root {
       }
     }
     if (node.type !== "page") return node
-    const slug = /\/docs\/(tg|max)\/?$/.test(node.url) ? "index" : (node.url.split("/").filter(Boolean).at(-1) ?? "")
+    const slug = /\/docs\/(tg|max|drive)\/?$/.test(node.url)
+      ? "index"
+      : (node.url.split("/").filter(Boolean).at(-1) ?? "")
     const Icon = sidebarIcons[slug as keyof typeof sidebarIcons] ?? FileText
     const task = /^\/(en|ru|es)\/docs\/(tg|max)\/(usage|rankings|bot|groups)\/?$/.exec(node.url)
     const title = task ? readerGuide([task[2], task[3]], task[1])?.title : undefined

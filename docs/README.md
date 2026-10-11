@@ -32,6 +32,7 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | Why does my agent not see the tool? | `agents.mdx` | Setup/recovery | Preserve the “usually already connected” distinction |
 | What should I ask first? | `first-tasks.md` | Tutorial/task hub | Pilot catch-up, older-history search and draft workflows here |
 | What do my accounts know about a person? | `people.md` | Task guide | Review source and data boundaries |
+| How should I connect documents, people and work? | `organize.md` | Explanation and worked task | Distinguish tags, notes, memories, projects/tasks and source-folder scope |
 | Can I see what the agent does? | `meeting-brief.mdx` | Interactive demo | Reuse reviewed meeting, inbox and search scenarios with sources |
 | How do I find a message or agreement? | `search.md` | Task guide | Lead with an agent request; keep terminal syntax optional |
 | How do I connect a browser AI app? | `browser-apps.mdx` | Connection guide | Preserve current web setup instructions |
@@ -52,6 +53,11 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | Which account or bot will run the task? | `profiles.md` | Account selection | Explain named profiles before configuration syntax |
 
 ## Messenger pages
+
+Google Drive uses the same source-owned structure under `drive/`, pinned to a reviewed source
+installation commit. Its compact reader path is overview → installation → usage/search/recipes;
+configuration, security, troubleshooting and generated commands remain discoverable references.
+It is listed next to Telegram/MAX under Tools, without implying it has messenger capabilities.
 
 Each row applies to `tg` and `max` where supported. Public addresses remain
 `/{lang}/docs/{tool}/{page}`. The owning source is `docs/{page}.md` in `tg-cli` or `max-cli`,

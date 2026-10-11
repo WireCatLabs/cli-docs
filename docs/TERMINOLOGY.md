@@ -41,6 +41,18 @@ actual product UI labels exactly. [AUTHORING.md](AUTHORING.md) covers page struc
 | Service processing AI requests | AI provider | провайдер ИИ | proveedor de IA | The configured service that receives data for AI processing. Explain this term when external data sharing matters; a provider is not another name for the agent. |
 | Configured text-generation component | model identifier (technical setting) | идентификатор модели (техническая настройка) | identificador del modelo (ajuste técnico) | The name used by an AI provider to select a text-generating component. This is a configuration value, not the agent the reader chats with. Preserve `models.replies.model` and other actual keys. |
 
+## Sources and organization
+
+| Concept | English | Russian | Spanish | Meaning |
+| --- | --- | --- | --- | --- |
+| Evidence item | source | источник | fuente | An original document, message or other stored item; retain its location. |
+| Labeled item | tag | тег | etiqueta | A local label; not an access permission or project. |
+| Owner-written context | note | заметка | nota | What the user writes about sources or people. |
+| Reusable source-backed conclusion | memory | память | recuerdo | A fact/summary/preference with evidence and a review status; source changes can make it stale. |
+| Group of work records | project | проект | proyecto | Existing work record connecting tasks and evidence, distinct from a folder or tag. |
+| Action to track | task | задача | tarea | An action with its own state, distinct from a note or tag. |
+| Source collection | folder | папка | carpeta | Explain whether it is a local file folder, Google folder or messenger chat folder. |
+
 ## Technical words and protected text
 
 Use **AI agent** or **agent** for the AI actor in ordinary prose. Do not introduce model as a

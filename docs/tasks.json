@@ -70,5 +70,39 @@
       "tg": ["attachments", "models", "messages"],
       "max": ["attachments", "models", "messages"]
     }
+  },
+  {
+    "id": "drive-ingestion",
+    "pages": ["drive/installation.md", "drive/usage.md", "drive/search.md"],
+    "families": {
+      "drive": ["session", "folders", "sync", "status", "documents", "search"]
+    }
+  },
+  {
+    "id": "organize-sources",
+    "pages": ["organize.md", "memo.mdx", "people.md", "drive/recipes.md"],
+    "families": {
+      "drive": ["tags", "notes", "links", "memories", "people"]
+    }
+  },
+  {
+    "id": "drive-controls",
+    "pages": ["drive/configuration.md", "drive/troubleshooting.md", "drive/security.md", "drive/commands.md"],
+    "families": {
+      "drive": [
+        "config",
+        "models",
+        "api",
+        "files",
+        "comments",
+        "permissions",
+        "revisions",
+        "shared-drives",
+        "mcp",
+        "commands",
+        "complete",
+        "schema"
+      ]
+    }
   }
 ]

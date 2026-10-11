@@ -5,9 +5,10 @@ export function installationMarkdown(lang: string): string {
   const words = wordsFor(lang)
   return tools
     .toSorted((a) => (a.name === "tg" ? -1 : 1))
-    .map(
-      (tool) =>
-        `### ${words.install} ${tool.name === "tg" ? "Telegram" : "MAX"} [#${tool.name}]\n\n${words.onboarding.paste}\n\n\`\`\`text\n${words.onboarding.prompt(tool.name, tool.package)}\n\`\`\``,
+    .map((tool) =>
+      tool.distribution === "source"
+        ? `### ${tool.displayName ?? tool.name} [#${tool.name}]\n\n[${words.install}](/${lang}/docs/${tool.name}/installation)\n\n${tool.summary[lang as "en" | "ru" | "es"]}`
+        : `### ${words.install} ${tool.name === "tg" ? "Telegram" : "MAX"} [#${tool.name}]\n\n${words.onboarding.paste}\n\n\`\`\`text\n${words.onboarding.prompt(tool.name, tool.package)}\n\`\`\``,
     )
     .join("\n\n")
 }

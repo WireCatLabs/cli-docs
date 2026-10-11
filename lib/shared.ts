@@ -1,10 +1,11 @@
 import { createGetUrl } from "fumadocs-core/source"
 import siteConfig from "@/site.config.json"
-import tools from "@/tools.json"
+import rawTools from "@/tools.json"
+import type { Tool } from "../scripts/sync"
 import { i18n } from "./i18n"
 
-export type Tool = (typeof tools)[number] & { guideRefs?: Record<string, string> }
-export { tools }
+export type { Tool }
+export const tools = rawTools as Tool[]
 
 export const appName = siteConfig.name
 export const tagline = "Messaging tools for your AI agent"

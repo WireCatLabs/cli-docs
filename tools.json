@@ -28,5 +28,19 @@
     "guideRefs": {
       "changelog": "fe47ed9ca20620ad6a226b6aa5b6158bebaab891"
     }
+  },
+  {
+    "name": "drive",
+    "displayName": "Google Drive",
+    "repo": "WireCatLabs/drive-cli",
+    "package": "@wirecat/drive-cli",
+    "lang": "en",
+    "distribution": "source",
+    "docsRef": "884162b4f1399d21dbd51c61ba68f2443eb86b7e",
+    "summary": {
+      "en": "Import selected Google folders, search documents locally and keep tags, notes and source-backed memories.",
+      "ru": "Импортируйте выбранные папки Google, ищите документы локально и сохраняйте теги, заметки и записи памяти с источниками.",
+      "es": "Importa carpetas de Google, busca documentos localmente y conserva etiquetas, notas y recuerdos con fuentes."
+    }
   }
 ]

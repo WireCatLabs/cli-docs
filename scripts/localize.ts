@@ -7,7 +7,7 @@ import { fromMarkdown } from "mdast-util-from-markdown"
 import { diagramStructure } from "../lib/mermaid.ts"
 import { writeCommandSections } from "./command-sections.ts"
 
-type Tool = { name: string; lang: string }
+type Tool = { name: string; lang: string; displayName?: string }
 type Correction = {
   tool: string
   slug: string
@@ -228,7 +228,7 @@ export function localizeTool(root: string, tool: Tool) {
     let group = 0
     const localized = {
       ...meta,
-      title: tool.name === "tg" ? "Telegram" : "MAX",
+      title: tool.displayName ?? (tool.name === "tg" ? "Telegram" : "MAX"),
       root: true,
       pages: meta.pages.map((page) => (page.startsWith("---") ? groups[lang][group++] : page)),
     }

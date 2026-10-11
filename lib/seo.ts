@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import siteConfig from "../site.config.json"
+import { driveDescriptions } from "./drive-descriptions"
 import { readerGuide } from "./reader-guides"
 import seoCopy from "./seo-copy.json"
 import { appName, siteUrl, tools } from "./shared"
@@ -65,7 +66,7 @@ export function pageMetadata({
 export function documentationTitle(lang: string, slugs: string[], authored: string): string {
   const tool = tools.find((candidate) => candidate.name === slugs[0])
   if (!tool) return authored
-  if (slugs.length === 1) return seoWords(lang).toolTitles[tool.name as "tg" | "max"]
+  if (slugs.length === 1) return seoWords(lang).toolTitles[tool.name as "tg" | "max"] ?? tool.displayName ?? authored
   return `${readerGuide(slugs, lang)?.title ?? authored} — ${tool.name}`
 }
 
@@ -73,11 +74,20 @@ export function documentationDescription(lang: string, slugs: string[], authored
   const taskDescription = readerGuide(slugs, lang)?.description
   if (taskDescription) return taskDescription
   if (authored?.trim()) return authored
+  const selectedTool = tools.find((candidate) => candidate.name === slugs[0])
+  if (selectedTool?.name === "drive") {
+    const description = driveDescriptions[localeOf(lang)][slugs[1] ?? "index"]
+    if (!description) throw new Error(`Missing reviewed Drive description: ${slugs.join("/")}`)
+    return description
+  }
   const [tool, slug] = slugs
   const description = seoWords(lang).reference[slug as keyof typeof seoCopy.en.reference]
   if (!tools.some((candidate) => candidate.name === tool) || !description)
     throw new Error(`Missing reviewed description for ${lang}/docs/${slugs.join("/")}`)
-  return description.replaceAll("{messenger}", tool === "tg" ? "Telegram" : "MAX")
+  return description.replaceAll(
+    "{messenger}",
+    tools.find((candidate) => candidate.name === tool)?.displayName ?? (tool === "tg" ? "Telegram" : "MAX"),
+  )
 }
 
 export function pageStructuredData({
