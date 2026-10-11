@@ -1,11 +1,96 @@
 ---
-title: "Zoom"
-description: "The starting point for Zoom documentation. Setup and usage guides are being prepared."
+title: "Meetings"
+description: "Find what was discussed, connect it to your projects and prepare for the next call."
 ---
 
-Use this page to find Zoom setup and usage guides. The documentation is being prepared;
-installation and account connection instructions are not available here yet.
+When you need to recover a decision or prepare for a call, use meeting transcripts together with
+related messages, files and notes. Your agent can turn those sources into a brief with references
+showing what was said, when and in which meeting.
+
+A transcript is the text of a conversation; a recording is its audio or video. Meeting information
+also includes the date, title and available participant records. [Zoom](./zm/index.md) supplies these
+sources through its API or transcript files you import. You attend calls in Zoom; the command-line
+tool gives your agent access to the saved information.
+
+## Find a discussion or decision
+
+Ask your agent to identify the right meeting before summarising it:
+
+```text prompt
+Use zm CLI to find the meetings about Research Example from the last month.
+Show the meeting dates and the passages about the launch decision, with source references.
+Separate recorded attendees from people merely mentioned. Tell me which transcripts are missing.
+```
+
+The agent checks meeting information, searches available transcripts and opens the matching passages.
+A useful answer gives the meeting, date, quotation or faithful paraphrase and its source reference.
+A missing transcript or an empty search result does not establish that the discussion never happened.
+[Search and evidence](./zm/search.md) explains word search, source references and index coverage;
+[search by meaning](./zm/topic-search.md) needs a configured search component.
+
+## Connect meetings to your other sources
+
+Use one project for the same work across meetings, messages and documents. Keep its short key and
+explicit aliases together rather than creating a new project for every spelling. Tags are labels
+for finding related material; notes hold your own context. A person link connects an observed
+participant to a person you selected; matching names alone do not establish identity.
+
+```text prompt
+Use zm CLI and Memo to collect the meetings for Research Example, including its existing aliases.
+Check the project and current tags before proposing new labels. Suggest possible synonyms for review.
+Combine the relevant passages with linked people, my notes, related messages and imported Google Drive files.
+Show the source of every conclusion. Propose project links, person links and tags before saving them.
+```
+
+The agent selects the canonical project, finds its meeting membership or related labels, and reads
+those meetings alongside the other available sources. You review uncertain links and new labels.
+Use [Memo](./memo.mdx) for notes, tags, facts and project records, [organising sources](./organize.md)
+for the common approach, and [Google Drive](./drive/index.md) to import the documents you want included.
+An existing calendar event can be linked explicitly; an upcoming Zoom meeting is not itself a
+synchronised Google or Outlook calendar.
+
+## Prepare for the next meeting
+
+```text prompt
+Use zm CLI to find my next Zoom meeting with Alice Example.
+Prepare a brief from earlier meetings in the series, linked project material and participant context.
+List earlier decisions, open questions and possible follow-ups with evidence.
+If the project or person is uncertain, show the candidates and why you chose them.
+Do not change the meeting or save inferred links.
+```
+
+The agent reads the upcoming Zoom schedule, then searches the stored context. Check that the brief
+names the intended meeting and separates confirmed decisions from suggestions. Ask it to show
+missing periods, transcripts or documents. [Upcoming Zoom meetings](./zm/remote-meetings.md) covers
+schedule and invitation reads; your agent assembles the brief from the sources you choose.
+
+## Keep useful findings afterwards
+
+Ask for a reviewable list of decisions, promises, important statements and follow-up tasks, each
+with a meeting passage. Check who actually attended and which person a speaker represents before
+saving an identity link. Reuse an existing project and label when they fit.
+
+Memo can keep facts and tasks separately from notes and reusable summaries. Owner commands save
+records directly; facts submitted through Memo's agent MCP tools remain proposed for review.
+A Zoom task proposal is a suggestion and does not create a task. A dedicated automatic meeting
+intake or preparation command is [planned work](./zm/roadmap.md).
+
+## More control
+
+These commands read your stored meetings; replace `1` with a meeting ID from your own list:
+
+```sh
+zm meetings list --json
+zm meetings show 1 --json
+zm meetings transcript 1 --json
+zm meetings search "launch decision" --json
+zm remote-meetings list --json
+```
+
+Search uses the data available in the selected profile. If it is missing, [pull or import the
+required transcripts](./zm/archive.md) before relying on the answer.
 
 ## Related guides
 
-- [Connect your AI agent](./agents.mdx).
+Start with [Zoom setup](./zm/installation.md), or continue with [connecting and organising your
+sources](./organize.md) once the meeting passages are available.
