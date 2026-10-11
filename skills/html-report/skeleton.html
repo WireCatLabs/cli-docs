@@ -1,0 +1,80 @@
+<title>Report Name</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/*__BASE_CSS__*/
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="meta">What was measured · data pulled 2026-01-31</p>
+    <h1>The subject, by name</h1>
+    <p>One paragraph: what this is, the period covered, and where the data came from.</p>
+    <ul class="toc">
+      <li><a href="#findings">Findings</a></li>
+      <li><a href="#detail">Detail</a></li>
+      <li><a href="#method">Method</a></li>
+    </ul>
+  </header>
+
+  <div class="kpis">
+    <div class="kpi"><b>61k</b><span>what this number counts</span></div>
+    <div class="kpi"><b>1,550</b><span>what this number counts</span></div>
+    <div class="kpi"><b>10.3</b><span>what this number counts</span></div>
+    <div class="kpi"><b>26.1%</b><span>what this number counts</span></div>
+  </div>
+
+  <section id="findings">
+    <h2>What the numbers say</h2>
+    <ol>
+      <li><p><b>The finding as a sentence with its number.</b> The supporting figures.</p></li>
+    </ol>
+  </section>
+
+  <section id="detail">
+    <h2>A question the reader has</h2>
+    <div class="grid2">
+      <div class="fig">
+        <h3>What the chart shows</h3>
+        <div class="chart"><canvas id="c1"></canvas></div>
+        <p class="cap">How to read it, and what each measure means.</p>
+      </div>
+      <div class="fig">
+        <h3>The table</h3>
+        <div class="tbl"><table>
+          <tr><th>Item</th><th class="n">Count</th></tr>
+          <tr><td>Example</td><td class="n">1,234</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="method">
+    <h2>How this was measured</h2>
+    <ul class="notes">
+      <li>Source, period, what was left out and why.</li>
+    </ul>
+  </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim()
+const charts = []
+const draw = () => {
+  charts.forEach(ch => ch.destroy())
+  charts.length = 0
+  Chart.defaults.color = css("--muted")
+  Chart.defaults.borderColor = css("--line")
+  Chart.defaults.font.family = css("--body")
+  const base = { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: css("--ink"), boxWidth: 12 } } } }
+  charts.push(new Chart(document.getElementById("c1"), {
+    type: "bar",
+    data: { labels: ["A", "B", "C"], datasets: [{ label: "Example", data: [3, 5, 2], backgroundColor: css("--accent") }] },
+    options: base,
+  }))
+}
+draw()
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw)
+new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] })
+</script>

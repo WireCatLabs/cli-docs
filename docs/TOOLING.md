@@ -133,7 +133,10 @@ inputs/output isolated. Installation requires Git, Node/npm and uv with Python 3
 
 The reusable skill lives at `skills/wirecat-documentation/SKILL.md`. Its installed copies in the
 owner's shared `.agents/skills` and Claude `.claude/skills` directories point agents back to these
-maintained rules. Refresh those copies after editing the skill. A TypeScript LSP is not installed:
+maintained rules. Refresh those copies after editing the skill.
+
+`skills/html-report/` is the house style for single-file HTML data reports (audits, measurements): rules, a base
+stylesheet, a starter page and a screenshot check. It has no dependency on this site and installs the same way. A TypeScript LSP is not installed:
 semantic navigation requires a compatible client integration; this work uses existing TypeScript
 checks and targeted source searches without changing the project's compiler version.
 
