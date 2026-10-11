@@ -94,7 +94,7 @@ describe("localized SEO", () => {
     ]
     for (const lang of seoLocales) {
       const descriptions = new Set<string>()
-      for (const tool of tools)
+      for (const tool of tools.filter((tool) => tool.name === "tg" || tool.name === "max"))
         for (const slug of slugs) {
           const description = documentationDescription(lang, [tool.name, slug])
           expect(description).toContain(tool.name === "tg" ? "Telegram" : "MAX")
@@ -102,6 +102,28 @@ describe("localized SEO", () => {
           descriptions.add(description)
         }
       expect(descriptions.size).toBe(34)
+    }
+  })
+  it("covers every source-installed Drive guide with distinct localized metadata", () => {
+    for (const lang of seoLocales) {
+      const descriptions = new Set<string>()
+      for (const slug of [
+        "index",
+        "installation",
+        "usage",
+        "search",
+        "recipes",
+        "commands",
+        "configuration",
+        "troubleshooting",
+        "security",
+      ]) {
+        const description = documentationDescription(lang, slug === "index" ? ["drive"] : ["drive", slug])
+        expect(description).toContain("Google Drive")
+        descriptions.add(description)
+      }
+      expect(descriptions.size).toBe(9)
+      expect(documentationTitle(lang, ["drive"], "Google Drive")).toBe("Google Drive")
     }
   })
 })

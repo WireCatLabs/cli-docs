@@ -50,7 +50,14 @@ export default async function Page(props: Props) {
   const breadcrumbs = [
     { name: seoWords(lang).homeLabel, pathname: homePath(lang) },
     { name: seoWords(lang).docsLabel, pathname: `/${lang}/docs` },
-    ...(tool ? [{ name: tool.name === "tg" ? "Telegram" : "MAX", pathname: `/${lang}/docs/${tool.name}` }] : []),
+    ...(tool
+      ? [
+          {
+            name: tool.displayName ?? (tool.name === "tg" ? "Telegram" : "MAX"),
+            pathname: `/${lang}/docs/${tool.name}`,
+          },
+        ]
+      : []),
     ...(page.slugs.length > (tool ? 1 : 0)
       ? [{ name: readerGuide(page.slugs, lang)?.title ?? page.data.title, pathname: page.url }]
       : []),
@@ -58,7 +65,7 @@ export default async function Page(props: Props) {
   const written = page.data.contentLanguage ?? tool?.lang ?? lang
   const ui = wordsFor(lang).navigation
   const guide =
-    tool && page.slugs.at(-1) === "installation"
+    tool && tool.distribution !== "source" && page.slugs.at(-1) === "installation"
       ? "installation"
       : tool && page.slugs.at(-1) === "mcp"
         ? "mcp"
@@ -70,7 +77,7 @@ export default async function Page(props: Props) {
         ? "docs/commands.md"
         : `docs/${page.slugs.slice(1).join("/") || "index"}.md`
 
-  const commandIndex = tool && page.slugs.at(-1) === "commands"
+  const commandIndex = tool && ["tg", "max"].includes(tool.name) && page.slugs.at(-1) === "commands"
   const commandRaw = commandIndex ? await page.data.getText("raw") : ""
   const commandNames = [...commandReferences(commandRaw)]
   const commandAliases = [

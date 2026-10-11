@@ -10,6 +10,12 @@ Read [AUTHORING.md](AUTHORING.md) before drafting: every guide begins with its u
 A reviewed documentation-only `guideRefs` override imports one page from a full immutable commit;
 its runtime facts must remain compatible with the pinned release. Its GitHub source link uses that commit.
 
+A tool explicitly marked `distribution: "source"` is installed from its repository, not npm.
+It pins a full reviewed commit in `docsRef`; source sync and offline command capture use that same
+commit. The overview and installation disclose the source/client prerequisites. This mode does not
+certify an npm release and does not change release gates for published tools. Source tools can omit
+changelog from their sidebar until there is a release to document.
+
 ## The pages
 
 One file per page, `docs/<name>.md`. Each page answers one question, and it is opened for a task,

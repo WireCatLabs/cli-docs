@@ -30,12 +30,18 @@ export function releaseNotesProblems(version: string, changelog: string, roadmap
   return problems
 }
 export function checkReleaseNotes(root: string): string[] {
-  const tools = JSON.parse(readFileSync(join(root, "tools.json"), "utf8")) as { name: string; docsRef: string }[]
+  const tools = JSON.parse(readFileSync(join(root, "tools.json"), "utf8")) as {
+    name: string
+    docsRef: string
+    distribution?: "source"
+  }[]
   const reviews = JSON.parse(readFileSync(join(root, "docs/release-notes-review.json"), "utf8")) as Record<
     string,
     Review
   >
   return tools.flatMap((tool) => {
+    // A reviewed source distribution has no npm/GitHub release to certify.
+    if (tool.distribution === "source") return []
     const base = join(root, "content/upstream", tool.name)
     if (!existsSync(join(base, "changelog.md")) || !existsSync(join(base, "roadmap.md")))
       return [`${tool.name}: run pnpm sync before release-note validation`]

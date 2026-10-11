@@ -71,6 +71,7 @@ export const releaseChanges = (files: { filename: string; status: string; previo
     .sort()
 
 export async function checkToolRelease(tool: Tool, getJson: JsonRequest = requestJson): Promise<ReleaseUpdate | null> {
+  if (tool.distribution === "source") return null
   if (!tool.docsRef) throw new Error(`${tool.name}: docsRef is required for release auditing`)
   if (!/^[\w.-]+\/[\w.-]+$/.test(tool.repo)) throw new Error("Invalid repository")
   const [releaseResponse, npmResponse] = await Promise.all([

@@ -29,6 +29,19 @@ export function InstallTool({
     window.addEventListener("hashchange", followHash)
     return () => window.removeEventListener("hashchange", followHash)
   }, [tool.name])
+  if (tool.distribution === "source")
+    return (
+      <Link
+        id={tool.name}
+        href={`/${lang}/docs/${tool.name}/installation`}
+        className="rounded-xl border bg-fd-card px-5 py-4"
+      >
+        <span className="block font-semibold">
+          {words.install} {tool.displayName ?? tool.name} →
+        </span>
+        <span className="mt-2 block text-sm text-fd-muted-foreground">{tool.summary[lang as "en" | "ru" | "es"]}</span>
+      </Link>
+    )
   return (
     <details
       id={tool.name}
