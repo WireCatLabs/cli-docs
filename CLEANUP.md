@@ -1,4 +1,5 @@
 - public/search-architecture.svg — replaced by HTML diagrams (ArchitectureDiagram searchPaths/strictSearch/conversationSearch); no page references it any more — 2026-10-04
+- lib/landing/{en,ru,es}.json, design/landing/g-home*.html, scripts/export-landing.mjs — no rendered page uses them any more (homepage is built from lib/editorial); only docs-quality reads the JSON. Check, then remove with that check — 2026-10-11
 
 ## Old `design/landing-variants` checkout — 2026-10-11
 
@@ -15,3 +16,13 @@ were deleted, not archived. The checkout is on `main`; three merged worktrees we
   it is merged before removing the worktree.
 - The nested `cli-docs/` folder in the main checkout: an empty repository with a linked worktree under
   `~/.superset/worktrees/`. Left untouched.
+- Worktrees kept on 2026-10-11 cleanup: `cli-docs-wt-homepage-interactions` (local commits after PR #101),
+  `cli-docs-wt-search-reader-refresh` (a process is running in it), `cli-docs-wt-schematic-previews` (uncommitted
+  change, no PR), the emdash worktree, `cli-testing/.worktrees/security-gates-cli-docs` (PR #121 closed, not
+  merged), `/tmp/cli-search-docs-clean-check`.
+- Main checkout stash `stale analytics keys, superseded by #159` — old uncommitted PostHog key change; drop it.
+
+## Removed — 2026-10-11
+
+- 18 worktrees whose PR was merged at the same commit and had no local changes (drive, agent-docs, html-report,
+  latest-versions, posthog, remove-meeting-brief and older ones). Their branches are kept.
