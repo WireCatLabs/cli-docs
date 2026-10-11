@@ -23,6 +23,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     await expect(page.getByRole("heading", { level: 1, name: titles[lang], exact: true })).toBeVisible()
     await expect(page.locator(`main a[href="/${lang}/docs/zm/search"]`)).toBeVisible()
     await expect(page.locator(`main a[href="/${lang}/docs/drive"]`)).toBeVisible()
+    await expect(page.locator(`main a[href="/${lang}/docs/memo"]`)).toBeVisible()
     const prefix = lang === "en" ? "" : `${lang}/`
     const markdown = await request.get(`/llms.mdx/docs/${prefix}zoom/content.md`)
     expect(markdown.ok()).toBe(true)
