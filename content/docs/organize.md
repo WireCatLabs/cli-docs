@@ -27,7 +27,7 @@ Drive can link existing records; it does not create a project or turn every tagg
 ## Try one project decision
 
 ```text prompt
-Use drive CLI to find the budget decision in my imported project documents.
+Use drive CLI with profile personal to find the budget decision in my imported project documents.
 Use tg CLI to find the message discussing it in the history already on this computer.
 Show the source links first. Tag the document budget and save a note about the open question.
 If the project and person already exist in the same store, show them before adding links.
@@ -48,8 +48,8 @@ review the proposed memory. A document changing can make an earlier memory stale
 Memo registers local folders and their subfolders; it can tag an imported subfolder by its path.
 Drive selects Google roots recursively and retains folder ancestry for sync. Its current shared
 database collection is account-level: it does not expose a navigable Google folder tree or let
-you treat every remote folder as a local project record. Use `drive folders list` to inspect selected
-roots and `drive files list --parent FOLDER_ID` to inspect live contents, replacing the placeholder.
+you treat every remote folder as a local project record. Use `drive personal folders list` to inspect selected
+roots and `drive personal files list --parent FOLDER_ID` to inspect live contents, replacing the placeholder.
 
 A messenger chat folder groups chats. It is a different kind of collection from a source-file
 folder. Neither a tag nor a project should silently change the source's folder membership.

@@ -15,12 +15,16 @@ for (const lang of ["en", "ru", "es"]) {
     const body = page.locator("main")
     await expect(body).toContainText("pnpm build")
     await expect(body).toContainText("Desktop app")
+    await expect(body.locator('a[href="https://console.cloud.google.com/auth/branding"]')).toBeVisible()
+    await expect(body.locator('a[href="https://console.cloud.google.com/auth/clients"]')).toBeVisible()
+    await expect(body).toContainText("Download JSON")
+    await expect(body).toContainText("Google Drive Activity API")
     await expect(body).not.toContainText("npm install -g @wirecat/drive-cli")
     await expect(page.locator("#agent-installation")).toHaveCount(0)
     const prefix = lang === "en" ? "" : `${lang}/`
     const markdown = await request.get(`/llms.mdx/docs/${prefix}drive/installation/content.md`)
     expect(markdown.ok()).toBe(true)
-    expect(await markdown.text()).toContain("drive session start --client-file")
+    expect(await markdown.text()).toContain("drive personal session start --client-file")
     expect(await markdown.text()).not.toContain("npm install -g @wirecat/drive-cli")
   })
 
@@ -30,7 +34,21 @@ for (const lang of ["en", "ru", "es"]) {
     const prefix = lang === "en" ? "" : `${lang}/`
     const markdown = await request.get(`/llms.mdx/docs/${prefix}drive/search/content.md`)
     expect(markdown.ok()).toBe(true)
-    expect(await markdown.text()).toContain("drive search 'budget AND tag:follow-up' --exact --json")
+    expect(await markdown.text()).toContain("drive personal search 'budget AND tag:follow-up' --exact --json")
+  })
+
+  test(`${lang}: Drive distinguishes managed cache from extra exports`, async ({ page, request }) => {
+    await page.goto(`/${lang}/docs/drive/usage`)
+    const body = page.locator("main")
+    await expect(body).toContainText("drive personal documents get DOC_ID")
+    await expect(body).toContainText("drive personal documents export DOC_ID")
+    await expect(body).toContainText("DRIVE_STATE_DIR")
+    await expect(body).toContainText("PDF")
+    const prefix = lang === "en" ? "" : `${lang}/`
+    const markdown = await request.get(`/llms.mdx/docs/${prefix}drive/usage/content.md`)
+    expect(markdown.ok()).toBe(true)
+    await expect(page.locator("#import-a-folder")).toHaveCount(1)
+    expect(await markdown.text()).toContain("drive personal documents export DOC_ID")
   })
 
   test(`${lang}: organization guide links source-specific actions`, async ({ page }) => {

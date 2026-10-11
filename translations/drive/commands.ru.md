@@ -5,16 +5,16 @@ title: "Команды Drive"
 <!-- Generated from the command tree by pnpm generate. Do not edit. -->
 
 
-Справочник команд и параметров Drive. Описания отдельных операций сохранены на языке справки инструмента.
+Здесь доступны все команды и параметры. Команды для аккаунта требуют явный профиль: `drive personal documents show DOC_ID` или `drive --profile personal documents show DOC_ID`. Справка, дерево команд, методы API, схемы и дополнение оболочки не выбирают аккаунт. См. [сценарии](./recipes.md) и [импорт и хранение](./usage.md). Описания операций сохраняют язык справки инструмента.
 
-## Общие параметры
+## Глобальные параметры
 
-Параметры применяются к выбранному профилю и текущей команде.
+Параметры применяются к выбранному профилю и текущему запуску.
 
 | Option | What it does |
 |---|---|
 | `-V, --version` | output the version number. |
-| `--profile <name>` | Google account profile. Default: `default`. |
+| `--profile <name>` | explicit Google account profile (alternative to the first word). |
 | `--json` | print machine-readable JSON. |
 | `--jsonl` | print machine-readable JSON lines. |
 | `--agent-json` | show control and direction characters visibly in machine output. |
@@ -39,7 +39,7 @@ Approve Google access in your browser; read-only unless --write is requested
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive session start [options]
+drive <profile> session start [options]
 ```
 
 | Option | What it does |
@@ -56,7 +56,7 @@ drive session start [options]
 Configured account profiles; no credentials are printed
 
 ```sh
-drive session list
+drive <profile> session list
 ```
 
 ### `drive session end`
@@ -66,7 +66,7 @@ Remove this profile's local sign-in; cached data is retained
 This command changes local state.
 
 ```sh
-drive session end
+drive <profile> session end
 ```
 
 ## `drive folders`
@@ -80,7 +80,7 @@ Include a folder and its descendants
 This command changes local state.
 
 ```sh
-drive folders add <url-or-id>
+drive <profile> folders add <url-or-id>
 ```
 
 | Argument | | What it is |
@@ -92,7 +92,7 @@ drive folders add <url-or-id>
 Selected folder IDs
 
 ```sh
-drive folders list
+drive <profile> folders list
 ```
 
 ### `drive folders remove`
@@ -102,7 +102,7 @@ Stop importing a folder; sync removes sources outside the remaining scope
 This command changes local state.
 
 ```sh
-drive folders remove <url-or-id>
+drive <profile> folders remove <url-or-id>
 ```
 
 | Argument | | What it is |
@@ -116,7 +116,7 @@ Fetch selected sources and resume a durable pending batch
 This command changes local state.
 
 ```sh
-drive sync [options]
+drive <profile> sync [options]
 ```
 
 | Option | What it does |
@@ -130,7 +130,7 @@ drive sync [options]
 Local sync checkpoint, cached sources and pending work
 
 ```sh
-drive status
+drive <profile> status
 ```
 
 ## `drive documents`
@@ -142,7 +142,7 @@ Locally imported sources and exports
 Imported sources with original Google URLs
 
 ```sh
-drive documents list [options]
+drive <profile> documents list [options]
 ```
 
 | Option | What it does |
@@ -155,7 +155,7 @@ drive documents list [options]
 Imported text with tab and source metadata
 
 ```sh
-drive documents show <url-or-id>
+drive <profile> documents show <url-or-id>
 ```
 
 | Argument | | What it is |
@@ -169,7 +169,7 @@ Write the native Markdown snapshot; existing files are refused
 This command changes local state.
 
 ```sh
-drive documents export <url-or-id> [options]
+drive <profile> documents export <url-or-id> [options]
 ```
 
 | Argument | | What it is |
@@ -185,7 +185,7 @@ drive documents export <url-or-id> [options]
 Source document, tags, links, notes, memories and observed editors
 
 ```sh
-drive documents context <document>
+drive <profile> documents context <document>
 ```
 
 | Argument | | What it is |
@@ -197,7 +197,7 @@ drive documents context <document>
 Live Docs JSON with every tab
 
 ```sh
-drive documents get <document>
+drive <profile> documents get <document>
 ```
 
 | Argument | | What it is |
@@ -209,7 +209,7 @@ drive documents get <document>
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive documents create [options]
+drive <profile> documents create [options]
 ```
 
 | Option | What it does |
@@ -221,7 +221,7 @@ drive documents create [options]
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive documents update <document> [options]
+drive <profile> documents update <document> [options]
 ```
 
 | Argument | | What it is |
@@ -235,7 +235,7 @@ drive documents update <document> [options]
 ### `drive documents history`
 
 ```sh
-drive documents history <document> [options]
+drive <profile> documents history <document> [options]
 ```
 
 | Argument | | What it is |
@@ -253,7 +253,7 @@ drive documents history <document> [options]
 Shared keyword and optional semantic search over imported Google sources
 
 ```sh
-drive search <query> [options]
+drive <profile> search <query> [options]
 ```
 
 | Argument | | What it is |
@@ -273,7 +273,7 @@ Local tags on shared documents; preserved through resync
 ### `drive tags list`
 
 ```sh
-drive tags list <document>
+drive <profile> tags list <document>
 ```
 
 | Argument | | What it is |
@@ -285,7 +285,7 @@ drive tags list <document>
 This command changes local state.
 
 ```sh
-drive tags add <document> <tags>
+drive <profile> tags add <document> <tags>
 ```
 
 | Argument | | What it is |
@@ -298,7 +298,7 @@ drive tags add <document> <tags>
 This command changes local state.
 
 ```sh
-drive tags remove <document> <tags>
+drive <profile> tags remove <document> <tags>
 ```
 
 | Argument | | What it is |
@@ -313,7 +313,7 @@ Connect documents to shared people, projects, notes and other references
 ### `drive links list`
 
 ```sh
-drive links list <document>
+drive <profile> links list <document>
 ```
 
 | Argument | | What it is |
@@ -325,7 +325,7 @@ drive links list <document>
 This command changes local state.
 
 ```sh
-drive links add <document> <target-reference> [options]
+drive <profile> links add <document> <target-reference> [options]
 ```
 
 | Argument | | What it is |
@@ -344,7 +344,7 @@ drive links add <document> <target-reference> [options]
 This command changes local state.
 
 ```sh
-drive links remove <document> <link-id>
+drive <profile> links remove <document> <link-id>
 ```
 
 | Argument | | What it is |
@@ -361,7 +361,7 @@ Local shared memos about a source document
 This command changes local state.
 
 ```sh
-drive notes add <document> <text> [options]
+drive <profile> notes add <document> <text> [options]
 ```
 
 | Argument | | What it is |
@@ -376,7 +376,7 @@ drive notes add <document> <text> [options]
 ### `drive notes list`
 
 ```sh
-drive notes list <document> [options]
+drive <profile> notes list <document> [options]
 ```
 
 | Argument | | What it is |
@@ -392,7 +392,7 @@ drive notes list <document> [options]
 ### `drive notes show`
 
 ```sh
-drive notes show <document> <note-reference>
+drive <profile> notes show <document> <note-reference>
 ```
 
 | Argument | | What it is |
@@ -405,7 +405,7 @@ drive notes show <document> <note-reference>
 This command changes local state.
 
 ```sh
-drive notes edit <document> <note-reference> <text> [options]
+drive <profile> notes edit <document> <note-reference> <text> [options]
 ```
 
 | Argument | | What it is |
@@ -423,7 +423,7 @@ drive notes edit <document> <note-reference> <text> [options]
 This command changes local state.
 
 ```sh
-drive notes remove <document> <note-reference>
+drive <profile> notes remove <document> <note-reference>
 ```
 
 | Argument | | What it is |
@@ -440,7 +440,7 @@ Evidence-backed shared memories; AI output remains proposed
 This command changes local state.
 
 ```sh
-drive memories add <document> <text> [options]
+drive <profile> memories add <document> <text> [options]
 ```
 
 | Argument | | What it is |
@@ -457,7 +457,7 @@ drive memories add <document> <text> [options]
 ### `drive memories list`
 
 ```sh
-drive memories list <document> [options]
+drive <profile> memories list <document> [options]
 ```
 
 | Argument | | What it is |
@@ -473,7 +473,7 @@ drive memories list <document> [options]
 ### `drive memories show`
 
 ```sh
-drive memories show <document> <memory-reference>
+drive <profile> memories show <document> <memory-reference>
 ```
 
 | Argument | | What it is |
@@ -486,7 +486,7 @@ drive memories show <document> <memory-reference>
 This command changes local state.
 
 ```sh
-drive memories confirm <document> <memory-reference>
+drive <profile> memories confirm <document> <memory-reference>
 ```
 
 | Argument | | What it is |
@@ -499,7 +499,7 @@ drive memories confirm <document> <memory-reference>
 This command changes local state.
 
 ```sh
-drive memories stale <document> <memory-reference>
+drive <profile> memories stale <document> <memory-reference>
 ```
 
 | Argument | | What it is |
@@ -510,7 +510,7 @@ drive memories stale <document> <memory-reference>
 ### `drive memories search`
 
 ```sh
-drive memories search <document> <query> [options]
+drive <profile> memories search <document> <query> [options]
 ```
 
 | Argument | | What it is |
@@ -529,7 +529,7 @@ Explicitly send selected text to the configured shared model; preview proposals 
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive memories extract <document> [options]
+drive <profile> memories extract <document> [options]
 ```
 
 | Argument | | What it is |
@@ -549,7 +549,7 @@ Google-observed identities and explicit links to shared people
 ### `drive people list`
 
 ```sh
-drive people list <document>
+drive <profile> people list <document>
 ```
 
 | Argument | | What it is |
@@ -561,7 +561,7 @@ drive people list <document>
 This command changes local state.
 
 ```sh
-drive people link <document> <google-id> <person-reference>
+drive <profile> people link <document> <google-id> <person-reference>
 ```
 
 | Argument | | What it is |
@@ -589,7 +589,7 @@ drive api methods [options]
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api call <method> [options]
+drive <profile> api call <method> [options]
 ```
 
 | Argument | | What it is |
@@ -610,7 +610,7 @@ Applies one or more updates to the document. Each request is validated before be
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api docs-documents-batch-update [options]
+drive <profile> api docs-documents-batch-update [options]
 ```
 
 | Option | What it does |
@@ -632,7 +632,7 @@ Creates a blank document using the title given in the request. Other fields in t
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api docs-documents-create [options]
+drive <profile> api docs-documents-create [options]
 ```
 
 | Option | What it does |
@@ -651,7 +651,7 @@ drive api docs-documents-create [options]
 Gets the latest version of the specified document. — read (GET v1/documents/{documentId})
 
 ```sh
-drive api docs-documents-get [options]
+drive <profile> api docs-documents-get [options]
 ```
 
 | Option | What it does |
@@ -672,7 +672,7 @@ drive api docs-documents-get [options]
 Gets information about the user, the user's Drive, and system capabilities. For more information, see [Return user info](https://developers.google.com/workspace/drive/api/guides/user-info). Required: The `fields` parameter must be set. To return the exact fields you need, see [Return specific fields](https://developers.google.com/workspace/drive/api/guides/fields-parameter). — read (GET about)
 
 ```sh
-drive api drive-about-get [options]
+drive <profile> api drive-about-get [options]
 ```
 
 | Option | What it does |
@@ -689,7 +689,7 @@ drive api drive-about-get [options]
 Retrieves an access proposal by ID. For more information, see [Manage pending access proposals](https://developers.google.com/workspace/drive/api/guides/pending-access). — read (GET files/{fileId}/accessproposals/{proposalId})
 
 ```sh
-drive api drive-accessproposals-get [options]
+drive <profile> api drive-accessproposals-get [options]
 ```
 
 | Option | What it does |
@@ -708,7 +708,7 @@ drive api drive-accessproposals-get [options]
 List the access proposals on a file. For more information, see [Manage pending access proposals](https://developers.google.com/workspace/drive/api/guides/pending-access). Note: Only approvers are able to list access proposals on a file. If the user isn't an approver, a 403 error is returned. — read (GET files/{fileId}/accessproposals)
 
 ```sh
-drive api drive-accessproposals-list [options]
+drive <profile> api drive-accessproposals-list [options]
 ```
 
 | Option | What it does |
@@ -730,7 +730,7 @@ Approves or denies an access proposal. For more information, see [Manage pending
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-accessproposals-resolve [options]
+drive <profile> api drive-accessproposals-resolve [options]
 ```
 
 | Option | What it does |
@@ -753,7 +753,7 @@ Approves an approval. For more information, see [Manage approvals](https://devel
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-approvals-approve [options]
+drive <profile> api drive-approvals-approve [options]
 ```
 
 | Option | What it does |
@@ -776,7 +776,7 @@ Cancels an approval. For more information, see [Manage approvals](https://develo
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-approvals-cancel [options]
+drive <profile> api drive-approvals-cancel [options]
 ```
 
 | Option | What it does |
@@ -799,7 +799,7 @@ Comments on an approval. For more information, see [Manage approvals](https://de
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-approvals-comment [options]
+drive <profile> api drive-approvals-comment [options]
 ```
 
 | Option | What it does |
@@ -822,7 +822,7 @@ Declines an approval. For more information, see [Manage approvals](https://devel
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-approvals-decline [options]
+drive <profile> api drive-approvals-decline [options]
 ```
 
 | Option | What it does |
@@ -843,7 +843,7 @@ drive api drive-approvals-decline [options]
 Gets an approval by ID. For more information, see [Manage approvals](https://developers.google.com/workspace/drive/api/guides/approvals). — read (GET files/{fileId}/approvals/{approvalId})
 
 ```sh
-drive api drive-approvals-get [options]
+drive <profile> api drive-approvals-get [options]
 ```
 
 | Option | What it does |
@@ -862,7 +862,7 @@ drive api drive-approvals-get [options]
 Lists the approvals on a file. For more information, see [Manage approvals](https://developers.google.com/workspace/drive/api/guides/approvals). By default, this method returns a minimal response that may not include the items array. To retrieve approval details, you must explicitly specify the fields you want using the `fields` query parameter. To return the exact fields you need, see [Return specific fields](https://developers.google.com/workspace/drive/api/guides/fields-parameter). — read (GET files/{fileId}/approvals)
 
 ```sh
-drive api drive-approvals-list [options]
+drive <profile> api drive-approvals-list [options]
 ```
 
 | Option | What it does |
@@ -884,7 +884,7 @@ Reassigns the reviewers on an approval. For more information, see [Manage approv
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-approvals-reassign [options]
+drive <profile> api drive-approvals-reassign [options]
 ```
 
 | Option | What it does |
@@ -907,7 +907,7 @@ Starts an approval on a file. For more information, see [Manage approvals](https
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-approvals-start [options]
+drive <profile> api drive-approvals-start [options]
 ```
 
 | Option | What it does |
@@ -927,7 +927,7 @@ drive api drive-approvals-start [options]
 Gets a specific app. For more information, see [Return user info](https://developers.google.com/workspace/drive/api/guides/user-info). — read (GET apps/{appId})
 
 ```sh
-drive api drive-apps-get [options]
+drive <profile> api drive-apps-get [options]
 ```
 
 | Option | What it does |
@@ -945,7 +945,7 @@ drive api drive-apps-get [options]
 Lists a user's installed apps. For more information, see [Return user info](https://developers.google.com/workspace/drive/api/guides/user-info). — read (GET apps)
 
 ```sh
-drive api drive-apps-list [options]
+drive <profile> api drive-apps-list [options]
 ```
 
 | Option | What it does |
@@ -965,7 +965,7 @@ drive api drive-apps-list [options]
 Gets the starting pageToken for listing future changes. For more information, see [Retrieve changes](https://developers.google.com/workspace/drive/api/guides/manage-changes). — read (GET changes/startPageToken)
 
 ```sh
-drive api drive-changes-get-start-page-token [options]
+drive <profile> api drive-changes-get-start-page-token [options]
 ```
 
 | Option | What it does |
@@ -986,7 +986,7 @@ drive api drive-changes-get-start-page-token [options]
 Lists the changes for a user or shared drive. For more information, see [Retrieve changes](https://developers.google.com/workspace/drive/api/guides/manage-changes). — read (GET changes)
 
 ```sh
-drive api drive-changes-list [options]
+drive <profile> api drive-changes-list [options]
 ```
 
 | Option | What it does |
@@ -1019,7 +1019,7 @@ Subscribes to changes for a user. For more information, see [Notifications for r
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-changes-watch [options]
+drive <profile> api drive-changes-watch [options]
 ```
 
 | Option | What it does |
@@ -1054,7 +1054,7 @@ Stops watching resources through this channel. For more information, see [Notifi
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-channels-stop [options]
+drive <profile> api drive-channels-stop [options]
 ```
 
 | Option | What it does |
@@ -1075,7 +1075,7 @@ Creates a comment on a file. For more information, see [Manage comments and repl
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-comments-create [options]
+drive <profile> api drive-comments-create [options]
 ```
 
 | Option | What it does |
@@ -1097,7 +1097,7 @@ Deletes a comment. For more information, see [Manage comments and replies](https
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-comments-delete [options]
+drive <profile> api drive-comments-delete [options]
 ```
 
 | Option | What it does |
@@ -1116,7 +1116,7 @@ drive api drive-comments-delete [options]
 Gets a comment by ID. For more information, see [Manage comments and replies](https://developers.google.com/workspace/drive/api/guides/manage-comments). Required: The `fields` parameter must be set. To return the exact fields you need, see [Return specific fields](https://developers.google.com/workspace/drive/api/guides/fields-parameter). — read (GET files/{fileId}/comments/{commentId})
 
 ```sh
-drive api drive-comments-get [options]
+drive <profile> api drive-comments-get [options]
 ```
 
 | Option | What it does |
@@ -1136,7 +1136,7 @@ drive api drive-comments-get [options]
 Lists a file's comments. For more information, see [Manage comments and replies](https://developers.google.com/workspace/drive/api/guides/manage-comments). Required: The `fields` parameter must be set. To return the exact fields you need, see [Return specific fields](https://developers.google.com/workspace/drive/api/guides/fields-parameter). — read (GET files/{fileId}/comments)
 
 ```sh
-drive api drive-comments-list [options]
+drive <profile> api drive-comments-list [options]
 ```
 
 | Option | What it does |
@@ -1160,7 +1160,7 @@ Updates a comment with patch semantics. For more information, see [Manage commen
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-comments-update [options]
+drive <profile> api drive-comments-update [options]
 ```
 
 | Option | What it does |
@@ -1183,7 +1183,7 @@ Creates a shared drive. For more information, see [Manage shared drives](https:/
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-drives-create [options]
+drive <profile> api drive-drives-create [options]
 ```
 
 | Option | What it does |
@@ -1205,7 +1205,7 @@ Permanently deletes a shared drive for which the user is an `organizer`. The sha
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-drives-delete [options]
+drive <profile> api drive-drives-delete [options]
 ```
 
 | Option | What it does |
@@ -1225,7 +1225,7 @@ drive api drive-drives-delete [options]
 Gets a shared drive's metadata by ID. For more information, see [Manage shared drives](https://developers.google.com/workspace/drive/api/guides/manage-shareddrives). — read (GET drives/{driveId})
 
 ```sh
-drive api drive-drives-get [options]
+drive <profile> api drive-drives-get [options]
 ```
 
 | Option | What it does |
@@ -1246,7 +1246,7 @@ Hides a shared drive from the default view. For more information, see [Manage sh
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-drives-hide [options]
+drive <profile> api drive-drives-hide [options]
 ```
 
 | Option | What it does |
@@ -1264,7 +1264,7 @@ drive api drive-drives-hide [options]
 Lists the user's shared drives. This method accepts the `q` parameter, which is a search query combining one or more search terms. For more information, see the [Search for shared drives](https://developers.google.com/workspace/drive/api/guides/search-shareddrives) guide. — read (GET drives)
 
 ```sh
-drive api drive-drives-list [options]
+drive <profile> api drive-drives-list [options]
 ```
 
 | Option | What it does |
@@ -1287,7 +1287,7 @@ Restores a shared drive to the default view. For more information, see [Manage s
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-drives-unhide [options]
+drive <profile> api drive-drives-unhide [options]
 ```
 
 | Option | What it does |
@@ -1307,7 +1307,7 @@ Updates the metadata for a shared drive. For more information, see [Manage share
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-drives-update [options]
+drive <profile> api drive-drives-update [options]
 ```
 
 | Option | What it does |
@@ -1330,7 +1330,7 @@ Creates a copy of a file and applies any requested updates with patch semantics.
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-files-copy [options]
+drive <profile> api drive-files-copy [options]
 ```
 
 | Option | What it does |
@@ -1361,7 +1361,7 @@ Creates a file. For more information, see [Create and manage files](https://deve
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-files-create [options]
+drive <profile> api drive-files-create [options]
 ```
 
 | Option | What it does |
@@ -1391,7 +1391,7 @@ Permanently deletes a file owned by the user without moving it to the trash. For
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-files-delete [options]
+drive <profile> api drive-files-delete [options]
 ```
 
 | Option | What it does |
@@ -1412,7 +1412,7 @@ drive api drive-files-delete [options]
 Downloads the content of a file. For more information, see [Download and export files](https://developers.google.com/workspace/drive/api/guides/manage-downloads). Operations are valid for 24 hours from the time of creation. — read (POST files/{fileId}/download)
 
 ```sh
-drive api drive-files-download [options]
+drive <profile> api drive-files-download [options]
 ```
 
 | Option | What it does |
@@ -1434,7 +1434,7 @@ Permanently deletes all of the user's trashed files. For more information, see [
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-files-empty-trash [options]
+drive <profile> api drive-files-empty-trash [options]
 ```
 
 | Option | What it does |
@@ -1453,7 +1453,7 @@ drive api drive-files-empty-trash [options]
 Exports a Google Workspace document to the requested MIME type and returns exported byte content. For more information, see [Download and export files](https://developers.google.com/workspace/drive/api/guides/manage-downloads). Note that the exported content is limited to 10 MB. — read (GET files/{fileId}/export)
 
 ```sh
-drive api drive-files-export [options]
+drive <profile> api drive-files-export [options]
 ```
 
 | Option | What it does |
@@ -1472,7 +1472,7 @@ drive api drive-files-export [options]
 Generates a CSE token which can be used to create or update CSE files. — read (GET files/generateCseToken)
 
 ```sh
-drive api drive-files-generate-cse-token [options]
+drive <profile> api drive-files-generate-cse-token [options]
 ```
 
 | Option | What it does |
@@ -1491,7 +1491,7 @@ drive api drive-files-generate-cse-token [options]
 Generates a set of file IDs which can be provided in create or copy requests. For more information, see [Create and manage files](https://developers.google.com/workspace/drive/api/guides/create-file). — read (GET files/generateIds)
 
 ```sh
-drive api drive-files-generate-ids [options]
+drive <profile> api drive-files-generate-ids [options]
 ```
 
 | Option | What it does |
@@ -1511,7 +1511,7 @@ drive api drive-files-generate-ids [options]
 Gets a file's metadata or content by ID. For more information, see [Search for files and folders](https://developers.google.com/workspace/drive/api/guides/search-files). If you provide the URL parameter `alt=media`, then the response includes the file contents in the response body. Downloading content with `alt=media` only works if the file is stored in Drive. To download Google Docs, Sheets, and Slides use [`files.export`](https://developers.google.com/workspace/drive/api/reference/rest/v3/files/export) instead. For more information, see [Download and export files](https://developers.google.com/workspace/drive/api/guides/manage-downloads). — read (GET files/{fileId})
 
 ```sh
-drive api drive-files-get [options]
+drive <profile> api drive-files-get [options]
 ```
 
 | Option | What it does |
@@ -1534,7 +1534,7 @@ drive api drive-files-get [options]
 Lists the user's files. For more information, see [Search for files and folders](https://developers.google.com/workspace/drive/api/guides/search-files). This method accepts the `q` parameter, which is a search query combining one or more search terms. This method returns *all* files by default, including trashed files. If you don't want trashed files to appear in the list, use the `trashed=false` query parameter to remove trashed files from the results. — read (GET files)
 
 ```sh
-drive api drive-files-list [options]
+drive <profile> api drive-files-list [options]
 ```
 
 | Option | What it does |
@@ -1566,7 +1566,7 @@ drive api drive-files-list [options]
 Lists the labels on a file. For more information, see [List labels on a file](https://developers.google.com/workspace/drive/api/guides/list-labels). — read (GET files/{fileId}/listLabels)
 
 ```sh
-drive api drive-files-list-labels [options]
+drive <profile> api drive-files-list-labels [options]
 ```
 
 | Option | What it does |
@@ -1588,7 +1588,7 @@ Modifies the set of labels applied to a file. For more information, see [Set a l
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-files-modify-labels [options]
+drive <profile> api drive-files-modify-labels [options]
 ```
 
 | Option | What it does |
@@ -1610,7 +1610,7 @@ Updates a file's metadata, content, or both. When calling this method, only popu
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-files-update [options]
+drive <profile> api drive-files-update [options]
 ```
 
 | Option | What it does |
@@ -1642,7 +1642,7 @@ Subscribes to changes to a file. For more information, see [Notifications for re
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-files-watch [options]
+drive <profile> api drive-files-watch [options]
 ```
 
 | Option | What it does |
@@ -1667,7 +1667,7 @@ drive api drive-files-watch [options]
 Gets the latest state of a long-running operation. Clients can use this method to poll the operation result at intervals as recommended by the API service. — read (GET operations/{name})
 
 ```sh
-drive api drive-operations-get [options]
+drive <profile> api drive-operations-get [options]
 ```
 
 | Option | What it does |
@@ -1687,7 +1687,7 @@ Creates a permission for a file or shared drive. For more information, see [Shar
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-permissions-create [options]
+drive <profile> api drive-permissions-create [options]
 ```
 
 | Option | What it does |
@@ -1718,7 +1718,7 @@ Deletes a permission. For more information, see [Share files, folders, and drive
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-permissions-delete [options]
+drive <profile> api drive-permissions-delete [options]
 ```
 
 | Option | What it does |
@@ -1741,7 +1741,7 @@ drive api drive-permissions-delete [options]
 Gets a permission by ID. For more information, see [Share files, folders, and drives](https://developers.google.com/workspace/drive/api/guides/manage-sharing). — read (GET files/{fileId}/permissions/{permissionId})
 
 ```sh
-drive api drive-permissions-get [options]
+drive <profile> api drive-permissions-get [options]
 ```
 
 | Option | What it does |
@@ -1763,7 +1763,7 @@ drive api drive-permissions-get [options]
 Lists a file's or shared drive's permissions. For more information, see [Share files, folders, and drives](https://developers.google.com/workspace/drive/api/guides/manage-sharing). — read (GET files/{fileId}/permissions)
 
 ```sh
-drive api drive-permissions-list [options]
+drive <profile> api drive-permissions-list [options]
 ```
 
 | Option | What it does |
@@ -1789,7 +1789,7 @@ Updates a permission with patch semantics. For more information, see [Share file
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-permissions-update [options]
+drive <profile> api drive-permissions-update [options]
 ```
 
 | Option | What it does |
@@ -1818,7 +1818,7 @@ Creates a reply to a comment. For more information, see [Manage comments and rep
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-replies-create [options]
+drive <profile> api drive-replies-create [options]
 ```
 
 | Option | What it does |
@@ -1841,7 +1841,7 @@ Deletes a reply. For more information, see [Manage comments and replies](https:/
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-replies-delete [options]
+drive <profile> api drive-replies-delete [options]
 ```
 
 | Option | What it does |
@@ -1861,7 +1861,7 @@ drive api drive-replies-delete [options]
 Gets a reply by ID. For more information, see [Manage comments and replies](https://developers.google.com/workspace/drive/api/guides/manage-comments). — read (GET files/{fileId}/comments/{commentId}/replies/{replyId})
 
 ```sh
-drive api drive-replies-get [options]
+drive <profile> api drive-replies-get [options]
 ```
 
 | Option | What it does |
@@ -1882,7 +1882,7 @@ drive api drive-replies-get [options]
 Lists a comment's replies. For more information, see [Manage comments and replies](https://developers.google.com/workspace/drive/api/guides/manage-comments). — read (GET files/{fileId}/comments/{commentId}/replies)
 
 ```sh
-drive api drive-replies-list [options]
+drive <profile> api drive-replies-list [options]
 ```
 
 | Option | What it does |
@@ -1906,7 +1906,7 @@ Updates a reply with patch semantics. For more information, see [Manage comments
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-replies-update [options]
+drive <profile> api drive-replies-update [options]
 ```
 
 | Option | What it does |
@@ -1930,7 +1930,7 @@ Permanently deletes a file version. You can only delete revisions for files with
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-revisions-delete [options]
+drive <profile> api drive-revisions-delete [options]
 ```
 
 | Option | What it does |
@@ -1949,7 +1949,7 @@ drive api drive-revisions-delete [options]
 Gets a revision's metadata or content by ID. For more information, see [Manage file revisions](https://developers.google.com/workspace/drive/api/guides/manage-revisions). — read (GET files/{fileId}/revisions/{revisionId})
 
 ```sh
-drive api drive-revisions-get [options]
+drive <profile> api drive-revisions-get [options]
 ```
 
 | Option | What it does |
@@ -1969,7 +1969,7 @@ drive api drive-revisions-get [options]
 Lists a file's revisions. For more information, see [Manage file revisions](https://developers.google.com/workspace/drive/api/guides/manage-revisions). **Important:** The list of revisions returned by this method might be incomplete for files with a large revision history, including frequently edited Google Docs, Sheets, and Slides. Older revisions might be omitted from the response, meaning the first revision returned may not be the oldest existing revision. The revision history visible in the Workspace editor user interface might be more complete than the list returned by the API. — read (GET files/{fileId}/revisions)
 
 ```sh
-drive api drive-revisions-list [options]
+drive <profile> api drive-revisions-list [options]
 ```
 
 | Option | What it does |
@@ -1991,7 +1991,7 @@ Updates a revision with patch semantics. For more information, see [Manage file 
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-revisions-update [options]
+drive <profile> api drive-revisions-update [options]
 ```
 
 | Option | What it does |
@@ -2014,7 +2014,7 @@ Deprecated: Use `drives.create` instead. — write (POST teamdrives)
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-teamdrives-create [options]
+drive <profile> api drive-teamdrives-create [options]
 ```
 
 | Option | What it does |
@@ -2036,7 +2036,7 @@ Deprecated: Use `drives.delete` instead. — destructive (DELETE teamdrives/{tea
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-teamdrives-delete [options]
+drive <profile> api drive-teamdrives-delete [options]
 ```
 
 | Option | What it does |
@@ -2054,7 +2054,7 @@ drive api drive-teamdrives-delete [options]
 Deprecated: Use `drives.get` instead. — read (GET teamdrives/{teamDriveId})
 
 ```sh
-drive api drive-teamdrives-get [options]
+drive <profile> api drive-teamdrives-get [options]
 ```
 
 | Option | What it does |
@@ -2073,7 +2073,7 @@ drive api drive-teamdrives-get [options]
 Deprecated: Use `drives.list` instead. — read (GET teamdrives)
 
 ```sh
-drive api drive-teamdrives-list [options]
+drive <profile> api drive-teamdrives-list [options]
 ```
 
 | Option | What it does |
@@ -2096,7 +2096,7 @@ Deprecated: Use `drives.update` instead. — write (PATCH teamdrives/{teamDriveI
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive api drive-teamdrives-update [options]
+drive <profile> api drive-teamdrives-update [options]
 ```
 
 | Option | What it does |
@@ -2117,7 +2117,7 @@ drive api drive-teamdrives-update [options]
 Query past activity in Google Drive. — read (POST v2/activity:query)
 
 ```sh
-drive api driveactivity-activity-query [options]
+drive <profile> api driveactivity-activity-query [options]
 ```
 
 | Option | What it does |
@@ -2138,7 +2138,7 @@ Remote Google Drive files; results are not automatically imported
 ### `drive files list`
 
 ```sh
-drive files list [options]
+drive <profile> files list [options]
 ```
 
 | Option | What it does |
@@ -2151,7 +2151,7 @@ drive files list [options]
 ### `drive files get`
 
 ```sh
-drive files get <file>
+drive <profile> files get <file>
 ```
 
 | Argument | | What it is |
@@ -2163,7 +2163,7 @@ drive files get <file>
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive files copy <file> [options]
+drive <profile> files copy <file> [options]
 ```
 
 | Argument | | What it is |
@@ -2180,7 +2180,7 @@ drive files copy <file> [options]
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive files move <file> [options]
+drive <profile> files move <file> [options]
 ```
 
 | Argument | | What it is |
@@ -2197,7 +2197,7 @@ drive files move <file> [options]
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive files update <file> [options]
+drive <profile> files update <file> [options]
 ```
 
 | Argument | | What it is |
@@ -2213,7 +2213,7 @@ drive files update <file> [options]
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive files trash <file>
+drive <profile> files trash <file>
 ```
 
 | Argument | | What it is |
@@ -2225,7 +2225,7 @@ drive files trash <file>
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive files restore <file>
+drive <profile> files restore <file>
 ```
 
 | Argument | | What it is |
@@ -2237,7 +2237,7 @@ drive files restore <file>
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive files mkdir <name> [options]
+drive <profile> files mkdir <name> [options]
 ```
 
 | Argument | | What it is |
@@ -2255,7 +2255,7 @@ Remote file comments; pagination tokens are returned
 ### `drive comments list`
 
 ```sh
-drive comments list <file> [options]
+drive <profile> comments list <file> [options]
 ```
 
 | Argument | | What it is |
@@ -2270,7 +2270,7 @@ drive comments list <file> [options]
 ### `drive comments get`
 
 ```sh
-drive comments get <file> <id>
+drive <profile> comments get <file> <id>
 ```
 
 | Argument | | What it is |
@@ -2285,7 +2285,7 @@ Remote file permissions; pagination tokens are returned
 ### `drive permissions list`
 
 ```sh
-drive permissions list <file> [options]
+drive <profile> permissions list <file> [options]
 ```
 
 | Argument | | What it is |
@@ -2300,7 +2300,7 @@ drive permissions list <file> [options]
 ### `drive permissions get`
 
 ```sh
-drive permissions get <file> <id>
+drive <profile> permissions get <file> <id>
 ```
 
 | Argument | | What it is |
@@ -2315,7 +2315,7 @@ Remote file revisions; pagination tokens are returned
 ### `drive revisions list`
 
 ```sh
-drive revisions list <file> [options]
+drive <profile> revisions list <file> [options]
 ```
 
 | Argument | | What it is |
@@ -2330,7 +2330,7 @@ drive revisions list <file> [options]
 ### `drive revisions get`
 
 ```sh
-drive revisions get <file> <id>
+drive <profile> revisions get <file> <id>
 ```
 
 | Argument | | What it is |
@@ -2343,7 +2343,7 @@ drive revisions get <file> <id>
 List accessible Google Shared Drives
 
 ```sh
-drive shared-drives [options]
+drive <profile> shared-drives [options]
 ```
 
 | Option | What it does |
@@ -2358,7 +2358,7 @@ Shared-style defaults/profile settings; credentials are separate
 ### `drive config show`
 
 ```sh
-drive config show
+drive <profile> config show
 ```
 
 ### `drive config set`
@@ -2366,7 +2366,7 @@ drive config show
 This command changes local state.
 
 ```sh
-drive config set <key> <json-value> [options]
+drive <profile> config set <key> <json-value> [options]
 ```
 
 | Argument | | What it is |
@@ -2411,7 +2411,7 @@ Configure the shared model gateway; keys stay outside config
 This command changes local state.
 
 ```sh
-drive models configure [options]
+drive <profile> models configure [options]
 ```
 
 | Option | What it does |
@@ -2426,7 +2426,7 @@ drive models configure [options]
 Expose guarded commands over MCP stdio
 
 ```sh
-drive mcp [options]
+drive <profile> mcp [options]
 ```
 
 | Option | What it does |

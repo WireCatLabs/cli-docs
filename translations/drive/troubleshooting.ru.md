@@ -18,11 +18,25 @@ title: "Исправить подключение или пустой поиск
 | Цель связи не найдена | Используйте ссылку из выбранной базы. Перед связями с людьми/проектами мессенджера проверьте явное общее хранение. |
 
 ```sh
-drive status --json
-drive folders list --json
-drive sync --json
-drive search 'known word' --exact --json
+drive personal status --json
+drive personal folders list --json
+drive personal sync --json
+drive personal search 'known word' --exact --json
 ```
 
 При обращении за помощью передайте обезличенный код ошибки и команду. Не прикладывайте
 JSON клиента, токены или приватный текст. Когда источник появился, вернитесь к [поиску](./search.md).
+
+## «Choose a profile explicitly»
+
+Выполните команду как `drive personal …` либо `drive --profile personal …`, заменив `personal`
+выбранным именем аккаунта. Ошибка перечисляет настроенные профили. Ни `DRIVE_PROFILE`, ни прежний
+сохранённый профиль не заменяют явный выбор. Для первого входа см.
+[подключение](./installation.md#connect-your-account). `drive personal session list` показывает все имена.
+
+## Непонятна настройка Google Cloud
+
+Включение API не создаёт OAuth-клиент. Настройте **Google Auth platform → Branding**,
+добавьте аккаунт в **Audience → Test users**, затем создайте **Clients → Desktop app** и скачайте JSON.
+Следуйте [инструкции по консоли](./installation.md#prepare-google-sign-in).
+Нужен Desktop JSON, а не ключ API или сервисного аккаунта.
