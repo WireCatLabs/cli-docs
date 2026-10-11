@@ -2,8 +2,45 @@
 title: "Uso"
 ---
 
-Grupos de comandos, salida, plazos y cancelación para scripts y agentes.
-[Todos los comandos y opciones](./commands.md) se generan desde el programa.
+Lee una reunión guardada, abre su transcripción y exporta lo necesario. Esta guía ayuda a elegir
+la orden y saber si lee datos locales, contacta con Zoom o modifica algo. Si todavía no hay reuniones,
+empieza por [instalar y conectar](./installation.md).
+
+## Lee tu primera reunión
+
+```sh
+zm meetings list --json
+zm meetings show <meeting-id> --json
+zm meetings transcript <meeting-id> --json
+zm meetings summary <meeting-id> --json
+```
+
+Sustituye `<meeting-id>` por un ID de la lista. Comprueba la fecha y el título antes de usar el texto.
+Si falta el resumen o la transcripción, esa parte no se obtuvo; no significa que no se habló.
+La lectura usa el perfil local elegido y no descarga datos nuevos de Zoom. La [guía del archivo](./archive.md)
+explica cómo recuperar periodos o importar archivos.
+
+Para obtener una copia portable del contenido disponible:
+
+```sh
+zm meetings export <meeting-id> --format markdown --json
+```
+
+Lee el resultado antes de guardarlo en un archivo. MCP devuelve exportaciones como texto, pero no
+escribe archivos. [Búsqueda y fuentes](./search.md) conserva referencias exactas para citar pasajes.
+
+## Elige datos locales o remotos
+
+| Necesidad | Familia de órdenes | Dónde trabaja |
+|---|---|---|
+| Leer transcripciones y fuentes | `meetings`, `events`, `search` | Base local compartida |
+| Obtener reuniones del anfitrión | `pull`, API `watch` | De Zoom a la base local |
+| Importar transcripciones | `import`, carpeta `watch` | De archivos a la base |
+| Guardar grabaciones disponibles | `recordings` | De Zoom al destino indicado |
+| Leer agenda o modificar una reunión | `remote-meetings` | Cuenta de Zoom |
+
+Una lectura local correcta no demuestra que Zoom conserve el mismo contenido. Descargar un archivo
+no importa su transcripción en la base hasta que solicites la importación del archivo.
 
 ## Comandos
 

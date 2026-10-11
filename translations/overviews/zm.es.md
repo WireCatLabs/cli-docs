@@ -3,9 +3,7 @@ title: "Zoom"
 description: "Transcripciones, grabaciones y contexto de reuniones para tu agente de IA."
 ---
 
-Las reuniones de Zoom pueden dar contexto a tu agente: recuperar una decisión, comprobar una
-promesa o preparar la próxima llamada con referencias a los pasajes originales. La herramienta
-se ejecuta en tu ordenador como `zm` y guarda los datos localmente.
+Conserva pasajes de reuniones para que tu agente recupere decisiones, compruebe promesas y prepare llamadas con fuentes. La herramienta Zoom se ejecuta en tu equipo como `zm`: lee datos disponibles del anfitrión o importa transcripciones.
 
 ## Qué puedes hacer
 
@@ -15,17 +13,14 @@ se ejecuta en tu ordenador como `zm` y guarda los datos localmente.
 - Buscar pasajes por palabras o mediante búsqueda por significado configurada y combinarlos con notas y proyectos.
 - Leer próximas reuniones e invitaciones; revisar cambios simples antes de aplicarlos.
 
-El acceso API usa tu propia aplicación de Zoom y los permisos que le das. Las transcripciones
+El acceso API usa la aplicación configurada y los permisos que le das. Las transcripciones
 deben estar disponibles para tu cuenta; puedes importar archivos de reuniones a las que asististe.
 
-## Empezar con tus datos
+## Conecta tus datos
 
-[Instala la herramienta](./installation.md), [crea tu aplicación de Zoom](./zoom-app.md) y
-[conecta la cuenta y elige un perfil local](./sessions.md). También puedes empezar con archivos:
-[importar y archivar reuniones](./archive.md) explica nombres y zonas horarias.
+Empieza con [instalar y conectar](./installation.md). Explica reutilizar una app que creaste, una de WireCat/equipo disponible para tu usuario o crear la tuya. Necesitas Public Client ID y consentimiento del navegador, no un archivo de credenciales. Para archivos, [importa VTT](./archive.md#downloaded-transcripts) sin app Zoom.
 
-Da al agente de terminal la [skill](./mcp.md) o conecta el servidor MCP de solo lectura a tu app de
-IA. MCP permite que la app invoque la herramienta; descubrir herramientas no importa reuniones.
+Tras guardar una reunión, [conecta el agente](./mcp.md) mediante instrucciones de terminal o MCP de lectura. La conexión no obtiene datos por sí sola.
 
 ## Elegir la próxima tarea
 

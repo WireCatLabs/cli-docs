@@ -2,8 +2,23 @@
 title: "Archivo local"
 ---
 
-Guarda reuniones en tu equipo: descarga las que organizaste por API, importa transcripciones,
-observa archivos nuevos y archiva grabaciones con sumas verificadas.
+Mantén el texto consultable y copia las grabaciones antes de que Zoom las elimine por retención.
+Elige obtener reuniones del anfitrión, importar una transcripción o archivar audio/vídeo en la nube.
+El texto de la base y los medios de una carpeta son copias distintas; una copia de vídeo no se vuelve
+consultable automáticamente en la base.
+
+## Elige qué conservar
+
+| Fuente disponible | Uso | Comprobación |
+|---|---|---|
+| Reuniones del anfitrión accesibles para la app | `zm pull --lookback-days 7` | Lista, una transcripción y partes ausentes |
+| Archivos VTT descargados | `zm import ./downloaded-transcripts` | Fecha/título frente al original |
+| Grabaciones en la nube | Lista, descarga o sincronización | Manifiesto del destino y sumas |
+| VTT archivados para búsqueda | Importación del archivo | Recibo y búsqueda del texto guardado |
+
+Para la API, conecta la app con [los permisos de la tarea](./zoom-app.md#add-archive-or-management-access).
+La importación y la inspección local no requieren login. Empieza por una reunión antes de configurar
+obtención repetida o copia diaria.
 
 ## Dónde se guardan las reuniones
 
@@ -20,9 +35,18 @@ Elige un [perfil local](./sessions.md#select-a-local-profile) antes de importar 
 
 ## Descargar reuniones organizadas
 
-`zm pull` obtiene reuniones, participantes, transcripciones y resúmenes del origen elegido. Zoom
-solo entrega transcripciones al **organizador**, con **Allow hosts to retain transcripts** activado
-([primera descarga](./zoom-app.md#before-your-first-zm-pull)).
+Selecciona la API, descarga un periodo reciente y comprueba el resultado:
+
+```sh
+zm config set source api
+zm pull --lookback-days 7
+zm meetings list --json
+zm meetings transcript <meeting-id> --json
+```
+
+Usa un ID de la lista. `zm pull` obtiene reuniones del anfitrión y participantes, transcripciones
+ y resúmenes disponibles. No crea texto ausente. Comprueba [generación y retención](./zoom-app.md#before-your-first-zm-pull)
+si falta la transcripción.
 
 `pull --lookback-days 7` revisa siete días; `pull --since 2026-10-01` recupera transcripciones tardías
 anteriores. El cursor no garantiza esa revisión. Serializa descargas de una cuenta para evitar
@@ -30,10 +54,21 @@ crear eventos simultáneos. Una reunión fallida no cambia el cursor y se puede 
 
 ## Transcripciones descargadas
 
-Descarga del portal las reuniones a las que asististe y usa `zm import <folder>`. Se leen archivos
-ordinarios `.vtt` directamente en la carpeta, con formato `YYYY-MM-DD_HHMM_topic-slug.vtt` del
-exportador existente. Sus IDs derivan de fecha y tema normalizado, sin UUID de Zoom. Participantes
-desconocidos y nombres de hablantes se conservan sin adivinar identidades.
+Si solo asististe, pide un VTT al anfitrión o descárgalo si tienes permiso. Asistir no garantiza acceso.
+Pon el archivo directamente en la carpeta elegida y usa su fecha/hora/título, por ejemplo
+`2026-10-01_1000_example-planning.vtt`. Renombrarlo no cambia su contenido.
+
+```sh
+zm config set account.profile personal
+zm config set files.timezone Europe/Madrid
+zm import ./downloaded-transcripts
+zm meetings list --json
+```
+
+La fuente lee archivos `.vtt` normales directamente en la carpeta, sin recursión. Los nombres usan
+`YYYY-MM-DD_HHMM_topic-slug.vtt`. El ID deriva del momento y tema normalizado; no hay UUID de Zoom.
+Los participantes quedan desconocidos: los nombres de hablantes se conservan sin adivinar identidades.
+Comprueba fecha, título y texto antes de vincular proyectos o personas.
 
 Las horas usan UTC. `files.timezone` elige la zona IANA usada en los nombres, como `Europe/Madrid`.
 Horas ambiguas o inexistentes se rechazan. Contenidos distintos de una clave normalizada dan error:
@@ -69,10 +104,15 @@ bloqueada detiene esa entrega y no empieza otro ciclo.
 
 ```sh
 zm recordings list --from 2026-10-01 --to 2026-10-10 --json
-zm recordings show example-occurrence --json
-zm recordings download example-occurrence --destination ./zoom-archive --json
+zm recordings show <zoom-occurrence-uuid> --json
+zm recordings download <zoom-occurrence-uuid> --destination ./zoom-archive --json
 zm recordings archive verify ./zoom-archive --offline --json
 ```
+
+Sustituye `<zoom-occurrence-uuid>` por el UUID devuelto en la lista, no un ID local o número de reunión
+Zoom. El recibo identifica archivos guardados y no disponibles. La verificación compara archivos con
+su manifiesto; no demuestra que Zoom tuviera todas las grabaciones. Si la lista está vacía, comprueba
+datos, cuenta anfitriona, disponibilidad y permisos antes de ampliar el periodo.
 
 Para historial por meses:
 
@@ -173,3 +213,8 @@ Admite PCM16 WAV mono o estéreo a 16 o 48 kHz, sin decodificar vídeo. `--model
 absoluto. Limita bytes, duración, segmentos y texto con `--max-bytes`, `--max-duration`, `--max-segments`
 y `--max-text-bytes`. Las marcas de tiempo indican ventanas de hasta 30 segundos; hablantes desconocidos.
 Se conservan fuentes del proveedor e historial; el recibo muestra cifras y procedencia.
+
+El reconocimiento necesita un componente de voz compatible instalado; no se presupone que exista.
+Convierte audio/vídeo no compatible al WAV indicado con una herramienta que ya uses. Tras aplicar,
+abre `meetings transcript` y revisa palabras y ventanas de tiempo antes de usarlo como evidencia.
+Continúa con [búsqueda y citas](./search.md).

@@ -17,9 +17,7 @@ Zoom; la herramienta de línea de comandos da al agente acceso a la información
 Pide al agente que identifique la reunión antes de resumirla:
 
 ```text prompt
-Usa zm CLI para encontrar las reuniones sobre Research Example del último mes.
-Muestra sus fechas y los pasajes sobre la decisión de lanzamiento, con referencias.
-Separa a los asistentes registrados de las personas solo mencionadas. Indica qué transcripciones faltan.
+Busca reuniones sobre Research Example del último mes. Muestra fechas y pasajes sobre la decisión de lanzamiento con referencias. Distingue asistentes registrados de personas solo mencionadas. Indica las transcripciones ausentes.
 ```
 
 El agente comprueba los datos, busca en las transcripciones disponibles y abre los pasajes relevantes.
@@ -36,10 +34,7 @@ ayudan a encontrar material relacionado; las notas guardan tu contexto. Un vínc
 conecta al participante observado con la persona elegida; un nombre coincidente no prueba identidad.
 
 ```text prompt
-Usa zm CLI y Memo para reunir las reuniones de Research Example, incluidos sus nombres alternativos existentes.
-Revisa el proyecto y las etiquetas antes de proponer nuevas. Muestra posibles sinónimos para revisar.
-Combina los pasajes con personas vinculadas, mis notas, mensajes relacionados y archivos importados de Google Drive.
-Muestra la fuente de cada conclusión. Propón vínculos de proyecto, personas y etiquetas antes de guardarlos.
+Reúne las reuniones de Research Example usando sus alias existentes. Comprueba el proyecto canónico y etiquetas actuales antes de proponer otras. Muestra posibles sinónimos para revisión. Combina pasajes con personas vinculadas, mis notas, mensajes y documentos Google Drive importados. Cita cada conclusión y propone vínculos inciertos antes de guardar.
 ```
 
 El agente elige el proyecto principal, encuentra sus reuniones vinculadas o etiquetadas y las lee
@@ -52,11 +47,7 @@ sincronización con un calendario de Google u Outlook.
 ## Preparar la próxima reunión
 
 ```text prompt
-Usa zm CLI para encontrar mi próxima reunión de Zoom con Alice Example.
-Prepara un resumen de reuniones anteriores de la serie, material del proyecto vinculado y contexto de participantes.
-Enumera decisiones previas, preguntas abiertas y posibles tareas con sus fuentes.
-Si el proyecto o la persona son ambiguos, muestra candidatos y las razones de tu elección.
-No cambies la reunión ni guardes vínculos inferidos.
+Busca mi próxima reunión Zoom con Alice Example. Prepara un informe con reuniones anteriores de la serie, fuentes del proyecto y contexto de participantes. Lista decisiones confirmadas, preguntas abiertas y posibles seguimientos con evidencia. Si proyecto o persona es incierto, muestra candidatos y motivos. No cambies reunión ni vínculos guardados.
 ```
 
 El agente lee la agenda de Zoom y busca el contexto guardado. Comprueba que el resumen se refiere

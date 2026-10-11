@@ -140,9 +140,10 @@ beautiful-mermaid is the selected renderer to trial. Break up overloaded graphs 
 zoom. Check mobile sizing, light/dark themes, keyboard controls and EN/RU/ES labels.
 
 Preserve executable command tokens, literals, URLs and original anchors in translations. Translate
-diagram labels while preserving node identities and relationships. The current translation gate
-compares code fences exactly; Mermaid label translation needs a deliberate extension rather
-than disabling executable-example checks.
+diagram labels while preserving node identities and relationships. The translation gate preserves
+executable fences exactly; `text prompt` fences contain reader requests
+and may be translated while retaining their marker and position. Other text fences retain exact contents.
+Diagram translations retain their structure rather than disabling executable-example checks.
 
 Every public page has a readable Markdown twin. Prompts, prerequisites, alternatives, diagram
 meaning and expected results must survive export. JSX that renders in HTML is not proof that
