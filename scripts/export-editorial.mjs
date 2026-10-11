@@ -89,7 +89,11 @@ for (const lang of ["en", "ru", "es"]) {
     )
     html = html.replace(/href="https:\/\/wirecat.dev\/en"/g, `href="${lang === "en" ? "/" : `/${lang}`}"`)
     html = html.replace(/href="https:\/\/wirecat\.dev\/([^"]*)"/g, (_, path) => `href="/${path}"`)
-    html = html.replace(/<details class="lang footer-language">[\s\S]*?<\/details>/, menu)
+    html = html.replace(
+      /(<button class="theme-toggle"[^>]*>(?:(?!<\/button>)[\s\S])*<\/button>)\s*<details class="lang footer-language">[\s\S]*?<\/details>/,
+      (_, theme) => `${menu}${theme}`,
+    )
+    if (html.includes('class="lang footer-language"')) throw new Error(`Footer language menu not replaced in ${kind}`)
     html = html.replaceAll('aria-label="Language"', `aria-label="${ui[lang].language}"`)
     html = html.replace(/(<a href="mailto:[^"]*">[\s\S]*?<\/a>)/g, "<!--email_off-->$1<!--/email_off-->")
     // Correctly annotate fixtures and identifiers that intentionally remain in English.

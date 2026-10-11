@@ -23,6 +23,13 @@
   list-style: none;
   font-size: 14px;
   line-height: 1;
+  transition:
+    background-color 320ms ease-out,
+    color 320ms ease-out;
+}
+.language-switcher[data-language-switcher] > summary:hover {
+  background: var(--accent-soft, var(--color-fd-accent));
+  color: var(--accent, var(--color-fd-foreground));
 }
 .language-switcher[data-language-switcher] > summary::-webkit-details-marker {
   display: none;
