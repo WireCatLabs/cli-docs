@@ -11,14 +11,41 @@ Si aún falta configurar algo, empieza por [instalación](./installation.mdx) o
 
 ```mermaid Cómo llega tu petición al servicio de mensajería
 graph TD
-  You["Tú"] --> Agent["Agente de IA"]
-  Agent --> Tool["Herramienta local"]
-  Tool --> Messenger["Mensajería"]
+  You["Tú"] --> Agents
+  subgraph Agents["Tu agente de IA"]
+    direction LR
+    Claude["Claude Code"]
+    Codex["Codex"]
+    OpenClaw["OpenClaw"]
+    Hermes["Hermes"]
+  end
+  Agents --> WireCat["WireCat"]
+  WireCat --> Core["Núcleo común: almacén local y búsqueda"]
+  Core --> Tools
+  subgraph Tools["Herramientas de línea de comandos"]
+    direction LR
+    TgCli["tg"]
+    MaxCli["max"]
+    MemoCli["memo"]
+    ZoomCli["zoom"]
+    DriveCli["drive"]
+  end
+  Tools --> Services
+  subgraph Services["Tus cuentas y archivos"]
+    direction LR
+    Telegram["Telegram"]
+    Max["MAX"]
+    Mail["Correo y notas"]
+    Zoom["Zoom"]
+    Drive["Google Drive"]
+  end
 ```
 
-Describes la tarea a tu agente. Usa la herramienta local de línea de comandos para leer los mensajes
-seleccionados del servicio de mensajería y responde a partir de ellos. La herramienta se ejecuta
-en tu ordenador; la configuración del agente determina dónde procesa los mensajes.
+Lee el esquema de arriba abajo. Describes la tarea a tu agente de IA, por ejemplo Claude Code, Codex,
+OpenClaw o Hermes. Debajo del agente está WireCat: un núcleo común que guarda tus mensajes, correo y notas en un
+almacén local y busca en él, y una herramienta de línea de comandos para cada servicio (`tg`, `max`,
+`memo`, `zoom`, `drive`) que trabaja con Telegram, MAX, tu correo y notas, Zoom o Google Drive. Las
+herramientas se ejecutan en tu ordenador; la configuración del agente determina dónde procesa los mensajes.
 
 ## Tus primeros cinco minutos
 
