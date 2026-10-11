@@ -62,9 +62,10 @@ The site already refuses to load analytics anywhere except `wirecat.dev`, so thi
 
 ## 8. Event retention
 
-The privacy page promises analytics events are kept for up to 12 months. Check which event
-retention your plan allows and set it, or change the privacy page in `lib/privacy.ts` to match.
-**[inferred]**
+PostHog sets event retention by plan, and it cannot be shortened: 1 year on the free plan, 7 years on
+paid plans ([events retention](https://posthog.com/docs/data/events-retention)). The privacy page in
+`lib/privacy.ts` promises "up to 12 months", which matches the free plan. Moving to a paid plan means
+rewriting that line in all three languages, or exporting and deleting events after 12 months yourself.
 
 ## 9. Sign the DPA
 
