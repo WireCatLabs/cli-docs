@@ -60,7 +60,6 @@ export const sidebarIcons = {
   rankings: ChartColumn,
   permissions: LockKeyhole,
   profiles: UserRoundCog,
-  "meeting-brief": Video,
   "topic-search": Search,
   "query-language": Braces,
   "configuration-reference": SlidersHorizontal,

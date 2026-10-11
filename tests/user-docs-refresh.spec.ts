@@ -2,14 +2,8 @@ import AxeBuilder from "@axe-core/playwright"
 import { expect, test } from "@playwright/test"
 
 for (const lang of ["en", "ru", "es"]) {
-  test(`${lang}: demo works without installation and references expose contents on mobile`, async ({ page }) => {
+  test(`${lang}: references expose contents on mobile`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 900 })
-    await page.goto(`/${lang}/docs/meeting-brief`)
-    const demo = page.locator("[data-meeting-scenario]")
-    const send = { en: "Send", ru: "Отправить", es: "Enviar" }[lang]
-    await demo.getByRole("button", { name: send, exact: true }).click()
-    await expect(demo.locator(".say")).toHaveCount(1)
-    await expect(demo.locator(".tool code").first()).toContainText("tg chats list")
     await page.goto(`/${lang}/docs/configuration`)
     await page.locator("#nd-toc-popover summary").click()
     await expect(page.locator("#nd-toc-popover details")).toHaveAttribute("open", "")

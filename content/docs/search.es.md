@@ -133,8 +133,7 @@ fechas, chats elegidos y si el historial está completo.
 
 ## Probar sin instalar
 
-Usa el [buscador de muestra](./search-playground.mdx) o la [demo de reunión](./meeting-brief.mdx)
-con mensajes integrados. No leen tu cuenta.
+Usa el [buscador de muestra](./search-playground.mdx) con mensajes integrados. No lee tu cuenta.
 
 ## Consultas precisas y detalles técnicos
 

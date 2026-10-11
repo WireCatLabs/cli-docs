@@ -7,7 +7,7 @@ Una vez conectada tu cuenta, prueba una primera petición con tu agente de IA. E
 petición es una tarea con tus propias palabras; el agente elige los comandos.
 
 Si aún falta configurar algo, empieza por [instalación](./installation.mdx) o
-[conectar al agente](./agents.mdx). Puedes ver el proceso antes de probarlo en [Demo](./meeting-brief.mdx).
+[conectar al agente](./agents.mdx).
 
 ```mermaid Cómo llega tu petición al servicio de mensajería
 graph TD
@@ -296,9 +296,6 @@ La hora del ejemplo es la hora de entrega del diseño ficticio. Si una ventana d
 truncada, el agente debe seguir el cursor de mensajes o indicar la parte que falta antes de afirmar
 que ha revisado toda la semana. Si el nombre de un participante es ambiguo, debe preguntar en vez
 de elegir un chat privado sin pruebas. [Ventanas de mensajes y cursores](./tg/usage.md#pages).
-
-[Demo](./meeting-brief.mdx) muestra cómo el agente reúne decisiones, preguntas y una agenda en un
-escenario preparado.
 
 ## Comprobar la respuesta
 

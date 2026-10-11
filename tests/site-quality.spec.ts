@@ -195,65 +195,6 @@ for (const lang of ["en", "ru", "es"]) {
   })
 }
 
-for (const lang of ["en", "ru", "es"]) {
-  test(`${lang}: meeting scenario waits for Send, shows commands and follows up`, async ({ page, request }) => {
-    await page.setViewportSize({ width: 390, height: 844 })
-    await page.goto(`/${lang}/docs/meeting-brief`)
-    const scenario = page.locator("[data-meeting-scenario]")
-    const send = { en: "Send", ru: "Отправить", es: "Enviar" }[lang]
-    await expect(scenario.locator("details.tool")).toHaveCount(0)
-    await expect(scenario.locator("input")).toHaveCount(0)
-    await scenario.getByRole("button", { name: send, exact: true }).click()
-    await expect(scenario.locator(".meeting-step > .ask")).toHaveCount(1)
-    await expect(scenario.locator("details.tool.running")).toBeVisible()
-    await expect(scenario.locator("[data-meeting-pending]")).toBeVisible()
-    await expect(scenario.locator("details.tool")).toHaveCount(2)
-    await expect(scenario.locator("details.tool code").first()).toContainText("tg chats list")
-    await scenario.locator("details.tool > summary").first().click()
-    await expect(scenario.locator("details.tool pre").first()).toBeVisible()
-    for (let i = 0; i < 2; i++) {
-      await scenario.getByRole("button", { name: send, exact: true }).click()
-      if (i === 0) await expect(scenario.locator("[data-meeting-pending]")).toBeVisible()
-      else await expect(scenario.locator("[data-meeting-pending]")).toHaveCount(0)
-    }
-    await expect(scenario.locator(".say")).toHaveCount(3)
-    await scenario.locator(".sources-toggle").last().click()
-    await scenario.locator(".evidence-message > summary").last().click()
-    await expect(scenario.locator(".evidence-message blockquote").last()).toBeVisible()
-    await scenario.getByRole("button", { name: "MAX", exact: true }).click()
-    await page.emulateMedia({ reducedMotion: "reduce" })
-    await expect(scenario.locator("details.tool")).toHaveCount(0)
-    await scenario.getByRole("button", { name: send, exact: true }).click()
-    await expect(scenario.locator("[data-meeting-pending]")).toBeVisible()
-    await expect(scenario.locator("details.tool code").first()).toContainText("max chats list")
-    expect(
-      await scenario
-        .locator(".meeting-step > .ask")
-        .first()
-        .evaluate((element) => getComputedStyle(element).animationName),
-    ).toBe("none")
-    for (const id of ["inbox", "search"]) {
-      await scenario.locator(`[data-scenario="${id}"]`).click()
-      await expect(scenario.locator("details.tool")).toHaveCount(0)
-      await scenario.getByRole("button", { name: send, exact: true }).click()
-      await expect(scenario.locator("[data-meeting-pending]")).toBeVisible()
-      await expect(scenario.locator("details.tool code").first()).toContainText(
-        id === "inbox" ? "max inbox" : "max search messages",
-      )
-      await expect(scenario.locator(".say")).toHaveCount(1)
-    }
-    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
-    expect((await new AxeBuilder({ page }).include("main").analyze()).violations).toEqual([])
-    const locale = lang === "en" ? "" : `${lang}/`
-    const markdown = await (await request.get(`/llms.mdx/docs/${locale}meeting-brief/content.md`)).text()
-    expect(markdown).toContain("tg chats list")
-    expect(markdown).toContain("max inbox")
-    expect(markdown).toContain("max search messages")
-    expect(markdown).not.toContain("<MeetingGuide")
-    expect(markdown).toContain("```text prompt")
-  })
-}
-
 test("the public project contact opts out of an unnecessary edge email decoder", async ({ request }) => {
   const html = await (await request.get("/")).text()
   const contact = html.match(/<!--email_off-->([\s\S]*?)<!--\/email_off-->/)?.[1]

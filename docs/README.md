@@ -33,7 +33,6 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | What should I ask first? | `first-tasks.md` | Tutorial/task hub | Pilot catch-up, older-history search and draft workflows here |
 | What do my accounts know about a person? | `people.md` | Task guide | Review source and data boundaries |
 | How should I connect documents, people and work? | `organize.md` | Explanation and worked task | Distinguish tags, notes, memories, projects/tasks and source-folder scope |
-| Can I see what the agent does? | `meeting-brief.mdx` | Interactive demo | Reuse reviewed meeting, inbox and search scenarios with sources |
 | How do I find a message or agreement? | `search.md` | Task guide | Lead with an agent request; keep terminal syntax optional |
 | How do I connect a browser AI app? | `browser-apps.mdx` | Connection guide | Preserve current web setup instructions |
 | How do I ask for a useful result? | `prompting.mdx` | Task guidance | Cross-link to worked examples instead of duplicating dialogues |

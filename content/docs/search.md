@@ -134,8 +134,7 @@ only roughly how something was said. Check dates, chat scope and whether history
 
 ## Try without installing
 
-Use the [search playground](./search-playground.mdx) or [meeting demo](./meeting-brief.mdx)
-with built-in messages. They do not read your account.
+Use the [search playground](./search-playground.mdx) with built-in messages. It does not read your account.
 
 ## More precise queries and technical details
 
