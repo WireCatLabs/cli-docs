@@ -6,18 +6,67 @@ description: "Usa un bot con tu agente o terminal para mensajes, archivos, event
 Usa un bot a través de tu agente o la terminal para responder peticiones, publicar novedades o ayudar con un grupo. Conéctalo y comprueba su acceso antes de tu primera tarea. Un bot tiene su propia cuenta, nombre y permisos. No obtiene acceso a tus conversaciones privadas,
 y los comandos sin `bot` siguen usando tu cuenta personal.
 
-Bot API es la forma oficial de controlar un bot de Telegram o MAX desde un programa. Con las herramientas `tg` y `max` puedes pedírselo al agente o ejecutar comandos: responder como bot, publicar informes
-y ayudar con tareas del grupo.
+Bot API es la forma oficial de controlar un bot de Telegram o MAX desde un programa:
+[Telegram Bot API](https://core.telegram.org/bots/api) y [MAX Bot API](https://dev.max.ru/docs-api).
+Las herramientas de línea de comandos `tg` y `max` la cubren entera: los 185 métodos de Telegram y
+las 33 operaciones de MAX. Además añaden lo que la API oficial no tiene: una copia de los mensajes
+del bot en la que puedes buscar, moderación del grupo según tus reglas y límites sobre dónde puede
+escribir el bot. Pide a tu agente que use el bot o ejecuta los comandos tú.
 
 ## Qué puede hacer un bot
 
-- **Mensajes:** enviar respuestas y publicaciones, editar y borrar sus mensajes y añadir botones.
-- **Archivos y multimedia:** enviar y recibir documentos, fotos y otros adjuntos admitidos por el servicio de mensajería.
-- **Eventos entrantes:** recibir mensajes y pulsaciones de botones para que los gestione tu agente o programa.
-- **Grupos y canales:** trabajar con miembros, mensajes fijados y ajustes donde tenga los permisos necesarios.
-- **Configuración del bot:** comprobar su identidad, definir comandos y configurar la recepción de eventos.
+| Tarea | Telegram | MAX |
+| --- | --- | --- |
+| Enviar, responder, editar, borrar y fijar mensajes, con Markdown o HTML | Sí | Sí |
+| Enviar archivos, fotos y mensajes de voz | Sí | Sí |
+| Ver mensajes nuevos, ediciones, botones pulsados, entradas y salidas | Sí | Sí, y mensajes borrados |
+| Responder a botones, definir el menú de comandos, configurar un webhook | Sí | Sí |
+| Nombrar y quitar administradores con los permisos que elijas; expulsar o bloquear miembros | Sí | Sí |
+| Ver la lista de miembros de un grupo | No: la Telegram Bot API no lo permite | Sí, 100 por página |
+| Añadir miembros a un grupo | No: la Telegram Bot API no lo permite | Sí, mientras el servidor de MAX lo acepte |
+| Responder en los comentarios de las publicaciones de un canal | No | Sí |
+| Revisar un grupo según tus reglas y quitar lo que las incumple | Sí | Sí |
+| Leer y buscar lo que el bot envió y recibió | Sí | Sí |
+| Importar mensajes antiguos | Canales y supergrupos | Sí |
 
-Los métodos y tipos de adjuntos varían entre Telegram y MAX. El bot solo ve lo que permite el servicio de mensajería. Las respuestas automáticas continuas necesitan un gestor de eventos en ejecución; un comando aislado no lo inicia.
+Un bot solo ve lo que el servicio de mensajería le muestra, y para hacer cambios en un grupo
+necesita permisos de administrador. Las respuestas automáticas continuas necesitan un programa
+que siga en marcha y gestione los eventos; un comando aislado no lo inicia.
+
+<a id="qué-añade-la-cli" />
+
+## Qué añade la CLI a la Bot API
+
+- **Un historial en el que buscar.** La Telegram Bot API no permite leer mensajes antiguos. La CLI
+  guarda en tu ordenador lo que el bot envía y recibe, así que tú y tu agente podéis listar,
+  buscar y ver quién escribió qué. También puede importar mensajes antiguos.
+- **Moderación del grupo según tus reglas.** Guardas las reglas del grupo una vez. El bot revisa
+  los mensajes nuevos con ellas, muestra lo que haría y solo actúa como las reglas permiten.
+- **Límites de escritura.** Cada bot tiene una lista de chats en los que puede escribir, un límite
+  por hora opcional y un registro de cada escritura. El registro nunca guarda el texto del
+  mensaje. Estos límites también se aplican a la API completa.
+- **Un token protegido.** El token se guarda en el llavero del sistema y nunca se muestra, ni
+  siquiera en los mensajes de error.
+- **Varios bots.** Cada bot tiene su propio nombre de perfil, la primera palabra del comando:
+  `tg sales bot …`, `tg support bot …`.
+- **Resultados que un programa puede usar.** `--json` da datos limpios y códigos de salida claros.
+  Si la conexión se corta durante un envío, la CLI no vuelve a enviar: informa de que el
+  resultado es desconocido, para que compruebes el chat antes.
+- **Una conexión para tu agente.** `tg <bot> bot mcp` y `max <bot> bot mcp` dan el bot a una
+  aplicación de agente solo con los permisos que tú definas.
+
+<a id="diferencias" />
+
+## Diferencias entre Telegram y MAX
+
+- **Telegram:** una persona debe iniciar el bot antes de que este pueda escribirle. En un grupo,
+  un bot que no es administrador solo ve los comandos y las respuestas dirigidas a él, salvo que
+  se desactive el modo de privacidad en BotFather.
+- **MAX:** solo las organizaciones verificadas, los empresarios individuales y los autónomos
+  registrados pueden crear un bot, y cada bot pasa una moderación. Un bot solo puede unirse a
+  grupos después de que lo permitas en los ajustes de privacidad del bot en business.max.ru.
+
+Todos los comandos y límites: [bots de Telegram](./tg/bot.md) · [bots de MAX](./max/bot.md).
 
 <a id="conectar-un-bot" />
 

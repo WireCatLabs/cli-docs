@@ -6,19 +6,67 @@ description: "Use a bot through your agent or terminal for messages, files, even
 Use a messenger bot through your agent or the terminal to answer requests, publish updates or help with a group. Connect it and check its access before your first task. A bot has its own account, name and permissions. It does not gain access to your private conversations,
 and commands without `bot` still use your personal account.
 
-Bot API is the official way to control a Telegram or MAX bot from a program. With the `tg` and `max` command-line tools,
-you can ask your agent to use it or run commands yourself: reply as the bot, publish reports
-and help with group tasks.
+Bot API is the official way to control a Telegram or MAX bot from a program:
+[Telegram Bot API](https://core.telegram.org/bots/api) and [MAX Bot API](https://dev.max.ru/docs-api).
+The `tg` and `max` command-line tools cover all of it: all 185 Telegram methods and all 33 MAX
+operations. They also add what the official API does not have: a searchable copy of the bot's
+messages, group moderation by your rules and limits on where the bot may write. Ask your agent to
+use the bot, or run commands yourself.
 
 ## What a bot can do
 
-- **Messages:** send replies and posts, edit and delete its messages, and add buttons.
-- **Files and media:** send and receive documents, photos and other attachments supported by the messenger.
-- **Incoming events:** receive new messages and button clicks for your agent or program to handle.
-- **Groups and channels:** work with members, pinned messages and settings where it has the required permissions.
-- **Bot setup:** check its identity, set its command list and configure event delivery.
+| Task | Telegram | MAX |
+| --- | --- | --- |
+| Send, reply to, edit, delete and pin messages, with Markdown or HTML | Yes | Yes |
+| Send files, photos and voice messages | Yes | Yes |
+| See new messages, edits, button presses, joins and departures | Yes | Yes, and deleted messages |
+| Answer buttons, set the command menu, set a webhook | Yes | Yes |
+| Make and remove admins with the rights you choose; remove or ban members | Yes | Yes |
+| List a group's members | No: the Telegram Bot API cannot | Yes, 100 per page |
+| Add members to a group | No: the Telegram Bot API cannot | Yes, while the MAX server allows it |
+| Reply in comments under channel posts | No | Yes |
+| Check a group against your rules and remove what breaks them | Yes | Yes |
+| Read and search what the bot sent and received | Yes | Yes |
+| Import older messages | Channels and supergroups | Yes |
 
-Available methods and attachment types differ between Telegram and MAX. A bot sees only what the messenger allows. Continuous auto-replies require a running event handler; a single command does not start one.
+A bot sees only what the messenger shows it, and changes in a group need admin rights there.
+Continuous auto-replies need a program that keeps running and handles events; a single command
+does not start one.
+
+<a id="what-the-cli-adds" />
+
+## What the CLI adds to the Bot API
+
+- **A history you can search.** The Telegram Bot API has no call to read old messages. The CLI
+  keeps what the bot sends and receives on your computer, so you and your agent can list, search
+  and look up who wrote what. It can also import older messages.
+- **Group moderation by your rules.** Save a group's rules once. The bot checks new messages
+  against them, shows what it would do, and acts only as the rules allow.
+- **Limits on writing.** Each bot has a list of chats it may write to, an optional hourly limit
+  and a journal of every write. The journal never stores the message text. These limits apply
+  to the full API too.
+- **A protected token.** The token is kept in your system keyring and is never printed, not even
+  in error messages.
+- **Several bots.** Each bot has its own profile name, the first word of the command:
+  `tg sales bot …`, `tg support bot …`.
+- **Results a program can use.** `--json` gives clean data and clear exit codes. If the
+  connection breaks during a send, the CLI does not send again: it reports that the result is
+  unknown, so you check the chat first.
+- **A connection for your agent.** `tg <bot> bot mcp` and `max <bot> bot mcp` give the bot to an
+  agent app with only the permissions you set.
+
+<a id="differences" />
+
+## Differences between Telegram and MAX
+
+- **Telegram:** a person must start the bot before it can write to them. In a group, a bot that
+  is not an admin sees only commands and replies to it, unless privacy mode is turned off in
+  BotFather.
+- **MAX:** only verified organisations, individual entrepreneurs and registered self-employed
+  people can create a bot, and every bot goes through moderation. A bot can join groups only
+  after you allow it in the bot's privacy settings at business.max.ru.
+
+All commands and limits: [Telegram bot guide](./tg/bot.md) · [MAX bot guide](./max/bot.md).
 
 <a id="connect-a-bot" />
 
