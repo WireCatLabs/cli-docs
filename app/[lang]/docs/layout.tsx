@@ -41,6 +41,8 @@ export default async function Layout({
         {...options}
         tree={unifiedDocsTree(source.getPageTree(lang))}
         tabs={false}
+        // Fumadocs' trigger expects a mounted dialog; ours opens the deferred one, in the header and drawer.
+        searchToggle={{ enabled: false }}
         slots={{
           header: DocsHeader,
           navTitle: DocsSidebarTitle,
