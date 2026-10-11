@@ -105,8 +105,9 @@ test("en: the data model diagram enlarges and Esc closes it", async ({ page }) =
   await page.goto("/en/docs/data-model")
   const dialog = page.getByRole("dialog")
   // The served button looks the same before its click handler is attached, so retry until a click opens it.
+  // Once open, the button is named "Close": click only while the diagram is still closed.
   await expect(async () => {
-    await page.getByRole("button", { name: "Enlarge diagram" }).first().click({ timeout: 1_000 })
+    if (!(await dialog.isVisible())) await page.getByRole("button", { name: "Enlarge diagram" }).first().click()
     await expect(dialog).toBeVisible({ timeout: 1_000 })
   }).toPass()
   await expect(dialog.getByRole("button", { name: "Close" })).toBeVisible()
