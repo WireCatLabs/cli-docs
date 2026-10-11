@@ -60,7 +60,7 @@ export function DiagramFrame({ svg, caption }: { svg: string; caption: string })
         className={
           open
             ? "max-h-full w-full max-w-[1600px] overflow-auto [&_svg]:h-auto [&_svg]:w-full"
-            : "cursor-zoom-in overflow-auto [&_svg]:h-auto [&_svg]:min-w-80 [&_svg]:max-w-full"
+            : "cursor-zoom-in overflow-auto [&_svg]:mx-auto [&_svg]:h-auto [&_svg]:min-w-80 [&_svg]:max-w-full"
         }
         onClick={(event) => {
           event.stopPropagation()

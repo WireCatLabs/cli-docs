@@ -22,8 +22,8 @@ can change. There are no promised dates. What already works is in [features](./f
 - **More messengers and meetings** — WhatsApp, Google Meet, Microsoft Teams and Slack, for both
   messages and meetings.
 - **Knowledge bases** — Notion.
-- **Agent platforms** — native integrations for OpenClaw and Hermes, beyond the skill that
-  [Hermes can already use](./agents.mdx).
+- **Agent platforms** — native integrations for OpenClaw and Hermes, beyond the skill both can
+  [already use](./agents.mdx).
 - **An SDK for new integrations** — so you or others can connect a new source the same way.
 - **GitHub** — pull request descriptions, issues and projects.
 

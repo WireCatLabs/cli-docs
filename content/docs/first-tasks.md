@@ -9,6 +9,17 @@ in your own words; the agent chooses the commands.
 If you still need setup, start with [installation](./installation.mdx) or
 [connecting your agent](./agents.mdx). To see the flow before trying it, open [Demo](./meeting-brief.mdx).
 
+```mermaid How your request reaches your messenger
+graph TD
+  You["You"] --> Agent["AI agent"]
+  Agent --> Tool["Local tool"]
+  Tool --> Messenger["Messenger"]
+```
+
+You describe the task to your agent. It uses the local command-line tool to read the selected messages
+from your messenger, then answers from those messages. The tool runs on your computer; your
+agent's own settings determine where it processes the messages.
+
 ## Your first five minutes
 
 Choose one request. These tasks only read, so nothing changes in your account. For MAX, replace

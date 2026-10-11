@@ -52,3 +52,5 @@ __pycache__/
 
 # Local documentation research and release contracts
 /.docs-tooling
+# Local archives of old checkouts; never published
+/archive-*/

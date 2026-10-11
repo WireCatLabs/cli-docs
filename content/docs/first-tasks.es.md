@@ -9,6 +9,17 @@ petición es una tarea con tus propias palabras; el agente elige los comandos.
 Si aún falta configurar algo, empieza por [instalación](./installation.mdx) o
 [conectar al agente](./agents.mdx). Puedes ver el proceso antes de probarlo en [Demo](./meeting-brief.mdx).
 
+```mermaid Cómo llega tu petición al servicio de mensajería
+graph TD
+  You["Tú"] --> Agent["Agente de IA"]
+  Agent --> Tool["Herramienta local"]
+  Tool --> Messenger["Mensajería"]
+```
+
+Describes la tarea a tu agente. Usa la herramienta local de línea de comandos para leer los mensajes
+seleccionados del servicio de mensajería y responde a partir de ellos. La herramienta se ejecuta
+en tu ordenador; la configuración del agente determina dónde procesa los mensajes.
+
 ## Tus primeros cinco minutos
 
 Elige una petición. Estas tareas solo leen, así que nada cambia en tu cuenta. Para MAX, cambia
