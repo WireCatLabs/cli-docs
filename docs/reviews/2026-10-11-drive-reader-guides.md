@@ -124,3 +124,10 @@ exactly. Initial requests to the unqualified package metadata URL still returned
 a fresh-query version document returned 0.1.0. Normal npm installation must be rechecked after
 registry propagation before declaring the reader installation path verified. The native tag
 and GitHub release are `v0.1.0` on the merge above.
+
+Registry propagation completed: ordinary `npm view` reports 0.1.0, global installation by
+package name succeeded, and offline command capture installed the exact released package by
+name. The final all-tool contract capture and strict docs check passed: 1,227 reference entries,
+zero reference gaps, zero invalid examples, 126 examples requiring manual review across the
+corpus, and 17 task mappings. Updated-main unit suite: 298 passing tests; typecheck and reviewed
+translation fingerprints pass. Portal PR #180 owns the final source/release pin and legal sidebar.
