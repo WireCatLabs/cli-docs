@@ -12,7 +12,7 @@ export function expandDocTerms(markdown: string, lang: string): string {
   const visit = (node: Node) => {
     if ((node.type === "html" || node.type === "text") && node.position) {
       const pattern =
-        /<(\/?)(ArchitectureDiagram|DocTerm|NodeSetupPrompt|MeetingBriefDemo|AgentInstallPrompt|InstallationMessengerTabs|InstallationOsTabs|PlatformSetupTabs|SearchPlayground|Screenshot|Tabs|Tab|Steps|Step|Accordions|Accordion|Callout)\b([^>]*)>/g
+        /<(\/?)(ArchitectureDiagram|DocTerm|NodeSetupPrompt|AgentInstallPrompt|InstallationMessengerTabs|InstallationOsTabs|PlatformSetupTabs|SearchPlayground|Screenshot|Tabs|Tab|Steps|Step|Accordions|Accordion|Callout)\b([^>]*)>/g
       const authored = markdown.slice(node.position.start.offset, node.position.end.offset)
       for (const match of authored.matchAll(pattern)) {
         const props = Object.fromEntries([...match[3].matchAll(/(\w+)="([^"]*)"/g)].map((attr) => [attr[1], attr[2]]))
@@ -24,8 +24,6 @@ export function expandDocTerms(markdown: string, lang: string): string {
           } else if (match[2] === "DocTerm") {
             const entry = docTerm(props.term as DocTermId, language)
             text = `${props.label ?? entry.title} (${entry.description})`
-          } else if (match[2] === "MeetingBriefDemo") {
-            text = `[${{ en: "Open the interactive demo", ru: "Открыть интерактивное демо", es: "Abrir la demo interactiva" }[language] ?? "Open the interactive demo"}](https://wirecat.dev/${language}/docs/meeting-brief)`
           } else if (match[2] === "SearchPlayground") {
             // Plain text, not a link: link rewriting would turn it back into this Markdown page.
             text = `${{ en: "The interactive playground runs only in a browser:", ru: "Интерактивная песочница работает только в браузере:", es: "El área de pruebas interactiva solo funciona en un navegador:" }[language] ?? "The interactive playground runs only in a browser:"} ${siteUrl}/${language}/docs/search-playground`

@@ -8,7 +8,6 @@ import { guideOrientation, guideStartLink } from "./guide-orientation"
 import { i18n } from "./i18n"
 import { installationMarkdown } from "./installation-markdown"
 import { resolveDocumentationLink, rewriteMarkdownLinks } from "./markdown-links"
-import { meetingMarkdown } from "./meeting-guide"
 import { readerGuide, readerGuideMarkdown } from "./reader-guides"
 import { rehypeCodeAccessibility } from "./rehype-code-accessibility"
 import { remarkAnchorAliases } from "./remark-anchor-aliases"
@@ -62,7 +61,6 @@ export const docsLlms = llms(source, {
     const raw = await page.data.getText("raw")
     const text =
       /^```mermaid\b/m.test(raw) ||
-      /<MeetingGuide\b/.test(raw) ||
       (page.slugs.length === 1 && ["installation", "memo", "email"].includes(page.slugs[0]))
         ? raw
         : dedentDocComponents(await page.data.getText("processed"))
@@ -81,7 +79,6 @@ export const docsLlms = llms(source, {
       text
         .replace(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/, "")
         .replace("<InstallationGuide />", installationMarkdown(page.locale ?? i18n.defaultLanguage))
-        .replace(/<MeetingGuide\s+lang="(?:en|ru|es)"\s*\/>/, meetingMarkdown(page.locale ?? i18n.defaultLanguage))
     const markdown = rewriteMarkdownLinks(expandDocTerms(body, page.locale ?? i18n.defaultLanguage), (href) =>
       resolveDocumentationLink(
         href,

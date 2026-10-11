@@ -7,7 +7,7 @@ Once your account is connected, try a first request with your AI agent. Find a m
 in your own words; the agent chooses the commands.
 
 If you still need setup, start with [installation](./installation.mdx) or
-[connecting your agent](./agents.mdx). To see the flow before trying it, open [Demo](./meeting-brief.mdx).
+[connecting your agent](./agents.mdx).
 
 ```mermaid How your request reaches your messenger
 graph TD
@@ -271,9 +271,6 @@ The sample time is the fictional design's delivery time. If a read window is tru
 must follow the message cursor or report the missing part before claiming to have checked the
 whole week. It should ask about ambiguous participant names rather than choose a direct chat
 without evidence. [Message windows and cursors](./tg/usage.md#pages).
-
-[Demo](./meeting-brief.mdx) walks through a ready-made scenario showing how the agent gathers
-decisions, questions and an agenda.
 
 ## Check the answer
 

@@ -25,7 +25,7 @@
   },
   {
     "id": "prepare-meeting",
-    "pages": ["meeting-brief.mdx", "first-tasks.md", "prompting.mdx"],
+    "pages": ["first-tasks.md", "prompting.mdx"],
     "families": {
       "tg": ["contacts", "chats", "messages"],
       "max": ["contacts", "chats", "messages"]
