@@ -85,7 +85,7 @@ export function DocsHeader(props: ComponentProps<"header">) {
       id="nd-subnav"
       className="sticky top-0 z-40 flex h-14 items-center gap-1 border-b bg-fd-background/95 px-2 backdrop-blur-sm [grid-area:header] min-[24rem]:gap-2 min-[24rem]:px-3 sm:gap-4 sm:px-5"
     >
-      <Link href={homePath(lang)} className="wirecat-brand shrink-0">
+      <Link href={homePath(lang)} className="wirecat-brand shrink-0 max-[24rem]:me-1">
         <WirecatLogo />
       </Link>
       <MessengerSwitch lang={lang} pages={pageUrls(tree.children).map((url) => url.slice(`/${lang}/docs/`.length))} />

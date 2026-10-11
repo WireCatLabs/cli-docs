@@ -1,6 +1,11 @@
 @import "tailwindcss/utilities.css" layer(utilities) source(none);
 @import "fumadocs-ui/css/neutral.css";
 @import "fumadocs-ui/css/preset.css";
+/* Our docs utilities must be built here too: this bundle loads after global.css, and its own
+   base utilities would otherwise override our responsive variants. */
+@source "../components";
+@source "../lib";
+@source "../app";
 @reference "tailwindcss";
 
 :root:not(.dark) {
@@ -56,14 +61,4 @@
 .docs-diagram .node text tspan + tspan {
   font-weight: 400;
   opacity: 0.8;
-}
-
-/* Fumadocs' prebuilt utilities load later and reset the header's responsive gap to 4px. */
-#nd-subnav > .wirecat-brand {
-  margin-inline-end: 6px;
-}
-@media (min-width: 40rem) {
-  #nd-subnav > .wirecat-brand {
-    margin-inline-end: 12px;
-  }
 }
