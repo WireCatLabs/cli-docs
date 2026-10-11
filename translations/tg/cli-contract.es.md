@@ -40,6 +40,8 @@ Algunos términos que utiliza la página:
 | Para ver qué haría un comando | `--dry-run` |
 | Para saber si ocurrió una escritura fallida | `outcome_unknown`, `retryable` y `operationId` |
 
+Las lecturas y descargas parciales pueden devolver JSON con código de salida `0`: comprueba `complete` y `batch` o `issue`. El JSONL de una descarga parcial añade `batch_summary`; el trabajo completado se conserva. Los errores incluyen `actions` con pasos, ajustes y pausas para recuperarse.
+
 ## Cómo se nombran los comandos
 
 Los comandos utilizan `tg [profile] resource action`. Los informes y recuentos se encuentran en `stats`, luego el recurso y el informe:
@@ -57,7 +59,7 @@ Las rutas más antiguas `messages stats`, `chats stats` y `tasks stats` ya no ex
 
 `--json` produce JSON. `--jsonl` produce un valor JSON por línea, para comandos que se pueden transmitir. En una tubería, JSON se elige automáticamente. stdout transporta datos; stderr lleva diagnósticos. Una bandera JSON explícita gana sobre un terminal conectado. `--help` y `--version` imprimen texto en la salida estándar, salen con `0` y no ejecutan el comando.
 
-Un error en el modo máquina es un objeto en stderr: `{"error":{"code":"…","message":"…","retryable":false}}`. Un comando desconocido, una opción o un argumento requerido faltante sale con el código 2. `tg commands --json` proporciona la tabla completa de códigos de salida. `--quiet` oculta los diagnósticos habituales pero mantiene los errores. La salida de la máquina no tiene color ni animación; `NO_COLOR` también desactiva el color en la salida de texto.
+Un error que termina el comando en modo máquina es un objeto en stderr: `{"error":{"code":"…","message":"…","retryable":false}}`. Un comando desconocido, una opción o un argumento requerido faltante sale con el código 2. `tg commands --json` proporciona la tabla completa de códigos de salida. `--quiet` oculta los diagnósticos habituales pero mantiene los errores. La salida de la máquina no tiene color ni animación; `NO_COLOR` también desactiva el color en la salida de texto.
 
 ## Ejecutar sin preguntas y límites de ejecución
 
@@ -99,6 +101,6 @@ Pídale al agente que le muestre los mensajes que contó y cuánto del historial
 
 ## Estándares que seguimos
 
-`tg` sigue las partes que se aplican de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) y [Pautas de interfaz de línea de comando](https://clig.dev/), además de [Esquema JSON](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/WireCatLabs/tg-cli/blob/v0.44.1/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/dev/STANDARD.md) describen cómo se aplican y las excepciones realizadas intencionalmente. No reclamamos una certificación completa de terceros.
+`tg` sigue las partes que se aplican de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) y [Pautas de interfaz de línea de comando](https://clig.dev/), además de [Esquema JSON](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/WireCatLabs/tg-cli/blob/v0.46.0/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/dev/STANDARD.md) describen cómo se aplican y las excepciones realizadas intencionalmente. No reclamamos una certificación completa de terceros.
 
 Para la configuración, consulte la [guía de configuración](./configuration.md); para cada clave y variable de entorno, la [referencia de configuración](./configuration-reference.md).

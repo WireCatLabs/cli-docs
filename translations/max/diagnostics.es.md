@@ -109,7 +109,7 @@ El resultado se escribe **en cualquier salida**, incluso si falla antes de conec
 
 Si el comando finaliza con un error, su ejecución se guarda sin `--record`, con la marca `"keptBecauseFailed": true` en `run.json`. Esto se aplica a cualquier comando y a cualquier error: indicador incorrecto, comando desconocido, verificación antes de comenzar a trabajar, comandos que no funcionan en MAX (`models`, `server`, `watch`, `upgrade`). La grabación contiene sólo las palabras del comando, por ejemplo `messages list`, sin lo que estaba escrito después de ellas.
 
-Un ejecución exitoso sin `--record` no deja constancia. Por lo tanto, un informe de problema siempre tiene algo que adjuntar. `--no-record` o `"record": false` en la configuración también lo desactiva.
+Una ejecución completamente satisfactoria sin `--record` no deja registro; los resultados parciales se conservan por defecto. Por lo tanto, un informe de problema siempre tiene algo que adjuntar. `--no-record` o `"record": false` en la configuración también lo desactiva.
 
 Las búsquedas y estadísticas exitosas mantienen su historial, separado de los registros de ejecución. Contiene parámetros de consulta, pero no se encontraron mensajes. Cómo gestionarlo - en la sección [búsquedas guardadas e historial](./search.md#сохранённые-поиски-и-история).
 
@@ -126,7 +126,7 @@ Lo mismo en el archivo de configuración:
 { "profiles": { "default": { "record": true } } }
 ```
 
-Luego se escribe cada ejecución. Por defecto, un ejecución exitoso no se registra a menos que se lo soliciten: un directorio de quién lee y cuándo sería un diario de su vida que nadie solicitó. `--no-record` o `"record": false` desactivan tanto la grabación de ejecución como el historial de búsqueda.
+Luego se escribe cada ejecución. Por defecto, una ejecución completamente satisfactoria no se registra a menos que se lo soliciten: un directorio de quién lee y cuándo sería un diario de su vida que nadie solicitó. `--no-record` o `"record": false` desactivan tanto la grabación de ejecución como el historial de búsqueda.
 
 ## Conservación
 
@@ -207,3 +207,21 @@ done
 
 - [Qué significa el error y qué hacer](./troubleshooting.md)
 - [Lo que generalmente termina en el disco](./security.md)
+
+## Buscar errores y ejecuciones parciales
+
+```sh
+max runs search --error-code rate_limited --json
+max runs search --status partial --since-time 2026-10-01 --json
+```
+
+`runs search` busca texto literal en metadatos y eventos de diagnóstico seguros.
+`--operation`, `--profile`, `--since-time`, `--limit` y `--page` acotan la búsqueda. Cada página admite hasta 100 ejecuciones;
+cada ejecución devuelve hasta 100 eventos coincidentes, con `eventsTruncated` si hay más.
+El fallo de un archivo o una página de historial genera `status: "partial"` con ID fallidos, etapas y códigos.
+El registro no copia el contenido de mensajes ni las respuestas de error del proveedor.
+Las ejecuciones parciales se conservan por defecto salvo que se desactive explícitamente el registro. La búsqueda no se registra a sí misma.
+
+En MCP llama a `max_read` con `command: "runs search"`; `arguments` acepta `query`, `status`, `error_code`, `operation`, `since_time`, `limit` y `page`.
+Solo lee registros del perfil activo, no conecta con MAX ni abre los logs sin filtrar de trabajos en segundo plano.
+El resultado parcial original contiene acciones de recuperación; el registro conserva solo identificadores y códigos seguros.

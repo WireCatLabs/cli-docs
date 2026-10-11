@@ -105,7 +105,7 @@ The outcome is saved **on every exit path**, including a command that fails befo
 
 A failed command saves its run even without `--record`, marking `"keptBecauseFailed": true` in `run.json`. This applies to any command and error: an invalid flag, unknown command, preflight failure or commands that do not contact MAX (`models`, `server`, `watch`, `upgrade`). Records contain only the command path, such as `messages list`, without subsequent arguments.
 
-Successful runs without `--record` leave no record, while a failed run provides evidence for a problem report. `--no-record` or configuration `"record": false` disables even this automatic failure record.
+Fully successful runs without `--record` leave no record; partial runs are retained by default, while a failed run provides evidence for a problem report. `--no-record` or configuration `"record": false` disables even this automatic failure record.
 
 Successful search and statistics requests keep separate history containing query parameters, not returned messages. See [saved searches and history](./search.md#сохранённые-поиски-и-история) for controls.
 
@@ -122,7 +122,7 @@ The same in the settings file:
 { "profiles": { "default": { "record": true } } }
 ```
 
-This records every run. Successful runs are otherwise not recorded unless requested: a directory tracking whom you read and when would create an unwanted personal diary. `--no-record` or `"record": false` disables run records and search history.
+This records every run. Fully successful runs are otherwise not recorded unless requested: a directory tracking whom you read and when would create an unwanted personal diary. `--no-record` or `"record": false` disables run records and search history.
 
 ## Retention
 
@@ -203,3 +203,22 @@ done
 
 - [Errors and recovery](./troubleshooting.md)
 - [What is saved on disk](./security.md)
+
+## Search errors and partial runs
+
+```sh
+max runs search --error-code rate_limited --json
+max runs search --status partial --since-time 2026-10-01 --json
+```
+
+`runs search` matches literal diagnostic text in metadata and safe events. Use `--operation`,
+`--profile`, `--since-time`, `--limit` and `--page` to narrow it. Each page allows up to 100 runs and
+each run returns at most 100 matched events, with `eventsTruncated` for additional events.
+A failed batch item or history page creates `status: "partial"` with failed IDs, stages and
+codes; message contents and provider error payloads are not copied into that record. Partial
+records are kept by default unless recording was explicitly disabled. Search does not record itself.
+
+MCP `max_read` with `command: "runs search"` accepts these `arguments`: `query`, `status`, `error_code`, `operation`, `since_time`, `limit` and `page`.
+It reads only the active profile's diagnostic runs, does not connect to MAX and does not open
+raw background-job logs. The original partial result contains recovery actions; diagnostic records
+keep only safe identifiers and codes.

@@ -168,8 +168,28 @@ max attachments extract --chat "Учебная группа" --ocr --concurrency
 
 Los reintentos usan el hash del archivo y el destino del modelo; ante errores, cancelación o respuestas incompletas se conserva el texto válido. No sobrescribe el texto del agente. Solo envía imágenes y escaneos al proveedor con `--ocr` explícito; sus tarifas se aplican. `--offline` y `--ocr` son incompatibles; no cambia automáticamente del agente a la API.
 
-La extracción admite archivos de hasta 50 MiB y texto local de hasta 2 millones de caracteres. La API OCR acepta PDF de hasta 20 páginas, imágenes de hasta 4 MiB y 20 millones de píxeles (máximo 8000 por lado). Procesa 1–8 archivos en paralelo, 4 por defecto; las páginas de cada archivo van en serie. Por defecto procesa hasta 100 archivos; `--limit` acepta 1–500. Continúa con el `cursor` devuelto. Si el proveedor responde 429 (demasiadas peticiones), detiene las llamadas de esta ejecución sin reintentar. Devuelve estados y referencias a mensajes, no el texto completo.
+La extracción admite por defecto archivos de hasta 50 MiB, configurable mediante `MESSAGING_ATTACHMENT_MAX_MIB` y texto local de hasta 2 millones de caracteres. La API OCR acepta PDF de hasta 20 páginas, imágenes de hasta 4 MiB y 20 millones de píxeles (máximo 8000 por lado). Procesa 1–8 archivos en paralelo, 4 por defecto; las páginas de cada archivo van en serie. Por defecto procesa hasta 100 archivos; `--limit` acepta 1–500. Continúa con el `cursor` devuelto. Si el proveedor responde 429 (demasiadas peticiones), detiene las llamadas de esta ejecución sin reintentar. Devuelve estados y referencias a mensajes, no el texto completo.
 
 ## Qué hacer después
 
 Busca una frase del archivo y abre el mensaje encontrado. Más información sobre descarga, extracción y búsqueda de contenido en [búsqueda](./search.md).
+
+## Recuperar un lote de archivos incompleto
+
+Un fallo aislado conserva los archivos terminados y permite continuar con los siguientes archivos independientes.
+El JSON parcial contiene `complete: false` y `batch`: los recuentos de intentos, éxitos y fallos, `errorRate`
+(una fracción de 0 a 1) y `failures`. Cada fallo incluye su ID o localizador, la etapa y `error`; la posición del adjunto aparece cuando se conoce.
+El error incluye código, mensaje y `actions`: esperar, reintentar, comprobar, configurar u omitir.
+La acción `wait` indica `afterMs` cuando el proveedor comunica una pausa; la acción `configure` nombra el ajuste.
+
+El código de salida `0` no confirma que todos los archivos se descargaron: comprueba `complete` y `batch.failed`.
+El JSONL de una descarga parcial añade una fila `type: "batch_summary"`. Los archivos guardados permanecen en el disco.
+Repetir `messages download --all` reintenta los ID fallidos del checkpoint y los archivos nuevos, omitiendo los tramos completados.
+Para la extracción, el cursor continúa con los archivos restantes; reintenta los localizadores fallidos por separado.
+Un nuevo fallo no borra el texto válido ya indexado.
+
+Después de diez intentos, una tasa de errores superior al 50% detiene los elementos nuevos.
+`MESSAGING_BATCH_MAX_ERROR_PERCENT` establece un porcentaje entero de 1 a 100. Los límites de frecuencia y los fallos de autenticación
+pueden detener el lote antes; las solicitudes paralelas ya iniciadas pueden terminar. Respeta la pausa del proveedor y continúa el trabajo pendiente.
+Busca registros parciales con `max runs search --status partial --json` o MCP `max_read` con `command: "runs search"`
+([diagnóstico](./diagnostics.md)).

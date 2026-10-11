@@ -127,7 +127,7 @@ Three directories follow operating system conventions, and two more are shared w
 | settings | `~/.config/max-cli/` | `~/Library/Preferences/max-cli/` | `%APPDATA%\max-cli\Config\` |
 | state | `~/.local/share/max-cli/` | `~/Library/Application Support/max-cli/` | `%LOCALAPPDATA%\max-cli\Data\` |
 | cache | `~/.cache/max-cli/` | `~/Library/Caches/max-cli/` | `%LOCALAPPDATA%\max-cli\Cache\` |
-| shared local archive | `~/.local/share/cli-messaging/messages.db` | under `~/Library/Application Support/cli-messaging/` | under `%LOCALAPPDATA%\cli-messaging\Data\` |
+| shared local archive | `~/.local/share/cli-messaging/wirecat.db` | under `~/Library/Application Support/cli-messaging/` | under `%LOCALAPPDATA%\cli-messaging\Data\` |
 | speech recognition models | `~/.cache/cli-common/models/audio/` | under `~/Library/Caches/cli-common/` | under `%LOCALAPPDATA%\cli-common\Cache\` |
 
 - **settings** — `config.json`, plus `credentials.json` containing a token only when no keyring is available.
@@ -155,9 +155,13 @@ max complete fish | source                         # fish, в config.fish
 
 For PowerShell, add `max complete powershell | Out-String | Invoke-Expression` to your profile.
 
-Tab **never connects to MAX**: connecting on every keypress would log into the account hundreds of times. Chat and person names come from shared `messages.db` for the selected profile account. Before the account is known or storage exists, only commands and flags are completed. Bot commands suggest chats from their local chat list. Chats are suggested by ID with their titles alongside: a title containing a space would otherwise reach `max` as two words.
+Tab **never connects to MAX**: connecting on every keypress would log into the account hundreds of times. Chat and person names come from shared `wirecat.db` for the selected profile account. Before the account is known or storage exists, only commands and flags are completed. Bot commands suggest chats from their local chat list. Chats are suggested by ID with their titles alongside: a title containing a space would otherwise reach `max` as two words.
 
 ## Update
+
+**When updating from the old `messages.db`, preserve any local-only data first.** The current store is `wirecat.db`; opening the default store deletes the old `messages.db` and its `-wal`/`-shm` files.
+Before running the new version, close old programs and copy any needed file and companions to another folder. `max store fetch --all` restores server messages, not old local notes or tags.
+Login stays ([the store and other versions](./archive.md#копия-и-другие-версии)).
 
 ```sh
 max upgrade           # тем же менеджером пакетов, которым max поставлен: pnpm, npm или bun

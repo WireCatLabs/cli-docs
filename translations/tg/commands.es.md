@@ -928,6 +928,25 @@ tg contacts context <person> [options]
 | `--chat <chat>` | un chat por identificador o nombre; repítelo para más — después, sus mensajes más recientes en cada uno, 20 salvo que se indique --limit, abreviados salvo que se indique -v. |
 | `--refresh` | con --chat, leer primero sus mensajes más recientes en cada chat desde el servicio de mensajería. |
 
+### `tg contacts timeline`
+
+everything one person took part in, in every messenger linked to them — messages they wrote or were mentioned in, chats, mail, meetings, tasks — newest first, from the store; never connects
+
+```sh
+tg contacts timeline <person> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `person` | obligatorio | their id, @username, or part of their name. |
+
+| Opción | Qué hace |
+|---|---|
+| `--scope <personal\|work>` | only what belongs to personal or to work accounts. |
+| `--since-time <time>` | nothing older than this ISO 8601 time, or 2h / 1d ago. |
+| `--until-time <time>` | through this ISO 8601 time, or 2h / 1d ago. |
+| `--limit <n>` | at most this many; 50 if not given. |
+
 ### `tg contacts check`
 
 si una persona parece un bot, una cuenta falsa o un spammer: su perfil, lo que escribió en el almacenamiento y las listas públicas de bloqueos (Combot Anti-Spam (CAS), lols.bot), a las que se envía su identificador — una pista, nunca un veredicto
@@ -2054,7 +2073,7 @@ tg store jobs list [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--state <state>` | solo las tareas en este estado. Uno de: `running`, `done`, `failed`, `cancelled`, `died`. |
+| `--state <state>` | solo las tareas en este estado. Uno de: `running`, `done`, `partial`, `failed`, `cancelled`, `died`. |
 
 #### `tg store jobs show`
 
@@ -2228,6 +2247,18 @@ tg store repair [options]
 | Opción | Qué hace |
 |---|---|
 | `--dry-run` | indica qué haría, sin cambiar nada. |
+
+### `tg store reset`
+
+back the store up beside itself, then delete it and start an empty one at this build's schema; asks first, or --yes
+
+```sh
+tg store reset [options]
+```
+
+| Opción | Qué hace |
+|---|---|
+| `--no-backup` | delete the store without backing it up first. |
 
 ### `tg store copies`
 
@@ -3096,6 +3127,8 @@ tg search all <query> [options]
 | Opción | Qué hace |
 |---|---|
 | `--only <resources>` | solo estos, separados por comas: messages, mail, notes. |
+| `--meetings [provider:account]` | also search one meeting account; with no value, the one stored account that holds meetings (put it after the query). |
+| `--max-meetings <n\|all>` | how many meetings --meetings looks through, newest first; all looks through every one (default 100). |
 | `--limit <n>` | cuántos. |
 | `--exact` | las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word. |
 | `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
@@ -3626,6 +3659,28 @@ tg runs show <run-id>
 | Argumento | | Qué es |
 |---|---|---|
 | `run-id` | obligatorio | identificador de `tg runs list`. |
+
+### `tg runs search`
+
+search recorded diagnostic metadata and events; no message contents
+
+```sh
+tg runs search [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | opcional | case-insensitive literal diagnostic text. |
+
+| Opción | Qué hace |
+|---|---|
+| `--status <status>` | run outcome. Uno de: `success`, `failed`, `partial`, `running`. |
+| `--error-code <code>` | one stable error code. |
+| `--operation <name>` | one operation, such as messages.download. |
+| `--profile <name>` | one recorded profile. |
+| `--since-time <time>` | runs starting on or after an ISO time or 2h / 1d ago. |
+| `--limit <n>` | matches per page, at most 100. Por defecto: `20`. |
+| `--page <n>` | result page. Por defecto: `1`. |
 
 ### `tg runs path`
 

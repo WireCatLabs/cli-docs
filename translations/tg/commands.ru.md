@@ -926,6 +926,25 @@ tg contacts context <person> [options]
 | `--chat <chat>` | чат по идентификатору или имени; повторите для нескольких — затем последние сообщения человека в каждом, 20, если не задан --limit, сокращённо, если не задан -v. |
 | `--refresh` | с --chat сначала прочитать последние сообщения человека в каждом чате из мессенджера. |
 
+### `tg contacts timeline`
+
+everything one person took part in, in every messenger linked to them — messages they wrote or were mentioned in, chats, mail, meetings, tasks — newest first, from the store; never connects
+
+```sh
+tg contacts timeline <person> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `person` | обязательный | their id, @username, or part of their name. |
+
+| Опция | Что делает |
+|---|---|
+| `--scope <personal\|work>` | only what belongs to personal or to work accounts. |
+| `--since-time <time>` | nothing older than this ISO 8601 time, or 2h / 1d ago. |
+| `--until-time <time>` | through this ISO 8601 time, or 2h / 1d ago. |
+| `--limit <n>` | at most this many; 50 if not given. |
+
 ### `tg contacts check`
 
 похож ли человек на бота, фальшивый аккаунт или спамера: профиль, его сообщения в хранилище и публичные списки блокировок (Combot Anti-Spam (CAS), lols.bot), в которые отправляется его идентификатор — готовый запрос, а не окончательный вывод
@@ -2052,7 +2071,7 @@ tg store jobs list [options]
 
 | Параметр | Назначение |
 |---|---|
-| `--state <state>` | только задачи в этом состоянии. Одно из: `running`, `done`, `failed`, `cancelled`, `died`. |
+| `--state <state>` | только задачи в этом состоянии. Одно из: `running`, `done`, `partial`, `failed`, `cancelled`, `died`. |
 
 #### `tg store jobs show`
 
@@ -2226,6 +2245,18 @@ tg store repair [options]
 | Параметр | Назначение |
 |---|---|
 | `--dry-run` | показать, что будет сделано, ничего не меняя. |
+
+### `tg store reset`
+
+back the store up beside itself, then delete it and start an empty one at this build's schema; asks first, or --yes
+
+```sh
+tg store reset [options]
+```
+
+| Опция | Что делает |
+|---|---|
+| `--no-backup` | delete the store without backing it up first. |
 
 ### `tg store copies`
 
@@ -3094,6 +3125,8 @@ tg search all <query> [options]
 | Параметр | Назначение |
 |---|---|
 | `--only <resources>` | только эти ресурсы через запятую: messages, mail, notes. |
+| `--meetings [provider:account]` | also search one meeting account; with no value, the one stored account that holds meetings (put it after the query). |
+| `--max-meetings <n\|all>` | how many meetings --meetings looks through, newest first; all looks through every one (default 100). |
 | `--limit <n>` | количество. |
 | `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word. |
 | `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
@@ -3624,6 +3657,28 @@ tg runs show <run-id>
 | Аргумент | | Описание |
 |---|---|---|
 | `run-id` | обязателен | идентификатор из `tg runs list`. |
+
+### `tg runs search`
+
+search recorded diagnostic metadata and events; no message contents
+
+```sh
+tg runs search [query] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | case-insensitive literal diagnostic text. |
+
+| Опция | Что делает |
+|---|---|
+| `--status <status>` | run outcome. Одно из: `success`, `failed`, `partial`, `running`. |
+| `--error-code <code>` | one stable error code. |
+| `--operation <name>` | one operation, such as messages.download. |
+| `--profile <name>` | one recorded profile. |
+| `--since-time <time>` | runs starting on or after an ISO time or 2h / 1d ago. |
+| `--limit <n>` | matches per page, at most 100. По умолчанию: `20`. |
+| `--page <n>` | result page. По умолчанию: `1`. |
 
 ### `tg runs path`
 

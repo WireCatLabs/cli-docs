@@ -77,7 +77,7 @@ tg store status "Book club" --json
 **Один файл используется всеми аккаунтами и CLI мессенджеров**, построенными на той же библиотеке, например [max-cli](https://github.com/WireCatLabs/max-cli):
 
 ```text
-~/.local/share/cli-messaging/messages.db       # Linux; MESSAGING_STORE moves it
+~/.local/share/cli-messaging/wirecat.db       # Linux; MESSAGING_STORE moves it
 ```
 
 `tg session end` завершает вход, но не меняет базу.
@@ -377,7 +377,13 @@ tg store clear --left --allow-dangerous  # delete the chats you have left, with 
 the message store was written by a newer version (schema N, needs at least M; this one speaks K) — upgrade this tool
 ```
 
-Выполните `tg upgrade`. Данные файла не теряются.
+**Общая локальная копия хранится в `wirecat.db`.** Старый `messages.db` не переносится: при открытии копии по умолчанию он удаляется вместе с `-wal` и `-shm`.
+Если в старом файле нужны заметки, псевдонимы, метки, задачи или расшифровки, остановите использующие его программы и скопируйте файл со служебными файлами в другую папку **до первого запуска новой версии**.
+При заданном `MESSAGING_STORE` очистка не выполняется; открытый другим процессом файл остаётся до следующего открытия копии.
+Сообщения из Telegram можно заново получить через `tg store fetch --all`; данные, существовавшие только локально, с сервера не вернутся. Вход сохраняется отдельно.
+Обновляйте `max` и `tg` вместе, чтобы они использовали одну копию.
+
+Если нужно обновить схему `wirecat.db`, выполните `tg upgrade` после сохранения нужного старого файла.
 
 ## Правила ответа
 

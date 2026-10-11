@@ -47,7 +47,7 @@ The `max bot` token is stored separately under the same `max-cli` service, in `b
 | Recipient allowlist, if enabled | `~/.local/share/max-cli/profiles/<профиль>.recipients.json` | `0600` |
 | Group moderation rules, after the first `chats rules set` | `~/.local/share/max-cli/profiles/<профиль>.moderation.json` | `0600` |
 | Bot: seen chats, send log, recipient list, `watch` position | `~/.local/share/max-cli/bots/…` | Directory `0700`, files `0600` |
-| Shared message store for personal accounts, bots and `tg`, including text, voice transcripts, downloaded attachment paths and their extracted text | `~/.local/share/cli-messaging/messages.db` | Directory `0700`, file `0600` |
+| Shared message store for personal accounts, bots and `tg`, including text, voice transcripts, downloaded attachment paths and their extracted text | `~/.local/share/cli-messaging/wirecat.db` | Directory `0700`, file `0600` |
 | Background `max serve` socket and log | `~/.local/share/max-cli/profiles/<профиль>.sock`, `.serve.log` | `0600` |
 | Old profile cache; no longer opened | `~/.cache/max-cli/<профиль>.db` and its `-wal`, `-shm` files | Directory `0700`, files `0600` |
 | Conversation export, **only through `max store export --output`** | Your chosen destination | `0600` |

@@ -133,7 +133,7 @@ El servidor ofrece seis prompts preparados, disponibles como comandos `/` en Cla
 
 El envío en `reply` utiliza `max_write` (`command: "messages send"`), por lo que, si la escritura está prohibida, el agente solo muestra un borrador.
 
-Los chats están disponibles como recursos `max://chat/<id>`; en Claude Code se pueden mencionar a través de `@`. El recurso proporciona el chat y sus mensajes más recientes. La lista de recursos se toma de una archivo local compartida de `messages.db` en la cuenta del perfil y no va a MAX; Si bien no hay una archivo local, está vacía. MAX sólo incluye la lectura de un chat.
+Los chats están disponibles como recursos `max://chat/<id>`; en Claude Code se pueden mencionar a través de `@`. El recurso proporciona el chat y sus mensajes más recientes. La lista de recursos se toma de una archivo local compartida de `wirecat.db` en la cuenta del perfil y no va a MAX; Si bien no hay una archivo local, está vacía. MAX sólo incluye la lectura de un chat.
 
 `max://skill` contiene la skill de `max`, igual que `max skill show`. Está disponible en `max mcp` y `max bot mcp`, sin conectarse a MAX.
 

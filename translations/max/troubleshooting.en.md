@@ -324,3 +324,16 @@ The command then prints a link for opening a new issue at [github.com/WireCatLab
 GitHub issues and attached files are public.
 
 ⚠ Never attach `~/.cache/max-cli/` or `~/.local/share/cli-messaging/`: they contain message text.
+
+## Partial results and recovery actions
+
+CLI and MCP errors include `actions`: what to check, which setting to change, how long to wait
+or which item to skip. `retryable` never authorizes automatic write replay: for `outcome_unknown`,
+verify whether the action happened first. API limits cannot be increased through local settings;
+reduce or split the input instead.
+
+A failed independent file or history page returns partial results with exit code `0`,
+`complete: false` and `batch` or `issue`. Completed downloads and earlier history pages remain
+saved. If a provider wait is too long to finish, single-chat `store fetch` includes `issue.retryAfterMs`
+and a `resume` boundary; multi-chat fetch exposes per-chat issues and downloads use checkpoints; do not repeat requests before the wait ends. Partial background jobs have
+state `partial` and can be retried with `max store jobs retry`. Check completeness as well as the exit code.

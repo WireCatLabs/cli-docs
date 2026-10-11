@@ -31,7 +31,7 @@ The full list of commands for groups is [below](#что-можно). Details abo
 
 ## Working with an agent
 
-An AI agent (such as Claude Code, Codex, Cursor, or Gemini CLI) can perform these checks for you. An agent with a terminal needs [max skill](https://github.com/WireCatLabs/max-cli/blob/v0.43.1/README.md#навык-для-агентов-с-терминалом); agent in an application without a terminal - [MCP server](./mcp.md). Below is your request, agent command and result.
+An AI agent (such as Claude Code, Codex, Cursor, or Gemini CLI) can perform these checks for you. An agent with a terminal needs [max skill](https://github.com/WireCatLabs/max-cli/blob/v0.45.0/README.md#навык-для-агентов-с-терминалом); agent in an application without a terminal - [MCP server](./mcp.md). Below is your request, agent command and result.
 
 <a id="an-admins-morning-who-needs-an-answer" />
 

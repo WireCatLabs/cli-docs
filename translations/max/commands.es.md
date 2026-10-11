@@ -1211,6 +1211,25 @@ max contacts context <person> [options]
 | `--chat <chat>` |un chat, por id o nombre; repítalo para más, luego sus mensajes más nuevos en cada uno, 20 a menos que --limit, breve a menos que -v.|
 | `--refresh` |Con --chat, lee primero los mensajes más recientes del Messenger en cada uno.|
 
+### `max contacts timeline`
+
+everything one person took part in, in every messenger linked to them — messages they wrote or were mentioned in, chats, mail, meetings, tasks — newest first, from the store; never connects
+
+```sh
+max contacts timeline <person> [options]
+```
+
+| Argumentoo | | Qué es |
+|---|---|---|
+| `person` | obligatorio | their id, @username, or part of their name. |
+
+| Opción | Qué hace |
+|---|---|
+| `--scope <personal\|work>` | only what belongs to personal or to work accounts. |
+| `--since-time <time>` | nothing older than this ISO 8601 time, or 2h / 1d ago. |
+| `--until-time <time>` | through this ISO 8601 time, or 2h / 1d ago. |
+| `--limit <n>` | at most this many; 50 if not given. |
+
 ### `max contacts check`
 
 comprueba si una persona parece un bot, una cuenta falsa o un spammer a partir de su perfil y sus mensajes en el almacén: es una pista, nunca un veredicto; las listas públicas de bloqueos solo cubren Telegram, por lo que no se envía nada
@@ -1827,6 +1846,18 @@ max store repair [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--dry-run` |diga lo que haría y no cambiará nada.|
+
+### `max store reset`
+
+back the store up beside itself, then delete it and start an empty one at this build's schema; asks first, or --yes
+
+```sh
+max store reset [options]
+```
+
+| Opción | Qué hace |
+|---|---|
+| `--no-backup` | delete the store without backing it up first. |
 
 ### `max store copies`
 
@@ -2683,6 +2714,8 @@ max search all <query> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--only <resources>` |solo estos, separados por comas: messages, mail, notes.|
+| `--meetings [provider:account]` | also search one meeting account; with no value, the one stored account that holds meetings (put it after the query). |
+| `--max-meetings <n\|all>` | how many meetings --meetings looks through, newest first; all looks through every one (default 100). |
 | `--limit <n>` | cuántos resultados. |
 | `--exact` |las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word.|
 | `--timezone <zone>` | la zona horaria IANA para los límites de las fechas del calendario. |
@@ -3628,6 +3661,28 @@ max runs show <run-id>
 | Argumento | | Qué es |
 |---|---|---|
 | `run-id` | obligatorio | un ID de `max runs list`. |
+
+### `max runs search`
+
+search recorded diagnostic metadata and events; no message contents
+
+```sh
+max runs search [query] [options]
+```
+
+| Argumentoo | | Qué es |
+|---|---|---|
+| `query` | opcional | case-insensitive literal diagnostic text. |
+
+| Opción | Qué hace |
+|---|---|
+| `--status <status>` | run outcome. Uno de: `success`, `failed`, `partial`, `running`. |
+| `--error-code <code>` | one stable error code. |
+| `--operation <name>` | one operation, such as messages.download. |
+| `--profile <name>` | one recorded profile. |
+| `--since-time <time>` | runs starting on or after an ISO time or 2h / 1d ago. |
+| `--limit <n>` | matches per page, at most 100. Por defecto: `20`. |
+| `--page <n>` | result page. Por defecto: `1`. |
 
 ### `max runs path`
 

@@ -176,7 +176,7 @@ Telegram lets you find has this number" si la persona oculta su teléfono o no t
 
 Código `8`. Es el límite propio de Telegram (FLOOD_WAIT). Espera ese tiempo; el JSON incluye `retryAfterMs`. Suele aparecer tras muchas peticiones seguidas, como `chats list --all` después de otros comandos o una descarga larga con `store fetch`. Para `store fetch` y `messages download --all`, aumentar `--pause` ayuda.
 
-Un comando espera una petición de hasta 10 segundos, dos veces como máximo, y lo indica en stderr: "Telegram asks to wait 3 s before … — waiting, then going on". `serve` y `watch` esperan hasta 2 minutos. Una espera más larga termina el comando con este error. `tg` también recuerda la espera: hasta que acaba, el mismo comando falla al instante sin volver a preguntar a Telegram, y `tg doctor` y `tg server status` la muestran en `flood`.
+Un comando espera una petición de hasta 10 segundos, dos veces como máximo, y lo indica en stderr: "Telegram asks to wait 3 s before … — waiting, then going on". `serve` y `watch` esperan hasta 2 minutos. Una espera más larga termina una solicitud independiente con este error; la lectura de historial por lotes devuelve un resultado parcial con `issue` y acciones de recuperación. `tg` también recuerda la espera: hasta que acaba, el mismo comando falla al instante sin volver a preguntar a Telegram, y `tg doctor` y `tg server status` la muestran en `flood`.
 
 Cómo encajan el ritmo, las esperas y los comandos paralelos: [límites y esperas](./limits.md).
 
@@ -311,3 +311,15 @@ tg doctor report create --run <id>    # about another run; ids from tg runs list
 Envíalo como nueva incidencia en [GitHub](https://github.com/WireCatLabs/tg-cli/issues/new): explica qué hiciste y qué ocurrió y adjuntal archivo. Tanto la incidencia como el archivo son públicos: revísalo antes.
 
 ⚠ Nunca adjuntes el directorio de estado, la sesión ni `~/.local/share/cli-messaging/`: contienen tu acceso y tus mensajes.
+
+## Resultados parciales y acciones de recuperación
+
+Los errores CLI y MCP contienen `actions`: qué comprobar, qué ajuste cambiar, cuánto esperar o qué elemento omitir.
+`retryable` nunca autoriza repetir una escritura automáticamente: ante `outcome_unknown`, comprueba primero si se realizó.
+Los límites de API no aumentan con ajustes locales; reduce o divide los datos de entrada.
+
+El fallo de un archivo independiente o una página de historial devuelve un resultado parcial con código de salida `0`,
+`complete: false` y `batch` o `issue`. Los archivos y las páginas anteriores permanecen guardados.
+Si la pausa del proveedor impide terminar, `store fetch` de un solo chat incluye `issue.retryAfterMs` y un límite `resume`;
+la consulta de todos los chats incluye sus respectivos `issue`, y las descargas usan checkpoints. No repitas las solicitudes antes de que termine la pausa.
+Un trabajo parcial en segundo plano tiene estado `partial` y se reintenta con `tg store jobs retry`. Comprueba la integridad del resultado además del código de salida.

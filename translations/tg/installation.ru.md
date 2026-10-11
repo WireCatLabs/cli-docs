@@ -107,7 +107,7 @@ pnpm build
 | настройки | `~/.config/tg-cli/` | `~/Library/Preferences/tg-cli/` | `%APPDATA%\tg-cli\Config\` |
 | состояние | `~/.local/share/tg-cli/` | `~/Library/Application Support/tg-cli/` | `%LOCALAPPDATA%\tg-cli\Data\` |
 | кеш | `~/.cache/tg-cli/` | `~/Library/Caches/tg-cli/` | `%LOCALAPPDATA%\tg-cli\Cache\` |
-| локальная база | `~/.local/share/cli-messaging/messages.db` | в `~/Library/Application Support/cli-messaging/` | в `%LOCALAPPDATA%\cli-messaging\Data\` |
+| локальная база | `~/.local/share/cli-messaging/wirecat.db` | в `~/Library/Application Support/cli-messaging/` | в `%LOCALAPPDATA%\cli-messaging\Data\` |
 | модели распознавания речи | `~/.cache/cli-common/models/audio/` | в `~/Library/Caches/cli-common/` | в `%LOCALAPPDATA%\cli-common\Cache\` |
 
 - **Настройки** сохраняют `config.json` и `credentials.json` только на машине без системного хранилища ключей.
@@ -136,6 +136,10 @@ PowerShell: добавьте `tg complete powershell | Out-String | Invoke-Expre
 Нажатие Tab **никогда не подключается к Telegram**. Пока локальной базы нет, дополняются только команды и параметры.
 
 ## Обновление
+
+**При обновлении со старого `messages.db` сначала сохраните нужные локальные данные.** Новая копия — `wirecat.db`; старый `messages.db` и его `-wal`/`-shm` удаляются при открытии копии по умолчанию.
+До запуска новой версии остановите старые программы и скопируйте нужный файл со служебными файлами в другую папку. `tg store fetch --all` вернёт сообщения с сервера, но не старые локальные заметки или метки.
+Вход сохраняется ([копия и другие версии](./archive.md#the-store-and-other-versions)).
 
 ```sh
 tg upgrade            # with the package manager that installed tg: npm, pnpm or bun

@@ -77,7 +77,7 @@ Mantiene el texto completo de cada mensaje que ha visto. El archivo solo lo pued
 **Es un único archivo para todas las cuentas y CLI de mensajería** que utilizan la misma biblioteca, como [max-cli](https://github.com/WireCatLabs/max-cli):
 
 ```text
-~/.local/share/cli-messaging/messages.db       # Linux; MESSAGING_STORE moves it
+~/.local/share/cli-messaging/wirecat.db       # Linux; MESSAGING_STORE moves it
 ```
 
 `tg session end` cierra sesión y deja intacto el archivo local.
@@ -377,7 +377,13 @@ El esquema del archivo tiene una versión. Un `tg` más reciente u otro CLI pued
 the message store was written by a newer version (schema N, needs at least M; this one speaks K) — upgrade this tool
 ```
 
-Ejecuta `tg upgrade`. No se pierde ningún dato del archivo.
+**La copia local compartida usa `wirecat.db`.** El antiguo `messages.db` no se migra: al abrir el almacén predeterminado se elimina junto con sus archivos `-wal` y `-shm`.
+Si necesitas notas, alias, etiquetas, tareas o transcripciones antiguas, cierra los programas que usan ese archivo y cópialo, con los archivos auxiliares que tenga, a otra carpeta **antes de ejecutar la nueva versión por primera vez**.
+Definir `MESSAGING_STORE` desactiva esta limpieza; un archivo abierto por otro proceso permanece hasta una apertura posterior del almacén.
+`tg store fetch --all` recupera mensajes de Telegram; los datos que solo existían localmente no se pueden descargar del servidor. El inicio de sesión se conserva por separado.
+Actualiza `tg` y `max` juntos para que usen el mismo almacén.
+
+Para actualizar el esquema de `wirecat.db`, ejecuta `tg upgrade` después de conservar cualquier archivo antiguo necesario.
 
 ## Reglas de respuesta
 

@@ -260,7 +260,7 @@ Bot API (`tg bot …`) и регистрация приложения в `sessio
 
 ```sh
 export TG_CONFIG_DIR=/tmp/tg-try/config TG_STATE_DIR=/tmp/tg-try/state TG_CACHE_DIR=/tmp/tg-try/cache
-export MESSAGING_STORE=/tmp/tg-try/messages.db
+export MESSAGING_STORE=/tmp/tg-try/wirecat.db
 tg setup
 ```
 

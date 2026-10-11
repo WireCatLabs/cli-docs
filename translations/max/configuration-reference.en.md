@@ -250,7 +250,7 @@ Directory variables give you separate settings and login state, useful for exper
 ```sh
 export MAX_CONFIG_DIR=/tmp/max-try/config
 export MAX_STATE_DIR=/tmp/max-try/state
-export MESSAGING_STORE=/tmp/max-try/messages.db
+export MESSAGING_STORE=/tmp/max-try/wirecat.db
 
 max setup            # этот токен не виден обычной установке
 max chats list

@@ -40,6 +40,8 @@ title: "Как tg ведет себя в скриптах"
 | Чтобы увидеть, что будет делать команда | `--dry-run` |
 | Чтобы узнать, произошла ли неудачная запись | `outcome_unknown`, `retryable` и `operationId` |
 
+Частичное чтение или скачивание может вернуть JSON с кодом `0`: проверьте `complete` и `batch` или `issue`. JSONL частичной загрузки добавляет `batch_summary`; успешная часть сохраняется. Ошибки содержат `actions` с действиями, настройками и паузой для восстановления.
+
 ## Как называются команды
 
 Команды используют `tg [profile] resource action`. Отчеты и счетчики находятся под `stats`, затем ресурс и отчет:
@@ -57,7 +59,7 @@ tg stats charts <chat> --json
 
 `--json` создает JSON. `--jsonl` создает одно значение JSON в строке для команд, которые могут передаваться в потоковом режиме. В канале JSON выбирается автоматически. стандартный вывод содержит данные; stderr содержит диагностические сообщения. Явный флаг JSON имеет преимущество перед подключенным терминалом. `--help` и `--version` печатают текст на стандартный вывод, завершаются с кодом `0` и не запускают команду.
 
-Ошибка в машинном режиме — это один объект в stderr: `{"error":{"code":"…","message":"…","retryable":false}}`. Неизвестная команда, опция или отсутствующий обязательный аргумент завершается с кодом 2. `tg commands --json` предоставляет полную таблицу кодов выхода. `--quiet` скрывает обычную диагностику, но сохраняет ошибки. Машинный вывод не имеет цвета и анимации; `NO_COLOR` также отключает цвет при выводе текста.
+Ошибка, завершающая команду, в машинном режиме — это один объект в stderr: `{"error":{"code":"…","message":"…","retryable":false}}`. Неизвестная команда, опция или отсутствующий обязательный аргумент завершается с кодом 2. `tg commands --json` предоставляет полную таблицу кодов выхода. `--quiet` скрывает обычную диагностику, но сохраняет ошибки. Машинный вывод не имеет цвета и анимации; `NO_COLOR` также отключает цвет при выводе текста.
 
 ## Запуск без вопросов и ограничения
 
@@ -99,6 +101,6 @@ tg commands schema messages list --json
 
 ## Стандарты, которым мы следуем
 
-`tg` соответствует частям, применимым к [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) и [Рекомендациям по интерфейсу командной строки](https://clig.dev/), а также [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) и [Agent Навыки](https://agentskills.io/specification). [Архитектура](https://github.com/WireCatLabs/tg-cli/blob/v0.44.1/docs/dev/ARCHITECTURE.md) и [стандарт общего интерфейса командной строки](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/dev/STANDARD.md) описывают, как они применяются, а также исключения, сделанные специально. Мы не претендуем на полную сертификацию третьей стороной.
+`tg` соответствует частям, применимым к [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) и [Рекомендациям по интерфейсу командной строки](https://clig.dev/), а также [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) и [Agent Навыки](https://agentskills.io/specification). [Архитектура](https://github.com/WireCatLabs/tg-cli/blob/v0.46.0/docs/dev/ARCHITECTURE.md) и [стандарт общего интерфейса командной строки](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/dev/STANDARD.md) описывают, как они применяются, а также исключения, сделанные специально. Мы не претендуем на полную сертификацию третьей стороной.
 
 Для настройки см. [руководство по настройке](./configuration.md); для каждого ключа и переменной среды — [справочник настроек](./configuration-reference.md).

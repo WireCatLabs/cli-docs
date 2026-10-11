@@ -331,3 +331,15 @@ Después, el comando imprime un enlace para abrir una incidencia en [github.com/
 Las incidencias de GitHub y los archivos adjuntos son públicos.
 
 ⚠ No adjuntes `~/.cache/max-cli/` ni `~/.local/share/cli-messaging/`: contienen mensajes.
+
+## Resultados parciales y acciones de recuperación
+
+Los errores CLI y MCP contienen `actions`: qué comprobar, qué ajuste cambiar, cuánto esperar o qué elemento omitir.
+`retryable` nunca autoriza repetir una escritura automáticamente: ante `outcome_unknown`, comprueba primero si se realizó.
+Los límites de API no aumentan con ajustes locales; reduce o divide los datos de entrada.
+
+El fallo de un archivo independiente o una página de historial devuelve un resultado parcial con código de salida `0`,
+`complete: false` y `batch` o `issue`. Los archivos y las páginas anteriores permanecen guardados.
+Si la pausa del proveedor impide terminar, `store fetch` de un solo chat incluye `issue.retryAfterMs` y un límite `resume`;
+la consulta de todos los chats incluye sus respectivos `issue`, y las descargas usan checkpoints. No repitas las solicitudes antes de que termine la pausa.
+Un trabajo parcial en segundo plano tiene estado `partial` y se reintenta con `max store jobs retry`. Comprueba la integridad del resultado además del código de salida.

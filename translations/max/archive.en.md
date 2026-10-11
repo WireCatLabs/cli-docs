@@ -316,7 +316,13 @@ The archive schema has a version number. A newer `max` or another program may up
 the message store was written by a newer version (schema N, needs at least M; this one speaks K) — upgrade this tool
 ```
 
-Run `max upgrade`. No data in the file is lost.
+**The shared local store uses `wirecat.db`.** The old `messages.db` is not migrated: opening the default store deletes it and its `-wal` and `-shm` files.
+If you need old notes, aliases, tags, tasks or transcriptions, close programs using that file and copy it and any companion files to another folder **before first running the new version**.
+An explicit `MESSAGING_STORE` disables this cleanup; a file held by another process stays until a later store open.
+`max store fetch --all` can fetch messages from MAX again; data that existed only locally cannot be fetched from the server. Login stays separate.
+Update `max` and `tg` together so they use the same store.
+
+For a `wirecat.db` schema update, run `max upgrade` after preserving any needed old file.
 
 ## Next steps
 
