@@ -56,7 +56,6 @@
     "“Save the decisions from this meeting as a project note.”": "«Сохрани решения с этой встречи в заметке о проекте».",
     "Keep notes about people, events and projects, with tags and links to the messages or files you will need later.": "Ведите заметки о людях, событиях и проектах, добавляя теги и ссылки на сообщения или файлы, которые понадобятся позже.",
     "Explore notes and files": "Работа с заметками и файлами",
-    "CLI for your Agent": "CLI для вашего агента",
     "Use tg cli, gather context for tomorrow’s Atlas call: decisions, risks and": "Используй tg cli, собери контекст к завтрашнему созвону по Atlas: решения, риски и",
     "questions.": "вопросы.",
     "Copy prompt": "Копировать запрос",
@@ -275,7 +274,7 @@
     "All commands": "Все команды",
     "Troubleshooting": "Если что-то не так",
     "AI agents": "ИИ-агенты",
-    "Connect your agent": "Подключить ассистента",
+    "Connect your agent": "Подключить агента",
     "MCP server": "MCP-сервер",
     "Recipes": "Рецепты",
     "Project": "Проект",
@@ -292,7 +291,6 @@
     "Features": "Возможности",
     "Examples": "Примеры",
     "Email": "Почта",
-    "Connect your agent": "Подключить агента",
     "Copy a setup request into your AI agent.": "Скопируйте запрос на настройку в своего ИИ-агента.",
     "Ask your agent to install and connect": "Попросите агента установить и подключить",
     "Copy request for your agent": "Скопировать запрос для агента",
@@ -489,8 +487,6 @@
     "Open source, your data and your agent": "Открытый код, ваши данные и ваш агент",
     "Open source": "Открытый код",
     "Both messaging tools are free under the Apache 2.0 licence. Read the code, report an issue or contribute.": "Оба инструмента бесплатны и доступны по лицензии Apache 2.0. Изучайте код, сообщайте о проблемах и участвуйте в разработке.",
-    "Your data": "Ваши данные",
-    "Your messaging archive stays on your computer. You choose the accounts and permissions. Content passed to your agent follows its model settings.": "Архив переписки хранится на вашем компьютере. Вы выбираете аккаунты и права доступа. Обработка данных, переданных агенту, зависит от настроек его модели.",
     "Security guide": "Руководство по безопасности",
     "Use Claude Code, Codex, Cursor, Gemini CLI, Hermes or another agent that works with CLI tools or MCP.": "Используйте Claude Code, Codex, Cursor, Gemini CLI, Hermes или другого агента, работающего с CLI или MCP.",
     "Agent setup guide": "Подключение агента",
@@ -658,7 +654,10 @@
     "Memo docs": "Memo — документация",
     "Email docs": "Почта — документация",
     "Zoom docs": "Zoom — документация",
-    "Memory for your messages, notes, and meetings. CLI access for your AI agent.": "Память для ваших сообщений, заметок и встреч. Доступ через CLI для вашего ИИ-агента."
+    "Memory for your messages, notes, and meetings. CLI access for your AI agent.": "Память для ваших сообщений, заметок и встреч. Доступ через CLI для вашего ИИ-агента.",
+    "Your data stays yours": "Данные только ваши",
+    "Your messaging archive stays on your computer. WireCat has no servers to send it to. Only your AI agent receives your data, and only for your task. You choose where its model runs.": "Архив переписки хранится на вашем компьютере. У WireCat нет серверов, куда бы он отправлялся. Данные получает только ваш ИИ-агент — и только для вашей задачи. Где работает его модель, выбираете вы.",
+    "MCP & CLI for your Agent": "MCP & CLI для вашего агента"
   },
   "es": {
     "Put the context from your chats to work — for you, your bots and the groups you run.": "Aprovecha el contexto de tus chats: para ti, tus bots y los grupos que administras.",
@@ -717,7 +716,6 @@
     "“Save the decisions from this meeting as a project note.”": "«Guarda las decisiones de esta reunión en una nota del proyecto».",
     "Keep notes about people, events and projects, with tags and links to the messages or files you will need later.": "Guarda notas sobre personas, eventos y proyectos, con etiquetas y enlaces a los mensajes o archivos que necesitarás después.",
     "Explore notes and files": "Trabaja con notas y archivos",
-    "CLI for your Agent": "CLI para tu agente",
     "Use tg cli, gather context for tomorrow’s Atlas call: decisions, risks and": "Usa tg cli, reúne el contexto para la llamada de Atlas de mañana: decisiones, riesgos y",
     "questions.": "pendientes.",
     "Copy prompt": "Copiar petición",
@@ -941,7 +939,6 @@
     "Features": "Funciones",
     "Examples": "Ejemplos",
     "Email": "Correo",
-    "Connect your agent": "Conectar tu agente",
     "Copy a setup request into your AI agent.": "Copia la petición de configuración en tu agente de IA.",
     "Ask your agent to install and connect": "Pide a tu agente que instale y conecte",
     "Copy request for your agent": "Copiar petición para tu agente",
@@ -1138,8 +1135,6 @@
     "Open source, your data and your agent": "Código abierto, tus datos y tu agente",
     "Open source": "Código abierto",
     "Both messaging tools are free under the Apache 2.0 licence. Read the code, report an issue or contribute.": "Ambas herramientas son gratuitas bajo la licencia Apache 2.0. Lee el código, informa de problemas o contribuye.",
-    "Your data": "Tus datos",
-    "Your messaging archive stays on your computer. You choose the accounts and permissions. Content passed to your agent follows its model settings.": "El archivo de mensajes permanece en tu ordenador. Tú eliges las cuentas y los permisos. El contenido que recibe tu agente se procesa según la configuración de su modelo.",
     "Security guide": "Guía de seguridad",
     "Use Claude Code, Codex, Cursor, Gemini CLI, Hermes or another agent that works with CLI tools or MCP.": "Usa Claude Code, Codex, Cursor, Gemini CLI, Hermes u otro agente compatible con CLI o MCP.",
     "Agent setup guide": "Guía para conectar el agente",
@@ -1318,6 +1313,9 @@
     "Memo docs": "Docs de Memo",
     "Email docs": "Docs de correo",
     "Zoom docs": "Docs de Zoom",
-    "Memory for your messages, notes, and meetings. CLI access for your AI agent.": "Memoria para tus mensajes, notas y reuniones. Acceso por CLI para tu agente de IA."
+    "Memory for your messages, notes, and meetings. CLI access for your AI agent.": "Memoria para tus mensajes, notas y reuniones. Acceso por CLI para tu agente de IA.",
+    "Your data stays yours": "Tus datos son solo tuyos",
+    "Your messaging archive stays on your computer. WireCat has no servers to send it to. Only your AI agent receives your data, and only for your task. You choose where its model runs.": "El archivo de mensajes se queda en tu ordenador. WireCat no tiene servidores a los que enviarlo. Solo tu agente de IA recibe tus datos, y solo para tu tarea. Tú eliges dónde funciona su modelo.",
+    "MCP & CLI for your Agent": "MCP & CLI para tu agente"
   }
 }
