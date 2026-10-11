@@ -87,7 +87,7 @@ test("agent resources stay native documents when opened from the landing", async
   await page.goto("/")
   await page.locator('footer a[href="/llms.txt"]').click()
   await expect(page).toHaveURL(/\/llms\.txt$/)
-  await expect(page.locator("body")).toContainText("# CLI tools")
+  await expect(page.locator("body")).toContainText("# WireCat")
   const response = await page.request.get("/sitemap.xml")
   expect(response.status()).toBe(200)
   expect(await response.text()).toContain("https://wirecat.dev/en/docs/tg/installation")

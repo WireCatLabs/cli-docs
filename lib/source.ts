@@ -3,7 +3,7 @@ import { llms, loader } from "fumadocs-core/source"
 import { metaSchema, pageSchema } from "fumadocs-core/source/schema"
 import { applyMdxPreset } from "fumadocs-mdx/config"
 import { defineDocs } from "fumadocs-mdx/macro"
-import { dedentDocComponents, expandDocTerms } from "./doc-terms-markdown"
+import { compactAgentMarkdown, dedentDocComponents, expandDocTerms } from "./doc-terms-markdown"
 import { guideOrientation, guideStartLink } from "./guide-orientation"
 import { i18n } from "./i18n"
 import { installationMarkdown } from "./installation-markdown"
@@ -90,6 +90,6 @@ export const docsLlms = llms(source, {
         (pathname) => markdownUrls.get(pathname),
       ),
     )
-    return `# ${readerGuide(page.slugs, page.locale ?? i18n.defaultLanguage)?.title ?? page.data.title} (${page.url})\n\n${markdown}`
+    return `# ${readerGuide(page.slugs, page.locale ?? i18n.defaultLanguage)?.title ?? page.data.title} (${page.url})\n\n${compactAgentMarkdown(markdown).trimStart()}`
   },
 })
