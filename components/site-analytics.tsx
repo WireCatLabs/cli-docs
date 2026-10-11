@@ -16,21 +16,21 @@ import styles from "./site-analytics.module.css"
 const words = {
   en: {
     label: "Analytics choice",
-    text: "We count visits without cookies. May we also remember your device and record anonymised sessions to improve the site?",
+    text: "We count visits without cookies. May we also remember your device and record sessions, with all text hidden, to improve the site?",
     privacy: "Privacy",
     accept: "Accept",
     decline: "Decline",
   },
   ru: {
     label: "Выбор аналитики",
-    text: "Мы считаем посещения без cookie. Разрешите также запоминать ваше устройство и записывать обезличенные сессии, чтобы улучшать сайт?",
+    text: "Мы считаем посещения без cookie. Разрешите также запоминать ваше устройство и записывать сессии со скрытым текстом, чтобы улучшать сайт?",
     privacy: "Конфиденциальность",
     accept: "Разрешить",
     decline: "Отказаться",
   },
   es: {
     label: "Elección de analítica",
-    text: "Contamos las visitas sin cookies. ¿Podemos también recordar tu dispositivo y grabar sesiones anonimizadas para mejorar el sitio?",
+    text: "Contamos las visitas sin cookies. ¿Podemos también recordar tu dispositivo y grabar sesiones, con todo el texto oculto, para mejorar el sitio?",
     privacy: "Privacidad",
     accept: "Aceptar",
     decline: "Rechazar",

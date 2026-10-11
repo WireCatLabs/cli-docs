@@ -24,6 +24,8 @@ describe("analytics consent", () => {
       opt_out_capturing_by_default: true,
       disable_session_recording: true,
       autocapture: false,
+      capture_performance: false,
+      enable_recording_console_log: false,
       session_recording: { maskAllInputs: true, maskTextSelector: "*" },
     })
   })

@@ -25,6 +25,8 @@ export const posthogOptions: Partial<PostHogConfig> = {
   capture_heatmaps: false,
   capture_dead_clicks: false,
   capture_exceptions: false,
+  capture_performance: false,
+  enable_recording_console_log: false,
   disable_surveys: true,
   disable_session_recording: true,
   session_recording: { maskAllInputs: true, maskTextSelector: "*" },

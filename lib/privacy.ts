@@ -24,7 +24,7 @@ export const privacyCopy: Record<
         title: "If you decline or do not answer",
         paragraphs: [
           "We count page views and two actions: copying an installation command and opening a setup guide. For these actions we record only the tool, the site language and the part of the page, never the copied text. Each record also holds the page address, the previous page and general browser and device details.",
-          "Nothing is stored in your browser: no cookies and no local storage. To count unique visitors, PostHog's servers combine your IP address and browser details with a random value that changes every day and is then deleted, and keep only the result. This count cannot follow you from one day to the next.",
+          "Nothing is stored in your browser apart from your answer, if you gave one: no cookies and no identifiers. To count unique visitors, PostHog's servers combine your IP address and browser details with a random value that changes every day and is then deleted, and keep only the result. This count cannot follow you from one day to the next.",
         ],
       },
       {
@@ -40,6 +40,13 @@ export const privacyCopy: Record<
         title: "IP address",
         paragraphs: [
           "Your IP address reaches PostHog with every request. PostHog does not store it with the events, and we do not use it to find your location.",
+        ],
+      },
+      {
+        id: "legal-basis",
+        title: "Legal basis",
+        paragraphs: [
+          "Counting visits without cookies rests on our legitimate interest in knowing how the site is used (GDPR Article 6(1)(f)); you can object by writing to us. The identifier and session recordings rest on your consent (Article 6(1)(a)), which you can withdraw at any time.",
         ],
       },
       {
@@ -78,7 +85,7 @@ export const privacyCopy: Record<
         title: "Если вы отказались или не ответили",
         paragraphs: [
           "Мы считаем просмотры страниц и два действия: копирование команды установки и открытие руководства по настройке. Для этих действий записываются только инструмент, язык сайта и часть страницы, но не скопированный текст. В каждой записи также есть адрес страницы, предыдущая страница и общие сведения о браузере и устройстве.",
-          "В браузере ничего не сохраняется: ни cookie, ни локального хранилища. Чтобы считать уникальных посетителей, серверы PostHog объединяют ваш IP-адрес и сведения о браузере со случайным значением, которое меняется каждый день и затем удаляется, и сохраняют только результат. Такой подсчёт не связывает ваши визиты в разные дни.",
+          "В браузере ничего не сохраняется, кроме вашего ответа, если вы его дали: ни cookie, ни идентификаторов. Чтобы считать уникальных посетителей, серверы PostHog объединяют ваш IP-адрес и сведения о браузере со случайным значением, которое меняется каждый день и затем удаляется, и сохраняют только результат. Такой подсчёт не связывает ваши визиты в разные дни.",
         ],
       },
       {
@@ -94,6 +101,13 @@ export const privacyCopy: Record<
         title: "IP-адрес",
         paragraphs: [
           "Ваш IP-адрес приходит в PostHog с каждым запросом. PostHog не сохраняет его вместе с событиями, и мы не определяем по нему ваше местоположение.",
+        ],
+      },
+      {
+        id: "legal-basis",
+        title: "Правовое основание",
+        paragraphs: [
+          "Подсчёт посещений без cookie основан на нашем законном интересе понимать, как используется сайт (статья 6(1)(f) GDPR); вы можете возразить, написав нам. Идентификатор и записи сессий основаны на вашем согласии (статья 6(1)(a)), которое можно отозвать в любой момент.",
         ],
       },
       {
@@ -132,7 +146,7 @@ export const privacyCopy: Record<
         title: "Si rechazas o no respondes",
         paragraphs: [
           "Contamos las páginas vistas y dos acciones: copiar un comando de instalación y abrir una guía de configuración. De estas acciones registramos solo la herramienta, el idioma del sitio y la parte de la página, nunca el texto copiado. Cada registro incluye también la dirección de la página, la página anterior y datos generales del navegador y del dispositivo.",
-          "No se guarda nada en tu navegador: ni cookies ni almacenamiento local. Para contar visitantes únicos, los servidores de PostHog combinan tu dirección IP y los datos del navegador con un valor aleatorio que cambia cada día y después se elimina, y guardan solo el resultado. Este recuento no puede seguirte de un día a otro.",
+          "No se guarda nada en tu navegador salvo tu respuesta, si la diste: ni cookies ni identificadores. Para contar visitantes únicos, los servidores de PostHog combinan tu dirección IP y los datos del navegador con un valor aleatorio que cambia cada día y después se elimina, y guardan solo el resultado. Este recuento no puede seguirte de un día a otro.",
         ],
       },
       {
@@ -148,6 +162,13 @@ export const privacyCopy: Record<
         title: "Dirección IP",
         paragraphs: [
           "Tu dirección IP llega a PostHog con cada solicitud. PostHog no la guarda con los eventos y no la usamos para conocer tu ubicación.",
+        ],
+      },
+      {
+        id: "legal-basis",
+        title: "Base jurídica",
+        paragraphs: [
+          "Contar visitas sin cookies se basa en nuestro interés legítimo en saber cómo se usa el sitio (artículo 6.1.f del RGPD); puedes oponerte escribiéndonos. El identificador y las grabaciones de sesiones se basan en tu consentimiento (artículo 6.1.a), que puedes retirar en cualquier momento.",
         ],
       },
       {
