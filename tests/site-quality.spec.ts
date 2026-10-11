@@ -66,6 +66,23 @@ test("documentation search loads on demand and mobile navigation dismisses with 
   await expect(dialog).not.toBeVisible()
 })
 
+for (const width of [768, 1280]) {
+  test(`documentation search opens from the only visible search button at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 })
+    await page.goto("/en/docs/bot-api")
+    const search = page.locator('button[aria-haspopup="dialog"]:visible', { hasText: "Search" })
+    await expect(search).toHaveCount(1)
+    await search.click()
+    const dialog = page.getByRole("dialog")
+    await expect(dialog).toBeVisible()
+    await dialog.getByRole("combobox").fill("installation")
+    await expect(dialog.getByRole("option").first()).toBeVisible()
+    await page.keyboard.press("Escape")
+    await expect(dialog).not.toBeVisible()
+    await expect(search).toBeFocused()
+  })
+}
+
 test("agent resources stay native documents when opened from the landing", async ({ page }) => {
   await page.goto("/")
   await page.locator('footer a[href="/llms.txt"]').click()
