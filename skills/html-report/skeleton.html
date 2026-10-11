@@ -62,7 +62,7 @@
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim()
 const charts = []
 const draw = () => {
-  charts.forEach(ch => ch.destroy())
+  for (const ch of charts) ch.destroy()
   charts.length = 0
   Chart.defaults.color = css("--muted")
   Chart.defaults.borderColor = css("--line")
