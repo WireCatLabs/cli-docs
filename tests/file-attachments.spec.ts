@@ -17,13 +17,13 @@ for (const lang of ["en", "ru", "es"] as const) {
         if (width === 390) await page.locator('#nd-subnav button[aria-controls="nd-sidebar-mobile"]').click()
         const sidebar = page.locator(width === 390 ? "#nd-sidebar-mobile" : "#nd-sidebar")
         await expect(sidebar).toBeVisible()
-        const missing = await sidebar
-          .locator('a[href*="/docs/"]')
-          .evaluateAll((links) =>
-            links
-              .filter((link) => !(link.closest("summary") ?? link).querySelector('svg[aria-hidden="true"]'))
-              .map((link) => link.getAttribute("href")),
-          )
+        const missing = await sidebar.locator('a[href*="/docs/"]').evaluateAll((links) =>
+          links
+            // The language menu links to this page in each language: a control, not a subject.
+            .filter((link) => !link.closest(".language-options"))
+            .filter((link) => !(link.closest("summary") ?? link).querySelector('svg[aria-hidden="true"]'))
+            .map((link) => link.getAttribute("href")),
+        )
         expect(missing, "every navigation link has a decorative subject icon").toEqual([])
         const attachment = sidebar.locator(`a[href="/${lang}/docs/${tool}/attachments"]`)
         await expect(attachment.locator("svg.lucide-paperclip")).toHaveCount(1)

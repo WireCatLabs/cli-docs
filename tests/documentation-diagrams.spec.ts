@@ -35,7 +35,8 @@ for (const lang of ["en", "ru", "es"]) {
     await expect(packages).toHaveCount(1)
     await expect(packages).toContainText("@wirecat/cli-messaging")
     for (const slug of ["architecture", "search-architecture", "data-model", "people", "meeting-brief"]) {
-      const link = page.locator(`#nd-sidebar a[href="/${lang}/docs/${slug}"]`)
+      // On the page itself, the language menu also links here; only the navigation entry is counted.
+      const link = page.locator(`#nd-sidebar a[href="/${lang}/docs/${slug}"]:not(.language-options *)`)
       await expect(link).toHaveCount(1)
       await expect(link.locator("svg")).toHaveCount(1)
     }

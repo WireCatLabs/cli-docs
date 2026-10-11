@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs"
+import { existsSync, readFileSync, statSync } from "node:fs"
 import { join } from "node:path"
 import GithubSlugger from "github-slugger"
 import { fromMarkdown } from "mdast-util-from-markdown"
@@ -55,11 +55,21 @@ export function resolveCommand(value: string, tool: string | undefined, indexes:
 }
 
 /** Shared presentation for released Markdown; executable examples and anchors stay intact. */
+// Parsing a command reference takes ~0.4 s and the plugin is created per file; reuse it until the file changes.
+const parsedReferences = new Map<string, { mtimeMs: number; references: Map<string, string> }>()
+
 function loadCommandIndexes() {
   const indexes = new Map<string, Map<string, string>>()
   for (const tool of ["tg", "max"]) {
     const file = join(process.cwd(), "content/docs", tool, "commands.md")
-    if (existsSync(file)) indexes.set(tool, commandReferences(readFileSync(file, "utf8")))
+    if (!existsSync(file)) continue
+    const { mtimeMs } = statSync(file)
+    let parsed = parsedReferences.get(file)
+    if (parsed?.mtimeMs !== mtimeMs) {
+      parsed = { mtimeMs, references: commandReferences(readFileSync(file, "utf8")) }
+      parsedReferences.set(file, parsed)
+    }
+    indexes.set(tool, parsed.references)
   }
   return indexes
 }
