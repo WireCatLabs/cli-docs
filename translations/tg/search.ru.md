@@ -73,7 +73,7 @@ tg search conversations 'moving to the country'   # conversations close in meani
 tg search topics "Hiking" "gear"                  # topic titles in one forum group
 ```
 
-`search all` сообщает, что представляет собой каждое попадание — сообщение (`msg:…`) или заметку (`note:…`). `search messages` никогда не возвращает почту, а `search mail` никогда не возвращает сообщения Telegram; только `search all` охватывает оба. `--type` сужает `search messages` до текста, голоса или файлов (`text|voice|file`), а `search notes` — до заметок, созданных в memo или импортированных из папки (`internal|file`). Если запрос использует поле, которого нет у почты или заметок (`chat:`, `from:`), `search all` исключает соответствующие источники и сообщает об этом.
+`search all` сообщает, что представляет собой каждое попадание — сообщение (`msg:…`) или заметку (`note:…`). `search messages` никогда не возвращает почту, а `search mail` никогда не возвращает сообщения Telegram; только `search all` охватывает оба. `--type` сужает `search messages` до текста, голоса или файлов (`text|voice|file`), а `search notes` — до заметок, созданных в memo или импортированных из папки (`internal|file`). У почты `chat:` выбирает цепочку писем, а `from:` — отправителя. Если поле не подходит — `kind:`/`topic:` для почты или `chat:`/`from:` для заметок, — `search all` пропускает этот источник и объясняет почему.
 
 Почта и заметки попадают в архив через memo: `memo mail import` и `memo import`. Без них `search all` ищет только сообщения.
 

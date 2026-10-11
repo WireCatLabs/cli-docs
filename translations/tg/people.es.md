@@ -85,7 +85,7 @@ El perfil no requiere solicitudes adicionales: utiliza las mismas tres llamadas 
 
 ## Qué dijo: `contacts context`
 
-Sin `--chat`, ofrece un resumen desde el almacén: chats compartidos, el último mensaje en cada dirección, sus mensajes recientes en vuestro chat privado y en grupos, y dónde lo mencionaron otros. Nunca se conecta.
+Sin `--chat`, ofrece un resumen desde el almacén: chats compartidos, el último mensaje en cada dirección, sus mensajes recientes en vuestro chat privado y en grupos, y dónde lo mencionaron otros. Las identidades de correo vinculadas también aportan el correo enviado y recibido. Nunca se conecta.
 
 ```sh
 tg contacts context @example_user

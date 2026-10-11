@@ -39,7 +39,7 @@ Reads, explicit history fetches and background capture write messages into one s
 
 The store keeps each message's original text and, separately, its normalized text for search. It also records which ranges of each chat's history it holds. An index, a build or a vector does not prove that a whole chat was downloaded.
 
-Good search needs downloaded chats. `store fetch --all --background` starts downloading the last 90 days of every chat; add `--since-time 365d` to go further back. Each run fetches at most 1,000 messages per chat in tg or 1,200 in max by default; repeat it to continue busy histories. Counts, topic search, filters and MAX searches without a named chat read only the archive.
+Good search needs downloaded chats. `store fetch --all --background` starts downloading the last 90 days of every chat; add `--since-time 365d` to go further back. Each run fetches at most 1,000 messages per chat in tg or 1,200 in max by default; repeat it to continue busy histories. Counts, topic search and filters read only the archive.
 
 Message search starts in the active account. `--source all` or `in:all` widens it to every account in the store; a provider narrows that. Names resolve inside the chosen scope, and an ambiguous author or chat asks for a more precise identifier. Topic search also starts in the active account: its built conversations, optionally one chat and a time boundary; `--source` widens it explicitly.
 
@@ -100,7 +100,7 @@ The stemmers are a store-wide setting, shared by every profile, tg and MAX: `sea
 
 ### Server search beside the archive
 
-`search messages` can also ask the messenger's own search, which can find messages that were never fetched. tg asks Telegram by default (`--backend both`). max asks MAX's server only when the query has words and names one chat (`--chat` or `chat:`); without a chat it answers from the archive. `--backend server` shows only the server's results, and `--backend archive` searches only the archive.
+`search messages` can also ask the messenger's own search, which can find messages that were never fetched. tg asks Telegram by default (`--backend both`). max asks MAX's server when the query has words: within the named chat (`--chat` or `chat:`), or without a chat across all chats, one best match from each, as the search bar on web.max.ru does; the archive supplies the other matches it holds. `--backend server` shows only the server's results, and `--backend archive` searches only the archive.
 
 The server's matching is its own. Telegram does not document its rules; MAX's server finds a word by its beginning but not its other forms. So the server's results are only candidates: they are saved into the archive, and the same strict query then runs once over the archive and the new rows. `exact:`, `-word`, phrases, filters and the ranking keep their meaning, and a message is never listed twice. A candidate the strict query rejects is kept but not shown.
 

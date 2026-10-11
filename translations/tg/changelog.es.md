@@ -4,6 +4,23 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.46.2 — 11.10.2026
+
+### Correcciones
+
+- La búsqueda en el archivo con `--discover` admite preguntas sobre permisos como «¿Pueden los contratistas acceder a producción?»
+  sin tratar el signo de interrogación final como comodín. La búsqueda estricta y los filtros mantienen su comportamiento.
+- La búsqueda de correo y el contexto de una persona vinculada también leen el almacenamiento de correo dedicado, junto con las importaciones anteriores.
+  El correo admite filtros de remitente y de cadena; los resultados muestran cada referencia de correo una sola vez.
+- Las descargas de historial en segundo plano ya no se detienen en el plazo predeterminado de 30 segundos; un
+  `--timeout` explícito sigue aplicándose.
+
+### Cambios — pueden romper scripts
+
+- Un fallo permanente de la descarga de historial antes de la primera página guardada ahora termina con un error en lugar
+  del código de salida `0` con un `issue`. El historial de bot sin mensaje inicial termina con el código `2`
+  y solicita `--from`. Los fallos después de haber avanzado siguen devolviendo resultados parciales.
+
 ## 0.46.1 — 11.10.2026
 
 ### Correcciones

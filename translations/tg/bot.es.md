@@ -173,7 +173,7 @@ tg sales bot store fetch -1001234567890 --from https://t.me/c/1234567890/512 --l
 tg sales bot store fetch -1001234567890 --last 200 --pause 1s
 ```
 
-`--from` empieza en ese mensaje, incluido, y debe referirse al mismo chat. Sin él, usa el mensaje más reciente que el bot tenga guardado. Si no tiene ninguno, consulta el más reciente de la sesión personal `default` existente. Si ninguna conoce un número, solicita `--from`. Usa las credenciales de aplicación Telegram del perfil del bot (`api_id` y `api_hash`) o las del perfil `default` existente; también acepta `TG_API_ID` y `TG_API_HASH`. No inicia una sesión personal.
+`--from` empieza en ese mensaje, incluido, y debe referirse al mismo chat. Sin él, usa el mensaje más reciente que el bot tenga guardado. Si no tiene ninguno, consulta el más reciente de la sesión personal `default` existente. Si ninguna conoce un número, termina con el código `2` y solicita `--from`. Usa las credenciales de aplicación Telegram del perfil del bot (`api_id` y `api_hash`) o las del perfil `default` existente; también acepta `TG_API_ID` y `TG_API_HASH`. No inicia una sesión personal.
 
 - `--limit` limita los mensajes descargados en esta ejecución (1000 por defecto).
 - `--page-size` limita los números de mensaje consultados por página, hasta 100.

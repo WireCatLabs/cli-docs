@@ -7,7 +7,7 @@ title: "Search query language"
 
 When using `max` through an AI agent, describe what you want in ordinary words and let the agent form the search query. Use this reference when typing searches yourself or looking up exact operators, every field, presets, date rules and limits.
 
-This is help for the queries `max search messages`, `max search all`, `max stats messages show`, saved searches and `--filter` [search by topic](./topic-search.md). Examples for every day - in [message search](./search.md).
+This is help for the queries `max search messages`, `max search mail`, `max search all`, `max stats messages show`, saved searches and `--filter` [search by topic](./topic-search.md). Examples for every day - in [message search](./search.md).
 
 Terms used below:
 
@@ -17,6 +17,8 @@ Terms used below:
 - **Word forms** — variations of one word, such as “apartment” and “apartments”.
 
 This language implements a strict subset of Apache Lucene syntax: words, phrases, AND/OR/NOT, groups, fields, ranges, limited patterns and regular expressions. Unsupported syntax causes an error rather than being silently skipped. The [full reference](https://github.com/WireCatLabs/cli-messaging/blob/v0.212.0/docs/search/query-language.md) contains generated field/operator/preset/limit tables and verified examples; the [technical specification](https://github.com/WireCatLabs/cli-messaging/blob/v0.212.0/docs/search/query-language-spec.md) describes grammar and compilation.
+
+For mail, `chat:` and `--chat` select a thread by its id or subject, and `from:` selects the sender. Mail has no `kind:` or `topic:` fields.
 
 ## What the language can do
 

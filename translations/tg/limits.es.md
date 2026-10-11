@@ -54,7 +54,8 @@ TG_REQUESTS_PER_MINUTE=30 tg store fetch "Book club"
 | más tiempo | se detiene con el código de salida `8` (`rate_limited`) y `retryAfterMs` en el JSON |
 
 `store fetch` y `messages download --all` esperan hasta 5 minutos entre páginas y continúan;
-una espera más larga detiene la ejecución, y la siguiente continúa desde lo que ya se ha guardado.
+una espera más larga detiene la ejecución, y la siguiente continúa desde lo que ya se ha guardado. `store fetch --all`
+también espera las pausas breves de Telegram mientras obtiene la lista de chats.
 
 **Una espera bloquea todo el perfil.** Hasta que termine, la siguiente solicitud de cada proceso espera a que finalice; una solicitud
 que tendría que esperar más de 5 minutos falla de inmediato con el código de salida `8`, sin consultar Telegram.

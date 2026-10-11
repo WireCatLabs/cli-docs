@@ -59,7 +59,7 @@ Ask your agent to catch up on unread messages, find a message, recall agreements
 reply. Reading **does not mark messages as read**. Sending, deleting and other changes require
 separate commands; you can restrict the agent's access.
 
-`max search all` searches messages, imported mail and notes stored on this computer at once. Message search (`max search messages`) asks both the local archive and the messenger by default (`--backend both`); use `--backend archive` for local-only results. Strict Lucene is the default query language; `--language legacy` restores the previous matching and typo correction. Prepare saved history before archive-only search, counting or rankings, and check coverage before treating an empty result as proof that a message is absent. MAX server search needs one chat. Counts, rankings and queries unsupported by the server use saved history. [Search guide](/en/docs/max/search).
+`max search all` searches messages, imported mail and notes stored on this computer at once. Message search (`max search messages`) asks both the local archive and the messenger by default (`--backend both`); use `--backend archive` for local-only results. Strict Lucene is the default query language; `--language legacy` restores the previous matching and typo correction. Prepare saved history before archive-only search, counting or rankings, and check coverage before treating an empty result as proof that a message is absent. Without a chat, the MAX server returns one best match from each chat. Counts, rankings and queries unsupported by the server use saved history. [Search guide](/en/docs/max/search).
 
 ## Find the guide for your task
 
