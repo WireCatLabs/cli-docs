@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { docTerm } from "../lib/doc-terms"
-import { dedentDocComponents, expandDocTerms } from "../lib/doc-terms-markdown"
+import { compactAgentMarkdown, dedentDocComponents, expandDocTerms } from "../lib/doc-terms-markdown"
 import { wordsFor } from "../lib/words"
 
 describe("documentation explanations for Markdown readers", () => {
@@ -28,6 +28,11 @@ describe("documentation explanations for Markdown readers", () => {
     const text = expandDocTerms(`${component}\n\n\`\`\`mdx\n${component}\n\`\`\``, lang)
     expect(text).toContain(`\`\`\`text\n${wordsFor(lang).onboarding.nodePrompt}\n\`\`\``)
     expect(text).toContain(`\`\`\`mdx\n${component}\n\`\`\``)
+  })
+  it.each(["en", "ru", "es"])("points %s agents to the browser instead of an empty search playground", (lang) => {
+    const result = expandDocTerms(`<SearchPlayground lang="${lang}" embedded />`, lang)
+    expect(result).not.toContain("<SearchPlayground")
+    expect(result).toContain(`https://wirecat.dev/${lang}/docs/search-playground`)
   })
   it("fails an unknown term so broken hints do not reach published agent docs", () => {
     expect(() => expandDocTerms('<DocTerm term="typo" />', "en")).toThrow("Unknown documentation term")
@@ -68,5 +73,34 @@ describe("dedentDocComponents", () => {
     expect(out).toContain("\nFollow the [guide](./browser-apps.mdx).")
     expect(out).toContain("\nAdd a connection with the [MCP guide](./mcp.mdx).")
     expect(out).toContain('\n{ "a": { "b": 1 } }')
+  })
+})
+
+describe("compactAgentMarkdown", () => {
+  it("drops table padding and anchor aliases but leaves code untouched", () => {
+    const code = '```text\n<a id="kept" />\n| a    | b |\n\n\n```'
+    const input = [
+      '<a id="old-name" />',
+      "",
+      "## Heading [#heading]",
+      "",
+      "| Option      | What it does |",
+      "| ----------- | ------------ |",
+      "| `--json`    | JSON \\| text  |",
+      "",
+      code,
+    ].join("\n")
+    expect(compactAgentMarkdown(input)).toBe(
+      [
+        "",
+        "## Heading [#heading]",
+        "",
+        "| Option | What it does |",
+        "| --- | --- |",
+        "| `--json` | JSON \\| text |",
+        "",
+        code,
+      ].join("\n"),
+    )
   })
 })

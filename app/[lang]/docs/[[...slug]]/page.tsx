@@ -22,6 +22,7 @@ import { guideOrientation, guideStartLink } from "@/lib/guide-orientation"
 import { readerGuide } from "@/lib/reader-guides"
 import { commandReferences } from "@/lib/remark-doc-usability"
 import {
+  absoluteUrl,
   documentationDescription,
   documentationTitle,
   pageMetadata,
@@ -145,6 +146,7 @@ export default async function Page(props: Props) {
         <MarkdownCopyButton markdownUrl={markdownUrl} />
         <ViewOptionsPopover
           markdownUrl={markdownUrl}
+          pageUrl={absoluteUrl(markdownUrl)}
           {...(tool
             ? {
                 githubUrl: `https://github.com/${tool.repo}/blob/${tool.guideRefs?.[page.slugs.at(-1) ?? ""] ?? tool.docsRef ?? "main"}/${repoPath}`,
@@ -207,7 +209,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const page = source.getPage(slug, lang)
   if (!page) notFound()
   const title = documentationTitle(lang, page.slugs, page.data.title)
-  return pageMetadata({
+  const metadata = pageMetadata({
     lang,
     suffix: `/docs${page.slugs.length ? `/${page.slugs.join("/")}` : ""}`,
     title: `${title} · ${appName}`,
@@ -215,4 +217,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     available: seoLocales.filter((locale) => source.getPage(page.slugs, locale)),
     article: true,
   })
+  return {
+    ...metadata,
+    alternates: { ...metadata.alternates, types: { "text/markdown": absoluteUrl(getPageMarkdownUrl(page).url) } },
+  }
 }
