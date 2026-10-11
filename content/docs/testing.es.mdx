@@ -42,9 +42,11 @@ También comprobamos el orden. Una respuesta útil en primera posición ahorra m
 | MRR | Lo cerca que está del principio el primer resultado relevante. |
 | nDCG@10 | Si los resultados más útiles aparecen primero cuando unos son mejores que otros. |
 
-Por ejemplo, **43,8% Success@10** significa que el 43,8% de las preguntas probadas tenía al menos un resultado relevante entre los diez primeros. No significa que se encontraran todos los mensajes relevantes ni que la respuesta estuviera primero.
+En nuestro primer experimento, **43,8% Recall@10** significaba que los diez primeros resultados contenían, en promedio, el 43,8% del material relevante conocido. No significaba que el 43,8% de las preguntas tuviera una respuesta. Success@10 cuenta preguntas con al menos un resultado útil; encontrar la respuesta se mide por separado.
 
 También comprobamos si se encontraron mensajes útiles antes de ordenarlos: cambiar el orden no recupera una respuesta ausente. Cuando una pregunta ayuda a mejorar la búsqueda, se convierte en un ejemplo de desarrollo. Hacen falta preguntas nuevas para valorar si la mejora funciona en otros casos. Cada informe indica qué medidas incluye. La [guía de evaluación de búsqueda](https://github.com/WireCatLabs/cli-testing/blob/main/performance/search/combined-search-evaluation.md) explica los cálculos y experimentos.
+
+El [relato de la investigación de búsqueda](https://github.com/WireCatLabs/cli-testing/blob/main/performance/search/PROCESS.md) recoge qué probamos, por qué cambiamos de enfoque y qué mejoras publicamos.
 
 ## Rendimiento y recursos
 
