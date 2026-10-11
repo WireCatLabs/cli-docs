@@ -16,7 +16,7 @@ for (const lang of ["en", "ru", "es"]) {
             await expect(main.locator(`a[href="/${lang}/docs/${target}"]`).first()).toBeVisible()
           }
         } else {
-          for (const target of ["tg/installation", "max/installation", "memo#install-memo"]) {
+          for (const target of ["tg/installation", "max/installation", "memo/installation"]) {
             await expect(main.locator(`a[href="/${lang}/docs/${target}"]`).first()).toBeVisible()
           }
           await expect(main.locator(".docs-term-trigger").first()).toBeEnabled()
