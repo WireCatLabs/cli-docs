@@ -26,7 +26,7 @@ Quote the matching text, show the source of each result and tell me what you cou
 | В вашей почте | `memo search mail 'budget'` |
 | В сообщениях Telegram или MAX | `memo search messages 'budget'` |
 
-`search all` ищет сразу в сообщениях, почте и заметках. Он не ищет людей, записи памяти, проекты и
+`search all` ищет сразу в сообщениях, почте и заметках. Он не ищет людей, память, проекты и
 задачи; для них используйте `memo context`, `memo memories search` и `memo tasks list`. Если вы знаете,
 где что-то лежит, лучше использовать отдельный поиск по этому месту: он понимает больше слов для поиска.
 

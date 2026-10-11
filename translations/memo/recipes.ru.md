@@ -60,7 +60,7 @@ Save it with the message as evidence only after I agree.
 
 Запись памяти, добавленная командой `memo`, подтверждается сразу. Поэтому в запросе агента просят
 сначала показать её. Позже, когда запись перестанет быть верной, отметьте её командой
-`memo memories stale` ([записи памяти](./memories.md)).
+`memo memories stale` ([память](./memories.md)).
 
 ## Записать решение из чата
 
@@ -82,7 +82,7 @@ and the memories, facts and actions waiting for my review. Do not approve or con
 ```
 
 Агент объединяет `memo tasks list`, `memo tasks ready` и списки на проверку со страницы
-[Записи памяти и факты](./memories.md). Решение по каждому пункту принимайте сами.
+[Память и факты](./memories.md). Решение по каждому пункту принимайте сами.
 
 ## Записать сводку в папку с заметками
 

@@ -8,6 +8,8 @@ la API.
 
 ## Sin publicar
 
+## 0.20.0 — 11.10.2026
+
 ### Novedades
 
 - Las guías de `docs/` siguen la estructura de herramientas de wirecat.dev: una introducción, el uso diario, cómo
@@ -17,6 +19,23 @@ la API.
   la documentación y los agentes puedan comprobar un comando antes de ejecutarlo.
 - Todos los comandos tienen una descripción en `--help`, incluidos organizaciones, proyectos, relaciones,
   recordatorios y el listado de tareas.
+
+## 0.19.0 — 11.10.2026
+
+### Novedades
+
+- `memo mcp` indica al agente que se conecta cuándo guardar: lo que pasó es un hecho (`facts_add`), lo que
+  concluyó es un recuerdo (`memories_add`), lo que hay que hacer es `actions_propose`, cada uno con su evidencia,
+  y solo lo que importará más adelante. `memo search …` y `memo notes show` terminan su `--help` con la misma
+  indicación para `memo facts add` y `memo memories add`.
+
+### Cambios
+
+- **La búsqueda por significado en el correo encuentra el correo que contiene la respuesta.** El correo vuelve a
+  dividirse en partes correo a correo; el texto citado de nuevo, los saludos y las firmas se siguen descartando.
+  Antes, una parte abarcaba varios correos de una cadena y el resultado nombraba el más reciente. La primera
+  indexación tras la actualización vuelve a dividir una vez el correo guardado y lo vectoriza de nuevo. Basado en
+  la biblioteca compartida 0.249.0.
 
 ### Correcciones
 
