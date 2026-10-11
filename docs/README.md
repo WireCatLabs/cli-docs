@@ -45,6 +45,7 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | How do the tools work internally? | `architecture.mdx` | Technical explanation | Trial beautiful-mermaid on one existing diagram |
 | What do tests prove and how can I repeat them? | `testing.mdx` | Technical explanation | Keep evidence and reproduction paths aligned with cli-testing and owning repositories |
 | How do search and conversation processing work? | `search-architecture.mdx` | Technical explanation | Reconcile playground description; keep source/release boundary |
+| What sources and integrations come next? | `roadmap.md` | Planned work | Keep planned items separate from available features; update when a source ships |
 | How do I check questions and activity in my group? | `group-admins.md` | Task guide | Start with a request and sources; inspect coverage before changes |
 | How do I save or override settings? | `configuration.mdx` | Configuration guide | Explain when settings matter and how to verify the effective value |
 | What may the agent change? | `permissions.mdx` | Access guide | Distinguish terminal confirmation, MCP permissions and app approval |
