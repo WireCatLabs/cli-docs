@@ -11,7 +11,8 @@ After following the guide, you will be able to:
 
 - import folders and search your files with source references;
 - create, edit and export notes about a person or message;
-- organise notes, messages and people with tags.
+- organise notes, messages and people with tags;
+- keep conclusions with their evidence and review what an agent proposes.
 
 WireCat uses Memo for these tasks. Memo is a tool that runs on your computer to import and
 search files and keep notes linked to their subjects. Your agent can run its commands for you.
@@ -156,7 +157,8 @@ and inspect the import report; a file that was not imported cannot appear in the
 There are two ways a note reaches Memo. **Imported notes** come from your files; edit the
 original file and import it again. **Your own notes** are written in Memo's local store and
 can be about a person, message, project, task or another note. Creating one does not send
-anything to that person or change the message it refers to.
+anything to that person or change the message it refers to. Their references differ: an imported
+file is `document:<id>`, a note you wrote is `note:<id>`.
 
 Ask your agent to add a note about the person or message you choose:
 
@@ -181,7 +183,8 @@ memo notes add 'Check the revised budget' --about 'msg:telegram/1/77/42' --json
 
 One note can have several subjects: repeat `--about` for each one. Use `max:<name or id>` or
 `email:<address>` for another identity. A stored object can also be named by its `person:`,
-`entity:`, `task:` or `note:` reference. The subject must exist in the store; a matching name
+`organization:`, `project:`, `task:`, `note:` or `document:` reference, and a stored meeting by
+`meeting:<account id>/<meeting id>`. The subject must exist in the store; a matching name
 alone does not establish that two accounts belong to one person.
 
 ### Read, edit and remove a note
@@ -219,12 +222,13 @@ A tag is a short label you choose, such as `work` or `follow-up`. It helps you f
 sources without rewriting them. Ask your agent to tag the exact notes, messages or people
 you choose, then show the labels it saved.
 
-Use IDs and source references returned by your own searches. `NOTE_ID`, `PERSON_UID` and
+Use IDs and source references returned by your own searches. `NOTE_ID`, `DOCUMENT_ID`, `PERSON_UID` and
 `FOLDER_ID` below are placeholders; the numeric message/identity/account IDs are illustrative.
 
 | What to label | Command |
 | --- | --- |
-| A note | `memo tags add work --note note:NOTE_ID` |
+| A note you wrote | `memo tags add work --note note:NOTE_ID` |
+| An imported file | `memo tags add work --note document:DOCUMENT_ID` |
 | A stored message | `memo tags add follow-up --message 'msg:telegram/1/77/42'` |
 | A stored messenger identity selected through an account | `memo tags add work --contact 101 --provider telegram --account 1` |
 | A linked person | `memo tags add work --person PERSON_UID` |
@@ -267,6 +271,36 @@ The file must already be imported. Ordinary text mentions do not create a person
 `notes about` shows related notes; `context` also gathers stored messages and mail for linked
 identities. See [linking accounts](./people.md#link-your-accounts) and [Email](./email.mdx).
 
+## Keep conclusions and review proposals
+
+A **memory** is a short conclusion — a fact, a preference or a summary — saved with the sources
+that show it and a `personal` or `work` scope. A memory you add is confirmed at once. One an agent
+adds waits as proposed until you check its evidence and confirm it. An agent can also **propose an
+action**, such as a reply. Approving it only creates a task in the account that would act; nothing
+is sent.
+
+```text prompt
+Show me the memories and actions Memo has waiting for my review, with their evidence.
+Do not confirm or approve anything; I will decide.
+```
+
+For manual use, replace the IDs with values from your own results:
+
+```sh
+memo memories add 'Bob Sample prefers Friday meetings' --scope work --evidence note:NOTE_ID
+memo memories list --status proposed --json
+memo memories confirm memory:MEMORY_ID
+memo actions list --status proposed --json
+memo actions approve ACTION_ID
+memo agents log --limit 20
+```
+
+`memo memories stale` marks a memory whose evidence no longer holds, and `memo actions reject`
+closes a proposal. `memo agents log` lists what agents did through the MCP servers that share the
+store: the agent, the tool and the outcome, never the arguments. `memo mcp` gives an AI app the same
+memories, proposals and log over [MCP](./mcp.mdx); what it writes waits for you, and it cannot
+confirm or approve.
+
 ## Add email
 
 For mail accounts, imports and linking an address to a person, continue with [Email](./email.mdx).
@@ -281,6 +315,11 @@ the agent to explain the gap rather than treat the result as complete.
 ## If something is missing
 
 If a note or tag is missing, check its exact ID and account. For file notes, inspect the import report and rerun the import after edits. If an edit conflicts, read the current revision before trying again.
+
+If you used Memo before it kept its data in the shared `wirecat.db` store, the old `messages.db`
+is not read. Register each folder again with `memo folders add`, then rerun `memo notes import` and
+`memo mail import`. When the store opens at its default path, the old unencrypted `messages.db` is
+deleted; copy it elsewhere before updating if you need anything from it.
 
 Continue with [Email](./email.mdx) to import mail and link addresses to people you know, or
 [People](./people.md#link-your-accounts) to connect identities across messengers.
