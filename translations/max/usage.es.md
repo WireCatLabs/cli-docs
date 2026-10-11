@@ -320,7 +320,7 @@ Los modelos se guardan en un directorio compartido por MAX y Telegram; `CLI_COMM
 
 Tiempos en un portátil Ryzen AI 9 HX 470 con un hilo. Elige otro modelo para un comando con `--model parakeet-v3` o como predeterminado con `"transcribeModel": "parakeet-v3"` en `defaults`. Cada descarga se comprueba contra la suma incluida en `max`; si no coincide, no se instala.
 
-El texto se guarda bajo tu cuenta en la base compartida `messages.db`, usada por `messages list`, `messages transcribe`, `inbox`, `review` y MCP. Repetir con el id del chat y el mismo modelo responde de inmediato, sin red ni reconocimiento. Las transcripciones del antiguo caché de perfil no se migran; `--transcribe` las genera de nuevo. La grabación se descarga mediante la conexión de lectura y esta se cierra antes del reconocimiento local. No hace falta un segundo acceso. Se necesitan unos 700 MB de memoria (`parakeet-v3`, 1,3 GB).
+El texto se guarda bajo tu cuenta en la base compartida `wirecat.db`, usada por `messages list`, `messages transcribe`, `inbox`, `review` y MCP. Repetir con el id del chat y el mismo modelo responde de inmediato, sin red ni reconocimiento. Las transcripciones del antiguo caché de perfil no se migran; `--transcribe` las genera de nuevo. La grabación se descarga mediante la conexión de lectura y esta se cierra antes del reconocimiento local. No hace falta un segundo acceso. Se necesitan unos 700 MB de memoria (`parakeet-v3`, 1,3 GB).
 
 Transcribir los mensajes de voz de los resultados del chat o de la bandeja de entrada en una ejecución:
 
@@ -350,7 +350,7 @@ max messages download -1000 --all --output-dir ~/Downloads --pause 5s   # все
 
 `--output` sigue siendo un nombre compatible para `--output-dir`; No puede especificar diferentes directorios al mismo tiempo. El directorio se crea si no existe. El JSON de un mensaje contiene `{items}`; JSONL: una entrada de archivo por línea. Con `--all`, el reinicio continúa omitiendo el progreso guardado; Los archivos ya guardados permanecen en su lugar.
 
-El archivo conserva su nombre, el resto: `<id сообщения>-<номер>.<расширение>`. **El archivo existente no se sobrescribe**: el comando se detendrá con un error y le asignará un nombre. El vídeo se guarda como MP4 más grande; Las llamadas, enlaces y stickers no se descargan, y habrá una línea sobre esto en stderr. Solo el propietario puede acceder a los archivos guardados (permiso 600). Las voces tienen `kind: voice` en JSON; la extensión del archivo adjunto sin nombre se selecciona mediante HTTP MIME. Envío de archivos, formatos y búsqueda por texto dentro de archivos - [adjuntos](./attachments.md).
+El archivo conserva su nombre, el resto: `<id сообщения>-<номер>.<расширение>`. **El archivo existente no se sobrescribe**: el fallo aparece en `batch` y continúan los archivos independientes. El vídeo se guarda como MP4 más grande; Las llamadas, enlaces y stickers no se descargan, y habrá una línea sobre esto en stderr. Solo el propietario puede acceder a los archivos guardados (permiso 600). Las voces tienen `kind: voice` en JSON; la extensión del archivo adjunto sin nombre se selecciona mediante HTTP MIME. Envío de archivos, formatos y búsqueda por texto dentro de archivos - [adjuntos](./attachments.md).
 
 <a id="медиа-чата"></a>
 
@@ -561,7 +561,7 @@ max stats charts synthetic-group --chart-kind messages --by day --timezone Europ
 
 El JSON contiene `chart`, y al guardar la imagen, también `chartFile` con ruta y tamaño. La imagen se escribe solo en un archivo nuevo, sin sobrescribirla. Una fecha que falta sigue siendo un vacío y se indican datos incompletos en la descripción y la imagen. `membership` requiere eventos de chat en línea y no está disponible con `--offline`. A través de MCP `max_read` (`command: "stats charts"`) devuelve JSON desde el almacenamiento local, sin conectarse ni escribir archivos; `format: "png"` agrega una imagen PNG y JSON con `chart` y tamaño `image`. Las entradas y salidas no están disponibles en el mismo. La lectura está sujeta al permiso `messages`. `--jsonl` y la imagen de salida estándar no están disponibles.
 
-![Gráfico sobre datos ficticios](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.43.1/docs/images/stats-charts.png)
+![Gráfico sobre datos ficticios](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.45.1/docs/images/stats-charts.png)
 
 Clasificaciones de mensajes y autores: [métricas, puntuaciones y evidence](./rankings.md).
 
@@ -1128,11 +1128,13 @@ En la terminal, la línea sobre la página siguiente va **a stderr**: stdout tra
 max messages list -1000 --jsonl | jq 'select(.senderId == "111")'
 ```
 
-Los errores van por **stderr**, dejando stdout vacío para no confundirlos con resultados:
+Los errores que terminan el comando van por **stderr**, dejando stdout vacío para no confundirlos con resultados:
 
 ```json
 {"error":{"code":"authentication_error","message":"no session for profile \"default\" — run `max setup` in a local terminal; agents: read `max skill show`"}}
 ```
+
+Las lecturas o descargas parciales pueden devolver JSON con código de salida `0`: comprueba `complete` y `batch` o `issue`. El JSONL de descarga parcial añade `batch_summary`; el trabajo completado se conserva.
 
 Debe realizar la bifurcación según el código de retorno y no según el texto: el texto cambia, el código no. La tabla completa está en [referencia de comandos](./commands.md), y la más común: `4` - sin sesión, `6` - no encontrada, `9` - tiempo de espera, `14` - resultado desconocido.
 

@@ -107,7 +107,7 @@ Tres directorios siguen las convenciones del sistema operativo y dos más se com
 | configuración | `~/.config/tg-cli/` | `~/Library/Preferences/tg-cli/` | `%APPDATA%\tg-cli\Config\` |
 | estado | `~/.local/share/tg-cli/` | `~/Library/Application Support/tg-cli/` | `%LOCALAPPDATA%\tg-cli\Data\` |
 | caché | `~/.cache/tg-cli/` | `~/Library/Caches/tg-cli/` | `%LOCALAPPDATA%\tg-cli\Cache\` |
-| archivo local | `~/.local/share/cli-messaging/messages.db` | dentro de `~/Library/Application Support/cli-messaging/` | dentro de `%LOCALAPPDATA%\cli-messaging\Data\` |
+| archivo local | `~/.local/share/cli-messaging/wirecat.db` | dentro de `~/Library/Application Support/cli-messaging/` | dentro de `%LOCALAPPDATA%\cli-messaging\Data\` |
 | modelos de voz | `~/.cache/cli-common/models/audio/` | dentro de `~/Library/Caches/cli-common/` | dentro de `%LOCALAPPDATA%\cli-common\Cache\` |
 
 - **configuraciones** mantienen `config.json` y `credentials.json` solo en una máquina sin llavero.
@@ -136,6 +136,10 @@ En PowerShell, añade `tg complete powershell | Out-String | Invoke-Expression` 
 Tab **nunca se conecta a Telegram**. Si todavía no hay archivo local, solo completa comandos y opciones.
 
 ## Actualización
+
+**Al actualizar desde el antiguo `messages.db`, conserva primero los datos que solo existen localmente.** El almacén actual es `wirecat.db`; al abrirlo en la ubicación predeterminada se eliminan el antiguo `messages.db` y sus archivos `-wal`/`-shm`.
+Antes de ejecutar la nueva versión, cierra los programas antiguos y copia los archivos necesarios a otra carpeta. `tg store fetch --all` recupera mensajes del servidor, pero no notas o etiquetas locales antiguas.
+El inicio de sesión se conserva ([el almacén y otras versiones](./archive.md#the-store-and-other-versions)).
 
 ```sh
 tg upgrade            # with the package manager that installed tg: npm, pnpm or bun

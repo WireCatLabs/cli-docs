@@ -165,8 +165,28 @@ max attachments extract --chat "Учебная группа" --ocr --concurrency
 
 Repeat processing uses the file hash and model target. Previously saved good text survives errors, cancellation and incomplete responses. Agent text is not overwritten. Images and scanned pages go to the provider only with explicit `--ocr`; calls are billed under its terms. `--offline` and `--ocr` cannot be combined; there is no automatic fallback from the agent to an API.
 
-Extraction is limited to 50 MiB per file; local text is limited to 2 million characters. The OCR API accepts PDFs up to 20 pages and images up to 4 MiB and 20 million pixels (at most 8,000 pixels per side). Parallel files: 1–8, default 4; pages within a file run sequentially. The API processes up to 100 files by default; `--limit` accepts 1–500. Continue with the returned `cursor`. A provider 429 response (too many requests) stops further API calls in that run without retrying. The command returns statuses and message links, not the full text.
+The default extraction budget is 50 MiB per file, configurable through `MESSAGING_ATTACHMENT_MAX_MIB`; local text is limited to 2 million characters. The OCR API accepts PDFs up to 20 pages and images up to 4 MiB and 20 million pixels (at most 8,000 pixels per side). Parallel files: 1–8, default 4; pages within a file run sequentially. The API processes up to 100 files by default; `--limit` accepts 1–500. Continue with the returned `cursor`. A provider 429 response (too many requests) stops further API calls in that run without retrying. The command returns statuses and message links, not the full text.
 
 ## Next steps
 
 Search for a phrase from the file and open the result. See [search](./search.md) for downloading, extraction and searching file contents.
+
+## Recover a partial file batch
+
+An isolated error keeps completed files and allows independent later files to continue.
+Partial JSON has `complete: false` and `batch`: attempted/succeeded/failed counts, `errorRate`
+(a fraction from 0 to 1), and `failures`. Each failure names its ID/locator and stage, with the attachment position when available,
+and an `error` with code, message and `actions`: wait, retry, check, configure or skip.
+A `wait` action carries `afterMs` when the provider supplies a delay; a `configure` action names its setting.
+
+Exit code `0` does not prove every file succeeded: inspect `complete` and `batch.failed`.
+Partial download JSONL appends a `type: "batch_summary"` row. Saved files stay on disk. Repeating
+`messages download --all` retries failed checkpoint IDs and new files while skipping successful
+stretches. For extraction, the cursor continues remaining files; retry failed locators separately.
+Previously good indexed text is preserved when a replacement fails.
+
+After ten attempts, failures above 50% stop new items. `MESSAGING_BATCH_MAX_ERROR_PERCENT` sets
+a whole percentage from 1 to 100. Rate limits or authentication failures stop earlier; concurrent
+requests already in flight may still finish. Honor the provider's wait and resume unfinished work.
+Search partial diagnostic records with `max runs search --status partial --json` or MCP `max_read` with `command: "runs search"`
+([diagnostics](./diagnostics.md)).

@@ -303,7 +303,7 @@ Models live in a directory shared by MAX and Telegram; `CLI_COMMON_CACHE_DIR` re
 
 Timings use one thread on a Ryzen AI 9 HX 470 laptop. Select another model for one run with `--model parakeet-v3`, or permanently with `"transcribeModel": "parakeet-v3"` in configuration `defaults`. Every download is checked against a checksum embedded in `max`; a mismatch prevents installation.
 
-Text is stored under your account in the shared local `messages.db`, used by `messages list`, `messages transcribe`, `inbox`, `review` and MCP. Repeating a request by chat id with the same model answers immediately, without network or model execution. Transcripts from the old profile-specific cache are not migrated; `--transcribe` recreates them. Recordings download over the reading connection, which closes before local recognition. Downloading does not need a second login. Memory usage is about 700 MB (`parakeet-v3` uses 1.3 GB).
+Text is stored under your account in the shared local `wirecat.db`, used by `messages list`, `messages transcribe`, `inbox`, `review` and MCP. Repeating a request by chat id with the same model answers immediately, without network or model execution. Transcripts from the old profile-specific cache are not migrated; `--transcribe` recreates them. Recordings download over the reading connection, which closes before local recognition. Downloading does not need a second login. Memory usage is about 700 MB (`parakeet-v3` uses 1.3 GB).
 
 Transcribe the voice messages in chat or inbox results in one run:
 
@@ -333,7 +333,7 @@ max messages download -1000 --all --output-dir ~/Downloads --pause 5s   # все
 
 `--output` remains the compatible name `--output-dir`; You cannot specify different directories at the same time. The directory is created if it does not exist. The JSON of one message contains `{items}`; JSONL - one file entry per line. With `--all`, repeated run continues to traverse the saved progress; already saved files remain in place.
 
-The file retains its name, the rest - `<id сообщения>-<номер>.<расширение>`. **The existing file is not overwritten**: command will stop with an error and name it. The video is saved as the largest MP4; calls, links and stickers are not downloaded, and there will be a line in stderr about this. Saved files are accessible only to the owner (permission 600). Voice messages have `kind: voice` in JSON; the extension of the unnamed attachment is selected via HTTP MIME. Sending files, formats and searching by text inside files - [attachments](./attachments.md).
+The file retains its name, the rest - `<id сообщения>-<номер>.<расширение>`. **The existing file is not overwritten**: the failure appears in `batch` and independent files continue. The video is saved as the largest MP4; calls, links and stickers are not downloaded, and there will be a line in stderr about this. Saved files are accessible only to the owner (permission 600). Voice messages have `kind: voice` in JSON; the extension of the unnamed attachment is selected via HTTP MIME. Sending files, formats and searching by text inside files - [attachments](./attachments.md).
 
 <a id="медиа-чата"></a>
 
@@ -544,7 +544,7 @@ max stats charts synthetic-group --chart-kind messages --by day --timezone Europ
 
 The JSON contains `chart`, and when saving the image, also `chartFile` with path and size. The image is written only to a new file, without overwriting. A missing date remains a gap and incomplete data is noted in the description and image. `membership` requires online chat events and is not available with `--offline`. Via MCP `max_read` (`command: "stats charts"`) returns JSON from local storage, without connecting and writing files; `format: "png"` adds a PNG and JSON image with `chart` and size `image`. Entries and exits are not available in it. Reading is subject to permission `messages`. `--jsonl` and stdout image are not available.
 
-![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.43.1/docs/images/stats-charts.png)
+![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.45.1/docs/images/stats-charts.png)
 
 Message and author rankings: [metrics, scores and evidence](./rankings.md).
 
@@ -1106,11 +1106,13 @@ In the terminal, the line about the next page goes **to stderr**: stdout carries
 max messages list -1000 --jsonl | jq 'select(.senderId == "111")'
 ```
 
-Errors go **to stderr** with stdout empty, so they cannot be mistaken for data:
+Errors that end the command go **to stderr** with stdout empty, so they cannot be mistaken for data:
 
 ```json
 {"error":{"code":"authentication_error","message":"no session for profile \"default\" — run `max setup` in a local terminal; agents: read `max skill show`"}}
 ```
+
+Partial reads or downloads can return JSON with exit code `0`: inspect `complete` and `batch` or `issue`. Partial download JSONL adds `batch_summary`; completed work stays saved.
 
 You need to branch according to the return code, and not according to the text: the text changes, the code does not. The entire table is in the [command reference](./commands.md), and the most common: `4` - no session, `6` - not found, `9` - timeout, `14` - outcome unknown.
 

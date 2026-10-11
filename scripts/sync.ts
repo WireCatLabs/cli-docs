@@ -158,8 +158,13 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
     const docs = join(checkout, "docs")
     const files = readdirSync(docs).filter((name) => name.endsWith(".md") && name !== "README.md")
     const guides = new Map<string, { text: string; ref: string }>()
+    let changelogGuide: { text: string; ref: string } | undefined
     for (const [slug, guideRef] of reviewedGuideRefs(tool, ref)) {
       run("git", ["fetch", "--depth", "1", "origin", guideRef], checkout)
+      if (slug === "changelog") {
+        changelogGuide = { text: run("git", ["show", `${guideRef}:CHANGELOG.md`], checkout), ref: guideRef }
+        continue
+      }
       guides.set(`${slug}.md`, { text: run("git", ["show", `${guideRef}:docs/${slug}.md`], checkout), ref: guideRef })
       if (!files.includes(`${slug}.md`)) files.push(`${slug}.md`)
     }
@@ -178,10 +183,10 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
       })
       writeFileSync(join(destination, file), page)
     }
-    if (existsSync(join(checkout, "CHANGELOG.md"))) {
-      const changelog = toPage(readFileSync(join(checkout, "CHANGELOG.md"), "utf8"), {
+    if (changelogGuide || existsSync(join(checkout, "CHANGELOG.md"))) {
+      const changelog = toPage(changelogGuide?.text ?? readFileSync(join(checkout, "CHANGELOG.md"), "utf8"), {
         repo: tool.repo,
-        tag,
+        tag: changelogGuide?.ref ?? tag,
         pages,
         from: "CHANGELOG.md",
       })

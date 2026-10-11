@@ -1219,6 +1219,25 @@ max contacts context <person> [options]
 | `--chat <chat>` | a chat, by id or name; repeat it for more — then their newest messages in each, 20 unless --limit, short unless -v. |
 | `--refresh` | with --chat, read their newest messages in each from the messenger first. |
 
+### `max contacts timeline`
+
+everything one person took part in, in every messenger linked to them — messages they wrote or were mentioned in, chats, mail, meetings, tasks — newest first, from the store; never connects
+
+```sh
+max contacts timeline <person> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | their id, @username, or part of their name. |
+
+| Option | What it does |
+|---|---|
+| `--scope <personal\|work>` | only what belongs to personal or to work accounts. |
+| `--since-time <time>` | nothing older than this ISO 8601 time, or 2h / 1d ago. |
+| `--until-time <time>` | through this ISO 8601 time, or 2h / 1d ago. |
+| `--limit <n>` | at most this many; 50 if not given. |
+
 ### `max contacts check`
 
 whether one person looks like a bot, a fake or a spammer: their profile and what they wrote in the store — a hint, never a verdict; the public ban lists cover Telegram only, so nothing is sent
@@ -1662,7 +1681,7 @@ max store jobs list [options]
 
 | Option | Purpose |
 |---|---|
-| `--state <state>` | only jobs in this state. One of: `running`, `done`, `failed`, `cancelled`, `died`. |
+| `--state <state>` | only jobs in this state. One of: `running`, `done`, `partial`, `failed`, `cancelled`, `died`. |
 
 #### `max store jobs show`
 
@@ -1690,7 +1709,7 @@ max store jobs cancel <job>
 
 #### `max store jobs retry`
 
-start a failed or died job again, as a new job; the fetch resumes where the store stopped
+start a partial, failed or died job again, as a new job; the fetch resumes where the store stopped
 
 ```sh
 max store jobs retry [job] [options]
@@ -1702,7 +1721,7 @@ max store jobs retry [job] [options]
 
 | Option | Purpose |
 |---|---|
-| `--failed` | every chat whose newest job failed or died. |
+| `--failed` | every chat whose newest job partial, failed or died. |
 
 
 #### `max store jobs clear`
@@ -1777,7 +1796,7 @@ max store migrate
 
 ### `max store reindex`
 
-rebuild the word index, its typo vocabulary, the stems, the files' word index and the notes' indexes from what is stored; loses nothing
+rebuild the word index, its typo vocabulary, the stems, the files' word index, the notes' indexes and who took part in what, from what is stored; loses nothing
 
 ```sh
 max store reindex
@@ -1838,6 +1857,18 @@ max store repair [options]
 | Option | Purpose |
 |---|---|
 | `--dry-run` | say what it would do, and change nothing. |
+
+### `max store reset`
+
+back the store up beside itself, then delete it and start an empty one at this build's schema; asks first, or --yes
+
+```sh
+max store reset [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--no-backup` | delete the store without backing it up first. |
 
 ### `max store copies`
 
@@ -2690,7 +2721,7 @@ find things by text: search all for everything the local store holds, or one res
 
 ### `max search all`
 
-search everything the local store holds — messenger messages, mail and notes — best match first; start here when you do not know where something was written
+search everything the local store holds — messenger messages, mail and notes, and with --meetings a meeting account's transcripts — best match first; start here when you do not know where something was written
 
 ```sh
 max search all <query> [options]
@@ -2702,7 +2733,9 @@ max search all <query> [options]
 
 | Option | Purpose |
 |---|---|
-| `--only <resources>` | only these, separated by commas: messages, mail, notes. |
+| `--only <resources>` | only these resources, separated by commas: messages, mail, notes; meetings with --meetings. |
+| `--meetings [provider:account]` | also search one meeting account; with no value, the one stored account that holds meetings (put it after the query). |
+| `--max-meetings <n\|all>` | how many meetings --meetings looks through, newest first; all looks through every one (default 100). |
 | `--limit <n>` | how many. |
 | `--exact` | bare words and quotes match their exact form only, as exact:word does. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
@@ -3535,7 +3568,7 @@ max config show [options]
 
 | Option | Purpose |
 |---|---|
-| `--bot` | the settings a `max bot` command on this profile gets, rather than the personal account's. |
+| `--bot` | the settings a bot command on this profile gets, rather than the personal account's. |
 
 ### `max config migrate`
 
@@ -3648,6 +3681,28 @@ max runs show <run-id>
 | Argument | | Meaning |
 |---|---|---|
 | `run-id` | required | an id from `max runs list`. |
+
+### `max runs search`
+
+search recorded diagnostic metadata and events; no message contents
+
+```sh
+max runs search [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | case-insensitive literal diagnostic text. |
+
+| Option | What it does |
+|---|---|
+| `--status <status>` | run outcome. One of: `success`, `failed`, `partial`, `running`. |
+| `--error-code <code>` | one stable error code. |
+| `--operation <name>` | one operation, such as messages.download. |
+| `--profile <name>` | one recorded profile. |
+| `--since-time <time>` | runs starting on or after an ISO time or 2h / 1d ago. |
+| `--limit <n>` | matches per page, at most 100. Default: `20`. |
+| `--page <n>` | result page. Default: `1`. |
 
 ### `max runs path`
 

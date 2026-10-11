@@ -132,7 +132,7 @@ The server offers six ready-made prompts, available as `/` commands in Claude Co
 
 Sending in `reply` uses `max_write` (`command: "messages send"`), so if writes are forbidden, the agent only shows a draft.
 
-Chats are resources at `max://chat/<id>`; Claude Code can mention them through `@`. A resource returns a chat and its latest messages. The resource list reads the shared local archive `messages.db` for the profile's account without contacting MAX; it is empty until an archive exists. Only fetching an individual chat contacts MAX.
+Chats are resources at `max://chat/<id>`; Claude Code can mention them through `@`. A resource returns a chat and its latest messages. The resource list reads the shared local archive `wirecat.db` for the profile's account without contacting MAX; it is empty until an archive exists. Only fetching an individual chat contacts MAX.
 
 `max://skill` contains the `max` skill, identical to `max skill show`. It is available in both `max mcp` and `max bot mcp`, without contacting MAX.
 

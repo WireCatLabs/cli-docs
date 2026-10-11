@@ -316,7 +316,13 @@ La estructura del archivo tiene una versión. Un `max` más reciente u otro prog
 the message store was written by a newer version (schema N, needs at least M; this one speaks K) — upgrade this tool
 ```
 
-Ejecuta `max upgrade`. No se pierden datos del archivo.
+**La copia local compartida usa `wirecat.db`.** El antiguo `messages.db` no se migra: al abrir el almacén predeterminado se elimina junto con sus archivos `-wal` y `-shm`.
+Si necesitas notas, alias, etiquetas, tareas o transcripciones antiguas, cierra los programas que usan ese archivo y cópialo, con los archivos auxiliares que tenga, a otra carpeta **antes de ejecutar la nueva versión por primera vez**.
+Definir `MESSAGING_STORE` desactiva esta limpieza; un archivo abierto por otro proceso permanece hasta una apertura posterior del almacén.
+`max store fetch --all` recupera mensajes de MAX; los datos que solo existían localmente no se pueden descargar del servidor. El inicio de sesión se conserva por separado.
+Actualiza `max` y `tg` juntos para que usen el mismo almacén.
+
+Para actualizar el esquema de `wirecat.db`, ejecuta `max upgrade` después de conservar cualquier archivo antiguo necesario.
 
 ## Siguiente paso
 

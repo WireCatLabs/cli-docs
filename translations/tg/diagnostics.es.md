@@ -58,7 +58,7 @@ Un registro de ejecución es una carpeta en `runs/<day>/` en la carpeta de estad
 
 Cuando un comando termina con un error, su ejecución se mantiene incluso sin `--record`. `run.json` entonces tiene `"keptBecauseFailed": true`. Esto es cierto para cada comando y cada error: una mala opción, un comando desconocido, una verificación antes de cualquier trabajo y comandos que nunca se conectan (`models`, `server`, `upgrade`). Un error antes de que se iniciara el comando, como un archivo de configuración que no se carga, se mantiene como una ejecución denominada `tg`. El registro contiene sólo las palabras del comando, como `messages list`, nunca lo que siguió.
 
-Una ejecución exitosa no deja registro a menos que usted lo solicite. Por lo tanto, un informe de problema siempre tiene un error al adjuntarlo. `--no-record`, o `"record": false` en la configuración, también desactiva esto.
+Una ejecución completamente exitosa no deja registro a menos que usted lo solicite. Por lo tanto, un informe de problema siempre tiene un error al adjuntarlo. `--no-record`, o `"record": false` en la configuración, también desactiva esto.
 
 Las búsquedas y consultas de estadísticas exitosas mantienen su propio historial, además de los registros de ejecución. Tiene sus propios controles: ver [búsquedas guardadas e historial](./search.md#saved-searches-and-history).
 
@@ -128,3 +128,21 @@ tg runs list --limit 100 --json | jq '[.items[] | select(.requests > 10) | {comm
 
 - [Qué significa un error y qué hacer](./troubleshooting.md)
 - [Lo que llega al disco](./security.md)
+
+## Buscar errores y ejecuciones parciales
+
+```sh
+tg runs search --error-code rate_limited --json
+tg runs search --status partial --since-time 2026-10-01 --json
+```
+
+`runs search` busca texto literal en metadatos y eventos de diagnóstico seguros.
+`--operation`, `--profile`, `--since-time`, `--limit` y `--page` acotan la búsqueda. Cada página admite hasta 100 ejecuciones;
+cada ejecución devuelve hasta 100 eventos coincidentes, con `eventsTruncated` si hay más.
+El fallo de un archivo o una página de historial genera `status: "partial"` con ID fallidos, etapas y códigos.
+El registro no copia el contenido de mensajes ni las respuestas de error del proveedor.
+Las ejecuciones parciales se conservan por defecto salvo que se desactive explícitamente el registro. La búsqueda no se registra a sí misma.
+
+En MCP llama a `tg_read` con `command: "runs search"`; `arguments` acepta `query`, `status`, `error_code`, `operation`, `since_time`, `limit` y `page`.
+Solo lee registros del perfil activo, no conecta con Telegram ni abre los logs sin filtrar de trabajos en segundo plano.
+El resultado parcial original contiene acciones de recuperación; el registro conserva solo identificadores y códigos seguros.

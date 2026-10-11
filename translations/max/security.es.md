@@ -49,7 +49,7 @@ El token de `max bot` está separado en el servicio `max-cli`, entrada `bot:<п�
 | destinatarios permitidos, si está activo | `~/.local/share/max-cli/profiles/<профиль>.recipients.json` | `0600` |
 | reglas de moderación tras el primer `chats rules set` | `~/.local/share/max-cli/profiles/<профиль>.moderation.json` | `0600` |
 | bot: chats vistos, envíos, destinatarios y punto de `watch` | `~/.local/share/max-cli/bots/…` | carpeta `0700`, archivos `0600` |
-| copia compartida de mensajes de cuenta personal, bot y `tg`, con textos, transcripciones, rutas de adjuntos descargados y su texto extraído | `~/.local/share/cli-messaging/messages.db` | carpeta `0700`, archivo `0600` |
+| copia compartida de mensajes de cuenta personal, bot y `tg`, con textos, transcripciones, rutas de adjuntos descargados y su texto extraído | `~/.local/share/cli-messaging/wirecat.db` | carpeta `0700`, archivo `0600` |
 | socket y registro de `max serve` | `~/.local/share/max-cli/profiles/<профиль>.sock`, `.serve.log` | `0600` |
 | copia anterior del perfil; ya no se abre | `~/.cache/max-cli/<профиль>.db` y sus `-wal`, `-shm` | carpeta `0700`, archivos `0600` |
 | exportación, **solo `max store export --output`** | destino indicado | `0600` |

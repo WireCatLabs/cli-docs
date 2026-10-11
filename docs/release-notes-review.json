@@ -1,14 +1,14 @@
 {
   "tg": {
-    "version": "v0.44.1",
+    "version": "v0.46.1",
     "roadmapSha256": "978bfe805c38732b567388b00cbe701d12721599bc2d3e8dae060fee8f83baab",
-    "reviewedAt": "2026-10-10",
-    "conclusion": "Reviewed the compatibility patch and exact schema-preserving dependency pins. Local PDF/audio and hidden-folder refusals are relaxed, original MCP write strings are preserved, and returned controls remain visible. No roadmap feature shipped in this patch; multi-photo sending, private chat notes and listed MAX parity features remain planned."
+    "reviewedAt": "2026-10-11",
+    "conclusion": "Reviewed configurable attachment/PDF budgets, partial recovery, diagnostic search and the selected SDK default-path legacy cleanup. Guides distinguish old local-only data from refetchable messages and place preservation before upgrades. Existing meeting-search options remain explicit. No listed roadmap item is newly completed by these changes; the existing planned work remains planned."
   },
   "max": {
-    "version": "v0.43.1",
+    "version": "v0.45.1",
     "roadmapSha256": "f1628c3c19b2ea49f41fb57147b92bb0f9d29081ed577d1be3755a8a35b2a961",
-    "reviewedAt": "2026-10-10",
-    "conclusion": "Reviewed HTTP(S), private-network/VPN compatibility and exact schema-preserving dependency pins. Local PDF/audio and hidden-folder refusals are relaxed; original MCP write strings and Windows environment resolution are preserved. No roadmap feature shipped in this patch: optional storage, events, video notes, cloud-password operations and standalone installers remain planned."
+    "reviewedAt": "2026-10-11",
+    "conclusion": "Reviewed configurable attachment/PDF budgets, partial recovery, diagnostic search and the selected SDK default-path legacy cleanup. Guides distinguish old local-only data from refetchable messages and place preservation before upgrades. Existing meeting-search options remain explicit. No listed roadmap item is newly completed by these changes; the existing planned work remains planned."
   }
 }

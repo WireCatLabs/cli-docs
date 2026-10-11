@@ -4,6 +4,47 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.46.1 — 11.10.2026
+
+### Correcciones
+
+- Las referencias a paquetes, la documentación y los ejemplos usan el espacio de nombres WireCat.
+
+### Cambios — pueden romper scripts
+
+- El fallo de un archivo o una página de historial conserva el trabajo completado y devuelve `complete: false`, `batch` o `issue` con código de salida `0`. Los scripts deben comprobar la integridad; el JSONL de descarga parcial añade `batch_summary`. Los errores incluyen `actions` para recuperarse. Reanudar las descargas reintenta los ID fallidos del checkpoint.
+- Después de diez intentos, el lote detiene las solicitudes nuevas si la tasa de errores supera el 50%; `MESSAGING_BATCH_MAX_ERROR_PERCENT` cambia el porcentaje y 100 desactiva esa parada porcentual. Los límites de frecuencia y los fallos de autenticación detienen antes; nunca se repiten automáticamente escrituras de resultado desconocido.
+
+### Novedades
+
+- Configura el tamaño para extracción y transferencia de archivos guardados mediante `MESSAGING_ATTACHMENT_MAX_MIB` (por defecto 50). Las vistas previas PDF permiten ahora 4000 píxeles por lado y 8 MiB por página; `MESSAGING_PDF_PREVIEW_MAX_PIXELS` y `MESSAGING_PDF_PREVIEW_MAX_MIB` ajustan esos valores. Aumentarlos requiere más memoria; el OCR externo y la descompresión mantienen límites independientes.
+- `tg runs search`, también el comando `runs search` en MCP `tg_read`, busca registros seguros por texto, estado, código de error y tiempo sin conectar con Telegram.
+
+## 0.46.0 — 11.10.2026
+
+### Cambios — pueden romper scripts
+
+- **El almacén limpia sus registros crecientes al abrirse**, como máximo una vez al día: elimina llamadas de herramientas del agente de más de 90 días y conserva las filas de actualizaciones de bot procesadas de más de 30 días, eliminando su contenido. Actualiza max-cli y cli-memo a la vez: comparten el almacén.
+
+### Novedades
+
+- `tg store reset` sirve para un almacén que esta compilación no puede migrar: crea una copia junto a él, lo elimina y empieza uno vacío. Pregunta primero; `--yes` omite la pregunta y `--no-backup` omite la copia.
+- `tg search all --meetings [provider:account]` también busca transcripciones, chat y resúmenes de una cuenta de reuniones; `--max-meetings <n|all>` establece cuántas consultar (100 por defecto).
+
+### Seguridad
+
+- **Se elimina el antiguo `messages.db`** al abrir el almacén predeterminado: el archivo sin cifrar anterior a `wirecat.db`, junto con sus `-wal` y `-shm`. Una línea en stderr indica el archivo. Se conserva si está definido `MESSAGING_STORE` o mientras otro proceso lo tenga abierto. De `@wirecat/cli-messaging` 0.222.0.
+
+## 0.45.0 — 10.10.2026
+
+### Cambios — pueden romper scripts
+
+- **El almacén local es un archivo nuevo, `wirecat.db`, y empieza vacío.** Está junto al antiguo `messages.db`, que `tg` deja intacto: no lo lee, convierte ni elimina. Ejecuta `tg store fetch --all` para recuperar mensajes de Telegram. Los datos que solo existen en este ordenador, como notas, alias, etiquetas, tareas y transcripciones, permanecen en `messages.db`. El inicio de sesión se conserva. Actualiza max-cli al mismo tiempo o verán archivos diferentes.
+
+### Novedades
+
+- `tg contacts timeline <person>`, también el comando `contacts timeline` en MCP `tg_read`, muestra la actividad de una persona en todos los mensajeros vinculados, de más reciente a más antigua, desde el almacén local. `--scope personal|work`, `--since-time`, `--until-time` y `--limit` acotan los resultados.
+
 ## 0.44.1 — 10.10.2026
 
 ### Correcciones
@@ -20,7 +61,6 @@ Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la m�
 ### Novedades
 
 - La búsqueda de mensajes con `--discover` o MCP `discover: true` encuentra coincidencias parciales y respuestas directas válidas en el archivo local sin descargar modelos. La búsqueda estricta sigue siendo predeterminada; los términos ausentes ayudan al agente a comprobar la evidencia.
-
 
 ## 0.43.1 — 10.10.2026
 
@@ -44,7 +84,6 @@ Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la m�
 
 - La extracción desde carpetas y transferencia de adjuntos guardados rechazan rutas ocultas, carpetas de la CLI y el almacén de mensajes, incluidos enlaces simbólicos. Las descargas MCP tampoco escriben allí.
 - DOCX usa el lector limitado de archivos de Office antes de cargar el contenido del documento.
-
 
 ## 0.42.0 — 09.10.2026
 
@@ -174,7 +213,6 @@ Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la m�
   `folders order` devuelve solo id y nombre.
 - `tg chats folders create|update` devuelven lo realmente guardado: Telegram descarta
   `--emoji` si no es un icono de carpeta suyo; antes la CLI decía que se había guardado.
-
 
 ## 0.35.0 — 08.10.2026
 

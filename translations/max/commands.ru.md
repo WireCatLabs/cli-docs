@@ -1230,6 +1230,25 @@ max contacts context <person> [options]
 | `--chat <chat>` | a chat, by id or name; repeat it for more — then their newest messages in each, 20 unless --limit, short unless -v. |
 | `--refresh` | with --chat, read their newest messages in each from the messenger first. |
 
+### `max contacts timeline`
+
+everything one person took part in, in every messenger linked to them — messages they wrote or were mentioned in, chats, mail, meetings, tasks — newest first, from the store; never connects
+
+```sh
+max contacts timeline <person> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `person` | обязательный | their id, @username, or part of their name. |
+
+| Опция | Что делает |
+|---|---|
+| `--scope <personal\|work>` | only what belongs to personal or to work accounts. |
+| `--since-time <time>` | nothing older than this ISO 8601 time, or 2h / 1d ago. |
+| `--until-time <time>` | through this ISO 8601 time, or 2h / 1d ago. |
+| `--limit <n>` | at most this many; 50 if not given. |
+
 ### `max contacts check`
 
 проверить, похож ли человек на бота, владельца поддельного аккаунта или спамера, по его профилю и сообщениям в хранилище — это подсказка, а не вердикт; публичные списки блокировок относятся только к Telegram, поэтому ничего не отправляется
@@ -1849,6 +1868,18 @@ max store repair [options]
 | Опция | Что делает |
 |---|---|
 | `--dry-run` | say what it would do, and change nothing. |
+
+### `max store reset`
+
+back the store up beside itself, then delete it and start an empty one at this build's schema; asks first, or --yes
+
+```sh
+max store reset [options]
+```
+
+| Опция | Что делает |
+|---|---|
+| `--no-backup` | delete the store without backing it up first. |
 
 ### `max store copies`
 
@@ -2718,6 +2749,8 @@ max search all <query> [options]
 | Опция | Что делает |
 |---|---|
 | `--only <resources>` | только эти ресурсы через запятую: messages, mail, notes. |
+| `--meetings [provider:account]` | also search one meeting account; with no value, the one stored account that holds meetings (put it after the query). |
+| `--max-meetings <n\|all>` | how many meetings --meetings looks through, newest first; all looks through every one (default 100). |
 | `--limit <n>` | сколько результатов. |
 | `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word. |
 | `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
@@ -3550,7 +3583,7 @@ max config show [options]
 
 | Опция | Что делает |
 |---|---|
-| `--bot` | the settings a `max bot` command on this profile gets, rather than the personal account's. |
+| `--bot` | the settings a bot command on this profile gets, rather than the personal account's. |
 
 ### `max config migrate`
 
@@ -3663,6 +3696,28 @@ max runs show <run-id>
 | Аргумент | | Что это |
 |---|---|---|
 | `run-id` | обязательный | ID из `max runs list`. |
+
+### `max runs search`
+
+search recorded diagnostic metadata and events; no message contents
+
+```sh
+max runs search [query] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | case-insensitive literal diagnostic text. |
+
+| Опция | Что делает |
+|---|---|
+| `--status <status>` | run outcome. Одно из: `success`, `failed`, `partial`, `running`. |
+| `--error-code <code>` | one stable error code. |
+| `--operation <name>` | one operation, such as messages.download. |
+| `--profile <name>` | one recorded profile. |
+| `--since-time <time>` | runs starting on or after an ISO time or 2h / 1d ago. |
+| `--limit <n>` | matches per page, at most 100. По умолчанию: `20`. |
+| `--page <n>` | result page. По умолчанию: `1`. |
 
 ### `max runs path`
 

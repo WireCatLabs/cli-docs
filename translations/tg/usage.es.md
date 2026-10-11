@@ -928,7 +928,8 @@ tg messages list me --jsonl | jq -r .text     # one message per line
 - `--json`: un valor JSON. **Cada lista es un objeto**, siempre la misma forma: `{ "items": [...], "page": 1, "limit": 20, "hasMore": true }`. `--all` y `--offline` responden con el mismo objeto.
 - Los mensajes de un chat no tienen número de página: `{ "items": [...], "limit": 20, "hasMore": true }`.
 - `--jsonl`: un objeto por línea, sin contenedor; si hay más se dice solo en stderr.
-- Hay un error `{ "error": { "code": "...", "message": "..." } }` en stderr y la salida estándar está vacía, por lo que nunca se puede considerar un rechazo como un resultado vacío.
+- Un error que termina el comando aparece como `{ "error": { "code": "...", "message": "..." } }` en stderr y la salida estándar está vacía, por lo que nunca se puede considerar un rechazo como un resultado vacío.
+- Las lecturas y descargas parciales pueden salir con código `0`: comprueba `complete` y `batch` o `issue`; el JSONL de descarga parcial añade `batch_summary`.
 - **Bifurcación en el código de salida, no en el texto.** El texto cambia; el código no. `0` funcionó, `2` entrada incorrecta, `4` no inició sesión, `5` el perfil puede no hacer esto, `6` no encontrado, `7` no está en la lista de destinatarios permitidos, `8` un límite (el límite por hora o el propio Telegram), `9` Telegram no respondió a tiempo, `14` se desconoce si llegó algún mensaje. La tabla completa está en [códigos de salida](./commands.md#exit-codes).
 - **Los identificadores son cadenas.** Nunca conviertas uno en un número.
 - `--quiet` desactiva las notas; todavía se dice un fracaso. `-v` y `-vv` agregan detalles a la vista de tabla.

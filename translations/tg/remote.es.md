@@ -188,7 +188,7 @@ El comando lee solo un archivo adjunto guardado de la cuenta activa. Nunca desca
 
 ### Transferir un archivo más grande
 
-Una respuesta lleva 512 KiB por defecto; `--chunk-bytes` permite hasta 1 MiB. Un archivo puede tener hasta 50 MiB. El JSON incluye `base64`, `offsetBytes`, `readBytes`, `totalBytes`, `nextOffsetBytes`, `complete` y el SHA256 de todo el archivo. `complete: true` significa que esta respuesta contiene el archivo completo, no que se haya reconocido su texto.
+Una respuesta lleva 512 KiB por defecto; `--chunk-bytes` permite hasta 1 MiB. Por defecto, el archivo admite hasta 50 MiB; se configura con `MESSAGING_ATTACHMENT_MAX_MIB`. El JSON incluye `base64`, `offsetBytes`, `readBytes`, `totalBytes`, `nextOffsetBytes`, `complete` y el SHA256 de todo el archivo. `complete: true` significa que esta respuesta contiene el archivo completo, no que se haya reconocido su texto.
 
 Decodifica cada parte base64, une las partes en orden de desplazamiento de bytes y sigue `nextOffsetBytes` hasta que sea nulo. Pase el primer SHA256 como `--if-sha256` en las siguientes solicitudes: si el archivo fuente cambió, la solicitud falla y no devuelve bytes modificados. Verifique el archivo unido con ese hash.
 
@@ -220,6 +220,35 @@ tg attachments show msg:telegram/500/7/204 --attachment 1 --page 1 --json
 
 A través de MCP llamar a `tg_read`, comando `attachments show`, con `page: 1` y el localizador de mensajes. De forma predeterminada, la página vuelve como contenido de imagen. Si la aplicación solo muestra metadatos, solicite `format: base64`, luego decodifique y muestre el PNG con las herramientas de imagen del agente. Recibir una cadena base64 no equivale a ver la página. Lea las páginas 1 a `pdf.pageCount`. Si ninguno de los formatos muestra los píxeles, informe el límite de la aplicación en lugar de inventar texto.
 
-`pdf.sourceSha256` y `pdf.sourceBytes` describen el PDF original; los `sha256` y `totalBytes` de nivel superior describen la imagen de la página. `--if-sha256` comprueba el PDF original. `--page` no se puede combinar con `--offset-bytes` o `--chunk-bytes`. Los PDF pueden tener hasta 50 MiB, sin un límite fijo de páginas; un PNG tiene como máximo 2000 píxeles en cada lado y una imagen de página tiene como máximo 1 MiB.
+`pdf.sourceSha256` y `pdf.sourceBytes` describen el PDF original; los `sha256` y `totalBytes` de nivel superior describen la imagen de la página. `--if-sha256` comprueba el PDF original. `--page` no se puede combinar con `--offset-bytes` o `--chunk-bytes`. Por defecto, los PDF admiten hasta 50 MiB sin límite fijo de páginas; un PNG permite 4000 píxeles por lado y 8 MiB por página. Los tres valores son configurables.
 
 La imagen de una página no llama a ningún servicio OCR externo ni indexa ningún texto. Después de mirar cada página, el agente llama a `attachments text set` y verifica una búsqueda de `content:`. Verifique números y diseños complejos con las imágenes; La calidad depende del documento fuente y de las herramientas del agente.
+
+## Aumentar el tamaño del archivo o de la vista previa PDF
+
+Define estas variables de entorno en el ordenador que ejecuta Telegram o su servidor MCP:
+
+| Variable | Por defecto | Qué limita |
+|---|---|---|
+| `MESSAGING_ATTACHMENT_MAX_MIB` | `50` | El tamaño del archivo para extracción y transferencia de adjuntos guardados |
+| `MESSAGING_PDF_PREVIEW_MAX_PIXELS` | `4000` | El ancho y alto de la página PNG |
+| `MESSAGING_PDF_PREVIEW_MAX_MIB` | `8` | El tamaño del PNG por página |
+
+Por ejemplo, permite archivos de 250 MiB y páginas de hasta 8000 píxeles/16 MiB:
+
+```sh
+export MESSAGING_ATTACHMENT_MAX_MIB=250
+export MESSAGING_PDF_PREVIEW_MAX_PIXELS=8000
+export MESSAGING_PDF_PREVIEW_MAX_MIB=16
+```
+
+En PowerShell usa `$env:MESSAGING_ATTACHMENT_MAX_MIB = "250"`; aplica la misma sintaxis a los otros nombres.
+Los valores deben ser enteros positivos. Ejecuta otra vez `tg mcp config` con ese entorno y reemplaza la entrada
+ del servidor en la aplicación: conservará estos ajustes. Reinicia el servidor si ya estaba en ejecución.
+La transferencia normal sigue usando fragmentos de hasta 1 MiB; es un límite independiente.
+
+Los valores grandes requieren más memoria y tiempo. El renderizado amplía la página hasta cuatro veces dentro del límite de píxeles;
+subir el máximo no obliga a todas las páginas a ocupar ese ancho. La respuesta MCP contempla base64 y metadatos,
+pero la aplicación puede imponer su propio límite. Para un JSON grande en CLI usa `--max-output-bytes 50000000`;
+`0` desactiva explícitamente el límite general de salida. Los límites del OCR externo y de descompresión de documentos
+son independientes del tamaño configurable del archivo.

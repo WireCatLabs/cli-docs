@@ -130,7 +130,7 @@ Tres directorios siguen las convenciones del sistema operativo y dos más se com
 |ajustes| `~/.config/max-cli/` | `~/Library/Preferences/max-cli/` | `%APPDATA%\max-cli\Config\` |
 |estado| `~/.local/share/max-cli/` | `~/Library/Application Support/max-cli/` | `%LOCALAPPDATA%\max-cli\Data\` |
 |cache| `~/.cache/max-cli/` | `~/Library/Caches/max-cli/` | `%LOCALAPPDATA%\max-cli\Cache\` |
-|copia general de mensajes| `~/.local/share/cli-messaging/messages.db` |bajo `~/Library/Application Support/cli-messaging/`|bajo `%LOCALAPPDATA%\cli-messaging\Data\`|
+|copia general de mensajes| `~/.local/share/cli-messaging/wirecat.db` |bajo `~/Library/Application Support/cli-messaging/`|bajo `%LOCALAPPDATA%\cli-messaging\Data\`|
 |modelos de reconocimiento de voz| `~/.cache/cli-common/models/audio/` |bajo `~/Library/Caches/cli-common/`|bajo `%LOCALAPPDATA%\cli-common\Cache\`|
 
 - **configuración** - `config.json`, y `credentials.json` con token, solo si la máquina no tiene llavero.
@@ -161,9 +161,13 @@ max complete fish | source                         # fish, в config.fish
 
 En PowerShell: `max complete powershell | Out-String | Invoke-Expression` en el perfil.
 
-Tab **nunca se conecta a MAX**: hacerlo con cada pulsación supondría iniciar sesión cientos de veces. Los nombres de chats y personas proceden del almacén compartido `messages.db` de la cuenta del perfil elegido. Si todavía no se conoce la cuenta o no existe ese almacén, solo se completan comandos y opciones. Los comandos de bot proponen chats de su lista local. Los chats se proponen por ID y muestran el nombre al lado: un nombre con espacios llegaría a `max` como varias palabras.
+Tab **nunca se conecta a MAX**: hacerlo con cada pulsación supondría iniciar sesión cientos de veces. Los nombres de chats y personas proceden del almacén compartido `wirecat.db` de la cuenta del perfil elegido. Si todavía no se conoce la cuenta o no existe ese almacén, solo se completan comandos y opciones. Los comandos de bot proponen chats de su lista local. Los chats se proponen por ID y muestran el nombre al lado: un nombre con espacios llegaría a `max` como varias palabras.
 
 ## Actualizar
+
+**Al actualizar desde el antiguo `messages.db`, conserva primero los datos que solo existen localmente.** El almacén actual es `wirecat.db`; al abrirlo en la ubicación predeterminada se eliminan el antiguo `messages.db` y sus archivos `-wal`/`-shm`.
+Antes de ejecutar la nueva versión, cierra los programas antiguos y copia los archivos necesarios a otra carpeta. `max store fetch --all` recupera mensajes del servidor, pero no notas o etiquetas locales antiguas.
+El inicio de sesión se conserva ([el almacén y otras versiones](./archive.md#копия-и-другие-версии)).
 
 ```sh
 max upgrade           # тем же менеджером пакетов, которым max поставлен: pnpm, npm или bun
