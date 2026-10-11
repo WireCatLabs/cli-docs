@@ -1559,5 +1559,108 @@
         }
       ]
     }
+  },
+  {
+    "tool": "tg",
+    "slug": "search",
+    "reason": "Mail supports thread and sender filters in the pinned released SDK; a synthetic SDK0.225.0 legacy-mail fixture confirms both. Distinguish notes without these fields. Native client guides are corrected in TG PR437 and MAX PR561.",
+    "replacements": {
+      "en": [
+        {
+          "before": "When a query uses a field mail or notes\ndon't have (`chat:`, `from:`), `search all` leaves them out and says so.",
+          "after": "Mail supports `chat:` for an email thread and `from:` for its sender. Notes do not have\nthese fields; `search all` skips notes for such queries and explains why."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Если запрос использует поле, которого нет у почты или заметок (`chat:`, `from:`), `search all` исключает соответствующие источники и сообщает об этом.",
+          "after": "У почты `chat:` выбирает цепочку писем, а `from:` — отправителя. У заметок этих полей нет; `search all` пропускает заметки для таких запросов и объясняет почему."
+        }
+      ],
+      "es": [
+        {
+          "before": "Cuando una consulta utiliza un campo correo o notas que no tiene (`chat:`, `from:`), `search all` los omite y lo dice.",
+          "after": "El correo admite `chat:` para seleccionar una cadena de correos y `from:` para su remitente. Las notas no tienen estos campos; `search all` omite las notas en esas consultas y explica por qué."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "search",
+    "reason": "Mail supports thread and sender filters in the pinned released SDK; a synthetic SDK0.225.0 legacy-mail fixture confirms both. Distinguish notes without these fields. Native client guides are corrected in TG PR437 and MAX PR561.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "Если в запросе\nесть поле, которого у почты или заметок нет (`chat:`, `from:`), `search all` пропускает их и говорит\nоб этом.",
+          "after": "У почты\n`chat:` выбирает цепочку писем, а `from:` — отправителя. У заметок этих полей нет;\n`search all` пропускает заметки для таких запросов и объясняет почему."
+        }
+      ],
+      "en": [
+        {
+          "before": "If a field such as `chat:` or `from:` does not apply to mail or notes, `search all` skips that kind and reports it.",
+          "after": "Mail supports `chat:` for an email thread and `from:` for its sender. Notes do not have these fields; `search all` skips notes for such queries and explains why."
+        }
+      ],
+      "es": [
+        {
+          "before": "Si la solicitud tiene un campo que el correo o las notas no tienen (`chat:`, `from:`), `search all` los omite y lo dice.",
+          "after": "El correo admite `chat:` para seleccionar una cadena de correos y `from:` para su remitente. Las notas no tienen estos campos; `search all` omite las notas en esas consultas y explica por qué."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "search",
+    "reason": "Imported email is mail, not a kind of note. Correct the reader task labels in the reviewed guide.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "Искать только импортированные почтовые заметки",
+          "after": "Искать только почту, импортированную memo"
+        }
+      ],
+      "es": [
+        {
+          "before": "Buscar sólo la nota de correo importada",
+          "after": "Buscar solo correo importado"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "search",
+    "reason": "Query language refers to search syntax rather than a spoken language.",
+    "replacements": {
+      "es": [
+        {
+          "before": "el idioma completo se encuentra en la [referencia del idioma de consulta]",
+          "after": "el lenguaje completo se encuentra en la [referencia del lenguaje de consulta]"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "search",
+    "reason": "Use clear Spanish terms for query syntax, bounded scanning and the whole execution.",
+    "replacements": {
+      "es": [
+        {
+          "before": "todo el idioma está en [referencia del idioma de consulta]",
+          "after": "todo el lenguaje está en [referencia del lenguaje de consulta]"
+        },
+        {
+          "before": "bypass limitado",
+          "after": "recorrido limitado"
+        },
+        {
+          "before": "todo el ejecución",
+          "after": "toda la ejecución"
+        }
+      ]
+    }
   }
 ]
