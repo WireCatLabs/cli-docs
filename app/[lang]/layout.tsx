@@ -18,7 +18,7 @@ export default async function Layout({
   return (
     <html lang={lang} suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
-        <SiteAnalytics />
+        <SiteAnalytics lang={lang} />
         {children}
         <CopyFeedback lang={lang} />
       </body>

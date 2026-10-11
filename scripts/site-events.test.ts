@@ -1,60 +1,39 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-import { copiedInstallationTool, enableSiteEvents, trackSiteEvent } from "../lib/site-events"
+import { copiedInstallationTool, enableSiteEvents, type SiteEventSink, trackSiteEvent } from "../lib/site-events"
 
 const context = { tool: "tg" as const, locale: "en", surface: "hero" as const }
-let browser: {
-  location: { hostname: string }
-  wirecatEvents?: unknown[]
-  gtag: ReturnType<typeof vi.fn>
-  ym: ReturnType<typeof vi.fn>
-}
+let browser: { location: { hostname: string }; wirecatEvents?: unknown[]; sessionStorage: { setItem: unknown } }
+let sink: { capture: ReturnType<typeof vi.fn<SiteEventSink["capture"]>> }
 beforeEach(() => {
-  browser = { location: { hostname: "wirecat.dev" }, gtag: vi.fn(), ym: vi.fn() }
+  browser = { location: { hostname: "wirecat.dev" }, sessionStorage: { setItem: vi.fn() } }
+  sink = { capture: vi.fn<SiteEventSink["capture"]>() }
   vi.stubGlobal("window", browser)
 })
 afterEach(() => vi.unstubAllGlobals())
 
 describe("installation intent measurement", () => {
-  it("preserves bounded pending intent through a full homepage-to-docs navigation", () => {
-    const values = new Map<string, string>()
-    const storage = {
-      getItem: (key: string) => values.get(key) ?? null,
-      setItem: (key: string, value: string) => values.set(key, value),
-      removeItem: (key: string) => values.delete(key),
-    }
-    Object.assign(browser, { sessionStorage: storage })
+  it("queues before PostHog loads and delivers each action once after it is ready", () => {
     trackSiteEvent("installation_command_copy", context)
-    const next = { location: { hostname: "wirecat.dev" }, sessionStorage: storage, gtag: vi.fn(), ym: vi.fn() }
-    vi.stubGlobal("window", next)
-    enableSiteEvents()
-    enableSiteEvents()
-    expect(next.gtag).toHaveBeenCalledExactlyOnceWith("event", "installation_command_copy", context)
-    expect(values.size).toBe(0)
-  })
-  it("discards expired or malformed stored events", () => {
-    Object.assign(browser, {
-      sessionStorage: {
-        getItem: () => JSON.stringify({ expires: 1, events: [{ name: "installation_command_copy", context }] }),
-        removeItem: vi.fn(),
-      },
-    })
-    enableSiteEvents()
-    expect(browser.gtag).not.toHaveBeenCalled()
-  })
-  it("queues before initialization and delivers each action once after readiness", () => {
-    trackSiteEvent("installation_command_copy", context)
-    expect(browser.gtag).not.toHaveBeenCalled()
-    enableSiteEvents()
-    enableSiteEvents()
-    expect(browser.gtag).toHaveBeenCalledExactlyOnceWith("event", "installation_command_copy", context)
-    expect(browser.ym).toHaveBeenCalledExactlyOnceWith(113377132, "reachGoal", "installation_command_copy", context)
+    expect(sink.capture).not.toHaveBeenCalled()
+    enableSiteEvents(sink)
+    enableSiteEvents(sink)
+    expect(sink.capture).toHaveBeenCalledExactlyOnceWith("installation_command_copy", context, { send_instantly: true })
     trackSiteEvent("setup_guide_open", { ...context, tool: "max", locale: "es", surface: "closing" })
-    expect(browser.gtag).toHaveBeenCalledTimes(2)
+    expect(sink.capture).toHaveBeenLastCalledWith(
+      "setup_guide_open",
+      { tool: "max", locale: "es", surface: "closing" },
+      { send_instantly: true },
+    )
+  })
+  it("keeps pending actions out of browser storage, which needs consent", () => {
+    trackSiteEvent("installation_command_copy", context)
+    expect(browser.sessionStorage.setItem).not.toHaveBeenCalled()
+    expect(browser.wirecatEvents).toHaveLength(1)
   })
   it("retains only tool, locale and surface rather than clipboard/message payloads", () => {
-    enableSiteEvents()
+    enableSiteEvents(sink)
     trackSiteEvent("installation_command_copy", { ...context, clipboard: "private text" } as typeof context)
-    expect(browser.gtag.mock.calls[0][2]).toEqual(context)
+    expect(sink.capture.mock.calls[0][1]).toEqual(context)
   })
   it("does not collect local/preview activity or invalid locales", () => {
     browser.location.hostname = "localhost"
@@ -65,12 +44,12 @@ describe("installation intent measurement", () => {
     expect(browser.wirecatEvents).toBeUndefined()
   })
   it("keeps tracking failures from breaking the visitor's successful action", () => {
-    browser.gtag.mockImplementation(() => {
+    sink.capture.mockImplementation(() => {
       throw new Error("blocked")
     })
-    enableSiteEvents()
+    enableSiteEvents(sink)
     expect(() => trackSiteEvent("installation_command_copy", context)).not.toThrow()
-    expect(browser.ym).toHaveBeenCalledTimes(1)
+    expect(sink.capture).toHaveBeenCalledTimes(1)
   })
   it("recognizes the published Windows and npm installation forms", () => {
     expect(copiedInstallationTool("npm install -g @wirecat/tg-cli && tg skill install --for all")).toBe("tg")

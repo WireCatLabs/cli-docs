@@ -136,9 +136,12 @@ The remaining review gates are `pnpm docs:localize`, lint, tests, `pnpm search:c
 
 ### Analytics and agent-readable documentation
 
-Production-only GA4 and Yandex Metrika IDs live in `site.config.json`. Tracking loads after
-hydration on the configured production hostname; browser checks use intercepted provider scripts
-and requests. Local previews do not load the JavaScript tags.
+Analytics use PostHog Cloud EU. The public project key and host live in `site.config.json`
+(`analytics.posthogKey`, `analytics.posthogHost`); with an empty key nothing loads and no consent
+banner appears. PostHog loads at idle, only on the configured production hostname. Visitors who
+decline or do not answer are counted cookieless; Accept adds a persistent identifier and masked
+session recording. Browser checks intercept the PostHog hosts. Owner setup in the PostHog UI:
+[docs/POSTHOG.md](docs/POSTHOG.md).
 
 Markdown twins resolve documentation links to their own Markdown URLs and expand the shared
 installation component into instructions and agent prompts. `pnpm check:links` validates HTML

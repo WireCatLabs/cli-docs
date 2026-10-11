@@ -1,5 +1,6 @@
 # pnpm blocks install scripts by default; each package is allowed by name.
 allowBuilds:
+  core-js: false
   esbuild: true
   lefthook: true
   sharp: true

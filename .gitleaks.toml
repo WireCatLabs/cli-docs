@@ -1,0 +1,9 @@
+[extend]
+useDefault = true
+
+# PostHog project keys are public by design: they can only send events, and the browser sees them anyway.
+[[allowlists]]
+description = "PostHog public project key"
+condition = "AND"
+paths = ['''^site\.config\.json$''']
+regexes = ['''phc_[A-Za-z0-9]+''']
