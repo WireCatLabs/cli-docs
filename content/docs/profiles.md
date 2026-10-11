@@ -12,10 +12,13 @@ Put the profile before the command:
 ```sh
 tg work config show
 max work config show
+drive personal config show
 ```
 
-Without a name, the tools use the default profile. A setting under `profiles.work` applies to
-that profile; values under `defaults` apply when it has no value of its own.
+Always name the intended profile in commands and agent requests. Drive account commands require
+it explicitly; an omitted name is an error. The reviewed Telegram/MAX releases retain default
+selection when a name is omitted, so keep specifying it there too. A setting under `profiles.work`
+applies to that profile; `defaults` supplies values it has not set.
 Profiles are not separate operating-system users: an agent with unrestricted file access
 can still reach other data on that computer.
 
@@ -35,4 +38,4 @@ from the messenger, not from your personal account. [Bots](./bot-api.mdx) explai
 
 [Configuration](./configuration.mdx) explains saved values, environment variables and flags.
 [Permissions](./permissions.mdx) controls what each profile may do.
-For login, use the [Telegram](./tg/sessions.md) or [MAX](./max/sessions.md) guide.
+For login, use the [Telegram](./tg/sessions.md) or [MAX](./max/sessions.md) guide, or [connect Google Drive](./drive/installation.md).
