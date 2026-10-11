@@ -77,6 +77,8 @@ an explanation of that language boundary. It does not invent translated CLI toke
 - Reviewed translation checks preserve code fences, inline literals, heading structure and links.
 - Twelve browser cases pass: three locales each for overview/navigation, source installation,
   tagged search/Markdown export and mobile shared-organization links.
+- The existing seven-case onboarding/browser smoke suite passes. The documented global source
+  installation was also exercised in a temporary npm prefix, and its `drive --help` works.
 
 No Google credentials or live Google/model actions were needed for these checks. Runtime limits
 and future provider-folder database work remain in their owning source/design, not fictional commands.
