@@ -38,5 +38,5 @@ drive personal config show --json
 Замените `YOUR_MODEL_ID` идентификатором провайдера. Передавайте ключ через документированную
 переменную, например `DRIVE_OPENAI_API_KEY`; не сохраняйте его в обычных настройках или чате.
 Anthropic и совместимые OpenAI-сервисы используют общий шлюз. См.
-[настройку ИИ](https://github.com/WireCatLabs/drive-cli/blob/2ec12e20c9a2dc192076287c56f2e84de41cf8e5/docs/dev/KNOWLEDGE_AND_API.md#memories-and-ai-extraction) и
+[настройку ИИ](https://github.com/WireCatLabs/drive-cli/blob/f07ad6134b1d2f061364ba6138e8f6f6590455d1/docs/dev/KNOWLEDGE_AND_API.md#memories-and-ai-extraction) и
 [справочник](./commands.md). Продолжите с [извлечением памяти](./recipes.md#remember-a-source-backed-decision).

@@ -142,11 +142,16 @@ Markdown: сначала синхронизируйте, если нужна а�
 drive personal session start --client-file /path/to/desktop-client.json --write
 drive personal documents create --title 'Project review'
 drive personal documents update NEW_DOC_ID --body '{"requests":[{"insertText":{"endOfSegmentLocation":{},"text":"Review notes\n"}}]}'
-drive personal files move NEW_DOC_ID --to FOLDER_ID
+drive personal files get NEW_DOC_ID --json
+drive personal files move NEW_DOC_ID --to FOLDER_ID --from OLD_PARENT_ID
 drive personal sync --json
 ```
 
-Замените `NEW_DOC_ID` значением `documentId` ответа создания. Проверьте папку и поиск нового текста.
+Замените `NEW_DOC_ID` значением `documentId` ответа создания. Docs создаёт его в корне My Drive.
+Прочитайте `parents` через `files get` и замените `OLD_PARENT_ID` этим ID; `--from` удаляет прежнего
+родителя при добавлении нового. У файла Google один родитель; см.
+[официальную инструкцию перемещения](https://developers.google.com/workspace/drive/api/guides/folder#move-files-between-folders).
+Проверьте папку и поиск нового текста.
 Для правок существующего документа используйте проверку версии Docs `writeControl`, доступную
 в [схеме обновления](./commands.md#drive-documents-update). Создание Google Doc из текста поддерживается;
 загрузка произвольных PDF/Office/медиа или преобразование локального Markdown в оформленный

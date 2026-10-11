@@ -78,3 +78,10 @@ API enablement, consent configuration, client JSON and user authorization are di
   after correcting a test-only expectation about stripped HTML anchors in Markdown. All seven
   existing browser smoke cases passed. HTML retains incoming anchor aliases; Markdown preserves
   the workflow and executable commands. Full production export/link/browser checks belong to CI.
+
+Canonical move check: Google's [folder guide](https://developers.google.com/workspace/drive/api/guides/folder#move-files-between-folders)
+and [Doc location](https://developers.google.com/workspace/docs/api/concepts/document) confirm
+that newly created Docs start in My Drive's root and moves use both add/remove parent IDs.
+The final EN/RU/ES recipe reads `parents` before `files move --from`; it does not guess the source
+parent. Shared profiles documentation now includes Drive and differentiates its required selection
+from the reviewed messenger releases' legacy fallback.

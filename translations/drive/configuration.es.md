@@ -37,5 +37,5 @@ drive personal config show --json
 Sustituye `YOUR_MODEL_ID` por el identificador del proveedor. Proporciona su clave mediante la
 variable documentada, como `DRIVE_OPENAI_API_KEY`; no la guardes en configuración ni en el chat.
 Anthropic y endpoints compatibles OpenAI usan el gateway compartido. Consulta
-[configuración de IA](https://github.com/WireCatLabs/drive-cli/blob/2ec12e20c9a2dc192076287c56f2e84de41cf8e5/docs/dev/KNOWLEDGE_AND_API.md#memories-and-ai-extraction) y
+[configuración de IA](https://github.com/WireCatLabs/drive-cli/blob/f07ad6134b1d2f061364ba6138e8f6f6590455d1/docs/dev/KNOWLEDGE_AND_API.md#memories-and-ai-extraction) y
 [comandos](./commands.md). Sigue con [extracción de recuerdos](./recipes.md#remember-a-source-backed-decision).

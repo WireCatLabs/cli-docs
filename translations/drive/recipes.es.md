@@ -141,11 +141,16 @@ y muévelo a una carpeta seleccionada:
 drive personal session start --client-file /path/to/desktop-client.json --write
 drive personal documents create --title 'Project review'
 drive personal documents update NEW_DOC_ID --body '{"requests":[{"insertText":{"endOfSegmentLocation":{},"text":"Review notes\n"}}]}'
-drive personal files move NEW_DOC_ID --to FOLDER_ID
+drive personal files get NEW_DOC_ID --json
+drive personal files move NEW_DOC_ID --to FOLDER_ID --from OLD_PARENT_ID
 drive personal sync --json
 ```
 
-Sustituye `NEW_DOC_ID` por el `documentId` de la respuesta. Comprueba que está en la carpeta elegida
+Sustituye `NEW_DOC_ID` por el `documentId` de la respuesta. Docs lo crea en la raíz de My Drive.
+Consulta `parents` con `files get` y sustituye `OLD_PARENT_ID` por ese ID; `--from` quita el padre
+anterior al añadir el nuevo. Los archivos Google tienen un padre: consulta
+[la guía oficial para mover archivos](https://developers.google.com/workspace/drive/api/guides/folder#move-files-between-folders).
+Comprueba que está en la carpeta elegida
 y que el texto aparece en búsqueda local. Para editar documentos existentes, usa el control de
 revisión Docs `writeControl` expuesto en [el esquema de actualización](./commands.md#drive-documents-update).
 Se puede crear un Doc nativo con texto; no hay flujo de subida de PDF/Office/multimedia arbitrarios
