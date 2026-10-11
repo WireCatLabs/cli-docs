@@ -5,7 +5,7 @@
     "homeLabel": "Home",
     "docsLabel": "Documentation",
     "socialTitle": "Memory for your messages. Context for your agent.",
-    "socialDescription": "Telegram, MAX, email and notes · Open-source CLI tools",
+    "socialDescription": "Connect Messengers, Notes, Meetings and Tasks",
     "reference": {
       "installation": "Install the {messenger} CLI on Windows, macOS or Linux, check requirements, update it and find its local files.",
       "usage": "Read {messenger} conversations, prepare replies and choose when your agent may send them.",
@@ -50,7 +50,7 @@
     "homeLabel": "Главная",
     "docsLabel": "Документация",
     "socialTitle": "Память для ваших сообщений. Контекст для вашего агента.",
-    "socialDescription": "Telegram, MAX, почта и заметки · CLI с открытым кодом",
+    "socialDescription": "Подключите мессенджеры, заметки, встречи и задачи",
     "reference": {
       "installation": "Установите CLI для {messenger} на Windows, macOS или Linux: требования, обновление и расположение локальных файлов.",
       "usage": "Читайте переписки {messenger}, готовьте ответы и выбирайте, когда агент может их отправлять.",
@@ -95,7 +95,7 @@
     "homeLabel": "Inicio",
     "docsLabel": "Documentación",
     "socialTitle": "Memoria para tus mensajes. Contexto para tu agente.",
-    "socialDescription": "Telegram, MAX, correo y notas · CLI de código abierto",
+    "socialDescription": "Conecta mensajería, notas, reuniones y tareas",
     "reference": {
       "installation": "Instala la CLI de {messenger} en Windows, macOS o Linux: requisitos, actualizaciones y ubicación de los archivos locales.",
       "usage": "Lee conversaciones de {messenger}, prepara respuestas y decide cuándo puede enviarlas tu agente.",
