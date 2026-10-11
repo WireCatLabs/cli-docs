@@ -5,17 +5,60 @@ export const privacyCopy: Record<
   { title: string; intro: string; updated: string; contact: string; sections: PrivacySection[] }
 > = {
   en: {
-    title: "Privacy",
+    title: "Privacy Policy",
     intro:
-      "How wirecat.dev counts visits, what is stored in your browser and how to change your choice. The WireCat tools run on your computer; this page covers only this website.",
+      "How WireCat handles Google account data, local documents, optional AI processing and visits to wirecat.dev. Learn what is shared and how to disconnect or delete your local copy.",
     updated: "Last updated: 11 October 2026",
     contact: "Questions and requests about your data:",
     sections: [
       {
+        id: "google-access",
+        title: "Google account access",
+        paragraphs: [
+          "WireCat Drive connects to Google only after you choose an account and approve access in Google’s browser consent screen. The default permission reads Drive files; it covers the account’s Drive, while your selected folders limit what the CLI imports. Google Docs and uploaded Markdown/plain text are supported for local indexing.",
+          "The application accesses file and folder IDs, names, types, parent relationships, links, timestamps and document contents for the operations you request. It can also read owner and last-editor names, email addresses or Google identifiers, permissions, comments and revisions. Activity history and installed-application metadata require their optional sign-in permissions. Remote creation, editing and file management require the separate write permission and an explicit command.",
+          "We use this access to import and refresh documents, export Markdown, search your local copy, show source links and history, and attach tags, notes, people and source-backed memories. Connecting an account does not import its whole Drive.",
+        ],
+      },
+      {
+        id: "local-storage",
+        title: "Local storage and security",
+        paragraphs: [
+          "The CLI communicates directly with Google APIs from your computer. It does not send Google tokens or imported documents to a WireCat-operated server. Website analytics is separate from the CLI and does not receive your Google documents.",
+          "OAuth tokens are stored in the operating-system credential store. If you explicitly choose file credential storage, they are written to a private local file. The CLI stores profile settings, document snapshots, searchable text, source metadata, tags, notes and memories locally. Optional search embeddings are computed locally with a downloaded model.",
+          "Local copies remain until you remove them. Removing a selected folder and running sync removes its imported sources from search and deletes managed snapshots; notes and memories can retain source context. Signing out or uninstalling the package does not erase the local store, exports or backups. Protect your computer and the copies you create.",
+        ],
+      },
+      {
+        id: "sharing-ai",
+        title: "Sharing and optional AI processing",
+        paragraphs: [
+          "WireCat does not sell Google user data, use it for advertising or use it to train general-purpose AI models. Project maintainers do not receive or routinely inspect your documents or tokens. If you contact support, share only what you choose to disclose; never include tokens or private documents unless needed for your request.",
+          "When you explicitly request AI memory extraction, selected cached document text is sent to the AI provider you configured, using your provider credentials. That provider receives the text and extraction request; its processing, retention and data-use settings apply. Choose a provider and settings that do not use Google data to train general-purpose models. Local keyword search and local embeddings do not require this transfer.",
+          "An agent or MCP application you connect can receive the document passages and metadata returned by the commands it calls. Its provider and settings control any further processing. Review those settings before giving an agent access to sensitive sources.",
+        ],
+      },
+      {
+        id: "disconnect-delete",
+        title: "Disconnecting and deleting data",
+        paragraphs: [
+          "Use the CLI’s session end command for each named profile to remove its local sign-in credentials. To revoke the application’s Google permission, remove WireCat from your Google Account’s third-party connections. Revocation stops future authorized access but does not delete copies already stored on your computer.",
+          "To erase local data, close the CLI and remove its local configuration and data directories, including any explicitly configured shared store, exports and backups you intend to delete. A shared store can contain data from other tools; do not delete it unless you intend to remove that data too. WireCat cannot remotely erase files on your computer.",
+          "Contact hello@wirecat.dev for privacy questions or requests concerning website or support data. Access, correction, deletion, restriction, portability and objection rights may apply under your local law. You can withdraw website consent and complain to the relevant data protection authority.",
+        ],
+      },
+      {
+        id: "policy-updates",
+        title: "Policy changes",
+        paragraphs: [
+          "We update this page when data practices change and show the update date above. Review the policy before enabling a new integration or optional permission. A broader use of Google data requires disclosure and the applicable consent before that use.",
+        ],
+      },
+      {
         id: "provider",
         title: "Who processes the data",
         paragraphs: [
-          "WireCat runs this website. For analytics we use PostHog Cloud EU, hosted in Frankfurt, Germany. PostHog processes the data on our behalf.",
+          "WireCat is an independent, personally maintained open-source project. This policy covers wirecat.dev and the WireCat Drive application. For website analytics we use PostHog Cloud EU, hosted in Frankfurt, Germany. PostHog processes the data on our behalf.",
           "Cloudflare serves the pages and processes your IP address to deliver them and protect the site.",
         ],
       },
@@ -66,17 +109,60 @@ export const privacyCopy: Record<
     ],
   },
   ru: {
-    title: "Конфиденциальность",
+    title: "Политика конфиденциальности",
     intro:
-      "Как wirecat.dev считает посещения, что хранится в вашем браузере и как изменить выбор. Инструменты WireCat работают на вашем компьютере; эта страница касается только сайта.",
+      "Как WireCat обрабатывает данные аккаунта Google, локальные документы, дополнительные ИИ-запросы и посещения wirecat.dev. Узнайте, что передаётся и как отключить доступ или удалить локальную копию.",
     updated: "Обновлено: 11 октября 2026 г.",
     contact: "Вопросы и запросы о ваших данных:",
     sections: [
       {
+        id: "google-access",
+        title: "Доступ к аккаунту Google",
+        paragraphs: [
+          "WireCat Drive подключается к Google только после выбора аккаунта и вашего согласия в браузере Google. По умолчанию запрашивается чтение файлов Drive: разрешение охватывает Drive аккаунта, а выбранные папки ограничивают импорт в CLI. Для локальной индексации поддерживаются Google Docs и загруженные Markdown/обычный текст.",
+          "Для запрошенных действий приложение получает идентификаторы файлов и папок, названия, типы, родительские связи, ссылки, даты и содержимое документов. Оно также может читать имена владельцев и последнего редактора, адреса электронной почты или идентификаторы Google, разрешения, комментарии и ревизии. История действий и сведения об установленных приложениях требуют дополнительных разрешений при входе. Создание, редактирование и управление файлами в Google требуют отдельного разрешения на запись и явной команды.",
+          "Доступ используется для импорта и обновления документов, экспорта Markdown, поиска в локальной копии, показа ссылок и истории, а также добавления тегов, заметок, людей и записей памяти с источниками. Подключение аккаунта не импортирует весь Drive.",
+        ],
+      },
+      {
+        id: "local-storage",
+        title: "Локальное хранение и защита",
+        paragraphs: [
+          "CLI обращается к API Google прямо с вашего компьютера. Он не отправляет токены Google или импортированные документы на сервер WireCat. Аналитика сайта отделена от CLI и не получает ваши документы Google.",
+          "Токены OAuth хранятся в системном хранилище учётных данных. При явном выборе файлового хранения они записываются в приватный локальный файл. Настройки профиля, снимки документов, текст для поиска, метаданные источников, теги, заметки и записи памяти хранятся локально. Дополнительные эмбеддинги для поиска вычисляются локально с загруженной моделью.",
+          "Локальные копии остаются, пока вы их не удалите. Удаление выбранной папки из импорта и последующая синхронизация убирают её источники из поиска и удаляют управляемые снимки; заметки и записи памяти могут сохранять контекст источников. Выход из аккаунта и удаление пакета не стирают локальное хранилище, экспорт или резервные копии. Защищайте компьютер и созданные копии.",
+        ],
+      },
+      {
+        id: "sharing-ai",
+        title: "Передача данных и дополнительные ИИ-запросы",
+        paragraphs: [
+          "WireCat не продаёт данные пользователей Google, не использует их для рекламы или обучения универсальных ИИ-моделей. Сопровождающие проекта не получают и не просматривают ваши документы или токены в обычной работе. При обращении в поддержку передавайте только выбранные вами сведения; не включайте токены или приватные документы без необходимости для запроса.",
+          "При явном запросе извлечения записей памяти с помощью ИИ выбранный текст из локальных документов отправляется настроенному вами провайдеру ИИ с вашими учётными данными провайдера. Он получает текст и запрос; действуют его правила обработки, хранения и использования данных. Выбирайте провайдера и настройки, которые не используют данные Google для обучения универсальных моделей. Поиск по словам и локальные эмбеддинги не требуют такой передачи.",
+          "Подключённый агент или MCP-приложение может получать фрагменты документов и метаданные, возвращаемые вызываемыми командами. Дальнейшая обработка определяется его провайдером и настройками. Проверьте их, прежде чем дать агенту доступ к чувствительным источникам.",
+        ],
+      },
+      {
+        id: "disconnect-delete",
+        title: "Отключение и удаление данных",
+        paragraphs: [
+          "Команда session end для каждого явно названного профиля удаляет локальные учётные данные входа. Чтобы отозвать разрешение Google, удалите WireCat из сторонних подключений в аккаунте Google. Отзыв прекращает дальнейший разрешённый доступ, но не удаляет уже сохранённые на компьютере копии.",
+          "Чтобы стереть локальные данные, закройте CLI и удалите его каталоги настроек и данных, а также явно выбранное общее хранилище, экспорт и резервные копии, которые хотите удалить. Общее хранилище может содержать данные других инструментов; удаляйте его только если хотите удалить и их. WireCat не может удалённо стереть файлы на вашем компьютере.",
+          "Для вопросов о конфиденциальности и запросов о данных сайта или поддержки пишите на hello@wirecat.dev. Местное право может предоставлять права на доступ, исправление, удаление, ограничение обработки, переносимость и возражение. Можно отозвать согласие на сайте и обратиться в орган по защите данных.",
+        ],
+      },
+      {
+        id: "policy-updates",
+        title: "Изменения политики",
+        paragraphs: [
+          "При изменении обработки данных мы обновляем эту страницу и дату выше. Ознакомьтесь с политикой перед включением новой интеграции или дополнительного разрешения. Более широкое использование данных Google требует раскрытия информации и применимого согласия до начала такого использования.",
+        ],
+      },
+      {
         id: "provider",
         title: "Кто обрабатывает данные",
         paragraphs: [
-          "Сайт ведёт WireCat. Для аналитики мы используем PostHog Cloud EU; данные хранятся во Франкфурте, Германия. PostHog обрабатывает их по нашему поручению.",
+          "WireCat — независимый проект с открытым исходным кодом, который поддерживает его автор. Эта политика охватывает wirecat.dev и приложение WireCat Drive. Для аналитики сайта мы используем PostHog Cloud EU; данные хранятся во Франкфурте, Германия. PostHog обрабатывает их по нашему поручению.",
           "Страницы отдаёт Cloudflare; он обрабатывает ваш IP-адрес, чтобы доставить страницы и защитить сайт.",
         ],
       },
@@ -127,17 +213,60 @@ export const privacyCopy: Record<
     ],
   },
   es: {
-    title: "Privacidad",
+    title: "Política de privacidad",
     intro:
-      "Cómo wirecat.dev cuenta las visitas, qué se guarda en tu navegador y cómo cambiar tu elección. Las herramientas de WireCat se ejecutan en tu ordenador; esta página trata solo de este sitio web.",
+      "Cómo WireCat trata los datos de Google, los documentos locales, el procesamiento opcional con IA y las visitas a wirecat.dev. Conoce qué se comparte y cómo desconectar o borrar tu copia local.",
     updated: "Última actualización: 11 de octubre de 2026",
     contact: "Preguntas y solicitudes sobre tus datos:",
     sections: [
       {
+        id: "google-access",
+        title: "Acceso a la cuenta de Google",
+        paragraphs: [
+          "WireCat Drive se conecta a Google solo después de elegir una cuenta y aprobar el acceso en la pantalla de consentimiento de Google. El permiso predeterminado lee archivos de Drive: cubre el Drive de la cuenta, mientras que las carpetas seleccionadas limitan la importación del CLI. La indexación local admite Google Docs y archivos Markdown o texto plano subidos.",
+          "La aplicación accede a identificadores de archivos y carpetas, nombres, tipos, relaciones de carpetas, enlaces, fechas y contenido para las operaciones que solicitas. También puede leer nombres de propietarios y del último editor, correos o identificadores de Google, permisos, comentarios y revisiones. El historial de actividad y los metadatos de aplicaciones instaladas requieren permisos opcionales al conectar. Crear, editar y gestionar archivos en Google requiere un permiso de escritura separado y un comando explícito.",
+          "Usamos este acceso para importar y actualizar documentos, exportar Markdown, buscar en tu copia local, mostrar enlaces e historial y añadir etiquetas, notas, personas y recuerdos con fuentes. Conectar una cuenta no importa todo su Drive.",
+        ],
+      },
+      {
+        id: "local-storage",
+        title: "Almacenamiento local y seguridad",
+        paragraphs: [
+          "El CLI se comunica con las API de Google directamente desde tu ordenador. No envía tokens de Google ni documentos importados a un servidor de WireCat. La analítica del sitio es independiente del CLI y no recibe tus documentos de Google.",
+          "Los tokens OAuth se guardan en el almacén de credenciales del sistema operativo. Si eliges explícitamente guardarlos en un archivo, se escriben en un archivo local privado. El CLI guarda localmente perfiles, copias de documentos, texto para búsqueda, metadatos, etiquetas, notas y recuerdos. Los embeddings opcionales se calculan localmente con un modelo descargado.",
+          "Las copias locales permanecen hasta que las elimines. Quitar una carpeta de la importación y sincronizar elimina sus fuentes del índice y sus copias gestionadas; las notas y los recuerdos pueden conservar contexto. Desconectar la cuenta o desinstalar el paquete no borra el almacén local, las exportaciones ni las copias de seguridad. Protege tu ordenador y las copias que crees.",
+        ],
+      },
+      {
+        id: "sharing-ai",
+        title: "Datos compartidos y procesamiento opcional con IA",
+        paragraphs: [
+          "WireCat no vende datos de usuarios de Google, no los usa para publicidad ni para entrenar modelos de IA de propósito general. Los responsables del proyecto no reciben ni inspeccionan habitualmente tus documentos o tokens. Si contactas con soporte, comparte solo lo que decidas revelar; no incluyas tokens ni documentos privados salvo que sean necesarios para tu petición.",
+          "Cuando solicitas explícitamente extraer recuerdos con IA, el texto local seleccionado se envía al proveedor de IA que configuraste, con tus credenciales del proveedor. Este recibe el texto y la petición; se aplican sus reglas de procesamiento, conservación y uso de datos. Elige un proveedor y ajustes que no utilicen datos de Google para entrenar modelos de propósito general. La búsqueda por palabras y los embeddings locales no requieren esta transferencia.",
+          "Un agente o una aplicación MCP conectados pueden recibir los fragmentos y metadatos devueltos por los comandos que ejecutan. Su proveedor y ajustes controlan el procesamiento posterior. Revísalos antes de dar al agente acceso a fuentes sensibles.",
+        ],
+      },
+      {
+        id: "disconnect-delete",
+        title: "Desconectar y eliminar datos",
+        paragraphs: [
+          "Usa el comando session end para cada perfil nombrado para eliminar sus credenciales locales. Para revocar el permiso de Google, elimina WireCat de las conexiones de terceros de tu cuenta de Google. La revocación detiene el acceso autorizado futuro, pero no borra las copias ya guardadas en tu ordenador.",
+          "Para borrar datos locales, cierra el CLI y elimina sus directorios de configuración y datos, incluidos el almacén compartido que hayas configurado, las exportaciones y las copias de seguridad que quieras borrar. Un almacén compartido puede contener datos de otras herramientas; bórralo solo si también quieres eliminar esos datos. WireCat no puede borrar remotamente los archivos de tu ordenador.",
+          "Escribe a hello@wirecat.dev para preguntas de privacidad o solicitudes sobre datos del sitio o de soporte. Según la ley aplicable, puedes tener derechos de acceso, rectificación, supresión, limitación, portabilidad y oposición. Puedes retirar el consentimiento del sitio y reclamar ante la autoridad de protección de datos correspondiente.",
+        ],
+      },
+      {
+        id: "policy-updates",
+        title: "Cambios de la política",
+        paragraphs: [
+          "Actualizamos esta página cuando cambian las prácticas de datos y mostramos la fecha arriba. Revisa la política antes de activar una integración o un permiso opcional nuevos. Un uso más amplio de datos de Google requiere información y el consentimiento aplicable antes de empezar.",
+        ],
+      },
+      {
         id: "provider",
         title: "Quién trata los datos",
         paragraphs: [
-          "WireCat gestiona este sitio web. Para la analítica usamos PostHog Cloud EU, alojado en Fráncfort (Alemania). PostHog trata los datos por encargo nuestro.",
+          "WireCat es un proyecto independiente de código abierto mantenido por su autor. Esta política cubre wirecat.dev y la aplicación WireCat Drive. Para la analítica del sitio usamos PostHog Cloud EU, alojado en Fráncfort (Alemania). PostHog trata los datos por encargo nuestro.",
           "Cloudflare sirve las páginas y trata tu dirección IP para entregarlas y proteger el sitio.",
         ],
       },

@@ -33,10 +33,10 @@ export function SiteFooter({ html, variant = "landing" }: { html: string; varian
       es: "Telegram · CLI + skill del agente",
     }[lang] ?? "Telegram · CLI + agent skill"
   const legal = {
-    en: { privacy: "Privacy", settings: "Cookie settings" },
-    ru: { privacy: "Конфиденциальность", settings: "Настройки cookie" },
-    es: { privacy: "Privacidad", settings: "Configuración de cookies" },
-  }[lang] ?? { privacy: "Privacy", settings: "Cookie settings" }
+    en: { privacy: "Privacy", terms: "Terms", settings: "Cookie settings" },
+    ru: { privacy: "Конфиденциальность", terms: "Условия", settings: "Настройки cookie" },
+    es: { privacy: "Privacidad", terms: "Términos", settings: "Configuración de cookies" },
+  }[lang] ?? { privacy: "Privacy", terms: "Terms", settings: "Cookie settings" }
   const command = html.match(/<span class="cmd">[\s\S]*?<\/span>/)?.[0]
   let footerHtml = html.includes('class="foot-contacts"')
     ? html
@@ -60,7 +60,7 @@ export function SiteFooter({ html, variant = "landing" }: { html: string; varian
   if (!footerHtml.includes('class="foot-legal"'))
     footerHtml = footerHtml.replace(
       '<div class="footer-controls">',
-      `<span class="foot-legal"><a class="animated-text-link" href="/${lang}/privacy"><span class="link-label">${escapeHtml(legal.privacy)}</span></a><button type="button" class="foot-consent" data-consent-settings hidden>${escapeHtml(legal.settings)}</button></span><div class="footer-controls">`,
+      `<span class="foot-legal"><a class="animated-text-link" href="/${lang}/privacy"><span class="link-label">${escapeHtml(legal.privacy)}</span></a><a class="animated-text-link" href="/${lang}/terms"><span class="link-label">${escapeHtml(legal.terms)}</span></a><button type="button" class="foot-consent" data-consent-settings hidden>${escapeHtml(legal.settings)}</button></span><div class="footer-controls">`,
     )
   footerHtml = footerHtml.replaceAll('href="/en"', 'href="/"')
   const rootRef = useRef<HTMLDivElement>(null)
