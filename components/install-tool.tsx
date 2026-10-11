@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 import { RuntimeRequirements } from "@/components/runtime-requirements"
 import { CopyText } from "@/components/text-snippet"
-import type { Tool } from "@/lib/shared"
+import { isMessenger, type Tool } from "@/lib/shared"
 import { wordsFor } from "@/lib/words"
 
 export function InstallTool({
@@ -29,7 +29,7 @@ export function InstallTool({
     window.addEventListener("hashchange", followHash)
     return () => window.removeEventListener("hashchange", followHash)
   }, [tool.name])
-  if (tool.distribution === "source")
+  if (!isMessenger(tool))
     return (
       <Link
         id={tool.name}

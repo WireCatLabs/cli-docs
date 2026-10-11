@@ -45,7 +45,8 @@ not read in order.
   The technical page on how search works is shared: `content/docs/search-architecture.mdx`.
 - `recipes.md` — whole tasks for an agent, each one copyable.
 - Pages only one tool has, named after what they cover — today `bot.md`, `groups.md`, `remote.md`
-  (max).
+  (max); `how-it-works.md`, `notes.md`, `tags.md`, `people.md`, `mail.md`, `tasks.md` and
+  `memories.md` (memo).
 
 ### Reference
 

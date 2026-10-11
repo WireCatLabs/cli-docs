@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import siteConfig from "../site.config.json"
 import { driveDescriptions } from "./drive-descriptions"
+import { memoDescriptions } from "./memo-descriptions"
 import { readerGuide } from "./reader-guides"
 import seoCopy from "./seo-copy.json"
 import { appName, siteUrl, tools } from "./shared"
@@ -66,7 +67,8 @@ export function pageMetadata({
 export function documentationTitle(lang: string, slugs: string[], authored: string): string {
   const tool = tools.find((candidate) => candidate.name === slugs[0])
   if (!tool) return authored
-  if (slugs.length === 1) return seoWords(lang).toolTitles[tool.name as "tg" | "max"] ?? tool.displayName ?? authored
+  if (slugs.length === 1)
+    return seoWords(lang).toolTitles[tool.name as "tg" | "max" | "memo"] ?? tool.displayName ?? authored
   return `${readerGuide(slugs, lang)?.title ?? authored} — ${tool.name}`
 }
 
@@ -75,9 +77,10 @@ export function documentationDescription(lang: string, slugs: string[], authored
   if (taskDescription) return taskDescription
   if (authored?.trim()) return authored
   const selectedTool = tools.find((candidate) => candidate.name === slugs[0])
-  if (selectedTool?.name === "drive") {
-    const description = driveDescriptions[localeOf(lang)][slugs[1] ?? "index"]
-    if (!description) throw new Error(`Missing reviewed Drive description: ${slugs.join("/")}`)
+  const reviewed = { drive: driveDescriptions, memo: memoDescriptions }[selectedTool?.name ?? ""]
+  if (reviewed) {
+    const description = reviewed[localeOf(lang)][slugs[1] ?? "index"]
+    if (!description) throw new Error(`Missing reviewed ${selectedTool?.displayName} description: ${slugs.join("/")}`)
     return description
   }
   const [tool, slug] = slugs

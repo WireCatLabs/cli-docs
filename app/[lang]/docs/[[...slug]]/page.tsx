@@ -30,7 +30,7 @@ import {
   seoLocales,
   seoWords,
 } from "@/lib/seo"
-import { appName, getPageMarkdownUrl, toolOf } from "@/lib/shared"
+import { appName, getPageMarkdownUrl, isMessenger, toolOf } from "@/lib/shared"
 import { homePath } from "@/lib/site-routes"
 import { source } from "@/lib/source"
 import { toolInstallationGuide } from "@/lib/tool-installation"
@@ -66,7 +66,7 @@ export default async function Page(props: Props) {
   const written = page.data.contentLanguage ?? tool?.lang ?? lang
   const ui = wordsFor(lang).navigation
   const guide =
-    tool && tool.distribution !== "source" && page.slugs.at(-1) === "installation"
+    tool && isMessenger(tool) && page.slugs.at(-1) === "installation"
       ? "installation"
       : tool && page.slugs.at(-1) === "mcp"
         ? "mcp"

@@ -56,7 +56,7 @@ folder. Neither a tag nor a project should silently change the source's folder m
 
 ## Put each action in its tool
 
-- [Notes and files](./memo.mdx#tag-your-sources): import local folders, label sources and write notes
+- [Notes and files](./memo/tags.md): import local folders, label sources and write notes
   about stored people or messages.
 - [People](./people.md): check context and explicitly connect known identities.
 - [Google Drive recipes](./drive/recipes.md): tag documents, link existing records and review memories.

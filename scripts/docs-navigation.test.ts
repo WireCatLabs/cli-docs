@@ -121,8 +121,12 @@ describe("sidebar icon coverage", () => {
     const shared = JSON.parse(readFileSync(new URL("../content/docs/meta.json", import.meta.url), "utf8")) as {
       pages: string[]
     }
-    const slugs = new Set(shared.pages.filter((slug) => !slug.startsWith("---") && !["tg", "max"].includes(slug)))
-    for (const tool of ["tg", "max"])
+    const slugs = new Set(
+      shared.pages
+        .filter((slug) => !slug.startsWith("---") && !["tg", "max"].includes(slug))
+        .map((slug) => /^\[[^\]]+\]\(\/[a-z]{2}\/docs\/([^)]+)\)$/.exec(slug)?.[1].split("/").at(-1) ?? slug),
+    )
+    for (const tool of ["tg", "max", "memo"])
       for (const file of readdirSync(new URL(`../translations/${tool}/`, import.meta.url)))
         if (/\.(en|ru|es)\.md$/.test(file)) slugs.add(file.replace(/\.(en|ru|es)\.md$/, ""))
     for (const slug of slugs) {

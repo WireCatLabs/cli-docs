@@ -80,7 +80,7 @@
   },
   {
     "id": "organize-sources",
-    "pages": ["organize.md", "memo.mdx", "people.md", "drive/recipes.md"],
+    "pages": ["organize.md", "memo/notes.md", "people.md", "drive/recipes.md"],
     "families": {
       "drive": ["tags", "notes", "links", "memories", "people"]
     }
@@ -103,6 +103,34 @@
         "complete",
         "schema"
       ]
+    }
+  },
+  {
+    "id": "memo-notes",
+    "pages": ["memo/notes.md", "memo/tags.md", "memo/search.md"],
+    "families": {
+      "memo": ["folders", "notes", "note", "tags", "search", "ask"]
+    }
+  },
+  {
+    "id": "memo-people",
+    "pages": ["memo/people.md", "memo/mail.md"],
+    "families": {
+      "memo": ["context", "organizations", "projects", "relationships", "vocabulary", "mail"]
+    }
+  },
+  {
+    "id": "memo-review",
+    "pages": ["memo/tasks.md", "memo/memories.md", "memo/mcp.md"],
+    "families": {
+      "memo": ["tasks", "reminders", "memories", "facts", "actions", "agents", "mcp"]
+    }
+  },
+  {
+    "id": "memo-upkeep",
+    "pages": ["memo/archive.md", "memo/configuration.md", "memo/commands.md"],
+    "families": {
+      "memo": ["import", "auto", "commands"]
     }
   }
 ]

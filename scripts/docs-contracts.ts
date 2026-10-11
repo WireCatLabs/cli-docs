@@ -68,7 +68,7 @@ for (const tool of tools) {
     XDG_CACHE_HOME: join(sandbox, "cache"),
     NO_COLOR: "1",
   }
-  for (const prefix of ["TG", "MAX", "DRIVE", "CLI_MESSAGING"])
+  for (const prefix of ["TG", "MAX", "DRIVE", "MEMO", "CLI_MESSAGING"])
     for (const suffix of ["CONFIG_DIR", "STATE_DIR", "CACHE_DIR"])
       env[`${prefix}_${suffix}`] = join(sandbox, prefix, suffix)
   const binary = join(packageRoot, typeof installed.bin === "string" ? installed.bin : installed.bin[tool.name])

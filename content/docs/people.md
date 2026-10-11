@@ -154,8 +154,8 @@ Replace the username and address with the person's actual identities. Check the 
 a matching name is not enough. Linking changes the local person record, not your logins or mailboxes.
 `contacts unlink` separates the identity you name if a link is wrong.
 
-To keep private context about a person, see [create notes](./memo.mdx#create-your-own-notes).
-The [notes and source tags guide](./memo.mdx#tag-your-sources) explains labels on a contact identity,
+To keep private context about a person, see [create notes](./memo/notes.md#write-your-own-notes).
+The [notes and source tags guide](./memo/tags.md) explains labels on a contact identity,
 a linked person or a specific message. Messenger contact-note commands are documented in
 [Telegram commands](./tg/commands.md#tg-contacts-notes) and [MAX commands](./max/commands.md#max-contacts-notes).
 

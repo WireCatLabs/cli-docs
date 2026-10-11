@@ -15,7 +15,7 @@ can change. There are no promised dates. What already works is in [features](./f
 ## In progress
 
 - **Zoom** — meeting recordings and transcripts. See the [Zoom page](./zoom.mdx).
-- **Google Drive** — documents and files beside your [notes and files](./memo.mdx).
+- **Google Drive** — documents and files beside your [notes and files](./memo/index.md).
 
 ## Next
 

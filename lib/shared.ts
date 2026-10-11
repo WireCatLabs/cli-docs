@@ -16,6 +16,9 @@ export const docsContentRoute = "/llms.mdx/docs"
 export const repository = siteConfig.repository
 export const siteUrl = siteConfig.url
 
+/** tg and max share login, sessions and the messenger onboarding; other tools have their own installation page. */
+export const isMessenger = (tool: Pick<Tool, "name">) => tool.name === "tg" || tool.name === "max"
+
 export const toolOf = (slugs: readonly string[]): Tool | undefined => tools.find((tool) => tool.name === slugs[0])
 
 const getContentUrl = createGetUrl(docsContentRoute)

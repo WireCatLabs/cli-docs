@@ -1,0 +1,119 @@
+---
+title: "Задачи и напоминания"
+---
+
+Эта страница поможет следить за тем, что вам нужно сделать: за просьбой в сообщении, обещанием в
+заметке или работой в одном из ваших проектов. Задача, созданная из сообщения или заметки, указывает на
+них. Поэтому вы всегда видите, откуда взялась задача. Напоминания остаются на вашем компьютере: Memo
+никогда не отправляет их в мессенджер или почтовый ящик.
+
+## Задача из сообщения или заметки
+
+**Проще всего — попросить агента.**
+
+```text prompt
+Use memo CLI to find the messages from this week where someone asked me for something.
+Show them to me first. Make a task only for the ones I choose.
+```
+
+**Или выполните команду сами.** Скопируйте ссылку на источник из результата поиска:
+
+```sh
+memo tasks add 'msg:telegram/1/77/42' --type request
+memo tasks add note:12 --provider telegram --account 1 --type promise
+memo tasks list --provider telegram --account 1
+```
+
+У задачи из источника есть тип: `request` (по умолчанию), `question`, `mention` или `promise`. Она
+относится к одному аккаунту мессенджера. Ссылка на сообщение уже содержит аккаунт; для заметки или
+файла добавьте `--provider` и `--account`. Если добавить ту же задачу дважды, вы получите уже
+существующую.
+
+## Задачи в проекте
+
+Задаче в проекте не нужен источник. Она получает ключ из ключа проекта и номера, например `HRB-1`:
+
+```sh
+memo tasks add --project HRB --title 'Book the venue' --priority 1
+memo tasks add --project HRB --title 'Export drops the last row' --type bug
+memo tasks list --project HRB
+memo tasks update HRB-1 --priority 0 --description 'Call before Friday'
+```
+
+| Параметр | Значение |
+|---|---|
+| `--type` | `chore` (по умолчанию), `bug` или `feature` |
+| `--priority` | число от 0 (срочно) до 4 (низкий приоритет) |
+| `--parent` | более крупная задача в том же проекте, частью которой является эта |
+| `--description` | подробности в формате Markdown |
+| `--assignee` | кто выполняет задачу, по ID человека |
+
+Как сначала создать проект, см. [организации и проекты](./people.md#organizations-and-projects).
+
+## Кто работает над задачей
+
+```sh
+memo tasks assign HRB-1 PERSON_UID
+memo tasks assign HRB-1 PERSON_UID --role reviewer
+```
+
+Роль — `assignee` (по умолчанию), `reviewer` или `watcher`. ID человека берётся из его контекста
+(`memo context … --json`). Задачи, назначенные человеку, видны в
+[его контексте](./people.md#everything-about-a-person).
+
+## Закройте задачу
+
+```sh
+memo tasks close HRB-1 --reason booked
+memo tasks close 7 --provider telegram --account 1 --as dismissed
+```
+
+Закройте задачу с `--as done` (по умолчанию) или `--as dismissed`. `memo tasks list --state done` показывает
+закрытые задачи. Каждое изменение статуса, приоритета или исполнителя записывается вместе с задачей.
+
+## Что делать в первую очередь
+
+Одна задача может ждать другую. Свяжите их, затем спросите Memo, какие задачи можно начинать:
+
+```sh
+memo tasks link HRB-2 HRB-1 --kind blocked-by     # HRB-2 waits for HRB-1
+memo tasks ready --project HRB                    # tasks with nothing left to wait for
+memo tasks readiness HRB-2                        # why HRB-2 can or cannot start
+memo tasks relations HRB-2
+memo tasks unlink HRB-2 HRB-1 --kind blocked-by
+```
+
+Задача становится готовой, только когда выполнены все задачи, которые она ждёт. Если одна из
+них закрыта как ненужная, Memo попросит вас проверить эту связь. Связи `follow-up-of` и `related-to` служат для информации и ничего
+не блокируют.
+
+## Напоминания
+
+Напоминание — это время, когда нужно обратить ваше внимание на задачу. Memo хранит его на вашем
+компьютере. Другая программа на ваш выбор, например агент или скрипт, запрашивает у Memo напоминания,
+срок которых наступил, и показывает их вам.
+
+```sh
+memo reminders schedule 7 --at 2026-10-20T09:00:00+02:00 --timezone Europe/Madrid --provider telegram --account 1
+memo reminders list --provider telegram --account 1
+memo reminders snooze 3 --revision 1 --at 2026-10-21T09:00:00+02:00 --provider telegram --account 1
+memo reminders cancel 3 --provider telegram --account 1
+```
+
+Указывайте время со смещением от UTC, например `+02:00` для Мадрида летом. Напоминание относится к
+аккаунту, поэтому ему нужны `--provider` и `--account`. Когда задача закрывается, её напоминания
+отменяются.
+
+Для программы, которая показывает напоминания:
+
+```sh
+memo reminders poll --provider telegram --account 1 --json
+memo reminders ack REMINDER_ID RECEIPT --provider telegram --account 1
+```
+
+`poll` выдаёт напоминания, срок которых наступил, каждое с квитанцией. `ack` с этой квитанцией
+подтверждает, что напоминание показано. Напоминание, которое не подтвердили вовремя, выдаётся снова с
+новой квитанцией, поэтому сбой не приведёт к его потере. Используйте `deliveryId` из ответа, чтобы не
+показывать одно и то же напоминание дважды. Таймер импорта не доставляет напоминания.
+
+Дальше: [пометьте задачи тегами](./tags.md) или [посмотрите, что предложил агент](./memories.md#proposed-actions).

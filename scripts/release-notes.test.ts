@@ -23,3 +23,9 @@ it("accepts unchanged plans only with a matching review and rejects edited plans
     expect.stringContaining("changed since review"),
   ])
 })
+it("checks only the changelog of a tool that publishes no roadmap", () => {
+  expect(releaseNotesProblems("v1.2.0", "## 1.2.0\n\n- Released capability\n", undefined)).toEqual([])
+  expect(releaseNotesProblems("v1.3.0", "## 1.2.0\n\n- Released capability\n", undefined)).not.toContainEqual(
+    expect.stringContaining("roadmap"),
+  )
+})

@@ -58,6 +58,11 @@ installation commit. Its compact reader path is overview → installation → us
 configuration, security, troubleshooting and generated commands remain discoverable references.
 It is listed next to Telegram/MAX under Tools, without implying it has messenger capabilities.
 
+Memo uses the same structure under `memo/`, pinned to its npm release in `tools.json`. It replaced
+the single shared "Notes and files" page at the same address; the shared sidebar keeps a "Notes and
+files" link to it. Memo is not a messenger (`isMessenger` in `lib/shared.ts`), so its installation
+page gets no messenger login guide and the shared installation page shows it as a link.
+
 Each row applies to `tg` and `max` where supported. Public addresses remain
 `/{lang}/docs/{tool}/{page}`. The owning source is `docs/{page}.md` in `tg-cli` or `max-cli`,
 except changelog, which comes from the root `CHANGELOG.md`. Translations live here under

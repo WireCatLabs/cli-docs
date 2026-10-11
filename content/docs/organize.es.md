@@ -56,7 +56,7 @@ Una etiqueta o proyecto no debe cambiar silenciosamente la carpeta de una fuente
 
 ## Usar cada herramienta para su acción
 
-- [Notas y archivos](./memo.mdx#tag-your-sources): importa carpetas locales, etiqueta fuentes y
+- [Notas y archivos](./memo/tags.md): importa carpetas locales, etiqueta fuentes y
   escribe notas sobre personas o mensajes guardados.
 - [Personas](./people.md): comprueba contexto y conecta identidades conocidas explícitamente.
 - [Recetas Google Drive](./drive/recipes.md): etiqueta documentos, vincula registros y revisa recuerdos.
