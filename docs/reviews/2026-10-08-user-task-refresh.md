@@ -42,7 +42,7 @@ Current pins: Telegram v0.28.0 and MAX v0.29.0. Exact isolated npm contracts are
 
 - TG contacts: `show` and `context --since-time/--limit` are available; `profile`, `check`,
   and `context --chat` are absent. Evidence: the command contract and the released
-  `@leemour/cli-messaging/dist/cli/messenger/contacts-command.js` /
+  `@wirecat/cli-messaging/dist/cli/messenger/contacts-command.js` /
   `dist/mcp/tools/contacts.js`.
 - MAX contacts: `profile`, `check` and scoped context are available in its contract.
 - Both HTTP servers force confirmation with `OVER_HTTP = { confirmSend: true, yes: false,

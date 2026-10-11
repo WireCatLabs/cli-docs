@@ -17,7 +17,7 @@ merge the site PRs (cli-docs #88, #92) and start the site's translation pass. Ea
   echo "## PRs"; gh pr view 527 --repo WireCatLabs/max-cli --json state,mergeable --jq '"max #527 \(.state) \(.mergeable)"'
   gh pr view 88 --repo WireCatLabs/cli-docs --json state,isDraft,mergeable --jq '"site #88 \(.state) draft=\(.isDraft) \(.mergeable)"'
   gh pr view 92 --repo WireCatLabs/cli-docs --json state,baseRefName --jq '"site #92 \(.state) base=\(.baseRefName)"'
-  echo "## npm"; for p in cli-messaging tg-cli max-cli; do echo "$p $(npm view @leemour/$p version --prefer-online)"; done
+  echo "## npm"; for p in cli-messaging tg-cli max-cli; do echo "$p $(npm view @wirecat/$p version --prefer-online)"; done
   echo "## last releases (2-hour gap per tool)"; gh release list --repo WireCatLabs/tg-cli --limit 1; gh release list --repo WireCatLabs/max-cli --limit 1; date -u +%FT%TZ
   echo "## worktrees"; git -C /home/leemour/Projects/AI/max-cli worktree list | grep release; git -C /home/leemour/Projects/AI/tg-cli worktree list | grep release
   echo "## last max report (shape to copy)"; cat /home/leemour/Projects/AI/max-cli/docs_ai/releases/0.40.0.md
@@ -48,7 +48,7 @@ two-hour gap has passed, both release worktrees, the report format, and tg's liv
      #524; requirements: replies send path changed in #523 — read it against `CLAUDE.md` constraints 1, 4, 6;
      live: the smoke lines). Sign-off line, already granted: `Signed off: 2026-10-09 — owner (release
      approved: "Accept and sign off")`. Commit and push it in `docs_ai` as its own repository does.
-   - From a clean checkout of max `main` run `bin/release`. Check: `npm view @leemour/max-cli version --prefer-online` prints 0.41.0.
+   - From a clean checkout of max `main` run `bin/release`. Check: `npm view @wirecat/max-cli version --prefer-online` prints 0.41.0.
 2. **tg 0.42.0** — not before two hours after the last tg release (orient shows the time).
    Worktree `/home/leemour/Projects/AI/tg-cli-wt-release-042`, branch `chore/release-0.42.0`, nothing
    changed yet. Follow tg's release skill: version 0.42.0 in `package.json`, `pnpm version:sync`,
@@ -89,7 +89,7 @@ if `bin/release` renumbers because a parallel session took the version, follow w
 ## 7. Check
 
 ```sh
-for p in cli-messaging tg-cli max-cli; do echo "$p $(npm view @leemour/$p version --prefer-online)"; done   # 0.213.0 / 0.42.0 / 0.41.0
+for p in cli-messaging tg-cli max-cli; do echo "$p $(npm view @wirecat/$p version --prefer-online)"; done   # 0.213.0 / 0.42.0 / 0.41.0
 gh pr view 92 --repo WireCatLabs/cli-docs --json state --jq .state                                            # MERGED
 ```
 

@@ -2,7 +2,7 @@
 title: "Historial de cambios"
 ---
 
-Cambios destacados de `@wirecat/max-cli` (`@leemour/max-cli` hasta 0.41.0), con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
+Cambios destacados de `@wirecat/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
 ## 0.43.1 — 10.10.2026
 
@@ -31,7 +31,7 @@ Cambios destacados de `@wirecat/max-cli` (`@leemour/max-cli` hasta 0.41.0), con 
 
 ### Cambios que pueden romper scripts
 
-- **El paquete se llama `@wirecat/max-cli` y el repositorio es `WireCatLabs/max-cli`.** Instala con `npm install -g @wirecat/max-cli`; el comando sigue siendo `max`. Desinstala primero `@leemour/max-cli`: ambos paquetes proporcionan `max`. No habrá nuevas versiones de `@leemour/max-cli`.
+- **El paquete se llama `@wirecat/max-cli` y el repositorio pertenece a WireCatLabs.** Usa este paquete para instalar y actualizar.
 - **La eliminación verifica el resultado leyendo del servidor.** Si MAX sigue devolviendo el mensaje o falla la comprobación, informa `outcome_unknown` en lugar de `deleted`. Lee el mensaje antes de repetir; la confirmación de la petición no demuestra su eliminación.
 - **La transcripción local admite Ogg Opus completo, mono o estéreo, de hasta 10 minutos.** Divide las grabaciones más largas. La extracción de texto PDF admite hasta 20 páginas y 30 segundos; divide los PDF mayores.
 - **MCP hace visibles los controles Unicode ocultos** en resultados de texto y argumentos de escritura, incluida la conversión de formato. Conserva las banderas regionales; el JSON normal de la CLI mantiene las cadenas originales.
@@ -553,7 +553,7 @@ La mayoría de comandos personales se comparten con tg: opciones, resultados `--
 - **`max messages search` busca palabras, mejores resultados primero.** `--newest` recupera orden reciente. Admite `"фраза"`, `-слово`, `OR`, `from:`, `chat:`, `after:`/`before:` y `has:`. Corrige erratas y lo avisa. `--context <n>` muestra contexto. JSON añade `match` y `score`.
 - **`max bot updates watch` ahora es `max bot watch`**, como en tg y el `max watch` personal. Sin `--events`, solo se imprimen mensajes nuevos; con `--events`, se imprime todo y cada línea identifica su evento (`{ "event": "message" | "edit" | "delete" | "callback" | "joined" | … }`) en lugar del evento sin procesar de MAX. `--timeout` lo termina normalmente con el código `0`. Los perfiles de bot de solo lectura ahora pueden usar `watch`: recibir eventos es leer. Se mantiene el marcador desde el que continuar.
 - **`bot webhooks list` devuelve `{ url, types }`**, no campos propios de MAX. `bot callbacks answer --text` deja de leer stdin mediante `-`. `bot commands`, `bot callbacks` y `bot webhooks` se comparten con tg; `webhooks set --secret-stdin` solo pregunta tras comprobar permisos.
-- **Node 22.16 o posterior**, o Bun. Si Node en Linux usa SQLite del sistema antiguo, `max` reinicia con `@leemour/cli-messaging-sqlite` antes de leer o enviar. Node oficial y Bun no requieren cambios.
+- **Node 22.16 o posterior**, o Bun. Si Node en Linux usa SQLite del sistema antiguo, `max` reinicia con `@wirecat/cli-messaging-sqlite` antes de leer o enviar. Node oficial y Bun no requieren cambios.
 - **`max store` se comparte con tg.** `store fetch` guarda en la base común y pagina MAX como antes: 30 mensajes, pausas de 5–10 segundos y hasta 40 páginas por ejecución. Así `messages`, `conversations` y `store` leen lo mismo. No se migra la caché; vuelve a descargar. Además:
   - Rechaza `store fetch --estimate`: los identificadores de MAX no permiten contar lo pendiente.
   - `store fetch|export --since` pasa a `--since-time`, solo fechas, no identificadores.
@@ -635,7 +635,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Cambios que pueden romper scripts
 
-- **El almacén compartido de mensajes pasa a la versión 6** (cli-messaging 0.49.0). La primera ejecución de `max` actualiza `messages.db`; después, las versiones de `tg` anteriores a la publicada ese día rechazan abrir el archivo y piden actualizar: `npm install -g @leemour/tg-cli@latest`. Los comandos de `max` no cambian.
+- **El almacén compartido de mensajes pasa a la versión 6** (cli-messaging 0.49.0). La primera ejecución de `max` actualiza `messages.db`; después, las versiones de `tg` anteriores a la publicada ese día rechazan abrir el archivo y piden actualizar: `npm install -g @wirecat/tg-cli@latest`. Los comandos de `max` no cambian.
 - **`--all-bots` necesita autorización para leer otros bots.** Define `readOtherBots` en `bot`: `max <имя> config set --bot readOtherBots true` o lista de perfiles. Sin ella, código `5` y comando para permitirlo.
 - **Cuando un nombre coincide con varias personas, los candidatos se ordenan por nombre**, con las personas sin nombre primero; antes seguían el orden de la caché. El texto del error no cambia.
 
@@ -802,7 +802,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 - **`max_review` y `/review` en MCP.** El agente separa mis obligaciones, esperas y dudas; revisa grupos antes de declarar retrasos y prepara recordatorios. Solo envía con tu aprobación ([MCP](./mcp.md#команды-и-чаты-по-)).
 - **`max mcp config` imprime configuración para Claude Desktop, Cursor y otros.** Rutas absolutas para Windows y clientes sin `PATH` del terminal ([Conexión](./mcp.md#подключение)).
 - **`max doctor` comprueba la instalación:** qué ejecuta `max`, dónde está instalado, si un terminal nuevo lo encontrará, si se cargan el llavero y SQLite y si hay un modelo de voz descargado.
-  Ten en cuenta: si la carpeta del comando no está en `PATH`, `doctor` imprime un comando para corregirlo: para PowerShell en Windows y `export` en Linux y macOS. Si no se encuentra el propio `max`, ejecuta `npx @leemour/max-cli doctor` ([troubleshooting.md](./troubleshooting.md#max-не-находится-после-установки)).
+  Ten en cuenta: si la carpeta del comando no está en `PATH`, `doctor` imprime un comando para corregirlo: para PowerShell en Windows y `export` en Linux y macOS. Si no se encuentra el propio `max`, ejecuta `npx @wirecat/max-cli doctor` ([troubleshooting.md](./troubleshooting.md#max-не-находится-после-установки)).
 - **`max doctor --online`** realiza un inicio, lee un chat y arranca MCP sin enviar.
 - **`max models audio download` prueba el modelo descargado.** Si falta, indica idioma y alternativas con tamaños.
 

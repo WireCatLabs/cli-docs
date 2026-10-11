@@ -71,7 +71,7 @@ document.querySelectorAll("[data-copy]").forEach((button) => {
 document.querySelectorAll("[data-install]").forEach((button) => {
   button.addEventListener("click", () => {
     const provider = button.dataset.install
-    const command = `npm i -g @leemour/${provider}-cli`
+    const command = `npm i -g @wirecat/${provider}-cli`
     document.querySelectorAll("[data-install]").forEach((choice) => choice.setAttribute("aria-pressed", String(choice === button)))
     document.querySelector("#install-command").textContent = command
     document.querySelector("#copy-install").dataset.copy = command

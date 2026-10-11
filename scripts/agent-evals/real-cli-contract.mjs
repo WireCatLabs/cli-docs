@@ -1,6 +1,6 @@
 /** Real tg@0.22.0 + real SQLite, synthetic data, no login session or provider.
  * Usage: node scripts/agent-evals/real-cli-contract.mjs <external-runtime> [report.json]
- * Runtime: npm install --prefix <external-runtime> @leemour/tg-cli@0.22.0
+ * Runtime: npm install --prefix <external-runtime> @wirecat/tg-cli@0.22.0
  */
 import assert from "node:assert/strict"
 import { spawnSync } from "node:child_process"
@@ -11,7 +11,7 @@ import { dirname, join, resolve } from "node:path"
 import { fileURLToPath, pathToFileURL } from "node:url"
 
 const runtime = resolve(process.argv[2] ?? "/tmp/wirecat-agent-eval-runtime")
-const packageRoot = join(runtime, "node_modules/@leemour")
+const packageRoot = join(runtime, "node_modules/@wirecat")
 const pkg = async (name) => JSON.parse(await readFile(join(packageRoot, name, "package.json"), "utf8"))
 const versions = { tg: (await pkg("tg-cli")).version, messaging: (await pkg("cli-messaging")).version }
 assert.deepEqual(

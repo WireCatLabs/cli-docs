@@ -2,7 +2,7 @@
 title: "Historial de cambios"
 ---
 
-Cambios destacados de `@wirecat/tg-cli` (`@leemour/tg-cli` hasta 0.42.0), con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
+Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
 ## 0.44.1 — 10.10.2026
 
@@ -32,7 +32,7 @@ Cambios destacados de `@wirecat/tg-cli` (`@leemour/tg-cli` hasta 0.42.0), con un
 
 ### Cambios que pueden romper scripts
 
-- **El paquete se llama `@wirecat/tg-cli` y el repositorio es `WireCatLabs/tg-cli`.** Instala con `npm install -g @wirecat/tg-cli`; el comando sigue siendo `tg`. Desinstala primero `@leemour/tg-cli`: ambos paquetes proporcionan `tg`. No habrá nuevas versiones de `@leemour/tg-cli`.
+- **El paquete se llama `@wirecat/tg-cli` y el repositorio pertenece a WireCatLabs.** Usa este paquete para instalar y actualizar.
 - La transcripción local admite grabaciones Ogg Opus completas, mono o estéreo, de hasta 10 minutos. Divide las más largas. La extracción de texto PDF admite hasta 20 páginas y 30 segundos.
 - MCP muestra controles invisibles en resultados de texto y argumentos de escritura, incluida la conversión de formato. Los emojis de banderas de subdivisiones territoriales se conservan; el JSON normal de la CLI mantiene las cadenas originales.
 
@@ -655,7 +655,7 @@ Cambios destacados de `@wirecat/tg-cli` (`@leemour/tg-cli` hasta 0.42.0), con un
 ### Cambios que pueden afectar a scripts
 
 - **`tg messages search` ordena por mejores coincidencias**, no por fecha; `--newest` restaura el orden anterior. Sin mensajes que contengan todas las palabras, busca cualquiera y después fragmentos. Mantiene `items`, `limit` y `hasMore`; añade `match` y `score` por resultado, `corrections`, `completeness` por chat y `wordsReady`. Acepta consultas de una o dos letras.
-- **tg requiere Node 22.16 o posterior**, o Bun. Si Node en Linux usa SQLite del sistema demasiado antiguo, `tg` se reinicia con el SQLite de `@leemour/cli-messaging-sqlite` antes de leer o enviar. Las versiones oficiales de Node y Bun no notan el cambio.
+- **tg requiere Node 22.16 o posterior**, o Bun. Si Node en Linux usa SQLite del sistema demasiado antiguo, `tg` se reinicia con el SQLite de `@wirecat/cli-messaging-sqlite` antes de leer o enviar. Las versiones oficiales de Node y Bun no notan el cambio.
 
 ### Correcciones
 
@@ -802,7 +802,7 @@ Cambios visibles para otros que pasan por la protección como `messages send`: s
 
 - **El almacenamiento compartido de mensajes pasa a la versión 6** (cli-messaging 0.49.0). La primera ejecución de `tg` actualiza
   `messages.db`; un `max` anterior al publicado el mismo día lo rechaza y pide
-  actualizarse: `npm install -g @leemour/max-cli@latest`. No cambia nada en los comandos propios de `tg`.
+  actualizarse: `npm install -g @wirecat/max-cli@latest`. No cambia nada en los comandos propios de `tg`.
 
 ## 0.12.0 — 30.09.2026
 

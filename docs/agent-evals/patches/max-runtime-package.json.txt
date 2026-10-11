@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "@leemour/max-cli": "^0.24.0"
+    "@wirecat/max-cli": "^0.24.0"
   }
 }

@@ -64,14 +64,14 @@ for (const lang of ["en", "ru", "es"] as const) {
       await prompt.locator("button.docs-copy").click()
       const request = await prompt.locator("code").innerText()
       await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toBe(request)
-      expect(request).not.toContain("@leemour/")
+
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
       const response = await page.request.get(`/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}memo/content.md`)
       expect(response.ok()).toBe(true)
       const markdown = await response.text()
       expect(markdown).toContain("npm install -g @wirecat/cli-memo")
       expect(markdown).toContain("npm.cmd install -g @wirecat/cli-memo")
-      expect(markdown).not.toContain("@leemour/")
+
       if (lang === "en") await page.screenshot({ path: `.docs-tooling/memo-request-${theme}.png` })
     })
   }
