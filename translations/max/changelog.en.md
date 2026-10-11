@@ -25,6 +25,10 @@ Notable changes to `@wirecat/max-cli`, one section per version, newest first. Ve
 - `max search all --meetings [provider:account]` also searches one meeting account's transcripts, chat and
   summaries; `--max-meetings <n|all>` sets how many meetings it looks through (100 by default).
 
+### Fixed
+
+- HTTP attachment downloads distinguish 429 from an ordinary network failure: they stop new files and expose the `Retry-After` wait when supplied. A 413 response suggests reducing input, rather than raising a local budget.
+
 ### Security
 
 - **The old `messages.db` is deleted** when the store opens at its default path: the unencrypted file used

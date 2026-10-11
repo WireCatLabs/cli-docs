@@ -19,6 +19,10 @@ Cambios destacados de `@wirecat/max-cli`, con una sección por versión, recient
 - `max store reset` sirve para un almacén que esta compilación no puede migrar: crea una copia junto a él, lo elimina y empieza uno vacío. Pregunta primero; `--yes` omite la pregunta y `--no-backup` omite la copia.
 - `max search all --meetings [provider:account]` también busca transcripciones, chat y resúmenes de una cuenta de reuniones; `--max-meetings <n|all>` establece cuántas consultar (100 por defecto).
 
+### Corregido
+
+- La descarga HTTP distingue un rechazo 429 de un fallo de red normal: detiene los archivos nuevos e indica la pausa `Retry-After` cuando existe. Un rechazo 413 sugiere reducir los datos de entrada en vez de aumentar el límite local.
+
 ### Seguridad
 
 - **Se elimina el antiguo `messages.db`** al abrir el almacén predeterminado: el archivo sin cifrar anterior a `wirecat.db`, junto con sus `-wal` y `-shm`. Una línea en stderr indica el archivo. Se conserva si está definido `MESSAGING_STORE` o mientras otro proceso lo tenga abierto. De `@wirecat/cli-messaging` 0.222.0.

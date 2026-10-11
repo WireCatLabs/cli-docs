@@ -14,11 +14,11 @@ Utilice esta página cuando `tg` muestre un error o no haga lo que esperaba. Bus
 
 Algunas palabras que utiliza esta página:
 
-- El **código de salida** es el número que devuelve un comando cuando finaliza: `0` significa que funcionó, cualquier otro número indica el tipo de falla. Los guiones y los agentes de IA lo leen; la siguiente tabla asigna cada uno a su sección.
+- El **código de salida** es el número que devuelve un comando cuando finaliza: `0` indica que el comando terminó; en lecturas por lotes comprueba la integridad del resultado, cualquier otro número indica el tipo de falla. Los guiones y los agentes de IA lo leen; la siguiente tabla asigna cada uno a su sección.
 - **`tg doctor`** comprueba la instalación sin conectarse a Telegram. Ejecútelo primero.
 - **`--trace`** muestra cada solicitud a Telegram tal como sucede, sin texto de mensaje ([diagnóstico](./diagnostics.md)).
 
-En la salida `--json`, cada error es una línea en stderr, `{"error":{"code":"…","message":"…"}}`, y el código de salida dice lo mismo que `code`. Cada código también se encuentra en la [referencia del código de salida](./commands.md#exit-codes).
+En la salida `--json`, un error que termina el comando es una línea en stderr, `{"error":{"code":"…","message":"…"}}`, y el código de salida dice lo mismo que `code`. Cada código también se encuentra en la [referencia del código de salida](./commands.md#exit-codes).
 
 ## Según el código de salida
 

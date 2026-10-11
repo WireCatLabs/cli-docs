@@ -15,11 +15,11 @@ Esta página es necesaria cuando `max` mostró un error o no hizo lo que esperab
 
 Palabras que aparecen aquí:
 
-- **Código de retorno** - el número con el que termina el comando: `0` - funcionó, cualquier otro número indica el tipo de falla. Lo leen scripts y agentes de IA; La siguiente tabla conduce de cada código a la sección.
+- **Código de retorno** - el número con el que termina el comando: `0` indica que el comando terminó; en lecturas por lotes comprueba la integridad del resultado, cualquier otro número indica el tipo de falla. Lo leen scripts y agentes de IA; La siguiente tabla conduce de cada código a la sección.
 - **`max doctor`** comprueba la instalación sin conectarse a MAX. Ejecútelo primero.
 - **`--trace`** muestra cada solicitud a MAX mientras se ejecuta, sin texto de mensaje ([diagnóstico](./diagnostics.md)).
 
-En la salida de `--json`, cada error es una línea en stderr, `{"error":{"code":"…","message":"…"}}`, y el código de retorno dice lo mismo que `code`. Todos los códigos también se encuentran en [directorio de códigos de retorno](./commands.md#коды-возврата).
+En la salida de `--json`, un error que termina el comando es una línea en stderr, `{"error":{"code":"…","message":"…"}}`, y el código de retorno dice lo mismo que `code`. Todos los códigos también se encuentran en [directorio de códigos de retorno](./commands.md#коды-возврата).
 
 ## Por código de salida
 
@@ -337,6 +337,8 @@ Las incidencias de GitHub y los archivos adjuntos son públicos.
 Los errores CLI y MCP contienen `actions`: qué comprobar, qué ajuste cambiar, cuánto esperar o qué elemento omitir.
 `retryable` nunca autoriza repetir una escritura automáticamente: ante `outcome_unknown`, comprueba primero si se realizó.
 Los límites de API no aumentan con ajustes locales; reduce o divide los datos de entrada.
+
+Un HTTP 429 al descargar un adjunto detiene los archivos nuevos del lote; `Retry-After` aparece en la acción de espera cuando el servidor lo indica. HTTP 413 es un límite del proveedor y no cambia al aumentar un límite local.
 
 El fallo de un archivo independiente o una página de historial devuelve un resultado parcial con código de salida `0`,
 `complete: false` y `batch` o `issue`. Los archivos y las páginas anteriores permanecen guardados.

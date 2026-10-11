@@ -8,11 +8,11 @@ Use this page when `max` reports an error or behaves unexpectedly. Find the disp
 
 Terms used below:
 
-- **Return code** - the number with which the command ends: `0` - it worked, any other number indicates the type of failure. It is read by scripts and AI agents; The table below leads from each code to section.
+- **Return code** - the number with which the command ends: `0` means the command completed; for batch reads check completeness, any other number indicates the type of failure. It is read by scripts and AI agents; The table below leads from each code to section.
 - **`max doctor`** checks installation without connecting to MAX. Launch it first.
 - **`--trace`** shows each request to MAX as it runs, without message text ([diagnostics](./diagnostics.md)).
 
-In the output of `--json`, each error is one line in stderr, `{"error":{"code":"…","message":"…"}}`, and the return code says the same as `code`. All codes are also in the [exit-code reference](./commands.md#коды-возврата).
+In the output of `--json`, an error that ends the command is one line in stderr, `{"error":{"code":"…","message":"…"}}`, and the return code says the same as `code`. All codes are also in the [exit-code reference](./commands.md#коды-возврата).
 
 ## By exit code
 
@@ -331,6 +331,8 @@ CLI and MCP errors include `actions`: what to check, which setting to change, ho
 or which item to skip. `retryable` never authorizes automatic write replay: for `outcome_unknown`,
 verify whether the action happened first. API limits cannot be increased through local settings;
 reduce or split the input instead.
+
+An HTTP 429 while downloading an attachment stops new files in the batch; `Retry-After` becomes the wait action when supplied. HTTP 413 is a provider limit; raising a local budget cannot change it.
 
 A failed independent file or history page returns partial results with exit code `0`,
 `complete: false` and `batch` or `issue`. Completed downloads and earlier history pages remain
