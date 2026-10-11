@@ -65,6 +65,9 @@ export const sidebarIcons = {
   memories: Brain,
   "how-it-works": Lightbulb,
   zoom: Video,
+  zm: Video,
+  "zoom-app": KeyRound,
+  "remote-meetings": Video,
   attachments: Paperclip,
   "audio-recognition": Mic,
   "external-models": BrainCircuit,
@@ -117,8 +120,17 @@ export function unifiedDocsTree(tree: Root): Root {
     if (node.type === "folder") {
       const firstPage = node.index ?? node.children.find((child) => child.type === "page")
       const tool =
-        firstPage?.type === "page" ? /\/docs\/(tg|max|drive|memo)(?:\/|$)/.exec(firstPage.url)?.[1] : undefined
-      const Icon = tool === "tg" ? Send : tool === "max" ? MessageSquare : tool === "memo" ? NotebookPen : FolderOpen
+        firstPage?.type === "page" ? /\/docs\/(tg|max|drive|memo|zm)(?:\/|$)/.exec(firstPage.url)?.[1] : undefined
+      const Icon =
+        tool === "tg"
+          ? Send
+          : tool === "max"
+            ? MessageSquare
+            : tool === "memo"
+              ? NotebookPen
+              : tool === "zm"
+                ? Video
+                : FolderOpen
       return {
         ...node,
         root: false,
@@ -128,7 +140,7 @@ export function unifiedDocsTree(tree: Root): Root {
       }
     }
     if (node.type !== "page") return node
-    const slug = /\/docs\/(tg|max|drive|memo)\/?$/.test(node.url)
+    const slug = /\/docs\/(tg|max|drive|memo|zm)\/?$/.test(node.url)
       ? "index"
       : (node.url.split("/").filter(Boolean).at(-1) ?? "")
     const Icon = sidebarIcons[slug as keyof typeof sidebarIcons] ?? FileText

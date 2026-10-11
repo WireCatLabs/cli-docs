@@ -34,6 +34,7 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | What do my accounts know about a person? | `people.md` | Task guide | Review source and data boundaries |
 | How should I connect documents, people and work? | `organize.md` | Explanation and worked task | Distinguish tags, notes, memories, projects/tasks and source-folder scope |
 | How do I find a message or agreement? | `search.md` | Task guide | Lead with an agent request; keep terminal syntax optional |
+| How do I recover a meeting decision and connect it to other sources? | `zoom.mdx` (Meetings, existing address) | Task guide | Keep participant identity, project links and cited findings explicit |
 | How do I connect a browser AI app? | `browser-apps.mdx` | Connection guide | Preserve current web setup instructions |
 | How do I ask for a useful result? | `prompting.mdx` | Task guidance | Cross-link to worked examples instead of duplicating dialogues |
 | How do I review a reply in my messaging app or use an auto-reply template? | `drafts-and-templates.mdx` | Task guide and explanation | Keep template facts in step with the tools' auto-reply guides |
@@ -57,6 +58,11 @@ Google Drive uses the same source-owned structure under `drive/`, pinned to a re
 installation commit. Its compact reader path is overview → installation → usage/search/recipes;
 configuration, security, troubleshooting and generated commands remain discoverable references.
 It is listed next to Telegram/MAX under Tools, without implying it has messenger capabilities.
+
+Zoom uses the source-owned structure under `zm/`, pinned to its reviewed npm release. It is listed
+immediately after Google Drive under Tools. The shared Meetings guide keeps its existing `zoom`
+address and covers source-backed context across tools. Setup, Zoom permissions, archive behavior
+and exact commands belong to the Zoom guides.
 
 Memo uses the same structure under `memo/`, pinned to its npm release in `tools.json`. It replaced
 the single shared "Notes and files" page at the same address; the shared sidebar keeps a "Notes and

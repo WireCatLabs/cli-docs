@@ -6,6 +6,7 @@ import { readerGuide } from "./reader-guides"
 import seoCopy from "./seo-copy.json"
 import { appName, siteUrl, tools } from "./shared"
 import { homePath } from "./site-routes"
+import { zoomDescriptions } from "./zoom-descriptions"
 
 export type SiteLocale = keyof typeof seoCopy
 export const seoLocales = Object.keys(seoCopy) as SiteLocale[]
@@ -81,6 +82,11 @@ export function documentationDescription(lang: string, slugs: string[], authored
   if (reviewed) {
     const description = reviewed[localeOf(lang)][slugs[1] ?? "index"]
     if (!description) throw new Error(`Missing reviewed ${selectedTool?.displayName} description: ${slugs.join("/")}`)
+    return description
+  }
+  if (selectedTool?.name === "zm") {
+    const description = zoomDescriptions[localeOf(lang)][slugs[1] ?? "index"]
+    if (!description) throw new Error(`Missing reviewed Zoom description: ${slugs.join("/")}`)
     return description
   }
   const [tool, slug] = slugs

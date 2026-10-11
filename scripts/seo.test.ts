@@ -195,3 +195,28 @@ describe("truthful structured data", () => {
     expect(html).toContain("\\u003c/script>")
   })
 })
+
+describe("Zoom descriptions", () => {
+  it("names meeting tasks for every reviewed page and locale", () => {
+    for (const lang of ["en", "ru", "es"])
+      for (const slug of [
+        "index",
+        "installation",
+        "zoom-app",
+        "archive",
+        "search",
+        "topic-search",
+        "mcp",
+        "remote-meetings",
+        "roadmap",
+        "commands",
+        "configuration",
+        "sessions",
+        "usage",
+        "security",
+        "troubleshooting",
+        "changelog",
+      ])
+        expect(documentationDescription(lang, slug === "index" ? ["zm"] : ["zm", slug]).length).toBeGreaterThan(20)
+  })
+})

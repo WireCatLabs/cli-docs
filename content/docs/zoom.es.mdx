@@ -1,11 +1,96 @@
 ---
-title: "Zoom"
-description: "El punto de partida de la documentación de Zoom. Las guías de configuración y uso están en preparación."
+title: "Reuniones"
+description: "Encuentra lo hablado, relaciónalo con tus proyectos y prepara la próxima llamada."
 ---
 
-Usa esta página para encontrar las guías de configuración y uso de Zoom. La documentación
-está en preparación; las instrucciones de instalación y conexión de la cuenta aún no están disponibles aquí.
+Cuando necesitas recuperar una decisión o preparar una llamada, combina las transcripciones
+con mensajes, archivos y notas relacionados. Tu agente puede preparar un resumen con referencias
+que indiquen qué se dijo, cuándo y en qué reunión.
+
+Una transcripción es el texto de la conversación; una grabación contiene el audio o vídeo. Los datos
+de una reunión también incluyen fecha, título y participantes registrados. [Zoom](./zm/index.md)
+obtiene estas fuentes mediante su API o archivos que importas. Participas en las llamadas desde
+Zoom; la herramienta de línea de comandos da al agente acceso a la información guardada.
+
+## Encontrar una discusión o decisión
+
+Pide al agente que identifique la reunión antes de resumirla:
+
+```text prompt
+Usa zm CLI para encontrar las reuniones sobre Research Example del último mes.
+Muestra sus fechas y los pasajes sobre la decisión de lanzamiento, con referencias.
+Separa a los asistentes registrados de las personas solo mencionadas. Indica qué transcripciones faltan.
+```
+
+El agente comprueba los datos, busca en las transcripciones disponibles y abre los pasajes relevantes.
+Una respuesta útil identifica la reunión, fecha, cita o paráfrasis fiel y referencia. Una transcripción
+ausente o una búsqueda vacía no demuestra que la discusión no ocurriera.
+[Buscar con fuentes](./zm/search.md) explica palabras, referencias y cobertura del índice;
+[buscar por significado](./zm/topic-search.md) necesita un componente de búsqueda configurado.
+
+## Relacionar reuniones con otras fuentes
+
+Usa un proyecto para el mismo trabajo en reuniones, mensajes y documentos. Conserva su clave corta
+y sus nombres alternativos explícitos, en lugar de crear un proyecto por cada escritura. Las etiquetas
+ayudan a encontrar material relacionado; las notas guardan tu contexto. Un vínculo de persona
+conecta al participante observado con la persona elegida; un nombre coincidente no prueba identidad.
+
+```text prompt
+Usa zm CLI y Memo para reunir las reuniones de Research Example, incluidos sus nombres alternativos existentes.
+Revisa el proyecto y las etiquetas antes de proponer nuevas. Muestra posibles sinónimos para revisar.
+Combina los pasajes con personas vinculadas, mis notas, mensajes relacionados y archivos importados de Google Drive.
+Muestra la fuente de cada conclusión. Propón vínculos de proyecto, personas y etiquetas antes de guardarlos.
+```
+
+El agente elige el proyecto principal, encuentra sus reuniones vinculadas o etiquetadas y las lee
+junto con otras fuentes disponibles. Revisas los vínculos dudosos y las nuevas etiquetas.
+Usa [Memo](./memo.mdx) para notas, etiquetas, hechos y proyectos, [organizar fuentes](./organize.md)
+para el enfoque común y [Google Drive](./drive/index.md) para importar los documentos elegidos.
+Puedes vincular un evento de calendario existente; una próxima reunión de Zoom no implica
+sincronización con un calendario de Google u Outlook.
+
+## Preparar la próxima reunión
+
+```text prompt
+Usa zm CLI para encontrar mi próxima reunión de Zoom con Alice Example.
+Prepara un resumen de reuniones anteriores de la serie, material del proyecto vinculado y contexto de participantes.
+Enumera decisiones previas, preguntas abiertas y posibles tareas con sus fuentes.
+Si el proyecto o la persona son ambiguos, muestra candidatos y las razones de tu elección.
+No cambies la reunión ni guardes vínculos inferidos.
+```
+
+El agente lee la agenda de Zoom y busca el contexto guardado. Comprueba que el resumen se refiere
+a la reunión correcta y separa decisiones confirmadas de sugerencias. Pide que indique períodos,
+transcripciones o documentos ausentes. [Próximas reuniones de Zoom](./zm/remote-meetings.md) describe
+la agenda y las invitaciones; el agente prepara el resumen con las fuentes que eliges.
+
+## Guardar los resultados útiles
+
+Pide una lista revisable de decisiones, promesas, declaraciones importantes y tareas posteriores,
+cada una con un pasaje. Comprueba quién asistió y qué persona representa el hablante antes de guardar
+un vínculo de identidad. Reutiliza el proyecto y las etiquetas existentes cuando encajen.
+
+Memo guarda hechos y tareas por separado de notas y resúmenes reutilizables. Los comandos del dueño
+guardan directamente; los hechos enviados mediante herramientas MCP de Memo para agentes quedan
+propuestos hasta revisarlos. Una propuesta de tarea de Zoom no crea una tarea. Los comandos dedicados
+al análisis automático y la preparación siguen [planificados](./zm/roadmap.md).
+
+## Más control
+
+Estos comandos leen reuniones guardadas; sustituye `1` por un ID de tu propia lista:
+
+```sh
+zm meetings list --json
+zm meetings show 1 --json
+zm meetings transcript 1 --json
+zm meetings search "launch decision" --json
+zm remote-meetings list --json
+```
+
+La búsqueda usa los datos disponibles en el perfil elegido. Si faltan, [descarga o importa las
+transcripciones necesarias](./zm/archive.md) antes de confiar en la respuesta.
 
 ## Guías relacionadas
 
-- [Conectar tu agente de IA](./agents.mdx).
+Empieza por [configurar Zoom](./zm/installation.md) o continúa con [relacionar y organizar
+fuentes](./organize.md) cuando los pasajes estén disponibles.

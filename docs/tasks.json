@@ -25,10 +25,11 @@
   },
   {
     "id": "prepare-meeting",
-    "pages": ["first-tasks.md", "prompting.mdx"],
+    "pages": ["first-tasks.md", "prompting.mdx", "zoom.mdx", "zm/search.md", "zm/remote-meetings.md"],
     "families": {
       "tg": ["contacts", "chats", "messages"],
-      "max": ["contacts", "chats", "messages"]
+      "max": ["contacts", "chats", "messages"],
+      "zm": ["meetings", "remote-meetings", "events"]
     }
   },
   {
@@ -131,6 +132,20 @@
     "pages": ["memo/archive.md", "memo/configuration.md", "memo/commands.md"],
     "families": {
       "memo": ["import", "auto", "commands"]
+    }
+  },
+  {
+    "id": "meeting-import-archive",
+    "pages": ["zm/installation.md", "zm/zoom-app.md", "zm/archive.md"],
+    "families": {
+      "zm": ["config", "login", "session", "import", "pull", "watch", "recordings", "doctor"]
+    }
+  },
+  {
+    "id": "meeting-agent-access",
+    "pages": ["zm/mcp.md", "zoom.mdx"],
+    "families": {
+      "zm": ["serve", "skill", "search", "commands", "complete"]
     }
   }
 ]
