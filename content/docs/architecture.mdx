@@ -23,7 +23,7 @@ Four packages of our own, plus two pinned builds, all published to npm under `@w
 
 | Package | What it owns |
 | --- | --- |
-| [`@wirecat/cli-core`](https://github.com/WireCatLabs/cli-core/tree/8648e39) | What any command line tool needs and no messenger: output modes, the terminal renderer, the closed list of errors and their exit codes, keyring access, config files, clocks, retry, an HTTP client, a code generator for HTTP APIs, self-update. Also used by `braze-cli`, which has nothing to do with messaging. |
+| [`@wirecat/cli-core`](https://github.com/WireCatLabs/cli-base/tree/8648e39) | What any command line tool needs and no messenger: output modes, the terminal renderer, the closed list of errors and their exit codes, keyring access, config files, clocks, retry, an HTTP client, a code generator for HTTP APIs, self-update. Also used by `braze-cli`, which has nothing to do with messaging. |
 | [`@wirecat/cli-messaging`](https://github.com/WireCatLabs/cli-messaging/tree/c7cd479) | Everything about messaging that is not one messenger: the domain model, name resolution, the local SQLite store, the send guard, the services (use cases), the command tree, the MCP server, speech recognition, background processes. |
 | `@wirecat/cli-messaging-sqlite` | SQLite 3.53 builds, loaded only where the runtime's own SQLite is too old (Bun on macOS, a Linux distribution's Node). |
 | `@wirecat/cli-messaging-onnx` | ONNX Runtime as WebAssembly, for the local embedding models. Speech recognition uses `sherpa-onnx`. |
