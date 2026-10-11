@@ -4,13 +4,15 @@ import { remarkAnchorAliases } from "../lib/remark-anchor-aliases"
 import { commandReferences, remarkDocUsability, resolveCommand } from "../lib/remark-doc-usability"
 import { preferredSearchTool, searchIntentPhrases } from "../lib/search-intents"
 
+// Presentation fixtures do not need to parse the full generated release command catalogs.
+// Reference-link tests below provide their own explicit command index.
 describe("documentation command references", () => {
   it("groups only complete remote setup sections, preserving each shell example and the next heading", () => {
     const markdown =
       "## Start\n\n### Windows (PowerShell)\n\n```powershell\ntg.cmd mcp\n```\n\n### macOS (Terminal)\n\n```sh\nmax mcp\n```\n\n### Linux (Terminal)\n\n```sh\nsudo tailscale funnel 8765\n```\n\n## Connect\n"
     for (const locale of ["", ".ru", ".es"]) {
       const tree = fromMarkdown(markdown)
-      remarkDocUsability()(tree, { path: `/project/content/docs/tg/remote${locale}.md` })
+      remarkDocUsability(new Map())(tree, { path: `/project/content/docs/tg/remote${locale}.md` })
       expect(tree.children[1]).toMatchObject({
         data: { hName: "platform-setup-tabs" },
         children: [
@@ -31,17 +33,17 @@ describe("documentation command references", () => {
       expect(tree.children[2]).toMatchObject({ type: "heading", depth: 2 })
     }
     const incomplete = fromMarkdown(markdown.replace("### Linux (Terminal)", "### Other"))
-    remarkDocUsability()(incomplete, { path: "/project/content/docs/max/remote.md" })
+    remarkDocUsability(new Map())(incomplete, { path: "/project/content/docs/max/remote.md" })
     expect(JSON.stringify(incomplete)).not.toContain("platform-setup-tabs")
     const otherPage = fromMarkdown(markdown)
-    remarkDocUsability()(otherPage, { path: "/project/content/docs/max/groups.md" })
+    remarkDocUsability(new Map())(otherPage, { path: "/project/content/docs/max/groups.md" })
     expect(JSON.stringify(otherPage)).not.toContain("platform-setup-tabs")
   })
   it("marks native reference prose as English without including the next localized section or altering examples", () => {
     const tree = fromMarkdown(
       '### `tg bot api`\n\nLocalized notice.\n\n<div lang="en">\n\n#### `tg bot api get-me`\n\nNative description.\n\n```sh\ntg bot api get-me\n```\n\n</div>\n\n## Localized next section\n',
     )
-    remarkDocUsability()(tree, { path: "/project/content/docs/tg/commands.ru.md" })
+    remarkDocUsability(new Map())(tree, { path: "/project/content/docs/tg/commands.ru.md" })
     expect(tree.children[2]).toMatchObject({
       data: { hName: "div", hProperties: { lang: "en" } },
       children: [{ type: "heading", depth: 4 }, { type: "paragraph" }, { type: "code", value: "tg bot api get-me" }],
@@ -54,7 +56,7 @@ describe("documentation command references", () => {
     const tree = fromMarkdown(
       "```text prompt\nUse tg cli.\nKeep line breaks.\n```\n\n```text\nLogged in as a user.\n```",
     )
-    remarkDocUsability()(tree, { path: "/project/content/docs/first-tasks.ru.md" })
+    remarkDocUsability(new Map())(tree, { path: "/project/content/docs/first-tasks.ru.md" })
     expect(tree.children[0]).toMatchObject({
       data: { hName: "agent-prompt", hProperties: { text: "Use tg cli.\nKeep line breaks.", language: "ru" } },
     })
@@ -63,7 +65,7 @@ describe("documentation command references", () => {
   it("keeps compact prompts copyable and preserves their Markdown source", () => {
     const markdown = "```text prompt compact\nFind the agreement and show its source.\n```"
     const tree = fromMarkdown(markdown)
-    remarkDocUsability()(tree, { path: "/project/content/docs/index.es.mdx" })
+    remarkDocUsability(new Map())(tree, { path: "/project/content/docs/index.es.mdx" })
     expect(tree.children[0]).toMatchObject({
       data: {
         hName: "agent-prompt",
@@ -76,7 +78,7 @@ describe("documentation command references", () => {
     const tree = fromMarkdown(
       "> **See the my.telegram.org login screen**\n>\n> ![Empty login form](/telegram-app-login.png)\n>\n> Website login comes before account authorization.\n",
     )
-    remarkDocUsability()(tree, { path: "/project/content/docs/tg/sessions.md" })
+    remarkDocUsability(new Map())(tree, { path: "/project/content/docs/tg/sessions.md" })
     expect(tree.children[0]).toMatchObject({
       data: { hName: "details", hProperties: { id: "telegram-app-login" } },
       children: [
@@ -113,7 +115,7 @@ describe("documentation command references", () => {
   })
   it("keeps a source section closed, with its original anchor and every executable example", () => {
     const tree = fromMarkdown("## Install\n\n## From source\n\n```sh\npnpm build\n```\n\n## Files\n")
-    remarkDocUsability()(tree, { path: "/project/content/docs/tg/installation.md" })
+    remarkDocUsability(new Map())(tree, { path: "/project/content/docs/tg/installation.md" })
     expect(tree.children[1]).toMatchObject({
       data: { hName: "details" },
       children: [
@@ -131,7 +133,7 @@ describe("documentation command references", () => {
       '## Shell completion\n\n```sh\nmax complete zsh\n```\n\n<a id="обновление-и-удаление" />\n\n## Upgrade\n\nKeep this.\n',
     )
     remarkAnchorAliases()(tree)
-    remarkDocUsability()(tree, { path: "/project/content/docs/max/installation.md" })
+    remarkDocUsability(new Map())(tree, { path: "/project/content/docs/max/installation.md" })
     expect(JSON.stringify(tree)).not.toContain("max complete zsh")
     expect(tree.children[0]).toMatchObject({ data: { hProperties: { id: "обновление-и-удаление" } } })
     expect(tree.children[1]).toMatchObject({ type: "heading" })
@@ -139,7 +141,7 @@ describe("documentation command references", () => {
   it("keeps the next section's alias outside the collapsed source section", () => {
     const tree = fromMarkdown('## From source\n\n```sh\npnpm build\n```\n\n<a id="where-files-go" />\n\n## Files\n')
     remarkAnchorAliases()(tree)
-    remarkDocUsability()(tree, { path: "/project/content/docs/tg/installation.md" })
+    remarkDocUsability(new Map())(tree, { path: "/project/content/docs/tg/installation.md" })
     expect(tree.children[1]).toMatchObject({ data: { hProperties: { id: "where-files-go" } } })
   })
 })

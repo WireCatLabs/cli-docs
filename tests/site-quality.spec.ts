@@ -51,10 +51,10 @@ test("documentation search loads on demand and mobile navigation dismisses with 
   await page.keyboard.press("Escape")
   await expect(menu).toHaveAttribute("aria-expanded", "false")
   await expect(menu).toBeFocused()
-  const search = page
-    .locator("#nd-subnav")
-    .getByRole("button", { name: /search/i })
-    .first()
+  // Mobile search lives in the drawer so language, theme and messenger controls fit.
+  await menu.click()
+  const search = page.locator('#nd-sidebar-mobile button[aria-haspopup="dialog"]:visible')
+  await expect(search).toHaveCount(1)
   await search.click()
   const dialog = page.getByRole("dialog")
   await expect(dialog).toBeVisible()
