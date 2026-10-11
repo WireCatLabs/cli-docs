@@ -18,11 +18,25 @@ Comprueba el paso que falla antes de cambiar de cuenta o ampliar permisos.
 | No se encuentra el destino del vínculo | Usa una referencia de la base seleccionada. Comprueba el almacenamiento compartido antes de vincular personas/proyectos del servicio de mensajería. |
 
 ```sh
-drive status --json
-drive folders list --json
-drive sync --json
-drive search 'known word' --exact --json
+drive personal status --json
+drive personal folders list --json
+drive personal sync --json
+drive personal search 'known word' --exact --json
 ```
 
 Al pedir ayuda, comparte el código de error sin datos privados y el comando. No incluyas JSON
 del cliente, tokens ni texto privado. Cuando aparezca la fuente, vuelve a [búsqueda](./search.md).
+
+## «Choose a profile explicitly»
+
+Ejecuta `drive personal …` o `drive --profile personal …`, sustituyendo `personal` por tu cuenta.
+El error lista perfiles configurados. Ni `DRIVE_PROFILE` ni un antiguo perfil guardado sustituyen
+la selección. Para la primera conexión, consulta [acceso](./installation.md#connect-your-account).
+`drive personal session list` muestra todos los nombres configurados.
+
+## La configuración Google Cloud resulta confusa
+
+Habilitar una API no crea un cliente OAuth. Configura **Google Auth platform → Branding**,
+añade la cuenta en **Audience → Test users**, crea **Clients → Desktop app** y descarga JSON.
+Sigue [los pasos de la consola](./installation.md#prepare-google-sign-in).
+Necesitas JSON Desktop, no clave API ni de cuenta de servicio.

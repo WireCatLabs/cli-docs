@@ -14,7 +14,7 @@ con búsqueda y permite añadir etiquetas, notas y recuerdos respaldados por fue
 Se admiten Google Docs y archivos Markdown/texto subidos. PDF, Office, Sheets, Slides y accesos
 directos no se importan. Elegir una carpeta incluye sus descendientes; el permiso de Google
 no se limita a esas carpetas. La sincronización lee Google; etiquetas y notas permanecen locales.
-Se instala desde el código fuente y actualmente requiere un cliente Desktop OAuth configurado en Google.
+La instalación usa código fuente; necesitas el JSON Desktop OAuth del propietario de la app o un cliente propio de Google Cloud. Cada comando de cuenta indica un perfil, como `drive personal sync`.
 
 Empieza con [instalación y conexión](./installation.md), después
 [importa tu primera carpeta](./usage.md). Consulta [recetas](./recipes.md) para peticiones completas.

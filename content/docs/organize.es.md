@@ -27,7 +27,7 @@ Drive vincula registros existentes; no crea proyectos ni convierte cada elemento
 ## Probar con una decisión
 
 ```text prompt
-Use drive CLI to find the budget decision in my imported project documents.
+Use drive CLI with profile personal to find the budget decision in my imported project documents.
 Use tg CLI to find the message discussing it in the history already on this computer.
 Show the source links first. Tag the document budget and save a note about the open question.
 If the project and person already exist in the same store, show them before adding links.
@@ -48,8 +48,8 @@ propuesto. Si el documento cambia, un recuerdo anterior puede quedar obsoleto.
 Memo registra carpetas locales y subcarpetas; puede etiquetar una subcarpeta importada por su ruta.
 Drive elige raíces Google recursivamente y conserva la ascendencia de carpetas para sincronizar.
 Su colección actual en la base corresponde a una cuenta: no expone un árbol navegable de Google
-ni trata cada carpeta remota como un proyecto local. Usa `drive folders list` para las raíces
-elegidas y `drive files list --parent FOLDER_ID` para contenido remoto, sustituyendo el marcador.
+ni trata cada carpeta remota como un proyecto local. Usa `drive personal folders list` para las raíces
+elegidas y `drive personal files list --parent FOLDER_ID` para contenido remoto, sustituyendo el marcador.
 
 Una carpeta de chats agrupa chats. Es una colección distinta de una carpeta de archivos fuente.
 Una etiqueta o proyecto no debe cambiar silenciosamente la carpeta de una fuente.

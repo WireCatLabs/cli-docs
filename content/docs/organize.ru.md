@@ -27,7 +27,7 @@ Drive связывает существующие записи; он не соз
 ## Попробовать на одном решении
 
 ```text prompt
-Use drive CLI to find the budget decision in my imported project documents.
+Use drive CLI with profile personal to find the budget decision in my imported project documents.
 Use tg CLI to find the message discussing it in the history already on this computer.
 Show the source links first. Tag the document budget and save a note about the open question.
 If the project and person already exist in the same store, show them before adding links.
@@ -48,8 +48,8 @@ Do not merge people based only on names or create a task without asking me what 
 Memo регистрирует локальные папки с подпапками и может пометить импортированную подпапку по пути.
 Drive рекурсивно выбирает корни Google и сохраняет происхождение папок для синхронизации. Сейчас
 коллекция общей базы соответствует аккаунту: она не показывает навигационное дерево Google и не
-превращает каждую удалённую папку в проект. Посмотрите выбранные корни через `drive folders list`,
-а удалённое содержимое — через `drive files list --parent FOLDER_ID`, заменив заполнитель.
+превращает каждую удалённую папку в проект. Посмотрите выбранные корни через `drive personal folders list`,
+а удалённое содержимое — через `drive personal files list --parent FOLDER_ID`, заменив заполнитель.
 
 Папка чатов мессенджера группирует чаты. Это другой вид коллекции, чем папка файлов-источников.
 Тег и проект не должны неявно менять принадлежность источника папке.

@@ -21,7 +21,7 @@ Las ediciones remotas requieren volver a conectar con `session start --write`. L
 permanente tiene controles adicionales. Usa `--read-only` para inspeccionar datos. Los roles
 y políticas de Google siguen vigentes; un control local no regula acciones fuera de la herramienta.
 
-`drive session end` elimina el acceso local pero conserva documentos y configuración. Revoca
+`drive personal session end` elimina el acceso local pero conserva documentos y configuración. Revoca
 la aplicación en tu cuenta de Google para retirar su acceso. Antes de borrar datos locales,
 identifica las carpetas y base de esta herramienta; no elimines una base compartida con otros tools.
 Consulta [configuración](./configuration.md) antes de cambiar el almacenamiento.
