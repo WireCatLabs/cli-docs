@@ -403,7 +403,7 @@ Otros nombres para cualquier cosa: el apodo de una persona, el nombre de un cont
 | `aliasable_id` | integer, not null | la fila en la tabla `aliasable_type` |
 | `account_id` | integer → `accounts.id` | se rellena cuando el alias vale solo visto desde una cuenta, como el nombre de un contacto en una mensajería; null cuando vale en todas partes |
 | `name` | text, not null | el alias tal como se escribe: un apodo, un nombre corto, un nombre anterior |
-| `name_folded` | text, not null | `name` normalizado para comparar: en minúsculas, sin acentos |
+| `name_folded` | text, not null | normalizado para comparar: los alias de personas y contactos se comparan sin acentos; los alias canónicos de proyectos y etiquetas los conservan |
 | `display` | integer, not null | 1 para el alias que se muestra en lugar del nombre real; como mucho uno por cosa y cuenta |
 | `source` | text, not null | dueño, agente, una importación |
 | `created_at` | integer, not null | cuándo se guardó esta fila aquí |
@@ -948,6 +948,7 @@ Lo que concluyó un agente: un resumen, un resumen diario, un hecho, una prefere
 | `scope` | text, not null | personal o de trabajo, según su evidencia |
 | `created_at` | integer, not null | cuándo se guardó esta fila aquí |
 | `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+| `deleted_at` | integer | cuándo dejó de ser una memoria: una memoria `fact` pasó a `facts` |
 
 #### `memory_words`
 
@@ -968,7 +969,7 @@ Filas de memorias que esperan ser indexadas: los triggers las encolan, JS normal
 
 ### Eventos y reuniones
 
-Los eventos del dueño, y el registro que cada app de reuniones tiene de ellos. `MessageStore.meetings` implementa tanto `MeetingStore` como el opcional `MeetingTranscriptStore` de `@wirecat/cli-meetings`. `appendTranscripts` se ejecuta en una sola transacción inmediata y casa la cuenta numérica con el id externo de la ocurrencia. Los campos de creación explícitos solo se aplican a una ocurrencia que falta; una ocurrencia eliminada se rechaza con `not_found`. Añadir cambia solo las versiones y filas de la transcripción y conserva los campos de la ocurrencia, eventos, series, cursores y demás partes. Repetir la misma fuente y hash coincide con el historial conservado sin reactivarlo. Las filas quedan sin enlazar a participantes, y la respuesta confirma identidades sin contar creadas ni omitidas. `MessageStore.meetings` implementa además `MeetingReadCapabilities`, aparte del puerto común de reuniones. `meetingMetadata` y `transcriptMetadata` leen metadatos dentro de su ámbito; `transcripts` y `transcriptRows` paginan por id de revisión y posición de la frase. Los límites van de 1 a 1000 y `hasMore` usa una fila de más. Los padres eliminados se rechazan con `not_found`; las revisiones sustituidas conservadas requieren `includeHistorical`. `maxReadBytes` vale 4 MiB por defecto y limita el texto UTF-8 guardado y los metadatos de la página elegida, incluida la fila de más y los padres devueltos. La comprobación previa y la lectura completa comparten una instantánea de lectura, sin vaciar las colas de escritura. Las páginas demasiado grandes se rechazan; la evidencia nunca se recorta. Este límite cuenta los bytes TEXT guardados, no la memoria total ni el JSON final; quien llama sigue limitando la salida. La cancelación es cooperativa: la señal se comprueba antes y entre consultas y tras leer valores. Una consulta SQLite síncrona en curso termina antes de informar la cancelación; quien llama espera la lectura antes de cerrar su conexión.
+Los eventos del dueño, y el registro que cada app de reuniones tiene de ellos. `MessageStore.meetings` implementa tanto `MeetingStore` como el opcional `MeetingTranscriptStore` de `src/meetings/`. `appendTranscripts` se ejecuta en una sola transacción inmediata y casa la cuenta numérica con el id externo de la ocurrencia. Los campos de creación explícitos solo se aplican a una ocurrencia que falta; una ocurrencia eliminada se rechaza con `not_found`. Añadir cambia solo las versiones y filas de la transcripción y conserva los campos de la ocurrencia, eventos, series, cursores y demás partes. Repetir la misma fuente y hash coincide con el historial conservado sin reactivarlo. Las filas quedan sin enlazar a participantes, y la respuesta confirma identidades sin contar creadas ni omitidas. `MessageStore.meetings` implementa además `MeetingReadCapabilities`, aparte del puerto común de reuniones. `meetingMetadata` y `transcriptMetadata` leen metadatos dentro de su ámbito; `transcripts` y `transcriptRows` paginan por id de revisión y posición de la frase. Los límites van de 1 a 1000 y `hasMore` usa una fila de más. Los padres eliminados se rechazan con `not_found`; las revisiones sustituidas conservadas requieren `includeHistorical`. `maxReadBytes` vale 4 MiB por defecto y limita el texto UTF-8 guardado y los metadatos de la página elegida, incluida la fila de más y los padres devueltos. La comprobación previa y la lectura completa comparten una instantánea de lectura, sin vaciar las colas de escritura. Las páginas demasiado grandes se rechazan; la evidencia nunca se recorta. Este límite cuenta los bytes TEXT guardados, no la memoria total ni el JSON final; quien llama sigue limitando la salida. La cancelación es cooperativa: la señal se comprueba antes y entre consultas y tras leer valores. Una consulta SQLite síncrona en curso termina antes de informar la cancelación; quien llama espera la lectura antes de cerrar su conexión.
 
 #### `event_series`
 
@@ -1166,7 +1167,7 @@ Filas de transcripciones, chat de reuniones y resúmenes que esperan ser indexad
 
 ### Tareas
 
-Un sistema de tareas y tickets para personas y agentes: proyectos con claves, tareas con tipo y prioridad, asignados que son personas o bots, y las decisiones tomadas por el camino. Una promesa es una tarea de tipo `promise`; una pregunta es una tarea de tipo `question` cuya respuesta está vinculada.
+Un sistema de tareas y tickets para personas y agentes: proyectos con claves, tareas con tipo y prioridad, asignados que son personas o bots, y los hechos registrados por el camino (`facts`). Una promesa es una tarea de tipo `promise`; una pregunta es una tarea de tipo `question` cuya respuesta está vinculada.
 
 #### `reminders`
 
@@ -1243,6 +1244,7 @@ Una tarea o ticket, para personas y agentes por igual. Todo lo que le concierne 
 | `created_at` | integer, not null | cuándo se guardó esta fila aquí |
 | `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
 | `deleted_at` | integer | desaparecido en la fuente; la sincronización nunca borra de verdad |
+| `next_check_at` | integer | cuándo un agente debe volver a mirar la tarea abierta; desde entonces la agenda la muestra. No es un recordatorio: al dueño no le llega nada |
 
 #### `task_assignments`
 
@@ -1274,7 +1276,7 @@ El historial de una tarea: creada, cambio de estado, asignada, fecha límite mov
 
 #### `decisions`
 
-Una elección que se tomó y vale hasta que se reemplace: por qué hacemos algo. Su evidencia — el mensaje, la fila de transcripción o el documento — son `links` de tipo `evidence`; una decisión que propuso un agente se vincula de vuelta a esa memoria con `created-from`.
+Reemplazada por `facts` (una decisión es un hecho de tipo `decision`) en la versión 2 del almacén. Nada escribe en ella; se queda vacía hasta una versión que pueda borrar tablas.
 
 | Columna | Tipo | Significado |
 | --- | --- | --- |
@@ -1291,6 +1293,33 @@ Una elección que se tomó y vale hasta que se reemplace: por qué hacemos algo.
 | `created_at` | integer, not null | cuándo se guardó esta fila aquí |
 | `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
 | `deleted_at` | integer | desaparecido en la fuente; la sincronización nunca borra de verdad |
+
+#### `facts`
+
+Lo que ocurrió, según su evidencia: un hecho, una afirmación, una pregunta, una decisión o una promesa. Su evidencia son `links` de tipo `evidence`; la respuesta a una pregunta es una fila de `links` de tipo `answered-by`. Reemplaza a `decisions`, que se queda vacía.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `type` | text, not null | hecho, afirmación, pregunta, decisión, promesa |
+| `statement` | text, not null | qué ocurrió, en una frase |
+| `status` | text, not null | propuesto, aceptado; una decisión también reemplazada o revertida |
+| `project_id` | integer → `projects.id` | el `project` al que pertenece |
+| `subject_type` | text | de quién o de qué trata: `person`, `chat`, `meeting`, `project`, … |
+| `subject_id` | integer | la fila en la tabla de `subject_type` |
+| `occurred_at` | integer | cuándo ocurrió, según la evidencia |
+| `supersedes_id` | integer → `facts.id` | la decisión que esta decisión reemplaza |
+| `author_type` | text, not null | `person` o `bot` |
+| `author_id` | integer, not null | la fila en la tabla de `author_type` |
+| `model` | text | el modelo que lo escribió, si lo escribió un agente |
+| `confirmed_by_type` | text | quién lo aceptó; null mientras está propuesto |
+| `confirmed_by_id` | integer | quién lo aceptó; null mientras está propuesto |
+| `scope` | text | personal o de trabajo, si quien lo escribió lo dijo |
+| `source` | text, not null | el dueño, un agente, una memoria, una importación |
+| `metadata` | text | JSON: lo que envía la fuente y no tiene columna; no se busca |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+| `deleted_at` | integer | borrado en la fuente; la sincronización nunca borra filas del todo |
 
 ### Agentes y acciones
 
@@ -1373,7 +1402,7 @@ Etiquetas que las reglas ponen a un chat al comparar su título, alias y descrip
 
 #### `links`
 
-Cada conexión entre dos cosas que no guarda ninguna columna. Tipos: `links-to` (un documento o nota enlaza a algo, tal como está escrito en él), `about` (una nota o documento trata de una persona, proyecto, …), `member-of` (un chat o persona pertenece a un proyecto u organización), `labelled` (una cuenta de carpeta → una etiqueta, la ruta de la subcarpeta en `anchor`, para que todo documento debajo lleve la etiqueta), `answered-by` (una tarea pregunta → el mensaje que la respondió), `evidence` (una decisión o memoria → su fuente), `created-from` (una cosa → aquello de lo que se hizo). Tipos que el almacén aún no escribe: `duplicate-of` (la misma pregunta hecha otra vez), `related-to`, `assigned-to`.
+Cada conexión entre dos cosas que no guarda ninguna columna. Tipos: `blocked-by` (una tarea necesita que otra termine antes), `follow-up-of` (una tarea continúa otra anterior), `links-to` (un documento o nota enlaza a algo, tal como está escrito en él), `about` (una nota o documento trata de una persona, proyecto, …), `member-of` (un chat o persona pertenece a un proyecto u organización), `labelled` (una cuenta de carpeta → una etiqueta, la ruta de la subcarpeta en `anchor`, para que todo documento debajo lleve la etiqueta), `answered-by` (una tarea pregunta → el mensaje que la respondió), `evidence` (un hecho o memoria → su fuente), `created-from` (una cosa → aquello de lo que se hizo). Tipos que el almacén aún no escribe: `duplicate-of` (la misma pregunta hecha otra vez), `related-to`, `assigned-to`.
 
 | Columna | Tipo | Significado |
 | --- | --- | --- |
@@ -1553,7 +1582,7 @@ Fragmentos de un texto más largo, la unidad que recibe un vector: tramos de un 
 | Columna | Tipo | Significado |
 | --- | --- | --- |
 | `id` | integer, PK | Clave primaria. |
-| `chunkable_type` | text, not null | `document`, `email`, `attachment`, `note`, `memory`, `conversation`, `meeting_transcript`, `meeting_summary`, `event`, `task` |
+| `chunkable_type` | text, not null | `document`, `email_thread`, `attachment`, `note`, `memory`, `conversation`, `meeting_transcript`, `meeting_summary`, `event`, `task` |
 | `chunkable_id` | integer, not null | la fila en la tabla `chunkable_type` |
 | `position` | integer, not null | orden dentro de su padre, desde 0 |
 | `start_offset` | integer, not null | dónde empieza el fragmento en el texto del padre, en caracteres |
