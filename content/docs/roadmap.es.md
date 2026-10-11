@@ -24,7 +24,7 @@ disponible, y el orden puede cambiar. No hay fechas prometidas. Lo que ya funcio
   como reuniones.
 - **Bases de conocimiento**: Notion.
 - **Plataformas de agentes**: integraciones nativas con OpenClaw y Hermes, más allá de la skill
-  que [Hermes ya puede usar](./agents.mdx).
+  que [ambos ya pueden usar](./agents.mdx).
 - **Un SDK para nuevas integraciones**: para que tú u otras personas conectéis una fuente nueva
   de la misma forma.
 - **GitHub**: descripciones de pull requests, issues y proyectos.

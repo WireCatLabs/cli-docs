@@ -5,7 +5,7 @@ for (const lang of ["en", "ru", "es"]) {
   test(`${lang}: task onboarding, Markdown equivalents and sidebar icons`, async ({ page, request }) => {
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto(`/${lang}/docs/first-tasks`)
-    await expect(page.locator('main figure [role="img"]')).toHaveCount(0)
+    await expect(page.locator('main figure [role="img"]')).toHaveCount(1)
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
     const violations = await new AxeBuilder({ page }).include("main").analyze()
     expect(violations.violations).toEqual([])
@@ -13,7 +13,7 @@ for (const lang of ["en", "ru", "es"]) {
     const response = await request.get(`/llms.mdx/docs/${locale}first-tasks/content.md`)
     expect(response.ok()).toBe(true)
     const markdown = await response.text()
-    expect(markdown).not.toContain("```mermaid")
+    expect(markdown).toContain("```mermaid")
     expect(markdown).toContain("installation")
     expect(markdown).not.toContain("<Mermaid")
     await page.goto(`/${lang}/docs/agents`)
