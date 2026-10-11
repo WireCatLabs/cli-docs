@@ -40,7 +40,7 @@ title: "Как tg ведет себя в скриптах"
 | Чтобы увидеть, что будет делать команда | `--dry-run` |
 | Чтобы узнать, произошла ли неудачная запись | `outcome_unknown`, `retryable` и `operationId` |
 
-Частичное чтение или скачивание может вернуть JSON с кодом `0`: проверьте `complete` и `batch` или `issue`. JSONL частичной загрузки добавляет `batch_summary`; успешная часть сохраняется. Ошибки содержат `actions` с действиями, настройками и паузой для восстановления.
+Частичное чтение или скачивание может вернуть JSON с кодом `0`: проверьте `complete` и `batch` или `issue`. Загрузка, которая не удалась до первой страницы по причине, которую повтор не исправит (например, нет `--from`), завершается с кодом этой ошибки. JSONL частичной загрузки добавляет `batch_summary`; успешная часть сохраняется. Ошибки содержат `actions` с действиями, настройками и паузой для восстановления.
 
 ## Как называются команды
 
@@ -101,6 +101,6 @@ tg commands schema messages list --json
 
 ## Стандарты, которым мы следуем
 
-`tg` соответствует частям, применимым к [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) и [Рекомендациям по интерфейсу командной строки](https://clig.dev/), а также [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) и [Agent Навыки](https://agentskills.io/specification). [Архитектура](https://github.com/WireCatLabs/tg-cli/blob/v0.46.2/docs/dev/ARCHITECTURE.md) и [стандарт общего интерфейса командной строки](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/dev/STANDARD.md) описывают, как они применяются, а также исключения, сделанные специально. Мы не претендуем на полную сертификацию третьей стороной.
+`tg` соответствует частям, применимым к [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) и [Рекомендациям по интерфейсу командной строки](https://clig.dev/), а также [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) и [Agent Навыки](https://agentskills.io/specification). [Архитектура](https://github.com/WireCatLabs/tg-cli/blob/v0.46.3/docs/dev/ARCHITECTURE.md) и [стандарт общего интерфейса командной строки](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/dev/STANDARD.md) описывают, как они применяются, а также исключения, сделанные специально. Мы не претендуем на полную сертификацию третьей стороной.
 
 Для настройки см. [руководство по настройке](./configuration.md); для каждого ключа и переменной среды — [справочник настроек](./configuration-reference.md).

@@ -21,7 +21,7 @@
       "ru": "Клиент Telegram для терминала и ИИ-агентов, с вашим собственным аккаунтом.",
       "es": "Un cliente de Telegram para la terminal y para agentes de IA, con tu propia cuenta."
     },
-    "docsRef": "v0.46.2"
+    "docsRef": "v0.46.3"
   },
   {
     "name": "drive",

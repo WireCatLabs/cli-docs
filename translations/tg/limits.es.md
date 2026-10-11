@@ -73,7 +73,10 @@ hacer nada; `tg flood clear` la levanta antes si sabes que Telegram ya no limita
 - `store fetch`: páginas de hasta 100 mensajes, `--pause` entre páginas (1 s de forma predeterminada), 1000 mensajes por
   ejecución salvo que `--limit` indique otra cantidad. `--estimate` calcula primero las solicitudes y no envía ninguna.
 - `messages download --all`: una solicitud por página y por archivo; las descargas de archivos también siguen el ritmo regulado.
-- `chats members list --all`, `chats list --all` y la reparación de lagunas siguen el mismo ritmo regulado.
+- `store fetch --all` obtiene la lista de chats en páginas de 100, un turno del ritmo por página.
+- `chats list --all` lee todos los chats en un solo turno: una solicitud por cada 100 chats, seguidas.
+- `chats members list --all`: páginas de 200 miembros, con 1 s entre ellas, hasta el tope de Telegram de 10 000.
+- La reparación de lagunas lee página a página con una pausa de 1 s, como `store fetch`.
 
 ## Trabajos en segundo plano
 

@@ -4,6 +4,42 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.46.3 — 11.10.2026
+
+### Cambios — pueden romper scripts
+
+- **Unirse a un chat e importar contactos cuentan para `sendsPerHour`.** Unirse cuenta como uno; importar, uno por
+  número; `tg contacts import` envía 10 números por solicitud. Cuando el límite detiene una importación a medias, el
+  error indica cuántos números se enviaron y que volver a importar es seguro.
+
+### Novedades
+
+- **`tg bot watch` imprime y guarda cada actualización una sola vez**, aunque Telegram la entregue de nuevo tras un
+  reinicio: cada actualización se registra por su `update_id` y se omite una vez procesada. Con `--events --jsonl`,
+  cada línea incluye `update: { id, kind }`.
+- `tg search all --backend archive|server|both` y `--server-time`, como en `search messages`; se aplican solo a los
+  mensajes, el correo y las notas siempre se buscan en local. El valor predeterminado es `both`.
+- `tg search mail --account <address>` busca en un buzón; sin él, en todos. El correo también se busca por
+  destinatario, carpeta y asunto (`to:`, `cc:`, `bcc:`, `mailbox:`, `subject:`), y los adjuntos por significado.
+
+### Correcciones
+
+- **`tg store fetch --all` espera un FLOOD_WAIT breve en la lista de chats** (hasta 5 minutos, como ya hacían las
+  páginas de mensajes) en lugar de fallar enseguida con `rate_limited`; una espera de 21 s terminaba cada descarga de
+  un almacén vacío. Incluido en 0.46.2, sin mencionarse allí.
+- Recorrer los chats (`store fetch --all` los lista de 100 en 100) lee cada diálogo de Telegram una sola vez.
+  Antes cada página volvía a recorrer todos los diálogos desde el principio, así que unos 1400 chats costaban más de
+  100 solicitudes seguidas en lugar de unas 15.
+- `chats members list --all` espera 1 s entre páginas de 200 miembros. Antes pedía hasta 50 páginas seguidas,
+  aunque la página de límites decía que tenía un ritmo regulado.
+
+### Seguridad
+
+- **La búsqueda ya no responde con mensajes de otra cuenta.** `search messages --backend server` con `--source all`
+  o `in:all` podía devolver un mensaje de otra cuenta con los mismos id de chat y de mensaje, y un id de chat sin su
+  cuenta coincidía con ese chat en todas las cuentas; ambos casos están corregidos.
+- Funciona con `@wirecat/cli-messaging` 0.233.0.
+
 ## 0.46.2 — 11.10.2026
 
 ### Correcciones

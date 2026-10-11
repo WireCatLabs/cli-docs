@@ -40,7 +40,7 @@ Algunos términos que utiliza la página:
 | Para ver qué haría un comando | `--dry-run` |
 | Para saber si ocurrió una escritura fallida | `outcome_unknown`, `retryable` y `operationId` |
 
-Las lecturas y descargas parciales pueden devolver JSON con código de salida `0`: comprueba `complete` y `batch` o `issue`. El JSONL de una descarga parcial añade `batch_summary`; el trabajo completado se conserva. Los errores incluyen `actions` con pasos, ajustes y pausas para recuperarse.
+Las lecturas y descargas parciales pueden devolver JSON con código de salida `0`: comprueba `complete` y `batch` o `issue`. Una descarga que falla antes de su primera página por un motivo que ningún reintento resuelve (como la falta de `--from`) termina con el código de ese error. El JSONL de una descarga parcial añade `batch_summary`; el trabajo completado se conserva. Los errores incluyen `actions` con pasos, ajustes y pausas para recuperarse.
 
 ## Cómo se nombran los comandos
 
@@ -101,6 +101,6 @@ Pídale al agente que le muestre los mensajes que contó y cuánto del historial
 
 ## Estándares que seguimos
 
-`tg` sigue las partes que se aplican de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) y [Pautas de interfaz de línea de comando](https://clig.dev/), además de [Esquema JSON](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/WireCatLabs/tg-cli/blob/v0.46.2/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/dev/STANDARD.md) describen cómo se aplican y las excepciones realizadas intencionalmente. No reclamamos una certificación completa de terceros.
+`tg` sigue las partes que se aplican de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) y [Pautas de interfaz de línea de comando](https://clig.dev/), además de [Esquema JSON](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/WireCatLabs/tg-cli/blob/v0.46.3/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/dev/STANDARD.md) describen cómo se aplican y las excepciones realizadas intencionalmente. No reclamamos una certificación completa de terceros.
 
 Para la configuración, consulte la [guía de configuración](./configuration.md); para cada clave y variable de entorno, la [referencia de configuración](./configuration-reference.md).
