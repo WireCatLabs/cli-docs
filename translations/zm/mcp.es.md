@@ -45,7 +45,7 @@ Un cliente MCP ejecuta `zm` con `["serve", "--mcp"]`. En el formato `mcpServers`
 
 Una app puede no ver el `PATH` de la terminal; un servidor stdio hereda parte del entorno
 ([depurar MCP](https://modelcontextprotocol.io/docs/tools/debugging)). Si no inicia, usa la ruta
-completa de `which zm`. Si configuraste `ZM_CONFIG_DIR` o `MESSAGING_STORE`, pasa los mismos valores
+completa de `command -v zm` en Linux/macOS o `where.exe zm` en Windows. Si configuraste `ZM_CONFIG_DIR` o `MESSAGING_STORE`, pasa los mismos valores
 en `env`; de lo contrario leerá otro perfil o base.
 
 Reserva stdout para el protocolo: omite `--json`, `--jsonl` y `--fields`. `--max-output-bytes`
@@ -62,7 +62,7 @@ Lista las reuniones guardadas. Abre la última y muestra fecha, texto disponible
 ```
 
 Compara la reunión con `zm meetings list --json` en el terminal. Si hay herramientas pero no datos,
-comprueba perfil/ruta e importa o descarga. Si no se inicia, usa `where zm` en Windows o
+comprueba perfil/ruta e importa o descarga. Si no se inicia, usa `where.exe zm` en Windows o
 `command -v zm` en Linux/macOS y pon la ruta completa en la entrada. Un chat web no ejecuta esta
 orden local sin una conexión compatible al equipo.
 
