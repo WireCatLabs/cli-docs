@@ -4,12 +4,29 @@ title: "Changelog"
 
 Notable changes to `@wirecat/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
-## 0.45.0 — 11.10.2026
+## 0.45.1 — 11.10.2026
+
+### Fixed
+
+- Package references, documentation and examples use the WireCat namespace.
 
 ### Changed — may break scripts
 
 - Independent file or history-page failures retain successful work and return `complete: false`, `batch` or `issue` with exit code `0`. Scripts must check completeness; partial download JSONL adds `batch_summary`. Errors include recovery `actions`. Resuming downloads retries failed checkpoint IDs.
 - Batches stop new requests after ten attempts when failures exceed 50%; `MESSAGING_BATCH_MAX_ERROR_PERCENT` adjusts the percentage, with 100 disabling that percentage stop. Throttling and authentication failures stop earlier; writes with unknown outcomes are never automatically replayed.
+
+### What's new
+
+- Set extraction and retained-file transfer size through `MESSAGING_ATTACHMENT_MAX_MIB` (default 50). PDF previews now allow 4000 pixels per side and 8 MiB per page; `MESSAGING_PDF_PREVIEW_MAX_PIXELS` and `MESSAGING_PDF_PREVIEW_MAX_MIB` adjust those budgets. Larger values need more memory; external OCR and decompression budgets remain separate.
+- `max runs search`, also the `runs search` command in MCP `max_read`, searches safe diagnostic records by text, status, error code and time without connecting to MAX.
+
+### Fixed
+
+- HTTP attachment downloads distinguish 429 from an ordinary network failure: they stop new files and expose the `Retry-After` wait when supplied. A 413 response suggests reducing input, rather than raising a local budget.
+
+## 0.45.0 — 11.10.2026
+
+### Changed — may break scripts
 
 - **The store prunes its growing logs on open**, at most once a day: agent tool calls older than 90 days are
   deleted, and a handled bot update older than 30 days keeps its row but loses its payload. Upgrade tg-cli and
@@ -17,17 +34,10 @@ Notable changes to `@wirecat/max-cli`, one section per version, newest first. Ve
 
 ### What's new
 
-- Set extraction and retained-file transfer size through `MESSAGING_ATTACHMENT_MAX_MIB` (default 50). PDF previews now allow 4000 pixels per side and 8 MiB per page; `MESSAGING_PDF_PREVIEW_MAX_PIXELS` and `MESSAGING_PDF_PREVIEW_MAX_MIB` adjust those budgets. Larger values need more memory; external OCR and decompression budgets remain separate.
-- `max runs search`, also the `runs search` command in MCP `max_read`, searches safe diagnostic records by text, status, error code and time without connecting to MAX.
-
 - `max store reset` for a store this build cannot migrate: it backs the store up beside itself, deletes it and
   starts an empty one. It asks first; `--yes` skips the question and `--no-backup` skips the copy.
 - `max search all --meetings [provider:account]` also searches one meeting account's transcripts, chat and
   summaries; `--max-meetings <n|all>` sets how many meetings it looks through (100 by default).
-
-### Fixed
-
-- HTTP attachment downloads distinguish 429 from an ordinary network failure: they stop new files and expose the `Retry-After` wait when supplied. A 413 response suggests reducing input, rather than raising a local budget.
 
 ### Security
 
@@ -51,7 +61,6 @@ Notable changes to `@wirecat/max-cli`, one section per version, newest first. Ve
   everything one person took part in, in every messenger linked to them, newest first, from the local
   store. `--scope personal|work`, `--since-time`, `--until-time` and `--limit` narrow it.
 
-
 ## 0.43.1 — 10.10.2026
 
 ### Fixed
@@ -74,7 +83,6 @@ Notable changes to `@wirecat/max-cli`, one section per version, newest first. Ve
 
 - The project is now licensed under Apache 2.0. See `LICENSE` for the terms.
 
-
 ## 0.42.0 — 10.10.2026
 
 ### Changed — may break scripts
@@ -94,7 +102,6 @@ Notable changes to `@wirecat/max-cli`, one section per version, newest first. Ve
 
 - **Directory extraction and retained-file transfer check file locations.** Hidden files and folders, CLI-owned folders and the message store are refused, including symlink targets. MCP downloads also refuse those places; use a normal downloads folder.
 - **DOCX applies the office archive limits.** Part count, expanded size and text-part size are checked before reading.
-
 
 ## 0.41.0 — 09.10.2026
 
@@ -228,7 +235,6 @@ Notable changes to `@wirecat/max-cli`, one section per version, newest first. Ve
 - **`max calls list`** shows incoming/outgoing/missed calls and duration, newest first.
 - **`max account privacy show`** shows who may find, see the number, call or add the account and
   whether online status is hidden; it uses the login response without another request.
-
 
 ## 0.34.0 — 08.10.2026
 
@@ -836,7 +842,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.45.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/99539b4efde2ae9ec66fa6e722fb3ced961c818f/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).

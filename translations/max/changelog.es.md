@@ -4,24 +4,36 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
-## 0.45.0 — 11.10.2026
+## 0.45.1 — 11.10.2026
+
+### Correcciones
+
+- Las referencias a paquetes, la documentación y los ejemplos usan el espacio de nombres WireCat.
 
 ### Cambios — pueden romper scripts
 
 - El fallo de un archivo o una página de historial conserva el trabajo completado y devuelve `complete: false`, `batch` o `issue` con código de salida `0`. Los scripts deben comprobar la integridad; el JSONL de descarga parcial añade `batch_summary`. Los errores incluyen `actions` para recuperarse. Reanudar las descargas reintenta los ID fallidos del checkpoint.
 - Después de diez intentos, el lote detiene las solicitudes nuevas si la tasa de errores supera el 50%; `MESSAGING_BATCH_MAX_ERROR_PERCENT` cambia el porcentaje y 100 desactiva esa parada porcentual. Los límites de frecuencia y los fallos de autenticación detienen antes; nunca se repiten automáticamente escrituras de resultado desconocido.
-- **El almacén limpia sus registros crecientes al abrirse**, como máximo una vez al día: elimina llamadas de herramientas del agente de más de 90 días y conserva las filas de actualizaciones de bot procesadas de más de 30 días, eliminando su contenido. Actualiza tg-cli y cli-memo a la vez: comparten el almacén.
 
 ### Novedades
 
 - Configura el tamaño para extracción y transferencia de archivos guardados mediante `MESSAGING_ATTACHMENT_MAX_MIB` (por defecto 50). Las vistas previas PDF permiten ahora 4000 píxeles por lado y 8 MiB por página; `MESSAGING_PDF_PREVIEW_MAX_PIXELS` y `MESSAGING_PDF_PREVIEW_MAX_MIB` ajustan esos valores. Aumentarlos requiere más memoria; el OCR externo y la descompresión mantienen límites independientes.
 - `max runs search`, también el comando `runs search` en MCP `max_read`, busca registros seguros por texto, estado, código de error y tiempo sin conectar con MAX.
-- `max store reset` sirve para un almacén que esta compilación no puede migrar: crea una copia junto a él, lo elimina y empieza uno vacío. Pregunta primero; `--yes` omite la pregunta y `--no-backup` omite la copia.
-- `max search all --meetings [provider:account]` también busca transcripciones, chat y resúmenes de una cuenta de reuniones; `--max-meetings <n|all>` establece cuántas consultar (100 por defecto).
 
-### Corregido
+### Correcciones
 
 - La descarga HTTP distingue un rechazo 429 de un fallo de red normal: detiene los archivos nuevos e indica la pausa `Retry-After` cuando existe. Un rechazo 413 sugiere reducir los datos de entrada en vez de aumentar el límite local.
+
+## 0.45.0 — 11.10.2026
+
+### Cambios — pueden romper scripts
+
+- **El almacén limpia sus registros crecientes al abrirse**, como máximo una vez al día: elimina llamadas de herramientas del agente de más de 90 días y conserva las filas de actualizaciones de bot procesadas de más de 30 días, eliminando su contenido. Actualiza tg-cli y cli-memo a la vez: comparten el almacén.
+
+### Novedades
+
+- `max store reset` sirve para un almacén que esta compilación no puede migrar: crea una copia junto a él, lo elimina y empieza uno vacío. Pregunta primero; `--yes` omite la pregunta y `--no-backup` omite la copia.
+- `max search all --meetings [provider:account]` también busca transcripciones, chat y resúmenes de una cuenta de reuniones; `--max-meetings <n|all>` establece cuántas consultar (100 por defecto).
 
 ### Seguridad
 
@@ -36,7 +48,6 @@ Cambios destacados de `@wirecat/max-cli`, con una sección por versión, recient
 ### Novedades
 
 - `max contacts timeline <человек>`, también el comando `contacts timeline` en MCP `max_read`, muestra la actividad de una persona en todos los mensajeros vinculados, de más reciente a más antigua, desde el almacén local. `--scope personal|work`, `--since-time`, `--until-time` y `--limit` acotan los resultados.
-
 
 ## 0.43.1 — 10.10.2026
 
@@ -60,7 +71,6 @@ Cambios destacados de `@wirecat/max-cli`, con una sección por versión, recient
 
 - El proyecto usa Apache 2.0. Consulta las condiciones en `LICENSE`.
 
-
 ## 0.42.0 — 10.10.2026
 
 ### Cambios que pueden romper scripts
@@ -80,7 +90,6 @@ Cambios destacados de `@wirecat/max-cli`, con una sección por versión, recient
 
 - **La extracción desde carpetas y transferencia de archivos guardados comprueban su ubicación.** Rechazan archivos y carpetas ocultos, carpetas de la CLI y el almacén de mensajes, incluidos destinos de enlaces simbólicos. Las descargas MCP tampoco escriben allí; usa una carpeta de descargas normal.
 - **DOCX aplica los límites de archivos de Office.** Comprueba número de partes, tamaño descomprimido y tamaño de las partes de texto antes de leerlas.
-
 
 ## 0.41.0 — 09.10.2026
 
@@ -816,7 +825,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.45.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/99539b4efde2ae9ec66fa6e722fb3ced961c818f/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos prácticos para bots.** `max <имя> bot messages send <чат> <текст>` envía a un chat por número, a una persona como `user:<номер>` o por el título de un chat que el bot ya ha visto; también hay `edit`, `delete`, `list` y `get`. `max <имя> bot chats list` muestra los chats que ha visto el bot; también están `chats get|pin|unpin|leave|action`. `max bot list` muestra todos los nombres con un token de bot.
   Por qué «que ha visto»: MAX no ofrece una lista de chats del bot, por lo que `max` los recuerda por su cuenta.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).
