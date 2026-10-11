@@ -35,14 +35,11 @@ jobs:
       security-events: write
     uses: WireCatLabs/cli-core/.github/workflows/release-checks.yml@1183bfb970330989ad8acec917b14b7e6187de15
 
-  deploy:
+  build:
     needs: [platform, security]
     runs-on: ubuntu-latest
     env:
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       REF: ${{ inputs.ref }}
-      WRANGLER: pnpm dlx wrangler@4.146.0
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
@@ -69,8 +66,36 @@ jobs:
       - run: pnpm check:assets
       - run: pnpm check:links
       - run: pnpm check:seo
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: site
+          path: out
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 1
+
+  # The browser suite is most of a deploy's time; four machines run a quarter each against the one build.
+  browser:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: site
+          path: out
       - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm exec playwright test
+      - run: pnpm exec playwright test --shard=${{ matrix.shard }}/4
         env:
           PLAYWRIGHT_EXPORT: "1"
       - run: pnpm check:browser-timings
@@ -79,13 +104,32 @@ jobs:
         continue-on-error: true
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: playwright-${{ github.job }}-${{ github.run_attempt }}
+          name: playwright-${{ matrix.shard }}-${{ github.run_attempt }}
           path: |
             playwright-report/results.json
             test-results/
           if-no-files-found: ignore
           retention-days: 7
           compression-level: 1
+
+  deploy:
+    needs: [build, browser]
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      WRANGLER: pnpm dlx wrangler@4.146.0
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: pnpm
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: site
+          path: out
       - name: Cloudflare Pages
         run: |
           if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
