@@ -9,63 +9,29 @@ type SiteEvent = {
   name: "installation_command_copy" | "setup_guide_open"
   context: InstallationEventContext
 }
+export type SiteEventSink = {
+  capture: (name: string, properties: InstallationEventContext, options: { send_instantly: boolean }) => unknown
+}
 type TrackingWindow = Window & {
   wirecatEvents?: SiteEvent[]
-  wirecatTrackingReady?: boolean
-  gtag?: (...args: unknown[]) => void
-  ym?: (...args: unknown[]) => void
-}
-const pendingKey = "wirecat.pending-installation-events"
-const eventNames = ["installation_command_copy", "setup_guide_open"]
-const surfaces = ["hero", "footer", "closing", "installation"]
-
-function eventQueue(browser: TrackingWindow): SiteEvent[] {
-  if (browser.wirecatEvents) return browser.wirecatEvents
-  browser.wirecatEvents = []
-  try {
-    const saved = JSON.parse(browser.sessionStorage.getItem(pendingKey) ?? "null")
-    if (saved?.expires > Date.now() && Array.isArray(saved.events))
-      for (const event of saved.events.slice(0, 50)) {
-        const context = event?.context
-        if (
-          eventNames.includes(event?.name) &&
-          ["tg", "max"].includes(context?.tool) &&
-          ["en", "ru", "es"].includes(context?.locale) &&
-          surfaces.includes(context?.surface)
-        )
-          browser.wirecatEvents.push({
-            name: event.name,
-            context: { tool: context.tool, locale: context.locale, surface: context.surface },
-          })
-      }
-  } catch {}
-  return browser.wirecatEvents
-}
-
-function savePending(browser: TrackingWindow) {
-  try {
-    if (browser.wirecatEvents?.length)
-      browser.sessionStorage.setItem(
-        pendingKey,
-        JSON.stringify({ expires: Date.now() + 300000, events: browser.wirecatEvents }),
-      )
-    else browser.sessionStorage.removeItem(pendingKey)
-  } catch {}
+  wirecatAnalytics?: SiteEventSink
 }
 
 const productionHostname = new URL(siteConfig.url).hostname
 
+// The queue lives in memory only: before consent nothing may be written to the visitor's browser.
+function eventQueue(browser: TrackingWindow): SiteEvent[] {
+  browser.wirecatEvents ??= []
+  return browser.wirecatEvents
+}
+
 export function flushSiteEvents(): void {
   const browser = window as TrackingWindow
-  if (!browser.wirecatTrackingReady || !browser.gtag || !browser.ym) return
-  const pending = eventQueue(browser).splice(0)
-  savePending(browser)
-  for (const event of pending) {
+  const sink = browser.wirecatAnalytics
+  if (!sink) return
+  for (const event of eventQueue(browser).splice(0)) {
     try {
-      browser.gtag("event", event.name, event.context)
-    } catch {}
-    try {
-      browser.ym(siteConfig.analytics.yandexMetrikaId, "reachGoal", event.name, event.context)
+      sink.capture(event.name, event.context, { send_instantly: true })
     } catch {}
   }
 }
@@ -73,11 +39,9 @@ export function flushSiteEvents(): void {
 export function trackSiteEvent(name: SiteEvent["name"], context: InstallationEventContext): void {
   if (typeof window === "undefined" || window.location.hostname !== productionHostname) return
   if (!["en", "ru", "es"].includes(context.locale) || !["tg", "max"].includes(context.tool)) return
-  const browser = window as TrackingWindow
-  const queue = eventQueue(browser)
+  const queue = eventQueue(window as TrackingWindow)
   if (queue.length < 50)
     queue.push({ name, context: { tool: context.tool, locale: context.locale, surface: context.surface } })
-  savePending(browser)
   flushSiteEvents()
 }
 
@@ -88,8 +52,7 @@ export function copiedInstallationTool(command: string): "tg" | "max" | undefine
     | undefined
 }
 
-export function enableSiteEvents(): void {
-  const browser = window as TrackingWindow
-  browser.wirecatTrackingReady = true
+export function enableSiteEvents(sink: SiteEventSink): void {
+  ;(window as TrackingWindow).wirecatAnalytics = sink
   flushSiteEvents()
 }

@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation"
 import { useEffect, useRef } from "react"
 import { useThemeToggle } from "@/components/use-theme-toggle"
+import { analyticsEnabled, openConsentBanner } from "@/lib/analytics"
 import { wirecatLogoSvg } from "@/lib/brand"
 import { notifyCopyFeedback } from "@/lib/copy-feedback"
 import { bindDisclosureMenus } from "@/lib/disclosure-menus"
@@ -31,6 +32,11 @@ export function SiteFooter({ html, variant = "landing" }: { html: string; varian
       ru: "Telegram · CLI + skill",
       es: "Telegram · CLI + skill del agente",
     }[lang] ?? "Telegram · CLI + agent skill"
+  const legal = {
+    en: { privacy: "Privacy", settings: "Cookie settings" },
+    ru: { privacy: "Конфиденциальность", settings: "Настройки cookie" },
+    es: { privacy: "Privacidad", settings: "Configuración de cookies" },
+  }[lang] ?? { privacy: "Privacy", settings: "Cookie settings" }
   const command = html.match(/<span class="cmd">[\s\S]*?<\/span>/)?.[0]
   let footerHtml = html.includes('class="foot-contacts"')
     ? html
@@ -51,6 +57,11 @@ export function SiteFooter({ html, variant = "landing" }: { html: string; varian
     /<details class="language-switcher editorial-language"[\s\S]*?<\/details>/,
     languageSwitcherHtml(lang, pathname),
   )
+  if (!footerHtml.includes('class="foot-legal"'))
+    footerHtml = footerHtml.replace(
+      '<div class="footer-controls">',
+      `<span class="foot-legal"><a class="animated-text-link" href="/${lang}/privacy"><span class="link-label">${escapeHtml(legal.privacy)}</span></a><button type="button" class="foot-consent" data-consent-settings hidden>${escapeHtml(legal.settings)}</button></span><div class="footer-controls">`,
+    )
   footerHtml = footerHtml.replaceAll('href="/en"', 'href="/"')
   const rootRef = useRef<HTMLDivElement>(null)
   useThemeToggle(rootRef, localeFromPath(pathname))
@@ -64,6 +75,11 @@ export function SiteFooter({ html, variant = "landing" }: { html: string; varian
     const brand = root.querySelector<HTMLAnchorElement>(".foot-brand > a")
     if (brand) brand.href = homePath(lang)
     for (const code of root.querySelectorAll<HTMLElement>(".cmd code")) code.tabIndex = 0
+    const consent = root.querySelector<HTMLButtonElement>("[data-consent-settings]")
+    if (consent && analyticsEnabled(window.location.hostname)) {
+      consent.hidden = false
+      consent.addEventListener("click", openConsentBanner, { signal: controller.signal })
+    }
     const button = root.querySelector<HTMLButtonElement>("[data-copy]")
     if (button) prepareInstallationButton(button)
     const label = button?.textContent ?? ""

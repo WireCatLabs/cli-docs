@@ -254,3 +254,25 @@ html.dark .wirecat-editorial .footer-host .theme-moon {
     width: 72px;
   }
 }
+.wirecat-editorial .footer-host .foot-legal {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+}
+.wirecat-editorial .footer-host .foot-bottom .foot-legal a,
+.wirecat-editorial .footer-host .foot-consent {
+  color: inherit;
+}
+.wirecat-editorial .footer-host .foot-consent {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.wirecat-editorial .footer-host .foot-consent[hidden] {
+  display: none;
+}

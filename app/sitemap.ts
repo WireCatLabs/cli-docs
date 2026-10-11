@@ -7,7 +7,7 @@ export const dynamic = "force-static"
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return seoLocales.flatMap((lang) => [
-    ...["", "/about", "/features", "/examples"].map((suffix) => ({
+    ...["", "/about", "/features", "/examples", "/privacy"].map((suffix) => ({
       url: absoluteUrl(suffix ? `/${lang}${suffix}` : homePath(lang)),
       alternates: { languages: pageAlternates(lang, suffix).languages },
     })),
