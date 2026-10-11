@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test"
 
-for (const lang of ["en", "ru", "es"]) {
+for (const lang of ["en", "ru", "es"] as const) {
   test(`${lang}: Drive overview leads to installation beside messenger tools`, async ({ page }) => {
     await page.goto(`/${lang}/docs/drive`)
     await expect(page.getByRole("heading", { level: 1, name: "Google Drive", exact: true })).toBeVisible()
@@ -19,6 +19,7 @@ for (const lang of ["en", "ru", "es"]) {
     const body = page.locator("main")
     await expect(body).not.toContainText("pnpm build")
     await expect(body).toContainText("npm install -g @wirecat/drive-cli")
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /npm/)
     await expect(body).toContainText("Desktop app")
     await expect(body.locator('a[href="https://console.cloud.google.com/auth/branding"]')).toBeVisible()
     await expect(body.locator('a[href="https://console.cloud.google.com/auth/clients"]')).toBeVisible()
@@ -31,6 +32,18 @@ for (const lang of ["en", "ru", "es"]) {
     expect(await markdown.text()).toContain("drive personal session start --client-file")
     expect(await markdown.text()).toContain("npm install -g @wirecat/drive-cli")
     expect(await markdown.text()).not.toContain("pnpm build")
+  })
+
+  test(`${lang}: Drive changelog renders the first released features`, async ({ page }) => {
+    await page.goto(`/${lang}/docs/drive/changelog`)
+    const title = { en: "Changelog", ru: "История изменений", es: "Historial de cambios" }[lang]
+    await expect(page.getByRole("heading", { level: 1, name: title, exact: true })).toBeVisible()
+    await expect(page.locator("main")).toContainText("0.1.0")
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /Google Drive/)
+    await expect(page.locator("#nd-sidebar").getByRole("link", { name: title, exact: true })).toHaveAttribute(
+      "href",
+      `/${lang}/docs/drive/changelog`,
+    )
   })
 
   test(`${lang}: Drive search preserves executable tagged-search examples`, async ({ page, request }) => {
