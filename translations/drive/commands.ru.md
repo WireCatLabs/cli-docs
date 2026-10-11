@@ -44,7 +44,7 @@ drive <profile> session start [options]
 
 | Option | What it does |
 |---|---|
-| `--client-file <file>` | Desktop OAuth application JSON. |
+| `--client-file <file>` | use your own Desktop OAuth application JSON instead of WireCat's app. |
 | `--credential-storage <storage>` | keyring or explicit private-file storage. Default: `keyring`. |
 | `--no-browser` | print the sign-in URL without opening a browser. |
 | `--write` | request remote Drive/Docs mutation permissions. |

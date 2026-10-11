@@ -319,3 +319,30 @@ export const privacyCopy: Record<
     ],
   },
 }
+
+const googleDisclosures = {
+  en: {
+    title: "Google API Limited Use",
+    text: "WireCat’s use and transfer of information received from Google APIs adheres to the Google API Services User Data Policy, including its Limited Use requirements.",
+    policy: "Google API Services User Data Policy",
+    revoke: "Manage your Google Account connections",
+    terms: "Terms of Service",
+  },
+  ru: {
+    title: "Ограниченное использование данных Google API",
+    text: "Использование и передача WireCat информации, полученной через API Google, соответствуют политике Google API Services User Data Policy, включая требования Limited Use.",
+    policy: "Google API Services User Data Policy",
+    revoke: "Управление подключениями в аккаунте Google",
+    terms: "Условия использования",
+  },
+  es: {
+    title: "Uso limitado de las API de Google",
+    text: "El uso y la transferencia por WireCat de información recibida de las API de Google cumplen la Google API Services User Data Policy, incluidos sus requisitos de uso limitado.",
+    policy: "Google API Services User Data Policy",
+    revoke: "Gestionar las conexiones de tu cuenta de Google",
+    terms: "Términos de servicio",
+  },
+} as const
+
+export const googleDisclosureFor = (lang: string) =>
+  googleDisclosures[lang as keyof typeof googleDisclosures] ?? googleDisclosures.en

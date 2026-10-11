@@ -2,49 +2,72 @@
 title: "Установить и подключить"
 ---
 
-Установите инструмент командной строки Drive, подключите аккаунт Google и импортируйте небольшую
-папку для проверки поиска. **Профиль** — выбранное вами имя аккаунта, например `personal` или
-`work`; его нужно указывать в каждой команде для аккаунта. Google открывает браузер для вашего
-согласия: вставлять токены в терминал или переписку с агентом не нужно.
+Установите инструмент Drive, подключите аккаунт Google и импортируйте небольшую папку для
+проверки поиска. **Профиль** — выбранное вами имя аккаунта, например `personal` или `work`;
+каждая команда для аккаунта должна его указывать. Google открывает браузер для согласия,
+поэтому токены доступа не нужно вставлять в терминал или чат агента.
 
-## Установить инструмент
+<a id="install-the-tool"></a>
 
-Сейчас инструмент устанавливается из исходного репозитория. Нужны Git, pnpm и Node.js 22.16+
-в ветке 22.x либо Node.js 24+. Откройте терминал на компьютере, где работает агент:
+## Установить самостоятельно или с агентом
 
-```sh
-git clone https://github.com/WireCatLabs/drive-cli.git
-cd drive-cli
-pnpm install --frozen-lockfile
-pnpm build
-npm install -g .
-drive --help
-```
-
-Последняя команда должна показать справку Drive. Сохраните репозиторий: глобальная команда
-использует эту установку. Для обновления выполните там `git pull`, затем повторите установку
-и сборку. В Windows используйте `npm.cmd`, если PowerShell блокирует `npm.ps1`.
 Если установкой занимается агент, попросите:
 
 ```text prompt
-Help me install drive CLI from https://github.com/WireCatLabs/drive-cli using its installation
-instructions. Check Git, Node.js and pnpm. Ask me for the profile name and Google folder.
-I will approve sign-in in my browser. Do not request tokens or credential contents in chat.
+Use drive CLI. Install @wirecat/drive-cli from npm and check drive --help.
+Ask me for the profile name and Google folder. Follow the Google connection guide; I will approve sign-in in my browser.
+Do not request tokens or credential contents in chat.
 ```
 
-[Официальная инструкция репозитория Drive](https://github.com/WireCatLabs/drive-cli/blob/main/docs/installation.md)
-описывает установку из исходников и обновление.
+В [официальном руководстве репозитория Drive](https://github.com/WireCatLabs/drive-cli/blob/main/docs/installation.md)
+описаны установка, обновление и подключение Google.
+
+Нужен [Node.js](https://nodejs.org/en/download) 22.16+ в ветке 22.x или Node.js 24+.
+Откройте терминал на компьютере, где работает агент:
+
+```sh
+npm install -g @wirecat/drive-cli
+drive --version
+drive --help
+```
+
+Пакет содержит скомпилированный JavaScript. Пользователям не нужны Git, pnpm или сборка исходников.
+`drive --help` должен показать команды. Установка не входит в аккаунт и не импортирует документы.
+В Windows используйте `npm.cmd`, если PowerShell блокирует `npm.ps1`. Если после установки команда
+`drive` не находится, заново откройте терминал или агента.
+
+Если вы уже используете pnpm или Bun, выберите альтернативу:
+
+```sh
+pnpm add -g @wirecat/drive-cli
+bun add -g @wirecat/drive-cli
+```
+
+Запустить без глобальной установки:
+
+```sh
+npx @wirecat/drive-cli --help
+```
+
+Для обновления повторите `npm install -g @wirecat/drive-cli`. Чтобы удалить команду:
+
+```sh
+npm uninstall -g @wirecat/drive-cli
+```
+
+Удаление сохраняет локальные настройки, учётные данные и индексированные документы. Чтобы сначала
+забыть вход Google, выполните `drive personal session end` для каждого подключённого профиля.
 
 ## Выбрать способ подключения
 
-**Общее приложение Google от WireCat** позволяет пользователям подтверждать доступ к своим
-аккаунтам в браузере; Google Cloud настраивает только владелец приложения. Это предполагаемый
-основной способ подключения. Сейчас исходная поставка ещё не включает идентификатор этого
-клиента, поэтому нужен Desktop JSON от владельца приложения либо собственный клиент по шагам ниже.
+**Общее приложение Google от WireCat** позволяет подтверждать доступ к своему аккаунту
+в браузере; Google Cloud настраивает только владелец приложения. Идентичность Desktop-клиента
+WireCat включена в CLI. Пропустите Google Cloud и переходите к [подключению аккаунта](#connect-your-account).
+Доступ к общему приложению может зависеть от проверки Google и правил вашей организации.
 
-Если владелец передал Desktop JSON, пропустите Google Cloud и переходите к
-[подключению аккаунта](#connect-your-account). JSON определяет приложение, но сам по себе не
-даёт доступа к аккаунту. Доступ предоставляется отдельно вашим согласием в браузере.
+Предпочитаете своё приложение? Создайте Desktop-клиент ниже и укажите JSON через `--client-file`.
+JSON определяет приложение, но сам по себе не даёт доступа к аккаунту. Доступ предоставляется
+отдельно вашим согласием в браузере.
 
 ## Подготовить вход Google
 
@@ -79,9 +102,11 @@ I will approve sign-in in my browser. Do not request tokens or credential conten
 Если платформа не настроена, нажмите **Get Started**. Заполните экраны: имя приложения
 (например, WireCat Drive), адрес поддержки, аудитория **External** для аккаунтов вне вашей
 организации Workspace и контактный адрес. Завершите шаг с политикой Google и создайте
-конфигурацию. Если она уже есть, измените поля в Branding. Для публичного запуска владелец
-также готовит сайт, политику конфиденциальности и сведения о разрешённых доменах.
-Это задача владельца, а не каждого подключающегося пользователя.
+конфигурацию. Если она уже есть, измените поля в Branding. Для приложения WireCat используйте `https://wirecat.dev/en/docs/drive` как главную страницу,
+`https://wirecat.dev/en/privacy` как политику конфиденциальности и `https://wirecat.dev/en/terms`
+как условия использования. В Authorized domains добавьте `wirecat.dev` без схемы и пути,
+затем подтвердите владение в Google Search Console через владельца или редактора Cloud проекта.
+Эти сведения настраивает владелец приложения, а не каждый пользователь.
 
 [Официальная инструкция экрана согласия Google](https://developers.google.com/workspace/guides/configure-oauth-consent)
 объясняет Branding, Audience и Data Access.
@@ -135,11 +160,22 @@ Desktop-клиент использует временный localhost callback 
 
 ## Подключить аккаунт
 
-Выберите имя профиля и замените путь к файлу:
+Публикация приложения Google не подключает этот компьютер к вашему аккаунту. Каждый
+пользователь открывает экран согласия и подтверждает доступ к своей учётной записи. Desktop
+клиент WireCat определяет общее приложение; собственный клиент определяет ваше приложение.
+Оба используют одну команду и хранят токены в локальном хранилище учётных данных пользователя.
+
+Выберите имя профиля и войдите через общее приложение WireCat:
 
 ```sh
-drive personal session start --client-file /absolute/path/to/wirecat-drive-desktop.json
+drive personal session start
 drive personal session list --json
+```
+
+Для собственного приложения замените путь к файлу и выполните:
+
+```sh
+drive personal session start --client-file /absolute/path/to/desktop-client.json
 ```
 
 В браузере выберите нужный аккаунт и проверьте запрашиваемые разрешения. После согласия страница

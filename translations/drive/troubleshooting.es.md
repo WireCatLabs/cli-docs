@@ -2,12 +2,13 @@
 title: "Resolver conexión o búsqueda vacía"
 ---
 
-Usa esta página si falta la herramienta, Google rechaza el acceso o no aparece un documento.
-Comprueba el paso que falla antes de cambiar de cuenta o ampliar permisos.
+Recupera el funcionamiento si Drive no aparece, Google rechaza la conexión o no encuentras
+un documento guardado. Empieza por el síntoma, comprueba el paso y verifica el resultado antes
+de importar más datos o cambiar permisos. Guarda el código de error y el perfil para soporte.
 
 | Síntoma | Qué hacer |
 | --- | --- |
-| No se encuentra `drive` | Reabre la terminal/agente, comprueba que sigue existiendo el repositorio y repite [instalación](./installation.md). |
+| No se encuentra `drive` | Reabre la terminal/agente, comprueba que el directorio de comandos globales de npm está en PATH y repite [instalación](./installation.md). |
 | Google bloquea el acceso | Revisa cliente Desktop, APIs, consentimiento y usuario de prueba. Usa la cuenta añadida a la aplicación. |
 | El acceso ha caducado | Ejecuta `session start` otra vez con tu archivo. Los permisos External Testing suelen caducar a los siete días. |
 | No hay llavero del sistema | Conecta con `--credential-storage file` explícito si el almacenamiento privado en archivo es adecuado. |
@@ -40,3 +41,25 @@ Habilitar una API no crea un cliente OAuth. Configura **Google Auth platform →
 añade la cuenta en **Audience → Test users**, crea **Clients → Desktop app** y descarga JSON.
 Sigue [los pasos de la consola](./installation.md#prepare-google-sign-in).
 Necesitas JSON Desktop, no clave API ni de cuenta de servicio.
+
+## La aplicación Google está publicada pero falta conectar
+
+Publicar la aplicación no autoriza tu cuenta ni este ordenador. Sigue el paso de
+[conexión de la cuenta](./installation.md#connect-your-account) y aprueba el acceso en el navegador.
+Con el cliente incluido de WireCat, los usuarios no repiten la configuración de Google
+Cloud. Un cliente Desktop propio sigue siendo una alternativa. Las políticas de Workspace y la
+verificación de permisos de Google pueden limitar cuentas o autorizaciones disponibles.
+
+## El contenido local difiere de Google
+
+Comprueba la última sincronización y el trabajo pendiente con `drive personal --offline status --json`.
+Las lecturas locales muestran esa versión. Ejecuta `drive personal sync --json` conectado para
+actualizarla y repite la búsqueda. Los metadatos actuales, comentarios e historial necesitan
+Google y se rechazan con `--offline`; `documents show` lee una fuente importada.
+
+## El resultado de una escritura remota es desconocido
+
+Si un comando informa de un resultado incierto tras un tiempo de espera o respuesta interrumpida,
+revisa el archivo en Google antes de repetirlo. Crear o copiar de nuevo puede duplicar una
+operación que sí se completó. La [referencia de comandos](./commands.md) explica los errores;
+comparte el código de error sin datos privados, no respuestas del SDK ni contenido sensible.

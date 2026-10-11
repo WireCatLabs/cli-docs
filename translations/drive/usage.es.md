@@ -2,9 +2,14 @@
 title: "Importar y organizar"
 ---
 
-Convierte una carpeta Google elegida en documentos locales con búsqueda y entiende qué queda
-en disco. Conecta primero una cuenta. Cada comando de cuenta indica un perfil: estos ejemplos
-usan `personal`. Sustitúyelo por el elegido al [conectar](./installation.md).
+Convierte las carpetas elegidas de Google en una copia local que tu agente pueda buscar y leer
+sin volver a Drive para cada pregunta. Esta guía muestra cómo elegir el alcance, comprobar lo
+guardado, actualizarlo y exportar un documento cuando otra herramienta lo necesita. Los ejemplos
+usan el perfil `personal`; sustitúyelo por el nombre de tu perfil conectado.
+
+**Sincronizar** descarga contenido compatible y actualiza su índice local. Una **copia guardada**
+conserva contenido y metadatos de esa sincronización. Una **exportación** es un archivo adicional
+que solicitas; no hace falta para buscar.
 
 ## Elegir la operación adecuada
 
@@ -65,6 +70,33 @@ Si Google devuelve `nextPageToken`, pásalo a `files list --page-token TOKEN` pa
 `folders list` muestra raíces seleccionadas. IDs y padres se guardan en el estado del perfil;
 todavía no hay árbol navegable en la base compartida. Los documentos se agrupan por cuenta.
 Los nombres repetidos no confunden identidades: selecciona por ID, no por título.
+
+## Leer contenido y metadatos sin conexión
+
+Tras importar, estos comandos usan la copia local y no consultan Google:
+
+```sh
+drive personal --offline documents list --json
+drive personal --offline documents show DOC_ID --json
+drive personal --offline documents context DOC_ID --json
+drive personal --offline people list DOC_ID --json
+drive personal --offline search 'budget' --exact --json
+```
+
+`documents list` devuelve títulos, ID, enlaces originales, tipos MIME, ID de carpetas padre,
+propietarios y último editor guardados, con fechas y versiones cuando Google las proporcionó.
+`documents show` añade texto indexado e ID/títulos de pestañas. `documents context` añade etiquetas,
+notas, vínculos y recuerdos locales. Lee el contenido guardado directamente; abrir Google es opcional.
+
+Sin conexión significa la última versión guardada, no una comprobación reciente de Google.
+`status` muestra la última sincronización y los elementos pendientes u omitidos. No se guardan
+automáticamente permisos completos, comentarios, revisiones, actividad ni respuestas arbitrarias
+de la API. `files get` y `documents get` consultan Google, a diferencia de `documents show`;
+`--offline` los rechaza. Se conserva el contenido importado y metadatos seleccionados, no todos
+los campos de todas las API de Google.
+
+Para guardar por separado todos los metadatos disponibles de un archivo, usa la
+[receta de JSON sin conexión](./recipes.md#save-full-available-metadata-for-offline-use).
 
 ## Mantener el índice actualizado
 

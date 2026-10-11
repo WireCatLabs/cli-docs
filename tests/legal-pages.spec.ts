@@ -7,7 +7,10 @@ const words = {
 }
 
 for (const lang of ["en", "ru", "es"] as const) {
-  test(`${lang}: legal footer links work without JavaScript and disclose Google access`, async ({ browser }) => {
+  test(`${lang}: legal footer links work without JavaScript and disclose Google access`, async ({
+    browser,
+    request,
+  }) => {
     const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } })
     const page = await context.newPage()
     await page.goto(lang === "en" ? "/" : `/${lang}`)
@@ -16,6 +19,11 @@ for (const lang of ["en", "ru", "es"] as const) {
     await expect(footer.locator(`a[href="/${lang}/terms"]`)).toBeVisible()
     await footer.locator(`a[href="/${lang}/privacy"]`).click()
     await expect(page.locator("main h1")).toHaveText(words[lang].privacy)
+    await expect(page.locator('nav.legal-document-nav a[aria-current="page"]')).toHaveAttribute(
+      "href",
+      `/${lang}/privacy`,
+    )
+    await expect(page.locator("nav.legal-document-nav a")).toHaveCount(2)
     await expect(page.locator("#google-access h2")).toHaveText(words[lang].google)
     await expect(page.locator("#sharing-ai")).toBeVisible()
     await expect(page.locator("#disconnect-delete")).toBeVisible()
@@ -24,9 +32,19 @@ for (const lang of ["en", "ru", "es"] as const) {
     await expect(page.locator('main a[href="mailto:hello@wirecat.dev"]')).toBeVisible()
     await page.locator(`main a[href="/${lang}/terms"]`).click()
     await expect(page.locator("main h1")).toHaveText(words[lang].terms)
+    await expect(page.locator('nav.legal-document-nav a[aria-current="page"]')).toHaveAttribute(
+      "href",
+      `/${lang}/terms`,
+    )
     await expect(page.locator(`main a[href="/${lang}/privacy"]`)).toBeVisible()
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `https://wirecat.dev/${lang}/terms`)
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
+    for (const document of ["privacy", "terms"] as const) {
+      const markdown = await request.get(`/llms.mdx/legal/${lang}/${document}/content.md`)
+      expect(markdown.ok()).toBe(true)
+      expect(await markdown.text()).toContain(words[lang][document])
+      expect(await markdown.text()).toContain("hello@wirecat.dev")
+    }
     await page.goto(`/${lang}/docs/drive`)
     await expect(page.locator(`footer.site a[href="/${lang}/privacy"]`)).toBeVisible()
     await expect(page.locator(`footer.site a[href="/${lang}/terms"]`)).toBeVisible()

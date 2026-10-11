@@ -2,13 +2,32 @@
 title: "Encontrar un documento"
 ---
 
-Encuentra una decisión sin abrir cada archivo. La búsqueda usa la copia local: sincroniza antes
-si necesitas cambios recientes y revisa el enlace original antes de actuar.
+Encuentra una decisión, un fragmento o un seguimiento entre los documentos importados. Esta
+guía explica cómo buscar palabras o significado, filtrar con etiquetas locales y leer evidencia
+sin abrir cada archivo de Google. La búsqueda usa la copia local; sincroniza para ver cambios recientes.
+
+El resultado es un fragmento indexado con su referencia, título y enlace original. La **búsqueda
+por palabras** compara términos; la **búsqueda por significado** usa embeddings locales para
+formulaciones relacionadas. Ninguna amplía el alcance importado ni descarga archivos de Google.
 
 ```text prompt
 Use drive CLI with profile personal to find the budget decision in my imported project documents.
 Show the matching passage and original Google link. Tell me which selected sources were skipped.
 ```
+
+## Elegir una búsqueda
+
+| Qué recuerdas | Cómo buscar |
+| --- | --- |
+| Una palabra distintiva | `drive personal search 'budget' --exact --json` |
+| Una de dos cuestiones | `drive personal search 'budget OR launch' --exact --json` |
+| Un seguimiento etiquetado | `drive personal search 'budget AND tag:follow-up' --exact --json` |
+| La pregunta, no su formulación | Prepara embeddings locales y busca con una pregunta natural |
+| Una persona vinculada a la fuente | Usa `documents list --person person:PERSON_ID` y revisa las fuentes |
+
+Los metadatos están en detalles y listados; no son una API universal de búsqueda por campos.
+Usa etiquetas y filtros de personas/listados compatibles, sin inventar campos de Google en
+el texto. La búsqueda no indexa comentarios, permisos ni historial de revisiones en Google.
 
 Para uso manual:
 
@@ -52,7 +71,8 @@ drive personal --offline search 'budget' --exact --limit 10 --offset 0 --json
 drive personal --offline documents show DOC_ID --json
 ```
 
-Lee el pasaje y la fuente antes de tratarlo como una decisión. Si aparece `meaningSkipped`, revisa
+Lee el fragmento guardado y sus metadatos antes de interpretarlo como una decisión. Puedes
+consultarlos sin conexión; abre el enlace original cuando necesites la versión actual de Google. Si aparece `meaningSkipped`, revisa
 la explicación; no supongas que se ejecutó búsqueda semántica. PDF, Sheets y otros formatos
 incompatibles se omiten tanto en búsqueda exacta como semántica. Consulta
 [cobertura por formato](./usage.md#which-document-types-are-searchable) y
