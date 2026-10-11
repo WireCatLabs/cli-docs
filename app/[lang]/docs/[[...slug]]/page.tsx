@@ -15,6 +15,7 @@ import { CommandReferenceIndex } from "@/components/command-reference-index"
 import { DocsDisclosures } from "@/components/docs-disclosures"
 import { DocsTocPopover } from "@/components/docs-toc-popover"
 import { getMDXComponents } from "@/components/mdx"
+import { MemoAnchorRedirect } from "@/components/memo-anchor-redirect"
 import { ReaderGuide } from "@/components/reader-guide"
 import { StructuredData } from "@/components/structured-data"
 import { installationReferenceTitle, ToolInstallationIntro } from "@/components/tool-installation-intro"
@@ -164,6 +165,7 @@ export default async function Page(props: Props) {
           <span className="mt-1 block text-sm text-fd-muted-foreground">{ui.mcpGuideDescription}</span>
         </Link>
       )}
+      {tool?.name === "memo" && page.slugs.length === 1 && <MemoAnchorRedirect lang={lang} />}
       <DocsBody lang={written}>
         {!taskGuide && guide !== "installation" && guideOrientation(page.slugs, lang) && (
           <p data-guide-orientation lang={lang}>

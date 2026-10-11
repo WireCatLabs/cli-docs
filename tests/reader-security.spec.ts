@@ -70,7 +70,7 @@ for (const lang of ["en", "ru", "es"] as const) {
       expect(response.ok()).toBe(true)
       const markdown = await response.text()
       expect(markdown).toContain("npm install -g @wirecat/cli-memo")
-      expect(markdown).toContain("npm.cmd")
+      expect(markdown).toContain("npm.cmd install -g @wirecat/cli-memo")
 
       if (lang === "en") await page.screenshot({ path: `.docs-tooling/memo-request-${theme}.png` })
     })

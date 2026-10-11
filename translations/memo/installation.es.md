@@ -41,7 +41,12 @@ npm install -g @wirecat/cli-memo
 memo --help
 ```
 
-En Windows, abre PowerShell y escribe `npm.cmd` en lugar de `npm`.
+En Windows, abre PowerShell y ejecuta:
+
+```powershell
+npm.cmd install -g @wirecat/cli-memo
+memo --help
+```
 
 `memo --help` debería mostrar comandos como `notes`, `search` y `tags`. Si el terminal dice que no
 encuentra el comando, ciérralo, abre uno nuevo y vuelve a intentarlo.

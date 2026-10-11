@@ -19,6 +19,11 @@ for (const lang of ["en", "ru", "es"]) {
     expect(await markdown.text()).toContain("npm install -g @wirecat/cli-memo")
   })
 
+  test(`${lang}: anchors of the former Memo page lead to the page that covers them`, async ({ page }) => {
+    await page.goto(`/${lang}/docs/memo#create-your-own-notes`)
+    await expect(page).toHaveURL(`/${lang}/docs/memo/notes#write-your-own-notes`)
+  })
+
   test(`${lang}: shared installation page links to Memo installation`, async ({ page }) => {
     await page.goto(`/${lang}/docs/installation`)
     await expect(page.locator(`main a[href="/${lang}/docs/memo/installation"]`).first()).toBeVisible()
