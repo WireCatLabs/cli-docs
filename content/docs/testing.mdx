@@ -42,9 +42,11 @@ We also check the order. A useful answer in first place saves more work than the
 | MRR | How close to the top the first relevant result appears. |
 | nDCG@10 | Whether the most useful results appear first when some results are better than others. |
 
-For example, **43.8% Success@10** means that 43.8% of the tested questions had at least one relevant result in the first ten. It does not mean every relevant message was found or that the answer was first.
+In our early experiment, **43.8% Recall@10** meant that the first ten results contained an average of 43.8% of the known relevant material. It did not mean that 43.8% of questions had an answer. Success@10 counts questions with at least one useful hit; finding the actual answer is measured separately.
 
 We check whether useful messages were found before sorting them, too: changing their order cannot recover a missing answer. Once a question helps us improve search, it becomes a development example. Fresh questions are needed to judge whether the improvement works elsewhere. Each report says which measures it includes. The [search evaluation guide](https://github.com/WireCatLabs/cli-testing/blob/main/performance/search/combined-search-evaluation.md) explains the calculations and experiments.
+
+The [search research account](https://github.com/WireCatLabs/cli-testing/blob/main/performance/search/PROCESS.md) records what we tried, why we changed approaches and which improvements shipped.
 
 ## Performance and resource use
 
