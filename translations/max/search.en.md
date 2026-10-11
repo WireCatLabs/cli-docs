@@ -67,7 +67,7 @@ max search notes 'бюджет' --type internal       # только замет�
 max search conversations 'переезд на дачу'      # разговоры, близкие по смыслу
 ```
 
-`search all` labels each match as a message (`msg:…`) or note (`note:…`). `search messages` excludes mail; `search mail` excludes messenger messages. Only `search all` combines them. `--type` selects text, voice or files (`text|voice|file`) for messages, or memo/folder notes for `search notes` (`internal|file`). If a field such as `chat:` or `from:` does not apply to mail or notes, `search all` skips that kind and reports it.
+`search all` labels each match as a message (`msg:…`) or note (`note:…`). `search messages` excludes mail; `search mail` excludes messenger messages. Only `search all` combines them. `--type` selects text, voice or files (`text|voice|file`) for messages, or memo/folder notes for `search notes` (`internal|file`). Mail supports `chat:` for an email thread and `from:` for its sender. When a field does not apply — `kind:`/`topic:` for mail, or `chat:`/`from:` for notes — `search all` skips that source and explains why.
 
 Mail and notes are archived via memo: `memo mail import` and `memo import`. Without them, `search all` only looks for messages.
 
@@ -407,10 +407,16 @@ max stats messages show --by hour                     # все сохранён�
 
 ## Search the MAX server: `--backend`
 
-The MAX server searches only one chat. When a query specifies one chat (`--chat` or `chat:`) and contains words without `--discover`, `max` queries both the server and the archive by default (`--backend both`). Without a specified chat, it does not query the server; results come from the archive. `--discover` always reads the archive only, including with `--backend both`.
+When a query contains words and `--discover` is not set, `max` queries both the server and the archive by default (`--backend both`). `--discover` always reads the archive only, including with `--backend both`.
+
+With a chat (`--chat` or `chat:`), the server searches that chat. Without a chat, the server searches all chats the way the search bar on web.max.ru does: in one request, returning one message from each chat — the best match. The archive finds the other matches in those chats if it has them. Chat titles and public channels are not included in the answer.
 
 ```sh
-max search messages 'счёт' --chat "Книжный клуб"                    # архив и сервер MAX
+max search messages 'счёт' --chat "Книжный клуб"                    # архив и сервер MAX, один чат
+```
+
+```sh
+max search messages 'счёт'                                          # архив и сервер MAX, все чаты
 ```
 
 ```sh

@@ -65,7 +65,8 @@ destinatarios, no otras cuentas en las que tengas que iniciar sesión.
 
 Gmail es el modo predeterminado e importa All Mail. Para otro proveedor IMAP, añade
 `"mode": "imap"` y `"folders": ["INBOX", "Archive"]` a la cuenta, con los nombres reales
-de las carpetas de tu buzón.
+de las carpetas de tu buzón. Las etiquetas de Gmail (Inbox, Important, Sent, Starred y las tuyas)
+se importan como buzones y se actualizan en cada ejecución.
 
 ```sh
 memo mail import --account gmail --since 2026-09-01 --json
@@ -76,6 +77,10 @@ por defecto; repítela para continuar si el resultado indica que la importación
 El buzón se abre solo para lectura: importar no envía correo ni lo marca como leído.
 El correo importado se almacena localmente; repetir la importación puede eliminar del almacén
 el texto de los mensajes que hayan desaparecido de la fuente.
+
+El texto de un adjunto legible se guarda con su correo y se encuentra con él. La importación también
+prepara el correo nuevo para la búsqueda por significado, de modo que
+`tg search conversations` y `max search conversations` pueden encontrarlo; `--no-embed` omite ese paso.
 
 ## Vincula el correo a la misma persona
 
@@ -106,9 +111,11 @@ Para buscar en el correo importado:
 
 ```sh
 memo search mail 'budget' --json
+memo search mail 'quote subject:budget mailbox:important' --json
 ```
 
-`search mail` busca en el correo importado. Los resultados pueden pertenecer a varios buzones;
+`search mail` busca en el correo importado. Además de palabras, admite `from:`, `to:`, `cc:` y `bcc:`
+para una persona, `subject:` para palabras solo del asunto y `mailbox:` para una carpeta o etiqueta de Gmail. Los resultados pueden pertenecer a varios buzones;
 comprueba sus referencias y pide al agente que conserve los de la dirección que elijas.
 `search all` también busca mensajes y notas; `skipped` indica qué tipo no se pudo buscar.
 Que falten resultados fuera del periodo importado no demuestra que no exista correo allí.

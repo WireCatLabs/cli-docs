@@ -39,7 +39,7 @@ Las lecturas, las descargas explícitas de historial y la captura en segundo pla
 
 El almacén guarda el texto original de cada mensaje y, aparte, su texto normalizado para buscar. También registra qué tramos del historial de cada chat tiene. Un índice, una construcción o un vector no prueban que un chat se descargara entero.
 
-Una buena búsqueda necesita chats descargados. `store fetch --all --background` empieza a descargar los últimos 90 días de cada chat; añade `--since-time 365d` para ir más atrás. Por defecto, cada ejecución descarga como máximo 1000 mensajes por chat en tg o 1200 en max; repítela para continuar historiales largos. Los recuentos, la búsqueda por temas, los filtros y las búsquedas de MAX sin un chat nombrado leen solo el archivo.
+Una buena búsqueda necesita chats descargados. `store fetch --all --background` empieza a descargar los últimos 90 días de cada chat; añade `--since-time 365d` para ir más atrás. Por defecto, cada ejecución descarga como máximo 1000 mensajes por chat en tg o 1200 en max; repítela para continuar historiales largos. Los recuentos, la búsqueda por temas y los filtros leen solo el archivo.
 
 La búsqueda de mensajes empieza en la cuenta activa. `--source all` o `in:all` la amplía a todas las cuentas del almacén; un proveedor la reduce. Los nombres se resuelven dentro de ese alcance, y un autor o chat ambiguo pide un identificador más preciso. La búsqueda por temas también empieza en la cuenta activa: sus conversaciones construidas, opcionalmente un chat y un límite de tiempo; `--source` amplía el alcance de forma explícita.
 
@@ -100,7 +100,7 @@ Los stemmers son un ajuste de todo el almacén, compartido por cada perfil, tg y
 
 ### Búsqueda en el servidor junto al archivo
 
-`search messages` también puede preguntar a la búsqueda del propio mensajero, que encuentra incluso mensajes nunca descargados. tg pregunta a Telegram por defecto (`--backend both`). max pregunta al servidor de MAX solo cuando la consulta tiene palabras y nombra un chat (`--chat` o `chat:`); sin chat, responde el archivo. `--backend server` muestra solo los resultados del servidor y `--backend archive` busca solo en el archivo.
+`search messages` también puede preguntar a la búsqueda del propio mensajero, que encuentra incluso mensajes nunca descargados. tg pregunta a Telegram por defecto (`--backend both`). max pregunta al servidor de MAX cuando la consulta tiene palabras: en el chat indicado (`--chat` o `chat:`) o, sin chat, en todos los chats a la vez, con la mejor coincidencia de cada uno, como la barra de búsqueda de web.max.ru; el archivo aporta las demás coincidencias que tenga. `--backend server` muestra solo los resultados del servidor y `--backend archive` busca solo en el archivo.
 
 Las reglas de coincidencia del servidor son suyas. Telegram no las documenta; el servidor de MAX encuentra una palabra por su comienzo, pero no sus otras formas. Por eso la respuesta del servidor son solo candidatos: se guardan en el archivo y la misma consulta estricta se ejecuta una vez sobre el archivo y las filas nuevas. `exact:`, `-palabra`, las frases, los filtros y el orden conservan su significado, y un mensaje nunca aparece dos veces. Un candidato que la consulta estricta rechaza se guarda, pero no se muestra.
 

@@ -4,11 +4,64 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.45.4 — 11.10.2026
+
+### Novedades
+
+- **`max search messages` sin chat también consulta al servidor de MAX**, como la barra de búsqueda de web.max.ru: una
+  solicitud para todos los chats y la mejor coincidencia de cada chat. Lo encontrado se guarda en el archivo y se
+  comprueba con tu consulta. Con `--chat`, el servidor busca en un chat, como antes. `--backend archive` deja solo
+  el archivo; con `--json`, estas búsquedas tienen ahora un bloque `server`.
+
+### Cambios — pueden romper scripts
+
+- **`max search messages` con palabras y sin chat ahora se conecta a MAX** (antes respondía solo el archivo) y
+  puede esperar al servidor hasta 5 segundos. Lo mismo se aplica a la búsqueda por MCP. Para buscar solo en el
+  archivo, como antes, añade `--backend archive` (en MCP, `backend: "archive"`).
+
+### Correcciones
+
+- Funciona con `@wirecat/cli-messaging` 0.231.0, que incluye cli-meetings 0.3.0 y los paquetes SQLite y ONNX 1.0.1 con
+  archivo de licencia; para `max` no cambia nada.
+
+## 0.45.3 — 11.10.2026
+
+### Cambios — pueden romper scripts
+
+- La búsqueda en el archivo con `--discover` admite preguntas como «¿Pueden los contratistas conectarse al proyecto?»:
+  el signo de interrogación ya no se convierte en un patrón de búsqueda. La búsqueda estricta y los filtros funcionan como antes.
+- La búsqueda de correo y las conversaciones de una persona vinculada también leen el almacenamiento de correo
+  separado, junto con la importación anterior. El correo admite filtros de remitente y de cadena. En los resultados,
+  un correo con la misma referencia aparece una sola vez.
+
+## 0.45.2 — 11.10.2026
+
+### Cambios — pueden romper scripts
+
+- **Una descarga de historial cuya primera página falla sin posibilidad de reintento vuelve a terminar con error**
+  (código de salida `2`), como antes de 0.45.1. Una espera que pide MAX y un fallo después de varias páginas siguen
+  dando un resultado parcial con `complete: false` y código `0`.
+
+### Correcciones
+
+- **`max store fetch --background` ya no se detiene a los 30 segundos.** La tarea en segundo plano recibía el
+  límite de 30 segundos común a los comandos y se detenía tras unos cien mensajes. Ahora llega hasta el final; un
+  `--timeout` explícito sigue limitándola.
+- **`max store fetch --all` espera una pausa breve** que pide la lista de chats (hasta 5 minutos, como ya hacían
+  las páginas de mensajes), en lugar de terminar enseguida con `rate_limited`.
+
+### Seguridad
+
+- **Se elimina el antiguo `messages.db`** al abrir el almacén en su ruta predeterminada (así desde 0.45.1): el archivo
+  sin cifrar anterior a `wirecat.db`, junto con sus `-wal` y `-shm`. Una línea en stderr lo indica. El archivo se
+  conserva si está definido `MESSAGING_STORE` y mientras otro proceso lo tenga abierto.
+
 ## 0.45.1 — 11.10.2026
 
 ### Correcciones
 
 - Las referencias a paquetes, la documentación y los ejemplos usan el espacio de nombres WireCat.
+- La descarga HTTP distingue un rechazo 429 de un fallo de red normal: detiene los archivos nuevos e indica la pausa `Retry-After` cuando existe. Un rechazo 413 sugiere reducir los datos de entrada en vez de aumentar el límite local.
 
 ### Cambios — pueden romper scripts
 
@@ -19,10 +72,6 @@ Cambios destacados de `@wirecat/max-cli`, con una sección por versión, recient
 
 - Configura el tamaño para extracción y transferencia de archivos guardados mediante `MESSAGING_ATTACHMENT_MAX_MIB` (por defecto 50). Las vistas previas PDF permiten ahora 4000 píxeles por lado y 8 MiB por página; `MESSAGING_PDF_PREVIEW_MAX_PIXELS` y `MESSAGING_PDF_PREVIEW_MAX_MIB` ajustan esos valores. Aumentarlos requiere más memoria; el OCR externo y la descompresión mantienen límites independientes.
 - `max runs search`, también el comando `runs search` en MCP `max_read`, busca registros seguros por texto, estado, código de error y tiempo sin conectar con MAX.
-
-### Correcciones
-
-- La descarga HTTP distingue un rechazo 429 de un fallo de red normal: detiene los archivos nuevos e indica la pausa `Retry-After` cuando existe. Un rechazo 413 sugiere reducir los datos de entrada en vez de aumentar el límite local.
 
 ## 0.45.0 — 11.10.2026
 
@@ -825,7 +874,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/99539b4efde2ae9ec66fa6e722fb3ced961c818f/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.45.4/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos prácticos para bots.** `max <имя> bot messages send <чат> <текст>` envía a un chat por número, a una persona como `user:<номер>` o por el título de un chat que el bot ya ha visto; también hay `edit`, `delete`, `list` y `get`. `max <имя> bot chats list` muestra los chats que ha visto el bot; también están `chats get|pin|unpin|leave|action`. `max bot list` muestra todos los nombres con un token de bot.
   Por qué «que ha visto»: MAX no ofrece una lista de chats del bot, por lo que `max` los recuerda por su cuenta.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).

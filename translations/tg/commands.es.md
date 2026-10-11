@@ -3110,11 +3110,11 @@ tg tasks close <task> [options]
 
 ## `tg search`
 
-buscar por texto: search all para todo lo que guarda el almacenamiento local, o un solo recurso
+buscar por texto: un solo recurso si sabes cuál (mail, messages, notes), o search all en mensajes, correo y notas
 
 ### `tg search all`
 
-buscar en todo lo que guarda el almacenamiento local — mensajes del servicio de mensajería, correo y notas —, mejores coincidencias primero; empieza aquí si no sabes dónde se escribió algo
+buscar mensajes del servicio de mensajería, correo y notas en el almacenamiento local, y los mensajes también en el servidor del servicio de mensajería (--backend; el correo y las notas solo en local), y con --meetings las transcripciones de una cuenta de reuniones; mejores coincidencias primero; no busca tareas, personas, memorias ni proyectos. Úsalo si no sabes dónde se escribió algo; search mail, messages o notes leen un tipo con todos sus campos
 
 ```sh
 tg search all <query> [options]
@@ -3132,6 +3132,8 @@ tg search all <query> [options]
 | `--limit <n>` | cuántos. |
 | `--exact` | las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word. |
 | `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
+| `--backend <archive\|server\|both>` | dónde buscar: el archivo local, el servidor del servicio de mensajería o ambos (predeterminado: both). Discovery usa solo el archivo. |
+| `--server-time <duration>` | dejar de esperar al servidor tras este tiempo (predeterminado: 5s). |
 
 ### `tg search messages`
 
@@ -3186,6 +3188,7 @@ tg search mail [query] [options]
 | Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | solo este hilo de correo, por identificador o asunto. |
+| `--account <address>` | solo esta cuenta de correo, por su dirección; todas las cuentas de correo si no se indica. |
 | `--limit <n>` | cuántos. |
 | `--newest` | recientes primero en lugar de mejores coincidencias. |
 | `--exact` | las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas. |

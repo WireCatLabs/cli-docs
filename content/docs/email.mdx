@@ -65,7 +65,8 @@ not additional accounts you must log into.
 
 Gmail is the default mode and imports All Mail. For another IMAP provider, configure
 `"mode": "imap"` and `"folders": ["INBOX", "Archive"]` in the account entry, using your
-mailbox's actual folder names.
+mailbox's actual folder names. Gmail labels — Inbox, Important, Sent, Starred and your own — are
+imported as mailboxes and refreshed on every run.
 
 ```sh
 memo mail import --account gmail --since 2026-09-01 --json
@@ -75,6 +76,10 @@ Choose the first date you want to include. Each run reads at most 200 new messag
 run it again to continue if the result says the import is incomplete. The mailbox is read-only:
 import does not send email or mark it read. Imported mail is stored locally; rerunning import
 can remove the stored text of mail that has disappeared from the source.
+
+The text of a readable attachment is kept with its email and found with it. Import also prepares
+new mail for search by meaning, so `tg search conversations` and `max search conversations`
+can find it; `--no-embed` skips that step.
 
 ## Link email to the same person
 
@@ -103,9 +108,11 @@ To search imported email:
 
 ```sh
 memo search mail 'budget' --json
+memo search mail 'quote subject:budget mailbox:important' --json
 ```
 
-`search mail` searches imported email. Results can include more than one mailbox; check each
+`search mail` searches imported email. Besides words, it takes `from:`, `to:`, `cc:` and `bcc:` for a
+person, `subject:` for words of the subject only and `mailbox:` for a folder or Gmail label. Results can include more than one mailbox; check each
 source reference and ask your agent to keep the results from the address you choose.
 `search all` also searches messages and notes; `skipped` identifies any kind it could not search.
 Missing hits outside the imported date window do not establish that no email exists there.

@@ -9,7 +9,7 @@ title: "Lenguaje de consulta de la búsqueda"
 
 Si trabaja con `max` a través de un agente de IA, no necesita aprender este idioma: diga con palabras comunes lo que está buscando y el agente creará la solicitud. Esta página es para quienes escriben la búsqueda ellos mismos y para quienes necesitan todos los filtros: operadores exactos, todos los campos, ajustes preestablecidos, reglas de fecha y límites.
 
-Esta es una ayuda para las consultas `max search messages`, `max search all`, `max stats messages show`, búsquedas guardadas y `--filter` [búsqueda por tema](./topic-search.md). Ejemplos para todos los días: en [búsqueda de mensajes](./search.md).
+Esta es una ayuda para las consultas `max search messages`, `max search mail`, `max search all`, `max stats messages show`, búsquedas guardadas y `--filter` [búsqueda por tema](./topic-search.md). Ejemplos para todos los días: en [búsqueda de mensajes](./search.md).
 
 Términos de esta página:
 
@@ -19,6 +19,8 @@ Términos de esta página:
 - **Formas de palabra**: distintas terminaciones, como «casa» y «casas».
 
 Idioma: un perfil estricto de la sintaxis de Apache Lucene: palabras, frases, Y/O/NO, grupos, campos, rangos, patrones limitados y expresiones regulares. "Estricto" significa que cualquier cosa que no sea compatible es un error, no una parte que se omite silenciosamente. [La ayuda completa](https://github.com/WireCatLabs/cli-messaging/blob/v0.212.0/docs/search/query-language.md) contiene tablas generadas de campos, operadores, ajustes preestablecidos y límites y ejemplos verificables; [La especificación técnica](https://github.com/WireCatLabs/cli-messaging/blob/v0.212.0/docs/search/query-language-spec.md) describe la gramática y el compilador.
+
+En el correo, `chat:` y `--chat` seleccionan una cadena por su id o por el asunto del mensaje, y `from:`, el remitente. El correo no tiene los campos `kind:` ni `topic:`.
 
 ## Qué puede hacer el idioma
 

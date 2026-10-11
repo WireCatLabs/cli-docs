@@ -11,7 +11,8 @@ Después de seguir la guía, podrás:
 
 - importar carpetas y buscar en archivos con referencias de origen;
 - crear, editar y exportar notas sobre una persona o mensaje;
-- organizar notas, mensajes y personas con etiquetas.
+- organizar notas, mensajes y personas con etiquetas;
+- guardar conclusiones con sus pruebas y revisar lo que propone un agente.
 
 WireCat utiliza Memo para estas tareas. Memo es una herramienta que se ejecuta en tu ordenador
 para importar y buscar archivos y guardar notas vinculadas a sus temas. Tu agente puede ejecutar
@@ -161,7 +162,8 @@ que está en un archivo y revisa el informe de importación: un archivo sin impo
 Una nota llega a Memo de dos formas. Las **notas importadas** proceden de archivos: edita el
 original y vuelve a importarlo. Tus **propias notas** se escriben en el almacén local de Memo
 sobre una persona, mensaje, proyecto, tarea u otra nota. Crearlas no envía nada a esa persona ni
-cambia el mensaje al que se refieren.
+cambia el mensaje al que se refieren. Sus referencias son distintas: un archivo importado es
+`document:<id>` y una nota que escribiste es `note:<id>`.
 
 Pide a tu agente una nota sobre la persona o mensaje que elijas:
 
@@ -186,7 +188,8 @@ memo notes add 'Check the revised budget' --about 'msg:telegram/1/77/42' --json
 
 Una nota puede tener varios temas: repite `--about` para cada uno. Usa `max:<name or id>` o
 `email:<address>` para otra identidad. Un objeto almacenado también puede nombrarse mediante
-su referencia `person:`, `entity:`, `task:` o `note:`. Debe existir en el almacén; coincidir en
+su referencia `person:`, `organization:`, `project:`, `task:`, `note:` o `document:`, y una reunión
+guardada mediante `meeting:<account id>/<meeting id>`. Debe existir en el almacén; coincidir en
 el nombre no establece que dos cuentas pertenezcan a la misma persona.
 
 ### Lee, edita y elimina una nota
@@ -226,12 +229,13 @@ Una etiqueta es un nombre corto que eliges, como `work` o `follow-up`. Ayuda a e
 fuentes relacionadas sin reescribirlas. Pide al agente que etiquete las notas, mensajes o
 personas que elijas y te muestre las etiquetas guardadas.
 
-Usa los IDs y referencias de tus propias búsquedas. `NOTE_ID`, `PERSON_UID` y `FOLDER_ID` son
+Usa los IDs y referencias de tus propias búsquedas. `NOTE_ID`, `DOCUMENT_ID`, `PERSON_UID` y `FOLDER_ID` son
 marcadores; los IDs numéricos de mensajes, identidades y cuentas son ilustrativos.
 
 | Qué etiquetar | Orden |
 | --- | --- |
-| Una nota | `memo tags add work --note note:NOTE_ID` |
+| Una nota que escribiste | `memo tags add work --note note:NOTE_ID` |
+| Un archivo importado | `memo tags add work --note document:DOCUMENT_ID` |
 | Un mensaje almacenado | `memo tags add follow-up --message 'msg:telegram/1/77/42'` |
 | Una identidad guardada en la cuenta de un servicio de mensajería | `memo tags add work --contact 101 --provider telegram --account 1` |
 | Una persona vinculada | `memo tags add work --person PERSON_UID` |
@@ -274,6 +278,36 @@ El archivo debe estar importado. Un nombre en texto normal no crea un enlace.
 `notes about` muestra notas relacionadas; `context` también reúne mensajes y correo de las
 identidades vinculadas. Consulta [vincular cuentas](./people.md#link-your-accounts) y [Correo](./email.mdx).
 
+## Guarda conclusiones y revisa propuestas
+
+Una **memoria** (memory) es una conclusión breve —un hecho, una preferencia o un resumen— guardada
+con las fuentes que la demuestran y un ámbito `personal` o `work`. Una memoria que añades tú queda
+confirmada al instante. La que añade un agente espera como propuesta hasta que compruebes sus
+pruebas y la confirmes. Un agente también puede **proponer una acción**, como una respuesta.
+Aprobarla solo crea una tarea en la cuenta que actuaría; no se envía nada.
+
+```text prompt
+Muéstrame las memorias y acciones de Memo que esperan mi revisión, con sus pruebas.
+No confirmes ni apruebes nada; lo decidiré yo.
+```
+
+Para usarlo a mano, sustituye los IDs por valores de tus propios resultados:
+
+```sh
+memo memories add 'Bob Sample prefers Friday meetings' --scope work --evidence note:NOTE_ID
+memo memories list --status proposed --json
+memo memories confirm memory:MEMORY_ID
+memo actions list --status proposed --json
+memo actions approve ACTION_ID
+memo agents log --limit 20
+```
+
+`memo memories stale` marca una memoria cuyas pruebas ya no se sostienen, y `memo actions reject`
+cierra una propuesta. `memo agents log` muestra lo que hicieron los agentes mediante los servidores
+MCP que comparten el almacén: el agente, la herramienta y el resultado, nunca los argumentos.
+`memo mcp` ofrece a una aplicación de IA las mismas memorias, propuestas y registro por
+[MCP](./mcp.mdx); lo que escribe te espera, y no puede confirmar ni aprobar.
+
 ## Añade correo
 
 Consulta [Correo](./email.mdx) para las cuentas, importaciones y enlaces de direcciones con personas.
@@ -288,6 +322,11 @@ no se resolvió, pide al agente que explique la carencia en vez de dar el result
 ## Si falta algo
 
 Si falta una nota o etiqueta, comprueba su ID y cuenta. Para notas de archivo, revisa el informe y repite la importación tras editar. Si una edición entra en conflicto, lee la revisión actual antes de volver a intentarlo.
+
+Si usabas Memo cuando aún no guardaba sus datos en el almacén compartido `wirecat.db`, el antiguo
+`messages.db` no se lee. Registra de nuevo cada carpeta con `memo folders add` y repite
+`memo notes import` y `memo mail import`. Al abrir el almacén en su ruta predeterminada, se elimina
+el antiguo `messages.db` sin cifrar; si necesitas algo de él, guarda una copia en otro lugar antes de actualizar.
 
 Continúa con [Correo](./email.mdx) para importar mensajes y vincular direcciones a personas que conoces,
 o [trabajar con personas](./people.md#link-your-accounts) para vincular identidades entre servicios de mensajería.

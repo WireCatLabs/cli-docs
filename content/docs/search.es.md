@@ -22,7 +22,7 @@ Para formas de palabras, errores de escritura y búsqueda por significado, consu
 ## Descarga primero el historial de los chats pertinentes
 
 Antes de buscar mensajes antiguos, descarga las conversaciones del periodo que necesitas.
-Iniciar sesión no descarga todo el historial. La búsqueda de palabras puede consultar también el servidor por defecto: `tg` pide candidatos a Telegram y `max` a MAX cuando indicas un solo chat. `--backend archive` limita la búsqueda de palabras al archivo local. La búsqueda por significado, los recuentos y las búsquedas de MAX sin un solo chat indicado usan mensajes guardados. Los filtros de archivos se evalúan en el archivo local, incluso si la búsqueda de palabras también obtiene candidatos del servidor. Si falta esa conversación, un resultado vacío no significa que nunca se enviara el mensaje.
+Iniciar sesión no descarga todo el historial. La búsqueda de palabras puede consultar también el servidor por defecto: `tg` pide candidatos a Telegram y `max` a MAX: en el chat que indiques o en todos los chats a la vez, con la mejor coincidencia de cada uno. `--backend archive` limita la búsqueda de palabras al archivo local. La búsqueda por significado y los recuentos usan mensajes guardados. Los filtros de archivos se evalúan en el archivo local, incluso si la búsqueda de palabras también obtiene candidatos del servidor. Si falta esa conversación, un resultado vacío no significa que nunca se enviara el mensaje.
 
 Pide al agente que descargue los chats elegidos o ejecuta el comando de tu servicio de mensajería. Sustituye
 `Project` por el nombre del chat; el ejemplo descarga el último mes, hasta 1000 mensajes por ejecución:
@@ -126,7 +126,7 @@ También puedes filtrar por persona, fecha o adjuntos. Las guías de
 
 ## Si falta un resultado
 
-Por defecto, la búsqueda de palabras puede consultar también el servidor de Telegram, o el de MAX cuando indicas un solo chat. La búsqueda por significado, los recuentos y filtros como archivos o enlaces necesitan
+Por defecto, la búsqueda de palabras puede consultar también el servidor de Telegram o el de MAX. La búsqueda por significado, los recuentos y filtros como archivos o enlaces necesitan
 historial guardado: descarga el periodo que falta y vuelve a buscar. Buscar palabras y buscar por
 significado resuelven tareas distintas; prueba ambas si no recuerdas el texto preciso. Comprueba
 fechas, chats elegidos y si el historial está completo.

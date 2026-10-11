@@ -22,7 +22,7 @@ For word forms, typo handling and meaning-based search, see [How search works](.
 ## Fetch the relevant chat history first
 
 Before searching older messages, download the conversations for the period you need. Logging
-in does not download all history. Word search can also query the messenger’s server by default: `tg` asks Telegram for word candidates, and `max` asks MAX when you name one chat. `--backend archive` keeps word searches local. Topic search, counts and MAX searches without one named chat use saved messages. File filters are evaluated against the local archive, even when a word search also retrieves server candidates. If that conversation is missing, an empty result does not mean the
+in does not download all history. Word search can also query the messenger’s server by default: `tg` asks Telegram for word candidates, and so does `max` with MAX: within the chat you name, or across all chats with one best match from each. `--backend archive` keeps word searches local. Topic search and counts use saved messages. File filters are evaluated against the local archive, even when a word search also retrieves server candidates. If that conversation is missing, an empty result does not mean the
 message was never sent.
 
 Ask your agent to fetch the selected chats or run your messenger's command. Replace `Project`
@@ -127,7 +127,7 @@ You can also filter by person, date or attachments. The [Telegram](./tg/search.m
 
 ## If a result is missing
 
-By default, word search can also ask Telegram’s server, or MAX’s server when you name one chat. Topic search,
+By default, word search can also ask Telegram’s or MAX’s server. Topic search,
 counts and filters such as files or links need saved history: fetch the missing period, then
 search again. A word search is different from a search by meaning; try both when you remember
 only roughly how something was said. Check dates, chat scope and whether history is complete.

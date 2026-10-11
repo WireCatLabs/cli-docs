@@ -4,11 +4,64 @@ title: "Changelog"
 
 Notable changes to `@wirecat/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
+## 0.45.4 — 11.10.2026
+
+### What's new
+
+- **`max search messages` without a chat also asks the MAX server**, like the search bar on web.max.ru: one request
+  across all chats, one best match from each chat. What it finds is saved in the archive and checked against your
+  query. With `--chat`, the server searches one chat, as before. `--backend archive` keeps the archive only;
+  with `--json`, such searches now have a `server` block.
+
+### Changed — may break scripts
+
+- **`max search messages` with words and no chat now connects to MAX** (it used to answer from the archive only) and
+  can wait for the server for up to 5 seconds. The same applies to search through MCP. To search only the archive, as
+  before, add `--backend archive` (in MCP, `backend: "archive"`).
+
+### Fixed
+
+- Runs on `@wirecat/cli-messaging` 0.231.0, which brings cli-meetings 0.3.0 and the SQLite and ONNX 1.0.1 packages with a
+  license file; nothing changes for `max`.
+
+## 0.45.3 — 11.10.2026
+
+### Changed — may break scripts
+
+- Archive search with `--discover` handles questions such as “Can contractors connect to the project?”:
+  the question mark no longer turns into a search pattern. Strict search and filters work as before.
+- Mail search and a linked person's conversations also read the separate mail storage, alongside
+  the earlier import. Mail supports sender and thread filters. In search results, an email with the same reference
+  is shown once.
+
+## 0.45.2 — 11.10.2026
+
+### Changed — may break scripts
+
+- **A history fetch whose very first page fails with no hope of a retry exits with an error again**
+  (exit code `2`), as before 0.45.1. A wait that MAX asks for, and a failure after several pages, still
+  give a partial result with `complete: false` and code `0`.
+
+### Fixed
+
+- **`max store fetch --background` no longer stops after 30 seconds.** The background task received the
+  30-second limit shared by commands and stopped after about a hundred messages. Now it runs to the end; an explicit
+  `--timeout` still limits it.
+- **`max store fetch --all` waits out a short pause** that the chat list asks for (up to 5 minutes, as message
+  pages already did), instead of ending at once with `rate_limited`.
+
+### Security
+
+- **The old `messages.db` is deleted** when the store is opened at its default path (since 0.45.1): the unencrypted file
+  used before `wirecat.db`, with its `-wal` and `-shm`. One line on stderr names it. The file stays when
+  `MESSAGING_STORE` is set, and while another process keeps it open.
+
 ## 0.45.1 — 11.10.2026
 
 ### Fixed
 
 - Package references, documentation and examples use the WireCat namespace.
+- HTTP attachment downloads distinguish 429 from an ordinary network failure: they stop new files and expose the `Retry-After` wait when supplied. A 413 response suggests reducing input, rather than raising a local budget.
 
 ### Changed — may break scripts
 
@@ -19,10 +72,6 @@ Notable changes to `@wirecat/max-cli`, one section per version, newest first. Ve
 
 - Set extraction and retained-file transfer size through `MESSAGING_ATTACHMENT_MAX_MIB` (default 50). PDF previews now allow 4000 pixels per side and 8 MiB per page; `MESSAGING_PDF_PREVIEW_MAX_PIXELS` and `MESSAGING_PDF_PREVIEW_MAX_MIB` adjust those budgets. Larger values need more memory; external OCR and decompression budgets remain separate.
 - `max runs search`, also the `runs search` command in MCP `max_read`, searches safe diagnostic records by text, status, error code and time without connecting to MAX.
-
-### Fixed
-
-- HTTP attachment downloads distinguish 429 from an ordinary network failure: they stop new files and expose the `Retry-After` wait when supplied. A 413 response suggests reducing input, rather than raising a local budget.
 
 ## 0.45.0 — 11.10.2026
 
@@ -842,7 +891,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/99539b4efde2ae9ec66fa6e722fb3ced961c818f/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.45.4/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).

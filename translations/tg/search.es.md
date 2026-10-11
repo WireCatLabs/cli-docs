@@ -73,7 +73,7 @@ tg search conversations 'moving to the country'   # conversations close in meani
 tg search topics "Hiking" "gear"                  # topic titles in one forum group
 ```
 
-`search all` dice qué es cada resultado: un mensaje (`msg:…`) o una nota (`note:…`). `search messages` nunca devuelve correo y `search mail` nunca devuelve mensajes de Telegram; sólo `search all` cubre ambos. `--type` limita `search messages` a texto, voz o archivos (`text|voice|file`) y `search notes` a notas escritas en notas o importadas desde una carpeta (`internal|file`). Cuando una consulta utiliza un campo correo o notas que no tiene (`chat:`, `from:`), `search all` los omite y lo dice.
+`search all` dice qué es cada resultado: un mensaje (`msg:…`) o una nota (`note:…`). `search messages` nunca devuelve correo y `search mail` nunca devuelve mensajes de Telegram; sólo `search all` cubre ambos. `--type` limita `search messages` a texto, voz o archivos (`text|voice|file`) y `search notes` a notas escritas en memo o importadas desde una carpeta (`internal|file`). El correo admite `chat:` para una cadena de correos y `from:` para su remitente. Si un campo no corresponde —`kind:`/`topic:` para el correo, o `chat:`/`from:` para las notas—, `search all` omite esa fuente y explica por qué.
 
 El correo y las notas llegan al archivo local mediante memo: `memo mail import` y `memo import`. Sin ellos, `search all` busca únicamente mensajes.
 

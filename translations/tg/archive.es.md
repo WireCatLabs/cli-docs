@@ -128,7 +128,7 @@ tg store fetch --all                          # every chat, most recently active
 tg store fetch --all --since-time 365d        # every chat, back to a year ago
 ```
 
-`store fetch` lee y guarda el historial por páginas, empezando por lo más reciente. **Puede reanudarse:** después de cada página registra lo que ya contiene, por lo que detenerlo no pierde datos. Ctrl-C, `--timeout`, el límite `--limit`, `--since-time`, `--last` y una espera larga exigida por Telegram detienen la descarga; la siguiente ejecución omite lo que ya está guardado. `--since-time` y `--last` indican hasta dónde retroceder: utiliza una de las dos, no ambas.
+`store fetch` lee y guarda el historial por páginas, empezando por lo más reciente. **Puede reanudarse:** después de cada página registra lo que ya contiene, por lo que detenerlo no pierde datos. Ctrl-C, `--timeout`, el límite `--limit`, `--since-time`, `--last` y una espera larga exigida por Telegram detienen la descarga; la siguiente ejecución omite lo que ya está guardado. `--since-time` y `--last` indican hasta dónde retroceder: utiliza una de las dos, no ambas. Un fallo permanente antes de la primera página guardada termina con un error; si ya hay progreso, un fallo puede devolver lo guardado con un `issue`.
 
 **Cada página es una petición desde tu cuenta**, de hasta 100 mensajes. La ejecución se detiene al alcanzar `--limit` mensajes (1000 por defecto); `--page-size` define los mensajes por petición (100 por defecto) y `--pause` separa las páginas (1 segundo por defecto; `500ms`, `30s`, `2m`). Si Telegram exige una espera corta, el comando espera; si supera cinco minutos, se detiene para que lo ejecutes más tarde. Consulta primero `--estimate`: calcula a partir del archivo y no envía peticiones.
 
@@ -136,7 +136,7 @@ Para buscar y llenar los espacios vacíos dentro del historial guardado de un ch
 
 ### En segundo plano
 
-Una descarga larga puede ejecutarse como una tarea que continúa después de finalizar el comando:
+Una descarga larga puede ejecutarse como una tarea que continúa después de finalizar el comando. No tiene el plazo predeterminado de 30 segundos; un `--timeout` explícito sigue limitándola:
 
 ```sh
 tg store fetch "Book club" --background     # prints the job id

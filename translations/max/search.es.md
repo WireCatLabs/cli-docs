@@ -70,7 +70,7 @@ max search notes 'бюджет' --type internal       # только замет�
 max search conversations 'переезд на дачу'      # разговоры, близкие по смыслу
 ```
 
-`search all` escribe para cada hallazgo que se trata de un mensaje (`msg:…`) o una nota (`note:…`). `search messages` nunca devuelve correo y `search mail` nunca devuelve mensajes de mensajería instantánea; juntos solo `search all` los busca. `--type` para `search messages` deja solo texto, voz o archivos (`text|voice|file`), para `search notes` deja notas desde memo o desde una carpeta (`internal|file`). Si la solicitud tiene un campo que el correo o las notas no tienen (`chat:`, `from:`), `search all` los omite y lo dice.
+`search all` escribe para cada hallazgo que se trata de un mensaje (`msg:…`) o una nota (`note:…`). `search messages` nunca devuelve correo y `search mail` nunca devuelve mensajes de mensajería instantánea; juntos solo `search all` los busca. `--type` para `search messages` deja solo texto, voz o archivos (`text|voice|file`), para `search notes` deja notas desde memo o desde una carpeta (`internal|file`). El correo admite `chat:` para seleccionar una cadena de correos y `from:` para su remitente. Si un campo no corresponde —`kind:`/`topic:` para el correo, o `chat:`/`from:` para las notas—, `search all` omite esa fuente y explica por qué.
 
 memo importa correo y notas al archivo: `memo mail import` y `memo import`. Sin esas importaciones, `search all` solo busca mensajes.
 
@@ -404,10 +404,16 @@ max stats messages show --by hour                     # все сохранён�
 
 ## Búsqueda en el servidor de MAX: `--backend`
 
-El servidor de MAX solo busca en un chat. Cuando la consulta especifica un chat (`--chat` o `chat:`) e incluye palabras sin `--discover`, `max` consulta tanto al servidor como al archivo de forma predeterminada (`--backend both`). Si no se especifica un chat, no consulta al servidor; los resultados proceden del archivo. `--discover` siempre usa solo el archivo, incluso con `--backend both`.
+Cuando la consulta incluye palabras y no se indica `--discover`, `max` consulta tanto al servidor como al archivo de forma predeterminada (`--backend both`). `--discover` siempre usa solo el archivo, incluso con `--backend both`.
+
+Con un chat (`--chat` o `chat:`), el servidor busca en ese chat. Sin chat, el servidor busca en todos los chats igual que la barra de búsqueda de web.max.ru: con una sola solicitud, y devuelve un mensaje de cada chat, la mejor coincidencia. El archivo encuentra las demás coincidencias de esos chats si las tiene. Los nombres de los chats y los canales públicos no se incluyen en la respuesta.
 
 ```sh
-max search messages 'счёт' --chat "Книжный клуб"                    # архив и сервер MAX
+max search messages 'счёт' --chat "Книжный клуб"                    # архив и сервер MAX, один чат
+```
+
+```sh
+max search messages 'счёт'                                          # архив и сервер MAX, все чаты
 ```
 
 ```sh

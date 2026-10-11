@@ -1,0 +1,14 @@
+[
+  {
+    "name": "memo",
+    "package": "@wirecat/cli-memo",
+    "docsRef": "v0.11.0",
+    "pages": ["memo", "email"]
+  },
+  {
+    "name": "zoom",
+    "package": "@wirecat/zoom-cli",
+    "docsRef": "v0.4.0",
+    "pages": ["zoom"]
+  }
+]
