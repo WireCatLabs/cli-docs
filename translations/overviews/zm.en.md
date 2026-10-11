@@ -3,9 +3,7 @@ title: "Zoom"
 description: "Keep transcripts, recordings and meeting context available to your AI agent."
 ---
 
-Zoom meetings can become searchable context for your agent: recover a decision, check a promise
-or prepare for the next call with references to the original passages. The tool runs on your
-computer as `zm` and stores the meeting information locally.
+Keep meeting passages available to your AI agent so it can recover decisions, check promises and prepare for a call with sources. The Zoom command-line tool runs on your computer as `zm`; it reads available hosted data or imports transcript files.
 
 ## What you can do
 
@@ -15,17 +13,14 @@ computer as `zm` and stores the meeting information locally.
 - Search passages by words or configured search by meaning, then combine them with notes and project context.
 - Read upcoming meetings and invitations; preview simple meeting changes before applying them.
 
-API access uses your own Zoom app and the permissions you grant. Transcripts must be available
+API access uses the configured Zoom app and the permissions you grant. Transcripts must be available
 for your account; meetings you attended can be imported from downloaded files.
 
-## Start with your data
+## Connect your data
 
-[Install the tool](./installation.md), [create your Zoom app](./zoom-app.md), then
-[log in and select a local profile](./sessions.md). You can also start with transcript files:
-[importing and archiving meetings](./archive.md) explains their naming and time-zone requirements.
+Start with [install and connect](./installation.md). Its steps cover using an app you already created, a WireCat/team app available to your Zoom user, or creating your own. You need its Public Client ID and browser consent, not a credentials file. For files only, [import VTT transcripts](./archive.md#downloaded-transcripts) without a Zoom app.
 
-Give a terminal agent the tool's [skill](./mcp.md), or connect its read-only MCP server to your
-AI app. MCP is the connection that lets an app call the tool; discovery alone does not import meetings.
+After storing a first meeting, [connect your agent](./mcp.md) through a terminal skill or read-only MCP tools. The connection does not retrieve data by itself.
 
 ## Choose your next task
 

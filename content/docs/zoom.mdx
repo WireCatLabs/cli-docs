@@ -17,9 +17,7 @@ tool gives your agent access to the saved information.
 Ask your agent to identify the right meeting before summarising it:
 
 ```text prompt
-Use zm CLI to find the meetings about Research Example from the last month.
-Show the meeting dates and the passages about the launch decision, with source references.
-Separate recorded attendees from people merely mentioned. Tell me which transcripts are missing.
+Find meetings about Research Example from the last month. Show dates and the passages about the launch decision, with source references. Distinguish recorded attendees from people only mentioned. Tell me which transcripts are missing.
 ```
 
 The agent checks meeting information, searches available transcripts and opens the matching passages.
@@ -36,10 +34,7 @@ for finding related material; notes hold your own context. A person link connect
 participant to a person you selected; matching names alone do not establish identity.
 
 ```text prompt
-Use zm CLI and Memo to collect the meetings for Research Example, including its existing aliases.
-Check the project and current tags before proposing new labels. Suggest possible synonyms for review.
-Combine the relevant passages with linked people, my notes, related messages and imported Google Drive files.
-Show the source of every conclusion. Propose project links, person links and tags before saving them.
+Collect the meetings for Research Example, including its existing project aliases. Check the canonical project and current tags before proposing labels. Show possible tag synonyms for review. Combine passages with linked people, my notes, related messages and imported Google Drive documents. Cite every conclusion and propose uncertain links before saving.
 ```
 
 The agent selects the canonical project, finds its meeting membership or related labels, and reads
@@ -52,11 +47,7 @@ synchronised Google or Outlook calendar.
 ## Prepare for the next meeting
 
 ```text prompt
-Use zm CLI to find my next Zoom meeting with Alice Example.
-Prepare a brief from earlier meetings in the series, linked project material and participant context.
-List earlier decisions, open questions and possible follow-ups with evidence.
-If the project or person is uncertain, show the candidates and why you chose them.
-Do not change the meeting or save inferred links.
+Find my next Zoom meeting with Alice Example. Prepare a brief from earlier meetings in the series, linked project sources and participant context. List confirmed decisions, open questions and possible follow-ups with evidence. If a project or person is uncertain, show candidates and reasons. Keep the meeting and stored links unchanged.
 ```
 
 The agent reads the upcoming Zoom schedule, then searches the stored context. Check that the brief

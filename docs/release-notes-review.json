@@ -13,8 +13,8 @@
   },
   "zm": {
     "version": "v0.7.1",
-    "roadmapSha256": "fabb25e84e9d496cffe6060659b726d801e84a1b95852e4920eb2d52d3486a04",
-    "reviewedAt": "2026-10-11",
-    "conclusion": "Shared native file/WAV reuse preserves CLI behavior. Available: meeting metadata, transcripts, archives, evidence, person/event links, explicit keyword indexing, configured semantic search and local PCM WAV transcription. Future dedicated intake/preparation and further native archive reuse remain planned. Reviewed documentation-only search/app/roadmap overrides at f7a1dd2cb730996c4e4b239e9ff9010d6dbbc783 match released commands."
+    "roadmapSha256": "a29fab601584dbb576c022824b1eda079f203b3fe284a7da27a1a0f0467fee41",
+    "reviewedAt": "2026-10-12",
+    "conclusion": "Zoom 0.7.1 runtime remains unchanged. Reviewed compatible documentation-only overrides rebuild app reuse/creation, callback completion, first reads and all task guides. Current manual agent workflows and future dedicated intake/preparation remain distinct; planned items are unchanged. Immutable source commits are recorded in tools.json and the page/locale review."
   }
 }

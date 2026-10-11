@@ -4,8 +4,9 @@ title: "Todos los comandos"
 
 <!-- Generated from the command tree by scripts/commands.ts. Do not edit; run pnpm generate. -->
 
-
-Las descripciones de operaciones conservan el idioma de la ayuda de la herramienta. Las reuniones usan IDs locales o IDs remotos de Zoom; las rutas del archivo son explícitas. Consulta la guía de uso para elegir una tarea.
+Consulta órdenes, argumentos y opciones exactos para leer reuniones, archivar grabaciones o gestionar
+la agenda. Los ID locales difieren de los de Zoom; los destinos son directorios explícitos.
+Para la primera conexión empieza por instalación o una guía de tarea.
 
 ## Opciones globales
 

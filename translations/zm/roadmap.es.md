@@ -2,9 +2,10 @@
 title: "Planes"
 ---
 
-La herramienta ya descarga datos y grabaciones disponibles de Zoom, importa transcripciones,
-busca fuentes y vincula reuniones explícitamente con personas y eventos. [Buscar con fuentes](./search.md)
-permite trabajar con esos datos ahora.
+Consulta qué flujos puedes usar hoy y cuáles faltan. La herramienta ya obtiene datos del anfitrión,
+importa texto, copia grabaciones y busca pasajes citados. Un agente puede combinarlos con proyectos,
+notas y personas de Memo; los flujos automáticos dedicados de abajo están previstos. Empieza con
+[búsqueda y fuentes](./search.md).
 
 ## Trabajo previsto
 

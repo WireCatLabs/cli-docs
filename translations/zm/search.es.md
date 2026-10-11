@@ -5,6 +5,25 @@ title: "Búsqueda y fuentes"
 Encuentra lo dicho en reuniones guardadas, lee el pasaje exacto con una referencia, recupera el
 contexto de una persona, vincula eventos y personas y revisa una tarea basada en su fuente.
 
+## Empieza con una pregunta
+
+```text prompt
+Busca discusiones de Research Example en reuniones guardadas. Muestra fechas y pasajes sobre la decisión de lanzamiento. Incluye referencias e indica texto o periodos ausentes.
+```
+
+El agente debe identificar la reunión, abrir el pasaje y distinguir un participante registrado de
+una persona solo mencionada. Lee las intervenciones cercanas antes de aceptar una decisión o promesa.
+Una búsqueda vacía no demuestra que no hubo discusión.
+
+Para buscar palabras en el texto guardado:
+
+```sh
+zm meetings search "example plan" --json
+```
+
+La búsqueda lee el perfil guardado, no el historial actual de Zoom. Primero [descarga o importa las reuniones que faltan](./archive.md).
+Para buscar formas de palabras y continuar dentro de una transcripción larga, sigue los pasos siguientes.
+
 ## Buscar reuniones guardadas
 
 Para búsquedas limitadas, indexa explícitamente la cola y recorre las páginas:
@@ -96,4 +115,9 @@ Se admiten pregunta, petición, mención y promesa. `applied: false` y `persiste
 indican que no se creó una tarea. `zm` no extrae compromisos por sí solo: el agente lee las fuentes
 y propone una tarea para el pasaje elegido.
 
-Consulta [búsqueda por significado](./topic-search.md) para otro enfoque.
+Antes de guardar notas, etiquetas o hechos, pide al agente los alias existentes del proyecto y las
+etiquetas actuales, y después sus propuestas de vínculos. Revisa posibles sinónimos antes de crear otra
+etiqueta para el mismo tema. Memo se instala por separado y debe usar la misma ruta de base de datos.
+
+La búsqueda por significado se explica en [su guía](./topic-search.md). Para preparar una llamada,
+combina los pasajes citados con [el calendario de Zoom](./remote-meetings.md).
