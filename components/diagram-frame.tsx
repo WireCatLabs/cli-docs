@@ -13,6 +13,8 @@ const labels = {
 /** The same SVG grows to fill the screen rather than being copied into a dialog: a copy would repeat its ids. */
 export function DiagramFrame({ svg, caption }: { svg: string; caption: string }) {
   const [open, setOpen] = useState(false)
+  const [ready, setReady] = useState(false)
+  useEffect(() => setReady(true), [])
   const lang = usePathname().split("/")[1]
   const text = labels[lang as keyof typeof labels] ?? labels.en
 
@@ -41,13 +43,14 @@ export function DiagramFrame({ svg, caption }: { svg: string; caption: string })
     >
       <button
         type="button"
+        disabled={!ready}
         onClick={(event) => {
           event.stopPropagation()
           setOpen(!open)
         }}
         aria-label={open ? text.close : text.open}
         title={open ? text.close : text.open}
-        className="absolute top-2 right-2 z-10 rounded-md border border-fd-border bg-fd-background p-1.5 text-fd-muted-foreground hover:text-fd-foreground"
+        className="absolute top-2 right-2 z-10 rounded-md border border-fd-border bg-fd-background p-1.5 text-fd-muted-foreground hover:text-fd-foreground disabled:cursor-wait disabled:opacity-50"
       >
         {open ? <X className="size-4" /> : <Maximize2 className="size-4" />}
       </button>

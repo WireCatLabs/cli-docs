@@ -104,12 +104,23 @@ for (const lang of ["en", "ru", "es"] as const) {
 test("en: the data model diagram enlarges and Esc closes it", async ({ page }) => {
   await page.goto("/en/docs/data-model")
   const dialog = page.getByRole("dialog")
-  // The served button looks the same before its click handler is attached, so retry until a click opens it.
-  await expect(async () => {
-    await page.getByRole("button", { name: "Enlarge diagram" }).first().click({ timeout: 1_000 })
-    await expect(dialog).toBeVisible({ timeout: 1_000 })
-  }).toPass()
+  const enlarge = page.getByRole("button", { name: "Enlarge diagram" }).first()
+  await expect(enlarge).toBeEnabled()
+  await enlarge.click()
+  await expect(dialog).toBeVisible()
   await expect(dialog.getByRole("button", { name: "Close" })).toBeVisible()
   await page.keyboard.press("Escape")
   await expect(dialog).toHaveCount(0)
+})
+
+test("en: diagram SVG is readable before JavaScript and enlargement waits for its handler", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false })
+  try {
+    const page = await context.newPage()
+    await page.goto("/en/docs/data-model")
+    await expect(page.locator("main figure.docs-diagram svg").first()).toBeVisible()
+    await expect(page.getByRole("button", { name: "Enlarge diagram" }).first()).toBeDisabled()
+  } finally {
+    await context.close()
+  }
 })
