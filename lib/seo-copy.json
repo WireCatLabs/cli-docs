@@ -5,7 +5,7 @@
     "homeLabel": "Home",
     "docsLabel": "Documentation",
     "socialTitle": "Your conversations. Your AI agent.",
-    "socialDescription": "Telegram and MAX · Open-source CLI tools",
+    "socialDescription": "Telegram, MAX, email and notes · Open-source CLI tools",
     "reference": {
       "installation": "Install the {messenger} CLI on Windows, macOS or Linux, check requirements, update it and find its local files.",
       "usage": "Read {messenger} conversations, prepare replies and choose when your agent may send them.",
@@ -50,7 +50,7 @@
     "homeLabel": "Главная",
     "docsLabel": "Документация",
     "socialTitle": "Ваши переписки. Ваш ИИ-агент.",
-    "socialDescription": "Telegram и MAX · CLI с открытым кодом",
+    "socialDescription": "Telegram, MAX, почта и заметки · CLI с открытым кодом",
     "reference": {
       "installation": "Установите CLI для {messenger} на Windows, macOS или Linux: требования, обновление и расположение локальных файлов.",
       "usage": "Читайте переписки {messenger}, готовьте ответы и выбирайте, когда агент может их отправлять.",
@@ -95,7 +95,7 @@
     "homeLabel": "Inicio",
     "docsLabel": "Documentación",
     "socialTitle": "Tus conversaciones. Tu agente de IA.",
-    "socialDescription": "Telegram y MAX · CLI de código abierto",
+    "socialDescription": "Telegram, MAX, correo y notas · CLI de código abierto",
     "reference": {
       "installation": "Instala la CLI de {messenger} en Windows, macOS o Linux: requisitos, actualizaciones y ubicación de los archivos locales.",
       "usage": "Lee conversaciones de {messenger}, prepara respuestas y decide cuándo puede enviarlas tu agente.",
