@@ -6,7 +6,28 @@ Cambios destacados de `@wirecat/cli-memo`, con una sección por versión, de la 
 antigua. Se utiliza [versionado semántico](https://semver.org/); antes de `1.0.0`, una versión menor puede cambiar
 la API.
 
-## Sin publicar
+## 0.21.0 — 11.10.2026
+
+### Correcciones
+
+- La indicación tras una búsqueda sin el modelo de búsqueda por significado nombra el comando que lo descarga,
+  `tg models text download e5-small`; antes nombraba un comando `memo models` que no existe.
+- `memo projects context` encuentra un proyecto por su clave (`HRB`) o por `project:<id>`, además de por su id;
+  con la clave la respuesta salía vacía.
+
+### Cambios — pueden romper scripts
+
+- **`memo search mail` y `memo search messages` muestran cada resultado como una referencia, luego quién y
+  cuándo, y luego un extracto.** En un correo, la segunda línea nombra To, Cc y sus etiquetas de Gmail, y la
+  tercera su asunto; el cuerpo completo vuelve con `--full`. `--json` da a cada correo `email` (from, to, cc, bcc
+  y reply-to con sus referencias `person:`, etiquetas, cadena, leído y destacado) y un `excerpt` en lugar del
+  `text` completo; `--brief` deja solo referencia, título, hora, remitente, extracto y puntuación. La búsqueda de
+  correo ya no devuelve `coverage`. Basado en la biblioteca compartida 0.251.0.
+
+### Correcciones
+
+- **La importación de correo ya no archiva las direcciones Cc en To.** El correo importado antes las conserva en
+  ambos campos; la búsqueda las muestra solo en Cc.
 
 ## 0.20.0 — 11.10.2026
 
