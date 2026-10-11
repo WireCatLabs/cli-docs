@@ -11,14 +11,41 @@ description: "Попробуйте полезный запрос, проверь
 
 ```mermaid Как ваш запрос доходит до мессенджера
 graph TD
-  You["Вы"] --> Agent["ИИ-агент"]
-  Agent --> Tool["Локальный инструмент"]
-  Tool --> Messenger["Мессенджер"]
+  You["Вы"] --> Agents
+  subgraph Agents["Ваш ИИ-агент"]
+    direction LR
+    Claude["Claude Code"]
+    Codex["Codex"]
+    OpenClaw["OpenClaw"]
+    Hermes["Hermes"]
+  end
+  Agents --> WireCat["WireCat"]
+  WireCat --> Core["Общее ядро: локальное хранилище и поиск"]
+  Core --> Tools
+  subgraph Tools["Инструменты командной строки"]
+    direction LR
+    TgCli["tg"]
+    MaxCli["max"]
+    MemoCli["memo"]
+    ZoomCli["zoom"]
+    DriveCli["drive"]
+  end
+  Tools --> Services
+  subgraph Services["Ваши аккаунты и файлы"]
+    direction LR
+    Telegram["Telegram"]
+    Max["MAX"]
+    Mail["Почта и заметки"]
+    Zoom["Zoom"]
+    Drive["Google Drive"]
+  end
 ```
 
-Вы описываете задачу агенту. Он с помощью локального инструмента командной строки читает выбранные
-сообщения из мессенджера и отвечает на их основе. Инструмент работает на вашем компьютере;
-настройки агента определяют, где он обрабатывает сообщения.
+Читайте схему сверху вниз. Вы описываете задачу своему ИИ-агенту, например Claude Code, Codex,
+OpenClaw или Hermes. Под агентом — WireCat: общее ядро хранит ваши сообщения, почту и заметки в
+локальном хранилище и ищет по ним, а инструмент командной строки для каждого сервиса (`tg`, `max`,
+`memo`, `zoom`, `drive`) работает с Telegram, MAX, почтой и заметками, Zoom или Google Drive.
+Инструменты работают на вашем компьютере; настройки агента определяют, где он обрабатывает сообщения.
 
 ## Первые пять минут
 

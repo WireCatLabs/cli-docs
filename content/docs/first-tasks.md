@@ -11,14 +11,41 @@ If you still need setup, start with [installation](./installation.mdx) or
 
 ```mermaid How your request reaches your messenger
 graph TD
-  You["You"] --> Agent["AI agent"]
-  Agent --> Tool["Local tool"]
-  Tool --> Messenger["Messenger"]
+  You["You"] --> Agents
+  subgraph Agents["Your AI agent"]
+    direction LR
+    Claude["Claude Code"]
+    Codex["Codex"]
+    OpenClaw["OpenClaw"]
+    Hermes["Hermes"]
+  end
+  Agents --> WireCat["WireCat"]
+  WireCat --> Core["Shared core: local store and search"]
+  Core --> Tools
+  subgraph Tools["Command-line tools"]
+    direction LR
+    TgCli["tg"]
+    MaxCli["max"]
+    MemoCli["memo"]
+    ZoomCli["zoom"]
+    DriveCli["drive"]
+  end
+  Tools --> Services
+  subgraph Services["Your accounts and files"]
+    direction LR
+    Telegram["Telegram"]
+    Max["MAX"]
+    Mail["Email and notes"]
+    Zoom["Zoom"]
+    Drive["Google Drive"]
+  end
 ```
 
-You describe the task to your agent. It uses the local command-line tool to read the selected messages
-from your messenger, then answers from those messages. The tool runs on your computer; your
-agent's own settings determine where it processes the messages.
+Read the picture from the top. You describe the task to your AI agent, for example Claude Code, Codex,
+OpenClaw or Hermes. Below the agent is WireCat: a shared core that keeps a local store of your messages,
+mail and notes and searches it, and a command-line tool for each service (`tg`, `max`, `memo`, `zoom`,
+`drive`) talks to Telegram, MAX, your email and notes, Zoom or Google Drive. The tools run on your
+computer; your agent's own settings determine where it processes the messages.
 
 ## Your first five minutes
 
