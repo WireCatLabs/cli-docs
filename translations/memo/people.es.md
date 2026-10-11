@@ -70,11 +70,11 @@ mensajería.
 memo organizations add 'Synthetic Studio' --kind company
 memo projects add 'Harbour' --key HRB --scope work --organization organization:1
 memo projects list
-memo projects context 1
+memo projects context HRB
 ```
 
-`--scope` es `personal` o `work`. `projects context` recibe el número del proyecto que da
-`projects list`. `projects context` y `organizations context` muestran las personas enlazadas al proyecto o a
+`--scope` es `personal` o `work`. `projects context` recibe la clave del proyecto o su
+número. `projects context` y `organizations context` muestran las personas enlazadas al proyecto o a
 la organización, las notas que tratan sobre él o que enlazan a él, y sus etiquetas. La clave
 de un proyecto también se usa para sus tareas, como `HRB-1` ([tareas](./tasks.md#tasks-in-a-project)).
 

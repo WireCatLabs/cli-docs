@@ -666,15 +666,15 @@ memo projects list [options]
 
 ### `memo projects context`
 
-One project by its id: its relationships, the notes about or linking it, and its tags
+One project by its id, key or project:<id>: its relationships, the notes about or linking it, and its tags
 
 ```sh
-memo projects context <id> [options]
+memo projects context <project> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `id` | required |  |
+| `project` | required |  |
 
 | Option | What it does |
 |---|---|
@@ -1343,6 +1343,8 @@ memo search all <query> [options]
 | `--exact` | words as written; skip meaning search. |
 | `--timezone <zone>` | IANA timezone for calendar date boundaries. |
 | `--json` | print JSON. |
+| `--brief` | each message or email as reference, time, sender and excerpt only. |
+| `--full` | each message or email with its whole text and every field. |
 | `--only <resources>` | messages,mail,notes, separated by commas. |
 
 ### `memo search messages`
@@ -1363,6 +1365,8 @@ memo search messages <query> [options]
 | `--exact` | words as written; skip meaning search. |
 | `--timezone <zone>` | IANA timezone for calendar date boundaries. |
 | `--json` | print JSON. |
+| `--brief` | each message or email as reference, time, sender and excerpt only. |
+| `--full` | each message or email with its whole text and every field. |
 | `--type <type>` | text, voice or file. |
 
 ### `memo search mail`
@@ -1383,6 +1387,8 @@ memo search mail <query> [options]
 | `--exact` | words as written; skip meaning search. |
 | `--timezone <zone>` | IANA timezone for calendar date boundaries. |
 | `--json` | print JSON. |
+| `--brief` | each message or email as reference, time, sender and excerpt only. |
+| `--full` | each message or email with its whole text and every field. |
 | `--account <address>` | only this mail account, by its address (default: every mail account). |
 
 ### `memo search notes`
@@ -1403,6 +1409,8 @@ memo search notes <query> [options]
 | `--exact` | words as written; skip meaning search. |
 | `--timezone <zone>` | IANA timezone for calendar date boundaries. |
 | `--json` | print JSON. |
+| `--brief` | each message or email as reference, time, sender and excerpt only. |
+| `--full` | each message or email with its whole text and every field. |
 | `--type <type>` | file or internal. |
 | `--tag <tag>` | only notes with this tag. |
 | `--filter <query>` | another query every note must match. |

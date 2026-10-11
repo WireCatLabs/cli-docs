@@ -13,6 +13,18 @@ import {
 } from "./localize.ts"
 
 describe("released documentation translations", () => {
+  it("translates marked reader prompts while preserving ordinary text and executable fences", () => {
+    const original = "```text prompt\nFind my latest meeting.\n```\n\n```sh\nzm meetings list --json\n```"
+    const translated = "```text prompt\nНайди последнюю встречу.\n```\n\n```sh\nzm meetings list --json\n```"
+    expect(translationProblems(original, translated)).toEqual([])
+    expect(translationProblems(original, translated.replace("zm meetings list", "zm meetings show"))).toContain(
+      "Code blocks changed",
+    )
+    expect(
+      translationProblems(original.replace("text prompt", "text"), translated.replace("text prompt", "text")),
+    ).toContain("Code blocks changed")
+    expect(translationProblems(original, translated.replace("text prompt", "text"))).toContain("Code blocks changed")
+  })
   const original =
     '---\ntitle: "Login"\n---\n\n## Profiles\n\nKeep `TG_PROFILE` and [sessions](./sessions.md#profiles).\n\n```sh\ntg work inbox # original comment\n```\n'
   const translated =

@@ -2,7 +2,7 @@ export const zoomDescriptions: Record<string, Record<string, string>> = {
   en: {
     index: "Use Zoom transcripts, recordings and meeting evidence as context for your AI agent.",
     installation: "Install zm and choose API access or downloaded transcript files for your first result.",
-    "zoom-app": "Register your own Zoom app, enable Public Client OAuth and grant the permissions you need.",
+    "zoom-app": "Reuse an existing Zoom app or create one, configure its Public Client ID and check permissions.",
     usage: "Choose meeting reads, archives or remote controls and understand their output and effects.",
     sessions: "Connect your Zoom account, keep tokens in the keyring and choose a local data profile.",
     archive: "Pull or import transcripts, save cloud recordings and verify the local archive.",
@@ -20,7 +20,7 @@ export const zoomDescriptions: Record<string, Record<string, string>> = {
   ru: {
     index: "Используйте расшифровки, записи и фрагменты встреч Zoom как контекст для ИИ-агента.",
     installation: "Установите zm и начните с API или скачанных файлов расшифровок.",
-    "zoom-app": "Создайте собственное приложение Zoom, включите Public Client OAuth и нужные разрешения.",
+    "zoom-app": "Используйте существующее приложение Zoom или создайте своё, настройте Public Client ID и разрешения.",
     usage: "Выберите чтение встреч, архив или управление и разберитесь в результатах и изменениях.",
     sessions: "Подключите аккаунт Zoom, храните токены в системном хранилище секретов и выберите профиль данных.",
     archive: "Загрузите или импортируйте расшифровки, сохраните облачные записи и проверьте архив.",
@@ -38,7 +38,7 @@ export const zoomDescriptions: Record<string, Record<string, string>> = {
   es: {
     index: "Usa transcripciones, grabaciones y fuentes de Zoom como contexto para tu agente de IA.",
     installation: "Instala zm y empieza con acceso API o archivos de transcripción descargados.",
-    "zoom-app": "Registra tu aplicación de Zoom, activa Public Client OAuth y concede los permisos necesarios.",
+    "zoom-app": "Reutiliza una app de Zoom o crea la tuya, configura Public Client ID y comprueba permisos.",
     usage: "Elige lecturas, archivos o controles remotos y entiende sus resultados y efectos.",
     sessions: "Conecta la cuenta de Zoom, guarda tokens en el llavero y elige un perfil local de datos.",
     archive: "Descarga o importa transcripciones, guarda grabaciones y verifica el archivo local.",

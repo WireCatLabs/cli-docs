@@ -1,5 +1,5 @@
 ---
-title: "memo"
+title: "Memo"
 ---
 
 Memo guarda en un solo lugar de tu ordenador lo que sabes sobre personas y proyectos: tus notas, tu

@@ -98,7 +98,11 @@ const fencedCode = (text: string) =>
     .map((node) => [
       node.lang,
       node.lang === "mermaid" ? null : node.meta,
-      node.lang === "mermaid" ? diagramStructure(node.value ?? "") : node.value,
+      node.lang === "mermaid"
+        ? diagramStructure(node.value ?? "")
+        : node.lang === "text" && node.meta === "prompt"
+          ? null
+          : node.value,
     ])
 
 export function translationProblems(original: string, translated: string): string[] {

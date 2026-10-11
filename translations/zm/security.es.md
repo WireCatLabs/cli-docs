@@ -2,15 +2,19 @@
 title: "Seguridad"
 ---
 
-Qué guarda `zm` en disco, qué envía por la red y qué acciones no realiza.
+Elige los datos que puede leer el agente y dónde se procesan. Autorización Zoom, almacenamiento local
+y procesamiento IA tienen límites separados: autorizar la app no envía por sí solo texto a un servicio
+IA. Esta guía los explica antes de conectar o archivar.
 
 ## Credenciales
 
-- `zm` usa tu aplicación de Zoom con Public Client OAuth, sin secreto de cliente.
-- El acceso comprueba PKCE y state. [wirecat.dev/zoom-callback](https://wirecat.dev/zoom-callback) es una página
-  estática que pasa la respuesta a `zm`; sin el verifier que queda en el equipo, la respuesta no sirve.
-- Los tokens solo están en el llavero, nunca en la configuración. Sin llavero aparece un error.
-- El listener se cierra tras éxito, fallo o vencimiento.
+- `zm` usa una app configurada con Public Client OAuth. Zoom puede mostrar su Client Secret,
+  pero la herramienta no lo pide ni usa. Configura solo el Public Client ID.
+- El login usa PKCE y comprueba el estado. La página estática
+  [wirecat.dev/zoom-callback](https://wirecat.dev/zoom-callback) pasa el retorno a `zm`; no sirve
+  sin la clave de verificación que queda en el equipo.
+- Los tokens solo van al almacén del sistema, no a la configuración. Si no está disponible, hay error.
+- El receptor se cierra al completar, fallar o caducar el login.
 
 ## Qué se envía por la red
 
@@ -32,3 +36,11 @@ Qué guarda `zm` en disco, qué envía por la red y qué acciones no realiza.
 - Cambios remotos, vínculos, indexación, transcripción, trabajos, vectores y recuperación primero muestran un plan
   y requieren `--yes`; `--dry-run` prevalece donde está disponible. Las escrituras remotas no se reintentan.
 - Proponer una tarea no la crea.
+
+Una app IA puede enviar los resultados a su propio proveedor. Elige app y política por separado
+de la autorización Zoom. Un servicio remoto de vectores recibe texto y consultas solo cuando se
+selecciona explícitamente; la ejecución local queda en el equipo. Archivos y base siguen conteniendo
+datos sensibles aunque los manifiestos omitan tokens.
+
+Para retirar acceso Zoom, [revoca la autorización](./sessions.md#remove-access). Para controlar lo
+que solicita una app, elige [instrucciones CLI o MCP de lectura](./mcp.md).

@@ -50,9 +50,21 @@
       "es": "Guarda transcripciones y grabaciones de Zoom, busca lo hablado y da contexto al agente para la próxima llamada."
     },
     "guideRefs": {
-      "roadmap": "f7a1dd2cb730996c4e4b239e9ff9010d6dbbc783",
-      "search": "f7a1dd2cb730996c4e4b239e9ff9010d6dbbc783",
-      "zoom-app": "f7a1dd2cb730996c4e4b239e9ff9010d6dbbc783"
+      "index": "2fb009471de7bcfd1feb7e857c2a5c8d3540b807",
+      "installation": "2fb009471de7bcfd1feb7e857c2a5c8d3540b807",
+      "zoom-app": "2fb009471de7bcfd1feb7e857c2a5c8d3540b807",
+      "sessions": "2fb009471de7bcfd1feb7e857c2a5c8d3540b807",
+      "usage": "2fb009471de7bcfd1feb7e857c2a5c8d3540b807",
+      "archive": "2fb009471de7bcfd1feb7e857c2a5c8d3540b807",
+      "search": "2fb009471de7bcfd1feb7e857c2a5c8d3540b807",
+      "topic-search": "2fb009471de7bcfd1feb7e857c2a5c8d3540b807",
+      "mcp": "823b5c5f702a95fe97738e3f986a6f1a5b25f720",
+      "remote-meetings": "2fb009471de7bcfd1feb7e857c2a5c8d3540b807",
+      "commands": "2fb009471de7bcfd1feb7e857c2a5c8d3540b807",
+      "configuration": "2fb009471de7bcfd1feb7e857c2a5c8d3540b807",
+      "troubleshooting": "2fb009471de7bcfd1feb7e857c2a5c8d3540b807",
+      "security": "2fb009471de7bcfd1feb7e857c2a5c8d3540b807",
+      "roadmap": "2fb009471de7bcfd1feb7e857c2a5c8d3540b807"
     }
   },
   {
@@ -66,6 +78,6 @@
       "ru": "Заметки, почта и сообщения в одном месте для вашего ИИ-агента: поиск, теги, люди и память, на вашем компьютере.",
       "es": "Tus notas, correo y mensajes en un solo lugar para tu agente de IA: búsqueda, etiquetas, personas y recuerdos, en tu ordenador."
     },
-    "docsRef": "v0.20.0"
+    "docsRef": "v0.21.0"
   }
 ]

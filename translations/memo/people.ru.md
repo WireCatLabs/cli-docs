@@ -67,11 +67,11 @@ tg contacts link 'Kai Sample' email:kai@example.com
 memo organizations add 'Synthetic Studio' --kind company
 memo projects add 'Harbour' --key HRB --scope work --organization organization:1
 memo projects list
-memo projects context 1
+memo projects context HRB
 ```
 
-`--scope` принимает значение `personal` или `work`. `projects context` принимает номер проекта из
-`projects list`. `projects context` и `organizations context` показывают людей, связанных с проектом или
+`--scope` принимает значение `personal` или `work`. `projects context` принимает ключ проекта или его
+номер. `projects context` и `organizations context` показывают людей, связанных с проектом или
 организацией, заметки о них или со ссылками на них и их теги. Ключ проекта также используется для его
 задач, например `HRB-1` ([задачи](./tasks.md#tasks-in-a-project)).
 
