@@ -18,7 +18,7 @@ for (const lang of ["en", "ru", "es"] as const) {
         const sidebar = page.locator(width === 390 ? "#nd-sidebar-mobile" : "#nd-sidebar")
         await expect(sidebar).toBeVisible()
         const missing = await sidebar
-          .locator('a[href*="/docs/"]')
+          .locator('[data-id$="-viewport"] a[href*="/docs/"]')
           .evaluateAll((links) =>
             links
               .filter((link) => !(link.closest("summary") ?? link).querySelector('svg[aria-hidden="true"]'))

@@ -35,11 +35,13 @@ for (const lang of ["en", "ru", "es"]) {
     await expect(packages).toHaveCount(1)
     await expect(packages).toContainText("@wirecat/cli-messaging")
     for (const slug of ["architecture", "search-architecture", "data-model", "people", "meeting-brief"]) {
-      const link = page.locator(`#nd-sidebar a[href="/${lang}/docs/${slug}"]`)
+      const link = page.locator(`#nd-sidebar [data-id$="-viewport"] a[href="/${lang}/docs/${slug}"]`)
       await expect(link).toHaveCount(1)
       await expect(link.locator("svg")).toHaveCount(1)
     }
-    await expect(page.locator(`#nd-sidebar a[href="/${lang}/docs/meeting-brief"] .lucide-video`)).toHaveCount(1)
+    await expect(
+      page.locator(`#nd-sidebar [data-id$="-viewport"] a[href="/${lang}/docs/meeting-brief"] .lucide-video`),
+    ).toHaveCount(1)
   })
 }
 

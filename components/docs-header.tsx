@@ -98,7 +98,6 @@ export function DocsHeader(props: ComponentProps<"header">) {
       </Link>
       <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
         <DocsSearchTrigger full className="hidden w-44 md:flex" />
-        <DocsSearchTrigger className="hidden min-[24rem]:block md:hidden" />
         <LanguageSwitcher lang={lang} />
         <ThemeSwitch lang={lang} />
         {slots.sidebar && (
