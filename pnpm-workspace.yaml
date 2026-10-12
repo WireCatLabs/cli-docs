@@ -5,10 +5,10 @@ allowBuilds:
   lefthook: true
   sharp: true
 minimumReleaseAgeExclude:
-  - '@wirecat/cli-core@0.18.1'
+  - '@wirecat/cli-base@0.21.0'
   - '@wirecat/cli-messaging-onnx@1.0.0'
   - '@wirecat/cli-messaging-sqlite@1.0.0'
-  - '@wirecat/cli-messaging@0.216.0'
+  - '@wirecat/cli-messaging@0.216.0 || 0.255.0'
   - '@wirecat/cli-tasks@0.2.0'
 patchedDependencies:
   '@fumadocs/base-ui@16.15.17': patches/@fumadocs__base-ui@16.15.17.patch

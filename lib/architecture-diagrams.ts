@@ -25,7 +25,7 @@ export const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] 
         {
           boxes: [
             {
-              name: "@wirecat/cli-core",
+              name: "@wirecat/cli-base",
               note: "output, errors and exit codes, keyring, config, codegen",
               tone: "core",
             },
@@ -62,7 +62,7 @@ export const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] 
         {
           boxes: [
             {
-              name: "@wirecat/cli-core",
+              name: "@wirecat/cli-base",
               note: "вывод, ошибки и коды выхода, ключница, настройки, генератор",
               tone: "core",
             },
@@ -99,7 +99,7 @@ export const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] 
         {
           boxes: [
             {
-              name: "@wirecat/cli-core",
+              name: "@wirecat/cli-base",
               note: "salida, errores y códigos de salida, llavero, configuración, codegen",
               tone: "core",
             },

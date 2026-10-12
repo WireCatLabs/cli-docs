@@ -18,7 +18,7 @@ const revision = process.argv[4] ?? "v1"
 assert.ok(["v1", "v2"].includes(revision), "Fixture revision must be v1 or v2")
 const root = join(runtime, "node_modules/@wirecat")
 const versions = {}
-for (const name of [packageName, "cli-messaging", "cli-core"])
+for (const name of [packageName, "cli-messaging", "cli-base"])
   versions[name] = JSON.parse(await readFile(join(root, name, "package.json"), "utf8")).version
 assert.equal(versions[packageName], command === "max" ? "0.24.0" : "0.23.0")
 const { openStore } = await import(pathToFileURL(join(root, "cli-messaging/dist/store/index.js")))

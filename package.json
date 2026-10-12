@@ -83,8 +83,8 @@
     "@cspell/dict-es-es": "3.0.9",
     "@cspell/dict-ru_ru": "2.3.3",
     "@types/shell-quote": "1.7.5",
-    "@wirecat/cli-core": "0.18.1",
-    "@wirecat/cli-messaging": "0.216.0",
+    "@wirecat/cli-base": "0.21.0",
+    "@wirecat/cli-messaging": "0.255.0",
     "@cspell/dict-en-gb": "5.0.34",
     "@babel/parser": "8.0.7"
   },
