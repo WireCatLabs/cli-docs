@@ -27,7 +27,9 @@ export function ReaderGuide({ slugs, lang }: { slugs: string[]; lang: string }) 
         <section data-bot-onboarding>
           <h2 id="task-bot-connect">{guide.setup.title}</h2>
           <p>
-            <a href={guide.setup.url}>{guide.setup.create}</a>
+            <a href={guide.setup.url} target="_blank" rel="noopener noreferrer">
+              {guide.setup.create}
+            </a>
           </p>
           {guide.setup.creationDetails && (
             <details data-botfather-help>

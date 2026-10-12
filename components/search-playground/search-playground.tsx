@@ -253,7 +253,11 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
                     <Popover.Popup className="sp-help-content" initialFocus={false}>
                       <p>{text.syntaxHelp}</p>
                       <code>AND · OR · NOT · chat: · from: · date: · has: · in: · text:</code>
-                      <a href="https://github.com/WireCatLabs/cli-core/blob/main/docs/search/query-language.md">
+                      <a
+                        href="https://github.com/WireCatLabs/cli-core/blob/main/docs/search/query-language.md"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         {text.reference} ↗
                       </a>
                     </Popover.Popup>
@@ -609,11 +613,19 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
         <div className="sp-footnote">
           <p>{text.scope}</p>
           <div>
-            <a href="https://github.com/WireCatLabs/max-cli/blob/main/docs/search.md">
+            <a
+              href="https://github.com/WireCatLabs/max-cli/blob/main/docs/search.md"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               MAX {text.reference}
               <ArrowUpRight size={13} aria-hidden />
             </a>
-            <a href="https://github.com/WireCatLabs/tg-cli/blob/main/docs/search.md">
+            <a
+              href="https://github.com/WireCatLabs/tg-cli/blob/main/docs/search.md"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Telegram {text.reference}
               <ArrowUpRight size={13} aria-hidden />
             </a>

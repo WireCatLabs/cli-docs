@@ -1,5 +1,5 @@
+import Link from "fumadocs-core/link"
 import { Accordion, Accordions } from "fumadocs-ui/components/accordion"
-import Link from "next/link"
 import { InstallTool } from "@/components/install-tool"
 import { Screenshot } from "@/components/screenshot"
 import { CopyText } from "@/components/text-snippet"

@@ -90,6 +90,10 @@ for (const lang of ["en", "ru", "es"]) {
     html = html.replace(/href="https:\/\/wirecat.dev\/en"/g, `href="${lang === "en" ? "/" : `/${lang}`}"`)
     html = html.replace(/href="https:\/\/wirecat\.dev\/([^"]*)"/g, (_, path) => `href="/${path}"`)
     html = html.replace(
+      /<a\b(?![^>]*\btarget=)([^>]*\bhref="https?:\/\/[^>]*)>/g,
+      '<a$1 target="_blank" rel="noopener noreferrer">',
+    )
+    html = html.replace(
       /(<button class="theme-toggle"[^>]*>(?:(?!<\/button>)[\s\S])*<\/button>)\s*<details class="lang footer-language">[\s\S]*?<\/details>/,
       (_, theme) => `${menu}${theme}`,
     )
