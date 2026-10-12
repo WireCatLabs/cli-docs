@@ -9,8 +9,8 @@ de importar más datos o cambiar permisos. Guarda el código de error y el perfi
 | Síntoma | Qué hacer |
 | --- | --- |
 | No se encuentra `drive` | Reabre la terminal/agente, comprueba que el directorio de comandos globales de npm está en PATH y repite [instalación](./installation.md). |
-| Google bloquea el acceso | Revisa cliente Desktop, APIs, consentimiento y usuario de prueba. Usa la cuenta añadida a la aplicación. |
-| El acceso ha caducado | Ejecuta `session start` otra vez con tu archivo. Los permisos External Testing suelen caducar a los siete días. |
+| Google bloquea el acceso | Revisa el error mostrado por Google y las políticas Workspace. Con tu propio cliente, comprueba también APIs, consentimiento y usuarios de prueba. |
+| El acceso ha caducado | Repite `drive personal session start`. Añade `--client-file` solo para tu propia aplicación. Los permisos External Testing suelen caducar a los siete días. |
 | No hay llavero del sistema | Conecta con `--credential-storage file` explícito si el almacenamiento privado en archivo es adecuado. |
 | Búsqueda vacía | Ejecuta `status`, comprueba raíces con `folders list` y luego `sync`. Prueba una palabra conocida con `search --exact`. |
 | Se omitió un archivo | Revisa tipo y permiso de descarga. Se admiten Google Docs y Markdown/TXT; PDF, Office, Sheets, Slides y accesos directos no se importan. |

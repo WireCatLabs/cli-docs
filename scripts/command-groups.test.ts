@@ -2,6 +2,22 @@ import { readFileSync } from "node:fs"
 import { expect, it } from "vitest"
 import { commandGroupForAnchor, commandGroups, splitCommandReference } from "../lib/command-groups"
 import { commandReferences } from "../lib/remark-doc-usability"
+import { documentationDescription, seoLocales } from "../lib/seo"
+
+// These checks require released sources captured by sync, before the full deployment suite.
+it("covers every released Drive sidebar page with distinct localized metadata", () => {
+  const sidebar = JSON.parse(readFileSync("content/upstream/drive/meta.json", "utf8")) as { pages: string[] }
+  const pages = sidebar.pages.filter((page) => !page.startsWith("---"))
+  for (const lang of seoLocales) {
+    const descriptions = new Set<string>()
+    for (const slug of pages) {
+      const description = documentationDescription(lang, slug === "index" ? ["drive"] : ["drive", slug])
+      expect(description).toContain("Google Drive")
+      descriptions.add(description)
+    }
+    expect(descriptions.size).toBe(pages.length)
+  }
+})
 
 it("partitions every generated command exactly once while retaining shared options and exit codes", () => {
   for (const tool of ["tg", "max"]) {

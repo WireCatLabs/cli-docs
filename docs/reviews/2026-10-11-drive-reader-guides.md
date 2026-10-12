@@ -131,3 +131,40 @@ name. The final all-tool contract capture and strict docs check passed: 1,227 re
 zero reference gaps, zero invalid examples, 126 examples requiring manual review across the
 corpus, and 17 task mappings. Updated-main unit suite: 298 passing tests; typecheck and reviewed
 translation fingerprints pass. Portal PR #180 owns the final source/release pin and legal sidebar.
+
+## Export recovery and final metadata review
+
+Deployment 38181590757 stopped before publication: the new Drive changelog page lacked its
+reviewed description in the three-locale metadata map. Source-install wording also remained
+in installation metadata. The follow-up adds task-focused npm/shared-app installation
+descriptions and changelog descriptions in EN/RU/ES. The released-source integration check now derives its page
+list from the Drive sidebar, so adding a page without metadata fails before export. Pure unit
+checks verify the released changelog and npm/shared-app installation descriptions.
+Browser cases cover the changelog route and installation metadata. No gate was relaxed.
+
+[Native recovery PR #17](https://github.com/WireCatLabs/drive-cli/pull/17) removes the stale
+mandatory-client-file instruction from troubleshooting. The portal uses the compatible
+immutable troubleshooting guide override `c7dbd9996d7349c11e89bbe6505c6e2fde12df9a`; runtime
+commands and npm pin remain v0.1.0. Both translations were reviewed against this source.
+
+Manual selected-folder import also succeeded: a native Doc was read from its saved snapshot
+and found through offline keyword search with its Google source link. Nested folder ancestry
+is retained in sync state, and the bounded batch leaves resumable pending work. Real document
+contents and file identities are excluded from this review record. This does not establish
+multi-tab export or asset fidelity.
+
+The independent release-update tracker on the prior merge flagged Zoom's latest-release
+metadata as older than its already-reviewed pin. That check does not own this Drive change;
+its validation remains enabled and the discrepancy was not hidden.
+
+Metadata/recovery follow-up validation: 298 unit tests, typecheck, lint and strict documentation
+checks pass. Nine affected overview/installation/changelog browser cases pass against the
+warmed local server with unchanged test assertions and deadlines. The temporary local runner
+only reuses the explicitly started server; the committed CI browser configuration is unchanged.
+The changelog test targets the named navigation item, separately from the version badge's
+legitimate link to the same route.
+
+Quick CI correctly runs without fetched documentation. The sidebar-dependent check was moved
+into the existing released-source fixture suite that deployment runs after sync; no existing
+check or CI exclusion was removed. Quick CI retains the changelog/npm metadata regression
+checks and passes all 296 tests. The full source-prepared suite passes 299 tests.
