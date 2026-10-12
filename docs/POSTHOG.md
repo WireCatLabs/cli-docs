@@ -48,8 +48,10 @@ starts recording only after Accept. The project switch must still be on.
 The code already disables autocapture, heatmaps, dead clicks, exceptions and surveys. Turning the
 project switches off as well keeps a future code change from silently enabling them.
 
-1. **Project settings → Autocapture**: off; **Heatmaps**: off; **Web vitals**: off;
-   **Surveys**: off. **[inferred]**
+1. **Project settings → Heatmaps**: off; **Web vitals**: off; **Surveys**: off. **[inferred]**
+2. **Autocapture** stays on in the project by the owner's choice (2026-10-12), so the code
+   (`autocapture: false` in `lib/analytics.ts`) is the only thing keeping click capture off. Turning it
+   on in code also means updating the privacy page in all three languages.
 
 ## 6. Allow only wirecat.dev
 
