@@ -6,7 +6,7 @@ import { build } from "esbuild"
 
 const require = createRequire(import.meta.url)
 const dist = resolve(dirname(require.resolve("@wirecat/cli-messaging/services")), "..")
-const core = resolve(dirname(require.resolve("@wirecat/cli-core")), "errors.js")
+const core = resolve(dirname(require.resolve("@wirecat/cli-base")), "errors.js")
 const sanitize = resolve(dirname(core), "sanitize.js")
 const files = ["parser", "registry", "dates", "automaton", "types"]
 const inputs = [
@@ -29,13 +29,13 @@ const result = await build({
   format: "esm",
   minify: true,
   write: false,
-  // The parser needs only cli-core's browser-safe parts: CliError, and singleLine for tag names.
+  // The parser needs only cli-base's browser-safe parts: CliError, and singleLine for tag names.
   plugins: [
     {
       name: "cli-core-browser",
       setup(build) {
-        build.onResolve({ filter: /^@wirecat\/cli-core$/ }, () => ({ path: "cli-core", namespace: "cli-core" }))
-        build.onLoad({ filter: /.*/, namespace: "cli-core" }, () => ({
+        build.onResolve({ filter: /^@wirecat\/cli-base$/ }, () => ({ path: "cli-base", namespace: "cli-base" }))
+        build.onLoad({ filter: /.*/, namespace: "cli-base" }, () => ({
           contents: `export * from ${JSON.stringify(core)}; export * from ${JSON.stringify(sanitize)};`,
           resolveDir: dirname(core),
         }))
@@ -50,7 +50,7 @@ const outputs = {
   "lib/search-language.generated.d.ts": `import type { QueryAst, QueryNode } from '@wirecat/cli-messaging/services';\nexport type { QueryAst, QueryNode };\nexport declare function parseLucene(text: string): QueryAst;\nexport declare function validateFields(ast: QueryAst): QueryAst;\nexport declare function normalize(text: string): string;\nexport declare function compileAutomaton(pattern: string): { test(text: string): boolean };\nexport declare function wildcardPattern(value: string): string;\nexport declare function dateRange(lower: string, upper: string, lowerInclusive: boolean, upperInclusive: boolean, zone: string, span: {start: number; end: number}): { lower?: number; upper?: number; lowerInclusive: boolean; upperInclusive: boolean };\nexport declare const QUERY_FIELDS: readonly {name: string; support: string; type: string; operators: readonly string[]; values?: readonly string[]; example: string}[];\n`,
   "public/search-language-notices.txt":
     readFileSync(resolve(dist, "../THIRD_PARTY_NOTICES"), "utf8") +
-    "\nBrowser error adapter: CliError from @wirecat/cli-core (MIT).\n" +
+    "\nBrowser error adapter: CliError from @wirecat/cli-base (MIT).\n" +
     readFileSync(resolve(dirname(core), "../LICENSE"), "utf8"),
 }
 for (const [file, content] of Object.entries(outputs)) {

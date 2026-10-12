@@ -96,7 +96,7 @@ except changelog, which comes from the root `CHANGELOG.md`. Translations live he
 | What is planned? | `roadmap` | Planned work, distinct from supported behavior |
 
 The exact inventory is resolved from the reviewed releases and `meta.json`, not this table.
-Required page and sidebar validation already exist in cli-core and sync. New page types must
+Required page and sidebar validation already exist in cli-base and sync. New page types must
 retain one owning source and corresponding locale/Markdown behavior.
 
 ## Manual task coverage baseline

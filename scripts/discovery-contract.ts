@@ -1,4 +1,4 @@
-import type { CommandInfo, OptionInfo } from "@wirecat/cli-core/commands"
+import type { CommandInfo, OptionInfo } from "@wirecat/cli-base/commands"
 import type { Program } from "./docs-quality.ts"
 
 export function discoveryContract(value: unknown, executable: string): Program {
