@@ -17,8 +17,11 @@ Each step is marked **[docs]** when PostHog's documentation describes it (link g
 
 Without this, every event from a visitor who declined or did not answer is dropped.
 
-1. **Project settings → Web analytics → Cookieless server hash mode**: turn it on. **[docs]**
-   ([cookieless tracking](https://posthog.com/tutorials/cookieless-tracking))
+1. **Settings → Web analytics → Cookieless tracking** (older docs: "Cookieless server hash mode"):
+   turn it on. **[docs]** ([ingestion warnings](https://posthog.com/docs/data/ingestion-warnings))
+   With the switch off, PostHog answers `200 {"status":"Ok"}` and then discards the event, so the
+   site looks healthy while the dashboard stays empty. Through the API it is
+   `cookieless_server_hash_mode: 2`.
 
 GeoIP and bot detection do not enrich events while this mode is on; the world map stays empty.
 
@@ -45,8 +48,10 @@ starts recording only after Accept. The project switch must still be on.
 The code already disables autocapture, heatmaps, dead clicks, exceptions and surveys. Turning the
 project switches off as well keeps a future code change from silently enabling them.
 
-1. **Project settings → Autocapture**: off; **Heatmaps**: off; **Web vitals**: off;
-   **Surveys**: off. **[inferred]**
+1. **Project settings → Heatmaps**: off; **Web vitals**: off; **Surveys**: off. **[inferred]**
+2. **Autocapture** stays on in the project by the owner's choice (2026-10-12), so the code
+   (`autocapture: false` in `lib/analytics.ts`) is the only thing keeping click capture off. Turning it
+   on in code also means updating the privacy page in all three languages.
 
 ## 6. Allow only wirecat.dev
 
