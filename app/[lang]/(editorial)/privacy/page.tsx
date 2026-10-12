@@ -54,9 +54,17 @@ export default async function PrivacyPage({ params }: Props) {
             <h2>{googleDisclosure.title}</h2>
             <p>{googleDisclosure.text}</p>
             <p>
-              <a href="https://developers.google.com/terms/api-services-user-data-policy">{googleDisclosure.policy}</a>
+              <a
+                href="https://developers.google.com/terms/api-services-user-data-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {googleDisclosure.policy}
+              </a>
               {" · "}
-              <a href="https://myaccount.google.com/connections">{googleDisclosure.revoke}</a>
+              <a href="https://myaccount.google.com/connections" target="_blank" rel="noopener noreferrer">
+                {googleDisclosure.revoke}
+              </a>
             </p>
           </section>
           <p>

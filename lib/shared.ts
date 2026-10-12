@@ -13,7 +13,7 @@ export const siteDescription =
   "Connect your AI agent, for example Claude Code, Codex, Cursor or Gemini CLI, to Telegram and MAX. Find what matters, keep track of commitments and reply with the full context."
 export const docsRoute = "/docs"
 export const docsContentRoute = "/llms.mdx/docs"
-export const repository = siteConfig.repository
+export const github = siteConfig.github
 export const siteUrl = siteConfig.url
 
 /** tg and max share login, sessions and the messenger onboarding; other tools have their own installation page. */

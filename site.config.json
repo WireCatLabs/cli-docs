@@ -1,7 +1,7 @@
 {
   "name": "WireCat",
   "url": "https://wirecat.dev",
-  "repository": "https://github.com/WireCatLabs/cli-docs",
+  "github": "https://github.com/WireCatLabs",
   "contacts": {
     "email": "hello@wirecat.dev",
     "telegram": "https://t.me/wirecatdev",

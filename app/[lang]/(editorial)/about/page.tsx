@@ -55,7 +55,7 @@ export default async function AboutPage({ params }: Props) {
           <Mail aria-hidden="true" />
           {words.emailButton}
         </a>
-        <a href={siteConfig.contacts.maintainerTelegram}>
+        <a href={siteConfig.contacts.maintainerTelegram} target="_blank" rel="noopener noreferrer">
           <MessageCircle aria-hidden="true" />
           {words.telegramButton}
         </a>
@@ -113,6 +113,8 @@ export default async function AboutPage({ params }: Props) {
                     <a
                       className="about-tool-source animated-text-link text-link"
                       href={product.source}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       aria-label={`${product.name}: GitHub`}
                     >
                       <span className="link-label">GitHub</span>
@@ -142,6 +144,8 @@ export default async function AboutPage({ params }: Props) {
               <a
                 className="about-contact-link animated-text-link text-link"
                 href={siteConfig.contacts.maintainerTelegram}
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <span className="link-label">{words.project.contact}</span>
                 <ArrowRight aria-hidden="true" />
@@ -177,7 +181,12 @@ export default async function AboutPage({ params }: Props) {
                 <div>
                   <dt>{words.project.maintainer}</dt>
                   <dd>
-                    <a className="animated-text-link" href={siteConfig.contacts.maintainerTelegram}>
+                    <a
+                      className="animated-text-link"
+                      href={siteConfig.contacts.maintainerTelegram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <span className="link-label">Viacheslav Ptsarev</span>
                       <ArrowRight aria-hidden="true" />
                     </a>
@@ -191,7 +200,12 @@ export default async function AboutPage({ params }: Props) {
             <section className="about-contribute">
               <h2>{words.project.contribute}</h2>
               <p>{words.project.contributeText}</p>
-              <a className="animated-text-link text-link" href={`${siteConfig.repository}/issues`}>
+              <a
+                className="animated-text-link text-link"
+                href={siteConfig.github}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <span className="link-label">{words.project.issues}</span>
                 <ArrowRight aria-hidden="true" />
               </a>

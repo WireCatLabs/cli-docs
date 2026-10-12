@@ -2,7 +2,7 @@ import { uiTranslations } from "fumadocs-ui/i18n"
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared"
 import { WirecatLogo } from "@/components/wirecat-logo"
 import { i18n } from "@/lib/i18n"
-import { repository } from "@/lib/shared"
+import { github } from "@/lib/shared"
 import { homePath } from "@/lib/site-routes"
 
 export const translations = i18n
@@ -52,7 +52,7 @@ export function baseOptions(lang: string): BaseLayoutProps {
     links: [
       {
         type: "icon",
-        url: repository,
+        url: github,
         text: "GitHub",
         label: "GitHub",
         icon: (
