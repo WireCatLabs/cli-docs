@@ -27,8 +27,8 @@ La instalación no ocurre al iniciar un comando normal.
 
 ## El servidor MCP
 
-`zm serve --mcp` usa stdio y ofrece siete herramientas de solo lectura: lista y detalles de reuniones,
-transcripciones, resúmenes, exportaciones, búsqueda de texto y participantes. Descubrir herramientas
+`zm serve --mcp` usa stdio y ofrece ocho herramientas de solo lectura: lista y detalles de reuniones,
+transcripciones, resúmenes, exportaciones, búsqueda de texto, participantes y búsqueda acotada con filtros de contexto. Descubrir herramientas
 no abre la base. Cada lectura usa la cuenta elegida y cierra su conexión antes de responder; el cliente
 no puede cambiar la cuenta. No se exponen escritura de archivos exportados ni cambios remotos.
 

@@ -17,6 +17,23 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
   })
 
+  test(`${lang}: contextual search filters remain readable on mobile and in Markdown`, async ({ page, request }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto(`/${lang}/docs/zm/search`)
+    await expect(page.locator("main")).toContainText("--identity-id")
+    await expect(page.locator("main")).toContainText("--person-id")
+    await expect(page.locator("main")).toContainText("--project")
+    await expect(page.locator(`main a[href="/${lang}/docs/memo/usage"]`).first()).toBeVisible()
+    const prefix = lang === "en" ? "" : `${lang}/`
+    const markdown = await request.get(`/llms.mdx/docs/${prefix}zm/search/content.md`)
+    expect(markdown.ok()).toBe(true)
+    const text = await markdown.text()
+    expect(text).toContain('zm meetings search-page "launch" --identity-id 12 --project RES')
+    expect(text).toContain("meeting_search_page")
+    expect(text).toContain("UTC")
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
+  })
+
   test(`${lang}: Meetings keeps its address and readable cross-source workflow`, async ({ page, request }) => {
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto(`/${lang}/docs/zoom`)

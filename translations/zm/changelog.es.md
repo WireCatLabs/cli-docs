@@ -4,6 +4,26 @@ title: "Historial de cambios"
 
 A continuación se conservan las descripciones originales en inglés de los cambios publicados. Comandos, límites y detalles históricos permanecen sin paráfrasis.
 
+## 0.7.3 — 12.10.2026
+
+### Añadido
+
+- `meetings search-page` combina fechas con `--identity-id`, `--person-id`, `--project`, `--tag` o `--topic`. Los nombres, claves y alias explícitos de proyectos se resuelven mediante el vocabulario compartido; los proyectos requieren pertenencia confirmada y las etiquetas deben estar asociadas explícitamente a la reunión. Los filtros de participantes seleccionan reuniones y no atribuyen intervenciones.
+- MCP de solo lectura `meeting_search_page` ofrece la misma búsqueda acotada en la cuenta elegida por el servidor.
+
+### Corregido
+
+- Zoom ya no duplica el registro y la validación comunes de búsqueda: cli-messaging los mantiene, junto con la selección canónica y el manejo MCP, para reutilizarlos en otros proveedores de reuniones.
+- Vitest pasa directamente a Oxc la configuración publicada del compilador cli-base; TypeScript sigue comprobando la configuración completa del proyecto.
+
+## 0.7.2 — 12.10.2026
+
+### Corregido
+
+- **Compilado con el framework compartido bajo su nuevo nombre, `@wirecat/cli-base` 0.21.0**, y `@wirecat/cli-messaging` 0.253.0. El framework antes se llamaba `@wirecat/cli-core`; la instalación contiene una sola copia. No cambian los comandos `zm`.
+- Instrucciones completas para configurar o reutilizar una app, recuperar el retorno del navegador y comprobar el primer resultado; corregidas las afirmaciones sobre permisos del manifiesto inicial y aclarados los límites de cuenta y datos.
+- Los ejemplos de notas y hechos de reuniones usan comandos admitidos de Memo, incluida la creación de notas en una cuenta concreta. La hoja de ruta distingue los flujos disponibles de la futura incorporación de reuniones y preparación. La configuración Zoom usa un único ejemplo reemplazable de ID de cliente.
+
 ## 0.7.1 — 11.10.2026
 
 ### Corregido

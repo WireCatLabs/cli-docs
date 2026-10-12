@@ -12,9 +12,9 @@
     "conclusion": "Reviewed 0.45.2-0.45.4: word search without a chat now also asks the MAX server (one best match per chat, --backend archive keeps the old behavior), discovery search tolerates question marks, mail search reads the dedicated mail tables, background fetch drops the 30-second default deadline and store fetch --all waits out short chat-list pauses. Roadmap unchanged: none of these items was listed as planned."
   },
   "zm": {
-    "version": "v0.7.1",
+    "version": "v0.7.3",
     "roadmapSha256": "a29fab601584dbb576c022824b1eda079f203b3fe284a7da27a1a0f0467fee41",
     "reviewedAt": "2026-10-12",
-    "conclusion": "Zoom 0.7.1 runtime remains unchanged. Reviewed compatible documentation-only overrides rebuild app reuse/creation, callback completion, first reads and all task guides. Current manual agent workflows and future dedicated intake/preparation remain distinct; planned items are unchanged. Immutable source commits are recorded in tools.json and the page/locale review."
+    "conclusion": "Reviewed Zoom 0.7.2–0.7.3: one cli-base framework copy and existing setup guide repairs; new bounded participant/person, confirmed-project and tag/topic filters use shared vocabulary aliases with a read-only MCP equivalent. Search does not infer membership or attribute speech. Compared all guide bodies against the previously reviewed immutable sources: only search, MCP, generated commands and changelog changed. Roadmap unchanged: dedicated intake/preparation, human-name discovery and broader connector work remain planned."
   }
 }
