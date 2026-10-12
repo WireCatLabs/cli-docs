@@ -43,6 +43,39 @@ pueden cambiarse o desactivarse. No hay componente semántico ni operadores. `--
 y `--until` limitan la cuenta. El cursor opaco pertenece a la cuenta, consulta y filtros y continúa
 incluso dentro de una transcripción larga. JSONL conserva la página con `nextCursor`.
 
+## Buscar por personas y proyectos
+
+Combina la identidad de un participante o una persona vinculada explícitamente con un proyecto
+y un intervalo de fechas:
+
+```sh
+zm meetings people "Alice Example" --json
+zm meetings search-page "launch" --identity-id 12 --project RES --since 2026-09-12 --until 2026-10-12 --json
+zm meetings search-page "budget" --person-id 7 --topic costs --since 2026-09-12 --json
+zm meetings search-page "launch" --tag planning --limit 20 --json
+```
+
+Los IDs y las etiquetas del ejemplo son ficticios: sustitúyelos por registros de tu almacén local.
+Usa el `identityId` de los resultados de participantes para `--identity-id`; `--person-id` acepta
+el ID numérico de una persona vinculada explícitamente. Un mismo nombre puede representar
+identidades distintas. Revisa los registros antes de vincularlos: estos filtros seleccionan
+reuniones y no atribuyen una intervención sin autor a una persona.
+
+`--project` acepta el nombre canónico de un proyecto existente, su clave o un alias explícito.
+Solo cuenta una pertenencia confirmada; una propuesta del agente o una palabra coincidente
+en la transcripción no establece esa pertenencia. `--tag` y `--topic` aceptan nombres canónicos
+o alias explícitos de etiquetas ya asociadas a la reunión; elige un solo filtro de etiqueta.
+Un nombre inexistente o ambiguo produce un error en vez de ampliar la búsqueda. `selection`
+muestra los registros resueltos para los filtros por nombre. Una fecha sin hora significa
+medianoche UTC; usa una hora con desplazamiento explícito para delimitar un día local.
+Se mantienen las reglas de continuación y cobertura.
+
+Si una reunión aún no está vinculada a un proyecto ni etiquetada, busca palabras y revisa
+las fuentes antes de organizarla con [los registros compartidos de Memo](https://wirecat.dev/en/docs/memo/usage).
+La herramienta MCP de solo lectura `meeting_search_page` ofrece los mismos filtros en la cuenta
+seleccionada por el servidor: `identity_id`, `person_id`, `project`, `tag`, `topic`, `since` y `until`.
+Sus fechas se expresan en milisegundos desde la época Unix.
+
 `meetings search` conserva la búsqueda literal por prefijos en transcripciones, chat y resúmenes;
 `--since`, `--until`, `--event-id` y `--series-id` la limitan. `meetings people <query>` busca por nombre
 o correo. `search all` usa el servicio común y busca solo reuniones por defecto:
