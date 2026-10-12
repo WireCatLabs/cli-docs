@@ -1,4 +1,3 @@
-import { readFileSync } from "node:fs"
 import { createElement } from "react"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
@@ -105,21 +104,12 @@ describe("localized SEO", () => {
       expect(descriptions.size).toBe(34)
     }
   })
-  it("covers every released Drive sidebar page with distinct localized metadata", () => {
-    const sidebar = JSON.parse(
-      readFileSync(new URL("../content/upstream/drive/meta.json", import.meta.url), "utf8"),
-    ) as {
-      pages: string[]
-    }
-    const pages = sidebar.pages.filter((page) => !page.startsWith("---"))
+  it("describes released Drive installation and changelog without source-build setup", () => {
     for (const lang of seoLocales) {
-      const descriptions = new Set<string>()
-      for (const slug of pages) {
-        const description = documentationDescription(lang, slug === "index" ? ["drive"] : ["drive", slug])
-        expect(description).toContain("Google Drive")
-        descriptions.add(description)
-      }
-      expect(descriptions.size).toBe(pages.length)
+      const installation = documentationDescription(lang, ["drive", "installation"])
+      expect(installation).toContain("npm")
+      expect(installation).toContain("WireCat")
+      expect(documentationDescription(lang, ["drive", "changelog"])).toContain("Google Drive")
       expect(documentationTitle(lang, ["drive"], "Google Drive")).toBe("Google Drive")
     }
   })

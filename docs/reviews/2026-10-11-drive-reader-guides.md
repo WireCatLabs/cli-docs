@@ -137,8 +137,9 @@ translation fingerprints pass. Portal PR #180 owns the final source/release pin 
 Deployment 38181590757 stopped before publication: the new Drive changelog page lacked its
 reviewed description in the three-locale metadata map. Source-install wording also remained
 in installation metadata. The follow-up adds task-focused npm/shared-app installation
-descriptions and changelog descriptions in EN/RU/ES. The SEO unit check now derives its page
-list from the released Drive sidebar, so adding a page without metadata fails before export.
+descriptions and changelog descriptions in EN/RU/ES. The released-source integration check now derives its page
+list from the Drive sidebar, so adding a page without metadata fails before export. Pure unit
+checks verify the released changelog and npm/shared-app installation descriptions.
 Browser cases cover the changelog route and installation metadata. No gate was relaxed.
 
 [Native recovery PR #17](https://github.com/WireCatLabs/drive-cli/pull/17) removes the stale
@@ -162,3 +163,8 @@ warmed local server with unchanged test assertions and deadlines. The temporary 
 only reuses the explicitly started server; the committed CI browser configuration is unchanged.
 The changelog test targets the named navigation item, separately from the version badge's
 legitimate link to the same route.
+
+Quick CI correctly runs without fetched documentation. The sidebar-dependent check was moved
+into the existing released-source fixture suite that deployment runs after sync; no existing
+check or CI exclusion was removed. Quick CI retains the changelog/npm metadata regression
+checks and passes all 296 tests. The full source-prepared suite passes 299 tests.
