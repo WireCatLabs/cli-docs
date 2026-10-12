@@ -17,8 +17,11 @@ Each step is marked **[docs]** when PostHog's documentation describes it (link g
 
 Without this, every event from a visitor who declined or did not answer is dropped.
 
-1. **Project settings → Web analytics → Cookieless server hash mode**: turn it on. **[docs]**
-   ([cookieless tracking](https://posthog.com/tutorials/cookieless-tracking))
+1. **Settings → Web analytics → Cookieless tracking** (older docs: "Cookieless server hash mode"):
+   turn it on. **[docs]** ([ingestion warnings](https://posthog.com/docs/data/ingestion-warnings))
+   With the switch off, PostHog answers `200 {"status":"Ok"}` and then discards the event, so the
+   site looks healthy while the dashboard stays empty. Through the API it is
+   `cookieless_server_hash_mode: 2`.
 
 GeoIP and bot detection do not enrich events while this mode is on; the world map stays empty.
 
