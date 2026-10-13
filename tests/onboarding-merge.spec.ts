@@ -48,7 +48,7 @@ for (const lang of ["en", "ru", "es"]) {
       await expect(page.locator("main")).toContainText(`@wirecat/${tool}-cli`)
       if (tool === "max") {
         await expect(page.locator("main #log-in")).toHaveCount(1)
-        await expect(page.locator("main code", { hasText: /^max setup$/ }).first()).toBeVisible()
+        await expect(page.locator("main code", { hasText: /^max personal setup$/ }).first()).toBeVisible()
         return
       }
       const login = page.locator("section[aria-labelledby=install-login]")
@@ -69,7 +69,7 @@ for (const lang of ["en", "ru", "es"]) {
     expect(md.status()).toBe(200)
     const markdown = await md.text()
     expect(markdown).toContain((await prompt.locator("code").textContent())?.trim().split("\n")[0] ?? "")
-    expect(markdown).toContain("max setup --method qr-chrome")
+    expect(markdown).toContain("max personal setup --method qr-chrome")
   })
 
   for (const tool of ["tg"]) {
