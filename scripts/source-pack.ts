@@ -83,7 +83,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     site: root,
     tg: resolve(root, "../tg-cli"),
     max: resolve(root, "../max-cli"),
-    core: resolve(root, "../cli-core"),
+    core: resolve(root, "../cli-base"),
     messaging: resolve(root, "../cli-messaging"),
   }
   if (!repositories[repo]) throw new Error("Repository must be site, tg, max, core or messaging")

@@ -32,7 +32,7 @@ const result = await build({
   // The parser needs only cli-base's browser-safe parts: CliError, and singleLine for tag names.
   plugins: [
     {
-      name: "cli-core-browser",
+      name: "cli-base-browser",
       setup(build) {
         build.onResolve({ filter: /^@wirecat\/cli-base$/ }, () => ({ path: "cli-base", namespace: "cli-base" }))
         build.onLoad({ filter: /.*/, namespace: "cli-base" }, () => ({
