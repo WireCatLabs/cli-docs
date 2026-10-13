@@ -2,7 +2,7 @@
 title: "Perfiles y bots"
 ---
 
-**Perfil** es el nombre de un inicio de sesión `max` en esta computadora: una cuenta MAX personal o un bot, con su propia sesión y su propia configuración. Sin nombre, `max` toma el perfil `default`, por lo que con una cuenta no tienes que pensar en perfiles.
+**Perfil** es el nombre de un inicio de sesión `max` en esta computadora: una cuenta MAX personal o un bot, con su propia sesión y su propia configuración. El nombre lo eliges tú en el primer inicio de sesión —`max personal setup`— y lo repites en cada comando: `max` nunca elige un perfil por sí mismo, ni siquiera si solo hay uno. Para no escribir el nombre cada vez, define `MAX_PROFILE` para la sesión de la terminal o usa `max config set defaultProfile personal` de forma permanente.
 
 Lea esta página si necesita una segunda cuenta, si el agente de IA necesita menos derechos que usted o si desea ejecutar un bot. Al final, sabes cómo elegir un perfil para el comando, cómo configurarlo y cómo cambiar a un bot.
 

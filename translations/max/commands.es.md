@@ -4,6 +4,7 @@ title: "Referencia de comandos"
 
 <!-- Generado desde el árbol de comandos por scripts/commands.ts. No editar el original; `pnpm generate`. -->
 
+
 Referencia de todas las órdenes, opciones y códigos de salida. La página se **genera desde el
 propio programa**, por lo que no puede describir una versión que no existe.
 
@@ -16,8 +17,12 @@ max [профиль] [опции] <команда> <действие> [аргу�
 ```
 
 **La primera palabra es el perfil** si no coincide con un comando: `max personal chats list`
-consulta los chats de `personal`, y `max chats list` los del perfil predeterminado. También puedes usar
-la variable `MAX_PROFILE`; sin ella el perfil se llama `default`.
+consulta los chats del perfil `personal`. La variable `MAX_PROFILE` fija el perfil para toda la sesión
+de la terminal, y `defaultProfile` en el archivo de configuración lo fija de forma permanente (`max config set defaultProfile personal`).
+**El perfil nunca se da por supuesto**: si no lo indicas, un comando que necesita una cuenta se detiene
+y enumera los perfiles de este ordenador, aunque solo haya uno. El primer inicio de sesión también lleva
+nombre: `max personal setup`. Sin perfil solo funcionan los comandos que no necesitan una cuenta:
+`--help`, `--version`, `commands`, `skill show`, `account list`, `config show`.
 
 Las descripciones se han traducido para esta guía. La salida literal de `max --help` sigue en inglés;
 los nombres de los comandos, opciones y códigos de salida no cambian.
@@ -35,12 +40,15 @@ Se aplican a todos los comandos.
 | `--jsonl` |Salida legible por máquina: un objeto JSON por línea, para streaming y jq.|
 | `--quiet` |diagnóstico desactivado.|
 | `--trace` |una línea por solicitud en stderr: identificadores y tiempos, nunca contenido del mensaje.|
+| `--debug` | si algo falla, su registro completo (causa y pila) en lugar de la línea breve. |
 | `--timeout <duration>` |abandone todo el comando después de esto: 30 s, 2 m, 500 ms.|
 | `--offline` |responder de lo grabado y nunca conectarse; falla si no fuera nada.|
 | `--no-input` | no pedir entrada ni abrir un inicio de sesión interactivo; la entrada mediante una tubería sigue disponible. |
 | `--max-input-bytes <bytes>` | máximo de bytes de entrada almacenados en búfer (predeterminado: 16777216). |
 | `--max-output-bytes <bytes>` | máximo de bytes de salida para máquinas (predeterminado: 4194304; 0 desactiva el límite). |
 | `--fields <paths>` | campos de elementos o del objeto separados por comas: id,text; conservar la paginación y los identificadores de operaciones. |
+| `--brief` | los mensajes y correos encontrados solo con referencia, título, hora, remitente y fragmento. |
+| `--full` | los mensajes y correos encontrados con todo su texto y todos los campos del proveedor. |
 | `--dry-run` | previsualizar los argumentos analizados y los permisos antes de ejecutar la acción. |
 | `--yes` |Continúe sin la pregunta que un nivel de pregunta pone antes de escribir.|
 | `--record` |mantenga esto ejecutándose en `max runs`: identificadores y horarios, nunca contenido de mensajes.|
@@ -995,6 +1003,8 @@ un nombre visible local y privado en la cuenta seleccionada
 
 #### `max contacts alias set`
 
+
+
 **Cambia algo solo en este ordenador.**
 
 ```sh
@@ -1007,6 +1017,8 @@ max contacts alias set <person> <alias>
 | `alias` | obligatorio |  |
 
 #### `max contacts alias rm`
+
+
 
 **Cambia algo solo en este ordenador.**
 
@@ -1024,6 +1036,8 @@ notas privadas del contacto, compartidas por las cuentas que lo ven
 
 #### `max contacts notes list`
 
+
+
 ```sh
 max contacts notes list <person>
 ```
@@ -1033,6 +1047,8 @@ max contacts notes list <person>
 | `person` | obligatorio |  |
 
 #### `max contacts notes show`
+
+
 
 ```sh
 max contacts notes show <person> <id>
@@ -1044,6 +1060,8 @@ max contacts notes show <person> <id>
 | `id` | obligatorio |  |
 
 #### `max contacts notes add`
+
+
 
 **Cambia algo solo en este ordenador.**
 
@@ -1060,6 +1078,8 @@ max contacts notes add <person> [options]
 | `--file <path>` | leer el texto de la nota desde un archivo; si se omite o se indica -, leer stdin. |
 
 #### `max contacts notes edit`
+
+
 
 **Cambia algo solo en este ordenador.**
 
@@ -1078,6 +1098,8 @@ max contacts notes edit <person> <id> [options]
 | `--revision <number>` | la revisión que leíste antes de editar. |
 
 #### `max contacts notes remove`
+
+
 
 **Cambia algo solo en este ordenador.**
 
@@ -1219,14 +1241,14 @@ everything one person took part in, in every messenger linked to them — messag
 max contacts timeline <person> [options]
 ```
 
-| Argumentoo | | Qué es |
+| Argumento | | Qué es |
 |---|---|---|
-| `person` | obligatorio | their id, @username, or part of their name. |
+| `person` | obligatorio | su ID, @username o parte de su nombre. |
 
 | Opción | Qué hace |
 |---|---|
 | `--scope <personal\|work>` | only what belongs to personal or to work accounts. |
-| `--since-time <time>` | nothing older than this ISO 8601 time, or 2h / 1d ago. |
+| `--since-time <time>` |nada más antiguo que este tiempo ISO 8601, o hace 2 h / 1 d.|
 | `--until-time <time>` | through this ISO 8601 time, or 2h / 1d ago. |
 | `--limit <n>` | at most this many; 50 if not given. |
 
@@ -1397,6 +1419,34 @@ max messages evidence <chat> [options]
 |---|---|
 | `--limit <n>` | how many, 1–100. |
 | `--before-id <id>` | solo mensajes anteriores a este ID de mensaje. |
+
+### `max messages sync`
+
+poner al día el historial de un chat en el almacén local, de lo más reciente a lo más antiguo; vuelve a ejecutarlo para continuar; --all sincroniza todos los chats
+
+```sh
+max messages sync [chat] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | opcional | un chat: su ID o parte de su título. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--all` |todos los chats, primero los activos más recientemente — lo que necesita la búsqueda; los últimos 90d salvo que se indique --since-time o --last.|
+| `--limit <n>` |como máximo este número de mensajes por ejecución, por chat con --all; 1200 si se omite.|
+| `--page-size <n>` |cuántos mensajes solicita una solicitud; 30 si no se da.|
+| `--pause <duration>` |la menor pausa entre páginas, para mantenerse dentro de los límites del proveedor; cada uno es hasta el doble. Por defecto: `5s`.|
+| `--since-time <time>` |deténgase una vez que llegue a mensajes anteriores a este: ISO 8601, o hace 2 h/1 d.|
+| `--last <n>` |se detiene una vez que se retienen los n mensajes más nuevos.|
+| `--catch-up` | preparar la búsqueda local después de esta ejecución; tiene prioridad sobre searchCatchUp. |
+| `--no-catch-up` | omitir la preparación local después de esta ejecución. |
+| `--catch-up-chunks <n>` | como máximo este número de fragmentos de vectores locales. |
+| `--catch-up-messages <n>` | omitir una reconstrucción del grafo con más mensajes que este número. |
+| `--catch-up-time <duration>` | tiempo disponible para la preparación local, 30s de forma predeterminada. |
+| `--background` |ejecutar como un trabajo que sobrevive a este comando; `store jobs show` lo sigue.|
+| `--estimate` |Solo calcule cuántos mensajes, solicitudes y minutos aún tomaría una recuperación completa: desde el archivo, sin solicitud.|
 
 ### `max messages transcribe`
 
@@ -1587,34 +1637,6 @@ max store status [chat]
 |---|---|---|
 | `chat` | opcional | un chat: su ID o parte de su título. |
 
-### `max store fetch`
-
-descargar el historial de un chat al almacenamiento local, primero los mensajes más recientes; ejecutar de nuevo para continuar; --all descarga todos los chats
-
-```sh
-max store fetch [chat] [options]
-```
-
-| Argumento | | Qué es |
-|---|---|---|
-| `chat` | opcional | un chat: su ID o parte de su título. |
-
-| Opción | Para qué sirve |
-|---|---|
-| `--all` |todos los chats, primero los activos más recientemente — lo que necesita la búsqueda; los últimos 90d salvo que se indique --since-time o --last.|
-| `--limit <n>` |como máximo este número de mensajes por ejecución, por chat con --all; 1200 si se omite.|
-| `--page-size <n>` |cuántos mensajes solicita una solicitud; 30 si no se da.|
-| `--pause <duration>` |la menor pausa entre páginas, para mantenerse dentro de los límites del proveedor; cada uno es hasta el doble. Por defecto: `5s`.|
-| `--since-time <time>` |deténgase una vez que llegue a mensajes anteriores a este: ISO 8601, o hace 2 h/1 d.|
-| `--last <n>` |se detiene una vez que se retienen los n mensajes más nuevos.|
-| `--catch-up` | preparar la búsqueda local después de descargar; anula searchCatchUp. |
-| `--no-catch-up` | omitir la preparación local después de esta descarga. |
-| `--catch-up-chunks <n>` | como máximo este número de fragmentos de vectores locales. |
-| `--catch-up-messages <n>` | omitir una reconstrucción del grafo con más mensajes que este número. |
-| `--catch-up-time <duration>` | tiempo disponible para la preparación local, 30s de forma predeterminada. |
-| `--background` |ejecutar como un trabajo que sobrevive a este comando; `store jobs show` lo sigue.|
-| `--estimate` |Solo calcule cuántos mensajes, solicitudes y minutos aún tomaría una recuperación completa: desde el archivo, sin solicitud.|
-
 ### `max store gaps`
 
 inspeccionar las lagunas internas de cobertura registradas y descargar explícitamente los datos que faltan
@@ -1660,11 +1682,11 @@ max store gaps repair <chat> [options]
 
 ### `max store jobs`
 
-background fetch jobs
+tareas de sincronización en segundo plano
 
 #### `max store jobs list`
 
-descargas en segundo plano, las más recientes primero
+tareas de sincronización en segundo plano, las más recientes primero
 
 ```sh
 max store jobs list [options]
@@ -1684,11 +1706,11 @@ max store jobs show [job]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `job` | opcional |se imprime la identificación del trabajo `store fetch --background`.|
+| `job` | opcional | el ID de la tarea que imprimió `messages sync --background`. |
 
 #### `max store jobs cancel`
 
-detener un trabajo en segundo plano en ejecución después de su página actual; una búsqueda posterior se reanuda donde se detuvo
+detener una tarea en segundo plano en curso tras su página actual; una sincronización posterior continúa donde se detuvo
 
 ```sh
 max store jobs cancel <job>
@@ -1700,7 +1722,7 @@ max store jobs cancel <job>
 
 #### `max store jobs retry`
 
-reiniciar un trabajo fallido o interrumpido como uno nuevo; la descarga continúa desde donde se guardó
+volver a iniciar una tarea parcial, fallida o muerta como tarea nueva; la sincronización continúa donde se detuvo el almacén
 
 ```sh
 max store jobs retry [job] [options]
@@ -1726,7 +1748,7 @@ max store jobs clear
 
 ### `max store export`
 
-los mensajes almacenados de un chat como líneas JSON, los más antiguos primero; nunca le pregunta al servicio de mensajería
+los mensajes guardados de un chat, del más antiguo al más reciente: --jsonl un mensaje por línea, --json un objeto { items, page, limit, hasMore }; nunca consulta el servicio de mensajería
 
 ```sh
 max store export [chats] [options]
@@ -1738,7 +1760,7 @@ max store export [chats] [options]
 
 | Opción | Para qué sirve |
 |---|---|
-| `--format <format>` |jsonl (el valor predeterminado): un mensaje por línea; Markdown: una transcripción con un encabezado por día, respuestas y reenvíos citados.|
+| `--format <format>` | jsonl: un mensaje por línea, el valor predeterminado con --output; markdown: una transcripción con un encabezado por día, respuestas y reenvíos citados. |
 | `--since-time <time>` |solo a partir de esta hora ISO 8601, o hace 30 m/2 h/1 d en adelante.|
 | `--output <file>` |escriba líneas JSON, o la transcripción, en este nuevo archivo, que solo usted podrá leer.|
 | `--to <dir>` |escribe en esta carpeta, un archivo por chat y un manifiesto; ejecútelo nuevamente para ver solo lo que cambió desde entonces.|
@@ -1903,7 +1925,7 @@ max stats messages show [query] [options]
 | `--max-messages <n>` | descargar como máximo este número de mensajes en total (predeterminado: 500). |
 | `--by <chat\|sender\|day\|hour>` |dimensión del recuento (por defecto: chat).|
 | `--chat <chat>` | solo este chat — lo mismo que chat: en la consulta; un chat: su ID o parte de su título. |
-| `--source <messenger>` |todas las cuentas de este servicio de mensajería en el almacenamiento; personal, bots o all — lo mismo que in: en la consulta.|
+| `--source <accounts>` | cada cuenta de este servicio de mensajería guardada en el almacén; personal, bots o all, igual que in: en la consulta. |
 | `--limit <n>` | how many rows. |
 | `--timezone <zone>` |la zona horaria de la IANA para los días y horas calendario.|
 | `--exact` |las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas.|
@@ -1928,7 +1950,7 @@ max stats messages counters show [query] [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--chat <chat>` | solo este chat; indica su ID o parte de su título. |
-| `--source <messenger>` | cuentas conectadas de este servicio de mensajería; la actualización usa la activa. |
+| `--source <accounts>` | cuentas guardadas de este servicio de mensajería; la actualización usa la cuenta activa. |
 | `--exact` | las palabras sin operadores coinciden por forma exacta. |
 | `--timezone <zone>` | zona horaria IANA para fechas de consulta. |
 | `--selection <json>` |selección fija de objetivos de counters show; incompatible con consulta y ámbito.|
@@ -1953,7 +1975,7 @@ max stats messages counters refresh [query] [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--chat <chat>` | solo este chat; indica su ID o parte de su título. |
-| `--source <messenger>` | cuentas conectadas de este servicio de mensajería; la actualización usa la activa. |
+| `--source <accounts>` | cuentas guardadas de este servicio de mensajería; la actualización usa la cuenta activa. |
 | `--exact` | las palabras sin operadores coinciden por forma exacta. |
 | `--timezone <zone>` | zona horaria IANA para fechas de consulta. |
 | `--selection <json>` |selección fija de objetivos de counters show; incompatible con consulta y ámbito.|
@@ -1978,7 +2000,7 @@ max stats messages unanswered [query] [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--chat <chat>` | solo este chat; indica su ID o parte de su título. |
-| `--source <messenger>` |todas las cuentas disponibles de este servicio de mensajería; personal, bots o all.|
+| `--source <accounts>` | cada cuenta guardada de este servicio de mensajería; personal, bots o all. |
 | `--exact` | las palabras sin campo coinciden en su forma exacta en lugar de por su raíz. |
 | `--saved <name\|id>` | ejecutar un informe guardado de este tipo; las opciones indicadas sustituyen las guardadas. |
 | `--timezone <zone>` | la zona horaria IANA para los límites de las fechas del calendario. |
@@ -2001,7 +2023,7 @@ max stats messages discussion [query] [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--chat <chat>` | solo este chat; indica su ID o parte de su título. |
-| `--source <messenger>` |todas las cuentas disponibles de este servicio de mensajería; personal, bots o all.|
+| `--source <accounts>` | cada cuenta guardada de este servicio de mensajería; personal, bots o all. |
 | `--exact` | las palabras sin campo coinciden en su forma exacta en lugar de por su raíz. |
 | `--saved <name\|id>` | ejecutar un informe guardado de este tipo; las opciones indicadas sustituyen las guardadas. |
 | `--timezone <zone>` | la zona horaria IANA para los límites de las fechas del calendario. |
@@ -2032,7 +2054,7 @@ max stats messages top [query] [options]
 | `--weights <json>` | el conjunto completo de pesos de los componentes; sustituye los pesos predefinidos. |
 | `--message-kind <kind>` | antes de clasificar, selecciona todos los mensajes, publicaciones o comentarios con tipo confirmado. Uno de: `all`, `posts`, `comments`. |
 | `--chat <chat>` | solo este chat; indica su ID o parte de su título. |
-| `--source <messenger>` |todas las cuentas disponibles de este servicio de mensajería; personal, bots o all.|
+| `--source <accounts>` | cada cuenta guardada de este servicio de mensajería; personal, bots o all. |
 | `--timezone <zone>` | zona horaria IANA para fechas y días activos. |
 | `--exact` | las palabras sin campo coinciden en su forma exacta en lugar de por su raíz. |
 | `--limit <n>` | filas clasificadas, 1–100. |
@@ -2076,7 +2098,7 @@ max stats contacts responses [query] [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--chat <chat>` | solo este chat; indica su ID o parte de su título. |
-| `--source <messenger>` |todas las cuentas disponibles de este servicio de mensajería; personal, bots o all.|
+| `--source <accounts>` | cada cuenta guardada de este servicio de mensajería; personal, bots o all. |
 | `--exact` | las palabras sin campo coinciden en su forma exacta en lugar de por su raíz. |
 | `--saved <name\|id>` | ejecutar un informe guardado de este tipo; las opciones indicadas sustituyen las guardadas. |
 | `--timezone <zone>` | la zona horaria IANA para los límites de las fechas del calendario. |
@@ -2106,7 +2128,7 @@ max stats contacts top [query] [options]
 | `--weights <json>` | el conjunto completo de pesos de los componentes; sustituye los pesos predefinidos. |
 | `--message-kind <kind>` | antes de clasificar, selecciona todos los mensajes, publicaciones o comentarios con tipo confirmado. Uno de: `all`, `posts`, `comments`. |
 | `--chat <chat>` | solo este chat; indica su ID o parte de su título. |
-| `--source <messenger>` |todas las cuentas disponibles de este servicio de mensajería; personal, bots o all.|
+| `--source <accounts>` | cada cuenta guardada de este servicio de mensajería; personal, bots o all. |
 | `--timezone <zone>` | zona horaria IANA para fechas y días activos. |
 | `--exact` | las palabras sin campo coinciden en su forma exacta en lugar de por su raíz. |
 | `--limit <n>` | filas clasificadas, 1–100. |
@@ -2270,6 +2292,75 @@ max tasks add <message> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--type <name>` |Tipo de tarea: pregunta, petición, mención o promesa.|
+| `--title <text>` | una línea: la acción y su objeto, p. ej. send Alex the API token. |
+| `--description <text>` | el detalle, en Markdown: quién debe qué a quién, cuándo se da por hecha, siguiente paso, palabras clave. |
+| `--due <when>` | cuándo debe estar hecha: una hora ISO 8601 o 2h, 3d desde ahora; none la borra. |
+| `--check <when>` | cuándo volver a revisarla: una hora ISO 8601 o 2h, 3d desde ahora; none la borra. |
+
+### `max tasks plan`
+
+establecer el título, la descripción, la fecha límite y la próxima revisión de una tarea; nada llega al servicio de mensajería
+
+```sh
+max tasks plan <task> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `task` | obligatorio | el ID o la clave de la tarea, tal como lo muestra tasks list. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--title <text>` | una línea: la acción y su objeto, p. ej. send Alex the API token. |
+| `--description <text>` | el detalle, en Markdown: quién debe qué a quién, cuándo se da por hecha, siguiente paso, palabras clave. |
+| `--due <when>` | cuándo debe estar hecha: una hora ISO 8601 o 2h, 3d desde ahora; none la borra. |
+| `--check <when>` | cuándo volver a revisarla: una hora ISO 8601 o 2h, 3d desde ahora; none la borra. |
+
+### `max tasks link`
+
+vincular una tarea con aquello a lo que se refiere (mensajes, chats, personas, documentos, URL) para consultarlo después
+
+```sh
+max tasks link <task> [targets] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `task` | obligatorio | el ID o la clave de la tarea, tal como lo muestra tasks list. |
+| `targets` | opcional | localizadores msg:, person:<id>, document:<id>, note:<id> o una URL. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--chat <chat>` | un chat al que se refiere, se puede repetir; un chat: su ID o parte de su título. |
+| `--kind <kind>` | related-to (por defecto), evidence (muestra que la tarea es real) o created-from. |
+
+### `max tasks show`
+
+una tarea: su plan y todo lo vinculado a ella
+
+```sh
+max tasks show <task>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `task` | obligatorio | el ID o la clave de la tarea, tal como lo muestra tasks list. |
+
+### `max tasks agenda`
+
+lo que hay que revisar hoy, desde el almacén local y sin texto de mensajes: tareas vencidas, por vencer o por revisar, chats donde debes una respuesta y chats donde esperas una
+
+```sh
+max tasks agenda [options]
+```
+
+| Opción | Para qué sirve |
+|---|---|
+| `--due <span>` | listar las tareas que vencen dentro de este plazo: 30m, 2h, 1d (por defecto 1d). |
+| `--unanswered <span>` | listar los chats donde otra persona escribió lo último hace al menos este tiempo (por defecto 1d). |
+| `--waiting <span>` | listar los chats donde tú escribiste lo último hace al menos este tiempo (por defecto 7d). |
+| `--within <span>` | omitir los chats sin actividad durante más tiempo: ya terminaron (por defecto 30d). |
+| `--kind <kinds>` | solo estos tipos de chat, separados por comas (por defecto dialog,group). |
 
 ### `max tasks close`
 
@@ -2440,11 +2531,15 @@ Permisos de análisis recordados para los chats de esta cuenta y los puntos fina
 
 #### `max conversations consents list`
 
+
+
 ```sh
 max conversations consents list
 ```
 
 #### `max conversations consents revoke`
+
+
 
 ```sh
 max conversations consents revoke [options]
@@ -2511,11 +2606,11 @@ max conversations embed clear [options]
 
 ## `max attachments`
 
-los archivos de mensajes almacenados: su texto en el archivo local, para el contenido: en una búsqueda
+los archivos de los mensajes guardados: su texto en el almacén local, donde la búsqueda lo encuentra
 
 ### `max attachments extract`
 
-guardar el texto de archivos descargados — texto, capas de texto PDF/DOCX, ODT/ODS/XLSX/PPTX/EPUB — en el almacén local para buscar con content:
+leer el texto de los archivos descargados (texto, capas de texto de PDF/DOCX, ODT/ODS/XLSX/PPTX/EPUB) al almacén local, donde la búsqueda los encuentra
 
 ```sh
 max attachments extract [options]
@@ -2575,7 +2670,7 @@ el texto de un archivo, mientras un agente lo lee
 
 #### `max attachments text set`
 
-mantenga el texto que un agente lee de un archivo (un escaneo, una foto) para que el contenido: lo encuentre; no se envía nada
+guardar el texto que un agente leyó de un archivo (un escaneo, una foto) para que la búsqueda lo encuentre; no se envía nada
 
 ```sh
 max attachments text set <chat> [message] [options]
@@ -2673,6 +2768,8 @@ descripciones de grupos y canales en caché para las etiquetas automáticas loca
 
 ### `max metadata get`
 
+
+
 ```sh
 max metadata get [options]
 ```
@@ -2682,6 +2779,8 @@ max metadata get [options]
 | `--chat <chat>` | un chat almacenado. |
 
 ### `max metadata refresh`
+
+
 
 **Cambia algo solo en este ordenador.**
 
@@ -2697,11 +2796,11 @@ max metadata refresh [options]
 
 ## `max search`
 
-buscar por texto: search all en todo lo que guarda el almacenamiento local, o en un solo recurso
+buscar por texto: en un recurso si sabes cuál (mail, messages, notes), o con search all en mensajes, correo y notas a la vez
 
 ### `max search all`
 
-buscar en todo lo que guarda el almacenamiento local —mensajes del servicio de mensajería, correo y notas—, la mejor coincidencia primero; empieza aquí cuando no sepas dónde se escribió algo
+buscar mensajes del servicio de mensajería, correo y notas en el almacén local, y mensajes en el servidor del servicio (--backend; el correo y las notas solo son locales), y transcripciones de una cuenta de reuniones cuando --source la nombra; primero la mejor coincidencia; no tareas, personas, recuerdos ni proyectos. Úsalo cuando no sepas dónde se escribió algo; search mail, messages o notes lee un solo tipo con todos sus campos
 
 ```sh
 max search all <query> [options]
@@ -2713,12 +2812,15 @@ max search all <query> [options]
 
 | Opción | Para qué sirve |
 |---|---|
-| `--only <resources>` |solo estos, separados por comas: messages, mail, notes.|
-| `--meetings [provider:account]` | also search one meeting account; with no value, the one stored account that holds meetings (put it after the query). |
-| `--max-meetings <n\|all>` | how many meetings --meetings looks through, newest first; all looks through every one (default 100). |
+| `--only <resources>` | solo estos recursos, separados por comas: messages, mail, notes; meetings cuando --source nombra una cuenta de reuniones. |
+| `--source <accounts>` | solo estas cuentas, separadas por comas: provider:account tal como lo muestra un resultado, un proveedor, un tipo o group:<name>; cada recurso lee las de su tipo, y las reuniones solo cuando se nombra una. |
+| `--max-meetings <n\|all>` | cuántas reuniones de la cuenta de reuniones revisar, de la más reciente a la más antigua; all las revisa todas (por defecto 100). |
 | `--limit <n>` | cuántos resultados. |
+| `--offset <n>` | omitir este número de resultados, para la página siguiente. |
 | `--exact` |las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word.|
 | `--timezone <zone>` | la zona horaria IANA para los límites de las fechas del calendario. |
+| `--backend <archive\|server\|both>` | dónde buscar: el archivo local, el servidor del servicio de mensajería o ambos (predeterminado: both). Discovery usa solo el archivo. |
+| `--server-time <duration>` | dejar de esperar al servidor tras este tiempo (predeterminado: 5s). |
 
 ### `max search messages`
 
@@ -2746,9 +2848,10 @@ max search messages [query] [options]
 | `--backend <archive\|server\|both>` | dónde buscar: el archivo local, el servidor del servicio de mensajería o ambos (predeterminado: both). Discovery usa solo el archivo. |
 | `--server-time <duration>` | dejar de esperar al servidor tras este tiempo (predeterminado: 5s). |
 | `--chat <chat>` | solo este chat — lo mismo que chat: en la consulta; un chat: su ID o parte de su título. |
-| `--source <messenger>` |todas las cuentas de este servicio de mensajería en el almacenamiento; personal, bots o all — lo mismo que in: en la consulta.|
+| `--source <accounts>` | cada cuenta de este servicio de mensajería guardada en el almacén; personal, bots o all, igual que in: en la consulta; o una lista: group:work,telegram:Alice,email:me@example.com. |
 | `--type <text\|voice\|file>` | solo mensajes de este tipo: solo texto, mensaje de voz o archivo. |
 | `--limit <n>` | cuántos resultados. |
+| `--offset <n>` | omitir este número de resultados, para la página siguiente. |
 | `--newest` | primero los más recientes en lugar de los mejores. |
 | `--exact` |las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas.|
 | `--context <n>` |mensajes antes y después de cada resultado; 2 en la terminal, 0 en caso contrario.|
@@ -2760,7 +2863,7 @@ max search messages [query] [options]
 
 ### `max search mail`
 
-buscar en el correo importado al almacenamiento local — lo trae memo mail import
+buscar en el correo importado al almacén local; memo sync --mail lo trae
 
 ```sh
 max search mail [query] [options]
@@ -2773,7 +2876,9 @@ max search mail [query] [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--chat <chat>` | solo este hilo de correo, por ID o asunto. |
+| `--source <accounts>` | solo estas cuentas de correo, separadas por comas: email:<address> tal como lo muestra un resultado, email, mail o group:<name>; todas las cuentas de correo si no se indica. |
 | `--limit <n>` | cuántos resultados. |
+| `--offset <n>` | omitir este número de resultados, para la página siguiente. |
 | `--newest` | primero los más recientes en lugar de los mejores. |
 | `--exact` |las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas.|
 | `--context <n>` |mensajes antes y después de cada resultado; 2 en la terminal, 0 en caso contrario.|
@@ -2794,7 +2899,7 @@ max search notes <query> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--type <internal\|file>` | solo notas escritas en memo, o solo notas de una carpeta. |
-| `--folder <id>` | solo esta carpeta de notas, por su ID; repite la opción para varias. |
+| `--source <accounts>` | solo estas cuentas de notas, separadas por comas: notes:internal para las notas escritas en memo, notes:<folder id> tal como lo muestra un resultado, notes, documents o group:<name>. |
 | `--tag <tag>` | solo notas con esta etiqueta. |
 | `--filter <query>` | una consulta que también debe cumplir cada resultado; no cambia la búsqueda por significado. |
 | `--limit <n>` | cuántos resultados. |
@@ -2828,7 +2933,7 @@ max search conversations <query> [options]
 | `--chat <chat>` | solo este chat: su ID o parte de su título. |
 | `--since-time <time>` |solo aquellos que todavía funcionan en este momento ISO 8601, o hace 30 m/2 h/1 d, o más tarde.|
 | `--filter <query>` |filtro estricto de Lucene: cualquier mensaje de una conversación debe coincidir; no cambia la consulta de significado.|
-| `--source <source>` |cuentas para buscar: personales, bots, todas o un proveedor; El valor predeterminado es la cuenta activa.|
+| `--source <accounts>` | cuentas en las que buscar: personal, bots, all, un proveedor o una lista como group:work,telegram:Alice,email:me@example.com; por defecto, la cuenta activa. |
 | `--timezone <zone>` |Zona horaria de IANA para fechas de filtrado; zona horaria del sistema de forma predeterminada.|
 | `--limit <n>` | cuántos resultados. |
 | `--refresh` |Primero construya e incruste, en esta máquina, los chats en el alcance que cambiaron o que nunca se crearon, dentro de --max-chats y --max-chunks.|
@@ -2853,7 +2958,7 @@ max searches create <name> [query] [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--chat <chat>` | solo este chat — lo mismo que chat: en la consulta; un chat: su ID o parte de su título. |
-| `--source <messenger>` |todas las cuentas de este servicio de mensajería en el almacenamiento; personal, bots o all — lo mismo que in: en la consulta.|
+| `--source <accounts>` | cada cuenta de este servicio de mensajería guardada en el almacén; personal, bots o all, igual que in: en la consulta; o una lista: group:work,telegram:Alice,email:me@example.com. |
 | `--limit <n>` | cuántos resultados. |
 | `--newest` | primero los más recientes en lugar de los mejores. |
 | `--exact` |las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas.|
@@ -3522,6 +3627,94 @@ eliminar la unidad de este perfil; detenlo primero
 max server uninstall
 ```
 
+## `max schedule`
+
+ejecutar un comando de max o un agente más tarde o de forma programada (systemd, launchd, Programador de tareas); un agente no puede enviar
+
+### `max schedule command`
+
+ejecutar max <args…> de forma programada; las lecturas guardan lo leído, así se llena el almacén con el historial de un chat
+
+```sh
+max schedule command <name> <args> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `name` | obligatorio | letras minúsculas, dígitos y guiones. |
+| `args` | obligatorio | el comando de max después de su nombre, p. ej. -- messages list <chat> --limit 50. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--every <duration>` | repetir: 30m, 2h, 1d. |
+| `--at <HH:MM>` | cada día a esta hora local. |
+| `--once <when>` | una sola ejecución: dentro de 30m, 2d o a una hora ISO; después la programación se elimina sola. |
+
+### `max schedule agent`
+
+iniciar un agente (claude o codex) con una petición de forma programada; se ejecuta con MAX_READ_ONLY=1, así que lee y redacta borradores pero no puede enviar; su respuesta se guarda y recibes un aviso
+
+```sh
+max schedule agent <name> <harness> <prompt> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `name` | obligatorio | letras minúsculas, dígitos y guiones. |
+| `harness` | obligatorio | el agente que se inicia. Uno de: `claude`, `codex`. |
+| `prompt` | obligatorio | qué hacer, p. ej. "run the daily follow-up review: max skill show follow-ups". |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--max-cost <usd>` | solo claude: detener una ejecución que cueste más que esto, en dólares estadounidenses. |
+| `--every <duration>` | repetir: 30m, 2h, 1d. |
+| `--at <HH:MM>` | cada día a esta hora local. |
+| `--once <when>` | una sola ejecución: dentro de 30m, 2d o a una hora ISO; después la programación se elimina sola. |
+
+### `max schedule list`
+
+las programaciones, cuándo se ejecutan y cómo fue su última ejecución
+
+```sh
+max schedule list
+```
+
+### `max schedule run`
+
+ejecutar una programación ahora, como lo haría su temporizador, y esperar a que termine
+
+```sh
+max schedule run <name>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `name` | obligatorio |  |
+
+### `max schedule remove`
+
+detener una programación y eliminar su temporizador; sus resultados anteriores se conservan
+
+```sh
+max schedule remove <name>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `name` | obligatorio |  |
+
+### `max schedule exec`
+
+lo que ejecuta un temporizador, a partir del archivo de la programación; para ejecutarla a mano, usa run
+
+```sh
+max schedule exec <file>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `file` | obligatorio |  |
+
 ## `max watch`
 
 imprimir nuevos mensajes a medida que llegan, desde un `max serve` en ejecución
@@ -3652,7 +3845,7 @@ max runs list [options]
 
 ### `max runs show`
 
-una ejecución: qué era y una línea por operación
+una ejecución: qué fue, cómo terminó y qué salió mal; -v para todos los eventos
 
 ```sh
 max runs show <run-id>
@@ -3670,7 +3863,7 @@ search recorded diagnostic metadata and events; no message contents
 max runs search [query] [options]
 ```
 
-| Argumentoo | | Qué es |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | opcional | case-insensitive literal diagnostic text. |
 
@@ -3710,7 +3903,7 @@ max skill show [name]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `name` | opcional |una de las habilidades enviadas para una tarea: conversaciones de enlace.|
+| `name` | opcional | una de las habilidades incluidas para una tarea: follow-ups, link-conversations. |
 
 ### `max skill install`
 
@@ -4355,6 +4548,8 @@ max bot recipients clear
 Lo que este robot envió, editó y eliminó de esta máquina: identificadores y resultados, nunca mensajes de texto.
 
 #### `max bot sends list`
+
+
 
 ```sh
 max bot sends list

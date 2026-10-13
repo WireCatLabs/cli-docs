@@ -22,7 +22,7 @@ Términos que aparecen a continuación:
 - **stdout** y **stderr** son los dos flujos de salida. stdout contiene el resultado; stderr, avisos y errores de la ejecución.
 - **Código de salida**: número devuelto al terminar. `0` significa éxito; los demás identifican un tipo de fallo.
 - **Modo máquina**: salida JSON para programas en vez de texto para personas.
-- **Comando puntual**: realiza una acción y termina, como `max messages list`. Un **comando continuo** funciona hasta que lo detienes: `watch`, `serve` y `mcp`.
+- **Comando puntual**: realiza una acción y termina, como `max personal messages list`. Un **comando continuo** funciona hasta que lo detienes: `watch`, `serve` y `mcp`.
 - **Escritura**: comando que modifica MAX, enviando, editando, eliminando o marcando como leído.
 
 ## Qué puedes esperar
@@ -36,19 +36,19 @@ Términos que aparecen a continuación:
 | Solo los campos necesarios | `--fields` |
 | Consultar parámetros sin leer la documentación | `max commands` y `max commands schema` |
 | Ver lo que haría el comando | `--dry-run` |
-| Saber si un cambio se realizó después de un fallo | `outcome_unknown`, `retryable` y `operationId` |
+| Saber si un cambio se realizó después de un fallo | `outcome_unknown` y `details.operationId` |
 
-Las lecturas y descargas parciales pueden devolver JSON con código de salida `0`: comprueba `complete` y `batch` o `issue`. El JSONL de una descarga parcial añade `batch_summary`; el trabajo completado se conserva. Los errores incluyen `actions` con pasos, ajustes y pausas para recuperarse.
+Las lecturas y descargas parciales pueden devolver JSON con código de salida `0`: comprueba `complete` y `batch` o `issue`. El JSONL de una descarga parcial añade `batch_summary`; el trabajo completado se conserva. Cada elemento fallido en `batch` incluye `actions` con pasos, ajustes y pausas para recuperarse.
 
 ## ¿Cómo se llaman los comandos?
 
 Los comandos siguen el patrón `max [профиль] ресурс действие`. Los informes y recuentos están bajo `stats`, seguido del recurso y el tipo de informe:
 
 ```sh
-max stats messages show --by sender --limit 10 --json
-max stats chats show <чат> --json
-max stats tasks show --json
-max stats charts <чат> --json
+max personal stats messages show --by sender --limit 10 --json
+max personal stats chats show <чат> --json
+max personal stats tasks show --json
+max personal stats charts <чат> --json
 ```
 
 Las antiguas rutas `messages stats`, `chats stats` y `tasks stats` ya no existen y tampoco existen alias para ellas. Si la configuración tenía permisos para estas rutas, verifique los cambios a través de `max config migrate --dry-run`, luego ejecute `max config migrate`. El derecho a las estadísticas no modifica la prohibición de leer los mensajes, chats o tareas originales.
@@ -57,7 +57,7 @@ Las antiguas rutas `messages stats`, `chats stats` y `tasks stats` ya no existen
 
 `--json` devuelve JSON; `--jsonl`: JSON separado por línea para comandos que pueden generar una secuencia. Al enviar a la tubería, JSON se selecciona automáticamente. Los datos van a stdout, los diagnósticos van a stderr. JSON explícito también funciona en la terminal. `--help` y `--version` devuelven texto a la salida estándar con el código 0 y no ejecutan el comando.
 
-Un error que termina el comando en modo máquina es un objeto en stderr: `{"error":{"code":"…","message":"…","retryable":false}}`. Un comando desconocido, una bandera o un argumento requerido faltante devuelve el código 2. La lista completa de códigos proporciona `max commands --json`. `--quiet` oculta los diagnósticos habituales, pero deja errores. La salida de la máquina no utiliza color ni animación; en salida normal, el color desactiva `NO_COLOR`.
+Un error que termina el comando en modo máquina es un objeto en stderr: `{"error":{"code":"…","reason":"…","message":"…","details":{…}}}`. `reason` es un identificador con puntos, por ejemplo `output.too-large`; `details` contiene lo que identifica el fallo: `candidates`, `operationId`, `permission`, y `retryable` solo si el fallo lo definió. `--debug` añade la causa y la traza de pila. Un comando desconocido, una bandera o un argumento requerido faltante devuelve el código 2. La lista completa de códigos proporciona `max commands --json`. `--quiet` oculta los diagnósticos habituales, pero deja errores. La salida de la máquina no utiliza color ni animación; en salida normal, el color desactiva `NO_COLOR`.
 
 ## Ejecutar sin preguntas y límites
 
@@ -72,7 +72,7 @@ La entrada desde stdin está limitada a 16 MiB; `--max-input-bytes 33554432` aum
 ## Resultado breve y lo que acepta el comando
 
 ```sh
-max messages list <чат> --json --fields id,text
+max personal messages list <чат> --json --fields id,text
 max commands messages list --json
 max commands schema messages list --json
 ```
@@ -99,6 +99,6 @@ Pide al agente los mensajes que ha contado y cuánto historial tiene guardado. U
 
 ## Reglas que seguimos
 
-`max` sigue las partes aplicables de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html), [Command Line Interface Guidelines](https://clig.dev/), [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/WireCatLabs/max-cli/blob/v0.45.4/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/dev/STANDARD.md) explican su aplicación y las excepciones deliberadas. No afirmamos disponer de certificación externa completa.
+`max` sigue las partes aplicables de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html), [Command Line Interface Guidelines](https://clig.dev/), [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/WireCatLabs/max-cli/blob/v0.49.0/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/dev/STANDARD.md) explican su aplicación y las excepciones deliberadas. No afirmamos disponer de certificación externa completa.
 
 Configuración paso a paso: consulte [guía de configuración](./configuration.md); Todas las claves y variables de entorno se encuentran en el [referencia de configuración](./configuration-reference.md).

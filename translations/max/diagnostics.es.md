@@ -17,8 +17,8 @@ Palabras que aparecen aquí:
 
 - **Ejecución** - una llamada `max`, desde el inicio hasta la salida.
 - **Registro de ejecución**: el directorio donde se almacena lo que hizo un ejecución: comando, total y una línea para cada solicitud a MAX. Nunca contiene mensajes de texto, nombres o títulos.
-- **`max doctor`** comprueba la instalación: versión, entrada, configuración y archivo local.
-- **Informe de problema**: un archivo JSON de la respuesta `max doctor` y un inicio fallido. Está adjunto a un problema en GitHub.
+- **`max personal doctor`** comprueba la instalación: versión, entrada, configuración y archivo local.
+- **Informe de problema**: un archivo JSON de la respuesta `max personal doctor` y un inicio fallido. Está adjunto a un problema en GitHub.
 
 ## ¿Qué se puede hacer?
 
@@ -26,15 +26,15 @@ Palabras que aparecen aquí:
 |---|---|---|
 | Ver peticiones durante la ejecución | `max … --trace` | Nada; solo stderr |
 | Guardar una ejecución | `max … --record` | Registro de ejecución |
-| Encontrar una ejecución fallida | `max runs list` | Los fallos se guardan automáticamente |
-| Guardar todas las ejecuciones | `max config set record true` | Cada registro |
-| Comprobar la instalación | `max doctor`, `max doctor --online` | Nada |
-| Crear un informe de problemas | `max doctor report create` | Un archivo que tú envías |
+| Encontrar una ejecución fallida | `max personal runs list` | Los fallos se guardan automáticamente |
+| Guardar todas las ejecuciones | `max personal config set record true` | Cada registro |
+| Comprobar la instalación | `max personal doctor`, `max personal doctor --online` | Nada |
+| Crear un informe de problemas | `max personal doctor report create` | Un archivo que tú envías |
 
 ## Mostrar: `--trace`
 
 ```sh
-max chats list --trace
+max personal chats list --trace
 ```
 
 ```text
@@ -51,13 +51,13 @@ max chats list --trace
 Todo esto va **a stderr**, por lo que nada se rompe junto a `--json`:
 
 ```sh
-max chats list --json --trace > chats.json    # данные в файл, диагностика на экран
+max personal chats list --json --trace > chats.json    # данные в файл, диагностика на экран
 ```
 
 En la terminal, las líneas de arriba. En la tubería, un objeto JSON por línea, siguiendo la misma regla que para los datos:
 
 ```sh
-max chats list --json --trace 2>&1 >/dev/null | jq -c 'select(.event == "response")'
+max personal chats list --json --trace 2>&1 >/dev/null | jq -c 'select(.event == "response")'
 ```
 
 `--trace` es más fuerte que `--quiet`: la bandera que agregaste tú mismo siempre funciona.
@@ -82,10 +82,10 @@ Los rechazos muestran código y clave MAX, como `404  not_found  not.found`, nun
 ## Guardar: `--record`
 
 ```sh
-max chats list --record
-max runs list                 # что делалось, новое сверху
-max runs show <id>            # один запуск: чем кончился и куда ходил
-max runs path <id>            # каталог, для jq и grep
+max personal chats list --record
+max personal runs list                 # что делалось, новое сверху
+max personal runs show <id>            # один запуск: чем кончился и куда ходил
+max personal runs path <id>            # каталог, для jq и grep
 ```
 
 Directorio de ejecución:
@@ -116,8 +116,8 @@ Las búsquedas y estadísticas exitosas mantienen su historial, separado de los 
 ## Registrar cada ejecución
 
 ```sh
-max config set record true          # этот профиль
-max chats list --no-record          # но не этот запуск
+max personal config set record true          # этот профиль
+max personal chats list --no-record          # но не этот запуск
 ```
 
 Lo mismo en el archivo de configuración:
@@ -157,8 +157,8 @@ Lo mismo ocurre con un informe recopilado de una ejecución.
 ## Verificar instalación: `max doctor`
 
 ```sh
-max doctor              # никуда не подключается
-max doctor --online     # ещё и входит в MAX один раз; ничего не отправляет
+max personal doctor              # никуда не подключается
+max personal doctor --online     # ещё и входит в MAX один раз; ничего не отправляет
 ```
 
 Sin `--online` imprime, **sin conectarse a MAX**, de qué depende cualquier comando:
@@ -168,7 +168,7 @@ Sin `--online` imprime, **sin conectarse a MAX**, de qué depende cualquier coma
 - almacenamiento general: en la respuesta `--json` el campo `store` es la ruta, esquema y número de chats y mensajes guardados. El cheque no crea ni actualizal archivo. `legacyCache` solo indica si existe un archivo de archivo local antiguo; si es así, `doctor` sugiere la ruta para la eliminación manual;
 - directorio de inicio;
 
-- qué está ejecutando `max` (Node o Bun, y dónde), qué administrador de paquetes está instalado, qué comando `max` encontrará en el nuevo terminal, si el llavero y SQLite están cargados, si el modelo de voz está descargado. Si el directorio con el comando `max` no está en `PATH`, `max doctor` imprime los comandos exactos que lo agregarán allí: en Windows - para PowerShell, en Linux y macOS - la línea `export`;
+- qué está ejecutando `max` (Node o Bun, y dónde), qué administrador de paquetes está instalado, qué comando `max` encontrará en el nuevo terminal, si el llavero y SQLite están cargados, si el modelo de voz está descargado. Si el directorio con el comando `max` no está en `PATH`, `max personal doctor` imprime los comandos exactos que lo agregarán allí: en Windows - para PowerShell, en Linux y macOS - la línea `export`;
 - pausa de inicio de sesión después de una falla MAX para inicios de sesión demasiado frecuentes, si corresponde.
 
 Para un bot, `max <имя> doctor` indica de dónde viene el token, cuántos chats ha visto y dónde están sus archivos: estado, caché, registros, archivo del bot, registro de envíos y almacén común de mensajes. No muestra el token.
@@ -178,30 +178,30 @@ Para un bot, `max <имя> doctor` indica de dónde viene el token, cuántos cha
 ## Informe de problemas
 
 ```sh
-max doctor report create              # о последнем неудачном запуске
-max doctor report create --run <id>   # об этом запуске
+max personal doctor report create              # о последнем неудачном запуске
+max personal doctor report create --run <id>   # об этом запуске
 ```
 
-El comando escribe un archivo JSON (lo que muestra y ejecuta `max doctor`) e imprime un enlace al nuevo problema en [github.com/WireCatLabs/max-cli/issues](https://github.com/WireCatLabs/max-cli/issues). Leal archivo antes de enviarlo. No contiene textos de mensajes y los números de chats y mensajes se reemplazan por etiquetas. ¿Qué más contiene? En la sección [cómo informar un problema](./troubleshooting.md#как-сообщить-о-проблеме).
+El comando escribe un archivo JSON (lo que muestra y ejecuta `max personal doctor`) e imprime un enlace al nuevo problema en [github.com/WireCatLabs/max-cli/issues](https://github.com/WireCatLabs/max-cli/issues). Leal archivo antes de enviarlo. No contiene textos de mensajes y los números de chats y mensajes se reemplazan por etiquetas. ¿Qué más contiene? En la sección [cómo informar un problema](./troubleshooting.md#как-сообщить-о-проблеме).
 
 Si no se realiza ningún inicio fallido, vuelva a ejecutar el comando fallido: el error persistirá.
 
 ## Qué hacer con los registros
 
-Los registros son JSON, por lo que `jq` responde las preguntas sobre ellos. `max runs list --json` corresponde a `{ items, page, limit, hasMore }`, y `items` es el ejecución de `run.json`, nuevos en la parte superior:
+Los registros son JSON, por lo que `jq` responde las preguntas sobre ellos. `max personal runs list --json` corresponde a `{ items, page, limit, hasMore }`, y `items` es el ejecución de `run.json`, nuevos en la parte superior:
 
 ```sh
 # какие запуски закончились плохо
-max runs list --json | jq '.items[] | select(.status=="failed") | {runId, command, errorCode}'
+max personal runs list --json | jq '.items[] | select(.status=="failed") | {runId, command, errorCode}'
 
 # сколько времени ушло на вход в последних запусках
-for id in $(max runs list --json | jq -r '.items[].runId'); do
+for id in $(max personal runs list --json | jq -r '.items[].runId'); do
   jq -r 'select(.operation=="session.login" and .event=="response") | "\(.durationMs)ms"' \
-    "$(max runs path "$id" --json | jq -r .path)/events.jsonl"
+    "$(max personal runs path "$id" --json | jq -r .path)/events.jsonl"
 done
 ```
 
-`max runs show` imprime los mismos eventos en una tabla, sin campos de servicio, que se repiten en cada línea; de lo contrario, la tabla se sale del borde derecho de la pantalla antes de alcanzar las duraciones. El archivo completo, con los campos de servicio, se encuentra en el directorio que imprime `max runs path`.
+`max personal runs show` imprime los mismos eventos en una tabla, sin campos de servicio, que se repiten en cada línea; de lo contrario, la tabla se sale del borde derecho de la pantalla antes de alcanzar las duraciones. El archivo completo, con los campos de servicio, se encuentra en el directorio que imprime `max personal runs path`.
 
 ## Siguiente paso
 
@@ -211,8 +211,8 @@ done
 ## Buscar errores y ejecuciones parciales
 
 ```sh
-max runs search --error-code rate_limited --json
-max runs search --status partial --since-time 2026-10-01 --json
+max personal runs search --error-code rate_limited --json
+max personal runs search --status partial --since-time 2026-10-01 --json
 ```
 
 `runs search` busca texto literal en metadatos y eventos de diagnóstico seguros.

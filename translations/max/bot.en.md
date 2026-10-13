@@ -6,7 +6,7 @@ A MAX bot is a separate account that can send messages, answer people and help m
 
 Terms used below:
 
-- **Bot** — a separate MAX account controlled by a program. `max bot` uses the official [MAX Bot API](https://dev.max.ru/docs-api). It has its own name, chats and token. `max …` without `bot` uses your personal account ([personal account guide](./usage.md)).
+- **Bot** — a separate MAX account controlled by a program. `max sales bot` uses the official [MAX Bot API](https://dev.max.ru/docs-api). It has its own name, chats and token. `max …` without `bot` uses your personal account ([personal account guide](./usage.md)).
 - **Token** — the bot's secret credential. Create the bot at [business.max.ru](https://business.max.ru/self). MAX issues bots to verified organisations, individual entrepreneurs and self-employed people, and moderates each bot.
 - **Bot name** — the name you save its token under, such as `sales`, placed first in every command: `max sales bot …`.
 - **Local archive** — what the bot read, sent or received, saved on this computer.
@@ -65,10 +65,10 @@ A bot is stored under a name you choose, used as the command's **first word**, j
 max sales bot auth set
 max support bot auth set
 max support bot messages send user:4815162342 "Ваша заявка принята"
-max bot list --check          # все имена с токеном бота и какой бот за каждым
+max sales bot list --check          # все имена с токеном бота и какой бот за каждым
 ```
 
-Without a name, the profile comes from `defaultProfile`, or `default` if unset: `max bot me`. `MAX_PROFILE` sets the name for the whole shell session.
+A profile name is required: the first word, `MAX_PROFILE` for the whole shell session, or the `defaultProfile` setting. Without one, a bot command stops and lists the profiles.
 
 ## Token storage
 
@@ -137,7 +137,7 @@ The bot must be a chat admin with permission for the action.
 
 An administrator bot can add members through `bot chats members add`. [MAX documentation](https://dev.max.ru/docs-api) marks this method removed, but the MAX server executes it; the server determines availability.
 
-First allow the bot to join groups. By default, MAX prevents bots from being added to group chats, whether through the app or `max chats members add` (response `participants.filter.out`). Enable this at [business.max.ru](https://business.max.ru/self): bot → **⋮ → Settings → Privacy** ([MAX documentation](https://dev.max.ru/docs/chatbots/bots-create/manage)). Then add it to the group and make it an admin in the MAX app. Group checks require permission to read messages; without it, MAX returns no group messages. You can also grant it with your own account: `max chats admins add "Поход" <номер бота> --can read,members,delete`.
+First allow the bot to join groups. By default, MAX prevents bots from being added to group chats, whether through the app or `max personal chats members add` (response `participants.filter.out`). Enable this at [business.max.ru](https://business.max.ru/self): bot → **⋮ → Settings → Privacy** ([MAX documentation](https://dev.max.ru/docs/chatbots/bots-create/manage)). Then add it to the group and make it an admin in the MAX app. Group checks require permission to read messages; without it, MAX returns no group messages. You can also grant it with your own account: `max personal chats admins add "Поход" <номер бота> --can read,members,delete`.
 
 ```sh
 max sales bot chats members list "Команда продаж" --limit 50
@@ -148,7 +148,7 @@ max sales bot chats admins add "Команда продаж" 4815162342 --can re
 max sales bot chats admins remove "Команда продаж" 4815162342
 ```
 
-`members list` returns up to 100 people and a `marker`. Fetch the next page with `--marker` and that value. Admin permissions in `--can` use the same names as `max chats admins add`: `read`, `members`, `admins`, `info`, `pin`, `link`, `edit`, `delete`. `read` grants access to group messages.
+`members list` returns up to 100 people and a `marker`. Fetch the next page with `--marker` and that value. Admin permissions in `--can` use the same names as `max personal chats admins add`: `read`, `members`, `admins`, `info`, `pin`, `link`, `edit`, `delete`. `read` grants access to group messages.
 
 ## Local storage
 
@@ -211,7 +211,7 @@ Updates received by `watch` are no longer delivered to another reader using this
 
 ## Checking a chat against rules
 
-A bot can follow a group where he is an admin, according to the same rules as `max chats moderate` for a personal account (see [rules in groups that you manage](./groups.md#правила)). Each bot has its own rules:
+A bot can follow a group where he is an admin, according to the same rules as `max personal chats moderate` for a personal account (see [rules in groups that you manage](./groups.md#правила)). Each bot has its own rules:
 
 ```sh
 max sales bot chats rules set -72894839451 invites remove        # приглашения в чужие чаты — удалять автора
@@ -222,7 +222,7 @@ max sales bot chats moderate -72894839451 --dry-run              # только 
 
 The check examines messages since the previous check (the past day on its first run) and new members, then performs actions allowed by rules and consent. Differences from personal accounts:
 
-- **Removed members are banned** and cannot return through the invite link. The link appears expired or invalid to them but keeps working for everyone else. An admin can add them back manually (`max chats members add`). Use `--no-ban` to remove without banning. Bans work only in chats with an invite link.
+- **Removed members are banned** and cannot return through the invite link. The link appears expired or invalid to them but keeps working for everyone else. An admin can add them back manually (`max personal chats members add`). Use `--no-ban` to remove without banning. Bans work only in chats with an invite link.
 - **The bot learns about joins only from `watch`.** MAX delivers each event to one reader, so checks use joins saved by `watch`. Without `watch`, the check examines only messages and reports that limitation.
 - **Bots cannot see account ages.** The Bot API does not provide them, so the account-age rule does not apply.
 
@@ -307,7 +307,7 @@ The journal records the chat, action type, outcome and text length, but no text.
 
 ## Any API operation
 
-`max bot api <операция>` exposes all Bot API operations, including those without convenient commands above. Commands are generated from the official API schema; new operations appear after a schema update. Operation help lists accepted fields:
+`max sales bot api <операция>` exposes all Bot API operations, including those without convenient commands above. Commands are generated from the official API schema; new operations appear after a schema update. Operation help lists accepted fields:
 
 ```sh
 max sales bot api get-my-info
@@ -316,7 +316,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Path and request parameters are flags, body is JSON in `--body`, `--body -` (from the pipe) or `--body-file`. `--body-file -` also reads stdin. The native parameter `timeout` is called `--poll-timeout`, and the global `--timeout` limits the entire command. The general option `--store-token <profile>` is not available for current MAX methods: they all reject it before performing the operation. Before sending, the body is checked against the schema, and the error message contains the field and what was expected in it, without the value itself. A list of all operations and which ones read and which ones write is [Bot API coverage](https://github.com/WireCatLabs/max-cli/blob/v0.45.4/docs/dev/bot-api-coverage.md).
+Path and request parameters are flags, body is JSON in `--body`, `--body -` (from the pipe) or `--body-file`. `--body-file -` also reads stdin. The native parameter `timeout` is called `--poll-timeout`, and the global `--timeout` limits the entire command. The general option `--store-token <profile>` is not available for current MAX methods: they all reject it before performing the operation. Before sending, the body is checked against the schema, and the error message contains the field and what was expected in it, without the value itself. A list of all operations and which ones read and which ones write is [Bot API coverage](https://github.com/WireCatLabs/max-cli/blob/v0.49.0/docs/dev/bot-api-coverage.md).
 
 <a id="для-скриптов-и-агентов"></a>
 
@@ -333,7 +333,7 @@ The failure or error is explained in the error message, and the command exits wi
 | `8` | exhausted `sendsPerHour` bot | wait or raise the limit |
 | `14` | no response received: unknown whether MAX completed the write | check chat before repeating |
 
-The [command reference](./commands.md) lists all codes. Bot `--trace` and `--record` log each Bot API request on stderr. File uploads report type, size and response code without URLs or filenames. Failed runs are saved in `max runs list` ([diagnostics](./diagnostics.md)).
+The [command reference](./commands.md) lists all codes. Bot `--trace` and `--record` log each Bot API request on stderr. File uploads report type, size and response code without URLs or filenames. Failed runs are saved in `max personal runs list` ([diagnostics](./diagnostics.md)).
 
 ## Certificate
 
@@ -341,7 +341,7 @@ The `platform-api2.max.ru` certificate is signed by a Russian Ministry of Digita
 
 ## Connecting a bot to an agent (MCP)
 
-`max <имя> bot mcp` gives your AI agent access to a bot, just as `max mcp` exposes your personal account:
+`max <имя> bot mcp` gives your AI agent access to a bot, just as `max personal mcp` exposes your personal account:
 
 ```sh
 claude mcp add sales-bot -- max sales bot mcp

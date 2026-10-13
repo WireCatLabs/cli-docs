@@ -9,7 +9,7 @@ Use this page when `max` reports an error or behaves unexpectedly. Find the disp
 Terms used below:
 
 - **Return code** - the number with which the command ends: `0` means the command completed; for batch reads check completeness, any other number indicates the type of failure. It is read by scripts and AI agents; The table below leads from each code to section.
-- **`max doctor`** checks installation without connecting to MAX. Launch it first.
+- **`max personal doctor`** checks installation without connecting to MAX. Launch it first.
 - **`--trace`** shows each request to MAX as it runs, without message text ([diagnostics](./diagnostics.md)).
 
 In the output of `--json`, an error that ends the command is one line in stderr, `{"error":{"code":"…","message":"…"}}`, and the return code says the same as `code`. All codes are also in the [exit-code reference](./commands.md#коды-возврата).
@@ -18,7 +18,7 @@ In the output of `--json`, an error that ends the command is one line in stderr,
 
 | Code | Name | Usual meaning | Help |
 |---|---|---|---|
-| `1` | `generic_failure` | typo in the command name or failure in `max` itself | [wrong profile](#команда-отвечает-но-профиль-не-тот), [report](#как-сообщить-о-проблеме) |
+| `1` | `internal_error` | typo in the command name or failure in `max` itself | [wrong profile](#команда-отвечает-но-профиль-не-тот), [report](#как-сообщить-о-проблеме) |
 | `2` | `validation_error` | a value or combination of options that `max` does not accept; name matches multiple chats | [values](#--limit-takes-a-whole-number-from-1-upwards-not-abc), [multiple chats](#matches-n-chats) |
 | `3` | `configuration_error` | error in `config.json`, or a newer version recorded the local copy | [settings](#is-not-a-valid-config), [local copy](#the-message-store-was-written-by-a-newer-version-) |
 | `4` | `authentication_error` | no login, session ended, or keyring is unavailable | [no session](#no-session-for-profile-default), [token not readable](#no-token-found-for-profile-default-although-it-has-logged-in-on-this-machine) |
@@ -31,22 +31,22 @@ In the output of `--json`, an error that ends the command is one line in stderr,
 | `11` | `provider_error` | MAX refused the request | [report](#как-сообщить-о-проблеме) |
 | `12` | `provider_unavailable` | failure on the MAX side | [report](#как-сообщить-о-проблеме) |
 | `13` | `invalid_response` | response that `max` could not read | [unexpected answer](#max-answered-with-something-we-did-not-expect) |
-| `14` | `outcome_unknown` | the connection was lost after sending, or the `max bot` gateway responded with 502, 503 or 504 to the change: the message could have been sent | [outcome unknown](#outcome_unknown-после-отправки) |
+| `14` | `outcome_unknown` | the connection was lost after sending, or the `max sales bot` gateway responded with 502, 503 or 504 to the change: the message could have been sent | [outcome unknown](#outcome_unknown-после-отправки) |
 | `130` | `cancelled` | pressed Ctrl-C or answered “no” to a question | [Ctrl-C](#ctrl-c) |
 
 ## Start with `max doctor`
 
 ```sh
-max doctor
+max personal doctor
 ```
 
-`max doctor` connects nowhere. It reports runtime/version, settings, token presence and keyring entry (including `MAX_*_DIR` relocation), shared storage, run directory and any login pause. It works even when other commands fail. A profile without a session is a reported condition, not an error; exit code remains `0`. It never prints a token, only presence and source.
+`max personal doctor` connects nowhere. It reports runtime/version, settings, token presence and keyring entry (including `MAX_*_DIR` relocation), shared storage, run directory and any login pause. It works even when other commands fail. A profile without a session is a reported condition, not an error; exit code remains `0`. It never prints a token, only presence and source.
 
 ```sh
-max doctor --online
+max personal doctor --online
 ```
 
-`--online` also logs into MAX once, reads one chat and starts the MCP server. Doesn't send anything and doesn't mark anything as read. login counts towards the MAX limit on logins, so if there is an error it is not repeated ([as shown by `max doctor`](./diagnostics.md#проверить-установку-max-doctor)).
+`--online` also logs into MAX once, reads one chat and starts the MCP server. Doesn't send anything and doesn't mark anything as read. login counts towards the MAX limit on logins, so if there is an error it is not repeated ([as shown by `max personal doctor`](./diagnostics.md#проверить-установку-max-doctor)).
 
 ## Installation
 
@@ -60,7 +60,7 @@ npx @wirecat/max-cli doctor
 
 `max on PATH` reports whether it was found; the note below explains the fix.
 
-**Windows.** npm puts commands in `%APPDATA%\npm`. If absent from `PATH`, `max doctor` prints two PowerShell lines: one fixes the current window, the other future windows. Check manually:
+**Windows.** npm puts commands in `%APPDATA%\npm`. If absent from `PATH`, `max personal doctor` prints two PowerShell lines: one fixes the current window, the other future windows. Check manually:
 
 ```powershell
 npm prefix -g
@@ -75,9 +75,9 @@ The first command shows the directory; the second shows current `PATH`. If the d
 Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 ```
 
-**Linux and macOS.** npm's command directory is `$(npm prefix -g)/bin`. `max doctor` prints `export PATH=…`; add it to `~/.zshrc` or `~/.bashrc`.
+**Linux and macOS.** npm's command directory is `$(npm prefix -g)/bin`. `max personal doctor` prints `export PATH=…`; add it to `~/.zshrc` or `~/.bashrc`.
 
-**On `PATH` there is another `max`.** If previously in `PATH` there is someone else’s program with the same name, `max doctor` will name its path. Call ours using the full path or put its directory earlier.
+**On `PATH` there is another `max`.** If previously in `PATH` there is someone else’s program with the same name, `max personal doctor` will name its path. Call ours using the full path or put its directory earlier.
 
 <a id="npx-leemourmax-cli-installs-the-wrong-version" />
 
@@ -94,17 +94,17 @@ npx @wirecat/max-cli@latest --version
 ### "no session for profile "default""
 
 ```json
-{"error":{"code":"authentication_error","message":"no session for profile \"default\" — run `max setup` in a local terminal; agents: read `max skill show`"}}
+{"error":{"code":"authentication_error","message":"no session for profile \"default\" — run `max personal setup` in a local terminal; agents: read `max skill show`"}}
 ```
 
 Code `4`: no token for this profile. You may not have logged in, may have logged into **another profile**, or may have used different directory variables.
 
 ```sh
-max setup                  # первый запуск
+max personal setup                  # первый запуск
 max personal chats list    # или назвать профиль, в который входили
 ```
 
-Resume an interrupted first run with `max setup`. An expired token requires an explicit fresh login: `max session start qr`. Your agent reads `max skill show` before login.
+Resume an interrupted first run with `max personal setup`. An expired token requires an explicit fresh login: `max personal session start qr`. Your agent reads `max skill show` before login.
 
 ⚠ A common cause when a token definitely exists is `MAX_CONFIG_DIR` set in one terminal but not another. Directory overrides also change keyring entries, so a session saved with them is invisible without them. Check `env | grep MAX_`.
 
@@ -125,17 +125,17 @@ max shop bot messages list -100
 
 ### "no token found for profile "default", although it has logged in on this machine"
 
-Return code `4`. The profile on this computer has already been logged in, but the token is not readable. Almost always this is a password storage that `max` cannot reach: the command is launched from cron, via ssh, or from another environment without `XDG_RUNTIME_DIR`. **Do not log in again** - this will add another device to your account, and the next time from the same environment the token will not be read again. `max doctor` will show whether it sees the token; how to set up cron - in the section [run according to schedule](./recipes.md#как-запускать-по-расписанию).
+Return code `4`. The profile on this computer has already been logged in, but the token is not readable. Almost always this is a password storage that `max` cannot reach: the command is launched from cron, via ssh, or from another environment without `XDG_RUNTIME_DIR`. **Do not log in again** - this will add another device to your account, and the next time from the same environment the token will not be read again. `max personal doctor` will show whether it sees the token; how to set up cron - in the section [run according to schedule](./recipes.md#как-запускать-по-расписанию).
 
 ### “MAX refused this profile's last login for too many attempts”
 
-Code `8`: MAX rejected excessive login attempts. `max` remembers the rejection and does not log in until the stated time, including commands, `max session start` and the background server. Consecutive refusals increase the wait: 1 minute, 5 minutes, 30 minutes, 1 hour, 6 hours, then 1 day. Successful login resets it.
+Code `8`: MAX rejected excessive login attempts. `max` remembers the rejection and does not log in until the stated time, including commands, `max personal session start` and the background server. Consecutive refusals increase the wait: 1 minute, 5 minutes, 30 minutes, 1 hour, 6 hours, then 1 day. Successful login resets it.
 
-**Wait.** An early login is another attempt counted by MAX; repeated attempts can prolong restrictions. Reduce scheduled login frequency. `max doctor` shows the pause expiry.
+**Wait.** An early login is another attempt counted by MAX; repeated attempts can prolong restrictions. Reduce scheduled login frequency. `max personal doctor` shows the pause expiry.
 
 How the request rate, waits and parallel commands work - in [constraints and expectations](./limits.md).
 
-The background server (`max serve`, `max server start`) stops after any authentication rejection rather than retrying. It still reconnects after network failures.
+The background server (`max personal serve`, `max personal server start`) stops after any authentication rejection rather than retrying. It still reconnects after network failures.
 
 ### Command responds, but the profile is wrong
 
@@ -166,8 +166,8 @@ Code `2`. The same applies to `--page`. Without validation, a nonnumeric value c
 Code `2`: `--before-time` or `--after-time` could not parse its value. Use ISO 8601 or a relative time:
 
 ```sh
-max messages list 0 --before-time 2026-09-20T01:00:00Z
-max messages list 0 --before-time 2h
+max personal messages list 0 --before-time 2026-09-20T01:00:00Z
+max personal messages list 0 --before-time 2h
 ```
 
 For a message ID, use `--before-id`: the time is encoded in the ID, without needing a previous chat read.
@@ -198,13 +198,13 @@ Code `2`: the name fragment matched multiple chats. The command refuses to guess
 
 ### "no chat matches"
 
-Code `6`: no matching chat. Names come from login data; a direct chat uses the other person's name. If the contact is unknown, it may have no title, so use its ID from `max chats list`.
+Code `6`: no matching chat. Names come from login data; a direct chat uses the other person's name. If the contact is unknown, it may have no title, so use its ID from `max personal chats list`.
 
 ## Limits and rights
 
 ### "profile... has sent N messages in the hour..."
 
-Code `8`: the profile's hourly `sendsPerHour` limit was reached; default 30. The error shows when sending is possible again. Raise it only if intended: `max config set sendsPerHour <n>`.
+Code `8`: the profile's hourly `sendsPerHour` limit was reached; default 30. The error shows when sending is possible again. Raise it only if intended: `max personal config set sendsPerHour <n>`.
 
 ### "chat... is not on the recipient list of profile..."
 
@@ -220,9 +220,9 @@ Code `7`. The command level is `ask`, but there is no one to answer: there is no
 
 ### Saved limit
 
-If the messenger specifies a wait time, `max` remembers it for the operation and chat. A retry before it expires immediately returns code `8` without contacting the messenger. MAX does not currently specify such times, so no hold is recorded for a personal MAX account and sends are not held. A sign-in cooldown in `max` protects against frequent sign-ins; `max doctor` shows its duration.
+If the messenger specifies a wait time, `max` remembers it for the operation and chat. A retry before it expires immediately returns code `8` without contacting the messenger. MAX does not currently specify such times, so no hold is recorded for a personal MAX account and sends are not held. A sign-in cooldown in `max` protects against frequent sign-ins; `max personal doctor` shows its duration.
 
-Remembered waits and send holds appear in `max server status` (`flood`). `max flood
+Remembered waits and send holds appear in `max personal server status` (`flood`). `max flood
 clear` forgets them without changing anything in MAX. Run it only when MAX is no longer limiting the account. MCP has no such command: an agent must not clear a limit to retry.
 
 ## MAX and network
@@ -238,7 +238,7 @@ If fields become empty afterward, this may explain why. Report the full warning 
 The connection exists but no response arrives. After the timeout, it returns code `9`, `timeout`.
 
 ```sh
-max chats list --trace
+max personal chats list --trace
 ```
 
 A `→` without its matching `←` means a request left without a response: investigate the network or MAX ([reading traces](./diagnostics.md#показать---trace)).
@@ -246,7 +246,7 @@ A `→` without its matching `←` means a request left without a response: inve
 There are two separate limits:
 
 ```sh
-max chats list --timeout 30s     # на команду целиком, включая вход
+max personal chats list --timeout 30s     # на команду целиком, включая вход
 ```
 
 `timeoutMs` in [Configuration](./configuration.md) limits **one response**. A command makes several requests, so total time can be a multiple of it. `--timeout` limits the whole run, returning code `9` and closing the connection.
@@ -262,16 +262,16 @@ Code `14`: **the message may have been sent**. The request left but no response 
 Retry **only with the same `--send-id`** shown in the error; MAX deduplicates it:
 
 ```sh
-max messages send 0 "текст" --send-id 1789784741828
+max personal messages send 0 "текст" --send-id 1789784741828
 ```
 
 Never retry without `--send-id`: that creates a second message.
 
-`max bot` has no `--send-id`. Check the chat before retrying.
+`max sales bot` has no `--send-id`. Check the chat before retrying.
 
 ### Ctrl-C
 
-Code `130`: the command stops and closes its connection. During a send, the message may already have gone through. Check the chat (`max messages list <чат> --limit 3`) before retrying.
+Code `130`: the command stops and closes its connection. During a send, the message may already have gone through. Check the chat (`max personal messages list <чат> --limit 3`) before retrying.
 
 Declining a change confirmation also returns this code, without performing the action.
 
@@ -281,21 +281,25 @@ Declining a change confirmation also returns this code, without performing the a
 
 Code `3`: another CLI, such as `tg`, or a newer `max`, upgraded the shared store beyond this version's support. Run `max upgrade`. No stored data is lost.
 
+### “two different copies of the store: … — nothing was moved or changed”
+
+Code `3`, on the first run after an update. The shared copy moves once to the WireCat folder, but both the old folder and the WireCat folder hold a `wirecat.db` with different contents — usually because an older `max`, `tg` or `memo` created a new copy in the old place after the move. Nothing was changed. Keep the copy you need, remove the other, and run the command again. Update all CLIs that share the copy together.
+
 ### “nothing recorded for profile … yet — run the command once without --offline”
 
-Code `6`. `--offline` uses only the local copy, and this profile has not yet retrieved anything into it. First run a command with a connection, for example `max chats list`.
+Code `6`. `--offline` uses only the local copy, and this profile has not yet retrieved anything into it. First run a command with a connection, for example `max personal chats list`.
 
 ### `search messages` doesn't find anything
 
-Search all chats reads the local archive; searching for words in one named chat also asks the MAX server. An empty response does not prove that there is no message. Check `coverage.next` in the answer `--json`: run the prompted command or ask for permission, then search again. `max store fetch --all --background` starts downloading all chats; `max store fetch <чат>` - one ([download history](./archive.md#скачать-историю), [prepare archive for search](./search.md#сначала-подготовьте-архив)).
+Search all chats reads the local archive; searching for words in one named chat also asks the MAX server. An empty response does not prove that there is no message. Check `coverage.next` in the answer `--json`: run the prompted command or ask for permission, then search again. `max personal messages sync --all --background` starts downloading all chats; `max personal messages sync <чат>` - one ([download history](./archive.md#скачать-историю), [prepare archive for search](./search.md#сначала-подготовьте-архив)).
 
 ### Empty chat list
 
 First check whether you are reading only local storage:
 
 ```sh
-max chats list --trace     # видны ли запросы к MAX
-max contacts sync         # заново получить полный список контактов
+max personal chats list --trace     # видны ли запросы к MAX
+max personal contacts sync         # заново получить полный список контактов
 ```
 
 If the first run listed chats but the next consecutive run is empty, that is a bug; report it. Subsequent logins may return only changed contacts; the remaining contacts come from the shared local store.
@@ -304,30 +308,30 @@ If the first run listed chats but the next consecutive run is empty, that is a b
 
 ### "max serve is already running for profile ..."
 
-Code `2`: only one `serve` per profile. `max server status` shows the process and start time; `max server stop` stops one started through `server start` or a service.
+Code `2`: only one `serve` per profile. `max personal server status` shows the process and start time; `max personal server stop` stops one started through `server start` or a service.
 
 ### The server does not start in the background
 
-The reason will be shown by `max server logs`. The usual reason for the service is the keyring: the service starts before the keyring is open, or without `XDG_RUNTIME_DIR`. If you transferred Node or `max`, run `max server install` again: the service starts the paths with which it was installed ([background server](./archive.md#новые-сообщения-сразу-max-serve-и-max-watch)).
+The reason will be shown by `max personal server logs`. The usual reason for the service is the keyring: the service starts before the keyring is open, or without `XDG_RUNTIME_DIR`. If you transferred Node or `max`, run `max personal server install` again: the service starts the paths with which it was installed ([background server](./archive.md#новые-сообщения-сразу-max-serve-и-max-watch)).
 
 ## Reporting a problem
 
 ```sh
-max doctor report          # что попадёт в отчёт и чего в нём не будет
-max doctor report create   # записать отчёт в файл и показать, как его отправить
+max personal doctor report          # что попадёт в отчёт и чего в нём не будет
+max personal doctor report create   # записать отчёт в файл и показать, как его отправить
 ```
 
-`create` writes `max-report-<время>.json` in the current directory with permissions `0600`. It contains version, runtime/system, doctor results, the latest failed run and the latest 20 write actions. It excludes message text, chat/person names, phone numbers and tokens. Chat/message ids become consistent labels within the report but different labels in another report. Failed runs save automatically without `--record` ([failed runs](./diagnostics.md#неудачный-запуск-сохраняется-всегда)). Select another run with `--run <id>`; `max runs list` shows ids.
+`create` writes `max-report-<время>.json` in the current directory with permissions `0600`. It contains version, runtime/system, doctor results, the latest failed run and the latest 20 write actions. It excludes message text, chat/person names, phone numbers and tokens. Chat/message ids become consistent labels within the report but different labels in another report. Failed runs save automatically without `--record` ([failed runs](./diagnostics.md#неудачный-запуск-сохраняется-всегда)). Select another run with `--run <id>`; `max personal runs list` shows ids.
 
 The command then prints a link for opening a new issue at [github.com/WireCatLabs/max-cli/issues](https://github.com/WireCatLabs/max-cli/issues), with the title and draft text already filled in. You need a GitHub account. Drag the report file into the text field, describe what you did and what happened, then click “Submit new issue”.
 
 GitHub issues and attached files are public.
 
-⚠ Never attach `~/.cache/max-cli/` or `~/.local/share/cli-messaging/`: they contain message text.
+⚠ Never attach `~/.cache/max-cli/` or `~/.local/share/WireCat/`: they contain message text.
 
 ## Partial results and recovery actions
 
-CLI and MCP errors include `actions`: what to check, which setting to change, how long to wait
+Each failed item of a partial result includes `actions`: what to check, which setting to change, how long to wait
 or which item to skip. `retryable` never authorizes automatic write replay: for `outcome_unknown`,
 verify whether the action happened first. API limits cannot be increased through local settings;
 reduce or split the input instead.
@@ -336,6 +340,6 @@ An HTTP 429 while downloading an attachment stops new files in the batch; `Retry
 
 A failed independent file or history page returns partial results with exit code `0`,
 `complete: false` and `batch` or `issue`. Completed downloads and earlier history pages remain
-saved. If a provider wait is too long to finish, single-chat `store fetch` includes `issue.retryAfterMs`
+saved. If a provider wait is too long to finish, single-chat `messages sync` includes `issue.retryAfterMs`
 and a `resume` boundary; multi-chat fetch exposes per-chat issues and downloads use checkpoints; do not repeat requests before the wait ends. Partial background jobs have
-state `partial` and can be retried with `max store jobs retry`. Check completeness as well as the exit code.
+state `partial` and can be retried with `max personal store jobs retry`. Check completeness as well as the exit code.

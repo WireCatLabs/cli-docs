@@ -17,8 +17,12 @@ max [профиль] [опции] <команда> <действие> [аргу�
 ```
 
 **Первое слово — профиль**, если оно не совпадает с именем команды: `max personal chats list`
-читает чаты профиля `personal`, а `max chats list` — профиля по умолчанию. То же самое говорит
-переменная `MAX_PROFILE`; без неё профиль называется `default`.
+читает чаты профиля `personal`. То же самое говорит переменная `MAX_PROFILE` на весь сеанс
+оболочки, а `defaultProfile` в файле настроек — насовсем (`max config set defaultProfile personal`).
+**Профиль никогда не подразумевается**: если его не назвать, команда, которой нужен аккаунт,
+останавливается и перечисляет профили этого компьютера — даже если профиль один. Первый вход тоже
+с именем: `max personal setup`. Без профиля работают только команды, которым аккаунт не нужен:
+`--help`, `--version`, `commands`, `skill show`, `account list`, `config show`.
 
 ⚠ Описания команд и опций ниже — ровно те, что печатает `max --help`, то есть по-английски. Это
 не недоработка перевода: текст живёт в программе, и второй его копии здесь быть не должно.
@@ -36,12 +40,15 @@ max [профиль] [опции] <команда> <действие> [аргу�
 | `--jsonl` | machine-readable output: one JSON object per line, for streaming and jq. |
 | `--quiet` | diagnostics off. |
 | `--trace` | one line per request on stderr: ids and timings, never message content. |
+| `--debug` | при сбое — полная запись (причина и стек) вместо короткой строки. |
 | `--timeout <duration>` | give up on the whole command after this — 30s, 2m, 500ms. |
 | `--offline` | answer from what was recorded and never connect; fails if nothing was. |
 | `--no-input` | не запрашивать ввод и не открывать интерактивный вход; ввод через канал остаётся доступным. |
 | `--max-input-bytes <bytes>` | максимальный размер буферизованного ввода в байтах (по умолчанию: 16777216). |
 | `--max-output-bytes <bytes>` | максимальный размер машинного вывода в байтах (по умолчанию: 4194304; 0 отключает ограничение). |
 | `--fields <paths>` | поля элементов или объекта через запятую: id,text; сохранять пагинацию и идентификаторы операций. |
+| `--brief` | найденные сообщения и письма — только ссылка, название, время, отправитель и отрывок. |
+| `--full` | найденные сообщения и письма целиком, со всеми полями провайдера. |
 | `--dry-run` | предварительно показать разобранные аргументы и разрешения перед выполнением действия. |
 | `--yes` | go ahead without the question an ask level puts before a write. |
 | `--record` | keep this run under `max runs` — ids and timings, never message content. |
@@ -101,7 +108,6 @@ the logged-in account
 ```sh
 max account list
 ```
-
 
 ### `max account show`
 
@@ -680,8 +686,7 @@ max chats folders show <folder>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `folder` | обязательный | ID папки или точное название. |
-
+| `folder` | обязательный | ID папки или её точное название. |
 
 #### `max chats folders create`
 
@@ -919,8 +924,7 @@ max chats start <bot> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--payload <text>` | параметр запуска для бота; если не задан — ?start= из ссылки. |
-
+| `--payload <text>` | параметр запуска, который читает бот; если не задан — собственный ?start= ссылки. |
 
 ### `max chats app`
 
@@ -938,8 +942,7 @@ max chats app <bot> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--start <param>` | параметр запуска для приложения. |
-
+| `--start <param>` | параметр запуска, который читает приложение. |
 
 ## `max contacts`
 
@@ -1240,7 +1243,7 @@ max contacts timeline <person> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `person` | обязательный | their id, @username, or part of their name. |
+| `person` | обязательный | ID, @username или часть имени. |
 
 | Опция | Что делает |
 |---|---|
@@ -1417,6 +1420,34 @@ max messages evidence <chat> [options]
 | `--limit <n>` | how many, 1–100. |
 | `--before-id <id>` | только сообщения старше сообщения с этим ID. |
 
+### `max messages sync`
+
+дописать историю чата в локальное хранилище, от новых к старым; повторный запуск продолжает; --all синхронизирует все чаты
+
+```sh
+max messages sync [chat] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | необязательный | чат: его ID или часть названия. |
+
+| Опция | Что делает |
+|---|---|
+| `--all` | каждый чат, сначала недавно активные — это нужно для поиска; последние 90d, если не заданы --since-time или --last. |
+| `--limit <n>` | не более этого числа сообщений за запуск; с --all лимит действует для каждого чата; по умолчанию 1200. |
+| `--page-size <n>` | how many messages one request asks for; 30 if not given. |
+| `--pause <duration>` | the least pause between pages, to stay under the provider's limits; each is up to twice that. По умолчанию: `5s`. |
+| `--since-time <time>` | stop once it reaches messages older than this: ISO 8601, or 2h / 1d ago. |
+| `--last <n>` | stop once the newest n messages are held. |
+| `--catch-up` | подготовить локальный поиск после этого запуска; важнее настройки searchCatchUp. |
+| `--no-catch-up` | не готовить локальный поиск после этого запуска. |
+| `--catch-up-chunks <n>` | не более указанного числа локальных векторных фрагментов. |
+| `--catch-up-messages <n>` | пропустить перестроение графа, если число сообщений превышает это значение. |
+| `--catch-up-time <duration>` | лимит времени локальной подготовки, по умолчанию 30s. |
+| `--background` | run as a job that outlives this command; `store jobs show` follows it. |
+| `--estimate` | only estimate how many messages, requests and minutes a full fetch would still take — from the store, no request. |
+
 ### `max messages transcribe`
 
 turn a voice message into text, on this machine — the recording goes nowhere
@@ -1586,10 +1617,9 @@ max messages press <chat> <message> <button>
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chat` | обязательный | чат: ID или часть названия. |
+| `chat` | обязательный | чат: его ID или часть названия. |
 | `message` | обязательный | ID сообщения с кнопками. |
-| `button` | обязательный | номер из `messages show` или точный текст. |
-
+| `button` | обязательный | её номер, как его печатает `messages show`, или её точный текст. |
 
 ## `max store`
 
@@ -1606,34 +1636,6 @@ max store status [chat]
 | Аргумент | | Что это |
 |---|---|---|
 | `chat` | необязательный | чат: его ID или часть названия. |
-
-### `max store fetch`
-
-загрузить историю чата в локальное хранилище, сначала новые сообщения; повторите запуск для продолжения; --all загружает все чаты
-
-```sh
-max store fetch [chat] [options]
-```
-
-| Аргумент | | Что это |
-|---|---|---|
-| `chat` | необязательный | чат: его ID или часть названия. |
-
-| Опция | Что делает |
-|---|---|
-| `--all` | каждый чат, сначала недавно активные — это нужно для поиска; последние 90d, если не заданы --since-time или --last. |
-| `--limit <n>` | не более этого числа сообщений за запуск; с --all лимит действует для каждого чата; по умолчанию 1200. |
-| `--page-size <n>` | how many messages one request asks for; 30 if not given. |
-| `--pause <duration>` | the least pause between pages, to stay under the provider's limits; each is up to twice that. По умолчанию: `5s`. |
-| `--since-time <time>` | stop once it reaches messages older than this: ISO 8601, or 2h / 1d ago. |
-| `--last <n>` | stop once the newest n messages are held. |
-| `--catch-up` | подготовить локальный поиск после загрузки; переопределяет searchCatchUp. |
-| `--no-catch-up` | пропустить локальную подготовку после этой загрузки. |
-| `--catch-up-chunks <n>` | не более указанного числа локальных векторных фрагментов. |
-| `--catch-up-messages <n>` | пропустить перестроение графа, если число сообщений превышает это значение. |
-| `--catch-up-time <duration>` | лимит времени локальной подготовки, по умолчанию 30s. |
-| `--background` | run as a job that outlives this command; `store jobs show` follows it. |
-| `--estimate` | only estimate how many messages, requests and minutes a full fetch would still take — from the store, no request. |
 
 ### `max store gaps`
 
@@ -1680,11 +1682,11 @@ max store gaps repair <chat> [options]
 
 ### `max store jobs`
 
-background fetch jobs
+фоновые задания синхронизации
 
 #### `max store jobs list`
 
-background fetch jobs, newest first
+фоновые задания синхронизации, новые сверху
 
 ```sh
 max store jobs list [options]
@@ -1704,11 +1706,11 @@ max store jobs show [job]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `job` | необязательный | the job id `store fetch --background` printed. |
+| `job` | необязательный | ID задания, который напечатала `messages sync --background`. |
 
 #### `max store jobs cancel`
 
-stop a running background job after its current page; a later fetch resumes where it stopped
+остановить идущее фоновое задание после текущей страницы; следующая синхронизация продолжит с того же места
 
 ```sh
 max store jobs cancel <job>
@@ -1720,7 +1722,7 @@ max store jobs cancel <job>
 
 #### `max store jobs retry`
 
-запустить неудачное или оборвавшееся задание заново; загрузка продолжается с сохранённого места
+запустить частичное, неудавшееся или умершее задание заново, новым заданием; синхронизация продолжится с того места, где остановилось хранилище
 
 ```sh
 max store jobs retry [job] [options]
@@ -1732,8 +1734,7 @@ max store jobs retry [job] [options]
 
 | Опция | Что делает |
 |---|---|
-| `--failed` | все чаты, чьё последнее задание завершилось ошибкой или оборвалось. |
-
+| `--failed` | каждый чат, чьё последнее задание осталось частичным, завершилось ошибкой или умерло. |
 
 #### `max store jobs clear`
 
@@ -1745,10 +1746,9 @@ max store jobs retry [job] [options]
 max store jobs clear
 ```
 
-
 ### `max store export`
 
-a chat's stored messages as JSON lines, oldest first; never asks the messenger
+сохранённые сообщения чата, от старых к новым: --jsonl — одно сообщение на строку, --json — один объект { items, page, limit, hasMore }; к мессенджеру не обращается
 
 ```sh
 max store export [chats] [options]
@@ -1760,7 +1760,7 @@ max store export [chats] [options]
 
 | Опция | Что делает |
 |---|---|
-| `--format <format>` | jsonl (the default): one message per line; markdown: a transcript with a heading per day, replies and forwards quoted. |
+| `--format <format>` | jsonl: одно сообщение на строку, по умолчанию с --output; markdown: стенограмма с заголовком на каждый день, ответы и пересылки цитируются. |
 | `--since-time <time>` | only from this ISO 8601 time, or 30m / 2h / 1d ago, on. |
 | `--output <file>` | write JSON lines, or the transcript, to this new file, readable only by you. |
 | `--to <dir>` | write into this folder, a file per chat and a manifest; run again on it for only what changed since. |
@@ -1925,7 +1925,7 @@ max stats messages show [query] [options]
 | `--max-messages <n>` | скачать не больше стольких сообщений всего (по умолчанию: 500). |
 | `--by <chat\|sender\|day\|hour>` | what to count by (default: chat). |
 | `--chat <chat>` | только этот чат — то же, что chat: в запросе; чат: его ID или часть названия. |
-| `--source <messenger>` | все аккаунты этого мессенджера в архиве; personal, bots или all — то же, что in: в запросе. |
+| `--source <accounts>` | каждый аккаунт этого мессенджера в хранилище; personal, bots или all — то же, что in: в запросе. |
 | `--limit <n>` | how many rows. |
 | `--timezone <zone>` | the IANA timezone for calendar days and hours. |
 | `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
@@ -1933,8 +1933,7 @@ max stats messages show [query] [options]
 
 #### `max stats messages counters`
 
-наблюдения каждого счётчика и ограниченное обновление из мессенджера
-
+наблюдения по каждому счётчику и ограниченное удалённое обновление
 
 #### `max stats messages counters show`
 
@@ -1951,14 +1950,13 @@ max stats messages counters show [query] [options]
 | Опция | Что делает |
 |---|---|
 | `--chat <chat>` | только этот чат; укажите его ID или часть названия. |
-| `--source <messenger>` | подключённые аккаунты этого мессенджера; обновление использует активный. |
-| `--exact` | слова без операторов совпадают по точной форме. |
-| `--timezone <zone>` | часовой пояс IANA для дат запроса. |
-| `--selection <json>` | фиксированная выборка целей из counters show; несовместима с запросом и областью. |
-| `--counters <names>` | разные поля views,reactions,comments; по умолчанию все три. |
-| `--limit <n>` | сообщения, 1–100; по умолчанию 20. |
-| `--max-age <duration>` | максимальный возраст свежего наблюдения; по умолчанию 24h. |
-
+| `--source <accounts>` | сохранённые аккаунты этого мессенджера; обновление идёт через активный аккаунт. |
+| `--exact` | слова без поля совпадают только в точной форме. |
+| `--timezone <zone>` | часовой пояс IANA для дат в запросе. |
+| `--selection <json>` | закреплённый выбор целей счётчиков из counters show; несовместим с запросом и областью. |
+| `--counters <names>` | отдельные поля views,reactions,comments; по умолчанию все три. |
+| `--limit <n>` | сообщений, 1–100; по умолчанию 20. |
+| `--max-age <duration>` | наибольший возраст свежего наблюдения; по умолчанию 24h. |
 
 #### `max stats messages counters refresh`
 
@@ -1977,16 +1975,15 @@ max stats messages counters refresh [query] [options]
 | Опция | Что делает |
 |---|---|
 | `--chat <chat>` | только этот чат; укажите его ID или часть названия. |
-| `--source <messenger>` | подключённые аккаунты этого мессенджера; обновление использует активный. |
-| `--exact` | слова без операторов совпадают по точной форме. |
-| `--timezone <zone>` | часовой пояс IANA для дат запроса. |
-| `--selection <json>` | фиксированная выборка целей из counters show; несовместима с запросом и областью. |
-| `--counters <names>` | разные поля views,reactions,comments; по умолчанию все три. |
-| `--limit <n>` | сообщения, 1–100; по умолчанию 20. |
-| `--max-messages <n>` | максимум сообщений для обновления, 1–100. |
-| `--sync-time <duration>` | время удалённого обновления; по умолчанию 30s, максимум 5m. |
-| `--dry-run` | показать точные сохранённые цели и поддерживаемые счётчики без подключения. |
-
+| `--source <accounts>` | сохранённые аккаунты этого мессенджера; обновление идёт через активный аккаунт. |
+| `--exact` | слова без поля совпадают только в точной форме. |
+| `--timezone <zone>` | часовой пояс IANA для дат в запросе. |
+| `--selection <json>` | закреплённый выбор целей счётчиков из counters show; несовместим с запросом и областью. |
+| `--counters <names>` | отдельные поля views,reactions,comments; по умолчанию все три. |
+| `--limit <n>` | сообщений, 1–100; по умолчанию 20. |
+| `--max-messages <n>` | наибольшее число сообщений для обновления, 1–100. |
+| `--sync-time <duration>` | время на удалённое обновление; по умолчанию 30s, не больше 5m. |
+| `--dry-run` | показать точные сохранённые цели и возможности счётчиков без подключения. |
 
 #### `max stats messages unanswered`
 
@@ -2003,7 +2000,7 @@ max stats messages unanswered [query] [options]
 | Опция | Что делает |
 |---|---|
 | `--chat <chat>` | только этот чат; укажите его ID или часть названия. |
-| `--source <messenger>` | все имеющиеся аккаунты этого мессенджера; personal, bots или all. |
+| `--source <accounts>` | каждый сохранённый аккаунт этого мессенджера; personal, bots или all. |
 | `--exact` | слова без поля совпадают в точной форме, а не по основе слова. |
 | `--saved <name\|id>` | запустить сохранённый отчёт этого вида; указанные опции заменяют сохранённые. |
 | `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
@@ -2026,7 +2023,7 @@ max stats messages discussion [query] [options]
 | Опция | Что делает |
 |---|---|
 | `--chat <chat>` | только этот чат; укажите его ID или часть названия. |
-| `--source <messenger>` | все имеющиеся аккаунты этого мессенджера; personal, bots или all. |
+| `--source <accounts>` | каждый сохранённый аккаунт этого мессенджера; personal, bots или all. |
 | `--exact` | слова без поля совпадают в точной форме, а не по основе слова. |
 | `--saved <name\|id>` | запустить сохранённый отчёт этого вида; указанные опции заменяют сохранённые. |
 | `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
@@ -2057,7 +2054,7 @@ max stats messages top [query] [options]
 | `--weights <json>` | полный набор весов компонентов; заменяет веса предустановки. |
 | `--message-kind <kind>` | перед ранжированием выбрать все сообщения, посты или комментарии с подтверждённым типом. Одно из: `all`, `posts`, `comments`. |
 | `--chat <chat>` | только этот чат; укажите его ID или часть названия. |
-| `--source <messenger>` | все имеющиеся аккаунты этого мессенджера; personal, bots или all. |
+| `--source <accounts>` | каждый сохранённый аккаунт этого мессенджера; personal, bots или all. |
 | `--timezone <zone>` | часовой пояс IANA для дат и активных дней. |
 | `--exact` | слова без поля совпадают в точной форме, а не по основе слова. |
 | `--limit <n>` | строки рейтинга, 1–100. |
@@ -2101,7 +2098,7 @@ max stats contacts responses [query] [options]
 | Опция | Что делает |
 |---|---|
 | `--chat <chat>` | только этот чат; укажите его ID или часть названия. |
-| `--source <messenger>` | все имеющиеся аккаунты этого мессенджера; personal, bots или all. |
+| `--source <accounts>` | каждый сохранённый аккаунт этого мессенджера; personal, bots или all. |
 | `--exact` | слова без поля совпадают в точной форме, а не по основе слова. |
 | `--saved <name\|id>` | запустить сохранённый отчёт этого вида; указанные опции заменяют сохранённые. |
 | `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
@@ -2131,7 +2128,7 @@ max stats contacts top [query] [options]
 | `--weights <json>` | полный набор весов компонентов; заменяет веса предустановки. |
 | `--message-kind <kind>` | перед ранжированием выбрать все сообщения, посты или комментарии с подтверждённым типом. Одно из: `all`, `posts`, `comments`. |
 | `--chat <chat>` | только этот чат; укажите его ID или часть названия. |
-| `--source <messenger>` | все имеющиеся аккаунты этого мессенджера; personal, bots или all. |
+| `--source <accounts>` | каждый сохранённый аккаунт этого мессенджера; personal, bots или all. |
 | `--timezone <zone>` | часовой пояс IANA для дат и активных дней. |
 | `--exact` | слова без поля совпадают в точной форме, а не по основе слова. |
 | `--limit <n>` | строки рейтинга, 1–100. |
@@ -2215,14 +2212,13 @@ max stats chats retention <chat> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--since-time <time>` | начало периода вступления в ISO 8601 или относительное время; по умолчанию последние 90 дней. |
-| `--until-time <time>` | конец периода вступления; по умолчанию сейчас. |
-| `--checkpoints <durations>` | до 10 возрастающих сроков после вступления через запятую; по умолчанию 1d,7d,30d. |
+| `--since-time <time>` | период вступления начинается со времени ISO 8601 или относительного; по умолчанию последние 90 дней. |
+| `--until-time <time>` | период вступления заканчивается в это время; по умолчанию сейчас. |
+| `--checkpoints <durations>` | до 10 возрастающих сроков с момента вступления через запятую; по умолчанию 1d,7d,30d. |
 | `--within <duration>` | окно активности и раннего ухода после вступления; по умолчанию 7d. |
-| `--by <day\|week>` | группировать даты вступления по календарному дню или неделе с понедельника. Одно из: `day`, `week`. |
+| `--by <day\|week>` | группировать даты вступления по календарным дням или неделям с понедельника. Одно из: `day`, `week`. |
 | `--timezone <zone>` | часовой пояс IANA для когорт вступления. |
-| `--limit <n>` | когорты и доказательства участников, 1–100. |
-
+| `--limit <n>` | когорты и данные по участникам, 1–100. |
 
 ### `max stats tasks`
 
@@ -2296,6 +2292,75 @@ max tasks add <message> [options]
 | Опция | Что делает |
 |---|---|
 | `--type <name>` | тип задачи: question, request, mention или promise. |
+| `--title <text>` | одна строка: действие и его объект — send Alex the API token. |
+| `--description <text>` | подробности в Markdown: кто кому должен, когда считать выполненной, следующий шаг, ключевые слова. |
+| `--due <when>` | когда она должна быть выполнена: время ISO 8601 или 2h, 3d от текущего момента; none очищает. |
+| `--check <when>` | когда посмотреть на неё снова: время ISO 8601 или 2h, 3d от текущего момента; none очищает. |
+
+### `max tasks plan`
+
+задать название, описание, срок и следующую проверку задачи; в мессенджер ничего не уходит
+
+```sh
+max tasks plan <task> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `task` | обязательный | ID или ключ задачи, как его показывает tasks list. |
+
+| Опция | Что делает |
+|---|---|
+| `--title <text>` | одна строка: действие и его объект — send Alex the API token. |
+| `--description <text>` | подробности в Markdown: кто кому должен, когда считать выполненной, следующий шаг, ключевые слова. |
+| `--due <when>` | когда она должна быть выполнена: время ISO 8601 или 2h, 3d от текущего момента; none очищает. |
+| `--check <when>` | когда посмотреть на неё снова: время ISO 8601 или 2h, 3d от текущего момента; none очищает. |
+
+### `max tasks link`
+
+привязать к задаче то, к чему она относится, — сообщения, чаты, людей, документы, ссылки, — чтобы потом прочитать контекст
+
+```sh
+max tasks link <task> [targets] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `task` | обязательный | ID или ключ задачи, как его показывает tasks list. |
+| `targets` | необязательный | локаторы msg:, person:<id>, document:<id>, note:<id> или URL. |
+
+| Опция | Что делает |
+|---|---|
+| `--chat <chat>` | чат, к которому она относится, можно повторять; чат: его ID или часть названия. |
+| `--kind <kind>` | related-to (по умолчанию), evidence — подтверждает, что задача настоящая, — или created-from. |
+
+### `max tasks show`
+
+одна задача: её план и всё, что к ней привязано
+
+```sh
+max tasks show <task>
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `task` | обязательный | ID или ключ задачи, как его показывает tasks list. |
+
+### `max tasks agenda`
+
+что нужно посмотреть сегодня — из локального хранилища и без текста сообщений: просроченные, близкие и требующие проверки задачи, чаты, где ждут вашего ответа, и чаты, где ответа ждёте вы
+
+```sh
+max tasks agenda [options]
+```
+
+| Опция | Что делает |
+|---|---|
+| `--due <span>` | показать задачи со сроком в пределах этого: 30m, 2h, 1d (по умолчанию 1d). |
+| `--unanswered <span>` | показать чаты, где последним написал кто-то другой не меньше этого времени назад (по умолчанию 1d). |
+| `--waiting <span>` | показать чаты, где последним написали вы не меньше этого времени назад (по умолчанию 7d). |
+| `--within <span>` | не показывать чаты, молчащие дольше этого: разговор закончился (по умолчанию 30d). |
+| `--kind <kinds>` | только эти виды чатов через запятую (по умолчанию dialog,group). |
 
 ### `max tasks close`
 
@@ -2541,11 +2606,11 @@ max conversations embed clear [options]
 
 ## `max attachments`
 
-the files of stored messages: their text in the local store, for content: in a search
+файлы сохранённых сообщений: их текст в локальном хранилище, где его находит поиск
 
 ### `max attachments extract`
 
-сохранить текст скачанных файлов — текст, текстовые слои PDF/DOCX, ODT/ODS/XLSX/PPTX/EPUB — в локальном хранилище для поиска content:
+прочитать текст скачанных файлов — текст, текстовые слои PDF/DOCX, ODT/ODS/XLSX/PPTX/EPUB — в локальное хранилище, где их находит поиск
 
 ```sh
 max attachments extract [options]
@@ -2593,12 +2658,11 @@ max attachments show <chat> [message] [options]
 
 | Опция | Что делает |
 |---|---|
-| `--attachment <n>` | позиция файла от 1; обязательна при нескольких файлах. |
-| `--page <n>` | отрисовать одну страницу PDF в PNG, от 1; нужен необязательный unpdf/canvas, без OCR. |
+| `--attachment <n>` | номер файла, начиная с 1; обязателен, если файлов несколько. |
+| `--page <n>` | отрисовать одну страницу PDF в PNG, начиная с 1; необязательные unpdf/canvas, без OCR. |
 | `--offset-bytes <n>` | смещение в байтах от 0. |
-| `--chunk-bytes <n>` | число возвращаемых байтов, 1–1048576 (по умолчанию524288). |
-| `--if-sha256 <hash>` | требовать SHA-256 всего файла из предыдущей порции. |
-
+| `--chunk-bytes <n>` | сколько байт вернуть, 1–1048576 (по умолчанию 524288). |
+| `--if-sha256 <hash>` | требовать SHA-256 всего файла из предыдущего фрагмента. |
 
 ### `max attachments text`
 
@@ -2606,7 +2670,7 @@ the text of one file, as an agent read it
 
 #### `max attachments text set`
 
-keep the text an agent read from a file — a scan, a photo — so content: finds it; nothing is sent
+сохранить текст, который агент прочитал из файла — скана, фотографии, — чтобы его находил поиск; ничего не отправляется
 
 ```sh
 max attachments text set <chat> [message] [options]
@@ -2732,11 +2796,11 @@ max metadata refresh [options]
 
 ## `max search`
 
-поиск по тексту: search all — во всём, что хранит локальное хранилище, или поиск по одному ресурсу
+поиск по тексту: в одном ресурсе, если он известен (mail, messages, notes), или search all — сразу по сообщениям, почте и заметкам
 
 ### `max search all`
 
-поиск во всём, что хранит локальное хранилище, — сообщения мессенджеров, почта и заметки, — лучшие совпадения сначала; начните отсюда, если не знаете, где это было написано
+искать сообщения мессенджера, письма и заметки в локальном хранилище, сообщения — и на сервере мессенджера (--backend; почта и заметки только локально), и расшифровки аккаунта встреч, если --source его называет, — лучшие совпадения первыми; не задачи, людей, записи памяти или проекты. Нужна, когда неизвестно, где что-то было написано; search mail, messages или notes читает один вид со всеми полями
 
 ```sh
 max search all <query> [options]
@@ -2748,12 +2812,15 @@ max search all <query> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--only <resources>` | только эти ресурсы через запятую: messages, mail, notes. |
-| `--meetings [provider:account]` | also search one meeting account; with no value, the one stored account that holds meetings (put it after the query). |
-| `--max-meetings <n\|all>` | how many meetings --meetings looks through, newest first; all looks through every one (default 100). |
+| `--only <resources>` | только эти ресурсы через запятую: messages, mail, notes; meetings, если --source называет аккаунт встреч. |
+| `--source <accounts>` | только эти аккаунты через запятую: provider:account, как его показывает найденное, провайдер, вид или group:<name>; каждый ресурс читает аккаунты своего вида, а встречи — только если аккаунт встреч назван. |
+| `--max-meetings <n\|all>` | сколько встреч аккаунта встреч просмотреть, начиная с новых; all — все (по умолчанию 100). |
 | `--limit <n>` | сколько результатов. |
+| `--offset <n>` | пропустить столько результатов — для следующей страницы. |
 | `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word. |
 | `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
+| `--backend <archive\|server\|both>` | где искать: локальный архив, сервер мессенджера или оба (по умолчанию: both). Discovery читает только архив. |
+| `--server-time <duration>` | прекратить ожидание ответа сервера через это время (по умолчанию: 5s). |
 
 ### `max search messages`
 
@@ -2781,9 +2848,10 @@ max search messages [query] [options]
 | `--backend <archive\|server\|both>` | где искать: локальный архив, сервер мессенджера или оба (по умолчанию: both). Discovery читает только архив. |
 | `--server-time <duration>` | прекратить ожидание ответа сервера через это время (по умолчанию: 5s). |
 | `--chat <chat>` | только этот чат — то же, что chat: в запросе; чат: его ID или часть названия. |
-| `--source <messenger>` | все аккаунты этого мессенджера в архиве; personal, bots или all — то же, что in: в запросе. |
+| `--source <accounts>` | каждый аккаунт этого мессенджера в хранилище; personal, bots или all — то же, что in: в запросе; или список: group:work,telegram:Alice,email:me@example.com. |
 | `--type <text\|voice\|file>` | только сообщения этого типа: только текст, голосовое сообщение или файл. |
 | `--limit <n>` | сколько результатов. |
+| `--offset <n>` | пропустить столько результатов — для следующей страницы. |
 | `--newest` | сначала новые, а не лучшие совпадения. |
 | `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
 | `--context <n>` | messages before and after each hit; 2 in the terminal, 0 otherwise. |
@@ -2795,7 +2863,7 @@ max search messages [query] [options]
 
 ### `max search mail`
 
-поиск в почте, импортированной в локальное хранилище, — её загружает memo mail import
+искать в почте, импортированной в локальное хранилище, — её приносит memo sync --mail
 
 ```sh
 max search mail [query] [options]
@@ -2808,7 +2876,9 @@ max search mail [query] [options]
 | Опция | Что делает |
 |---|---|
 | `--chat <chat>` | только эта почтовая цепочка, по ID или теме. |
+| `--source <accounts>` | только эти почтовые аккаунты через запятую: email:<address>, как его показывает найденное, email, mail или group:<name>; если не задано — все почтовые аккаунты. |
 | `--limit <n>` | сколько результатов. |
+| `--offset <n>` | пропустить столько результатов — для следующей страницы. |
 | `--newest` | сначала новые, а не лучшие совпадения. |
 | `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
 | `--context <n>` | сколько сообщений показать до и после каждого совпадения; 2 в терминале, иначе 0. |
@@ -2829,7 +2899,7 @@ max search notes <query> [options]
 | Опция | Что делает |
 |---|---|
 | `--type <internal\|file>` | только заметки, написанные в memo, или только заметки из папки. |
-| `--folder <id>` | только эта папка с заметками, по её ID; для нескольких повторите. |
+| `--source <accounts>` | только эти аккаунты заметок через запятую: notes:internal для заметок, написанных в memo, notes:<folder id>, как его показывает найденное, notes, documents или group:<name>. |
 | `--tag <tag>` | только заметки с этим тегом. |
 | `--filter <query>` | запрос, которому должно также соответствовать каждое совпадение; на поиск по смыслу он не влияет. |
 | `--limit <n>` | сколько результатов. |
@@ -2863,7 +2933,7 @@ max search conversations <query> [options]
 | `--chat <chat>` | только этот чат: его ID или часть названия. |
 | `--since-time <time>` | only those still going at this ISO 8601 time, or 30m / 2h / 1d ago, or later. |
 | `--filter <query>` | strict Lucene filter: any message in a conversation must match; does not change the meaning query. |
-| `--source <source>` | accounts to search: personal, bots, all, or a provider; defaults to the active account. |
+| `--source <accounts>` | аккаунты для поиска: personal, bots, all, провайдер или список вроде group:work,telegram:Alice,email:me@example.com; по умолчанию активный аккаунт. |
 | `--timezone <zone>` | IANA timezone for filter dates; system timezone by default. |
 | `--limit <n>` | сколько результатов. |
 | `--refresh` | first build and embed, on this machine, the chats in scope that changed or were never built — within --max-chats and --max-chunks. |
@@ -2888,7 +2958,7 @@ max searches create <name> [query] [options]
 | Опция | Что делает |
 |---|---|
 | `--chat <chat>` | только этот чат — то же, что chat: в запросе; чат: его ID или часть названия. |
-| `--source <messenger>` | все аккаунты этого мессенджера в архиве; personal, bots или all — то же, что in: в запросе. |
+| `--source <accounts>` | каждый аккаунт этого мессенджера в хранилище; personal, bots или all — то же, что in: в запросе; или список: group:work,telegram:Alice,email:me@example.com. |
 | `--limit <n>` | сколько результатов. |
 | `--newest` | сначала новые, а не лучшие совпадения. |
 | `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
@@ -3557,6 +3627,94 @@ remove this profile's unit; stop it first
 max server uninstall
 ```
 
+## `max schedule`
+
+запускать команду max или агента позже или по расписанию (systemd, launchd, Планировщик заданий); агент не может отправлять
+
+### `max schedule command`
+
+запускать max <args…> по таймеру — чтение сохраняет прочитанное, так история чата наполняет хранилище
+
+```sh
+max schedule command <name> <args> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `name` | обязательный | строчные буквы, цифры и дефисы. |
+| `args` | обязательный | команда max после имени расписания, например -- messages list <chat> --limit 50. |
+
+| Опция | Что делает |
+|---|---|
+| `--every <duration>` | повторять: 30m, 2h, 1d. |
+| `--at <HH:MM>` | каждый день в это местное время. |
+| `--once <when>` | один запуск: через 30m, 2d или во время ISO; после него расписание удаляется само. |
+
+### `max schedule agent`
+
+запускать агента (claude или codex) с заданием по таймеру; он работает с MAX_READ_ONLY=1, поэтому читает и готовит черновики, но не может отправлять, — ответ сохраняется, и приходит уведомление
+
+```sh
+max schedule agent <name> <harness> <prompt> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `name` | обязательный | строчные буквы, цифры и дефисы. |
+| `harness` | обязательный | какого агента запустить. Одно из: `claude`, `codex`. |
+| `prompt` | обязательный | что делать, например "run the daily follow-up review: max skill show follow-ups". |
+
+| Опция | Что делает |
+|---|---|
+| `--max-cost <usd>` | только claude: остановить запуск, который стоит больше этого, в долларах США. |
+| `--every <duration>` | повторять: 30m, 2h, 1d. |
+| `--at <HH:MM>` | каждый день в это местное время. |
+| `--once <when>` | один запуск: через 30m, 2d или во время ISO; после него расписание удаляется само. |
+
+### `max schedule list`
+
+расписания: когда они запускаются и как прошёл последний запуск
+
+```sh
+max schedule list
+```
+
+### `max schedule run`
+
+выполнить расписание сейчас, как это сделал бы его таймер, и дождаться окончания
+
+```sh
+max schedule run <name>
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `name` | обязательный |  |
+
+### `max schedule remove`
+
+остановить расписание и удалить его таймер; прежние результаты остаются
+
+```sh
+max schedule remove <name>
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `name` | обязательный |  |
+
+### `max schedule exec`
+
+то, что запускает таймер по файлу расписания; чтобы запустить вручную, используйте run
+
+```sh
+max schedule exec <file>
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `file` | обязательный |  |
+
 ## `max watch`
 
 print new messages as they arrive, from a running `max serve`
@@ -3687,7 +3845,7 @@ max runs list [options]
 
 ### `max runs show`
 
-one run: what it was, and one line per operation
+один запуск: что это было, чем закончилось и что пошло не так; -v — все события
 
 ```sh
 max runs show <run-id>
@@ -3745,7 +3903,7 @@ max skill show [name]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `name` | необязательный | one of the skills shipped for a task: link-conversations. |
+| `name` | необязательный | один из навыков для задачи, которые идут в комплекте: follow-ups, link-conversations. |
 
 ### `max skill install`
 

@@ -14,14 +14,14 @@ Terms used below:
 
 | Question | Command |
 | --- | --- |
-| Which messages received the most reactions? | `max stats messages top` |
-| Who answers questions most often? | `max stats contacts top` |
-| Which questions are waiting for answers? | `max stats messages unanswered` |
-| How quickly does a person reply? | `max stats contacts responses` |
-| Did newcomers receive help? | `max stats chats newcomers` |
-| Do newcomers stay? | `max stats chats retention` |
-| Which posts received views but no discussion? | `max stats messages discussion` |
-| How recent are views and reactions? | `max stats messages counters show` |
+| Which messages received the most reactions? | `max personal stats messages top` |
+| Who answers questions most often? | `max personal stats contacts top` |
+| Which questions are waiting for answers? | `max personal stats messages unanswered` |
+| How quickly does a person reply? | `max personal stats contacts responses` |
+| Did newcomers receive help? | `max personal stats chats newcomers` |
+| Do newcomers stay? | `max personal stats chats retention` |
+| Which posts received views but no discussion? | `max personal stats messages discussion` |
+| How recent are views and reactions? | `max personal stats messages counters show` |
 
 The requests, names and results below are fictional examples. Replace the chat name with yours. Tables show how an agent can present its answer; commands with `--json` return data for it.
 
@@ -36,7 +36,7 @@ Find the messages with the most recorded reactions.
 **Command:**
 
 ```sh
-max stats messages top --chat "Поход" --measure reactions --limit 3 --json
+max personal stats messages top --chat "Поход" --measure reactions --limit 3 --json
 ```
 
 **Example agent answer:**
@@ -60,7 +60,7 @@ Compare people by their observed answers to questions.
 **Command:**
 
 ```sh
-max stats contacts top --chat "Поход" --measure answers --limit 3 --json
+max personal stats contacts top --chat "Поход" --measure answers --limit 3 --json
 ```
 
 **Example agent answer:**
@@ -88,7 +88,7 @@ Find older questions without an observed direct answer.
 **Command:**
 
 ```sh
-max stats messages unanswered --chat "Поход" --older-than 24h --json
+max personal stats messages unanswered --chat "Поход" --older-than 24h --json
 ```
 
 **Example agent answer:**
@@ -114,7 +114,7 @@ See the number of answers and waiting times for a selected person.
 **Command:**
 
 ```sh
-max stats contacts responses --chat "Поход" --answerer "Алекс" --json
+max personal stats contacts responses --chat "Поход" --answerer "Алекс" --json
 ```
 
 **Example agent answer:**
@@ -140,7 +140,7 @@ Check whether people who recently joined received answers to their questions.
 **Command:**
 
 ```sh
-max stats chats newcomers "Поход" --within 7d --json
+max personal stats chats newcomers "Поход" --within 7d --json
 ```
 
 **Example agent answer:**
@@ -169,7 +169,7 @@ Compare observed membership one day, one week and one month after joining.
 **Command:**
 
 ```sh
-max stats chats retention "Поход" --checkpoints 1d,7d,30d --within 7d --timezone UTC --json
+max personal stats chats retention "Поход" --checkpoints 1d,7d,30d --within 7d --timezone UTC --json
 ```
 
 **Example agent answer:**
@@ -195,7 +195,7 @@ Find viewed posts with little recorded discussion.
 **Command:**
 
 ```sh
-max stats messages discussion --chat "Новости" --min-views 100 --max-replies 0 --json
+max personal stats messages discussion --chat "Новости" --min-views 100 --max-replies 0 --json
 ```
 
 **Example agent answer:**
@@ -221,7 +221,7 @@ Check when views and reactions were observed separately.
 **Command:**
 
 ```sh
-max stats messages counters show --chat "Поход" --counters views,reactions --max-age 24h --limit 20 --json
+max personal stats messages counters show --chat "Поход" --counters views,reactions --max-age 24h --limit 20 --json
 ```
 
 **Example agent answer:**
@@ -238,7 +238,7 @@ max stats messages counters show --chat "Поход" --counters views,reactions 
 Before fetching new counters, ask for the exact messages and limits.
 
 ```sh
-max stats messages counters refresh --chat "Поход" --counters views,reactions --max-messages 20 --sync-time 30s --dry-run --json
+max personal stats messages counters refresh --chat "Поход" --counters views,reactions --max-messages 20 --sync-time 30s --dry-run --json
 ```
 
 > **Plan:** at most 20 messages, up to 30 seconds. Views and reactions are supported.

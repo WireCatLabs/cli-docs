@@ -18,20 +18,20 @@ Primero, las palabras que aparecen aquí:
 - **Sesión**: acceso de `max` a tu cuenta MAX en este ordenador. Incluye un token y una identidad de dispositivo; aparece como otro dispositivo en la aplicación.
 - **Token**: cadena que MAX entrega al iniciar sesión. Permite leer tus chats: trátala como una contraseña. `max` la guarda en el llavero.
 - **Identidad de dispositivo**: cómo se identifica `max` ante MAX; mantiene el mismo dispositivo entre comandos. Se guarda junto al estado.
-- **Llavero**: almacén de contraseñas del sistema operativo.
-- **Perfil**: nombre de una sesión local con su token, estado y ajustes. Sin nombre, `max` usa `default`. Necesitas otro perfil para otra cuenta o restricciones distintas ([perfiles](#профили)).
+- **Llavero**: almacén de contraseñas del sistema operativo: Keychain en macOS, Secret Service (GNOME Keyring, KWallet) en Linux, Administrador de credenciales en Windows.
+- **Perfil**: nombre de una sesión local con su token, estado y ajustes. El nombre se indica en cada comando (`max personal …`), con `MAX_PROFILE` o con `defaultProfile`; `max` nunca elige un perfil por sí mismo. Necesitas otro perfil para otra cuenta o restricciones distintas ([perfiles](#профили)).
 
-No confunda `max session` y `max account sessions`. `max session` — entrada del propio `max`; `max account sessions` enumera todos los demás dispositivos y aplicaciones que hayan iniciado sesión en su cuenta.
+No confunda `max personal session` y `max personal account sessions`. `max personal session` — entrada del propio `max`; `max personal account sessions` enumera todos los demás dispositivos y aplicaciones que hayan iniciado sesión en su cuenta.
 
 ## Primer inicio
 
-`max setup --agent codex` comprueba los directorios locales, guía el acceso con QR, comprueba la cuenta y hasta cinco chats e instala el skill del agente. Opciones: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Sin opción pregunta en el terminal; en modo máquina omite el skill. `max skill show` se puede leer antes de iniciar sesión.
+`max personal setup --agent codex` comprueba los directorios locales, guía el acceso con QR, comprueba la cuenta y hasta cinco chats e instala el skill del agente. Opciones: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Sin opción pregunta en el terminal; en modo máquina omite el skill. `max skill show` se puede leer antes de iniciar sesión.
 
-Tarda unos cinco minutos. La historia se descarga por separado luego de seleccionar el chat y el volumen; La instalación no inicia el servicio en segundo plano. Al reiniciar se comprueba la sesión existente. `--method token|qr|qr-chrome|sms` selecciona el nuevo método de entrada; de forma predeterminada, la configuración toma `qr`. QR y navegador requieren una persona en la terminal local. No pase el token como argumento. Si se interrumpe la configuración, repita la configuración. Si el token ha caducado, ejecute explícitamente `max session start qr`; Si el llavero es inaccesible, primero corrija el entorno de acuerdo con las indicaciones.
+Tarda unos cinco minutos. La historia se descarga por separado luego de seleccionar el chat y el volumen; La instalación no inicia el servicio en segundo plano. Al reiniciar se comprueba la sesión existente. `--method token|qr|qr-chrome|sms` selecciona el nuevo método de entrada; de forma predeterminada, la configuración toma `qr`. QR y navegador requieren una persona en la terminal local. No pase el token como argumento. Si se interrumpe la configuración, repita la configuración. Si el token ha caducado, ejecute explícitamente `max personal session start qr`; Si el llavero es inaccesible, primero corrija el entorno de acuerdo con las indicaciones.
 
 ## Entrada
 
-`max session start <способ>` permite iniciar sesión de cuatro maneras. En todos los casos, el token solo se guarda en el llavero después de que MAX lo acepte.
+`max personal session start <способ>` permite iniciar sesión de cuatro maneras. En todos los casos, el token solo se guarda en el llavero después de que MAX lo acepte.
 
 | Método | Qué ocurre | Requisitos |
 |---|---|---|
@@ -41,7 +41,7 @@ Tarda unos cinco minutos. La historia se descarga por separado luego de seleccio
 | `sms` | Abre la misma ventana de web.max.ru; elige acceso por teléfono en la página | Chrome, Chromium, Edge o Brave |
 
 ```sh
-max session start qr
+max personal session start qr
 ```
 
 **`qr-chrome` y `sms` son los métodos más conservadores.** El acceso lo realiza web.max.ru en un navegador real: MAX ve su propio cliente web. Se utiliza un perfil temporal separado del tuyo. Cuando termina el acceso, se cierra la ventana y se elimina el perfil, también al pulsar Ctrl-C. Cerrar la ventana no termina la sesión: es como cerrar una pestaña. El navegador se detecta automáticamente; puedes elegir otro con `MAX_BROWSER`. Los navegadores instalados por snap no sirven porque tienen su propio directorio `/tmp`.
@@ -56,32 +56,32 @@ Los tres métodos requieren una persona ante el terminal; sin ella, fallan con c
 
 ### Introducir el token manualmente
 
-`max session start` sin método **importa** un token ya emitido por el cliente oficial, como `web.max.ru` u otro cliente, y lo guarda en el llavero. También funciona si el acceso encuentra un CAPTCHA o un segundo factor poco habitual.
+`max personal session start` sin método **importa** un token ya emitido por el cliente oficial, como `web.max.ru` u otro cliente, y lo guarda en el llavero. También funciona si el acceso encuentra un CAPTCHA o un segundo factor poco habitual.
 
 ```sh
-max session start
+max personal session start
 MAX token: ▏          # ввод не отображается
 ```
 
 **El token no se pasa como argumento.** Cualquier proceso del comando puede ver los argumentos con `ps`, y quedan en el historial de la shell. Por eso se solicita sin mostrar lo que escribes o, sin terminal, se lee desde una tubería:
 
 ```sh
-pass show max/token | max session start
+pass show max/token | max personal session start
 ```
 
-Para CI y ejecuciones puntuales hay una variable con **prioridad sobre el llavero**: si defines `MAX_TOKEN`, se utiliza ese valor y no se escribe en el llavero. Con ella no se inicia `max serve` en segundo plano: el propio comando se conecta a MAX.
+Para CI y ejecuciones puntuales hay una variable con **prioridad sobre el llavero**: si defines `MAX_TOKEN`, se utiliza ese valor y no se escribe en el llavero. Con ella no se inicia `max personal serve` en segundo plano: el propio comando se conecta a MAX.
 
 ```sh
-MAX_TOKEN="$(cat /path/to/token)" max chats list --json
+MAX_TOKEN="$(cat /path/to/token)" max personal chats list --json
 ```
 
 ## Verificar y salir
 
 ```sh
-max account show             # под кем выполнен вход: id, имя, последние четыре цифры телефона
+max personal account show             # под кем выполнен вход: id, имя, последние четыре цифры телефона
 max account list             # все профили на этом компьютере и аккаунт каждого
-max account sessions list    # все устройства и приложения, вошедшие в аккаунт; ничего не завершает
-max session end              # выйти из MAX и забыть токен на этой машине
+max personal account sessions list    # все устройства и приложения, вошедшие в аккаунт; ничего не завершает
+max personal session end              # выйти из MAX и забыть токен на этой машине
 ```
 
 `session end` primero termina la sesión en el servidor de MAX y después borra el token de este ordenador. La respuesta indica el resultado:
@@ -96,23 +96,29 @@ Si MAX no responde, se conserva el token para que puedas repetir el comando. Un 
 
 ## ¿Cuánto dura una sesión?
 
-Su duración es desconocida: MAX no la comunica. Sigue funcionando después de cerrar la pestaña de web.max.ru. Cuando MAX deje de aceptarlo, vuelve a iniciar sesión con `max session start`.
+Su duración es desconocida: MAX no la comunica. Sigue funcionando después de cerrar la pestaña de web.max.ru. Cuando MAX deje de aceptarlo, vuelve a iniciar sesión con `max personal session start`.
 
-`max` no limita el número de accesos, pero los cuenta por perfil; `max doctor` muestra el contador.
+`max` no limita el número de accesos, pero los cuenta por perfil; `max personal doctor` muestra el contador.
 
 ## Perfiles
 
 El perfil almacena su token y su estado; Se comparte el archivo local de los mensajes, con los datos de la cuenta. El perfil se llama **primera palabra**, no una bandera:
 
 ```sh
-max chats list              # профиль default
 max personal chats list     # профиль personal
+max work chats list         # профиль work
 export MAX_PROFILE=personal # или на всю сессию оболочки
 ```
 
-Regla: **La primera palabra es perfil a menos que sea la misma que el nombre del comando.** Por lo tanto, un perfil no puede llamarse `chats`, `runs` o `session`; `max session start` y `max setup` rechazan dicho nombre. De lo contrario, `max chats` significaría silenciosamente "perfil de chat sin comando". El nombre consta de letras latinas, números, puntos, guiones y guiones bajos y comienza con una letra o un número.
+Regla: **La primera palabra es perfil a menos que sea la misma que el nombre del comando.** Por lo tanto, un perfil no puede llamarse `chats`, `runs` o `session`; `max personal session start` y `max personal setup` rechazan dicho nombre. De lo contrario, `max personal chats` significaría silenciosamente "perfil de chat sin comando". El nombre consta de letras latinas, números, puntos, guiones y guiones bajos y comienza con una letra o un número.
 
-Ordene, la primera coincidencia gana: primera palabra, `MAX_PROFILE`, `defaultProfile` en el archivo de configuración, luego `default`.
+Orden, gana la primera coincidencia: primera palabra, `MAX_PROFILE`, `defaultProfile` en el archivo de configuración. Si no hay ninguno, un comando que necesita una cuenta termina con el código `2` y enumera los perfiles de este ordenador, aunque solo haya uno:
+
+```text
+✗ name a profile: `max <profile> …` — profiles here: personal (or set MAX_PROFILE)
+```
+
+En un ordenador sin perfiles, el mensaje indica cómo crear el primero: `max personal setup`. Sin perfil solo funcionan los comandos que no necesitan una cuenta: `--help`, `--version`, `commands`, `skill show`, `account list`, `config show`.
 
 Si la primera palabra no es un comando y tampoco aparece otro después, el programa explica lo ocurrido en lugar de limitarse a mostrar la ayuda:
 

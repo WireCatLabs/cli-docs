@@ -31,10 +31,10 @@ These settings are changed most often. The [configuration reference](./configura
 | `senderColors` | Different colour for each message author | `false` |
 | `timeoutMs` | Milliseconds to wait for **one** MAX response; use `--timeout` for the whole command | Transport-dependent |
 | `catchUpMarksRead` | `inbox` and `review` mark displayed chats read; the other person can see this | `false` |
-| `serve` | Start background `max serve` when a command needs MAX ([one shared login](./limits.md#один-вход-на-всё)) | `true` |
+| `serve` | Start background `max personal serve` when a command needs MAX ([one shared login](./limits.md#один-вход-на-всё)) | `true` |
 | `transcribeModel` | Speech-recognition model for voice messages | `gigaam-v3` |
 | `updateCheck` | Report new `max` versions once a day | `true` |
-| `defaultProfile` | Profile used when none is named | `default` |
+| `defaultProfile` | Profile used when none is named | none: without a name the command lists the profiles |
 
 There is no place for secrets in this file: no token, phone number or chat id. Tokens use the system keyring or, if unavailable, a file only you can read ([token storage](./security.md#где-живёт-токен)).
 
@@ -54,7 +54,7 @@ The first command reading settings creates an initial file. Here it is with one 
 - `defaults` applies to all profiles.
 - `profiles.work` applies only to `work` and overrides `defaults`.
 
-Thus `max work chats list` shows 50 rows, while `max chats list` shows 20. Add `--limit 5` for five rows in one command. Remove the profile's `limit` to use `defaults` again.
+Thus `max work chats list` shows 50 rows, while `max personal chats list` shows 20. Add `--limit 5` for five rows in one command. Remove the profile's `limit` to use `defaults` again.
 
 <details> <summary>Full example with all sections</summary>
 
@@ -97,11 +97,12 @@ Thus `max work chats list` shows 50 rows, while `max chats list` shows 20. Add `
 
 What each part does:
 
-- `defaultProfile`: `max chats list` without a profile name uses `personal`.
+- `defaultProfile`: `max chats list` without a profile name uses `personal`. Without this setting and
+  without `MAX_PROFILE`, such a command stops and lists the profiles.
 - `defaults`: every profile receives these values unless it overrides them. `updateCheck`, `skillHint` and `transcribeModel` are allowed only here because the program and speech-recognition downloads are shared by all profiles.
 - `profiles.personal`: more rows, colours and recording every run, only for `personal`.
 - `profiles.work`: reading and sending messages are allowed; other message changes are denied. At most 10 sends per hour. No background server starts: each command connects to MAX itself.
-- `personal.defaults`: applies only to personal-account commands, never `max … bot`. Here `store fetch` also prepares downloaded chats for search.
+- `personal.defaults`: applies only to personal-account commands, never `max … bot`. Here `messages sync` also prepares downloaded chats for search.
 - `bot.defaults`: applies only to bot commands (`max shop bot …`). Bots can read and send, and do nothing else.
 - `bot.profiles.shop`: `shop` can send 200 messages per hour and cannot read other bots' saved data on this computer. `readOtherBots` is allowed only in `bot`; `serve`, `senderColors` and `catchUpMarksRead` are not accepted there.
 
@@ -119,7 +120,7 @@ What each part does:
 
 ## Three ways to set a value
 
-- **File:** the value persists for future commands. `max config set limit 50` saves it.
+- **File:** the value persists for future commands. `max personal config set limit 50` saves it.
 - **Environment variable:** applies to one terminal or agent process. For example, `MAX_PROFILE` selects a profile and `MAX_TIMEOUT` limits command duration. Not every setting has a variable.
 - **Option:** `--limit 5` affects only one command.
 
@@ -132,10 +133,10 @@ Options override environment variables, followed by the profile's file value, fi
 Edit the file with any text editor or let `max` do it. `config set` validates before writing, so it never saves a file the next command would reject.
 
 ```sh
-max config set limit 50                 # профилю, с которым вы работаете
+max personal config set limit 50                 # профилю, с которым вы работаете
 max work config set limit 50            # профилю work
 max config set sendsPerHour 10 --defaults   # всем профилям
-max config unset limit                  # вернуть значение по умолчанию
+max personal config unset limit                  # вернуть значение по умолчанию
 max config show                         # проверить, что действует и откуда взялось каждое значение
 ```
 

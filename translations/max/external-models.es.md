@@ -32,9 +32,9 @@ La búsqueda por significado se puede configurar por separado: `embeddingProvide
 Elige el identificador exacto de un modelo que admita imágenes. El ejemplo siguiente usa `gpt-4o-mini`; cambia el valor para otro modelo. Primero guarda la clave mediante entrada interactiva oculta y después configura la tarea:
 
 ```sh
-max models text key set openai
-max config set models.ocr.provider openai
-max config set models.ocr.model gpt-4o-mini
+max personal models text key set openai
+max personal config set models.ocr.provider openai
+max personal config set models.ocr.model gpt-4o-mini
 max config show
 ```
 
@@ -43,7 +43,7 @@ La clave no se pasa como argumento del comando ni se guarda en el campo `models`
 Si `baseUrl` no está configurado ni se hereda de `models.default`, se usa el endpoint estándar de OpenAI. Para probar con un lote pequeño:
 
 ```sh
-max attachments extract --chat "Учебная группа" --ocr --concurrency 1 --limit 1 --json
+max personal attachments extract --chat "Учебная группа" --ocr --concurrency 1 --limit 1 --json
 ```
 
 `--limit 1` limita archivos, no llamadas API. Un PDF con varias páginas escaneadas puede necesitar una llamada por página. Un PDF de texto o DOCX puede procesarse localmente sin llamar al modelo. El número de llamadas no equivale al de archivos.
@@ -53,10 +53,10 @@ max attachments extract --chat "Учебная группа" --ocr --concurrency
 Elige el identificador exacto de un modelo de visión al que tengas acceso; `your-vision-model` es un marcador para tu valor, no un nombre de modelo real.
 
 ```sh
-max models text key set anthropic
-max config set models.ocr.provider anthropic
-max config set models.ocr.model your-vision-model
-max config unset models.ocr.baseUrl
+max personal models text key set anthropic
+max personal config set models.ocr.provider anthropic
+max personal config set models.ocr.model your-vision-model
+max personal config unset models.ocr.baseUrl
 ```
 
 El último comando elimina cualquier endpoint sobrescrito anteriormente. Si la URL tampoco se hereda de `models.default`, se usa el endpoint estándar de Anthropic.
@@ -66,10 +66,10 @@ El último comando elimina cualquier endpoint sobrescrito anteriormente. Si la U
 Un endpoint compatible con OpenAI usa el adaptador `openai`, aunque el servidor pertenezca a otro proveedor. Debe admitir la API correspondiente e imágenes, no solo peticiones de texto. Configura una URL sin clave, parámetros de consulta ni fragmento:
 
 ```sh
-max config set models.ocr.provider openai
-max config set models.ocr.model your-vision-model
-max config set models.ocr.baseUrl https://gateway.example.org/v1
-max models text key set gateway.example.org
+max personal config set models.ocr.provider openai
+max personal config set models.ocr.model your-vision-model
+max personal config set models.ocr.baseUrl https://gateway.example.org/v1
+max personal models text key set gateway.example.org
 ```
 
 Para un punto final no estándar, el nombre de la clave es su host, incluido el puerto si se especifica en la URL. El campo `baseUrl` en sí no es una clave. Si el servidor acepta texto, esto no significa que lea imágenes; verifique esto en la documentación de su servidor.
@@ -83,7 +83,7 @@ Los comandos `config set` anteriores cambian el perfil seleccionado. Pon su nomb
 Cada campo se toma primero de su variable de entorno, después de los ajustes del perfil y los valores comunes. Los campos sin configurar pueden heredarse de `models.default`. Por ejemplo, para una ejecución en un terminal POSIX con una clave ya guardada:
 
 ```sh
-MAX_MODELS_OCR_PROVIDER=openai MAX_MODELS_OCR_MODEL=gpt-4o-mini max attachments extract --chat "Учебная группа" --ocr --limit 1 --json
+MAX_MODELS_OCR_PROVIDER=openai MAX_MODELS_OCR_MODEL=gpt-4o-mini max personal attachments extract --chat "Учебная группа" --ocr --limit 1 --json
 ```
 
 En PowerShell, configura las variables correspondientes `$env:MAX_MODELS_OCR_PROVIDER` y `$env:MAX_MODELS_OCR_MODEL`. `MAX_MODELS_OCR_BASE_URL` sobrescribe el endpoint. Para claves se admiten `MAX_OPENAI_API_KEY`/`OPENAI_API_KEY` y las variables correspondientes de Anthropic; no pongas sus valores en ejemplos ni en el historial de comandos.

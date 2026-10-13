@@ -24,7 +24,7 @@ A short example file and a complete one, with all sections and an explanation of
 Within the file, **the most specific entry wins**. For a personal-account command using `work`: `personal.profiles.work` → `profiles.work` → `personal.defaults` → `defaults`. For `max work bot …`, the same order applies with `bot` replacing `personal`. A profile-specific entry takes precedence over a section-wide entry.
 
 ```sh
-max chats list --limit 5          # флаг: 5
+max personal chats list --limit 5          # флаг: 5
 MAX_PROFILE=personal max chats list   # переменная выбирает профиль
 # "limit": 50 у профиля в файле — когда флага нет
 # "limit": 30 в "defaults" — когда и у профиля нет
@@ -49,7 +49,7 @@ max config show --json     # то же одним объектом
 
 The command prints the selected profile **and where it came from**, the path to the settings file and whether it exists, the profiles and effective values of all settings with the source of each.
 
-Each setting shows its source: `flag`, `default` or `config file:` with its key, such as `config file: bot.profiles.test`. The profile source is `first word`, `MAX_PROFILE`, `MAX_PROFILE_LOCK`, `config file: defaultProfile` or `default`.
+Each setting shows its source: `flag`, `default` or `config file:` with its key, such as `config file: bot.profiles.test`. The profile source is `first word`, `MAX_PROFILE`, `MAX_PROFILE_LOCK`, `config file: defaultProfile` or `none named`: no profile was named, and `profile` is then `null`.
 
 With `--json`, the response also includes `storeSettings`: shared archive settings (`searchStemmers.*`) and their origin, `store` or `default`.
 
@@ -57,13 +57,13 @@ With `--json`, the response also includes `storeSettings`: shared archive settin
 
 ⚠ **The profile list includes all profiles on this machine:** those named in configuration, logged in as personal accounts, or configured as bots. Each is identified as personal, bot or both.
 
-⚠ **This is not a health check.** The command reads files: does not open the cache, does not touch the keyring and does not contact MAX. `max doctor` checks whether the session is alive ([first step in case of problems](./troubleshooting.md)).
+⚠ **This is not a health check.** The command reads files: does not open the cache, does not touch the keyring and does not contact MAX. `max personal doctor` checks whether the session is alive ([first step in case of problems](./troubleshooting.md)).
 
 Output contains no secrets: the configuration file has no fields in which to store them.
 
 ## Configuration file
 
-`~/.config/max-cli/config.json` on Linux; Paths on other systems are in the [Settings Guide](./configuration.md#где-лежит-файл). The first command reading the settings creates it from `limit`, `keepRunsForDays`, `sendsPerHour`, `updateCheck` and `skillHint` into `defaults`. The file is created with the rights `0600`, and `max config set` writes it with the rights `0644`: there are no secrets in it.
+`~/.config/max-cli/config.json` on Linux; Paths on other systems are in the [Settings Guide](./configuration.md#где-лежит-файл). The first command reading the settings creates it from `limit`, `keepRunsForDays`, `sendsPerHour`, `updateCheck` and `skillHint` into `defaults`. The file is created with the rights `0600`, and `max personal config set` writes it with the rights `0644`: there are no secrets in it.
 
 ```json
 {
@@ -90,20 +90,20 @@ Output contains no secrets: the configuration file has no fields in which to sto
 
 | Field | Purpose | Override for one run | Default |
 | --- | --- | --- | --- |
-| `defaultProfile` | Profile when no first-word profile or `MAX_PROFILE` is supplied | First word (`max work …`), `MAX_PROFILE` | `default` |
+| `defaultProfile` | Profile when no first-word profile or `MAX_PROFILE` is supplied | First word (`max work …`), `MAX_PROFILE` | none: without a name the command lists the profiles |
 | `limit` | Rows shown without `--limit` | `--limit` | `20` |
 | `timeoutMs` | Milliseconds to wait for **one request** | None (`--timeout` is different; see below) | Transport-dependent |
 | `color` | Terminal colours; otherwise based on terminal detection | None; without the field, `NO_COLOR` disables colour | Terminal-dependent |
-| `senderColors` | Separate author colours in `max messages`; `вы` is always blue. Requires `color`. Personal accounts only | None | `false` |
-| `catchUpMarksRead` | `max inbox`/`max review` mark displayed chats read through the last shown message. Other people see the receipt. Personal accounts only | `--mark-read`, `--no-mark-read` | `false` |
-| `searchCatchUp` | After `store fetch` or gap repair, prepare this chat's graph and installed local vectors within limits; no automatic downloads or remote calls. Personal accounts only | `--catch-up`, `--no-catch-up` | `false` |
+| `senderColors` | Separate author colours in `max personal messages`; `вы` is always blue. Requires `color`. Personal accounts only | None | `false` |
+| `catchUpMarksRead` | `max personal inbox`/`max personal review` mark displayed chats read through the last shown message. Other people see the receipt. Personal accounts only | `--mark-read`, `--no-mark-read` | `false` |
+| `searchCatchUp` | After `messages sync` or gap repair, prepare this chat's graph and installed local vectors within limits; no automatic downloads or remote calls. Personal accounts only | `--catch-up`, `--no-catch-up` | `false` |
 | `record` | Save every run as with `--record` ([diagnostics](./diagnostics.md)) | `--record`, `--no-record` | `false` |
 | `keepRunsForDays` | Run-record retention in days | None | `30` |
 | `permissions` | `deny`, `readonly`, `ask`, `allow` by resource/command; more specific keys win ([below](#права-доступа)) | None; `--yes` and `--allow-dangerous` answer `ask`, never override `deny` | `allow` except deletion, ending other sessions and some irreversible actions use `ask`; auto-reply `replies.send` uses `deny` |
 | `sendsPerHour` | Hourly sends including forwards, edits, notifying pins, deletions, member additions and accepted join requests; excess returns code `8`. Bot limits must be set in `bot` ([send protection](./security.md#защита-от-отправки-не-туда)) | None | `30`; no default bot limit |
 | `requestsPerMinute` | Shared profile request rate after the initial 10-request burst; `0` disables pacing ([limits](./limits.md)) | `MAX_REQUESTS_PER_MINUTE` | `20` |
-| `serve` | Start `max serve` when needed and absent. Disabled with `MAX_TOKEN`. Personal accounts only | `--serve`, `--no-serve` | `true` |
-| `transcribeModel` | Speech recognition for `max messages transcribe`; **only in `defaults`** | `--model` with `messages transcribe` or `--transcribe` | `gigaam-v3` |
+| `serve` | Start `max personal serve` when needed and absent. Disabled with `MAX_TOKEN`. Personal accounts only | `--serve`, `--no-serve` | `true` |
+| `transcribeModel` | Speech recognition for `max personal messages transcribe`; **only in `defaults`** | `--model` with `messages transcribe` or `--transcribe` | `gigaam-v3` |
 | `readOtherBots` | Permit requested `--all-bots`/`--bots` reads: `false`, `true` for all, or bot-profile names. **Only in `bot`** ([bots](./bot.md)) | None; flags request access, the setting allows it | `false` |
 | `updateCheck` | Check npm and show update notices once daily. **Only in `defaults`**: version is shared across profiles | Disabled by `MAX_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER`, `CI` | `true` |
 | `skillHint` | Daily stderr notice for a missing/outdated `max` skill with `max skill install` guidance. Detects agents through `AI_AGENT` or `CLAUDECODE`. **Only in `defaults`** | None | `true` |
@@ -124,7 +124,7 @@ Their formats deliberately differ: `timeoutMs` is a number of milliseconds in th
 
 There is no file setting for `--timeout`: a command budget belongs to a specific run, rather than a lasting preference.
 
-**`--page` and `--all` deliberately have no file settings.** A saved page number is useful once, then disrupts later runs. The same applies to `--order` for `max contacts list`: `contactOrder` would duplicate the same option. `--limit` has a setting because how much to show is a lasting preference.
+**`--page` and `--all` deliberately have no file settings.** A saved page number is useful once, then disrupts later runs. The same applies to `--order` for `max personal contacts list`: `contactOrder` would duplicate the same option. `--limit` has a setting because how much to show is a lasting preference.
 
 ## Access permissions
 
@@ -159,9 +159,9 @@ This works both ways: `messages: allow` on a profile also overrides `messages.de
 **By default, everything is allowed except for a few changes that are difficult to undo.** Asking: `messages.delete`, `bot.messages.delete`, `chats.delete`, `chats.clear`, `topics.enable`, `topics.delete`, and `account.sessions.end`. Automatic replies are not sent until you allow: `replies.send` - `deny`.
 
 ```sh
-max config set permissions.messages.delete allow     # удалять без вопроса
-max config set permissions.messages.send ask         # спрашивать перед каждой отправкой
-max config unset permissions.messages.delete         # вернуть значение по умолчанию
+max personal config set permissions.messages.delete allow     # удалять без вопроса
+max personal config set permissions.messages.send ask         # спрашивать перед каждой отправкой
+max personal config unset permissions.messages.delete         # вернуть значение по умолчанию
 ```
 
 ### Question before change
@@ -190,7 +190,7 @@ Migration preserves effective permissions, MAX settings and moderation checkpoin
 ## Changing settings without opening the file
 
 ```sh
-max config set limit 50                 # профилю по умолчанию
+max personal config set limit 50        # профилю personal
 max work config set record true         # профилю work
 max config set keepRunsForDays 7 --defaults   # всем профилям сразу
 max work config unset limit             # убрать; снова решает defaults или встроенное
@@ -200,11 +200,11 @@ max config set --personal --defaults limit 30 # всем личным аккау
 max config set defaultProfile work      # какой профиль без первого слова
 ```
 
-Values are checked with the same schema used for reading, **before writing**: `max config set limit 0` is refused and the file stays unchanged. `serve`, `senderColors`, `catchUpMarksRead`, `searchCatchUp` and `mcpTools` are not accepted with `--bot`: bots have no server, sender colors or unread state, and legacy `mcpTools` applies only to personal accounts.
+Values are checked with the same schema used for reading, **before writing**: `max personal config set limit 0` is refused and the file stays unchanged. `serve`, `senderColors`, `catchUpMarksRead`, `searchCatchUp` and `mcpTools` are not accepted with `--bot`: bots have no server, sender colors or unread state, and legacy `mcpTools` applies only to personal accounts.
 
 ### Search languages
 
-`searchStemmers.cyrillic` (`russian` or `none`) and `searchStemmers.latin` (`english`, `spanish`, both separated by commas - this is the default - or `none`) are stored not in the settings file, but in the general message archive: they are the same for all profiles and for both messengers. Therefore, `--defaults`, `--personal` and `--bot` are not accepted with them, and they cannot be changed under `MAX_PROFILE_LOCK`. `config unset` returns the built-in value. After the change, perform `max store reindex` - see [archive maintenance](./archive.md#обслуживание-архива).
+`searchStemmers.cyrillic` (`russian` or `none`) and `searchStemmers.latin` (`english`, `spanish`, both separated by commas - this is the default - or `none`) are stored not in the settings file, but in the general message archive: they are the same for all profiles and for both messengers. Therefore, `--defaults`, `--personal` and `--bot` are not accepted with them, and they cannot be changed under `MAX_PROFILE_LOCK`. `config unset` returns the built-in value. After the change, perform `max personal store reindex` - see [archive maintenance](./archive.md#обслуживание-архива).
 
 ## Typos are errors, not ignored settings
 
@@ -230,11 +230,12 @@ A missing file is not an error: it means the program has not been configured.
 | `MAX_TIMEOUT` | restriction on the entire command, for the entire shell session; same as `--timeout` |
 | `MAX_REQUESTS_PER_MINUTE` | same as `requestsPerMinute`, and stronger than file |
 | `MAX_TOKEN` | token directly, bypassing the keyring - for CI and one-time run |
-| `MAX_BOT_TOKEN` | bot token for `max bot`, bypassing the keyring |
+| `MAX_BOT_TOKEN` | bot token for `max sales bot`, bypassing the keyring |
 | `MAX_CONFIG_DIR` | where are `config.json` and, in the absence of a keyring, a file with a token |
 | `MAX_STATE_DIR` | where are the status of the profiles and the catalog `runs/` |
-| `MAX_CACHE_DIR` | only the old cache: `max doctor` looks for the remaining file there. For compatibility, it still changes the entry in the keyring; for a shared copy use `MESSAGING_STORE` |
+| `MAX_CACHE_DIR` | only the old cache: `max personal doctor` looks for the remaining file there. For compatibility, it still changes the entry in the keyring; for a shared copy use `MESSAGING_STORE` |
 | `MESSAGING_STORE` | file for shared local copy of chats, messages and transcripts |
+| `WIRECAT_STATE_DIR` | the WireCat folder shared by all CLIs: the local archive and speech models |
 | `NO_COLOR` | turns off the color, as in any other program |
 | `MAX_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER` | don't ask npm about a new version; `CI` works the same way |
 | `MAX_EMBEDDING_*`, `MAX_ANALYSIS_*`, `MAX_MODELS_*` | model settings ([below](#переменные-для-настроек-моделей)) |
@@ -252,8 +253,8 @@ export MAX_CONFIG_DIR=/tmp/max-try/config
 export MAX_STATE_DIR=/tmp/max-try/state
 export MESSAGING_STORE=/tmp/max-try/wirecat.db
 
-max setup            # этот токен не виден обычной установке
-max chats list
+max personal setup            # этот токен не виден обычной установке
+max personal chats list
 ```
 
 > ⚠ **The regular installation cannot see this isolated session.** A token saved with directory variables in one terminal is invisible in another without those variables, resulting in “no session”.
@@ -274,7 +275,7 @@ The "profile" area includes `defaults`, `profiles.<имя>`, `personal.defaults`
 | `mcpTools` | array `contacts`, `polls`, `groups`, `profile`; old format | personal account |
 | `readOtherBots` | boolean or array of profile names | only `bot` |
 | `updateCheck`, `skillHint` | boolean | only `defaults` |
-| `transcribeModel` | string id from `max models audio list` | only `defaults` |
+| `transcribeModel` | string id from `max personal models audio list` | only `defaults` |
 | `embeddingProvider` | `local` or `openai` | profile |
 | `embeddingModel`, `analysisModel` | non-empty string, no more than 200 characters | profile |
 | `embeddingBaseUrl`, `analysisBaseUrl` | HTTP(S) URL without credentials, query and fragment | profile |

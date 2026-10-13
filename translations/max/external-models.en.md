@@ -33,9 +33,9 @@ Choose the exact ID of an image-capable model. The example below uses `gpt-4o-mi
 
 
 ```sh
-max models text key set openai
-max config set models.ocr.provider openai
-max config set models.ocr.model gpt-4o-mini
+max personal models text key set openai
+max personal config set models.ocr.provider openai
+max personal config set models.ocr.model gpt-4o-mini
 max config show
 ```
 
@@ -46,7 +46,7 @@ If `baseUrl` is neither set nor inherited from `models.default`, the standard Op
 
 
 ```sh
-max attachments extract --chat "Учебная группа" --ocr --concurrency 1 --limit 1 --json
+max personal attachments extract --chat "Учебная группа" --ocr --concurrency 1 --limit 1 --json
 ```
 
 `--limit 1` limits files, not API calls. A PDF with several scanned pages may require one call per page. A text PDF or DOCX may be processed locally without calling a model. The call count is not the file count.
@@ -58,10 +58,10 @@ Choose the exact ID of a vision model available to you; `your-vision-model` belo
 
 
 ```sh
-max models text key set anthropic
-max config set models.ocr.provider anthropic
-max config set models.ocr.model your-vision-model
-max config unset models.ocr.baseUrl
+max personal models text key set anthropic
+max personal config set models.ocr.provider anthropic
+max personal config set models.ocr.model your-vision-model
+max personal config unset models.ocr.baseUrl
 ```
 
 The last command removes any previous endpoint override. If the URL is not inherited from `models.default` either, the standard Anthropic endpoint is used.
@@ -72,10 +72,10 @@ The last command removes any previous endpoint override. If the URL is not inher
 An OpenAI-compatible endpoint uses the `openai` adapter even if another provider owns the server. It must support the relevant API and images, not only text requests. Configure a URL without a key, query parameters or a fragment:
 
 ```sh
-max config set models.ocr.provider openai
-max config set models.ocr.model your-vision-model
-max config set models.ocr.baseUrl https://gateway.example.org/v1
-max models text key set gateway.example.org
+max personal config set models.ocr.provider openai
+max personal config set models.ocr.model your-vision-model
+max personal config set models.ocr.baseUrl https://gateway.example.org/v1
+max personal models text key set gateway.example.org
 ```
 
 For a custom endpoint, the key name is its host, including the port if the URL specifies one. The `baseUrl` field itself is not a key. A server accepting text does not necessarily accept images; check its documentation.
@@ -89,7 +89,7 @@ The `config set` commands above change the selected profile. Put its name first,
 Each field is taken first from its environment variable, then from profile settings and shared defaults. Unset fields may inherit from `models.default`. For example, for one run in a POSIX terminal using an already saved key:
 
 ```sh
-MAX_MODELS_OCR_PROVIDER=openai MAX_MODELS_OCR_MODEL=gpt-4o-mini max attachments extract --chat "Учебная группа" --ocr --limit 1 --json
+MAX_MODELS_OCR_PROVIDER=openai MAX_MODELS_OCR_MODEL=gpt-4o-mini max personal attachments extract --chat "Учебная группа" --ocr --limit 1 --json
 ```
 
 In PowerShell, set the corresponding `$env:MAX_MODELS_OCR_PROVIDER` and `$env:MAX_MODELS_OCR_MODEL` variables. `MAX_MODELS_OCR_BASE_URL` overrides the endpoint. Keys can use `MAX_OPENAI_API_KEY`/`OPENAI_API_KEY` and the corresponding Anthropic variables; do not put their values in examples or command history.

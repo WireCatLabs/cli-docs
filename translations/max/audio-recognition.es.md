@@ -14,18 +14,18 @@ Términos que encontrarás más abajo:
 
 | Tarea | Comando |
 | --- | --- |
-| Ver modelos, tamaños y descargas | `max models audio list` |
-| Descargar un modelo | `max models audio download <модель>` |
-| Transcribir una nota de voz | `max messages transcribe <чат> <сообщение>` |
+| Ver modelos, tamaños y descargas | `max personal models audio list` |
+| Descargar un modelo | `max personal models audio download <модель>` |
+| Transcribir una nota de voz | `max personal messages transcribe <чат> <сообщение>` |
 | Transcribir notas de la lista mostrada | `--transcribe` en `messages list` e `inbox` |
 | Elegir el modelo para siguientes ejecuciones | `max config set --defaults transcribeModel <модель>` |
 
 ## Inicio rápido
 
 ```sh
-max models audio list --json
-max models audio download gigaam-v3
-max messages transcribe "Учебная группа" 204 --json
+max personal models audio list --json
+max personal models audio download gigaam-v3
+max personal messages transcribe "Учебная группа" 204 --json
 ```
 
 `max` obtiene el audio de MAX, cierra la conexión y después ejecuta el modelo. No lo descarga automáticamente al leer un chat: ejecuta antes `models audio download`. Reutiliza los archivos descargados y comprueba su suma de verificación al instalarlos.
@@ -41,8 +41,8 @@ max messages transcribe "Учебная группа" 204 --json
 `models audio list` muestra el tamaño exacto y las descargas. Elige un modelo que conozca el idioma de la grabación. Para una ejecución:
 
 ```sh
-max models audio download parakeet-v3
-max messages transcribe "Учебная группа" 204 --model parakeet-v3 --json
+max personal models audio download parakeet-v3
+max personal messages transcribe "Учебная группа" 204 --model parakeet-v3 --json
 ```
 
 Para todas las ejecuciones siguientes:
@@ -56,8 +56,8 @@ No confundas los grupos: `models audio` son modelos de voz; `models text` son mo
 ## Varios mensajes
 
 ```sh
-max messages list "Учебная группа" --limit 20 --transcribe --json
-max inbox --transcribe --json
+max personal messages list "Учебная группа" --limit 20 --transcribe --json
+max personal inbox --transcribe --json
 ```
 
 `--transcribe` solo procesa las notas sin texto de la lista mostrada, no todo el historial. Descarga el audio, cierra la conexión y ejecuta el modelo. `--model` elige otro para una ejecución.
@@ -70,7 +70,7 @@ Se transcriben mensajes que MAX identifica como `kind: voice`. Un MP3 o WAV envi
 
 La transcripción local admite una grabación Ogg Opus completa, mono o estéreo, sin un límite de duración independiente. Las grabaciones largas requieren más memoria y tiempo de procesamiento.
 
-Los modelos comparten carpeta para MAX y Telegram; `CLI_COMMON_CACHE_DIR` cambia su ubicación. Necesitan disco para guardarse, y memoria y CPU para transcribir. La velocidad depende de la duración, el modelo y el ordenador.
+Los modelos comparten carpeta para MAX y Telegram; `WIRECAT_STATE_DIR` cambia su ubicación. Necesitan disco para guardarse, y memoria y CPU para transcribir. La velocidad depende de la duración, el modelo y el ordenador.
 
 ## Calidad
 

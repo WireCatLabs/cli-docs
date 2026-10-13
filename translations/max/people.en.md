@@ -16,20 +16,20 @@ Terms used below:
 
 | Task | Command |
 | --- | --- |
-| Learn who someone is and where you chat with them | `max contacts profile` |
-| Read their messages across all chats or selected chats | `max contacts context` |
-| Check an account for bot, fake or spammer signals | `max contacts check` |
-| Check the most suspicious group members | `max chats members audit --deep` |
-| Record that a MAX account and a Telegram account belong to one person | `max contacts link` |
-| Keep your own name and notes for a person | `max contacts alias`, `max contacts notes` |
+| Learn who someone is and where you chat with them | `max personal contacts profile` |
+| Read their messages across all chats or selected chats | `max personal contacts context` |
+| Check an account for bot, fake or spammer signals | `max personal contacts check` |
+| Check the most suspicious group members | `max personal chats members audit --deep` |
+| Record that a MAX account and a Telegram account belong to one person | `max personal contacts link` |
+| Keep your own name and notes for a person | `max personal contacts alias`, `max personal contacts notes` |
 
 See the [contacts command reference](./commands.md#max-contacts) for all options.
 
 ## Who they are: `contacts profile`
 
 ```sh
-max contacts profile 20000002
-max contacts profile 20000002 --json
+max personal contacts profile 20000002
+max personal contacts profile 20000002 --json
 ```
 
 The command shows what MAX reports about the person and how many of their messages are saved locally in each shared chat:
@@ -73,7 +73,7 @@ The command makes one additional MAX request beyond those made by `contacts show
 `theirMessages`, `firstAt` and `lastAt` are calculated from the local copy, not requested from MAX. If `complete: false`, the chat is not saved from its beginning: the count is a minimum, and `firstAt` may be later than the person’s actual first message. Download the chat to fill it in:
 
 ```sh
-max store fetch "Книжный клуб"
+max personal messages sync "Книжный клуб"
 ```
 
 ## What they wrote: `contacts context`
@@ -81,14 +81,14 @@ max store fetch "Книжный клуб"
 Without `--chat`, the command assembles an overview from the local copy: shared chats, the latest message in each direction, recent direct messages from the person and recent group messages where others mentioned them. It does not connect to MAX or mark anything as read.
 
 ```sh
-max contacts context 20000002
+max personal contacts context 20000002
 ```
 
 With `--chat`, it shows the person’s latest messages in each specified chat, oldest first, 20 per chat:
 
 ```sh
-max contacts context 20000002 --chat "Книжный клуб" --chat "Работа" --limit 10
-max contacts context 20000002 --chat "Книжный клуб" --refresh
+max personal contacts context 20000002 --chat "Книжный клуб" --chat "Работа" --limit 10
+max personal contacts context 20000002 --chat "Книжный клуб" --refresh
 ```
 
 ```json
@@ -117,7 +117,7 @@ max contacts context 20000002 --chat "Книжный клуб" --refresh
 ## Bot, fake account or spammer: `contacts check`
 
 ```sh
-max contacts check 20000002
+max personal contacts check 20000002
 ```
 
 ```json
@@ -160,8 +160,8 @@ Nothing. Public spammer lists (Combot CAS and lols.bot) cover only Telegram acco
 ## Group members: `chats members audit --deep`
 
 ```sh
-max chats members audit "Книжный клуб"
-max chats members audit "Книжный клуб" --deep 10
+max personal chats members audit "Книжный клуб"
+max personal chats members audit "Книжный клуб" --deep 10
 ```
 
 `chats members audit` scores all members using the member list and local copy, without a separate request for each person, and shows those with a detected reason, highest scores first. `--deep 10` then runs a full `contacts check` for the ten highest-scoring people, one person per second. It removes nobody; owners and administrators are excluded.
@@ -171,8 +171,8 @@ max chats members audit "Книжный клуб" --deep 10
 `max` and `tg` on the same computer use one local copy. If you know a MAX account and a Telegram account belong to the same person, record the link:
 
 ```sh
-max contacts link 20000002 telegram:1000001
-max contacts unlink 20000002
+max personal contacts link 20000002 telegram:1000001
+max personal contacts unlink 20000002
 ```
 
 After linking, `contacts context` without `--chat` combines both accounts: shared chats and messages from MAX and Telegram. `contacts profile` and `contacts context --chat` still show only the account you named. A link is your explicit record: matching names in two messengers never establish that they are one person. This record does not change the MAX address book.
@@ -180,17 +180,17 @@ After linking, `contacts context` without `--chat` combines both accounts: share
 ## Your names and notes: `contacts alias`, `contacts notes`
 
 ```sh
-max contacts alias set "Борис Пример" Боря            # ваше имя для человека, только на этом компьютере
-max contacts alias rm "Борис Пример"
-max contacts notes add "Борис Пример" --file note.txt  # или текст из stdin
-max contacts notes list "Борис Пример"
-max contacts notes edit "Борис Пример" <id> --revision 1 --file note.txt
-max contacts notes remove "Борис Пример" <id>
-max contacts show "Борис Пример" --with-notes
-max contacts list --search-notes квартира             # люди, в чьих заметках есть этот текст
+max personal contacts alias set "Борис Пример" Боря            # ваше имя для человека, только на этом компьютере
+max personal contacts alias rm "Борис Пример"
+max personal contacts notes add "Борис Пример" --file note.txt  # или текст из stdin
+max personal contacts notes list "Борис Пример"
+max personal contacts notes edit "Борис Пример" <id> --revision 1 --file note.txt
+max personal contacts notes remove "Борис Пример" <id>
+max personal contacts show "Борис Пример" --with-notes
+max personal contacts list --search-notes квартира             # люди, в чьих заметках есть этот текст
 ```
 
-Aliases and notes stay in the local archive and never go to MAX. An alias applies only to the account you are using; a person's note is visible in every `max` login profile on this computer that encounters that person. `contacts rename` changes the name in the MAX address book, which is different. Commands resolve your alias unless it matches another person's name; then use an id. `--revision` prevents changing a note that has changed since you read it.
+Aliases and notes stay in the local archive and never go to MAX. An alias applies only to the account you are using; a person's note is visible in every `max` login profile on this computer that encounters that person. `contacts rename` changes the name in the MAX address book, which is different. Commands resolve your alias unless it matches another person's name; then use an id. `--revision` prevents changing a note that has changed since you read it. Refreshing contacts keeps notes and aliases, and linking people does not merge them.
 
 ## Next steps
 
