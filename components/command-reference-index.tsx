@@ -1,4 +1,4 @@
-import { Bot, ShieldCheck, UserRound } from "lucide-react"
+import { Bot, ShieldCheck, UserRound, Wrench } from "lucide-react"
 import Link from "next/link"
 import { commandGroup, commandGroupCopy, commandGroups, commandLanguage } from "@/lib/command-groups"
 import { CommandHashRedirect } from "./command-hash-redirect"
@@ -16,7 +16,7 @@ export function CommandReferenceIndex({
   aliases: string[]
 }) {
   const text = commandGroupCopy[commandLanguage(lang)]
-  const icons = { personal: UserRound, bot: Bot, admin: ShieldCheck }
+  const icons = { personal: UserRound, bot: Bot, admin: ShieldCheck, setup: Wrench }
   const messenger = tool === "max" ? "MAX" : "Telegram"
   return (
     <div className="not-prose space-y-5" data-command-index>

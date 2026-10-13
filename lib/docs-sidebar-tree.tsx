@@ -116,7 +116,7 @@ export const sidebarIcons = {
   roadmap: Route,
 }
 
-const commandIcons = { personal: UserRound, bot: Bot, admin: ShieldCheck }
+const commandIcons = { personal: UserRound, bot: Bot, admin: ShieldCheck, setup: Wrench }
 
 function commandFolder(index: Item, lang: string): Folder {
   const text = commandGroupCopy[commandLanguage(lang)]

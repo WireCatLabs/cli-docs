@@ -7,7 +7,9 @@ const purpose = {
     compare:
       "Compare Telegram tools by their supported tasks, connection options and licences so you can choose the one that fits your needs.",
     "commands-personal":
-      "This reference covers personal-account commands. Use it to find the exact command, arguments and options for login, reading, searching, files and sending.",
+      "This reference covers personal-account commands. Use it to find the exact command, arguments and options for chats, messages, contacts, search, files and sending.",
+    "commands-setup":
+      "This reference covers setup and maintenance commands. Use it to look up login, profiles, configuration, the background server, the local store, diagnostics and agent connection.",
     "commands-bot":
       "This reference covers bot commands and the Bot API. Use it to look up authentication, messages, events and method parameters for the bot you control.",
     "commands-admin":
@@ -63,7 +65,9 @@ const purpose = {
       "Здесь собран синтаксис запросов для поиска сообщений. Вы сможете сочетать слова, людей, чаты, даты и условия по файлам, проверять запрос и понимать найденные совпадения.",
     compare: "Сравните инструменты Telegram по задачам, вариантам подключения и лицензиям, чтобы выбрать подходящий.",
     "commands-personal":
-      "Здесь собраны команды личного аккаунта. Вы найдёте точную команду, аргументы и параметры для входа, чтения, поиска, файлов и отправки.",
+      "Здесь собраны команды личного аккаунта. Вы найдёте точную команду, аргументы и параметры для чатов, сообщений, контактов, поиска, файлов и отправки.",
+    "commands-setup":
+      "Здесь собраны команды настройки и обслуживания. Вы найдёте параметры входа, профилей, настроек, фонового сервера, локального хранилища, диагностики и подключения агента.",
     "commands-bot":
       "Здесь собраны команды бота и методы Bot API. Вы сможете найти параметры подключения, сообщений, событий и нужного метода для своего бота.",
     "commands-admin":
@@ -120,7 +124,9 @@ const purpose = {
     compare:
       "Compara las herramientas de Telegram por sus tareas, conexiones y licencias para elegir la que necesitas.",
     "commands-personal":
-      "Esta referencia reúne comandos de cuenta personal. Consulta argumentos y opciones de acceso, lectura, búsqueda, archivos y envío.",
+      "Esta referencia reúne comandos de cuenta personal. Consulta argumentos y opciones de chats, mensajes, contactos, búsqueda, archivos y envío.",
+    "commands-setup":
+      "Esta referencia reúne comandos de configuración y mantenimiento. Consulta opciones de acceso, perfiles, configuración, servidor en segundo plano, almacén local, diagnóstico y conexión del agente.",
     "commands-bot":
       "Esta referencia reúne comandos del bot y métodos Bot API. Consulta parámetros de autenticación, mensajes, eventos y métodos para tu bot.",
     "commands-admin":

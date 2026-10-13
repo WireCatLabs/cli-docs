@@ -10,7 +10,7 @@ for (const lang of ["en", "ru", "es"])
       await expect(page.locator("[data-command-index]")).toBeVisible()
       await expect(page.locator("main pre")).toHaveCount(0)
       expect(await page.evaluate(() => document.querySelectorAll("*").length)).toBeLessThan(2500)
-      for (const group of ["personal", "bot", "admin"])
+      for (const group of ["personal", "bot", "admin", "setup"])
         await expect(
           page.locator(`[data-command-index] a[href="/${lang}/docs/${tool}/commands-${group}"]`),
         ).toHaveCount(1)
