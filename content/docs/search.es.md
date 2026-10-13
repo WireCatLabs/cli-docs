@@ -46,7 +46,7 @@ vez:
 
 ```sh
 tg search all invoice
-max search all invoice
+max personal search all invoice
 ```
 
 Cada resultado indica si es un mensaje, un correo o una nota. Las secciones siguientes buscan en un solo tipo.
@@ -66,7 +66,7 @@ Deberías obtener la fecha acordada y sus mensajes de origen. Si solo fue una pr
 
 ```sh
 tg search messages factura
-max search messages factura
+max personal search messages factura
 ```
 
 </details>
@@ -78,7 +78,7 @@ Para una frase exacta, conserva las comillas dentro de la consulta:
 
 ```sh
 tg search messages 'exact:"factura final"'
-max search messages 'exact:"factura final"'
+max personal search messages 'exact:"factura final"'
 ```
 
 </details>
@@ -107,7 +107,7 @@ buscar nombres de chats o personas puede funcionar de otra forma.
 
 ```sh
 tg search messages factura --chat "Proyecto"
-max search messages factura --chat "Proyecto"
+max personal search messages factura --chat "Proyecto"
 ```
 
 </details>

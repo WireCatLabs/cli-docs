@@ -9,7 +9,7 @@ This guide connects your chosen messenger and checks it with a request for your 
 
 ## Before starting
 
-- Install the [command-line tool for Telegram or MAX](./installation.mdx) and sign into your account. A local agent is unnecessary for browser use: `tg setup --agent none` or `max setup --agent none`.
+- Install the [command-line tool for Telegram or MAX](./installation.mdx) and sign into your account. A local agent is unnecessary for browser use: `tg setup --agent none` or `max personal setup --agent none`.
 - Use the computer running the tool for initial setup, and keep it awake while connected. The end of this page explains an always-on server option.
 - Your AI chat account needs an option for adding a custom connection. If it is missing in a work account, check with your administrator. The [OpenAI instructions](https://developers.openai.com/plugins/quickstart) and [Claude instructions](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) show current options.
 
@@ -49,7 +49,7 @@ Choose your operating system and <DocTerm term="terminal" lang="en" label="open 
 Install the Windows Tailscale app and sign in through its tray menu. Open fresh PowerShell
 windows after installing Node.js, the CLI and Tailscale so they see the updated PATH.
 Use `.cmd` CLI shims to avoid PowerShell execution-policy errors; initial setup is
-`tg.cmd setup --agent none` or `max.cmd setup --agent none`.
+`tg.cmd setup --agent none` or `max.cmd personal setup --agent none`.
 
 Run **window 1 as Administrator** for Funnel. `&` handles the space in the default installation
 path; adjust it if Tailscale is installed elsewhere. Run **window 2 as your normal user**,
@@ -207,7 +207,7 @@ See [permissions](./permissions.mdx) for examples and how to change access.
 
 A browser connection needs the computer running the command-line tool, its MCP server and the HTTPS tunnel. After sleep or a restart, use this order:
 
-1. Wake the computer and check the account in a terminal with `tg account show` or `max account show`. Use `tg.cmd` or `max.cmd` in PowerShell. If this fails, follow the login guide for [Telegram](./tg/sessions.md) or [MAX](./max/sessions.md).
+1. Wake the computer and check the account in a terminal with `tg account show` or `max personal account show`. Use `tg.cmd` or `max.cmd` in PowerShell. If this fails, follow the login guide for [Telegram](./tg/sessions.md) or [MAX](./max/sessions.md).
 2. Restart the tunnel and server using the two windows above. Use the same profile and check that the HTTPS address still matches the connector. If it changed, update the server's public URL and the connector URL.
 3. Retry the five-chat request. If the app asks you to connect again, use the new one-time code printed by the running server.
 
@@ -231,7 +231,7 @@ for its connector. Funnel's permitted public ports are `443`, `8443` and `10000`
   `tailscale funnel status`, then disable only that route with `tailscale funnel --https=443 off`
   (or `8443` for the second server). Use your OS's executable path and elevation above.
   Avoid `funnel reset` if you have another route: it clears them all.
-- **Revoke app access:** run `tg mcp --revoke` or `max mcp --revoke`; use `tg.cmd` / `max.cmd`
+- **Revoke app access:** run `tg mcp --revoke` or `max personal mcp --revoke`; use `tg.cmd` / `max.cmd`
   in PowerShell. Apps must log in again. Your messenger account stays logged in.
 
 ## Troubleshooting
@@ -242,7 +242,7 @@ for its connector. Funnel's permitted public ports are `443`, `8443` and `10000`
   effective permission. Use `deny` or `readonly` to refuse server-side changes; check the app's own approval settings.
 - **PowerShell refuses scripts:** use `tg.cmd` or `max.cmd`. If the command is missing, reopen
   PowerShell and check the CLI installation; do not change machine-wide execution policy.
-- **No tools:** `tg mcp doctor` or `max mcp doctor` checks the local handshake, not the tunnel or
+- **No tools:** `tg mcp doctor` or `max personal mcp doctor` checks the local handshake, not the tunnel or
   messenger login. An explicit `account show` command checks that account connection.
 - **Port occupied:** use another local port and point Funnel at the same number. For simultaneous
   servers, also give each route a distinct public HTTPS port as above.
@@ -263,7 +263,7 @@ Try this after the connection works on your computer. See remote setup for [Tele
 <summary>Linux server: keep the connection running after logout and reboot</summary>
 
 1. Use one ordinary Linux user for installation, messenger login and the service. Install Node.js, the CLI and Tailscale, then log into the messenger as that user. First verify the five-chat request using the foreground commands above.
-2. Run `tg mcp config` or `max mcp config`. Take the absolute Node path from `command` and the CLI entry path from `args`; preserve a named profile if present. Do not put account passwords or bot tokens in the service file.
+2. Run `tg mcp config` or `max personal mcp config`. Take the absolute Node path from `command` and the CLI entry path from `args`; preserve a named profile if present. Do not put account passwords or bot tokens in the service file.
 3. Create `~/.config/systemd/user/wirecat-mcp.service`. Replace the two paths and public address in this template with the actual values. Use the same configuration/state directories as your successful login:
 
 ```ini

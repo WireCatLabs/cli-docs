@@ -47,7 +47,7 @@ all of them together:
 
 ```sh
 tg search all invoice
-max search all invoice
+max personal search all invoice
 ```
 
 Each result says whether it is a message, an email or a note. The sections below search one kind.
@@ -67,7 +67,7 @@ You should get the agreed date and the messages behind it. If the date was only 
 
 ```sh
 tg search messages invoice
-max search messages invoice
+max personal search messages invoice
 ```
 
 </details>
@@ -79,7 +79,7 @@ For an exact phrase, keep the quotes inside the query:
 
 ```sh
 tg search messages 'exact:"final invoice"'
-max search messages 'exact:"final invoice"'
+max personal search messages 'exact:"final invoice"'
 ```
 
 </details>
@@ -108,7 +108,7 @@ chat-title and person-name lookup can behave differently.
 
 ```sh
 tg search messages invoice --chat "Project"
-max search messages invoice --chat "Project"
+max personal search messages invoice --chat "Project"
 ```
 
 </details>

@@ -47,7 +47,7 @@ max personal messages sync "Project" --since-time 30d --limit 1000
 
 ```sh
 tg search all invoice
-max search all invoice
+max personal search all invoice
 ```
 
 У каждого результата указано, что это: сообщение, письмо или заметка. Разделы ниже ищут в одном виде.
@@ -67,7 +67,7 @@ max search all invoice
 
 ```sh
 tg search messages счёт
-max search messages счёт
+max personal search messages счёт
 ```
 
 </details>
@@ -79,7 +79,7 @@ max search messages счёт
 
 ```sh
 tg search messages 'exact:"счёт оплачен"'
-max search messages 'exact:"счёт оплачен"'
+max personal search messages 'exact:"счёт оплачен"'
 ```
 
 </details>
@@ -108,7 +108,7 @@ max search messages 'exact:"счёт оплачен"'
 
 ```sh
 tg search messages счёт --chat "Проект"
-max search messages счёт --chat "Проект"
+max personal search messages счёт --chat "Проект"
 ```
 
 </details>

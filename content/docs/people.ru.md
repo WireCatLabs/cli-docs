@@ -47,7 +47,7 @@ description: "Вспомните, кто вам написал и что вы о
 
 ```sh
 tg contacts profile @example_user
-max contacts profile 20000002
+max personal contacts profile 20000002
 ```
 
 Для краткой информации используйте `contacts show`. Человека называют по ID или части имени;
@@ -76,7 +76,7 @@ max contacts profile 20000002
 
 ```sh
 tg contacts context @example_user --since-time 30d --limit 20
-max contacts context 20000002 --since-time 30d --limit 20
+max personal contacts context 20000002 --since-time 30d --limit 20
 ```
 
 Без `--chat` — обзор: общие чаты, последнее сообщение в каждую сторону, его недавние сообщения и
@@ -85,7 +85,7 @@ max contacts context 20000002 --since-time 30d --limit 20
 
 ```sh
 tg contacts context @example_user --chat "Книжный клуб" --chat "Работа" --limit 10
-max contacts context 20000002 --chat "Книжный клуб" --chat "Работа" --limit 10
+max personal contacts context 20000002 --chat "Книжный клуб" --chat "Работа" --limit 10
 ```
 
 У каждого сообщения только время и текст, чтобы агент мог прочитать много сразу и сделать выжимку.
@@ -103,7 +103,7 @@ Telegram ищет сообщения этого человека в каждом
 
 ```sh
 tg contacts check @example_user
-max contacts check 20000002
+max personal contacts check 20000002
 ```
 
 В ответе — оценка и все причины, у каждой указан источник: отметки самого мессенджера, пустой
@@ -124,7 +124,7 @@ max contacts check 20000002
 
 ```sh
 tg chats members audit "Книжный клуб" --deep 10
-max chats members audit "Книжный клуб" --deep 10
+max personal chats members audit "Книжный клуб" --deep 10
 ```
 
 <a id="link-your-accounts" />

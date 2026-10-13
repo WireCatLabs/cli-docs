@@ -60,7 +60,7 @@ Los campos son `text`, `exact`, `body`, `from`, `chat`, `date`, `kind`, `has`, `
 
 ```sh
 tg search messages 'invoice AND has:file' --source all --context 2 --json
-max search messages 'chat:"Project team" AND date:[2026-10-01 TO 2026-10-31]' --timezone Europe/Madrid --json
+max personal search messages 'chat:"Project team" AND date:[2026-10-01 TO 2026-10-31]' --timezone Europe/Madrid --json
 tg search messages 'filename:*.pdf size>1MB date:7d' --json
 ```
 
@@ -131,7 +131,7 @@ Vinculación con ayuda del agente: `skill show link-conversations` da al agente 
 ```sh
 tg conversations build --chat "Project team"
 tg conversations list --chat "Project team" --json
-max conversations batches status --chat "Project team" --json
+max personal conversations batches status --chat "Project team" --json
 ```
 
 ## 4. Fragmentos y vectores
@@ -177,7 +177,7 @@ Los vectores son blobs de SQLite que se recorren por páginas y se puntúan en J
 
 ```sh
 tg search conversations "Where did we discuss renting a flat?" --chat "Project team" --json
-max conversations related "Project team" 4521 --json
+max personal conversations related "Project team" 4521 --json
 ```
 
 ## 6. Frescura

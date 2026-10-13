@@ -47,7 +47,7 @@ Both messengers provide a profile with the person's identity and shared conversa
 
 ```sh
 tg contacts profile @example_user
-max contacts profile 20000002
+max personal contacts profile 20000002
 ```
 
 Use `contacts show` for a shorter lookup. Name a person by their ID or part of their name; in
@@ -76,7 +76,7 @@ Both messengers can gather context from messages already saved on your computer:
 
 ```sh
 tg contacts context @example_user --since-time 30d --limit 20
-max contacts context 20000002 --since-time 30d --limit 20
+max personal contacts context 20000002 --since-time 30d --limit 20
 ```
 
 Without `--chat`, you get an overview: shared chats, the last message each way, their recent
@@ -85,7 +85,7 @@ in each one, oldest first, 20 per chat by default:
 
 ```sh
 tg contacts context @example_user --chat "Book club" --chat "Team" --limit 10
-max contacts context 20000002 --chat "Book club" --chat "Team" --limit 10
+max personal contacts context 20000002 --chat "Book club" --chat "Team" --limit 10
 ```
 
 Each message is only its time and text, so an agent can read many at once and summarise them.
@@ -103,7 +103,7 @@ Both messengers support an account check:
 
 ```sh
 tg contacts check @example_user
-max contacts check 20000002
+max personal contacts check 20000002
 ```
 
 The answer is a score and every reason behind it, each with its source: the messenger's own marks,
@@ -123,7 +123,7 @@ highest, one person per second. The owner and admins are left out, and nobody is
 
 ```sh
 tg chats members audit "Book club" --deep 10
-max chats members audit "Book club" --deep 10
+max personal chats members audit "Book club" --deep 10
 ```
 
 <a id="link-your-accounts" />

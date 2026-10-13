@@ -80,7 +80,7 @@ memo mail gmail import --since 2026-09-01 --json
 
 Текст читаемого вложения хранится вместе с письмом и находится вместе с ним. Импорт также готовит
 новые письма к поиску по смыслу, поэтому их находят `tg search conversations` и
-`max search conversations`; `--no-embed` пропускает этот шаг.
+`max personal search conversations`; `--no-embed` пропускает этот шаг.
 
 ## Свяжите почту с тем же человеком
 
@@ -95,7 +95,7 @@ tg contacts link @example_user email:rin@example.test
 memo context telegram:"Rin Example" --json
 ```
 
-Для MAX используйте `max contacts link` с ID или именем человека в MAX. Проверьте возвращённые
+Для MAX используйте `max personal contacts link` с ID или именем человека в MAX. Проверьте возвращённые
 учётные записи и источники. Похожее имя не доказывает, что это один человек. Если сохранено
 несколько аккаунтов нужного провайдера, используйте
 `memo context telegram:"Rin Example" --account 1 --json` со своим ID аккаунта.
