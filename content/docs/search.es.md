@@ -32,7 +32,7 @@ tg store fetch "Project" --since-time 30d --limit 1000
 ```
 
 ```sh
-max store fetch "Project" --since-time 30d --limit 1000
+max personal messages sync "Project" --since-time 30d --limit 1000
 ```
 
 Si se alcanza el límite, el historial del mes puede seguir incompleto. Instrucciones para descargar,
