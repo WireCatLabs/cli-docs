@@ -193,11 +193,14 @@ export function localizeTool(root: string, tool: Tool) {
     const slug = file.slice(0, -3)
     const original = readFileSync(join(source, file), "utf8")
     for (const lang of languages) {
-      const overview = join(root, "translations/overviews", `${tool.name}.${lang}.md`)
+      const owned =
+        slug === "index"
+          ? join(root, "translations/overviews", `${tool.name}.${lang}.md`)
+          : join(root, "translations/pages", tool.name, `${slug}.${lang}.md`)
       const path = join(translations, `${slug}.${lang}.md`)
       const destination = join(target, lang === "en" ? file : `${slug}.${lang}.md`)
-      if (slug === "index" && existsSync(overview)) {
-        writeFileSync(destination, siteLinks(contentLanguage(readFileSync(overview, "utf8"), lang), lang))
+      if (existsSync(owned)) {
+        writeFileSync(destination, siteLinks(contentLanguage(readFileSync(owned, "utf8"), lang), lang))
         continue
       }
       if (lang === tool.lang && !existsSync(path)) {
