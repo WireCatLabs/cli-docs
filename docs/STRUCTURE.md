@@ -114,6 +114,8 @@ localization the portal derives `commands-personal`, `commands-bot`, `commands-a
 from those same sections. The `/commands` HTML route is a lightweight choice of references;
 existing command hashes redirect to their partition. Edit native commands at the source, not
 these derived files. Shared global options and exit codes appear in every part.
+In the sidebar, Commands is a folder holding these parts. Every tool's Commands page opens with a short
+"How commands work" section owned by `lib/command-rules.ts`; keep its facts in line with the released reference.
 
 ## Task presentation beside released references
 

@@ -12,6 +12,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { CommandReferenceIndex } from "@/components/command-reference-index"
+import { CommandRules } from "@/components/command-rules"
 import { DocsDisclosures } from "@/components/docs-disclosures"
 import { DocsTocPopover } from "@/components/docs-toc-popover"
 import { getMDXComponents } from "@/components/mdx"
@@ -195,7 +196,10 @@ export default async function Page(props: Props) {
             aliases={commandAliases}
           />
         ) : (
-          <MDX components={getMDXComponents({ a: createRelativeLink(source, page) })} />
+          <>
+            {tool && page.slugs.at(-1) === "commands" && <CommandRules tool={tool.name} lang={lang} />}
+            <MDX components={getMDXComponents({ a: createRelativeLink(source, page) })} />
+          </>
         )}
       </DocsBody>
     </DocsPage>

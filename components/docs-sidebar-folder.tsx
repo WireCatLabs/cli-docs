@@ -21,9 +21,11 @@ export function DocsSidebarFolder({ item, children }: { item: Folder; children: 
         : item.name === "MAX"
           ? "max"
           : page?.type === "page"
-            ? /\/docs\/(tg|max)(?:\/|$)/.exec(page.url)?.[1]
+            ? /\/docs\/(tg|max)\/?$/.exec(page.url)?.[1]
             : undefined
-  const active = tool ? /\/docs\/(tg|max)(?:\/|$)/.exec(pathname)?.[1] === tool : path.includes(item)
+  const active = tool
+    ? /\/docs\/(tg|max)(?:\/|$)/.exec(pathname)?.[1] === tool
+    : path.includes(item) || pathname.replace(/\/$/, "") === item.index?.url.replace(/\/$/, "")
   const open =
     item.collapsible === false || (override?.path === pathname ? override.open : active || Boolean(item.defaultOpen))
   return (
