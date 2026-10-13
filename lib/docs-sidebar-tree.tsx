@@ -1,4 +1,4 @@
-import type { Node, Root } from "fumadocs-core/page-tree"
+import type { Folder, Item, Node, Root } from "fumadocs-core/page-tree"
 import {
   Activity,
   Archive,
@@ -44,12 +44,14 @@ import {
   StickyNote,
   Tag,
   Terminal,
+  UserRound,
   UserRoundCog,
   Users,
   Video,
   Webhook,
   Wrench,
 } from "lucide-react"
+import { commandGroupCopy, commandGroups, commandLanguage } from "./command-groups"
 import { readerGuide } from "./reader-guides"
 
 export const sidebarIcons = {
@@ -114,6 +116,24 @@ export const sidebarIcons = {
   roadmap: Route,
 }
 
+const commandIcons = { personal: UserRound, bot: Bot, admin: ShieldCheck }
+
+function commandFolder(index: Item, lang: string): Folder {
+  const text = commandGroupCopy[commandLanguage(lang)]
+  const base = index.url.replace(/\/$/, "")
+  return {
+    type: "folder",
+    name: index.name,
+    icon: index.icon,
+    index,
+    defaultOpen: false,
+    children: commandGroups.map((group) => {
+      const Icon = commandIcons[group]
+      return { type: "page", name: text[group], url: `${base}-${group}`, icon: <Icon aria-hidden="true" /> }
+    }),
+  }
+}
+
 /** One navigation tree on every page: tool folders expand, never replace the shared menu. */
 export function unifiedDocsTree(tree: Root): Root {
   const decorate = (node: Node): Node => {
@@ -146,7 +166,9 @@ export function unifiedDocsTree(tree: Root): Root {
     const Icon = sidebarIcons[slug as keyof typeof sidebarIcons] ?? FileText
     const task = /^\/(en|ru|es)\/docs\/(tg|max)\/(usage|rankings|bot|groups)\/?$/.exec(node.url)
     const title = task ? readerGuide([task[2], task[3]], task[1])?.title : undefined
-    return { ...node, name: title ?? node.name, icon: node.icon ?? <Icon aria-hidden="true" /> }
+    const page = { ...node, name: title ?? node.name, icon: node.icon ?? <Icon aria-hidden="true" /> }
+    const commands = /^\/(en|ru|es)\/docs\/(?:tg|max)\/commands\/?$/.exec(node.url)
+    return commands ? commandFolder(page, commands[1]) : page
   }
   return { ...tree, children: tree.children.map(decorate) }
 }

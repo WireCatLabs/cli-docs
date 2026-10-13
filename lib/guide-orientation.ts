@@ -11,7 +11,7 @@ const purpose = {
     "commands-bot":
       "This reference covers bot commands and the Bot API. Use it to look up authentication, messages, events and method parameters for the bot you control.",
     "commands-admin":
-      "This reference covers group administration commands. Use it to look up member, invitation, permission and moderation options before making a change.",
+      "This reference covers group administration commands. Use it to look up member, invitation, permission, moderation, forum topic and statistics options before making a change.",
 
     people:
       "Identify a person and recover what you have discussed before replying. This guide explains the available context, account signals and the limits of incomplete history.",
@@ -67,7 +67,7 @@ const purpose = {
     "commands-bot":
       "Здесь собраны команды бота и методы Bot API. Вы сможете найти параметры подключения, сообщений, событий и нужного метода для своего бота.",
     "commands-admin":
-      "Здесь собраны команды администрирования групп. Вы сможете найти параметры участников, приглашений, прав и модерации перед изменением.",
+      "Здесь собраны команды администрирования групп. Вы сможете найти параметры участников, приглашений, прав, модерации, тем форумов и статистики перед изменением.",
 
     people:
       "Вспомните, кто вам написал и что вы обсуждали, прежде чем отвечать. Здесь описаны доступный контекст, признаки аккаунта и ограничения неполной истории.",
@@ -124,7 +124,7 @@ const purpose = {
     "commands-bot":
       "Esta referencia reúne comandos del bot y métodos Bot API. Consulta parámetros de autenticación, mensajes, eventos y métodos para tu bot.",
     "commands-admin":
-      "Esta referencia reúne comandos administrativos. Consulta opciones de miembros, invitaciones, permisos y moderación antes de cambiar algo.",
+      "Esta referencia reúne comandos administrativos. Consulta opciones de miembros, invitaciones, permisos, moderación, temas de foro y estadísticas antes de cambiar algo.",
 
     people:
       "Identifica a una persona y recupera lo hablado antes de responder. Esta guía explica el contexto disponible, las señales de la cuenta y los límites de un historial incompleto.",

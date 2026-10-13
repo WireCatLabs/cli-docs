@@ -17,6 +17,7 @@ export function CommandReferenceIndex({
 }) {
   const text = commandGroupCopy[commandLanguage(lang)]
   const icons = { personal: UserRound, bot: Bot, admin: ShieldCheck }
+  const messenger = tool === "max" ? "MAX" : "Telegram"
   return (
     <div className="not-prose space-y-5" data-command-index>
       {/* Remember legacy fragments before hydration can restore a URL without the hash. */}
@@ -74,6 +75,24 @@ export function CommandReferenceIndex({
           ))}
         </ul>
       </details>
+      <section className="space-y-3" data-command-rules>
+        <h2 className="text-xl font-semibold">{text.rules.heading}</h2>
+        <pre className="overflow-x-auto rounded-lg border bg-fd-secondary p-3 text-sm">
+          <code>{`${tool} [profile] [options] <resource> <action> [arguments]`}</code>
+        </pre>
+        <ul className="list-disc space-y-2 pl-5">
+          {text.rules.items.map((item) => (
+            <li key={item}>{withCode(item.replaceAll("{tool}", tool).replaceAll("{messenger}", messenger))}</li>
+          ))}
+        </ul>
+        <p className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+          {Object.entries(text.rules.links).map(([slug, label]) => (
+            <Link key={slug} className="underline" href={`/${lang}/docs/${tool}/${slug}`}>
+              {label} →
+            </Link>
+          ))}
+        </p>
+      </section>
       {aliases
         .filter((id) => !commands.some(([, anchor]) => anchor === id))
         .map((id) => (
@@ -85,3 +104,6 @@ export function CommandReferenceIndex({
     </div>
   )
 }
+
+const withCode = (text: string) =>
+  text.split("`").map((part, index) => (index % 2 ? <code key={part}>{part}</code> : part))
