@@ -175,7 +175,7 @@ El acceso por navegador necesita Chrome, Chromium, Edge o Brave. Los navegadores
 
 ### max no se encuentra después de instalarlo
 
-**Con tu agente:** reinicia el agente o pídele que abra un terminal nuevo. Un terminal que estaba abierto durante la instalación no ve el comando nuevo.
+**Con tu agente:** reinicia el agente o pídele que abra un terminal nuevo. Un terminal que estaba abierto durante la instalación no ve el comando nuevo. En Windows, un agente en un terminal ya abierto debe actualizar su entorno y leer `max skill show` antes de iniciar sesión.
 
 **A mano:** abre un terminal nuevo y vuelve a ejecutar `max --version`. Si sigue fallando, este comando explica por qué y qué ejecutar:
 
@@ -192,6 +192,18 @@ $env:Path = "$maxNpmPrefix;$env:Path"
 max skill install --for all
 max --version
 ```
+
+### Tras actualizar, max dice que no se indicó un perfil
+
+Desde la versión 0.49.0, max nunca elige una cuenta por sí mismo: cada comando que usa tu cuenta empieza con el nombre del perfil.
+
+**Con tu agente:** dile el nombre del perfil. Si configuraste max antes de esta versión sin nombre, el perfil es `default`.
+
+**A mano:** escribe el nombre primero (`max default chats list`) o fíjalo una vez: `export MAX_PROFILE=default` en el perfil de tu shell, o `max config set defaultProfile default`. Si añadiste max a una aplicación MCP con `max mcp config`, vuelve a ejecutar ese comando.
+
+### Tras actualizar, max se detiene y nombra dos archivos de mensajes
+
+La actualización mueve una sola vez el archivo de mensajes a la carpeta WireCat. Si el sitio antiguo y el nuevo tienen copias distintas, max se detiene con el código 3 y nombra los dos archivos. Conserva el que necesitas, aparta el otro y vuelve a ejecutar el comando. No se ha movido ni cambiado nada.
 
 ### ¿Dónde escribo los códigos y las contraseñas?
 
@@ -229,7 +241,7 @@ En el almacén de contraseñas del sistema operativo (el llavero), no en un arch
 | Archivo local de mensajes, compartido con tg | `~/.local/share/WireCat/wirecat.db` | `%LOCALAPPDATA%\WireCat\Data\wirecat.db` |
 | Modelos de reconocimiento de voz | `~/.local/share/WireCat/models/audio/` | `%LOCALAPPDATA%\WireCat\Data\models\audio\` |
 
-`max personal doctor` muestra las rutas exactas en tu ordenador. Para cambiar estas carpetas u otros ajustes, consulta [Configuración](/es/docs/configuration) y la [referencia de ajustes de max](/es/docs/max/configuration).
+`max personal doctor` muestra las rutas exactas en tu ordenador. `WIRECAT_STATE_DIR` mueve toda la carpeta WireCat; sustituye a `CLI_COMMON_CACHE_DIR`. Para cambiar estas carpetas u otros ajustes, consulta [Configuración](/es/docs/configuration) y la [referencia de ajustes de max](/es/docs/max/configuration).
 
 La primera ejecución tras actualizar desde un max anterior mueve aquí una sola vez el archivo y los modelos, desde `~/.local/share/cli-messaging/` y `~/.cache/cli-common/models/`. Si ambos sitios tienen copias distintas, max se detiene y nombra los dos archivos: conserva uno y vuelve a ejecutarlo.
 
@@ -247,6 +259,8 @@ La primera ejecución tras actualizar desde un max anterior mueve aquí una sola
 max upgrade           # usa el gestor de paquetes que instaló max: npm, pnpm o bun
 max upgrade --check   # solo indica si hay una versión más nueva
 ```
+
+Si actualizas desde una versión que guardaba los mensajes en `messages.db`, copia antes las notas o etiquetas que solo existen en tu ordenador: el archivo antiguo se borra al abrir el nuevo. `max personal messages sync --all` vuelve a descargar los mensajes, pero no las notas ni etiquetas locales.
 
 Actualiza tg y memo junto con max: comparten el archivo de mensajes, y una herramienta antigua crearía un archivo nuevo en el sitio anterior.
 
