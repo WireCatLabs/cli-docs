@@ -9,7 +9,7 @@ title: "Lenguaje de consulta de la búsqueda"
 
 Si trabaja con `max` a través de un agente de IA, no necesita aprender este idioma: diga con palabras comunes lo que está buscando y el agente creará la solicitud. Esta página es para quienes escriben la búsqueda ellos mismos y para quienes necesitan todos los filtros: operadores exactos, todos los campos, ajustes preestablecidos, reglas de fecha y límites.
 
-Esta es una ayuda para las consultas `max search messages`, `max search mail`, `max search all`, `max stats messages show`, búsquedas guardadas y `--filter` [búsqueda por tema](./topic-search.md). Ejemplos para todos los días: en [búsqueda de mensajes](./search.md).
+Esta es una ayuda para las consultas `max personal search messages`, `max personal search mail`, `max personal search all`, `max personal stats messages show`, búsquedas guardadas y `--filter` [búsqueda por tema](./topic-search.md). Ejemplos para todos los días: en [búsqueda de mensajes](./search.md).
 
 Términos de esta página:
 
@@ -53,7 +53,7 @@ Las palabras y frases sin campo buscan distintas formas de palabra. `--exact` se
 | grupo | `(alpha OR beta) gamma` | los paréntesis fijan el orden |
 | grupo de campo | `from:(alice OR bob)` | el campo se aplica a cada valor |
 | intervalo | `date:[2026-01-01 TO 2026-02-01}` | `[ ]` incluyen, `{ }` excluyen, `*` abierto |
-| comparación | `size>10MB`, `date>=7d` | un intervalo abierto |
+| comparación | `size>10MB`, `date>=7d`, `date:>=7d` | un intervalo abierto; la forma con dos puntos significa lo mismo |
 | comodín | `квартир*`, `т?кст` | `*` cualquier número de caracteres, `?` uno |
 | expresión regular | `text:/pass(port)?/` | una expresión regular de Lucene con límites |
 
@@ -82,7 +82,7 @@ Las palabras y frases sin campo buscan distintas formas de palabra. `--exact` se
 
 Los nombres de campo distinguen mayúsculas. Un campo, valor o combinación desconocidos son un error, nunca una respuesta vacía ni texto normal. Un nombre que el archivo local no conoce no se busca en MAX.
 
-`kind:bot` selecciona un chat con un bot; `in:bots` selecciona los archivos de `max bot`. `topic:` requiere exactamente un chat en `chat:` o `--chat`: los números de tema se repiten entre chats. `filename`, `mime` y `size` coinciden con un mensaje si coincide al menos uno de sus archivos. MAX no indica los tipos de archivo, así que `mime:` no encuentra nada aquí: busca por extensión.
+`kind:bot` selecciona un chat con un bot; `in:bots` selecciona los archivos de `max sales bot`. `topic:` requiere exactamente un chat en `chat:` o `--chat`: los números de tema se repiten entre chats. `filename`, `mime` y `size` coinciden con un mensaje si coincide al menos uno de sus archivos. MAX no indica los tipos de archivo, así que `mime:` no encuentra nada aquí: busca por extensión.
 
 ## Filtros preparados
 
@@ -123,7 +123,7 @@ En un archivo grande, un prefijo corto como `к*` puede abarcar más de 10 000 p
 ### Expresión regular de JavaScript: `--regex`
 
 ```sh
-max search messages --regex 'invoice\s+\d+' --json
+max personal search messages --regex 'invoice\s+\d+' --json
 ```
 
 `--regex` - modo separado. Las palabras después del comando son una única expresión regular de JavaScript, no una consulta en ese idioma. No distingue entre mayúsculas y minúsculas, se compara con el texto completo de cada mensaje almacenado y se ejecuta en un proceso aislado con límites de tiempo y tamaño. Una búsqueda guardada almacena su `--regex`; no puede agregar `--regex` al comenzar desde `--saved`.
@@ -133,9 +133,9 @@ max search messages --regex 'invoice\s+\d+' --json
 `--json` devuelve `{ items, page, limit, hasMore, corrections, completeness, wordsReady, query, coverage }`, aunque no haya coincidencias. `--jsonl` emite solo los elementos.
 
 - `query`: la versión del lenguaje, la zona horaria y el orden usados.
-- `coverage`: en qué cuentas y chats se buscó. `lastSyncedAt` es el momento más antiguo en que `store fetch` descargó un chat del ámbito, o `null` si alguno no se descargó nunca. `inventoryComplete` significa que cada cuenta del ámbito ha listado alguna vez todos sus chats; no garantiza un historial completo.
+- `coverage`: en qué cuentas y chats se buscó. `lastSyncedAt` es el momento más antiguo en que `messages sync` descargó un chat del ámbito, o `null` si alguno no se descargó nunca. `inventoryComplete` significa que cada cuenta del ámbito ha listado alguna vez todos sus chats; no garantiza un historial completo.
 - `completeness`: por chat, si su historial guardado llega al principio y si tiene huecos.
-- `wordsReady`: si el índice de palabras está completo. Cuando es `false`, una consulta con palabras falla con `index_not_ready` y el comando que lo termina, `max store migrate`; una consulta sin palabras se ejecuta.
+- `wordsReady`: si el índice de palabras está completo. Cuando es `false`, una consulta con palabras falla con `index_not_ready` y el comando que lo termina, `max personal store migrate`; una consulta sin palabras se ejecuta.
 - `hasMore` se refiere a la página, no a si MAX tiene más.
 
 Un error incluye la posición del problema en la consulta y una pista.

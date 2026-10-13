@@ -7,7 +7,7 @@ title: "Search query language"
 
 When using `max` through an AI agent, describe what you want in ordinary words and let the agent form the search query. Use this reference when typing searches yourself or looking up exact operators, every field, presets, date rules and limits.
 
-This is help for the queries `max search messages`, `max search mail`, `max search all`, `max stats messages show`, saved searches and `--filter` [search by topic](./topic-search.md). Examples for every day - in [message search](./search.md).
+This is help for the queries `max personal search messages`, `max personal search mail`, `max personal search all`, `max personal stats messages show`, saved searches and `--filter` [search by topic](./topic-search.md). Examples for every day - in [message search](./search.md).
 
 Terms used below:
 
@@ -51,7 +51,7 @@ Unqualified words and phrases match word forms. `--exact` selects exact forms fo
 | group | `(alpha OR beta) gamma` | brackets set the order |
 | field group | `from:(alice OR bob)` | the field applies to each value |
 | range | `date:[2026-01-01 TO 2026-02-01}` | `[ ]` include, `{ }` exclude, `*` open |
-| comparison | `size>10MB`, `date>=7d` | an open range |
+| comparison | `size>10MB`, `date>=7d`, `date:>=7d` | an open range; the form with a colon means the same |
 | wildcard | `квартир*`, `т?кст` | `*` any characters, `?` one |
 | regex | `text:/pass(port)?/` | a bounded Lucene regular expression |
 
@@ -81,7 +81,7 @@ Unqualified words and phrases match word forms. `--exact` selects exact forms fo
 Field names are case-sensitive. An unknown field, value or combination is an error, never an empty
 answer and never plain text. A name that the archive does not know is not looked up on MAX.
 
-`kind:bot` selects a chat with a bot; `in:bots` selects the archives of `max bot`. `topic:` requires exactly one chat in `chat:` or `--chat`: topic numbers repeat across chats. `filename`, `mime` and `size` match a message if at least one of its files matches. MAX does not report file types, so `mime:` finds nothing here: search by extension.
+`kind:bot` selects a chat with a bot; `in:bots` selects the archives of `max sales bot`. `topic:` requires exactly one chat in `chat:` or `--chat`: topic numbers repeat across chats. `filename`, `mime` and `size` match a message if at least one of its files matches. MAX does not report file types, so `mime:` finds nothing here: search by extension.
 
 ## Presets
 
@@ -131,7 +131,7 @@ narrow the chat, the dates or the pattern.
 ### JavaScript Regular Expression: `--regex`
 
 ```sh
-max search messages --regex 'invoice\s+\d+' --json
+max personal search messages --regex 'invoice\s+\d+' --json
 ```
 
 `--regex` - separate mode. The words after command are a single JavaScript regular expression, not a query in that language. It is case-insensitive, checked against the full text of each stored message, and executed in an isolated process with time and size limits. A saved search stores its `--regex`; You cannot add `--regex` when running with `--saved`.
@@ -143,11 +143,11 @@ even when nothing matched. `--jsonl` streams the items only.
 
 - `query` — the language version, the time zone and the order used.
 - `coverage` — which accounts and chats were searched. `lastSyncedAt` is the oldest time a chat in scope
-  was fetched by `store fetch`, `null` if any chat never was. `inventoryComplete` means every account in
+  was fetched by `messages sync`, `null` if any chat never was. `inventoryComplete` means every account in
   scope has once listed all its chats; it does not promise a complete history.
 - `completeness` — per chat: whether its stored history reaches the start and has gaps.
 - `wordsReady` — whether the word index is complete. When it is `false`, a query with words fails with
-  `index_not_ready` and the command that finishes it, `max store migrate`; a query without words runs.
+  `index_not_ready` and the command that finishes it, `max personal store migrate`; a query without words runs.
 - `hasMore` is about the page, not about whether MAX holds more.
 
 An error carries the position of the problem in the query and a hint.

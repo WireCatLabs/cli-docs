@@ -4,6 +4,143 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.49.0 — 13.10.2026
+
+### Novedades
+
+- **Compilado sobre `@wirecat/cli-messaging` 0.259.0 y `@wirecat/cli-base` 0.24.0.** El comando `store fetch` ahora
+  se llama `messages sync` (mismos argumentos, opciones y JSON); el nombre antiguo queda oculto y obsoleto.
+- **`--debug`:** ante un fallo, el registro completo —causa y pila— sigue al error: en la terminal, tras la línea `✗`;
+  en otro caso, como segunda línea JSON.
+- **`runs list` y `runs search` leen un índice por días** y responden en milisegundos incluso con miles de ejecuciones.
+
+### Cambios — pueden romper scripts
+
+- **La copia compartida de mensajes y los modelos de voz se mudan una vez a la carpeta WireCat**, `~/.local/share/WireCat/`
+  (Windows: `%LOCALAPPDATA%\WireCat\Data\`), en la primera ejecución, desde `~/.local/share/cli-messaging/` y
+  `~/.cache/cli-common/models/`. La mudanza no sobrescribe nada: si en ambos sitios hay copias distintas, `max`
+  se detiene con el código `3` y nombra los dos archivos. `WIRECAT_STATE_DIR` sustituye a `CLI_COMMON_CACHE_DIR` y
+  traslada toda la carpeta. Actualiza `tg` y `memo` junto con `max`: un CLI antiguo creará una copia nueva en el sitio anterior.
+  [Dónde están los archivos](./installation.md).
+- **Un único objeto de error:** `{"error":{"code","reason","message","details"}}`. Lo que estaba directamente en `error`
+  —`candidates`, `sendId`, `operationId`, `permission`— ahora está en `error.details`. `reason` es un identificador con
+  puntos (`output_limit` → `output.too-large`, `input_limit` → `input.too-large`); `retryable` aparece solo si lo
+  fijó el propio fallo, y `actions` solo en los elementos fallidos de un resultado parcial. El código `1` se llama
+  `internal_error` (antes `generic_failure`), y su mensaje ya no incluye el texto del fallo: lo muestra
+  `--debug`. Las claves que no están en la lista común de cli-messaging desaparecen de `details`: `providerError` queda
+  solo en el texto del mensaje, y los ID de los mensajes que `messages delete` no eliminó también se enumeran en el mensaje.
+- **`runs show` muestra solo lo que salió mal** (respuestas fallidas, advertencias, un cierre inesperado) y añade
+  `eventCount`; todos los eventos, con `-v`, como antes.
+- **`max` ya no elige el perfil por su cuenta.** Si ni la primera palabra, ni `MAX_PROFILE`, ni el ajuste
+  `defaultProfile` nombran un perfil, un comando que necesita una cuenta termina con el código `2` y enumera los
+  perfiles de este ordenador, aunque solo haya uno. Antes trabajaba en silencio con el perfil `default`.
+  El primer inicio de sesión también lleva nombre: `max personal setup` (cualquier nombre en lugar de `personal`); en un
+  ordenador sin perfiles, el error sugiere justo este comando. Sin perfil siguen funcionando `--help`,
+  `--version`, `commands`, `skill show`, `account list` y `config show`. Las sugerencias de los errores ahora
+  siempre nombran el perfil (`max default setup`, no `max setup`), y `max mcp config` siempre se lo pasa al servidor.
+  Por qué: qué cuenta escribe y lee lo decide el propietario, y lo decide de forma explícita; si no, un agente o un
+  script podía actuar desde la cuenta equivocada.
+  Qué tener en cuenta: para quien usaba el perfil `default` sin nombrarlo, `max chats list` y los scripts sin perfil
+  dejarán de funcionar. El error nombra los perfiles; elige una de tres opciones: `max default chats list`,
+  `export MAX_PROFILE=default` en el perfil de tu shell o `max config set defaultProfile default`. Las entradas MCP
+  creadas con `max mcp config`, vuelve a crearlas con ese mismo comando. [Perfiles](./profiles.md).
+
+## 0.48.0 — 12.10.2026
+
+### Novedades
+
+- **`--brief` y `--full` en cualquier comando.** `--brief` deja de cada mensaje encontrado la referencia, el chat, la hora,
+  el autor, un fragmento y la puntuación; `--full` lo devuelve todo.
+- **`max search all` nombra al autor de cada resultado** y cómo se encontró (por palabras o por significado).
+
+- **`max schedule`: un comando o un agente programados**, mediante systemd (Linux), launchd (macOS) o el
+  Programador de tareas (Windows). `max schedule command <имя> --every 2h -- messages list <чат>` ejecuta un
+  comando de max; la lectura guarda lo leído en el almacén. `max schedule agent <имя> claude "<задание>" --at 08:30`
+  inicia un agente (claude o codex), como mucho una vez por hora. El agente trabaja con `MAX_READ_ONLY=1` y no puede
+  enviar nada; su respuesta queda en `latest.md` junto a la programación, y una notificación de escritorio avisa cuando
+  está lista. `--once 2h` es una sola ejecución; después, la programación se elimina sola. `max schedule list`, `run`, `remove`.
+- **`max server install` indica cómo activar la revisión diaria de compromisos**, y no activa nada por su cuenta.
+- **`MAX_READ_ONLY=1` prohíbe al proceso cualquier envío**, por encima del archivo de configuración y de `--permission`.
+
+### Cambios — pueden romper scripts
+
+- **`max search messages` devuelve un fragmento, no el texto completo.** Cada resultado tiene `excerpt` en lugar de `text`:
+  unos 240 caracteres alrededor de la primera palabra de la consulta; el texto completo, con `--full` o `max messages show <ссылка>`.
+  Los campos vacíos `editedAt`, `replyTo`, `forwardedFrom` y `reactions` ya no se imprimen en la salida para máquinas.
+  Un script que leía `text` de los resultados de búsqueda debe leer `excerpt` o añadir `--full`.
+
+
+## 0.47.0 — 11.10.2026
+
+### Novedades
+
+- **Las tareas tienen plan, enlaces y agenda** (almacén compartido 0.247.0, versión 4). `max tasks add` acepta
+  `--title`, `--description`, `--due` y `--check`; `max tasks plan <задача>` los cambia después, y `none` borra
+  una fecha. La fecha de revisión indica cuándo el agente debe volver a mirar la tarea; no es un recordatorio: el
+  propietario no recibe nada. `max tasks link` vincula a la tarea mensajes, chats, personas, documentos y enlaces;
+  `max tasks show` muestra el plan con sus enlaces. `max tasks agenda`, sin el texto de los mensajes, enumera
+  las tareas vencidas y próximas, los chats donde el propietario debe una respuesta (`owed`), donde espera una respuesta
+  (`waiting`) y los chats cuyo último mensaje aún no está guardado (`unsynced`). `max skill show follow-ups` es
+  una revisión diaria para el agente: solo borradores, no envía nada.
+- **La búsqueda entiende comparaciones con dos puntos.** `date:>=2026-01-01` (y `:>`, `:<`, `:<=`) equivale a
+  `date>=2026-01-01`; antes esa forma daba `invalid_syntax`. Un `after:` o `before:` rechazado ahora
+  sugiere el reemplazo: ante `after:2026-09-01`, la respuesta es usar `date>=2026-09-01`.
+
+### Cambios — pueden romper scripts
+
+- Almacén compartido 0.247.0: el contexto de una reunión registra hechos con la acción `fact.add`; `memory.add` ya no
+  acepta el tipo `fact`.
+- El almacén compartido 0.246.0 comprueba las etiquetas nuevas antes de crearlas. Un nombre parecido requiere la
+  revisión del propietario; puedes usar la etiqueta existente o su alias explícito. Los registros
+  existentes se conservan; las coincidencias automáticas de nombre y alias se unen en una sola etiqueta.
+
+## 0.46.0 — 11.10.2026
+
+### Cambios — pueden romper scripts
+
+- **En macOS, max guarda sus archivos en los mismos sitios que en Linux**: `~/.config/max-cli`, `~/.local/share/max-cli` y
+  `~/.cache/max-cli` en lugar de `~/Library/…`. La primera ejecución traslada allí las carpetas antiguas junto con el almacén
+  compartido y los modelos de voz, y cambia el registro del agente instalado de `max server` a la nueva carpeta. Mientras
+  `max serve` o el servidor MCP estén en marcha, max muestra una advertencia, esa vez trabaja con las carpetas antiguas
+  y lo vuelve a intentar en la siguiente ejecución. En Linux y Windows no cambia nada.
+- **max funciona sobre `@wirecat/cli-messaging` 0.242.0**: se conservan las claves existentes de proyectos y tareas; los
+  proyectos nuevos reciben claves cortas, y el almacén compartido admite dependencias verificables entre tareas.
+- **max funciona sobre `@wirecat/cli-messaging` 0.238.0; el archivo pasa a la versión 2.** Al abrirse por primera vez, el
+  archivo se actualiza: los recuerdos del tipo `fact` se convierten en hechos (lo que ocurrió, separado de las conclusiones),
+  y los vínculos «asignado» se copian a las asignaciones de tareas. Las compilaciones anteriores de max abren el archivo
+  actualizado como antes.
+- **El correo para la búsqueda por significado se divide en fragmentos por conversación, no por mensaje.** Las citas,
+  saludos y firmas no entran en los fragmentos. En la primera indexación se eliminan los fragmentos antiguos y todo el
+  correo se vectoriza de nuevo: una sola vez, y llevará tiempo. El texto de los correos y la búsqueda por palabras no cambian.
+
+### Novedades
+
+- `--source` en `search messages`, `search mail` y `search conversations` acepta una lista de cuentas y grupos:
+  `--source group:work,max:default,email:me@work.example`. Un grupo se guarda con
+  `max config set accountGroups.<имя> <список>` y lo ven todas las aplicaciones que trabajan con el archivo.
+- `max search conversations` encuentra correos de los buzones también por palabras, no solo por significado.
+
+## 0.45.5 — 11.10.2026
+
+### Cambios — pueden romper scripts
+
+- **Unirse a un chat e importar contactos cuentan para `sendsPerHour`.** Unirse cuenta como una acción; importar,
+  una por número; `max contacts import` envía los números de 10 en 10 por solicitud. Si el límite detuvo una importación
+  a medias, el error dice cuántos números se enviaron, y volver a importar es seguro.
+
+### Novedades
+
+- `max search all --backend archive|server|both` y `--server-time`, como en `search messages`; solo afecta a los
+  mensajes: el correo y las notas se buscan localmente. Por defecto, `both`.
+- `max search mail --account <адрес>` busca en el correo de un solo buzón; sin él, en todos.
+- El correo se busca por destinatarios, carpeta y asunto (`to:`, `cc:`, `bcc:`, `mailbox:`, `subject:`), y los adjuntos de los correos, por significado.
+
+### Seguridad
+
+- **La búsqueda ya no devuelve mensajes de otra cuenta.** `search messages --backend server` con `--source all` o
+  `in:all` podía mostrar un mensaje ajeno con los mismos ID de chat y de mensaje; ahora se rechaza buscar en un chat sin cuenta.
+  De `@wirecat/cli-messaging` 0.233.0.
+
 ## 0.45.4 — 11.10.2026
 
 ### Novedades
@@ -874,7 +1011,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.45.4/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.49.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos prácticos para bots.** `max <имя> bot messages send <чат> <текст>` envía a un chat por número, a una persona como `user:<номер>` o por el título de un chat que el bot ya ha visto; también hay `edit`, `delete`, `list` y `get`. `max <имя> bot chats list` muestra los chats que ha visto el bot; también están `chats get|pin|unpin|leave|action`. `max bot list` muestra todos los nombres con un token de bot.
   Por qué «que ha visto»: MAX no ofrece una lista de chats del bot, por lo que `max` los recuerda por su cuenta.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).

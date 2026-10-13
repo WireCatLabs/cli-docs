@@ -168,20 +168,20 @@
     "replacements": {
       "en": [
         {
-          "before": "```sh\nmax session start qr\n```",
-          "after": "```sh\nmax session start qr\n```\n\n1. Keep the QR code visible on your computer, in the terminal or browser window opened by the command.\n2. Open MAX on your phone and select the account you want to connect.\n3. Go to **Settings → Devices** and open its QR login scanner. Labels can vary by app version.\n4. Scan the computer’s QR code using the scanner inside MAX and confirm the connection if asked.\n5. If MAX asks for an additional account password, enter it at the terminal prompt; input is hidden.\n6. Wait for the command to finish successfully, then run `max account show` to verify the account and `max chats list --limit 5` to read a few chats.\n\n[Official MAX login instructions](https://help.max.ru/help/account/dostup_k_prophilyu/kak_voiti_v_prophil_max_esli_on_uzhe_est)."
+          "before": "```sh\nmax personal session start qr\n```",
+          "after": "```sh\nmax personal session start qr\n```\n\n1. Keep the QR code visible on your computer, in the terminal or browser window opened by the command.\n2. Open MAX on your phone and select the account you want to connect.\n3. Go to **Settings → Devices** and open its QR login scanner. Labels can vary by app version.\n4. Scan the computer’s QR code using the scanner inside MAX and confirm the connection if asked.\n5. If MAX asks for an additional account password, enter it at the terminal prompt; input is hidden.\n6. Wait for the command to finish successfully, then run `max personal account show` to verify the account and `max personal chats list --limit 5` to read a few chats.\n\n[Official MAX login instructions](https://help.max.ru/help/account/dostup_k_prophilyu/kak_voiti_v_prophil_max_esli_on_uzhe_est)."
         }
       ],
       "ru": [
         {
-          "before": "```sh\nmax session start qr\n```",
-          "after": "```sh\nmax session start qr\n```\n\n1. Оставьте QR-код видимым на компьютере — в терминале или в окне браузера, которое открыла команда.\n2. На телефоне откройте MAX и выберите аккаунт, который хотите подключить.\n3. Перейдите в **Настройки → Устройства** и откройте сканер для входа по QR. Названия пунктов могут отличаться в вашей версии приложения.\n4. Отсканируйте QR на компьютере сканером внутри MAX и подтвердите подключение, если появится запрос.\n5. Если MAX запрашивает дополнительный пароль аккаунта, введите его по запросу терминала; символы не отображаются.\n6. Дождитесь успешного завершения команды. Проверьте аккаунт через `max account show`, затем прочитайте несколько чатов через `max chats list --limit 5`.\n\n[Официальная инструкция входа MAX](https://help.max.ru/help/account/dostup_k_prophilyu/kak_voiti_v_prophil_max_esli_on_uzhe_est)."
+          "before": "```sh\nmax personal session start qr\n```",
+          "after": "```sh\nmax personal session start qr\n```\n\n1. Оставьте QR-код видимым на компьютере — в терминале или в окне браузера, которое открыла команда.\n2. На телефоне откройте MAX и выберите аккаунт, который хотите подключить.\n3. Перейдите в **Настройки → Устройства** и откройте сканер для входа по QR. Названия пунктов могут отличаться в вашей версии приложения.\n4. Отсканируйте QR на компьютере сканером внутри MAX и подтвердите подключение, если появится запрос.\n5. Если MAX запрашивает дополнительный пароль аккаунта, введите его по запросу терминала; символы не отображаются.\n6. Дождитесь успешного завершения команды. Проверьте аккаунт через `max personal account show`, затем прочитайте несколько чатов через `max personal chats list --limit 5`.\n\n[Официальная инструкция входа MAX](https://help.max.ru/help/account/dostup_k_prophilyu/kak_voiti_v_prophil_max_esli_on_uzhe_est)."
         }
       ],
       "es": [
         {
-          "before": "```sh\nmax session start qr\n```",
-          "after": "```sh\nmax session start qr\n```\n\n1. Mantén visible el QR en el ordenador, en la terminal o en la ventana del navegador abierta por el comando.\n2. Abre MAX en el teléfono y selecciona la cuenta que quieres conectar.\n3. Ve a **Ajustes → Dispositivos** y abre el escáner de acceso por QR. Los nombres pueden variar según la versión.\n4. Escanea el QR del ordenador desde MAX y confirma la conexión si se solicita.\n5. Si MAX pide una contraseña adicional de la cuenta, introdúcela en la terminal; los caracteres se ocultan.\n6. Espera a que termine el comando, comprueba la cuenta con `max account show` y lee algunos chats con `max chats list --limit 5`.\n\n[Instrucciones oficiales de MAX](https://help.max.ru/help/account/dostup_k_prophilyu/kak_voiti_v_prophil_max_esli_on_uzhe_est)."
+          "before": "```sh\nmax personal session start qr\n```",
+          "after": "```sh\nmax personal session start qr\n```\n\n1. Mantén visible el QR en el ordenador, en la terminal o en la ventana del navegador abierta por el comando.\n2. Abre MAX en el teléfono y selecciona la cuenta que quieres conectar.\n3. Ve a **Ajustes → Dispositivos** y abre el escáner de acceso por QR. Los nombres pueden variar según la versión.\n4. Escanea el QR del ordenador desde MAX y confirma la conexión si se solicita.\n5. Si MAX pide una contraseña adicional de la cuenta, introdúcela en la terminal; los caracteres se ocultan.\n6. Espera a que termine el comando, comprueba la cuenta con `max personal account show` y lee algunos chats con `max personal chats list --limit 5`.\n\n[Instrucciones oficiales de MAX](https://help.max.ru/help/account/dostup_k_prophilyu/kak_voiti_v_prophil_max_esli_on_uzhe_est)."
         }
       ]
     }
@@ -243,20 +243,20 @@
     "replacements": {
       "en": [
         {
-          "before": "\nThe token's lifetime is unknown: MAX does not report it. It continues working after the web.max.ru tab is closed. When MAX stops accepting it, log in again with `max session start`.\n\n`max` does not limit logins, but counts them for each profile. `max doctor` shows the count.\n\n",
-          "after": "\nMAX does not report a fixed token expiration time, so the CLI cannot promise a number of days. Closing the web.max.ru tab does not end the authorization. If MAX rejects the saved token, reconnect by QR:\n\n```sh\nmax session start qr\n```\n\nFor a work profile, use `max work session start qr`. Then run `max account show` (or `max work account show`) to verify the account. The bare `max session start` command imports an existing token rather than displaying a QR code. `max doctor` shows the login count for the profile.\n\n"
+          "before": "\nThe token's lifetime is unknown: MAX does not report it. It continues working after the web.max.ru tab is closed. When MAX stops accepting it, log in again with `max personal session start`.\n\n`max` does not limit logins, but counts them for each profile. `max personal doctor` shows the count.\n\n",
+          "after": "\nMAX does not report a fixed token expiration time, so the CLI cannot promise a number of days. Closing the web.max.ru tab does not end the authorization. If MAX rejects the saved token, reconnect by QR:\n\n```sh\nmax personal session start qr\n```\n\nFor a work profile, use `max work session start qr`. Then run `max personal account show` (or `max work account show`) to verify the account. The bare `max personal session start` command imports an existing token rather than displaying a QR code. `max personal doctor` shows the login count for the profile.\n\n"
         }
       ],
       "ru": [
         {
-          "before": "\nСрок жизни токена неизвестен: MAX его не сообщает. Токен продолжает работать и после того, как\nвкладка web.max.ru закрыта. Когда MAX перестаёт его принимать, войдите заново:\n`max session start`.\n\n`max` не ограничивает число входов, но считает их для каждого профиля; счётчик показывает\n`max doctor`.\n\n",
-          "after": "\nMAX не сообщает фиксированный срок истечения токена, поэтому CLI не может обещать конкретное число дней. Закрытие вкладки web.max.ru не завершает авторизацию. Если MAX перестал принимать сохранённый токен, подключитесь заново по QR:\n\n```sh\nmax session start qr\n```\n\nДля рабочего профиля используйте `max work session start qr`. Затем проверьте аккаунт командой `max account show` или `max work account show`. Команда `max session start` без способа импортирует существующий токен, а не показывает QR-код. Число входов для профиля показывает `max doctor`.\n\n"
+          "before": "\nСрок жизни токена неизвестен: MAX его не сообщает. Токен продолжает работать и после того, как\nвкладка web.max.ru закрыта. Когда MAX перестаёт его принимать, войдите заново:\n`max personal session start`.\n\n`max` не ограничивает число входов, но считает их для каждого профиля; счётчик показывает\n`max personal doctor`.\n\n",
+          "after": "\nMAX не сообщает фиксированный срок истечения токена, поэтому CLI не может обещать конкретное число дней. Закрытие вкладки web.max.ru не завершает авторизацию. Если MAX перестал принимать сохранённый токен, подключитесь заново по QR:\n\n```sh\nmax personal session start qr\n```\n\nДля рабочего профиля используйте `max work session start qr`. Затем проверьте аккаунт командой `max personal account show` или `max work account show`. Команда `max personal session start` без способа импортирует существующий токен, а не показывает QR-код. Число входов для профиля показывает `max personal doctor`.\n\n"
         }
       ],
       "es": [
         {
-          "before": "\nSu duración es desconocida: MAX no la comunica. Sigue funcionando después de cerrar la pestaña de web.max.ru. Cuando MAX deje de aceptarlo, vuelve a iniciar sesión con `max session start`.\n\n`max` no limita el número de accesos, pero los cuenta por perfil; `max doctor` muestra el contador.\n\n",
-          "after": "\nMAX no informa de una fecha fija de caducidad del token; el CLI no puede prometer un número de días. Cerrar web.max.ru no termina la autorización. Si MAX rechaza el token guardado, vuelve a conectar por QR:\n\n```sh\nmax session start qr\n```\n\nPara el perfil laboral, usa `max work session start qr`. Comprueba después la cuenta con `max account show` o `max work account show`. El comando `max session start` sin método importa un token existente en lugar de mostrar un QR. `max doctor` muestra el número de accesos del perfil.\n\n"
+          "before": "\nSu duración es desconocida: MAX no la comunica. Sigue funcionando después de cerrar la pestaña de web.max.ru. Cuando MAX deje de aceptarlo, vuelve a iniciar sesión con `max personal session start`.\n\n`max` no limita el número de accesos, pero los cuenta por perfil; `max personal doctor` muestra el contador.\n\n",
+          "after": "\nMAX no informa de una fecha fija de caducidad del token; el CLI no puede prometer un número de días. Cerrar web.max.ru no termina la autorización. Si MAX rechaza el token guardado, vuelve a conectar por QR:\n\n```sh\nmax personal session start qr\n```\n\nPara el perfil laboral, usa `max work session start qr`. Comprueba después la cuenta con `max personal account show` o `max work account show`. El comando `max personal session start` sin método importa un token existente en lugar de mostrar un QR. `max personal doctor` muestra el número de accesos del perfil.\n\n"
         }
       ]
     }
@@ -268,20 +268,20 @@
     "replacements": {
       "en": [
         {
-          "before": "if ! max messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max setup\" ;;\n  esac\nfi",
-          "after": "if max messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max setup\" ;;\n  esac\nfi"
+          "before": "if ! max personal messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max personal setup\" ;;\n  esac\nfi",
+          "after": "if max personal messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max personal setup\" ;;\n  esac\nfi"
         }
       ],
       "ru": [
         {
-          "before": "if ! max messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max setup\" ;;\n  esac\nfi",
-          "after": "if max messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max setup\" ;;\n  esac\nfi"
+          "before": "if ! max personal messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max personal setup\" ;;\n  esac\nfi",
+          "after": "if max personal messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max personal setup\" ;;\n  esac\nfi"
         }
       ],
       "es": [
         {
-          "before": "if ! max messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max setup\" ;;\n  esac\nfi",
-          "after": "if max messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max setup\" ;;\n  esac\nfi"
+          "before": "if ! max personal messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max personal setup\" ;;\n  esac\nfi",
+          "after": "if max personal messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max personal setup\" ;;\n  esac\nfi"
         }
       ]
     }
@@ -325,50 +325,25 @@
   },
   {
     "tool": "max",
-    "slug": "installation",
-    "reason": "Use harness-neutral first-run commands. setup asks for the agent in an interactive terminal; preserve explicit option documentation and machine-mode behavior. Requested by owner 2026-10-04; checked against setup option/selectAgent implementations.",
-    "replacements": {
-      "en": [
-        {
-          "before": "\nmax setup --agent codex            # QR-вход и навык агента\n",
-          "after": "\nmax setup            # QR-вход и навык агента\n"
-        }
-      ],
-      "ru": [
-        {
-          "before": "\nmax setup --agent codex            # QR-вход и навык агента\n",
-          "after": "\nmax setup            # QR-вход и навык агента\n"
-        }
-      ],
-      "es": [
-        {
-          "before": "\nmax setup --agent codex            # QR-вход и навык агента\n",
-          "after": "\nmax setup            # QR-вход и навык агента\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
     "slug": "usage",
     "reason": "Use harness-neutral first-run commands. setup asks for the agent in an interactive terminal; preserve explicit option documentation and machine-mode behavior. Requested by owner 2026-10-04; checked against setup option/selectAgent implementations.",
     "replacements": {
       "en": [
         {
-          "before": "\nmax setup --agent codex  # QR-вход и навык агента\n",
-          "after": "\nmax setup  # QR-вход и навык агента\n"
+          "before": "\nmax personal setup --agent codex  # QR-вход и навык агента\n",
+          "after": "\nmax personal setup  # QR-вход и навык агента\n"
         }
       ],
       "ru": [
         {
-          "before": "\nmax setup --agent codex  # QR-вход и навык агента\n",
-          "after": "\nmax setup  # QR-вход и навык агента\n"
+          "before": "\nmax personal setup --agent codex  # QR-вход и навык агента\n",
+          "after": "\nmax personal setup  # QR-вход и навык агента\n"
         }
       ],
       "es": [
         {
-          "before": "\nmax setup --agent codex  # QR-вход и навык агента\n",
-          "after": "\nmax setup  # QR-вход и навык агента\n"
+          "before": "\nmax personal setup --agent codex  # QR-вход и навык агента\n",
+          "after": "\nmax personal setup  # QR-вход и навык агента\n"
         }
       ]
     }
@@ -380,20 +355,20 @@
     "replacements": {
       "en": [
         {
-          "before": "\n`max setup --agent codex` checks local directories, guides you through QR login, checks your account and up to five chats, and installs the agent skill. Agent choices: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Without a parameter, an interactive terminal asks you; machine mode skips skill installation. `max skill show` is available before login.\n",
-          "after": "\n`max setup` checks local directories, guides you through QR login, checks your account and up to five chats, and installs the agent skill. Agent choices: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Without a parameter, an interactive terminal asks you; machine mode skips skill installation. `max skill show` is available before login.\n"
+          "before": "\n`max personal setup --agent codex` checks local directories, guides you through QR login, checks your account and up to five chats, and installs the agent skill. Agent choices: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Without a parameter, an interactive terminal asks you; machine mode skips skill installation. `max skill show` is available before login.\n",
+          "after": "\n`max personal setup` checks local directories, guides you through QR login, checks your account and up to five chats, and installs the agent skill. Agent choices: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Without a parameter, an interactive terminal asks you; machine mode skips skill installation. `max skill show` is available before login.\n"
         }
       ],
       "ru": [
         {
-          "before": "\n`max setup --agent codex` проверяет локальные каталоги, проводит через QR-вход, проверяет\n",
-          "after": "\n`max setup` проверяет локальные каталоги, проводит через QR-вход, проверяет\n"
+          "before": "\n`max personal setup --agent codex` проверяет локальные каталоги, проводит через QR-вход, проверяет\n",
+          "after": "\n`max personal setup` проверяет локальные каталоги, проводит через QR-вход, проверяет\n"
         }
       ],
       "es": [
         {
-          "before": "\n`max setup --agent codex` comprueba los directorios locales, guía el acceso con QR, comprueba la cuenta y hasta cinco chats e instala el skill del agente. Opciones: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Sin opción pregunta en el terminal; en modo máquina omite el skill. `max skill show` se puede leer antes de iniciar sesión.\n",
-          "after": "\n`max setup` comprueba los directorios locales, guía el acceso con QR, comprueba la cuenta y hasta cinco chats e instala el skill del agente. Opciones: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Sin opción pregunta en el terminal; en modo máquina omite el skill. `max skill show` se puede leer antes de iniciar sesión.\n"
+          "before": "\n`max personal setup --agent codex` comprueba los directorios locales, guía el acceso con QR, comprueba la cuenta y hasta cinco chats e instala el skill del agente. Opciones: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Sin opción pregunta en el terminal; en modo máquina omite el skill. `max skill show` se puede leer antes de iniciar sesión.\n",
+          "after": "\n`max personal setup` comprueba los directorios locales, guía el acceso con QR, comprueba la cuenta y hasta cinco chats e instala el skill del agente. Opciones: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Sin opción pregunta en el terminal; en modo máquina omite el skill. `max skill show` se puede leer antes de iniciar sesión.\n"
         }
       ]
     }
@@ -877,20 +852,20 @@
     "replacements": {
       "ru": [
         {
-          "before": "`max messages link <chat> <message>` или `max messages link <msg:locator>` возвращает\n`{ locator, url, access, reason }`. Личный MAX сначала проверяет сообщение в локальном архиве\nи возвращает locator; формат нативной ссылки пока не подтверждён. С `--offline` подключения нет.\nLocator другой учётной записи отклоняется. `messages links` — другая команда: она объясняет связи\nразговоров ([поиск по темам](./topic-search.md)).",
-          "after": "`max messages link <chat> <message>` или `max messages link <msg:locator>` возвращает\n`{ locator, url, access, reason }`. Личный MAX сначала проверяет сообщение в локальном архиве\nи возвращает locator без нативной ссылки. Команда читает только архив и не подключается к MAX даже без `--offline`.\nLocator другой учётной записи отклоняется. `messages links` — другая команда: она объясняет связи\nразговоров ([поиск по темам](./topic-search.md))."
+          "before": "`max personal messages link <chat> <message>` или `max personal messages link <msg:locator>` возвращает\n`{ locator, url, access, reason }`. Личный MAX сначала проверяет сообщение в локальном архиве\nи возвращает locator; формат нативной ссылки пока не подтверждён. С `--offline` подключения нет.\nLocator другой учётной записи отклоняется. `messages links` — другая команда: она объясняет связи\nразговоров ([поиск по темам](./topic-search.md)).",
+          "after": "`max personal messages link <chat> <message>` или `max personal messages link <msg:locator>` возвращает\n`{ locator, url, access, reason }`. Личный MAX сначала проверяет сообщение в локальном архиве\nи возвращает locator без нативной ссылки. Команда читает только архив и не подключается к MAX даже без `--offline`.\nLocator другой учётной записи отклоняется. `messages links` — другая команда: она объясняет связи\nразговоров ([поиск по темам](./topic-search.md))."
         }
       ],
       "en": [
         {
-          "before": "`max messages link <chat> <message>` or `max messages link <msg:locator>` returns `{ locator, url, access, reason }`. Personal MAX first checks the message in the local archive and returns a locator; The native link format has not yet been confirmed. There is no connection with `--offline`. The other account's Locator is rejected. `messages links` is another command: it explains the connections of conversations ([search by topic](./topic-search.md)).",
-          "after": "`max messages link <chat> <message>` or `max messages link <msg:locator>` returns `{ locator, url, access, reason }`. Personal MAX checks the message in the local archive and returns a locator without a native URL. This command reads only the archive and never connects to MAX, even without `--offline`. The other account's Locator is rejected. `messages links` is another command: it explains the connections of conversations ([search by topic](./topic-search.md))."
+          "before": "`max personal messages link <chat> <message>` or `max personal messages link <msg:locator>` returns `{ locator, url, access, reason }`. Personal MAX first checks the message in the local archive and returns a locator; The native link format has not yet been confirmed. There is no connection with `--offline`. The other account's Locator is rejected. `messages links` is another command: it explains the connections of conversations ([search by topic](./topic-search.md)).",
+          "after": "`max personal messages link <chat> <message>` or `max personal messages link <msg:locator>` returns `{ locator, url, access, reason }`. Personal MAX checks the message in the local archive and returns a locator without a native URL. This command reads only the archive and never connects to MAX, even without `--offline`. The other account's Locator is rejected. `messages links` is another command: it explains the connections of conversations ([search by topic](./topic-search.md))."
         }
       ],
       "es": [
         {
-          "before": "`max messages link <chat> <message>` o `max messages link <msg:locator>` devuelve `{ locator, url, access, reason }`. Personal MAX primero verifica el mensaje en el archivo local y devuelve un localizador; El formato del enlace nativo aún no se ha confirmado. No hay conexión con `--offline`. Se rechaza el localizador de la otra cuenta. `messages links` es otro comando: explica las conexiones de las conversaciones ([buscar por temas](./topic-search.md)).",
-          "after": "`max messages link <chat> <message>` o `max messages link <msg:locator>` devuelve `{ locator, url, access, reason }`. En una cuenta personal de MAX, el comando comprueba el mensaje en el archivo local y devuelve su localizador sin una URL nativa. Solo lee el archivo local y no se conecta a MAX, incluso sin `--offline`. Se rechaza el localizador de la otra cuenta. `messages links` es otro comando: explica las conexiones de las conversaciones ([buscar por temas](./topic-search.md))."
+          "before": "`max personal messages link <chat> <message>` o `max personal messages link <msg:locator>` devuelve `{ locator, url, access, reason }`. Personal MAX primero verifica el mensaje en el archivo local y devuelve un localizador; El formato del enlace nativo aún no se ha confirmado. No hay conexión con `--offline`. Se rechaza el localizador de la otra cuenta. `messages links` es otro comando: explica las conexiones de las conversaciones ([buscar por temas](./topic-search.md)).",
+          "after": "`max personal messages link <chat> <message>` o `max personal messages link <msg:locator>` devuelve `{ locator, url, access, reason }`. En una cuenta personal de MAX, el comando comprueba el mensaje en el archivo local y devuelve su localizador sin una URL nativa. Solo lee el archivo local y no se conecta a MAX, incluso sin `--offline`. Se rechaza el localizador de la otra cuenta. `messages links` es otro comando: explica las conexiones de las conversaciones ([buscar por temas](./topic-search.md))."
         }
       ]
     }
@@ -1323,19 +1298,6 @@
   },
   {
     "tool": "max",
-    "slug": "installation",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Установка\"\n---\n\n",
-          "after": "---\ntitle: \"Установка\"\n---\n\n<a id=\"обычный-способ\" />\n\n<a id=\"первый-запуск-и-инструкция-для-агента\" />\n\n<a id=\"обновление-и-удаление\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
     "slug": "mcp",
     "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
     "replacements": {
@@ -1609,6 +1571,44 @@
         {
           "before": "todo el ejecución",
           "after": "toda la ejecución"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "search",
+    "source": "https://github.com/WireCatLabs/cli-memo/blob/v0.21.0/CHANGELOG.md",
+    "reason": "max 0.49.0 names memo sync --mail, which arrives in a memo release newer than the pinned memo 0.21.0; there the same import is memo import --mail. Drop this correction when the memo pin reaches memo sync.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "# только почта, которую привёл memo sync --mail",
+          "after": "# только почта, которую привёл memo import --mail"
+        },
+        {
+          "before": "`memo sync --mail` и `memo import`",
+          "after": "`memo import --mail` и `memo import`"
+        }
+      ],
+      "en": [
+        {
+          "before": "# только почта, которую привёл memo sync --mail",
+          "after": "# только почта, которую привёл memo import --mail"
+        },
+        {
+          "before": "`memo sync --mail` and `memo import`",
+          "after": "`memo import --mail` and `memo import`"
+        }
+      ],
+      "es": [
+        {
+          "before": "# только почта, которую привёл memo sync --mail",
+          "after": "# только почта, которую привёл memo import --mail"
+        },
+        {
+          "before": "`memo sync --mail` y `memo import`",
+          "after": "`memo import --mail` y `memo import`"
         }
       ]
     }

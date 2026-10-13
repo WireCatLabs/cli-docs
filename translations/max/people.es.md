@@ -17,20 +17,20 @@ Unas palabras que aparecerán a continuación:
 
 |Tarea|Comando|
 | --- | --- |
-|Descubra quién es y dónde se corresponde con él.| `max contacts profile` |
-|Lea lo que escribió en todos los chats o en los nombrados.| `max contacts context` |
-|Comprueba si la cuenta parece un bot, una falsificación o un spammer| `max contacts check` |
-|Comprueba los miembros del grupo más sospechosos| `max chats members audit --deep` |
-|Anota que la cuenta MAX y la cuenta Telegram son la misma persona| `max contacts link` |
-|Guarde su nombre y notas sobre la persona.| `max contacts alias`, `max contacts notes` |
+|Descubra quién es y dónde se corresponde con él.| `max personal contacts profile` |
+|Lea lo que escribió en todos los chats o en los nombrados.| `max personal contacts context` |
+|Comprueba si la cuenta parece un bot, una falsificación o un spammer| `max personal contacts check` |
+|Comprueba los miembros del grupo más sospechosos| `max personal chats members audit --deep` |
+|Anota que la cuenta MAX y la cuenta Telegram son la misma persona| `max personal contacts link` |
+|Guarde su nombre y notas sobre la persona.| `max personal contacts alias`, `max personal contacts notes` |
 
 Todas las opciones para estos comandos están en [referencia de comandos para contactos](./commands.md#max-contacts).
 
 ## Quién es: `contacts profile`
 
 ```sh
-max contacts profile 20000002
-max contacts profile 20000002 --json
+max personal contacts profile 20000002
+max personal contacts profile 20000002 --json
 ```
 
 El comando muestra lo que MAX informa sobre la persona y cuántos mensajes suyos están guardados localmente en cada chat compartido:
@@ -74,7 +74,7 @@ El comando realiza una solicitud adicional a MAX respecto a `contacts show` y no
 `theirMessages`, `firstAt` y `lastAt` se calculan a partir de el archivo local, no se solicitan a MAX. Si `complete: false`, el chat no está guardado desde el principio: el recuento es un mínimo y `firstAt` puede ser posterior al primer mensaje real de esa persona. Descarga el chat para completarlo:
 
 ```sh
-max store fetch "Книжный клуб"
+max personal messages sync "Книжный клуб"
 ```
 
 ## Qué escribió: `contacts context`
@@ -82,14 +82,14 @@ max store fetch "Книжный клуб"
 Sin `--chat`, el comando prepara un resumen de el archivo local: chats compartidos, el último mensaje en cada dirección, mensajes recientes de la persona en el chat privado y en grupos donde otros la mencionaron. No se conecta a MAX ni marca nada como leído.
 
 ```sh
-max contacts context 20000002
+max personal contacts context 20000002
 ```
 
 Con `--chat`, muestra los últimos mensajes de la persona en cada chat indicado, del más antiguo al más reciente, 20 por chat:
 
 ```sh
-max contacts context 20000002 --chat "Книжный клуб" --chat "Работа" --limit 10
-max contacts context 20000002 --chat "Книжный клуб" --refresh
+max personal contacts context 20000002 --chat "Книжный клуб" --chat "Работа" --limit 10
+max personal contacts context 20000002 --chat "Книжный клуб" --refresh
 ```
 
 ```json
@@ -118,7 +118,7 @@ max contacts context 20000002 --chat "Книжный клуб" --refresh
 ## Bot, cuenta falsa o spam: `contacts check`
 
 ```sh
-max contacts check 20000002
+max personal contacts check 20000002
 ```
 
 ```json
@@ -161,8 +161,8 @@ Nada. Las listas públicas de spam (Combot CAS y lols.bot) solo cubren cuentas d
 ## Miembros del grupo: `chats members audit --deep`
 
 ```sh
-max chats members audit "Книжный клуб"
-max chats members audit "Книжный клуб" --deep 10
+max personal chats members audit "Книжный клуб"
+max personal chats members audit "Книжный клуб" --deep 10
 ```
 
 `chats members audit` evalúa a todos los miembros con la lista de miembros y el archivo local, sin una solicitud independiente por persona, y muestra a quienes tengan algún motivo, de mayor a menor puntuación. Después, `--deep 10` ejecuta una comprobación completa de `contacts check` para las diez personas con mayor puntuación, una por segundo. No elimina a nadie; se excluyen el propietario y los administradores.
@@ -174,8 +174,8 @@ max chats members audit "Книжный клуб" --deep 10
 `max` y `tg` en el mismo ordenador usan una archivo local compartida. Si sabes que una cuenta de MAX y una de Telegram pertenecen a la misma persona, registra el vínculo:
 
 ```sh
-max contacts link 20000002 telegram:1000001
-max contacts unlink 20000002
+max personal contacts link 20000002 telegram:1000001
+max personal contacts unlink 20000002
 ```
 
 Luego de esto, `contacts context` sin `--chat` recopila ambas cuentas: chats generales y mensajes de MAX y de Telegram. `contacts profile` y `contacts context --chat` todavía solo muestran la cuenta que nombraste. La conexión es solo lo que anotaste: el mismo nombre en dos servicios de mensajería nunca se considera una sola persona. Esta entrada no cambia la libreta de direcciones MAX.
@@ -183,17 +183,17 @@ Luego de esto, `contacts context` sin `--chat` recopila ambas cuentas: chats gen
 ## Sus nombres y notas: `contacts alias`, `contacts notes`
 
 ```sh
-max contacts alias set "Борис Пример" Боря            # ваше имя для человека, только на этом компьютере
-max contacts alias rm "Борис Пример"
-max contacts notes add "Борис Пример" --file note.txt  # или текст из stdin
-max contacts notes list "Борис Пример"
-max contacts notes edit "Борис Пример" <id> --revision 1 --file note.txt
-max contacts notes remove "Борис Пример" <id>
-max contacts show "Борис Пример" --with-notes
-max contacts list --search-notes квартира             # люди, в чьих заметках есть этот текст
+max personal contacts alias set "Борис Пример" Боря            # ваше имя для человека, только на этом компьютере
+max personal contacts alias rm "Борис Пример"
+max personal contacts notes add "Борис Пример" --file note.txt  # или текст из stdin
+max personal contacts notes list "Борис Пример"
+max personal contacts notes edit "Борис Пример" <id> --revision 1 --file note.txt
+max personal contacts notes remove "Борис Пример" <id>
+max personal contacts show "Борис Пример" --with-notes
+max personal contacts list --search-notes квартира             # люди, в чьих заметках есть этот текст
 ```
 
-Los apodos y las notas se guardan en una archivo local y nunca van a MAX. El apodo es válido sólo en la cuenta con la que estás trabajando; una nota sobre una persona es visible en cada perfil de inicio de sesión `max` en esa computadora donde aparece esa persona. `contacts rename` cambia el nombre en la libreta de direcciones MAX, eso es diferente. El comando busca una persona que usa su apodo si el apodo no coincide con el nombre de otra persona; de lo contrario necesitas una identificación. `--revision` no le permite cambiar una nota si se cambió después de leerla.
+Los apodos y las notas se guardan en una archivo local y nunca van a MAX. El apodo es válido sólo en la cuenta con la que estás trabajando; una nota sobre una persona es visible en cada perfil de inicio de sesión `max` en esa computadora donde aparece esa persona. `contacts rename` cambia el nombre en la libreta de direcciones MAX, eso es diferente. El comando busca una persona que usa su apodo si el apodo no coincide con el nombre de otra persona; de lo contrario necesitas una identificación. `--revision` no le permite cambiar una nota si se cambió después de leerla. Actualizar los contactos conserva las notas y los apodos, y vincular personas no los fusiona.
 
 ## ¿Qué sigue?
 

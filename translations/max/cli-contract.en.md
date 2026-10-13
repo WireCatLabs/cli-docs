@@ -17,7 +17,7 @@ Terms used below:
 - **stdout** and **stderr** are the command's two output streams. Results go to stdout; progress, warnings and errors go to stderr.
 - **Exit code** — the number returned when a command exits. `0` means success; other numbers identify the failure type.
 - **Machine mode** — JSON output for programs rather than text for people.
-- A **one-shot command** performs one action and exits, such as `max messages list`. A **long-running command** continues until stopped: `watch`, `serve` and `mcp`.
+- A **one-shot command** performs one action and exits, such as `max personal messages list`. A **long-running command** continues until stopped: `watch`, `serve` and `mcp`.
 - **Write** — an action changing something in MAX: sending, editing, deleting or marking read.
 
 ## What you can rely on
@@ -31,19 +31,19 @@ Terms used below:
 | Return only needed fields | `--fields` |
 | Discover command options without reading the guide | `max commands` and `max commands schema` |
 | Preview an action | `--dry-run` |
-| Handle a write whose outcome is unknown | `outcome_unknown`, `retryable` and `operationId` |
+| Handle a write whose outcome is unknown | `outcome_unknown` and `details.operationId` |
 
-Partial reads and downloads can return JSON with exit code `0`: inspect `complete` and `batch` or `issue`. Partial download JSONL adds `batch_summary`; completed work stays saved. Errors include `actions` with recovery steps, settings and waits.
+Partial reads and downloads can return JSON with exit code `0`: inspect `complete` and `batch` or `issue`. Partial download JSONL adds `batch_summary`; completed work stays saved. Each failed item in `batch` includes `actions` with recovery steps, settings and waits.
 
 ## Command names
 
 Commands follow the pattern `max [профиль] ресурс действие`. Reports and counts are under `stats`, followed by the resource and report type:
 
 ```sh
-max stats messages show --by sender --limit 10 --json
-max stats chats show <чат> --json
-max stats tasks show --json
-max stats charts <чат> --json
+max personal stats messages show --by sender --limit 10 --json
+max personal stats chats show <чат> --json
+max personal stats tasks show --json
+max personal stats charts <чат> --json
 ```
 
 The old paths `messages stats`, `chats stats` and `tasks stats` no longer exist, including aliases. If settings grant permissions for them, preview changes with `max config migrate --dry-run`, then run `max config migrate`. Permission to view statistics does not override a ban on reading underlying messages, chats or tasks.
@@ -52,7 +52,7 @@ The old paths `messages stats`, `chats stats` and `tasks stats` no longer exist,
 
 `--json` returns JSON; `--jsonl` emits one JSON object per line for commands supporting streams. Piped output selects JSON automatically. Data goes to stdout and diagnostics to stderr. Explicit JSON also works in a terminal. `--help` and `--version` print text to stdout with exit code 0 without running the command.
 
-An error that ends the command in machine mode is one stderr object: `{"error":{"code":"…","message":"…","retryable":false}}`. An unknown command, flag or missing required argument returns code 2. `max commands --json` lists all exit codes. `--quiet` hides ordinary diagnostics but retains errors. Machine output has no colours or animation; `NO_COLOR` disables colours in ordinary output.
+An error that ends the command in machine mode is one stderr object: `{"error":{"code":"…","reason":"…","message":"…","details":{…}}}`. `reason` is a dotted identifier, for example `output.too-large`; `details` holds what names the failure: `candidates`, `operationId`, `permission`, and `retryable` only when the failure set it. `--debug` adds the cause and the stack. An unknown command, flag or missing required argument returns code 2. `max commands --json` lists all exit codes. `--quiet` hides ordinary diagnostics but retains errors. Machine output has no colours or animation; `NO_COLOR` disables colours in ordinary output.
 
 ## Noninteractive runs and limits
 
@@ -67,7 +67,7 @@ Stdin is limited to 16 MiB; `--max-input-bytes 33554432` increases it. Secret in
 ## Short results and accepted inputs
 
 ```sh
-max messages list <чат> --json --fields id,text
+max personal messages list <чат> --json --fields id,text
 max commands messages list --json
 max commands schema messages list --json
 ```
@@ -94,6 +94,6 @@ Ask your agent to show the messages counted and the saved history coverage. An u
 
 ## Rules we follow
 
-`max` follows applicable parts of [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) and [Command Line Interface Guidelines](https://clig.dev/), as well as [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) and [Agent Skills](https://agentskills.io/specification). The [architecture](https://github.com/WireCatLabs/max-cli/blob/v0.45.4/docs/dev/ARCHITECTURE.md) and [shared CLI standard](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/dev/STANDARD.md) explain how these apply and intentional exceptions. We do not claim full third-party certification.
+`max` follows applicable parts of [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) and [Command Line Interface Guidelines](https://clig.dev/), as well as [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) and [Agent Skills](https://agentskills.io/specification). The [architecture](https://github.com/WireCatLabs/max-cli/blob/v0.49.0/docs/dev/ARCHITECTURE.md) and [shared CLI standard](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/dev/STANDARD.md) explain how these apply and intentional exceptions. We do not claim full third-party certification.
 
 See [configuration](./configuration.md) for setup steps and the [configuration reference](./configuration-reference.md) for all keys and environment variables.

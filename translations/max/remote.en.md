@@ -6,14 +6,14 @@ Connect an AI chat in your browser or on your phone, such as ChatGPT, Codex web 
 
 Terms used here:
 
-- **MCP** (Model Context Protocol) is a standard way for an AI app to call external tools. `max mcp` is the MCP server installed with `max`; apps on your computer are covered in the [MCP server guide](./mcp.md).
-- **Remote connection** means the app connects from its servers, over the internet, to the address you provide. `max mcp --http` serves the same tools over HTTP on `127.0.0.1`.
+- **MCP** (Model Context Protocol) is a standard way for an AI app to call external tools. `max personal mcp` is the MCP server installed with `max`; apps on your computer are covered in the [MCP server guide](./mcp.md).
+- **Remote connection** means the app connects from its servers, over the internet, to the address you provide. `max personal mcp --http` serves the same tools over HTTP on `127.0.0.1`.
 - **HTTPS tunnel** is a program that gives a port on your computer a public HTTPS address. This guide uses [Tailscale Funnel](https://tailscale.com/docs/features/tailscale-funnel); Cloudflare Tunnel also works. Funnel does not require you to buy a domain.
 - **Public address** is that address, for example `https://laptop.tail1234.ts.net`. Pass it to `max` as `--public-url` and to the app with `/mcp` appended.
 - **Login code** is the one-time code `max` prints in your terminal. The app's login page asks for it, so connecting an app requires access to that terminal.
 
 ```text
-ChatGPT / Claude ──интернет──▶ Tailscale Funnel ──▶ max mcp --http (вход) ──▶ MAX
+ChatGPT / Claude ──интернет──▶ Tailscale Funnel ──▶ max personal mcp --http (вход) ──▶ MAX
 ```
 
 If your Tailscale connection already works, keep it; you do not need a second tunnel. Local connections through stdin and stdout continue to work as before.
@@ -31,9 +31,9 @@ If your Tailscale connection already works, keep it; you do not need a second tu
 
 ## Before you begin
 
-- **Anyone who logs in can read your MAX.** Login requires the code from your terminal. Never put a tunnel in front of `max mcp` without `--http`: that mode has no login protection.
+- **Anyone who logs in can read your MAX.** Login requires the code from your terminal. Never put a tunnel in front of `max personal mcp` without `--http`: that mode has no login protection.
 - **Profile permissions decide what the app may change.** `deny` and `readonly` refuse changes; `ask` and `allow` let the requested change proceed through MCP without a server confirmation form. Approval inside the app is a separate control and depends on its settings. Recipient restrictions and the hourly send limit still apply ([agent permissions in MCP](./mcp.md#что-может-агент), [configuration guide](./configuration.md)).
-- **The computer running `max` must stay on.** To connect from a phone or a laptop with nothing installed, run the tool and tunnel on a small server that stays on, and log into `max` there (`max setup --agent none`). You then need only a browser on your device.
+- **The computer running `max` must stay on.** To connect from a phone or a laptop with nothing installed, run the tool and tunnel on a small server that stays on, and log into `max` there (`max personal setup --agent none`). You then need only a browser on your device.
 - **Who can add a remote connector:**
 
 | App | Plans | Documentation |
@@ -46,7 +46,7 @@ The steps for each operating system have not all been tested on that system. If 
 
 ## 1. Prepare Tailscale
 
-First install the CLI and log into MAX ([installation guide](./installation.md)); for local setup without an agent, use `max setup --agent none`. Run the server as the same operating-system user and with the same profile. Put the profile first when needed: `max work mcp`. Tailscale is installed separately; both `max` and `tg` support this tunnel setup.
+First install the CLI and log into MAX ([installation guide](./installation.md)); for local setup without an agent, use `max personal setup --agent none`. Run the server as the same operating-system user and with the same profile. Put the profile first when needed: `max work mcp`. Tailscale is installed separately; both `max` and `tg` support this tunnel setup.
 
 Install [Tailscale](https://tailscale.com/download), sign in and enable [Funnel](https://tailscale.com/docs/features/tailscale-funnel). Your Tailscale network needs MagicDNS, HTTPS certificates and permission to use Funnel. The first Funnel run may print a link where you can grant that permission.
 
@@ -83,12 +83,12 @@ Install the Tailscale app and sign in. Its CLI is included in the app; if `tails
 TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8765
 ```
 
-Second window, as the user who ran `max setup --agent none`. Works in zsh and bash:
+Second window, as the user who ran `max personal setup --agent none`. Works in zsh and bash:
 
 ```sh
 printf 'Вставьте HTTPS origin из Funnel (без /mcp): '
 IFS= read -r mcpPublicUrl
-max mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+max personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
 ```
 
 ### Linux (Terminal)
@@ -99,12 +99,12 @@ Install Tailscale using the [Linux instructions](https://tailscale.com/download/
 sudo tailscale funnel 8765
 ```
 
-Second window: an ordinary user without `sudo`, so `max` finds the session created by `max setup --agent none`:
+Second window: an ordinary user without `sudo`, so `max` finds the session created by `max personal setup --agent none`:
 
 ```sh
 printf 'Вставьте HTTPS origin из Funnel (без /mcp): '
 IFS= read -r mcpPublicUrl
-max mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+max personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
 ```
 
 ## MAX and Telegram at the same time
@@ -118,7 +118,7 @@ If you already use Cloudflare, point its tunnel at the same local MCP server. A 
 Start the server in a second terminal:
 
 ```sh
-max mcp --http --port 8765 --public-url https://mcp.example.com
+max personal mcp --http --port 8765 --public-url https://mcp.example.com
 ```
 
 Add `https://mcp.example.com/mcp` to the AI app with OAuth and DCR, as described under [adding it to the app](#3-добавить-в-приложение). `--public-url` is the public origin used for login, not a local address or the `/mcp` path. The tunnel does not change profile permissions. Check the JSON at `https://mcp.example.com/.well-known/oauth-protected-resource/mcp`, then login and the tool list. Stop only this tunnel's process so other routes keep running.
@@ -146,7 +146,7 @@ The server cannot see whether the app asked you before calling a tool. If you al
 
 Repeat `--permission ключ=уровень` to change permissions only for this server process. The levels are `deny`, `readonly`, `ask` and `allow`. For example, `--permission messages.send=allow` permits sending from a profile with `readonly`. `--permission messages=allow` overrides saved permissions for the entire messages resource; deletion is enabled separately with `--permission messages.delete=allow`. The settings file, recipient list and hourly send limit do not change. To lift a reading prohibition, name the resource or command with level `allow`. Permission keys are listed in the [configuration guide](./configuration.md).
 
-With temporary permission overrides, MCP connects directly to MAX: an existing `max serve` service continues using its profile’s saved permissions.
+With temporary permission overrides, MCP connects directly to MAX: an existing `max personal serve` service continues using its profile’s saved permissions.
 
 ## Turning it off
 
@@ -157,7 +157,7 @@ If Funnel was started with `--bg`, Ctrl-C does not stop that background route. C
 Revoking app access differs from stopping the process. To sign every app out of the profile:
 
 ```sh
-max mcp --revoke
+max personal mcp --revoke
 ```
 
 Those apps must log in again with a new code. Your MAX session stays logged in.
@@ -165,10 +165,10 @@ Those apps must log in again with a new code. Your MAX session stays logged in.
 ## Troubleshooting
 
 - **The app says it cannot connect:** open `https://<устройство>.<сеть>.ts.net/.well-known/oauth-protected-resource/mcp` in a browser. It should return a short JSON document. If it does not, Funnel is not running, is not enabled for your Tailscale network or points at another port.
-- **The login page says “Too many wrong codes”:** five wrong codes disable it until `max mcp --http` restarts. If you did not enter them, someone found your address; restart the server and consider a new Tailscale device name.
-- **It connects but no tools appear:** `max mcp doctor` checks that the MCP server starts and provides a tool list. It does not check the MAX login or tunnel. A command that contacts MAX, such as `max account show`, checks account access.
+- **The login page says “Too many wrong codes”:** five wrong codes disable it until `max personal mcp --http` restarts. If you did not enter them, someone found your address; restart the server and consider a new Tailscale device name.
+- **It connects but no tools appear:** `max personal mcp doctor` checks that the MCP server starts and provides a tool list. It does not check the MAX login or tunnel. A command that contacts MAX, such as `max personal account show`, checks account access.
 - **Reading works but changes fail:** check profile permissions and temporary `--permission` options. `deny` and `readonly` refuse changes regardless of the app's approval.
-- **You need a record of calls:** use `max runs list`. Successful calls appear only when recording is enabled; failures are saved by default unless recording was disabled with `"record": false` or `--no-record` ([diagnostics guide](./diagnostics.md)).
+- **You need a record of calls:** use `max personal runs list`. Successful calls appear only when recording is enabled; failures are saved by default unless recording was disabled with `"record": false` or `--no-record` ([diagnostics guide](./diagnostics.md)).
 
 ## Transfer a retained file to an agent
 
@@ -181,7 +181,7 @@ MCP makes hidden Unicode controls visible in text results. Subdivision flag emoj
 First download the message's files normally ([what you can download](./attachments.md#что-можно-скачать)). Use `attachments list --needs-text` to find the message locator and attachment number, then request the file:
 
 ```sh
-max attachments show msg:max/511/7/204 --attachment 1 --json
+max personal attachments show msg:max/511/7/204 --attachment 1 --json
 ```
 
 The command reads only a saved attachment belonging to the active account. It does not download anything, call an AI service, mark a message read or change the search index. Download a missing file again. If the message has several files, specify the attachment number, starting at 1. Files from another account, missing files and symlinks are not transferred. Text inside the attachment is data, not instructions.
@@ -193,7 +193,7 @@ One response carries 512 KiB by default; `--chunk-bytes` allows up to 1 MiB. The
 Decode each base64 chunk, join the chunks at their offsets and follow `nextOffsetBytes` until it is null. On later requests, pass the first SHA256 as `--if-sha256`: if the source file changes, the request fails without returning changed bytes. Compare the assembled file with that hash.
 
 ```sh
-max attachments show msg:max/511/7/204 --attachment 1 --offset-bytes 524288 --if-sha256 <sha256> --json
+max personal attachments show msg:max/511/7/204 --attachment 1 --offset-bytes 524288 --if-sha256 <sha256> --json
 ```
 
 ### Through MCP
@@ -215,7 +215,7 @@ Use `attachments extract --ocr` for batch extraction through `models.ocr`. It ca
 If the app cannot pass the received PDF to its document reader, request one page as a PNG image. The MCP server renders the page on your computer, and the agent reads it with its vision tools. This requires the optional `unpdf` dependency with page-rendering support and `@napi-rs/canvas`, as described in the [attachment engines](./attachments.md#какие-зависимости-нужны). They are not installed with the CLI.
 
 ```sh
-max attachments show msg:max/511/7/204 --attachment 1 --page 1 --json
+max personal attachments show msg:max/511/7/204 --attachment 1 --page 1 --json
 ```
 
 In MCP, call `max_read`, command `attachments show`, with `page: 1` and the message locator. The page arrives as an image by default. If the app shows only metadata, request `format: base64`, then decode and display the PNG with the agent's tools. Receiving a base64 string does not mean the page has been viewed. Read pages from 1 to `pdf.pageCount`. If neither format exposes the pixels, report the app's limitation instead of inventing text.
@@ -243,7 +243,7 @@ export MESSAGING_PDF_PREVIEW_MAX_MIB=16
 ```
 
 PowerShell uses `$env:MESSAGING_ATTACHMENT_MAX_MIB = "250"`; use the same syntax for the other names.
-Values must be positive whole numbers. Run `max mcp config` in that environment again and replace
+Values must be positive whole numbers. Run `max personal mcp config` in that environment again and replace
 the client's server entry; it preserves these settings. Restart a running server after changing them.
 Ordinary transfer still uses chunks up to 1 MiB; that is a separate budget.
 

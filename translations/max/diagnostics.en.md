@@ -13,8 +13,8 @@ Terms used below:
 
 - **Run** — one invocation of `max`, from startup to exit.
 - **Run record** — a directory describing one run: command, outcome and one line per MAX request. It never contains message text, people's names or chat names.
-- **`max doctor`** checks installation: version, login, settings and local archive.
-- **Problem report** — a JSON file combining `max doctor` results and a failed run, for a GitHub issue.
+- **`max personal doctor`** checks installation: version, login, settings and local archive.
+- **Problem report** — a JSON file combining `max personal doctor` results and a failed run, for a GitHub issue.
 
 ## What you can do
 
@@ -22,15 +22,15 @@ Terms used below:
 | --- | --- | --- |
 | Inspect requests as they happen | `max … --trace` | Nothing; stderr output only |
 | Save one run | `max … --record` | Run record |
-| Find a failed run later | `max runs list` | Failed runs are saved automatically |
-| Save every run | `max config set record true` | Every run's record |
-| Check installation | `max doctor`, `max doctor --online` | Nothing |
-| Prepare a problem report | `max doctor report create` | One file you choose to submit |
+| Find a failed run later | `max personal runs list` | Failed runs are saved automatically |
+| Save every run | `max personal config set record true` | Every run's record |
+| Check installation | `max personal doctor`, `max personal doctor --online` | Nothing |
+| Prepare a problem report | `max personal doctor report create` | One file you choose to submit |
 
 ## Show: `--trace`
 
 ```sh
-max chats list --trace
+max personal chats list --trace
 ```
 
 ```text
@@ -47,13 +47,13 @@ max chats list --trace
 Everything goes **to stderr**, keeping `--json` output intact:
 
 ```sh
-max chats list --json --trace > chats.json    # данные в файл, диагностика на экран
+max personal chats list --json --trace > chats.json    # данные в файл, диагностика на экран
 ```
 
 A terminal displays the lines above. A pipe receives one JSON object per line, as with data:
 
 ```sh
-max chats list --json --trace 2>&1 >/dev/null | jq -c 'select(.event == "response")'
+max personal chats list --json --trace 2>&1 >/dev/null | jq -c 'select(.event == "response")'
 ```
 
 `--trace` overrides `--quiet`: a flag you explicitly add always applies.
@@ -78,10 +78,10 @@ A failure shows the error code and MAX's key, such as `404  not_found  not.found
 ## Save: `--record`
 
 ```sh
-max chats list --record
-max runs list                 # что делалось, новое сверху
-max runs show <id>            # один запуск: чем кончился и куда ходил
-max runs path <id>            # каталог, для jq и grep
+max personal chats list --record
+max personal runs list                 # что делалось, новое сверху
+max personal runs show <id>            # один запуск: чем кончился и куда ходил
+max personal runs path <id>            # каталог, для jq и grep
 ```
 
 A run directory:
@@ -112,8 +112,8 @@ Successful search and statistics requests keep separate history containing query
 ## Recording every run
 
 ```sh
-max config set record true          # этот профиль
-max chats list --no-record          # но не этот запуск
+max personal config set record true          # этот профиль
+max personal chats list --no-record          # но не этот запуск
 ```
 
 The same in the settings file:
@@ -153,8 +153,8 @@ The same applies to reports assembled from runs.
 ## Check installation: `max doctor`
 
 ```sh
-max doctor              # никуда не подключается
-max doctor --online     # ещё и входит в MAX один раз; ничего не отправляет
+max personal doctor              # никуда не подключается
+max personal doctor --online     # ещё и входит в MAX один раз; ничего не отправляет
 ```
 
 Without `--online`, it reports **without connecting to MAX** the information commands depend on:
@@ -163,7 +163,7 @@ Without `--online`, it reports **without connecting to MAX** the information com
 - Login count and last login; every local profile: personal account, bot or both.
 - Shared storage: JSON `store` includes path, schema and saved chat/message counts. The check neither creates nor updates storage. `legacyCache` reports any old local archive; `doctor` gives its path for manual removal.
 - Run-record directory.
-- The MAX web-client version `max` presents and when it was inspected. After 60 days, `max doctor` warns that MAX might stop accepting it; updating `max` can help.
+- The MAX web-client version `max` presents and when it was inspected. After 60 days, `max personal doctor` warns that MAX might stop accepting it; updating `max` can help.
 - Runtime (Node or Bun and location), package manager, which `max` a new terminal finds, whether keyring and SQLite load, and whether speech-recognition files are downloaded. If the command reference is missing from `PATH`, it prints exact commands to add it: PowerShell on Windows, an `export` line on Linux/macOS.
 - Any login pause imposed after MAX rejects excessive logins.
 
@@ -174,30 +174,30 @@ For a bot profile, `max <имя> doctor` reports the bot token's source, observe
 ## Problem Report
 
 ```sh
-max doctor report create              # о последнем неудачном запуске
-max doctor report create --run <id>   # об этом запуске
+max personal doctor report create              # о последнем неудачном запуске
+max personal doctor report create --run <id>   # об этом запуске
 ```
 
-The command writes a JSON file containing `max doctor` results and the run, then prints a link to a new [GitHub issue](https://github.com/WireCatLabs/max-cli/issues). Read the file before submitting. It has no message text; chat and message ids are replaced with labels. See [reporting a problem](./troubleshooting.md#как-сообщить-о-проблеме) for its remaining contents.
+The command writes a JSON file containing `max personal doctor` results and the run, then prints a link to a new [GitHub issue](https://github.com/WireCatLabs/max-cli/issues). Read the file before submitting. It has no message text; chat and message ids are replaced with labels. See [reporting a problem](./troubleshooting.md#как-сообщить-о-проблеме) for its remaining contents.
 
 If there is no failed run, run the failing command again to save its error automatically.
 
 ## What to do with the recordings
 
-Records are JSON, so `jq` can inspect them. `max runs list --json` returns `{ items, page, limit, hasMore }`; `items` contains `run.json` records, newest first:
+Records are JSON, so `jq` can inspect them. `max personal runs list --json` returns `{ items, page, limit, hasMore }`; `items` contains `run.json` records, newest first:
 
 ```sh
 # какие запуски закончились плохо
-max runs list --json | jq '.items[] | select(.status=="failed") | {runId, command, errorCode}'
+max personal runs list --json | jq '.items[] | select(.status=="failed") | {runId, command, errorCode}'
 
 # сколько времени ушло на вход в последних запусках
-for id in $(max runs list --json | jq -r '.items[].runId'); do
+for id in $(max personal runs list --json | jq -r '.items[].runId'); do
   jq -r 'select(.operation=="session.login" and .event=="response") | "\(.durationMs)ms"' \
-    "$(max runs path "$id" --json | jq -r .path)/events.jsonl"
+    "$(max personal runs path "$id" --json | jq -r .path)/events.jsonl"
 done
 ```
 
-`max runs show` displays the same events as a table without repeated bookkeeping fields, keeping durations on screen. The full file, including those fields, is in the directory printed by `max runs path`.
+`max personal runs show` displays the same events as a table without repeated bookkeeping fields, keeping durations on screen. The full file, including those fields, is in the directory printed by `max personal runs path`.
 
 ## Next steps
 
@@ -207,8 +207,8 @@ done
 ## Search errors and partial runs
 
 ```sh
-max runs search --error-code rate_limited --json
-max runs search --status partial --since-time 2026-10-01 --json
+max personal runs search --error-code rate_limited --json
+max personal runs search --status partial --since-time 2026-10-01 --json
 ```
 
 `runs search` matches literal diagnostic text in metadata and safe events. Use `--operation`,

@@ -33,10 +33,10 @@ Estas son las configuraciones que se cambian con más frecuencia. Una descripci�
 | `senderColors` |Cada autor tiene un color diferente en la lista de mensajes.| `false` |
 | `timeoutMs` |cuánto tiempo esperar una respuesta a **una** solicitud a MAX, en milisegundos. Para restringir todo el comando, use `--timeout`|en transporte|
 | `catchUpMarksRead` |`inbox` y `review` marcan los chats mostrados como leídos. El interlocutor ve esto.| `false` |
-| `serve` |ejecute el servidor en segundo plano `max serve` cuando el comando necesite MAX ([una entrada para todos los](./limits.md#один-вход-на-всё))| `true` |
+| `serve` |ejecute el servidor en segundo plano `max personal serve` cuando el comando necesite MAX ([una entrada para todos los](./limits.md#один-вход-на-всё))| `true` |
 | `transcribeModel` |qué modelo reconocer mensajes de voz| `gigaam-v3` |
 | `updateCheck` |una vez al día para informar que se ha lanzado una nueva versión de `max`| `true` |
-| `defaultProfile` |¿Qué perfil toma el comando si el perfil no se nombra?| `default` |
+| `defaultProfile` |¿Qué perfil toma el comando si el perfil no se nombra?| ninguno: sin nombre, el comando enumera los perfiles |
 
 No hay ningún secreto en un archivo. No hay lugar en él para un token, un número de teléfono o una identificación de chat: el token se almacena en el llavero del sistema y, donde no está, en un archivo que solo usted puede leer ([donde vive token](./security.md#где-живёт-токен)).
 
@@ -56,7 +56,7 @@ El primer comando que lee la configuración creal archivo inicial. Aquí está, 
 - `defaults` es válido para todos los perfiles.
 - `profiles.work` es válido sólo para el perfil `work` y es más importante que `defaults`.
 
-Por lo tanto, `max work chats list` mostrará 50 líneas y `max chats list` mostrará 20. Agregue `--limit 5` para obtener cinco líneas en un comando. Elimine `limit` del perfil y el valor de `defaults` volverá a ser válido.
+Por lo tanto, `max work chats list` mostrará 50 líneas y `max personal chats list` mostrará 20. Agregue `--limit 5` para obtener cinco líneas en un comando. Elimine `limit` del perfil y el valor de `defaults` volverá a ser válido.
 
 <details> <summary>Ejemplo completo con todas las secciones</summary>
 
@@ -99,11 +99,12 @@ Por lo tanto, `max work chats list` mostrará 50 líneas y `max chats list` most
 
 Qué hace cada parte:
 
-- `defaultProfile`: `max chats list` sin nombre de perfil funciona con `personal`.
+- `defaultProfile`: `max chats list` sin nombre de perfil funciona con `personal`. Sin este ajuste y
+  sin `MAX_PROFILE`, ese comando se detiene y enumera los perfiles.
 - `defaults`: cada perfil recibe estos valores si no ha especificado los suyos propios. `updateCheck`, `skillHint` y `transcribeModel` sólo son válidos aquí: el programa y los modelos de voz son los mismos para todos los perfiles.
 - `profiles.personal`: más líneas, colores y grabación de cada ejecución - sólo para `personal`.
 - `profiles.work`: se pueden leer mensajes, se pueden enviar mensajes, se prohíben otros cambios en los mensajes. No más de 10 envíos por hora. El servidor en segundo plano no se inicia: cada comando ingresa MAX.
-- `personal.defaults`: sólo para comandos de cuentas personales, nunca para `max … bot`. Aquí `store fetch` también prepara chats descargados para búsqueda.
+- `personal.defaults`: sólo para comandos de cuentas personales, nunca para `max … bot`. Aquí `messages sync` también prepara chats descargados para búsqueda.
 - `bot.defaults`: sólo para comandos de bot (`max shop bot …`). Los bots pueden leer y enviar, y nada más.
 - `bot.profiles.shop`: El bot `shop` puede enviar 200 mensajes por hora y no lee lo que otros bots en esta computadora han guardado. `readOtherBots` sólo es válido en la sección `bot`; Allí, por el contrario, no se aceptan `serve`, `senderColors` y `catchUpMarksRead`.
 
@@ -121,7 +122,7 @@ Qué hace cada parte:
 
 ## Tres formas de establecer un valor
 
-- **En archivo:** el valor se guardará para los siguientes comandos. `max config set limit 50` lo anota.
+- **En archivo:** el valor se guardará para los siguientes comandos. `max personal config set limit 50` lo anota.
 - **Variable de entorno:** el valor es válido en un terminal o en un proceso de agente. Por ejemplo, `MAX_PROFILE` selecciona el perfil y `MAX_TIMEOUT` limita el tiempo del comando. No todas las configuraciones tienen una variable.
 - **Parámetro:** `--limit 5` cambia solo este comando.
 
@@ -134,10 +135,10 @@ El parámetro es más importante que la variable de entorno. Luego viene el valo
 El archivo se puede editar en cualquier editor de texto o confiar a `max`. `config set` verifica el valor antes de escribir, por lo que nunca guarda un archivo que el siguiente comando descartará.
 
 ```sh
-max config set limit 50                 # профилю, с которым вы работаете
+max personal config set limit 50                 # профилю, с которым вы работаете
 max work config set limit 50            # профилю work
 max config set sendsPerHour 10 --defaults   # всем профилям
-max config unset limit                  # вернуть значение по умолчанию
+max personal config unset limit                  # вернуть значение по умолчанию
 max config show                         # проверить, что действует и откуда взялось каждое значение
 ```
 

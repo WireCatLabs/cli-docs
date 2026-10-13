@@ -8,13 +8,13 @@ Use this page to connect your MAX account to an agent application without termin
 
 Terms used below:
 
-- **MCP** ([Model Context Protocol](https://modelcontextprotocol.io)) — a standard for agent applications to use external tools. The application is the **MCP client**; `max mcp` is the **MCP server**.
+- **MCP** ([Model Context Protocol](https://modelcontextprotocol.io)) — a standard for agent applications to use external tools. The application is the **MCP client**; `max personal mcp` is the **MCP server**.
 - **Tool** — an action the server offers to your agent, such as reading or writing.
 - **Ready-made request** (prompt) — a task the application displays as a command, such as reviewing unread messages.
 - **Resource** — data the application can attach to the agent chat, such as a messenger chat.
 - **Profile** — settings and one `max` login; see [profiles](./profiles.md).
 
-The server is included with `max`; no separate installation is needed. It normally communicates through stdin and stdout. `max mcp --http --public-url` instead exposes tools on a local port behind your HTTPS tunnel.
+The server is included with `max`; no separate installation is needed. It normally communicates through stdin and stdout. `max personal mcp --http --public-url` instead exposes tools on a local port behind your HTTPS tunnel.
 
 ## Do you need MCP?
 
@@ -23,7 +23,7 @@ An AI agent with terminal command access, such as Claude Code, Codex, Cursor age
 - Applications without terminal access, such as Claude Desktop or Cursor chat.
 - Applying profile permissions to each operation exposed by the application.
 
-ChatGPT and Claude **in a browser** connect through `max mcp --http`; see [use from web or mobile](./remote.md).
+ChatGPT and Claude **in a browser** connect through `max personal mcp --http`; see [use from web or mobile](./remote.md).
 
 ## What the server provides
 
@@ -38,14 +38,14 @@ ChatGPT and Claude **in a browser** connect through `max mcp --http`; see [use f
 
 ## Connecting
 
-First run `max setup --agent none` in your local terminal to log in to MAX; MCP does not perform login. Then `max mcp setup` connects the application separately. Your agent can read `max skill show` before login; it explains both steps.
+First run `max personal setup --agent none` in your local terminal to log in to MAX; MCP does not perform login. Then `max personal mcp setup` connects the application separately. Your agent can read `max skill show` before login; it explains both steps.
 
 **Codex or Claude Code on this computer:**
 
 ```sh
-max mcp doctor                 # проверяет запуск MCP и список инструментов
-max mcp setup codex           # добавляет сервер в Codex
-max mcp setup claude-code     # или в Claude Code
+max personal mcp doctor                 # проверяет запуск MCP и список инструментов
+max personal mcp setup codex           # добавляет сервер в Codex
+max personal mcp setup claude-code     # или в Claude Code
 ```
 
 For another profile, put its name first: `max work mcp setup codex`. Setup uses the application's own commands and leaves other servers intact. If an entry with the same name exists, remove it in the application before repeating setup. If the profile exposes write tools, check permissions, then repeat with `--allow-writes`. This flag confirms installation only: it does not change profile permissions or flags such as `--allow-send`.
@@ -55,7 +55,7 @@ For another profile, put its name first: `max work mcp setup codex`. Setup uses 
 **Claude Code manually:**
 
 ```sh
-claude mcp add max -- max mcp
+claude mcp add max -- max personal mcp
 ```
 
 With a profile, put its name first as in any command:
@@ -67,7 +67,7 @@ claude mcp add max-work -- max work mcp
 **Claude Desktop, Cursor and other applications:** `max` prints the configuration entry:
 
 ```sh
-max mcp config                  # права текущего профиля
+max personal mcp config                  # права текущего профиля
 max work mcp config
 ```
 
@@ -87,7 +87,7 @@ Check profile permissions before connecting the agent, then insert the entry int
 
 Entries use full paths because an application launched outside a terminal does not inherit its `PATH`. On Windows, `max` is `max.cmd`, which cannot run without a shell. Flags such as `--allow-send` are included. `MAX_CONFIG_DIR`, `MAX_STATE_DIR`, `MAX_CACHE_DIR`, `MESSAGING_STORE` and `XDG_RUNTIME_DIR` are included only when set; tokens are never included. `MAX_CACHE_DIR` covers only the old cache; `MESSAGING_STORE` sets the shared local archive. Passing the archive and keyring communication paths lets desktop applications use the same login and saved messages as the terminal.
 
-With nvm, fnm or Volta, the Node path points to one version. Run `max mcp config` again after changing that version. The command refuses to run from `npx`, whose cache cleanup would remove the saved path.
+With nvm, fnm or Volta, the Node path points to one version. Run `max personal mcp config` again after changing that version. The command refuses to run from `npx`, whose cache cleanup would remove the saved path.
 
 ⚠ **`MAX_CONFIG_DIR`, `MAX_STATE_DIR` and `MAX_CACHE_DIR` change where login data is found.** If set in the terminal but not in the MCP application, or vice versa, the server can report “no session” while terminal `max` works. Set them consistently or leave them unset everywhere.
 
@@ -134,7 +134,7 @@ Sending in `reply` uses `max_write` (`command: "messages send"`), so if writes a
 
 Chats are resources at `max://chat/<id>`; Claude Code can mention them through `@`. A resource returns a chat and its latest messages. The resource list reads the shared local archive `wirecat.db` for the profile's account without contacting MAX; it is empty until an archive exists. Only fetching an individual chat contacts MAX.
 
-`max://skill` contains the `max` skill, identical to `max skill show`. It is available in both `max mcp` and `max bot mcp`, without contacting MAX.
+`max://skill` contains the `max` skill, identical to `max skill show`. It is available in both `max personal mcp` and `max sales bot mcp`, without contacting MAX.
 
 ## Statistics charts
 
@@ -154,4 +154,4 @@ MAX has no Telegram-style topics, so there are no `max_topics_*` tools. Direct t
 
 The first call needing MAX opens a connection; subsequent network calls reuse it. Local search, statistics, evidence and saved login data need no connection. It closes after 2 minutes idle and always after 5 minutes from login: chat lists come from login responses and would otherwise become stale. The next call logs in again. Calls run sequentially even when the application sends them together.
 
-With stdin/stdout, closing application stdin ends the server and its MAX connection. HTTP runs until Ctrl-C. `max mcp --http --public-url https://<имя>.ts.net` uses an HTTPS tunnel and terminal-code login. Permissions are the same over HTTP and stdin/stdout. `max mcp --revoke` revokes application logins while keeping the MAX session. See [use from web or mobile](./remote.md).
+With stdin/stdout, closing application stdin ends the server and its MAX connection. HTTP runs until Ctrl-C. `max personal mcp --http --public-url https://<имя>.ts.net` uses an HTTPS tunnel and terminal-code login. Permissions are the same over HTTP and stdin/stdout. `max personal mcp --revoke` revokes application logins while keeping the MAX session. See [use from web or mobile](./remote.md).

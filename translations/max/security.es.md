@@ -18,7 +18,7 @@ Lo común a `max` y `tg` (el archivo local de las conversaciones, la protección
 
 Lo que protege cualquier herramienta de WireCat está en la [página común](https://wirecat.dev/ru/docs/security). Particularidades de MAX:
 
-- **El servidor en segundo plano también aplica los límites del perfil.** Los permisos, los destinatarios y el límite por hora se comprueban en el comando y en `max serve`, incluso para programas que conectan directamente a su socket ([abajo](#защита-от-отправки-не-туда)).
+- **El servidor en segundo plano también aplica los límites del perfil.** Los permisos, los destinatarios y el límite por hora se comprueban en el comando y en `max personal serve`, incluso para programas que conectan directamente a su socket ([abajo](#защита-от-отправки-не-туда)).
 - **Token.** `max` no guarda un token de `MAX_TOKEN` ni lo pasa al servidor. El servidor no entrega tokens a los clientes del socket ([abajo](#где-живёт-токен)).
 - **Red.** Los archivos se descargan por HTTP(S) mediante el transporte de red normal, incluida la red local, dentro del límite de tamaño configurado. Los frames MAX y los datos descomprimidos tienen límites; las conexiones tienen tiempos de espera ([abajo](#что-уходит-в-сеть)).
 - **Cuenta.** `max` no es una aplicación oficial, y las condiciones de MAX no permiten este tipo de programas sin consentimiento de la empresa ([abajo](#правила-max-и-ваш-аккаунт)).
@@ -27,14 +27,14 @@ Lo que protege cualquier herramienta de WireCat está en la [página común](htt
 
 En el almacén de claves del sistema, servicio `max-cli`, entrada con nombre del perfil. No se guarda en configuración, argumentos, variables de shell ni historial.
 
-Si no hay almacén, se guarda en `~/.config/max-cli/credentials.json` con `0600` y se avisa por stderr. `max doctor` también indica que procede de archivo.
+Si no hay almacén, se guarda en `~/.config/max-cli/credentials.json` con `0600` y se avisa por stderr. `max personal doctor` también indica que procede de archivo.
 
 `MAX_TOKEN` tiene prioridad sobre el almacén, para CI. El token de la variable permanece solo en ella:
 
 - Si MAX renueva el token, `max` no lo guarda en almacén ni archivo; avisa por stderr. Así no queda un token activo en archivos de compilación que puedan acabar en cachés o artefactos.
-- Con `MAX_TOKEN` no inicia `max serve` ni le transmite la variable; evita que un token de un comando siga activo quince minutos en segundo plano.
+- Con `MAX_TOKEN` no inicia `max personal serve` ni le transmite la variable; evita que un token de un comando siga activo quince minutos en segundo plano.
 
-El token de `max bot` está separado en el servicio `max-cli`, entrada `bot:<профиль>`; sin almacén, en el mismo archivo con `0600`. `MAX_BOT_TOKEN` tiene prioridad, igual que `MAX_TOKEN`. `max bot auth set` valida a qué bot pertenece antes de guardar, para no sustituir un token válido por una errata. Nunca guarda el de `MAX_BOT_TOKEN`.
+El token de `max sales bot` está separado en el servicio `max-cli`, entrada `bot:<профиль>`; sin almacén, en el mismo archivo con `0600`. `MAX_BOT_TOKEN` tiene prioridad, igual que `MAX_TOKEN`. `max sales bot auth set` valida a qué bot pertenece antes de guardar, para no sustituir un token válido por una errata. Nunca guarda el de `MAX_BOT_TOKEN`.
 
 **La configuración no admite secretos:** no hay campos para token, teléfono ni identificador de chat.
 
@@ -49,17 +49,17 @@ El token de `max bot` está separado en el servicio `max-cli`, entrada `bot:<п�
 | destinatarios permitidos, si está activo | `~/.local/share/max-cli/profiles/<профиль>.recipients.json` | `0600` |
 | reglas de moderación tras el primer `chats rules set` | `~/.local/share/max-cli/profiles/<профиль>.moderation.json` | `0600` |
 | bot: chats vistos, envíos, destinatarios y punto de `watch` | `~/.local/share/max-cli/bots/…` | carpeta `0700`, archivos `0600` |
-| copia compartida de mensajes de cuenta personal, bot y `tg`, con textos, transcripciones, rutas de adjuntos descargados y su texto extraído | `~/.local/share/cli-messaging/wirecat.db` | carpeta `0700`, archivo `0600` |
-| socket y registro de `max serve` | `~/.local/share/max-cli/profiles/<профиль>.sock`, `.serve.log` | `0600` |
+| copia compartida de mensajes de cuenta personal, bot y `tg`, con textos, transcripciones, rutas de adjuntos descargados y su texto extraído | `~/.local/share/WireCat/wirecat.db` | carpeta `0700`, archivo `0600` |
+| socket y registro de `max personal serve` | `~/.local/share/max-cli/profiles/<профиль>.sock`, `.serve.log` | `0600` |
 | copia anterior del perfil; ya no se abre | `~/.cache/max-cli/<профиль>.db` y sus `-wal`, `-shm` | carpeta `0700`, archivos `0600` |
-| exportación, **solo `max store export --output`** | destino indicado | `0600` |
-| archivos descargados, `max messages download` o `max attachments extract --download --output-dir` | carpeta actual o `--output` | `0600` |
-| informe, **solo `max doctor report create`** | carpeta actual o `--output` | `0600` |
-| modelos de voz, **solo tras `max models audio download`** | `~/.cache/cli-common/models/audio/…` | carpeta `0700`, archivos `0600` |
+| exportación, **solo `max personal store export --output`** | destino indicado | `0600` |
+| archivos descargados, `max personal messages download` o `max personal attachments extract --download --output-dir` | carpeta actual o `--output` | `0600` |
+| informe, **solo `max personal doctor report create`** | carpeta actual o `--output` | `0600` |
+| modelos de voz, **solo tras `max personal models audio download`** | `~/.local/share/WireCat/models/audio/…` | carpeta `0700`, archivos `0600` |
 
-⚠ **La copia compartida contiene texto de mensajes y transcripciones de voz:** sirve para responder sin red. `max session end` no la elimina. `max store clear --left --allow-dangerous` solo borra datos de chats abandonados; no hay una orden que elimine toda la copia compartida.
+⚠ **La copia compartida contiene texto de mensajes y transcripciones de voz:** sirve para responder sin red. `max personal session end` no la elimina. `max personal store clear --left --allow-dangerous` solo borra datos de chats abandonados; no hay una orden que elimine toda la copia compartida.
 
-Los archivos antiguos de caché del perfil ya no se abren. Si quedan, `max doctor` muestra su ruta; puedes borrarlos aparte sin afectar a la copia compartida.
+Los archivos antiguos de caché del perfil ya no se abren. Si quedan, `max personal doctor` muestra su ruta; puedes borrarlos aparte sin afectar a la copia compartida.
 
 También hay contenido de conversaciones en la copia del bot, exportaciones y descargas; la lista de chats del bot contiene títulos. El resto no contiene conversaciones.
 
@@ -77,13 +77,13 @@ Por qué hace falta la protección de envíos y cómo funciona se explica en la 
 | permitir envíos y prohibir otras escrituras en mensajes | primero `max agent config set permissions.messages readonly` y después `max agent config set permissions.messages.send allow`; conserva otros recursos y reglas más específicas | código `5` para acciones prohibidas, sin conexión |
 | destinatarios permitidos | `max <профиль> recipients add <чат>`; desactivar con `recipients clear` | código `7` |
 | máximo por hora: mensajes, reenvíos, ediciones, fijados con aviso, eliminados y personas añadidas; no reacciones | `sendsPerHour`, predeterminado `30` | código `8`, indica cuándo reintentar |
-| registro de cada intento, sin texto | siempre; `max sends list` | — |
+| registro de cada intento, sin texto | siempre; `max personal sends list` | — |
 
 **Los bots tienen claves propias `bot.*`, como `bot.messages.send`.** Usan los mismos niveles. Los ajustes comunes y las capas `bot.defaults`/`bot.profiles` se resuelven en el mismo orden; `config show --bot` muestra los permisos efectivos. Los antiguos `readOnly` y `allow` siguen siendo compatibles antes de migrar.
 
 Cada bot tiene destinatarios (`max <имя> bot recipients add <чат>`) y registro (`max <имя> bot sends list`) propios. **Toda** escritura pasa por ellos, incluidos `messages send`, `messages pin` y `bot api`, para evitar eludir controles con API genérica. Edición y eliminación reciben primero el chat; `max` consulta el mensaje y rechaza si pertenece a otro. No hace esa comprobación para `user:<id>`. Registra chat, tipo, resultado y longitud, nunca texto. No hay límite por hora de bots hasta definirlo en `bot`: `max <имя> config set --bot sendsPerHour 200`.
 
-**El servidor en segundo plano `max serve` realiza las mismas comprobaciones** para todo lo que pasa por él, incluidas las solicitudes de programas conectados directamente a su socket en lugar de mediante `max`. Solo acepta solicitudes que conoce `max`, con la forma en que las envía `max`; por ejemplo, rechaza eliminar un chat completo. Los cambios mediante `config set` se aplican de inmediato sin reiniciar el servidor.
+**El servidor en segundo plano `max personal serve` realiza las mismas comprobaciones** para todo lo que pasa por él, incluidas las solicitudes de programas conectados directamente a su socket en lugar de mediante `max`. Solo acepta solicitudes que conoce `max`, con la forma en que las envía `max`; por ejemplo, rechaza eliminar un chat completo. Los cambios mediante `config set` se aplican de inmediato sin reiniciar el servidor.
 
 Contactos, perfil, carpetas y sesiones también respetan solo lectura. No usan destinatarios ni límite por hora porque no envían a chats. Se registran como `account` y acción, sin nombres, teléfonos ni títulos.
 
@@ -93,13 +93,13 @@ La lista es opcional: sin destinatarios añadidos, cualquier chat; activa pero v
 
 ## Qué no hace la herramienta
 
-- **No marca como leído sin preguntar.** “Obtener historial” y “marcar como leído” son operaciones de protocolo diferentes. El segundo lo envían únicamente `max chats mark-read` y `messages list --mark-read`; leerlo no lo envía.
+- **No marca como leído sin preguntar.** “Obtener historial” y “marcar como leído” son operaciones de protocolo diferentes. El segundo lo envían únicamente `max personal chats mark-read` y `messages list --mark-read`; leerlo no lo envía.
 - **No envía nada que no haya sido solicitado.** Sólo `messages send|edit|delete|forward|pin|unpin|press`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `session end`, `chats join|leave|create|update|start|app`, `chats members|admins …`, `chats requests accept|decline`, `chats link reset`, cambia algo `chats folders create|update|delete|order`, `chats moderate` (solo lo que gobierna el grupo). permitir), `chats mark-read` y `messages list --mark-read`, y cada uno hace sólo lo que está escrito en la línea escrita. `max commands --json` los marca como `mutates`.
 - **La eliminación por defecto requiere confirmación.** El nivel `ask` para `messages.delete` requiere una respuesta en el terminal o `--allow-dangerous`; explícito `allow` realiza la eliminación sin lugar a dudas. Para eliminar a todos también necesitas `--for-everyone`; La herramienta MCP general no lo permite.
-- **No toma el número de teléfono de la línea de comando.** `contacts lookup` lo solicita o lo lee desde la tubería, `contacts import` - desde el archivo: la línea de comando es vista por `ps` y el historial del shell. No hay ningún número en los errores, el registro de envío y los registros de inicio, y `max session start` y `max account show` lo muestran oculto.
+- **No toma el número de teléfono de la línea de comando.** `contacts lookup` lo solicita o lo lee desde la tubería, `contacts import` - desde el archivo: la línea de comando es vista por `ps` y el historial del shell. No hay ningún número en los errores, el registro de envío y los registros de inicio, y `max personal session start` y `max personal account show` lo muestran oculto.
 - **No escribe mensajes en el registro.** Ni en forma recortada ni en hash - consulte [diagnóstico](./diagnostics.md).
-- **No pasa por intermediarios.** Donde se conecta exactamente el `max` es en el apartado [“Qué entra a la red”](#что-уходит-в-сеть). `max` no tiene telemetría propia; `max serve` envía MAX un evento de servicio, como una pestaña oculta de la versión web; consulte en el mismo lugar.
-- **Mantiene la conexión sólo en `max serve`.** Se inicia en segundo plano con el primer comando que necesita MAX; se detiene solo después de 15 minutos sin nada que hacer. No ejecutar - `max config set serve false`.
+- **No pasa por intermediarios.** Donde se conecta exactamente el `max` es en el apartado [“Qué entra a la red”](#что-уходит-в-сеть). `max` no tiene telemetría propia; `max personal serve` envía MAX un evento de servicio, como una pestaña oculta de la versión web; consulte en el mismo lugar.
+- **Mantiene la conexión sólo en `max personal serve`.** Se inicia en segundo plano con el primer comando que necesita MAX; se detiene solo después de 15 minutos sin nada que hacer. No ejecutar - `max personal config set serve false`.
 
 ## Texto ajeno en pantalla
 
@@ -116,18 +116,18 @@ El token no se pasa como argumento, pero el texto de un mensaje sí, y se ve en 
 | `wss://api.oneme.ru/websocket`, cabecera `Origin`: `https://web.max.ru` | comandos que necesitan MAX |
 | servidores de archivos de MAX, dirección indicada por MAX | `messages send --file`, `messages download` |
 | `https://web.max.ru` en perfil Chromium temporal | `session start qr-chrome`, `session start sms`, `setup --method qr-chrome|sms` |
-| Hugging Face y GitHub para modelos de voz | solo `max models audio download`; la voz se procesa localmente |
-| Hugging Face, archivos del modelo de texto | Solo `max models text download`; el modelo local no envía mensajes |
+| Hugging Face y GitHub para modelos de voz | solo `max personal models audio download`; la voz se procesa localmente |
+| Hugging Face, archivos del modelo de texto | Solo `max personal models text download`; el modelo local no envía mensajes |
 | Servicio externo de vectores configurado | `conversations embed` envía texto de conversaciones tras el consentimiento; `search conversations`, incluido MCP, envía la pregunta al seleccionar un servicio externo |
 | Servicio compatible con OpenAI o Anthropic configurado | `conversations build --analyze --chat` envía lotes limitados tras el consentimiento para la cuenta, el chat y el servicio |
-| `https://platform-api2.max.ru`, Bot API oficial, token en `Authorization` | solo `max bot` |
+| `https://platform-api2.max.ru`, Bot API oficial, token en `Authorization` | solo `max sales bot` |
 | registro npm para comprobar versiones | `max upgrade` y una vez al día desde terminal; se desactiva con `updateCheck: false` |
 
-`max messages download` usa HTTP(S) y redirecciones normales sin comprobar las direcciones DNS. El comando no prohíbe VPN, proxies ni direcciones locales. Límite de archivos: 4 GiB; voz para transcripción: 32 MiB.
+`max personal messages download` usa HTTP(S) y redirecciones normales sin comprobar las direcciones DNS. El comando no prohíbe VPN, proxies ni direcciones locales. Límite de archivos: 4 GiB; voz para transcripción: 32 MiB.
 
-Las solicitudes de `max bot` se identifican como `max-cli/<версия>`: MAX ya conoce al bot por su token. El certificado de `platform-api2.max.ru` está firmado por un certificado raíz del Ministerio de Desarrollo Digital que no está incluido en Node; `max` lo añade solo a sus propias solicitudes a la Bot API y no cambia nada en el sistema.
+Las solicitudes de `max sales bot` se identifican como `max-cli/<версия>`: MAX ya conoce al bot por su token. El certificado de `platform-api2.max.ru` está firmado por un certificado raíz del Ministerio de Desarrollo Digital que no está incluido en Node; `max` lo añade solo a sus propias solicitudes a la Bot API y no cambia nada en el sistema.
 
-Para las cuentas personales, las solicitudes de red no contienen el nombre de esta herramienta ni un user-agent propio: el user-agent y la descripción del dispositivo proceden del cliente web de MAX. Las tramas también usan la dirección, el formato binario y la compresión del cliente web. `max serve` reproduce la telemetría del cliente web tal como la envía una pestaña oculta: un evento «lista de chats mostrada» 20 segundos después de iniciar sesión, y nada más. Solo contiene el número de tu cuenta y la hora, sin mensajes ni nombres de chats. Los comandos de una sola ejecución no envían telemetría. Después de iniciar sesión, `max serve` solicita los mismos datos que una pestaña: carpetas, banners, historial de llamadas, conjuntos de stickers y reacciones. Son solicitudes de solo lectura; las respuestas no se muestran ni se guardan. Los comandos de una sola ejecución no hacen estas solicitudes. Siguen existiendo diferencias: la pestaña también solicita contactos, historias y suscripciones a notificaciones push, mientras que `max` no lo hace. Por tanto, MAX puede distinguir `max` de su cliente web.
+Para las cuentas personales, las solicitudes de red no contienen el nombre de esta herramienta ni un user-agent propio: el user-agent y la descripción del dispositivo proceden del cliente web de MAX. Las tramas también usan la dirección, el formato binario y la compresión del cliente web. `max personal serve` reproduce la telemetría del cliente web tal como la envía una pestaña oculta: un evento «lista de chats mostrada» 20 segundos después de iniciar sesión, y nada más. Solo contiene el número de tu cuenta y la hora, sin mensajes ni nombres de chats. Los comandos de una sola ejecución no envían telemetría. Después de iniciar sesión, `max personal serve` solicita los mismos datos que una pestaña: carpetas, banners, historial de llamadas, conjuntos de stickers y reacciones. Son solicitudes de solo lectura; las respuestas no se muestran ni se guardan. Los comandos de una sola ejecución no hacen estas solicitudes. Siguen existiendo diferencias: la pestaña también solicita contactos, historias y suscripciones a notificaciones push, mientras que `max` no lo hace. Por tanto, MAX puede distinguir `max` de su cliente web.
 
 ## Condiciones de MAX y tu cuenta
 
@@ -138,7 +138,7 @@ Prácticas recomendadas:
 - **Usa MAX como siempre, en el navegador o en el teléfono, junto con `max`.** Una cuenta que solo responde a solicitudes de `max` tiene un comportamiento distinto del de una cuenta usada por una persona.
 - **No conviertas `max` en un flujo continuo de peticiones.** Lee cuando lo necesites, no cada minuto por programación.
 
-Se avisa una vez por stderr al iniciar sesión por primera vez con `max setup` o `max session start`.
+Se avisa una vez por stderr al iniciar sesión por primera vez con `max personal setup` o `max personal session start`.
 
 ## Inicio de sesión con navegador
 
@@ -156,19 +156,19 @@ MAX no publica una API para cuentas de usuario. Todo lo que se sabe sobre el pro
 
 ## Uso personal
 
-La herramienta guarda en tu comando conversaciones y contactos de otras personas, incluidos los textos de los mensajes. El acceso a la base local permite acceder a esos datos. Entregar una exportación (`max store export`) a otra persona también entrega el contenido de la conversación; sus enlaces a fotos pueden abrirse sin iniciar sesión. Antes de compartir, revisa el contenido y los destinatarios. Esta página describe el funcionamiento de la herramienta y no certifica el cumplimiento legal de tu caso de uso.
+La herramienta guarda en tu comando conversaciones y contactos de otras personas, incluidos los textos de los mensajes. El acceso a la base local permite acceder a esos datos. Entregar una exportación (`max personal store export`) a otra persona también entrega el contenido de la conversación; sus enlaces a fotos pueden abrirse sin iniciar sesión. Antes de compartir, revisa el contenido y los destinatarios. Esta página describe el funcionamiento de la herramienta y no certifica el cumplimiento legal de tu caso de uso.
 
-Los informes (`max doctor report create`) se adjuntan a incidencias **públicas** de GitHub. No contienen texto, nombres ni teléfonos; los identificadores se sustituyen por etiquetas. Revísalos antes de enviarlos.
+Los informes (`max personal doctor report create`) se adjuntan a incidencias **públicas** de GitHub. No contienen texto, nombres ni teléfonos; los identificadores se sustituyen por etiquetas. Revísalos antes de enviarlos.
 
 ## Si se filtra el token
 
 ```sh
-max session end        # выйти из MAX и забыть локально
+max personal session end        # выйти из MAX и забыть локально
 ```
 
 `session end` termina esta sesión en el servidor de MAX, por lo que un token filtrado deja de funcionar. Si MAX no responde, el comando lo indica y conserva el token; repite el comando.
 
-`max account sessions end --others --yes` cierra **todas las demás** sesiones, también el móvil, donde tendrás que iniciar sesión otra vez. No permite cerrar una concreta: MAX no les da identificador. Si MAX renueva el token actual, `max` lo guarda antes de confirmar.
+`max personal account sessions end --others --yes` cierra **todas las demás** sesiones, también el móvil, donde tendrás que iniciar sesión otra vez. No permite cerrar una concreta: MAX no les da identificador. Si MAX renueva el token actual, `max` lo guarda antes de confirmar.
 
 ## Siguiente paso
 

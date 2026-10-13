@@ -14,18 +14,18 @@ Terms used below:
 
 | Task | Command |
 | --- | --- |
-| See available models, sizes and downloads | `max models audio list` |
-| Download a model | `max models audio download <модель>` |
-| Transcribe one voice message | `max messages transcribe <чат> <сообщение>` |
+| See available models, sizes and downloads | `max personal models audio list` |
+| Download a model | `max personal models audio download <модель>` |
+| Transcribe one voice message | `max personal messages transcribe <чат> <сообщение>` |
 | Transcribe voice messages in the displayed list | `--transcribe` with `messages list` and `inbox` |
 | Choose a model for future runs | `max config set --defaults transcribeModel <модель>` |
 
 ## Quick start
 
 ```sh
-max models audio list --json
-max models audio download gigaam-v3
-max messages transcribe "Учебная группа" 204 --json
+max personal models audio list --json
+max personal models audio download gigaam-v3
+max personal messages transcribe "Учебная группа" 204 --json
 ```
 
 `max` downloads the recording from MAX, closes the connection and then starts recognition. Reading a chat does not automatically download the model: run `models audio download` first. Downloaded files are reused and their checksums are verified during installation.
@@ -41,8 +41,8 @@ max messages transcribe "Учебная группа" 204 --json
 `models audio list` shows exact sizes and existing downloads. Choose a model that supports the recording's language. For one run:
 
 ```sh
-max models audio download parakeet-v3
-max messages transcribe "Учебная группа" 204 --model parakeet-v3 --json
+max personal models audio download parakeet-v3
+max personal messages transcribe "Учебная группа" 204 --model parakeet-v3 --json
 ```
 
 For future runs:
@@ -56,8 +56,8 @@ Keep command groups distinct: `models audio` manages speech recognition; `models
 ## Multiple messages
 
 ```sh
-max messages list "Учебная группа" --limit 20 --transcribe --json
-max inbox --transcribe --json
+max personal messages list "Учебная группа" --limit 20 --transcribe --json
+max personal inbox --transcribe --json
 ```
 
 `--transcribe` processes only voice messages in the displayed list that lack text, rather than the entire chat history. It first downloads the recordings, closes the connection, then recognises speech. `--model` selects a different model for one run.
@@ -70,7 +70,7 @@ This processes voice messages identified by MAX as `kind: voice`. An MP3 or WAV 
 
 Local transcription accepts a complete mono or stereo Ogg Opus recording without a separate duration limit. Longer recordings require more memory and processing time.
 
-MAX and Telegram share the downloaded model folder; `CLI_COMMON_CACHE_DIR` changes its location. Downloads need disk space; recognition needs memory and processor time. Speed depends on recording length, model and computer.
+MAX and Telegram share the downloaded model folder; `WIRECAT_STATE_DIR` changes its location. Downloads need disk space; recognition needs memory and processor time. Speed depends on recording length, model and computer.
 
 ## Quality
 

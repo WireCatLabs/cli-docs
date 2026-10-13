@@ -9,11 +9,11 @@ Terms used below:
 - **Rule** — which incoming messages match and whether to reply, open a task or do both.
 - **Template** — reusable reply text with fields such as sender name and time.
 - **Audience** — the people and chats eligible for replies, regardless of what a rule matches.
-- `max serve` — the background process receiving new messages and applying rules.
+- `max personal serve` — the background process receiving new messages and applying rules.
 
 Who receives the response and when something is sent:
 
-- **Anyone selected by the rules gets a response until you limit the audience.** Reply only to selected people: `max replies audience --reply listed --allow-people …`; exclude someone: `--deny-people` and `--deny-chats`.
+- **Anyone selected by the rules gets a response until you limit the audience.** Reply only to selected people: `max personal replies audience --reply listed --allow-people …`; exclude someone: `--deny-people` and `--deny-chats`.
 - **Nothing is sent until you enable sending.** Need `permissions.replies.send allow`; `ask` also prohibits sending, because there is no one to ask the background server. The new rule is also disabled until you enable it.
 
 See the [auto-reply command reference](./commands.md#max-replies).
@@ -21,22 +21,22 @@ See the [auto-reply command reference](./commands.md#max-replies).
 ## Create and enable a rule
 
 ```sh
-max replies add away
-max replies edit away --template 'Спасибо, {{ sender.firstName | default: "вам" }}! Отвечу утром.'
-max replies edit away --outside 09:00-19:00 --days mon-fri --timezone Europe/Madrid
-max replies edit away --per-chat 1/12h --per-person 1/1d
+max personal replies add away
+max personal replies edit away --template 'Спасибо, {{ sender.firstName | default: "вам" }}! Отвечу утром.'
+max personal replies edit away --outside 09:00-19:00 --days mon-fri --timezone Europe/Madrid
+max personal replies edit away --per-chat 1/12h --per-person 1/1d
 ```
 
-`add` creates a disabled rule with all current settings. `<профиль>.replies.json` lives beside `configFile` from `max config show --json`. By default, rules may reply to anyone they match. To restrict replies to selected people, enter comma-separated MAX ids; `max contacts show <имя> --json` returns the person's `id`:
+`add` creates a disabled rule with all current settings. `<профиль>.replies.json` lives beside `configFile` from `max config show --json`. By default, rules may reply to anyone they match. To restrict replies to selected people, enter comma-separated MAX ids; `max personal contacts show <имя> --json` returns the person's `id`:
 
 ```sh
-max replies audience --reply listed --allow-people 1000001
+max personal replies audience --reply listed --allow-people 1000001
 ```
 
 To reply to everyone except some people or chats, leave `--reply all` and ban them:
 
 ```sh
-max replies audience --deny-people 1000002 --deny-chats 1000003
+max personal replies audience --deny-people 1000002 --deny-chats 1000003
 ```
 
 After the first command in the file:
@@ -55,13 +55,13 @@ After the first command in the file:
 Rule names are lowercase letters, numbers, and hyphens; repeated id is rejected. A rule with action `reply` cannot be enabled without template text. For a disabled rule and action `task`, empty text is acceptable.
 
 ```sh
-max replies test --since-time 7d
-max replies on away
-max config set permissions.replies.send allow
-max serve
+max personal replies test --since-time 7d
+max personal replies on away
+max personal config set permissions.replies.send allow
+max personal serve
 ```
 
-`replies test` reads only saved messages: does not send anything, does not change anything and does not connect to MAX. Without permission to send, the server is silent. `max replies off away` disables one rule.
+`replies test` reads only saved messages: does not send anything, does not change anything and does not connect to MAX. Without permission to send, the server is silent. `max personal replies off away` disables one rule.
 
 ## Edit conditions and audience
 
@@ -79,7 +79,7 @@ max serve
 
 The first working-hours edit requires the window, days and time zone together; later edits can change one field. `--no-hours` clears the window and cannot combine with its fields. The original file and full result are validated before writing. Invalid edits leave the file intact; other rules, audience, order and reply history are preserved.
 
-`max replies audience` shows the file-wide audience. A new file uses `--reply all`: anyone matched by a rule is eligible. `--reply listed` restricts replies to allowed people and chats. `--allow-people`, `--allow-chats`, `--deny-people` and `--deny-chats` replace their respective lists. Denials override allowances. An empty `listed` audience receives nothing; the command warns. A `task` action opens a local task and is not restricted by reply audience.
+`max personal replies audience` shows the file-wide audience. A new file uses `--reply all`: anyone matched by a rule is eligible. `--reply listed` restricts replies to allowed people and chats. `--allow-people`, `--allow-chats`, `--deny-people` and `--deny-chats` replace their respective lists. Denials override allowances. An empty `listed` audience receives nothing; the command warns. A `task` action opens a local task and is not restricted by reply audience.
 
 ## Liquid templates and AI replies
 
@@ -96,19 +96,19 @@ AI-generated text can change only the `ai` block. Everything outside remains you
 
 After substitutions, the block body is the instruction. Incoming text goes separately to the AI provider as data. The generated response is never executed as Liquid; overlong text and an exact repeat of the incoming message are rejected. Without a configured provider, consent or a successful call, `else` supplies the reply. Without a fallback, sending is skipped with a reason.
 
-Set `models.replies.provider` (`openai` or `anthropic`), the exact model ID in `models.replies.model`, and `models.replies.baseUrl` if needed. Shared values come from `models.default`; `provider off` disables the assignment. `config set` and `config unset` accept these keys; `config show` shows each field’s source. The older `analysisProvider`, `analysisModel` and `analysisBaseUrl` still work for analysis. Store the key with `max models text key set`; for a custom server, the key name is its host with port, and the public provider key is not sent there.
+Set `models.replies.provider` (`openai` or `anthropic`), the exact model ID in `models.replies.model`, and `models.replies.baseUrl` if needed. Shared values come from `models.default`; `provider off` disables the assignment. `config set` and `config unset` accept these keys; `config show` shows each field’s source. The older `analysisProvider`, `analysisModel` and `analysisBaseUrl` still work for analysis. Store the key with `max personal models text key set`; for a custom server, the key name is its host with port, and the public provider key is not sent there.
 
 Consent to share data with an AI provider is separate from permission to send replies:
 
 ```sh
-max replies consents show
-max replies consents grant
-max replies consents revoke
+max personal replies consents show
+max personal replies consents grant
+max personal replies consents revoke
 ```
 
 `grant` allows incoming data to be sent to the selected provider for the whole profile. `replies consents deny` with a chat ID forbids model use for that chat; `allow` with an ID removes that denial but does not grant profile consent. Denials survive grant/revoke. Changing the provider or endpoint requires new consent. Changes to consent, settings, rules, audience or pause during a model call are checked before its result is sent.
 
-`max replies test` shows instructions and fallback text without calling a model. `max replies test --ai` explicitly allows saved messages to be sent to the configured model with valid consent. It sends no reply to the messenger and does not change reply history; `--ai` cannot be combined with `--offline`. Older `{firstName}`, `{name}` and `model: may-reword` are read with a warning: the original populated template remains the fallback text. New files do not need the `model` field.
+`max personal replies test` shows instructions and fallback text without calling a model. `max personal replies test --ai` explicitly allows saved messages to be sent to the configured model with valid consent. It sends no reply to the messenger and does not change reply history; `--ai` cannot be combined with `--offline`. Older `{firstName}`, `{name}` and `model: may-reword` are read with a warning: the original populated template remains the fallback text. New files do not need the `model` field.
 
 ## What rules leave alone
 
@@ -119,4 +119,4 @@ max replies consents revoke
 
 `perChat` and `perPerson` limits are required. Two autoresponders stop at the first limit.
 
-`max replies pause` immediately stops all rules; `resume` lifts the pause without a restart. `status` shows send permission, enabled rules and audience. `max sends list` shows sent replies labeled with their rule.
+`max personal replies pause` immediately stops all rules; `resume` lifts the pause without a restart. `status` shows send permission, enabled rules and audience. `max personal sends list` shows sent replies labeled with their rule.

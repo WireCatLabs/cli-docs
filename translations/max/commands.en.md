@@ -15,7 +15,8 @@ Command syntax:
 max [профиль] [опции] <команда> <действие> [аргументы]
 ```
 
-**The first word is a profile name** unless it matches a command name: `max personal chats list` reads chats for `personal`, while `max chats list` uses the default profile. The `MAX_PROFILE` environment variable selects the same profile; without it, the profile is `default`.
+**The first word is a profile name** unless it matches a command name: `max personal chats list` reads chats for the `personal` profile. The `MAX_PROFILE` environment variable sets the profile for the whole shell session, and `defaultProfile` in the settings file sets it permanently (`max config set defaultProfile personal`).
+**A profile is never assumed**: without one, a command that needs an account stops and lists the profiles on this computer, even when there is only one. The first login names one too: `max personal setup`. Without a profile, only commands that need no account work: `--help`, `--version`, `commands`, `skill show`, `account list`, `config show`.
 
 ⚠ Command and option descriptions below match `max --help` exactly. They come from the program itself, ensuring that help and this reference stay consistent.
 
@@ -32,12 +33,15 @@ Apply to every command.
 | `--jsonl` | machine-readable output: one JSON object per line, for streaming and jq. |
 | `--quiet` | diagnostics off. |
 | `--trace` | one line per request on stderr: ids and timings, never message content. |
+| `--debug` | on a failure, its whole record — cause and stack — in place of the short line. |
 | `--timeout <duration>` | give up on the whole command after this — 30s, 2m, 500ms. |
 | `--offline` | answer from what was recorded and never connect; fails if nothing was. |
 | `--no-input` | never prompt or open interactive login; piped input remains available. |
 | `--max-input-bytes <bytes>` | maximum buffered input bytes (default: 16777216). |
 | `--max-output-bytes <bytes>` | maximum machine output bytes (default: 4194304; 0 disables). |
 | `--fields <paths>` | comma-separated item or object fields: id,text; preserve pagination and operation ids. |
+| `--brief` | found messages and mail as reference, title, time, sender and excerpt only. |
+| `--full` | found messages and mail with their whole text and every provider field. |
 | `--dry-run` | preview parsed arguments and permissions before running the action. |
 | `--yes` | go ahead without the question an ask level puts before a write. |
 | `--record` | keep this run under `max runs` — ids and timings, never message content. |
@@ -97,7 +101,6 @@ every profile on this computer, and the account each is logged in as; asks the m
 ```sh
 max account list
 ```
-
 
 ### `max account show`
 
@@ -678,7 +681,6 @@ max chats folders show <folder>
 |---|---|---|
 | `folder` | required | the folder's id, or its title exactly. |
 
-
 #### `max chats folders create`
 
 create a chat folder
@@ -917,7 +919,6 @@ max chats start <bot> [options]
 |---|---|
 | `--payload <text>` | the start parameter the bot reads; a link's own ?start= when not given. |
 
-
 ### `max chats app`
 
 the address that opens a bot's mini app, signed in as you — keep it to yourself
@@ -935,7 +936,6 @@ max chats app <bot> [options]
 | Option | Purpose |
 |---|---|
 | `--start <param>` | the start parameter the app reads. |
-
 
 ## `max contacts`
 
@@ -997,6 +997,7 @@ a private local display name in the selected account
 #### `max contacts alias set`
 
 
+
 **Changes something on this computer only.**
 
 ```sh
@@ -1009,6 +1010,7 @@ max contacts alias set <person> <alias>
 | `alias` | required |  |
 
 #### `max contacts alias rm`
+
 
 
 **Changes something on this computer only.**
@@ -1028,6 +1030,7 @@ your private notes on a stored contact, the same in every account that sees them
 #### `max contacts notes list`
 
 
+
 ```sh
 max contacts notes list <person>
 ```
@@ -1037,6 +1040,7 @@ max contacts notes list <person>
 | `person` | required |  |
 
 #### `max contacts notes show`
+
 
 
 ```sh
@@ -1049,6 +1053,7 @@ max contacts notes show <person> <id>
 | `id` | required |  |
 
 #### `max contacts notes add`
+
 
 
 **Changes something on this computer only.**
@@ -1068,6 +1073,7 @@ max contacts notes add <person> [options]
 #### `max contacts notes edit`
 
 
+
 **Changes something on this computer only.**
 
 ```sh
@@ -1085,6 +1091,7 @@ max contacts notes edit <person> <id> [options]
 | `--revision <number>` | the revision you read before editing. |
 
 #### `max contacts notes remove`
+
 
 
 **Changes something on this computer only.**
@@ -1406,6 +1413,34 @@ max messages evidence <chat> [options]
 | `--limit <n>` | how many, 1–100. |
 | `--before-id <id>` | only messages older than this message id. |
 
+### `max messages sync`
+
+bring a chat's history in the local store up to date, newest first; run it again to continue; --all syncs every chat
+
+```sh
+max messages sync [chat] [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `chat` | optional | a chat: its id, or part of its title. |
+
+| Option | Purpose |
+|---|---|
+| `--all` | every chat, most recently active first — what search needs; the last 90d unless --since-time or --last. |
+| `--limit <n>` | at most this many messages in this run, per chat with --all; 1200 if not given. |
+| `--page-size <n>` | how many messages one request asks for; 30 if not given. |
+| `--pause <duration>` | the least pause between pages, to stay under the provider's limits; each is up to twice that. Default: `5s`. |
+| `--since-time <time>` | stop once it reaches messages older than this: ISO 8601, or 2h / 1d ago. |
+| `--last <n>` | stop once the newest n messages are held. |
+| `--catch-up` | prepare local search after this run; overrides searchCatchUp. |
+| `--no-catch-up` | skip local preparation after this run. |
+| `--catch-up-chunks <n>` | at most this many local vector chunks. |
+| `--catch-up-messages <n>` | skip a graph rebuild larger than this many messages. |
+| `--catch-up-time <duration>` | local preparation time budget, 30s by default. |
+| `--background` | run as a job that outlives this command; `store jobs show` follows it. |
+| `--estimate` | only estimate how many messages, requests and minutes a full fetch would still take — from the store, no request. |
+
 ### `max messages transcribe`
 
 turn a voice message into text, on this machine — the recording goes nowhere
@@ -1579,7 +1614,6 @@ max messages press <chat> <message> <button>
 | `message` | required | the id of the message with the buttons. |
 | `button` | required | its number as `messages show` prints it, or its exact text. |
 
-
 ## `max store`
 
 the local store of messages
@@ -1595,34 +1629,6 @@ max store status [chat]
 | Argument | | Meaning |
 |---|---|---|
 | `chat` | optional | a chat: its id, or part of its title. |
-
-### `max store fetch`
-
-fetch a chat's history into the local store, newest first; run it again to continue; --all fetches every chat
-
-```sh
-max store fetch [chat] [options]
-```
-
-| Argument | | Meaning |
-|---|---|---|
-| `chat` | optional | a chat: its id, or part of its title. |
-
-| Option | Purpose |
-|---|---|
-| `--all` | every chat, most recently active first — what search needs; the last 90d unless --since-time or --last. |
-| `--limit <n>` | at most this many messages in this run, per chat with --all; 1200 if not given. |
-| `--page-size <n>` | how many messages one request asks for; 30 if not given. |
-| `--pause <duration>` | the least pause between pages, to stay under the provider's limits; each is up to twice that. Default: `5s`. |
-| `--since-time <time>` | stop once it reaches messages older than this: ISO 8601, or 2h / 1d ago. |
-| `--last <n>` | stop once the newest n messages are held. |
-| `--catch-up` | prepare local search after fetch; overrides searchCatchUp. |
-| `--no-catch-up` | skip local preparation after this fetch. |
-| `--catch-up-chunks <n>` | at most this many local vector chunks. |
-| `--catch-up-messages <n>` | skip a graph rebuild larger than this many messages. |
-| `--catch-up-time <duration>` | local preparation time budget, 30s by default. |
-| `--background` | run as a job that outlives this command; `store jobs show` follows it. |
-| `--estimate` | only estimate how many messages, requests and minutes a full fetch would still take — from the store, no request. |
 
 ### `max store gaps`
 
@@ -1669,11 +1675,11 @@ max store gaps repair <chat> [options]
 
 ### `max store jobs`
 
-background fetch jobs
+background sync jobs
 
 #### `max store jobs list`
 
-background fetch jobs, newest first
+background sync jobs, newest first
 
 ```sh
 max store jobs list [options]
@@ -1693,11 +1699,11 @@ max store jobs show [job]
 
 | Argument | | Meaning |
 |---|---|---|
-| `job` | optional | the job id `store fetch --background` printed. |
+| `job` | optional | the job id `messages sync --background` printed. |
 
 #### `max store jobs cancel`
 
-stop a running background job after its current page; a later fetch resumes where it stopped
+stop a running background job after its current page; a later sync resumes where it stopped
 
 ```sh
 max store jobs cancel <job>
@@ -1709,7 +1715,7 @@ max store jobs cancel <job>
 
 #### `max store jobs retry`
 
-start a partial, failed or died job again, as a new job; the fetch resumes where the store stopped
+start a partial, failed or died job again, as a new job; the sync resumes where the store stopped
 
 ```sh
 max store jobs retry [job] [options]
@@ -1723,7 +1729,6 @@ max store jobs retry [job] [options]
 |---|---|
 | `--failed` | every chat whose newest job partial, failed or died. |
 
-
 #### `max store jobs clear`
 
 forget finished jobs and remove their logs; a running job is kept
@@ -1734,10 +1739,9 @@ forget finished jobs and remove their logs; a running job is kept
 max store jobs clear
 ```
 
-
 ### `max store export`
 
-a chat's stored messages as JSON lines, oldest first; never asks the messenger
+a chat's stored messages, oldest first: --jsonl one message per line, --json one { items, page, limit, hasMore } object; never asks the messenger
 
 ```sh
 max store export [chats] [options]
@@ -1749,7 +1753,7 @@ max store export [chats] [options]
 
 | Option | Purpose |
 |---|---|
-| `--format <format>` | jsonl (the default): one message per line; markdown: a transcript with a heading per day, replies and forwards quoted. |
+| `--format <format>` | jsonl: one message per line, the default with --output; markdown: a transcript with a heading per day, replies and forwards quoted. |
 | `--since-time <time>` | only from this ISO 8601 time, or 30m / 2h / 1d ago, on. |
 | `--output <file>` | write JSON lines, or the transcript, to this new file, readable only by you. |
 | `--to <dir>` | write into this folder, a file per chat and a manifest; run again on it for only what changed since. |
@@ -1914,7 +1918,7 @@ max stats messages show [query] [options]
 | `--max-messages <n>` | fetch at most this many messages total (default: 500). |
 | `--by <chat\|sender\|day\|hour>` | what to count by (default: chat). |
 | `--chat <chat>` | only this chat — the same as chat: in the query; a chat: its id, or part of its title. |
-| `--source <messenger>` | every account of this messenger held in the store; personal, bots or all — the same as in: in the query. |
+| `--source <accounts>` | every account of this messenger held in the store; personal, bots or all — the same as in: in the query. |
 | `--limit <n>` | how many rows. |
 | `--timezone <zone>` | the IANA timezone for calendar days and hours. |
 | `--exact` | bare words and quotes match their exact form only, as exact:word does; text: still matches every form. |
@@ -1923,7 +1927,6 @@ max stats messages show [query] [options]
 #### `max stats messages counters`
 
 per-counter observations and bounded remote refresh
-
 
 #### `max stats messages counters show`
 
@@ -1940,14 +1943,13 @@ max stats messages counters show [query] [options]
 | Option | Purpose |
 |---|---|
 | `--chat <chat>` | only this chat; a chat: its id, or part of its title. |
-| `--source <messenger>` | held accounts of this messenger; refresh uses the active account. |
+| `--source <accounts>` | held accounts of this messenger; refresh uses the active account. |
 | `--exact` | bare words match exact forms. |
 | `--timezone <zone>` | IANA timezone for query dates. |
 | `--selection <json>` | pinned counter-targets selection from counters show; conflicts with query and scope. |
 | `--counters <names>` | distinct views,reactions,comments fields; all three by default. |
 | `--limit <n>` | messages, 1–100; 20 by default. |
 | `--max-age <duration>` | maximum fresh observation age; 24h by default. |
-
 
 #### `max stats messages counters refresh`
 
@@ -1966,7 +1968,7 @@ max stats messages counters refresh [query] [options]
 | Option | Purpose |
 |---|---|
 | `--chat <chat>` | only this chat; a chat: its id, or part of its title. |
-| `--source <messenger>` | held accounts of this messenger; refresh uses the active account. |
+| `--source <accounts>` | held accounts of this messenger; refresh uses the active account. |
 | `--exact` | bare words match exact forms. |
 | `--timezone <zone>` | IANA timezone for query dates. |
 | `--selection <json>` | pinned counter-targets selection from counters show; conflicts with query and scope. |
@@ -1975,7 +1977,6 @@ max stats messages counters refresh [query] [options]
 | `--max-messages <n>` | maximum messages to refresh, 1–100. |
 | `--sync-time <duration>` | remote refresh budget; 30s by default, maximum 5m. |
 | `--dry-run` | preview exact stored targets and counter capabilities without connecting. |
-
 
 #### `max stats messages unanswered`
 
@@ -1992,7 +1993,7 @@ max stats messages unanswered [query] [options]
 | Option | Purpose |
 |---|---|
 | `--chat <chat>` | only this chat; a chat: its id, or part of its title. |
-| `--source <messenger>` | every held account of this messenger; personal, bots or all. |
+| `--source <accounts>` | every held account of this messenger; personal, bots or all. |
 | `--exact` | bare words match exact forms rather than stems. |
 | `--saved <name\|id>` | run a saved report of this kind; typed report options replace stored options. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
@@ -2015,7 +2016,7 @@ max stats messages discussion [query] [options]
 | Option | Purpose |
 |---|---|
 | `--chat <chat>` | only this chat; a chat: its id, or part of its title. |
-| `--source <messenger>` | every held account of this messenger; personal, bots or all. |
+| `--source <accounts>` | every held account of this messenger; personal, bots or all. |
 | `--exact` | bare words match exact forms rather than stems. |
 | `--saved <name\|id>` | run a saved report of this kind; typed report options replace stored options. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
@@ -2046,7 +2047,7 @@ max stats messages top [query] [options]
 | `--weights <json>` | the complete component weights; replaces preset weights. |
 | `--message-kind <kind>` | select proven all, posts or comments before ranking. One of: `all`, `posts`, `comments`. |
 | `--chat <chat>` | only this chat; a chat: its id, or part of its title. |
-| `--source <messenger>` | every held account of this messenger; personal, bots or all. |
+| `--source <accounts>` | every held account of this messenger; personal, bots or all. |
 | `--timezone <zone>` | the IANA timezone for dates and active days. |
 | `--exact` | bare words match exact forms rather than stems. |
 | `--limit <n>` | ranked rows, 1–100. |
@@ -2090,7 +2091,7 @@ max stats contacts responses [query] [options]
 | Option | Purpose |
 |---|---|
 | `--chat <chat>` | only this chat; a chat: its id, or part of its title. |
-| `--source <messenger>` | every held account of this messenger; personal, bots or all. |
+| `--source <accounts>` | every held account of this messenger; personal, bots or all. |
 | `--exact` | bare words match exact forms rather than stems. |
 | `--saved <name\|id>` | run a saved report of this kind; typed report options replace stored options. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
@@ -2120,7 +2121,7 @@ max stats contacts top [query] [options]
 | `--weights <json>` | the complete component weights; replaces preset weights. |
 | `--message-kind <kind>` | select proven all, posts or comments before ranking. One of: `all`, `posts`, `comments`. |
 | `--chat <chat>` | only this chat; a chat: its id, or part of its title. |
-| `--source <messenger>` | every held account of this messenger; personal, bots or all. |
+| `--source <accounts>` | every held account of this messenger; personal, bots or all. |
 | `--timezone <zone>` | the IANA timezone for dates and active days. |
 | `--exact` | bare words match exact forms rather than stems. |
 | `--limit <n>` | ranked rows, 1–100. |
@@ -2212,7 +2213,6 @@ max stats chats retention <chat> [options]
 | `--timezone <zone>` | IANA timezone for joining cohorts. |
 | `--limit <n>` | cohorts and member evidence, 1–100. |
 
-
 ### `max stats tasks`
 
 task statistics
@@ -2285,6 +2285,75 @@ max tasks add <message> [options]
 | Option | Purpose |
 |---|---|
 | `--type <name>` | the task's type: question, request, mention or promise. |
+| `--title <text>` | one line: the action and its object — send Alex the API token. |
+| `--description <text>` | the detail, in Markdown: who owes whom, done when, next step, keywords. |
+| `--due <when>` | when it must be done: an ISO 8601 time or 2h, 3d from now; none clears it. |
+| `--check <when>` | when to look at it again: an ISO 8601 time or 2h, 3d from now; none clears it. |
+
+### `max tasks plan`
+
+set a task's title, description, due date and next check; nothing reaches the messenger
+
+```sh
+max tasks plan <task> [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `task` | required | the task's id or key, as tasks list shows it. |
+
+| Option | Purpose |
+|---|---|
+| `--title <text>` | one line: the action and its object — send Alex the API token. |
+| `--description <text>` | the detail, in Markdown: who owes whom, done when, next step, keywords. |
+| `--due <when>` | when it must be done: an ISO 8601 time or 2h, 3d from now; none clears it. |
+| `--check <when>` | when to look at it again: an ISO 8601 time or 2h, 3d from now; none clears it. |
+
+### `max tasks link`
+
+link a task to what it concerns — messages, chats, people, documents, URLs — to read around later
+
+```sh
+max tasks link <task> [targets] [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `task` | required | the task's id or key, as tasks list shows it. |
+| `targets` | optional | msg: locators, person:<id>, document:<id>, note:<id>, or a URL. |
+
+| Option | Purpose |
+|---|---|
+| `--chat <chat>` | a chat it concerns, repeatable; a chat: its id, or part of its title. |
+| `--kind <kind>` | related-to (default), evidence — it shows the task is real — or created-from. |
+
+### `max tasks show`
+
+one task: its plan and everything linked to it
+
+```sh
+max tasks show <task>
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `task` | required | the task's id or key, as tasks list shows it. |
+
+### `max tasks agenda`
+
+what needs a look today, from the local store and without message text: tasks overdue, due or to check, chats where you owe an answer, chats where you wait for one
+
+```sh
+max tasks agenda [options]
+```
+
+| Option | Purpose |
+|---|---|
+| `--due <span>` | list tasks due within this: 30m, 2h, 1d (default 1d). |
+| `--unanswered <span>` | list chats where someone else wrote last this long ago (default 1d). |
+| `--waiting <span>` | list chats where you wrote last this long ago (default 7d). |
+| `--within <span>` | leave out chats silent longer than this: they ended (default 30d). |
+| `--kind <kinds>` | only these chat kinds, comma-separated (default dialog,group). |
 
 ### `max tasks close`
 
@@ -2456,11 +2525,13 @@ remembered analysis permissions for this account's chats and provider endpoints
 #### `max conversations consents list`
 
 
+
 ```sh
 max conversations consents list
 ```
 
 #### `max conversations consents revoke`
+
 
 
 ```sh
@@ -2528,11 +2599,11 @@ max conversations embed clear [options]
 
 ## `max attachments`
 
-the files of stored messages: their text in the local store, for content: in a search
+the files of stored messages: their text in the local store, where search finds it
 
 ### `max attachments extract`
 
-read the text of downloaded files — text, PDF/DOCX text layers, ODT/ODS/XLSX/PPTX/EPUB — into the local store, for content: in a search
+read the text of downloaded files — text, PDF/DOCX text layers, ODT/ODS/XLSX/PPTX/EPUB — into the local store, where search finds them
 
 ```sh
 max attachments extract [options]
@@ -2586,14 +2657,13 @@ max attachments show <chat> [message] [options]
 | `--chunk-bytes <n>` | bytes to return, 1–1048576 (default524288). |
 | `--if-sha256 <hash>` | require the whole file SHA-256 from the preceding chunk. |
 
-
 ### `max attachments text`
 
 the text of one file, as an agent read it
 
 #### `max attachments text set`
 
-keep the text an agent read from a file — a scan, a photo — so content: finds it; nothing is sent
+keep the text an agent read from a file — a scan, a photo — so search finds it; nothing is sent
 
 ```sh
 max attachments text set <chat> [message] [options]
@@ -2692,6 +2762,7 @@ cached group/channel descriptions for local automatic tags
 ### `max metadata get`
 
 
+
 ```sh
 max metadata get [options]
 ```
@@ -2701,6 +2772,7 @@ max metadata get [options]
 | `--chat <chat>` | a stored chat. |
 
 ### `max metadata refresh`
+
 
 
 **Changes something on this computer only.**
@@ -2717,11 +2789,11 @@ max metadata refresh [options]
 
 ## `max search`
 
-find things by text: search all for everything the local store holds, or one resource
+find things by text: one resource when you know it (mail, messages, notes), or search all across messages, mail and notes
 
 ### `max search all`
 
-search everything the local store holds — messenger messages, mail and notes, and with --meetings a meeting account's transcripts — best match first; start here when you do not know where something was written
+search messenger messages, mail and notes in the local store, and the messenger's server for messages (--backend; mail and notes are local only), and a meeting account's transcripts when --source names one — best match first; not tasks, people, memories or projects. Use it when you do not know where something was written; search mail, messages or notes reads one kind with all its fields
 
 ```sh
 max search all <query> [options]
@@ -2733,12 +2805,15 @@ max search all <query> [options]
 
 | Option | Purpose |
 |---|---|
-| `--only <resources>` | only these resources, separated by commas: messages, mail, notes; meetings with --meetings. |
-| `--meetings [provider:account]` | also search one meeting account; with no value, the one stored account that holds meetings (put it after the query). |
-| `--max-meetings <n\|all>` | how many meetings --meetings looks through, newest first; all looks through every one (default 100). |
+| `--only <resources>` | only these resources, separated by commas: messages, mail, notes; meetings when --source names a meeting account. |
+| `--source <accounts>` | only these accounts, separated by commas: provider:account as a hit shows it, a provider, a kind or group:<name>; each resource reads the ones of its kind, and meetings only when it names one. |
+| `--max-meetings <n\|all>` | how many of the meeting account's meetings to look through, newest first; all looks through every one (default 100). |
 | `--limit <n>` | how many. |
+| `--offset <n>` | skip this many, for the next page. |
 | `--exact` | bare words and quotes match their exact form only, as exact:word does. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--backend <archive\|server\|both>` | where to search: the local archive, the messenger's server, or both (default: both). Discovery uses the archive only. |
+| `--server-time <duration>` | stop waiting for the server after this long (default: 5s). |
 
 ### `max search messages`
 
@@ -2766,9 +2841,10 @@ max search messages [query] [options]
 | `--backend <archive\|server\|both>` | where to search: the local archive, the messenger's server, or both (default: both). Discovery uses the archive only. |
 | `--server-time <duration>` | stop waiting for the server after this long (default: 5s). |
 | `--chat <chat>` | only this chat — the same as chat: in the query; a chat: its id, or part of its title. |
-| `--source <messenger>` | every account of this messenger held in the store; personal, bots or all — the same as in: in the query. |
+| `--source <accounts>` | every account of this messenger held in the store; personal, bots or all — the same as in: in the query; or a list: group:work,telegram:Alice,email:me@example.com. |
 | `--type <text\|voice\|file>` | only messages of this type: text alone, a voice message, or a file. |
 | `--limit <n>` | how many. |
+| `--offset <n>` | skip this many, for the next page. |
 | `--newest` | newest first instead of best first. |
 | `--exact` | bare words and quotes match their exact form only, as exact:word does; text: still matches every form. |
 | `--context <n>` | messages before and after each hit; 2 in the terminal, 0 otherwise. |
@@ -2780,7 +2856,7 @@ max search messages [query] [options]
 
 ### `max search mail`
 
-search the mail imported into the local store — memo mail import brings it in
+search the mail imported into the local store — memo sync --mail brings it in
 
 ```sh
 max search mail [query] [options]
@@ -2793,7 +2869,9 @@ max search mail [query] [options]
 | Option | Purpose |
 |---|---|
 | `--chat <chat>` | only this mail thread, by id or subject. |
+| `--source <accounts>` | only these mail accounts, separated by commas: email:<address> as a hit shows it, email, mail or group:<name>; every mail account when unset. |
 | `--limit <n>` | how many. |
+| `--offset <n>` | skip this many, for the next page. |
 | `--newest` | newest first instead of best first. |
 | `--exact` | bare words and quotes match their exact form only, as exact:word does; text: still matches every form. |
 | `--context <n>` | messages before and after each hit; 2 in the terminal, 0 otherwise. |
@@ -2814,7 +2892,7 @@ max search notes <query> [options]
 | Option | Purpose |
 |---|---|
 | `--type <internal\|file>` | only notes written in memo, or only notes from a folder. |
-| `--folder <id>` | only this notes folder, by its id; repeat it for more. |
+| `--source <accounts>` | only these notes accounts, separated by commas: notes:internal for notes written in memo, notes:<folder id> as a hit shows it, notes, documents or group:<name>. |
 | `--tag <tag>` | only notes with this tag. |
 | `--filter <query>` | a query every hit must also match; it does not change the search by meaning. |
 | `--limit <n>` | how many. |
@@ -2848,7 +2926,7 @@ max search conversations <query> [options]
 | `--chat <chat>` | only this chat: a chat: its id, or part of its title. |
 | `--since-time <time>` | only those still going at this ISO 8601 time, or 30m / 2h / 1d ago, or later. |
 | `--filter <query>` | strict Lucene filter: any message in a conversation must match; does not change the meaning query. |
-| `--source <source>` | accounts to search: personal, bots, all, or a provider; defaults to the active account. |
+| `--source <accounts>` | accounts to search: personal, bots, all, a provider, or a list like group:work,telegram:Alice,email:me@example.com; defaults to the active account. |
 | `--timezone <zone>` | IANA timezone for filter dates; system timezone by default. |
 | `--limit <n>` | how many. |
 | `--refresh` | first build and embed, on this machine, the chats in scope that changed or were never built — within --max-chats and --max-chunks. |
@@ -2873,7 +2951,7 @@ max searches create <name> [query] [options]
 | Option | Purpose |
 |---|---|
 | `--chat <chat>` | only this chat — the same as chat: in the query; a chat: its id, or part of its title. |
-| `--source <messenger>` | every account of this messenger held in the store; personal, bots or all — the same as in: in the query. |
+| `--source <accounts>` | every account of this messenger held in the store; personal, bots or all — the same as in: in the query; or a list: group:work,telegram:Alice,email:me@example.com. |
 | `--limit <n>` | how many. |
 | `--newest` | newest first instead of best first. |
 | `--exact` | bare words and quotes match their exact form only, as exact:word does; text: still matches every form. |
@@ -3542,6 +3620,94 @@ remove this profile's unit; stop it first
 max server uninstall
 ```
 
+## `max schedule`
+
+run a max command or an agent later or on a timer (systemd, launchd, Task Scheduler); an agent cannot send
+
+### `max schedule command`
+
+run max <args…> on a timer — reads save what they read, so this is how a chat's history fills the store
+
+```sh
+max schedule command <name> <args> [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `name` | required | lowercase letters, digits and dashes. |
+| `args` | required | the max command after its name, e.g. -- messages list <chat> --limit 50. |
+
+| Option | Purpose |
+|---|---|
+| `--every <duration>` | repeat: 30m, 2h, 1d. |
+| `--at <HH:MM>` | every day at this local time. |
+| `--once <when>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
+
+### `max schedule agent`
+
+start an agent (claude or codex) with a prompt on a timer; it runs with MAX_READ_ONLY=1, so it reads and drafts and cannot send — its answer is kept and you are notified
+
+```sh
+max schedule agent <name> <harness> <prompt> [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `name` | required | lowercase letters, digits and dashes. |
+| `harness` | required | the agent to start. One of: `claude`, `codex`. |
+| `prompt` | required | what to do, e.g. "run the daily follow-up review: max skill show follow-ups". |
+
+| Option | Purpose |
+|---|---|
+| `--max-cost <usd>` | claude only: stop a run that costs more than this, in US dollars. |
+| `--every <duration>` | repeat: 30m, 2h, 1d. |
+| `--at <HH:MM>` | every day at this local time. |
+| `--once <when>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
+
+### `max schedule list`
+
+the schedules, when they run and how their last run went
+
+```sh
+max schedule list
+```
+
+### `max schedule run`
+
+run a schedule now, as its timer would, and wait for it
+
+```sh
+max schedule run <name>
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `name` | required |  |
+
+### `max schedule remove`
+
+stop a schedule and remove its timer; its past output stays
+
+```sh
+max schedule remove <name>
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `name` | required |  |
+
+### `max schedule exec`
+
+what a timer runs, given the schedule's file; to run one by hand, use run
+
+```sh
+max schedule exec <file>
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `file` | required |  |
+
 ## `max watch`
 
 print new messages as they arrive, from a running `max serve`
@@ -3672,7 +3838,7 @@ max runs list [options]
 
 ### `max runs show`
 
-one run: what it was, and one line per operation
+one run: what it was, how it ended and what went wrong; -v for every event
 
 ```sh
 max runs show <run-id>
@@ -3730,7 +3896,7 @@ max skill show [name]
 
 | Argument | | Meaning |
 |---|---|---|
-| `name` | optional | one of the skills shipped for a task: link-conversations. |
+| `name` | optional | one of the skills shipped for a task: follow-ups, link-conversations. |
 
 ### `max skill install`
 
@@ -4375,6 +4541,7 @@ max bot recipients clear
 what this bot sent, edited and deleted from this machine — ids and outcomes, never text
 
 #### `max bot sends list`
+
 
 
 ```sh
