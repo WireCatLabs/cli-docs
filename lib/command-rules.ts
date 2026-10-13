@@ -10,7 +10,7 @@ const messenger = (tool: string): Record<Lang, Rules> => {
       shape: `${tool} [profile] [options] <resource> <action> [arguments]`,
       items: [
         "Resource first, then the action. The resource is what you work with: `chats`, `messages`, `contacts`. The action is what you do with it: `list`, `show`, `send`.",
-        `Name the profile as the first word: \`${tool} work chats list\` lists the chats of profile \`work\`. Without a profile word or \`${tool.toUpperCase()}_PROFILE\`, the command uses the profile \`default\` even when other profiles exist, so scripts and agents should always name one.`,
+        `Name the profile as the first word: \`${tool} work chats list\` lists the chats of profile \`work\`. No profile is ever assumed: a command that needs an account and gets none from the first word, \`${tool.toUpperCase()}_PROFILE\` or the \`defaultProfile\` setting stops and lists your profiles, even when there is only one.`,
         "Global options work with every command: `--json` for scripts and agents, `--dry-run` to check a command without running it, `--offline` to answer from the local copy only.",
         `A command that changes something is marked in the reference: “Changes something in ${name}” changes data in the messenger, “Changes something on this computer only” changes only files on this computer.`,
         "Permission levels can make a write ask for confirmation first. `--yes` gives that confirmation in advance.",
@@ -22,7 +22,7 @@ const messenger = (tool: string): Record<Lang, Rules> => {
       shape: `${tool} [профиль] [опции] <ресурс> <действие> [аргументы]`,
       items: [
         "Сначала ресурс, потом действие. Ресурс — то, с чем вы работаете: `chats`, `messages`, `contacts`. Действие — что с ним сделать: `list`, `show`, `send`.",
-        `Называйте профиль первым словом: \`${tool} work chats list\` показывает чаты профиля \`work\`. Без слова профиля и без \`${tool.toUpperCase()}_PROFILE\` команда берёт профиль \`default\`, даже если есть другие профили. Поэтому скрипты и агенты всегда должны называть профиль.`,
+        `Называйте профиль первым словом: \`${tool} work chats list\` показывает чаты профиля \`work\`. Профиль никогда не подставляется сам: если команде нужен аккаунт, а профиль не задан ни первым словом, ни \`${tool.toUpperCase()}_PROFILE\`, ни настройкой \`defaultProfile\`, она останавливается и перечисляет ваши профили, даже если профиль один.`,
         "Общие параметры работают с любой командой: `--json` для скриптов и агентов, `--dry-run` для проверки без выполнения, `--offline` для ответа только из локальной копии.",
         `Команда, которая что-то меняет, отмечена в справочнике: «Changes something in ${name}» меняет данные в мессенджере, «Changes something on this computer only» меняет только файлы на этом компьютере.`,
         "Уровни разрешений могут требовать подтверждения перед записью. `--yes` даёт это подтверждение заранее.",
@@ -34,7 +34,7 @@ const messenger = (tool: string): Record<Lang, Rules> => {
       shape: `${tool} [perfil] [opciones] <recurso> <acción> [argumentos]`,
       items: [
         "Primero el recurso, después la acción. El recurso es aquello con lo que trabajas: `chats`, `messages`, `contacts`. La acción es lo que haces con él: `list`, `show`, `send`.",
-        `Indica el perfil como primera palabra: \`${tool} work chats list\` muestra los chats del perfil \`work\`. Sin palabra de perfil ni \`${tool.toUpperCase()}_PROFILE\`, el comando usa el perfil \`default\` aunque existan otros perfiles, así que los scripts y agentes deben indicar siempre uno.`,
+        `Indica el perfil como primera palabra: \`${tool} work chats list\` muestra los chats del perfil \`work\`. Nunca se asume un perfil: si un comando necesita una cuenta y no recibe perfil por la primera palabra, \`${tool.toUpperCase()}_PROFILE\` ni el ajuste \`defaultProfile\`, se detiene y muestra tus perfiles, aunque solo haya uno.`,
         "Las opciones globales funcionan con cualquier comando: `--json` para scripts y agentes, `--dry-run` para comprobar un comando sin ejecutarlo, `--offline` para responder solo desde la copia local.",
         `Un comando que cambia algo está marcado en la referencia: «Changes something in ${name}» cambia datos en el mensajero, «Changes something on this computer only» cambia solo archivos en este ordenador.`,
         "Los niveles de permisos pueden pedir confirmación antes de una escritura. `--yes` da esa confirmación por adelantado.",
