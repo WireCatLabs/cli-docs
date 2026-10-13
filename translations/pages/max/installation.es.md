@@ -45,7 +45,7 @@ El agente te guía por estos pasos:
 
 1. **Revisa tu ordenador.** max necesita Node.js 22.16 o posterior. Si falta, el agente te explica cómo instalarlo.
 2. **Instala max.** En este paso tu cuenta no se toca.
-3. **Inicia el acceso.** El agente ejecuta `max setup` en una ventana de terminal, y ahí aparece un código QR. Lo escaneas con el teléfono, como se explica en [Inicia sesión en MAX](#log-in). Si el agente no puede mostrarte esa ventana, te pedirá que ejecutes `max setup` tú mismo.
+3. **Inicia el acceso.** El agente ejecuta `max personal setup` en una ventana de terminal, y ahí aparece un código QR. Lo escaneas con el teléfono, como se explica en [Inicia sesión en MAX](#log-in). Si el agente no puede mostrarte esa ventana, te pedirá que ejecutes `max personal setup` tú mismo.
 4. **Se conecta a max.** El agente instala para sí las instrucciones de max.
 5. **Muestra el resultado.** Ves el nombre de tu cuenta y algunos chats. El agente no envía nada.
 
@@ -83,7 +83,7 @@ Abre Terminal en macOS o Linux, o PowerShell en Windows.
 4. **Inicia el acceso:**
 
    ```sh
-   max setup
+   max personal setup
    ```
 
    Continúa con el paso siguiente.
@@ -100,7 +100,9 @@ Abre Terminal en macOS o Linux, o PowerShell en Windows.
 
 El acceso añade tu ordenador como un dispositivo nuevo de tu cuenta de MAX, igual que la aplicación de MAX para ordenador. Puedes ver ese dispositivo en MAX en el teléfono y quitarlo cuando quieras. El acceso no descarga el historial de chats.
 
-`max setup` muestra el acceso. Lo inicia tu agente o lo ejecutas tú.
+`max personal setup` muestra el acceso. Lo inicia tu agente o lo ejecutas tú.
+
+`personal` es el nombre de este acceso en tu ordenador, llamado perfil. Sirve cualquier nombre. Los comandos siguientes empiezan con el mismo nombre, por ejemplo `max personal doctor`.
 
 1. Espera a que aparezca el código QR de acceso en el ordenador. Aparece en el terminal. Si la ventana es demasiado estrecha, setup abre el código en el navegador.
 2. En el teléfono, abre MAX, entra en Ajustes → Dispositivos y elige escanear el QR. Permite el acceso a la cámara si se solicita.
@@ -136,7 +138,7 @@ Comprueba que el nombre y los chats son de la cuenta que querías conectar. Si e
 
 Setup no descarga todo el historial de chats. Para buscar mensajes antiguos, pide al agente que [descargue el historial que necesitas](/es/docs/max/archive).
 
-A mano, `max doctor` muestra si has iniciado sesión y dónde guarda max sus archivos. No se conecta a MAX.
+A mano, `max personal doctor` muestra si has iniciado sesión y dónde guarda max sus archivos. No se conecta a MAX.
 
 <a id="дальше" />
 
@@ -157,8 +159,8 @@ A mano, `max doctor` muestra si has iniciado sesión y dónde guarda max sus arc
 **A mano:** ejecuta uno de estos comandos:
 
 ```sh
-max setup --method qr-chrome   # web.max.ru en una ventana de navegador aparte
-max setup --method sms         # la misma ventana, con acceso por número de teléfono
+max personal setup --method qr-chrome   # web.max.ru en una ventana de navegador aparte
+max personal setup --method sms         # la misma ventana, con acceso por número de teléfono
 ```
 
 El acceso por navegador necesita Chrome, Chromium, Edge o Brave. Los navegadores instalados como paquete snap no funcionan. La ventana usa un perfil temporal, no el tuyo, y se cierra tras el acceso.
@@ -167,7 +169,7 @@ El acceso por navegador necesita Chrome, Chromium, Edge o Brave. Los navegadores
 
 **Con tu agente:** pídele que ejecute setup otra vez y escanea el código nuevo.
 
-**A mano:** vuelve a ejecutar `max setup`. Si ya iniciaste sesión, setup usa ese acceso y no vuelve a preguntar.
+**A mano:** vuelve a ejecutar `max personal setup`. Si ya iniciaste sesión, setup usa ese acceso y no vuelve a preguntar.
 
 <a id="q-not-found" />
 
@@ -224,10 +226,12 @@ En el almacén de contraseñas del sistema operativo (el llavero), no en un arch
 | Ajustes | `~/.config/max-cli/` | `%APPDATA%\max-cli\Config\` |
 | Estado: perfiles, bots, registros de ejecución | `~/.local/share/max-cli/` | `%LOCALAPPDATA%\max-cli\Data\` |
 | Caché | `~/.cache/max-cli/` | `%LOCALAPPDATA%\max-cli\Cache\` |
-| Archivo local de mensajes, compartido con tg | `~/.local/share/cli-messaging/wirecat.db` | en `%LOCALAPPDATA%\cli-messaging\Data\` |
-| Modelos de reconocimiento de voz | `~/.cache/cli-common/models/audio/` | en `%LOCALAPPDATA%\cli-common\Cache\` |
+| Archivo local de mensajes, compartido con tg | `~/.local/share/WireCat/wirecat.db` | `%LOCALAPPDATA%\WireCat\Data\wirecat.db` |
+| Modelos de reconocimiento de voz | `~/.local/share/WireCat/models/audio/` | `%LOCALAPPDATA%\WireCat\Data\models\audio\` |
 
-`max doctor` muestra las rutas exactas en tu ordenador. Para cambiar estas carpetas u otros ajustes, consulta [Configuración](/es/docs/configuration) y la [referencia de ajustes de max](/es/docs/max/configuration).
+`max personal doctor` muestra las rutas exactas en tu ordenador. Para cambiar estas carpetas u otros ajustes, consulta [Configuración](/es/docs/configuration) y la [referencia de ajustes de max](/es/docs/max/configuration).
+
+La primera ejecución tras actualizar desde un max anterior mueve aquí una sola vez el archivo y los modelos, desde `~/.local/share/cli-messaging/` y `~/.cache/cli-common/models/`. Si ambos sitios tienen copias distintas, max se detiene y nombra los dos archivos: conserva uno y vuelve a ejecutarlo.
 
 <a id="обновление" />
 
@@ -244,6 +248,8 @@ max upgrade           # usa el gestor de paquetes que instaló max: npm, pnpm o 
 max upgrade --check   # solo indica si hay una versión más nueva
 ```
 
+Actualiza tg y memo junto con max: comparten el archivo de mensajes, y una herramienta antigua crearía un archivo nuevo en el sitio anterior.
+
 max no se actualiza solo. Una vez al día comprueba si hay una versión nueva y lo indica en una línea del terminal. El acceso se conserva tras actualizar.
 
 <a id="удаление" />
@@ -255,13 +261,13 @@ max no se actualiza solo. Una vez al día comprueba si hay una versión nueva y 
 Desinstalar max quita el comando, no tus datos. Cierra sesión antes, para que el acceso también se borre del llavero:
 
 ```sh
-max server uninstall          # solo si instalaste el servicio en segundo plano
-max session end               # cerrar sesión y olvidar el acceso
+max personal server uninstall          # solo si instalaste el servicio en segundo plano
+max personal session end               # cerrar sesión y olvidar el acceso
 npm uninstall -g @wirecat/max-cli
 rm -rf ~/.config/max-cli ~/.local/share/max-cli ~/.cache/max-cli
 ```
 
-Si conectaste bots, ejecuta también `max <profile> bot auth remove` para cada perfil de bot. Borra `~/.local/share/cli-messaging/` solo si ninguna otra herramienta, como tg, necesita los mensajes guardados.
+Si conectaste bots, ejecuta también `max <profile> bot auth remove` para cada perfil de bot. Borra `~/.local/share/WireCat/` solo si ninguna otra herramienta, como tg, necesita los mensajes guardados.
 
 <a id="из-исходников" />
 

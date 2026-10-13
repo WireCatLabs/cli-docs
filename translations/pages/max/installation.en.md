@@ -45,7 +45,7 @@ The agent goes through these steps with you:
 
 1. **It checks your computer.** max needs Node.js 22.16 or newer. If it is missing, the agent explains how to install it.
 2. **It installs max.** This does not touch your account yet.
-3. **It starts the login.** The agent runs `max setup` in a terminal window, and a QR code appears there. You scan it with your phone, as described in [Log in to MAX](#log-in). If the agent cannot show you that window, it asks you to run `max setup` yourself.
+3. **It starts the login.** The agent runs `max personal setup` in a terminal window, and a QR code appears there. You scan it with your phone, as described in [Log in to MAX](#log-in). If the agent cannot show you that window, it asks you to run `max personal setup` yourself.
 4. **It connects itself to max.** The agent installs the max instructions for itself.
 5. **It shows the result.** You see your account name and a few chats. The agent sends nothing.
 
@@ -83,7 +83,7 @@ Open Terminal on macOS or Linux, or PowerShell on Windows.
 4. **Start the login:**
 
    ```sh
-   max setup
+   max personal setup
    ```
 
    Continue with the next step.
@@ -100,7 +100,9 @@ Open Terminal on macOS or Linux, or PowerShell on Windows.
 
 Login adds your computer as a new device on your MAX account, like the MAX desktop app. You can see this device in MAX on your phone and remove it at any time. Login does not download your chat history.
 
-`max setup` shows the login. Your agent starts it, or you run it yourself.
+`max personal setup` shows the login. Your agent starts it, or you run it yourself.
+
+`personal` is the name of this login on your computer, called a profile. Any name works. Later commands start with the same name, for example `max personal doctor`.
 
 1. Wait for the login QR code to appear on your computer. It appears in the terminal. If the window is too narrow, setup opens the code in your browser.
 
@@ -138,7 +140,7 @@ Check that the name and the chats belong to the account you wanted to connect. I
 
 Setup does not download your whole chat history. To search older messages, ask the agent to [download the history you need](/en/docs/max/archive).
 
-By hand, `max doctor` shows whether you are logged in and where max keeps its files. It does not connect to MAX.
+By hand, `max personal doctor` shows whether you are logged in and where max keeps its files. It does not connect to MAX.
 
 <a id="дальше" />
 
@@ -159,8 +161,8 @@ By hand, `max doctor` shows whether you are logged in and where max keeps its fi
 **By hand:** run one of these:
 
 ```sh
-max setup --method qr-chrome   # web.max.ru in a separate browser window
-max setup --method sms         # the same window, with phone-number login
+max personal setup --method qr-chrome   # web.max.ru in a separate browser window
+max personal setup --method sms         # the same window, with phone-number login
 ```
 
 Browser login needs Chrome, Chromium, Edge or Brave. Browsers installed as a snap package do not work. The window uses a temporary profile, not your own, and closes after login.
@@ -169,7 +171,7 @@ Browser login needs Chrome, Chromium, Edge or Brave. Browsers installed as a sna
 
 **With your agent:** ask it to run setup again, then scan the new code.
 
-**By hand:** run `max setup` again. If you already logged in, setup uses that login and does not ask again.
+**By hand:** run `max personal setup` again. If you already logged in, setup uses that login and does not ask again.
 
 <a id="q-not-found" />
 
@@ -226,10 +228,12 @@ In your operating system's password storage (the keyring), not in a file. If you
 | Settings | `~/.config/max-cli/` | `%APPDATA%\max-cli\Config\` |
 | State: profiles, bots, run records | `~/.local/share/max-cli/` | `%LOCALAPPDATA%\max-cli\Data\` |
 | Cache | `~/.cache/max-cli/` | `%LOCALAPPDATA%\max-cli\Cache\` |
-| Local message archive, shared with tg | `~/.local/share/cli-messaging/wirecat.db` | under `%LOCALAPPDATA%\cli-messaging\Data\` |
-| Speech recognition models | `~/.cache/cli-common/models/audio/` | under `%LOCALAPPDATA%\cli-common\Cache\` |
+| Local message archive, shared with tg | `~/.local/share/WireCat/wirecat.db` | `%LOCALAPPDATA%\WireCat\Data\wirecat.db` |
+| Speech recognition models | `~/.local/share/WireCat/models/audio/` | `%LOCALAPPDATA%\WireCat\Data\models\audio\` |
 
-`max doctor` shows the exact paths on your computer. To change these locations or other settings, see [Configuration](/en/docs/configuration) and the [max settings reference](/en/docs/max/configuration).
+`max personal doctor` shows the exact paths on your computer. To change these locations or other settings, see [Configuration](/en/docs/configuration) and the [max settings reference](/en/docs/max/configuration).
+
+The first run after an update from an older max moves the archive and the models here once, from `~/.local/share/cli-messaging/` and `~/.cache/cli-common/models/`. If both places hold different copies, max stops and names both files: keep one and run it again.
 
 <a id="обновление" />
 
@@ -246,6 +250,8 @@ max upgrade           # uses the package manager that installed max: npm, pnpm o
 max upgrade --check   # only says whether a newer version exists
 ```
 
+Update tg and memo together with max: they share the message archive, and an older tool would create a new archive in the old place.
+
 max does not update itself. It checks for a new version once a day and prints a one-line notice in the terminal. Your login stays after an update.
 
 <a id="удаление" />
@@ -257,13 +263,13 @@ max does not update itself. It checks for a new version once a day and prints a 
 Removing max deletes the command, not your data. Log out first, so the login is also removed from the keyring:
 
 ```sh
-max server uninstall          # only if you installed the background service
-max session end               # log out and forget the login
+max personal server uninstall          # only if you installed the background service
+max personal session end               # log out and forget the login
 npm uninstall -g @wirecat/max-cli
 rm -rf ~/.config/max-cli ~/.local/share/max-cli ~/.cache/max-cli
 ```
 
-If you connected bots, also run `max <profile> bot auth remove` for each bot profile. Remove `~/.local/share/cli-messaging/` only if no other tool, such as tg, still needs the saved messages.
+If you connected bots, also run `max <profile> bot auth remove` for each bot profile. Remove `~/.local/share/WireCat/` only if no other tool, such as tg, still needs the saved messages.
 
 <a id="из-исходников" />
 
