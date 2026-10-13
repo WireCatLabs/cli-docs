@@ -110,7 +110,7 @@ inline literals, heading structure and link destinations. Released originals sta
 ## Portal command presentation
 
 The release-owned `commands.md` remains the complete source and Markdown reference. After
-localization the portal derives `commands-personal`, `commands-bot` and `commands-admin` pages
+localization the portal derives `commands-personal`, `commands-bot`, `commands-admin` and `commands-setup` pages
 from those same sections. The `/commands` HTML route is a lightweight choice of references;
 existing command hashes redirect to their partition. Edit native commands at the source, not
 these derived files. Shared global options and exit codes appear in every part.

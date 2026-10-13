@@ -1,5 +1,24 @@
-export type CommandGroup = "personal" | "bot" | "admin"
-export const commandGroups: CommandGroup[] = ["personal", "bot", "admin"]
+export type CommandGroup = "personal" | "bot" | "admin" | "setup"
+export const commandGroups: CommandGroup[] = ["personal", "bot", "admin", "setup"]
+const setup = new Set([
+  "session",
+  "setup",
+  "account",
+  "config",
+  "server",
+  "serve",
+  "watch",
+  "store",
+  "models",
+  "doctor",
+  "runs",
+  "flood",
+  "mcp",
+  "skill",
+  "commands",
+  "complete",
+  "upgrade",
+])
 const adminChat = new Set([
   "create",
   "update",
@@ -22,6 +41,7 @@ const adminTopics = new Set(["enable", "create", "edit", "delete", "order"])
 export function commandGroup(command: string): CommandGroup {
   const words = command.trim().split(/\s+/).slice(1)
   if (words[0] === "bot") return "bot"
+  if (setup.has(words[0])) return "setup"
   if (
     words[0] === "groups" ||
     words[0] === "stats" ||
@@ -39,6 +59,7 @@ export function commandGroupForAnchor(anchor: string): CommandGroup {
     return "personal"
   }
   if (/^(tg|max)-bot(?:-|$)/.test(value)) return "bot"
+  if ([...setup].some((name) => new RegExp(`^(tg|max)-${name}(?:-|$)`).test(value))) return "setup"
   if (
     /^(tg|max)-(?:groups|stats)(?:-|$)/.test(value) ||
     [...adminChat].some((name) => new RegExp(`^(tg|max)-chats-${name}(?:-|$)`).test(value)) ||
@@ -55,11 +76,14 @@ export const commandGroupCopy = {
     personal: "Личный аккаунт",
     bot: "Боты",
     admin: "Управление группами и каналами",
+    setup: "Настройка и обслуживание",
     descriptions: {
-      personal: "Вход, чтение, поиск, файлы, отправка, архив и настройки своего аккаунта.",
+      personal: "Чаты, сообщения, контакты, поиск, файлы, отправка и автоответы в своём аккаунте.",
       bot: "Подключение бота, сообщения, события и полный Bot API.",
       admin:
         "Участники, приглашения, права, модерация, темы форумов и статистика групп и каналов. Изменения требуют соответствующих прав.",
+      setup:
+        "Вход, профили, настройки, фоновый сервер, локальное хранилище, диагностика, подключение агента и обновления.",
     },
     all: "Полный справочник в Markdown",
     options: "Общие параметры",
@@ -83,11 +107,14 @@ export const commandGroupCopy = {
     personal: "Personal account",
     bot: "Bots",
     admin: "Group and channel administration",
+    setup: "Setup and maintenance",
     descriptions: {
-      personal: "Login, reading, search, files, sending, archive and your account settings.",
+      personal: "Chats, messages, contacts, search, files, sending and auto-replies in your own account.",
       bot: "Bot connection, messages, updates and the full Bot API.",
       admin:
         "Members, invitations, permissions, moderation, forum topics and statistics for groups and channels. Changes require the relevant permissions.",
+      setup:
+        "Login, profiles, configuration, the background server, the local store, diagnostics, agent connection and updates.",
     },
     all: "Full reference in Markdown",
     options: "Global options",
@@ -111,11 +138,14 @@ export const commandGroupCopy = {
     personal: "Cuenta personal",
     bot: "Bots",
     admin: "Administración de grupos y canales",
+    setup: "Configuración y mantenimiento",
     descriptions: {
-      personal: "Acceso, lectura, búsqueda, archivos, envío, historial y ajustes de tu cuenta.",
+      personal: "Chats, mensajes, contactos, búsqueda, archivos, envío y respuestas automáticas en tu cuenta.",
       bot: "Conexión del bot, mensajes, eventos y Bot API completa.",
       admin:
         "Miembros, invitaciones, permisos, moderación, temas de foro y estadísticas de grupos y canales. Los cambios requieren los permisos pertinentes.",
+      setup:
+        "Acceso, perfiles, configuración, servidor en segundo plano, almacén local, diagnóstico, conexión del agente y actualizaciones.",
     },
     all: "Referencia completa en Markdown",
     options: "Opciones globales",
@@ -148,7 +178,7 @@ export function splitCommandReference(markdown: string, lang: string): Record<Co
   const footerMatch = /^(?:<a id="[^"\n]+" \/>\n\n)?## (?!`(?:tg|max))[^\n]+[\s\S]*$/m.exec(tail)
   const footerIndex = footerMatch ? lastStart + footerMatch.index : body.length
   const footer = footerMatch?.[0] ?? ""
-  const sections: Record<CommandGroup, string[]> = { personal: [], bot: [], admin: [] }
+  const sections: Record<CommandGroup, string[]> = { personal: [], bot: [], admin: [], setup: [] }
   starts.forEach((match, index) => {
     const part = body.slice(match.index, starts[index + 1]?.index ?? footerIndex)
     sections[commandGroup(match[1])].push(part)

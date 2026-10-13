@@ -39,6 +39,8 @@ it("routes existing bot/admin/personal anchors, including multiword commands and
   expect(commandGroupForAnchor("#tg-stats-messages-show")).toBe("admin")
   expect(commandGroupForAnchor("#tg-topics-create")).toBe("admin")
   expect(commandGroupForAnchor("#tg-topics-list")).toBe("personal")
+  expect(commandGroupForAnchor("#tg-store-export")).toBe("setup")
+  expect(commandGroupForAnchor("#max-session-start")).toBe("setup")
   expect(commandGroupForAnchor("#tg-messages-search")).toBe("personal")
   expect(commandGroupForAnchor("#%invalid")).toBe("personal")
 })
