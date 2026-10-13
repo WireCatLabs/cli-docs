@@ -140,7 +140,7 @@ export function validateInvocation(
       continue
     }
     if (tokens[i] === "--help" || tokens[i] === "-h") return null
-    if (option.takesValue && !tokens[i].includes("=") && /<[^>]+>/.test(option.flags)) {
+    if (option.takes_value && !tokens[i].includes("=") && /<[^>]+>/.test(option.flags)) {
       if (tokens[i + 1] === undefined || tokens[i + 1].startsWith("--"))
         return executable ? { kind: "invalid", reason: `${tokens[i]} requires a value` } : null
       i++
@@ -184,8 +184,9 @@ export function validateInvocation(
       if (name === "--help" || name === "-h") return null
       const option = options.get(name)
       if (!option) return { kind: "invalid", reason: `Unknown option ${name} for ${command.path.join(" ")}` }
-      if (!option.takesValue && token.includes("=")) return { kind: "invalid", reason: `${name} does not take a value` }
-      if (option.takesValue && !token.includes("=")) {
+      if (!option.takes_value && token.includes("="))
+        return { kind: "invalid", reason: `${name} does not take a value` }
+      if (option.takes_value && !token.includes("=")) {
         if (/<[^>]+>/.test(option.flags)) {
           if (remaining[i + 1] === undefined || remaining[i + 1].startsWith("--"))
             return executable ? { kind: "invalid", reason: `${name} requires a value` } : null

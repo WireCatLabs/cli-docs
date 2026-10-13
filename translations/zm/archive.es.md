@@ -25,7 +25,7 @@ obtención repetida o copia diaria.
 Acceso, grabaciones y comandos remotos funcionan sin la base de reuniones. Importación, descarga,
 seguimiento y lectura usan el adaptador SQLite publicado: abre conexiones al necesitarlas y las
 cierra antes del resultado. `MESSAGING_STORE` elige la base compartida. Modelo, exportación y procesamiento
-vienen de `@wirecat/cli-messaging/meetings`.
+vienen de `@wirecat/cli-core/meetings`.
 
 La base es `wirecat.db`. Abrir su ruta predeterminada elimina la antigua `messages.db` y los archivos
 `-wal` y `-shm`, sin migrarlos. Se conservan con `MESSAGING_STORE`, ruta explícita o una base antigua

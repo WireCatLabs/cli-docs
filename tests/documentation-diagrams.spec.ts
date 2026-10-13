@@ -33,7 +33,7 @@ for (const lang of ["en", "ru", "es"]) {
     await page.goto(`/${lang}/docs/architecture`)
     const packages = page.locator("main figure").filter({ hasText: "@wirecat/tg-cli" })
     await expect(packages).toHaveCount(1)
-    await expect(packages).toContainText("@wirecat/cli-messaging")
+    await expect(packages).toContainText("@wirecat/cli-core")
     for (const slug of ["architecture", "search-architecture", "data-model", "people"]) {
       const link = page.locator(`#nd-sidebar [data-id$="-viewport"] a[href="/${lang}/docs/${slug}"]`)
       await expect(link).toHaveCount(1)

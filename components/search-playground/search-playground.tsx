@@ -253,7 +253,7 @@ export function SearchPlayground({ lang, embedded = false }: { lang: string; emb
                     <Popover.Popup className="sp-help-content" initialFocus={false}>
                       <p>{text.syntaxHelp}</p>
                       <code>AND · OR · NOT · chat: · from: · date: · has: · in: · text:</code>
-                      <a href="https://github.com/WireCatLabs/cli-messaging/blob/main/docs/search/query-language.md">
+                      <a href="https://github.com/WireCatLabs/cli-core/blob/main/docs/search/query-language.md">
                         {text.reference} ↗
                       </a>
                     </Popover.Popup>

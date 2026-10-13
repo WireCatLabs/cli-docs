@@ -546,8 +546,8 @@ export const demoFields = QUERY_FIELDS.filter(
 export const locator = (message: DemoMessage) => `msg:${message.provider}/demo/${message.chatId}/${message.id}`
 const tokens = (text: string) => normalize(text).match(/[\p{L}\p{N}]+/gu) ?? []
 const inRange = (time: number, range: ReturnType<typeof dateRange>) =>
-  (range.lower === undefined || (range.lowerInclusive ? time >= range.lower : time > range.lower)) &&
-  (range.upper === undefined || (range.upperInclusive ? time <= range.upper : time < range.upper))
+  (range.lower === undefined || (range.lower_inclusive ? time >= range.lower : time > range.lower)) &&
+  (range.upper === undefined || (range.upper_inclusive ? time <= range.upper : time < range.upper))
 export const compileQuery = (query: string, archive = messages): ((message: DemoMessage) => boolean) => {
   const ast = validateFields(parseLucene(query))
   const compile = (node: QueryNode): ((message: DemoMessage) => boolean) => {
@@ -555,7 +555,7 @@ export const compileQuery = (query: string, archive = messages): ((message: Demo
       const clauses = node.clauses.map((clause) => ({ occur: clause.occur, test: compile(clause.node) }))
       const must = clauses.filter((clause) => clause.occur === "must")
       const should = clauses.filter((clause) => clause.occur === "should")
-      const excluded = clauses.filter((clause) => clause.occur === "mustNot")
+      const excluded = clauses.filter((clause) => clause.occur === "must_not")
       return (message) =>
         (must.length > 0 || should.length > 0) &&
         must.every((clause) => clause.test(message)) &&
@@ -570,8 +570,8 @@ export const compileQuery = (query: string, archive = messages): ((message: Demo
       const range = dateRange(
         node.value,
         node.upper ?? node.value,
-        node.lowerInclusive ?? true,
-        node.upperInclusive ?? true,
+        node.lower_inclusive ?? true,
+        node.upper_inclusive ?? true,
         "UTC",
         node.span,
       )
@@ -604,10 +604,11 @@ export const compileQuery = (query: string, archive = messages): ((message: Demo
       return (message) => message[node.field as "chat" | "from"] === matching[0]
     }
     if (node.field === "has")
-      return (message) =>
-        node.value.toLowerCase() === "attachment"
-          ? message.has.some((kind) => kind !== "link")
-          : message.has.includes(node.value.toLowerCase())
+      return (message) => {
+        const kind = node.value.toLowerCase()
+        if (kind === "text") return message.text.length > 0
+        return kind === "attachment" ? message.has.some((other) => other !== "link") : message.has.includes(kind)
+      }
     if (node.field === "in")
       return (message) => ["all", "personal", message.provider].includes(node.value.toLowerCase())
     throw new Error("This field is not available in this demo.")
@@ -799,7 +800,7 @@ export const highlightWords = (query: string): Set<string> => {
     const values: string[] = []
     const visit = (node: QueryNode) => {
       if (node.kind === "boolean") {
-        for (const clause of node.clauses) if (clause.occur !== "mustNot") visit(clause.node)
+        for (const clause of node.clauses) if (clause.occur !== "must_not") visit(clause.node)
       } else if (node.field === "text" && ["term", "phrase"].includes(node.operator)) values.push(...tokens(node.value))
     }
     visit(root)

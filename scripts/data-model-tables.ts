@@ -1,5 +1,5 @@
 // pnpm docs:data-model <schema.md> [--source] — rewrites the table reference in content/docs/data-model*.mdx
-// from cli-messaging's docs/storage/schema.md. English comes from the schema doc, with content/data/data-model/en.json
+// from cli-core's docs/storage/schema.md. English comes from the schema doc, with content/data/data-model/en.json
 // filling what it leaves empty; ru and es come from their JSON files, keyed the same way. --source writes
 // content/data/data-model/source.json: every key with its English text, the list a translation must cover.
 import { readFileSync, writeFileSync } from "node:fs"
@@ -155,7 +155,7 @@ const readJson = (file: string) => JSON.parse(readFileSync(join(dataDir, file), 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const [schemaPath, flag] = process.argv.slice(2)
   if (!schemaPath) {
-    console.error("usage: pnpm docs:data-model <path to cli-messaging docs/storage/schema.md> [--source]")
+    console.error("usage: pnpm docs:data-model <path to cli-core docs/storage/schema.md> [--source]")
     process.exit(2)
   }
   const areas = parseSchema(readFileSync(schemaPath, "utf8"))

@@ -5,23 +5,30 @@ import { dirname, resolve } from "node:path"
 import { build } from "esbuild"
 
 const require = createRequire(import.meta.url)
-const dist = resolve(dirname(require.resolve("@wirecat/cli-messaging/services")), "..")
+const dist = resolve(dirname(require.resolve("@wirecat/cli-core/services")), "..")
 const core = resolve(dirname(require.resolve("@wirecat/cli-base")), "errors.js")
 const sanitize = resolve(dirname(core), "sanitize.js")
-const files = ["parser", "registry", "dates", "automaton", "types"]
+const query = resolve(dirname(require.resolve("@wirecat/cli-base/query")))
+const lucene = (name) => resolve(dist, `search/lucene/${name}.js`)
+const entries = [
+  ["parseLucene", resolve(query, "parser.js")],
+  ["dateRange", resolve(query, "dates.js")],
+  ["QUERY_FIELDS, validateFields", lucene("registry")],
+  ["compileAutomaton, wildcardPattern", lucene("automaton")],
+  ["normalize", resolve(dist, "store/normalize.js")],
+]
 const inputs = [
-  ...files.map((name) => resolve(dist, `search/lucene/${name}.js`)),
+  ...["parser", "dates", "types", "validate", "fields", "registry"].map((name) => resolve(query, `${name}.js`)),
+  ...["registry", "automaton", "types"].map(lucene),
   resolve(dist, "store/normalize.js"),
+  resolve(dist, "domain/tags.js"),
   core,
   sanitize,
 ]
 const fingerprint = createHash("sha256")
   .update(inputs.map((file) => readFileSync(file)).join("\n"))
   .digest("hex")
-const input = `${files
-  .filter((name) => name !== "types")
-  .map((name) => `export * from ${JSON.stringify(resolve(dist, `search/lucene/${name}.js`))};`)
-  .join("\n")}\nexport { normalize } from ${JSON.stringify(resolve(dist, "store/normalize.js"))};`
+const input = entries.map(([names, file]) => `export { ${names} } from ${JSON.stringify(file)};`).join("\n")
 const result = await build({
   stdin: { contents: input, resolveDir: dist },
   bundle: true,
@@ -44,10 +51,10 @@ const result = await build({
   ],
   legalComments: "inline",
 })
-const header = `// Generated from pinned @wirecat/cli-messaging. Source SHA-256: ${fingerprint}\n// Apache Lucene notices: /search-language-notices.txt\n`
+const header = `// Generated from pinned @wirecat/cli-core. Source SHA-256: ${fingerprint}\n// Apache Lucene notices: /search-language-notices.txt\n`
 const outputs = {
   "lib/search-language.generated.js": header + result.outputFiles[0].text,
-  "lib/search-language.generated.d.ts": `import type { QueryAst, QueryNode } from '@wirecat/cli-messaging/services';\nexport type { QueryAst, QueryNode };\nexport declare function parseLucene(text: string): QueryAst;\nexport declare function validateFields(ast: QueryAst): QueryAst;\nexport declare function normalize(text: string): string;\nexport declare function compileAutomaton(pattern: string): { test(text: string): boolean };\nexport declare function wildcardPattern(value: string): string;\nexport declare function dateRange(lower: string, upper: string, lowerInclusive: boolean, upperInclusive: boolean, zone: string, span: {start: number; end: number}): { lower?: number; upper?: number; lowerInclusive: boolean; upperInclusive: boolean };\nexport declare const QUERY_FIELDS: readonly {name: string; support: string; type: string; operators: readonly string[]; values?: readonly string[]; example: string}[];\n`,
+  "lib/search-language.generated.d.ts": `import type { QueryAst, QueryNode } from '@wirecat/cli-base/query';\nexport type { QueryAst, QueryNode };\nexport declare function parseLucene(text: string): QueryAst;\nexport declare function validateFields(ast: QueryAst): QueryAst;\nexport declare function normalize(text: string): string;\nexport declare function compileAutomaton(pattern: string): { test(text: string): boolean };\nexport declare function wildcardPattern(value: string): string;\nexport declare function dateRange(lower: string, upper: string, lowerInclusive: boolean, upperInclusive: boolean, zone: string, span: {start: number; end: number}): { lower?: number; upper?: number; lower_inclusive: boolean; upper_inclusive: boolean };\nexport declare const QUERY_FIELDS: readonly {name: string; support: string; type: string; operators: readonly string[]; values?: readonly string[]; example: string}[];\n`,
   "public/search-language-notices.txt":
     readFileSync(resolve(dist, "../THIRD_PARTY_NOTICES"), "utf8") +
     "\nBrowser error adapter: CliError from @wirecat/cli-base (MIT).\n" +

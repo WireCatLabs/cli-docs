@@ -19,14 +19,14 @@ const leaf = (path: string[], args = 0): CommandInfo => ({
     description: "",
   })),
   options: [
-    { flags: "--json", takesValue: false, mandatory: false, description: "" },
-    { flags: "--limit <n>", takesValue: true, mandatory: false, description: "" },
+    { flags: "--json", takes_value: false, mandatory: false, description: "" },
+    { flags: "--limit <n>", takes_value: true, mandatory: false, description: "" },
   ],
   commands: [],
 })
 const program: Program = {
   cli: "tg",
-  globalOptions: [{ flags: "--timeout <duration>", takesValue: true, mandatory: false, description: "" }],
+  globalOptions: [{ flags: "--timeout <duration>", takes_value: true, mandatory: false, description: "" }],
   commands: [{ ...leaf(["messages"]), commands: [leaf(["messages", "send"], 2), leaf(["messages", "list"], 1)] }],
 }
 

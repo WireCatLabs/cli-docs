@@ -90,7 +90,7 @@ one paragraph in [docs/DESIGN.md](docs/DESIGN.md), "Later". None is planned yet;
   compiler. Shared installation uses `installation*.mdx`; link to it with `./installation.mdx`.
 - **One copy of cli-base in each CLI.** max-cli and tg-cli force it with a pnpm override; two copies
   make the "changes something" marks vanish from the generated `commands.md` (RISK-97). Any cli-base
-  or cli-messaging bump in a CLI: `pnpm generate`, then check that page has no diff.
+  or cli-core bump in a CLI: `pnpm generate`, then check that page has no diff.
 - **Cloudflare has two accounts on this login.** The site is in **ModelRow leemour**
   (`95adf467c9937e5fdca37a0cb07fa70a`); the `cf` CLI asks which one unless `CLOUDFLARE_ACCOUNT_ID`
   is set. The deploy token can only deploy Pages: domains and redirect rules are changed in the

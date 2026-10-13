@@ -12,7 +12,7 @@ for (const { name: tool, docsRef, package: packageName } of reviewed) {
   const version = docsRef.replace(/^v/, "")
   const require = createRequire(join(root, `${tool}-v${version}`, "node_modules", packageName, "package.json"))
   const manifest = require("./package.json")
-  const messaging = Object.keys(manifest.dependencies).find((name) => name.endsWith("/cli-messaging"))
+  const messaging = Object.keys(manifest.dependencies).find((name) => /\/(cli-messaging|cli-core)$/.test(name))
   assert.ok(messaging, "Reviewed release must declare its messaging dependency")
   const base = resolve(require.resolve(`${messaging}/services`), "../..")
   const { openStore } = await import(pathToFileURL(join(base, "store/index.js")))

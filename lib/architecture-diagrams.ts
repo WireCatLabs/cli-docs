@@ -16,7 +16,7 @@ export const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] 
         {
           boxes: [
             {
-              name: "@wirecat/cli-messaging",
+              name: "@wirecat/cli-core",
               note: "domain, services, store, send guard, commands, MCP",
               tone: "shared",
             },
@@ -29,7 +29,7 @@ export const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] 
               note: "output, errors and exit codes, keyring, config, codegen",
               tone: "core",
             },
-            { name: "cli-messaging-sqlite · -onnx", note: "pinned SQLite and ONNX Runtime builds", tone: "core" },
+            { name: "cli-core-sqlite · -onnx", note: "pinned SQLite and ONNX Runtime builds", tone: "core" },
           ],
         },
         {
@@ -53,7 +53,7 @@ export const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] 
         {
           boxes: [
             {
-              name: "@wirecat/cli-messaging",
+              name: "@wirecat/cli-core",
               note: "модель, сервисы, хранилище, защита отправки, команды, MCP",
               tone: "shared",
             },
@@ -66,7 +66,7 @@ export const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] 
               note: "вывод, ошибки и коды выхода, ключница, настройки, генератор",
               tone: "core",
             },
-            { name: "cli-messaging-sqlite · -onnx", note: "закреплённые сборки SQLite и ONNX Runtime", tone: "core" },
+            { name: "cli-core-sqlite · -onnx", note: "закреплённые сборки SQLite и ONNX Runtime", tone: "core" },
           ],
         },
         {
@@ -90,7 +90,7 @@ export const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] 
         {
           boxes: [
             {
-              name: "@wirecat/cli-messaging",
+              name: "@wirecat/cli-core",
               note: "dominio, servicios, almacén, protección de envíos, comandos, MCP",
               tone: "shared",
             },
@@ -103,7 +103,7 @@ export const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] 
               note: "salida, errores y códigos de salida, llavero, configuración, codegen",
               tone: "core",
             },
-            { name: "cli-messaging-sqlite · -onnx", note: "builds fijados de SQLite y ONNX Runtime", tone: "core" },
+            { name: "cli-core-sqlite · -onnx", note: "builds fijados de SQLite y ONNX Runtime", tone: "core" },
           ],
         },
         {
