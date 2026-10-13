@@ -287,7 +287,7 @@ export function toolInstallationGuide(tool: string, lang: string) {
 
 /** Same reader steps and request as HTML, ahead of the unchanged native reference. */
 export function toolInstallationMarkdown(slugs: string[], lang: string) {
-  if (slugs.length !== 2 || !["tg", "max"].includes(slugs[0]) || slugs[1] !== "installation") return ""
+  if (slugs.length !== 2 || slugs[0] !== "tg" || slugs[1] !== "installation") return ""
   const guide = toolInstallationGuide(slugs[0], lang)
   const sections = guide.sections
     .map((section) =>

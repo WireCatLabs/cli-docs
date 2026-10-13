@@ -46,11 +46,33 @@ for (const lang of ["en", "ru", "es"]) {
       await guide.click()
       await expect(page).toHaveURL(new RegExp(`/${lang}/docs/${tool}/installation$`))
       await expect(page.locator("main")).toContainText(`@wirecat/${tool}-cli`)
+      if (tool === "max") {
+        await expect(page.locator("main #log-in")).toHaveCount(1)
+        await expect(page.locator("main code", { hasText: /^max setup$/ }).first()).toBeVisible()
+        return
+      }
       const login = page.locator("section[aria-labelledby=install-login]")
       await expect(login.locator("ol").first()).toBeVisible()
       await expect(login.locator("code").first()).toHaveText(`${tool} setup`)
     })
+  }
 
+  test(`${lang}/max: installation shows every step openly and matches the Markdown guide`, async ({ page }) => {
+    await page.goto(`/${lang}/docs/max/installation`)
+    const main = page.locator("main")
+    const prompt = main.locator(".docs-prompt").first()
+    await expect(prompt).toBeVisible()
+    for (const id of ["install", "log-in", "connect-agent", "check", "questions", "files"])
+      await expect(main.locator(`#${id}`)).toHaveCount(1)
+    await expect(main.locator("article details")).toHaveCount(1)
+    const md = await page.request.get(`/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}max/installation/content.md`)
+    expect(md.status()).toBe(200)
+    const markdown = await md.text()
+    expect(markdown).toContain((await prompt.locator("code").textContent())?.trim().split("\n")[0] ?? "")
+    expect(markdown).toContain("max setup --method qr-chrome")
+  })
+
+  for (const tool of ["tg"]) {
     test(`${lang}/${tool}: login instructions and request match the Markdown guide`, async ({ page }) => {
       await page.goto(`/${lang}/docs/${tool}/installation`)
       const login = page.locator("section[aria-labelledby=install-login]")
