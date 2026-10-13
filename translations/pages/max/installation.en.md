@@ -177,7 +177,7 @@ Browser login needs Chrome, Chromium, Edge or Brave. Browsers installed as a sna
 
 ### max is not found after installation
 
-**With your agent:** restart the agent, or ask it to open a new terminal. A terminal that was open during the install does not see the new command.
+**With your agent:** restart the agent, or ask it to open a new terminal. A terminal that was open during the install does not see the new command. On Windows, an agent in a terminal that was already open must refresh its environment and read `max skill show` before it logs in.
 
 **By hand:** open a new terminal and run `max --version` again. If it still fails, this command explains why and what to run:
 
@@ -194,6 +194,18 @@ $env:Path = "$maxNpmPrefix;$env:Path"
 max skill install --for all
 max --version
 ```
+
+### After an update, max says no profile was named
+
+Since version 0.49.0, max never chooses an account by itself: every command that uses your account starts with the profile name.
+
+**With your agent:** tell it the profile name. If you set max up before this version without a name, the profile is `default`.
+
+**By hand:** put the name first (`max default chats list`), or set it once: `export MAX_PROFILE=default` in your shell profile, or `max config set defaultProfile default`. If you added max to an MCP app with `max mcp config`, run that command again.
+
+### After an update, max stops and names two archive files
+
+The update moves the message archive to the WireCat folder once. If both the old and the new place hold different copies, max stops with exit code 3 and names both files. Keep the one you need, move the other away, and run the command again. Nothing was moved or changed.
 
 ### Where do I enter codes and passwords?
 
@@ -231,7 +243,7 @@ In your operating system's password storage (the keyring), not in a file. If you
 | Local message archive, shared with tg | `~/.local/share/WireCat/wirecat.db` | `%LOCALAPPDATA%\WireCat\Data\wirecat.db` |
 | Speech recognition models | `~/.local/share/WireCat/models/audio/` | `%LOCALAPPDATA%\WireCat\Data\models\audio\` |
 
-`max personal doctor` shows the exact paths on your computer. To change these locations or other settings, see [Configuration](/en/docs/configuration) and the [max settings reference](/en/docs/max/configuration).
+`max personal doctor` shows the exact paths on your computer. `WIRECAT_STATE_DIR` moves the whole WireCat folder; it replaces `CLI_COMMON_CACHE_DIR`. To change these locations or other settings, see [Configuration](/en/docs/configuration) and the [max settings reference](/en/docs/max/configuration).
 
 The first run after an update from an older max moves the archive and the models here once, from `~/.local/share/cli-messaging/` and `~/.cache/cli-common/models/`. If both places hold different copies, max stops and names both files: keep one and run it again.
 
@@ -249,6 +261,8 @@ The first run after an update from an older max moves the archive and the models
 max upgrade           # uses the package manager that installed max: npm, pnpm or bun
 max upgrade --check   # only says whether a newer version exists
 ```
+
+If you update from a version that kept messages in `messages.db`, first copy any notes or tags that exist only on your computer: the old file is deleted when the new archive opens. `max personal messages sync --all` downloads the messages again, but not local notes or tags.
 
 Update tg and memo together with max: they share the message archive, and an older tool would create a new archive in the old place.
 
