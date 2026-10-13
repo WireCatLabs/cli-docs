@@ -1,11 +1,25 @@
 import type { CommandInfo, OptionInfo } from "@wirecat/cli-base/commands"
 import type { Program } from "./docs-quality.ts"
 
+const snakeOption = (option: OptionInfo & { takesValue?: boolean }): OptionInfo => {
+  const { takesValue, ...rest } = option
+  return takesValue === undefined ? option : { ...rest, takes_value: takesValue }
+}
+const snakeCommand = (command: CommandInfo): CommandInfo => ({
+  ...command,
+  options: command.options.map(snakeOption),
+  commands: command.commands.map(snakeCommand),
+})
+
 export function discoveryContract(value: unknown, executable: string): Program {
   if (!value || typeof value !== "object") throw new Error("Invalid discovery contract")
   const raw = value as Record<string, unknown>
-  const options = raw.globalOptions ?? raw.options
+  const options = raw.global_options ?? raw.globalOptions ?? raw.options
   if ((raw.cli !== undefined && raw.cli !== executable) || !Array.isArray(raw.commands) || !Array.isArray(options))
     throw new Error("Invalid discovery contract")
-  return { cli: executable, commands: raw.commands as CommandInfo[], globalOptions: options as OptionInfo[] }
+  return {
+    cli: executable,
+    commands: (raw.commands as CommandInfo[]).map(snakeCommand),
+    globalOptions: (options as OptionInfo[]).map(snakeOption),
+  }
 }

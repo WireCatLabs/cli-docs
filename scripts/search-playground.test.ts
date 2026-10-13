@@ -1,8 +1,8 @@
 import { mkdtempSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
-import { searchStore } from "@wirecat/cli-messaging/services"
-import { type MessageStore, openStore } from "@wirecat/cli-messaging/store"
+import { searchStore } from "@wirecat/cli-core/services"
+import { type MessageStore, openStore } from "@wirecat/cli-core/store"
 import { afterAll, beforeAll, describe, expect, it } from "vitest"
 import { createDemoDates, demoDates } from "../lib/search-playground/dates"
 import {
@@ -216,7 +216,7 @@ describe("reversible query filters and value suggestions", () => {
 describe("discoverable sample search paths", () => {
   it("has an Atlas example and another topic for every attachment filter", () => {
     const kinds = demoFields.find((field) => field.name === "has")?.values ?? []
-    expect(kinds.length).toBe(12)
+    expect(kinds.length).toBe(13)
     for (const kind of kinds) {
       expect(searchDemo(`Atlas has:${kind}`).length, kind).toBeGreaterThan(0)
       expect(searchDemo(`has:${kind} NOT Atlas`).length, kind).toBeGreaterThan(0)

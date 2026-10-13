@@ -202,7 +202,7 @@ security), Project (changelog, roadmap).
 
 ## Later
 
-- ⚪ **IDEA-107** — `/{lang}/compare`: max and tg side by side, generated from cli-messaging's
+- ⚪ **IDEA-107** — `/{lang}/compare`: max and tg side by side, generated from cli-core's
   `parity.json`, so it cannot drift from the programs.
 - ⚪ **IDEA-108** — a searchable commands reference built from `<tool> commands --json`, beside the
   generated `commands` page.

@@ -18,7 +18,7 @@ Términos de esta página:
 - **Operador**: palabra o signo que combina condiciones: `AND`, `OR`, `NOT`.
 - **Formas de palabra**: distintas terminaciones, como «casa» y «casas».
 
-Idioma: un perfil estricto de la sintaxis de Apache Lucene: palabras, frases, Y/O/NO, grupos, campos, rangos, patrones limitados y expresiones regulares. "Estricto" significa que cualquier cosa que no sea compatible es un error, no una parte que se omite silenciosamente. [La ayuda completa](https://github.com/WireCatLabs/cli-messaging/blob/v0.212.0/docs/search/query-language.md) contiene tablas generadas de campos, operadores, ajustes preestablecidos y límites y ejemplos verificables; [La especificación técnica](https://github.com/WireCatLabs/cli-messaging/blob/v0.212.0/docs/search/query-language-spec.md) describe la gramática y el compilador.
+Idioma: un perfil estricto de la sintaxis de Apache Lucene: palabras, frases, Y/O/NO, grupos, campos, rangos, patrones limitados y expresiones regulares. "Estricto" significa que cualquier cosa que no sea compatible es un error, no una parte que se omite silenciosamente. [La ayuda completa](https://github.com/WireCatLabs/cli-core/blob/v0.212.0/docs/search/query-language.md) contiene tablas generadas de campos, operadores, ajustes preestablecidos y límites y ejemplos verificables; [La especificación técnica](https://github.com/WireCatLabs/cli-core/blob/v0.212.0/docs/search/query-language-spec.md) describe la gramática y el compilador.
 
 En el correo, `chat:` y `--chat` seleccionan una cadena por su id o por el asunto del mensaje, y `from:`, el remitente. El correo no tiene los campos `kind:` ni `topic:`.
 
