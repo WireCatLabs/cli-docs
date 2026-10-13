@@ -42,12 +42,14 @@ Open [the installation guide](/en/docs/installation#max) and choose the terminal
 After installing, run guided setup for QR login and agent skills:
 
 ```sh
-max setup
+max personal setup
 ```
 
 ```sh
-max chats list --limit 5
+max personal chats list --limit 5
 ```
+
+`personal` is the profile name: choose any name at the first login and repeat it in every command.
 
 Setup checks your account and up to five chats. Running it again reuses your session; it does not download full history or start the background service.
 

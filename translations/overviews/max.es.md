@@ -42,12 +42,14 @@ Abre [la guía de instalación](/es/docs/installation#max) y elige las instrucci
 Tras instalar la herramienta, configura la cuenta y consulta algunos chats:
 
 ```sh
-max setup
+max personal setup
 ```
 
 ```sh
-max chats list --limit 5
+max personal chats list --limit 5
 ```
+
+`personal` es el nombre del perfil: elige cualquiera en el primer inicio de sesión y repítelo en cada comando.
 
 `setup` guía el acceso con QR e instala los skills de los agentes. Reutiliza la sesión al repetirlo; no descarga todo el historial.
 
