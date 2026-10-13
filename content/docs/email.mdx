@@ -78,7 +78,7 @@ import does not send email or mark it read. Imported mail is stored locally; rer
 can remove the stored text of mail that has disappeared from the source.
 
 The text of a readable attachment is kept with its email and found with it. Import also prepares
-new mail for search by meaning, so `tg search conversations` and `max search conversations`
+new mail for search by meaning, so `tg search conversations` and `max personal search conversations`
 can find it; `--no-embed` skips that step.
 
 ## Link email to the same person
@@ -92,7 +92,7 @@ tg contacts link @example_user email:rin@example.test
 memo context telegram:"Rin Example" --json
 ```
 
-For MAX, use `max contacts link` with that person's MAX ID or name. Check the returned identities
+For MAX, use `max personal contacts link` with that person's MAX ID or name. Check the returned identities
 and source references. A similar display name is not proof of identity. If several accounts of
 the requested provider are stored, use `memo context telegram:"Rin Example" --account 1 --json`
 with the account ID you actually use. See [linking and unlinking people](./people.md#link-your-accounts).

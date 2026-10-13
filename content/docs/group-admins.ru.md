@@ -18,7 +18,7 @@ description: "Отвечайте на вопросы, понимайте акт�
 
 ```sh
 tg review --unanswered 24h
-max review --unanswered 24h
+max personal review --unanswered 24h
 ```
 
 Перед отправкой проверяйте предложенные ответы. Отчёт основан на сохранённой истории:
@@ -28,7 +28,7 @@ max review --unanswered 24h
 
 ```sh
 tg stats chats show "Команда" --since-time 7d
-max stats chats show "Команда" --since-time 7d
+max personal stats chats show "Команда" --since-time 7d
 ```
 
 Смотрите сообщения, активных участников и ответы на вопросы. Если история неполная,

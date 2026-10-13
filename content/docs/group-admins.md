@@ -18,7 +18,7 @@ Read [Telegram group tasks](./tg/groups.md) or [MAX group tasks](./max/groups.md
 
 ```sh
 tg review --unanswered 24h
-max review --unanswered 24h
+max personal review --unanswered 24h
 ```
 
 Check the suggested replies before sending them. A report is based on the history available
@@ -28,7 +28,7 @@ locally: missing messages can change its picture of the discussion.
 
 ```sh
 tg stats chats show "Team" --since-time 7d
-max stats chats show "Team" --since-time 7d
+max personal stats chats show "Team" --since-time 7d
 ```
 
 Look at messages, active participants and questions answered. Missing history limits the

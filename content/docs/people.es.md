@@ -48,7 +48,7 @@ Ambos mensajeros ofrecen un perfil con la identidad y conversaciones compartidas
 
 ```sh
 tg contacts profile @example_user
-max contacts profile 20000002
+max personal contacts profile 20000002
 ```
 
 Usa `contacts show` para una consulta breve. Indica a la persona por su ID o parte de su nombre;
@@ -78,7 +78,7 @@ Ambos mensajeros reúnen contexto de mensajes ya guardados en tu ordenador:
 
 ```sh
 tg contacts context @example_user --since-time 30d --limit 20
-max contacts context 20000002 --since-time 30d --limit 20
+max personal contacts context 20000002 --since-time 30d --limit 20
 ```
 
 Sin `--chat` obtienes un resumen: los chats compartidos, el último mensaje en cada sentido, sus
@@ -87,7 +87,7 @@ mensajes más nuevos en cada uno, del más antiguo al más reciente, 20 por chat
 
 ```sh
 tg contacts context @example_user --chat "Club de lectura" --chat "Trabajo" --limit 10
-max contacts context 20000002 --chat "Club de lectura" --chat "Trabajo" --limit 10
+max personal contacts context 20000002 --chat "Club de lectura" --chat "Trabajo" --limit 10
 ```
 
 Cada mensaje es solo su hora y su texto, para que un agente lea muchos a la vez y los resuma.
@@ -107,7 +107,7 @@ Ambos mensajeros admiten comprobar una cuenta:
 
 ```sh
 tg contacts check @example_user
-max contacts check 20000002
+max personal contacts check 20000002
 ```
 
 La respuesta es una puntuación y todos los motivos, cada uno con su origen: las marcas del propio
@@ -129,7 +129,7 @@ administradores quedan fuera, y no se elimina a nadie:
 
 ```sh
 tg chats members audit "Club de lectura" --deep 10
-max chats members audit "Club de lectura" --deep 10
+max personal chats members audit "Club de lectura" --deep 10
 ```
 
 <a id="link-your-accounts" />

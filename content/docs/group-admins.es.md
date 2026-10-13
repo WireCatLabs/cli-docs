@@ -18,7 +18,7 @@ Los comandos están en las guías de [Telegram](./tg/groups.md) y [MAX](./max/gr
 
 ```sh
 tg review --unanswered 24h
-max review --unanswered 24h
+max personal review --unanswered 24h
 ```
 
 Revisa las respuestas sugeridas antes de enviarlas. El informe usa el historial guardado;
@@ -28,7 +28,7 @@ los mensajes que faltan pueden cambiar su visión de la conversación.
 
 ```sh
 tg stats chats show "Equipo" --since-time 7d
-max stats chats show "Equipo" --since-time 7d
+max personal stats chats show "Equipo" --since-time 7d
 ```
 
 Revisa mensajes, participantes activos y preguntas respondidas. Descarga más historial antes

@@ -80,7 +80,7 @@ el texto de los mensajes que hayan desaparecido de la fuente.
 
 El texto de un adjunto legible se guarda con su correo y se encuentra con él. La importación también
 prepara el correo nuevo para la búsqueda por significado, de modo que
-`tg search conversations` y `max search conversations` pueden encontrarlo; `--no-embed` omite ese paso.
+`tg search conversations` y `max personal search conversations` pueden encontrarlo; `--no-embed` omite ese paso.
 
 ## Vincula el correo a la misma persona
 
@@ -95,7 +95,7 @@ tg contacts link @example_user email:rin@example.test
 memo context telegram:"Rin Example" --json
 ```
 
-Para MAX, usa `max contacts link` con el ID o nombre de la persona. Comprueba las identidades
+Para MAX, usa `max personal contacts link` con el ID o nombre de la persona. Comprueba las identidades
 y referencias devueltas. Un nombre parecido no demuestra identidad. Si hay varias cuentas
 del proveedor, usa `memo context telegram:"Rin Example" --account 1 --json` con el ID de cuenta
 que utilizas. Consulta [vincular y separar personas](./people.md#link-your-accounts).
