@@ -25,16 +25,20 @@ export function remarkAnchorAliases() {
         const value =
           child.type === "html"
             ? child.value
-            : child.type === "paragraph" && child.children?.every((part) => part.type === "html")
+            : child.type === "paragraph" &&
+                child.children?.every((part) => part.type === "html" || (part.type === "text" && !part.value?.trim()))
               ? child.children.map((part) => part.value ?? "").join("")
               : undefined
-        const alias = /^<a id="([^"<>]+)"\s*(?:\/>|><\/a>)$/.exec(value?.trim() ?? "")
+        const pattern = /<a id="([^"<>]+)"\s*(?:\/>|><\/a>)/g
+        const aliases = [...(value ?? "").matchAll(pattern)]
         // A block node, not emphasis: the Markdown copy for agents prints an empty emphasis as `**` and
         // joins the neighbouring blocks into it.
-        if (alias) {
-          if (ids.has(alias[1])) return []
-          ids.add(alias[1])
-          return [{ type: "paragraph", children: [], data: { hName: "span", hProperties: { id: alias[1] } } }]
+        if (aliases.length && !value?.replace(pattern, "").trim()) {
+          return aliases.flatMap((alias) => {
+            if (ids.has(alias[1])) return []
+            ids.add(alias[1])
+            return [{ type: "paragraph", children: [], data: { hName: "span", hProperties: { id: alias[1] } } }]
+          })
         }
         visit(child)
         return [child]

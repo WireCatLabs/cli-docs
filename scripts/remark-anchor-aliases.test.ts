@@ -2,6 +2,15 @@ import { fromMarkdown } from "mdast-util-from-markdown"
 import { expect, it } from "vitest"
 import { remarkAnchorAliases } from "../lib/remark-anchor-aliases"
 
+it("preserves adjoining aliases without requiring an extra paragraph between them", () => {
+  const tree = fromMarkdown('<a id="choose-how-to-connect"></a>\n<a id="connect-your-account"></a>\n\n## 2. Connect')
+  remarkAnchorAliases()(tree)
+  expect(tree.children.slice(0, 2).map((node) => node.data)).toEqual([
+    { hName: "span", hProperties: { id: "choose-how-to-connect" } },
+    { hName: "span", hProperties: { id: "connect-your-account" } },
+  ])
+})
+
 it("preserves standard and self-closing legacy anchors while leaving other HTML untouched", () => {
   const tree = fromMarkdown(
     '<a id="old-section"></a>\n\n<a id="older-section" />\n\n<a id="unsafe" onclick="run()"></a>',
