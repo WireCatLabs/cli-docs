@@ -47,7 +47,7 @@ tg sales bot auth show    # which bot it is
 
 Telegram no proporciona a los bots una lista de chats; sus identificadores se obtienen de lo que el bot hace o recibe.
 
-- **Una persona:** escribe a `user:<id>`. El resultado del envío incluye el chat de destino como `chatId` en `--json`. La persona debe haber iniciado el bot: los bots no pueden [iniciar conversaciones](https://core.telegram.org/bots#how-are-bots-different-from-users) con alguien que nunca les escribió.
+- **Una persona:** escribe a `user:<id>`. El resultado del envío incluye el chat de destino como `item.chat_id` en `--json`. La persona debe haber iniciado el bot: los bots no pueden [iniciar conversaciones](https://core.telegram.org/bots#how-are-bots-different-from-users) con alguien que nunca les escribió.
 - **Un grupo o canal:** añade el bot, escribe algo y observa lo que recibe:
 
   ```sh
@@ -71,7 +71,7 @@ tg support bot auth set
 tg personal bot list --check  # every name with a bot token, and which bot each is
 ```
 
-Sin nombre explícito se utiliza `TG_PROFILE` o, si falta, el ajuste `defaultProfile`; si no hay ninguno, el comando se detiene y enumera los perfiles.
+Sin nombre explícito se utiliza `TG_PROFILE` o, si falta, el ajuste `default_profile`; si no hay ninguno, el comando se detiene y enumera los perfiles.
 
 ## El token
 
@@ -160,7 +160,7 @@ tg sales bot messages between @ann Bob       # what both wrote, in the chats bot
 
 **La Bot API de Telegram no ofrece historial de mensajes.** `messages list` y `messages show` responden a partir de lo que envió el bot, lo que recibió `bot watch` y lo que importó `bot store fetch` en esta computadora, y lo dicen. La búsqueda necesita cada palabra; `"a phrase"`, `-word`, `a OR b` y los filtros `from:`, `chat:`, `after:`, `before:` y `has:` funcionan y se corrige un error tipográfico. `contacts show --refresh` es rechazado: importe primero los mensajes más antiguos con `bot store fetch`.
 
-`--all-bots` y `--bots <names>` también leen las copias de otros bots, cuando el `readOtherBots` del perfil lo permite.
+`--all-bots` y `--bots <names>` también leen las copias de otros bots, cuando el `read_other_bots` del perfil lo permite.
 
 ### Recuperando mensajes antiguos
 
@@ -262,7 +262,7 @@ Cada escritura se registra con chat, tipo de acción y resultado, nunca texto:
 tg sales bot sends list
 ```
 
-La configuración de un bot, como un límite de envío por hora, se encuentra en la sección `bot` del archivo de configuración: `tg sales config set --bot sendsPerHour 200` (consulte [configuración](./configuration.md)).
+La configuración de un bot, como un límite de envío por hora, se encuentra en la sección `bot` del archivo de configuración: `tg sales config set --bot sends_per_hour 200` (consulte [configuración](./configuration.md)).
 
 ## La API de bots completa
 
@@ -301,7 +301,7 @@ Un comando rechazado o fallido indica el motivo en su mensaje de error y termina
 | `5` | los permisos del perfil no permiten que el bot haga esto | cambia el permiso solo si quieres permitirlo |
 | `6` | no se encontró el chat: un título que el bot aún no ha visto, por ejemplo | use la identificación del chat o abra el chat con `bot chats show` |
 | `7` | el chat no está en la lista de destinatarios del bot, o nadie respondió una pregunta en un nivel `ask` puesto | agrega el chat con `bot recipients add`, o ejecuta el comando donde podrás responder |
-| `8` | el `sendsPerHour` del bot está agotado | esperar o aumentar el límite |
+| `8` | el `sends_per_hour` del bot está agotado | esperar o aumentar el límite |
 | `14` | no hubo respuesta: no se sabe si Telegram escribió | revisa el chat antes de repetirlo |
 
 Cada código está en la [referencia de comando](./commands.md). `--trace` y `--record` también funcionan para un bot: cada solicitud de API de Bot es una línea en stderr, nunca con su dirección, ya que el token está en ella. Una ejecución fallida se mantiene y se muestra en `tg personal runs list` (consulte [diagnósticos](./diagnostics.md)).

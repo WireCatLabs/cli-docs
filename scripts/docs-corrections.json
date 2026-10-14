@@ -31,20 +31,20 @@
     "replacements": {
       "en": [
         {
-          "before": "if ! tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  case $? in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi",
-          "after": "if tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi"
+          "before": "if ! tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  case $? in\n    14) echo \"it may have gone — repeat only with the same --operation-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi",
+          "after": "if tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"it may have gone — repeat only with the same --operation-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi"
         }
       ],
       "ru": [
         {
-          "before": "if ! tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  case $? in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi",
-          "after": "if tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi"
+          "before": "if ! tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  case $? in\n    14) echo \"it may have gone — repeat only with the same --operation-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi",
+          "after": "if tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"it may have gone — repeat only with the same --operation-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi"
         }
       ],
       "es": [
         {
-          "before": "if ! tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  case $? in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi",
-          "after": "if tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi"
+          "before": "if ! tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  case $? in\n    14) echo \"it may have gone — repeat only with the same --operation-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi",
+          "after": "if tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"it may have gone — repeat only with the same --operation-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi"
         }
       ]
     }

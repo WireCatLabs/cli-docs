@@ -4,6 +4,111 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.55.0 — 14.10.2026
+
+### Novedades
+
+- **Los archivos se leen del disco a medida que se suben** (cli-core 0.272.0). `messages send --file`, `--photo`,
+  `--voice`, la foto de perfil y `tg bot` ya no leen el archivo entero en memoria antes, y desaparece el rechazo de
+  archivos de 2 GiB o más: se aplica el límite propio de Telegram.
+
+### Cambios — pueden romper scripts
+
+- **Un mensaje de voz sin escuchar aparece en `missing`** (cli-core 0.274.0): `review`, `inbox` y `messages list`
+  añaden `{field: "transcript", step: "messages.transcribe"}` por cada mensaje de voz sin transcripción guardada, así
+  que una respuesta cuyo único contenido es un mensaje de voz ya no parece completa.
+- **`tasks link <task> task:<id>` registra una relación entre dos tareas** (cli-core 0.274.0), con
+  `--kind
+  blocked-by`, `follow-up-of` o `related-to`.
+- **Un siguiente paso con un comando que solo cambia esta máquina nunca se ejecuta sin preguntar** (cli-core 0.273.0):
+  los pasos `server restart` y `store reindex` llevan `safe_to_auto_execute: false`.
+- **`mentions rebuild` recibe el tipo como argumento**: `tg <profile> mentions rebuild person-name`, no `--kind`
+  (cli-core 0.272.0).
+
+## 0.54.0 — 14.10.2026
+
+### Novedades
+
+- **`tg images embed`: busca imágenes por lo que muestran** (cli-core 0.268.0). Está desactivado hasta
+  `tg <profile> config set picture_search true`; descarga el modelo una vez con
+  `tg <profile> models image download clip-b32` (unos 155 MB) y luego ejecuta `tg <profile> images embed [--chat] [--limit]`.
+  Después, `search messages` devuelve una lista `pictures` junto a sus resultados. Las consultas de imágenes deben estar
+  en inglés.
+
+- **`tg mentions`: teléfonos, correos electrónicos, enlaces y documentos de Google encontrados en los mensajes
+  guardados** (cli-core 0.264.0, versión 7 del almacén). `mentions list kind:phone`, `mentions list domain:google.com`;
+  una palabra suelta es un valor escrito de cualquier forma, así que `89001234567` encuentra `+79001234567`.
+  `mentions show <id>` da el texto alrededor de una mención. Los mensajes guardados antes de esta versión necesitan una
+  vez `tg <profile> mentions rebuild`; los nuevos se leen al guardarse.
+
+- **Menciones en los archivos y notas de voz de un mensaje** (cli-core 0.269.0, versión 10 del almacén). El texto que
+  leyó `attachments
+  extract` y la transcripción de una nota de voz también producen menciones, con `field` `file_text`
+  o `transcript`. Los adjuntos con texto de antes de la versión 10 necesitan una vez `tg <profile> mentions rebuild`,
+  que ahora también cuenta `attachments`.
+- **`tg mentions confirm <id> [person:<uid>|organization:<id>]` y `mentions reject <id>`** deciden a quién pertenece un
+  teléfono o una dirección, o lo descartan para siempre. Una organización puede ser dueña de un teléfono o una dirección
+  aparte de cualquier persona (versión 11 del almacén; las versiones anteriores siguen funcionando).
+- **`phone:`, `email:`, `url:` y `domain:` en una búsqueda de mensajes** encuentran mensajes por lo que menciona su
+  texto: `phone:"8 900 000-00-01"`, `email:"ana@example.com"`, `domain:docs.google.com`. El correo aún no tiene
+  menciones.
+- **Una programación que falla se avisa antes de cualquier otro comando** con una línea en stderr, hasta que la
+  siguiente ejecución salga bien; `schedule list` muestra la racha.
+
+### Cambios — pueden romper scripts
+
+- **`contacts timeline` pagina como cualquier otra lista:** una lista cortada en `--limit` responde
+  `page.has_more: true`, `page.cursor` y un paso `page.next` (`--cursor` continúa); `meta.truncated` se mantiene para
+  los cambios que siguen en cola. La nota «cut at --limit» en stderr desaparece.
+- **Basado en `@wirecat/cli-core` 0.269.0 y `@wirecat/cli-base` 0.27.2.**
+- **Cada respuesta es un envoltorio con claves en snake_case.** Una lista es `{items, page: {limit, has_more, cursor?}, next?,
+  missing?, meta}`, un solo elemento `{item, next?, missing?, meta}`; `meta.run_id` nombra la ejecución. Esto cubre
+  todos los comandos: mensajes, chats, contactos, escrituras (`{item: {operation_id, send_id, message}}`), inbox,
+  review, búsqueda, estadísticas, almacén, cuenta, doctor, config, runs, `upgrade`, `bot *`, y los propios
+  `session start|end` y `setup` de tg (`app_keys`, `already_logged_in`, `chats.has_more`). Qué ejecutar después es un
+  paso `next` en lugar de campos como `nextBeforeId`, `nextOffset`, `nextCursor` y `hasMore`. Las respuestas MCP son
+  los mismos envoltorios, y las herramientas MCP rechazan argumentos que no aceptan.
+- **Las listas reciben una consulta, no opciones de filtro.** `chats list kind:group unread_count>0`,
+  `chats events "Hiking" time>=7d`, `messages list "Book club" id<4242`, `contacts list notes:<text>`,
+  `attachments list chat:<id> is:needs_text`, `store jobs list state:failed`, `inbox date>2h`,
+  `review date>3d chat:<id>`, `search messages 'chat:"Book club"
+  lease'`.
+  `--search`, `--kind`, `--unread`, `--type`, `--since-time`, `--before-id`, `--after-id`,
+  `--before-time`, `--after-time`, `--topic`, `--search-notes`, `--min-score`, `--revoked`, `--link`, `--answer`,
+  `--needs-text`, `--state`, el `--chat` de review y el `--chat` de search desaparecen de esos comandos.
+  `messages
+  evidence` y `chats media` continúan con `--cursor` desde `page.next`. `contacts list name:` necesita
+  contactos guardados.
+- **El bloque de Telegram de `doctor` está en snake_case:** `app_credentials`, `keyring_moved_by_environment`,
+  `proxy.bot_api`.
+- **Los detalles de error están en snake_case:** `provider_error` (antes `providerError`); un grupo que pasó a
+  supergrupo indica `migrated_chat_id` en el rechazo de la Bot API, y una conversión a foro que puede haber ocurrido
+  indica `previous_chat_id` y `chat_id`.
+- **Los ajustes del archivo de configuración están en snake_case** (`keep_runs_for_days`, `sends_per_hour`,
+  `read_only`, `default_profile`, …). Un archivo existente se migra solo en su primera lectura.
+- **Los registros de ejecuciones están en snake_case** (`duration_ms`, `error_code`, `error_class`, `provider_error`);
+  las ejecuciones escritas antes se siguen leyendo.
+- **Los informes de estadísticas rechazan `--jsonl`**: un informe es un solo objeto. `stats chats show` nombra su chat
+  como referencia `chat:`; `stats tasks show` responde un elemento con `open` y `rows`.
+- **`--json=<fields>` sustituye a `--fields` y `--agent-json`, que desaparecen.** `--json=id,text` conserva esos
+  campos de cada elemento. El JSON de la CLI mantiene el texto del mensaje tal como se escribió; las respuestas MCP
+  siguen mostrando los caracteres invisibles.
+- **`tags list`, `tasks list` y `conversations list` reciben una consulta en lugar de opciones de filtro.**
+  `tags list tag:work type:chat`, `tags list sources:auto`; `tasks list state:open kind:promise chat:<id>`;
+  `conversations list <chat> started_at>=7d`. `--tag`, `--type`, `--source`, `--state`, `--chat`, `--before-time`
+  y `--since-time` desaparecen de estas listas. Los elementos son las entidades compartidas: una etiqueta nombra en qué
+  está como `target`, y una conversación indica `messages_count`, `started_at`, `first_message`.
+- **Los registros de ejecución solo guardan las claves de atributo listadas.** Un id de mensaje en `ids.message` se
+  descarta por ahora, así que `runs search <message id>` no lo encuentra (comunicado a cli-core).
+
+### Correcciones
+
+- **Los prompts MCP solo nombran argumentos que aceptan las herramientas.** `review` pasa su ventana como `query`
+  (`date>"…"`).
+- **`tg <profile> bot messages delete` acepta más de 100 mensajes.** Enviaba todos los ids en una sola llamada, y
+  Telegram acepta como máximo 100, así que una lista más larga fallaba. Ahora los envía de 100 en 100; si falla una
+  llamada posterior, el error dice cuántos se habían borrado ya.
+
 ## 0.53.0 — 14.10.2026
 
 ### Cambios — pueden romper scripts

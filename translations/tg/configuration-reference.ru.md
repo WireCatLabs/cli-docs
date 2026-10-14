@@ -47,7 +47,7 @@ tg shop config show --bot
 
 В нем перечислены профиль, откуда взялось имя профиля, профили, имена файлов, путь к файлу и его существование, а также каждый параметр с его значением и **откуда это значение**: `flag`, переменная среды, `config file`, `config defaults` или `default`. `--bot` показывает настройки, которые получает команда бота этого профиля. `--json` дает то же самое, что и один объект для скрипта.
 
-Список заканчивается `commandTimeoutMs`: ограничение на всю команду, от `--timeout` или `TG_TIMEOUT`. Это не настройка файла; `timeoutMs` ограничивает один запрос.
+Список заканчивается `commandTimeoutMs`: ограничение на всю команду, от `--timeout` или `TG_TIMEOUT`. Это не настройка файла; `timeout_ms` ограничивает один запрос.
 
 Когда установлены `TG_CONFIG_DIR`, `TG_STATE_DIR` или `TG_CACHE_DIR`, об этом говорится в stderr, поскольку это также меняет, какой логин находится ([где хранятся части логина](./sessions.md#where-the-parts-are-kept)).
 
@@ -55,21 +55,21 @@ tg shop config show --bot
 
 ## Файл настроек
 
-`config.json` в каталоге настроек (`~/.config/tg-cli/config.json` в Linux; другие системы указаны в [куда идут файлы](./installation.md#where-files-go)). Первая команда, считывающая настройки, создает их с `limit`, `keepRunsForDays`, `sendsPerHour`, `updateCheck` и `skillHint` под `defaults`; существующий файл никогда не заменяется.
+`config.json` в каталоге настроек (`~/.config/tg-cli/config.json` в Linux; другие системы указаны в [куда идут файлы](./installation.md#where-files-go)). Первая команда, считывающая настройки, создает их с `limit`, `keep_runs_for_days`, `sends_per_hour`, `update_check` и `skill_hint` под `defaults`; существующий файл никогда не заменяется.
 
 ```json
 {
-  "defaultProfile": "default",
+  "default_profile": "default",
   "defaults": {
-    "sendsPerHour": 10,
-    "updateCheck": false
+    "sends_per_hour": 10,
+    "update_check": false
   },
   "profiles": {
     "default": { "limit": 50 },
     "work": { "permissions": { "messages": "readonly", "messages.send": "allow" }, "record": true }
   },
-  "personal": { "defaults": { "catchUpMarksRead": true } },
-  "bot": { "profiles": { "shop": { "sendsPerHour": 200 } } }
+  "personal": { "defaults": { "catch_up_marks_read": true } },
+  "bot": { "profiles": { "shop": { "sends_per_hour": 200 } } }
 }
 ```
 
@@ -78,34 +78,35 @@ tg shop config show --bot
 - `personal.defaults`, `personal.profiles.<name>`: только команды личного аккаунта.
 - `bot.defaults`, `bot.profiles.<name>`: только команды `tg <name> bot …`.
 
-`defaultProfile` вверху называет используемый профиль, если ни первое слово, ни `TG_PROFILE` не называют его. Первое слово (`tg work …`) и `TG_PROFILE` переопределяют его. Если не задано ничего из этого, команда, которая использует аккаунт, останавливается с кодом выхода `2` и перечисляет профили на этом компьютере.
+`default_profile` вверху называет используемый профиль, если ни первое слово, ни `TG_PROFILE` не называют его. Первое слово (`tg work …`) и `TG_PROFILE` переопределяют его. Если не задано ничего из этого, команда, которая использует аккаунт, останавливается с кодом выхода `2` и перечисляет профили на этом компьютере.
 
 | Настройка | По умолчанию | Что делает | Переопределение на один запуск |
 |---|---|---|---|
 | `limit` | `20` | строк на странице списка | `--limit` |
-| `timeoutMs` | нет | как долго может ждать **один** запрос к Telegram, в миллисекундах. Команда делает несколько запросов, поэтому для ограничения всей команды используйте `--timeout` | нет (`--timeout` — это другое) |
+| `timeout_ms` | нет | как долго может ждать **один** запрос к Telegram, в миллисекундах. Команда делает несколько запросов, поэтому для ограничения всей команды используйте `--timeout` | нет (`--timeout` — это другое) |
 | `color` | из терминала | цвет в виде таблицы | нет; без настроек `NO_COLOR` отключает его |
-| `senderColors` | `false` | цвет для каждого отправителя в таблице сообщений | нет |
-| `catchUpMarksRead` | `false` | `inbox` и `review` отмечают каждый чат, который они показывают, прочитанным, вплоть до самого нового отображаемого сообщения. Другая сторона это видит | `--mark-read`, `--no-mark-read` |
-| `searchCatchUp` | `false` | `messages sync` и `store gaps repair` также подготавливают полученный чат для локального поиска: его граф обсуждений и, если он установлен, его векторы. Никогда не загружает модели и не вызывает внешних провайдеров | `--catch-up`, `--no-catch-up` |
+| `sender_colors` | `false` | цвет для каждого отправителя в таблице сообщений | нет |
+| `catch_up_marks_read` | `false` | `inbox` и `review` отмечают каждый чат, который они показывают, прочитанным, вплоть до самого нового отображаемого сообщения. Другая сторона это видит | `--mark-read`, `--no-mark-read` |
+| `search_catch_up` | `false` | `messages sync` и `store gaps repair` также подготавливают полученный чат для локального поиска: его граф обсуждений и, если он установлен, его векторы. Никогда не загружает модели и не вызывает внешних провайдеров | `--catch-up`, `--no-catch-up` |
+| `picture_search` | `false` | поиск сохранённых картинок по тому, что на них изображено. `images embed` читает сохранённые картинки, когда модель загружена, и тогда `search messages` также возвращает список `pictures` ([картинки](./search.md#pictures-by-what-they-show)) | нет |
 | `record` | `false` | сохранять каждый запуск ([диагностика](./diagnostics.md)) | `--record`, `--no-record` |
-| `keepRunsForDays` | `30` | записи запусков старше этого удаляются при сохранении следующего | нет |
+| `keep_runs_for_days` | `30` | записи запусков старше этого удаляются при сохранении следующего | нет |
 | `permissions` | разрешено все, кроме: спрашивают удаление, завершение сессий и некоторые другие изменения; автоответы не могут отправляться | что профиль может делать по команде ([ниже](#what-a-profile-may-do)) | нет; `--yes` и `--allow-dangerous` отвечают только на `ask`, они никогда не отменяют `deny` |
-| `sendsPerHour` | `30`; у бота его нет, пока он не установлен в разделе `bot` | наибольшее количество отправок за час ([защита отправки](./security.md#the-send-guard)) | нет |
-| `requestsPerMinute` | `60` | запросов в минуту после краткого всплеска до 20, общие для всех процессов профиля; `0` отключает ([ограничивает и ждет](./limits.md)) | `TG_REQUESTS_PER_MINUTE` |
-| `transcribeWith` | `auto` | кто превращает голос в текст: `auto` (Telegram, иначе локальная модель), `messenger` или `local` | `--local` или `--model`, что подразумевает |
-| `speechModel` | нет | какую скачанную модель использует `--local` (`tg personal models audio list`) | `--model` |
+| `sends_per_hour` | `30`; у бота его нет, пока он не установлен в разделе `bot` | наибольшее количество отправок за час ([защита отправки](./security.md#the-send-guard)) | нет |
+| `requests_per_minute` | `60` | запросов в минуту после краткого всплеска до 20, общие для всех процессов профиля; `0` отключает ([ограничивает и ждет](./limits.md)) | `TG_REQUESTS_PER_MINUTE` |
+| `transcribe_with` | `auto` | кто превращает голос в текст: `auto` (Telegram, иначе локальная модель), `messenger` или `local` | `--local` или `--model`, что подразумевает |
+| `speech_model` | нет | какую скачанную модель использует `--local` (`tg personal models audio list`) | `--model` |
 | `proxy` | нет | сервер SOCKS5, HTTP `CONNECT` или MTProxy для доступа к Telegram через ([ниже](#through-a-proxy)) | `TG_PROXY` |
-| `readOtherBots` | `false` | только бот: может ли `tg personal bot` читать то, что хранят другие боты на этой машине — `true` или список имен профилей ([bots](./bot.md)) | нет; `--all-bots` и `--bots` спрашивают, настройка позволяет |
-| `updateCheck` | `true` | ежедневная строка «Существует более новая версия»; только под `defaults` | нет; `TG_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER` или `CI` выключить |
-| `skillHint` | `true` | линия не чаще одного раза в день для агента, у которого копия навыка tg отсутствует или старше tg; только под `defaults` | нет |
-| `embeddingProvider` | `local` | локальная модель или `openai` | `--provider` |
-| `embeddingModel` | провайдер по умолчанию | модель векторизации | `--model` |
-| `embeddingBaseUrl` | провайдер по умолчанию | адрес API для векторизации | `--base-url` |
-| `embeddingDims` | модель по умолчанию | целое число 1–65 536 | `--dims` |
-| `analysisProvider` | `agent` | `agent`, `openai` или `anthropic` | `build --provider` |
-| `analysisModel` | нет; требуется для `--analyze` | модель анализа | `build --model` |
-| `analysisBaseUrl` | провайдер по умолчанию | конечная точка API анализа | `build --base-url` |
+| `read_other_bots` | `false` | только бот: может ли `tg personal bot` читать то, что хранят другие боты на этой машине — `true` или список имен профилей ([bots](./bot.md)) | нет; `--all-bots` и `--bots` спрашивают, настройка позволяет |
+| `update_check` | `true` | ежедневная строка «Существует более новая версия»; только под `defaults` | нет; `TG_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER` или `CI` выключить |
+| `skill_hint` | `true` | линия не чаще одного раза в день для агента, у которого копия навыка tg отсутствует или старше tg; только под `defaults` | нет |
+| `embedding_provider` | `local` | локальная модель или `openai` | `--provider` |
+| `embedding_model` | провайдер по умолчанию | модель векторизации | `--model` |
+| `embedding_base_url` | провайдер по умолчанию | адрес API для векторизации | `--base-url` |
+| `embedding_dims` | модель по умолчанию | целое число 1–65 536 | `--dims` |
+| `analysis_provider` | `agent` | `agent`, `openai` или `anthropic` | `build --provider` |
+| `analysis_model` | нет; требуется для `--analyze` | модель анализа | `build --model` |
+| `analysis_base_url` | провайдер по умолчанию | конечная точка API анализа | `build --base-url` |
 | `models` | нет | внешние модели по назначению ([ниже](#models-by-purpose)) | `TG_MODELS_*` переменные |
 | `searchStemmers.cyrillic`, `searchStemmers.latin` | `russian`, `english,spanish` | языки-основы слов для поиска по всему архиву ([ниже](#search-languages)) | нет |
 
@@ -139,7 +140,7 @@ tg shop config show --bot
 }
 ```
 
-Это работает и в обратную сторону: `messages: allow` профиля тоже скрывает `messages.delete: deny` из `defaults`, и удаление снова требует подтверждения, как по умолчанию. Старые `readOnly` и `allow` действуют в том разделе, где они записаны.
+Это работает и в обратную сторону: `messages: allow` профиля тоже скрывает `messages.delete: deny` из `defaults`, и удаление снова требует подтверждения, как по умолчанию. Старые `read_only` и `allow` действуют в том разделе, где они записаны.
 
 `inbox`, `review`, `watch`, `serve` и `messages sync`, `export`, `search` показывают сообщения и относятся к `messages`: `messages: deny` блокирует и их. `config`, `session`, `doctor`, `recipients`, `mcp` и обслуживание самой базы не ограничиваются.
 
@@ -175,22 +176,22 @@ done
 
 ### Совместимость со старыми настройками
 
-`readOnly: true` задаёт `readonly` для всех ресурсов. Список в `allow` (`send`, `forward`, `reaction`, `edit`, `pin`, `read`, `delete`, `groups`, `contacts`, `profile`, `folders`, `sessions`) задаёт этим действиям `allow`, а остальным — `readonly`; удаление всё равно требует подтверждения. Ключ в `permissions` того же раздела имеет приоритет над обоими вариантами.
+`read_only: true` задаёт `readonly` для всех ресурсов. Список в `allow` (`send`, `forward`, `reaction`, `edit`, `pin`, `read`, `delete`, `groups`, `contacts`, `profile`, `folders`, `sessions`) задаёт этим действиям `allow`, а остальным — `readonly`; удаление всё равно требует подтверждения. Ключ в `permissions` того же раздела имеет приоритет над обоими вариантами.
 
 ### Перенос устаревших настроек доступа
 
-`tg config migrate --dry-run --json` показывает предварительную замену `readOnly` и `allow` на `permissions`, сохраняя уровни, указанные в файле для личных профилей и профилей ботов. Он не записывает файл и не подключается к Telegram. `tg config migrate --json` применяет эту миграцию; процесс, привязанный к одному профилю, не может применить изменение, влияющее на все профили. Остальные настройки сохраняются. Файл, который уже использует только `permissions`, не требует миграции. Как только `permissions` присутствует, `config set` отклоняет изменения в `readOnly` и `allow`; измените соответствующие ключи разрешения.
+`tg config migrate --dry-run --json` показывает предварительную замену `read_only` и `allow` на `permissions`, сохраняя уровни, указанные в файле для личных профилей и профилей ботов. Он не записывает файл и не подключается к Telegram. `tg config migrate --json` применяет эту миграцию; процесс, привязанный к одному профилю, не может применить изменение, влияющее на все профили. Остальные настройки сохраняются. Файл, который уже использует только `permissions`, не требует миграции. Как только `permissions` присутствует, `config set` отклоняет изменения в `read_only` и `allow`; измените соответствующие ключи разрешения.
 
 ## Изменение через команду
 
 ```sh
 tg config set limit 50                        # this profile
 tg work config set permissions.contacts readonly   # profile "work"; one key at a time
-tg config set sendsPerHour 10 --defaults      # every profile
+tg config set sends_per_hour 10 --defaults      # every profile
 tg config set limit 30 --personal --defaults  # every personal account
-tg shop config set sendsPerHour 200 --bot     # only the bot "shop"
-tg config set updateCheck false --defaults    # a setting that exists only under defaults
-tg config unset sendsPerHour                  # back to the default
+tg shop config set sends_per_hour 200 --bot     # only the bot "shop"
+tg config set update_check false --defaults    # a setting that exists only under defaults
+tg config unset sends_per_hour                  # back to the default
 ```
 
 `config set` проверяет значения по тем же правилам, что и чтение настроек, и не записывает файл, который другая команда затем отклонит.
@@ -205,7 +206,7 @@ tg config unset sendsPerHour                  # back to the default
 
 ```text
 config.json is not a valid config:
-  profiles.default.limt: unknown setting — the known ones are limit, timeoutMs, …
+  profiles.default.limt: unknown setting — the known ones are limit, timeout_ms, …
 ```
 
 Если бы ошибочные настройки игнорировались, команда незаметно использовала бы значение по умолчанию. Поэтому ошибкой также считается ключ `permissions`, не начинающийся с ресурса.
@@ -242,7 +243,7 @@ Bot API (`tg personal bot …`) и регистрация приложения �
 | `TG_PROFILE` | профиль, когда первое слово не называет ни одного |
 | `TG_PROFILE_LOCK` | закрепляет процесс в одном профиле; любому другому отказано ([profiles](./sessions.md#profiles)) |
 | `TG_TIMEOUT` | то же, что и `--timeout`: `500ms`, `30s` или `2m` для всей команды |
-| `TG_REQUESTS_PER_MINUTE` | то же, что `requestsPerMinute`, и имеет приоритет над его |
+| `TG_REQUESTS_PER_MINUTE` | то же, что `requests_per_minute`, и имеет приоритет над его |
 | `TG_API_ID`, `TG_API_HASH` | приложение вместо системного хранилища ключей — для CI; оба или ни один |
 | `TG_PROXY` | URL-адрес прокси-сервера, пароль или секретный ключ; имеет приоритет над настройку `proxy` ([выше](#through-a-proxy)) |
 | `TG_CONFIG_DIR`, `TG_STATE_DIR`, `TG_CACHE_DIR` | переместите три каталога — и запись связки ключей с ними |
@@ -272,29 +273,29 @@ tg personal setup
 
 | Ключ | Принятый тип/значение | Область применения |
 |---|---|---|
-| `defaultProfile` | строка имени профиля | корень файла |
-| `limit`, `timeoutMs`, `keepRunsForDays`, `sendsPerHour` | целое число ≥ 1 | профиль |
-| `requestsPerMinute` | целое число ≥ 0 | профиль |
-| `color`, `senderColors`, `catchUpMarksRead`, `searchCatchUp`, `record`, `readOnly` | логическое | профиль |
+| `default_profile` | строка имени профиля | корень файла |
+| `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` | целое число ≥ 1 | профиль |
+| `requests_per_minute` | целое число ≥ 0 | профиль |
+| `color`, `sender_colors`, `catch_up_marks_read`, `search_catch_up`, `record`, `read_only` | логическое | профиль |
 | `permissions` | объект путей команд и уровней `deny`, `readonly`, `ask`, `allow` | профиль |
 | `allow` | массив разрешенных действий; устаревший формат | профиль |
-| `readOtherBots` | логическое значение или массив имен профилей | только бот |
-| `updateCheck`, `skillHint` | логическое | только корневые `defaults` |
-| `transcribeWith` | `auto`, `messenger`, `local` | профиль |
-| `speechModel` | загруженный идентификатор модели в виде строки | профиль |
+| `read_other_bots` | логическое значение или массив имен профилей | только бот |
+| `update_check`, `skill_hint` | логическое | только корневые `defaults` |
+| `transcribe_with` | `auto`, `messenger`, `local` | профиль |
+| `speech_model` | загруженный идентификатор модели в виде строки | профиль |
 | `proxy` | поддерживается URL-адрес прокси-сервера в виде строки | профиль |
-| `embeddingProvider` | `local`, `openai` | профиль |
-| `embeddingModel`, `analysisModel` | непустая строка, не более 200 символов | профиль |
-| `embeddingBaseUrl`, `analysisBaseUrl` | URL-адрес HTTP(S) без учетных данных, запроса или фрагмента | профиль |
-| `embeddingDims` | целое число 1–65 536 | профиль |
-| `analysisProvider` | `agent`, `openai`, `anthropic` | профиль |
+| `embedding_provider` | `local`, `openai` | профиль |
+| `embedding_model`, `analysis_model` | непустая строка, не более 200 символов | профиль |
+| `embedding_base_url`, `analysis_base_url` | URL-адрес HTTP(S) без учетных данных, запроса или фрагмента | профиль |
+| `embedding_dims` | целое число 1–65 536 | профиль |
+| `analysis_provider` | `agent`, `openai`, `anthropic` | профиль |
 | `models` | объекты назначения, описанные ниже | профиль |
 | `searchStemmers.cyrillic` | `russian`, `none` | общий архив через `config set` |
 | `searchStemmers.latin` | `english`, `spanish`, оба через запятую, `none` | общий архив через `config set` |
 
 ### Модели по назначению
 
-`models.<purpose>` принимает только `provider`, `model` и `baseUrl`. Названия назначений начинаются
+`models.<purpose>` принимает только `provider`, `model` и `base_url`. Названия назначений начинаются
 со строчной буквы и содержат строчные буквы, цифры и дефисы.
 `default` задаёт общие поля; `analysis` и `replies` переопределяют их по одному.
 Другие допустимые названия назначений можно сохранить заранее; это не включает отсутствующую возможность.
@@ -304,7 +305,7 @@ tg personal setup
 |---|---|---|
 | `models.<purpose>.provider` | `off`, `openai`, `anthropic` | отсутствует; внешних вызовов нет |
 | `models.<purpose>.model` | непустая строка, не более 200 символов | отсутствует; включённому провайдеру нужен явный идентификатор модели |
-| `models.<purpose>.baseUrl` | URL HTTP(S) без учётных данных, строки запроса или фрагмента | адрес API провайдера |
+| `models.<purpose>.base_url` | URL HTTP(S) без учётных данных, строки запроса или фрагмента | адрес API провайдера |
 
 Для каждого поля порядок приоритета: `TG_MODELS_<PURPOSE>_PROVIDER`, `_MODEL` или `_BASE_URL`,
 затем ближайшее настроенное поле назначения, явно заданные прежние поля `analysis*` для `analysis`,
@@ -319,5 +320,5 @@ tg personal setup
 
 ## Дальше
 
-- [Безопасность](./security.md): что защищает `permissions`, список получателей и `sendsPerHour`.
-- [Диагностика](./diagnostics.md): что хранит `record` и как долго держит `keepRunsForDays`
+- [Безопасность](./security.md): что защищает `permissions`, список получателей и `sends_per_hour`.
+- [Диагностика](./diagnostics.md): что хранит `record` и как долго держит `keep_runs_for_days`

@@ -18,9 +18,9 @@ Términos de esta página:
 - **Operador**: palabra o signo que combina condiciones: `AND`, `OR`, `NOT`.
 - **Formas de palabra**: distintas terminaciones, como «casa» y «casas».
 
-Idioma: un perfil estricto de la sintaxis de Apache Lucene: palabras, frases, Y/O/NO, grupos, campos, rangos, patrones limitados y expresiones regulares. "Estricto" significa que cualquier cosa que no sea compatible es un error, no una parte que se omite silenciosamente. [La ayuda completa](https://github.com/WireCatLabs/cli-messaging/blob/v0.212.0/docs/search/query-language.md) contiene tablas generadas de campos, operadores, ajustes preestablecidos y límites y ejemplos verificables; [La especificación técnica](https://github.com/WireCatLabs/cli-messaging/blob/v0.212.0/docs/search/query-language-spec.md) describe la gramática y el compilador.
+Idioma: un perfil estricto de la sintaxis de Apache Lucene: palabras, frases, Y/O/NO, grupos, campos, rangos, patrones limitados y expresiones regulares. "Estricto" significa que cualquier cosa que no sea compatible es un error, no una parte que se omite silenciosamente. [La ayuda completa](https://github.com/WireCatLabs/cli-core/blob/v0.212.0/docs/search/query-language.md) contiene tablas generadas de campos, operadores, ajustes preestablecidos y límites y ejemplos verificables; [La especificación técnica](https://github.com/WireCatLabs/cli-core/blob/v0.212.0/docs/search/query-language-spec.md) describe la gramática y el compilador.
 
-En el correo, `chat:` y `--chat` seleccionan una cadena por su id o por el asunto del mensaje, y `from:`, el remitente. El correo no tiene los campos `kind:` ni `topic:`.
+En el correo, `chat:` selecciona una cadena por su id o por el asunto del mensaje, y `from:`, el remitente. El correo no tiene los campos `kind:` ni `topic:`.
 
 ## Qué puede hacer el idioma
 
@@ -82,7 +82,7 @@ Las palabras y frases sin campo buscan distintas formas de palabra. `--exact` se
 
 Los nombres de campo distinguen mayúsculas. Un campo, valor o combinación desconocidos son un error, nunca una respuesta vacía ni texto normal. Un nombre que el archivo local no conoce no se busca en MAX.
 
-`kind:bot` selecciona un chat con un bot; `in:bots` selecciona los archivos de `max sales bot`. `topic:` requiere exactamente un chat en `chat:` o `--chat`: los números de tema se repiten entre chats. `filename`, `mime` y `size` coinciden con un mensaje si coincide al menos uno de sus archivos. MAX no indica los tipos de archivo, así que `mime:` no encuentra nada aquí: busca por extensión.
+`kind:bot` selecciona un chat con un bot; `in:bots` selecciona los archivos de `max sales bot`. `topic:` requiere exactamente un chat en `chat:`: los números de tema se repiten entre chats. `filename`, `mime` y `size` coinciden con un mensaje si coincide al menos uno de sus archivos. MAX no indica los tipos de archivo, así que `mime:` no encuentra nada aquí: busca por extensión.
 
 ## Filtros preparados
 
@@ -130,19 +130,18 @@ max personal search messages --regex 'invoice\s+\d+' --json
 
 ## La respuesta
 
-`--json` devuelve `{ items, page, limit, hasMore, corrections, completeness, wordsReady, query, coverage }`, aunque no haya coincidencias. `--jsonl` emite solo los elementos.
+`--json` devuelve `{ items, page, next, missing, meta }`, aunque no haya coincidencias. `--jsonl` emite solo los mensajes, uno por línea.
 
-- `query`: la versión del lenguaje, la zona horaria y el orden usados.
-- `coverage`: en qué cuentas y chats se buscó. `lastSyncedAt` es el momento más antiguo en que `messages sync` descargó un chat del ámbito, o `null` si alguno no se descargó nunca. `inventoryComplete` significa que cada cuenta del ámbito ha listado alguna vez todos sus chats; no garantiza un historial completo.
-- `completeness`: por chat, si su historial guardado llega al principio y si tiene huecos.
-- `wordsReady`: si el índice de palabras está completo. Cuando es `false`, una consulta con palabras falla con `index_not_ready` y el comando que lo termina, `max personal store migrate`; una consulta sin palabras se ejecuta.
-- `hasMore` se refiere a la página, no a si MAX tiene más.
+- `missing`: lo que la búsqueda no vio y por qué: una entrada `coverage` si parte de los chats no se descargó o está atrasada, `text` mientras se construye el índice de palabras, `pictures` si el modelo de imágenes no está descargado.
+- `next`: los comandos que lo corrigen (`messages.sync`, `store.migrate`, `models.download-image`) y `page.next`, la página siguiente con la misma consulta.
+- `meta.accounts`: en qué cuentas se buscó.
+- `page.has_more` se refiere a la página, no a si MAX tiene más.
 
 Un error incluye la posición del problema en la consulta y una pista.
 
 ## A través de MCP
 
-Mediante MCP, `max_read` (`command: "search messages"`) acepta la consulta como `text` o como árbol de sintaxis con versión en `ast`, nunca ambos; `timezone` elige la zona del calendario. `chat` acepta ID o nombre guardado; `source`, `newest`, `context` y `limit` corresponden a las opciones del comando. `saved` ejecuta una búsqueda guardada. `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` y `sync_first` corresponden a `--thread…` y `--sync-first`; `sync_first` requiere `messages.sync-first: allow`. Devuelve los mismos campos que `--json`. `max_read` (`command: "stats messages show"`) cuenta las mismas consultas. `record: false` evita registrar la llamada en el historial.
+Mediante MCP, `max_read` (`command: "search messages"`) acepta la consulta como `text` o como árbol de sintaxis con versión en `ast`, nunca ambos; `timezone` elige la zona del calendario. `chat:` se escribe en la propia consulta; `source`, `newest`, `context` y `limit` corresponden a las opciones del comando. `saved` ejecuta una búsqueda guardada. `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` y `sync_first` corresponden a `--thread…` y `--sync-first`; `sync_first` requiere `messages.sync-first: allow`. Devuelve el mismo objeto que `--json`. `max_read` (`command: "stats messages show"`) cuenta las mismas consultas. `record: false` evita registrar la llamada en el historial.
 
 ## Más
 

@@ -138,9 +138,9 @@ the result to September.
 Find the chat and check what is saved, then search only the saved history, as the request asked:
 
 ```sh
-tg personal chats list --search Atlas --kind group
+tg personal chats list 'title:*Atlas* kind:group' --offline
 tg personal store status -1001001001001
-tg personal search messages 'analytics date:[2026-09-01 TO 2026-10-01}' --chat -1001001001001 --backend archive --json
+tg personal search messages 'analytics date:[2026-09-01 TO 2026-10-01} chat:"-1001001001001"' --backend archive --json
 ```
 
 After your approval, fetch the period, check coverage again and read around the match:
@@ -148,7 +148,7 @@ After your approval, fetch the period, check coverage again and read around the 
 ```sh
 tg personal messages sync -1001001001001 --since-time 2026-09-01 --limit 1000
 tg personal store status -1001001001001
-tg personal search messages 'analytics date:[2026-09-01 TO 2026-10-01}' --chat -1001001001001 --backend archive --json
+tg personal search messages 'analytics date:[2026-09-01 TO 2026-10-01} chat:"-1001001001001"' --backend archive --json
 tg personal messages context -1001001001001 4312 --before-n 2 --after-n 4
 ```
 
@@ -208,12 +208,12 @@ Don't invent a delivery time. Check what I actually promised Anna and make the d
 Resolve the chats and review both sides of each conversation:
 
 ```sh
-tg personal chats list --search Atlas --kind group
-tg personal contacts list --search Anna
-tg personal contacts list --search Tom
-tg personal review --chat -1001001001001 --since-time 7d
-tg personal review --chat 100200300 --since-time 7d
-tg personal review --chat 100200301 --since-time 7d
+tg personal chats list 'title:*Atlas* kind:group' --offline
+tg personal contacts show Anna
+tg personal contacts show Tom
+tg personal review 'chat:"-1001001001001" date>7d'
+tg personal review 'chat:100200300 date>7d'
+tg personal review 'chat:100200301 date>7d'
 ```
 
 Then check the original promise and its replies:
@@ -276,20 +276,20 @@ Check whether Anna approved the revised design after Tom sent it. If not, add th
 Find the groups and participants, then read the selected chats:
 
 ```sh
-tg personal chats list --search Atlas --kind group
-tg personal contacts list --search Anna
-tg personal contacts list --search Tom
-tg personal messages list -1001001001001 --after-time 7d --limit 100
-tg personal messages list -1001001001002 --after-time 7d --limit 100
-tg personal messages list 100200300 --after-time 7d --limit 100
-tg personal messages list 100200301 --after-time 7d --limit 100
+tg personal chats list 'title:*Atlas* kind:group' --offline
+tg personal contacts show Anna
+tg personal contacts show Tom
+tg personal messages list -1001001001001 'date>7d' --limit 100
+tg personal messages list -1001001001002 'date>7d' --limit 100
+tg personal messages list 100200300 'date>7d' --limit 100
+tg personal messages list 100200301 'date>7d' --limit 100
 ```
 
 For the follow-up, read the messages after the design arrived:
 
 ```sh
 tg personal messages context -1001001001002 732 --before-n 2 --after-n 10
-tg personal messages list 100200300 --after-time 2026-10-02T12:00:00+02:00 --limit 50
+tg personal messages list 100200300 'date>"2026-10-02T12:00:00+02:00"' --limit 50
 ```
 
 </details>

@@ -98,7 +98,7 @@ Thanks, {{ sender.firstName | default: "there" }}!
 
 El cuerpo del bloque es una instrucción para el modelo. El texto entrante se le pasa por separado, como datos. Si no hay modelo configurado, falta consentimiento o falla la llamada, se envía el texto de `else`; sin `else`, no se responde al mensaje y se registra el motivo.
 
-Elige el modelo con `models.replies.provider` (`openai` o `anthropic`), `models.replies.model` y, para tu propio servidor, `models.replies.baseUrl`; `models.default` completa lo que no se haya definido. Guarda la clave con `tg personal models text key set`.
+Elige el modelo con `models.replies.provider` (`openai` o `anthropic`), `models.replies.model` y, para tu propio servidor, `models.replies.base_url`; `models.default` completa lo que no se haya definido. Guarda la clave con `tg personal models text key set`.
 
 Usar un modelo exige un consentimiento propio, independiente del permiso para enviar:
 

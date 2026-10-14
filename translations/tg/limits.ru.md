@@ -36,7 +36,7 @@ waiting 12 s to keep this profile's pace with Telegram
 Измените частоту запросов в файле конфигурации или для одной оболочки с помощью переменной окружения:
 
 ```json
-{ "defaults": { "requestsPerMinute": 30 } }
+{ "defaults": { "requests_per_minute": 30 } }
 ```
 
 ```sh
@@ -64,7 +64,7 @@ TG_REQUESTS_PER_MINUTE=30 tg personal messages sync "Book club"
 
 ## Операции записи
 
-- **30 отправок в час** для каждого профиля по умолчанию (`sendsPerHour`), учитываются по процессам; см. [защиту отправки](./security.md#the-send-guard).
+- **30 отправок в час** для каждого профиля по умолчанию (`sends_per_hour`), учитываются по процессам; см. [защиту отправки](./security.md#the-send-guard).
 - **Лимит спама (PEER_FLOOD)** и замороженный аккаунт блокируют каждую запись; чтение все еще работает. См. [устранение неполадок](./troubleshooting.md).
 - Отправка, которая могла прийти, а могла и не прийти, никогда не повторяется `tg`; см. [когда результат неизвестен](./usage.md#when-the-outcome-is-unknown).
 

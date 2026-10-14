@@ -23,10 +23,10 @@ Pide a tu agente que encuentre mensajes que respondan a una pregunta y muestre l
 Para controlar la búsqueda desde la línea de comandos:
 
 ```sh
-tg personal search messages 'What time does Helix export run?' --discover --chat 990 --json
+tg personal search messages 'What time does Helix export run? chat:990' --discover --json
 ```
 
-Busca solo en el archivo local. Conserva los filtros de chat, autor y fecha. En MCP, pasa `discover: true` a la herramienta de búsqueda de mensajes. `query.discovery` describe el conjunto limitado de candidatos; `items[].discovery.missingTerms` indica términos ausentes y `parent` enlaza una respuesta con su mensaje padre. Una puntuación alta no mide la confianza en la respuesta: puede aparecer primero una pregunta, propuesta o decisión antigua. Lee la evidencia y comprueba la [cobertura del archivo](./archive.md) antes de concluir que falta un hecho.
+Busca solo en el archivo local. Conserva los filtros de chat, autor y fecha. En MCP, pasa `discover: true` a la herramienta de búsqueda de mensajes. El `discovery` de cada elemento indica qué parte de la consulta coincidió: `missing_terms` indica términos ausentes y `parent` enlaza una respuesta con su mensaje padre. Una puntuación alta no mide la confianza en la respuesta: puede aparecer primero una pregunta, propuesta o decisión antigua. Lee la evidencia y comprueba la [cobertura del archivo](./archive.md) antes de concluir que falta un hecho.
 
 Sin `--discover`, se mantiene la búsqueda estricta. La sintaxis booleana, frases entre comillas, comodines, peticiones AST, `--exact` y `--newest` conservan el comportamiento estricto. No combina con legacy, expresiones regulares ni `--backend server`. La búsqueda semántica de conversaciones sigue siendo una [búsqueda por temas](./topic-search.md) aparte.
 
@@ -54,7 +54,7 @@ tg personal search all 'lease' --only messages,notes  # without mail
 ```
 
 ```sh
-tg personal search messages 'lease' --chat "Book club"  # Telegram messages only, never mail
+tg personal search messages 'lease chat:"Book club"'  # Telegram messages only, never mail
 ```
 
 ```sh
@@ -90,7 +90,7 @@ Empieza por una frase y un chat. Este ejemplo busca en el historial guardado sin
 **Comando:**
 
 ```sh
-tg personal search messages '"invoice paid"' --chat "Book club" --backend archive --json
+tg personal search messages '"invoice paid" chat:"Book club"' --backend archive --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -172,10 +172,6 @@ tg personal search messages 'chat:"Book club" library'
 ```
 
 ```sh
-tg personal search messages library --chat "Book club"  # the same, as an option
-```
-
-```sh
 tg personal search messages 'passport kind:private'  # one-to-one chats only
 ```
 
@@ -252,7 +248,7 @@ tg personal search messages 'content:invoice'
 ```
 
 ```sh
-tg personal attachments list --chat "Book club" --needs-text
+tg personal attachments list 'chat:"Book club" is:needs_text'
 ```
 
 ```sh
@@ -265,7 +261,7 @@ La extracción local también lee UTF-16 con marca BOM, codificaciones heredadas
 
 La extracción de PDF necesita el paquete opcional `unpdf`; Word necesita `mammoth`, instalado donde está `tg`. Para una instalación global de npm: `npm install -g unpdf mammoth`. Se informa que falta un paquete; su agente puede proporcionarle el texto en su lugar.
 
-**Las fotos y los escaneos** no tienen capa de texto. Su agente normalmente los lee con su propio OCR o herramientas de visión y escribe el texto con `attachments text set`. `attachments list --needs-text` le proporciona la ruta guardada, el localizador de mensajes y el número del archivo adjunto; muestra rutas y estado del texto, nunca el texto en sí. Verifique el resultado con una búsqueda `content:`. Una ruta en un servidor MCP no mueve el archivo a un agente en otra computadora: el agente necesita acceso al archivo. Dicho agente puede recibir los bytes del archivo guardado en partes delimitadas y verificar su hash a través de [mostrar archivos adjuntos](./attachments.md); La entrega del archivo no reconoce ni indexa el texto, por lo que aún escribe el texto con `attachments text set`.
+**Las fotos y los escaneos** no tienen capa de texto. Su agente normalmente los lee con su propio OCR o herramientas de visión y escribe el texto con `attachments text set`. `attachments list is:needs_text` le proporciona la ruta guardada, el localizador de mensajes y el número del archivo adjunto; muestra rutas y estado del texto, nunca el texto en sí. Verifique el resultado con una búsqueda `content:`. Una ruta en un servidor MCP no mueve el archivo a un agente en otra computadora: el agente necesita acceso al archivo. Dicho agente puede recibir los bytes del archivo guardado en partes delimitadas y verificar su hash a través de [mostrar archivos adjuntos](./attachments.md); La entrega del archivo no reconoce ni indexa el texto, por lo que aún escribe el texto con `attachments text set`.
 
 **Muchos escaneos a la vez** pueden ir al servicio modelo que usted elija. Configure un modelo de visión en `models.ocr` y mantenga su clave con el `models text key set` habitual. Reemplace `your-vision-model` con el nombre de su modelo.
 
@@ -291,6 +287,31 @@ tg personal attachments extract --chat "Book club" --ocr --concurrency 4 --limit
 
 `--from-dir` protege los archivos y carpetas conocidos de credenciales, las carpetas de la CLI y el almacén de mensajes. Las carpetas de trabajo ocultas normales están permitidas. Las descargas de extracción por MCP también requieren `output_dir` fuera de los lugares protegidos. La extracción local de texto PDF no tiene un límite fijo de páginas ni un tiempo de espera separado de 30 segundos; siguen aplicándose la cancelación del comando y los límites de tamaño del archivo y del texto.
 
+## Imágenes, por lo que muestran
+
+La búsqueda de imágenes está desactivada. Mira las imágenes de este equipo con un modelo pequeño y nunca las envía a ningún sitio.
+Actívala para un perfil, descarga el modelo una vez (unos 155 MB, compartido por todos los perfiles) y luego lee las imágenes
+que tienes almacenadas:
+
+```sh
+tg personal config set picture_search true
+```
+
+```sh
+tg personal images models download clip-b32
+```
+
+```sh
+tg personal images embed --chat "Book club" --limit 100
+```
+
+`images embed` descarga cada imagen almacenada a través de Telegram, de una en una, y no marca nada como leído. Solo guarda
+un vector y el hash de la imagen. Después, una búsqueda de mensajes con palabras también devuelve una lista `pictures` junto a los
+resultados habituales, nunca mezclada en la clasificación de texto. Con el ajuste activado pero sin modelo, una nota en stderr indica que no se buscó en las imágenes y por qué.
+
+**Escribe las consultas de imágenes en inglés.** El modelo no conoce otro idioma. Un agente traduce primero la consulta
+("собака на пляже" pasa a ser "dog on a beach"). `tg personal images models list` muestra qué modelos están descargados.
+
 ## Contraseñas, códigos y tarjetas
 
 ```sh
@@ -314,7 +335,7 @@ tg personal tags add work --contact "Bob Synthetic"
 ```
 
 ```sh
-tg personal tags list --tag work --type chat
+tg personal tags list tag:work type:chat
 ```
 
 ```sh
@@ -351,7 +372,7 @@ tg personal tags auto                    # write the automatic tags
 ```
 
 ```sh
-tg personal tags list --source auto      # only the automatic ones
+tg personal tags list sources:auto      # only the automatic ones
 ```
 
 `--refresh-metadata` lee de Telegram las descripciones actuales antes de clasificar; se rechaza junto con
@@ -447,7 +468,7 @@ Con `--json`, cada mensaje dice de dónde vino (`source`: `archive`, `server` o 
 ## Obtener mensajes nuevos primero: `--sync-first`
 
 ```sh
-tg personal search messages 'invoice' --chat "Book club" --sync-first
+tg personal search messages 'invoice chat:"Book club"' --sync-first
 ```
 
 `--sync-first` descarga mensajes nuevos antes de buscar y no marca nada como leído. Se necesitan como máximo 5 chats, 500 mensajes y 30 segundos; cambie estos límites con `--max-chats`, `--max-messages` y `--sync-time`. Cuando la descarga falla o se detiene antes de tiempo, aún obtienes los resultados del archivo local, marcados con cobertura obsoleta y los detalles de la descarga.
@@ -468,7 +489,7 @@ Una respuesta vacía significa "no en el archivo local en la que buscó", no "nu
 
 **Huecos en el historial de un chat.** `tg personal store gaps plan <chat>` busca, en esta computadora, espacios entre los tramos del historial que tiene el archivo local. Los ID de mensajes faltantes y los períodos de silencio por sí solos no prueban que falte el historial; los bordes del historial guardado permanecen `unknown`. Verifique el plan, luego ejecute `tg personal store gaps repair <chat> --fingerprint <hash>` para descargar los espacios. Los valores predeterminados son cinco espacios, 500 mensajes y 30 segundos; `--max-gaps`, `--limit`, `--repair-time`, `--page-size` y `--pause` marcan los límites. Una repetición repara los espacios restantes y nunca elimina un mensaje porque Telegram no lo devolvió. Las páginas donde varios mensajes comparten una marca de tiempo permanecen pendientes. `--background` lo ejecuta como un trabajo que siguen `store jobs show`, `store jobs list` y `store jobs cancel`. La reparación necesita permiso de escritura `store.gaps.repair` y permiso para leer mensajes. A través de MCP, los mismos comandos se encuentran a través de `tg_tools_search` y se ejecutan a través de `tg_read` o `tg_write`; Los trabajos pertenecen a un perfil.
 
-**Prepara la búsqueda por temas durante la descarga.** `tg personal messages sync <chat> --catch-up` crea las conversaciones de ese chat y calcula sus vectores locales inmediatamente después de descargar el historial, para [búsqueda de tema](./topic-search.md). Está desactivado de forma predeterminada; la configuración del perfil `searchCatchUp: true` lo activa y `--no-catch-up` lo desactiva para una ejecución. Los límites son `--catch-up-chunks 500 --catch-up-messages 10000 --catch-up-time 30s`. Nunca descarga un modelo ni llama a un servicio remoto. Un resultado `prepared` separado informa cuando la preparación está incompleta; el historial obtenido se guarda de cualquier manera. Durante una reparación de brechas, la recuperación comparte el presupuesto de tiempo de la reparación.
+**Prepara la búsqueda por temas durante la descarga.** `tg personal messages sync <chat> --catch-up` crea las conversaciones de ese chat y calcula sus vectores locales inmediatamente después de descargar el historial, para [búsqueda de tema](./topic-search.md). Está desactivado de forma predeterminada; la configuración del perfil `search_catch_up: true` lo activa y `--no-catch-up` lo desactiva para una ejecución. Los límites son `--catch-up-chunks 500 --catch-up-messages 10000 --catch-up-time 30s`. Nunca descarga un modelo ni llama a un servicio remoto. Un resultado `prepared` separado informa cuando la preparación está incompleta; el historial obtenido se guarda de cualquier manera. Durante una reparación de brechas, la recuperación comparte el presupuesto de tiempo de la reparación.
 
 ## Próximo
 

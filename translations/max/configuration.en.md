@@ -22,19 +22,19 @@ These settings are changed most often. The [configuration reference](./configura
 | Setting | Purpose | Built-in default |
 | --- | --- | --- |
 | `limit` | Rows displayed without `--limit` | `20` |
-| `sendsPerHour` | Messages a profile may send per hour; stops sending loops | `30`; bots have no limit until set in `bot` |
-| `requestsPerMinute` | Request rate after an initial short burst; `0` disables pacing ([limits and waits](./limits.md)) | `20` |
+| `sends_per_hour` | Messages a profile may send per hour; stops sending loops | `30`; bots have no limit until set in `bot` |
+| `requests_per_minute` | Request rate after an initial short burst; `0` disables pacing ([limits and waits](./limits.md)) | `20` |
 | `permissions` | Read, ask before changes or act without asking ([permissions](./permissions.md)) | All allowed except deletion and some other irreversible changes ask first; auto-reply sending is disabled |
 | `record` | Save each run for later inspection ([diagnostics](./diagnostics.md)) | `false` |
-| `keepRunsForDays` | Days to retain run records | `30` |
+| `keep_runs_for_days` | Days to retain run records | `30` |
 | `color` | Table colours | Based on terminal |
-| `senderColors` | Different colour for each message author | `false` |
-| `timeoutMs` | Milliseconds to wait for **one** MAX response; use `--timeout` for the whole command | Transport-dependent |
-| `catchUpMarksRead` | `inbox` and `review` mark displayed chats read; the other person can see this | `false` |
+| `sender_colors` | Different colour for each message author | `false` |
+| `timeout_ms` | Milliseconds to wait for **one** MAX response; use `--timeout` for the whole command | Transport-dependent |
+| `catch_up_marks_read` | `inbox` and `review` mark displayed chats read; the other person can see this | `false` |
 | `serve` | Start background `max personal serve` when a command needs MAX ([one shared login](./limits.md#один-вход-на-всё)) | `true` |
-| `transcribeModel` | Speech-recognition model for voice messages | `gigaam-v3` |
-| `updateCheck` | Report new `max` versions once a day | `true` |
-| `defaultProfile` | Profile used when none is named | none: without a name the command lists the profiles |
+| `transcribe_model` | Speech-recognition model for voice messages | `gigaam-v3` |
+| `update_check` | Report new `max` versions once a day | `true` |
+| `default_profile` | Profile used when none is named | none: without a name the command lists the profiles |
 
 There is no place for secrets in this file: no token, phone number or chat id. Tokens use the system keyring or, if unavailable, a file only you can read ([token storage](./security.md#где-живёт-токен)).
 
@@ -44,7 +44,7 @@ The first command reading settings creates an initial file. Here it is with one 
 
 ```json
 {
-  "defaults": { "limit": 20, "keepRunsForDays": 30, "sendsPerHour": 30, "updateCheck": true, "skillHint": true },
+  "defaults": { "limit": 20, "keep_runs_for_days": 30, "sends_per_hour": 30, "update_check": true, "skill_hint": true },
   "profiles": {
     "work": { "limit": 50 }
   }
@@ -60,36 +60,36 @@ Thus `max work chats list` shows 50 rows, while `max personal chats list` shows 
 
 ```json
 {
-  "defaultProfile": "personal",
+  "default_profile": "personal",
   "defaults": {
     "limit": 20,
-    "keepRunsForDays": 14,
-    "sendsPerHour": 30,
-    "requestsPerMinute": 20,
-    "updateCheck": true,
-    "skillHint": true,
-    "transcribeModel": "gigaam-v3"
+    "keep_runs_for_days": 14,
+    "sends_per_hour": 30,
+    "requests_per_minute": 20,
+    "update_check": true,
+    "skill_hint": true,
+    "transcribe_model": "gigaam-v3"
   },
   "profiles": {
     "personal": {
       "limit": 50,
       "color": true,
-      "senderColors": true,
+      "sender_colors": true,
       "record": true
     },
     "work": {
       "permissions": { "messages": "readonly", "messages.send": "allow" },
-      "sendsPerHour": 10,
+      "sends_per_hour": 10,
       "serve": false
     }
   },
   "personal": {
-    "defaults": { "catchUpMarksRead": false, "searchCatchUp": true }
+    "defaults": { "catch_up_marks_read": false, "search_catch_up": true }
   },
   "bot": {
     "defaults": { "permissions": { "bot": "readonly", "bot.messages.send": "allow" } },
     "profiles": {
-      "shop": { "sendsPerHour": 200, "readOtherBots": false }
+      "shop": { "sends_per_hour": 200, "read_other_bots": false }
     }
   }
 }
@@ -97,14 +97,14 @@ Thus `max work chats list` shows 50 rows, while `max personal chats list` shows 
 
 What each part does:
 
-- `defaultProfile`: `max chats list` without a profile name uses `personal`. Without this setting and
+- `default_profile`: `max chats list` without a profile name uses `personal`. Without this setting and
   without `MAX_PROFILE`, such a command stops and lists the profiles.
-- `defaults`: every profile receives these values unless it overrides them. `updateCheck`, `skillHint` and `transcribeModel` are allowed only here because the program and speech-recognition downloads are shared by all profiles.
+- `defaults`: every profile receives these values unless it overrides them. `update_check`, `skill_hint` and `transcribe_model` are allowed only here because the program and speech-recognition downloads are shared by all profiles.
 - `profiles.personal`: more rows, colours and recording every run, only for `personal`.
 - `profiles.work`: reading and sending messages are allowed; other message changes are denied. At most 10 sends per hour. No background server starts: each command connects to MAX itself.
 - `personal.defaults`: applies only to personal-account commands, never `max … bot`. Here `messages sync` also prepares downloaded chats for search.
 - `bot.defaults`: applies only to bot commands (`max shop bot …`). Bots can read and send, and do nothing else.
-- `bot.profiles.shop`: `shop` can send 200 messages per hour and cannot read other bots' saved data on this computer. `readOtherBots` is allowed only in `bot`; `serve`, `senderColors` and `catchUpMarksRead` are not accepted there.
+- `bot.profiles.shop`: `shop` can send 200 messages per hour and cannot read other bots' saved data on this computer. `read_other_bots` is allowed only in `bot`; `serve`, `sender_colors` and `catch_up_marks_read` are not accepted there.
 
 </details>
 
@@ -112,8 +112,7 @@ What each part does:
 
 | System | Path |
 |---|---|
-| Linux | `~/.config/max-cli/config.json` |
-| macOS | `~/Library/Preferences/max-cli/config.json` |
+| Linux and macOS | `~/.config/max-cli/config.json` |
 | Windows | `%APPDATA%\max-cli\Config\config.json` |
 
 `max config show` prints this computer's actual path and each effective setting. In PowerShell, use `max.cmd` instead of `max`. An existing file is never replaced with the initial file.
@@ -135,7 +134,7 @@ Edit the file with any text editor or let `max` do it. `config set` validates be
 ```sh
 max personal config set limit 50                 # профилю, с которым вы работаете
 max work config set limit 50            # профилю work
-max config set sendsPerHour 10 --defaults   # всем профилям
+max config set sends_per_hour 10 --defaults   # всем профилям
 max personal config unset limit                  # вернуть значение по умолчанию
 max config show                         # проверить, что действует и откуда взялось каждое значение
 ```

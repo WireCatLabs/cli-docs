@@ -109,8 +109,8 @@ chat-title and person-name lookup can behave differently.
 <summary>Optional: commands for the terminal</summary>
 
 ```sh
-tg personal search messages invoice --chat "Project"
-max personal search messages invoice --chat "Project"
+tg personal search messages 'invoice chat:"Project"'
+max personal search messages 'invoice chat:"Project"'
 ```
 
 </details>

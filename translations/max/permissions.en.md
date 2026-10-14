@@ -45,7 +45,7 @@ Bot permissions and limits are set in the bot section. To require confirmation b
 
 ```sh
 max support config set permissions.bot.messages.send ask --bot
-max support config set sendsPerHour 30 --bot
+max support config set sends_per_hour 30 --bot
 ```
 
 ## Limit recipients and repeated sends

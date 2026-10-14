@@ -159,7 +159,7 @@ Es `chats`, plural. Consulta `max --help`.
 ### «is not a valid config»
 
 ```json
-{"error":{"code":"configuration_error","message":"…/config.json is not a valid config:\n  profiles.default.limitt: unknown setting — the known ones are limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, sendsPerHour, senderColors, serve, mcpTools"}}
+{"error":{"code":"configuration_error","reason":"config.invalid","message":"…/config.json is not a valid config:\n  profiles.default.limitt: unknown setting — the known ones are limit, timeout_ms, color, record, keep_runs_for_days, read_only, allow, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, mcp_tools"}}
 ```
 
 Código `3`. En un archivo de configuración, un campo que no está en el esquema casi siempre es un error tipográfico y el mensaje indica su ruta. Rechazado a propósito: un campo silenciosamente ignorado vale medio día de desconcierto. Todos los campos están en [referencia de configuración](./configuration-reference.md).
@@ -168,16 +168,16 @@ Código `3`. En un archivo de configuración, un campo que no está en el esquem
 
 Código `2`; igual para `--page`. Sin validación, un valor no numérico vaciaría la lista silenciosamente.
 
-### «--before-time takes an ISO 8601 time or 30m, 2h, 1d ago»
+### «query.invalid-date … use an ISO date, today, yesterday, 30m/2h/7d ago, or a quoted timestamp with offset»
 
-Código `2`: valor incorrecto de `--before-time` o `--after-time`. Usa ISO 8601 o tiempo relativo:
+Código `2`: la consulta no entendió la hora en `date<…` o `date>…`. Acepta una fecha ISO 8601, `today`, `yesterday`, tiempo relativo o una hora exacta entre comillas, con segundos y desfase:
 
 ```sh
-max personal messages list 0 --before-time 2026-09-20T01:00:00Z
-max personal messages list 0 --before-time 2h
+max personal messages list 0 'date<"2026-09-20T01:00:00Z"'
+max personal messages list 0 'date<2h'
 ```
 
-Para ID utiliza `--before-id`: contiene el tiempo sin necesitar lectura previa.
+Para ID utiliza `id<…`: contiene el tiempo sin necesitar lectura previa.
 
 ### «--at-time takes a time like 2026-09-25T09:00 or a delay like 30m, 2h, 1d»
 
@@ -211,7 +211,7 @@ Código `6`: no existe ese nombre. Un chat personal usa el nombre de la persona;
 
 ### «profile … has sent N messages in the hour …»
 
-Código `8`: límite `sendsPerHour`, por defecto 30. El error indica cuándo repetir. Súbelo solo intencionadamente con `max personal config set sendsPerHour <n>`.
+Código `8`: límite `sends_per_hour`, por defecto 30. El error indica cuándo repetir. Súbelo solo intencionadamente con `max personal config set sends_per_hour <n>`.
 
 ### «chat … is not on the recipient list of profile …»
 
@@ -256,7 +256,7 @@ Hay dos límites distintos:
 max personal chats list --timeout 30s     # на команду целиком, включая вход
 ```
 
-`timeoutMs` de [Configuración](./configuration.md) limita **una respuesta**; varias solicitudes multiplican el tiempo. `--timeout` limita todo y devuelve `9`, cerrando la conexión.
+`timeout_ms` de [Configuración](./configuration.md) limita **una respuesta**; varias solicitudes multiplican el tiempo. `--timeout` limita todo y devuelve `9`, cerrando la conexión.
 
 Si no hay líneas y no termina, informa del defecto con `--trace`. Imprimir un resultado sin terminar también es un fallo.
 
@@ -338,14 +338,14 @@ Las incidencias de GitHub y los archivos adjuntos son públicos.
 
 ## Resultados parciales y acciones de recuperación
 
-Cada elemento fallido de un resultado parcial contiene `actions`: qué comprobar, qué ajuste cambiar, cuánto esperar o qué elemento omitir.
+Cada elemento fallido de un resultado parcial contiene `error` con código, mensaje y `retryable`: si se puede repetir ese elemento.
 `retryable` nunca autoriza repetir una escritura automáticamente: ante `outcome_unknown`, comprueba primero si se realizó.
 Los límites de API no aumentan con ajustes locales; reduce o divide los datos de entrada.
 
-Un HTTP 429 al descargar un adjunto detiene los archivos nuevos del lote; `Retry-After` aparece en la acción de espera cuando el servidor lo indica. HTTP 413 es un límite del proveedor y no cambia al aumentar un límite local.
+Un HTTP 429 al descargar un adjunto detiene los archivos nuevos del lote. HTTP 413 es un límite del proveedor y no cambia al aumentar un límite local.
 
 El fallo de un archivo independiente o una página de historial devuelve un resultado parcial con código de salida `0`,
 `complete: false` y `batch` o `issue`. Los archivos y las páginas anteriores permanecen guardados.
-Si la pausa del proveedor impide terminar, `messages sync` de un solo chat incluye `issue.retryAfterMs` y un límite `resume`;
+Si la pausa del proveedor impide terminar, `messages sync` de un solo chat incluye `issue.retry_after_ms` y un límite `resume`;
 la consulta de todos los chats incluye sus respectivos `issue`, y las descargas usan checkpoints. No repitas las solicitudes antes de que termine la pausa.
 Un trabajo parcial en segundo plano tiene estado `partial` y se reintenta con `max personal store jobs retry`. Comprueba la integridad del resultado además del código de salida.

@@ -64,7 +64,7 @@ Files the tools cannot read as text, such as scans and photos, are listed as nee
 Your agent reads the image with its own vision tools and saves the words:
 
 ```sh
-tg personal attachments list --chat "Book club" --needs-text
+tg personal attachments list 'chat:"Book club" is:needs_text'
 tg personal attachments text set "Book club" 204 --text-file ./scan.txt
 ```
 
@@ -90,7 +90,7 @@ In files and transcripts, a word is matched in its exact form. Other word forms 
 
 ## Phones, emails and links
 
-The tools find phone numbers, email addresses, links and Google document links in message text, file text and transcripts. Each is stored as a mention. Search finds it however it was written:
+The tools find phone numbers, email addresses, links and Google document links in message text, file text and transcripts; `tg` also finds the names of people you know. Each is stored as a mention. Search finds it however it was written:
 
 ```sh
 tg personal search messages 'phone:"+1 555 010 0100"'
@@ -98,7 +98,7 @@ tg personal search messages 'email:"ana@example.com"'
 tg personal search messages 'domain:example.com'
 ```
 
-`phone:` finds `+1 555 010 0100` and `+1 (555) 010-0100` alike; without the `+`, only Russian numbers are recognized. `domain:` finds every link and address on that site. Mentions are found by rules, not by a model. A mention you reject stays dismissed.
+`phone:` finds `+1 555 010 0100` and `+1 (555) 010-0100` alike; without the `+`, only Russian numbers are recognized. `domain:` finds every link and address on that site. Mentions are found by rules, not by a model. A mention you reject stays dismissed. How to review mentions and record who they are: [Phones, links and names](./mentions.md).
 
 ## Pictures
 

@@ -47,7 +47,7 @@ tg shop config show --bot
 
 Enumera el perfil, de dónde vino el nombre del perfil, los perfiles, los nombres de los archivos, la ruta del archivo y si existe, y cada configuración con su valor y **de dónde vino ese valor**: `flag`, una variable de entorno, `config file`, `config defaults` o `default`. `--bot` muestra la configuración a medida que la obtiene un comando de bot de ese perfil. `--json` da lo mismo que un objeto, para un script.
 
-La lista termina con `commandTimeoutMs`: el límite de un comando completo, desde `--timeout` o `TG_TIMEOUT`. No es una configuración del archivo; `timeoutMs` limita una solicitud.
+La lista termina con `commandTimeoutMs`: el límite de un comando completo, desde `--timeout` o `TG_TIMEOUT`. No es una configuración del archivo; `timeout_ms` limita una solicitud.
 
 Cuando se configura `TG_CONFIG_DIR`, `TG_STATE_DIR` o `TG_CACHE_DIR`, lo dice en stderr, ya que eso también cambia qué inicio de sesión se encuentra ([donde se guardan las partes del inicio de sesión](./sessions.md#where-the-parts-are-kept)).
 
@@ -55,21 +55,21 @@ Cuando se configura `TG_CONFIG_DIR`, `TG_STATE_DIR` o `TG_CACHE_DIR`, lo dice en
 
 ## El archivo
 
-`config.json` en el directorio de configuración (`~/.config/tg-cli/config.json` en Linux; otros sistemas se enumeran en [dónde van los archivos](./installation.md#where-files-go)). El primer comando que lee la configuración lo crea con `limit`, `keepRunsForDays`, `sendsPerHour`, `updateCheck` y `skillHint` bajo `defaults`; un archivo existente nunca se reemplaza.
+`config.json` en el directorio de configuración (`~/.config/tg-cli/config.json` en Linux; otros sistemas se enumeran en [dónde van los archivos](./installation.md#where-files-go)). El primer comando que lee la configuración lo crea con `limit`, `keep_runs_for_days`, `sends_per_hour`, `update_check` y `skill_hint` bajo `defaults`; un archivo existente nunca se reemplaza.
 
 ```json
 {
-  "defaultProfile": "default",
+  "default_profile": "default",
   "defaults": {
-    "sendsPerHour": 10,
-    "updateCheck": false
+    "sends_per_hour": 10,
+    "update_check": false
   },
   "profiles": {
     "default": { "limit": 50 },
     "work": { "permissions": { "messages": "readonly", "messages.send": "allow" }, "record": true }
   },
-  "personal": { "defaults": { "catchUpMarksRead": true } },
-  "bot": { "profiles": { "shop": { "sendsPerHour": 200 } } }
+  "personal": { "defaults": { "catch_up_marks_read": true } },
+  "bot": { "profiles": { "shop": { "sends_per_hour": 200 } } }
 }
 ```
 
@@ -78,34 +78,35 @@ Cuando se configura `TG_CONFIG_DIR`, `TG_STATE_DIR` o `TG_CACHE_DIR`, lo dice en
 - `personal.defaults`, `personal.profiles.<name>`: solo comandos de cuenta personal.
 - `bot.defaults`, `bot.profiles.<name>`: sólo comandos `tg <name> bot …`.
 
-`defaultProfile` en la parte superior nombra el perfil utilizado cuando ni la primera palabra ni `TG_PROFILE` nombran uno. La primera palabra (`tg work …`) y `TG_PROFILE` la anulan. Sin ninguno de ellos, un comando que usa una cuenta se detiene con el código de salida `2` y enumera los perfiles de este equipo.
+`default_profile` en la parte superior nombra el perfil utilizado cuando ni la primera palabra ni `TG_PROFILE` nombran uno. La primera palabra (`tg work …`) y `TG_PROFILE` la anulan. Sin ninguno de ellos, un comando que usa una cuenta se detiene con el código de salida `2` y enumera los perfiles de este equipo.
 
 | Configuración | Predeterminado | Qué hace | Anulado por uno ejecutado por |
 |---|---|---|---|
 | `limit` | `20` | filas por página de una lista | `--limit` |
-| `timeoutMs` | ninguno | cuánto tiempo puede esperar **una** solicitud a Telegram, en milisegundos. Un comando genera varios, por lo que para limitar el comando completo use `--timeout` | ninguno (`--timeout` es otra cosa) |
+| `timeout_ms` | ninguno | cuánto tiempo puede esperar **una** solicitud a Telegram, en milisegundos. Un comando genera varios, por lo que para limitar el comando completo use `--timeout` | ninguno (`--timeout` es otra cosa) |
 | `color` | desde la terminal | color en la vista de tabla | ninguno; sin configuración, `NO_COLOR` lo apaga |
-| `senderColors` | `false` | un color por remitente en la vista de tabla de mensajes | ninguno |
-| `catchUpMarksRead` | `false` | `inbox` y `review` marcan cada chat que muestran como leído, hasta el mensaje más reciente mostrado. El otro lado lo ve | `--mark-read`, `--no-mark-read` |
-| `searchCatchUp` | `false` | `messages sync` y `store gaps repair` también preparan el chat recuperado para búsqueda local: su gráfico y, si está instalado, sus vectores. Nunca descarga modelos ni llama a proveedores remotos | `--catch-up`, `--no-catch-up` |
+| `sender_colors` | `false` | un color por remitente en la vista de tabla de mensajes | ninguno |
+| `catch_up_marks_read` | `false` | `inbox` y `review` marcan cada chat que muestran como leído, hasta el mensaje más reciente mostrado. El otro lado lo ve | `--mark-read`, `--no-mark-read` |
+| `search_catch_up` | `false` | `messages sync` y `store gaps repair` también preparan el chat recuperado para búsqueda local: su gráfico y, si está instalado, sus vectores. Nunca descarga modelos ni llama a proveedores remotos | `--catch-up`, `--no-catch-up` |
+| `picture_search` | `false` | busca las imágenes guardadas por lo que muestran. `images embed` lee las imágenes guardadas una vez descargado el modelo, y entonces `search messages` también devuelve una lista `pictures` ([imágenes](./search.md#pictures-by-what-they-show)) | ninguno |
 | `record` | `false` | mantener cada ejecución ([diagnóstico](./diagnostics.md)) | `--record`, `--no-record` |
-| `keepRunsForDays` | `30` | las ejecuciones registradas anteriores a esta se eliminan cuando se conserva la siguiente | ninguno |
+| `keep_runs_for_days` | `30` | las ejecuciones registradas anteriores a esta se eliminan cuando se conserva la siguiente | ninguno |
 | `permissions` | todo está permitido, excepto: eliminar, finalizar sesiones y algunos otros cambios solicitados; las reglas de respuesta pueden no enviarse | qué puede hacer el perfil, por comando ([abajo](#what-a-profile-may-do)) | ninguno; `--yes` y `--allow-dangerous` solo responden `ask`, nunca levantan `deny` |
-| `sendsPerHour` | `30`; un bot no tiene ninguno hasta que se configura en la sección `bot` | la mayor cantidad de envíos en cualquier hora ([el control de envío](./security.md#the-send-guard)) | ninguno |
-| `requestsPerMinute` | `60` | solicitudes un minuto después de una ráfaga de 20, compartida por todos los procesos del perfil; `0` lo apaga ([límites y esperas](./limits.md)) | `TG_REQUESTS_PER_MINUTE` |
-| `transcribeWith` | `auto` | quién convierte la voz en texto: `auto` (Telegram, si no, un modelo local), `messenger` o `local` | `--local`, o `--model`, lo que lo implica |
-| `speechModel` | ninguno | qué modelo descargado utiliza `--local` (`tg personal models audio list`) | `--model` |
+| `sends_per_hour` | `30`; un bot no tiene ninguno hasta que se configura en la sección `bot` | la mayor cantidad de envíos en cualquier hora ([el control de envío](./security.md#the-send-guard)) | ninguno |
+| `requests_per_minute` | `60` | solicitudes un minuto después de una ráfaga de 20, compartida por todos los procesos del perfil; `0` lo apaga ([límites y esperas](./limits.md)) | `TG_REQUESTS_PER_MINUTE` |
+| `transcribe_with` | `auto` | quién convierte la voz en texto: `auto` (Telegram, si no, un modelo local), `messenger` o `local` | `--local`, o `--model`, lo que lo implica |
+| `speech_model` | ninguno | qué modelo descargado utiliza `--local` (`tg personal models audio list`) | `--model` |
 | `proxy` | ninguno | el servidor SOCKS5, HTTP `CONNECT` o MTProxy para llegar a Telegram a través de ([abajo](#through-a-proxy)) | `TG_PROXY` |
-| `readOtherBots` | `false` | solo un bot: si `tg personal bot` puede leer lo que otros bots en esta máquina guardan: `true`, o una lista de nombres de perfiles ([bots](./bot.md)) | ninguno; `--all-bots` y `--bots` preguntan, la configuración permite |
-| `updateCheck` | `true` | la línea diaria "existe una versión más nueva"; sólo bajo `defaults` | ninguno; `TG_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER` o `CI` apágalo |
-| `skillHint` | `true` | una línea, como máximo una vez al día, para un agente cuya copia de la skill de tg falta o es anterior a tg; sólo bajo `defaults` | ninguno |
-| `embeddingProvider` | `local` | modelo local o `openai` | `--provider` |
-| `embeddingModel` | predeterminado del proveedor | modelo de incrustación | `--model` |
-| `embeddingBaseUrl` | predeterminado del proveedor | incorporación de punto final API | `--base-url` |
-| `embeddingDims` | modelo predeterminado | entero 1–65,536 | `--dims` |
-| `analysisProvider` | `agent` | `agent`, `openai` o `anthropic` | `build --provider` |
-| `analysisModel` | ninguno; requerido para `--analyze` | modelo de análisis | `build --model` |
-| `analysisBaseUrl` | predeterminado del proveedor | punto final API de análisis | `build --base-url` |
+| `read_other_bots` | `false` | solo un bot: si `tg personal bot` puede leer lo que otros bots en esta máquina guardan: `true`, o una lista de nombres de perfiles ([bots](./bot.md)) | ninguno; `--all-bots` y `--bots` preguntan, la configuración permite |
+| `update_check` | `true` | la línea diaria "existe una versión más nueva"; sólo bajo `defaults` | ninguno; `TG_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER` o `CI` apágalo |
+| `skill_hint` | `true` | una línea, como máximo una vez al día, para un agente cuya copia de la skill de tg falta o es anterior a tg; sólo bajo `defaults` | ninguno |
+| `embedding_provider` | `local` | modelo local o `openai` | `--provider` |
+| `embedding_model` | predeterminado del proveedor | modelo de incrustación | `--model` |
+| `embedding_base_url` | predeterminado del proveedor | incorporación de punto final API | `--base-url` |
+| `embedding_dims` | modelo predeterminado | entero 1–65,536 | `--dims` |
+| `analysis_provider` | `agent` | `agent`, `openai` o `anthropic` | `build --provider` |
+| `analysis_model` | ninguno; requerido para `--analyze` | modelo de análisis | `build --model` |
+| `analysis_base_url` | predeterminado del proveedor | punto final API de análisis | `build --base-url` |
 | `models` | ninguno | modelos externos por finalidad ([abajo](#models-by-purpose)) | Variables `TG_MODELS_*` |
 | `searchStemmers.cyrillic`, `searchStemmers.latin` | `russian`, `english,spanish` | los idiomas de raíz de palabras para buscar en todal archivo local ([abajo](#search-languages)) | ninguno |
 
@@ -139,7 +140,7 @@ Las claves de distintas secciones del archivo se suman, pero **decide primero la
 }
 ```
 
-Funciona en ambos sentidos: `messages: allow` en un perfil también oculta `messages.delete: deny` de `defaults`, y eliminar vuelve a pedir confirmación, como por defecto. Los antiguos `readOnly` y `allow` cuentan en la sección en la que están escritos.
+Funciona en ambos sentidos: `messages: allow` en un perfil también oculta `messages.delete: deny` de `defaults`, y eliminar vuelve a pedir confirmación, como por defecto. Los antiguos `read_only` y `allow` cuentan en la sección en la que están escritos.
 
 `inbox`, `review`, `watch`, `serve` y `messages sync`, `export` y `search` muestran mensajes, por lo que cuentan como `messages`: `messages: deny` también los bloquea. `config`, `session`, `doctor`, `recipients`, `mcp` y el mantenimiento del archivo local nunca se restringen.
 
@@ -175,22 +176,22 @@ permiten la escritura solicitada. Repite `--permission key=level` para los permi
 
 ### Ajustes anteriores que siguen funcionando
 
-`readOnly: true` equivale a `readonly` en todos los recursos. Una lista en `allow` (`send`, `forward`, `reaction`, `edit`, `pin`, `read`, `delete`, `groups`, `contacts`, `profile`, `folders`, `sessions`) permite esas acciones con `allow` y deja las demás en `readonly`; las eliminaciones siguen pidiendo confirmación. Una clave de `permissions` de la misma sección tiene prioridad sobre ambos.
+`read_only: true` equivale a `readonly` en todos los recursos. Una lista en `allow` (`send`, `forward`, `reaction`, `edit`, `pin`, `read`, `delete`, `groups`, `contacts`, `profile`, `folders`, `sessions`) permite esas acciones con `allow` y deja las demás en `readonly`; las eliminaciones siguen pidiendo confirmación. Una clave de `permissions` de la misma sección tiene prioridad sobre ambos.
 
 ### Migrar la configuración de acceso heredada
 
-`tg config migrate --dry-run --json` muestra una vista previa del reemplazo de `readOnly` y `allow` por `permissions`, manteniendo los niveles que proporcionó el archivo para perfiles personales y de bot. No escribe el archivo ni se conecta a Telegram. `tg config migrate --json` aplica esa migración; un proceso bloqueado en un perfil no puede aplicar un cambio que afecte a todos los perfiles. Se mantienen otras configuraciones. Un archivo que ya utiliza únicamente `permissions` no necesita migración. Una vez que `permissions` está presente, `config set` rechaza los cambios en `readOnly` y `allow`; cambie las claves de permiso correspondientes.
+`tg config migrate --dry-run --json` muestra una vista previa del reemplazo de `read_only` y `allow` por `permissions`, manteniendo los niveles que proporcionó el archivo para perfiles personales y de bot. No escribe el archivo ni se conecta a Telegram. `tg config migrate --json` aplica esa migración; un proceso bloqueado en un perfil no puede aplicar un cambio que afecte a todos los perfiles. Se mantienen otras configuraciones. Un archivo que ya utiliza únicamente `permissions` no necesita migración. Una vez que `permissions` está presente, `config set` rechaza los cambios en `read_only` y `allow`; cambie las claves de permiso correspondientes.
 
 ## Cambiar ajustes sin abrir el archivo
 
 ```sh
 tg config set limit 50                        # this profile
 tg work config set permissions.contacts readonly   # profile "work"; one key at a time
-tg config set sendsPerHour 10 --defaults      # every profile
+tg config set sends_per_hour 10 --defaults      # every profile
 tg config set limit 30 --personal --defaults  # every personal account
-tg shop config set sendsPerHour 200 --bot     # only the bot "shop"
-tg config set updateCheck false --defaults    # a setting that exists only under defaults
-tg config unset sendsPerHour                  # back to the default
+tg shop config set sends_per_hour 200 --bot     # only the bot "shop"
+tg config set update_check false --defaults    # a setting that exists only under defaults
+tg config unset sends_per_hour                  # back to the default
 ```
 
 `config set` valida el valor con las mismas reglas que el lector, por lo que no genera un archivo que los siguientes comandos rechacen.
@@ -205,7 +206,7 @@ Un ajuste desconocido en el archivo detiene todos los comandos con código de sa
 
 ```text
 config.json is not a valid config:
-  profiles.default.limt: unknown setting — the known ones are limit, timeoutMs, …
+  profiles.default.limt: unknown setting — the known ones are limit, timeout_ms, …
 ```
 
 Si se ignorase un ajuste mal escrito, el programa usaría el valor predeterminado sin explicar por qué. Lo mismo se aplica a claves de `permissions` que no empiezan por un recurso.
@@ -242,7 +243,7 @@ La Bot API (`tg personal bot …`) y el registro de la aplicación de `session s
 | `TG_PROFILE` | el perfil, cuando la primera palabra no nombra a nadie |
 | `TG_PROFILE_LOCK` | fija el proceso a un perfil; cualquier otro es rechazado ([perfiles](./sessions.md#profiles)) |
 | `TG_TIMEOUT` | lo mismo que `--timeout`: `500ms`, `30s` o `2m` para todo el comando |
-| `TG_REQUESTS_PER_MINUTE` | igual que `requestsPerMinute`, y lo supera |
+| `TG_REQUESTS_PER_MINUTE` | igual que `requests_per_minute`, y lo supera |
 | `TG_API_ID`, `TG_API_HASH` | la aplicación, en lugar del llavero, para CI; ambos o ninguno |
 | `TG_PROXY` | la URL del proxy, la contraseña o el secreto incluidos; gana sobre la configuración `proxy` ([arriba](#through-a-proxy)) |
 | `TG_CONFIG_DIR`, `TG_STATE_DIR`, `TG_CACHE_DIR` | mueve los tres directorios y la entrada del llavero con ellos |
@@ -271,29 +272,29 @@ Sin `MESSAGING_STORE`, lo que lea esa sesión seguirá guardándose en tu archiv
 
 | Clave | Tipo/valor aceptado | Alcance |
 |---|---|---|
-| `defaultProfile` | cadena de nombre de perfil | raíz del archivo |
-| `limit`, `timeoutMs`, `keepRunsForDays`, `sendsPerHour` | entero ≥ 1 | perfil |
-| `requestsPerMinute` | entero ≥ 0 | perfil |
-| `color`, `senderColors`, `catchUpMarksRead`, `searchCatchUp`, `record`, `readOnly` | booleano | perfil |
+| `default_profile` | cadena de nombre de perfil | raíz del archivo |
+| `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` | entero ≥ 1 | perfil |
+| `requests_per_minute` | entero ≥ 0 | perfil |
+| `color`, `sender_colors`, `catch_up_marks_read`, `search_catch_up`, `record`, `read_only` | booleano | perfil |
 | `permissions` | objeto de rutas de comando y niveles `deny`, `readonly`, `ask`, `allow` | perfil |
 | `allow` | variedad de acciones permitidas; formato heredado | perfil |
-| `readOtherBots` | booleano o conjunto de nombres de perfil | solo bot |
-| `updateCheck`, `skillHint` | booleano | raíz `defaults` solamente |
-| `transcribeWith` | `auto`, `messenger`, `local` | perfil |
-| `speechModel` | ID del modelo descargado como una cadena | perfil |
+| `read_other_bots` | booleano o conjunto de nombres de perfil | solo bot |
+| `update_check`, `skill_hint` | booleano | raíz `defaults` solamente |
+| `transcribe_with` | `auto`, `messenger`, `local` | perfil |
+| `speech_model` | ID del modelo descargado como una cadena | perfil |
 | `proxy` | URL de proxy compatible como una cadena | perfil |
-| `embeddingProvider` | `local`, `openai` | perfil |
-| `embeddingModel`, `analysisModel` | cadena no vacía, como máximo 200 caracteres | perfil |
-| `embeddingBaseUrl`, `analysisBaseUrl` | URL HTTP(S) sin credenciales, consulta o fragmento | perfil |
-| `embeddingDims` | entero 1–65,536 | perfil |
-| `analysisProvider` | `agent`, `openai`, `anthropic` | perfil |
+| `embedding_provider` | `local`, `openai` | perfil |
+| `embedding_model`, `analysis_model` | cadena no vacía, como máximo 200 caracteres | perfil |
+| `embedding_base_url`, `analysis_base_url` | URL HTTP(S) sin credenciales, consulta o fragmento | perfil |
+| `embedding_dims` | entero 1–65,536 | perfil |
+| `analysis_provider` | `agent`, `openai`, `anthropic` | perfil |
 | `models` | objetos de propósito descritos a continuación | perfil |
 | `searchStemmers.cyrillic` | `russian`, `none` | archivo compartido, a través de `config set` |
 | `searchStemmers.latin` | `english`, `spanish`, ambos separados por comas, `none` | archivo compartido, a través de `config set` |
 
 ### Modelos por finalidad
 
-`models.<purpose>` acepta solo `provider`, `model` y `baseUrl`. Los nombres de propósito empiezan
+`models.<purpose>` acepta solo `provider`, `model` y `base_url`. Los nombres de propósito empiezan
 por una letra minúscula y contienen letras minúsculas, dígitos y guiones.
 `default` proporciona campos comunes; `analysis` y `replies` los sobrescriben campo por campo.
 Se pueden guardar otros nombres de propósito válidos por adelantado; esto no habilita un caso de uso inexistente.
@@ -303,7 +304,7 @@ La ausencia de proveedor o `off` desactiva las llamadas a modelos externos.
 |---|---|---|
 | `models.<purpose>.provider` | `off`, `openai`, `anthropic` | ausente; sin llamadas externas |
 | `models.<purpose>.model` | cadena no vacía, como máximo 200 caracteres | ausente; un proveedor activado necesita un identificador de modelo explícito |
-| `models.<purpose>.baseUrl` | URL HTTP(S) sin credenciales, consulta ni fragmento | endpoint del proveedor |
+| `models.<purpose>.base_url` | URL HTTP(S) sin credenciales, consulta ni fragmento | endpoint del proveedor |
 
 Para cada campo, el orden de prioridad es `TG_MODELS_<PURPOSE>_PROVIDER`, `_MODEL` o `_BASE_URL`,
 después el campo de propósito configurado más cercano, los campos antiguos `analysis*` explícitos para `analysis`
@@ -318,5 +319,5 @@ Los campos heredados aceptan `TG_EMBEDDING_PROVIDER`, `TG_EMBEDDING_MODEL`, `TG_
 
 ## Siguiente paso
 
-- [Seguridad](./security.md): qué protegen `permissions`, la lista de destinatarios y `sendsPerHour`
-- [Diagnóstico](./diagnostics.md): qué mantiene el `record` y cuánto tiempo lo mantiene el `keepRunsForDays`
+- [Seguridad](./security.md): qué protegen `permissions`, la lista de destinatarios y `sends_per_hour`
+- [Diagnóstico](./diagnostics.md): qué mantiene el `record` y cuánto tiempo lo mantiene el `keep_runs_for_days`

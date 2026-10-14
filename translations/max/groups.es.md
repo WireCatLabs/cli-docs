@@ -21,7 +21,7 @@ Aquí todo funciona desde tu cuenta personal, en grupos donde tú eres el admini
 | --- | --- |
 |Encuentre preguntas que esperan ser respondidas| `max personal review --unanswered` |
 |Vea quién se unió, quién se fue, quién fue agregado o eliminado| `max personal chats events` |
-|Resumen de la semana: decisiones, promesas, preguntas abiertas| `max personal review --since-time 7d` |
+|Resumen de la semana: decisiones, promesas, preguntas abiertas| `max personal review 'date>7d'` |
 |Mantén una lista de lo que te espera| `max personal tasks list` |
 |Elimina el spam según tus propias reglas| `max personal chats rules set`, `max personal chats moderate` |
 |Reemplace el enlace de invitación filtrado| `max personal chats link reset` |
@@ -49,7 +49,7 @@ Empieza por las preguntas que esperan una respuesta tuya o de los administradore
 **Comando:**
 
 ```sh
-max personal review --chat "Поход" --unanswered 4h --json
+max personal review 'chat:"Поход"' --unanswered 4h --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -77,7 +77,7 @@ Revisa los eventos de entrada. Una cuenta nueva merece revisión; su edad no dem
 **Comando:**
 
 ```sh
-max personal chats events "Поход" --type add --since-time 7d --json
+max personal chats events "Поход" 'time>=7d' --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -157,7 +157,7 @@ Pide un resumen de decisiones, compromisos y preguntas pendientes.
 **Comando:**
 
 ```sh
-max personal review --chat "Поход" --since-time 7d --json
+max personal review 'chat:"Поход" date>7d' --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -187,7 +187,7 @@ Sin `--allow-dangerous` en cron, las acciones en el nivel `ask` simplemente est�
 
 | Comando | Qué hace |
 |---|---|
-| `max personal review --chat <чат> --unanswered [длительность]` | Preguntas sin respuesta tuya o de administradores durante el plazo indicado (por ejemplo `4h`; por defecto `24h`) |
+| `max personal review 'chat:<чат>' --unanswered [длительность]` | Preguntas sin respuesta tuya o de administradores durante el plazo indicado (por ejemplo `4h`; por defecto `24h`) |
 | `max personal chats events <чат>` | Entradas, salidas, quién añadió o expulsó a quién; 7 días por defecto |
 | `max personal chats members list <чат>` | Página de miembros de MAX (`--all`: todos disponibles, hasta 5000), propietario, administradores, creación de cuenta y última conexión; tras `admins add`, el rol puede tardar en actualizarse |
 | `max personal chats rules show\|set\|unset <чат>` | Reglas del grupo |
@@ -203,7 +203,7 @@ Sin `--allow-dangerous` en cron, las acciones en el nivel `ask` simplemente est�
 
 Un agente conectado mediante el [servidor MCP](./mcp.md) puede ejecutar los mismos comandos dentro de los permisos del perfil.
 
-Las órdenes que modifican grupos devuelven `operationId` en JSON; después de crear, entrar, modificar o renovar el enlace, la ficha está en `chat`. Si el título o la descripción cambió pero la solicitud de ajustes no terminó, el resultado es `outcome_unknown`. Consulta el grupo con `chats show` antes de repetir: el cambio puede haberse aplicado parcialmente.
+Las órdenes que modifican grupos devuelven `operation_id` en JSON; después de crear, entrar, modificar o renovar el enlace, la ficha está en `chat`. Si el título o la descripción cambió pero la solicitud de ajustes no terminó, el resultado es `outcome_unknown`. Consulta el grupo con `chats show` antes de repetir: el cambio puede haberse aplicado parcialmente.
 
 ## Qué necesita tu respuesta
 
@@ -212,11 +212,11 @@ Las órdenes que modifican grupos devuelven `operationId` en JSON; después de c
 Mira lo que te espera, los viejos arriba, y luego solo preguntas y menciones en un grupo:
 
 ```sh
-max personal tasks list --state open
+max personal tasks list state:open
 ```
 
 ```sh
-max personal tasks list --chat "Поход" --type question,mention
+max personal tasks list chat:<id чата> "(kind:question OR kind:mention)"
 ```
 
 Agrega algo que las reglas no ven, como tu promesa, o cierra una tarea que no necesita respuesta:
@@ -307,7 +307,7 @@ El consentimiento decide si se ejecuta:
 
 Se leen los archivos antiguos: `forbid` se convierte en `deny`, `flag` y `confirm` - `ask`. Un agente conectado vía MCP opera sólo donde el nivel es `allow`; Las acciones de nivel `ask` siguen siendo el plan para usted, no hay formularios de servidor.
 
-`chats moderate --json` devuelve `{ chatId, rows }`. `--since-time` acepta una fecha ISO 8601 o `30m`, `2h`, `1d`, no un ID de mensaje; no cambia el punto guardado. Ese punto se guarda junto a las reglas; el anterior, de la sesión, se migra automáticamente antes de la primera ejecución. CLI y MCP personal comparten el mismo punto.
+`chats moderate --json` devuelve `{ item: { chat_id, rows } }`. `--since-time` acepta una fecha ISO 8601 o `30m`, `2h`, `1d`, no un ID de mensaje; no cambia el punto guardado. Ese punto se guarda junto a las reglas; el anterior, de la sesión, se migra automáticamente antes de la primera ejecución. CLI y MCP personal comparten el mismo punto.
 
 ## Mediante un bot
 
@@ -359,7 +359,7 @@ Para guardar miembros cada día, añade el grupo al seguimiento con `max persona
 
 El seguimiento no inicia el servidor ni extiende su tiempo de inactividad: para el historial diario, mantenga `max personal server` ejecutándose en todo momento. `max personal chats tracking list` muestra los siguientes grupos y el último número guardado de participantes; `show`: estado del grupo e instantáneas del número de participantes durante los últimos 30 días. `max personal chats tracking remove <группа>` detiene la recepción automática; el historial acumulado permanece accesible a través de `max personal chats members history`.
 
-`max personal chats members history` muestra entradas, salidas y cambios de perfil guardados en orden temporal; `--since-time` limita el período. No consulta MAX. Usa la hora de entrada de MAX si se conoce; si no, la primera vez que se observó a la persona. La salida corresponde a la primera instantánea completa sin ella, no a la hora exacta. La primera lectura crea la lista inicial: esas personas no necesariamente entraron ese día. `chats members list --offline` muestra la última lista completa; una lectura parcial no la sustituye. Sin ninguna instantánea completa puede estar vacía aunque existan perfiles y eventos individuales. Los perfiles y el historial se conservan junto a tus mensajes en el archivo local.
+`max personal chats members history` muestra entradas, salidas y cambios de perfil guardados en orden temporal; la consulta `time>=7d` limita el período. No consulta MAX. Usa la hora de entrada de MAX si se conoce; si no, la primera vez que se observó a la persona. La salida corresponde a la primera instantánea completa sin ella, no a la hora exacta. La primera lectura crea la lista inicial: esas personas no necesariamente entraron ese día. `chats members list --offline` muestra la última lista completa; una lectura parcial no la sustituye. Sin ninguna instantánea completa puede estar vacía aunque existan perfiles y eventos individuales. Los perfiles y el historial se conservan junto a tus mensajes en el archivo local.
 
 `max personal chats members audit` consulta los miembros y muestra señales de cuentas sospechosas. `--budget` limita las páginas y `--min-score` establece la puntuación mínima. Es una pista para que una persona la revise: no se elimina a nadie, se excluyen los administradores y el propietario, `more` indica una lista incompleta y `unknown` indica señales desconocidas. MAX no proporciona todas las señales de Telegram. Esta comprobación no está disponible con `--offline`. «No escribió» significa que no se encontraron mensajes de esa persona en el historial local; no demuestra que nunca escribiera en el grupo.
 
@@ -382,7 +382,7 @@ max personal stats chats show "Поход" --since-time 7d --by day --timezone E
 ```
 
 ```sh
-max personal chats members history "Поход" --since-time 7d --offline --json
+max personal chats members history "Поход" 'time>=7d' --offline --json
 ```
 
 ```sh

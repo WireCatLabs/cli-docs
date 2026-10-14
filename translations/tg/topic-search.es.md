@@ -31,7 +31,7 @@ La búsqueda de tema no es el campo `topic:` de [búsqueda de mensajes](./search
 | Tarea | Comando |
 |---|---|
 | Encuentre una discusión por tema, en un chat o en cada chat preparado | `tg personal search conversations "<question>"` |
-| Ver las conversaciones de un chat, las más nuevas primero | `tg personal conversations list --chat <chat>` |
+| Ver las conversaciones de un chat, las más nuevas primero | `tg personal conversations list <chat>` |
 | Lea una conversación de principio a fin | `tg personal conversations show <id>` |
 | Abrir toda la conversación a la que pertenece un mensaje | `tg personal conversations show <chat> <message>` |
 | Encuentra otras conversaciones sobre lo mismo, en cada chat | `tg personal conversations related <chat> <message>` |
@@ -128,7 +128,7 @@ En la terminal cada resultado es una línea:
 Con `--json`, la respuesta también tiene `meaning` (`searched` o `unavailable`), el `model` utilizado y `readiness`: qué chats se buscaron por significado, cuáles solo por palabras, cuáles están desactualizados y cuáles nunca se construyeron. Cuando algo limita la búsqueda, stderr nombra los chats y el comando que lo soluciona, por ejemplo `conversations embed --chat <chat>`.
 
 ```sh
-tg personal conversations list --chat "Book club" --since-time 7d
+tg personal conversations list "Book club" started_at>=7d
 tg personal conversations show 91                # one conversation, oldest first
 tg personal conversations show "Book club" 204   # the conversation message 204 is in
 tg personal conversations related "Book club" 204  # other conversations about the same thing, in every chat
@@ -168,7 +168,7 @@ tg personal search conversations "contract terms" --filter 'has:file' --timezone
 **Comienza desde un mensaje.** Encontraste un mensaje con búsqueda de palabras y quieres todo lo demás sobre ese tema:
 
 ```sh
-tg personal search messages '"deposit back"' --chat "Valencia expats"
+tg personal search messages '"deposit back" chat:"Valencia expats"'
 tg personal conversations related "Valencia expats" 5120
 ```
 

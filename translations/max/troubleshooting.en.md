@@ -152,7 +152,7 @@ The command is `chats`, plural. `max --help` lists all commands.
 ### "is not a valid config"
 
 ```json
-{"error":{"code":"configuration_error","message":"…/config.json is not a valid config:\n  profiles.default.limitt: unknown setting — the known ones are limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, sendsPerHour, senderColors, serve, mcpTools"}}
+{"error":{"code":"configuration_error","reason":"config.invalid","message":"…/config.json is not a valid config:\n  profiles.default.limitt: unknown setting — the known ones are limit, timeout_ms, color, record, keep_runs_for_days, read_only, allow, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, mcp_tools"}}
 ```
 
 Code `3`. In a settings file, a field that is not in the schema is almost always a typo, and the message states its path. Rejected on purpose: a silently ignored field is worth half a day of bewilderment. All fields are in the [configuration reference](./configuration-reference.md).
@@ -161,16 +161,17 @@ Code `3`. In a settings file, a field that is not in the schema is almost always
 
 Code `2`. The same applies to `--page`. Without validation, a nonnumeric value could silently produce an empty list.
 
-### "--before-time takes an ISO 8601 time or 30m, 2h, 1d ago"
+### "query.invalid-date … use an ISO date, today, yesterday, 30m/2h/7d ago, or a quoted timestamp with offset"
 
-Code `2`: `--before-time` or `--after-time` could not parse its value. Use ISO 8601 or a relative time:
+Code `2`: the query could not parse the time in `date<…` or `date>…`. It accepts an ISO 8601 date, `today`,
+`yesterday`, a relative time, or an exact time in quotes with seconds and an offset:
 
 ```sh
-max personal messages list 0 --before-time 2026-09-20T01:00:00Z
-max personal messages list 0 --before-time 2h
+max personal messages list 0 'date<"2026-09-20T01:00:00Z"'
+max personal messages list 0 'date<2h'
 ```
 
-For a message ID, use `--before-id`: the time is encoded in the ID, without needing a previous chat read.
+For a message ID, use `id<…`: the time is encoded in the ID, without needing a previous chat read.
 
 ### "--at-time takes a time like 2026-09-25T09:00 or a delay like 30m, 2h, 1d"
 
@@ -204,7 +205,7 @@ Code `6`: no matching chat. Names come from login data; a direct chat uses the o
 
 ### "profile... has sent N messages in the hour..."
 
-Code `8`: the profile's hourly `sendsPerHour` limit was reached; default 30. The error shows when sending is possible again. Raise it only if intended: `max personal config set sendsPerHour <n>`.
+Code `8`: the profile's hourly `sends_per_hour` limit was reached; default 30. The error shows when sending is possible again. Raise it only if intended: `max personal config set sends_per_hour <n>`.
 
 ### "chat... is not on the recipient list of profile..."
 
@@ -249,7 +250,7 @@ There are two separate limits:
 max personal chats list --timeout 30s     # на команду целиком, включая вход
 ```
 
-`timeoutMs` in [Configuration](./configuration.md) limits **one response**. A command makes several requests, so total time can be a multiple of it. `--timeout` limits the whole run, returning code `9` and closing the connection.
+`timeout_ms` in [Configuration](./configuration.md) limits **one response**. A command makes several requests, so total time can be a multiple of it. `--timeout` limits the whole run, returning code `9` and closing the connection.
 
 If there are no trace lines and the command still does not return, report a defect with `--trace` output. A command that prints a response but fails to exit is also a defect.
 
@@ -331,15 +332,15 @@ GitHub issues and attached files are public.
 
 ## Partial results and recovery actions
 
-Each failed item of a partial result includes `actions`: what to check, which setting to change, how long to wait
-or which item to skip. `retryable` never authorizes automatic write replay: for `outcome_unknown`,
+Each failed item of a partial result includes an `error` with a code, a message and `retryable`:
+whether this item can be retried. `retryable` never authorizes automatic write replay: for `outcome_unknown`,
 verify whether the action happened first. API limits cannot be increased through local settings;
 reduce or split the input instead.
 
-An HTTP 429 while downloading an attachment stops new files in the batch; `Retry-After` becomes the wait action when supplied. HTTP 413 is a provider limit; raising a local budget cannot change it.
+An HTTP 429 while downloading an attachment stops new files in the batch. HTTP 413 is a provider limit; raising a local budget cannot change it.
 
 A failed independent file or history page returns partial results with exit code `0`,
 `complete: false` and `batch` or `issue`. Completed downloads and earlier history pages remain
-saved. If a provider wait is too long to finish, single-chat `messages sync` includes `issue.retryAfterMs`
+saved. If a provider wait is too long to finish, single-chat `messages sync` includes `issue.retry_after_ms`
 and a `resume` boundary; multi-chat fetch exposes per-chat issues and downloads use checkpoints; do not repeat requests before the wait ends. Partial background jobs have
 state `partial` and can be retried with `max personal store jobs retry`. Check completeness as well as the exit code.

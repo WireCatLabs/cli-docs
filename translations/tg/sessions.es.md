@@ -89,7 +89,7 @@ export TG_PROFILE=work     # the same for the whole shell session
 
 **La primera palabra es el perfil si no es un comando.** Por eso un perfil no puede llamarse `chats`, `messages` ni usar otra palabra de comando; `tg personal session start` rechaza esos nombres. Los nombres admiten letras, cifras, puntos, guiones y guiones bajos, y deben empezar por una letra o cifra.
 
-El orden de prioridad, de mayor a menor, es: primera palabra, `TG_PROFILE`, `defaultProfile` en la configuración. Si no hay ninguno, un comando que usa una cuenta se detiene con el código de salida `2` y muestra la lista de perfiles de esta computadora; si todavía no hay ninguno, indica que ejecutes `tg personal setup`. `tg` nunca elige uno, ni siquiera el único que hay. Los comandos que no usan ninguna cuenta funcionan sin perfil: `--help`, `--version`, `commands`, `skill show`, `account list` y `config show`.
+El orden de prioridad, de mayor a menor, es: primera palabra, `TG_PROFILE`, `default_profile` en la configuración. Si no hay ninguno, un comando que usa una cuenta se detiene con el código de salida `2` y muestra la lista de perfiles de esta computadora; si todavía no hay ninguno, indica que ejecutes `tg personal setup`. `tg` nunca elige uno, ni siquiera el único que hay. Los comandos que no usan ninguna cuenta funcionan sin perfil: `--help`, `--version`, `commands`, `skill show`, `account list` y `config show`.
 
 Si una palabra no es un comando y no va seguida de ningún comando, se muestra este error:
 

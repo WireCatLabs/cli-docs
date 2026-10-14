@@ -68,7 +68,7 @@ max personal tasks agenda
 Открытые задачи одного чата:
 
 ```sh
-tg personal tasks list --chat "Renovation" --state open
+tg personal tasks list 'chat:"Renovation" state:open'
 ```
 
 Добавить задачу для сообщения и спланировать её:

@@ -67,7 +67,7 @@ max personal tasks agenda
 Open tasks of one chat:
 
 ```sh
-tg personal tasks list --chat "Renovation" --state open
+tg personal tasks list 'chat:"Renovation" state:open'
 ```
 
 Add a task for a message, then plan it:

@@ -67,7 +67,7 @@ for key in messages reactions polls topics chats contacts account conversations 
   tg config set permissions.$key readonly
 done
 tg config show                       # check the permissions in force
-tg config set sendsPerHour 5         # or: at most five sends an hour
+tg config set sends_per_hour 5         # or: at most five sends an hour
 tg personal recipients add "Book club"  # and only to the chats on this list
 ```
 
@@ -123,9 +123,9 @@ Escribe en Telegram: **no**. Permitir: `Bash(tg personal inbox:*)`.
 
 - `tg personal inbox` — no leído, como lo cuenta Telegram: lo que no has abierto en ningún dispositivo.
 - `tg personal inbox --new`: desde la última ejecución de `--new`. Sólo `tg` conoce ese punto; nadie más lo ve.
-- `tg personal inbox --since-time 2d` — los dos últimos días; el punto guardado permanece donde estaba.
+- `tg personal inbox 'date>2d'` — los dos últimos días; el punto guardado permanece donde estaba.
 
-Ninguno de ellos marca nada de lo leído. Para hacer eso, agregue `--mark-read` o active `catchUpMarksRead` en la [configuración](./configuration.md). El otro lado ve entonces que lo lees.
+Ninguno de ellos marca nada de lo leído. Para hacer eso, agregue `--mark-read` o active `catch_up_marks_read` en la [configuración](./configuration.md). El otro lado ve entonces que lo lees.
 
 ### Chats directos, grupos y canales aparte
 
@@ -143,8 +143,8 @@ channel --json` y una solicitud para elegir lo que importa. Sin `--kind`, todo j
 
 Escribe en Telegram: **no**. Permitir: `Bash(tg personal messages list:*)`.
 
-> Lea los últimos 7 días del chat "Club de lectura": `tg personal messages list "Book club" --after-time 7d --limit 200
---json`. Si la respuesta dice `"hasMore": true`, sigue leyendo. Redactar un informe: qué se decidió, quién tomó qué y cuándo, qué cuestiones siguen abiertas. Dé a cada punto su fecha y autor.
+> Lea los últimos 7 días del chat "Club de lectura": `tg personal messages list "Book club" "date>7d" --limit 200
+--json`. Si la respuesta tiene un paso `page.next`, síguelo. Redactar un informe: qué se decidió, quién tomó qué y cuándo, qué cuestiones siguen abiertas. Dé a cada punto su fecha y autor.
 
 ## ¿Quién debe qué?
 
@@ -156,11 +156,11 @@ Escribe en Telegram: **no**. Permitir: `Bash(tg personal review:*)`, `Bash(tg pe
 
 ## Lo que no has respondido
 
-La forma más corta es `tg personal review --since-time 7d --unanswered --json`: preguntas que nadie respondió: a usted en chats individuales, a usted o a los administradores en grupos. La receta siguiente es más amplia: también detecta solicitudes sin signo de interrogación.
+La forma más corta es `tg personal review 'date>7d' --unanswered --json`: preguntas que nadie respondió: a usted en chats individuales, a usted o a los administradores en grupos. La receta siguiente es más amplia: también detecta solicitudes sin signo de interrogación.
 
 Escribe en Telegram: **no**. Permitir: `Bash(tg personal chats list:*)`, `Bash(tg personal messages list:*)`.
 
-> Ejecute `tg personal chats list --kind dialog --limit 30 --json`. Para cada chat cuyo último mensaje sea de los últimos 7 días, lea `tg personal messages list <chat id> --limit 5 --json`. Muestra los chats donde el último > mensaje no es mío y hace una pregunta o hace una petición: quién, sobre qué y hace cuántos días.
+> Ejecute `tg personal chats list kind:dialog --limit 30 --json`. Para cada chat cuyo último mensaje sea de los últimos 7 días, lea `tg personal messages list <chat id> --limit 5 --json`. Muestra los chats donde el último mensaje no es mío y hace una pregunta o hace una petición: quién, sobre qué y hace cuántos días.
 
 ## Encuentra algo que se dijo
 
@@ -182,7 +182,7 @@ Una vez aceptado, el agente lo envía: `tg personal messages send @example_user 
 
 Escribe en Telegram: **sólo si las reglas del grupo lo permiten**. Permitir: `Bash(tg personal review:*)`, `Bash(tg personal chats events:*)`, `Bash(tg personal chats members list:*)`, `Bash(tg personal chats moderate:*)`.
 
-> Ejecute `tg personal review --chat "Hiking" --unanswered 4h --json`, `tg personal chats events "Hiking" --since-time 7d
+> Ejecute `tg personal review 'chat:Hiking' --unanswered 4h --json`, `tg personal chats events "Hiking" "time>=7d"
 --json` y `tg personal chats moderate "Hiking" --dry-run --json`. Brevemente: qué preguntas esperan respuesta, de quién y desde cuándo; quién se unió o fue agregado esta semana y por quién; lo que encontró el cheque en contra de las reglas del grupo y lo que sugiere. No responda ni elimine a nadie: enumere los comandos que lo harían si estoy de acuerdo.
 
 Con planes `--dry-run`, `chats moderate` únicamente. Sin él, actúa hasta donde lo permiten las reglas del grupo, así que deje a `Bash(tg personal chats moderate:*)` fuera de la lista si el agente nunca debe actuar. Cada escenario para un grupo: [grupos que ejecuta](./groups.md).

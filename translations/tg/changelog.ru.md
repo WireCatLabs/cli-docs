@@ -4,6 +4,105 @@ title: "История изменений"
 
 Основные изменения `@wirecat/tg-cli` по версиям, от новых к старым. Используется [семантическое версионирование](https://semver.org); до `1.0.0` интерфейс команд может меняться.
 
+## 0.55.0 — 14.10.2026
+
+### Что нового
+
+- **Файлы читаются с диска по ходу отправки** (cli-core 0.272.0). `messages send --file`, `--photo`, `--voice`, фото
+  профиля и `tg bot` больше не читают весь файл в память заранее, и отказ для файлов от 2 ГиБ убран: действует
+  собственный лимит Telegram.
+
+### Изменено — может сломать скрипты
+
+- **Непрослушанное голосовое сообщение указывается в `missing`** (cli-core 0.274.0): `review`, `inbox` и `messages list`
+  добавляют `{field: "transcript", step: "messages.transcribe"}` для каждого голосового сообщения без сохранённой
+  расшифровки, поэтому ответ, в котором есть только голосовое сообщение, больше не выглядит полным.
+- **`tasks link <task> task:<id>` записывает связь между двумя задачами** (cli-core 0.274.0), с
+  `--kind
+  blocked-by`, `follow-up-of` или `related-to`.
+- **Следующий шаг с командой, которая меняет только этот компьютер, никогда не выполняется без спроса** (cli-core
+  0.273.0): шаги `server restart` и `store reindex` содержат `safe_to_auto_execute: false`.
+- **`mentions rebuild` принимает вид упоминаний аргументом**: `tg <profile> mentions rebuild person-name`, а не
+  `--kind` (cli-core 0.272.0).
+
+## 0.54.0 — 14.10.2026
+
+### Что нового
+
+- **`tg images embed`: поиск картинок по тому, что на них изображено** (cli-core 0.268.0). Выключен, пока не задано
+  `tg <profile> config set picture_search true`; один раз загрузите модель командой
+  `tg <profile> models image download clip-b32` (около 155 МБ), затем выполните `tg <profile> images embed [--chat] [--limit]`.
+  После этого `search messages` возвращает рядом с найденным список `pictures`. Запросы по картинкам пишутся на английском.
+
+- **`tg mentions`: телефоны, e-mail, ссылки и документы Google, найденные в сохранённых сообщениях** (cli-core 0.264.0,
+  версия хранилища 7). `mentions list kind:phone`, `mentions list domain:google.com`; простое слово — это значение,
+  записанное как угодно, поэтому `89001234567` находит `+79001234567`. `mentions show <id>` показывает текст вокруг
+  упоминания. Для сообщений, сохранённых до этой версии, нужно один раз выполнить `tg <profile> mentions rebuild`;
+  новые читаются при сохранении.
+
+- **Упоминания в файлах и голосовых сообщениях** (cli-core 0.269.0, версия хранилища 10). Текст, прочитанный
+  `attachments
+  extract`, и расшифровка голосового сообщения тоже дают упоминания, с `field` `file_text` или
+  `transcript`. Для вложений с текстом, полученным до версии 10, нужно один раз выполнить
+  `tg <profile> mentions rebuild`, который теперь также считает `attachments`.
+- **`tg mentions confirm <id> [person:<uid>|organization:<id>]` и `mentions reject <id>`** решают, кому принадлежит
+  телефон или адрес, или отклоняют его навсегда. Организация может владеть телефоном или адресом отдельно от любого
+  человека (версия хранилища 11; старые сборки продолжают работать).
+- **`phone:`, `email:`, `url:` и `domain:` в поиске сообщений** находят сообщения по тому, что упомянуто в их тексте:
+  `phone:"8 900 000-00-01"`, `email:"ana@example.com"`, `domain:docs.google.com`. У почты упоминаний пока нет.
+- **О сбоях расписания сообщается перед любой другой командой** одной строкой в stderr, пока следующий запуск не
+  пройдёт успешно; `schedule list` показывает серию сбоев.
+
+### Изменено — может сломать скрипты
+
+- **`contacts timeline` разбивается на страницы, как любой другой список:** список, обрезанный по `--limit`, отвечает
+  `page.has_more: true`, `page.cursor` и шагом `page.next` (`--cursor` продолжает); `meta.truncated` остаётся для
+  изменений, которые ещё в очереди. Заметки «cut at --limit» в stderr больше нет.
+- **Собрано на `@wirecat/cli-core` 0.269.0 и `@wirecat/cli-base` 0.27.2.**
+- **Каждый ответ — обёртка с ключами в snake_case.** Список — это `{items, page: {limit, has_more, cursor?}, next?,
+  missing?, meta}`, один объект — `{item, next?, missing?, meta}`; `meta.run_id` называет запуск. Это касается каждой
+  команды: сообщения, чаты, контакты, запись (`{item: {operation_id, send_id, message}}`), inbox, review, поиск,
+  статистика, хранилище, аккаунт, doctor, config, runs, `upgrade`, `bot *`, а также собственные `session start|end` и
+  `setup` в tg (`app_keys`, `already_logged_in`, `chats.has_more`). Что выполнить дальше, указывает шаг `next` вместо
+  полей вроде `nextBeforeId`, `nextOffset`, `nextCursor` и `hasMore`. Ответы MCP — те же обёртки, и инструменты MCP
+  отклоняют аргументы, которых не принимают.
+- **Списки принимают запрос, а не параметры фильтрации.** `chats list kind:group unread_count>0`,
+  `chats events "Hiking" time>=7d`, `messages list "Book club" id<4242`, `contacts list notes:<text>`,
+  `attachments list chat:<id> is:needs_text`, `store jobs list state:failed`, `inbox date>2h`,
+  `review date>3d chat:<id>`, `search messages 'chat:"Book club"
+  lease'`.
+  `--search`, `--kind`, `--unread`, `--type`, `--since-time`, `--before-id`, `--after-id`,
+  `--before-time`, `--after-time`, `--topic`, `--search-notes`, `--min-score`, `--revoked`, `--link`, `--answer`,
+  `--needs-text`, `--state`, `--chat` у review и `--chat` у search убраны из этих команд. `messages
+  evidence` и `chats media` продолжают через `--cursor` из `page.next`. `contacts list name:` требует сохранённых контактов.
+- **Блок Telegram в `doctor` — в snake_case:** `app_credentials`, `keyring_moved_by_environment`, `proxy.bot_api`.
+- **Подробности ошибок — в snake_case:** `provider_error` (было `providerError`); группа, ставшая супергруппой, сообщает
+  `migrated_chat_id` в отказе Bot API; преобразование в форум, которое могло произойти, сообщает `previous_chat_id` и
+  `chat_id`.
+- **Настройки файла конфигурации — в snake_case** (`keep_runs_for_days`, `sends_per_hour`, `read_only`, `default_profile`,
+  …). Существующий файл переводится сам при первом чтении.
+- **Журналы запусков — в snake_case** (`duration_ms`, `error_code`, `error_class`, `provider_error`); запуски, записанные
+  раньше, по-прежнему читаются.
+- **Отчёты статистики отклоняют `--jsonl`**: отчёт — это один объект. `stats chats show` называет свой чат ссылкой
+  `chat:`; `stats tasks show` отвечает одним объектом с `open` и `rows`.
+- **`--json=<fields>` заменяет `--fields` и `--agent-json`, которые убраны.** `--json=id,text` оставляет эти поля
+  у каждого объекта. JSON в CLI сохраняет текст сообщений как он написан; ответы MCP по-прежнему показывают невидимые символы.
+- **`tags list`, `tasks list` и `conversations list` принимают запрос вместо параметров фильтрации.**
+  `tags list tag:work type:chat`, `tags list sources:auto`; `tasks list state:open kind:promise chat:<id>`;
+  `conversations list <chat> started_at>=7d`. `--tag`, `--type`, `--source`, `--state`, `--chat`, `--before-time`
+  и `--since-time` у этих списков убраны. Элементы — общие сущности: тег называет то, на чём стоит, как `target`,
+  обсуждение сообщает `messages_count`, `started_at`, `first_message`.
+- **Записи запусков хранят только перечисленные ключи атрибутов.** Id сообщения в `ids.message` пока отбрасывается,
+  поэтому `runs search <message id>` его не находит (сообщено в cli-core).
+
+### Исправлено
+
+- **Промпты MCP называют только аргументы, которые принимают инструменты.** `review` передаёт своё окно как `query`
+  (`date>"…"`).
+- **`tg <profile> bot messages delete` принимает больше 100 сообщений.** Он отправлял все id одним вызовом, а Telegram
+  принимает не больше 100, поэтому более длинный список завершался ошибкой. Теперь он отправляет их по 100; если
+  следующий вызов не удаётся, ошибка говорит, сколько уже удалено.
+
 ## 0.53.0 — 14.10.2026
 
 ### Изменено — может сломать скрипты

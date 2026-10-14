@@ -143,9 +143,9 @@ OpenClaw или Hermes. Под агентом — WireCat: общее ядро �
 Находит чат, проверяет, что сохранено, и ищет только по сохранённой истории, как просили в запросе:
 
 ```sh
-tg personal chats list --search Atlas --kind group
+tg personal chats list 'title:*Atlas* kind:group' --offline
 tg personal store status -1001001001001
-tg personal search messages 'analytics date:[2026-09-01 TO 2026-10-01}' --chat -1001001001001 --backend archive --json
+tg personal search messages 'analytics date:[2026-09-01 TO 2026-10-01} chat:"-1001001001001"' --backend archive --json
 ```
 
 После вашего разрешения загружает период, снова проверяет полноту и читает сообщения вокруг найденного:
@@ -153,7 +153,7 @@ tg personal search messages 'analytics date:[2026-09-01 TO 2026-10-01}' --chat -
 ```sh
 tg personal messages sync -1001001001001 --since-time 2026-09-01 --limit 1000
 tg personal store status -1001001001001
-tg personal search messages 'analytics date:[2026-09-01 TO 2026-10-01}' --chat -1001001001001 --backend archive --json
+tg personal search messages 'analytics date:[2026-09-01 TO 2026-10-01} chat:"-1001001001001"' --backend archive --json
 tg personal messages context -1001001001001 4312 --before-n 2 --after-n 4
 ```
 
@@ -215,12 +215,12 @@ Telegram находит только слова, поэтому для чтен�
 Находит чаты и просматривает обе стороны каждого разговора:
 
 ```sh
-tg personal chats list --search Atlas --kind group
-tg personal contacts list --search Anna
-tg personal contacts list --search Tom
-tg personal review --chat -1001001001001 --since-time 7d
-tg personal review --chat 100200300 --since-time 7d
-tg personal review --chat 100200301 --since-time 7d
+tg personal chats list 'title:*Atlas* kind:group' --offline
+tg personal contacts show Anna
+tg personal contacts show Tom
+tg personal review 'chat:"-1001001001001" date>7d'
+tg personal review 'chat:100200300 date>7d'
+tg personal review 'chat:100200301 date>7d'
 ```
 
 Затем проверяет исходное обещание и ответы на него:
@@ -284,20 +284,20 @@ tg personal messages context 100200300 201 --before-n 2 --after-n 5
 Находит группы и участников, затем читает выбранные чаты:
 
 ```sh
-tg personal chats list --search Atlas --kind group
-tg personal contacts list --search Anna
-tg personal contacts list --search Tom
-tg personal messages list -1001001001001 --after-time 7d --limit 100
-tg personal messages list -1001001001002 --after-time 7d --limit 100
-tg personal messages list 100200300 --after-time 7d --limit 100
-tg personal messages list 100200301 --after-time 7d --limit 100
+tg personal chats list 'title:*Atlas* kind:group' --offline
+tg personal contacts show Anna
+tg personal contacts show Tom
+tg personal messages list -1001001001001 'date>7d' --limit 100
+tg personal messages list -1001001001002 'date>7d' --limit 100
+tg personal messages list 100200300 'date>7d' --limit 100
+tg personal messages list 100200301 'date>7d' --limit 100
 ```
 
 Для уточнения читает сообщения после того, как пришёл дизайн:
 
 ```sh
 tg personal messages context -1001001001002 732 --before-n 2 --after-n 10
-tg personal messages list 100200300 --after-time 2026-10-02T12:00:00+02:00 --limit 50
+tg personal messages list 100200300 'date>"2026-10-02T12:00:00+02:00"' --limit 50
 ```
 
 </details>

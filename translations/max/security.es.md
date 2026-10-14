@@ -76,12 +76,12 @@ Por qué hace falta la protección de envíos y cómo funciona se explica en la 
 | prohibir escrituras en mensajes salvo autorizaciones más específicas | `max agent config set permissions.messages readonly`; limita otros recursos por separado | código `5`, sin conexión |
 | permitir envíos y prohibir otras escrituras en mensajes | primero `max agent config set permissions.messages readonly` y después `max agent config set permissions.messages.send allow`; conserva otros recursos y reglas más específicas | código `5` para acciones prohibidas, sin conexión |
 | destinatarios permitidos | `max <профиль> recipients add <чат>`; desactivar con `recipients clear` | código `7` |
-| máximo por hora: mensajes, reenvíos, ediciones, fijados con aviso, eliminados y personas añadidas; no reacciones | `sendsPerHour`, predeterminado `30` | código `8`, indica cuándo reintentar |
+| máximo por hora: mensajes, reenvíos, ediciones, fijados con aviso, eliminados y personas añadidas; no reacciones | `sends_per_hour`, predeterminado `30` | código `8`, indica cuándo reintentar |
 | registro de cada intento, sin texto | siempre; `max personal sends list` | — |
 
-**Los bots tienen claves propias `bot.*`, como `bot.messages.send`.** Usan los mismos niveles. Los ajustes comunes y las capas `bot.defaults`/`bot.profiles` se resuelven en el mismo orden; `config show --bot` muestra los permisos efectivos. Los antiguos `readOnly` y `allow` siguen siendo compatibles antes de migrar.
+**Los bots tienen claves propias `bot.*`, como `bot.messages.send`.** Usan los mismos niveles. Los ajustes comunes y las capas `bot.defaults`/`bot.profiles` se resuelven en el mismo orden; `config show --bot` muestra los permisos efectivos. Los antiguos `read_only` y `allow` siguen siendo compatibles antes de migrar.
 
-Cada bot tiene destinatarios (`max <имя> bot recipients add <чат>`) y registro (`max <имя> bot sends list`) propios. **Toda** escritura pasa por ellos, incluidos `messages send`, `messages pin` y `bot api`, para evitar eludir controles con API genérica. Edición y eliminación reciben primero el chat; `max` consulta el mensaje y rechaza si pertenece a otro. No hace esa comprobación para `user:<id>`. Registra chat, tipo, resultado y longitud, nunca texto. No hay límite por hora de bots hasta definirlo en `bot`: `max <имя> config set --bot sendsPerHour 200`.
+Cada bot tiene destinatarios (`max <имя> bot recipients add <чат>`) y registro (`max <имя> bot sends list`) propios. **Toda** escritura pasa por ellos, incluidos `messages send`, `messages pin` y `bot api`, para evitar eludir controles con API genérica. Edición y eliminación reciben primero el chat; `max` consulta el mensaje y rechaza si pertenece a otro. No hace esa comprobación para `user:<id>`. Registra chat, tipo, resultado y longitud, nunca texto. No hay límite por hora de bots hasta definirlo en `bot`: `max <имя> config set --bot sends_per_hour 200`.
 
 **El servidor en segundo plano `max personal serve` realiza las mismas comprobaciones** para todo lo que pasa por él, incluidas las solicitudes de programas conectados directamente a su socket en lugar de mediante `max`. Solo acepta solicitudes que conoce `max`, con la forma en que las envía `max`; por ejemplo, rechaza eliminar un chat completo. Los cambios mediante `config set` se aplican de inmediato sin reiniciar el servidor.
 
@@ -121,7 +121,7 @@ El token no se pasa como argumento, pero el texto de un mensaje sí, y se ve en 
 | Servicio externo de vectores configurado | `conversations embed` envía texto de conversaciones tras el consentimiento; `search conversations`, incluido MCP, envía la pregunta al seleccionar un servicio externo |
 | Servicio compatible con OpenAI o Anthropic configurado | `conversations build --analyze --chat` envía lotes limitados tras el consentimiento para la cuenta, el chat y el servicio |
 | `https://platform-api2.max.ru`, Bot API oficial, token en `Authorization` | solo `max sales bot` |
-| registro npm para comprobar versiones | `max upgrade` y una vez al día desde terminal; se desactiva con `updateCheck: false` |
+| registro npm para comprobar versiones | `max upgrade` y una vez al día desde terminal; se desactiva con `update_check: false` |
 
 `max personal messages download` usa HTTP(S) y redirecciones normales sin comprobar las direcciones DNS. El comando no prohíbe VPN, proxies ni direcciones locales. Límite de archivos: 4 GiB; voz para transcripción: 32 MiB.
 
@@ -176,4 +176,4 @@ max personal session end        # выйти из MAX и забыть локал
 - [Diagnóstico](./diagnostics.md): qué se registra exactamente y qué nunca se registra
 - [Inicio de sesión, sesiones y perfiles](./sessions.md): llaveros, `MAX_TOKEN`, qué hace `session end`
 - [MCP](./mcp.md): qué puede hacer el agente a través del servidor MCP y qué activa cada flag
-- [Permisos](./permissions.md): cómo configurar `permissions` y `sendsPerHour`
+- [Permisos](./permissions.md): cómo configurar `permissions` y `sends_per_hour`

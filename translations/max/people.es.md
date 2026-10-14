@@ -33,7 +33,7 @@ max personal contacts profile 20000002
 max personal contacts profile 20000002 --json
 ```
 
-El comando muestra lo que MAX informa sobre la persona y cuántos mensajes suyos están guardados localmente en cada chat compartido:
+El comando muestra lo que MAX informa sobre la persona y cuántos mensajes suyos están guardados localmente en cada chat compartido. En JSON es el campo `item` de la respuesta, igual que en `contacts context` y `contacts check` más abajo:
 
 ```json
 {
@@ -44,24 +44,24 @@ El comando muestra lo que MAX informa sobre la persona y cuántos mensajes suyos
   "phone": "***0123",
   "flags": { "bot": false },
   "registered": { "at": "2021-03-14T00:00:00.000Z", "source": "max", "precision": "day" },
-  "hasPhoto": true,
+  "has_photo": true,
   "seen": "2026-10-08T07:12:00.000Z",
   "chats": [
-    { "id": "30000003", "title": "Пример Примеров", "kind": "dialog", "theirMessages": 128,
-      "firstAt": "2024-02-11T09:14:00.000Z", "lastAt": "2026-10-05T18:02:00.000Z", "complete": true },
-    { "id": "-40000004", "title": "Книжный клуб", "kind": "group", "theirMessages": 37,
-      "firstAt": "2025-06-01T10:00:00.000Z", "lastAt": "2026-09-30T20:41:00.000Z", "complete": false }
+    { "id": "30000003", "title": "Пример Примеров", "kind": "dialog", "their_messages": 128,
+      "first_at": "2024-02-11T09:14:00.000Z", "last_at": "2026-10-05T18:02:00.000Z", "complete": true },
+    { "id": "-40000004", "title": "Книжный клуб", "kind": "group", "their_messages": 37,
+      "first_at": "2025-06-01T10:00:00.000Z", "last_at": "2026-09-30T20:41:00.000Z", "complete": false }
   ],
   "aliases": [
-    { "name": "Пример П.", "firstSeenAt": "2024-03-02T08:00:00.000Z",
-      "lastSeenAt": "2024-03-02T08:00:00.000Z", "source": "profile" }
+    { "name": "Пример П.", "first_seen_at": "2024-03-02T08:00:00.000Z",
+      "last_seen_at": "2024-03-02T08:00:00.000Z", "source": "profile" }
   ]
 }
 ```
 
 - **`registered`**: la fecha de creación de la cuenta según el propio MAX (`source: max`). No es una estimación.
 - **`flags`**: `bot: true` identifica un bot. MAX no proporciona marcas de estafador o verificado para cuentas personales.
-- **`hasPhoto`**: si la persona tiene foto de perfil.
+- **`has_photo`**: si la persona tiene foto de perfil.
 - **`seen`**: cuándo estuvo la persona en MAX por última vez, o `online`. Se consulta MAX aparte en cada llamada; el campo no aparece si MAX no comunica presencia.
 - **`phone`**: solo los últimos cuatro dígitos, y únicamente si MAX te muestra el número. `--show-phone` imprime el número completo. La herramienta MCP siempre lo oculta.
 - **`chats`**: todos los chats compartidos y cualquier otro chat donde el archivo local contenga mensajes de esa persona.
@@ -71,7 +71,7 @@ El comando realiza una solicitud adicional a MAX respecto a `contacts show` y no
 
 ### Los recuentos describen la copia guardada
 
-`theirMessages`, `firstAt` y `lastAt` se calculan a partir de el archivo local, no se solicitan a MAX. Si `complete: false`, el chat no está guardado desde el principio: el recuento es un mínimo y `firstAt` puede ser posterior al primer mensaje real de esa persona. Descarga el chat para completarlo:
+`their_messages`, `first_at` y `last_at` se calculan a partir de el archivo local, no se solicitan a MAX. Si `complete: false`, el chat no está guardado desde el principio: el recuento es un mínimo y `first_at` puede ser posterior al primer mensaje real de esa persona. Descarga el chat para completarlo:
 
 ```sh
 max personal messages sync "Книжный клуб"
@@ -130,13 +130,13 @@ max personal contacts check 20000002
     { "reason": "link_first", "weight": 2, "source": "store" }
   ],
   "registries": [
-    { "name": "cas", "answer": "unknown", "checkedAt": "2026-10-07T08:00:00.000Z",
+    { "name": "cas", "answer": "unknown", "checked_at": "2026-10-07T08:00:00.000Z",
       "detail": "lists Telegram accounts only, not max" },
-    { "name": "lols", "answer": "unknown", "checkedAt": "2026-10-07T08:00:00.000Z",
+    { "name": "lols", "answer": "unknown", "checked_at": "2026-10-07T08:00:00.000Z",
       "detail": "lists Telegram accounts only, not max" }
   ],
   "unknown": [],
-  "checkedAt": "2026-10-07T08:00:00.000Z"
+  "checked_at": "2026-10-07T08:00:00.000Z"
 }
 ```
 
@@ -190,7 +190,7 @@ max personal contacts notes list "Борис Пример"
 max personal contacts notes edit "Борис Пример" <id> --revision 1 --file note.txt
 max personal contacts notes remove "Борис Пример" <id>
 max personal contacts show "Борис Пример" --with-notes
-max personal contacts list --search-notes квартира             # люди, в чьих заметках есть этот текст
+max personal contacts list notes:квартира                     # люди, в чьих заметках есть этот текст
 ```
 
 Los apodos y las notas se guardan en una archivo local y nunca van a MAX. El apodo es válido sólo en la cuenta con la que estás trabajando; una nota sobre una persona es visible en cada perfil de inicio de sesión `max` en esa computadora donde aparece esa persona. `contacts rename` cambia el nombre en la libreta de direcciones MAX, eso es diferente. El comando busca una persona que usa su apodo si el apodo no coincide con el nombre de otra persona; de lo contrario necesitas una identificación. `--revision` no le permite cambiar una nota si se cambió después de leerla. Actualizar los contactos conserva las notas y los apodos, y vincular personas no los fusiona.

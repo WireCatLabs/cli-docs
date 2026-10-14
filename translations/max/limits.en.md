@@ -30,7 +30,7 @@ waiting 12 s to keep this profile's pace with MAX
 Change the request rate in the configuration file or use an environment variable for one environment:
 
 ```json
-{ "defaults": { "requestsPerMinute": 10 } }
+{ "defaults": { "requests_per_minute": 10 } }
 ```
 
 ```sh
@@ -47,7 +47,7 @@ MAX_REQUESTS_PER_MINUTE=10 max personal messages sync Друзья
 
 ## Sending
 
-- **30 sends per hour** per profile by default (`sendsPerHour`), across all processes together; exceeding the limit returns code `8`. See [protection against sending to the wrong place](./security.md#защита-от-отправки-не-туда).
+- **30 sends per hour** per profile by default (`sends_per_hour`), across all processes together; exceeding the limit returns code `8`. See [protection against sending to the wrong place](./security.md#защита-от-отправки-не-туда).
 - `max` does not automatically retry a send whose outcome is unknown. MAX recognises a retry with the same `--send-id` and does not create a second message.
 
 ## Download history

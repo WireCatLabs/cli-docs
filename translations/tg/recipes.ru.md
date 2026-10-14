@@ -69,7 +69,7 @@ for key in messages reactions polls topics chats contacts account conversations 
   tg config set permissions.$key readonly
 done
 tg config show                       # check the permissions in force
-tg config set sendsPerHour 5         # or: at most five sends an hour
+tg config set sends_per_hour 5         # or: at most five sends an hour
 tg personal recipients add "Book club"  # and only to the chats on this list
 ```
 
@@ -125,9 +125,9 @@ cron запускает задания с почти пустой средой. 
 
 - `tg personal inbox` — непрочитанное, как считает Telegram: то, что вы не открывали ни на одном устройстве.
 - `tg personal inbox --new` — с момента последнего запуска `--new`. Только `tg` знает эту точку; никто больше этого не видит.
-- `tg personal inbox --since-time 2d` — последние два дня; сохраненная точка остается там, где она была.
+- `tg personal inbox 'date>2d'` — последние два дня; сохраненная точка остается там, где она была.
 
-Ни одна из этих команд не отмечает ничего прочитанным. Для этого добавьте `--mark-read` или включите `catchUpMarksRead` в [настройках](./configuration.md). Другая сторона увидит, что вы это прочитали.
+Ни одна из этих команд не отмечает ничего прочитанным. Для этого добавьте `--mark-read` или включите `catch_up_marks_read` в [настройках](./configuration.md). Другая сторона увидит, что вы это прочитали.
 
 ### Прямые чаты, группы и каналы отдельно
 
@@ -145,8 +145,8 @@ channel --json` и просьба выбрать самое важное. Без
 
 Изменения в Telegram: **нет**. Разрешите: `Bash(tg personal messages list:*)`.
 
-> Читайте последние 7 дней чата "Книжный клуб": `tg personal messages list "Book club" --after-time 7d --limit 200
-> --json`. Если в ответе написано `"hasMore": true`, читайте дальше. Напишите отчет: что решено, кто что взял на себя и к какому сроку, какие вопросы еще открыты. Укажите каждому пункту дату и автора.
+> Читайте последние 7 дней чата "Книжный клуб": `tg personal messages list "Book club" "date>7d" --limit 200
+> --json`. Если в ответе есть шаг `page.next`, выполните его. Напишите отчет: что решено, кто что взял на себя и к какому сроку, какие вопросы еще открыты. Укажите каждому пункту дату и автора.
 
 ## Кто что должен
 
@@ -158,11 +158,11 @@ channel --json` и просьба выбрать самое важное. Без
 
 ## Что осталось без вашего ответа
 
-Самая короткая форма — `tg personal review --since-time 7d --unanswered --json`: вопросы, на которые никто не ответил — вам в личных чатах, вам или администраторам в группах. Сценарий ниже шире: он также ловит запросы без вопросительного знака.
+Самая короткая форма — `tg personal review 'date>7d' --unanswered --json`: вопросы, на которые никто не ответил — вам в личных чатах, вам или администраторам в группах. Сценарий ниже шире: он также ловит запросы без вопросительного знака.
 
 Изменения в Telegram: **нет**. Разрешите: `Bash(tg personal chats list:*)`, `Bash(tg personal messages list:*)`.
 
-> Запустите `tg personal chats list --kind dialog --limit 30 --json`. Для каждого чата, последнее сообщение которого было получено за последние 7 дней, прочитайте `tg personal messages list <chat id> --limit 5 --json`. Показать чаты, где последнее сообщение не мое и задает вопрос или делает запрос: кто, о чем и сколько дней назад.
+> Запустите `tg personal chats list kind:dialog --limit 30 --json`. Для каждого чата, последнее сообщение которого было получено за последние 7 дней, прочитайте `tg personal messages list <chat id> --limit 5 --json`. Показать чаты, где последнее сообщение не мое и задает вопрос или делает запрос: кто, о чем и сколько дней назад.
 
 ## Найдите то, что было сказано
 
@@ -184,7 +184,7 @@ channel --json` и просьба выбрать самое важное. Без
 
 Изменения в Telegram: **только если правила группы это позволяют**. Разрешите: `Bash(tg personal review:*)`, `Bash(tg personal chats events:*)`, `Bash(tg personal chats members list:*)`, `Bash(tg personal chats moderate:*)`.
 
-> Запустите `tg personal review --chat "Hiking" --unanswered 4h --json`, `tg personal chats events "Hiking" --since-time 7d
+> Запустите `tg personal review 'chat:Hiking' --unanswered 4h --json`, `tg personal chats events "Hiking" "time>=7d"
 > --json` и `tg personal chats moderate "Hiking" --dry-run --json`. Кратко: какие вопросы ждут ответа, от кого и с каких пор; кто присоединился или был добавлен на этой неделе и кем; что проверка выявила против правил группы и что она предполагает. Не отвечайте и не удаляйте никого — перечислите команды, которые сделают это, если я согласен.
 
 С `--dry-run` команда `chats moderate` только составляет план. Без него он действует настолько, насколько позволяют правила группы, поэтому оставьте `Bash(tg personal chats moderate:*)` вне списка, если агент никогда не должен действовать. Каждый сценарий для группы: [группы, которыми вы управляете](./groups.md).

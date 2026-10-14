@@ -30,7 +30,7 @@ waiting 12 s to keep this profile's pace with MAX
 Cambia el ritmo de solicitudes en el archivo de configuración o utiliza una variable de entorno para un entorno concreto:
 
 ```json
-{ "defaults": { "requestsPerMinute": 10 } }
+{ "defaults": { "requests_per_minute": 10 } }
 ```
 
 ```sh
@@ -47,7 +47,7 @@ MAX_REQUESTS_PER_MINUTE=10 max personal messages sync Друзья
 
 ## Enviar
 
-- **30 envíos por hora** por perfil predeterminado (`sendsPerHour`), en todos los procesos juntos; arriba: falla con el código `8`. Consulte [protección contra mala dirección](./security.md#защита-от-отправки-не-туда).
+- **30 envíos por hora** por perfil predeterminado (`sends_per_hour`), en todos los procesos juntos; arriba: falla con el código `8`. Consulte [protección contra mala dirección](./security.md#защита-от-отправки-не-туда).
 - `max` no repite el envío propiamente dicho, que puede haber llegado o no: la repetición con el mismo `--send-id` MAX reconoce y no crea un segundo mensaje.
 
 ## Descargar el historial

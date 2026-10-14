@@ -1,15 +1,15 @@
 {
   "tg": {
-    "version": "v0.53.0",
+    "version": "v0.55.0",
     "roadmapSha256": "978bfe805c38732b567388b00cbe701d12721599bc2d3e8dae060fee8f83baab",
     "reviewedAt": "2026-10-14",
-    "conclusion": "Reviewed 0.47.0-0.53.0: messages list --limit pages past 100 and carries poll results; comment paging reports hasMore correctly; --source takes account lists and groups; the shared store upgrades (facts table, project keys, label review); macOS folders move to the Linux paths; purging an account drops people only it had seen; date:>= colon comparisons parse; tasks gain plans, links and an agenda with the follow-ups skill; search hits return an excerpt (--full for the whole text) and --brief/--full work everywhere; tg schedule runs a command or a read-only agent on a timer; TG_READ_ONLY=1 refuses every write; store fetch is renamed messages sync; one error object with details and --debug; the store and speech models move to the WireCat folder; tg no longer picks a profile and stops with exit code 2; HTML files are read as their main text; machine output keys are snake_case; defaultProfile can be set without a profile and MCP entries name the profile. Roadmap unchanged: several photos in one message, private chat notes and the max-only features remain planned; none of them shipped."
+    "conclusion": "Reviewed 0.54.0-0.55.0: tg mentions (phones, e-mail, links, Google documents, and in 0.55.0 known people's names) with confirm, reject, rebuild <kind> and the phone:, email:, url:, domain:, mentions: search fields; mentions in files and voice notes; images embed for picture search; every answer an envelope with snake_case keys; contacts timeline pages; a failing schedule is reported first; files upload from disk without the 2 GiB refusal; unheard voice messages named in missing; tasks link task:<id>; local-only next steps are never auto-run. Roadmap unchanged: several photos in one message, private chat notes and the max-only features remain planned; none of them shipped."
   },
   "max": {
-    "version": "v0.49.0",
+    "version": "v0.51.0",
     "roadmapSha256": "f1628c3c19b2ea49f41fb57147b92bb0f9d29081ed577d1be3755a8a35b2a961",
     "reviewedAt": "2026-10-14",
-    "conclusion": "Reviewed 0.45.5-0.49.0: chat joins and contact imports count toward sendsPerHour; search fixes cross-account server results and accepts account groups in --source; macOS folders move to the Linux paths; tasks gain plans, links and an agenda; date:>= comparisons parse; search hits return an excerpt (--full for the whole text) and --brief/--full work everywhere; max schedule runs a command or a read-only agent on a timer; MAX_READ_ONLY=1 forbids every send; store fetch is renamed messages sync; one error object with details; shared archive and speech models move to the WireCat folder; max no longer picks a profile itself and stops with exit code 2. Roadmap unchanged: optional local copy, event-triggered actions, round videos, cloud password management and standalone installers remain planned; max schedule runs on a timer, not on a new message."
+    "conclusion": "Reviewed 0.50.0-0.51.0: max mentions (phones, e-mail, links, Google documents) with confirm, reject, rebuild, mentions in files and voice notes and the phone:, email:, url:, domain: search fields; each watch subscriber has its own queue and the largest is cut on overflow; --json=<fields> replaces --fields and --agent-json; tags, tasks and conversations lists take a query; serve keeps the login when closed mid-answer; snake_case error keys; contacts timeline pages; the 2 GiB file and 100-member limits are named. Roadmap unchanged: an optional no-local-copy mode, actions on events, video circles, cloud password and standalone installers remain planned; none of them shipped."
   },
   "zm": {
     "version": "v0.13.0",

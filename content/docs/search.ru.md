@@ -109,8 +109,8 @@ max personal search messages 'exact:"счёт оплачен"'
 <summary>Дополнительно: команды для терминала</summary>
 
 ```sh
-tg personal search messages счёт --chat "Проект"
-max personal search messages счёт --chat "Проект"
+tg personal search messages 'счёт chat:"Проект"'
+max personal search messages 'счёт chat:"Проект"'
 ```
 
 </details>

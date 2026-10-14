@@ -35,8 +35,7 @@ max [профиль] [опции] <команда> <действие> [аргу�
 |---|---|
 | `-V, --version` | output the version number. |
 | `-v, --verbose` | more detail in what is shown: -v ids, -vv everything we know. По умолчанию: `0`. |
-| `--json` | machine-readable output: one JSON value on stdout, nothing else. |
-| `--agent-json` | JSON для ИИ-агента: невидимые управляющие символы показаны явно; обычный --json сохраняет текст. |
+| `--json` | machine-readable output: one JSON value on stdout; --json=id,text keeps only those fields. |
 | `--jsonl` | machine-readable output: one JSON object per line, for streaming and jq. |
 | `--quiet` | diagnostics off. |
 | `--trace` | one line per request on stderr: ids and timings, never message content. |
@@ -46,7 +45,6 @@ max [профиль] [опции] <команда> <действие> [аргу�
 | `--no-input` | не запрашивать ввод и не открывать интерактивный вход; ввод через канал остаётся доступным. |
 | `--max-input-bytes <bytes>` | максимальный размер буферизованного ввода в байтах (по умолчанию: 16777216). |
 | `--max-output-bytes <bytes>` | максимальный размер машинного вывода в байтах (по умолчанию: 4194304; 0 отключает ограничение). |
-| `--fields <paths>` | поля элементов или объекта через запятую: id,text; сохранять пагинацию и идентификаторы операций. |
 | `--brief` | найденные сообщения и письма — только ссылка, название, время, отправитель и отрывок. |
 | `--full` | найденные сообщения и письма целиком, со всеми полями провайдера. |
 | `--dry-run` | предварительно показать разобранные аргументы и разрешения перед выполнением действия. |
@@ -147,8 +145,12 @@ where else this account is logged in — not `max session`, which is this tool's
 every device and app logged in to this account; nothing is ended
 
 ```sh
-max account sessions list
+max account sessions list [query]
 ```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | условия поле:значение; этот список пока ни по одному полю не фильтрует. |
 
 #### `max account sessions end`
 
@@ -232,20 +234,21 @@ the chats this account is in
 
 ### `max chats list`
 
-chats, newest first, archived ones included
+чаты, новые первыми, включая архивные; запрос выполняется по локальному хранилищу, поэтому в онлайне, где мессенджер ничего не фильтрует, нужен --offline
 
 ```sh
-max chats list [options]
+max chats list [query] [options]
 ```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | условия поле:значение, сужающие список; поля перечислены ниже. |
 
 | Опция | Что делает |
 |---|---|
 | `--limit <n>` | сколько показать. |
 | `--page <n>` | какая страница, начиная с 1. |
 | `--all` | все строки, без страниц. |
-| `--search <text>` | only chats whose name contains this; at least 3 characters. |
-| `--kind <kind>` | only chats of this kind: dialog, group, channel, saved. |
-| `--unread` | only chats with unread messages. |
 
 ### `max chats show`
 
@@ -261,20 +264,16 @@ max chats show <chat>
 
 ### `max chats events`
 
-who joined, left, was added or removed, and by whom — from the chat's service messages
+кто вошёл, вышел, был добавлен или удалён и кем — по служебным сообщениям чата; за последние 7 дней, если запрос не задаёт время
 
 ```sh
-max chats events <chat> [options]
+max chats events <chat> [query]
 ```
 
 | Аргумент | | Что это |
 |---|---|---|
 | `chat` | обязательный | чат: его ID или часть названия. |
-
-| Опция | Что делает |
-|---|---|
-| `--since-time <time>` | ISO 8601 или 2h / 1d назад; если не указано — 7 дней назад. |
-| `--type <names>` | only these, comma-separated: join, leave, add, remove, create, title, pin. |
+| `query` | необязательный | условия поле:значение, сужающие список; поля перечислены ниже. |
 
 ### `max chats inspect`
 
@@ -363,12 +362,13 @@ who is in a group
 everyone in a group, a page at a time, with their role and when they were last seen
 
 ```sh
-max chats members list <chat> [options]
+max chats members list <chat> [query] [options]
 ```
 
 | Аргумент | | Что это |
 |---|---|---|
 | `chat` | обязательный | чат: его ID или часть названия. |
+| `query` | необязательный | условия поле:значение; этот список пока ни по одному полю не фильтрует. |
 
 | Опция | Что делает |
 |---|---|
@@ -381,17 +381,17 @@ max chats members list <chat> [options]
 members that look like bots, each with its reasons — read from the member list and the local store; never one request per person, and it removes nobody
 
 ```sh
-max chats members audit <chat> [options]
+max chats members audit <chat> [query] [options]
 ```
 
 | Аргумент | | Что это |
 |---|---|---|
 | `chat` | обязательный | чат: его ID или часть названия. |
+| `query` | необязательный | условия поле:значение, сужающие список; поля перечислены ниже. |
 
 | Опция | Что делает |
 |---|---|
 | `--budget <pages>` | at most this many pages of 200 members, a pause between them (default: 10). |
-| `--min-score <n>` | only members scoring at least this; 1 lists everyone with a reason (default: 2). |
 | `--deep <n>` | также полностью проверить первых n человек — профиль, фотографии и все их сообщения — по одному человеку в секунду; публичные списки блокировок относятся только к Telegram, поэтому ничего не отправляется. |
 
 #### `max chats members history`
@@ -399,16 +399,13 @@ max chats members audit <chat> [options]
 who joined, who left and whose profile changed, oldest first — what chats members fetch recorded in the local store; never asks the messenger
 
 ```sh
-max chats members history <chat> [options]
+max chats members history <chat> [query]
 ```
 
 | Аргумент | | Что это |
 |---|---|---|
 | `chat` | обязательный | чат: его ID или часть названия. |
-
-| Опция | Что делает |
-|---|---|
-| `--since-time <time>` | ISO 8601, or 2h / 1d ago; everything recorded if not given. |
+| `query` | необязательный | условия поле:значение, сужающие список; поля перечислены ниже. |
 
 #### `max chats members fetch`
 
@@ -611,18 +608,18 @@ max chats link reset <chat>
 ожидающие заявки на вступление в канал MAX, где нужно одобрение; только для администраторов; requestedAt равен null
 
 ```sh
-max chats requests list <chat> [options]
+max chats requests list <chat> [query] [options]
 ```
 
 | Аргумент | | Что это |
 |---|---|---|
 | `chat` | обязательный | чат: его ID или часть названия. |
+| `query` | необязательный | условия поле:значение, сужающие список; поля перечислены ниже. |
 
 | Опция | Что делает |
 |---|---|
-| `--limit <n>` | сколько результатов. |
-| `--search <text>` | только люди, у которых имя или @username содержит этот текст. |
-| `--link <link>` | MAX не поддерживает; вместо этого ищите по имени. |
+| `--limit <n>` | сколько показать. |
+| `--page <n>` | какая страница, начиная с 1. |
 
 #### `max chats requests accept`
 
@@ -673,8 +670,12 @@ your chat folders
 your chat folders, in the order the app shows them
 
 ```sh
-max chats folders list
+max chats folders list [query]
 ```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | условия поле:значение; этот список пока ни по одному полю не фильтрует. |
 
 #### `max chats folders show`
 
@@ -838,7 +839,7 @@ max chats media <chat> [options]
 |---|---|
 | `--type <names>` | только эти типы через запятую: photo, video, file, audio, link. |
 | `--limit <n>` | сколько показать. |
-| `--before-id <id>` | читать то, что старше этого id сообщения. |
+| `--cursor <cursor>` | продолжить с места, где, по page.next, остановилась прошлая страница. |
 
 ### `max chats mute`
 
@@ -950,11 +951,15 @@ people you have a one-to-one chat with
 
 ### `max contacts list`
 
-people you have a one-to-one chat with
+люди, с которыми у вас есть личный чат; name: ищет по имени, локальному псевдониму или @username, notes: — по вашим личным заметкам о них
 
 ```sh
-max contacts list [options]
+max contacts list [query] [options]
 ```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | условия поле:значение, сужающие список; поля перечислены ниже. |
 
 | Опция | Что делает |
 |---|---|
@@ -962,8 +967,6 @@ max contacts list [options]
 | `--page <n>` | какая страница, начиная с 1. |
 | `--all` | все строки, без страниц. |
 | `--order <recent\|name>` | newest conversation first, or alphabetical. По умолчанию: `recent`. |
-| `--search <text>` | только люди, у которых имя, локальный псевдоним или @username содержит этот текст. |
-| `--search-notes <text>` | только люди, в личных заметках о которых есть этот текст. |
 
 ### `max contacts show`
 
@@ -1039,12 +1042,13 @@ max contacts alias rm <person>
 
 
 ```sh
-max contacts notes list <person>
+max contacts notes list <person> [query]
 ```
 
 | Аргумент | | Что это |
 |---|---|---|
 | `person` | обязательный |  |
+| `query` | необязательный | условия поле:значение; этот список пока ни по одному полю не фильтрует. |
 
 #### `max contacts notes show`
 
@@ -1251,6 +1255,7 @@ max contacts timeline <person> [options]
 | `--since-time <time>` | nothing older than this ISO 8601 time, or 2h / 1d ago. |
 | `--until-time <time>` | through this ISO 8601 time, or 2h / 1d ago. |
 | `--limit <n>` | at most this many; 50 if not given. |
+| `--cursor <cursor>` | продолжить с места, где остановилась прошлая страница; его даёт page.next, с теми же фильтрами. |
 
 ### `max contacts check`
 
@@ -1302,20 +1307,18 @@ read and send messages in a chat
 a chat's messages, oldest to newest
 
 ```sh
-max messages list <chat> [options]
+max messages list <chat> [query] [options]
 ```
 
 | Аргумент | | Что это |
 |---|---|---|
 | `chat` | обязательный | чат: его ID или часть названия. |
+| `query` | необязательный | откуда начать и какая тема: id<42, date>2026-10-01, topic:12. |
 
 | Опция | Что делает |
 |---|---|
 | `--limit <n>` | сколько результатов. |
-| `--before-id <id>` | только сообщения старше сообщения с этим ID. |
-| `--before-time <time>` | only messages older than this ISO 8601 time, or 2h / 1d ago. |
-| `--after-id <id>` | only messages newer than this message id. |
-| `--after-time <time>` | only messages newer than this ISO 8601 time, or 2h / 1d ago. |
+| `--cursor <cursor>` | продолжить с места, где остановилась прошлая страница; его даёт page.next. |
 | `--transcribe` | turn voice messages not heard yet into text — by the messenger, or a model on this machine; can take minutes. |
 | `--model <id>` | which downloaded speech model hears them, with --transcribe; `models audio list` shows them. |
 | `--mark-read` | also mark the chat read up to the newest message shown; the other person sees it. |
@@ -1418,7 +1421,7 @@ max messages evidence <chat> [options]
 | Опция | Что делает |
 |---|---|
 | `--limit <n>` | how many, 1–100. |
-| `--before-id <id>` | только сообщения старше сообщения с этим ID. |
+| `--cursor <cursor>` | продолжить с места, где, по page.next, остановился прошлый пакет. |
 
 ### `max messages sync`
 
@@ -1440,7 +1443,7 @@ max messages sync [chat] [options]
 | `--pause <duration>` | the least pause between pages, to stay under the provider's limits; each is up to twice that. По умолчанию: `5s`. |
 | `--since-time <time>` | stop once it reaches messages older than this: ISO 8601, or 2h / 1d ago. |
 | `--last <n>` | stop once the newest n messages are held. |
-| `--catch-up` | подготовить локальный поиск после этого запуска; важнее настройки searchCatchUp. |
+| `--catch-up` | подготовить локальный поиск после этого запуска; важнее настройки search_catch_up. |
 | `--no-catch-up` | не готовить локальный поиск после этого запуска. |
 | `--catch-up-chunks <n>` | не более указанного числа локальных векторных фрагментов. |
 | `--catch-up-messages <n>` | пропустить перестроение графа, если число сообщений превышает это значение. |
@@ -1673,7 +1676,7 @@ max store gaps repair <chat> [options]
 | `--page-size <n>` | число сообщений на страницу провайдера. |
 | `--pause <duration>` | пауза между страницами провайдера. По умолчанию: `5s`. |
 | `--fingerprint <hash>` | отказать, если этот ранее проверенный план охвата изменился. |
-| `--catch-up` | подготовить локальный поиск после устранения пробелов; переопределяет searchCatchUp. |
+| `--catch-up` | подготовить локальный поиск после устранения пробелов; переопределяет search_catch_up. |
 | `--no-catch-up` | пропустить подготовку локального поиска после устранения пробелов. |
 | `--catch-up-chunks <n>` | максимальное число подготавливаемых локальных фрагментов. |
 | `--catch-up-messages <n>` | максимальное число сохранённых сообщений, читаемых для подготовки. |
@@ -1689,12 +1692,18 @@ max store gaps repair <chat> [options]
 фоновые задания синхронизации, новые сверху
 
 ```sh
-max store jobs list [options]
+max store jobs list [query] [options]
 ```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | условия поле:значение, сужающие список; поля перечислены ниже. |
 
 | Опция | Что делает |
 |---|---|
-| `--state <state>` | Только задачи в состоянии `running`, `done`, `failed`, `cancelled` или `died`. |
+| `--limit <n>` | сколько показать. |
+| `--page <n>` | какая страница, начиная с 1. |
+| `--all` | все строки, без страниц. |
 
 #### `max store jobs show`
 
@@ -1748,7 +1757,7 @@ max store jobs clear
 
 ### `max store export`
 
-сохранённые сообщения чата, от старых к новым: --jsonl — одно сообщение на строку, --json — один объект { items, page, limit, hasMore }; к мессенджеру не обращается
+сохранённые сообщения чата, от старых к новым: --jsonl — по сообщению на строку, --json — список сообщений в общей обёртке; к мессенджеру не обращается
 
 ```sh
 max store export [chats] [options]
@@ -2266,15 +2275,15 @@ max stats charts <chat> [options]
 задачи, сначала самые старые, с их источником — сообщением или заметкой
 
 ```sh
-max tasks list [options]
+max tasks list [query] [options]
 ```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | условия поле:значение, сужающие список; поля перечислены ниже. |
 
 | Опция | Что делает |
 |---|---|
-| `--state <state>` | только задачи в этом состоянии: open, done или dismissed. |
-| `--chat <chat>` | только задачи этого чата; укажите его ID или часть названия. |
-| `--type <names>` | только эти типы через запятую: question, request, mention, promise. |
-| `--before-time <time>` | только задачи, открытые до этого времени в ISO 8601 или до момента 2h / 1d назад. |
 | `--limit <n>` | сколько результатов. |
 
 ### `max tasks add`
@@ -2351,8 +2360,12 @@ max tasks show <task>
 что нужно посмотреть сегодня — из локального хранилища и без текста сообщений: просроченные, близкие и требующие проверки задачи, чаты, где ждут вашего ответа, и чаты, где ответа ждёте вы
 
 ```sh
-max tasks agenda [options]
+max tasks agenda [query] [options]
 ```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | условия поле:значение, сужающие список; поля перечислены ниже. |
 
 | Опция | Что делает |
 |---|---|
@@ -2360,7 +2373,6 @@ max tasks agenda [options]
 | `--unanswered <span>` | показать чаты, где последним написал кто-то другой не меньше этого времени назад (по умолчанию 1d). |
 | `--waiting <span>` | показать чаты, где последним написали вы не меньше этого времени назад (по умолчанию 7d). |
 | `--within <span>` | не показывать чаты, молчащие дольше этого: разговор закончился (по умолчанию 30d). |
-| `--kind <kinds>` | только эти виды чатов через запятую (по умолчанию dialog,group). |
 
 ### `max tasks close`
 
@@ -2396,8 +2408,8 @@ max conversations build [options]
 | `--chat <chat>` | чат: его ID или часть названия. |
 | `--analyze` | link batches using the configured analysis provider; requires --chat and remembers consent for this chat/provider. |
 | `--provider <provider>` | analysis: agent, openai or anthropic. |
-| `--model <model>` | analysis model; overrides analysisModel. |
-| `--base-url <url>` | analysis API endpoint; overrides analysisBaseUrl. |
+| `--model <model>` | analysis model; overrides analysis_model. |
+| `--base-url <url>` | analysis API endpoint; overrides analysis_base_url. |
 | `--size <n>` | analysis answer messages per batch, 10–200; default 50. |
 | `--max-tokens <n>` | analysis input/output reservation cap per run; default 100000. |
 | `--max-chats <n>` | не больше стольких чатов за один запуск; если не указано — 20. |
@@ -2407,13 +2419,16 @@ max conversations build [options]
 a chat's conversations, the newest first: when, how many messages, how many people
 
 ```sh
-max conversations list [options]
+max conversations list <chat> [query] [options]
 ```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | чат: его ID или часть названия. |
+| `query` | необязательный | условия поле:значение, сужающие список; поля перечислены ниже. |
 
 | Опция | Что делает |
 |---|---|
-| `--chat <chat>` | чат: его ID или часть названия. |
-| `--since-time <time>` | only those that started at this ISO 8601 time, or 30m / 2h / 1d ago, or later. |
 | `--limit <n>` | сколько результатов. |
 
 ### `max conversations show`
@@ -2629,16 +2644,18 @@ max attachments extract [options]
 
 ### `max attachments list`
 
-files of stored messages, where each was saved and whether its text is held — never the text
+файлы сохранённых сообщений, новые первыми: где сохранён каждый и есть ли его текст — но не сам текст
 
 ```sh
-max attachments list [options]
+max attachments list [query] [options]
 ```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | условия поле:значение, сужающие список; поля перечислены ниже. |
 
 | Опция | Что делает |
 |---|---|
-| `--chat <chat>` | only this chat's files; a chat: its id, or part of its title. |
-| `--needs-text` | only files saved here whose text nobody has yet: what an agent reads and writes back. |
 | `--limit <n>` | сколько показать. |
 | `--page <n>` | какая страница, начиная с 1. |
 | `--all` | все строки, без страниц. |
@@ -2753,14 +2770,92 @@ max tags remove <tag> [options]
 what is tagged: this account's chats and messages, and the people of its messenger
 
 ```sh
-max tags list [options]
+max tags list [query]
 ```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | условия поле:значение, сужающие список; поля перечислены ниже. |
+
+## `max mentions`
+
+телефоны, e-mail, ссылки и документы, найденные в сохранённых сообщениях
+
+### `max mentions list`
+
+упоминания этого аккаунта, подходящие под запрос, новые первыми; только локальное хранилище
+
+```sh
+max mentions list [query] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | поля ниже; слово без поля — это значение, поэтому телефон, набранный с 8, найдётся и записанный с +7. |
 
 | Опция | Что делает |
 |---|---|
-| `--tag <tag>` | only this tag. |
-| `--source <manual\|auto>` | только метки с отметкой о принадлежности к этому источнику. |
-| `--type <names>` | only what is tagged of this type: chat, contact or message. |
+| `--limit <n>` | сколько показать. |
+| `--page <n>` | какая страница, начиная с 1. |
+
+### `max mentions show`
+
+одно упоминание, текст вокруг него и сколько ещё мест содержат то же значение
+
+```sh
+max mentions show <id>
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `id` | обязательный | ID упоминания из mentions list. |
+
+### `max mentions confirm`
+
+указать, что это за упоминание, везде, где встречается его значение: владельца телефона, сохранённый документ
+
+**Меняет что-то только на этом компьютере.**
+
+```sh
+max mentions confirm <id> [person] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `id` | обязательный | ID упоминания из mentions list. |
+| `person` | необязательный | person:<uid> или organization:<id> — владелец телефона или адреса; документу он не нужен. |
+
+| Опция | Что делает |
+|---|---|
+| `--as-owner` | записать решение как ваше, хотя программу запускает терминал агента (задана AI_AGENT или CLAUDECODE). |
+
+### `max mentions reject`
+
+не настоящее упоминание или не стоит хранить: отклонить его значение везде и при следующих синхронизациях
+
+**Меняет что-то только на этом компьютере.**
+
+```sh
+max mentions reject <id> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `id` | обязательный | ID упоминания из mentions list. |
+
+| Опция | Что делает |
+|---|---|
+| `--as-owner` | записать решение как ваше, хотя программу запускает терминал агента (задана AI_AGENT или CLAUDECODE). |
+
+### `max mentions rebuild`
+
+заново найти упоминания во всех сохранённых сообщениях; принятые решения сохраняются
+
+**Меняет что-то только на этом компьютере.**
+
+```sh
+max mentions rebuild
+```
 
 ## `max metadata`
 
@@ -2816,7 +2911,7 @@ max search all <query> [options]
 | `--source <accounts>` | только эти аккаунты через запятую: provider:account, как его показывает найденное, провайдер, вид или group:<name>; каждый ресурс читает аккаунты своего вида, а встречи — только если аккаунт встреч назван. |
 | `--max-meetings <n\|all>` | сколько встреч аккаунта встреч просмотреть, начиная с новых; all — все (по умолчанию 100). |
 | `--limit <n>` | сколько результатов. |
-| `--offset <n>` | пропустить столько результатов — для следующей страницы. |
+| `--page <n>` | какая страница, начиная с 1. |
 | `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word. |
 | `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
 | `--backend <archive\|server\|both>` | где искать: локальный архив, сервер мессенджера или оба (по умолчанию: both). Discovery читает только архив. |
@@ -2847,11 +2942,9 @@ max search messages [query] [options]
 | `--thread-within <duration>` | сообщения в пределах этого времени до и после совпадения (по умолчанию: 1d). |
 | `--backend <archive\|server\|both>` | где искать: локальный архив, сервер мессенджера или оба (по умолчанию: both). Discovery читает только архив. |
 | `--server-time <duration>` | прекратить ожидание ответа сервера через это время (по умолчанию: 5s). |
-| `--chat <chat>` | только этот чат — то же, что chat: в запросе; чат: его ID или часть названия. |
 | `--source <accounts>` | каждый аккаунт этого мессенджера в хранилище; personal, bots или all — то же, что in: в запросе; или список: group:work,telegram:Alice,email:me@example.com. |
-| `--type <text\|voice\|file>` | только сообщения этого типа: только текст, голосовое сообщение или файл. |
 | `--limit <n>` | сколько результатов. |
-| `--offset <n>` | пропустить столько результатов — для следующей страницы. |
+| `--page <n>` | какая страница, начиная с 1. |
 | `--newest` | сначала новые, а не лучшие совпадения. |
 | `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
 | `--context <n>` | messages before and after each hit; 2 in the terminal, 0 otherwise. |
@@ -2875,10 +2968,9 @@ max search mail [query] [options]
 
 | Опция | Что делает |
 |---|---|
-| `--chat <chat>` | только эта почтовая цепочка, по ID или теме. |
 | `--source <accounts>` | только эти почтовые аккаунты через запятую: email:<address>, как его показывает найденное, email, mail или group:<name>; если не задано — все почтовые аккаунты. |
 | `--limit <n>` | сколько результатов. |
-| `--offset <n>` | пропустить столько результатов — для следующей страницы. |
+| `--page <n>` | какая страница, начиная с 1. |
 | `--newest` | сначала новые, а не лучшие совпадения. |
 | `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
 | `--context <n>` | сколько сообщений показать до и после каждого совпадения; 2 в терминале, иначе 0. |
@@ -2900,10 +2992,9 @@ max search notes <query> [options]
 |---|---|
 | `--type <internal\|file>` | только заметки, написанные в memo, или только заметки из папки. |
 | `--source <accounts>` | только эти аккаунты заметок через запятую: notes:internal для заметок, написанных в memo, notes:<folder id>, как его показывает найденное, notes, documents или group:<name>. |
-| `--tag <tag>` | только заметки с этим тегом. |
 | `--filter <query>` | запрос, которому должно также соответствовать каждое совпадение; на поиск по смыслу он не влияет. |
 | `--limit <n>` | сколько результатов. |
-| `--offset <n>` | пропустить столько результатов — для следующей страницы. |
+| `--page <n>` | какая страница, начиная с 1. |
 | `--exact` | только слова в написанной форме; по смыслу не ищется. |
 | `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
 
@@ -2987,8 +3078,12 @@ max searches show <name|id>
 the saved searches, by name
 
 ```sh
-max searches list
+max searches list [query]
 ```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | условия поле:значение; этот список пока ни по одному полю не фильтрует. |
 
 ### `max searches history`
 
@@ -3000,7 +3095,9 @@ max searches history [options]
 
 | Опция | Что делает |
 |---|---|
-| `--limit <n>` | сколько результатов. |
+| `--limit <n>` | сколько показать. |
+| `--page <n>` | какая страница, начиная с 1. |
+| `--all` | все строки, без страниц. |
 
 ### `max searches delete`
 
@@ -3047,8 +3144,12 @@ speech models for transcribing voice messages
 the speech models, most suitable first, which are downloaded, and which one is the default
 
 ```sh
-max models audio list
+max models audio list [query]
 ```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | условия поле:значение; этот список пока ни по одному полю не фильтрует. |
 
 #### `max models audio download`
 
@@ -3071,8 +3172,12 @@ embedding models for searching conversations by meaning
 the embedding models, most suitable first, which are downloaded, and which one is the default
 
 ```sh
-max models text list
+max models text list [query]
 ```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | условия поле:значение; этот список пока ни по одному полю не фильтрует. |
 
 #### `max models text download`
 
@@ -3296,39 +3401,46 @@ max sends list [options]
 | Опция | Что делает |
 |---|---|
 | `--limit <n>` | сколько показать. |
+| `--page <n>` | какая страница, начиная с 1. |
+| `--all` | все строки, без страниц. |
 
 ## `max inbox`
 
 other people's unread messages in every chat; --new for what arrived since the last check
 
 ```sh
-max inbox [options]
+max inbox [query] [options]
 ```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | с какого момента: date>2h, date>2026-10-01; сохранённая точка не сдвигается. |
 
 | Опция | Что делает |
 |---|---|
 | `--new` | what arrived since the last check, each message once — for scheduled runs. |
-| `--since-time <time>` | what arrived after this ISO 8601 time, or 2h / 1d ago; the saved point stays put. |
 | `--limit <n>` | at most this many per chat, the newest. |
 | `--all` | muted and archived chats too — left out unless they mention you or reply to you. |
 | `--kind <kinds>` | only chats of these kinds, comma-separated: dialog, group, channel, saved. |
 | `--transcribe` | turn voice messages not heard yet into text — by the messenger, or a model on this machine; can take minutes. |
 | `--model <id>` | which downloaded speech model hears them, with --transcribe; `models audio list` shows them. |
 | `--mark-read` | also mark each chat shown read, up to the newest message shown; the other side sees it. |
-| `--no-mark-read` | do not, whatever the catchUpMarksRead setting says. |
+| `--no-mark-read` | do not, whatever the catch_up_marks_read setting says. |
 
 ## `max review`
 
 every message, yours too, in chats that changed since a point — for reviewing who owes what
 
 ```sh
-max review [options]
+max review [query] [options]
 ```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | где закончился прошлый обзор и какой чат: date>2h, chat:"Book club"; без даты — 3 дня назад. |
 
 | Опция | Что делает |
 |---|---|
-| `--since-time <time>` | where the last review ended — ISO 8601, or 2h / 1d ago; 3 days ago if not given. |
-| `--chat <chat>` | только этот чат: его ID или часть названия. |
 | `--kind <kinds>` | only chats of these kinds, comma-separated: dialog, group, channel, saved. |
 | `--unanswered [duration]` | only questions to you or a group's admins that nobody answered, asked at least this long ago — 4h, 1d; 24h if not given. |
 | `--all` | muted and archived chats too — left out unless they mention you or reply to you. |
@@ -3336,7 +3448,7 @@ max review [options]
 | `--model <id>` | which downloaded speech model hears them, with --transcribe; `models audio list` shows them. |
 | `--new` | what changed since the last `review --new`, a point per chat — for scheduled runs. |
 | `--mark-read` | also mark each chat shown read, up to the newest message shown; the other side sees it. |
-| `--no-mark-read` | do not, whatever the catchUpMarksRead setting says. |
+| `--no-mark-read` | do not, whatever the catch_up_marks_read setting says. |
 
 ## `max replies`
 
@@ -3554,6 +3666,8 @@ max serve [options]
 | Опция | Что делает |
 |---|---|
 | `--idle <duration>` | stop after this long with nobody using it — 15m, 1h is 60m. |
+| `--max-subscriber-buffer-bytes <bytes>` | буфер на одного наблюдателя, после которого его отключают; 0 — без ограничения. |
+| `--max-subscriber-total-buffer-bytes <bytes>` | общий бюджет буферов всех наблюдателей; 0 — без ограничения. |
 
 ## `max server`
 
@@ -3769,7 +3883,7 @@ max config set <setting> <value> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `setting` | обязательный | одно из: limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, requestsPerMinute, embeddingProvider, embeddingModel, embeddingBaseUrl, embeddingDims, analysisProvider, analysisModel, analysisBaseUrl, models, senderColors, catchUpMarksRead, searchCatchUp, serve, mcpTools, readOtherBots, updateCheck, skillHint, transcribeModel, defaultProfile, searchStemmers.cyrillic, searchStemmers.latin. |
+| `setting` | обязательный | одно из: limit, timeout_ms, color, record, keep_runs_for_days, read_only, allow, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, mcp_tools, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, searchStemmers.cyrillic, searchStemmers.latin. |
 | `value` | обязательный | a number, true or false, or for allow a list like send,reaction. |
 
 | Опция | Что делает |
@@ -3790,7 +3904,7 @@ max config unset <setting> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `setting` | обязательный | одно из: limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, requestsPerMinute, embeddingProvider, embeddingModel, embeddingBaseUrl, embeddingDims, analysisProvider, analysisModel, analysisBaseUrl, models, senderColors, catchUpMarksRead, searchCatchUp, serve, mcpTools, readOtherBots, updateCheck, skillHint, transcribeModel, defaultProfile, searchStemmers.cyrillic, searchStemmers.latin. |
+| `setting` | обязательный | одно из: limit, timeout_ms, color, record, keep_runs_for_days, read_only, allow, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, mcp_tools, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, searchStemmers.cyrillic, searchStemmers.latin. |
 
 | Опция | Что делает |
 |---|---|
@@ -3842,18 +3956,23 @@ max runs list [options]
 | Опция | Что делает |
 |---|---|
 | `--limit <n>` | how many to show. По умолчанию: `20`. |
+| `--page <n>` | какая страница, начиная с 1. По умолчанию: `1`. |
 
 ### `max runs show`
 
-один запуск: что это было, чем закончилось и что пошло не так; -v — все события
+один запуск: что это было, чем закончилось и все записанные события
 
 ```sh
-max runs show <run-id>
+max runs show <run-id> [options]
 ```
 
 | Аргумент | | Что это |
 |---|---|---|
 | `run-id` | обязательный | ID из `max runs list`. |
+
+| Опция | Что делает |
+|---|---|
+| `--problems` | только неудачные ответы, предупреждения и сбои. |
 
 ### `max runs search`
 
@@ -4235,7 +4354,7 @@ max bot chats members list <chat> [options]
 
 #### `max bot chats members add`
 
-add people to a chat by user id; the bot must be an admin that may add members
+добавить людей в чат по ID пользователя, не больше 100; бот должен быть администратором с правом добавлять участников
 
 **Меняет что-то в MAX.**
 
@@ -4465,8 +4584,8 @@ max bot messages between <people> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--all-bots` | также читать копии всех других ботов на этом компьютере, которые разрешает readOtherBots. |
-| `--bots <profiles>` | также читать копии этих ботов, через запятую — каждый должен быть разрешён в readOtherBots. |
+| `--all-bots` | также читать копии всех других ботов на этом компьютере, которые разрешает read_other_bots. |
+| `--bots <profiles>` | также читать копии этих ботов, через запятую — каждый должен быть разрешён в read_other_bots. |
 | `--limit <n>` | how many of the latest messages from each chat. |
 
 ### `max bot search`
@@ -4487,9 +4606,10 @@ max bot search messages [query] [options]
 
 | Опция | Что делает |
 |---|---|
-| `--all-bots` | также читать копии всех других ботов на этом компьютере, которые разрешает readOtherBots. |
-| `--bots <profiles>` | также читать копии этих ботов, через запятую — каждый должен быть разрешён в readOtherBots. |
+| `--all-bots` | также читать копии всех других ботов на этом компьютере, которые разрешает read_other_bots. |
+| `--bots <profiles>` | также читать копии этих ботов, через запятую — каждый должен быть разрешён в read_other_bots. |
 | `--limit <n>` | сколько результатов. |
+| `--page <n>` | какая страница, начиная с 1. |
 | `--newest` | сначала новые, а не лучшие совпадения. |
 | `--from <who>` | only what this person wrote — an id, @username or part of a name; repeat it for any of several. |
 
@@ -4691,8 +4811,8 @@ max bot contacts show <who> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--all-bots` | также читать копии всех других ботов на этом компьютере, которые разрешает readOtherBots. |
-| `--bots <profiles>` | также читать копии этих ботов, через запятую — каждый должен быть разрешён в readOtherBots. |
+| `--all-bots` | также читать копии всех других ботов на этом компьютере, которые разрешает read_other_bots. |
+| `--bots <profiles>` | также читать копии этих ботов, через запятую — каждый должен быть разрешён в read_other_bots. |
 | `--limit <n>` | how many messages from the private chat. |
 | `--refresh` | read the private chat with them again from the messenger first — one request. |
 

@@ -50,7 +50,7 @@ max personal mcp setup claude-code     # или в Claude Code
 
 For another profile, put its name first: `max work mcp setup codex`. Setup uses the application's own commands and leaves other servers intact. If an entry with the same name exists, remove it in the application before repeating setup. If the profile exposes write tools, check permissions, then repeat with `--allow-writes`. This flag confirms installation only: it does not change profile permissions or flags such as `--allow-send`.
 
-`mcp doctor` reads no messages and does not log in to MAX. Success means MCP starts and lists tools; it does not prove the session is valid. `potentialWrites` counts tools without the read-only annotation. Web and mobile need a separate [remote connection](./remote.md).
+`mcp doctor` reads no messages and does not log in to MAX. Success means MCP starts and lists tools; it does not prove the session is valid. `potential_writes` counts tools without the read-only annotation. Web and mobile need a separate [remote connection](./remote.md).
 
 **Claude Code manually:**
 

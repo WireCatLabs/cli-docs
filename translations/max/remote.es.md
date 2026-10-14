@@ -172,7 +172,7 @@ Estas aplicaciones deberán iniciar sesión nuevamente con un nuevo código. La 
 
 ## Transferir un archivo guardado al agente
 
-El agente en su computadora puede abrir el archivo guardado por `localPath`. El agente remoto no puede, por lo que obtiene los bytes almacenados mediante `attachments show` (MCP: `max_read`, comando `attachments show`).
+El agente en su computadora puede abrir el archivo guardado por `local_path`. El agente remoto no puede, por lo que obtiene los bytes almacenados mediante `attachments show` (MCP: `max_read`, comando `attachments show`).
 
 La transferencia de archivos guardados rechaza archivos y carpetas conocidos de credenciales, las carpetas de la CLI y el almacén de mensajes, incluidos los destinos de enlaces simbólicos. Se permiten las carpetas de trabajo ocultas normales.
 
@@ -188,9 +188,9 @@ El comando lee solo el archivo adjunto guardado de la cuenta activa. No descarga
 
 ### Transferir un archivo grande
 
-Una respuesta lleva 512 KiB por defecto; `--chunk-bytes` permite hasta 1 MiB. Por defecto el archivo puede tener hasta 50 MiB; se configura con `MESSAGING_ATTACHMENT_MAX_MIB`. El JSON contiene `base64`, `offsetBytes`, `readBytes`, `totalBytes`, `nextOffsetBytes`, `complete` y SHA256 de todo el archivo. `complete: true` significa que todo el archivo cabe en esta respuesta, no que se reconoció su texto.
+Una respuesta lleva 512 KiB por defecto; `--chunk-bytes` permite hasta 1 MiB. Por defecto el archivo puede tener hasta 50 MiB; se configura con `MESSAGING_ATTACHMENT_MAX_MIB`. El JSON es `{item}` con los campos `base64`, `offset_bytes`, `read_bytes`, `total_bytes`, `next_offset_bytes`, `complete` y SHA256 de todo el archivo. `complete: true` significa que todo el archivo cabe en esta respuesta, no que se reconoció su texto.
 
-Decodifica cada parte base64, conecta las partes en el desplazamiento y camina por `nextOffsetBytes` hasta que sea nulo. En las siguientes solicitudes, pase el primer SHA256 como `--if-sha256`: si el archivo fuente ha cambiado, la solicitud fallará y no devolverá los bytes modificados. Verifique el archivo recopilado con este hash.
+Decodifica cada parte base64, conecta las partes en el desplazamiento y camina por `next_offset_bytes` hasta que sea nulo. En las siguientes solicitudes, pase el primer SHA256 como `--if-sha256`: si el archivo fuente ha cambiado, la solicitud fallará y no devolverá los bytes modificados. Verifique el archivo recopilado con este hash.
 
 ```sh
 max personal attachments show msg:max/511/7/204 --attachment 1 --offset-bytes 524288 --if-sha256 <sha256> --json
@@ -218,9 +218,9 @@ Si la aplicación no puede pasar el PDF resultante a su lector de documentos, so
 max personal attachments show msg:max/511/7/204 --attachment 1 --page 1 --json
 ```
 
-En MCP, llame a `max_read`, comando `attachments show`, con `page: 1` y mensajes de localizador. Por defecto, la página viene con una imagen. Si la aplicación solo muestra metadatos, solicite `format: base64`, luego decodifique y muestre el PNG usando el agente. Obtener una cadena base64 aún no muestra la página. Lea las páginas 1 a `pdf.pageCount`. Si los píxeles no están disponibles en ningún formato, informe una limitación de la aplicación en lugar de texto ficticio.
+En MCP, llame a `max_read`, comando `attachments show`, con `page: 1` y mensajes de localizador. Por defecto, la página viene con una imagen. Si la aplicación solo muestra metadatos, solicite `format: base64`, luego decodifique y muestre el PNG usando el agente. Obtener una cadena base64 aún no muestra la página. Lea las páginas 1 a `pdf.page_count`. Si los píxeles no están disponibles en ningún formato, informe una limitación de la aplicación en lugar de texto ficticio.
 
-`pdf.sourceSha256` y `pdf.sourceBytes` describen el PDF original; arriba `sha256` y `totalBytes` - imagen de la página. `--if-sha256` comprueba el PDF original. `--page` no se puede combinar con `--offset-bytes` o `--chunk-bytes`. Por defecto, el PDF admite hasta 50 MiB sin un límite de páginas independiente; el PNG permite 4000 píxeles por lado y 8 MiB por página. Los tres valores son configurables.
+`pdf.source_sha256` y `pdf.source_bytes` describen el PDF original; arriba `sha256` y `total_bytes` - imagen de la página. `--if-sha256` comprueba el PDF original. `--page` no se puede combinar con `--offset-bytes` o `--chunk-bytes`. Por defecto, el PDF admite hasta 50 MiB sin un límite de páginas independiente; el PNG permite 4000 píxeles por lado y 8 MiB por página. Los tres valores son configurables.
 
 La imagen de la página no llama a un servicio OCR externo y no agrega texto al índice. Después de ver todas las páginas, el agente llama a `attachments text set` y verifica la búsqueda de `content:`. Verifique números y diseños complejos con imágenes; La calidad depende del documento fuente y de las herramientas del agente.
 
