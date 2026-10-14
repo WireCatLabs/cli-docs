@@ -25,7 +25,7 @@ zm remote-meetings invitation 123456789 --json
 ```
 
 Los identificadores remotos son IDs numéricos de Zoom; `meetings` usa IDs de la base local.
-La lista requiere `meeting:read:list_meetings` del manifiesto; detalles e invitaciones necesitan
+La lista requiere añadir manualmente `meeting:read:list_meetings`; detalles e invitaciones necesitan
 permisos opcionales de [la guía](./zoom-app.md#add-archive-or-management-access).
 
 ## Crear, modificar o cancelar
