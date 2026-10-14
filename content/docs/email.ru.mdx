@@ -79,7 +79,7 @@ memo mail gmail import --since 2026-09-01 --json
 текст писем, исчезнувших из источника.
 
 Текст читаемого вложения хранится вместе с письмом и находится вместе с ним. Импорт также готовит
-новые письма к поиску по смыслу, поэтому их находят `tg search conversations` и
+новые письма к поиску по смыслу, поэтому их находят `tg personal search conversations` и
 `max personal search conversations`; `--no-embed` пропускает этот шаг.
 
 ## Свяжите почту с тем же человеком
@@ -91,7 +91,7 @@ memo mail gmail import --since 2026-09-01 --json
 другой аккаунт и не объединяет ваши почтовые ящики. Сначала импортируйте почту и сохраните учётную запись человека в мессенджере, прочитав его профиль или сообщения. Добавлять его в адресную книгу не требуется. Замените имя пользователя и адрес своими:
 
 ```sh
-tg contacts link @example_user email:rin@example.test
+tg personal contacts link @example_user email:rin@example.test
 memo context telegram:"Rin Example" --json
 ```
 

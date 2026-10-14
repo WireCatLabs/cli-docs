@@ -72,7 +72,7 @@ same profile permissions as the CLI. It does not log in for you or download the 
 
 ## Before connecting
 
-[Install and log in](./installation.mdx). Run `tg mcp config` or `max personal mcp config`
+[Install and log in](./installation.mdx). Run `tg personal mcp config` or `max personal mcp config`
 to print a configuration with the actual Node and CLI paths on your machine. This command prints
 settings; it does not edit your client. Desktop clients may have a different PATH from your terminal.
 
@@ -81,7 +81,7 @@ settings; it does not edit your client. Desktop clients may have a different PAT
 In a terminal where the installed command works:
 
 ```sh
-codex mcp add tg -- tg mcp
+codex mcp add tg -- tg personal mcp
 codex mcp list
 ```
 
@@ -93,7 +93,7 @@ and put them into `[mcp_servers.tg]` or `[mcp_servers.max]`; Codex uses TOML, no
 ### Claude Code
 
 ```sh
-claude mcp add --scope user tg -- tg mcp
+claude mcp add --scope user tg -- tg personal mcp
 claude mcp list
 ```
 
@@ -102,7 +102,7 @@ Use `/mcp` in a session to check status. For full paths, use the values from `mc
 
 ### Cursor and Claude Desktop
 
-Copy the server entry printed by `tg mcp config` or `max personal mcp config` into the client's
+Copy the server entry printed by `tg personal mcp config` or `max personal mcp config` into the client's
 `mcpServers` settings, preserving its full paths and environment. Merge it with existing servers.
 
 | Client | Configuration file |
@@ -118,7 +118,7 @@ Restart the client and check that the server's tools are available.
 ### Gemini CLI
 
 ```sh
-gemini mcp add --scope user tg tg mcp
+gemini mcp add --scope user tg tg personal mcp
 gemini mcp list
 ```
 

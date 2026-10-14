@@ -46,7 +46,7 @@ and questions still open. The answer should say which history was available.
 Both messengers provide a profile with the person's identity and shared conversations:
 
 ```sh
-tg contacts profile @example_user
+tg personal contacts profile @example_user
 max personal contacts profile 20000002
 ```
 
@@ -68,14 +68,14 @@ The available profile fields depend on what the messenger shares with your accou
   `source: messages` and is approximate, because a message downloaded again carries the newest name.
 - **Shared chats:** how many of their messages your local copy holds in each chat, and the first and
   last of them. When a chat is not saved from its start (`complete: false`), the count is a minimum;
-  `store fetch <chat>` fills it in.
+  `messages sync <chat>` fills it in.
 
 ## What they wrote
 
 Both messengers can gather context from messages already saved on your computer:
 
 ```sh
-tg contacts context @example_user --since-time 30d --limit 20
+tg personal contacts context @example_user --since-time 30d --limit 20
 max personal contacts context 20000002 --since-time 30d --limit 20
 ```
 
@@ -84,7 +84,7 @@ messages and where others mentioned them. Name the chats that matter to get thei
 in each one, oldest first, 20 per chat by default:
 
 ```sh
-tg contacts context @example_user --chat "Book club" --chat "Team" --limit 10
+tg personal contacts context @example_user --chat "Book club" --chat "Team" --limit 10
 max personal contacts context 20000002 --chat "Book club" --chat "Team" --limit 10
 ```
 
@@ -102,7 +102,7 @@ search by sender. For more history, use [Telegram archive](./tg/archive.md) or
 Both messengers support an account check:
 
 ```sh
-tg contacts check @example_user
+tg personal contacts check @example_user
 max personal contacts check 20000002
 ```
 
@@ -122,7 +122,7 @@ saved history, and lists those with a reason. `--deep 10` then runs the full che
 highest, one person per second. The owner and admins are left out, and nobody is removed:
 
 ```sh
-tg chats members audit "Book club" --deep 10
+tg personal chats members audit "Book club" --deep 10
 max personal chats members audit "Book club" --deep 10
 ```
 
@@ -133,7 +133,7 @@ max personal chats members audit "Book club" --deep 10
 If you know two accounts belong to the same person, you can record that link locally:
 
 ```sh
-tg contacts link @example_user max:"Example User"
+tg personal contacts link @example_user max:"Example User"
 ```
 
 Both accounts must already be in the history on this computer, so use `tg` and `max` on the same
@@ -147,7 +147,7 @@ association.
 [Import your email](./email.mdx) first, then link a known address to the stored messenger contact:
 
 ```sh
-tg contacts link @example_user email:rin@example.test
+tg personal contacts link @example_user email:rin@example.test
 ```
 
 Replace the username and address with the person's actual identities. Check the returned identities;

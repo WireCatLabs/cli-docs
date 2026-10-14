@@ -74,7 +74,7 @@ Usa tg CLI. Encuentra el último enlace que me enviaron en mis cinco chats más 
 Obtendrás una respuesta breve con mensajes que puedes abrir o identificar. Empieza por unos pocos chats para comprobar fácilmente el resultado.
 
 **Qué pasa por dentro.** Para la primera petición, el agente ejecuta comandos como
-`tg inbox --limit 5` y `tg chats list --limit 5`, y después lee más mensajes donde necesita
+`tg personal inbox --limit 5` y `tg personal chats list --limit 5`, y después lee más mensajes donde necesita
 contexto. Leer no marca los mensajes como leídos. [Leer mensajes](./tg/usage.md#reading) explica
 los límites.
 
@@ -146,25 +146,25 @@ Encuentra el chat, comprueba qué está guardado y busca solo en el historial gu
 petición:
 
 ```sh
-tg chats list --search Atlas --kind group
-tg store status -1001001001001
-tg search messages 'analytics date:[2026-09-01 TO 2026-10-01}' --chat -1001001001001 --backend archive --json
+tg personal chats list --search Atlas --kind group
+tg personal store status -1001001001001
+tg personal search messages 'analytics date:[2026-09-01 TO 2026-10-01}' --chat -1001001001001 --backend archive --json
 ```
 
 Tras tu aprobación, descarga el periodo, vuelve a comprobar la cobertura y lee alrededor del
 resultado:
 
 ```sh
-tg store fetch -1001001001001 --since-time 2026-09-01 --limit 1000
-tg store status -1001001001001
-tg search messages 'analytics date:[2026-09-01 TO 2026-10-01}' --chat -1001001001001 --backend archive --json
-tg messages context -1001001001001 4312 --before-n 2 --after-n 4
+tg personal messages sync -1001001001001 --since-time 2026-09-01 --limit 1000
+tg personal store status -1001001001001
+tg personal search messages 'analytics date:[2026-09-01 TO 2026-10-01}' --chat -1001001001001 --backend archive --json
+tg personal messages context -1001001001001 4312 --before-n 2 --after-n 4
 ```
 
 </details>
 
 **Por qué estos comandos:** `messages list` lee una ventana de mensajes y la guarda en local;
-`store fetch` carga un tramo de historial más largo. `search messages` también consulta por
+`messages sync` carga un tramo de historial más largo. `search messages` también consulta por
 defecto la búsqueda propia de Telegram; `--backend archive` la limita al historial guardado. La
 búsqueda de Telegram solo encuentra palabras, así que leer la conversación alrededor de un
 resultado y revisar un mes entero necesitan el historial guardado. `messages context` comprueba qué
@@ -225,19 +225,19 @@ borrador.
 Identifica los chats y revisa las dos partes de cada conversación:
 
 ```sh
-tg chats list --search Atlas --kind group
-tg contacts list --search Anna
-tg contacts list --search Tom
-tg review --chat -1001001001001 --since-time 7d
-tg review --chat 100200300 --since-time 7d
-tg review --chat 100200301 --since-time 7d
+tg personal chats list --search Atlas --kind group
+tg personal contacts list --search Anna
+tg personal contacts list --search Tom
+tg personal review --chat -1001001001001 --since-time 7d
+tg personal review --chat 100200300 --since-time 7d
+tg personal review --chat 100200301 --since-time 7d
 ```
 
 Después revisa la promesa original y sus respuestas:
 
 ```sh
-tg messages context -1001001001001 4520 --before-n 3 --after-n 6
-tg messages context 100200300 201 --before-n 2 --after-n 5
+tg personal messages context -1001001001001 4520 --before-n 3 --after-n 6
+tg personal messages context 100200300 201 --before-n 2 --after-n 5
 ```
 
 </details>
@@ -301,20 +301,20 @@ pregunta.
 Encuentra los grupos y los participantes, y después lee los chats elegidos:
 
 ```sh
-tg chats list --search Atlas --kind group
-tg contacts list --search Anna
-tg contacts list --search Tom
-tg messages list -1001001001001 --after-time 7d --limit 100
-tg messages list -1001001001002 --after-time 7d --limit 100
-tg messages list 100200300 --after-time 7d --limit 100
-tg messages list 100200301 --after-time 7d --limit 100
+tg personal chats list --search Atlas --kind group
+tg personal contacts list --search Anna
+tg personal contacts list --search Tom
+tg personal messages list -1001001001001 --after-time 7d --limit 100
+tg personal messages list -1001001001002 --after-time 7d --limit 100
+tg personal messages list 100200300 --after-time 7d --limit 100
+tg personal messages list 100200301 --after-time 7d --limit 100
 ```
 
 Para la pregunta siguiente, lee los mensajes posteriores a la llegada del diseño:
 
 ```sh
-tg messages context -1001001001002 732 --before-n 2 --after-n 10
-tg messages list 100200300 --after-time 2026-10-02T12:00:00+02:00 --limit 50
+tg personal messages context -1001001001002 732 --before-n 2 --after-n 10
+tg personal messages list 100200300 --after-time 2026-10-02T12:00:00+02:00 --limit 50
 ```
 
 </details>

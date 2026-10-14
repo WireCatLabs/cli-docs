@@ -23,10 +23,10 @@ The tool creates the file with common defaults the first time a command reads se
 
 ```sh
 tg config show
-tg config set limit 50
+tg personal config set limit 50
 tg work config set limit 10
 tg config set sendsPerHour 10 --defaults
-tg config unset limit
+tg personal config unset limit
 ```
 
 `config show` lists every setting with its value and where that value came from. `config set` saves a value for the current profile, for a named profile such as `work`, or with `--defaults` for every profile. It checks the value before writing, so a typo is refused instead of saved. `config unset` removes a value so the default applies again. For MAX, write `max` instead of `tg`. You can also edit the file by hand.

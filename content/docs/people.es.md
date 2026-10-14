@@ -47,7 +47,7 @@ El agente debe indicar qué historial estaba disponible.
 Ambos mensajeros ofrecen un perfil con la identidad y conversaciones compartidas:
 
 ```sh
-tg contacts profile @example_user
+tg personal contacts profile @example_user
 max personal contacts profile 20000002
 ```
 
@@ -70,14 +70,14 @@ Los campos del perfil dependen de lo que el mensajero comparte con tu cuenta:
   lleva el nombre más reciente.
 - **Chats compartidos:** cuántos de sus mensajes tiene tu copia local en cada chat, y el primero y
   el último. Si un chat no está guardado desde el principio (`complete: false`), la cifra es un
-  mínimo; `store fetch <chat>` lo completa.
+  mínimo; `messages sync <chat>` lo completa.
 
 ## Qué escribió
 
 Ambos mensajeros reúnen contexto de mensajes ya guardados en tu ordenador:
 
 ```sh
-tg contacts context @example_user --since-time 30d --limit 20
+tg personal contacts context @example_user --since-time 30d --limit 20
 max personal contacts context 20000002 --since-time 30d --limit 20
 ```
 
@@ -86,7 +86,7 @@ mensajes recientes y dónde lo mencionaron otros. Nombra los chats que importan 
 mensajes más nuevos en cada uno, del más antiguo al más reciente, 20 por chat de forma predeterminada:
 
 ```sh
-tg contacts context @example_user --chat "Club de lectura" --chat "Trabajo" --limit 10
+tg personal contacts context @example_user --chat "Club de lectura" --chat "Trabajo" --limit 10
 max personal contacts context 20000002 --chat "Club de lectura" --chat "Trabajo" --limit 10
 ```
 
@@ -106,7 +106,7 @@ chat, porque no puede buscar por remitente. Para más historial, consulta
 Ambos mensajeros admiten comprobar una cuenta:
 
 ```sh
-tg contacts check @example_user
+tg personal contacts check @example_user
 max personal contacts check 20000002
 ```
 
@@ -128,7 +128,7 @@ comprobación completa de los diez con más puntos, una persona por segundo. El 
 administradores quedan fuera, y no se elimina a nadie:
 
 ```sh
-tg chats members audit "Club de lectura" --deep 10
+tg personal chats members audit "Club de lectura" --deep 10
 max personal chats members audit "Club de lectura" --deep 10
 ```
 
@@ -139,7 +139,7 @@ max personal chats members audit "Club de lectura" --deep 10
 Si sabes que dos cuentas pertenecen a la misma persona, puedes guardar el vínculo localmente:
 
 ```sh
-tg contacts link @example_user max:"Example User"
+tg personal contacts link @example_user max:"Example User"
 ```
 
 Las dos cuentas deben estar ya en el historial de este ordenador, así que usa `tg` y `max` en el
@@ -153,7 +153,7 @@ local.
 [Importa el correo](./email.mdx) primero y vincula una dirección conocida al contacto almacenado:
 
 ```sh
-tg contacts link @example_user email:rin@example.test
+tg personal contacts link @example_user email:rin@example.test
 ```
 
 Sustituye el usuario y la dirección por las identidades reales de la persona. Comprueba las

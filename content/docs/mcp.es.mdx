@@ -72,7 +72,7 @@ permisos del perfil que el CLI. El inicio de sesión y la descarga del archivo s
 
 ## Antes de conectar
 
-[Instala e inicia sesión](./installation.mdx). `tg mcp config` o `max personal mcp config`
+[Instala e inicia sesión](./installation.mdx). `tg personal mcp config` o `max personal mcp config`
 muestra la configuración con las rutas reales de Node y del CLI. No edita el cliente.
 El PATH de una aplicación de escritorio puede ser diferente del de la terminal.
 
@@ -81,7 +81,7 @@ El PATH de una aplicación de escritorio puede ser diferente del de la terminal.
 En una terminal donde ya funcione el comando:
 
 ```sh
-codex mcp add tg -- tg mcp
+codex mcp add tg -- tg personal mcp
 codex mcp list
 ```
 
@@ -93,7 +93,7 @@ en `[mcp_servers.tg]` o `[mcp_servers.max]`. Codex utiliza TOML.
 ### Claude Code
 
 ```sh
-claude mcp add --scope user tg -- tg mcp
+claude mcp add --scope user tg -- tg personal mcp
 claude mcp list
 ```
 
@@ -102,7 +102,7 @@ Comprueba el estado con `/mcp` en la sesión. Para rutas completas, usa los valo
 
 ### Cursor y Claude Desktop
 
-Copia la entrada de `tg mcp config` o `max personal mcp config` en `mcpServers`, conservando las rutas
+Copia la entrada de `tg personal mcp config` o `max personal mcp config` en `mcpServers`, conservando las rutas
 y el entorno. Combínala con los servidores que ya tengas.
 
 | Cliente | Archivo |
@@ -118,7 +118,7 @@ Reinicia el cliente y comprueba las herramientas disponibles.
 ### Gemini CLI
 
 ```sh
-gemini mcp add --scope user tg tg mcp
+gemini mcp add --scope user tg tg personal mcp
 gemini mcp list
 ```
 
