@@ -90,8 +90,8 @@ no importa su transcripción en la base hasta que solicites la importación del 
 ## Salida para scripts y agentes
 
 Usa `--json` para una respuesta completa. Un resultado lleva `item`; una lista, `items` y
-`page` (`limit`, `has_more` y `cursor` opcional). Ambos incluyen `meta.run_id` y
-`meta.duration_ms`, con pasos `next` e información `missing` opcionales. Las claves usan snake_case.
+`page` (`mode`, `limit`, `has_more` y `next_cursor` opcional). Ambos incluyen `meta.run_id`,
+`meta.duration_ms` y `meta.complete`, con pasos `next` e información `missing` opcionales. Las claves usan snake_case.
 
 Los informes detallados de participantes, fuentes, búsqueda semántica y búsqueda unificada
 conservan cobertura y continuación dentro de `item`. La búsqueda de palabras en reuniones
@@ -99,9 +99,21 @@ guardadas devuelve elementos con `ref`, `meeting`, `excerpt` y `offset_ms`. Los 
 en `item`; transcripciones y resúmenes, en `items`. Los detalles cuentan transcripciones actuales;
 `meetings transcript <meeting> --history` lee revisiones anteriores conservadas.
 
-`--jsonl` conserva cada respuesta completa por línea, incluidas las confirmaciones continuas.
-La lista de comandos es el documento compartido del contrato 2; ayuda, versión y autocompletado
-mantienen sus protocolos. Los errores van a stderr; `--quiet` omite otros diagnósticos.
+`--jsonl` emite registros con tipo: cada resultado es `{"type":"item","data":...}`, seguido de
+`{"type":"end","complete":true,"page":...}`. Las listas vacías también emiten el registro end.
+Cada informe permanece en un registro item; cada confirmación continua tiene su propio registro end.
+Lee `complete` e `issues` opcional en el registro end. Usa `--json` cuando necesites `next`,
+`missing` y los metadatos de ejecución de la respuesta completa. La lista de comandos usa el
+contrato compartido 3 con declaraciones separadas `effects.remote` y `effects.local`; ayuda,
+versión y autocompletado mantienen sus protocolos.
+
+Una fuente omitida deja `meta.complete` en false y añade un problema de esa fuente.
+`search all` acepta resultados parciales y termina con código cero; revisa sus omisiones antes de
+considerar completo el resultado. Otras respuestas parciales imprimen lo disponible y después
+terminan con el código del primer problema. Una página limitada con más resultados es paginación
+normal, en vez de un fallo de fuente.
+
+Los errores van a stderr; `--quiet` omite otros diagnósticos.
 Las tuberías reciben JSON por defecto; la terminal, salida legible. El autocompletado emite
 el protocolo de la shell salvo que pidas JSON.
 
