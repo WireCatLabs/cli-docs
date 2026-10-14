@@ -11,19 +11,6 @@ usan el perfil `personal`; sustitúyelo por el nombre de tu perfil conectado.
 conserva contenido y metadatos de esa sincronización. Una **exportación** es un archivo adicional
 que solicitas; no hace falta para buscar.
 
-Las respuestas para programas usan una envoltura: `item` para un resultado único o compuesto,
-o `items` con `page` para una lista sencilla; `meta` identifica la ejecución, su duración y el estado
-`complete`. Las claves de Drive usan snake_case. Los metadatos del proveedor y los diccionarios del
-usuario conservan sus claves. Los pasajes de búsqueda están en `item.hits` y los contadores de
-sync/status en `item`. La ayuda y el autocompletado siguen siendo texto; `commands --json` usa el
-documento compartido de comandos con contrato `3`. `effects` describe lecturas y escrituras remotas
-y locales; `api_operation` identifica un método generado de Google. Las listas usan
-`page.mode: "page"` y devuelven `next_page` si quedan resultados. La búsqueda y las listas de notas
-usan `--page`, no `--offset`. JSONL emite registros `{"type":"item","data":…}` seguidos de un único
-registro `{"type":"end",…}` con `complete` y metadatos de página. Los errores incluyen
-`error.retry.safe`; comprueba una escritura remota de resultado incierto antes de repetirla.
-MCP muestra los caracteres de control de forma visible; `--agent-json` ya no es una opción.
-
 ## Elegir la operación adecuada
 
 | Qué quieres | Comando | De dónde vienen los datos | Qué se guarda |
@@ -235,3 +222,33 @@ reducir el archivo SQLite ni borrar cada nota creada por separado.
 
 Comprueba que listado y búsqueda coinciden con el alcance elegido. Sigue con
 [búsqueda](./search.md) o [recetas completas](./recipes.md).
+
+## Salida estructurada
+
+JSON y JSONL permiten que otra herramienta lea los resultados sin interpretar el texto del
+terminal. Puedes conservar solo los campos que necesita junto con la paginación y la información sobre si la respuesta está completa.
+
+Las respuestas para programas usan una envoltura: `item` para un resultado único o compuesto,
+o `items` con `page` para una lista sencilla; `meta` identifica la ejecución, su duración y el estado
+`complete`. Las claves de Drive usan snake_case. Los metadatos del proveedor y los diccionarios del
+usuario conservan sus claves. Los pasajes de búsqueda están en `item.hits` y los contadores de
+sync/status en `item`. La ayuda y el autocompletado siguen siendo texto; `commands --json` usa el
+documento compartido de comandos con contrato `3`. `effects` describe lecturas y escrituras remotas
+y locales; `api_operation` identifica un método generado de Google. Las listas usan
+`page.mode: "page"` y devuelven `next_page` si quedan resultados. La búsqueda y las listas de notas
+usan `--page`, no `--offset`. JSONL emite registros `{"type":"item","data":…}` seguidos de un único
+registro `{"type":"end",…}` con `complete` y metadatos de página. Los errores incluyen
+`error.retry.safe`; comprueba una escritura remota de resultado incierto antes de repetirla.
+MCP muestra los caracteres de control de forma visible; `--agent-json` ya no es una opción.
+
+Para unos pocos campos del catálogo, usa `--json=id,name` en vez de `--json`. Solo se devuelven
+esos campos de cada elemento; la envoltura y los metadatos de página siguen disponibles.
+La misma selección funciona con `--jsonl`. Un campo desconocido de primer nivel produce un error
+con los campos disponibles. Una escritura sin campos de resultado declarados requiere `--json`
+sin selección; la selección se rechaza antes de ejecutar la escritura.
+
+En un terminal interactivo, los comandos con campos de resultado declarados piden que nombres los
+campos al solicitar JSON. Omite `--json` para una lectura normal o elige los campos explícitamente.
+Los agentes y las tuberías pueden usar `--json` sin selección para obtener el resultado completo.
+
+Consulta los argumentos y las opciones de salida de cada operación en la [referencia de comandos](./commands.md).

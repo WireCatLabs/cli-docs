@@ -15,7 +15,7 @@ title: "Команды Drive"
 |---|---|
 | `-V, --version` | output the version number. |
 | `--profile <name>` | explicit Google account profile (alternative to the first word). |
-| `--json` | print machine-readable JSON. |
+| `--json` | print machine-readable JSON; --json=id,title keeps only those fields. |
 | `--jsonl` | print machine-readable JSON lines. |
 | `--quiet` | suppress optional diagnostics. |
 | `--debug` | on failure, show the full error record: cause and stack. |

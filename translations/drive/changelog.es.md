@@ -4,6 +4,20 @@ title: "Historial de cambios"
 
 Los detalles técnicos de las versiones se conservan en el idioma del proyecto original. Las guías traducidas explican las tareas habituales.
 
+## 0.7.0 — 2026-10-14
+
+- Command effects distinguish Google-only reads from cached reads. Handwritten Google reads now
+  agree with generated methods (`remote: read`, `local: none`); account-free discovery/completion
+  declares no data access. Sync, cached reads and local writes retain their effects and guards.
+- JSON selection uses the catalog view's own fields, including `name` and `parents`, and checks
+  returned provider fields before printing. Writes without declared output fields refuse selection
+  before acting. The shared SDK owns parsing and validation; provider adapters declare their view.
+- **`--json=id,title` keeps only those fields** of the answer's item or items, in JSON and JSONL, as tg and max do.
+  A field the answer does not have is refused with the fields it has. Adopts cli-core 0.278.0.
+- Clarify contract-3 output, page/JSONL metadata and interrupted-sync recovery in the import
+  guide; refresh developer alignment and testing notes to distinguish current pins, previous-store
+  fixtures and published-package acceptance.
+
 ## 0.6.0 — 2026-10-14
 
 - **An interrupted first folder walk resumes.** `sync` saves the walk as it goes (`walk.json` beside the sync
