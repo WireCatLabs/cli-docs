@@ -6,6 +6,11 @@ Una app de Zoom define los permisos que puede solicitar un programa. Conecta una
 o crea una administrada por el usuario. Obtendrás el Public Client ID, ajustes de retorno y permisos
 para el login del navegador. Registrarla no añade un bot a las reuniones ni crea grabaciones. No se descarga un archivo de credenciales ni se crea otro cliente OAuth fuera de la app: activa Public Client OAuth dentro y copia el ID.
 
+Elige cómo conectar:
+
+- [Usa una app que ya creaste](#use-an-app-you-already-created)
+- [Crea tu propia app](#create-your-own-app)
+
 ## Usa una app que ya creaste
 
 1. Entra en [Zoom App Marketplace](https://marketplace.zoom.us/) y abre **Developer → Created apps**.

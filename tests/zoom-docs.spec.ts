@@ -120,6 +120,19 @@ for (const lang of ["en", "ru", "es"] as const) {
   test(`${lang}: app guide has manual creation and existing app reuse with explicit scope setup`, async ({ page }) => {
     await page.goto(`/${lang}/docs/zm/zoom-app`)
     const main = page.locator("main")
+    const choices = main.locator("ul").first()
+    await expect(choices.locator("a")).toHaveText(
+      {
+        en: ["Use an app you already created", "Create your own app"],
+        ru: ["Используйте уже созданное приложение", "Создайте своё приложение"],
+        es: ["Usa una app que ya creaste", "Crea tu propia app"],
+      }[lang],
+    )
+    for (const anchor of ["use-an-app-you-already-created", "create-your-own-app"]) {
+      await choices.locator(`a[href="#${anchor}"]`).click()
+      await expect(page).toHaveURL(new RegExp(`#${anchor}$`))
+      await expect(main.locator(`[id="${anchor}"]`)).toHaveCount(1)
+    }
     await expect(main).toContainText("General app")
     await expect(main).toContainText("User-managed")
     await expect(main).toContainText("Use Public Client OAuth")
