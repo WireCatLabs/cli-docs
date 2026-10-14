@@ -46,6 +46,11 @@ for (const lang of ["en", "ru", "es"] as const) {
         }
         const scan = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze()
         expect(scan.violations, `${route} ${width}`).toEqual([])
+        if (route === "") {
+          await main.locator(`a[href="/${lang}/docs/search"]`).first().click()
+          await expect(page).toHaveURL(new RegExp(`/${lang}/docs/search$`))
+          await expect(page.locator("main h1")).toBeVisible()
+        }
       })
     }
   }
