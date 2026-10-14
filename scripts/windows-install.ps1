@@ -57,7 +57,7 @@ if ($answer.PSObject.Properties.Name -contains 'item') {
     # Published tools adopt the envelope independently; older releases still return the store directly.
     $duration = $answer.meta.duration_ms
     $numericDuration = $duration -is [int] -or $duration -is [long] -or $duration -is [double] -or $duration -is [decimal]
-    if ($answer.error -or $null -eq $answer.item -or $null -ne $answer.items -or
+    if ($answer.error -or $answer.item -isnot [pscustomobject] -or $null -ne $answer.items -or
         $answer.meta.run_id -isnot [string] -or [string]::IsNullOrWhiteSpace($answer.meta.run_id) -or
         -not $numericDuration -or $duration -lt 0 -or [double]::IsNaN([double]$duration) -or
         [double]::IsInfinity([double]$duration)) {
