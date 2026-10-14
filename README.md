@@ -68,8 +68,9 @@ Fonts and licences remain local in `public/fonts/`; contacts are configured in `
 [deploy.yml](.github/workflows/deploy.yml) builds from the release tags and publishes `out/` to
 Cloudflare Pages (project `cli-docs`, served at wirecat.dev) on a push to `main`, daily, and on a
 tool's release signal; a failed run publishes nothing. It needs the secrets `CLOUDFLARE_API_TOKEN`
-(permission: Cloudflare Pages — Edit) and `CLOUDFLARE_ACCOUNT_ID`; without them it builds and says
-it did not deploy. Run it by hand with `ref: main` to publish what the tools are about to release.
+(permission: Cloudflare Pages — Edit) and `CLOUDFLARE_ACCOUNT_ID` in the `production` environment,
+which only `main` can deploy to; without the token the deploy job fails. Run it by hand with
+`ref: main` to publish what the tools are about to release.
 
 ## Licence
 
