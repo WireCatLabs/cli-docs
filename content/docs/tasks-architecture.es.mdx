@@ -35,7 +35,8 @@ cuenta; una tarea de proyecto va a un proyecto que creaste tú. Un vínculo a un
 tareas de tus propios proyectos, y solo tú los aplicas. Antes de escribir un `blocked-by` o un
 `follow-up-of`, una consulta recursiva comprueba que no cierra un ciclo.
 
-**Previsto.** Campos nuevos: `category`, marcas, `claimed_by`, `claimed_until`. Tipos de vínculo
+**Previsto.** Campos nuevos: `category`, `claimed_by`, `claimed_until`. Una tarea pasa a ser un tipo
+más en la tabla `taggings` que ya existe, así que los comandos y filtros `tags` sirven en las tareas. Tipos de vínculo
 nuevos: `duplicate-of` y `discovered-from`. Dos tablas de texto completo nuevas, `task_words` y
 `task_stems`, hechas como las de las notas. Cada cambio de categoría pasa a ser una fila de
 `task_events` del tipo `category`.
@@ -51,12 +52,13 @@ UPDATE projects SET tasks_count = tasks_count + 1 WHERE id = ? RETURNING key, ta
 ```
 
 Una tarea encontrada en un mensaje tiene un id interno (un UUID) y una clave del proyecto de entrada
-de su cuenta. `tasks list` muestra el principio del id; `tasks show` y `tasks agenda` muestran la clave.
+de su cuenta: `IN`, 8 caracteres hexadecimales y un número, como `IN1A2B3C4D-17`. `tasks list` muestra el principio del id; `tasks show` y `tasks agenda` muestran la clave.
 
-**Previsto.** Una tarea encontrada en un mensaje recibe una clave por tipo: `Q-15` pregunta,
-`REQ-22` petición, `M-7` mención, `PR-4` promesa. Cada tipo tiene su propia fila de contador, tomada
-en la misma escritura que la inserción, como en los proyectos. Se resuelven tanto `task:<key>` como
-`task:<uuid>`. La categoría es un campo, no parte de la clave, así que corregir una categoría nunca
+**Previsto.** Una tarea nueva encontrada en un mensaje recibe, en lugar de la clave de entrada, una
+clave legible por tipo: `Q-15` pregunta, `REQ-22` petición, `M-7` mención, `PR-4` promesa. Las tareas
+anteriores conservan su clave `IN…`. Cada tipo tiene su propia fila de contador, tomada
+en la misma escritura que la inserción, como en los proyectos. El UUID y los dos tipos de clave se
+resuelven como `task:<…>`. La categoría es un campo, no parte de la clave, así que corregir una categoría nunca
 rompe una clave citada en un chat o una nota.
 
 **Por qué no identificadores hash.** [beads](https://github.com/gastownhall/beads) usa
@@ -286,9 +288,9 @@ programación. Algunas de sus ideas se toman aquí y otras no.
 | beads | Aquí |
 | --- | --- |
 | Identificadores hash `bd-a3f8` | Claves legibles de un contador: un almacén, un escritor cada vez |
-| [Etiquetas](https://github.com/gastownhall/beads/blob/main/docs/core-concepts/labels.md) para todo lo que no es un campo | Una categoría de una lista fija, más marcas libres |
+| [Etiquetas](https://github.com/gastownhall/beads/blob/main/docs/core-concepts/labels.md) para todo lo que no es un campo | Una categoría de una lista fija, más las etiquetas que ya existen |
 | Tipos de arista como `duplicates` y `discovered-from` | `duplicate-of` y `discovered-from` se suman a los tipos de vínculo |
-| `bd ready`: trabajo abierto y sin bloqueos | `tasks agenda`, con `--category` y `--label` previstos |
+| `bd ready`: trabajo abierto y sin bloqueos | `tasks agenda`, con filtros por categoría y etiqueta previstos |
 | `bd update --claim`: una reserva atómica | `tasks claim`, un préstamo que termina solo |
 | `external_ref` a un elemento externo | Cada tarea se vincula a todos sus mensajes |
 | `bd duplicates` fusiona copias exactas; `bd find-duplicates` puntúa la coincidencia de palabras y solo informa | Una comprobación antes de crear, pesos por campo y una elección del agente o una lista de revisión |

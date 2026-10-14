@@ -35,7 +35,8 @@ or `created-from`. A relation between two tasks is also a `links` row, with the 
 you apply them. Before a `blocked-by` or `follow-up-of` row is written, a recursive query checks
 that it does not close a loop.
 
-**Planned.** New fields: `category`, labels, `claimed_by`, `claimed_until`. New relation kinds:
+**Planned.** New fields: `category`, `claimed_by`, `claimed_until`. A task becomes one more taggable
+type in the existing `taggings` table, so the `tags` commands and filters work on tasks. New relation kinds:
 `duplicate-of` and `discovered-from`. Two new full-text tables, `task_words` and `task_stems`,
 built like the ones for notes. Every category change becomes a `task_events` row of kind
 `category`.
@@ -49,12 +50,13 @@ from a counter on the project row, taken in the same write as the insert:
 UPDATE projects SET tasks_count = tasks_count + 1 WHERE id = ? RETURNING key, tasks_count
 ```
 
-A task found in a message has an internal id (a UUID) and a key from its account's inbox project.
+A task found in a message has an internal id (a UUID) and a key from its account's inbox project:
+`IN`, 8 hexadecimal characters and a number, such as `IN1A2B3C4D-17`.
 `tasks list` shows the start of the id; `tasks show` and `tasks agenda` show the key.
 
-**Planned.** A task found in a message gets a key per type: `Q-15` question, `REQ-22` request,
-`M-7` mention, `PR-4` promise. Each type has its own counter row, taken in the same write as the
-insert, as for projects. `task:<key>` and `task:<uuid>` both resolve. The category is a field, not
+**Planned.** A new task found in a message gets a readable key per type in place of the inbox key:
+`Q-15` question, `REQ-22` request, `M-7` mention, `PR-4` promise. Older tasks keep their `IN…` key. Each type has its own counter row, taken in the same write as the
+insert, as for projects. The UUID and both kinds of key resolve as `task:<…>`. The category is a field, not
 part of the key, so correcting a category never breaks a key quoted in a chat or a note.
 
 **Why not hash ids.** [beads](https://github.com/gastownhall/beads) uses hash ids such as `bd-a3f8`
@@ -275,9 +277,9 @@ are taken here, some are not.
 | beads | Here |
 | --- | --- |
 | Hash ids `bd-a3f8` | Readable keys from a counter: one store, one writer at a time |
-| [Labels](https://github.com/gastownhall/beads/blob/main/docs/core-concepts/labels.md) for everything that is not a field | One category from a fixed list, plus free labels |
+| [Labels](https://github.com/gastownhall/beads/blob/main/docs/core-concepts/labels.md) for everything that is not a field | One category from a fixed list, plus the existing tags |
 | Edge types such as `duplicates` and `discovered-from` | `duplicate-of` and `discovered-from` join the relation kinds |
-| `bd ready`: open, unblocked work | `tasks agenda`, with `--category` and `--label` planned |
+| `bd ready`: open, unblocked work | `tasks agenda`, with a category and a tag filter planned |
 | `bd update --claim`: an atomic claim | `tasks claim`, a lease that ends by itself |
 | `external_ref` to one outside item | Every task links to all of its messages |
 | `bd duplicates` merges exact copies; `bd find-duplicates` scores word overlap and only reports | A check before creating, field weights, and a choice by the agent or on a review list |

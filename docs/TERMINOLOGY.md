@@ -53,7 +53,6 @@ actual product UI labels exactly. [AUTHORING.md](AUTHORING.md) covers page struc
 | Action to track | task | задача | tarea | An action with its own state, distinct from a note or tag. |
 | Tie between two tasks | task relation; relation | отношение между задачами; отношение | vínculo entre tareas; vínculo | `blocked-by`, `follow-up-of`, `related-to` between tasks. Not a relationship (person and organization) and not a link inside a note. |
 | What a task is about | category | категория | categoría | One name from a fixed list in the settings (planned). Distinct from a tag and from a task's type. |
-| Free filter word on a task | label | пометка | marca | A free word such as `urgent` (planned). Whether labels are stored as tags is not decided; do not call them tags until it is. |
 | Temporary hold on a task | claim | бронь | reserva | Marks who works on a task now; it ends by itself after a set time (planned). |
 | Second task for the same thing | duplicate; merge | дубликат; объединить | duplicado; fusionar | A merge moves messages to the kept task and closes the duplicate; it can be undone and deletes nothing (planned). |
 | Source collection | folder | папка | carpeta | Explain whether it is a local file folder, Google folder or messenger chat folder. |

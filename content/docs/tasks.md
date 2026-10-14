@@ -10,7 +10,7 @@ close it when it is done. Tasks stay on your computer, in the local store of `tg
 Nothing on this page sends a message.
 
 The sections marked **Planned** describe work that is designed but not available yet: categories,
-labels, keys per type, claiming and the duplicate check. [How tasks work](./tasks-architecture.mdx)
+tags on tasks, keys per type, claiming and the duplicate check. [How tasks work](./tasks-architecture.mdx)
 gives the technical detail.
 
 ## Where tasks come from
@@ -150,20 +150,22 @@ tasks duplicates reject REQ-23 REQ-22
 tasks unmerge REQ-23
 ```
 
-## Planned: categories, labels and keys
+## Planned: categories, tags and keys
 
 - **A category** says what a task is about: `money`, `documents`, `meeting`, `delivery`, `access`,
   `personal` or `other`. The list is fixed in the settings, so "finance" and "payments" never live
   side by side. A rule picks the category from the words of the message; your agent corrects it.
-- **Labels** such as `urgent` or `waiting-for-them` are free words for filtering.
+- **Tags** such as `urgent` or `waiting-for-them` work on tasks too: the existing `tags` commands
+  and filters apply to tasks. Tags are for filtering only; the duplicate check ignores them.
 - **Keys per type:** a task found in a message gets a short key, such as `Q-15` for a question,
   `REQ-22` for a request, `M-7` for a mention or `PR-4` for a promise. A key never changes, so you can
-  quote it in a chat or a note.
+  quote it in a chat or a note. Older tasks keep their current key, such as `IN1A2B3C4D-17`; both
+  kinds of key and the full id keep working.
 
 ```text
 tasks add msg:telegram/1/77/42 --type request --category money
 tasks categories
-tasks agenda --category money --label urgent
+tasks agenda --category money
 ```
 
 ## Planned: claiming a task

@@ -10,7 +10,7 @@ cerrarla cuando esté hecha. Las tareas se quedan en tu ordenador, en el almacé
 y `memo`. Nada de esta página envía mensajes.
 
 Las secciones marcadas como **Previsto** describen trabajo ya diseñado pero aún no disponible:
-categorías, marcas, claves por tipo, la reserva de tareas y la detección de duplicados.
+categorías, etiquetas en las tareas, claves por tipo, la reserva de tareas y la detección de duplicados.
 [Cómo funcionan las tareas](./tasks-architecture.mdx) da el detalle técnico.
 
 ## De dónde salen las tareas
@@ -156,20 +156,23 @@ tasks duplicates reject REQ-23 REQ-22
 tasks unmerge REQ-23
 ```
 
-## Previsto: categorías, marcas y claves
+## Previsto: categorías, etiquetas y claves
 
 - **Una categoría** dice de qué trata una tarea: `money`, `documents`, `meeting`, `delivery`, `access`,
   `personal` u `other`. La lista está fijada en los ajustes, así que «finanzas» y «pagos» nunca
   conviven. Una regla elige la categoría por las palabras del mensaje; tu agente la corrige.
-- **Las marcas**, como `urgent` o `waiting-for-them`, son palabras libres para filtrar.
+- **Las etiquetas**, como `urgent` o `waiting-for-them`, también sirven en las tareas: se aplican los
+  comandos y filtros `tags` de siempre. Las etiquetas solo sirven para filtrar; la detección de
+  duplicados no las tiene en cuenta.
 - **Claves por tipo:** una tarea encontrada en un mensaje recibe una clave corta, como `Q-15` para una
   pregunta, `REQ-22` para una petición, `M-7` para una mención o `PR-4` para una promesa. Una clave no
-  cambia nunca, así que puedes citarla en un chat o una nota.
+  cambia nunca, así que puedes citarla en un chat o una nota. Las tareas anteriores conservan su
+  clave actual, como `IN1A2B3C4D-17`; siguen funcionando los dos tipos de clave y el id completo.
 
 ```text
 tasks add msg:telegram/1/77/42 --type request --category money
 tasks categories
-tasks agenda --category money --label urgent
+tasks agenda --category money
 ```
 
 ## Previsto: reservar una tarea
