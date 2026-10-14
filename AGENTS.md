@@ -14,3 +14,10 @@ Before writing or reviewing documentation, read [docs/AUTHORING.md](docs/AUTHORI
 
 For routine local documentation edits, follow [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md):
 use the browser smoke suite and targeted checks. Full export and browser coverage run in CI.
+
+## Security
+
+Security audits of this repository follow the shared
+[security method](https://github.com/WireCatLabs/cli-testing/tree/main/docs/security) in cli-testing;
+vulnerabilities are reported as the
+[security policy](https://github.com/WireCatLabs/.github/blob/main/SECURITY.md) says.

@@ -18,7 +18,7 @@ WireCat se toma la seguridad en serio. Usamos comprobaciones automáticas y audi
 
 Las comprobaciones automáticas buscan vulnerabilidades conocidas en dependencias, patrones sospechosos de código, secretos expuestos y configuraciones arriesgadas de publicación. Las revisiones manuales siguen en el código el uso de credenciales, permisos, descargas y texto de mensajes no confiable. Contrastamos los posibles hallazgos con el código y, cuando corresponde, los probamos con datos sintéticos antes de considerarlos problemas confirmados.
 
-El [método de auditoría de seguridad](https://github.com/WireCatLabs/cli-testing/blob/5445c6f08b15ee04881aee3cbe466b0a17574b56/docs/security/METHOD.md) y la [guía para repetirla](https://github.com/WireCatLabs/cli-testing/blob/5445c6f08b15ee04881aee3cbe466b0a17574b56/docs/security/RUNBOOK.md) describen el proceso. Las auditorías pueden detectar problemas y áreas pendientes de pruebas; no garantizan la seguridad de cualquier agente, adjunto o plataforma. Los hallazgos detallados se gestionan en privado mientras se investigan y corrigen.
+El [método de auditoría de seguridad](https://github.com/WireCatLabs/cli-testing/blob/main/docs/security/METHOD.md) y la [guía para repetirla](https://github.com/WireCatLabs/cli-testing/blob/main/docs/security/RUNBOOK.md) describen el proceso. Las auditorías pueden detectar problemas y áreas pendientes de pruebas; no garantizan la seguridad de cualquier agente, adjunto o plataforma. Los hallazgos detallados se gestionan en privado mientras se investigan y corrigen.
 
 ## Elegir qué puede hacer el agente
 
@@ -116,14 +116,14 @@ Al pedir estadísticas, solicita los mensajes u observaciones de miembros que re
 y comprueba qué historial falta. Un contador desconocido no es cero; un historial incompleto no
 demuestra que una pregunta nunca recibió respuesta o que un miembro permaneció en silencio.
 
-El [informe publicado](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/dev/evaluations/2026-10-08-independent-stats-agent-evaluation.md) registra 38 tareas sintéticas en seis contextos nuevos de agentes:
+El [informe publicado](https://github.com/WireCatLabs/cli-core/blob/73a57e1d229441d27f8325677808c3ae09175803/docs/dev/evaluations/2026-10-08-independent-stats-agent-evaluation.md) registra 38 tareas sintéticas en seis contextos nuevos de agentes:
 interpretar informes, conservar valores desconocidos, previsualizar objetivos exactos, respetar
 permisos y recuperar pruebas modificadas. Los contextos comparten tareas; el número de resultados
 no es un porcentaje de fiabilidad. No se usaron cuentas reales ni adaptadores de red del mensajero;
 MCP se accedió mediante un proxy de shell. No garantiza que otro agente o tu agente se comporte
 igual ni que resista todas las instrucciones ocultas en mensajes.
 
-Los desarrolladores pueden [repetir el procedimiento](https://github.com/WireCatLabs/cli-messaging/tree/main/scripts/evals) con datos sintéticos. Revisa las
+Los desarrolladores pueden [repetir el procedimiento](https://github.com/WireCatLabs/cli-core/tree/main/scripts/evals) con datos sintéticos. Revisa las
 limitaciones de modelo y SDK del informe antes de comparar puntuaciones y verifica las pruebas
 antes de tomar decisiones importantes.
 
