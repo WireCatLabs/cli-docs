@@ -72,7 +72,7 @@ drive personal --offline documents show DOC_ID --json
 ```
 
 Lee el fragmento y metadatos guardados antes de interpretarlos como una decisión. Abre el enlace
-Google para comprobar la versión actual. Si aparece `meaningSkipped`, revisa la razón: la búsqueda
+Google para comprobar la versión actual. Si aparece `meaning_skipped`, revisa la razón: la búsqueda
 semántica puede no haberse ejecutado. PDF escaneados, Slides, imágenes y otros formatos ilegibles
 no tienen texto; se encuentran por nombre y `not_read` indica la razón (es `null` en uno leído).
 Abre `source_url`, sin citar texto ausente. Consulta [formatos](./usage.md#which-document-types-are-searchable)
@@ -80,7 +80,7 @@ y [recetas](./recipes.md#refresh-a-project-and-prepare-a-meeting-brief).
 
 ## Buscar imágenes por lo que muestran
 
-Con `pictureSearch` activado en el perfil, `drive personal search "cat on a sofa"` también
+Con `picture_search` activado en el perfil, `drive personal search "cat on a sofa"` también
 ofrece `pictures`: imágenes más cercanas al contenido del texto, con `ref`, `score`, `title` y
 `source_url`. Es una lista separada de `hits`. Con la opción desactivada no hay `pictures`.
 

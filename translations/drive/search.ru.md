@@ -71,7 +71,7 @@ drive personal --offline documents show DOC_ID --json
 ```
 
 Прочитайте сохранённый фрагмент и метаданные перед выводом о решении. Для свежей версии откройте
-исходную ссылку Google. Если видите `meaningSkipped`, проверьте причину: смысловой поиск мог не
+исходную ссылку Google. Если видите `meaning_skipped`, проверьте причину: смысловой поиск мог не
 выполняться. Сканированные PDF, Slides, изображения и другие нечитаемые форматы не имеют текста;
 по названию они находятся, но `not_read` содержит причину (для прочитанного файла `null`).
 Открывайте `source_url`, не цитируйте отсутствующий текст. См. [форматы](./usage.md#which-document-types-are-searchable)
@@ -79,7 +79,7 @@ drive personal --offline documents show DOC_ID --json
 
 ## Искать изображения по содержимому
 
-Если в профиле включён `pictureSearch`, команда `drive personal search "cat on a sofa"`
+Если в профиле включён `picture_search`, команда `drive personal search "cat on a sofa"`
 возвращает также `pictures`: изображения, ближайшие по содержимому к запросу, с `ref`, `score`,
 `title` и `source_url`. Это отдельный список, не часть `hits`. При выключенной настройке поля `pictures` нет.
 
