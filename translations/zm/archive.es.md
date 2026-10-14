@@ -77,9 +77,9 @@ parte de la carpeta en silencio.
 
 ## Observar nuevas reuniones
 
-`zm watch --source api --lookback-days 7 --jsonl` repite descargas. Una carpeta elige archivos;
-si no, se usa la configuración. Puede usar `files.folder`. El API necesita red y admite `--since-time`
-y solapamiento de 0–31 días. Tras guardar el cursor se usa este con el solapamiento; fallos retienen
+`zm watch api --lookback-days 7 --jsonl` repite descargas. `zm watch files [folder]` observa una
+carpeta de transcripciones; si falta, usa `files.folder`. Sin ambos argumentos se aplica el origen
+configurado. La API necesita red y admite `--since-time` y solapamiento de 0–31 días. Tras guardar el cursor se usa este con el solapamiento; fallos retienen
 la primera frontera. El solapamiento se resta también del primer `--since-time`.
 `--interval` es la pausa entre ciclos. Perfil, origen, ajustes y cliente OAuth se capturan al
 inicio; reinicia tras cambiarlos. Los ciclos no se superponen y cierran la base antes de confirmar.
@@ -88,7 +88,7 @@ Detén con Ctrl-C.
 Para una carpeta:
 
 ```sh
-zm watch ./downloaded-transcripts --interval 10s --jsonl
+zm watch files ./downloaded-transcripts --interval 10s --jsonl
 ```
 
 Cada ciclo revisa de nuevo los archivos, incluidas correcciones antiguas, importa en serie, cierra

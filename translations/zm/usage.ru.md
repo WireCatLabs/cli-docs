@@ -68,7 +68,7 @@ zm meetings export <meeting-id> --format markdown --json
 | `meetings embeddings --model <model>` | просмотреть генерацию; `--yes` обрабатывает одну порцию |
 | `search all <query>` | искать встречи или явно выбранные общие ресурсы |
 | `events list` | прочитать сохранённые события |
-| `watch [folder] --source api\|files --jsonl` | повторно импортировать источник в текущем процессе |
+| `watch [api\|files] [folder] --jsonl` | повторно импортировать источник в текущем процессе |
 | `recordings list`, `recordings show <meeting>` | найти облачные записи и метаданные файлов |
 | `recordings download <meeting> --destination <directory>` | архивировать доступные файлы |
 | `recordings sync --since-time <date> --until-time <date> --destination <directory> --jsonl` | архивировать историю по календарным месяцам |

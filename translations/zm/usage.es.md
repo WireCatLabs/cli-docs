@@ -68,7 +68,7 @@ no importa su transcripción en la base hasta que solicites la importación del 
 | `meetings embeddings --model <model>` | revisar generación; `--yes` aplica un lote |
 | `search all <query>` | buscar reuniones o recursos elegidos explícitamente |
 | `events list` | leer eventos guardados |
-| `watch [folder] --source api\|files --jsonl` | importar repetidamente en primer plano |
+| `watch [api\|files] [folder] --jsonl` | importar repetidamente en primer plano |
 | `recordings list`, `recordings show <meeting>` | descubrir grabaciones y metadatos |
 | `recordings download <meeting> --destination <directory>` | archivar archivos disponibles |
 | `recordings sync --since-time <date> --until-time <date> --destination <directory> --jsonl` | archivar historial por meses |
