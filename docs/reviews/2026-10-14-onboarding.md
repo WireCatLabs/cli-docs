@@ -116,3 +116,14 @@ checks remain intact; no prose or command text is dropped to fit the layout.
 Final compact-layout validation:21 responsive/clipboard/security/Markdown cases pass, all with
 20% timeout headroom. Repository lint, full type checks and browser-test structure policy pass.
 The compact controls remain keyboard accessible and request text remains complete.
+
+## App setup contents follow-up
+
+Portal base814e2a4; native basebcb6b44. Owner requested a contents list at the start of
+Connect a Zoom app. Native PR73 adds exactly two links below the introduction: Use an app you
+already created, then Create your own app. Imported from immutable078cd372b836398d210b2b6ab37772aa85d6ad7e;
+reviewed runtime remains Zoom0.10.0. Both existing English anchors remain the targets in each locale.
+
+Read the native English page and both complete RU/ES translations; the two additions preserve
+app choices, Public Client ID, permissions, callback and first-sync guidance. No settings or
+command behavior changes. Browser coverage now follows both contents links in all three locales.
