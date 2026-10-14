@@ -146,7 +146,7 @@ Encuentra el chat, comprueba qué está guardado y busca solo en el historial gu
 petición:
 
 ```sh
-tg personal chats list 'title:*Atlas* kind:group'
+tg personal chats list 'title:*Atlas* kind:group' --offline
 tg personal store status -1001001001001
 tg personal search messages 'analytics date:[2026-09-01 TO 2026-10-01} chat:"-1001001001001"' --backend archive --json
 ```
@@ -225,9 +225,9 @@ borrador.
 Identifica los chats y revisa las dos partes de cada conversación:
 
 ```sh
-tg personal chats list 'title:*Atlas* kind:group'
-tg personal contacts list name:Anna
-tg personal contacts list name:Tom
+tg personal chats list 'title:*Atlas* kind:group' --offline
+tg personal contacts show Anna
+tg personal contacts show Tom
 tg personal review 'chat:"-1001001001001" date>7d'
 tg personal review 'chat:100200300 date>7d'
 tg personal review 'chat:100200301 date>7d'
@@ -301,9 +301,9 @@ pregunta.
 Encuentra los grupos y los participantes, y después lee los chats elegidos:
 
 ```sh
-tg personal chats list 'title:*Atlas* kind:group'
-tg personal contacts list name:Anna
-tg personal contacts list name:Tom
+tg personal chats list 'title:*Atlas* kind:group' --offline
+tg personal contacts show Anna
+tg personal contacts show Tom
 tg personal messages list -1001001001001 'date>7d' --limit 100
 tg personal messages list -1001001001002 'date>7d' --limit 100
 tg personal messages list 100200300 'date>7d' --limit 100

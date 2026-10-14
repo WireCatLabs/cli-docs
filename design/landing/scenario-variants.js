@@ -8,7 +8,7 @@ window.WireScenarioVariants = {
           "ask": "Use tg cli, gather context for tomorrow’s Atlas call: decisions, risks and questions."
         },
         {
-          "tool": "tg chats list title:Atlas",
+          "tool": "tg chats list title:Atlas --offline",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"101\",\n      \"title\": \"Atlas · team\",\n      \"kind\": \"group\"\n    },\n    {\n      \"id\": \"102\",\n      \"title\": \"Atlas · design\",\n      \"kind\": \"group\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -52,7 +52,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Atlas · design\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Anna\",\n          \"text\": \"The design is ready. We’re still waiting for the final copy.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
-          "tool": "tg chats list title:Tom",
+          "tool": "tg chats list title:Tom --offline",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"503\",\n      \"title\": \"Tom\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -189,7 +189,7 @@ window.WireScenarioVariants = {
           "ask": "Use tg cli, I’m an admin of the Community group. Show violations of its rules and a proposed action plan. Don’t delete anything yet."
         },
         {
-          "tool": "tg chats list title:Community",
+          "tool": "tg chats list title:Community --offline",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"301\",\n      \"title\": \"Community\",\n      \"kind\": \"group\"\n    }\n  ]\n}"
         },
         {
@@ -416,7 +416,7 @@ window.WireScenarioVariants = {
           "ask": "Find Tom’s chat and check whether he already sent the design. Draft replies to the customer, Anna and Tom."
         },
         {
-          "tool": "tg chats list title:Tom",
+          "tool": "tg chats list title:Tom --offline",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"503\",\n      \"title\": \"Tom\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -524,7 +524,7 @@ window.WireScenarioVariants = {
           "ask": "Use tg cli, find the current Atlas contract, invoices and presentation. Check project groups and direct messages."
         },
         {
-          "tool": "tg chats list title:Atlas",
+          "tool": "tg chats list title:Atlas --offline",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"101\",\n      \"title\": \"Atlas · team\"\n    },\n    {\n      \"id\": \"102\",\n      \"title\": \"Atlas · design\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -564,7 +564,7 @@ window.WireScenarioVariants = {
           "ask": "Check Anna's DMs and the design group. Use the latest versions, but keep the old ones too."
         },
         {
-          "tool": "tg chats list title:Anna",
+          "tool": "tg chats list title:Anna --offline",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"501\",\n      \"title\": \"Anna\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -716,7 +716,7 @@ window.WireScenarioVariants = {
           "ask": "Usa tg cli, reúne el contexto para la llamada de Atlas de mañana: decisiones, riesgos y preguntas."
         },
         {
-          "tool": "tg chats list title:Atlas",
+          "tool": "tg chats list title:Atlas --offline",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"101\",\n      \"title\": \"Atlas · equipo\",\n      \"kind\": \"group\"\n    },\n    {\n      \"id\": \"102\",\n      \"title\": \"Atlas · diseño\",\n      \"kind\": \"group\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -760,7 +760,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Atlas · diseño\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Anna\",\n          \"text\": \"La maqueta está lista. Aún faltan los textos finales.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
-          "tool": "tg chats list title:Tom",
+          "tool": "tg chats list title:Tom --offline",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"503\",\n      \"title\": \"Tom\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -897,7 +897,7 @@ window.WireScenarioVariants = {
           "ask": "Usa tg cli, soy administrador del grupo Comunidad. Muéstrame las infracciones y un plan. No borres nada todavía."
         },
         {
-          "tool": "tg chats list title:Comunidad",
+          "tool": "tg chats list title:Comunidad --offline",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"301\",\n      \"title\": \"Comunidad\",\n      \"kind\": \"group\"\n    }\n  ]\n}"
         },
         {
@@ -1124,7 +1124,7 @@ window.WireScenarioVariants = {
           "ask": "Busca el chat de Tom y comprueba si ya envió el diseño. Prepara respuestas para el cliente, Anna y Tom."
         },
         {
-          "tool": "tg chats list title:Tom",
+          "tool": "tg chats list title:Tom --offline",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"503\",\n      \"title\": \"Tom\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1232,7 +1232,7 @@ window.WireScenarioVariants = {
           "ask": "Usa tg cli, encuentra el contrato, las facturas y la presentación actuales de Atlas. Revisa grupos y mensajes privados."
         },
         {
-          "tool": "tg chats list title:Atlas",
+          "tool": "tg chats list title:Atlas --offline",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"101\",\n      \"title\": \"Atlas · equipo\"\n    },\n    {\n      \"id\": \"102\",\n      \"title\": \"Atlas · diseño\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1272,7 +1272,7 @@ window.WireScenarioVariants = {
           "ask": "Revisa mi conversación con Anna y el grupo de diseño. Quédate con las últimas versiones, pero conserva también las anteriores."
         },
         {
-          "tool": "tg chats list title:Anna",
+          "tool": "tg chats list title:Anna --offline",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"501\",\n      \"title\": \"Anna\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1440,7 +1440,7 @@ window.WireScenarioVariants = {
           "ask": "Используй tg cli, собери контекст к завтрашнему созвону по Atlas: решения, риски и вопросы."
         },
         {
-          "tool": "tg chats list title:Atlas",
+          "tool": "tg chats list title:Atlas --offline",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"101\",\n      \"title\": \"Atlas · команда\",\n      \"kind\": \"group\"\n    },\n    {\n      \"id\": \"102\",\n      \"title\": \"Atlas · дизайн\",\n      \"kind\": \"group\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1484,7 +1484,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Atlas\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Анна\",\n          \"text\": \"Макет готов. Финальные тексты ещё ждём.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
-          "tool": "tg chats list title:Том",
+          "tool": "tg chats list title:Том --offline",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"503\",\n      \"title\": \"Том\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1621,7 +1621,7 @@ window.WireScenarioVariants = {
           "ask": "Используй tg cli, я администратор группы «Сообщество». Покажи нарушения её правил и план действий. Пока ничего не удаляй."
         },
         {
-          "tool": "tg chats list title:Сообщество",
+          "tool": "tg chats list title:Сообщество --offline",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"301\",\n      \"title\": \"Сообщество\",\n      \"kind\": \"group\"\n    }\n  ]\n}"
         },
         {
@@ -1848,7 +1848,7 @@ window.WireScenarioVariants = {
           "ask": "Найди чат с Томом и проверь, не прислал ли он макет. Подготовь ответы клиенту, Анне и Тому."
         },
         {
-          "tool": "tg chats list title:Том",
+          "tool": "tg chats list title:Том --offline",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"503\",\n      \"title\": \"Том\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1956,7 +1956,7 @@ window.WireScenarioVariants = {
           "ask": "Используй tg cli, найди актуальный договор, счета и презентацию по Atlas. Проверь проектные группы и личную переписку."
         },
         {
-          "tool": "tg chats list title:Atlas",
+          "tool": "tg chats list title:Atlas --offline",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"101\",\n      \"title\": \"Atlas · команда\"\n    },\n    {\n      \"id\": \"102\",\n      \"title\": \"Atlas · дизайн\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1996,7 +1996,7 @@ window.WireScenarioVariants = {
           "ask": "Посмотри личку Анны и дизайн. Оставь последние версии, но не теряй старые."
         },
         {
-          "tool": "tg chats list title:Анна",
+          "tool": "tg chats list title:Анна --offline",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"501\",\n      \"title\": \"Анна\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
