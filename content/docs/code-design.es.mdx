@@ -272,8 +272,9 @@ La mayor parte del diseño la comprueban máquinas, así que un cambio que lo ro
 
 | Comprobación | Qué detiene | Dónde |
 | --- | --- | --- |
-| Importaciones restringidas | Una importación que cruza un límite de capa de la tabla anterior o los límites de una herramienta. | El `biome.json` de cada repositorio, ejecutado por `pnpm lint`. |
-| Ciclos de importación | Dos módulos que se importan entre sí en ejecución, directamente o a través de otros. Las importaciones solo de tipos están permitidas. | `noImportCycles` en las reglas de nivel superior del lint de cli-core. |
+| Importaciones restringidas | Una importación que cruza un límite de capa de la tabla anterior o los límites de una herramienta, o un SDK de proveedor importado fuera del módulo al que pertenece. | El `biome.json` de cada repositorio, ejecutado por `pnpm lint`. |
+| Ciclos de importación | Dos módulos que se importan entre sí en ejecución, directamente o a través de otros. Las importaciones solo de tipos están permitidas. | `noImportCycles` en las reglas de nivel superior del lint de cada repositorio. |
+| Tamaño de archivo | Un archivo de más de 1000 líneas. Un archivo que ya las supera no puede crecer: su excepción está limitada a su tamaño actual. Las pruebas y el código generado están exentos. | `noExcessiveLinesPerFile` en el `biome.json` de cada repositorio. |
 | Parity | Un cambio del núcleo que rompe la compilación de cualquiera de las herramientas. Una rama con el mismo nombre en una herramienta permite que un cambio incompatible pase las comprobaciones antes de que las herramientas lo adopten. | El workflow Parity de cli-core. |
 | Contrato de comandos | La forma de `commands --json`, los efectos declarados en cada comando, la captura de la ayuda. | `contracts:check` y `cli-dev lint` de cada herramienta. |
 | Comprobación de tipos | Código, pruebas y scripts como tres proyectos. | `pnpm typecheck`. |
@@ -282,6 +283,9 @@ La mayor parte del diseño la comprueban máquinas, así que un cambio que lo ro
 Biome construye el grafo de importaciones para `noImportCycles` solo cuando la regla está activada en las
 reglas de nivel superior. Dentro de una entrada `overrides` no informa de nada, así que la regla se queda
 arriba.
+
+Cada mes, el registro de [comprobaciones de arquitectura](https://github.com/WireCatLabs/cli-testing/blob/main/performance/engineering/architecture-checks/README.md) vuelve a medir estas reglas en todos los
+repositorios, lista los archivos de más de 500 líneas con un veredicto sobre cada uno y guarda la tendencia.
 
 Convenciones para el código nuevo:
 
@@ -310,8 +314,8 @@ Convenciones para el código nuevo:
 - **El adaptador de tg es una clase grande**: 2312 líneas y unos 110 métodos, legible método a método, pero
   es el lugar donde acaba cada función de Telegram.
 - **`client/values.ts` de max** tiene 59 exportaciones que usan 20 módulos.
-- **Solo cli-core aplica la regla contra ciclos de importación.** tg y max no tienen ciclos hoy, pero su lint
-  no impide uno nuevo.
+- **Algunos archivos grandes todavía hacen varias cosas.** El lint impide que crezcan los de más de 1000
+  líneas; el registro de [comprobaciones de arquitectura](https://github.com/WireCatLabs/cli-testing/blob/main/performance/engineering/architecture-checks/README.md) nombra la costura por la que dividir cada uno.
 
 Para ver dónde encajan en estas capas la búsqueda, los vectores y el grafo de conversaciones, sigue con la
 [arquitectura de búsqueda](./search-architecture.mdx).
