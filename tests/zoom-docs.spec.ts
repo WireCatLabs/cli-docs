@@ -216,3 +216,22 @@ for (const lang of ["en", "ru", "es"] as const) {
     })
   }
 }
+
+for (const lang of ["en", "ru", "es"] as const) {
+  test(`${lang}: hosted calendar coverage and unverified dates survive Markdown export`, async ({ page, request }) => {
+    await page.goto(`/${lang}/docs/zm/remote-meetings`)
+    const limits = {
+      en: ["not list every invitation", "mark its date as unverified"],
+      ru: ["не включает все приглашения", "отметьте дату как неподтверждённую"],
+      es: ["No incluye todas las invitaciones", "marca la fecha como no verificada"],
+    }[lang]
+    for (const limit of limits) await expect(page.locator("main")).toContainText(limit)
+    const prefix = lang === "en" ? "" : `${lang}/`
+    const response = await request.get(`/llms.mdx/docs/${prefix}zm/remote-meetings/content.md`)
+    expect(response.ok()).toBe(true)
+    const markdown = await response.text()
+    for (const limit of limits) expect(markdown).toContain(limit)
+    expect(markdown).toContain("meeting:read:list_meetings")
+    expect(markdown).toContain("zm remote-meetings list --json")
+  })
+}

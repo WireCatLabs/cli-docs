@@ -21,6 +21,9 @@ key and explicit aliases, including meetings without confirmed membership.
 
 Feature PR76 is merged at c255b84. Package/SKILL/changelog preparation PR77 is merged at b11f45e.
 Native continuation correction PR78 is merged at f60c137: root next versus item.page.cursor.
+Native calendar clarification PR79 merged at0142fea: hosted-list scope, missing invitation coverage
+and unverified recurring dates. Source: current adapter plus official Zoom Meetings API and
+occurrence documentation (checked14 October).
 Core 0.268.0 and Base 0.27.2 remain exact registry dependencies; no preview pins were introduced.
 
 421 native synthetic tests passed, with 98.14% line and 97.07% statement coverage, all required
@@ -48,6 +51,7 @@ root next preserves frozen query, cursor, scope and budgets. Completeness remain
 | usage EN/RU/ES | Existing guide retained; adds bounded project evidence command to local command table; metadata/history boundaries unchanged |
 | changelog EN/RU/ES | Exact 0.12 additions and inherited guide correction translated; previous history preserved |
 | generated commands EN/RU/ES | New native-generated projects/evidence subtree copied with exact executable fences/options; existing translated framing preserved |
+| remote meetings EN/RU/ES | Full guides read; distinguish hosted schedule from invitations and require occurrence verification in Zoom; no unsupported calendar read or automatic brief is claimed |
 | shared Meetings EN/RU/ES | Full guides read; explain unlinked candidate discovery, review before association, prior indexing and fictional IDs; preserve schedule/recurrence limitations |
 | unchanged Zoom sources | Compared immutable source diff with prior review: onboarding/app choices, archive, topic search, settings, sessions, security and remote management retain behavior |
 
@@ -58,4 +62,15 @@ no automatic extraction, meeting brief command or new provider connector is clai
 All execution uses fresh temporary HOME/store/state on the command line. Fixtures contain invented
 people, projects and transcripts. No owner database, model directory or keyring was opened.
 
-Publication, final portal validation and live-route evidence will be recorded in the PR.
+Zoom0.12.0 release38584172850 succeeded, including421 native tests and all four installed Linux/Windows
+Node22/24 jobs. Registry tarball integrity and exact equality with the validated artifact pass;
+v0.12.0 dereferences0142fea. Matching GitHub release and isolated global0.12 installation are verified.
+Discovery says contract2 and includes project evidence; doctor retains item/meta. No owner state was opened.
+
+Portal sources now use only immutable v0.12.0; incorporated search/MCP guide overrides are retired.
+All12 changed translation fingerprints are reviewed/current. Exact command captures for all five
+pinned packages pass with runtime network disabled. Strict docs:1265 references,zero gaps/invalid
+examples,126 unchanged manual illustrations. All305 unit tests, lint, typechecking, Markdown and
+release-note/roadmap checks pass. Search/MCP/shared guides passed12 targeted browser cases; the
+calendar/shared-guide follow-up passed6 cases, with20% timeout headroom in both runs.
+Deployment CI and final live-route evidence will be recorded in the PR.

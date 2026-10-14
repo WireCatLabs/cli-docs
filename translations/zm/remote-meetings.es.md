@@ -12,7 +12,8 @@ el agente reúna discusiones anteriores y contexto del proyecto.
 Busca mi próxima reunión Zoom sobre Research Example. Muestra fecha, zona horaria e invitación. Después reúne discusiones y preguntas abiertas del texto guardado, con fuentes. No cambies la reunión ni guardes vínculos inferidos.
 ```
 
-La herramienta lista la agenda Zoom; el agente reúne fuentes locales. No sincroniza calendarios
+La lista contiene las reuniones programadas del anfitrión conectado mediante la API de Zoom.
+No incluye todas las invitaciones del calendario. El agente reúne fuentes locales. No sincroniza calendarios
 Google/Outlook ni genera un informe automático. La lista necesita `meeting:read:list_meetings`;
 detalles e invitaciones requieren [permisos adicionales](./zoom-app.md#add-archive-or-management-access).
 
@@ -27,6 +28,10 @@ zm remote-meetings invitation 123456789 --json
 Los identificadores remotos son IDs numéricos de Zoom; `meetings` usa IDs de la base local.
 La lista requiere añadir manualmente `meeting:read:list_meetings`; detalles e invitaciones necesitan
 permisos opcionales de [la guía](./zoom-app.md#add-archive-or-management-access).
+
+En una serie recurrente, la hora inicial de la lista no verifica la próxima ocurrencia. La CLI
+aún no expone lecturas de agenda por ocurrencia. Confirma la ocurrencia en Zoom antes de confiar
+en un informe de preparación; si no puedes comprobarla, marca la fecha como no verificada.
 
 ## Crear, modificar o cancelar
 
