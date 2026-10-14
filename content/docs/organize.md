@@ -18,7 +18,7 @@ The records you connect must be in the same deliberately chosen local store.
 | Memory | Keep a reusable summary, fact or preference with supporting evidence. | A proposed budget decision, reviewed before confirmation. |
 | Person | Connect identities you know belong to the same human. | A Google editor and a messenger identity; matching names alone are not enough. |
 | Project | Connect existing work and its evidence under one project record. | The launch project linked to its budget document. |
-| Task | Track an action rather than merely label a source. | Confirm the revised budget, with a link to the document. |
+| Task | Track an action rather than merely label a source. See [Tasks](./tasks.md). | Confirm the revised budget, with a link to the document. |
 
 Tags and notes are local organization; they do not edit a Google file, send a message or change
 mailbox labels. Projects and tasks are stored work records, not commands supplied by every connector.

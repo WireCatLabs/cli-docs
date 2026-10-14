@@ -51,6 +51,11 @@ actual product UI labels exactly. [AUTHORING.md](AUTHORING.md) covers page struc
 | Reusable source-backed conclusion | memory | память; запись памяти, где иначе непонятно | recuerdo | A fact/summary/preference with evidence and a review status; source changes can make it stale. |
 | Group of work records | project | проект | proyecto | Existing work record connecting tasks and evidence, distinct from a folder or tag. |
 | Action to track | task | задача | tarea | An action with its own state, distinct from a note or tag. |
+| Tie between two tasks | task relation; relation | отношение между задачами; отношение | vínculo entre tareas; vínculo | `blocked-by`, `follow-up-of`, `related-to` between tasks. Not a relationship (person and organization) and not a link inside a note. |
+| What a task is about | category | категория | categoría | One name from a fixed list in the settings (planned). Distinct from a tag and from a task's type. |
+| Free filter word on a task | label | пометка | marca | A free word such as `urgent` (planned). Whether labels are stored as tags is not decided; do not call them tags until it is. |
+| Temporary hold on a task | claim | бронь | reserva | Marks who works on a task now; it ends by itself after a set time (planned). |
+| Second task for the same thing | duplicate; merge | дубликат; объединить | duplicado; fusionar | A merge moves messages to the kept task and closes the duplicate; it can be undone and deletes nothing (planned). |
 | Source collection | folder | папка | carpeta | Explain whether it is a local file folder, Google folder or messenger chat folder. |
 | Shared local file of the CLIs | local store | локальное хранилище | almacén local | The one file on the computer (`wirecat.db`) where tg, max and memo keep messages, mail, notes and records. A messenger's own pages may call its chat copy the local archive. |
 | Pointer to one stored item | reference | ссылка на источник | referencia | The typed identifier a result returns, such as `note:12` or `msg:telegram/1/77/42`. Distinct from a link written inside a note. |

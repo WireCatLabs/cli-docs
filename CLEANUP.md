@@ -12,6 +12,7 @@ were deleted, not archived. The checkout is on `main`; three merged worktrees we
 
 ## Retained
 
+- `~/Projects/AI/cli-docs-wt-tasks-pages`, branch `docs/tasks-pages` — tasks and tasks-architecture pages; remove the worktree after the PR is merged or closed — 2026-10-14
 - `.worktrees/zoom-participants`, branch `docs/zoom-participants` — Zoom 0.10 release-source and locale review; retained 2026-10-14 for the owner's cleanup batch.
 - `~/.cache/zoom-bounded-participants-release-2026-10-14` and `/tmp/zm-test-participant-platform-*` — clean release checkout and isolated installed-platform fixtures; retained 2026-10-14 for the owner's cleanup batch.
 - `/home/leemour/Projects/AI/max-cli-private-wt-llm-wiki-20261009` — cli-private PR #270; check whether

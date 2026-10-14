@@ -18,7 +18,7 @@ Los registros conectados deben estar en la misma base local elegida expresamente
 | Recuerdo | Conservar resumen, hecho o preferencia con evidencia. | Una decisión de presupuesto propuesta y revisada antes de confirmar. |
 | Persona | Conectar identidades que sabes que pertenecen al mismo humano. | Un editor Google y una identidad del servicio de mensajería; el nombre no basta. |
 | Proyecto | Conectar trabajo existente y evidencia bajo un registro de proyecto. | El lanzamiento vinculado con su presupuesto. |
-| Tarea | Seguir una acción en lugar de solo etiquetar una fuente. | Confirmar el presupuesto con un vínculo al documento. |
+| Tarea | Seguir una acción en lugar de solo etiquetar una fuente. Ver [Tareas](./tasks.md). | Confirmar el presupuesto con un vínculo al documento. |
 
 Etiquetas y notas son organización local: no editan un archivo Google, envían mensajes ni cambian
 etiquetas del correo. Proyectos y tareas son registros de trabajo, no comandos de todo conector.

@@ -9,6 +9,7 @@
     "search",
     "what-is-indexed",
     "search-playground",
+    "tasks",
     "prompting",
     "drafts-and-templates",
     "features",
@@ -37,6 +38,7 @@
     "code-design",
     "data-model",
     "search-architecture",
+    "tasks-architecture",
     "testing",
     "roadmap"
   ]
