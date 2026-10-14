@@ -266,15 +266,15 @@ Si no hay líneas y no termina, informa del defecto con `--trace`. Imprimir un r
 
 Código `14`: **pudo enviarse**. La solicitud salió y no llegó respuesta; no es éxito ni fallo confirmado.
 
-Repite **solo con el mismo `--send-id`** del error; MAX elimina duplicados:
+Repite **solo con el mismo `--operation-id`** del error; MAX elimina duplicados:
 
 ```sh
-max personal messages send 0 "текст" --send-id 1789784741828
+max personal messages send 0 "текст" --operation-id 1789784741828
 ```
 
-Sin `--send-id` sería otro mensaje.
+Sin `--operation-id` sería otro mensaje.
 
-`max sales bot` no tiene `--send-id`: antes de repetir el envío, comprueba en el chat si el mensaje se envió.
+`max sales bot` no tiene `--operation-id`: antes de repetir el envío, comprueba en el chat si el mensaje se envió.
 
 ### Ctrl-C
 

@@ -90,7 +90,7 @@ En archivos y transcripciones, la palabra se busca en su forma exacta. Las otras
 
 ## Teléfonos, correos y enlaces
 
-Las herramientas encuentran números de teléfono, direcciones de correo, enlaces, enlaces a documentos de Google en el texto de mensajes, archivos y transcripciones; `tg` también encuentra los nombres de personas que conoces. Cada valor se guarda como una mención. La búsqueda lo encuentra como se haya escrito:
+Las herramientas encuentran números de teléfono, direcciones de correo, enlaces, enlaces a documentos de Google en el texto de mensajes, archivos y transcripciones, y también los nombres de personas que conoces. Cada valor se guarda como una mención. La búsqueda lo encuentra como se haya escrito:
 
 ```sh
 tg personal search messages 'phone:"+1 555 010 0100"'

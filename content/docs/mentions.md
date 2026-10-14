@@ -12,7 +12,7 @@ history you want to search saved on your computer.
 ## What a mention is
 
 A **mention** is a value the tools found in a message: a phone number, an email address, a link or a link to a Google
-document. In Telegram it can also be the name of someone you know. The tools look in the message text, in the text
+document, or the name of someone you know. The tools look in the message text, in the text
 of its files and in its voice note transcripts.
 
 Each mention is kept in one standard form, so search finds a value however it was written. `+1 (555) 010-0100` and
@@ -108,7 +108,7 @@ to change.
 
 ## Names of people
 
-In Telegram, `tg` also finds the names of people you have met in a chat: the person's name and the names of their
+The tools also find the names of people you have met in a chat: the person's name and the names of their
 accounts. A name is found in any grammatical case, so «Анна» also finds «Анне» and «Анну», and a
 name written in Latin letters also finds its Russian spelling: «Valery» finds «Валерию». Two names of one person in a
 row, such as a first name and a surname, count as one full name.
@@ -133,6 +133,7 @@ When new people appear in your history, read the names again:
 
 ```sh
 tg personal mentions rebuild person-name
+max personal mentions rebuild person-name
 ```
 
 ## Messages saved earlier
@@ -154,7 +155,6 @@ logs, error messages or run records. A link is never opened and a site is never 
 
 ## What is not there yet
 
-- Names of people in `max`. They come in a later release.
 - Names of people the tools do not know yet.
 - Mentions in [notes and files](./memo/notes.md) and in [email](./email.mdx).
 - A link tied to the chat or the stored document it points to. For now a link can only be dismissed.

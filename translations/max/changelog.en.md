@@ -4,6 +4,45 @@ title: "Changelog"
 
 Notable changes to `@wirecat/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
+## 0.52.0 — 14.10.2026
+
+### What's new
+
+- **Sync continues where it stopped**: `store jobs show` shows `progress`, and `messages sync --all`
+  no longer trips over a chat that is already busy (cli-core 0.276.0).
+- **`max watch` no longer crashes with a stack trace if an event handler throws**: the subscription ends with that error,
+  and the connection to the server stays.
+- **Files and videos are streamed from disk while they upload** (cli-core 0.272.0). `max messages send --file`,
+  `--photo`, profile and group photos and `max bot` no longer read the whole file into memory before sending, and the
+  refusal for files of 2 GiB or more is gone. A voice message is still read whole — its length and waveform are computed from it — up to 256 MiB.
+- **Picture search: `max <профиль> images embed` and `max <профиль> images models download|list`.** Turn it on with
+  `max <профиль> config set picture_search true` (off by default); the `clip-b32` model is downloaded once
+  (about 155 MB), and `images embed` computes a vector for each picture in the local store. Message search by words then
+  returns `pictures` next to the matches. Why: to find a picture by what it shows.
+  What to consider: picture queries are English only; the agent translates them itself. More in
+  [search](./search.md#картинки-поиск-по-тому-что-на-них-изображено).
+
+### Changed — may break scripts
+
+- **`max store export --format jsonl` writes the same records to files and folders as to the screen**: snake_case, `chat_id`;
+  a deletion line is `{ "id", "chat_id", "deleted": true }` (cli-core 0.276.0). What to consider: the new build does not
+  append to a folder exported earlier; export to a new folder.
+- **`max watch --jsonl` writes messages in the same shape as `messages list`**: snake_case, with `ref` (`chat_id`,
+  `chat_title`, `sender_name`). `--events` lines are snake_case too: `chat_id`, `message_id`, `user_id`, `up_to_time`,
+  `unread_count`. A person sees the same as before. What to consider: scripts that read `chatId` take `chat_id`.
+- **A voice message without text goes into `missing`** in `review`, `inbox`, `messages list` and MCP, so the agent sees
+  that it still needs a transcript (cli-core 0.275.0).
+- **A next step to a command that changes only this computer does not run on its own** (cli-core 0.273.0):
+  the `server restart` and `store reindex` steps carry `safe_to_auto_execute: false`.
+- **`mentions rebuild` takes the kind as an argument**: `max <профиль> mentions rebuild person-name`, not `--kind`
+  (cli-core 0.272.0).
+- **`max doctor --json`, `session start` and `session end` answer with a snake_case envelope**: `{item, meta}`, keys
+  `legacy_cache`, `keyring.moved_by_environment`, `session.state_file`, `revoked_on_server`. A person still
+  sees lines of text. What to consider: scripts that read these answers take the fields from `item`, in snake_case.
+- **`max bot chats members list --cursor` instead of `--marker`**, with no alias; the bot's MCP tool takes `cursor` too.
+  The answer names the next step in `page.next`. max's own commands (`recipients`, `config`, `mcp`, `messages transcribe`,
+  `bot comments`, `bot uploads`) answer the same way as the shared ones: an end line for `--jsonl` and hints on stderr.
+
 ## 0.51.0 — 14.10.2026
 
 ### What's new
@@ -1097,7 +1136,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.51.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.52.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).

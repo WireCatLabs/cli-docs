@@ -457,3 +457,17 @@ Una respuesta vacía significa «no está en el archivo en el que buscaste», no
 - [Búsqueda por tema](./topic-search.md): encuentra una conversación por su tema cuando no recuerdas sus palabras.
 - [Lenguaje de consulta](./query-language.md): todos los campos, operadores y límites, y la respuesta JSON.
 - [Cómo funciona la búsqueda](https://wirecat.dev/ru/docs/search-architecture): la página técnica: el índice de palabras, el grafo de conversaciones, los vectores y cómo se ordenan los resultados.
+
+## Imágenes: buscar por lo que muestran
+
+La búsqueda por imágenes está desactivada hasta que la actives. Funciona por separado para cada perfil, en este ordenador: `max` descarga cada imagen de MAX de una en una, la convierte en un vector de 512 números y la borra. En el archivo quedan solo el vector y la suma de control del archivo.
+
+```sh
+max personal config set picture_search true
+max personal images models download clip-b32
+max personal images embed
+```
+
+`images models download clip-b32` descarga el modelo una sola vez (unos 155 MB). `images embed` procesa las imágenes que aún no tienen vector y sigue desde donde se detuvo; `--chat <чат>` y `--limit <n>` limitan el volumen. No marca nada como leído.
+
+Después, la búsqueda por palabras devuelve, junto a los resultados, la lista `pictures`: los mensajes cuya imagen está más cerca de la consulta (`ref`, `score`). Esta lista no se mezcla con el orden de los resultados de texto. La consulta para imágenes debe estar **en inglés**: la parte de texto del modelo no conoce otros idiomas, por eso el agente traduce primero la consulta. Sin `picture_search` no hay lista `pictures`; si el ajuste está activado pero falta el modelo, `pictures_skipped` lo indica.

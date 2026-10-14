@@ -260,15 +260,15 @@ If there are no trace lines and the command still does not return, report a defe
 
 Code `14`: **the message may have been sent**. The request left but no response arrived, so neither success nor failure is confirmed.
 
-Retry **only with the same `--send-id`** shown in the error; MAX deduplicates it:
+Retry **only with the same `--operation-id`** shown in the error; MAX deduplicates it:
 
 ```sh
-max personal messages send 0 "текст" --send-id 1789784741828
+max personal messages send 0 "текст" --operation-id 1789784741828
 ```
 
-Never retry without `--send-id`: that creates a second message.
+Never retry without `--operation-id`: that creates a second message.
 
-`max sales bot` has no `--send-id`. Check the chat before retrying.
+`max sales bot` has no `--operation-id`. Check the chat before retrying.
 
 ### Ctrl-C
 

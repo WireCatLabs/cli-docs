@@ -171,7 +171,7 @@ La exportación **no se conecta a nada**; solo incluye datos leídos o descargad
 
 ### Exportar a una carpeta y añadir solo lo nuevo
 
-`--to <папка>` escribe los chats en una carpeta: un archivo JSONL por chat y `manifest.json`. Al repetir en la misma carpeta, solo se añade lo que ha cambiado desde la vez anterior: mensajes nuevos, ediciones (también de mensajes antiguos) y borrados. Un mensaje borrado se escribe sin texto: `{ "id", "chatId", "deleted": true }`.
+`--to <папка>` escribe los chats en una carpeta: un archivo JSONL por chat y `manifest.json`. Al repetir en la misma carpeta, solo se añade lo que ha cambiado desde la vez anterior: mensajes nuevos, ediciones (también de mensajes antiguos) y borrados. Un mensaje borrado se escribe sin texto: `{ "id", "chat_id", "deleted": true }`.
 
 ```sh
 max personal store export Друзья Работа --to ~/max-архив
@@ -262,7 +262,7 @@ max personal watch --events --jsonl  # ещё правки, удаления, р
 - **Si MAX desconecta**, reintenta tras 1, 2, 4… segundos, hasta un minuto de espera; `max personal watch` lo indica en stderr. Un token rechazado detiene con error de autenticación.
 - **Una conexión compartida por perfil.** Comandos, `max personal mcp` y `max personal watch` usan la del servidor para leer, enviar y reaccionar. Los controles de envío siguen en el comando. Si falta, se inicia y espera; con `serve: false`, el comando conecta directamente. Un segundo servidor rechaza antes de entrar.
 - El servidor mantiene actualizado el estado de su sesión: tiene en cuenta mensajes nuevos, chats leídos en el teléfono y cambios en los chats. Si MAX informa de algo que no puede aplicar (mensajes eliminados), vuelve a iniciar sesión en segundo plano, como máximo una vez por minuto.
-- **Con `--events`, cambia el formato:** `{"event": "message", "message": …}`, `{"event": "edit", "message": …}`, `{"event": "delete", "chatId", "chatTitle", "messageId"}`, `{"event": "reaction", "chatId", "chatTitle", "messageId", "reactions"}`, `{"event": "read", "chatId", "chatTitle", "userId", "upToTime", "unreadCount"}` indica quién leyó hasta esa hora, incluido el propietario desde otro dispositivo; `{"event": "chat", "chat"}` indica cambios de nombre, miembros o salida del propietario. Marcar como no leído no genera un evento de lectura. Sin la opción, una línea por mensaje. `max personal watch` no muestra quién escribe: MAX solo lo envía a quien tenga abierto ese chat.
+- **Con `--events`, cambia el formato:** `{"event": "message", "message": …}`, `{"event": "edit", "message": …}`, `{"event": "delete", "chat_id", "chat_title", "message_id"}`, `{"event": "reaction", "chat_id", "chat_title", "message_id", "reactions"}`, `{"event": "read", "chat_id", "chat_title", "user_id", "up_to_time", "unread_count"}` indica quién leyó hasta esa hora, incluido el propietario desde otro dispositivo; `{"event": "chat", "chat"}` indica cambios de nombre, miembros o salida del propietario. Marcar como no leído no genera un evento de lectura. Sin la opción, una línea por mensaje. `max personal watch` no muestra quién escribe: MAX solo lo envía a quien tenga abierto ese chat.
 - **`max personal watch` solo ve lo que llega mientras tanto él como el servidor están conectados.** Los mensajes que llegan durante una desconexión de MAX se pierden en ese flujo. Una línea `status` con `connected: true` después de una desconexión indica que debes recuperar lo omitido: `max personal inbox 'date>"<время из поля at предыдущей строки status>"'`.
 
 ## Estado, copia de seguridad y restauración
