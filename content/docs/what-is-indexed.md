@@ -98,7 +98,7 @@ tg personal search messages 'email:"ana@example.com"'
 tg personal search messages 'domain:example.com'
 ```
 
-`phone:` finds `+1 555 010 0100` and `+1 (555) 010-0100` alike; without the `+`, only Russian numbers are recognized. `domain:` finds every link and address on that site. Mentions are found by rules, not by a model. A mention you reject stays dismissed. How to review mentions and record whose number it is: [Phones, emails and links](./mentions.md).
+`phone:` finds `+1 555 010 0100` and `+1 (555) 010-0100` alike; without the `+`, only Russian numbers are recognized. `domain:` finds every link and address on that site. Mentions are found by rules, not by a model. A mention you reject stays dismissed.
 
 ## Pictures
 
