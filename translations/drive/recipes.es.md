@@ -19,6 +19,7 @@ archivo de Google. [Importación y almacenamiento](./usage.md) explica la copia 
 | Proponer recuerdos con IA | Envía texto local al proveedor configurado | Solo con `--save` o confirmación | No |
 | Consultar comentarios o historial | Sí | Sin importación automática | No |
 | Crear o editar un Doc | Sí | Se importa al sincronizar después | Sí |
+| Explorar y organizar el árbol guardado | No | Etiquetas/notas cuando se solicitan | No |
 
 ## Primera carpeta buscable sin exportaciones extra
 
@@ -100,10 +101,38 @@ contenido no se indexa. Continúa con el token devuelto si necesitas el listado 
 funciones y políticas de Google determinan qué campos expone.
 
 Tu agente puede leer el JSON guardado sin Google. Es una copia separada que tú gestionas;
-no se importa automáticamente a la base ni se busca con `drive search`. La sincronización normal
-guarda los metadatos seleccionados descritos en [lectura sin conexión](./usage.md#read-content-and-metadata-offline).
+no se importa automáticamente a la base ni se busca con `drive search`.
 Listas de permisos, comentarios e historial siguen siendo operaciones API separadas. Actualiza
 o elimina estos JSON adicionales cuando ya no necesites esa versión.
+
+Sync también guarda la respuesta disponible de metadatos en el catálogo local. Usa
+`catalog show FILE_ID --offline` sin crear otro JSON. Las entradas antiguas mantienen su conjunto
+anterior hasta volver a escanear. Permisos, comentarios e historial siguen siendo operaciones API separadas.
+
+## Explorar y etiquetar carpetas sin Google
+
+```text prompt
+Use drive CLI with profile personal and only local data. Show the imported folder tree,
+find the PDFs last edited by Rin, and show their source links and content availability.
+Tag the folder I choose follow-up and save my memo beside it. Do not download or export files.
+```
+
+```sh
+drive personal catalog import --offline
+drive personal catalog tree --depth 3 --offline --json
+drive personal catalog list 'mime:"application/pdf" AND person:Rin*' --offline --json
+drive personal catalog tags add FOLDER_ID follow-up --offline
+drive personal notes add FOLDER_ID 'Check the final version with Rin' --offline
+drive personal catalog list 'tag:follow-up' --offline --json
+drive personal documents context FOLDER_ID --offline --json
+```
+
+`catalog import` copia una caché anterior a la base; sync la rellena en importaciones nuevas.
+Sustituye `FOLDER_ID` por el ID del árbol y comprueba que el contexto contiene la etiqueta y la nota.
+La etiqueta afecta a la carpeta, no a todos los descendientes. Los archivos con solo metadatos se
+encuentran antes de terminar el lote de contenido. Para citar un pasaje, verifica que el texto esté
+indexado y usa `documents show`: los metadatos no prueban lo que dice el archivo. Consulta
+[navegación y filtros del catálogo](./usage.md#browse-and-organize-the-local-catalog).
 
 ## Mantener seguimientos junto a las fuentes
 
@@ -127,9 +156,9 @@ Do not merge people merely because their names match.
 ```
 
 ```sh
-drive personal people list DOC_ID --json
-drive personal links add DOC_ID project:PROJECT_ID --kind related-to
-drive personal links add DOC_ID person:PERSON_ID --kind about
+drive personal identities list DOC_ID --json
+drive personal relationships add DOC_ID project:PROJECT_ID --kind related-to
+drive personal relationships add DOC_ID person:PERSON_ID --kind about
 drive personal documents context DOC_ID --json
 ```
 
@@ -152,7 +181,9 @@ Con un [proveedor IA configurado](./configuration.md#optional-ai-extraction):
 drive personal memories extract DOC_ID --scope work
 drive personal memories extract DOC_ID --scope work --save
 drive personal memories list DOC_ID --scope work --json
+drive personal facts list DOC_ID --status proposed --json
 drive personal memories confirm DOC_ID memory:MEMORY_ID
+drive personal facts confirm DOC_ID fact:FACT_ID
 ```
 
 La extracción muestra una vista previa; `--save` guarda propuestas. Sustituye `MEMORY_ID` por una
@@ -175,7 +206,7 @@ drive personal session start --client-file /path/to/desktop-client.json --activi
 drive personal documents history DOC_ID --activity --json
 ```
 
-Continúa con el token devuelto y `--page-token` en el mismo comando. Las revisiones/eventos visibles
+Continúa con el token devuelto y `--cursor` en el mismo comando. Las revisiones/eventos visibles
 pueden estar incompletos; no son un historial carácter por carácter. Los comentarios pueden
 consultarse aquí, pero no se incluyen en la búsqueda de documentos.
 
@@ -199,12 +230,12 @@ drive personal session start --client-file /path/to/desktop-client.json --write
 drive personal documents create --title 'Project review'
 drive personal documents update NEW_DOC_ID --body '{"requests":[{"insertText":{"endOfSegmentLocation":{},"text":"Review notes\n"}}]}'
 drive personal files get NEW_DOC_ID --json
-drive personal files move NEW_DOC_ID --to FOLDER_ID --from OLD_PARENT_ID
+drive personal files move NEW_DOC_ID --parent FOLDER_ID --old-parent OLD_PARENT_ID
 drive personal sync --json
 ```
 
 Sustituye `NEW_DOC_ID` por el `documentId` de la respuesta. Docs lo crea en la raíz de My Drive.
-Consulta `parents` con `files get` y sustituye `OLD_PARENT_ID` por ese ID; `--from` quita el padre
+Consulta `parents` con `files get` y sustituye `OLD_PARENT_ID` por ese ID; `--old-parent` quita el padre
 anterior al añadir el nuevo. Los archivos Google tienen un padre: consulta
 [la guía oficial para mover archivos](https://developers.google.com/workspace/drive/api/guides/folder#move-files-between-folders).
 Comprueba que está en la carpeta elegida

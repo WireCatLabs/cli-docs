@@ -10,7 +10,7 @@ podrás decidir qué conectar, qué conservar sin conexión y qué tarea probar 
 ## Qué puedes hacer
 
 - Encontrar una decisión entre documentos importados y obtener el fragmento, título y enlace original de Google.
-- Leer texto y metadatos guardados sin abrir Drive ni usar la red.
+- Leer texto y metadatos guardados, explorar árboles de carpetas y encontrar archivos ilegibles sin abrir Drive.
 - Actualizar las carpetas elegidas mediante sincronizaciones repetibles, incluidas sus subcarpetas.
 - Añadir etiquetas, notas y recuerdos con fuentes que se conservan tras renombrar y actualizar documentos.
 - Vincular documentos con editores observados en Google y personas, proyectos u otras fuentes existentes.
@@ -45,21 +45,18 @@ el material para leerlo y exportarlo.
 | ID de Google, título, tipo, enlace original, carpetas padre, fechas y versión cuando existen | Identificar la fuente y consultar los metadatos de la última sincronización |
 | Propietarios y último editor que muestra Google | Ver participantes observados y vínculos de identidad guardados |
 | Etiquetas, notas, vínculos con personas/proyectos y recuerdos locales | Organizar y recuperar contexto en tareas posteriores |
-| Raíces seleccionadas, relaciones de carpetas, puntos de control y trabajo pendiente | Mantener el alcance y reanudar una importación interrumpida |
+| Carpetas Google y relaciones padre en la base local | Explorar el árbol guardado, listar hijos, etiquetar carpetas y añadir notas |
+| Raíces seleccionadas, puntos de control y trabajo pendiente | Mantener el alcance y reanudar una importación interrumpida |
 
-Es una copia de las fuentes seleccionadas y compatibles en la última sincronización, no una
-copia completa de cada campo de las API de Google. Los comentarios, listas de revisiones,
-permisos e historial de actividad se consultan en Google; no se añaden automáticamente al índice
-local. Los metadatos se devuelven como datos estructurados; la búsqueda trabaja con el texto
-indexado y las etiquetas locales.
+El catálogo conserva archivos y carpetas del alcance elegido, incluidos formatos cuyo contenido
+no se puede leer. `catalog search` busca nombres, descripciones, tipos y propietarios/editores observados;
+`search` busca texto indexado y etiquetas locales. `content` indica si hay solo metadatos,
+texto indexado o una razón de fallo de lectura. Las etiquetas y notas de carpeta son locales.
 
-También puedes [guardar los metadatos completos disponibles como JSON](./recipes.md#save-full-available-metadata-for-offline-use)
-para que otra herramienta los lea sin conexión.
-
-Los ID de carpetas y sus relaciones se conservan en el estado de sincronización. Actualmente la
-base agrupa documentos por cuenta de Google; no ofrece un árbol de carpetas navegable. Los
-listados en Google muestran hijos directos y la importación recorre los descendientes. Consulta
-[el alcance de carpetas y almacenamiento](./usage.md).
+Sync solicita todos los campos de metadatos que Google permite leer y conserva la respuesta en
+la base. Las entradas antiguas guardan su conjunto anterior hasta actualizarse. Es la copia de
+la última sincronización: permisos, comentarios, revisiones y actividad siguen siendo consultas
+a Google y no se guardan automáticamente. Consulta [carpetas sin conexión](./usage.md#browse-and-organize-the-local-catalog).
 
 ## Pide tu primer resultado
 
@@ -84,10 +81,10 @@ Sustituye `FOLDER_ID` y el perfil. Continúa sincronizando mientras quede trabaj
 
 ## Contenido y conexiones compatibles
 
-La indexación local admite Google Docs y Markdown/texto plano subidos. Omite PDF, Office, Sheets,
-Slides, imágenes, audio y accesos directos. En Docs indexa cuerpo, tablas y notas al pie de todas
-las pestañas; excluye imágenes, encabezados, pies, comentarios y sugerencias. Consultar los
-metadatos de un archivo mediante la API es distinto de importar su contenido.
+La indexación local admite Google Docs y Sheets, Markdown/texto subido, PDF con capa de texto,
+Word `.docx`, Excel `.xlsx` y CSV. PDF escaneado, Slides, imágenes, audio y accesos directos se omiten
+con su razón. Docs incluye cuerpo, tablas y notas al pie de todas las pestañas; excluye imágenes,
+encabezados, pies, comentarios y sugerencias. Consultar metadatos mediante la API es distinto de importar contenido.
 
 La conexión abre la pantalla de consentimiento de Google. Cada usuario autoriza su cuenta;
 el propietario configura la aplicación compartida. Un cliente Desktop OAuth propio sigue

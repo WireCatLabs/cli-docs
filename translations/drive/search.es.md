@@ -71,9 +71,20 @@ drive personal --offline search 'budget' --exact --limit 10 --offset 0 --json
 drive personal --offline documents show DOC_ID --json
 ```
 
-Lee el fragmento guardado y sus metadatos antes de interpretarlo como una decisión. Puedes
-consultarlos sin conexión; abre el enlace original cuando necesites la versión actual de Google. Si aparece `meaningSkipped`, revisa
-la explicación; no supongas que se ejecutó búsqueda semántica. PDF, Sheets y otros formatos
-incompatibles se omiten tanto en búsqueda exacta como semántica. Consulta
-[cobertura por formato](./usage.md#which-document-types-are-searchable) y
-[recetas](./recipes.md#refresh-a-project-and-prepare-a-meeting-brief).
+Lee el fragmento y metadatos guardados antes de interpretarlos como una decisión. Abre el enlace
+Google para comprobar la versión actual. Si aparece `meaningSkipped`, revisa la razón: la búsqueda
+semántica puede no haberse ejecutado. PDF escaneados, Slides, imágenes y otros formatos ilegibles
+no tienen texto; se encuentran por nombre y `not_read` indica la razón (es `null` en uno leído).
+Abre `source_url`, sin citar texto ausente. Consulta [formatos](./usage.md#which-document-types-are-searchable)
+y [recetas](./recipes.md#refresh-a-project-and-prepare-a-meeting-brief).
+
+## Buscar imágenes por lo que muestran
+
+Con `pictureSearch` activado en el perfil, `drive personal search "cat on a sofa"` también
+ofrece `pictures`: imágenes más cercanas al contenido del texto, con `ref`, `score`, `title` y
+`source_url`. Es una lista separada de `hits`. Con la opción desactivada no hay `pictures`.
+
+Escribe consultas de imágenes en inglés: el modelo solo entiende inglés y el agente traduce
+primero otras preguntas. Si el modelo no está descargado, `pictures_skipped` informa de que falta el modelo; los `hits` habituales no se ven afectados.
+
+Antes de activar la opción, sigue la [preparación compartida del modelo](./configuration.md#change-and-check-a-value).
