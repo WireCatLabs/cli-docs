@@ -4,6 +4,19 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.11.0 — 14.10.2026
+
+### Cambios — pueden afectar a scripts
+
+- Usa el SDK compartido `@wirecat/cli-core` 0.268.0. El descubrimiento declara el contrato 2. Las respuestas correctas de CLI/MCP usan sobres de elemento/lista snake_case con metadatos; JSONL conserva respuestas completas. Informes detallados y confirmaciones continuas están en `item`.
+- Los detalles están en `item` y cuentan transcripciones actuales; las lecturas de transcripciones/resúmenes usan `items`. Las coincidencias incluyen `ref`, `meeting`, `excerpt` y `offset_ms`, con continuación estándar que conserva los filtros.
+
+### Correcciones
+
+- MCP rechaza argumentos desconocidos/incorrectos en el manejador, nombra el campo antes de abrir el almacén, declara esquemas estrictos de éxito/error y conserva motivos/detalles de errores compartidos.
+- La guía de la app de Zoom comienza con enlaces para reutilizar una app o crear la propia.
+- La instalación ofrece ayuda del agente, opciones de app existente/nueva, lanzadores de Windows y comprobación del primer pasaje con fuente. La portada se identifica como punto de inicio.
+
 ## 0.10.0 — 14.10.2026
 
 ### Cambios — pueden afectar a scripts

@@ -30,7 +30,9 @@ Todas las palabras deben coincidir por prefijos literales o formas guardadas. Po
 inglesas, rusas y españolas; pueden cambiarse o desactivarse. La consulta usa palabras normales, sin operadores.
 `--meeting-id`, `--event-id`, `--series-id`, `--since-time` y `--until-time` limitan la cuenta elegida.
 El cursor opaco pertenece a la cuenta, consulta y filtros, y continúa dentro de una transcripción larga.
-JSONL conserva toda la página, incluidos `next_cursor` y `coverage`.
+JSONL conserva toda la página, incluidos `page.cursor`, `next` e información `missing` del índice.
+Cada coincidencia contiene `ref`, referencia de reunión `meeting`, `excerpt` y `offset_ms`;
+abre una línea con `meetings passage`.
 
 ## Buscar por significado o en un archivo
 
@@ -66,8 +68,7 @@ reuniones y no atribuyen una intervención sin autor a una persona.
 Solo cuenta una pertenencia confirmada; una propuesta del agente o una palabra coincidente
 en la transcripción no establece esa pertenencia. `--tag` y `--topic` aceptan nombres canónicos
 o alias explícitos de etiquetas ya asociadas a la reunión; elige un solo filtro de etiqueta.
-Un nombre inexistente o ambiguo produce un error en vez de ampliar la búsqueda. `selection`
-muestra los registros resueltos para los filtros por nombre. Una fecha sin hora significa
+Un nombre inexistente o ambiguo produce un error en vez de ampliar la búsqueda. Una fecha sin hora significa
 medianoche UTC; usa una hora con desplazamiento explícito para delimitar un día local.
 Se mantienen las reglas de continuación y cobertura.
 
@@ -81,8 +82,8 @@ Sus fechas se expresan en milisegundos desde la época Unix.
 Compara Unicode de forma literal; no traduce nombres ni deduce que dos registros son la misma persona.
 `--limit` (50 por defecto), `--scan-limit` (1000) y `--max-read-bytes` (1048576)
 limitan coincidencias, observaciones examinadas y bytes de nombres/correos leídos por llamada.
-La respuesta conserva `page.has_more`, `page.cursor`, cobertura y ambigüedad de identidades de la página, también en JSONL.
-Sigue el paso `page.next` o repite la misma consulta con `--cursor`. Una página vacía puede tener continuación.
+La respuesta conserva `item.page.has_more`, `item.page.cursor`, cobertura y ambigüedad de identidades de la página, también en JSONL.
+Sigue el paso `item.next` o repite la misma consulta con `--cursor`. Una página vacía puede tener continuación.
 Los IDs distintos son candidatos para revisar, nunca vínculos automáticos con personas. No se sabe si el archivo está completo.
 
 `meetings list` filtra metadatos con una consulta, por ejemplo
@@ -102,7 +103,7 @@ zm meetings task-proposal meeting:3/15/20/0 --type promise --json
 Para otras fuentes indica `--only messages,mail,notes,meetings`. Los mensajes pertenecen a la cuenta
 elegida, el correo incluye cuentas guardadas y las notas son globales. Las reuniones usan prefijos;
 la sintaxis no admitida y consultas exactas se marcan como omitidas. Para continuar solo reuniones,
-pasa `meetings.next_cursor` mediante `--meeting-cursor '<json>'`, vinculado a cuenta y consulta.
+pasa `item.meetings.next_cursor` mediante `--meeting-cursor '<json>'`, vinculado a cuenta y consulta.
 JSONL conserva el informe completo, con omisiones, cobertura y cursores.
 
 ## Leer fuentes
@@ -133,7 +134,7 @@ usan 3 por defecto; el máximo combinado es 999. `--bytes` limita el JSON de las
 Si la propia línea de referencia no cabe en el presupuesto, la operación falla en vez de devolver
 un pasaje vacío. El límite global `--max-output-bytes` también limita el resultado final.
 
-Comprueba `coverage.has_before`, `has_after` y `truncated_by` antes de considerar completo el pasaje.
+Dentro de `item`, comprueba `coverage.has_before`, `has_after` y `truncated_by` antes de considerar completo el pasaje.
 Para ampliarlo, abre `before_ref` con más líneas anteriores o `after_ref` con más posteriores.
 La línea del límite se incluye de nuevo; el agente puede deduplicarla mediante `ref`.
 `archive_completeness: "unknown"` describe el archivo incluso cuando la ventana local está completa.
@@ -185,7 +186,7 @@ zm search meetings "RES" --identity-id 12 --since-time 2026-09-14 --until-time 2
 Revisa todas las páginas de participantes y elige el `identity_id` correcto; un nombre coincidente
 no basta para seleccionar una persona. Usa alias registrados en el vocabulario compartido o indicados
 por el propietario. Los comandos actuales no expanden los alias automáticamente al buscar transcripciones.
-Repite las búsquedas de esos nombres sin `--project` y sigue cada `next_cursor` mientras `has_more` sea true.
+Repite las búsquedas de esos nombres sin `--project` y sigue `page.cursor` o el paso `next` mientras `page.has_more` sea true.
 Mantén los mismos límites de participante y fechas al continuar.
 
 Para cada `ref` pertinente, abre `zm meetings passage <ref> --format markdown`.

@@ -37,7 +37,9 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(text).toContain("meeting_passage")
     expect(text).toContain("--scan-limit")
     expect(text).toContain("page.has_more")
-    expect(text).toContain("page.next")
+    expect(text).toContain("`item.next`")
+    expect(text).toContain("`offset_ms`")
+    expect(text).not.toContain("`selection`")
     expect(text).toContain("`identity_id`")
     expect(text).not.toContain("`identityId`")
     expect(text).toContain('zm search meetings "Research Example" --identity-id 12 --since-time 2026-09-14')
@@ -182,4 +184,31 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(markdown).toContain("OPENAI_API_KEY")
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
   })
+}
+
+for (const lang of ["en", "ru", "es"] as const) {
+  for (const guide of ["usage", "mcp"]) {
+    test(`${lang}/${guide}: standard answers retain metadata and detailed reports`, async ({ page, request }) => {
+      await page.goto(`/${lang}/docs/zm/${guide}`)
+      const main = page.locator("main")
+      await expect(main).toContainText("meta.run_id")
+      await expect(main).toContainText("meta.duration_ms")
+      await expect(main).toContainText("item")
+      const prefix = lang === "en" ? "" : `${lang}/`
+      const response = await request.get(`/llms.mdx/docs/${prefix}zm/${guide}/content.md`)
+      expect(response.ok()).toBe(true)
+      const markdown = await response.text()
+      expect(markdown).toContain("`meta.run_id`")
+      expect(markdown).toContain("`meta.duration_ms`")
+      expect(markdown).toContain("`items`")
+      if (guide === "usage") {
+        expect(markdown).toContain("`offset_ms`")
+        expect(markdown).toContain("`meetings transcript <meeting> --history`")
+      } else {
+        expect(markdown).toContain("`item.page`")
+        expect(markdown).toContain("`item.next`")
+        expect(markdown).toContain("`validation_error`")
+      }
+    })
+  }
 }
