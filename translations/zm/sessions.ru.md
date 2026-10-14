@@ -12,7 +12,7 @@ title: "Вход, сеансы и профили"
 Запустите вход в интерактивном терминале компьютера, где будет храниться сеанс:
 
 ```sh
-zm config set zoom.clientId <public-client-id>
+zm config set zoom.client_id <public-client-id>
 zm session start --browser firefox
 ```
 

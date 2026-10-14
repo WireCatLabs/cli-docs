@@ -12,7 +12,7 @@ Configura con `zm config set <key> <value>` y consulta los valores con `zm confi
 
 | Clave | Significado |
 |---|---|
-| `zoom.clientId` | Public Client ID de [app existente o nueva](./zoom-app.md); sin valor inicial, necesario para API |
+| `zoom.client_id` | Public Client ID de [app existente o nueva](./zoom-app.md); sin valor inicial, necesario para API |
 | `account.profile` | [Etiqueta local](./sessions.md#select-a-local-profile) de reuniones; sin valor inicial, necesaria para la base |
 | `source` | Fuente de `meetings sync` y `watch`: `api` predeterminada o `files` |
 | `files.folder` | Carpeta para obtención/observación de archivos; sin valor inicial |
@@ -20,8 +20,11 @@ Configura con `zm config set <key> <value>` y consulta los valores con `zm confi
 
 Comprueba `zm config show` tras editar. Cambiar `account.profile` no cambia el usuario de Zoom.
 Otro ID selecciona otra entrada del almacén; autoriza esa app antes de usar API. `ZOOM_CLIENT_ID`
-no es un ajuste de la orden instalada `zm`; usa `zm config set zoom.clientId` en vez de la variable
+no es un ajuste de la orden instalada `zm`; usa `zm config set zoom.client_id` en vez de la variable
 copiada de una sonda de desarrollo.
+
+El archivo guarda estos ajustes como `client_id`, `files_folder`, `files_timezone`, `account_profile` y `source`.
+Todavía lee los nombres camelCase `zoom.clientId`, `clientId`, `filesFolder`, `filesTimezone` y `accountProfile`.
 
 Una configuración incorrecta permite `--help` y `--version`; los comandos de configuración indican el error.
 

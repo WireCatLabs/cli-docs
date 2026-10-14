@@ -12,7 +12,7 @@ Obtén el Public Client ID de [una app existente o nueva](./zoom-app.md). Inicia
 terminal interactivo del ordenador que guardará la sesión:
 
 ```sh
-zm config set zoom.clientId <public-client-id>
+zm config set zoom.client_id <public-client-id>
 zm session start --browser firefox
 ```
 

@@ -25,7 +25,7 @@
   },
   {
     "id": "prepare-meeting",
-    "pages": ["first-tasks.md", "prompting.mdx", "zoom.mdx", "zm/search.md", "zm/remote-meetings.md"],
+    "pages": ["first-tasks.md", "prompting.mdx", "zoom.mdx", "zm/search.md", "zm/remote-meetings.md", "zm/usage.md"],
     "families": {
       "tg": ["contacts", "chats", "messages"],
       "max": ["contacts", "chats", "messages"],

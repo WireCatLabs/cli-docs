@@ -61,6 +61,14 @@ la agenda y las invitaciones; el agente prepara el resumen con las fuentes que e
 En una serie recurrente, confirma la siguiente ocurrencia concreta: la fecha inicial de la serie
 no verifica la próxima llamada. Si faltan permisos para comprobarla, marca la fecha como no verificada.
 
+Para una serie elegida, [reúne contexto con fuentes](./zm/usage.md#prepare-for-an-upcoming-meeting)
+con `zm meetings prepare <series-id> --json`. Lee la próxima fecha en Zoom y une historial guardado
+acotado, participantes observados, proyectos confirmados, hechos aceptados y tareas con fuentes
+directas. Usa el ID numérico de la serie del proveedor, no el ID interno de la reunión guardada.
+La cobertura marca el historial personal, las fuentes de todo el proyecto y los candidatos por
+nombre/alias como no consultados; el agente puede investigarlos aparte. La preparación no descarga
+transcripciones ausentes.
+
 ## Guardar los resultados útiles
 
 Pide una lista revisable de decisiones, promesas, declaraciones importantes y tareas posteriores,
@@ -69,8 +77,8 @@ un vínculo de identidad. Reutiliza el proyecto y las etiquetas existentes cuand
 
 Memo guarda hechos y tareas por separado de notas y resúmenes reutilizables. Los comandos del dueño
 guardan directamente; los hechos enviados mediante herramientas MCP de Memo para agentes quedan
-propuestos hasta revisarlos. Una propuesta de tarea de Zoom no crea una tarea. Los comandos dedicados
-al análisis automático y la preparación siguen [planificados](./zm/roadmap.md).
+propuestos hasta revisarlos. Una propuesta de tarea de Zoom no crea una tarea. El análisis automático
+y la preparación más amplia siguen [planificados](./zm/roadmap.md).
 
 ## Más control
 

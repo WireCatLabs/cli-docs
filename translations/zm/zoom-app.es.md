@@ -23,7 +23,7 @@ Elige cómo conectar:
 5. Configura el ID e inicia otro login:
 
 ```sh
-zm config set zoom.clientId <public-client-id>
+zm config set zoom.client_id <public-client-id>
 zm config set source api
 zm session start
 ```
@@ -115,7 +115,7 @@ emitidos no ganan permisos automáticamente. Comprueba lo realmente concedido co
 | `cloud_recording:read:list_user_recordings` | Descubrir grabaciones |
 | `cloud_recording:read:list_recording_files` | Inspeccionar y descargar archivos |
 | `user:read:user` | Verificar sesión remota con `zm session status --check` |
-| `meeting:read:meeting` | Ver una reunión remota |
+| `meeting:read:meeting` | Ver detalles remotos y preparar una serie elegida con contexto guardado |
 | `meeting:read:invitation` | Leer invitación |
 | `meeting:write:meeting` | Crear reunión |
 | `meeting:update:meeting` | Actualizar reunión |

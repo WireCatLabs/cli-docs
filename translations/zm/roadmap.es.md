@@ -3,14 +3,14 @@ title: "Planes"
 ---
 
 Consulta qué flujos puedes usar hoy y cuáles faltan. La herramienta ya obtiene datos del anfitrión,
-importa texto, copia grabaciones y busca pasajes citados. Un agente puede combinarlos con proyectos,
-notas y personas de Memo; los flujos automáticos dedicados de abajo están previstos. Empieza con
-[búsqueda y fuentes](./search.md).
+importa texto, copia grabaciones y busca pasajes citados. `meetings prepare` combina la prueba de la próxima cita de una serie elegida con contexto guardado acotado.
+Un agente puede combinar esas fuentes con proyectos, notas y personas de Memo. Empieza con
+[preparación](./usage.md#prepare-for-an-upcoming-meeting) o [búsqueda y fuentes](./search.md).
 
 ## Trabajo previsto
 
 - Análisis revisable de resultados: el agente propone hechos, decisiones y tareas con fuentes; repetirlo evita registros duplicados.
-- Un comando dedicado de preparación: reuniones previas, contexto de participantes y material del proyecto en un resumen con fuentes y lagunas.
+- Preparación más amplia: descubrir series candidatas, consultar el historial de participantes y fuentes de todo el proyecto, y elaborar un informe con pruebas y lagunas explícitas. El comando actual de una serie no consulta esas fuentes y devuelve contexto guardado sin generar resúmenes.
 - Más almacenamiento común para que otros proveedores reutilicen descargas parciales, puntos de control y recuperación sin copiar la implementación de Zoom.
 
 Los nombres alternativos de proyectos, etiquetas y notas ya pertenecen a Memo y al almacén común.

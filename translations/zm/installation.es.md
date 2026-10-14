@@ -105,7 +105,7 @@ Sustituye `<public-client-id>` por el Public Client ID de la aplicación, sin lo
 Ejecuta los comandos de uno en uno en una terminal normal. Déjala abierta mientras apruebas en el navegador:
 
 ```sh
-zm config set zoom.clientId <public-client-id>
+zm config set zoom.client_id <public-client-id>
 zm config set source api
 zm session start
 ```
