@@ -13,6 +13,10 @@ Esta página muestra lo que construimos a continuación. Algo planificado aún n
 disponible, y el orden puede cambiar. No hay fechas prometidas. Lo que ya funciona está en
 [funciones](./features.mdx).
 
+**Puedes influir en esta hoja de ruta.** Propón una fuente o una función, cuéntanos qué necesitas primero o
+comenta un punto en el [chat de WireCat en Telegram](https://t.me/wirecatdev). Leemos cada petición y con ellas
+decidimos qué viene después.
+
 ## En curso
 
 - **Zoom**: grabaciones y transcripciones de reuniones. Consulta la [página de Zoom](./zoom.mdx).
