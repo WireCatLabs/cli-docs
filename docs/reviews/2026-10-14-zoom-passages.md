@@ -13,6 +13,7 @@ remain unchanged in all locales.
 
 | Finding | Correction and evidence |
 | --- | --- |
+| Package README retained old login, automatic manifest scopes, no-secret and portal-launch claims | Correct setup to match the app guide, scope-free manifest, actual command tree and existing portal. Explain automatic indexing and store/archive coverage. |
 | Evidence instructions used the retired `--after` CLI option | Use `--cursor`; current Commander registration and generated command reference agree. MCP's separate `after` argument is unchanged. |
 | Semantic continuation used `nextCursor` | Use `next_cursor`, matching the Zoom-owned output conversion. |
 | Semantic guide implied CLI search never builds stored vectors | Distinguish CLI build-before-search from MCP read-only ranking; `meeting-search-commands.ts`, `meeting-semantic.ts` and `mcp-server.ts`. |
