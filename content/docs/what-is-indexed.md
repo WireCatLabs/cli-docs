@@ -90,7 +90,7 @@ In files and transcripts, a word is matched in its exact form. Other word forms 
 
 ## Phones, emails and links
 
-The tools find phone numbers, email addresses, links, Google document links and names of people you know in message text, file text and transcripts. Each is stored as a mention. Search finds it however it was written:
+The tools find phone numbers, email addresses, links and Google document links in message text, file text and transcripts. Each is stored as a mention. Search finds it however it was written:
 
 ```sh
 tg personal search messages 'phone:"+1 555 010 0100"'
@@ -98,7 +98,7 @@ tg personal search messages 'email:"ana@example.com"'
 tg personal search messages 'domain:example.com'
 ```
 
-`phone:` finds `+1 555 010 0100` and `15550100100` alike. `domain:` finds every link and address on that site. Mentions are found by rules, not by a model. A mention you reject stays dismissed.
+`phone:` finds `+1 555 010 0100` and `+1 (555) 010-0100` alike; without the `+`, only Russian numbers are recognized. `domain:` finds every link and address on that site. Mentions are found by rules, not by a model. A mention you reject stays dismissed. How to review mentions and record whose number it is: [Phones, emails and links](./mentions.md).
 
 ## Pictures
 
