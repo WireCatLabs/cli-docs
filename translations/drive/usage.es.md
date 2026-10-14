@@ -12,11 +12,17 @@ conserva contenido y metadatos de esa sincronización. Una **exportación** es u
 que solicitas; no hace falta para buscar.
 
 Las respuestas para programas usan una envoltura: `item` para un resultado único o compuesto,
-o `items` con `page` para una lista sencilla; `meta` identifica la ejecución y su duración.
-Las claves de Drive usan snake_case. Los metadatos del proveedor y los diccionarios del usuario
-conservan sus claves. Los pasajes de búsqueda están en `item.hits` y los contadores de sync/status
-en `item`. La ayuda y el autocompletado siguen siendo texto; `commands --json` usa el documento
-compartido de comandos con contrato `2`.
+o `items` con `page` para una lista sencilla; `meta` identifica la ejecución, su duración y el estado
+`complete`. Las claves de Drive usan snake_case. Los metadatos del proveedor y los diccionarios del
+usuario conservan sus claves. Los pasajes de búsqueda están en `item.hits` y los contadores de
+sync/status en `item`. La ayuda y el autocompletado siguen siendo texto; `commands --json` usa el
+documento compartido de comandos con contrato `3`. `effects` describe lecturas y escrituras remotas
+y locales; `api_operation` identifica un método generado de Google. Las listas usan
+`page.mode: "page"` y devuelven `next_page` si quedan resultados. La búsqueda y las listas de notas
+usan `--page`, no `--offset`. JSONL emite registros `{"type":"item","data":…}` seguidos de un único
+registro `{"type":"end",…}` con `complete` y metadatos de página. Los errores incluyen
+`error.retry.safe`; comprueba una escritura remota de resultado incierto antes de repetirla.
+MCP muestra los caracteres de control de forma visible; `--agent-json` ya no es una opción.
 
 ## Elegir la operación adecuada
 
@@ -88,7 +94,10 @@ drive personal documents list --json
 ```
 
 La importación lista documentos con IDs Google estables y enlaces originales. Si quedan
-operaciones pendientes, repite `drive personal sync`: reanuda el trabajo guardado.
+operaciones pendientes, repite `drive personal sync`: reanuda el trabajo guardado. Un primer recorrido
+de carpetas interrumpido también continúa desde su punto guardado. `sync --rescan` reinicia el
+recorrido. El trabajo completado se guarda por lotes; si el proceso termina abruptamente,
+puede repetir el último lote al continuar.
 El primer recorrido es recursivo; `files list --parent` solo lista hijos inmediatos.
 Si Google devuelve `nextPageToken`, pásalo a `files list --cursor TOKEN` para continuar.
 

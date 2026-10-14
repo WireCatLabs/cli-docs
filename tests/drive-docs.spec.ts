@@ -83,7 +83,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     const title = { en: "Changelog", ru: "История изменений", es: "Historial de cambios" }[lang]
     await expect(page.getByRole("heading", { level: 1, name: title, exact: true })).toBeVisible()
     await expect(page.locator("main")).toContainText("0.1.0")
-    await expect(page.locator("main")).toContainText("0.5.0")
+    await expect(page.locator("main")).toContainText("0.6.0")
     await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /Google Drive/)
     await expect(page.locator("#nd-sidebar").getByRole("link", { name: title, exact: true })).toHaveAttribute(
       "href",
@@ -97,7 +97,10 @@ for (const lang of ["en", "ru", "es"] as const) {
     const prefix = lang === "en" ? "" : `${lang}/`
     const markdown = await request.get(`/llms.mdx/docs/${prefix}drive/search/content.md`)
     expect(markdown.ok()).toBe(true)
-    expect(await markdown.text()).toContain("drive personal search 'budget AND tag:follow-up' --exact --json")
+    const text = await markdown.text()
+    expect(text).toContain("drive personal search 'budget AND tag:follow-up' --exact --json")
+    expect(text).toContain("--limit 10 --page 1 --json")
+    expect(text).not.toContain("--offset 0")
   })
 
   test(`${lang}: Drive distinguishes managed cache from extra exports`, async ({ page, request }) => {
@@ -114,6 +117,10 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(await markdown.text()).toContain("drive personal documents export DOC_ID")
     expect(await markdown.text()).toContain("drive personal catalog tree --offline")
     expect(await markdown.text()).toContain("provider_metadata")
+    expect(await markdown.text()).toContain("`effects`")
+    expect(await markdown.text()).toContain("`api_operation`")
+    expect(await markdown.text()).toContain("`3`")
+    expect(await markdown.text()).toContain("`error.retry.safe`")
   })
 
   test(`${lang}: Drive settings separate saved choices, environment and invocation options`, async ({ page }) => {
@@ -125,6 +132,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     await expect(body.locator("table").nth(1)).not.toContainText("DRIVE_CONFIG_DIR")
     await expect(body.locator("table").nth(2)).toContainText("DRIVE_CONFIG_DIR")
     await expect(body.locator("table").nth(3)).toContainText("--offline")
+    await expect(body.locator("table").nth(3)).not.toContainText("--agent-json")
   })
 
   test(`${lang}: Drive recipes preserve offline and full metadata workflows in Markdown`, async ({ request }) => {

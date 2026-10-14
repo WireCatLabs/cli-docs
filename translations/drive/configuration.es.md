@@ -126,7 +126,7 @@ modelo y la creación de embeddings deben usar ese mismo directorio.
 | `--read-only` | Rechazar cambios locales y remotos |
 | `--permission KEY=LEVEL` | Sustituir temporalmente el permiso de un comando |
 | `--dry-run` | Validar y mostrar una operación compatible sin ejecutarla |
-| `--json`, `--jsonl`, `--agent-json` | Salida estructurada; el JSON para agentes muestra caracteres de control |
+| `--json`, `--jsonl` | Salida estructurada; MCP muestra los caracteres de control de forma visible |
 | `--timeout DURATION`, `--max-output-bytes N` | Limitar el tiempo del comando y la salida almacenada en búfer |
 
 Estas opciones no son ajustes del archivo. Las de cada comando, como `search --limit` y

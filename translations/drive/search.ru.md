@@ -61,12 +61,12 @@ drive personal search 'what did we agree to spend?' --json
 
 ## Проверить, что участвовало в поиске
 
-`--limit` ограничивает число результатов, `--offset` пропускает указанное количество;
+`--limit` ограничивает число результатов, `--page` выбирает страницу;
 охват источников не расширяется. Поиск не загружает файлы из Google. Для свежего ответа
 выполните `drive personal sync` и проверьте `drive personal status --json`. Для чтения кеша без сети:
 
 ```sh
-drive personal --offline search 'budget' --exact --limit 10 --offset 0 --json
+drive personal --offline search 'budget' --exact --limit 10 --page 1 --json
 drive personal --offline documents show DOC_ID --json
 ```
 

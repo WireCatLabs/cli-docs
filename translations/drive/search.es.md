@@ -62,12 +62,12 @@ Consulta [problemas de sincronización](./troubleshooting.md).
 
 ## Comprobar qué se buscó
 
-`--limit` limita resultados y `--offset` salta esa cantidad; no amplían la cobertura. La búsqueda
+`--limit` limita resultados y `--page` elige la página; no amplían la cobertura. La búsqueda
 no descarga de Google. Para actualidad, ejecuta `drive personal sync` y revisa
 `drive personal status --json`. Para leer la caché sin red:
 
 ```sh
-drive personal --offline search 'budget' --exact --limit 10 --offset 0 --json
+drive personal --offline search 'budget' --exact --limit 10 --page 1 --json
 drive personal --offline documents show DOC_ID --json
 ```
 
