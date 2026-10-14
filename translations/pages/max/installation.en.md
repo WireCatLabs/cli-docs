@@ -197,9 +197,9 @@ max --version
 
 ### After an update, max says no profile was named
 
-Since version 0.49.0, max never chooses an account by itself: every command that uses your account starts with the profile name.
+max never chooses an account by itself: every command that uses your account starts with the profile name.
 
-**With your agent:** tell it the profile name. If you set max up before this version without a name, the profile is `default`.
+**With your agent:** tell it the profile name. If you set max up earlier without naming a profile, it is called `default`.
 
 **By hand:** put the name first (`max default chats list`), or set it once: `export MAX_PROFILE=default` in your shell profile, or `max config set defaultProfile default`. If you added max to an MCP app with `max mcp config`, run that command again.
 

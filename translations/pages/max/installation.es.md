@@ -195,9 +195,9 @@ max --version
 
 ### Tras actualizar, max dice que no se indicó un perfil
 
-Desde la versión 0.49.0, max nunca elige una cuenta por sí mismo: cada comando que usa tu cuenta empieza con el nombre del perfil.
+max nunca elige una cuenta por sí mismo: cada comando que usa tu cuenta empieza con el nombre del perfil.
 
-**Con tu agente:** dile el nombre del perfil. Si configuraste max antes de esta versión sin nombre, el perfil es `default`.
+**Con tu agente:** dile el nombre del perfil. Si configuraste max antes sin nombrar un perfil, se llama `default`.
 
 **A mano:** escribe el nombre primero (`max default chats list`) o fíjalo una vez: `export MAX_PROFILE=default` en el perfil de tu shell, o `max config set defaultProfile default`. Si añadiste max a una aplicación MCP con `max mcp config`, vuelve a ejecutar ese comando.
 
