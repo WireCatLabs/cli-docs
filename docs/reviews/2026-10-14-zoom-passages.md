@@ -98,7 +98,7 @@ does not establish prose correctness.
   accepted after prose review and matching heading structure, executable fences, inline literals
   and links. Overviews retain their maintained locale sources.
 - Actual npm 0.9.0 discovery contract captured with network and keyring access blocked.
-- Full sync, strict docs checks and release-note/roadmap checks pass: 1224 command-reference
+- Full sync, strict docs checks and release-note/roadmap checks pass: 1248 command-reference
   entries, zero reference gaps, zero invalid examples and no missing task destinations/families.
   Zoom has no unmapped families. Six Zoom syntax illustrations are config paths/completion
   placeholders, reviewed as notation. Other tools retain their reviewed pins and report scope.
@@ -106,7 +106,7 @@ does not establish prose correctness.
   browser cases pass, including mobile layouts, source Markdown, current commands, app setup and
   the three retained anchors. All cases retain 20% timeout headroom.
 - All 300 unit tests, typecheck, source lint, search-bundle validation, export links/SEO and asset
-  budgets pass. The project-scoped worktree exclusion fixes zero-file lint runs: 383 files checked.
+  budgets pass. The project-scoped worktree exclusion fixes zero-file lint runs: 379 files checked.
 
 ## Delivery
 
