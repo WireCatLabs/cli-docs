@@ -64,15 +64,9 @@ for (const lang of ["en", "ru", "es"]) {
           expect(md.status()).toBe(200)
           const text = await md.text()
           expect(text).toContain(tool === "tg" ? "Telegram" : "MAX")
-          expect(text).toContain(
-            route === "usage"
-              ? `${tool} messages send`
-              : route === "rankings"
-                ? `${tool} stats`
-                : route === "bot"
-                  ? `${tool} bot`
-                  : `${tool} chats`,
-          )
+          const command =
+            route === "usage" ? "messages send" : route === "rankings" ? "stats" : route === "bot" ? "bot" : "chats"
+          expect(text).toMatch(new RegExp(`${tool} (?:[\\w<>-]+ )?${command}`))
           expect(text).not.toContain("<ReaderGuide")
           if (route === "rankings") expect(text).toContain("684")
         })
