@@ -4,6 +4,22 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.10.0 — 14.10.2026
+
+### Cambios — pueden afectar a scripts
+
+- Usa el SDK común de reuniones `@wirecat/cli-core` 0.267.0 y la base CLI `@wirecat/cli-base` 0.27.2.
+- Las listas guardadas filtran mediante consultas de metadatos en lugar de los parámetros de lista `--since-time` y `--until-time`. La entidad común tiene IDs de texto y referencias de proveedor/cuenta, con `page` y pasos de continuación. JSONL conserva el sobre completo de la lista.
+- La búsqueda de participantes devuelve observaciones acotadas snake_case con `identity_id`, ambigüedad de la página y cobertura explícita. JSONL conserva la continuación en vez de emitir solo observaciones. Sigue `page.next` o `page.cursor` incluso en una página vacía.
+
+### Añadido
+
+- `meetings people` y MCP `meeting_people` limitan coincidencias, observaciones examinadas y bytes leídos de nombres/correos mediante `--limit`, `--scan-limit`, `--max-read-bytes` y `--cursor` (argumentos MCP en snake_case). Los cursores retienen la cuenta y la consulta de nombre; no se deducen vínculos con personas.
+
+### Corregido
+
+- Los enlaces existentes a la primera sincronización, la búsqueda guardada y la preparación explícita de vectores siguen funcionando tras renombrar los comandos.
+
 ## 0.9.0 — 14.10.2026
 
 ### Cambiado — puede afectar a scripts
