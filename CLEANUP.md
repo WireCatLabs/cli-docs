@@ -28,3 +28,5 @@ were deleted, not archived. The checkout is on `main`; three merged worktrees we
 
 - 18 worktrees whose PR was merged at the same commit and had no local changes (drive, agent-docs, html-report,
   latest-versions, posthog, remove-meeting-brief and older ones). Their branches are kept.
+
+- Retain `docs/zoom-012-project-evidence`, its worktree, isolated `/var/tmp/docs-012-*` states and `/tmp/docs-zoom-012-*` logs/reference symlink until owner-approved cleanup. No owner state was used.

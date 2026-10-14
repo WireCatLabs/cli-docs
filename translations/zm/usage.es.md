@@ -60,6 +60,7 @@ no importa su transcripción en la base hasta que solicites la importación del 
 | `meetings summary <meeting>` | leer resúmenes guardados |
 | `meetings export <meeting> --format markdown\|vtt` | exportar contenido guardado |
 | `search meetings <query>`, `meetings people <query>` | buscar texto o participantes |
+| `meetings projects evidence <project> [query...]` | leer evidencia acotada del nombre, clave y alias de un proyecto existente |
 | `meetings update <reference>`, `meetings link <reference>` | revisar o aplicar vínculos elegidos |
 | `meetings transcribe <meeting> <file> --model <model>` | revisar o reconocer un WAV como transcripción independiente |
 | `meetings passage <reference>`, `meetings evidence <reference>`, `meetings context <person>` | leer fuentes limitadas o contexto personal vinculado |

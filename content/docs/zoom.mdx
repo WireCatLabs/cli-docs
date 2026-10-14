@@ -37,8 +37,11 @@ participant to a person you selected; matching names alone do not establish iden
 Collect the meetings for Research Example, including its existing project aliases. Check the canonical project and current tags before proposing labels. Show possible tag synonyms for review. Combine passages with linked people, my notes, related messages and imported Google Drive documents. Cite every conclusion and propose uncertain links before saving.
 ```
 
-The agent selects the canonical project, finds its meeting membership or related labels, and reads
-those meetings alongside the other available sources. You review uncertain links and new labels.
+The agent selects the canonical project and searches its stored name, key and explicit aliases for
+cited meeting candidates, including meetings that have not been linked yet. It also reads confirmed
+membership and related labels alongside the other available sources. Review the cited passages before
+accepting a project association. The alias search reads the existing index; after importing new
+transcripts, run ordinary word search to index them first. You review uncertain links and new labels.
 Use [Memo](./memo/index.md) for notes, tags, facts and project records, [organising sources](./organize.md)
 for the common approach, and [Google Drive](./drive/index.md) to import the documents you want included.
 An existing calendar event can be linked explicitly; an upcoming Zoom meeting is not itself a
@@ -50,7 +53,8 @@ synchronised Google or Outlook calendar.
 Find my next Zoom meeting with Alice Example. Prepare a brief from earlier meetings in the series, linked project sources and participant context. List confirmed decisions, open questions and possible follow-ups with evidence. If a project or person is uncertain, show candidates and reasons. Keep the meeting and stored links unchanged.
 ```
 
-The agent reads the upcoming Zoom schedule, then searches the stored context. Check that the brief
+The agent reads the upcoming hosted-meeting schedule in Zoom, then searches the stored context.
+This list does not include every calendar invitation. Check that the brief
 names the intended meeting and separates confirmed decisions from suggestions. Ask it to show
 missing periods, transcripts or documents. [Upcoming Zoom meetings](./zm/remote-meetings.md) covers
 schedule and invitation reads; your agent assembles the brief from the sources you choose.
@@ -71,13 +75,15 @@ intake or preparation command is [planned work](./zm/roadmap.md).
 ## More control
 
 Read saved meetings and list the upcoming Zoom schedule. Replace `1` with an ID from your list,
-and replace the fictional passage reference with a transcript search hit's `ref`:
+and replace the fictional passage reference with a transcript search hit's `ref`.
+The project key `RES` and identity ID `12` are also fictional; select existing records from Memo and participant results.
 
 ```sh
 zm meetings list --json
 zm meetings show 1 --json
 zm meetings transcript 1 --json
 zm search meetings "launch decision" --json
+zm meetings projects evidence RES 'identity_id:12 started_at:[2026-09-14 TO 2026-10-14]' --limit 20 --json
 zm meetings passage meeting:3/15/20/4 --before-n 3 --after-n 4 --format markdown
 zm remote-meetings list --json
 ```

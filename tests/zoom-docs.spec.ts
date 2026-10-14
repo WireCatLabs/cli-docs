@@ -39,11 +39,14 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(text).toContain("page.has_more")
     expect(text).toContain("`item.next`")
     expect(text).toContain("`offset_ms`")
-    expect(text).not.toContain("`selection`")
+    expect(text).toContain("`selection`")
     expect(text).toContain("`identity_id`")
     expect(text).not.toContain("`identityId`")
-    expect(text).toContain('zm search meetings "Research Example" --identity-id 12 --since-time 2026-09-14')
-    await expect(page.locator("main")).toContainText('zm search meetings "Research Example"')
+    expect(text).toContain("zm meetings projects evidence RES 'identity_id:12 started_at:[2026-09-14 TO 2026-10-14]'")
+    await expect(page.locator("main")).toContainText("zm meetings projects evidence RES")
+    expect(text).toContain("`item.page.cursor`")
+    expect(text).toContain("meeting_project_evidence")
+    expect(text).toContain('association: "unconfirmed-word-evidence"')
     expect(text).toContain('archive_completeness: "unknown"')
     expect(text).toContain("UTC")
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
@@ -208,7 +211,27 @@ for (const lang of ["en", "ru", "es"] as const) {
         expect(markdown).toContain("`item.page`")
         expect(markdown).toContain("`item.next`")
         expect(markdown).toContain("`validation_error`")
+        expect(markdown).toContain("`meeting_project_evidence`")
       }
     })
   }
+}
+
+for (const lang of ["en", "ru", "es"] as const) {
+  test(`${lang}: hosted calendar coverage and unverified dates survive Markdown export`, async ({ page, request }) => {
+    await page.goto(`/${lang}/docs/zm/remote-meetings`)
+    const limits = {
+      en: ["not list every invitation", "mark its date as unverified"],
+      ru: ["не включает все приглашения", "отметьте дату как неподтверждённую"],
+      es: ["No incluye todas las invitaciones", "marca la fecha como no verificada"],
+    }[lang]
+    for (const limit of limits) await expect(page.locator("main")).toContainText(limit)
+    const prefix = lang === "en" ? "" : `${lang}/`
+    const response = await request.get(`/llms.mdx/docs/${prefix}zm/remote-meetings/content.md`)
+    expect(response.ok()).toBe(true)
+    const markdown = await response.text()
+    for (const limit of limits) expect(markdown).toContain(limit)
+    expect(markdown).toContain("meeting:read:list_meetings")
+    expect(markdown).toContain("zm remote-meetings list --json")
+  })
 }
