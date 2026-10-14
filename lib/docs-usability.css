@@ -283,6 +283,10 @@
   white-space: pre;
   line-height: 1.5;
 }
+.docs-snippet-compact.docs-prompt pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
 .docs-snippet-compact .docs-snippet-bar {
   flex: none;
   padding: 0.35rem 0.5rem;

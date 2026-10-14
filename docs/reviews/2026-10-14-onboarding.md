@@ -100,3 +100,19 @@ published no changed site content; validation and deployment must finish on the 
 Correction validation: all 18 affected responsive onboarding cases pass, including actual Search
 navigation in EN/RU/ES at desktop and mobile widths; the timing-headroom gate and strict released
 command audit pass. Every authored relative destination in the six changed shared pages exists.
+
+The corrected export/link/SEO gates passed in 38556197989. Its full browser matrix then caught
+the shared entry requests losing their compact presentation. Restore compact markup on all
+three authored requests in every locale; update the corpus check from five older messenger-only
+examples to the three current message/meeting/file examples. Keep clipboard, Markdown equality,
+security navigation, mobile overflow and accessibility assertions. Publication remains gated on
+the new complete run; no production site change was published by this failed browser run.
+
+Compact multiline requests now wrap inside their copy row rather than creating an inaccessible
+horizontal scroll area. The Markdown check parses exported code blocks, including quoted fences,
+and compares the complete request text with the clipboard source. The security/accessibility
+checks remain intact; no prose or command text is dropped to fit the layout.
+
+Final compact-layout validation:21 responsive/clipboard/security/Markdown cases pass, all with
+20% timeout headroom. Repository lint, full type checks and browser-test structure policy pass.
+The compact controls remain keyboard accessible and request text remains complete.
