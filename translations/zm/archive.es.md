@@ -121,7 +121,7 @@ zm recordings sync --since-time 2026-01-01 --until-time 2026-10-10 --destination
 ```
 
 Las fechas deben estar ordenadas y abarcar como máximo diez años. Se hacen peticiones mensuales,
-se deduplican UUID y se descarga en serie. Cada JSONL confirma una reunión; resultados y archivos
+se deduplican UUID y se descarga en serie. Cada registro item de JSONL confirma una reunión; resultados y archivos
 anteriores permanecen si falla otra. Repite un período para descubrir archivos nuevos. Con perfil
 se guarda progreso y registros pendientes. `--recheck-since-time YYYY-MM-DD` revisa fechas recientes,
 `--checkpoint` elige su archivo, `--max-pages` y `--max-entries` limitan descubrimiento.

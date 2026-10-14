@@ -31,3 +31,5 @@ were deleted, not archived. The checkout is on `main`; three merged worktrees we
 
 - Retain `docs/zoom-012-project-evidence`, its worktree, isolated `/var/tmp/docs-012-*` states and `/tmp/docs-zoom-012-*` logs/reference symlink until owner-approved cleanup. No owner state was used.
 - Retain `fix/windows-standard-envelopes` until owner-approved cleanup; it updates the Windows installation proof for independently adopted item envelopes while retaining legacy release checks.
+
+- 2026-10-14: retain `.worktrees/zoom-013-standards` until owner-approved cleanup; Zoom contract 3 documentation review.

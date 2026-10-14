@@ -4,6 +4,18 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.13.0 — 14.10.2026
+
+### Cambios — pueden afectar a quienes llaman al programa
+
+- Adopta cli-base 0.28 y la política compartida de respuestas de Core 0.273. La lista de comandos
+  usa el contrato 3 con efectos locales y remotos separados. Las listas JSON incluyen el modo de
+  página y `next_cursor`; JSONL emite registros item y end, incluso para resultados vacíos. Los
+  scripts que leían una respuesta completa por línea deben leer `data`, la página y la indicación final de si el resultado está completo.
+- Las respuestas correctas de CLI/MCP incluyen metadatos completos. Las fuentes de búsqueda
+  omitidas indican resultados parciales y problemas por fuente. Las políticas compartidas
+  comprueban los siguientes pasos disponibles y si es seguro repetir la operación.
+
 ## 0.12.0 — 14.10.2026
 
 ### Añadido

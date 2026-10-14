@@ -30,7 +30,7 @@ Todas las palabras deben coincidir por prefijos literales o formas guardadas. Po
 inglesas, rusas y españolas; pueden cambiarse o desactivarse. La consulta usa palabras normales, sin operadores.
 `--meeting-id`, `--event-id`, `--series-id`, `--since-time` y `--until-time` limitan la cuenta elegida.
 El cursor opaco pertenece a la cuenta, consulta y filtros, y continúa dentro de una transcripción larga.
-JSONL conserva toda la página, incluidos `page.cursor`, `next` e información `missing` del índice.
+JSON incluye `page.next_cursor`, `next` e información `missing` del índice. JSONL emite registros de resultados seguidos de un registro end con la página y si el resultado está completo.
 Cada coincidencia contiene `ref`, referencia de reunión `meeting`, `excerpt` y `offset_ms`;
 abre una línea con `meetings passage`.
 
@@ -82,13 +82,14 @@ Sus fechas se expresan en milisegundos desde la época Unix.
 Compara Unicode de forma literal; no traduce nombres ni deduce que dos registros son la misma persona.
 `--limit` (50 por defecto), `--scan-limit` (1000) y `--max-read-bytes` (1048576)
 limitan coincidencias, observaciones examinadas y bytes de nombres/correos leídos por llamada.
-La respuesta conserva `item.page.has_more`, `item.page.cursor`, cobertura y ambigüedad de identidades de la página, también en JSONL.
+La respuesta JSON conserva `item.page.has_more`, `item.page.next_cursor`, cobertura y ambigüedad de identidades de la página. JSONL conserva ese informe en `data` del registro item, seguido de un registro end.
 Sigue el paso `item.next` o repite la misma consulta con `--cursor`. Una página vacía puede tener continuación.
 Los IDs distintos son candidatos para revisar, nunca vínculos automáticos con personas. No se sabe si el archivo está completo.
 
 `meetings list` filtra metadatos con una consulta, por ejemplo
 `zm meetings list 'started_at:[2026-09-12 TO 2026-10-12]' --json`.
-Devuelve `items`, `page` y pasos `next` opcionales en JSON y JSONL. Continúa con `--page`.
+JSON devuelve `items`, `page` y pasos `next` opcionales. JSONL emite cada reunión en un registro item,
+seguido de un registro end con la página y si el resultado está completo. Continúa con `--page`.
 La consulta por fecha sustituye los antiguos parámetros del listado `--since-time` y `--until-time`;
 esos parámetros siguen disponibles en la búsqueda de transcripciones y la importación de reuniones.
 `search all` usa el servicio común y busca solo reuniones por defecto:
@@ -104,7 +105,8 @@ Para otras fuentes indica `--only messages,mail,notes,meetings`. Los mensajes pe
 elegida, el correo incluye cuentas guardadas y las notas son globales. Las reuniones usan prefijos;
 la sintaxis no admitida y consultas exactas se marcan como omitidas. Para continuar solo reuniones,
 pasa `item.meetings.next_cursor` mediante `--meeting-cursor '<json>'`, vinculado a cuenta y consulta.
-JSONL conserva el informe completo, con omisiones, cobertura y cursores.
+JSONL conserva el informe en un registro item, con omisiones, cobertura y cursores, seguido de un registro end.
+Las fuentes omitidas dejan `complete` en false y aparecen en `issues`; la búsqueda termina con código cero.
 
 ## Leer fuentes
 
@@ -194,7 +196,7 @@ pasajes nuevos. La lectura usa por defecto 4 MiB y como máximo 100 coincidencia
 y `--limit` cambian esos límites. La resolución del catálogo tiene otro límite de 1 MiB y 32 nombres.
 Un vocabulario excesivo produce un error explícito. La integridad del archivo y del índice sigue siendo desconocida.
 
-Continúa con el paso `next` de la raíz, incluso si `item.hits` está vacío. El cursor está en `item.page.cursor`. Sus argumentos
+Continúa con el paso `next` de la raíz, incluso si `item.hits` está vacío. El cursor está en `item.page.next_cursor`. Sus argumentos
 repiten proyecto, selección, cursor y límites. Se terminan las páginas de un nombre antes de pasar al
 siguiente alias. Las fechas relativas se fijan como límites absolutos en la consulta devuelta; úsala
 con `--cursor` para que otro día no cambie la selección. Cambiar el vocabulario o la selección puede invalidar el cursor.

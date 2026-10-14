@@ -44,7 +44,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(text).not.toContain("`identityId`")
     expect(text).toContain("zm meetings projects evidence RES 'identity_id:12 started_at:[2026-09-14 TO 2026-10-14]'")
     await expect(page.locator("main")).toContainText("zm meetings projects evidence RES")
-    expect(text).toContain("`item.page.cursor`")
+    expect(text).toContain("`item.page.next_cursor`")
     expect(text).toContain("meeting_project_evidence")
     expect(text).toContain('association: "unconfirmed-word-evidence"')
     expect(text).toContain('archive_completeness: "unknown"')
@@ -192,6 +192,7 @@ for (const lang of ["en", "ru", "es"] as const) {
 for (const lang of ["en", "ru", "es"] as const) {
   for (const guide of ["usage", "mcp"]) {
     test(`${lang}/${guide}: standard answers retain metadata and detailed reports`, async ({ page, request }) => {
+      if (guide === "usage") await page.setViewportSize({ width: 390, height: 844 })
       await page.goto(`/${lang}/docs/zm/${guide}`)
       const main = page.locator("main")
       await expect(main).toContainText("meta.run_id")
@@ -205,6 +206,13 @@ for (const lang of ["en", "ru", "es"] as const) {
       expect(markdown).toContain("`meta.duration_ms`")
       expect(markdown).toContain("`items`")
       if (guide === "usage") {
+        expect(markdown).toContain('`{"type":"item","data":...}`')
+        expect(markdown).toContain('`{"type":"end","complete":true,"page":...}`')
+        expect(markdown).toContain("`meta.complete`")
+        expect(markdown).toContain("`effects.remote`")
+        expect(markdown).toContain("`effects.local`")
+        expect(markdown).toContain("`next_cursor`")
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
         expect(markdown).toContain("`offset_ms`")
         expect(markdown).toContain("`meetings transcript <meeting> --history`")
       } else {
