@@ -91,7 +91,8 @@ tg personal tasks close <task> --as done --reason "contract sent"
 tg personal tasks close <task> --as dismissed --reason no-reply-needed
 ```
 
-`<task>` is the id or key that `tasks list` and `tasks agenda` show. `max` has the same commands.
+`<task>` is the task's key, as `tasks agenda` prints it, or its full id. `max` has the
+same commands.
 
 </details>
 
@@ -126,8 +127,8 @@ The same request often comes in several messages: "can you send the invoice?", t
 15 000, please", then a reminder two days later. These must stay one task. The tool will check each
 new task before it creates it:
 
-- **Sure it is the same task** (for example, the new message replies to a message of an open task):
-  the message is attached to that task. No new task is made, and the answer says which task and why.
+- **Sure it is the same task:** this happens only when the same rule already made a task for the
+  same message. Nothing new is made, and the answer says which task and why.
 - **Not sure:** the tool does not guess. When your agent adds the task, the tool refuses and lists up
   to five similar tasks with the reasons ("same person, same amount"). The agent chooses to attach the
   message to one of them or to make a new task. When a rule finds the task, the pair goes to a review
@@ -135,7 +136,9 @@ new task before it creates it:
 - **Clearly different:** a new task is made.
 
 The check compares words (including other forms of a word and typos), the person, the amount of
-money, the due date, the category and the time. A chat alone never makes two tasks "the same".
+money, the due date, the category, replies and the time. A chat alone never makes two tasks "the
+same". **The tool never merges tasks on its own.** Some similar tasks, such as a gift for mum and a
+gift for dad with the same amount, differ in one word's meaning, so your agent or you decide.
 
 On the review list you merge a pair or mark it as different. A merge moves the messages to the kept
 task and closes the other one as a duplicate. **A merge can be undone**, and nothing is deleted.

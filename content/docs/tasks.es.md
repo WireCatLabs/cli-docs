@@ -93,7 +93,7 @@ tg personal tasks close <task> --as done --reason "contract sent"
 tg personal tasks close <task> --as dismissed --reason no-reply-needed
 ```
 
-`<task>` es el id o la clave que muestran `tasks list` y `tasks agenda`. `max` tiene los mismos comandos.
+`<task>` es la clave de la tarea, tal como la imprime `tasks agenda`, o su id completo. `max` tiene los mismos comandos.
 
 </details>
 
@@ -131,9 +131,8 @@ La misma petición llega a menudo en varios mensajes: «¿me mandas la factura?�
 15 000, por favor», y un recordatorio dos días después. Debe seguir siendo una sola tarea. La
 herramienta comprobará cada tarea nueva antes de crearla:
 
-- **Segura de que es la misma tarea** (por ejemplo, el mensaje nuevo responde a un mensaje de una
-  tarea abierta): el mensaje se une a esa tarea. No se crea ninguna tarea nueva, y la respuesta dice
-  a cuál y por qué.
+- **Segura de que es la misma tarea:** solo ocurre cuando la misma regla ya creó una tarea para el
+  mismo mensaje. No se crea nada nuevo, y la respuesta dice a qué tarea y por qué.
 - **No está segura:** la herramienta no adivina. Si la tarea la añade tu agente, la herramienta se
   niega y lista hasta cinco tareas parecidas con los motivos («misma persona, mismo importe»). El
   agente elige unir el mensaje a una de ellas o crear una tarea nueva. Si la tarea la encontró una
@@ -141,8 +140,10 @@ herramienta comprobará cada tarea nueva antes de crearla:
 - **Claramente distinta:** se crea una tarea nueva.
 
 La comprobación compara las palabras (también otras formas de una palabra y errores de escritura), la
-persona, el importe, la fecha límite, la categoría y el tiempo. Compartir un chat no basta nunca para
-que dos tareas sean «la misma».
+persona, el importe, la fecha límite, la categoría, las respuestas y el tiempo. Compartir un chat no
+basta nunca para que dos tareas sean «la misma». **La herramienta nunca fusiona tareas por su
+cuenta.** Algunas tareas parecidas, como un regalo para mamá y otro para papá por el mismo importe, se
+distinguen por el sentido de una palabra, así que decide tu agente o tú.
 
 En la lista de revisión puedes fusionar un par o marcarlo como distinto. Una fusión pasa los mensajes a
 la tarea que se queda y cierra la otra como duplicado. **Una fusión se puede deshacer**, y no se

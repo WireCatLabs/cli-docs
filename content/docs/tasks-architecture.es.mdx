@@ -3,8 +3,8 @@ title: Cómo funcionan las tareas
 description: "La parte técnica de las tareas: una tabla, claves, vínculos, reservas y la detección de duplicados prevista."
 ---
 
-Comprende cómo se guarda una tarea, de dónde sale su clave y cómo decidirá la herramienta que dos
-tareas son una. Sirve a desarrolladores y autores de agentes que leen el almacén local o construyen
+Comprende cómo se guarda una tarea, de dónde sale su clave y cómo encontrará la herramienta tareas
+que pueden ser la misma. Sirve a desarrolladores y autores de agentes que leen el almacén local o construyen
 sobre las tareas. Primero van los datos; después, lo previsto: claves por tipo, reservas y la
 detección de duplicados con un ejemplo resuelto. Para el uso diario, empieza por [Tareas](./tasks.md).
 
@@ -15,7 +15,7 @@ si describe lo que ya existe o lo que está **previsto**.
 ## Los datos
 
 **Ahora.** Una tabla, `tasks`, guarda todas las tareas del almacén local. La lista completa de
-columnas está en el [modelo de datos](./data-model.mdx#tasks-1).
+columnas está en el [modelo de datos](./data-model.mdx#tasks).
 
 | Qué | Cómo se guarda |
 | --- | --- |
@@ -99,14 +99,15 @@ graph TD
   Cand --> Compare("4. Comparar campo a campo")
   Compare --> Score("5. Sumar pesos")
   Score --> Decide{"6. Banda"}
-  Decide -->|"misma o quizá"| Ask("Elige el agente, o lista de revisión")
+  Decide -->|"probable o quizá"| Ask("Elige el agente, o lista de revisión")
   Decide -->|"distinta"| Create("Crear la tarea")
   Ask --> Learn("7. Aprender de la respuesta")
 ```
 
 En palabras: la tarea nueva se normaliza; una coincidencia segura la une enseguida; si no, se reúnen
 candidatas, cada una se compara campo a campo, se suman los pesos y el total decide: crear o
-preguntar. Cada respuesta se guarda para ajustar los pesos más adelante.
+preguntar. Una puntuación nunca fusiona dos tareas; decide un agente o una persona. Cada respuesta se
+guarda para ajustar los pesos más adelante.
 
 ### 1. Normalizar
 
@@ -126,14 +127,13 @@ escrituras.
 
 ### 2. Coincidencias seguras
 
-Estas unen el mensaje a una tarea existente sin puntuar:
+Solo una coincidencia une sin puntuar: **la misma regla sobre el mismo mensaje**, que mantiene un
+índice único sobre fuente y regla. No se crea nada nuevo, y la respuesta dice a qué tarea y por qué.
 
-1. El mensaje nuevo **responde a** un mensaje ya vinculado a una tarea abierta (el propio vínculo de
-   respuesta del servicio de mensajería).
-2. **La misma regla sobre el mismo mensaje**: un índice único sobre fuente y regla.
-3. **El mismo título normalizado para la misma persona** en una tarea abierta.
-
-No se crea nada nuevo, y la respuesta dice a qué tarea y por qué.
+En el primer borrador también eran seguras una respuesta y el mismo título. En el conjunto de pruebas
+se equivocaron 6 veces de 11: una respuesta que añade una petición nueva, el «+1» de otra persona, el
+mismo título para otro trabajo. Ahora una respuesta es un campo con peso (paso 4), y el mismo título
+es solo una puntuación de texto alta.
 
 ### 3. Candidatas
 
@@ -177,30 +177,49 @@ frecuencia lo muestran tareas sin relación. Un nivel habitual entre duplicados 
 la baja. La [guía de Splink sobre el modelo de Fellegi–Sunter](https://moj-analytical-services.github.io/splink/topic_guides/theory/fellegi_sunter.html)
 explica el método.
 
-Los pesos iniciales se fijan a mano. Se ajustan con un conjunto de pruebas sintético antes de que
-decidan nada:
+Los primeros pesos se fijaron a mano y después se ajustaron con un conjunto de pruebas sintético:
 
 | Nivel | Peso |
 | --- | --- |
-| Texto: 0,6 o más / de 0,3 a 0,6 / menos de 0,3 | +4 / +2 / −2 |
-| Persona: misma / distinta / desconocida | +3 / −3 / 0 |
-| Importe: igual / distinto / falta | +3 / −4 / 0 |
+| Texto: 0,6 o más / de 0,3 a 0,6 / menos de 0,3 | +5 / +5 / −2 |
+| Persona: misma / distinta / desconocida | +1 / −3 / 0 |
+| Importe: igual / distinto / falta | +6 / −4 / 0 |
 | Categoría: misma / distinta | +1 / −1 |
-| Fecha límite: 2 días o menos / más / falta | +1 / −1 / 0 |
+| Fecha límite: 2 días o menos / más / falta | +4 / −1 / 0 |
 | Cadena de respuestas: sí / no | +6 / 0 |
-| Tiempo: 3 días o menos / de 4 a 14 días / más | +1 / 0 / −1 |
+| Tiempo: 3 días o menos / de 4 a 14 días / más | +2 / −2 / −3 |
 
-El plan no da peso para «cadena de respuestas: no» ni para «tiempo: de 4 a 14 días»; esta página los
-cuenta como 0. Bandas: **8 o más es «misma», de 3 a 7 es «quizá», menos de 3 es «distinta».** Los
-pesos y las bandas viven en un solo módulo, con el motivo de cada número; nada más los fija en el
-código.
+Ningún duplicado del conjunto tenía otra persona, otro importe u otra categoría, así que contar daría
+a esos niveles −5 o −6 sin ninguna observación. Conservan los valores fijados a mano.
+
+Bandas: **10 o más es «probable», de 5 a 9 es «quizá», menos de 5 es «distinta».** «Probable» solo
+pone una candidata la primera de la lista; nada se fusiona por una puntuación. Los pesos y las bandas
+viven en un solo módulo, con el motivo de cada número; nada más los fija en el código.
+
+### Lo que mostró el conjunto de pruebas
+
+El conjunto tiene 251 tareas sintéticas en ruso e inglés, con 80 pares duplicados. Usa el `bm25()` real
+de FTS5 y el lematizador de cli-core; los pesos se ajustaron con una mitad y se probaron con la otra
+([WireCatLabs/cli-testing#60](https://github.com/WireCatLabs/cli-testing/pull/60)).
+
+- «Quizá» y «probable» juntas encuentran el 90% de los duplicados. El 58% de los pares que muestran son
+  duplicados reales, y el 21% de las tareas nuevas se rechaza hasta que se elige.
+- «Probable» sola acierta el 85% de las veces y encuentra el 43% de los duplicados.
+- **Ninguna puntuación es segura para fusionar sola.** La primera puntuación sin fusiones erróneas es
+  16, y atrapa el 4% de los duplicados. Las tareas parecidas que quedan, como un regalo para mamá y
+  otro para papá por el mismo importe con dos días de diferencia, se distinguen por el sentido de una
+  palabra, que ningún campo ve.
+
+Límites: los datos son sintéticos, la misma persona escribió los datos y la puntuación, y los
+duplicados entre idiomas se detectan mal (2 de 5 salieron «distinta»). Aún no hay medidas sobre chats
+reales.
 
 ### 6. Decidir
 
 | Banda | Tarea añadida por un agente | Tarea abierta por una regla |
 | --- | --- | --- |
-| Segura (paso 2) | se une a la tarea, nada nuevo | igual |
-| Misma | aparece primero; el agente debe elegir | a la lista de revisión; ninguna puntuación fusiona sola todavía |
+| Segura (paso 2) | no se aplica | nada nuevo |
+| Probable | aparece primero; el agente debe elegir | a la lista de revisión |
 | Quizá | `tasks add` se niega y lista hasta 5 candidatas con puntuación y motivos; el agente repite con `--attach <task>` o `--new` | a la lista de revisión |
 | Distinta | se crea | se crea |
 
@@ -210,7 +229,7 @@ porque ese agente ya es el juez. Mem0 funciona igual: el agente que escribe un r
 añadirlo, actualizar uno existente, borrar uno o no hacer nada
 ([Mem0, arXiv 2504.19413](https://arxiv.org/abs/2504.19413)).
 
-**La lista de revisión.** `tasks duplicates` lista los pares que una regla dejó en «misma» o «quizá»,
+**La lista de revisión.** `tasks duplicates` lista los pares que una regla dejó en «probable» o «quizá»,
 los más nuevos primero, con motivos. `tasks merge <dup> --into <task>` vincula todos los mensajes del
 duplicado a la tarea que se queda, cierra el duplicado como `dismissed` con un vínculo `duplicate-of`
 y registra la decisión. `tasks duplicates reject <dup> <task>` registra «no es lo mismo», así que el
@@ -223,9 +242,9 @@ vínculos a mensajes se quedan donde están hasta que se muevan. Una fusión nun
 
 Cada fusión, rechazo, `--attach` y `--new` tras una lista de candidatas es un par etiquetado. Con
 suficientes pares, `m` y `u` de cada nivel se vuelven a contar a partir de ellos, la misma estimación
-por conteo que usa Splink, sin paso de entrenamiento. Entonces la banda «misma» puede empezar a
-fusionar sola, primero los pares de reglas. Hasta que tú lo permitas, solo las coincidencias seguras
-del paso 2 se fusionan sin una persona.
+por conteo que usa Splink, sin paso de entrenamiento, y las bandas se mueven. Una puntuación nunca
+fusiona sola. Si las respuestas reales muestran que casi siempre aceptas los pares «probable»,
+fusionarlos será decisión tuya.
 
 ## Un ejemplo resuelto
 
@@ -243,21 +262,21 @@ raíces.
 
 | Campo | REQ-22 | Puntos | REQ-19 | Puntos |
 | --- | --- | --- | --- | --- |
-| Texto | raíces `send`, `invoic`, `15000`: 3 comunes de 4 distintas = 0,75 | +4 | raíces `send`, `contract`, `invoic`, `40000`: 2 comunes de 6 distintas = 0,33 | +2 |
-| Persona | misma | +3 | misma | +3 |
-| Importe | 15000 ₽ = 15000 ₽ | +3 | 15000 ₽ ≠ 40000 ₽ | −4 |
+| Texto | raíces `send`, `invoic`, `15000`: 3 comunes de 4 distintas = 0,75 | +5 | raíces `send`, `contract`, `invoic`, `40000`: 2 comunes de 6 distintas = 0,33 | +5 |
+| Persona | misma | +1 | misma | +1 |
+| Importe | 15000 ₽ = 15000 ₽ | +6 | 15000 ₽ ≠ 40000 ₽ | −4 |
 | Categoría | `money` = `money` | +1 | `money` = `money` | +1 |
 | Fecha límite | falta en REQ-22 | 0 | falta en REQ-19 | 0 |
 | Cadena de respuestas | no | 0 | no | 0 |
-| Tiempo | 1 día | +1 | 10 días | 0 |
-| **Total** | | **12: misma** | | **2: distinta** |
+| Tiempo | 1 día | +2 | 10 días | −2 |
+| **Total** | | **15: probable** | | **1: distinta** |
 
 La petición la encontró una regla, así que la herramienta la crea como REQ-23 y pone el par REQ-23 y
-REQ-22 en la lista de revisión; ninguna puntuación fusiona sola todavía. Después,
-`tasks merge REQ-23 --into REQ-22` las une. Si la tarea la hubiera añadido un agente, `tasks add` se
-negaría, mostraría REQ-22 primero con 12 puntos y «misma persona, mismo importe, 3 de 4 raíces en
+REQ-22 en la lista de revisión. Nada se fusiona por la puntuación: tu agente o tú revisáis el par y
+ejecutáis `tasks merge REQ-23 --into REQ-22`. Si la tarea la hubiera añadido un agente, `tasks add` se
+negaría, mostraría REQ-22 primero con 15 puntos y «misma persona, mismo importe, 3 de 4 raíces en
 común», y el agente repetiría con `--attach REQ-22`. REQ-19 comparte la persona y las palabras «send
-invoice», pero el importe la hunde: es otro trabajo.
+invoice», pero el importe y la antigüedad la hunden: es otro trabajo.
 
 ## Comparación con beads
 
@@ -272,7 +291,7 @@ programación. Algunas de sus ideas se toman aquí y otras no.
 | `bd ready`: trabajo abierto y sin bloqueos | `tasks agenda`, con `--category` y `--label` previstos |
 | `bd update --claim`: una reserva atómica | `tasks claim`, un préstamo que termina solo |
 | `external_ref` a un elemento externo | Cada tarea se vincula a todos sus mensajes |
-| `bd duplicates` fusiona copias exactas; `bd find-duplicates` puntúa la coincidencia de palabras y solo informa | Una comprobación antes de crear, pesos por campo y una lista de revisión |
+| `bd duplicates` fusiona copias exactas; `bd find-duplicates` puntúa la coincidencia de palabras y solo informa | Una comprobación antes de crear, pesos por campo y una elección del agente o una lista de revisión |
 
 El texto de los chats nunca es una copia exacta, y nada en beads comprueba antes de crear una tarea.
 Por eso la comprobación de aquí trabaja por campos y pregunta cuando no está segura.

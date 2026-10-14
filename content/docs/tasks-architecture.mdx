@@ -3,8 +3,8 @@ title: How tasks work
 description: "The technical side of tasks: one table, keys, relations, claiming and the planned duplicate check."
 ---
 
-Understand how a task is stored, how it gets its key and how the tool will decide that two tasks
-are one. This helps developers and agent authors who read the local store or build on tasks. The data
+Understand how a task is stored, how it gets its key and how the tool will find tasks that may be
+the same. This helps developers and agent authors who read the local store or build on tasks. The data
 comes first, then the planned parts: keys per type, claiming and the duplicate check with a worked
 example. For everyday use, start with [Tasks](./tasks.md).
 
@@ -94,14 +94,15 @@ graph TD
   Cand --> Compare("4. Compare field by field")
   Compare --> Score("5. Add up weights")
   Score --> Decide{"6. Band"}
-  Decide -->|"same or maybe"| Ask("Agent chooses, or review list")
+  Decide -->|"likely or maybe"| Ask("Agent chooses, or review list")
   Decide -->|"different"| Create("Create the task")
   Ask --> Learn("7. Learn from the answer")
 ```
 
 In words: the new task is normalized; a certain match attaches it at once; otherwise a set of
 candidates is collected, each candidate is compared field by field, the weights are added up, and
-the total decides: create, or ask. Each answer is kept to tune the weights later.
+the total decides: create, or ask. A score never merges two tasks; an agent or a person decides.
+Each answer is kept to tune the weights later.
 
 ### 1. Normalize
 
@@ -120,14 +121,13 @@ The stems and the normalized text go to `task_words` and `task_stems`, kept by t
 
 ### 2. Certain matches
 
-These attach the message to an existing task with no score:
+Only one match attaches with no score: the **same rule on the same message**, kept by a unique index
+on source and rule. Nothing new is created, and the answer says which task and why.
 
-1. The new message **replies to** a message already linked to an open task (the messenger's own
-   reply link).
-2. The **same rule on the same message**: a unique index on source and rule.
-3. The **same normalized title for the same person** on an open task.
-
-Nothing new is created, and the answer says which task and why.
+A reply and the same title were certain matches in the first draft. On the test set they were wrong
+6 times in 11: a reply that adds a new request, another person's "+1", the same title for a
+different job. Now a reply is a weighted field (step 4), and the same title is only a high text
+score.
 
 ### 3. Candidates
 
@@ -171,29 +171,47 @@ tasks show it. A level that duplicates usually share pushes the sum up; a level 
 pushes it down. The [Splink guide to the Fellegi–Sunter model](https://moj-analytical-services.github.io/splink/topic_guides/theory/fellegi_sunter.html)
 explains the method.
 
-The starting weights are set by hand. They are tuned on a synthetic test set before they decide
-anything:
+The first weights were set by hand, then tuned on a synthetic test set:
 
 | Level | Weight |
 | --- | --- |
-| Text: 0.6 or more / 0.3 to 0.6 / under 0.3 | +4 / +2 / −2 |
-| Person: same / different / unknown | +3 / −3 / 0 |
-| Amount: equal / different / missing | +3 / −4 / 0 |
+| Text: 0.6 or more / 0.3 to 0.6 / under 0.3 | +5 / +5 / −2 |
+| Person: same / different / unknown | +1 / −3 / 0 |
+| Amount: equal / different / missing | +6 / −4 / 0 |
 | Category: same / different | +1 / −1 |
-| Due date: 2 days or fewer / more / missing | +1 / −1 / 0 |
+| Due date: 2 days or fewer / more / missing | +4 / −1 / 0 |
 | Reply chain: yes / no | +6 / 0 |
-| Time: 3 days or fewer / 4 to 14 days / more | +1 / 0 / −1 |
+| Time: 3 days or fewer / 4 to 14 days / more | +2 / −2 / −3 |
 
-The plan gives no weight for "reply chain: no" and "time: 4 to 14 days"; this page counts them as 0.
-Bands: **8 or more is "same", 3 to 7 is "maybe", under 3 is "different".** Weights and bands live in
-one module, with the reason for each number; nothing else hard-codes them.
+No duplicate in the test set had a different person, amount or category, so counting would give
+those levels −5 or −6 from no observations. They keep their hand-set values.
+
+Bands: **10 or more is "likely", 5 to 9 is "maybe", under 5 is "different".** "Likely" only puts a
+candidate first in the list; nothing merges on a score. Weights and bands live in one module, with
+the reason for each number; nothing else hard-codes them.
+
+### What the test set showed
+
+The test set has 251 synthetic Russian and English tasks with 80 duplicate pairs. It uses the real
+FTS5 `bm25()` and the cli-core stemmer; the weights were tuned on one half and tested on the other
+([WireCatLabs/cli-testing#60](https://github.com/WireCatLabs/cli-testing/pull/60)).
+
+- "Maybe" and "likely" together find 90% of the duplicates. 58% of the pairs they show are true
+  duplicates, and 21% of new tasks are refused for a choice.
+- "Likely" alone is right 85% of the time and finds 43% of the duplicates.
+- **No score is safe for an automatic merge.** The first score with no wrong merge is 16, and it
+  catches 4% of the duplicates. The similar pairs that remain, such as a gift for mum and a gift for
+  dad with the same amount two days apart, differ in the meaning of one word, which no field sees.
+
+Limits: the data is synthetic, the same author wrote the data and the scorer, and duplicates
+across languages are weak (2 of 5 scored "different"). There is no measurement on real chats yet.
 
 ### 6. Decide
 
 | Band | Task added by an agent | Task opened by a rule |
 | --- | --- | --- |
-| Certain (step 2) | linked to the task, nothing new | the same |
-| Same | listed first; the agent must choose | to the review list; no score merges on its own yet |
+| Certain (step 2) | does not apply | nothing new |
+| Likely | listed first; the agent must choose | to the review list |
 | Maybe | `tasks add` refuses and lists up to 5 candidates with score and reasons; the agent repeats with `--attach <task>` or `--new` | to the review list |
 | Different | created | created |
 
@@ -203,7 +221,7 @@ judge. Mem0 works the same way: the agent that writes a memory chooses to add it
 existing one, delete one or do nothing
 ([Mem0, arXiv 2504.19413](https://arxiv.org/abs/2504.19413)).
 
-**The review list.** `tasks duplicates` lists the pairs a rule left in "same" or "maybe", newest
+**The review list.** `tasks duplicates` lists the pairs a rule left in "likely" or "maybe", newest
 first, with reasons. `tasks merge <dup> --into <task>` links every message of the duplicate to the
 kept task, closes the duplicate as `dismissed` with a `duplicate-of` relation, and records the
 decision. `tasks duplicates reject <dup> <task>` records "not the same", so the pair does not come
@@ -216,8 +234,8 @@ stay where they are until they are moved. A merge never deletes anything.
 
 Every merge, rejection, `--attach` and `--new` after a candidate list is a labelled pair. With
 enough pairs, `m` and `u` for each level are counted again from them, the same counting estimate
-that Splink uses, with no training step. Then the "same" band may start to merge on its own, rule
-pairs first. Until you allow it, only the certain matches of step 2 merge without a person.
+that Splink uses, with no training step, and the bands move. A score never merges on its own. If
+real answers show that you almost always accept "likely" pairs, merging them is your decision.
 
 ## A worked example
 
@@ -232,21 +250,22 @@ lower than the stem value for both pairs, so the stem value counts.
 
 | Field | REQ-22 | Points | REQ-19 | Points |
 | --- | --- | --- | --- | --- |
-| Text | stems `send`, `invoic`, `15000`: 3 shared of 4 distinct = 0.75 | +4 | stems `send`, `contract`, `invoic`, `40000`: 2 shared of 6 distinct = 0.33 | +2 |
-| Person | same | +3 | same | +3 |
-| Amount | 15000 ₽ = 15000 ₽ | +3 | 15000 ₽ ≠ 40000 ₽ | −4 |
+| Text | stems `send`, `invoic`, `15000`: 3 shared of 4 distinct = 0.75 | +5 | stems `send`, `contract`, `invoic`, `40000`: 2 shared of 6 distinct = 0.33 | +5 |
+| Person | same | +1 | same | +1 |
+| Amount | 15000 ₽ = 15000 ₽ | +6 | 15000 ₽ ≠ 40000 ₽ | −4 |
 | Category | `money` = `money` | +1 | `money` = `money` | +1 |
 | Due date | missing on REQ-22 | 0 | missing on REQ-19 | 0 |
 | Reply chain | no | 0 | no | 0 |
-| Time | 1 day | +1 | 10 days | 0 |
-| **Total** | | **12: same** | | **2: different** |
+| Time | 1 day | +2 | 10 days | −2 |
+| **Total** | | **15: likely** | | **1: different** |
 
 A rule found this request, so the tool creates it as REQ-23 and puts the pair REQ-23 and REQ-22 on
-the review list; no score merges on its own yet. `tasks merge REQ-23 --into REQ-22` then joins them.
-If an agent had added the task, `tasks add` would refuse, show REQ-22 first with 12 points and
+the review list. Nothing merges on the score: your agent or you run
+`tasks merge REQ-23 --into REQ-22` after checking. If an agent had added the task, `tasks add` would
+refuse, show REQ-22 first with 15 points and
 "same person, same amount, 3 of 4 stems shared", and the agent would repeat with `--attach REQ-22`.
-REQ-19 shares the person and the words "send invoice", but the amount pulls it down: it is another
-job.
+REQ-19 shares the person and the words "send invoice", but the amount and the age pull it down: it
+is another job.
 
 ## Compared with beads
 
@@ -261,7 +280,7 @@ are taken here, some are not.
 | `bd ready`: open, unblocked work | `tasks agenda`, with `--category` and `--label` planned |
 | `bd update --claim`: an atomic claim | `tasks claim`, a lease that ends by itself |
 | `external_ref` to one outside item | Every task links to all of its messages |
-| `bd duplicates` merges exact copies; `bd find-duplicates` scores word overlap and only reports | A check before creating, field weights, and a review list |
+| `bd duplicates` merges exact copies; `bd find-duplicates` scores word overlap and only reports | A check before creating, field weights, and a choice by the agent or on a review list |
 
 Chat text is never an exact copy of itself, and nothing in beads checks before a task is created.
 That is why the check here works on fields and asks when it is not sure.
