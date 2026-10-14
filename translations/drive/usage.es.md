@@ -11,6 +11,13 @@ usan el perfil `personal`; sustitúyelo por el nombre de tu perfil conectado.
 conserva contenido y metadatos de esa sincronización. Una **exportación** es un archivo adicional
 que solicitas; no hace falta para buscar.
 
+Las respuestas para programas usan una envoltura: `item` para un resultado único o compuesto,
+o `items` con `page` para una lista sencilla; `meta` identifica la ejecución y su duración.
+Las claves de Drive usan snake_case. Los metadatos del proveedor y los diccionarios del usuario
+conservan sus claves. Los pasajes de búsqueda están en `item.hits` y los contadores de sync/status
+en `item`. La ayuda y el autocompletado siguen siendo texto; `commands --json` usa el documento
+compartido de comandos con contrato `2`.
+
 ## Elegir la operación adecuada
 
 | Qué quieres | Comando | De dónde vienen los datos | Qué se guarda |
@@ -34,12 +41,12 @@ incluye en la búsqueda local. La búsqueda necesita importar; exportar es opcio
 | Google Sheet | Exporta el libro como `.xlsx` y lee cada hoja | Cada hoja es un encabezado; filas como `Row 2: Column: value`, usando la primera fila textual como nombres de columnas |
 | PDF, Word (`.docx`), Excel (`.xlsx`), CSV o TSV subidos | Descarga y lee texto | Texto PDF/Word, cada hoja Excel y filas CSV |
 | PDF escaneado sin texto | Guarda el nombre con la razón | Sin OCR; buscable por nombre |
-| Imágenes con `pictureSearch` activado | Guarda el nombre, descarga hasta 25 MB si Google lo permite, calcula un vector y no conserva el archivo | Encuentra el contenido en `pictures`; consulta [buscar imágenes](./search.md#search-images-by-what-they-show) |
+| Imágenes con `picture_search` activado | Guarda el nombre, descarga hasta 25 MB si Google lo permite, calcula un vector y no conserva el archivo | Encuentra el contenido en `pictures`; consulta [buscar imágenes](./search.md#search-images-by-what-they-show) |
 | Slides, presentaciones, `.xlsm`, imágenes, audio, vídeo, JSON o código | Guarda el nombre con la razón | Sin extracción, OCR ni transcripción; buscable por nombre |
 | Acceso directo Drive | Omite | No sigue el destino |
 | Descarga restringida por Google | Guarda el nombre con la razón | Los metadatos no garantizan acceso al contenido; buscable por nombre |
 
-`drive personal config set pictureSearch true` activa imágenes para un perfil
+`drive personal config set picture_search true` activa imágenes para un perfil
 (consulta [configuración](./configuration.md)). El siguiente `drive personal sync` descarga
 imágenes y cuenta las procesadas en `pictures`. `pictures_too_large` cuenta las mayores de 25 MB,
 que siguen solo por nombre. `pictures_skipped` indica que falta el modelo: el resto del sync termina
@@ -48,7 +55,7 @@ y otro sync procesa las imágenes cuando el modelo está preparado.
 Markdown/TXT se reconoce por MIME textual o sufijos `.md`, `.markdown`, `.txt`. Google exporta
 hasta 10 MB: una Sheet mayor se omite con esa razón. Los archivos de más de 50 MB se omiten antes
 de descargarse, igual que el texto de 2 000 000 caracteres o más (reduce el límite con
-[`maxTextChars`](./configuration.md#saved-settings)). Los archivos omitidos por una versión anterior
+[`max_text_chars`](./configuration.md#saved-settings)). Los archivos omitidos por una versión anterior
 solo por formato se leen en el siguiente sync. Renombrar no convierte un binario en texto.
 Docs incluye cuerpo, tablas y notas al pie; excluye encabezados, pies, comentarios, imágenes y
 sugerencias. Texto de búsqueda y Markdown Google son representaciones distintas: comprueba

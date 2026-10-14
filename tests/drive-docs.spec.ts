@@ -83,7 +83,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     const title = { en: "Changelog", ru: "История изменений", es: "Historial de cambios" }[lang]
     await expect(page.getByRole("heading", { level: 1, name: title, exact: true })).toBeVisible()
     await expect(page.locator("main")).toContainText("0.1.0")
-    await expect(page.locator("main")).toContainText("0.4.0")
+    await expect(page.locator("main")).toContainText("0.5.0")
     await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /Google Drive/)
     await expect(page.locator("#nd-sidebar").getByRole("link", { name: title, exact: true })).toHaveAttribute(
       "href",

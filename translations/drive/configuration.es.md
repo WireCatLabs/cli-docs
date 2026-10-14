@@ -26,17 +26,22 @@ La base predeterminada es `drive.db` en el directorio de datos; las copias y pun
 están en `profiles/PROFILE_NAME/`. Lee sobre [almacenamiento local](./usage.md#disk-use-index-without-an-export-directory)
 antes de moverlos o borrarlos.
 
+Los archivos con nombres antiguos en camelCase se migran a snake_case en la primera lectura
+correcta. Conservan sus permisos y no se reescriben si no hay cambios. Se mantienen los nombres
+de perfiles, las rutas de permisos y los nombres de usos de modelos. Los valores antiguos y
+nuevos que entren en conflicto se rechazan.
+
 ## Ajustes guardados
 
 | Clave | Qué controla | Alcance |
 | --- | --- | --- |
-| `readOnly` | Rechaza cambios locales y remotos, incluida la sincronización y añadir notas | Perfil o `defaults` |
+| `read_only` | Rechaza cambios locales y remotos, incluida la sincronización y añadir notas | Perfil o `defaults` |
 | `permissions` | Acceso por comando: `deny`, `readonly`, `ask` o `allow` | Perfil o `defaults` |
-| `maxTextChars` | Máximo de caracteres por archivo; valor predeterminado y máximo `2000000`, límite de los lectores | Perfil o `defaults` |
-| `pictureSearch` | `true` busca imágenes por su contenido: sync descarga imágenes de hasta 25 MB y la búsqueda devuelve `pictures`; predeterminado `false` | Solo perfil |
+| `max_text_chars` | Máximo de caracteres por archivo; valor predeterminado y máximo `2000000`, límite de los lectores | Perfil o `defaults` |
+| `picture_search` | `true` busca imágenes por su contenido: sync descarga imágenes de hasta 25 MB y la búsqueda devuelve `pictures`; predeterminado `false` | Solo perfil |
 | `models.memories.provider` | Proveedor de IA para la extracción solicitada explícitamente | Perfil o `defaults` |
 | `models.memories.model` | Identificador del modelo del proveedor | Perfil o `defaults` |
-| `models.memories.baseUrl` | Dirección opcional del proveedor configurado | Perfil o `defaults` |
+| `models.memories.base_url` | Dirección opcional del proveedor configurado | Perfil o `defaults` |
 
 Los datos de la cuenta se gestionan aparte: `session start` guarda identidad y almacenamiento
 de credenciales; `folders add`/`folders remove` cambian las raíces elegidas. No guardes tokens
@@ -60,26 +65,26 @@ drive personal config show --json
 ```
 
 Estos permisos limitan las familias de comandos de archivos y Docs en Google. La sincronización
-local y las notas tienen claves separadas. `readOnly true` es más amplio: también bloquea cambios
+local y las notas tienen claves separadas. `read_only true` es más amplio: también bloquea cambios
 locales, así que no lo actives si quieres importar o etiquetar. Revisa la [referencia de comandos](./commands.md)
 y los [permisos de datos](./security.md) antes de elegir reglas más amplias.
 
 `config set` cambia el perfil elegido salvo que añadas `--defaults`. Por ejemplo:
 
 ```sh
-drive personal config set readOnly true --defaults
-drive work config set readOnly false
+drive personal config set read_only true --defaults
+drive work config set read_only false
 drive personal config show --json
 ```
 
-`drive personal config set pictureSearch true` activa imágenes solo para `personal`.
+`drive personal config set picture_search true` activa imágenes solo para `personal`.
 Prepara primero el modelo local compartido `clip-b32` (unos 160 MB) y escribe consultas en inglés.
 Un agente con terminal puede usar el instalador de modelos verificado del SDK instalado:
 
 ```text prompt
 Prepare WireCat's local CLIP image model for Drive profile personal using the installed shared SDK.
 Use its verified model installer and the same WIRECAT_STATE_DIR as Drive. Download only model files;
-do not connect to Google or change my source files. Then enable pictureSearch for personal.
+do not connect to Google or change my source files. Then enable picture_search for personal.
 ```
 
 El SDK público exporta `modelsCommand` mediante `@wirecat/cli-core/cli`; el agente puede consultar
@@ -90,7 +95,7 @@ La primera línea cambia el valor compartido; la segunda lo sustituye para `work
 imprime ambas secciones, no una lista combinada de valores efectivos. Omitir el perfil es un
 error: `DRIVE_PROFILE` y un antiguo perfil predeterminado guardado no lo seleccionan.
 
-`drive personal config set maxTextChars 500000` omite textos más largos con su razón; se leen
+`drive personal config set max_text_chars 500000` omite textos más largos con su razón; se leen
 en el siguiente sync después de aumentar el límite.
 
 ## Variables de entorno
@@ -126,7 +131,7 @@ modelo y la creación de embeddings deben usar ese mismo directorio.
 
 Estas opciones no son ajustes del archivo. Las de cada comando, como `search --limit` y
 `sync --limit`, se explican en su referencia. Los permisos temporales tienen prioridad sobre los
-del perfil y después los compartidos. Un `readOnly true` guardado sigue limitando incluso con
+del perfil y después los compartidos. Un `read_only true` guardado sigue limitando incluso con
 permiso `allow`. Las variables de IA tienen prioridad sobre el modelo y proveedor del perfil
 o de los valores compartidos.
 

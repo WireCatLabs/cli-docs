@@ -4,6 +4,13 @@ title: "Historial de cambios"
 
 Los detalles técnicos de las versiones se conservan en el idioma del proyecto original. Las guías traducidas explican las tareas habituales.
 
+## 0.5.0 — 2026-10-14
+
+- **JSON contract 2 (breaking).** Command answers use `item` or `items`/`page` plus `meta`, with snake_case keys. Search passages are under `item.hits`; sync/status results are under `item`. Discovery retains the shared `commands --json` format and advertises contract 2. Provider metadata, JSON Schemas and user dictionary keys retain their vocabulary. MCP returns the same envelope without an extra `result` wrapper.
+- **Existing settings migrate safely.** Read configuration through cli-core's shared loader. Old camelCase settings, including AI model URLs and Drive controls, move to snake_case once, retaining file permissions, profile names, permission paths and model-purpose names. Conflicting aliases are refused without rewriting. Existing camelCase `config set` spellings remain accepted as aliases.
+- **MCP arguments are validated and audited by Drive.** Bad types, missing fields and unknown arguments return field-specific `validation_error` replies instead of SDK text. Calls are logged through the shared store without argument/response bodies. A failed audit write cannot hide a completed operation's result.
+- Adopt cli-core 0.268.0 and cli-base 0.27.2, preserve shared error reasons/details through `failureContext`, and update the search adapter to the shared snake_case result fields.
+
 ## 0.4.0 — 2026-10-14
 
 - **Drive images found by what they show.** With `drive <profile> config set pictureSearch true`, sync downloads each
