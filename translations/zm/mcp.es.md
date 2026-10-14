@@ -53,8 +53,8 @@ limita cada resultado; cero elimina el límite. Elige un perfil e importa o desc
 de leerlos. El descubrimiento funciona sin datos guardados.
 
 `meeting_people` busca nombres/correos guardados de participantes en la cuenta fijada por el servidor.
-Usa `limit`, `scan_limit`, `max_read_bytes` y `cursor` para acotar la lectura. El `page` estándar
-y el paso `page.next` conservan la continuación aunque la página actual no tenga coincidencias.
+Usa `limit`, `scan_limit`, `max_read_bytes` y `cursor` para acotar la lectura. El `item.page` del informe
+y el paso `item.next` conservan la continuación aunque la página actual no tenga coincidencias.
 `identity_id` identifica una identidad observada; los nombres repetidos no crean vínculos con personas.
 `meetings_list` acepta una consulta de metadatos `query` (por ejemplo, `started_at:[2026-09-12 TO 2026-10-12]`)
 en lugar de los antiguos `since` y `until`, y devuelve la entidad de reunión y el sobre de lista comunes.
@@ -72,6 +72,16 @@ Compara la reunión con `zm meetings list --json` en el terminal. Si hay herrami
 comprueba perfil/ruta e importa o descarga. Si no se inicia, usa `where.exe zm` en Windows o
 `command -v zm` en Linux/macOS y pon la ruta completa en la entrada. Un chat web no ejecuta esta
 orden local sin una conexión compatible al equipo.
+
+## Formato de respuesta
+
+Las respuestas correctas usan los mismos sobres de elemento/lista que la CLI, con claves
+snake_case y `meta.run_id` / `meta.duration_ms`. Los informes detallados de contexto,
+participantes y búsqueda semántica están en `item`; las listas de reuniones, transcripciones,
+resúmenes y coincidencias de palabras usan `items` y `page`. El contenido de texto y el
+estructurado contienen la misma respuesta completa. Cada herramienta declara un esquema estricto
+de éxito/error. El manejador rechaza argumentos desconocidos antes de abrir el almacén, con
+`validation_error` que nombra el campo. El servidor selecciona la cuenta.
 
 ## Herramientas opcionales
 

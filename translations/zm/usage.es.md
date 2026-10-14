@@ -88,11 +88,21 @@ no importa su transcripción en la base hasta que solicites la importación del 
 
 ## Salida para scripts y agentes
 
-`--json` produce un valor. `--jsonl` transmite los elementos normales uno por línea; las listas
-de reuniones guardadas y las páginas acotadas de participantes conservan un sobre completo por línea,
-con continuación y cobertura. Los errores van a stderr; `--quiet` omite
-otros diagnósticos. Las tuberías reciben JSON por defecto y la terminal una salida legible.
-El autocompletado emite el protocolo de la shell salvo que pidas JSON.
+Usa `--json` para una respuesta completa. Un resultado lleva `item`; una lista, `items` y
+`page` (`limit`, `has_more` y `cursor` opcional). Ambos incluyen `meta.run_id` y
+`meta.duration_ms`, con pasos `next` e información `missing` opcionales. Las claves usan snake_case.
+
+Los informes detallados de participantes, fuentes, búsqueda semántica y búsqueda unificada
+conservan cobertura y continuación dentro de `item`. La búsqueda de palabras en reuniones
+guardadas devuelve elementos con `ref`, `meeting`, `excerpt` y `offset_ms`. Los detalles están
+en `item`; transcripciones y resúmenes, en `items`. Los detalles cuentan transcripciones actuales;
+`meetings transcript <meeting> --history` lee revisiones anteriores conservadas.
+
+`--jsonl` conserva cada respuesta completa por línea, incluidas las confirmaciones continuas.
+La lista de comandos es el documento compartido del contrato 2; ayuda, versión y autocompletado
+mantienen sus protocolos. Los errores van a stderr; `--quiet` omite otros diagnósticos.
+Las tuberías reciben JSON por defecto; la terminal, salida legible. El autocompletado emite
+el protocolo de la shell salvo que pidas JSON.
 
 `--fields id,title` elige campos. `--offline` rechaza la red. Los comandos finitos conservan la salida
 hasta liberar recursos; el límite predeterminado es 4 MiB. `--max-output-bytes 0` lo elimina.
