@@ -2085,8 +2085,6 @@ html[lang] .wirecat-editorial .wirecat-landing :is(h1, h2.big, .about-page h2) {
 }
 .wirecat-editorial .wirecat-landing {
   --gutter: clamp(16px, 2.7vw, 48px);
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22400%22%20viewBox%3D%220%200%20400%20400%22%20fill%3D%22none%22%20stroke%3D%22%231b2123%22%20stroke-width%3D%222.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cg%20transform%3D%22translate(24%20181)%20rotate(-13)%20scale(0.56)%22%3E%3Cpath%20d%3D%22M0%200l36-14-10%2034-8-12z%22%2F%3E%3Cpath%20d%3D%22M18%208l18-22%22%2F%3E%3Cpath%20d%3D%22M0%200c-18%208-26%2024-18%2040%22%20stroke-dasharray%3D%222%208%22%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate(327%20168)%20rotate(1)%20scale(0.69)%22%3E%3Cpath%20d%3D%22M-22%208c0-12%2012-18%2026-16%2012%202%2018%208%2018%2016z%22%2F%3E%3Cpath%20d%3D%22M-22%208h44%22%2F%3E%3Cpath%20d%3D%22M-18%20-2l-2-9%207%205M-10%20-7l3-7%203%208%22%2F%3E%3Cpath%20d%3D%22M-15%201q2%202%204%200%22%2F%3E%3Cpath%20d%3D%22M22%208c5%200%207-6%202-9%22%2F%3E%3Cpath%20d%3D%22M26%20-16h6l-6%206h6M34%20-26h4l-4%204h4%22%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate(190%20123)%20rotate(-20)%20scale(0.76)%22%3E%3Cpath%20d%3D%22M0%200l36-14-10%2034-8-12z%22%2F%3E%3Cpath%20d%3D%22M18%208l18-22%22%2F%3E%3Cpath%20d%3D%22M0%200c-18%208-26%2024-18%2040%22%20stroke-dasharray%3D%222%208%22%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate(231%20315)%20rotate(-8)%20scale(0.58)%22%3E%3Cpath%20d%3D%22M-22%208c0-12%2012-18%2026-16%2012%202%2018%208%2018%2016z%22%2F%3E%3Cpath%20d%3D%22M-22%208h44%22%2F%3E%3Cpath%20d%3D%22M-18%20-2l-2-9%207%205M-10%20-7l3-7%203%208%22%2F%3E%3Cpath%20d%3D%22M-15%201q2%202%204%200%22%2F%3E%3Cpath%20d%3D%22M22%208c5%200%207-6%202-9%22%2F%3E%3Cpath%20d%3D%22M26%20-16h6l-6%206h6M34%20-26h4l-4%204h4%22%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate(101%20283)%20rotate(6)%20scale(0.72)%22%3E%3Cpath%20d%3D%22M0%200l36-14-10%2034-8-12z%22%2F%3E%3Cpath%20d%3D%22M18%208l18-22%22%2F%3E%3Cpath%20d%3D%22M0%200c-18%208-26%2024-18%2040%22%20stroke-dasharray%3D%222%208%22%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate(341%2031)%20rotate(15)%20scale(0.79)%22%3E%3Cpath%20d%3D%22M-22%208c0-12%2012-18%2026-16%2012%202%2018%208%2018%2016z%22%2F%3E%3Cpath%20d%3D%22M-22%208h44%22%2F%3E%3Cpath%20d%3D%22M-18%20-2l-2-9%207%205M-10%20-7l3-7%203%208%22%2F%3E%3Cpath%20d%3D%22M-15%201q2%202%204%200%22%2F%3E%3Cpath%20d%3D%22M22%208c5%200%207-6%202-9%22%2F%3E%3Cpath%20d%3D%22M26%20-16h6l-6%206h6M34%20-26h4l-4%204h4%22%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate(358%20282)%20rotate(35)%20scale(0.79)%22%3E%3Cpath%20d%3D%22M0%200l36-14-10%2034-8-12z%22%2F%3E%3Cpath%20d%3D%22M18%208l18-22%22%2F%3E%3Cpath%20d%3D%22M0%200c-18%208-26%2024-18%2040%22%20stroke-dasharray%3D%222%208%22%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate(241%2032)%20rotate(32)%20scale(0.80)%22%3E%3Cpath%20d%3D%22M-22%208c0-12%2012-18%2026-16%2012%202%2018%208%2018%2016z%22%2F%3E%3Cpath%20d%3D%22M-22%208h44%22%2F%3E%3Cpath%20d%3D%22M-18%20-2l-2-9%207%205M-10%20-7l3-7%203%208%22%2F%3E%3Cpath%20d%3D%22M-15%201q2%202%204%200%22%2F%3E%3Cpath%20d%3D%22M22%208c5%200%207-6%202-9%22%2F%3E%3Cpath%20d%3D%22M26%20-16h6l-6%206h6M34%20-26h4l-4%204h4%22%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate(351%20375)%20rotate(-5)%20scale(0.79)%22%3E%3Cpath%20d%3D%22M0%200l36-14-10%2034-8-12z%22%2F%3E%3Cpath%20d%3D%22M18%208l18-22%22%2F%3E%3Cpath%20d%3D%22M0%200c-18%208-26%2024-18%2040%22%20stroke-dasharray%3D%222%208%22%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate(41%2042)%20rotate(23)%20scale(0.58)%22%3E%3Cpath%20d%3D%22M-22%208c0-12%2012-18%2026-16%2012%202%2018%208%2018%2016z%22%2F%3E%3Cpath%20d%3D%22M-22%208h44%22%2F%3E%3Cpath%20d%3D%22M-18%20-2l-2-9%207%205M-10%20-7l3-7%203%208%22%2F%3E%3Cpath%20d%3D%22M-15%201q2%202%204%200%22%2F%3E%3Cpath%20d%3D%22M22%208c5%200%207-6%202-9%22%2F%3E%3Cpath%20d%3D%22M26%20-16h6l-6%206h6M34%20-26h4l-4%204h4%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
-  background-size: 400px 400px;
 }
 .wirecat-editorial .wirecat-landing .say ul {
   list-style: none;
@@ -2520,19 +2518,6 @@ html.dark .wirecat-editorial {
   font:
     15px / 1.55 Onest,
     sans-serif;
-}
-.wirecat-editorial::before {
-  content: "";
-  position: absolute;
-  inset: 44px 0 auto;
-  height: 760px;
-  background: url("/editorial-wallpaper.svg") repeat;
-  pointer-events: none;
-  opacity: 0.5;
-  z-index: -1;
-}
-html.dark .wirecat-editorial::before {
-  opacity: 0.12;
 }
 .wirecat-editorial h1,
 .wirecat-editorial h2,
