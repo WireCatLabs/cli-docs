@@ -19,8 +19,9 @@ title: "Команды Drive"
 | `--jsonl` | print machine-readable JSON lines. |
 | `--agent-json` | show control and direction characters visibly in machine output. |
 | `--quiet` | suppress optional diagnostics. |
+| `--debug` | on failure, show the full error record: cause and stack. |
 | `--timeout <duration>` | whole-command deadline, e.g. 30s. |
-| `--max-output-bytes <n>` | bound buffered result output. Default: `4194304`. |
+| `--max-output-bytes <n>` | largest result to print, in bytes; 0 for no limit. Default: `4194304`. |
 | `--read-only` | refuse local and remote mutations. |
 | `--offline` | answer only operations that use local cached data. |
 | `--dry-run` | validate command/policy and preview without acting. |
@@ -30,11 +31,11 @@ title: "Команды Drive"
 
 ## `drive session`
 
-Google browser sign-in and local account profiles
+sign in to Google and manage local profiles
 
 ### `drive session start`
 
-Approve Google access in your browser; read-only unless --write is requested
+sign in to Google in the browser; read-only unless you pass --write
 
 This command can change Google data or send data to the configured model.
 
@@ -44,16 +45,16 @@ drive <profile> session start [options]
 
 | Option | What it does |
 |---|---|
-| `--client-file <file>` | use your own Desktop OAuth application JSON instead of WireCat's app. |
-| `--credential-storage <storage>` | keyring or explicit private-file storage. Default: `keyring`. |
-| `--no-browser` | print the sign-in URL without opening a browser. |
-| `--write` | request remote Drive/Docs mutation permissions. |
-| `--activity` | also request Drive Activity history permissions. |
-| `--apps` | also request the installed Drive applications permission. |
+| `--client-file <file>` | path to your own Desktop OAuth client JSON, used instead of WireCat's. |
+| `--credential-storage <storage>` | where the sign-in is kept: keyring, or file for a private file. Default: `keyring`. |
+| `--no-browser` | print the sign-in URL instead of opening a browser. |
+| `--write` | also ask for permission to change Drive files and Docs. |
+| `--activity` | also ask for permission to read Drive Activity history. |
+| `--apps` | also ask for permission to see installed Drive apps. |
 
 ### `drive session list`
 
-Configured account profiles; no credentials are printed
+list the configured profiles; credentials are never printed
 
 ```sh
 drive <profile> session list
@@ -61,7 +62,7 @@ drive <profile> session list
 
 ### `drive session end`
 
-Remove this profile's local sign-in; cached data is retained
+sign this profile out; imported documents stay
 
 This command changes local state.
 
@@ -71,25 +72,25 @@ drive <profile> session end
 
 ## `drive folders`
 
-Select Google folders for local ingestion
+choose the Google Drive folders that sync imports
 
 ### `drive folders add`
 
-Include a folder and its descendants
+import a folder and everything under it on the next sync
 
 This command changes local state.
 
 ```sh
-drive <profile> folders add <url-or-id>
+drive <profile> folders add <folder>
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `url-or-id` | required |  |
+| `folder` | required | folder id or Google Drive URL. |
 
 ### `drive folders list`
 
-Selected folder IDs
+list the folder ids sync imports
 
 ```sh
 drive <profile> folders list
@@ -97,21 +98,21 @@ drive <profile> folders list
 
 ### `drive folders remove`
 
-Stop importing a folder; sync removes sources outside the remaining scope
+stop importing a folder; the next sync drops its documents
 
 This command changes local state.
 
 ```sh
-drive <profile> folders remove <url-or-id>
+drive <profile> folders remove <folder>
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `url-or-id` | required |  |
+| `folder` | required | folder id or Google Drive URL. |
 
 ## `drive sync`
 
-Fetch selected sources and resume a durable pending batch
+import what changed in the chosen folders, and finish an unfinished sync; one sync reads at most 10000 entries under the chosen folders, and as many changes
 
 This command changes local state.
 
@@ -121,13 +122,13 @@ drive <profile> sync [options]
 
 | Option | What it does |
 |---|---|
-| `--max <n>` | maximum source operations this run. Default: `200`. |
-| `--rescan` | reconcile selected folders from a fresh change token. |
-| `--embed` | embed pending shared note chunks using an already-downloaded model. |
+| `--limit <n>` | how many documents to read from Google in this run. Default: `200`. |
+| `--rescan` | read every chosen folder again instead of only what changed. |
+| `--embed` | also index pending text for meaning search, with a model already downloaded. |
 
 ## `drive status`
 
-Local sync checkpoint, cached sources and pending work
+show the last sync, imported documents and pending work
 
 ```sh
 drive <profile> status
@@ -135,11 +136,11 @@ drive <profile> status
 
 ## `drive documents`
 
-Locally imported sources and exports
+read imported documents and Google Docs
 
 ### `drive documents list`
 
-Imported sources with original Google URLs
+list imported documents with their Google URLs
 
 ```sh
 drive <profile> documents list [options]
@@ -147,42 +148,42 @@ drive <profile> documents list [options]
 
 | Option | What it does |
 |---|---|
-| `--tag <tag>` | filter by a local shared tag. |
-| `--person <reference>` | filter by a linked shared person reference. |
+| `--tag <tag>` | only documents with this tag. |
+| `--person <reference>` | only documents linked to this person:<uid> reference. |
 
 ### `drive documents show`
 
-Imported text with tab and source metadata
+show an imported document's text, tabs and metadata
 
 ```sh
-drive <profile> documents show <url-or-id>
+drive <profile> documents show <document>
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `url-or-id` | required |  |
+| `document` | required | document id or Google Docs URL. |
 
 ### `drive documents export`
 
-Write the native Markdown snapshot; existing files are refused
+write an imported document to a new Markdown file
 
 This command changes local state.
 
 ```sh
-drive <profile> documents export <url-or-id> [options]
+drive <profile> documents export <document> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `url-or-id` | required |  |
+| `document` | required | document id or Google Docs URL. |
 
 | Option | What it does |
 |---|---|
-| `--out <file>` | destination Markdown file. |
+| `--out <file>` | path of the Markdown file to write; an existing file is refused. |
 
 ### `drive documents context`
 
-Source document, tags, links, notes, memories and observed editors
+show a document with its tags, relationships, notes, memories and editors
 
 ```sh
 drive <profile> documents context <document>
@@ -190,11 +191,11 @@ drive <profile> documents context <document>
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
+| `document` | required | Google file or folder id or URL in the local catalog. |
 
 ### `drive documents get`
 
-Live Docs JSON with every tab
+read a document live from Google Docs, as JSON with every tab
 
 ```sh
 drive <profile> documents get <document>
@@ -202,9 +203,11 @@ drive <profile> documents get <document>
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
+| `document` | required | document id or Google Docs URL. |
 
 ### `drive documents create`
+
+create an empty Google Doc
 
 This command can change Google data or send data to the configured model.
 
@@ -214,9 +217,11 @@ drive <profile> documents create [options]
 
 | Option | What it does |
 |---|---|
-| `--title <title>` |  |
+| `--title <title>` | title of the new document. |
 
 ### `drive documents update`
+
+change a Google Doc with a Docs batchUpdate request
 
 This command can change Google data or send data to the configured model.
 
@@ -226,13 +231,15 @@ drive <profile> documents update <document> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
+| `document` | required | document id or Google Docs URL. |
 
 | Option | What it does |
 |---|---|
-| `--body <json>` | Docs batchUpdate body, including requests and optional writeControl. |
+| `--body <json>` | Docs batchUpdate body: requests and an optional writeControl. |
 
 ### `drive documents history`
+
+list a document's revisions, or who did what with --activity
 
 ```sh
 drive <profile> documents history <document> [options]
@@ -240,17 +247,17 @@ drive <profile> documents history <document> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
+| `document` | required | document id or Google Docs URL. |
 
 | Option | What it does |
 |---|---|
-| `--limit <n>` | maximum items in this page. Default: `100`. |
-| `--page-token <token>` | next page token returned by Google. |
-| `--activity` | read actor/activity events instead of revisions; requires session start --activity. |
+| `--limit <n>` | how many items one page holds. Default: `100`. |
+| `--cursor <cursor>` | continue from the nextPageToken of the previous page. |
+| `--activity` | list activity events instead of revisions; needs session start --activity. |
 
 ## `drive search`
 
-Shared keyword and optional semantic search over imported Google sources
+search imported documents by words, and by meaning when indexed
 
 ```sh
 drive <profile> search <query> [options]
@@ -258,19 +265,143 @@ drive <profile> search <query> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `query` | required |  |
+| `query` | required | words to look for. |
 
 | Option | What it does |
 |---|---|
-| `--limit <n>` | maximum results. Default: `20`. |
-| `--offset <n>` | results to skip. Default: `0`. |
-| `--exact` | keyword search only, without stemming or meaning. |
+| `--limit <n>` | how many results to return. Default: `20`. |
+| `--offset <n>` | how many results to skip. Default: `0`. |
+| `--exact` | match the words exactly: no word forms, no meaning. |
+
+## `drive catalog`
+
+browse stored Drive files and folders offline
+
+### `drive catalog import`
+
+put cached file and folder metadata into the shared database
+
+This command changes local state.
+
+```sh
+drive <profile> catalog import
+```
+
+### `drive catalog show`
+
+show stored metadata and the stable file or folder reference
+
+```sh
+drive <profile> catalog show <file>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | Google file or folder id, or its Drive URL. |
+
+### `drive catalog list`
+
+list cached files and folders using metadata queries
+
+```sh
+drive <profile> catalog list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | metadata query: kind, mime, name, parent, person, tag; AND, OR, NOT. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many entries to return (at most 1000). Default: `50`. |
+| `--page <n>` | which page to return. Default: `1`. |
+
+### `drive catalog search`
+
+search cached names, descriptions, types and observed people
+
+```sh
+drive <profile> catalog search <query> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | required | metadata query: kind, mime, name, parent, person, tag; AND, OR, NOT. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many entries to return (at most 1000). Default: `50`. |
+| `--page <n>` | which page to return. Default: `1`. |
+
+### `drive catalog tree`
+
+show the cached hierarchy below a folder or all selected roots
+
+```sh
+drive <profile> catalog tree [folder] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `folder` | optional | Google folder id or URL; defaults to the explicitly selected profile's roots. |
+
+| Option | What it does |
+|---|---|
+| `--depth <n>` | maximum descendant depth, from 0 to 50. Default: `5`. |
+
+### `drive catalog tags`
+
+add owner tags to cached files or folders
+
+#### `drive catalog tags list`
+
+list local tags on a cached file or folder
+
+```sh
+drive <profile> catalog tags list <file>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | Google file or folder id, or its Drive URL. |
+
+#### `drive catalog tags add`
+
+add local tags on a cached file or folder
+
+This command changes local state.
+
+```sh
+drive <profile> catalog tags add <file> <tags>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | Google file or folder id, or its Drive URL. |
+| `tags` | required | local tag names. |
+
+#### `drive catalog tags remove`
+
+remove local tags on a cached file or folder
+
+This command changes local state.
+
+```sh
+drive <profile> catalog tags remove <file> <tags>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | Google file or folder id, or its Drive URL. |
+| `tags` | required | local tag names. |
 
 ## `drive tags`
 
-Local tags on shared documents; preserved through resync
+label imported documents; labels survive a sync
 
 ### `drive tags list`
+
+list a document's tags
 
 ```sh
 drive <profile> tags list <document>
@@ -278,9 +409,11 @@ drive <profile> tags list <document>
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
+| `document` | required | Google file or folder id or URL in the local catalog. |
 
 ### `drive tags add`
+
+tag a document
 
 This command changes local state.
 
@@ -290,10 +423,12 @@ drive <profile> tags add <document> <tags>
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
-| `tags` | required |  |
+| `document` | required | Google file or folder id or URL in the local catalog. |
+| `tags` | required | one or more tags. |
 
 ### `drive tags remove`
+
+untag a document
 
 This command changes local state.
 
@@ -303,60 +438,68 @@ drive <profile> tags remove <document> <tags>
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
-| `tags` | required |  |
+| `document` | required | Google file or folder id or URL in the local catalog. |
+| `tags` | required | one or more tags. |
 
-## `drive links`
+## `drive relationships`
 
-Connect documents to shared people, projects, notes and other references
+connect a document to people, projects, notes and other references
 
-### `drive links list`
+### `drive relationships list`
+
+list a document's relationships
 
 ```sh
-drive <profile> links list <document>
+drive <profile> relationships list <document>
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
+| `document` | required | Google file or folder id or URL in the local catalog. |
 
-### `drive links add`
+### `drive relationships add`
+
+connect a document to another reference
 
 This command changes local state.
 
 ```sh
-drive <profile> links add <document> <target-reference> [options]
+drive <profile> relationships add <document> <reference> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
-| `target-reference` | required |  |
+| `document` | required | Google file or folder id or URL in the local catalog. |
+| `reference` | required | what it connects to, such as person:<uid>, project:<id> or note:<id>. |
 
 | Option | What it does |
 |---|---|
-| `--kind <kind>` |  One of: `links-to`, `about`, `evidence`, `created-from`, `related-to`, `assigned-to`. Default: `related-to`. |
-| `--role <role>` |  |
-| `--evidence <text>` |  |
+| `--kind <kind>` | how the two relate. One of: `links-to`, `about`, `evidence`, `created-from`, `related-to`, `assigned-to`. Default: `related-to`. |
+| `--role <role>` | the part the reference plays, in a word or two. |
+| `--evidence <text>` | why the two are connected. |
 
-### `drive links remove`
+### `drive relationships remove`
+
+remove one of a document's relationships
 
 This command changes local state.
 
 ```sh
-drive <profile> links remove <document> <link-id>
+drive <profile> relationships remove <document> <relationship-id>
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
-| `link-id` | required |  |
+| `document` | required | Google file or folder id or URL in the local catalog. |
+| `relationship-id` | required | id, as relationships list prints it. |
 
 ## `drive notes`
 
-Local shared memos about a source document
+write notes about an imported document
 
 ### `drive notes add`
+
+write a note about a document
 
 This command changes local state.
 
@@ -366,14 +509,16 @@ drive <profile> notes add <document> <text> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
-| `text` | required |  |
+| `document` | required | Google file or folder id or URL in the local catalog. |
+| `text` | required | the note's text. |
 
 | Option | What it does |
 |---|---|
-| `--title <title>` |  |
+| `--title <title>` | a title for the note. |
 
 ### `drive notes list`
+
+list a document's notes
 
 ```sh
 drive <profile> notes list <document> [options]
@@ -381,61 +526,69 @@ drive <profile> notes list <document> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
+| `document` | required | Google file or folder id or URL in the local catalog. |
 
 | Option | What it does |
 |---|---|
-| `--search <text>` |  |
-| `--limit <n>` | maximum notes. Default: `50`. |
-| `--offset <n>` | notes to skip. Default: `0`. |
+| `--search <text>` | only notes that contain this text. |
+| `--limit <n>` | how many notes to return. Default: `50`. |
+| `--offset <n>` | how many notes to skip. Default: `0`. |
 
 ### `drive notes show`
 
+show one note
+
 ```sh
-drive <profile> notes show <document> <note-reference>
+drive <profile> notes show <document> <note>
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
-| `note-reference` | required |  |
+| `document` | required | Google file or folder id or URL in the local catalog. |
+| `note` | required | note:<id> reference, as notes list prints it. |
 
 ### `drive notes edit`
 
+replace a note's text
+
 This command changes local state.
 
 ```sh
-drive <profile> notes edit <document> <note-reference> <text> [options]
+drive <profile> notes edit <document> <note> <text> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
-| `note-reference` | required |  |
-| `text` | required |  |
+| `document` | required | Google file or folder id or URL in the local catalog. |
+| `note` | required | note:<id> reference, as notes list prints it. |
+| `text` | required | the note's new text. |
 
 | Option | What it does |
 |---|---|
-| `--revision <n>` | revision from notes show; refuses stale edits. |
+| `--revision <n>` | revision from notes show; a newer note is not overwritten. |
 
 ### `drive notes remove`
+
+delete one note
 
 This command changes local state.
 
 ```sh
-drive <profile> notes remove <document> <note-reference>
+drive <profile> notes remove <document> <note>
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
-| `note-reference` | required |  |
+| `document` | required | Google file or folder id or URL in the local catalog. |
+| `note` | required | note:<id> reference, as notes list prints it. |
 
 ## `drive memories`
 
-Evidence-backed shared memories; AI output remains proposed
+keep what was learned from a document, with evidence; an agent's stay proposed
 
 ### `drive memories add`
+
+record a memory about a document
 
 This command changes local state.
 
@@ -445,16 +598,18 @@ drive <profile> memories add <document> <text> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
-| `text` | required |  |
+| `document` | required | Google file or folder id or URL in the local catalog. |
+| `text` | required | what to remember. |
 
 | Option | What it does |
 |---|---|
-| `--scope <scope>` |  One of: `personal`, `work`. |
-| `--kind <kind>` |  One of: `summary`, `digest`, `fact`, `preference`. Default: `fact`. |
-| `--supersedes <memory-reference>` | replace an earlier memory about this same source. |
+| `--scope <scope>` | whose memory it is: personal or work. One of: `personal`, `work`. |
+| `--kind <kind>` | what kind of memory it is. One of: `summary`, `digest`, `preference`. Default: `summary`. |
+| `--supersedes <memory>` | a memory:<id> about the same document that this one replaces. |
 
 ### `drive memories list`
+
+list a document's memories
 
 ```sh
 drive <profile> memories list <document> [options]
@@ -462,52 +617,60 @@ drive <profile> memories list <document> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
+| `document` | required | Google file or folder id or URL in the local catalog. |
 
 | Option | What it does |
 |---|---|
-| `--scope <scope>` |  One of: `personal`, `work`. |
-| `--kind <kind>` |  One of: `summary`, `digest`, `fact`, `preference`. |
-| `--limit <n>` | maximum memories. Default: `50`. |
+| `--scope <scope>` | only personal or only work memories. One of: `personal`, `work`. |
+| `--kind <kind>` | only memories of this kind. One of: `summary`, `digest`, `preference`. |
+| `--limit <n>` | how many memories to return. Default: `50`. |
 
 ### `drive memories show`
 
+show one memory
+
 ```sh
-drive <profile> memories show <document> <memory-reference>
+drive <profile> memories show <document> <memory>
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
-| `memory-reference` | required |  |
+| `document` | required | Google file or folder id or URL in the local catalog. |
+| `memory` | required | memory:<id> reference, as memories list prints it. |
 
 ### `drive memories confirm`
 
+confirm a proposed memory as true
+
 This command changes local state.
 
 ```sh
-drive <profile> memories confirm <document> <memory-reference>
+drive <profile> memories confirm <document> <memory>
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
-| `memory-reference` | required |  |
+| `document` | required | Google file or folder id or URL in the local catalog. |
+| `memory` | required | memory:<id> reference, as memories list prints it. |
 
 ### `drive memories stale`
 
+mark a memory as out of date
+
 This command changes local state.
 
 ```sh
-drive <profile> memories stale <document> <memory-reference>
+drive <profile> memories stale <document> <memory>
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
-| `memory-reference` | required |  |
+| `document` | required | Google file or folder id or URL in the local catalog. |
+| `memory` | required | memory:<id> reference, as memories list prints it. |
 
 ### `drive memories search`
+
+search a document's memories by words
 
 ```sh
 drive <profile> memories search <document> <query> [options]
@@ -515,16 +678,16 @@ drive <profile> memories search <document> <query> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
-| `query` | required |  |
+| `document` | required | Google file or folder id or URL in the local catalog. |
+| `query` | required | words to look for. |
 
 | Option | What it does |
 |---|---|
-| `--scope <scope>` |  One of: `personal`, `work`. |
+| `--scope <scope>` | search personal or work memories. One of: `personal`, `work`. |
 
 ### `drive memories extract`
 
-Explicitly send selected text to the configured shared model; preview proposals or save them
+send a document's text to the model and show the memories it proposes
 
 This command can change Google data or send data to the configured model.
 
@@ -534,57 +697,147 @@ drive <profile> memories extract <document> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
+| `document` | required | Google file or folder id or URL in the local catalog. |
 
 | Option | What it does |
 |---|---|
-| `--scope <scope>` |  One of: `personal`, `work`. |
-| `--tab <id>` | extract only this cached Google Docs tab. |
-| `--save` | save proposed memories with quotes and source snapshot hash. |
+| `--scope <scope>` | whose memories they become: personal or work. One of: `personal`, `work`. |
+| `--tab <id>` | send only this tab of the document. |
+| `--save` | save the proposals, each with its quote and the document's version. |
 
-## `drive people`
+## `drive facts`
 
-Google-observed identities and explicit links to shared people
+what happened, as a document shows it; an agent's stay proposed until confirmed
 
-### `drive people list`
+### `drive facts add`
 
-```sh
-drive <profile> people list <document>
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `document` | required |  |
-
-### `drive people link`
+record a fact a document shows
 
 This command changes local state.
 
 ```sh
-drive <profile> people link <document> <google-id> <person-reference>
+drive <profile> facts add <document> <statement> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required |  |
-| `google-id` | required |  |
-| `person-reference` | required |  |
+| `document` | required | Google file or folder id or URL in the local catalog. |
+| `statement` | required | the fact, in one sentence. |
+
+| Option | What it does |
+|---|---|
+| `--type <type>` | what kind of fact it is. One of: `fact`, `statement`, `question`, `decision`, `promise`. Default: `fact`. |
+| `--scope <scope>` | whose fact it is: personal or work. One of: `personal`, `work`. |
+
+### `drive facts list`
+
+list a document's facts
+
+```sh
+drive <profile> facts list <document> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Google file or folder id or URL in the local catalog. |
+
+| Option | What it does |
+|---|---|
+| `--type <type>` | only facts of this kind. One of: `fact`, `statement`, `question`, `decision`, `promise`. |
+| `--status <status>` | only facts in this state. One of: `proposed`, `accepted`, `superseded`, `reversed`. |
+| `--limit <n>` | how many facts to return. Default: `50`. |
+
+### `drive facts show`
+
+show one fact
+
+```sh
+drive <profile> facts show <document> <fact>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Google file or folder id or URL in the local catalog. |
+| `fact` | required | fact:<id> reference, as facts list prints it. |
+
+### `drive facts confirm`
+
+confirm a proposed fact as true
+
+This command changes local state.
+
+```sh
+drive <profile> facts confirm <document> <fact>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Google file or folder id or URL in the local catalog. |
+| `fact` | required | fact:<id> reference, as facts list prints it. |
+
+## `drive identities`
+
+the Google accounts seen on a document, and the people they belong to
+
+### `drive identities list`
+
+list the owners and last editor Google shows for a document
+
+```sh
+drive <profile> identities list <document>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Google file or folder id or URL in the local catalog. |
+
+### `drive identities link`
+
+record that a Google account belongs to a known person
+
+This command changes local state.
+
+```sh
+drive <profile> identities link <document> <google-id> <person>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Google file or folder id or URL in the local catalog. |
+| `google-id` | required | Google account id, as identities list prints it. |
+| `person` | required | person:<uid> reference of someone already known. |
 
 ## `drive api`
 
-Discover and call the official Drive, Docs and Activity SDK methods
+discover and call the official Drive, Docs and Activity API methods
 
-### `drive api methods`
+### `drive api list`
+
+list the Google API methods drive can call
 
 ```sh
-drive api methods [options]
+drive api list [options]
 ```
 
 | Option | What it does |
 |---|---|
-| `--service <name>` | drive, docs or driveactivity. |
+| `--service <name>` | only the methods of this service: drive, docs or driveactivity. |
+
+### `drive api show`
+
+show one method's request schema and contract, without calling Google
+
+```sh
+drive api show <method>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `method` | required | Google method name, as api list prints it. |
 
 ### `drive api call`
+
+call one Google API method by name with JSON parameters
 
 This command can change Google data or send data to the configured model.
 
@@ -594,14 +847,14 @@ drive <profile> api call <method> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `method` | required |  |
+| `method` | required | Google method name, as api list prints it. |
 
 | Option | What it does |
 |---|---|
-| `--params <json>` | JSON query/path parameters. Default: `[object Object]`. |
-| `--body <json>` | JSON request body. |
-| `--allow-write` | explicitly permit a mutating generic method. |
-| `--allow-delete` | explicitly permit permanent deletion or emptying trash. |
+| `--params <json>` | query and path parameters as a JSON object. Default: `[object Object]`. |
+| `--body <json>` | request body as a JSON object. |
+| `--allow-write` | allow a method that changes Google data. |
+| `--allow-delete` | allow a method that deletes for good or empties the trash. |
 
 ### `drive api docs-documents-batch-update`
 
@@ -2133,9 +2386,11 @@ drive <profile> api driveactivity-activity-query [options]
 
 ## `drive files`
 
-Remote Google Drive files; results are not automatically imported
+read and change files in Google Drive; nothing is imported
 
 ### `drive files list`
+
+list files in Google Drive, one page at a time
 
 ```sh
 drive <profile> files list [options]
@@ -2143,12 +2398,14 @@ drive <profile> files list [options]
 
 | Option | What it does |
 |---|---|
-| `--limit <n>` | maximum items in this page. Default: `100`. |
-| `--page-token <token>` | next page token returned by Google. |
-| `--query <q>` | Google Drive query syntax. Default: `trashed = false`. |
-| `--parent <folder>` | list immediate children of this folder. |
+| `--limit <n>` | how many items one page holds. Default: `100`. |
+| `--cursor <cursor>` | continue from the nextPageToken of the previous page. |
+| `--query <q>` | only files that match this Google Drive query. Default: `trashed = false`. |
+| `--parent <folder>` | only the files directly inside this folder id. |
 
 ### `drive files get`
+
+show one file's Google Drive metadata
 
 ```sh
 drive <profile> files get <file>
@@ -2156,9 +2413,11 @@ drive <profile> files get <file>
 
 | Argument | | What it is |
 |---|---|---|
-| `file` | required |  |
+| `file` | required | file id or Google Drive URL. |
 
 ### `drive files copy`
+
+copy a file in Google Drive
 
 This command can change Google data or send data to the configured model.
 
@@ -2168,14 +2427,16 @@ drive <profile> files copy <file> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `file` | required |  |
+| `file` | required | file id or Google Drive URL. |
 
 | Option | What it does |
 |---|---|
-| `--name <name>` |  |
-| `--parent <folder>` |  |
+| `--name <name>` | name of the copy; Google's default when omitted. |
+| `--parent <folder>` | folder id to put the copy in. |
 
 ### `drive files move`
+
+move a file to another Google Drive folder
 
 This command can change Google data or send data to the configured model.
 
@@ -2185,14 +2446,16 @@ drive <profile> files move <file> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `file` | required |  |
+| `file` | required | file id or Google Drive URL. |
 
 | Option | What it does |
 |---|---|
-| `--to <folder>` |  |
-| `--from <folder>` | remove this previous parent explicitly. |
+| `--parent <folder>` | folder id to move the file into. |
+| `--old-parent <folder>` | folder id to take the file out of. |
 
 ### `drive files update`
+
+change a file's Google Drive metadata
 
 This command can change Google data or send data to the configured model.
 
@@ -2202,13 +2465,15 @@ drive <profile> files update <file> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `file` | required |  |
+| `file` | required | file id or Google Drive URL. |
 
 | Option | What it does |
 |---|---|
-| `--body <json>` | Google File metadata patch. |
+| `--body <json>` | the metadata fields to change, as a JSON object. |
 
 ### `drive files trash`
+
+move a file to the Google Drive trash
 
 This command can change Google data or send data to the configured model.
 
@@ -2218,9 +2483,11 @@ drive <profile> files trash <file>
 
 | Argument | | What it is |
 |---|---|---|
-| `file` | required |  |
+| `file` | required | file id or Google Drive URL. |
 
 ### `drive files restore`
+
+take a file out of the trash
 
 This command can change Google data or send data to the configured model.
 
@@ -2230,9 +2497,11 @@ drive <profile> files restore <file>
 
 | Argument | | What it is |
 |---|---|---|
-| `file` | required |  |
+| `file` | required | file id or Google Drive URL. |
 
 ### `drive files mkdir`
+
+create an empty folder in Google Drive
 
 This command can change Google data or send data to the configured model.
 
@@ -2242,17 +2511,19 @@ drive <profile> files mkdir <name> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `name` | required |  |
+| `name` | required | folder name. |
 
 | Option | What it does |
 |---|---|
-| `--parent <folder>` |  |
+| `--parent <folder>` | folder id to create it in; My Drive when omitted. |
 
 ## `drive comments`
 
-Remote file comments; pagination tokens are returned
+read the comments of a file in Google Drive
 
 ### `drive comments list`
+
+list a file's comments
 
 ```sh
 drive <profile> comments list <file> [options]
@@ -2260,29 +2531,33 @@ drive <profile> comments list <file> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `file` | required |  |
+| `file` | required | file id or Google Drive URL. |
 
 | Option | What it does |
 |---|---|
-| `--limit <n>` | maximum items in this page. Default: `100`. |
-| `--page-token <token>` | next page token returned by Google. |
+| `--limit <n>` | how many items one page holds. Default: `100`. |
+| `--cursor <cursor>` | continue from the nextPageToken of the previous page. |
 
 ### `drive comments get`
 
+show one comment of a file
+
 ```sh
-drive <profile> comments get <file> <id>
+drive <profile> comments get <file> <comment-id>
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `file` | required |  |
-| `id` | required |  |
+| `file` | required | file id or Google Drive URL. |
+| `comment-id` | required | comment id, as comments list prints it. |
 
 ## `drive permissions`
 
-Remote file permissions; pagination tokens are returned
+read the permissions of a file in Google Drive
 
 ### `drive permissions list`
+
+list a file's permissions
 
 ```sh
 drive <profile> permissions list <file> [options]
@@ -2290,29 +2565,33 @@ drive <profile> permissions list <file> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `file` | required |  |
+| `file` | required | file id or Google Drive URL. |
 
 | Option | What it does |
 |---|---|
-| `--limit <n>` | maximum items in this page. Default: `100`. |
-| `--page-token <token>` | next page token returned by Google. |
+| `--limit <n>` | how many items one page holds. Default: `100`. |
+| `--cursor <cursor>` | continue from the nextPageToken of the previous page. |
 
 ### `drive permissions get`
 
+show one permission of a file
+
 ```sh
-drive <profile> permissions get <file> <id>
+drive <profile> permissions get <file> <permission-id>
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `file` | required |  |
-| `id` | required |  |
+| `file` | required | file id or Google Drive URL. |
+| `permission-id` | required | permission id, as permissions list prints it. |
 
 ## `drive revisions`
 
-Remote file revisions; pagination tokens are returned
+read the revisions of a file in Google Drive
 
 ### `drive revisions list`
+
+list a file's revisions
 
 ```sh
 drive <profile> revisions list <file> [options]
@@ -2320,27 +2599,29 @@ drive <profile> revisions list <file> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `file` | required |  |
+| `file` | required | file id or Google Drive URL. |
 
 | Option | What it does |
 |---|---|
-| `--limit <n>` | maximum items in this page. Default: `100`. |
-| `--page-token <token>` | next page token returned by Google. |
+| `--limit <n>` | how many items one page holds. Default: `100`. |
+| `--cursor <cursor>` | continue from the nextPageToken of the previous page. |
 
 ### `drive revisions get`
 
+show one revision of a file
+
 ```sh
-drive <profile> revisions get <file> <id>
+drive <profile> revisions get <file> <revision-id>
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `file` | required |  |
-| `id` | required |  |
+| `file` | required | file id or Google Drive URL. |
+| `revision-id` | required | revision id, as revisions list prints it. |
 
 ## `drive shared-drives`
 
-List accessible Google Shared Drives
+list the shared drives this account can open
 
 ```sh
 drive <profile> shared-drives [options]
@@ -2348,20 +2629,24 @@ drive <profile> shared-drives [options]
 
 | Option | What it does |
 |---|---|
-| `--limit <n>` | maximum items in this page. Default: `100`. |
-| `--page-token <token>` | next page token returned by Google. |
+| `--limit <n>` | how many items one page holds. Default: `100`. |
+| `--cursor <cursor>` | continue from the nextPageToken of the previous page. |
 
 ## `drive config`
 
-Shared-style defaults/profile settings; credentials are separate
+read and change settings; credentials are kept apart
 
 ### `drive config show`
+
+show the defaults and every profile's settings
 
 ```sh
 drive <profile> config show
 ```
 
 ### `drive config set`
+
+set one setting of this profile, or of the defaults
 
 This command changes local state.
 
@@ -2371,16 +2656,16 @@ drive <profile> config set <key> <json-value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `key` | required |  |
-| `json-value` | required |  |
+| `key` | required | readOnly, maxTextChars, pictureSearch, permissions.<key> or models.<purpose>.<field>. |
+| `json-value` | required | the new value, as JSON. |
 
 | Option | What it does |
 |---|---|
-| `--defaults` | change defaults rather than the selected profile. |
+| `--defaults` | change the defaults instead of this profile. |
 
 ## `drive complete`
 
-Shell completion from the shared command registry
+print a shell completion script, or complete words
 
 ```sh
 drive complete [words]
@@ -2388,42 +2673,32 @@ drive complete [words]
 
 | Argument | | What it is |
 |---|---|---|
-| `words` | optional |  |
-
-## `drive schema`
-
-Generated request schema and operation contract without Google access
-
-```sh
-drive schema <method>
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `method` | required |  |
+| `words` | optional | a shell name, or after -- the words typed so far. |
 
 ## `drive models`
 
-Configure the shared model gateway; keys stay outside config
+choose the model that proposes memories; keys stay out of config
 
-### `drive models configure`
+### `drive models set`
+
+set the provider and model for one use
 
 This command changes local state.
 
 ```sh
-drive <profile> models configure [options]
+drive <profile> models set [options]
 ```
 
 | Option | What it does |
 |---|---|
-| `--purpose <purpose>` | shared model purpose. Default: `memories`. |
-| `--provider <provider>` |  One of: `openai`, `anthropic`, `off`. |
-| `--model <model>` | model identifier for the selected provider. |
-| `--base-url <url>` | optional HTTP/S model endpoint without URL credentials. |
+| `--purpose <purpose>` | what the model is used for. Default: `memories`. |
+| `--provider <provider>` | who runs the model, or off to use none. One of: `openai`, `anthropic`, `off`. |
+| `--model <model>` | model id at the provider. |
+| `--base-url <url>` | HTTP or HTTPS address of the model API, without credentials in it. |
 
 ## `drive mcp`
 
-Expose guarded commands over MCP stdio
+serve drive's commands to an agent over MCP on stdio
 
 ```sh
 drive <profile> mcp [options]
@@ -2431,11 +2706,11 @@ drive <profile> mcp [options]
 
 | Option | What it does |
 |---|---|
-| `--tools` | list offered tools without starting a server. |
+| `--tools` | list the tools offered instead of starting the server. |
 
 ## `drive commands`
 
-Discover the command tree and options as shared registry data
+print the command tree and its options as data
 
 ```sh
 drive commands [path]
@@ -2443,11 +2718,11 @@ drive commands [path]
 
 | Argument | | What it is |
 |---|---|---|
-| `path` | optional |  |
+| `path` | optional | only this command or group, as words. |
 
 ## Коды завершения
 
-Ошибки используют общий контракт WireCat.
+Failures use the shared WireCat error contract.
 
 | Code | When |
 |---|---|

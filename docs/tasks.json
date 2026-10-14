@@ -76,14 +76,14 @@
     "id": "drive-ingestion",
     "pages": ["drive/installation.md", "drive/usage.md", "drive/search.md"],
     "families": {
-      "drive": ["session", "folders", "sync", "status", "documents", "search"]
+      "drive": ["session", "folders", "sync", "status", "documents", "search", "catalog"]
     }
   },
   {
     "id": "organize-sources",
     "pages": ["organize.md", "memo/notes.md", "people.md", "drive/recipes.md"],
     "families": {
-      "drive": ["tags", "notes", "links", "memories", "people"]
+      "drive": ["tags", "notes", "relationships", "memories", "facts", "identities"]
     }
   },
   {
@@ -101,8 +101,7 @@
         "shared-drives",
         "mcp",
         "commands",
-        "complete",
-        "schema"
+        "complete"
       ]
     }
   },

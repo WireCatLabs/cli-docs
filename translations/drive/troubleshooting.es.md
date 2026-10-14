@@ -13,7 +13,7 @@ de importar más datos o cambiar permisos. Guarda el código de error y el perfi
 | El acceso ha caducado | Repite `drive personal session start`. Añade `--client-file` solo para tu propia aplicación. Los permisos External Testing suelen caducar a los siete días. |
 | No hay llavero del sistema | Conecta con `--credential-storage file` explícito si el almacenamiento privado en archivo es adecuado. |
 | Búsqueda vacía | Ejecuta `status`, comprueba raíces con `folders list` y luego `sync`. Prueba una palabra conocida con `search --exact`. |
-| Se omitió un archivo | Revisa tipo y permiso de descarga. Se admiten Google Docs y Markdown/TXT; PDF, Office, Sheets, Slides y accesos directos no se importan. |
+| Se omitió un archivo | Revisa tipo y permiso de descarga. Se importan Docs, Sheets, Markdown/TXT, PDF, `.docx`, `.xlsx` y CSV; PDF escaneados, Slides y accesos directos no se leen. |
 | Sync se detuvo con errores | Repítelo: se reanuda el trabajo pendiente. No trates una importación parcial como completa. |
 | Falta el componente de búsqueda semántica | Prepara la caché compartida según [búsqueda](./search.md#search-by-meaning) o usa `--exact`. |
 | No se encuentra el destino del vínculo | Usa una referencia de la base seleccionada. Comprueba el almacenamiento compartido antes de vincular personas/proyectos del servicio de mensajería. |

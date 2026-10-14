@@ -7,7 +7,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     await expect(page.locator(`a[href="/${lang}/docs/drive/installation"]`).first()).toBeVisible()
     await expect(page.locator("main")).toContainText("SQLite")
     await expect(
-      page.locator(`main a[href="/${lang}/docs/drive/recipes#save-full-available-metadata-for-offline-use"]`),
+      page.locator(`main a[href="/${lang}/docs/drive/usage#browse-and-organize-the-local-catalog"]`),
     ).toBeVisible()
     await expect(page.locator("#nd-sidebar").locator(`a[href="/${lang}/docs/tg"]`)).toHaveCount(1)
     await expect(page.locator("#nd-sidebar").locator(`a[href="/${lang}/docs/max"]`)).toHaveCount(1)
@@ -34,11 +34,12 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(await markdown.text()).not.toContain("pnpm build")
   })
 
-  test(`${lang}: Drive changelog renders the first released features`, async ({ page }) => {
+  test(`${lang}: Drive changelog renders current and first released features`, async ({ page }) => {
     await page.goto(`/${lang}/docs/drive/changelog`)
     const title = { en: "Changelog", ru: "История изменений", es: "Historial de cambios" }[lang]
     await expect(page.getByRole("heading", { level: 1, name: title, exact: true })).toBeVisible()
     await expect(page.locator("main")).toContainText("0.1.0")
+    await expect(page.locator("main")).toContainText("0.4.0")
     await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /Google Drive/)
     await expect(page.locator("#nd-sidebar").getByRole("link", { name: title, exact: true })).toHaveAttribute(
       "href",
@@ -67,6 +68,8 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(markdown.ok()).toBe(true)
     await expect(page.locator("#import-a-folder")).toHaveCount(1)
     expect(await markdown.text()).toContain("drive personal documents export DOC_ID")
+    expect(await markdown.text()).toContain("drive personal catalog tree --offline")
+    expect(await markdown.text()).toContain("provider_metadata")
   })
 
   test(`${lang}: Drive settings separate saved choices, environment and invocation options`, async ({ page }) => {
@@ -87,6 +90,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     const markdown = await response.text()
     expect(markdown).toContain("drive personal --offline documents context DOC_ID --json")
     expect(markdown).toContain("drive personal files get FILE_ID --json > ./file-metadata.json")
+    expect(markdown).toContain("drive personal catalog tags add FOLDER_ID follow-up --offline")
   })
 
   test(`${lang}: organization guide links source-specific actions`, async ({ page }) => {

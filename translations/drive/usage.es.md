@@ -26,21 +26,39 @@ incluye en la búsqueda local. La búsqueda necesita importar; exportar es opcio
 
 ## Qué tipos de documentos se pueden buscar
 
-| Tipo en Drive | Qué hace sync | Resultado para búsqueda/exportación |
+| Tipo en Google Drive | Qué hace sync | Resultado para búsqueda/exportación |
 | --- | --- | --- |
-| Google Doc nativo | Obtiene contenido Docs y exportación Markdown de Google | Búsqueda en todas las pestañas; exportación Markdown Google |
-| Markdown o TXT subido | Descarga texto a la caché administrada | Texto buscable y exportable |
-| Carpeta Google | Recorre descendientes y guarda IDs/padres en el estado | La carpeta no es un documento buscable |
-| PDF, Word, Excel, presentaciones, imágenes o audio | Omite | Sin extracción, OCR o transcripción automáticos |
-| Google Sheets o Slides nativo | Omite | Sin indexación de hojas o diapositivas |
+| Google Doc nativo | Obtiene contenido Docs y Markdown Google | Texto de todas las pestañas; exportación Markdown Google |
+| Markdown o TXT subido | Descarga texto a la caché | Texto buscable y exportable |
+| Carpeta Google | Guarda metadatos y padres en la base; recorre descendientes | `catalog tree`, búsqueda de metadatos, etiquetas y notas locales |
+| Google Sheet | Exporta el libro como `.xlsx` y lee cada hoja | Cada hoja es un encabezado; filas como `Row 2: Column: value`, usando la primera fila textual como nombres de columnas |
+| PDF, Word (`.docx`), Excel (`.xlsx`), CSV o TSV subidos | Descarga y lee texto | Texto PDF/Word, cada hoja Excel y filas CSV |
+| PDF escaneado sin texto | Guarda el nombre con la razón | Sin OCR; buscable por nombre |
+| Imágenes con `pictureSearch` activado | Guarda el nombre, descarga hasta 25 MB si Google lo permite, calcula un vector y no conserva el archivo | Encuentra el contenido en `pictures`; consulta [buscar imágenes](./search.md#search-images-by-what-they-show) |
+| Slides, presentaciones, `.xlsm`, imágenes, audio, vídeo, JSON o código | Guarda el nombre con la razón | Sin extracción, OCR ni transcripción; buscable por nombre |
 | Acceso directo Drive | Omite | No sigue el destino |
-| Descarga restringida por Google | Omite | Leer metadatos no garantiza leer contenido |
+| Descarga restringida por Google | Guarda el nombre con la razón | Los metadatos no garantizan acceso al contenido; buscable por nombre |
 
-Markdown/TXT se reconoce por MIME de texto o sufijos `.md`, `.markdown` o `.txt`.
-Renombrar no convierte un binario en texto. Docs incluye cuerpo, tablas y notas al pie;
-excluye encabezados, pies, comentarios, imágenes y sugerencias. El texto buscable y el Markdown
-Google son representaciones separadas: revisa la exportación si importan formato o pestañas.
-Comprueba cada fuente omitida en el informe.
+`drive personal config set pictureSearch true` activa imágenes para un perfil
+(consulta [configuración](./configuration.md)). El siguiente `drive personal sync` descarga
+imágenes y cuenta las procesadas en `pictures`. `pictures_too_large` cuenta las mayores de 25 MB,
+que siguen solo por nombre. `pictures_skipped` indica que falta el modelo: el resto del sync termina
+y otro sync procesa las imágenes cuando el modelo está preparado.
+
+Markdown/TXT se reconoce por MIME textual o sufijos `.md`, `.markdown`, `.txt`. Google exporta
+hasta 10 MB: una Sheet mayor se omite con esa razón. Los archivos de más de 50 MB se omiten antes
+de descargarse, igual que el texto de 2 000 000 caracteres o más (reduce el límite con
+[`maxTextChars`](./configuration.md#saved-settings)). Los archivos omitidos por una versión anterior
+solo por formato se leen en el siguiente sync. Renombrar no convierte un binario en texto.
+Docs incluye cuerpo, tablas y notas al pie; excluye encabezados, pies, comentarios, imágenes y
+sugerencias. Texto de búsqueda y Markdown Google son representaciones distintas: comprueba
+la exportación si importan formato o pestañas. Revisa cada fuente omitida.
+
+Un archivo ilegible se guarda con nombre, tipo, tamaño, propietarios y enlace, sin texto.
+`drive sync` los cuenta en `names_only` y muestra la razón en `skipped`. `search` los encuentra
+por nombre; `not_read` indica la razón, así que abre `source_url` en vez de citar texto ausente.
+La búsqueda por significado los ignora. Salen del índice al borrarse, moverse fuera del alcance
+o enviarse a la papelera. Si el formato o límite permite leerlos después, sync sustituye la entrada por texto.
 
 <a id="import-a-folder"></a>
 
@@ -57,7 +75,7 @@ Para hacerlo manualmente, sustituye `FOLDER_ID` por el ID o la URL completa:
 ```sh
 drive personal files list --parent FOLDER_ID --json
 drive personal folders add https://drive.google.com/drive/folders/FOLDER_ID
-drive personal sync --max 200 --json
+drive personal sync --limit 200 --json
 drive personal status --json
 drive personal documents list --json
 ```
@@ -65,11 +83,12 @@ drive personal documents list --json
 La importación lista documentos con IDs Google estables y enlaces originales. Si quedan
 operaciones pendientes, repite `drive personal sync`: reanuda el trabajo guardado.
 El primer recorrido es recursivo; `files list --parent` solo lista hijos inmediatos.
-Si Google devuelve `nextPageToken`, pásalo a `files list --page-token TOKEN` para continuar.
+Si Google devuelve `nextPageToken`, pásalo a `files list --cursor TOKEN` para continuar.
 
-`folders list` muestra raíces seleccionadas. IDs y padres se guardan en el estado del perfil;
-todavía no hay árbol navegable en la base compartida. Los documentos se agrupan por cuenta.
-Los nombres repetidos no confunden identidades: selecciona por ID, no por título.
+`folders list` muestra las raíces elegidas. `catalog tree` muestra su jerarquía guardada;
+`catalog list "parent:FOLDER_ID"` lista los hijos inmediatos sin Google. El índice de contenido
+agrupa documentos por cuenta; moverlos en Google conserva su referencia local. Los nombres
+repetidos son seguros: selecciona la fuente por ID.
 
 ## Leer contenido y metadatos sin conexión
 
@@ -79,7 +98,7 @@ Tras importar, estos comandos usan la copia local y no consultan Google:
 drive personal --offline documents list --json
 drive personal --offline documents show DOC_ID --json
 drive personal --offline documents context DOC_ID --json
-drive personal --offline people list DOC_ID --json
+drive personal --offline identities list DOC_ID --json
 drive personal --offline search 'budget' --exact --json
 ```
 
@@ -88,15 +107,49 @@ propietarios y último editor guardados, con fechas y versiones cuando Google la
 `documents show` añade texto indexado e ID/títulos de pestañas. `documents context` añade etiquetas,
 notas, vínculos y recuerdos locales. Lee el contenido guardado directamente; abrir Google es opcional.
 
-Sin conexión significa la última versión guardada, no una comprobación reciente de Google.
-`status` muestra la última sincronización y los elementos pendientes u omitidos. No se guardan
-automáticamente permisos completos, comentarios, revisiones, actividad ni respuestas arbitrarias
-de la API. `files get` y `documents get` consultan Google, a diferencia de `documents show`;
-`--offline` los rechaza. Se conserva el contenido importado y metadatos seleccionados, no todos
-los campos de todas las API de Google.
+Sin conexión usas la última versión guardada, no una nueva consulta a Google. `status` informa
+del último sync y trabajo pendiente/omitido. No se guardan automáticamente permisos completos,
+comentarios, revisiones, actividad ni respuestas API arbitrarias. `files get` y `documents get`
+consultan Google, a diferencia de `documents show`; `--offline` las rechaza.
 
-Para guardar por separado todos los metadatos disponibles de un archivo, usa la
-[receta de JSON sin conexión](./recipes.md#save-full-available-metadata-for-offline-use).
+Sync solicita todos los campos de metadatos disponibles y guarda la respuesta en
+`provider_metadata` de la entrada del catálogo. Google solo expone campos permitidos a tu cuenta.
+Las entradas antiguas mantienen el conjunto normalizado anterior; `sync --rescan` actualiza los metadatos desde Google.
+
+## Explorar y organizar el catálogo local
+
+El **catálogo** guarda los archivos y carpetas de Google, sus metadatos y relaciones de parentesco. Permite localizar fuentes aunque su contenido no se haya descargado o no se pueda leer. Sync lo rellena tras descubrir archivos, antes de procesar el lote limitado de contenido.
+
+Para una importación anterior, copia los metadatos de la caché sin Google ni descargas adicionales:
+
+```sh
+drive personal catalog import --offline
+drive personal catalog tree --offline
+drive personal catalog list 'parent:FOLDER_ID' --offline --json
+drive personal catalog show FILE_ID --offline --json
+drive personal catalog search 'budget AND kind:file' --offline --json
+drive personal catalog list 'person:Rin* AND mime:"application/pdf"' --offline --json
+```
+
+`catalog import` copia metadatos del punto de sincronización; no descubre archivos nuevos de Google ni avanza el cursor de sync. Incluye fuentes pendientes y excluye las pendientes de eliminación. Si `entries` es cero y todavía no has sincronizado la carpeta, realiza primero la importación anterior. Para metadatos actuales o más completos, usa `sync --rescan` con conexión.
+
+`tree` parte de las raíces seleccionadas o acepta un ID de carpeta. `--depth 3` limita los descendientes; `truncated: true` indica que una rama tiene más hijos. Los nodos son compactos: usa `show` para los metadatos. Las listas aceptan `--limit` y `--page` e indican continuidad con `has_more`. El lenguaje compartido admite `kind:folder`, `parent:FOLDER_ID`, `tag:follow-up`, `mime:"application/pdf"` y `AND`, `OR`, `NOT`. `person:Rin*` coincide por prefijo con el nombre, correo o ID Google del propietario o último editor observado; entrecomilla un nombre completo para coincidencia exacta. Las palabras sueltas buscan nombres, descripciones o tipos. Es distinto de buscar texto/significado y de `documents list --person`, que filtra una referencia de persona vinculada explícitamente en la base.
+
+Las entradas devuelven una referencia estable `document:<id>`, también para carpetas Google; no significa que la carpeta tenga texto de documento. Comprueba `kind` y `content`: `metadata` no tiene cuerpo indexado, `indexed` indica texto guardado y `unreadable` indica un nombre con la razón del fallo de lectura. Estos estados no garantizan una extracción completa.
+
+Puedes etiquetar una carpeta, guardar una nota junto a ella o vincularla a un proyecto existente:
+
+```sh
+drive personal catalog tags add FOLDER_ID project follow-up --offline
+drive personal catalog list 'tag:follow-up' --offline --json
+drive personal notes add FOLDER_ID 'Ask Rin which files are final' --offline
+drive personal relationships add FOLDER_ID project:PROJECT_ID --kind related-to --offline
+drive personal documents context FOLDER_ID --offline --json
+```
+
+Usa ID o URL de Google y referencias de proyecto de la misma base local. Las etiquetas, notas y relaciones reutilizan los registros compartidos. Las etiquetas de carpeta no pasan a los hijos ni cambian etiquetas o permisos Google. Renombrar o mover conserva la referencia. Las fuentes fuera del alcance seleccionado salen del catálogo activo; la reconciliación de metadatos conserva su identidad y anotaciones. Las tareas normales de eliminación de contenido siguen quitando texto y etiquetas de documento según las reglas del índice.
+
+El catálogo de cada cuenta está aislado. Un alcance completo admite hasta 10 000 entradas, con metadatos y salida del árbol limitados. Elige raíces más pequeñas si el recorrido supera el límite.
 
 ## Mantener el índice actualizado
 
@@ -106,11 +159,15 @@ drive personal status --json
 ```
 
 Sync consulta el registro de cambios Google. Repítelo tras ediciones o antes de una respuesta
-que requiera actualidad; no hay observador en segundo plano. `--max` limita operaciones por
+que requiera actualidad; no hay observador en segundo plano. `--limit` limita operaciones por
 ejecución, no el tamaño final. `--rescan` vuelve a comprobar las carpetas con un token nuevo.
 El texto sin cambios reutiliza su identidad y vectores. Renombrar conserva el ID; mover fuera
 de las raíces o borrar en Google quita el documento de búsqueda al sincronizar. Los cambios
 o retiradas marcan como obsoletos los recuerdos activos.
+
+Un sync lee como máximo 10 000 entradas de las carpetas elegidas y 10 000 cambios.
+Si hay más cambios, `--rescan` ayuda mientras las carpetas no superen 10 000 entradas;
+si las superan, elige menos carpetas o raíces más pequeñas.
 
 ## Disco: indexar sin un directorio de exportaciones
 

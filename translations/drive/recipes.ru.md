@@ -19,6 +19,7 @@ Google. [Импорт и хранение](./usage.md) объясняет сод
 | Предложить память через провайдера ИИ | Отправляет сохранённый текст настроенному провайдеру | Только с `--save` или подтверждением | Нет |
 | Проверить комментарии или историю | Да | Без автоматического импорта | Нет |
 | Создать или изменить Google Doc | Да | Импортируется при следующей синхронизации | Да |
+| Просмотреть и организовать сохранённое дерево папок | Нет | Теги/заметки по запросу | Нет |
 
 ## Первая папка для поиска без лишних экспортов
 
@@ -101,9 +102,36 @@ drive personal files list --parent FOLDER_ID --json > ./folder-metadata.json
 
 Агент может читать сохранённый JSON без Google. Это отдельный снимок под вашим управлением;
 он автоматически не импортируется в базу и не становится доступным через `drive search`.
-Обычная синхронизация сохраняет выбранные метаданные из раздела [чтения без сети](./usage.md#read-content-and-metadata-offline).
 Списки разрешений, комментарии и история — отдельные действия API. Обновляйте или удаляйте
 дополнительные JSON-файлы, когда сохранённая версия больше не нужна.
+
+Sync также сохраняет доступный ответ метаданных файла в локальном каталоге. Используйте
+`catalog show FILE_ID --offline` без дополнительного JSON-файла. Старые записи содержат только
+прежний набор полей до повторного обхода. Разрешения, комментарии и история остаются отдельными API-операциями.
+
+## Просмотреть папки и назначить теги без Google
+
+```text prompt
+Use drive CLI with profile personal and only local data. Show the imported folder tree,
+find the PDFs last edited by Rin, and show their source links and content availability.
+Tag the folder I choose follow-up and save my memo beside it. Do not download or export files.
+```
+
+```sh
+drive personal catalog import --offline
+drive personal catalog tree --depth 3 --offline --json
+drive personal catalog list 'mime:"application/pdf" AND person:Rin*' --offline --json
+drive personal catalog tags add FOLDER_ID follow-up --offline
+drive personal notes add FOLDER_ID 'Check the final version with Rin' --offline
+drive personal catalog list 'tag:follow-up' --offline --json
+drive personal documents context FOLDER_ID --offline --json
+```
+
+`catalog import` переносит прежний кеш в базу; обычный sync заполняет её при новых импортах.
+Замените `FOLDER_ID` идентификатором из дерева. Проверьте, что контекст папки содержит тег и заметку.
+Тег относится к папке, а не всем потомкам. Файлы с одними метаданными доступны до завершения
+скачивания содержимого. Для цитаты убедитесь, что текст индексирован, и используйте `documents show`:
+метаданные сами по себе не доказывают содержимого. См. [навигацию и фильтры каталога](./usage.md#browse-and-organize-the-local-catalog).
 
 ## Хранить вопросы рядом с источниками
 
@@ -127,9 +155,9 @@ Do not merge people merely because their names match.
 ```
 
 ```sh
-drive personal people list DOC_ID --json
-drive personal links add DOC_ID project:PROJECT_ID --kind related-to
-drive personal links add DOC_ID person:PERSON_ID --kind about
+drive personal identities list DOC_ID --json
+drive personal relationships add DOC_ID project:PROJECT_ID --kind related-to
+drive personal relationships add DOC_ID person:PERSON_ID --kind about
 drive personal documents context DOC_ID --json
 ```
 
@@ -152,7 +180,9 @@ Show exact supporting quotes. Let me review them before saving or confirming any
 drive personal memories extract DOC_ID --scope work
 drive personal memories extract DOC_ID --scope work --save
 drive personal memories list DOC_ID --scope work --json
+drive personal facts list DOC_ID --status proposed --json
 drive personal memories confirm DOC_ID memory:MEMORY_ID
+drive personal facts confirm DOC_ID fact:FACT_ID
 ```
 
 Извлечение по умолчанию показывает предварительный результат; `--save` сохраняет предложения.
@@ -176,7 +206,7 @@ drive personal session start --client-file /path/to/desktop-client.json --activi
 drive personal documents history DOC_ID --activity --json
 ```
 
-Для продолжения передайте полученный токен в `--page-token` той же команды. Видимые Google
+Для продолжения передайте полученный токен в `--cursor` той же команды. Видимые Google
 версии/события могут быть неполными; это не посимвольная история правок. Комментарии доступны
 для просмотра, но не входят в поиск документов.
 
@@ -200,12 +230,12 @@ drive personal session start --client-file /path/to/desktop-client.json --write
 drive personal documents create --title 'Project review'
 drive personal documents update NEW_DOC_ID --body '{"requests":[{"insertText":{"endOfSegmentLocation":{},"text":"Review notes\n"}}]}'
 drive personal files get NEW_DOC_ID --json
-drive personal files move NEW_DOC_ID --to FOLDER_ID --from OLD_PARENT_ID
+drive personal files move NEW_DOC_ID --parent FOLDER_ID --old-parent OLD_PARENT_ID
 drive personal sync --json
 ```
 
 Замените `NEW_DOC_ID` значением `documentId` ответа создания. Docs создаёт его в корне My Drive.
-Прочитайте `parents` через `files get` и замените `OLD_PARENT_ID` этим ID; `--from` удаляет прежнего
+Прочитайте `parents` через `files get` и замените `OLD_PARENT_ID` этим ID; `--old-parent` удаляет прежнего
 родителя при добавлении нового. У файла Google один родитель; см.
 [официальную инструкцию перемещения](https://developers.google.com/workspace/drive/api/guides/folder#move-files-between-folders).
 Проверьте папку и поиск нового текста.

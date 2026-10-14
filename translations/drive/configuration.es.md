@@ -32,6 +32,8 @@ antes de moverlos o borrarlos.
 | --- | --- | --- |
 | `readOnly` | Rechaza cambios locales y remotos, incluida la sincronización y añadir notas | Perfil o `defaults` |
 | `permissions` | Acceso por comando: `deny`, `readonly`, `ask` o `allow` | Perfil o `defaults` |
+| `maxTextChars` | Máximo de caracteres por archivo; valor predeterminado y máximo `2000000`, límite de los lectores | Perfil o `defaults` |
+| `pictureSearch` | `true` busca imágenes por su contenido: sync descarga imágenes de hasta 25 MB y la búsqueda devuelve `pictures`; predeterminado `false` | Solo perfil |
 | `models.memories.provider` | Proveedor de IA para la extracción solicitada explícitamente | Perfil o `defaults` |
 | `models.memories.model` | Identificador del modelo del proveedor | Perfil o `defaults` |
 | `models.memories.baseUrl` | Dirección opcional del proveedor configurado | Perfil o `defaults` |
@@ -70,9 +72,26 @@ drive work config set readOnly false
 drive personal config show --json
 ```
 
+`drive personal config set pictureSearch true` activa imágenes solo para `personal`.
+Prepara primero el modelo local compartido `clip-b32` (unos 160 MB) y escribe consultas en inglés.
+Un agente con terminal puede usar el instalador de modelos verificado del SDK instalado:
+
+```text prompt
+Prepare WireCat's local CLIP image model for Drive profile personal using the installed shared SDK.
+Use its verified model installer and the same WIRECAT_STATE_DIR as Drive. Download only model files;
+do not connect to Google or change my source files. Then enable pictureSearch for personal.
+```
+
+El SDK público exporta `modelsCommand` mediante `@wirecat/cli-core/cli`; el agente puede consultar
+esa API. Drive ofrece configuración y búsqueda; la preparación del modelo usa el SDK compartido
+o una herramienta WireCat con soporte de modelos de imagen.
+
 La primera línea cambia el valor compartido; la segunda lo sustituye para `work`. La última
 imprime ambas secciones, no una lista combinada de valores efectivos. Omitir el perfil es un
 error: `DRIVE_PROFILE` y un antiguo perfil predeterminado guardado no lo seleccionan.
+
+`drive personal config set maxTextChars 500000` omite textos más largos con su razón; se leen
+en el siguiente sync después de aumentar el límite.
 
 ## Variables de entorno
 
@@ -84,13 +103,13 @@ Afectan al proceso que ejecuta Drive; `config set` no las guarda.
 | `DRIVE_STATE_DIR` | Mover copias, puntos de control y directorio de la base predeterminada |
 | `DRIVE_CACHE_DIR` | Mover la caché de la herramienta; no mueve las copias de documentos |
 | `DRIVE_STORE` | Elegir un archivo de base explícito en lugar de `drive.db` |
-| `CLI_COMMON_CACHE_DIR` | Elegir la caché compartida del modelo de búsqueda local |
+| `WIRECAT_STATE_DIR` | Mueve la carpeta WireCat de modelos compartidos; por defecto `~/.local/share/WireCat/` |
 | `DRIVE_GOOGLE_CLIENT_ID`, `DRIVE_GOOGLE_CLIENT_SECRET` | Usar tu aplicación Desktop OAuth en lugar de la incluida de WireCat; configura el ID antes de su secret |
 | `DRIVE_MODELS_MEMORIES_PROVIDER`, `DRIVE_MODELS_MEMORIES_MODEL`, `DRIVE_MODELS_MEMORIES_BASE_URL` | Sustituir los ajustes de extracción de recuerdos para el proceso |
 | `DRIVE_OPENAI_API_KEY`, `DRIVE_ANTHROPIC_API_KEY` | Proporcionar la clave del proveedor; también se acepta la variable correspondiente sin prefijo |
 
 Mantén las mismas rutas al conectar y en comandos posteriores: cambiarlas puede cambiar la
-entrada de credenciales que ve el CLI. Si defines `CLI_COMMON_CACHE_DIR`, la preparación del
+entrada de credenciales que ve el CLI. Si defines `WIRECAT_STATE_DIR`, la preparación del
 modelo y la creación de embeddings deben usar ese mismo directorio.
 
 ## Opciones de una ejecución
@@ -106,7 +125,7 @@ modelo y la creación de embeddings deben usar ese mismo directorio.
 | `--timeout DURATION`, `--max-output-bytes N` | Limitar el tiempo del comando y la salida almacenada en búfer |
 
 Estas opciones no son ajustes del archivo. Las de cada comando, como `search --limit` y
-`sync --max`, se explican en su referencia. Los permisos temporales tienen prioridad sobre los
+`sync --limit`, se explican en su referencia. Los permisos temporales tienen prioridad sobre los
 del perfil y después los compartidos. Un `readOnly true` guardado sigue limitando incluso con
 permiso `allow`. Las variables de IA tienen prioridad sobre el modelo y proveedor del perfil
 o de los valores compartidos.
