@@ -1,0 +1,317 @@
+---
+title: Diseño del código
+description: Las capas del núcleo compartido y de las herramientas de mensajería, las reglas que las mantienen separadas, los patrones que usan y qué partes se pueden sustituir y a qué coste.
+---
+
+Esta página explica cómo está organizado el código de `tg`, `max` y las demás herramientas de WireCat:
+qué capa puede llamar a cuál, cómo un módulo habla con el resto a través de una interfaz y qué hay que
+cambiar para sustituir una parte. Léela antes de cambiar el núcleo compartido, de escribir un adaptador
+para un mensajero nuevo o de juzgar si un cambio encaja en el diseño. [Arquitectura](./architecture.mdx)
+cuenta con más detalle los paquetes y el recorrido de un comando en ejecución; esta página trata de la
+estructura del código y de cómo se mantiene.
+
+Dos términos aparecen en todo el texto. Un **puerto** es una interfaz que define el núcleo compartido y de
+la que depende. Un **adaptador** es el código de una herramienta que implementa un puerto para un mensajero
+o proveedor. El núcleo llama al puerto y nunca importa el adaptador.
+
+La página describe el código leído el 14 de octubre de 2026, en
+[cli-core a3b5b3c](https://github.com/WireCatLabs/cli-core/tree/a3b5b3c47792d5e2df6529642e907ee32783e66a),
+[max-cli 0536988](https://github.com/WireCatLabs/max-cli/tree/0536988bb3a9ae5aed40cdd12e572a72dd2564a1) y
+[tg-cli faea191](https://github.com/WireCatLabs/tg-cli/tree/faea191a76ea40f3159e865cf5c17f99163c4104).
+Los recuentos de archivos y líneas son de esos commits.
+
+## Paquetes
+
+```mermaid Quién depende de quién entre los paquetes
+graph TB
+  Base("cli-base<br>salida, errores, configuración, llavero")
+  Core("cli-core<br>comandos, servicios, almacén, búsqueda, MCP")
+  Tg("tg-cli<br>adaptador de Telegram sobre mtcute")
+  Max("max-cli<br>cliente de MAX, adaptador, Bot API")
+  Memo("memo, drive, zm<br>notas, documentos, reuniones")
+  Core --> Base
+  Tg --> Core
+  Max --> Core
+  Memo --> Core
+  Tg --> Base
+  Max --> Base
+```
+
+Las dependencias van en un solo sentido. `cli-base` no sabe nada de mensajería. `cli-core` contiene todo lo
+de mensajería que no pertenece a un solo mensajero. Cada herramienta fija una versión exacta de ambos, así
+que un cambio en el núcleo llega a los usuarios solo cuando una herramienta actualiza esa versión. Una
+herramienta que aún no lo ha hecho sigue funcionando con la versión fijada.
+
+## Capas
+
+Una capa puede llamar a las capas inferiores y nunca a las superiores. El diagrama muestra `cli-core` y una
+herramienta; la flecha punteada es la implementación de un puerto, no una llamada.
+
+```mermaid Las capas de cli-core y cómo se conecta una herramienta
+graph TB
+  subgraph TOOL["Una herramienta de mensajería: tg o max"]
+    Program("program<br>registra los comandos")
+    Describe("descripción Messenger<br>qué ofrece la CLI")
+    Adapter("adaptador<br>traduce el mensajero al puerto")
+    Client("cliente del mensajero<br>mtcute o el cliente propio de MAX")
+  end
+  subgraph CORE["cli-core"]
+    Cli("cli/ y mcp/<br>comandos y herramientas MCP")
+    Services("services/<br>casos de uso")
+    Sends("sends/<br>escrituras protegidas, adjuntos")
+    Port("ports/messenger.ts<br>el contrato del adaptador")
+    Store("store/<br>MessageStore sobre SQLite")
+    Domain("domain/<br>modelos y tipos de valor")
+  end
+  Program --> Cli
+  Program --> Describe
+  Describe --> Adapter
+  Adapter --> Client
+  Adapter -.->|implementa| Port
+  Cli --> Services
+  Services --> Sends
+  Services --> Port
+  Services --> Store
+  Sends --> Port
+  Services --> Domain
+  Store --> Domain
+```
+
+| Capa | Su función | Tamaño | Qué no puede importar |
+| --- | --- | --- | --- |
+| `domain/` | Tipos independientes del mensajero: `Chat`, `Message`, `Person`, localizadores, tramos de formato. Ningún comportamiento que necesite red o archivos. | 24 archivos | Ninguna biblioteca de mensajero ni adaptador. |
+| `ports/messenger.ts` | El contrato que implementa cada mensajero. | 1 archivo, 663 líneas | Lo mismo. |
+| `store/` | El archivo local: una interfaz `MessageStore`, abierta por `openStore`, sobre módulos SQLite, migraciones e índices de búsqueda. | 101 archivos | Nada fuera de `store/` puede importar un módulo de `store/sqlite/`. |
+| `services/` | Casos de uso: mensajes, chats, personas, búsqueda, vectores, menciones, moderación. | 81 archivos | Commander, un módulo de comando, un módulo SQLite. |
+| `sends/` | Toda escritura: la protección de envíos, los identificadores de operación, el registro de envíos, los adjuntos. | 14 archivos | Lo mismo que los servicios. |
+| `cli/`, `mcp/` | Presentación: comandos, el sobre JSON, configuración y perfiles; herramientas MCP sobre los mismos servicios. | 168 + 51 archivos | Un módulo SQLite. |
+| `meetings/`, `tasks/` | Módulos autónomos con sus propios puertos. | 46 + 4 archivos | Cualquier otra parte de cli-core, una base de datos o el sistema de archivos. |
+| `readers/`, `images/` | Lectores de documentos y descriptores de imágenes, elegidos de un registro. | 13 + 6 archivos | El almacén, los servicios, los comandos y las herramientas MCP. |
+
+La última columna no es una recomendación. Cada fila es una regla de lint en el
+[biome.json de cli-core](https://github.com/WireCatLabs/cli-core/blob/a3b5b3c47792d5e2df6529642e907ee32783e66a/biome.json),
+y una importación que la cruza hace fallar el pull request con una frase que nombra la regla.
+
+### Dentro de una herramienta
+
+**max** no tiene biblioteca oficial, así que el cliente forma parte de la herramienta. Sus capas son una
+especificación del protocolo, un cliente generado a partir de ella, la conexión WebSocket, 22 fábricas de
+recursos en `src/client/` y la raíz que las une en
+[src/client.ts](https://github.com/WireCatLabs/max-cli/blob/0536988bb3a9ae5aed40cdd12e572a72dd2564a1/src/client.ts).
+[max-adapter.ts](https://github.com/WireCatLabs/max-cli/blob/0536988bb3a9ae5aed40cdd12e572a72dd2564a1/src/adapter/max-adapter.ts)
+traduce ese cliente al puerto. Las reglas de lint mantienen el protocolo, la especificación y el código
+generado detrás de `src/client.ts`, separan la parte de la Bot API oficial de la sesión de la cuenta
+personal e impiden que la sesión y `max serve` importen comandos.
+
+```mermaid Cómo se monta el cliente de max
+graph LR
+  Spec("spec/<br>operaciones") --> Gen("generated/<br>cliente del protocolo")
+  Gen --> Conn("protocol/<br>conexión, tramas")
+  Conn --> Factories("client/<br>sesión, peticiones, entrega,<br>lecturas, escrituras, adjuntos")
+  Factories --> Root("client.ts<br>MaxClient")
+  Root --> Adapter("adapter/<br>max-adapter.ts")
+```
+
+**tg** usa [mtcute](https://github.com/mtcute/mtcute). Solo `src/telegram/` puede importarlo, y los comandos
+no pueden acceder directamente a su traducción de tipos ni a la de errores. El adaptador es una sola clase
+en
+[telegram/adapter.ts](https://github.com/WireCatLabs/tg-cli/blob/faea191a76ea40f3159e865cf5c17f99163c4104/src/telegram/adapter.ts).
+
+## Cómo habla un módulo con el resto
+
+### El contrato del mensajero
+
+`MessengerAdapter` es un núcleo obligatorio más grupos opcionales. `MessengerCore` tiene siete métodos:
+`self`, `me`, `resolve`, `chat`, `send`, `logout` y `close`. Todo lo demás está en 39 grupos opcionales,
+como `MessagePolls`, `ForumControl`, `ChatFolders` y `LiveUpdates`.
+
+```mermaid El contrato del adaptador: un núcleo obligatorio y grupos opcionales
+classDiagram
+  class MessengerCore {
+    self()
+    me()
+    resolve(chat)
+    chat(chat)
+    send(chatId, text, options)
+    logout()
+    close()
+  }
+  class MessagePolls {
+    poll()
+    vote()
+    closePoll()
+  }
+  class ForumControl {
+    createTopic()
+  }
+  class MessengerAdapter
+  MessengerCore <|-- MessengerAdapter
+  MessagePolls <|-- MessengerAdapter
+  ForumControl <|-- MessengerAdapter
+```
+
+El código que necesita un método opcional lo pide por su nombre:
+
+```ts
+const react = capability(connection, "react", "react to a message")
+```
+
+`capability()` devuelve el método o falla con `validation_error` y el texto «this messenger cannot react to
+a message» si el adaptador no lo tiene. Una opción que el mensajero no puede cumplir se rechaza de la
+misma manera, nunca se descarta en silencio.
+
+### La descripción
+
+Cada herramienta entrega también al núcleo un objeto `Messenger` de 47 campos: el nombre de la aplicación,
+cómo conectarse, cómo paginar el historial y opciones como `pollQuiz`, `topicShow` y `stickers`. Los
+comandos leen esas opciones al registrar sus parámetros, así que `polls create --quiz` solo existe en una
+herramienta cuyo mensajero tiene cuestionarios.
+
+### Los servicios y sus dependencias
+
+Un servicio es una función que recibe un objeto de dependencias y devuelve el caso de uso:
+`messagesService(deps)`, `chatsService(deps)`. No hay clases ni contenedor. El objeto de dependencias,
+[`ServiceDeps`](https://github.com/WireCatLabs/cli-core/blob/a3b5b3c47792d5e2df6529642e907ee32783e66a/src/services/deps.ts),
+lleva la descripción del mensajero, la protección de envíos y funciones que abren recursos de forma
+perezosa:
+
+```ts
+connection: () => Promise<MessengerAdapter>
+store: () => Promise<MessageStore>
+account: () => Promise<AccountKey>
+```
+
+Nada se abre hasta que un servicio lo pide, así que una lectura que responde el almacén local nunca se
+conecta.
+[`servicesFor(deps)`](https://github.com/WireCatLabs/cli-core/blob/a3b5b3c47792d5e2df6529642e907ee32783e66a/src/services/index.ts#L145)
+crea todos los servicios una vez; los comandos y las herramientas MCP los toman de ahí, así que dan la
+misma respuesta y el mismo error para la misma entrada.
+
+Una herramienta puede sustituir un servicio sin copiar el núcleo. `Messenger.services` recibe los
+servicios compartidos y devuelve sustitutos; max lo usa para que la moderación encuentre los chats a su
+manera.
+
+### Módulos autónomos
+
+`meetings/` y `tasks/` definen sus propios puertos: un proveedor implementa `MeetingSource` en su propio
+paquete, y el almacén implementa `MeetingStore` y `TaskStore`. El resto de cli-core los importa solo a
+través de su `index.ts`, y ellos no importan nada más de cli-core. Un proveedor de reuniones como Zoom se
+conecta sin que el núcleo sepa que existe.
+
+### Registros
+
+Los lectores de documentos y los descriptores de imágenes se registran con `registerReader` y
+`registerImageProvider`, con una posición opcional. Añadir un motor de PDF o un modelo de imágenes
+consiste en registrarlo; el código que llama a los lectores no cambia.
+
+## Una escritura de principio a fin
+
+`max messages send <chat> --file report.pdf`. El archivo se comprueba al empezar el comando y solo se lee
+mientras se sube, así que un archivo grande nunca se guarda entero en memoria.
+
+```mermaid Un envío con archivo, del comando al mensajero
+sequenceDiagram
+  participant Cmd as messages send
+  participant Up as sends/upload.ts
+  participant Svc as servicio de mensajes
+  participant Guard as protección de envíos
+  participant Ad as adaptador de max
+  participant Cl as MaxClient
+  Cmd->>Up: readAttachments(flags)
+  Up-->>Cmd: Upload con origen en archivo: ruta y tamaño
+  Cmd->>Svc: send(chat, text, uploads)
+  Svc->>Guard: comprobar permisos, destinatarios, límites
+  Svc->>Ad: send(chatId, text, attachments)
+  Ad->>Ad: uploadBlob: un Blob leído del disco
+  Ad->>Cl: envío con el Blob como cuerpo de la subida
+  Cl->>Cl: subida por HTTP y después envío del mensaje
+  Cl-->>Ad: mensaje de MAX
+  Ad-->>Svc: Message del dominio
+  Svc->>Guard: registrar el resultado, nunca el texto
+  Svc-->>Cmd: la respuesta para stdout
+```
+
+En tg el adaptador entrega el mismo Blob a mtcute y vuelve a abrir el archivo en cada reintento. Un
+adaptador cuya biblioteca necesita los bytes en memoria llama a `uploadBytes`, que rechaza un archivo de
+más de 256 MiB.
+
+## Patrones en uso
+
+| Patrón | Dónde | Qué aporta |
+| --- | --- | --- |
+| Puertos y adaptadores | `ports/messenger.ts`, `meetings/source.ts`, `tasks/store.ts` | El núcleo nunca importa un proveedor; un proveedor puede cambiar sin tocar el núcleo. |
+| Grupos de capacidades | `MessengerAdapter`, `capability()` | Un mensajero implementa lo que tiene; una función que falta es un rechazo claro, no un fallo. |
+| Opciones de la descripción | `Messenger` | Los parámetros aparecen solo donde funcionan. |
+| Funciones fábrica sobre un objeto de dependencias | `xService(deps)`, `ServiceDeps` | Funciones simples, fáciles de probar con un sustituto; la apertura perezosa abarata los comandos de una sola ejecución. |
+| Raíces de composición | `servicesFor`, `MaxClient`, el contexto del comando | Un solo lugar construye el grafo de objetos y cierra lo que abrió. |
+| Punto de sustitución | `Messenger.services` | Una herramienta cambia un caso de uso a la vez para sus comandos y sus herramientas MCP. |
+| Traducción protectora | `max-adapter.ts`, `telegram/map.ts` | Los tipos y errores del proveedor se convierten en tipos del dominio y códigos de error tipados en un solo archivo por herramienta. |
+| Proxy envolvente | `throughWrapper` en `ports/messenger.ts` | El registro de la ejecución y la caché envuelven el adaptador; un método nuevo del adaptador pasa sin tocar los envoltorios. |
+| Registros | `readers/registry.ts`, `images/registry.ts` | Los motores nuevos se conectan sin cambiar a quienes los llaman. |
+| Cliente generado | max: de `spec/` a `generated/` | Las operaciones de MAX se declaran una vez; una prueba falla si los archivos generados se desvían. |
+
+## Qué se puede sustituir y a qué coste
+
+Una parte se puede sustituir cuando el código que está por encima depende de una interfaz y no de la parte,
+y una regla de lint o una prueba lo mantiene así.
+
+| Parte | Coste | Cómo |
+| --- | --- | --- |
+| La biblioteca de Telegram | Acotado | Reescribir `src/telegram/`; nada más importa mtcute. |
+| El protocolo de MAX | Acotado | Cambiar la especificación y regenerar; solo el cliente llega al protocolo. |
+| Un caso de uso en una herramienta | Pequeño | `Messenger.services`. |
+| Lectores de documentos, descriptores de imágenes, modelos de vectores | Pequeño | Registrar un lector o proveedor; elegir un modelo local o remoto. |
+| Un proveedor de reuniones | Pequeño | Implementar `MeetingSource` en el paquete del proveedor. |
+| Un mensajero nuevo | Moderado | Implementar `MessengerCore` y los grupos que tenga el mensajero, y escribir una descripción. Los comandos, las herramientas MCP, el almacén, la búsqueda y la protección de envíos vienen con el núcleo. |
+| Una interfaz nueva junto a la CLI y MCP | Moderado | Llamar a `servicesFor(deps)` y mostrar la respuesta. Los servicios aún importan algunas utilidades de `cli/` (configuración, utilidades de errores, consultas de listas), que tendrían que moverse con ella. |
+| El motor de almacenamiento | Difícil | Reimplementar `MessageStore`: unos 140 métodos, incluidas la búsqueda de texto completo, las raíces de palabras y la búsqueda por vectores. El límite se respeta, pero la interfaz es una sola superficie amplia. |
+
+## Cómo se mantiene el diseño
+
+La mayor parte del diseño la comprueban máquinas, así que un cambio que lo rompe falla antes de la revisión.
+
+| Comprobación | Qué detiene | Dónde |
+| --- | --- | --- |
+| Importaciones restringidas | Una importación que cruza un límite de capa de la tabla anterior o los límites de una herramienta. | El `biome.json` de cada repositorio, ejecutado por `pnpm lint`. |
+| Ciclos de importación | Dos módulos que se importan entre sí en ejecución, directamente o a través de otros. Las importaciones solo de tipos están permitidas. | `noImportCycles` en las reglas de nivel superior del lint de cli-core. |
+| Parity | Un cambio del núcleo que rompe la compilación de cualquiera de las herramientas. Una rama con el mismo nombre en una herramienta permite que un cambio incompatible pase las comprobaciones antes de que las herramientas lo adopten. | El workflow Parity de cli-core. |
+| Contrato de comandos | La forma de `commands --json`, los efectos declarados en cada comando, la captura de la ayuda. | `contracts:check` y `cli-dev lint` de cada herramienta. |
+| Comprobación de tipos | Código, pruebas y scripts como tres proyectos. | `pnpm typecheck`. |
+| Archivos generados | Ediciones manuales de las páginas de comandos generadas o del cliente del protocolo de max. | Pruebas que comparan con `pnpm generate`. |
+
+Biome construye el grafo de importaciones para `noImportCycles` solo cuando la regla está activada en las
+reglas de nivel superior. Dentro de una entrada `overrides` no informa de nada, así que la regla se queda
+arriba.
+
+Convenciones para el código nuevo:
+
+1. **Una función nueva del mensajero** es un grupo opcional en `ports/messenger.ts`, al que se accede con
+   `capability()` y que se ofrece mediante una opción de la descripción. `MessengerCore` no crece.
+2. **Un caso de uso nuevo** es un servicio que recibe `ServiceDeps`. Lo llaman el comando y la herramienta
+   MCP; un archivo de comando no contiene lógica de negocio.
+3. **Una consulta nueva al almacén** es un módulo en `store/sqlite/`, expuesto solo a través de `store.ts`.
+   Un servicio lee con `accountStore(deps)`; una lectura deliberada de varias cuentas se identifica con
+   `crossAccount(deps, reason)`.
+4. **Toda escritura** pasa por la protección de envíos: comprobada antes, registrada después, con un
+   identificador de operación.
+5. **Un tipo del proveedor** no pasa del adaptador.
+6. **Un cambio incompatible del núcleo** aparece en su registro de cambios en «Changed — may break callers»,
+   con ramas del mismo nombre en las herramientas para que Parity compile su adopción.
+7. **Dividir un archivo** requiere una costura: una dependencia que elimina, un ciclo que rompe o una parte
+   que se puede probar o sustituir por separado. Su longitud por sí sola no es motivo.
+
+## Límites del diseño actual
+
+- **El almacén es una sola interfaz amplia.** `MessageStore` tiene unos 140 métodos sobre un único
+  `openStore`, y `store.ts` tiene 2042 líneas. Casi todas las funciones lo tocan. Dividirlo solo sirve
+  siguiendo una costura real: recursos que se abren y cierran por separado.
+- **Los servicios aún saben un poco de la CLI.** Importan la descripción `Messenger` como tipo y algunas
+  utilidades de `cli/` en ejecución.
+- **El adaptador de tg es una clase grande**: 2312 líneas y unos 110 métodos, legible método a método, pero
+  es el lugar donde acaba cada función de Telegram.
+- **`client/values.ts` de max** tiene 59 exportaciones que usan 20 módulos.
+- **Solo cli-core aplica la regla contra ciclos de importación.** tg y max no tienen ciclos hoy, pero su lint
+  no impide uno nuevo.
+
+Para ver dónde encajan en estas capas la búsqueda, los vectores y el grafo de conversaciones, sigue con la
+[arquitectura de búsqueda](./search-architecture.mdx).
