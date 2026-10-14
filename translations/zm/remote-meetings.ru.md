@@ -35,8 +35,8 @@ zm remote-meetings invitation 123456789 --json
 предпросмотр, даже вместе с `--yes`.
 
 ```sh
-zm remote-meetings create --topic "Example planning" --start-time 2026-10-20T10:00:00Z --duration-minutes 30 --json
-zm remote-meetings update 123456789 --topic "Example review" --yes --json
+zm remote-meetings create --title "Example planning" --start-time 2026-10-20T10:00:00Z --duration-minutes 30 --json
+zm remote-meetings update 123456789 --title "Example review" --yes --json
 zm remote-meetings cancel 123456789 --dry-run --json
 ```
 

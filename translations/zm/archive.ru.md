@@ -11,8 +11,8 @@ title: "Локальный архив"
 
 | Что есть | Команда | Что проверить |
 |---|---|---|
-| Встречи организатора, доступные приложению | `zm pull --lookback-days 7` | Список, расшифровку одной встречи и недостающие части |
-| Скачанные VTT-файлы | `zm import ./downloaded-transcripts` | Дату и название относительно оригинала |
+| Встречи организатора, доступные приложению | `zm meetings sync --lookback-days 7` | Список, расшифровку одной встречи и недостающие части |
+| Скачанные VTT-файлы | `zm meetings import ./downloaded-transcripts` | Дату и название относительно оригинала |
 | Облачные записи | Список, загрузку или синхронизацию записей | Манифест папки и контрольные суммы |
 | Архивные VTT для поиска | Импорт архива | Подтверждение импорта, затем поиск текста |
 
@@ -25,7 +25,7 @@ title: "Локальный архив"
 Вход, загрузка записей и удалённые команды работают независимо от базы встреч. Импорт, загрузка,
 наблюдение за папкой и чтение используют опубликованный общий адаптер SQLite. Соединения открываются
 по необходимости и закрываются до успешного вывода. Данные сохраняются в общей базе WireCat;
-`MESSAGING_STORE` задаёт путь. Общая модель, экспорт и обработка — в `@wirecat/cli-messaging/meetings`.
+`MESSAGING_STORE` задаёт путь. Общая модель, экспорт и обработка — в `@wirecat/cli-core/meetings`.
 
 Общая база называется `wirecat.db`. Открытие стандартного пути удаляет старую незашифрованную
 `messages.db` и файлы `-wal`, `-shm`, без переноса данных. Они сохраняются при заданном
@@ -40,16 +40,16 @@ title: "Локальный архив"
 
 ```sh
 zm config set source api
-zm pull --lookback-days 7
+zm meetings sync --lookback-days 7
 zm meetings list --json
 zm meetings transcript <meeting-id> --json
 ```
 
-Используйте ID из списка. `zm pull` получает встречи организатора и доступных участников,
+Используйте ID из списка. `zm meetings sync` получает встречи организатора и доступных участников,
 расшифровки и резюме ИИ. Он не создаёт отсутствующий текст. Если его нет, проверьте
-[создание и хранение расшифровок](./zoom-app.md#before-your-first-zm-pull).
+[создание и хранение расшифровок](./zoom-app.md#before-your-first-zm-meetings-sync).
 
-`pull --lookback-days 7` снова проверяет семь дней; `pull --since 2026-10-01` позволяет вернуться к
+`meetings sync --lookback-days 7` снова проверяет семь дней; `meetings sync --since-time 2026-10-01` позволяет вернуться к
 более ранним встречам с поздней расшифровкой. Один курсор не гарантирует повторную проверку.
 Загрузки одного аккаунта выполняйте последовательно: одновременные могут создавать события.
 Ошибка встречи не меняет курсор, поэтому следующая загрузка повторит её.
@@ -63,7 +63,7 @@ zm meetings transcript <meeting-id> --json
 ```sh
 zm config set account.profile personal
 zm config set files.timezone Europe/Madrid
-zm import ./downloaded-transcripts
+zm meetings import ./downloaded-transcripts
 zm meetings list --json
 ```
 
@@ -81,9 +81,9 @@ zm meetings list --json
 
 `zm watch --source api --lookback-days 7 --jsonl` повторно загружает API. Аргумент папки выбирает
 файлы, иначе используется настройка; для файлов можно задать `files.folder`. API требует сети,
-поддерживает `--since` и перекрытие 0–31 день. `--since` — начальная граница; после успешной записи
+поддерживает `--since-time` и перекрытие 0–31 день. `--since-time` — начальная граница; после успешной записи
 курсора используется курсор с перекрытием. При ошибке начальная граница сохраняется. Перекрытие
-также вычитается из начального `--since`.
+также вычитается из начального `--since-time`.
 `--interval` задаёт паузу между завершёнными циклами. Профиль, источник, файловые настройки и клиент
 OAuth фиксируются до начала: после изменений перезапустите наблюдение. Циклы не перекрываются,
 закрывают базу до квитанции. Ctrl-C останавливает процесс.
@@ -107,10 +107,10 @@ zm watch ./downloaded-transcripts --interval 10s --jsonl
 `zm` сохраняет доступные видео, аудио, расшифровки и чат. Найдите встречу и скачайте файлы в явный каталог:
 
 ```sh
-zm recordings list --from 2026-10-01 --to 2026-10-10 --json
+zm recordings list --since-time 2026-10-01 --until-time 2026-10-10 --json
 zm recordings show <zoom-occurrence-uuid> --json
 zm recordings download <zoom-occurrence-uuid> --destination ./zoom-archive --json
-zm recordings archive verify ./zoom-archive --offline --json
+zm recordings archive check ./zoom-archive --offline --json
 ```
 
 Замените `<zoom-occurrence-uuid>` на UUID из списка записей, а не локальный ID или числовой номер
@@ -121,18 +121,18 @@ zm recordings archive verify ./zoom-archive --offline --json
 Для истории по месяцам:
 
 ```sh
-zm recordings sync --from 2026-01-01 --to 2026-10-10 --destination ./zoom-archive --jsonl
+zm recordings sync --since-time 2026-01-01 --until-time 2026-10-10 --destination ./zoom-archive --jsonl
 ```
 
 Даты должны идти по порядку и охватывать не более десяти календарных лет. Запросы выполняются
 помесячно, UUID очищаются от повторов, загрузки последовательные. Каждая JSONL-квитанция описывает
 завершённую встречу; прежние квитанции и файлы остаются при поздней ошибке. Повторите диапазон или
 недавний период для новых файлов. Выбранный профиль сохраняет прогресс и очередь записей.
-`--recheck-from YYYY-MM-DD` повторно проверяет даты, `--checkpoint` задаёт файл состояния.
+`--recheck-since-time YYYY-MM-DD` повторно проверяет даты, `--checkpoint` задаёт файл состояния.
 `--max-pages` и `--max-entries` ограничивают обнаружение. Без терминала нужен `--jsonl`.
 
 Контрольные точки подтверждают прежние загрузки, а не текущую целостность или полноту доступных
-записей провайдера. `recordings archive verify` проверяет файлы. `--no-resume` заново просматривает
+записей провайдера. `recordings archive check` проверяет файлы. `--no-resume` заново просматривает
 весь диапазон без сохранённого прогресса.
 
 Список записей принимает диапазон до 31 дня. Файлы потоково пишутся на диск, видео не загружается
@@ -161,7 +161,7 @@ ID через запятую. Сохраняются только завершё
 Выберите абсолютный каталог и пояс таймера:
 
 ```sh
-zm recordings schedule create --name daily --destination /home/AliceExample/zoom-archive --from 2026-01-01 --at 03:15 --timezone Europe/Madrid --json
+zm recordings schedule create --name daily --destination /home/AliceExample/zoom-archive --since-time 2026-01-01 --at 03:15 --timezone Europe/Madrid --json
 zm recordings schedule list --offline --json
 zm recordings schedule run <schedule-id> --jsonl
 zm recordings schedule disable <schedule-id> --yes --json
@@ -181,14 +181,14 @@ systemd; планы работают и на других платформах. 
 
 ```sh
 zm recordings archive transcript ./zoom-archive --offline --json
-zm recordings archive search ./zoom-archive "example plan" --limit 100 --offline --json
+zm search meetings "example plan" --archive ./zoom-archive --limit 100 --offline --json
 ```
 
 Обе команды проверяют размер и SHA-256 каждого прочитанного WebVTT до выдачи фрагментов. Поиск
 останавливается после одного совпадения сверх лимита; следующие файлы не читает. Вход, настройки
 и база не нужны. `--uuid` или `--file-ids` выбирают данные, `--max-bytes` меняет предел 8 МиБ на файл.
 Поиск нормализует Unicode и регистр текста, не ищет имена говорящих. Лимит 100, максимум 1000.
-`hasMore` сообщает ещё одно совпадение: увеличьте лимит или сузьте встречу, файл или запрос.
+`has_more` сообщает ещё одно совпадение: увеличьте лимит или сузьте встречу, файл или запрос.
 Курсора нет. Вывод ограничен `--max-output-bytes`; ошибка проверки не выдаёт успешный результат.
 
 Для импорта в выбранный профиль:

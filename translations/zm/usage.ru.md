@@ -34,8 +34,8 @@ zm meetings export <meeting-id> --format markdown --json
 | Что нужно | Группа команд | Где работает |
 |---|---|---|
 | Читать расшифровки и источники | `meetings`, `events`, `search` | Общая локальная база |
-| Получить встречи организатора | `pull`, API `watch` | Из Zoom в локальную базу |
-| Импортировать файлы расшифровок | `import`, папка `watch` | Из файлов в базу |
+| Получить встречи организатора | `meetings sync`, API `watch` | Из Zoom в локальную базу |
+| Импортировать файлы расшифровок | `meetings import`, папка `watch` | Из файлов в базу |
 | Сохранить облачные записи | `recordings` | Из Zoom в указанную папку |
 | Прочитать расписание или изменить встречу | `remote-meetings` | Аккаунт Zoom |
 
@@ -48,36 +48,35 @@ zm meetings export <meeting-id> --format markdown --json
 |---|---|
 | `config show` | показать локальные настройки |
 | `config set <key> <value>` | настроить публичный клиент или файловый источник |
-| `login [--browser <program>]` | разрешить доступ через браузер |
+| `session start [--browser <program>]` | разрешить доступ через браузер |
 | `commands --json` | показать аргументы, параметры и примеры |
 | `complete -- <words...>` | ответить на дополнение команд |
 | `doctor` | проверить среду и публичные настройки без входа или базы |
 | `session status` | проверить OAuth отдельно от профилей данных |
-| `import <folder>` | импортировать скачанные расшифровки в выбранный профиль |
-| `pull [--since <date>]` | загрузить встречи из настроенного источника |
+| `meetings import <folder>` | импортировать скачанные расшифровки в выбранный профиль |
+| `meetings sync [--since-time <time>]` | загрузить встречи из настроенного источника |
 | `meetings list`, `meetings show <meeting>` | прочитать сохранённые встречи |
 | `meetings transcript <meeting>` | прочитать текущие расшифровки |
 | `meetings summary <meeting>` | прочитать сохранённые сводки |
 | `meetings export <meeting> --format markdown\|vtt` | экспортировать данные встреч |
-| `meetings search <query>`, `meetings people <query>` | найти сохранённый текст или участников |
-| `meetings search-page <query>`, `meetings search-index` | продолжить поиск и явно индексировать слова |
-| `meetings link-event <reference>`, `meetings link-person <reference>` | просмотреть или применить выбранные связи |
+| `search meetings <query>`, `meetings people <query>` | найти сохранённый текст или участников |
+| `meetings update <reference>`, `meetings link <reference>` | просмотреть или применить выбранные связи |
 | `meetings transcribe <meeting> <file> --model <model>` | просмотреть или локально распознать WAV в отдельную расшифровку |
-| `meetings evidence <reference>`, `meetings context <person>` | прочитать ограниченные источники или контекст связанного человека |
-| `meetings task-proposal <reference> --kind <kind>` | просмотреть задачу со ссылкой на встречу |
-| `meetings semantic <query> --model <id>` | ранжировать просмотренные векторы выбранным компонентом |
-| `meetings embeddings --model <id>` | просмотреть генерацию; `--yes` обрабатывает одну порцию |
+| `meetings passage <reference>`, `meetings evidence <reference>`, `meetings context <person>` | прочитать ограниченные источники или контекст связанного человека |
+| `meetings task-proposal <reference> --type <type>` | просмотреть задачу со ссылкой на встречу |
+| `search meetings <query> --model <model>` | искать по смыслу, сначала создавая недостающие векторы |
+| `meetings embeddings --model <model>` | просмотреть генерацию; `--yes` обрабатывает одну порцию |
 | `search all <query>` | искать встречи или явно выбранные общие ресурсы |
 | `events list` | прочитать сохранённые события |
 | `watch [folder] --source api\|files --jsonl` | повторно импортировать источник в текущем процессе |
 | `recordings list`, `recordings show <meeting>` | найти облачные записи и метаданные файлов |
 | `recordings download <meeting> --destination <directory>` | архивировать доступные файлы |
-| `recordings sync --from <date> --to <date> --destination <directory> --jsonl` | архивировать историю по календарным месяцам |
+| `recordings sync --since-time <date> --until-time <date> --destination <directory> --jsonl` | архивировать историю по календарным месяцам |
 | `recordings schedule create\|list\|show\|run\|disable` | управлять ежедневными архивными заданиями |
-| `recordings archive inspect\|verify\|locks <directory>` | проверить локальные манифесты, суммы или блокировки |
+| `recordings archive show\|check\|locks <directory>` | проверить локальные манифесты, суммы или блокировки |
 | `recordings archive recover <directory>` | просмотреть восстановление устаревших блокировок |
 | `recordings archive transcript <directory>` | прочитать проверенные WebVTT-фрагменты без базы |
-| `recordings archive search <directory> <query>` | искать проверенный текст без базы |
+| `search meetings <query> --archive <directory>` | искать проверенный текст без базы |
 | `recordings archive import <directory>` | проверить VTT и добавить к сохранённым встречам |
 | `remote-meetings list\|show\|invitation` | прочитать будущие встречи и приглашения |
 | `remote-meetings create\|update\|cancel` | просмотреть или применить простое изменение Zoom |

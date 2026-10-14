@@ -13,7 +13,7 @@ terminal interactivo del ordenador que guardará la sesión:
 
 ```sh
 zm config set zoom.clientId <public-client-id>
-zm login --browser firefox
+zm session start --browser firefox
 ```
 
 Omite `--browser firefox` para usar el navegador predeterminado. Zoom muestra los permisos solicitados;
@@ -24,12 +24,12 @@ no en la configuración pública. Si ese almacén no está disponible, la conexi
 
 Deja el terminal abierto. Tras **Allow**, `https://wirecat.dev/zoom-callback` envía la respuesta al
 receptor temporal del ordenador. Al recibirla correctamente, se cierra; la orden informa
-`loggedIn: true`, muestra los permisos concedidos y devuelve el indicador del terminal.
+`logged_in: true`, muestra los permisos concedidos y devuelve el indicador del terminal.
 
 Si no aparece nada en el terminal después de aprobar:
 
 1. Mira la página de retorno del navegador. Copia los parámetros `code=…&state=…` o la URL completa.
-2. Pégalos en **el mismo terminal que sigue esperando en `zm login`** y pulsa Enter. No inicies
+2. Pégalos en **el mismo terminal que sigue esperando en `zm session start`** y pulsa Enter. No inicies
    otro proceso ni pegues el valor como una orden nueva del intérprete.
 3. Si pasaron cinco minutos, repite la conexión y usa el nuevo retorno. Cada intento tiene su
    estado y clave de verificación; una respuesta antigua se rechaza.
@@ -44,7 +44,7 @@ pertenece al intento activo. La conexión termina cuando el terminal la confirma
 zm session status --json
 ```
 
-Se comprueba el estado guardado sin contactar con Zoom ni renovar tokens. `loggedIn: true` indica
+Se comprueba el estado guardado sin contactar con Zoom ni renovar tokens. `logged_in: true` indica
 credenciales guardadas, no validez remota. Los permisos devueltos muestran lo concedido. Para una
 comprobación remota, añade `user:read:user`, autoriza otra vez y ejecuta:
 
@@ -53,7 +53,7 @@ zm session status --check --json
 ```
 
 El error de permiso ausente indica su nombre. El dueño lo añade y guarda la app; el usuario repite
-`zm login`. Cambiar la configuración no amplía un token ya emitido.
+`zm session start`. Cambiar la configuración no amplía un token ya emitido.
 
 El inicio de sesión necesita entrada interactiva. La salida canalizada o con `--json` requiere
 además `--interactive`; `--no-input` impide abrir el navegador. Haz la primera conexión en un terminal
@@ -76,7 +76,7 @@ directorio de configuración y Public Client ID; cambiar solo `account.profile` 
 
 `MESSAGING_STORE` selecciona la base compartida. Usa la misma ruta en Zoom, Memo y MCP para conectar
 reuniones con notas y proyectos. Importar archivos no avanza el cursor; al cambiar de fuente puede
-hacer falta un `--since` anterior explícito.
+hacer falta un `--since-time` anterior explícito.
 
 ## Retirar el acceso
 

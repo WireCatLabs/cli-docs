@@ -27,7 +27,7 @@ La instalación no ocurre al iniciar un comando normal.
 
 ## El servidor MCP
 
-`zm serve --mcp` usa stdio y ofrece ocho herramientas de solo lectura: lista y detalles de reuniones,
+`zm serve --mcp` usa stdio y ofrece siete herramientas de solo lectura: lista y detalles de reuniones,
 transcripciones, resúmenes, exportaciones, búsqueda de texto, participantes y búsqueda acotada con filtros de contexto. Descubrir herramientas
 no abre la base. Cada lectura usa la cuenta elegida y cierra su conexión antes de responder; el cliente
 no puede cambiar la cuenta. No se exponen escritura de archivos exportados ni cambios remotos.
@@ -68,9 +68,8 @@ orden local sin una conexión compatible al equipo.
 
 ## Herramientas opcionales
 
-Los indicadores amplían el conjunto: `--meeting-context` añade fuentes, contexto personal y propuestas
-de tareas; `--unified-search`, búsqueda compartida solo de reuniones; `--semantic --model <id>`, una
-consulta de vectores. Los componentes remotos necesitan `--base-url` y `--dims`. El servidor fija el
+Los indicadores amplían el conjunto: `--meeting-context` añade pasajes citados, fuentes, contexto personal y propuestas
+de tareas; `--unified-search`, búsqueda compartida solo de reuniones; `--semantic --model <model>`, la búsqueda `search_meetings` en vectores existentes mediante `by_meaning`. Los componentes remotos necesitan `--base-url` y `--dims`. El servidor fija el
 componente al iniciar y el perfil al leer por primera vez. Reinícialo para cambiar la selección;
 los clientes no pueden hacerlo. Generar vectores y crear tareas no son herramientas MCP.
 

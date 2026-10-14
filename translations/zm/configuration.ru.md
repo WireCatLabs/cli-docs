@@ -14,7 +14,7 @@ title: "Настройки"
 |---|---|
 | `zoom.clientId` | Public Client ID [существующего или нового приложения](./zoom-app.md); изначально не задан, нужен для API |
 | `account.profile` | [Локальная метка](./sessions.md#select-a-local-profile) данных; изначально не задана, нужна для базы |
-| `source` | Источник `pull` и `watch`: `api` по умолчанию или `files` |
+| `source` | Источник `meetings sync` и `watch`: `api` по умолчанию или `files` |
 | `files.folder` | Папка для загрузки/наблюдения файлов; изначально не задана |
 | `files.timezone` | Часовой пояс IANA имён файлов, например `Europe/Madrid`; по умолчанию UTC |
 
