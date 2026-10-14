@@ -28,19 +28,41 @@ export function DocsSidebarFolder({ item, children }: { item: Folder; children: 
     : path.includes(item) || pathname.replace(/\/$/, "") === item.index?.url.replace(/\/$/, "")
   const open =
     item.collapsible === false || (override?.path === pathname ? override.open : active || Boolean(item.defaultOpen))
+  const toggle = () => setOverride({ path: pathname, open: !open })
+  const row =
+    "relative flex w-full items-center gap-2 rounded-lg p-2 text-start text-sm text-fd-muted-foreground hover:bg-fd-accent/50 hover:text-fd-accent-foreground [&_svg]:size-4 [&_svg]:shrink-0"
+  const chevron = <ChevronDown aria-hidden="true" className={`ml-auto${open ? "" : " -rotate-90"}`} />
+  // A link inside the toggle would nest two controls, so a folder with its own page gets a separate toggle.
   return (
-    <details
-      open={open}
-      data-guide-tool={tool}
-      className="group/guide"
-      onToggle={(event) => setOverride({ path: pathname, open: event.currentTarget.open })}
-    >
-      <summary className="relative flex w-full cursor-pointer list-none items-center gap-2 rounded-lg p-2 text-start text-sm text-fd-muted-foreground hover:bg-fd-accent/50 hover:text-fd-accent-foreground focus-visible:outline-2 focus-visible:outline-offset-2 [&::-webkit-details-marker]:hidden [&_svg]:size-4 [&_svg]:shrink-0">
-        {item.icon}
-        {item.index ? <Link href={item.index.url}>{item.name}</Link> : item.name}
-        <ChevronDown aria-hidden="true" className="ml-auto -rotate-90 group-open/guide:rotate-0" />
-      </summary>
-      <div className="relative ml-2.5 flex flex-col gap-0.5 border-l border-fd-border pl-0.5 pt-0.5">{children}</div>
-    </details>
+    <div data-guide-tool={tool} data-open={open} className="group/guide">
+      {item.index ? (
+        <div className={row}>
+          <Link href={item.index.url} className="flex flex-1 items-center gap-2 focus-visible:outline-2">
+            {item.icon}
+            {item.name}
+          </Link>
+          {item.collapsible !== false && (
+            <button type="button" aria-expanded={open} onClick={toggle} className="rounded focus-visible:outline-2">
+              <span className="sr-only">{item.name}</span>
+              {chevron}
+            </button>
+          )}
+        </div>
+      ) : (
+        <button
+          type="button"
+          aria-expanded={open}
+          onClick={item.collapsible === false ? undefined : toggle}
+          className={`${row} focus-visible:outline-2 focus-visible:outline-offset-2`}
+        >
+          {item.icon}
+          {item.name}
+          {chevron}
+        </button>
+      )}
+      <div hidden={!open} className="relative ml-2.5 flex flex-col gap-0.5 border-l border-fd-border pl-0.5 pt-0.5">
+        {children}
+      </div>
+    </div>
   )
 }
