@@ -10,9 +10,19 @@ para un mensajero nuevo o de juzgar si un cambio encaja en el diseño. [Arquitec
 cuenta con más detalle los paquetes y el recorrido de un comando en ejecución; esta página trata de la
 estructura del código y de cómo se mantiene.
 
-Dos términos aparecen en todo el texto. Un **puerto** es una interfaz que define el núcleo compartido y de
-la que depende. Un **adaptador** es el código de una herramienta que implementa un puerto para un mensajero
-o proveedor. El núcleo llama al puerto y nunca importa el adaptador.
+Dos términos aparecen en todo el texto.
+
+- Un **puerto** es la lista de métodos que el núcleo compartido necesita de un mensajero, escrita una vez en
+  cli-core como una interfaz de TypeScript: `resolve(chat)` encuentra un chat, `send(chatId, text)` envía un
+  mensaje, etcétera. El núcleo solo llama a estos métodos y nunca ve la API propia de Telegram ni de otro
+  mensajero.
+- Un **adaptador** es la clase de una herramienta que rellena esos métodos para un mensajero.
+  `TelegramAdapter` de tg implementa `send` llamando a la biblioteca de Telegram mtcute y convierte su
+  respuesta en el `Message` de cli-core.
+
+Así, `messages send` se escribe una vez en cli-core y funciona en todas las herramientas: el comando llama
+al puerto y cada herramienta conecta su propio adaptador. Para admitir un mensajero nuevo se escribe un
+adaptador nuevo, sin cambiar el núcleo.
 
 La página describe el código leído el 14 de octubre de 2026, en
 [cli-core a3b5b3c](https://github.com/WireCatLabs/cli-core/tree/a3b5b3c47792d5e2df6529642e907ee32783e66a),
@@ -49,11 +59,11 @@ herramienta; la flecha punteada es la implementación de un puerto, no una llama
 
 ```mermaid Las capas de cli-core y cómo se conecta una herramienta
 graph TB
-  subgraph TOOL["Una herramienta de mensajería: tg o max"]
+  subgraph TOOL["Una herramienta de mensajería, como tg"]
     Program("program<br>registra los comandos")
     Describe("descripción Messenger<br>qué ofrece la CLI")
     Adapter("adaptador<br>traduce el mensajero al puerto")
-    Client("cliente del mensajero<br>mtcute o el cliente propio de MAX")
+    Client("cliente del mensajero<br>mtcute en tg")
   end
   subgraph CORE["cli-core"]
     Cli("cli/ y mcp/<br>comandos y herramientas MCP")
@@ -121,33 +131,25 @@ en
 
 ### El contrato del mensajero
 
-`MessengerAdapter` es un núcleo obligatorio más grupos opcionales. `MessengerCore` tiene siete métodos:
-`self`, `me`, `resolve`, `chat`, `send`, `logout` y `close`. Todo lo demás está en 39 grupos opcionales,
-como `MessagePolls`, `ForumControl`, `ChatFolders` y `LiveUpdates`.
+El puerto de los mensajeros es `MessengerAdapter`, en `ports/messenger.ts`. Tiene dos partes:
 
-```mermaid El contrato del adaptador: un núcleo obligatorio y grupos opcionales
-classDiagram
-  class MessengerCore {
-    self()
-    me()
-    resolve(chat)
-    chat(chat)
-    send(chatId, text, options)
-    logout()
-    close()
-  }
-  class MessagePolls {
-    poll()
-    vote()
-    closePoll()
-  }
-  class ForumControl {
-    createTopic()
-  }
-  class MessengerAdapter
-  MessengerCore <|-- MessengerAdapter
-  MessagePolls <|-- MessengerAdapter
-  ForumControl <|-- MessengerAdapter
+- **Un núcleo obligatorio de siete métodos** que todo mensajero tiene: `self`, `me`, `resolve`, `chat`,
+  `send`, `logout` y `close`. Un adaptador al que le falte alguno no compila.
+- **39 grupos opcionales** para funciones que solo tienen algunos mensajeros: `MessagePolls` (encuestas),
+  `ForumControl` (temas de foro), `ChatFolders`, `LiveUpdates` y otros. Un adaptador implementa los grupos
+  que admite su mensajero y omite el resto.
+
+```mermaid Qué pasa cuando un comando necesita una función opcional
+graph LR
+  Cmd("tg messages react") --> Svc("servicio de mensajes")
+  Svc -->|"capability(adapter, 'react')"| Has{"¿tiene el adaptador<br>react?"}
+  Has -->|yes| Call("TelegramAdapter.react()<br>llama a mtcute")
+  Has -->|no| Refuse("validation_error:<br>este mensajero no puede<br>reaccionar a un mensaje")
+  subgraph ADAPTER["TelegramAdapter implementa"]
+    Core("núcleo obligatorio<br>self, me, resolve, chat,<br>send, logout, close")
+    Opt("grupos opcionales que admite<br>reacciones, encuestas, temas de foro,<br>carpetas, actualizaciones en vivo, …")
+  end
+  Call -.-> Opt
 ```
 
 El código que necesita un método opcional lo pide por su nombre:
@@ -188,8 +190,8 @@ crea todos los servicios una vez; los comandos y las herramientas MCP los toman 
 misma respuesta y el mismo error para la misma entrada.
 
 Una herramienta puede sustituir un servicio sin copiar el núcleo. `Messenger.services` recibe los
-servicios compartidos y devuelve sustitutos; max lo usa para que la moderación encuentre los chats a su
-manera.
+servicios compartidos y devuelve sustitutos, por ejemplo su propia forma de encontrar un chat para la
+moderación.
 
 ### Módulos autónomos
 
@@ -206,7 +208,7 @@ consiste en registrarlo; el código que llama a los lectores no cambia.
 
 ## Una escritura de principio a fin
 
-`max messages send <chat> --file report.pdf`. El archivo se comprueba al empezar el comando y solo se lee
+`tg messages send <chat> --file report.pdf`. El archivo se comprueba al empezar el comando y solo se lee
 mientras se sube, así que un archivo grande nunca se guarda entero en memoria.
 
 ```mermaid Un envío con archivo, del comando al mensajero
@@ -215,25 +217,25 @@ sequenceDiagram
   participant Up as sends/upload.ts
   participant Svc as servicio de mensajes
   participant Guard as protección de envíos
-  participant Ad as adaptador de max
-  participant Cl as MaxClient
+  participant Ad as TelegramAdapter
+  participant Cl as mtcute
   Cmd->>Up: readAttachments(flags)
   Up-->>Cmd: Upload con origen en archivo: ruta y tamaño
   Cmd->>Svc: send(chat, text, uploads)
   Svc->>Guard: comprobar permisos, destinatarios, límites
   Svc->>Ad: send(chatId, text, attachments)
-  Ad->>Ad: uploadBlob: un Blob leído del disco
-  Ad->>Cl: envío con el Blob como cuerpo de la subida
-  Cl->>Cl: subida por HTTP y después envío del mensaje
-  Cl-->>Ad: mensaje de MAX
-  Ad-->>Svc: Message del dominio
+  Ad->>Cl: uploadFile(un Blob leído del disco)
+  Cl-->>Ad: archivo subido
+  Ad->>Cl: sendMedia(chat, archivo y pie)
+  Cl-->>Ad: mensaje de Telegram
+  Ad-->>Svc: Message de cli-core
   Svc->>Guard: registrar el resultado, nunca el texto
   Svc-->>Cmd: la respuesta para stdout
 ```
 
-En tg el adaptador entrega el mismo Blob a mtcute y vuelve a abrir el archivo en cada reintento. Un
-adaptador cuya biblioteca necesita los bytes en memoria llama a `uploadBytes`, que rechaza un archivo de
-más de 256 MiB.
+Si la subida se corta, el adaptador vuelve a abrir el archivo y lo intenta de nuevo. El adaptador de max hace lo
+mismo con su propio cliente. Un adaptador cuya biblioteca necesita los bytes en memoria llama a
+`uploadBytes`, que rechaza un archivo de más de 256 MiB.
 
 ## Patrones en uso
 
