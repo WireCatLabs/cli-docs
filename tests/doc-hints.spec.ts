@@ -118,8 +118,8 @@ for (const lang of languages) {
     await page.goto(`/${lang}/docs`)
     const intro = await page.locator(".prose > p,.fd-prose > p").first().innerText()
     expect(intro).not.toMatch(/WireCat|CLI|Node\.js|npm/u)
-    expect(intro).toContain("Telegram")
-    expect(intro).toContain("MAX")
+    for (const tool of ["tg", "max", "memo", "drive", "zm"])
+      await expect(page.locator(`main a[href="/${lang}/docs/${tool}/installation"]`).first()).toBeVisible()
     const definitions = [
       {
         label: { en: "AI agent", ru: "ИИ-агенту", es: "agente de IA" }[lang],
@@ -129,7 +129,7 @@ for (const lang of languages) {
       { label: "skill", page: "agents" },
       { label: "MCP", page: "mcp" },
     ]
-    await expect(page.locator(".docs-term-trigger")).toHaveCount(5)
+    await expect(page.locator(".docs-term-trigger")).toHaveCount(4)
     for (const definition of definitions) {
       const prefix = { en: "More about", ru: "Подробнее", es: "Más sobre" }[lang]
       const trigger = page.getByRole("button", { name: `${prefix}: ${definition.label}`, exact: true })

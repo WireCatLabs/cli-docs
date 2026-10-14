@@ -1,9 +1,18 @@
 ---
-title: "Zoom"
+title: "Zoom — empieza aquí"
 description: "Transcripciones, grabaciones y contexto de reuniones para tu agente de IA."
 ---
 
 Conserva pasajes de reuniones para que tu agente recupere decisiones, compruebe promesas y prepare llamadas con fuentes. La herramienta Zoom se ejecuta en tu equipo como `zm`: lee datos disponibles del anfitrión o importa transcripciones.
+
+## Elige por dónde empezar
+
+| Tu situación | Siguiente paso |
+|---|---|
+| Conectas Zoom por primera vez | [Instalar con el agente o a mano](./installation.md) |
+| Ya creaste una aplicación | [Encontrar su Public Client ID](./zoom-app.md#use-an-app-you-already-created) y [completar el acceso](./installation.md#first-run) |
+| Tienes archivos VTT descargados | [Importar sin aplicación ni inicio de sesión](./installation.md#import-without-a-zoom-app) |
+| Las reuniones ya están guardadas | [Buscar un pasaje](./search.md); no hace falta reinstalar |
 
 ## Qué puedes hacer
 

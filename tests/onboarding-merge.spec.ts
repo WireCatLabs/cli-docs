@@ -1,9 +1,9 @@
 import AxeBuilder from "@axe-core/playwright"
 import { expect, test } from "@playwright/test"
 
-for (const lang of ["en", "ru", "es"]) {
+for (const lang of ["en", "ru", "es"] as const) {
   for (const width of [1440, 390]) {
-    for (const route of ["features", "installation"]) {
+    for (const route of ["features", "installation", ""]) {
       test(`${lang}/${route}: shared sidebar and layout at ${width}px`, async ({ page }) => {
         await page.setViewportSize({ width, height: 900 })
         await page.goto(`/${lang}/docs/${route}`)
@@ -16,11 +16,33 @@ for (const lang of ["en", "ru", "es"]) {
             await expect(main.locator(`a[href="/${lang}/docs/${target}"]`).first()).toBeVisible()
           }
         } else {
-          for (const target of ["tg/installation", "max/installation", "memo/installation"]) {
+          for (const target of [
+            "tg/installation",
+            "max/installation",
+            "memo/installation",
+            "drive/installation",
+            "zm/installation",
+          ]) {
             await expect(main.locator(`a[href="/${lang}/docs/${target}"]`).first()).toBeVisible()
           }
           await expect(main.locator(".docs-term-trigger").first()).toBeEnabled()
-          await expect(main.locator("pre").filter({ hasText: "node --version" }).first()).toBeVisible()
+          if (route === "installation")
+            await expect(main.locator("pre").filter({ hasText: "node --version" }).first()).toBeVisible()
+          else {
+            const title = { en: "Start here", ru: "Начните здесь", es: "Empieza aquí" }[lang]
+            await expect(page.getByRole("heading", { level: 1, name: title, exact: true })).toBeVisible()
+            const mobile = width === 390
+            if (mobile) await page.locator('#nd-subnav button[aria-controls="nd-sidebar-mobile"]').click()
+            const sidebar = page.locator(mobile ? "#nd-sidebar-mobile" : "#nd-sidebar")
+            const start = sidebar.getByRole("link", { name: title, exact: true })
+            await expect(start).toBeVisible()
+            await expect(start).toHaveAttribute("href", `/${lang}/docs`)
+            if (mobile) {
+              await page.keyboard.press("Escape")
+              await expect(sidebar).not.toBeVisible()
+            }
+            await expect(main.locator(".docs-prompt")).toHaveCount(3)
+          }
         }
         const scan = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze()
         expect(scan.violations, `${route} ${width}`).toEqual([])
