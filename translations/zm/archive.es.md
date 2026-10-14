@@ -137,15 +137,18 @@ comas. Solo guarda archivos completos descargables; otros se informan aparte. Pe
 y funciones de cuenta limitan el acceso. Asistir a una reunión no garantiza acceso a su grabación.
 
 Los manifiestos contienen metadatos, tamaños y SHA-256, sin URLs firmadas ni tokens. Repetir verifica
-y omite archivos coincidentes. No sobrescribe: usa otro destino si no coinciden. Con perfil se
-conservan partes verificadas y se reanuda solo con validador fuerte y rango coincidentes. Una
-representación cambiada reinicia con seguridad. `--resume` explícito necesita perfil; `--no-resume`
-o ausencia de perfil usan partes temporales. Entradas completas permanecen tras errores posteriores.
+y omite archivos coincidentes. Si tamaño y fecha de modificación no cambian desde la última
+verificación (`.zoom-verified.json`), no vuelve a calcular su hash. `recordings archive check` siempre
+calcula el hash de todos. No sobrescribe: usa otro destino si no coinciden. Descargas y sincronización
+necesitan un perfil elegido (`zm config set account.profile <label>`); el archivo pertenece a esa cuenta.
+Se conservan partes verificadas y se reanuda solo con validador fuerte y rango coincidentes. Una
+representación cambiada reinicia con seguridad. `--no-resume` usa partes temporales. Entradas completas permanecen tras errores posteriores.
 
 ## Bloqueos y recuperación
 
 La inspección local no necesita acceso ni base. Se rechazan escritores simultáneos al destino.
-Tras un fallo, inspecciona `recordings archive locks` y revisa `recordings archive recover`.
+Una descarga recupera por sí sola el bloqueo de un proceso terminado en este equipo.
+Para los demás casos, inspecciona `recordings archive locks` y revisa `recordings archive recover`.
 `--yes` quita bloqueos reconocidos de procesos terminados en este equipo; conserva activos, ajenos
 y desconocidos. Solo elimina marcadores. La continuación recupera una publicación completa si
 coinciden diario propio, parte verificada y archivo final; archivos ajenos quedan protegidos.
@@ -174,14 +177,15 @@ Los nombres usan hashes y las identidades quedan en manifiestos:
 
 ```sh
 zm recordings archive transcript ./zoom-archive --offline --json
-zm search meetings "example plan" --archive ./zoom-archive --limit 100 --offline --json
+zm search recordings ./zoom-archive "example plan" --limit 100 --offline --json
 ```
 
 Se verifica tamaño y SHA-256 de cada WebVTT antes de devolver pasajes. La búsqueda se detiene al
 hallar un resultado adicional al límite y no lee archivos posteriores. No necesita acceso,
-configuración ni base. `--uuid` o `--file-ids` eligen datos; `--max-bytes` ajusta 8 MiB por archivo.
+configuración ni base. La lectura de transcripciones acepta `--uuid` o `--file-ids` para elegir datos
+y `--max-bytes` para ajustar el límite de 8 MiB por archivo; la búsqueda rechaza una transcripción mayor.
 Busca texto normalizado por Unicode y minúsculas, sin nombres de hablantes. Límite 100, máximo 1000.
-`has_more` indica otro resultado: amplía el límite o reduce reunión, archivo o consulta. No hay
+`has_more` indica otro resultado: amplía el límite o reduce la consulta. No hay
 cursor. `--max-output-bytes` limita la salida; un fallo de verificación no da éxito.
 
 Para importar al perfil:

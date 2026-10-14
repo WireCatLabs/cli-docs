@@ -4,6 +4,28 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.14.0 — 15.10.2026
+
+### Cambios — pueden afectar a quienes llaman al programa
+
+- `recordings download` y `recordings sync` necesitan un perfil elegido. El archivo pertenece a esa cuenta; sin `account.profile` devuelven `configuration_error`. El SDK exige `DownloadOptions.account`, y `syncRecordingArchive` recibe un servicio con `catalog`.
+- El SDK retira `ZoomError`: los errores usan `CliError` de cli-base. Las capacidades de `StoreConnection` son obligatorias; se retiran `StoreConnectRequest.capability` y `StoreConnection.appendTranscripts`. `ProgramDeps` deja de aceptar sustituciones de capacidades; `createStoreConnector` recibe un almacén cli-core completo.
+- El terminal imprime los elementos con el renderizador común de cli-core y los siguientes pasos en stderr. JSON y JSONL conservan su formato.
+- `--json=id,title` sustituye a `--fields`: el estándar común `--json [fields]` se procesa con `liftJson`, como en tg, max, drive y memo. Los campos se eligen con `--json`, no con `--jsonl`; se rechazan los desconocidos mostrando los disponibles. Adopta Core 0.280.0.
+- `zm search recordings <directory> <query>` sustituye a `zm search meetings <query> --archive <directory>`. La búsqueda del archivo devuelve las coincidencias de `search all`: `ref` (`recording:<file id>/<cue position>`), `title`, `timestamp`, `excerpt`, `sender_name`, `offset_ms`; `account` es la carpeta del archivo. Funciona `--json=ref,excerpt`. Se retiran `--archive`, `--uuid`, `--file-ids` y `--max-bytes` de `search meetings`; el comando nuevo acepta solo `--limit`. Para una ocurrencia, un archivo o una transcripción de más de 8 MiB usa `recordings archive transcript`.
+- El archivo de ajustes usa snake_case: `client_id`, `files_folder`, `files_timezone` y `account_profile`. La orden documentada es `zm config set zoom.client_id`; todavía acepta `zm config set zoom.clientId`. Al leer un archivo antiguo lo reescribe en snake_case, conservando su modo de acceso. Rechaza valores contradictorios entre ambas grafías.
+
+### Añadido
+
+- `meetings prepare <series-id>` lee la prueba de la próxima cita de una serie elegida y su historial guardado acotado: transcripciones citadas, participantes observados, proyectos confirmados, hechos aceptados y tareas con fuentes directas. Conserva citas y cobertura juntas; no acepta hallazgos. `serve --mcp --meeting-preparation` habilita el `meeting_prepare` opcional.
+- El SDK ofrece `createZoomUpcomingMeetingReader`: convierte detalles acotados de Zoom al lector compartido de prueba de ocurrencia; los calendarios ausentes y la recurrencia incompleta quedan sin verificar. Lo usa el flujo compartido de preparación.
+
+### Corregido
+
+- Los IDs remotos con saltos de línea finales se rechazan antes de autenticar.
+- Una descarga recupera el bloqueo de un proceso terminado en este equipo sin `recordings archive recover --yes`. Los bloqueos activos, ajenos o desconocidos siguen rechazándose.
+- Repetir la descarga no recalcula el hash de todos los archivos: tamaño y fecha de modificación sin cambios en `.zoom-verified.json` permiten usar la última verificación. Cualquier cambio vuelve a calcularlo; `recordings archive check` siempre comprueba todos.
+
 ## 0.13.0 — 14.10.2026
 
 ### Cambios — pueden afectar a quienes llaman al programa

@@ -29,6 +29,52 @@ zm meetings export <meeting-id> --format markdown --json
 Lee el resultado antes de guardarlo en un archivo. MCP devuelve exportaciones como texto, pero no
 escribe archivos. [Búsqueda y fuentes](./search.md) conserva referencias exactas para citar pasajes.
 
+## Prepara una próxima reunión
+
+Tienes una próxima llamada en Zoom y quieres tener a mano la conversación anterior. Pide al agente:
+
+```text prompt
+Prepárame para la próxima llamada de Research Example en Zoom. Identifica primero la serie correcta.
+Muestra la próxima hora, pasajes citados de llamadas anteriores, vínculos confirmados al proyecto,
+decisiones guardadas y tareas con origen directo en esas reuniones. Si encajan varias series,
+muestra candidatas. Indica qué falta o no está confirmado. No cambies nada.
+```
+
+Usa el ID de serie del propio Zoom que aparece en [la agenda](./remote-meetings.md), con dígitos
+sin espacios, en lugar del ID interno de `meetings list`. En el terminal:
+
+```sh
+zm meetings prepare 123456789 --json
+```
+
+La orden lee la serie elegida en Zoom y la une al historial del perfil local seleccionado.
+Necesita el permiso opcional `meeting:read:meeting` en [la aplicación Zoom](./zoom-app.md#add-archive-or-management-access).
+No descarga transcripciones ausentes, cambia permisos ni inicia sesión. La ventana predeterminada
+mira siete días hacia delante y treinta hacia atrás, con un máximo de cinco reuniones anteriores
+y diez pasajes citados por reunión.
+
+Comprueba `item.upcoming.candidate` y `verified_next`: una hora candidata puede ser útil aunque
+no demuestre que es la próxima reunión. La fecha inicial de una serie recurrente no lo demuestra.
+`meetings` conserva referencias a reuniones, pasajes y huellas de contenido, nombres observados
+con vínculos existentes a personas, proyectos confirmados, hechos aceptados sobre la reunión y
+tareas de origen directo. La asistencia anterior no predice quién acudirá a la próxima llamada.
+
+Si aparece la próxima hora sin reuniones anteriores, descarga el periodo pertinente mediante la
+API de Zoom para guardar sus vínculos exactos a la serie. Un archivo de transcripción importado
+puede carecer de ese ID del proveedor. La preparación no une llamadas por títulos o nombres parecidos.
+
+La cobertura distingue historial ausente, reuniones sin fecha, filas adicionales y límites de salida.
+No se conoce si el archivo incluye todo el historial. El historial personal, el contexto general del
+proyecto y las candidatas por nombre/alias aparecen como no consultados; la evidencia de los hechos
+guardados no se vuelve a comprobar. Usa [búsqueda y fuentes](./search.md) para investigar esas lagunas.
+La preparación no genera un resumen, acepta hallazgos ni crea tareas.
+
+Para una ventana fija, usa tiempos ISO con zona en `--since-time`, `--before-time` y
+`--history-since-time`. `--meetings`, `--cues` y `--context-limit` acotan el contexto;
+`--max-read-bytes` acota cada lectura y `--bytes` el elemento de preparación. Pueden quedar filas
+fuera del límite. Las fuentes omitidas dan `meta.complete=false`: revisa sus referencias antes de
+usar el informe. Si la cobertura señala un recorte, aumenta el límite correspondiente.
+
 ## Elige datos locales o remotos
 
 | Necesidad | Familia de órdenes | Dónde trabaja |
@@ -37,6 +83,7 @@ escribe archivos. [Búsqueda y fuentes](./search.md) conserva referencias exacta
 | Obtener reuniones del anfitrión | `meetings sync`, API `watch` | De Zoom a la base local |
 | Importar transcripciones | `meetings import`, carpeta `watch` | De archivos a la base |
 | Guardar grabaciones disponibles | `recordings` | De Zoom al destino indicado |
+| Preparar una serie elegida | `meetings prepare` | Calendario Zoom y base local |
 | Leer agenda o modificar una reunión | `remote-meetings` | Cuenta de Zoom |
 
 Una lectura local correcta no demuestra que Zoom conserve el mismo contenido. Descargar un archivo
@@ -60,6 +107,7 @@ no importa su transcripción en la base hasta que solicites la importación del 
 | `meetings summary <meeting>` | leer resúmenes guardados |
 | `meetings export <meeting> --format markdown\|vtt` | exportar contenido guardado |
 | `search meetings <query>`, `meetings people <query>` | buscar texto o participantes |
+| `meetings prepare <series-id>` | reunir la próxima cita y el contexto guardado con fuentes de una serie elegida |
 | `meetings projects evidence <project> [query...]` | leer evidencia acotada del nombre, clave y alias de un proyecto existente |
 | `meetings update <reference>`, `meetings link <reference>` | revisar o aplicar vínculos elegidos |
 | `meetings transcribe <meeting> <file> --model <model>` | revisar o reconocer un WAV como transcripción independiente |
@@ -77,7 +125,7 @@ no importa su transcripción en la base hasta que solicites la importación del 
 | `recordings archive show\|check\|locks <directory>` | inspeccionar manifiestos, sumas o bloqueos |
 | `recordings archive recover <directory>` | revisar recuperación de bloqueos obsoletos |
 | `recordings archive transcript <directory>` | leer WebVTT verificado sin base de datos |
-| `search meetings <query> --archive <directory>` | buscar texto verificado sin base |
+| `search recordings <directory> <query>` | buscar texto verificado sin base |
 | `recordings archive import <directory>` | verificar VTT y añadirlo a reuniones guardadas |
 | `remote-meetings list\|show\|invitation` | leer próximas reuniones e invitaciones |
 | `remote-meetings create\|update\|cancel` | revisar o aplicar un cambio simple en Zoom |
@@ -117,7 +165,7 @@ Los errores van a stderr; `--quiet` omite otros diagnósticos.
 Las tuberías reciben JSON por defecto; la terminal, salida legible. El autocompletado emite
 el protocolo de la shell salvo que pidas JSON.
 
-`--fields id,title` elige campos. `--offline` rechaza la red. Los comandos finitos conservan la salida
+`--json=id,title` elige campos. `--offline` rechaza la red. Los comandos finitos conservan la salida
 hasta liberar recursos; el límite predeterminado es 4 MiB. `--max-output-bytes 0` lo elimina.
 
 ## Plazos y cancelación

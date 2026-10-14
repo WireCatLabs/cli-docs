@@ -61,6 +61,13 @@ schedule and invitation reads; your agent assembles the brief from the sources y
 For a recurring series, confirm the actual next occurrence; its original start date alone does not
 verify the next call. If permissions prevent that check, mark the date as unverified.
 
+For one selected series, [prepare cited context](./zm/usage.md#prepare-for-an-upcoming-meeting)
+with `zm meetings prepare <series-id> --json`. It reads the upcoming time from Zoom and joins
+bounded stored prior calls, observed people, confirmed projects, accepted facts and directly sourced
+tasks. Use the provider's numeric series ID, not the internal stored meeting ID. Its coverage keeps
+person history, project-wide sources and project-name/alias candidates explicitly unqueried; the
+agent can investigate those separately. Missing transcripts are not downloaded by preparation.
+
 ## Keep useful findings afterwards
 
 Ask for a reviewable list of decisions, promises, important statements and follow-up tasks, each
@@ -69,8 +76,8 @@ saving an identity link. Reuse an existing project and label when they fit.
 
 Memo can keep facts and tasks separately from notes and reusable summaries. Owner commands save
 records directly; facts submitted through Memo's agent MCP tools remain proposed for review.
-A Zoom task proposal is a suggestion and does not create a task. A dedicated automatic meeting
-intake or preparation command is [planned work](./zm/roadmap.md).
+A Zoom task proposal is a suggestion and does not create a task. Dedicated automatic meeting
+intake and broader preparation remain [planned work](./zm/roadmap.md).
 
 ## More control
 

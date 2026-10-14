@@ -12,9 +12,9 @@
     "conclusion": "Reviewed 0.52.0: syncs resume where they stopped; watch survives a failing handler; files and videos upload from disk without the 2 GiB refusal; picture search (images embed, images models) behind picture_search; store export --format jsonl writes the printed records; watch --jsonl and --events in snake_case; voice messages without text named in missing; local-only next steps are never auto-run; mentions rebuild takes its kind as an argument and names of known people are found (cli-core 0.276.0); doctor, session start and end answer in the envelope; bot chats members list --cursor replaces --marker. Roadmap unchanged: an optional no-local-copy mode, actions on events, video circles, cloud password and standalone installers remain planned; none of them shipped."
   },
   "zm": {
-    "version": "v0.13.0",
-    "roadmapSha256": "a29fab601584dbb576c022824b1eda079f203b3fe284a7da27a1a0f0467fee41",
-    "reviewedAt": "2026-10-14",
-    "conclusion": "Reviewed 0.13.0: contract 3 declares local/remote effects; typed JSONL item/data and end records replace whole answer lines; cursor pages use next_cursor; skipped sources carry completeness/issues, and partial non-search answers return the first source error after printing data. Shared answer, retry and next-step policies are reused. Roadmap unchanged: verified occurrence binding, cited preparation, reviewed findings intake and further shared native archive storage remain planned. Existing Memo notes/tags/aliases and project evidence remain available."
+    "version": "v0.14.0",
+    "roadmapSha256": "e021a1c311c9a27d3ce79cabb819393f0aee396cedf8a00ce17d4da6246e0d6e",
+    "reviewedAt": "2026-10-15",
+    "conclusion": "Reviewed 0.14.0: cited selected-series preparation and optional strict meeting_prepare are delivered. The upcoming SDK, archive dead-process takeover/verified-file cache, separate search recordings, JSON projection, snake_case settings with legacy reads, required SDK/store capabilities and shared body rendering are retained. Roadmap now describes wider series discovery, person/project/alias enrichment, reviewed idempotent findings intake and shared native archive storage as future work. Preparation does not accept findings, generate summaries, create tasks, fetch absent transcripts or establish future attendance."
   }
 }

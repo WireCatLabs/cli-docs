@@ -12,7 +12,7 @@ title: "Настройки"
 
 | Ключ | Значение |
 |---|---|
-| `zoom.clientId` | Public Client ID [существующего или нового приложения](./zoom-app.md); изначально не задан, нужен для API |
+| `zoom.client_id` | Public Client ID [существующего или нового приложения](./zoom-app.md); изначально не задан, нужен для API |
 | `account.profile` | [Локальная метка](./sessions.md#select-a-local-profile) данных; изначально не задана, нужна для базы |
 | `source` | Источник `meetings sync` и `watch`: `api` по умолчанию или `files` |
 | `files.folder` | Папка для загрузки/наблюдения файлов; изначально не задана |
@@ -20,8 +20,11 @@ title: "Настройки"
 
 После изменения проверьте `zm config show`. Смена `account.profile` не меняет пользователя Zoom.
 Другой ID клиента выбирает другую запись ключей: подтвердите приложение перед API. `ZOOM_CLIENT_ID`
-не является настройкой установленной команды `zm`; используйте `zm config set zoom.clientId`,
+не является настройкой установленной команды `zm`; используйте `zm config set zoom.client_id`,
 а не переменную из инструмента разработчика.
+
+Файл хранит эти настройки как `client_id`, `files_folder`, `files_timezone`, `account_profile` и `source`.
+Имена camelCase `zoom.clientId`, `clientId`, `filesFolder`, `filesTimezone` и `accountProfile` по-прежнему читаются.
 
 Повреждённая конфигурация не мешает `--help` и `--version`; команды настроек сообщают об ошибке.
 

@@ -105,7 +105,7 @@ zm.cmd doctor
 по одной в обычном терминале и оставьте его открытым, пока подтверждаете вход в браузере:
 
 ```sh
-zm config set zoom.clientId <public-client-id>
+zm config set zoom.client_id <public-client-id>
 zm config set source api
 zm session start
 ```

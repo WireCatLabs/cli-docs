@@ -68,8 +68,33 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(text).toContain("Research Example")
     expect(text).toContain("zm meetings transcript 1 --json")
     expect(text).toContain("zm remote-meetings list --json")
+    expect(text).toContain("zm meetings prepare <series-id> --json")
     expect(text).toContain('zm search meetings "launch decision" --json')
     expect(text).toContain("zm meetings passage meeting:3/15/20/4")
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
+  })
+
+  test(`${lang}: preparation keeps its cited scope and gaps in HTML and Markdown`, async ({ page, request }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto(`/${lang}/docs/zm/usage#prepare-for-an-upcoming-meeting`)
+    const main = page.locator("main")
+    await expect(main.locator("#prepare-for-an-upcoming-meeting")).toHaveCount(1)
+    await expect(main).toContainText("zm meetings prepare 123456789 --json")
+    await expect(main).toContainText("verified_next")
+    await expect(main).toContainText("--history-since-time")
+    await expect(
+      main.locator(`a[href="/${lang}/docs/zm/zoom-app#add-archive-or-management-access"]`).first(),
+    ).toBeVisible()
+    const prefix = lang === "en" ? "" : `${lang}/`
+    const response = await request.get(`/llms.mdx/docs/${prefix}zm/usage/content.md`)
+    expect(response.ok()).toBe(true)
+    const markdown = await response.text()
+    expect(markdown).toContain("zm meetings prepare 123456789 --json")
+    expect(markdown).toContain("`item.upcoming.candidate`")
+    expect(markdown).toContain("`verified_next`")
+    expect(markdown).toContain("`meta.complete=false`")
+    expect(markdown).toContain("meeting:read:meeting")
+    expect(markdown).toContain("--context-limit")
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
   })
 
@@ -83,7 +108,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     const prefix = lang === "en" ? "" : `${lang}/`
     const markdown = await request.get(`/llms.mdx/docs/${prefix}zm/installation/content.md`)
     expect(markdown.ok()).toBe(true)
-    expect(await markdown.text()).toContain("zm config set zoom.clientId <public-client-id>")
+    expect(await markdown.text()).toContain("zm config set zoom.client_id <public-client-id>")
     expect(await markdown.text()).toContain("zm session start")
   })
 }
@@ -110,7 +135,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     const response = await request.get(`/llms.mdx/docs/${prefix}zm/installation/content.md`)
     expect(response.ok()).toBe(true)
     const markdown = await response.text()
-    expect(markdown).toContain("zm config set zoom.clientId <public-client-id>")
+    expect(markdown).toContain("zm config set zoom.client_id <public-client-id>")
     expect(markdown).toContain("zm config set source api")
     expect(markdown).toContain("zm session status --json")
     expect(markdown).toContain("code=…&state=…")

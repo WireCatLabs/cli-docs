@@ -15,12 +15,11 @@ title: "Все команды"
 | Параметр | Действие |
 |---|---|
 | `-V, --version` | output the version number. |
-| `--json` | one JSON value. |
+| `--json` | one JSON value; --json=id,title keeps only those fields. |
 | `--jsonl` | one JSON object per item. |
 | `--no-input` | disable interactive login. |
 | `--interactive` | permit browser approval in an interactive terminal. |
 | `--quiet` | suppress non-error diagnostics. |
-| `--fields <paths>` | project result fields, such as id,title. |
 | `--timeout <duration>` | command deadline: reads 30s, login 5m, downloads/transcription 1h; watch/MCP have no default. |
 | `--max-output-bytes <bytes>` | bound rendered result bytes (default 4194304; zero is unlimited). |
 | `--offline` | refuse network requests. |
@@ -48,7 +47,7 @@ set a configuration value
 zm config set <key> <value>
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `key` | required | setting name, such as account.profile. |
 | `value` | required | new value. |
@@ -65,11 +64,11 @@ stored meetings, newest first
 zm meetings list [query] [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--json` | one JSON value. |
 | `--jsonl` | one JSON object per item. |
@@ -84,11 +83,11 @@ show a stored meeting
 zm meetings show <meeting> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `meeting` | required | stored meeting id. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--json` | one JSON value. |
 | `--jsonl` | one JSON object per item. |
@@ -101,11 +100,11 @@ show current meeting transcripts
 zm meetings transcript <meeting> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `meeting` | required | stored meeting id. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--history` | include superseded transcript versions. |
 | `--json` | one JSON value. |
@@ -119,11 +118,11 @@ show stored meeting summaries
 zm meetings summary <meeting> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `meeting` | required | stored meeting id. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--json` | one JSON value. |
 | `--jsonl` | one JSON object per item. |
@@ -138,11 +137,11 @@ export a meeting as Markdown or one transcript as WebVTT
 zm meetings export <meeting> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `meeting` | required | stored meeting id. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--format <format>` | export format. One of: `markdown`, `vtt`. Default: `markdown`. |
 | `--transcript-id <id>` | export a specific transcript version. |
@@ -158,11 +157,11 @@ find meeting participants by name or email
 zm meetings people <query> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `query` | required | a name or an email address. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--json` | one JSON value. |
 | `--jsonl` | one JSON object per item. |
@@ -181,7 +180,7 @@ bring the stored meetings up to date from the connected account
 zm meetings sync [options]
 ```
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--json` | one JSON value. |
 | `--jsonl` | one JSON object per item. |
@@ -198,11 +197,11 @@ import downloaded meeting transcripts
 zm meetings import <folder> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `folder` | required | folder of transcripts downloaded from the provider. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--json` | one JSON value. |
 | `--jsonl` | one JSON object per item. |
@@ -230,6 +229,29 @@ zm meetings projects evidence <project> [query] [options]
 | `--cursor <cursor>` | continue with the same project and frozen selection from next. |
 | `--max-read-bytes <bytes>` | word-read byte budget, at most 67108864 (default 4194304). |
 
+### `zm meetings prepare`
+
+prepare cited context for one upcoming series
+
+```sh
+zm meetings prepare <series-id> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `series-id` | required | exact provider series ID. |
+
+| Option | What it does |
+|---|---|
+| `--since-time <time>` | window start as ISO timestamp with zone (default now). |
+| `--before-time <time>` | exclusive window end as ISO timestamp (default seven days after start). |
+| `--history-since-time <time>` | history start as ISO timestamp (default thirty days before start). |
+| `--meetings <n>` | prior occurrences, 1–20 (default 5). |
+| `--cues <n>` | cues per occurrence, 1–100 (default 10). |
+| `--context-limit <n>` | entries per context category, 1–100 (default 20). |
+| `--max-read-bytes <bytes>` | stored/normalized bytes per read, at most 4194304 (default 262144). |
+| `--bytes <bytes>` | preparation item JSON bytes, 4096–4194304 (default 65536). |
+
 ### `zm meetings update`
 
 preview linking a stored meeting to an event; --yes applies it
@@ -240,11 +262,11 @@ preview linking a stored meeting to an event; --yes applies it
 zm meetings update <reference> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `reference` | required | meeting reference, such as meeting:1/1. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--event-id <id>` | stored event id, or none to unlink. |
 | `--expected-event-id <id>` | compare current event id, or none. |
@@ -261,11 +283,11 @@ preview linking a meeting participant to a stored person; --yes applies it
 zm meetings link <reference> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `reference` | required | meeting reference, such as meeting:1/1. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--participant-id <id>` | participant id from this meeting. |
 | `--person <uid>` | explicit stored person UID. |
@@ -284,12 +306,12 @@ preview transcribing a recording on this machine; --yes adds the transcript
 zm meetings transcribe <meeting> <file> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `meeting` | required | stored meeting id or meeting reference. |
 | `file` | required | local PCM16 WAV file (16 or 48 kHz, mono/stereo). |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--model <model>` | installed speech model. |
 | `--models-dir <directory>` | shared installed speech-model directory. |
@@ -308,11 +330,11 @@ read the stored transcript lines, chat or summary behind a meeting reference
 zm meetings evidence <reference> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `reference` | required | meeting reference, such as meeting:3/15. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--cues <n>` | how many transcript lines, 1 through 1000. |
 | `--bytes <bytes>` | how much text, in bytes, 2 through 4194304. |
@@ -329,11 +351,11 @@ what the stored meetings say about a person, through linked identities
 zm meetings context <person> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `person` | required | stored person, such as person:7. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--cues <n>` | how many transcript lines, 1 through 1000. |
 | `--bytes <bytes>` | how much text, in bytes, 2 through 4194304. |
@@ -349,11 +371,11 @@ preview the task a meeting line would become, without creating it
 zm meetings task-proposal <reference> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `reference` | required | transcript line reference, such as meeting:3/15/20/0. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--type <type>` | question, request, mention or promise. |
 
@@ -365,11 +387,11 @@ read a cited cue with bounded context before and after it
 zm meetings passage <reference> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `reference` | required | retained transcript cue reference from a search hit. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--before-n <n>` | preceding cues (default 3). |
 | `--after-n <n>` | following cues (default 3); at most 999 surrounding cues in total. |
@@ -388,7 +410,7 @@ preview building meeting vectors; --yes builds one batch
 zm meetings embeddings [options]
 ```
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--model <model>` | embedding model: an installed local one, or one served at --base-url. |
 | `--base-url <url>` | remote embedding service; OpenAI reads OPENAI_API_KEY. |
@@ -412,7 +434,7 @@ list stored events
 zm events list [options]
 ```
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--json` | one JSON value. |
 | `--jsonl` | one JSON object per item. |
@@ -425,7 +447,7 @@ discover commands, flags and examples, optionally scoped to a command path
 zm commands [path]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `path` | optional | resource or command path. |
 
@@ -437,7 +459,7 @@ answer shell completion requests
 zm complete [words]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `words` | optional | shell words ending in the partial word. |
 
@@ -461,7 +483,7 @@ show cached login state; remote verification is explicit
 zm session status [options]
 ```
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--check` | verify the session with Zoom. |
 
@@ -469,13 +491,13 @@ zm session status [options]
 
 log in to Zoom through your browser
 
-**Изменяет данные в Zoom.**
+**Changes remote Zoom data.**
 
 ```sh
 zm session start [options]
 ```
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--browser <program>` | browser program. |
 
@@ -489,12 +511,12 @@ keep fetching new meetings from Zoom, or rescanning a folder, until stopped
 zm watch [target] [folder] [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `target` | optional | api or files; otherwise the configured source. One of: `api`, `files`. |
 | `folder` | optional | with files: folder of downloaded transcripts; otherwise files.folder. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--since-time <time>` | on the first run, fetch meetings from this ISO 8601 time. |
 | `--lookback-days <days>` | API cursor overlap for late transcripts (0 through 31). |
@@ -512,7 +534,7 @@ list cloud recording occurrences (last 30 days by default)
 zm recordings list [options]
 ```
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--since-time <time>` | first day, YYYY-MM-DD. |
 | `--until-time <time>` | last day, YYYY-MM-DD. |
@@ -527,7 +549,7 @@ download a date range of recordings into an archive folder, a month at a time
 zm recordings sync [options]
 ```
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--since-time <time>` | first day, YYYY-MM-DD. |
 | `--until-time <time>` | last day, YYYY-MM-DD; at most ten years after the first. |
@@ -548,7 +570,7 @@ show downloadable asset metadata without signed URLs
 zm recordings show <meeting>
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `meeting` | required | meeting id or occurrence UUID. |
 
@@ -562,11 +584,11 @@ stream recording assets into a verified local archive
 zm recordings download <meeting> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `meeting` | required | meeting id or occurrence UUID. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--destination <directory>` | explicit archive directory. |
 | `--file-ids <ids>` | comma-separated recording file ids. |
@@ -586,11 +608,11 @@ read the transcripts of a local archive, checking each file first
 zm recordings archive transcript <directory> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `directory` | required | archive folder. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--uuid <uuid>` | select an occurrence UUID. |
 | `--file-ids <ids>` | select comma-separated transcript asset ids. |
@@ -604,7 +626,7 @@ show what a local archive holds, from its transfer records
 zm recordings archive show <directory>
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `directory` | required | archive folder. |
 
@@ -616,7 +638,7 @@ check the size and checksum of every file in a local archive
 zm recordings archive check <directory>
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `directory` | required | archive folder. |
 
@@ -628,7 +650,7 @@ list the locks on a local archive: active, stale or another machine's
 zm recordings archive locks <directory>
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `directory` | required | archive folder. |
 
@@ -642,11 +664,11 @@ preview removing stale locks; --yes removes them
 zm recordings archive recover <directory> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `directory` | required | archive folder. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--yes` | remove recognized locks left by a dead local process. |
 | `--dry-run` | preview only, including when --yes is present. |
@@ -661,11 +683,11 @@ check an archive's transcripts, then add them to the stored meetings
 zm recordings archive import <directory> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `directory` | required | archive folder. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--uuid <uuid>` | select an occurrence UUID. |
 | `--file-ids <ids>` | select comma-separated transcript asset ids. |
@@ -686,7 +708,7 @@ preview a daily archive job; --yes installs its timer
 zm recordings schedule create [options]
 ```
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--name <name>` | local job name. |
 | `--destination <directory>` | absolute archive directory. |
@@ -714,7 +736,7 @@ show one saved local job and its captured settings
 zm recordings schedule show <job>
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `job` | required | saved job id. |
 
@@ -728,7 +750,7 @@ run the captured job once with durable archive progress
 zm recordings schedule run <job>
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `job` | required | saved job id. |
 
@@ -742,11 +764,11 @@ preview disabling a saved timer; --yes disables it without deleting files
 zm recordings schedule disable <job> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `job` | required | saved job id. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--yes` | disable and stop the timer. |
 | `--dry-run` | preview even when --yes is present. |
@@ -771,7 +793,7 @@ show an upcoming meeting
 zm remote-meetings show <meeting>
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `meeting` | required | positive numeric Zoom meeting id. |
 
@@ -783,7 +805,7 @@ read invitation text
 zm remote-meetings invitation <meeting>
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `meeting` | required | positive numeric Zoom meeting id. |
 
@@ -797,7 +819,7 @@ preview a meeting creation; --yes performs it once
 zm remote-meetings create [options]
 ```
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--title <text>` | meeting title. |
 | `--start-time <timestamp>` | ISO start time with timezone. |
@@ -818,11 +840,11 @@ preview a meeting update; --yes performs it once
 zm remote-meetings update <meeting> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `meeting` | required | positive numeric Zoom meeting id. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--title <text>` | meeting title. |
 | `--start-time <timestamp>` | ISO start time with timezone. |
@@ -843,11 +865,11 @@ preview a cancellation; --yes performs it once
 zm remote-meetings cancel <meeting> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `meeting` | required | positive numeric Zoom meeting id. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--occurrence-id <id>` | cancel one recurring occurrence. |
 | `--yes` | apply cancellation once instead of previewing. |
@@ -875,7 +897,7 @@ write SKILL.md to \~/.claude/skills/zoom-cli/ (Claude Code) and \~/.agents/skill
 zm skill install [options]
 ```
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--for <agents>` | which agents to install for. One of: `claude`, `agents`, `all`. Default: `all`. |
 
@@ -883,17 +905,18 @@ zm skill install [options]
 
 serve read-only meeting tools over MCP stdio
 
-**Изменяет локальные данные.**
+**Changes local data.**
 
 ```sh
 zm serve [options]
 ```
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--mcp` | use the MCP JSON-RPC protocol. |
 | `--unified-search` | include selected-profile meetings-only unified search. |
 | `--meeting-context` | include account-fixed evidence, person context and task proposals. |
+| `--meeting-preparation` | include cited meeting preparation with remote Zoom schedule reads. |
 | `--semantic` | include read-only meeting vector search with an explicit query model. |
 | `--model <model>` | query embedding model: an installed one, or one served at --base-url. |
 | `--base-url <url>` | explicit remote embedding endpoint for semantic queries. |
@@ -911,11 +934,11 @@ search meetings and, with --only, messages, mail and notes in the local store
 zm search all <query> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `query` | required | words to find; a word also matches longer words it starts. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--only <resources>` | comma-separated meetings,messages,mail,notes (default meetings). |
 | `--limit <n>` | how many results, 1 through 1000 (default 100). Default: `100`. |
@@ -925,19 +948,19 @@ zm search all <query> [options]
 
 ### `zm search meetings`
 
-find words in stored meetings, by meaning with --model, or in an archive folder
+find words in stored meetings, or by meaning with --model
 
-**Изменяет локальные данные.**
+**Changes local data.**
 
 ```sh
 zm search meetings <query> [options]
 ```
 
-| Аргумент | | Значение |
+| Argument | | What it is |
 |---|---|---|
 | `query` | required | words to find; each also matches its other word forms. |
 
-| Параметр | Действие |
+| Option | What it does |
 |---|---|
 | `--meeting-id <id>` | only this stored meeting. |
 | `--identity-id <id>` | meetings with this participant identity; does not say who spoke a hit. |
@@ -950,7 +973,7 @@ zm search meetings <query> [options]
 | `--since-time <time>` | meetings starting at or after this ISO 8601 date or time. |
 | `--until-time <time>` | meetings starting at or before this ISO 8601 date or time. |
 | `--limit <n>` | how many hits, 1 through 1000 (default 100). |
-| `--cursor <cursor>` | продолжить с page.next_cursor предыдущей страницы с тем же запросом и фильтрами. |
+| `--cursor <cursor>` | continue from the previous page's page.next_cursor, with the same query and filters. |
 | `--max-read-bytes <bytes>` | most stored bytes to read, 1 through 67108864 (default 4194304). |
 | `--model <model>` | search by meaning with this embedding model, building missing vectors first. |
 | `--base-url <url>` | remote embedding service for --model; OpenAI reads OPENAI_API_KEY. |
@@ -958,10 +981,23 @@ zm search meetings <query> [options]
 | `--max-chunks <n>` | by meaning: most stored passages to compare. |
 | `--max-rows <n>` | by meaning: most transcript lines to read, 1 through 100000. |
 | `--max-text-bytes <bytes>` | by meaning: most transcript text to read (default 4 MiB). |
-| `--archive <directory>` | search the transcripts of this archive folder, before any import. |
-| `--uuid <uuid>` | with --archive: only this occurrence UUID. |
-| `--file-ids <ids>` | with --archive: only these comma-separated transcript asset ids. |
-| `--max-bytes <bytes>` | with --archive: largest transcript file to read (default 8 MiB). |
+
+### `zm search recordings`
+
+find words in the transcripts of a downloaded archive folder, before any import
+
+```sh
+zm search recordings <directory> <query> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `directory` | required | archive folder. |
+| `query` | required | words to find as one phrase, ignoring case. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many hits, 1 through 1000 (default 100). |
 
 ## Коды завершения
 

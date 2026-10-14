@@ -37,12 +37,16 @@ abre una línea con `meetings passage`.
 ## Buscar por significado o en un archivo
 
 `--model <model>` busca por significado en vez de palabras y genera primero los vectores que faltan;
-consulta la [búsqueda por temas](./topic-search.md). `--archive <directory>` busca transcripciones en una
+consulta la [búsqueda por temas](./topic-search.md). `search recordings <directory> <query>` busca transcripciones en una
 carpeta descargada antes de importarlas, sin base de datos, configuración ni inicio de sesión:
 
 ```sh
-zm search meetings "example plan" --archive ./zoom-archive --limit 100 --offline --json
+zm search recordings ./zoom-archive "example plan" --limit 100 --offline --json
 ```
+
+Las coincidencias tienen el formato de `search all`: `ref` (`recording:<file id>/<cue position>`),
+`title`, `timestamp`, `excerpt`, `sender_name` y `offset_ms`; `account` es la carpeta del archivo.
+
 
 Los filtros del almacén no se aplican al archivo ni a la búsqueda por significado.
 
@@ -144,7 +148,7 @@ La línea del límite se incluye de nuevo; el agente puede deduplicarla mediante
 Una transcripción corregida conserva la referencia anterior, marcada `superseded`, sin cambiar
 silenciosamente a la nueva versión. Para rechazar una línea modificada, pasa el `target_fingerprint`
 anterior con `--expected-fingerprint`. JSON conserva las líneas estructuradas y sus huellas; Markdown
-cita el texto de la transcripción. Usa `--json` al seleccionar campos mediante `--fields`.
+cita el texto de la transcripción. `--json=id,title` conserva solo esos campos.
 
 Con `zm serve --mcp --meeting-context`, `meeting_passage` ofrece la misma lectura con `reference`,
 `before`, `after`, `bytes`, `max_read_bytes`, `expected_fingerprint` y `format` (`json`, `text`

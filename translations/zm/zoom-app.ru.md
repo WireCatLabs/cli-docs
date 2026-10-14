@@ -24,7 +24,7 @@ title: "Подключить приложение Zoom"
 5. Настройте ID и запустите новый вход:
 
 ```sh
-zm config set zoom.clientId <public-client-id>
+zm config set zoom.client_id <public-client-id>
 zm config set source api
 zm session start
 ```
@@ -119,7 +119,7 @@ zm session start
 | `cloud_recording:read:list_user_recordings` | Найти облачные записи |
 | `cloud_recording:read:list_recording_files` | Посмотреть и скачать файлы записей |
 | `user:read:user` | Проверить серверный сеанс через `zm session status --check` |
-| `meeting:read:meeting` | Посмотреть удалённую встречу |
+| `meeting:read:meeting` | Просмотр удалённых сведений и подготовка выбранной серии с сохранённым контекстом |
 | `meeting:read:invitation` | Прочитать приглашение |
 | `meeting:write:meeting` | Создать встречу |
 | `meeting:update:meeting` | Изменить встречу |

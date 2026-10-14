@@ -37,11 +37,15 @@ zm search meetings "example plan" --limit 20 --cursor <next_cursor> --json
 ## Поиск по смыслу или в архиве
 
 `--model <model>` ищет по смыслу вместо слов, сначала создавая недостающие векторы; см. [поиск по темам](./topic-search.md).
-`--archive <directory>` ищет расшифровки в скачанной папке до импорта, без базы, настроек и входа:
+`search recordings <directory> <query>` ищет расшифровки в скачанной папке до импорта, без базы, настроек и входа:
 
 ```sh
-zm search meetings "example plan" --archive ./zoom-archive --limit 100 --offline --json
+zm search recordings ./zoom-archive "example plan" --limit 100 --offline --json
 ```
+
+Совпадения имеют формат `search all`: `ref` (`recording:<file id>/<cue position>`), `title`,
+`timestamp`, `excerpt`, `sender_name` и `offset_ms`; `account` — папка архива.
+
 
 Фильтры хранилища не применяются к архиву или поиску по смыслу.
 
@@ -143,7 +147,7 @@ zm meetings passage meeting:3/15/20/4 --before-n 0 --after-n 0 --json
 После исправления расшифровки старая ссылка остаётся читаемой с отметкой `superseded`, не переключаясь
 на новую версию. Чтобы отклонить изменившуюся строку, передайте прежний `target_fingerprint` через
 `--expected-fingerprint`. JSON сохраняет структурированные строки и отпечатки; Markdown выводит
-расшифровку как цитируемый текст. Для выбора полей через `--fields` используйте `--json`.
+расшифровку как цитируемый текст. `--json=id,title` оставляет только эти поля.
 
 При `zm serve --mcp --meeting-context` инструмент `meeting_passage` выполняет то же чтение с
 `reference`, `before`, `after`, `bytes`, `max_read_bytes`, `expected_fingerprint` и `format`
