@@ -178,7 +178,7 @@ const purpose = {
 }
 export function guideOrientation(slugs: string[], lang: string): string | undefined {
   if (slugs.length !== 2 || !["tg", "max"].includes(slugs[0])) return
-  if (slugs[0] === "max" && slugs[1] === "installation") return
+  if (slugs[1] === "installation") return
   const text = purpose[lang === "ru" || lang === "es" ? lang : "en"]
   return text[slugs[1] as keyof typeof text]
 }

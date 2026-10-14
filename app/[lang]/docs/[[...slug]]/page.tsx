@@ -19,7 +19,6 @@ import { getMDXComponents } from "@/components/mdx"
 import { MemoAnchorRedirect } from "@/components/memo-anchor-redirect"
 import { ReaderGuide } from "@/components/reader-guide"
 import { StructuredData } from "@/components/structured-data"
-import { installationReferenceTitle, ToolInstallationIntro } from "@/components/tool-installation-intro"
 import { guideOrientation, guideStartLink } from "@/lib/guide-orientation"
 import { readerGuide } from "@/lib/reader-guides"
 import { commandReferences } from "@/lib/remark-doc-usability"
@@ -35,7 +34,6 @@ import {
 import { appName, getPageMarkdownUrl, toolOf } from "@/lib/shared"
 import { homePath } from "@/lib/site-routes"
 import { source } from "@/lib/source"
-import { toolInstallationGuide } from "@/lib/tool-installation"
 import { wordsFor } from "@/lib/words"
 import "@/lib/docs-usability.css"
 
@@ -67,12 +65,7 @@ export default async function Page(props: Props) {
   ]
   const written = page.data.contentLanguage ?? tool?.lang ?? lang
   const ui = wordsFor(lang).navigation
-  const guide =
-    tool?.name === "tg" && page.slugs.at(-1) === "installation"
-      ? "installation"
-      : tool && page.slugs.at(-1) === "mcp"
-        ? "mcp"
-        : undefined
+  const guide = tool && page.slugs.at(-1) === "mcp" ? "mcp" : undefined
   const repoPath =
     page.slugs.at(-1) === "changelog"
       ? "CHANGELOG.md"
@@ -100,18 +93,7 @@ export default async function Page(props: Props) {
       ]
     : commandIndex
       ? []
-      : guide === "installation"
-        ? [
-            { title: ui.installGuide, url: "#agent-installation", depth: 2 },
-            ...toolInstallationGuide(tool?.name ?? "tg", lang).sections.map((section) => ({
-              title: section.title,
-              url: `#${section.id}`,
-              depth: 3,
-            })),
-            { title: installationReferenceTitle(lang), url: "#installation-reference", depth: 2 },
-            ...page.data.toc,
-          ]
-        : page.data.toc
+      : page.data.toc
 
   return (
     <DocsPage
@@ -168,7 +150,7 @@ export default async function Page(props: Props) {
       )}
       {tool?.name === "memo" && page.slugs.length === 1 && <MemoAnchorRedirect lang={lang} />}
       <DocsBody lang={written}>
-        {!taskGuide && guide !== "installation" && guideOrientation(page.slugs, lang) && (
+        {!taskGuide && guideOrientation(page.slugs, lang) && (
           <p data-guide-orientation lang={lang}>
             {guideOrientation(page.slugs, lang)}
           </p>
@@ -178,7 +160,6 @@ export default async function Page(props: Props) {
             <Link href={guideStartLink(page.slugs, lang)?.href ?? ""}>{guideStartLink(page.slugs, lang)?.label} →</Link>
           </p>
         )}
-        {guide === "installation" && tool && <ToolInstallationIntro tool={tool} lang={lang} />}
         {taskGuide ? (
           <>
             <ReaderGuide slugs={page.slugs} lang={lang} />
