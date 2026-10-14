@@ -73,7 +73,7 @@ tg --no-record chats list          # but not this one
 
 ## Срок хранения
 
-**30 дней** или значение `keepRunsForDays` в настройках. Старые записи удаляются только при сохранении новой. Удаляются целые дневные каталоги по их имени, без чтения файлов.
+**30 дней** или значение `keep_runs_for_days` в настройках. Старые записи удаляются только при сохранении новой. Удаляются целые дневные каталоги по их имени, без чтения файлов.
 
 ## Что не попадает в записи
 
@@ -114,11 +114,11 @@ tg personal doctor report create --run <run-id>  # about this one
 
 ## Анализ записей
 
-Записи имеют формат JSON, поэтому их можно анализировать через `jq`. `tg personal runs list --json` возвращает `{ items, page, limit, hasMore }`, где `items` — содержимое `run.json` для каждого запуска, от новых к старым:
+Записи имеют формат JSON, поэтому их можно анализировать через `jq`. `tg personal runs list --json` возвращает `{ items, page: { limit, has_more }, meta }`, где `items` — содержимое `run.json` для каждого запуска, от новых к старым:
 
 ```sh
-tg personal runs list --limit 100 --json | jq '[.items[] | select(.status == "failed") | {command, errorCode}]'
-tg personal runs list --limit 100 --json | jq '[.items[] | .durationMs] | add / length'  # average duration
+tg personal runs list --limit 100 --json | jq '[.items[] | select(.status == "failed") | {command, error_code}]'
+tg personal runs list --limit 100 --json | jq '[.items[] | .duration_ms] | add / length'  # average duration
 tg personal runs list --limit 100 --json | jq '[.items[] | select(.requests > 10) | {command, requests}]'
 ```
 

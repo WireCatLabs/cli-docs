@@ -48,7 +48,7 @@ tg work config set permissions.messages readonly
 
 ```sh
 tg support config set permissions.bot.messages.send ask --bot
-tg support config set sendsPerHour 30 --bot
+tg support config set sends_per_hour 30 --bot
 ```
 
 ## Ограничьте получателей и повторные отправки

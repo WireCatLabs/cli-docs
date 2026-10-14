@@ -12,7 +12,7 @@ Unas palabras que aparecerán a continuación:
 - **Modelo externo**: modelo de IA que se ejecuta en el servidor del proveedor (por ejemplo, OpenAI o Anthropic). `max` le envía datos a través de la red a través de una API.
 
 - **Propósito**: tarea para la cual se seleccionó el modelo: `models.ocr`, `models.analysis`, `models.replies`. Cada tarea puede tener su propio proveedor y su propio modelo.
-- **Punto final** (`baseUrl`): dirección del servidor al que se envía la solicitud.
+- **Punto final** (`base_url`): dirección del servidor al que se envía la solicitud.
 
 Estos ajustes no controlan a tu agente de IA. Cuando el agente lee un archivo por su cuenta, usa sus propias herramientas y configuración.
 
@@ -25,7 +25,7 @@ Estos ajustes no controlan a tu agente de IA. Cuando el agente lee un archivo po
 | Bloque de IA en una plantilla de respuesta | `models.replies` | Regla con un bloque `{% ai %}` y consentimiento aparte para respuestas; consulta [reglas de respuesta](./replies.md) |
 | Valores comunes de estas tareas | `models.default` | Se usan para los campos no configurados en una tarea concreta |
 
-La búsqueda por significado se puede configurar por separado: `embeddingProvider`, `embeddingModel` y `embeddingBaseUrl`. Guarda las llaves de la misma forma. Para obtener más detalles, consulte [guía de búsqueda](./search.md). El reconocimiento de voz se reconoce mediante un modelo de voz independiente en su computadora, sin una API; consulte [reconocimiento de voz](./audio-recognition.md).
+La búsqueda por significado se puede configurar por separado: `embedding_provider`, `embedding_model` y `embedding_base_url`. Guarda las llaves de la misma forma. Para obtener más detalles, consulte [guía de búsqueda](./search.md). El reconocimiento de voz se reconoce mediante un modelo de voz independiente en su computadora, sin una API; consulte [reconocimiento de voz](./audio-recognition.md).
 
 ## OpenAI: configurar OCR
 
@@ -40,7 +40,7 @@ max config show
 
 La clave no se pasa como argumento del comando ni se guarda en el campo `models` del archivo de ajustes. `key set` también acepta el secreto por stdin; debe proporcionarlo tu gestor de secretos. No pongas la propia clave en la línea de comandos.
 
-Si `baseUrl` no está configurado ni se hereda de `models.default`, se usa el endpoint estándar de OpenAI. Para probar con un lote pequeño:
+Si `base_url` no está configurado ni se hereda de `models.default`, se usa el endpoint estándar de OpenAI. Para probar con un lote pequeño:
 
 ```sh
 max personal attachments extract --chat "Учебная группа" --ocr --concurrency 1 --limit 1 --json
@@ -56,7 +56,7 @@ Elige el identificador exacto de un modelo de visión al que tengas acceso; `you
 max personal models text key set anthropic
 max personal config set models.ocr.provider anthropic
 max personal config set models.ocr.model your-vision-model
-max personal config unset models.ocr.baseUrl
+max personal config unset models.ocr.base_url
 ```
 
 El último comando elimina cualquier endpoint sobrescrito anteriormente. Si la URL tampoco se hereda de `models.default`, se usa el endpoint estándar de Anthropic.
@@ -68,13 +68,13 @@ Un endpoint compatible con OpenAI usa el adaptador `openai`, aunque el servidor 
 ```sh
 max personal config set models.ocr.provider openai
 max personal config set models.ocr.model your-vision-model
-max personal config set models.ocr.baseUrl https://gateway.example.org/v1
+max personal config set models.ocr.base_url https://gateway.example.org/v1
 max personal models text key set gateway.example.org
 ```
 
-Para un punto final no estándar, el nombre de la clave es su host, incluido el puerto si se especifica en la URL. El campo `baseUrl` en sí no es una clave. Si el servidor acepta texto, esto no significa que lea imágenes; verifique esto en la documentación de su servidor.
+Para un punto final no estándar, el nombre de la clave es su host, incluido el puerto si se especifica en la URL. El campo `base_url` en sí no es una clave. Si el servidor acepta texto, esto no significa que lea imágenes; verifique esto en la documentación de su servidor.
 
-Para volver al endpoint estándar de OpenAI, elimina `models.ocr.baseUrl`. Las API de texto y las compatibles con Anthropic no se pueden mezclar solo cambiando la URL: elige el adaptador que corresponda al protocolo del servidor.
+Para volver al endpoint estándar de OpenAI, elimina `models.ocr.base_url`. Las API de texto y las compatibles con Anthropic no se pueden mezclar solo cambiando la URL: elige el adaptador que corresponda al protocolo del servidor.
 
 ## Perfil, valores comunes y una ejecución
 

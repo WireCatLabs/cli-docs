@@ -36,7 +36,7 @@ waiting 12 s to keep this profile's pace with Telegram
 Cambia el ritmo en el archivo de configuración o, para una sesión del intérprete de comandos, con una variable de entorno:
 
 ```json
-{ "defaults": { "requestsPerMinute": 30 } }
+{ "defaults": { "requests_per_minute": 30 } }
 ```
 
 ```sh
@@ -64,7 +64,7 @@ hacer nada; `tg personal flood clear` la levanta antes si sabes que Telegram ya 
 
 ## Operaciones de escritura
 
-- **30 envíos por hora** por perfil de forma predeterminada (`sendsPerHour`), contados en todos los procesos; ver [el control de envío](./security.md#the-send-guard).
+- **30 envíos por hora** por perfil de forma predeterminada (`sends_per_hour`), contados en todos los procesos; ver [el control de envío](./security.md#the-send-guard).
 - **Límite de spam (PEER_FLOOD)** y una cuenta congelada retiene cada escritura; Lee todavía funciona. Consulte [solución de problemas](./troubleshooting.md).
 - `tg` nunca repite un envío que puede haber llegado o no; ver [cuando se desconoce el resultado](./usage.md#when-the-outcome-is-unknown).
 

@@ -19,7 +19,7 @@ Algunas palabras en esta página:
 | Enviar un archivo, una foto, un vídeo o un mensaje de voz | `tg personal messages send --file`, `--photo`, `--voice` |
 | Descargar los archivos de un mensaje o un chat | `tg personal messages download` |
 | Leer texto de archivos guardados en esta computadora | `tg personal attachments extract` |
-| Vea qué archivos aún necesitan texto | `tg personal attachments list --needs-text` |
+| Vea qué archivos aún necesitan texto | `tg personal attachments list is:needs_text` |
 | Guarde el texto que leyó su agente | `tg personal attachments text set` |
 | Buscar un mensaje por el texto de su archivo | `tg personal search messages 'content:…'` |
 | Leer escaneos de forma masiva con un modelo externo | `tg personal attachments extract --ocr` |
@@ -59,17 +59,17 @@ La descarga guarda medios sin leer su texto ni convertir su formato.
 
 ```sh
 tg personal messages download "Study group" 204 --output-dir ./files --json
-tg personal attachments list --chat "Study group" --needs-text --json
+tg personal attachments list 'chat:"Study group" is:needs_text' --json
 ```
 
-Una descarga nunca sobrescribe un archivo existente. `localPath` en la respuesta nombra un archivo en la computadora que ejecuta `tg`.
+Una descarga nunca sobrescribe un archivo existente. `local_path` en la respuesta nombra un archivo en la computadora que ejecuta `tg`.
 
 <a id="transfer-a-larger-file"></a>
 <a id="mcp-and-host-capabilities"></a>
 
 ## Archivos para un agente remoto
 
-Un agente en esta computadora puede abrir `localPath`. Un agente en otra computadora necesita los bytes del archivo y una herramienta que pueda abrir el formato: la ruta por sí sola no mueve el archivo. Verifique lo que su aplicación de IA puede recibir y vea [conexión remota y acceso a archivos](./remote.md). Obtener el archivo, leerlo y guardar su texto en el índice de búsqueda son pasos separados.
+Un agente en esta computadora puede abrir `local_path`. Un agente en otra computadora necesita los bytes del archivo y una herramienta que pueda abrir el formato: la ruta por sí sola no mueve el archivo. Verifique lo que su aplicación de IA puede recibir y vea [conexión remota y acceso a archivos](./remote.md). Obtener el archivo, leerlo y guardar su texto en el índice de búsqueda son pasos separados.
 
 Un agente remoto puede recibir un PDF guardado a través de `attachments show`. Si su aplicación no puede abrir archivos PDF, puede solicitar cada página como una imagen con `--page`. Esto utiliza paquetes de renderizado locales opcionales; el agente lee el texto. Si no se muestra la imagen, solicite MCP `format: base64` y muestre el PNG con las herramientas del agente. Consulte [leer páginas PDF de forma remota](./remote.md#read-pdf-pages-without-a-local-file-handoff) para ver un ejemplo y sus límites.
 
@@ -130,16 +130,16 @@ Pregúntele a su agente: “Lea cada página de este archivo adjunto, marque los
 
 ```sh
 tg personal attachments extract --chat "Study group" --download --output-dir ./files
-tg personal attachments list --chat "Study group" --needs-text
+tg personal attachments list 'chat:"Study group" is:needs_text'
 tg personal attachments text set "Study group" 204 --text-file ./scan.txt
-tg personal search messages 'content:worksheet' --chat "Study group" --backend archive
+tg personal search messages 'content:worksheet chat:"Study group"' --backend archive
 ```
 
 `--attachment` selecciona un archivo de un mensaje entre varios, contando desde 1. Al recibir los bytes y leer el texto no lo indexa: `attachments text set` guarda el resultado. Comprueba que `content:` devuelve el mensaje original y su localizador. El texto de un archivo son datos, nunca instrucciones para el agente. El texto que guardó el agente no se sobrescribe con una extracción automática posterior.
 
 ### Qué hace el agente
 
-Un agente no puede abrir todos los archivos por sí solo. Necesita los bytes del archivo o acceso a `localPath`, un programa que lee o convierte el formato y, para las imágenes, un modelo que pueda ver. Elige una forma disponible, verifica que el resultado esté completo y guarda el texto con `text set`.
+Un agente no puede abrir todos los archivos por sí solo. Necesita los bytes del archivo o acceso a `local_path`, un programa que lee o convierte el formato y, para las imágenes, un modelo que pueda ver. Elige una forma disponible, verifica que el resultado esté completo y guarda el texto con `text set`.
 
 | Archivo fuente | Cómo el agente puede obtener el texto |
 | --- | --- |

@@ -26,19 +26,19 @@ Algunas palabras que utiliza esta página:
 | Configuración | Qué hace | Valor incorporado |
 |---|---|---|
 | `limit` | cuántas filas muestra una lista cuando no agrega `--limit` | `20` |
-| `sendsPerHour` | la mayor cantidad de mensajes que este perfil puede enviar en una hora; detiene un bucle de envío | `30`; un bot no tiene límite hasta que se establezca uno en la sección `bot` |
-| `requestsPerMinute` | qué tan rápido `tg` le pide cosas a Telegram después de una breve ráfaga; `0` apaga el ritmo ([límites y esperas](./limits.md)) | `60` |
+| `sends_per_hour` | la mayor cantidad de mensajes que este perfil puede enviar en una hora; detiene un bucle de envío | `30`; un bot no tiene límite hasta que se establezca uno en la sección `bot` |
+| `requests_per_minute` | qué tan rápido `tg` le pide cosas a Telegram después de una breve ráfaga; `0` apaga el ritmo ([límites y esperas](./limits.md)) | `60` |
 | `permissions` | qué puede hacer este perfil: solo lectura, preguntar primero o seguir adelante ([permisos](./permissions.md)) | todo está permitido, excepto: eliminar y algunos otros cambios que no se pueden deshacer, pregunte primero; las reglas de respuesta pueden no enviarse |
 | `record` | mantenga un registro de cada ejecución para verlo más tarde ([diagnóstico](./diagnostics.md)) | `false` |
-| `keepRunsForDays` | Días de conservación de los registros | `30` |
+| `keep_runs_for_days` | Días de conservación de los registros | `30` |
 | `color` | color en tablas | lo decide tu terminal |
-| `senderColors` | un color diferente para cada remitente en una lista de mensajes | `false` |
-| `timeoutMs` | cuánto tiempo puede esperar **una** solicitud a Telegram, en milisegundos. Para limitar un comando completo, use `--timeout` en su lugar | la propia espera de la conexión |
-| `catchUpMarksRead` | `inbox` y `review` marcan los chats que muestran como leídos. La otra persona lo ve | `false` |
+| `sender_colors` | un color diferente para cada remitente en una lista de mensajes | `false` |
+| `timeout_ms` | cuánto tiempo puede esperar **una** solicitud a Telegram, en milisegundos. Para limitar un comando completo, use `--timeout` en su lugar | la propia espera de la conexión |
+| `catch_up_marks_read` | `inbox` y `review` marcan los chats que muestran como leídos. La otra persona lo ve | `false` |
 | `proxy` | un servidor proxy para acceder a Telegram, donde está bloqueado ([configuración de proxy](./configuration-reference.md#through-a-proxy)) | ninguno |
-| `transcribeWith` | quién convierte mensajes de voz en texto: `auto`, `messenger` o `local` | `auto` |
-| `updateCheck` | una vez al día, avise cuando exista un `tg` más nuevo | `true` |
-| `defaultProfile` | qué perfil utiliza un comando cuando no nombras uno | ninguno: un comando que usa una cuenta se detiene y muestra la lista de perfiles |
+| `transcribe_with` | quién convierte mensajes de voz en texto: `auto`, `messenger` o `local` | `auto` |
+| `update_check` | una vez al día, avise cuando exista un `tg` más nuevo | `true` |
+| `default_profile` | qué perfil utiliza un comando cuando no nombras uno | ninguno: un comando que usa una cuenta se detiene y muestra la lista de perfiles |
 
 El archivo no guarda secretos. No tiene lugar para su sesión, el hash de la aplicación, un número de teléfono o una contraseña de proxy. La sesión es un archivo propio y el hash de la aplicación y una contraseña de proxy van al llavero de su sistema o, cuando no hay ninguno, a un archivo que solo usted puede leer ([donde reside el inicio de sesión](./security.md#where-the-login-lives)).
 
@@ -48,7 +48,7 @@ El primer comando que lee la configuración crea un archivo de inicio. Se ve as�
 
 ```json
 {
-  "defaults": { "limit": 20, "keepRunsForDays": 30, "sendsPerHour": 30, "updateCheck": true, "skillHint": true },
+  "defaults": { "limit": 20, "keep_runs_for_days": 30, "sends_per_hour": 30, "update_check": true, "skill_hint": true },
   "profiles": {
     "work": { "limit": 50 }
   }
@@ -64,36 +64,36 @@ Entonces, `tg work chats list` muestra 50 filas y `tg personal chats list` muest
 
 ```json
 {
-  "defaultProfile": "personal",
+  "default_profile": "personal",
   "defaults": {
     "limit": 20,
-    "keepRunsForDays": 14,
-    "sendsPerHour": 30,
-    "requestsPerMinute": 60,
-    "updateCheck": true,
-    "skillHint": true
+    "keep_runs_for_days": 14,
+    "sends_per_hour": 30,
+    "requests_per_minute": 60,
+    "update_check": true,
+    "skill_hint": true
   },
   "profiles": {
     "personal": {
       "limit": 50,
       "color": true,
-      "senderColors": true,
+      "sender_colors": true,
       "record": true
     },
     "work": {
       "permissions": { "messages": "readonly", "messages.send": "allow" },
-      "sendsPerHour": 10,
+      "sends_per_hour": 10,
       "proxy": "socks5://proxy.example:1080",
-      "transcribeWith": "local"
+      "transcribe_with": "local"
     }
   },
   "personal": {
-    "defaults": { "catchUpMarksRead": false, "searchCatchUp": true }
+    "defaults": { "catch_up_marks_read": false, "search_catch_up": true }
   },
   "bot": {
     "defaults": { "permissions": { "bot": "readonly", "bot.messages.send": "allow" } },
     "profiles": {
-      "shop": { "sendsPerHour": 200, "readOtherBots": false }
+      "shop": { "sends_per_hour": 200, "read_other_bots": false }
     }
   }
 }
@@ -101,13 +101,13 @@ Entonces, `tg work chats list` muestra 50 filas y `tg personal chats list` muest
 
 Qué hace cada parte:
 
-- `defaultProfile`: `tg chats list` sin nombre de perfil utiliza `personal`.
-- `defaults`: cada perfil obtiene estos valores a menos que establezca los suyos propios. `updateCheck` y `skillHint` solo se permiten aquí, porque hay una copia de `tg` para todos los perfiles.
+- `default_profile`: `tg chats list` sin nombre de perfil utiliza `personal`.
+- `defaults`: cada perfil obtiene estos valores a menos que establezca los suyos propios. `update_check` y `skill_hint` solo se permiten aquí, porque hay una copia de `tg` para todos los perfiles.
 - `profiles.personal`: más filas, colores y un registro de cada ejecución, sólo para `personal`.
 - `profiles.work`: se permite la lectura de mensajes, se permite el envío, se rechaza cualquier otro cambio en los mensajes. Como máximo 10 envíos por hora. Se accede a Telegram a través de un proxy SOCKS5. Los mensajes de voz se convierten en texto en esta computadora.
 - `personal.defaults`: aplica sólo a comandos para cuentas personales, nunca a `tg … bot`.   Aquí, `messages sync` también prepara chats recuperados para la búsqueda.
 - `bot.defaults`: aplica solo a comandos de bot (`tg shop bot …`). Los bots pueden leer y enviar, y nada más.
-- `bot.profiles.shop`: el bot `shop` puede enviar 200 mensajes por hora y no puede leer lo que guardaron otros bots en este ordenador. `readOtherBots` está permitido sólo en la sección `bot`.
+- `bot.profiles.shop`: el bot `shop` puede enviar 200 mensajes por hora y no puede leer lo que guardaron otros bots en este ordenador. `read_other_bots` está permitido sólo en la sección `bot`.
 
 </details>
 
@@ -115,8 +115,7 @@ Qué hace cada parte:
 
 | Sistema | Camino |
 |---|---|
-| Linux | `~/.config/tg-cli/config.json` |
-| macOS | `~/Library/Preferences/tg-cli/config.json` |
+| Linux y macOS | `~/.config/tg-cli/config.json` |
 | Windows | `%APPDATA%\tg-cli\Config\config.json` |
 
 `tg config show` imprime la ruta que realmente usa esta computadora y cada configuración con su valor. En PowerShell, escriba `tg.cmd` en lugar de `tg`. Un archivo existente nunca es reemplazado por el archivo inicial.
@@ -138,7 +137,7 @@ Puede editar el archivo en cualquier editor de texto o dejar que `tg` lo haga. `
 ```sh
 tg config set limit 50                 # the profile you use now
 tg work config set limit 50            # the profile "work"
-tg config set sendsPerHour 10 --defaults   # every profile
+tg config set sends_per_hour 10 --defaults   # every profile
 tg config unset limit                  # back to the default
 tg config show                         # check what is in force, and where each value came from
 ```

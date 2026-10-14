@@ -58,11 +58,11 @@ for resource in messages reactions polls topics chats contacts account bot conve
   max personal config set "permissions.$resource" readonly
 done
 max config show                       # проверить эффективные права
-max personal config set sendsPerHour 5          # или: не больше пяти сообщений в час
+max personal config set sends_per_hour 5          # или: не больше пяти сообщений в час
 max personal recipients add "Иван Петров"       # и писать только в эти чаты
 ```
 
-`readonly` restricts only its named resource: restricting `messages` does not block reactions, voting or chat changes. The loop sets every resource. A more specific key such as `permissions.messages.send: allow` takes precedence; remove such allowances for a read-only profile. After migration, legacy `readOnly` cannot be changed.
+`readonly` restricts only its named resource: restricting `messages` does not block reactions, voting or chat changes. The loop sets every resource. A more specific key such as `permissions.messages.send: allow` takes precedence; remove such allowances for a read-only profile. After migration, legacy `read_only` cannot be changed.
 
 `permissions` also affects your own commands until removed with `max personal config unset permissions.<ресурс>`, restoring inherited settings and defaults. Use a separate profile to restrict only the agent. `max personal sends list` records every send attempt, including rejected ones. See [send protections](./security.md#защита-от-отправки-не-туда) and [permissions](./configuration-reference.md#права-доступа).
 
@@ -114,9 +114,9 @@ Writes to MAX: **no**. Permit: `Bash(max personal inbox:*)`.
 
 - `max personal inbox` — unread messages, as MAX counts them: everything you have not opened on any device.
 - `max personal inbox --new` — since the previous `--new` run. Only `max` knows this point; your contacts do not see it.
-- `max personal inbox --since-time 2d` — the past two days; the saved point does not move.
+- `max personal inbox 'date>2d'` — the past two days; the saved point does not move.
 
-None of them mark messages as read. If needed, add `--mark-read` or enable `catchUpMarksRead` in [settings](./configuration.md). Then the interlocutor will see what you have read.
+None of them mark messages as read. If needed, add `--mark-read` or enable `catch_up_marks_read` in [settings](./configuration.md). Then the interlocutor will see what you have read.
 
 ### Direct chats, groups and channels separately
 
@@ -134,7 +134,7 @@ None of them mark messages as read. If needed, add `--mark-read` or enable `catc
 Writes to MAX: **no**. Permit: `Bash(max personal messages list:*)`.
 
 > Read the past 7 days in the Project Alpha chat: `max messages list "Проект Альфа"
-> --after-time 7d --limit 200 --json`. If the response has `"hasMore": true`, continue reading. Report decisions, responsibilities and deadlines, and unanswered questions. Include the date and author for each item.
+> 'date>7d' --limit 200 --json`. If the response has a `page.next` step, continue reading with its `--cursor`. Report decisions, responsibilities and deadlines, and unanswered questions. Include the date and author for each item.
 
 ## Commitments and follow-ups
 
@@ -146,11 +146,11 @@ Writes to MAX: **no**. Permit: `Bash(max personal review:*)`, `Bash(max personal
 
 ## People you have not answered
 
-The shortest option is `max personal review --since-time 7d --unanswered --json`: unanswered questions addressed to you in direct chats, or to you and admins in groups. The broader recipe below also catches requests without a question mark.
+The shortest option is `max personal review 'date>7d' --unanswered --json`: unanswered questions addressed to you in direct chats, or to you and admins in groups. The broader recipe below also catches requests without a question mark.
 
 Writes to MAX: **no**. Permit: `Bash(max personal chats list:*)`, `Bash(max personal messages list:*)`.
 
-> Run `max personal chats list --kind dialog --limit 30 --json`. For each chat active in the past 7 days, read `max personal messages list <id чата> --limit 5 --json`. Show chats whose latest message is not mine and contains a question or request: who it is with, the topic and days elapsed.
+> Run `max personal chats list kind:dialog --offline --limit 30 --json`. For each chat active in the past 7 days, read `max personal messages list <id чата> --limit 5 --json`. Show chats whose latest message is not mine and contains a question or request: who it is with, the topic and days elapsed.
 
 ## Find what was said
 
@@ -172,8 +172,8 @@ When you agree, the agent sends himself: `max personal messages send "Иван �
 
 Writes to MAX: **only as permitted by group rules**. Permit: `Bash(max personal review:*)`, `Bash(max personal chats events:*)`, `Bash(max personal chats members list:*)`, `Bash(max personal chats moderate:*)`.
 
-> Run `max personal review --chat "Поход" --unanswered 4h --json`, `max chats events "Поход" --since-time
-7d --json` and `max chats moderate "Поход" --dry-run --json`. Summarise questions awaiting replies, authors and waiting times; joins/additions this week and who added them; and rule violations with proposed actions. Send no replies and remove nobody: list commands for my approval.
+> Run `max personal review 'chat:"Поход"' --unanswered 4h --json`, `max chats events "Поход"
+> 'time>=7d' --json` and `max chats moderate "Поход" --dry-run --json`. Summarise questions awaiting replies, authors and waiting times; joins/additions this week and who added them; and rule violations with proposed actions. Send no replies and remove nobody: list commands for my approval.
 
 With `--dry-run` command `chats moderate` only makes a plan. Without it, it acts within the group rules, so remove `Bash(max personal chats moderate:*)` from the list if the agent should never act. All scenarios and rules are [groups that you lead](./groups.md).
 

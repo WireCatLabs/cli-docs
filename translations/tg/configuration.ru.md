@@ -26,19 +26,19 @@ title: "Настройки"
 | Настройка | Что он делает | Встроенное значение |
 |---|---|---|
 | `limit` | сколько строк показывает список, если вы не добавляете `--limit` | `20` |
-| `sendsPerHour` | наибольшее количество сообщений, которые этот профиль может отправить за один час; останавливает цикл отправки | `30`; у бота нет ограничений, пока они не установлены в разделе `bot` |
-| `requestsPerMinute` | как быстро `tg` запрашивает информацию в Telegram после короткого всплеска; `0` выключает темп ([ограничивает и ждет](./limits.md)) | `60` |
+| `sends_per_hour` | наибольшее количество сообщений, которые этот профиль может отправить за один час; останавливает цикл отправки | `30`; у бота нет ограничений, пока они не установлены в разделе `bot` |
+| `requests_per_minute` | как быстро `tg` запрашивает информацию в Telegram после короткого всплеска; `0` выключает темп ([ограничивает и ждет](./limits.md)) | `60` |
 | `permissions` | что может делать этот профиль: только чтение, сначала спросить или продолжить ([разрешения](./permissions.md)) | всё разрешено, но удаление и некоторые необратимые изменения требуют подтверждения; отправка автоответов запрещена |
 | `record` | вести учет каждого запуска, чтобы просмотреть его позже ([диагностика](./diagnostics.md)) | `false` |
-| `keepRunsForDays` | сколько дней хранятся записи запусков | `30` |
+| `keep_runs_for_days` | сколько дней хранятся записи запусков | `30` |
 | `color` | цвет в таблицах | определяется вашим терминалом |
-| `senderColors` | свой цвет для каждого отправителя в списке сообщений | `false` |
-| `timeoutMs` | как долго может ждать **один** запрос к Telegram, в миллисекундах. Чтобы ограничить всю команду, вместо этого используйте `--timeout` | собственное ожидание соединения |
-| `catchUpMarksRead` | `inbox` и `review` помечают отображаемые чаты как прочитанные. Другой человек это видит | `false` |
+| `sender_colors` | свой цвет для каждого отправителя в списке сообщений | `false` |
+| `timeout_ms` | как долго может ждать **один** запрос к Telegram, в миллисекундах. Чтобы ограничить всю команду, вместо этого используйте `--timeout` | собственное ожидание соединения |
+| `catch_up_marks_read` | `inbox` и `review` помечают отображаемые чаты как прочитанные. Другой человек это видит | `false` |
 | `proxy` | прокси-сервер для доступа к Telegram, где он заблокирован ([настройка прокси](./configuration-reference.md#through-a-proxy)) | нет |
-| `transcribeWith` | кто превращает голосовые сообщения в текст: `auto`, `messenger` или `local` | `auto` |
-| `updateCheck` | раз в день сообщать, когда появится более новая версия `tg` | `true` |
-| `defaultProfile` | какой профиль использует команда, если вы его не называете | нет: команда, которой нужен аккаунт, останавливается и перечисляет профили |
+| `transcribe_with` | кто превращает голосовые сообщения в текст: `auto`, `messenger` или `local` | `auto` |
+| `update_check` | раз в день сообщать, когда появится более новая версия `tg` | `true` |
+| `default_profile` | какой профиль использует команда, если вы его не называете | нет: команда, которой нужен аккаунт, останавливается и перечисляет профили |
 
 Этот файл никогда не хранит секрета. В нем нет места для вашей сессии, хэша приложения, номера телефона или пароля прокси. Сессия представляет собой отдельный файл, а хэш приложения и пароль прокси-сервера передаются в связку ключей вашей системы или, если его нет, в файл, который можете прочитать только вы ([где находится логин](./security.md#where-the-login-lives)).
 
@@ -48,7 +48,7 @@ title: "Настройки"
 
 ```json
 {
-  "defaults": { "limit": 20, "keepRunsForDays": 30, "sendsPerHour": 30, "updateCheck": true, "skillHint": true },
+  "defaults": { "limit": 20, "keep_runs_for_days": 30, "sends_per_hour": 30, "update_check": true, "skill_hint": true },
   "profiles": {
     "work": { "limit": 50 }
   }
@@ -65,36 +65,36 @@ title: "Настройки"
 
 ```json
 {
-  "defaultProfile": "personal",
+  "default_profile": "personal",
   "defaults": {
     "limit": 20,
-    "keepRunsForDays": 14,
-    "sendsPerHour": 30,
-    "requestsPerMinute": 60,
-    "updateCheck": true,
-    "skillHint": true
+    "keep_runs_for_days": 14,
+    "sends_per_hour": 30,
+    "requests_per_minute": 60,
+    "update_check": true,
+    "skill_hint": true
   },
   "profiles": {
     "personal": {
       "limit": 50,
       "color": true,
-      "senderColors": true,
+      "sender_colors": true,
       "record": true
     },
     "work": {
       "permissions": { "messages": "readonly", "messages.send": "allow" },
-      "sendsPerHour": 10,
+      "sends_per_hour": 10,
       "proxy": "socks5://proxy.example:1080",
-      "transcribeWith": "local"
+      "transcribe_with": "local"
     }
   },
   "personal": {
-    "defaults": { "catchUpMarksRead": false, "searchCatchUp": true }
+    "defaults": { "catch_up_marks_read": false, "search_catch_up": true }
   },
   "bot": {
     "defaults": { "permissions": { "bot": "readonly", "bot.messages.send": "allow" } },
     "profiles": {
-      "shop": { "sendsPerHour": 200, "readOtherBots": false }
+      "shop": { "sends_per_hour": 200, "read_other_bots": false }
     }
   }
 }
@@ -102,13 +102,13 @@ title: "Настройки"
 
 Что делает каждая часть:
 
-- `defaultProfile`: `tg chats list` без имени профиля использует `personal`.
-- `defaults`: каждый профиль получает эти значения, если он не устанавливает свои собственные. `updateCheck` и `skillHint` разрешены только здесь, поскольку для всех профилей существует одна копия `tg`.
+- `default_profile`: `tg chats list` без имени профиля использует `personal`.
+- `defaults`: каждый профиль получает эти значения, если он не устанавливает свои собственные. `update_check` и `skill_hint` разрешены только здесь, поскольку для всех профилей существует одна копия `tg`.
 - `profiles.personal`: больше строк, цветов и запись каждого прогона, только для `personal`.
 - `profiles.work`: чтение сообщений разрешено, отправка разрешена, любое другое изменение сообщений запрещено. Максимум 10 отправок в час. Доступ к Telegram осуществляется через прокси-сервер SOCKS5. Голосовые сообщения на этом компьютере преобразуются в текст.
 - `personal.defaults`: применяется только к командам для личных аккаунтов, но не к `tg … bot`.   Здесь `messages sync` также подготавливает полученные чаты для поиска.
 - `bot.defaults`: применяется только к командам бота (`tg shop bot …`). Боты могут читать и отправлять, и ничего больше.
-- `bot.profiles.shop`: бот `shop` может отправлять 200 сообщений в час и не может читать то, что сохранили другие боты на этом компьютере. `readOtherBots` разрешен только в разделе `bot`.
+- `bot.profiles.shop`: бот `shop` может отправлять 200 сообщений в час и не может читать то, что сохранили другие боты на этом компьютере. `read_other_bots` разрешен только в разделе `bot`.
 
 </details>
 
@@ -116,8 +116,7 @@ title: "Настройки"
 
 | Система | Путь |
 |---|---|
-| Linux | `~/.config/tg-cli/config.json` |
-| macOS | `~/Library/Preferences/tg-cli/config.json` |
+| Linux и macOS | `~/.config/tg-cli/config.json` |
 | Windows | `%APPDATA%\tg-cli\Config\config.json` |
 
 `tg config show` печатает путь, который фактически использует этот компьютер, и каждый параметр с его значением. В PowerShell введите `tg.cmd` вместо `tg`. Существующий файл никогда не заменяется стартовым файлом.
@@ -139,7 +138,7 @@ title: "Настройки"
 ```sh
 tg config set limit 50                 # the profile you use now
 tg work config set limit 50            # the profile "work"
-tg config set sendsPerHour 10 --defaults   # every profile
+tg config set sends_per_hour 10 --defaults   # every profile
 tg config unset limit                  # back to the default
 tg config show                         # check what is in force, and where each value came from
 ```

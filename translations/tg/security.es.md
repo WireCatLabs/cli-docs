@@ -16,7 +16,7 @@ Lo que cada herramienta WireCat tiene en común (el archivo local, el control de
 
 - **El archivo de sesión es tu acceso.** Quien pueda leerlo usa tu cuenta, sin contraseña ni código ([más abajo](#where-the-login-lives)).
 - **Ningún comando acepta secretos como argumento:** ni el hash de la aplicación, ni la contraseña 2FA, ni el código de inicio de sesión, ni un número de teléfono.
-- **La protección de envíos es la común:** todos los comandos y herramientas MCP comprueban `permissions`, la lista de destinatarios y `sendsPerHour` ([más abajo](#the-send-guard)).
+- **La protección de envíos es la común:** todos los comandos y herramientas MCP comprueban `permissions`, la lista de destinatarios y `sends_per_hour` ([más abajo](#the-send-guard)).
 - **`tg` se comunica con Telegram, npm y my.telegram.org** (a través de tu proxy si configuras uno) y con los servidores de descarga de modelos o los servicios de embeddings y análisis que configures de forma explícita ([más abajo](#what-goes-over-the-network)).
 - **El archivo local no está cifrado y se conserva después de cerrar la sesión.** Solo el cifrado del disco completo lo protege si te roban el disco.
 - **No protege frente a alguien que utilice tu usuario del equipo** ni frente a un agente al que se permite cambiar los ajustes. Los límites detienen a un agente al que un mensaje que ha leído convence para enviar, no a uno que se propone sortearlos; frente a ese, ejecuta el agente en un entorno aislado (sandbox) o como un usuario distinto.
@@ -55,7 +55,7 @@ Si pierdes el equipo, cierra la sesión desde otro dispositivo: Telegram → Aju
 
 ## Protección de envíos
 
-Todos los comandos y herramientas MCP que cambian algo en Telegram pasan por la protección común: `permissions`, la lista de destinatarios, `sendsPerHour` (30 por defecto) y un registro sin texto. Cómo funciona cada control, su código de salida y lo que no puede impedir: la [página común](https://wirecat.dev/en/docs/security).
+Todos los comandos y herramientas MCP que cambian algo en Telegram pasan por la protección común: `permissions`, la lista de destinatarios, `sends_per_hour` (30 por defecto) y un registro sin texto. Cómo funciona cada control, su código de salida y lo que no puede impedir: la [página común](https://wirecat.dev/en/docs/security).
 
 ```sh
 tg config set permissions.messages readonly  # no change to messages from this profile
@@ -75,7 +75,7 @@ Los caracteres de control, los saltos de línea en nombres y los títulos de cha
 ## Qué pasa por la red
 
 - **Telegram**, a través de MTProto para comandos de cuentas personales, incluidos archivos y fotos. Los comandos de bot utilizan la API de bot HTTPS; `bot store fetch` utiliza una sesión de bot MTProto separada para el historial.
-- **npm**, una vez al día en una terminal, para ver si existe un `tg` más nuevo y en `tg upgrade`.   `updateCheck` o `TG_NO_UPDATE_CHECK=1` lo apaga ([configuración](./configuration.md)).
+- **npm**, una vez al día en una terminal, para ver si existe un `tg` más nuevo y en `tg upgrade`.   `update_check` o `TG_NO_UPDATE_CHECK=1` lo apaga ([configuración](./configuration.md)).
 - **my.telegram.org**, solo durante `tg personal setup` o `tg personal session start`: abierto en su navegador, o, con `--app auto`, controlado por `tg`. Una aplicación que `tg` crea allí se titula `tg-cli` y tiene la página GitHub de este proyecto como dirección.
 - **Hugging Face y GitHub**, solo cuando ejecutas `tg personal models audio download` o `tg personal models text download`. Un mensaje de voz nunca llega allí: en esta máquina se ejecuta un modelo local.
 - **Los endpoints de embeddings configurados** reciben texto de conversación de `conversations embed` después del consentimiento y consulta de texto de `search conversations` remoto, incluidas las búsquedas de MCP. Las incrustaciones locales no envían ningún texto.
@@ -110,4 +110,4 @@ El postinstall global de npm instala la skill incluida en los directorios de age
 - [Diagnóstico](./diagnostics.md): qué se registra exactamente y qué nunca se registra
 - [Inicio de sesión, sesiones y perfiles](./sessions.md): la aplicación, el llavero, perfiles, cerrar sesión
 - [MCP](./mcp.md): qué puede hacer un agente a través de MCP y qué cambia en cada nivel y bandera
-- [Permisos](./permissions.md): cómo configurar `permissions` y `sendsPerHour`
+- [Permisos](./permissions.md): cómo configurar `permissions` y `sends_per_hour`

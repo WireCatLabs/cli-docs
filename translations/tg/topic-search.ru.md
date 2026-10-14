@@ -31,7 +31,7 @@ title: "Поиск по теме"
 | Задача | Команда |
 |---|---|
 | Найдите обсуждение по теме, в одном чате или в каждом подготовленном чате | `tg personal search conversations "<question>"` |
-| Просматривайте обсуждения в чате, сначала самые новые | `tg personal conversations list --chat <chat>` |
+| Просматривайте обсуждения в чате, сначала самые новые | `tg personal conversations list <chat>` |
 | Прочитать одно обсуждение от начала до конца | `tg personal conversations show <id>` |
 | Открыть всё обсуждение, которому принадлежит сообщение | `tg personal conversations show <chat> <message>` |
 | Найдите другие обсуждения о том же самом в каждом чате | `tg personal conversations related <chat> <message>` |
@@ -128,7 +128,7 @@ tg personal conversations show 91                # 6. read the conversation that
 При `--json` в ответе также есть `meaning` (`searched` или `unavailable`), используемый `model` и `readiness`: в каких чатах осуществлялся поиск по смыслу, в каких только по словам, которые устарели и которые так и не были построены. Когда что-то ограничивает поиск, stderr называет чаты и команду, которая это исправляет, например `conversations embed --chat <chat>`.
 
 ```sh
-tg personal conversations list --chat "Book club" --since-time 7d
+tg personal conversations list "Book club" started_at>=7d
 tg personal conversations show 91                # one conversation, oldest first
 tg personal conversations show "Book club" 204   # the conversation message 204 is in
 tg personal conversations related "Book club" 204  # other conversations about the same thing, in every chat
@@ -168,7 +168,7 @@ tg personal search conversations "contract terms" --filter 'has:file' --timezone
 **Начните с одного сообщения.** Вы нашли сообщение с помощью поиска по словам и хотите получить все остальное по этой теме:
 
 ```sh
-tg personal search messages '"deposit back"' --chat "Valencia expats"
+tg personal search messages '"deposit back" chat:"Valencia expats"'
 tg personal conversations related "Valencia expats" 5120
 ```
 

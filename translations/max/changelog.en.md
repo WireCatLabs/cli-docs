@@ -4,6 +4,76 @@ title: "Changelog"
 
 Notable changes to `@wirecat/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
+## 0.51.0 — 14.10.2026
+
+### What's new
+
+- **Each `max watch` has its own queue.** A slow watcher no longer holds up the others; the buffer is 64 MiB per
+  watcher and 256 MiB in total, `max serve --max-subscriber-buffer-bytes` and `--max-subscriber-total-buffer-bytes`
+  change them, `0` removes the limit.
+- **`max mentions`: phones, e-mail, links and Google documents from stored messages** (cli-core 0.264.0,
+  database version 7). `mentions list kind:phone`, `mentions list domain:google.com`; a word without a field is a value in
+  any record, `89001234567` finds `+79001234567`. `mentions show <id>` shows the text around it. Messages stored
+  earlier are read by a single `max <профиль> mentions rebuild`; new ones are read as they are written.
+- **`max mentions confirm|reject`, mentions in files and voice messages, search by `phone:`, `email:`, `url:`, `domain:`**
+  (cli-core 0.269.0, database version 11). `mentions confirm <id> [person:<uid>|organization:<id>]` records whose
+  phone or address it is (organizations too), `mentions reject <id>` dismisses the value for good; the author of the
+  record is the agent or the owner (`--as-owner`). Text from files and voice transcripts also yields mentions (field
+  `file_text` or `transcript`); ones stored earlier are read by a single `mentions rebuild`. Message search finds them
+  by `phone:"8 900
+  000-00-01"`, `domain:docs.google.com`, `email:"ana@example.com"`. Older builds read the database as before.
+
+### Changed — may break scripts
+
+- **Built on `@wirecat/cli-core` 0.269.0: `contacts timeline` pages like the other lists.** A list cut by
+  `--limit` answers `page.has_more: true`, `page.cursor` and a `page.next` step (`--cursor` continues with the same
+  `--scope`, `--since-time` and `--until-time`); it used to be `has_more: false` and `meta.truncated`. `meta.truncated`
+  stays for changes still waiting in the queue. The "cut at --limit" note on stderr is gone. What to update: scripts
+  that read `meta.truncated` from `contacts timeline` read `page.has_more`.
+- **Error keys are snake_case for `max bot` too, and for a send with no answer.** The MAX refusal code for a bot is now
+  `error.details.max_code` (it was `maxCode`); `outcome_unknown` on a message send returns `send_id` (it was `sendId`).
+- **On `@wirecat/cli-core` 0.270.0 and `@wirecat/cli-base` 0.27.2.**
+- **`--json=<поля>` replaces `--fields` and `--agent-json`; they are gone.** `--json=id,text` keeps these fields of
+  each item. JSON in the CLI keeps text as it is; MCP answers still show invisible characters.
+- **`tags list`, `tasks list` and `conversations list` take a query instead of filter flags.**
+  `tags list tag:work type:chat`, `tags list sources:auto`; `tasks list state:open kind:promise chat:<id>`;
+  `conversations list <чат> started_at>=7d`. These lists no longer have `--tag`, `--type`, `--source`, `--state`,
+  `--chat`, `--before-time` and `--since-time`. The items are shared entities: a tag names what it is on as `target`,
+  a conversation returns `messages_count`, `started_at`, `first_message`.
+
+### Fixed
+
+- **`max serve` no longer loses the login if it was closed just as MAX answered.** The profile state and the refreshed
+  token are saved before the check for closing: MAX has already counted this login, and the next run does not log in again.
+- **A full shared `max watch` buffer disconnects whoever holds the most**, not whoever is written to next.
+  The refusal reaches `watch` with code `invalid_response` and reason `output.too-large`, not `provider_error`.
+- **The record of a failed run again keeps the MAX refusal code** (`providerError`, for example `proto.payload`). Since
+  cli-core 0.263.0 it is read from `error.details.provider_error`, but max wrote `providerError`, and the code was lost;
+  the "already voted" poll check and the retry after `not.found` now look at the new key too.
+- **`MaxClient` calls a file of 2 GiB or more what it is, not "it cannot be read".** A file by path in
+  `send({ files })` and a group or profile photo are checked for size first: Node does not read a file of 2 GiB or
+  more, and the error now says so.
+- **`max <бот> bot chats members add` takes at most 100 people at a time.** The MAX Bot API accepts up to 100 ids in
+  one request; a longer list is now refused before the request, with a request to split it across several runs.
+
+## 0.50.0 — 14.10.2026
+
+### Changed — may break scripts
+
+- **Built on `@wirecat/cli-core` 0.262.0 (the new name of `@wirecat/cli-messaging`, follows its 0.261.0; the parity
+  command is `cli-core-parity`) and `@wirecat/cli-base` 0.26.0.** Keys in machine output are snake_case: in
+  `error.details` — `operation_id`, `send_id`, `retry_after_ms`; in `commands --json` — `global_options`,
+  `inherited_options`, `exit_codes`, `takes_value` and `contract: 1`. The query tree in the MCP argument `ast` writes
+  `lower_inclusive`, `upper_inclusive` and `must_not`.
+- **HTML files are read as main text** (cli-core 0.262.0): menus, footers and banners are dropped; headings, lists,
+  tables and links stay. Text already stored for HTML attachments is read again on the next `attachments extract`
+  and changes. `title:`, `site:`, `lang:`, `author:` and `keyword:` search notes and files.
+
+### Fixed
+
+- **`max config set defaultProfile <имя>` and `config unset defaultProfile` work without naming a profile.** Before,
+  the command first required a profile and failed if there were several (cli-core 0.262.0).
+
 ## 0.49.0 — 13.10.2026
 
 ### What's new
@@ -1027,7 +1097,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.49.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.51.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).

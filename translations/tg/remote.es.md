@@ -176,9 +176,9 @@ Esas aplicaciones deben iniciar sesión nuevamente con un nuevo código. Esto no
 
 ## Transferir archivos guardados a un agente
 
-Un agente en su computadora puede abrir un archivo guardado mediante su `localPath`. Un agente remoto no puede, por lo que obtiene los bytes guardados a través de `attachments show` (MCP: `tg_read`, comando `attachments show`).
+Un agente en su computadora puede abrir un archivo guardado mediante su `local_path`. Un agente remoto no puede, por lo que obtiene los bytes guardados a través de `attachments show` (MCP: `tg_read`, comando `attachments show`).
 
-Primero descargue los archivos del mensaje de la forma habitual ([descargando archivos](./attachments.md#what-you-can-download)). Utilice `attachments list --needs-text` para encontrar el localizador de mensajes y la posición del archivo adjunto. Después pide el archivo:
+Primero descargue los archivos del mensaje de la forma habitual ([descargando archivos](./attachments.md#what-you-can-download)). Utilice `attachments list is:needs_text` para encontrar el localizador de mensajes y la posición del archivo adjunto. Después pide el archivo:
 
 ```sh
 tg personal attachments show msg:telegram/500/7/204 --attachment 1 --json
@@ -188,9 +188,9 @@ El comando lee solo un archivo adjunto guardado de la cuenta activa. Nunca desca
 
 ### Transferir un archivo más grande
 
-Una respuesta lleva 512 KiB por defecto; `--chunk-bytes` permite hasta 1 MiB. Por defecto, el archivo admite hasta 50 MiB; se configura con `MESSAGING_ATTACHMENT_MAX_MIB`. El JSON incluye `base64`, `offsetBytes`, `readBytes`, `totalBytes`, `nextOffsetBytes`, `complete` y el SHA256 de todo el archivo. `complete: true` significa que esta respuesta contiene el archivo completo, no que se haya reconocido su texto.
+Una respuesta lleva 512 KiB por defecto; `--chunk-bytes` permite hasta 1 MiB. Por defecto, el archivo admite hasta 50 MiB; se configura con `MESSAGING_ATTACHMENT_MAX_MIB`. El `item` del JSON incluye `base64`, `offset_bytes`, `read_bytes`, `total_bytes`, `next_offset_bytes`, `complete` y el SHA256 de todo el archivo. `complete: true` significa que esta respuesta contiene el archivo completo, no que se haya reconocido su texto.
 
-Decodifica cada parte base64, une las partes en orden de desplazamiento de bytes y sigue `nextOffsetBytes` hasta que sea nulo. Pase el primer SHA256 como `--if-sha256` en las siguientes solicitudes: si el archivo fuente cambió, la solicitud falla y no devuelve bytes modificados. Verifique el archivo unido con ese hash.
+Decodifica cada parte base64, une las partes en orden de desplazamiento de bytes y sigue `next_offset_bytes` hasta que sea nulo. Pase el primer SHA256 como `--if-sha256` en las siguientes solicitudes: si el archivo fuente cambió, la solicitud falla y no devuelve bytes modificados. Verifique el archivo unido con ese hash.
 
 ```sh
 tg personal attachments show msg:telegram/500/7/204 --offset-bytes 524288 --if-sha256 <sha256> --json
@@ -218,9 +218,9 @@ Si la aplicación no puede pasar un PDF recibido a su lector de documentos, soli
 tg personal attachments show msg:telegram/500/7/204 --attachment 1 --page 1 --json
 ```
 
-A través de MCP llamar a `tg_read`, comando `attachments show`, con `page: 1` y el localizador de mensajes. De forma predeterminada, la página vuelve como contenido de imagen. Si la aplicación solo muestra metadatos, solicite `format: base64`, luego decodifique y muestre el PNG con las herramientas de imagen del agente. Recibir una cadena base64 no equivale a ver la página. Lea las páginas 1 a `pdf.pageCount`. Si ninguno de los formatos muestra los píxeles, informe el límite de la aplicación en lugar de inventar texto.
+A través de MCP llamar a `tg_read`, comando `attachments show`, con `page: 1` y el localizador de mensajes. De forma predeterminada, la página vuelve como contenido de imagen. Si la aplicación solo muestra metadatos, solicite `format: base64`, luego decodifique y muestre el PNG con las herramientas de imagen del agente. Recibir una cadena base64 no equivale a ver la página. Lea las páginas 1 a `pdf.page_count`. Si ninguno de los formatos muestra los píxeles, informe el límite de la aplicación en lugar de inventar texto.
 
-`pdf.sourceSha256` y `pdf.sourceBytes` describen el PDF original; los `sha256` y `totalBytes` de nivel superior describen la imagen de la página. `--if-sha256` comprueba el PDF original. `--page` no se puede combinar con `--offset-bytes` o `--chunk-bytes`. Por defecto, los PDF admiten hasta 50 MiB sin límite fijo de páginas; un PNG permite 4000 píxeles por lado y 8 MiB por página. Los tres valores son configurables.
+`pdf.source_sha256` y `pdf.source_bytes` describen el PDF original; los `sha256` y `total_bytes` de nivel superior describen la imagen de la página. `--if-sha256` comprueba el PDF original. `--page` no se puede combinar con `--offset-bytes` o `--chunk-bytes`. Por defecto, los PDF admiten hasta 50 MiB sin límite fijo de páginas; un PNG permite 4000 píxeles por lado y 8 MiB por página. Los tres valores son configurables.
 
 La imagen de una página no llama a ningún servicio OCR externo ni indexa ningún texto. Después de mirar cada página, el agente llama a `attachments text set` y verifica una búsqueda de `content:`. Verifique números y diseños complejos con las imágenes; La calidad depende del documento fuente y de las herramientas del agente.
 

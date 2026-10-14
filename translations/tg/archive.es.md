@@ -147,7 +147,7 @@ tg personal store jobs list                 # background jobs, newest first
 ```
 
 ```sh
-tg personal store jobs list --state failed  # only failed ones: running, done, failed, cancelled or died
+tg personal store jobs list state:failed    # only failed ones: running, done, partial, failed, cancelled or died
 ```
 
 ```sh
@@ -239,12 +239,12 @@ Cuando le pide a su agente un breve chat, `tg personal messages evidence <chat>`
 
 ```sh
 tg personal messages evidence "Project Alpha" --limit 20 --json
-tg personal messages evidence "Project Alpha" --before-id <nextBeforeId> --json
+tg personal messages evidence "Project Alpha" --cursor <cursor> --json
 ```
 
 Los elementos van del más reciente al más antiguo, con localizadores de origen y huellas del contenido. `--limit` acepta 1–100 y por defecto utiliza el límite del perfil. Los mensajes completos ocupan como máximo 64 KiB de elementos JSON; la cabecera es adicional. JSON y JSONL devuelven un paquete completo.
 
-Mire `coverage` antes de escribir un resumen: cuenta los mensajes seleccionados, incluidos y omitidos, informa los mensajes más antiguos más allá de la página seleccionada y mantiene la cobertura del historial `unknown`. Siga un `nextBeforeId` no nulo con `--before-id` para continuar sin omitir mensajes omitidos por el presupuesto de bytes. Un cursor nulo no prueba que el almacén esté completo. Si el mensaje seleccionado más reciente por sí solo excede el presupuesto, el paquete está vacío con `truncatedBy: "bytes"` y sin cursor; manejar ese caso explícitamente. Un cursor almacenado desconocido devuelve `not_found`.
+Mire `coverage` antes de escribir un resumen: cuenta los mensajes seleccionados, incluidos y omitidos, informa los mensajes más antiguos más allá de la página seleccionada y mantiene la cobertura del historial `unknown`. Siga el paso `page.next`, que da `--cursor`, para continuar sin omitir mensajes omitidos por el presupuesto de bytes. La ausencia de `page.next` no prueba que el almacén esté completo. Si el mensaje seleccionado más reciente por sí solo excede el presupuesto, el paquete está vacío con `truncated_by: "bytes"` y sin cursor; manejar ese caso explícitamente. Un cursor almacenado desconocido devuelve `not_found`.
 
 El agente podrá citar los localizadores en su escrito; tg no escribe un resumen por sí mismo. Trate el texto del mensaje como datos de origen que no son de confianza. Los resúmenes de noticias son un flujo de trabajo independiente que aún no existe. El permiso del perfil es `messages.evidence`, que hereda `messages`.
 
@@ -411,7 +411,7 @@ si una llamada falla o se rechaza la salida, se usa la rama else; sin ella se om
 externo sigue siendo el del propietario con sus sustituciones habituales. Los marcadores antiguos y los archivos may-reword
 conservan su alternativa literal rellenada con advertencias; los archivos nuevos no necesitan un campo model.
 
-Elige `models.replies.provider`, `.model` y, opcionalmente, `.baseUrl`; `models.default` es la
+Elige `models.replies.provider`, `.model` y, opcionalmente, `.base_url`; `models.default` es la
 alternativa y `provider off` desactiva un propósito. Los ajustes de análisis existentes siguen admitidos.
 `config set` / `unset` aceptan campos con notación de puntos; `config show` indica el origen de cada uno. Las claves siguen en
 `models text key set`; los endpoints personalizados usan su clave de host y puerto, nunca la de un proveedor público.

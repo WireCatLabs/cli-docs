@@ -103,10 +103,10 @@ describe("reviewed landing workflows", () => {
         const commands = sessionById(sessions, id).steps.flatMap((step) => (step.tool ? [step.tool] : []))
         const read = commands.indexOf("tg messages list 503 --limit 30")
         const search = commands.findIndex(
-          (command) => command.startsWith("tg search messages") && command.includes("--chat 503"),
+          (command) => command.startsWith("tg search messages") && command.includes("chat:503"),
         )
         expect(read).toBeGreaterThan(0)
-        expect(commands[read - 1]).toMatch(/^tg chats list --search/)
+        expect(commands[read - 1]).toMatch(/^tg chats list title:/)
         expect(search).toBeGreaterThan(read)
       }
       const steps = sessionById(sessions, "commitments").steps

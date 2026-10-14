@@ -11,7 +11,7 @@ Terms used below:
 - **External model** — an AI component running on a provider's server, such as OpenAI or Anthropic. `max` sends data to it over an API.
 - **API** — how a program calls a service. A **key** is the provider's secret that grants access. Pricing, limits and capabilities depend on the provider.
 - **Purpose** — the task for which a model is selected: `models.ocr`, `models.analysis` or `models.replies`. Each can have its own provider and model.
-- **Endpoint** (`baseUrl`) — the server address receiving the request.
+- **Endpoint** (`base_url`) — the server address receiving the request.
 
 These settings do not control your AI agent. When the agent reads a file itself, it uses its own tools and AI configuration.
 
@@ -24,7 +24,7 @@ These settings do not control your AI agent. When the agent reads a file itself,
 | AI block in a reply template | `models.replies` | A rule with an `{% ai %}` block and separate consent for replies; see [reply rules](./replies.md) |
 | Shared values for these tasks | `models.default` | Used for fields not set for a specific task |
 
-Search by meaning has separate settings: `embeddingProvider`, `embeddingModel` and `embeddingBaseUrl`. It stores keys in the same way. See the [search guide](./search.md). Voice transcription uses a separate speech-recognition component on your computer, without an API; see [voice transcription](./audio-recognition.md).
+Search by meaning has separate settings: `embedding_provider`, `embedding_model` and `embedding_base_url`. It stores keys in the same way. See the [search guide](./search.md). Voice transcription uses a separate speech-recognition component on your computer, without an API; see [voice transcription](./audio-recognition.md).
 
 ## OpenAI: configure OCR
 
@@ -42,7 +42,7 @@ max config show
 The key is not passed as a command argument and is not stored in the settings file’s `models` field. `key set` also accepts a secret through stdin; your secret manager should supply it. Do not put the key itself on the command line.
 
 
-If `baseUrl` is neither set nor inherited from `models.default`, the standard OpenAI endpoint is used. To test a small batch:
+If `base_url` is neither set nor inherited from `models.default`, the standard OpenAI endpoint is used. To test a small batch:
 
 
 ```sh
@@ -61,7 +61,7 @@ Choose the exact ID of a vision model available to you; `your-vision-model` belo
 max personal models text key set anthropic
 max personal config set models.ocr.provider anthropic
 max personal config set models.ocr.model your-vision-model
-max personal config unset models.ocr.baseUrl
+max personal config unset models.ocr.base_url
 ```
 
 The last command removes any previous endpoint override. If the URL is not inherited from `models.default` either, the standard Anthropic endpoint is used.
@@ -74,13 +74,13 @@ An OpenAI-compatible endpoint uses the `openai` adapter even if another provider
 ```sh
 max personal config set models.ocr.provider openai
 max personal config set models.ocr.model your-vision-model
-max personal config set models.ocr.baseUrl https://gateway.example.org/v1
+max personal config set models.ocr.base_url https://gateway.example.org/v1
 max personal models text key set gateway.example.org
 ```
 
-For a custom endpoint, the key name is its host, including the port if the URL specifies one. The `baseUrl` field itself is not a key. A server accepting text does not necessarily accept images; check its documentation.
+For a custom endpoint, the key name is its host, including the port if the URL specifies one. The `base_url` field itself is not a key. A server accepting text does not necessarily accept images; check its documentation.
 
-To return to the standard OpenAI endpoint, remove `models.ocr.baseUrl`. Text and Anthropic-compatible APIs cannot be mixed simply by replacing the URL: choose the adapter matching the server protocol.
+To return to the standard OpenAI endpoint, remove `models.ocr.base_url`. Text and Anthropic-compatible APIs cannot be mixed simply by replacing the URL: choose the adapter matching the server protocol.
 
 ## Profile, shared defaults and one run
 

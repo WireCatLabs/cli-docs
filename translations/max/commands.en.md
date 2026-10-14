@@ -28,8 +28,7 @@ Apply to every command.
 |---|---|
 | `-V, --version` | output the version number. |
 | `-v, --verbose` | more detail in what is shown: -v ids, -vv everything we know. Default: `0`. |
-| `--json` | machine-readable output: one JSON value on stdout, nothing else. |
-| `--agent-json` | JSON for AI agents: invisible controls are visible; ordinary --json preserves text. |
+| `--json` | machine-readable output: one JSON value on stdout; --json=id,text keeps only those fields. |
 | `--jsonl` | machine-readable output: one JSON object per line, for streaming and jq. |
 | `--quiet` | diagnostics off. |
 | `--trace` | one line per request on stderr: ids and timings, never message content. |
@@ -39,7 +38,6 @@ Apply to every command.
 | `--no-input` | never prompt or open interactive login; piped input remains available. |
 | `--max-input-bytes <bytes>` | maximum buffered input bytes (default: 16777216). |
 | `--max-output-bytes <bytes>` | maximum machine output bytes (default: 4194304; 0 disables). |
-| `--fields <paths>` | comma-separated item or object fields: id,text; preserve pagination and operation ids. |
 | `--brief` | found messages and mail as reference, title, time, sender and excerpt only. |
 | `--full` | found messages and mail with their whole text and every provider field. |
 | `--dry-run` | preview parsed arguments and permissions before running the action. |
@@ -140,8 +138,12 @@ where else this account is logged in — not `max session`, which is this tool's
 every device and app logged in to this account; nothing is ended
 
 ```sh
-max account sessions list
+max account sessions list [query]
 ```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | field:value terms; this list filters by none yet. |
 
 #### `max account sessions end`
 
@@ -225,20 +227,21 @@ the chats this account is in
 
 ### `max chats list`
 
-chats, newest first, archived ones included
+chats, newest first, archived ones included; the query is answered from the local store, so online, where the messenger filters nothing, it needs --offline
 
 ```sh
-max chats list [options]
+max chats list [query] [options]
 ```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | Purpose |
 |---|---|
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
 | `--all` | every row, no paging. |
-| `--search <text>` | only chats whose name contains this; at least 3 characters. |
-| `--kind <kind>` | only chats of this kind: dialog, group, channel, saved. |
-| `--unread` | only chats with unread messages. |
 
 ### `max chats show`
 
@@ -254,20 +257,16 @@ max chats show <chat>
 
 ### `max chats events`
 
-who joined, left, was added or removed, and by whom — from the chat's service messages
+who joined, left, was added or removed, and by whom — from the chat's service messages; the last 7 days unless the query names time
 
 ```sh
-max chats events <chat> [options]
+max chats events <chat> [query]
 ```
 
 | Argument | | Meaning |
 |---|---|---|
 | `chat` | required | a chat: its id, or part of its title. |
-
-| Option | Purpose |
-|---|---|
-| `--since-time <time>` | ISO 8601, or 2h / 1d ago; 7 days ago if not given. |
-| `--type <names>` | only these, comma-separated: join, leave, add, remove, create, title, pin. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 ### `max chats inspect`
 
@@ -356,12 +355,13 @@ who is in a group
 everyone in a group, a page at a time, with their role and when they were last seen
 
 ```sh
-max chats members list <chat> [options]
+max chats members list <chat> [query] [options]
 ```
 
 | Argument | | Meaning |
 |---|---|---|
 | `chat` | required | a chat: its id, or part of its title. |
+| `query` | optional | field:value terms; this list filters by none yet. |
 
 | Option | Purpose |
 |---|---|
@@ -374,17 +374,17 @@ max chats members list <chat> [options]
 members that look like bots, each with its reasons — read from the member list and the local store; never one request per person, and it removes nobody
 
 ```sh
-max chats members audit <chat> [options]
+max chats members audit <chat> [query] [options]
 ```
 
 | Argument | | Meaning |
 |---|---|---|
 | `chat` | required | a chat: its id, or part of its title. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | Purpose |
 |---|---|
 | `--budget <pages>` | at most this many pages of 200 members, a pause between them (default: 10). |
-| `--min-score <n>` | only members scoring at least this; 1 lists everyone with a reason (default: 2). |
 | `--deep <n>` | also check the top n in full — profile, photos and everything they wrote — one person a second; the public ban lists cover Telegram only, so nothing is sent. |
 
 #### `max chats members history`
@@ -392,16 +392,13 @@ max chats members audit <chat> [options]
 who joined, who left and whose profile changed, oldest first — what chats members fetch recorded in the local store; never asks the messenger
 
 ```sh
-max chats members history <chat> [options]
+max chats members history <chat> [query]
 ```
 
 | Argument | | Meaning |
 |---|---|---|
 | `chat` | required | a chat: its id, or part of its title. |
-
-| Option | Purpose |
-|---|---|
-| `--since-time <time>` | ISO 8601, or 2h / 1d ago; everything recorded if not given. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 #### `max chats members fetch`
 
@@ -604,18 +601,18 @@ requests to join a MAX channel needing approval
 pending requests to join a MAX channel needing approval; admins only; requestedAt is null
 
 ```sh
-max chats requests list <chat> [options]
+max chats requests list <chat> [query] [options]
 ```
 
 | Argument | | Meaning |
 |---|---|---|
 | `chat` | required | a chat: its id, or part of its title. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | Purpose |
 |---|---|
-| `--limit <n>` | how many. |
-| `--search <text>` | only people whose name or @username has this. |
-| `--link <link>` | not supported by MAX; use name search instead. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
 
 #### `max chats requests accept`
 
@@ -666,8 +663,12 @@ your chat folders
 your chat folders, in the order the app shows them
 
 ```sh
-max chats folders list
+max chats folders list [query]
 ```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | field:value terms; this list filters by none yet. |
 
 #### `max chats folders show`
 
@@ -831,7 +832,7 @@ max chats media <chat> [options]
 |---|---|
 | `--type <names>` | only these kinds, comma-separated: photo, video, file, audio, link. |
 | `--limit <n>` | how many to show. |
-| `--before-id <id>` | read what came before this message id. |
+| `--cursor <cursor>` | go on from where page.next says the last page stopped. |
 
 ### `max chats mute`
 
@@ -943,11 +944,15 @@ people you have a one-to-one chat with
 
 ### `max contacts list`
 
-people you have a one-to-one chat with
+people you have a one-to-one chat with; name: matches the name, your local alias or the @username, notes: your private notes about them
 
 ```sh
-max contacts list [options]
+max contacts list [query] [options]
 ```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | Purpose |
 |---|---|
@@ -955,8 +960,6 @@ max contacts list [options]
 | `--page <n>` | which page, starting at 1. |
 | `--all` | every row, no paging. |
 | `--order <recent\|name>` | newest conversation first, or alphabetical. Default: `recent`. |
-| `--search <text>` | only people whose name, local alias or @username contains this. |
-| `--search-notes <text>` | only people whose private notes contain this text. |
 
 ### `max contacts show`
 
@@ -1032,12 +1035,13 @@ your private notes on a stored contact, the same in every account that sees them
 
 
 ```sh
-max contacts notes list <person>
+max contacts notes list <person> [query]
 ```
 
 | Argument | | Meaning |
 |---|---|---|
 | `person` | required |  |
+| `query` | optional | field:value terms; this list filters by none yet. |
 
 #### `max contacts notes show`
 
@@ -1244,6 +1248,7 @@ max contacts timeline <person> [options]
 | `--since-time <time>` | nothing older than this ISO 8601 time, or 2h / 1d ago. |
 | `--until-time <time>` | through this ISO 8601 time, or 2h / 1d ago. |
 | `--limit <n>` | at most this many; 50 if not given. |
+| `--cursor <cursor>` | go on from where the last page stopped; page.next gives it, with the same filters. |
 
 ### `max contacts check`
 
@@ -1295,20 +1300,18 @@ read and send messages in a chat
 a chat's messages, oldest to newest
 
 ```sh
-max messages list <chat> [options]
+max messages list <chat> [query] [options]
 ```
 
 | Argument | | Meaning |
 |---|---|---|
 | `chat` | required | a chat: its id, or part of its title. |
+| `query` | optional | where to start and which topic: id<42, date>2026-10-01, topic:12. |
 
 | Option | Purpose |
 |---|---|
 | `--limit <n>` | how many. |
-| `--before-id <id>` | only messages older than this message id. |
-| `--before-time <time>` | only messages older than this ISO 8601 time, or 2h / 1d ago. |
-| `--after-id <id>` | only messages newer than this message id. |
-| `--after-time <time>` | only messages newer than this ISO 8601 time, or 2h / 1d ago. |
+| `--cursor <cursor>` | go on from where the last page stopped; page.next gives it. |
 | `--transcribe` | turn voice messages not heard yet into text — by the messenger, or a model on this machine; can take minutes. |
 | `--model <id>` | which downloaded speech model hears them, with --transcribe; `models audio list` shows them. |
 | `--mark-read` | also mark the chat read up to the newest message shown; the other person sees it. |
@@ -1411,7 +1414,7 @@ max messages evidence <chat> [options]
 | Option | Purpose |
 |---|---|
 | `--limit <n>` | how many, 1–100. |
-| `--before-id <id>` | only messages older than this message id. |
+| `--cursor <cursor>` | go on from where page.next says the last packet stopped. |
 
 ### `max messages sync`
 
@@ -1433,7 +1436,7 @@ max messages sync [chat] [options]
 | `--pause <duration>` | the least pause between pages, to stay under the provider's limits; each is up to twice that. Default: `5s`. |
 | `--since-time <time>` | stop once it reaches messages older than this: ISO 8601, or 2h / 1d ago. |
 | `--last <n>` | stop once the newest n messages are held. |
-| `--catch-up` | prepare local search after this run; overrides searchCatchUp. |
+| `--catch-up` | prepare local search after this run; overrides search_catch_up. |
 | `--no-catch-up` | skip local preparation after this run. |
 | `--catch-up-chunks <n>` | at most this many local vector chunks. |
 | `--catch-up-messages <n>` | skip a graph rebuild larger than this many messages. |
@@ -1666,7 +1669,7 @@ max store gaps repair <chat> [options]
 | `--page-size <n>` | messages per provider page. |
 | `--pause <duration>` | provider pause between pages. Default: `5s`. |
 | `--fingerprint <hash>` | refuse if this previously inspected coverage plan changed. |
-| `--catch-up` | prepare local search after repair; overrides searchCatchUp. |
+| `--catch-up` | prepare local search after repair; overrides search_catch_up. |
 | `--no-catch-up` | skip local search preparation after repair. |
 | `--catch-up-chunks <n>` | maximum local chunks prepared. |
 | `--catch-up-messages <n>` | maximum stored messages read for preparation. |
@@ -1682,12 +1685,18 @@ background sync jobs
 background sync jobs, newest first
 
 ```sh
-max store jobs list [options]
+max store jobs list [query] [options]
 ```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | Purpose |
 |---|---|
-| `--state <state>` | only jobs in this state. One of: `running`, `done`, `partial`, `failed`, `cancelled`, `died`. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+| `--all` | every row, no paging. |
 
 #### `max store jobs show`
 
@@ -1741,7 +1750,7 @@ max store jobs clear
 
 ### `max store export`
 
-a chat's stored messages, oldest first: --jsonl one message per line, --json one { items, page, limit, hasMore } object; never asks the messenger
+a chat's stored messages, oldest first: --jsonl one message per line, --json the list envelope of messages; never asks the messenger
 
 ```sh
 max store export [chats] [options]
@@ -2259,15 +2268,15 @@ what waits on you — unanswered questions, mentions, requests, promises — kep
 tasks, oldest first, with their message or note source
 
 ```sh
-max tasks list [options]
+max tasks list [query] [options]
 ```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | Purpose |
 |---|---|
-| `--state <state>` | only tasks in this state: open, done or dismissed. |
-| `--chat <chat>` | only this chat's tasks; a chat: its id, or part of its title. |
-| `--type <names>` | only these types, comma-separated: question, request, mention, promise. |
-| `--before-time <time>` | only tasks opened before this ISO 8601 time, or 2h / 1d ago. |
 | `--limit <n>` | how many. |
 
 ### `max tasks add`
@@ -2344,8 +2353,12 @@ max tasks show <task>
 what needs a look today, from the local store and without message text: tasks overdue, due or to check, chats where you owe an answer, chats where you wait for one
 
 ```sh
-max tasks agenda [options]
+max tasks agenda [query] [options]
 ```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | Purpose |
 |---|---|
@@ -2353,7 +2366,6 @@ max tasks agenda [options]
 | `--unanswered <span>` | list chats where someone else wrote last this long ago (default 1d). |
 | `--waiting <span>` | list chats where you wrote last this long ago (default 7d). |
 | `--within <span>` | leave out chats silent longer than this: they ended (default 30d). |
-| `--kind <kinds>` | only these chat kinds, comma-separated (default dialog,group). |
 
 ### `max tasks close`
 
@@ -2389,8 +2401,8 @@ max conversations build [options]
 | `--chat <chat>` | a chat: its id, or part of its title. |
 | `--analyze` | link batches using the configured analysis provider; requires --chat and remembers consent for this chat/provider. |
 | `--provider <provider>` | analysis: agent, openai or anthropic. |
-| `--model <model>` | analysis model; overrides analysisModel. |
-| `--base-url <url>` | analysis API endpoint; overrides analysisBaseUrl. |
+| `--model <model>` | analysis model; overrides analysis_model. |
+| `--base-url <url>` | analysis API endpoint; overrides analysis_base_url. |
 | `--size <n>` | analysis answer messages per batch, 10–200; default 50. |
 | `--max-tokens <n>` | analysis input/output reservation cap per run; default 100000. |
 | `--max-chats <n>` | at most this many chats in one run; 20 if not given. |
@@ -2400,13 +2412,16 @@ max conversations build [options]
 a chat's conversations, the newest first: when, how many messages, how many people
 
 ```sh
-max conversations list [options]
+max conversations list <chat> [query] [options]
 ```
+
+| Argument | | Meaning |
+|---|---|---|
+| `chat` | required | a chat: its id, or part of its title. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | Purpose |
 |---|---|
-| `--chat <chat>` | a chat: its id, or part of its title. |
-| `--since-time <time>` | only those that started at this ISO 8601 time, or 30m / 2h / 1d ago, or later. |
 | `--limit <n>` | how many. |
 
 ### `max conversations show`
@@ -2622,16 +2637,18 @@ max attachments extract [options]
 
 ### `max attachments list`
 
-files of stored messages, where each was saved and whether its text is held — never the text
+files of stored messages, newest first: where each was saved and whether its text is held — never the text
 
 ```sh
-max attachments list [options]
+max attachments list [query] [options]
 ```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | Purpose |
 |---|---|
-| `--chat <chat>` | only this chat's files; a chat: its id, or part of its title. |
-| `--needs-text` | only files saved here whose text nobody has yet: what an agent reads and writes back. |
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
 | `--all` | every row, no paging. |
@@ -2746,14 +2763,92 @@ max tags remove <tag> [options]
 what is tagged: this account's chats and messages, and the people of its messenger
 
 ```sh
-max tags list [options]
+max tags list [query]
 ```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+## `max mentions`
+
+phones, e-mail, links and documents found in stored messages
+
+### `max mentions list`
+
+this account's mentions matching the query, newest first; local store only
+
+```sh
+max mentions list [query] [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | fields below; a bare word is a value, so a phone typed with 8 finds it written with +7. |
 
 | Option | Purpose |
 |---|---|
-| `--tag <tag>` | only this tag. |
-| `--source <manual\|auto>` | only labels with this ownership claim. |
-| `--type <names>` | only what is tagged of this type: chat, contact or message. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+
+### `max mentions show`
+
+one mention, the text around it, and how many other places hold its value
+
+```sh
+max mentions show <id>
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `id` | required | the mention's id, from mentions list. |
+
+### `max mentions confirm`
+
+say what a mention is, everywhere its value is written: a phone's owner, the stored document
+
+**Changes something on this computer only.**
+
+```sh
+max mentions confirm <id> [person] [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `id` | required | the mention's id, from mentions list. |
+| `person` | optional | person:<uid> or organization:<id> that owns the phone or the address; a document needs none. |
+
+| Option | Purpose |
+|---|---|
+| `--as-owner` | record it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
+
+### `max mentions reject`
+
+not a real mention, or not worth keeping: dismiss its value everywhere, and on later syncs
+
+**Changes something on this computer only.**
+
+```sh
+max mentions reject <id> [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `id` | required | the mention's id, from mentions list. |
+
+| Option | Purpose |
+|---|---|
+| `--as-owner` | record it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
+
+### `max mentions rebuild`
+
+find the mentions of every stored message again; decisions are kept
+
+**Changes something on this computer only.**
+
+```sh
+max mentions rebuild
+```
 
 ## `max metadata`
 
@@ -2809,7 +2904,7 @@ max search all <query> [options]
 | `--source <accounts>` | only these accounts, separated by commas: provider:account as a hit shows it, a provider, a kind or group:<name>; each resource reads the ones of its kind, and meetings only when it names one. |
 | `--max-meetings <n\|all>` | how many of the meeting account's meetings to look through, newest first; all looks through every one (default 100). |
 | `--limit <n>` | how many. |
-| `--offset <n>` | skip this many, for the next page. |
+| `--page <n>` | which page, starting at 1. |
 | `--exact` | bare words and quotes match their exact form only, as exact:word does. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 | `--backend <archive\|server\|both>` | where to search: the local archive, the messenger's server, or both (default: both). Discovery uses the archive only. |
@@ -2840,11 +2935,9 @@ max search messages [query] [options]
 | `--thread-within <duration>` | messages within this long either side of the hit (default: 1d). |
 | `--backend <archive\|server\|both>` | where to search: the local archive, the messenger's server, or both (default: both). Discovery uses the archive only. |
 | `--server-time <duration>` | stop waiting for the server after this long (default: 5s). |
-| `--chat <chat>` | only this chat — the same as chat: in the query; a chat: its id, or part of its title. |
 | `--source <accounts>` | every account of this messenger held in the store; personal, bots or all — the same as in: in the query; or a list: group:work,telegram:Alice,email:me@example.com. |
-| `--type <text\|voice\|file>` | only messages of this type: text alone, a voice message, or a file. |
 | `--limit <n>` | how many. |
-| `--offset <n>` | skip this many, for the next page. |
+| `--page <n>` | which page, starting at 1. |
 | `--newest` | newest first instead of best first. |
 | `--exact` | bare words and quotes match their exact form only, as exact:word does; text: still matches every form. |
 | `--context <n>` | messages before and after each hit; 2 in the terminal, 0 otherwise. |
@@ -2868,10 +2961,9 @@ max search mail [query] [options]
 
 | Option | Purpose |
 |---|---|
-| `--chat <chat>` | only this mail thread, by id or subject. |
 | `--source <accounts>` | only these mail accounts, separated by commas: email:<address> as a hit shows it, email, mail or group:<name>; every mail account when unset. |
 | `--limit <n>` | how many. |
-| `--offset <n>` | skip this many, for the next page. |
+| `--page <n>` | which page, starting at 1. |
 | `--newest` | newest first instead of best first. |
 | `--exact` | bare words and quotes match their exact form only, as exact:word does; text: still matches every form. |
 | `--context <n>` | messages before and after each hit; 2 in the terminal, 0 otherwise. |
@@ -2893,10 +2985,9 @@ max search notes <query> [options]
 |---|---|
 | `--type <internal\|file>` | only notes written in memo, or only notes from a folder. |
 | `--source <accounts>` | only these notes accounts, separated by commas: notes:internal for notes written in memo, notes:<folder id> as a hit shows it, notes, documents or group:<name>. |
-| `--tag <tag>` | only notes with this tag. |
 | `--filter <query>` | a query every hit must also match; it does not change the search by meaning. |
 | `--limit <n>` | how many. |
-| `--offset <n>` | skip this many, for the next page. |
+| `--page <n>` | which page, starting at 1. |
 | `--exact` | words as written only; meaning is not searched. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 
@@ -2980,8 +3071,12 @@ max searches show <name|id>
 the saved searches, by name
 
 ```sh
-max searches list
+max searches list [query]
 ```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | field:value terms; this list filters by none yet. |
 
 ### `max searches history`
 
@@ -2993,7 +3088,9 @@ max searches history [options]
 
 | Option | Purpose |
 |---|---|
-| `--limit <n>` | how many. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+| `--all` | every row, no paging. |
 
 ### `max searches delete`
 
@@ -3040,8 +3137,12 @@ speech models for transcribing voice messages
 the speech models, most suitable first, which are downloaded, and which one is the default
 
 ```sh
-max models audio list
+max models audio list [query]
 ```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | field:value terms; this list filters by none yet. |
 
 #### `max models audio download`
 
@@ -3064,8 +3165,12 @@ embedding models for searching conversations by meaning
 the embedding models, most suitable first, which are downloaded, and which one is the default
 
 ```sh
-max models text list
+max models text list [query]
 ```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | field:value terms; this list filters by none yet. |
 
 #### `max models text download`
 
@@ -3289,39 +3394,46 @@ max sends list [options]
 | Option | Purpose |
 |---|---|
 | `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+| `--all` | every row, no paging. |
 
 ## `max inbox`
 
 other people's unread messages in every chat; --new for what arrived since the last check
 
 ```sh
-max inbox [options]
+max inbox [query] [options]
 ```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | from when: date>2h, date>2026-10-01; the saved point stays put. |
 
 | Option | Purpose |
 |---|---|
 | `--new` | what arrived since the last check, each message once — for scheduled runs. |
-| `--since-time <time>` | what arrived after this ISO 8601 time, or 2h / 1d ago; the saved point stays put. |
 | `--limit <n>` | at most this many per chat, the newest. |
 | `--all` | muted and archived chats too — left out unless they mention you or reply to you. |
 | `--kind <kinds>` | only chats of these kinds, comma-separated: dialog, group, channel, saved. |
 | `--transcribe` | turn voice messages not heard yet into text — by the messenger, or a model on this machine; can take minutes. |
 | `--model <id>` | which downloaded speech model hears them, with --transcribe; `models audio list` shows them. |
 | `--mark-read` | also mark each chat shown read, up to the newest message shown; the other side sees it. |
-| `--no-mark-read` | do not, whatever the catchUpMarksRead setting says. |
+| `--no-mark-read` | do not, whatever the catch_up_marks_read setting says. |
 
 ## `max review`
 
 every message, yours too, in chats that changed since a point — for reviewing who owes what
 
 ```sh
-max review [options]
+max review [query] [options]
 ```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | where the last review ended and which chat: date>2h, chat:"Book club"; 3 days ago if no date. |
 
 | Option | Purpose |
 |---|---|
-| `--since-time <time>` | where the last review ended — ISO 8601, or 2h / 1d ago; 3 days ago if not given. |
-| `--chat <chat>` | only this chat: a chat: its id, or part of its title. |
 | `--kind <kinds>` | only chats of these kinds, comma-separated: dialog, group, channel, saved. |
 | `--unanswered [duration]` | only questions to you or a group's admins that nobody answered, asked at least this long ago — 4h, 1d; 24h if not given. |
 | `--all` | muted and archived chats too — left out unless they mention you or reply to you. |
@@ -3329,7 +3441,7 @@ max review [options]
 | `--model <id>` | which downloaded speech model hears them, with --transcribe; `models audio list` shows them. |
 | `--new` | what changed since the last `review --new`, a point per chat — for scheduled runs. |
 | `--mark-read` | also mark each chat shown read, up to the newest message shown; the other side sees it. |
-| `--no-mark-read` | do not, whatever the catchUpMarksRead setting says. |
+| `--no-mark-read` | do not, whatever the catch_up_marks_read setting says. |
 
 ## `max replies`
 
@@ -3547,6 +3659,8 @@ max serve [options]
 | Option | Purpose |
 |---|---|
 | `--idle <duration>` | stop after this long with nobody using it — 15m, 1h is 60m. |
+| `--max-subscriber-buffer-bytes <bytes>` | buffer per watcher before disconnecting it; 0 is unlimited. |
+| `--max-subscriber-total-buffer-bytes <bytes>` | combined watcher buffer budget; 0 is unlimited. |
 
 ## `max server`
 
@@ -3762,7 +3876,7 @@ max config set <setting> <value> [options]
 
 | Argument | | Meaning |
 |---|---|---|
-| `setting` | required | one of: limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, requestsPerMinute, embeddingProvider, embeddingModel, embeddingBaseUrl, embeddingDims, analysisProvider, analysisModel, analysisBaseUrl, models, senderColors, catchUpMarksRead, searchCatchUp, serve, mcpTools, readOtherBots, updateCheck, skillHint, transcribeModel, defaultProfile, searchStemmers.cyrillic, searchStemmers.latin. |
+| `setting` | required | one of: limit, timeout_ms, color, record, keep_runs_for_days, read_only, allow, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, mcp_tools, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, searchStemmers.cyrillic, searchStemmers.latin. |
 | `value` | required | a number, true or false, or for allow a list like send,reaction. |
 
 | Option | Purpose |
@@ -3783,7 +3897,7 @@ max config unset <setting> [options]
 
 | Argument | | Meaning |
 |---|---|---|
-| `setting` | required | one of: limit, timeoutMs, color, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, requestsPerMinute, embeddingProvider, embeddingModel, embeddingBaseUrl, embeddingDims, analysisProvider, analysisModel, analysisBaseUrl, models, senderColors, catchUpMarksRead, searchCatchUp, serve, mcpTools, readOtherBots, updateCheck, skillHint, transcribeModel, defaultProfile, searchStemmers.cyrillic, searchStemmers.latin. |
+| `setting` | required | one of: limit, timeout_ms, color, record, keep_runs_for_days, read_only, allow, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, mcp_tools, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, searchStemmers.cyrillic, searchStemmers.latin. |
 
 | Option | Purpose |
 |---|---|
@@ -3835,18 +3949,23 @@ max runs list [options]
 | Option | Purpose |
 |---|---|
 | `--limit <n>` | how many to show. Default: `20`. |
+| `--page <n>` | which page, starting at 1. Default: `1`. |
 
 ### `max runs show`
 
-one run: what it was, how it ended and what went wrong; -v for every event
+one run: what it was, how it ended, and every event it logged
 
 ```sh
-max runs show <run-id>
+max runs show <run-id> [options]
 ```
 
 | Argument | | Meaning |
 |---|---|---|
 | `run-id` | required | an id from `max runs list`. |
+
+| Option | Purpose |
+|---|---|
+| `--problems` | only failed responses, warnings and crashes. |
 
 ### `max runs search`
 
@@ -4228,7 +4347,7 @@ max bot chats members list <chat> [options]
 
 #### `max bot chats members add`
 
-add people to a chat by user id; the bot must be an admin that may add members
+add people to a chat by user id, at most 100; the bot must be an admin that may add members
 
 **Changes something in MAX.**
 
@@ -4458,8 +4577,8 @@ max bot messages between <people> [options]
 
 | Option | Purpose |
 |---|---|
-| `--all-bots` | also read every other bot's copy on this machine that readOtherBots allows. |
-| `--bots <profiles>` | also read these bots' copies, comma separated — each allowed by readOtherBots. |
+| `--all-bots` | also read every other bot's copy on this machine that read_other_bots allows. |
+| `--bots <profiles>` | also read these bots' copies, comma separated — each allowed by read_other_bots. |
 | `--limit <n>` | how many of the latest messages from each chat. |
 
 ### `max bot search`
@@ -4480,9 +4599,10 @@ max bot search messages [query] [options]
 
 | Option | Purpose |
 |---|---|
-| `--all-bots` | also read every other bot's copy on this machine that readOtherBots allows. |
-| `--bots <profiles>` | also read these bots' copies, comma separated — each allowed by readOtherBots. |
+| `--all-bots` | also read every other bot's copy on this machine that read_other_bots allows. |
+| `--bots <profiles>` | also read these bots' copies, comma separated — each allowed by read_other_bots. |
 | `--limit <n>` | how many. |
+| `--page <n>` | which page, starting at 1. |
 | `--newest` | newest first instead of best first. |
 | `--from <who>` | only what this person wrote — an id, @username or part of a name; repeat it for any of several. |
 
@@ -4684,8 +4804,8 @@ max bot contacts show <who> [options]
 
 | Option | Purpose |
 |---|---|
-| `--all-bots` | also read every other bot's copy on this machine that readOtherBots allows. |
-| `--bots <profiles>` | also read these bots' copies, comma separated — each allowed by readOtherBots. |
+| `--all-bots` | also read every other bot's copy on this machine that read_other_bots allows. |
+| `--bots <profiles>` | also read these bots' copies, comma separated — each allowed by read_other_bots. |
 | `--limit <n>` | how many messages from the private chat. |
 | `--refresh` | read the private chat with them again from the messenger first — one request. |
 

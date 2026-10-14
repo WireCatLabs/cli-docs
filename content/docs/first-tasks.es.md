@@ -146,9 +146,9 @@ Encuentra el chat, comprueba qué está guardado y busca solo en el historial gu
 petición:
 
 ```sh
-tg personal chats list --search Atlas --kind group
+tg personal chats list 'title:*Atlas* kind:group'
 tg personal store status -1001001001001
-tg personal search messages 'analytics date:[2026-09-01 TO 2026-10-01}' --chat -1001001001001 --backend archive --json
+tg personal search messages 'analytics date:[2026-09-01 TO 2026-10-01} chat:"-1001001001001"' --backend archive --json
 ```
 
 Tras tu aprobación, descarga el periodo, vuelve a comprobar la cobertura y lee alrededor del
@@ -157,7 +157,7 @@ resultado:
 ```sh
 tg personal messages sync -1001001001001 --since-time 2026-09-01 --limit 1000
 tg personal store status -1001001001001
-tg personal search messages 'analytics date:[2026-09-01 TO 2026-10-01}' --chat -1001001001001 --backend archive --json
+tg personal search messages 'analytics date:[2026-09-01 TO 2026-10-01} chat:"-1001001001001"' --backend archive --json
 tg personal messages context -1001001001001 4312 --before-n 2 --after-n 4
 ```
 
@@ -225,12 +225,12 @@ borrador.
 Identifica los chats y revisa las dos partes de cada conversación:
 
 ```sh
-tg personal chats list --search Atlas --kind group
-tg personal contacts list --search Anna
-tg personal contacts list --search Tom
-tg personal review --chat -1001001001001 --since-time 7d
-tg personal review --chat 100200300 --since-time 7d
-tg personal review --chat 100200301 --since-time 7d
+tg personal chats list 'title:*Atlas* kind:group'
+tg personal contacts list name:Anna
+tg personal contacts list name:Tom
+tg personal review 'chat:"-1001001001001" date>7d'
+tg personal review 'chat:100200300 date>7d'
+tg personal review 'chat:100200301 date>7d'
 ```
 
 Después revisa la promesa original y sus respuestas:
@@ -301,20 +301,20 @@ pregunta.
 Encuentra los grupos y los participantes, y después lee los chats elegidos:
 
 ```sh
-tg personal chats list --search Atlas --kind group
-tg personal contacts list --search Anna
-tg personal contacts list --search Tom
-tg personal messages list -1001001001001 --after-time 7d --limit 100
-tg personal messages list -1001001001002 --after-time 7d --limit 100
-tg personal messages list 100200300 --after-time 7d --limit 100
-tg personal messages list 100200301 --after-time 7d --limit 100
+tg personal chats list 'title:*Atlas* kind:group'
+tg personal contacts list name:Anna
+tg personal contacts list name:Tom
+tg personal messages list -1001001001001 'date>7d' --limit 100
+tg personal messages list -1001001001002 'date>7d' --limit 100
+tg personal messages list 100200300 'date>7d' --limit 100
+tg personal messages list 100200301 'date>7d' --limit 100
 ```
 
 Para la pregunta siguiente, lee los mensajes posteriores a la llegada del diseño:
 
 ```sh
 tg personal messages context -1001001001002 732 --before-n 2 --after-n 10
-tg personal messages list 100200300 --after-time 2026-10-02T12:00:00+02:00 --limit 50
+tg personal messages list 100200300 'date>"2026-10-02T12:00:00+02:00"' --limit 50
 ```
 
 </details>

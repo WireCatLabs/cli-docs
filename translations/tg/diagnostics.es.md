@@ -73,7 +73,7 @@ Luego se mantiene cada ejecución. De forma predeterminada, una ejecución que f
 
 ## Cuánto se conservan
 
-**30 días**, o el valor de `keepRunsForDays` en la configuración. Los registros antiguos solo se eliminan al guardar uno nuevo; si la herramienta no escribe nada, no recorre ese directorio. Se eliminan días completos según el nombre de la carpeta, sin abrir los archivos.
+**30 días**, o el valor de `keep_runs_for_days` en la configuración. Los registros antiguos solo se eliminan al guardar uno nuevo; si la herramienta no escribe nada, no recorre ese directorio. Se eliminan días completos según el nombre de la carpeta, sin abrir los archivos.
 
 ## Qué nunca contiene un registro
 
@@ -114,11 +114,11 @@ Si no hay ejecuciones fallidas guardadas, vuelve a ejecutar el comando que falla
 
 ## Consultar los registros
 
-Los registros son JSON, así que puedes analizarlos con `jq`. `tg personal runs list --json` devuelve `{ items, page, limit, hasMore }`; `items` contiene los archivos `run.json`, del más reciente al más antiguo:
+Los registros son JSON, así que puedes analizarlos con `jq`. `tg personal runs list --json` devuelve `{ items, page: { limit, has_more }, meta }`; `items` contiene los archivos `run.json`, del más reciente al más antiguo:
 
 ```sh
-tg personal runs list --limit 100 --json | jq '[.items[] | select(.status == "failed") | {command, errorCode}]'
-tg personal runs list --limit 100 --json | jq '[.items[] | .durationMs] | add / length'  # average duration
+tg personal runs list --limit 100 --json | jq '[.items[] | select(.status == "failed") | {command, error_code}]'
+tg personal runs list --limit 100 --json | jq '[.items[] | .duration_ms] | add / length'  # average duration
 tg personal runs list --limit 100 --json | jq '[.items[] | select(.requests > 10) | {command, requests}]'
 ```
 

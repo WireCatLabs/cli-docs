@@ -130,13 +130,17 @@ tg personal search messages --regex 'invoice\s+\d+' --json
 
 ## La respuesta
 
-`--json` devuelve `{ items, page, limit, hasMore, corrections, completeness, wordsReady, query, coverage }`, aunque no haya coincidencias. `--jsonl` emite solo los elementos.
+`--json` devuelve `{ items, page: { limit, has_more }, next?, missing?, meta }`, aunque no haya coincidencias.
+`--jsonl` emite solo los elementos.
 
-- `query`: la versión del idioma, la zona horaria y el orden utilizado.
-- `coverage`: qué cuentas y chats se buscaron. `lastSyncedAt` es la vez más antigua que `messages sync` recuperó un chat dentro del alcance, `null` si algún chat nunca lo fue. `inventoryComplete` significa que cada cuenta dentro del alcance ha enumerado una vez todos sus chats; no promete una historia completa.
-- `completeness`: por chat, si su historial almacenado llega al inicio y tiene huecos.
-- `wordsReady`: si el índice de palabras está completo. Cuando es `false`, una consulta con palabras falla con `index_not_ready` y el comando que la finaliza, `tg personal store migrate`; se ejecuta una consulta sin palabras.
-- `hasMore` se trata de la página, no de si Telegram tiene más capacidad.
+- `items`: los resultados, los mejores primero (o los más nuevos primero con `--newest`), cada uno con su `ref` (`msg:…`), `timestamp`,
+  `sender_name`, `excerpt` y `matched_in`.
+- `meta.accounts`: qué cuentas se buscaron.
+- `missing`: lo que la respuesta no pudo ver, cada cosa con el paso que lo completa. `coverage` significa que algunos chats del alcance
+  nunca se descargaron o que la descarga previa a la búsqueda se detuvo antes de tiempo (paso `messages.sync`); `text` significa que el índice
+  de palabras aún se está construyendo (paso `store.migrate`, `tg personal store migrate`).
+- `next`: los pasos que hay que ejecutar. `page.next` repite la consulta para la página siguiente.
+- `page.has_more` se refiere a la página, no a si Telegram tiene más.
 
 Un error incluye la posición del problema en la consulta y una pista.
 

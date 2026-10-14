@@ -8,11 +8,11 @@ window.WireScenarioVariants = {
           "ask": "Use tg cli, gather context for tomorrow’s Atlas call: decisions, risks and questions."
         },
         {
-          "tool": "tg chats list --search \"Atlas\"",
+          "tool": "tg chats list title:Atlas",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"101\",\n      \"title\": \"Atlas · team\",\n      \"kind\": \"group\"\n    },\n    {\n      \"id\": \"102\",\n      \"title\": \"Atlas · design\",\n      \"kind\": \"group\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg review --chat \"Atlas · team\" --since-time 7d",
+          "tool": "tg review 'chat:\"Atlas · team\" date>7d'",
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Atlas · team\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Anna\",\n          \"text\": \"We’re launching on Friday.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        },\n        {\n          \"id\": \"48211\",\n          \"senderName\": \"Marco\",\n          \"text\": \"Anna needs the final copy by Thursday.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        },\n        {\n          \"id\": \"48212\",\n          \"senderName\": \"Tom\",\n          \"text\": \"Tom needs staging access.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
@@ -48,11 +48,11 @@ window.WireScenarioVariants = {
           "ask": "Check the design group and my DMs with Tom too. He may have sent the results there."
         },
         {
-          "tool": "tg review --chat \"Atlas · design\" --since-time 7d",
+          "tool": "tg review 'chat:\"Atlas · design\" date>7d'",
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Atlas · design\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Anna\",\n          \"text\": \"The design is ready. We’re still waiting for the final copy.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
-          "tool": "tg chats list --search \"Tom\"",
+          "tool": "tg chats list title:Tom",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"503\",\n      \"title\": \"Tom\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -60,7 +60,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Tom\",\n      \"text\": \"Test payments work. I still need access to production.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg search messages \"Atlas\" --chat 503 --language legacy",
+          "tool": "tg search messages 'Atlas chat:503'",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Tom\",\n      \"text\": \"Test payments work. I still need access to production.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -189,7 +189,7 @@ window.WireScenarioVariants = {
           "ask": "Use tg cli, I’m an admin of the Community group. Show violations of its rules and a proposed action plan. Don’t delete anything yet."
         },
         {
-          "tool": "tg chats list --search \"Community\"",
+          "tool": "tg chats list title:Community",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"301\",\n      \"title\": \"Community\",\n      \"kind\": \"group\"\n    }\n  ]\n}"
         },
         {
@@ -269,7 +269,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Marco\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Marco\",\n          \"text\": \"Approve the budget by 11:00 or the contractor cannot start.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    },\n    {\n      \"title\": \"Anna\",\n      \"messages\": [\n        {\n          \"id\": \"48211\",\n          \"senderName\": \"Anna\",\n          \"text\": \"The meeting moved to 19:30. Please confirm.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    },\n    {\n      \"title\": \"Mum\",\n      \"messages\": [\n        {\n          \"id\": \"8812\",\n          \"senderName\": \"Mum\",\n          \"text\": \"Voice note, 0:42\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
-          "tool": "tg review --chat \"Tech news\" --since-time 1d --all",
+          "tool": "tg review 'chat:\"Tech news\" date>1d' --all",
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Tech news\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Anna\",\n          \"text\": \"The coding tool has been updated.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        },\n        {\n          \"id\": \"48211\",\n          \"senderName\": \"Marco\",\n          \"text\": \"A practical guide to a new search approach is out.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
@@ -376,11 +376,11 @@ window.WireScenarioVariants = {
           "ask": "Use tg cli, find who needs my reply, what I promised and what I’m waiting on from others."
         },
         {
-          "tool": "tg review --since-time 7d --all --unanswered",
+          "tool": "tg review 'date>7d' --all --unanswered",
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Atlas\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Anna\",\n          \"text\": \"Marco: please confirm the budget.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        },\n        {\n          \"id\": \"48211\",\n          \"senderName\": \"Marco\",\n          \"text\": \"Customer: when is delivery?\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
-          "tool": "tg review --since-time 7d --all",
+          "tool": "tg review 'date>7d' --all",
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Atlas\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Anna\",\n          \"text\": \"You: I’ll send Anna the invoice by Friday.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        },\n        {\n          \"id\": \"48211\",\n          \"senderName\": \"Marco\",\n          \"text\": \"Tom: I’ll send the design on Wednesday.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        },\n        {\n          \"id\": \"48212\",\n          \"senderName\": \"Tom\",\n          \"text\": \"Customer: Friday works for me.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
@@ -416,7 +416,7 @@ window.WireScenarioVariants = {
           "ask": "Find Tom’s chat and check whether he already sent the design. Draft replies to the customer, Anna and Tom."
         },
         {
-          "tool": "tg chats list --search \"Tom\"",
+          "tool": "tg chats list title:Tom",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"503\",\n      \"title\": \"Tom\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -424,7 +424,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Tom\",\n      \"text\": \"Here’s the first design draft. I’ll finalise it after your feedback.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg search messages \"design\" --chat 503 --language legacy",
+          "tool": "tg search messages 'design chat:503'",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Tom\",\n      \"text\": \"Here’s the first design draft. I’ll finalise it after your feedback.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -524,11 +524,11 @@ window.WireScenarioVariants = {
           "ask": "Use tg cli, find the current Atlas contract, invoices and presentation. Check project groups and direct messages."
         },
         {
-          "tool": "tg chats list --search \"Atlas\"",
+          "tool": "tg chats list title:Atlas",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"101\",\n      \"title\": \"Atlas · team\"\n    },\n    {\n      \"id\": \"102\",\n      \"title\": \"Atlas · design\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg search messages \"contract OR invoice OR presentation\" --chat \"Atlas · team\" --language legacy",
+          "tool": "tg search messages '(contract OR invoice OR presentation) chat:\"Atlas · team\"'",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Anna\",\n      \"text\": \"Atlas presentation v2.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    },\n    {\n      \"id\": \"48211\",\n      \"senderName\": \"Marco\",\n      \"text\": \"Invoice for the first phase.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    },\n    {\n      \"id\": \"48212\",\n      \"senderName\": \"Tom\",\n      \"text\": \"Contract — initial draft.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -564,15 +564,15 @@ window.WireScenarioVariants = {
           "ask": "Check Anna's DMs and the design group. Use the latest versions, but keep the old ones too."
         },
         {
-          "tool": "tg chats list --search \"Anna\"",
+          "tool": "tg chats list title:Anna",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"501\",\n      \"title\": \"Anna\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg search messages \"contract\" --chat 501 --language legacy",
+          "tool": "tg search messages 'contract chat:501'",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Anna\",\n      \"text\": \"Final Atlas contract. Payment terms updated.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg search messages \"presentation\" --chat \"Atlas · design\" --language legacy",
+          "tool": "tg search messages 'presentation chat:\"Atlas · design\"'",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Anna\",\n      \"text\": \"Atlas presentation v3, with updated designs.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -600,7 +600,7 @@ window.WireScenarioVariants = {
           "ask": "Check the remaining invoices and download the current files into an Atlas folder. Don’t send anything."
         },
         {
-          "tool": "tg search messages \"invoice\" --chat 501 --language legacy",
+          "tool": "tg search messages 'invoice chat:501'",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48213\",\n      \"senderName\": \"Anna\",\n      \"text\": \"The second-phase invoice hasn’t been issued yet.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -716,11 +716,11 @@ window.WireScenarioVariants = {
           "ask": "Usa tg cli, reúne el contexto para la llamada de Atlas de mañana: decisiones, riesgos y preguntas."
         },
         {
-          "tool": "tg chats list --search \"Atlas\"",
+          "tool": "tg chats list title:Atlas",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"101\",\n      \"title\": \"Atlas · equipo\",\n      \"kind\": \"group\"\n    },\n    {\n      \"id\": \"102\",\n      \"title\": \"Atlas · diseño\",\n      \"kind\": \"group\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg review --chat \"Atlas · equipo\" --since-time 7d",
+          "tool": "tg review 'chat:\"Atlas · equipo\" date>7d'",
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Atlas · equipo\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Anna\",\n          \"text\": \"Lanzamos el viernes.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        },\n        {\n          \"id\": \"48211\",\n          \"senderName\": \"Marco\",\n          \"text\": \"Anna necesita los textos finales para el jueves.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        },\n        {\n          \"id\": \"48212\",\n          \"senderName\": \"Tom\",\n          \"text\": \"Tom necesita acceso al entorno de pruebas.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
@@ -756,11 +756,11 @@ window.WireScenarioVariants = {
           "ask": "Revisa también el grupo de diseño y mi conversación privada con Tom. Puede que haya enviado los resultados por ahí."
         },
         {
-          "tool": "tg review --chat \"Atlas · diseño\" --since-time 7d",
+          "tool": "tg review 'chat:\"Atlas · diseño\" date>7d'",
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Atlas · diseño\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Anna\",\n          \"text\": \"La maqueta está lista. Aún faltan los textos finales.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
-          "tool": "tg chats list --search \"Tom\"",
+          "tool": "tg chats list title:Tom",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"503\",\n      \"title\": \"Tom\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -768,7 +768,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Tom\",\n      \"text\": \"Los pagos de prueba funcionan. Todavía necesito acceso a producción.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg search messages \"Atlas\" --chat 503 --language legacy",
+          "tool": "tg search messages 'Atlas chat:503'",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Tom\",\n      \"text\": \"Los pagos de prueba funcionan. Todavía necesito acceso a producción.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -897,7 +897,7 @@ window.WireScenarioVariants = {
           "ask": "Usa tg cli, soy administrador del grupo Comunidad. Muéstrame las infracciones y un plan. No borres nada todavía."
         },
         {
-          "tool": "tg chats list --search \"Comunidad\"",
+          "tool": "tg chats list title:Comunidad",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"301\",\n      \"title\": \"Comunidad\",\n      \"kind\": \"group\"\n    }\n  ]\n}"
         },
         {
@@ -977,7 +977,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Marco\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Marco\",\n          \"text\": \"Aprueba el presupuesto antes de las 11:00 o el proveedor no puede empezar.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    },\n    {\n      \"title\": \"Anna\",\n      \"messages\": [\n        {\n          \"id\": \"48211\",\n          \"senderName\": \"Anna\",\n          \"text\": \"La reunión pasa a las 19:30. Confirma, por favor.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    },\n    {\n      \"title\": \"Mamá\",\n      \"messages\": [\n        {\n          \"id\": \"8812\",\n          \"senderName\": \"Mamá\",\n          \"text\": \"Audio, 0:42\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
-          "tool": "tg review --chat \"Noticias de tecnología\" --since-time 1d --all",
+          "tool": "tg review 'chat:\"Noticias de tecnología\" date>1d' --all",
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Noticias de tecnología\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Anna\",\n          \"text\": \"La herramienta de desarrollo se ha actualizado.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        },\n        {\n          \"id\": \"48211\",\n          \"senderName\": \"Marco\",\n          \"text\": \"Han publicado una guía sobre un nuevo enfoque de búsqueda.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
@@ -1084,11 +1084,11 @@ window.WireScenarioVariants = {
           "ask": "Usa tg cli, busca quién necesita mi respuesta, qué prometí y qué estoy esperando de otros."
         },
         {
-          "tool": "tg review --since-time 7d --all --unanswered",
+          "tool": "tg review 'date>7d' --all --unanswered",
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Atlas\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Anna\",\n          \"text\": \"Marco: confirma el presupuesto, por favor.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        },\n        {\n          \"id\": \"48211\",\n          \"senderName\": \"Marco\",\n          \"text\": \"Cliente: ¿cuándo llega el pedido?\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
-          "tool": "tg review --since-time 7d --all",
+          "tool": "tg review 'date>7d' --all",
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Atlas\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Anna\",\n          \"text\": \"Tú: enviaré la factura a Anna para el viernes.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        },\n        {\n          \"id\": \"48211\",\n          \"senderName\": \"Marco\",\n          \"text\": \"Tom: enviaré la maqueta el miércoles.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        },\n        {\n          \"id\": \"48212\",\n          \"senderName\": \"Tom\",\n          \"text\": \"Cliente: el viernes me va bien.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
@@ -1124,7 +1124,7 @@ window.WireScenarioVariants = {
           "ask": "Busca el chat de Tom y comprueba si ya envió el diseño. Prepara respuestas para el cliente, Anna y Tom."
         },
         {
-          "tool": "tg chats list --search \"Tom\"",
+          "tool": "tg chats list title:Tom",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"503\",\n      \"title\": \"Tom\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1132,7 +1132,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Tom\",\n      \"text\": \"Aquí está la primera versión de la maqueta. La cerraré después de vuestros comentarios.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg search messages \"maqueta\" --chat 503 --language legacy",
+          "tool": "tg search messages 'maqueta chat:503'",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Tom\",\n      \"text\": \"Aquí está la primera versión de la maqueta. La cerraré después de vuestros comentarios.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1232,11 +1232,11 @@ window.WireScenarioVariants = {
           "ask": "Usa tg cli, encuentra el contrato, las facturas y la presentación actuales de Atlas. Revisa grupos y mensajes privados."
         },
         {
-          "tool": "tg chats list --search \"Atlas\"",
+          "tool": "tg chats list title:Atlas",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"101\",\n      \"title\": \"Atlas · equipo\"\n    },\n    {\n      \"id\": \"102\",\n      \"title\": \"Atlas · diseño\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg search messages \"contrato OR factura OR presentación\" --chat \"Atlas · equipo\" --language legacy",
+          "tool": "tg search messages '(contrato OR factura OR presentación) chat:\"Atlas · equipo\"'",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Anna\",\n      \"text\": \"Presentación de Atlas v2.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    },\n    {\n      \"id\": \"48211\",\n      \"senderName\": \"Marco\",\n      \"text\": \"Factura de la primera fase.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    },\n    {\n      \"id\": \"48212\",\n      \"senderName\": \"Tom\",\n      \"text\": \"Contrato: versión preliminar.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1272,15 +1272,15 @@ window.WireScenarioVariants = {
           "ask": "Revisa mi conversación con Anna y el grupo de diseño. Quédate con las últimas versiones, pero conserva también las anteriores."
         },
         {
-          "tool": "tg chats list --search \"Anna\"",
+          "tool": "tg chats list title:Anna",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"501\",\n      \"title\": \"Anna\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg search messages \"contrato\" --chat 501 --language legacy",
+          "tool": "tg search messages 'contrato chat:501'",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Anna\",\n      \"text\": \"Contrato final de Atlas. Condiciones de pago actualizadas.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg search messages \"presentación\" --chat \"Atlas · diseño\" --language legacy",
+          "tool": "tg search messages 'presentación chat:\"Atlas · diseño\"'",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Anna\",\n      \"text\": \"Presentación de Atlas v3, con las maquetas actualizadas.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1316,7 +1316,7 @@ window.WireScenarioVariants = {
           "ask": "Revisa las facturas restantes y descarga los archivos actuales en una carpeta Atlas. No envíes nada."
         },
         {
-          "tool": "tg search messages \"factura\" --chat 501 --language legacy",
+          "tool": "tg search messages 'factura chat:501'",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48213\",\n      \"senderName\": \"Anna\",\n      \"text\": \"La factura de la segunda fase aún no se ha emitido.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1440,11 +1440,11 @@ window.WireScenarioVariants = {
           "ask": "Используй tg cli, собери контекст к завтрашнему созвону по Atlas: решения, риски и вопросы."
         },
         {
-          "tool": "tg chats list --search \"Atlas\"",
+          "tool": "tg chats list title:Atlas",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"101\",\n      \"title\": \"Atlas · команда\",\n      \"kind\": \"group\"\n    },\n    {\n      \"id\": \"102\",\n      \"title\": \"Atlas · дизайн\",\n      \"kind\": \"group\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg review --chat \"Atlas · команда\" --since-time 7d",
+          "tool": "tg review 'chat:\"Atlas · команда\" date>7d'",
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Atlas\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Анна\",\n          \"text\": \"Запускаем в пятницу.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        },\n        {\n          \"id\": \"48211\",\n          \"senderName\": \"Марко\",\n          \"text\": \"Анна ждёт финальные тексты до четверга.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        },\n        {\n          \"id\": \"48212\",\n          \"senderName\": \"Том\",\n          \"text\": \"Тому нужен доступ к стенду.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
@@ -1480,11 +1480,11 @@ window.WireScenarioVariants = {
           "ask": "Посмотри ещё дизайн и мою личку с Томом. Он мог прислать результат туда."
         },
         {
-          "tool": "tg review --chat \"Atlas · дизайн\" --since-time 7d",
+          "tool": "tg review 'chat:\"Atlas · дизайн\" date>7d'",
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Atlas\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Анна\",\n          \"text\": \"Макет готов. Финальные тексты ещё ждём.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
-          "tool": "tg chats list --search \"Том\"",
+          "tool": "tg chats list title:Том",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"503\",\n      \"title\": \"Том\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1492,7 +1492,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Том\",\n      \"text\": \"Проверил тестовую оплату. Для боевого стенда всё ещё нужен доступ.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg search messages \"Atlas\" --chat 503 --language legacy",
+          "tool": "tg search messages 'Atlas chat:503'",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Том\",\n      \"text\": \"Проверил тестовую оплату. Для боевого стенда всё ещё нужен доступ.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1621,7 +1621,7 @@ window.WireScenarioVariants = {
           "ask": "Используй tg cli, я администратор группы «Сообщество». Покажи нарушения её правил и план действий. Пока ничего не удаляй."
         },
         {
-          "tool": "tg chats list --search \"Сообщество\"",
+          "tool": "tg chats list title:Сообщество",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"301\",\n      \"title\": \"Сообщество\",\n      \"kind\": \"group\"\n    }\n  ]\n}"
         },
         {
@@ -1701,7 +1701,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Марко\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Марко\",\n          \"text\": \"Согласуй бюджет до 11:00, иначе подрядчик не начнёт.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    },\n    {\n      \"title\": \"Анна\",\n      \"messages\": [\n        {\n          \"id\": \"48211\",\n          \"senderName\": \"Анна\",\n          \"text\": \"Встречу перенесли на 19:30. Подтверди, пожалуйста.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    },\n    {\n      \"title\": \"Мама\",\n      \"messages\": [\n        {\n          \"id\": \"8812\",\n          \"senderName\": \"Мама\",\n          \"text\": \"Голосовое, 0:42\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
-          "tool": "tg review --chat \"Новости технологий\" --since-time 1d --all",
+          "tool": "tg review 'chat:\"Новости технологий\" date>1d' --all",
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Новости технологий\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Анна\",\n          \"text\": \"Обновился инструмент для кода.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        },\n        {\n          \"id\": \"48211\",\n          \"senderName\": \"Марко\",\n          \"text\": \"Опубликован разбор нового подхода к поиску.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
@@ -1808,11 +1808,11 @@ window.WireScenarioVariants = {
           "ask": "Используй tg cli, найди, кому я должен ответить, что обещал и от кого жду результата."
         },
         {
-          "tool": "tg review --since-time 7d --all --unanswered",
+          "tool": "tg review 'date>7d' --all --unanswered",
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Atlas\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Анна\",\n          \"text\": \"Марко: подтвердите бюджет.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        },\n        {\n          \"id\": \"48211\",\n          \"senderName\": \"Марко\",\n          \"text\": \"Клиент: когда доставка?\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
-          "tool": "tg review --since-time 7d --all",
+          "tool": "tg review 'date>7d' --all",
           "out": "{\n  \"chats\": [\n    {\n      \"title\": \"Atlas\",\n      \"messages\": [\n        {\n          \"id\": \"48210\",\n          \"senderName\": \"Анна\",\n          \"text\": \"Вы: пришлю счёт Анне до пятницы.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        },\n        {\n          \"id\": \"48211\",\n          \"senderName\": \"Марко\",\n          \"text\": \"Том: макет отдам в среду.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        },\n        {\n          \"id\": \"48212\",\n          \"senderName\": \"Том\",\n          \"text\": \"Клиент: пятница подходит.\",\n          \"timestamp\": \"2026-10-02T09:00:00Z\"\n        }\n      ],\n      \"more\": false\n    }\n  ],\n  \"skipped\": [],\n  \"partial\": false\n}"
         },
         {
@@ -1848,7 +1848,7 @@ window.WireScenarioVariants = {
           "ask": "Найди чат с Томом и проверь, не прислал ли он макет. Подготовь ответы клиенту, Анне и Тому."
         },
         {
-          "tool": "tg chats list --search \"Том\"",
+          "tool": "tg chats list title:Том",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"503\",\n      \"title\": \"Том\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1856,7 +1856,7 @@ window.WireScenarioVariants = {
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Том\",\n      \"text\": \"Вот первый вариант макета. Финал после ваших комментариев.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg search messages \"макет\" --chat 503 --language legacy",
+          "tool": "tg search messages 'макет chat:503'",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Том\",\n      \"text\": \"Вот первый вариант макета. Финал после ваших комментариев.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1956,11 +1956,11 @@ window.WireScenarioVariants = {
           "ask": "Используй tg cli, найди актуальный договор, счета и презентацию по Atlas. Проверь проектные группы и личную переписку."
         },
         {
-          "tool": "tg chats list --search \"Atlas\"",
+          "tool": "tg chats list title:Atlas",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"101\",\n      \"title\": \"Atlas · команда\"\n    },\n    {\n      \"id\": \"102\",\n      \"title\": \"Atlas · дизайн\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg search messages \"договор OR счёт OR презентация\" --chat \"Atlas · команда\" --language legacy",
+          "tool": "tg search messages '(договор OR счёт OR презентация) chat:\"Atlas · команда\"'",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Анна\",\n      \"text\": \"Презентация Atlas v2.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    },\n    {\n      \"id\": \"48211\",\n      \"senderName\": \"Марко\",\n      \"text\": \"Счёт за первый этап.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    },\n    {\n      \"id\": \"48212\",\n      \"senderName\": \"Том\",\n      \"text\": \"Договор — предварительная версия.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1996,15 +1996,15 @@ window.WireScenarioVariants = {
           "ask": "Посмотри личку Анны и дизайн. Оставь последние версии, но не теряй старые."
         },
         {
-          "tool": "tg chats list --search \"Анна\"",
+          "tool": "tg chats list title:Анна",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"501\",\n      \"title\": \"Анна\",\n      \"kind\": \"private\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg search messages \"договор\" --chat 501 --language legacy",
+          "tool": "tg search messages 'договор chat:501'",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Анна\",\n      \"text\": \"Финальный договор по Atlas. Исправлены условия оплаты.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
-          "tool": "tg search messages \"презентация\" --chat \"Atlas · дизайн\" --language legacy",
+          "tool": "tg search messages 'презентация chat:\"Atlas · дизайн\"'",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"senderName\": \"Анна\",\n      \"text\": \"Презентация Atlas v3, обновила макеты.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -2040,7 +2040,7 @@ window.WireScenarioVariants = {
           "ask": "Проверь оставшиеся счета и скачай актуальные файлы в папку Atlas. Ничего не отправляй."
         },
         {
-          "tool": "tg search messages \"счёт\" --chat 501 --language legacy",
+          "tool": "tg search messages 'счёт chat:501'",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48213\",\n      \"senderName\": \"Анна\",\n      \"text\": \"Счёт за второй этап пока не выставляли.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {

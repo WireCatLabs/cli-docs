@@ -24,7 +24,7 @@ Topic search differs from the `topic:` field in [message search](./search.md). T
 | Task | Command |
 |---|---|
 | Find a discussion on a topic - in one chat or in all prepared ones | `max personal search conversations "<вопрос>"` |
-| View chat conversations, new ones on top | `max personal conversations list --chat <чат>` |
+| View chat conversations, new ones on top | `max personal conversations list <чат>` |
 | Read one conversation from start to finish | `max personal conversations show <id>` |
 | Open entire conversation that contains a message | `max personal conversations show <чат> <сообщение>` |
 | Find other conversations about the same thing in all chats | `max personal conversations related <чат> <сообщение>` |
@@ -118,10 +118,10 @@ In the terminal, each result is one line:
 - A message locator (`msg:…`) accepted by `max personal messages show` and `max personal messages context`.
 - `stale` if text changed after vector calculation: the score refers to older text.
 
-`--json` also includes `meaning` (`searched` or `unavailable`), `model` and `readiness`: chats searched by meaning, by words only, stale chats and unbuilt chats. When coverage is limited, stderr names affected chats and the command to fix them, such as `conversations embed --chat <чат>`.
+With `--json`, what the search could not check by meaning is listed as entries in `missing`: the model is not downloaded, vectors are stale, or a chat was never built or fetched. Beside it, `next` holds the command that fixes it, such as `conversations embed --chat <чат>`; accounts are in `meta.accounts`.
 
 ```sh
-max personal conversations list --chat "Книжный клуб" --since-time 7d
+max personal conversations list "Книжный клуб" started_at>=7d
 max personal conversations show 91                       # один разговор, от старых к новым
 max personal conversations show "Книжный клуб" 204       # разговор, в котором сообщение 204
 max personal conversations related "Книжный клуб" 204    # другие разговоры о том же, во всех чатах
@@ -161,7 +161,7 @@ max personal search conversations "условия договора" --filter 'ha
 **Start with one message.** You found a message using a word search and want everything else on this topic:
 
 ```sh
-max personal search messages '"вернули залог"' --chat "Valencia expats"
+max personal search messages '"вернули залог" chat:"Valencia expats"'
 max personal conversations related "Valencia expats" 5120
 ```
 

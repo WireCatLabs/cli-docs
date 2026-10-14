@@ -108,8 +108,8 @@ buscar nombres de chats o personas puede funcionar de otra forma.
 <summary>Opcional: comandos para el terminal</summary>
 
 ```sh
-tg personal search messages factura --chat "Proyecto"
-max personal search messages factura --chat "Proyecto"
+tg personal search messages 'factura chat:"Proyecto"'
+max personal search messages 'factura chat:"Proyecto"'
 ```
 
 </details>

@@ -27,7 +27,7 @@ max personal replies edit away --outside 09:00-19:00 --days mon-fri --timezone E
 max personal replies edit away --per-chat 1/12h --per-person 1/1d
 ```
 
-`add` crea una regla desactivada con todos sus ajustes actuales. El archivo `<профиль>.replies.json` está junto al `configFile` que muestra `max config show --json`. Por defecto puede responder a cualquiera que coincida con la regla. Para limitarlo a personas elegidas, indica sus ID de MAX separados por comas; `max personal contacts show <имя> --json` muestra el ID en `id`:
+`add` crea una regla desactivada con todos sus ajustes actuales. El archivo `<профиль>.replies.json` está junto al `config_file` que muestra `max config show --json`. Por defecto puede responder a cualquiera que coincida con la regla. Para limitarlo a personas elegidas, indica sus ID de MAX separados por comas; `max personal contacts show <имя> --json` muestra el ID en `id`:
 
 ```sh
 max personal replies audience --reply listed --allow-people 1000001
@@ -96,7 +96,7 @@ Un modelo solo puede cambiar el bloque `ai`; el texto fuera de él sigue siendo 
 
 El cuerpo del bloque después de las sustituciones es la instrucción. El texto entrante se envía al modelo por separado como datos. Su respuesta no se ejecuta como Liquid; se rechaza una respuesta demasiado larga o que repita por completo el texto entrante. Si no hay proveedor configurado, falta consentimiento o falla la llamada, se utiliza `else`. Sin él, se omite la respuesta y se explica el motivo.
 
-Configura `models.replies.provider` (`openai` o `anthropic`), el ID exacto del modelo en `models.replies.model` y, si lo necesitas, `models.replies.baseUrl`. Los valores compartidos proceden de `models.default`; `provider off` desactiva la asignación. `config set` y `config unset` admiten estas claves; `config show` muestra el origen de cada campo. Los antiguos `analysisProvider`, `analysisModel` y `analysisBaseUrl` siguen funcionando para el análisis. Guarda la clave con `max personal models text key set`; para un servidor propio, el nombre de la clave es su host con el puerto, y no se envía allí la clave del proveedor público.
+Configura `models.replies.provider` (`openai` o `anthropic`), el ID exacto del modelo en `models.replies.model` y, si lo necesitas, `models.replies.base_url`. Los valores compartidos proceden de `models.default`; `provider off` desactiva la asignación. `config set` y `config unset` admiten estas claves; `config show` muestra el origen de cada campo. Los antiguos `analysis_provider`, `analysis_model` y `analysis_base_url` siguen funcionando para el análisis. Guarda la clave con `max personal models text key set`; para un servidor propio, el nombre de la clave es su host con el puerto, y no se envía allí la clave del proveedor público.
 
 El consentimiento para el modelo es independiente del permiso para enviar respuestas:
 

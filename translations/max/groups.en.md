@@ -18,7 +18,7 @@ These actions use your personal account in groups you administer. Terms used bel
 | --- | --- |
 | Find questions that are waiting to be answered | `max personal review --unanswered` |
 | See who joined, left, added or removed | `max personal chats events` |
-| Sum up the week: decisions, promises, open questions | `max personal review --since-time 7d` |
+| Sum up the week: decisions, promises, open questions | `max personal review 'date>7d'` |
 | Keep a list of what's waiting for you | `max personal tasks list` |
 | Remove spam according to your own rules | `max personal chats rules set`, `max personal chats moderate` |
 | Replace leaked invitation link | `max personal chats link reset` |
@@ -46,7 +46,7 @@ Start with questions that have been waiting for you or the admins.
 **Command:**
 
 ```sh
-max personal review --chat "Поход" --unanswered 4h --json
+max personal review 'chat:"Поход"' --unanswered 4h --json
 ```
 
 **Example agent answer:**
@@ -76,7 +76,7 @@ Review joining events. A new account is a reason to check, not proof of spam.
 **Command:**
 
 ```sh
-max personal chats events "Поход" --type add --since-time 7d --json
+max personal chats events "Поход" 'time>=7d' --json
 ```
 
 **Example agent answer:**
@@ -158,7 +158,7 @@ Ask for a short recap of decisions, commitments and open questions.
 **Command:**
 
 ```sh
-max personal review --chat "Поход" --since-time 7d --json
+max personal review 'chat:"Поход" date>7d' --json
 ```
 
 **Example agent answer:**
@@ -188,7 +188,7 @@ Without `--allow-dangerous` in cron, actions at level `ask` are just planned and
 
 | command | What does |
 |---|---|
-| `max personal review --chat <чат> --unanswered [длительность]` | questions that you and the admins did not answer within the specified time (for example, `4h`; default `24h`) |
+| `max personal review 'chat:<чат>' --unanswered [длительность]` | questions that you and the admins did not answer within the specified time (for example, `4h`; default `24h`) |
 | `max personal chats events <чат>` | who entered, left, who was added and removed, by whom; by default 7 days |
 | `max personal chats members list <чат>` | page of participants from MAX (`--all` - all available, up to 5000): who is the owner and admins (immediately after `admins add` the role may be the same), when the account was created, when it was online |
 | `max personal chats rules show\|set\|unset <чат>` | group rules |
@@ -204,7 +204,7 @@ Without `--allow-dangerous` in cron, actions at level `ask` are just planned and
 
 An agent connected via [MCP server](./mcp.md) can execute the same commands within the scope of profile rights.
 
-Group-changing commands return `operationId` in JSON. After creating, joining, updating or resetting a link, the chat record is in `chat`. If the title or description changed but the settings request did not complete, the result is `outcome_unknown`. Read the group with `chats show` before retrying: the change may have applied partially.
+Group-changing commands return `operation_id` in JSON. After creating, joining, updating or resetting a link, the chat record is in `chat`. If the title or description changed but the settings request did not complete, the result is `outcome_unknown`. Read the group with `chats show` before retrying: the change may have applied partially.
 
 ## What needs your reply
 
@@ -213,11 +213,11 @@ Group-changing commands return `operationId` in JSON. After creating, joining, u
 See what awaits you, the old ones on top, and then only questions and mentions in one group:
 
 ```sh
-max personal tasks list --state open
+max personal tasks list state:open
 ```
 
 ```sh
-max personal tasks list --chat "Поход" --type question,mention
+max personal tasks list chat:<id чата> "(kind:question OR kind:mention)"
 ```
 
 Add something that the rules don't see, like your promise, or close a task that doesn't need to be answered:
@@ -308,7 +308,7 @@ Consent determines whether the action is performed:
 
 Old files are read: `forbid` becomes `deny`, `flag` and `confirm` - `ask`. An agent connected via MCP operates only where the level is `allow`; level `ask` actions remain the plan for you, there are no server forms.
 
-`chats moderate --json` returns `{ chatId, rows }`. `--since-time` accepts an ISO 8601 time or `30m`, `2h`, `1d`, not a message ID, and does not advance the saved position. The next-check position is stored with the rules; the old session position is migrated automatically before the first run. CLI and personal-account MCP share this position.
+`chats moderate --json` returns `{ item: { chat_id, rows } }`. `--since-time` accepts an ISO 8601 time or `30m`, `2h`, `1d`, not a message ID, and does not advance the saved position. The next-check position is stored with the rules; the old session position is migrated automatically before the first run. CLI and personal-account MCP share this position.
 
 ## Using a bot
 
@@ -360,7 +360,7 @@ To collect the lineup every day, add the group to the watch list: `max personal 
 
 Tracking does not start the server or prolong its idle timeout: for daily history, keep `max personal server` running at all times. `max personal chats tracking list` shows the groups being monitored and the last number of participants saved; `show` - group status and snapshots of the number of participants over the last 30 days. `max personal chats tracking remove <группа>` stops automatic receiving; the accumulated history remains accessible through `max personal chats members history`.
 
-`max personal chats members history` lists saved joins, departures and profile changes chronologically; `--since-time` limits the period. It never contacts MAX. A join uses MAX's timestamp when available, otherwise first observation. Departure time is the first complete snapshot missing the person, rather than their exact departure. The initial list does not mean everyone joined that day. `chats members list --offline` shows the latest complete saved membership; partial reads do not replace it. Without a complete snapshot, the list can be empty even when individual profiles and events exist. Profiles and history remain beside messages in the local archive.
+`max personal chats members history` lists saved joins, departures and profile changes chronologically; the query `time>=7d` limits the period. It never contacts MAX. A join uses MAX's timestamp when available, otherwise first observation. Departure time is the first complete snapshot missing the person, rather than their exact departure. The initial list does not mean everyone joined that day. `chats members list --offline` shows the latest complete saved membership; partial reads do not replace it. Without a complete snapshot, the list can be empty even when individual profiles and events exist. Profiles and history remain beside messages in the local archive.
 
 `max personal chats members audit` reads members and shows signals of suspicious accounts. `--budget` limits pages, and `--min-score` sets the minimum score. This is a hint for human review: nobody is removed, administrators and the owner are excluded, `more` means an incomplete list, and `unknown` means unknown signals. MAX does not provide every Telegram signal. This check is unavailable with `--offline`. “Never wrote” means no messages from the person were found in local history; it does not prove they never posted in the group.
 
@@ -383,7 +383,7 @@ max personal stats chats show "Поход" --since-time 7d --by day --timezone E
 ```
 
 ```sh
-max personal chats members history "Поход" --since-time 7d --offline --json
+max personal chats members history "Поход" 'time>=7d' --offline --json
 ```
 
 ```sh

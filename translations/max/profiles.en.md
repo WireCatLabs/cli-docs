@@ -2,7 +2,7 @@
 title: "Profiles and bots"
 ---
 
-A **profile** names one `max` login on this computer: a personal MAX account or a bot, with its own session and settings. You choose the name at the first login — `max personal setup` — and repeat it in every command: `max` never picks a profile by itself, not even the only one. To avoid typing the name each time, set `MAX_PROFILE` for the shell session or run `max config set defaultProfile personal` once and for all.
+A **profile** names one `max` login on this computer: a personal MAX account or a bot, with its own session and settings. You choose the name at the first login — `max personal setup` — and repeat it in every command: `max` never picks a profile by itself, not even the only one. To avoid typing the name each time, set `MAX_PROFILE` for the shell session or run `max config set default_profile personal` once and for all.
 
 Use this page when you need a second account, want your AI agent to have fewer permissions than you, or want to run a bot. You will learn to select a profile for a command, give it its own settings and switch to a bot.
 

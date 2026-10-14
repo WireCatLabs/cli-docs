@@ -64,7 +64,7 @@ Los archivos que no se pueden leer como texto, como escaneos y fotos, aparecen e
 Tu agente lee la imagen con sus propias herramientas de visión y guarda las palabras:
 
 ```sh
-tg personal attachments list --chat "Book club" --needs-text
+tg personal attachments list 'chat:"Book club" is:needs_text'
 tg personal attachments text set "Book club" 204 --text-file ./scan.txt
 ```
 
@@ -90,7 +90,7 @@ En archivos y transcripciones, la palabra se busca en su forma exacta. Las otras
 
 ## Teléfonos, correos y enlaces
 
-Las herramientas encuentran números de teléfono, direcciones de correo, enlaces, enlaces a documentos de Google en el texto de mensajes, archivos y transcripciones. Cada valor se guarda como una mención. La búsqueda lo encuentra como se haya escrito:
+Las herramientas encuentran números de teléfono, direcciones de correo, enlaces, enlaces a documentos de Google en el texto de mensajes, archivos y transcripciones; `tg` también encuentra los nombres de personas que conoces. Cada valor se guarda como una mención. La búsqueda lo encuentra como se haya escrito:
 
 ```sh
 tg personal search messages 'phone:"+1 555 010 0100"'
@@ -98,7 +98,7 @@ tg personal search messages 'email:"ana@example.com"'
 tg personal search messages 'domain:example.com'
 ```
 
-`phone:` encuentra igual `+1 555 010 0100` y `+1 (555) 010-0100`; sin `+`, solo se reconocen números rusos. `domain:` encuentra todos los enlaces y direcciones de ese sitio. Las menciones se encuentran con reglas, sin modelo. Una mención que rechazas sigue descartada.
+`phone:` encuentra igual `+1 555 010 0100` y `+1 (555) 010-0100`; sin `+`, solo se reconocen números rusos. `domain:` encuentra todos los enlaces y direcciones de ese sitio. Las menciones se encuentran con reglas, sin modelo. Una mención que rechazas sigue descartada. Cómo revisar menciones y registrar quién es: [Teléfonos, enlaces y nombres](./mentions.md).
 
 ## Imágenes
 

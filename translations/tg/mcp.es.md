@@ -144,7 +144,7 @@ El servidor ofrece seis prompts preparados; en Claude Code son comandos `/`:
 
 Los chats son recursos `tg://chat/<id>` — en Claude Code puedes mencionarlos con `@`. Un recurso es el chat y sus mensajes recientes. La lista proviene de la copia local de tus mensajes y nunca se conecta a Telegram; hasta que se leyó algo, está vacío. Solo se conecta leyendo un chat.
 
-`tg_read` (`command: "messages link"`) devuelve `{ locator, url, access, reason }` sin el texto del mensaje. Verifica la cuenta y la audiencia de la misma manera que `messages link`; un enlace privado no convierte a nadie en miembro. Los puntos de control de la bandeja de entrada y de revisión en MCP están separados de los puntos de control `--new` del terminal.
+`tg_read` (`command: "messages link"`) devuelve `{ item: { ref, url, access, reason } }` sin el texto del mensaje. Verifica la cuenta y la audiencia de la misma manera que `messages link`; un enlace privado no convierte a nadie en miembro. Los puntos de control de la bandeja de entrada y de revisión en MCP están separados de los puntos de control `--new` del terminal.
 
 ## Gráficos de estadísticas
 

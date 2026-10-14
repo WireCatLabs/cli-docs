@@ -27,7 +27,7 @@ La búsqueda por tema no es un campo `topic:` [búsqueda de mensajes](./search.m
 |Tarea|Comando|
 |---|---|
 |Encuentre una discusión sobre un tema, en un chat o en todos los preparados| `max personal search conversations "<вопрос>"` |
-|Ver conversaciones de chat, las nuevas en la parte superior| `max personal conversations list --chat <чат>` |
+|Ver conversaciones de chat, las nuevas en la parte superior| `max personal conversations list <чат>` |
 |Leer una conversación de principio a fin| `max personal conversations show <id>` |
 |Abrir toda la conversación que contiene un mensaje.| `max personal conversations show <чат> <сообщение>` |
 |Encuentra otras conversaciones sobre lo mismo en todos los chats| `max personal conversations related <чат> <сообщение>` |
@@ -121,10 +121,10 @@ En la terminal, cada resultado es una línea:
 - enlace al mensaje (`msg:…`), aceptado por `max personal messages show` y `max personal messages context`;
 - `stale`, si el texto fue modificado después de calcular el vector: la puntuación es para el texto antiguo.
 
-Con `--json` en la respuesta también están `meaning` (`searched` o `unavailable`), `model` y `readiness`: qué chats se vieron por significado, cuáles solo por palabras, cuáles están desactualizados y cuáles nunca se construyeron. Si la búsqueda está limitada por algo, stderr nombra los chats y el comando que lo arreglará, por ejemplo `conversations embed --chat <чат>`.
+Con `--json`, lo que la búsqueda no pudo ver por significado son entradas en `missing`: el modelo no está descargado, los vectores están desactualizados, el chat nunca se construyó o no se descargó. Junto a ellas, en `next`, está el comando que lo arreglará, por ejemplo `conversations embed --chat <чат>`; las cuentas están en `meta.accounts`.
 
 ```sh
-max personal conversations list --chat "Книжный клуб" --since-time 7d
+max personal conversations list "Книжный клуб" started_at>=7d
 max personal conversations show 91                       # один разговор, от старых к новым
 max personal conversations show "Книжный клуб" 204       # разговор, в котором сообщение 204
 max personal conversations related "Книжный клуб" 204    # другие разговоры о том же, во всех чатах
@@ -164,7 +164,7 @@ max personal search conversations "условия договора" --filter 'ha
 **Comienza con un mensaje.** Encontraste un mensaje usando una búsqueda de palabras y quieres todo lo demás sobre este tema:
 
 ```sh
-max personal search messages '"вернули залог"' --chat "Valencia expats"
+max personal search messages '"вернули залог" chat:"Valencia expats"'
 max personal conversations related "Valencia expats" 5120
 ```
 

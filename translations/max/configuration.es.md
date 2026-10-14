@@ -24,19 +24,19 @@ Estas son las configuraciones que se cambian con más frecuencia. Una descripci�
 |Ajustes|¿Qué hace?|Valor incorporado|
 |---|---|---|
 | `limit` |¿Cuántas líneas muestra la lista si no se especifica `--limit`?| `20` |
-| `sendsPerHour` |cuántos mensajes puede enviar un perfil en una hora; detiene el ciclo de envío|`30`; el bot no tiene límite hasta que se especifica en la sección `bot`|
-| `requestsPerMinute` |¿Con qué frecuencia accede `max` a MAX después de una breve serie de solicitudes? `0` apaga el tempo ([limitaciones y expectativas](./limits.md))| `20` |
+| `sends_per_hour` |cuántos mensajes puede enviar un perfil en una hora; detiene el ciclo de envío|`30`; el bot no tiene límite hasta que se especifica en la sección `bot`|
+| `requests_per_minute` |¿Con qué frecuencia accede `max` a MAX después de una breve serie de solicitudes? `0` apaga el tempo ([limitaciones y expectativas](./limits.md))| `20` |
 | `permissions` |qué puede hacer el perfil: sólo leer, preguntar antes de cambiar o hacer sin preguntar ([permisos](./permissions.md))|todo está permitido excepto: primero se solicita la eliminación y algunos cambios irreversibles más; las respuestas automáticas no se envían|
 | `record` |registrar cada ejecución para verlo más tarde ([diagnóstico](./diagnostics.md))| `false` |
-| `keepRunsForDays` |¿Cuántos días se almacenan los registros de ejecución?| `30` |
+| `keep_runs_for_days` |¿Cuántos días se almacenan los registros de ejecución?| `30` |
 | `color` |color en tablas|por terminal|
-| `senderColors` |Cada autor tiene un color diferente en la lista de mensajes.| `false` |
-| `timeoutMs` |cuánto tiempo esperar una respuesta a **una** solicitud a MAX, en milisegundos. Para restringir todo el comando, use `--timeout`|en transporte|
-| `catchUpMarksRead` |`inbox` y `review` marcan los chats mostrados como leídos. El interlocutor ve esto.| `false` |
+| `sender_colors` |Cada autor tiene un color diferente en la lista de mensajes.| `false` |
+| `timeout_ms` |cuánto tiempo esperar una respuesta a **una** solicitud a MAX, en milisegundos. Para restringir todo el comando, use `--timeout`|en transporte|
+| `catch_up_marks_read` |`inbox` y `review` marcan los chats mostrados como leídos. El interlocutor ve esto.| `false` |
 | `serve` |ejecute el servidor en segundo plano `max personal serve` cuando el comando necesite MAX ([una entrada para todos los](./limits.md#один-вход-на-всё))| `true` |
-| `transcribeModel` |qué modelo reconocer mensajes de voz| `gigaam-v3` |
-| `updateCheck` |una vez al día para informar que se ha lanzado una nueva versión de `max`| `true` |
-| `defaultProfile` |¿Qué perfil toma el comando si el perfil no se nombra?| ninguno: sin nombre, el comando enumera los perfiles |
+| `transcribe_model` |qué modelo reconocer mensajes de voz| `gigaam-v3` |
+| `update_check` |una vez al día para informar que se ha lanzado una nueva versión de `max`| `true` |
+| `default_profile` |¿Qué perfil toma el comando si el perfil no se nombra?| ninguno: sin nombre, el comando enumera los perfiles |
 
 No hay ningún secreto en un archivo. No hay lugar en él para un token, un número de teléfono o una identificación de chat: el token se almacena en el llavero del sistema y, donde no está, en un archivo que solo usted puede leer ([donde vive token](./security.md#где-живёт-токен)).
 
@@ -46,7 +46,7 @@ El primer comando que lee la configuración creal archivo inicial. Aquí está, 
 
 ```json
 {
-  "defaults": { "limit": 20, "keepRunsForDays": 30, "sendsPerHour": 30, "updateCheck": true, "skillHint": true },
+  "defaults": { "limit": 20, "keep_runs_for_days": 30, "sends_per_hour": 30, "update_check": true, "skill_hint": true },
   "profiles": {
     "work": { "limit": 50 }
   }
@@ -62,36 +62,36 @@ Por lo tanto, `max work chats list` mostrará 50 líneas y `max personal chats l
 
 ```json
 {
-  "defaultProfile": "personal",
+  "default_profile": "personal",
   "defaults": {
     "limit": 20,
-    "keepRunsForDays": 14,
-    "sendsPerHour": 30,
-    "requestsPerMinute": 20,
-    "updateCheck": true,
-    "skillHint": true,
-    "transcribeModel": "gigaam-v3"
+    "keep_runs_for_days": 14,
+    "sends_per_hour": 30,
+    "requests_per_minute": 20,
+    "update_check": true,
+    "skill_hint": true,
+    "transcribe_model": "gigaam-v3"
   },
   "profiles": {
     "personal": {
       "limit": 50,
       "color": true,
-      "senderColors": true,
+      "sender_colors": true,
       "record": true
     },
     "work": {
       "permissions": { "messages": "readonly", "messages.send": "allow" },
-      "sendsPerHour": 10,
+      "sends_per_hour": 10,
       "serve": false
     }
   },
   "personal": {
-    "defaults": { "catchUpMarksRead": false, "searchCatchUp": true }
+    "defaults": { "catch_up_marks_read": false, "search_catch_up": true }
   },
   "bot": {
     "defaults": { "permissions": { "bot": "readonly", "bot.messages.send": "allow" } },
     "profiles": {
-      "shop": { "sendsPerHour": 200, "readOtherBots": false }
+      "shop": { "sends_per_hour": 200, "read_other_bots": false }
     }
   }
 }
@@ -99,14 +99,14 @@ Por lo tanto, `max work chats list` mostrará 50 líneas y `max personal chats l
 
 Qué hace cada parte:
 
-- `defaultProfile`: `max chats list` sin nombre de perfil funciona con `personal`. Sin este ajuste y
+- `default_profile`: `max chats list` sin nombre de perfil funciona con `personal`. Sin este ajuste y
   sin `MAX_PROFILE`, ese comando se detiene y enumera los perfiles.
-- `defaults`: cada perfil recibe estos valores si no ha especificado los suyos propios. `updateCheck`, `skillHint` y `transcribeModel` sólo son válidos aquí: el programa y los modelos de voz son los mismos para todos los perfiles.
+- `defaults`: cada perfil recibe estos valores si no ha especificado los suyos propios. `update_check`, `skill_hint` y `transcribe_model` sólo son válidos aquí: el programa y los modelos de voz son los mismos para todos los perfiles.
 - `profiles.personal`: más líneas, colores y grabación de cada ejecución - sólo para `personal`.
 - `profiles.work`: se pueden leer mensajes, se pueden enviar mensajes, se prohíben otros cambios en los mensajes. No más de 10 envíos por hora. El servidor en segundo plano no se inicia: cada comando ingresa MAX.
 - `personal.defaults`: sólo para comandos de cuentas personales, nunca para `max … bot`. Aquí `messages sync` también prepara chats descargados para búsqueda.
 - `bot.defaults`: sólo para comandos de bot (`max shop bot …`). Los bots pueden leer y enviar, y nada más.
-- `bot.profiles.shop`: El bot `shop` puede enviar 200 mensajes por hora y no lee lo que otros bots en esta computadora han guardado. `readOtherBots` sólo es válido en la sección `bot`; Allí, por el contrario, no se aceptan `serve`, `senderColors` y `catchUpMarksRead`.
+- `bot.profiles.shop`: El bot `shop` puede enviar 200 mensajes por hora y no lee lo que otros bots en esta computadora han guardado. `read_other_bots` sólo es válido en la sección `bot`; Allí, por el contrario, no se aceptan `serve`, `sender_colors` y `catch_up_marks_read`.
 
 </details>
 
@@ -114,8 +114,7 @@ Qué hace cada parte:
 
 |Sistema|Camino|
 |---|---|
-| Linux | `~/.config/max-cli/config.json` |
-| macOS | `~/Library/Preferences/max-cli/config.json` |
+| Linux y macOS | `~/.config/max-cli/config.json` |
 | Windows | `%APPDATA%\max-cli\Config\config.json` |
 
 `max config show` imprime la ruta que esta computadora realmente usa y cada configuración con un valor. En PowerShell, escriba `max.cmd` en lugar de `max`. Un archivo existente nunca se reemplaza por el inicial.
@@ -137,7 +136,7 @@ El archivo se puede editar en cualquier editor de texto o confiar a `max`. `conf
 ```sh
 max personal config set limit 50                 # профилю, с которым вы работаете
 max work config set limit 50            # профилю work
-max config set sendsPerHour 10 --defaults   # всем профилям
+max config set sends_per_hour 10 --defaults   # всем профилям
 max personal config unset limit                  # вернуть значение по умолчанию
 max config show                         # проверить, что действует и откуда взялось каждое значение
 ```

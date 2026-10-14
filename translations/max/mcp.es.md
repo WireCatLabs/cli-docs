@@ -51,7 +51,7 @@ max personal mcp setup claude-code     # или в Claude Code
 
 Para otro perfil, primero ponga su nombre: `max work mcp setup codex`. El comando de instalación utiliza la aplicación en sí y no toca sus otros servidores. Si ya existe una entrada con el mismo nombre, elimínela en la aplicación antes de instalarla nuevamente. Si el perfil ofrece herramientas de grabación, primero verifique sus permisos y luego vuelva a emitir el comando con `--allow-writes`. Esta bandera solo confirma la instalación: no cambia los derechos del perfil ni marca `--allow-send` y otros.
 
-`mcp doctor` no lee mensajes ni se conecta a MAX. Una comprobación correcta demuestra que MCP inicia y enumera herramientas, no que la sesión sea válida. `potentialWrites` cuenta herramientas que no son de solo lectura. El navegador y el móvil requieren [conexión remota](./remote.md).
+`mcp doctor` no lee mensajes ni se conecta a MAX. Una comprobación correcta demuestra que MCP inicia y enumera herramientas, no que la sesión sea válida. `potential_writes` cuenta herramientas que no son de solo lectura. El navegador y el móvil requieren [conexión remota](./remote.md).
 
 **Claude Code manualmente:**
 

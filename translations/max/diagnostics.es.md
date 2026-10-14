@@ -101,13 +101,13 @@ El directorio tiene permisos `0700` y ambos archivos, `0600`. `run.json` se escr
 El resultado se escribe **en cualquier salida**, incluso si falla antes de conectar:
 
 ```json
-{ "runId": "…", "command": "chats list", "profile": "default", "status": "failed",
-  "requests": 0, "errorCode": "authentication_error", "durationMs": 12 }
+{ "run_id": "…", "command": "chats list", "profile": "default", "status": "failed",
+  "requests": 0, "error_code": "authentication_error", "duration_ms": 12 }
 ```
 
 ## Las ejecuciones fallidas siempre se guardan
 
-Si el comando finaliza con un error, su ejecución se guarda sin `--record`, con la marca `"keptBecauseFailed": true` en `run.json`. Esto se aplica a cualquier comando y a cualquier error: indicador incorrecto, comando desconocido, verificación antes de comenzar a trabajar, comandos que no funcionan en MAX (`models`, `server`, `watch`, `upgrade`). La grabación contiene sólo las palabras del comando, por ejemplo `messages list`, sin lo que estaba escrito después de ellas.
+Si el comando finaliza con un error, su ejecución se guarda sin `--record`, con la marca `"kept_because_failed": true` en `run.json`. Esto se aplica a cualquier comando y a cualquier error: indicador incorrecto, comando desconocido, verificación antes de comenzar a trabajar, comandos que no funcionan en MAX (`models`, `server`, `watch`, `upgrade`). La grabación contiene sólo las palabras del comando, por ejemplo `messages list`, sin lo que estaba escrito después de ellas.
 
 Una ejecución completamente satisfactoria sin `--record` no deja registro; los resultados parciales se conservan por defecto. Por lo tanto, un informe de problema siempre tiene algo que adjuntar. `--no-record` o `"record": false` en la configuración también lo desactiva.
 
@@ -130,7 +130,7 @@ Luego se escribe cada ejecución. Por defecto, una ejecución completamente sati
 
 ## Conservación
 
-**30 días**, o `keepRunsForDays` en [ajustes](./configuration.md). Lo antiguo sólo se elimina cuando se escribe algo: una herramienta que no escribe nada no tiene por qué pasar por este directorio. Se elimina durante días en su totalidad, por nombre de directorio, por lo que no es necesario abrir nada para solucionarlo.
+**30 días**, o `keep_runs_for_days` en [ajustes](./configuration.md). Lo antiguo sólo se elimina cuando se escribe algo: una herramienta que no escribe nada no tiene por qué pasar por este directorio. Se elimina durante días en su totalidad, por nombre de directorio, por lo que no es necesario abrir nada para solucionarlo.
 
 ## Lo que nunca se registra
 
@@ -188,16 +188,16 @@ Si no se realiza ningún inicio fallido, vuelva a ejecutar el comando fallido: e
 
 ## Qué hacer con los registros
 
-Los registros son JSON, por lo que `jq` responde las preguntas sobre ellos. `max personal runs list --json` corresponde a `{ items, page, limit, hasMore }`, y `items` es el ejecución de `run.json`, nuevos en la parte superior:
+Los registros son JSON, por lo que `jq` responde las preguntas sobre ellos. `max personal runs list --json` corresponde a `{ items, page: { limit, has_more } }`, y `items` es el ejecución de `run.json`, nuevos en la parte superior:
 
 ```sh
 # какие запуски закончились плохо
-max personal runs list --json | jq '.items[] | select(.status=="failed") | {runId, command, errorCode}'
+max personal runs list --json | jq '.items[] | select(.status=="failed") | {run_id, command, error_code}'
 
 # сколько времени ушло на вход в последних запусках
-for id in $(max personal runs list --json | jq -r '.items[].runId'); do
-  jq -r 'select(.operation=="session.login" and .event=="response") | "\(.durationMs)ms"' \
-    "$(max personal runs path "$id" --json | jq -r .path)/events.jsonl"
+for id in $(max personal runs list --json | jq -r '.items[].run_id'); do
+  jq -r 'select(.operation=="session.login" and .event=="response") | "\(.duration_ms)ms"' \
+    "$(max personal runs path "$id" --json | jq -r .item.path)/events.jsonl"
 done
 ```
 
@@ -217,11 +217,11 @@ max personal runs search --status partial --since-time 2026-10-01 --json
 
 `runs search` busca texto literal en metadatos y eventos de diagnóstico seguros.
 `--operation`, `--profile`, `--since-time`, `--limit` y `--page` acotan la búsqueda. Cada página admite hasta 100 ejecuciones;
-cada ejecución devuelve hasta 100 eventos coincidentes, con `eventsTruncated` si hay más.
+cada ejecución devuelve hasta 100 eventos coincidentes, con `events_truncated` si hay más.
 El fallo de un archivo o una página de historial genera `status: "partial"` con ID fallidos, etapas y códigos.
 El registro no copia el contenido de mensajes ni las respuestas de error del proveedor.
 Las ejecuciones parciales se conservan por defecto salvo que se desactive explícitamente el registro. La búsqueda no se registra a sí misma.
 
 En MCP llama a `max_read` con `command: "runs search"`; `arguments` acepta `query`, `status`, `error_code`, `operation`, `since_time`, `limit` y `page`.
 Solo lee registros del perfil activo, no conecta con MAX ni abre los logs sin filtrar de trabajos en segundo plano.
-El resultado parcial original contiene acciones de recuperación; el registro conserva solo identificadores y códigos seguros.
+El resultado completo del comando parcial nombra los elementos fallidos y sus códigos de error; el registro conserva solo identificadores y códigos seguros.

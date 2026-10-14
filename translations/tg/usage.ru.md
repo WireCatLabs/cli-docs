@@ -184,11 +184,11 @@ tg personal chats list                     # newest first, archived chats includ
 ```
 
 ```sh
-tg personal chats list --unread --kind group  # only groups with unread messages
+tg personal chats list 'unread_count>0 kind:group'  # only groups with unread messages
 ```
 
 ```sh
-tg personal chats list --search book       # titles containing "book"; at least 3 characters
+tg personal chats list 'title:*book*'   # titles containing "book"; at least 3 characters
 ```
 
 ```sh
@@ -208,7 +208,7 @@ tg personal messages list "Book club" --limit 50
 ```
 
 ```sh
-tg personal messages list "Hiking" --topic 12   # one forum topic; topics list shows the ids
+tg personal messages list "Hiking" topic:12   # one forum topic; topics list shows the ids
 ```
 
 ```sh
@@ -225,11 +225,11 @@ tg personal messages context "Book club" 4242 --before-n 2 --after-n 10
 
 В `context` выбранное сообщение отмечается `◀` в терминале и `"anchor": true` в JSON.
 
-`--topic` читает сообщения темы от самого нового назад или от `--before-id`. Общая тема (`1`) не принимается: Telegram не присваивает её сообщениям ID темы, поэтому читайте весь чат. С `--offline` параметр `--topic` оставляет только сохранённые сообщения этой темы.
+`topic:<id>` в запросе читает сообщения темы от самого нового назад или от `id<…`. Общая тема (`1`) не принимается: Telegram не присваивает её сообщениям ID темы, поэтому читайте весь чат. С `--offline` условие `topic:` оставляет только сохранённые сообщения этой темы.
 
 ### Ссылки на сообщения
 
-`tg personal messages link <chat> <message>` или `tg personal messages link <msg:locator>` возвращает `{ locator, url, access, reason }`. Постоянные ссылки каналов и супергрупп могут быть общедоступными или ограниченными; ссылка не дает членства. Диалоги, основные группы и сохраненные сообщения возвращают локатор. Offline проверяет сохраненную цель и не возвращает постоянную ссылку. Локатор другого аккаунта отклонен. Эта единственная команда отличается от `messages links`, которая объясняет взаимоотношения диалога ([поиск темы](./topic-search.md)).
+`tg personal messages link <chat> <message>` или `tg personal messages link <msg:locator>` возвращает `{ item: { ref, url, access, reason } }`. Постоянные ссылки каналов и супергрупп могут быть общедоступными или ограниченными; ссылка не дает членства. Диалоги, основные группы и сохраненные сообщения возвращают локатор. Offline проверяет сохраненную цель и не возвращает постоянную ссылку. Локатор другого аккаунта отклонен. Эта единственная команда отличается от `messages links`, которая объясняет взаимоотношения диалога ([поиск темы](./topic-search.md)).
 
 ### Что требует ответа
 
@@ -238,7 +238,7 @@ tg personal inbox            # other people's unread messages, in every chat
 ```
 
 ```sh
-tg personal inbox --since-time 2h  # everything that came in during the last two hours
+tg personal inbox 'date>2h'  # everything that came in during the last two hours
 ```
 
 ```sh
@@ -251,9 +251,9 @@ tg personal inbox --new --jsonl  # the same for a script: one message per line
 
 `inbox` показывает только чужие сообщения с указанием чата. Чаты без уведомлений и архив пропускаются, кроме упоминаний и ответов вам; `--all` включает их. Число пропущенных выводится в stderr.
 
-**`inbox --new` сдвигает сохранённую позицию.** Следующий `--new` продолжает с неё, показывая сообщения один раз. Первый `--new` охватывает 24 часа. `inbox` без `--new` и `inbox --since-time` позицию не меняют. Обычный `inbox` повторяет результат, пока сообщения не прочитаны в приложении: сам он не отмечает прочитанным.
+**`inbox --new` сдвигает сохранённую позицию.** Следующий `--new` продолжает с неё, показывая сообщения один раз. Первый `--new` охватывает 24 часа. `inbox` без `--new` и `inbox 'date>…'` позицию не меняют. Обычный `inbox` повторяет результат, пока сообщения не прочитаны в приложении: сам он не отмечает прочитанным.
 
-За запуск читаются максимум 20 чатов. Остальные перечислены в stderr и `skipped` с командой чтения. Если ожидающих сообщений больше `--limit`, показываются самые новые, а stderr объясняет, как прочитать остальные.
+За запуск читаются максимум 20 чатов. Остальные попадают в запись `missing` с шагом, который читает такой чат. Если ожидающих сообщений больше `--limit`, показываются самые новые, а stderr объясняет, как прочитать остальные.
 
 ### Обязательства и ожидания: `review`
 
@@ -262,16 +262,17 @@ tg personal review                         # the last 3 days
 ```
 
 ```sh
-tg personal review --since-time 2026-09-23T09:00  # from where the last review ended
+tg personal review 'date>2026-09-23T09:00'  # from where the last review ended
 ```
 
 ```sh
-tg personal review --chat "Book club" --json
+tg personal review 'chat:"Book club"' --json
 ```
 
-Все сообщения — ваши и чужие — в чатах с активностью после `--since-time`. Они помогают понять обещания, ожидания и неясности; классификацию выполняете вы или агент. Отметки прочитанного нет.
+Все сообщения — ваши и чужие — в чатах с активностью после `date>` в запросе. Они помогают понять обещания, ожидания и неясности; классификацию выполняете вы или агент. Отметки прочитанного нет.
 
-В конце stderr показывает прочитанный период. **Следующую проверку начинайте с этого `--since-time`**, чтобы не было пропусков. При неполном результате — слишком много чатов или ограничение последними 300 сообщениями — команда предупреждает; границу лучше не сдвигать. Максимум 20 чатов за запуск.
+Первый шаг `next` в ответе, `review.next`, — это следующая проверка: она начинается там, где закончилась эта
+(`date>"<until>"`). **Следующую проверку запускайте с этого шага**, чтобы не было пропусков. При неполном результате — слишком много чатов или ограничение последними 300 сообщениями — команда предупреждает; границу лучше не сдвигать. Максимум 20 чатов за запуск.
 
 #### Вопросы без ответа
 
@@ -280,12 +281,12 @@ tg personal review --unanswered            # questions nobody answered in 24 hou
 ```
 
 ```sh
-tg personal review --chat "Neighbours" --unanswered 4h
+tg personal review 'chat:Neighbours' --unanswered 4h
 ```
 
 `--unanswered [hours]` оставляет вопросы, ожидающие вас или администраторов группы. Вопрос — сообщение с `?` (знак `?` в ссылках не учитывается) или ответ вам/администратору. Он закрыт, если вы или администратор ответили либо написали следом за автором. Вопросы моложе указанного срока (по умолчанию 24 часа) исключаются. Если администраторы неизвестны, учитываются только ваши ответы и выводится предупреждение.
 
-Сохраненные голосовые расшифровки также учитываются в этом фильтре. Добавьте `--transcribe`, чтобы расшифровывать голосовые сообщения, у которых нет сохраненной расшифровки, перед выбором вопросов. Голосовое сообщение, которое не удалось расшифровать, делает обзор неполным: пустой результат не означает, что вопросов без ответа нет. Сохраняйте предыдущую границу до тех пор, пока `complete` не станет истинным.
+Сохраненные голосовые расшифровки также учитываются в этом фильтре. Добавьте `--transcribe`, чтобы расшифровывать голосовые сообщения, у которых нет сохраненной расшифровки, перед выбором вопросов. Голосовое сообщение, которое не удалось расшифровать, делает обзор неполным: пустой результат не означает, что вопросов без ответа нет. Сохраняйте предыдущую границу, пока в ответе есть запись `missing`.
 
 ### Голосовые сообщения
 
@@ -331,7 +332,7 @@ tg personal models audio download parakeet-v3  # once, checked against the sha25
 | `gigaam-v3` | русский — лучшая из трёх моделей для русского | 232 МБ |
 | `gigaam-v3-ctc` | русский — немного быстрее, хуже с заглавными буквами | 225 МБ |
 
-`--model` выбирает другую модель для одной команды, рядом с `--transcribe` или в `messages transcribe`; `transcribeWith` и `speechModel` в настройках выбирают значения по умолчанию ([конфигурация](./configuration.md)). Расшифровка хранится в локальном хранилище и повторно используется в списках сообщений, входящих и проверках. Повторный вызов `messages transcribe` может запросить новую расшифровку или снова запустить распознавание. `--transcribe` может занять несколько минут.
+`--model` выбирает другую модель для одной команды, рядом с `--transcribe` или в `messages transcribe`; `transcribe_with` и `speech_model` в настройках выбирают значения по умолчанию ([конфигурация](./configuration.md)). Расшифровка хранится в локальном хранилище и повторно используется в списках сообщений, входящих и проверках. Повторный вызов `messages transcribe` может запросить новую расшифровку или снова запустить распознавание. `--transcribe` может занять несколько минут.
 
 ### Файлы
 
@@ -352,7 +353,7 @@ tg personal contacts list              # people you have a one-to-one chat with,
 ```
 
 ```sh
-tg personal contacts list --order name --search ann
+tg personal contacts list 'name:*ann*' --order name
 ```
 
 ```sh
@@ -379,7 +380,8 @@ tg personal contacts context @example_user --chat "Book club"  # their latest me
 tg personal contacts check @example_user  # does the account look like a bot or a spammer
 ```
 
-`contacts list` — это люди, с которыми вы общаетесь один на один. `contacts sync` также добавляет остальную часть вашего списка контактов Telegram. `contacts lookup` никогда не принимает число в качестве аргумента: передавайте его по конвейеру или вводите по запросу. Профиль человека, его последние сообщения, проверка бота и что он куда отправляет: [люди](./people.md).
+`contacts list` — это люди, с которыми вы общаетесь один на один. `contacts sync` также добавляет остальную часть вашего списка контактов Telegram. `name:` и `notes:` ищут людей, которых хранит локальное хранилище, поэтому сначала нужен
+`contacts sync` (или ранее прочитанные сообщения); если ничего не сохранено, запрос отклоняется. `contacts lookup` никогда не принимает число в качестве аргумента: передавайте его по конвейеру или вводите по запросу. Профиль человека, его последние сообщения, проверка бота и что он куда отправляет: [люди](./people.md).
 
 Изменение контактов и собственного профиля:
 
@@ -436,38 +438,38 @@ tg personal contacts list --all        # every row, no paging
 
 ⚠ **Нумерация страниц живого списка может повторить или пропустить строку.** Новое сообщение между запросами сдвигает чаты через границу страниц.
 
-**У сообщений чата нет страниц: используйте `--before-id`, `--after-id`, `--after-time`** для точного продолжения:
+**У сообщений чата нет страниц: они принимают запрос по `id` и `date`, а для следующей страницы — `--cursor`**, что дает точное продолжение:
 
 ```sh
-tg personal messages list "Book club" --before-id 4242  # older than message 4242
+tg personal messages list "Book club" "id<4242"  # older than message 4242
 ```
 
 ```sh
-tg personal messages list "Book club" --after-id 4242  # newer than 4242, oldest first
+tg personal messages list "Book club" "id>4242"  # newer than 4242, oldest first
 ```
 
 ```sh
-tg personal messages list "Book club" --after-time 2h  # what came in during the last two hours
+tg personal messages list "Book club" "date>2h"  # what came in during the last two hours
 ```
 
 ```sh
-tg personal messages list "Book club" --after-time 2026-09-20T09:00
+tg personal messages list "Book club" "date>2026-09-20T09:00"
 ```
 
 ```sh
-tg personal messages list "Book club" --before-time 1d  # what came before this time yesterday
+tg personal messages list "Book club" "date<1d"  # what came before this time yesterday
 ```
 
-Готовый запрос следующей страницы идёт в stderr. `--before-id` и `--after-id` принимают идентификатор сообщения. `--after-time` — ISO 8601 или период назад: `30m`, `2h`, `1d`. В `messages context` параметры `--before-n`, `--after-n` задают число сообщений вокруг выбранного.
+В терминале строка со следующей страницей идёт в stderr; в JSON это шаг `page.next`, который дает `--cursor`. `id<` и `id>` принимают идентификатор сообщения. `date>` и `date<` — ISO 8601 или период назад: `30m`, `2h`, `1d`. В `messages context` параметры `--before-n`, `--after-n` задают число сообщений вокруг выбранного.
 
 ### Найти чат и написать в него
 
 ```sh
-tg personal chats list --search book --kind group  # groups with "book" in the title
+tg personal chats list 'title:*book* kind:group'  # groups with "book" in the title
 ```
 
 ```sh
-tg personal contacts list --search ann       # people by name or @username
+tg personal contacts list 'name:*ann*'  # people by name or @username
 ```
 
 ```sh
@@ -479,7 +481,7 @@ tg personal search messages "contract"       # the text of every message this ma
 ```
 
 ```sh
-tg personal search messages "contract" --chat "Book club"
+tg personal search messages 'contract chat:"Book club"'
 ```
 
 ```sh
@@ -594,7 +596,7 @@ tg personal polls show "Book club" 4250    # the poll and its answer ids
 ```
 
 ```sh
-tg personal polls voters "Book club" 4250 --answer <answer id>  # who chose it; not in an anonymous poll
+tg personal polls voters "Book club" 4250 'answers:<answer id>'  # who chose it; not in an anonymous poll
 ```
 
 ```sh
@@ -659,14 +661,14 @@ tg personal messages delete me 4242 --allow-dangerous --for-everyone
 
 ### Неизвестный результат отправки
 
-Код `14` означает обрыв после отправки: **сообщение могло уйти**. Ошибка содержит `--send-id`. Повторите с ним: Telegram исключит дубликат.
+Код `14` означает обрыв после отправки: **сообщение могло уйти**. Ошибка содержит `--operation-id`. Повторите с ним: Telegram исключит дубликат.
 
 ```sh
-tg personal messages send "Book club" "See you at 7" --send-id <id from the error>
+tg personal messages send "Book club" "See you at 7" --operation-id <id from the error>
 ```
 
 ```sh
-tg personal messages forward "Book club" 4242 --to me --send-id <id from the error>
+tg personal messages forward "Book club" 4242 --to me --operation-id <id from the error>
 ```
 
 Пересылка и опрос тоже получают идентификатор. Повтор без него создаст второе сообщение. Файл загружается до отправки сообщения: оборванную загрузку tg повторяет три раза, и если она так и не удалась, в ошибке сказано, что ничего не отправлено, — такую команду можно просто запустить снова. Другие записи — закрепление, реакция, отметка о прочтении, удаление, голос, папки, контакты — так же завершаются кодом `14`, когда Telegram не отвечает; сообщение говорит, безопасно ли повторять. Создание папки повторять небезопасно: сначала посмотрите `tg personal chats folders list`, иначе папок может стать две. Отправка с `--at-time` не повторяется: проверьте `tg personal messages scheduled <chat>`.
@@ -744,7 +746,7 @@ tg personal messages comments "Rozetked" 27644     # the comments under post 276
 ```
 
 ```sh
-tg personal messages comments "Rozetked" 27644 --before-id 3732413
+tg personal messages comments "Rozetked" 27644 "id<3732413"
 ```
 
 ```sh
@@ -765,7 +767,7 @@ tg personal chats send-as "Book club"
 tg personal messages send "Book club" "Meeting moved to 8" --send-as <id from the list>
 ```
 
-В списке всегда есть вы, а `default` отмечает сохранённый выбор группы; чтение ничего не меняет. ID, которого нет в списке, отклоняется. `--send-as` работает и с файлами, `tg personal messages forward` и `tg personal polls create` — для пересылки нужен список чата из `--to`. При повторении операции с неизвестным результатом передайте тот же `--send-as` вместе с `--send-id`.
+В списке всегда есть вы, а `default` отмечает сохранённый выбор группы; чтение ничего не меняет. ID, которого нет в списке, отклоняется. `--send-as` работает и с файлами, `tg personal messages forward` и `tg personal polls create` — для пересылки нужен список чата из `--to`. При повторении операции с неизвестным результатом передайте тот же `--send-as` вместе с `--operation-id`.
 
 В группе канал может быть сохранён как отправитель по умолчанию — Telegram делает это для группы обсуждения вашего канала. В такой группе отправка, пересылка или опрос **без** `--send-as` отклоняются (код `2`), чтобы не уйти от имени канала: ошибка предлагает `--send-as <your id>` для отправки от вашего имени и `--send-as <channel id>` — от имени канала.
 
@@ -790,7 +792,7 @@ tg personal chats events "Hiking"                  # who joined, left, was added
 ```
 
 ```sh
-tg personal chats events "Hiking" --type join,leave --since-time 2026-09-01T00:00
+tg personal chats events "Hiking" 'type:(join OR leave) time>=2026-09-01T00:00'
 ```
 
 ```sh
@@ -806,7 +808,7 @@ tg personal topics show "Hiking" 12                # one topic: title, closed or
 ```
 
 ```sh
-tg personal review --chat "Hiking" --unanswered    # questions nobody answered
+tg personal review 'chat:Hiking' --unanswered    # questions nobody answered
 ```
 
 Эти команды только читают. `events` читает служебные сообщения чата: кто что сделал и кому. Имена: `join`, `leave`, `add`, `remove`, `create`, `title` и `pin`.
@@ -864,7 +866,7 @@ tg personal chats requests list "Hiking 2027"      # who asked to join, newest f
 ```
 
 ```sh
-tg personal chats requests list "Hiking 2027" --search Ana  # by name; or --link <link>, never both
+tg personal chats requests list "Hiking 2027" 'name:*Ana*'  # by name; or link:<link>
 ```
 
 ```sh
@@ -907,7 +909,7 @@ tg personal chats admins remove "Hiking 2027" @kate
 
 `chats link create` создает еще одну ссылку-приглашение и никому не сообщает: `--approval` заставляет того, кто присоединится по ней, спросить подтвердить вступление, `--expire-time` задаёт срок действия (`2026-12-01T09:00` или `30m`, `2h`, `7d` с этого момента), а `--max-uses` ограничивает число вступлений. `chats link update` меняет одни и те же три на одной из ваших ссылок, а также на собственной ссылке группы (`--no-approval` отключает одобрение, `--expire-time never` отменяет срок действия); неуказанные настройки сохраняются. Ссылка с одобрением вступления, не имеет ограничения на использование, поэтому `--approval` с `--max-uses` отклоняется. `chats update --join-approval on` заставляет всех спрашивать первыми, какую бы ссылку они ни использовали.
 
-В группе, администраторы которой одобряют присоединение, `chats requests list` показывает ожидающие запросы с примечанием, отправленным пользователем; их видят только админы, а чтение никому не говорит. `--search` находит людей по имени или @username, `--link` сохраняет тех, кто спросил, по одной ссылке-приглашению; Telegram не может делать и то, и другое одновременно. `accept` и `decline` отвечают на один, по идентификатору из списка. Принятый запрос учитывается в почасовом лимите, отклоненный — нет; список получателей проверяет только группу. Тому, кто уже является участником, отвечают `already: true`, а отсутствующий запрос заканчивается выходом `6`. `--all` отвечает на каждый ожидающий запрос, а с `--link` — на те, которые пришли по одной ссылке; они учитываются в первую очередь, и прием, превышающий часовой лимит, отклоняется до того, как кого-либо впустят. `chats link list` показывает только ваши собственные ссылки; отзыв собственной ссылки группы приводит к тому, что Telegram выдает новую, о чем свидетельствует ответ.
+В группе, администраторы которой одобряют присоединение, `chats requests list` показывает ожидающие запросы с примечанием, отправленным пользователем; их видят только админы, а чтение никому не говорит. Запрос сужает список: `name:` или `username:` находит людей, `link:` оставляет тех, кто спросил, по одной ссылке-приглашению; Telegram не может делать и то, и другое одновременно. `accept` и `decline` отвечают на один, по идентификатору из списка. Принятый запрос учитывается в почасовом лимите, отклоненный — нет; список получателей проверяет только группу. Тому, кто уже является участником, отвечают `already: true`, а отсутствующий запрос заканчивается выходом `6`. `--all` отвечает на каждый ожидающий запрос, а с `--link` — на те, которые пришли по одной ссылке; они учитываются в первую очередь, и прием, превышающий часовой лимит, отклоняется до того, как кого-либо впустят. `chats link list` показывает только ваши собственные ссылки; отзыв собственной ссылки группы приводит к тому, что Telegram выдает новую, о чем свидетельствует ответ.
 
 `chats update` меняет заголовок, описание и две настройки Telegram за один раз; ответом является группа в ее нынешнем виде, и `chats show` показывает те же настройки. Правила модерации — `chats rules` и `chats moderate` — находятся в [правилах модерации](./groups.md#rules).
 
@@ -925,21 +927,23 @@ tg personal chats list --json | jq -r '.items[].id'
 tg personal messages list me --jsonl | jq -r .text  # one message per line
 ```
 
-- `--json`: одно значение JSON. **Каждый список представляет собой один объект** всегда одной и той же формы: `{ "items": [...], "page": 1, "limit": 20, "hasMore": true }`. `--all` и `--offline` отвечают одним и тем же объектом.
-- Сообщения чата не имеют номера страницы: `{ "items": [...], "limit": 20, "hasMore": true }`.
+- `--json`: одно значение JSON. **Каждый список представляет собой один объект** всегда одной и той же формы: `{ "items": [...], "page": { "limit": 20, "has_more": true }, "meta": { ... } }`; если строк больше, список называет следующий шаг в `page.next`. `--all` и `--offline` отвечают одним и тем же объектом. Одна сущность, а не список, — это `{ "item": {...}, "meta": {...} }`.
+- Сообщения чата листаются через `--cursor`, а не по номеру страницы; его несет `page.next`.
 - `--jsonl`: по одному объекту в строке, без оболочки; есть ли что-то еще, говорится только в stderr.
+  Отчет (`stats …`) — это один объект, поэтому `--jsonl` для него отклоняется; списки `stats * evidence` по-прежнему выдаются потоком.
 - Ошибка, завершающая команду, — `{ "error": { "code": "...", "message": "..." } }` на stderr, а stdout пуст, поэтому отказ никогда не может быть воспринят как пустой результат.
 - Частичное чтение и скачивание может завершиться с кодом `0`: проверьте `complete` и `batch` или `issue`; JSONL частичной загрузки добавляет `batch_summary`.
 - **Переход по коду выхода, а не по тексту.** Текст меняется; код этого не делает. `0` сработал, `2` неправильный ввод, `4` не вошел в систему, `5` профиль не может этого сделать, `6` не найден, `7` нет в списке разрешенных получателей, `8` установлен лимит (почасовой лимит или собственный Telegram), `9` Telegram не ответил вовремя, `14` неизвестно, дошло ли сообщение. Полная таблица находится в [кодах выхода](./commands.md#exit-codes).
 - **Идентификаторы — это строки.** Не преобразуйте идентификатор в число.
 - `--quiet` скрывает обычные сообщения о работе; ошибки остаются. `-v` и `-vv` добавляют детали к представлению таблицы.
 - `--timeout 30s` ограничивает всю команду (`500ms`, `30s` или `2m`).
-- `tg commands --json` — это все дерево команд, с `mutates: true` для каждой команды, которая что-то меняет в Telegram.
+- `tg commands --json` — это все дерево команд, с `effects: { remote, local }` для каждой команды:
+  `remote: "write"` значит, что команда что-то меняет в Telegram.
 
 ```sh
 if ! tg personal messages send "Book club" "See you at 7" --json > /dev/null; then
   case $? in
-    14) echo "it may have gone — repeat only with the same --send-id" ;;
+    14) echo "it may have gone — repeat only with the same --operation-id" ;;
     4)  echo "run tg personal session start" ;;
   esac
 fi
@@ -1076,7 +1080,7 @@ tg config set permissions.messages.send ask        # a yes or no before each sen
 ```
 
 ```sh
-tg config set sendsPerHour 10
+tg config set sends_per_hour 10
 ```
 
 `permissions` сообщает, что профиль может делать для каждой команды: `deny`, `readonly`, `ask` или `allow`. По умолчанию все разрешено, а удаление сообщений и завершение сессий спрашивается в первую очередь. Отказ — это код выхода `5`, а в ошибке указывается команда, которая это разрешает. **В файле нет поля для секрета.** Каждая настройка и переменная: [конфигурация](./configuration.md).

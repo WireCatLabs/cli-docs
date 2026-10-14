@@ -43,7 +43,7 @@ max sales bot me                                        # какой это бо
 
 MAX has no list of all chats a bot belongs to, so obtain IDs from what the bot has done or received.
 
-- **A conversation with a person.** Address them as `user:<номер>`. The send response includes the destination chat ID in `chatId`.
+- **A conversation with a person.** Address them as `user:<номер>`. The send response includes the destination chat ID in `chat_id`.
 - **A group or channel.** Add the bot, then request the latest updates from MAX:
 
   ```sh
@@ -68,7 +68,7 @@ max support bot messages send user:4815162342 "Ваша заявка приня�
 max sales bot list --check          # все имена с токеном бота и какой бот за каждым
 ```
 
-A profile name is required: the first word, `MAX_PROFILE` for the whole shell session, or the `defaultProfile` setting. Without one, a bot command stops and lists the profiles.
+A profile name is required: the first word, `MAX_PROFILE` for the whole shell session, or the `default_profile` setting. Without one, a bot command stops and lists the profiles.
 
 ## Token storage
 
@@ -99,7 +99,7 @@ max sales bot messages pin "Команда продаж" mid.0000019a7f3c21de --
 max sales bot messages unpin "Команда продаж" mid.0000019a7f3c21de
 ```
 
-`--silent` sends without a notification. Text is limited to 4,000 characters. The example ids `user:4815162342` and `mid.0000019a7f3c21de` are fictional; substitute yours. `--html` uses HTML; it cannot be combined with `--md`. Deletion asks for confirmation; `--allow-dangerous` confirms it. Pinning is silent by default; `--notify` informs members. The response contains the message and `operationId`, its audit-entry id.
+`--silent` sends without a notification. Text is limited to 4,000 characters. The example ids `user:4815162342` and `mid.0000019a7f3c21de` are fictional; substitute yours. `--html` uses HTML; it cannot be combined with `--md`. Deletion asks for confirmation; `--allow-dangerous` confirms it. Pinning is silent by default; `--notify` informs members. The response contains the message and `operation_id`, its audit-entry id.
 
 If the connection drops during a send, `max` does not retry automatically. It reports an unknown outcome (code `14`). Check the chat before sending again.
 
@@ -189,13 +189,13 @@ max sales bot messages between @ann Борис --limit 20
 **Each bot sees only its own local copy.** Reading another bot's copy requires both permission in configuration and an explicit request in the command:
 
 ```sh
-max shop config set --bot readOtherBots true          # боту shop можно читать всех ботов
-max shop config set --bot readOtherBots news,support  # или только этих
+max shop config set --bot read_other_bots true          # боту shop можно читать всех ботов
+max shop config set --bot read_other_bots news,support  # или только этих
 max shop bot search messages заказ --bots news        # и тогда — явно, в команде
 max shop bot contacts show @ann --all-bots            # все, кого разрешено
 ```
 
-`--all-bots` and `--bots` are supported by `search messages`, `contacts show` and `messages between`. Without `readOtherBots`, both refuse with code `5` and name the command that enables access. Through `max <имя> bot mcp`, the equivalent fields (`all_bots`, `bots`) are offered only when access is permitted.
+`--all-bots` and `--bots` are supported by `search messages`, `contacts show` and `messages between`. Without `read_other_bots`, both refuse with code `5` and name the command that enables access. Through `max <имя> bot mcp`, the equivalent fields (`all_bots`, `bots`) are offered only when access is permitted.
 
 ## Updates
 
@@ -303,7 +303,7 @@ Every bot write — send, edit, delete or pin — is logged:
 max sales bot sends list
 ```
 
-The journal records the chat, action type, outcome and text length, but no text. Recipient restrictions and journalling apply to **every** bot write, including `bot api`. A bot has no hourly send limit until one is set in configuration section `bot` (`max <имя> config set --bot sendsPerHour 200`; see [configuration](./configuration.md)).
+The journal records the chat, action type, outcome and text length, but no text. Recipient restrictions and journalling apply to **every** bot write, including `bot api`. A bot has no hourly send limit until one is set in configuration section `bot` (`max <имя> config set --bot sends_per_hour 200`; see [configuration](./configuration.md)).
 
 ## Any API operation
 
@@ -316,7 +316,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Path and request parameters are flags, body is JSON in `--body`, `--body -` (from the pipe) or `--body-file`. `--body-file -` also reads stdin. The native parameter `timeout` is called `--poll-timeout`, and the global `--timeout` limits the entire command. The general option `--store-token <profile>` is not available for current MAX methods: they all reject it before performing the operation. Before sending, the body is checked against the schema, and the error message contains the field and what was expected in it, without the value itself. A list of all operations and which ones read and which ones write is [Bot API coverage](https://github.com/WireCatLabs/max-cli/blob/v0.49.0/docs/dev/bot-api-coverage.md).
+Path and request parameters are flags, body is JSON in `--body`, `--body -` (from the pipe) or `--body-file`. `--body-file -` also reads stdin. The native parameter `timeout` is called `--poll-timeout`, and the global `--timeout` limits the entire command. The general option `--store-token <profile>` is not available for current MAX methods: they all reject it before performing the operation. Before sending, the body is checked against the schema, and the error message contains the field and what was expected in it, without the value itself. A list of all operations and which ones read and which ones write is [Bot API coverage](https://github.com/WireCatLabs/max-cli/blob/v0.51.0/docs/dev/bot-api-coverage.md).
 
 <a id="для-скриптов-и-агентов"></a>
 
@@ -330,7 +330,7 @@ The failure or error is explained in the error message, and the command exits wi
 | `5` | read-only profile or action not allowed `allow` | change permissions only if you want to allow it |
 | `6` | chat not found - for example, by name, which the bot has not yet seen, or a person without `user:` | indicate the chat number or `user:<номер>`, or open the chat via `bot chats show` |
 | `7` | chat is not in the list of bot recipients | add chat via `bot recipients add` |
-| `8` | exhausted `sendsPerHour` bot | wait or raise the limit |
+| `8` | exhausted `sends_per_hour` bot | wait or raise the limit |
 | `14` | no response received: unknown whether MAX completed the write | check chat before repeating |
 
 The [command reference](./commands.md) lists all codes. Bot `--trace` and `--record` log each Bot API request on stderr. File uploads report type, size and response code without URLs or filenames. Failed runs are saved in `max personal runs list` ([diagnostics](./diagnostics.md)).

@@ -79,14 +79,14 @@ npx conserva lo descargado. Solicita la última: `npx @wirecat/tg-cli@latest`.
 
 ### "name a profile: `tg <profile> …` — profiles here: …"
 
-Código de salida `2`. El comando usa una cuenta y nada indica el perfil: ni una primera palabra, ni `TG_PROFILE`, ni `defaultProfile` en el archivo de configuración. `tg` nunca elige uno por su cuenta, aunque solo exista uno. El mensaje enumera los perfiles de este equipo; pon uno delante del comando:
+Código de salida `2`. El comando usa una cuenta y nada indica el perfil: ni una primera palabra, ni `TG_PROFILE`, ni `default_profile` en el archivo de configuración. `tg` nunca elige uno por su cuenta, aunque solo exista uno. El mensaje enumera los perfiles de este equipo; pon uno delante del comando:
 
 ```sh
 tg personal chats list         # the profile named in the message
 export TG_PROFILE=personal     # or for the whole shell session
 ```
 
-Para usar siempre un mismo perfil, define `"defaultProfile": "personal"` al principio del archivo de configuración ([configuración](./configuration.md)). En un equipo que todavía no tiene ningún perfil, el mensaje indica que ejecutes `tg personal setup`; cualquier nombre sirve en lugar de `personal`.
+Para usar siempre un mismo perfil, define `"default_profile": "personal"` al principio del archivo de configuración ([configuración](./configuration.md)). En un equipo que todavía no tiene ningún perfil, el mensaje indica que ejecutes `tg personal setup`; cualquier nombre sirve en lugar de `personal`.
 
 ### "no session for profile "default" — run `tg setup`"
 
@@ -150,9 +150,9 @@ Código de salida `3`. `config.json` tiene una configuración que `tg` no conoce
 
 Código `2`. Lo mismo se aplica a `--page`. Sin esa comprobación, un valor no numérico podría vaciar silenciosamente la lista.
 
-### "--after-time takes an ISO 8601 time or 30m, 2h, 1d ago"
+### "`id<` takes a message id"
 
-Código `2`. `--since-time` exige el mismo formato. Aceptan fechas ISO 8601 (`2026-09-20T09:00`) o intervalos anteriores (`30m`, `2h`, `1d`). Para identificadores de mensaje, usa `--after-id` o `--before-id`.
+Código `2`. `id<` e `id>` en una consulta de `messages list` aceptan un identificador de mensaje (`'id<4242'`); `messages comments` dice lo mismo sobre un identificador de comentario. Para una fecha, usa `date>` o `date<`: una fecha ISO 8601 (`2026-09-20T09:00`) o un intervalo anterior (`30m`, `2h`, `1d`).
 
 ### "--at-time takes a time like 2026-09-25T09:00 or a delay like 30m, 2h, 1d"
 
@@ -174,7 +174,7 @@ Código `2`. El título coincide con varios chats. El error los enumera con iden
 
 ### "no chat matches …"
 
-Código `6`. Ningún título contiene lo introducido. Prueba `tg personal chats list --search <part of it>`, el identificador, `@username` o `me` para Mensajes guardados. El título de un chat individual es el nombre de la otra persona tal como Telegram te lo muestra.
+Código `6`. Ningún título contiene lo introducido. Prueba `tg personal chats list 'title:*<part of it>*'`, el identificador, `@username` o `me` para Mensajes guardados. El título de un chat individual es el nombre de la otra persona tal como Telegram te lo muestra.
 
 ### "Telegram does not know that (…)"
 
@@ -197,7 +197,7 @@ Código `5`. Telegram limita una cuenta que ha escrito a demasiadas personas que
 
 ### "profile … has sent N messages in the hour …"
 
-Código `8`. Límite por hora del perfil (`sendsPerHour`, 30 por defecto). El error indica cuándo podrá enviar de nuevo. Auméntalo solo si pretendías enviar esa cantidad: `tg config set sendsPerHour <n>`.
+Código `8`. Límite por hora del perfil (`sends_per_hour`, 30 por defecto). El error indica cuándo podrá enviar de nuevo. Auméntalo solo si pretendías enviar esa cantidad: `tg config set sends_per_hour <n>`.
 
 ### "chat … is not on the recipient list of profile …"
 
@@ -221,7 +221,7 @@ Cuando Telegram dice cuánto tiempo esperar, `tg` recuerda ese tiempo para la op
 
 ### "Telegram refused: …"
 
-Telegram rechazó la petición e indicó por qué. Código `5` si la cuenta no tiene permiso; `11` en los demás casos. El nombre después de "refused" es el de Telegram y el JSON lo incluye como `providerError`; nunca se repite lo introducido. Algunos tienen mensajes específicos:
+Telegram rechazó la petición e indicó por qué. Código `5` si la cuenta no tiene permiso; `11` en los demás casos. El nombre después de "refused" es el de Telegram y el JSON lo incluye como `provider_error`; nunca se repite lo introducido. Algunos tienen mensajes específicos:
 
 - **"Telegram transcribes only for Premium accounts…"**: código `5`. Usa un modelo local: `tg personal models audio download parakeet-v3` y después `tg personal messages transcribe <chat> <id> --local`.
 - **"that message is not a voice or video note"**: código `2`; el identificador corresponde a otro tipo de mensaje.
@@ -261,10 +261,10 @@ Si imprime la respuesta pero no termina, es un fallo. Cinco segundos después de
 
 ### `outcome_unknown` después de un envío
 
-Código `14`. La conexión se interrumpió después de salir el mensaje, que puede haber llegado. No es éxito ni fracaso. **No lo vuelvas a enviar tal cual.** Repite con el `--send-id` del error; Telegram elimina la segunda copia:
+Código `14`. La conexión se interrumpió después de salir el mensaje, que puede haber llegado. No es éxito ni fracaso. **No lo vuelvas a enviar tal cual.** Repite con el `--operation-id` del error; Telegram elimina la segunda copia:
 
 ```sh
-tg personal messages send <chat> "<the same text>" --send-id <id from the error>
+tg personal messages send <chat> "<the same text>" --operation-id <id from the error>
 ```
 
 Después de `--at-time`, consulta `tg personal messages scheduled <chat>`: los envíos programados nunca se repiten.

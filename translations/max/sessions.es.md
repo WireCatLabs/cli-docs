@@ -19,7 +19,7 @@ Primero, las palabras que aparecen aquí:
 - **Token**: cadena que MAX entrega al iniciar sesión. Permite leer tus chats: trátala como una contraseña. `max` la guarda en el llavero.
 - **Identidad de dispositivo**: cómo se identifica `max` ante MAX; mantiene el mismo dispositivo entre comandos. Se guarda junto al estado.
 - **Llavero**: almacén de contraseñas del sistema operativo: Keychain en macOS, Secret Service (GNOME Keyring, KWallet) en Linux, Administrador de credenciales en Windows.
-- **Perfil**: nombre de una sesión local con su token, estado y ajustes. El nombre se indica en cada comando (`max personal …`), con `MAX_PROFILE` o con `defaultProfile`; `max` nunca elige un perfil por sí mismo. Necesitas otro perfil para otra cuenta o restricciones distintas ([perfiles](#профили)).
+- **Perfil**: nombre de una sesión local con su token, estado y ajustes. El nombre se indica en cada comando (`max personal …`), con `MAX_PROFILE` o con `default_profile`; `max` nunca elige un perfil por sí mismo. Necesitas otro perfil para otra cuenta o restricciones distintas ([perfiles](#профили)).
 
 No confunda `max personal session` y `max personal account sessions`. `max personal session` — entrada del propio `max`; `max personal account sessions` enumera todos los demás dispositivos y aplicaciones que hayan iniciado sesión en su cuenta.
 
@@ -112,7 +112,7 @@ export MAX_PROFILE=personal # или на всю сессию оболочки
 
 Regla: **La primera palabra es perfil a menos que sea la misma que el nombre del comando.** Por lo tanto, un perfil no puede llamarse `chats`, `runs` o `session`; `max personal session start` y `max personal setup` rechazan dicho nombre. De lo contrario, `max personal chats` significaría silenciosamente "perfil de chat sin comando". El nombre consta de letras latinas, números, puntos, guiones y guiones bajos y comienza con una letra o un número.
 
-Orden, gana la primera coincidencia: primera palabra, `MAX_PROFILE`, `defaultProfile` en el archivo de configuración. Si no hay ninguno, un comando que necesita una cuenta termina con el código `2` y enumera los perfiles de este ordenador, aunque solo haya uno:
+Orden, gana la primera coincidencia: primera palabra, `MAX_PROFILE`, `default_profile` en el archivo de configuración. Si no hay ninguno, un comando que necesita una cuenta termina con el código `2` y enumera los perfiles de este ordenador, aunque solo haya uno:
 
 ```text
 ✗ name a profile: `max <profile> …` — profiles here: personal (or set MAX_PROFILE)

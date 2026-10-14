@@ -16,9 +16,9 @@ Terms used below:
 - **Operator** — a word or symbol combining conditions: `AND`, `OR`, `NOT`.
 - **Word forms** — variations of one word, such as “apartment” and “apartments”.
 
-This language implements a strict subset of Apache Lucene syntax: words, phrases, AND/OR/NOT, groups, fields, ranges, limited patterns and regular expressions. Unsupported syntax causes an error rather than being silently skipped. The [full reference](https://github.com/WireCatLabs/cli-messaging/blob/v0.212.0/docs/search/query-language.md) contains generated field/operator/preset/limit tables and verified examples; the [technical specification](https://github.com/WireCatLabs/cli-messaging/blob/v0.212.0/docs/search/query-language-spec.md) describes grammar and compilation.
+This language implements a strict subset of Apache Lucene syntax: words, phrases, AND/OR/NOT, groups, fields, ranges, limited patterns and regular expressions. Unsupported syntax causes an error rather than being silently skipped. The [full reference](https://github.com/WireCatLabs/cli-core/blob/v0.212.0/docs/search/query-language.md) contains generated field/operator/preset/limit tables and verified examples; the [technical specification](https://github.com/WireCatLabs/cli-core/blob/v0.212.0/docs/search/query-language-spec.md) describes grammar and compilation.
 
-For mail, `chat:` and `--chat` select a thread by its id or subject, and `from:` selects the sender. Mail has no `kind:` or `topic:` fields.
+For mail, `chat:` selects a thread by its id or subject, and `from:` selects the sender. Mail has no `kind:` or `topic:` fields.
 
 ## What the language can do
 
@@ -81,7 +81,7 @@ Unqualified words and phrases match word forms. `--exact` selects exact forms fo
 Field names are case-sensitive. An unknown field, value or combination is an error, never an empty
 answer and never plain text. A name that the archive does not know is not looked up on MAX.
 
-`kind:bot` selects a chat with a bot; `in:bots` selects the archives of `max sales bot`. `topic:` requires exactly one chat in `chat:` or `--chat`: topic numbers repeat across chats. `filename`, `mime` and `size` match a message if at least one of its files matches. MAX does not report file types, so `mime:` finds nothing here: search by extension.
+`kind:bot` selects a chat with a bot; `in:bots` selects the archives of `max sales bot`. `topic:` requires exactly one chat in `chat:`: topic numbers repeat across chats. `filename`, `mime` and `size` match a message if at least one of its files matches. MAX does not report file types, so `mime:` finds nothing here: search by extension.
 
 ## Presets
 
@@ -138,23 +138,21 @@ max personal search messages --regex 'invoice\s+\d+' --json
 
 ## The answer
 
-`--json` returns `{ items, page, limit, hasMore, corrections, completeness, wordsReady, query, coverage }`,
-even when nothing matched. `--jsonl` streams the items only.
+`--json` returns `{ items, page, next, missing, meta }`, even when nothing matched. `--jsonl` streams the
+messages only.
 
-- `query` — the language version, the time zone and the order used.
-- `coverage` — which accounts and chats were searched. `lastSyncedAt` is the oldest time a chat in scope
-  was fetched by `messages sync`, `null` if any chat never was. `inventoryComplete` means every account in
-  scope has once listed all its chats; it does not promise a complete history.
-- `completeness` — per chat: whether its stored history reaches the start and has gaps.
-- `wordsReady` — whether the word index is complete. When it is `false`, a query with words fails with
-  `index_not_ready` and the command that finishes it, `max personal store migrate`; a query without words runs.
-- `hasMore` is about the page, not about whether MAX holds more.
+- `missing` — what the search did not see and why: a `coverage` entry if some chats are not fetched or are
+  behind, `text` while the word index is still being built, `pictures` if the image model is not downloaded.
+- `next` — the commands that fix this (`messages.sync`, `store.migrate`, `models.download-image`), and
+  `page.next` — the next page with the same query.
+- `meta.accounts` — which accounts were searched.
+- `page.has_more` is about the page, not about whether MAX holds more.
 
 An error carries the position of the problem in the query and a hint.
 
 ## Via MCP
 
-Through the `max` MCP server, `max_read` (`command: "search messages"`) accepts either `text` or a versioned syntax tree in `ast`, not both. `timezone` sets the calendar zone. `chat` accepts an id or saved name; `source`, `newest`, `context` and `limit` match command options; `saved` runs a saved search. `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` and `sync_first` match `--thread…` and `--sync-first`; `sync_first` requires `messages.sync-first: allow`. Results use the same fields as `--json`. `max_read` (`command: "stats messages show"`) counts the same queries. `record: false` disables request-history recording.
+Through the `max` MCP server, `max_read` (`command: "search messages"`) accepts either `text` or a versioned syntax tree in `ast`, not both. `timezone` sets the calendar zone. `chat:` goes in the query itself; `source`, `newest`, `context` and `limit` match command options; `saved` runs a saved search. `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` and `sync_first` match `--thread…` and `--sync-first`; `sync_first` requires `messages.sync-first: allow`. The response is the same object as `--json`. `max_read` (`command: "stats messages show"`) counts the same queries. `record: false` disables request-history recording.
 
 ## Next steps
 

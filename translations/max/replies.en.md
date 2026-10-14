@@ -27,7 +27,7 @@ max personal replies edit away --outside 09:00-19:00 --days mon-fri --timezone E
 max personal replies edit away --per-chat 1/12h --per-person 1/1d
 ```
 
-`add` creates a disabled rule with all current settings. `<профиль>.replies.json` lives beside `configFile` from `max config show --json`. By default, rules may reply to anyone they match. To restrict replies to selected people, enter comma-separated MAX ids; `max personal contacts show <имя> --json` returns the person's `id`:
+`add` creates a disabled rule with all current settings. `<профиль>.replies.json` lives beside `config_file` from `max config show --json`. By default, rules may reply to anyone they match. To restrict replies to selected people, enter comma-separated MAX ids; `max personal contacts show <имя> --json` returns the person's `id`:
 
 ```sh
 max personal replies audience --reply listed --allow-people 1000001
@@ -96,7 +96,7 @@ AI-generated text can change only the `ai` block. Everything outside remains you
 
 After substitutions, the block body is the instruction. Incoming text goes separately to the AI provider as data. The generated response is never executed as Liquid; overlong text and an exact repeat of the incoming message are rejected. Without a configured provider, consent or a successful call, `else` supplies the reply. Without a fallback, sending is skipped with a reason.
 
-Set `models.replies.provider` (`openai` or `anthropic`), the exact model ID in `models.replies.model`, and `models.replies.baseUrl` if needed. Shared values come from `models.default`; `provider off` disables the assignment. `config set` and `config unset` accept these keys; `config show` shows each field’s source. The older `analysisProvider`, `analysisModel` and `analysisBaseUrl` still work for analysis. Store the key with `max personal models text key set`; for a custom server, the key name is its host with port, and the public provider key is not sent there.
+Set `models.replies.provider` (`openai` or `anthropic`), the exact model ID in `models.replies.model`, and `models.replies.base_url` if needed. Shared values come from `models.default`; `provider off` disables the assignment. `config set` and `config unset` accept these keys; `config show` shows each field’s source. The older `analysis_provider`, `analysis_model` and `analysis_base_url` still work for analysis. Store the key with `max personal models text key set`; for a custom server, the key name is its host with port, and the public provider key is not sent there.
 
 Consent to share data with an AI provider is separate from permission to send replies:
 

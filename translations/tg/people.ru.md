@@ -198,7 +198,6 @@ tg personal contacts notes list "Bob Synthetic"
 tg personal contacts notes edit "Bob Synthetic" <id> --revision 1 --file note.txt
 tg personal contacts notes remove "Bob Synthetic" <id>
 tg personal contacts show "Bob Synthetic" --with-notes
-tg personal contacts list --search-notes flat          # people whose notes contain this text
 ```
 
 Псевдонимы и заметки остаются в локальном архиве и никогда не попадают в Telegram. Псевдоним применяется только к того аккаунта, который вы используете сейчас; заметка о человеке отображается в каждом профиле входа `tg` на этом компьютере, который его видит. `contacts rename` меняет имя в ваших контактах Telegram — другое дело. Команда находит человека по вашему псевдониму, если только он не соответствует чужому имени; тогда ему нужен идентификатор. `--revision` останавливает редактирование заметки, которая изменилась с момента ее прочтения. Обновление контактов сохраняет ваши псевдонимы и заметки, а связывание двух людей не объединяет их.

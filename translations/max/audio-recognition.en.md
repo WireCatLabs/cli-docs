@@ -18,7 +18,7 @@ Terms used below:
 | Download a model | `max personal models audio download <модель>` |
 | Transcribe one voice message | `max personal messages transcribe <чат> <сообщение>` |
 | Transcribe voice messages in the displayed list | `--transcribe` with `messages list` and `inbox` |
-| Choose a model for future runs | `max config set --defaults transcribeModel <модель>` |
+| Choose a model for future runs | `max config set --defaults transcribe_model <модель>` |
 
 ## Quick start
 
@@ -48,7 +48,7 @@ max personal messages transcribe "Учебная группа" 204 --model parak
 For future runs:
 
 ```sh
-max config set --defaults transcribeModel parakeet-v3
+max config set --defaults transcribe_model parakeet-v3
 ```
 
 Keep command groups distinct: `models audio` manages speech recognition; `models text` manages search components and API keys. The image setting `models.ocr` does not affect voice transcription.
@@ -62,7 +62,7 @@ max personal inbox --transcribe --json
 
 `--transcribe` processes only voice messages in the displayed list that lack text, rather than the entire chat history. It first downloads the recordings, closes the connection, then recognises speech. `--model` selects a different model for one run.
 
-Text is saved under your account in the shared local archive. It appears in message views, inbox, review and the MCP server. If the same model has already transcribed the same message, `max` can return the saved text. JSON uses the `transcript` field. Failed recordings appear in `unheard`, with reasons printed to stderr.
+Text is saved under your account in the shared local archive. It appears in message views, inbox, review and the MCP server. If the same model has already transcribed the same message, `max` can return the saved text. JSON uses the `transcript` field. Failed recordings and the reasons are listed in `missing`.
 
 ## Formats and limits
 

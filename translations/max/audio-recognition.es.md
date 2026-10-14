@@ -18,7 +18,7 @@ Términos que encontrarás más abajo:
 | Descargar un modelo | `max personal models audio download <модель>` |
 | Transcribir una nota de voz | `max personal messages transcribe <чат> <сообщение>` |
 | Transcribir notas de la lista mostrada | `--transcribe` en `messages list` e `inbox` |
-| Elegir el modelo para siguientes ejecuciones | `max config set --defaults transcribeModel <модель>` |
+| Elegir el modelo para siguientes ejecuciones | `max config set --defaults transcribe_model <модель>` |
 
 ## Inicio rápido
 
@@ -48,7 +48,7 @@ max personal messages transcribe "Учебная группа" 204 --model parak
 Para todas las ejecuciones siguientes:
 
 ```sh
-max config set --defaults transcribeModel parakeet-v3
+max config set --defaults transcribe_model parakeet-v3
 ```
 
 No confundas los grupos: `models audio` son modelos de voz; `models text` son modelos de búsqueda y claves de API. `models.ocr` para imágenes no afecta a la voz.
@@ -62,7 +62,7 @@ max personal inbox --transcribe --json
 
 `--transcribe` solo procesa las notas sin texto de la lista mostrada, no todo el historial. Descarga el audio, cierra la conexión y ejecuta el modelo. `--model` elige otro para una ejecución.
 
-El texto se guarda bajo tu cuenta en el archivo local común. Lo ven las vistas de mensajes, la bandeja de entrada, el resumen y el servidor MCP. Si ese mensaje ya se transcribió con el mismo modelo, `max` puede devolver el texto guardado. En JSON aparece en `transcript`. Las notas no reconocidas aparecen en `unheard` y el motivo se escribe en stderr.
+El texto se guarda bajo tu cuenta en el archivo local común. Lo ven las vistas de mensajes, la bandeja de entrada, el resumen y el servidor MCP. Si ese mensaje ya se transcribió con el mismo modelo, `max` puede devolver el texto guardado. En JSON aparece en `transcript`. Las notas no reconocidas y el motivo aparecen en `missing`.
 
 ## Formatos y límites
 

@@ -200,7 +200,6 @@ tg personal contacts notes list "Bob Synthetic"
 tg personal contacts notes edit "Bob Synthetic" <id> --revision 1 --file note.txt
 tg personal contacts notes remove "Bob Synthetic" <id>
 tg personal contacts show "Bob Synthetic" --with-notes
-tg personal contacts list --search-notes flat          # people whose notes contain this text
 ```
 
 Los alias y notas permanecen en el archivo local y nunca llegan a Telegram. Un alias se aplica sólo en la cuenta que usas ahora; Se muestra una nota sobre una persona en cada perfil de inicio de sesión `tg` en esta computadora que la ve. `contacts rename` cambia el nombre de tus contactos de Telegram, algo diferente. Un comando busca a una persona por su alias a menos que coincida con el nombre de otra persona; entonces necesita la identificación. `--revision` detiene la edición de una nota que cambió desde que la leyó. Actualizar los contactos conserva tus alias y notas, y vincular a dos personas no las fusiona.

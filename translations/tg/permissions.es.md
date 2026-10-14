@@ -48,7 +48,7 @@ Los permisos y límites del bot pertenecen a la sección del bot. Para pedir con
 
 ```sh
 tg support config set permissions.bot.messages.send ask --bot
-tg support config set sendsPerHour 30 --bot
+tg support config set sends_per_hour 30 --bot
 ```
 
 ## Restringe los destinatarios y los envíos repetidos

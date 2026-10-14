@@ -97,13 +97,13 @@ The directory has permissions `0700`; both files use `0600`. `run.json` is writt
 The outcome is saved **on every exit path**, including a command that fails before connecting:
 
 ```json
-{ "runId": "…", "command": "chats list", "profile": "default", "status": "failed",
-  "requests": 0, "errorCode": "authentication_error", "durationMs": 12 }
+{ "run_id": "…", "command": "chats list", "profile": "default", "status": "failed",
+  "requests": 0, "error_code": "authentication_error", "duration_ms": 12 }
 ```
 
 ## Failed runs are always saved
 
-A failed command saves its run even without `--record`, marking `"keptBecauseFailed": true` in `run.json`. This applies to any command and error: an invalid flag, unknown command, preflight failure or commands that do not contact MAX (`models`, `server`, `watch`, `upgrade`). Records contain only the command path, such as `messages list`, without subsequent arguments.
+A failed command saves its run even without `--record`, marking `"kept_because_failed": true` in `run.json`. This applies to any command and error: an invalid flag, unknown command, preflight failure or commands that do not contact MAX (`models`, `server`, `watch`, `upgrade`). Records contain only the command path, such as `messages list`, without subsequent arguments.
 
 Fully successful runs without `--record` leave no record; partial runs are retained by default, while a failed run provides evidence for a problem report. `--no-record` or configuration `"record": false` disables even this automatic failure record.
 
@@ -126,7 +126,7 @@ This records every run. Fully successful runs are otherwise not recorded unless 
 
 ## Retention
 
-Records last **30 days**, or `keepRunsForDays` in [configuration](./configuration.md). Old records are removed only when a new record is written. Entire days are removed by directory name, without opening their contents to decide.
+Records last **30 days**, or `keep_runs_for_days` in [configuration](./configuration.md). Old records are removed only when a new record is written. Entire days are removed by directory name, without opening their contents to decide.
 
 ## What is never recorded
 
@@ -184,16 +184,16 @@ If there is no failed run, run the failing command again to save its error autom
 
 ## What to do with the recordings
 
-Records are JSON, so `jq` can inspect them. `max personal runs list --json` returns `{ items, page, limit, hasMore }`; `items` contains `run.json` records, newest first:
+Records are JSON, so `jq` can inspect them. `max personal runs list --json` returns `{ items, page: { limit, has_more } }`; `items` contains `run.json` records, newest first:
 
 ```sh
 # какие запуски закончились плохо
-max personal runs list --json | jq '.items[] | select(.status=="failed") | {runId, command, errorCode}'
+max personal runs list --json | jq '.items[] | select(.status=="failed") | {run_id, command, error_code}'
 
 # сколько времени ушло на вход в последних запусках
-for id in $(max personal runs list --json | jq -r '.items[].runId'); do
-  jq -r 'select(.operation=="session.login" and .event=="response") | "\(.durationMs)ms"' \
-    "$(max personal runs path "$id" --json | jq -r .path)/events.jsonl"
+for id in $(max personal runs list --json | jq -r '.items[].run_id'); do
+  jq -r 'select(.operation=="session.login" and .event=="response") | "\(.duration_ms)ms"' \
+    "$(max personal runs path "$id" --json | jq -r .item.path)/events.jsonl"
 done
 ```
 
@@ -213,12 +213,12 @@ max personal runs search --status partial --since-time 2026-10-01 --json
 
 `runs search` matches literal diagnostic text in metadata and safe events. Use `--operation`,
 `--profile`, `--since-time`, `--limit` and `--page` to narrow it. Each page allows up to 100 runs and
-each run returns at most 100 matched events, with `eventsTruncated` for additional events.
+each run returns at most 100 matched events, with `events_truncated` for additional events.
 A failed batch item or history page creates `status: "partial"` with failed IDs, stages and
 codes; message contents and provider error payloads are not copied into that record. Partial
 records are kept by default unless recording was explicitly disabled. Search does not record itself.
 
 MCP `max_read` with `command: "runs search"` accepts these `arguments`: `query`, `status`, `error_code`, `operation`, `since_time`, `limit` and `page`.
 It reads only the active profile's diagnostic runs, does not connect to MAX and does not open
-raw background-job logs. The original partial result contains recovery actions; diagnostic records
+raw background-job logs. The original partial result names the failed items and their error codes; diagnostic records
 keep only safe identifiers and codes.
