@@ -29,9 +29,24 @@ for (const lang of ["en", "ru", "es"] as const) {
     const prefix = lang === "en" ? "" : `${lang}/`
     const markdown = await request.get(`/llms.mdx/docs/${prefix}drive/installation/content.md`)
     expect(markdown.ok()).toBe(true)
-    expect(await markdown.text()).toContain("drive personal session start --client-file")
-    expect(await markdown.text()).toContain("npm install -g @wirecat/drive-cli")
-    expect(await markdown.text()).not.toContain("pnpm build")
+    const text = await markdown.text()
+    expect(text).toContain("npm install -g @wirecat/drive-cli")
+    expect(text).not.toContain("pnpm build")
+    // Users can finish shared-app sign-in and their first import before optional Cloud setup.
+    const sharedSignIn = text.indexOf("drive personal session start\n")
+    const sessionCheck = text.indexOf("drive personal session list --json")
+    const firstImport = text.indexOf("drive personal folders add")
+    const cloudSetup = text.indexOf("https://console.cloud.google.com/")
+    const customSignIn = text.indexOf("drive personal session start --client-file")
+    expect(sharedSignIn).toBeGreaterThan(-1)
+    expect(sessionCheck).toBeGreaterThan(sharedSignIn)
+    expect(firstImport).toBeGreaterThan(sessionCheck)
+    expect(cloudSetup).toBeGreaterThan(firstImport)
+    expect(customSignIn).toBeGreaterThan(cloudSetup)
+    expect(text.slice(customSignIn)).toContain("(#connect-your-account)")
+    await expect(body.locator('a[href="#connect-your-account"]').last()).toBeVisible()
+    await expect(page.locator("#connect-your-account")).toHaveCount(1)
+    await expect(page.locator("#prepare-google-sign-in")).toHaveCount(1)
   })
 
   test(`${lang}: Drive changelog renders current and first released features`, async ({ page }) => {
