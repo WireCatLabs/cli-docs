@@ -83,7 +83,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     const title = { en: "Changelog", ru: "История изменений", es: "Historial de cambios" }[lang]
     await expect(page.getByRole("heading", { level: 1, name: title, exact: true })).toBeVisible()
     await expect(page.locator("main")).toContainText("0.1.0")
-    await expect(page.locator("main")).toContainText("0.6.0")
+    await expect(page.locator("main")).toContainText("0.7.0")
     await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /Google Drive/)
     await expect(page.locator("#nd-sidebar").getByRole("link", { name: title, exact: true })).toHaveAttribute(
       "href",
@@ -121,6 +121,12 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(await markdown.text()).toContain("`api_operation`")
     expect(await markdown.text()).toContain("`3`")
     expect(await markdown.text()).toContain("`error.retry.safe`")
+    const text = await markdown.text()
+    expect(text).toContain("--json=id,name")
+    expect(text).toContain("drive personal documents export DOC_ID --out ./decision.md")
+    expect(text.lastIndexOf("drive personal documents export DOC_ID --out ./decision.md")).toBeLessThan(
+      text.indexOf("--json=id,name"),
+    )
   })
 
   test(`${lang}: Drive settings separate saved choices, environment and invocation options`, async ({ page }) => {
