@@ -271,6 +271,6 @@ Si coinciden varias personas, el agente muestra los candidatos y te pide elegir.
 
 ## Más opciones
 
-Puedes elegir período, dimensión y puntuación compuesta, y guardar la selección para repetir el informe. Las fórmulas, argumentos de evidencia y límites de páginas están en la [especificación compartida de estadísticas](https://github.com/WireCatLabs/cli-core/blob/main/docs/rankings.md) y la [referencia de comandos](./commands.md#max-stats).
+Puedes elegir período, dimensión y puntuación compuesta, y guardar la selección para repetir el informe. Las fórmulas, argumentos de evidencia y límites de páginas están en la [especificación compartida de estadísticas](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/rankings.md) y la [referencia de comandos](./commands.md#max-stats).
 
 Para verificar un resultado, pide al agente que abra la pregunta, respuesta o miembros que sustentan esa fila. Antes del siguiente informe, [comprueba la cobertura del archivo](./archive.md).

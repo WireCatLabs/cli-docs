@@ -8,7 +8,8 @@ for (const lang of ["en", "ru", "es"])
     }) => {
       await page.goto(`/${lang}/docs/${tool}/commands`)
       await expect(page.locator("[data-command-index]")).toBeVisible()
-      await expect(page.locator("main pre")).toHaveCount(0)
+      await expect(page.locator("main pre")).toHaveCount(1)
+      await expect(page.locator("main pre")).toContainText(`${tool} [`)
       expect(await page.evaluate(() => document.querySelectorAll("*").length)).toBeLessThan(2500)
       for (const group of ["personal", "bot", "admin", "setup"])
         await expect(

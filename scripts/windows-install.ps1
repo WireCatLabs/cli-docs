@@ -37,6 +37,8 @@ $installedVersion = & $shim --version
 if ($LASTEXITCODE -ne 0 -or "$installedVersion".Trim() -ne $version) { throw 'Installed CLI version does not match npm' }
 & $shim --help
 if ($LASTEXITCODE -ne 0) { throw 'Installed CLI help failed' }
+# Account commands refuse to guess a profile (max 0.49.0+); doctor and migrate only read it, never log in.
+Set-Item -Path "env:$($Tool.ToUpper())_PROFILE" -Value 'smoke'
 foreach ($command in @('doctor', 'commands')) {
     $json = & $shim $command --json
     if ($LASTEXITCODE -ne 0) { throw "Installed CLI failed: $command" }
