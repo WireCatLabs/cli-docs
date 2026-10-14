@@ -242,7 +242,9 @@ test("has and in complete values; every Space reopens fields and operators", asy
     await input.press("Escape")
     await input.pressSequentially(`${field}:`)
     await expect(page.locator(".sp-popup")).toBeVisible()
-    await expect(page.locator(".sp-suggestion")).toHaveCount(field === "has" ? 12 : 4)
+    await expect(page.locator(".sp-suggestion")).toHaveCount(field === "has" ? 13 : 4)
+    if (field === "has")
+      await expect(page.locator(".sp-suggestion span").getByText("text", { exact: true })).toBeVisible()
   }
   for (const query of ["invoice", "has:file", "in:max", 'chat:"Client studio"', "Atlas AND (invoice OR budget)"]) {
     await input.fill(query)
