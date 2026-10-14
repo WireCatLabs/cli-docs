@@ -69,7 +69,7 @@ max personal tasks agenda
 Tareas abiertas de un chat:
 
 ```sh
-tg personal tasks list --chat "Renovation" --state open
+tg personal tasks list 'chat:"Renovation" state:open'
 ```
 
 Añadir una tarea para un mensaje y planificarla:
