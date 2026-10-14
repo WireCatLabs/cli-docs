@@ -9,11 +9,11 @@ Algunas palabras utilizadas a continuación:
 - Una **regla** dice qué mensajes entrantes responder y qué hacer: responder, abrir una tarea o ambas cosas.
 - Una **plantilla** es el texto de respuesta. Puede incluir el nombre del remitente y la hora.
 - La **audiencia** es la lista de personas y chats que pueden obtener una respuesta, independientemente de lo que diga una regla.
-- `tg serve` es el proceso en segundo plano que recibe nuevos mensajes y aplica las reglas.
+- `tg personal serve` es el proceso en segundo plano que recibe nuevos mensajes y aplica las reglas.
 
 Quién recibe una respuesta y cuándo se envía algo:
 
-- **Las respuestas van a todas las personas que coincidan con tus reglas, a menos que limites la audiencia.** Responde solo a personas seleccionadas con `tg replies audience --reply listed --allow-people …`, o omite algunas con `--deny-people` y `--deny-chats`.
+- **Las respuestas van a todas las personas que coincidan con tus reglas, a menos que limites la audiencia.** Responde solo a personas seleccionadas con `tg personal replies audience --reply listed --allow-people …`, o omite algunas con `--deny-people` y `--deny-chats`.
 - **No se envía nada hasta que activas el envío.** `permissions.replies.send` debe ser `allow`. `ask` cuenta como no, porque un servidor en segundo plano no tiene a quién preguntar. Las reglas nuevas permanecen desactivadas hasta que las activas.
 
 Las listas de opciones completas se encuentran en [los comandos de respuesta automática](./commands.md#tg-replies).
@@ -21,22 +21,22 @@ Las listas de opciones completas se encuentran en [los comandos de respuesta aut
 ## Crear y activar una regla
 
 ```sh
-tg replies add away
-tg replies edit away --template 'Thanks, {{ sender.firstName | default: "there" }}! I will answer in the morning.'
-tg replies edit away --outside 09:00-19:00 --days mon-fri --timezone Europe/Madrid
-tg replies edit away --per-chat 1/12h --per-person 1/1d
+tg personal replies add away
+tg personal replies edit away --template 'Thanks, {{ sender.firstName | default: "there" }}! I will answer in the morning.'
+tg personal replies edit away --outside 09:00-19:00 --days mon-fri --timezone Europe/Madrid
+tg personal replies edit away --per-chat 1/12h --per-person 1/1d
 ```
 
-`add` crea una regla que está desactivada, con cada configuración escrita. Las reglas se encuentran en `<profile>.replies.json`, en la misma carpeta que el `configFile` que nombra `tg config show --json`. Por defecto, las reglas responden a todas las personas con las que coinciden. Para responder solo a personas seleccionadas, indique sus ID de Telegram, separados por comas; `tg contacts show <name> --json` imprime la identificación de una persona como `id`:
+`add` crea una regla que está desactivada, con cada configuración escrita. Las reglas se encuentran en `<profile>.replies.json`, en la misma carpeta que el `configFile` que nombra `tg config show --json`. Por defecto, las reglas responden a todas las personas con las que coinciden. Para responder solo a personas seleccionadas, indique sus ID de Telegram, separados por comas; `tg personal contacts show <name> --json` imprime la identificación de una persona como `id`:
 
 ```sh
-tg replies audience --reply listed --allow-people 1000001
+tg personal replies audience --reply listed --allow-people 1000001
 ```
 
 Para responder a todos excepto a algunas personas o chats, mantén `--reply all` y niégalos:
 
 ```sh
-tg replies audience --deny-people 1000002 --deny-chats -1002000002
+tg personal replies audience --deny-people 1000002 --deny-chats -1002000002
 ```
 
 Después del primer comando, el archivo contiene:
@@ -57,13 +57,13 @@ Los ID de reglas usan letras minúsculas, dígitos y `-`, y cada uno es único. 
 Después, consulta qué habría respondido, actívala e inicia el servidor:
 
 ```sh
-tg replies test --since-time 7d
-tg replies on away
+tg personal replies test --since-time 7d
+tg personal replies on away
 tg config set permissions.replies.send allow
-tg serve
+tg personal serve
 ```
 
-`replies test` lee solo mensajes ya guardados en tu almacén local. No envía ni cambia nada y nunca se conecta. `tg replies off away` desactiva una regla.
+`replies test` lee solo mensajes ya guardados en tu almacén local. No envía ni cambia nada y nunca se conecta. `tg personal replies off away` desactiva una regla.
 
 ## Condiciones y audiencia
 
@@ -81,7 +81,7 @@ tg serve
 
 La primera vez que establezcas el horario laboral, indica la ventana, los días y la zona horaria juntos; después de eso puedes cambiar uno. Una edición incorrecta no sobrescribe el archivo y las demás reglas, la audiencia y el registro de lo respondido permanecen como estaban.
 
-`tg replies audience` muestra a quién pueden responder todas las reglas del archivo. Un nuevo archivo es `--reply all`: responde a cualquiera que coincida con una regla. `--reply listed` responde sólo a las personas y chats permitidos. `--allow-people`, `--allow-chats`, `--deny-people` y `--deny-chats` reemplazan esas listas, y una denegación prevalece sobre una asignación. Una acción `task` abre una tarea en esta computadora y no está limitada por la audiencia.
+`tg personal replies audience` muestra a quién pueden responder todas las reglas del archivo. Un nuevo archivo es `--reply all`: responde a cualquiera que coincida con una regla. `--reply listed` responde sólo a las personas y chats permitidos. `--allow-people`, `--allow-chats`, `--deny-people` y `--deny-chats` reemplazan esas listas, y una denegación prevalece sobre una asignación. Una acción `task` abre una tarea en esta computadora y no está limitada por la audiencia.
 
 ## Plantillas y un modelo
 
@@ -98,19 +98,19 @@ Thanks, {{ sender.firstName | default: "there" }}!
 
 El cuerpo del bloque es una instrucción para el modelo. El texto entrante se le pasa por separado, como datos. Si no hay modelo configurado, falta consentimiento o falla la llamada, se envía el texto de `else`; sin `else`, no se responde al mensaje y se registra el motivo.
 
-Elige el modelo con `models.replies.provider` (`openai` o `anthropic`), `models.replies.model` y, para tu propio servidor, `models.replies.baseUrl`; `models.default` completa lo que no se haya definido. Guarda la clave con `tg models text key set`.
+Elige el modelo con `models.replies.provider` (`openai` o `anthropic`), `models.replies.model` y, para tu propio servidor, `models.replies.baseUrl`; `models.default` completa lo que no se haya definido. Guarda la clave con `tg personal models text key set`.
 
 Usar un modelo exige un consentimiento propio, independiente del permiso para enviar:
 
 ```sh
-tg replies consents show
-tg replies consents grant
-tg replies consents revoke
-tg replies consents deny -1002000002
-tg replies consents allow -1002000002
+tg personal replies consents show
+tg personal replies consents grant
+tg personal replies consents revoke
+tg personal replies consents deny -1002000002
+tg personal replies consents allow -1002000002
 ```
 
-`grant` permite enviar datos de mensajes entrantes al proveedor elegido para todo el perfil. `deny` impide que los mensajes de un chat lleguen al modelo; `allow` levanta esa prohibición sin conceder consentimiento. Un proveedor o endpoint nuevo necesita consentimiento de nuevo. `tg replies test --ai` envía mensajes guardados al modelo para que veas su texto; sigue sin enviar nada a Telegram.
+`grant` permite enviar datos de mensajes entrantes al proveedor elegido para todo el perfil. `deny` impide que los mensajes de un chat lleguen al modelo; `allow` levanta esa prohibición sin conceder consentimiento. Un proveedor o endpoint nuevo necesita consentimiento de nuevo. `tg personal replies test --ai` envía mensajes guardados al modelo para que veas su texto; sigue sin enviar nada a Telegram.
 
 ## A qué nunca responde una regla
 
@@ -124,10 +124,10 @@ Cada regla debe tener límites `perChat` y `perPerson`, de modo que dos sistemas
 ## Detener y revisar
 
 ```sh
-tg replies pause
-tg replies resume
-tg replies status
-tg sends list
+tg personal replies pause
+tg personal replies resume
+tg personal replies status
+tg personal sends list
 ```
 
 `pause` detiene todas las reglas a la vez, incluido un `serve` en ejecución, sin reiniciar; `resume` deshace la pausa. `status` indica si se permite enviar, qué reglas están activas y a quién pueden responder. `sends list` muestra cada respuesta con la regla que la envió.

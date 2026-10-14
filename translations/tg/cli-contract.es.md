@@ -24,7 +24,7 @@ Algunos términos que utiliza la página:
 - **stdout** y **stderr** son los dos flujos de salida de un comando. stdout lleva el resultado;   stderr transporta mensajes sobre la ejecución, como advertencias y errores.
 - **Código de salida** es el número que devuelve un comando cuando finaliza. `0` significa éxito; cualquier otro número indica el tipo de falla.
 - El **modo máquina** se genera como JSON para un programa, en lugar de texto para una persona.
-- **Comando de una sola vez** hace una cosa y sale, por ejemplo `tg messages list`. Un **comando persistente** sigue ejecutándose hasta que lo detienes: `watch`, `serve` y `mcp`.
+- **Comando de una sola vez** hace una cosa y sale, por ejemplo `tg personal messages list`. Un **comando persistente** sigue ejecutándose hasta que lo detienes: `watch`, `serve` y `mcp`.
 - **Escribir** es cualquier comando que cambia algo en Telegram: envía, edita, elimina o marca como leído.
 
 ## En qué puedes confiar
@@ -38,19 +38,19 @@ Algunos términos que utiliza la página:
 | Sólo los campos que necesitas | `--fields` |
 | Opciones de un comando sin leer los documentos | `tg commands` y `tg commands schema` |
 | Para ver qué haría un comando | `--dry-run` |
-| Para saber si ocurrió una escritura fallida | `outcome_unknown`, `retryable` y `operationId` |
+| Para saber si ocurrió una escritura fallida | `outcome_unknown` y `details.operationId` |
 
-Las lecturas y descargas parciales pueden devolver JSON con código de salida `0`: comprueba `complete` y `batch` o `issue`. Una descarga que falla antes de su primera página por un motivo que ningún reintento resuelve (como la falta de `--from`) termina con el código de ese error. El JSONL de una descarga parcial añade `batch_summary`; el trabajo completado se conserva. Los errores incluyen `actions` con pasos, ajustes y pausas para recuperarse.
+Las lecturas y descargas parciales pueden devolver JSON con código de salida `0`: comprueba `complete` y `batch` o `issue`. Una descarga que falla antes de su primera página por un motivo que ningún reintento resuelve (como la falta de `--from`) termina con el código de ese error. El JSONL de una descarga parcial añade `batch_summary`; el trabajo completado se conserva. Cada elemento fallido en `batch` incluye `actions` con pasos, ajustes y pausas para recuperarse.
 
 ## Cómo se nombran los comandos
 
 Los comandos utilizan `tg [profile] resource action`. Los informes y recuentos se encuentran en `stats`, luego el recurso y el informe:
 
 ```sh
-tg stats messages show --by sender --limit 10 --json
-tg stats chats show <chat> --json
-tg stats tasks show --json
-tg stats charts <chat> --json
+tg personal stats messages show --by sender --limit 10 --json
+tg personal stats chats show <chat> --json
+tg personal stats tasks show --json
+tg personal stats charts <chat> --json
 ```
 
 Las rutas más antiguas `messages stats`, `chats stats` y `tasks stats` ya no existen y no hay alias para ellas. Si sus permisos nombran estas rutas, revise el cambio con `tg config migrate --dry-run` y luego ejecute `tg config migrate`. El permiso para las estadísticas no anula un permiso denegado para los mensajes, chats o tareas que se encuentran debajo.
@@ -59,7 +59,7 @@ Las rutas más antiguas `messages stats`, `chats stats` y `tasks stats` ya no ex
 
 `--json` produce JSON. `--jsonl` produce un valor JSON por línea, para comandos que se pueden transmitir. En una tubería, JSON se elige automáticamente. stdout transporta datos; stderr lleva diagnósticos. Una bandera JSON explícita gana sobre un terminal conectado. `--help` y `--version` imprimen texto en la salida estándar, salen con `0` y no ejecutan el comando.
 
-Un error que termina el comando en modo máquina es un objeto en stderr: `{"error":{"code":"…","message":"…","retryable":false}}`. Un comando desconocido, una opción o un argumento requerido faltante sale con el código 2. `tg commands --json` proporciona la tabla completa de códigos de salida. `--quiet` oculta los diagnósticos habituales pero mantiene los errores. La salida de la máquina no tiene color ni animación; `NO_COLOR` también desactiva el color en la salida de texto.
+Un error que termina el comando en modo máquina es un objeto en stderr: `{"error":{"code":"…","reason":"…","message":"…","details":{…}}}`. `reason` es un identificador con puntos, como `output.too-large`; `details` contiene lo que nombra el fallo, como `candidates`, `operationId` o `permission`, y `retryable` solo cuando el fallo lo indica. `--debug` añade la causa y la traza de la pila. Un comando desconocido, una opción o un argumento requerido faltante sale con el código 2. `tg commands --json` proporciona la tabla completa de códigos de salida. `--quiet` oculta los diagnósticos habituales pero mantiene los errores. La salida de la máquina no tiene color ni animación; `NO_COLOR` también desactiva el color en la salida de texto.
 
 ## Ejecutar sin preguntas y límites de ejecución
 
@@ -74,7 +74,7 @@ La entrada leída desde stdin está limitada a 16 MiB; `--max-input-bytes 335544
 ## Resultados más pequeños y qué acepta un comando
 
 ```sh
-tg messages list <chat> --json --fields id,text
+tg personal messages list <chat> --json --fields id,text
 tg commands messages list --json
 tg commands schema messages list --json
 ```
@@ -101,6 +101,6 @@ Pídale al agente que le muestre los mensajes que contó y cuánto del historial
 
 ## Estándares que seguimos
 
-`tg` sigue las partes que se aplican de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) y [Pautas de interfaz de línea de comando](https://clig.dev/), además de [Esquema JSON](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/WireCatLabs/tg-cli/blob/v0.46.3/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/dev/STANDARD.md) describen cómo se aplican y las excepciones realizadas intencionalmente. No reclamamos una certificación completa de terceros.
+`tg` sigue las partes que se aplican de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) y [Pautas de interfaz de línea de comando](https://clig.dev/), además de [Esquema JSON](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/WireCatLabs/tg-cli/blob/v0.53.0/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/WireCatLabs/cli-core/blob/main/docs/dev/STANDARD.md) describen cómo se aplican y las excepciones realizadas intencionalmente. No reclamamos una certificación completa de terceros.
 
 Para la configuración, consulte la [guía de configuración](./configuration.md); para cada clave y variable de entorno, la [referencia de configuración](./configuration-reference.md).

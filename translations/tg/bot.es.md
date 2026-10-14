@@ -11,7 +11,7 @@ Utilice esta página cuando tenga un bot de Telegram, o quiera uno, y lo necesit
 
 Algunas palabras en esta página:
 
-- **Un bot** es una cuenta de Telegram independiente que ejecuta un programa. `tg bot` funciona con él a través de la [API oficial de bots de Telegram](https://core.telegram.org/bots/api). No tiene nada que ver con tu propia cuenta: el bot tiene su propio nombre, sus propios chats y su propio token, y `tg …` sin la palabra `bot` sigues siendo tú (ver [usar tu propia cuenta](./usage.md)).
+- **Un bot** es una cuenta de Telegram independiente que ejecuta un programa. `tg personal bot` funciona con él a través de la [API oficial de bots de Telegram](https://core.telegram.org/bots/api). No tiene nada que ver con tu propia cuenta: el bot tiene su propio nombre, sus propios chats y su propio token, y `tg …` sin la palabra `bot` sigues siendo tú (ver [usar tu propia cuenta](./usage.md)).
 - **Un token** es la contraseña del bot. Creas un bot con [@BotFather](https://t.me/BotFather) en Telegram y te da el token.
 - **El nombre de un bot** es la palabra que eliges para guardar el token de un bot, como `sales`. Es la primera palabra de cada comando de bot: `tg sales bot …`.
 - **La copia local** es lo que el bot envió, recibió o importó y guardó en esta computadora. Telegram no le da al bot ningún historial de mensajes, por lo que para leer mensajes antiguos se utiliza esta copia.
@@ -68,10 +68,10 @@ Cada bot se guarda con el nombre que elijas. Ese nombre es la **primera palabra*
 ```sh
 tg sales bot auth set
 tg support bot auth set
-tg bot list --check       # every name with a bot token, and which bot each is
+tg personal bot list --check  # every name with a bot token, and which bot each is
 ```
 
-Sin nombre explícito se utiliza `defaultProfile` o, si falta, `default`. `TG_PROFILE` lo selecciona para la terminal.
+Sin nombre explícito se utiliza `TG_PROFILE` o, si falta, el ajuste `defaultProfile`; si no hay ninguno, el comando se detiene y enumera los perfiles.
 
 ## El token
 
@@ -173,7 +173,7 @@ tg sales bot store fetch -1001234567890 --from https://t.me/c/1234567890/512 --l
 tg sales bot store fetch -1001234567890 --last 200 --pause 1s
 ```
 
-`--from` empieza en ese mensaje, incluido, y debe referirse al mismo chat. Sin él, usa el mensaje más reciente que el bot tenga guardado. Si no tiene ninguno, consulta el más reciente de la sesión personal `default` existente. Si ninguna conoce un número, termina con el código `2` y solicita `--from`. Usa las credenciales de aplicación Telegram del perfil del bot (`api_id` y `api_hash`) o las del perfil `default` existente; también acepta `TG_API_ID` y `TG_API_HASH`. No inicia una sesión personal.
+`--from` empieza en ese mensaje, incluido, y debe referirse al mismo chat. Sin él, usa el mensaje más reciente que el bot tenga guardado. Si no tiene ninguno, consulta el más reciente de la sesión personal del mismo perfil, si la tiene. Si ninguna conoce un número, termina con el código `2` y solicita `--from`. Usa las credenciales de aplicación Telegram del propio perfil (`api_id` y `api_hash`), nunca las de otro perfil; también acepta `TG_API_ID` y `TG_API_HASH`. No inicia una sesión personal.
 
 - `--limit` limita los mensajes descargados en esta ejecución (1000 por defecto).
 - `--page-size` limita los números de mensaje consultados por página, hasta 100.
@@ -197,7 +197,7 @@ tg sales bot watch --types message,callback_query
 
 ## Moderar mediante reglas
 
-Un bot que sea administrador de un grupo puede juzgar las novedades del grupo según las reglas del grupo, como lo hace `tg chats moderate` con su cuenta (consulte [reglas para los grupos que ejecuta](./groups.md#rules)):
+Un bot que sea administrador de un grupo puede juzgar las novedades del grupo según las reglas del grupo, como lo hace `tg personal chats moderate` con su cuenta (consulte [reglas para los grupos que ejecuta](./groups.md#rules)):
 
 ```sh
 tg sales bot chats rules set -1001234567890 invites delete   # invite links to other chats: delete
@@ -304,11 +304,11 @@ Un comando rechazado o fallido indica el motivo en su mensaje de error y termina
 | `8` | el `sendsPerHour` del bot está agotado | esperar o aumentar el límite |
 | `14` | no hubo respuesta: no se sabe si Telegram escribió | revisa el chat antes de repetirlo |
 
-Cada código está en la [referencia de comando](./commands.md). `--trace` y `--record` también funcionan para un bot: cada solicitud de API de Bot es una línea en stderr, nunca con su dirección, ya que el token está en ella. Una ejecución fallida se mantiene y se muestra en `tg runs list` (consulte [diagnósticos](./diagnostics.md)).
+Cada código está en la [referencia de comando](./commands.md). `--trace` y `--record` también funcionan para un bot: cada solicitud de API de Bot es una línea en stderr, nunca con su dirección, ya que el token está en ella. Una ejecución fallida se mantiene y se muestra en `tg personal runs list` (consulte [diagnósticos](./diagnostics.md)).
 
 ## Conectar el bot al agente mediante MCP
 
-`tg <name> bot mcp` entrega el bot a su agente de IA, del mismo modo que `tg mcp` sirve su cuenta:
+`tg <name> bot mcp` entrega el bot a su agente de IA, del mismo modo que `tg personal mcp` sirve su cuenta:
 
 ```sh
 claude mcp add sales-bot -- tg sales bot mcp

@@ -11,8 +11,8 @@ title: "Диагностика: что сделала команда"
 
 - **Запуск** — это один вызов `tg` от начала до выхода.
 - **Запись о запуске** — это папка, в которой хранится то, что было выполнено при каждом запуске: его команда, его результат и одна строка на каждый запрос к Telegram. Он никогда не содержит текст сообщения, имена или заголовки.
-- **`tg doctor`** проверяет установку: версию, логин, настройки и локальный архив.
-- **Отчет о проблеме** – это один файл JSON, созданный на основе `tg doctor`, и неудачный запуск. Вы прикрепляете его к проблеме.
+- **`tg personal doctor`** проверяет установку: версию, логин, настройки и локальный архив.
+- **Отчет о проблеме** – это один файл JSON, созданный на основе `tg personal doctor`, и неудачный запуск. Вы прикрепляете его к проблеме.
 
 ## Что можно сделать
 
@@ -20,10 +20,10 @@ title: "Диагностика: что сделала команда"
 |---|---|---|
 | Просматривайте каждый запрос в реальном времени | `tg --trace …` | нет, печатает только в stderr |
 | Запишите один запуск | `tg --record …` | да, запись запуска |
-| Найти неудачный запуск позже | `tg runs list` | неудачный запуск сохраняется сам по себе |
+| Найти неудачный запуск позже | `tg personal runs list` | неудачный запуск сохраняется сам по себе |
 | Записывайте каждый запуск | `tg config set record true` | да, каждый запуск |
-| Проверьте установку | `tg doctor`, `tg doctor --online` | нет |
-| Сообщить о проблеме | `tg doctor report create` | да, один файл вы отправите |
+| Проверьте установку | `tg personal doctor`, `tg personal doctor --online` | нет |
+| Сообщить о проблеме | `tg personal doctor report create` | да, один файл вы отправите |
 
 ## Показать операции: `--trace`
 
@@ -44,9 +44,9 @@ tg --trace messages list "Book club" --limit 5
 
 ```sh
 tg --record chats list
-tg runs list                 # recorded runs, newest first
-tg runs show <run-id>        # one run: its outcome, and one line per operation
-tg runs path <run-id>        # the folder that holds it
+tg personal runs list        # recorded runs, newest first
+tg personal runs show <run-id>  # one run: its outcome, and one line per operation
+tg personal runs path <run-id>  # the folder that holds it
 ```
 
 Запись запуска — это папка под `runs/<day>/` в папке состояния (`~/.local/share/tg-cli/runs/` в Linux). Его имя – время и команда. Он содержит два файла:
@@ -89,8 +89,8 @@ tg --no-record chats list          # but not this one
 ## Проверить установку: `tg doctor`
 
 ```sh
-tg doctor              # connects to nothing
-tg doctor --online     # also connects once and reads the account; sends nothing to Telegram
+tg personal doctor     # connects to nothing
+tg personal doctor --online  # also connects once and reads the account; sends nothing to Telegram
 ```
 
 Команда показывает версию, среду выполнения, профиль, файл конфигурации, наличие сессии и данных приложения (без значений), изменение записи хранилища ключей через `TG_*_DIR`, локальную базу (путь, версию, количество чатов и сообщений), отправки за последний час и сохранённые запуски.
@@ -99,30 +99,30 @@ tg doctor --online     # also connects once and reads the account; sends nothing
 - **`files`** и **`telegram.session.files`** называют каждый личный файл или папку, которые могут читать другие пользователи этого компьютера: сессия, хранилище, их файлы SQLite `-wal` и `-shm`, журнал отправки и папка запусков. У каждого есть команда `chmod`, которая это исправляет. `doctor` сам никогда не меняет режим файла. Windows не проверяется.
 - **`online.clock`** (с `--online`) сравнивает часы этого компьютера с часами Telegram.   `skewMs` положителен, когда этот компьютер впереди. Он предупреждает (`ok: false`) через 10 секунд. Telegram отклоняет запрос, который опережает собственные часы более чем на 30 секунд.
 - **`online.standing`** (с `--online`) — это `active`, `frozen`, `banned`, `deactivated` или `revoked` или `unknown`, когда ответ Telegram не может быть определен. Замороженный аккаунт может читать, но не писать. Там, где Telegram их предоставляет, указывается дата, когда аккаунт был заморожен, дата, когда Telegram его удалит, и ссылка на апелляцию. Повторный вход не восстанавливает аккаунт, закрытый Telegram.
-- **`flood`** перечисляет ожидания, которые Telegram попросил сохранить в этом профиле (`deadlines`) и задержать отправку (`sendBlock`). `doctor` только читает, за одним исключением: **`doctor --online` записывает блокировку отправки для замороженного аккаунта.** Когда он считывает аккаунт как замороженный, он удерживает отправку до даты Telegram. Когда он считает его активным, он снимает удержание. Он никогда не снимает ограничение на спам — `tg flood clear` делает это.
+- **`flood`** перечисляет ожидания, которые Telegram попросил сохранить в этом профиле (`deadlines`) и задержать отправку (`sendBlock`). `doctor` только читает, за одним исключением: **`doctor --online` записывает блокировку отправки для замороженного аккаунта.** Когда он считывает аккаунт как замороженный, он удерживает отправку до даты Telegram. Когда он считает его активным, он снимает удержание. Он никогда не снимает ограничение на спам — `tg personal flood clear` делает это.
 
 ## Отчёт об ошибке
 
 ```sh
-tg doctor report create                   # about the newest failed run
-tg doctor report create --run <run-id>    # about this one
+tg personal doctor report create          # about the newest failed run
+tg personal doctor report create --run <run-id>  # about this one
 ```
 
-Он записывает файл JSON — то, что показывает `tg doctor` плюс запуск — и говорит, куда его отправить: новая задача на [github.com/WireCatLabs/tg-cli/issues](https://github.com/WireCatLabs/tg-cli/issues/new). Прочтите его, прежде чем отправить. Он не содержит текста сообщения, и каждый идентификатор отображается в виде метки, а не номера Telegram. [Как сообщить о проблеме](./troubleshooting.md#report-a-problem) перечисляет все, что содержится в файле.
+Он записывает файл JSON — то, что показывает `tg personal doctor` плюс запуск — и говорит, куда его отправить: новая задача на [github.com/WireCatLabs/tg-cli/issues](https://github.com/WireCatLabs/tg-cli/issues/new). Прочтите его, прежде чем отправить. Он не содержит текста сообщения, и каждый идентификатор отображается в виде метки, а не номера Telegram. [Как сообщить о проблеме](./troubleshooting.md#report-a-problem) перечисляет все, что содержится в файле.
 
 Если записи неудачного запуска нет, повторите проблемную команду: ошибка сохранится автоматически.
 
 ## Анализ записей
 
-Записи имеют формат JSON, поэтому их можно анализировать через `jq`. `tg runs list --json` возвращает `{ items, page, limit, hasMore }`, где `items` — содержимое `run.json` для каждого запуска, от новых к старым:
+Записи имеют формат JSON, поэтому их можно анализировать через `jq`. `tg personal runs list --json` возвращает `{ items, page, limit, hasMore }`, где `items` — содержимое `run.json` для каждого запуска, от новых к старым:
 
 ```sh
-tg runs list --limit 100 --json | jq '[.items[] | select(.status == "failed") | {command, errorCode}]'
-tg runs list --limit 100 --json | jq '[.items[] | .durationMs] | add / length'    # average duration
-tg runs list --limit 100 --json | jq '[.items[] | select(.requests > 10) | {command, requests}]'
+tg personal runs list --limit 100 --json | jq '[.items[] | select(.status == "failed") | {command, errorCode}]'
+tg personal runs list --limit 100 --json | jq '[.items[] | .durationMs] | add / length'  # average duration
+tg personal runs list --limit 100 --json | jq '[.items[] | select(.requests > 10) | {command, requests}]'
 ```
 
-`tg runs show <run-id>` выводит те же события таблицей без повторяющихся полей. Полный файл находится в каталоге, который показывает `tg runs path <run-id>`.
+`tg personal runs show <run-id>` выводит те же события таблицей без повторяющихся полей. Полный файл находится в каталоге, который показывает `tg personal runs path <run-id>`.
 
 ## Дальше
 
@@ -132,8 +132,8 @@ tg runs list --limit 100 --json | jq '[.items[] | select(.requests > 10) | {comm
 ## Найти ошибку или частичный запуск
 
 ```sh
-tg runs search --error-code rate_limited --json
-tg runs search --status partial --since-time 2026-10-01 --json
+tg personal runs search --error-code rate_limited --json
+tg personal runs search --status partial --since-time 2026-10-01 --json
 ```
 
 `runs search` ищет буквальный текст в метаданных и безопасных диагностических событиях;

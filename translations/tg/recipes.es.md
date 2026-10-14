@@ -19,7 +19,7 @@ Términos en esta página:
 
 - **Agente**: un agente de IA que ejecuta comandos en su computadora por usted.
 - **Skill**: un archivo que le indica al agente cómo utilizar `tg`. `tg skill install` lo pone donde el agente lo busca.
-- **Cliente MCP**: una aplicación de IA sin terminal, como Claude Desktop. Llega a `tg` a través del servidor MCP `tg mcp` en lugar de ejecutar comandos.
+- **Cliente MCP**: una aplicación de IA sin terminal, como Claude Desktop. Llega a `tg` a través del servidor MCP `tg personal mcp` en lugar de ejecutar comandos.
 - **Modo sin cabeza**: el agente toma una solicitud, la ejecuta y sale, sin conversación. Claude Code lo llama modo `-p`; El Codex lo llama `codex exec`.
 - **cron**: el programador integrado en Linux y macOS. Inicia un comando en momentos establecidos.
 
@@ -46,16 +46,16 @@ Términos en esta página:
 La skill va a las carpetas de Claude Code (`~/.claude/skills/tg-cli/`) y de Codex y Gemini CLI (`~/.agents/skills/tg-cli/`). `tg skill show` imprime el mismo texto, si su agente mantiene sus skills en otro lugar.
 3. Guarde las solicitudes siguientes en archivos, por ejemplo en `~/tg-recipes/`. Los comandos de programación leen la solicitud de un archivo.
 
-Un cliente MCP no necesita un skill. Conecta el servidor MCP (`tg mcp config` muestra la entrada para sus ajustes) y usa sus peticiones preparadas: `catch-up`, `review`, `reply`, `find`. Consulta [las peticiones del servidor MCP](./mcp.md#prompts-and-chats-by-).
+Un cliente MCP no necesita un skill. Conecta el servidor MCP (`tg personal mcp config` muestra la entrada para sus ajustes) y usa sus peticiones preparadas: `catch-up`, `review`, `reply`, `find`. Consulta [las peticiones del servidor MCP](./mcp.md#prompts-and-chats-by-).
 
 ## Qué puede hacer el agente
 
 Un agente con un horario trabaja sin usted, así que establezca los límites en la configuración, no en la solicitud. Un agente puede leer mal "no enviar nada". No puede eludir una configuración que no se le permite cambiar.
 
-**Limita lo que el agente puede ejecutar.** Esta es una configuración del agente. Por ejemplo, Claude Code en el modo `-p` ejecuta solo los comandos en `--allowedTools`. Sin ningún `tg messages send` en la lista, el agente no puede llamarlo:
+**Limita lo que el agente puede ejecutar.** Esta es una configuración del agente. Por ejemplo, Claude Code en el modo `-p` ejecuta solo los comandos en `--allowedTools`. Sin ningún `tg personal messages send` en la lista, el agente no puede llamarlo:
 
 ```sh
-claude -p "$(cat ~/tg-recipes/morning.md)" --allowedTools "Bash(tg inbox:*)"
+claude -p "$(cat ~/tg-recipes/morning.md)" --allowedTools "Bash(tg personal inbox:*)"
 ```
 
 El Codex no tiene tal lista. Su entorno aislado bloquea la red y la escritura de archivos de forma predeterminada, y `tg` necesita ambas cosas: se conecta a Telegram y guarda lo que lee en su copia local. Por lo tanto, Codex se ejecuta con `--sandbox danger-full-access` y la configuración de `tg` por debajo del límite de envío.
@@ -68,12 +68,12 @@ for key in messages reactions polls topics chats contacts account conversations 
 done
 tg config show                       # check the permissions in force
 tg config set sendsPerHour 5         # or: at most five sends an hour
-tg recipients add "Book club"        # and only to the chats on this list
+tg personal recipients add "Book club"  # and only to the chats on this list
 ```
 
 `readonly` en un recurso no cubre los demás: `messages` por sí solo aún permite al agente reaccionar, votar o cambiar de chat. Por eso el bucle establece cada recurso. Una clave más precisa, como `permissions.messages.send: allow`, gana su recurso: elimine dichas claves si el perfil solo debe leer.
 
-`permissions` también limita sus propios comandos, hasta que los vuelva a cambiar: `tg config unset permissions.messages`. Para limitar solo al agente, asígnele un perfil propio. Cada intento de envío, incluidos los rechazados, está en `tg sends list`. Consulte [el control de envío](./security.md#the-send-guard) y [lo que puede hacer un perfil](./configuration-reference.md#what-a-profile-may-do).
+`permissions` también limita sus propios comandos, hasta que los vuelva a cambiar: `tg config unset permissions.messages`. Para limitar solo al agente, asígnele un perfil propio. Cada intento de envío, incluidos los rechazados, está en `tg personal sends list`. Consulte [el control de envío](./security.md#the-send-guard) y [lo que puede hacer un perfil](./configuration-reference.md#what-a-profile-may-do).
 
 **La lectura no revela nada.** Ningún comando en las recetas siguientes marca nada leído: nadie ve que el agente abrió un chat.
 
@@ -83,7 +83,7 @@ tg recipients add "Book club"        # and only to the chats on this list
 - **cron y `claude -p`.** No se necesita aplicación, en cualquier computadora que esté encendida en ese momento:
 
   ```cron
-  30 8 * * * claude -p "$(cat ~/tg-recipes/morning.md)" --allowedTools "Bash(tg inbox:*)" >> ~/tg-recipes/morning.log 2>&1
+  30 8 * * * claude -p "$(cat ~/tg-recipes/morning.md)" --allowedTools "Bash(tg personal inbox:*)" >> ~/tg-recipes/morning.log 2>&1
   ```
 
 cron inicia trabajos con un entorno casi vacío. En Linux esto rompe `tg` de dos maneras:
@@ -113,17 +113,17 @@ Las rutinas en la nube de Claude no encajan: se ejecutan en otra computadora, do
 
 ## Resumen de la mañana
 
-Escribe en Telegram: **no**. Permitir: `Bash(tg inbox:*)`.
+Escribe en Telegram: **no**. Permitir: `Bash(tg personal inbox:*)`.
 
-> Ejecute `tg inbox --new --json`. Agrupa los mensajes por chat. Para cada chat, una línea: quién escribe y qué quiere. Ponga primero lo que necesita una respuesta hoy. Doble los anuncios y notificaciones de servicios en > una línea al final.
+> Ejecute `tg personal inbox --new --json`. Agrupa los mensajes por chat. Para cada chat, una línea: quién escribe y qué quiere. Ponga primero lo que necesita una respuesta hoy. Doble los anuncios y notificaciones de servicios en > una línea al final.
 
 `--new` muestra cada mensaje una vez. `tg` recuerda dónde se detuvo en cada chat y la siguiente ejecución comienza allí. La primera ejecución se remonta a 24 horas atrás.
 
 ### Desde cuando es "nuevo"
 
-- `tg inbox` — no leído, como lo cuenta Telegram: lo que no has abierto en ningún dispositivo.
-- `tg inbox --new`: desde la última ejecución de `--new`. Sólo `tg` conoce ese punto; nadie más lo ve.
-- `tg inbox --since-time 2d` — los dos últimos días; el punto guardado permanece donde estaba.
+- `tg personal inbox` — no leído, como lo cuenta Telegram: lo que no has abierto en ningún dispositivo.
+- `tg personal inbox --new`: desde la última ejecución de `--new`. Sólo `tg` conoce ese punto; nadie más lo ve.
+- `tg personal inbox --since-time 2d` — los dos últimos días; el punto guardado permanece donde estaba.
 
 Ninguno de ellos marca nada de lo leído. Para hacer eso, agregue `--mark-read` o active `catchUpMarksRead` en la [configuración](./configuration.md). El otro lado ve entonces que lo lees.
 
@@ -132,43 +132,43 @@ Ninguno de ellos marca nada de lo leído. Para hacer eso, agregue `--mark-read` 
 `--kind` mantiene sólo chats de ese tipo: `dialog` (uno a uno), `group`, `channel`. Un resumen de noticias de canales y un resumen de sus conversaciones pueden aparecer separados, en diferentes momentos. Cada chat tiene su propio punto, por lo que una ejecución nunca oculta lo que la otra aún no ha mostrado.
 
 ```cron
-30 8 * * * claude -p "$(cat ~/tg-recipes/morning.md)" --allowedTools "Bash(tg inbox:*)"
-0 19 * * * claude -p "$(cat ~/tg-recipes/news.md)" --allowedTools "Bash(tg inbox:*)"
+30 8 * * * claude -p "$(cat ~/tg-recipes/morning.md)" --allowedTools "Bash(tg personal inbox:*)"
+0 19 * * * claude -p "$(cat ~/tg-recipes/news.md)" --allowedTools "Bash(tg personal inbox:*)"
 ```
 
-En `morning.md`, `tg inbox --new --kind dialog,group --json`; en `news.md`, `tg inbox --new --kind
+En `morning.md`, `tg personal inbox --new --kind dialog,group --json`; en `news.md`, `tg personal inbox --new --kind
 channel --json` y una solicitud para elegir lo que importa. Sin `--kind`, todo junto.
 
 ## Informe semanal sobre un chat
 
-Escribe en Telegram: **no**. Permitir: `Bash(tg messages list:*)`.
+Escribe en Telegram: **no**. Permitir: `Bash(tg personal messages list:*)`.
 
-> Lea los últimos 7 días del chat "Club de lectura": `tg messages list "Book club" --after-time 7d --limit 200
+> Lea los últimos 7 días del chat "Club de lectura": `tg personal messages list "Book club" --after-time 7d --limit 200
 --json`. Si la respuesta dice `"hasMore": true`, sigue leyendo. Redactar un informe: qué se decidió, quién tomó qué y cuándo, qué cuestiones siguen abiertas. Dé a cada punto su fecha y autor.
 
 ## ¿Quién debe qué?
 
-Escribe en Telegram: **no**. Permitir: `Bash(tg review:*)`, `Bash(tg messages context:*)`, `Bash(tg search messages:*)`.
+Escribe en Telegram: **no**. Permitir: `Bash(tg personal review:*)`, `Bash(tg personal messages context:*)`, `Bash(tg personal search messages:*)`.
 
-> Ejecutar `tg review --new --transcribe --json` (la primera vez, los últimos 3 días; luego desde el último > `--new`, un punto por chat). Clasifíquelo en tres listas: lo que debo, lo que espero de los demás, lo que necesita ser aclarado. Dé a cada punto su chat, fecha y los identificadores de mensaje en los que se basa; una fecha límite sólo si > se nombró a uno. Antes de llamar a algo atrasado, verifique si se hizo más tarde o en un grupo de trabajo. Si la respuesta dice `"complete": false`, dime qué falta. Al final, enumera los puntos > abiertos.
+> Ejecutar `tg personal review --new --transcribe --json` (la primera vez, los últimos 3 días; luego desde el último > `--new`, un punto por chat). Clasifíquelo en tres listas: lo que debo, lo que espero de los demás, lo que necesita ser aclarado. Dé a cada punto su chat, fecha y los identificadores de mensaje en los que se basa; una fecha límite sólo si > se nombró a uno. Antes de llamar a algo atrasado, verifique si se hizo más tarde o en un grupo de trabajo. Si la respuesta dice `"complete": false`, dime qué falta. Al final, enumera los puntos > abiertos.
 
 `--transcribe` primero convierte los mensajes de voz en texto; puede tardar unos minutos. La siguiente revisión es la misma solicitud más los puntos abiertos de la anterior: el agente los revisa primero. Un chat no leído completo mantiene su punto y regresa. En un cliente MCP es el mensaje `review`.
 
 ## Lo que no has respondido
 
-La forma más corta es `tg review --since-time 7d --unanswered --json`: preguntas que nadie respondió: a usted en chats individuales, a usted o a los administradores en grupos. La receta siguiente es más amplia: también detecta solicitudes sin signo de interrogación.
+La forma más corta es `tg personal review --since-time 7d --unanswered --json`: preguntas que nadie respondió: a usted en chats individuales, a usted o a los administradores en grupos. La receta siguiente es más amplia: también detecta solicitudes sin signo de interrogación.
 
-Escribe en Telegram: **no**. Permitir: `Bash(tg chats list:*)`, `Bash(tg messages list:*)`.
+Escribe en Telegram: **no**. Permitir: `Bash(tg personal chats list:*)`, `Bash(tg personal messages list:*)`.
 
-> Ejecute `tg chats list --kind dialog --limit 30 --json`. Para cada chat cuyo último mensaje sea de los últimos 7 días, lea `tg messages list <chat id> --limit 5 --json`. Muestra los chats donde el último > mensaje no es mío y hace una pregunta o hace una petición: quién, sobre qué y hace cuántos días.
+> Ejecute `tg personal chats list --kind dialog --limit 30 --json`. Para cada chat cuyo último mensaje sea de los últimos 7 días, lea `tg personal messages list <chat id> --limit 5 --json`. Muestra los chats donde el último > mensaje no es mío y hace una pregunta o hace una petición: quién, sobre qué y hace cuántos días.
 
 ## Encuentra algo que se dijo
 
-Escribe en Telegram: **no**. Permitir: `Bash(tg search messages:*)`, `Bash(tg messages context:*)`.
+Escribe en Telegram: **no**. Permitir: `Bash(tg personal search messages:*)`, `Bash(tg personal messages context:*)`.
 
-> Busque "factura" con `tg search messages invoice --json`. Para cada respuesta, lea > `tg messages context <locator> --json` y dígame quién dijo qué y cuándo.
+> Busque "factura" con `tg personal search messages invoice --json`. Para cada respuesta, lea > `tg personal messages context <locator> --json` y dígame quién dijo qué y cuándo.
 
-De forma predeterminada, la búsqueda busca tanto en la copia de esta computadora como en el servidor de Telegram. La copia local contiene solo lo que ha guardado `tg`. Para buscar en todo el historial local de un chat, descárgalo primero. Esa es una solicitud de su cuenta, así que hágalo usted mismo: `tg store fetch <chat>`. Consulte [obtener el historial de un chat](./archive.md#fetch-a-chats-history).
+De forma predeterminada, la búsqueda busca tanto en la copia de esta computadora como en el servidor de Telegram. La copia local contiene solo lo que ha guardado `tg`. Para buscar en todo el historial local de un chat, descárgalo primero. Esa es una solicitud de su cuenta, así que hágalo usted mismo: `tg personal messages sync <chat>`. Consulte [obtener el historial de un chat](./archive.md#fetch-a-chats-history).
 
 ## Redactar una respuesta
 
@@ -176,16 +176,16 @@ Escribe a Telegram: **sólo después de tu sí**. Éste es para una conversació
 
 > Lee los últimos 20 mensajes del chat con @example_user y sugiere una respuesta a su última > pregunta. No lo envíes, muéstrame el texto.
 
-Una vez aceptado, el agente lo envía: `tg messages send @example_user "…"`. Un cliente MCP se conecta con `tg mcp`. Deje `tg_write` sin aprobar en el cliente y le preguntará antes de cada envío. Los permisos del perfil aún limitan lo que puede escribir. Consulte [el servidor MCP](./mcp.md).
+Una vez aceptado, el agente lo envía: `tg personal messages send @example_user "…"`. Un cliente MCP se conecta con `tg personal mcp`. Deje `tg_write` sin aprobar en el cliente y le preguntará antes de cada envío. Los permisos del perfil aún limitan lo que puede escribir. Consulte [el servidor MCP](./mcp.md).
 
 ## Un grupo que diriges
 
-Escribe en Telegram: **sólo si las reglas del grupo lo permiten**. Permitir: `Bash(tg review:*)`, `Bash(tg chats events:*)`, `Bash(tg chats members list:*)`, `Bash(tg chats moderate:*)`.
+Escribe en Telegram: **sólo si las reglas del grupo lo permiten**. Permitir: `Bash(tg personal review:*)`, `Bash(tg personal chats events:*)`, `Bash(tg personal chats members list:*)`, `Bash(tg personal chats moderate:*)`.
 
-> Ejecute `tg review --chat "Hiking" --unanswered 4h --json`, `tg chats events "Hiking" --since-time 7d
---json` y `tg chats moderate "Hiking" --dry-run --json`. Brevemente: qué preguntas esperan respuesta, de quién y desde cuándo; quién se unió o fue agregado esta semana y por quién; lo que encontró el cheque en contra de las reglas del grupo y lo que sugiere. No responda ni elimine a nadie: enumere los comandos que lo harían si estoy de acuerdo.
+> Ejecute `tg personal review --chat "Hiking" --unanswered 4h --json`, `tg personal chats events "Hiking" --since-time 7d
+--json` y `tg personal chats moderate "Hiking" --dry-run --json`. Brevemente: qué preguntas esperan respuesta, de quién y desde cuándo; quién se unió o fue agregado esta semana y por quién; lo que encontró el cheque en contra de las reglas del grupo y lo que sugiere. No responda ni elimine a nadie: enumere los comandos que lo harían si estoy de acuerdo.
 
-Con planes `--dry-run`, `chats moderate` únicamente. Sin él, actúa hasta donde lo permiten las reglas del grupo, así que deje a `Bash(tg chats moderate:*)` fuera de la lista si el agente nunca debe actuar. Cada escenario para un grupo: [grupos que ejecuta](./groups.md).
+Con planes `--dry-run`, `chats moderate` únicamente. Sin él, actúa hasta donde lo permiten las reglas del grupo, así que deje a `Bash(tg personal chats moderate:*)` fuera de la lista si el agente nunca debe actuar. Cada escenario para un grupo: [grupos que ejecuta](./groups.md).
 
 ## Colecciones similares
 

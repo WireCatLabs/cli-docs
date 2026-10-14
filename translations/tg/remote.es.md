@@ -12,14 +12,14 @@ Utilice esta página cuando desee una aplicación de IA que se ejecute en el nav
 
 Términos utilizados en esta página:
 
-- **MCP** (Model Context Protocol) es la forma estándar en que una aplicación de IA llama a herramientas externas. `tg mcp` es el servidor MCP que viene con `tg`; la [guía del servidor MCP](./mcp.md) cubre aplicaciones en su propia computadora.
-- **Conexión remota** significa que la aplicación se conecta desde sus propios servidores, a través de Internet, a la dirección que usted le proporcione. `tg mcp --http` utiliza las mismas herramientas a través de HTTP en `127.0.0.1` para esto.
+- **MCP** (Model Context Protocol) es la forma estándar en que una aplicación de IA llama a herramientas externas. `tg personal mcp` es el servidor MCP que viene con `tg`; la [guía del servidor MCP](./mcp.md) cubre aplicaciones en su propia computadora.
+- **Conexión remota** significa que la aplicación se conecta desde sus propios servidores, a través de Internet, a la dirección que usted le proporcione. `tg personal mcp --http` utiliza las mismas herramientas a través de HTTP en `127.0.0.1` para esto.
 - **Túnel HTTPS** es un programa que le da a un puerto de su computadora una dirección HTTPS pública.   Esta página utiliza [Tailscale Funnel](https://tailscale.com/docs/features/tailscale-funnel); El túnel Cloudflare también funciona. No es necesario comprar un dominio para Funnel.
 - **URL pública** es esa dirección, por ejemplo `https://laptop.tail1234.ts.net`. Lo pasas a `tg` como `--public-url` y la aplicación lo obtiene con `/mcp` al final.
 - **Código de acceso** es un código de un solo uso que `tg` imprime en tu terminal. La página de inicio de sesión de la aplicación lo solicita, por lo que solo una persona que vea ese terminal puede conectar una aplicación.
 
 ```text
-ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ tg mcp --http (login) ──▶ Telegram
+ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ tg personal mcp --http (login) ──▶ Telegram
 ```
 
 Si su conexión Tailscale ya funciona, consérvela; No necesitas un segundo túnel. La conexión stdin/stdout local sigue funcionando como antes.
@@ -37,9 +37,9 @@ Si su conexión Tailscale ya funciona, consérvela; No necesitas un segundo tún
 
 ## Antes de empezar
 
-- **Quien inicia sesión lee tu Telegram.** El inicio de sesión necesita la clave de acceso de tu terminal.   Nunca coloques un túnel frente a `tg mcp` sin `--http`: ese modo no tiene ningún inicio de sesión.
+- **Quien inicia sesión lee tu Telegram.** El inicio de sesión necesita la clave de acceso de tu terminal.   Nunca coloques un túnel frente a `tg personal mcp` sin `--http`: ese modo no tiene ningún inicio de sesión.
 - **Los permisos de perfil deciden qué puede cambiar la aplicación.** `deny` y `readonly` bloquean escrituras;   `ask` y `allow` permiten que una escritura MCP solicitada se realice sin un formulario en el servidor. La aprobación de la aplicación es independiente y depende de su configuración. Aún se aplican restricciones de destinatarios y límites por horas ([lo que puede hacer un agente](./mcp.md#what-an-agent-may-do), [guía de configuración](./configuration.md)).
-- **La computadora que ejecuta `tg` debe permanecer encendida.** Para usarlo desde un teléfono o desde una computadora portátil sin nada instalado, ejecute todo esto en un servidor pequeño que esté siempre encendido e inicie sesión en `tg` allí (`tg setup --agent none`). Entonces sólo necesitas un navegador.
+- **La computadora que ejecuta `tg` debe permanecer encendida.** Para usarlo desde un teléfono o desde una computadora portátil sin nada instalado, ejecute todo esto en un servidor pequeño que esté siempre encendido e inicie sesión en `tg` allí (`tg personal setup --agent none`). Entonces sólo necesitas un navegador.
 - **Quién puede agregar un conector remoto:**
 
 | Aplicación | Planes | Documentación |
@@ -87,12 +87,12 @@ Instale e inicie sesión en la aplicación Tailscale. Su CLI viene con la aplica
 TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8765
 ```
 
-Segunda ventana de Terminal, como el mismo usuario que ejecutó `tg setup --agent none`. Esto funciona tanto en zsh como en bash:
+Segunda ventana de Terminal, como el mismo usuario que ejecutó `tg personal setup --agent none`. Esto funciona tanto en zsh como en bash:
 
 ```sh
 printf 'Paste the HTTPS origin printed by Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
 ```
 
 ### Linux (Terminal)
@@ -103,12 +103,12 @@ Instale Tailscale con las [instrucciones de Linux](https://tailscale.com/downloa
 sudo tailscale funnel 8765
 ```
 
-Segunda ventana de terminal: su usuario normal, sin `sudo`, por lo que `tg` encuentra la sesión creada por `tg setup --agent none`:
+Segunda ventana de terminal: su usuario normal, sin `sudo`, por lo que `tg` encuentra la sesión creada por `tg personal setup --agent none`:
 
 ```sh
 printf 'Paste the HTTPS origin printed by Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
 ```
 
 ## Ejecutar MAX y Telegram juntos
@@ -122,7 +122,7 @@ Si ya usa Cloudflare, apunte su túnel al mismo servidor MCP local. Un nombre de
 Inicia el servidor en otro terminal:
 
 ```sh
-tg mcp --http --port 8765 --public-url https://mcp.example.com
+tg personal mcp --http --port 8765 --public-url https://mcp.example.com
 ```
 
 Agregue `https://mcp.example.com/mcp` a su aplicación de IA con OAuth y DCR, como se describe en [conectar la aplicación](#connect-the-app). `--public-url` es el origen público utilizado para iniciar sesión, no la dirección local ni la ruta `/mcp`. El túnel no cambia los permisos del perfil. Verifique el JSON en `https://mcp.example.com/.well-known/oauth-protected-resource/mcp`, luego inicie sesión y vea la lista de herramientas. Cuando te detengas, detén solo el proceso propio de este túnel, para que otras rutas sigan funcionando.
@@ -161,7 +161,7 @@ Si inició Funnel con `--bg`, Ctrl-C no detiene esa ruta en segundo plano. Verif
 Revocar el acceso de las aplicaciones es distinto de detener el proceso. Para cerrar sesión en todas las aplicaciones de un perfil:
 
 ```sh
-tg mcp --revoke --json
+tg personal mcp --revoke --json
 ```
 
 Esas aplicaciones deben iniciar sesión nuevamente con un nuevo código. Esto no finaliza su sesión de Telegram.
@@ -169,10 +169,10 @@ Esas aplicaciones deben iniciar sesión nuevamente con un nuevo código. Esto no
 ## Si no funciona
 
 - **La aplicación dice que no se puede conectar:** abra `https://<device>.<network>.ts.net/.well-known/oauth-protected-resource/mcp` en un navegador. Debe mostrar un JSON corto. Si no es así, Funnel no se está ejecutando, no está habilitado en su red Tailscale o apunta a otro puerto.
-- **La página de inicio de sesión dice "Demasiados códigos incorrectos":** después de cinco códigos incorrectos, se bloquea hasta que se reinicie `tg mcp --http`. Si no los escribiste, alguien encontró tu dirección: reinicia y piensa en un nuevo nombre de dispositivo en Tailscale.
-- **La aplicación se conecta, pero no hay herramientas:** `tg mcp doctor` verifica que el servidor MCP se inicie y enumere sus herramientas. No comprueba el inicio de sesión de Telegram ni el túnel. Un comando que va a Telegram, como `tg account show`, verifica la conexión de la cuenta.
+- **La página de inicio de sesión dice "Demasiados códigos incorrectos":** después de cinco códigos incorrectos, se bloquea hasta que se reinicie `tg personal mcp --http`. Si no los escribiste, alguien encontró tu dirección: reinicia y piensa en un nuevo nombre de dispositivo en Tailscale.
+- **La aplicación se conecta, pero no hay herramientas:** `tg personal mcp doctor` verifica que el servidor MCP se inicie y enumere sus herramientas. No comprueba el inicio de sesión de Telegram ni el túnel. Un comando que va a Telegram, como `tg personal account show`, verifica la conexión de la cuenta.
 - **La lectura funciona, la escritura falla:** verifique los permisos del perfil y cualquier anulación de `--permission`. `deny` y `readonly` bloquean las escrituras, independientemente de lo que apruebe la aplicación.
-- **Necesita un registro de las llamadas:** `tg runs list` las muestra. Las llamadas exitosas aparecen sólo cuando la grabación está activada; las llamadas fallidas se mantienen de forma predeterminada, a menos que la grabación se haya desactivado con `"record": false` o `--no-record` ([guía de diagnóstico](./diagnostics.md)).
+- **Necesita un registro de las llamadas:** `tg personal runs list` las muestra. Las llamadas exitosas aparecen sólo cuando la grabación está activada; las llamadas fallidas se mantienen de forma predeterminada, a menos que la grabación se haya desactivado con `"record": false` o `--no-record` ([guía de diagnóstico](./diagnostics.md)).
 
 ## Transferir archivos guardados a un agente
 
@@ -181,7 +181,7 @@ Un agente en su computadora puede abrir un archivo guardado mediante su `localPa
 Primero descargue los archivos del mensaje de la forma habitual ([descargando archivos](./attachments.md#what-you-can-download)). Utilice `attachments list --needs-text` para encontrar el localizador de mensajes y la posición del archivo adjunto. Después pide el archivo:
 
 ```sh
-tg attachments show msg:telegram/500/7/204 --attachment 1 --json
+tg personal attachments show msg:telegram/500/7/204 --attachment 1 --json
 ```
 
 El comando lee solo un archivo adjunto guardado de la cuenta activa. Nunca descarga, nunca llama a un modelo, nunca marca un mensaje como leído y nunca cambia el índice de búsqueda. Un archivo faltante debe descargarse nuevamente. Cuando un mensaje tiene varios archivos, dé la posición, empezando por 1. No se envían archivos de otra cuenta, archivos faltantes ni enlaces simbólicos. El texto dentro de un archivo adjunto son datos, nunca instrucciones.
@@ -193,7 +193,7 @@ Una respuesta lleva 512 KiB por defecto; `--chunk-bytes` permite hasta 1 MiB. Po
 Decodifica cada parte base64, une las partes en orden de desplazamiento de bytes y sigue `nextOffsetBytes` hasta que sea nulo. Pase el primer SHA256 como `--if-sha256` en las siguientes solicitudes: si el archivo fuente cambió, la solicitud falla y no devuelve bytes modificados. Verifique el archivo unido con ese hash.
 
 ```sh
-tg attachments show msg:telegram/500/7/204 --offset-bytes 524288 --if-sha256 <sha256> --json
+tg personal attachments show msg:telegram/500/7/204 --offset-bytes 524288 --if-sha256 <sha256> --json
 ```
 
 ### A través de MCP
@@ -215,7 +215,7 @@ Guarde el resultado con `attachments text set` (MCP: `tg_write`, comando `attach
 Si la aplicación no puede pasar un PDF recibido a su lector de documentos, solicite una página como imagen PNG. El servidor MCP dibuja la página en su computadora y el agente lee la imagen con su propia visión. Esto necesita el `unpdf` opcional con representación de página y el `@napi-rs/canvas`, como se describe en [motores adjuntos](./attachments.md#dependencies-and-missing-engines). No se instalan con la CLI.
 
 ```sh
-tg attachments show msg:telegram/500/7/204 --attachment 1 --page 1 --json
+tg personal attachments show msg:telegram/500/7/204 --attachment 1 --page 1 --json
 ```
 
 A través de MCP llamar a `tg_read`, comando `attachments show`, con `page: 1` y el localizador de mensajes. De forma predeterminada, la página vuelve como contenido de imagen. Si la aplicación solo muestra metadatos, solicite `format: base64`, luego decodifique y muestre el PNG con las herramientas de imagen del agente. Recibir una cadena base64 no equivale a ver la página. Lea las páginas 1 a `pdf.pageCount`. Si ninguno de los formatos muestra los píxeles, informe el límite de la aplicación en lugar de inventar texto.
@@ -243,7 +243,7 @@ export MESSAGING_PDF_PREVIEW_MAX_MIB=16
 ```
 
 En PowerShell usa `$env:MESSAGING_ATTACHMENT_MAX_MIB = "250"`; aplica la misma sintaxis a los otros nombres.
-Los valores deben ser enteros positivos. Ejecuta otra vez `tg mcp config` con ese entorno y reemplaza la entrada
+Los valores deben ser enteros positivos. Ejecuta otra vez `tg personal mcp config` con ese entorno y reemplaza la entrada
  del servidor en la aplicación: conservará estos ajustes. Reinicia el servidor si ya estaba en ejecución.
 La transferencia normal sigue usando fragmentos de hasta 1 MiB; es un límite independiente.
 

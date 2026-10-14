@@ -15,7 +15,7 @@ title: "Поиск по теме"
 
 Вы помните, что в чате что-то обсуждалось, а не слова, которые использовали люди. Поиск по теме находит это обсуждение по его смыслу. Спросите: «Где мы говорили об аренде квартиры?» и поиск найдёт обсуждение, в котором говорится «квартира», «аренда» и «залог», даже если никто не написал «аренда квартиры». Поиск работает и между языками: вопрос на английском может найти обсуждение на испанском или русском.
 
-Прочитав эту страницу, вы можете подготовить чат для поиска по теме, задавать вопросы своими словами, читать результаты и решать, когда обычный поиск по словам является лучшим инструментом. Поиск по теме использует только те сообщения, которые tg уже сохранил на этом компьютере, поэтому сначала загрузите историю: `tg store fetch <chat>` ([загрузить историю чата](./archive.md#fetch-a-chats-history)).
+Прочитав эту страницу, вы можете подготовить чат для поиска по теме, задавать вопросы своими словами, читать результаты и решать, когда обычный поиск по словам является лучшим инструментом. Поиск по теме использует только те сообщения, которые tg уже сохранил на этом компьютере, поэтому сначала загрузите историю: `tg personal messages sync <chat>` ([загрузить историю чата](./archive.md#fetch-a-chats-history)).
 
 Термины, используемые на этой странице:
 
@@ -30,18 +30,18 @@ title: "Поиск по теме"
 
 | Задача | Команда |
 |---|---|
-| Найдите обсуждение по теме, в одном чате или в каждом подготовленном чате | `tg search conversations "<question>"` |
-| Просматривайте обсуждения в чате, сначала самые новые | `tg conversations list --chat <chat>` |
-| Прочитать одно обсуждение от начала до конца | `tg conversations show <id>` |
-| Открыть всё обсуждение, которому принадлежит сообщение | `tg conversations show <chat> <message>` |
-| Найдите другие обсуждения о том же самом в каждом чате | `tg conversations related <chat> <message>` |
-| Ограничить результаты одним человеком, периодом или словом | `tg search conversations "<question>" --filter '<query>'` |
-| Посмотрите, что устарело, и наверстайте упущенное | `tg conversations status`, `tg search conversations "<question>" --refresh` |
+| Найдите обсуждение по теме, в одном чате или в каждом подготовленном чате | `tg personal search conversations "<question>"` |
+| Просматривайте обсуждения в чате, сначала самые новые | `tg personal conversations list --chat <chat>` |
+| Прочитать одно обсуждение от начала до конца | `tg personal conversations show <id>` |
+| Открыть всё обсуждение, которому принадлежит сообщение | `tg personal conversations show <chat> <message>` |
+| Найдите другие обсуждения о том же самом в каждом чате | `tg personal conversations related <chat> <message>` |
+| Ограничить результаты одним человеком, периодом или словом | `tg personal search conversations "<question>" --filter '<query>'` |
+| Посмотрите, что устарело, и наверстайте упущенное | `tg personal conversations status`, `tg personal search conversations "<question>" --refresh` |
 | Позвольте вашему собственному ИИ-агенту улучшить группировку сообщений | `tg skill show link-conversations` |
 
 ## Поиск по теме или поиск по слову?
 
-| | [Поиск слов](./search.md) (`tg search messages`) | Поиск по теме (`tg search conversations`) |
+| | [Поиск слов](./search.md) (`tg personal search messages`) | Поиск по теме (`tg personal search conversations`) |
 |---|---|---|
 | Вы знаете | точные слова, имя, дата, файл | только то, о чем речь |
 | Он находит | отдельные сообщения, содержащие ваши слова | целые обсуждения о вашем вопросе |
@@ -64,12 +64,12 @@ title: "Поиск по теме"
 **Что происходит, шаг за шагом:**
 
 ```sh
-tg store fetch "Book club"                       # 1. download the history, if it is not saved yet
-tg conversations build --chat "Book club"        # 2. separate the chat into conversations
-tg models text download e5-small                 # 3. once: download the model, 135 MB, shared with max
-tg conversations embed --chat "Book club"        # 4. compute a vector for each piece
-tg search conversations "where do we meet" --chat "Book club"   # 5. ask
-tg conversations show 91                         # 6. read the conversation that was found
+tg personal messages sync "Book club"              # 1. download the history, if it is not saved yet
+tg personal conversations build --chat "Book club"  # 2. separate the chat into conversations
+tg personal models text download e5-small        # 3. once: download the model, 135 MB, shared with max
+tg personal conversations embed --chat "Book club"  # 4. compute a vector for each piece
+tg personal search conversations "where do we meet" --chat "Book club"  # 5. ask
+tg personal conversations show 91                # 6. read the conversation that was found
 ```
 
 Шаги 2–4 выполняются на вашем компьютере и никогда не запрашивают Telegram. `embed` продолжит работу с того места, где остановился, если вы прервете его. Для последующих вопросов потребуется только шаг 5; [поддерживать актуальность](#keep-it-current) объясняет, когда повторять шаги 2 и 4.
@@ -89,7 +89,7 @@ tg conversations show 91                         # 6. read the conversation that
 
 ### 1. Сборка: разделить чат на обсуждения
 
-`tg conversations build` считывает сохраненные сообщения чата, начиная с самых старых, и для каждого сообщения определяет, какое из более ранних сообщений оно продолжает. Он не использует искусственный интеллект и не запрашивает Telegram. Ссылки берутся в следующем порядке:
+`tg personal conversations build` считывает сохраненные сообщения чата, начиная с самых старых, и для каждого сообщения определяет, какое из более ранних сообщений оно продолжает. Он не использует искусственный интеллект и не запрашивает Telegram. Ссылки берутся в следующем порядке:
 
 1. **Собственные ответы Telegram.** Сообщение, отправленное в качестве ответа, принадлежит сообщению, на которое оно отвечает.
 2. **Ответы вашего агента**, если вы попросили агента связать чат ([ниже](#let-your-ai-agent-link-messages)).
@@ -100,11 +100,11 @@ tg conversations show 91                         # 6. read the conversation that
 
 ### 2. Векторизация: превратите каждый фрагмент в вектор
 
-`tg conversations embed` разбивает каждый обсуждение на части примерно по 1200 символов по границам сообщений. Каждая строка фрагмента представляет собой «отправитель: текст». Сообщение, длиннее фрагмента, разбивается на перекрывающиеся части, поэтому модель читает все длинное сообщение, а не только его начало. Сообщения без текста ничего не добавляют. Затем модель превращает каждую часть в вектор, и tg сохраняет его. Текст фрагмента повторно не сохраняется; только его вектор и отпечаток текста, который показывает, когда текст меняется.
+`tg personal conversations embed` разбивает каждый обсуждение на части примерно по 1200 символов по границам сообщений. Каждая строка фрагмента представляет собой «отправитель: текст». Сообщение, длиннее фрагмента, разбивается на перекрывающиеся части, поэтому модель читает все длинное сообщение, а не только его начало. Сообщения без текста ничего не добавляют. Затем модель превращает каждую часть в вектор, и tg сохраняет его. Текст фрагмента повторно не сохраняется; только его вектор и отпечаток текста, который показывает, когда текст меняется.
 
 ### 3. Поиск: по смыслу и по словам одновременно
 
-`tg search conversations` ищет ваш вопрос двумя способами и объединяет результаты:
+`tg personal search conversations` ищет ваш вопрос двумя способами и объединяет результаты:
 
 - **По смыслу.** Вопрос тоже становится вектором. tg сравнивает его с векторами всех фрагментов и ранжирует каждый обсуждение по ближайшему фрагменту. При использовании модели по умолчанию `e5-small` совпадение по смыслу должно быть достаточно близким: показатель сходства должен быть выше 0,80 по шкале, где 1 означает одинаковое значение.
 - **По словам.** tg также ищет каждое слово вашего вопроса в сохраненных сообщениях. Слово из трех и более букв также соответствует более длинным словам, начинающимся с него (`meet` находит `meeting`). Опечатки не исправляются.
@@ -122,17 +122,17 @@ tg conversations show 91                         # 6. read the conversation that
 - показатель сходства, или `—`, если его находили только слова;
 - номер обсуждения, когда он начался и закончился, сколько сообщений и людей, его первое сообщение;
 - `(messages 4185–4192)`: фрагмент, который лучше всего совпал (или сообщение, если его нашли только слова), чтобы вы знали, с чего начать чтение;
-- локатор сообщения (`msg:…`), который принимают `tg messages show` и `tg messages context`;
+- локатор сообщения (`msg:…`), который принимают `tg personal messages show` и `tg personal messages context`;
 - `stale`, когда текст изменился после вычисления его вектора: оценка присваивается старому тексту.
 
 При `--json` в ответе также есть `meaning` (`searched` или `unavailable`), используемый `model` и `readiness`: в каких чатах осуществлялся поиск по смыслу, в каких только по словам, которые устарели и которые так и не были построены. Когда что-то ограничивает поиск, stderr называет чаты и команду, которая это исправляет, например `conversations embed --chat <chat>`.
 
 ```sh
-tg conversations list --chat "Book club" --since-time 7d
-tg conversations show 91                         # one conversation, oldest first
-tg conversations show "Book club" 204            # the conversation message 204 is in
-tg conversations related "Book club" 204         # other conversations about the same thing, in every chat
-tg messages links "Book club" 204                # why that message is where it is
+tg personal conversations list --chat "Book club" --since-time 7d
+tg personal conversations show 91                # one conversation, oldest first
+tg personal conversations show "Book club" 204   # the conversation message 204 is in
+tg personal conversations related "Book club" 204  # other conversations about the same thing, in every chat
+tg personal messages links "Book club" 204       # why that message is where it is
 ```
 
 `related` использует векторы, сохраненные `embed`, и не запускает модели, поэтому отвечает быстро. Это поиск только по смыслу.
@@ -142,7 +142,7 @@ tg messages links "Book club" 204                # why that message is where it 
 **Вы помните тему, а не слова.**
 
 ```sh
-tg search conversations "who is bringing food to the picnic"
+tg personal search conversations "who is bringing food to the picnic"
 ```
 
 Это ищет каждый подготовленный чат. Он может найти обсуждение, в котором люди написали «Я возьму сэндвичи» и «Боб принесёт напитки», которые поиск по словам пропустил бы.
@@ -150,7 +150,7 @@ tg search conversations "who is bringing food to the picnic"
 **Обсуждение велось на другом языке.**
 
 ```sh
-tg search conversations "renting a flat" --chat "Valencia expats"
+tg personal search conversations "renting a flat" --chat "Valencia expats"
 ```
 
 В модели по умолчанию можно найти обсуждение «писо», написанное на испанском языке.
@@ -158,30 +158,30 @@ tg search conversations "renting a flat" --chat "Valencia expats"
 **Уточнение по человеку и периоду.** `--filter` использует строгий [язык запросов](./query-language.md). Обсуждение подходит, если хотя бы одно из его сообщений соответствует всему фильтру. Ваш вопрос все еще соответствует по смыслу.
 
 ```sh
-tg search conversations "budget for the trip" --filter 'from:"Alice Synthetic" date:30d'
+tg personal search conversations "budget for the trip" --filter 'from:"Alice Synthetic" date:30d'
 ```
 
 ```sh
-tg search conversations "contract terms" --filter 'has:file' --timezone Europe/Madrid
+tg personal search conversations "contract terms" --filter 'has:file' --timezone Europe/Madrid
 ```
 
 **Начните с одного сообщения.** Вы нашли сообщение с помощью поиска по словам и хотите получить все остальное по этой теме:
 
 ```sh
-tg search messages '"deposit back"' --chat "Valencia expats"
-tg conversations related "Valencia expats" 5120
+tg personal search messages '"deposit back"' --chat "Valencia expats"
+tg personal conversations related "Valencia expats" 5120
 ```
 
 **Выполняйте поиск и по чатам своих ботов.** По умолчанию поиск по темам использует активный аккаунт. `--source personal`, `bots`, `all` или имя мессенджера расширяет его; Затем для каждого результата указывается, из какого аккаунта он получен.
 
 ```sh
-tg search conversations "delivery delayed" --source all
+tg personal search conversations "delivery delayed" --source all
 ```
 
 **Получайте новые сообщения, прежде чем спросить.** `--sync-first` сначала загружает новые сообщения в пределах чата, времени и границ сообщений поиска сообщений.
 
 ```sh
-tg search conversations "where do we meet" --chat "Book club" --sync-first
+tg personal search conversations "where do we meet" --chat "Book club" --sync-first
 ```
 
 ## Поддерживайте актуальность
@@ -189,19 +189,19 @@ tg search conversations "where do we meet" --chat "Book club" --sync-first
 Новые сообщения попадают в обсуждение только после следующей сборки, а в вектор — только после следующей векторизации.
 
 ```sh
-tg conversations status                          # what is behind, chat by chat
-tg conversations build                           # every chat that changed, and groups never built
-tg conversations embed                           # every built chat with pieces left
-tg search conversations "renting a flat" --refresh   # catch up first, then search
+tg personal conversations status                 # what is behind, chat by chat
+tg personal conversations build                  # every chat that changed, and groups never built
+tg personal conversations embed                  # every built chat with pieces left
+tg personal search conversations "renting a flat" --refresh  # catch up first, then search
 ```
 
 `status` подсчитывает для каждого чата с построенными обсуждениями сообщения, которые сборка не видела (новые, отредактированные, удаленные), фрагменты, вектор которых является текущим, устаревшим или отсутствующим, а также количество групп, которые никогда не были созданы. Без `--chat`, `build`, `embed` и `search --refresh` позволяют обрабатывать не более 20 чатов за раз (`--max-chats`) и вставлять не более 2000 фрагментов за раз (`--max-chunks`); запустите их еще раз, чтобы продолжить. Они никогда не скачивают модель. `--refresh` нельзя комбинировать с `--filter` или `--source`: сначала постройте обсуждения и вычислите векторы нужных чатов.
 
-Когда правила изменяются в новой версии, `status` и `tg store check` называют чаты, созданные с использованием старых правил; построить их заново.
+Когда правила изменяются в новой версии, `status` и `tg personal store check` называют чаты, созданные с использованием старых правил; построить их заново.
 
 Когда сообщение удаляется, его текст также покидает векторы.
 
-`tg store fetch <chat> --catch-up` также может строить обсуждения и вычислять векторы чата сразу после его загрузки ([загрузить историю чата](./archive.md#fetch-a-chats-history)).
+`tg personal messages sync <chat> --catch-up` также может строить обсуждения и вычислять векторы чата сразу после его загрузки ([загрузить историю чата](./archive.md#fetch-a-chats-history)).
 
 ## Пусть ваш ИИ-агент свяжет сообщения
 
@@ -209,12 +209,12 @@ tg search conversations "renting a flat" --refresh   # catch up first, then sear
 
 ```sh
 tg skill show link-conversations                 # the agent's instructions
-tg conversations batches status --chat "Book club"   # how many messages and batches, how much text
+tg personal conversations batches status --chat "Book club"  # how many messages and batches, how much text
 ```
 
-Агент читает инструкции, сообщает вам, какой объем текста он будет читать, и ждет вашего «да». Затем он обрабатывает чат по частям (`tg conversations batches next`), решает, на какое более раннее сообщение каждый отвечает, и сохраняет свой ответ (`tg conversations links add`). В следующей сборке они используются: сначала идут собственные ответы Telegram, потом ссылки агента, потом правила. `tg conversations links clear --chat "Book club"` удаляет ответы агента; потом построить снова. В этом рабочем процессе tg сам по себе не вызывает модель. Разрешение профиля `conversations.links` определяет, можно ли сохранять ответы.
+Агент читает инструкции, сообщает вам, какой объем текста он будет читать, и ждет вашего «да». Затем он обрабатывает чат по частям (`tg personal conversations batches next`), решает, на какое более раннее сообщение каждый отвечает, и сохраняет свой ответ (`tg personal conversations links add`). В следующей сборке они используются: сначала идут собственные ответы Telegram, потом ссылки агента, потом правила. `tg personal conversations links clear --chat "Book club"` удаляет ответы агента; потом построить снова. В этом рабочем процессе tg сам по себе не вызывает модель. Разрешение профиля `conversations.links` определяет, можно ли сохранять ответы.
 
-tg также может отправлять пакеты в сам провайдеру ИИ. Обычный `build` использует правила и сохраненные ссылки; `tg conversations build --chat <chat> --analyze` отправляет ограниченные пакеты в настроенную конечную точку, совместимую с OpenAI или Anthropic. Требуется явный `--chat`. Перед первым пакетом он показывает объем, конечную точку и лимит токенов и запрашивает согласие. Согласие сохраняется для этого аккаунта, чата и провайдера, пока вы его не отзовете. По умолчанию — 50 сообщений на пакет (`--size`) и не более 100 000 токенов, зарезервированных на один запуск (`--max-tokens`); `--yes` предоставляет согласие в сценариях. `tg conversations consents list` перечисляет согласия; `consents revoke --chat <chat>` отменяет их. Встроенный анализ работает только из командной строки, а не через MCP, а ключи никогда не попадают в файл настроек.
+tg также может отправлять пакеты в сам провайдеру ИИ. Обычный `build` использует правила и сохраненные ссылки; `tg personal conversations build --chat <chat> --analyze` отправляет ограниченные пакеты в настроенную конечную точку, совместимую с OpenAI или Anthropic. Требуется явный `--chat`. Перед первым пакетом он показывает объем, конечную точку и лимит токенов и запрашивает согласие. Согласие сохраняется для этого аккаунта, чата и провайдера, пока вы его не отзовете. По умолчанию — 50 сообщений на пакет (`--size`) и не более 100 000 токенов, зарезервированных на один запуск (`--max-tokens`); `--yes` предоставляет согласие в сценариях. `tg personal conversations consents list` перечисляет согласия; `consents revoke --chat <chat>` отменяет их. Встроенный анализ работает только из командной строки, а не через MCP, а ключи никогда не попадают в файл настроек.
 
 ## Конфиденциальность и стоимость
 
@@ -222,8 +222,8 @@ tg также может отправлять пакеты в сам прова�
 запросу:
 
 ```sh
-tg models text list                              # the models, and which are downloaded
-tg models text download embeddinggemma --accept-terms
+tg personal models text list                     # the models, and which are downloaded
+tg personal models text download embeddinggemma --accept-terms
 ```
 
 `e5-small` стоит по умолчанию: маленький и быстрый, около 100 языков. `embeddinggemma` находит больше, но работает примерно в семь раз медленнее и загружает только с помощью `--accept-terms`, поскольку он подпадает под условия Google Gemma. Векторы двух моделей никогда не смешиваются: выполняйте поиск той моделью, которой вычисляли векторы. Если чат векторизован только другой моделью, об этом сообщается в stderr.
@@ -234,12 +234,12 @@ tg models text download embeddinggemma --accept-terms
 Векторы может вычислять и внешний сервис с вашим собственным ключом:
 
 ```sh
-tg models text key set openai
-tg conversations embed --chat "Book club" --provider openai
-tg search conversations "renting a flat" --provider openai
+tg personal models text key set openai
+tg personal conversations embed --chat "Book club" --provider openai
+tg personal search conversations "renting a flat" --provider openai
 ```
 
-Затем текст обсуждений чата поступает в этот сервис, и при каждом поиске отправляется ваш вопрос. Прежде чем что-либо отправить, `embed` сообщает, сколько фрагментов, максимум сколько токенов и максимум какую цену, и ждет вашего «да» (`--yes` в скриптах; `--max-tokens` устанавливает лимит). `--base-url` позволяет использовать любой сервер с API векторизации OpenAI, например Ollama или LM Studio, на вашем компьютере с помощью `--model` и `--dims`. `tg models text key remove openai` забывает ключ. Настройки удалённой векторизации также применяются к поискам, которые ваш агент выполняет через MCP, поэтому его вопросы также направляются в эту службу.
+Затем текст обсуждений чата поступает в этот сервис, и при каждом поиске отправляется ваш вопрос. Прежде чем что-либо отправить, `embed` сообщает, сколько фрагментов, максимум сколько токенов и максимум какую цену, и ждет вашего «да» (`--yes` в скриптах; `--max-tokens` устанавливает лимит). `--base-url` позволяет использовать любой сервер с API векторизации OpenAI, например Ollama или LM Studio, на вашем компьютере с помощью `--model` и `--dims`. `tg personal models text key remove openai` забывает ключ. Настройки удалённой векторизации также применяются к поискам, которые ваш агент выполняет через MCP, поэтому его вопросы также направляются в эту службу.
 
 ## Дальше
 

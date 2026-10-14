@@ -22,14 +22,14 @@ Algunas palabras en esta página:
 
 | Pregunta | Comando |
 | --- | --- |
-| Qué mensajes obtuvieron más reacciones | `tg stats messages top` |
-| Quién responde más preguntas | `tg stats contacts top` |
-| Qué preguntas esperan respuesta | `tg stats messages unanswered` |
-| ¿Qué tan rápido responde una persona? | `tg stats contacts responses` |
-| Si los recién llegados recibieron ayuda | `tg stats chats newcomers` |
-| Si los recién llegados se quedan | `tg stats chats retention` |
-| Qué publicaciones fueron vistas pero no discutidas | `tg stats messages discussion` |
-| Qué frescas son las opiniones y reacciones | `tg stats messages counters show` |
+| Qué mensajes obtuvieron más reacciones | `tg personal stats messages top` |
+| Quién responde más preguntas | `tg personal stats contacts top` |
+| Qué preguntas esperan respuesta | `tg personal stats messages unanswered` |
+| ¿Qué tan rápido responde una persona? | `tg personal stats contacts responses` |
+| Si los recién llegados recibieron ayuda | `tg personal stats chats newcomers` |
+| Si los recién llegados se quedan | `tg personal stats chats retention` |
+| Qué publicaciones fueron vistas pero no discutidas | `tg personal stats messages discussion` |
+| Qué frescas son las opiniones y reacciones | `tg personal stats messages counters show` |
 
 Las peticiones, los nombres y los resultados son ejemplos ficticios. Sustituye el nombre del chat por el tuyo. Las tablas muestran cómo puede presentar su respuesta el agente; los comandos con `--json` le devuelven los datos.
 
@@ -44,7 +44,7 @@ Encuentra los mensajes con más reacciones guardadas.
 **Comando:**
 
 ```sh
-tg stats messages top --chat "Hiking" --measure reactions --limit 3 --json
+tg personal stats messages top --chat "Hiking" --measure reactions --limit 3 --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -68,7 +68,7 @@ Compara a las personas por sus respuestas observadas a preguntas.
 **Comando:**
 
 ```sh
-tg stats contacts top --chat "Hiking" --measure answers --limit 3 --json
+tg personal stats contacts top --chat "Hiking" --measure answers --limit 3 --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -92,7 +92,7 @@ Encuentra preguntas antiguas sin respuesta directa observada.
 **Comando:**
 
 ```sh
-tg stats messages unanswered --chat "Hiking" --older-than 24h --json
+tg personal stats messages unanswered --chat "Hiking" --older-than 24h --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -118,7 +118,7 @@ Consulta cuántas respuestas se observaron y cuánto tardaron para la persona el
 **Comando:**
 
 ```sh
-tg stats contacts responses --chat "Hiking" --answerer "Alex Rivera" --json
+tg personal stats contacts responses --chat "Hiking" --answerer "Alex Rivera" --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -144,7 +144,7 @@ Comprueba si las personas recién incorporadas recibieron respuestas.
 **Comando:**
 
 ```sh
-tg stats chats newcomers "Hiking" --within 7d --json
+tg personal stats chats newcomers "Hiking" --within 7d --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -169,7 +169,7 @@ Compara la presencia observada un día, una semana y un mes después de entrar.
 **Comando:**
 
 ```sh
-tg stats chats retention "Hiking" --checkpoints 1d,7d,30d --within 7d --timezone UTC --json
+tg personal stats chats retention "Hiking" --checkpoints 1d,7d,30d --within 7d --timezone UTC --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -195,7 +195,7 @@ Encuentra publicaciones vistas con poca conversación guardada.
 **Comando:**
 
 ```sh
-tg stats messages discussion --chat "News" --min-views 100 --max-replies 0 --json
+tg personal stats messages discussion --chat "News" --min-views 100 --max-replies 0 --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -217,7 +217,7 @@ Comprueba por separado cuándo se observaron las visitas y las reacciones.
 **Comando:**
 
 ```sh
-tg stats messages counters show --chat "Hiking" --counters views,reactions --max-age 24h --limit 20 --json
+tg personal stats messages counters show --chat "Hiking" --counters views,reactions --max-age 24h --limit 20 --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -234,7 +234,7 @@ tg stats messages counters show --chat "Hiking" --counters views,reactions --max
 Antes de consultar recuentos nuevos, pide los mensajes exactos y los límites.
 
 ```sh
-tg stats messages counters refresh --chat "Hiking" --counters views,reactions --max-messages 20 --sync-time 30s --dry-run --json
+tg personal stats messages counters refresh --chat "Hiking" --counters views,reactions --max-messages 20 --sync-time 30s --dry-run --json
 ```
 
 > **Plan:** Como máximo 20 mensajes y 30 segundos. Se admiten visitas y reacciones.
@@ -250,6 +250,6 @@ Un informe vacío con historial incompleto no demuestra que no hubiera preguntas
 
 ## Más opciones
 
-Puede seleccionar un período, elegir una medida o puntuación combinada y guardar una selección para otro informe. Las fórmulas de puntuación, los argumentos de evidencia exacta y los límites de páginas se encuentran en la [especificación de estadísticas compartidas](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/rankings.md) y la [referencia de comando para estadísticas](./commands.md#tg-stats).
+Puede seleccionar un período, elegir una medida o puntuación combinada y guardar una selección para otro informe. Las fórmulas de puntuación, los argumentos de evidencia exacta y los límites de páginas se encuentran en la [especificación de estadísticas compartidas](https://github.com/WireCatLabs/cli-core/blob/main/docs/rankings.md) y la [referencia de comando para estadísticas](./commands.md#tg-stats).
 
 Para verificar un resultado, pide al agente que abra la pregunta, respuesta o miembros que sustentan esa fila. Antes del siguiente informe, [comprueba la cobertura del archivo](./archive.md).

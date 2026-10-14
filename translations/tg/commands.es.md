@@ -16,8 +16,11 @@ tg [profile] [options] <resource> <verb> [arguments]
 ```
 
 **La primera palabra es el perfil** si no es un comando: `tg work chats list` muestra los chats del
-perfil `work`, y `tg chats list` los del perfil predeterminado. `TG_PROFILE` lo selecciona para
-toda la sesión de terminal; sin ninguna de las dos formas, el perfil es `default`.
+perfil `work`. `TG_PROFILE` lo selecciona para toda la sesión de terminal, y `defaultProfile` en el
+archivo de configuración, de forma permanente. **No se supone ningún perfil**, ni siquiera el único: sin
+ninguno de ellos, un comando que usa una cuenta se detiene con el código de salida 2 y enumera los
+perfiles de este equipo. Los comandos que no usan ninguna cuenta (`--help`, `--version`, `commands`,
+`skill show`, `account list`, `config show`) funcionan sin perfil.
 
 ## Opciones comunes a todos los comandos
 
@@ -30,12 +33,15 @@ toda la sesión de terminal; sin ninguna de las dos formas, el perfil es `defaul
 | `--jsonl` | salida para programas: un objeto JSON por línea, para flujos y jq. |
 | `--quiet` | oculta los mensajes de diagnóstico, pero sigue mostrando fallos. |
 | `--trace` | registros de la conexión por stderr; nunca el contenido de mensajes. |
+| `--debug` | ante un fallo, su registro completo —causa y pila— en lugar de la línea breve. |
 | `--timeout <duration>` | detiene todo el comando después de este intervalo: 30s, 2m, 500ms. |
 | `--offline` | responde desde lo guardado sin conectarse; falla si no hay datos. |
 | `--no-input` | no pedir entrada ni abrir un inicio de sesión interactivo; la entrada mediante una tubería sigue disponible. |
 | `--max-input-bytes <bytes>` | máximo de bytes de entrada almacenados en búfer (predeterminado: 16777216). |
 | `--max-output-bytes <bytes>` | máximo de bytes de salida para máquinas (predeterminado: 4194304; 0 desactiva el límite). |
 | `--fields <paths>` | campos de elementos o del objeto separados por comas: id,text; conservar la paginación y los identificadores de operaciones. |
+| `--brief` | mensajes y correo encontrados solo con referencia, título, hora, remitente y fragmento. |
+| `--full` | mensajes y correo encontrados con su texto completo y todos los campos del proveedor. |
 | `--dry-run` | previsualizar los argumentos analizados y los permisos antes de ejecutar la acción. |
 | `--yes` | omite la confirmación que el nivel ask exige antes de escribir. |
 | `--record` | guarda esta ejecución: identificadores y tiempos, nunca contenido. |
@@ -230,6 +236,27 @@ tg chats send-as <chat>
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+### `tg chats documents`
+
+los documentos de Google Docs y Drive enlazados en los mensajes guardados de un chat
+
+#### `tg chats documents list`
+
+todos los enlaces a documentos del chat, recientes primero, y si el almacén local los tiene
+
+```sh
+tg chats documents list <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--limit <n>` | cuántos mostrar. |
+| `--page <n>` | número de página, desde 1. |
 
 ### `tg chats members`
 
@@ -1500,6 +1527,34 @@ tg messages links <chat> <message>
 | `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 | `message` | obligatorio | identificador del mensaje. |
 
+### `tg messages sync`
+
+actualizar el historial de un chat en el almacenamiento local, primero los mensajes más recientes; ejecutar de nuevo para continuar; --all sincroniza todos los chats
+
+```sh
+tg messages sync [chat] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | opcional | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--all` | todos los chats, primero los activos más recientemente — lo que necesita la búsqueda; los últimos 90d salvo que se indique --since-time o --last. |
+| `--limit <n>` | como máximo este número de mensajes en esta ejecución, por chat con --all; 1000 si no se indica. |
+| `--page-size <n>` | mensajes por petición; 100 si se omite. |
+| `--pause <duration>` | pausa entre páginas para respetar límites. Predeterminada: `1s`. |
+| `--since-time <time>` | se detiene al llegar a mensajes anteriores al momento indicado: ISO 8601 o 2h / 1d atrás. |
+| `--last <n>` | se detiene cuando tiene guardados los n mensajes más recientes. |
+| `--catch-up` | preparar la búsqueda local después de esta ejecución; anula searchCatchUp. |
+| `--no-catch-up` | omitir la preparación local después de esta ejecución. |
+| `--catch-up-chunks <n>` | como máximo este número de fragmentos de vectores locales. |
+| `--catch-up-messages <n>` | omitir una reconstrucción del grafo con más mensajes que este número. |
+| `--catch-up-time <duration>` | tiempo disponible para la preparación local, 30s de forma predeterminada. |
+| `--background` | ejecuta como tarea que continúa al finalizar el comando; consúltala con `store jobs show`. |
+| `--estimate` | solo estima mensajes, peticiones y minutos pendientes usando el archivo local, sin peticiones. |
+
 ## `tg reactions`
 
 reacciones a mensajes
@@ -1972,6 +2027,94 @@ elimina la unidad del perfil; detenla primero
 tg server uninstall
 ```
 
+## `tg schedule`
+
+ejecutar un comando de tg o un agente más tarde o con un temporizador (systemd, launchd, Task Scheduler); un agente no puede enviar
+
+### `tg schedule command`
+
+ejecutar tg <args…> con un temporizador: las lecturas guardan lo que leen, así que es la forma de llenar el almacén con el historial de un chat
+
+```sh
+tg schedule command <name> <args> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `name` | obligatorio | letras minúsculas, dígitos y guiones. |
+| `args` | obligatorio | el comando de tg tras su nombre, p. ej. -- messages list <chat> --limit 50. |
+
+| Opción | Qué hace |
+|---|---|
+| `--every <duration>` | repetir: 30m, 2h, 1d. |
+| `--at <HH:MM>` | cada día a esta hora local. |
+| `--once <when>` | una sola ejecución: dentro de 30m, 2d o a una hora ISO; la programación se elimina después. |
+
+### `tg schedule agent`
+
+iniciar un agente (claude o codex) con una instrucción según un temporizador; se ejecuta con TG_READ_ONLY=1, así que lee y redacta borradores pero no puede enviar; su respuesta se guarda y recibes un aviso
+
+```sh
+tg schedule agent <name> <harness> <prompt> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `name` | obligatorio | letras minúsculas, dígitos y guiones. |
+| `harness` | obligatorio | el agente que se inicia. Uno de: `claude`, `codex`. |
+| `prompt` | obligatorio | qué hacer, p. ej. "haz la revisión diaria de pendientes: tg skill show follow-ups". |
+
+| Opción | Qué hace |
+|---|---|
+| `--max-cost <usd>` | solo claude: detener una ejecución que cueste más que esto, en dólares estadounidenses. |
+| `--every <duration>` | repetir: 30m, 2h, 1d. |
+| `--at <HH:MM>` | cada día a esta hora local. |
+| `--once <when>` | una sola ejecución: dentro de 30m, 2d o a una hora ISO; la programación se elimina después. |
+
+### `tg schedule list`
+
+las programaciones, cuándo se ejecutan y cómo fue su última ejecución
+
+```sh
+tg schedule list
+```
+
+### `tg schedule run`
+
+ejecutar una programación ahora, como lo haría su temporizador, y esperar a que termine
+
+```sh
+tg schedule run <name>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `name` | obligatorio |  |
+
+### `tg schedule remove`
+
+detener una programación y quitar su temporizador; su salida anterior se conserva
+
+```sh
+tg schedule remove <name>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `name` | obligatorio |  |
+
+### `tg schedule exec`
+
+lo que ejecuta un temporizador a partir del archivo de la programación; para ejecutar una a mano, usa run
+
+```sh
+tg schedule exec <file>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `file` | obligatorio |  |
+
 ## `tg store`
 
 archivo local de mensajes
@@ -1987,34 +2130,6 @@ tg store status [chat]
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | opcional | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
-
-### `tg store fetch`
-
-descargar el historial de un chat al almacenamiento local, primero los mensajes más recientes; ejecutar de nuevo para continuar; --all descarga todos los chats
-
-```sh
-tg store fetch [chat] [options]
-```
-
-| Argumento | | Qué es |
-|---|---|---|
-| `chat` | opcional | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
-
-| Opción | Qué hace |
-|---|---|
-| `--all` | todos los chats, primero los activos más recientemente — lo que necesita la búsqueda; los últimos 90d salvo que se indique --since-time o --last. |
-| `--limit <n>` | como máximo este número de mensajes en esta ejecución, por chat con --all; 1000 si no se indica. |
-| `--page-size <n>` | mensajes por petición; 100 si se omite. |
-| `--pause <duration>` | pausa entre páginas para respetar límites. Predeterminada: `1s`. |
-| `--since-time <time>` | se detiene al llegar a mensajes anteriores al momento indicado: ISO 8601 o 2h / 1d atrás. |
-| `--last <n>` | se detiene cuando tiene guardados los n mensajes más recientes. |
-| `--catch-up` | preparar la búsqueda local después de descargar; anula searchCatchUp. |
-| `--no-catch-up` | omitir la preparación local después de esta descarga. |
-| `--catch-up-chunks <n>` | como máximo este número de fragmentos de vectores locales. |
-| `--catch-up-messages <n>` | omitir una reconstrucción del grafo con más mensajes que este número. |
-| `--catch-up-time <duration>` | tiempo disponible para la preparación local, 30s de forma predeterminada. |
-| `--background` | ejecuta como tarea que continúa al finalizar el comando; consúltala con `store jobs show`. |
-| `--estimate` | solo estima mensajes, peticiones y minutos pendientes usando el archivo local, sin peticiones. |
 
 ### `tg store gaps`
 
@@ -2061,11 +2176,11 @@ tg store gaps repair <chat> [options]
 
 ### `tg store jobs`
 
-descargas en segundo plano
+sincronizaciones en segundo plano
 
 #### `tg store jobs list`
 
-descargas en segundo plano, recientes primero
+sincronizaciones en segundo plano, recientes primero
 
 ```sh
 tg store jobs list [options]
@@ -2085,11 +2200,11 @@ tg store jobs show [job]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `job` | opcional | identificador que imprimió `store fetch --background`. |
+| `job` | opcional | identificador que imprimió `messages sync --background`. |
 
 #### `tg store jobs cancel`
 
-detiene la tarea tras la página actual; una descarga posterior reanuda desde ahí
+detiene la tarea tras la página actual; una sincronización posterior reanuda desde ahí
 
 ```sh
 tg store jobs cancel <job>
@@ -2101,7 +2216,7 @@ tg store jobs cancel <job>
 
 #### `tg store jobs retry`
 
-reintentar una tarea fallida o interrumpida como una nueva; la descarga continúa donde se detuvo el archivo
+reintentar una tarea fallida o interrumpida como una nueva; la sincronización continúa donde se detuvo el archivo
 
 ```sh
 tg store jobs retry [job] [options]
@@ -2127,7 +2242,7 @@ tg store jobs clear
 
 ### `tg store export`
 
-mensajes guardados de un chat en líneas JSON, antiguos primero; nunca consulta el servicio
+mensajes guardados de un chat, antiguos primero: --jsonl un mensaje por línea, --json un objeto { items, page, limit, hasMore }; nunca consulta el servicio
 
 ```sh
 tg store export [chats] [options]
@@ -2139,7 +2254,7 @@ tg store export [chats] [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--format <format>` | jsonl (predeterminado): mensaje por línea; markdown: transcripción por días con respuestas y reenvíos citados. |
+| `--format <format>` | jsonl: mensaje por línea, el predeterminado con --output; markdown: transcripción por días con respuestas y reenvíos citados. |
 | `--since-time <time>` | solo a partir de esta fecha ISO 8601 o intervalo anterior como 30m / 2h / 1d. |
 | `--output <file>` | escribe líneas JSON o transcripción en un archivo nuevo, legible solo por ti. |
 | `--to <dir>` | escribe en esta carpeta un archivo por chat y un manifiesto; al repetirlo sobre ella, solo lo que cambió desde entonces. |
@@ -2499,11 +2614,11 @@ tg conversations embed clear [options]
 
 ## `tg attachments`
 
-los archivos de los mensajes guardados: su texto en el archivo local, para content: en una búsqueda
+los archivos de los mensajes guardados: su texto en el archivo local, donde la búsqueda lo encuentra
 
 ### `tg attachments extract`
 
-guardar el texto de archivos descargados — texto, capas de texto PDF/DOCX, ODT/ODS/XLSX/PPTX/EPUB — en el almacén local para buscar con content:
+guardar el texto de archivos descargados — texto, capas de texto PDF/DOCX, ODT/ODS/XLSX/PPTX/EPUB — en el almacén local, donde la búsqueda los encuentra
 
 ```sh
 tg attachments extract [options]
@@ -2563,7 +2678,7 @@ el texto de un archivo, tal como lo leyó un agente
 
 #### `tg attachments text set`
 
-guarda el texto que un agente leyó de un archivo (un escaneo, una foto) para que content: lo encuentre; no se envía nada
+guarda el texto que un agente leyó de un archivo (un escaneo, una foto) para que la búsqueda lo encuentre; no se envía nada
 
 ```sh
 tg attachments text set <chat> [message] [options]
@@ -2711,7 +2826,7 @@ tg stats messages show [query] [options]
 | `--max-messages <n>` | descarga como máximo este número de mensajes en total (predeterminado: 500). |
 | `--by <chat\|sender\|day\|hour>` | por qué contar (predeterminado: chat). |
 | `--chat <chat>` | solo este chat, igual que chat: en la consulta; título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
-| `--source <messenger>` | todas las cuentas de este servicio guardadas, personal, bots o all; igual que in: en la consulta. |
+| `--source <accounts>` | todas las cuentas de este servicio guardadas, personal, bots o all; igual que in: en la consulta. |
 | `--limit <n>` | cuántas filas. |
 | `--timezone <zone>` | zona horaria IANA para los días y horas del calendario. |
 | `--exact` | las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas. |
@@ -2736,7 +2851,7 @@ tg stats messages counters show [query] [options]
 | Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | solo este chat: su título o parte de él, su identificador, @username o `me` para Mensajes guardados. |
-| `--source <messenger>` | cuentas conectadas de este servicio de mensajería; la actualización usa la activa. |
+| `--source <accounts>` | cuentas conectadas de este servicio de mensajería; la actualización usa la activa. |
 | `--exact` | las palabras sin operadores coinciden por forma exacta. |
 | `--timezone <zone>` | zona horaria IANA para fechas de consulta. |
 | `--selection <json>` | selección fija de objetivos de counters show; incompatible con consulta y ámbito. |
@@ -2761,7 +2876,7 @@ tg stats messages counters refresh [query] [options]
 | Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | solo este chat: su título o parte de él, su identificador, @username o `me` para Mensajes guardados. |
-| `--source <messenger>` | cuentas conectadas de este servicio de mensajería; la actualización usa la activa. |
+| `--source <accounts>` | cuentas conectadas de este servicio de mensajería; la actualización usa la activa. |
 | `--exact` | las palabras sin operadores coinciden por forma exacta. |
 | `--timezone <zone>` | zona horaria IANA para fechas de consulta. |
 | `--selection <json>` | selección fija de objetivos de counters show; incompatible con consulta y ámbito. |
@@ -2786,7 +2901,7 @@ tg stats messages unanswered [query] [options]
 | Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | solo este chat: su título o parte de él, su identificador, @username o `me` para Mensajes guardados. |
-| `--source <messenger>` | todas las cuentas disponibles de este servicio de mensajería; personal, bots o all. |
+| `--source <accounts>` | todas las cuentas disponibles de este servicio de mensajería; personal, bots o all. |
 | `--exact` | las palabras sin campo coinciden en su forma exacta en lugar de por su raíz. |
 | `--saved <name\|id>` | ejecutar un informe guardado de este tipo; las opciones indicadas sustituyen las guardadas. |
 | `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
@@ -2809,7 +2924,7 @@ tg stats messages discussion [query] [options]
 | Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | solo este chat: su título o parte de él, su identificador, @username o `me` para Mensajes guardados. |
-| `--source <messenger>` | todas las cuentas disponibles de este servicio de mensajería; personal, bots o all. |
+| `--source <accounts>` | todas las cuentas disponibles de este servicio de mensajería; personal, bots o all. |
 | `--exact` | las palabras sin campo coinciden en su forma exacta en lugar de por su raíz. |
 | `--saved <name\|id>` | ejecutar un informe guardado de este tipo; las opciones indicadas sustituyen las guardadas. |
 | `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
@@ -2840,7 +2955,7 @@ tg stats messages top [query] [options]
 | `--weights <json>` | el conjunto completo de pesos de los componentes; sustituye los pesos predefinidos. |
 | `--message-kind <kind>` | seleccionar antes de clasificar todos los mensajes o aquellos cuya condición de publicación o comentario esté confirmada. Uno de: `all`, `posts`, `comments`. |
 | `--chat <chat>` | solo este chat: su título o parte de él, su identificador, @username o `me` para Mensajes guardados. |
-| `--source <messenger>` | todas las cuentas disponibles de este servicio de mensajería; personal, bots o all. |
+| `--source <accounts>` | todas las cuentas disponibles de este servicio de mensajería; personal, bots o all. |
 | `--timezone <zone>` | zona horaria IANA para fechas y días activos. |
 | `--exact` | las palabras sin campo coinciden en su forma exacta en lugar de por su raíz. |
 | `--limit <n>` | filas clasificadas, 1–100. |
@@ -2884,7 +2999,7 @@ tg stats contacts responses [query] [options]
 | Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | solo este chat: su título o parte de él, su identificador, @username o `me` para Mensajes guardados. |
-| `--source <messenger>` | todas las cuentas disponibles de este servicio de mensajería; personal, bots o all. |
+| `--source <accounts>` | todas las cuentas disponibles de este servicio de mensajería; personal, bots o all. |
 | `--exact` | las palabras sin campo coinciden en su forma exacta en lugar de por su raíz. |
 | `--saved <name\|id>` | ejecutar un informe guardado de este tipo; las opciones indicadas sustituyen las guardadas. |
 | `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
@@ -2914,7 +3029,7 @@ tg stats contacts top [query] [options]
 | `--weights <json>` | el conjunto completo de pesos de los componentes; sustituye los pesos predefinidos. |
 | `--message-kind <kind>` | seleccionar antes de clasificar todos los mensajes o aquellos cuya condición de publicación o comentario esté confirmada. Uno de: `all`, `posts`, `comments`. |
 | `--chat <chat>` | solo este chat: su título o parte de él, su identificador, @username o `me` para Mensajes guardados. |
-| `--source <messenger>` | todas las cuentas disponibles de este servicio de mensajería; personal, bots o all. |
+| `--source <accounts>` | todas las cuentas disponibles de este servicio de mensajería; personal, bots o all. |
 | `--timezone <zone>` | zona horaria IANA para fechas y días activos. |
 | `--exact` | las palabras sin campo coinciden en su forma exacta en lugar de por su raíz. |
 | `--limit <n>` | filas clasificadas, 1–100. |
@@ -3090,6 +3205,75 @@ tg tasks add <message> [options]
 | Opción | Qué hace |
 |---|---|
 | `--type <name>` | tipo de tarea: question, request, mention o promise. |
+| `--title <text>` | una línea: la acción y su objeto — enviar a Alex el token de la API. |
+| `--description <text>` | el detalle, en Markdown: quién debe qué a quién, cuándo está hecha, el siguiente paso, palabras clave. |
+| `--due <when>` | cuándo debe estar hecha: una hora ISO 8601 o dentro de 2h, 3d; none la borra. |
+| `--check <when>` | cuándo revisarla de nuevo: una hora ISO 8601 o dentro de 2h, 3d; none la borra. |
+
+### `tg tasks plan`
+
+fijar el título, la descripción, la fecha límite y la próxima revisión de una tarea; nada llega al servicio de mensajería
+
+```sh
+tg tasks plan <task> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `task` | obligatorio | el identificador o la clave de la tarea tal como lo muestra tasks list. |
+
+| Opción | Qué hace |
+|---|---|
+| `--title <text>` | una línea: la acción y su objeto — enviar a Alex el token de la API. |
+| `--description <text>` | el detalle, en Markdown: quién debe qué a quién, cuándo está hecha, el siguiente paso, palabras clave. |
+| `--due <when>` | cuándo debe estar hecha: una hora ISO 8601 o dentro de 2h, 3d; none la borra. |
+| `--check <when>` | cuándo revisarla de nuevo: una hora ISO 8601 o dentro de 2h, 3d; none la borra. |
+
+### `tg tasks link`
+
+vincular una tarea con lo que le concierne — mensajes, chats, personas, documentos, URL — para leer el contexto después
+
+```sh
+tg tasks link <task> [targets] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `task` | obligatorio | el identificador o la clave de la tarea tal como lo muestra tasks list. |
+| `targets` | opcional | localizadores msg:, person:<id>, document:<id>, note:<id> o una URL. |
+
+| Opción | Qué hace |
+|---|---|
+| `--chat <chat>` | un chat al que concierne, repetible; chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+| `--kind <kind>` | related-to (predeterminado), evidence — demuestra que la tarea es real — o created-from. |
+
+### `tg tasks show`
+
+una tarea: su plan y todo lo vinculado a ella
+
+```sh
+tg tasks show <task>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `task` | obligatorio | el identificador o la clave de la tarea tal como lo muestra tasks list. |
+
+### `tg tasks agenda`
+
+lo que necesita una revisión hoy, desde el almacén local y sin texto de mensajes: tareas vencidas, con fecha límite o por revisar, chats donde debes una respuesta y chats donde esperas una
+
+```sh
+tg tasks agenda [options]
+```
+
+| Opción | Qué hace |
+|---|---|
+| `--due <span>` | tareas con fecha límite dentro de este plazo: 30m, 2h, 1d (predeterminado 1d). |
+| `--unanswered <span>` | chats donde otra persona escribió por última vez hace al menos este tiempo (predeterminado 1d). |
+| `--waiting <span>` | chats donde tú escribiste por última vez hace al menos este tiempo (predeterminado 7d). |
+| `--within <span>` | omitir los chats en silencio durante más de este tiempo: la conversación terminó (predeterminado 30d). |
+| `--kind <kinds>` | solo estos tipos de chat, separados por comas (predeterminado dialog,group). |
 
 ### `tg tasks close`
 
@@ -3114,7 +3298,7 @@ buscar por texto: un solo recurso si sabes cuál (mail, messages, notes), o sear
 
 ### `tg search all`
 
-buscar mensajes del servicio de mensajería, correo y notas en el almacenamiento local, y los mensajes también en el servidor del servicio de mensajería (--backend; el correo y las notas solo en local), y con --meetings las transcripciones de una cuenta de reuniones; mejores coincidencias primero; no busca tareas, personas, memorias ni proyectos. Úsalo si no sabes dónde se escribió algo; search mail, messages o notes leen un tipo con todos sus campos
+buscar mensajes del servicio de mensajería, correo y notas en el almacenamiento local, y los mensajes también en el servidor del servicio de mensajería (--backend; el correo y las notas solo en local), y las transcripciones de una cuenta de reuniones cuando --source nombra una; mejores coincidencias primero; no busca tareas, personas, memorias ni proyectos. Úsalo si no sabes dónde se escribió algo; search mail, messages o notes leen un tipo con todos sus campos
 
 ```sh
 tg search all <query> [options]
@@ -3126,10 +3310,11 @@ tg search all <query> [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--only <resources>` | solo estos, separados por comas: messages, mail, notes. |
-| `--meetings [provider:account]` | also search one meeting account; with no value, the one stored account that holds meetings (put it after the query). |
-| `--max-meetings <n\|all>` | how many meetings --meetings looks through, newest first; all looks through every one (default 100). |
+| `--only <resources>` | solo estos, separados por comas: messages, mail, notes; meetings cuando --source nombra una cuenta de reuniones. |
+| `--source <accounts>` | solo estas cuentas, separadas por comas: provider:account tal como lo muestra un resultado, un proveedor, un tipo o group:<name>; cada recurso lee las de su tipo, y las reuniones solo cuando nombra una. |
+| `--max-meetings <n\|all>` | cuántas reuniones de la cuenta de reuniones revisar, las más recientes primero; all las revisa todas (predeterminado 100). |
 | `--limit <n>` | cuántos. |
+| `--offset <n>` | omite este número de resultados, para la página siguiente. |
 | `--exact` | las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word. |
 | `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
 | `--backend <archive\|server\|both>` | dónde buscar: el archivo local, el servidor del servicio de mensajería o ambos (predeterminado: both). Discovery usa solo el archivo. |
@@ -3161,9 +3346,10 @@ tg search messages [query] [options]
 | `--backend <archive\|server\|both>` | dónde buscar: el archivo local, el servidor del servicio de mensajería o ambos (predeterminado: both). Discovery usa solo el archivo. |
 | `--server-time <duration>` | dejar de esperar al servidor tras este tiempo (predeterminado: 5s). |
 | `--chat <chat>` | solo este chat, igual que chat: en la consulta; título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
-| `--source <messenger>` | todas las cuentas de este servicio guardadas, personal, bots o all; igual que in: en la consulta. |
+| `--source <accounts>` | todas las cuentas de este servicio guardadas, personal, bots o all; igual que in: en la consulta; o una lista: group:work,telegram:Alice,email:me@example.com. |
 | `--type <text\|voice\|file>` | solo mensajes de este tipo: solo texto, un mensaje de voz o un archivo. |
 | `--limit <n>` | cuántos. |
+| `--offset <n>` | omite este número de resultados, para la página siguiente. |
 | `--newest` | recientes primero en lugar de mejores coincidencias. |
 | `--exact` | las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas. |
 | `--context <n>` | mensajes anteriores y posteriores a cada resultado; 2 en terminal, 0 en otros casos. |
@@ -3175,7 +3361,7 @@ tg search messages [query] [options]
 
 ### `tg search mail`
 
-buscar en el correo importado al almacenamiento local; memo mail import lo trae
+buscar en el correo importado al almacenamiento local; memo sync --mail lo trae
 
 ```sh
 tg search mail [query] [options]
@@ -3188,8 +3374,9 @@ tg search mail [query] [options]
 | Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | solo este hilo de correo, por identificador o asunto. |
-| `--account <address>` | solo esta cuenta de correo, por su dirección; todas las cuentas de correo si no se indica. |
+| `--source <accounts>` | solo estas cuentas de correo, separadas por comas: email:<address> tal como lo muestra un resultado, email, mail o group:<name>; todas las cuentas de correo si no se indica. |
 | `--limit <n>` | cuántos. |
+| `--offset <n>` | omite este número de resultados, para la página siguiente. |
 | `--newest` | recientes primero en lugar de mejores coincidencias. |
 | `--exact` | las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas. |
 | `--context <n>` | mensajes anteriores y posteriores a cada resultado; 2 en terminal, 0 en otros casos. |
@@ -3210,7 +3397,7 @@ tg search notes <query> [options]
 | Opción | Qué hace |
 |---|---|
 | `--type <internal\|file>` | solo notas escritas en memo, o solo notas de una carpeta. |
-| `--folder <id>` | solo esta carpeta de notas, por su identificador; repite para incluir varias. |
+| `--source <accounts>` | solo estas cuentas de notas, separadas por comas: notes:internal para las notas escritas en memo, notes:<folder id> tal como lo muestra un resultado, notes, documents o group:<name>. |
 | `--tag <tag>` | solo notas con esta etiqueta. |
 | `--filter <query>` | una consulta que también debe cumplir cada resultado; no cambia la búsqueda por significado. |
 | `--limit <n>` | cuántos. |
@@ -3244,7 +3431,7 @@ tg search conversations <query> [options]
 | `--chat <chat>` | solo este chat, por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 | `--since-time <time>` | solo conversaciones aún activas desde esta fecha ISO 8601 o intervalo anterior como 30m / 2h / 1d. |
 | `--filter <query>` | filtro estricto de Lucene: algún mensaje de la conversación debe cumplirlo; no cambia la consulta por significado. |
-| `--source <source>` | cuentas en las que buscar: personal, bots, all o un proveedor; por defecto, la cuenta activa. |
+| `--source <accounts>` | cuentas en las que buscar: personal, bots, all, un proveedor o una lista como group:work,telegram:Alice,email:me@example.com; por defecto, la cuenta activa. |
 | `--timezone <zone>` | zona horaria IANA para las fechas del filtro; por defecto, la del sistema. |
 | `--limit <n>` | cuántos. |
 | `--refresh` | primero analiza y calcula vectores, en este equipo, de los chats del alcance que cambiaron o nunca se analizaron, dentro de --max-chats y --max-chunks. |
@@ -3288,7 +3475,7 @@ tg searches create <name> [query] [options]
 | Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | solo este chat, igual que chat: en la consulta; título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
-| `--source <messenger>` | todas las cuentas de este servicio guardadas, personal, bots o all; igual que in: en la consulta. |
+| `--source <accounts>` | todas las cuentas de este servicio guardadas, personal, bots o all; igual que in: en la consulta; o una lista: group:work,telegram:Alice,email:me@example.com. |
 | `--limit <n>` | cuántos. |
 | `--newest` | recientes primero en lugar de mejores coincidencias. |
 | `--exact` | las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas. |
@@ -3653,7 +3840,7 @@ tg runs list [options]
 
 ### `tg runs show`
 
-una ejecución: información general y una línea por operación
+una ejecución: qué fue, cómo terminó y qué falló; -v para cada evento
 
 ```sh
 tg runs show <run-id>
@@ -3739,8 +3926,8 @@ tg config set <setting> <value> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | obligatorio | uno de: limit, timeoutMs, color, senderColors, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, requestsPerMinute, transcribeWith, speechModel, catchUpMarksRead, searchCatchUp, embeddingProvider, embeddingModel, embeddingBaseUrl, embeddingDims, analysisProvider, analysisModel, analysisBaseUrl, models, proxy, readOtherBots, updateCheck, skillHint, searchStemmers.cyrillic, searchStemmers.latin. |
-| `value` | obligatorio | número, true o false; para allow, lista como send,reaction. |
+| `setting` | obligatorio | uno de: limit, timeoutMs, color, senderColors, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, requestsPerMinute, transcribeWith, speechModel, catchUpMarksRead, searchCatchUp, embeddingProvider, embeddingModel, embeddingBaseUrl, embeddingDims, analysisProvider, analysisModel, analysisBaseUrl, models, proxy, readOtherBots, updateCheck, skillHint, defaultProfile, searchStemmers.cyrillic, searchStemmers.latin, accountGroups.<name>. |
+| `value` | obligatorio | número, true o false; para allow, lista como send,reaction; para un grupo, tg:work,max:Alice,email:me@x. |
 
 | Opción | Qué hace |
 |---|---|
@@ -3760,7 +3947,7 @@ tg config unset <setting> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | obligatorio | uno de: limit, timeoutMs, color, senderColors, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, requestsPerMinute, transcribeWith, speechModel, catchUpMarksRead, searchCatchUp, embeddingProvider, embeddingModel, embeddingBaseUrl, embeddingDims, analysisProvider, analysisModel, analysisBaseUrl, models, proxy, readOtherBots, updateCheck, skillHint, searchStemmers.cyrillic, searchStemmers.latin. |
+| `setting` | obligatorio | uno de: limit, timeoutMs, color, senderColors, record, keepRunsForDays, readOnly, allow, permissions, sendsPerHour, requestsPerMinute, transcribeWith, speechModel, catchUpMarksRead, searchCatchUp, embeddingProvider, embeddingModel, embeddingBaseUrl, embeddingDims, analysisProvider, analysisModel, analysisBaseUrl, models, proxy, readOtherBots, updateCheck, skillHint, defaultProfile, searchStemmers.cyrillic, searchStemmers.latin, accountGroups.<name>. |
 
 | Opción | Qué hace |
 |---|---|
@@ -8226,7 +8413,7 @@ tg skill show [name]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `name` | opcional | skill de tarea incluida: link-conversations. |
+| `name` | opcional | skill de tarea incluida: follow-ups, link-conversations. |
 
 ### `tg skill install`
 

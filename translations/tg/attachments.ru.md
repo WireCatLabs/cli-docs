@@ -16,13 +16,13 @@ title: "Файловые вложения"
 
 | Задача | Команда |
 | --- | --- |
-| Отправить файл, фотографию, видео или голосовое сообщение | `tg messages send --file`, `--photo`, `--voice` |
-| Скачать файлы сообщения или чата | `tg messages download` |
-| Прочитать текст из сохраненных файлов на этом компьютере | `tg attachments extract` |
-| Посмотрите, в каких файлах еще нужен текст | `tg attachments list --needs-text` |
-| Сохраните текст, который прочитает ваш агент | `tg attachments text set` |
-| Найти сообщение по тексту его файла | `tg search messages 'content:…'` |
-| Массовое чтение сканов с помощью внешней модели | `tg attachments extract --ocr` |
+| Отправить файл, фотографию, видео или голосовое сообщение | `tg personal messages send --file`, `--photo`, `--voice` |
+| Скачать файлы сообщения или чата | `tg personal messages download` |
+| Прочитать текст из сохраненных файлов на этом компьютере | `tg personal attachments extract` |
+| Посмотрите, в каких файлах еще нужен текст | `tg personal attachments list --needs-text` |
+| Сохраните текст, который прочитает ваш агент | `tg personal attachments text set` |
+| Найти сообщение по тексту его файла | `tg personal search messages 'content:…'` |
+| Массовое чтение сканов с помощью внешней модели | `tg personal attachments extract --ocr` |
 
 ## Что можно отправить
 
@@ -37,10 +37,10 @@ title: "Файловые вложения"
 | Другое аудио и видео | `--file`; оно не преобразуется в голосовое сообщение | `--file`, в виде файла |
 
 ```sh
-tg messages send "Study group" "Worksheet" --file worksheet.pdf
-tg messages send "Study group" --photo picture.jpg
-tg messages send "Study group" --file trip.mp4 --as-file
-tg messages send "Study group" --voice note.ogg
+tg personal messages send "Study group" "Worksheet" --file worksheet.pdf
+tg personal messages send "Study group" --photo picture.jpg
+tg personal messages send "Study group" --file trip.mp4 --as-file
+tg personal messages send "Study group" --voice note.ogg
 ```
 
 `--filename` изменяет отображаемое имя, а не формат. Бот отправляет сообщения со своим именем и собственными разрешениями: см. [отправка файлов от имени бота](./bot.md#files). Подписи и спойлеры см. в разделе [отправка файлов из вашего аккаунта](./usage.md#files-photos-and-voice-messages).
@@ -58,8 +58,8 @@ tg messages send "Study group" --voice note.ogg
 | Вложение без доступного медиа | Не создаёт файл |
 
 ```sh
-tg messages download "Study group" 204 --output-dir ./files --json
-tg attachments list --chat "Study group" --needs-text --json
+tg personal messages download "Study group" 204 --output-dir ./files --json
+tg personal attachments list --chat "Study group" --needs-text --json
 ```
 
 Загрузка никогда не перезаписывает существующий файл. `localPath` в ответе называет файл на компьютере, на котором работает `tg`.
@@ -129,10 +129,10 @@ npm install -g unpdf mammoth @napi-rs/canvas
 Спросите своего агента: «Прочитайте каждую страницу этого вложения, отметьте неясные отрывки, сохраните буквальный текст и проверьте, находит ли поиск по фразе исходное сообщение». Агент запускает такие команды:
 
 ```sh
-tg attachments extract --chat "Study group" --download --output-dir ./files
-tg attachments list --chat "Study group" --needs-text
-tg attachments text set "Study group" 204 --text-file ./scan.txt
-tg search messages 'content:worksheet' --chat "Study group" --backend archive
+tg personal attachments extract --chat "Study group" --download --output-dir ./files
+tg personal attachments list --chat "Study group" --needs-text
+tg personal attachments text set "Study group" 204 --text-file ./scan.txt
+tg personal search messages 'content:worksheet' --chat "Study group" --backend archive
 ```
 
 `--attachment` выбирает один файл сообщения из нескольких, считая от 1. Прием байтов и чтение текста не индексируют его: `attachments text set` сохраняет результат. Убедитесь, что `content:` возвращает исходное сообщение и его локатор. Текст в файле — это данные, а не инструкции для агента. Текст, сохраненный агентом, не перезаписывается при последующем автоматическом извлечении.
@@ -172,7 +172,7 @@ API не является автоматически более точным, ч
 Вам нужна модель для обработки изображений, ее конечная точка и ключ. Настройки, хранение ключа и выбор `models.ocr` находятся в разделе [Настройка API и массовое извлечение](./search.md#files-preparation-and-archive-gaps). После настройки:
 
 ```sh
-tg attachments extract --chat "Study group" --ocr --concurrency 4 --limit 20 --json
+tg personal attachments extract --chat "Study group" --ocr --concurrency 4 --limit 20 --json
 ```
 
 Повтор использует хэш файла и цель модели; хороший сохраненный текст остается после ошибки, отмены или неполного ответа. Текст агента не перезаписывается. Изображения и страницы сканирования попадают к провайдеру только с явным `--ocr`; провайдер взимает плату за запросы на своих условиях. `--offline` и `--ocr` несовместимы, и автоматическое переключение с агента на API отсутствует.
@@ -201,5 +201,5 @@ tg attachments extract --chat "Study group" --ocr --concurrency 4 --limit 20 --j
 `MESSAGING_BATCH_MAX_ERROR_PERCENT` задаёт целый процент от 1 до 100. Ограничение частоты или отказ
 авторизации останавливает раньше; выполняющиеся параллельные запросы могут ещё завершиться.
 После паузы сервера повторите только незавершённое. Ошибки и частичные запуски ищутся через
-`tg runs search --status partial --json` или `tg_read` с `command: "runs search"` в MCP
+`tg personal runs search --status partial --json` или `tg_read` с `command: "runs search"` в MCP
 ([диагностика](./diagnostics.md)).

@@ -38,7 +38,7 @@ Algunas palabras que utiliza esta página:
 | `proxy` | un servidor proxy para acceder a Telegram, donde está bloqueado ([configuración de proxy](./configuration-reference.md#through-a-proxy)) | ninguno |
 | `transcribeWith` | quién convierte mensajes de voz en texto: `auto`, `messenger` o `local` | `auto` |
 | `updateCheck` | una vez al día, avise cuando exista un `tg` más nuevo | `true` |
-| `defaultProfile` | qué perfil utiliza un comando cuando no nombras uno | `default` |
+| `defaultProfile` | qué perfil utiliza un comando cuando no nombras uno | ninguno: un comando que usa una cuenta se detiene y muestra la lista de perfiles |
 
 El archivo no guarda secretos. No tiene lugar para su sesión, el hash de la aplicación, un número de teléfono o una contraseña de proxy. La sesión es un archivo propio y el hash de la aplicación y una contraseña de proxy van al llavero de su sistema o, cuando no hay ninguno, a un archivo que solo usted puede leer ([donde reside el inicio de sesión](./security.md#where-the-login-lives)).
 
@@ -58,7 +58,7 @@ El primer comando que lee la configuración crea un archivo de inicio. Se ve as�
 - `defaults` se aplica a todos los perfiles.
 - `profiles.work` se aplica sólo al perfil `work` y gana a `defaults`.
 
-Entonces, `tg work chats list` muestra 50 filas y `tg chats list` muestra 20. Agregue `--limit 5` para obtener cinco para un comando. Elimine el `limit` del perfil y el valor de `defaults` se aplicará nuevamente.
+Entonces, `tg work chats list` muestra 50 filas y `tg personal chats list` muestra 20. Agregue `--limit 5` para obtener cinco para un comando. Elimine el `limit` del perfil y el valor de `defaults` se aplicará nuevamente.
 
 <details> <summary>Un ejemplo completo con cada sección</summary>
 
@@ -105,7 +105,7 @@ Qué hace cada parte:
 - `defaults`: cada perfil obtiene estos valores a menos que establezca los suyos propios. `updateCheck` y `skillHint` solo se permiten aquí, porque hay una copia de `tg` para todos los perfiles.
 - `profiles.personal`: más filas, colores y un registro de cada ejecución, sólo para `personal`.
 - `profiles.work`: se permite la lectura de mensajes, se permite el envío, se rechaza cualquier otro cambio en los mensajes. Como máximo 10 envíos por hora. Se accede a Telegram a través de un proxy SOCKS5. Los mensajes de voz se convierten en texto en esta computadora.
-- `personal.defaults`: aplica sólo a comandos para cuentas personales, nunca a `tg … bot`.   Aquí, `store fetch` también prepara chats recuperados para la búsqueda.
+- `personal.defaults`: aplica sólo a comandos para cuentas personales, nunca a `tg … bot`.   Aquí, `messages sync` también prepara chats recuperados para la búsqueda.
 - `bot.defaults`: aplica solo a comandos de bot (`tg shop bot …`). Los bots pueden leer y enviar, y nada más.
 - `bot.profiles.shop`: el bot `shop` puede enviar 200 mensajes por hora y no puede leer lo que guardaron otros bots en este ordenador. `readOtherBots` está permitido sólo en la sección `bot`.
 

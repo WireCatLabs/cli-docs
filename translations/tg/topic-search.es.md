@@ -15,7 +15,7 @@ title: "Búsqueda por tema"
 
 Recuerdas que en un chat se discutió algo, pero no las palabras que usaba la gente. La búsqueda de temas encuentra esa discusión por su significado. Pregunta "¿dónde hablamos de alquilar un piso?" y encuentra una conversación que dice "departamento", "arrendamiento" y "fianza", aunque nadie haya escrito "alquilar piso". También funciona en todos los idiomas: una pregunta en inglés encuentra una discusión en español o ruso.
 
-Después de leer esta página, puede preparar un chat para la búsqueda de temas, hacer preguntas con sus propias palabras, leer los resultados y decidir cuándo la búsqueda de palabras ordinaria es la mejor herramienta. La búsqueda de temas utiliza solo los mensajes que tg ya ha guardado en esta computadora, así que descargue primero el historial: `tg store fetch <chat>` ([descargar el historial de un chat](./archive.md#fetch-a-chats-history)).
+Después de leer esta página, puede preparar un chat para la búsqueda de temas, hacer preguntas con sus propias palabras, leer los resultados y decidir cuándo la búsqueda de palabras ordinaria es la mejor herramienta. La búsqueda de temas utiliza solo los mensajes que tg ya ha guardado en esta computadora, así que descargue primero el historial: `tg personal messages sync <chat>` ([descargar el historial de un chat](./archive.md#fetch-a-chats-history)).
 
 Términos utilizados en esta página:
 
@@ -30,18 +30,18 @@ La búsqueda de tema no es el campo `topic:` de [búsqueda de mensajes](./search
 
 | Tarea | Comando |
 |---|---|
-| Encuentre una discusión por tema, en un chat o en cada chat preparado | `tg search conversations "<question>"` |
-| Ver las conversaciones de un chat, las más nuevas primero | `tg conversations list --chat <chat>` |
-| Lea una conversación de principio a fin | `tg conversations show <id>` |
-| Abrir toda la conversación a la que pertenece un mensaje | `tg conversations show <chat> <message>` |
-| Encuentra otras conversaciones sobre lo mismo, en cada chat | `tg conversations related <chat> <message>` |
-| Limitar resultados a una persona, un punto o una palabra | `tg search conversations "<question>" --filter '<query>'` |
-| Vea lo que está desactualizado y póngase al día | `tg conversations status`, `tg search conversations "<question>" --refresh` |
+| Encuentre una discusión por tema, en un chat o en cada chat preparado | `tg personal search conversations "<question>"` |
+| Ver las conversaciones de un chat, las más nuevas primero | `tg personal conversations list --chat <chat>` |
+| Lea una conversación de principio a fin | `tg personal conversations show <id>` |
+| Abrir toda la conversación a la que pertenece un mensaje | `tg personal conversations show <chat> <message>` |
+| Encuentra otras conversaciones sobre lo mismo, en cada chat | `tg personal conversations related <chat> <message>` |
+| Limitar resultados a una persona, un punto o una palabra | `tg personal search conversations "<question>" --filter '<query>'` |
+| Vea lo que está desactualizado y póngase al día | `tg personal conversations status`, `tg personal search conversations "<question>" --refresh` |
 | Deje que su propio agente de IA mejore la forma en que se agrupan los mensajes | `tg skill show link-conversations` |
 
 ## ¿Búsqueda de tema o búsqueda de palabras?
 
-| | [Búsqueda de palabras](./search.md) (`tg search messages`) | Búsqueda de tema (`tg search conversations`) |
+| | [Búsqueda de palabras](./search.md) (`tg personal search messages`) | Búsqueda de tema (`tg personal search conversations`) |
 |---|---|---|
 | Ya sabes | las palabras exactas, un nombre, una fecha, un archivo | sólo de qué se trataba |
 | Se encuentra | mensajes individuales que contienen tus palabras | conversaciones completas sobre tu pregunta |
@@ -64,12 +64,12 @@ Prepare un chat una vez y luego haga tantas preguntas como desee.
 **Qué pasa, paso a paso:**
 
 ```sh
-tg store fetch "Book club"                       # 1. download the history, if it is not saved yet
-tg conversations build --chat "Book club"        # 2. separate the chat into conversations
-tg models text download e5-small                 # 3. once: download the model, 135 MB, shared with max
-tg conversations embed --chat "Book club"        # 4. compute a vector for each piece
-tg search conversations "where do we meet" --chat "Book club"   # 5. ask
-tg conversations show 91                         # 6. read the conversation that was found
+tg personal messages sync "Book club"              # 1. download the history, if it is not saved yet
+tg personal conversations build --chat "Book club"  # 2. separate the chat into conversations
+tg personal models text download e5-small        # 3. once: download the model, 135 MB, shared with max
+tg personal conversations embed --chat "Book club"  # 4. compute a vector for each piece
+tg personal search conversations "where do we meet" --chat "Book club"  # 5. ask
+tg personal conversations show 91                # 6. read the conversation that was found
 ```
 
 Los pasos 2 a 4 se ejecutan en su computadora y nunca consultan Telegram. `embed` continúa donde se detuvo si lo interrumpes. Las preguntas posteriores sólo necesitan el paso 5; [manténgalo actualizado](#keep-it-current) explica cuándo repetir los pasos 2 y 4.
@@ -89,7 +89,7 @@ La búsqueda de temas tiene tres etapas. Los dos primeros preparan una charla un
 
 ### 1. Construir: separar el chat en conversaciones
 
-`tg conversations build` lee los mensajes guardados de un chat, los más antiguos primero, y decide para cada mensaje cuál mensaje anterior continúa. No utiliza IA y no solicita Telegram. Los enlaces provienen, en este orden:
+`tg personal conversations build` lee los mensajes guardados de un chat, los más antiguos primero, y decide para cada mensaje cuál mensaje anterior continúa. No utiliza IA y no solicita Telegram. Los enlaces provienen, en este orden:
 
 1. **Respuestas propias de Telegram.** Un mensaje enviado como respuesta pertenece al mensaje que responde.
 2. **Las respuestas de su agente**, si le pidió a su agente que vincule el chat ([abajo](#let-your-ai-agent-link-messages)).
@@ -100,11 +100,11 @@ Un mensaje sin enlace inicia una nueva conversación. Una conversación puede om
 
 ### 2. Incrustar: convierte cada pieza en un vector
 
-`tg conversations embed` corta cada conversación en partes de aproximadamente 1200 caracteres, en los límites del mensaje. Cada línea de una pieza es "remitente: texto". Un mensaje más largo que una pieza se divide en partes superpuestas, por lo que el modelo lee todo un mensaje largo, no solo su comienzo. Los mensajes sin texto no añaden nada. Luego, el modelo convierte cada pieza en un vector y tg lo guarda. El texto de la pieza no se vuelve a guardar; solo su vector y una huella digital que muestra cuando cambia el texto.
+`tg personal conversations embed` corta cada conversación en partes de aproximadamente 1200 caracteres, en los límites del mensaje. Cada línea de una pieza es "remitente: texto". Un mensaje más largo que una pieza se divide en partes superpuestas, por lo que el modelo lee todo un mensaje largo, no solo su comienzo. Los mensajes sin texto no añaden nada. Luego, el modelo convierte cada pieza en un vector y tg lo guarda. El texto de la pieza no se vuelve a guardar; solo su vector y una huella digital que muestra cuando cambia el texto.
 
 ### 3. Búsqueda: por significado y por palabras al mismo tiempo
 
-`tg search conversations` busca tu pregunta de dos maneras y une los resultados:
+`tg personal search conversations` busca tu pregunta de dos maneras y une los resultados:
 
 - **Por significado.** La pregunta también se convierte en un vector. tg lo compara con los vectores de todas las piezas y clasifica cada conversación según su pieza más cercana. Con el modelo predeterminado `e5-small`, una coincidencia por significado debe ser lo suficientemente cercana: su puntuación de similitud debe ser superior a 0,80, en una escala donde 1 significa el mismo significado.
 - **Por palabras.** tg también busca cada palabra de tu pregunta en los mensajes guardados. Una palabra de tres o más letras también coincide con palabras más largas que comienzan con ella (`meet` busca `meeting`). Los errores tipográficos no se corrigen.
@@ -122,17 +122,17 @@ En la terminal cada resultado es una línea:
 - la puntuación de similitud, o `—` cuando solo se encontraron palabras;
 - el número de la conversación, cuándo empezó y terminó, cuántos mensajes y personas, su primer mensaje;
 - `(messages 4185–4192)`: la pieza que mejor coincidió (o el mensaje, cuando solo se encontraron palabras), para que sepas por dónde empezar a leer;
-- el localizador de mensajes (`msg:…`), que aceptan `tg messages show` y `tg messages context`;
+- el localizador de mensajes (`msg:…`), que aceptan `tg personal messages show` y `tg personal messages context`;
 - `stale` cuando el texto cambió después de calcular su vector: la puntuación es para el texto antiguo.
 
 Con `--json`, la respuesta también tiene `meaning` (`searched` o `unavailable`), el `model` utilizado y `readiness`: qué chats se buscaron por significado, cuáles solo por palabras, cuáles están desactualizados y cuáles nunca se construyeron. Cuando algo limita la búsqueda, stderr nombra los chats y el comando que lo soluciona, por ejemplo `conversations embed --chat <chat>`.
 
 ```sh
-tg conversations list --chat "Book club" --since-time 7d
-tg conversations show 91                         # one conversation, oldest first
-tg conversations show "Book club" 204            # the conversation message 204 is in
-tg conversations related "Book club" 204         # other conversations about the same thing, in every chat
-tg messages links "Book club" 204                # why that message is where it is
+tg personal conversations list --chat "Book club" --since-time 7d
+tg personal conversations show 91                # one conversation, oldest first
+tg personal conversations show "Book club" 204   # the conversation message 204 is in
+tg personal conversations related "Book club" 204  # other conversations about the same thing, in every chat
+tg personal messages links "Book club" 204       # why that message is where it is
 ```
 
 `related` utiliza los vectores que `embed` guardó y no ejecuta ningún modelo, por lo que responde rápidamente. Es una búsqueda únicamente por significado.
@@ -142,7 +142,7 @@ tg messages links "Book club" 204                # why that message is where it 
 **Recuerdas el tema, no las palabras.**
 
 ```sh
-tg search conversations "who is bringing food to the picnic"
+tg personal search conversations "who is bringing food to the picnic"
 ```
 
 Esto busca en todos los chats preparados. Puede encontrar una conversación en la que la gente escribió "Tomaré sándwiches" y "Bob tiene las bebidas", algo que la búsqueda de palabras omitiría.
@@ -150,7 +150,7 @@ Esto busca en todos los chats preparados. Puede encontrar una conversación en l
 **La discusión fue en otro idioma.**
 
 ```sh
-tg search conversations "renting a flat" --chat "Valencia expats"
+tg personal search conversations "renting a flat" --chat "Valencia expats"
 ```
 
 Con el modelo predeterminado, este puede encontrar una discusión escrita en español sobre un "piso".
@@ -158,30 +158,30 @@ Con el modelo predeterminado, este puede encontrar una discusión escrita en esp
 **Restringido por persona y período.** `--filter` utiliza el estricto [lenguaje de consulta](./query-language.md). Una conversación califica cuando al menos uno de sus mensajes coincide con todo el filtro. Su pregunta todavía coincide con el significado.
 
 ```sh
-tg search conversations "budget for the trip" --filter 'from:"Alice Synthetic" date:30d'
+tg personal search conversations "budget for the trip" --filter 'from:"Alice Synthetic" date:30d'
 ```
 
 ```sh
-tg search conversations "contract terms" --filter 'has:file' --timezone Europe/Madrid
+tg personal search conversations "contract terms" --filter 'has:file' --timezone Europe/Madrid
 ```
 
 **Comienza desde un mensaje.** Encontraste un mensaje con búsqueda de palabras y quieres todo lo demás sobre ese tema:
 
 ```sh
-tg search messages '"deposit back"' --chat "Valencia expats"
-tg conversations related "Valencia expats" 5120
+tg personal search messages '"deposit back"' --chat "Valencia expats"
+tg personal conversations related "Valencia expats" 5120
 ```
 
 **Busca también en los chats de tus bots.** De forma predeterminada, la búsqueda de temas utiliza la cuenta activa. `--source personal`, `bots`, `all` o un nombre de messenger lo amplía; Luego, cada resultado dice de qué cuenta proviene.
 
 ```sh
-tg search conversations "delivery delayed" --source all
+tg personal search conversations "delivery delayed" --source all
 ```
 
 **Busca mensajes nuevos antes de preguntar.** `--sync-first` descarga los mensajes nuevos primero, dentro de los límites de chat, tiempo y mensajes de la búsqueda de mensajes.
 
 ```sh
-tg search conversations "where do we meet" --chat "Book club" --sync-first
+tg personal search conversations "where do we meet" --chat "Book club" --sync-first
 ```
 
 ## Mantenlo actualizado
@@ -189,19 +189,19 @@ tg search conversations "where do we meet" --chat "Book club" --sync-first
 Los mensajes nuevos llegan a una conversación solo tras la siguiente construcción, y a un vector solo tras la siguiente vectorización.
 
 ```sh
-tg conversations status                          # what is behind, chat by chat
-tg conversations build                           # every chat that changed, and groups never built
-tg conversations embed                           # every built chat with pieces left
-tg search conversations "renting a flat" --refresh   # catch up first, then search
+tg personal conversations status                 # what is behind, chat by chat
+tg personal conversations build                  # every chat that changed, and groups never built
+tg personal conversations embed                  # every built chat with pieces left
+tg personal search conversations "renting a flat" --refresh  # catch up first, then search
 ```
 
 `status` cuenta, para cada chat creado, los mensajes que la compilación no ha visto (nuevos, editados, eliminados), las piezas cuyo vector está actual, obsoleto o faltante, y cuántos grupos nunca se crearon. Sin `--chat`, `build`, `embed` y `search --refresh` aceptan como máximo 20 chats por ejecución (`--max-chats`) e incrustan como máximo 2000 piezas por ejecución (`--max-chunks`); ejecútelos nuevamente para continuar. Nunca descargan un modelo. `--refresh` no se puede combinar con `--filter` o `--source`: primero cree e incruste los chats que desee.
 
-Cuando las reglas cambian en una nueva versión, `status` y `tg store check` nombran los chats creados con las reglas anteriores; construirlos de nuevo.
+Cuando las reglas cambian en una nueva versión, `status` y `tg personal store check` nombran los chats creados con las reglas anteriores; construirlos de nuevo.
 
 Cuando se elimina un mensaje, su texto también abandona los vectores.
 
-`tg store fetch <chat> --catch-up` también puede crear e incrustar un chat inmediatamente después de descargarlo ([descargar el historial de un chat](./archive.md#fetch-a-chats-history)).
+`tg personal messages sync <chat> --catch-up` también puede crear e incrustar un chat inmediatamente después de descargarlo ([descargar el historial de un chat](./archive.md#fetch-a-chats-history)).
 
 ## Deja que tu agente de IA enlace mensajes
 
@@ -209,20 +209,20 @@ Las reglas omiten enlaces que solo muestran el significado. Su propio agente de 
 
 ```sh
 tg skill show link-conversations                 # the agent's instructions
-tg conversations batches status --chat "Book club"   # how many messages and batches, how much text
+tg personal conversations batches status --chat "Book club"  # how many messages and batches, how much text
 ```
 
-El agente lee las instrucciones, te dice cuánto texto leerá y espera tu sí. Luego toma el chat por lotes a la vez (`tg conversations batches next`), decide qué mensaje anterior responde cada uno y guarda su respuesta (`tg conversations links add`). La siguiente versión los utiliza: las respuestas de Telegram vienen primero, luego los enlaces del agente y luego las reglas. `tg conversations links clear --chat "Book club"` descarta las respuestas del agente; construir de nuevo después. En este flujo de trabajo, tg en sí no llama a un modelo. El permiso de perfil `conversations.links` decide si se pueden guardar las respuestas.
+El agente lee las instrucciones, te dice cuánto texto leerá y espera tu sí. Luego toma el chat por lotes a la vez (`tg personal conversations batches next`), decide qué mensaje anterior responde cada uno y guarda su respuesta (`tg personal conversations links add`). La siguiente versión los utiliza: las respuestas de Telegram vienen primero, luego los enlaces del agente y luego las reglas. `tg personal conversations links clear --chat "Book club"` descarta las respuestas del agente; construir de nuevo después. En este flujo de trabajo, tg en sí no llama a un modelo. El permiso de perfil `conversations.links` decide si se pueden guardar las respuestas.
 
-tg también puede enviar los lotes a un servicio modelo. El habitual `build` utiliza reglas y enlaces guardados; `tg conversations build --chat <chat> --analyze` envía lotes limitados a un punto final Anthropic o compatible con OpenAI configurado. Se requiere un `--chat` explícito. Antes del primer lote, muestra el volumen, el punto final y el límite del token, y solicita consentimiento. El consentimiento se recuerda para esa cuenta, chat y proveedor hasta que lo revoques. Los valores predeterminados son 50 mensajes por lote (`--size`) y como máximo 100.000 tokens reservados por ejecución (`--max-tokens`); `--yes` otorga consentimiento en scripts. `tg conversations consents list` enumera los consentimientos; `consents revoke --chat <chat>` los revoca. El análisis integrado funciona sólo desde la línea de comandos, no a través de MCP, y las claves nunca van al archivo de configuración.
+tg también puede enviar los lotes a un servicio modelo. El habitual `build` utiliza reglas y enlaces guardados; `tg personal conversations build --chat <chat> --analyze` envía lotes limitados a un punto final Anthropic o compatible con OpenAI configurado. Se requiere un `--chat` explícito. Antes del primer lote, muestra el volumen, el punto final y el límite del token, y solicita consentimiento. El consentimiento se recuerda para esa cuenta, chat y proveedor hasta que lo revoques. Los valores predeterminados son 50 mensajes por lote (`--size`) y como máximo 100.000 tokens reservados por ejecución (`--max-tokens`); `--yes` otorga consentimiento en scripts. `tg personal conversations consents list` enumera los consentimientos; `consents revoke --chat <chat>` los revoca. El análisis integrado funciona sólo desde la línea de comandos, no a través de MCP, y las claves nunca van al archivo de configuración.
 
 ## Privacidad y coste
 
 Por defecto nada sale de tu equipo. El modelo se ejecuta aquí, y un modelo solo se descarga cuando lo pides:
 
 ```sh
-tg models text list                              # the models, and which are downloaded
-tg models text download embeddinggemma --accept-terms
+tg personal models text list                     # the models, and which are downloaded
+tg personal models text download embeddinggemma --accept-terms
 ```
 
 `e5-small` es el predeterminado: pequeño y rápido, alrededor de 100 idiomas. `embeddinggemma` encuentra más, pero se ejecuta aproximadamente siete veces más lento y se descarga solo con `--accept-terms`, ya que está bajo los términos Gemma de Google. Los vectores de dos modelos nunca se mezclan: busque con el modelo con el que incrustó. Un chat integrado solo con otro modelo se nombra en stderr.
@@ -232,12 +232,12 @@ En un portátil reciente, `e5-small` vectoriza unos 30 fragmentos por segundo; u
 Un servicio puede calcular los vectores en su lugar, con tu propia clave:
 
 ```sh
-tg models text key set openai
-tg conversations embed --chat "Book club" --provider openai
-tg search conversations "renting a flat" --provider openai
+tg personal models text key set openai
+tg personal conversations embed --chat "Book club" --provider openai
+tg personal search conversations "renting a flat" --provider openai
 ```
 
-Luego el texto de las conversaciones del chat pasa a ese servicio, y cada búsqueda envía tu pregunta. Antes de enviar cualquier cosa, `embed` dice cuántas piezas, como máximo cuántos tokens y como máximo qué precio, y espera su sí (`--yes` en scripts; `--max-tokens` establece un límite). `--base-url` toma cualquier servidor con la API integrada de OpenAI, como Ollama o LM Studio en su propia computadora, con `--model` y `--dims`. `tg models text key remove openai` olvida la clave. La configuración de incrustación remota también se aplica a las búsquedas que su agente realiza en MCP, por lo que sus preguntas también se dirigen a ese servicio.
+Luego el texto de las conversaciones del chat pasa a ese servicio, y cada búsqueda envía tu pregunta. Antes de enviar cualquier cosa, `embed` dice cuántas piezas, como máximo cuántos tokens y como máximo qué precio, y espera su sí (`--yes` en scripts; `--max-tokens` establece un límite). `--base-url` toma cualquier servidor con la API integrada de OpenAI, como Ollama o LM Studio en su propia computadora, con `--model` y `--dims`. `tg personal models text key remove openai` olvida la clave. La configuración de incrustación remota también se aplica a las búsquedas que su agente realiza en MCP, por lo que sus preguntas también se dirigen a ese servicio.
 
 ## Próximo
 

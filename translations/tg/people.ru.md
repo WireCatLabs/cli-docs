@@ -17,20 +17,20 @@ title: "Люди"
 
 | Задача | Команда |
 | --- | --- |
-| Узнайте, кто этот человек и где вы с ним разговариваете | `tg contacts profile` |
-| Прочитайте, что они сказали, в каждом чате или в названных вами чатах | `tg contacts context` |
-| Проверьте, похож ли аккаунт на бота, фейка или спамера | `tg contacts check` |
-| Проверьте самых подозрительных участников группы | `tg chats members audit --deep` |
-| Запишите, что аккаунт Telegram и аккаунт MAX — это одно и то же лицо | `tg contacts link` |
-| Сохраняйте свое имя и заметки для человека | `tg contacts alias`, `tg contacts notes` |
+| Узнайте, кто этот человек и где вы с ним разговариваете | `tg personal contacts profile` |
+| Прочитайте, что они сказали, в каждом чате или в названных вами чатах | `tg personal contacts context` |
+| Проверьте, похож ли аккаунт на бота, фейка или спамера | `tg personal contacts check` |
+| Проверьте самых подозрительных участников группы | `tg personal chats members audit --deep` |
+| Запишите, что аккаунт Telegram и аккаунт MAX — это одно и то же лицо | `tg personal contacts link` |
+| Сохраняйте свое имя и заметки для человека | `tg personal contacts alias`, `tg personal contacts notes` |
 
 Все параметры этих команд приведены в [справке по командам для контактов](./commands.md#tg-contacts).
 
 ## Кто этот человек: `contacts profile`
 
 ```sh
-tg contacts profile @example_user
-tg contacts profile @example_user --json
+tg personal contacts profile @example_user
+tg personal contacts profile @example_user --json
 ```
 
 Команда показывает все сведения Telegram о человеке и число его сообщений в вашем локальном хранилище для каждого общего чата:
@@ -78,7 +78,7 @@ tg contacts profile @example_user --json
 `theirMessages`, `firstAt` и `lastAt` берутся из локального хранилища, а не из Telegram. Когда `complete` равен `false`, чат сохранён не с начала, поэтому число сообщений — нижняя граница, а `firstAt` может быть позже настоящего первого сообщения человека. Загрузите чат, чтобы заполнить историю:
 
 ```sh
-tg store fetch "Book club"
+tg personal messages sync "Book club"
 ```
 
 Профиль не требует дополнительных запросов: он использует те же три вызова, что и `contacts show`. Человеку не говорят, что вы смотрели.
@@ -88,14 +88,14 @@ tg store fetch "Book club"
 Без `--chat` команда даёт обзор из хранилища: общие чаты, последнее сообщение в каждом направлении, недавние сообщения человека в личном чате и группах, а также упоминания его другими. Связанные адреса электронной почты добавляют отправленные и полученные письма. Никогда не подключается.
 
 ```sh
-tg contacts context @example_user
+tg personal contacts context @example_user
 ```
 
 С `--chat` показывает последние сообщения человека в каждом указанном чате, от старых к новым, по 20 на чат:
 
 ```sh
-tg contacts context @example_user --chat "Book club" --chat "Team" --limit 10
-tg contacts context @example_user --chat "Book club" --refresh
+tg personal contacts context @example_user --chat "Book club" --chat "Team" --limit 10
+tg personal contacts context @example_user --chat "Book club" --refresh
 ```
 
 ```json
@@ -124,8 +124,8 @@ tg contacts context @example_user --chat "Book club" --refresh
 ## Бот, поддельный аккаунт или спамер: `contacts check`
 
 ```sh
-tg contacts check @example_user
-tg contacts check @example_user --no-registries
+tg personal contacts check @example_user
+tg personal contacts check @example_user --no-registries
 ```
 
 ```json
@@ -171,8 +171,8 @@ tg contacts check @example_user --no-registries
 ## Участники группы: `chats members audit --deep`
 
 ```sh
-tg chats members audit "Book club"
-tg chats members audit "Book club" --deep 10
+tg personal chats members audit "Book club"
+tg personal chats members audit "Book club" --deep 10
 ```
 
 `chats members audit` оценивает каждого участника по списку участников и хранилищу без отдельного запроса на человека и перечисляет тех, у кого найдены причины, от высокой оценки к низкой. `--deep 10` затем запускает полный `contacts check` для десяти первых, по одному человеку в секунду, включая публичные списки спама. Никого не удаляет. Владелец и администраторы исключаются.
@@ -182,8 +182,8 @@ tg chats members audit "Book club" --deep 10
 Telegram и MAX используют одно локальное хранилище на этом компьютере. Если вы знаете, что аккаунты Telegram и MAX принадлежат одному человеку, запишите связь:
 
 ```sh
-tg contacts link @example_user max:"Example User"
-tg contacts unlink @example_user
+tg personal contacts link @example_user max:"Example User"
+tg personal contacts unlink @example_user
 ```
 
 После этого `contacts context` без `--chat` собирает оба аккаунта: чаты, которыми вы делитесь, и сообщения из аккаунта Telegram и из аккаунта MAX. `contacts profile` и `contacts context --chat` по-прежнему отображают только указанный вами аккаунт. Ссылка — это только то, что вы записываете: одно и то же имя в обоих мессенджерах никогда не воспринимается как один и тот же человек.
@@ -191,17 +191,17 @@ tg contacts unlink @example_user
 ## Свои имена и заметки: `contacts alias`, `contacts notes`
 
 ```sh
-tg contacts alias set "Bob Synthetic" Bobby            # your own name for a person, on this computer only
-tg contacts alias rm "Bob Synthetic"
-tg contacts notes add "Bob Synthetic" --file note.txt  # or the text from stdin
-tg contacts notes list "Bob Synthetic"
-tg contacts notes edit "Bob Synthetic" <id> --revision 1 --file note.txt
-tg contacts notes remove "Bob Synthetic" <id>
-tg contacts show "Bob Synthetic" --with-notes
-tg contacts list --search-notes flat                   # people whose notes contain this text
+tg personal contacts alias set "Bob Synthetic" Bobby   # your own name for a person, on this computer only
+tg personal contacts alias rm "Bob Synthetic"
+tg personal contacts notes add "Bob Synthetic" --file note.txt  # or the text from stdin
+tg personal contacts notes list "Bob Synthetic"
+tg personal contacts notes edit "Bob Synthetic" <id> --revision 1 --file note.txt
+tg personal contacts notes remove "Bob Synthetic" <id>
+tg personal contacts show "Bob Synthetic" --with-notes
+tg personal contacts list --search-notes flat          # people whose notes contain this text
 ```
 
-Псевдонимы и заметки остаются в локальном архиве и никогда не попадают в Telegram. Псевдоним применяется только к того аккаунта, который вы используете сейчас; заметка о человеке отображается в каждом профиле входа `tg` на этом компьютере, который его видит. `contacts rename` меняет имя в ваших контактах Telegram — другое дело. Команда находит человека по вашему псевдониму, если только он не соответствует чужому имени; тогда ему нужен идентификатор. `--revision` останавливает редактирование заметки, которая изменилась с момента ее прочтения.
+Псевдонимы и заметки остаются в локальном архиве и никогда не попадают в Telegram. Псевдоним применяется только к того аккаунта, который вы используете сейчас; заметка о человеке отображается в каждом профиле входа `tg` на этом компьютере, который его видит. `contacts rename` меняет имя в ваших контактах Telegram — другое дело. Команда находит человека по вашему псевдониму, если только он не соответствует чужому имени; тогда ему нужен идентификатор. `--revision` останавливает редактирование заметки, которая изменилась с момента ее прочтения. Обновление контактов сохраняет ваши псевдонимы и заметки, а связывание двух людей не объединяет их.
 
 ## Дальше
 

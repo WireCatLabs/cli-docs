@@ -1,9 +1,9 @@
 {
   "tg": {
-    "version": "v0.46.3",
+    "version": "v0.53.0",
     "roadmapSha256": "978bfe805c38732b567388b00cbe701d12721599bc2d3e8dae060fee8f83baab",
-    "reviewedAt": "2026-10-11",
-    "conclusion": "Reviewed 0.46.2 and 0.46.3: discovery search tolerates a trailing question mark; mail search and person context read the dedicated mail tables with sender, recipient, thread, folder and subject filters and an --account choice; background fetch jobs drop the 30-second default deadline; a permanent failure before the first saved page exits with an error; joins and contact imports count toward sendsPerHour; bot watch handles each update once; search all takes --backend; chat-list and member paging is paced; server search no longer returns another account's messages. Roadmap unchanged: none of these items was listed as planned."
+    "reviewedAt": "2026-10-14",
+    "conclusion": "Reviewed 0.47.0-0.53.0: messages list --limit pages past 100 and carries poll results; comment paging reports hasMore correctly; --source takes account lists and groups; the shared store upgrades (facts table, project keys, label review); macOS folders move to the Linux paths; purging an account drops people only it had seen; date:>= colon comparisons parse; tasks gain plans, links and an agenda with the follow-ups skill; search hits return an excerpt (--full for the whole text) and --brief/--full work everywhere; tg schedule runs a command or a read-only agent on a timer; TG_READ_ONLY=1 refuses every write; store fetch is renamed messages sync; one error object with details and --debug; the store and speech models move to the WireCat folder; tg no longer picks a profile and stops with exit code 2; HTML files are read as their main text; machine output keys are snake_case; defaultProfile can be set without a profile and MCP entries name the profile. Roadmap unchanged: several photos in one message, private chat notes and the max-only features remain planned; none of them shipped."
   },
   "max": {
     "version": "v0.49.0",

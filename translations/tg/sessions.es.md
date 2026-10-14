@@ -11,22 +11,22 @@ Primero, las palabras que utiliza esta página:
 - **Sesión**: el inicio de sesión de `tg` en esta computadora. Telegram lo emite cuando inicias sesión y lo incluye en la aplicación Telegram como un dispositivo más. `tg` lo guarda en un archivo. Quien tenga ese archivo puede leer tus chats, así que trátalo como tu contraseña.
 - **App** (`api_id` y `api_hash`): dos valores de [my.telegram.org](https://my.telegram.org/apps) que identifican el programa ante Telegram. Cada usuario registra su propia aplicación una vez; `tg` puede hacerlo por usted.
 - **Llavero**: el almacén de contraseñas de tu sistema operativo. `tg` mantiene los valores de la aplicación allí.
-- **Perfil**: un nombre para un inicio de sesión en esta computadora, con su propia sesión, aplicación y configuración. Sin nombre, `tg` utiliza el perfil `default`. Necesita un segundo perfil solo para una segunda cuenta o para límites separados ([perfiles](#profiles)).
+- **Perfil**: un nombre para un inicio de sesión en esta computadora, con su propia sesión, aplicación y configuración. Todo comando que usa una cuenta lo nombra, así que eliges un nombre durante la configuración (`tg personal setup`) y lo usas desde entonces ([perfiles](#profiles)).
 
-No confunda `tg session` con `tg account sessions`. `tg session` es el inicio de sesión del propio `tg`; `tg account sessions` enumera todos los demás dispositivos y aplicaciones que hayan iniciado sesión en su cuenta.
+No confunda `tg personal session` con `tg personal account sessions`. `tg personal session` es el inicio de sesión del propio `tg`; `tg personal account sessions` enumera todos los demás dispositivos y aplicaciones que hayan iniciado sesión en su cuenta.
 
 ## Primera ejecución
 
-`tg setup` guía una primera ejecución a través de la aplicación y la sesión, verifica cinco chats y ofrece una skill de agente. Espere unos cinco minutos; Las descargas del historial son un paso aparte. Ejecútelo en una terminal. Utilice `tg setup --app browser` para el registro manual de la aplicación o `--method phone` para iniciar sesión por teléfono. `tg session start` sigue siendo el comando para iniciar sesión únicamente, incluida la reanudación de un inicio de sesión interrumpido. El programa de instalación comprueba una sesión existente y no vuelve a iniciar sesión silenciosamente si se rechaza.
+`tg personal setup` guía una primera ejecución a través de la aplicación y la sesión, verifica cinco chats y ofrece una skill de agente. Espere unos cinco minutos; Las descargas del historial son un paso aparte. Ejecútelo en una terminal. Utilice `tg personal setup --app browser` para el registro manual de la aplicación o `--method phone` para iniciar sesión por teléfono. `tg personal session start` sigue siendo el comando para iniciar sesión únicamente, incluida la reanudación de un inicio de sesión interrumpido. El programa de instalación comprueba una sesión existente y no vuelve a iniciar sesión silenciosamente si se rechaza.
 
 ## La aplicación de my.telegram.org
 
-Cada usuario registra su propia aplicación. Telegram proporciona una aplicación por número de teléfono; por eso `tg` no incluye ni comparte un identificador de aplicación. Se necesita una vez por perfil; `tg session start` solo lo pide si el perfil todavía no tiene uno.
+Cada usuario registra su propia aplicación. Telegram proporciona una aplicación por número de teléfono; por eso `tg` no incluye ni comparte un identificador de aplicación. Se necesita una vez por perfil; `tg personal session start` solo lo pide si el perfil todavía no tiene uno.
 
 Hay dos formas de obtenerlo:
 
 - **`--app
-browser`** abre [my.telegram.org/apps](https://my.telegram.org/apps). Inicie sesión allí, cree una aplicación si no tiene ninguna (cualquier título y nombre corto, plataforma de escritorio) y pegue `App api_id` y `App api_hash` cuando `tg` lo solicite. El hash no se muestra mientras escribe. Este es el valor predeterminado para `tg session start`.
+browser`** abre [my.telegram.org/apps](https://my.telegram.org/apps). Inicie sesión allí, cree una aplicación si no tiene ninguna (cualquier título y nombre corto, plataforma de escritorio) y pegue `App api_id` y `App api_hash` cuando `tg` lo solicite. El hash no se muestra mientras escribe. Este es el valor predeterminado para `tg personal session start`.
 - **`--app auto`** completa el sitio por usted. Le solicita su número de teléfono y el código que my.telegram.org le envía como mensaje en Telegram, luego lee su aplicación o crea una si no tiene ninguna. El sitio no tiene API, por lo que `tg` sigue su formulario web; un cambio por parte de Telegram puede romper esto. `--app browser` todavía funciona entonces. Este es el valor predeterminado para `tg setup`.
 
 La aplicación solo se guarda después de que Telegram acepte el inicio de sesión.
@@ -34,9 +34,9 @@ La aplicación solo se guarda después de que Telegram acepte el inicio de sesi�
 ## Iniciar sesión
 
 ```sh
-tg session start           # a QR code in the terminal
-tg session start phone     # a phone number, the code Telegram sends, and your 2FA password
-tg session start phone --sms   # the same, asking Telegram for the code by SMS
+tg personal session start  # a QR code in the terminal
+tg personal session start phone  # a phone number, the code Telegram sends, and your 2FA password
+tg personal session start phone --sms  # the same, asking Telegram for the code by SMS
 ```
 
 **QR:** escanea el código en la aplicación Telegram: Configuración → Dispositivos → Vincular dispositivo de escritorio. El código se renueva mientras esperas.
@@ -49,7 +49,7 @@ Después de cualquiera de los dos, Telegram incluye un nuevo dispositivo en la l
 Logged in as <your name> (@<username>, id <id>) — profile default.
 Session:  ~/.local/share/tg-cli/sessions/default.session
 App keys: in the keyring
-Next:     tg chats list · tg server install to keep the archive current
+Next:     tg personal chats list · tg personal server install to keep the archive current
 ```
 
 ### Cuando un agente inicia la sesión
@@ -57,39 +57,39 @@ Next:     tg chats list · tg server install to keep the archive current
 Su agente de IA puede iniciar el inicio de sesión por usted, pero no tiene una terminal para dibujar el código QR. `--qr-file` escribe el código como una imagen (PNG) y el agente se lo muestra para que lo escanee:
 
 ```sh
-tg session start --qr-file login.png
+tg personal session start --qr-file login.png
 ```
 
-El archivo se reemplaza cuando Telegram renueva el código y se elimina cuando finaliza el inicio de sesión, haya funcionado o no. Sin terminal, esto funciona sólo cuando el perfil ya tiene su aplicación y la cuenta no tiene contraseña 2FA: cualquier otra cosa tienes que escribirla tú mismo. `tg setup` toma la misma opción `--qr-file`.
+El archivo se reemplaza cuando Telegram renueva el código y se elimina cuando finaliza el inicio de sesión, haya funcionado o no. Sin terminal, esto funciona sólo cuando el perfil ya tiene su aplicación y la cuenta no tiene contraseña 2FA: cualquier otra cosa tienes que escribirla tú mismo. `tg personal setup` toma la misma opción `--qr-file`.
 
 ## Comprobar la cuenta y cerrar sesión
 
 ```sh
-tg account show              # who this profile is logged in as
+tg personal account show     # who this profile is logged in as
 tg account list              # every profile on this computer, and the account each is logged in as
-tg account sessions list     # every device and app logged in to the account; ends nothing
-tg session end               # log out on Telegram's side, and delete the session file here
+tg personal account sessions list  # every device and app logged in to the account; ends nothing
+tg personal session end      # log out on Telegram's side, and delete the session file here
 ```
 
-`tg session end` también cierra la sesión **en Telegram**: el dispositivo desaparece de la lista de la aplicación. No elimina el identificador ni el hash de la aplicación del llavero y deja intacto el archivo local.
+`tg personal session end` también cierra la sesión **en Telegram**: el dispositivo desaparece de la lista de la aplicación. No elimina el identificador ni el hash de la aplicación del llavero y deja intacto el archivo local.
 
 ## Cuánto dura una sesión
 
-Hasta que finalice: por `tg session end`, desde la lista de dispositivos en una aplicación de Telegram, o por el propio Telegram una vez que la sesión no se haya utilizado durante más tiempo que el límite de sesiones inactivas de la cuenta (`authorization_ttl_days` en [API de Telegram](https://core.telegram.org/method/account.setAuthorizationTTL)), que las aplicaciones te permiten configurar en la lista de dispositivos. Un perfil que se ejecuta todos los días nunca llega a él. Cuando finaliza una sesión, cada comando responde "no inició sesión o la sesión finalizó" con el código de salida `4`; inicie sesión nuevamente con `tg session start` ([qué hacer cuando finalizó la sesión](./troubleshooting.md#not-logged-in-or-the-session-was-ended--run-tg-session-start)).
+Hasta que finalice: por `tg personal session end`, desde la lista de dispositivos en una aplicación de Telegram, o por el propio Telegram una vez que la sesión no se haya utilizado durante más tiempo que el límite de sesiones inactivas de la cuenta (`authorization_ttl_days` en [API de Telegram](https://core.telegram.org/method/account.setAuthorizationTTL)), que las aplicaciones te permiten configurar en la lista de dispositivos. Un perfil que se ejecuta todos los días nunca llega a él. Cuando finaliza una sesión, cada comando responde "no inició sesión o la sesión finalizó" con el código de salida `4`; inicie sesión nuevamente con `tg personal session start` ([qué hacer cuando finalizó la sesión](./troubleshooting.md#not-logged-in-or-the-session-was-ended--run-tg-session-start)).
 
 ## Perfiles
 
 Un perfil es una sesión independiente, con su propia aplicación, configuración, destinatarios y ejecuciones. Su nombre es **la primera palabra** del comando, no una opción:
 
 ```sh
-tg chats list              # profile "default"
+tg personal chats list     # profile "personal"
 tg work chats list         # profile "work"
 export TG_PROFILE=work     # the same for the whole shell session
 ```
 
-**La primera palabra es el perfil si no es un comando.** Por eso un perfil no puede llamarse `chats`, `messages` ni usar otra palabra de comando; `tg session start` rechaza esos nombres. Los nombres admiten letras, cifras, puntos, guiones y guiones bajos, y deben empezar por una letra o cifra.
+**La primera palabra es el perfil si no es un comando.** Por eso un perfil no puede llamarse `chats`, `messages` ni usar otra palabra de comando; `tg personal session start` rechaza esos nombres. Los nombres admiten letras, cifras, puntos, guiones y guiones bajos, y deben empezar por una letra o cifra.
 
-El orden de prioridad, de mayor a menor, es: primera palabra, `TG_PROFILE`, `defaultProfile` en la configuración y, por último, `default`.
+El orden de prioridad, de mayor a menor, es: primera palabra, `TG_PROFILE`, `defaultProfile` en la configuración. Si no hay ninguno, un comando que usa una cuenta se detiene con el código de salida `2` y muestra la lista de perfiles de esta computadora; si todavía no hay ninguno, indica que ejecutes `tg personal setup`. `tg` nunca elige uno, ni siquiera el único que hay. Los comandos que no usan ninguna cuenta funcionan sin perfil: `--help`, `--version`, `commands`, `skill show`, `account list` y `config show`.
 
 Si una palabra no es un comando y no va seguida de ningún comando, se muestra este error:
 

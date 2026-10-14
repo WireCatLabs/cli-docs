@@ -27,7 +27,7 @@ Para cada ajuste se utiliza el primero que esté definido:
 5. El valor predeterminado del programa.
 
 ```sh
-tg chats list --limit 5     # 5: the option
+tg personal chats list --limit 5  # 5: the option
 # "limit": 50 in the profile's entry — when there is no option
 # "limit": 30 in "defaults" — when the profile has none either
 # 20 — when nothing is set
@@ -51,7 +51,7 @@ La lista termina con `commandTimeoutMs`: el límite de un comando completo, desd
 
 Cuando se configura `TG_CONFIG_DIR`, `TG_STATE_DIR` o `TG_CACHE_DIR`, lo dice en stderr, ya que eso también cambia qué inicio de sesión se encuentra ([donde se guardan las partes del inicio de sesión](./sessions.md#where-the-parts-are-kept)).
 
-⚠ **No es una verificación de estado.** Crea la configuración inicial si está ausente y luego lee los archivos. No abre ningún archivo local, no pide llavero y no se conecta. Si la sesión aún funciona es una pregunta para `tg doctor --online` ([solución de problemas con tg doctor](./troubleshooting.md#first-tg-doctor)).
+⚠ **No es una verificación de estado.** Crea la configuración inicial si está ausente y luego lee los archivos. No abre ningún archivo local, no pide llavero y no se conecta. Si la sesión aún funciona es una pregunta para `tg personal doctor --online` ([solución de problemas con tg doctor](./troubleshooting.md#first-tg-doctor)).
 
 ## El archivo
 
@@ -78,7 +78,7 @@ Cuando se configura `TG_CONFIG_DIR`, `TG_STATE_DIR` o `TG_CACHE_DIR`, lo dice en
 - `personal.defaults`, `personal.profiles.<name>`: solo comandos de cuenta personal.
 - `bot.defaults`, `bot.profiles.<name>`: sólo comandos `tg <name> bot …`.
 
-`defaultProfile` en la parte superior nombra el perfil utilizado cuando ni la primera palabra ni `TG_PROFILE` nombran uno. La primera palabra (`tg work …`) y `TG_PROFILE` la anulan. Sin él, el perfil es `default`.
+`defaultProfile` en la parte superior nombra el perfil utilizado cuando ni la primera palabra ni `TG_PROFILE` nombran uno. La primera palabra (`tg work …`) y `TG_PROFILE` la anulan. Sin ninguno de ellos, un comando que usa una cuenta se detiene con el código de salida `2` y enumera los perfiles de este equipo.
 
 | Configuración | Predeterminado | Qué hace | Anulado por uno ejecutado por |
 |---|---|---|---|
@@ -87,16 +87,16 @@ Cuando se configura `TG_CONFIG_DIR`, `TG_STATE_DIR` o `TG_CACHE_DIR`, lo dice en
 | `color` | desde la terminal | color en la vista de tabla | ninguno; sin configuración, `NO_COLOR` lo apaga |
 | `senderColors` | `false` | un color por remitente en la vista de tabla de mensajes | ninguno |
 | `catchUpMarksRead` | `false` | `inbox` y `review` marcan cada chat que muestran como leído, hasta el mensaje más reciente mostrado. El otro lado lo ve | `--mark-read`, `--no-mark-read` |
-| `searchCatchUp` | `false` | `store fetch` y `store gaps repair` también preparan el chat recuperado para búsqueda local: su gráfico y, si está instalado, sus vectores. Nunca descarga modelos ni llama a proveedores remotos | `--catch-up`, `--no-catch-up` |
+| `searchCatchUp` | `false` | `messages sync` y `store gaps repair` también preparan el chat recuperado para búsqueda local: su gráfico y, si está instalado, sus vectores. Nunca descarga modelos ni llama a proveedores remotos | `--catch-up`, `--no-catch-up` |
 | `record` | `false` | mantener cada ejecución ([diagnóstico](./diagnostics.md)) | `--record`, `--no-record` |
 | `keepRunsForDays` | `30` | las ejecuciones registradas anteriores a esta se eliminan cuando se conserva la siguiente | ninguno |
 | `permissions` | todo está permitido, excepto: eliminar, finalizar sesiones y algunos otros cambios solicitados; las reglas de respuesta pueden no enviarse | qué puede hacer el perfil, por comando ([abajo](#what-a-profile-may-do)) | ninguno; `--yes` y `--allow-dangerous` solo responden `ask`, nunca levantan `deny` |
 | `sendsPerHour` | `30`; un bot no tiene ninguno hasta que se configura en la sección `bot` | la mayor cantidad de envíos en cualquier hora ([el control de envío](./security.md#the-send-guard)) | ninguno |
 | `requestsPerMinute` | `60` | solicitudes un minuto después de una ráfaga de 20, compartida por todos los procesos del perfil; `0` lo apaga ([límites y esperas](./limits.md)) | `TG_REQUESTS_PER_MINUTE` |
 | `transcribeWith` | `auto` | quién convierte la voz en texto: `auto` (Telegram, si no, un modelo local), `messenger` o `local` | `--local`, o `--model`, lo que lo implica |
-| `speechModel` | ninguno | qué modelo descargado utiliza `--local` (`tg models audio list`) | `--model` |
+| `speechModel` | ninguno | qué modelo descargado utiliza `--local` (`tg personal models audio list`) | `--model` |
 | `proxy` | ninguno | el servidor SOCKS5, HTTP `CONNECT` o MTProxy para llegar a Telegram a través de ([abajo](#through-a-proxy)) | `TG_PROXY` |
-| `readOtherBots` | `false` | solo un bot: si `tg bot` puede leer lo que otros bots en esta máquina guardan: `true`, o una lista de nombres de perfiles ([bots](./bot.md)) | ninguno; `--all-bots` y `--bots` preguntan, la configuración permite |
+| `readOtherBots` | `false` | solo un bot: si `tg personal bot` puede leer lo que otros bots en esta máquina guardan: `true`, o una lista de nombres de perfiles ([bots](./bot.md)) | ninguno; `--all-bots` y `--bots` preguntan, la configuración permite |
 | `updateCheck` | `true` | la línea diaria "existe una versión más nueva"; sólo bajo `defaults` | ninguno; `TG_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER` o `CI` apágalo |
 | `skillHint` | `true` | una línea, como máximo una vez al día, para un agente cuya copia de la skill de tg falta o es anterior a tg; sólo bajo `defaults` | ninguno |
 | `embeddingProvider` | `local` | modelo local o `openai` | `--provider` |
@@ -141,7 +141,7 @@ Las claves de distintas secciones del archivo se suman, pero **decide primero la
 
 Funciona en ambos sentidos: `messages: allow` en un perfil también oculta `messages.delete: deny` de `defaults`, y eliminar vuelve a pedir confirmación, como por defecto. Los antiguos `readOnly` y `allow` cuentan en la sección en la que están escritos.
 
-`inbox`, `review`, `watch`, `serve` y `store fetch`, `export` y `search` muestran mensajes, por lo que cuentan como `messages`: `messages: deny` también los bloquea. `config`, `session`, `doctor`, `recipients`, `mcp` y el mantenimiento del archivo local nunca se restringen.
+`inbox`, `review`, `watch`, `serve` y `messages sync`, `export` y `search` muestran mensajes, por lo que cuentan como `messages`: `messages: deny` también los bloquea. `config`, `session`, `doctor`, `recipients`, `mcp` y el mantenimiento del archivo local nunca se restringen.
 
 **Los valores predeterminados permiten todo excepto algunos cambios que son difíciles de revertir.** Estos preguntan: `messages.delete`, `bot.messages.delete`, `chats.delete`, `chats.clear`, `topics.enable`, `topics.delete` y `account.sessions.end`. Es posible que las reglas de respuesta no se envíen hasta que usted lo permita: `replies.send` es `deny`. Un valor predeterminado incorporado solo endurece: `messages: readonly` aún rechaza una eliminación, y `messages: allow` mantiene la pregunta antes de una eliminación hasta que usted configure `messages.delete`.
 
@@ -171,7 +171,7 @@ MCP no tiene formularios de confirmación del servidor. `deny` y `readonly` bloq
 permiten la escritura solicitada. Repite `--permission key=level` para los permisos temporales del servidor
 ([configuración en el navegador](./remote.md)). La confirmación en la CLI con `ask` sigue aplicándose.
 
-`replies.send` por defecto es `deny`; habilitar una regla de respuesta por sí sola no permite el envío. `tg replies audience` puede limitar las respuestas a personas seleccionadas o excluir algunas.
+`replies.send` por defecto es `deny`; habilitar una regla de respuesta por sí sola no permite el envío. `tg personal replies audience` puede limitar las respuestas a personas seleccionadas o excluir algunas.
 
 ### Ajustes anteriores que siguen funcionando
 
@@ -212,7 +212,7 @@ Si se ignorase un ajuste mal escrito, el programa usaría el valor predeterminad
 
 ## A través de un proxy
 
-Donde Telegram está bloqueado, `tg` puede llegar a él a través de un proxy: SOCKS5, un proxy HTTP que admita `CONNECT` o un MTProxy. Un ajuste `proxy` por perfil, o para todos los perfiles con `--defaults`. Configúralo antes de `tg setup`: el inicio de sesión también pasa por él.
+Donde Telegram está bloqueado, `tg` puede llegar a él a través de un proxy: SOCKS5, un proxy HTTP que admita `CONNECT` o un MTProxy. Un ajuste `proxy` por perfil, o para todos los perfiles con `--defaults`. Configúralo antes de `tg personal setup`: el inicio de sesión también pasa por él.
 
 ```sh
 tg config set proxy socks5://proxy.example:1080       # no password: on the command line
@@ -231,9 +231,9 @@ tg config unset proxy
 
 **Una contraseña o un secreto de MTProxy nunca llegan al archivo de configuración.** `config set proxy -` lee la URL sin mostrarla, o desde una tubería, guarda el secreto en el llavero del sistema (uno por perfil, y otro para `--defaults` que un perfil usa solo con el proxy de los valores predeterminados) y escribe la URL sin él; `config show`, `doctor` y los errores la muestran de la misma forma. Se rechaza una URL con un secreto en la línea de comandos, porque `ps` y el historial de la shell lo conservarían.
 
-`TG_PROXY` acepta la URL completa, secreto incluido, y tiene prioridad sobre el ajuste: para CI o para una prueba puntual. `config show` muestra el ajuste del archivo; `tg doctor` muestra el proxy que se usa realmente. No se leen `ALL_PROXY` ni `HTTPS_PROXY`: suelen definirse para otras herramientas, y el proxy es algo que eliges para esta cuenta.
+`TG_PROXY` acepta la URL completa, secreto incluido, y tiene prioridad sobre el ajuste: para CI o para una prueba puntual. `config show` muestra el ajuste del archivo; `tg personal doctor` muestra el proxy que se usa realmente. No se leen `ALL_PROXY` ni `HTTPS_PROXY`: suelen definirse para otras herramientas, y el proxy es algo que eliges para esta cuenta.
 
-La Bot API (`tg bot …`) y el registro de la aplicación de `session start --app auto` pasan por el mismo proxy SOCKS5 o HTTP. Un MTProxy solo transporta el protocolo propio de Telegram, así que con uno se conectan directamente; `tg doctor` indica cuál. `--app browser` abre my.telegram.org en tu navegador, que usa su propia configuración de proxy.
+La Bot API (`tg personal bot …`) y el registro de la aplicación de `session start --app auto` pasan por el mismo proxy SOCKS5 o HTTP. Un MTProxy solo transporta el protocolo propio de Telegram, así que con uno se conectan directamente; `tg personal doctor` indica cuál. `--app browser` abre my.telegram.org en tu navegador, que usa su propia configuración de proxy.
 
 ## Variables de entorno
 
@@ -247,7 +247,7 @@ La Bot API (`tg bot …`) y el registro de la aplicación de `session start --ap
 | `TG_PROXY` | la URL del proxy, la contraseña o el secreto incluidos; gana sobre la configuración `proxy` ([arriba](#through-a-proxy)) |
 | `TG_CONFIG_DIR`, `TG_STATE_DIR`, `TG_CACHE_DIR` | mueve los tres directorios y la entrada del llavero con ellos |
 | `MESSAGING_STORE` | la ruta del archivo del archivo local |
-| `CLI_COMMON_CACHE_DIR` | donde se guardan los modelos de habla |
+| `WIRECAT_STATE_DIR` | la carpeta WireCat que comparten todas las CLI: el almacén local y los modelos de habla |
 | `TG_NO_UPDATE_CHECK` | `1` desactiva la línea diaria "Existe una versión más nueva" |
 | `NO_COLOR` | sin color en la vista de tabla |
 | `XDG_RUNTIME_DIR` | en Linux, cómo se llega al llavero; cron y ssh a menudo lo omiten |
@@ -260,7 +260,7 @@ Apunta los tres directorios a otra ubicación: `tg` tendrá allí una configurac
 ```sh
 export TG_CONFIG_DIR=/tmp/tg-try/config TG_STATE_DIR=/tmp/tg-try/state TG_CACHE_DIR=/tmp/tg-try/cache
 export MESSAGING_STORE=/tmp/tg-try/wirecat.db
-tg setup
+tg personal setup
 ```
 
 Sin `MESSAGING_STORE`, lo que lea esa sesión seguirá guardándose en tu archivo local habitual.
