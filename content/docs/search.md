@@ -44,15 +44,16 @@ resuming and checking history: [Telegram](./tg/archive.md#fetch-a-chats-history)
 
 ## Search everything at once
 
-When you do not know where something was written — a chat, an email or your own notes — search
-all of them together:
+When you do not know where something was written — a chat or your own notes — search both together:
 
 ```sh
 tg personal search all invoice
 max personal search all invoice
 ```
 
-Each result says whether it is a message, an email or a note. The sections below search one kind.
+Each result says whether it is a message or a note. `tg` and `max` do not search mail: `memo search mail`
+does, and `memo search all invoice` searches messages, mail and notes at once. The sections below search one
+kind.
 
 ## Find a word or phrase
 

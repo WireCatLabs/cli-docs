@@ -15,7 +15,7 @@ Understand why a search finds a result or misses it: what gets indexed, how matc
 | Notes | Saved note text, titles and supported filters | A note reference; stored links can connect notes to other records |
 | Files and meeting transcripts | Extracted or supplied text, once saved | Attachment text stays linked to its message; a transcript saved as a note is searched as a note |
 
-`search all` queries messages, email and notes, then merges their ranked lists. It reports sources it skipped; it does not turn every content type into one message index. Files need text extraction, and recordings need transcription before their contents can be searched.
+`search all` queries messages and notes in `tg` and `max`, and messages, email and notes in `memo`, then merges their ranked lists. It reports sources it skipped; it does not turn every content type into one message index. Files need text extraction, and recordings need transcription before their contents can be searched.
 
 Results can be connected through stored references and links. Message search joins messages to chats, senders and attachments for filtering. Direct reply links connect an answer to its parent message. A separate conversation build groups messages within a chat; it does not automatically group notes, files and meetings into one discussion.
 
