@@ -52,7 +52,21 @@ foreach ($command in @('doctor', 'commands')) {
 if ($LASTEXITCODE -ne 0) { throw 'Store migration failed' }
 $storeJson = & $shim store info --json
 if ($LASTEXITCODE -ne 0) { throw 'Store info failed' }
-$store = ($storeJson -join "`n") | ConvertFrom-Json
+$answer = ($storeJson -join "`n") | ConvertFrom-Json
+if ($answer.PSObject.Properties.Name -contains 'item') {
+    # Published tools adopt the envelope independently; older releases still return the store directly.
+    $duration = $answer.meta.duration_ms
+    $numericDuration = $duration -is [int] -or $duration -is [long] -or $duration -is [double] -or $duration -is [decimal]
+    if ($answer.error -or $answer.item -isnot [pscustomobject] -or $null -ne $answer.items -or
+        $answer.meta.run_id -isnot [string] -or [string]::IsNullOrWhiteSpace($answer.meta.run_id) -or
+        -not $numericDuration -or $duration -lt 0 -or [double]::IsNaN([double]$duration) -or
+        [double]::IsInfinity([double]$duration)) {
+        throw 'Store info returned an invalid item envelope'
+    }
+    $store = $answer.item
+} else {
+    $store = $answer
+}
 if ($store.error -or -not $store.exists -or $store.schema.version -lt 1 -or -not $store.schema.writable) {
     throw "SQLite store is unusable: $storeJson"
 }

@@ -30,3 +30,4 @@ were deleted, not archived. The checkout is on `main`; three merged worktrees we
   latest-versions, posthog, remove-meeting-brief and older ones). Their branches are kept.
 
 - Retain `docs/zoom-012-project-evidence`, its worktree, isolated `/var/tmp/docs-012-*` states and `/tmp/docs-zoom-012-*` logs/reference symlink until owner-approved cleanup. No owner state was used.
+- Retain `fix/windows-standard-envelopes` until owner-approved cleanup; it updates the Windows installation proof for independently adopted item envelopes while retaining legacy release checks.
