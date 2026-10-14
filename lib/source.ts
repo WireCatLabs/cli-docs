@@ -11,6 +11,7 @@ import { resolveDocumentationLink, rewriteMarkdownLinks } from "./markdown-links
 import { readerGuide, readerGuideMarkdown } from "./reader-guides"
 import { rehypeCodeAccessibility } from "./rehype-code-accessibility"
 import { remarkAnchorAliases } from "./remark-anchor-aliases"
+import { remarkDisclosures } from "./remark-disclosures"
 import { remarkDocUsability } from "./remark-doc-usability"
 import { remarkMermaid } from "./remark-mermaid"
 import { docsRoute, getPageMarkdownUrl, siteUrl, toolOf } from "./shared"
@@ -21,7 +22,7 @@ const docs = defineDocs({
     schema: pageSchema.extend({ contentLanguage: pageSchema.shape.title.optional() }),
     // The tools' pages use fences Shiki has no grammar for (`cron`); those show as plain text.
     mdxOptions: applyMdxPreset({
-      remarkPlugins: [remarkAnchorAliases, remarkDocUsability, remarkMermaid],
+      remarkPlugins: [remarkDisclosures, remarkAnchorAliases, remarkDocUsability, remarkMermaid],
       remarkImageOptions: { useImport: false },
       rehypePlugins: [rehypeCodeAccessibility],
       rehypeCodeOptions: {
