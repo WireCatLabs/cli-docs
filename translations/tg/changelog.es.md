@@ -4,6 +4,201 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.53.0 — 14.10.2026
+
+### Cambios — pueden romper scripts
+
+- **Basado en `@wirecat/cli-core` 0.262.0 y `@wirecat/cli-base` 0.26.0.** `@wirecat/cli-core` es el nuevo nombre de
+  `@wirecat/cli-messaging`; su 0.262.0 sigue a la 0.261.0. El comando de paridad es `cli-core-parity`. Las claves de la
+  salida para máquinas van en snake_case: `error.details` dice `operation_id`, `send_id`, `retry_after_ms`;
+  `commands --json` dice `global_options`, `inherited_options`, `exit_codes`, `takes_value` y `contract: 1`. Un árbol
+  de consulta en el argumento MCP `ast` tiene `lower_inclusive`, `upper_inclusive` y `must_not`.
+- **Los archivos HTML se leen como su texto principal** (cli-core 0.262.0): se descartan menús, pies de página y
+  banners, y se conservan encabezados, listas, tablas y enlaces. El texto de adjuntos HTML ya guardado se vuelve a
+  leer en el siguiente `attachments extract`, y cambia. `title:`, `site:`, `lang:`, `author:` y `keyword:` buscan en
+  notas y archivos.
+
+### Correcciones
+
+- **`tg config set defaultProfile <name>` y `config unset defaultProfile` funcionan sin indicar un perfil.** Antes
+  pedían uno primero y fallaban cuando había varios (cli-core 0.262.0).
+- **`tg default mcp config` y `mcp install` indican el perfil.** La entrada omitía un perfil llamado `default`, así que
+  su servidor MCP se detenía en la primera llamada, ya que tg ya no supone ningún perfil (cli-messaging 0.260.0).
+
+## 0.52.0 — 13.10.2026
+
+### Novedades
+
+- **Basado en cli-messaging 0.259.0 y cli-base 0.24.0.** `store fetch` ahora es `messages sync` (mismos argumentos,
+  opciones y JSON). `store fetch` sigue funcionando como nombre oculto y obsoleto; la documentación y la skill usan
+  `messages sync`. `bot store fetch` conserva su nombre.
+- **`--debug`:** ante un fallo, el registro completo (causa y pila) sigue al error: después de la línea `✗` en una
+  terminal, y como segunda línea JSON en los demás casos.
+- **`runs list` y `runs search` leen un índice por día**, así que responden en milisegundos con miles de ejecuciones.
+
+### Correcciones
+
+- **La skill avisa de tres errores que cometió un agente durante las pruebas.** Comparó una palabra simple en una
+  herramienta con `content:` en otra, leyó `ref` donde una búsqueda responde `locator` (o `items` donde las notas
+  responden `hits`) e informó de un error ya corregido en una versión más nueva; un bucle de zsh sobre `$c` pasó la
+  ruta de un comando como un solo argumento.
+
+### Cambios — pueden romper scripts
+
+- **El almacén local y los modelos de voz se trasladan una sola vez a la carpeta WireCat**, `~/.local/share/WireCat/`
+  (Windows: `%LOCALAPPDATA%\WireCat\Data\`), en el primer arranque, desde `~/.local/share/cli-messaging/` y
+  `~/.cache/cli-common/models/`. El traslado nunca sobrescribe: si ambos sitios contienen un almacén distinto, `tg` se
+  detiene con el código de salida `3` y nombra los dos archivos. `WIRECAT_STATE_DIR` sustituye a
+  `CLI_COMMON_CACHE_DIR` y traslada la carpeta completa. Actualiza `max` y `memo` junto con `tg`: una versión anterior
+  crearía un almacén nuevo en el sitio antiguo. [Dónde guarda tg sus archivos](./installation.md).
+- **Un único objeto de error:** `{"error":{"code","reason","message","details"}}`. Lo que antes estaba en el nivel
+  superior de `error` (`candidates`, `sendId`, `operationId`, `permission`, `retryAfterMs`) ahora está en
+  `error.details`. `reason` es un id con puntos (`output_limit` → `output.too-large`, `input_limit` →
+  `input.too-large`); `retryable` aparece solo donde el fallo lo define, y `actions` solo en los elementos fallidos de
+  un resultado parcial. El código de salida `1` es `internal_error` (antes `generic_failure`), y su mensaje ya no
+  incluye el texto propio del fallo; `--debug` lo muestra.
+- **`runs show` muestra solo lo que salió mal** (respuestas fallidas, avisos, el cierre inesperado) y añade
+  `eventCount`; `-v` muestra todos los eventos, como antes.
+- **`tg` nunca elige un perfil por ti.** Un comando que usa una cuenta y no nombra ningún perfil (sin primera palabra,
+  sin `TG_PROFILE`, sin `defaultProfile` en el archivo de configuración) se detiene con el código de salida `2` en
+  lugar de usar `default`, también cuando `default` es el único perfil. **Esto rompe todas las configuraciones
+  existentes con un solo perfil**: `tg chats list` ahora falla. El error enumera los perfiles de este equipo, así que
+  la solución está en el mensaje: `tg default chats list`, `export TG_PROFILE=default` o
+  `"defaultProfile": "default"` en el archivo de configuración. En un equipo nuevo, el primer inicio de sesión es
+  `tg personal setup` (cualquier nombre). `--help`, `--version`, `commands`, `skill show`, `account list` y
+  `config show` siguen funcionando sin perfil. Los clientes MCP y las tareas programadas que inician `tg mcp` o
+  `tg serve` sin perfil necesitan añadir uno. El `store fetch` de un bot usa solo las credenciales de aplicación y la
+  sesión personal de su propio perfil, nunca las de `default`.
+
+## 0.51.0 — 12.10.2026
+
+### Novedades
+
+- **`--brief` y `--full` en todos los comandos.** `--brief` conserva de un mensaje encontrado la referencia, el chat,
+  la hora, el remitente, el extracto y la puntuación; `--full` lo conserva todo.
+- **`tg search all` indica quién escribió cada resultado** y cómo se encontró (por palabras o por significado).
+
+- **`tg schedule`: ejecuta un comando o un agente con un temporizador**, mediante systemd (Linux), launchd (macOS) o
+  el Programador de tareas (Windows). `tg schedule command <name> --every 2h -- messages list <chat>` ejecuta un
+  comando de tg; una lectura guarda lo que lee. `tg schedule agent <name> claude "<prompt>" --at 08:30` inicia un
+  agente (claude o codex), como máximo una vez por hora. El agente se ejecuta con `TG_READ_ONLY=1` y no puede enviar;
+  su respuesta se guarda como `latest.md` junto a la programación y una notificación de escritorio avisa de que está
+  lista. `--once 2h` se ejecuta una vez y después elimina la programación. `tg schedule list`, `run` y `remove`.
+- **`tg server install` sugiere el comando para una revisión diaria de pendientes**, y no activa nada.
+- **`TG_READ_ONLY=1` rechaza cualquier escritura del proceso**, por encima del archivo de configuración y de
+  `--permission`.
+
+### Cambios — pueden romper scripts
+
+- **`tg search messages` responde con un extracto, no con el texto completo.** Cada resultado lleva `excerpt`, unos
+  240 caracteres alrededor de la primera palabra de la consulta, en lugar de `text`; `--full` o
+  `tg messages show <ref>` dan el mensaje completo. Los `editedAt`, `replyTo`, `forwardedFrom` y `reactions` nulos se
+  omiten de la salida para máquinas. Un script que leía `text` de los resultados de búsqueda debe leer `excerpt` o
+  añadir `--full`.
+
+
+## 0.50.0 — 11.10.2026
+
+### Novedades
+
+- **Las tareas tienen plan, vínculos y una agenda diaria** (almacén compartido 0.247.0, versión 4). `tg tasks add`
+  acepta `--title`, `--description`, `--due` y `--check`; `tg tasks plan <task>` los cambia más tarde, y `none` borra
+  una fecha. La próxima revisión es cuándo un agente debería volver a mirar la tarea, no un recordatorio: al
+  propietario no le llega nada. `tg tasks link` vincula una tarea con mensajes, chats, personas, documentos y URL;
+  `tg tasks show` imprime el plan con sus vínculos. `tg tasks agenda` enumera, sin el texto de ningún mensaje, las
+  tareas vencidas o que vencen pronto, los chats que esperan una respuesta tuya (`owed`), los que esperan a otros
+  (`waiting`) y aquellos cuyo mensaje más reciente no está guardado (`unsynced`). `tg skill show follow-ups` es la
+  rutina diaria para un agente: solo borradores, nunca envía.
+
+### Cambios — pueden romper scripts
+
+- Almacén compartido 0.247.0: un contexto de reunión registra hechos con `fact.add`; `memory.add` ya no acepta el tipo `fact`.
+
+### Correcciones
+
+- Se fija el paquete compartido 0.248.0, que incluye las entradas de paridad del seguimiento de tareas. Las
+  comprobaciones de la versión ahora reconocen los planes de tareas, los vínculos, las tarjetas, la agenda y sus
+  opciones.
+
+## 0.49.0 — 11.10.2026
+
+### Novedades
+
+- **La búsqueda acepta la forma con dos puntos de una comparación.** `date:>=2026-01-01` (y `:>`, `:<`, `:<=`) es lo
+  mismo que `date>=2026-01-01`; antes fallaba con `invalid_syntax`. Un `after:` o `before:` rechazado ahora nombra su
+  sustituto: `after:2026-09-01` indica que se use `date>=2026-09-01`.
+
+### Cambios — pueden romper scripts
+
+- El almacén compartido 0.246.0 compara las etiquetas nuevas con los nombres canónicos y los alias antes de crearlas.
+  Los nombres parecidos requieren la revisión del propietario; reutiliza una etiqueta existente o su alias explícito.
+  Las etiquetas y los datos existentes se mantienen, y las coincidencias automáticas por nombre canónico y por alias
+  comparten una sola afirmación.
+
+## 0.48.1 — 11.10.2026
+
+### Novedades
+
+- **Almacén compartido 0.242.0**: los id de proyectos y tareas existentes se mantienen; los proyectos nuevos reciben
+  claves cortas, y el almacén puede comprobar qué tareas dependen de cuáles.
+
+### Correcciones
+
+- **npm vuelve a instalar los paquetes uno junto a otro.** Basado en `@wirecat/cli-messaging` 0.241.0, cuyo
+  `@wirecat/cli-meetings` 0.4.2 acepta cli-core 0.20.0. Con 0.240.0, npm colocaba cli-messaging en una carpeta anidada
+  con una segunda copia de cli-core.
+
+## 0.48.0 — 11.10.2026
+
+### Novedades
+
+- **`--source` acepta una lista de cuentas y grupos** en `search messages`, `search mail` y `search conversations`:
+  `--source group:work,tg:mila,email:me@work.example` busca exactamente en esos. Una entrada es un grupo,
+  `app:account` (un perfil de cualquier aplicación —`max:default` funciona desde tg—, el id de la cuenta o su nombre)
+  o una palabra simple de `--source`. `config set accountGroups.<name> <list>` guarda un grupo para todas las
+  aplicaciones.
+- **El almacén compartido se actualiza a la versión 2 la primera vez que tg lo abre.** Los hechos (lo que se dijo,
+  preguntó, decidió o prometió) tienen su propia tabla junto a los recuerdos; los recuerdos guardados con el tipo
+  `fact` se trasladan allí, y las asignaciones de tareas se copian a su propia tabla. Un tg, max o memo anterior sigue
+  abriendo el almacén actualizado.
+
+### Cambios — pueden romper scripts
+
+- **En macOS, tg guarda sus archivos donde lo hace en Linux**: `~/.config/tg-cli`, `~/.local/share/tg-cli` y
+  `~/.cache/tg-cli` en lugar de `~/Library/…`. La primera ejecución traslada allí las carpetas antiguas, junto con el
+  almacén compartido y los modelos de voz, y apunta un agente `tg server` instalado a su nuevo registro. Mientras se
+  está ejecutando un `tg serve` o un servidor MCP, muestra un aviso, sigue usando las carpetas antiguas durante esa
+  ejecución y vuelve a intentarlo la próxima vez. Linux y Windows no cambian.
+- **Purgar una cuenta también elimina a las personas que solo esa cuenta había visto.** Una persona se mantiene
+  mientras otra cuenta, una etiqueta, una nota o cualquier otro registro apunte a ella.
+- **El correo se busca por significado hilo a hilo.** La primera pasada de indexación tras la actualización vuelve a
+  dividir cada hilo y genera de nuevo los embeddings del correo; la búsqueda por palabras no cambia.
+
+### Correcciones
+
+- **Purgar una cuenta que tenía reuniones ya no falla**, y una purga elimina los vectores que solo ella usaba.
+- Sobre `@wirecat/cli-messaging` 0.238.0.
+
+## 0.47.0 — 11.10.2026
+
+### Novedades
+
+- **`messages list --limit` devuelve tantos mensajes como se piden.** Telegram entrega como máximo 100 por
+  solicitud, y `--limit 500` se detenía en 100 con `hasMore: true`; ahora sigue leyendo página a página
+  (cli-messaging 0.235.0).
+- **Una encuesta en `messages list` incluye su pregunta, sus respuestas y el total de votos** en
+  `providerMetadata.poll`, así que las encuestas de un canal se leen sin un `polls show` por mensaje.
+
+### Correcciones
+
+- **`messages comments --limit 100` (o más) indica cuándo quedan comentarios más antiguos.** Para saberlo pedía a
+  Telegram un comentario más que el límite, pero Telegram devuelve como máximo 100, así que un hilo de 1600
+  comentarios respondía con 100 y `hasMore: false`. Ahora pide como máximo 100 y toma una página completa como señal
+  de que hay más.
+- **`polls show` da el total de votos de una encuesta antes de que votes.** Telegram envía el total de todos modos;
+  solo el recuento de cada respuesta espera a tu voto. Antes el total también era `null`.
+- Sobre `@wirecat/cli-messaging` 0.235.0.
+
 ## 0.46.3 — 11.10.2026
 
 ### Cambios — pueden romper scripts

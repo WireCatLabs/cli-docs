@@ -24,7 +24,7 @@ title: "Как tg ведет себя в скриптах"
 - **stdout** и **stderr** — это два потока вывода команды. stdout передаёт результат;   stderr содержит сообщения о запуске, такие как предупреждения и ошибки.
 - **Код выхода** — это число, возвращаемое командой по завершении. `0` означает успех; любое другое число указывает на тип неисправности.
 - **Машинный режим** для программы выводится в формате JSON, а не в виде текста для человека.
-- **Однократная команда** выполняет одно действие и завершает работу, например `tg messages list`. **Постоянная команда** продолжает выполняться, пока вы ее не остановите: `watch`, `serve` и `mcp`.
+- **Однократная команда** выполняет одно действие и завершает работу, например `tg personal messages list`. **Постоянная команда** продолжает выполняться, пока вы ее не остановите: `watch`, `serve` и `mcp`.
 - **Запись** — это любая команда, которая что-то меняет в Telegram: отправляет, редактирует, удаляет или помечает как прочитанное.
 
 ## На что можно положиться
@@ -38,19 +38,19 @@ title: "Как tg ведет себя в скриптах"
 | Только те поля, которые вам нужны | `--fields` |
 | Параметры команды без чтения документации | `tg commands` и `tg commands schema` |
 | Чтобы увидеть, что будет делать команда | `--dry-run` |
-| Чтобы узнать, произошла ли неудачная запись | `outcome_unknown`, `retryable` и `operationId` |
+| Чтобы узнать, произошла ли неудачная запись | `outcome_unknown` и `details.operationId` |
 
-Частичное чтение или скачивание может вернуть JSON с кодом `0`: проверьте `complete` и `batch` или `issue`. Загрузка, которая не удалась до первой страницы по причине, которую повтор не исправит (например, нет `--from`), завершается с кодом этой ошибки. JSONL частичной загрузки добавляет `batch_summary`; успешная часть сохраняется. Ошибки содержат `actions` с действиями, настройками и паузой для восстановления.
+Частичное чтение или скачивание может вернуть JSON с кодом `0`: проверьте `complete` и `batch` или `issue`. Загрузка, которая не удалась до первой страницы по причине, которую повтор не исправит (например, нет `--from`), завершается с кодом этой ошибки. JSONL частичной загрузки добавляет `batch_summary`; успешная часть сохраняется. Каждый неудавшийся элемент в `batch` содержит `actions` с действиями, настройками и паузой для восстановления.
 
 ## Как называются команды
 
 Команды используют `tg [profile] resource action`. Отчеты и счетчики находятся под `stats`, затем ресурс и отчет:
 
 ```sh
-tg stats messages show --by sender --limit 10 --json
-tg stats chats show <chat> --json
-tg stats tasks show --json
-tg stats charts <chat> --json
+tg personal stats messages show --by sender --limit 10 --json
+tg personal stats chats show <chat> --json
+tg personal stats tasks show --json
+tg personal stats charts <chat> --json
 ```
 
 Старые пути `messages stats`, `chats stats` и `tasks stats` больше не существуют, и для них нет псевдонимов. Если в ваших разрешениях указаны эти пути, просмотрите изменения с помощью `tg config migrate --dry-run`, а затем запустите `tg config migrate`. Разрешение на сбор статистики не отменяет отказ в разрешении на сообщения, чаты или задачи, указанные ниже.
@@ -59,7 +59,7 @@ tg stats charts <chat> --json
 
 `--json` создает JSON. `--jsonl` создает одно значение JSON в строке для команд, которые могут передаваться в потоковом режиме. В канале JSON выбирается автоматически. стандартный вывод содержит данные; stderr содержит диагностические сообщения. Явный флаг JSON имеет преимущество перед подключенным терминалом. `--help` и `--version` печатают текст на стандартный вывод, завершаются с кодом `0` и не запускают команду.
 
-Ошибка, завершающая команду, в машинном режиме — это один объект в stderr: `{"error":{"code":"…","message":"…","retryable":false}}`. Неизвестная команда, опция или отсутствующий обязательный аргумент завершается с кодом 2. `tg commands --json` предоставляет полную таблицу кодов выхода. `--quiet` скрывает обычную диагностику, но сохраняет ошибки. Машинный вывод не имеет цвета и анимации; `NO_COLOR` также отключает цвет при выводе текста.
+Ошибка, завершающая команду, в машинном режиме — это один объект в stderr: `{"error":{"code":"…","reason":"…","message":"…","details":{…}}}`. `reason` — это идентификатор через точку, например `output.too-large`; `details` содержит то, что называет сбой, например `candidates`, `operationId` или `permission`, а `retryable` — только если сбой это сообщает. `--debug` добавляет причину и стек вызовов. Неизвестная команда, опция или отсутствующий обязательный аргумент завершается с кодом 2. `tg commands --json` предоставляет полную таблицу кодов выхода. `--quiet` скрывает обычную диагностику, но сохраняет ошибки. Машинный вывод не имеет цвета и анимации; `NO_COLOR` также отключает цвет при выводе текста.
 
 ## Запуск без вопросов и ограничения
 
@@ -74,7 +74,7 @@ tg stats charts <chat> --json
 ## Меньшие результаты и что принимает команда
 
 ```sh
-tg messages list <chat> --json --fields id,text
+tg personal messages list <chat> --json --fields id,text
 tg commands messages list --json
 tg commands schema messages list --json
 ```
@@ -101,6 +101,6 @@ tg commands schema messages list --json
 
 ## Стандарты, которым мы следуем
 
-`tg` соответствует частям, применимым к [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) и [Рекомендациям по интерфейсу командной строки](https://clig.dev/), а также [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) и [Agent Навыки](https://agentskills.io/specification). [Архитектура](https://github.com/WireCatLabs/tg-cli/blob/v0.46.3/docs/dev/ARCHITECTURE.md) и [стандарт общего интерфейса командной строки](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/dev/STANDARD.md) описывают, как они применяются, а также исключения, сделанные специально. Мы не претендуем на полную сертификацию третьей стороной.
+`tg` соответствует частям, применимым к [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) и [Рекомендациям по интерфейсу командной строки](https://clig.dev/), а также [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) и [Agent Навыки](https://agentskills.io/specification). [Архитектура](https://github.com/WireCatLabs/tg-cli/blob/v0.53.0/docs/dev/ARCHITECTURE.md) и [стандарт общего интерфейса командной строки](https://github.com/WireCatLabs/cli-core/blob/main/docs/dev/STANDARD.md) описывают, как они применяются, а также исключения, сделанные специально. Мы не претендуем на полную сертификацию третьей стороной.
 
 Для настройки см. [руководство по настройке](./configuration.md); для каждого ключа и переменной среды — [справочник настроек](./configuration-reference.md).

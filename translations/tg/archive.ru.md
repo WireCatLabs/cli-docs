@@ -20,14 +20,14 @@ tg сохраняет каждое прочитанное сообщение н�
 
 | Задача | Команда |
 |---|---|
-| Посмотрите, какая часть каждого чата сохраняется | `tg store status` |
-| Загрузите историю чата или историю каждого чата | `tg store fetch <chat>`, `tg store fetch --all` |
-| Запустить длительную загрузку в фоновом режиме | `tg store fetch <chat> --background`, `tg store jobs list` |
-| Постоянно держите архив в актуальном состоянии | `tg server start`, `tg server install` |
+| Посмотрите, какая часть каждого чата сохраняется | `tg personal store status` |
+| Загрузите историю чата или историю каждого чата | `tg personal messages sync <chat>`, `tg personal messages sync --all` |
+| Запустить длительную загрузку в фоновом режиме | `tg personal messages sync <chat> --background`, `tg personal store jobs list` |
+| Постоянно держите архив в актуальном состоянии | `tg personal server start`, `tg personal server install` |
 | Чтение чатов без подключения | `tg --offline messages list <chat>` |
-| Экспортируйте чат в строки JSON или Markdown | `tg store export <chat> --output <file>` |
-| Подготовить сообщения для агентского брифа | `tg messages evidence <chat>` |
-| Проверка, резервное копирование и восстановление архива | `tg store check`, `tg store backup`, `tg store restore` |
+| Экспортируйте чат в строки JSON или Markdown | `tg personal store export <chat> --output <file>` |
+| Подготовить сообщения для агентского брифа | `tg personal messages evidence <chat>` |
+| Проверка, резервное копирование и восстановление архива | `tg personal store check`, `tg personal store backup`, `tg personal store restore` |
 
 ## Проверьте и дополните историю чата
 
@@ -40,19 +40,19 @@ tg сохраняет каждое прочитанное сообщение н�
 **Проверить сохранённую историю:**
 
 ```sh
-tg store status "Book club" --json
+tg personal store status "Book club" --json
 ```
 
 **Скачать выбранный период:**
 
 ```sh
-tg store fetch "Book club" --since-time 30d --json
+tg personal messages sync "Book club" --since-time 30d --json
 ```
 
 **Проверить ещё раз:**
 
 ```sh
-tg store status "Book club" --json
+tg personal store status "Book club" --json
 ```
 
 **Пример ответа агента:**
@@ -70,65 +70,65 @@ tg store status "Book club" --json
 
 - **Все прочитанные данные.** Чаты из `chats list`, сообщения из `messages list`, `messages context`, `inbox` и отправленные вами сообщения.
 - **События, полученные `serve`** во время работы: новые сообщения, правки, удаления и реакции ([ниже](#keeping-it-current-serve)). `watch` тоже сохраняет выводимые сообщения.
-- **Явная загрузка:** история чата через `tg store fetch`, список контактов через `tg contacts sync`.
+- **Явная загрузка:** история чата через `tg personal messages sync`, список контактов через `tg personal contacts sync`.
 
 Он сохраняет полный текст каждого прочитанного сообщения. Файл доступен для чтения только вашему пользователю и не зашифрован ([то, что попадает на диск](./security.md#what-reaches-the-disk)).
 
 **Один файл используется всеми аккаунтами и CLI мессенджеров**, построенными на той же библиотеке, например [max-cli](https://github.com/WireCatLabs/max-cli):
 
 ```text
-~/.local/share/cli-messaging/wirecat.db       # Linux; MESSAGING_STORE moves it
+~/.local/share/WireCat/wirecat.db             # Linux and macOS; MESSAGING_STORE moves it
 ```
 
-`tg session end` завершает вход, но не меняет базу.
+`tg personal session end` завершает вход, но не меняет базу.
 
 ## Полнота истории
 
 ```sh
-tg store status                  # per chat: messages stored, the oldest and newest, the stretches held completely
+tg personal store status         # per chat: messages stored, the oldest and newest, the stretches held completely
 ```
 
 ```sh
-tg store status "Book club"      # one chat
+tg personal store status "Book club"  # one chat
 ```
 
-Полностью сохранённый участок — последовательность сообщений без пропусков. Разрозненное чтение оставляет пробелы; `store fetch` заполняет их.
+Полностью сохранённый участок — последовательность сообщений без пропусков. Разрозненное чтение оставляет пробелы; `messages sync` заполняет их.
 
 ## Загрузка истории чата
 
 ```sh
-tg store fetch "Book club" --estimate         # what a full fetch would still cost; asks Telegram nothing
+tg personal messages sync "Book club" --estimate  # what a full fetch would still cost; asks Telegram nothing
 ```
 
 ```sh
-tg store fetch "Book club"                    # fetch it, newest to oldest
+tg personal messages sync "Book club"           # fetch it, newest to oldest
 ```
 
 ```sh
-tg store fetch "Book club"                    # run again to continue where it stopped
+tg personal messages sync "Book club"           # run again to continue where it stopped
 ```
 
 ```sh
-tg store fetch "Book club" --since-time 30d   # only back to 30 days ago
+tg personal messages sync "Book club" --since-time 30d  # only back to 30 days ago
 ```
 
 ```sh
-tg store fetch "Book club" --last 5000        # only until the newest 5000 are held
+tg personal messages sync "Book club" --last 5000  # only until the newest 5000 are held
 ```
 
 ```sh
-tg store fetch "Book club" --limit 5000       # up to 5000 messages in this run
+tg personal messages sync "Book club" --limit 5000  # up to 5000 messages in this run
 ```
 
 ```sh
-tg store fetch --all                          # every chat, most recently active first: the last 90 days
+tg personal messages sync --all                 # every chat, most recently active first: the last 90 days
 ```
 
 ```sh
-tg store fetch --all --since-time 365d        # every chat, back to a year ago
+tg personal messages sync --all --since-time 365d  # every chat, back to a year ago
 ```
 
-`store fetch` читает и сохраняет историю постранично, от новых сообщений к старым. **Загрузку можно продолжить:** после каждой страницы записывается прогресс. Ctrl-C, `--timeout`, лимит `--limit`, `--since-time`, `--last` и длительное ожидание Telegram останавливают загрузку без потери данных. Следующий запуск пропускает сохранённое. `--since-time` и `--last` определяют глубину истории: используйте один из них. Неустранимый сбой до первой сохранённой страницы завершает команду ошибкой; после того как часть сохранена, сбой может вернуть сохранённое вместе с `issue`.
+`messages sync` читает и сохраняет историю постранично, от новых сообщений к старым. **Загрузку можно продолжить:** после каждой страницы записывается прогресс. Ctrl-C, `--timeout`, лимит `--limit`, `--since-time`, `--last` и длительное ожидание Telegram останавливают загрузку без потери данных. Следующий запуск пропускает сохранённое. `--since-time` и `--last` определяют глубину истории: используйте один из них. Неустранимый сбой до первой сохранённой страницы завершает команду ошибкой; после того как часть сохранена, сбой может вернуть сохранённое вместе с `issue`.
 
 **Каждая страница — запрос от вашего аккаунта** до 100 сообщений. Запуск останавливается после `--limit` сообщений (по умолчанию 1000); `--page-size` задаёт размер страницы (100), `--pause` — паузу между страницами (1 секунда; варианты `500ms`, `30s`, `2m`). Короткое ожидание Telegram выполняется; ожидание более пяти минут завершает запуск, который можно повторить позже. Сначала используйте `--estimate`: оценка строится по локальной базе без запросов.
 
@@ -139,107 +139,107 @@ tg store fetch --all --since-time 365d        # every chat, back to a year ago
 Длительная загрузка может выполняться заданием, которое продолжает работу после завершения команды. У него нет 30-секундного предела по умолчанию; явный `--timeout` по-прежнему его ограничивает:
 
 ```sh
-tg store fetch "Book club" --background     # prints the job id
+tg personal messages sync "Book club" --background  # prints the job id
 ```
 
 ```sh
-tg store jobs list                          # background jobs, newest first
+tg personal store jobs list                 # background jobs, newest first
 ```
 
 ```sh
-tg store jobs list --state failed           # only failed ones: running, done, failed, cancelled or died
+tg personal store jobs list --state failed  # only failed ones: running, done, failed, cancelled or died
 ```
 
 ```sh
-tg store jobs show                          # the newest job, and what the store now holds of its chat
+tg personal store jobs show                 # the newest job, and what the store now holds of its chat
 ```
 
 ```sh
-tg store jobs show <job>
+tg personal store jobs show <job>
 ```
 
 ```sh
-tg store jobs cancel <job>                  # stops after the current page; a later fetch resumes
+tg personal store jobs cancel <job>         # stops after the current page; a later fetch resumes
 ```
 
 ```sh
-tg store jobs retry <job>                   # a failed or died job again, as a new job with the same options
+tg personal store jobs retry <job>          # a failed or died job again, as a new job with the same options
 ```
 
 ```sh
-tg store jobs retry --failed                # every chat whose newest job failed or died
+tg personal store jobs retry --failed       # every chat whose newest job failed or died
 ```
 
 ```sh
-tg store jobs clear                         # forget finished jobs and their logs; a running job stays
+tg personal store jobs clear                # forget finished jobs and their logs; a running job stays
 ```
 
 ## Поиск
 
-`tg search messages` находит сохраненные сообщения по словам, отправителю, чату, дате, файлам, ссылкам и вашим собственным тегам. При поиске по словам также по умолчанию запрашивается Telegram; `--backend archive` читает только сохраненные сообщения. `--sync-first` первым получает новые сообщения. [Поиск сообщений](./search.md) — это руководство с сохраненными поисковыми запросами и счетчиками. Пустой ответ означает «нет в этом архиве»: сначала скачайте чат.
+`tg personal search messages` находит сохраненные сообщения по словам, отправителю, чату, дате, файлам, ссылкам и вашим собственным тегам. При поиске по словам также по умолчанию запрашивается Telegram; `--backend archive` читает только сохраненные сообщения. `--sync-first` первым получает новые сообщения. [Поиск сообщений](./search.md) — это руководство с сохраненными поисковыми запросами и счетчиками. Пустой ответ означает «нет в этом архиве»: сначала скачайте чат.
 
 ## Разговоры внутри группы
 
-В активной группе смешивает сразу несколько разговоров. `tg conversations` отделяет их от сохраненных сообщений и находит их по тому, о чем они были, на этом компьютере: [поиск по теме](./topic-search.md).
+В активной группе смешивает сразу несколько разговоров. `tg personal conversations` отделяет их от сохраненных сообщений и находит их по тому, о чем они были, на этом компьютере: [поиск по теме](./topic-search.md).
 
 ## Экспорт
 
 ```sh
-tg store export "Book club" --jsonl > book-club.jsonl       # one message per line, oldest first
+tg personal store export "Book club" --jsonl > book-club.jsonl  # one message per line, oldest first
 ```
 
 ```sh
-tg store export "Book club" --json > book-club.json         # { "items": [...] }
+tg personal store export "Book club" --json > book-club.json  # { "items": [...] }
 ```
 
 ```sh
-tg store export "Book club" --format markdown > book-club.md   # a transcript: a heading per day, replies and forwards quoted
+tg personal store export "Book club" --format markdown > book-club.md  # a transcript: a heading per day, replies and forwards quoted
 ```
 
 ```sh
-tg store export "Book club" --output book-club.jsonl --since-time 7d     # the last week, into a file only you can read
+tg personal store export "Book club" --output book-club.jsonl --since-time 7d  # the last week, into a file only you can read
 ```
 
-Экспорт включает только сохранённые данные и не обращается к Telegram. Сначала проверьте `tg store status`; для полной истории загрузите её.
+Экспорт включает только сохранённые данные и не обращается к Telegram. Сначала проверьте `tg personal store status`; для полной истории загрузите её.
 
 `--output <file>` записывает JSON по строкам или текст переписки с `--format markdown` в новый файл, доступный только вам. Команда показывает путь и число сообщений, существующие файлы не перезаписывает. `--since-time` принимает время ISO 8601 или период `30m`, `2h`, `1d` назад.
 
 ### В каталог, и только изменения
 
 ```sh
-tg store export "Book club" "Work" --to ~/tg-export   # a JSON-lines file per chat, and manifest.json
+tg personal store export "Book club" "Work" --to ~/tg-export  # a JSON-lines file per chat, and manifest.json
 ```
 
 ```sh
-tg store export --kind group --to ~/tg-groups          # every stored group
+tg personal store export --kind group --to ~/tg-groups  # every stored group
 ```
 
 ```sh
-tg store export --all --to ~/tg-all                    # every stored chat of this account
+tg personal store export --all --to ~/tg-all           # every stored chat of this account
 ```
 
 Повторный запуск в тот же каталог добавляет только изменения с прошлого раза: новые сообщения, правки (в том числе старых сообщений) и удаления. Удалённое сообщение записывается без текста, как `{ "id", "chatId", "deleted": true }`. Каталог с другими файлами или экспортированный из другого аккаунта отклоняется. Изменение одних только реакций изменением не считается.
 
 ### С паролем
 
-`--encrypt` в `store export` (с `--output` или `--to`) и в `store backup` сжимает файл и шифрует его паролем — других программ не нужно. `tg store decrypt <file> --output <new file>` расшифровывает файл; `tg store restore` запрашивает пароль зашифрованной копии.
+`--encrypt` в `store export` (с `--output` или `--to`) и в `store backup` сжимает файл и шифрует его паролем — других программ не нужно. `tg personal store decrypt <file> --output <new file>` расшифровывает файл; `tg personal store restore` запрашивает пароль зашифрованной копии.
 
 - **Пароль нигде не хранится** — ни в настройках, ни в хранилище ключей, ни в записях. Если вы его потеряете, файл открыть нельзя.
 - Вводите пароль сами в скрытом запросе, который спрашивает его дважды. Агент, которому вы его дали, передаёт пароль через stdin, а не аргументом: аргументы видны другим программам на компьютере.
 
   ```sh
-  printf '%s' 'password' | tg store backup ~/tg.sealed --encrypt
+  printf '%s' 'password' | tg personal store backup ~/tg.sealed --encrypt
   ```
 
 - В зашифрованный каталог за один запуск пишется один файл. Его `manifest.json` не содержит названий чатов, а запуск с другим паролем отклоняется.
 
 ## Исходные данные для сводки по чату
 
-Когда вы запрашиваете у своего агента краткую информацию о чате, `tg messages evidence <chat>` подготавливает сообщения, которые он должен прочитать: один пакет из локального хранилища этого профиля. Команда никогда не подключается и не отмечает сообщения прочитанными, даже без `--offline`:
+Когда вы запрашиваете у своего агента краткую информацию о чате, `tg personal messages evidence <chat>` подготавливает сообщения, которые он должен прочитать: один пакет из локального хранилища этого профиля. Команда никогда не подключается и не отмечает сообщения прочитанными, даже без `--offline`:
 
 ```sh
-tg messages evidence "Project Alpha" --limit 20 --json
-tg messages evidence "Project Alpha" --before-id <nextBeforeId> --json
+tg personal messages evidence "Project Alpha" --limit 20 --json
+tg personal messages evidence "Project Alpha" --before-id <nextBeforeId> --json
 ```
 
 Сообщения идут от новых к старым, с указателями источников и отпечатками содержимого. `--limit` принимает 1–100, по умолчанию лимит профиля. Полные сообщения занимают максимум 64 КиБ JSON; заголовок пакета не учитывается. JSON и JSONL возвращают один полный пакет.
@@ -276,30 +276,30 @@ tg --offline contacts list
 
 ## Поддержание актуальности: `serve`
 
-`tg serve` работает до остановки и сохраняет новые сообщения, правки, удаления и реакции. При старте догружает события, пропущенные во время остановки. Для профиля может работать только один `serve`; второй отклоняется. **Самостоятельного запуска нет.**
+`tg personal serve` работает до остановки и сохраняет новые сообщения, правки, удаления и реакции. При старте догружает события, пропущенные во время остановки. Для профиля может работать только один `serve`; второй отклоняется. **Самостоятельного запуска нет.**
 
-`tg watch` отличается: он печатает новые сообщения с этого момента и не догоняет пропущенное ([новые сообщения по мере их поступления](./usage.md#new-messages-as-they-arrive)).
+`tg personal watch` отличается: он печатает новые сообщения с этого момента и не догоняет пропущенное ([новые сообщения по мере их поступления](./usage.md#new-messages-as-they-arrive)).
 
 ### В фоновом режиме
 
 ```sh
-tg server start       # start serve in the background; answers once it listens
+tg personal server start  # start serve in the background; answers once it listens
 ```
 
 ```sh
-tg server status      # whether it runs, since when, who started it
+tg personal server status  # whether it runs, since when, who started it
 ```
 
 ```sh
-tg server logs -n 50  # its latest log lines
+tg personal server logs -n 50  # its latest log lines
 ```
 
 ```sh
-tg server stop
+tg personal server stop
 ```
 
 ```sh
-tg server restart
+tg personal server restart
 ```
 
 ### Как системная служба
@@ -307,15 +307,15 @@ tg server restart
 Для работы между входами в систему установите пользовательскую службу: systemd в Linux или launchd в macOS.
 
 ```sh
-tg server install      # writes ~/.config/systemd/user/tg-serve-<profile>.service; starts nothing
+tg personal server install  # writes ~/.config/systemd/user/tg-serve-<profile>.service; starts nothing
 ```
 
 ```sh
-tg server start        # starts it — through the unit, now that there is one
+tg personal server start  # starts it — through the unit, now that there is one
 ```
 
 ```sh
-tg server status
+tg personal server status
 systemctl --user enable tg-serve-default    # only if it should start at every login
 ```
 
@@ -323,9 +323,9 @@ systemctl --user enable tg-serve-default    # only if it should start at every l
 
 - Служба запускает те `node` и `tg`, которыми установлена. После переноса или смены версии Node установите её заново.
 - Она получает профиль, `TG_*_DIR` и `MESSAGING_STORE` из оболочки, запустившей `server install`, и больше ничего.
-- **После `server start` проверьте журнал:** `tg server logs`. Служба читает данные приложения из хранилища ключей. Если оно заблокировано до входа пользователя, запуск не сработает; systemd повторяет попытку каждые 30 секунд, причина будет в журнале.
-- **Уже отозванный вход не даёт службе запуститься.** `serve` проверяет его до сообщения о готовности и завершается с кодом 4; после этого установленная служба остаётся остановленной. Войдите через `tg session start`, затем выполните `tg server start`. Вход, отозванный во время работы службы, тоже завершает её с кодом 4 — примерно в течение 15 минут. Если данные приложения недоступны, а сохранённая сессия есть, serve завершается с кодом 12, и systemd повторяет запуск. В macOS агент не перезапускается ни после какой ошибки, поскольку launchd не умеет исключить один код завершения; запустите его снова через `tg server start`. Чтобы обновить старую службу, снова выполните `tg server install`.
-- `tg server uninstall` удаляет службу. Сначала остановите её.
+- **После `server start` проверьте журнал:** `tg personal server logs`. Служба читает данные приложения из хранилища ключей. Если оно заблокировано до входа пользователя, запуск не сработает; systemd повторяет попытку каждые 30 секунд, причина будет в журнале.
+- **Уже отозванный вход не даёт службе запуститься.** `serve` проверяет его до сообщения о готовности и завершается с кодом 4; после этого установленная служба остаётся остановленной. Войдите через `tg personal session start`, затем выполните `tg personal server start`. Вход, отозванный во время работы службы, тоже завершает её с кодом 4 — примерно в течение 15 минут. Если данные приложения недоступны, а сохранённая сессия есть, serve завершается с кодом 12, и systemd повторяет запуск. В macOS агент не перезапускается ни после какой ошибки, поскольку launchd не умеет исключить один код завершения; запустите его снова через `tg personal server start`. Чтобы обновить старую службу, снова выполните `tg personal server install`.
+- `tg personal server uninstall` удаляет службу. Сначала остановите её.
 - `tg upgrade` перезапускает работающий сервер для перехода на новую версию.
 
 Автоматические ответы от `serve` на тестовые аккаунты описаны в [автоматические ответы](./replies.md).
@@ -333,41 +333,41 @@ systemctl --user enable tg-serve-default    # only if it should start at every l
 ## Проверка, резервная копия и восстановление
 
 ```sh
-tg store info                          # where the file is, its size, its schema, how many rows; changes nothing
+tg personal store info                 # where the file is, its size, its schema, how many rows; changes nothing
 ```
 
 ```sh
-tg store check                         # integrity, search indexes, disk, and which chats are behind; changes nothing
+tg personal store check                # integrity, search indexes, disk, and which chats are behind; changes nothing
 ```
 
 ```sh
-tg store backup ~/tg-store.db          # a copy of the store, while it is in use; --encrypt for a password
+tg personal store backup ~/tg-store.db  # a copy of the store, while it is in use; --encrypt for a password
 ```
 
 ```sh
-tg store restore ~/tg-store.db         # put a backup in place of the store
+tg personal store restore ~/tg-store.db  # put a backup in place of the store
 ```
 
 ```sh
-tg store migrate                       # bring the store up to this version's schema
+tg personal store migrate              # bring the store up to this version's schema
 ```
 
 ```sh
-tg store clear --left --allow-dangerous  # delete the chats you have left, with their messages
+tg personal store clear --left --allow-dangerous  # delete the chats you have left, with their messages
 ```
 
 - **`backup` не перезаписывает файлы:** укажите новый путь. Копирование возможно во время работы команд и `serve`.
-- **`restore` сохраняет заменяемую базу** рядом и показывает путь. Восстановление запрещено, пока работает `serve` любого профиля; сначала `tg server stop`. Проверяются доступность и целостность копии. После восстановления перезапустите все `serve` и `mcp` обоих CLI, чтобы они читали восстановленную базу.
-- **Чат, из которого вы вышли, исчезает из `chats list --offline`** после следующего полного чтения списка через `tg chats list`; сообщения остаются. При повторном вступлении чат возвращается. **`store clear --left`** удаляет эти чаты с сообщениями. Без `--allow-dangerous` команда только показывает объём удаления. Историю покинутого чата нельзя загрузить повторно.
+- **`restore` сохраняет заменяемую базу** рядом и показывает путь. Восстановление запрещено, пока работает `serve` любого профиля; сначала `tg personal server stop`. Проверяются доступность и целостность копии. После восстановления перезапустите все `serve` и `mcp` обоих CLI, чтобы они читали восстановленную базу.
+- **Чат, из которого вы вышли, исчезает из `chats list --offline`** после следующего полного чтения списка через `tg personal chats list`; сообщения остаются. При повторном вступлении чат возвращается. **`store clear --left`** удаляет эти чаты с сообщениями. Без `--allow-dangerous` команда только показывает объём удаления. Историю покинутого чата нельзя загрузить повторно.
 - **`migrate`** нужен, только если `info` или `check` сообщает об устаревшей структуре. Сначала сделайте копию. Старые сообщения нормализуются пакетами; остановка не теряет прогресс.
 
 ## Восстановление и обслуживание индексов
 
-`tg store migrate` строит незавершенные индексы; `tg store reindex` восстанавливает их. `store info` и `store check` показывают, готовы ли индекс слова и индекс основы слова. Поиск использует основы (часть слова, форма которой остается неизменной) для поиска форм слов; `exact:` и `--exact` выбирают точные формы.
+`tg personal store migrate` строит незавершенные индексы; `tg personal store reindex` восстанавливает их. `store info` и `store check` показывают, готовы ли индекс слова и индекс основы слова. Поиск использует основы (часть слова, форма которой остается неизменной) для поиска форм слов; `exact:` и `--exact` выбирают точные формы.
 
-`tg config set searchStemmers.cyrillic russian` и `searchStemmers.latin english,spanish` устанавливают стеммеры общего хранилища: латиница принимает `english`, `spanish` или оба (по умолчанию, поэтому латинское слово соответствует основам обоих), а `none` отключает один; запустите `store reindex` по вашему выбору. Когда обновление tg меняет значение по умолчанию, основы перестраиваются сами: пока они не будут готовы, поиск соответствует точным словоформам и говорит об этом, `tg serve` завершает их в фоновом режиме, а `store migrate` сразу. Настройка затрагивает как мессенджеры, так и каждый профиль; процесс, заблокированный профилем, не может его изменить.
+`tg config set searchStemmers.cyrillic russian` и `searchStemmers.latin english,spanish` устанавливают стеммеры общего хранилища: латиница принимает `english`, `spanish` или оба (по умолчанию, поэтому латинское слово соответствует основам обоих), а `none` отключает один; запустите `store reindex` по вашему выбору. Когда обновление tg меняет значение по умолчанию, основы перестраиваются сами: пока они не будут готовы, поиск соответствует точным словоформам и говорит об этом, `tg personal serve` завершает их в фоновом режиме, а `store migrate` сразу. Настройка затрагивает как мессенджеры, так и каждый профиль; процесс, заблокированный профилем, не может его изменить.
 
-`tg store repair --dry-run --json` просматривает структурный ремонт и откатывает его. `store repair` применяет его без удаления данных: несовпадающие таблицы сохраняются как копии, а оставшиеся там строки или столбцы именуются в ответе. Проверьте копии перед удалением одной с помощью `store copies delete <exact name>`; `store repair` называет их в своем ответе. Перед восстановлением остановите процессы, использующие хранилище.
+`tg personal store repair --dry-run --json` просматривает структурный ремонт и откатывает его. `store repair` применяет его без удаления данных: несовпадающие таблицы сохраняются как копии, а оставшиеся там строки или столбцы именуются в ответе. Проверьте копии перед удалением одной с помощью `store copies delete <exact name>`; `store repair` называет их в своем ответе. Перед восстановлением остановите процессы, использующие хранилище.
 
 ## Совместимость версий базы
 
@@ -380,7 +380,7 @@ the message store was written by a newer version (schema N, needs at least M; th
 **Общая локальная копия хранится в `wirecat.db`.** Старый `messages.db` не переносится: при открытии копии по умолчанию он удаляется вместе с `-wal` и `-shm`.
 Если в старом файле нужны заметки, псевдонимы, метки, задачи или расшифровки, остановите использующие его программы и скопируйте файл со служебными файлами в другую папку **до первого запуска новой версии**.
 При заданном `MESSAGING_STORE` очистка не выполняется; открытый другим процессом файл остаётся до следующего открытия копии.
-Сообщения из Telegram можно заново получить через `tg store fetch --all`; данные, существовавшие только локально, с сервера не вернутся. Вход сохраняется отдельно.
+Сообщения из Telegram можно заново получить через `tg personal messages sync --all`; данные, существовавшие только локально, с сервера не вернутся. Вход сохраняется отдельно.
 Обновляйте `max` и `tg` вместе, чтобы они использовали одну копию.
 
 Если нужно обновить схему `wirecat.db`, выполните `tg upgrade` после сохранения нужного старого файла.
@@ -389,11 +389,11 @@ the message store was written by a newer version (schema N, needs at least M; th
 
 [Автоматические ответы](./replies.md) — это руководство по правилам ответа. Этот раздел представляет собой подробную информацию о том, как `serve` их применяет.
 
-`tg replies test [rule] --since-time 7d --json` имитирует то, что будут получать сохраненные сообщения; он никогда не отправляет. Правила находятся в файле ответов профиля. `replies status`, `pause` и `resume` проверяют/контролируют их. Фактические общие ответы `serve` требуют явного разрешения `replies.send:allow` и отправляются всем, кому соответствует правило, если только аудитория не ограничивает их. По умолчанию отправка запрещена. Изменения, сообщения до запуска и уже отвеченные сообщения игнорируются. `ask` не может отправить сообщение из автоматической службы.
+`tg personal replies test [rule] --since-time 7d --json` имитирует то, что будут получать сохраненные сообщения; он никогда не отправляет. Правила находятся в файле ответов профиля. `replies status`, `pause` и `resume` проверяют/контролируют их. Фактические общие ответы `serve` требуют явного разрешения `replies.send:allow` и отправляются всем, кому соответствует правило, если только аудитория не ограничивает их. По умолчанию отправка запрещена. Изменения, сообщения до запуска и уже отвеченные сообщения игнорируются. `ask` не может отправить сообщение из автоматической службы.
 
-Создайте отключенное правило с помощью `tg replies add away`, отредактируйте его с помощью `replies edit away --template`, затем используйте `replies on away` или `off away`. Для включенных правил ответа требуется непустой шаблон. Редактирование изменяет только именованные поля; списки представляют собой замены, разделенные запятыми, пустая строка очищает одну. Варианты включают `--do reply,task`, `--kinds`, `--chats`, `--not-chats`, `--words`, `--question` / `--no-question`, `--mentions-me` / `--no-mentions-me`, `--people`, `--not-people`, `--contacts-only` / `--no-contacts-only`, `--as-reply` / `--no-as-reply`, `--per-chat`, `--per-person` и поля часов `--outside`, `--days`, `--timezone` (`--no-hours` очищает их). Для первой настройки часов требуются все три поля. Недопустимые изменения сохраняют файл, другие правила, аудиторию и историю ответов.
+Создайте отключенное правило с помощью `tg personal replies add away`, отредактируйте его с помощью `replies edit away --template`, затем используйте `replies on away` или `off away`. Для включенных правил ответа требуется непустой шаблон. Редактирование изменяет только именованные поля; списки представляют собой замены, разделенные запятыми, пустая строка очищает одну. Варианты включают `--do reply,task`, `--kinds`, `--chats`, `--not-chats`, `--words`, `--question` / `--no-question`, `--mentions-me` / `--no-mentions-me`, `--people`, `--not-people`, `--contacts-only` / `--no-contacts-only`, `--as-reply` / `--no-as-reply`, `--per-chat`, `--per-person` и поля часов `--outside`, `--days`, `--timezone` (`--no-hours` очищает их). Для первой настройки часов требуются все три поля. Недопустимые изменения сохраняют файл, другие правила, аудиторию и историю ответов.
 
-`tg replies audience` показывает аудиторию профиля; `--reply all|listed`, `--allow-people`, `--allow-chats`, `--deny-people` и `--deny-chats` заменяют именованные поля. Отрицание побеждает; указан с пустым списком разрешенных, никому не отвечает; новый файл отвечает всем, кому соответствует правило. Локальная задача правила может открыться даже там, где ответ запрещен.
+`tg personal replies audience` показывает аудиторию профиля; `--reply all|listed`, `--allow-people`, `--allow-chats`, `--deny-people` и `--deny-chats` заменяют именованные поля. Отрицание побеждает; указан с пустым списком разрешенных, никому не отвечает; новый файл отвечает всем, кому соответствует правило. Локальная задача правила может открыться даже там, где ответ запрещен.
 
 Шаблоны используют переменные Liquid `sender.firstName`, `sender.name`, `chat.title`, `chat.kind` и
 `now` в часовом поясе рабочего интервала правила (без него — UTC), с фильтрами вроде `default` и
@@ -416,13 +416,13 @@ Thanks, {{ sender.firstName | default: "there" }}.
 `config set` / `unset` принимают поля с точечной записью; `config show` сообщает источник каждого. Ключи остаются в
 `models text key set`; пользовательские адреса API используют ключ своего хоста и порта, а не ключ публичного провайдера.
 
-`tg replies consents show|grant|revoke` управляет согласием на модель отдельно от разрешения отправлять.
+`tg personal replies consents show|grant|revoke` управляет согласием на модель отдельно от разрешения отправлять.
 Grant явно разрешает передачу входящих данных настроенному провайдеру для всего профиля,
 кроме собственных идентификаторов чатов, исключённых через `replies consents deny`; `allow` снимает исключение без
 предоставления согласия. Исключения сохраняются после grant/revoke. Другому адресу API нужно новое согласие.
 Изменения согласия, конфигурации, паузы, правил и аудитории во время вызова модели проверяются перед отправкой.
 
-`tg replies test` показывает инструкции и запасной ответ без вызовов модели. `tg replies test --ai` явно
+`tg personal replies test` показывает инструкции и запасной ответ без вызовов модели. `tg personal replies test --ai` явно
 отправляет сохранённые данные сообщений модели, на которую дано согласие, но не отправляет ответ в мессенджер и не меняет
 историю ответов; его нельзя сочетать с `--offline`.
 

@@ -28,14 +28,14 @@ title: "Статистика"
 
 | Вопрос | Команда |
 | --- | --- |
-| Какие сообщения получили наибольшее количество реакций | `tg stats messages top` |
-| Кто больше всех отвечает на вопросы | `tg stats contacts top` |
-| Какие вопросы ждут ответа | `tg stats messages unanswered` |
-| Как быстро отвечает один человек | `tg stats contacts responses` |
-| Получили ли новички помощь | `tg stats chats newcomers` |
-| Останутся ли новички | `tg stats chats retention` |
-| Какие посты были просмотрены, но не обсуждены | `tg stats messages discussion` |
-| Насколько свежи просмотры и реакции | `tg stats messages counters show` |
+| Какие сообщения получили наибольшее количество реакций | `tg personal stats messages top` |
+| Кто больше всех отвечает на вопросы | `tg personal stats contacts top` |
+| Какие вопросы ждут ответа | `tg personal stats messages unanswered` |
+| Как быстро отвечает один человек | `tg personal stats contacts responses` |
+| Получили ли новички помощь | `tg personal stats chats newcomers` |
+| Останутся ли новички | `tg personal stats chats retention` |
+| Какие посты были просмотрены, но не обсуждены | `tg personal stats messages discussion` |
+| Насколько свежи просмотры и реакции | `tg personal stats messages counters show` |
 
 Все запросы, имена и результаты ниже — вымышленные примеры. Замените название чата своим. Таблицы показывают, как агент может оформить ответ; команда с `--json` возвращает данные для него.
 
@@ -50,7 +50,7 @@ title: "Статистика"
 **Команда:**
 
 ```sh
-tg stats messages top --chat "Hiking" --measure reactions --limit 3 --json
+tg personal stats messages top --chat "Hiking" --measure reactions --limit 3 --json
 ```
 
 **Пример ответа агента:**
@@ -74,7 +74,7 @@ tg stats messages top --chat "Hiking" --measure reactions --limit 3 --json
 **Команда:**
 
 ```sh
-tg stats contacts top --chat "Hiking" --measure answers --limit 3 --json
+tg personal stats contacts top --chat "Hiking" --measure answers --limit 3 --json
 ```
 
 **Пример ответа агента:**
@@ -98,7 +98,7 @@ tg stats contacts top --chat "Hiking" --measure answers --limit 3 --json
 **Команда:**
 
 ```sh
-tg stats messages unanswered --chat "Hiking" --older-than 24h --json
+tg personal stats messages unanswered --chat "Hiking" --older-than 24h --json
 ```
 
 **Пример ответа агента:**
@@ -124,7 +124,7 @@ tg stats messages unanswered --chat "Hiking" --older-than 24h --json
 **Команда:**
 
 ```sh
-tg stats contacts responses --chat "Hiking" --answerer "Alex Rivera" --json
+tg personal stats contacts responses --chat "Hiking" --answerer "Alex Rivera" --json
 ```
 
 **Пример ответа агента:**
@@ -150,7 +150,7 @@ tg stats contacts responses --chat "Hiking" --answerer "Alex Rivera" --json
 **Команда:**
 
 ```sh
-tg stats chats newcomers "Hiking" --within 7d --json
+tg personal stats chats newcomers "Hiking" --within 7d --json
 ```
 
 **Пример ответа агента:**
@@ -175,7 +175,7 @@ tg stats chats newcomers "Hiking" --within 7d --json
 **Команда:**
 
 ```sh
-tg stats chats retention "Hiking" --checkpoints 1d,7d,30d --within 7d --timezone UTC --json
+tg personal stats chats retention "Hiking" --checkpoints 1d,7d,30d --within 7d --timezone UTC --json
 ```
 
 **Пример ответа агента:**
@@ -201,7 +201,7 @@ tg stats chats retention "Hiking" --checkpoints 1d,7d,30d --within 7d --timezone
 **Команда:**
 
 ```sh
-tg stats messages discussion --chat "News" --min-views 100 --max-replies 0 --json
+tg personal stats messages discussion --chat "News" --min-views 100 --max-replies 0 --json
 ```
 
 **Пример ответа агента:**
@@ -223,7 +223,7 @@ tg stats messages discussion --chat "News" --min-views 100 --max-replies 0 --jso
 **Команда:**
 
 ```sh
-tg stats messages counters show --chat "Hiking" --counters views,reactions --max-age 24h --limit 20 --json
+tg personal stats messages counters show --chat "Hiking" --counters views,reactions --max-age 24h --limit 20 --json
 ```
 
 **Пример ответа агента:**
@@ -240,7 +240,7 @@ tg stats messages counters show --chat "Hiking" --counters views,reactions --max
 Перед чтением новых счётчиков попросите показать точные сообщения и пределы.
 
 ```sh
-tg stats messages counters refresh --chat "Hiking" --counters views,reactions --max-messages 20 --sync-time 30s --dry-run --json
+tg personal stats messages counters refresh --chat "Hiking" --counters views,reactions --max-messages 20 --sync-time 30s --dry-run --json
 ```
 
 > **План:** не больше 20 сообщений, до 30 секунд. Просмотры и реакции поддерживаются.
@@ -256,6 +256,6 @@ tg stats messages counters refresh --chat "Hiking" --counters views,reactions --
 
 ## Больше контроля
 
-Вы можете выбрать период, выбрать показатель или комбинированный показатель и сохранить выборку для другого отчета. Формулы оценки, аргументы точной выборки и ограничения на количество страниц находятся в [спецификации общей статистики](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/rankings.md) и [справке по команде для статистики](./commands.md#tg-stats).
+Вы можете выбрать период, выбрать показатель или комбинированный показатель и сохранить выборку для другого отчета. Формулы оценки, аргументы точной выборки и ограничения на количество страниц находятся в [спецификации общей статистики](https://github.com/WireCatLabs/cli-core/blob/main/docs/rankings.md) и [справке по команде для статистики](./commands.md#tg-stats).
 
 Чтобы проверить вывод, попросите агента открыть вопрос, ответ или участников, на которых основана строка отчёта. Для следующего отчёта сначала [проверьте полноту архива](./archive.md).

@@ -17,20 +17,20 @@ Algunas palabras en esta página:
 
 | Tarea | Comando |
 | --- | --- |
-| Ver quién es una persona y dónde hablas con ella | `tg contacts profile` |
-| Lee lo que dijeron, en cada chat o en los chats que nombras | `tg contacts context` |
-| Compruebe si la cuenta parece un bot, una falsificación o un spammer | `tg contacts check` |
-| Consulta los miembros más sospechosos de un grupo | `tg chats members audit --deep` |
-| Registra que una cuenta de Telegram y una cuenta MAX son la misma persona | `tg contacts link` |
-| Mantenga su propio nombre y notas para una persona | `tg contacts alias`, `tg contacts notes` |
+| Ver quién es una persona y dónde hablas con ella | `tg personal contacts profile` |
+| Lee lo que dijeron, en cada chat o en los chats que nombras | `tg personal contacts context` |
+| Compruebe si la cuenta parece un bot, una falsificación o un spammer | `tg personal contacts check` |
+| Consulta los miembros más sospechosos de un grupo | `tg personal chats members audit --deep` |
+| Registra que una cuenta de Telegram y una cuenta MAX son la misma persona | `tg personal contacts link` |
+| Mantenga su propio nombre y notas para una persona | `tg personal contacts alias`, `tg personal contacts notes` |
 
 Cada opción de estos comandos se encuentra en la [referencia de comando para contactos](./commands.md#tg-contacts).
 
 ## Quién es: `contacts profile`
 
 ```sh
-tg contacts profile @example_user
-tg contacts profile @example_user --json
+tg personal contacts profile @example_user
+tg personal contacts profile @example_user --json
 ```
 
 Muestra todo lo que Telegram dice de la persona y cuántos mensajes suyos contiene tu almacén local en cada chat compartido:
@@ -78,7 +78,7 @@ Muestra todo lo que Telegram dice de la persona y cuántos mensajes suyos contie
 `theirMessages`, `firstAt` y `lastAt` proceden de tu almacén local, nunca de Telegram. Cuando `complete` es `false`, el almacén no contiene el chat desde el principio, así que el recuento es un mínimo y `firstAt` puede ser posterior al primer mensaje real de la persona. Descarga el chat para completar el historial:
 
 ```sh
-tg store fetch "Book club"
+tg personal messages sync "Book club"
 ```
 
 El perfil no requiere solicitudes adicionales: utiliza las mismas tres llamadas que `contacts show`. A la persona no se le dice que miraste.
@@ -88,14 +88,14 @@ El perfil no requiere solicitudes adicionales: utiliza las mismas tres llamadas 
 Sin `--chat`, ofrece un resumen desde el almacén: chats compartidos, el último mensaje en cada dirección, sus mensajes recientes en vuestro chat privado y en grupos, y dónde lo mencionaron otros. Las identidades de correo vinculadas también aportan el correo enviado y recibido. Nunca se conecta.
 
 ```sh
-tg contacts context @example_user
+tg personal contacts context @example_user
 ```
 
 Con `--chat`, muestra sus mensajes más recientes en cada chat indicado, de más antiguo a más nuevo, 20 por chat:
 
 ```sh
-tg contacts context @example_user --chat "Book club" --chat "Team" --limit 10
-tg contacts context @example_user --chat "Book club" --refresh
+tg personal contacts context @example_user --chat "Book club" --chat "Team" --limit 10
+tg personal contacts context @example_user --chat "Book club" --refresh
 ```
 
 ```json
@@ -124,8 +124,8 @@ tg contacts context @example_user --chat "Book club" --refresh
 ## Bot, cuenta falsa o spammer: `contacts check`
 
 ```sh
-tg contacts check @example_user
-tg contacts check @example_user --no-registries
+tg personal contacts check @example_user
+tg personal contacts check @example_user --no-registries
 ```
 
 ```json
@@ -171,8 +171,8 @@ Por ahora, la clave de CAS es opcional. Si Combot te proporciona una, guárdala 
 ## Miembros de un grupo: `chats members audit --deep`
 
 ```sh
-tg chats members audit "Book club"
-tg chats members audit "Book club" --deep 10
+tg personal chats members audit "Book club"
+tg personal chats members audit "Book club" --deep 10
 ```
 
 `chats members audit` puntúa a cada miembro con la lista de miembros y el almacén, sin una solicitud por persona, y enumera a quienes tienen algún motivo, de mayor a menor puntuación. `--deep 10` ejecuta después el `contacts check` completo para los diez primeros, a una persona por segundo, incluidas las listas de spam. No elimina a nadie. Se excluyen el propietario y los administradores.
@@ -184,8 +184,8 @@ tg chats members audit "Book club" --deep 10
 Telegram y MAX comparten un almacén local en este ordenador. Cuando sepas que una cuenta de Telegram y una de MAX son de la misma persona, regístralo:
 
 ```sh
-tg contacts link @example_user max:"Example User"
-tg contacts unlink @example_user
+tg personal contacts link @example_user max:"Example User"
+tg personal contacts unlink @example_user
 ```
 
 Después de eso, `contacts context` sin `--chat` reúne ambas cuentas: los chats que compartes y los mensajes de la cuenta de Telegram y de la cuenta MAX. `contacts profile` y `contacts context --chat` aún muestran solo la cuenta que nombraste. El enlace es sólo lo que registras: el mismo nombre en ambos servicios de mensajería nunca se toma como la misma persona.
@@ -193,17 +193,17 @@ Después de eso, `contacts context` sin `--chat` reúne ambas cuentas: los chats
 ## Tus propios nombres y notas: `contacts alias`, `contacts notes`
 
 ```sh
-tg contacts alias set "Bob Synthetic" Bobby            # your own name for a person, on this computer only
-tg contacts alias rm "Bob Synthetic"
-tg contacts notes add "Bob Synthetic" --file note.txt  # or the text from stdin
-tg contacts notes list "Bob Synthetic"
-tg contacts notes edit "Bob Synthetic" <id> --revision 1 --file note.txt
-tg contacts notes remove "Bob Synthetic" <id>
-tg contacts show "Bob Synthetic" --with-notes
-tg contacts list --search-notes flat                   # people whose notes contain this text
+tg personal contacts alias set "Bob Synthetic" Bobby   # your own name for a person, on this computer only
+tg personal contacts alias rm "Bob Synthetic"
+tg personal contacts notes add "Bob Synthetic" --file note.txt  # or the text from stdin
+tg personal contacts notes list "Bob Synthetic"
+tg personal contacts notes edit "Bob Synthetic" <id> --revision 1 --file note.txt
+tg personal contacts notes remove "Bob Synthetic" <id>
+tg personal contacts show "Bob Synthetic" --with-notes
+tg personal contacts list --search-notes flat          # people whose notes contain this text
 ```
 
-Los alias y notas permanecen en el archivo local y nunca llegan a Telegram. Un alias se aplica sólo en la cuenta que usas ahora; Se muestra una nota sobre una persona en cada perfil de inicio de sesión `tg` en esta computadora que la ve. `contacts rename` cambia el nombre de tus contactos de Telegram, algo diferente. Un comando busca a una persona por su alias a menos que coincida con el nombre de otra persona; entonces necesita la identificación. `--revision` detiene la edición de una nota que cambió desde que la leyó.
+Los alias y notas permanecen en el archivo local y nunca llegan a Telegram. Un alias se aplica sólo en la cuenta que usas ahora; Se muestra una nota sobre una persona en cada perfil de inicio de sesión `tg` en esta computadora que la ve. `contacts rename` cambia el nombre de tus contactos de Telegram, algo diferente. Un comando busca a una persona por su alias a menos que coincida con el nombre de otra persona; entonces necesita la identificación. `--revision` detiene la edición de una nota que cambió desde que la leyó. Actualizar los contactos conserva tus alias y notas, y vincular a dos personas no las fusiona.
 
 ## Siguiente paso
 

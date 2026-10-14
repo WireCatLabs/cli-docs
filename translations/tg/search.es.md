@@ -23,7 +23,7 @@ Pide a tu agente que encuentre mensajes que respondan a una pregunta y muestre l
 Para controlar la búsqueda desde la línea de comandos:
 
 ```sh
-tg search messages 'What time does Helix export run?' --discover --chat 990 --json
+tg personal search messages 'What time does Helix export run?' --discover --chat 990 --json
 ```
 
 Busca solo en el archivo local. Conserva los filtros de chat, autor y fecha. En MCP, pasa `discover: true` a la herramienta de búsqueda de mensajes. `query.discovery` describe el conjunto limitado de candidatos; `items[].discovery.missingTerms` indica términos ausentes y `parent` enlaza una respuesta con su mensaje padre. Una puntuación alta no mide la confianza en la respuesta: puede aparecer primero una pregunta, propuesta o decisión antigua. Lee la evidencia y comprueba la [cobertura del archivo](./archive.md) antes de concluir que falta un hecho.
@@ -32,52 +32,52 @@ Sin `--discover`, se mantiene la búsqueda estricta. La sintaxis booleana, frase
 
 ## Qué puedes hacer
 
-Cada búsqueda se realiza bajo un grupo de comandos, `tg search`. Cuando no sepa dónde se escribió algo, comience con `search all`.
+Cada búsqueda se realiza bajo un grupo de comandos, `tg personal search`. Cuando no sepa dónde se escribió algo, comience con `search all`.
 
 | Tarea | Comando |
 |---|---|
-| Busque mensajes, correo y notas en una sola respuesta | `tg search all '<query>'` |
-| Buscar solo mensajes de Telegram; sin `--discover`, también en su servidor | `tg search messages '<query>'` |
-| Buscar sólo la nota de correo importada | `tg search mail '<query>'` |
-| Buscar notas escritas en memo o importadas desde una carpeta | `tg search notes '<query>'` |
-| Encuentre una discusión según de qué se trata | `tg search conversations '<question>'` ([búsqueda de tema](./topic-search.md)) |
-| Buscar un tema en un grupo del foro por su título | `tg search topics <chat> '<words>'` |
-| Contar coincidencias por chat, remitente, día u hora | `tg stats messages show '<query>'` |
-| Guarde una búsqueda y ejecútela nuevamente más tarde | `tg searches create`, `tg search messages --saved <name>` |
+| Busque mensajes, correo y notas en una sola respuesta | `tg personal search all '<query>'` |
+| Buscar solo mensajes de Telegram; sin `--discover`, también en su servidor | `tg personal search messages '<query>'` |
+| Buscar sólo la nota de correo importada | `tg personal search mail '<query>'` |
+| Buscar notas escritas en memo o importadas desde una carpeta | `tg personal search notes '<query>'` |
+| Encuentre una discusión según de qué se trata | `tg personal search conversations '<question>'` ([búsqueda de tema](./topic-search.md)) |
+| Buscar un tema en un grupo del foro por su título | `tg personal search topics <chat> '<words>'` |
+| Contar coincidencias por chat, remitente, día u hora | `tg personal stats messages show '<query>'` |
+| Guarde una búsqueda y ejecútela nuevamente más tarde | `tg personal searches create`, `tg personal search messages --saved <name>` |
 
 ```sh
-tg search all 'lease agreement'                   # messages, mail and notes, best match first
+tg personal search all 'lease agreement'          # messages, mail and notes, best match first
 ```
 
 ```sh
-tg search all 'lease' --only messages,notes       # without mail
+tg personal search all 'lease' --only messages,notes  # without mail
 ```
 
 ```sh
-tg search messages 'lease' --chat "Book club"     # Telegram messages only, never mail
+tg personal search messages 'lease' --chat "Book club"  # Telegram messages only, never mail
 ```
 
 ```sh
-tg search mail 'invoice'                          # only the mail memo mail import brought in
+tg personal search mail 'invoice'                 # only the mail memo sync --mail brought in
 ```
 
 ```sh
-tg search notes 'budget' --type internal          # only notes written in memo
+tg personal search notes 'budget' --type internal  # only notes written in memo
 ```
 
 ```sh
-tg search conversations 'moving to the country'   # conversations close in meaning
+tg personal search conversations 'moving to the country'  # conversations close in meaning
 ```
 
 ```sh
-tg search topics "Hiking" "gear"                  # topic titles in one forum group
+tg personal search topics "Hiking" "gear"         # topic titles in one forum group
 ```
 
 `search all` dice qué es cada resultado: un mensaje (`msg:…`) o una nota (`note:…`). `search messages` nunca devuelve correo y `search mail` nunca devuelve mensajes de Telegram; sólo `search all` cubre ambos. `--type` limita `search messages` a texto, voz o archivos (`text|voice|file`) y `search notes` a notas escritas en memo o importadas desde una carpeta (`internal|file`). El correo admite `chat:` para una cadena de correos y `from:` para su remitente. Si un campo no corresponde —`kind:`/`topic:` para el correo, o `chat:`/`from:` para las notas—, `search all` omite esa fuente y explica por qué.
 
-El correo y las notas llegan al archivo local mediante memo: `memo mail import` y `memo import`. Sin ellos, `search all` busca únicamente mensajes.
+El correo y las notas llegan al archivo local mediante memo: `memo sync --mail` y `memo import`. Sin ellos, `search all` busca únicamente mensajes.
 
-El resto de esta página trata sobre la búsqueda de mensajes, `tg search messages`. Sin `--discover`, lee el archivo local y también solicita la búsqueda propia de Telegram ([abajo](#asking-telegram-too---backend)).
+El resto de esta página trata sobre la búsqueda de mensajes, `tg personal search messages`. Sin `--discover`, lee el archivo local y también solicita la búsqueda propia de Telegram ([abajo](#asking-telegram-too---backend)).
 
 ## Prueba una búsqueda concreta
 
@@ -90,7 +90,7 @@ Empieza por una frase y un chat. Este ejemplo busca en el historial guardado sin
 **Comando:**
 
 ```sh
-tg search messages '"invoice paid"' --chat "Book club" --backend archive --json
+tg personal search messages '"invoice paid"' --chat "Book club" --backend archive --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -110,19 +110,19 @@ Un resultado vacío no demuestra que el mensaje nunca existiera. Revisa las lagu
 Una buena búsqueda necesita que se descarguen sus chats. La búsqueda de Telegram encuentra un mensaje por sus palabras incluso si tg nunca lo encontró, pero todo lo demás solo lee el archivo local: contando con `stats`, búsqueda de temas, `has:`, `filename:`, expresiones regulares, ajustes preestablecidos, etiquetas y clasificación de formas de palabras. Comience descargando todos los chats:
 
 ```sh
-tg store fetch --all --background     # the last 90 days of every chat, as a background job
+tg personal messages sync --all --background  # the last 90 days of every chat, as a background job
 ```
 
 ```sh
-tg store jobs show                    # how far it got
+tg personal store jobs show           # how far it got
 ```
 
-Cada ejecución recupera como máximo 1000 mensajes por chat de forma predeterminada; repítalo para continuar con las conversaciones ocupadas. Agregue `--since-time 365d` para ir más atrás o busque un chat con `tg store fetch "Book club"` ([descargar el historial de un chat](./archive.md#fetch-a-chats-history)). Después de eso, `tg serve` mantiene el archivo local actualizado.
+Cada ejecución recupera como máximo 1000 mensajes por chat de forma predeterminada; repítalo para continuar con las conversaciones ocupadas. Agregue `--since-time 365d` para ir más atrás o busque un chat con `tg personal messages sync "Book club"` ([descargar el historial de un chat](./archive.md#fetch-a-chats-history)). Después de eso, `tg personal serve` mantiene el archivo local actualizado.
 
 Cada búsqueda dice lo que buscó. En la terminal, cuando el archivo local podía contener más o no se encontró nada, una línea dice cuántos mensajes y chats se buscaron, cuántos chats nunca se recuperaron o están atrasados ​​y el comando que lo soluciona:
 
 ```text
-searched 12,430 messages in 37 chats — 5 never fetched; `tg store fetch --all --background` fetches them
+searched 12,430 messages in 37 chats — 5 never fetched; `tg personal messages sync --all --background` fetches them
 ```
 
 Con `--json`, `coverage` lleva lo mismo: `messages`, `chats`, hasta diez chats `attention` y `next`. Cuando no se encuentre nada y esté configurado `next`, ejecute ese comando o pídale a su agente que lo haga antes de decidir que el mensaje no existe.
@@ -132,23 +132,23 @@ Escribe la consulta entre comillas simples para que la terminal no toque sus com
 ## Palabras y frases
 
 ```sh
-tg search messages invoice
+tg personal search messages invoice
 ```
 
 ```sh
-tg search messages '"invoice paid"'              # words together
+tg personal search messages '"invoice paid"'     # words together
 ```
 
 ```sh
-tg search messages 'cafe OR library'
+tg personal search messages 'cafe OR library'
 ```
 
 ```sh
-tg search messages '(cafe OR library) NOT loud'
+tg personal search messages '(cafe OR library) NOT loud'
 ```
 
 ```sh
-tg search messages 'invoic*'                     # every word that starts with "invoic"
+tg personal search messages 'invoic*'            # every word that starts with "invoic"
 ```
 
 Todas las palabras una al lado de la otra deben estar en el mensaje. La búsqueda incluye formas de palabras, según la configuración de idioma del archivo local: `piso` puede encontrar `pisos`. Las citas mantienen unidas las palabras y también permiten formas de palabras. Utilice `exact:piso` o agregue `--exact` para palabras sin un campo explícito. Un `text:` explícito sigue buscando formas de palabra. Se ignoran las mayúsculas y las tildes. Los errores tipográficos no se corrigen automáticamente.
@@ -156,27 +156,27 @@ Todas las palabras una al lado de la otra deben estar en el mensaje. La búsqued
 ## Personas y chats
 
 ```sh
-tg search messages 'from:"Alice Synthetic" invoice'
+tg personal search messages 'from:"Alice Synthetic" invoice'
 ```
 
 ```sh
-tg search messages 'from:("Alice Synthetic" OR "Bob Synthetic") library'
+tg personal search messages 'from:("Alice Synthetic" OR "Bob Synthetic") library'
 ```
 
 ```sh
-tg search messages 'from:me date:7d'             # what you wrote this week
+tg personal search messages 'from:me date:7d'    # what you wrote this week
 ```
 
 ```sh
-tg search messages 'chat:"Book club" library'
+tg personal search messages 'chat:"Book club" library'
 ```
 
 ```sh
-tg search messages library --chat "Book club"    # the same, as an option
+tg personal search messages library --chat "Book club"  # the same, as an option
 ```
 
 ```sh
-tg search messages 'passport kind:private'       # one-to-one chats only
+tg personal search messages 'passport kind:private'  # one-to-one chats only
 ```
 
 `kind:` toma `private`, `group`, `channel`, `saved` (mensajes guardados) y `bot`. `topic:` se centra en un tema del foro de un grupo; necesita ese grupo en `chat:` o `--chat`. Para buscar en todas las cuentas del archivo local, agregue `--source all`.
@@ -184,19 +184,19 @@ tg search messages 'passport kind:private'       # one-to-one chats only
 ## Fechas
 
 ```sh
-tg search messages 'date:today'
+tg personal search messages 'date:today'
 ```
 
 ```sh
-tg search messages 'library date:yesterday'
+tg personal search messages 'library date:yesterday'
 ```
 
 ```sh
-tg search messages 'invoice date:7d'             # from 7 days ago until now; also 30m, 2h
+tg personal search messages 'invoice date:7d'    # from 7 days ago until now; also 30m, 2h
 ```
 
 ```sh
-tg search messages 'invoice date:[2026-01-01 TO 2026-02-01}' --timezone Europe/Madrid
+tg personal search messages 'invoice date:[2026-01-01 TO 2026-02-01}' --timezone Europe/Madrid
 ```
 
 `today`, `yesterday` y las fechas del calendario son días en la zona horaria de tu equipo; `--timezone` elige otra. En un intervalo, `[` y `]` incluyen ese día; `{` y `}` lo excluyen.
@@ -204,35 +204,35 @@ tg search messages 'invoice date:[2026-01-01 TO 2026-02-01}' --timezone Europe/M
 ## Archivos y enlaces
 
 ```sh
-tg search messages 'has:file'
+tg personal search messages 'has:file'
 ```
 
 ```sh
-tg search messages 'filename:*.pdf'
+tg personal search messages 'filename:*.pdf'
 ```
 
 ```sh
-tg search messages 'filename:*contract*'         # part of the name
+tg personal search messages 'filename:*contract*'  # part of the name
 ```
 
 ```sh
-tg search messages 'size>10MB'
+tg personal search messages 'size>10MB'
 ```
 
 ```sh
-tg search messages 'mime:image'                  # any picture sent as a file
+tg personal search messages 'mime:image'         # any picture sent as a file
 ```
 
 ```sh
-tg search messages 'mime:"application/pdf"'      # quote a full type
+tg personal search messages 'mime:"application/pdf"'  # quote a full type
 ```
 
 ```sh
-tg search messages 'has:photo chat:"Book club"'
+tg personal search messages 'has:photo chat:"Book club"'
 ```
 
 ```sh
-tg search messages 'has:link AND "github.com"'   # a link to a site
+tg personal search messages 'has:link AND "github.com"'  # a link to a site
 ```
 
 Un archivo se encuentra por su nombre, tamaño y tipo aunque el mensaje no tenga texto. `filename:` compara el nombre completo, sin distinguir mayúsculas ni tildes. Los tamaños usan KB, MB y GB de 1024. `has:` también admite `attachment`, `video`, `audio`, `voice`, `sticker`, `contact`, `location` y `poll`. Un enlace cuenta tanto si está en el texto como si solo aparece en su vista previa.
@@ -244,19 +244,19 @@ Un archivo se encuentra por su nombre, tamaño y tipo aunque el mensaje no tenga
 `content:` busca el texto dentro de los archivos adjuntos: un PDF, un archivo de Word, un escaneo. El texto primero debe ser extraído en el archivo local, por tg o por su agente. Más información sobre archivos: [archivos adjuntos](./attachments.md).
 
 ```sh
-tg attachments extract --chat "Book club" --download --output-dir ./files
+tg personal attachments extract --chat "Book club" --download --output-dir ./files
 ```
 
 ```sh
-tg search messages 'content:invoice'
+tg personal search messages 'content:invoice'
 ```
 
 ```sh
-tg attachments list --chat "Book club" --needs-text
+tg personal attachments list --chat "Book club" --needs-text
 ```
 
 ```sh
-tg attachments text set "Book club" 204 --text-file ./scan.txt
+tg personal attachments text set "Book club" 204 --text-file ./scan.txt
 ```
 
 `attachments extract` lee texto sin formato, archivos de Word y PDF con una capa de texto en esta computadora. `--download` requiere `--output-dir`; sin ellos, la extracción lee los archivos ya guardados. Con varios archivos adjuntos en un mensaje, elija uno con `--attachment`, comenzando en 1.
@@ -278,27 +278,27 @@ tg config set models.ocr.model your-vision-model
 ```
 
 ```sh
-tg models text key set openai
+tg personal models text key set openai
 ```
 
 ```sh
-tg attachments extract --chat "Book club" --ocr --concurrency 4 --limit 100 --json
+tg personal attachments extract --chat "Book club" --ocr --concurrency 4 --limit 100 --json
 ```
 
 `--ocr` envía imágenes a ese servicio; sin él no se llama ningún modelo. La simultaneidad es 1–8, por defecto 4; el límite de archivos es de 1 a 500, el valor predeterminado es 100. Pase el cursor devuelto para continuar con una exploración limitada. Los PDF escaneados necesitan los `unpdf` y `@napi-rs/canvas` opcionales, con un máximo de 20 páginas por documento; las páginas con una capa de texto permanecen locales. Una repetición reutiliza el hash del archivo y la identidad del modelo. El texto que escribió su agente y el texto indexado anteriormente sobreviven a una ejecución de OCR fallida o cancelada. Verifique el recuento fallido y el estado de cada archivo; un límite de tarifa del proveedor detiene las llamadas posteriores en esa ejecución. `--offline` no se puede combinar con `--ocr`.
 
-**Archivos que ya tienes.** `tg attachments extract --chat <chat> --from-dir ./files` lee una carpeta, sin sus subcarpetas. Un archivo necesita un nombre original único o un conjunto completo de nombres de descarga. No combine `--from-dir` con `--download` o `--output-dir`. `tg messages download <chat> <id> --extract` extrae solo los archivos descargados por esta ejecución; `--all --extract` hace lo mismo para todo el lote. La extracción detecta archivos modificados mediante su hash y conservan el texto que escribió su agente. A través de MCP, una extracción limitada devuelve una continuación `cursor` y metadatos, sin texto de archivo.
+**Archivos que ya tienes.** `tg personal attachments extract --chat <chat> --from-dir ./files` lee una carpeta, sin sus subcarpetas. Un archivo necesita un nombre original único o un conjunto completo de nombres de descarga. No combine `--from-dir` con `--download` o `--output-dir`. `tg personal messages download <chat> <id> --extract` extrae solo los archivos descargados por esta ejecución; `--all --extract` hace lo mismo para todo el lote. La extracción detecta archivos modificados mediante su hash y conservan el texto que escribió su agente. A través de MCP, una extracción limitada devuelve una continuación `cursor` y metadatos, sin texto de archivo.
 
 `--from-dir` protege los archivos y carpetas conocidos de credenciales, las carpetas de la CLI y el almacén de mensajes. Las carpetas de trabajo ocultas normales están permitidas. Las descargas de extracción por MCP también requieren `output_dir` fuera de los lugares protegidos. La extracción local de texto PDF no tiene un límite fijo de páginas ni un tiempo de espera separado de 30 segundos; siguen aplicándose la cancelación del comando y los límites de tamaño del archivo y del texto.
 
 ## Contraseñas, códigos y tarjetas
 
 ```sh
-tg search messages 'preset:secret kind:saved'    # something that looks like a password or token
+tg personal search messages 'preset:secret kind:saved'  # something that looks like a password or token
 ```
 
 ```sh
-tg search messages 'preset:card'
+tg personal search messages 'preset:card'
 ```
 
 Un filtro preparado encuentra mensajes que *parecen* una contraseña, un código de inicio de sesión, una clave de API, un número de tarjeta o IBAN, un pasaporte, un teléfono, un correo electrónico o un enlace. Solo comprueba la forma: no demuestra que una contraseña funcione ni que una tarjeta sea real. La lista completa está en el [lenguaje de consulta](./query-language.md#presets).
@@ -306,27 +306,27 @@ Un filtro preparado encuentra mensajes que *parecen* una contraseña, un código
 ## Etiquetas
 
 ```sh
-tg tags add work --chat "Book club"
+tg personal tags add work --chat "Book club"
 ```
 
 ```sh
-tg tags add work --contact "Bob Synthetic"
+tg personal tags add work --contact "Bob Synthetic"
 ```
 
 ```sh
-tg tags list --tag work --type chat
+tg personal tags list --tag work --type chat
 ```
 
 ```sh
-tg search messages 'tag:work invoice'
+tg personal search messages 'tag:work invoice'
 ```
 
 ```sh
-tg search messages 'invoice NOT tag:work'
+tg personal search messages 'invoice NOT tag:work'
 ```
 
 ```sh
-tg tags remove work --chat "Book club"
+tg personal tags remove work --chat "Book club"
 ```
 
 Una etiqueta es tu propia etiqueta en un chat, una persona o un mensaje (`--message <id> --chat <chat>`). Se guarda únicamente en el archivo local y nunca se envía a Telegram. `tag:work` busca mensajes etiquetados como `work`, mensajes en un chat etiquetados como `work` y mensajes de una persona etiquetada como `work`. Una etiqueta tiene entre 1 y 32 letras de la a a la z, dígitos y guiones.
@@ -335,24 +335,27 @@ Los grupos y canales pueden etiquetarse automáticamente a partir de su título,
 ni usar un modelo:
 
 ```sh
-tg metadata refresh --chat "Book club"   # read the chat's description from Telegram; the chat is not changed
+tg personal metadata refresh --chat "Book club"  # read the chat's description from Telegram; the chat is not changed
 ```
 
 ```sh
-tg metadata refresh --only-missing       # every stored group and channel with no description read yet
+tg personal metadata refresh --only-missing  # every stored group and channel with no description read yet
 ```
 
 ```sh
-tg tags auto --dry-run                   # what it would tag, without writing
+tg personal tags auto --dry-run          # what it would tag, without writing
 ```
 
 ```sh
-tg tags auto                             # write the automatic tags
+tg personal tags auto                    # write the automatic tags
 ```
 
 ```sh
-tg tags list --source auto               # only the automatic ones
+tg personal tags list --source auto      # only the automatic ones
 ```
+
+`--refresh-metadata` lee de Telegram las descripciones actuales antes de clasificar; se rechaza junto con
+`--dry-run`, que usa las descripciones guardadas. Una ejecución procesa como máximo 500 chats, 50 por defecto (`--limit`).
 
 Las etiquetas automáticas nunca modifican las tuyas: una nueva ejecución elimina solo las etiquetas automáticas obsoletas. Si añades una etiqueta
 que ya se asignó automáticamente, pasa a ser tuya.
@@ -360,55 +363,55 @@ que ya se asignó automáticamente, pasa a ser tuya.
 ## Búsquedas guardadas e historial
 
 ```sh
-tg searches create meetings 'library OR cafe' --chat "Book club"
+tg personal searches create meetings 'library OR cafe' --chat "Book club"
 ```
 
 ```sh
-tg search messages --saved meetings
+tg personal search messages --saved meetings
 ```
 
 ```sh
-tg search messages --saved meetings 'date:today'  # extra words are added with AND
+tg personal search messages --saved meetings 'date:today'  # extra words are added with AND
 ```
 
 ```sh
-tg stats messages show --saved meetings --by day
+tg personal stats messages show --saved meetings --by day
 ```
 
 ```sh
-tg searches list
+tg personal searches list
 ```
 
 ```sh
-tg searches history --limit 10
+tg personal searches history --limit 10
 ```
 
 ```sh
-tg search messages --saved 42                    # a row of the history, by its number
+tg personal search messages --saved 42           # a row of the history, by its number
 ```
 
 `searches create` guarda una consulta con sus opciones y no ejecuta nada; un nombre que ya existe necesita `--replace`. Las opciones que escribes con `--saved` sustituyen a las guardadas. El texto guardado se vuelve a leer en cada ejecución, así que `date:7d` siempre significa los últimos 7 días. `searches show` muestra una y `searches delete` elimina una.
 
-Cada búsqueda y recuento exitoso se escribe en el historial: la consulta y sus opciones, nunca los mensajes que encontró. Se conservan las 1.000 ejecuciones más recientes. `--no-record` mantiene una ejecución sin él; para MCP, `tg mcp --no-record` o `record` configurado en `false` mantiene fuera las llamadas del servidor. `searches clear` vacía el historial y mantiene las búsquedas guardadas. Este historial es independiente de los registros de ejecución de `tg runs`.
+Cada búsqueda y recuento exitoso se escribe en el historial: la consulta y sus opciones, nunca los mensajes que encontró. Se conservan las 1.000 ejecuciones más recientes. `--no-record` mantiene una ejecución sin él; para MCP, `tg personal mcp --no-record` o `record` configurado en `false` mantiene fuera las llamadas del servidor. `searches clear` vacía el historial y mantiene las búsquedas guardadas. Este historial es independiente de los registros de ejecución de `tg personal runs`.
 
 Las búsquedas guardadas y el historial están en el archivo local que comparten tg y max: ambos ven las mismas, y `delete` o `clear` en uno cambia el otro. Las etiquetas se quedan con su cuenta.
 
 ## Recuentos: `stats messages show`
 
 ```sh
-tg stats messages show invoice                        # how many in each chat
+tg personal stats messages show invoice               # how many in each chat
 ```
 
 ```sh
-tg stats messages show 'date:7d' --by sender
+tg personal stats messages show 'date:7d' --by sender
 ```
 
 ```sh
-tg stats messages show 'from:me' --by day --timezone Europe/Madrid
+tg personal stats messages show 'from:me' --by day --timezone Europe/Madrid
 ```
 
 ```sh
-tg stats messages show --by hour                      # every stored message
+tg personal stats messages show --by hour             # every stored message
 ```
 
 `stats messages show` cuenta los mensajes que encontraría `search messages` con la misma consulta, cada uno una sola vez.
@@ -421,15 +424,15 @@ cuántos chats están incompletos.
 Telegram puede buscar su propia copia de tus chats, incluidos los mensajes que nunca recuperaste. Sin `--discover`, tg pregunta por defecto a Telegram y al archivo local en una sola ejecución (`--backend both`). `--backend server` muestra solo los resultados de Telegram y `--backend archive` busca solo en el archivo local. `--discover` siempre usa solo el archivo, incluso con `--backend both`.
 
 ```sh
-tg search messages 'invoice' --backend both
+tg personal search messages 'invoice' --backend both
 ```
 
 ```sh
-tg search messages 'invoice chat:"Book club" from:Olga' --backend both
+tg personal search messages 'invoice chat:"Book club" from:Olga' --backend both
 ```
 
 ```sh
-tg search messages 'invoice date:2026-09' --backend server --server-time 10s
+tg personal search messages 'invoice date:2026-09' --backend server --server-time 10s
 ```
 
 Telegram decide por sí solo qué coincide con una palabra y no la documenta. Entonces tg trata su respuesta como candidatos: los guarda en el archivo local y ejecuta su consulta sobre ellos con las propias reglas del archivo local. `exact:`, `-word`, las comillas y la clasificación significan lo mismo que sin `--backend`, y un mensaje nunca aparece dos veces. Un mensaje devuelto por Telegram que no coincide con tu consulta no se muestra, pero se conserva en el archivo local.
@@ -444,7 +447,7 @@ Con `--json`, cada mensaje dice de dónde vino (`source`: `archive`, `server` o 
 ## Obtener mensajes nuevos primero: `--sync-first`
 
 ```sh
-tg search messages 'invoice' --chat "Book club" --sync-first
+tg personal search messages 'invoice' --chat "Book club" --sync-first
 ```
 
 `--sync-first` descarga mensajes nuevos antes de buscar y no marca nada como leído. Se necesitan como máximo 5 chats, 500 mensajes y 30 segundos; cambie estos límites con `--max-chats`, `--max-messages` y `--sync-time`. Cuando la descarga falla o se detiene antes de tiempo, aún obtienes los resultados del archivo local, marcados con cobertura obsoleta y los detalles de la descarga.
@@ -461,11 +464,11 @@ En una terminal, tg imprime una transcripción legible. `--json` devuelve un obj
 
 ## Si no se encuentra nada
 
-Una respuesta vacía significa "no en el archivo local en la que buscó", no "nunca envió". Verifique lo que está almacenado con `tg store status` y obtenga más con `tg store fetch`. Con `--json` la respuesta dice qué chats se buscaron y qué tan completos están, incluso cuando no hay nada que coincida. Si tg solicita `tg store migrate`, el índice de palabras aún se está construyendo; Las búsquedas sin palabras (`has:file`, `date:today`) ya funcionan.
+Una respuesta vacía significa "no en el archivo local en la que buscó", no "nunca envió". Verifique lo que está almacenado con `tg personal store status` y obtenga más con `tg personal messages sync`. Con `--json` la respuesta dice qué chats se buscaron y qué tan completos están, incluso cuando no hay nada que coincida. Si tg solicita `tg personal store migrate`, el índice de palabras aún se está construyendo; Las búsquedas sin palabras (`has:file`, `date:today`) ya funcionan.
 
-**Huecos en el historial de un chat.** `tg store gaps plan <chat>` busca, en esta computadora, espacios entre los tramos del historial que tiene el archivo local. Los ID de mensajes faltantes y los períodos de silencio por sí solos no prueban que falte el historial; los bordes del historial guardado permanecen `unknown`. Verifique el plan, luego ejecute `tg store gaps repair <chat> --fingerprint <hash>` para descargar los espacios. Los valores predeterminados son cinco espacios, 500 mensajes y 30 segundos; `--max-gaps`, `--limit`, `--repair-time`, `--page-size` y `--pause` marcan los límites. Una repetición repara los espacios restantes y nunca elimina un mensaje porque Telegram no lo devolvió. Las páginas donde varios mensajes comparten una marca de tiempo permanecen pendientes. `--background` lo ejecuta como un trabajo que siguen `store jobs show`, `store jobs list` y `store jobs cancel`. La reparación necesita permiso de escritura `store.gaps.repair` y permiso para leer mensajes. A través de MCP, los mismos comandos se encuentran a través de `tg_tools_search` y se ejecutan a través de `tg_read` o `tg_write`; Los trabajos pertenecen a un perfil.
+**Huecos en el historial de un chat.** `tg personal store gaps plan <chat>` busca, en esta computadora, espacios entre los tramos del historial que tiene el archivo local. Los ID de mensajes faltantes y los períodos de silencio por sí solos no prueban que falte el historial; los bordes del historial guardado permanecen `unknown`. Verifique el plan, luego ejecute `tg personal store gaps repair <chat> --fingerprint <hash>` para descargar los espacios. Los valores predeterminados son cinco espacios, 500 mensajes y 30 segundos; `--max-gaps`, `--limit`, `--repair-time`, `--page-size` y `--pause` marcan los límites. Una repetición repara los espacios restantes y nunca elimina un mensaje porque Telegram no lo devolvió. Las páginas donde varios mensajes comparten una marca de tiempo permanecen pendientes. `--background` lo ejecuta como un trabajo que siguen `store jobs show`, `store jobs list` y `store jobs cancel`. La reparación necesita permiso de escritura `store.gaps.repair` y permiso para leer mensajes. A través de MCP, los mismos comandos se encuentran a través de `tg_tools_search` y se ejecutan a través de `tg_read` o `tg_write`; Los trabajos pertenecen a un perfil.
 
-**Prepara la búsqueda por temas durante la descarga.** `tg store fetch <chat> --catch-up` crea las conversaciones de ese chat y calcula sus vectores locales inmediatamente después de descargar el historial, para [búsqueda de tema](./topic-search.md). Está desactivado de forma predeterminada; la configuración del perfil `searchCatchUp: true` lo activa y `--no-catch-up` lo desactiva para una ejecución. Los límites son `--catch-up-chunks 500 --catch-up-messages 10000 --catch-up-time 30s`. Nunca descarga un modelo ni llama a un servicio remoto. Un resultado `prepared` separado informa cuando la preparación está incompleta; el historial obtenido se guarda de cualquier manera. Durante una reparación de brechas, la recuperación comparte el presupuesto de tiempo de la reparación.
+**Prepara la búsqueda por temas durante la descarga.** `tg personal messages sync <chat> --catch-up` crea las conversaciones de ese chat y calcula sus vectores locales inmediatamente después de descargar el historial, para [búsqueda de tema](./topic-search.md). Está desactivado de forma predeterminada; la configuración del perfil `searchCatchUp: true` lo activa y `--no-catch-up` lo desactiva para una ejecución. Los límites son `--catch-up-chunks 500 --catch-up-messages 10000 --catch-up-time 30s`. Nunca descarga un modelo ni llama a un servicio remoto. Un resultado `prepared` separado informa cuando la preparación está incompleta; el historial obtenido se guarda de cualquier manera. Durante una reparación de brechas, la recuperación comparte el presupuesto de tiempo de la reparación.
 
 ## Próximo
 

@@ -9,11 +9,11 @@ title: "Автоответы"
 - **Правило** указывает, на какие входящие сообщения отвечать и что делать: отвечать, открывать задачу или и то, и другое.
 - **Шаблон** – это текст ответа. Он может включать имя отправителя и время.
 - **Аудитория** — это список людей и чатов, которые могут получить ответ, независимо от того, что написано в правиле.
-- `tg serve` — фоновый процесс, который получает новые сообщения и применяет правила.
+- `tg personal serve` — фоновый процесс, который получает новые сообщения и применяет правила.
 
 Кто получает ответ и когда что-либо отправляется:
 
-- **Ответы отправляются всем, кто соответствует вашим правилам, если вы не ограничиваете аудиторию.** Отвечайте только избранным людям с помощью `tg replies audience --reply listed --allow-people …` или исключите отдельных людей и чаты с помощью `--deny-people` и `--deny-chats`.
+- **Ответы отправляются всем, кто соответствует вашим правилам, если вы не ограничиваете аудиторию.** Отвечайте только избранным людям с помощью `tg personal replies audience --reply listed --allow-people …` или исключите отдельных людей и чаты с помощью `--deny-people` и `--deny-chats`.
 - **Ничего не отправляется, пока вы не включите отправку.** `permissions.replies.send` должен быть `allow`. `ask` не разрешает отправку, поскольку фоновому серверу не у кого спросить. Новое правило также отключено, пока вы его не включите.
 
 Полный список опций находится в [командах автоответа](./commands.md#tg-replies).
@@ -21,22 +21,22 @@ title: "Автоответы"
 ## Создать и включить правило
 
 ```sh
-tg replies add away
-tg replies edit away --template 'Thanks, {{ sender.firstName | default: "there" }}! I will answer in the morning.'
-tg replies edit away --outside 09:00-19:00 --days mon-fri --timezone Europe/Madrid
-tg replies edit away --per-chat 1/12h --per-person 1/1d
+tg personal replies add away
+tg personal replies edit away --template 'Thanks, {{ sender.firstName | default: "there" }}! I will answer in the morning.'
+tg personal replies edit away --outside 09:00-19:00 --days mon-fri --timezone Europe/Madrid
+tg personal replies edit away --per-chat 1/12h --per-person 1/1d
 ```
 
-`add` создает отключенное правило, в котором записаны все настройки. Правила находятся в `<profile>.replies.json`, в той же папке, что и `configFile`, который показывает `tg config show --json`. По умолчанию правила отвечают всем, кому они соответствуют. Чтобы ответить только избранным людям, укажите их идентификаторы Telegram через запятую; `tg contacts show <name> --json` печатает идентификатор человека как `id`:
+`add` создает отключенное правило, в котором записаны все настройки. Правила находятся в `<profile>.replies.json`, в той же папке, что и `configFile`, который показывает `tg config show --json`. По умолчанию правила отвечают всем, кому они соответствуют. Чтобы ответить только избранным людям, укажите их идентификаторы Telegram через запятую; `tg personal contacts show <name> --json` печатает идентификатор человека как `id`:
 
 ```sh
-tg replies audience --reply listed --allow-people 1000001
+tg personal replies audience --reply listed --allow-people 1000001
 ```
 
 Чтобы ответить всем, кроме некоторых людей и чатов, сохраните `--reply all` и исключите их:
 
 ```sh
-tg replies audience --deny-people 1000002 --deny-chats -1002000002
+tg personal replies audience --deny-people 1000002 --deny-chats -1002000002
 ```
 
 После первой команды файл содержит:
@@ -57,13 +57,13 @@ ID правил состоят из строчных букв, цифр и `-`; 
 Затем посмотрите, что правило ответило бы, включите его и запустите сервер:
 
 ```sh
-tg replies test --since-time 7d
-tg replies on away
+tg personal replies test --since-time 7d
+tg personal replies on away
 tg config set permissions.replies.send allow
-tg serve
+tg personal serve
 ```
 
-`replies test` читает только сообщения, уже сохранённые в локальном хранилище. Ничего не отправляет, не меняет и никогда не подключается. `tg replies off away` выключает одно правило.
+`replies test` читает только сообщения, уже сохранённые в локальном хранилище. Ничего не отправляет, не меняет и никогда не подключается. `tg personal replies off away` выключает одно правило.
 
 ## Условия и аудитория
 
@@ -81,7 +81,7 @@ tg serve
 
 При первой настройке рабочего времени укажите окно, дни и часовой пояс вместе; после этого вы можете изменить его. Неправильное редактирование не приводит к перезаписыванию файла, а остальные правила, аудитория и запись ответов остаются прежними.
 
-`tg replies audience` показывает, кому может отвечать весь файл. Новый файл — `--reply all`: он отвечает всем, кому соответствует правило. `--reply listed` отвечает только разрешенным людям и чатам. `--allow-people`, `--allow-chats`, `--deny-people` и `--deny-chats` заменяют эти списки, и запрет имеет приоритет над разрешением. Действие `task` открывает задачу на этом компьютере и не ограничено аудиторией.
+`tg personal replies audience` показывает, кому может отвечать весь файл. Новый файл — `--reply all`: он отвечает всем, кому соответствует правило. `--reply listed` отвечает только разрешенным людям и чатам. `--allow-people`, `--allow-chats`, `--deny-people` и `--deny-chats` заменяют эти списки, и запрет имеет приоритет над разрешением. Действие `task` открывает задачу на этом компьютере и не ограничено аудиторией.
 
 ## Шаблоны и модель
 
@@ -98,19 +98,19 @@ Thanks, {{ sender.firstName | default: "there" }}!
 
 Содержимое блока — инструкция агенту. Входящий текст передаётся агенту отдельно, как данные. Если ИИ не настроен, нет согласия или вызов не удался, отправляется текст `else`; без `else` сообщение остаётся без ответа, а причина записывается.
 
-Выберите модель через `models.replies.provider` (`openai` или `anthropic`), `models.replies.model` и, для своего сервера, `models.replies.baseUrl`; `models.default` заполняет незаданные значения. Храните ключ через `tg models text key set`.
+Выберите модель через `models.replies.provider` (`openai` или `anthropic`), `models.replies.model` и, для своего сервера, `models.replies.baseUrl`; `models.default` заполняет незаданные значения. Храните ключ через `tg personal models text key set`.
 
 Для передачи данных провайдеру ИИ нужно отдельное согласие, независимо от права на отправку:
 
 ```sh
-tg replies consents show
-tg replies consents grant
-tg replies consents revoke
-tg replies consents deny -1002000002
-tg replies consents allow -1002000002
+tg personal replies consents show
+tg personal replies consents grant
+tg personal replies consents revoke
+tg personal replies consents deny -1002000002
+tg personal replies consents allow -1002000002
 ```
 
-`grant` разрешает передавать данные входящих сообщений выбранному провайдеру для всего профиля. `deny` запрещает передавать провайдеру ИИ сообщения одного чата; `allow` снимает этот запрет, но не выдаёт согласия. Для нового провайдера или адреса endpoint нужно новое согласие. `tg replies test --ai` отправляет сохранённые сообщения провайдеру ИИ, чтобы вы могли посмотреть подготовленный текст; в Telegram по-прежнему ничего не отправляется.
+`grant` разрешает передавать данные входящих сообщений выбранному провайдеру для всего профиля. `deny` запрещает передавать провайдеру ИИ сообщения одного чата; `allow` снимает этот запрет, но не выдаёт согласия. Для нового провайдера или адреса endpoint нужно новое согласие. `tg personal replies test --ai` отправляет сохранённые сообщения провайдеру ИИ, чтобы вы могли посмотреть подготовленный текст; в Telegram по-прежнему ничего не отправляется.
 
 ## На что правило никогда не отвечает
 
@@ -124,10 +124,10 @@ tg replies consents allow -1002000002
 ## Остановить и проверить
 
 ```sh
-tg replies pause
-tg replies resume
-tg replies status
-tg sends list
+tg personal replies pause
+tg personal replies resume
+tg personal replies status
+tg personal sends list
 ```
 
 `pause` останавливает все правила сразу, включая работающий `serve`, без перезапуска; `resume` отменяет паузу. `status` показывает, разрешена ли отправка, какие правила включены и кому могут отвечать. `sends list` показывает каждый ответ с отправившим его правилом.

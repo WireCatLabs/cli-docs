@@ -31,20 +31,20 @@
     "replacements": {
       "en": [
         {
-          "before": "if ! tg messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  case $? in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg session start\" ;;\n  esac\nfi",
-          "after": "if tg messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg session start\" ;;\n  esac\nfi"
+          "before": "if ! tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  case $? in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi",
+          "after": "if tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi"
         }
       ],
       "ru": [
         {
-          "before": "if ! tg messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  case $? in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg session start\" ;;\n  esac\nfi",
-          "after": "if tg messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg session start\" ;;\n  esac\nfi"
+          "before": "if ! tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  case $? in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi",
+          "after": "if tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi"
         }
       ],
       "es": [
         {
-          "before": "if ! tg messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  case $? in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg session start\" ;;\n  esac\nfi",
-          "after": "if tg messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg session start\" ;;\n  esac\nfi"
+          "before": "if ! tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  case $? in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi",
+          "after": "if tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"it may have gone — repeat only with the same --send-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi"
         }
       ]
     }
@@ -101,62 +101,25 @@
   },
   {
     "tool": "tg",
-    "slug": "installation",
-    "reason": "User-facing installation guide: runtime support rather than CI details, complete OS-specific paths, and expandable credential storage explanation linked to the documented security model. Default paths verified against cli-core resolvePaths, TG sessionFile and cli-messaging sharedModelsDirectory.",
-    "replacements": {
-      "en": [
-        {
-          "before": "| What | Linux | macOS | Windows |\n|---|---|---|---|\n| settings | `~/.config/tg-cli/` | `~/Library/Preferences/tg-cli/` | `%APPDATA%\\tg-cli\\Config\\` |\n| state | `~/.local/share/tg-cli/` | `~/Library/Application Support/tg-cli/` | `%LOCALAPPDATA%\\tg-cli\\Data\\` |\n| cache | `~/.cache/tg-cli/` | `~/Library/Caches/tg-cli/` | `%LOCALAPPDATA%\\tg-cli\\Cache\\` |\n| the local store | `~/.local/share/cli-messaging/wirecat.db` | under `~/Library/Application Support/cli-messaging/` | under `%LOCALAPPDATA%\\cli-messaging\\Data\\` |\n| speech models | `~/.cache/cli-common/models/audio/` | under `~/Library/Caches/cli-common/` | under `%LOCALAPPDATA%\\cli-common\\Cache\\` |",
-          "after": "| Data | Linux | macOS | Windows |\n|---|---|---|---|\n| Settings | `~/.config/tg-cli/config.json` | `~/Library/Preferences/tg-cli/config.json` | `%APPDATA%\\tg-cli\\Config\\config.json` |\n| Telegram login session | `~/.local/share/tg-cli/sessions/<profile>.session` | `~/Library/Application Support/tg-cli/sessions/<profile>.session` | `%LOCALAPPDATA%\\tg-cli\\Data\\sessions\\<profile>.session` |\n| Run records | `~/.local/share/tg-cli/runs/` | `~/Library/Application Support/tg-cli/runs/` | `%LOCALAPPDATA%\\tg-cli\\Data\\runs\\` |\n| Send journal | `~/.local/share/tg-cli/sends/<profile>.jsonl` | `~/Library/Application Support/tg-cli/sends/<profile>.jsonl` | `%LOCALAPPDATA%\\tg-cli\\Data\\sends\\<profile>.jsonl` |\n| Allowed recipients | `~/.local/share/tg-cli/profiles/<profile>.recipients.json` | `~/Library/Application Support/tg-cli/profiles/<profile>.recipients.json` | `%LOCALAPPDATA%\\tg-cli\\Data\\profiles\\<profile>.recipients.json` |\n| Inbox reading position | `~/.local/share/tg-cli/inbox/<profile>.json` | `~/Library/Application Support/tg-cli/inbox/<profile>.json` | `%LOCALAPPDATA%\\tg-cli\\Data\\inbox\\<profile>.json` |\n| Background server log | `~/.local/share/tg-cli/serve/<profile>.log` | `~/Library/Application Support/tg-cli/serve/<profile>.log` | `%LOCALAPPDATA%\\tg-cli\\Data\\serve\\<profile>.log` |\n| Cache | `~/.cache/tg-cli/` | `~/Library/Caches/tg-cli/` | `%LOCALAPPDATA%\\tg-cli\\Cache\\` |\n| Local message database | `~/.local/share/cli-messaging/wirecat.db` | `~/Library/Application Support/cli-messaging/wirecat.db` | `%LOCALAPPDATA%\\cli-messaging\\Data\\wirecat.db` |\n| Speech recognition models | `~/.cache/cli-common/models/audio/` | `~/Library/Caches/cli-common/models/audio/` | `%LOCALAPPDATA%\\cli-common\\Cache\\models\\audio\\` |\n\n`~` means your home folder. On Windows, paste `%APPDATA%` or `%LOCALAPPDATA%` into File Explorer’s address bar. `<profile>` is the account profile name, usually `default`. These are default locations; `tg doctor` shows the actual paths, including overrides."
-        },
-        {
-          "before": "- **settings** hold `config.json`, and `credentials.json` only on a machine with no keyring.",
-          "after": "- **Settings** are saved in `config.json`. The Telegram app credentials normally go into the operating system’s keyring; `credentials.json` is a fallback when that keyring is unavailable.\n\n> **How are login credentials protected?**\n>\n> The Telegram app ID and hash go into macOS Keychain, Windows Credential Manager or Linux Secret Service. Keeping them outside the settings file reduces accidental exposure when you share configuration. If the keyring is unavailable, `tg` warns and uses a credentials file with restricted permissions. The Telegram session remains a separate file: anyone who can read it can use that login. Do not share it or add it to Git. See [Security](./security.md#where-the-login-lives).\n"
-        }
-      ],
-      "ru": [
-        {
-          "before": "| Данные | Linux | macOS | Windows |\n|---|---|---|---|\n| настройки | `~/.config/tg-cli/` | `~/Library/Preferences/tg-cli/` | `%APPDATA%\\tg-cli\\Config\\` |\n| состояние | `~/.local/share/tg-cli/` | `~/Library/Application Support/tg-cli/` | `%LOCALAPPDATA%\\tg-cli\\Data\\` |\n| кеш | `~/.cache/tg-cli/` | `~/Library/Caches/tg-cli/` | `%LOCALAPPDATA%\\tg-cli\\Cache\\` |\n| локальная база | `~/.local/share/cli-messaging/wirecat.db` | в `~/Library/Application Support/cli-messaging/` | в `%LOCALAPPDATA%\\cli-messaging\\Data\\` |\n| модели распознавания речи | `~/.cache/cli-common/models/audio/` | в `~/Library/Caches/cli-common/` | в `%LOCALAPPDATA%\\cli-common\\Cache\\` |",
-          "after": "| Данные | Linux | macOS | Windows |\n|---|---|---|---|\n| Настройки | `~/.config/tg-cli/config.json` | `~/Library/Preferences/tg-cli/config.json` | `%APPDATA%\\tg-cli\\Config\\config.json` |\n| Сессия входа в Telegram | `~/.local/share/tg-cli/sessions/<profile>.session` | `~/Library/Application Support/tg-cli/sessions/<profile>.session` | `%LOCALAPPDATA%\\tg-cli\\Data\\sessions\\<profile>.session` |\n| Записи запусков | `~/.local/share/tg-cli/runs/` | `~/Library/Application Support/tg-cli/runs/` | `%LOCALAPPDATA%\\tg-cli\\Data\\runs\\` |\n| Журнал отправок | `~/.local/share/tg-cli/sends/<profile>.jsonl` | `~/Library/Application Support/tg-cli/sends/<profile>.jsonl` | `%LOCALAPPDATA%\\tg-cli\\Data\\sends\\<profile>.jsonl` |\n| Разрешённые получатели | `~/.local/share/tg-cli/profiles/<profile>.recipients.json` | `~/Library/Application Support/tg-cli/profiles/<profile>.recipients.json` | `%LOCALAPPDATA%\\tg-cli\\Data\\profiles\\<profile>.recipients.json` |\n| Позиция чтения входящих | `~/.local/share/tg-cli/inbox/<profile>.json` | `~/Library/Application Support/tg-cli/inbox/<profile>.json` | `%LOCALAPPDATA%\\tg-cli\\Data\\inbox\\<profile>.json` |\n| Журнал фонового сервера | `~/.local/share/tg-cli/serve/<profile>.log` | `~/Library/Application Support/tg-cli/serve/<profile>.log` | `%LOCALAPPDATA%\\tg-cli\\Data\\serve\\<profile>.log` |\n| Кеш | `~/.cache/tg-cli/` | `~/Library/Caches/tg-cli/` | `%LOCALAPPDATA%\\tg-cli\\Cache\\` |\n| Локальная база сообщений | `~/.local/share/cli-messaging/wirecat.db` | `~/Library/Application Support/cli-messaging/wirecat.db` | `%LOCALAPPDATA%\\cli-messaging\\Data\\wirecat.db` |\n| Модели распознавания речи | `~/.cache/cli-common/models/audio/` | `~/Library/Caches/cli-common/models/audio/` | `%LOCALAPPDATA%\\cli-common\\Cache\\models\\audio\\` |\n\n`~` — ваша домашняя папка. В Windows вставьте `%APPDATA%` или `%LOCALAPPDATA%` в адресную строку Проводника. `<profile>` — имя профиля аккаунта, обычно `default`. Здесь указаны пути по умолчанию; `tg doctor` покажет фактические пути, включая переопределения."
-        },
-        {
-          "before": "- **Настройки** сохраняют `config.json` и `credentials.json` только на машине без системного хранилища ключей.",
-          "after": "- **Настройки** сохраняются в `config.json`. Данные приложения Telegram обычно хранятся в системном хранилище ключей; `credentials.json` используется, если хранилище недоступно.\n\n> **Как защищены данные входа?**\n>\n> ID и хеш приложения Telegram сохраняются в Keychain на macOS, Credential Manager на Windows или Secret Service на Linux. Они отделены от настроек, чтобы снизить риск случайной передачи секретов вместе с конфигурацией. Если хранилище недоступно, `tg` предупреждает и сохраняет данные в файл с ограниченными правами доступа. Сессия Telegram остаётся отдельным файлом: доступ к нему позволяет использовать ваш вход. Не передавайте его и не добавляйте в Git. Подробнее: [Безопасность](./security.md#where-the-login-lives).\n"
-        }
-      ],
-      "es": [
-        {
-          "before": "| Contenido | Linux | macOS | Windows |\n|---|---|---|---|\n| configuración | `~/.config/tg-cli/` | `~/Library/Preferences/tg-cli/` | `%APPDATA%\\tg-cli\\Config\\` |\n| estado | `~/.local/share/tg-cli/` | `~/Library/Application Support/tg-cli/` | `%LOCALAPPDATA%\\tg-cli\\Data\\` |\n| caché | `~/.cache/tg-cli/` | `~/Library/Caches/tg-cli/` | `%LOCALAPPDATA%\\tg-cli\\Cache\\` |\n| archivo local | `~/.local/share/cli-messaging/wirecat.db` | dentro de `~/Library/Application Support/cli-messaging/` | dentro de `%LOCALAPPDATA%\\cli-messaging\\Data\\` |\n| modelos de voz | `~/.cache/cli-common/models/audio/` | dentro de `~/Library/Caches/cli-common/` | dentro de `%LOCALAPPDATA%\\cli-common\\Cache\\` |",
-          "after": "| Datos | Linux | macOS | Windows |\n|---|---|---|---|\n| Configuración | `~/.config/tg-cli/config.json` | `~/Library/Preferences/tg-cli/config.json` | `%APPDATA%\\tg-cli\\Config\\config.json` |\n| Sesión de Telegram | `~/.local/share/tg-cli/sessions/<profile>.session` | `~/Library/Application Support/tg-cli/sessions/<profile>.session` | `%LOCALAPPDATA%\\tg-cli\\Data\\sessions\\<profile>.session` |\n| Ejecuciones registradas | `~/.local/share/tg-cli/runs/` | `~/Library/Application Support/tg-cli/runs/` | `%LOCALAPPDATA%\\tg-cli\\Data\\runs\\` |\n| Registro de envíos | `~/.local/share/tg-cli/sends/<profile>.jsonl` | `~/Library/Application Support/tg-cli/sends/<profile>.jsonl` | `%LOCALAPPDATA%\\tg-cli\\Data\\sends\\<profile>.jsonl` |\n| Destinatarios permitidos | `~/.local/share/tg-cli/profiles/<profile>.recipients.json` | `~/Library/Application Support/tg-cli/profiles/<profile>.recipients.json` | `%LOCALAPPDATA%\\tg-cli\\Data\\profiles\\<profile>.recipients.json` |\n| Posición de lectura | `~/.local/share/tg-cli/inbox/<profile>.json` | `~/Library/Application Support/tg-cli/inbox/<profile>.json` | `%LOCALAPPDATA%\\tg-cli\\Data\\inbox\\<profile>.json` |\n| Registro del servidor | `~/.local/share/tg-cli/serve/<profile>.log` | `~/Library/Application Support/tg-cli/serve/<profile>.log` | `%LOCALAPPDATA%\\tg-cli\\Data\\serve\\<profile>.log` |\n| Caché | `~/.cache/tg-cli/` | `~/Library/Caches/tg-cli/` | `%LOCALAPPDATA%\\tg-cli\\Cache\\` |\n| Base de mensajes local | `~/.local/share/cli-messaging/wirecat.db` | `~/Library/Application Support/cli-messaging/wirecat.db` | `%LOCALAPPDATA%\\cli-messaging\\Data\\wirecat.db` |\n| Modelos de reconocimiento de voz | `~/.cache/cli-common/models/audio/` | `~/Library/Caches/cli-common/models/audio/` | `%LOCALAPPDATA%\\cli-common\\Cache\\models\\audio\\` |\n\n`~` es tu carpeta personal. En Windows, pega `%APPDATA%` o `%LOCALAPPDATA%` en la barra de direcciones del Explorador. `<profile>` es el nombre del perfil, normalmente `default`. Estas son las rutas predeterminadas; `tg doctor` muestra las rutas reales y sus cambios."
-        },
-        {
-          "before": "- **configuraciones** mantienen `config.json` y `credentials.json` solo en una máquina sin llavero.",
-          "after": "- **Configuración:** se guarda en `config.json`. Las credenciales de la aplicación Telegram normalmente van al llavero del sistema; `credentials.json` se usa si el llavero no está disponible.\n\n> **¿Cómo se protegen las credenciales?**\n>\n> El ID y hash de la aplicación se guardan en Keychain de macOS, Credential Manager de Windows o Secret Service de Linux. Separarlos de la configuración reduce el riesgo de compartirlos por accidente. Si el llavero no está disponible, `tg` avisa y usa un archivo con permisos restringidos. La sesión de Telegram sigue siendo un archivo independiente: quien lo lee puede usar ese acceso. No lo compartas ni lo añadas a Git. Consulta [Seguridad](./security.md#where-the-login-lives).\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
     "slug": "sessions",
     "reason": "Explicit beginner login instructions: distinguish app credentials/account/session, copyable complete commands, QR and phone sequences, code-delivery limitations, named account profiles and inactivity vs overall session lifetime. Verified against TG session.ts, Telegram auth/API documentation and official Desktop inactivity selector.",
     "replacements": {
       "ru": [
         {
           "before": "\nПрофиль — отдельный вход со своей сессией, приложением, настройками, получателями и записями запусков. Имя указывается **первым словом**, а не параметром:\n\n",
-          "after": "\nПрофиль — именованное подключение аккаунта Telegram в CLI. Обычно отдельный профиль создают для каждого номера: например, `default` для личного аккаунта и `work` для рабочего. У каждого подключения свои сессия входа, данные приложения, настройки, разрешённые получатели и записи запусков.\n\nИмя `work` — выбранная вами метка, а не номер телефона. Чтобы подключить рабочий аккаунт, выполните:\n\n```sh\ntg work session start --app browser\n```\n\nПри регистрации приложения укажите рабочий номер; при QR-входе переключите Telegram на телефоне на рабочий аккаунт. После входа проверьте, какой аккаунт связан с меткой:\n\n```sh\ntg work account show\n```\n\nОдин и тот же аккаунт тоже можно подключить в нескольких профилях; профиль сам по себе не создаёт новый аккаунт Telegram. Имя профиля указывается **первым словом после `tg`**, перед командой:\n\n"
+          "after": "\nПрофиль — именованное подключение аккаунта Telegram в CLI. Обычно отдельный профиль создают для каждого номера: например, `personal` для личного аккаунта и `work` для рабочего. У каждого подключения свои сессия входа, данные приложения, настройки, разрешённые получатели и записи запусков.\n\nИмя `work` — выбранная вами метка, а не номер телефона. Чтобы подключить рабочий аккаунт, выполните:\n\n```sh\ntg work session start --app browser\n```\n\nПри регистрации приложения укажите рабочий номер; при QR-входе переключите Telegram на телефоне на рабочий аккаунт. После входа проверьте, какой аккаунт связан с меткой:\n\n```sh\ntg work account show\n```\n\nОдин и тот же аккаунт тоже можно подключить в нескольких профилях; профиль сам по себе не создаёт новый аккаунт Telegram. Имя профиля указывается **первым словом после `tg`**, перед командой:\n\n"
         }
       ],
       "en": [
         {
           "before": "\nA profile is a separate login: its own session, app, settings, recipients and runs. It is named by\n**the first word**, not by an option:\n\n",
-          "after": "\nA profile is a named connection to a Telegram account in the CLI. Usually you use one per phone number: for example `default` for a personal account and `work` for a work account. Each connection has its own login session, application credentials, settings, allowed recipients and run records.\n\n`work` is a label you choose, not a phone number. Connect a work account with:\n\n```sh\ntg work session start --app browser\n```\n\nUse the work number to register credentials; for QR login, switch Telegram on your phone to the work account. Then check which account the label refers to:\n\n```sh\ntg work account show\n```\n\nYou can also connect the same account in multiple profiles; a profile does not create a Telegram account. The profile name is **the first word after `tg`**, before the command:\n\n"
+          "after": "\nA profile is a named connection to a Telegram account in the CLI. Usually you use one per phone number: for example `personal` for a personal account and `work` for a work account. Each connection has its own login session, application credentials, settings, allowed recipients and run records.\n\n`work` is a label you choose, not a phone number. Connect a work account with:\n\n```sh\ntg work session start --app browser\n```\n\nUse the work number to register credentials; for QR login, switch Telegram on your phone to the work account. Then check which account the label refers to:\n\n```sh\ntg work account show\n```\n\nYou can also connect the same account in multiple profiles; a profile does not create a Telegram account. The profile name is **the first word after `tg`**, before the command:\n\n"
         }
       ],
       "es": [
         {
           "before": "\nUn perfil es una sesión independiente, con su propia aplicación, configuración, destinatarios y ejecuciones. Su nombre es **la primera palabra** del comando, no una opción:\n\n",
-          "after": "\nUn perfil es una conexión con nombre a una cuenta Telegram en el CLI. Normalmente usas uno por número: `default` para la cuenta personal y `work` para la cuenta laboral. Cada conexión tiene su sesión, credenciales de aplicación, ajustes, destinatarios permitidos y ejecuciones.\n\n`work` es una etiqueta que eliges, no un número. Conecta la cuenta laboral con:\n\n```sh\ntg work session start --app browser\n```\n\nUsa el número laboral para registrar credenciales; para el QR, cambia Telegram del teléfono a la cuenta laboral. Comprueba después qué cuenta corresponde a la etiqueta:\n\n```sh\ntg work account show\n```\n\nPuedes conectar la misma cuenta en varios perfiles; un perfil no crea una cuenta Telegram. Su nombre es **la primera palabra después de `tg`**, antes del comando:\n\n"
+          "after": "\nUn perfil es una conexión con nombre a una cuenta Telegram en el CLI. Normalmente usas uno por número: `personal` para la cuenta personal y `work` para la cuenta laboral. Cada conexión tiene su sesión, credenciales de aplicación, ajustes, destinatarios permitidos y ejecuciones.\n\n`work` es una etiqueta que eliges, no un número. Conecta la cuenta laboral con:\n\n```sh\ntg work session start --app browser\n```\n\nUsa el número laboral para registrar credenciales; para el QR, cambia Telegram del teléfono a la cuenta laboral. Comprueba después qué cuenta corresponde a la etiqueta:\n\n```sh\ntg work account show\n```\n\nPuedes conectar la misma cuenta en varios perfiles; un perfil no crea una cuenta Telegram. Su nombre es **la primera palabra después de `tg`**, antes del comando:\n\n"
         }
       ]
     }
@@ -282,43 +245,6 @@
         {
           "before": "if ! max personal messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max personal setup\" ;;\n  esac\nfi",
           "after": "if max personal messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max personal setup\" ;;\n  esac\nfi"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "installation",
-    "reason": "Use harness-neutral first-run commands. setup asks for the agent in an interactive terminal; preserve explicit option documentation and machine-mode behavior. Requested by owner 2026-10-04; checked against setup option/selectAgent implementations.",
-    "replacements": {
-      "en": [
-        {
-          "before": "\ntg setup --agent codex\n",
-          "after": "\ntg setup\n"
-        },
-        {
-          "before": "\nWithout a global installation, use `npm exec --yes --package=@wirecat/tg-cli -- tg setup --agent codex`.\n",
-          "after": "\nWithout a global installation, use `npm exec --yes --package=@wirecat/tg-cli -- tg setup`.\n"
-        }
-      ],
-      "ru": [
-        {
-          "before": "\ntg setup --agent codex\n",
-          "after": "\ntg setup\n"
-        },
-        {
-          "before": "\nБез глобальной установки используйте `npm exec --yes --package=@wirecat/tg-cli -- tg setup --agent codex`. Затем программа установки предлагает следующие команды в той же форме.\n",
-          "after": "\nБез глобальной установки используйте `npm exec --yes --package=@wirecat/tg-cli -- tg setup`. Настройка предложит последующие команды в таком же виде.\n"
-        }
-      ],
-      "es": [
-        {
-          "before": "\ntg setup --agent codex\n",
-          "after": "\ntg setup\n"
-        },
-        {
-          "before": "\nSin una instalación global, utilice `npm exec --yes --package=@wirecat/tg-cli -- tg setup --agent codex`. Luego, el programa de instalación sugiere los siguientes comandos de la misma forma.\n",
-          "after": "\nSin instalación global, usa `npm exec --yes --package=@wirecat/tg-cli -- tg setup`. Setup propone los comandos siguientes de la misma forma.\n"
         }
       ]
     }
@@ -507,20 +433,20 @@
     "replacements": {
       "en": [
         {
-          "before": "`tg chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
-          "after": "`tg chats link update <chat> <link> --approval --expire-time <time>`, `tg chats link update <chat> <link> --no-approval --max-uses <n>`"
+          "before": "`tg personal chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
+          "after": "`tg personal chats link update <chat> <link> --approval --expire-time <time>`, `tg personal chats link update <chat> <link> --no-approval --max-uses <n>`"
         }
       ],
       "ru": [
         {
-          "before": "`tg chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
-          "after": "`tg chats link update <chat> <link> --approval --expire-time <time>`, `tg chats link update <chat> <link> --no-approval --max-uses <n>`"
+          "before": "`tg personal chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
+          "after": "`tg personal chats link update <chat> <link> --approval --expire-time <time>`, `tg personal chats link update <chat> <link> --no-approval --max-uses <n>`"
         }
       ],
       "es": [
         {
-          "before": "`tg chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
-          "after": "`tg chats link update <chat> <link> --approval --expire-time <time>`, `tg chats link update <chat> <link> --no-approval --max-uses <n>`"
+          "before": "`tg personal chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
+          "after": "`tg personal chats link update <chat> <link> --approval --expire-time <time>`, `tg personal chats link update <chat> <link> --no-approval --max-uses <n>`"
         }
       ]
     }
@@ -688,7 +614,7 @@
   {
     "tool": "tg",
     "slug": "commands",
-    "reason": "`tg messages search`, `tg conversations search`, `tg topics search` and `tg bot messages search` were replaced by `tg search messages`, `tg search conversations`, `tg search topics` and `tg bot search messages`. Keep the published anchors of the removed commands pointing at their replacements so existing links still land on the right entry.",
+    "reason": "`tg messages search`, `tg conversations search`, `tg topics search` and `tg bot messages search` were replaced by `tg search messages`, `tg search conversations`, `tg search topics` and `tg bot search messages`, and `tg store fetch` was renamed `tg messages sync` (0.52.0). Keep the published anchors of the removed commands pointing at their replacements so existing links still land on the right entry.",
     "replacements": {
       "en": [
         {
@@ -706,6 +632,10 @@
         {
           "before": "\n#### `tg bot search messages`\n",
           "after": "\n<a id=\"tg-bot-messages-search\" />\n\n#### `tg bot search messages`\n"
+        },
+        {
+          "before": "\n### `tg messages sync`\n",
+          "after": "\n<a id=\"tg-store-fetch\" />\n\n### `tg messages sync`\n"
         }
       ],
       "ru": [
@@ -724,6 +654,10 @@
         {
           "before": "\n#### `tg bot search messages`\n",
           "after": "\n<a id=\"tg-bot-messages-search\" />\n\n#### `tg bot search messages`\n"
+        },
+        {
+          "before": "\n### `tg messages sync`\n",
+          "after": "\n<a id=\"tg-store-fetch\" />\n\n### `tg messages sync`\n"
         }
       ],
       "es": [
@@ -742,6 +676,10 @@
         {
           "before": "\n#### `tg bot search messages`\n",
           "after": "\n<a id=\"tg-bot-messages-search\" />\n\n#### `tg bot search messages`\n"
+        },
+        {
+          "before": "\n### `tg messages sync`\n",
+          "after": "\n<a id=\"tg-store-fetch\" />\n\n### `tg messages sync`\n"
         }
       ]
     }
@@ -1000,8 +938,8 @@
           "after": "Unknown commands, unknown options and missing required arguments return exit code `2` (`validation_error`). With `--json`, the error is a JSON object on stderr. An unrecognised first word is interpreted as a profile name, so a command typo may be read as a profile:"
         },
         {
-          "before": "| `1` | `generic_failure` | a typo in a command name, or a fault in `tg` itself | [unknown command](#error-unknown-command-), [report it](#report-a-problem) |",
-          "after": "| `1` | `generic_failure` | an unexpected failure in `tg` | [report it](#report-a-problem) |"
+          "before": "| `1` | `internal_error` | a typo in a command name, or a fault in `tg` itself | [unknown command](#error-unknown-command-), [report it](#report-a-problem) |",
+          "after": "| `1` | `internal_error` | an unexpected failure in `tg` | [report it](#report-a-problem) |"
         },
         {
           "before": "| `2` | `validation_error` | a value or a combination of options `tg` does not accept; a name that fits several chats | [values](#--limit-takes-a-whole-number-from-1-upwards), [several chats](#-matches-3-chats--name-one-by-its-id) |",
@@ -1009,7 +947,7 @@
         },
         {
           "before": "```text\ntg chat list\nerror: unknown command 'list'\n```",
-          "after": "```text\ntg chat list --json\n{\"error\":{\"retryable\":false,\"code\":\"validation_error\",\"message\":\"unknown command 'list' \\\"chat\\\" is not a command, so it was read as a profile name — which left \\\"list\\\" to be one.\"}}\n```"
+          "after": "```text\ntg chat list --json\n{\"error\":{\"code\":\"validation_error\",\"reason\":\"input.invalid\",\"message\":\"unknown command 'list' \\\"chat\\\" is not a command, so it was read as a profile name — which left \\\"list\\\" to be one.\"}}\n```"
         }
       ],
       "ru": [
@@ -1018,8 +956,8 @@
           "after": "Неизвестная команда, неизвестная опция и пропущенный обязательный аргумент возвращают код `2` (`validation_error`). С `--json` ошибка выводится объектом JSON в stderr. Первое слово, не являющееся командой, считается именем профиля, поэтому опечатка может стать именем профиля:"
         },
         {
-          "before": "| `1` | `generic_failure` | опечатка в команде или сбой `tg` | [неизвестная команда](#error-unknown-command-), [сообщить](#report-a-problem) |",
-          "after": "| `1` | `generic_failure` | непредвиденный сбой `tg` | [сообщить](#report-a-problem) |"
+          "before": "| `1` | `internal_error` | опечатка в команде или сбой `tg` | [неизвестная команда](#error-unknown-command-), [сообщить](#report-a-problem) |",
+          "after": "| `1` | `internal_error` | непредвиденный сбой `tg` | [сообщить](#report-a-problem) |"
         },
         {
           "before": "| `2` | `validation_error` | значение или сочетание параметров, которое `tg` не принимает; имя, совпадающее с несколькими чатами | [значения](#--limit-takes-a-whole-number-from-1-upwards), [несколько чатов](#-matches-3-chats--name-one-by-its-id) |",
@@ -1027,7 +965,7 @@
         },
         {
           "before": "```text\ntg chat list\nerror: unknown command 'list'\n```",
-          "after": "```text\ntg chat list --json\n{\"error\":{\"retryable\":false,\"code\":\"validation_error\",\"message\":\"unknown command 'list' \\\"chat\\\" is not a command, so it was read as a profile name — which left \\\"list\\\" to be one.\"}}\n```"
+          "after": "```text\ntg chat list --json\n{\"error\":{\"code\":\"validation_error\",\"reason\":\"input.invalid\",\"message\":\"unknown command 'list' \\\"chat\\\" is not a command, so it was read as a profile name — which left \\\"list\\\" to be one.\"}}\n```"
         }
       ],
       "es": [
@@ -1036,8 +974,8 @@
           "after": "Los comandos u opciones desconocidos y los argumentos obligatorios ausentes devuelven el código `2` (`validation_error`). Con `--json`, el error es un objeto JSON en stderr. Una primera palabra que no sea un comando se interpreta como nombre de perfil, así que una errata puede convertirse en un perfil:"
         },
         {
-          "before": "| `1` | `generic_failure` | error en el nombre del comando o fallo de `tg` | [comando desconocido](#error-unknown-command-), [informar del problema](#report-a-problem) |",
-          "after": "| `1` | `generic_failure` | un fallo inesperado de `tg` | [informar del problema](#report-a-problem) |"
+          "before": "| `1` | `internal_error` | error en el nombre del comando o fallo de `tg` | [comando desconocido](#error-unknown-command-), [informar del problema](#report-a-problem) |",
+          "after": "| `1` | `internal_error` | un fallo inesperado de `tg` | [informar del problema](#report-a-problem) |"
         },
         {
           "before": "| `2` | `validation_error` | un valor o una combinación de opciones que `tg` no acepta; un nombre que coincide con varios chats | [valores](#--limit-takes-a-whole-number-from-1-upwards), [varios chats](#-matches-3-chats--name-one-by-its-id) |",
@@ -1045,7 +983,7 @@
         },
         {
           "before": "```text\ntg chat list\nerror: unknown command 'list'\n```",
-          "after": "```text\ntg chat list --json\n{\"error\":{\"retryable\":false,\"code\":\"validation_error\",\"message\":\"unknown command 'list' \\\"chat\\\" is not a command, so it was read as a profile name — which left \\\"list\\\" to be one.\"}}\n```"
+          "after": "```text\ntg chat list --json\n{\"error\":{\"code\":\"validation_error\",\"reason\":\"input.invalid\",\"message\":\"unknown command 'list' \\\"chat\\\" is not a command, so it was read as a profile name — which left \\\"list\\\" to be one.\"}}\n```"
         }
       ]
     }
@@ -1609,6 +1547,43 @@
         {
           "before": "`memo sync --mail` y `memo import`",
           "after": "`memo import --mail` y `memo import`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "search",
+    "reason": "tg 0.53.0 search guide names memo sync --mail, which arrives in a memo release newer than the pinned memo 0.21.0; there mail and notes are imported with memo import --mail and memo import --notes. Drop this correction when the memo pin reaches memo sync.",
+    "replacements": {
+      "en": [
+        {
+          "before": "# only the mail memo sync --mail brought in",
+          "after": "# only the mail memo import --mail brought in"
+        },
+        {
+          "before": "`memo sync --mail` and `memo import`",
+          "after": "`memo import --mail` and `memo import --notes`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "# only the mail memo sync --mail brought in",
+          "after": "# only the mail memo import --mail brought in"
+        },
+        {
+          "before": "`memo sync --mail` и `memo import`",
+          "after": "`memo import --mail` и `memo import --notes`"
+        }
+      ],
+      "es": [
+        {
+          "before": "# only the mail memo sync --mail brought in",
+          "after": "# only the mail memo import --mail brought in"
+        },
+        {
+          "before": "`memo sync --mail` y `memo import`",
+          "after": "`memo import --mail` y `memo import --notes`"
         }
       ]
     }

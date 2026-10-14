@@ -15,14 +15,14 @@ Palabras que utiliza esta página:
 
 ## El ritmo: un cupo por perfil
 
-Cada solicitud que `tg` hace para un perfil —desde un comando, `tg mcp`, `tg serve` o un trabajo en segundo plano—
+Cada solicitud que `tg` hace para un perfil —desde un comando, `tg personal mcp`, `tg personal serve` o un trabajo en segundo plano—
 usa el mismo ritmo regulado de ese perfil:
 
 - una ráfaga de **20 solicitudes** se ejecuta de inmediato, por lo que los comandos habituales no esperan;
 - después de la ráfaga, **una solicitud por segundo** (60 por minuto), hasta que el cupo se reponga durante la inactividad.
 
 **Dos comandos simultáneos comparten el mismo ritmo.** Los turnos se guardan en un archivo dentro de la carpeta de estado
-(`pace/<profile>.json`), por lo que dos terminales, varios trabajos `store fetch --background` y `serve` se ponen
+(`pace/<profile>.json`), por lo que dos terminales, varios trabajos `messages sync --background` y `serve` se ponen
 en la misma cola en lugar de ejecutarse cada uno a toda velocidad. Ejecutar cinco descargas en paralelo no es más rápido
 que ejecutarlas una tras otra, ni implica más riesgo. Los distintos perfiles —distintas
 cuentas de Telegram— tienen su propio ritmo.
@@ -40,7 +40,7 @@ Cambia el ritmo en el archivo de configuración o, para una sesión del intérpr
 ```
 
 ```sh
-TG_REQUESTS_PER_MINUTE=30 tg store fetch "Book club"
+TG_REQUESTS_PER_MINUTE=30 tg personal messages sync "Book club"
 ```
 
 `0` desactiva la regulación del ritmo. Hazlo solo para un perfil cuya cuenta puedas permitirte que Telegram limite.
@@ -53,14 +53,14 @@ TG_REQUESTS_PER_MINUTE=30 tg store fetch "Book club"
 | hasta 2 min, en `serve` y `watch` | espera como máximo tres veces |
 | más tiempo | se detiene con el código de salida `8` (`rate_limited`) y `retryAfterMs` en el JSON |
 
-`store fetch` y `messages download --all` esperan hasta 5 minutos entre páginas y continúan;
-una espera más larga detiene la ejecución, y la siguiente continúa desde lo que ya se ha guardado. `store fetch --all`
+`messages sync` y `messages download --all` esperan hasta 5 minutos entre páginas y continúan;
+una espera más larga detiene la ejecución, y la siguiente continúa desde lo que ya se ha guardado. `messages sync --all`
 también espera las pausas breves de Telegram mientras obtiene la lista de chats.
 
 **Una espera bloquea todo el perfil.** Hasta que termine, la siguiente solicitud de cada proceso espera a que finalice; una solicitud
 que tendría que esperar más de 5 minutos falla de inmediato con el código de salida `8`, sin consultar Telegram.
-`tg doctor` y `tg server status` muestran en `flood` qué está bloqueado. Cuando termina la espera, no hace falta
-hacer nada; `tg flood clear` la levanta antes si sabes que Telegram ya no limita la cuenta.
+`tg personal doctor` y `tg personal server status` muestran en `flood` qué está bloqueado. Cuando termina la espera, no hace falta
+hacer nada; `tg personal flood clear` la levanta antes si sabes que Telegram ya no limita la cuenta.
 
 ## Operaciones de escritura
 
@@ -70,18 +70,18 @@ hacer nada; `tg flood clear` la levanta antes si sabes que Telegram ya no limita
 
 ## Lecturas masivas
 
-- `store fetch`: páginas de hasta 100 mensajes, `--pause` entre páginas (1 s de forma predeterminada), 1000 mensajes por
+- `messages sync`: páginas de hasta 100 mensajes, `--pause` entre páginas (1 s de forma predeterminada), 1000 mensajes por
   ejecución salvo que `--limit` indique otra cantidad. `--estimate` calcula primero las solicitudes y no envía ninguna.
 - `messages download --all`: una solicitud por página y por archivo; las descargas de archivos también siguen el ritmo regulado.
-- `store fetch --all` obtiene la lista de chats en páginas de 100, un turno del ritmo por página.
+- `messages sync --all` obtiene la lista de chats en páginas de 100, un turno del ritmo por página.
 - `chats list --all` lee todos los chats en un solo turno: una solicitud por cada 100 chats, seguidas.
 - `chats members list --all`: páginas de 200 miembros, con 1 s entre ellas, hasta el tope de Telegram de 10 000.
-- La reparación de lagunas lee página a página con una pausa de 1 s, como `store fetch`.
+- La reparación de lagunas lee página a página con una pausa de 1 s, como `messages sync`.
 
 ## Trabajos en segundo plano
 
-`store fetch --background` y `store gaps repair --background` inician un trabajo que dura más que el comando: un trabajo por chat a la vez, cada uno en su propio proceso, todo al mismo ritmo del perfil. `tg store jobs
-list` los muestra, `tg store jobs cancel <job>` se detiene uno después de su página actual. Consulte [descarga en segundo plano](./archive.md#in-the-background).
+`messages sync --background` y `store gaps repair --background` inician un trabajo que dura más que el comando: un trabajo por chat a la vez, cada uno en su propio proceso, todo al mismo ritmo del perfil. `tg personal store jobs
+list` los muestra, `tg personal store jobs cancel <job>` se detiene uno después de su página actual. Consulte [descarga en segundo plano](./archive.md#in-the-background).
 
 ## Bots
 

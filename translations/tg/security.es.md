@@ -18,7 +18,8 @@ Lo que cada herramienta WireCat tiene en común (el archivo local, el control de
 - **Ningún comando acepta secretos como argumento:** ni el hash de la aplicación, ni la contraseña 2FA, ni el código de inicio de sesión, ni un número de teléfono.
 - **La protección de envíos es la común:** todos los comandos y herramientas MCP comprueban `permissions`, la lista de destinatarios y `sendsPerHour` ([más abajo](#the-send-guard)).
 - **`tg` se comunica con Telegram, npm y my.telegram.org** (a través de tu proxy si configuras uno) y con los servidores de descarga de modelos o los servicios de embeddings y análisis que configures de forma explícita ([más abajo](#what-goes-over-the-network)).
-- **No protege frente a alguien que utilice tu usuario del equipo** ni frente a un agente al que se permite cambiar los ajustes.
+- **El archivo local no está cifrado y se conserva después de cerrar la sesión.** Solo el cifrado del disco completo lo protege si te roban el disco.
+- **No protege frente a alguien que utilice tu usuario del equipo** ni frente a un agente al que se permite cambiar los ajustes. Los límites detienen a un agente al que un mensaje que ha leído convence para enviar, no a uno que se propone sortearlos; frente a ese, ejecuta el agente en un entorno aislado (sandbox) o como un usuario distinto.
 
 ## Dónde se guarda la sesión
 
@@ -45,10 +46,10 @@ El archivo local, la configuración, los registros de ejecución, el registro de
 | punto de `inbox --new` | `inbox/<profile>.json` | dónde terminó la última revisión | `0600` |
 | descargas en segundo plano | directorio de estado | chat, progreso y resultado | `0600` |
 | registro y bloqueo de `serve` | `serve/<profile>.log`, o registro systemd | lo que hizo `serve` | `0600` |
-| unidad systemd o agente launchd, solo con `tg server install` | carpeta de unidades del usuario | comando que inicia `serve` | `0644` |
-| copia de seguridad, solo con `tg store backup` | archivo indicado | copia del archivo local completo | `0600` |
+| unidad systemd o agente launchd, solo con `tg personal server install` | carpeta de unidades del usuario | comando que inicia `serve` | `0644` |
+| copia de seguridad, solo con `tg personal store backup` | archivo indicado | copia del archivo local completo | `0600` |
 
-Las rutas exactas en esta máquina: `tg doctor`. Las carpetas de cada sistema: [dónde van los archivos](./installation.md#where-files-go).
+Las rutas exactas en esta máquina: `tg personal doctor`. Las carpetas de cada sistema: [dónde van los archivos](./installation.md#where-files-go).
 
 Si pierdes el equipo, cierra la sesión desde otro dispositivo: Telegram → Ajustes → Dispositivos, y termina la creada por `tg`. Así el archivo de sesión deja de servir.
 
@@ -59,8 +60,8 @@ Todos los comandos y herramientas MCP que cambian algo en Telegram pasan por la 
 ```sh
 tg config set permissions.messages readonly  # no change to messages from this profile
 tg config set permissions.messages.send ask  # a question before each send
-tg recipients add "Book club"                # the first add turns the list on
-tg sends list                                # every attempt: sent, refused, failed, or not known
+tg personal recipients add "Book club"       # the first add turns the list on
+tg personal sends list                       # every attempt: sent, refused, failed, or not known
 ```
 
 En Telegram cuentan para el límite por hora: mensajes, reenvíos, ediciones, mensajes fijados con notificación, cada mensaje eliminado, grupos nuevos y cada persona añadida. No cuentan reacciones, votos, mensajes fijados sin aviso ni marcar como leído. Los reenvíos se comprueban contra el chat de destino.
@@ -75,8 +76,8 @@ Los caracteres de control, los saltos de línea en nombres y los títulos de cha
 
 - **Telegram**, a través de MTProto para comandos de cuentas personales, incluidos archivos y fotos. Los comandos de bot utilizan la API de bot HTTPS; `bot store fetch` utiliza una sesión de bot MTProto separada para el historial.
 - **npm**, una vez al día en una terminal, para ver si existe un `tg` más nuevo y en `tg upgrade`.   `updateCheck` o `TG_NO_UPDATE_CHECK=1` lo apaga ([configuración](./configuration.md)).
-- **my.telegram.org**, solo durante `tg setup` o `tg session start`: abierto en su navegador, o, con `--app auto`, controlado por `tg`. Una aplicación que `tg` crea allí se titula `tg-cli` y tiene la página GitHub de este proyecto como dirección.
-- **Hugging Face y GitHub**, solo cuando ejecutas `tg models audio download` o `tg models text download`. Un mensaje de voz nunca llega allí: en esta máquina se ejecuta un modelo local.
+- **my.telegram.org**, solo durante `tg personal setup` o `tg personal session start`: abierto en su navegador, o, con `--app auto`, controlado por `tg`. Una aplicación que `tg` crea allí se titula `tg-cli` y tiene la página GitHub de este proyecto como dirección.
+- **Hugging Face y GitHub**, solo cuando ejecutas `tg personal models audio download` o `tg personal models text download`. Un mensaje de voz nunca llega allí: en esta máquina se ejecuta un modelo local.
 - **Los endpoints de embeddings configurados** reciben texto de conversación de `conversations embed` después del consentimiento y consulta de texto de `search conversations` remoto, incluidas las búsquedas de MCP. Las incrustaciones locales no envían ningún texto.
 - **Los puntos finales de análisis configurados** reciben lotes de mensajes limitados solo con `conversations build --analyze --chat`, después del consentimiento limitado a la cuenta, el chat y el proveedor; La construcción ordinaria no envía nada.
 
@@ -88,7 +89,7 @@ No hay telemetría.
 
 ## Inicio de sesión
 
-`tg setup` y `tg session start` dibujan el QR en la terminal. Queda en el historial visual, pero Telegram lo renueva mientras esperas, por lo que los antiguos no sirven. `--qr-file` lo guarda como PNG legible solo por ti y eliminal archivo al finalizar, funcione o no.
+`tg personal setup` y `tg personal session start` dibujan el QR en la terminal. Queda en el historial visual, pero Telegram lo renueva mientras esperas, por lo que los antiguos no sirven. `--qr-file` lo guarda como PNG legible solo por ti y elimina el archivo al finalizar, funcione o no.
 
 `--app auto` rellena my.telegram.org sin navegador: solicita el teléfono y el código que el sitio envía por Telegram, nada más.
 
@@ -100,8 +101,8 @@ El postinstall global de npm instala la skill incluida en los directorios de age
 
 ## Si se filtra la sesión
 
-1. En Telegram → Ajustes → Dispositivos, termina la sesión creada por `tg`. También puedes ejecutar `tg session end` en este equipo: termina la sesión en Telegram y eliminal archivo.
-2. Inicia sesión de nuevo: `tg session start`.
+1. En Telegram → Ajustes → Dispositivos, termina la sesión creada por `tg`. También puedes ejecutar `tg personal session end` en este equipo: termina la sesión en Telegram y elimina el archivo.
+2. Inicia sesión de nuevo: `tg personal session start`.
 
 ## Siguiente paso
 

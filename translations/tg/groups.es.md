@@ -12,23 +12,23 @@ Aquí todo funciona desde tu cuenta personal, en grupos donde eres administrador
 - **Un administrador** es un miembro con derechos para administrar el grupo. Algunos comandos cuentan sólo sus respuestas y las respuestas de los administradores.
 - **El almacén local** es la copia de mensajes que `tg` guarda en esta computadora. Los informes y las tareas lo utilizan, por lo que solo ven lo que se descargó.
 - **Una tarea** es algo que espera de ti, como una pregunta que nadie respondió. `tg` abre y cierra tareas en el archivo local.
-- **Las reglas** dicen qué busca `tg chats moderate`, como enlaces o inundaciones, y qué puede hacer.
+- **Las reglas** dicen qué busca `tg personal chats moderate`, como enlaces o inundaciones, y qué puede hacer.
 - **Una instantánea de miembros** es la lista de miembros guardada en un día. Las instantáneas a lo largo del tiempo muestran quién se unió y quién se fue.
 
 ## Qué puedes hacer
 
 | Tarea | Comando |
 | --- | --- |
-| Encuentra preguntas que esperan una respuesta | `tg review --unanswered` |
-| Vea quién se unió, se fue, fue agregado o eliminado | `tg chats events` |
-| Resumen de una semana: decisiones, promesas, preguntas abiertas | `tg review --since-time 7d` |
-| Mantenga una lista de lo que le espera | `tg tasks list` |
-| Elimina el spam según tus propias reglas | `tg chats rules set`, `tg chats moderate` |
-| Reemplazar un enlace de invitación filtrado | `tg chats link reset` |
-| Dejar entrar a la gente o rechazarla | `tg chats requests list\|accept\|decline` |
-| Ver la actividad de la semana y las estadísticas propias de Telegram | `tg stats chats show`, `tg stats chats official` |
-| Guarde la lista de miembros todos los días | `tg chats members fetch --track` |
-| Encuentra miembros que parezcan bots o spammers | `tg chats members audit` |
+| Encuentra preguntas que esperan una respuesta | `tg personal review --unanswered` |
+| Vea quién se unió, se fue, fue agregado o eliminado | `tg personal chats events` |
+| Resumen de una semana: decisiones, promesas, preguntas abiertas | `tg personal review --since-time 7d` |
+| Mantenga una lista de lo que le espera | `tg personal tasks list` |
+| Elimina el spam según tus propias reglas | `tg personal chats rules set`, `tg personal chats moderate` |
+| Reemplazar un enlace de invitación filtrado | `tg personal chats link reset` |
+| Dejar entrar a la gente o rechazarla | `tg personal chats requests list\|accept\|decline` |
+| Ver la actividad de la semana y las estadísticas propias de Telegram | `tg personal stats chats show`, `tg personal stats chats official` |
+| Guarde la lista de miembros todos los días | `tg personal chats members fetch --track` |
+| Encuentra miembros que parezcan bots o spammers | `tg personal chats members audit` |
 
 La lista completa de comandos de grupo está [abajo](#what-there-is). Los detalles de cada comando se encuentran en [grupos y canales en la guía de uso](./usage.md#groups-and-channels); cada opción está en la [referencia de comando](./commands.md).
 
@@ -49,7 +49,7 @@ Empieza por las preguntas que esperan una respuesta tuya o de los administradore
 **Comando:**
 
 ```sh
-tg review --chat "Hiking" --unanswered 4h --json
+tg personal review --chat "Hiking" --unanswered 4h --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -77,7 +77,7 @@ Revisa los eventos de entrada. Una cuenta nueva merece revisión; su edad no dem
 **Comando:**
 
 ```sh
-tg chats events "Hiking" --type join,add --since-time 7d --json
+tg personal chats events "Hiking" --type join,add --since-time 7d --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -102,13 +102,13 @@ Reemplaza el enlace de invitación cuando hayas pedido ese cambio.
 **Reemplazar el enlace:**
 
 ```sh
-tg chats link reset "Hiking" --json
+tg personal chats link reset "Hiking" --json
 ```
 
 **Restringir la incorporación de miembros:**
 
 ```sh
-tg chats update "Hiking" --only-admins-add on --json
+tg personal chats update "Hiking" --only-admins-add on --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -133,7 +133,7 @@ Primero vea lo que sugieren las reglas, sin ninguna acción.
 **Comando:**
 
 ```sh
-tg chats moderate "Hiking" --dry-run --json
+tg personal chats moderate "Hiking" --dry-run --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -159,7 +159,7 @@ Pide un resumen de decisiones, compromisos y preguntas pendientes.
 **Comando:**
 
 ```sh
-tg review --chat "Hiking" --since-time 7d --json
+tg personal review --chat "Hiking" --since-time 7d --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -180,7 +180,7 @@ tg review --chat "Hiking" --since-time 7d --json
 No necesitas un agente para obtener las preguntas pendientes: basta con ejecutar el comando.
 
 ```cron
-0 9,21 * * * tg review --chat "Hiking" --unanswered --json >> ~/hiking-open.jsonl 2>> ~/tg-cron.log
+0 9,21 * * * tg personal review --chat "Hiking" --unanswered --json >> ~/hiking-open.jsonl 2>> ~/tg-cron.log
 ```
 
 cron no tiene terminal y, a menudo, no tiene `XDG_RUNTIME_DIR`, sin el cual `tg` no puede acceder al llavero: consulte [ejecución programada](./recipes.md#running-on-a-schedule).
@@ -189,28 +189,37 @@ cron no tiene terminal y, a menudo, no tiene `XDG_RUNTIME_DIR`, sin el cual `tg`
 
 | Comando | Qué hace |
 |---|---|
-| `tg review --chat <chat> --unanswered [duration]` | preguntas que usted y los administradores no han respondido durante tanto tiempo: `4h`, `1d`; 24 horas por defecto |
-| `tg chats events <chat>` | quién se incorporó, se fue, fue añadido o eliminado, y por quién; 7 días por defecto |
-| `tg chats members list <chat>` | todos los miembros del grupo, con su rol y cuándo fueron vistos por última vez |
-| `tg topics list <chat>`, `tg search topics <chat> <text>` | los temas de un grupo de foro; la búsqueda los encuentra por título |
-| `tg topics show <chat> <id>` | un tema: título, cerrado o fijado, recuento de no leídos, última actividad |
-| `tg topics enable <chat>` | habilitar un foro; un grupo básico requiere `--upgrade --yes` y devuelve una nueva identificación de chat |
-| `tg topics create <chat> <title>` | crear un tema; después de un resultado desconocido marque `topics list` en lugar de repetir |
-| `tg messages send <chat> <text> --topic <id>`, `tg polls create <chat> <question> <answers> --topic <id>` | enviar un mensaje o encuesta sobre un tema del foro |
-| `tg messages forward <chat> <message> --to <forum> --topic <id>` | reenviar un mensaje a un tema del foro `--to` |
-| `tg chats inspect <link>` | adónde conduce una invitación o un enlace público; no se une a nada |
-| `tg chats create <title> [person...]` | un nuevo grupo (un supergrupo) o un canal con `--channel` |
-| `tg chats join <link>`, `tg chats leave <chat>` | unirse por un enlace, salir |
-| `tg chats update <chat>` | el título, la descripción y si los miembros pueden fijar (`--all-can-pin`) o agregar personas (`--only-admins-add`) |
-| `tg chats members add\|remove <chat> <person...>` | agregar personas (se les dice; se nombra a quienes no se pudieron agregar) o eliminarlas (sus mensajes permanecen) |
-| `tg chats admins add <chat> <person> --can <rights>` | convertir a un miembro en administrador con estos derechos: miembros, administradores, información, fijar, vincular, publicar, editar, eliminar |
-| `tg chats admins remove <chat> <person>` | retirar los permisos de administrador; sigue siendo miembro |
-| `tg chats link update <chat> <link> --approval\|--no-approval --expire-time <time> --max-uses <n>` | cambiar solo la aprobación, el vencimiento o el límite de uso proporcionados de su enlace de invitación adicional; suministrar al menos un cambio |
-| `tg chats link show\|reset <chat>` | el enlace de invitación; `reset` hace uno nuevo y el viejo deja de funcionar |
-| `tg chats requests list\|accept\|decline <chat>` | solicitudes para unirse a un grupo que necesita la aprobación de un administrador: quién preguntó, déjelo entrar, rechace; `--all` responde a todas las solicitudes |
-| `tg chats rules show\|set\|unset <chat>` | las reglas del grupo |
-| `tg chats moderate <chat>` | comprobar el grupo según sus reglas; hace lo que permiten las reglas |
-| `tg messages delete --for-everyone`, `pin`, `unpin` | eliminar para todos, pin |
+| `tg personal review --chat <chat> --unanswered [duration]` | preguntas que usted y los administradores no han respondido durante tanto tiempo: `4h`, `1d`; 24 horas por defecto |
+| `tg personal chats events <chat>` | quién se incorporó, se fue, fue añadido o eliminado, y por quién; 7 días por defecto |
+| `tg personal chats members list <chat>` | todos los miembros del grupo, con su rol y cuándo fueron vistos por última vez |
+| `tg personal topics list <chat>`, `tg personal search topics <chat> <text>` | los temas de un grupo de foro; la búsqueda los encuentra por título |
+| `tg personal topics show <chat> <id>` | un tema: título, cerrado o fijado, recuento de no leídos, última actividad |
+| `tg personal topics enable <chat>` | habilitar un foro; un grupo básico requiere `--upgrade --yes` y devuelve una nueva identificación de chat |
+| `tg personal topics create <chat> <title>` | crear un tema; después de un resultado desconocido marque `topics list` en lugar de repetir |
+| `tg personal messages send <chat> <text> --topic <id>`, `tg personal polls create <chat> <question> <answers> --topic <id>` | enviar un mensaje o encuesta sobre un tema del foro |
+| `tg personal messages forward <chat> <message> --to <forum> --topic <id>` | reenviar un mensaje a un tema del foro `--to` |
+| `tg personal chats inspect <link>` | adónde conduce una invitación o un enlace público; no se une a nada |
+| `tg personal chats create <title> [person...]` | un nuevo grupo (un supergrupo) o un canal con `--channel` |
+| `tg personal chats join <link>`, `tg personal chats leave <chat>` | unirse por un enlace, salir |
+| `tg personal chats update <chat>` | el título, la descripción y si los miembros pueden fijar (`--all-can-pin`) o agregar personas (`--only-admins-add`) |
+| `tg personal chats members add\|remove <chat> <person...>` | agregar personas (se les dice; se nombra a quienes no se pudieron agregar) o eliminarlas (sus mensajes permanecen) |
+| `tg personal chats admins add <chat> <person> --can <rights>` | convertir a un miembro en administrador con estos derechos: miembros, administradores, información, fijar, vincular, publicar, editar, eliminar |
+| `tg personal chats admins remove <chat> <person>` | retirar los permisos de administrador; sigue siendo miembro |
+| `tg personal chats link update <chat> <link> --approval\|--no-approval --expire-time <time> --max-uses <n>` | cambiar solo la aprobación, el vencimiento o el límite de uso proporcionados de su enlace de invitación adicional; suministrar al menos un cambio |
+| `tg personal chats link show\|reset <chat>` | el enlace de invitación; `reset` hace uno nuevo y el viejo deja de funcionar |
+| `tg personal chats requests list\|accept\|decline <chat>` | solicitudes para unirse a un grupo que necesita la aprobación de un administrador: quién preguntó, déjelo entrar, rechace; `--all` responde a todas las solicitudes |
+| `tg personal chats rules show\|set\|unset <chat>` | las reglas del grupo |
+| `tg personal chats moderate <chat>` | comprobar el grupo según sus reglas; hace lo que permiten las reglas |
+| `tg personal messages delete --for-everyone`, `pin`, `unpin` | eliminar para todos, pin |
+
+Solo el propietario del grupo puede activar los temas. Un supergrupo existente no necesita
+actualización. Al actualizar un grupo básico, este recibe un nuevo id de chat; el archivo local guarda
+los mensajes anteriores con el id original y no fusiona los dos historiales.
+
+En un tema de foro, el texto, los pies de foto y de archivo y los envíos programados se quedan en el
+tema, y una respuesta explícita debe pertenecer a ese tema. Un tema cerrado o inexistente se rechaza
+antes de enviar nada. Si no se sabe cómo terminó un envío, repítelo con el mismo `--send-id`, chat y
+tema; para un envío programado, consulta `tg personal messages scheduled <chat>` en lugar de repetirlo.
 
 Un agente conectado a través del [servidor MCP](./mcp.md) puede ejecutar los mismos comandos, siempre que los permisos del perfil lo permitan.
 
@@ -223,75 +232,97 @@ Un agente conectado a través del [servidor MCP](./mcp.md) puede ejecutar los mi
 Vea lo que le espera, primero el mayor, luego solo preguntas y menciones en un grupo:
 
 ```sh
-tg tasks list --state open
+tg personal tasks list --state open
 ```
 
 ```sh
-tg tasks list --chat "Hiking" --type question,mention
+tg personal tasks list --chat "Hiking" --type question,mention
 ```
 
 Agregue lo que las reglas no pueden ver, como una promesa que hizo, o cierre una tarea que no necesita respuesta:
 
 ```sh
-tg tasks add msg:telegram/<you>/<chat>/<message> --type promise
+tg personal tasks add msg:telegram/<you>/<chat>/<message> --type promise
 ```
 
 ```sh
-tg tasks close <task> --as dismissed --reason no-reply-needed
+tg personal tasks close <task> --as dismissed --reason no-reply-needed
 ```
+
+Ponle a una tarea un título, una fecha límite y una fecha para volver a mirarla, y vincúlale los
+mensajes y chats a los que pertenece. La fecha de revisión es para ti o para tu agente; tg nunca le
+recuerda nada a nadie:
+
+```sh
+tg personal tasks plan <task> --title "Send Anna the contract" --due 2d --check 1d
+```
+
+```sh
+tg personal tasks link <task> msg:telegram/<you>/<chat>/<message> --chat "Hiking"
+```
+
+Mira lo que necesita atención hoy: tareas vencidas o que vencen pronto, chats donde alguien espera tu
+respuesta y chats donde tú esperas la suya. Lee el archivo local, no el texto de los mensajes:
+
+```sh
+tg personal tasks agenda
+```
+
+`tg skill show follow-ups` muestra una rutina diaria para un agente de IA que redacta borradores de
+respuesta a partir de esta lista y no envía nada.
 
 Vea las tareas abiertas por chat, la más antigua y el tiempo medio para cerrar:
 
 ```sh
-tg stats tasks show
+tg personal stats tasks show
 ```
 
 Una tarea cerrada permanece cerrada y una tarea descartada nunca regresa. Solo sus propias respuestas cierran una tarea (las de un administrador no) y no se ve una mención de `@username`. Un agente conectado a través de MCP recibe los mismos comandos.
 
 ## Normas
 
-Las reglas de un grupo dicen qué busca `tg chats moderate` y qué puede hacer al respecto. Viven en un archivo de este perfil, nunca en Telegram, y nada vigila al grupo en segundo plano: una regla actúa sólo cuando ejecutas `chats moderate`.
+Las reglas de un grupo dicen qué busca `tg personal chats moderate` y qué puede hacer al respecto. Viven en un archivo de este perfil, nunca en Telegram, y nada vigila al grupo en segundo plano: una regla actúa sólo cuando ejecutas `chats moderate`.
 
 Muestra las reglas. Hasta el primer cambio, son los valores predeterminados, marcados como no guardados:
 
 ```sh
-tg chats rules show "Hiking"
+tg personal chats rules show "Hiking"
 ```
 
 Eliminar un mensaje que tiene un enlace:
 
 ```sh
-tg chats rules set "Hiking" links delete
+tg personal chats rules set "Hiking" links delete
 ```
 
 Bloquear a estas personas por id...
 
 ```sh
-tg chats rules set "Hiking" blocked 12345,67890
+tg personal chats rules set "Hiking" blocked 12345,67890
 ```
 
 …y eliminarlos cuando escriban o se unan:
 
 ```sh
-tg chats rules set "Hiking" blockedPeople remove
+tg personal chats rules set "Hiking" blockedPeople remove
 ```
 
 Eliminar sin preguntarte primero:
 
 ```sh
-tg chats rules set "Hiking" consent.delete allow
+tg personal chats rules set "Hiking" consent.delete allow
 ```
 
 Vea lo que haría el cheque, sin hacerlo:
 
 ```sh
-tg chats moderate "Hiking" --dry-run
+tg personal chats moderate "Hiking" --dry-run
 ```
 
 Compruebe qué hay de nuevo desde la última ejecución y actúe:
 
 ```sh
-tg chats moderate "Hiking"
+tg personal chats moderate "Hiking"
 ```
 
 | Regla | Predeterminado | Lo que busca |
@@ -329,7 +360,7 @@ Consulta los mensajes, las personas que escribieron y las respuestas de la seman
 **Comando:**
 
 ```sh
-tg stats chats show "Hiking" --since-time 7d --offline --json
+tg personal stats chats show "Hiking" --since-time 7d --offline --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -347,10 +378,10 @@ Sin `--offline`, el CLI también descarga eventos de entrada y salida. Las obser
 ### Estadísticas de Telegram
 
 ```sh
-tg stats chats official <chat> --json
+tg personal stats chats official <chat> --json
 ```
 
-Telegram calcula estadísticas para los administradores de supergrupos y canales suficientemente grandes, las mismas de la pantalla Estadísticas de sus aplicaciones. `tg stats chats official` las consulta e imprime un objeto JSON. Telegram elige el periodo, indicado como `period`. Cada total incluye el valor del periodo anterior.
+Telegram calcula estadísticas para los administradores de supergrupos y canales suficientemente grandes, las mismas de la pantalla Estadísticas de sus aplicaciones. `tg personal stats chats official` las consulta e imprime un objeto JSON. Telegram elige el periodo, indicado como `period`. Cada total incluye el valor del periodo anterior.
 
 - Un supergrupo (`kind: "group"`) tiene miembros, mensajes, lectores y autores, los principales autores, administradores e invitadores, y 8 gráficos: crecimiento, miembros, nuevos miembros por origen, idiomas, mensajes, acciones, horas y días de la semana.
 - Un canal (`kind: "channel"`) tiene seguidores, vistas, compartidos y reacciones por publicación y por historia, cuántos seguidores tienen notificaciones activadas, publicaciones recientes con sus recuentos y 12 gráficos.
@@ -361,38 +392,38 @@ Telegram responde solo para un chat donde te muestra estadísticas. En un grupo 
 
 ### Instantáneas de miembros y cambios
 
-`tg chats members fetch` lee los miembros al almacén local y registra perfiles, cambios, el recuento del día y si la lectura fue completa. `--budget` limita las páginas. Tras una lectura parcial no se registra a nadie como salido: eso exige leer toda la lista disponible y conocer un recuento del grupo no superior al número leído. Un presupuesto mayor no evita los límites de Telegram para las listas de miembros.
+`tg personal chats members fetch` lee los miembros al almacén local y registra perfiles, cambios, el recuento del día y si la lectura fue completa. `--budget` limita las páginas. Tras una lectura parcial no se registra a nadie como salido: eso exige leer toda la lista disponible y conocer un recuento del grupo no superior al número leído. Un presupuesto mayor no evita los límites de Telegram para las listas de miembros.
 
-`--track` añade el grupo a la lista de seguimiento. `chats tracking list` muestra todos los grupos seguidos; `show` muestra el estado de uno y los recuentos diarios de los últimos 30 días. `add` inicia el seguimiento sin descargar de inmediato; `remove` detiene las descargas diarias y conserva el historial registrado. Mientras funciona `tg serve`, descarga los grupos uno a uno, inicia la primera ronda un minuto después de conectarse y omite los ya descargados en el día UTC actual. El seguimiento no inicia `serve`; si estuvo detenido varios días, la siguiente ejecución registra una instantánea nueva en lugar de rellenar los días perdidos.
+`--track` añade el grupo a la lista de seguimiento. `chats tracking list` muestra todos los grupos seguidos; `show` muestra el estado de uno y los recuentos diarios de los últimos 30 días. `add` inicia el seguimiento sin descargar de inmediato; `remove` detiene las descargas diarias y conserva el historial registrado. Mientras funciona `tg personal serve`, descarga los grupos uno a uno, inicia la primera ronda un minuto después de conectarse y omite los ya descargados en el día UTC actual. El seguimiento no inicia `serve`; si estuvo detenido varios días, la siguiente ejecución registra una instantánea nueva en lugar de rellenar los días perdidos.
 
-`tg chats members history` muestra las entradas, salidas y cambios de perfil registrados, de más antiguo a más nuevo; `--since-time` limita el periodo. Nunca consulta Telegram. Una entrada usa la hora de Telegram si se conoce; si no, la primera vez que se vio a la persona. Una salida se fecha en la primera instantánea completa sin ella, no en el momento exacto de su marcha. La primera descarga registra la lista inicial: esas personas no necesariamente entraron ese día. `chats members list --offline` lee la última lista guardada completa; las lecturas parciales no la sustituyen. Sin una instantánea completa, esta lista puede estar vacía aunque ya se hayan registrado algunos perfiles y eventos. Los perfiles y el historial permanecen en el almacén local junto a los mensajes.
+`tg personal chats members history` muestra las entradas, salidas y cambios de perfil registrados, de más antiguo a más nuevo; `--since-time` limita el periodo. Nunca consulta Telegram. Una entrada usa la hora de Telegram si se conoce; si no, la primera vez que se vio a la persona. Una salida se fecha en la primera instantánea completa sin ella, no en el momento exacto de su marcha. La primera descarga registra la lista inicial: esas personas no necesariamente entraron ese día. `chats members list --offline` lee la última lista guardada completa; las lecturas parciales no la sustituyen. Sin una instantánea completa, esta lista puede estar vacía aunque ya se hayan registrado algunos perfiles y eventos. Los perfiles y el historial permanecen en el almacén local junto a los mensajes.
 
-`tg chats members audit` enumera miembros con señales de bot y sus motivos; `--budget` limita las páginas y `--min-score` fija el umbral. No elimina a nadie y excluye a los administradores y al propietario. `more` indica una lista parcial y `unknown` nombra señales no disponibles. No funciona con `--offline`; las puntuaciones necesitan revisión humana. Telegram proporciona datos de bot, scam, fake, deleted, foto, entrada e invitador cuando están disponibles. «Nunca escribió» significa que no se encontraron mensajes en el historial local, no demuestra que esa persona nunca escribiera en el grupo.
+`tg personal chats members audit` enumera miembros con señales de bot y sus motivos; `--budget` limita las páginas y `--min-score` fija el umbral. No elimina a nadie y excluye a los administradores y al propietario. `more` indica una lista parcial y `unknown` nombra señales no disponibles. No funciona con `--offline`; las puntuaciones necesitan revisión humana. Telegram proporciona datos de bot, scam, fake, deleted, foto, entrada e invitador cuando están disponibles. «Nunca escribió» significa que no se encontraron mensajes en el historial local, no demuestra que esa persona nunca escribiera en el grupo.
 
 `--deep <n>` comprueba también a los primeros n miembros en detalle, a uno por segundo: su perfil, su foto de perfil más antigua, hasta 1000 mensajes guardados de cada uno y dos listas públicas de spam, Combot CAS y lols.bot. Se envía el ID de cada miembro a esas listas. La comprobación completa aparece en `check` de cada miembro revisado.
 
 ### Un informe semanal de tu grupo
 
-«Hiking Club» es un grupo ficticio de ejemplo. Descarga primero sus mensajes con `store fetch` si aún no están guardados; después registra la lista actual de miembros y prepara el informe:
+«Hiking Club» es un grupo ficticio de ejemplo. Descarga primero sus mensajes con `messages sync` si aún no están guardados; después registra la lista actual de miembros y prepara el informe:
 
 ```sh
-tg chats members fetch "Hiking Club" --track --json
+tg personal chats members fetch "Hiking Club" --track --json
 ```
 
 ```sh
-tg stats chats show "Hiking Club" --since-time 7d --by day --timezone Europe/Madrid --json
+tg personal stats chats show "Hiking Club" --since-time 7d --by day --timezone Europe/Madrid --json
 ```
 
 ```sh
-tg chats members history "Hiking Club" --since-time 7d --offline --json
+tg personal chats members history "Hiking Club" --since-time 7d --offline --json
 ```
 
 ```sh
-tg chats tracking show "Hiking Club" --offline --json
+tg personal chats tracking show "Hiking Club" --offline --json
 ```
 
 ```sh
-tg chats members audit "Hiking Club" --json
+tg personal chats members audit "Hiking Club" --json
 ```
 
-Pide al agente que incluya mensajes, remitentes activos, preguntas sin respuesta, cambios de miembros y días con instantáneas. Mantén visibles en el informe `complete`, `more`, `unknown` y los huecos entre instantáneas. Deja `tg serve` funcionando o repite las descargas de miembros para los informes siguientes; el primer informe no puede mostrar salidas anteriores a la primera lista registrada.
+Pide al agente que incluya mensajes, remitentes activos, preguntas sin respuesta, cambios de miembros y días con instantáneas. Mantén visibles en el informe `complete`, `more`, `unknown` y los huecos entre instantáneas. Deja `tg personal serve` funcionando o repite las descargas de miembros para los informes siguientes; el primer informe no puede mostrar salidas anteriores a la primera lista registrada.

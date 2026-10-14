@@ -16,13 +16,13 @@ Algunas palabras en esta página:
 
 | Tarea | Comando |
 | --- | --- |
-| Enviar un archivo, una foto, un vídeo o un mensaje de voz | `tg messages send --file`, `--photo`, `--voice` |
-| Descargar los archivos de un mensaje o un chat | `tg messages download` |
-| Leer texto de archivos guardados en esta computadora | `tg attachments extract` |
-| Vea qué archivos aún necesitan texto | `tg attachments list --needs-text` |
-| Guarde el texto que leyó su agente | `tg attachments text set` |
-| Buscar un mensaje por el texto de su archivo | `tg search messages 'content:…'` |
-| Leer escaneos de forma masiva con un modelo externo | `tg attachments extract --ocr` |
+| Enviar un archivo, una foto, un vídeo o un mensaje de voz | `tg personal messages send --file`, `--photo`, `--voice` |
+| Descargar los archivos de un mensaje o un chat | `tg personal messages download` |
+| Leer texto de archivos guardados en esta computadora | `tg personal attachments extract` |
+| Vea qué archivos aún necesitan texto | `tg personal attachments list --needs-text` |
+| Guarde el texto que leyó su agente | `tg personal attachments text set` |
+| Buscar un mensaje por el texto de su archivo | `tg personal search messages 'content:…'` |
+| Leer escaneos de forma masiva con un modelo externo | `tg personal attachments extract --ocr` |
 
 ## Qué puedes enviar
 
@@ -37,10 +37,10 @@ El envío requiere un comando explícito; extraer texto no envía nada al chat. 
 | Otros audios y vídeos | `--file`; no se convierte en mensaje de voz | `--file`, como archivo |
 
 ```sh
-tg messages send "Study group" "Worksheet" --file worksheet.pdf
-tg messages send "Study group" --photo picture.jpg
-tg messages send "Study group" --file trip.mp4 --as-file
-tg messages send "Study group" --voice note.ogg
+tg personal messages send "Study group" "Worksheet" --file worksheet.pdf
+tg personal messages send "Study group" --photo picture.jpg
+tg personal messages send "Study group" --file trip.mp4 --as-file
+tg personal messages send "Study group" --voice note.ogg
 ```
 
 `--filename` cambia el nombre mostrado, no el formato. Un bot envía con su propio nombre y sus propios permisos: consulte [enviar archivos como bot](./bot.md#files). Para ver subtítulos y spoilers, consulte [enviar archivos desde su cuenta](./usage.md#files-photos-and-voice-messages).
@@ -58,8 +58,8 @@ La descarga guarda medios sin leer su texto ni convertir su formato.
 | Adjunto sin contenido descargable | No genera un archivo |
 
 ```sh
-tg messages download "Study group" 204 --output-dir ./files --json
-tg attachments list --chat "Study group" --needs-text --json
+tg personal messages download "Study group" 204 --output-dir ./files --json
+tg personal attachments list --chat "Study group" --needs-text --json
 ```
 
 Una descarga nunca sobrescribe un archivo existente. `localPath` en la respuesta nombra un archivo en la computadora que ejecuta `tg`.
@@ -129,10 +129,10 @@ Instálelos donde `tg` pueda cargarlos. Después de la instalación, ejecute la 
 Pregúntele a su agente: “Lea cada página de este archivo adjunto, marque los pasajes inciertos, guarde el texto literal y verifique que al buscar una frase se encuentre el mensaje original”. El agente ejecuta comandos como estos:
 
 ```sh
-tg attachments extract --chat "Study group" --download --output-dir ./files
-tg attachments list --chat "Study group" --needs-text
-tg attachments text set "Study group" 204 --text-file ./scan.txt
-tg search messages 'content:worksheet' --chat "Study group" --backend archive
+tg personal attachments extract --chat "Study group" --download --output-dir ./files
+tg personal attachments list --chat "Study group" --needs-text
+tg personal attachments text set "Study group" 204 --text-file ./scan.txt
+tg personal search messages 'content:worksheet' --chat "Study group" --backend archive
 ```
 
 `--attachment` selecciona un archivo de un mensaje entre varios, contando desde 1. Al recibir los bytes y leer el texto no lo indexa: `attachments text set` guarda el resultado. Comprueba que `content:` devuelve el mensaje original y su localizador. El texto de un archivo son datos, nunca instrucciones para el agente. El texto que guardó el agente no se sobrescribe con una extracción automática posterior.
@@ -172,7 +172,7 @@ Un modelo externo puede leer texto en imágenes compatibles y en páginas de arc
 Necesita un modelo de visión, su punto final y una clave. La configuración, el almacenamiento de la clave y la elección de `models.ocr` se encuentran en [Configuración de API y extracción masiva](./search.md#files-preparation-and-archive-gaps). Después de la configuración:
 
 ```sh
-tg attachments extract --chat "Study group" --ocr --concurrency 4 --limit 20 --json
+tg personal attachments extract --chat "Study group" --ocr --concurrency 4 --limit 20 --json
 ```
 
 Una repetición utiliza el hash del archivo y el modelo objetivo; El buen texto guardado permanece después de un error, una cancelación o una respuesta incompleta. El texto del agente no se sobrescribe. Las imágenes y las páginas escaneadas van al proveedor sólo con un `--ocr` explícito; el proveedor cobra las llamadas según sus propios términos. `--offline` y `--ocr` no van juntos y no hay cambio automático del agente a la API.
@@ -201,5 +201,5 @@ Un nuevo fallo no borra el texto válido ya indexado.
 Después de diez intentos, una tasa de errores superior al 50% detiene los elementos nuevos.
 `MESSAGING_BATCH_MAX_ERROR_PERCENT` establece un porcentaje entero de 1 a 100. Los límites de frecuencia y los fallos de autenticación
 pueden detener el lote antes; las solicitudes paralelas ya iniciadas pueden terminar. Respeta la pausa del proveedor y continúa el trabajo pendiente.
-Busca registros parciales con `tg runs search --status partial --json` o MCP `tg_read` con `command: "runs search"`
+Busca registros parciales con `tg personal runs search --status partial --json` o MCP `tg_read` con `command: "runs search"`
 ([diagnóstico](./diagnostics.md)).

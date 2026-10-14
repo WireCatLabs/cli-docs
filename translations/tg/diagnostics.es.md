@@ -11,8 +11,8 @@ Algunas palabras que utiliza esta página:
 
 - Una **ejecución** es una llamada de `tg`, desde el inicio hasta la salida.
 - Un **registro de ejecución** es una carpeta que guarda lo que hizo una ejecución: su comando, su resultado y una línea por solicitud a Telegram. Nunca contiene texto, nombres o títulos de mensajes.
-- **`tg doctor`** comprueba la instalación: la versión, el inicio de sesión, la configuración y el archivo local.
-- Un **informe de problema** es un archivo JSON creado a partir de `tg doctor` y una ejecución fallida. Lo adjuntas a un problema.
+- **`tg personal doctor`** comprueba la instalación: la versión, el inicio de sesión, la configuración y el archivo local.
+- Un **informe de problema** es un archivo JSON creado a partir de `tg personal doctor` y una ejecución fallida. Lo adjuntas a un problema.
 
 ## Qué puedes hacer
 
@@ -20,10 +20,10 @@ Algunas palabras que utiliza esta página:
 |---|---|---|
 | Vea cada solicitud a medida que sucede | `tg --trace …` | no, imprime solo en stderr |
 | Mantenga un registro de una ejecución | `tg --record …` | sí, un registro de ejecución |
-| Encuentra una ejecución fallida más tarde | `tg runs list` | una ejecución fallida se mantiene sola |
+| Encuentra una ejecución fallida más tarde | `tg personal runs list` | una ejecución fallida se mantiene sola |
 | Mantenga un registro de cada ejecución | `tg config set record true` | sí, cada ejecución |
-| Verifique la instalación | `tg doctor`, `tg doctor --online` | no |
-| Hacer un informe de problema | `tg doctor report create` | sí, un archivo que envías |
+| Verifique la instalación | `tg personal doctor`, `tg personal doctor --online` | no |
+| Hacer un informe de problema | `tg personal doctor report create` | sí, un archivo que envías |
 
 ## Ver las operaciones: `--trace`
 
@@ -44,9 +44,9 @@ También pasa por las líneas de registro de la biblioteca de Telegram que se en
 
 ```sh
 tg --record chats list
-tg runs list                 # recorded runs, newest first
-tg runs show <run-id>        # one run: its outcome, and one line per operation
-tg runs path <run-id>        # the folder that holds it
+tg personal runs list        # recorded runs, newest first
+tg personal runs show <run-id>  # one run: its outcome, and one line per operation
+tg personal runs path <run-id>  # the folder that holds it
 ```
 
 Un registro de ejecución es una carpeta en `runs/<day>/` en la carpeta de estado (`~/.local/share/tg-cli/runs/` en Linux). Su nombre es la hora y el comando. Contiene dos archivos:
@@ -89,8 +89,8 @@ Lo mismo ocurre con un informe elaborado a partir de una ejecución.
 ## Comprobar la instalación: `tg doctor`
 
 ```sh
-tg doctor              # connects to nothing
-tg doctor --online     # also connects once and reads the account; sends nothing to Telegram
+tg personal doctor     # connects to nothing
+tg personal doctor --online  # also connects once and reads the account; sends nothing to Telegram
 ```
 
 Muestra versión, entorno de ejecución, perfil, configuración, existencia de sesión y credenciales (nunca sus valores), si `TG_*_DIR` ha cambiado la entrada del llavero, el archivo local (ruta, versión, número de chats y mensajes), los envíos de la última hora y las ejecuciones guardadas.
@@ -99,30 +99,30 @@ Muestra versión, entorno de ejecución, perfil, configuración, existencia de s
 - **`files`** y **`telegram.session.files`** nombran cada archivo o carpeta privada que otros usuarios de esta máquina pueden leer: la sesión, el almacén, sus archivos SQLite `-wal` y `-shm`, el diario de envío y la carpeta de ejecuciones. Cada uno tiene el comando `chmod` que lo soluciona. `doctor` nunca cambia el modo de un archivo. Windows no está marcado.
 - **`online.clock`** (con `--online`) compara el reloj de esta computadora con el de Telegram.   `skewMs` es positivo cuando esta computadora está por delante. Avisa (`ok: false`) a los 10 segundos. Telegram rechaza una solicitud enviada más de 30 segundos antes de su propio reloj.
 - **`online.standing`** (con `--online`) es `active`, `frozen`, `banned`, `deactivated` o `revoked`, o `unknown` cuando la respuesta de Telegram no pudo decirlo. Una cuenta congelada puede leer pero no escribir. Cuando Telegram los proporciona, incluye la fecha en que se congeló la cuenta, la fecha en que Telegram la eliminará y el enlace de apelación. Iniciar sesión nuevamente no vuelve a abrir una cuenta cerrada de Telegram.
-- **`flood`** enumera las esperas que Telegram le pidió a este perfil que mantuviera (`deadlines`) y una retención en sus envíos (`sendBlock`). `doctor` solo lee, con una excepción: **`doctor --online` escribe la retención congelada.** Cuando lee la cuenta como congelada, retiene los envíos hasta la fecha de Telegram. Cuando lo lee como activo, levanta esa retención. Nunca elimina la retención de un límite de spam: `tg flood clear` lo hace.
+- **`flood`** enumera las esperas que Telegram le pidió a este perfil que mantuviera (`deadlines`) y una retención en sus envíos (`sendBlock`). `doctor` solo lee, con una excepción: **`doctor --online` escribe la retención congelada.** Cuando lee la cuenta como congelada, retiene los envíos hasta la fecha de Telegram. Cuando lo lee como activo, levanta esa retención. Nunca elimina la retención de un límite de spam: `tg personal flood clear` lo hace.
 
 ## Crear un informe de problema
 
 ```sh
-tg doctor report create                   # about the newest failed run
-tg doctor report create --run <run-id>    # about this one
+tg personal doctor report create          # about the newest failed run
+tg personal doctor report create --run <run-id>  # about this one
 ```
 
-Escribe un archivo JSON (lo que muestra `tg doctor` más la ejecución) y dice dónde enviarlo: un nuevo número en [github.com/WireCatLabs/tg-cli/issues](https://github.com/WireCatLabs/tg-cli/issues/new). Léelo antes de enviarlo. No contiene ningún texto de mensaje y cada identificación aparece como una etiqueta, no como un número de Telegram. [Cómo informar un problema](./troubleshooting.md#report-a-problem) enumera todo lo que contiene el archivo.
+Escribe un archivo JSON (lo que muestra `tg personal doctor` más la ejecución) y dice dónde enviarlo: un nuevo número en [github.com/WireCatLabs/tg-cli/issues](https://github.com/WireCatLabs/tg-cli/issues/new). Léelo antes de enviarlo. No contiene ningún texto de mensaje y cada identificación aparece como una etiqueta, no como un número de Telegram. [Cómo informar un problema](./troubleshooting.md#report-a-problem) enumera todo lo que contiene el archivo.
 
 Si no hay ejecuciones fallidas guardadas, vuelve a ejecutar el comando que falla; el fallo se guardará automáticamente.
 
 ## Consultar los registros
 
-Los registros son JSON, así que puedes analizarlos con `jq`. `tg runs list --json` devuelve `{ items, page, limit, hasMore }`; `items` contiene los archivos `run.json`, del más reciente al más antiguo:
+Los registros son JSON, así que puedes analizarlos con `jq`. `tg personal runs list --json` devuelve `{ items, page, limit, hasMore }`; `items` contiene los archivos `run.json`, del más reciente al más antiguo:
 
 ```sh
-tg runs list --limit 100 --json | jq '[.items[] | select(.status == "failed") | {command, errorCode}]'
-tg runs list --limit 100 --json | jq '[.items[] | .durationMs] | add / length'    # average duration
-tg runs list --limit 100 --json | jq '[.items[] | select(.requests > 10) | {command, requests}]'
+tg personal runs list --limit 100 --json | jq '[.items[] | select(.status == "failed") | {command, errorCode}]'
+tg personal runs list --limit 100 --json | jq '[.items[] | .durationMs] | add / length'  # average duration
+tg personal runs list --limit 100 --json | jq '[.items[] | select(.requests > 10) | {command, requests}]'
 ```
 
-`tg runs show <run-id>` muestra los mismos eventos como tabla, sin los campos repetidos en cada línea. El archivo completo está en la carpeta que indica `tg runs path <run-id>`.
+`tg personal runs show <run-id>` muestra los mismos eventos como tabla, sin los campos repetidos en cada línea. El archivo completo está en la carpeta que indica `tg personal runs path <run-id>`.
 
 ## Siguiente paso
 
@@ -132,8 +132,8 @@ tg runs list --limit 100 --json | jq '[.items[] | select(.requests > 10) | {comm
 ## Buscar errores y ejecuciones parciales
 
 ```sh
-tg runs search --error-code rate_limited --json
-tg runs search --status partial --since-time 2026-10-01 --json
+tg personal runs search --error-code rate_limited --json
+tg personal runs search --status partial --since-time 2026-10-01 --json
 ```
 
 `runs search` busca texto literal en metadatos y eventos de diagnóstico seguros.
