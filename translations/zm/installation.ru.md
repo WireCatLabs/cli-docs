@@ -60,28 +60,28 @@ zm doctor
 ```sh
 zm config set zoom.clientId <public-client-id>
 zm config set source api
-zm login
+zm session start
 ```
 
 1. Войдите в нужный аккаунт Zoom в браузере и изучите разрешения.
 2. Нажмите **Allow**. Zoom открывает страницу возврата WireCat, которая передаёт ответ
    ожидающему процессу `zm` на компьютере.
-3. Вернитесь в терминал. Вход завершён, когда `zm` сообщает `loggedIn: true` и возвращает
+3. Вернитесь в терминал. Вход завершён, когда `zm` сообщает `logged_in: true` и возвращает
    приглашение. Одного подтверждения в браузере недостаточно.
 4. Если терминал ждёт, скопируйте `code=…&state=…` или весь URL со страницы возврата,
    вставьте в тот же терминал и нажмите Enter до пятиминутного срока. Если процесс уже завершился,
-   выполните `zm login` заново и подтвердите новую попытку.
+   выполните `zm session start` заново и подтвердите новую попытку.
 
 Проверьте сохранённый сеанс и выберите **профиль** — локальную метку данных встреч:
 
 ```sh
 zm session status --json
 zm config set account.profile personal
-zm pull --lookback-days 7
+zm meetings sync --lookback-days 7
 zm meetings list --json
 ```
 
-Сеанс должен сообщить `loggedIn: true`. Успешная загрузка сохраняет доступные встречи организатора;
+Сеанс должен сообщить `logged_in: true`. Успешная загрузка сохраняет доступные встречи организатора;
 список даёт локальные ID. Откройте встречу с ID из него:
 
 ```sh
@@ -90,7 +90,7 @@ zm meetings transcript <meeting-id> --json
 ```
 
 Список может быть пустым, если в периоде нет доступных встреч организатора. Пустая расшифровка
-означает отсутствие текста от Zoom; разрешение его не создаёт. Проверьте [хранение текста](./zoom-app.md#before-your-first-zm-pull)
+означает отсутствие текста от Zoom; разрешение его не создаёт. Проверьте [хранение текста](./zoom-app.md#before-your-first-zm-meetings-sync)
 и при необходимости загрузите ранний период. Ошибка scope называет нужное право; после его
 добавления владельцем подтвердите приложение повторно.
 
@@ -107,7 +107,7 @@ zm meetings transcript <meeting-id> --json
 ```sh
 zm config set account.profile personal
 zm config set files.timezone Europe/Madrid
-zm import ./downloaded-transcripts
+zm meetings import ./downloaded-transcripts
 zm meetings list --json
 ```
 

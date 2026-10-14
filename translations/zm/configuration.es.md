@@ -14,7 +14,7 @@ Configura con `zm config set <key> <value>` y consulta los valores con `zm confi
 |---|---|
 | `zoom.clientId` | Public Client ID de [app existente o nueva](./zoom-app.md); sin valor inicial, necesario para API |
 | `account.profile` | [Etiqueta local](./sessions.md#select-a-local-profile) de reuniones; sin valor inicial, necesaria para la base |
-| `source` | Fuente de `pull` y `watch`: `api` predeterminada o `files` |
+| `source` | Fuente de `meetings sync` y `watch`: `api` predeterminada o `files` |
 | `files.folder` | Carpeta para obtención/observación de archivos; sin valor inicial |
 | `files.timezone` | Zona IANA de nombres, por ejemplo `Europe/Madrid`; UTC predeterminado |
 

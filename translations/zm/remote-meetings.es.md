@@ -25,7 +25,7 @@ zm remote-meetings invitation 123456789 --json
 ```
 
 Los identificadores remotos son IDs numéricos de Zoom; `meetings` usa IDs de la base local.
-La lista requiere `meeting:read:list_meetings` del manifiesto; detalles e invitaciones necesitan
+La lista requiere añadir manualmente `meeting:read:list_meetings`; detalles e invitaciones necesitan
 permisos opcionales de [la guía](./zoom-app.md#add-archive-or-management-access).
 
 ## Crear, modificar o cancelar
@@ -34,8 +34,8 @@ Primero se muestra la petición. `--yes` la aplica una vez; `--dry-run` mantiene
 previa, incluso junto a `--yes`.
 
 ```sh
-zm remote-meetings create --topic "Example planning" --start-time 2026-10-20T10:00:00Z --duration-minutes 30 --json
-zm remote-meetings update 123456789 --topic "Example review" --yes --json
+zm remote-meetings create --title "Example planning" --start-time 2026-10-20T10:00:00Z --duration-minutes 30 --json
+zm remote-meetings update 123456789 --title "Example review" --yes --json
 zm remote-meetings cancel 123456789 --dry-run --json
 ```
 

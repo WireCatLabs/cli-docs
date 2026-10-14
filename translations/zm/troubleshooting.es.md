@@ -12,7 +12,7 @@ un cambio remoto incierto antes de repetirlo.
 
 El navegador aprobó la app, pero el retorno no llegó al proceso. Deja abierto el terminal.
 Copia `code=…&state=…` o la URL completa en la página WireCat y pégalo en **el mismo terminal
-con `zm login` activo**, pulsando Enter. Debe informar `loggedIn: true` y devolver el indicador.
+con `zm session start` activo**, pulsando Enter. Debe informar `logged_in: true` y devolver el indicador.
 Si caducó, inicia otro intento y usa su retorno; el antiguo no completa uno nuevo.
 
 Un navegador en otro dispositivo o un terminal remoto puede impedir el retorno automático.
@@ -31,7 +31,7 @@ comprueba que el terminal termine.
 Selecciona un navegador instalado explícitamente:
 
 ```sh
-zm login --browser firefox
+zm session start --browser firefox
 ```
 
 En un terminal interactivo, abre tú la URL de autorización impresa por ese login y pega el retorno
@@ -55,7 +55,7 @@ No se guarda el token en un archivo de texto. Tras repararlo, repite login y com
 ### Falta un permiso necesario
 
 El error indica el nombre exacto. El dueño lo añade en **Scopes** y guarda; el usuario repite
-`zm login`. Comprueba lo concedido con `zm session status --json` y repite la lectura. Los tokens
+`zm session start`. Comprueba lo concedido con `zm session status --json` y repite la lectura. Los tokens
 emitidos no adquieren permisos automáticamente. Archivo, detalles, comprobación remota y cambios
 necesitan [permisos distintos](./zoom-app.md#add-archive-or-management-access).
 
@@ -76,16 +76,16 @@ Al informar, conserva orden, código y permiso; excluye retornos OAuth, tokens y
 | Síntoma | Diagnóstico y reparación | Resultado |
 |---|---|---|
 | No hay perfil o la lista está vacía | Elige perfil e importa/descarga; leer no registra cuentas | `zm meetings list --json` muestra sus reuniones |
-| No hay reuniones recientes del anfitrión | Revisa usuario, API y fechas; usa un `--since` anterior | Compara fechas con ocurrencias esperadas |
+| No hay reuniones recientes del anfitrión | Revisa usuario, API y fechas; usa un `--since-time` anterior | Compara fechas con ocurrencias esperadas |
 | Reunión sin texto | Revisa generación/retención y permisos; texto nunca guardado o expirado no se recrea | Abre texto tras estar disponible y descargar otra vez |
 | Falta una reunión a la que asististe | Pide VTT al anfitrión o descarga con permiso e importa | Comprueba fecha, título y texto |
-| El texto llegó después | Repite `zm pull --lookback-days 7` o un `--since` anterior | Abre el nuevo texto |
+| El texto llegó después | Repite `zm meetings sync --lookback-days 7` o un `--since-time` anterior | Abre el nuevo texto |
 | Fallo parcial de descarga | Corrige y repite; la ocurrencia fallida no avanza el cursor | Revisa recibo y lista |
 | Nombre/hora de archivo inválido | Usa `YYYY-MM-DD_HHMM_topic.vtt` y su zona; resuelve conflictos | Importación con fecha/título correctos |
 | Búsqueda vacía | Comprueba texto, perfil y cobertura del índice | Abre un pasaje conocido y comprueba su disponibilidad |
 
-Ejecuta descargas de una cuenta en serie. Consulta [ajustes de texto](./zoom-app.md#before-your-first-zm-pull),
-[importación](./archive.md#downloaded-transcripts) y [cobertura](./search.md#search-stored-meetings).
+Ejecuta descargas de una cuenta en serie. Consulta [ajustes de texto](./zoom-app.md#before-your-first-zm-meetings-sync),
+[importación](./archive.md#downloaded-transcripts) y [cobertura](./search.md#start-with-a-question).
 
 ## Archivos
 

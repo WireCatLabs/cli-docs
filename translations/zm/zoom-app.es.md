@@ -20,11 +20,11 @@ para el login del navegador. Registrarla no añade un bot a las reuniones ni cre
 ```sh
 zm config set zoom.clientId <public-client-id>
 zm config set source api
-zm login
+zm session start
 ```
 
 Sustituye el valor sin los signos angulares. Entra como el usuario cuyas reuniones quieres, revisa
-los permisos y aprueba. Espera `loggedIn: true` en el terminal. Si sigue esperando después de aprobar,
+los permisos y aprueba. Espera `logged_in: true` en el terminal. Si sigue esperando después de aprobar,
 [completa el retorno](./sessions.md#finish-the-browser-callback).
 
 ### Usa una app de WireCat o de tu equipo
@@ -35,7 +35,7 @@ mantiene retorno y permisos; tú autorizas tu propia cuenta.
 
 Una app en desarrollo no está disponible automáticamente para usuarios de otra cuenta. Confirma
 el acceso con su dueño; puede hacer falta el administrador. Un enlace de autorización solo no
-configura `zm` ni completa su sesión: inicia `zm login` para crear el retorno y la clave de ese
+configura `zm` ni completa su sesión: inicia `zm session start` para crear el retorno y la clave de ese
 intento. Si no puedes autorizar la app compartida, crea la tuya siguiendo los pasos siguientes.
 
 ## Crea tu propia app
@@ -61,7 +61,7 @@ pero esta herramienta envía la URL indicada.
 5. Abre **Scopes → Add Scopes**, busca cada nombre de la tabla, selecciona los permisos de usuario
    y guarda. Explica su uso si Zoom pide una descripción. Añade grabación o escritura solo para esas tareas.
 6. Revisa **Local Test**, instalación y aprobación requerida. **Add App Now** puede autorizar la
-   app en desarrollo, pero vuelve al terminal y ejecuta `zm login` para establecer la sesión.
+   app en desarrollo, pero vuelve al terminal y ejecuta `zm session start` para establecer la sesión.
    Distribuirla a otras cuentas tiene otro proceso de revisión de Zoom.
 7. Vuelve al [primer uso](./installation.md#first-run) con el Public Client ID.
 
@@ -77,7 +77,7 @@ es una plantilla para crear la app, no un archivo de credenciales. Contiene URLs
 manifiesto, guarda el JSON e impórtalo al crear la General app.
 
 **El manifiesto no incluye permisos ni activa Public Client OAuth.** Completa los pasos 3–6 a mano
-tras importarlo. Importar correctamente no significa estar listo para `zm login`. La creación manual
+tras importarlo. Importar correctamente no significa estar listo para `zm session start`. La creación manual
 es la ruta completa cuando no hay opción de importar.
 
 <a id="what-the-manifest-asks-for" />
@@ -95,13 +95,13 @@ nombrado: autoriza una llamada API, pero no garantiza que existan los datos soli
 | `meeting:read:list_past_participants` | Participantes y sesiones de entrada/salida |
 | `meeting:read:summary` | Resumen disponible de Zoom AI |
 
-Configura los cinco para `zm pull`: la obtención lee esas partes aunque falte texto o resumen.
+Configura los cinco para `zm meetings sync`: la obtención lee esas partes aunque falte texto o resumen.
 El plan, ajustes del anfitrión y retención determinan qué existe. Para solo listar la agenda basta
 el permiso de lista de reuniones.
 
 ## Añadir archivo o gestión
 
-El dueño añade el permiso en **Scopes** y guarda; el usuario repite `zm login`. Los tokens ya
+El dueño añade el permiso en **Scopes** y guarda; el usuario repite `zm session start`. Los tokens ya
 emitidos no ganan permisos automáticamente. Comprueba lo realmente concedido con
 `zm session status --json`.
 
@@ -120,7 +120,9 @@ Archivar no requiere permisos de escritura de reuniones. Los cambios muestran un
 `--yes` aplica una solicitud. Tras concederlos, sigue con [archivo de grabaciones](./archive.md#archive-cloud-recordings)
 o [gestión de reuniones](./remote-meetings.md).
 
-## Antes del primer `zm pull`
+<a id="before-your-first-zm-pull" />
+
+## Antes del primer `zm meetings sync`
 
 La transcripción debe haberse generado y retenido en Zoom. En ajustes web busca **Meeting → In Meeting
 (Advanced) → Meeting transcript** y activa generación/retención necesarias. El administrador puede

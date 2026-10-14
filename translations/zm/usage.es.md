@@ -34,8 +34,8 @@ escribe archivos. [Búsqueda y fuentes](./search.md) conserva referencias exacta
 | Necesidad | Familia de órdenes | Dónde trabaja |
 |---|---|---|
 | Leer transcripciones y fuentes | `meetings`, `events`, `search` | Base local compartida |
-| Obtener reuniones del anfitrión | `pull`, API `watch` | De Zoom a la base local |
-| Importar transcripciones | `import`, carpeta `watch` | De archivos a la base |
+| Obtener reuniones del anfitrión | `meetings sync`, API `watch` | De Zoom a la base local |
+| Importar transcripciones | `meetings import`, carpeta `watch` | De archivos a la base |
 | Guardar grabaciones disponibles | `recordings` | De Zoom al destino indicado |
 | Leer agenda o modificar una reunión | `remote-meetings` | Cuenta de Zoom |
 
@@ -48,36 +48,35 @@ no importa su transcripción en la base hasta que solicites la importación del 
 |---|---|
 | `config show` | mostrar configuración local |
 | `config set <key> <value>` | configurar cliente público u origen de archivos |
-| `login [--browser <program>]` | autorizar acceso en el navegador |
+| `session start [--browser <program>]` | autorizar acceso en el navegador |
 | `commands --json` | descubrir argumentos, opciones y ejemplos |
 | `complete -- <words...>` | responder a autocompletado |
 | `doctor` | inspeccionar entorno y configuración sin acceso ni base |
 | `session status` | comprobar OAuth aparte de perfiles locales |
-| `import <folder>` | importar transcripciones al perfil elegido |
-| `pull [--since <date>]` | descargar reuniones del origen configurado |
+| `meetings import <folder>` | importar transcripciones al perfil elegido |
+| `meetings sync [--since-time <time>]` | descargar reuniones del origen configurado |
 | `meetings list`, `meetings show <meeting>` | leer reuniones guardadas |
 | `meetings transcript <meeting>` | leer transcripciones actuales |
 | `meetings summary <meeting>` | leer resúmenes guardados |
 | `meetings export <meeting> --format markdown\|vtt` | exportar contenido guardado |
-| `meetings search <query>`, `meetings people <query>` | buscar texto o participantes |
-| `meetings search-page <query>`, `meetings search-index` | continuar resultados e indexar palabras explícitamente |
-| `meetings link-event <reference>`, `meetings link-person <reference>` | revisar o aplicar vínculos elegidos |
+| `search meetings <query>`, `meetings people <query>` | buscar texto o participantes |
+| `meetings update <reference>`, `meetings link <reference>` | revisar o aplicar vínculos elegidos |
 | `meetings transcribe <meeting> <file> --model <model>` | revisar o reconocer un WAV como transcripción independiente |
-| `meetings evidence <reference>`, `meetings context <person>` | leer fuentes limitadas o contexto personal vinculado |
-| `meetings task-proposal <reference> --kind <kind>` | revisar una tarea con su fuente |
-| `meetings semantic <query> --model <id>` | ordenar vectores examinados con componente explícito |
-| `meetings embeddings --model <id>` | revisar generación; `--yes` aplica un lote |
+| `meetings passage <reference>`, `meetings evidence <reference>`, `meetings context <person>` | leer fuentes limitadas o contexto personal vinculado |
+| `meetings task-proposal <reference> --type <type>` | revisar una tarea con su fuente |
+| `search meetings <query> --model <model>` | buscar por significado, generando primero los vectores que faltan |
+| `meetings embeddings --model <model>` | revisar generación; `--yes` aplica un lote |
 | `search all <query>` | buscar reuniones o recursos elegidos explícitamente |
 | `events list` | leer eventos guardados |
-| `watch [folder] --source api\|files --jsonl` | importar repetidamente en primer plano |
+| `watch [api\|files] [folder] --jsonl` | importar repetidamente en primer plano |
 | `recordings list`, `recordings show <meeting>` | descubrir grabaciones y metadatos |
 | `recordings download <meeting> --destination <directory>` | archivar archivos disponibles |
-| `recordings sync --from <date> --to <date> --destination <directory> --jsonl` | archivar historial por meses |
+| `recordings sync --since-time <date> --until-time <date> --destination <directory> --jsonl` | archivar historial por meses |
 | `recordings schedule create\|list\|show\|run\|disable` | gestionar trabajos diarios de archivo |
-| `recordings archive inspect\|verify\|locks <directory>` | inspeccionar manifiestos, sumas o bloqueos |
+| `recordings archive show\|check\|locks <directory>` | inspeccionar manifiestos, sumas o bloqueos |
 | `recordings archive recover <directory>` | revisar recuperación de bloqueos obsoletos |
 | `recordings archive transcript <directory>` | leer WebVTT verificado sin base de datos |
-| `recordings archive search <directory> <query>` | buscar texto verificado sin base |
+| `search meetings <query> --archive <directory>` | buscar texto verificado sin base |
 | `recordings archive import <directory>` | verificar VTT y añadirlo a reuniones guardadas |
 | `remote-meetings list\|show\|invitation` | leer próximas reuniones e invitaciones |
 | `remote-meetings create\|update\|cancel` | revisar o aplicar un cambio simple en Zoom |

@@ -2,7 +2,99 @@
 title: "История изменений"
 ---
 
-Ниже приведены исходные английские описания опубликованных изменений. Названия команд, ограничения и исторические сведения сохранены без пересказа.
+Новые записи переведены ниже; ранняя история сохранена на исходном английском. Названия команд и ограничения относятся к указанным версиям.
+
+## 0.9.0 — 14.10.2026
+
+### Изменено — может нарушить скрипты
+
+- **Используются `@wirecat/cli-core` 0.264.0** (новое имя cli-messaging) **и `@wirecat/cli-base` 0.27.1.**
+- **Все ключи, которые выводит сам zm, используют snake_case**, в stdout и его результатах MCP:
+  `config show` (`account_profile`, `client_id`, `files_folder`, `files_timezone`), `doctor` и `session status`
+  (`data_profile`, `expires_at`), `session start` (`logged_in`), записи, архивы и задания
+  (`manifest_path`, `timer_state`, `checkpoint_revision`, `job.capture.client_id`),
+  `meetings update|link|transcribe|evidence|context`, `search meetings`, `search all` и `watch`
+  (`has_more`, `next_cursor`, `meeting_id`, `transcript_rows`). `--fields` принимает эти имена.
+  `commands --json` содержит `global_options`, `inherited_options`, `exit_codes`; его `contract` равен 1.
+  Команды из cli-core (`meetings list|show|transcript|summary|export|people`) сохраняют прежние ключи,
+  пока их не изменит cli-core.
+- **`search all --meeting-cursor` и аргумент `meeting_cursor` инструмента MCP `search_all` принимают
+  курсор snake_case**, который возвращает `meetings.next_cursor`
+  (`account_id`, `query`, `meeting_offset`, `hit_offset`).
+- **В терминале ошибка выводится одной строкой** (`✗ message`); в канале или при `--json`/`--jsonl` —
+  объектом JSON. Сбой запуска — `internal_error` с кодом 1, а не `configuration_error`.
+- **Источник `watch` задаётся первым аргументом вместо `--source`:** `zm watch api` или
+  `zm watch files [folder]`. Без аргументов действует настройка `source`.
+  Одна папка (`zm watch ./downloads`) теперь вызывает ошибку; используйте `zm watch files ./downloads`.
+
+### Добавлено
+
+- `meetings passage <ref>` открывает строку результата поиска и соседние реплики с источниками в тексте,
+  Markdown или JSON. `--before-n`, `--after-n`, пределы байтов и сведения о покрытии ограничивают ответ;
+  сохранённые версии и необязательная проверка отпечатка сохраняют связь с источником.
+  MCP предоставляет тот же привязанный к аккаунту `meeting_passage` при `--meeting-context`.
+- **`--debug`:** при ошибке выводится полная диагностическая запись с причиной и стеком — после объекта
+  ошибки или вместо короткой строки.
+
+### Исправлено
+
+- README различает Public Client ID и Client Secret, объясняет ручное добавление разрешений и
+  необязательный манифест, использует текущую команду входа и адрес документации. Описание покрытия
+  различает доступные записи базы и отдельно скачанные расшифровки.
+- Руководство по безопасности объясняет автоматическую индексацию и создание недостающих векторов,
+  включая передачу расшифровок явно выбранному удалённому сервису.
+- Руководство MCP перечисляет семь стандартных инструментов после объединения поиска; руководство
+  управления встречами уточняет, что разрешение списка добавляется вручную.
+- Поиск различает генерацию недостающих векторов CLI и чтение существующих векторов MCP;
+  руководства используют `session start` для входа и `--cursor` для продолжения чтения источников.
+
+- **`zm meetings import <folder>` и файловый источник читают папку по одной расшифровке.** Раньше все `.vtt` открывались одновременно. Файл более 10 МиБ — существующего предела скачивания расшифровок — отклоняется до чтения. Папка с более чем 10 000 расшифровок отклоняется с просьбой перенести часть в другую папку.
+
+## 0.8.0 — 13.10.2026
+
+### Изменено — может нарушить скрипты
+
+- **Runs on `@wirecat/cli-messaging` 0.258.0 and `@wirecat/cli-base` 0.24.0.**
+- **The shared store and models move to the WireCat folder** (`~/.local/share/WireCat/` on Linux and macOS,
+  `%LOCALAPPDATA%\WireCat\Data\` on Windows) on the first start of zm, as tg, max and memo do. Nothing moves when
+  `MESSAGING_STORE` or `WIRECAT_STATE_DIR` is set. Two different stores under the same name stop the command with
+  an error naming both paths; nothing is changed.
+- **Meeting ingestion moves under `meetings`.** The old names stop working:
+  - `zm pull` → `zm meetings sync`, with `--since` → `--since-time`
+  - `zm import <folder>` → `zm meetings import <folder>`
+  - `meetings list --since`/`--until` → `--since-time`/`--until-time`
+- **One error object:** `{ error: { code, reason, message, … } }` on stderr and in MCP results. A failure that is
+  not a typed error is `internal_error` (exit 1) and replaces `generic_failure`, also in `commands --json`
+  `exitCodes`.
+- **`zm commands --json` prints the shared commands document**: `cli`, `version`, `contract`, `description`,
+  `globalOptions` (was `options`), `commands` and `exitCodes`; a command path adds `scope` and `inheritedOptions`.
+- `zm commands` without `--json` lists one row per command: usage, description and whether it writes.
+- **Commands renamed to the shared command words.** The old names stop working:
+  - `zm login` → `zm session start`
+  - `meetings link-person` → `meetings link`; `meetings link-event` → `meetings update`
+  - `recordings archive inspect` → `recordings archive show`; `recordings archive verify` → `recordings archive check`
+- **Options renamed.** The old names stop working:
+  - `recordings list|sync --from`/`--to` → `--since-time`/`--until-time`; `recordings sync --recheck-from` →
+    `--recheck-since-time`; `recordings schedule create --from` → `--since-time`
+  - `watch --since` and `meetings context --since` → `--since-time`
+  - `meetings evidence --after` → `--cursor`
+  - `meetings task-proposal --kind` → `--type`
+  - `remote-meetings create|update --topic` → `--title`
+- **One meeting search, `zm search meetings <query>`, that indexes on its own.** It replaces four commands, which
+  stop working:
+  - `meetings search` and `meetings search-page`: their filters all move over, including `--event-id` and
+    `--series-id`; `--since`/`--until` are `--since-time`/`--until-time` and `--after` is `--cursor`.
+  - `meetings search-index`: gone. The search indexes what was stored since the last search before it reads.
+  - `meetings semantic`: `search meetings <query> --model <model>` (with `--base-url`, `--dims`,
+    `--max-chunks`, `--max-rows`, `--max-text-bytes`; `--after-chunk-id` is `--cursor`). It first builds the
+    vectors that are missing for that model.
+  - `recordings archive search <directory> <query>`: `search meetings <query> --archive <directory>` (with
+    `--uuid`, `--file-ids`, `--max-bytes`).
+  - MCP: `meetings_search`, `meeting_search_page` and `meeting_semantic_search` are one tool,
+    `search_meetings`. With `serve --semantic`, `by_meaning: true` ranks existing vectors; MCP never builds
+    them.
+- Value names in help now say what they hold: `--limit <n>`, `--model <model>`, `--max-read-bytes <bytes>`,
+  `--max-text-bytes <bytes>`; every argument has a description and long summaries are shorter.
 
 ## 0.7.3 — 12.10.2026
 

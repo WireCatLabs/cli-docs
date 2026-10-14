@@ -60,26 +60,26 @@ mantén abierto el terminal mientras apruebas en el navegador:
 ```sh
 zm config set zoom.clientId <public-client-id>
 zm config set source api
-zm login
+zm session start
 ```
 
 1. Entra en la cuenta correcta en el navegador y revisa los permisos.
 2. Pulsa **Allow**. Zoom abre el retorno WireCat, que envía la autorización al proceso `zm` esperando.
-3. Vuelve al terminal. El login termina cuando `zm` informa `loggedIn: true` y vuelve al indicador.
+3. Vuelve al terminal. El login termina cuando `zm` informa `logged_in: true` y vuelve al indicador.
    Aprobar en el navegador solo no basta.
 4. Si espera, copia `code=…&state=…` o la URL completa, pégalo en ese mismo terminal y pulsa Enter
-   antes del límite de cinco minutos. Si ya terminó, ejecuta `zm login` otra vez y aprueba el intento nuevo.
+   antes del límite de cinco minutos. Si ya terminó, ejecuta `zm session start` otra vez y aprueba el intento nuevo.
 
 Comprueba la sesión guardada y elige un **perfil**, una etiqueta local de las reuniones:
 
 ```sh
 zm session status --json
 zm config set account.profile personal
-zm pull --lookback-days 7
+zm meetings sync --lookback-days 7
 zm meetings list --json
 ```
 
-La sesión debe informar `loggedIn: true`. La obtención guarda reuniones disponibles del anfitrión;
+La sesión debe informar `logged_in: true`. La obtención guarda reuniones disponibles del anfitrión;
 la lista devuelve sus ID locales. Abre una con el ID de esa lista:
 
 ```sh
@@ -88,7 +88,7 @@ zm meetings transcript <meeting-id> --json
 ```
 
 La lista puede estar vacía si no hay reuniones disponibles del anfitrión en ese periodo. Texto vacío
-significa que Zoom no lo proporcionó; el permiso no lo crea. Revisa [retención](./zoom-app.md#before-your-first-zm-pull)
+significa que Zoom no lo proporcionó; el permiso no lo crea. Revisa [retención](./zoom-app.md#before-your-first-zm-meetings-sync)
 y descarga un periodo anterior si hace falta. El error de scope nombra el permiso; autoriza otra vez
 tras añadirlo el dueño.
 
@@ -105,7 +105,7 @@ interpreta en la zona configurada:
 ```sh
 zm config set account.profile personal
 zm config set files.timezone Europe/Madrid
-zm import ./downloaded-transcripts
+zm meetings import ./downloaded-transcripts
 zm meetings list --json
 ```
 

@@ -16,15 +16,27 @@ identificador y dimensiones. No se descargan modelos; el plan no los carga ni en
 Los ejemplos usan `e5-small` local. Comprueba que esté instalado antes de aplicar; nombrarlo no
 lo instala. Para comparar resultados, deben usar el mismo modelo/dimensiones que los vectores guardados.
 
-## Vectores de reuniones
+<a id="explicit-meeting-vectors" />
+
+## Buscar por significado
 
 Elige un componente local ya instalado o un endpoint remoto y su dimensión:
 
 ```sh
+zm search meetings "example plan" --model e5-small --max-chunks 1000 --json
+zm search meetings "example plan" --model example-model --base-url http://127.0.0.1:8080/v1 --dims 384 --json
+```
+
+Antes de leer, la búsqueda vuelve a dividir las transcripciones actuales en pasajes y genera
+vectores para los que aún no tienen uno del componente elegido. La primera búsqueda tarda más
+en un almacén grande y, con un servicio remoto, le envía esos pasajes. Continúa mediante
+`--cursor <next_cursor>`; los resultados se ordenan por página.
+
+Para preparar vectores de antemano, revisa el plan y procésalos por lotes:
+
+```sh
 zm meetings embeddings --model e5-small --json
 zm meetings embeddings --model e5-small --yes --limit 100 --json
-zm meetings semantic "example plan" --model e5-small --max-chunks 1000 --json
-zm meetings semantic "example plan" --model example-model --base-url http://127.0.0.1:8080/v1 --dims 384 --json
 ```
 
 El primer comando muestra el estado sin abrir el componente, descargar archivos ni crear vectores.
@@ -42,11 +54,15 @@ completa puede emitir su confirmación durante un período limitado tras la canc
 
 ## Buscar
 
-La búsqueda calcula solo el vector de la consulta y lee los existentes, sin reconstruirlos ni
-crearlos. Ordena los candidatos examinados de la cuenta y componente elegidos. `--after-chunk-id`
-continúa el examen, no pagina una clasificación global. El informe muestra la cobertura de candidatos;
-la integridad del índice y del archivo es desconocida. `--max-rows` y `--max-text-bytes` limitan las lecturas.
+El comando genera primero los vectores guardados que faltan, calcula el vector de la consulta
+y ordena los candidatos examinados para la cuenta y el componente elegidos. Continúa mediante
+`--cursor <next_cursor>`: cada página ordena sus candidatos, sin ampliar una clasificación global.
+El informe indica la cobertura del examen; la integridad del índice y del archivo sigue siendo
+desconocida. `--max-rows` y `--max-text-bytes` limitan las lecturas durante generación y búsqueda.
+Con la opción `by_meaning` fijada por el servidor MCP, la búsqueda solo lee vectores existentes
+y no puede generarlos.
 
-Comprueba que se generaron vectores antes de esperar coincidencias. Abre el pasaje con
-[fuentes de reunión](./search.md#read-evidence) y lee contexto: similitud es una candidata, no prueba
-una decisión. Si no hay candidatos, revisa perfil/modelo, vectores y cobertura antes de concluir ausencia.
+Abre el pasaje mediante [el contexto de reunión](./search.md#read-around-a-search-hit) y lee
+las líneas cercanas: la similitud indica una candidata, no demuestra una decisión. Si no hay
+candidatos, comprueba perfil, componente, transcripciones y cobertura de generación y examen
+antes de concluir que no hubo una discusión relevante.

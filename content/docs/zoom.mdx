@@ -54,6 +54,8 @@ The agent reads the upcoming Zoom schedule, then searches the stored context. Ch
 names the intended meeting and separates confirmed decisions from suggestions. Ask it to show
 missing periods, transcripts or documents. [Upcoming Zoom meetings](./zm/remote-meetings.md) covers
 schedule and invitation reads; your agent assembles the brief from the sources you choose.
+For a recurring series, confirm the actual next occurrence; its original start date alone does not
+verify the next call. If permissions prevent that check, mark the date as unverified.
 
 ## Keep useful findings afterwards
 
@@ -68,18 +70,22 @@ intake or preparation command is [planned work](./zm/roadmap.md).
 
 ## More control
 
-These commands read your stored meetings; replace `1` with a meeting ID from your own list:
+Read saved meetings and list the upcoming Zoom schedule. Replace `1` with an ID from your list,
+and replace the fictional passage reference with a transcript search hit's `ref`:
 
 ```sh
 zm meetings list --json
 zm meetings show 1 --json
 zm meetings transcript 1 --json
-zm meetings search "launch decision" --json
+zm search meetings "launch decision" --json
+zm meetings passage meeting:3/15/20/4 --before-n 3 --after-n 4 --format markdown
 zm remote-meetings list --json
 ```
 
 Search uses the data available in the selected profile. If it is missing, [pull or import the
 required transcripts](./zm/archive.md) before relying on the answer.
+`zm meetings passage` shows the surrounding stored lines with source references; it does not fetch
+missing Zoom data.
 
 ## Related guides
 

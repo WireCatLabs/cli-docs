@@ -54,6 +54,8 @@ El agente lee la agenda de Zoom y busca el contexto guardado. Comprueba que el r
 a la reunión correcta y separa decisiones confirmadas de sugerencias. Pide que indique períodos,
 transcripciones o documentos ausentes. [Próximas reuniones de Zoom](./zm/remote-meetings.md) describe
 la agenda y las invitaciones; el agente prepara el resumen con las fuentes que eliges.
+En una serie recurrente, confirma la siguiente ocurrencia concreta: la fecha inicial de la serie
+no verifica la próxima llamada. Si faltan permisos para comprobarla, marca la fecha como no verificada.
 
 ## Guardar los resultados útiles
 
@@ -68,18 +70,22 @@ al análisis automático y la preparación siguen [planificados](./zm/roadmap.md
 
 ## Más control
 
-Estos comandos leen reuniones guardadas; sustituye `1` por un ID de tu propia lista:
+Lee reuniones guardadas y la agenda de Zoom. Sustituye `1` por un ID de tu propia lista,
+y la referencia ficticia del pasaje por el `ref` de una coincidencia de transcripción:
 
 ```sh
 zm meetings list --json
 zm meetings show 1 --json
 zm meetings transcript 1 --json
-zm meetings search "launch decision" --json
+zm search meetings "launch decision" --json
+zm meetings passage meeting:3/15/20/4 --before-n 3 --after-n 4 --format markdown
 zm remote-meetings list --json
 ```
 
 La búsqueda usa los datos disponibles en el perfil elegido. Si faltan, [descarga o importa las
 transcripciones necesarias](./zm/archive.md) antes de confiar en la respuesta.
+`zm meetings passage` muestra las líneas guardadas cercanas con referencias; no descarga datos
+ausentes de Zoom.
 
 ## Guías relacionadas
 
