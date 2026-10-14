@@ -33,12 +33,14 @@ Abre [la guía de instalación](/es/docs/installation#tg) y elige las instruccio
 Tras instalar la herramienta, ejecuta la configuración guiada y consulta algunos chats:
 
 ```sh
-tg setup
+tg personal setup
 ```
 
 ```sh
-tg chats list --limit 5
+tg personal chats list --limit 5
 ```
+
+`personal` es el nombre del perfil: elige cualquiera en el primer inicio de sesión y repítelo en cada comando.
 
 Reserva unos cinco minutos. Primero el comando pide el número y un código recibido en Telegram para obtener `api_id` y `api_hash` de [my.telegram.org](https://my.telegram.org/apps). Después muestra el QR para acceder a la cuenta. En el teléfono, abre Telegram → Ajustes → Dispositivos → Vincular dispositivo de escritorio y escanéalo. Setup comprueba los primeros cinco chats e instala las skills. Si ya tienes una sesión válida, la reutiliza. Espera a que termine antes de listar chats. [Pasos completos de acceso](/es/docs/tg/sessions).
 

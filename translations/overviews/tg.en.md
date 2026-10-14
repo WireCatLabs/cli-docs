@@ -32,12 +32,14 @@ Open [the installation guide](/en/docs/installation#tg) and choose the terminal 
 After installing, run guided setup: it helps with app registration and login, checks your account and five chats, and installs agent skills. It reuses an existing session; downloading history remains a separate choice.
 
 ```sh
-tg setup
+tg personal setup
 ```
 
 ```sh
-tg chats list --limit 5
+tg personal chats list --limit 5
 ```
+
+`personal` is the profile name: choose any name at the first login and repeat it in every command.
 
 First, the command asks for your phone number and a code sent in Telegram to obtain `api_id` and `api_hash` from [my.telegram.org](https://my.telegram.org/apps). Then it displays the QR code for account login. Open Telegram on your phone → Settings → Devices → Link Desktop Device and scan it. Wait for **Logged in as …** before listing chats. [Complete login steps](/en/docs/tg/sessions).
 
