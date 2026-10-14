@@ -5,6 +5,8 @@ title: "Búsqueda y fuentes"
 Encuentra lo dicho en reuniones guardadas, lee el pasaje exacto con una referencia, recupera el
 contexto de una persona, vincula eventos y personas y revisa una tarea basada en su fuente.
 
+<a id="search-stored-meetings" />
+
 ## Empieza con una pregunta
 
 ```text prompt

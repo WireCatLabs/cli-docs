@@ -124,6 +124,8 @@ zm session start
 один запрос. После выдачи прав переходите к [архиву записей](./archive.md#archive-cloud-recordings)
 или [управлению встречами](./remote-meetings.md).
 
+<a id="before-your-first-zm-pull" />
+
 ## Перед первым `zm meetings sync`
 
 Расшифровка должна быть создана и сохранена в Zoom. В веб-настройках найдите **Meeting → In Meeting

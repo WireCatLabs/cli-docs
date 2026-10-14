@@ -120,6 +120,8 @@ Archivar no requiere permisos de escritura de reuniones. Los cambios muestran un
 `--yes` aplica una solicitud. Tras concederlos, sigue con [archivo de grabaciones](./archive.md#archive-cloud-recordings)
 o [gestión de reuniones](./remote-meetings.md).
 
+<a id="before-your-first-zm-pull" />
+
 ## Antes del primer `zm meetings sync`
 
 La transcripción debe haberse generado y retenido en Zoom. En ajustes web busca **Meeting → In Meeting

@@ -15,7 +15,7 @@
       "!lib/search-language.generated.d.ts",
       "!.docs-tooling",
       "!.impeccable",
-      "!**/.worktrees",
+      "!.worktrees",
       "!config/wirecat"
     ]
   },

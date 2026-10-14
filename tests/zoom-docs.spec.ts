@@ -23,13 +23,18 @@ for (const lang of ["en", "ru", "es"] as const) {
     await expect(page.locator("main")).toContainText("--identity-id")
     await expect(page.locator("main")).toContainText("--person-id")
     await expect(page.locator("main")).toContainText("--project")
+    await expect(page.locator("main")).toContainText("--expected-fingerprint")
+    await expect(page.locator("main #search-stored-meetings")).toHaveCount(1)
     await expect(page.locator(`main a[href="/${lang}/docs/memo/usage"]`).first()).toBeVisible()
     const prefix = lang === "en" ? "" : `${lang}/`
     const markdown = await request.get(`/llms.mdx/docs/${prefix}zm/search/content.md`)
     expect(markdown.ok()).toBe(true)
     const text = await markdown.text()
-    expect(text).toContain('zm meetings search-page "launch" --identity-id 12 --project RES')
-    expect(text).toContain("meeting_search_page")
+    expect(text).toContain('zm search meetings "launch" --identity-id 12 --project RES')
+    expect(text).toContain("search_meetings")
+    expect(text).toContain("zm meetings passage meeting:3/15/20/4 --before-n 3 --after-n 4 --format markdown")
+    expect(text).toContain("meeting_passage")
+    expect(text).toContain('archive_completeness: "unknown"')
     expect(text).toContain("UTC")
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
   })
@@ -41,6 +46,8 @@ for (const lang of ["en", "ru", "es"] as const) {
     await expect(page.locator(`main a[href="/${lang}/docs/zm/search"]`)).toBeVisible()
     await expect(page.locator(`main a[href="/${lang}/docs/drive"]`)).toBeVisible()
     await expect(page.locator(`main a[href="/${lang}/docs/memo"]`)).toBeVisible()
+    await expect(page.locator("main")).toContainText('zm search meetings "launch decision"')
+    await expect(page.locator("main")).toContainText("zm meetings passage meeting:3/15/20/4")
     const prefix = lang === "en" ? "" : `${lang}/`
     const markdown = await request.get(`/llms.mdx/docs/${prefix}zoom/content.md`)
     expect(markdown.ok()).toBe(true)
@@ -48,6 +55,8 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(text).toContain("Research Example")
     expect(text).toContain("zm meetings transcript 1 --json")
     expect(text).toContain("zm remote-meetings list --json")
+    expect(text).toContain('zm search meetings "launch decision" --json')
+    expect(text).toContain("zm meetings passage meeting:3/15/20/4")
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
   })
 
@@ -62,7 +71,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     const markdown = await request.get(`/llms.mdx/docs/${prefix}zm/installation/content.md`)
     expect(markdown.ok()).toBe(true)
     expect(await markdown.text()).toContain("zm config set zoom.clientId <public-client-id>")
-    expect(await markdown.text()).toContain("zm login")
+    expect(await markdown.text()).toContain("zm session start")
   })
 }
 
@@ -79,7 +88,7 @@ for (const lang of ["en", "ru", "es"] as const) {
       }[lang],
     )
     await expect(main).toContainText("WireCat")
-    await expect(main).toContainText("loggedIn: true")
+    await expect(main).toContainText("logged_in: true")
     await expect(main).toContainText("code=…&state=…")
     await expect(page.locator(`main a[href="/${lang}/docs/zm/zoom-app#create-your-own-app"]`)).toBeVisible()
     await expect(main).toContainText("OAuth Redirect URL")
@@ -113,6 +122,7 @@ for (const lang of ["en", "ru", "es"] as const) {
       }[lang],
     )
     await expect(main).toContainText("meeting:read:list_past_participants")
+    await expect(main.locator("#before-your-first-zm-pull")).toHaveCount(1)
     await expect(page.locator(`main a[href="/${lang}/docs/zm/installation#first-run"]`).first()).toBeVisible()
     await expect(page.locator(`main a[href="/${lang}/docs/zm/sessions#finish-the-browser-callback"]`)).toBeVisible()
     await expect(main.locator('a[href="https://marketplace.zoom.us/"]').first()).toBeVisible()
@@ -123,12 +133,27 @@ for (const lang of ["en", "ru", "es"] as const) {
     await page.goto(`/${lang}/docs/zm/sessions#finish-the-browser-callback`)
     const main = page.locator("main")
     await expect(main).toContainText("code=…&state=…")
-    await expect(main).toContainText("loggedIn: true")
+    await expect(main).toContainText("logged_in: true")
     await expect(main).toContainText("Enter")
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
     const prefix = lang === "en" ? "" : `${lang}/`
     const response = await request.get(`/llms.mdx/docs/${prefix}zm/sessions/content.md`)
     expect(response.ok()).toBe(true)
     expect(await response.text()).toContain("code=…&state=…")
+  })
+
+  test(`${lang}: semantic guide retains its older anchor and current search in Markdown`, async ({ page, request }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto(`/${lang}/docs/zm/topic-search#explicit-meeting-vectors`)
+    await expect(page.locator("main #explicit-meeting-vectors")).toHaveCount(1)
+    await expect(page.locator("main")).toContainText("--cursor <next_cursor>")
+    const prefix = lang === "en" ? "" : `${lang}/`
+    const response = await request.get(`/llms.mdx/docs/${prefix}zm/topic-search/content.md`)
+    expect(response.ok()).toBe(true)
+    const markdown = await response.text()
+    expect(markdown).toContain('zm search meetings "example plan" --model e5-small')
+    expect(markdown).toContain("by_meaning")
+    expect(markdown).toContain("OPENAI_API_KEY")
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
   })
 }

@@ -4,7 +4,7 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
-## Unreleased
+## 0.9.0 — 14.10.2026
 
 ### Cambiado — puede afectar a scripts
 

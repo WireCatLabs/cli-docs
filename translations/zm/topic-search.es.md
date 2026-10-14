@@ -16,6 +16,8 @@ identificador y dimensiones. No se descargan modelos; el plan no los carga ni en
 Los ejemplos usan `e5-small` local. Comprueba que esté instalado antes de aplicar; nombrarlo no
 lo instala. Para comparar resultados, deben usar el mismo modelo/dimensiones que los vectores guardados.
 
+<a id="explicit-meeting-vectors" />
+
 ## Buscar por significado
 
 Elige un componente local ya instalado o un endpoint remoto y su dimensión:

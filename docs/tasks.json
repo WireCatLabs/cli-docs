@@ -138,7 +138,7 @@
     "id": "meeting-import-archive",
     "pages": ["zm/installation.md", "zm/zoom-app.md", "zm/archive.md"],
     "families": {
-      "zm": ["config", "login", "session", "import", "pull", "watch", "recordings", "doctor"]
+      "zm": ["config", "session", "meetings", "watch", "recordings", "doctor"]
     }
   },
   {
