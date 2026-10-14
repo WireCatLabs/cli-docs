@@ -10,9 +10,18 @@ description: Слои общего ядра и инструментов для �
 подробнее рассказывает о пакетах и о пути команды во время работы; эта страница — о строении кода и о
 том, как оно сохраняется.
 
-Два слова встречаются повсюду. **Порт** — интерфейс, который определяет общее ядро и от которого оно
-зависит. **Адаптер** — код в одном инструменте, который реализует порт для одного мессенджера или
-поставщика. Ядро вызывает порт и никогда не импортирует адаптер.
+Два слова встречаются повсюду.
+
+- **Порт** — список методов, которые общему ядру нужны от мессенджера. Он записан один раз в cli-core как
+  интерфейс TypeScript: `resolve(chat)` находит чат, `send(chatId, text)` отправляет сообщение и так далее.
+  Ядро вызывает только эти методы и никогда не видит собственный API Telegram или другого мессенджера.
+- **Адаптер** — класс в одном инструменте, который заполняет эти методы для одного мессенджера.
+  `TelegramAdapter` в tg реализует `send` через библиотеку Telegram mtcute и превращает её ответ в
+  `Message` из cli-core.
+
+Поэтому `messages send` написана в cli-core один раз и работает в каждом инструменте: команда вызывает
+порт, а каждый инструмент подключает свой адаптер. Чтобы поддержать новый мессенджер, пишут новый
+адаптер, а ядро не меняют.
 
 Описан код, прочитанный 14 октября 2026 года, на коммитах
 [cli-core a3b5b3c](https://github.com/WireCatLabs/cli-core/tree/a3b5b3c47792d5e2df6529642e907ee32783e66a),
@@ -49,11 +58,11 @@ graph TB
 
 ```mermaid Слои cli-core и то, как к ним подключается инструмент
 graph TB
-  subgraph TOOL["Инструмент для мессенджера: tg или max"]
+  subgraph TOOL["Инструмент для мессенджера, например tg"]
     Program("program<br>регистрирует команды")
     Describe("описание Messenger<br>что предлагает CLI")
     Adapter("адаптер<br>отображает мессенджер на порт")
-    Client("клиент мессенджера<br>mtcute или собственный клиент MAX")
+    Client("клиент мессенджера<br>mtcute в tg")
   end
   subgraph CORE["cli-core"]
     Cli("cli/ и mcp/<br>команды и инструменты MCP")
@@ -121,33 +130,25 @@ graph LR
 
 ### Контракт мессенджера
 
-`MessengerAdapter` — обязательное ядро и необязательные группы. В `MessengerCore` семь методов: `self`,
-`me`, `resolve`, `chat`, `send`, `logout` и `close`. Всё остальное разбито на 39 необязательных групп,
-например `MessagePolls`, `ForumControl`, `ChatFolders` и `LiveUpdates`.
+Порт для мессенджеров — `MessengerAdapter` в `ports/messenger.ts`. В нём две части:
 
-```mermaid Контракт адаптера: обязательное ядро и необязательные группы
-classDiagram
-  class MessengerCore {
-    self()
-    me()
-    resolve(chat)
-    chat(chat)
-    send(chatId, text, options)
-    logout()
-    close()
-  }
-  class MessagePolls {
-    poll()
-    vote()
-    closePoll()
-  }
-  class ForumControl {
-    createTopic()
-  }
-  class MessengerAdapter
-  MessengerCore <|-- MessengerAdapter
-  MessagePolls <|-- MessengerAdapter
-  ForumControl <|-- MessengerAdapter
+- **Обязательное ядро из семи методов**, которые есть у любого мессенджера: `self`, `me`, `resolve`,
+  `chat`, `send`, `logout` и `close`. Адаптер без любого из них не пройдёт проверку типов.
+- **39 необязательных групп** для возможностей, которые есть не у всех мессенджеров: `MessagePolls`
+  (опросы), `ForumControl` (темы форума), `ChatFolders`, `LiveUpdates` и другие. Адаптер реализует группы,
+  которые поддерживает его мессенджер, и пропускает остальные.
+
+```mermaid Что происходит, когда команде нужна необязательная возможность
+graph LR
+  Cmd("tg messages react") --> Svc("сервис сообщений")
+  Svc -->|"capability(adapter, 'react')"| Has{"есть ли у адаптера<br>react?"}
+  Has -->|yes| Call("TelegramAdapter.react()<br>вызывает mtcute")
+  Has -->|no| Refuse("validation_error:<br>этот мессенджер не умеет<br>ставить реакции")
+  subgraph ADAPTER["TelegramAdapter реализует"]
+    Core("обязательное ядро<br>self, me, resolve, chat,<br>send, logout, close")
+    Opt("необязательные группы, которые он поддерживает<br>реакции, опросы, темы форума,<br>папки, живые обновления, …")
+  end
+  Call -.-> Opt
 ```
 
 Код, которому нужен необязательный метод, просит его по имени:
@@ -187,7 +188,7 @@ account: () => Promise<AccountKey>
 одинаковый ответ и одинаковую ошибку.
 
 Инструмент может заменить один сервис, не копируя ядро. `Messenger.services` получает общие сервисы и
-возвращает замены; max так даёт модерации свой способ находить чат.
+возвращает замены, например свой способ находить чат для модерации.
 
 ### Самостоятельные модули
 
@@ -204,7 +205,7 @@ account: () => Promise<AccountKey>
 
 ## Одна запись от начала до конца
 
-`max messages send <chat> --file report.pdf`. Файл проверяется при запуске команды и читается только во
+`tg messages send <chat> --file report.pdf`. Файл проверяется при запуске команды и читается только во
 время загрузки, поэтому большой файл никогда не держится в памяти целиком.
 
 ```mermaid Отправка с файлом: от команды до мессенджера
@@ -213,24 +214,25 @@ sequenceDiagram
   participant Up as sends/upload.ts
   participant Svc as сервис сообщений
   participant Guard as защита отправки
-  participant Ad as адаптер max
-  participant Cl as MaxClient
+  participant Ad as TelegramAdapter
+  participant Cl as mtcute
   Cmd->>Up: readAttachments(flags)
   Up-->>Cmd: Upload с источником-файлом: путь и размер
   Cmd->>Svc: send(chat, text, uploads)
   Svc->>Guard: проверка разрешений, получателей, пределов
   Svc->>Ad: send(chatId, text, attachments)
-  Ad->>Ad: uploadBlob: Blob, читаемый с диска
-  Ad->>Cl: отправка с Blob в теле загрузки
-  Cl->>Cl: загрузка по HTTP, затем отправка сообщения
-  Cl-->>Ad: сообщение MAX
-  Ad-->>Svc: доменное Message
+  Ad->>Cl: uploadFile(Blob, читаемый с диска)
+  Cl-->>Ad: загруженный файл
+  Ad->>Cl: sendMedia(чат, файл и подпись)
+  Cl-->>Ad: сообщение Telegram
+  Ad-->>Svc: Message из cli-core
   Svc->>Guard: запись итога в журнал, без текста
   Svc-->>Cmd: ответ для stdout
 ```
 
-В tg адаптер передаёт тот же Blob в mtcute и открывает файл заново при каждой повторной попытке. Адаптер,
-чьей библиотеке нужны байты в памяти, вызывает `uploadBytes`, который отклоняет файл больше 256 MiB.
+Если загрузка обрывается, адаптер открывает файл заново и повторяет попытку. Адаптер max делает то же
+со своим клиентом. Адаптер, чьей библиотеке нужны байты в памяти, вызывает `uploadBytes`, который
+отклоняет файл больше 256 MiB.
 
 ## Приёмы
 

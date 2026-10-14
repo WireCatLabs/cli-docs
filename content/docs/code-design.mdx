@@ -10,9 +10,18 @@ judging whether a change fits the design. [Architecture](./architecture.mdx) cov
 the runtime path of a command in more detail; this page is about the structure of the code and how it
 is kept.
 
-Two terms come up throughout. A **port** is an interface the shared core defines and depends on. An
-**adapter** is the code in one tool that implements a port for one messenger or provider. The core
-calls the port and never imports the adapter.
+Two terms come up throughout.
+
+- A **port** is the list of methods the shared core needs from a messenger, written once in cli-core as a
+  TypeScript interface: `resolve(chat)` finds a chat, `send(chatId, text)` sends a message, and so on.
+  The core calls only these methods. It never sees Telegram's or any other messenger's own API.
+- An **adapter** is the class in one tool that fills in those methods for one messenger. tg's
+  `TelegramAdapter` implements `send` by calling the Telegram library mtcute and turning its answer into
+  cli-core's `Message`.
+
+So `messages send` is written once in cli-core and works in every tool: the command calls the port, and
+each tool plugs in its own adapter. Supporting a new messenger means writing a new adapter, not changing
+the core.
 
 The page describes the code as read on 14 October 2026, at
 [cli-core a3b5b3c](https://github.com/WireCatLabs/cli-core/tree/a3b5b3c47792d5e2df6529642e907ee32783e66a),
@@ -49,11 +58,11 @@ tool; the dotted edge is an implementation of a port, not a call.
 
 ```mermaid The layers of cli-core and how a tool plugs in
 graph TB
-  subgraph TOOL["A messenger tool: tg or max"]
+  subgraph TOOL["A messenger tool, such as tg"]
     Program("program<br>registers the commands")
     Describe("Messenger descriptor<br>what the CLI offers")
     Adapter("adapter<br>maps the messenger to the port")
-    Client("messenger client<br>mtcute, or MAX's own")
+    Client("messenger client<br>mtcute for tg")
   end
   subgraph CORE["cli-core"]
     Cli("cli/ and mcp/<br>commands and MCP tools")
@@ -120,33 +129,25 @@ may not reach its mapping or error translation directly. The adapter is one clas
 
 ### The messenger contract
 
-`MessengerAdapter` is a required core plus optional groups. `MessengerCore` has seven methods: `self`,
-`me`, `resolve`, `chat`, `send`, `logout` and `close`. Everything else comes in 39 optional groups such
-as `MessagePolls`, `ForumControl`, `ChatFolders` and `LiveUpdates`.
+The port for messengers is `MessengerAdapter` in `ports/messenger.ts`. It has two parts:
 
-```mermaid The adapter contract: a required core and optional groups
-classDiagram
-  class MessengerCore {
-    self()
-    me()
-    resolve(chat)
-    chat(chat)
-    send(chatId, text, options)
-    logout()
-    close()
-  }
-  class MessagePolls {
-    poll()
-    vote()
-    closePoll()
-  }
-  class ForumControl {
-    createTopic()
-  }
-  class MessengerAdapter
-  MessengerCore <|-- MessengerAdapter
-  MessagePolls <|-- MessengerAdapter
-  ForumControl <|-- MessengerAdapter
+- **A required core of seven methods** that every messenger has: `self`, `me`, `resolve`, `chat`, `send`,
+  `logout` and `close`. An adapter without one of them does not compile.
+- **39 optional groups** for features only some messengers have, such as `MessagePolls` (polls),
+  `ForumControl` (forum topics), `ChatFolders` and `LiveUpdates`. An adapter implements the groups its
+  messenger supports and leaves out the rest.
+
+```mermaid What happens when a command needs an optional feature
+graph LR
+  Cmd("tg messages react") --> Svc("messages service")
+  Svc -->|"capability(adapter, 'react')"| Has{"does the adapter<br>have react?"}
+  Has -->|yes| Call("TelegramAdapter.react()<br>calls mtcute")
+  Has -->|no| Refuse("validation_error:<br>this messenger cannot<br>react to a message")
+  subgraph ADAPTER["TelegramAdapter implements"]
+    Core("required core<br>self, me, resolve, chat,<br>send, logout, close")
+    Opt("optional groups it supports<br>reactions, polls, forum topics,<br>folders, live updates, …")
+  end
+  Call -.-> Opt
 ```
 
 Code that needs an optional method asks for it by name:
@@ -184,7 +185,7 @@ builds every service once; the commands and the MCP tools take them from there, 
 answer and the same error for the same input.
 
 A tool can replace one service without forking the core. `Messenger.services` receives the shared
-services and returns replacements; max uses it to give moderation its own way of finding a chat.
+services and returns replacements, for example its own way of finding a chat for moderation.
 
 ### Self-contained modules
 
@@ -201,7 +202,7 @@ registering one; the code that calls readers does not change.
 
 ## One write, end to end
 
-`max messages send <chat> --file report.pdf`. The file is checked when the command starts and read only
+`tg messages send <chat> --file report.pdf`. The file is checked when the command starts and read only
 while it uploads, so a large file is never held in memory.
 
 ```mermaid A send with a file, from the command to the messenger
@@ -210,24 +211,25 @@ sequenceDiagram
   participant Up as sends/upload.ts
   participant Svc as messages service
   participant Guard as send guard
-  participant Ad as max adapter
-  participant Cl as MaxClient
+  participant Ad as TelegramAdapter
+  participant Cl as mtcute
   Cmd->>Up: readAttachments(flags)
   Up-->>Cmd: Upload with a file source: path and size
   Cmd->>Svc: send(chat, text, uploads)
   Svc->>Guard: check permissions, recipients, limits
   Svc->>Ad: send(chatId, text, attachments)
-  Ad->>Ad: uploadBlob: a Blob read from disk
-  Ad->>Cl: send with the Blob as the upload body
-  Cl->>Cl: upload over HTTP, then send the message
-  Cl-->>Ad: MAX message
-  Ad-->>Svc: domain Message
+  Ad->>Cl: uploadFile(a Blob read from disk)
+  Cl-->>Ad: uploaded file
+  Ad->>Cl: sendMedia(chat, file and caption)
+  Cl-->>Ad: Telegram message
+  Ad-->>Svc: cli-core Message
   Svc->>Guard: journal the outcome, never the text
   Svc-->>Cmd: the answer for stdout
 ```
 
-In tg the adapter hands the same Blob to mtcute and opens the file again for each retry. An adapter
-whose library needs the bytes in memory calls `uploadBytes`, which refuses a file over 256 MiB.
+If the upload drops, the adapter opens the file again and retries. max's adapter does the same with its
+own client. An adapter whose library needs the bytes in memory calls `uploadBytes`, which refuses a file
+over 256 MiB.
 
 ## Patterns in use
 
