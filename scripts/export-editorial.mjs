@@ -227,10 +227,6 @@ combined.walkRules((rule) => {
     return `.wirecat-editorial ${selector}`
   })
 })
-combined.walkDecls((d) => {
-  if (d.prop === "background" || d.prop === "background-image")
-    d.value = d.value.replaceAll("/wallpaper.svg", "/editorial-wallpaper.svg")
-})
 const reset =
   ".wirecat-editorial {position:relative;isolation:isolate;min-height:100vh;font:15px/1.55 Onest,sans-serif;color:var(--ink);background:var(--bg)}.wirecat-editorial :where(h1,h2,h3,h4,p,ul,ol,dl,pre,blockquote){margin:0;padding:0}.wirecat-editorial ul{list-style:disc}.wirecat-editorial ol{list-style:decimal}.wirecat-editorial summary{display:list-item}.wirecat-editorial [hidden]{display:none!important}\n"
 const extras = `\n.wirecat-editorial .site-header{flex-wrap:wrap}.wirecat-editorial .site-header nav{flex-wrap:wrap}@media(max-width:650px){.wirecat-editorial .site-header{gap:10px}.wirecat-editorial .site-header nav{gap:7px}.wirecat-editorial .site-header .brand .wirecat-logo-word{width:78px}.wirecat-editorial .site-header .brand .wirecat-logo-mark{width:24px;height:24px}.wirecat-editorial .site-header .connect-dropdown>summary{padding-inline:8px;max-width:150px;font-size:11px}.wirecat-editorial .site-header .theme-switch{width:28px;height:28px}}\n`
@@ -240,12 +236,5 @@ await writeFile(
     reset +
     combined.toString() +
     extras,
-)
-await writeFile(
-  new URL("../public/editorial-wallpaper.svg", import.meta.url),
-  (await readFile(new URL("wallpaper.svg", sourceDir), "utf8")).replace(
-    /(<svg[^>]*>)/,
-    "$1<title>Decorative messenger pattern</title>",
-  ),
 )
 console.log("Exported selected editorial home, features and examples in en/ru/es.")
