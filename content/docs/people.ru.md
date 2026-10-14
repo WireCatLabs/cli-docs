@@ -46,7 +46,7 @@ description: "Вспомните, кто вам написал и что вы о
 Оба мессенджера показывают профиль человека и общую переписку:
 
 ```sh
-tg contacts profile @example_user
+tg personal contacts profile @example_user
 max personal contacts profile 20000002
 ```
 
@@ -67,7 +67,7 @@ max personal contacts profile 20000002
   от старых к новым, со ссылкой `t.me` для старого имени пользователя Telegram. Имя из сохранённых
   сообщений помечено `source: messages` и приблизительно: заново скачанное сообщение несёт новое имя.
 - **Общие чаты:** сколько его сообщений в локальном хранилище в каждом чате, первое и последнее из них.
-  Если чат сохранён не с начала (`complete: false`), число — нижняя граница; `store fetch <чат>`
+  Если чат сохранён не с начала (`complete: false`), число — нижняя граница; `messages sync <чат>`
   дополнит хранилище.
 
 ## Что он писал
@@ -75,7 +75,7 @@ max personal contacts profile 20000002
 Оба мессенджера могут собрать контекст из сообщений, уже сохранённых на вашем компьютере:
 
 ```sh
-tg contacts context @example_user --since-time 30d --limit 20
+tg personal contacts context @example_user --since-time 30d --limit 20
 max personal contacts context 20000002 --since-time 30d --limit 20
 ```
 
@@ -84,7 +84,7 @@ max personal contacts context 20000002 --since-time 30d --limit 20
 от старых к новым, по умолчанию 20 на чат:
 
 ```sh
-tg contacts context @example_user --chat "Книжный клуб" --chat "Работа" --limit 10
+tg personal contacts context @example_user --chat "Книжный клуб" --chat "Работа" --limit 10
 max personal contacts context 20000002 --chat "Книжный клуб" --chat "Работа" --limit 10
 ```
 
@@ -102,7 +102,7 @@ Telegram ищет сообщения этого человека в каждом
 Проверка аккаунта доступна в обоих мессенджерах:
 
 ```sh
-tg contacts check @example_user
+tg personal contacts check @example_user
 max personal contacts check 20000002
 ```
 
@@ -123,7 +123,7 @@ max personal contacts check 20000002
 список не попадают, никто не удаляется:
 
 ```sh
-tg chats members audit "Книжный клуб" --deep 10
+tg personal chats members audit "Книжный клуб" --deep 10
 max personal chats members audit "Книжный клуб" --deep 10
 ```
 
@@ -134,7 +134,7 @@ max personal chats members audit "Книжный клуб" --deep 10
 Если вы знаете, что два аккаунта принадлежат одному человеку, можно сохранить связь локально:
 
 ```sh
-tg contacts link @example_user max:"Example User"
+tg personal contacts link @example_user max:"Example User"
 ```
 
 Оба аккаунта уже должны быть в истории на этом компьютере, поэтому `tg` и `max` нужны на одном
@@ -148,7 +148,7 @@ tg contacts link @example_user max:"Example User"
 Сначала [импортируйте почту](./email.mdx), затем свяжите известный адрес с сохранённым контактом:
 
 ```sh
-tg contacts link @example_user email:rin@example.test
+tg personal contacts link @example_user email:rin@example.test
 ```
 
 Замените имя пользователя и адрес настоящими учётными записями человека. Проверьте возвращённые

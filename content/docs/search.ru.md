@@ -29,7 +29,7 @@ description: "Найдите сообщение, человека, чат или
 замените `Project` на название чата; загружается последний месяц, до 1000 сообщений за один запуск:
 
 ```sh
-tg store fetch "Project" --since-time 30d --limit 1000
+tg personal messages sync "Project" --since-time 30d --limit 1000
 ```
 
 ```sh
@@ -46,7 +46,7 @@ max personal messages sync "Project" --since-time 30d --limit 1000
 сразу:
 
 ```sh
-tg search all invoice
+tg personal search all invoice
 max personal search all invoice
 ```
 
@@ -66,7 +66,7 @@ max personal search all invoice
 <summary>Дополнительно: команды для терминала</summary>
 
 ```sh
-tg search messages счёт
+tg personal search messages счёт
 max personal search messages счёт
 ```
 
@@ -78,7 +78,7 @@ max personal search messages счёт
 <summary>Дополнительно: команды для терминала</summary>
 
 ```sh
-tg search messages 'exact:"счёт оплачен"'
+tg personal search messages 'exact:"счёт оплачен"'
 max personal search messages 'exact:"счёт оплачен"'
 ```
 
@@ -107,7 +107,7 @@ max personal search messages 'exact:"счёт оплачен"'
 <summary>Дополнительно: команды для терминала</summary>
 
 ```sh
-tg search messages счёт --chat "Проект"
+tg personal search messages счёт --chat "Проект"
 max personal search messages счёт --chat "Проект"
 ```
 

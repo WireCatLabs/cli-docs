@@ -39,7 +39,7 @@ Reads, explicit history fetches and background capture write messages into one s
 
 The store keeps each message's original text and, separately, its normalized text for search. It also records which ranges of each chat's history it holds. An index, a build or a vector does not prove that a whole chat was downloaded.
 
-Good search needs downloaded chats. `store fetch --all --background` in tg, `messages sync --all --background` in max, starts downloading the last 90 days of every chat; add `--since-time 365d` to go further back. Each run fetches at most 1,000 messages per chat in tg or 1,200 in max by default; repeat it to continue busy histories. Counts, topic search and filters read only the archive.
+Good search needs downloaded chats. `messages sync --all --background` starts downloading the last 90 days of every chat; add `--since-time 365d` to go further back. Each run fetches at most 1,000 messages per chat in tg or 1,200 in max by default; repeat it to continue busy histories. Counts, topic search and filters read only the archive.
 
 Message search starts in the active account. `--source all` or `in:all` widens it to every account in the store; a provider narrows that. Names resolve inside the chosen scope, and an ambiguous author or chat asks for a more precise identifier. Topic search also starts in the active account: its built conversations, optionally one chat and a time boundary; `--source` widens it explicitly.
 
@@ -59,9 +59,9 @@ The pipeline:
 The fields are `text`, `exact`, `body`, `from`, `chat`, `date`, `kind`, `has`, `topic`, `in`, `preset`, `content`, `filename`, `mime`, `size` and `tag`. File fields match a message when at least one of its attachments matches, by the name, size and type the messenger reported; MAX reports no type, so `mime:` finds nothing there. `content:` searches text extracted from attachments or supplied by an agent. `tag:` reads the owner's local tags on the message, its chat or its sender. `date:` also takes `today`, `yesterday` and offsets such as `7d`, counted from the moment the query runs. Fuzzy, proximity, boost and interval operators are refused with an explicit error.
 
 ```sh
-tg search messages 'invoice AND has:file' --source all --context 2 --json
+tg personal search messages 'invoice AND has:file' --source all --context 2 --json
 max personal search messages 'chat:"Project team" AND date:[2026-10-01 TO 2026-10-31]' --timezone Europe/Madrid --json
-tg search messages 'filename:*.pdf size>1MB date:7d' --json
+tg personal search messages 'filename:*.pdf size>1MB date:7d' --json
 ```
 
 `text` matches normalized words; `body` addresses the original full text, case-sensitive. `body:/.*invoice.*/` expresses a substring condition. A date without a time is a calendar day in the chosen zone; an inclusive upper day includes the whole day, and days when clocks change are not assumed to last 24 hours.
@@ -70,7 +70,7 @@ When every branch requires words, results are ranked by BM25 over the word index
 
 If the word index is not ready, a query with words fails with `index_not_ready`, the share already built and the command that finishes it (`store migrate`); it never falls back to substring matching. A query without words still runs. Query length, tree depth, automaton size, vocabulary expansion (10,000 words), candidates, scanned bytes, work and time are bounded. Exceeding a budget is an error (`query_limit`), never a silently shorter result.
 
-The JSON answer includes the language, field and preset versions, the time zone, the order, `wordsReady`, per-chat `completeness`, and account and chat coverage, even with no hits. `lastSyncedAt` is the oldest time a chat in scope was last fetched by `store fetch` (tg) or `messages sync` (max), or `null` if one never was. `inventoryComplete` says every account in scope has at some point listed all its chats; it is knowledge about the past, not a promise about now. `coverage` also reports the stored messages and chats in scope, counts never-fetched and behind chats, lists up to ten `attention` chats, and names `next`, the one command that would improve the answer. When no message is found and `next` is set, an agent runs it or asks the owner before concluding that the message does not exist.
+The JSON answer includes the language, field and preset versions, the time zone, the order, `wordsReady`, per-chat `completeness`, and account and chat coverage, even with no hits. `lastSyncedAt` is the oldest time a chat in scope was last fetched by `messages sync`, or `null` if one never was. `inventoryComplete` says every account in scope has at some point listed all its chats; it is knowledge about the past, not a promise about now. `coverage` also reports the stored messages and chats in scope, counts never-fetched and behind chats, lists up to ten `attention` chats, and names `next`, the one command that would improve the answer. When no message is found and `next` is set, an agent runs it or asks the owner before concluding that the message does not exist.
 
 `stats messages show` runs the same query and counts each matching message once, grouped by chat, sender, calendar day or hour. It counts the archive only. A successful search or count writes its query and options, never its results, to a local history of the newest 1,000 runs; saved searches are named entries that are parsed again on every run.
 
@@ -129,8 +129,8 @@ Agent-assisted linking: `skill show link-conversations` gives the owner's agent 
 `conversations build --chat <chat> --analyze` is the explicit alternative: the CLI sends bounded batches to a configured OpenAI-compatible or Anthropic endpoint. It needs one named chat, reports the volume, endpoint and token limit, and asks for consent, which is remembered for that account, chat and provider until revoked (`conversations consents list`, `conversations consents revoke`). Defaults are 50 messages per batch and at most 100,000 reserved tokens per run; `--yes` grants consent in scripts.
 
 ```sh
-tg conversations build --chat "Project team"
-tg conversations list --chat "Project team" --json
+tg personal conversations build --chat "Project team"
+tg personal conversations list --chat "Project team" --json
 max personal conversations batches status --chat "Project team" --json
 ```
 
@@ -145,9 +145,9 @@ Local models run through ONNX Runtime (WebAssembly) in Node or Bun. The default 
 One local session uses `min(8, cores)` threads. `--workers` starts several sessions with the threads split between them, each with its own copy of the model, and `--threads` sets the total.
 
 ```sh
-tg models text download e5-small
-tg conversations embed --chat "Project team"
-tg conversations embed status --chat "Project team" --json
+tg personal models text download e5-small
+tg personal conversations embed --chat "Project team"
+tg personal conversations embed status --chat "Project team" --json
 ```
 
 A remote provider computes vectors with the owner's key: OpenAI, or any server with OpenAI's `/v1/embeddings` shape through `--base-url` with `--model` and `--dims`, such as Gemini, Jina, Ollama or LM Studio. That sends the pieces' text, and each search sends the question. Before sending anything, `embed` states the pieces, the maximum tokens and the maximum price and waits for a yes (`--yes` in scripts, `--max-tokens` as a cap).
@@ -176,7 +176,7 @@ Vectors are SQLite blobs scanned in pages and scored in JavaScript. There is no 
 `conversations related` uses the mean of a conversation's current vectors as the query and searches every built chat. No model runs, so it needs no download.
 
 ```sh
-tg search conversations "Where did we discuss renting a flat?" --chat "Project team" --json
+tg personal search conversations "Where did we discuss renting a flat?" --chat "Project team" --json
 max personal conversations related "Project team" 4521 --json
 ```
 

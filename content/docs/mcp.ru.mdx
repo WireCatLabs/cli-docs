@@ -73,7 +73,7 @@ ChatGPT, Claude и другие веб-чаты подключаются чер�
 
 ## Перед подключением
 
-[Установите CLI и войдите](./installation.mdx). Выполните `tg mcp config` или
+[Установите CLI и войдите](./installation.mdx). Выполните `tg personal mcp config` или
 `max personal mcp config`: команда напечатает настройки с настоящими путями Node и CLI на вашей машине.
 Она показывает конфигурацию, а не редактирует клиент. PATH у приложения с рабочего стола
 может отличаться от PATH терминала.
@@ -83,7 +83,7 @@ ChatGPT, Claude и другие веб-чаты подключаются чер�
 В терминале, где установленная команда уже работает:
 
 ```sh
-codex mcp add tg -- tg mcp
+codex mcp add tg -- tg personal mcp
 codex mcp list
 ```
 
@@ -95,7 +95,7 @@ codex mcp list
 ### Claude Code
 
 ```sh
-claude mcp add --scope user tg -- tg mcp
+claude mcp add --scope user tg -- tg personal mcp
 claude mcp list
 ```
 
@@ -104,7 +104,7 @@ claude mcp list
 
 ### Cursor и Claude Desktop
 
-Скопируйте запись сервера из `tg mcp config` или `max personal mcp config` в `mcpServers` клиента,
+Скопируйте запись сервера из `tg personal mcp config` или `max personal mcp config` в `mcpServers` клиента,
 сохранив полные пути и переменные окружения. Добавьте запись к существующим серверам.
 
 | Клиент | Файл настроек |
@@ -120,7 +120,7 @@ claude mcp list
 ### Gemini CLI
 
 ```sh
-gemini mcp add --scope user tg tg mcp
+gemini mcp add --scope user tg tg personal mcp
 gemini mcp list
 ```
 

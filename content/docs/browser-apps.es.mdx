@@ -9,7 +9,7 @@ Esta guía conecta el servicio de mensajería que elijas y lo comprueba con una 
 
 ## Antes de empezar
 
-- Instala la [herramienta de línea de comandos de Telegram o MAX](./installation.mdx) e inicia sesión en tu cuenta. No necesitas un agente local para usar el navegador: `tg setup --agent none` o `max personal setup --agent none`.
+- Instala la [herramienta de línea de comandos de Telegram o MAX](./installation.mdx) e inicia sesión en tu cuenta. No necesitas un agente local para usar el navegador: `tg personal setup --agent none` o `max personal setup --agent none`.
 - Haz la configuración inicial en el ordenador que ejecuta la herramienta y mantenlo encendido durante el uso. Al final explicamos la opción de un servidor siempre encendido.
 - Tu cuenta del chat de IA debe permitir añadir una conexión propia. Si no aparece esa opción en tu cuenta de trabajo, consulta al administrador. Las [instrucciones de OpenAI](https://developers.openai.com/plugins/quickstart) y de [Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) muestran las opciones actuales.
 
@@ -49,7 +49,7 @@ Elige tu sistema operativo y <DocTerm term="terminal" lang="es" label="abre dos 
 Instala la app Tailscale e inicia sesión desde su icono en la bandeja. Tras instalar Node.js,
 el CLI y Tailscale, abre ventanas nuevas de PowerShell para actualizar PATH. Usa `.cmd` para
 los comandos npm y evitar errores de la política de ejecución. Configuración inicial:
-`tg.cmd setup --agent none` o `max.cmd personal setup --agent none`.
+`tg.cmd personal setup --agent none` o `max.cmd personal setup --agent none`.
 
 Ejecuta **la ventana 1 como Administrador** para Funnel. `&` gestiona el espacio de la ruta
 predeterminada; cambia la ruta si instalaste Tailscale en otro lugar.
@@ -61,7 +61,7 @@ Ejecuta **la ventana 2 con tu usuario habitual**, que inició sesión en el serv
 
 ```powershell
 $mcpPublicUrl = Read-Host 'HTTPS origin from Funnel (no /mcp)'
-tg.cmd mcp --http --port 8765 --public-url $mcpPublicUrl --permission messages.send=allow
+tg.cmd personal mcp --http --port 8765 --public-url $mcpPublicUrl --permission messages.send=allow
 ```
 
 Para MAX, cambia `tg.cmd` por `max.cmd` en la ventana 2. Ejecuta ambos procesos en Windows.
@@ -83,7 +83,7 @@ TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
 ```
 
 Para MAX, cambia `tg` por `max` en la ventana 2.
@@ -105,7 +105,7 @@ sudo tailscale funnel 8765
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
 ```
 
 Para MAX, cambia `tg` por `max` en la ventana 2. No ejecutes el servidor del servicio de mensajería con `sudo`.
@@ -207,7 +207,7 @@ Consulta los ejemplos de [permisos](./permissions.mdx).
 
 La conexión del navegador requiere el ordenador con la herramienta de línea de comandos, su servidor MCP y el túnel HTTPS en ejecución. Después de suspender o reiniciar, sigue este orden:
 
-1. Activa el ordenador y comprueba la cuenta en un terminal con `tg account show` o `max personal account show`. En PowerShell usa `tg.cmd` o `max.cmd`. Si falla, sigue la guía de acceso de [Telegram](./tg/sessions.md) o [MAX](./max/sessions.md).
+1. Activa el ordenador y comprueba la cuenta en un terminal con `tg personal account show` o `max personal account show`. En PowerShell usa `tg.cmd` o `max.cmd`. Si falla, sigue la guía de acceso de [Telegram](./tg/sessions.md) o [MAX](./max/sessions.md).
 2. Reinicia el túnel y el servidor en las dos ventanas indicadas arriba. Usa el mismo perfil y comprueba que la dirección HTTPS coincide con la del conector. Si cambió, actualiza la dirección pública del servidor y la del conector.
 3. Repite la petición de cinco chats. Si la aplicación pide conectar de nuevo, usa el nuevo código de un solo uso que muestra el servidor en ejecución.
 
@@ -232,7 +232,7 @@ Funnel admite los puertos públicos `443`, `8443` y `10000`
 - **Funnel en segundo plano:** con `--bg`, Ctrl-C no lo desactiva. Consulta `tailscale funnel status`
   y desactiva solo esa ruta con `tailscale funnel --https=443 off` (o `8443` para el segundo servidor).
   Usa la ruta y elevación de tu SO arriba. Evita `funnel reset` si tienes otra ruta: las borra todas.
-- **Revocar acceso de apps:** `tg mcp --revoke` o `max personal mcp --revoke`; en PowerShell, usa
+- **Revocar acceso de apps:** `tg personal mcp --revoke` o `max personal mcp --revoke`; en PowerShell, usa
   `tg.cmd` / `max.cmd`. Las apps deben volver a entrar; la sesión del servicio de mensajería se mantiene.
 
 ## Si algo falla
@@ -243,7 +243,7 @@ Funnel admite los puertos públicos `443`, `8443` y `10000`
   efectivo. `deny` y `readonly` impiden cambios en el servidor; revisa también las aprobaciones de la app.
 - **PowerShell rechaza scripts:** usa `tg.cmd` o `max.cmd`. Si no encuentra el comando, abre una
   ventana nueva y comprueba la instalación del CLI; no cambies la política de ejecución de todo el sistema.
-- **Sin herramientas:** `tg mcp doctor` o `max personal mcp doctor` verifica el handshake local, no el
+- **Sin herramientas:** `tg personal mcp doctor` o `max personal mcp doctor` verifica el handshake local, no el
   túnel ni el acceso al servicio de mensajería. Un `account show` explícito verifica esa cuenta.
 - **Puerto ocupado:** cambia el puerto local y apunta Funnel al mismo número. Para dos servidores,
   asigna también puertos HTTPS públicos distintos, como arriba.
@@ -264,7 +264,7 @@ Prueba esta opción después de que funcione en tu ordenador. Consulta la conexi
 <summary>Servidor Linux: mantener la conexión tras salir y reiniciar</summary>
 
 1. Usa el mismo usuario normal de Linux para instalar, entrar en el servicio de mensajería y ejecutar el servicio. Instala Node.js, CLI y Tailscale e inicia sesión con ese usuario. Comprueba primero la petición de cinco chats con el arranque normal de arriba.
-2. Ejecuta `tg mcp config` o `max personal mcp config`. Usa la ruta absoluta de Node de `command` y la entrada del CLI de `args`; conserva el perfil indicado. No guardes contraseñas ni tokens del bot en el servicio.
+2. Ejecuta `tg personal mcp config` o `max personal mcp config`. Usa la ruta absoluta de Node de `command` y la entrada del CLI de `args`; conserva el perfil indicado. No guardes contraseñas ni tokens del bot en el servicio.
 3. Crea `~/.config/systemd/user/wirecat-mcp.service`. Sustituye rutas y dirección pública por valores reales. Los directorios de configuración y estado deben coincidir con los del acceso comprobado:
 
 ```ini

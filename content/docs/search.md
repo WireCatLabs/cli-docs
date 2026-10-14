@@ -29,7 +29,7 @@ Ask your agent to fetch the selected chats or run your messenger's command. Repl
 with the chat title; this example downloads the past month, up to 1,000 messages per run:
 
 ```sh
-tg store fetch "Project" --since-time 30d --limit 1000
+tg personal messages sync "Project" --since-time 30d --limit 1000
 ```
 
 ```sh
@@ -46,7 +46,7 @@ When you do not know where something was written — a chat, an email or your ow
 all of them together:
 
 ```sh
-tg search all invoice
+tg personal search all invoice
 max personal search all invoice
 ```
 
@@ -66,7 +66,7 @@ You should get the agreed date and the messages behind it. If the date was only 
 <summary>Optional: commands for the terminal</summary>
 
 ```sh
-tg search messages invoice
+tg personal search messages invoice
 max personal search messages invoice
 ```
 
@@ -78,7 +78,7 @@ For an exact phrase, keep the quotes inside the query:
 <summary>Optional: commands for the terminal</summary>
 
 ```sh
-tg search messages 'exact:"final invoice"'
+tg personal search messages 'exact:"final invoice"'
 max personal search messages 'exact:"final invoice"'
 ```
 
@@ -107,7 +107,7 @@ chat-title and person-name lookup can behave differently.
 <summary>Optional: commands for the terminal</summary>
 
 ```sh
-tg search messages invoice --chat "Project"
+tg personal search messages invoice --chat "Project"
 max personal search messages invoice --chat "Project"
 ```
 

@@ -17,7 +17,7 @@ Ask your agent to review unanswered questions and mentions, with links to the me
 Read [Telegram group tasks](./tg/groups.md) or [MAX group tasks](./max/groups.md) for the commands.
 
 ```sh
-tg review --unanswered 24h
+tg personal review --unanswered 24h
 max personal review --unanswered 24h
 ```
 
@@ -27,7 +27,7 @@ locally: missing messages can change its picture of the discussion.
 ## Understand activity
 
 ```sh
-tg stats chats show "Team" --since-time 7d
+tg personal stats chats show "Team" --since-time 7d
 max personal stats chats show "Team" --since-time 7d
 ```
 

@@ -40,7 +40,7 @@ description: "Выберите способ подключения для сво
 Выполните одну команду в терминале на компьютере, где работает агент. Она подключит аккаунт и установит инструкцию для агента:
 
 ```sh
-tg setup --agent codex
+tg personal setup --agent codex
 ```
 
 Вместо `codex` укажите `cursor`, `claude` или `gemini`. Без `--agent` программа предложит выбрать агента. Для Hermes, OpenClaw и других агентов укажите `none`, затем выполните подсказку для своего приложения ниже.
@@ -90,7 +90,7 @@ tg skill install
   [решение проблем Telegram](./tg/troubleshooting.md) ·
   [решение проблем MAX](./max/troubleshooting.md#max-не-находится-после-установки).
 - **Агент сообщает «no session».** Инструмент запускается, но не находит вход. Войдите через
-  `tg setup` в том же окружении и профиле, которые использует агент: тот же пользователь
+  `tg personal setup` в том же окружении и профиле, которые использует агент: тот же пользователь
   компьютера, то же имя профиля и те же переменные каталогов, например `TG_CONFIG_DIR`, если вы
   их задавали. Подробнее: [Telegram](./tg/troubleshooting.md#no-session-for-profile-default--run-tg-setup) ·
   [MAX](./max/troubleshooting.md#no-session-for-profile-default).

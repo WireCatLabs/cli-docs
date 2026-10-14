@@ -17,7 +17,7 @@ description: "Отвечайте на вопросы, понимайте акт�
 Команды описаны для [Telegram](./tg/groups.md) и [MAX](./max/groups.md).
 
 ```sh
-tg review --unanswered 24h
+tg personal review --unanswered 24h
 max personal review --unanswered 24h
 ```
 
@@ -27,7 +27,7 @@ max personal review --unanswered 24h
 ## Понять активность
 
 ```sh
-tg stats chats show "Команда" --since-time 7d
+tg personal stats chats show "Команда" --since-time 7d
 max personal stats chats show "Команда" --since-time 7d
 ```
 

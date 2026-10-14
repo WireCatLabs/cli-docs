@@ -40,7 +40,7 @@ Los ejemplos usan `tg` para Telegram. Para MAX cambia `tg` por `max` y el nombre
 Ejecuta un comando en el terminal del ordenador donde trabaja el agente. Conecta la cuenta e instala las instrucciones:
 
 ```sh
-tg setup --agent codex
+tg personal setup --agent codex
 ```
 
 Cambia `codex` por `cursor`, `claude` o `gemini`. Sin `--agent`, la configuración te permite elegir. Para Hermes, OpenClaw u otro agente, usa `none` y sigue la nota correspondiente abajo.
@@ -90,7 +90,7 @@ La cuenta y los chats deben ser tuyos. Después sigue con [Primeras tareas](./fi
   [solución de problemas de Telegram](./tg/troubleshooting.md) ·
   [solución de problemas de MAX](./max/troubleshooting.md#max-не-находится-после-установки).
 - **El agente dice «no session».** La herramienta se ejecuta, pero no encuentra el acceso. Inicia
-  sesión con `tg setup` en el mismo entorno y perfil que usa el agente: el mismo usuario del
+  sesión con `tg personal setup` en el mismo entorno y perfil que usa el agente: el mismo usuario del
   ordenador, el mismo nombre de perfil y las mismas variables de carpetas, como `TG_CONFIG_DIR`,
   si las definiste. Detalles:
   [Telegram](./tg/troubleshooting.md#no-session-for-profile-default--run-tg-setup) ·

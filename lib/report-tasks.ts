@@ -267,7 +267,7 @@ export function reportTasks(tool: string, lang: string): ReportTask[] {
       `${tool} contacts check 42 --offline --json`,
     ],
   }
-  if (tool === "tg") commands.group.push("tg stats chats official Project --json")
+  if (tool === "tg") commands.group.push("tg personal stats chats official Project --json")
   const examples: Record<string, ReportTask["example"]> = {
     group: {
       headers: labels.slice(0, 2),

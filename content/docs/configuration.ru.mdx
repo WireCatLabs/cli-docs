@@ -23,10 +23,10 @@ description: "Где лежит файл настроек, как посмотр
 
 ```sh
 tg config show
-tg config set limit 50
+tg personal config set limit 50
 tg work config set limit 10
 tg config set sendsPerHour 10 --defaults
-tg config unset limit
+tg personal config unset limit
 ```
 
 `config show` перечисляет все настройки, их значения и откуда взялось каждое значение. `config set` сохраняет значение для текущего профиля, для профиля с именем, например `work`, или с `--defaults` — для всех профилей. Значение проверяется до записи, поэтому опечатка не сохранится, а вернёт ошибку. `config unset` удаляет значение, и снова действует значение по умолчанию. Для MAX пишите `max` вместо `tg`. Файл можно править и вручную.

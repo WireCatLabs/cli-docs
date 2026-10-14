@@ -17,7 +17,7 @@ Pide al agente preguntas pendientes y menciones con enlaces a mensajes.
 Los comandos están en las guías de [Telegram](./tg/groups.md) y [MAX](./max/groups.md).
 
 ```sh
-tg review --unanswered 24h
+tg personal review --unanswered 24h
 max personal review --unanswered 24h
 ```
 
@@ -27,7 +27,7 @@ los mensajes que faltan pueden cambiar su visión de la conversación.
 ## Entender la actividad
 
 ```sh
-tg stats chats show "Equipo" --since-time 7d
+tg personal stats chats show "Equipo" --since-time 7d
 max personal stats chats show "Equipo" --since-time 7d
 ```
 

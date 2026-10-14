@@ -73,8 +73,8 @@ OpenClaw или Hermes. Под агентом — WireCat: общее ядро �
 
 Вы получите короткий ответ с сообщениями, которые можно открыть или найти. Начните с нескольких чатов, чтобы легко проверить результат.
 
-**Что происходит внутри.** Для первого запроса агент выполняет команды вроде `tg inbox --limit 5` и
-`tg chats list --limit 5`, а затем читает больше сообщений там, где ему нужен контекст. Чтение не
+**Что происходит внутри.** Для первого запроса агент выполняет команды вроде `tg personal inbox --limit 5` и
+`tg personal chats list --limit 5`, а затем читает больше сообщений там, где ему нужен контекст. Чтение не
 отмечает сообщения прочитанными. Ограничения описаны в разделе [чтение и входящие](./tg/usage.md#reading).
 
 **Полезно знать**
@@ -143,24 +143,24 @@ OpenClaw или Hermes. Под агентом — WireCat: общее ядро �
 Находит чат, проверяет, что сохранено, и ищет только по сохранённой истории, как просили в запросе:
 
 ```sh
-tg chats list --search Atlas --kind group
-tg store status -1001001001001
-tg search messages 'analytics date:[2026-09-01 TO 2026-10-01}' --chat -1001001001001 --backend archive --json
+tg personal chats list --search Atlas --kind group
+tg personal store status -1001001001001
+tg personal search messages 'analytics date:[2026-09-01 TO 2026-10-01}' --chat -1001001001001 --backend archive --json
 ```
 
 После вашего разрешения загружает период, снова проверяет полноту и читает сообщения вокруг найденного:
 
 ```sh
-tg store fetch -1001001001001 --since-time 2026-09-01 --limit 1000
-tg store status -1001001001001
-tg search messages 'analytics date:[2026-09-01 TO 2026-10-01}' --chat -1001001001001 --backend archive --json
-tg messages context -1001001001001 4312 --before-n 2 --after-n 4
+tg personal messages sync -1001001001001 --since-time 2026-09-01 --limit 1000
+tg personal store status -1001001001001
+tg personal search messages 'analytics date:[2026-09-01 TO 2026-10-01}' --chat -1001001001001 --backend archive --json
+tg personal messages context -1001001001001 4312 --before-n 2 --after-n 4
 ```
 
 </details>
 
 **Почему эти команды:** `messages list` читает окно сообщений и сохраняет их локально;
-`store fetch` заполняет более длинный отрезок истории. `search messages` по умолчанию спрашивает
+`messages sync` заполняет более длинный отрезок истории. `search messages` по умолчанию спрашивает
 ещё и собственный поиск Telegram; `--backend archive` оставляет поиск в сохранённой истории. Поиск
 Telegram находит только слова, поэтому для чтения обсуждения вокруг найденного и проверки целого
 месяца нужна сохранённая история. `messages context` проверяет, что говорили вокруг найденного
@@ -215,19 +215,19 @@ Telegram находит только слова, поэтому для чтен�
 Находит чаты и просматривает обе стороны каждого разговора:
 
 ```sh
-tg chats list --search Atlas --kind group
-tg contacts list --search Anna
-tg contacts list --search Tom
-tg review --chat -1001001001001 --since-time 7d
-tg review --chat 100200300 --since-time 7d
-tg review --chat 100200301 --since-time 7d
+tg personal chats list --search Atlas --kind group
+tg personal contacts list --search Anna
+tg personal contacts list --search Tom
+tg personal review --chat -1001001001001 --since-time 7d
+tg personal review --chat 100200300 --since-time 7d
+tg personal review --chat 100200301 --since-time 7d
 ```
 
 Затем проверяет исходное обещание и ответы на него:
 
 ```sh
-tg messages context -1001001001001 4520 --before-n 3 --after-n 6
-tg messages context 100200300 201 --before-n 2 --after-n 5
+tg personal messages context -1001001001001 4520 --before-n 3 --after-n 6
+tg personal messages context 100200300 201 --before-n 2 --after-n 5
 ```
 
 </details>
@@ -284,20 +284,20 @@ tg messages context 100200300 201 --before-n 2 --after-n 5
 Находит группы и участников, затем читает выбранные чаты:
 
 ```sh
-tg chats list --search Atlas --kind group
-tg contacts list --search Anna
-tg contacts list --search Tom
-tg messages list -1001001001001 --after-time 7d --limit 100
-tg messages list -1001001001002 --after-time 7d --limit 100
-tg messages list 100200300 --after-time 7d --limit 100
-tg messages list 100200301 --after-time 7d --limit 100
+tg personal chats list --search Atlas --kind group
+tg personal contacts list --search Anna
+tg personal contacts list --search Tom
+tg personal messages list -1001001001001 --after-time 7d --limit 100
+tg personal messages list -1001001001002 --after-time 7d --limit 100
+tg personal messages list 100200300 --after-time 7d --limit 100
+tg personal messages list 100200301 --after-time 7d --limit 100
 ```
 
 Для уточнения читает сообщения после того, как пришёл дизайн:
 
 ```sh
-tg messages context -1001001001002 732 --before-n 2 --after-n 10
-tg messages list 100200300 --after-time 2026-10-02T12:00:00+02:00 --limit 50
+tg personal messages context -1001001001002 732 --before-n 2 --after-n 10
+tg personal messages list 100200300 --after-time 2026-10-02T12:00:00+02:00 --limit 50
 ```
 
 </details>

@@ -28,7 +28,7 @@ Pide al agente que descargue los chats elegidos o ejecuta el comando de tu servi
 `Project` por el nombre del chat; el ejemplo descarga el último mes, hasta 1000 mensajes por ejecución:
 
 ```sh
-tg store fetch "Project" --since-time 30d --limit 1000
+tg personal messages sync "Project" --since-time 30d --limit 1000
 ```
 
 ```sh
@@ -45,7 +45,7 @@ Si no sabes dónde se escribió algo — en un chat, un correo o tus propias not
 vez:
 
 ```sh
-tg search all invoice
+tg personal search all invoice
 max personal search all invoice
 ```
 
@@ -65,7 +65,7 @@ Deberías obtener la fecha acordada y sus mensajes de origen. Si solo fue una pr
 <summary>Opcional: comandos para el terminal</summary>
 
 ```sh
-tg search messages factura
+tg personal search messages factura
 max personal search messages factura
 ```
 
@@ -77,7 +77,7 @@ Para una frase exacta, conserva las comillas dentro de la consulta:
 <summary>Opcional: comandos para el terminal</summary>
 
 ```sh
-tg search messages 'exact:"factura final"'
+tg personal search messages 'exact:"factura final"'
 max personal search messages 'exact:"factura final"'
 ```
 
@@ -106,7 +106,7 @@ buscar nombres de chats o personas puede funcionar de otra forma.
 <summary>Opcional: comandos para el terminal</summary>
 
 ```sh
-tg search messages factura --chat "Proyecto"
+tg personal search messages factura --chat "Proyecto"
 max personal search messages factura --chat "Proyecto"
 ```
 
