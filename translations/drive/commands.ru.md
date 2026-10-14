@@ -17,7 +17,6 @@ title: "Команды Drive"
 | `--profile <name>` | explicit Google account profile (alternative to the first word). |
 | `--json` | print machine-readable JSON. |
 | `--jsonl` | print machine-readable JSON lines. |
-| `--agent-json` | show control and direction characters visibly in machine output. |
 | `--quiet` | suppress optional diagnostics. |
 | `--debug` | on failure, show the full error record: cause and stack. |
 | `--timeout <duration>` | whole-command deadline, e.g. 30s. |
@@ -270,7 +269,7 @@ drive <profile> search <query> [options]
 | Option | What it does |
 |---|---|
 | `--limit <n>` | how many results to return. Default: `20`. |
-| `--offset <n>` | how many results to skip. Default: `0`. |
+| `--page <n>` | which page to return. Default: `1`. |
 | `--exact` | match the words exactly: no word forms, no meaning. |
 
 ## `drive catalog`
@@ -532,7 +531,7 @@ drive <profile> notes list <document> [options]
 |---|---|
 | `--search <text>` | only notes that contain this text. |
 | `--limit <n>` | how many notes to return. Default: `50`. |
-| `--offset <n>` | how many notes to skip. Default: `0`. |
+| `--page <n>` | which page to return. Default: `1`. |
 
 ### `drive notes show`
 
