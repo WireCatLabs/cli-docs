@@ -33,8 +33,10 @@ IA. Esta guía los explica antes de conectar o archivar.
 
 - MCP solo lee la cuenta elegida: no escribe exportaciones ni cambios remotos, ni genera vectores o crea tareas.
 - La transcripción local usa un componente instalado en el equipo y no descarga ninguno.
-- Cambios remotos, vínculos, indexación, transcripción, trabajos, vectores y recuperación primero muestran un plan
+- Cambios remotos, vínculos, transcripción, trabajos, generación explícita mediante `meetings embeddings` y recuperación primero muestran un plan
   y requieren `--yes`; `--dry-run` prevalece donde está disponible. Las escrituras remotas no se reintentan.
+- La búsqueda de palabras actualiza su índice automáticamente. Con `--model` genera los vectores que
+  faltan antes de ordenar; un `--base-url` remoto recibe pasajes de transcripción además de la consulta.
 - Proponer una tarea no la crea.
 
 Una app IA puede enviar los resultados a su propio proveedor. Elige app y política por separado
