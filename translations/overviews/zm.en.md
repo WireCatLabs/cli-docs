@@ -1,9 +1,18 @@
 ---
-title: "Zoom"
+title: "Zoom — start here"
 description: "Keep transcripts, recordings and meeting context available to your AI agent."
 ---
 
 Keep meeting passages available to your AI agent so it can recover decisions, check promises and prepare for a call with sources. The Zoom command-line tool runs on your computer as `zm`; it reads available hosted data or imports transcript files.
+
+## Choose your starting point
+
+| Your situation | Next step |
+|---|---|
+| First time connecting Zoom | [Install with your agent or by hand](./installation.md) |
+| You already created an app | [Find its Public Client ID](./zoom-app.md#use-an-app-you-already-created), then [finish login](./installation.md#first-run) |
+| You have downloaded VTT files | [Import them without an app or login](./installation.md#import-without-a-zoom-app) |
+| Meetings are already saved | [Find a passage](./search.md); no reinstall is needed |
 
 ## What you can do
 

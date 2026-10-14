@@ -1,61 +1,108 @@
 ---
-title: "Instalación"
+title: "Instalar y conectar Zoom"
 ---
 
-Instala la herramienta Zoom en el equipo donde trabaja tu agente, conecta la cuenta y obtén una
-primera reunión. El paquete es `@wirecat/zoom-cli` y la orden, `zm`. Puedes reutilizar una app
-configurada, crear la tuya o importar texto sin app ni login.
+Da a tu agente de IA acceso a las transcripciones de Zoom guardadas para encontrar lo hablado y
+mostrar los pasajes que respaldan una respuesta. Puedes configurarlo con tu agente o ejecutar
+los comandos. Si ya tienes transcripciones, empieza sin crear una aplicación de Zoom ni iniciar sesión.
 
-## Requisitos
+## Los pasos
 
-- **Node.js 22.16 o posterior en 22.x, o Node.js 24 o posterior**, con npm. También funciona con Bun.
-  Instala Node.js desde [nodejs.org](https://nodejs.org/en/download) si falta `node --version`.
-- Linux, macOS o Windows. Abre un terminal de ese equipo para las órdenes siguientes.
-- Para login API, un almacén de contraseñas operativo. macOS usa Keychain, Windows Credential Manager
-  y Linux necesita un servicio de secretos de escritorio accesible. Un servidor sin él no puede guardar
-  la sesión; sigue disponible importar archivos.
-- Una cuenta Zoom autorizada a instalar la app. Tu organización puede exigir aprobación del administrador.
+1. [Instala la herramienta](#install) en el ordenador donde funciona el agente.
+2. [Elige la fuente](#choose-how-to-connect): tu cuenta de Zoom o transcripciones descargadas.
+3. [Conecta el agente](#give-your-agent-access) para que conozca los comandos.
+4. [Comprueba una reunión](#check-your-first-result) y lee un pasaje que respalde el resultado.
+
+¿Ya tienes reuniones guardadas? Ve directamente a [búsqueda y fuentes](./search.md).
+
+## Configura con tu agente
+
+Usa un agente que ejecute comandos en este ordenador, como Codex, Claude Code, Cursor o Gemini
+CLI. Copia esta petición en su chat:
+
+```text prompt
+Use zm CLI: ayúdame a conectar transcripciones de Zoom con mi agente de IA en este ordenador.
+Sigue https://wirecat.dev/es/docs/zm/installation y comprueba los programas necesarios antes de instalar.
+Pregunta si quiero conectar mi cuenta de Zoom o importar transcripciones que ya tengo.
+Si elijo Zoom, ayúdame a usar mi aplicación o crear una y encontrar su Public Client ID.
+Yo aprobaré el acceso en el navegador; no me pidas tokens ni códigos de callback en este chat.
+Instala las instrucciones para mi agente, busca una reunión guardada y muestra un pasaje citado.
+Explica qué datos faltan. No crees ni cambies reuniones remotas.
+```
+
+El agente prepara la herramienta y comprueba resultados. Tú eliges la aplicación y la cuenta,
+apruebas el consentimiento de Zoom y completas la respuesta de acceso si hace falta. Si el agente
+no puede mantener abierta una terminal interactiva, ejecuta [Primer uso](#first-run) y vuelve a él.
+Para un agente sin terminal, consulta [MCP y skills](./mcp.md).
+
+## Qué necesitas
+
+- **Node.js 22.16 o posterior dentro de 22.x, o Node.js 24 o posterior**, con npm. Comprueba
+  `node --version` y `npm --version` en Terminal de macOS/Linux o PowerShell de Windows.
+  Si falta alguno, instala Node.js desde [nodejs.org](https://nodejs.org/en/download), abre otra
+  terminal y comprueba de nuevo. La herramienta también funciona con Bun.
+- Espacio para las reuniones que guardes en este ordenador. Una herramienta instalada en un
+  servidor usa los archivos y el acceso del servidor, no los del portátil.
+- **Para acceder a Zoom:** una cuenta autorizada para añadir la aplicación y un almacén de
+  contraseñas del sistema: Keychain en macOS, Credential Manager en Windows o un servicio de
+  secretos del escritorio en Linux. La organización puede exigir aprobación del administrador.
+  Un servidor sin ese almacén no guarda el acceso; importar archivos no lo necesita.
 
 ## Instalar
 
 ```sh
 npm install -g @wirecat/zoom-cli
 zm --version
-zm --help
 zm doctor
 ```
 
-Versión y ayuda aparecen sin login. Doctor comprueba entorno y ajustes públicos sin contactar con
-Zoom ni abrir la base. Si falta `zm`, vuelve a abrir el terminal y comprueba que el directorio global
-de ejecutables npm esté en PATH, la lista de carpetas donde se buscan órdenes.
+Debes ver un número de versión y resultados del diagnóstico local. Ninguno inicia sesión ni
+lee reuniones. El paquete es `@wirecat/zoom-cli`; el comando corto que usarás es `zm`.
+
+En Windows, si PowerShell bloquea `npm.ps1` o `zm.ps1`, usa los lanzadores:
+
+```powershell
+npm.cmd install -g @wirecat/zoom-cli
+zm.cmd --version
+zm.cmd doctor
+```
+
+Usa `zm.cmd` en los demás ejemplos si tu terminal lo requiere. No necesitas cambiar la política
+de ejecución de PowerShell. Si no encuentra el comando, abre otra terminal y comprueba que la
+carpeta global de comandos de npm esté en PATH, las carpetas donde busca programas. Reinicia
+un agente que ya estuviera abierto si no ve el nuevo comando.
 
 ## Elige cómo conectar
 
-| Situación inicial | Siguiente acción |
+| Tu punto de partida | Qué hacer |
 |---|---|
-| Ya creaste una app Zoom | Abre credenciales, activa Public Client OAuth y copia **Public Client ID**; revisa la lista inferior |
-| Tu equipo facilita una app, incluida WireCat | Obtén **Public Client ID** del dueño y confirma que tu usuario puede autorizarla; sigue el mismo login |
-| Necesitas una app | [Crea la tuya](./zoom-app.md#create-your-own-app) y vuelve con el Public Client ID |
-| Solo tienes transcripciones | Omite el login y usa [importación sin app](#import-without-a-zoom-app) |
+| Ya creaste una aplicación de Zoom | [Abre sus credenciales](./zoom-app.md#use-an-app-you-already-created), activa Public Client OAuth y copia el **Public Client ID** |
+| Tu equipo proporciona una aplicación, incluida una de WireCat | Pide su **Public Client ID** al propietario y confirma que tu usuario de Zoom pueda autorizarla; [usa la aplicación compartida](./zoom-app.md#use-a-wirecat-or-team-app) |
+| Necesitas una aplicación | [Crea una General app con User-managed](./zoom-app.md#create-your-own-app), configura la respuesta y los permisos, y vuelve aquí |
+| Tienes archivos de transcripciones | [Importa sin aplicación de Zoom](#import-without-a-zoom-app) y omite el acceso del navegador |
 
-Una app Zoom es un registro de permisos en Marketplace, distinto de tu cuenta y la aplicación de
-llamadas. No hay archivo de credenciales: configura Public Client ID y autoriza tu cuenta en el navegador. `zm` necesita un ID explícito; instalarlo no selecciona una app. Una app en desarrollo
-puede estar limitada a la cuenta del desarrollador. Un ID solo no da acceso a datos ajenos.
+**No hay archivo de credenciales que descargar.** La aplicación de Zoom registra los permisos que
+puede pedir la herramienta. Es distinta de tu cuenta y de la aplicación para llamadas. Dentro de
+ella activa **Use Public Client OAuth** y copia el **Public Client ID**. No uses el Client ID
+normal ni el Client Secret. No crees otro cliente OAuth fuera de la aplicación.
 
-Antes del login, el dueño comprueba ajustes en el mismo entorno Development o Production que el ID elegido:
+Antes de iniciar sesión, revisa el mismo entorno Development o Production al que pertenece ese ID:
 
 | Ajuste | Valor necesario |
 |---|---|
-| Tipo / gestión | General app / User-managed |
-| Use Public Client OAuth | Activado; copia **Public Client ID**, no Client ID normal ni Client Secret |
-| OAuth Redirect URL | `https://wirecat.dev/zoom-callback` |
-| OAuth Allow Lists | Incluye `https://wirecat.dev/zoom-callback` |
-| Scopes | [Permisos de lectura](./zoom-app.md#what-the-manifest-asks-for); archivo/gestión solo para esas tareas |
+| Tipo de aplicación / gestión | General app / User-managed |
+| Use Public Client OAuth | Activado |
+| OAuth Redirect URL y OAuth Allow Lists | Ambos incluyen exactamente `https://wirecat.dev/zoom-callback` |
+| Scopes | Los cinco [permisos de lectura de reuniones del anfitrión](./zoom-app.md#what-the-manifest-asks-for) para sincronizar |
 
-## Primera ejecución
+La [guía de la aplicación](./zoom-app.md) explica los pasos del Marketplace y el acceso a grabaciones.
+Instalar `zm` no elige una aplicación compartida. Una aplicación en desarrollo puede estar limitada
+a la cuenta de su creador; el ID por sí solo no da acceso a reuniones de otra persona.
 
-Sustituye `<public-client-id>` por el valor copiado sin signos angulares. Ejecuta una orden cada vez;
-mantén abierto el terminal mientras apruebas en el navegador:
+## Primer uso
+
+Sustituye `<public-client-id>` por el Public Client ID de la aplicación, sin los signos angulares.
+Ejecuta los comandos de uno en uno en una terminal normal. Déjala abierta mientras apruebas en el navegador:
 
 ```sh
 zm config set zoom.clientId <public-client-id>
@@ -63,14 +110,16 @@ zm config set source api
 zm session start
 ```
 
-1. Entra en la cuenta correcta en el navegador y revisa los permisos.
-2. Pulsa **Allow**. Zoom abre el retorno WireCat, que envía la autorización al proceso `zm` esperando.
-3. Vuelve al terminal. El login termina cuando `zm` informa `logged_in: true` y vuelve al indicador.
-   Aprobar en el navegador solo no basta.
-4. Si espera, copia `code=…&state=…` o la URL completa, pégalo en ese mismo terminal y pulsa Enter
-   antes del límite de cinco minutos. Si ya terminó, ejecuta `zm session start` otra vez y aprueba el intento nuevo.
+1. Inicia sesión en la cuenta de Zoom cuyas reuniones organizadas quieres recuperar y revisa los permisos.
+2. Elige **Allow**. Zoom abre la página de respuesta de WireCat, que entrega la autorización
+   a la herramienta que espera en este ordenador.
+3. Vuelve a la terminal. El éxito es `logged_in: true` seguido del indicador de la terminal.
+   Aprobar solo en el navegador no termina el acceso de la herramienta.
+4. Si sigue esperando, copia `code=…&state=…` o la URL completa de respuesta y pégala en
+   **esa misma terminal que espera**. Pulsa Enter. No la pegues en el chat del agente ni la
+   ejecutes como comando. Tras el plazo de cinco minutos, inicia un nuevo intento.
 
-Comprueba la sesión guardada y elige un **perfil**, una etiqueta local de las reuniones:
+Elige un **perfil**, una etiqueta local para estas reuniones guardadas, y recupera un periodo pequeño:
 
 ```sh
 zm session status --json
@@ -79,28 +128,20 @@ zm meetings sync --lookback-days 7
 zm meetings list --json
 ```
 
-La sesión debe informar `logged_in: true`. La obtención guarda reuniones disponibles del anfitrión;
-la lista devuelve sus ID locales. Abre una con el ID de esa lista:
+El estado debe mostrar credenciales guardadas con `logged_in: true`; no contacta con Zoom para
+comprobar si el acceso sigue siendo válido. Sync hace las peticiones remotas y guarda los datos
+disponibles de reuniones del anfitrión. List lee la copia local. Cambiar la etiqueta del perfil
+no cambia la cuenta aprobada. Consulta [sesiones y perfiles](./sessions.md#select-a-local-profile).
 
-```sh
-zm meetings show <meeting-id> --json
-zm meetings transcript <meeting-id> --json
-```
+Si la lista está vacía, comprueba la cuenta, las fechas y [la disponibilidad de grabaciones y transcripciones](./zoom-app.md#before-your-first-zm-meetings-sync).
+Una reunión a la que asististe sin organizarla puede requerir un archivo del anfitrión. Un error
+de permiso indica cuál falta; guarda el cambio en la aplicación y autoriza de nuevo.
 
-La lista puede estar vacía si no hay reuniones disponibles del anfitrión en ese periodo. Texto vacío
-significa que Zoom no lo proporcionó; el permiso no lo crea. Revisa [retención](./zoom-app.md#before-your-first-zm-meetings-sync)
-y descarga un periodo anterior si hace falta. El error de scope nombra el permiso; autoriza otra vez
-tras añadirlo el dueño.
+## Importar sin una aplicación de Zoom
 
-Un perfil local no cambia la cuenta elegida en el navegador. Para separar cuentas, consulta
-[sesiones](./sessions.md#select-a-local-profile), y si no termina la aprobación,
-[recuperación del login](./troubleshooting.md#login).
-
-## Importar sin una app Zoom
-
-Usa un VTT que tengas permiso de descargar o un archivo del anfitrión. Ponlo en una carpeta y nómbralo
-por fecha, hora y título, por ejemplo `2026-10-01_1000_example-planning.vtt`. La hora del nombre se
-interpreta en la zona configurada:
+Usa un `.vtt` descargado con permiso o proporcionado por el anfitrión. Nombra el archivo, por ejemplo,
+`2026-10-01_1000_example-planning.vtt` y guárdalo directamente en una carpeta. El nombre aporta la fecha, la
+hora y el título; el ajuste de zona horaria determina cómo se interpreta la hora:
 
 ```sh
 zm config set account.profile personal
@@ -109,50 +150,75 @@ zm meetings import ./downloaded-transcripts
 zm meetings list --json
 ```
 
-No necesitas app, login ni token OAuth. La importación lee archivos `.vtt` normales directamente en
-la carpeta, sin recursión ni deducir asistentes por nombres. Consulta [transcripciones descargadas](./archive.md#downloaded-transcripts).
+Usa tu carpeta y zona horaria. La importación no recorre subcarpetas ni deduce asistentes a partir
+de los nombres de quienes hablan. No necesita aplicación, acceso del navegador ni token OAuth.
+Consulta [transcripciones descargadas](./archive.md#downloaded-transcripts) para nombres compatibles
+e historial de correcciones.
 
-## Da acceso a tu agente
+## Da acceso al agente
 
-Tras guardar la primera reunión, instala las instrucciones para un agente de terminal:
+Un **skill** es el conjunto de instrucciones para un agente con terminal:
 
 ```sh
 zm skill install --for agents
 ```
 
-Se elige el directorio Codex/Gemini; usa `--for claude` para Claude Code u omite `--for` para ambos.
-Para una app con MCP, consulta [MCP e instrucciones](./mcp.md). Prueba a pedir:
+Instala instrucciones para Codex/Gemini. Para Claude Code usa `--for claude`; sin `--for` instala
+ambas variantes. Las instrucciones no autorizan Zoom ni recuperan reuniones. Para un agente que
+use MCP, sigue [MCP y skills](./mcp.md); sus herramientas de reuniones son de solo lectura.
+
+## Comprueba el primer resultado
+
+Usa un ID devuelto por la lista, sustituyendo `<meeting-id>` sin los signos angulares:
+
+```sh
+zm meetings show <meeting-id> --json
+zm meetings transcript <meeting-id> --json
+```
+
+Debes ver la reunión guardada y las transcripciones que Zoom proporcionó o importaste. Una reunión
+puede existir sin texto; el permiso por sí solo no lo crea. Pide al agente:
 
 ```text prompt
-Busca la reunión que acabo de importar o descargar. Muestra fecha, discusión principal y un pasaje que la apoye. Indica si falta texto o información de participantes.
+Use zm CLI: busca la reunión que acabo de importar o recuperar.
+Muestra la fecha, los participantes realmente registrados, una decisión y el pasaje que la respalda.
+Si ninguna decisión está respaldada, dilo. Indica si faltan la transcripción o los datos de participantes.
 ```
+
+Una respuesta útil muestra una referencia, las palabras que la respaldan y la información ausente.
+Si falta la transcripción o el acceso no termina, consulta [solución de problemas](./troubleshooting.md).
+Cuando funcione, [busca un tema y lee el contexto de sus fuentes](./search.md).
 
 ## Dónde se guardan los archivos
 
-La herramienta crea `config.json` público al configurar; no es un archivo de credenciales descargado. `zm doctor --json` muestra su ubicación. La configuración usa el directorio de aplicaciones de tu plataforma. `ZM_CONFIG_DIR` elige otro
-y cambia el servicio del almacén de login. Las reuniones usan `wirecat.db` compartida;
-`MESSAGING_STORE` elige otra base. Las grabaciones van solo al destino indicado. Consulta [configuración](./configuration.md).
+La herramienta crea ajustes públicos en `config.json` al configurarla; no es un archivo de
+credenciales descargado. `zm doctor --json` muestra su ubicación. Los tokens quedan en el almacén
+de contraseñas del sistema. Las reuniones usan el `wirecat.db` local compartido; las grabaciones
+se descargan en el destino elegido. `ZM_CONFIG_DIR` cambia la configuración y su servicio de claves;
+`MESSAGING_STORE` elige otra base de datos. Consulta [configuración](./configuration.md).
 
 ## Actualizar o quitar la herramienta
+
+Actualiza con el mismo comando y comprueba la versión:
 
 ```sh
 npm install -g @wirecat/zoom-cli
 zm --version
 ```
 
-Para quitar la orden:
+Para quitar el comando:
 
 ```sh
 npm uninstall -g @wirecat/zoom-cli
 ```
 
-Desinstalar el paquete no borra la base compartida ni carpetas de grabaciones. Revoca acceso en
-Marketplace si quieres retirar la autorización. No existe orden de logout; [sesiones](./sessions.md#remove-access)
-explica los controles disponibles.
+La desinstalación deja la base de reuniones y las carpetas de grabaciones. Revoca el acceso de la
+aplicación en Zoom Marketplace si también quieres retirar su autorización. No hay comando de
+cierre de sesión; consulta [sesiones](./sessions.md#remove-access). Usa los lanzadores `.cmd` en Windows si hace falta.
 
-## Completar comandos
+## Completar comandos en la terminal
 
-`zm complete -- <words...>` responde a peticiones de completado, pero no lo instala en el intérprete.
-`zm commands --json` enumera órdenes y opciones para agentes y scripts.
+`zm complete -- <words...>` responde a peticiones de autocompletado; no lo instala en tu terminal.
+`zm commands --json` enumera comandos y opciones para agentes y scripts.
 
-Cuando veas la primera reunión, [busca su texto y conserva referencias](./search.md).
+Tras instalar, [busca un pasaje de reunión](./search.md) y comprueba la fuente antes de guardar conclusiones.

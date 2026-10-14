@@ -1,84 +1,87 @@
 ---
-title: "Primeros pasos"
-description: "Deja que tu agente de IA lea, busque y responda tus mensajes de Telegram y MAX, desde tu propia cuenta y en tu propio ordenador."
+title: "Empieza aquí"
+description: "Elige los mensajes, documentos o reuniones que usará tu agente de IA, conecta una fuente y recibe una primera respuesta con pruebas."
 ---
 
-Da a tu <DocTerm term="agent" lang="es" label="agente de IA" /> acceso a tu cuenta de Telegram o MAX. Le preguntas con palabras
-normales —`¿quién sigue esperando mi respuesta?`, `¿qué acordamos con Marco en septiembre?`— y
-el agente lee tus chats y responde. Como prueba, te muestra los mensajes que ha usado.
+Da a tu <DocTerm term="agent" lang="es" label="agente de IA" /> acceso a la información con la que
+ya trabajas: chats, notas, correo, documentos o transcripciones de reuniones. Pregunta qué se
+acordó, quién espera una respuesta o qué preparar para una llamada. El agente consulta las fuentes
+conectadas y muestra los fragmentos que respaldan su respuesta. Empieza con una fuente; no necesitas
+todas las herramientas.
 
-Funciona con un programa de terminal (<DocTerm term="cli" lang="es" label="CLI" />) para tu servicio de mensajería: `tg` para Telegram, `max` para MAX.
-Solo necesitas el de tu servicio de mensajería. El CLI se ejecuta en tu ordenador y usa tu propia cuenta. Tu
-agente (Claude Code, Codex, Cursor, Gemini CLI, Hermes y <DocTerm term="supported-agents" lang="es" label="cualquier otro agente" />) lo ejecuta por ti. Tú decides qué puede
-hacer el agente: solo leer, preguntar antes de enviar o enviar a los chats que elijas.
+<a id="what-it-covers" />
+<a id="qué-incluye" />
+<a id="telegram-or-max" />
+<a id="telegram-o-max" />
 
-La herramienta se conecta directamente al servicio de mensajería y guarda su archivo en tu ordenador. No envía mensajes ni datos de acceso a WireCat: no hay ningún servicio de WireCat en medio. El agente recibe los mensajes que lee para la tarea; sus ajustes determinan dónde se procesan.
+## Elige con qué quieres trabajar
 
-## Qué puedes pedir
+| Tu información | Por dónde empezar |
+|---|---|
+| Chats de Telegram o un bot de Telegram | [Conectar Telegram](./tg/installation.md) |
+| Chats de MAX o un bot de MAX | [Conectar MAX](./max/installation.md) |
+| Notas, archivos locales o correo | [Configurar Memo](./memo/installation.md) |
+| Documentos de Google Drive | [Conectar Google Drive](./drive/installation.md) |
+| Reuniones, transcripciones o grabaciones de Zoom | [Conectar Zoom](./zm/installation.md) |
 
-**Ponerte al día**
+Cada guía explica la instalación, el acceso a la cuenta si hace falta y los primeros datos que
+puedes recuperar. Compara las tareas en [las funciones de WireCat](./features.mdx).
 
-```text prompt compact
-Resume mis mensajes sin leer y dime quién necesita una respuesta.
+<a id="start-here" />
+
+<a id="empieza-aquí" />
+
+## Consigue tu primer resultado
+
+1. **[Elige dónde instalar](./installation.mdx).** Usa el ordenador o servidor donde tu agente
+   pueda ejecutar las herramientas desde una terminal (<DocTerm term="cli" lang="es" label="CLI" />). El agente puede ayudarte; la guía de cada
+   herramienta también ofrece pasos manuales. El inicio de sesión y la aplicación dependen de la fuente.
+2. **[Conecta tu agente](./agents.mdx).** Un <DocTerm term="skill" lang="es" label="skill" /> enseña los comandos a un agente con terminal.
+   <DocTerm term="mcp" lang="es" label="MCP" /> permite usar herramientas desde un agente compatible. Ninguno importa el historial ni
+   autoriza una cuenta por sí solo.
+3. **Prepara pocos datos.** Sigue la guía de la fuente para recuperar un periodo de chat, importar
+   una carpeta o guardar una transcripción. Comprueba la cuenta, la carpeta y las fechas elegidas.
+4. **Haz una pregunta y comprueba la fuente.** Prueba una petición de abajo. Si faltan datos,
+   la respuesta debe decirlo: una búsqueda vacía no demuestra que nunca se tratara el tema.
+
+Si tu agente funciona solo en un navegador o teléfono, consulta [el acceso web y móvil](./browser-apps.mdx).
+La herramienta sigue ejecutándose en un ordenador que controlas.
+
+<a id="qué-puedes-pedir" />
+
+## Prueba una petición
+
+Para Telegram o MAX, empieza con **Use tg CLI** o **Use max CLI**, respectivamente:
+
+```text prompt
+Use tg CLI: busca la fecha de entrega acordada en el chat Atlas la semana pasada.
+Muestra el mensaje que la respalda y su contexto. Indica si falta ese periodo del historial.
 ```
 
-**Encontrar**
+Para una transcripción de reunión que ya has guardado:
 
-```text prompt compact
-Busca el precio acordado en Atlas y muéstrame el mensaje.
+```text prompt
+Use zm CLI: busca la última reunión sobre Research Example.
+Muestra una decisión respaldada por una fuente y su fragmento citado. Indica qué información falta.
 ```
 
-**Preparar**
+Para notas o archivos importados en Memo:
 
-```text prompt compact
-Prepara la agenda de mi llamada con Anna a partir de los chats de esta semana.
+```text prompt
+Use memo CLI: busca el resumen del proyecto que importé.
+Muestra la fuente y el siguiente paso acordado. No inventes una respuesta si los archivos no la contienen.
 ```
 
-**Hacer seguimiento**
+Un resultado útil incluye la fuente original, contexto para comprobar la conclusión y los límites
+de los datos disponibles. Después prueba [las primeras tareas con mensajes](./first-tasks.md),
+[el contexto de reuniones](./zoom.mdx) o [la organización de fuentes](./organize.md).
 
-```text prompt compact
-¿Qué prometí esta semana? Redacta respuestas, no las envíes.
-```
+## Decide qué acceso permites
 
-**Mensajes personales a muchas personas**
+Las herramientas se ejecutan donde las instalas y guardan allí sus datos locales. El agente recibe
+el contenido que consulta; sus ajustes determinan dónde se procesa. Antes de permitir cambios o
+trabajo en segundo plano, revisa [seguridad y flujo de datos](./security.mdx) y [permisos](./permissions.mdx).
+Leer, guardar una nota, redactar y enviar una respuesta son acciones distintas.
 
-```text prompt compact
-Redacta una respuesta personal para cada persona que preguntó por el taller.
-```
-
-## Qué incluye
-
-- **Tareas habituales de tu cuenta** — leer mensajes, trabajar con chats y contactos, responder y usar encuestas. Las acciones disponibles varían entre servicios; las guías explican el alcance de cada herramienta.
-- **Tu historial, con búsqueda sin conexión** — un archivo local de los chats que elijas.
-- **Todos los métodos de la Bot API** — los 185 de Telegram y los 33 de MAX.
-- **Administrar grupos** — revisa la actividad, gestiona miembros y modera grupos donde tengas permisos de administrador.
-- **Mensajes de voz a texto** — en tu propio ordenador.
-- **Límites que tú fijas** — solo lectura, preguntar antes de enviar, solo chats elegidos.
-
-[Todas las funciones →](./features.mdx)
-
-## Empieza aquí
-
-1. **[Instalar e iniciar sesión](./installation.mdx)** — unos 5 minutos. Instalas el CLI y
-   escaneas un código QR con el teléfono.
-2. **[Probar las primeras tareas](./first-tasks.md)** — copia una petición en tu agente y recibe
-   tu primera respuesta.
-
-El <DocTerm term="skill" lang="es" label="skill" /> instalado da al agente instrucciones para usar el servicio de mensajería.
-
-Con eso basta para empezar. Más adelante, cuando lo necesites:
-
-- [Formular peticiones](./prompting.mdx) — consigue mejores respuestas de tu agente.
-- [Conectar tu agente de IA](./agents.mdx) — si tu agente no encuentra el comando `tg` o `max`.
-- <DocTerm term="mcp" lang="es" label="MCP" />: [MCP y skills](./mcp.mdx) — para Claude Desktop y otros clientes sin terminal.
-- ChatGPT, Claude u otro chat de IA en el navegador o el móvil: [Usar desde la web o el móvil](./browser-apps.mdx) — tu propio túnel y un código de acceso de un solo uso.
-
-## ¿Telegram o MAX?
-
-Ambos cubren las tareas habituales; la [página de funciones](./features.mdx) explica sus diferencias. Instala el de tu servicio de mensajería, o los dos:
-[guía de Telegram](./tg/index.md) · [guía de MAX](./max/index.md).
-
-El selector **Telegram / MAX** de la parte superior de cada página te lleva a la misma sección del
-otro servicio de mensajería.
-
-- **Documentos del proyecto:** [Google Drive](./drive/index.md) importa carpetas elegidas para búsqueda local, etiquetas y notas. [Organizar fuentes](./organize.md) explica cómo conectar documentos, personas y trabajo.
+¿Ya está conectado? Ve directamente a [búsqueda](./search.mdx) o [reuniones](./zoom.mdx): no necesitas
+reinstalar para probar otra pregunta.

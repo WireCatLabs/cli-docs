@@ -1,84 +1,81 @@
 ---
-title: "Getting started"
-description: "Let your AI agent read, search and answer your Telegram and MAX messages, from your own account on your own computer."
+title: "Start here"
+description: "Choose the messages, documents or meetings your AI agent should use, connect one source and get a first answer with evidence."
 ---
 
-Give your <DocTerm term="agent" lang="en" label="AI agent" /> access to your Telegram or MAX account. You ask in plain words — `who is
-still waiting for my answer?`, `what did we agree with Marco in September?` — and the agent
-reads your chats and answers, with the messages it used as proof.
+Give your <DocTerm term="agent" lang="en" label="AI agent" /> access to the information you already
+work with: chats, notes, email, documents or meeting transcripts. Ask what was agreed, who needs
+an answer or what to prepare for a call. The agent uses connected sources and shows the passages
+behind its answer. Start with one source; you do not need every tool.
 
-It works through a command line tool (<DocTerm term="cli" lang="en" label="CLI" />) for your messenger: `tg` for Telegram, `max` for MAX. You
-need only the one for the messenger you use. The tool runs on your computer and uses your own
-account. Your agent (Claude Code, Codex, Cursor, Gemini CLI, Hermes and <DocTerm term="supported-agents" lang="en" label="any other agent" />) runs it for you. You decide
-what the agent may do: only read, ask before sending, or send to chosen chats.
+<a id="what-it-covers" />
+<a id="telegram-or-max" />
 
-The messenger tool connects directly to your messenger and keeps its archive on your computer. It sends no messages or login data to WireCat; there is no WireCat service in between. Your agent receives the messages it reads for a task, and its settings determine where those messages are processed.
+## Choose what you want to work with
 
-## What you can ask
+| Your information | Start with |
+|---|---|
+| Telegram chats or a Telegram bot | [Connect Telegram](./tg/installation.md) |
+| MAX chats or a MAX bot | [Connect MAX](./max/installation.md) |
+| Notes, local files or email | [Set up Memo](./memo/installation.md) |
+| Documents in Google Drive | [Connect Google Drive](./drive/installation.md) |
+| Zoom meetings, transcripts or recordings | [Connect Zoom](./zm/installation.md) |
 
-**Catch up**
+Each guide explains installation, account access if needed, and the first data to retrieve.
+For a wider comparison of tasks, see [what WireCat can do](./features.mdx).
 
-```text prompt compact
-Summarise unread messages and tell me who needs an answer.
+<a id="start-here" />
+
+## Get your first result
+
+1. **[Choose where to install](./installation.mdx).** Use the computer or server where your agent
+   can run the tools from a terminal (<DocTerm term="cli" lang="en" label="CLI" />). An agent can help with setup; the tool's guide also
+   has manual steps. Login and app setup differ by source.
+2. **[Connect your agent](./agents.mdx).** A <DocTerm term="skill" lang="en" label="skill" /> teaches a terminal agent the commands. <DocTerm term="mcp" lang="en" label="MCP" /> gives
+   a compatible agent access to tools. Neither step imports history or authorizes an account.
+3. **Prepare a small amount of data.** Follow the source guide to retrieve a chat period, import
+   a folder or save one transcript. Confirm the account, folder and dates are the ones you chose.
+4. **Ask one question and check its source.** Try a request below. If data is missing, the answer
+   should say so; an empty search does not prove something was never discussed.
+
+If you use an agent only in a browser or on a phone, follow [web and mobile access](./browser-apps.mdx).
+The tool still runs on a computer you control.
+
+<a id="what-you-can-ask" />
+
+## Try a request
+
+For Telegram or MAX, start the request with **Use tg CLI** or **Use max CLI**, respectively:
+
+```text prompt
+Use tg CLI to find the delivery date agreed in the Atlas chat last week.
+Show the supporting message and its surrounding context. Tell me if that period is missing.
 ```
 
-**Find**
+For a meeting transcript you have already saved:
 
-```text prompt compact
-Find the price we agreed in Atlas and show the message.
+```text prompt
+Use zm CLI to find the latest meeting about Research Example.
+Show one supported decision and its cited passage, and list the information that is missing.
 ```
 
-**Prepare**
+For notes or files you have imported into Memo:
 
-```text prompt compact
-Prepare an agenda for my call with Anna from this week’s chats.
+```text prompt
+Use memo CLI to find the project brief I imported.
+Show the source and the agreed next step. Do not invent an answer if the files do not contain it.
 ```
 
-**Follow up**
+A useful result includes the original source, enough context to check the conclusion and any
+coverage limits. Once that works, try [first message tasks](./first-tasks.md),
+[meeting context](./zoom.mdx) or [organizing sources](./organize.md).
 
-```text prompt compact
-What did I promise this week? Draft replies, don’t send them.
-```
+## Decide what access to allow
 
-**Personal messages to many people**
+The tools run where you install them and keep local data there. Your agent receives the content
+it retrieves, and its own settings determine where that content is processed. Check
+[security and data flow](./security.mdx) and [permissions](./permissions.mdx) before allowing writes
+or background work. Reading, saving a note, drafting a reply and sending it are different actions.
 
-```text prompt compact
-Draft a personal reply to each person who asked about the workshop.
-```
-
-## What it covers
-
-- **Everyday account tasks** — read messages, work with chats and contacts, send replies and use polls. Available actions differ by messenger; the guides explain each tool’s scope.
-- **Your history, searchable offline** — a local archive of the chats you choose.
-- **Every Bot API method** — all 185 for Telegram, all 33 for MAX.
-- **Group administration** — review activity, manage members and moderate groups where you have admin rights.
-- **Voice messages to text** — on your own computer.
-- **Limits you set** — read-only, ask before sending, chosen chats only.
-
-- **Project documents:** [Google Drive](./drive/index.md) imports selected folders for local search, tags and notes. [Organize sources](./organize.md) explains how documents, people and work connect.
-
-[All features →](./features.mdx)
-
-## Start here
-
-1. **[Install and log in](./installation.mdx)** — about 5 minutes. You install the CLI and scan
-   a QR code with your phone.
-2. **[Try your first tasks](./first-tasks.md)** — copy a request into your agent and get your
-   first answer.
-
-The installed <DocTerm term="skill" lang="en" label="skill" /> gives your agent instructions for using the messenger.
-
-That is all you need to start. Later, when you need them:
-
-- [Writing requests](./prompting.mdx) — get better answers from your agent.
-- [Connect your AI agent](./agents.mdx) — if your agent does not see the `tg` or `max` command.
-- <DocTerm term="mcp" lang="en" label="MCP" />: [MCP and skills](./mcp.mdx) — for Claude Desktop and other clients without a terminal.
-- ChatGPT, Claude or another AI chat in a browser or on your phone: [Use from web or mobile](./browser-apps.mdx) — your own tunnel and a one-time login code.
-
-## Telegram or MAX?
-
-Both tools cover everyday tasks; the [features page](./features.mdx) explains the differences. Install the one for the messenger you use, or both:
-[Telegram guide](./tg/index.md) · [MAX guide](./max/index.md).
-
-The **Telegram / MAX** switch at the top of every page takes you to the same section for the other
-messenger.
+Already connected? Go directly to [search](./search.mdx) or [meetings](./zoom.mdx); you do not need
+to reinstall to try another question.

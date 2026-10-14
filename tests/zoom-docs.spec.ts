@@ -1,10 +1,11 @@
 import { expect, test } from "@playwright/test"
 
 const titles = { en: "Meetings", ru: "Встречи", es: "Reuniones" }
+const startTitles = { en: "Zoom — start here", ru: "Zoom — начало работы", es: "Zoom — empieza aquí" }
 for (const lang of ["en", "ru", "es"] as const) {
   test(`${lang}: Zoom sits beside Drive and opens its setup guide`, async ({ page }) => {
     await page.goto(`/${lang}/docs/zm`)
-    await expect(page.getByRole("heading", { level: 1, name: "Zoom", exact: true })).toBeVisible()
+    await expect(page.getByRole("heading", { level: 1, name: startTitles[lang], exact: true })).toBeVisible()
     await expect(page.locator(`main a[href="/${lang}/docs/zm/installation"]`).first()).toBeVisible()
     const links = await page
       .locator("#nd-sidebar a[href]")
@@ -109,6 +110,11 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(markdown).toContain("zm session status --json")
     expect(markdown).toContain("code=…&state=…")
     expect(markdown).toContain("https://wirecat.dev/zoom-callback")
+    expect(markdown).toContain("npm.cmd install -g @wirecat/zoom-cli")
+    expect(markdown).toContain("zm.cmd doctor")
+    expect(markdown).toContain("Use zm CLI")
+    await expect(main.locator("#check-your-first-result")).toHaveCount(1)
+    await expect(main.locator(".docs-prompt").first()).toBeVisible()
   })
 
   test(`${lang}: app guide has manual creation and existing app reuse with explicit scope setup`, async ({ page }) => {
