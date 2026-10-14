@@ -90,7 +90,7 @@ En archivos y transcripciones, la palabra se busca en su forma exacta. Las otras
 
 ## Teléfonos, correos y enlaces
 
-Las herramientas encuentran números de teléfono, direcciones de correo, enlaces, enlaces a documentos de Google y nombres de personas que conoces en el texto de mensajes, archivos y transcripciones. Cada valor se guarda como una mención. La búsqueda lo encuentra como se haya escrito:
+Las herramientas encuentran números de teléfono, direcciones de correo, enlaces, enlaces a documentos de Google en el texto de mensajes, archivos y transcripciones. Cada valor se guarda como una mención. La búsqueda lo encuentra como se haya escrito:
 
 ```sh
 tg personal search messages 'phone:"+1 555 010 0100"'
@@ -98,7 +98,7 @@ tg personal search messages 'email:"ana@example.com"'
 tg personal search messages 'domain:example.com'
 ```
 
-`phone:` encuentra igual `+1 555 010 0100` y `15550100100`. `domain:` encuentra todos los enlaces y direcciones de ese sitio. Las menciones se encuentran con reglas, sin modelo. Una mención que rechazas sigue descartada.
+`phone:` encuentra igual `+1 555 010 0100` y `+1 (555) 010-0100`; sin `+`, solo se reconocen números rusos. `domain:` encuentra todos los enlaces y direcciones de ese sitio. Las menciones se encuentran con reglas, sin modelo. Una mención que rechazas sigue descartada. Cómo revisar menciones y registrar de quién es un número: [Teléfonos, correos y enlaces](./mentions.md).
 
 ## Imágenes
 
