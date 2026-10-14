@@ -19,6 +19,8 @@ and [MAX](./max/search.md#текст-внутри-файлов). See [People](./
 
 For word forms, typo handling and meaning-based search, see [How search works](./search-architecture.mdx).
 
+Which kinds of content are indexed, and what each one needs (a command, a model or a setting): [What gets indexed](./what-is-indexed.md).
+
 ## Fetch the relevant chat history first
 
 Before searching older messages, download the conversations for the period you need. Logging

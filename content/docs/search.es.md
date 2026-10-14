@@ -19,6 +19,8 @@ y [MAX](./max/search.md#текст-внутри-файлов). Para encontrar pe
 
 Para formas de palabras, errores de escritura y búsqueda por significado, consulta [Cómo funciona la búsqueda](./search-architecture.mdx).
 
+Qué tipos de contenido se indexan y qué necesita cada uno (un comando, un modelo o un ajuste): [Qué se indexa](./what-is-indexed.md).
+
 ## Descarga primero el historial de los chats pertinentes
 
 Antes de buscar mensajes antiguos, descarga las conversaciones del periodo que necesitas.
