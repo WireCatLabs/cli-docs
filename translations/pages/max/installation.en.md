@@ -215,7 +215,7 @@ In the setup terminal or on the web.max.ru page, never in the agent chat. If you
 
 **With your agent:** open a new agent session, so it loads the max instructions. If it still cannot, follow [Connect your agent](/en/docs/agents).
 
-**By hand:** install the skill for your agent, for example `max skill install --for claude`. The choices are `codex`, `cursor`, `claude`, `gemini` and `all`.
+**By hand:** run `max skill install --for claude` for Claude Code, `--for agents` for Codex, Gemini CLI and other agents that read `~/.agents`, or `--for all`.
 
 ### A chat or older messages are missing
 
