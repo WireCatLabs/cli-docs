@@ -11,6 +11,7 @@
     "how-things-are-linked",
     "search-efficiently",
     "search-playground",
+    "tasks",
     "prompting",
     "drafts-and-templates",
     "features",
@@ -39,6 +40,7 @@
     "code-design",
     "data-model",
     "search-architecture",
+    "tasks-architecture",
     "testing",
     "roadmap"
   ]
