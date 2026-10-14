@@ -87,7 +87,7 @@ max personal session end              # выйти из MAX и забыть то
 `session end` primero termina la sesión en el servidor de MAX y después borra el token de este ordenador. La respuesta indica el resultado:
 
 ```json
-{ "profile": "default", "forgotten": true, "revokedOnServer": true }
+{ "item": { "profile": "default", "forgotten": true, "revoked_on_server": true }, "meta": { … } }
 ```
 
 **Si iniciaste sesión con un token de una pestaña de web.max.ru, comparten la misma sesión:** `session end` también cierra la sesión de MAX de esa pestaña.

@@ -90,7 +90,7 @@ In files and transcripts, a word is matched in its exact form. Other word forms 
 
 ## Phones, emails and links
 
-The tools find phone numbers, email addresses, links and Google document links in message text, file text and transcripts; `tg` also finds the names of people you know. Each is stored as a mention. Search finds it however it was written:
+The tools find phone numbers, email addresses, links and Google document links in message text, file text and transcripts, and the names of people you know. Each is stored as a mention. Search finds it however it was written:
 
 ```sh
 tg personal search messages 'phone:"+1 555 010 0100"'

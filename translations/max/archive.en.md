@@ -171,7 +171,7 @@ Export **never connects to the network** and includes only downloaded or previou
 
 ### Exporting to a folder and adding only what is new
 
-`--to <папка>` writes chats to a folder: one JSONL file per chat and `manifest.json`. Running it again into the same folder adds only what has changed since the last run: new messages, edits (including edits to old messages) and deletions. A deleted message is written without its text — `{ "id", "chatId", "deleted": true }`.
+`--to <папка>` writes chats to a folder: one JSONL file per chat and `manifest.json`. Running it again into the same folder adds only what has changed since the last run: new messages, edits (including edits to old messages) and deletions. A deleted message is written without its text — `{ "id", "chat_id", "deleted": true }`.
 
 ```sh
 max personal store export Друзья Работа --to ~/max-архив
@@ -262,7 +262,7 @@ max personal watch --events --jsonl  # ещё правки, удаления, р
 - **If MAX disconnects**, the server reconnects after 1, 2, 4… seconds, with the delay capped at one minute. `max personal watch` reports this on stderr. If MAX no longer accepts the token, the server stops with an authentication error.
 - **All clients share one MAX connection per profile.** Commands, `max personal mcp` and `max personal watch` do not log in independently: reads, sends and reactions use the server's connection. Send safeguards still run in the command. If no server exists, the command starts one and waits. With `serve: false` and no server, the command connects itself. A second server refuses before logging in.
 - The server keeps its session state current when messages arrive, a chat is read on your phone or a chat changes. If MAX reports something it cannot apply, such as deleted messages, it logs in again in the background, at most once a minute.
-- **With `--events`, line formats change:** `{"event": "message", "message": …}`, `{"event": "edit", "message": …}`, `{"event": "delete", "chatId", "chatTitle", "messageId"}`, `{"event": "reaction", "chatId", "chatTitle", "messageId", "reactions"}`, `{"event": "read", "chatId", "chatTitle", "userId", "upToTime", "unreadCount"}` records who read through that message time, including the owner on another device; `{"event": "chat", "chat"}` records chat-name, membership or departure changes. Marking a chat unread is not a read event. Without the flag, each line is a message as before. `max personal watch` cannot show who is typing: MAX sends typing notifications only to a client with that chat open.
+- **With `--events`, line formats change:** `{"event": "message", "message": …}`, `{"event": "edit", "message": …}`, `{"event": "delete", "chat_id", "chat_title", "message_id"}`, `{"event": "reaction", "chat_id", "chat_title", "message_id", "reactions"}`, `{"event": "read", "chat_id", "chat_title", "user_id", "up_to_time", "unread_count"}` records who read through that message time, including the owner on another device; `{"event": "chat", "chat"}` records chat-name, membership or departure changes. Marking a chat unread is not a read event. Without the flag, each line is a message as before. `max personal watch` cannot show who is typing: MAX sends typing notifications only to a client with that chat open.
 - **`max personal watch` sees only messages arriving while it and the server are connected.** Messages during an outage are missed. A `status` line with `connected: true` after an outage tells you to fetch them: `max personal inbox 'date>"<время из поля at предыдущей строки status>"'`.
 
 ## Status, backup and recovery

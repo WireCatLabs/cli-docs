@@ -126,7 +126,7 @@ Sign out of MAX and forget the session on this computer:
 max personal session end
 ```
 
-`session end` ends the session on the MAX server (`revokedOnServer: true`). If the token was copied from a web.max.ru tab, that tab is also signed out.
+`session end` ends the session on the MAX server (`revoked_on_server: true`). If the token was copied from a web.max.ru tab, that tab is also signed out.
 
 `account show --json` contains the MAX fields `id`, `name`, `phone`, `description` and `username: null` as a general account format. The number is masked; `--show-phone` clearly shows it in its entirety.
 
@@ -316,7 +316,7 @@ max personal inbox --transcribe
 
 `--transcribe` processes displayed voice messages lacking text; `--model` selects speech recognition for one run. `max` first downloads the required recordings, closes the connection, then recognises speech. The transcript appears below the voice message with 🎤, or in JSON `transcript`. Failures and their reasons are listed in `missing`; messages still display. Missing recognition files produce download guidance rather than an automatic download. Files in `~/.local/share/WireCat/models/audio` are shared by `max` and `tg`.
 
-Existing transcripts appear without the flag. With `--offline`, new audio cannot be downloaded or transcribed.
+Existing transcripts appear without the flag. Without the flag, the others are listed in `missing` with a `transcript` entry, so a response with them does not look complete. With `--offline`, new audio cannot be downloaded or transcribed.
 
 ### Files
 
@@ -543,7 +543,7 @@ max personal stats charts synthetic-group --chart-kind messages --by day --timez
 
 The JSON is `{item}` with the chart description; when the image is saved, it also has `file` with path and size. The image is written only to a new file, without overwriting. A missing date remains a gap and incomplete data is noted in the description and image. `membership` requires online chat events and is not available with `--offline`. Via MCP `max_read` (`command: "stats charts"`) returns JSON from local storage, without connecting and writing files; `format: "png"` adds a PNG and JSON image with `chart` and size `image`. Entries and exits are not available in it. Reading is subject to permission `messages`. `--jsonl` and stdout image are not available.
 
-![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.51.0/docs/images/stats-charts.png)
+![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.52.0/docs/images/stats-charts.png)
 
 Message and author rankings: [metrics, scores and evidence](./rankings.md).
 
@@ -603,11 +603,11 @@ max personal messages scheduled 0                                       # что
 
 The message waits **on MAX's server** and sends even if your computer is off. MAX discards seconds, so time is rounded down to the minute. Less than a minute or more than a year away is rejected.
 
-- Response: `{item: {operation_id, send_id, message, scheduled_for}}`, containing the queued message and time;
+- Response: `{item: {operation_id, message, scheduled_for}}`, containing the queued message and time;
   the `messages.scheduled` step in `next` shows the queue. **Its ID changes when sent.**
 - `--silent` is unsupported: MAX always sends scheduled messages with notifications.
 - Send safeguards (read-only, recipients, hourly limit) are checked when queuing.
-- Missing responses are not retried. `outcome_unknown` advises checking the queue; `--send-id` cannot be combined with `--at-time`. Scheduled-send deduplication has not been verified.
+- Missing responses are not retried. `outcome_unknown` advises checking the queue; `--operation-id` cannot be combined with `--at-time`. Scheduled-send deduplication has not been verified.
 - **Cancel or edit in the MAX app.** `max` does not issue cancellation.
 
 ### Photos, video, files and voice messages
@@ -747,13 +747,13 @@ Message IDs may be separate arguments or comma-separated. After MAX acknowledges
 
 ### If the outcome is unknown
 
-When sending, if no response arrives, the outcome is `outcome_unknown` (code `14`), **neither confirmed success nor failure**, because the message may have been sent. The error includes a `--send-id` for a safe retry:
+When sending, if no response arrives, the outcome is `outcome_unknown` (code `14`), **neither confirmed success nor failure**, because the message may have been sent. The error includes a `--operation-id` for a safe retry:
 
 ```sh
-max personal messages send 0 "текст" --send-id 1789784741828
+max personal messages send 0 "текст" --operation-id 1789784741828
 ```
 
-MAX does not create a second message if a repeat came with the same `cid`. If the forwarding response was `outcome_unknown`, repeat it only with `--send-id` from the error - MAX will leave one copy. A repeat without it will be a second copy. The deferred message is not repeated: check `max personal messages scheduled <чат>`.
+MAX does not create a second message if a repeat came with the same `cid`. If the forwarding response was `outcome_unknown`, repeat it only with `--operation-id` from the error - MAX will leave one copy. A repeat without it will be a second copy. The deferred message is not repeated: check `max personal messages scheduled <чат>`.
 
 ### Mark as read
 
@@ -1122,7 +1122,7 @@ You need to branch according to the return code, and not according to the text: 
 ```sh
 if ! max personal messages send 0 "текст" --json > /dev/null; then
   case $? in
-    14) echo "могло уйти, повторять только с тем же --send-id" ;;
+    14) echo "могло уйти, повторять только с тем же --operation-id" ;;
     4)  echo "нужен max personal setup" ;;
   esac
 fi

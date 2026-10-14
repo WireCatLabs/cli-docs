@@ -161,7 +161,7 @@ Without `--online`, it reports **without connecting to MAX** the information com
 
 - Whether a token exists, its source, keyring entry and any environment-variable relocation. It never prints the token, only presence and source.
 - Login count and last login; every local profile: personal account, bot or both.
-- Shared storage: JSON `store` includes path, schema and saved chat/message counts. The check neither creates nor updates storage. `legacyCache` reports any old local archive; `doctor` gives its path for manual removal.
+- Shared storage: JSON `item.store` includes path, schema and saved chat/message counts. The check neither creates nor updates storage. `item.legacy_cache` reports any old local archive; `doctor` gives its path for manual removal.
 - Run-record directory.
 - The MAX web-client version `max` presents and when it was inspected. After 60 days, `max personal doctor` warns that MAX might stop accepting it; updating `max` can help.
 - Runtime (Node or Bun and location), package manager, which `max` a new terminal finds, whether keyring and SQLite load, and whether speech-recognition files are downloaded. If the command reference is missing from `PATH`, it prints exact commands to add it: PowerShell on Windows, an `export` line on Linux/macOS.

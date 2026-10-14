@@ -231,20 +231,20 @@
     "replacements": {
       "en": [
         {
-          "before": "if ! max personal messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max personal setup\" ;;\n  esac\nfi",
-          "after": "if max personal messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max personal setup\" ;;\n  esac\nfi"
+          "before": "if ! max personal messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --operation-id\" ;;\n    4)  echo \"нужен max personal setup\" ;;\n  esac\nfi",
+          "after": "if max personal messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --operation-id\" ;;\n    4)  echo \"нужен max personal setup\" ;;\n  esac\nfi"
         }
       ],
       "ru": [
         {
-          "before": "if ! max personal messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max personal setup\" ;;\n  esac\nfi",
-          "after": "if max personal messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max personal setup\" ;;\n  esac\nfi"
+          "before": "if ! max personal messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --operation-id\" ;;\n    4)  echo \"нужен max personal setup\" ;;\n  esac\nfi",
+          "after": "if max personal messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --operation-id\" ;;\n    4)  echo \"нужен max personal setup\" ;;\n  esac\nfi"
         }
       ],
       "es": [
         {
-          "before": "if ! max personal messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max personal setup\" ;;\n  esac\nfi",
-          "after": "if max personal messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --send-id\" ;;\n    4)  echo \"нужен max personal setup\" ;;\n  esac\nfi"
+          "before": "if ! max personal messages send 0 \"текст\" --json > /dev/null; then\n  case $? in\n    14) echo \"могло уйти, повторять только с тем же --operation-id\" ;;\n    4)  echo \"нужен max personal setup\" ;;\n  esac\nfi",
+          "after": "if max personal messages send 0 \"текст\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"могло уйти, повторять только с тем же --operation-id\" ;;\n    4)  echo \"нужен max personal setup\" ;;\n  esac\nfi"
         }
       ]
     }
