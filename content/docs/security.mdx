@@ -18,7 +18,7 @@ WireCat takes security seriously. We use automated security checks and manual au
 
 Automated checks look for known dependency vulnerabilities, suspicious code patterns, exposed secrets and risky release-workflow settings. Manual reviews trace how credentials, permissions, downloads and untrusted message text move through the code. Candidate findings are checked against the source and, where appropriate, tested with synthetic data before they are treated as confirmed issues.
 
-The [security audit method](https://github.com/WireCatLabs/cli-testing/blob/5445c6f08b15ee04881aee3cbe466b0a17574b56/docs/security/METHOD.md) and [repeatable audit runbook](https://github.com/WireCatLabs/cli-testing/blob/5445c6f08b15ee04881aee3cbe466b0a17574b56/docs/security/RUNBOOK.md) describe the process. Audits can find issues and identify parts that still need testing; they do not guarantee that every agent, attachment or platform is safe. Detailed findings are tracked privately while they are investigated and fixed.
+The [security audit method](https://github.com/WireCatLabs/cli-testing/blob/main/docs/security/METHOD.md) and [repeatable audit runbook](https://github.com/WireCatLabs/cli-testing/blob/main/docs/security/RUNBOOK.md) describe the process. Audits can find issues and identify parts that still need testing; they do not guarantee that every agent, attachment or platform is safe. Detailed findings are tracked privately while they are investigated and fixed.
 
 ## Decide what the agent can do
 
@@ -105,13 +105,13 @@ When you ask for a statistics answer, request the messages or member observation
 check which history is missing. Unknown counts are not zero, and missing history does not prove
 that a question was never answered or a member stayed silent.
 
-The [published evaluation report](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/dev/evaluations/2026-10-08-independent-stats-agent-evaluation.md) records 38 synthetic task outcomes in six fresh
+The [published evaluation report](https://github.com/WireCatLabs/cli-core/blob/73a57e1d229441d27f8325677808c3ae09175803/docs/dev/evaluations/2026-10-08-independent-stats-agent-evaluation.md) records 38 synthetic task outcomes in six fresh
 agent contexts: interpreting reports, preserving unknowns, previewing exact targets, respecting
 permission refusals and recovering changed evidence. These contexts share tasks, so the outcome
 count is not a reliability percentage. No real account or native messenger network adapter was
 used; MCP was reached through a shell proxy. It does not guarantee that your agent will behave the same way, or resist every instruction hidden in a message.
 
-Developers can [repeat the procedure](https://github.com/WireCatLabs/cli-messaging/tree/main/scripts/evals) with synthetic data. Check the report's model and
+Developers can [repeat the procedure](https://github.com/WireCatLabs/cli-core/tree/main/scripts/evals) with synthetic data. Check the report's model and
 SDK limitations before comparing scores, and keep evidence review part of important decisions.
 
 </details>
