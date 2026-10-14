@@ -37,8 +37,11 @@ conecta al participante observado con la persona elegida; un nombre coincidente 
 Reúne las reuniones de Research Example usando sus alias existentes. Comprueba el proyecto canónico y etiquetas actuales antes de proponer otras. Muestra posibles sinónimos para revisión. Combina pasajes con personas vinculadas, mis notas, mensajes y documentos Google Drive importados. Cita cada conclusión y propone vínculos inciertos antes de guardar.
 ```
 
-El agente elige el proyecto principal, encuentra sus reuniones vinculadas o etiquetadas y las lee
-junto con otras fuentes disponibles. Revisas los vínculos dudosos y las nuevas etiquetas.
+El agente elige el proyecto principal y busca su nombre, clave y alias explícitos guardados para
+encontrar pasajes con fuentes, incluso en reuniones aún sin vincular. También lee pertenencias
+confirmadas y etiquetas junto con otras fuentes. Revisa los pasajes antes de aceptar una asociación.
+La búsqueda de alias lee el índice existente: tras importar transcripciones, ejecuta primero una
+búsqueda normal de palabras para indexarlas. Revisas los vínculos dudosos y las nuevas etiquetas.
 Usa [Memo](./memo/index.md) para notas, etiquetas, hechos y proyectos, [organizar fuentes](./organize.md)
 para el enfoque común y [Google Drive](./drive/index.md) para importar los documentos elegidos.
 Puedes vincular un evento de calendario existente; una próxima reunión de Zoom no implica
@@ -71,13 +74,15 @@ al análisis automático y la preparación siguen [planificados](./zm/roadmap.md
 ## Más control
 
 Lee reuniones guardadas y la agenda de Zoom. Sustituye `1` por un ID de tu propia lista,
-y la referencia ficticia del pasaje por el `ref` de una coincidencia de transcripción:
+y la referencia ficticia del pasaje por el `ref` de una coincidencia de transcripción.
+La clave de proyecto `RES` y el ID de identidad `12` también son ficticios; elige registros existentes de Memo y los resultados de participantes.
 
 ```sh
 zm meetings list --json
 zm meetings show 1 --json
 zm meetings transcript 1 --json
 zm search meetings "launch decision" --json
+zm meetings projects evidence RES 'identity_id:12 started_at:[2026-09-14 TO 2026-10-14]' --limit 20 --json
 zm meetings passage meeting:3/15/20/4 --before-n 3 --after-n 4 --format markdown
 zm remote-meetings list --json
 ```

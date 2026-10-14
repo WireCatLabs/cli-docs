@@ -60,6 +60,7 @@ zm meetings export <meeting-id> --format markdown --json
 | `meetings summary <meeting>` | прочитать сохранённые сводки |
 | `meetings export <meeting> --format markdown\|vtt` | экспортировать данные встреч |
 | `search meetings <query>`, `meetings people <query>` | найти сохранённый текст или участников |
+| `meetings projects evidence <project> [query...]` | прочитать ограниченные источники по названию, ключу и псевдонимам существующего проекта |
 | `meetings update <reference>`, `meetings link <reference>` | просмотреть или применить выбранные связи |
 | `meetings transcribe <meeting> <file> --model <model>` | просмотреть или локально распознать WAV в отдельную расшифровку |
 | `meetings passage <reference>`, `meetings evidence <reference>`, `meetings context <person>` | прочитать ограниченные источники или контекст связанного человека |

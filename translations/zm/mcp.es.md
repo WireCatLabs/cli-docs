@@ -27,8 +27,8 @@ La instalación no ocurre al iniciar un comando normal.
 
 ## El servidor MCP
 
-`zm serve --mcp` usa stdio y ofrece siete herramientas de solo lectura: lista y detalles de reuniones,
-transcripciones, resúmenes, exportaciones, búsqueda de texto y participantes. Descubrir herramientas
+`zm serve --mcp` usa stdio y ofrece ocho herramientas de solo lectura: lista y detalles de reuniones,
+transcripciones, resúmenes, exportaciones, búsquedas de palabras, participantes y evidencia por nombres de proyectos. Descubrir herramientas
 no abre la base. Cada lectura usa la cuenta elegida y cierra su conexión antes de responder; el cliente
 no puede cambiar la cuenta. No se exponen escritura de archivos exportados ni cambios remotos.
 
@@ -58,6 +58,13 @@ y el paso `item.next` conservan la continuación aunque la página actual no ten
 `identity_id` identifica una identidad observada; los nombres repetidos no crean vínculos con personas.
 `meetings_list` acepta una consulta de metadatos `query` (por ejemplo, `started_at:[2026-09-12 TO 2026-10-12]`)
 en lugar de los antiguos `since` y `until`, y devuelve la entidad de reunión y el sobre de lista comunes.
+
+`meeting_project_evidence` acepta un nombre/clave/alias de proyecto existente y la consulta
+compartida de selección, además de limit, cursor y max_read_bytes. Devuelve un elemento registrado
+con proyecto, nombre coincidente, coincidencias con fuentes, cobertura y asociación sin confirmar.
+Cada llamada lee una página de un nombre del índice existente sin actualizarlo. Sigue el paso next
+de la raíz incluso tras una página vacía; las fechas devueltas se fijan para continuar. Nunca crea
+alias ni confirma la pertenencia al proyecto.
 
 ## Prueba la conexión
 

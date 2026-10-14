@@ -173,27 +173,44 @@ añade cuentas explícitas para buscar. Las etiquetas locales no autentican una 
 
 ## Encontrar un proyecto antes de vincularlo
 
-El filtro de pertenencia confirmada puede omitir una reunión que todavía no está vinculada al proyecto.
-Para descubrir candidatos, busca el nombre canónico y sus alias conocidos como palabras, manteniendo
-los límites de participante y fechas. Los nombres e IDs siguientes son ficticios:
+El filtro de pertenencia confirmada puede omitir una reunión pertinente que todavía no está vinculada.
+Usa un proyecto existente del catálogo compartido para buscar su nombre canónico, clave y alias explícitos:
 
 ```sh
 zm meetings people "Alice Example" --limit 50 --json
-zm search meetings "Research Example" --identity-id 12 --since-time 2026-09-14 --until-time 2026-10-14 --json
-zm search meetings "RES" --identity-id 12 --since-time 2026-09-14 --until-time 2026-10-14 --json
+zm meetings projects evidence RES 'identity_id:12 started_at:[2026-09-14 TO 2026-10-14]' --limit 20 --json
 ```
 
-Revisa todas las páginas de participantes y elige el `identity_id` correcto; un nombre coincidente
-no basta para seleccionar una persona. Usa alias registrados en el vocabulario compartido o indicados
-por el propietario. Los comandos actuales no expanden los alias automáticamente al buscar transcripciones.
-Repite las búsquedas de esos nombres sin `--project` y sigue `page.cursor` o el paso `next` mientras `page.has_more` sea true.
-Mantén los mismos límites de participante y fechas al continuar.
+La clave del proyecto y el ID de identidad son ficticios. Revisa las páginas de participantes antes de
+elegir la identidad correcta; un nombre coincidente no establece un vínculo con una persona. Si el
+proyecto no existe o es ambiguo, revisa primero el catálogo de proyectos de Memo. El comando solo
+resuelve nombres existentes; no inventa alias ni crea proyectos, etiquetas, vínculos con personas o pertenencia.
 
-Para cada `ref` pertinente, abre `zm meetings passage <ref> --format markdown`.
-El pasaje conserva tiempos, referencias, revisión y cobertura, de modo que el agente pueda responder
-con fuentes sin un script que recorte el JSON de transcripciones completas. Las referencias repetidas
-entre alias son la misma evidencia. Una palabra del proyecto puede ser incidental: revisa el pasaje
-antes de proponer una asociación. Ningún resultado demuestra que un archivo incompleto contenga todas las discusiones.
+La respuesta contiene un `item`, con el `project` canónico, el nombre coincidente `term`, los
+`hits` con fuentes, `selection`, límites, `page` y `coverage` explícita, además de metadatos de
+ejecución. Cada llamada lee una página de un nombre del índice local de palabras existente, sin
+actualizarlo. Tras importar reuniones, ejecuta una búsqueda normal de palabras para indexar los
+pasajes nuevos. La lectura usa por defecto 4 MiB y como máximo 100 coincidencias; `--max-read-bytes`
+y `--limit` cambian esos límites. La resolución del catálogo tiene otro límite de 1 MiB y 32 nombres.
+Un vocabulario excesivo produce un error explícito. La integridad del archivo y del índice sigue siendo desconocida.
+
+Continúa con el paso `next` de la raíz, incluso si `item.hits` está vacío. El cursor está en `item.page.cursor`. Sus argumentos
+repiten proyecto, selección, cursor y límites. Se terminan las páginas de un nombre antes de pasar al
+siguiente alias. Las fechas relativas se fijan como límites absolutos en la consulta devuelta; úsala
+con `--cursor` para que otro día no cambie la selección. Cambiar el vocabulario o la selección puede invalidar el cursor.
+
+La consulta opcional de selección acepta valores exactos de `meeting_id`, `identity_id`, `person_id`,
+`tag_id`, `event_id` y `series_id`, una vez cada uno y unidos por AND, además de fechas/rangos de
+`started_at`. Los rangos incluyen días naturales completos en UTC; las marcas ISO entre comillas
+fijan límites exactos. Se rechazan OR, negación y filtros de pertenencia confirmada a un proyecto.
+La herramienta MCP `meeting_project_evidence` recibe `project` y, opcionalmente, `query`, `limit`,
+`cursor` y `max_read_bytes`; la cuenta queda fijada por el servidor.
+
+Para cada pasaje conservado pertinente, abre `zm meetings passage <ref> --format markdown` y revisa
+las palabras cercanas. `association: "unconfirmed-word-evidence"` significa evidencia candidata: una
+clave puede ser incidental y las referencias repetidas entre nombres son la misma evidencia. Propón
+asociaciones tras revisar el pasaje. Si aún no existe el proyecto, sigue disponible la búsqueda normal
+sin `--project`: repite manualmente los nombres conocidos con la misma selección.
 
 ## Notas, etiquetas y recuerdos con memo
 

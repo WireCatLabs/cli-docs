@@ -4,6 +4,16 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.12.0 — 14.10.2026
+
+### Añadido
+
+- Evidencia del nombre, clave y alias de un proyecto existente mediante `meetings projects evidence` y MCP `meeting_project_evidence` compartidos. La lectura conserva fuentes, continuación ligada a la cuenta y fechas fijas, y cobertura desconocida explícita, sin actualizar índices ni aceptar pertenencia.
+
+### Corregido
+
+- Las guías de búsqueda/MCP sitúan la continuación de los informes dentro de `item` y omiten el campo de selección retirado de la búsqueda por palabras.
+
 ## 0.11.0 — 14.10.2026
 
 ### Cambios — pueden afectar a scripts
