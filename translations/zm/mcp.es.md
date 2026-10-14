@@ -52,6 +52,13 @@ Reserva stdout para el protocolo: omite `--json`, `--jsonl` y `--fields`. `--max
 limita cada resultado; cero elimina el límite. Elige un perfil e importa o descarga sus datos antes
 de leerlos. El descubrimiento funciona sin datos guardados.
 
+`meeting_people` busca nombres/correos guardados de participantes en la cuenta fijada por el servidor.
+Usa `limit`, `scan_limit`, `max_read_bytes` y `cursor` para acotar la lectura. El `page` estándar
+y el paso `page.next` conservan la continuación aunque la página actual no tenga coincidencias.
+`identity_id` identifica una identidad observada; los nombres repetidos no crean vínculos con personas.
+`meetings_list` acepta una consulta de metadatos `query` (por ejemplo, `started_at:[2026-09-12 TO 2026-10-12]`)
+en lugar de los antiguos `since` y `until`, y devuelve la entidad de reunión y el sobre de lista comunes.
+
 ## Prueba la conexión
 
 Tras instalar instrucciones, inicia otra sesión si el agente no las detectó. Después de configurar

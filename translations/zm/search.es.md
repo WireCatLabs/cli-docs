@@ -57,7 +57,7 @@ zm search meetings "launch" --tag planning --limit 20 --json
 ```
 
 Los IDs y las etiquetas del ejemplo son ficticios: sustitúyelos por registros de tu almacén local.
-Usa el `identityId` de los resultados de participantes para `--identity-id`; `--person-id` acepta
+Usa el `identity_id` de los resultados de participantes para `--identity-id`; `--person-id` acepta
 el ID numérico de una persona vinculada explícitamente. Un mismo nombre puede representar
 identidades distintas. Revisa los registros antes de vincularlos: estos filtros seleccionan
 reuniones y no atribuyen una intervención sin autor a una persona.
@@ -77,7 +77,20 @@ La herramienta MCP de solo lectura `search_meetings` ofrece los mismos filtros e
 seleccionada por el servidor: `identity_id`, `person_id`, `event_id`, `series_id`, `project`, `tag`, `topic`, `since_time`, `until_time` y `cursor`.
 Sus fechas se expresan en milisegundos desde la época Unix.
 
-`meetings people <query>` busca por nombre o correo. `search all` usa el servicio común y busca solo reuniones por defecto:
+`meetings people <query>` busca observaciones guardadas de participantes por nombre o correo en la cuenta elegida.
+Compara Unicode de forma literal; no traduce nombres ni deduce que dos registros son la misma persona.
+`--limit` (50 por defecto), `--scan-limit` (1000) y `--max-read-bytes` (1048576)
+limitan coincidencias, observaciones examinadas y bytes de nombres/correos leídos por llamada.
+La respuesta conserva `page.has_more`, `page.cursor`, cobertura y ambigüedad de identidades de la página, también en JSONL.
+Sigue el paso `page.next` o repite la misma consulta con `--cursor`. Una página vacía puede tener continuación.
+Los IDs distintos son candidatos para revisar, nunca vínculos automáticos con personas. No se sabe si el archivo está completo.
+
+`meetings list` filtra metadatos con una consulta, por ejemplo
+`zm meetings list 'started_at:[2026-09-12 TO 2026-10-12]' --json`.
+Devuelve `items`, `page` y pasos `next` opcionales en JSON y JSONL. Continúa con `--page`.
+La consulta por fecha sustituye los antiguos parámetros del listado `--since-time` y `--until-time`;
+esos parámetros siguen disponibles en la búsqueda de transcripciones y la importación de reuniones.
+`search all` usa el servicio común y busca solo reuniones por defecto:
 
 ```sh
 zm search all "example plan" --limit 100 --max-meetings 100 --json
@@ -156,6 +169,30 @@ Primero aparece un plan; `--yes` aplica una vez y `--dry-run` prevalece. Los val
 una decisión obsoleta. `--event-id none` quita el evento. Solo se mueve la identidad del participante
 elegido, sin adivinar por nombre. La persona necesita observaciones autorizadas; `--target-accounts <ids>`
 añade cuentas explícitas para buscar. Las etiquetas locales no autentican una identidad remota.
+
+## Encontrar un proyecto antes de vincularlo
+
+El filtro de pertenencia confirmada puede omitir una reunión que todavía no está vinculada al proyecto.
+Para descubrir candidatos, busca el nombre canónico y sus alias conocidos como palabras, manteniendo
+los límites de participante y fechas. Los nombres e IDs siguientes son ficticios:
+
+```sh
+zm meetings people "Alice Example" --limit 50 --json
+zm search meetings "Research Example" --identity-id 12 --since-time 2026-09-14 --until-time 2026-10-14 --json
+zm search meetings "RES" --identity-id 12 --since-time 2026-09-14 --until-time 2026-10-14 --json
+```
+
+Revisa todas las páginas de participantes y elige el `identity_id` correcto; un nombre coincidente
+no basta para seleccionar una persona. Usa alias registrados en el vocabulario compartido o indicados
+por el propietario. Los comandos actuales no expanden los alias automáticamente al buscar transcripciones.
+Repite las búsquedas de esos nombres sin `--project` y sigue cada `next_cursor` mientras `has_more` sea true.
+Mantén los mismos límites de participante y fechas al continuar.
+
+Para cada `ref` pertinente, abre `zm meetings passage <ref> --format markdown`.
+El pasaje conserva tiempos, referencias, revisión y cobertura, de modo que el agente pueda responder
+con fuentes sin un script que recorte el JSON de transcripciones completas. Las referencias repetidas
+entre alias son la misma evidencia. Una palabra del proyecto puede ser incidental: revisa el pasaje
+antes de proponer una asociación. Ningún resultado demuestra que un archivo incompleto contenga todas las discusiones.
 
 ## Notas, etiquetas y recuerdos con memo
 

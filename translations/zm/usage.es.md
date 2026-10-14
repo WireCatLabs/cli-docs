@@ -88,7 +88,9 @@ no importa su transcripción en la base hasta que solicites la importación del 
 
 ## Salida para scripts y agentes
 
-`--json` produce un valor; `--jsonl`, un objeto por línea. Los errores van a stderr; `--quiet` omite
+`--json` produce un valor. `--jsonl` transmite los elementos normales uno por línea; las listas
+de reuniones guardadas y las páginas acotadas de participantes conservan un sobre completo por línea,
+con continuación y cobertura. Los errores van a stderr; `--quiet` omite
 otros diagnósticos. Las tuberías reciben JSON por defecto y la terminal una salida legible.
 El autocompletado emite el protocolo de la shell salvo que pidas JSON.
 
