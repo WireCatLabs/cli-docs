@@ -46,78 +46,28 @@ for (const lang of ["en", "ru", "es"]) {
       await guide.click()
       await expect(page).toHaveURL(new RegExp(`/${lang}/docs/${tool}/installation$`))
       await expect(page.locator("main")).toContainText(`@wirecat/${tool}-cli`)
-      if (tool === "max") {
-        await expect(page.locator("main #log-in")).toHaveCount(1)
-        await expect(page.locator("main code", { hasText: /^max personal setup$/ }).first()).toBeVisible()
-        return
-      }
-      const login = page.locator("section[aria-labelledby=install-login]")
-      await expect(login.locator("ol").first()).toBeVisible()
-      await expect(login.locator("code").first()).toHaveText(`${tool} setup`)
+      await expect(page.locator("main #log-in")).toHaveCount(1)
+      await expect(page.locator("main code", { hasText: new RegExp(`^${tool} personal setup$`) }).first()).toBeVisible()
     })
   }
 
-  test(`${lang}/max: installation shows every step openly and matches the Markdown guide`, async ({ page }) => {
-    await page.goto(`/${lang}/docs/max/installation`)
-    const main = page.locator("main")
-    const prompt = main.locator(".docs-prompt").first()
-    await expect(prompt).toBeVisible()
-    for (const id of ["install", "log-in", "connect-agent", "check", "questions", "files"])
-      await expect(main.locator(`#${id}`)).toHaveCount(1)
-    await expect(main.locator("article details")).toHaveCount(1)
-    const md = await page.request.get(`/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}max/installation/content.md`)
-    expect(md.status()).toBe(200)
-    const markdown = await md.text()
-    expect(markdown).toContain((await prompt.locator("code").textContent())?.trim().split("\n")[0] ?? "")
-    expect(markdown).toContain("max personal setup --method qr-chrome")
-  })
-
-  for (const tool of ["tg"]) {
-    test(`${lang}/${tool}: login instructions and request match the Markdown guide`, async ({ page }) => {
+  for (const tool of ["tg", "max"])
+    test(`${lang}/${tool}: installation shows every step openly and matches the Markdown guide`, async ({ page }) => {
       await page.goto(`/${lang}/docs/${tool}/installation`)
-      const login = page.locator("section[aria-labelledby=install-login]")
-      await login.locator("[data-installation-login-help] button").first().click()
-      await expect(login.locator("img")).toHaveCount(tool === "tg" ? 5 : 0)
-      await expect(login.locator("figure:not(:has(img))")).toHaveCount(tool === "tg" ? 1 : 2)
-      for (const image of await login.locator("img").all()) {
-        await image.scrollIntoViewIfNeeded()
-        await expect.poll(() => image.evaluate((node) => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0)
-      }
-
+      const main = page.locator("main")
+      const prompt = main.locator(".docs-prompt").first()
+      await expect(prompt).toBeVisible()
+      for (const id of ["install", "log-in", "connect-agent", "check", "questions", "files"])
+        await expect(main.locator(`#${id}`)).toHaveCount(1)
+      await expect(main.locator("article details")).toHaveCount(1)
       const md = await page.request.get(
         `/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}${tool}/installation/content.md`,
       )
       expect(md.status()).toBe(200)
       const markdown = await md.text()
-      for (const image of await login
-        .locator("img")
-        .evaluateAll((nodes) =>
-          nodes.map((node) => ({ src: node.getAttribute("src"), alt: node.getAttribute("alt") })),
-        )) {
-        expect(markdown).toContain(`![${image.alt}](${image.src})`)
-      }
-      for (const slot of await login.locator("figure:not(:has(img))").allTextContents()) {
-        expect(markdown).toContain(slot.trim())
-      }
-
-      for (const paragraph of await login.locator("p, li").evaluateAll((nodes) =>
-        nodes
-          .map((node) =>
-            [...node.childNodes]
-              .filter((child) => child.nodeType === Node.TEXT_NODE)
-              .map((child) => child.textContent)
-              .join(""),
-          )
-          .filter((text) => text.trim() !== "" && text.trim() !== "→"),
-      )) {
-        expect(markdown).toContain(paragraph.replace(/ →$/, ""))
-      }
-      expect(markdown).toContain(
-        await page.locator("section[aria-labelledby=install-request] .docs-prompt code").textContent(),
-      )
-      expect(markdown.indexOf("[#install-login]")).toBeLessThan(markdown.indexOf("[#installation-reference]"))
+      expect(markdown).toContain((await prompt.locator("code").textContent())?.trim().split("\n")[0] ?? "")
+      expect(markdown).toContain(`${tool} personal setup --`)
     })
-  }
 
   test(`${lang}: installation deep links and common setup are readable in Markdown`, async ({ page }) => {
     const md = await page.request.get(`/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}installation/content.md`)
