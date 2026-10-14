@@ -2,7 +2,7 @@
 title: "Historial de cambios"
 ---
 
-A continuación se conservan las descripciones originales en inglés de los cambios publicados. Comandos, límites y detalles históricos permanecen sin paráfrasis.
+Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
 ## Unreleased
 
@@ -46,6 +46,8 @@ A continuación se conservan las descripciones originales en inglés de los camb
   aclara que el permiso de lista debe añadirse manualmente.
 - La búsqueda distingue generación CLI de vectores ausentes y lectura MCP de vectores existentes;
   las guías usan `session start` para login y `--cursor` para continuar las fuentes.
+
+- **`zm meetings import <folder>` y el origen de archivos leen una transcripción cada vez.** Antes abrían todos los `.vtt` a la vez. Se rechaza antes de leer un archivo de más de 10 MiB, el límite existente de descarga de transcripciones. Una carpeta con más de 10 000 transcripciones se rechaza pidiendo mover parte a otra carpeta.
 
 ## 0.8.0 — 13.10.2026
 
