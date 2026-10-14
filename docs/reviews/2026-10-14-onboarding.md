@@ -89,3 +89,14 @@ Sidebar key warnings remain outside this prose change.
   Every case retains the required 20% timeout headroom. No timeout or assertion was weakened.
 - The final shared/sidebar flow uses existing URLs and explicit aliases for former heading links.
   Full export/link/SEO/broader browser gates and post-deployment route checks remain pending.
+
+The first production export (38554176396) completed, then link validation stopped deployment:
+the shared entry's final search link used `search.mdx`, while its actual source is `search.md`.
+All three authored links are corrected. Every relative destination in the six rewritten shared
+pages was checked against its source file, and the responsive browser cases now follow that
+final Search link. No checker, timeout or deployment condition is weakened. This failed run
+published no changed site content; validation and deployment must finish on the correction.
+
+Correction validation: all 18 affected responsive onboarding cases pass, including actual Search
+navigation in EN/RU/ES at desktop and mobile widths; the timing-headroom gate and strict released
+command audit pass. Every authored relative destination in the six changed shared pages exists.
