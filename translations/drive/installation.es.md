@@ -60,14 +60,67 @@ el acceso de Google, ejecuta `drive personal session end` para cada perfil conec
 
 ## Elegir cómo conectar
 
-Con **la aplicación Google compartida de WireCat**, apruebas tu propia cuenta en el navegador;
-solo el propietario configura Google Cloud. La identidad del cliente Desktop de WireCat está
-incluida en el CLI. Omite Google Cloud y ve a [conectar tu cuenta](#connect-your-account).
-La verificación de Google y las políticas de tu organización pueden afectar el acceso a la app.
+- **Conectar mediante la aplicación Google de WireCat:** sigue [Conectar tu cuenta](#connect-your-account)
+  abajo. El CLI ya incluye la identidad de la aplicación; eliges tu cuenta y apruebas el acceso
+  en el navegador. No necesitas un proyecto Google Cloud ni un archivo JSON.
+- **Usar tu propia aplicación Google:** sigue [Preparar el acceso Google](#prepare-google-sign-in)
+  para crear un cliente Desktop y descargar su JSON. El último paso inicia el acceso con ese
+  archivo y te devuelve a los pasos de aprobación en el navegador de abajo.
 
-¿Prefieres tu propia aplicación? Crea un cliente Desktop abajo y pasa su JSON con `--client-file`.
-El JSON identifica la aplicación; por sí solo no da acceso a tu cuenta. Ese permiso se concede
-por separado en el navegador.
+## Conectar tu cuenta
+
+La aplicación de WireCat está seleccionada por defecto. Cada usuario concede acceso a su propia
+cuenta Google; publicar una aplicación o instalar el CLI no inicia sesión por ti.
+
+1. Abre una terminal en el ordenador donde instalaste el CLI. Elige un nombre de perfil para
+   esta cuenta; los ejemplos usan `personal`. Inicia el acceso:
+
+```sh
+drive personal session start
+```
+
+2. En el navegador que se abre, elige la cuenta Google que quieres conectar. Revisa los permisos
+   solicitados y aprueba el acceso. La conexión predeterminada solo solicita lectura de Drive.
+   Espera a que la página de callback confirme que se recibió el acceso y la terminal indique
+   que el perfil `personal` está conectado.
+3. Vuelve a la terminal y comprueba la conexión:
+
+```sh
+drive personal session list --json
+```
+
+La lista muestra tu perfil conectado sin imprimir tokens. Sigue con
+[Comprobar el primer resultado](#check-your-first-result) para importar una carpeta elegida
+y probar la búsqueda. Iniciar sesión no descarga tus archivos.
+
+Si Google bloquea el acceso, el estado de verificación de la aplicación o las políticas del
+administrador Workspace pueden restringirlo. Para tu propia aplicación en Testing, añade
+la cuenta en Audience como se explica en [Preparar el acceso Google](#prepare-google-sign-in)
+y vuelve a intentar el acceso.
+
+Los tokens se guardan en el llavero del sistema operativo. Si no está disponible, añade
+`--credential-storage file` explícitamente para almacenamiento privado en archivo.
+`--no-browser` imprime un enlace que puedes abrir en el mismo ordenador. Usa
+`drive work session start ...` para otra cuenta. Ningún perfil de entorno o configuración se elige
+automáticamente.
+
+## Comprobar el primer resultado
+
+Elige una carpeta pequeña con un Google Doc o archivo Markdown/TXT. Copia su URL del navegador
+y sustituye `FOLDER_ID`:
+
+```sh
+drive personal folders add https://drive.google.com/drive/folders/FOLDER_ID
+drive personal sync --json
+drive personal status --json
+drive personal documents list --json
+drive personal search 'a word from your document' --exact --json
+```
+
+Comprueba que la lista contiene los documentos esperados, no quedan operaciones pendientes y
+la búsqueda devuelve un pasaje y su enlace original. Repite sync si queda trabajo. Conectar
+la cuenta no importa todo Drive. Sigue con [formatos y almacenamiento](./usage.md) o
+[recetas](./recipes.md).
 
 ## Preparar el acceso Google
 
@@ -158,52 +211,13 @@ application ni añadas una URL de redirección web para este flujo. Consulta las
 El JSON descargado tiene una sección `installed` que identifica la aplicación. No es tu token de
 acceso. Dale al agente solo la ruta, no el contenido.
 
-## Conectar tu cuenta
-
-Publicar la aplicación Google no conecta este ordenador con tu cuenta. Cada usuario sigue
-abriendo el consentimiento y autorizando su cuenta. El cliente Desktop de WireCat identifica
-la app compartida; un cliente propio identifica tu aplicación. Ambos usan el mismo comando
-y guardan tokens en el almacén local de credenciales de cada usuario.
-
-Elige el nombre del perfil y conecta con la aplicación compartida de WireCat:
-
-```sh
-drive personal session start
-drive personal session list --json
-```
-
-Para tu propia aplicación, sustituye la ruta y ejecuta:
+Ahora conecta con el cliente descargado. Sustituye la ruta por la ruta completa del archivo
+JSON y elige tu nombre de perfil:
 
 ```sh
 drive personal session start --client-file /absolute/path/to/desktop-client.json
 ```
 
-En el navegador, elige la cuenta prevista y revisa los permisos. Tras aprobar, la página de
-callback confirma que se recibió el acceso y la terminal indica que `personal` está conectado.
-La lista de sesiones muestra todos los perfiles sin imprimir tokens. Si Google bloquea el acceso
-porque no eres usuario de prueba, añade esa cuenta exacta en Audience y repite. Un administrador
-Workspace también puede restringir esta aplicación.
-
-Los tokens se guardan en el llavero del sistema operativo. Si no está disponible, añade
-`--credential-storage file` explícitamente para almacenamiento privado en archivo.
-`--no-browser` imprime un enlace que puedes abrir en el mismo ordenador. Usa
-`drive work session start ...` para otra cuenta. Ningún perfil de entorno o configuración se elige
-automáticamente.
-
-## Comprobar el primer resultado
-
-Elige una carpeta pequeña con un Google Doc o archivo Markdown/TXT. Copia su URL del navegador
-y sustituye `FOLDER_ID`:
-
-```sh
-drive personal folders add https://drive.google.com/drive/folders/FOLDER_ID
-drive personal sync --json
-drive personal status --json
-drive personal documents list --json
-drive personal search 'a word from your document' --exact --json
-```
-
-Comprueba que la lista contiene los documentos esperados, no quedan operaciones pendientes y
-la búsqueda devuelve un pasaje y su enlace original. Repite sync si queda trabajo. Conectar
-la cuenta no importa todo Drive. Sigue con [formatos y almacenamiento](./usage.md) o
-[recetas](./recipes.md).
+Vuelve a [Conectar tu cuenta](#connect-your-account) desde el paso 2: aprueba el acceso en el
+navegador y comprueba la sesión. Se utiliza tu aplicación y los tokens se guardan localmente,
+igual que al conectar con la aplicación de WireCat.
