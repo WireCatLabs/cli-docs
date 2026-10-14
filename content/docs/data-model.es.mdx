@@ -150,6 +150,12 @@ necesita una columna para cada una de las demás:
 - **Los alias** (aliases) dan otros nombres a cualquier cosa: un apodo, el nombre de un contacto en
   un mensajero, el nombre corto de un proyecto. Los leen la búsqueda y la resolución de nombres.
 
+**Las menciones** (mentions) son valores que las reglas encuentran en un texto guardado: un
+teléfono, una dirección de correo, un enlace, un documento de Google o el nombre de una persona
+que conoces. Una mención sigue en `found` hasta que la vinculas a una persona, una organización o
+un documento, o la descartas. La versión para lectores de esta sección, con quién crea cada
+vínculo: [Cómo se vincula todo](./how-things-are-linked.md).
+
 **El ámbito** (scope) es `personal` o `work`. Se fija en cuentas, organizaciones y proyectos, y lo
 que contienen lo hereda: un chat toma el ámbito de su cuenta salvo que fije el suyo, y una memoria
 toma el ámbito de sus pruebas. Una pregunta hecha para el trabajo lee solo datos de trabajo, así que
@@ -1402,7 +1408,7 @@ Etiquetas que las reglas ponen a un chat al comparar su título, alias y descrip
 
 #### `links`
 
-Cada conexión entre dos cosas que no guarda ninguna columna. Tipos: `blocked-by` (una tarea necesita que otra termine antes), `follow-up-of` (una tarea continúa otra anterior), `links-to` (un documento o nota enlaza a algo, tal como está escrito en él), `about` (una nota o documento trata de una persona, proyecto, …), `member-of` (un chat o persona pertenece a un proyecto u organización), `labelled` (una cuenta de carpeta → una etiqueta, la ruta de la subcarpeta en `anchor`, para que todo documento debajo lleve la etiqueta), `answered-by` (una tarea pregunta → el mensaje que la respondió), `evidence` (un hecho o memoria → su fuente), `created-from` (una cosa → aquello de lo que se hizo). Tipos que el almacén aún no escribe: `duplicate-of` (la misma pregunta hecha otra vez), `related-to`, `assigned-to`.
+Cada conexión entre dos cosas que no guarda ninguna columna. Tipos: `blocked-by` (una tarea necesita que otra termine antes), `follow-up-of` (una tarea continúa otra anterior), `links-to` (un documento, nota o mensaje enlaza a algo, tal como está escrito en él), `about` (una nota o documento trata de una persona, proyecto, …), `member-of` (un chat o persona pertenece a un proyecto u organización), `labelled` (una cuenta de carpeta → una etiqueta, la ruta de la subcarpeta en `anchor`, para que todo documento debajo lleve la etiqueta), `answered-by` (una tarea pregunta → el mensaje que la respondió), `evidence` (un hecho o memoria → su fuente), `created-from` (una cosa → aquello de lo que se hizo). Tipos que el almacén aún no escribe: `duplicate-of` (la misma pregunta hecha otra vez), `related-to`, `assigned-to`.
 
 | Columna | Tipo | Significado |
 | --- | --- | --- |

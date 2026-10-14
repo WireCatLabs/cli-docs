@@ -140,6 +140,11 @@ every other:
 - **Aliases** give any thing other names: a nickname, a contact name in one messenger, a short
   project name. Name matching and search read them.
 
+**Mentions** are values found by rules in a stored text: a phone, an email address, a link, a
+Google document or the name of a person you know. A mention stays `found` until you link it to a
+person, an organization or a document, or dismiss it. The reader version of this section, with who
+makes each link: [How things are linked](./how-things-are-linked.md).
+
 **Scope** is `personal` or `work`. It is set on accounts, organizations and projects, and what they
 hold inherits it: a chat takes its account's scope unless it sets its own, and a memory takes the
 scope of its evidence. A question asked for work reads only work data, so it never pulls in a
@@ -1387,7 +1392,7 @@ Tags that rules put on a chat by matching its title, username and description.
 
 #### `links`
 
-Every connection between two things that no column holds. Kinds: `blocked-by` (a task needs another task to finish first), `follow-up-of` (a task continues an earlier task), `links-to` (a document or note links to something, as written in it), `about` (a note or document is about a person, project, …), `member-of` (a chat or person belongs to a project or organization), `labelled` (a folder account → a tag, the subfolder's path in `anchor`, so every document under it carries the tag), `answered-by` (a question task → the message that answered it), `evidence` (a fact or memory → its source), `created-from` (a thing → what it was made from). Kinds the store does not write yet: `duplicate-of` (the same question asked again), `related-to`, `assigned-to`.
+Every connection between two things that no column holds. Kinds: `blocked-by` (a task needs another task to finish first), `follow-up-of` (a task continues an earlier task), `links-to` (a document, note or message links to something, as written in it), `about` (a note or document is about a person, project, …), `member-of` (a chat or person belongs to a project or organization), `labelled` (a folder account → a tag, the subfolder's path in `anchor`, so every document under it carries the tag), `answered-by` (a question task → the message that answered it), `evidence` (a fact or memory → its source), `created-from` (a thing → what it was made from). Kinds the store does not write yet: `duplicate-of` (the same question asked again), `related-to`, `assigned-to`.
 
 | Column | Type | Meaning |
 | --- | --- | --- |
