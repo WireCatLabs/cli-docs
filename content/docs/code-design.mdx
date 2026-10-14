@@ -266,8 +266,9 @@ Most of the design is checked by machines, so a change that breaks it fails befo
 
 | Check | What it stops | Where |
 | --- | --- | --- |
-| Restricted imports | An import across a layer boundary in the table above, or across a tool's boundaries. | Each repository's `biome.json`, run by `pnpm lint`. |
-| Import loops | Two modules that import each other at run time, directly or through others. Type-only imports are allowed. | `noImportCycles` in cli-core's top-level lint rules. |
+| Restricted imports | An import across a layer boundary in the table above or across a tool's boundaries, or a provider SDK imported outside the module that owns it. | Each repository's `biome.json`, run by `pnpm lint`. |
+| Import loops | Two modules that import each other at run time, directly or through others. Type-only imports are allowed. | `noImportCycles` in the top-level lint rules of every repository. |
+| File size | A file over 1,000 lines. A file already over it may not grow: its exception is capped at its current size. Tests and generated code are exempt. | `noExcessiveLinesPerFile` in every repository's `biome.json`. |
 | Parity | A core change that breaks either tool's build. A branch of the same name in a tool lets a breaking change go green before the tools adopt it. | cli-core's Parity workflow. |
 | Command contract | The `commands --json` shape, declared effects on every command, the help snapshot. | Each tool's `contracts:check` and `cli-dev lint`. |
 | Type checks | Code, tests and scripts as three projects. | `pnpm typecheck`. |
@@ -275,6 +276,9 @@ Most of the design is checked by machines, so a change that breaks it fails befo
 
 Biome builds the import graph for `noImportCycles` only when the rule is switched on in the top-level
 rules. Inside an `overrides` entry it reports nothing, so the rule stays at the top level.
+
+Each month the [architecture checks](https://github.com/WireCatLabs/cli-testing/blob/main/performance/engineering/architecture-checks/README.md) record re-measures these rules in every repository, lists
+the files over 500 lines with a verdict on each, and keeps the trend.
 
 Conventions for new code:
 
@@ -302,8 +306,8 @@ Conventions for new code:
 - **The tg adapter is one large class**: 2,312 lines and about 110 methods, readable per method but the
   place every Telegram feature lands.
 - **max's `client/values.ts`** holds 59 exports used by 20 modules.
-- **Only cli-core enforces the import-loop rule.** tg and max have no import loops today, but their lint does
-  not stop a new one.
+- **Some large files still hold several jobs.** Lint stops the ones over 1,000 lines from growing; the
+  [architecture checks](https://github.com/WireCatLabs/cli-testing/blob/main/performance/engineering/architecture-checks/README.md) record names the seam each would split along.
 
 To see where search, embeddings and the conversation graph sit in these layers, continue with
 [search architecture](./search-architecture.mdx).
