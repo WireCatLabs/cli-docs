@@ -22,7 +22,7 @@ for (const lang of ["en", "ru", "es"]) {
     const headings = await page.locator("main h3 > a[data-card]").allTextContents()
     expect(headings).toContain("Hermes")
     expect(headings.indexOf("OpenClaw")).toBe(headings.indexOf("Hermes") + 1)
-    await expect(page.locator("main pre").first()).toContainText("tg setup --agent codex")
+    await expect(page.locator("main pre").first()).toContainText("tg personal setup --agent codex")
     await expect(page.locator("main pre").filter({ hasText: "tg skill show" }).first()).toBeVisible()
     const agentResponse = await request.get(`/llms.mdx/docs/${locale}agents/content.md`)
     expect(agentResponse.ok()).toBe(true)
