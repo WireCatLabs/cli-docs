@@ -5,12 +5,16 @@ context, and continue to cross-source investigation without silently saving find
 
 ## Plan and evidence
 
-1. Keep the portal pinned to 0.13 until 0.14 is published and its tag/tarball can be verified.
+1. The portal pin advances to 0.14 only after publication, source-tag and registry-tarball verification.
 2. Native feature PR89 merged 587fe8a; Core 0.280 and Base 0.30 vocabulary are published.
    The runtime stays Base 0.28.2; the newer Base alias is development-only.
 3. Native full validation 38644001619 passed 451 cases, statement coverage 97.24%, contracts,
    upgrades, no-leak and four installed Linux/Windows Node22/24 jobs. The final release repeats
-   validation on main in 38644930952. Publication is still pending while this review is drafted.
+   validation on main in 38644930952, which succeeded. Publication, tag and matching GitHub release
+   are verified. Registry bytes match the validated artifact: SHA256
+   `ce3cb79d1db43fc613ac2d7ab4fe112ce3bdac6652d43cf5399e667b0ae20d74`.
+   An isolated canonical installation verifies contract 3 discovery, the preparation command, early
+   invalid-bound refusal and a single production Base identity.
 4. Review source-owned guides and corresponding RU/ES text, regenerate command references,
    preserve URLs/anchors and exact executable literals. Capture final immutable source and all
    five reviewed command contracts before the strict publication checks.
@@ -74,11 +78,23 @@ legacy reads in configuration. Kept automatic intake and broader preparation in 
 ## Checks and remaining gates
 
 All 22 changed localized guide structures pass, preserving code fences, inline literals, links and
-heading structure. Preview fingerprints were accepted after prose/source review; final fingerprints
-must match the published release. Browser regressions now check preparation anchors, scope links,
+heading structure. Final source matches the reviewed prose fingerprints against immutable v0.14.0.
+All five exact reviewed command contracts were captured with network disabled during CLI discovery. Browser regressions now check preparation anchors, scope links,
 example, proof fields, limits and Markdown in EN/RU/ES, plus canonical install settings.
 
 The first local development-server browser run timed out during initial route compilation at the
-existing 60-second startup budget; no page tests ran. Budgets and assertions were retained. A frozen
-preview export is being built for the next browser attempt. Exact release contracts, strict docs,
-release/roadmap record, final export/browser checks, PR/deploy and live verification remain pending.
+existing 60-second startup budget; no page tests ran. The first frozen export also hit page timeouts
+with Next's default 20-worker static generation under host load. It was stopped by its verified PID.
+The next complete export used two workers through Next's existing CIRCLE_NODE_TOTAL setting, without
+changing repository configuration, deadlines or assertions. It succeeded. All 36 affected Zoom browser
+cases pass on that frozen export, including mobile HTML and Markdown for all three locales; every
+case retains 20% timeout headroom. Released source prose is identical to this reviewed preview.
+
+Lint, Markdown and current-guide checks pass. The final strict contracts/docs checks, link/SEO checks,
+full PR/manual CI, deployment and live verification are recorded below as they complete. No live
+account data or credentials were used.
+
+Strict final docs validation checks 12,429 examples and 1,289 reference entries: zero reference gaps
+and zero invalid examples. The report separately retains syntax shorthand/manual-review entries
+and unmapped command families; those are not counted as verified runnable examples. The Zoom
+preparation task now links its usage guide. Link and SEO export checks pass.
