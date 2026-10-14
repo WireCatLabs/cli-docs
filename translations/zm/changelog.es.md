@@ -4,6 +4,49 @@ title: "Historial de cambios"
 
 A continuación se conservan las descripciones originales en inglés de los cambios publicados. Comandos, límites y detalles históricos permanecen sin paráfrasis.
 
+## Unreleased
+
+### Cambiado — puede afectar a scripts
+
+- **Usa `@wirecat/cli-core` 0.264.0** (nuevo nombre de cli-messaging) **y `@wirecat/cli-base` 0.27.1.**
+- **Todas las claves que escribe zm usan snake_case**, tanto en stdout como en sus resultados MCP:
+  `config show` (`account_profile`, `client_id`, `files_folder`, `files_timezone`), `doctor` y `session status`
+  (`data_profile`, `expires_at`), `session start` (`logged_in`), grabaciones, archivos y trabajos
+  (`manifest_path`, `timer_state`, `checkpoint_revision`, `job.capture.client_id`),
+  `meetings update|link|transcribe|evidence|context`, `search meetings`, `search all` y `watch`
+  (`has_more`, `next_cursor`, `meeting_id`, `transcript_rows`). `--fields` acepta estos nombres.
+  `commands --json` incluye `global_options`, `inherited_options` y `exit_codes`; su `contract` es 1.
+  Los comandos de cli-core (`meetings list|show|transcript|summary|export|people`) conservan sus claves
+  hasta que cli-core las cambie.
+- **`search all --meeting-cursor` y el argumento MCP `meeting_cursor` de `search_all` aceptan el cursor
+  snake_case** que devuelve `meetings.next_cursor` (`account_id`, `query`, `meeting_offset`, `hit_offset`).
+- **Un error ocupa una línea en el terminal** (`✗ message`); en una tubería o con `--json`/`--jsonl`,
+  se devuelve el objeto JSON. Un fallo de inicio es `internal_error` con salida 1, no `configuration_error`.
+- **El origen de `watch` es el primer argumento en lugar de `--source`:** `zm watch api` o
+  `zm watch files [folder]`. Sin argumentos se aplica el ajuste `source`.
+  Una carpeta sola (`zm watch ./downloads`) ahora da error; usa `zm watch files ./downloads`.
+
+### Añadido
+
+- `meetings passage <ref>` abre una coincidencia de transcripción y sus líneas cercanas con fuentes
+  en texto, Markdown o JSON. `--before-n`, `--after-n`, los presupuestos de bytes y la cobertura limitan
+  la respuesta; las revisiones guardadas y la comprobación opcional de huellas conservan su fuente.
+  MCP ofrece el mismo `meeting_passage` ligado a la cuenta al activar `--meeting-context`.
+- **`--debug`:** si falla, muestra el registro completo con causa y pila, después del objeto de error
+  o en lugar de la línea corta.
+
+### Corregido
+
+- README distingue Public Client ID y Client Secret, explica permisos manuales y manifiesto opcional,
+  y usa el comando de login y la dirección de documentación actuales. La cobertura distingue los
+  datos guardados disponibles de las transcripciones archivadas por separado.
+- La guía de seguridad explica indexación automática y generación de vectores ausentes, incluida
+  la entrega de pasajes a un servicio remoto elegido explícitamente.
+- La guía MCP enumera siete herramientas predeterminadas tras consolidar búsquedas; la de gestión
+  aclara que el permiso de lista debe añadirse manualmente.
+- La búsqueda distingue generación CLI de vectores ausentes y lectura MCP de vectores existentes;
+  las guías usan `session start` para login y `--cursor` para continuar las fuentes.
+
 ## 0.8.0 — 13.10.2026
 
 ### Cambiado — puede afectar a scripts

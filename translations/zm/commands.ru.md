@@ -344,7 +344,7 @@ zm meetings passage <reference> [options]
 |---|---|
 | `--before-n <n>` | preceding cues (default 3). |
 | `--after-n <n>` | following cues (default 3); at most 999 surrounding cues in total. |
-| `--bytes <n>` | cue JSON byte budget (default 65536); the anchor must fit. |
+| `--bytes <bytes>` | cue JSON byte budget (default 65536); the anchor must fit. |
 | `--max-read-bytes <bytes>` | stored text byte budget (default 4194304); boundary probes read metadata only. |
 | `--expected-fingerprint <hash>` | reject a changed anchor using its previously read cue fingerprint. |
 | `--format <format>` | compact text, Markdown or structured JSON. One of: `text`, `markdown`, `json`. Default: `text`. |
@@ -457,16 +457,16 @@ keep fetching new meetings from Zoom, or rescanning a folder, until stopped
 **Changes local data.**
 
 ```sh
-zm watch [folder] [options]
+zm watch [target] [folder] [options]
 ```
 
 | Аргумент | | Значение |
 |---|---|---|
-| `folder` | optional | folder of downloaded transcripts; implies --source files. |
+| `target` | optional | api or files; otherwise the configured source. One of: `api`, `files`. |
+| `folder` | optional | with files: folder of downloaded transcripts; otherwise files.folder. |
 
 | Параметр | Действие |
 |---|---|
-| `--source <source>` | api or files; otherwise uses configured source. One of: `api`, `files`. |
 | `--since-time <time>` | on the first run, fetch meetings from this ISO 8601 time. |
 | `--lookback-days <days>` | API cursor overlap for late transcripts (0 through 31). |
 | `--interval <duration>` | delay after each completed receipt (1s through 24h). Default: `10000`. |
