@@ -151,7 +151,7 @@ max sales bot chats admins add "Команда продаж" 4815162342 --can re
 max sales bot chats admins remove "Команда продаж" 4815162342
 ```
 
-`members list` devuelve hasta 100 personas y `marker`; sigue con `--marker`. `--can` usa los permisos de `max personal chats admins add`: `read`, `members`, `admins`, `info`, `pin`, `link`, `edit`, `delete`. `read` permite leer mensajes del grupo.
+`members list` devuelve hasta 100 personas; para la página siguiente, usa `--cursor` con el valor de `page.next_cursor` (el paso `page.next` también lo indica). `--can` usa los permisos de `max personal chats admins add`: `read`, `members`, `admins`, `info`, `pin`, `link`, `edit`, `delete`. `read` permite leer mensajes del grupo.
 
 ## Archivo local
 
@@ -319,7 +319,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Los parámetros de ruta y consulta son opciones; el cuerpo es JSON en `--body`, `--body -` (tubería) o `--body-file`. `--body-file -` también lee stdin. El parámetro nativo `timeout` se llama `--poll-timeout`; el global `--timeout` limita todo el comando. `--store-token <profile>` no está disponible en los métodos MAX actuales: todos lo rechazan antes de ejecutar. Se valida el cuerpo contra el esquema y los errores muestran el campo y lo esperado, sin revelar su valor. Lista de operaciones y clasificación lectura/escritura: [cobertura Bot API](https://github.com/WireCatLabs/max-cli/blob/v0.51.0/docs/dev/bot-api-coverage.md).
+Los parámetros de ruta y consulta son opciones; el cuerpo es JSON en `--body`, `--body -` (tubería) o `--body-file`. `--body-file -` también lee stdin. El parámetro nativo `timeout` se llama `--poll-timeout`; el global `--timeout` limita todo el comando. `--store-token <profile>` no está disponible en los métodos MAX actuales: todos lo rechazan antes de ejecutar. Se valida el cuerpo contra el esquema y los errores muestran el campo y lo esperado, sin revelar su valor. Lista de operaciones y clasificación lectura/escritura: [cobertura Bot API](https://github.com/WireCatLabs/max-cli/blob/v0.52.0/docs/dev/bot-api-coverage.md).
 
 <a id="для-скриптов-и-агентов"></a>
 

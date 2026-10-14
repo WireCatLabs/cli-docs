@@ -462,3 +462,24 @@ An empty answer means “not in the archive you searched”, not “never sent�
 - [Query language](./query-language.md) — every field, operator, limit and the JSON answer.
 - [How search works](https://wirecat.dev/ru/docs/search-architecture) — the technical page: the word
   index, the conversation graph, vectors and how results are ranked.
+
+## Pictures: search by what they show
+
+Picture search is off until you turn it on. It works separately for each profile, on this computer: `max` downloads
+each picture through MAX one at a time, turns it into a vector of 512 numbers and deletes it. The archive keeps only
+the vector and the file checksum.
+
+```sh
+max personal config set picture_search true
+max personal images models download clip-b32
+max personal images embed
+```
+
+`images models download clip-b32` downloads the model once (about 155 MB). `images embed` processes pictures that do
+not have a vector yet and continues from where it stopped. `--chat <чат>` and `--limit <n>` limit the amount. Nothing
+is marked as read.
+
+After this, a word search returns a `pictures` list next to the results: messages whose picture is closest to the query
+(`ref`, `score`). It is not mixed into the text ranking. The picture query must be in **English**: the text part of the
+model knows no other language, so the agent translates the query first. Without `picture_search` there is no `pictures`
+list. If the setting is on but the model is missing, `pictures_skipped` says so.

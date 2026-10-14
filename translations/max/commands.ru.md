@@ -62,6 +62,8 @@ the stored MAX session for this profile
 
 log this profile in to MAX
 
+**Меняет что-то в MAX.**
+
 ```sh
 max session start [method]
 ```
@@ -411,6 +413,8 @@ max chats members history <chat> [query]
 
 read a group's whole member list into the local store's member history: who joined, who left, daily counts and profile changes; someone is recorded as gone only when every member was read
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max chats members fetch <chat> [options]
 ```
@@ -486,6 +490,8 @@ max chats tracking show <chat>
 
 ежедневно загружать список участников этого чата, пока работает serve, начиная со следующего запуска
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max chats tracking add <chat>
 ```
@@ -497,6 +503,8 @@ max chats tracking add <chat>
 #### `max chats tracking remove`
 
 прекратить ежедневную загрузку; уже сохранённая история остаётся
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max chats tracking remove <chat>
@@ -1120,6 +1128,8 @@ max contacts notes remove <person> <id>
 
 forget where the last sync left off and take the whole list again
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max contacts sync
 ```
@@ -1277,6 +1287,8 @@ max contacts check <person> [options]
 
 record that two people in the store are one person — the same name is never enough
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max contacts link <person> <other>
 ```
@@ -1289,6 +1301,8 @@ max contacts link <person> <other>
 ### `max contacts unlink`
 
 undo contacts link for one identity: it is a person of its own again
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max contacts unlink <person>
@@ -1389,6 +1403,8 @@ max messages link <chat> [message]
 
 save a message's photos, files, videos and voice notes to a folder — or a whole chat's with --all
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max messages download <chat> [message] [options]
 ```
@@ -1426,6 +1442,8 @@ max messages evidence <chat> [options]
 ### `max messages sync`
 
 дописать историю чата в локальное хранилище, от новых к старым; повторный запуск продолжает; --all синхронизирует все чаты
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max messages sync [chat] [options]
@@ -1488,7 +1506,7 @@ max messages send <chat> [text] [options]
 | `--topic <id>` | send to this forum topic; unsupported by messengers without topics. |
 | `--reply-to <message>` | answer this message, by its id in the same chat. |
 | `--send-as <id>` | публиковать от имени одной из сущностей в списке `chats send-as`; обязательно, если чат по умолчанию публикует от другого имени. |
-| `--send-id <id>` | repeat a send whose outcome was unknown, without risking a second copy. |
+| `--operation-id <id>` | повторить отправку с неизвестным исходом, не рискуя второй копией. |
 | `--silent` | доставить без уведомления. |
 | `--no-preview` | no preview card for a link in the text. |
 | `--md` | читать текст как Markdown этого мессенджера; поддерживаемый синтаксис — в его руководстве по форматированию. |
@@ -1572,7 +1590,7 @@ max messages forward <chat> <message> [options]
 | `--to <chat>` | where it goes: a chat: its id, or part of its title. |
 | `--silent` | deliver it without a notification. |
 | `--send-as <id>` | публиковать от имени одной из сущностей в списке `chats send-as` для чата --to; обязательно, если чат по умолчанию публикует от другого имени. |
-| `--send-id <id>` | repeat a forward whose outcome was unknown, without risking a second copy. |
+| `--operation-id <id>` | повторить пересылку с неизвестным исходом, не рискуя второй копией. |
 
 ### `max messages pin`
 
@@ -1660,6 +1678,8 @@ max store gaps plan <chat>
 
 загрузить данные внутренних пробелов с ограничениями и перепроверить охват; никогда не удалять сообщения, которые не встретились при загрузке
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max store gaps repair <chat> [options]
 ```
@@ -1721,6 +1741,8 @@ max store jobs show [job]
 
 остановить идущее фоновое задание после текущей страницы; следующая синхронизация продолжит с того же места
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max store jobs cancel <job>
 ```
@@ -1732,6 +1754,8 @@ max store jobs cancel <job>
 #### `max store jobs retry`
 
 запустить частичное, неудавшееся или умершее задание заново, новым заданием; синхронизация продолжится с того места, где остановилось хранилище
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max store jobs retry [job] [options]
@@ -1759,6 +1783,8 @@ max store jobs clear
 
 сохранённые сообщения чата, от старых к новым: --jsonl — по сообщению на строку, --json — список сообщений в общей обёртке; к мессенджеру не обращается
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max store export [chats] [options]
 ```
@@ -1780,6 +1806,8 @@ max store export [chats] [options]
 ### `max store clear`
 
 delete from the store the chats this account has left, with their messages
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max store clear [options]
@@ -1810,6 +1838,8 @@ max store check
 
 обновить схему архива, нормализовать сообщения и заметки, построить индексы слов и основ
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max store migrate
 ```
@@ -1818,6 +1848,8 @@ max store migrate
 
 перестроить индексы слов, опечаток, основ, файлов и заметок без удаления данных
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max store reindex
 ```
@@ -1825,6 +1857,8 @@ max store reindex
 ### `max store backup`
 
 copy the store into a new file, while it is in use; never overwrites a file
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max store backup <file> [options]
@@ -1842,6 +1876,8 @@ max store backup <file> [options]
 
 put a backup in place of the store; the store it replaces is kept beside it, never deleted
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max store restore <file>
 ```
@@ -1853,6 +1889,8 @@ max store restore <file>
 ### `max store decrypt`
 
 open a file written with --encrypt into a new file; asks for its password
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max store decrypt <file> [options]
@@ -1870,6 +1908,8 @@ max store decrypt <file> [options]
 
 bring every table to this build's shape, deleting nothing: a table of the wrong shape is kept as a copy beside a new one
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max store repair [options]
 ```
@@ -1881,6 +1921,8 @@ max store repair [options]
 ### `max store reset`
 
 back the store up beside itself, then delete it and start an empty one at this build's schema; asks first, or --yes
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max store reset [options]
@@ -1897,6 +1939,8 @@ the tables `store repair` kept as copies
 #### `max store copies delete`
 
 delete one copy `store repair` kept, named exactly; refuses any other table
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max store copies delete <name>
@@ -2250,6 +2294,8 @@ max stats tasks show [options]
 
 данные графика из статистики чата и, по желанию, изображение SVG или PNG с тёмным оформлением
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max stats charts <chat> [options]
 ```
@@ -2290,6 +2336,8 @@ max tasks list [query] [options]
 
 добавить задачу для сохранённого сообщения или заметки — обещания или просьбы
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max tasks add <message> [options]
 ```
@@ -2310,6 +2358,8 @@ max tasks add <message> [options]
 
 задать название, описание, срок и следующую проверку задачи; в мессенджер ничего не уходит
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max tasks plan <task> [options]
 ```
@@ -2327,7 +2377,9 @@ max tasks plan <task> [options]
 
 ### `max tasks link`
 
-привязать к задаче то, к чему она относится, — сообщения, чаты, людей, документы, ссылки, — чтобы потом прочитать контекст
+привязать к задаче сообщения, чаты, людей или ссылки — или другую задачу: task:<id>
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max tasks link <task> [targets] [options]
@@ -2336,12 +2388,12 @@ max tasks link <task> [targets] [options]
 | Аргумент | | Что это |
 |---|---|---|
 | `task` | обязательный | ID или ключ задачи, как его показывает tasks list. |
-| `targets` | необязательный | локаторы msg:, person:<id>, document:<id>, note:<id> или URL. |
+| `targets` | необязательный | локаторы msg:, person:<id>, document:<id>, note:<id>, URL; или task:<id>, который связывает две задачи проекта. |
 
 | Опция | Что делает |
 |---|---|
 | `--chat <chat>` | чат, к которому она относится, можно повторять; чат: его ID или часть названия. |
-| `--kind <kind>` | related-to (по умолчанию), evidence — подтверждает, что задача настоящая, — или created-from. |
+| `--kind <kind>` | related-to (по умолчанию), evidence — подтверждает, что задача настоящая, — или created-from; для task:<id> — related-to, blocked-by или follow-up-of. |
 
 ### `max tasks show`
 
@@ -2378,6 +2430,8 @@ max tasks agenda [query] [options]
 
 закрыть задачу: done либо dismissed, если ответ не нужен; закрытая задача остаётся закрытой
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max tasks close <task> [options]
 ```
@@ -2398,6 +2452,8 @@ the conversations inside a chat, found in the stored messages by replies, mentio
 ### `max conversations build`
 
 find a chat's conversations in what the store holds, replacing the last build; without --chat, every chat that changed since its build and every group never built; never asks the messenger
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max conversations build [options]
@@ -2519,6 +2575,8 @@ your agent's answers: which earlier message each message of a batch answers
 
 store your agent's answer to a batch, read as JSON from stdin: { "model", "answers": [{ "message", "parent", "confidence" }] }; all or nothing
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max conversations links add [options]
 ```
@@ -2530,6 +2588,8 @@ max conversations links add [options]
 #### `max conversations links clear`
 
 drop your agent's answers for a chat, or only one model's; messages are never touched
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max conversations links clear [options]
@@ -2556,6 +2616,8 @@ max conversations consents list
 
 
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max conversations consents revoke [options]
 ```
@@ -2568,6 +2630,8 @@ max conversations consents revoke [options]
 ### `max conversations embed`
 
 compute a vector for each chunk of a chat's conversations for search by meaning — on this machine, or with --provider through a service and your key; resumes where it stopped; without --chat, every built chat with chunks left, on this machine only
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max conversations embed [options]
@@ -2607,6 +2671,8 @@ max conversations embed status [options]
 
 drop a chat's vectors, or only one model's; messages and conversations are never touched
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max conversations embed clear [options]
 ```
@@ -2626,6 +2692,8 @@ max conversations embed clear [options]
 ### `max attachments extract`
 
 прочитать текст скачанных файлов — текст, текстовые слои PDF/DOCX, ODT/ODS/XLSX/PPTX/EPUB — в локальное хранилище, где их находит поиск
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max attachments extract [options]
@@ -2688,6 +2756,8 @@ the text of one file, as an agent read it
 #### `max attachments text set`
 
 сохранить текст, который агент прочитал из файла — скана, фотографии, — чтобы его находил поиск; ничего не отправляется
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max attachments text set <chat> [message] [options]
@@ -2779,7 +2849,7 @@ max tags list [query]
 
 ## `max mentions`
 
-телефоны, e-mail, ссылки и документы, найденные в сохранённых сообщениях
+телефоны, e-mail, ссылки, документы и имена людей, найденные в сохранённых сообщениях
 
 ### `max mentions list`
 
@@ -2812,7 +2882,7 @@ max mentions show <id>
 
 ### `max mentions confirm`
 
-указать, что это за упоминание, везде, где встречается его значение: владельца телефона, сохранённый документ
+указать, что это за упоминание: владельца телефона везде, где он записан, сохранённый документ, кого означает имя
 
 **Меняет что-то только на этом компьютере.**
 
@@ -2823,7 +2893,7 @@ max mentions confirm <id> [person] [options]
 | Аргумент | | Что это |
 |---|---|---|
 | `id` | обязательный | ID упоминания из mentions list. |
-| `person` | необязательный | person:<uid> или organization:<id> — владелец телефона или адреса; документу он не нужен. |
+| `person` | необязательный | person:<uid> или organization:<id> — владелец телефона или адреса; person:<uid> — тот, кого означает имя; документу он не нужен. |
 
 | Опция | Что делает |
 |---|---|
@@ -2831,7 +2901,7 @@ max mentions confirm <id> [person] [options]
 
 ### `max mentions reject`
 
-не настоящее упоминание или не стоит хранить: отклонить его значение везде и при следующих синхронизациях
+не настоящее упоминание: отклонить его значение везде и при следующих синхронизациях; имя — только там, где оно стоит
 
 **Меняет что-то только на этом компьютере.**
 
@@ -2854,8 +2924,61 @@ max mentions reject <id> [options]
 **Меняет что-то только на этом компьютере.**
 
 ```sh
-max mentions rebuild
+max mentions rebuild [kind]
 ```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `kind` | необязательный | только этот вид: person-name — после того как люди добавлены или переименованы. Одно из: `phone`, `email`, `url`, `document`, `person-name`. |
+
+## `max images`
+
+искать картинки по тому, что на них изображено, моделью на этом компьютере
+
+### `max images embed`
+
+посчитать вектор для каждой картинки, которую знает хранилище и для которой вектора ещё нет, — она скачивается через мессенджер, хранится только вектор; нужны `picture_search` в профиле и `images models download clip-b32`; продолжает с места остановки
+
+**Меняет что-то только на этом компьютере.**
+
+```sh
+max images embed [options]
+```
+
+| Опция | Что делает |
+|---|---|
+| `--chat <chat>` | только этот чат; чат: его ID или часть названия. |
+| `--limit <n>` | не больше стольких картинок за один запуск; если не указано — 100. |
+
+### `max images models`
+
+модели, которые читают картинки, для `images embed` и поиска по картинкам
+
+#### `max images models list`
+
+модели для картинок: какие скачаны и какая используется по умолчанию
+
+```sh
+max images models list [query]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | условия поле:значение; этот список пока ни по одному полю не фильтрует. |
+
+#### `max images models download`
+
+скачать модель для картинок один раз, со сверкой sha256, которую ожидает эта версия
+
+**Меняет что-то только на этом компьютере.**
+
+```sh
+max images models download <model>
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `model` | обязательный | ID модели из `images models list`. |
 
 ## `max metadata`
 
@@ -3037,6 +3160,8 @@ max search conversations <query> [options]
 
 сохранить поиск под именем, не выполняя его; search messages --saved <name> выполняет его
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max searches create <name> [query] [options]
 ```
@@ -3103,6 +3228,8 @@ max searches history [options]
 
 delete a saved search, or one run from the history
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max searches delete <name|id>
 ```
@@ -3115,6 +3242,8 @@ max searches delete <name|id>
 
 empty the history; saved searches stay
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max searches clear
 ```
@@ -3126,6 +3255,8 @@ the waits MAX asked this profile to keep, and a hold on its writes
 ### `max flood clear`
 
 забыть их, снять приостановку и ограничение темпа профиля, когда MAX больше не ограничивает аккаунт; на стороне MAX ничего не меняется
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max flood clear
@@ -3155,6 +3286,8 @@ max models audio list [query]
 
 download a speech model once, checked against the sha256 this version expects
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max models audio download <model>
 ```
@@ -3183,6 +3316,8 @@ max models text list [query]
 
 download an embedding model once, checked against the sha256 this version expects
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max models text download <model> [options]
 ```
@@ -3203,6 +3338,8 @@ API keys for embedding and analysis providers
 
 store a key, typed at a hidden prompt or piped on stdin — never as an argument
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max models text key set <provider>
 ```
@@ -3214,6 +3351,8 @@ max models text key set <provider>
 #### `max models text key remove`
 
 forget a stored key
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max models text key remove <provider>
@@ -3299,7 +3438,7 @@ max polls create <chat> <question> <answers> [options]
 | `--revote` | people may change their vote. |
 | `--silent` | send without a notification. |
 | `--send-as <id>` | публиковать от имени одной из сущностей в списке `chats send-as`; обязательно, если чат по умолчанию публикует от другого имени. |
-| `--send-id <id>` | repeat a create whose outcome was unknown, without risking a second poll. |
+| `--operation-id <id>` | повторить создание с неизвестным исходом, не рискуя вторым опросом. |
 
 ## `max reactions`
 
@@ -3635,6 +3774,8 @@ max replies test [rule] [options]
 
 stop every reply rule of this profile at once, a running serve too; resume undoes it
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max replies pause
 ```
@@ -3642,6 +3783,8 @@ max replies pause
 ### `max replies resume`
 
 let the reply rules answer again after pause
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max replies resume
@@ -3658,6 +3801,8 @@ max replies status
 ## `max serve`
 
 stay connected to MAX and stream new messages to `max watch`, until Ctrl-C
+
+**Меняет что-то в MAX.**
 
 ```sh
 max serve [options]
@@ -3677,6 +3822,8 @@ max serve [options]
 
 start serve in the background — through the unit if one is installed — and answer once it connects
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max server start [options]
 ```
@@ -3689,6 +3836,8 @@ max server start [options]
 
 stop this profile's serve — through the unit if it runs under one
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max server stop
 ```
@@ -3696,6 +3845,8 @@ max server stop
 ### `max server restart`
 
 stop it and start it again
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max server restart [options]
@@ -3729,6 +3880,8 @@ max server logs [options]
 
 write a systemd user unit or a launchd agent for this profile; starts nothing
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max server install
 ```
@@ -3736,6 +3889,8 @@ max server install
 ### `max server uninstall`
 
 remove this profile's unit; stop it first
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max server uninstall
@@ -3748,6 +3903,8 @@ max server uninstall
 ### `max schedule command`
 
 запускать max <args…> по таймеру — чтение сохраняет прочитанное, так история чата наполняет хранилище
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max schedule command <name> <args> [options]
@@ -3767,6 +3924,8 @@ max schedule command <name> <args> [options]
 ### `max schedule agent`
 
 запускать агента (claude или codex) с заданием по таймеру; он работает с MAX_READ_ONLY=1, поэтому читает и готовит черновики, но не может отправлять, — ответ сохраняется, и приходит уведомление
+
+**Меняет что-то только на этом компьютере.**
 
 ```sh
 max schedule agent <name> <harness> <prompt> [options]
@@ -3797,6 +3956,8 @@ max schedule list
 
 выполнить расписание сейчас, как это сделал бы его таймер, и дождаться окончания
 
+**Меняет что-то в MAX.**
+
 ```sh
 max schedule run <name>
 ```
@@ -3809,6 +3970,8 @@ max schedule run <name>
 
 остановить расписание и удалить его таймер; прежние результаты остаются
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max schedule remove <name>
 ```
@@ -3820,6 +3983,8 @@ max schedule remove <name>
 ### `max schedule exec`
 
 то, что запускает таймер по файлу расписания; чтобы запустить вручную, используйте run
+
+**Меняет что-то в MAX.**
 
 ```sh
 max schedule exec <file>
@@ -3932,6 +4097,8 @@ what a problem report holds and where it goes; writes nothing
 
 write a problem report to a file, and print how to send it
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max doctor report create [options]
 ```
@@ -4028,6 +4195,8 @@ max skill show [name]
 
 write SKILL.md to \~/.claude/skills/max-cli/ (Claude Code) and \~/.agents/skills/max-cli/ (Codex, Gemini CLI)
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max skill install [options]
 ```
@@ -4056,6 +4225,8 @@ max commands schema <path>
 
 upgrade max with the package manager that installed it; --check only looks
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max upgrade [options]
 ```
@@ -4079,6 +4250,8 @@ max complete [words]
 ## `max mcp`
 
 serve this profile to an agent over MCP, on stdin and stdout — `claude mcp add max -- max mcp`
+
+**Меняет что-то в MAX.**
 
 ```sh
 max mcp [options]
@@ -4337,7 +4510,7 @@ max bot chats members remove <chat> <person> [options]
 
 #### `max bot chats members list`
 
-members of a chat, a page at a time — --marker takes the `marker` the last page gave
+участники чата, по странице за раз — --cursor берёт `page.next_cursor`, который вернула прошлая страница
 
 ```sh
 max bot chats members list <chat> [options]
@@ -4350,7 +4523,7 @@ max bot chats members list <chat> [options]
 | Опция | Что делает |
 |---|---|
 | `--limit <n>` | сколько, до 100. |
-| `--marker <marker>` | continue from here. |
+| `--cursor <cursor>` | продолжить отсюда. |
 
 #### `max bot chats members add`
 
@@ -4679,6 +4852,8 @@ max bot sends list
 
 print new messages as they arrive and keep them, until Ctrl-C or --timeout (either ends it normally)
 
+**Меняет что-то в MAX.**
+
 ```sh
 max bot watch [options]
 ```
@@ -4824,6 +4999,8 @@ the bot's local copy on this machine
 
 fetch a chat's history into the bot's local copy, newest first; run it again to continue
 
+**Меняет что-то только на этом компьютере.**
+
 ```sh
 max bot store fetch <chat> [options]
 ```
@@ -4843,6 +5020,8 @@ max bot store fetch <chat> [options]
 ### `max bot mcp`
 
 serve this bot to an agent over MCP, on stdin and stdout — `claude mcp add sales-bot -- max sales bot mcp`
+
+**Меняет что-то в MAX.**
 
 ```sh
 max bot mcp [options]
@@ -5510,4 +5689,4 @@ max bot api get-updates [options]
 
 `0` и только `0` означает, что операция выполнена. `14` — `outcome_unknown` — означает, что
 сообщение **могло** уйти: не отправлено и не провалено, и повторять его можно только с тем же
-`--send-id`.
+`--operation-id`.

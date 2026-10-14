@@ -55,6 +55,8 @@ the stored MAX session for this profile
 
 log this profile in to MAX
 
+**Changes something in MAX.**
+
 ```sh
 max session start [method]
 ```
@@ -404,6 +406,8 @@ max chats members history <chat> [query]
 
 read a group's whole member list into the local store's member history: who joined, who left, daily counts and profile changes; someone is recorded as gone only when every member was read
 
+**Changes something on this computer only.**
+
 ```sh
 max chats members fetch <chat> [options]
 ```
@@ -479,6 +483,8 @@ max chats tracking show <chat>
 
 fetch this chat's member list daily while serve runs, from its next run
 
+**Changes something on this computer only.**
+
 ```sh
 max chats tracking add <chat>
 ```
@@ -490,6 +496,8 @@ max chats tracking add <chat>
 #### `max chats tracking remove`
 
 stop fetching it daily; the history already kept stays
+
+**Changes something on this computer only.**
 
 ```sh
 max chats tracking remove <chat>
@@ -1113,6 +1121,8 @@ max contacts notes remove <person> <id>
 
 forget where the last sync left off and take the whole list again
 
+**Changes something on this computer only.**
+
 ```sh
 max contacts sync
 ```
@@ -1270,6 +1280,8 @@ max contacts check <person> [options]
 
 record that two people in the store are one person — the same name is never enough
 
+**Changes something on this computer only.**
+
 ```sh
 max contacts link <person> <other>
 ```
@@ -1282,6 +1294,8 @@ max contacts link <person> <other>
 ### `max contacts unlink`
 
 undo contacts link for one identity: it is a person of its own again
+
+**Changes something on this computer only.**
 
 ```sh
 max contacts unlink <person>
@@ -1382,6 +1396,8 @@ max messages link <chat> [message]
 
 save a message's photos, files, videos and voice notes to a folder — or a whole chat's with --all
 
+**Changes something on this computer only.**
+
 ```sh
 max messages download <chat> [message] [options]
 ```
@@ -1419,6 +1435,8 @@ max messages evidence <chat> [options]
 ### `max messages sync`
 
 bring a chat's history in the local store up to date, newest first; run it again to continue; --all syncs every chat
+
+**Changes something on this computer only.**
 
 ```sh
 max messages sync [chat] [options]
@@ -1481,7 +1499,7 @@ max messages send <chat> [text] [options]
 | `--topic <id>` | send to this forum topic; unsupported by messengers without topics. |
 | `--reply-to <message>` | answer this message, by its id in the same chat. |
 | `--send-as <id>` | post as one of the identities `chats send-as` lists; required where the chat posts as someone else by default. |
-| `--send-id <id>` | repeat a send whose outcome was unknown, without risking a second copy. |
+| `--operation-id <id>` | repeat a send whose outcome was unknown, without risking a second copy. |
 | `--silent` | deliver without a notification. |
 | `--no-preview` | no preview card for a link in the text. |
 | `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
@@ -1565,7 +1583,7 @@ max messages forward <chat> <message> [options]
 | `--to <chat>` | where it goes: a chat: its id, or part of its title. |
 | `--silent` | deliver it without a notification. |
 | `--send-as <id>` | post as one of the identities `chats send-as` lists for the --to chat; required where the chat posts as someone else by default. |
-| `--send-id <id>` | repeat a forward whose outcome was unknown, without risking a second copy. |
+| `--operation-id <id>` | repeat a forward whose outcome was unknown, without risking a second copy. |
 
 ### `max messages pin`
 
@@ -1653,6 +1671,8 @@ max store gaps plan <chat>
 
 fetch bounded interior gaps and recheck coverage; never delete unseen messages
 
+**Changes something on this computer only.**
+
 ```sh
 max store gaps repair <chat> [options]
 ```
@@ -1714,6 +1734,8 @@ max store jobs show [job]
 
 stop a running background job after its current page; a later sync resumes where it stopped
 
+**Changes something on this computer only.**
+
 ```sh
 max store jobs cancel <job>
 ```
@@ -1725,6 +1747,8 @@ max store jobs cancel <job>
 #### `max store jobs retry`
 
 start a partial, failed or died job again, as a new job; the sync resumes where the store stopped
+
+**Changes something on this computer only.**
 
 ```sh
 max store jobs retry [job] [options]
@@ -1752,6 +1776,8 @@ max store jobs clear
 
 a chat's stored messages, oldest first: --jsonl one message per line, --json the list envelope of messages; never asks the messenger
 
+**Changes something on this computer only.**
+
 ```sh
 max store export [chats] [options]
 ```
@@ -1773,6 +1799,8 @@ max store export [chats] [options]
 ### `max store clear`
 
 delete from the store the chats this account has left, with their messages
+
+**Changes something on this computer only.**
 
 ```sh
 max store clear [options]
@@ -1803,6 +1831,8 @@ max store check
 
 bring the store up to this build's schema, then normalize, index and stem the messages and notes stored before it
 
+**Changes something on this computer only.**
+
 ```sh
 max store migrate
 ```
@@ -1811,6 +1841,8 @@ max store migrate
 
 rebuild the word index, its typo vocabulary, the stems, the files' word index, the notes' indexes and who took part in what, from what is stored; loses nothing
 
+**Changes something on this computer only.**
+
 ```sh
 max store reindex
 ```
@@ -1818,6 +1850,8 @@ max store reindex
 ### `max store backup`
 
 copy the store into a new file, while it is in use; never overwrites a file
+
+**Changes something on this computer only.**
 
 ```sh
 max store backup <file> [options]
@@ -1835,6 +1869,8 @@ max store backup <file> [options]
 
 put a backup in place of the store; the store it replaces is kept beside it, never deleted
 
+**Changes something on this computer only.**
+
 ```sh
 max store restore <file>
 ```
@@ -1846,6 +1882,8 @@ max store restore <file>
 ### `max store decrypt`
 
 open a file written with --encrypt into a new file; asks for its password
+
+**Changes something on this computer only.**
 
 ```sh
 max store decrypt <file> [options]
@@ -1863,6 +1901,8 @@ max store decrypt <file> [options]
 
 bring every table to this build's shape, deleting nothing: a table of the wrong shape is kept as a copy beside a new one
 
+**Changes something on this computer only.**
+
 ```sh
 max store repair [options]
 ```
@@ -1874,6 +1914,8 @@ max store repair [options]
 ### `max store reset`
 
 back the store up beside itself, then delete it and start an empty one at this build's schema; asks first, or --yes
+
+**Changes something on this computer only.**
 
 ```sh
 max store reset [options]
@@ -1890,6 +1932,8 @@ the tables `store repair` kept as copies
 #### `max store copies delete`
 
 delete one copy `store repair` kept, named exactly; refuses any other table
+
+**Changes something on this computer only.**
 
 ```sh
 max store copies delete <name>
@@ -2243,6 +2287,8 @@ max stats tasks show [options]
 
 a chart's data from a chat's statistics, and optionally a dark SVG or PNG image
 
+**Changes something on this computer only.**
+
 ```sh
 max stats charts <chat> [options]
 ```
@@ -2283,6 +2329,8 @@ max tasks list [query] [options]
 
 add a task for a stored message or note — a promise, a request
 
+**Changes something on this computer only.**
+
 ```sh
 max tasks add <message> [options]
 ```
@@ -2303,6 +2351,8 @@ max tasks add <message> [options]
 
 set a task's title, description, due date and next check; nothing reaches the messenger
 
+**Changes something on this computer only.**
+
 ```sh
 max tasks plan <task> [options]
 ```
@@ -2320,7 +2370,9 @@ max tasks plan <task> [options]
 
 ### `max tasks link`
 
-link a task to what it concerns — messages, chats, people, documents, URLs — to read around later
+link a task to messages, chats, people or URLs — or to another task: task:<id>
+
+**Changes something on this computer only.**
 
 ```sh
 max tasks link <task> [targets] [options]
@@ -2329,12 +2381,12 @@ max tasks link <task> [targets] [options]
 | Argument | | Meaning |
 |---|---|---|
 | `task` | required | the task's id or key, as tasks list shows it. |
-| `targets` | optional | msg: locators, person:<id>, document:<id>, note:<id>, or a URL. |
+| `targets` | optional | msg: locators, person:<id>, document:<id>, note:<id>, a URL; or task:<id>, which links two project tasks. |
 
 | Option | Purpose |
 |---|---|
 | `--chat <chat>` | a chat it concerns, repeatable; a chat: its id, or part of its title. |
-| `--kind <kind>` | related-to (default), evidence — it shows the task is real — or created-from. |
+| `--kind <kind>` | related-to (default), evidence — it shows the task is real — or created-from; for task:<id>, related-to, blocked-by or follow-up-of. |
 
 ### `max tasks show`
 
@@ -2371,6 +2423,8 @@ max tasks agenda [query] [options]
 
 close a task: done, or dismissed when it needs no answer; a closed task stays closed
 
+**Changes something on this computer only.**
+
 ```sh
 max tasks close <task> [options]
 ```
@@ -2391,6 +2445,8 @@ the conversations inside a chat, found in the stored messages by replies, mentio
 ### `max conversations build`
 
 find a chat's conversations in what the store holds, replacing the last build; without --chat, every chat that changed since its build and every group never built; never asks the messenger
+
+**Changes something on this computer only.**
 
 ```sh
 max conversations build [options]
@@ -2512,6 +2568,8 @@ your agent's answers: which earlier message each message of a batch answers
 
 store your agent's answer to a batch, read as JSON from stdin: { "model", "answers": [{ "message", "parent", "confidence" }] }; all or nothing
 
+**Changes something on this computer only.**
+
 ```sh
 max conversations links add [options]
 ```
@@ -2523,6 +2581,8 @@ max conversations links add [options]
 #### `max conversations links clear`
 
 drop your agent's answers for a chat, or only one model's; messages are never touched
+
+**Changes something on this computer only.**
 
 ```sh
 max conversations links clear [options]
@@ -2549,6 +2609,8 @@ max conversations consents list
 
 
 
+**Changes something on this computer only.**
+
 ```sh
 max conversations consents revoke [options]
 ```
@@ -2561,6 +2623,8 @@ max conversations consents revoke [options]
 ### `max conversations embed`
 
 compute a vector for each chunk of a chat's conversations for search by meaning — on this machine, or with --provider through a service and your key; resumes where it stopped; without --chat, every built chat with chunks left, on this machine only
+
+**Changes something on this computer only.**
 
 ```sh
 max conversations embed [options]
@@ -2600,6 +2664,8 @@ max conversations embed status [options]
 
 drop a chat's vectors, or only one model's; messages and conversations are never touched
 
+**Changes something on this computer only.**
+
 ```sh
 max conversations embed clear [options]
 ```
@@ -2619,6 +2685,8 @@ the files of stored messages: their text in the local store, where search finds 
 ### `max attachments extract`
 
 read the text of downloaded files — text, PDF/DOCX text layers, ODT/ODS/XLSX/PPTX/EPUB — into the local store, where search finds them
+
+**Changes something on this computer only.**
 
 ```sh
 max attachments extract [options]
@@ -2681,6 +2749,8 @@ the text of one file, as an agent read it
 #### `max attachments text set`
 
 keep the text an agent read from a file — a scan, a photo — so search finds it; nothing is sent
+
+**Changes something on this computer only.**
 
 ```sh
 max attachments text set <chat> [message] [options]
@@ -2772,7 +2842,7 @@ max tags list [query]
 
 ## `max mentions`
 
-phones, e-mail, links and documents found in stored messages
+phones, e-mail, links, documents and people's names found in stored messages
 
 ### `max mentions list`
 
@@ -2805,7 +2875,7 @@ max mentions show <id>
 
 ### `max mentions confirm`
 
-say what a mention is, everywhere its value is written: a phone's owner, the stored document
+say what a mention is: a phone's owner everywhere it is written, the stored document, who a name means
 
 **Changes something on this computer only.**
 
@@ -2816,7 +2886,7 @@ max mentions confirm <id> [person] [options]
 | Argument | | Meaning |
 |---|---|---|
 | `id` | required | the mention's id, from mentions list. |
-| `person` | optional | person:<uid> or organization:<id> that owns the phone or the address; a document needs none. |
+| `person` | optional | person:<uid> or organization:<id> that owns the phone or the address; person:<uid> a name means; a document needs none. |
 
 | Option | Purpose |
 |---|---|
@@ -2824,7 +2894,7 @@ max mentions confirm <id> [person] [options]
 
 ### `max mentions reject`
 
-not a real mention, or not worth keeping: dismiss its value everywhere, and on later syncs
+not a real mention: dismiss its value everywhere and on later syncs; a name only where it is
 
 **Changes something on this computer only.**
 
@@ -2847,8 +2917,61 @@ find the mentions of every stored message again; decisions are kept
 **Changes something on this computer only.**
 
 ```sh
-max mentions rebuild
+max mentions rebuild [kind]
 ```
+
+| Argument | | Meaning |
+|---|---|---|
+| `kind` | optional | only this kind: person-name after people were added or renamed. One of: `phone`, `email`, `url`, `document`, `person-name`. |
+
+## `max images`
+
+search pictures by what they show, with a model on this machine
+
+### `max images embed`
+
+compute a vector for each picture the store knows and has none for — downloading it through the messenger, keeping only the vector; needs `picture_search` on in the profile and `images models download clip-b32`; resumes where it stopped
+
+**Changes something on this computer only.**
+
+```sh
+max images embed [options]
+```
+
+| Option | Purpose |
+|---|---|
+| `--chat <chat>` | only this chat; a chat: its id, or part of its title. |
+| `--limit <n>` | at most this many pictures in one run; 100 if not given. |
+
+### `max images models`
+
+models that read pictures, for `images embed` and picture search
+
+#### `max images models list`
+
+the picture models, which are downloaded, and which one is the default
+
+```sh
+max images models list [query]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | field:value terms; this list filters by none yet. |
+
+#### `max images models download`
+
+download a picture model once, checked against the sha256 this version expects
+
+**Changes something on this computer only.**
+
+```sh
+max images models download <model>
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `model` | required | a model id from `images models list`. |
 
 ## `max metadata`
 
@@ -3030,6 +3153,8 @@ saved searches and the history of search messages and stats messages show, kept 
 
 save a search under a name without running it; search messages --saved <name> runs it
 
+**Changes something on this computer only.**
+
 ```sh
 max searches create <name> [query] [options]
 ```
@@ -3096,6 +3221,8 @@ max searches history [options]
 
 delete a saved search, or one run from the history
 
+**Changes something on this computer only.**
+
 ```sh
 max searches delete <name|id>
 ```
@@ -3108,6 +3235,8 @@ max searches delete <name|id>
 
 empty the history; saved searches stay
 
+**Changes something on this computer only.**
+
 ```sh
 max searches clear
 ```
@@ -3119,6 +3248,8 @@ the waits MAX asked this profile to keep, and a hold on its writes
 ### `max flood clear`
 
 forget them, lift the hold and the profile's pace, once MAX no longer limits the account; changes nothing there
+
+**Changes something on this computer only.**
 
 ```sh
 max flood clear
@@ -3148,6 +3279,8 @@ max models audio list [query]
 
 download a speech model once, checked against the sha256 this version expects
 
+**Changes something on this computer only.**
+
 ```sh
 max models audio download <model>
 ```
@@ -3176,6 +3309,8 @@ max models text list [query]
 
 download an embedding model once, checked against the sha256 this version expects
 
+**Changes something on this computer only.**
+
 ```sh
 max models text download <model> [options]
 ```
@@ -3196,6 +3331,8 @@ API keys for embedding and analysis providers
 
 store a key, typed at a hidden prompt or piped on stdin — never as an argument
 
+**Changes something on this computer only.**
+
 ```sh
 max models text key set <provider>
 ```
@@ -3207,6 +3344,8 @@ max models text key set <provider>
 #### `max models text key remove`
 
 forget a stored key
+
+**Changes something on this computer only.**
 
 ```sh
 max models text key remove <provider>
@@ -3292,7 +3431,7 @@ max polls create <chat> <question> <answers> [options]
 | `--revote` | people may change their vote. |
 | `--silent` | send without a notification. |
 | `--send-as <id>` | post as one of the identities `chats send-as` lists; required where the chat posts as someone else by default. |
-| `--send-id <id>` | repeat a create whose outcome was unknown, without risking a second poll. |
+| `--operation-id <id>` | repeat a create whose outcome was unknown, without risking a second poll. |
 
 ## `max reactions`
 
@@ -3628,6 +3767,8 @@ max replies test [rule] [options]
 
 stop every reply rule of this profile at once, a running serve too; resume undoes it
 
+**Changes something on this computer only.**
+
 ```sh
 max replies pause
 ```
@@ -3635,6 +3776,8 @@ max replies pause
 ### `max replies resume`
 
 let the reply rules answer again after pause
+
+**Changes something on this computer only.**
 
 ```sh
 max replies resume
@@ -3651,6 +3794,8 @@ max replies status
 ## `max serve`
 
 stay connected to MAX and stream new messages to `max watch`, until Ctrl-C
+
+**Changes something in MAX.**
 
 ```sh
 max serve [options]
@@ -3670,6 +3815,8 @@ max serve [options]
 
 start serve in the background — through the unit if one is installed — and answer once it connects
 
+**Changes something on this computer only.**
+
 ```sh
 max server start [options]
 ```
@@ -3682,6 +3829,8 @@ max server start [options]
 
 stop this profile's serve — through the unit if it runs under one
 
+**Changes something on this computer only.**
+
 ```sh
 max server stop
 ```
@@ -3689,6 +3838,8 @@ max server stop
 ### `max server restart`
 
 stop it and start it again
+
+**Changes something on this computer only.**
 
 ```sh
 max server restart [options]
@@ -3722,6 +3873,8 @@ max server logs [options]
 
 write a systemd user unit or a launchd agent for this profile; starts nothing
 
+**Changes something on this computer only.**
+
 ```sh
 max server install
 ```
@@ -3729,6 +3882,8 @@ max server install
 ### `max server uninstall`
 
 remove this profile's unit; stop it first
+
+**Changes something on this computer only.**
 
 ```sh
 max server uninstall
@@ -3741,6 +3896,8 @@ run a max command or an agent later or on a timer (systemd, launchd, Task Schedu
 ### `max schedule command`
 
 run max <args…> on a timer — reads save what they read, so this is how a chat's history fills the store
+
+**Changes something on this computer only.**
 
 ```sh
 max schedule command <name> <args> [options]
@@ -3760,6 +3917,8 @@ max schedule command <name> <args> [options]
 ### `max schedule agent`
 
 start an agent (claude or codex) with a prompt on a timer; it runs with MAX_READ_ONLY=1, so it reads and drafts and cannot send — its answer is kept and you are notified
+
+**Changes something on this computer only.**
 
 ```sh
 max schedule agent <name> <harness> <prompt> [options]
@@ -3790,6 +3949,8 @@ max schedule list
 
 run a schedule now, as its timer would, and wait for it
 
+**Changes something in MAX.**
+
 ```sh
 max schedule run <name>
 ```
@@ -3802,6 +3963,8 @@ max schedule run <name>
 
 stop a schedule and remove its timer; its past output stays
 
+**Changes something on this computer only.**
+
 ```sh
 max schedule remove <name>
 ```
@@ -3813,6 +3976,8 @@ max schedule remove <name>
 ### `max schedule exec`
 
 what a timer runs, given the schedule's file; to run one by hand, use run
+
+**Changes something in MAX.**
 
 ```sh
 max schedule exec <file>
@@ -3925,6 +4090,8 @@ what a problem report holds and where it goes; writes nothing
 
 write a problem report to a file, and print how to send it
 
+**Changes something on this computer only.**
+
 ```sh
 max doctor report create [options]
 ```
@@ -4021,6 +4188,8 @@ max skill show [name]
 
 write SKILL.md to \~/.claude/skills/max-cli/ (Claude Code) and \~/.agents/skills/max-cli/ (Codex, Gemini CLI)
 
+**Changes something on this computer only.**
+
 ```sh
 max skill install [options]
 ```
@@ -4049,6 +4218,8 @@ max commands schema <path>
 
 upgrade max with the package manager that installed it; --check only looks
 
+**Changes something on this computer only.**
+
 ```sh
 max upgrade [options]
 ```
@@ -4072,6 +4243,8 @@ max complete [words]
 ## `max mcp`
 
 serve this profile to an agent over MCP, on stdin and stdout — `claude mcp add max -- max mcp`
+
+**Changes something in MAX.**
 
 ```sh
 max mcp [options]
@@ -4330,7 +4503,7 @@ max bot chats members remove <chat> <person> [options]
 
 #### `max bot chats members list`
 
-members of a chat, a page at a time — --marker takes the `marker` the last page gave
+members of a chat, a page at a time — --cursor takes the `page.next_cursor` the last page gave
 
 ```sh
 max bot chats members list <chat> [options]
@@ -4343,7 +4516,7 @@ max bot chats members list <chat> [options]
 | Option | Purpose |
 |---|---|
 | `--limit <n>` | how many, up to 100. |
-| `--marker <marker>` | continue from here. |
+| `--cursor <cursor>` | continue from here. |
 
 #### `max bot chats members add`
 
@@ -4672,6 +4845,8 @@ max bot sends list
 
 print new messages as they arrive and keep them, until Ctrl-C or --timeout (either ends it normally)
 
+**Changes something in MAX.**
+
 ```sh
 max bot watch [options]
 ```
@@ -4817,6 +4992,8 @@ the bot's local copy on this machine
 
 fetch a chat's history into the bot's local copy, newest first; run it again to continue
 
+**Changes something on this computer only.**
+
 ```sh
 max bot store fetch <chat> [options]
 ```
@@ -4836,6 +5013,8 @@ max bot store fetch <chat> [options]
 ### `max bot mcp`
 
 serve this bot to an agent over MCP, on stdin and stdout — `claude mcp add sales-bot -- max sales bot mcp`
+
+**Changes something in MAX.**
 
 ```sh
 max bot mcp [options]
@@ -5501,4 +5680,4 @@ Scripts should branch on the code, not the message: wording may change, codes re
 | `130` | `cancelled` |
 | `1` | Any other error |
 
-`0`, and only `0`, means the operation succeeded. `14` — `outcome_unknown` — means the message **may** have been sent: its outcome is neither confirmed nor failed. Retry only with the same `--send-id`.
+`0`, and only `0`, means the operation succeeded. `14` — `outcome_unknown` — means the message **may** have been sent: its outcome is neither confirmed nor failed. Retry only with the same `--operation-id`.

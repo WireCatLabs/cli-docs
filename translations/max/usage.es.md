@@ -143,7 +143,7 @@ Cerrar sesión en MAX y olvidar la sesión en este ordenador:
 max personal session end
 ```
 
-`session end` termina la sesión en el servidor de MAX (`revokedOnServer: true`). Si copiaste el token de una pestaña de web.max.ru, también se cierra la sesión de esa pestaña.
+`session end` termina la sesión en el servidor de MAX (`revoked_on_server: true`). Si copiaste el token de una pestaña de web.max.ru, también se cierra la sesión de esa pestaña.
 
 `account show --json` contiene los campos MAX `id`, `name`, `phone`, `description` y `username: null` como formato de cuenta general. El número está enmascarado; `--show-phone` lo muestra claramente en su totalidad.
 
@@ -333,7 +333,7 @@ max personal inbox --transcribe
 
 `--transcribe` procesa solo los mensajes de voz mostrados que todavía no tienen texto; `--model` elige el modelo para una ejecución. Primero `max` descarga todas las grabaciones necesarias y después cierra la conexión antes de ejecutar el modelo. El texto aparece bajo el mensaje de voz con el icono 🎤, o en `transcript` con `--json`. Las transcripciones fallidas y su motivo aparecen en `missing`; los mensajes se muestran igualmente. Si el modelo no está descargado, el comando indica cómo descargarlo, pero no lo hace automáticamente. Los modelos se guardan en `~/.local/share/WireCat/models/audio`, una copia compartida por `max` y `tg`.
 
-Las transcripciones guardadas se muestran sin opción. Con `--offline` no se transcriben nuevas notas porque no se pueden descargar.
+Las transcripciones guardadas se muestran sin opción: el texto está en este ordenador. Las demás aparecen sin la opción en `missing` con la entrada `transcript`, así la respuesta no parece completa. Con `--offline` no se transcriben nuevas notas porque no se pueden descargar.
 
 ### Archivos
 
@@ -559,7 +559,7 @@ max personal stats charts synthetic-group --chart-kind messages --by day --timez
 
 El JSON es `{item}` con la descripción del gráfico y, al guardar la imagen, también `file` con ruta y tamaño. La imagen se escribe solo en un archivo nuevo, sin sobrescribirla. Una fecha que falta sigue siendo un vacío y se indican datos incompletos en la descripción y la imagen. `membership` requiere eventos de chat en línea y no está disponible con `--offline`. A través de MCP `max_read` (`command: "stats charts"`) devuelve JSON desde el almacenamiento local, sin conectarse ni escribir archivos; `format: "png"` agrega una imagen PNG y JSON con `chart` y tamaño `image`. Las entradas y salidas no están disponibles en el mismo. La lectura está sujeta al permiso `messages`. `--jsonl` y la imagen de salida estándar no están disponibles.
 
-![Gráfico sobre datos ficticios](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.51.0/docs/images/stats-charts.png)
+![Gráfico sobre datos ficticios](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.52.0/docs/images/stats-charts.png)
 
 Clasificaciones de mensajes y autores: [métricas, puntuaciones y evidence](./rankings.md).
 
@@ -619,10 +619,10 @@ max personal messages scheduled 0                                       # что
 
 El mensaje espera **en el servidor MAX** y se envía aunque el ordenador esté apagado. MAX descarta los segundos y envía al principio del minuto, redondeando hacia abajo. Rechaza tiempos inferiores a un minuto o superiores a un año.
 
-- Respuesta - `{item: {operation_id, send_id, message, scheduled_for}}`: mensaje en cola y hora de envío; el paso `messages.scheduled` en `next` muestra la cola. **Cuando salga, tendrá una identificación diferente.**
+- Respuesta - `{item: {operation_id, message, scheduled_for}}`: mensaje en cola y hora de envío; el paso `messages.scheduled` en `next` muestra la cola. **Cuando salga, tendrá una identificación diferente.**
 - Con `--silent` - fallo: la aplicación MAX siempre envía una notificación retrasada.
 - Las protecciones de envío (solo lectura, lista de destinatarios, límite por hora) cuentan el mensaje ahora, en el momento de hacer cola.
-- Si no hay respuesta no habrá repetición: `outcome_unknown` aconseja consultar la cola, y no se acepta `--send-id` con `--at-time`. No se ha probado si MAX colapsa la repetición diferida.
+- Si no hay respuesta no habrá repetición: `outcome_unknown` aconseja consultar la cola, y no se acepta `--operation-id` con `--at-time`. No se ha probado si MAX colapsa la repetición diferida.
 - **Cancelar o cambiar - en la aplicación MAX.** `max` no envía eliminación.
 
 ### Fotos, vídeos, archivos y voces.
@@ -761,13 +761,13 @@ Los ID pueden pasarse como argumentos separados o separados por comas. Tras conf
 
 ### Si se desconoce el resultado
 
-Al enviar, si no llega respuesta, el comando devuelve `outcome_unknown` (código `14`), **ni «enviado» ni «error»**: el mensaje pudo enviarse. El error incluye `--send-id`, identificador para reintentar sin crear una segunda copia:
+Al enviar, si no llega respuesta, el comando devuelve `outcome_unknown` (código `14`), **ni «enviado» ni «error»**: el mensaje pudo enviarse. El error incluye `--operation-id`, identificador para reintentar sin crear una segunda copia:
 
 ```sh
-max personal messages send 0 "текст" --send-id 1789784741828
+max personal messages send 0 "текст" --operation-id 1789784741828
 ```
 
-MAX no crea un segundo mensaje si vino una repetición con el mismo `cid`. Si la respuesta de reenvío fue `outcome_unknown`, repítala solo con `--send-id` debido al error; MAX dejará una copia. Una repetición sin él será una segunda copia. El mensaje diferido no se repite: comprobar `max personal messages scheduled <чат>`.
+MAX no crea un segundo mensaje si vino una repetición con el mismo `cid`. Si la respuesta de reenvío fue `outcome_unknown`, repítala solo con `--operation-id` debido al error; MAX dejará una copia. Una repetición sin él será una segunda copia. El mensaje diferido no se repite: comprobar `max personal messages scheduled <чат>`.
 
 ### Marcar como leído
 
@@ -1141,7 +1141,7 @@ Debe realizar la bifurcación según el código de retorno y no según el texto:
 ```sh
 if ! max personal messages send 0 "текст" --json > /dev/null; then
   case $? in
-    14) echo "могло уйти, повторять только с тем же --send-id" ;;
+    14) echo "могло уйти, повторять только с тем же --operation-id" ;;
     4)  echo "нужен max personal setup" ;;
   esac
 fi

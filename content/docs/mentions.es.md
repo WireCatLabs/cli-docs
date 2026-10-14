@@ -11,8 +11,7 @@ Necesitas el historial de los chats que quieres buscar guardado en tu ordenador.
 ## Qué es una mención
 
 Una **mención** es un valor que las herramientas encontraron en un mensaje: un número de teléfono, una dirección de
-correo, un enlace o un enlace a un documento de Google. En Telegram también puede ser el nombre de alguien que
-conoces. Las herramientas lo buscan en el texto del mensaje, en el texto de sus archivos y en las transcripciones de
+correo, un enlace, un enlace a un documento de Google o el nombre de alguien que conoces. Las herramientas lo buscan en el texto del mensaje, en el texto de sus archivos y en las transcripciones de
 sus notas de voz.
 
 Cada mención se guarda en una forma estándar, así que la búsqueda encuentra un valor se haya escrito como se haya
@@ -109,7 +108,7 @@ mensajería no cambia. El almacén registra quién decidió. Un comando ejecutad
 
 ## Nombres de personas
 
-En Telegram, `tg` también encuentra los nombres de las personas que has visto en un chat: el nombre de la persona y los
+Las herramientas también encuentran los nombres de las personas que has visto en un chat: el nombre de la persona y los
 nombres de sus cuentas. Un nombre se encuentra en cualquier caso gramatical del ruso, así que «Анна» también encuentra
 «Анне» y «Анну», y un nombre escrito en letras latinas también encuentra su forma rusa: «Valery» encuentra «Валерию».
 Dos nombres seguidos de la misma persona, como nombre y apellido, cuentan como un nombre completo.
@@ -135,6 +134,7 @@ Cuando aparezcan personas nuevas en tu historial, vuelve a leer los nombres:
 
 ```sh
 tg personal mentions rebuild person-name
+max personal mentions rebuild person-name
 ```
 
 ## Mensajes guardados antes
@@ -156,7 +156,6 @@ registros, mensajes de error ni registros de ejecución. Nunca se abre un enlace
 
 ## Lo que aún no existe
 
-- Nombres de personas en `max`. Llegarán más adelante.
 - Nombres de personas que las herramientas aún no conocen.
 - Menciones en [notas y archivos](./memo/notes.md) y en el [correo](./email.mdx).
 - Vincular un enlace con el chat o el documento guardado al que apunta. Por ahora un enlace solo se puede descartar.

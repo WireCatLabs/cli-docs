@@ -6,10 +6,10 @@
     "conclusion": "Reviewed 0.54.0-0.55.0: tg mentions (phones, e-mail, links, Google documents, and in 0.55.0 known people's names) with confirm, reject, rebuild <kind> and the phone:, email:, url:, domain:, mentions: search fields; mentions in files and voice notes; images embed for picture search; every answer an envelope with snake_case keys; contacts timeline pages; a failing schedule is reported first; files upload from disk without the 2 GiB refusal; unheard voice messages named in missing; tasks link task:<id>; local-only next steps are never auto-run. Roadmap unchanged: several photos in one message, private chat notes and the max-only features remain planned; none of them shipped."
   },
   "max": {
-    "version": "v0.51.0",
+    "version": "v0.52.0",
     "roadmapSha256": "f1628c3c19b2ea49f41fb57147b92bb0f9d29081ed577d1be3755a8a35b2a961",
     "reviewedAt": "2026-10-14",
-    "conclusion": "Reviewed 0.50.0-0.51.0: max mentions (phones, e-mail, links, Google documents) with confirm, reject, rebuild, mentions in files and voice notes and the phone:, email:, url:, domain: search fields; each watch subscriber has its own queue and the largest is cut on overflow; --json=<fields> replaces --fields and --agent-json; tags, tasks and conversations lists take a query; serve keeps the login when closed mid-answer; snake_case error keys; contacts timeline pages; the 2 GiB file and 100-member limits are named. Roadmap unchanged: an optional no-local-copy mode, actions on events, video circles, cloud password and standalone installers remain planned; none of them shipped."
+    "conclusion": "Reviewed 0.52.0: syncs resume where they stopped; watch survives a failing handler; files and videos upload from disk without the 2 GiB refusal; picture search (images embed, images models) behind picture_search; store export --format jsonl writes the printed records; watch --jsonl and --events in snake_case; voice messages without text named in missing; local-only next steps are never auto-run; mentions rebuild takes its kind as an argument and names of known people are found (cli-core 0.276.0); doctor, session start and end answer in the envelope; bot chats members list --cursor replaces --marker. Roadmap unchanged: an optional no-local-copy mode, actions on events, video circles, cloud password and standalone installers remain planned; none of them shipped."
   },
   "zm": {
     "version": "v0.13.0",
