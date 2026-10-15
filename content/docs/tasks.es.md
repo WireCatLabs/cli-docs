@@ -10,8 +10,8 @@ cerrarla cuando esté hecha. Las tareas se quedan en tu ordenador, en el almacé
 y `memo`. Nada de esta página envía mensajes.
 
 Las categorías, las etiquetas en las tareas, las claves por tipo, la reserva de tareas y la detección
-de duplicados ya están en el núcleo común de las herramientas (cli-core). `tg`, `max` y `memo` las
-tendrán cuando pasen a su versión más reciente. [Cómo funcionan las tareas](./tasks-architecture.mdx)
+de duplicados ya están en el núcleo común de las herramientas (cli-core). Las tienen `tg`, `max`
+y `memo`. [Cómo funcionan las tareas](./tasks-architecture.mdx)
 da el detalle técnico.
 
 ## De dónde salen las tareas
@@ -81,7 +81,7 @@ tg personal tasks list 'chat:"Renovation" state:open'
 Añadir una tarea para un mensaje y planificarla:
 
 ```sh
-tg personal tasks add msg:telegram/1/77/42 --type promise --title "Send Bob Sample the signed contract" --due 3d
+tg personal tasks add msg:telegram/1/77/42 --type promise --category documents --title "Send Bob Sample the signed contract" --due 3d
 tg personal tasks plan <task> --description "Done when Bob confirms he has it." --remind-time 2d
 ```
 
@@ -106,7 +106,7 @@ tg personal tasks close <task> --as dismissed --reason no-reply-needed
 - **agenda** lista las tareas vencidas, las que vencen pronto o toca revisar, y después los chats
   donde debes una respuesta y los chats donde la esperas tú. Avisa si el almacén lleva tiempo sin
   guardar nada.
-- **add** necesita un tipo. Con la versión más reciente de cli-core necesita también una categoría
+- **add** necesita un tipo. También necesita una categoría
   (`--category`), y se niega si ya existe una tarea parecida; consulta
   [Sin tareas duplicadas](#sin-tareas-duplicadas).
 - **plan** fija el título, la descripción, la fecha límite y la próxima revisión. La próxima revisión
