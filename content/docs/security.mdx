@@ -3,7 +3,7 @@ title: Security
 description: Control the agent’s access, understand where your messages go, and know the limits of those controls.
 ---
 
-WireCat takes security seriously. We use automated security checks and manual audits to review the tools, their dependencies and how AI agents use them. This guide explains what those checks cover, where your data goes and which controls you can set for your own account.
+When you connect an AI agent to your account, choose what it may read, change or share. This guide helps you set those controls, understand where your data goes and recognize the limits of the tools' security checks.
 
 ## What security covers
 
@@ -32,8 +32,9 @@ and permission before retrying. Do not tell an agent to bypass the restriction t
 For important replies, ask for a draft and review the recipient and text before sending.
 Reading messages does not mark them as read; that is a separate action.
 
-An agent started on a schedule runs read-only. It can read and draft, but it cannot send, and it
-cannot change settings, permissions, recipients or schedules, so it cannot arrange a later send.
+An agent started by a tg or max schedule runs with the tool's read-only lock. Through that tool,
+it can read and prepare reply text, but it cannot send or change settings, permissions, recipients
+or schedules to arrange a later send. This lock does not restrict other programs the agent can run.
 
 ## Where your information goes
 
