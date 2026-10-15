@@ -89,6 +89,10 @@ for (const lang of ["en", "ru", "es"] as const) {
       "shared_project",
       "related.has_more",
       "related.output_limited",
+      "notes.items",
+      "notes.coverage.has_more",
+      "notes.coverage.output_limited",
+      "source_evidence: not-revalidated",
       "knowledge.items",
       "knowledge.coverage.has_more",
       "knowledge.coverage.output_limited",
@@ -262,6 +266,10 @@ for (const lang of ["en", "ru", "es"] as const) {
         expect(markdown).toContain("`item.next`")
         expect(markdown).toContain("`validation_error`")
         expect(markdown).toContain("`meeting_project_evidence`")
+        for (const field of ["meta.truncated", "content_bytes", "validation_error"]) {
+          await expect(main).toContainText(field)
+          expect(markdown).toContain(`\`${field}\``)
+        }
       }
     })
   }

@@ -4,6 +4,38 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.20.1 — 15.10.2026
+
+### Corregido
+
+- La preparación MCP mantiene el elemento dentro del límite de bytes tras hacer visibles los
+  caracteres ocultos. Conserva las fuentes de reuniones antes que notas y hechos aceptados,
+  indica omisiones y cuenta los bytes del texto que recibe el cliente. Rechaza los metadatos
+  que no caben.
+
+## 0.20.0 — 15.10.2026
+
+### Añadido
+
+- La preparación incluye notas y anotaciones del dueño sobre personas vinculadas explícitamente
+  y proyectos globales confirmados mediante el servicio compartido de cli-core. Conserva referencias,
+  revisiones y cobertura separada; las fuentes de reuniones y los hechos aceptados tienen prioridad.
+  Los documentos importados, correo, mensajes y candidatos por alias del proyecto quedan fuera.
+
+## 0.19.0 — 15.10.2026
+
+### Cambios — pueden romper compatibilidad
+
+- Los estándares compartidos usan cli-base 0.33.0 y cli-core 0.288.0. `meetings link --source <accounts>`
+  sustituye a `--target-accounts` para cuentas numéricas adicionales explícitas del almacén al buscar
+  una persona. Actualiza los scripts a `--source`: no hay alias del nombre anterior. La base de
+  incidencias del control de comandos baja de 27 a 26 sin nuevas excepciones.
+
+### Corregido
+
+- La documentación refleja cli-core 0.286.0 y posteriores: abrir `wirecat.db` conserva los archivos
+  antiguos `messages.db` y sus archivos auxiliares de SQLite. Su conservación se gestiona aparte.
+
 ## 0.18.0 — 15.10.2026
 
 ### Añadido

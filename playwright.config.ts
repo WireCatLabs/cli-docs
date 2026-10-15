@@ -9,6 +9,7 @@ export default defineConfig({
   fullyParallel: true,
   // GitHub runners for public repos have 4 vCPUs; 8 workers starved the axe scans into timeouts.
   workers: process.env.CI ? 4 : 2,
+  globalSetup: "./tests/dev-server-setup.ts",
   reporter: [[process.env.CI ? "dot" : "list"], ["json", { outputFile: "playwright-report/results.json" }]],
   use: { baseURL, trace: "retain-on-failure", screenshot: "only-on-failure" },
   webServer: {

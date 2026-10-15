@@ -36,7 +36,7 @@ Tienes una próxima llamada en Zoom y quieres tener a mano la conversación ante
 ```text prompt
 Prepárame para la próxima llamada de Research Example en Zoom. Identifica primero la serie correcta.
 Muestra la próxima hora, pasajes citados de llamadas anteriores, vínculos confirmados al proyecto,
-decisiones guardadas y tareas con origen directo en esas reuniones. Si encajan varias series,
+decisiones guardadas, notas de personas/proyectos vinculados y tareas con origen directo en esas reuniones. Si encajan varias series,
 muestra candidatas. Indica qué falta o no está confirmado. No cambies nada.
 ```
 
@@ -70,16 +70,28 @@ globales confirmados, incluidas decisiones registradas fuera de estas reuniones.
 referencia `fact:`, referencias al sujeto/proyecto, fecha de actualización e indicadores
 `shared_person`/`shared_project`. Usa las llamadas anteriores incluidas como anclas y excluye hechos
 propuestos, revocados, eliminados o actualizados después del inicio de la preparación. La referencia
-permite recuperar el registro completo y su evidencia mediante Memo antes de usarlo. No busca notas,
-correo ni mensajes: `knowledge.coverage` lo indica con `fact_evidence: not-revalidated`
+permite recuperar el registro completo y su evidencia mediante Memo antes de usarlo. Esta sección
+contiene hechos aceptados; `knowledge.coverage` conserva `fact_evidence: not-revalidated`
 y `other_sources: not-queried`.
+
+`notes.items` añade notas y anotaciones escritas por el dueño sobre esas personas vinculadas y
+proyectos globales confirmados. Cada una incluye referencia `note:`, título/texto, revisión, fecha
+de actualización y una referencia a la persona/proyecto que la relaciona. Son comentarios guardados,
+separados de los hechos aceptados. Usa revisiones actuales y vínculos confirmados; excluye notas
+eliminadas, notas de bots, sujetos limitados a una cuenta y revisiones actualizadas después del inicio
+de la preparación. Recupera la nota por su referencia en Memo para ver todas sus asociaciones.
+
+Comprueba `notes.coverage.has_more` y `notes.coverage.output_limited` para saber si hay notas adicionales u omitidas.
+`source_evidence: not-revalidated` indica que no se han vuelto a comprobar sus fuentes;
+`other_sources: not-queried` deja fuera de la cobertura los documentos importados, el correo y los
+mensajes. Seleccionar `--json=notes.items.ref` conserva esa cobertura junto a las referencias.
 
 Si aparece la próxima hora sin reuniones anteriores, descarga el periodo pertinente mediante la
 API de Zoom para guardar sus vínculos exactos a la serie. Un archivo de transcripción importado
 puede carecer de ese ID del proveedor. La preparación no une llamadas por títulos o nombres parecidos.
 
 La cobertura distingue historial ausente, reuniones sin fecha, filas adicionales y límites de salida.
-No se conoce si el archivo incluye todo el historial. Las notas de personas/proyectos, el correo,
+No se conoce si el archivo incluye todo el historial. Los documentos importados, el correo,
 los mensajes y las candidatas por nombre/alias quedan sin consultar; sin reuniones anteriores
 utilizables, tampoco se consulta el historial relacionado. La evidencia de los hechos guardados
 no se vuelve a comprobar. Usa [búsqueda y fuentes](./search.md) para investigar esas lagunas.
@@ -91,8 +103,10 @@ Para una ventana fija, usa tiempos ISO con zona en `--since-time`, `--before-tim
 el elemento completo. Las fuentes de la serie tienen prioridad; `related.has_more` y
 `related.output_limited` indican contexto relacionado adicional u omitido.
 Los hechos aceptados tienen indicadores independientes `knowledge.coverage.has_more` y `knowledge.coverage.output_limited`;
-se devuelven hasta veinte (o un `--context-limit` menor), cediendo bytes a las fuentes de reuniones. Pueden quedar filas
-fuera del límite. Las fuentes omitidas dan `meta.complete=false`: revisa sus referencias antes de
+se devuelven hasta veinte (o un `--context-limit` menor), cediendo bytes a las fuentes de reuniones.
+Las notas tienen sus propios indicadores de más filas y límites de salida, con hasta veinte entradas
+(o un `--context-limit` menor). Usan el espacio restante tras los hechos aceptados y las fuentes de
+reuniones. Pueden quedar filas fuera del límite. Las fuentes omitidas dan `meta.complete=false`: revisa sus referencias antes de
 usar el informe. Si la cobertura señala un recorte, aumenta el límite correspondiente.
 
 ## Elige datos locales o remotos

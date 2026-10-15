@@ -27,9 +27,8 @@ seguimiento y lectura usan el adaptador SQLite publicado: abre conexiones al nec
 cierra antes del resultado. `MESSAGING_STORE` elige la base compartida. Modelo, exportación y procesamiento
 vienen de `@wirecat/cli-core/meetings`.
 
-La base es `wirecat.db`. Abrir su ruta predeterminada elimina la antigua `messages.db` y los archivos
-`-wal` y `-shm`, sin migrarlos. Se conservan con `MESSAGING_STORE`, ruta explícita o una base antigua
-abierta por otro proceso. Una apertura posterior reintenta eliminarla cuando ese proceso termina.
+La base es `wirecat.db`. Abrirla conserva los archivos antiguos `messages.db` y sus archivos
+`-wal` y `-shm`. Gestiona su conservación aparte de importar o leer reuniones.
 
 Elige un [perfil local](./sessions.md#select-a-local-profile) antes de importar o descargar.
 

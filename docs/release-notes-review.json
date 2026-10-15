@@ -12,9 +12,9 @@
     "conclusion": "Reviewed 0.54.0: task claims, categories, tags and duplicate review; mentions domains, list --new, --all-in-chat and phone_countries; store version 16 reads notes and documents; snake_case settings only; mail search moved to Memo; MAX_READ_ONLY now blocks writes that enable later writes. Roadmap unchanged: optional no-local-copy mode, event actions, video circles, cloud password and standalone installers remain future work."
   },
   "zm": {
-    "version": "v0.18.0",
-    "roadmapSha256": "cdb9b75f66b9196456864f0d8d469dc299696bdb7c4bf85bb2e4fb5a1fcd3a9c",
+    "version": "v0.20.1",
+    "roadmapSha256": "a20d838cc5b4155b13c2dca9b4bc75ed0686e07fefcf0ef9953f6e698e57f257",
     "reviewedAt": "2026-10-15",
-    "conclusion": "Reviewed0.17.1 and0.18.0: MCP escapes hidden/control characters while retaining data/instruction boundaries; selected-series preparation now includes cited accepted global person/project facts through explicit links and confirmed projects. Knowledge coverage survives field selection, retains independent bounds and yields bytes to meeting evidence. Notes, mail, messages and alias candidates remain unqueried; no automatic summaries, findings, tasks or link inference. Broader discovery, reviewed intake and shared native archive storage remain future work."
+    "conclusion": "Reviewed 0.19.0, 0.20.0 and 0.20.1: the separate standards release adopts Base0.33/Core0.288, canonical meetings link --source and legacy-store preservation; preparation adds bounded owner person/project notes with references, revisions and separate coverage, distinct from accepted facts. Core0.290 reapplies the item budget after MCP escaping, recounts received cue bytes and retains truncation metadata. Imported documents, communications, alias candidates, broader calendar discovery, reviewed findings and shared native archive storage remain planned; no automatic summaries, writes, acceptance or task creation."
   }
 }

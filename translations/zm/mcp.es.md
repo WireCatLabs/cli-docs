@@ -108,6 +108,15 @@ Zoom, no descarga transcripciones ausentes ni acepta hallazgos. El elemento `mee
 conserva citas, reuniones relacionadas acotadas por vínculos explícitos a personas/proyectos
 confirmados y cobertura explícita. Los hechos aceptados sobre personas/proyectos aparecen en
 `knowledge`, con referencias y límites explícitos de evidencia y fuentes no consultadas.
+Las notas y anotaciones del dueño aparecen por separado en `notes`, con referencias `note:`,
+revisiones y límites explícitos de fuentes y cobertura. No consulta documentos importados, correo ni mensajes.
 Las lecturas relacionadas se limitan a la cuenta y periodo
 elegidos, sin escrituras. Consulta [preparación](./usage.md#prepare-for-an-upcoming-meeting)
 para ver qué incluye, qué no consulta y cómo comprobar el resultado.
+
+El parámetro de preparación `bytes` limita el elemento después de hacer visibles los caracteres
+ocultos, que pueden ocupar más espacio que en el JSON del CLI. Primero se reducen notas, después
+hechos aceptados, llamadas relacionadas e historial de la serie. Comprueba `meta.truncated` y la
+cobertura de cada sección. `content_bytes` cuenta los bytes de los pasajes escapados que recibe
+el cliente MCP. Si los propios metadatos no caben, devuelve `validation_error`: aumenta `bytes`
+o reduce el contexto elegido.

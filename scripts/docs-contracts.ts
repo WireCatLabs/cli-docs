@@ -39,6 +39,7 @@ for (const tool of tools) {
       XDG_STATE_HOME: join(buildHome, "state"),
       XDG_CACHE_HOME: join(buildHome, "cache"),
       MESSAGING_STORE: join(buildHome, "wirecat.db"),
+      WIRECAT_STATE_DIR: join(buildHome, "wirecat-state"),
       NPM_CONFIG_GLOBALCONFIG: globalConfig,
       PATH: process.env.PATH ?? "",
       NODE_ENV: "test",
@@ -74,6 +75,7 @@ for (const tool of tools) {
   const env: NodeJS.ProcessEnv = {
     HOME: sandbox,
     MESSAGING_STORE: join(sandbox, "wirecat.db"),
+    WIRECAT_STATE_DIR: join(sandbox, "wirecat-state"),
     XDG_STATE_HOME: join(sandbox, "state"),
     NODE_ENV: "test",
     PATH: process.env.PATH ?? "",
