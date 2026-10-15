@@ -37,6 +37,7 @@ Usa [búsqueda](./search.md) para una discusión concreta.
 
 Para un informe completo de un canal, con alcance, lo que los lectores reenvían, temas y comentarios, sigue
 [Analítica de grupos y canales](./group-analytics.md).
+Para ver antes cómo es ese informe, abre el [informe de ejemplo de un canal](./group-analytics-example.mdx).
 
 ## Revisar miembros
 

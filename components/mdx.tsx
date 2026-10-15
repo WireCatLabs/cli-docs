@@ -7,6 +7,7 @@ import { ExternalLink } from "lucide-react"
 import type { MDXComponents } from "mdx/types"
 import type { ComponentProps, ComponentType } from "react"
 import { ArchitectureDiagram } from "@/components/architecture-diagram"
+import { ChannelReport } from "@/components/channel-report/channel-report"
 import { DocTerm } from "@/components/doc-term"
 import { DocsCodeBlock } from "@/components/docs-code-block"
 import {
@@ -44,6 +45,7 @@ export function getMDXComponents(components?: MDXComponents) {
     h2: (props: ComponentProps<"h2"> & { "data-static-heading"?: boolean }) =>
       props["data-static-heading"] ? <h2 {...props}>{props.children}</h2> : <Heading as="h2" {...props} />,
     ArchitectureDiagram,
+    ChannelReport,
     Mermaid,
     InstallationGuide,
     AgentInstallPrompt,

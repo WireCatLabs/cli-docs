@@ -51,6 +51,7 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | What sources and integrations come next? | `roadmap.md` | Planned work | Keep planned items separate from available features; update when a source ships |
 | How do I check questions and activity in my group? | `group-admins.md` | Task guide | Start with a request and sources; inspect coverage before changes |
 | How do I get a full report on a Telegram channel? | `group-analytics.md` | Task guide | Recipe with an example report; privacy of readers before publishing |
+| What does a channel report look like? | `group-analytics-example.mdx` | Example | The full example report, rendered inside the docs layout; readers counted, never named |
 | How do I save or override settings? | `configuration.mdx` | Configuration guide | Explain when settings matter and how to verify the effective value |
 | What may the agent change? | `permissions.mdx` | Access guide | Distinguish terminal confirmation, MCP permissions and app approval |
 | Which account or bot will run the task? | `profiles.md` | Account selection | Explain named profiles before configuration syntax |

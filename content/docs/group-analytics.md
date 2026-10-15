@@ -10,7 +10,7 @@ need a Telegram account that can open the channel. You do not need to be an admi
 
 ## What you get
 
-See the [example report on @AI_DeepLearning](/channel-report-example.html), an English channel of 17k
+See the [example report on @AI_DeepLearning](./group-analytics-example.mdx), an English channel of 17k
 subscribers that reviews computer-vision papers. It covers 1,582 posts from 2017 to October 2026 and one year of
 comments. It shows:
 

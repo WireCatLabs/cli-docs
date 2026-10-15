@@ -37,6 +37,7 @@ outside the messages you hold. Try [search](./search.md) for a particular discus
 
 For a full report on a channel, with reach, what readers share, themes and comments, follow
 [Group and channel analytics](./group-analytics.md).
+To see what such a report looks like first, open the [example channel report](./group-analytics-example.mdx).
 
 ## Review membership
 
