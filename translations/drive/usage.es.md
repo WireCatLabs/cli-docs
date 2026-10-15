@@ -19,7 +19,7 @@ que solicitas; no hace falta para buscar.
 | Leer un Google Doc ahora | `drive personal documents get DOC_ID` | Google, al momento | No importa; imprime JSON Docs |
 | Mantener una carpeta buscable | `drive personal folders add FOLDER_ID`, luego `drive personal sync` | Carpeta Google y descendientes | Índice, copias y punto de sincronización |
 | Leer una fuente importada | `drive personal documents show DOC_ID` | Copia local | Nada nuevo |
-| Dar Markdown a otra herramienta | `drive personal documents export DOC_ID --out ./decision.md` | Copia local | El archivo solicitado |
+| Dar Markdown a otra herramienta | `drive personal documents export DOC_ID --output ./decision.md` | Copia local | El archivo solicitado |
 
 Redirigir la salida a un archivo también la guarda. Examinar o leer contenido en Google no lo
 incluye en la búsqueda local. La búsqueda necesita importar; exportar es opcional.
@@ -86,7 +86,7 @@ de carpetas interrumpido también continúa desde su punto guardado. `sync --res
 recorrido. El trabajo completado se guarda por lotes; si el proceso termina abruptamente,
 puede repetir el último lote al continuar.
 El primer recorrido es recursivo; `files list --parent` solo lista hijos inmediatos.
-Si Google devuelve `nextPageToken`, pásalo a `files list --cursor TOKEN` para continuar.
+Si Google tiene más resultados, `page.next_cursor` contiene el token; pásalo a `files list --cursor TOKEN` para continuar.
 
 `folders list` muestra las raíces elegidas. `catalog tree` muestra su jerarquía guardada;
 `catalog list "parent:FOLDER_ID"` lista los hijos inmediatos sin Google. El índice de contenido
@@ -210,7 +210,7 @@ y editores observados. Para hechos revisados o vínculos con personas/proyectos,
 ## Exportar o dejar de importar
 
 ```sh
-drive personal documents export DOC_ID --out ./decision.md
+drive personal documents export DOC_ID --output ./decision.md
 drive personal folders remove FOLDER_ID
 drive personal sync --json
 ```
@@ -229,20 +229,24 @@ JSON y JSONL permiten que otra herramienta lea los resultados sin interpretar el
 terminal. Puedes conservar solo los campos que necesita junto con la paginación y la información sobre si la respuesta está completa.
 
 Las respuestas para programas usan una envoltura: `item` para un resultado único o compuesto,
-o `items` con `page` para una lista sencilla; `meta` identifica la ejecución, su duración y el estado
+o `items` con `page` para una lista; `meta` identifica la ejecución, su duración y el estado
 `complete`. Las claves de Drive usan snake_case. Los metadatos del proveedor y los diccionarios del
 usuario conservan sus claves. Los pasajes de búsqueda están en `item.hits` y los contadores de
 sync/status en `item`. La ayuda y el autocompletado siguen siendo texto; `commands --json` usa el
 documento compartido de comandos con contrato `3`. `effects` describe lecturas y escrituras remotas
-y locales; `api_operation` identifica un método generado de Google. Las listas usan
-`page.mode: "page"` y devuelven `next_page` si quedan resultados. La búsqueda y las listas de notas
+y locales; `api_operation` identifica un método generado de Google. Las listas locales usan
+`page.mode: "page"` y devuelven `next_page` si quedan resultados; las listas de Google
+(`files list`, `comments list`, `permissions list`, `revisions list`, `shared-drives`, `documents history`)
+usan `page.mode: "cursor"` y devuelven `next_cursor`. La búsqueda y las listas de notas
 usan `--page`, no `--offset`. JSONL emite registros `{"type":"item","data":…}` seguidos de un único
 registro `{"type":"end",…}` con `complete` y metadatos de página. Los errores incluyen
 `error.retry.safe`; comprueba una escritura remota de resultado incierto antes de repetirla.
 MCP muestra los caracteres de control de forma visible; `--agent-json` ya no es una opción.
 
-Para unos pocos campos del catálogo, usa `--json=id,name` en vez de `--json`. Solo se devuelven
-esos campos de cada elemento; la envoltura y los metadatos de página siguen disponibles.
+Para unos pocos campos del catálogo, usa `--json=id,name` en vez de `--json`. Las rutas con puntos seleccionan objetos y arrays anidados: `--json=hits.ref,hits.excerpt`
+selecciona los pasajes de `item.hits`. Las rutas parten de los datos de la respuesta. Se conservan
+la envoltura, páginas, cobertura, siguientes pasos, datos ausentes y metadatos de ejecución.
+La selección reduce lo que se imprime, no los datos que se examinan.
 La misma selección funciona con `--jsonl`. Un campo desconocido de primer nivel produce un error
 con los campos disponibles. Una escritura sin campos de resultado declarados requiere `--json`
 sin selección; la selección se rechaza antes de ejecutar la escritura.

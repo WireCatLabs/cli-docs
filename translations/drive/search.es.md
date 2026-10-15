@@ -44,6 +44,17 @@ y sugerencias no forman parte del texto indexado. Usa `tag:follow-up` solo o con
 buscar etiquetas locales. `drive personal search` no tiene opción `--tag`; no admite campos
 exclusivos de mensajes.
 
+## Qué resultado aparece primero
+
+Un archivo cuyo título coincide con tus palabras aparece primero. El orden es: título igual a
+la consulta, título que contiene la frase y título con todas las palabras en cualquier orden.
+Ese resultado incluye `title` en `found_by`, aunque el texto sea largo y mencione las palabras
+solo una vez o no las contenga.
+
+Esto se aplica a consultas de palabras como `budget decision`. Una consulta con un campo
+(`tag:follow-up`), `OR`, `NOT`, un comodín o una expresión regular conserva el orden de las
+coincidencias del texto.
+
 ## Buscar por significado
 
 Drive utiliza la caché compartida del componente de búsqueda local. Si usas Telegram o MAX,

@@ -123,8 +123,8 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(await markdown.text()).toContain("`error.retry.safe`")
     const text = await markdown.text()
     expect(text).toContain("--json=id,name")
-    expect(text).toContain("drive personal documents export DOC_ID --out ./decision.md")
-    expect(text.lastIndexOf("drive personal documents export DOC_ID --out ./decision.md")).toBeLessThan(
+    expect(text).toContain("drive personal documents export DOC_ID --output ./decision.md")
+    expect(text.lastIndexOf("drive personal documents export DOC_ID --output ./decision.md")).toBeLessThan(
       text.indexOf("--json=id,name"),
     )
   })
