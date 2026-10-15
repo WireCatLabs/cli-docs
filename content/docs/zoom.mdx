@@ -68,8 +68,11 @@ tasks. It also includes related stored calls through existing person links or co
 within the selected account and history window. Use the provider's numeric series ID, not the
 internal stored meeting ID. `knowledge.items` adds accepted facts about those linked people and
 confirmed projects, including decisions recorded outside the meetings. Keep their `fact:` references
-so the agent can retrieve and check the evidence. Notes, mail, messages and project-name/alias
-candidates remain explicitly unqueried; the agent can investigate those separately. Missing
+so the agent can retrieve and check the evidence. `notes.items` separately adds owner-written notes
+and annotations about those people/projects, retaining `note:` references, revisions and coverage.
+Keep these comments distinct from accepted facts, and check `notes.coverage` for omitted notes and
+sources that were not rechecked. Imported documents, mail, messages and project-name/alias candidates
+remain explicitly unqueried; the agent can investigate those separately. Missing
 transcripts are not downloaded by preparation, and matching names never creates a person link.
 
 ## Keep useful findings afterwards

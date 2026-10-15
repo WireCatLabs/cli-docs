@@ -176,7 +176,7 @@ zm meetings link meeting:1/1 --participant-id 1 --person 1 --expected-person non
 
 Primero aparece un plan; `--yes` aplica una vez y `--dry-run` prevalece. Los valores esperados rechazan
 una decisión obsoleta. `--event-id none` quita el evento. Solo se mueve la identidad del participante
-elegido, sin adivinar por nombre. La persona necesita observaciones autorizadas; `--target-accounts <ids>`
+elegido, sin adivinar por nombre. La persona necesita observaciones autorizadas; `--source <accounts>`
 añade cuentas explícitas para buscar. Las etiquetas locales no autentican una identidad remota.
 
 ## Encontrar un proyecto antes de vincularlo
