@@ -5,7 +5,7 @@ title: "Search"
 <a id="для-скриптов-и-агентов" />
 <a id="подготовка-файлов-и-архива" />
 
-Search helps you recover a message, agreement, file or old code without scrolling through chats. This page explains searching data saved on this computer—messenger messages and mail/notes imported by [memo](https://github.com/WireCatLabs/cli-memo)—and searching the MAX server.
+Search helps you recover a message, agreement, file or old code without scrolling through chats. This page explains searching data saved on this computer—messenger messages and notes—and searching the MAX server. Mail is searched by [memo](https://github.com/WireCatLabs/cli-memo): `memo search mail`.
 
 After reading it, you will be able to find messages by words, people, chats, dates, files and links, save the search and run it again, count matches and distinguish between a real “not found” and a gap in the saved history. The search does not mark anything as read.
 
@@ -27,7 +27,7 @@ max personal search messages 'Во сколько ежедневная выгр�
 
 This searches the local archive only. Chat, sender and date filters stay in force. In MCP, pass `discover: true` to the message-search tool. `items[].discovery.missing_terms` lists missing words, and `parent` links a reply to its matching parent. A high score is not answer confidence: a question, proposal or old decision can rank first. Read the evidence and check [archive coverage](./archive.md) before concluding that a fact is absent.
 
-Without `--discover`, strict search remains the default. Boolean syntax, quoted phrases, wildcards, AST, `--exact` and `--newest` keep strict semantics. Discovery cannot combine with legacy, regular-expression search or `--backend server`. Meaning-based conversation search stays a separate [topic-search option](./topic-search.md).
+Without `--discover`, strict search remains the default. Boolean syntax, quoted phrases, wildcards, AST, `--exact` and `--newest` keep strict semantics. Discovery cannot combine with `--backend server`. Meaning-based conversation search stays a separate [topic-search option](./topic-search.md).
 
 ## What you can do
 
@@ -35,28 +35,24 @@ The entire search is in one command group, `max personal search`. If you don't k
 
 | Task | Command |
 |---|---|
-| Search immediately in messages, mail and notes | `max personal search all '<запрос>'` |
+| Search immediately in messages and notes | `max personal search all '<запрос>'` |
 | Search messenger messages; without `--discover`, also on the MAX server in one chat | `max personal search messages '<запрос>'` |
-| Search only mail that was imported by memo | `max personal search mail '<запрос>'` |
+| Search mail | `memo search mail '<запрос>'` — `max` has no such command |
 | Search notes from memo or folder | `max personal search notes '<запрос>'` |
 | Find a discussion by what it was about | `max personal search conversations '<вопрос>'` ([search by topic](./topic-search.md)) |
 | Count matches by chats, people, days or hours | `max personal stats messages show '<запрос>'` |
 | Save search and run it again | `max personal searches create`, `max personal search messages --saved <имя>` |
 
 ```sh
-max personal search all 'договор аренды'                 # сообщения, почта и заметки, лучшее первым
+max personal search all 'договор аренды'                 # сообщения и заметки, лучшее первым
 ```
 
 ```sh
-max personal search all 'договор' --only messages,notes  # без почты
+max personal search messages 'договор chat:Друзья'     # только сообщения мессенджеров
 ```
 
 ```sh
-max personal search messages 'договор chat:Друзья'     # только сообщения мессенджеров, без почты
-```
-
-```sh
-max personal search mail 'счёт'                          # только почта, которую привёл memo sync --mail
+memo search mail 'счёт'                                  # почта — это memo; max search mail подскажет его
 ```
 
 ```sh
@@ -67,9 +63,9 @@ max personal search notes 'бюджет' --type internal       # только з
 max personal search conversations 'переезд на дачу'      # разговоры, близкие по смыслу
 ```
 
-`search all` labels each match as a message (`msg:…`) or note (`note:…`). `search messages` excludes mail; `search mail` excludes messenger messages. Only `search all` combines them. In `search messages`, `NOT has:attachment`, `has:voice` and `has:file` in the query keep only text, voice messages or files; `--type` in `search notes` selects memo or folder notes (`internal|file`). Mail supports `chat:` for an email thread and `from:` for its sender. When a field does not apply — `kind:`/`topic:` for mail, or `chat:`/`from:` for notes — `search all` skips that source and explains why.
+`search all` labels each match as a message (`msg:…`) or note (`note:…`). `max` does not search mail: neither `search messages` nor `search all` does; `max personal search mail` answers with a hint, “mail is memo's: install @wirecat/cli-memo, then `memo search mail …`”. In `search messages`, `NOT has:attachment`, `has:voice` and `has:file` in the query keep only text, voice messages or files; `--type` in `search notes` selects memo or folder notes (`internal|file`). When a field does not apply, for example `chat:`/`from:` for notes, `search all` skips that source and explains why.
 
-Mail and notes are archived via memo: `memo sync --mail` and `memo import`. Without them, `search all` only looks for messages.
+Notes are archived via memo: `memo import`. Without them, `search all` only looks for messages.
 
 The rest of this page covers `max personal search messages`. Without `--discover`, searches within one chat can also query the MAX server ([below](#поиск-на-сервере-max---backend)).
 
@@ -223,7 +219,7 @@ max personal search messages 'has:photo chat:"Книжный клуб"'
 max personal search messages 'has:link AND "github.com"'  # ссылка на сайт
 ```
 
-A file is found by name and size even when the message has no text. `filename:` compares the whole name, ignoring case, accents and `ё`. Sizes use KB, MB and GB of 1,024. MAX does not report the file type, so search by extension: `filename:*.pdf`, rather than `mime:`. `has:` also accepts `attachment`, `video`, `audio`, `voice`, `sticker`, `contact`, `location` and `poll`. A link counts whether it appears in the text or only in a link card.
+A file is found by name and size even when the message has no text. `filename:` compares the whole name, ignoring case, accents and `ё`. Sizes use KB, MB and GB of 1,024. MAX does not report the file type, so search by extension: `filename:*.pdf`, rather than `mime:`. `has:` also accepts `attachment`, `video`, `audio`, `voice`, `sticker`, `contact`, `location` and `poll`. A link counts whether it appears in the text or only in a link card. A phone number, an email address, the site of a link or a confirmed person from the text are found by the fields `phone:`, `email:`, `url:`, `domain:` and `mentions:`; see [Mentions](./query-language.md#упоминания).
 
 ## Text inside files
 

@@ -165,7 +165,7 @@ Sin `--online` imprime, **sin conectarse a MAX**, de qué depende cualquier coma
 
 - si hay un token y de dónde viene, qué entrada hay en el llavero y si las variables de entorno lo han movido (el token en sí nunca se imprime, solo "es" y "de");
 
-- almacenamiento general: en la respuesta `--json` el campo `item.store` es la ruta, esquema y número de chats y mensajes guardados. La comprobación no crea ni actualiza el almacenamiento. `item.legacy_cache` solo indica si existe un archivo de archivo local antiguo; si es así, `doctor` sugiere la ruta para la eliminación manual;
+- almacenamiento general: en la respuesta `--json` el campo `item.store` es la ruta, esquema y número de chats y mensajes guardados. La comprobación no crea ni actualiza el almacenamiento;
 - directorio de inicio;
 
 - qué está ejecutando `max` (Node o Bun, y dónde), qué administrador de paquetes está instalado, qué comando `max` encontrará en el nuevo terminal, si el llavero y SQLite están cargados, si el modelo de voz está descargado. Si el directorio con el comando `max` no está en `PATH`, `max personal doctor` imprime los comandos exactos que lo agregarán allí: en Windows - para PowerShell, en Linux y macOS - la línea `export`;

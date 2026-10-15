@@ -49,7 +49,7 @@ max personal mcp setup codex           # добавляет сервер в Code
 max personal mcp setup claude-code     # или в Claude Code
 ```
 
-Para otro perfil, primero ponga su nombre: `max work mcp setup codex`. El comando de instalación utiliza la aplicación en sí y no toca sus otros servidores. Si ya existe una entrada con el mismo nombre, elimínela en la aplicación antes de instalarla nuevamente. Si el perfil ofrece herramientas de grabación, primero verifique sus permisos y luego vuelva a emitir el comando con `--allow-writes`. Esta bandera solo confirma la instalación: no cambia los derechos del perfil ni marca `--allow-send` y otros.
+Para otro perfil, primero ponga su nombre: `max work mcp setup codex`. El comando de instalación utiliza la aplicación en sí y no toca sus otros servidores. Si ya existe una entrada con el mismo nombre, elimínela en la aplicación antes de instalarla nuevamente. Si el perfil ofrece herramientas de grabación, primero verifique sus permisos y luego vuelva a emitir el comando con `--allow-writes`. Esta bandera solo confirma la instalación: no cambia los derechos del perfil.
 
 `mcp doctor` no lee mensajes ni se conecta a MAX. Una comprobación correcta demuestra que MCP inicia y enumera herramientas, no que la sesión sea válida. `potential_writes` cuenta herramientas que no son de solo lectura. El navegador y el móvil requieren [conexión remota](./remote.md).
 
@@ -86,7 +86,7 @@ max work mcp config
 
 Verifique los permisos de su perfil antes de conectar a un agente. Luego inserte una entrada en el archivo de configuración de la aplicación `mcpServers`. Claude Desktop tiene `%APPDATA%\Claude\claude_desktop_config.json` en Windows y `~/Library/Application Support/Claude/claude_desktop_config.json` en macOS, Cursor tiene `~/.cursor/mcp.json`. El comando en sí no registra nada.
 
-Las rutas en las entradas están completas, porque una aplicación que no se inicia desde el terminal no ve el terminal `PATH`. En Windows, `max` es el archivo `max.cmd`, que una aplicación sin shell no puede ejecutar. Las banderas `--allow-send` y otras se transfieren al registro. Las variables `MAX_CONFIG_DIR`, `MAX_STATE_DIR`, `MAX_CACHE_DIR`, `MESSAGING_STORE` y `XDG_RUNTIME_DIR` se incluyen en él sólo si se especifican; ficha - nunca. `MAX_CACHE_DIR` se refiere únicamente al caché antiguo y el archivo local compartida de los mensajes se especifica mediante `MESSAGING_STORE`. El comando transfiere la ruta a esta copia y el directorio para comunicarse con el llavero para que una aplicación iniciada desde el escritorio utilice la misma entrada y mensajes guardados que el terminal.
+Las rutas en las entradas están completas, porque una aplicación que no se inicia desde el terminal no ve el terminal `PATH`. En Windows, `max` es el archivo `max.cmd`, que una aplicación sin shell no puede ejecutar. Las banderas `--permission` y `--yes` se transfieren al registro. Las variables `MAX_CONFIG_DIR`, `MAX_STATE_DIR`, `MAX_CACHE_DIR`, `MESSAGING_STORE` y `XDG_RUNTIME_DIR` se incluyen en él sólo si se especifican; ficha - nunca. `MAX_CACHE_DIR` se refiere únicamente al caché antiguo y el archivo local compartida de los mensajes se especifica mediante `MESSAGING_STORE`. El comando transfiere la ruta a esta copia y el directorio para comunicarse con el llavero para que una aplicación iniciada desde el escritorio utilice la misma entrada y mensajes guardados que el terminal.
 
 Si Node se entrega a través de nvm, fnm o Volta, la ruta hacia él se refiere a una versión de Node. Después de cambiar la versión, ejecute `max personal mcp config` nuevamente. Desde `npx` el comando se niega a funcionar: `npx` borra su caché y la ruta dejará de existir.
 
@@ -97,8 +97,6 @@ El bot tiene su propio servidor, `max <имя> bot mcp`; consulte [bot para agen
 ## Qué puede hacer un agente
 
 El acceso está determinado por el perfil `permissions` ([derechos de acceso en el directorio de configuración](./configuration-reference.md#права-доступа)). `deny` niega el comando, `readonly` permite solo lectura y `ask` y `allow` permiten la escritura que solicitó el agente. No hay formularios de confirmación en el servidor: la aprobación se configura en la aplicación del agente. En la terminal, el comando en el nivel `ask` aún requiere una respuesta o un indicador explícito. `--permission ключ=уровень` cambia el nivel solo para el proceso del servidor. El perfil se puede proteger mediante `MAX_PROFILE_LOCK`.
-
-Las antiguas banderas `--confirm-send`, `--allow-send`, `--allow-delete` y `--http-confirmation` ya no definen lo que puede hacer el agente. Se aceptan con una advertencia para que las grabaciones guardadas sigan ejecutándose; eliminarlos de los registros de la solicitud.
 
 ## Herramientas
 

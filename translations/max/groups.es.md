@@ -222,7 +222,13 @@ max personal tasks list chat:<id чата> "(kind:question OR kind:mention)"
 Agrega algo que las reglas no ven, como tu promesa, o cierra una tarea que no necesita respuesta:
 
 ```sh
-max personal tasks add msg:max/<вы>/<чат>/<сообщение> --type promise
+max personal tasks add msg:max/<вы>/<чат>/<сообщение> --type promise --category other
+```
+
+Si una tarea puede ser el mismo trabajo que una abierta o cerrada en los últimos 14 días, `tasks add` la rechaza con código de salida 2 y nombra a los candidatos. Repite con `--attach <задача>` para vincular el mensaje a ella, o con `--new` para abrir una nueva de todos modos. `tasks duplicates` muestra los pares que encontraron las reglas, y `tasks merge <задача> --into <другая>` los une:
+
+```sh
+max personal tasks add msg:max/<вы>/<чат>/<сообщение> --type promise --category other --attach <задача>
 ```
 
 ```sh

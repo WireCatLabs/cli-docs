@@ -48,7 +48,7 @@ max personal mcp setup codex           # добавляет сервер в Code
 max personal mcp setup claude-code     # или в Claude Code
 ```
 
-For another profile, put its name first: `max work mcp setup codex`. Setup uses the application's own commands and leaves other servers intact. If an entry with the same name exists, remove it in the application before repeating setup. If the profile exposes write tools, check permissions, then repeat with `--allow-writes`. This flag confirms installation only: it does not change profile permissions or flags such as `--allow-send`.
+For another profile, put its name first: `max work mcp setup codex`. Setup uses the application's own commands and leaves other servers intact. If an entry with the same name exists, remove it in the application before repeating setup. If the profile exposes write tools, check permissions, then repeat with `--allow-writes`. This flag confirms installation only: it does not change profile permissions.
 
 `mcp doctor` reads no messages and does not log in to MAX. Success means MCP starts and lists tools; it does not prove the session is valid. `potential_writes` counts tools without the read-only annotation. Web and mobile need a separate [remote connection](./remote.md).
 
@@ -85,7 +85,7 @@ max work mcp config
 
 Check profile permissions before connecting the agent, then insert the entry into the application's `mcpServers` configuration. Claude Desktop uses `%APPDATA%\Claude\claude_desktop_config.json` on Windows and `~/Library/Application Support/Claude/claude_desktop_config.json` on macOS; Cursor uses `~/.cursor/mcp.json`. The command writes nothing itself.
 
-Entries use full paths because an application launched outside a terminal does not inherit its `PATH`. On Windows, `max` is `max.cmd`, which cannot run without a shell. Flags such as `--allow-send` are included. `MAX_CONFIG_DIR`, `MAX_STATE_DIR`, `MAX_CACHE_DIR`, `MESSAGING_STORE` and `XDG_RUNTIME_DIR` are included only when set; tokens are never included. `MAX_CACHE_DIR` covers only the old cache; `MESSAGING_STORE` sets the shared local archive. Passing the archive and keyring communication paths lets desktop applications use the same login and saved messages as the terminal.
+Entries use full paths because an application launched outside a terminal does not inherit its `PATH`. On Windows, `max` is `max.cmd`, which cannot run without a shell. The `--permission` and `--yes` flags are included. `MAX_CONFIG_DIR`, `MAX_STATE_DIR`, `MAX_CACHE_DIR`, `MESSAGING_STORE` and `XDG_RUNTIME_DIR` are included only when set; tokens are never included. `MAX_CACHE_DIR` covers only the old cache; `MESSAGING_STORE` sets the shared local archive. Passing the archive and keyring communication paths lets desktop applications use the same login and saved messages as the terminal.
 
 With nvm, fnm or Volta, the Node path points to one version. Run `max personal mcp config` again after changing that version. The command refuses to run from `npx`, whose cache cleanup would remove the saved path.
 
@@ -96,8 +96,6 @@ Bots have their own server, `max <имя> bot mcp`; see [a bot for your agent](.
 ## What your agent may do
 
 Profile `permissions` controls access ([permissions reference](./configuration-reference.md#права-доступа)). `deny` blocks a command; `readonly` allows reading; `ask` and `allow` permit the requested write. The server has no confirmation form: configure approval in the agent application. Terminal commands at `ask` still require an answer or explicit flag. `--permission ключ=уровень` changes permissions only for this server process. `MAX_PROFILE_LOCK` can fix the profile.
-
-Legacy `--confirm-send`, `--allow-send`, `--allow-delete` and `--http-confirmation` no longer control agent permissions. They produce a warning but keep saved configurations working; remove them from application entries.
 
 ## Tools
 

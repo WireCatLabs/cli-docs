@@ -53,7 +53,7 @@ El comando imprime el perfil seleccionado **y de dónde vino**, la ruta al archi
 
 Cada ajuste indica su origen: `flag`, `default` o `config file:` con la clave, como `config file: bot.profiles.test`. El perfil muestra `first word`, `MAX_PROFILE`, `MAX_PROFILE_LOCK`, `config file: default_profile` o `none named`: no se nombró ningún perfil, y entonces `profile` es `null`.
 
-Con `--json`, la respuesta también incluye `storeSettings`: los ajustes del archivo compartido (`searchStemmers.*`) y su origen, `store` o `default`.
+Con `--json`, la respuesta también incluye `store_settings`: los ajustes del archivo compartido (`search_stemmers.*`) y su origen, `store` o `default`.
 
 `--bot` muestra las configuraciones tal como las recibirá `max <имя> bot …`: el bot tiene su propia sección y su propio límite de envío. Si el archivo no existe, al cargar la configuración primero se crea uno con los valores predeterminados habituales. El archivo existente no se sobrescribe. Si se configura una de las variables `MAX_*_DIR`, el comando lo dirá en stderr: con ellas, el perfil tiene una entrada diferente en el llavero, y un inicio de sesión realizado sin ellas parece "sin sesión".
 
@@ -67,7 +67,7 @@ No aparecen secretos: el archivo no dispone de campos para guardarlos.
 
 `~/.config/max-cli/config.json` en Linux; rutas en otros sistemas - en [guía de configuración](./configuration.md#где-лежит-файл). El primer comando para leer la configuración lo crea con `limit`, `keep_runs_for_days`, `sends_per_hour`, `update_check` y `skill_hint` en `defaults`. El archivo se crea con derechos `0600` y `max personal config set` lo escribe con derechos `0644`: no contiene secretos.
 
-Los nombres de los ajustes se escriben en snake_case: `sends_per_hour`, `read_only`, `models.<назначение>.base_url`. Un archivo con los nombres antiguos (`sendsPerHour`, `readOnly`, `baseUrl`) lo renombra la primera lectura, una sola vez y solo si el resultado pasa la validación. Los nombres de perfil, las rutas de `permissions` y los destinos de los modelos no cambian. Un mismo ajuste con los dos nombres y valores distintos es un error.
+Los nombres de los ajustes se escriben en snake_case: `sends_per_hour`, `keep_runs_for_days`, `models.<назначение>.base_url`. Un archivo con los nombres antiguos (`sendsPerHour`, `keepRunsForDays`, `baseUrl`) lo renombra la primera lectura, una sola vez y solo si el resultado pasa la validación. Los nombres de perfil, las rutas de `permissions` y los destinos de los modelos no cambian. Un mismo ajuste con los dos nombres y valores distintos es un error.
 
 ```json
 {
@@ -111,7 +111,7 @@ Los nombres de los ajustes se escriben en snake_case: `sends_per_hour`, `read_on
 | `read_other_bots` |¿Puede el bot leer copias de otros bots cuando el comando lo solicita? `--all-bots` o `--bots`: `false`, `true`: todos o una lista de perfiles de bot. **Solo en la sección `bot`** ([bots](./bot.md))|—; `--all-bots` y `--bots` preguntan, el campo permite| `false` |
 | `update_check` |Una vez al día pregunte a npm si hay una nueva versión e infórmelo en la terminal. **Solo en `defaults`**: la versión del programa es la misma para todos los perfiles|—; apagar `MAX_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER`, `CI`| `true` |
 | `skill_hint` |una vez al día decirle al agente en stderr que no tiene la habilidad `max` o que es anterior al programa y que está asignada por `max skill install`. Reconocemos al agente por la variable `AI_AGENT` o `CLAUDECODE`. **Solo en `defaults`**| — | `true` |
-| `read_only`, `allow`, `mcp_tools` |configuraciones antiguas, lea para comprobar la compatibilidad; `config migrate` los convierte a `permissions`| — |no se pueden cambiar después de la migración|
+| `allow` |ajuste antiguo, se lee por compatibilidad; en su lugar, `permissions`| — |no se puede cambiar si hay `permissions`|
 | `embedding_provider` |modelo local (`local`) o `openai`| `--provider` | `local` |
 | `embedding_model` |modelo vectorial| `--model` |por servicio|
 | `embedding_base_url` |Dirección API de vectores| `--base-url` |por servicio|
@@ -120,7 +120,7 @@ Los nombres de los ajustes se escriben en snake_case: `sends_per_hour`, `read_on
 | `analysis_model` |modelo de análisis| `build --model` |No; para `--analyze` configurado explícitamente|
 | `analysis_base_url` |dirección API de análisis| `build --base-url` |por servicio|
 | `models` |modelos externos por propósito ([abajo](#модели-по-назначению))|variables `MAX_MODELS_*`|No|
-| `searchStemmers.cyrillic`, `searchStemmers.latin` |Lenguajes de raíces de palabras para buscar en todo el archivo general ([abajo](#языки-поиска))| — | `russian`, `english,spanish` |
+| `search_stemmers.cyrillic`, `search_stemmers.latin` |Lenguajes de raíces de palabras para buscar en todo el archivo general ([abajo](#языки-поиска))| — | `russian`, `english,spanish` |
 
 ⚠ **`timeout_ms` y `--timeout` son distintos.** `timeout_ms` limita la espera de **una respuesta** de MAX. `--timeout` limita **todo el comando**. Una lectura incluye conexión, INIT, LOGIN, resolución del nombre del chat y la propia petición, por lo que su duración puede ser varias veces `timeout_ms`.
 
@@ -158,7 +158,7 @@ Los permisos de distintas secciones se combinan, pero **primero cuenta la secci�
 }
 ```
 
-Funciona en ambos sentidos: `messages: allow` en el perfil también anula `messages.delete: deny` de `defaults`, y entonces eliminar vuelve a preguntar, como por defecto. Los antiguos `read_only` y `allow` se aplican en la sección donde están escritos.
+Funciona en ambos sentidos: `messages: allow` en el perfil también anula `messages.delete: deny` de `defaults`, y entonces eliminar vuelve a preguntar, como por defecto. El antiguo `allow` se aplica en la sección donde está escrito.
 
 **De forma predeterminada, todo está permitido excepto algunos cambios que son difíciles de deshacer.** Preguntado por: `messages.delete`, `bot.messages.delete`, `chats.delete`, `chats.clear`, `topics.enable`, `topics.delete` y `account.sessions.end`. Las respuestas automáticas no se envían hasta que usted permita: `replies.send` - `deny`.
 
@@ -174,22 +174,11 @@ Con `ask`, el terminal pide confirmación con «no» por defecto. `--allow-dange
 
 ### A través de MCP
 
-MCP no muestra formularios de confirmación: `ask` permite la escritura invocada; `deny` y `readonly` siguen bloqueándola. `--permission ключ=уровень` modifica temporalmente los permisos del proceso. Las antiguas opciones de confirmación ya no determinan el acceso. En la CLI, `ask` sigue requiriendo una respuesta o una opción explícita. Consulta la conexión en la [guía MCP](./mcp.md).
+MCP no muestra formularios de confirmación: `ask` permite la escritura invocada; `deny` y `readonly` siguen bloqueándola. `--permission ключ=уровень` modifica temporalmente los permisos del proceso. En la CLI, `ask` sigue requiriendo una respuesta o una opción explícita. Consulta la conexión en la [guía MCP](./mcp.md).
 
-### Configuraciones antiguas que aún funcionan
+### Ajuste antiguo `allow`
 
-`read_only: true` se lee como `readonly` para cada recurso. La lista en `allow` (`send`, `forward`, `reaction`, `edit`, `pin`, `read`, `delete`, `groups`, `contacts`, `profile`, `folders`, `sessions`) dice `allow` para estas acciones y `readonly` para el resto; todavía pide eliminación. La clave en `permissions` de la misma partición es más importante que ambas. `mcp_tools` es legible, pero el acceso ya no cambia.
-
-### Traducción de configuraciones antiguas
-
-Puedes ver los cambios antes de convertir un archivo antiguo:
-
-```sh
-max config migrate --dry-run
-max config migrate
-```
-
-La migración conserva los permisos efectivos, los ajustes MAX y los puntos de moderación. Los niveles antiguos `forbid/flag/confirm` pasan a `deny/ask/ask`. `--dry-run` no escribe. Una vez existe `permissions`, cambiar `read_only`, `allow` o `mcp_tools` se rechaza indicando el nuevo ajuste. `MAX_PROFILE_LOCK` impide migrar el archivo completo; permite la vista previa.
+La lista en `allow` (`send`, `forward`, `reaction`, `edit`, `pin`, `read`, `delete`, `groups`, `contacts`, `profile`, `folders`, `sessions`) se lee como `allow` para estas acciones y `readonly` para el resto; eliminar sigue pidiendo confirmación. La clave en `permissions` de la misma sección es más importante. Cuando el archivo tiene `permissions`, `config set allow` se rechaza e indica el nuevo ajuste.
 
 ## Cambiar sin abrir el archivo
 
@@ -204,18 +193,18 @@ max config set --personal --defaults limit 30 # всем личным аккау
 max config set default_profile work      # какой профиль без первого слова
 ```
 
-Los valores se comprueban con el mismo esquema usado para leer, **antes de escribir**: `max personal config set limit 0` se rechaza y el archivo queda igual. `serve`, `sender_colors`, `catch_up_marks_read`, `search_catch_up` y `mcp_tools` no se admiten con `--bot`: los bots no tienen servidor, colores de autores ni estado de no leído, y el antiguo `mcp_tools` solo se aplica a cuentas personales.
+Los valores se comprueban con el mismo esquema usado para leer, **antes de escribir**: `max personal config set limit 0` se rechaza y el archivo queda igual. `serve`, `sender_colors`, `catch_up_marks_read` y `search_catch_up` no se admiten con `--bot`: los bots no tienen servidor, colores de autores ni estado de no leído.
 
 ### Idiomas de búsqueda
 
-`searchStemmers.cyrillic` (`russian` o `none`) y `searchStemmers.latin` (`english`, `spanish`, ambos separados por comas (este es el valor predeterminado) o `none`) no se almacenan en el archivo de configuración, sino en el archivo general de mensajes: son los mismos para todos los perfiles y para ambos servicios de mensajería. Por lo tanto, `--defaults`, `--personal` y `--bot` no se aceptan con ellos y no se pueden cambiar en `MAX_PROFILE_LOCK`. `config unset` devuelve el valor incorporado. Después del cambio, realice `max personal store reindex`; consulte [mantenimiento de archivos](./archive.md#обслуживание-архива).
+`search_stemmers.cyrillic` (`russian` o `none`) y `search_stemmers.latin` (`english`, `spanish`, ambos separados por comas (este es el valor predeterminado) o `none`) no se almacenan en el archivo de configuración, sino en el archivo general de mensajes: son los mismos para todos los perfiles y para ambos servicios de mensajería. Por lo tanto, `--defaults`, `--personal` y `--bot` no se aceptan con ellos y no se pueden cambiar en `MAX_PROFILE_LOCK`. `config unset` devuelve el valor incorporado. Después del cambio, realice `max personal store reindex`; consulte [mantenimiento de archivos](./archive.md#обслуживание-архива).
 
 ## Las erratas son errores
 
 Un campo desconocido se rechaza con su nombre y `configuration_error`, código `3`:
 
 ```json
-{"error":{"code":"configuration_error","reason":"config.invalid","message":"/home/you/.config/max-cli/config.json is not a valid config:\n  profiles.default.limitt: unknown setting — the known ones are limit, timeout_ms, color, record, keep_runs_for_days, read_only, allow, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, mcp_tools"}}
+{"error":{"code":"configuration_error","reason":"config.invalid","message":"/home/you/.config/max-cli/config.json is not a valid config:\n  profiles.default.limitt: unknown setting — the known ones are limit, timeout_ms, color, record, keep_runs_for_days, allow, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve"}}
 ```
 
 Un tipo incorrecto identifica el campo y lo admitido: `profiles.default.limit: has to be a
@@ -272,11 +261,10 @@ El área de "perfil" incluye `defaults`, `profiles.<имя>`, `personal.defaults
 | `default_profile` |línea con nombre de perfil|raíz del archivo|
 | `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` |entero ≥ 1|perfil|
 | `requests_per_minute` |entero ≥ 0|perfil|
-| `color`, `record`, `read_only` | boolean |perfil|
+| `color`, `record` | boolean |perfil|
 | `sender_colors`, `catch_up_marks_read`, `search_catch_up`, `serve` | boolean |cuenta personal|
 | `permissions` |objeto de rutas y niveles de comando `deny`, `readonly`, `ask`, `allow`|perfil|
 | `allow` |variedad de acciones permitidas; formato antiguo|perfil|
-| `mcp_tools` |matriz `contacts`, `polls`, `groups`, `profile`; formato antiguo|cuenta personal|
 | `read_other_bots` |booleano o conjunto de nombres de perfil|sólo `bot`|
 | `update_check`, `skill_hint` | boolean |solo `defaults`|
 | `transcribe_model` |ID de cadena de `max personal models audio list`|solo `defaults`|
@@ -286,8 +274,8 @@ El área de "perfil" incluye `defaults`, `profiles.<имя>`, `personal.defaults
 | `embedding_dims` |entero 1–65 536|perfil|
 | `analysis_provider` | `agent`, `openai`, `anthropic` |perfil|
 | `models` |objeto de asignación de modelo; Los campos se describen a continuación.|perfil|
-| `searchStemmers.cyrillic` | `russian`, `none` |archivo general, vía `config set`|
-| `searchStemmers.latin` |`english`, `spanish`, ambos separados por comas, `none`|archivo general, vía `config set`|
+| `search_stemmers.cyrillic` | `russian`, `none` |archivo general, vía `config set`|
+| `search_stemmers.latin` |`english`, `spanish`, ambos separados por comas, `none`|archivo general, vía `config set`|
 
 ### Modelos por tarea
 

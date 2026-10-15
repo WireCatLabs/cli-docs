@@ -61,7 +61,7 @@ max personal config set sends_per_hour 5          # или: не больше п
 max personal recipients add "Иван Петров"       # и писать только в эти чаты
 ```
 
-`readonly` en un recurso no afecta a otros: limitar solo `messages` deja disponibles reacciones, votos o cambios de chats. Por eso el bucle configura cada recurso. Una clave más precisa, como `permissions.messages.send: allow`, tiene prioridad: elimina esas excepciones para un perfil de solo lectura. Tras migrar, el antiguo `read_only` ya no puede modificarse.
+`readonly` en un recurso no afecta a otros: limitar solo `messages` deja disponibles reacciones, votos o cambios de chats. Por eso el bucle configura cada recurso. Una clave más precisa, como `permissions.messages.send: allow`, tiene prioridad: elimina esas excepciones para un perfil de solo lectura.
 
 `permissions` también restringe tus propios comandos hasta que elimines la prohibición: `max personal config unset permissions.<ресурс>`. Luego, la configuración heredada y los valores predeterminados se aplican nuevamente. Para restringir solo al agente, asígnele un perfil separado. Todos los intentos de envío, incluidos los rechazados, se envían a `max personal sends list`. Consulte [protección contra direcciones erróneas](./security.md#защита-от-отправки-не-туда) y [permisos](./configuration-reference.md#права-доступа).
 

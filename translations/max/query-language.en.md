@@ -2,12 +2,13 @@
 title: "Search query language"
 ---
 
+<a id="упоминания" />
 <a id="в-mcp" />
 <a id="прежние-режимы" />
 
 When using `max` through an AI agent, describe what you want in ordinary words and let the agent form the search query. Use this reference when typing searches yourself or looking up exact operators, every field, presets, date rules and limits.
 
-This is help for the queries `max personal search messages`, `max personal search mail`, `max personal search all`, `max personal stats messages show`, saved searches and `--filter` [search by topic](./topic-search.md). Examples for every day - in [message search](./search.md).
+This is help for the queries `max personal search messages`, `max personal search all`, `max personal stats messages show`, saved searches and `--filter` [search by topic](./topic-search.md). Examples for every day - in [message search](./search.md).
 
 Terms used below:
 
@@ -18,7 +19,7 @@ Terms used below:
 
 This language implements a strict subset of Apache Lucene syntax: words, phrases, AND/OR/NOT, groups, fields, ranges, limited patterns and regular expressions. Unsupported syntax causes an error rather than being silently skipped. The [full reference](https://github.com/WireCatLabs/cli-core/blob/v0.212.0/docs/search/query-language.md) contains generated field/operator/preset/limit tables and verified examples; the [technical specification](https://github.com/WireCatLabs/cli-core/blob/v0.212.0/docs/search/query-language-spec.md) describes grammar and compilation.
 
-For mail, `chat:` selects a thread by its id or subject, and `from:` selects the sender. Mail has no `kind:` or `topic:` fields.
+`max` does not search mail: that is `memo search mail`.
 
 ## What the language can do
 
@@ -77,11 +78,33 @@ Unqualified words and phrases match word forms. `--exact` selects exact forms fo
 | `mime` | attachment type; MAX does not report it | `mime:image` |
 | `size` | attachment size in bytes or 1,024-based KB/MB/GB | `size>10MB` |
 | `tag` | your local tag on the message, its chat or sender | `tag:work` |
+| `phone` | a phone number found in the text, however it is written | `phone:"+34 600 000 000"` |
+| `email` | an email address found in the text | `email:"ana@example.com"` |
+| `url` | a link found in the text, without tracking parameters | `url:"https://example.com/a"` |
+| `domain` | the site of a link or address found in the text | `domain:example.com` |
+| `mentions` | the person, organization or document that a found mention is linked to | `mentions:"person:12"` |
 
 Field names are case-sensitive. An unknown field, value or combination is an error, never an empty
 answer and never plain text. A name that the archive does not know is not looked up on MAX.
 
 `kind:bot` selects a chat with a bot; `in:bots` selects the archives of `max sales bot`. `topic:` requires exactly one chat in `chat:`: topic numbers repeat across chats. `filename`, `mime` and `size` match a message if at least one of its files matches. MAX does not report file types, so `mime:` finds nothing here: search by extension.
+
+## Mentions
+
+`max` finds phone numbers, email addresses, links, documents and names of people in the saved messages. These fields
+find the messages that contain them. `max mentions list` shows the findings themselves.
+
+```sh
+max personal search messages 'phone:"+34 600 000 000"'
+max personal search messages 'email:"ana@example.com" OR domain:example.com'
+max personal search messages 'mentions:"person:12"'
+```
+
+Put a value with `+` or `@` in quotes: both signs are operators. A phone number is found however it is written:
+`+34 600 000 000` and `600000000` are one phone number, and a number without `+` is read by the countries in the
+`phone_countries` setting. `domain:` treats `docs.example.com` as the site `example.com`. In `mentions:`, write a
+reference to a person, organization or document; the field finds the messages whose mentions you linked to it with
+`max mentions confirm`.
 
 ## Presets
 
@@ -127,14 +150,6 @@ On a large archive a short prefix such as `к*` can expand to more than 10,000 w
 lengthen it. Long
 queries, deep nesting, large patterns and slow scans are refused with `query_limit`, not cut short:
 narrow the chat, the dates or the pattern.
-
-### JavaScript Regular Expression: `--regex`
-
-```sh
-max personal search messages --regex 'invoice\s+\d+' --json
-```
-
-`--regex` - separate mode. The words after command are a single JavaScript regular expression, not a query in that language. It is case-insensitive, checked against the full text of each stored message, and executed in an isolated process with time and size limits. A saved search stores its `--regex`; You cannot add `--regex` when running with `--saved`.
 
 ## The answer
 

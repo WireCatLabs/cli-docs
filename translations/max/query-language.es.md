@@ -4,12 +4,13 @@ title: "Lenguaje de consulta de la búsqueda"
 
 <a id="en-mcp" />
 <a id="los-modos-anteriores" />
+<a id="упоминания" />
 <a id="в-mcp" />
 <a id="прежние-режимы" />
 
 Si trabaja con `max` a través de un agente de IA, no necesita aprender este idioma: diga con palabras comunes lo que está buscando y el agente creará la solicitud. Esta página es para quienes escriben la búsqueda ellos mismos y para quienes necesitan todos los filtros: operadores exactos, todos los campos, ajustes preestablecidos, reglas de fecha y límites.
 
-Esta es una ayuda para las consultas `max personal search messages`, `max personal search mail`, `max personal search all`, `max personal stats messages show`, búsquedas guardadas y `--filter` [búsqueda por tema](./topic-search.md). Ejemplos para todos los días: en [búsqueda de mensajes](./search.md).
+Esta es una ayuda para las consultas `max personal search messages`, `max personal search all`, `max personal stats messages show`, búsquedas guardadas y `--filter` [búsqueda por tema](./topic-search.md). Ejemplos para todos los días: en [búsqueda de mensajes](./search.md).
 
 Términos de esta página:
 
@@ -20,7 +21,7 @@ Términos de esta página:
 
 Idioma: un perfil estricto de la sintaxis de Apache Lucene: palabras, frases, Y/O/NO, grupos, campos, rangos, patrones limitados y expresiones regulares. "Estricto" significa que cualquier cosa que no sea compatible es un error, no una parte que se omite silenciosamente. [La ayuda completa](https://github.com/WireCatLabs/cli-core/blob/v0.212.0/docs/search/query-language.md) contiene tablas generadas de campos, operadores, ajustes preestablecidos y límites y ejemplos verificables; [La especificación técnica](https://github.com/WireCatLabs/cli-core/blob/v0.212.0/docs/search/query-language-spec.md) describe la gramática y el compilador.
 
-En el correo, `chat:` selecciona una cadena por su id o por el asunto del mensaje, y `from:`, el remitente. El correo no tiene los campos `kind:` ni `topic:`.
+`max` no busca en el correo: para eso está `memo search mail`.
 
 ## Qué puede hacer el idioma
 
@@ -79,10 +80,32 @@ Las palabras y frases sin campo buscan distintas formas de palabra. `--exact` se
 | `mime` | tipo del adjunto; MAX no lo indica | `mime:image` |
 | `size` | tamaño en bytes o KB/MB/GB de 1024 | `size>10MB` |
 | `tag` | tu etiqueta local en el mensaje, su chat o su remitente | `tag:work` |
+| `phone` | teléfono encontrado en el texto, como sea que esté escrito | `phone:"+34 600 000 000"` |
+| `email` | dirección de correo encontrada en el texto | `email:"ana@example.com"` |
+| `url` | enlace encontrado en el texto, sin parámetros de seguimiento | `url:"https://example.com/a"` |
+| `domain` | sitio de un enlace o de una dirección encontrados en el texto | `domain:example.com` |
+| `mentions` | persona, organización o documento a los que está vinculada la mención encontrada | `mentions:"person:12"` |
 
 Los nombres de campo distinguen mayúsculas. Un campo, valor o combinación desconocidos son un error, nunca una respuesta vacía ni texto normal. Un nombre que el archivo local no conoce no se busca en MAX.
 
 `kind:bot` selecciona un chat con un bot; `in:bots` selecciona los archivos de `max sales bot`. `topic:` requiere exactamente un chat en `chat:`: los números de tema se repiten entre chats. `filename`, `mime` y `size` coinciden con un mensaje si coincide al menos uno de sus archivos. MAX no indica los tipos de archivo, así que `mime:` no encuentra nada aquí: busca por extensión.
+
+## Menciones
+
+`max` encuentra en los mensajes guardados teléfonos, direcciones de correo, enlaces, documentos y nombres de personas.
+Estos campos buscan los mensajes que los contienen. Los hallazgos en sí los muestra `max mentions list`.
+
+```sh
+max personal search messages 'phone:"+34 600 000 000"'
+max personal search messages 'email:"ana@example.com" OR domain:example.com'
+max personal search messages 'mentions:"person:12"'
+```
+
+Pon entre comillas el valor con `+` o `@`: ambos signos son operadores. Un teléfono se encuentra como sea que esté
+escrito: `+34 600 000 000` y `600000000` son el mismo teléfono, y un número sin `+` se lee según los países del ajuste
+`phone_countries`. `domain:` considera `docs.example.com` como el sitio `example.com`. En `mentions:` se escribe una
+referencia a una persona, organización o documento; el campo encuentra los mensajes cuyas menciones vinculaste a ella
+con `max mentions confirm`.
 
 ## Filtros preparados
 
@@ -119,14 +142,6 @@ Antes de indexarlo y buscarlo, el texto se convierte a minúsculas y pierde los 
 `text:/счёт/` coincide con la palabra completa «счёт», pero no con «счётом». `body:/счёт/` coincide solo con un mensaje cuyo texto completo es «счёт», distinguiendo mayúsculas; para encontrarla en cualquier posición, usa `body:/.*счёт.*/`, y para el comienzo de una frase, `body:/.*[Сс]чёт.*/`. Es la sintaxis de expresiones regulares de Lucene, sin lookaround, referencias inversas, anclas ni indicadores de JavaScript.
 
 En un archivo grande, un prefijo corto como `к*` puede abarcar más de 10 000 palabras y se rechaza; alárgalo. Las consultas largas, el anidamiento profundo, los patrones grandes y los recorridos lentos se rechazan con `query_limit`, no se recortan: limita el chat, las fechas o el patrón.
-
-### Expresión regular de JavaScript: `--regex`
-
-```sh
-max personal search messages --regex 'invoice\s+\d+' --json
-```
-
-`--regex` - modo separado. Las palabras después del comando son una única expresión regular de JavaScript, no una consulta en ese idioma. No distingue entre mayúsculas y minúsculas, se compara con el texto completo de cada mensaje almacenado y se ejecuta en un proceso aislado con límites de tiempo y tamaño. Una búsqueda guardada almacena su `--regex`; no puede agregar `--regex` al comenzar desde `--saved`.
 
 ## La respuesta
 

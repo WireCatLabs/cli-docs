@@ -159,7 +159,7 @@ Es `chats`, plural. Consulta `max --help`.
 ### «is not a valid config»
 
 ```json
-{"error":{"code":"configuration_error","reason":"config.invalid","message":"…/config.json is not a valid config:\n  profiles.default.limitt: unknown setting — the known ones are limit, timeout_ms, color, record, keep_runs_for_days, read_only, allow, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, mcp_tools"}}
+{"error":{"code":"configuration_error","reason":"config.invalid","message":"…/config.json is not a valid config:\n  profiles.default.limitt: unknown setting — the known ones are limit, timeout_ms, color, record, keep_runs_for_days, allow, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve"}}
 ```
 
 Código `3`. En un archivo de configuración, un campo que no está en el esquema casi siempre es un error tipográfico y el mensaje indica su ruta. Rechazado a propósito: un campo silenciosamente ignorado vale medio día de desconcierto. Todos los campos están en [referencia de configuración](./configuration-reference.md).

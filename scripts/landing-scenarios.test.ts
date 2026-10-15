@@ -47,14 +47,9 @@ describe("reviewed landing workflows", () => {
       const preview = group.steps.find((step: Step) => step.tool?.startsWith("max chats moderate"))
       expect(JSON.parse(preview.out)).toMatchObject({ chatId: "301", rows: expect.any(Array) })
       const files = maxSession(sessionById(sessions, "files"))
-      expect(files.steps.filter((step: Step) => step.tool?.includes("--output ./Atlas"))).toHaveLength(3)
-      expect(files.steps.some((step: Step) => step.tool?.includes("--output-dir"))).toBe(false)
+      expect(files.steps.filter((step: Step) => step.tool?.includes("--output-dir ./Atlas"))).toHaveLength(3)
       const search = maxSession(sessionById(sessions, "search"))
-      expect(
-        search.steps
-          .filter((step: Step) => step.tool?.startsWith("max search messages"))
-          .every((step: Step) => step.tool?.includes("--language legacy")),
-      ).toBe(true)
+      expect(search.steps.some((step: Step) => step.tool?.includes("--language"))).toBe(false)
       expect(search.steps.some((step: Step) => step.tool?.startsWith("tg messages context msg:telegram/"))).toBe(true)
       expect(search.steps.some((step: Step) => step.tool?.startsWith("max messages context msg:max/"))).toBe(true)
       const bot = maxSession(sessionById(sessions, "bot"))

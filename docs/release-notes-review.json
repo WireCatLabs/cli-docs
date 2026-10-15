@@ -6,10 +6,10 @@
     "conclusion": "Reviewed 0.57–0.60: permissions-only snake_case configuration, Lucene-only message queries, explicit task category/duplicate resolution and shared flag names; mail search belongs to Memo. Roadmap unchanged: multi-photo sending, private chat notes and the listed MAX-only capabilities remain future work."
   },
   "max": {
-    "version": "v0.53.0",
+    "version": "v0.54.0",
     "roadmapSha256": "f1628c3c19b2ea49f41fb57147b92bb0f9d29081ed577d1be3755a8a35b2a961",
     "reviewedAt": "2026-10-15",
-    "conclusion": "Reviewed 0.53.0: camelCase config set/unset names write snake_case settings; bot uploads obey credential/keyring/browser/WireCat file restrictions with the explicit CLI override; pre-acknowledgement MAX rate refusals are safe to retry while uncertain outcomes remain unsafe. Bot/security guides correctly distinguish Node process-wide trust of the extra root from Bun per-request trust; the system certificate store is unchanged. Roadmap unchanged: optional no-local-copy mode, event actions, video circles, cloud password and standalone installers remain future work."
+    "conclusion": "Reviewed 0.54.0: task claims, categories, tags and duplicate review; mentions domains, list --new, --all-in-chat and phone_countries; store version 16 reads notes and documents; snake_case settings only; mail search moved to Memo; MAX_READ_ONLY now blocks writes that enable later writes. Roadmap unchanged: optional no-local-copy mode, event actions, video circles, cloud password and standalone installers remain future work."
   },
   "zm": {
     "version": "v0.18.0",

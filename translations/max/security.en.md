@@ -77,7 +77,7 @@ Why protection against wrong sends is needed and how it works is described on th
 | Hourly limit for messages, forwards, edits, notified pins, deleted messages and added members; reactions excluded | `sends_per_hour`, default `30` | Code `8`, with next available time |
 | Log every attempt without content | Always; inspect with `max personal sends list` | — |
 
-**Bots have their own `bot.*` keys, such as `bot.messages.send`.** They use the same levels. Common settings and `bot.defaults`/`bot.profiles` layers resolve in the same order; `config show --bot` reports effective permissions. Legacy `read_only` and `allow` remain readable for compatibility before migration.
+**Bots have their own `bot.*` keys, such as `bot.messages.send`.** They use the same levels. Common settings and `bot.defaults`/`bot.profiles` layers resolve in the same order; `config show --bot` reports effective permissions. The legacy `allow` is still read.
 
 Each bot has its own recipient list (`max <имя> bot recipients add <чат>`) and log (`max <имя> bot sends list`). **Every** write passes them, including `messages send`, `messages pin` and `bot api`, preventing a generic API call from bypassing safeguards. Edits and deletions take the chat first: `max` fetches the message and refuses if it belongs to another chat. This comparison is unavailable for a chat addressed as `user:<id>`. Logs contain chat, action, outcome and text length, but not text. Bots have no hourly limit unless configured in `bot`: `max <имя> config set --bot sends_per_hour 200`.
 
