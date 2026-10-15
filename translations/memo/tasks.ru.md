@@ -29,6 +29,19 @@ memo tasks list --provider telegram --account 1
 файла добавьте `--provider` и `--account`. Если добавить ту же задачу дважды, вы получите уже
 существующую.
 
+## Что требует внимания сегодня
+
+Повестка, план и карточка — те же команды, что в tg и max; укажите аккаунт мессенджера:
+
+```sh
+memo tasks agenda --provider telegram --account 1           # overdue, due, owed and waiting chats
+memo tasks plan 1a2b3c4d --due 2d --remind-time 1d --title 'Send the revised budget' --provider telegram --account 1
+memo tasks show 1a2b3c4d --provider telegram --account 1
+memo stats tasks show --provider telegram --account 1       # open tasks per chat
+```
+
+Без `--provider` и `--account` команда перечисляет аккаунты в хранилище. tg и max открывают эти задачи при синхронизации; memo читает то же хранилище.
+
 ## Задачи в проекте
 
 Задаче в проекте не нужен источник. Она получает ключ из ключа проекта и номера, например `HRB-1`:
@@ -36,7 +49,7 @@ memo tasks list --provider telegram --account 1
 ```sh
 memo tasks add --project HRB --title 'Book the venue' --priority 1
 memo tasks add --project HRB --title 'Export drops the last row' --type bug
-memo tasks list --project HRB
+memo tasks list project:HRB
 memo tasks update HRB-1 --priority 0 --description 'Call before Friday'
 ```
 
@@ -68,8 +81,7 @@ memo tasks close HRB-1 --reason booked
 memo tasks close 7 --provider telegram --account 1 --as dismissed
 ```
 
-Закройте задачу с `--as done` (по умолчанию) или `--as dismissed`. `memo tasks list --state done` показывает
-закрытые задачи. Каждое изменение статуса, приоритета или исполнителя записывается вместе с задачей.
+Закройте задачу через `--as done` (по умолчанию) или `--as dismissed`. `memo tasks list state:done` показывает закрытые задачи; с `--project` поле `kind:bug` сужает вид. `source:"note:12"` оставляет задачи аккаунта из одного сообщения, заметки или документа — этот шаг `memo search all` предлагает для результата, на который ссылаются задачи. Каждое изменение статуса, приоритета или исполнителя сохраняется с задачей.
 
 ## Что делать в первую очередь
 
@@ -77,10 +89,16 @@ memo tasks close 7 --provider telegram --account 1 --as dismissed
 
 ```sh
 memo tasks link HRB-2 HRB-1 --kind blocked-by     # HRB-2 waits for HRB-1
-memo tasks ready --project HRB                    # tasks with nothing left to wait for
-memo tasks readiness HRB-2                        # why HRB-2 can or cannot start
+memo tasks list project:HRB ready:true          # tasks with nothing left to wait for
+memo tasks status HRB-2                           # why HRB-2 can or cannot start
 memo tasks relations HRB-2
 memo tasks unlink HRB-2 HRB-1 --kind blocked-by
+```
+
+`tasks link` также принимает другую задачу как `task:HRB-1`. Иная цель — сообщение, чат, человек или URL — связывает задачу аккаунта с её предметом и требует `--provider` и `--account`:
+
+```sh
+memo tasks link 12 msg:telegram/500/7/101 --provider telegram --account 500
 ```
 
 Задача становится готовой, только когда выполнены все задачи, которые она ждёт. Если одна из
@@ -94,9 +112,9 @@ memo tasks unlink HRB-2 HRB-1 --kind blocked-by
 срок которых наступил, и показывает их вам.
 
 ```sh
-memo reminders schedule 7 --at 2026-10-20T09:00:00+02:00 --timezone Europe/Madrid --provider telegram --account 1
+memo reminders add 7 --at-time 2026-10-20T09:00:00+02:00 --timezone Europe/Madrid --provider telegram --account 1
 memo reminders list --provider telegram --account 1
-memo reminders snooze 3 --revision 1 --at 2026-10-21T09:00:00+02:00 --provider telegram --account 1
+memo reminders update 3 --revision 1 --at-time 2026-10-21T09:00:00+02:00 --provider telegram --account 1
 memo reminders cancel 3 --provider telegram --account 1
 ```
 

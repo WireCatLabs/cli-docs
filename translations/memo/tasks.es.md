@@ -29,6 +29,19 @@ Una tarea creada a partir de una fuente tiene un tipo: `request` (el predetermin
 ya indica su cuenta; para una nota o un archivo, añade `--provider` y `--account`. Si añades la misma
 tarea dos veces, obtienes la que ya existe.
 
+## Qué revisar hoy
+
+La agenda, el plan y la ficha son los mismos comandos de tg y max; indica la cuenta:
+
+```sh
+memo tasks agenda --provider telegram --account 1           # overdue, due, owed and waiting chats
+memo tasks plan 1a2b3c4d --due 2d --remind-time 1d --title 'Send the revised budget' --provider telegram --account 1
+memo tasks show 1a2b3c4d --provider telegram --account 1
+memo stats tasks show --provider telegram --account 1       # open tasks per chat
+```
+
+Sin `--provider` y `--account`, el comando enumera las cuentas guardadas. tg y max abren estas tareas al sincronizar; memo lee el mismo almacén.
+
 ## Tareas en un proyecto
 
 Una tarea en un proyecto no necesita fuente. Recibe una clave formada por la clave del proyecto y un
@@ -37,7 +50,7 @@ número, como `HRB-1`:
 ```sh
 memo tasks add --project HRB --title 'Book the venue' --priority 1
 memo tasks add --project HRB --title 'Export drops the last row' --type bug
-memo tasks list --project HRB
+memo tasks list project:HRB
 memo tasks update HRB-1 --priority 0 --description 'Call before Friday'
 ```
 
@@ -69,8 +82,7 @@ memo tasks close HRB-1 --reason booked
 memo tasks close 7 --provider telegram --account 1 --as dismissed
 ```
 
-Cierra una tarea con `--as done` (el predeterminado) o `--as dismissed`. `memo tasks list --state done`
-muestra las tareas cerradas. Cada cambio de estado, prioridad o responsable queda registrado con la tarea.
+Cierra una tarea con `--as done` (predeterminado) o `--as dismissed`. `memo tasks list state:done` muestra las cerradas; con `--project`, `kind:bug` filtra la clase. `source:"note:12"` conserva tareas de una cuenta procedentes de un mensaje, nota o documento: es el paso que propone `memo search all` para un resultado con tareas vinculadas. Cada cambio de estado, prioridad o responsable queda registrado.
 
 ## Qué hacer primero
 
@@ -78,10 +90,16 @@ Una tarea puede esperar a otra. Vincúlalas y luego pregunta a Memo qué tareas 
 
 ```sh
 memo tasks link HRB-2 HRB-1 --kind blocked-by     # HRB-2 waits for HRB-1
-memo tasks ready --project HRB                    # tasks with nothing left to wait for
-memo tasks readiness HRB-2                        # why HRB-2 can or cannot start
+memo tasks list project:HRB ready:true          # tasks with nothing left to wait for
+memo tasks status HRB-2                           # why HRB-2 can or cannot start
 memo tasks relations HRB-2
 memo tasks unlink HRB-2 HRB-1 --kind blocked-by
+```
+
+`tasks link` también acepta otra tarea como `task:HRB-1`. Un destino distinto —mensaje, chat, persona o URL— vincula la tarea de una cuenta con su tema y requiere `--provider` y `--account`:
+
+```sh
+memo tasks link 12 msg:telegram/500/7/101 --provider telegram --account 500
 ```
 
 Una tarea solo está lista cuando todas las tareas a las que espera están hechas. Si una de las tareas
@@ -95,9 +113,9 @@ ordenador; otro programa que tú eliges, como tu agente o un script, pide a Memo
 pendientes y te los muestra.
 
 ```sh
-memo reminders schedule 7 --at 2026-10-20T09:00:00+02:00 --timezone Europe/Madrid --provider telegram --account 1
+memo reminders add 7 --at-time 2026-10-20T09:00:00+02:00 --timezone Europe/Madrid --provider telegram --account 1
 memo reminders list --provider telegram --account 1
-memo reminders snooze 3 --revision 1 --at 2026-10-21T09:00:00+02:00 --provider telegram --account 1
+memo reminders update 3 --revision 1 --at-time 2026-10-21T09:00:00+02:00 --provider telegram --account 1
 memo reminders cancel 3 --provider telegram --account 1
 ```
 

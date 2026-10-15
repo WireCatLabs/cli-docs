@@ -50,17 +50,20 @@ Use the memo tools to list the memories waiting for my review.
 
 ## Инструменты
 
-| Инструмент | Что он делает |
+| Инструмент | Действие |
 |---|---|
-| `memories_add`, `memories_list`, `memories_show`, `memories_search` | Сохраняет и читает память |
-| `facts_add`, `facts_list`, `facts_show` | Записывает и читает факты |
-| `actions_propose`, `actions_list`, `actions_show` | Предлагает действия и читает их |
-| `agents_log` | Читает журнал агентов |
-| `vocabulary_list`, `vocabulary_resolve`, `vocabulary_preflight` | Находит проекты, теги и темы, только чтение |
-| `task_relations`, `task_readiness`, `tasks_ready` | Показывает, как задачи зависят друг от друга, только чтение |
+| `search_all` | Поиск сообщений всех мессенджеров, почты и заметок вместе; только чтение |
+| `search_messages`, `search_mail`, `search_notes` | Поиск одного вида источников со всеми полями; только чтение |
+| `person_context` | Человек в мессенджерах и почте, со связанными заметками и задачами; только чтение |
+| `memories_add`, `memories_list`, `memories_show`, `search_memories` | Запись и чтение памяти |
+| `facts_add`, `facts_list`, `facts_show` | Запись и чтение фактов |
+| `actions_add`, `actions_list`, `actions_show` | Предложение и чтение действий |
+| `agents_log` | Чтение журнала агента |
+| `vocabulary_list`, `vocabulary_show`, `vocabulary_check` | Просмотр проектов, тегов и тем; только чтение |
+| `tasks_relations`, `tasks_status`, `tasks_list` | Зависимости задач; только чтение |
 
 Всё, что добавляет приложение, сохраняется под именем агента `memo-mcp` и ждёт со статусом «предложено».
-Вы проверяете это командой `memo memories list --status proposed` и командами со страницы
+Вы проверяете это командой `memo memories list status:proposed` и командами со страницы
 [Память и факты](./memories.md).
 
 ## Журнал агентов
@@ -68,7 +71,7 @@ Use the memo tools to list the memories waiting for my review.
 Каждый вызов приложения записывается в журнал агентов:
 
 ```sh
-memo agents log --agent memo-mcp --limit 20
+memo agents log agent:memo-mcp --limit 20
 ```
 
 Журнал показывает инструмент, результат и время, но никогда не показывает, что отправило приложение.

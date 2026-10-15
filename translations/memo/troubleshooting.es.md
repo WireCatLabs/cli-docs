@@ -13,7 +13,7 @@ y ejecuta `memo --help`. Si sigue fallando, instala Memo de nuevo:
 
 ## Una nota o un archivo no aparece en la búsqueda
 
-1. Ejecuta `memo notes import` y lee el informe. Muestra los archivos que no pudo leer y por qué.
+1. Ejecuta `memo sync --only notes` y lee el informe. Muestra los archivos que no pudo leer y por qué.
 2. Comprueba que la carpeta del archivo está en `memo folders list` y que `notes.ignore` no omite el
    archivo en el [archivo de configuración](./configuration.md#notes).
 3. Busca una palabra que sepas que está en el archivo. Una búsqueda encuentra resultados que contienen
@@ -30,7 +30,7 @@ con tg o max y luego importa:
 
 ```sh
 tg models text download e5-small    # or: max models text download e5-small
-memo import
+memo sync
 ```
 
 ## Aparece "nobody by that name yet"
@@ -56,9 +56,7 @@ funciona, y luego importa de nuevo.
 `no mail account` significa que el archivo de configuración todavía no tiene cuentas de correo. Añade
 una en `mail.accounts` ([correo](./mail.md#add-the-account-to-memo)).
 
-`memo mail import` necesita el nombre de la cuenta: `memo mail work import`. El nombre es el `name` de
-`mail.accounts` en el archivo de configuración. Memo muestra los nombres que conoce cuando falta el
-nombre o es incorrecto.
+`memo sync --account work` acepta el nombre de cuenta: el `name` de `mail.accounts` en los ajustes. Si es incorrecto, Memo enumera las cuentas conocidas. Sin `--account`, lee todas.
 
 ## Se rechaza la edición de una nota
 
@@ -81,9 +79,15 @@ El comando trabaja en una sola cuenta y Memo no elige una por ti. Añade `--prov
 
 Las versiones anteriores de Memo guardaban los datos en un archivo llamado `messages.db`. La versión
 actual usa el almacén local compartido, `wirecat.db`, y no lee el archivo antiguo. Añade de nuevo cada
-carpeta con `memo folders add` y luego ejecuta `memo notes import` y `memo mail <account> import`.
+carpeta con `memo folders add` y luego ejecuta `memo sync --only notes` y `memo sync --only mail`.
+
+## La ayuda muestra todos los comandos
+
+Una ruta en un solo argumento, como `memo "projects add" --help`, se rechaza indicando las palabras correctas. Un bucle puede pasarla así: en zsh, `for c in "projects add"; do memo $c --help; done` conserva `$c` entero. Usa `memo ${=c} --help` en zsh o recorre las palabras.
 
 ## Si sigues sin solución
+
+Antes de informar de un error, compara `memo --version` con `npm view @wirecat/cli-memo version`. Si tu versión es anterior, actualiza y prueba de nuevo: el fallo puede estar corregido.
 
 Ejecuta de nuevo el comando que falla con `--json` y da la respuesta completa a tu agente, o
 [abre una incidencia](https://github.com/WireCatLabs/cli-memo/issues) con el comando y el mensaje. No

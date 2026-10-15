@@ -69,7 +69,7 @@ Memo читает почту через [Himalaya](https://github.com/pimalaya/h
 ваши собственные — импортируются как почтовые ящики и обновляются при каждом запуске.
 
 ```sh
-memo mail gmail import --since 2026-09-01 --json
+memo sync --only mail --account gmail --since-time 2026-09-01 --json
 ```
 
 Выберите начальную дату. По умолчанию за один запуск читается не более 200 новых писем.
@@ -137,7 +137,7 @@ memo tags list --provider email --account you@example.com --json
 ярлыки Gmail и флаги почты. Чтобы сохранить оценку, связанную с одним письмом:
 
 ```sh
-memo notes add 'Waiting for a revised quote' --about 'msg:email/you%40example.com/12345/67890' --json
+memo notes add 'Waiting for a revised quote' --subject 'msg:email/you%40example.com/12345/67890' --json
 ```
 
 Полный порядок действий описан в разделах [создание, изменение и экспорт заметок](./memo/notes.md#write-your-own-notes)

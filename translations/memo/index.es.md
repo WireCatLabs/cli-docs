@@ -62,7 +62,7 @@ O escribe tú los comandos. Sustituye `/path/to/notes` por una carpeta de tu ord
 ```sh
 npm install -g @wirecat/cli-memo
 memo folders add /path/to/notes --format markdown
-memo notes import --no-embed
+memo sync --only notes --no-embed
 memo search notes budget
 ```
 

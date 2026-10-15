@@ -81,7 +81,7 @@ Use memo CLI to give me a weekly review: open tasks by project, tasks that are r
 and the memories, facts and actions waiting for my review. Do not approve or confirm anything.
 ```
 
-Агент объединяет `memo tasks list`, `memo tasks ready` и списки на проверку со страницы
+Агент объединяет `memo tasks list`, `memo tasks list project:HRB ready:true` и списки на проверку со страницы
 [Память и факты](./memories.md). Решение по каждому пункту принимайте сами.
 
 ## Записать сводку в папку с заметками
@@ -91,7 +91,7 @@ Use memo CLI to write a short note about the Harbour project that summarises wha
 with the sources it is based on. Show me the note, then export it to my vault.
 ```
 
-Агент пишет заметку командой `memo notes add --about project:…` и экспортирует её командой
+Агент пишет заметку командой `memo notes add --subject project:…` и экспортирует её командой
 `memo notes export` ([заметки](./notes.md#save-your-notes-as-files)). Memo никогда не перезаписывает
 файл, который вы изменили.
 
@@ -107,6 +107,6 @@ Use memo CLI to collect the sources about the Harbour budget with memo ask, usin
 
 ## Запуск по расписанию
 
-В Linux `memo auto on` поддерживает ваши заметки и почту в актуальном состоянии. Чтобы выполнять рецепт
+В Linux `memo auto start` поддерживает ваши заметки и почту в актуальном состоянии. Чтобы выполнять рецепт
 каждое утро, используйте собственное расписание агента или планировщик на компьютере, который запускает
 агента с этим запросом.

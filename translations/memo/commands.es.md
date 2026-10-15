@@ -7,17 +7,18 @@ title: "Todos los comandos"
 
 Consulta aquí todos los comandos y opciones de Memo. Los comandos que trabajan en una cuenta de un servicio de mensajería o de correo usan `--provider` y `--account`; Memo nunca elige una cuenta por ti. Añade `--json` para obtener una respuesta que un script o un agente puedan leer. Consulta las [recetas](./recipes.md) para tareas completas y [usar Memo](./usage.md) para un día normal. Las descripciones de las operaciones conservan el idioma de la ayuda de la herramienta.
 
-## Opciones globales
+## Opciones generales
 
-Estas opciones funcionan con el propio comando `memo`.
+Estas opciones se aplican al propio comando `memo`.
 
 | Option | What it does |
 |---|---|
 | `-V, --version` | output the version number. |
+| `--debug` | on failure, show the full error record: cause and stack. |
 
 ## `memo context`
 
-What the store holds about a person — messages, mail and notes — with a link to each source
+messages, mail and notes about a person, each with a link to its source
 
 ```sh
 memo context <person> [options]
@@ -30,48 +31,16 @@ memo context <person> [options]
 | Option | What it does |
 |---|---|
 | `--limit <n>` | most messages and notes of each kind. Default: `20`. |
-| `--json` | print JSON. |
-| `--account <id>` | required when several accounts of the requested provider are stored. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--account <account>` | the stored account to read; required when the store holds several of that messenger. |
 
 ## `memo notes`
 
-Notes: files from your folders, and notes you write here about messages, people and projects
-
-### `memo notes import`
-
-Bring the folders' notes, their links and tags into the shared store — only what changed
-
-```sh
-memo notes import [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--folder <path-or-id...>` | only these configured folders. |
-| `--ignore <path...>` | files or folders inside them to skip, added to notes.ignore — a path or a glob. |
-| `--no-embed` | skip embedding the notes for search by meaning this run. |
-| `--json` | print JSON. |
-
-### `memo notes about`
-
-Notes about a person, project or note, and the notes that link them — through links, never a name in plain text
-
-```sh
-memo notes about <subject> [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `subject` | required | <messenger>:<name or id>, person:<uid>, organization:<id>, project:<id>, note:<id> or document:<id>. |
-
-| Option | What it does |
-|---|---|
-| `--limit <n>` | most notes of each kind. Default: `20`. |
-| `--json` | print JSON. |
+notes from your folders, and notes you write here
 
 ### `memo notes show`
 
-One note: its text, tags, what it links and what links it
+one note: its text, tags, what it links and what links it
 
 ```sh
 memo notes show <note> [options]
@@ -83,28 +52,31 @@ memo notes show <note> [options]
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo notes list`
 
-Notes, newest first
+notes, newest first
 
 ```sh
-memo notes list [options]
+memo notes list [query] [options]
 ```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
-| `--about <subject>` | only notes about this: <messenger>:<name or id> or a typed reference. |
-| `--source <source>` | file or internal. |
-| `--search <text>` | only notes holding this text, as written. |
-| `--offset <n>` | skip this many. Default: `0`. |
 | `--limit <n>` | most notes, at most 500. Default: `20`. |
-| `--json` | print JSON. |
+| `--page <n>` | which page, from 1. Default: `1`. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo notes add`
 
-Write a note of your own about messages, people, projects or other notes
+write a note of your own about messages, people, projects or other notes
+
+This command changes the local store or your files.
 
 ```sh
 memo notes add [text] [options]
@@ -112,24 +84,26 @@ memo notes add [text] [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `text` | optional | the note; or --text, or --file. |
+| `text` | optional | the note; or --text, or --text-file. |
 
 | Option | What it does |
 |---|---|
 | `--text <text>` | the note. |
-| `--file <path>` | read the note from a file; - reads stdin. |
+| `--text-file <path>` | read the note from a file; - reads stdin. |
 | `--title <title>` | a title. |
-| `--about <subject...>` | what it is about: <messenger>:<name or id>, msg:, chat:, person:, organization:, project:, task:, note:, document:, meeting:. |
+| `--subject <ref>` | what it is about: <messenger>:<name or id>, msg:, chat:, person:, organization:, project:, task:, note:, document:, meeting:; repeat for more. |
 | `--meeting <id>` | also about this meeting, by its store id, with --provider and --account. |
 | `--provider <provider>` | the meeting's provider. |
 | `--account <account>` | the meeting's account. |
 | `--export [dir]` | also write it as a file — to this folder, or notes.export.dir. |
 | `--format <format>` | the file's format: obsidian, markdown. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo notes edit`
 
-Change a note you wrote here; a file's note is edited in its file
+change a note you wrote here; a file's note is edited in its file
+
+This command changes the local store or your files.
 
 ```sh
 memo notes edit <id> [options]
@@ -143,14 +117,16 @@ memo notes edit <id> [options]
 |---|---|
 | `--revision <n>` | its current revision, so an edit made meanwhile is not lost. |
 | `--text <text>` | the new text. |
-| `--file <path>` | read the new text from a file; - reads stdin. |
+| `--text-file <path>` | read the new text from a file; - reads stdin. |
 | `--export [dir]` | also rewrite its file — in this folder, or notes.export.dir. |
 | `--format <format>` | the file's format: obsidian, markdown. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo notes remove`
 
-Delete a note you wrote here; a file it was exported to stays
+delete a note you wrote here; a file it was exported to stays
+
+This command changes the local store or your files.
 
 ```sh
 memo notes remove <id> [options]
@@ -162,11 +138,13 @@ memo notes remove <id> [options]
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo notes export`
 
-Write the notes you wrote here as files, never overwriting one you edited
+write the notes you wrote here as files, never overwriting one you edited
+
+This command changes the local store or your files.
 
 ```sh
 memo notes export [options]
@@ -174,17 +152,19 @@ memo notes export [options]
 
 | Option | What it does |
 |---|---|
-| `--to <dir>` | the folder to write to (default: notes.export.dir). |
+| `--output-dir <dir>` | the folder to write to (default: notes.export.dir). |
 | `--format <format>` | the files' format: obsidian, markdown. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ## `memo folders`
 
-Folders of notes: an id that links and the store use, and where the folder is on this computer
+folders of notes: the id links and the store use, and the path on this computer
 
 ### `memo folders add`
 
-Give a folder of notes an id, or show the one it has
+give a folder of notes an id, or show the one it has
+
+This command changes the local store or your files.
 
 ```sh
 memo folders add <path> [options]
@@ -197,11 +177,13 @@ memo folders add <path> [options]
 | Option | What it does |
 |---|---|
 | `--format <format>` | how its notes are written: obsidian, markdown (default: obsidian). |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo folders attach`
 
-Bind a folder id from another computer to the folder's path on this one
+bind a folder id from another computer to the folder's path on this one
+
+This command changes the local store or your files.
 
 ```sh
 memo folders attach <id> <path> [options]
@@ -215,44 +197,205 @@ memo folders attach <id> <path> [options]
 | Option | What it does |
 |---|---|
 | `--format <format>` | how its notes are written: obsidian, markdown. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo folders list`
 
-The folders of notes: those on this computer, and those the store has from another
+folders of notes on this computer, and those the store knows from another
 
 ```sh
-memo folders list [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--json` | print JSON. |
-
-## `memo mail`
-
-Read one mail account through Himalaya into the shared message store
-
-```sh
-memo mail [account] [action] [options]
+memo folders list [query] [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `account` | optional | the account's name in mail.accounts of the config, also its name in Himalaya. |
-| `action` | optional | import: read the account's mail, and drop the text of mail deleted at the source. |
+| `query` | optional | field:value terms; this list filters by none yet. |
 
 | Option | What it does |
 |---|---|
-| `--since <date>` | first day to read, YYYY-MM-DD (default: 30 days ago). |
-| `--max <n>` | most new messages to read in this run. Default: `200`. |
-| `--json` | print JSON. |
-| `--no-embed` | skip semantic embedding; local words remain searchable. |
-| `--retry-attachments` | reread bounded stored messages after installing an extraction engine. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+## `memo messages`
+
+stored emails; tg and max read messenger messages
+
+### `memo messages show`
+
+one stored email, whole, and the emails of its thread around it
+
+```sh
+memo messages show <message> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `message` | required | the email's msg:email/… reference, as search answers give it. |
+
+| Option | What it does |
+|---|---|
+| `--before-n <n>` | also this many earlier emails of its thread. Default: `0`. |
+| `--after-n <n>` | also this many later emails of its thread. Default: `0`. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+## `memo mail`
+
+look at a mail account before importing it, and the owner's rules
+
+### `memo mail probe`
+
+group an account's mail by sender and list, to decide what to keep or skip
+
+```sh
+memo mail probe <account> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `account` | required | the account's name in mail.accounts, or its address. |
+
+| Option | What it does |
+|---|---|
+| `--since-time <time>` | only mail from this time, ISO 8601 or 30d ago (default: all mail). |
+| `--limit <n>` | show this many of the largest groups. Default: `50`. |
+| `--domain-age` | ask each shown sender domain's registry when it was registered (RDAP); tells each registry its domain. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+### `memo mail status`
+
+how far an account's import is: mail stored, recorded, and left to read
+
+```sh
+memo mail status <account> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `account` | required | the account's name in mail.accounts, or its address. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+### `memo mail rules`
+
+the owner's decisions on which mail to skip or keep, by sender, domain or list
+
+#### `memo mail rules list`
+
+one account's rules
+
+```sh
+memo mail rules list <account> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `account` | required | the account's name in mail.accounts, or its address. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+#### `memo mail rules add`
+
+skip, record or keep mail by sender, domain or list; a repeat replaces its rule
+
+This command changes the local store or your files.
+
+```sh
+memo mail rules add <account> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `account` | required | the account's name in mail.accounts, or its address. |
+
+| Option | What it does |
+|---|---|
+| `--sender <address>` | one sender address. |
+| `--domain <domain>` | a sender domain, and its subdomains. |
+| `--list-id <id>` | a mailing list, by its List-Id. |
+| `--do <actions>` | one of skip (never read or store this mail), envelope (store only sender, date, size and labels: counted, out of search, cleanable later), keep (import it even when a skip or envelope rule matches). |
+| `--reason <text>` | why, for the owner later. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+#### `memo mail rules remove`
+
+drop the rule for a sender, domain or list
+
+This command changes the local store or your files.
+
+```sh
+memo mail rules remove <account> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `account` | required | the account's name in mail.accounts, or its address. |
+
+| Option | What it does |
+|---|---|
+| `--sender <address>` | one sender address. |
+| `--domain <domain>` | a sender domain. |
+| `--list-id <id>` | a mailing list, by its List-Id. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+#### `memo mail rules apply`
+
+cut stored mail an envelope rule matches to its envelope; dry run unless --yes
+
+This command changes the local store or your files.
+
+```sh
+memo mail rules apply <account> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `account` | required | the account's name in mail.accounts, or its address. |
+
+| Option | What it does |
+|---|---|
+| `--since-time <time>` | only mail from this time, ISO 8601 or 30d ago (default: all mail). |
+| `--yes` | change the store; without it, only say what would change. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+#### `memo mail rules export`
+
+print one account's rules as JSON, to review, keep or move elsewhere
+
+```sh
+memo mail rules export <account>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `account` | required | the account's name in mail.accounts, or its address. |
+
+#### `memo mail rules import`
+
+add the rules of a file from memo mail rules export; same match replaces
+
+This command changes the local store or your files.
+
+```sh
+memo mail rules import <account> <file> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `account` | required | the account's name in mail.accounts, or its address. |
+| `file` | required | the file memo mail rules export wrote. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ## `memo note`
 
-Name the note that is about a person, or show it
+name the note that is about a person, or show it
+
+This command changes the local store or your files.
 
 ```sh
 memo note <identity> [path] [options]
@@ -269,11 +412,13 @@ memo note <identity> [path] [options]
 
 ## `memo tags`
 
-Your labels on stored sources and folders or threads
+your labels on stored sources and folders or threads
 
 ### `memo tags add`
 
-Put labels on one source
+put labels on one source
+
+This command changes the local store or your files.
 
 ```sh
 memo tags add <tag> [options]
@@ -285,24 +430,26 @@ memo tags add <tag> [options]
 
 | Option | What it does |
 |---|---|
-| `--message <locator>` | a stored email or message's full msg: locator. |
+| `--message <message>` | a stored email or message's full msg: locator. |
 | `--note <reference>` | a note: note:<id>, a file in a notes folder: document:<id>; a bare id is a note. |
-| `--chat <id>` | a stored mail thread or chat's exact id; requires --provider and --account. |
+| `--chat <chat>` | a stored mail thread or chat's exact id; requires --provider and --account. |
 | `--provider <provider>` | the chat's provider, such as email. |
 | `--account <account>` | the chat's account, such as a mailbox address. |
 | `--task <id>` | label a task. |
-| `--contact <id>` | label a contact identity, with provider/account. |
+| `--contact <person>` | label a contact identity, with provider/account. |
 | `--person <uid>` | label a unified person. |
-| `--organization <id>` | label an organization. |
-| `--project <id>` | label a project. |
+| `--organization <organization>` | label an organization: its id or organization:<id>. |
+| `--project <project>` | label a project: its key or project:<id>. |
 | `--meeting <id>` | label a meeting by its store id, with --provider and --account. |
-| `--folder <id>` | label a notes folder, or with --path one subfolder: every note under it. |
-| `--path <subfolder>` | the subfolder inside --folder. |
-| `--json` | print JSON. |
+| `--folder <folder>` | label a notes folder by its id or path, or with --subfolder one subfolder: every note under it. |
+| `--subfolder <path>` | the subfolder inside --folder. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo tags remove`
 
-Remove labels from one source
+remove labels from one source
+
+This command changes the local store or your files.
 
 ```sh
 memo tags remove <tag> [options]
@@ -314,63 +461,49 @@ memo tags remove <tag> [options]
 
 | Option | What it does |
 |---|---|
-| `--message <locator>` | a stored email or message's full msg: locator. |
+| `--message <message>` | a stored email or message's full msg: locator. |
 | `--note <reference>` | a note: note:<id>, a file in a notes folder: document:<id>; a bare id is a note. |
-| `--chat <id>` | a stored mail thread or chat's exact id; requires --provider and --account. |
+| `--chat <chat>` | a stored mail thread or chat's exact id; requires --provider and --account. |
 | `--provider <provider>` | the chat's provider, such as email. |
 | `--account <account>` | the chat's account, such as a mailbox address. |
 | `--task <id>` | label a task. |
-| `--contact <id>` | label a contact identity, with provider/account. |
+| `--contact <person>` | label a contact identity, with provider/account. |
 | `--person <uid>` | label a unified person. |
-| `--organization <id>` | label an organization. |
-| `--project <id>` | label a project. |
+| `--organization <organization>` | label an organization: its id or organization:<id>. |
+| `--project <project>` | label a project: its key or project:<id>. |
 | `--meeting <id>` | label a meeting by its store id, with --provider and --account. |
-| `--folder <id>` | label a notes folder, or with --path one subfolder: every note under it. |
-| `--path <subfolder>` | the subfolder inside --folder. |
-| `--json` | print JSON. |
+| `--folder <folder>` | label a notes folder by its id or path, or with --subfolder one subfolder: every note under it. |
+| `--subfolder <path>` | the subfolder inside --folder. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo tags list`
 
-List source labels, optionally in one provider or account
+list source labels, optionally in one provider or account
 
 ```sh
-memo tags list [options]
+memo tags list [query] [options]
 ```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
 | `--provider <provider>` | only this provider. |
 | `--account <account>` | only this account; requires --provider. |
-| `--tag <tag>` | only this tag. |
-| `--type <type>` | chat, message, contact, note, document, person, organization, project, task, meeting, folder. |
 | `--limit <n>` | most labels to show. Default: `100`. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ## `memo tasks`
 
-Open work linked to stored messages, documents and emails
-
-### `memo tasks link`
-
-link reviewed project task relationships
-
-```sh
-memo tasks link <task> <other-task> [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `task` | required |  |
-| `other-task` | required |  |
-
-| Option | What it does |
-|---|---|
-| `--kind <kind>` | blocked-by, follow-up-of, related-to. |
-| `--json` | print JSON. |
+open work linked to stored messages, documents and emails
 
 ### `memo tasks unlink`
 
 unlink reviewed project task relationships
+
+This command changes the local store or your files.
 
 ```sh
 memo tasks unlink <task> <other-task> [options]
@@ -378,17 +511,17 @@ memo tasks unlink <task> <other-task> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `task` | required |  |
-| `other-task` | required |  |
+| `task` | required | the task: task:<id> or its id. |
+| `other-task` | required | the task it relates to: task:<id> or its id. |
 
 | Option | What it does |
 |---|---|
-| `--kind <kind>` | blocked-by, follow-up-of, related-to. |
-| `--json` | print JSON. |
+| `--kind <kind>` | blocked-by, follow-up-of, related-to, duplicate-of, discovered-from. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo tasks relations`
 
-A task's links to other tasks
+a task's links to other tasks
 
 ```sh
 memo tasks relations <task> [options]
@@ -396,45 +529,33 @@ memo tasks relations <task> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `task` | required |  |
+| `task` | required | the task: task:<id> or its id. |
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
-### `memo tasks readiness`
+### `memo tasks status`
 
-Whether a task can start, and what it still waits for
+whether a task can start, and what it still waits for
 
 ```sh
-memo tasks readiness <task> [options]
+memo tasks status <task> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `task` | required |  |
+| `task` | required | the task: task:<id> or its id. |
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
-
-### `memo tasks ready`
-
-Discover project work with completed prerequisites; this does not claim a task
-
-```sh
-memo tasks ready [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--project <project>` | canonical project reference, key or explicit alias. |
-| `--limit <n>` | tasks per page. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo tasks add`
 
-Add a task: from a message, note or document, or with --project and --title a task of your own
+add a task from a message, note or document, or one of your own in a project
+
+This command changes the local store or your files.
 
 ```sh
 memo tasks add [source] [options]
@@ -448,35 +569,41 @@ memo tasks add [source] [options]
 |---|---|
 | `--provider <provider>` | source provider. |
 | `--account <account>` | exact stored account. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 | `--title <title>` | one line saying what is to be done. |
 | `--priority <n>` | 0 urgent … 4 low. |
-| `--parent <task>` | the parent task, in the same project. |
+| `--parent <id>` | the parent task, in the same project. |
 | `--description <text>` | the detail, in Markdown. |
 | `--type <type>` | question, request (default), mention or promise from a source; bug, feature or chore (default) in a project. |
 | `--project <project>` | a task without a source: the project's key or project:<id>. |
 | `--assignee <person...>` | who does it: a person's UID. |
+| `--into <id>` | link the source to this task instead of opening one that may be the same job. |
+| `--new` | open the task even when one like it is open or was closed in the last 14 days. |
 
 ### `memo tasks list`
 
-Tasks of one account or one project, open by default
+tasks of one account or one project, open by default
 
 ```sh
-memo tasks list [options]
+memo tasks list [query] [options]
 ```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
 | `--provider <provider>` | source provider. |
 | `--account <account>` | exact stored account. |
-| `--json` | print JSON. |
-| `--state <state>` | open, done or dismissed. Default: `open`. |
-| `--project <project>` | a project's tasks, by its key or project:<id>, instead of an account's. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 | `--limit <n>` | most tasks. Default: `100`. |
 
 ### `memo tasks close`
 
-Close a task as done or dismissed
+close a task as done or dismissed
+
+This command changes the local store or your files.
 
 ```sh
 memo tasks close <id> [options]
@@ -484,19 +611,21 @@ memo tasks close <id> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `id` | required |  |
+| `id` | required | the task's id. |
 
 | Option | What it does |
 |---|---|
 | `--provider <provider>` | source provider. |
 | `--account <account>` | exact stored account. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 | `--as <state>` | done or dismissed. Default: `done`. |
 | `--reason <text>` | why it is closed. |
 
 ### `memo tasks update`
 
-Change a task's title, priority, parent or description
+change a task's title, priority, parent or description
+
+This command changes the local store or your files.
 
 ```sh
 memo tasks update <id> [options]
@@ -510,13 +639,15 @@ memo tasks update <id> [options]
 |---|---|
 | `--title <title>` | one line saying what is to be done. |
 | `--priority <n>` | 0 urgent … 4 low. |
-| `--parent <task>` | the parent task, in the same project. |
+| `--parent <id>` | the parent task, in the same project. |
 | `--description <text>` | the detail, in Markdown. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo tasks assign`
 
-Name who works on a task
+name who works on a task
+
+This command changes the local store or your files.
 
 ```sh
 memo tasks assign <id> <person> [options]
@@ -530,15 +661,130 @@ memo tasks assign <id> <person> [options]
 | Option | What it does |
 |---|---|
 | `--role <role>` | assignee, reviewer, watcher. Default: `assignee`. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+### `memo tasks agenda`
+
+what needs a look today, from the local store and without message text: tasks overdue, due or to check, chats where you owe an answer, chats where you wait for one
+
+```sh
+memo tasks agenda [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--due-within <duration>` | list tasks due within this: 30m, 2h, 1d (default 1d). |
+| `--unanswered <duration>` | list chats where someone else wrote last this long ago (default 1d). |
+| `--waiting <duration>` | list chats where you wrote last this long ago (default 7d). |
+| `--within <duration>` | leave out chats silent longer than this: they ended (default 30d). |
+| `--holder <name>` | who you are for claims: a session id or a chat id; default WIRECAT_HOLDER, else Claude Code's session, else the agent's name. |
+| `--provider <provider>` | the messenger account's provider: telegram, max. |
+| `--account <account>` | the messenger account, as the store holds it. |
+| `--json` | print JSON. |
+
+### `memo tasks plan`
+
+set a task's title, description, due date, next check and category; nothing reaches the messenger
+
+This command changes the local store or your files.
+
+```sh
+memo tasks plan <task> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `task` | required | the task's id or key, as tasks list shows it. |
+
+| Option | What it does |
+|---|---|
+| `--category <name>` | what it is about, from the list tasks categories prints: money, documents, meeting, …; a change is kept in the task's history. |
+| `--title <title>` | one line: the action and its object — send Alex the API token. |
+| `--description <text>` | the detail, in Markdown: who owes whom, done when, next step, keywords. |
+| `--due <time>` | when it must be done: an ISO 8601 time or 2h, 3d from now; none clears it. |
+| `--remind-time <time>` | when to look at it again: an ISO 8601 time or 2h, 3d from now; none clears it. |
+| `--provider <provider>` | the messenger account's provider: telegram, max. |
+| `--account <account>` | the messenger account, as the store holds it. |
+| `--json` | print JSON. |
+
+### `memo tasks show`
+
+one task: its plan and everything linked to it
+
+```sh
+memo tasks show <task> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `task` | required | the task's id or key, as tasks list shows it. |
+
+| Option | What it does |
+|---|---|
+| `--provider <provider>` | the messenger account's provider: telegram, max. |
+| `--account <account>` | the messenger account, as the store holds it. |
+| `--json` | print JSON. |
+
+### `memo tasks link`
+
+link a task to messages, chats, people or URLs — or to another task: task:<id>
+
+This command changes the local store or your files.
+
+```sh
+memo tasks link <task> [targets] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `task` | required | the task's id or key, as tasks list shows it. |
+| `targets` | optional | msg: locators, person:<id>, document:<id>, note:<id>, a URL; or task:<id>, which links two project tasks. |
+
+| Option | What it does |
+|---|---|
+| `--chat <chat>` | a chat it concerns, repeatable; a stored chat, by its id or title. |
+| `--kind <kind>` | related-to (default), evidence — it shows the task is real — or created-from; for task:<id>, related-to, blocked-by, follow-up-of, duplicate-of or discovered-from. |
+| `--provider <provider>` | the messenger account's provider: telegram, max. |
+| `--account <account>` | the messenger account, as the store holds it. |
+| `--json` | print JSON. |
+
+## `memo stats`
+
+statistics about what the store holds
+
+### `memo stats tasks`
+
+task statistics
+
+#### `memo stats tasks show`
+
+per chat: how many tasks are open, the oldest open one, the median time to close
+
+```sh
+memo stats tasks show [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--chat <chat>` | only this chat; a stored chat, by its id or title. |
+| `--type <type>` | only this type: question, request, mention or promise. |
+| `--provider <provider>` | the messenger account's provider: telegram, max. |
+| `--account <account>` | the messenger account, as the store holds it. |
 | `--json` | print JSON. |
 
 ## `memo organizations`
 
-Companies, teams, families and communities of yours
+companies, teams, families and communities of yours
 
 ### `memo organizations add`
 
-Add an organization of yours: a company, team, family or community
+add an organization of yours: a company, team, family or community
+
+This command changes the local store or your files.
 
 ```sh
 memo organizations add <name> [options]
@@ -546,17 +792,17 @@ memo organizations add <name> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `name` | required |  |
+| `name` | required | the organization's name. |
 
 | Option | What it does |
 |---|---|
 | `--kind <kind>` | company, team, family, community. |
 | `--scope <scope>` | personal, work. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo organizations list`
 
-Your organizations
+your organizations
 
 ```sh
 memo organizations list [options]
@@ -564,56 +810,58 @@ memo organizations list [options]
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo organizations context`
 
-One organization: its relationships, the notes about or linking it, and its tags
+one organization by its id or organization:<id>: its relationships, the notes about or linking it, and its tags
 
 ```sh
-memo organizations context <id> [options]
+memo organizations context <organization> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `id` | required |  |
+| `organization` | required | its id or organization:<id>. |
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ## `memo projects`
 
-Projects of yours, each with a short key
+projects of yours, each with a short key
 
 ### `memo projects meetings`
 
-Explicit account-scoped project membership
+explicit account-scoped project membership
 
 #### `memo projects meetings list`
 
-Meetings linked to a project in one account, or proposed links
+meetings linked to a project in one account, or with confirmed:false proposed
 
 ```sh
-memo projects meetings list <project> [options]
+memo projects meetings list <project> [query] [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `project` | required | project reference, key or explicit alias. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
 | `--provider <provider>` | meeting provider. |
 | `--account <account>` | exact stored meeting account. |
-| `--json` | print JSON. |
-| `--proposed` | show proposed memberships instead of confirmed ones. |
-| `--limit <n>` | meetings per page. |
-| `--offset <n>` | rows to skip. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--limit <n>` | meetings per page, at most 500. Default: `50`. |
+| `--page <n>` | which page, from 1. |
 
 #### `memo projects meetings link`
 
-Link a stored meeting to a project, or confirm a proposed link
+link a stored meeting to a project, or confirm a proposed link
+
+This command changes the local store or your files.
 
 ```sh
 memo projects meetings link <project> <meeting-id> [options]
@@ -621,20 +869,22 @@ memo projects meetings link <project> <meeting-id> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `project` | required |  |
+| `project` | required | project reference, key or explicit alias. |
 | `meeting-id` | required | positive stored meeting id. |
 
 | Option | What it does |
 |---|---|
 | `--provider <provider>` | meeting provider. |
 | `--account <account>` | exact stored meeting account. |
-| `--json` | print JSON. |
-| `--expected <fingerprint>` | required when confirming an existing proposal. |
-| `--provenance <text>` | why the reviewed meeting belongs to this project. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--fingerprint <hash>` | required when confirming an existing proposal. |
+| `--reason <text>` | why the reviewed meeting belongs to this project. |
 
 ### `memo projects add`
 
-Add a project of yours, with a short key its tasks use
+add a project of yours, with a short key its tasks use
+
+This command changes the local store or your files.
 
 ```sh
 memo projects add <name> [options]
@@ -642,19 +892,19 @@ memo projects add <name> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `name` | required |  |
+| `name` | required | the project's name. |
 
 | Option | What it does |
 |---|---|
 | `--key <key>` | 3–4 letters and digits; made from the name when left out. |
 | `--type <type>` | work, client, personal, oss, other. |
-| `--organization <reference>` | organization:<id> it belongs to. |
+| `--organization <organization>` | the organization it belongs to: its id or organization:<id>. |
 | `--scope <scope>` | personal, work. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo projects list`
 
-Your projects
+your projects
 
 ```sh
 memo projects list [options]
@@ -662,11 +912,11 @@ memo projects list [options]
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo projects context`
 
-One project by its id, key or project:<id>: its relationships, the notes about or linking it, and its tags
+one project by its id, key or project:<id>: its key documents first, then its relationships, the notes about or linking it, and its tags. Start work on a project here
 
 ```sh
 memo projects context <project> [options]
@@ -674,19 +924,81 @@ memo projects context <project> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `project` | required |  |
+| `project` | required | its id, key or project:<id>. |
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+### `memo projects key-documents`
+
+the notes, files and messages to read first about a project, each with why
+
+#### `memo projects key-documents add`
+
+mark a note:, document: or msg: reference as a key document of the project
+
+This command changes the local store or your files.
+
+```sh
+memo projects key-documents add <project> <reference> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `project` | required | id, key or project:<id>. |
+| `reference` | required | note:, document: or msg: reference. |
+
+| Option | What it does |
+|---|---|
+| `--reason <text>` | why it is key, in a few words. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--as-owner` | record it as yours although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set). |
+
+#### `memo projects key-documents remove`
+
+unmark a key document; the note, file or message stays
+
+This command changes the local store or your files.
+
+```sh
+memo projects key-documents remove <project> <reference> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `project` | required | id, key or project:<id>. |
+| `reference` | required | the key document's note:, document: or msg: reference. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+#### `memo projects key-documents list`
+
+a project's key documents: why, who marked each and whether it is still there
+
+```sh
+memo projects key-documents list <project> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `project` | required | id, key or project:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ## `memo relationships`
 
-Explicit relations between people, organizations and projects; this never links identities
+relations between people, organizations and projects; never between identities
 
 ### `memo relationships add`
 
-State that a person, organization or project belongs to or relates to another
+state that a person, organization or project belongs to or relates to another; an agent's waits for you to confirm it
+
+This command changes the local store or your files.
 
 ```sh
 memo relationships add <from> <to> [options]
@@ -694,32 +1006,38 @@ memo relationships add <from> <to> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `from` | required |  |
-| `to` | required |  |
+| `from` | required | the person:, organization: or project: that belongs or relates. |
+| `to` | required | the person:, organization: or project: it belongs or relates to. |
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
+| `--as-owner` | record it as yours although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set). |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 | `--kind <kind>` | member-of or related-to. Default: `member-of`. |
-| `--role <role>` |  |
-| `--evidence <text>` |  |
+| `--role <role>` | the role it has there, in a few words, such as cto. |
+| `--reason <text>` | why you think so, in a sentence. |
 
 ### `memo relationships list`
 
-Relationships, all or those of one reference
+relationships, all or those of one reference
 
 ```sh
-memo relationships list [options]
+memo relationships list [query] [options]
 ```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
-| `--reference <reference>` |  |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo relationships remove`
 
-Remove a relationship
+remove a relationship
+
+This command changes the local store or your files.
 
 ```sh
 memo relationships remove <id> [options]
@@ -727,15 +1045,17 @@ memo relationships remove <id> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `id` | required |  |
+| `id` | required | the relationship's id, as relationships list gives it. |
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo relationships confirm`
 
-Accept a suggested relationship
+confirm a suggested relationship
+
+This command changes the local store or your files.
 
 ```sh
 memo relationships confirm <id> [options]
@@ -743,15 +1063,15 @@ memo relationships confirm <id> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `id` | required |  |
+| `id` | required | the relationship's id, as relationships list gives it. |
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo relationships suggest`
 
-Store weak shared-domain suggestions for direct email contacts; confirmation is explicit
+suggest relationships between email contacts of one domain; you confirm each
 
 ```sh
 memo relationships suggest [options]
@@ -761,36 +1081,38 @@ memo relationships suggest [options]
 |---|---|
 | `--provider <provider>` | source provider. |
 | `--account <account>` | exact stored account. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 | `--limit <n>` | most suggestions, at most 100. Default: `20`. |
 
 ## `memo reminders`
 
-Durable local reminders; poll leases a delivery and ack confirms it
+durable local reminders; poll hands one out and ack confirms it was shown
 
-### `memo reminders schedule`
+### `memo reminders add`
 
-Schedule a reminder for an open task
+add a reminder for an open task
+
+This command changes the local store or your files.
 
 ```sh
-memo reminders schedule <task> [options]
+memo reminders add <task> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `task` | required |  |
+| `task` | required | the task's id. |
 
 | Option | What it does |
 |---|---|
 | `--provider <provider>` | source provider. |
 | `--account <account>` | exact stored account. |
-| `--json` | print JSON. |
-| `--at <timestamp>` | ISO timestamp with UTC offset. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--at-time <time>` | when to remind: an ISO 8601 time with its UTC offset. |
 | `--timezone <zone>` | IANA timezone. Default: `UTC`. |
 
 ### `memo reminders list`
 
-Pending reminders of one account
+pending reminders of one account
 
 ```sh
 memo reminders list [options]
@@ -800,11 +1122,13 @@ memo reminders list [options]
 |---|---|
 | `--provider <provider>` | source provider. |
 | `--account <account>` | exact stored account. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo reminders poll`
 
-Hand out due reminders, each with a receipt to acknowledge
+hand out due reminders, each with a receipt to acknowledge
+
+This command changes the local store or your files.
 
 ```sh
 memo reminders poll [options]
@@ -814,12 +1138,14 @@ memo reminders poll [options]
 |---|---|
 | `--provider <provider>` | source provider. |
 | `--account <account>` | exact stored account. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 | `--limit <n>` | most due reminders, at most 500. Default: `100`. |
 
 ### `memo reminders ack`
 
-Confirm that a handed-out reminder was shown
+confirm that a handed-out reminder was shown
+
+This command changes the local store or your files.
 
 ```sh
 memo reminders ack <id> <receipt> [options]
@@ -827,18 +1153,20 @@ memo reminders ack <id> <receipt> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `id` | required |  |
-| `receipt` | required |  |
+| `id` | required | the reminder's id. |
+| `receipt` | required | the receipt reminders poll handed out with it. |
 
 | Option | What it does |
 |---|---|
 | `--provider <provider>` | source provider. |
 | `--account <account>` | exact stored account. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo reminders cancel`
 
-Cancel a reminder
+cancel a reminder
+
+This command changes the local store or your files.
 
 ```sh
 memo reminders cancel <id> [options]
@@ -846,113 +1174,106 @@ memo reminders cancel <id> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `id` | required |  |
+| `id` | required | the reminder's id. |
 
 | Option | What it does |
 |---|---|
 | `--provider <provider>` | source provider. |
 | `--account <account>` | exact stored account. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
-### `memo reminders snooze`
+### `memo reminders update`
 
-Move a reminder to a later time
+move a reminder to another time
+
+This command changes the local store or your files.
 
 ```sh
-memo reminders snooze <id> [options]
+memo reminders update <id> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `id` | required |  |
+| `id` | required | the reminder's id. |
 
 | Option | What it does |
 |---|---|
 | `--provider <provider>` | source provider. |
 | `--account <account>` | exact stored account. |
-| `--json` | print JSON. |
-| `--at <timestamp>` |  |
-| `--revision <n>` | current revision. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--at-time <time>` | the new time: an ISO 8601 time with its UTC offset. |
+| `--revision <n>` | the reminder's current revision, as reminders list gives it. |
 
 ## `memo vocabulary`
 
-Canonical projects, tags and topics with explicit aliases
+canonical projects, tags and topics with explicit aliases
 
 ### `memo vocabulary list`
 
-List canonical IDs, aliases, usage counts and a preview fingerprint
+list canonical IDs, aliases, usage counts and a preview fingerprint
 
 ```sh
-memo vocabulary list [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--kind <kind>` | project, tag or topic. |
-| `--scope <scope>` | personal or work projects. |
-| `--max-entries <n>` | catalog input budget, not a page size. |
-| `--max-read-bytes <n>` | catalog input byte budget. |
-| `--json` | print JSON. |
-
-### `memo vocabulary resolve`
-
-Resolve an exact name or alias; ambiguity is reported
-
-```sh
-memo vocabulary resolve <name> [options]
+memo vocabulary list [query] [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `name` | required |  |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
-| `--kind <kind>` | project, tag or topic. |
-| `--scope <scope>` | personal or work projects. |
 | `--max-entries <n>` | catalog input budget, not a page size. |
-| `--max-read-bytes <n>` | catalog input byte budget. |
-| `--json` | print JSON. |
+| `--max-read-bytes <bytes>` | catalog input byte budget. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
-### `memo vocabulary audit`
+### `memo vocabulary show`
 
-Discover likely synonyms without accepting or merging them
+the project, tag or topic an exact name or alias names; ambiguity is reported
 
 ```sh
-memo vocabulary audit [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--kind <kind>` | project, tag or topic. |
-| `--scope <scope>` | personal or work projects. |
-| `--max-entries <n>` | catalog input budget, not a page size. |
-| `--max-read-bytes <n>` | catalog input byte budget. |
-| `--json` | print JSON. |
-| `--min-similarity <n>` | minimum lexical similarity, 0.65–1. |
-| `--max-comparisons <n>` | bound name comparisons. |
-| `--limit <n>` | maximum candidate pairs. |
-
-### `memo vocabulary preflight`
-
-Review an existing label or likely lexical duplicates before creation
-
-```sh
-memo vocabulary preflight <name> [options]
+memo vocabulary show <name> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `name` | required |  |
+| `name` | required | the name or alias to look up, exactly. |
 
 | Option | What it does |
 |---|---|
-| `--kind <kind>` | tag or topic. |
-| `--json` | print JSON. |
+| `--kind <kind>` | project, tag or topic. |
+| `--scope <scope>` | personal or work projects. |
+| `--max-entries <n>` | catalog input budget, not a page size. |
+| `--max-read-bytes <bytes>` | catalog input byte budget. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+### `memo vocabulary check`
+
+check a new name for an existing label or likely duplicates before vocabulary create, or without a name the whole vocabulary for likely synonyms. It merges and creates nothing
+
+```sh
+memo vocabulary check [name] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | optional | a tag or topic you mean to create; without it, the whole vocabulary. |
+
+| Option | What it does |
+|---|---|
+| `--kind <kind>` | project, tag or topic. |
+| `--scope <scope>` | personal or work projects. |
+| `--max-entries <n>` | catalog input budget, not a page size. |
+| `--max-read-bytes <bytes>` | catalog input byte budget. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--min-similarity <n>` | without a name: minimum lexical similarity, 0.65–1. |
+| `--max-comparisons <n>` | without a name: most name comparisons. |
+| `--limit <n>` | without a name: most candidate pairs. |
 
 ### `memo vocabulary create`
 
-Owner: create a distinct tag or topic after reviewing its preflight
+owner: create a distinct tag or topic after vocabulary check <name>
+
+This command changes the local store or your files.
 
 ```sh
 memo vocabulary create <name> [options]
@@ -960,21 +1281,23 @@ memo vocabulary create <name> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `name` | required |  |
+| `name` | required | the new tag or topic. |
 
 | Option | What it does |
 |---|---|
 | `--kind <kind>` | tag or topic. |
-| `--expected <fingerprint>` | the current preflight creationFingerprint. |
-| `--json` | print JSON. |
+| `--fingerprint <hash>` | the creation_fingerprint vocabulary check <name> gave. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo vocabulary aliases`
 
-Owner-reviewed aliases on stable canonical IDs
+owner-reviewed aliases on stable canonical IDs
 
 #### `memo vocabulary aliases add`
 
-Owner: add another name for a project, tag or topic
+owner: add another name for a project, tag or topic
+
+This command changes the local store or your files.
 
 ```sh
 memo vocabulary aliases add <reference> <name> [options]
@@ -982,17 +1305,19 @@ memo vocabulary aliases add <reference> <name> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `reference` | required |  |
-| `name` | required |  |
+| `reference` | required | project:<id>, tag:<id> or topic:<id>, from vocabulary list. |
+| `name` | required | the other name. |
 
 | Option | What it does |
 |---|---|
-| `--expected <fingerprint>` | the current vocabulary preview fingerprint. |
-| `--json` | print JSON. |
+| `--fingerprint <hash>` | the current vocabulary preview fingerprint. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 #### `memo vocabulary aliases remove`
 
-Owner: remove another name from a project, tag or topic
+owner: remove another name from a project, tag or topic
+
+This command changes the local store or your files.
 
 ```sh
 memo vocabulary aliases remove <reference> <alias-id> [options]
@@ -1000,21 +1325,23 @@ memo vocabulary aliases remove <reference> <alias-id> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `reference` | required |  |
-| `alias-id` | required |  |
+| `reference` | required | project:<id>, tag:<id> or topic:<id>, from vocabulary list. |
+| `alias-id` | required | the alias's id, from vocabulary list. |
 
 | Option | What it does |
 |---|---|
-| `--expected <fingerprint>` | the current vocabulary preview fingerprint. |
-| `--json` | print JSON. |
+| `--fingerprint <hash>` | the current vocabulary preview fingerprint. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ## `memo memories`
 
-What agents and you concluded, each with its evidence: agents propose, you confirm
+what agents and you concluded, with evidence; you confirm an agent's
 
 ### `memo memories add`
 
-Write a memory of your own; it is confirmed at once
+write a memory; an agent's waits as proposed until you confirm it
+
+This command changes the local store or your files.
 
 ```sh
 memo memories add <text> [options]
@@ -1026,32 +1353,33 @@ memo memories add <text> [options]
 
 | Option | What it does |
 |---|---|
+| `--as-owner` | record it as yours although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set). |
 | `--kind <kind>` | summary, digest, preference. |
 | `--scope <scope>` | personal or work. |
 | `--evidence <ref...>` | what shows it: msg:, note:, meeting:, person: or another reference. |
 | `--subject <ref>` | what it is about, as a reference. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo memories list`
 
-Memories, newest first
+memories, newest first
 
 ```sh
-memo memories list [options]
+memo memories list [query] [options]
 ```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
-| `--status <status>` | proposed, confirmed, stale, superseded. |
-| `--kind <kind>` | summary, digest, preference. |
-| `--scope <scope>` | personal or work. |
-| `--subject <ref>` | only memories about this reference. |
 | `--limit <n>` | most memories, up to 500. Default: `100`. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo memories show`
 
-One memory with its evidence
+one memory with its evidence
 
 ```sh
 memo memories show <ref> [options]
@@ -1063,29 +1391,13 @@ memo memories show <ref> [options]
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
-
-### `memo memories search`
-
-Memories holding every word, best first
-
-```sh
-memo memories search <words> [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `words` | required | the words to find. |
-
-| Option | What it does |
-|---|---|
-| `--scope <scope>` | personal or work. |
-| `--limit <n>` | most memories, up to 500. Default: `20`. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo memories confirm`
 
-Stand behind a memory: its evidence was checked now
+stand behind a memory: its evidence was checked now
+
+This command changes the local store or your files.
 
 ```sh
 memo memories confirm <ref> [options]
@@ -1097,11 +1409,13 @@ memo memories confirm <ref> [options]
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo memories stale`
 
-Mark a memory whose evidence no longer holds
+mark a memory whose evidence no longer holds
+
+This command changes the local store or your files.
 
 ```sh
 memo memories stale <ref> [options]
@@ -1113,15 +1427,17 @@ memo memories stale <ref> [options]
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ## `memo facts`
 
-What happened — said, asked, decided, promised — with its evidence: agents propose, you accept
+what happened — said, asked, decided, promised — with evidence
 
 ### `memo facts add`
 
-Record a fact of your own; it is accepted at once
+record a fact; an agent's waits as proposed until you confirm it
+
+This command changes the local store or your files.
 
 ```sh
 memo facts add <statement> [options]
@@ -1133,35 +1449,36 @@ memo facts add <statement> [options]
 
 | Option | What it does |
 |---|---|
-| `--type <type>` | fact, statement, question, decision, promise. |
+| `--as-owner` | record it as yours although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set). |
+| `--kind <kind>` | fact, statement, question, decision, promise. |
 | `--evidence <ref...>` | what shows it: msg:, note:, meeting:, person: or another reference. |
-| `--project <ref>` | the project it belongs to, project:<id>. |
+| `--project <project>` | the project it belongs to: its key or project:<id>. |
 | `--subject <ref>` | what it is about, as a reference. |
-| `--occurred <iso>` | when it happened, as the evidence shows. |
+| `--occurred-time <time>` | when it happened, as the evidence shows, ISO 8601. |
 | `--scope <scope>` | personal or work. |
 | `--supersedes <ref>` | a decision only: the decision this one replaces. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo facts list`
 
-Facts, latest first
+facts, latest first
 
 ```sh
-memo facts list [options]
+memo facts list [query] [options]
 ```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
-| `--type <type>` | fact, statement, question, decision, promise. |
-| `--status <status>` | proposed, accepted, superseded, reversed. |
-| `--project <ref>` | only this project's, project:<id>. |
-| `--subject <ref>` | only facts about this reference. |
 | `--limit <n>` | most facts, up to 500. Default: `100`. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo facts show`
 
-One fact with its evidence
+one fact with its evidence
 
 ```sh
 memo facts show <ref> [options]
@@ -1173,14 +1490,16 @@ memo facts show <ref> [options]
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
-### `memo facts accept`
+### `memo facts confirm`
 
-Stand behind a fact an agent proposed; a decision it supersedes stops holding
+stand behind a fact an agent proposed; a decision it supersedes stops holding
+
+This command changes the local store or your files.
 
 ```sh
-memo facts accept <ref> [options]
+memo facts confirm <ref> [options]
 ```
 
 | Argument | | What it is |
@@ -1189,11 +1508,13 @@ memo facts accept <ref> [options]
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo facts reverse`
 
-An accepted decision no longer holds, and nothing replaced it
+an accepted decision no longer holds, and nothing replaced it
+
+This command changes the local store or your files.
 
 ```sh
 memo facts reverse <ref> [options]
@@ -1205,18 +1526,20 @@ memo facts reverse <ref> [options]
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ## `memo actions`
 
-What an agent proposes to do; approving one makes it your task, nothing is sent
+what an agent proposes to do; confirming one makes it your task, nothing is sent
 
-### `memo actions propose`
+### `memo actions add`
 
-Propose an action, such as a reply or a ban, in the account that would act
+propose an action, such as a reply or a ban, in the account that would act
+
+This command changes the local store or your files.
 
 ```sh
-memo actions propose <kind> [options]
+memo actions add <kind> [options]
 ```
 
 | Argument | | What it is |
@@ -1225,30 +1548,34 @@ memo actions propose <kind> [options]
 
 | Option | What it does |
 |---|---|
+| `--as-owner` | record it as yours although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set). |
 | `--reason <text>` | why it should be done. |
 | `--provider <provider>` | the provider of the account that would act. |
 | `--account <account>` | the account that would act, when the provider has several. |
 | `--target <ref>` | what it acts on: msg:, chat:, contact:, person:, task:, …. |
 | `--payload <json>` | what to do, as JSON, such as the reply's text. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo actions list`
 
-Proposed actions, newest first
+proposed actions, newest first
 
 ```sh
-memo actions list [options]
+memo actions list [query] [options]
 ```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
-| `--status <status>` | proposed, approved, rejected, executed, failed. |
 | `--limit <n>` | most actions, up to 500. Default: `100`. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo actions show`
 
-One proposed action, with its payload
+one proposed action, with its payload
 
 ```sh
 memo actions show <id> [options]
@@ -1256,31 +1583,35 @@ memo actions show <id> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `id` | required |  |
+| `id` | required | the action's id, as actions list gives it. |
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
-### `memo actions approve`
+### `memo actions confirm`
 
-Approve it: it becomes a task in the account that would act; nothing is sent
+confirm it: it becomes a task in the account that would act; nothing is sent
+
+This command changes the local store or your files.
 
 ```sh
-memo actions approve <id> [options]
+memo actions confirm <id> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `id` | required |  |
+| `id` | required | the action's id, as actions list gives it. |
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ### `memo actions reject`
 
-Reject it; nothing is done
+reject it; nothing is done
+
+This command changes the local store or your files.
 
 ```sh
 memo actions reject <id> [options]
@@ -1288,34 +1619,38 @@ memo actions reject <id> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `id` | required |  |
+| `id` | required | the action's id, as actions list gives it. |
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ## `memo agents`
 
-What agents did through the MCP servers that share the store
+what agents did through the MCP servers that share the store
 
 ### `memo agents log`
 
-One row per tool call, newest first: agent, tool, tier, outcome and times, never its arguments
+one row per tool call, newest first: agent, tool, tier, outcome and times, never its arguments
 
 ```sh
-memo agents log [options]
+memo agents log [query] [options]
 ```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
-| `--tool <name>` | only this tool. |
-| `--agent <name>` | only this agent, such as tg-mcp or memo-mcp. |
 | `--limit <n>` | most rows, up to 500. Default: `100`. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ## `memo mcp`
 
-Serve memories, proposed actions and the agent log to an agent over MCP, on stdin and stdout
+serve memories, proposed actions and the agent log over MCP on stdin and stdout
+
+This command changes the local store or your files.
 
 ```sh
 memo mcp
@@ -1323,11 +1658,11 @@ memo mcp
 
 ## `memo search`
 
-Search stored messages, mail and notes: one kind when you know it, search all when you do not
+search stored messages, mail, notes and memories; search all when unsure where
 
 ### `memo search all`
 
-Messages, mail and notes ranked together; not people, memories, projects or decisions. A kind you know reads better with its own search, with all its fields
+messages, mail and notes ranked together; not people, memories, projects or decisions. A kind you know reads better with its own search, with all its fields
 
 ```sh
 memo search all <query> [options]
@@ -1342,14 +1677,15 @@ memo search all <query> [options]
 | `--limit <n>` | most results, at most 100. Default: `20`. |
 | `--exact` | words as written; skip meaning search. |
 | `--timezone <zone>` | IANA timezone for calendar date boundaries. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 | `--brief` | each message or email as reference, time, sender and excerpt only. |
-| `--full` | each message or email with its whole text and every field. |
+| `--full` | each message or email with its whole text; --json keeps the excerpt, messages show the text. |
 | `--only <resources>` | messages,mail,notes, separated by commas. |
+| `--project <project>` | rank the key documents of this project (id, key or project:<id>) first; nothing is left out. |
 
 ### `memo search messages`
 
-Stored messenger messages only
+stored messenger messages only
 
 ```sh
 memo search messages <query> [options]
@@ -1364,14 +1700,13 @@ memo search messages <query> [options]
 | `--limit <n>` | most results, at most 100. Default: `20`. |
 | `--exact` | words as written; skip meaning search. |
 | `--timezone <zone>` | IANA timezone for calendar date boundaries. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 | `--brief` | each message or email as reference, time, sender and excerpt only. |
-| `--full` | each message or email with its whole text and every field. |
-| `--type <type>` | text, voice or file. |
+| `--full` | each message or email with its whole text; --json keeps the excerpt, messages show the text. |
 
 ### `memo search mail`
 
-Imported emails only
+imported emails only
 
 ```sh
 memo search mail <query> [options]
@@ -1386,14 +1721,14 @@ memo search mail <query> [options]
 | `--limit <n>` | most results, at most 100. Default: `20`. |
 | `--exact` | words as written; skip meaning search. |
 | `--timezone <zone>` | IANA timezone for calendar date boundaries. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 | `--brief` | each message or email as reference, time, sender and excerpt only. |
-| `--full` | each message or email with its whole text and every field. |
-| `--account <address>` | only this mail account, by its address (default: every mail account). |
+| `--full` | each message or email with its whole text; --json keeps the excerpt, messages show the text. |
+| `--account <account>` | only this mail account, by its address (default: every mail account). |
 
 ### `memo search notes`
 
-Native notes by words and, with the local model, meaning
+native notes by words and, with the local model, meaning
 
 ```sh
 memo search notes <query> [options]
@@ -1408,80 +1743,110 @@ memo search notes <query> [options]
 | `--limit <n>` | most results, at most 100. Default: `20`. |
 | `--exact` | words as written; skip meaning search. |
 | `--timezone <zone>` | IANA timezone for calendar date boundaries. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 | `--brief` | each message or email as reference, time, sender and excerpt only. |
-| `--full` | each message or email with its whole text and every field. |
+| `--full` | each message or email with its whole text; --json keeps the excerpt, messages show the text. |
 | `--type <type>` | file or internal. |
-| `--tag <tag>` | only notes with this tag. |
 | `--filter <query>` | another query every note must match. |
-| `--folder <path-or-id...>` | only these folders. |
-| `--offset <n>` | continue from nextOffset. Default: `0`. |
+| `--folder <folder>` | only this folder, by its id or path; repeat for more. |
+| `--page <n>` | which page, from 1. Default: `1`. |
+| `--project <project>` | rank the key documents of this project (id, key or project:<id>) first, labelled key; nothing is left out. |
 
-## `memo ask`
+### `memo search memories`
 
-Prepare cited evidence for your agent, or explicitly call a configured model
+memories holding every word, best first
 
 ```sh
-memo ask <question> [options]
+memo search memories <words> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `question` | required |  |
+| `words` | required | the words to find. |
 
 | Option | What it does |
 |---|---|
-| `--query <query>` | structured retrieval query; defaults to the question. |
-| `--all` |  |
-| `--provider <provider>` |  |
-| `--account <account>` |  |
-| `--limit <n>` | most evidence items, at most 100. Default: `20`. |
-| `--model` | call MEMO_MODELS_ANALYSIS_PROVIDER/MODEL instead of returning an evidence bundle. |
-| `--allow-remote` | explicitly consent to sending this evidence to the configured model. |
-| `--json` |  |
+| `--scope <scope>` | personal or work. |
+| `--limit <n>` | most memories, up to 500. Default: `20`. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
-## `memo import`
+## `memo ask`
 
-Bring notes and mail up to date in the shared store — only what changed; the timer runs this
+prepare cited evidence for your agent, or explicitly call a configured model
 
 ```sh
-memo import [options]
+memo ask <question> [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `question` | required | the question, in your own words. |
+| `query` | optional | what to search for: words, phrases, Boolean operators and field queries; default the question. |
+
+| Option | What it does |
+|---|---|
+| `--all` | look in every stored account and the notes. |
+| `--provider <provider>` | look in this provider's accounts only, such as telegram or email. |
+| `--account <account>` | look in this stored account only, with --provider. |
+| `--limit <n>` | most evidence items, at most 100. Default: `20`. |
+| `--analyze` | call MEMO_MODELS_ANALYSIS_PROVIDER/MODEL instead of returning an evidence bundle. |
+| `--allow-remote` | explicitly consent to sending this evidence to the configured model. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+## `memo sync`
+
+bring notes and mail up to date in the store, only what changed. Every configured folder and mail account unless narrowed; a notes option syncs notes only, a mail option mail only, unless both are given
+
+This command changes the local store or your files.
+
+```sh
+memo sync [options]
 ```
 
 | Option | What it does |
 |---|---|
-| `--notes` | notes only. |
-| `--mail` | mail only. |
+| `--only <resources>` | notes,mail, separated by commas. |
+| `--folder <folder>` | notes: only this configured folder, by its id or path; repeat for more. |
+| `--ignore <path>` | notes: also skip this file or folder, a path or a glob; repeat for more. |
+| `--account <account>` | mail: only this account, by its name in mail.accounts or its address; repeat for more. |
+| `--since-time <time>` | mail: read from this time, ISO 8601 or 30d ago (default: 30d). |
+| `--limit <n>` | mail: most new emails to read per account this run (default: 200). |
+| `--retry-attachments` | mail: reread stored emails' attachments after installing an extraction engine. |
+| `--rescan` | mail: list every message again, not only mail an earlier run left; also checks deletions. |
 | `--no-embed` | skip embedding notes and mail for search by meaning this run. |
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ## `memo auto`
 
-Run memo import on a timer (systemd user timer); on/off and the interval live in the config
+run memo sync on a systemd user timer, set in the config
 
-### `memo auto on`
+### `memo auto start`
 
-Import every --every (default: auto.every in the config, else 5m), starting a minute from now
+sync every --every (default auto.every, else 5m), starting a minute from now
+
+This command changes the local store or your files.
 
 ```sh
-memo auto on [options]
+memo auto start [options]
 ```
 
 | Option | What it does |
 |---|---|
-| `--every <interval>` | how often: 5m, 90s, 1h — a minute or more. |
+| `--every <duration>` | how often: 5m, 90s, 1h — a minute or more. |
 
-### `memo auto off`
+### `memo auto stop`
 
-Stop importing on a timer and remove the timer
+stop syncing on a timer and remove the timer
+
+This command changes the local store or your files.
 
 ```sh
-memo auto off
+memo auto stop
 ```
 
 ### `memo auto status`
 
-Whether the timer is on, its interval, when it runs next and how the last run ended
+whether the timer is on, its interval, its next run and how the last one ended
 
 ```sh
 memo auto status [options]
@@ -1489,11 +1854,38 @@ memo auto status [options]
 
 | Option | What it does |
 |---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+## `memo doctor`
+
+where memo keeps its files and what needs attention; connects to nothing
+
+```sh
+memo doctor [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+## `memo upgrade`
+
+upgrade memo with the package manager that installed it; --check only looks
+
+This command changes the local store or your files.
+
+```sh
+memo upgrade [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--check` | say whether a newer version exists, and install nothing. |
 | `--json` | print JSON. |
 
 ## `memo commands`
 
-Discover the command tree and options as shared registry data
+discover the command tree and options as shared registry data
 
 ```sh
 memo commands [path] [options]
@@ -1505,11 +1897,37 @@ memo commands [path] [options]
 
 | Option | What it does |
 |---|---|
-| `--json` | print JSON. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
 
-## Códigos de salida
+## `memo skill`
 
-Los errores siguen el contrato de errores compartido de WireCat.
+the instructions an agent is given for this tool
+
+### `memo skill show`
+
+print SKILL.md — `memo skill install` puts it where Claude Code, Codex and Gemini CLI look for it
+
+```sh
+memo skill show
+```
+
+### `memo skill install`
+
+write SKILL.md to \~/.claude/skills/cli-memo/ (Claude Code) and \~/.agents/skills/cli-memo/ (Codex, Gemini CLI)
+
+This command changes the local store or your files.
+
+```sh
+memo skill install [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--for <agents>` | which agents to install for. One of: `claude`, `agents`, `all`. Default: `all`. |
+
+## Exit codes
+
+Failures use the shared WireCat error contract.
 
 | Code | When |
 |---|---|

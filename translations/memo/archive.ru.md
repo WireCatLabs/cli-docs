@@ -10,7 +10,7 @@ title: "Обновление Memo"
 ## Импортируйте изменения
 
 ```sh
-memo import
+memo sync
 ```
 
 Эта команда импортирует все папки и почтовые аккаунты из [файла настроек](./configuration.md). Для
@@ -22,26 +22,28 @@ notes /path/to/notes: 24 notes, 2 changed, 0 moved, 0 gone
 
 | Параметр | Что он делает |
 |---|---|
-| `--notes` | Только папки с заметками |
-| `--mail` | Только почтовые аккаунты |
+| `--only notes` | Только папки с заметками |
+| `--only mail` | Только почтовые аккаунты |
 | `--no-embed` | Пропустить подготовку к поиску по смыслу |
 
-Сообщения Telegram и MAX обновляют tg и max, а не `memo import`.
+Сообщения Telegram и MAX обновляют tg и max, а не `memo sync`.
 
 ## Импорт по таймеру (Linux)
 
 ```sh
-memo auto on --every 5m     # import every 5 minutes, starting a minute from now
-memo auto status            # whether the timer is on, when it runs next and how the last run ended
-memo auto off               # stop and remove the timer
+memo auto start --every 5m   # sync every 5 minutes, starting a minute from now
+memo auto status             # whether the timer is on, when it runs next and how the last run ended
+memo auto stop               # stop and remove the timer
 ```
+
+Пока запуски таймера завершаются ошибкой, каждая команда memo выводит в stderr одну строку: с какого времени, сколько запусков и почему не удались. `memo auto status` показывает это в `failing`. После успешного запуска строка исчезает.
 
 `--every` принимает `90s`, `5m`, `1h` и так далее; самый короткий интервал — одна минута. Таймер
 использует systemd — диспетчер служб в большинстве систем Linux. В macOS и Windows запускайте
-`memo import` сами или через собственный планировщик.
+`memo sync` сами или через собственный планировщик.
 
-Таймер запускает `memo import` с настройками терминала, из которого вы его включили. Поэтому он
-находит Himalaya и ваши пароли так же, как этот терминал. `memo auto on` и `off` записывают `auto` в
+Таймер запускает `memo sync` с настройками терминала, из которого вы его включили. Поэтому он
+находит Himalaya и ваши пароли так же, как этот терминал. `memo auto start` и `stop` записывают `auto` в
 файл настроек; если вы измените значение там, таймер учтёт это при следующем запуске.
 
 ## Что читает импорт

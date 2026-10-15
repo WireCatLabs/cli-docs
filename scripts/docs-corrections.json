@@ -1495,44 +1495,6 @@
     }
   },
   {
-    "tool": "max",
-    "slug": "search",
-    "source": "https://github.com/WireCatLabs/cli-memo/blob/v0.21.0/CHANGELOG.md",
-    "reason": "max 0.49.0 names memo sync --mail, which arrives in a memo release newer than the pinned memo 0.21.0; there the same import is memo import --mail. Drop this correction when the memo pin reaches memo sync.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "# только почта, которую привёл memo sync --mail",
-          "after": "# только почта, которую привёл memo import --mail"
-        },
-        {
-          "before": "`memo sync --mail` и `memo import`",
-          "after": "`memo import --mail` и `memo import`"
-        }
-      ],
-      "en": [
-        {
-          "before": "# только почта, которую привёл memo sync --mail",
-          "after": "# только почта, которую привёл memo import --mail"
-        },
-        {
-          "before": "`memo sync --mail` and `memo import`",
-          "after": "`memo import --mail` and `memo import`"
-        }
-      ],
-      "es": [
-        {
-          "before": "# только почта, которую привёл memo sync --mail",
-          "after": "# только почта, которую привёл memo import --mail"
-        },
-        {
-          "before": "`memo sync --mail` y `memo import`",
-          "after": "`memo import --mail` y `memo import`"
-        }
-      ]
-    }
-  },
-  {
     "tool": "tg",
     "slug": "commands",
     "reason": "The released 0.60 manifest uses Core 0.288.0 and strict snake_case settings; fix the stale introductory setting name.",
@@ -1597,24 +1559,24 @@
   {
     "tool": "tg",
     "slug": "search",
-    "reason": "Core 0.285.0 removed TG mail search. Preserve the pinned Memo 0.21 import syntax and distinguish searchable notes from mail owned by Memo.",
+    "reason": "Core 0.285.0 removed TG mail search. Memo 0.41.0 syncs notes with --only notes; distinguish notes from mail owned by Memo.",
     "replacements": {
       "en": [
         {
           "before": "Mail and notes reach the store through memo: `memo sync --mail` and `memo import`. Without them,\n`search all` searches messages only.",
-          "after": "Notes reach the store through `memo import --notes`. Without imported notes, `search all` searches messages only. Search mail separately with Memo."
+          "after": "Notes reach the store through `memo sync --only notes`. Without imported notes, `search all` searches messages only. Search mail separately with Memo."
         }
       ],
       "ru": [
         {
           "before": "Почта и заметки попадают в архив через memo: `memo sync --mail` и `memo import`. Без них `search all` ищет только сообщения.",
-          "after": "Заметки попадают в архив через `memo import --notes`. Без импортированных заметок `search all` ищет только сообщения. Почту ищите отдельно через Memo."
+          "after": "Заметки попадают в архив через `memo sync --only notes`. Без импортированных заметок `search all` ищет только сообщения. Почту ищите отдельно через Memo."
         }
       ],
       "es": [
         {
           "before": "El correo y las notas llegan al archivo local mediante memo: `memo sync --mail` y `memo import`. Sin ellos, `search all` busca únicamente mensajes.",
-          "after": "Las notas llegan al archivo local mediante `memo import --notes`. Sin notas importadas, `search all` busca solo mensajes. Busca el correo por separado con Memo."
+          "after": "Las notas llegan al archivo local mediante `memo sync --only notes`. Sin notas importadas, `search all` busca solo mensajes. Busca el correo por separado con Memo."
         }
       ]
     }
@@ -1782,31 +1744,6 @@
     }
   },
   {
-    "tool": "memo",
-    "slug": "tags",
-    "reason": "TG 0.58.0 no longer searches mail. Pinned Memo 0.21.0 owns mail search; sharing tags does not restore TG mail search.",
-    "replacements": {
-      "en": [
-        {
-          "before": "`tg search mail 'tag:follow-up'`",
-          "after": "`memo search mail 'tag:follow-up'`"
-        }
-      ],
-      "ru": [
-        {
-          "before": "`tg search mail 'tag:follow-up'`",
-          "after": "`memo search mail 'tag:follow-up'`"
-        }
-      ],
-      "es": [
-        {
-          "before": "`tg search mail 'tag:follow-up'`",
-          "after": "`memo search mail 'tag:follow-up'`"
-        }
-      ]
-    }
-  },
-  {
     "tool": "tg",
     "slug": "search",
     "reason": "Core 0.285.0 removed mail search from TG; the released guide opening still promises mail alongside notes. Keep the opening consistent with the supported search sources.",
@@ -1827,6 +1764,292 @@
         {
           "before": "mensajes de Telegram y el correo y las notas que [memo]",
           "after": "mensajes de Telegram y las notas que [memo]"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "configuration",
+    "reason": "Current guides describe supported behavior; migration version numbers belong in changelogs.",
+    "replacements": {
+      "en": [
+        {
+          "before": "since 0.32.0 rules live there",
+          "after": "rules live there"
+        }
+      ],
+      "ru": [
+        {
+          "before": "с 0.32.0 они хранятся там",
+          "after": "они хранятся там"
+        }
+      ],
+      "es": [
+        {
+          "before": "desde 0.32.0 se guardan allí",
+          "after": "se guardan allí"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "mail",
+    "reason": "Describe the supported legacy rule migration without release-number prose in a current task guide.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Before 0.32.0 rules were kept in `config.json`.",
+          "after": "Older settings kept rules in `config.json`."
+        }
+      ],
+      "ru": [
+        {
+          "before": "До 0.32.0 правила находились в `config.json`.",
+          "after": "Прежние настройки содержали правила в `config.json`."
+        }
+      ],
+      "es": [
+        {
+          "before": "Antes de 0.32.0 las reglas estaban en `config.json`.",
+          "after": "Los ajustes antiguos guardaban las reglas en `config.json`."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "memories",
+    "reason": "Memo 0.41.0 exposes facts confirm, replacing facts accept; keep native surrounding prose consistent with the generated command example.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`accept`",
+          "after": "`confirm`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`accept`",
+          "after": "`confirm`"
+        }
+      ],
+      "es": [
+        {
+          "before": "`accept`",
+          "after": "`confirm`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "installation",
+    "reason": "Preserve incoming section anchors from the previously reviewed Memo release after task and command vocabulary updates.",
+    "replacements": {
+      "en": [
+        {
+          "before": "## What it needs",
+          "after": "<a id=\"update-and-remove\" />\n\n## What it needs"
+        }
+      ],
+      "ru": [
+        {
+          "before": "## Что нужно для работы",
+          "after": "<a id=\"обновление-и-удаление\" />\n\n## Что нужно для работы"
+        }
+      ],
+      "es": [
+        {
+          "before": "## Qué necesita",
+          "after": "<a id=\"actualizar-y-quitar\" />\n\n## Qué necesita"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "mail",
+    "reason": "Preserve incoming section anchors from the previously reviewed Memo release after task and command vocabulary updates.",
+    "replacements": {
+      "en": [
+        {
+          "before": "## Before you start",
+          "after": "<a id=\"import-mail\" />\n\n## Before you start"
+        }
+      ],
+      "ru": [
+        {
+          "before": "## Перед началом",
+          "after": "<a id=\"импортируйте-почту\" />\n\n## Перед началом"
+        }
+      ],
+      "es": [
+        {
+          "before": "## Antes de empezar",
+          "after": "<a id=\"importar-correo\" />\n\n## Antes de empezar"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "usage",
+    "reason": "Core hit entities moved task links to next in Memo 0.33.0. The old nested tasks.id projection example names a removed field; retain a valid compact hit selector.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Dotted paths traverse nested objects and arrays, for example\n`--json=ref,excerpt,tasks.id` for `memo search all`.",
+          "after": "Dotted paths traverse nested objects and arrays. Use\n`--json=ref,excerpt` for compact `memo search all` hits."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Путь через точку проходит по вложенным объектам и массивам, например `--json=ref,excerpt,tasks.id` для `memo search all`.",
+          "after": "Путь через точку проходит по вложенным объектам и массивам. Для компактных результатов `memo search all` используйте `--json=ref,excerpt`."
+        }
+      ],
+      "es": [
+        {
+          "before": "Las rutas con puntos recorren objetos y arrays anidados: `--json=ref,excerpt,tasks.id` para `memo search all`.",
+          "after": "Las rutas con puntos recorren objetos y arrays anidados. Usa `--json=ref,excerpt` para resultados compactos de `memo search all`."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "search",
+    "reason": "Memo 0.41.0 syncs mail and notes through --only; preserve the separately pinned MAX search behavior while updating cross-tool import instructions.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "`memo sync --mail` и `memo import`",
+          "after": "`memo sync --only mail` и `memo sync --only notes`"
+        },
+        {
+          "before": "# только почта, которую привёл memo sync --mail",
+          "after": "# только почта, которую привёл memo sync --only mail"
+        }
+      ],
+      "en": [
+        {
+          "before": "`memo sync --mail` and `memo import`",
+          "after": "`memo sync --only mail` and `memo sync --only notes`"
+        },
+        {
+          "before": "# только почта, которую привёл memo sync --mail",
+          "after": "# только почта, которую привёл memo sync --only mail"
+        }
+      ],
+      "es": [
+        {
+          "before": "`memo sync --mail` y `memo import`",
+          "after": "`memo sync --only mail` y `memo sync --only notes`"
+        },
+        {
+          "before": "# только почта, которую привёл memo sync --mail",
+          "after": "# только почта, которую привёл memo sync --only mail"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "troubleshooting",
+    "reason": "This is an intentionally refused single-argument path, not an executable command. Keep the quoted path illustration and the valid corrected invocation without presenting the refused form as runnable.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`memo \"projects add\" --help`",
+          "after": "`\"projects add\"`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`memo \"projects add\" --help`",
+          "after": "`\"projects add\"`"
+        }
+      ],
+      "es": [
+        {
+          "before": "`memo \"projects add\" --help`",
+          "after": "`\"projects add\"`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "zm",
+    "slug": "search",
+    "reason": "Memo 0.41.0 list filters use query terms and facts add uses kind; update the meeting-knowledge examples from the separately pinned Zoom guide.",
+    "replacements": {
+      "en": [
+        {
+          "before": "memo notes list --about meeting:1/1 --json",
+          "after": "memo notes list 'about:\"meeting:1/1\"' --json"
+        },
+        {
+          "before": "memo facts add \"Alice Example will review\" --type promise --scope work",
+          "after": "memo facts add \"Alice Example will review\" --kind promise --scope work"
+        },
+        {
+          "before": "memo facts list --subject meeting:1/1 --json",
+          "after": "memo facts list 'subject:\"meeting:1/1\"' --json"
+        }
+      ],
+      "ru": [
+        {
+          "before": "memo notes list --about meeting:1/1 --json",
+          "after": "memo notes list 'about:\"meeting:1/1\"' --json"
+        },
+        {
+          "before": "memo facts add \"Alice Example will review\" --type promise --scope work",
+          "after": "memo facts add \"Alice Example will review\" --kind promise --scope work"
+        },
+        {
+          "before": "memo facts list --subject meeting:1/1 --json",
+          "after": "memo facts list 'subject:\"meeting:1/1\"' --json"
+        }
+      ],
+      "es": [
+        {
+          "before": "memo notes list --about meeting:1/1 --json",
+          "after": "memo notes list 'about:\"meeting:1/1\"' --json"
+        },
+        {
+          "before": "memo facts add \"Alice Example will review\" --type promise --scope work",
+          "after": "memo facts add \"Alice Example will review\" --kind promise --scope work"
+        },
+        {
+          "before": "memo facts list --subject meeting:1/1 --json",
+          "after": "memo facts list 'subject:\"meeting:1/1\"' --json"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "mail",
+    "reason": "Memo 0.41.0 mail/import.ts skips a complete mbox checkpoint when size and mtime match; incomplete runs and --rescan scan again. Correct the stale each-run claim.",
+    "replacements": {
+      "en": [
+        {
+          "before": "The file is only read when you name the account, and each run reads all of it.",
+          "after": "The file is only read when you name the account. Incomplete imports scan it again; a completed snapshot is skipped until its size or modification time changes. `--rescan` forces another scan."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Файл читается, только если указать этот аккаунт; каждый запуск читает его целиком.",
+          "after": "Файл читается, только если указать этот аккаунт. Незавершённый импорт сканирует его снова; завершённый снимок пропускается, пока не изменятся размер или время изменения файла. `--rescan` запускает новое сканирование."
+        }
+      ],
+      "es": [
+        {
+          "before": "El archivo solo se lee al nombrar esa cuenta; cada ejecución lo lee entero.",
+          "after": "El archivo solo se lee al nombrar esa cuenta. Una importación incompleta lo vuelve a recorrer; un archivo completado se omite hasta que cambie su tamaño o fecha de modificación. `--rescan` fuerza otro recorrido."
         }
       ]
     }

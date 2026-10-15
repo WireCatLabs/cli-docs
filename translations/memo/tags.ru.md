@@ -34,7 +34,7 @@ memo tags add work follow-up --note note:12      # two tags at once
 |---|---|
 | Заметку, которую вы написали | `--note note:12` |
 | Файл из папки заметок | `--note document:3` |
-| Все заметки в папке или в одной из вложенных папок | `--folder 1` или `--folder 1 --path Projects` |
+| Все заметки в папке или в одной из вложенных папок | `--folder 1` или `--folder 1 --subfolder Projects` |
 | Сообщение или письмо | `--message 'msg:telegram/1/77/42'` (полная ссылка на источник) |
 | Чат или цепочку писем | `--chat 77 --provider telegram --account 1` |
 | Контакт в одном аккаунте | `--contact 101 --provider telegram --account 1` |
@@ -61,14 +61,14 @@ ID папки можно узнать через `memo folders list`. Тег н�
 ## Найдите по тегу
 
 ```sh
-memo tags list --tag follow-up              # everything with this tag
-memo search notes 'budget' --tag work       # notes with the tag that contain a word
+memo tags list tag:follow-up               # everything with this tag
+memo search notes 'budget' --filter 'tag:work'  # notes with the tag that contain a word
 memo search all 'tag:follow-up'             # messages, mail and notes with the tag
 memo tags list                              # every tag, up to 100
 ```
 
 `memo tags list` показывает по 100 тегов за раз; чтобы увидеть больше, добавьте `--limit 500`.
-`--type note` или `--type person` показывает только один вид.
+`type:note` или `type:person` показывает только один вид.
 
 ## Снимите тег
 
@@ -81,7 +81,6 @@ memo tags remove follow-up --note document:3
 
 ## Теги в tg и max
 
-tg и max читают те же теги: `tg search mail 'tag:follow-up'` тоже находит помеченные письма. Теги на
-контакте также доступны через `tg tags` и `max tags`.
+tg и max читают те же теги: `tg search messages 'tag:follow-up'` находит помеченные сообщения Telegram, а `memo search mail 'tag:follow-up'` — письма. Теги контактов доступны через `tg tags` и `max tags`.
 
 Дальше: [ищите по тегу и по словам](./search.md).

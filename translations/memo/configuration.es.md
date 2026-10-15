@@ -4,7 +4,7 @@ title: "Configuración"
 
 Esta página muestra cada ajuste del archivo de configuración de Memo y cada variable de entorno que
 lee Memo. Úsala para consultar un ajuste; rara vez necesitas editar el archivo a mano.
-`memo folders add` añade una carpeta y `memo auto on` activa el temporizador por ti. Edita tú el
+`memo folders add` añade una carpeta y `memo auto start` activa el temporizador por ti. Edita tú el
 archivo para indicar los archivos que se omiten, las cuentas de correo y dónde van las notas
 exportadas.
 
@@ -21,8 +21,8 @@ las llaves como en el ejemplo.
   },
   "mail": {
     "accounts": [{ "name": "work", "address": "you@example.com" }],
-    "maxBodyChars": 1000000,
-    "maxAttachmentChars": 200000
+    "max_body_chars": 1000000,
+    "max_attachment_chars": 200000
   },
   "auto": { "enabled": true, "every": "5m" }
 }
@@ -46,18 +46,22 @@ Consulta [usar las mismas notas en otro ordenador](./notes.md#use-the-same-notes
 
 | Clave | Significado |
 |---|---|
-| `name` | El nombre de la cuenta en Himalaya, y el nombre en `memo mail <name> import`. |
-| `address` | La dirección de correo. |
-| `mode` | `gmail` (el predeterminado) o `imap`. |
-| `folders` | Para `imap`: las carpetas de correo que se leen, como `["INBOX", "Archive"]`. |
-| `embed` | `false` deja el correo de esta cuenta fuera de la búsqueda por significado. |
+| `name` | Nombre de la cuenta en Himalaya; lo acepta `memo sync --account`. |
+| `address` | Dirección de correo. |
+| `mode` | `gmail` (predeterminado), `imap` o `mbox` para un archivo de Google Takeout. |
+| `path` | Para `mbox`: archivo Takeout, como `~/Takeout/Mail/All mail Including Spam and Trash.mbox`. |
+| `folders` | Para `imap`: carpetas que se leerán, como `["INBOX", "Archive"]`. |
+| `embed` | `false` excluye el correo de esta cuenta de la búsqueda por significado. |
+| `rules` | Solo se lee para mover las reglas al almacén: desde 0.32.0 se guardan allí y se gestionan con `memo mail rules`. Véase [Correo](./mail.md#choose-what-to-import). |
 
 Junto a `accounts`:
 
 | Clave | Significado |
 |---|---|
-| `maxBodyChars` | Cuántos caracteres de cada correo se guardan. Valor predeterminado: 1.000.000. |
-| `maxAttachmentChars` | Cuántos caracteres del texto de cada adjunto se guardan. Valor predeterminado: 200.000. |
+| `max_body_chars` | Cuántos caracteres de cada correo se guardan. Valor predeterminado: 1.000.000. |
+| `max_attachment_chars` | Cuántos caracteres del texto de cada adjunto se guardan. Valor predeterminado: 200.000. |
+
+Los ajustes usan snake_case; se rechazan los nombres en camelCase.
 
 Consulta [Correo](./mail.md).
 
@@ -65,11 +69,16 @@ Consulta [Correo](./mail.md).
 
 | Clave | Significado |
 |---|---|
-| `enabled` | `true` cuando el temporizador de importación está activado. |
-| `every` | Cada cuánto se ejecuta: `90s`, `5m`, `1h`; un minuto o más. |
+| `enabled` | `true` si el temporizador de importación está activo. |
+| `every` | Frecuencia: `90s`, `5m`, `1h`; un minuto como mínimo. |
+| `places` | Variables de ubicación de memo y del almacén (`MEMO_CONFIG_DIR`, `MESSAGING_STORE`…) guardadas al ejecutar `memo auto start`; se pasan a cada ejecución del temporizador. |
 
-`memo auto on` y `memo auto off` escriben estos valores. Si los editas a mano, el temporizador los
+`memo auto start` y `memo auto stop` escriben estos valores. Si los editas a mano, el temporizador los
 sigue en su siguiente ejecución. Consulta [importar con un temporizador](./archive.md#import-on-a-timer-linux).
+
+## `update_check`
+
+`false` desactiva la comprobación diaria de nuevas versiones de memo. `MEMO_NO_UPDATE_CHECK=1` hace lo mismo para una sesión de terminal.
 
 ## Variables de entorno
 
@@ -77,9 +86,9 @@ sigue en su siguiente ejecución. Consulta [importar con un temporizador](./arch
 |---|---|
 | `MEMO_CONFIG_DIR` | La carpeta que contiene `config.json`. |
 | `MEMO_STATE_DIR` | La carpeta de estado de Memo: cómo era cada carpeta en la última importación. |
-| `MEMO_MODELS_ANALYSIS_PROVIDER`, `MEMO_MODELS_ANALYSIS_MODEL` | El proveedor de IA y el identificador del modelo (el nombre que usa el proveedor para él) a los que llama `memo ask --model`. |
+| `MEMO_MODELS_ANALYSIS_PROVIDER`, `MEMO_MODELS_ANALYSIS_MODEL` | El proveedor de IA y el identificador del modelo (el nombre que usa el proveedor para él) a los que llama `memo ask --analyze`. |
 | `MEMO_MODELS_ANALYSIS_BASE_URL` | Opcional: la dirección del proveedor. |
 | `MEMO_MODEL_API_KEY` | La clave del proveedor. |
 
-Memo llama a un proveedor fuera de tu ordenador solo cuando `memo ask` tiene a la vez `--model` y
+Memo llama a un proveedor fuera de tu ordenador solo cuando `memo ask` tiene a la vez `--analyze` y
 `--allow-remote`. Consulta [dar las fuentes a tu agente](./search.md#give-your-agent-the-sources).

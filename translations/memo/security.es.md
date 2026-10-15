@@ -32,20 +32,14 @@ carpeta o de un buzón, no borra nada y te avisa.
 
 ## Los agentes sugieren, tú decides
 
-- Las acciones propuestas, y los recuerdos y hechos añadidos a través del servidor MCP, esperan tu
-  revisión. A través del servidor MCP, un agente no puede confirmar, aceptar, aprobar ni rechazar.
-- Un recuerdo o un hecho añadido con el comando `memo` se confirma al momento, lo escriba quien lo
-  escriba. Pide a un agente con terminal que primero te muestre lo que quiere añadir.
-- Al aprobar una acción, se convierte en una tarea para ti. Memo nunca envía un mensaje ni un correo.
-- El registro de agentes guarda el agente, la herramienta, el resultado y la hora, nunca lo que envió
-  el agente.
-- Dos cuentas se tratan como una sola persona solo después de que las vincules. Que coincida el nombre
-  o el dominio del correo nunca es suficiente.
+- Las acciones propuestas y los recuerdos y hechos añadidos por MCP esperan tu revisión. Por MCP un agente no puede confirmar, aceptar, aprobar ni rechazar.
+- Un hecho, recuerdo, vínculo o acción propuesta añadido con `memo` registra al autor. En un terminal de agente (`AI_AGENT` o `CLAUDECODE` definido), el agente es el autor y el hecho, recuerdo o vínculo espera tu revisión, como mediante MCP. Lo tuyo se confirma al instante; en el terminal de un agente se indica con `--as-owner`. Es una etiqueta, no un bloqueo: el agente también puede pasarla, así que indícale que nunca lo haga.
+- Aprobar una acción la convierte en una tarea para ti. Memo no envía mensajes ni correos.
+- El registro del agente conserva agente, herramienta, resultado y hora, sin el contenido enviado.
+- Dos cuentas solo representan a una persona después de que las enlaces. Coincidir en nombre o dominio nunca basta.
 
 ## Qué puede salir de tu ordenador
 
-- `memo ask` da las fuentes a tu propio agente de forma predeterminada. Solo las envía a un proveedor
-  de IA con `--model`, y a un proveedor fuera de tu ordenador solo si además usas `--allow-remote`.
-  La respuesta del proveedor es texto generado: compruébala con las fuentes.
-- Lo que tu agente hace con el texto que lee depende de ese agente y de su proveedor. Memo no puede
-  controlarlo. Da acceso a tu agente solo a las fuentes que estés dispuesto a compartir con él.
+- `memo ask` prepara fuentes para tu agente. Solo las envía a un proveedor con `--analyze` y, si es externo al equipo, también `--allow-remote`. La respuesta generada debe comprobarse con las fuentes.
+- Lo que tu agente haga con el texto depende de él y su proveedor; Memo no puede controlarlo. Dale acceso solo a fuentes que quieras compartir.
+- `memo mail probe --domain-age` consulta a los registros cuándo se registró un dominio remitente. Cada consulta comunica un nombre de dominio a un registro; la respuesta se guarda en el equipo. Sin el indicador, probe no consulta a nadie.
