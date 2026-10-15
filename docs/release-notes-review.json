@@ -12,9 +12,9 @@
     "conclusion": "Reviewed 0.54.0: task claims, categories, tags and duplicate review; mentions domains, list --new, --all-in-chat and phone_countries; store version 16 reads notes and documents; snake_case settings only; mail search moved to Memo; MAX_READ_ONLY now blocks writes that enable later writes. Roadmap unchanged: optional no-local-copy mode, event actions, video circles, cloud password and standalone installers remain future work."
   },
   "zm": {
-    "version": "v0.20.0",
+    "version": "v0.20.1",
     "roadmapSha256": "a20d838cc5b4155b13c2dca9b4bc75ed0686e07fefcf0ef9953f6e698e57f257",
     "reviewedAt": "2026-10-15",
-    "conclusion": "Reviewed 0.19.0 and 0.20.0: the separate Base0.33/Core0.288 standards release renames meetings link --target-accounts to --source and preserves legacy store files; Core0.289 adds bounded owner-written person/project notes and annotations through explicit associations. Notes retain references, revisions and coverage separately from accepted facts and yield output bytes to meeting evidence and accepted knowledge. Imported documents, mail, messages, alias candidates, broader calendar discovery, reviewed findings intake and shared native archive storage remain future work. No automatic summary, finding acceptance or task creation."
+    "conclusion": "Reviewed 0.19.0, 0.20.0 and 0.20.1: the separate standards release adopts Base0.33/Core0.288, canonical meetings link --source and legacy-store preservation; preparation adds bounded owner person/project notes with references, revisions and separate coverage, distinct from accepted facts. Core0.290 reapplies the item budget after MCP escaping, recounts received cue bytes and retains truncation metadata. Imported documents, communications, alias candidates, broader calendar discovery, reviewed findings and shared native archive storage remain planned; no automatic summaries, writes, acceptance or task creation."
   }
 }

@@ -5,57 +5,54 @@ references and revision numbers, distinguish them from accepted facts, and inves
 
 ## Source boundary
 
-- Draft base: cli-docs origin/main `ba70b2b5c392ca6209c076dfc6956afd1f5b5298`. Existing installation,
-  Zoom app creation/connection, sidebar, table of contents, routes and incoming anchors are preserved.
-- Core 0.289.0 published from `4eac4e4c8d7014282735ec5f8d13cab9a74ca65f`, release38762362557.
+- Documentation base: origin/main `0f2bffc`, preserving the newer Telegram0.60/Memo0.41 reviews
+  and task category example. The original draft began at `ba70b2b`; no other tool pin is changed.
+- Current Zoom pin is verified **v0.20.1**, source `bc91018482ddfa0a136aa94c49cfe2aa2b46f431`,
+  [release38798750377](https://github.com/WireCatLabs/zoom-cli/actions/runs/38798750377).
   Registry bytes equal the validated artifact, SHA256
-  `fa891b9a994be0ea6007dcb52995d3c71d8afc113f5383f8035e4dd5ce6e7090`; SRI and tag/source match.
-  Release validation passed4551 tests, four intentional skips, coverage, security, SQLite/old-Node,
-  Bun and TG/MAX parity. The separate UTF-8 probe test correction is test-only after that immutable source.
-- Zoom0.19.0 published from `efb097fefe23cf307107bf971af5d7fcb77be49a`, release38764078786.
-  Registry bytes equal the validated artifact, SHA256
-  `a47a330e38f7aafdd1c65432b886add2b215081dc53fec1c066e397e2ac16358`; four installed platforms and
-  one Base identity pass. This is the separate Base0.33/Core0.288 standards release.
-- The Zoom notes feature is merged in PR112 with actual published Core0.289/Base0.33 pins. It passed
-  455 native tests, types, docs and command lint (26 baseline, zero new/overridden). Its release-only
-  PR113 merged as348b452de6ae9ecfa2b9cb699c6304e1741a894f and release38783292555 succeeded.
-  Zoom0.20.0 registry bytes equal the validated artifact, SHA256
-  `d5e7ddbf6281ecfbbb6b4cdb7e4c9adb4f10f09da51f9cab77c234f84e91e0f2`; SRI/tag/source match.
-  All four installed platforms pass owner-note/revision and projection proofs with one Base identity.
-- This draft does not advance tools.json or accept source fingerprints until the matching release
-  is verified. It is not deployed. Candidate structure checks cover commands, links, headings and code;
-  they do not certify prose, a published package or reader task success.
+  `ae54b7877663d582124ecbf92e906920d1d2e9fd7dbd6cea51f724dfa54d86b2`; SRI and tag/source match.
+  All456 native tests and all four Linux/Windows Node22.16/24.19 installed-platform proofs pass,
+  including notes/revision, projection, post-escaping MCP budget and one Base identity.
+- Runtime is published Core0.290.0/Base0.33.0. Core source
+  `a9b2202c0233218813a5d9256e04e76a9e482849`, release38794095014, SHA256
+  `36899b6660dfd29c1c5b900bd0a6697170663b7e86f4e46300527ef5b300071d`.
+  Registry/tar/SRI/tag match;4554 tests plus four intentional skips,95.09% lines, security,
+  compatibility, SQLite restart, Bun and TG/MAX parity passed. No new migration or heavy dependency.
+- The separate standards release0.19 published and was verified before notes0.20 merged. This
+  portal update includes its `--source` rename and legacy-store preservation correction, the0.20
+  notes feature and0.20.1 byte fix. These are source-owned facts, not portal-only runtime claims.
+- Global CLI and both managed agent skills are0.20.1, checked without owner config/store/keyring/models.
+  The current docs draft is not deployed; the checked-in review is the premerge snapshot.
 
 ## Reader review inventory
 
 The changed capability paragraphs, retained openings/endings, links and task boundaries were inspected
-against owning native code and the preceding reviewed guides. Final immutable sync and browser/export
-verification remain required. Generated English command content is source-owned; its changed literal
+against owning native code and the preceding reviewed guides. Final immutable sync, translation review and the targeted Zoom browser/export suite passed. Generated English command content is source-owned; its changed literal
 row is copied from native generation rather than invented by the portal.
 
 | Page and locale | Reader task | Behavior checked | Final released source / exports | Reviewer |
 |---|---|---|---|---|
-| Zoom usage, en | Prepare for an upcoming selected series | Owner notes are separate from accepted facts; references/revisions/coverage remain visible. | Pending final release sync and HTML/Markdown checks | Codex |
-| Zoom usage, ru | Prepare for an upcoming selected series | Owner notes are separate from accepted facts; references/revisions/coverage remain visible. | Pending final release sync and HTML/Markdown checks | Codex |
-| Zoom usage, es | Prepare for an upcoming selected series | Owner notes are separate from accepted facts; references/revisions/coverage remain visible. | Pending final release sync and HTML/Markdown checks | Codex |
-| Zoom mcp, en | Give an agent bounded preparation tools | Account remains server-selected; notes use the same registered answer and source limits. | Pending final release sync and HTML/Markdown checks | Codex |
-| Zoom mcp, ru | Give an agent bounded preparation tools | Account remains server-selected; notes use the same registered answer and source limits. | Pending final release sync and HTML/Markdown checks | Codex |
-| Zoom mcp, es | Give an agent bounded preparation tools | Account remains server-selected; notes use the same registered answer and source limits. | Pending final release sync and HTML/Markdown checks | Codex |
-| Zoom roadmap, en | Choose supported work and identify what remains | Owner notes are delivered; imported documents, mail, messages, alias candidates and reviewed intake remain future work. | Pending final release sync and HTML/Markdown checks | Codex |
-| Zoom roadmap, ru | Choose supported work and identify what remains | Owner notes are delivered; imported documents, mail, messages, alias candidates and reviewed intake remain future work. | Pending final release sync and HTML/Markdown checks | Codex |
-| Zoom roadmap, es | Choose supported work and identify what remains | Owner notes are delivered; imported documents, mail, messages, alias candidates and reviewed intake remain future work. | Pending final release sync and HTML/Markdown checks | Codex |
-| Zoom archive, en | Understand local meeting storage | Core 0.286+ preserves legacy messages.db and SQLite sidecars; retention is a separate action. | Pending final release sync and HTML/Markdown checks | Codex |
-| Zoom archive, ru | Understand local meeting storage | Core 0.286+ preserves legacy messages.db and SQLite sidecars; retention is a separate action. | Pending final release sync and HTML/Markdown checks | Codex |
-| Zoom archive, es | Understand local meeting storage | Core 0.286+ preserves legacy messages.db and SQLite sidecars; retention is a separate action. | Pending final release sync and HTML/Markdown checks | Codex |
-| Zoom search, en | Link a participant to a known person | --source names explicit additional numeric store accounts; links require an explicit person. | Pending final release sync and HTML/Markdown checks | Codex |
-| Zoom search, ru | Link a participant to a known person | --source names explicit additional numeric store accounts; links require an explicit person. | Pending final release sync and HTML/Markdown checks | Codex |
-| Zoom search, es | Link a participant to a known person | --source names explicit additional numeric store accounts; links require an explicit person. | Pending final release sync and HTML/Markdown checks | Codex |
-| Zoom commands, en | Look up exact command syntax | Generated native source row for --source <accounts> is copied into the maintained translations. | Pending final release sync and HTML/Markdown checks | Codex |
-| Zoom commands, ru | Look up exact command syntax | Generated native source row for --source <accounts> is copied into the maintained translations. | Pending final release sync and HTML/Markdown checks | Codex |
-| Zoom commands, es | Look up exact command syntax | Generated native source row for --source <accounts> is copied into the maintained translations. | Pending final release sync and HTML/Markdown checks | Codex |
-| Zoom changelog, en | Understand the release and required script update | Separate 0.19 standards and 0.20 notes entries; old --target-accounts has no alias. | Pending final release sync and HTML/Markdown checks | Codex |
-| Zoom changelog, ru | Understand the release and required script update | Separate 0.19 standards and 0.20 notes entries; old --target-accounts has no alias. | Pending final release sync and HTML/Markdown checks | Codex |
-| Zoom changelog, es | Understand the release and required script update | Separate 0.19 standards and 0.20 notes entries; old --target-accounts has no alias. | Pending final release sync and HTML/Markdown checks | Codex |
+| Zoom usage, en | Prepare for an upcoming selected series | Owner notes are separate from accepted facts; references/revisions/coverage remain visible. | Native/translation/contract matched; browser scope below | Codex |
+| Zoom usage, ru | Prepare for an upcoming selected series | Owner notes are separate from accepted facts; references/revisions/coverage remain visible. | Native/translation/contract matched; browser scope below | Codex |
+| Zoom usage, es | Prepare for an upcoming selected series | Owner notes are separate from accepted facts; references/revisions/coverage remain visible. | Native/translation/contract matched; browser scope below | Codex |
+| Zoom mcp, en | Give an agent bounded preparation tools | Account remains server-selected; notes use the registered answer and post-escaping item/cue byte bounds. | Native/translation/contract matched; browser scope below | Codex |
+| Zoom mcp, ru | Give an agent bounded preparation tools | Account remains server-selected; notes use the registered answer and post-escaping item/cue byte bounds. | Native/translation/contract matched; browser scope below | Codex |
+| Zoom mcp, es | Give an agent bounded preparation tools | Account remains server-selected; notes use the registered answer and post-escaping item/cue byte bounds. | Native/translation/contract matched; browser scope below | Codex |
+| Zoom roadmap, en | Choose supported work and identify what remains | Owner notes are delivered; imported documents, mail, messages, alias candidates and reviewed intake remain future work. | Native/translation/contract matched; browser scope below | Codex |
+| Zoom roadmap, ru | Choose supported work and identify what remains | Owner notes are delivered; imported documents, mail, messages, alias candidates and reviewed intake remain future work. | Native/translation/contract matched; browser scope below | Codex |
+| Zoom roadmap, es | Choose supported work and identify what remains | Owner notes are delivered; imported documents, mail, messages, alias candidates and reviewed intake remain future work. | Native/translation/contract matched; browser scope below | Codex |
+| Zoom archive, en | Understand local meeting storage | Core 0.286+ preserves legacy messages.db and SQLite sidecars; retention is a separate action. | Native/translation/contract matched; browser scope below | Codex |
+| Zoom archive, ru | Understand local meeting storage | Core 0.286+ preserves legacy messages.db and SQLite sidecars; retention is a separate action. | Native/translation/contract matched; browser scope below | Codex |
+| Zoom archive, es | Understand local meeting storage | Core 0.286+ preserves legacy messages.db and SQLite sidecars; retention is a separate action. | Native/translation/contract matched; browser scope below | Codex |
+| Zoom search, en | Link a participant to a known person | --source names explicit additional numeric store accounts; links require an explicit person. | Native/translation/contract matched; browser scope below | Codex |
+| Zoom search, ru | Link a participant to a known person | --source names explicit additional numeric store accounts; links require an explicit person. | Native/translation/contract matched; browser scope below | Codex |
+| Zoom search, es | Link a participant to a known person | --source names explicit additional numeric store accounts; links require an explicit person. | Native/translation/contract matched; browser scope below | Codex |
+| Zoom commands, en | Look up exact command syntax | Generated native source row for `--source <accounts>` is copied into the maintained translations. | Native/translation/contract matched; browser scope below | Codex |
+| Zoom commands, ru | Look up exact command syntax | Generated native source row for `--source <accounts>` is copied into the maintained translations. | Native/translation/contract matched; browser scope below | Codex |
+| Zoom commands, es | Look up exact command syntax | Generated native source row for `--source <accounts>` is copied into the maintained translations. | Native/translation/contract matched; browser scope below | Codex |
+| Zoom changelog, en | Understand the release and required script update | Separate0.19 standards,0.20 notes and0.20.1 MCP budget entries; old --target-accounts has no alias. | Native/translation/contract matched; browser scope below | Codex |
+| Zoom changelog, ru | Understand the release and required script update | Separate0.19 standards,0.20 notes and0.20.1 MCP budget entries; old --target-accounts has no alias. | Native/translation/contract matched; browser scope below | Codex |
+| Zoom changelog, es | Understand the release and required script update | Separate0.19 standards,0.20 notes and0.20.1 MCP budget entries; old --target-accounts has no alias. | Native/translation/contract matched; browser scope below | Codex |
 | Shared Meetings, en | Prepare from linked saved context | Separate notes from accepted facts; retain note refs/revisions and investigate unqueried documents/communications. | Pending final release and HTML/Markdown checks | Codex |
 | Shared Meetings, ru | Prepare from linked saved context | Separate notes from accepted facts; retain note refs/revisions and investigate unqueried documents/communications. | Pending final release and HTML/Markdown checks | Codex |
 | Shared Meetings, es | Prepare from linked saved context | Separate notes from accepted facts; retain note refs/revisions and investigate unqueried documents/communications. | Pending final release and HTML/Markdown checks | Codex |
@@ -70,21 +67,30 @@ row is copied from native generation rather than invented by the portal.
 - Archive translations still promised automatic deletion of legacy messages.db files. Native0.19
   corrected that stale claim; both translations now describe preservation and separate retention.
 - Search and command translations carried --target-accounts. They now use the source-owned
-  --source <accounts> syntax and preserve its explicit numeric-account meaning.
+  `--source <accounts>` syntax and preserve its explicit numeric-account meaning.
 - The roadmap retains broader series discovery, imported documents/communications/aliases,
   reviewed findings intake and shared native archive storage as planned work.
 
+The published0.20 regression grew a37,982-byte item to81,982 bytes under a64KiB bound. The
+actual installed0.20.1 package returns4,852 bytes for the same synthetic MCP request while preserving
+the raw CLI note. Core owns the shared trimming policy; original source text and citations stay intact.
+
+The discovery capture now explicitly sets WIRECAT_STATE_DIR in both source-build and subprocess
+environments, alongside temporary HOME/store paths. Final contracts were recaptured after that change.
+
 ## Gates
 
-- [x] Native feature455 tests, TypeScript, docs and command lint passed.
-- [x] Candidate installed SDK helper passed notes/revision/projection and resource/scoping assertions.
-- [x] All14 changed candidate translation structures pass; reviewed fingerprints are not advanced yet.
+- [x] Native456 tests, TypeScript, docs and command lint passed.
+- [x] All four release-installed SDK proofs passed notes/revision/projection, framing budgets and resource/scoping assertions.
+- [x] All14 final translated structures match; reviewed source fingerprints are accepted.
 - [x] Verify the immutable Zoom0.20 release, tarball/SRI/tag and four installed-platform proofs.
-- [ ] Capture final native sources, review translations in full and accept their matching fingerprints.
-- [ ] Refresh exact command contracts; run strict localization, quality and release-note checks.
-- [ ] Run the affected Zoom browser suite against HTML and Markdown.
+- [x] Capture final native sources, review translations in full and accept their matching fingerprints.
+- [x] Refresh exact command contracts; run strict localization, quality and release-note checks.
+- [x] Run the affected Zoom browser suite against HTML and Markdown:36 passed.
 - [ ] Merge after all checks pass; verify the successful production deployment and live routes.
 
-No owner account, store, keyring, models or live Zoom data is needed for these checks. Syntax/manual
-review counts from quality reports will be recorded separately; CI does not establish whole-corpus
-editorial compliance. Final deployment and live proof will also be recorded in the private delivery.
+No owner account, store, keyring, models or live Zoom data was used. Strict quality reported1319
+reference entries, zero reference gaps/invalid examples and17 task mappings. Its144 corpus-wide
+syntax illustrations/manual cases are not claimed executed or fully audited; CI does not establish
+whole-corpus editorial compliance. The existing dev Sidebar React key warning remains; no frontend
+layout code changed. Final deployment and live proof will also be recorded in the private delivery.
