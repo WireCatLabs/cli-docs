@@ -24,8 +24,9 @@ un año de comentarios. Muestra:
   frecuencia responde el autor.
 - **Una lectura:** qué funciona, qué podría mejorar y qué experimentos hacer, cada punto con una cifra.
 
-Por ejemplo, el informe encontró que las publicaciones con el código ya publicado despegan casi tres veces más que la
-media del canal, y que las vistas cayeron un 40% después de una pausa de tres meses y no se recuperaron.
+Por ejemplo, el informe encontró que los lectores reenvían más las publicaciones con el código ya publicado (5,3
+veces por cada 1.000 vistas, frente a 4,0 en todo el canal), y que las vistas cayeron un 40% después de una pausa de
+tres meses sin publicar y no se recuperaron.
 
 Hicimos el ejemplo con nuestro script interno. El script no está publicado. Los pasos de abajo usan solo comandos
 públicos de tg, así que tu agente puede hacer el mismo tipo de informe.
