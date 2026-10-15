@@ -53,6 +53,8 @@ tg personal contacts timeline "Kai Sample" --since-time 2026-10-01 --limit 20
 
 La herramienta también anota quién participó en qué (remitente, destinatario, participante, responsable, autor, mencionado, vinculado). Por eso «todo sobre Kai» es una sola consulta y no un recorrido por todos los mensajes.
 
+La cronología de una persona sigue la participación guardada y los vínculos explícitos de mensajes. Confirmar una mención de teléfono, correo o nombre permite buscarla con `mentions:`, pero no añade por sí solo una entrada a la cronología.
+
 ## Respuestas y conversaciones
 
 Cada mensaje puede apuntar al mensaje anterior al que responde. Cada puntero dice de dónde viene:
@@ -62,8 +64,6 @@ Cada mensaje puede apuntar al mensaje anterior al que responde. Cada puntero dic
 - **Tu agente.** Una respuesta que guardó tras leer el chat. Guardarla requiere el permiso de perfil `conversations.links`.
 
 `conversations build` une esos punteros en conversaciones de un chat. `messages context` con `--thread` sigue la cadena desde un mensaje en lugar de mostrar sus vecinos en el tiempo. Un vínculo que quedó desactualizado tras una edición o un borrado se muestra, pero no se sigue. Al reconstruir, las conversaciones reciben ids nuevos, así que conserva la referencia `msg:` del mensaje, no el id de la conversación. Cómo se construye el grafo: [Cómo funciona la búsqueda](./search-architecture.mdx#3-reconstruir-conversaciones-con-un-grafo-de-mensajes).
-
-La cronología de una persona sigue la participación guardada y los vínculos explícitos de mensajes. Confirmar una mención de teléfono, correo o nombre permite buscarla con `mentions:`, pero no añade por sí solo una entrada a la cronología.
 
 ## Archivos, notas de voz e imágenes
 

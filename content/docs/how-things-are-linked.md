@@ -53,6 +53,8 @@ tg personal contacts timeline "Kai Sample" --since-time 2026-10-01 --limit 20
 
 The tool also records who took part in what (sender, recipient, participant, assignee, author, mentioned, linked). That record is why "everything about Kai" is one lookup and not a scan of every message.
 
+The person timeline follows recorded participation and explicit message links. Confirming a found phone, email or name mention makes it searchable with `mentions:`, but does not by itself add a timeline entry.
+
 ## Replies and conversations
 
 Every message can point at the earlier message it answers. Each pointer says where it came from:
@@ -62,8 +64,6 @@ Every message can point at the earlier message it answers. Each pointer says whe
 - **Your agent.** An answer it stored after reading the chat. Storing it needs the profile permission `conversations.links`.
 
 `conversations build` joins these pointers into conversations for one chat. `messages context` with `--thread` follows the chain from a message instead of showing its neighbours in time. A link that went out of date after an edit or a deletion is shown but never followed. A rebuild gives conversations new ids, so keep the `msg:` reference of the message, not the conversation id. How the graph is built: [How search works](./search-architecture.mdx#3-reconstruct-discussions-with-a-message-graph).
-
-The person timeline follows recorded participation and explicit message links. Confirming a found phone, email or name mention makes it searchable with `mentions:`, but does not by itself add a timeline entry.
 
 ## Files, voice notes and pictures
 
