@@ -22,8 +22,9 @@ comments. It shows:
 - **Polls and comments:** turnout, the biggest polls, how many people comment and how often the author answers.
 - **A reading:** what works, what could be better and experiments to run, each backed by a number.
 
-The example found, for instance, that posts with released code break out almost three times as often as the
-channel's average, and that views fell about 40% after a three-month break and did not come back.
+The example found, for instance, that readers forward posts with released code more often (5.3 times per 1,000
+views, against 4.0 for the channel), and that views fell about 40% after a three-month pause in posting and did not
+come back.
 
 We made the example with our own internal script. The script is not published. The steps below use only public tg
 commands, so your agent can produce the same kind of report.
