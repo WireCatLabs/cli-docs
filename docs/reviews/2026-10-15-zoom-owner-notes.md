@@ -5,8 +5,8 @@ references and revision numbers, distinguish them from accepted facts, and inves
 
 ## Source boundary
 
-- Documentation base: origin/main `00568d0`, preserving the newer Telegram0.60/Memo0.41 reviews
-  and task category example. The original draft began at `ba70b2b`; no other tool pin is changed.
+- Documentation base: origin/main `00568d0`, preserving MAX0.54/Telegram0.60/Memo0.41 reviews, analytics
+  guides and the task category example. The original draft began at `ba70b2b`; no other tool pin is changed.
 - Current Zoom pin is verified **v0.20.1**, source `bc91018482ddfa0a136aa94c49cfe2aa2b46f431`,
   [release38798750377](https://github.com/WireCatLabs/zoom-cli/actions/runs/38798750377).
   Registry bytes equal the validated artifact, SHA256
@@ -27,7 +27,7 @@ references and revision numbers, distinguish them from accepted facts, and inves
 ## Reader review inventory
 
 The changed capability paragraphs, retained openings/endings, links and task boundaries were inspected
-against owning native code and the preceding reviewed guides. Final immutable sync and translation review passed; browser scope and timing findings are recorded below. Generated English command content is source-owned; its changed literal
+against owning native code and the preceding reviewed guides. Final immutable sync, translation review and all36 targeted HTML/Markdown cases passed; timing evidence is recorded below. Generated English command content is source-owned; its changed literal
 row is copied from native generation rather than invented by the portal.
 
 | Page and locale | Reader task | Behavior checked | Final released source / exports | Reviewer |
@@ -79,7 +79,10 @@ The initial36-case development run passed functionally but two cases exceeded th
 headroom guard (26.606s and24.123s against30s). A retained two-case trace located13.9/14.2s in
 first-request Markdown compilation. The existing server readiness probe warmed only HTML. A bounded
 shared Markdown readiness check now runs before development tests, skips static export runs and
-retains every test assertion, deadline and timing threshold. The final rerun is pending.
+retains every test assertion, deadline and timing threshold. A run interrupted by a concurrent
+source refresh is excluded from final evidence. After all generators finished, the stable36-case
+rerun passed in1.4 minutes and the timing guard passed; its slowest case took3.612s against30s.
+The15 browser-policy tests and TypeScript also passed.
 
 The discovery capture now explicitly sets WIRECAT_STATE_DIR in both source-build and subprocess
 environments, alongside temporary HOME/store paths. Final contracts were recaptured after that change.
@@ -92,10 +95,10 @@ environments, alongside temporary HOME/store paths. Final contracts were recaptu
 - [x] Verify the immutable Zoom0.20.1 release, tarball/SRI/tag and four installed-platform proofs.
 - [x] Capture final native sources, review translations in full and accept their matching fingerprints.
 - [x] Refresh exact command contracts; run strict localization, quality and release-note checks.
-- [x] Run the affected Zoom browser suite against HTML and Markdown:36 passed.
+- [x] Run the affected Zoom browser suite against HTML and Markdown:36 passed; unchanged20% timing headroom guard passed.
 - [ ] Merge after all checks pass; verify the successful production deployment and live routes.
 
-No owner account, store, keyring, models or live Zoom data was used. Strict quality reported1319
+No owner account, store, keyring, models or live Zoom data was used. Strict quality reported1327
 reference entries, zero reference gaps/invalid examples and17 task mappings. Its144 corpus-wide
 syntax illustrations/manual cases are not claimed executed or fully audited; CI does not establish
 whole-corpus editorial compliance. The existing dev Sidebar React key warning remains; no frontend
