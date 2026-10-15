@@ -10,7 +10,7 @@ probar después. Necesitas una cuenta de Telegram que pueda abrir el canal. No h
 
 ## Qué obtienes
 
-Mira el [informe de ejemplo sobre @AI_DeepLearning](/channel-report-example.html), un canal en inglés de 17
+Mira el [informe de ejemplo sobre @AI_DeepLearning](./group-analytics-example.mdx), un canal en inglés de 17
 mil suscriptores que reseña artículos de visión por computadora. Cubre 1.582 publicaciones de 2017 a octubre de 2026 y
 un año de comentarios. Muestra:
 
