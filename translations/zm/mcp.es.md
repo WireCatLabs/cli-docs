@@ -106,6 +106,8 @@ fechas ISO opcionales `after`, `until`, `history_after` y límites `meetings`, `
 `meeting:read:meeting`. Esta herramienta opcional no funciona con `--offline`, no cambia la app
 Zoom, no descarga transcripciones ausentes ni acepta hallazgos. El elemento `meeting_preparation`
 conserva citas, reuniones relacionadas acotadas por vínculos explícitos a personas/proyectos
-confirmados y cobertura explícita. Las lecturas relacionadas se limitan a la cuenta y periodo
+confirmados y cobertura explícita. Los hechos aceptados sobre personas/proyectos aparecen en
+`knowledge`, con referencias y límites explícitos de evidencia y fuentes no consultadas.
+Las lecturas relacionadas se limitan a la cuenta y periodo
 elegidos, sin escrituras. Consulta [preparación](./usage.md#prepare-for-an-upcoming-meeting)
 para ver qué incluye, qué no consulta y cómo comprobar el resultado.

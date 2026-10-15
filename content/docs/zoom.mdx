@@ -66,7 +66,9 @@ with `zm meetings prepare <series-id> --json`. It reads the upcoming time from Z
 bounded stored prior calls, observed people, confirmed projects, accepted facts and directly sourced
 tasks. It also includes related stored calls through existing person links or confirmed projects,
 within the selected account and history window. Use the provider's numeric series ID, not the
-internal stored meeting ID. Person/project sources outside meeting transcripts and project-name/alias
+internal stored meeting ID. `knowledge.items` adds accepted facts about those linked people and
+confirmed projects, including decisions recorded outside the meetings. Keep their `fact:` references
+so the agent can retrieve and check the evidence. Notes, mail, messages and project-name/alias
 candidates remain explicitly unqueried; the agent can investigate those separately. Missing
 transcripts are not downloaded by preparation, and matching names never creates a person link.
 

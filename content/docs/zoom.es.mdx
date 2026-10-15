@@ -66,8 +66,10 @@ con `zm meetings prepare <series-id> --json`. Lee la próxima fecha en Zoom y un
 acotado, participantes observados, proyectos confirmados, hechos aceptados y tareas con fuentes
 directas. Incluye también llamadas guardadas relacionadas mediante vínculos existentes a personas
 o proyectos confirmados, dentro de la cuenta y el periodo elegidos. Usa el ID numérico de la serie
-del proveedor, no el ID interno de la reunión guardada. Las fuentes de personas/proyectos fuera de
-las transcripciones y los candidatos por nombre/alias quedan como no consultados; el agente puede
+del proveedor, no el ID interno de la reunión guardada. `knowledge.items` añade hechos aceptados sobre
+esas personas vinculadas y proyectos confirmados, incluidas decisiones registradas fuera de las
+reuniones. Conserva las referencias `fact:` para que el agente pueda recuperar y comprobar la evidencia.
+Las notas, el correo, los mensajes y los candidatos por nombre/alias quedan como no consultados; el agente puede
 investigarlos aparte. La preparación no descarga transcripciones ausentes ni vincula personas por
 coincidencia de nombres.
 

@@ -65,13 +65,22 @@ confirmados compartidos con el historial incluido. Cada una conserva referencia,
 esas conexiones. La búsqueda se limita al perfil y periodo elegidos, usa vínculos actuales y excluye
 asociaciones propuestas a proyectos. Coincidir nombres o palabras nunca crea un vínculo.
 
+`knowledge.items` añade hechos aceptados sobre personas vinculadas explícitamente y proyectos
+globales confirmados, incluidas decisiones registradas fuera de estas reuniones. Cada uno conserva
+referencia `fact:`, referencias al sujeto/proyecto, fecha de actualización e indicadores
+`shared_person`/`shared_project`. Usa las llamadas anteriores incluidas como anclas y excluye hechos
+propuestos, revocados, eliminados o actualizados después del inicio de la preparación. La referencia
+permite recuperar el registro completo y su evidencia mediante Memo antes de usarlo. No busca notas,
+correo ni mensajes: `knowledge.coverage` lo indica con `fact_evidence: not-revalidated`
+y `other_sources: not-queried`.
+
 Si aparece la próxima hora sin reuniones anteriores, descarga el periodo pertinente mediante la
 API de Zoom para guardar sus vínculos exactos a la serie. Un archivo de transcripción importado
 puede carecer de ese ID del proveedor. La preparación no une llamadas por títulos o nombres parecidos.
 
 La cobertura distingue historial ausente, reuniones sin fecha, filas adicionales y límites de salida.
-No se conoce si el archivo incluye todo el historial. Las fuentes de personas/proyectos fuera de
-transcripciones y las candidatas por nombre/alias quedan sin consultar; sin reuniones anteriores
+No se conoce si el archivo incluye todo el historial. Las notas de personas/proyectos, el correo,
+los mensajes y las candidatas por nombre/alias quedan sin consultar; sin reuniones anteriores
 utilizables, tampoco se consulta el historial relacionado. La evidencia de los hechos guardados
 no se vuelve a comprobar. Usa [búsqueda y fuentes](./search.md) para investigar esas lagunas.
 La preparación no genera un resumen, acepta hallazgos ni crea tareas.
@@ -80,7 +89,9 @@ Para una ventana fija, usa tiempos ISO con zona en `--since-time`, `--before-tim
 `--history-since-time`. `--meetings` limita por separado el historial de la serie y el relacionado;
 `--cues` y `--context-limit` acotan el contexto. `--max-read-bytes` acota cada lectura y `--bytes`
 el elemento completo. Las fuentes de la serie tienen prioridad; `related.has_more` y
-`related.output_limited` indican contexto relacionado adicional u omitido. Pueden quedar filas
+`related.output_limited` indican contexto relacionado adicional u omitido.
+Los hechos aceptados tienen indicadores independientes `knowledge.coverage.has_more` y `knowledge.coverage.output_limited`;
+se devuelven hasta veinte (o un `--context-limit` menor), cediendo bytes a las fuentes de reuniones. Pueden quedar filas
 fuera del límite. Las fuentes omitidas dan `meta.complete=false`: revisa sus referencias antes de
 usar el informe. Si la cobertura señala un recorte, aumenta el límite correspondiente.
 
