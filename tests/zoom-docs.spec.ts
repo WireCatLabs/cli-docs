@@ -266,6 +266,10 @@ for (const lang of ["en", "ru", "es"] as const) {
         expect(markdown).toContain("`item.next`")
         expect(markdown).toContain("`validation_error`")
         expect(markdown).toContain("`meeting_project_evidence`")
+        for (const field of ["meta.truncated", "content_bytes", "validation_error"]) {
+          await expect(main).toContainText(field)
+          expect(markdown).toContain(`\`${field}\``)
+        }
       }
     })
   }

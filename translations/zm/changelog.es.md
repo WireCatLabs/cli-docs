@@ -4,6 +4,15 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.20.1 — 15.10.2026
+
+### Corregido
+
+- La preparación MCP mantiene el elemento dentro del límite de bytes tras hacer visibles los
+  caracteres ocultos. Conserva las fuentes de reuniones antes que notas y hechos aceptados,
+  indica omisiones y cuenta los bytes del texto que recibe el cliente. Rechaza los metadatos
+  que no caben.
+
 ## 0.20.0 — 15.10.2026
 
 ### Añadido
