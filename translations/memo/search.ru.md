@@ -27,7 +27,7 @@ Quote the matching text, show the source of each result and tell me what you cou
 | В сообщениях Telegram или MAX | `memo search messages 'budget'` |
 
 `search all` ищет сразу в сообщениях, почте и заметках. Он не ищет людей, память, проекты и
-задачи; для них используйте `memo context`, `memo memories search` и `memo tasks list`. Если вы знаете,
+задачи; для них используйте `memo context`, `memo search memories` и `memo tasks list`. Если вы знаете,
 где что-то лежит, лучше использовать отдельный поиск по этому месту: он понимает больше слов для поиска.
 
 ## Слова для поиска
@@ -35,16 +35,19 @@ Quote the matching text, show the source of each result and tell me what you cou
 Поиск находит результаты, в которых есть **каждое** введённое вами слово, включая другие формы слова
 (`meeting` находит и `meetings`).
 
-| Чтобы найти | Введите |
+| Что найти | Запрос |
 |---|---|
-| Все эти слова | `budget venue` |
-| Точную фразу | `"budget review"` |
-| Одно слово или другое | `budget OR invoice` |
-| Без какого-то слова | `budget NOT cancelled` |
+| Все слова | `budget venue` |
+| Точная фраза | `"budget review"` |
+| Одно из слов | `budget OR invoice` |
+| Без слова | `budget NOT cancelled` |
 | С тегом | `tag:follow-up` |
-| За один день или начиная с какого-то дня | `date:2026-10-08`, `date:[2026-09-01 TO *]` |
-| От кого-то или кому-то (почта и сообщения) | `from:kai`, `to:kai@example.com` |
-| В теме письма или в почтовой папке (почта) | `subject:invoice`, `mailbox:important` |
+| За день или начиная с даты | `date:2026-10-08`, `date:[2026-09-01 TO *]` |
+| От кого или кому (почта и сообщения) | `from:kai`, `to:kai@example.com` |
+| Тема или папка письма | `subject:invoice`, `mailbox:important` |
+| Внутри вложения (сообщения и почта) | `content:invoice`, `filename:*.pdf` |
+
+`content:` сужает поиск до текста файлов, `filename:` — до имён: `memo search messages 'content:invoice'`. Текст доступен после обработки файла tg или max (`tg attachments extract`) либо записи агентом.
 
 Заключайте запрос поиска в одинарные кавычки, чтобы терминал передал его в Memo без изменений:
 `memo search notes '"budget review" NOT cancelled'`. `--exact` находит слова только в том виде, в котором
@@ -53,14 +56,13 @@ Quote the matching text, show the source of each result and tell me what you cou
 ## Сузьте поиск по заметкам
 
 ```sh
-memo search notes 'budget' --tag work                   # only notes with a tag
+memo search notes 'budget' --filter 'tag:work'          # only notes with a tag
 memo search notes 'budget' --folder /path/to/notes       # only one folder
 memo search notes 'budget' --type internal               # only notes you wrote in Memo
 memo search notes 'budget' --filter 'date:2026-10-08'    # and a second condition
 ```
 
-`--type file` показывает только заметки из файлов. Результаты выводятся по 20 за раз; если их больше, в
-ответе есть `nextOffset`, и `--offset` с этим числом показывает следующую страницу.
+`--type file` показывает только заметки из файлов. Выдаётся по 20 результатов; если есть ещё, `--page 2` открывает следующую страницу, номер которой указан в `page.next_page`.
 
 ## Поиск в почте
 
@@ -83,7 +85,7 @@ memo search mail 'budget' --account you@example.com
 tg models text download e5-small    # or: max models text download e5-small
 ```
 
-Модель работает на вашем компьютере. После скачивания выполните `memo import`, чтобы подготовить заметки
+Модель работает на вашем компьютере. После скачивания выполните `memo sync`, чтобы подготовить заметки
 к поиску по смыслу. Каждый результат сообщает, как он найден: по словам, по смыслу или обоими способами.
 Без модели Memo пишет "Searched by words only" и всё равно находит каждую заметку, в которой есть эти
 слова.
@@ -110,16 +112,13 @@ Linked from these notes
 `memo ask` собирает источники для вопроса, чтобы агент мог ответить и сослаться на них:
 
 ```sh
-memo ask 'What is the Harbour budget?' --all --query 'Harbour budget'
+memo ask 'What is the Harbour budget?' 'Harbour budget' --all
 ```
 
-`--query` задаёт слова для поиска; без него Memo ищет по всему вопросу, и совпасть должно каждое слово.
-`--all` ищет во всех аккаунтах; для одного аккаунта используйте `--provider telegram --account 1`. В
-ответе перечислены все источники со ссылкой на источник и текстом, что именно искали и было ли что-то
-пропущено. Memo сам не отвечает на вопрос и не сохраняет ответ.
+Слова после вопроса задают поиск. Без них Memo ищет весь вопрос, и каждое слово должно совпасть. `--all` ищет во всех аккаунтах; `--provider telegram --account 1` выбирает один. Ответ перечисляет источники с ссылками и текстом, область поиска и пропуски. Memo сам не отвечает на вопрос и не сохраняет ответ.
 
 Memo может также отправить источники настроенному вами провайдеру ИИ и вернуть его ответ: добавьте
-`--model`, а для провайдера за пределами вашего компьютера — ещё и `--allow-remote`. См.
+`--analyze`, а для провайдера за пределами вашего компьютера — ещё и `--allow-remote`. См.
 [настройки](./configuration.md#environment-variables). Ответ провайдера — это сгенерированный текст:
 сверьте его с источниками.
 

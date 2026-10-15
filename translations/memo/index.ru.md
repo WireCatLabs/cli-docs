@@ -61,7 +61,7 @@ Search it for a word I give you and show me the source of each result.
 ```sh
 npm install -g @wirecat/cli-memo
 memo folders add /path/to/notes --format markdown
-memo notes import --no-embed
+memo sync --only notes --no-embed
 memo search notes budget
 ```
 

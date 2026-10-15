@@ -75,6 +75,23 @@ memo projects context HRB
 организацией, заметки о них или со ссылками на них и их теги. Ключ проекта также используется для его
 задач, например `HRB-1` ([задачи](./tasks.md#tasks-in-a-project)).
 
+## Ключевые документы проекта
+
+**Ключевой документ** — заметка, файл или сохранённое сообщение, которое стоит прочитать первым по проекту, с краткой причиной. Отметка относится к одному проекту: один файл может быть ключевым для одного проекта и обычным для другого.
+
+```sh
+memo projects key-documents add HRB document:3 --reason 'the plan everyone follows'
+memo projects key-documents add HRB msg:telegram/1/77/42 --reason 'the agreed budget'
+memo projects key-documents list HRB
+memo projects key-documents remove HRB document:3
+```
+
+`projects context` начинает с них: название, путь и причина. Если файл или сообщение исчезли из хранилища, отметка остаётся с `available: false` до удаления. `memo search all` и `memo search notes` с `--project HRB` ставят ключевые документы первыми, не исключая остальные; `search notes` помечает их `key`. Отметка агента ждёт подтверждения и называет агента, как отношение.
+
+**Начинайте работу над проектом с `memo projects context <key>`** — сами или через агента.
+
+Общий тег вроде `key` (`memo tags add key --note document:3`) не указывает проект. Перенесите его в ключевые документы через `memo projects key-documents add`, затем снимите тег через `memo tags remove key`.
+
 ## Кто к чему относится
 
 **Связь** означает, что человек входит в организацию или работает над проектом:
@@ -82,11 +99,11 @@ memo projects context HRB
 ```sh
 memo relationships add person:PERSON_UID organization:1 --kind member-of
 memo relationships add person:PERSON_UID project:1 --kind related-to --role author
-memo relationships list --reference project:1
+memo relationships list 'about:"project:1"'
 memo relationships remove 4
 ```
 
-Связи — это утверждения, которые делаете вы. Они никогда не объединяют два аккаунта в одного человека.
+Отношения — ваши утверждения. Они не объединяют два аккаунта в одного человека. Отношение, добавленное из терминала агента, ждёт подтверждения; `provenance` называет агента (`agent:claude-code`). Подтвердите через `memo relationships confirm`; `--as-owner` сразу делает запись вашей.
 
 Memo может предложить связи на основе почты: люди, которые пишут вам с одного и того же домена компании.
 
@@ -107,8 +124,8 @@ memo projects meetings link HRB 5 --provider zoom --account ACCOUNT
 memo projects meetings list HRB --provider zoom --account ACCOUNT
 ```
 
-Точно укажите аккаунт встречи. `--proposed` показывает связи, которые предложил агент; чтобы подтвердить
-одну из них, повторите `link` со значением `--expected` из этого списка.
+Точно укажите аккаунт встречи. `confirmed:false` показывает связи, которые предложил агент; чтобы подтвердить
+одну из них, повторите `link` со значением `--fingerprint` из этого списка.
 
 ## Другие названия проектов и тегов
 
@@ -116,14 +133,14 @@ memo projects meetings list HRB --provider zoom --account ACCOUNT
 поиск или агент находили его по любому из них:
 
 ```sh
-memo vocabulary list --kind project
-memo vocabulary resolve 'Harbor' --kind project
-memo vocabulary aliases add project:1 'Harbor' --expected VALUE
+memo vocabulary list kind:project
+memo vocabulary show 'Harbor' --kind project
+memo vocabulary aliases add project:1 'Harbor' --fingerprint VALUE
 ```
 
 `vocabulary list` показывает каждый проект, тег и тему с их другими названиями и проверочным значением.
-Передайте это значение в `--expected`, когда добавляете или удаляете название; если список за это время
-изменился, Memo откажет, и вам нужно будет посмотреть снова. `memo vocabulary preflight 'on-boarding'`
+Передайте это значение в `--fingerprint`, когда добавляете или удаляете название; если список за это время
+изменился, Memo откажет, и вам нужно будет посмотреть снова. `memo vocabulary check 'on-boarding'`
 показывает похожие существующие теги до того, как вы создадите новый, чтобы у вас не появились и
 `onboarding`, и `on-boarding`.
 

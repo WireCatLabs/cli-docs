@@ -16,8 +16,8 @@ mensajes, correo y notas a la vez.
 | De dónde viene | Quién lo pone en el almacén local |
 |---|---|
 | Mensajes de Telegram y MAX | tg y max, cuando descargan tus chats |
-| Correo | `memo mail <account> import` o `memo import` |
-| Archivos de tus carpetas de notas | `memo notes import` o `memo import` |
+| Correo | `memo sync --only mail` o `memo sync` |
+| Archivos de tus carpetas de notas | `memo sync --only notes` o `memo sync` |
 | Tus propias notas, etiquetas, tareas, recuerdos y hechos | Memo, cuando tú o tu agente los añadís |
 
 Memo nunca cambia el original: tus archivos se quedan como están, y tu buzón se abre solo para
@@ -115,13 +115,11 @@ confirmes el recuerdo o aceptes el hecho. A través de MCP, un agente no puede c
 aprobar ni rechazar, y cada llamada que hace queda escrita en el registro de agentes
 (`memo agents log`), sin los detalles que envió.
 
-Un recuerdo o un hecho añadido con el comando `memo` cuenta como tuyo y queda confirmado en el acto:
-el comando no puede saber si lo escribiste tú o tu agente. Pide a un agente con terminal que te
-muestre el texto y su fuente antes de añadir nada.
+El comando `memo` reconoce el terminal de un agente por `AI_AGENT` o `CLAUDECODE`, variables que establecen agentes como Claude Code. Un hecho, recuerdo, vínculo o acción propuesta se atribuye al agente y espera tu revisión, como mediante MCP. Sin ellas, o con `--as-owner`, se atribuye a ti y se confirma al instante. Las variables y `--as-owner` son etiquetas, no un bloqueo: un agente puede establecerlas y escribir como tú.
 
 ## Qué puede salir de tu ordenador
 
 Nada, a menos que lo pidas. Por defecto, `memo ask` prepara fuentes para tu propio agente. Envía
-texto a un proveedor de IA solo cuando configuras uno y añades `--model`, y a un proveedor remoto
+texto a un proveedor de IA solo cuando configuras uno y añades `--analyze`, y a un proveedor remoto
 solo si además añades `--allow-remote`. Lo que tu agente hace con el texto que lee depende de ese
 agente. Consulta [Seguridad](./security.md).

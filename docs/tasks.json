@@ -130,7 +130,7 @@
     "id": "memo-upkeep",
     "pages": ["memo/archive.md", "memo/configuration.md", "memo/commands.md"],
     "families": {
-      "memo": ["import", "auto", "commands"]
+      "memo": ["sync", "auto", "commands", "doctor", "upgrade", "skill"]
     }
   },
   {

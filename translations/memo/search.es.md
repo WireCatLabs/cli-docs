@@ -28,7 +28,7 @@ cada una con `memo notes show` o en la aplicación original.
 | Mensajes de Telegram o MAX | `memo search messages 'budget'` |
 
 `search all` busca en mensajes, correo y notas a la vez. No busca personas, recuerdos, proyectos ni
-tareas; para eso usa `memo context`, `memo memories search` y `memo tasks list`. Cuando sabes dónde
+tareas; para eso usa `memo context`, `memo search memories` y `memo tasks list`. Cuando sabes dónde
 está algo, su propia búsqueda es mejor, porque entiende más palabras de búsqueda.
 
 ## Palabras de búsqueda
@@ -36,16 +36,19 @@ está algo, su propia búsqueda es mejor, porque entiende más palabras de búsq
 Una búsqueda encuentra resultados que contienen **todas** las palabras que escribes, incluidas otras
 formas de cada palabra (`meeting` también encuentra `meetings`).
 
-| Para encontrar | Escribe |
+| Qué buscar | Consulta |
 |---|---|
-| Todas estas palabras | `budget venue` |
+| Todas las palabras | `budget venue` |
 | Una frase exacta | `"budget review"` |
 | Una palabra u otra | `budget OR invoice` |
 | Sin una palabra | `budget NOT cancelled` |
 | Con una etiqueta | `tag:follow-up` |
-| En un día, o desde un día en adelante | `date:2026-10-08`, `date:[2026-09-01 TO *]` |
+| En un día o desde una fecha | `date:2026-10-08`, `date:[2026-09-01 TO *]` |
 | De alguien o para alguien (correo y mensajes) | `from:kai`, `to:kai@example.com` |
-| En el asunto o en una carpeta de correo (correo) | `subject:invoice`, `mailbox:important` |
+| En el asunto o carpeta de correo | `subject:invoice`, `mailbox:important` |
+| Dentro de un adjunto (mensajes y correo) | `content:invoice`, `filename:*.pdf` |
+
+`content:` limita la búsqueda al texto de archivos y `filename:` a sus nombres: `memo search messages 'content:invoice'`. El texto está disponible cuando tg o max lo ha leído (`tg attachments extract`) o un agente lo ha escrito.
 
 Pon la búsqueda entre comillas simples para que el terminal se la pase a Memo tal cual:
 `memo search notes '"budget review" NOT cancelled'`. `--exact` solo encuentra las palabras tal como
@@ -54,14 +57,13 @@ están escritas.
 ## Acotar tus notas
 
 ```sh
-memo search notes 'budget' --tag work                   # only notes with a tag
+memo search notes 'budget' --filter 'tag:work'          # only notes with a tag
 memo search notes 'budget' --folder /path/to/notes       # only one folder
 memo search notes 'budget' --type internal               # only notes you wrote in Memo
 memo search notes 'budget' --filter 'date:2026-10-08'    # and a second condition
 ```
 
-`--type file` muestra solo las notas de archivos. Los resultados llegan de 20 en 20; cuando hay más,
-la respuesta da un `nextOffset`, y `--offset` con ese número muestra la página siguiente.
+`--type file` muestra solo notas de archivos. Los resultados llegan de 20 en 20; si hay más, `--page 2` abre la siguiente página, cuyo número figura en `page.next_page`.
 
 ## Buscar en el correo
 
@@ -84,7 +86,7 @@ puede encontrar una nota sobre unas vacaciones. tg o max descarga el modelo una 
 tg models text download e5-small    # or: max models text download e5-small
 ```
 
-El modelo se ejecuta en tu ordenador. Después de la descarga, ejecuta `memo import` para que tus notas
+El modelo se ejecuta en tu ordenador. Después de la descarga, ejecuta `memo sync` para que tus notas
 queden preparadas para él. Cada resultado indica si se encontró por palabras, por significado o de
 las dos formas. Sin el modelo, Memo dice "Searched by words only" y aun así encuentra todas las notas
 que contienen las palabras.
@@ -111,17 +113,13 @@ enlaces y cómo se encontró.
 `memo ask` reúne las fuentes para una pregunta, para que tu agente pueda responder y citarlas:
 
 ```sh
-memo ask 'What is the Harbour budget?' --all --query 'Harbour budget'
+memo ask 'What is the Harbour budget?' 'Harbour budget' --all
 ```
 
-`--query` indica las palabras que hay que buscar; sin él, Memo busca la pregunta entera, y todas las
-palabras tienen que coincidir. `--all` busca en todas las cuentas; usa
-`--provider telegram --account 1` para una sola cuenta. La respuesta muestra cada fuente con su
-referencia y su texto, qué se buscó y si algo quedó fuera. Memo no responde la pregunta por sí mismo
-y no guarda la respuesta.
+Las palabras después de la pregunta indican qué buscar; sin ellas, Memo busca toda la pregunta y cada palabra debe coincidir. `--all` busca en todas las cuentas; `--provider telegram --account 1` elige una. La respuesta enumera fuentes con referencia y texto, el ámbito buscado y lo omitido. Memo no responde a la pregunta ni guarda la respuesta por sí solo.
 
 Memo también puede enviar las fuentes a un proveedor de IA que hayas configurado y devolver su
-respuesta: añade `--model`, y `--allow-remote` para un proveedor fuera de tu ordenador. Consulta la
+respuesta: añade `--analyze`, y `--allow-remote` para un proveedor fuera de tu ordenador. Consulta la
 [configuración](./configuration.md#environment-variables). La respuesta del proveedor es texto
 generado: compárala con las fuentes.
 

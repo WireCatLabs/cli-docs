@@ -32,17 +32,17 @@ Tell me how many notes it found and which files it could not read.
 
 ```sh
 memo folders add /path/to/notes --format markdown
-memo notes import --no-embed
+memo sync --only notes --no-embed
 ```
 
 Для папки Obsidian:
 
 ```sh
 memo folders add /path/to/vault --format obsidian
-memo notes import --no-embed
+memo sync --only notes --no-embed
 ```
 
-`memo folders add` выводит ID папки, например `1`. `memo notes import` читает заметки и сообщает,
+`memo folders add` выводит ID папки, например `1`. `memo sync --only notes` читает заметки и сообщает,
 сколько их нашлось:
 
 ```text
@@ -50,7 +50,7 @@ memo notes import --no-embed
 ```
 
 `--no-embed` пропускает подготовку к поиску по смыслу, поэтому для начала работы модель поиска не нужна.
-Запускайте `memo notes import` снова после того, как добавите или измените файлы; читаются только
+Запускайте `memo sync --only notes` снова после того, как добавите или измените файлы; читаются только
 изменения.
 
 Можно добавить несколько папок. `memo folders list` показывает их все.
@@ -108,13 +108,13 @@ npm install -g unpdf mammoth
 { "notes": { "ignore": ["Journal/Private.md", "Archive", "**/Private*"] } }
 ```
 
-`memo notes import --ignore Drafts` пропускает папку только при одном импорте.
+`memo sync --only notes --ignore Drafts` пропускает папку только для одного запуска.
 
 ## Найдите свои заметки
 
 ```sh
 memo search notes 'budget'
-memo search notes 'budget' --tag work
+memo search notes 'budget' --filter 'tag:work'
 memo notes show document:3
 ```
 
@@ -135,11 +135,13 @@ Show me the saved note.
 Или сами:
 
 ```sh
-memo notes add 'Prefers morning meetings' --about telegram:'Kai Sample'
-memo notes list --about telegram:'Kai Sample'
+memo notes add 'Prefers morning meetings' --subject telegram:'Kai Sample'
+memo notes list 'about:"telegram:Kai Sample"'
 ```
 
-`--about` указывает, к чему относится заметка. Чтобы указать несколько, повторите его:
+`notes list about:` показывает заметки о предмете и связанные с ним: напрямую, через заметку о нём или через общее имя двух людей. Поле `via` в `--json` указывает путь: `about`, `link`, `through` или `name`. Условие используется отдельно в запросе; `source:internal` и `text:budget` сужают весь список.
+
+`--subject` в `notes add` задаёт, о чём заметка. Повторите его для нескольких предметов:
 
 | К чему относится | Что написать |
 |---|---|
@@ -169,7 +171,7 @@ memo notes remove 12
 ### Сохраните заметки в файлы
 
 ```sh
-memo notes export --to /path/to/vault/memo --format obsidian
+memo notes export --output-dir /path/to/vault/memo --format obsidian
 ```
 
 Экспорт записывает заметки, которые вы написали в Memo, в виде файлов Markdown в выбранную вами папку.
@@ -204,5 +206,7 @@ memo folders attach 1 /other/path/to/notes
 ```
 
 С тем же ID заметки сохраняют свои ссылки и теги на обоих компьютерах.
+
+Папка `google-drive:…` содержит документы Google Drive, сохранённые drive-cli. `memo folders list` помечает её «kept by drive», а `memo folders attach` отклоняет: поиск memo уже читает её.
 
 Дальше: [пометьте заметки тегами](./tags.md) или [найдите их](./search.md).

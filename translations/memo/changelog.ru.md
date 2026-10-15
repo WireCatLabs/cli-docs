@@ -6,6 +6,529 @@ title: "История изменений"
 [семантическое версионирование](https://semver.org/); до `1.0.0` минорный выпуск может менять
 интерфейс.
 
+Точные технические записи новых выпусков сохранены на английском; инструкции по использованию переведены в соответствующих руководствах.
+
+## Не выпущено
+
+## 0.41.0 — 15.10.2026
+
+### Изменено — может затронуть скрипты
+
+- **cli-core 0.288.0 and cli-base 0.33.0**, with no old names kept. Shared commands take the new names:
+  `tasks agenda --due` → `--due-within`; `tasks agenda --tag`, `--category` and `--claimed` are gone — write the
+  query fields `tag:`, `category:` and `claimed:` instead.
+- `memo tasks add --attach <task>` → `--into <id>`, the name cli-core's `tasks add` and `tasks merge` use.
+- `memo tags add|remove --chat` shows its value as `<chat>`, as every other `--chat` does; it still takes the
+  chat's exact id.
+
+## 0.40.0 — 15.10.2026
+
+### Изменено — может затронуть скрипты
+
+- **cli-core 0.287.0 and cli-base 0.32.0**, with no old names kept. Shared commands take the new option names:
+  `tasks plan --check` → `--remind-time`; `tasks agenda --within` takes a `<duration>`. Every `--json` answer is an
+  envelope (`item`, or `items` and `page`).
+- **memo's own option names follow cli-base 0.32.0's vocabulary**: `mail rules add|remove --from` → `--sender`;
+  `mail rules add --skip|--envelope|--keep` → one `--do <actions>` (`skip`, `envelope` or `keep`; more than one is
+  refused); `tags add|remove --path` → `--subfolder`; `facts add --occurred` → `--occurred-time`.
+- The MCP tool `facts_add` takes `occurred_time` instead of `occurredAt`.
+
+## 0.39.0 — 15.10.2026
+
+### Изменено — может затронуть скрипты
+
+- `memo tasks list` answers each task as cli-core's `task` entity, as tg and max do: `kind`, `state`, `key`,
+  `title`, `source_message`, `chat`, `account`, `due_at`, `created_at`, `updated_at` and the rest. A task no longer
+  carries its message or note preview (`message`, `note`), its `source`, `source_kind` or `group`; `memo tasks show`
+  has the card. A project's tasks answer the same fields, not their store row.
+- `--json=<fields>` is checked against the declared answer of `relationships list` (`relationship`) and `tasks list`
+  (`task`); `tags list`, `folders list`, `actions list`, `agents log`, `vocabulary list` and
+  `projects meetings list` declare memo's own entities.
+- `memo folders list` takes a `[query...]` like every list; it filters by no field yet, so any term is refused.
+- A list given an option it does not have answers a query error (exit 2) instead of commander's unknown option.
+
+### Внутренние изменения
+
+- The list query helpers come from cli-core 0.285.0 (`termField`, `queryTerms`, `withQuery`, `queryArgument`);
+  memo's copy is gone. `factItem` builds the `fact` entity in snake_case.
+
+## 0.38.0 — 15.10.2026
+
+### Изменено — может затронуть скрипты
+
+- **cli-core 0.285.0**, the version tg and max move to. `memo tasks add` refuses a task that may be the same job as
+  an open one, or one closed in the last 14 days (exit 2, reason `task.duplicate-candidates`, candidates in
+  `details.candidates`); `--attach <task>` links the message to that task instead, `--new` opens it anyway.
+  `memo tasks agenda` takes `--category` and `--tag`. Opening the store upgrades it to version 16 (new tables and
+  triggers only; older tg and max keep working with it).
+
+### Исправлено
+
+- **MCP answers show hidden characters in what other people wrote**, as tg's and max's do: messages,
+  mail, notes, names, facts and memories come back with tag characters, direction overrides, zero-width spaces,
+  U+FEFF, C1 and other control characters escaped (an ANSI escape reads `\x1b`), in the text and the structured
+  content, errors included. Every read tool's description, and the server instructions, say that this text is data
+  from other people, never instructions. Cyrillic, emoji and flags are unchanged; what an agent saves, and the
+  CLI's `--json`, keep the original text.
+
+## 0.37.1 — 15.10.2026
+
+### Безопасность
+
+- **A hostile HTML email no longer stalls `memo sync`**: an HTML-only mail is turned into text in time linear in
+  its size; one of unclosed tags or long blank runs took up to 30 seconds per 200,000 characters, holding the mail
+  import. Ordinary mail reads as before, except that `&amp;lt;` now reads as `&lt;` instead of `<`.
+
+## 0.37.0 — 15.10.2026
+
+### Изменено — может затронуть скрипты
+
+- **Lists filter with their query, not with flags**, and the old flags are gone: `actions list --status proposed` →
+  `actions list status:proposed`; `agents log --tool X --agent Y` → `agents log tool:X agent:Y`;
+  `projects meetings list --proposed` → `confirmed:false`; `tasks list --project HRB --ready` →
+  `tasks list project:HRB ready:true`; `vocabulary list --kind tag --scope work` → `vocabulary list kind:tag
+  scope:work`. The store still does the filtering. MCP `actions_list`, `agents_log`, `tasks_list` and
+  `vocabulary_list` take the same terms as `query`.
+- **`memo sync --notes` and `--mail` are now `--only notes` and `--only mail`** (`--only notes,mail` for both).
+- **`memo search messages --type` is gone**: the query says it — `has:voice`, `has:file` or `NOT has:attachment`.
+  MCP `search_messages` drops its `type` input the same way.
+- **`memo ask` takes what to search for after the question**, not as `--query`:
+  `memo ask 'What did I promise?' 'promised OR "by Friday"' --all`.
+
+## 0.36.0 — 15.10.2026
+
+- **Nested JSON report fields use the shared projector.** Dotted paths traverse report objects and arrays while preserving coverage, pagination and execution metadata. The bundled skill documents bounded output and removes fixed import-speed claims.
+- **Obsolete config keys are refused without rewriting the file.** Rename camelCase settings to snake_case before using the configuration.
+
+## 0.35.0 — 15.10.2026
+
+### Исправлено
+
+- **`memo mail status` counts the widest window ever imported**, not the latest run. A rule change, a new
+  UIDVALIDITY or `--rescan` starts the resume point over, and the timer's 30-day run then made status say
+  "complete" while most of a mailbox was still unread. The widest window and the last run are now shown apart;
+  `--json` gains `folders[].since` and `folders[].last`.
+
+## 0.34.0 — 15.10.2026
+
+### Изменено — может затронуть скрипты
+
+- **Option names follow the shared vocabulary of cli-base 0.31.1**, with no old names kept:
+  `notes add --about` → `--subject`; `notes add|edit --file` → `--text-file`; `notes export --to` → `--output-dir`;
+  `ask --model` → `--analyze`; `mail probe --limit-groups` → `--limit`; `vocabulary create`, `vocabulary aliases
+  add|remove` and `projects meetings link --expected` → `--fingerprint`; `projects meetings link --provenance` →
+  `--reason`.
+- **The config file is read only in snake_case**: a camelCase setting such as `mail.maxBodyChars` or a rule's
+  `decidedAt` is refused, and old folders are no longer moved at start (cli-core 0.283.0).
+- `@wirecat/cli-base` 0.31.1, `@wirecat/cli-core` 0.283.0.
+
+## 0.33.0 — 15.10.2026
+
+### Изменено — может затронуть скрипты
+
+- **`facts list` and `memories list` take a query, not filter flags**: `memo facts list kind:decision
+  status:proposed project:HRB`, `memo memories list scope:work subject:"person:42"`. The store filters by the
+  terms, joined by AND; `--type`, `--status`, `--kind`, `--scope`, `--project` and `--subject` are unknown options
+  there now. MCP `facts_list` and `memories_list` take one `query` string instead of those arguments.
+- **Facts and memories answer cli-core's `fact` and `memory` entities**: a fact's `type`, `statement` and `source`
+  are `kind`, `text` and `origin`; a memory's `body` is `text`. `facts add` takes `--kind` instead of `--type`,
+  and MCP `facts_add` takes `kind` and `text` instead of `type` and `statement`. `--json=<field>` on facts and
+  memories refuses a field the entity lacks.
+- **`tags list` and `relationships list` take a query**: `memo tags list tag:follow-up type:note`, `memo
+  relationships list 'about:"project:1"'` instead of `--tag`, `--type` and `--reference`. `--provider` and
+  `--account` stay on `tags list`: they pick the accounts, they do not filter rows.
+- **`tasks list` and `notes list` take a query**: `memo tasks list state:done`, `memo tasks list kind:bug --project
+  HRB`, `memo notes list source:internal text:budget`, `memo notes list 'about:"telegram:Kai Sample"'` instead of
+  `--state`, `--about`, `--source` and `--search`. `about:` stands alone: the notes it finds through links are no
+  longer narrowed further. `--project` and `--ready` stay on `tasks list`: they pick which tasks are read. A next
+  page of `notes list` carries the query.
+- **`notes show`, `notes add` and `notes edit` answer cli-core's `note` entity**: `labels` and `provenance` are
+  gone from `notes show` (`tags` keeps the tag names); each of `links` is `{to, target_text, kind, anchor}` and each
+  of `backlinks` is `{from, target_text, kind, anchor}`. `--json=<field>` refuses a field a note lacks.
+- **`search all` answers cli-core's `hit` items**: `key` is gone (key documents still come first with
+  `--project`), and a result's open `tasks` moved into `next`: a `tasks list source:"<ref>"` step for the account
+  holding them. The `missing: tasks` entry is gone.
+- **`search` over several accounts no longer runs as the first one**: it runs as memo and reads exactly the
+  accounts selected. An account error lists the accounts to choose from.
+- **cli-core 0.281.0**: a note whose title matches the query ranks first in `search notes` and `search all`, and
+  lists `title` in `found_by`.
+- **`memo tasks link` is cli-core's, the one tg and max have:** a `task:<id>` target links two project tasks as
+  before (`--kind blocked-by`, `follow-up-of` or `related-to`, now `related-to` when not given); a message, chat,
+  person or URL target links a messenger account's task to it, with `--provider` and `--account`. The old form
+  keeps working: `memo tasks link HRB-2 HRB-1 --kind blocked-by` (a bare id with `blocked-by` or `follow-up-of` is a
+  task; with `related-to`, when that task exists — otherwise it is refused with "write task:<id>"). `--json`
+  answers `{ item: { relations } }`, the task's relations after the link, where it printed `{ relation, changed }`.
+  `tasks unlink` and `tasks relations` are unchanged.
+
+### Добавлено
+
+- **`tasks list source:"<ref>"`** keeps an account's tasks from one message, note or document.
+
+### Добавлено
+
+- **`memo tasks agenda`, `tasks plan`, `tasks show` and `memo stats tasks show`**, the same commands tg and max
+  have: cli-core's builders, mounted with `--provider --account`, so memo's agenda reads any messenger account the
+  store holds. Without them a command fails and lists the accounts.
+
+## 0.32.0 — 15.10.2026
+
+### Изменено
+
+- **Mail rules live in the store**, beside the mail they decide, instead of `config.json`. `memo mail rules list`
+  counts every rule's emails in one query (it took minutes with hundreds of rules), and each envelope email
+  remembers the rule that recorded it. The first command that reads rules moves them from the config, checks
+  they all arrived, then drops them from it; the old config stays as `config.json.<time>.before-rules-in-store`
+  (mode 600) and stderr says so once. A keep rule whose reason says "never remove" becomes protected.
+
+### Добавлено
+
+- **`memo mail rules export <account>`** prints the rules as JSON; **`memo mail rules import <account> <file>`**
+  adds them, replacing a rule with the same match.
+
+### Изменено — может затронуть скрипты
+
+- **Every `--json` answer, and every MCP answer, is the standard envelope.** One thing comes in `item`, a list in
+  `items` with `page` (`mode`, `limit`, `has_more`, and `next_page` where the command takes `--page`), and each
+  answer carries `meta` with its `run_id`. Before, most commands printed the bare record. `commands --json` reports
+  contract 4.
+- **`--offset` is now `--page`** in `notes list`, `search notes` and `projects meetings list`; MCP `search_notes`
+  takes `page`. A list that only grows with `--limit` says `has_more` and names no next page.
+- **`search notes`** lists its notes in `items`, not `hits`; why meaning was not searched is in `missing`. Its
+  `linked` summary is no longer in JSON or MCP (the text view keeps it): ask `memo context <person>` instead.
+- **`search all`** carries the open tasks that point at a hit on that hit, as `tasks`; the accounts read are
+  `meta.accounts`, and a resource it could not read is a `meta.issues` entry.
+- **`folders list`** puts the folders known only from another computer in the same list, with `path: null`;
+  **`tags list`** puts labels on notes, people, projects and folders in the same list as source labels, one row
+  per label with its `origin`, instead of a separate `knowledge` list.
+- **`search all`, `search messages`, `search mail` and `search notes` answer cli-core's entities**, as tg and max
+  do: `search all` items are `hit`s (`excerpt`, `sender_name`, `sender_ref`, no `text` or `from`), `search messages`
+  and `search mail` items are the `message.hit` view (`ref`, not `locator`; no whole `text` — `messages show` has
+  it). `--json=<field>` refuses a field the entity lacks, and a bare `--json` at a terminal asks which fields.
+- **`search notes --tag` is gone**: `tag:work` goes in the query or in `--filter`; MCP `search_notes` takes
+  `filter` instead of `tag`.
+- **`notes add` and `notes edit`** answer the note itself as `item`, so `--json=id` works; with `--export` the
+  file written is the note's `export_path`.
+- **Search by meaning, when its model is missing,** says tg or max downloads it, not a `tg` command as memo's
+  own.
+- **`mail rules remove`** answers the rules left as `rules`; `relationships suggest` answers a list and no
+  longer names its scope; `reminders list` and `reminders poll` answer lists.
+
+## 0.31.0 — 14.10.2026
+
+### Добавлено
+
+- **`memo doctor`** says where memo keeps its files and what needs attention, and connects to nothing: the settings
+  file, the store and its schema, the notes folders and their ids, the mail accounts and Himalaya's version, the
+  search model, the timer (including a program it runs that is gone, and its failing streak) and the agent skill's
+  version. Each problem names the command that fixes it; the exit code is 1 while one is left. `--json` answers
+  `{item, meta}`.
+- **`memo upgrade`** updates memo with the package manager that installed it; `--check` only looks. Once a day memo
+  asks npm for a newer version and says so in one stderr line, only to a person at a terminal — never with
+  `--json`, in a pipe or on a timer run. `"update_check": false` or `MEMO_NO_UPDATE_CHECK=1` turns it off.
+- **`memo mail probe` scores each sender group** for spam, scams and robots, with the signals behind it: Gmail's
+  DMARC verdict, a brand in the display name sent from another domain, Reply-To on another domain, a
+  throwaway-mail domain, bulk mail never replied to, Gmail's Spam, and replies from the owner (−5).
+  `--domain-age` adds the sender domain's age from its registry (RDAP), asked once per domain and kept.
+- **Gmail's SPF, DKIM and DMARC verdicts and Reply-To are kept** on new mail: in the headers of mail stored in
+  full, and in the metadata of envelopes. Listing reads two more header fields, about 1 KB an email instead of
+  300 bytes.
+
+### Изменено
+
+- **Config settings are named in snake_case:** `mail.max_body_chars`, `mail.max_attachment_chars`, and `list_id`
+  and `decided_at` in `mail.accounts[].rules[]`, which `memo mail rules` writes and prints that way. The camelCase
+  names older versions wrote are still read, and the file is saved in snake_case; both spellings with different
+  values are an error. Renaming inside `rules` needs the cli-core release carrying PR #1224.
+
+### Исправлено
+
+- **A himalaya that exits before reading its input no longer crashes memo** with an unhandled `write EPIPE`; the
+  failure is reported with how himalaya ended, as for any other himalaya error.
+- **The timer follows the memo you run.** After a Node.js switch and an install under the new version, the next
+  memo command points the `memo auto` unit at it, so removing the old Node.js no longer breaks the timer silently.
+  A checkout or `npx` never moves it.
+- **The timer keeps the places memo was started with.** `memo auto start` records `MEMO_CONFIG_DIR`,
+  `MEMO_STATE_DIR`, `MEMO_CACHE_DIR`, `MESSAGING_STORE` and `WIRECAT_STATE_DIR` in `auto.places` and passes them to
+  every timer run, which used the default places before.
+- **A failed Himalaya call says why.** The message names the exit code or signal and Himalaya's last line, instead
+  of repeating the command; `exit_code`, `signal` and the last five stderr lines, with passwords and tokens cut,
+  are in the error's details. Gmail's `[THROTTLED]` is its own reason, `mail.throttled` (`rate_limited`), with the
+  advice to wait an hour or more.
+
+## 0.30.0 — 14.10.2026
+
+### Добавлено
+
+- **A mail sync goes on where the last one stopped, without listing the mailbox again.** Each run keeps, in the
+  store, the mailbox's UIDVALIDITY and the UIDs whose outcome is final (stored, recorded or skipped by a rule), so a
+  rerun reads metadata only for mail not done: a 305,000-email mailbox no longer costs 15–25 minutes of listing
+  per run. A whole listing — the only kind that marks deleted mail and refreshes labels and read state — still runs
+  at least daily, whenever the rules change, when UIDVALIDITY changes, and with the new `memo sync --rescan`. A
+  window under 5,000 emails, like the timer's 30 days, is listed whole every run. An mbox file read to the end is
+  not read again until its size or time changes. `memo sync --json` adds `pass` (`full` or `resumed`) to each
+  account.
+- **`memo mail status <account>`** says how far an account's import is, from the store: stored in full, recorded
+  as envelopes, and done of the mail in the widest window searched, as cli-core's progress line;
+  `--json` answers the shared progress shape.
+- **Mail stored in full keeps List-Id, List-Unsubscribe and Precedence** in its headers (`list-id`,
+  `list-unsubscribe`, `precedence`), so a rule can later be matched from the store.
+
+- **`--json=id,title` keeps only those fields** of an answer's item or items, read the way tg and max read it
+  (cli-core 0.277.0's `liftJson` and `checkJson`). Adopts cli-core 0.277.0 and cli-base 0.28.2.
+
+## 0.29.0 — 14.10.2026
+
+### Добавлено
+
+- **A failing timer run is said on every command.** While the last `memo auto` run failed, every memo command
+  writes one line to stderr — `memo: scheduled sync failing since 2026-10-14 00:58 (12 runs): notes … has no
+  folder id — memo auto status` — until a timer run passes. `memo auto status` shows `failing` (`since`, `runs`,
+  `reason`). Runs are kept in `<state>/auto/last.json` with cli-core's `recordRun`; the timer run itself and a sync
+  started by hand do not print or count.
+- **Mail stored in full keeps its size at the source** (RFC822.SIZE), as envelopes already did.
+
+### Изменено
+
+- **On cli-core 0.274.0 and cli-base 0.28.1.** Every answer's `meta` has
+  `complete`; `memo sync` answers `complete: false` with `issues` (`{ code, source }`) when a source failed, and
+  each entry of its `failed` list carries `code`. Errors carry `retry: { safe, after_ms? }`.
+- **Every command declares its effects** in `commands --json`, now contract 3: what it reads or writes on the mail
+  server or a model, and on this machine. A failed read is marked safe to retry (`memo sync` while another sync
+  runs, for one); before, nothing was, because a command with no effects counts as a write.
+
+## 0.28.0 — 14.10.2026
+
+### Добавлено
+
+- **`memo mail rules apply <account>`** cuts mail stored in full that an envelope rule matches down to its
+  envelope: text, attachments and search entries go, sender, date, size, labels and the subject in metadata stay.
+  A dry run by default that says per rule how many emails and how much text it would cut; `--yes` cuts them.
+  Matching reads the headers from the mailbox, as `memo sync` does. Mail only a skip rule matches stays as
+  stored. It takes the sync lock and refuses with `sync.running` while a sync runs.
+
+## 0.27.0 — 14.10.2026
+
+### Изменено
+
+- **Every JSON key memo prints is snake_case**, on the CLI and in MCP: `has_more`, `next_offset`, `key_documents`,
+  `your_notes`, `not_read`, `from_them`, `proposed_by`, `creation_fingerprint`, `already_stored`,
+  `deletions_skipped`, and the rest. A note's front matter, an email's headers and metadata keep their own keys.
+  `memo commands --json` says contract 2.
+- **`memo sync --json` prints the shared envelope:** `{"item": {"notes", "mail", "failed", …}, "meta": {"run_id",
+  "duration_ms", "accounts"?}}`. What was the whole answer is now `item`.
+- **Notes search uses cli-core's names:** a hit's line is `excerpt`, and `found_by`, `has_more`, `next_offset`,
+  `meaning_skipped`, `links[].target_text`.
+- **More registered reasons:** `folder.unbound` (with `path`), `folder.not-found`, `note.not-imported`,
+  `mail.account-unknown` (with `account`), `mail.rule-not-found`, `mail.source-failed`, `mail.invalid-imap`,
+  `project.not-found`, `person.not-found`, `identity.no-messenger`, `auto.systemctl-failed`.
+- A missing embedding model is recognised by its reason, `model.not-downloaded`, not by its text.
+- Moves to `@wirecat/cli-core` 0.268.0 and `@wirecat/cli-base` 0.27.2.
+
+## 0.26.0 — 14.10.2026
+
+### Изменено
+
+- **Errors are one object, the same on the CLI and in MCP:** `{"error": {"code", "reason", "message", "param"?,
+  "details"?}}`. The CLI prints it as one JSON line on stderr in machine mode and `✗ message` at a terminal; MCP
+  returns it as `structuredContent` with `isError`. A failure that is not memo's own is `internal_error` /
+  `command.crashed` and its text is hidden. A bad option is `validation_error` with Commander's words, exit 2.
+- **New global `--debug`** prints the whole error record after the object: the thrown text, cause and stack.
+- **memo registers its own reasons** in `APP.errors`: `sync.running` (with `pid`) for a sync refused by the lock.
+- A source that fails during `memo sync` shows its registered message; a crash's text shows only with `--debug`.
+
+### Добавлено
+
+- **`memo mail rules add --envelope`** records matching mail without its text: sender, date, size, labels and
+  the Gmail id, with the subject in metadata and out of search. `memo mail rules list` shows how many emails
+  each envelope rule recorded and their size. A keep wins over an envelope, an envelope over a skip; removing
+  an envelope rule or changing it to keep reads those emails in full on the next sync. `memo sync --json`
+  reports `envelopes` beside `skipped`.
+
+### Исправлено
+
+- **The `memo auto` timer no longer fails when a sync is still running.** A timer run that finds the lock held
+  exits 0 and writes `memo sync skipped: …` to stderr (`skipped` in `--json`). A sync started by hand still
+  refuses with `rate_limited` / `sync.running`.
+- **The missing-model hint names the CLIs that download it** — memo has no `models` command: `tg or max
+  downloads it: tg models text download e5-small`. MCP `search_notes` no longer suggests `memo models …`.
+
+## 0.25.0 — 14.10.2026
+
+### Добавлено
+
+- **`memo mail probe <account>`** groups an account's mail by sender and List-Id from headers only (about 300
+  bytes an email): emails, size, unread and bulk shares, years, whether the owner ever wrote to the sender,
+  and a `skip` suggestion for large, bulk, never-answered groups. `--json` for agents.
+- **`memo mail rules list|add|remove <account>`** keep the owner's skip/keep decisions by sender, domain or
+  List-Id in `mail.accounts[].rules`; a keep wins over a skip. `memo sync` never reads or stores an email a
+  skip rule matches and reports it as `skipped`; mail stored before stays.
+- **Google Takeout mbox accounts** (`"mode": "mbox", "path": "…"`, with the Gmail address) import old mail by
+  Gmail's message and thread ids, so it joins the IMAP account's mail. The file is read in one streaming
+  pass; it only adds mail, never marks any deleted, and syncs only when named with `--account`.
+
+### Исправлено
+
+- **`memo sync` imports a mailbox of more than ~120,000 emails.** A long `--since-time` window failed with
+  "Maximum call stack size exceeded" before saving anything.
+- **`memo sync --mail` reads mail about ten times faster.** Emails are fetched raw, up to 50 (or 20 MB) per
+  IMAP call instead of one himalaya call each, and parsed in-process with `postal-mime`. An email that cannot
+  be read or parsed is listed under `unreadable` and tried again next run instead of failing the account.
+- **Listing a mailbox of several hundred thousand emails no longer reads one huge answer.** All Mail is listed
+  10,000 emails per himalaya call.
+- **A whole-mailbox `memo sync` no longer loads every stored email's text.** The deletion check and the "already
+  stored" check read only Message-IDs and mailboxes, in one query each, instead of every body and one lookup per
+  listed email.
+- **A mail marked deleted by mistake is saved again when IMAP lists it again.** It used to count as already
+  stored and stayed without its text. An mbox archive still leaves mail that IMAP proved deleted alone.
+
+### Изменено
+
+- **Depends on `@wirecat/cli-core` 0.265.0 and `@wirecat/cli-base` 0.27.1.** `@wirecat/cli-core` is the new name
+  of `@wirecat/cli-messaging`; opening the store with it runs store migrations up to version 7. `memo commands
+  <path> --json` says `inherited_options` instead of `inheritedOptions`, and its `contract` is 1.
+- **`attachments[].part` and an attachment's `providerRef.part` count the email's attachments from 0** instead
+  of being himalaya's MIME part index. Attachments stored earlier keep theirs.
+- **Mail bodies are read from the raw message.** Text matches the old reader once whitespace is collapsed; blank
+  lines, spaces at line ends and joined flowed lines may differ. HTML parts that the old reader filed as attachments are now the body, and attachments the old reader
+  named `attachment-N` keep their real file names.
+- **`memo sync --help` and the agent skill say how long a large first mail import takes**, and that Gmail caps
+  IMAP downloads per day.
+
+## 0.24.0 — 13.10.2026
+
+### Добавлено
+
+- **An agent skill, as tg has.** `memo skill show` prints it and `memo skill install --for claude|agents|all`
+  writes it where Claude Code, Codex and Gemini CLI look; a global npm install does that too, unless
+  `MEMO_INSTALL_AGENT=none`. It starts with the traps agents fell into: choosing an account, `content:` and
+  answer keys, starting project work with `memo projects context`, `--as-owner`, accepting their own proposals,
+  writing message text to files, old versions and zsh word splitting.
+
+- **Key documents of a project.** `memo projects key-documents add <project> <note:|document:|msg:> --reason
+  <text>` marks what to read first about one project; `remove` and `list` go with it. `memo projects context`
+  starts with them — title, path, why, who marked it — and keeps a mark whose source is gone as
+  `available: false`. `memo search all` and `search notes` with `--project <project>` put the project's key
+  documents first, labelled `key`, and leave nothing out. An agent's mark waits unconfirmed and names the agent.
+
+- **Every command shows one to three examples** at the end of its `--help` and in `memo commands --json`
+  (`examples`). A test runs each through memo's own parser, so an example never names a command, option or value
+  memo does not take.
+
+### Изменено — может затронуть скрипты
+
+- **The local store and the search models move to one WireCat folder** (cli-messaging 0.258.0):
+  `~/.local/share/WireCat/` on Linux and macOS, `%LOCALAPPDATA%\WireCat\Data\` on Windows. The first start of
+  memo, tg or max after the update moves `wirecat.db` and the models there, once; the old folders stay.
+  `WIRECAT_STATE_DIR` moves the whole folder and replaces `CLI_COMMON_CACHE_DIR`.
+- **An MCP tool failure that is not a memo error is `internal_error`**, the shared name; it was `generic_failure`.
+- **`memo notes about` is gone; `memo notes list --about <subject>` returns what it did.** The list now holds the
+  notes about the subject and the notes linking it, a note about it, or a name two people share, each with `via`
+  (`about`, `link`, `through`, `name`), the headings it links under (`anchors`) and, for `name`, the name as written
+  (`linkText`). It still pages and combines with `--source` and `--search`. A person's
+  notes include those about any of their messenger identities.
+
+- `memo context` tells you to run `messages sync <chat>` for chats not read in full; the hint said `store fetch <chat>`, which cli-messaging 0.256.0 renamed. Text read from a CSV attachment or note now comes as rows (`name: Bravo; value: 200`), not raw comma separated lines.
+- **`memo commands --json` prints cli-base's commands document**, the shape tg and max print: `cli`, `version`,
+  `contract`, `description`, `globalOptions`, `commands`, `exitCodes`. `items` is gone; `memo commands <path> --json`
+  puts the one command under `commands` with `scope` and `inheritedOptions`.
+- `memo import` is now `memo sync` (owner, 2026-10-12; WireCat glossary in cli-messaging). `memo import` stops working. `memo auto start` writes `memo sync` into the unit; a timer installed before runs `memo import` and fails until `memo auto start` is run.
+- **A write from an agent's terminal is the agent's.** `memo facts add`, `memories add`, `relationships add`
+  and `actions add` run with `AI_AGENT` or `CLAUDECODE` set record the agent as author (`claude-code`, the
+  name before the version in `AI_AGENT`), as the MCP server does: the fact or memory waits as `proposed`, the
+  relationship unconfirmed with `provenance: agent:<name>`. They were recorded as the owner's and accepted.
+  `--as-owner` keeps a write yours inside an agent's terminal.
+
+- **One meaning per flag (WireCat command standard).** A flag that takes several values is given once per value:
+  `memo notes add --about a --about b`, `sync` and `search notes` `--folder a --folder b`.
+  `reminders add` and `update` take `--at-time` instead of `--at`. `relationships add` takes `--reason <text>`
+  instead of `--evidence`, which in `facts` and `memories` names references. `--project` takes a key or
+  `project:<id>` in `facts add`, `facts list` and `tags add|remove`, as it does in `tasks`; `tags --folder` takes a
+  folder's path as well as its id; `projects add --organization` takes a bare id as well as `organization:<id>`.
+
+- **One way to bring notes and mail in: `memo sync` (WireCat command standard, no two commands overlap).**
+  `memo notes import` and `memo mail <account> import` are gone. `memo sync --notes` and `--mail` take one side;
+  `--folder` and `--ignore` narrow the notes, `--account <name>`, `--since-time <time>` (a date, ISO 8601 or
+  `30d` ago), `--limit <n>` and `--retry-attachments` narrow the mail. Without `--account` it reads every account
+  and names each. `memo mail <account> show <reference>` is `memo messages show <reference>`.
+- **Verbs from the shared list.** `facts accept` and `actions approve` are `confirm`; `actions propose` is
+  `actions add`; `tasks readiness` is `tasks status`; `tasks ready` is `tasks list --ready --project <project>`;
+  `auto on` / `off` are `auto start` / `stop`; `reminders schedule` / `snooze` are `reminders add` / `update`;
+  `vocabulary resolve` is `vocabulary show`; `vocabulary preflight <name>` and `vocabulary audit` are one
+  `vocabulary check [name]`; `memories search` is `search memories`. The old names stop working.
+- **MCP tools follow their commands:** `actions_add`, `search_memories`, `tasks_relations`, `tasks_status`,
+  `tasks_list` (with `ready`), `vocabulary_check` (with or without `name`) and `vocabulary_show` replace
+  `actions_propose`, `memories_search`, `task_relations`, `task_readiness`, `tasks_ready`, `vocabulary_audit`,
+  `vocabulary_preflight` and `vocabulary_resolve`.
+
+### Исправлено
+
+- **Mail hints name `memo sync --mail`.** `memo search mail` and its MCP tool named `memo mail <account> import`,
+  which is gone.
+- **`memo sync` keeps `mail.maxBodyChars` and `mail.maxAttachmentChars`.** Only `memo mail <account> import`
+  read them; the timer stored mail with the defaults.
+- **Every argument and option of memo is described in its help**, and every summary is lower case, at most 80
+  characters.
+- **A command path given as one argument is refused with the words to type.** `memo "projects add" --help` — what
+  a zsh loop over `"$c"` passes — printed the root help; it now says `"projects add" was given as one argument;
+  run: memo projects add`.
+- **Search help says where file text and references are.** `search messages`, `search mail` and `search all` say
+  `content:`, `transcript:` and `filename:` narrow a search to the text of files, voice transcripts or file names, and each search's `--help` and MCP
+  tool names the list (`items` or `hits`) and the reference (`locator` or `ref`) of its `--json` answer. The usage and
+  troubleshooting guides say the same, and to compare `memo --version` with npm before reporting a bug.
+- **The search guide names `content:` for messages.** It narrows a search to the text of files, in
+  `memo search messages` and `memo search all` as in tg; the guide listed it for mail only.
+- **`memo projects context` and `memo organizations context` refuse what the store does not hold** with
+  `not_found` instead of an empty answer, and `organizations context` takes `organization:<id>` as well as
+  its id.
+- **`memo folders attach` refuses drive-cli's `google-drive:` folder**, and `memo folders list` marks it "kept by
+  drive" (`keptBy: "drive"` in JSON) instead of offering to attach it. Bound to a disk folder, the next import
+  would have deleted the Drive documents missing from it.
+- **`memo search all` no longer runs as the first stored account.** It searched every account before too, but
+  picked one as its own; now it runs as memo's notes and its answer names every account it read, as `accounts`
+  (`{ resource, provider, account }`) in JSON and a `searched:` line on stderr. `memo search messages` and
+  `memo search mail` stop picking one as well.
+
+## 0.23.0 — 12.10.2026
+
+### Исправлено
+
+- **An MCP answer over 4 MiB is refused with `invalid_response`**, as cli-messaging's tools refuse one, instead of
+  reaching the agent whole.
+- **Memory, fact, action and agent-log lists say whether there are more** (`hasMore`, CLI and MCP), as the other
+  lists do; asked for the whole 500, a full answer says it may have more. `tasks list` (of an account), `tasks
+  ready` and `tasks_ready` give each task its `task:` reference.
+- **Terminal answers name things by the references memo's commands take.** `notes list` and `context` printed a
+  bare note id that `notes show` refuses; they print `note:`/`document:` references. `notes show` printed only the
+  text; it starts with the reference, path or title, update time and tags, and ends with what it links and what
+  links it. `context` names the person as `person:<id>` and each message by its `msg:` locator, and tasks as
+  `task:<id>`. `tags list` names a chat as `chat:…`, a contact as `<messenger>:<id>` and every other label's
+  target as `<type>:<id>`, not as JSON. `context --json` gives each of your notes its `ref`.
+
+## 0.22.0 — 12.10.2026
+
+### Изменено
+
+- **Built on `@wirecat/cli-base` 0.21.0, the framework's new name, and the shared library 0.254.0.** Nothing
+  changes in memo's commands; `memo search` answers carry `nextOffset` where the shared search gives it, and
+  `memo context person:<id>` takes the `person:` references search answers give.
+
+### Добавлено
+
+- **`memo mail <account> show <reference>` opens one stored email whole**, by the `msg:email/…` reference search
+  answers give: time, sender, To, Cc, labels, subject and the whole body; `--before-n`/`--after-n` add the emails
+  of its thread either side, `--json` the same as data. The reference must be of the named account.
+- **The MCP server searches every source.** `search_all`, `search_messages`, `search_mail`, `search_notes` and
+  `person_context` read the same store as `memo search` and `memo context`. memo is where an agent searches across
+  messengers, mail and notes; tg and max will search only their own messages
+  ([which tool owns which command](https://github.com/WireCatLabs/cli-messaging/blob/main/docs/dev/TOOL-BOUNDARIES.md)).
+
+### Исправлено
+
+- **`memo ask` gives coverage as counts per account, and its 64 KiB limit covers the whole answer.** Each
+  messenger account had one row per chat, up to 500, which made 95% of an answer (64 KB of 68 KB on one real
+  store); now `chats` counts `checked`, `complete`, `partial`, `neverFetched`, `behind` and `withGaps`, and `more`
+  says the 500-chat check was cut short. The size check measured the evidence only; it now measures what is printed.
+
 ## 0.21.0 — 11.10.2026
 
 ### Исправлено

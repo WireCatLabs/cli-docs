@@ -78,6 +78,23 @@ número. `projects context` y `organizations context` muestran las personas enla
 la organización, las notas que tratan sobre él o que enlazan a él, y sus etiquetas. La clave
 de un proyecto también se usa para sus tareas, como `HRB-1` ([tareas](./tasks.md#tasks-in-a-project)).
 
+## Documentos clave de un proyecto
+
+Un **documento clave** es una nota, archivo o mensaje guardado que conviene leer primero sobre un proyecto, con un motivo breve. La marca pertenece a un proyecto: el mismo archivo puede ser clave para uno y no para otro.
+
+```sh
+memo projects key-documents add HRB document:3 --reason 'the plan everyone follows'
+memo projects key-documents add HRB msg:telegram/1/77/42 --reason 'the agreed budget'
+memo projects key-documents list HRB
+memo projects key-documents remove HRB document:3
+```
+
+`projects context` empieza por ellos: título, ruta y motivo. Si el archivo o mensaje desaparece del almacén, la marca permanece con `available: false` hasta que la elimines. `memo search all` y `memo search notes` con `--project HRB` ponen primero los documentos clave sin excluir los demás; `search notes` los marca `key`. Una marca añadida por un agente espera confirmación e identifica al agente, como un vínculo.
+
+**Empieza a trabajar en un proyecto con `memo projects context <key>`**, personalmente o mediante tu agente.
+
+Una etiqueta global como `key` (`memo tags add key --note document:3`) no identifica un proyecto. Conviértela en documento clave con `memo projects key-documents add` y retira la etiqueta con `memo tags remove key`.
+
 ## Quién pertenece a dónde
 
 Una **relación** indica que una persona pertenece a una organización o trabaja en un proyecto:
@@ -85,11 +102,11 @@ Una **relación** indica que una persona pertenece a una organización o trabaja
 ```sh
 memo relationships add person:PERSON_UID organization:1 --kind member-of
 memo relationships add person:PERSON_UID project:1 --kind related-to --role author
-memo relationships list --reference project:1
+memo relationships list 'about:"project:1"'
 memo relationships remove 4
 ```
 
-Las relaciones son afirmaciones que haces tú. Nunca enlazan dos cuentas en una sola persona.
+Los vínculos son afirmaciones tuyas. No unen dos cuentas en una persona. Uno añadido desde el terminal de un agente queda sin confirmar, con el agente en `provenance` (`agent:claude-code`), hasta `memo relationships confirm`; `--as-owner` lo atribuye a ti al instante.
 
 Memo puede sugerir relaciones a partir del correo: personas que te escriben desde el mismo dominio de
 empresa.
@@ -111,8 +128,8 @@ memo projects meetings link HRB 5 --provider zoom --account ACCOUNT
 memo projects meetings list HRB --provider zoom --account ACCOUNT
 ```
 
-Nombra exactamente la cuenta de la reunión. `--proposed` muestra los enlaces que sugirió un agente;
-para confirmar uno, repite `link` con el valor `--expected` que aparece en esa lista.
+Nombra exactamente la cuenta de la reunión. `confirmed:false` muestra los enlaces que sugirió un agente;
+para confirmar uno, repite `link` con el valor `--fingerprint` que aparece en esa lista.
 
 ## Otros nombres para proyectos y etiquetas
 
@@ -120,14 +137,14 @@ La gente llama al mismo proyecto de formas distintas. Puedes dar otros nombres a
 etiqueta, para que una búsqueda o un agente los encuentre por cualquiera de ellos:
 
 ```sh
-memo vocabulary list --kind project
-memo vocabulary resolve 'Harbor' --kind project
-memo vocabulary aliases add project:1 'Harbor' --expected VALUE
+memo vocabulary list kind:project
+memo vocabulary show 'Harbor' --kind project
+memo vocabulary aliases add project:1 'Harbor' --fingerprint VALUE
 ```
 
 `vocabulary list` muestra cada proyecto, etiqueta y tema con sus otros nombres y un valor de
-comprobación. Pasa ese valor a `--expected` cuando añadas o quites un nombre; si la lista cambió
-mientras tanto, Memo se niega y vuelves a mirar. `memo vocabulary preflight 'on-boarding'` muestra
+comprobación. Pasa ese valor a `--fingerprint` cuando añadas o quites un nombre; si la lista cambió
+mientras tanto, Memo se niega y vuelves a mirar. `memo vocabulary check 'on-boarding'` muestra
 etiquetas parecidas que ya existen antes de que crees una nueva, para que no acabes con `onboarding`
 y `on-boarding`.
 

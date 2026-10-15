@@ -32,17 +32,17 @@ Para una carpeta de archivos Markdown normales:
 
 ```sh
 memo folders add /path/to/notes --format markdown
-memo notes import --no-embed
+memo sync --only notes --no-embed
 ```
 
 Para una bóveda de Obsidian:
 
 ```sh
 memo folders add /path/to/vault --format obsidian
-memo notes import --no-embed
+memo sync --only notes --no-embed
 ```
 
-`memo folders add` muestra el ID de la carpeta, por ejemplo `1`. `memo notes import` lee las notas y
+`memo folders add` muestra el ID de la carpeta, por ejemplo `1`. `memo sync --only notes` lee las notas y
 dice cuántas ha encontrado:
 
 ```text
@@ -50,7 +50,7 @@ dice cuántas ha encontrado:
 ```
 
 `--no-embed` se salta la preparación para la búsqueda por significado, así que no necesitas el modelo
-de búsqueda para empezar. Vuelve a ejecutar `memo notes import` después de añadir o editar archivos;
+de búsqueda para empezar. Vuelve a ejecutar `memo sync --only notes` después de añadir o editar archivos;
 solo se leen los cambios.
 
 Puedes añadir más de una carpeta. `memo folders list` las muestra todas.
@@ -108,13 +108,13 @@ carpeta (se omite todo lo que contiene) o un patrón:
 { "notes": { "ignore": ["Journal/Private.md", "Archive", "**/Private*"] } }
 ```
 
-`memo notes import --ignore Drafts` omite una carpeta solo en una importación.
+`memo sync --only notes --ignore Drafts` omite una carpeta solo en esa ejecución.
 
 ## Encontrar tus notas
 
 ```sh
 memo search notes 'budget'
-memo search notes 'budget' --tag work
+memo search notes 'budget' --filter 'tag:work'
 memo notes show document:3
 ```
 
@@ -135,11 +135,13 @@ Show me the saved note.
 O hazlo tú:
 
 ```sh
-memo notes add 'Prefers morning meetings' --about telegram:'Kai Sample'
-memo notes list --about telegram:'Kai Sample'
+memo notes add 'Prefers morning meetings' --subject telegram:'Kai Sample'
+memo notes list 'about:"telegram:Kai Sample"'
 ```
 
-`--about` indica de qué trata la nota. Úsalo más de una vez para varios temas:
+`notes list about:` muestra notas sobre un tema y las que lo enlazan: directamente, mediante una nota sobre él o por un nombre compartido entre dos personas. `via` en `--json` indica el camino: `about`, `link`, `through` o `name`. Se usa como condición independiente; `source:internal` y `text:budget` acotan toda la lista.
+
+`--subject` en `notes add` indica de qué trata la nota. Repítelo para varios temas:
 
 | Sobre | Escribe |
 |---|---|
@@ -169,7 +171,7 @@ Una nota que viene de un archivo se edita en el archivo, no con `memo notes edit
 ### Guardar tus notas como archivos
 
 ```sh
-memo notes export --to /path/to/vault/memo --format obsidian
+memo notes export --output-dir /path/to/vault/memo --format obsidian
 ```
 
 La exportación escribe las notas que escribiste en Memo como archivos Markdown en la carpeta que
@@ -204,5 +206,7 @@ memo folders attach 1 /other/path/to/notes
 ```
 
 Con el mismo ID, las notas conservan sus enlaces y sus etiquetas en los dos ordenadores.
+
+Una carpeta `google-drive:…` contiene documentos que guardó drive-cli. `memo folders list` la marca «kept by drive» y `memo folders attach` la rechaza: la búsqueda de memo ya la lee.
 
 Siguiente: [etiqueta tus notas](./tags.md) o [busca en ellas](./search.md).

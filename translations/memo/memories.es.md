@@ -20,19 +20,15 @@ Do not confirm or approve anything; I will decide.
 O hazlo tú:
 
 ```sh
-memo memories list --status proposed
-memo facts list --status proposed
-memo actions list --status proposed
+memo memories list status:proposed
+memo facts list status:proposed
+memo actions list status:proposed
 ```
 
 Abre cada fuente, luego confirma lo que es correcto y deja o rechaza el resto. El resto de esta página
 explica cómo.
 
-**Qué espera tu decisión.** Una acción propuesta siempre espera hasta que la apruebes o la rechaces.
-Un recuerdo o un hecho espera cuando una aplicación lo añade a través de [el servidor MCP](./mcp.md).
-Un recuerdo o un hecho añadido con el comando `memo` cuenta como tuyo y se confirma al momento, tanto si
-lo escribiste tú como tu agente. Así que pide a un agente con terminal que primero te muestre el texto
-y su fuente, y que lo añada solo cuando estés de acuerdo.
+**Qué espera tu decisión.** Una acción propuesta siempre espera aprobación o rechazo. Un recuerdo o hecho espera cuando lo añade un agente: mediante [MCP](./mcp.md) o `memo` en su terminal (con `AI_AGENT` o `CLAUDECODE`), que registra al agente como autor. Lo que añades personalmente se confirma al instante; en un terminal de agente, `--as-owner` lo atribuye a ti. El agente también puede pasar `--as-owner`; indícale que no lo haga.
 
 ## Recuerdos
 
@@ -44,33 +40,27 @@ reuniones que lo demuestran. Tiene un tipo y un ámbito:
 
 ```sh
 memo memories add 'Kai Sample prefers Friday meetings' --kind preference --scope work --evidence note:12
-memo memories list
+memo memories list kind:preference scope:work
 memo memories show memory:3
-memo memories search friday meetings
+memo search memories friday meetings
 memo memories confirm memory:3
 memo memories stale memory:3
 ```
 
-Un recuerdo añadido con el comando `memo` se confirma al momento. Uno añadido a través de MCP espera
-como `proposed` hasta que revises su evidencia y lo confirmes con `confirm`. Cuando la evidencia ya no
-es válida, por ejemplo, si Kai ahora prefiere los lunes, márcalo como `stale`. `--subject person:…`
-indica de quién o de qué trata el recuerdo.
+Un recuerdo que añades con `memo` se confirma al instante. El de un agente queda `proposed` hasta que revises las fuentes y lo marques con `confirm`. Si la evidencia deja de ser válida, por ejemplo Kai prefiere ahora los lunes, márcalo `stale`. `--subject person:…` indica de quién o de qué trata. `memories list` filtra por `kind`, `status`, `scope` y `subject` en la consulta: `subject:"person:42"`.
 
 ## Hechos
 
-Un hecho registra lo que pasó, con su evidencia. Su tipo es `fact`, `statement`, `question`,
-`decision` o `promise`.
+Un hecho registra lo ocurrido con su evidencia. Su clase es `fact`, `statement`, `question`, `decision` o `promise`.
 
 ```sh
-memo facts add 'We moved the launch to spring' --type decision --evidence 'msg:telegram/1/77/42'
-memo facts list --type decision
+memo facts add 'We moved the launch to spring' --kind decision --evidence 'msg:telegram/1/77/42'
+memo facts list kind:decision project:HRB
 memo facts show fact:4
-memo facts accept fact:4
+memo facts confirm fact:4
 ```
 
-Un hecho añadido con el comando `memo` se acepta al momento. Uno añadido a través de MCP espera como
-`proposed` hasta que lo aceptes con `accept`. `--project project:1` pone el hecho en un proyecto y
-`--occurred` indica la fecha en que pasó.
+Un hecho que añades con `memo` se acepta al instante. El de un agente queda `proposed` hasta `accept`; `author` y `origin` identifican al autor. `facts list` filtra por `kind`, `status`, `project` y `subject` en la consulta. `--project project:1` lo incorpora a un proyecto y `--occurred-time` indica cuándo ocurrió.
 
 Una decisión puede sustituir a otra anterior: añade `--supersedes fact:2`. Cuando aceptas la nueva
 decisión, la antigua deja de ser válida. Cuando una decisión ya no es válida y nada la sustituyó,
@@ -82,9 +72,9 @@ Una acción propuesta es algo que un agente quiere hacer en una de tus cuentas: 
 invitación, una expulsión en un grupo. Memo nunca la lleva a cabo.
 
 ```sh
-memo actions list --status proposed
+memo actions list status:proposed
 memo actions show 5
-memo actions approve 5
+memo actions confirm 5
 memo actions reject 5
 ```
 
@@ -95,14 +85,14 @@ se cierra y no se hace nada.
 Un agente propone una acción así:
 
 ```sh
-memo actions propose reply --reason 'Kai asked twice' --provider telegram --target 'msg:telegram/1/77/42' --payload '{"text":"Friday works"}'
+memo actions add reply --reason 'Kai asked twice' --provider telegram --target 'msg:telegram/1/77/42' --payload '{"text":"Friday works"}'
 ```
 
 ## Qué hicieron los agentes
 
 ```sh
 memo agents log --limit 20
-memo agents log --agent memo-mcp
+memo agents log agent:memo-mcp
 ```
 
 El registro de agentes muestra cada llamada que hizo un agente a través de los servidores MCP de Memo,

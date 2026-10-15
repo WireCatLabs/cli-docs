@@ -13,11 +13,11 @@ Memo lee tus carpetas y buzones cuando se lo pides, no todo el tiempo. Un comand
 ha cambiado desde la última vez:
 
 ```sh
-memo import
+memo sync
 ```
 
 Solo se leen los archivos cambiados y el correo nuevo, así que una segunda ejecución es rápida. En
-Linux, `memo auto on` lo ejecuta por ti cada pocos minutos ([mantener Memo al día](./archive.md)).
+Linux, `memo auto start` lo ejecuta por ti cada pocos minutos ([mantener Memo al día](./archive.md)).
 Los mensajes de Telegram y MAX llegan a través de tg y max, no a través de Memo.
 
 ## Encontrar algo
@@ -51,7 +51,7 @@ notas enlazadas a ella, cada cosa con su fuente. Consulta [Personas y proyectos]
 ## Guardar lo que has aprendido
 
 ```sh
-memo notes add 'Prefers calls in the morning' --about telegram:'Kai Sample'
+memo notes add 'Prefers calls in the morning' --subject telegram:'Kai Sample'
 memo tags add follow-up --note note:NOTE_ID
 memo tasks add --project HRB --title 'Book the venue'
 ```
@@ -70,10 +70,7 @@ Use memo CLI to show the memories, facts and actions waiting for my review, with
 Do not confirm or approve anything; I will decide.
 ```
 
-[Recuerdos y hechos](./memories.md) explica cómo confirmarlos o rechazarlos. Aprobar una acción la
-convierte en una tarea para ti; Memo nunca envía nada. Un recuerdo o un hecho añadido con el comando
-`memo` queda confirmado en el acto. Pide a un agente con terminal que primero te muestre el texto, y que lo
-añada solo después de que estés de acuerdo.
+[Recuerdos y hechos](./memories.md) explica cómo confirmarlos o rechazarlos. Aprobar una acción la convierte en una tarea para ti; Memo no envía nada. Un recuerdo o hecho añadido por el agente con `memo` también espera: con `AI_AGENT` o `CLAUDECODE`, Memo registra al agente como autor. Lo que añades personalmente se confirma al instante.
 
 ## Respuestas para scripts y agentes
 
@@ -84,6 +81,18 @@ Cada resultado nombra su fuente con una **referencia**, como `note:12`, `documen
 `msg:telegram/1/77/42`. Puedes pasar una referencia a otros comandos: para etiquetarla, escribir una
 nota sobre ella o usarla como evidencia. [Cómo funciona Memo](./how-it-works.md#references) explica
 cada tipo.
+
+Las respuestas JSON comparten una forma. Un objeto está en `item`; una lista en `items`, con `page` indicando si hay más (`page.has_more`). `meta` identifica la ejecución y cuentas leídas; `missing`, cuando existe, explica lo que no se pudo cubrir. `--json=a,b` conserva esos campos del objeto o de cada elemento. Las rutas con puntos recorren objetos y arrays anidados: `--json=ref,excerpt,tasks.id` para `memo search all`. Parten del contenido de la respuesta; se conservan paginación, cobertura, siguientes pasos, datos ausentes y metadatos. Elegir campos reduce la salida, no el trabajo examinado.
+
+Dónde están las referencias de búsqueda:
+
+| Comando | Referencia de cada resultado |
+|---|---|
+| `memo search messages`, `memo search mail` | `items[].ref`, como en `tg search messages` |
+| `memo search all` | `items[].ref`, con `kind`; `next` enumera tareas abiertas que apuntan al resultado (`tasks list source:"<ref>"`) |
+| `memo search notes` | `items[].ref` |
+
+`content:` limita al texto de archivos, `transcript:` a transcripciones de voz y `filename:` a nombres de archivo. Compara condiciones iguales: `memo search messages 'content:invoice'` con `tg search messages 'content:invoice'`, y una palabra simple con otra palabra simple.
 
 ## Elegir una cuenta
 

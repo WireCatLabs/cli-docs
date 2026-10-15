@@ -69,7 +69,7 @@ de las carpetas de tu buzón. Las etiquetas de Gmail (Inbox, Important, Sent, St
 se importan como buzones y se actualizan en cada ejecución.
 
 ```sh
-memo mail gmail import --since 2026-09-01 --json
+memo sync --only mail --account gmail --since-time 2026-09-01 --json
 ```
 
 Elige la fecha inicial que quieras incluir. Cada ejecución lee hasta 200 mensajes nuevos
@@ -136,7 +136,7 @@ una conversación, `--provider` y `--account` indican a qué buzón pertenece. E
 no cambian las de Gmail ni los indicadores del buzón. Para guardar una valoración de un correo:
 
 ```sh
-memo notes add 'Waiting for a revised quote' --about 'msg:email/you%40example.com/12345/67890' --json
+memo notes add 'Waiting for a revised quote' --subject 'msg:email/you%40example.com/12345/67890' --json
 ```
 
 Consulta [crear, editar y exportar notas](./memo/notes.md#write-your-own-notes) y

@@ -33,7 +33,7 @@ así que `Work` y `work` son la misma etiqueta. Añadir una etiqueta que ya est�
 |---|---|
 | Una nota que escribiste | `--note note:12` |
 | Un archivo de una carpeta de notas | `--note document:3` |
-| Todas las notas de una carpeta, o de una carpeta que hay dentro | `--folder 1` o `--folder 1 --path Projects` |
+| Todas las notas de una carpeta, o de una carpeta que hay dentro | `--folder 1` o `--folder 1 --subfolder Projects` |
 | Un mensaje o un correo | `--message 'msg:telegram/1/77/42'` (la referencia completa) |
 | Un chat o un hilo de correo | `--chat 77 --provider telegram --account 1` |
 | Un contacto en una cuenta | `--contact 101 --provider telegram --account 1` |
@@ -62,14 +62,14 @@ vienen de un archivo.
 ## Encontrar cosas por etiqueta
 
 ```sh
-memo tags list --tag follow-up              # everything with this tag
-memo search notes 'budget' --tag work       # notes with the tag that contain a word
+memo tags list tag:follow-up               # everything with this tag
+memo search notes 'budget' --filter 'tag:work'  # notes with the tag that contain a word
 memo search all 'tag:follow-up'             # messages, mail and notes with the tag
 memo tags list                              # every tag, up to 100
 ```
 
-`memo tags list` muestra 100 etiquetas cada vez; añade `--limit 500` para ver más. `--type note` o
-`--type person` muestra solo un tipo.
+`memo tags list` muestra 100 etiquetas cada vez; añade `--limit 500` para ver más. `type:note` o
+`type:person` muestra solo un tipo.
 
 ## Quitar una etiqueta
 
@@ -82,7 +82,6 @@ está no cambia nada. Una etiqueta que viene de un archivo se quita editando el 
 
 ## Etiquetas en tg y max
 
-tg y max leen las mismas etiquetas: `tg search mail 'tag:follow-up'` también encuentra el correo
-etiquetado. Las etiquetas de un contacto también están disponibles con `tg tags` y `max tags`.
+tg y max leen las mismas etiquetas: `tg search messages 'tag:follow-up'` encuentra mensajes de Telegram etiquetados y `memo search mail 'tag:follow-up'` encuentra correo etiquetado. Las etiquetas de contactos también están disponibles con `tg tags` y `max tags`.
 
 Siguiente: [busca por etiqueta y por palabras](./search.md).

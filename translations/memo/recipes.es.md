@@ -82,7 +82,7 @@ Use memo CLI to give me a weekly review: open tasks by project, tasks that are r
 and the memories, facts and actions waiting for my review. Do not approve or confirm anything.
 ```
 
-Tu agente combina `memo tasks list`, `memo tasks ready` y las listas de revisión de
+Tu agente combina `memo tasks list`, `memo tasks list project:HRB ready:true` y las listas de revisión de
 [Recuerdos y hechos](./memories.md). Decide tú cada elemento.
 
 ## Escribir un resumen en tu bóveda
@@ -92,7 +92,7 @@ Use memo CLI to write a short note about the Harbour project that summarises wha
 with the sources it is based on. Show me the note, then export it to my vault.
 ```
 
-Tu agente escribe la nota con `memo notes add --about project:…` y la exporta con
+Tu agente escribe la nota con `memo notes add --subject project:…` y la exporta con
 `memo notes export` ([notas](./notes.md#save-your-notes-as-files)). Memo nunca sobrescribe un archivo
 que editaste.
 
@@ -108,6 +108,6 @@ configures uno y lo permitas ([búsqueda](./search.md#give-your-agent-the-source
 
 ## Ejecutarlo de forma programada
 
-En Linux, `memo auto on` mantiene al día tus notas y tu correo. Para ejecutar una receta cada mañana,
+En Linux, `memo auto start` mantiene al día tus notas y tu correo. Para ejecutar una receta cada mañana,
 usa la programación propia de tu agente o un programador de tareas de tu ordenador que inicie tu
 agente con la petición.

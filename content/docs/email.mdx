@@ -69,7 +69,7 @@ mailbox's actual folder names. Gmail labels — Inbox, Important, Sent, Starred 
 imported as mailboxes and refreshed on every run.
 
 ```sh
-memo mail gmail import --since 2026-09-01 --json
+memo sync --only mail --account gmail --since-time 2026-09-01 --json
 ```
 
 Choose the first date you want to include. Each run reads at most 200 new messages by default;
@@ -133,7 +133,7 @@ A full message reference carries its mailbox, thread and message IDs. For a thre
 labels or mailbox flags. To save an assessment linked to one email:
 
 ```sh
-memo notes add 'Waiting for a revised quote' --about 'msg:email/you%40example.com/12345/67890' --json
+memo notes add 'Waiting for a revised quote' --subject 'msg:email/you%40example.com/12345/67890' --json
 ```
 
 See [creating, editing and exporting notes](./memo/notes.md#write-your-own-notes) and

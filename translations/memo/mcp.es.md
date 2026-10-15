@@ -51,24 +51,27 @@ Use the memo tools to list the memories waiting for my review.
 
 ## Las herramientas
 
-| Herramienta | Qué hace |
+| Herramienta | Función |
 |---|---|
-| `memories_add`, `memories_list`, `memories_show`, `memories_search` | Guarda y lee recuerdos |
-| `facts_add`, `facts_list`, `facts_show` | Registra y lee hechos |
-| `actions_propose`, `actions_list`, `actions_show` | Propone acciones y las lee |
-| `agents_log` | Lee el registro de agentes |
-| `vocabulary_list`, `vocabulary_resolve`, `vocabulary_preflight` | Busca proyectos, etiquetas y temas, solo lectura |
-| `task_relations`, `task_readiness`, `tasks_ready` | Muestra cómo dependen las tareas unas de otras, solo lectura |
+| `search_all` | Buscar mensajes de todos los servicios, correo y notas; solo lectura |
+| `search_messages`, `search_mail`, `search_notes` | Buscar un tipo con todos sus campos; solo lectura |
+| `person_context` | Una persona entre servicios y correo, con notas y tareas enlazadas; solo lectura |
+| `memories_add`, `memories_list`, `memories_show`, `search_memories` | Guardar y leer recuerdos |
+| `facts_add`, `facts_list`, `facts_show` | Registrar y leer hechos |
+| `actions_add`, `actions_list`, `actions_show` | Proponer y leer acciones |
+| `agents_log` | Leer el registro del agente |
+| `vocabulary_list`, `vocabulary_show`, `vocabulary_check` | Consultar proyectos, etiquetas y temas; solo lectura |
+| `tasks_relations`, `tasks_status`, `tasks_list` | Consultar dependencias entre tareas; solo lectura |
 
 Todo lo que añade la aplicación se guarda con el nombre de agente `memo-mcp` y espera como propuesto. Lo revisas
-con `memo memories list --status proposed` y los comandos de [Recuerdos y hechos](./memories.md).
+con `memo memories list status:proposed` y los comandos de [Recuerdos y hechos](./memories.md).
 
 ## El registro de agentes
 
 Cada llamada que hace la aplicación se escribe en el registro de agentes:
 
 ```sh
-memo agents log --agent memo-mcp --limit 20
+memo agents log agent:memo-mcp --limit 20
 ```
 
 El registro muestra la herramienta, el resultado y la hora, nunca lo que envió la aplicación.
