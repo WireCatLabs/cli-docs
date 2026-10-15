@@ -43,15 +43,16 @@ continuar y comprobar el historial: [Telegram](./tg/archive.md#fetch-a-chats-his
 
 ## Buscar en todo a la vez
 
-Si no sabes dónde se escribió algo — en un chat, un correo o tus propias notas —, busca en todo a la
-vez:
+Si no sabes dónde se escribió algo — en un chat o en tus propias notas —, busca en ambos a la vez:
 
 ```sh
 tg personal search all invoice
 max personal search all invoice
 ```
 
-Cada resultado indica si es un mensaje, un correo o una nota. Las secciones siguientes buscan en un solo tipo.
+Cada resultado indica si es un mensaje o una nota. `tg` y `max` no buscan en el correo: lo hace
+`memo search mail`, y `memo search all invoice` busca en mensajes, correo y notas a la vez. Las secciones
+siguientes buscan en un solo tipo.
 
 ## Encontrar una palabra o frase
 

@@ -34,3 +34,5 @@ were deleted, not archived. The checkout is on `main`; three merged worktrees we
 - Retain `fix/windows-standard-envelopes` until owner-approved cleanup; it updates the Windows installation proof for independently adopted item envelopes while retaining legacy release checks.
 
 - 2026-10-14: retain `.worktrees/zoom-013-standards` until owner-approved cleanup; Zoom contract 3 documentation review.
+- 2026-10-14: local branch `backup/source-search-own-c1c72cd` — the notes-and-tasks version of feat/source-search-own before the owner reversed it; remove once #199 merges.
+- 2026-10-14: `../cli-docs-wt-source-search`, branch `feat/source-search-own` — tg and max search no mail; remove after its PR merges.
