@@ -4,6 +4,58 @@ title: "Historial de cambios"
 
 Los detalles técnicos de las versiones se conservan en el idioma del proyecto original. Las guías traducidas explican las tareas habituales.
 
+## 0.13.0 — 2026-10-16
+
+### Added
+
+- Track changing decisions with `facts add --supersedes fact:ID` and `facts reverse`.
+  Replacements supersede the earlier decision on acceptance; reversals keep its history.
+  Both require the same imported document and account, use shared Core fact transitions,
+  and respect offline, read-only and dry-run controls. `facts add --occurred-time` records
+  the evidence’s event time.
+
+## 0.12.2 — 2026-10-16
+
+### Fixed
+
+- AI memory extraction explicitly allows supporting source quotes in the shared model gateway.
+  Its mandatory exact-evidence request no longer conflicts with the gateway’s ordinary no-copy
+  instruction. Preview, proposal review and exact-quote validation retain their existing behavior.
+  Uses `@wirecat/cli-core` 0.294.0 with matching `@wirecat/cli-base` 0.35.0.
+
+## 0.12.1 — 2026-10-15
+
+### Changed
+
+- `catalog show`, `catalog list`, `catalog search` and `documents list` declare the rows they answer
+  (`document.drive_catalog`, `drive_document`) in `commands --json`, and `--json=<field>` is checked against those
+  declarations through cli-core's `entityFields` rather than by command name. A field the rows lack is still
+  refused with `output.unknown-field`.
+- drive runs on `@wirecat/cli-core` 0.292.0.
+
+## 0.12.0 — 2026-10-15
+
+### Added
+
+- `files upload <path> [--parent ID] [--name NAME]` uploads a local file of any size with Google's resumable
+  upload, in 8 MiB chunks. An interrupted upload continues from the byte Google holds on the next run; the session
+  waits in the profile's state folder (`uploads/`, mode 600) for up to a week. The answer carries the file id, size
+  and MD5, and drive refuses the upload when Google's MD5 differs from the local file's. It is a write: profile
+  policy, `--dry-run` and `--read-only` apply.
+
+## 0.11.2 — 2026-10-15
+
+### Fixed
+
+- `memories search <document>` finds the document's memories however many other documents match. The store now
+  searches only that document's memories; before, drive took the best 200 matches across every memory and kept
+  the document's own, so one whose matches ranked lower answered nothing. `meta.truncated` now means the document
+  itself has 200 matches or more.
+
+### Changed
+
+- drive runs on `@wirecat/cli-core` 0.289.0.
+
 ## 0.11.1 — 2026-10-15
 
 ### Fixed

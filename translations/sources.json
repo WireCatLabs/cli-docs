@@ -118,8 +118,8 @@
   "drive/installation.ru": "8a7ab06553d72d863bca8bad549ab7962223039e32341d20395cb1337a456ad1",
   "drive/usage.ru": "6f6d7dc96422c0f38650687c50c4302c6fc03ab1b3b55e09fc41fc2a1041ac46",
   "drive/search.ru": "85a638cacc33ef3adaf51d8c3f64985d8fc0b282e0922c0772d479d0ad3d0e53",
-  "drive/recipes.ru": "582210bf67e531d7c8b4ef18e4b7edb18b7e022b952851b8b38c7445f5fb4ae7",
-  "drive/commands.ru": "d9124a84fe4f90be15deba1cc4df2ac23b4aecfa6a528e68ce39f55eba322f8f",
+  "drive/recipes.ru": "1611b30744ec1caaa919c31086b6cdcf0e4292b37f1cf1531e707b3f27bcd13b",
+  "drive/commands.ru": "53c67a442bb3b2edc3b003e35eeb7c42e13a483f2341f5b5e84784f32079ca3c",
   "drive/configuration.ru": "c2be81ca685aaba0fda7692ef010697c705fbe69ad29f85141209da450a60a2d",
   "drive/troubleshooting.ru": "81e9c96bb0e667a006d16751601aeb764c708949a5fad757245dea61feaac154",
   "drive/security.ru": "d86da115ec7d9d6f92551c7dac1d7461061173c0109023b0b947c2dcca8a2713",
@@ -127,8 +127,8 @@
   "drive/installation.es": "8a7ab06553d72d863bca8bad549ab7962223039e32341d20395cb1337a456ad1",
   "drive/usage.es": "6f6d7dc96422c0f38650687c50c4302c6fc03ab1b3b55e09fc41fc2a1041ac46",
   "drive/search.es": "85a638cacc33ef3adaf51d8c3f64985d8fc0b282e0922c0772d479d0ad3d0e53",
-  "drive/recipes.es": "582210bf67e531d7c8b4ef18e4b7edb18b7e022b952851b8b38c7445f5fb4ae7",
-  "drive/commands.es": "d9124a84fe4f90be15deba1cc4df2ac23b4aecfa6a528e68ce39f55eba322f8f",
+  "drive/recipes.es": "1611b30744ec1caaa919c31086b6cdcf0e4292b37f1cf1531e707b3f27bcd13b",
+  "drive/commands.es": "53c67a442bb3b2edc3b003e35eeb7c42e13a483f2341f5b5e84784f32079ca3c",
   "drive/configuration.es": "c2be81ca685aaba0fda7692ef010697c705fbe69ad29f85141209da450a60a2d",
   "drive/troubleshooting.es": "81e9c96bb0e667a006d16751601aeb764c708949a5fad757245dea61feaac154",
   "drive/security.es": "d86da115ec7d9d6f92551c7dac1d7461061173c0109023b0b947c2dcca8a2713",
@@ -200,6 +200,6 @@
   "zm/configuration.es": "dca4712e82cf6307647df4f00c0a86f23c32de2c173bd54ab5df19b72f40bf71",
   "zm/security.es": "9fb8cb24c91b1b45e98b9ae07c423844f839496d80a477c14753525391f04da3",
   "zm/usage.es": "add7b96625d29f5b3621e51fd27261b7cff71aecd19f4b27428876540e73ba2b",
-  "drive/changelog.ru": "21732e18dc8522d30dcc778ef42bd78d45a310bcf912f0b26bad12acc4a85565",
-  "drive/changelog.es": "21732e18dc8522d30dcc778ef42bd78d45a310bcf912f0b26bad12acc4a85565"
+  "drive/changelog.ru": "399a86554e75fa42ca67f417377083b779170a51294d67eeafe29bf77f8a32d6",
+  "drive/changelog.es": "399a86554e75fa42ca67f417377083b779170a51294d67eeafe29bf77f8a32d6"
 }

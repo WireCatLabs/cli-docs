@@ -191,6 +191,34 @@ referencia devuelta solo tras revisarla. Cambiar o retirar la fuente marca los r
 como obsoletos. La extracción envía texto local seleccionado al proveedor; búsqueda por vectores
 es una operación distinta. Para escribirlo tú: `memories add DOC_ID 'Your fact' --scope work`.
 
+## Actualizar una decisión
+
+Conserva la decisión anterior y su fuente cuando cambie un acuerdo. Estos comandos actualizan
+los hechos locales del documento importado; no editan Google Drive.
+
+```sh
+drive personal facts list DOC_ID kind:decision --json
+drive personal facts add DOC_ID 'Move the launch to November' --type decision --scope work --supersedes fact:OLD_ID --occurred-time 2026-10-16T10:00:00Z
+drive personal facts show DOC_ID fact:OLD_ID --json
+```
+
+Sustituye `fact:OLD_ID` por la referencia de la decisión anterior devuelta por el comando.
+La nueva decisión se acepta de inmediato y la anterior pasa a `superseded`; ambas siguen visibles.
+La opción `--occurred-time` registra cuándo se tomó la decisión, en lugar de cuándo la guardaste.
+Una sustitución propuesta por un agente sigue pendiente hasta que la confirmes; la decisión
+anterior sigue vigente hasta entonces. Revisa la fuente antes de confirmar.
+
+Si una decisión deja de estar vigente y no hay sustitución:
+
+```sh
+drive personal facts reverse DOC_ID fact:DECISION_ID
+drive personal facts list DOC_ID status:reversed --json
+```
+
+Solo se pueden revertir decisiones aceptadas, no otros tipos de hechos. El hecho debe pertenecer
+al documento y la cuenta seleccionados. Estas operaciones funcionan sin conexión y respetan
+`--read-only`. Usa `--dry-run` para ver la operación sin cambiar los hechos locales.
+
 ## Examinar revisiones o actividad opcional
 
 ```sh
@@ -241,8 +269,11 @@ anterior al añadir el nuevo. Los archivos Google tienen un padre: consulta
 Comprueba que está en la carpeta elegida
 y que el texto aparece en búsqueda local. Para editar documentos existentes, usa el control de
 revisión Docs `writeControl` expuesto en [el esquema de actualización](./commands.md#drive-documents-update).
-Se puede crear un Doc nativo con texto; no hay flujo de subida de PDF/Office/multimedia arbitrarios
-ni conversión de Markdown local a un Doc con formato.
+Para subir un PDF, documento de Office o archivo multimedia local, usa
+`drive personal files upload ./report.pdf --parent FOLDER_ID`. Necesita el mismo permiso de escritura.
+El comando devuelve el ID del archivo; repetirlo reanuda una subida interrumpida.
+Ejecuta sync para indexar archivos compatibles dentro de las carpetas seleccionadas. La subida
+conserva el formato original; no convierte Markdown local en un Google Doc con formato.
 
 ## Usar un cliente MCP local
 
