@@ -64,9 +64,11 @@ verify the next call. If permissions prevent that check, mark the date as unveri
 For one selected series, [prepare cited context](./zm/usage.md#prepare-for-an-upcoming-meeting)
 with `zm meetings prepare <series-id> --json`. It reads the upcoming time from Zoom and joins
 bounded stored prior calls, observed people, confirmed projects, accepted facts and directly sourced
-tasks. Use the provider's numeric series ID, not the internal stored meeting ID. Its coverage keeps
-person history, project-wide sources and project-name/alias candidates explicitly unqueried; the
-agent can investigate those separately. Missing transcripts are not downloaded by preparation.
+tasks. It also includes related stored calls through existing person links or confirmed projects,
+within the selected account and history window. Use the provider's numeric series ID, not the
+internal stored meeting ID. Person/project sources outside meeting transcripts and project-name/alias
+candidates remain explicitly unqueried; the agent can investigate those separately. Missing
+transcripts are not downloaded by preparation, and matching names never creates a person link.
 
 ## Keep useful findings afterwards
 

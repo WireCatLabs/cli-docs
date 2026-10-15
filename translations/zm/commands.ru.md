@@ -246,7 +246,7 @@ zm meetings prepare <series-id> [options]
 | `--since-time <time>` | window start as ISO timestamp with zone (default now). |
 | `--before-time <time>` | exclusive window end as ISO timestamp (default seven days after start). |
 | `--history-since-time <time>` | history start as ISO timestamp (default thirty days before start). |
-| `--meetings <n>` | prior occurrences, 1–20 (default 5). |
+| `--meetings <n>` | предыдущие встречи и отдельный предел связанных встреч, 1–20 (по умолчанию 5). |
 | `--cues <n>` | cues per occurrence, 1–100 (default 10). |
 | `--context-limit <n>` | entries per context category, 1–100 (default 20). |
 | `--max-read-bytes <bytes>` | stored/normalized bytes per read, at most 4194304 (default 262144). |
@@ -314,7 +314,7 @@ zm meetings transcribe <meeting> <file> [options]
 | Option | What it does |
 |---|---|
 | `--model <model>` | installed speech model. |
-| `--models-dir <directory>` | shared installed speech-model directory. |
+| `--models-dir <dir>` | shared installed speech-model directory. |
 | `--max-bytes <bytes>` | largest audio file to read, in bytes (default 1 GiB). |
 | `--max-duration <duration>` | longest audio to transcribe (default 4h). |
 | `--max-segments <n>` | most recognized segments (default 10000). |
@@ -520,7 +520,7 @@ zm watch [target] [folder] [options]
 |---|---|
 | `--since-time <time>` | on the first run, fetch meetings from this ISO 8601 time. |
 | `--lookback-days <days>` | API cursor overlap for late transcripts (0 through 31). |
-| `--interval <duration>` | delay after each completed receipt (1s through 24h). Default: `10000`. |
+| `--pause <duration>` | delay after each completed receipt (1s through 24h). Default: `10000`. |
 
 ## `zm recordings`
 
@@ -553,14 +553,14 @@ zm recordings sync [options]
 |---|---|
 | `--since-time <time>` | first day, YYYY-MM-DD. |
 | `--until-time <time>` | last day, YYYY-MM-DD; at most ten years after the first. |
-| `--destination <directory>` | explicit archive directory. |
+| `--output-dir <dir>` | явная папка архива. |
 | `--max-bytes <bytes>` | maximum bytes per recording file. |
 | `--resume` | resume verified partial downloads and archive progress; requires a local profile. |
 | `--no-resume` | disable persistent resume state for this invocation. |
 | `--checkpoint <file>` | explicit durable checkpoint file; implies resume. |
 | `--recheck-since-time <time>` | look again from this day, YYYY-MM-DD, for recordings that came late. |
 | `--max-pages <pages>` | catalog page limit from 1 through 10000 (default 1000). |
-| `--max-entries <entries>` | occurrence limit from 1 through 10000 (default 10000). |
+| `--max-entries <n>` | occurrence limit from 1 through 10000 (default 10000). |
 
 ### `zm recordings show`
 
@@ -590,7 +590,7 @@ zm recordings download <meeting> [options]
 
 | Option | What it does |
 |---|---|
-| `--destination <directory>` | explicit archive directory. |
+| `--output-dir <dir>` | явная папка архива. |
 | `--file-ids <ids>` | comma-separated recording file ids. |
 | `--max-bytes <bytes>` | per-file download byte limit (default 20 GiB). |
 | `--resume` | resume verified partial downloads and archive progress; requires a local profile. |
@@ -711,9 +711,9 @@ zm recordings schedule create [options]
 | Option | What it does |
 |---|---|
 | `--name <name>` | local job name. |
-| `--destination <directory>` | absolute archive directory. |
+| `--output-dir <dir>` | абсолютный путь папки архива. |
 | `--since-time <time>` | first day to archive, YYYY-MM-DD. |
-| `--at <time>` | daily HH:mm time. |
+| `--at <hh:mm>` | ежедневное время. |
 | `--timezone <zone>` | IANA timezone for the timer. |
 | `--lookback-days <days>` | revisit the latest zero through 31 UTC days (default seven). |
 | `--max-bytes <bytes>` | maximum bytes per recording file (default 20 GiB). |
@@ -821,8 +821,8 @@ zm remote-meetings create [options]
 
 | Option | What it does |
 |---|---|
-| `--title <text>` | meeting title. |
-| `--start-time <timestamp>` | ISO start time with timezone. |
+| `--title <title>` | meeting title. |
+| `--start-time <time>` | ISO start time with timezone. |
 | `--duration-minutes <minutes>` | positive meeting duration in minutes. |
 | `--timezone <zone>` | IANA timezone. |
 | `--agenda <text>` | meeting agenda. |
@@ -846,8 +846,8 @@ zm remote-meetings update <meeting> [options]
 
 | Option | What it does |
 |---|---|
-| `--title <text>` | meeting title. |
-| `--start-time <timestamp>` | ISO start time with timezone. |
+| `--title <title>` | meeting title. |
+| `--start-time <time>` | ISO start time with timezone. |
 | `--duration-minutes <minutes>` | positive meeting duration in minutes. |
 | `--timezone <zone>` | IANA timezone. |
 | `--agenda <text>` | meeting agenda. |

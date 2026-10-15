@@ -31,8 +31,10 @@ inglesas, rusas y españolas; pueden cambiarse o desactivarse. La consulta usa p
 `--meeting-id`, `--event-id`, `--series-id`, `--since-time` y `--until-time` limitan la cuenta elegida.
 El cursor opaco pertenece a la cuenta, consulta y filtros, y continúa dentro de una transcripción larga.
 JSON incluye `page.next_cursor`, `next` e información `missing` del índice. JSONL emite registros de resultados seguidos de un registro end con la página y si el resultado está completo.
-Cada coincidencia contiene `ref`, referencia de reunión `meeting`, `excerpt` y `offset_ms`;
-abre una línea con `meetings passage`.
+Cada coincidencia contiene `ref`, referencia de reunión `meeting`, `excerpt` y `offset_ms`.
+Cuando están guardados, source incluye título, `started_at`, referencia de evidencia `ref` y
+documento url. Un URL null indica que no hay enlace al documento; el enlace para entrar a Zoom
+no lo sustituye. Abre una línea con `meetings passage`.
 
 ## Buscar por significado o en un archivo
 
@@ -148,7 +150,7 @@ La línea del límite se incluye de nuevo; el agente puede deduplicarla mediante
 Una transcripción corregida conserva la referencia anterior, marcada `superseded`, sin cambiar
 silenciosamente a la nueva versión. Para rechazar una línea modificada, pasa el `target_fingerprint`
 anterior con `--expected-fingerprint`. JSON conserva las líneas estructuradas y sus huellas; Markdown
-cita el texto de la transcripción. `--json=id,title` conserva solo esos campos.
+cita el texto de la transcripción. `--json=items.ref,items.start_ms,items.speaker_name,items.text` conserva solo esos campos.
 
 Con `zm serve --mcp --meeting-context`, `meeting_passage` ofrece la misma lectura con `reference`,
 `before`, `after`, `bytes`, `max_read_bytes`, `expected_fingerprint` y `format` (`json`, `text`

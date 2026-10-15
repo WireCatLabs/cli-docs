@@ -24,7 +24,11 @@ title: "Настройки"
 а не переменную из инструмента разработчика.
 
 Файл хранит эти настройки как `client_id`, `files_folder`, `files_timezone`, `account_profile` и `source`.
-Имена camelCase `zoom.clientId`, `clientId`, `filesFolder`, `filesTimezone` и `accountProfile` по-прежнему читаются.
+JSON принимает только эти ключи snake_case. Старый файл camelCase отклоняется и не переписывается.
+Перед обновлением переименуйте `clientId` в `client_id`, `filesFolder` в `files_folder`,
+`filesTimezone` в `files_timezone`, `accountProfile` в `account_profile`. Сохраните значения и закрытые
+права доступа к файлу. Селектор команды `zoom.clientId` остаётся псевдонимом `zoom.client_id`,
+но не поддерживается как ключ JSON.
 
 Повреждённая конфигурация не мешает `--help` и `--version`; команды настроек сообщают об ошибке.
 
@@ -40,7 +44,7 @@ title: "Настройки"
 | Windows | `%APPDATA%\zm\Config\config.json` |
 | Явный путь | `config.json` внутри `ZM_CONFIG_DIR` |
 
-Старое расположение macOS переносится при возможности; doctor показывает реально используемый путь.
+Старое расположение macOS больше не переносится автоматически; doctor показывает используемый путь.
 Открытые настройки приложения, токены хранилища секретов и база встреч — разные данные.
 
 ## Переменные среды

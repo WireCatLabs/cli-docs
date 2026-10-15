@@ -82,6 +82,15 @@ for (const lang of ["en", "ru", "es"] as const) {
     await expect(main).toContainText("zm meetings prepare 123456789 --json")
     await expect(main).toContainText("verified_next")
     await expect(main).toContainText("--history-since-time")
+    const relatedFields = [
+      "related.items",
+      "related.anchors",
+      "shared_person",
+      "shared_project",
+      "related.has_more",
+      "related.output_limited",
+    ]
+    for (const field of relatedFields) await expect(main).toContainText(field)
     await expect(
       main.locator(`a[href="/${lang}/docs/zm/zoom-app#add-archive-or-management-access"]`).first(),
     ).toBeVisible()
@@ -95,6 +104,9 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(markdown).toContain("`meta.complete=false`")
     expect(markdown).toContain("meeting:read:meeting")
     expect(markdown).toContain("--context-limit")
+    for (const field of relatedFields) expect(markdown).toContain(field)
+    expect(markdown).toContain("--output-dir")
+    expect(markdown).not.toContain("--destination")
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
   })
 

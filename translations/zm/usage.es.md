@@ -50,8 +50,8 @@ zm meetings prepare 123456789 --json
 La orden lee la serie elegida en Zoom y la une al historial del perfil local seleccionado.
 Necesita el permiso opcional `meeting:read:meeting` en [la aplicación Zoom](./zoom-app.md#add-archive-or-management-access).
 No descarga transcripciones ausentes, cambia permisos ni inicia sesión. La ventana predeterminada
-mira siete días hacia delante y treinta hacia atrás, con un máximo de cinco reuniones anteriores
-y diez pasajes citados por reunión.
+mira siete días hacia delante y treinta hacia atrás, con un máximo de cinco reuniones anteriores,
+cinco reuniones relacionadas y diez pasajes citados por reunión.
 
 Comprueba `item.upcoming.candidate` y `verified_next`: una hora candidata puede ser útil aunque
 no demuestre que es la próxima reunión. La fecha inicial de una serie recurrente no lo demuestra.
@@ -59,19 +59,28 @@ no demuestre que es la próxima reunión. La fecha inicial de una serie recurren
 con vínculos existentes a personas, proyectos confirmados, hechos aceptados sobre la reunión y
 tareas de origen directo. La asistencia anterior no predice quién acudirá a la próxima llamada.
 
+`related.items` añade reuniones fuera de la serie mediante vínculos existentes a personas o proyectos
+confirmados compartidos con el historial incluido. Cada una conserva referencia, citas e indicadores
+`shared_person`/`shared_project`; `related.anchors` muestra las llamadas anteriores que establecen
+esas conexiones. La búsqueda se limita al perfil y periodo elegidos, usa vínculos actuales y excluye
+asociaciones propuestas a proyectos. Coincidir nombres o palabras nunca crea un vínculo.
+
 Si aparece la próxima hora sin reuniones anteriores, descarga el periodo pertinente mediante la
 API de Zoom para guardar sus vínculos exactos a la serie. Un archivo de transcripción importado
 puede carecer de ese ID del proveedor. La preparación no une llamadas por títulos o nombres parecidos.
 
 La cobertura distingue historial ausente, reuniones sin fecha, filas adicionales y límites de salida.
-No se conoce si el archivo incluye todo el historial. El historial personal, el contexto general del
-proyecto y las candidatas por nombre/alias aparecen como no consultados; la evidencia de los hechos
-guardados no se vuelve a comprobar. Usa [búsqueda y fuentes](./search.md) para investigar esas lagunas.
+No se conoce si el archivo incluye todo el historial. Las fuentes de personas/proyectos fuera de
+transcripciones y las candidatas por nombre/alias quedan sin consultar; sin reuniones anteriores
+utilizables, tampoco se consulta el historial relacionado. La evidencia de los hechos guardados
+no se vuelve a comprobar. Usa [búsqueda y fuentes](./search.md) para investigar esas lagunas.
 La preparación no genera un resumen, acepta hallazgos ni crea tareas.
 
 Para una ventana fija, usa tiempos ISO con zona en `--since-time`, `--before-time` y
-`--history-since-time`. `--meetings`, `--cues` y `--context-limit` acotan el contexto;
-`--max-read-bytes` acota cada lectura y `--bytes` el elemento de preparación. Pueden quedar filas
+`--history-since-time`. `--meetings` limita por separado el historial de la serie y el relacionado;
+`--cues` y `--context-limit` acotan el contexto. `--max-read-bytes` acota cada lectura y `--bytes`
+el elemento completo. Las fuentes de la serie tienen prioridad; `related.has_more` y
+`related.output_limited` indican contexto relacionado adicional u omitido. Pueden quedar filas
 fuera del límite. Las fuentes omitidas dan `meta.complete=false`: revisa sus referencias antes de
 usar el informe. Si la cobertura señala un recorte, aumenta el límite correspondiente.
 
@@ -119,8 +128,8 @@ no importa su transcripción en la base hasta que solicites la importación del 
 | `events list` | leer eventos guardados |
 | `watch [api\|files] [folder] --jsonl` | importar repetidamente en primer plano |
 | `recordings list`, `recordings show <meeting>` | descubrir grabaciones y metadatos |
-| `recordings download <meeting> --destination <directory>` | archivar archivos disponibles |
-| `recordings sync --since-time <date> --until-time <date> --destination <directory> --jsonl` | archivar historial por meses |
+| `recordings download <meeting> --output-dir <dir>` | archivar archivos disponibles |
+| `recordings sync --since-time <date> --until-time <date> --output-dir <dir> --jsonl` | archivar historial por meses |
 | `recordings schedule create\|list\|show\|run\|disable` | gestionar trabajos diarios de archivo |
 | `recordings archive show\|check\|locks <directory>` | inspeccionar manifiestos, sumas o bloqueos |
 | `recordings archive recover <directory>` | revisar recuperación de bloqueos obsoletos |
@@ -143,7 +152,10 @@ Usa `--json` para una respuesta completa. Un resultado lleva `item`; una lista, 
 
 Los informes detallados de participantes, fuentes, búsqueda semántica y búsqueda unificada
 conservan cobertura y continuación dentro de `item`. La búsqueda de palabras en reuniones
-guardadas devuelve elementos con `ref`, `meeting`, `excerpt` y `offset_ms`. Los detalles están
+guardadas devuelve elementos con `ref`, `meeting`, `excerpt` y `offset_ms`. Si están guardados,
+`source` añade título, `started_at`, referencia de evidencia `ref` y documento `url`. Un URL null
+indica que no hay enlace al documento; el enlace para entrar a la llamada no es un enlace a evidencia.
+Los detalles están
 en `item`; transcripciones y resúmenes, en `items`. Los detalles cuentan transcripciones actuales;
 `meetings transcript <meeting> --history` lee revisiones anteriores conservadas.
 
@@ -165,7 +177,11 @@ Los errores van a stderr; `--quiet` omite otros diagnósticos.
 Las tuberías reciben JSON por defecto; la terminal, salida legible. El autocompletado emite
 el protocolo de la shell salvo que pidas JSON.
 
-`--json=id,title` elige campos. `--offline` rechaza la red. Los comandos finitos conservan la salida
+`--json=id,title` elige campos. Las rutas con puntos seleccionan objetos y matrices anidados, por
+ejemplo `--json=ref,excerpt,source.title,source.started_at,source.url` para resultados de reuniones.
+Las rutas parten del contenido del resultado; páginas, cobertura, pasos siguientes, datos ausentes
+y metadatos de ejecución permanecen. La proyección reduce lo impreso, no el trabajo de búsqueda.
+`--offline` rechaza la red. Los comandos finitos conservan la salida
 hasta liberar recursos; el límite predeterminado es 4 MiB. `--max-output-bytes 0` lo elimina.
 
 ## Plazos y cancelación

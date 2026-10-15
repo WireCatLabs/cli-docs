@@ -31,8 +31,10 @@ zm search meetings "example plan" --limit 20 --cursor <next_cursor> --json
 слов, без операторов. `--meeting-id`, `--event-id`, `--series-id`, `--since-time` и `--until-time` сужают
 выбранный аккаунт. Непрозрачный курсор относится к аккаунту, запросу и фильтрам и может продолжать внутри
 большой расшифровки. JSON содержит `page.next_cursor`, `next` и сведения `missing` об индексе. JSONL выдаёт записи результатов, затем запись end со страницей и полнотой.
-Совпадения содержат ссылку `ref`, встречу `meeting`, фрагмент `excerpt` и `offset_ms`;
-откройте строку через `meetings passage`.
+Совпадения содержат ссылку `ref`, встречу `meeting`, фрагмент `excerpt` и `offset_ms`.
+При наличии сохранённых данных source включает название, `started_at`, ссылку на источник `ref`
+и документ url. Если URL — null, ссылки на документ нет; ссылка для входа в Zoom её не заменяет.
+Откройте строку через `meetings passage`.
 
 ## Поиск по смыслу или в архиве
 
@@ -147,7 +149,7 @@ zm meetings passage meeting:3/15/20/4 --before-n 0 --after-n 0 --json
 После исправления расшифровки старая ссылка остаётся читаемой с отметкой `superseded`, не переключаясь
 на новую версию. Чтобы отклонить изменившуюся строку, передайте прежний `target_fingerprint` через
 `--expected-fingerprint`. JSON сохраняет структурированные строки и отпечатки; Markdown выводит
-расшифровку как цитируемый текст. `--json=id,title` оставляет только эти поля.
+расшифровку как цитируемый текст. `--json=items.ref,items.start_ms,items.speaker_name,items.text` оставляет только эти поля.
 
 При `zm serve --mcp --meeting-context` инструмент `meeting_passage` выполняет то же чтение с
 `reference`, `before`, `after`, `bytes`, `max_read_bytes`, `expected_fingerprint` и `format`

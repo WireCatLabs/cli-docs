@@ -24,7 +24,11 @@ no es un ajuste de la orden instalada `zm`; usa `zm config set zoom.client_id` e
 copiada de una sonda de desarrollo.
 
 El archivo guarda estos ajustes como `client_id`, `files_folder`, `files_timezone`, `account_profile` y `source`.
-Todavía lee los nombres camelCase `zoom.clientId`, `clientId`, `filesFolder`, `filesTimezone` y `accountProfile`.
+Los archivos JSON deben usar esas claves snake_case. Los antiguos archivos camelCase se rechazan sin
+reescribirlos. Antes de actualizar, renombra `clientId` a `client_id`, `filesFolder` a `files_folder`,
+`filesTimezone` a `files_timezone` y `accountProfile` a `account_profile`. Conserva sus valores y los
+permisos privados del archivo. El selector de comando `zoom.clientId` sigue como alias de
+`zoom.client_id`, pero no se admite como clave JSON.
 
 Una configuración incorrecta permite `--help` y `--version`; los comandos de configuración indican el error.
 
@@ -40,7 +44,7 @@ comprobar la sesión OAuth guardada.
 | Windows | `%APPDATA%\zm\Config\config.json` |
 | Ruta explícita | `config.json` dentro de `ZM_CONFIG_DIR` |
 
-Los directorios antiguos de macOS se migran cuando es posible; doctor muestra la ruta utilizada.
+Los directorios antiguos de macOS ya no se trasladan automáticamente; doctor muestra la ruta utilizada.
 Ajustes públicos, tokens del almacén y base de reuniones son datos separados.
 
 ## Variables de entorno

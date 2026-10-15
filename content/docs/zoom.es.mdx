@@ -64,10 +64,12 @@ no verifica la próxima llamada. Si faltan permisos para comprobarla, marca la f
 Para una serie elegida, [reúne contexto con fuentes](./zm/usage.md#prepare-for-an-upcoming-meeting)
 con `zm meetings prepare <series-id> --json`. Lee la próxima fecha en Zoom y une historial guardado
 acotado, participantes observados, proyectos confirmados, hechos aceptados y tareas con fuentes
-directas. Usa el ID numérico de la serie del proveedor, no el ID interno de la reunión guardada.
-La cobertura marca el historial personal, las fuentes de todo el proyecto y los candidatos por
-nombre/alias como no consultados; el agente puede investigarlos aparte. La preparación no descarga
-transcripciones ausentes.
+directas. Incluye también llamadas guardadas relacionadas mediante vínculos existentes a personas
+o proyectos confirmados, dentro de la cuenta y el periodo elegidos. Usa el ID numérico de la serie
+del proveedor, no el ID interno de la reunión guardada. Las fuentes de personas/proyectos fuera de
+las transcripciones y los candidatos por nombre/alias quedan como no consultados; el agente puede
+investigarlos aparte. La preparación no descarga transcripciones ausentes ni vincula personas por
+coincidencia de nombres.
 
 ## Guardar los resultados útiles
 
