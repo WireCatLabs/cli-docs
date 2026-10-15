@@ -113,6 +113,7 @@ export const sidebarIcons = {
   search: Search,
   groups: Users,
   "group-admins": Users,
+  "group-analytics": ChartColumn,
   people: ContactRound,
   mentions: AtSign,
   bot: Bot,
