@@ -99,7 +99,9 @@ tg personal tasks close <task> --as done --reason "contract sent"
 tg personal tasks close <task> --as dismissed --reason no-reply-needed
 ```
 
-`<task>` es la clave de la tarea, tal como la imprime `tasks agenda`, o su id completo. `max` tiene los mismos comandos.
+`<task>` es la clave de la tarea, tal como la imprime `tasks agenda`, o su id completo. `max` tiene los mismos comandos;
+algunos nombres nuevos de abajo (`tasks related`, `duplicates defer`, `--into`, `--lease` y los campos de consulta
+de la agenda) aún tienen en `max` sus nombres anteriores.
 
 </details>
 
@@ -151,7 +153,7 @@ herramienta comprueba cada tarea nueva antes de crearla:
   nada nuevo, y la respuesta muestra esa tarea.
 - **No está segura:** la herramienta no adivina. Si la tarea la añade tu agente, `tasks add` se niega
   y lista hasta cinco tareas parecidas con los motivos («misma persona, mismo importe»). El agente
-  repite el comando con `--attach <task>` para unir el mensaje a una de ellas, o con `--new` para crear
+  repite el comando con `--into <task>` para unir el mensaje a una de ellas, o con `--new` para crear
   una tarea nueva. Si la tarea la encontró una regla, la tarea se crea y los pares parecidos van a una
   lista de revisión.
 - **Claramente distinta:** se crea una tarea nueva.
@@ -164,23 +166,23 @@ se distinguen por el sentido de una palabra, así que decide un agente o tú.
 
 **Quién decide.** El agente que revisa tus chats después de sincronizar recorre la lista de revisión.
 Fusiona los pares que son el mismo trabajo y rechaza los que no lo son. Cuando no puede decidir, marca
-el par como dudoso. Tú ves solo los pares dudosos, con `tasks duplicates --unsure`.
+el par como dudoso. Tú ves solo los pares dudosos, con `tasks duplicates decision:unsure`.
 
 Una fusión vincula todos los mensajes del duplicado a la tarea que se queda y cierra el duplicado como
 `dismissed`, con un vínculo `duplicate-of`. **Una fusión se puede deshacer**, y no se borra nada. Un
 par rechazado no vuelve.
 
 ```text
-tasks similar REQ-23
+tasks related REQ-23
 tasks duplicates
 tasks merge REQ-23 --into REQ-22
 tasks duplicates reject REQ-23 REQ-22
-tasks duplicates unsure REQ-23 REQ-22
-tasks duplicates --unsure
+tasks duplicates defer REQ-23 REQ-22
+tasks duplicates decision:unsure
 tasks unmerge REQ-23
 ```
 
-`tasks similar` muestra las tareas que pueden ser el mismo trabajo que una tarea, las mejores
+`tasks related` muestra las tareas que pueden ser el mismo trabajo que una tarea, las mejores
 primero, cada una con una banda (`likely`, `maybe` o `different`) y los motivos. No cambia nada.
 
 ## Categorías, etiquetas y claves
@@ -205,7 +207,7 @@ primero, cada una con una banda (`likely`, `maybe` o `different`) y los motivos.
 ```text
 tasks add msg:telegram/1/77/42 --type request --category money
 tasks categories
-tasks agenda --category money --tag urgent
+tasks agenda category:money tag:urgent
 tasks list category:money
 config set task_categories.travel "trips and tickets | flight, hotel, es:vuelo"
 config unset task_categories.travel
@@ -220,7 +222,7 @@ Los comandos `config` cambian el almacén, no un perfil: la lista es la misma en
 Cuando trabajan a la vez dos agentes, o un agente y tú, uno de ellos reserva antes la tarea. La
 reserva termina sola a los 30 minutos, así que un agente detenido nunca bloquea una tarea. Reservar
 otra vez alarga tu propia reserva. Cerrar una tarea termina su reserva. La agenda muestra quién tiene
-cada tarea y oculta las que ha reservado otro; `tasks agenda --claimed` las muestra también. Tú, como
+cada tarea y oculta las que ha reservado otro; `tasks agenda claimed:any` las muestra también. Tú, como
 propietario, puedes liberar cualquier reserva.
 
 Quien reserva es una sesión de agente. La herramienta toma lo primero que esté definido:
@@ -234,20 +236,20 @@ Quien reserva es una sesión de agente. La herramienta toma lo primero que esté
 Un agente sin variable de sesión, como un agente web, pasa el id de su chat con `--holder`.
 
 ```text
-tasks claim REQ-22 --for 30m
+tasks claim REQ-22 --lease 30m
 tasks release REQ-22
-tasks agenda --claimed
+tasks agenda claimed:any
 ```
 
 Los agentes que usan el servidor MCP tienen las mismas herramientas, como `tasks_claim`,
-`tasks_release`, `tasks_categories`, `tasks_similar`, `tasks_duplicates`, `tasks_merge` y `tasks_unmerge`.
+`tasks_release`, `tasks_categories`, `tasks_related`, `tasks_duplicates`, `tasks_merge` y `tasks_unmerge`.
 
 ## Aún no está hecho
 
 - **Una comprobación cuando un mensaje se vincula a una tarea existente.** La comprobación lee solo el
   título, la descripción y el mensaje de origen de una tarea. Primero tiene que aprender a leer
   también los mensajes vinculados.
-- **Ajustar los pesos con tus respuestas.** Cada fusión, rechazo, `--attach` y `--new` se guarda,
+- **Ajustar los pesos con tus respuestas.** Cada fusión, rechazo, `--into` y `--new` se guarda,
   pero todavía nada los usa para cambiar los pesos.
 
 ## Páginas relacionadas

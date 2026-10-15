@@ -83,7 +83,7 @@ lets one writer in at a time across processes, so the claim is atomic between `t
 and agents on the same computer. The claim is a **lease**: it ends by itself (30 minutes by default),
 so a crashed agent never holds a task forever. `tasks release` gives it back early, and the owner
 may release any claim; closing a task releases it. `tasks agenda` shows each task's holder and hides
-tasks claimed by someone else unless `--claimed` asks for them. MCP has `tasks_claim` and
+tasks claimed by someone else unless the query asks for them with `claimed:any`. MCP has `tasks_claim` and
 `tasks_release`.
 
 **The holder** is one agent session, so two sessions of one agent do not share a claim. The first
@@ -108,7 +108,7 @@ The default list is `money`, `documents`, `meeting`, `delivery`, `access`, `pers
 `tasks add` needs a category from the list (MCP `tasks_add` needs `category`), and an unknown name is
 refused with the list. A rule matches the source message's stems against each category's words: the
 most hits wins, and no hit is `other`. `tasks categories` (MCP `tasks_categories`) prints the list
-with meanings and words. `tasks agenda --category <name> --tag <name>` filters the agenda. Changing the
+with meanings and words. `tasks agenda category:<name> tag:<name>` filters the agenda with query fields (MCP `tasks_agenda` takes them in `query`). Changing the
 list does not change the category of existing tasks.
 
 ## Rules on sync
@@ -124,7 +124,7 @@ a failed sync. Nothing is attached on its own beyond a certain match (step 2 bel
 The check runs on every new task. It runs in cli-core, on SQLite, with no embeddings and no call to
 an AI provider. **Not built yet:** the check on a new message linked to an existing task. The
 comparison reads only a task's title, description and source message, so a linked message changes no
-score until the comparison reads linked messages too. `tasks similar <task>` (MCP `tasks_similar`)
+score until the comparison reads linked messages too. `tasks related <task>` (MCP `tasks_related`)
 runs steps 3 to 5 for one stored task and prints the result; it changes nothing.
 
 ```mermaid How a new task is checked for duplicates
@@ -167,7 +167,7 @@ notes.
 
 Only one match attaches with no score: the **same message** already has a task of that type. Nothing
 new is created, and the answer shows that task (`created: false`). A rule also opens no task for a
-message that is linked to a task as `evidence`, which is what `--attach` and `tasks merge` write.
+message that is linked to a task as `evidence`, which is what `--into` and `tasks merge` write.
 
 A reply and the same title were certain matches in the first draft. On the test set they were wrong
 6 times in 11: a reply that adds a new request, another person's "+1", the same title for a
@@ -257,7 +257,7 @@ across languages are weak (2 of 5 scored "different"). There is no measurement o
 | --- | --- | --- |
 | Certain (step 2) | nothing new; the answer shows that task (`created: false`) | nothing new |
 | Likely | listed first; the agent must choose | created; the pair goes to the review list |
-| Maybe | `tasks add` refuses (exit code 2, reason `task.duplicate-candidates`) and lists up to 5 candidates with score and reasons; the agent repeats with `--attach <task>` or `--new` | created; the pair goes to the review list |
+| Maybe | `tasks add` refuses (exit code 2, reason `task.duplicate-candidates`) and lists up to 5 candidates with score and reasons; the agent repeats with `--into <task>` or `--new` | created; the pair goes to the review list |
 | Different | created | created |
 
 The tool refuses instead of warning: an agent can skip a warning, but not an exit code. Asking the
@@ -274,17 +274,17 @@ the pairs that agent marks unsure. The agent's merges can be undone like any oth
 "likely" or "maybe", newest first, with score, band, levels and reasons. `tasks merge <dup> --into
 <task>` links every message of the duplicate to the kept task, closes the duplicate as `dismissed`
 with a `duplicate-of` relation, and records the decision. `tasks duplicates reject <dup> <task>`
-records "not the same", so the pair does not come back. `tasks duplicates unsure <dup> <task>` leaves
-the pair to the owner, and `tasks duplicates --unsure` lists those pairs. MCP has the same tools:
+records "not the same", so the pair does not come back. `tasks duplicates defer <dup> <task>` leaves
+the pair to the owner, stored as `unsure`, and `tasks duplicates decision:unsure` lists those pairs. MCP has the same tools:
 `tasks_duplicates`, `tasks_merge`, `tasks_unmerge`, `tasks_duplicates_reject` and
-`tasks_duplicates_unsure`.
+`tasks_duplicates_defer`.
 
 **A merge can be undone.** `tasks unmerge <dup>` reopens the duplicate and removes the relation. Links
 stay where they are until they are moved. A merge never deletes anything.
 
 ### 7. Learn from answers
 
-**Now.** Every merge, rejection, `--attach` and `--new` after a candidate list is kept as a labelled
+**Now.** Every merge, rejection, `--into` and `--new` after a candidate list is kept as a labelled
 pair in `task_pairs`.
 
 **Not built yet.** With enough pairs, `m` and `u` for each level are counted again from them, the
@@ -319,7 +319,7 @@ the review list. Nothing merges on the score: the agent that reviews after the s
 and runs `tasks merge REQ-23 --into REQ-22`. If it could not tell, it would mark the pair unsure for
 you. If an agent had added the task, `tasks add` would
 refuse, show REQ-22 first with 15 points and
-"same person, same amount, 3 of 4 stems shared", and the agent would repeat with `--attach REQ-22`.
+"same person, same amount, 3 of 4 stems shared", and the agent would repeat with `--into REQ-22`.
 REQ-19 shares the person and the words "send invoice", but the amount and the age pull it down: it
 is another job.
 
