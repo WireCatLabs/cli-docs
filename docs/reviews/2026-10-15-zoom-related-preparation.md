@@ -38,10 +38,16 @@ refresh an index or call a model. Stored fact evidence is not revalidated.
 
 - [x] Verify immutable native release, matching registry/validated bytes and dependency identities.
 - [x] Pin that release, sync source pages and review every changed translation before accepting hashes.
-- [ ] Refresh exact command contracts; strict examples/reference/task validation passes.
-- [ ] Record roadmap fingerprint and review; localization and release-note gates pass.
-- [ ] Build/export/link checks and relevant browser checks pass.
+- [x] Refresh exact command contracts; strict examples/reference/task validation passes.
+- [x] Record roadmap fingerprint and review; localization and release-note gates pass.
+- [x] Build/export/link checks and relevant browser checks pass.
 - [ ] Merge green PR, await deployment and verify EN/RU/ES live HTML and Markdown twins.
 
+Local evidence: 305 unit tests and all36 Zoom browser checks pass. Production export, types, asset
+limits, links, SEO, release notes and strict quality checks pass. The corpus has1289 reference
+entries, zero gaps and invalid examples,141 illustrations requiring manual review and17 task
+mappings; this does not claim every illustration was executed. Two pre-existing security lint
+warnings remain outside these changes. Incoming reviewed MAX/TG/Drive updates were preserved.
+
 Runtime checks use isolated synthetic state. No owner database, login, keyring or live Zoom call is
-required or used. Native proof is complete; site build/deployment proof remains pending.
+required or used. Native and local site proof are complete; deployment/live proof remains pending.
