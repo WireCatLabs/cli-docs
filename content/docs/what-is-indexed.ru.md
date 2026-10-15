@@ -121,10 +121,12 @@ tg personal search conversations "photos from the trip" --chat "Book club"
 
 Вы помните, как выглядит картинка. Это выключено, пока вы не включите, и включается для одного профиля. Функция есть в последних релизах `tg` и `max`; проверьте свою версию командой `images --help`. По порядку:
 
-1. `config set picture_search true`
-2. `images models download clip-b32`
-3. `images embed --chat "Book club" --limit 100`
-4. Ищите словами, например `search messages "dog on a beach"`
+```sh
+config set picture_search true
+images models download clip-b32
+images embed --chat "Book club" --limit 100
+search messages "dog on a beach"
+```
 
 Перед каждой командой ставьте имя инструмента и имя профиля, как в примерах выше.
 

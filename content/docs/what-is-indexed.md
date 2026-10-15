@@ -121,10 +121,12 @@ A photo with no caption and no message near it gets no piece. To find it, use on
 
 You remember what the picture looks like. This is off until you turn it on, for one profile at a time. It is in the latest releases of `tg` and `max`; run `images --help` to check yours. In order:
 
-1. `config set picture_search true`
-2. `images models download clip-b32`
-3. `images embed --chat "Book club" --limit 100`
-4. Search with words, for example `search messages "dog on a beach"`
+```sh
+config set picture_search true
+images models download clip-b32
+images embed --chat "Book club" --limit 100
+search messages "dog on a beach"
+```
 
 Put the tool name and your profile name in front of each command, as in the examples above.
 
