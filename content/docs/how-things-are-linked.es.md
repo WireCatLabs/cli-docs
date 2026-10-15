@@ -68,6 +68,10 @@ Cada mensaje puede apuntar al mensaje anterior al que responde. Cada puntero dic
 - La transcripción de una nota de voz pertenece al mensaje, así que `transcript:` encuentra ese mensaje.
 - Una imagen se encuentra por el chat que la rodea o por lo que muestra. Ambas vías se explican en [Qué se indexa](./what-is-indexed.md#imágenes).
 
+## Transcripciones de reuniones
+
+Un fragmento de transcripción tiene una referencia `meeting:` que conserva su reunión y revisión. Úsala para leer el contexto y conservar la cobertura. Un participante puede vincularse explícitamente a una persona y una reunión puede pertenecer a un proyecto confirmado; coincidir en el nombre no crea esos vínculos. Vincular un participante no demuestra quién pronunció un fragmento. [Evidencia y vínculos de reuniones](./zoom.mdx) explica cómo comprobar esas asociaciones antes de guardar un hallazgo con fuentes.
+
 ## Menciones
 
 Una mención es un teléfono, una dirección de correo, un enlace, un enlace a un documento de Google o el nombre de una persona que conoces, encontrados con reglas en el texto de mensajes, archivos y transcripciones. Cada mención empieza como `found`. Después la confirmas (`linked`) o la rechazas (`dismissed`).

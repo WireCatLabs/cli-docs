@@ -68,6 +68,10 @@ Every message can point at the earlier message it answers. Each pointer says whe
 - A voice note's transcript belongs to the message, so `transcript:` finds that message.
 - A picture is found through the chat around it or through what it shows. Both are explained in [What gets indexed](./what-is-indexed.md#pictures).
 
+## Meeting transcripts
+
+A transcript cue has a `meeting:` reference that retains its meeting and transcript revision. Use it to read the surrounding passage and keep its coverage. A participant can be explicitly linked to a person, and a meeting can have confirmed project membership; a name match alone creates neither link. A participant link does not establish who spoke a cue. [Meeting evidence and links](./zoom.mdx) explains how to inspect these associations before saving a sourced finding.
+
 ## Mentions
 
 A mention is a phone number, an email address, a link, a Google document link, or the name of a person you know, found by rules in message text, file text and transcripts. Each mention starts as `found`. You then confirm it (`linked`) or reject it (`dismissed`).
