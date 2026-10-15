@@ -1894,31 +1894,6 @@
     }
   },
   {
-    "tool": "memo",
-    "slug": "usage",
-    "reason": "Core hit entities moved task links to next in Memo 0.33.0. The old nested tasks.id projection example names a removed field; retain a valid compact hit selector.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Dotted paths traverse nested objects and arrays, for example\n`--json=ref,excerpt,tasks.id` for `memo search all`.",
-          "after": "Dotted paths traverse nested objects and arrays. Use\n`--json=ref,excerpt` for compact `memo search all` hits."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Путь через точку проходит по вложенным объектам и массивам, например `--json=ref,excerpt,tasks.id` для `memo search all`.",
-          "after": "Путь через точку проходит по вложенным объектам и массивам. Для компактных результатов `memo search all` используйте `--json=ref,excerpt`."
-        }
-      ],
-      "es": [
-        {
-          "before": "Las rutas con puntos recorren objetos y arrays anidados: `--json=ref,excerpt,tasks.id` para `memo search all`.",
-          "after": "Las rutas con puntos recorren objetos y arrays anidados. Usa `--json=ref,excerpt` para resultados compactos de `memo search all`."
-        }
-      ]
-    }
-  },
-  {
     "tool": "max",
     "slug": "search",
     "reason": "Memo 0.41.0 has no top-level import; notes come in through memo sync --only notes. MAX 0.54.0 still names memo import. MAX 0.54.0 has no search mail subcommand (it answers with a Memo hint), so the prose names it without a runnable invocation.",
@@ -2032,24 +2007,24 @@
   {
     "tool": "memo",
     "slug": "mail",
-    "reason": "Memo 0.41.0 mail/import.ts skips a complete mbox checkpoint when size and mtime match; incomplete runs and --rescan scan again. Correct the stale each-run claim.",
+    "reason": "Memo 0.45.0 adds protect and tags in the following section; the earlier three-actions sentence otherwise falsely excludes the released fourth action. Exact released mail rules add help lists skip, envelope, keep and protect.",
     "replacements": {
       "en": [
         {
-          "before": "The file is only read when you name the account, and each run reads all of it.",
-          "after": "The file is only read when you name the account. Incomplete imports scan it again; a completed snapshot is skipped until its size or modification time changes. `--rescan` forces another scan."
+          "before": "A rule's `--do` is one of three actions:",
+          "after": "The basic `--do` actions are listed below; protection and tags follow in the next section:"
         }
       ],
       "ru": [
         {
-          "before": "Файл читается, только если указать этот аккаунт; каждый запуск читает его целиком.",
-          "after": "Файл читается, только если указать этот аккаунт. Незавершённый импорт сканирует его снова; завершённый снимок пропускается, пока не изменятся размер или время изменения файла. `--rescan` запускает новое сканирование."
+          "before": "`--do` правила задаёт одно из трёх действий:",
+          "after": "Основные действия `--do` перечислены ниже; защита и теги описаны в следующем разделе:"
         }
       ],
       "es": [
         {
-          "before": "El archivo solo se lee al nombrar esa cuenta; cada ejecución lo lee entero.",
-          "after": "El archivo solo se lee al nombrar esa cuenta. Una importación incompleta lo vuelve a recorrer; un archivo completado se omite hasta que cambie su tamaño o fecha de modificación. `--rescan` fuerza otro recorrido."
+          "before": "El `--do` de una regla elige una de tres acciones:",
+          "after": "Las acciones básicas de `--do` se muestran abajo; la protección y las etiquetas se explican en la siguiente sección:"
         }
       ]
     }

@@ -157,6 +157,56 @@ Con `zm serve --mcp --meeting-context`, `meeting_passage` ofrece la misma lectur
 o `markdown`). El servidor fija la cuenta. Pide al agente que cite el contexto antes de sugerir
 un hecho o una tarea de seguimiento.
 
+## Leer varias consultas o pasajes juntos
+
+Al comprobar varios nombres o citas, el agente puede agrupar las lecturas y conservar por separado
+cada respuesta y su continuación. Usa el perfil elegido y las reuniones guardadas, con una sola pasada
+limitada de indexación antes de buscar palabras. No consulta Zoom ni ejecuta un modelo.
+
+Guarda un JSON como `requests.json`, sustituyendo la referencia ficticia por una línea de tus resultados:
+
+```json
+{
+  "requests": [
+    {"id": "name", "command": ["search", "meetings"], "args": ["Research Example", "--limit", "10"]},
+    {"id": "alias", "command": ["search", "meetings"], "args": ["RES", "--limit", "10"]},
+    {"id": "passage", "command": ["meetings", "passage"], "args": ["meeting:3/15/20/4", "--before-n", "2"]}
+  ]
+}
+```
+
+```sh
+zm batch requests.json --json
+zm batch requests.json --format markdown
+cat requests.json | zm batch - --jsonl
+```
+
+Cada resultado conserva `id`, `command`, `status` y `complete`. Si tiene éxito, la respuesta habitual está
+en `answer`; si falla, lleva `error`. Las consultas repetidas y los pasajes solapados siguen separados.
+Para continuar, pasa el cursor de búsqueda o la huella esperada del pasaje en los `args` de esa petición.
+Solo admite `search meetings` por palabras y `meetings passage`; las opciones de modelo, perfil y escritura
+no pueden anidarse en el lote.
+
+Admite hasta 32 peticiones y 256 KiB de entrada UTF-8. El presupuesto predeterminado de texto guardado
+es 64 MiB: reserva todo el límite `--max-read-bytes` de cada petición y 4 MiB una vez para indexar, sin
+devolver bytes no usados. Son límites conservadores, no medidas de entrada/salida de la base. Reduce
+los límites de cada petición o divide el lote. El `--max-read-bytes` del lote puede reducir el total.
+La salida se limita a 4 MiB y el `--max-output-bytes` global puede reducirlo; si no cabe ni la estructura
+de resultados, falla antes de leer el almacén.
+
+Comprueba cada estado y el `meta.complete` exterior: un rechazo por presupuesto es `not_run`; una petición
+ejecutada cuya respuesta excede el límite de salida es `error`, y las siguientes quedan como `not_run`.
+Los resultados parciales terminan con código cero y conservan todos los ID. Una entrada incorrecta sale
+con código 2 antes de abrir el almacén. JSONL emite un elemento por petición y un registro final con
+completitud y problemas. La cancelación y los fallos de salida final hacen fallar toda la invocación
+sin imprimir stdout parcial.
+
+Para JSON compacto, `--json=ref,excerpt,source.title,source.started_at,source.url` selecciona campos dentro
+de cada respuesta y conserva ID, errores y cobertura. Los pasajes usan campos de líneas como
+`items.ref,items.start_ms,items.speaker_name,items.text`. Texto y Markdown incluyen tiempos, hablantes
+y referencias, con cobertura una vez por resultado. Revisa los datos ausentes y la continuación antes
+de conservar una conclusión.
+
 ## Contexto de una persona
 
 Usa identidades vinculadas y presencia en la cuenta, sin identificar por nombres de hablantes.

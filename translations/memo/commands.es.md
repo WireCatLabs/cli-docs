@@ -278,11 +278,11 @@ memo mail status <account> [options]
 
 ### `memo mail rules`
 
-the owner's decisions on which mail to skip or keep, by sender, domain or list
+the owner's decisions on which mail to keep, record, skip, tag or protect
 
 #### `memo mail rules list`
 
-one account's rules
+one account's rules, protected ones first
 
 ```sh
 memo mail rules list <account> [options]
@@ -294,11 +294,12 @@ memo mail rules list <account> [options]
 
 | Option | What it does |
 |---|---|
+| `--filter <query>` | is:protected lists only the rules no cleanup may override. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
 #### `memo mail rules add`
 
-skip, record or keep mail by sender, domain or list; a repeat replaces its rule
+decide mail by sender, list, subject, age, size, label or kind; repeats replace
 
 This command changes the local store or your files.
 
@@ -315,13 +316,15 @@ memo mail rules add <account> [options]
 | `--sender <address>` | one sender address. |
 | `--domain <domain>` | a sender domain, and its subdomains. |
 | `--list-id <id>` | a mailing list, by its List-Id. |
-| `--do <actions>` | one of skip (never read or store this mail), envelope (store only sender, date, size and labels: counted, out of search, cleanable later), keep (import it even when a skip or envelope rule matches). |
+| `--filter <query>` | from:<address, domain or word>, to:<address>, subject:<word> (or a bare word), older:<n>d, larger:<size> (5MB, 300KB), has:attachment, label:<name> (label:"Two words"), is:unread, is:bulk, score:<n> (at least); all must hold. |
+| `--kind <kind>` | a built-in kind of mail: social, newsletters, developer, shopping, alerts. |
+| `--do <actions>` | one of skip (never read or store), envelope (store only sender, date, size and labels: counted, out of search, cleanable later), keep (store in full even when a skip or envelope rule matches) or protect (keep, and no cleanup may ever cut, archive or trash it); add tag:<name> to also tag the mail, e.g. envelope,tag:promo. |
 | `--reason <text>` | why, for the owner later. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
 #### `memo mail rules remove`
 
-drop the rule for a sender, domain or list
+drop the rule with exactly these conditions
 
 This command changes the local store or your files.
 
@@ -336,8 +339,30 @@ memo mail rules remove <account> [options]
 | Option | What it does |
 |---|---|
 | `--sender <address>` | one sender address. |
-| `--domain <domain>` | a sender domain. |
+| `--domain <domain>` | a sender domain, and its subdomains. |
 | `--list-id <id>` | a mailing list, by its List-Id. |
+| `--filter <query>` | from:<address, domain or word>, to:<address>, subject:<word> (or a bare word), older:<n>d, larger:<size> (5MB, 300KB), has:attachment, label:<name> (label:"Two words"), is:unread, is:bulk, score:<n> (at least); all must hold. |
+| `--kind <kind>` | a built-in kind of mail: social, newsletters, developer, shopping, alerts. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+#### `memo mail rules import-filters`
+
+propose rules from a Takeout export's Gmail filters; --yes adds them
+
+This command changes the local store or your files.
+
+```sh
+memo mail rules import-filters <account> <file> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `account` | required | the account's name in mail.accounts, or its address. |
+| `file` | required | Takeout's Mail/User settings/Filters.json. |
+
+| Option | What it does |
+|---|---|
+| `--yes` | add the proposed rules; without it, only show them. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
 #### `memo mail rules apply`
@@ -1724,7 +1749,7 @@ memo search mail <query> [options]
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 | `--brief` | each message or email as reference, time, sender and excerpt only. |
 | `--full` | each message or email with its whole text; --json keeps the excerpt, messages show the text. |
-| `--account <account>` | only this mail account, by its address (default: every mail account). |
+| `--account <account>` | only this mail account, by its name in mail.accounts or its address (default: every mail account). |
 
 ### `memo search notes`
 
