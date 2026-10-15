@@ -29,11 +29,14 @@
     "repo": "WireCatLabs/drive-cli",
     "package": "@wirecat/drive-cli",
     "lang": "en",
-    "docsRef": "v0.11.1",
+    "docsRef": "v0.13.0",
     "summary": {
       "en": "Import selected Google folders, search documents locally and keep tags, notes and source-backed memories.",
       "ru": "Импортируйте выбранные папки Google, ищите документы локально и сохраняйте теги, заметки и записи памяти с источниками.",
       "es": "Importa carpetas de Google, busca documentos localmente y conserva etiquetas, notas y recuerdos con fuentes."
+    },
+    "guideRefs": {
+      "recipes": "bed538f045694e4a02fbbb0fe5e8a415d424c143"
     }
   },
   {
