@@ -12,9 +12,9 @@
     "conclusion": "Reviewed 0.52.0: syncs resume where they stopped; watch survives a failing handler; files and videos upload from disk without the 2 GiB refusal; picture search (images embed, images models) behind picture_search; store export --format jsonl writes the printed records; watch --jsonl and --events in snake_case; voice messages without text named in missing; local-only next steps are never auto-run; mentions rebuild takes its kind as an argument and names of known people are found (cli-core 0.276.0); doctor, session start and end answer in the envelope; bot chats members list --cursor replaces --marker. Roadmap unchanged: an optional no-local-copy mode, actions on events, video circles, cloud password and standalone installers remain planned; none of them shipped."
   },
   "zm": {
-    "version": "v0.14.0",
-    "roadmapSha256": "e021a1c311c9a27d3ce79cabb819393f0aee396cedf8a00ce17d4da6246e0d6e",
+    "version": "v0.17.0",
+    "roadmapSha256": "f8f934c8be998a19d2ee62f91690a8d96d5cc83028ae5cee093015fea4cc3190",
     "reviewedAt": "2026-10-15",
-    "conclusion": "Reviewed 0.14.0: cited selected-series preparation and optional strict meeting_prepare are delivered. The upcoming SDK, archive dead-process takeover/verified-file cache, separate search recordings, JSON projection, snake_case settings with legacy reads, required SDK/store capabilities and shared body rendering are retained. Roadmap now describes wider series discovery, person/project/alias enrichment, reviewed idempotent findings intake and shared native archive storage as future work. Preparation does not accept findings, generate summaries, create tasks, fetch absent transcripts or establish future attendance."
+    "conclusion": "Reviewed0.15–0.17: shared nested projection/search source context, canonical snake_case settings with explicit manual renaming, startup folder behavior and output-dir/pause vocabulary are documented. Related preparation now returns cited same-account calls through current person links or confirmed global projects, with independent lookahead and exact-series output priority. Nonmeeting sources and project-name/alias candidates remain unqueried; broader discovery, reviewed idempotent findings intake and shared native archive storage remain planned. Preparation does not generate summaries, accept findings, create tasks or infer links from names."
   }
 }

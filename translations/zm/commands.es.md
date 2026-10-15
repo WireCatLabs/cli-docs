@@ -246,7 +246,7 @@ zm meetings prepare <series-id> [options]
 | `--since-time <time>` | window start as ISO timestamp with zone (default now). |
 | `--before-time <time>` | exclusive window end as ISO timestamp (default seven days after start). |
 | `--history-since-time <time>` | history start as ISO timestamp (default thirty days before start). |
-| `--meetings <n>` | prior occurrences and separate related-meeting limit, 1–20 (default 5). |
+| `--meetings <n>` | reuniones anteriores y límite independiente de reuniones relacionadas, 1–20 (predeterminado 5). |
 | `--cues <n>` | cues per occurrence, 1–100 (default 10). |
 | `--context-limit <n>` | entries per context category, 1–100 (default 20). |
 | `--max-read-bytes <bytes>` | stored/normalized bytes per read, at most 4194304 (default 262144). |
@@ -553,7 +553,7 @@ zm recordings sync [options]
 |---|---|
 | `--since-time <time>` | first day, YYYY-MM-DD. |
 | `--until-time <time>` | last day, YYYY-MM-DD; at most ten years after the first. |
-| `--output-dir <dir>` | explicit archive directory. |
+| `--output-dir <dir>` | directorio de archivo explícito. |
 | `--max-bytes <bytes>` | maximum bytes per recording file. |
 | `--resume` | resume verified partial downloads and archive progress; requires a local profile. |
 | `--no-resume` | disable persistent resume state for this invocation. |
@@ -590,7 +590,7 @@ zm recordings download <meeting> [options]
 
 | Option | What it does |
 |---|---|
-| `--output-dir <dir>` | explicit archive directory. |
+| `--output-dir <dir>` | directorio de archivo explícito. |
 | `--file-ids <ids>` | comma-separated recording file ids. |
 | `--max-bytes <bytes>` | per-file download byte limit (default 20 GiB). |
 | `--resume` | resume verified partial downloads and archive progress; requires a local profile. |
@@ -711,9 +711,9 @@ zm recordings schedule create [options]
 | Option | What it does |
 |---|---|
 | `--name <name>` | local job name. |
-| `--output-dir <dir>` | absolute archive directory. |
+| `--output-dir <dir>` | directorio de archivo absoluto. |
 | `--since-time <time>` | first day to archive, YYYY-MM-DD. |
-| `--at <hh:mm>` | daily time. |
+| `--at <hh:mm>` | hora diaria. |
 | `--timezone <zone>` | IANA timezone for the timer. |
 | `--lookback-days <days>` | revisit the latest zero through 31 UTC days (default seven). |
 | `--max-bytes <bytes>` | maximum bytes per recording file (default 20 GiB). |
