@@ -103,7 +103,7 @@ Each message is only its time and text, so an agent can read many at once and su
 `-v` adds message IDs and links; `-vv` gives the whole message.
 
 The answer comes from saved history and does not connect to the messenger. Missing messages do not
-prove you never discussed something. With `--chat`, `--refresh` asks the messenger first: Telegram
+prove you never discussed something. With `--chat`, `--sync-first` (`--refresh` in `max`) asks the messenger first: Telegram
 searches each chat for that person's messages; MAX reads each chat's newest page, because it cannot
 search by sender. For more history, use [Telegram archive](./tg/archive.md) or
 [MAX archive](./max/archive.md).
@@ -176,7 +176,7 @@ a linked person or a specific message. Messenger contact-note commands are docum
 |---|---|---|
 | Registration date | Telegram's month after a first contact, otherwise an estimate | the exact day, when MAX supplies it |
 | Marks like scam, fake, verified, premium | shown | MAX does not send them for personal accounts |
-| `--refresh` | searches each chat for the person's messages | reads each chat's newest page |
+| `--sync-first` (`max`: `--refresh`) | searches each chat for the person's messages | reads each chat's newest page |
 | Public spam lists | asked, unless `--no-registries` | not asked |
 | Extra requests for a profile | none beyond those of `contacts show` | one per person |
 

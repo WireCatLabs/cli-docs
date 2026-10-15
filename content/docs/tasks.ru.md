@@ -96,7 +96,8 @@ tg personal tasks close <task> --as done --reason "contract sent"
 tg personal tasks close <task> --as dismissed --reason no-reply-needed
 ```
 
-`<task>` — ключ задачи, как его печатает `tasks agenda`, или её полный id. В `max` те же команды.
+`<task>` — ключ задачи, как его печатает `tasks agenda`, или её полный id. В `max` те же команды; некоторые новые имена ниже (`tasks related`,
+`duplicates defer`, `--into`, `--lease` и поля запроса в плане) в `max` пока называются по-старому.
 
 </details>
 
@@ -145,7 +146,7 @@ tg personal tasks close <task> --as dismissed --reason no-reply-needed
   Новая задача не создаётся, а в ответе показана та задача.
 - **Не уверен:** инструмент не гадает. Если задачу добавляет агент, `tasks add` отказывает и
   показывает до пяти похожих задач с причинами («тот же человек, та же сумма»). Агент повторяет
-  команду с `--attach <task>`, чтобы привязать сообщение к одной из них, или с `--new`, чтобы создать
+  команду с `--into <task>`, чтобы привязать сообщение к одной из них, или с `--new`, чтобы создать
   новую задачу. Если задачу нашло правило, задача создаётся, а похожие пары попадают в список на
   проверку.
 - **Явно другая:** создаётся новая задача.
@@ -158,23 +159,23 @@ tg personal tasks close <task> --as dismissed --reason no-reply-needed
 
 **Кто решает.** Список на проверку разбирает агент, который просматривает ваши чаты после
 синхронизации. Он объединяет пары об одном деле и отклоняет пары о разных. Если он не может решить,
-он отмечает пару как неясную. Вы видите только неясные пары: `tasks duplicates --unsure`.
+он отмечает пару как неясную. Вы видите только неясные пары: `tasks duplicates decision:unsure`.
 
 Объединение привязывает все сообщения дубликата к оставшейся задаче и закрывает дубликат как
 `dismissed` с отношением `duplicate-of`. **Объединение можно отменить**, и ничего не удаляется.
 Отклонённая пара больше не возвращается.
 
 ```text
-tasks similar REQ-23
+tasks related REQ-23
 tasks duplicates
 tasks merge REQ-23 --into REQ-22
 tasks duplicates reject REQ-23 REQ-22
-tasks duplicates unsure REQ-23 REQ-22
-tasks duplicates --unsure
+tasks duplicates defer REQ-23 REQ-22
+tasks duplicates decision:unsure
 tasks unmerge REQ-23
 ```
 
-`tasks similar` показывает задачи, которые могут быть тем же делом, что и данная, — лучшие первыми,
+`tasks related` показывает задачи, которые могут быть тем же делом, что и данная, — лучшие первыми,
 каждую с полосой (`likely`, `maybe` или `different`) и причинами. Команда ничего не меняет.
 
 ## Категории, теги и ключи
@@ -197,7 +198,7 @@ tasks unmerge REQ-23
 ```text
 tasks add msg:telegram/1/77/42 --type request --category money
 tasks categories
-tasks agenda --category money --tag urgent
+tasks agenda category:money tag:urgent
 tasks list category:money
 config set task_categories.travel "trips and tickets | flight, hotel, es:vuelo"
 config unset task_categories.travel
@@ -212,7 +213,7 @@ config show
 Когда одновременно работают два агента или агент и вы, один из них сначала бронирует задачу. Бронь
 заканчивается сама через 30 минут, поэтому остановившийся агент не держит задачу вечно. Повторная
 бронь продлевает вашу. Закрытие задачи снимает бронь. План задач показывает, кто держит каждую
-задачу, и скрывает задачи, которые забронировал кто-то другой; `tasks agenda --claimed` показывает и
+задачу, и скрывает задачи, которые забронировал кто-то другой; `tasks agenda claimed:any` показывает и
 их. Вы, владелец, можете снять любую бронь.
 
 Держатель брони — одна сессия агента. Инструмент берёт первое, что задано:
@@ -226,19 +227,19 @@ config show
 Агент без переменной сессии, например веб-агент, передаёт id своего чата через `--holder`.
 
 ```text
-tasks claim REQ-22 --for 30m
+tasks claim REQ-22 --lease 30m
 tasks release REQ-22
-tasks agenda --claimed
+tasks agenda claimed:any
 ```
 
 У агентов, которые работают через MCP-сервер, есть те же инструменты, например `tasks_claim`,
-`tasks_release`, `tasks_categories`, `tasks_similar`, `tasks_duplicates`, `tasks_merge` и `tasks_unmerge`.
+`tasks_release`, `tasks_categories`, `tasks_related`, `tasks_duplicates`, `tasks_merge` и `tasks_unmerge`.
 
 ## Ещё не сделано
 
 - **Проверка, когда сообщение привязывают к существующей задаче.** Проверка читает только название,
   описание и исходное сообщение задачи. Сначала она должна научиться читать и привязанные сообщения.
-- **Настройка весов по вашим ответам.** Каждое объединение, отказ, `--attach` и `--new` сохраняются,
+- **Настройка весов по вашим ответам.** Каждое объединение, отказ, `--into` и `--new` сохраняются,
   но пока ничто не меняет по ним веса.
 
 ## Связанные страницы

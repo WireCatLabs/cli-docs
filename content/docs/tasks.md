@@ -97,7 +97,8 @@ tg personal tasks close <task> --as dismissed --reason no-reply-needed
 ```
 
 `<task>` is the task's key, as `tasks agenda` prints it, or its full id. `max` has the
-same commands.
+same commands; some newer names below (`tasks related`, `duplicates defer`, `--into`, `--lease` and the
+agenda's query fields) still have their earlier names in `max`.
 
 </details>
 
@@ -145,7 +146,7 @@ new task before it creates it:
   is made, and the answer shows that task.
 - **Not sure:** the tool does not guess. When your agent adds the task, `tasks add` refuses and lists
   up to five similar tasks with the reasons ("same person, same amount"). The agent repeats the
-  command with `--attach <task>` to link the message to one of them, or with `--new` to make a new
+  command with `--into <task>` to link the message to one of them, or with `--new` to make a new
   task. When a rule finds the task, the task is made and the similar pairs go to a review list.
 - **Clearly different:** a new task is made.
 
@@ -156,23 +157,23 @@ and a gift for dad with the same amount, differ in one word's meaning, so an age
 
 **Who decides.** The agent that reviews your chats after a sync goes through the review list. It
 merges the pairs that are one job and rejects the pairs that are not. When it cannot tell, it marks
-the pair unsure. You see only the unsure pairs, with `tasks duplicates --unsure`.
+the pair unsure. You see only the unsure pairs, with `tasks duplicates decision:unsure`.
 
 A merge links every message of the duplicate to the kept task and closes the duplicate as
 `dismissed`, with a `duplicate-of` relation. **A merge can be undone**, and nothing is deleted. A
 rejected pair does not come back.
 
 ```text
-tasks similar REQ-23
+tasks related REQ-23
 tasks duplicates
 tasks merge REQ-23 --into REQ-22
 tasks duplicates reject REQ-23 REQ-22
-tasks duplicates unsure REQ-23 REQ-22
-tasks duplicates --unsure
+tasks duplicates defer REQ-23 REQ-22
+tasks duplicates decision:unsure
 tasks unmerge REQ-23
 ```
 
-`tasks similar` shows the tasks that may be the same job as one task, best first, each with a band
+`tasks related` shows the tasks that may be the same job as one task, best first, each with a band
 (`likely`, `maybe` or `different`) and the reasons. It changes nothing.
 
 ## Categories, tags and keys
@@ -195,7 +196,7 @@ tasks unmerge REQ-23
 ```text
 tasks add msg:telegram/1/77/42 --type request --category money
 tasks categories
-tasks agenda --category money --tag urgent
+tasks agenda category:money tag:urgent
 tasks list category:money
 config set task_categories.travel "trips and tickets | flight, hotel, es:vuelo"
 config unset task_categories.travel
@@ -210,7 +211,7 @@ The `config` commands change the store, not one profile: the list is the same in
 When two agents, or an agent and you, work at the same time, one of them claims a task first. The
 claim ends by itself after 30 minutes, so a stopped agent never blocks a task. Claiming again extends
 your own claim. Closing a task ends its claim. The agenda shows who holds each task and hides tasks
-that someone else claimed; `tasks agenda --claimed` shows them too. You, the owner, can release any
+that someone else claimed; `tasks agenda claimed:any` shows them too. You, the owner, can release any
 claim.
 
 The holder is one agent session. The tool takes the first of these that is set:
@@ -224,19 +225,19 @@ The holder is one agent session. The tool takes the first of these that is set:
 An agent with no session variable, such as a web agent, passes its chat id with `--holder`.
 
 ```text
-tasks claim REQ-22 --for 30m
+tasks claim REQ-22 --lease 30m
 tasks release REQ-22
-tasks agenda --claimed
+tasks agenda claimed:any
 ```
 
 Agents that use the MCP server have the same tools, such as `tasks_claim`, `tasks_release`,
-`tasks_categories`, `tasks_similar`, `tasks_duplicates`, `tasks_merge` and `tasks_unmerge`.
+`tasks_categories`, `tasks_related`, `tasks_duplicates`, `tasks_merge` and `tasks_unmerge`.
 
 ## Not built yet
 
 - **A check when a message is linked to an existing task.** The check reads only a task's title,
   description and source message. It must first learn to read the linked messages too.
-- **Tuning the weights from your answers.** Every merge, rejection, `--attach` and `--new` is kept,
+- **Tuning the weights from your answers.** Every merge, rejection, `--into` and `--new` is kept,
   but nothing uses them yet to change the weights.
 
 ## Related pages

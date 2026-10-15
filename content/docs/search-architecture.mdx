@@ -163,7 +163,7 @@ A [synthetic benchmark](https://github.com/WireCatLabs/cli-messaging/blob/v0.148
 
 The two ranked lists are combined by reciprocal rank fusion: each list adds `1 / (60 + rank)` to a conversation, ranks starting at one. A result reports `by: ["meaning"]`, `["words"]` or both. Its `score` is the best piece's cosine similarity, not the fusion score and not a probability that it answers the question; a result found only by words has `score: null`. Its `summary` is metadata — identifiers, dates, message and sender counts — not generated prose.
 
-`--filter 'from:me date:7d'` limits conversations before ranking: a single message in the conversation must match the whole strict query. `--source personal|bots|all|<provider>` widens the scope beyond the active account. Neither can accompany `--refresh`.
+`--filter 'from:me date:7d'` limits conversations before ranking: a single message in the conversation must match the whole strict query. `--source personal|bots|all|<provider>` widens the scope beyond the active account. Neither can accompany `--catch-up` (`--refresh` in `max`).
 
 With no local model downloaded, search answers by words alone and reports `"meaning": "unavailable"`; it never downloads a model or switches to a remote one. A chat embedded only with another model is left out of the meaning branch and named in `embeddedOnlyElsewhere`. A chat that was never built returns nothing here.
 
@@ -182,7 +182,7 @@ max personal conversations related "Project team" 4521 --json
 
 - **Edits.** A result whose piece changed after it was embedded is marked `stale: true`; its score is for the old text until the next build and embedding.
 - **Deletions.** A deleted message keeps its row, so a later sync cannot bring it back, but loses its text: in the row, the search copy, the edit history, transcripts and every vector of a piece that held it, unless a current piece without a deleted message still uses the same text.
-- **Catch-up.** `conversations build` and `embed` without `--chat`, and `search conversations --refresh`, build and embed on this machine the chats that changed or were never built: at most 20 chats and 2,000 pieces a run by default (`--max-chats`, `--max-chunks`). They never download a model; a remote model is only ever used per chat, with the owner's yes. MCP offers the same catch-up as the `conversations refresh` write command.
+- **Catch-up.** `conversations build` and `embed` without `--chat`, and `search conversations --catch-up` (`--refresh` in `max`), build and embed on this machine the chats that changed or were never built: at most 20 chats and 2,000 pieces a run by default (`--max-chats`, `--max-chunks`). They never download a model; a remote model is only ever used per chat, with the owner's yes. MCP offers the same catch-up as the `conversations refresh` write command.
 
 ## 7. Evidence and context for an agent
 

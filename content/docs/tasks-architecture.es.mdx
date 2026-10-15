@@ -88,7 +88,7 @@ entrar a un solo escritor cada vez entre procesos, así que la reserva es atómi
 los 30 minutos por defecto), así que un agente que se cae nunca retiene una tarea para siempre.
 `tasks release` la devuelve antes, y el propietario puede liberar cualquier reserva; cerrar una tarea
 también la libera. `tasks agenda` muestra quién tiene cada tarea y oculta las tareas reservadas por
-otros salvo que `--claimed` las pida. MCP tiene `tasks_claim` y `tasks_release`.
+otros salvo que la consulta las pida con `claimed:any`. MCP tiene `tasks_claim` y `tasks_release`.
 
 **Quien reserva** es una sesión de agente, así que dos sesiones de un mismo agente no comparten una
 reserva. Gana lo primero que esté definido: `--holder <name>`, la variable `WIRECAT_HOLDER`,
@@ -114,7 +114,7 @@ La lista por defecto es `money`, `documents`, `meeting`, `delivery`, `access`, `
 desconocido se rechaza junto con la lista. Una regla compara las raíces del mensaje de origen con las
 palabras de cada categoría: gana la que tiene más coincidencias, y sin coincidencias es `other`.
 `tasks categories` (MCP `tasks_categories`) imprime la lista con significados y palabras.
-`tasks agenda --category <name> --tag <name>` filtra la agenda. Cambiar la lista no cambia la
+`tasks agenda category:<name> tag:<name>` filtra la agenda con campos de consulta (MCP `tasks_agenda` los recibe en `query`). Cambiar la lista no cambia la
 categoría de las tareas que ya existen.
 
 ## Reglas al sincronizar
@@ -132,7 +132,7 @@ La comprobación se ejecuta con cada tarea nueva. Corre en cli-core, sobre SQLit
 sin llamar a un proveedor de IA. **Aún no está hecho:** la comprobación de un mensaje nuevo vinculado
 a una tarea existente. La comparación lee solo el título, la descripción y el mensaje de origen de una
 tarea, así que un mensaje vinculado no cambia la puntuación hasta que la comparación lea también los
-mensajes vinculados. `tasks similar <task>` (MCP `tasks_similar`) hace los pasos 3 a 5 para una tarea
+mensajes vinculados. `tasks related <task>` (MCP `tasks_related`) hace los pasos 3 a 5 para una tarea
 guardada e imprime el resultado; no cambia nada.
 
 ```mermaid Cómo se comprueba si una tarea nueva es un duplicado
@@ -175,7 +175,7 @@ indexa, como con las notas.
 
 Solo una coincidencia une sin puntuar: **el mismo mensaje** ya tiene una tarea de ese tipo. No se crea
 nada nuevo, y la respuesta muestra esa tarea (`created: false`). Una regla tampoco abre ninguna tarea
-para un mensaje vinculado a una tarea como `evidence`, que es lo que escriben `--attach` y
+para un mensaje vinculado a una tarea como `evidence`, que es lo que escriben `--into` y
 `tasks merge`.
 
 En el primer borrador también eran seguras una respuesta y el mismo título. En el conjunto de pruebas
@@ -268,7 +268,7 @@ reales.
 | --- | --- | --- |
 | Segura (paso 2) | nada nuevo; la respuesta muestra esa tarea (`created: false`) | nada nuevo |
 | Probable | aparece primero; el agente debe elegir | se crea; el par va a la lista de revisión |
-| Quizá | `tasks add` se niega (código de salida 2, motivo `task.duplicate-candidates`) y lista hasta 5 candidatas con puntuación y motivos; el agente repite con `--attach <task>` o `--new` | se crea; el par va a la lista de revisión |
+| Quizá | `tasks add` se niega (código de salida 2, motivo `task.duplicate-candidates`) y lista hasta 5 candidatas con puntuación y motivos; el agente repite con `--into <task>` o `--new` | se crea; el par va a la lista de revisión |
 | Distinta | se crea | se crea |
 
 La herramienta se niega en lugar de avisar: un agente puede pasar por alto un aviso, pero no un código
@@ -287,16 +287,16 @@ regla dejó en «probable» o «quizá», los más nuevos primero, con puntuaci�
 `tasks merge <dup> --into <task>` vincula todos los mensajes del duplicado a la tarea que se queda,
 cierra el duplicado como `dismissed` con un vínculo `duplicate-of` y registra la decisión.
 `tasks duplicates reject <dup> <task>` registra «no es lo mismo», así que el par no vuelve a aparecer.
-`tasks duplicates unsure <dup> <task>` deja el par al propietario, y `tasks duplicates --unsure` lista
+`tasks duplicates defer <dup> <task>` deja el par al propietario, guardado como `unsure`, y `tasks duplicates decision:unsure` lista
 esos pares. MCP tiene las mismas herramientas: `tasks_duplicates`, `tasks_merge`, `tasks_unmerge`,
-`tasks_duplicates_reject` y `tasks_duplicates_unsure`.
+`tasks_duplicates_reject` y `tasks_duplicates_defer`.
 
 **Una fusión se puede deshacer.** `tasks unmerge <dup>` reabre el duplicado y quita el vínculo. Los
 vínculos a mensajes se quedan donde están hasta que se muevan. Una fusión nunca borra nada.
 
 ### 7. Aprender de las respuestas
 
-**Ahora.** Cada fusión, rechazo, `--attach` y `--new` tras una lista de candidatas se guarda en
+**Ahora.** Cada fusión, rechazo, `--into` y `--new` tras una lista de candidatas se guarda en
 `task_pairs` como un par etiquetado.
 
 **Aún no está hecho.** Con suficientes pares, `m` y `u` de cada nivel se vuelven a contar a partir de ellos, la misma estimación
@@ -334,7 +334,7 @@ REQ-22 en la lista de revisión. Nada se fusiona por la puntuación: el agente q
 sincronizar lee las dos tareas y ejecuta `tasks merge REQ-23 --into REQ-22`. Si no pudiera decidir,
 marcaría el par como dudoso para ti. Si la tarea la hubiera añadido un agente, `tasks add` se
 negaría, mostraría REQ-22 primero con 15 puntos y «misma persona, mismo importe, 3 de 4 raíces en
-común», y el agente repetiría con `--attach REQ-22`. REQ-19 comparte la persona y las palabras «send
+común», y el agente repetiría con `--into REQ-22`. REQ-19 comparte la persona y las palabras «send
 invoice», pero el importe y la antigüedad la hunden: es otro trabajo.
 
 ## Comparación con beads
