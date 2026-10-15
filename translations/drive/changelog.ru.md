@@ -4,6 +4,63 @@ title: "История изменений"
 
 Технические сведения о выпусках ниже сохранены на языке исходного проекта. Практические инструкции доступны в переведённых руководствах.
 
+## 0.8.1 — 2026-10-15
+
+- Maintainers can set `WIRECAT_RELEASE_WAIT_SECONDS` when using `bin/release` to wait for the
+  existing machine-wide lock; the default remains immediate refusal when busy.
+
+- The create-document recipe names the CLI response field `document_id`; Google request bodies
+  keep their provider field names.
+
+- **Nested JSON selection uses the shared projector.** Dotted paths traverse arrays and report objects; coverage, pagination and execution metadata stay available.
+- Fresh npm installs preserve generated API operation names and remote effects. Aligns Base 0.31.1
+  with Core 0.283.0, avoiding separate framework instances; installed Node/Bun smoke checks both
+  generated reads and writes before publication. Legacy camelCase settings still migrate once,
+  retaining their file mode and refusing conflicting aliases.
+- A clean install holds one copy of `@wirecat/cli-base` (0.8.0 installed two: 0.31.0 for drive, 0.28.2 for
+  cli-core); the installed-package smoke check now fails when `npm ls @wirecat/cli-base` lists more than one.
+- Security: the MCP client used by the MCP tests is `@modelcontextprotocol/client` 2.3.1; below 2.2.0 it could send
+  OAuth credentials to an authorization server chosen by the MCP server.
+
+- **Search puts a file whose title matches the query first.** A plain-words query ranks a title equal to the query,
+  then a title containing it as a phrase, then a title holding all its words, ahead of text matches; a field, `OR`,
+  `NOT`, wildcard or regular expression query keeps its order. A hit's `found_by` may now say `title`.
+
+## 0.8.0 — 2026-10-15
+
+- **Flag names follow the shared vocabulary of cli-base 0.31.0 (breaking, no aliases).** `documents export
+  --out` is now `--output`; `api call --allow-write` is now `--allow-writes`; `relationships add --evidence` is now
+  `--reason`. `files list` takes its Google Drive query as words after the command instead of `--query`. Value names
+  in help read `--max-output-bytes <bytes>`, `--parent <id>`, `--old-parent <id>`, `--person <uid>` and
+  `--supersedes <ref>`; `documents list --person` accepts a bare uid as well as `person:<uid>`.
+- A missing text or picture model now says that tg or max downloads it, with both commands, instead of naming only
+  `tg`: drive has no download command of its own.
+- Uses `@wirecat/cli-base` 0.31.0 and `@wirecat/cli-core` 0.281.0.
+
+- `status` names the supported Google Sheets and uploaded PDF, Word, Excel, CSV and TSV readers,
+  alongside Docs and Markdown/TXT, while retaining the native-export fidelity limitation.
+
+- The MCP contract snapshot reflects the positional `notes list` query, so full validation checks
+  the current tool arguments instead of the removed `--search` option.
+
+- Maintainer OAuth guidance reflects the released shared app, keeps user-owned clients optional,
+  and links the isolated Google acceptance workflow instead of duplicating source-build instructions.
+
+- **`notes list` takes its search as words after the document (breaking).** `drive personal notes list DOC_ID
+  review` replaces `--search review`, which now fails as an unknown option; the answer's `page.args` names it
+  `query`.
+- A store that fails to migrate no longer advises `tg store reset`: drive keeps its own store and has no such command.
+
+- **Cursor lists page.** `files list`, `comments list`, `permissions list`, `revisions list`, `shared-drives` and
+  `documents history` answer a list of Google's rows with `page.mode: "cursor"`, `page.next_cursor` set from
+  Google's `nextPageToken`, and a `page.next` step; before, the whole Google response came back as one item and the
+  token was never reported. An unfinished Google search is named in `missing`.
+- Every command builds its answer with cli-core's `itemOf`/`listOf` instead of drive guessing the shape, and prints
+  through `renderAnswer`. `memories search` is a list (hitting its 200-candidate cap sets `meta.truncated`).
+  `documents history` drops its `file_id`, `source` and `coverage` wrapper. `catalog list`, `catalog search` and
+  `notes list` add a `page.next` step when more remain. In a terminal, a command prints its item or items, not the
+  whole envelope, and a next-page hint goes to stderr.
+
 ## 0.7.0 — 2026-10-14
 
 - Command effects distinguish Google-only reads from cached reads. Handwritten Google reads now
