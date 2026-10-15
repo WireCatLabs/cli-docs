@@ -242,7 +242,13 @@ tg personal tasks list chat:<chat id> "(kind:question OR kind:mention)"
 Agregue lo que las reglas no pueden ver, como una promesa que hizo, o cierre una tarea que no necesita respuesta:
 
 ```sh
-tg personal tasks add msg:telegram/<you>/<chat>/<message> --type promise
+tg personal tasks add msg:telegram/<you>/<chat>/<message> --type promise --category other
+```
+
+Si la tarea puede ser el mismo trabajo que una abierta o cerrada en los últimos 14 días, `tasks add` rechaza la creación con código 2 y muestra los candidatos. Repite con `--into <task>` para vincular el mensaje con esa tarea, o con `--new` para crear otra. `tasks duplicates` muestra los pares encontrados por las reglas y `tasks merge <task> --into <other>` los une:
+
+```sh
+tg personal tasks add msg:telegram/<you>/<chat>/<message> --type promise --category other --into <task>
 ```
 
 ```sh
@@ -254,7 +260,7 @@ mensajes y chats a los que pertenece. La fecha de revisión es para ti o para tu
 recuerda nada a nadie:
 
 ```sh
-tg personal tasks plan <task> --title "Send Anna the contract" --due 2d --check 1d
+tg personal tasks plan <task> --title "Send Anna the contract" --due 2d --remind-time 1d
 ```
 
 ```sh
@@ -340,7 +346,7 @@ Un agente conectado a través de MCP actúa únicamente cuando un nivel es `allo
 
 ## Con un bot
 
-Si su bot es administrador del grupo, puede ejecutar la misma verificación: `tg <bot> bot chats moderate`. Una persona que el bot elimina no puede volver a través del enlace a menos que agregue `--no-ban`. El bot solo juzga los mensajes que vio o importó en esta computadora, y no juzga las uniones. Consulte [moderar un grupo con un bot](./bot.md#moderating-a-group-by-its-rules).
+Si su bot es administrador del grupo, puede ejecutar la misma verificación: `tg <bot> bot chats moderate`. Una persona que el bot elimina no puede volver a través del enlace a menos que agregue `--no-block`. El bot solo juzga los mensajes que vio o importó en esta computadora, y no juzga las uniones. Consulte [moderar un grupo con un bot](./bot.md#moderating-a-group-by-its-rules).
 
 ## Limitaciones
 
@@ -392,13 +398,13 @@ Telegram responde solo para un chat donde te muestra estadísticas. En un grupo 
 
 ### Instantáneas de miembros y cambios
 
-`tg personal chats members fetch` lee los miembros al almacén local y registra perfiles, cambios, el recuento del día y si la lectura fue completa. `--budget` limita las páginas. Tras una lectura parcial no se registra a nadie como salido: eso exige leer toda la lista disponible y conocer un recuento del grupo no superior al número leído. Un presupuesto mayor no evita los límites de Telegram para las listas de miembros.
+`tg personal chats members fetch` lee los miembros al almacén local y registra perfiles, cambios, el recuento del día y si la lectura fue completa. `--max-pages` limita las páginas. Tras una lectura parcial no se registra a nadie como salido: eso exige leer toda la lista disponible y conocer un recuento del grupo no superior al número leído. Un presupuesto mayor no evita los límites de Telegram para las listas de miembros.
 
 `--track` añade el grupo a la lista de seguimiento. `chats tracking list` muestra todos los grupos seguidos; `show` muestra el estado de uno y los recuentos diarios de los últimos 30 días. `add` inicia el seguimiento sin descargar de inmediato; `remove` detiene las descargas diarias y conserva el historial registrado. Mientras funciona `tg personal serve`, descarga los grupos uno a uno, inicia la primera ronda un minuto después de conectarse y omite los ya descargados en el día UTC actual. El seguimiento no inicia `serve`; si estuvo detenido varios días, la siguiente ejecución registra una instantánea nueva en lugar de rellenar los días perdidos.
 
 `tg personal chats members history` muestra las entradas, salidas y cambios de perfil registrados, de más antiguo a más nuevo; una consulta como `time>=7d` limita el periodo. Nunca consulta Telegram. Una entrada usa la hora de Telegram si se conoce; si no, la primera vez que se vio a la persona. Una salida se fecha en la primera instantánea completa sin ella, no en el momento exacto de su marcha. La primera descarga registra la lista inicial: esas personas no necesariamente entraron ese día. `chats members list --offline` lee la última lista guardada completa; las lecturas parciales no la sustituyen. Sin una instantánea completa, esta lista puede estar vacía aunque ya se hayan registrado algunos perfiles y eventos. Los perfiles y el historial permanecen en el almacén local junto a los mensajes.
 
-`tg personal chats members audit` enumera miembros con señales de bot y sus motivos; `--budget` limita las páginas y una consulta como `score>=3` fija el umbral (`score>=2` si no se indica). No elimina a nadie y excluye a los administradores y al propietario. `meta.truncated` indica que no se leyeron todos los miembros. No funciona con `--offline`; las puntuaciones necesitan revisión humana. Telegram proporciona datos de bot, scam, fake, deleted, foto, entrada e invitador cuando están disponibles. «Nunca escribió» significa que no se encontraron mensajes en el historial local, no demuestra que esa persona nunca escribiera en el grupo.
+`tg personal chats members audit` enumera miembros con señales de bot y sus motivos; `--max-pages` limita las páginas y una consulta como `score>=3` fija el umbral (`score>=2` si no se indica). No elimina a nadie y excluye a los administradores y al propietario. `meta.truncated` indica que no se leyeron todos los miembros. No funciona con `--offline`; las puntuaciones necesitan revisión humana. Telegram proporciona datos de bot, scam, fake, deleted, foto, entrada e invitador cuando están disponibles. «Nunca escribió» significa que no se encontraron mensajes en el historial local, no demuestra que esa persona nunca escribiera en el grupo.
 
 `--deep <n>` comprueba también a los primeros n miembros en detalle, a uno por segundo: su perfil, su foto de perfil más antigua, hasta 1000 mensajes guardados de cada uno y dos listas públicas de spam, Combot CAS y lols.bot. Se envía el ID de cada miembro a esas listas. La comprobación completa aparece en `check` de cada miembro revisado.
 

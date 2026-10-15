@@ -71,7 +71,7 @@ hacer nada; `tg personal flood clear` la levanta antes si sabes que Telegram ya 
 ## Lecturas masivas
 
 - `messages sync`: páginas de hasta 100 mensajes, `--pause` entre páginas (1 s de forma predeterminada), 1000 mensajes por
-  ejecución salvo que `--limit` indique otra cantidad. `--estimate` calcula primero las solicitudes y no envía ninguna.
+  ejecución salvo que `--limit` indique otra cantidad. `--dry-run` calcula primero las solicitudes y no envía ninguna.
 - `messages download --all`: una solicitud por página y por archivo; las descargas de archivos también siguen el ritmo regulado.
 - `messages sync --all` obtiene la lista de chats en páginas de 100, un turno del ritmo por página.
 - `chats list --all` lee todos los chats en un solo turno: una solicitud por cada 100 chats, seguidas.

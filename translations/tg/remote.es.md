@@ -190,15 +190,15 @@ El comando lee solo un archivo adjunto guardado de la cuenta activa. Nunca desca
 
 Una respuesta lleva 512 KiB por defecto; `--chunk-bytes` permite hasta 1 MiB. Por defecto, el archivo admite hasta 50 MiB; se configura con `MESSAGING_ATTACHMENT_MAX_MIB`. El `item` del JSON incluye `base64`, `offset_bytes`, `read_bytes`, `total_bytes`, `next_offset_bytes`, `complete` y el SHA256 de todo el archivo. `complete: true` significa que esta respuesta contiene el archivo completo, no que se haya reconocido su texto.
 
-Decodifica cada parte base64, une las partes en orden de desplazamiento de bytes y sigue `next_offset_bytes` hasta que sea nulo. Pase el primer SHA256 como `--if-sha256` en las siguientes solicitudes: si el archivo fuente cambió, la solicitud falla y no devuelve bytes modificados. Verifique el archivo unido con ese hash.
+Decodifica cada parte base64, une las partes en orden de desplazamiento de bytes y sigue `next_offset_bytes` hasta que sea nulo. Pase el primer SHA256 como `--expected-fingerprint` en las siguientes solicitudes: si el archivo fuente cambió, la solicitud falla y no devuelve bytes modificados. Verifique el archivo unido con ese hash.
 
 ```sh
-tg personal attachments show msg:telegram/500/7/204 --offset-bytes 524288 --if-sha256 <sha256> --json
+tg personal attachments show msg:telegram/500/7/204 --offset-bytes 524288 --expected-fingerprint <sha256> --json
 ```
 
 ### A través de MCP
 
-Encuentre `attachments show` con las tres herramientas normales. Sus argumentos son `message` (un localizador, o un id con `chat`), `attachment`, `offset_bytes`, `chunk_bytes` y `if_sha256`. Una imagen completa PNG, JPEG o WebP, de hasta 8000 píxeles por cada lado y 20 millones de píxeles en total, llega como contenido de imagen; otros archivos llegan como recursos binarios integrados. Un recurso parcial es un conjunto de bytes, no un PDF o una imagen completos. El URI del recurso es un nombre, no una dirección de descarga.
+Encuentre `attachments show` con las tres herramientas normales. Sus argumentos son `message` (un localizador, o un id con `chat`), `attachment`, `offset_bytes`, `chunk_bytes` y `expected_fingerprint`. Una imagen completa PNG, JPEG o WebP, de hasta 8000 píxeles por cada lado y 20 millones de píxeles en total, llega como contenido de imagen; otros archivos llegan como recursos binarios integrados. Un recurso parcial es un conjunto de bytes, no un PDF o una imagen completos. El URI del recurso es un nombre, no una dirección de descarga.
 
 La aplicación debe pasar esos bytes a las herramientas de archivos del agente. Si el agente puede abrir un PDF o guardar un archivo depende de la aplicación. Si la aplicación no muestra recursos integrados, solicite `format: "base64"` y decodifique el JSON con las herramientas del agente. Los perfiles que niegan `messages` o `attachments.show` rechazan la transferencia; Los perfiles de solo lectura pueden leer archivos guardados.
 
@@ -220,7 +220,7 @@ tg personal attachments show msg:telegram/500/7/204 --attachment 1 --page 1 --js
 
 A través de MCP llamar a `tg_read`, comando `attachments show`, con `page: 1` y el localizador de mensajes. De forma predeterminada, la página vuelve como contenido de imagen. Si la aplicación solo muestra metadatos, solicite `format: base64`, luego decodifique y muestre el PNG con las herramientas de imagen del agente. Recibir una cadena base64 no equivale a ver la página. Lea las páginas 1 a `pdf.page_count`. Si ninguno de los formatos muestra los píxeles, informe el límite de la aplicación en lugar de inventar texto.
 
-`pdf.source_sha256` y `pdf.source_bytes` describen el PDF original; los `sha256` y `total_bytes` de nivel superior describen la imagen de la página. `--if-sha256` comprueba el PDF original. `--page` no se puede combinar con `--offset-bytes` o `--chunk-bytes`. Por defecto, los PDF admiten hasta 50 MiB sin límite fijo de páginas; un PNG permite 4000 píxeles por lado y 8 MiB por página. Los tres valores son configurables.
+`pdf.source_sha256` y `pdf.source_bytes` describen el PDF original; los `sha256` y `total_bytes` de nivel superior describen la imagen de la página. `--expected-fingerprint` comprueba el PDF original. `--page` no se puede combinar con `--offset-bytes` o `--chunk-bytes`. Por defecto, los PDF admiten hasta 50 MiB sin límite fijo de páginas; un PNG permite 4000 píxeles por lado y 8 MiB por página. Los tres valores son configurables.
 
 La imagen de una página no llama a ningún servicio OCR externo ni indexa ningún texto. Después de mirar cada página, el agente llama a `attachments text set` y verifica una búsqueda de `content:`. Verifique números y diseños complejos con las imágenes; La calidad depende del documento fuente y de las herramientas del agente.
 

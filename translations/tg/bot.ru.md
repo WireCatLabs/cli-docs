@@ -158,7 +158,7 @@ tg sales bot search messages --from @ann     # what one person wrote
 tg sales bot messages between @ann Bob       # what both wrote, in the chats both wrote in
 ```
 
-**В Bot API Telegram нет метода чтения истории.** `messages list` и `messages show` отвечают на основе того, что отправил бот, что получил `bot watch` и что `bot store fetch` импортировал на этот компьютер, и так и говорят. Для поиска необходимо каждое слово; `"a phrase"`, `-word`, `a OR b` и фильтры `from:`, `chat:`, `after:`, `before:` и `has:` работают, опечатки отклоняются. `contacts show --refresh` отклонен: сначала импортируйте старые сообщения с `bot store fetch`.
+**В Bot API Telegram нет метода чтения истории.** `messages list` и `messages show` отвечают на основе того, что отправил бот, что получил `bot watch` и что `bot store fetch` импортировал на этот компьютер, и так и говорят. Для поиска необходимо каждое слово; `"a phrase"`, `-word`, `a OR b` и фильтры `from:`, `chat:`, `after:`, `before:` и `has:` работают, опечатки отклоняются. `contacts show --sync-first` отклонен: сначала импортируйте старые сообщения с `bot store fetch`.
 
 `--all-bots` и `--bots <names>` также читают копии других ботов, если `read_other_bots` профиля это позволяет.
 
@@ -169,7 +169,7 @@ tg sales bot messages between @ann Bob       # what both wrote, in the chats bot
 В примерах используются вымышленные идентификатор чата и ссылка на сообщение:
 
 ```sh
-tg sales bot store fetch -1001234567890 --from https://t.me/c/1234567890/512 --limit 20 --json
+tg sales bot store fetch -1001234567890 --until-id https://t.me/c/1234567890/512 --limit 20 --json
 tg sales bot store fetch -1001234567890 --last 200 --pause 1s
 ```
 
@@ -206,7 +206,7 @@ tg sales bot chats moderate -1001234567890 --dry-run         # what breaks the r
 tg sales bot chats moderate -1001234567890                   # act as the rules allow
 ```
 
-Бот проверяет только то, что `tg sales bot watch` сохранил или `bot store fetch` загрузил на этом компьютере. Вступления не проверяются. Удалённый участник не сможет вернуться по ссылке, если не задан `--no-ban`. Правила лежат в том же файле, что и правила профиля личного аккаунта с таким же именем.
+Бот проверяет только то, что `tg sales bot watch` сохранил или `bot store fetch` загрузил на этом компьютере. Вступления не проверяются. Удалённый участник не сможет вернуться по ссылке, если не задан `--no-block`. Правила лежат в том же файле, что и правила профиля личного аккаунта с таким же именем.
 
 <a id="buttons-the-menu-webhooks"></a>
 
@@ -276,6 +276,7 @@ tg sales bot sends list
 
 Значение `@path` означает загрузку локального файла только в полях, объявленных файловыми
 в схеме, включая вложенные поля массива `media` в JSON. В обычном тексте символ `@` сохраняется.
+Защищённый путь в `@path` отклоняется до подключения; `bot api --allow-any-file` разрешает чтение таких путей во всех файловых полях вызова.
 Секретные поля, например `secret_token` и `provider_token`, передаются через stdin или JSON-файл,
 доступный только владельцу; отдельных флагов для них нет.
 

@@ -97,7 +97,7 @@ Un tramo «completo» es una secuencia de mensajes sin huecos. Leer mensajes sue
 ## Descargar el historial de un chat
 
 ```sh
-tg personal messages sync "Book club" --estimate  # what a full fetch would still cost; asks Telegram nothing
+tg personal messages sync "Book club" --dry-run  # what a full fetch would still cost; asks Telegram nothing
 ```
 
 ```sh
@@ -130,7 +130,7 @@ tg personal messages sync --all --since-time 365d  # every chat, back to a year 
 
 `messages sync` lee y guarda el historial por páginas, empezando por lo más reciente. **Puede reanudarse:** después de cada página registra lo que ya contiene, por lo que detenerlo no pierde datos. Ctrl-C, `--timeout`, el límite `--limit`, `--since-time`, `--last` y una espera larga exigida por Telegram detienen la descarga; la siguiente ejecución omite lo que ya está guardado. `--since-time` y `--last` indican hasta dónde retroceder: utiliza una de las dos, no ambas. Un fallo permanente antes de la primera página guardada termina con un error; si ya hay progreso, un fallo puede devolver lo guardado con un `issue`.
 
-**Cada página es una petición desde tu cuenta**, de hasta 100 mensajes. La ejecución se detiene al alcanzar `--limit` mensajes (1000 por defecto); `--page-size` define los mensajes por petición (100 por defecto) y `--pause` separa las páginas (1 segundo por defecto; `500ms`, `30s`, `2m`). Si Telegram exige una espera corta, el comando espera; si supera cinco minutos, se detiene para que lo ejecutes más tarde. Consulta primero `--estimate`: calcula a partir del archivo y no envía peticiones.
+**Cada página es una petición desde tu cuenta**, de hasta 100 mensajes. La ejecución se detiene al alcanzar `--limit` mensajes (1000 por defecto); `--page-size` define los mensajes por petición (100 por defecto) y `--pause` separa las páginas (1 segundo por defecto; `500ms`, `30s`, `2m`). Si Telegram exige una espera corta, el comando espera; si supera cinco minutos, se detiene para que lo ejecutes más tarde. Consulta primero `--dry-run`: calcula a partir del archivo y no envía peticiones.
 
 Para buscar y llenar los espacios vacíos dentro del historial guardado de un chat y preparar la búsqueda de temas inmediatamente después de una búsqueda (`--catch-up`), consulte [cuando no se encuentra nada](./search.md#when-nothing-is-found).
 
@@ -207,22 +207,22 @@ La exportación solo escribe lo guardado y nunca consulta Telegram. Comprueba pr
 ### En una carpeta, y solo lo que ha cambiado
 
 ```sh
-tg personal store export "Book club" "Work" --to ~/tg-export  # a JSON-lines file per chat, and manifest.json
+tg personal store export "Book club" "Work" --output-dir ~/tg-export  # a JSON-lines file per chat, and manifest.json
 ```
 
 ```sh
-tg personal store export --kind group --to ~/tg-groups  # every stored group
+tg personal store export --include group --output-dir ~/tg-groups  # every stored group
 ```
 
 ```sh
-tg personal store export --all --to ~/tg-all           # every stored chat of this account
+tg personal store export --all --output-dir ~/tg-all   # every stored chat of this account
 ```
 
 Si vuelves a ejecutarlo en la misma carpeta, solo añade lo que ha cambiado desde la última vez: mensajes nuevos, ediciones (también de mensajes antiguos) y eliminaciones. Un mensaje eliminado se escribe sin su texto, como `{ "id", "chatId", "deleted": true }`. Se rechaza una carpeta que contenga otros archivos o que se haya exportado desde otra cuenta. Un cambio solo en las reacciones no cuenta como cambio.
 
 ### Con contraseña
 
-`--encrypt` en `store export` (con `--output` o `--to`) y en `store backup` comprime el archivo y lo cifra con una contraseña, sin necesidad de otro programa. `tg personal store decrypt <file> --output <new file>` lo abre; `tg personal store restore` pide la contraseña de una copia de seguridad cifrada.
+`--encrypt` en `store export` (con `--output` o `--output-dir`) y en `store backup` comprime el archivo y lo cifra con una contraseña, sin necesidad de otro programa. `tg personal store decrypt <file> --output <new file>` lo abre; `tg personal store restore` pide la contraseña de una copia de seguridad cifrada.
 
 - **La contraseña no se guarda en ningún sitio**: ni en la configuración, ni en el llavero, ni en ningún registro. Si la pierdes, no se puede abrir el archivo.
 - Escríbela tú en la solicitud oculta, que la pide dos veces. Un agente al que se la hayas dado la pasa por stdin, nunca como argumento, porque otros programas del equipo pueden verlo:
@@ -391,7 +391,7 @@ Para actualizar el esquema de `wirecat.db`, ejecuta `tg upgrade` después de con
 
 `tg personal replies test [rule] --since-time 7d --json` simula qué mensajes almacenados recibirían; nunca envía. Las reglas se encuentran en el archivo de respuestas del perfil. `replies status`, `pause` y `resume` los inspeccionan/controlan. Las respuestas reales compartidas `serve` requieren un permiso `replies.send:allow` explícito y van a todos los que coincidan con una regla a menos que la audiencia las limite. El envío está denegado de forma predeterminada. Se ignoran las ediciones, los mensajes anteriores al inicio y los mensajes ya respondidos. `ask` no puede realizar envíos desde un servicio desatendido.
 
-Cree una regla deshabilitada con `tg personal replies add away`, edítela con `replies edit away --template` y luego use `replies on away` o `off away`. Las reglas de respuesta habilitadas necesitan una plantilla que no esté vacía. La edición cambia solo los campos con nombre; las listas son reemplazos separados por comas, una cadena vacía borra una. Las opciones incluyen `--do reply,task`, `--kinds`, `--chats`, `--not-chats`, `--words`, `--question` / `--no-question`, `--mentions-me` / `--no-mentions-me`, `--people`, `--not-people`, `--contacts-only` / `--no-contacts-only`, `--as-reply` / `--no-as-reply`, `--per-chat`, `--per-person` y los campos de horas `--outside`, `--days`, `--timezone` (`--no-hours` los borra). La primera configuración de horas requiere los tres campos. Las ediciones no válidas conservan el archivo, otras reglas, la audiencia y el historial de respuestas.
+Cree una regla deshabilitada con `tg personal replies add away`, edítela con `replies edit away --template` y luego use `replies on away` o `off away`. Las reglas de respuesta habilitadas necesitan una plantilla que no esté vacía. La edición cambia solo los campos con nombre; las listas son reemplazos separados por comas, una cadena vacía borra una. Las opciones incluyen `--do reply,task`, `--kinds`, `--allow-chats`, `--deny-chats`, `--words`, `--question` / `--no-question`, `--mentions-me` / `--no-mentions-me`, `--allow-people`, `--deny-people`, `--contacts-only` / `--no-contacts-only`, `--as-reply` / `--no-as-reply`, `--per-chat`, `--per-person` y los campos de horas `--outside`, `--days`, `--timezone` (`--no-hours` los borra). La primera configuración de horas requiere los tres campos. Las ediciones no válidas conservan el archivo, otras reglas, la audiencia y el historial de respuestas.
 
 `tg personal replies audience` muestra la audiencia del perfil; `--reply all|listed`, `--allow-people`, `--allow-chats`, `--deny-people` y `--deny-chats` reemplazan sus campos nombrados. Negar gana; listado con una lista de permitidos vacía no responde a nadie; un nuevo archivo responde a todos los que coinciden con una regla. La tarea local de una regla puede abrirse incluso cuando una respuesta está prohibida.
 

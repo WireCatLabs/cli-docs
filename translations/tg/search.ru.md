@@ -36,9 +36,9 @@ tg personal search messages 'What time does Helix export run? chat:990' --discov
 
 | Задача | Команда |
 |---|---|
-| Поиск сообщений, почты и заметок в одном ответе | `tg personal search all '<query>'` |
+| Поиск сообщений и заметок в одном ответе | `tg personal search all '<query>'` |
 | Искать только сообщения Telegram; без `--discover` — также на сервере Telegram | `tg personal search messages '<query>'` |
-| Искать только импортированные почтовые заметки | `tg personal search mail '<query>'` |
+| Поиск почты | В Memo: установите @wirecat/cli-memo и выполните `memo search mail '<query>'` |
 | Поиск заметок, созданных в memo или импортированных из папки | `tg personal search notes '<query>'` |
 | Найдите обсуждение по тому, о чем оно было | `tg personal search conversations '<question>'` ([поиск по теме](./topic-search.md)) |
 | Найдите тему в группе форума по ее названию | `tg personal search topics <chat> '<words>'` |
@@ -46,20 +46,17 @@ tg personal search messages 'What time does Helix export run? chat:990' --discov
 | Сохранить поиск и запустить его позже | `tg personal searches create`, `tg personal search messages --saved <name>` |
 
 ```sh
-tg personal search all 'lease agreement'          # messages, mail and notes, best match first
+tg personal search all 'lease agreement'          # messages and notes, best match first
 ```
 
 ```sh
-tg personal search all 'lease' --only messages,notes  # without mail
+tg personal search all 'lease' --only notes       # notes only
 ```
 
 ```sh
 tg personal search messages 'lease chat:"Book club"'  # Telegram messages only, never mail
 ```
 
-```sh
-tg personal search mail 'invoice'                 # only the mail memo sync --mail brought in
-```
 
 ```sh
 tg personal search notes 'budget' --type internal  # only notes written in memo
@@ -73,7 +70,7 @@ tg personal search conversations 'moving to the country'  # conversations close 
 tg personal search topics "Hiking" "gear"         # topic titles in one forum group
 ```
 
-`search all` сообщает, что представляет собой каждое попадание — сообщение (`msg:…`) или заметку (`note:…`). `search messages` никогда не возвращает почту, а `search mail` никогда не возвращает сообщения Telegram; только `search all` охватывает оба. `--type` сужает `search messages` до текста, голоса или файлов (`text|voice|file`), а `search notes` — до заметок, созданных в memo или импортированных из папки (`internal|file`). У почты `chat:` выбирает цепочку писем, а `from:` — отправителя. Если поле не подходит — `kind:`/`topic:` для почты или `chat:`/`from:` для заметок, — `search all` пропускает этот источник и объясняет почему.
+`search all` сообщает тип результата — сообщение (`msg:…`) или заметку (`note:…`). tg не ищет почту: `tg personal search mail` отвечает "mail is memo's: install @wirecat/cli-memo, then `memo search mail …`", а `search all --only mail` отклоняется так же. `--type` выбирает текст, голос или файлы в `search messages` (`text|voice|file`), а в `search notes` — заметки memo или импортированные файлы (`internal|file`). Неподходящие поля — `chat:`/`from:` для заметок — заставляют `search all` пропустить источник и объяснить причину.
 
 Почта и заметки попадают в архив через memo: `memo sync --mail` и `memo import`. Без них `search all` ищет только сообщения.
 
@@ -357,7 +354,7 @@ tg personal search messages 'invoice NOT tag:work'
 tg personal tags remove work --chat "Book club"
 ```
 
-Тег — это ваша собственная метка в чате, человеке или одном сообщении (`--message <id> --chat <chat>`). Он хранится только в локальном архиве и никогда не отправляется в Telegram. `tag:work` находит сообщения с тегом `work`, сообщения в чате с тегом `work` и сообщения от человека с тегом `work`. Тег состоит из 1–32 букв a–z, цифр и дефисов.
+Тег — это ваша собственная метка в чате, человеке или одном сообщении (`--message <id> --chat <chat>`) или задаче (`--task <id-or-key>`). Он хранится только в локальном архиве и никогда не отправляется в Telegram. `tag:work` находит сообщения с тегом `work`, сообщения в чате с тегом `work` и сообщения от человека с тегом `work`. Тег состоит из 1–32 букв a–z, цифр и дефисов.
 
 Группам и каналам можно автоматически назначать теги по их названию, имени пользователя и описанию — без чтения сообщений
 и без модели:
@@ -382,7 +379,7 @@ tg personal tags auto                    # write the automatic tags
 tg personal tags list sources:auto      # only the automatic ones
 ```
 
-`--refresh-metadata` перед классификацией читает из Telegram актуальные описания; вместе с
+`--sync-first` перед классификацией читает из Telegram актуальные описания; вместе с
 `--dry-run` этот флаг не принимается, потому что `--dry-run` берёт сохранённые описания. Один запуск обрабатывает не больше 500 чатов, по умолчанию 50 (`--limit`).
 
 Автоматические теги не затрагивают ваши: повторный запуск удаляет только устаревшие автоматические теги. Если вы добавите тег,

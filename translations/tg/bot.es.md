@@ -158,7 +158,7 @@ tg sales bot search messages --from @ann     # what one person wrote
 tg sales bot messages between @ann Bob       # what both wrote, in the chats both wrote in
 ```
 
-**La Bot API de Telegram no ofrece historial de mensajes.** `messages list` y `messages show` responden a partir de lo que envió el bot, lo que recibió `bot watch` y lo que importó `bot store fetch` en esta computadora, y lo dicen. La búsqueda necesita cada palabra; `"a phrase"`, `-word`, `a OR b` y los filtros `from:`, `chat:`, `after:`, `before:` y `has:` funcionan y se corrige un error tipográfico. `contacts show --refresh` es rechazado: importe primero los mensajes más antiguos con `bot store fetch`.
+**La Bot API de Telegram no ofrece historial de mensajes.** `messages list` y `messages show` responden a partir de lo que envió el bot, lo que recibió `bot watch` y lo que importó `bot store fetch` en esta computadora, y lo dicen. La búsqueda necesita cada palabra; `"a phrase"`, `-word`, `a OR b` y los filtros `from:`, `chat:`, `after:`, `before:` y `has:` funcionan y se corrige un error tipográfico. `contacts show --sync-first` es rechazado: importe primero los mensajes más antiguos con `bot store fetch`.
 
 `--all-bots` y `--bots <names>` también leen las copias de otros bots, cuando el `read_other_bots` del perfil lo permite.
 
@@ -169,7 +169,7 @@ tg sales bot messages between @ann Bob       # what both wrote, in the chats bot
 Estos ejemplos usan un identificador de chat y un enlace ficticios:
 
 ```sh
-tg sales bot store fetch -1001234567890 --from https://t.me/c/1234567890/512 --limit 20 --json
+tg sales bot store fetch -1001234567890 --until-id https://t.me/c/1234567890/512 --limit 20 --json
 tg sales bot store fetch -1001234567890 --last 200 --pause 1s
 ```
 
@@ -205,7 +205,7 @@ tg sales bot chats moderate -1001234567890 --dry-run         # what breaks the r
 tg sales bot chats moderate -1001234567890                   # act as the rules allow
 ```
 
-Solo revisa lo guardado por `tg sales bot watch` o importado con `bot store fetch` en este equipo. No evalúa entradas de miembros. Las personas eliminadas no pueden regresar por enlace salvo con `--no-ban`. Las reglas se guardan en el mismo archivo que las de tu perfil personal del mismo nombre.
+Solo revisa lo guardado por `tg sales bot watch` o importado con `bot store fetch` en este equipo. No evalúa entradas de miembros. Las personas eliminadas no pueden regresar por enlace salvo con `--no-block`. Las reglas se guardan en el mismo archivo que las de tu perfil personal del mismo nombre.
 
 <a id="buttons-the-menu-webhooks"></a>
 
@@ -275,6 +275,7 @@ el parámetro global `--timeout` limita la duración de todo el comando.
 
 Solo los campos de archivo declarados en el esquema interpretan `@path` como una carga local,
 incluidos los campos anidados de un array JSON `media`. El carácter `@` en texto normal se conserva.
+Una ruta protegida en `@path` se rechaza antes de conectar; `bot api --allow-any-file` permite leer esas rutas en todos los campos de archivo de la llamada.
 Los campos secretos, como `secret_token` y `provider_token`, se pasan por stdin o mediante un archivo
 JSON legible solo por su propietario; no tienen opciones de línea de comandos separadas.
 

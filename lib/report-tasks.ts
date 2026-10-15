@@ -263,7 +263,7 @@ export function reportTasks(tool: string, lang: string): ReportTask[] {
       `${tool} stats contacts top 'date:[2026-10-01 TO 2026-10-07] from:Anna' --chat Project --measure messages --json`,
     ],
     antibot: [
-      `${tool} chats members audit Project 'score>=2' --budget 2 --json`,
+      `${tool} chats members audit Project 'score>=2' ${tool === "tg" ? "--max-pages" : "--budget"} 2 --json`,
       `${tool} contacts check 42 --offline --json`,
     ],
   }

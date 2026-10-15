@@ -17,7 +17,7 @@ Lo que cada herramienta WireCat tiene en común (el archivo local, el control de
 - **El archivo de sesión es tu acceso.** Quien pueda leerlo usa tu cuenta, sin contraseña ni código ([más abajo](#where-the-login-lives)).
 - **Ningún comando acepta secretos como argumento:** ni el hash de la aplicación, ni la contraseña 2FA, ni el código de inicio de sesión, ni un número de teléfono.
 - **La protección de envíos es la común:** todos los comandos y herramientas MCP comprueban `permissions`, la lista de destinatarios y `sends_per_hour` ([más abajo](#the-send-guard)).
-- **`tg` se comunica con Telegram, npm y my.telegram.org** (a través de tu proxy si configuras uno) y con los servidores de descarga de modelos o los servicios de embeddings y análisis que configures de forma explícita ([más abajo](#what-goes-over-the-network)).
+- **`tg` se comunica con Telegram, npm y my.telegram.org**, y con servidores de descarga de modelos o servicios de embeddings y análisis configurados explícitamente ([más abajo](#what-goes-over-the-network)). Telegram usa el proxy que configures; la comprobación de actualizaciones npm y `tg upgrade` no.
 - **El archivo local no está cifrado y se conserva después de cerrar la sesión.** Solo el cifrado del disco completo lo protege si te roban el disco.
 - **No protege frente a alguien que utilice tu usuario del equipo** ni frente a un agente al que se permite cambiar los ajustes. Los límites detienen a un agente al que un mensaje que ha leído convence para enviar, no a uno que se propone sortearlos; frente a ese, ejecuta el agente en un entorno aislado (sandbox) o como un usuario distinto.
 
@@ -66,7 +66,7 @@ tg personal sends list                       # every attempt: sent, refused, fai
 
 En Telegram cuentan para el límite por hora: mensajes, reenvíos, ediciones, mensajes fijados con notificación, cada mensaje eliminado, grupos nuevos y cada persona añadida. No cuentan reacciones, votos, mensajes fijados sin aviso ni marcar como leído. Los reenvíos se comprueban contra el chat de destino.
 
-`TG_PROFILE_LOCK` fija el perfil allí donde el agente no puede modificar su entorno. `--file` y `--photo` rechazan los archivos y carpetas conocidos de credenciales, las carpetas de `tg` y el almacén local, incluidos los destinos de enlaces simbólicos. Las carpetas de trabajo ocultas normales están permitidas; MCP no puede eludir la protección de estos lugares.
+`TG_PROFILE_LOCK` fija el perfil allí donde el agente no puede modificar su entorno. `--file`, `--photo` y los campos `@path` de `bot api` rechazan los archivos y carpetas conocidos de credenciales, las carpetas de `tg` y el almacén local, incluidos los destinos de enlaces simbólicos. Las carpetas de trabajo ocultas normales están permitidas; MCP no puede eludir la protección de estos lugares.
 
 ## Texto ajeno en tu pantalla
 
