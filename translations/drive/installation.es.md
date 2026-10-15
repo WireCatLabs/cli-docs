@@ -194,7 +194,7 @@ Busca cada API, abre su página y pulsa **Enable**. Comprueba **Enabled APIs & s
 | --- | --- | --- |
 | [Google Drive API](https://console.cloud.google.com/apis/library/drive.googleapis.com) | Carpetas, archivos, exportación, comentarios, revisiones y permisos | Siempre |
 | [Google Docs API](https://console.cloud.google.com/apis/library/docs.googleapis.com) | Leer todas las pestañas y crear/editar Docs nativos | Siempre |
-| [Google Drive Activity API](https://console.cloud.google.com/apis/library/driveactivity.googleapis.com) | Historial de actores y actividad | Opcional `--activity`; habilítala para todas las funciones de la app compartida |
+| [Google Drive Activity API](https://console.cloud.google.com/apis/library/driveactivity.googleapis.com) | Historial de actores y actividad | Opcional `--grant activity`; habilítala para todas las funciones de la app compartida |
 
 Habilitar una API la hace disponible para el proyecto; no concede acceso a ningún usuario.
 El conector actual no utiliza las APIs Sheets, Slides, People ni Gmail.
@@ -234,9 +234,9 @@ utiliza el campo de introducción manual de scopes.
 | Permiso | Uso en el CLI |
 | --- | --- |
 | `https://www.googleapis.com/auth/drive.readonly` | Importación y lectura predeterminadas |
-| `https://www.googleapis.com/auth/drive` | Crear/editar/gestionar en Google con `--write` |
-| `https://www.googleapis.com/auth/drive.activity.readonly` | Historial opcional con `--activity` |
-| `https://www.googleapis.com/auth/drive.apps.readonly` | Metadatos de aplicaciones Drive instaladas con `--apps` |
+| `https://www.googleapis.com/auth/drive` | Crear/editar/gestionar en Google con `--grant write` |
+| `https://www.googleapis.com/auth/drive.activity.readonly` | Historial opcional con `--grant activity` |
+| `https://www.googleapis.com/auth/drive.apps.readonly` | Metadatos de aplicaciones Drive instaladas con `--grant apps` |
 
 Para una prueba personal de lectura basta el primer scope. La app compartida debe declarar también
 los permisos opcionales que ofrecerá; el CLI solo los solicita con sus opciones. Los métodos

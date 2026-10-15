@@ -195,7 +195,7 @@ JSON Desktop-клиента определяет приложение, а сог
 | --- | --- | --- |
 | [Google Drive API](https://console.cloud.google.com/apis/library/drive.googleapis.com) | Папки, файлы, экспорт, комментарии, версии и разрешения | Всегда |
 | [Google Docs API](https://console.cloud.google.com/apis/library/docs.googleapis.com) | Все вкладки документов, создание и редактирование Google Docs | Всегда |
-| [Google Drive Activity API](https://console.cloud.google.com/apis/library/driveactivity.googleapis.com) | События и участники изменений | Необязательный `--activity`; включите для всех функций общего приложения |
+| [Google Drive Activity API](https://console.cloud.google.com/apis/library/driveactivity.googleapis.com) | События и участники изменений | Необязательный `--grant activity`; включите для всех функций общего приложения |
 
 Включение API делает его доступным проекту, но не предоставляет доступ пользователю.
 Текущий коннектор не использует API Sheets, Slides, People и Gmail.
@@ -235,9 +235,9 @@ Testing нажмите **Test users → Add users**, добавьте подкл
 | Разрешение | Для чего в CLI |
 | --- | --- |
 | `https://www.googleapis.com/auth/drive.readonly` | Импорт папок и чтение по умолчанию |
-| `https://www.googleapis.com/auth/drive` | Создание/редактирование/управление в Google с `--write` |
-| `https://www.googleapis.com/auth/drive.activity.readonly` | Необязательная история с `--activity` |
-| `https://www.googleapis.com/auth/drive.apps.readonly` | Метаданные установленных приложений Drive с `--apps` |
+| `https://www.googleapis.com/auth/drive` | Создание/редактирование/управление в Google с `--grant write` |
+| `https://www.googleapis.com/auth/drive.activity.readonly` | Необязательная история с `--grant activity` |
+| `https://www.googleapis.com/auth/drive.apps.readonly` | Метаданные установленных приложений Drive с `--grant apps` |
 
 Для личной проверки чтения достаточно первого scope. Общее приложение объявляет и те
 необязательные разрешения, которые будет предлагать; CLI запрашивает их только с нужными

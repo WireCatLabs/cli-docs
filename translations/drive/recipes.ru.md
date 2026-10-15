@@ -16,7 +16,7 @@ Google. [Импорт и хранение](./usage.md) объясняет сод
 | Импортировать или обновить проект | Да | Индекс и снимки | Нет |
 | Подготовить справку из сохранённой копии | Нет | Нет | Нет |
 | Добавить теги, заметки и связи | Нет | Да | Нет |
-| Предложить память через провайдера ИИ | Отправляет сохранённый текст настроенному провайдеру | Только с `--save` или подтверждением | Нет |
+| Предложить память через провайдера ИИ | Отправляет сохранённый текст настроенному провайдеру | Только с `--yes` или подтверждением | Нет |
 | Проверить комментарии или историю | Да | Без автоматического импорта | Нет |
 | Создать или изменить Google Doc | Да | Импортируется при следующей синхронизации | Да |
 | Просмотреть и организовать сохранённое дерево папок | Нет | Теги/заметки по запросу | Нет |
@@ -138,12 +138,12 @@ drive personal documents context FOLDER_ID --offline --json
 ```sh
 drive personal tags add DOC_ID follow-up budget
 drive personal notes add DOC_ID 'Confirm whether tax is included' --title 'Budget review'
-drive personal documents list --tag follow-up --json
+drive personal documents list tag:follow-up --json
 drive personal search 'budget AND tag:follow-up' --exact --json
 drive personal notes list DOC_ID --json
 ```
 
-`--tag` фильтрует метки в списке документов; поиск использует `tag:` внутри запроса.
+Список документов и поиск принимают `tag:` внутри запроса.
 Прочитайте список заметок, чтобы проверить запись. Меняется локальный контекст, не документ Google.
 
 ## Связать документ с человеком или проектом
@@ -178,14 +178,14 @@ Show exact supporting quotes. Let me review them before saving or confirming any
 
 ```sh
 drive personal memories extract DOC_ID --scope work
-drive personal memories extract DOC_ID --scope work --save
-drive personal memories list DOC_ID --scope work --json
-drive personal facts list DOC_ID --status proposed --json
+drive personal memories extract DOC_ID --scope work --yes
+drive personal memories list DOC_ID scope:work --json
+drive personal facts list DOC_ID status:proposed --json
 drive personal memories confirm DOC_ID memory:MEMORY_ID
 drive personal facts confirm DOC_ID fact:FACT_ID
 ```
 
-Извлечение по умолчанию показывает предварительный результат; `--save` сохраняет предложения.
+Извлечение по умолчанию показывает предварительный результат; `--yes` сохраняет предложения.
 Заменяйте `MEMORY_ID` полученной ссылкой только после проверки. Изменение или удаление источника
 помечает активную память устаревшей. Извлечение отправляет выбранный кешированный текст провайдеру;
 локальный поиск по векторам — другая операция. Можно записать факт вручную:
@@ -202,7 +202,7 @@ drive personal comments list DOC_ID --json
 и участников включите Drive Activity API и подключитесь снова с дополнительным разрешением:
 
 ```sh
-drive personal session start --client-file /path/to/desktop-client.json --activity
+drive personal session start --client-file /path/to/desktop-client.json --grant activity
 drive personal documents history DOC_ID --activity --json
 ```
 
@@ -222,11 +222,11 @@ Markdown: сначала синхронизируйте, если нужна а�
 
 ## Создать Google Doc и включить в поиск
 
-Используйте этот сценарий, только если хотите изменить Google Drive. Подключитесь с `--write`,
+Используйте этот сценарий, только если хотите изменить Google Drive. Подключитесь с `--grant write`,
 создайте документ и переместите его в выбранную папку:
 
 ```sh
-drive personal session start --client-file /path/to/desktop-client.json --write
+drive personal session start --client-file /path/to/desktop-client.json --grant write
 drive personal documents create --title 'Project review'
 drive personal documents update NEW_DOC_ID --body '{"requests":[{"insertText":{"endOfSegmentLocation":{},"text":"Review notes\n"}}]}'
 drive personal files get NEW_DOC_ID --json

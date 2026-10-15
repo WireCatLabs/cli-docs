@@ -16,7 +16,7 @@ archivo de Google. [Importación y almacenamiento](./usage.md) explica la copia 
 | Importar o actualizar un proyecto | Sí | Índice y copias | No |
 | Preparar un informe con la copia guardada | No | No | No |
 | Añadir etiquetas, notas o vínculos | No | Sí | No |
-| Proponer recuerdos con IA | Envía texto local al proveedor configurado | Solo con `--save` o confirmación | No |
+| Proponer recuerdos con IA | Envía texto local al proveedor configurado | Solo con `--yes` o confirmación | No |
 | Consultar comentarios o historial | Sí | Sin importación automática | No |
 | Crear o editar un Doc | Sí | Se importa al sincronizar después | Sí |
 | Explorar y organizar el árbol guardado | No | Etiquetas/notas cuando se solicitan | No |
@@ -139,12 +139,12 @@ indexado y usa `documents show`: los metadatos no prueban lo que dice el archivo
 ```sh
 drive personal tags add DOC_ID follow-up budget
 drive personal notes add DOC_ID 'Confirm whether tax is included' --title 'Budget review'
-drive personal documents list --tag follow-up --json
+drive personal documents list tag:follow-up --json
 drive personal search 'budget AND tag:follow-up' --exact --json
 drive personal notes list DOC_ID --json
 ```
 
-`--tag` filtra etiquetas en el listado; la búsqueda usa `tag:` en la consulta. Lee la lista de
+Tanto el listado de documentos como la búsqueda aceptan `tag:` en la consulta. Lee la lista de
 notas para confirmar el memo. Cambias contexto local, no el documento Google.
 
 ## Vincular un documento con una persona o proyecto
@@ -179,14 +179,14 @@ Con un [proveedor IA configurado](./configuration.md#optional-ai-extraction):
 
 ```sh
 drive personal memories extract DOC_ID --scope work
-drive personal memories extract DOC_ID --scope work --save
-drive personal memories list DOC_ID --scope work --json
-drive personal facts list DOC_ID --status proposed --json
+drive personal memories extract DOC_ID --scope work --yes
+drive personal memories list DOC_ID scope:work --json
+drive personal facts list DOC_ID status:proposed --json
 drive personal memories confirm DOC_ID memory:MEMORY_ID
 drive personal facts confirm DOC_ID fact:FACT_ID
 ```
 
-La extracción muestra una vista previa; `--save` guarda propuestas. Sustituye `MEMORY_ID` por una
+La extracción muestra una vista previa; `--yes` guarda propuestas. Sustituye `MEMORY_ID` por una
 referencia devuelta solo tras revisarla. Cambiar o retirar la fuente marca los recuerdos activos
 como obsoletos. La extracción envía texto local seleccionado al proveedor; búsqueda por vectores
 es una operación distinta. Para escribirlo tú: `memories add DOC_ID 'Your fact' --scope work`.
@@ -202,7 +202,7 @@ Estas lecturas consultan Google. Revisiones/comentarios usan Drive API. Para eve
 habilita Drive Activity API y vuelve a conectar con su permiso:
 
 ```sh
-drive personal session start --client-file /path/to/desktop-client.json --activity
+drive personal session start --client-file /path/to/desktop-client.json --grant activity
 drive personal documents history DOC_ID --activity --json
 ```
 
@@ -222,11 +222,11 @@ esa exportación extra al acabar; la caché administrada permanece.
 
 ## Crear un Doc nativo e incluirlo en búsqueda
 
-Hazlo solo cuando quieras cambiar Google Drive. Conecta de nuevo con `--write`, crea el Doc
+Hazlo solo cuando quieras cambiar Google Drive. Conecta de nuevo con `--grant write`, crea el Doc
 y muévelo a una carpeta seleccionada:
 
 ```sh
-drive personal session start --client-file /path/to/desktop-client.json --write
+drive personal session start --client-file /path/to/desktop-client.json --grant write
 drive personal documents create --title 'Project review'
 drive personal documents update NEW_DOC_ID --body '{"requests":[{"insertText":{"endOfSegmentLocation":{},"text":"Review notes\n"}}]}'
 drive personal files get NEW_DOC_ID --json
