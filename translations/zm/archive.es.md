@@ -81,14 +81,14 @@ parte de la carpeta en silencio.
 carpeta de transcripciones; si falta, usa `files.folder`. Sin ambos argumentos se aplica el origen
 configurado. La API necesita red y admite `--since-time` y solapamiento de 0–31 días. Tras guardar el cursor se usa este con el solapamiento; fallos retienen
 la primera frontera. El solapamiento se resta también del primer `--since-time`.
-`--interval` es la pausa entre ciclos. Perfil, origen, ajustes y cliente OAuth se capturan al
+`--pause` es la pausa entre ciclos. Perfil, origen, ajustes y cliente OAuth se capturan al
 inicio; reinicia tras cambiarlos. Los ciclos no se superponen y cierran la base antes de confirmar.
 Detén con Ctrl-C.
 
 Para una carpeta:
 
 ```sh
-zm watch files ./downloaded-transcripts --interval 10s --jsonl
+zm watch files ./downloaded-transcripts --pause 10s --jsonl
 ```
 
 Cada ciclo revisa de nuevo los archivos, incluidas correcciones antiguas, importa en serie, cierra
@@ -105,7 +105,7 @@ bloqueada detiene esa entrega y no empieza otro ciclo.
 ```sh
 zm recordings list --since-time 2026-10-01 --until-time 2026-10-10 --json
 zm recordings show <zoom-occurrence-uuid> --json
-zm recordings download <zoom-occurrence-uuid> --destination ./zoom-archive --json
+zm recordings download <zoom-occurrence-uuid> --output-dir ./zoom-archive --json
 zm recordings archive check ./zoom-archive --offline --json
 ```
 
@@ -117,7 +117,7 @@ datos, cuenta anfitriona, disponibilidad y permisos antes de ampliar el periodo.
 Para historial por meses:
 
 ```sh
-zm recordings sync --since-time 2026-01-01 --until-time 2026-10-10 --destination ./zoom-archive --jsonl
+zm recordings sync --since-time 2026-01-01 --until-time 2026-10-10 --output-dir ./zoom-archive --jsonl
 ```
 
 Las fechas deben estar ordenadas y abarcar como máximo diez años. Se hacen peticiones mensuales,
@@ -158,7 +158,7 @@ coinciden diario propio, parte verificada y archivo final; archivos ajenos queda
 Elige destino absoluto y zona del temporizador:
 
 ```sh
-zm recordings schedule create --name daily --destination /home/AliceExample/zoom-archive --since-time 2026-01-01 --at 03:15 --timezone Europe/Madrid --json
+zm recordings schedule create --name daily --output-dir /home/AliceExample/zoom-archive --since-time 2026-01-01 --at 03:15 --timezone Europe/Madrid --json
 zm recordings schedule list --offline --json
 zm recordings schedule run <schedule-id> --jsonl
 zm recordings schedule disable <schedule-id> --yes --json

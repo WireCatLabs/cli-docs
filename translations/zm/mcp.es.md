@@ -105,5 +105,7 @@ fechas ISO opcionales `after`, `until`, `history_after` y límites `meetings`, `
 `max_read_bytes` y `bytes`. El servidor elige la cuenta y lee el calendario Zoom; necesita
 `meeting:read:meeting`. Esta herramienta opcional no funciona con `--offline`, no cambia la app
 Zoom, no descarga transcripciones ausentes ni acepta hallazgos. El elemento `meeting_preparation`
-conserva citas y cobertura explícita. Consulta [preparación](./usage.md#prepare-for-an-upcoming-meeting)
+conserva citas, reuniones relacionadas acotadas por vínculos explícitos a personas/proyectos
+confirmados y cobertura explícita. Las lecturas relacionadas se limitan a la cuenta y periodo
+elegidos, sin escrituras. Consulta [preparación](./usage.md#prepare-for-an-upcoming-meeting)
 para ver qué incluye, qué no consulta y cómo comprobar el resultado.

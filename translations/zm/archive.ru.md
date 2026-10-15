@@ -84,14 +84,14 @@ zm meetings list --json
 источник. API требует сети, поддерживает `--since-time` и перекрытие 0–31 день. `--since-time` — начальная граница; после успешной записи
 курсора используется курсор с перекрытием. При ошибке начальная граница сохраняется. Перекрытие
 также вычитается из начального `--since-time`.
-`--interval` задаёт паузу между завершёнными циклами. Профиль, источник, файловые настройки и клиент
+`--pause` задаёт паузу между завершёнными циклами. Профиль, источник, файловые настройки и клиент
 OAuth фиксируются до начала: после изменений перезапустите наблюдение. Циклы не перекрываются,
 закрывают базу до квитанции. Ctrl-C останавливает процесс.
 
 Для папки расшифровок:
 
 ```sh
-zm watch files ./downloaded-transcripts --interval 10s --jsonl
+zm watch files ./downloaded-transcripts --pause 10s --jsonl
 ```
 
 Каждый цикл снова просматривает папку, включая исправленные старые файлы. Импорт последовательный,
@@ -109,7 +109,7 @@ zm watch files ./downloaded-transcripts --interval 10s --jsonl
 ```sh
 zm recordings list --since-time 2026-10-01 --until-time 2026-10-10 --json
 zm recordings show <zoom-occurrence-uuid> --json
-zm recordings download <zoom-occurrence-uuid> --destination ./zoom-archive --json
+zm recordings download <zoom-occurrence-uuid> --output-dir ./zoom-archive --json
 zm recordings archive check ./zoom-archive --offline --json
 ```
 
@@ -121,7 +121,7 @@ zm recordings archive check ./zoom-archive --offline --json
 Для истории по месяцам:
 
 ```sh
-zm recordings sync --since-time 2026-01-01 --until-time 2026-10-10 --destination ./zoom-archive --jsonl
+zm recordings sync --since-time 2026-01-01 --until-time 2026-10-10 --output-dir ./zoom-archive --jsonl
 ```
 
 Даты должны идти по порядку и охватывать не более десяти календарных лет. Запросы выполняются
@@ -165,7 +165,7 @@ ID через запятую. Сохраняются только завершё
 Выберите абсолютный каталог и пояс таймера:
 
 ```sh
-zm recordings schedule create --name daily --destination /home/AliceExample/zoom-archive --since-time 2026-01-01 --at 03:15 --timezone Europe/Madrid --json
+zm recordings schedule create --name daily --output-dir /home/AliceExample/zoom-archive --since-time 2026-01-01 --at 03:15 --timezone Europe/Madrid --json
 zm recordings schedule list --offline --json
 zm recordings schedule run <schedule-id> --jsonl
 zm recordings schedule disable <schedule-id> --yes --json

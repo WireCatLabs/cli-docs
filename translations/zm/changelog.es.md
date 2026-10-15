@@ -4,6 +4,37 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.17.0 — 15.10.2026
+
+### Añadido
+
+- La preparación incluye reuniones guardadas citadas de otras series mediante vínculos existentes
+  a personas o proyectos compartidos confirmados. El periodo de la cuenta, la cobertura independiente
+  de filas relacionadas y el presupuesto JSON compartido acotan el informe. Las fuentes de la serie
+  elegida tienen prioridad; nombres y palabras no crean asociaciones. CLI y MCP opcional comparten
+  el servicio de Core.
+
+## 0.16.0 — 15.10.2026
+
+### Cambios — pueden afectar a quienes llaman al programa
+
+- Los indicadores usan los nombres comunes de cli-base: `recordings download`, `recordings sync` y
+  `recordings schedule create` aceptan `--output-dir <dir>` en vez de `--destination`, y `watch` usa
+  `--pause` en vez de `--interval`. Se retiran los nombres antiguos. Los valores también comparten
+  nombres: `--at <hh:mm>`, `--max-entries <n>`, `--models-dir <dir>`, `--start-time <time>`, `--title <title>`.
+
+## 0.15.0 — 15.10.2026
+
+### Cambios — pueden afectar a quienes llaman al programa
+
+- Los selectores JSON anidados usan el proyector de Base. Las rutas con puntos recorren objetos y
+  matrices conservando cobertura, paginación y metadatos de ejecución. Los resultados de reuniones
+  incluyen título, fecha y referencia/enlace de origen para citar sin otras lecturas. La selección
+  compacta de pasajes y las instrucciones incluidas siguen las mismas reglas.
+- La configuración usa snake_case sin reescritura automática y el arranque ya no traslada carpetas.
+  Antes de actualizar, renombra los campos antiguos y elige explícitamente las carpetas actuales.
+  El alias de comando `zoom.clientId` sigue escribiendo `client_id`.
+
 ## 0.14.0 — 15.10.2026
 
 ### Cambios — pueden afectar a quienes llaman al programa
