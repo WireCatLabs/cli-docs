@@ -90,8 +90,9 @@ La respuesta indica si hay más resultados (`has_more`). Eso describe la página
 ## Mantén la salida corta
 
 - `--limit <n>` limita los resultados.
-- `--brief` muestra cada mensaje encontrado como referencia, hora, remitente y extracto. Revisa con él y luego abre un resultado.
-- `--json=ref` conserva solo los campos que nombras. `--jsonl` imprime un resultado por línea. `--full` devuelve los textos completos.
+- `--json=<campos>` conserva solo los campos que nombras, por ejemplo `--json=ref,date,text`. Es la única opción
+  que reduce cualquier respuesta: entre un 31% y un 64% menos que `--json` completo en [nuestra medición](https://github.com/WireCatLabs/cli-testing/tree/main/performance/agents/output-size).
+- `--jsonl` imprime un resultado por línea. No es más corto que `--json`. `--full` devuelve los textos completos.
 - `--max-output-bytes` limita por defecto la salida automática a 4 MiB. Un resultado que supera el límite falla de forma visible en lugar de recortarse.
 - `--context <n>` añade `n` mensajes vecinos a cada lado de un resultado. Vale 0 cuando la salida no es un terminal.
 
@@ -114,8 +115,8 @@ Sustituye los nombres por los tuyos.
 | --- | --- |
 | Un acuerdo y su fuente | `tg personal search messages 'chat:"Book club" agreed date>=2026-10-01' --limit 5` |
 | Todo sobre una persona este mes | `tg personal contacts timeline "Kai Sample" --since-time 2026-10-01` |
-| Dónde aparece un número de teléfono | `tg personal search messages 'phone:"+1 555 010 0100"' --brief` |
-| Archivos enviados a un chat la semana pasada | `tg personal search messages 'chat:"Book club" has:file date>=2026-10-07' --brief` |
+| Dónde aparece un número de teléfono | `tg personal search messages 'phone:"+1 555 010 0100"'` |
+| Archivos enviados a un chat la semana pasada | `tg personal search messages 'chat:"Book club" has:file date>=2026-10-07'` |
 | Qué dice un documento de Drive sobre un tema | `drive personal search 'budget' --exact --limit 5` |
 
 Para recetas más largas: [Telegram](./tg/recipes.md) y [MAX](./max/recipes.md).
