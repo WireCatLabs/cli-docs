@@ -68,7 +68,7 @@ graph TB
     Cli("cli/ and mcp/<br>commands and MCP tools")
     Services("services/<br>use cases")
     Sends("sends/<br>guarded writes, uploads")
-    Port("ports/messenger.ts<br>the adapter contract")
+    Port("ports/<br>the adapter contract, the traits")
     Store("store/<br>MessageStore over SQLite")
     Domain("domain/<br>models and value types")
   end
@@ -88,10 +88,10 @@ graph TB
 
 | Layer | Its job | Size | What it may not import |
 | --- | --- | --- | --- |
-| `domain/` | Messenger-neutral types: `Chat`, `Message`, `Person`, locators, formatting spans. No behaviour that needs a network or a file. | 24 files | Any messenger library or adapter. |
-| `ports/messenger.ts` | The contract every messenger implements. | 1 file, 663 lines | Same as above. |
+| `domain/` | Messenger-neutral types and values: `Chat`, `Message`, `Person`, locators, formatting spans, the fact, memory and task value sets. No behaviour that needs a network or a file. It sits almost at the bottom: it reads two types from `search/` and the task kinds from `tasks/`. | 29 files | `cli/`, any messenger library or adapter. |
+| `ports/` | The contract every messenger implements (`messenger.ts`), what a service reads of the messenger (`traits.ts`) and who the app is (`app.ts`). | 3 files | Same as above. |
 | `store/` | The local archive: one `MessageStore` interface, opened by `openStore`, over SQLite modules, migrations and the search indexes. | 101 files | Nothing outside `store/` may import a module under `store/sqlite/`. |
-| `services/` | Use cases: messages, chats, people, search, embeddings, mentions, moderation. | 81 files | Commander, a command module, a SQLite module. |
+| `services/` | Use cases: messages, chats, people, search, embeddings, mentions, moderation. | 87 files | Commander, anything under `cli/`, a SQLite module. The same holds for `replies/`, `attachments/`, `moderation/`, `models/` and `analysis/`. |
 | `sends/` | Every write: the send guard, operation ids, the send journal, uploads. | 14 files | Same as services. |
 | `cli/`, `mcp/` | Presentation: commands, the JSON envelope, settings and profiles; MCP tools over the same services. | 168 + 51 files | A SQLite module. |
 | `meetings/`, `tasks/` | Self-contained modules with their own ports. | 46 + 4 files | Anything else in cli-core, a database or the file system. |
@@ -162,9 +162,14 @@ never dropped.
 
 ### The descriptor
 
-Each tool also hands the core a `Messenger` object of 47 fields: the app's name, how to connect, how to
-page history, and flags such as `pollQuiz`, `topicShow` and `stickers`. Commands read the flags when
-they register their options, so `polls create --quiz` exists only in a tool whose messenger has quizzes.
+Each tool also hands the core a `Messenger` object: the app's name, how to connect, how to page history,
+and flags such as `pollQuiz`, `topicShow` and `stickers`. Commands read the flags when they register their
+options, so `polls create --quiz` exists only in a tool whose messenger has quizzes.
+
+Services see only part of it. [`MessengerTraits`](https://github.com/WireCatLabs/cli-core/blob/80616b3813ca8264d8f9edca3e8e0fcce7a1e81e/src/ports/traits.ts) in `ports/traits.ts` holds the 14 fields a service reads,
+such as the app's name, how history is paged and whether the messenger searches on its server. `Messenger`
+extends it with what only the CLI uses: `connect`, settings, the guard hook and `doctor`'s diagnosis. A
+service cannot reach a command, a commander object or a setting it was not given.
 
 ### Services and their dependencies
 
@@ -181,8 +186,8 @@ account: () => Promise<AccountKey>
 
 Nothing opens until a service asks, so a read answered from the local store never connects.
 [`servicesFor(deps)`](https://github.com/WireCatLabs/cli-core/blob/a3b5b3c47792d5e2df6529642e907ee32783e66a/src/services/index.ts#L145)
-builds every service once; the commands and the MCP tools take them from there, so both give the same
-answer and the same error for the same input.
+builds the services over one dependency object: a command builds them for its run, an MCP tool for its
+call. Both call the same service functions, so a use case has one implementation for both.
 
 A tool can replace one service without forking the core. `Messenger.services` receives the shared
 services and returns replacements, for example its own way of finding a chat for moderation.
@@ -259,7 +264,7 @@ rule or a test keeps it that way.
 | Document readers, image describers, embedding models | Small | Register a reader or provider; choose a local or remote model. |
 | A meeting provider | Small | Implement `MeetingSource` in the provider's package. |
 | A new messenger | Moderate | Implement `MessengerCore` and the groups the messenger has, and write a descriptor. The commands, MCP tools, store, search and send guard come with the core. |
-| A new front end beside the CLI and MCP | Moderate | Call `servicesFor(deps)` and render. Services still import some helpers from `cli/` (settings, failure helpers, list queries), so those move with it. |
+| A new front end beside the CLI and MCP | Moderate | Build `ServiceDeps`, call `servicesFor(deps)` and render. Services import nothing from `cli/`; the front end writes its own way to connect and resolve settings. |
 | The storage engine | Hard | Reimplement `MessageStore`: about 140 methods, including full-text, stemming and vector search. The boundary holds, but the interface is one wide surface. |
 
 ## Keeping the shape
@@ -286,8 +291,11 @@ Conventions for new code:
 
 1. **A new messenger feature** is an optional group in `ports/messenger.ts`, reached through `capability()`
    and offered through a descriptor flag. `MessengerCore` does not grow.
-2. **A new use case** is a service that takes `ServiceDeps`. The command and the MCP tool both call it; a
-   command file holds no business logic.
+2. **A new use case** is a service that takes the narrowest dependency it needs. A use case that only reads the
+   store takes the store part it reads (`Pick<MessageStore, …>`, or a store and an account), as most meeting
+   and search services do: it is the easier one to test and to move. One that also needs the messenger, the
+   send guard or lazy opening takes `ServiceDeps`. Of the 87 service files, 25 take only the store and 36 take
+   `ServiceDeps`. The command and the MCP tool both call the service; a command file holds no business logic.
 3. **A new store query** is a module under `store/sqlite/`, exposed only through `store.ts`. A service reads
    through `accountStore(deps)`; a read across accounts on purpose names itself with
    `crossAccount(deps, reason)`.
@@ -303,8 +311,9 @@ Conventions for new code:
 - **The store is one wide interface.** `MessageStore` has about 140 methods over one `openStore`, and
   `store.ts` is 2,042 lines. Most features touch it. A split is useful only along a real seam: resources
   that open and close separately.
-- **Services still know a little about the CLI.** They import the `Messenger` descriptor as a type and a
-  handful of runtime helpers from `cli/`.
+- **The CLI-only parts of `Messenger` take a commander `Command`.** `connect`, `accountOf`, `guard` and
+  `diagnose` read the command's options themselves. Services never see them, but a second front end would
+  write its own versions.
 - **The tg adapter is one large class**: 2,312 lines and about 110 methods, readable per method but the
   place every Telegram feature lands.
 - **max's `client/values.ts`** holds 59 exports used by 20 modules.

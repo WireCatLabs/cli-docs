@@ -69,7 +69,7 @@ graph TB
     Cli("cli/ y mcp/<br>comandos y herramientas MCP")
     Services("services/<br>casos de uso")
     Sends("sends/<br>escrituras protegidas, adjuntos")
-    Port("ports/messenger.ts<br>el contrato del adaptador")
+    Port("ports/<br>el contrato del adaptador, los rasgos")
     Store("store/<br>MessageStore sobre SQLite")
     Domain("domain/<br>modelos y tipos de valor")
   end
@@ -89,10 +89,10 @@ graph TB
 
 | Capa | Su función | Tamaño | Qué no puede importar |
 | --- | --- | --- | --- |
-| `domain/` | Tipos independientes del mensajero: `Chat`, `Message`, `Person`, localizadores, tramos de formato. Ningún comportamiento que necesite red o archivos. | 24 archivos | Ninguna biblioteca de mensajero ni adaptador. |
-| `ports/messenger.ts` | El contrato que implementa cada mensajero. | 1 archivo, 663 líneas | Lo mismo. |
+| `domain/` | Tipos y valores independientes del mensajero: `Chat`, `Message`, `Person`, localizadores, tramos de formato, los conjuntos de valores de hechos, memoria y tareas. Ningún comportamiento que necesite red o archivos. Está casi abajo del todo: toma dos tipos de `search/` y los tipos de tarea de `tasks/`. | 29 archivos | `cli/`, ninguna biblioteca de mensajero ni adaptador. |
+| `ports/` | El contrato que implementa cada mensajero (`messenger.ts`), lo que un servicio lee del mensajero (`traits.ts`) y quién es la aplicación (`app.ts`). | 3 archivos | Lo mismo. |
 | `store/` | El archivo local: una interfaz `MessageStore`, abierta por `openStore`, sobre módulos SQLite, migraciones e índices de búsqueda. | 101 archivos | Nada fuera de `store/` puede importar un módulo de `store/sqlite/`. |
-| `services/` | Casos de uso: mensajes, chats, personas, búsqueda, vectores, menciones, moderación. | 81 archivos | Commander, un módulo de comando, un módulo SQLite. |
+| `services/` | Casos de uso: mensajes, chats, personas, búsqueda, vectores, menciones, moderación. | 87 archivos | Commander, cualquier cosa de `cli/`, un módulo SQLite. Lo mismo vale para `replies/`, `attachments/`, `moderation/`, `models/` y `analysis/`. |
 | `sends/` | Toda escritura: la protección de envíos, los identificadores de operación, el registro de envíos, los adjuntos. | 14 archivos | Lo mismo que los servicios. |
 | `cli/`, `mcp/` | Presentación: comandos, el sobre JSON, configuración y perfiles; herramientas MCP sobre los mismos servicios. | 168 + 51 archivos | Un módulo SQLite. |
 | `meetings/`, `tasks/` | Módulos autónomos con sus propios puertos. | 46 + 4 archivos | Cualquier otra parte de cli-core, una base de datos o el sistema de archivos. |
@@ -164,10 +164,16 @@ misma manera, nunca se descarta en silencio.
 
 ### La descripción
 
-Cada herramienta entrega también al núcleo un objeto `Messenger` de 47 campos: el nombre de la aplicación,
-cómo conectarse, cómo paginar el historial y opciones como `pollQuiz`, `topicShow` y `stickers`. Los
-comandos leen esas opciones al registrar sus parámetros, así que `polls create --quiz` solo existe en una
+Cada herramienta entrega también al núcleo un objeto `Messenger`: el nombre de la aplicación, cómo
+conectarse, cómo paginar el historial y opciones como `pollQuiz`, `topicShow` y `stickers`. Los comandos
+leen esas opciones al registrar sus parámetros, así que `polls create --quiz` solo existe en una
 herramienta cuyo mensajero tiene cuestionarios.
+
+Los servicios ven solo una parte. [`MessengerTraits`](https://github.com/WireCatLabs/cli-core/blob/80616b3813ca8264d8f9edca3e8e0fcce7a1e81e/src/ports/traits.ts), en `ports/traits.ts`, reúne los 14 campos que lee un
+servicio, como el nombre de la aplicación, cómo se pagina el historial y si el mensajero busca en su
+servidor. `Messenger` lo amplía con lo que solo usa la CLI: `connect`, la configuración, el gancho de la
+protección de envíos y el diagnóstico de `doctor`. Un servicio no puede llegar a un comando, a un objeto de
+commander ni a una opción que no se le haya dado.
 
 ### Los servicios y sus dependencias
 
@@ -186,8 +192,9 @@ account: () => Promise<AccountKey>
 Nada se abre hasta que un servicio lo pide, así que una lectura que responde el almacén local nunca se
 conecta.
 [`servicesFor(deps)`](https://github.com/WireCatLabs/cli-core/blob/a3b5b3c47792d5e2df6529642e907ee32783e66a/src/services/index.ts#L145)
-crea todos los servicios una vez; los comandos y las herramientas MCP los toman de ahí, así que dan la
-misma respuesta y el mismo error para la misma entrada.
+crea los servicios sobre un objeto de dependencias: un comando los crea para su ejecución, una herramienta
+MCP para su llamada. Ambos llaman a las mismas funciones de servicio, así que un caso de uso tiene una sola
+implementación para los dos.
 
 Una herramienta puede sustituir un servicio sin copiar el núcleo. `Messenger.services` recibe los
 servicios compartidos y devuelve sustitutos, por ejemplo su propia forma de encontrar un chat para la
@@ -265,7 +272,7 @@ y una regla de lint o una prueba lo mantiene así.
 | Lectores de documentos, descriptores de imágenes, modelos de vectores | Pequeño | Registrar un lector o proveedor; elegir un modelo local o remoto. |
 | Un proveedor de reuniones | Pequeño | Implementar `MeetingSource` en el paquete del proveedor. |
 | Un mensajero nuevo | Moderado | Implementar `MessengerCore` y los grupos que tenga el mensajero, y escribir una descripción. Los comandos, las herramientas MCP, el almacén, la búsqueda y la protección de envíos vienen con el núcleo. |
-| Una interfaz nueva junto a la CLI y MCP | Moderado | Llamar a `servicesFor(deps)` y mostrar la respuesta. Los servicios aún importan algunas utilidades de `cli/` (configuración, utilidades de errores, consultas de listas), que tendrían que moverse con ella. |
+| Una interfaz nueva junto a la CLI y MCP | Moderado | Construir `ServiceDeps`, llamar a `servicesFor(deps)` y mostrar la respuesta. Los servicios no importan nada de `cli/`; la interfaz nueva escribe su propia forma de conectarse y de leer la configuración. |
 | El motor de almacenamiento | Difícil | Reimplementar `MessageStore`: unos 140 métodos, incluidas la búsqueda de texto completo, las raíces de palabras y la búsqueda por vectores. El límite se respeta, pero la interfaz es una sola superficie amplia. |
 
 ## Cómo se mantiene el diseño
@@ -293,8 +300,12 @@ Convenciones para el código nuevo:
 
 1. **Una función nueva del mensajero** es un grupo opcional en `ports/messenger.ts`, al que se accede con
    `capability()` y que se ofrece mediante una opción de la descripción. `MessengerCore` no crece.
-2. **Un caso de uso nuevo** es un servicio que recibe `ServiceDeps`. Lo llaman el comando y la herramienta
-   MCP; un archivo de comando no contiene lógica de negocio.
+2. **Un caso de uso nuevo** es un servicio que recibe la dependencia más estrecha que necesita. Un caso de uso
+   que solo lee el almacén recibe la parte que lee (`Pick<MessageStore, …>`, o un almacén y una cuenta), como
+   la mayoría de los servicios de reuniones y de búsqueda: es más fácil de probar y de mover. Uno que además
+   necesita el mensajero, la protección de envíos o la apertura perezosa recibe `ServiceDeps`. De los 87
+   archivos de servicios, 25 reciben solo el almacén y 36 reciben `ServiceDeps`. Lo llaman el comando y la
+   herramienta MCP; un archivo de comando no contiene lógica de negocio.
 3. **Una consulta nueva al almacén** es un módulo en `store/sqlite/`, expuesto solo a través de `store.ts`.
    Un servicio lee con `accountStore(deps)`; una lectura deliberada de varias cuentas se identifica con
    `crossAccount(deps, reason)`.
@@ -311,8 +322,9 @@ Convenciones para el código nuevo:
 - **El almacén es una sola interfaz amplia.** `MessageStore` tiene unos 140 métodos sobre un único
   `openStore`, y `store.ts` tiene 2042 líneas. Casi todas las funciones lo tocan. Dividirlo solo sirve
   siguiendo una costura real: recursos que se abren y cierran por separado.
-- **Los servicios aún saben un poco de la CLI.** Importan la descripción `Messenger` como tipo y algunas
-  utilidades de `cli/` en ejecución.
+- **Las partes de `Messenger` que solo usa la CLI reciben un `Command` de commander.** `connect`,
+  `accountOf`, `guard` y `diagnose` leen ellas mismas las opciones del comando. Los servicios no las ven,
+  pero una segunda interfaz tendría que escribir las suyas.
 - **El adaptador de tg es una clase grande**: 2312 líneas y unos 110 métodos, legible método a método, pero
   es el lugar donde acaba cada función de Telegram.
 - **`client/values.ts` de max** tiene 59 exportaciones que usan 20 módulos.
