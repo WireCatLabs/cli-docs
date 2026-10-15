@@ -36,7 +36,7 @@ title: "Поиск по теме"
 | Открыть всё обсуждение, которому принадлежит сообщение | `tg personal conversations show <chat> <message>` |
 | Найдите другие обсуждения о том же самом в каждом чате | `tg personal conversations related <chat> <message>` |
 | Ограничить результаты одним человеком, периодом или словом | `tg personal search conversations "<question>" --filter '<query>'` |
-| Посмотрите, что устарело, и наверстайте упущенное | `tg personal conversations status`, `tg personal search conversations "<question>" --refresh` |
+| Посмотрите, что устарело, и наверстайте упущенное | `tg personal conversations status`, `tg personal search conversations "<question>" --catch-up` |
 | Позвольте вашему собственному ИИ-агенту улучшить группировку сообщений | `tg skill show link-conversations` |
 
 ## Поиск по теме или поиск по слову?
@@ -192,10 +192,10 @@ tg personal search conversations "where do we meet" --chat "Book club" --sync-fi
 tg personal conversations status                 # what is behind, chat by chat
 tg personal conversations build                  # every chat that changed, and groups never built
 tg personal conversations embed                  # every built chat with pieces left
-tg personal search conversations "renting a flat" --refresh  # catch up first, then search
+tg personal search conversations "renting a flat" --catch-up  # catch up first, then search
 ```
 
-`status` подсчитывает для каждого чата с построенными обсуждениями сообщения, которые сборка не видела (новые, отредактированные, удаленные), фрагменты, вектор которых является текущим, устаревшим или отсутствующим, а также количество групп, которые никогда не были созданы. Без `--chat`, `build`, `embed` и `search --refresh` позволяют обрабатывать не более 20 чатов за раз (`--max-chats`) и вставлять не более 2000 фрагментов за раз (`--max-chunks`); запустите их еще раз, чтобы продолжить. Они никогда не скачивают модель. `--refresh` нельзя комбинировать с `--filter` или `--source`: сначала постройте обсуждения и вычислите векторы нужных чатов.
+`status` подсчитывает для каждого чата с построенными обсуждениями сообщения, которые сборка не видела (новые, отредактированные, удаленные), фрагменты, вектор которых является текущим, устаревшим или отсутствующим, а также количество групп, которые никогда не были созданы. Без `--chat`, `build`, `embed` и `search conversations --catch-up` позволяют обрабатывать не более 20 чатов за раз (`--max-chats`) и вставлять не более 2000 фрагментов за раз (`--max-chunks`); запустите их еще раз, чтобы продолжить. Они никогда не скачивают модель. `--catch-up` нельзя комбинировать с `--filter` или `--source`: сначала постройте обсуждения и вычислите векторы нужных чатов.
 
 Когда правила изменяются в новой версии, `status` и `tg personal store check` называют чаты, созданные с использованием старых правил; построить их заново.
 

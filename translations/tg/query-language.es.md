@@ -9,7 +9,7 @@ title: "Lenguaje de consulta de la búsqueda"
 
 Si utilizas un agente de IA con tg, no necesitas aprender este lenguaje: describe lo que quieres con palabras sencillas y el agente escribe la consulta. Esta página es para personas que escriben búsquedas por sí mismas y para cualquiera que desee todos los filtros: operadores exactos, todos los campos, ajustes preestablecidos, reglas de fecha y límites.
 
-Es la referencia para las consultas de `tg personal search messages`, `tg personal search mail`, `tg personal search all`, `tg personal stats messages show`, búsquedas guardadas y el `--filter` de [búsqueda de tema](./topic-search.md). Para ejemplos cotidianos, comience con [búsqueda de mensajes](./search.md).
+Es la referencia para las consultas de `tg personal search messages`, `tg personal search all`, `tg personal stats messages show`, búsquedas guardadas y el `--filter` de [búsqueda de tema](./topic-search.md). Para ejemplos cotidianos, comience con [búsqueda de mensajes](./search.md).
 
 Términos utilizados en esta página:
 
@@ -119,14 +119,6 @@ El texto se normaliza antes de indexarlo y buscarlo: minúsculas y sin tildes. U
 `text:/pay/` coincide con la palabra completa pay, no con payment. `body:/pay/` coincide solo con un mensaje cuyo texto entero es pay, distinguiendo mayúsculas; para encontrarla en cualquier parte, usa `body:/.*pay.*/`. Es la sintaxis de expresiones regulares de Lucene, sin anticipaciones de JavaScript, referencias hacia atrás, anclas ni opciones.
 
 En un archivo grande, un prefijo corto como `a*` puede ampliarse a más de 10.000 palabras y se rechaza; alargarlo. Las consultas largas, el anidamiento profundo, los patrones grandes y los escaneos lentos se rechazan con `query_limit`, no se acortan: limita el chat, las fechas o el patrón.
-
-### Una expresión regular de JavaScript: `--regex`
-
-```sh
-tg personal search messages --regex 'invoice\s+\d+' --json
-```
-
-`--regex` es un modo separado. Las palabras que proporciona son una expresión regular de JavaScript, no una consulta en este idioma. No distingue entre mayúsculas y minúsculas, se prueba con el texto completo de cada mensaje almacenado y se ejecuta en un trabajador aislado con límites de tiempo y tamaño. Una búsqueda guardada mantiene su `--regex`; no puede agregar `--regex` cuando ejecuta uno con `--saved`.
 
 ## La respuesta
 

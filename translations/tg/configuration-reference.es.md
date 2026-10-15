@@ -140,7 +140,7 @@ Las claves de distintas secciones del archivo se suman, pero **decide primero la
 }
 ```
 
-Funciona en ambos sentidos: `messages: allow` en un perfil también oculta `messages.delete: deny` de `defaults`, y eliminar vuelve a pedir confirmación, como por defecto. Los antiguos `read_only` y `allow` cuentan en la sección en la que están escritos.
+Funciona en ambos sentidos: `messages: allow` en un perfil también oculta `messages.delete: deny` de `defaults`, y eliminar vuelve a pedir confirmación, como por defecto.
 
 `inbox`, `review`, `watch`, `serve` y `messages sync`, `export` y `search` muestran mensajes, por lo que cuentan como `messages`: `messages: deny` también los bloquea. `config`, `session`, `doctor`, `recipients`, `mcp` y el mantenimiento del archivo local nunca se restringen.
 
@@ -174,13 +174,9 @@ permiten la escritura solicitada. Repite `--permission key=level` para los permi
 
 `replies.send` por defecto es `deny`; habilitar una regla de respuesta por sí sola no permite el envío. `tg personal replies audience` puede limitar las respuestas a personas seleccionadas o excluir algunas.
 
-### Ajustes anteriores que siguen funcionando
+### Ajustes anteriores
 
-`read_only: true` equivale a `readonly` en todos los recursos. Una lista en `allow` (`send`, `forward`, `reaction`, `edit`, `pin`, `read`, `delete`, `groups`, `contacts`, `profile`, `folders`, `sessions`) permite esas acciones con `allow` y deja las demás en `readonly`; las eliminaciones siguen pidiendo confirmación. Una clave de `permissions` de la misma sección tiene prioridad sobre ambos.
-
-### Migrar la configuración de acceso heredada
-
-`tg config migrate --dry-run --json` muestra una vista previa del reemplazo de `read_only` y `allow` por `permissions`, manteniendo los niveles que proporcionó el archivo para perfiles personales y de bot. No escribe el archivo ni se conecta a Telegram. `tg config migrate --json` aplica esa migración; un proceso bloqueado en un perfil no puede aplicar un cambio que afecte a todos los perfiles. Se mantienen otras configuraciones. Un archivo que ya utiliza únicamente `permissions` no necesita migración. Una vez que `permissions` está presente, `config set` rechaza los cambios en `read_only` y `allow`; cambie las claves de permiso correspondientes.
+`permissions` es el único ajuste de acceso. Un archivo con `read_only` o `allow` se rechaza por clave desconocida: sustitúyelos por claves de `permissions` (`read_only: true` equivale a `readonly` para todos los recursos).
 
 ## Cambiar ajustes sin abrir el archivo
 
@@ -275,9 +271,8 @@ Sin `MESSAGING_STORE`, lo que lea esa sesión seguirá guardándose en tu archiv
 | `default_profile` | cadena de nombre de perfil | raíz del archivo |
 | `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` | entero ≥ 1 | perfil |
 | `requests_per_minute` | entero ≥ 0 | perfil |
-| `color`, `sender_colors`, `catch_up_marks_read`, `search_catch_up`, `record`, `read_only` | booleano | perfil |
+| `color`, `sender_colors`, `catch_up_marks_read`, `search_catch_up`, `record` | booleano | perfil |
 | `permissions` | objeto de rutas de comando y niveles `deny`, `readonly`, `ask`, `allow` | perfil |
-| `allow` | variedad de acciones permitidas; formato heredado | perfil |
 | `read_other_bots` | booleano o conjunto de nombres de perfil | solo bot |
 | `update_check`, `skill_hint` | booleano | raíz `defaults` solamente |
 | `transcribe_with` | `auto`, `messenger`, `local` | perfil |

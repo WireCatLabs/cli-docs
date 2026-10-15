@@ -36,9 +36,9 @@ Cada búsqueda se realiza bajo un grupo de comandos, `tg personal search`. Cuand
 
 | Tarea | Comando |
 |---|---|
-| Busque mensajes, correo y notas en una sola respuesta | `tg personal search all '<query>'` |
+| Busque mensajes y notas en una sola respuesta | `tg personal search all '<query>'` |
 | Buscar solo mensajes de Telegram; sin `--discover`, también en su servidor | `tg personal search messages '<query>'` |
-| Buscar sólo la nota de correo importada | `tg personal search mail '<query>'` |
+| Buscar correo | En Memo: instala @wirecat/cli-memo y ejecuta `memo search mail '<query>'` |
 | Buscar notas escritas en memo o importadas desde una carpeta | `tg personal search notes '<query>'` |
 | Encuentre una discusión según de qué se trata | `tg personal search conversations '<question>'` ([búsqueda de tema](./topic-search.md)) |
 | Buscar un tema en un grupo del foro por su título | `tg personal search topics <chat> '<words>'` |
@@ -46,20 +46,17 @@ Cada búsqueda se realiza bajo un grupo de comandos, `tg personal search`. Cuand
 | Guarde una búsqueda y ejecútela nuevamente más tarde | `tg personal searches create`, `tg personal search messages --saved <name>` |
 
 ```sh
-tg personal search all 'lease agreement'          # messages, mail and notes, best match first
+tg personal search all 'lease agreement'          # messages and notes, best match first
 ```
 
 ```sh
-tg personal search all 'lease' --only messages,notes  # without mail
+tg personal search all 'lease' --only notes       # notes only
 ```
 
 ```sh
 tg personal search messages 'lease chat:"Book club"'  # Telegram messages only, never mail
 ```
 
-```sh
-tg personal search mail 'invoice'                 # only the mail memo sync --mail brought in
-```
 
 ```sh
 tg personal search notes 'budget' --type internal  # only notes written in memo
@@ -73,7 +70,7 @@ tg personal search conversations 'moving to the country'  # conversations close 
 tg personal search topics "Hiking" "gear"         # topic titles in one forum group
 ```
 
-`search all` dice qué es cada resultado: un mensaje (`msg:…`) o una nota (`note:…`). `search messages` nunca devuelve correo y `search mail` nunca devuelve mensajes de Telegram; sólo `search all` cubre ambos. `--type` limita `search messages` a texto, voz o archivos (`text|voice|file`) y `search notes` a notas escritas en memo o importadas desde una carpeta (`internal|file`). El correo admite `chat:` para una cadena de correos y `from:` para su remitente. Si un campo no corresponde —`kind:`/`topic:` para el correo, o `chat:`/`from:` para las notas—, `search all` omite esa fuente y explica por qué.
+`search all` indica el tipo de resultado: mensaje (`msg:…`) o nota (`note:…`). tg no busca correo: `tg personal search mail` responde "mail is memo's: install @wirecat/cli-memo, then `memo search mail …`", y `search all --only mail` se rechaza igual. `--type` limita `search messages` a texto, voz o archivos (`text|voice|file`) y `search notes` a notas de memo o archivos importados (`internal|file`). Si un campo no corresponde —`chat:`/`from:` para notas—, `search all` omite esa fuente y explica por qué.
 
 El correo y las notas llegan al archivo local mediante memo: `memo sync --mail` y `memo import`. Sin ellos, `search all` busca únicamente mensajes.
 
@@ -350,7 +347,7 @@ tg personal search messages 'invoice NOT tag:work'
 tg personal tags remove work --chat "Book club"
 ```
 
-Una etiqueta es tu propia etiqueta en un chat, una persona o un mensaje (`--message <id> --chat <chat>`). Se guarda únicamente en el archivo local y nunca se envía a Telegram. `tag:work` busca mensajes etiquetados como `work`, mensajes en un chat etiquetados como `work` y mensajes de una persona etiquetada como `work`. Una etiqueta tiene entre 1 y 32 letras de la a a la z, dígitos y guiones.
+Una etiqueta es tu propia etiqueta en un chat, una persona o un mensaje (`--message <id> --chat <chat>`) o una tarea (`--task <id-or-key>`). Se guarda únicamente en el archivo local y nunca se envía a Telegram. `tag:work` busca mensajes etiquetados como `work`, mensajes en un chat etiquetados como `work` y mensajes de una persona etiquetada como `work`. Una etiqueta tiene entre 1 y 32 letras de la a a la z, dígitos y guiones.
 
 Los grupos y canales pueden etiquetarse automáticamente a partir de su título, nombre de usuario y descripción, sin consultar mensajes
 ni usar un modelo:
@@ -375,7 +372,7 @@ tg personal tags auto                    # write the automatic tags
 tg personal tags list sources:auto      # only the automatic ones
 ```
 
-`--refresh-metadata` lee de Telegram las descripciones actuales antes de clasificar; se rechaza junto con
+`--sync-first` lee de Telegram las descripciones actuales antes de clasificar; se rechaza junto con
 `--dry-run`, que usa las descripciones guardadas. Una ejecución procesa como máximo 500 chats, 50 por defecto (`--limit`).
 
 Las etiquetas automáticas nunca modifican las tuyas: una nueva ejecución elimina solo las etiquetas automáticas obsoletas. Si añades una etiqueta

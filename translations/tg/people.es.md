@@ -95,7 +95,7 @@ Con `--chat`, muestra sus mensajes más recientes en cada chat indicado, de más
 
 ```sh
 tg personal contacts context @example_user --chat "Book club" --chat "Team" --limit 10
-tg personal contacts context @example_user --chat "Book club" --refresh
+tg personal contacts context @example_user --chat "Book club" --sync-first
 ```
 
 ```json
@@ -117,7 +117,7 @@ tg personal contacts context @example_user --chat "Book club" --refresh
 ```
 
 - Cada mensaje contiene solo hora y texto para que un agente pueda leer muchos a la vez. `-v` añade el ID del mensaje, un enlace, el remitente y a qué responde; `-vv` muestra el mensaje completo.
-- `--refresh` consulta primero Telegram: una búsqueda por chat de los mensajes de esa persona. Sin él, la respuesta procede del almacén y nunca se conecta.
+- `--sync-first` consulta primero Telegram: una búsqueda por chat de los mensajes de esa persona. Sin él, la respuesta procede del almacén y nunca se conecta.
 - `more: true` indica que hay mensajes más antiguos que los del límite; `complete: false`, que el almacén no contiene el chat desde el principio.
 - Un mensaje de voz incluye `transcript` una vez convertido en texto.
 

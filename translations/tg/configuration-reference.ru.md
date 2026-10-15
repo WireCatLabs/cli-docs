@@ -140,7 +140,7 @@ tg shop config show --bot
 }
 ```
 
-Это работает и в обратную сторону: `messages: allow` профиля тоже скрывает `messages.delete: deny` из `defaults`, и удаление снова требует подтверждения, как по умолчанию. Старые `read_only` и `allow` действуют в том разделе, где они записаны.
+Это работает и в обратную сторону: `messages: allow` профиля тоже скрывает `messages.delete: deny` из `defaults`, и удаление снова требует подтверждения, как по умолчанию.
 
 `inbox`, `review`, `watch`, `serve` и `messages sync`, `export`, `search` показывают сообщения и относятся к `messages`: `messages: deny` блокирует и их. `config`, `session`, `doctor`, `recipients`, `mcp` и обслуживание самой базы не ограничиваются.
 
@@ -174,13 +174,9 @@ done
 
 `replies.send` по умолчанию равен `deny`; включение только правила ответа не позволяет отправлять сообщения. `tg personal replies audience` может ограничить ответы выбранным людям или исключить некоторых из них.
 
-### Совместимость со старыми настройками
+### Старые настройки
 
-`read_only: true` задаёт `readonly` для всех ресурсов. Список в `allow` (`send`, `forward`, `reaction`, `edit`, `pin`, `read`, `delete`, `groups`, `contacts`, `profile`, `folders`, `sessions`) задаёт этим действиям `allow`, а остальным — `readonly`; удаление всё равно требует подтверждения. Ключ в `permissions` того же раздела имеет приоритет над обоими вариантами.
-
-### Перенос устаревших настроек доступа
-
-`tg config migrate --dry-run --json` показывает предварительную замену `read_only` и `allow` на `permissions`, сохраняя уровни, указанные в файле для личных профилей и профилей ботов. Он не записывает файл и не подключается к Telegram. `tg config migrate --json` применяет эту миграцию; процесс, привязанный к одному профилю, не может применить изменение, влияющее на все профили. Остальные настройки сохраняются. Файл, который уже использует только `permissions`, не требует миграции. Как только `permissions` присутствует, `config set` отклоняет изменения в `read_only` и `allow`; измените соответствующие ключи разрешения.
+`permissions` — единственная настройка доступа. Файл с `read_only` или `allow` отклоняется из-за неизвестного ключа: замените их ключами `permissions` (`read_only: true` соответствует `readonly` для всех ресурсов).
 
 ## Изменение через команду
 
@@ -276,9 +272,8 @@ tg personal setup
 | `default_profile` | строка имени профиля | корень файла |
 | `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` | целое число ≥ 1 | профиль |
 | `requests_per_minute` | целое число ≥ 0 | профиль |
-| `color`, `sender_colors`, `catch_up_marks_read`, `search_catch_up`, `record`, `read_only` | логическое | профиль |
+| `color`, `sender_colors`, `catch_up_marks_read`, `search_catch_up`, `record` | логическое | профиль |
 | `permissions` | объект путей команд и уровней `deny`, `readonly`, `ask`, `allow` | профиль |
-| `allow` | массив разрешенных действий; устаревший формат | профиль |
 | `read_other_bots` | логическое значение или массив имен профилей | только бот |
 | `update_check`, `skill_hint` | логическое | только корневые `defaults` |
 | `transcribe_with` | `auto`, `messenger`, `local` | профиль |

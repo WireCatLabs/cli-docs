@@ -4,6 +4,100 @@ title: "История изменений"
 
 Основные изменения `@wirecat/tg-cli` по версиям, от новых к старым. Используется [семантическое версионирование](https://semver.org); до `1.0.0` интерфейс команд может меняться.
 
+## 0.60.0 — 15.10.2026
+
+### Изменения, которые могут затронуть скрипты
+
+- **Задачи и сервер используют имена общего словаря**, без псевдонимов (следующий cli-core, cli-base 0.33.0):
+  `tasks similar` → `tasks related`; `tasks duplicates unsure` → `tasks duplicates defer` (ключ разрешения
+  `tasks.duplicates.defer`; сохранённое решение по-прежнему `unsure`); `tasks add --attach` → `--into`;
+  `tasks claim
+--for` → `--lease`; `tasks agenda --due` → `--due-within`; `server logs --lines` → `--limit` (`-n` сохранён).
+  В MCP: `tasks_related`, `tasks_duplicates_defer`, `into`, `lease`, `due_within`.
+- **`tasks agenda` и `tasks duplicates` фильтруются полями запроса, не флагами**: `tasks agenda --tag <name>` →
+  `tag:<name>`, `--category <name>` → `category:<name>`, `--claimed` → `claimed:any`;
+  `tasks duplicates --unsure` → `decision:unsure`. В MCP `tasks_agenda` и `tasks_duplicates` принимают `query`.
+
+## 0.59.0 — 15.10.2026
+
+### Изменения, которые могут затронуть скрипты
+
+- **Флаги используют имена общего словаря**, без псевдонимов (следующий cli-core):
+  `chats members audit|fetch --budget` → `--max-pages`; `messages sync --estimate` → `--dry-run`;
+  `contacts context --refresh`, `bot contacts show
+--refresh` и `tags auto --refresh-metadata` → `--sync-first`;
+  `search conversations --refresh` → `--catch-up`; `attachments show --if-sha256` → `--expected-fingerprint`;
+  `replies edit --chats|--not-chats|--people|--not-people` → `--allow-chats|--deny-chats|--allow-people|--deny-people`;
+  `schedule agent|command --once` → `--at-time`; `bot chats moderate --no-ban` → `--no-block`;
+  `chats mark-read --until` → `--until-id`; `tasks add|plan --check` → `--remind-time`;
+  `store export --to` → `--output-dir`, а `--kind` → `--include`; `bot store fetch --from` → `--until-id`.
+  Аргументы MCP следуют этим именам: `max_pages`, `until_id`, `expected_fingerprint`, `sync_first`, `remind_time`.
+
+## 0.58.0 — 15.10.2026
+
+### Что нового
+
+- **Задачи об одной работе** (cli-core 0.285.0): `tasks similar <task>` оценивает похожие задачи;
+  `tasks duplicates [--unsure]` показывает найденные правилами пары; `tasks merge <task> --into <other>`
+  объединяет их, а `tasks unmerge` отменяет объединение; `tasks duplicates reject|unsure` решает судьбу пары.
+  `tasks agenda` принимает `--category` и `--tag`, `config set task_categories.<name>` меняет категории всего хранилища.
+- **Упоминания** (cli-core 0.285.0): `mentions domains` показывает сайты из ссылок; `mentions list --new` —
+  найденное после последнего просмотра; `mentions confirm|reject <id> --all-in-chat` решает все случаи имени
+  в одном чате; ссылка `t.me` указывает на чат или человека. `config set phone_countries es,ru` читает номера без `+`.
+- **Версия хранилища 16**: правила упоминаний также читают текст заметок и сохранённых документов;
+  один `mentions rebuild` обрабатывает прежние записи. `mentions list` по-прежнему показывает только упоминания
+  в сообщениях. Добавляются лишь триггеры, поэтому старый tg продолжает открывать хранилище.
+
+### Изменения, которые могут затронуть скрипты
+
+- **`tasks add` отклоняет возможный дубликат** открытой задачи или закрытой за последние 14 дней
+  (cli-core 0.285.0): код 2, причина `task.duplicate-candidates`, кандидаты в `details.candidates`.
+  Повторите с `--attach <task>`, чтобы связать сообщение с задачей, или `--new`, чтобы всё же создать новую;
+  это действует и в `tasks add` через MCP.
+- **`phone:` и `value:` также сопоставляют конец сохранённого номера с национальными цифрами запроса**
+  (от 8 цифр, cli-core 0.285.0). Номер, сохранённый до `phone_countries`, находится обоими способами.
+  Российский городской номер в группах, `(812) 000-00-01`, сохраняется как `+78120000001`, а не голые цифры.
+- **tg больше не ищет почту** (cli-core 0.285.0, cli-core#1121): `tg search mail` и MCP `search_mail` удалены,
+  `search all` читает сообщения и заметки, но не почту; `--only mail` отклоняется. `tg search mail …`
+  отвечает ``mail is memo's: install @wirecat/cli-memo, then `memo search mail …` ``.
+  `search notes`, задачи, заметки и теги остаются.
+
+### Исправлено
+
+- Название с кириллическими заглавными буквами находится запросом в нижнем регистре (cli-core 0.285.0).
+- **Вредоносное HTML-вложение больше не задерживает чтение** (cli-core 0.285.0): страница с незакрытыми
+  тегами или комментариями обрабатывается за время, линейное её размеру.
+
+## 0.57.0 — 15.10.2026
+
+### Изменения, которые могут затронуть скрипты
+
+- **`bot api --allow-any-file` находится на `bot api`**, а не каждой операции с файлами: укажите его один раз
+  до или после имени метода, и каждый файл `@path` вызова можно читать из защищённых мест. Без него
+  файлы `@path` из каталогов учётных данных, собственных папок `tg` и локального хранилища отклоняются до подключения.
+- **`tasks add` требует `--category <name>`** (cli-core 0.282.0): money, documents, meeting, delivery, access,
+  personal или other; `tasks categories` показывает список. Задачи получают ключи вроде `Q-15`;
+  `tasks claim` / `tasks release` занимают задачу для одной сессии агента.
+- **`permissions` — единственная настройка доступа** (cli-core 0.282.0): файл с `read_only` или `allow`
+  отклоняется из-за неизвестного ключа, `config migrate` удалён. Настройки читаются только в snake_case;
+  `config set` больше не принимает camelCase.
+- **Один язык поиска** (cli-core 0.281.0): `--language` и `--regex` удалены из `search messages` и
+  `searches create`; используйте Lucene, например `body:/.*invoice.*/`. `conversations embed --workers` удалён.
+  Сохранённый в старом языке поиск отклоняется: сохраните его заново.
+- **Нет переноса папок при запуске**: прежние папки в `~/Library` больше не перемещаются.
+
+### Что нового
+
+- **`messages sync` открывает задачи по сохранённым сообщениям** (cli-core 0.282.0): неотвеченный вопрос,
+  упоминание вас; закрывает после вашего ответа.
+- **Совпадение по заголовку идёт первым в `search notes` и `search all`** (cli-core 0.281.0).
+
+### Исправлено
+
+- **Уведомление об обновлении называет `tg upgrade` и молчит лишь во время `upgrade`** (cli-base 0.29.0):
+  `tasks update` больше не отключает его.
+- **Вложенные пути полей `--json` работают через списки** (cli-base 0.31.1, cli-core 0.283.0).
+
 ## 0.56.0 — 14.10.2026
 
 ### Изменения, которые могут затронуть скрипты
@@ -11,6 +105,8 @@ title: "История изменений"
 - **`store export` сохраняет файлы в том же виде, что выводит на экран** (cli-core 0.276.0): файлы `--output`
   и папки `--to` содержат те же записи (`chat_id`, `sender_name`, `ref`…). Папка от прежней версии
   отклоняется с сообщением "export into a new folder".
+
+- **`bot api` отклоняет файлы `@path` из защищённых мест**: известные файлы и папки учётных данных, собственные папки `tg` и локальное хранилище — до подключения, как `bot messages send --file`; `--allow-any-file` на операции с файлами разрешает отправить их. Файл больше 256 МиБ отклоняется без загрузки в память.
 
 ### Что нового
 

@@ -36,7 +36,7 @@ La búsqueda de tema no es el campo `topic:` de [búsqueda de mensajes](./search
 | Abrir toda la conversación a la que pertenece un mensaje | `tg personal conversations show <chat> <message>` |
 | Encuentra otras conversaciones sobre lo mismo, en cada chat | `tg personal conversations related <chat> <message>` |
 | Limitar resultados a una persona, un punto o una palabra | `tg personal search conversations "<question>" --filter '<query>'` |
-| Vea lo que está desactualizado y póngase al día | `tg personal conversations status`, `tg personal search conversations "<question>" --refresh` |
+| Vea lo que está desactualizado y póngase al día | `tg personal conversations status`, `tg personal search conversations "<question>" --catch-up` |
 | Deje que su propio agente de IA mejore la forma en que se agrupan los mensajes | `tg skill show link-conversations` |
 
 ## ¿Búsqueda de tema o búsqueda de palabras?
@@ -192,10 +192,10 @@ Los mensajes nuevos llegan a una conversación solo tras la siguiente construcci
 tg personal conversations status                 # what is behind, chat by chat
 tg personal conversations build                  # every chat that changed, and groups never built
 tg personal conversations embed                  # every built chat with pieces left
-tg personal search conversations "renting a flat" --refresh  # catch up first, then search
+tg personal search conversations "renting a flat" --catch-up  # catch up first, then search
 ```
 
-`status` cuenta, para cada chat creado, los mensajes que la compilación no ha visto (nuevos, editados, eliminados), las piezas cuyo vector está actual, obsoleto o faltante, y cuántos grupos nunca se crearon. Sin `--chat`, `build`, `embed` y `search --refresh` aceptan como máximo 20 chats por ejecución (`--max-chats`) e incrustan como máximo 2000 piezas por ejecución (`--max-chunks`); ejecútelos nuevamente para continuar. Nunca descargan un modelo. `--refresh` no se puede combinar con `--filter` o `--source`: primero cree e incruste los chats que desee.
+`status` cuenta, para cada chat creado, los mensajes que la compilación no ha visto (nuevos, editados, eliminados), las piezas cuyo vector está actual, obsoleto o faltante, y cuántos grupos nunca se crearon. Sin `--chat`, `build`, `embed` y `search conversations --catch-up` aceptan como máximo 20 chats por ejecución (`--max-chats`) e incrustan como máximo 2000 piezas por ejecución (`--max-chunks`); ejecútelos nuevamente para continuar. Nunca descargan un modelo. `--catch-up` no se puede combinar con `--filter` o `--source`: primero cree e incruste los chats que desee.
 
 Cuando las reglas cambian en una nueva versión, `status` y `tg personal store check` nombran los chats creados con las reglas anteriores; construirlos de nuevo.
 

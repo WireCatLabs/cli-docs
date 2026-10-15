@@ -95,7 +95,7 @@ tg personal contacts context @example_user
 
 ```sh
 tg personal contacts context @example_user --chat "Book club" --chat "Team" --limit 10
-tg personal contacts context @example_user --chat "Book club" --refresh
+tg personal contacts context @example_user --chat "Book club" --sync-first
 ```
 
 ```json
@@ -117,7 +117,7 @@ tg personal contacts context @example_user --chat "Book club" --refresh
 ```
 
 - Каждое сообщение содержит только время и текст, чтобы агент мог прочитать сразу много сообщений. `-v` добавляет ID сообщения, ссылку, отправителя и сообщение, на которое дан ответ; `-vv` показывает сообщение целиком.
-- `--refresh` сначала обращается к Telegram: один поиск сообщений человека на чат. Без него ответ берётся из хранилища без подключения.
+- `--sync-first` сначала обращается к Telegram: один поиск сообщений человека на чат. Без него ответ берётся из хранилища без подключения.
 - `more: true` означает, что есть сообщения старше лимита; `complete: false` — что чат сохранён не с начала.
 - Голосовое сообщение содержит `transcript`, когда уже преобразовано в текст.
 

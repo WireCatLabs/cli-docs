@@ -82,7 +82,7 @@ Añadir una tarea para un mensaje y planificarla:
 
 ```sh
 tg personal tasks add msg:telegram/1/77/42 --type promise --title "Send Bob Sample the signed contract" --due 3d
-tg personal tasks plan <task> --description "Done when Bob confirms he has it." --check 2d
+tg personal tasks plan <task> --description "Done when Bob confirms he has it." --remind-time 2d
 ```
 
 Vincular más mensajes y verlo todo en un sitio:

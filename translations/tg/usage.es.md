@@ -471,7 +471,7 @@ tg personal contacts list 'name:*ann*'  # people by name or @username
 ```
 
 ```sh
-tg personal search all "contract"            # messages, mail and notes this machine has kept
+tg personal search all "contract"            # messages and notes this machine has kept
 ```
 
 ```sh
@@ -483,10 +483,10 @@ tg personal search messages 'contract chat:"Book club"'
 ```
 
 ```sh
-tg personal search messages "invoice.*(march|april)" --regex
+tg personal search messages 'body:/.*invoice.*(march|april).*/'
 ```
 
-Las búsquedas de chat y contactos necesitan **al menos tres caracteres**. `search messages` utiliza el [lenguaje de consulta de búsqueda](./query-language.md): `invoice` también encuentra otras formas de la palabra, `invoic*` busca comienzos y `exact:invoice` solo esa forma. Lee lo que `serve` obtuvo o guardó y también solicita la búsqueda propia de Telegram (`--backend archive` solo para el archivo local). En su lugar, `--regex` trata las palabras como una expresión regular de JavaScript. Más: [búsqueda de mensajes](./search.md). Una vez que tengas el chat, usa su id.
+Las búsquedas de chat y contactos necesitan **al menos tres caracteres**. `search messages` utiliza el [lenguaje de consulta de búsqueda](./query-language.md): `invoice` también encuentra otras formas de la palabra, `invoic*` busca comienzos y `exact:invoice` solo esa forma. Lee lo que `serve` obtuvo o guardó y también solicita la búsqueda propia de Telegram (`--backend archive` solo para el archivo local). `body:/…/` compara una expresión regular con el mensaje completo. Más: [búsqueda de mensajes](./search.md). Una vez que tengas el chat, usa su id.
 
 ## Enviar
 
@@ -678,7 +678,7 @@ tg personal chats mark-read "Book club"      # up to the newest message
 ```
 
 ```sh
-tg personal chats mark-read "Book club" --until 4242  # only up to this one
+tg personal chats mark-read "Book club" --until-id 4242  # only up to this one
 ```
 
 ```sh
@@ -1038,7 +1038,7 @@ tg personal chats list --offline                  # only from the store, never c
 ```
 
 ```sh
-tg personal messages sync "Project Alpha" --estimate  # how much a fetch would take
+tg personal messages sync "Project Alpha" --dry-run  # how much a fetch would take
 ```
 
 ```sh

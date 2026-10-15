@@ -97,7 +97,7 @@ tg personal store status "Book club"  # one chat
 ## Загрузка истории чата
 
 ```sh
-tg personal messages sync "Book club" --estimate  # what a full fetch would still cost; asks Telegram nothing
+tg personal messages sync "Book club" --dry-run  # what a full fetch would still cost; asks Telegram nothing
 ```
 
 ```sh
@@ -130,7 +130,7 @@ tg personal messages sync --all --since-time 365d  # every chat, back to a year 
 
 `messages sync` читает и сохраняет историю постранично, от новых сообщений к старым. **Загрузку можно продолжить:** после каждой страницы записывается прогресс. Ctrl-C, `--timeout`, лимит `--limit`, `--since-time`, `--last` и длительное ожидание Telegram останавливают загрузку без потери данных. Следующий запуск пропускает сохранённое. `--since-time` и `--last` определяют глубину истории: используйте один из них. Неустранимый сбой до первой сохранённой страницы завершает команду ошибкой; после того как часть сохранена, сбой может вернуть сохранённое вместе с `issue`.
 
-**Каждая страница — запрос от вашего аккаунта** до 100 сообщений. Запуск останавливается после `--limit` сообщений (по умолчанию 1000); `--page-size` задаёт размер страницы (100), `--pause` — паузу между страницами (1 секунда; варианты `500ms`, `30s`, `2m`). Короткое ожидание Telegram выполняется; ожидание более пяти минут завершает запуск, который можно повторить позже. Сначала используйте `--estimate`: оценка строится по локальной базе без запросов.
+**Каждая страница — запрос от вашего аккаунта** до 100 сообщений. Запуск останавливается после `--limit` сообщений (по умолчанию 1000); `--page-size` задаёт размер страницы (100), `--pause` — паузу между страницами (1 секунда; варианты `500ms`, `30s`, `2m`). Короткое ожидание Telegram выполняется; ожидание более пяти минут завершает запуск, который можно повторить позже. Сначала используйте `--dry-run`: оценка строится по локальной базе без запросов.
 
 Чтобы найти и заполнить пробелы в сохраненной истории чата, а также подготовить поиск по теме сразу после получения (`--catch-up`), см. раздел [когда ничего не найдено](./search.md#when-nothing-is-found).
 
@@ -207,22 +207,22 @@ tg personal store export "Book club" --output book-club.jsonl --since-time 7d  #
 ### В каталог, и только изменения
 
 ```sh
-tg personal store export "Book club" "Work" --to ~/tg-export  # a JSON-lines file per chat, and manifest.json
+tg personal store export "Book club" "Work" --output-dir ~/tg-export  # a JSON-lines file per chat, and manifest.json
 ```
 
 ```sh
-tg personal store export --kind group --to ~/tg-groups  # every stored group
+tg personal store export --include group --output-dir ~/tg-groups  # every stored group
 ```
 
 ```sh
-tg personal store export --all --to ~/tg-all           # every stored chat of this account
+tg personal store export --all --output-dir ~/tg-all   # every stored chat of this account
 ```
 
 Повторный запуск в тот же каталог добавляет только изменения с прошлого раза: новые сообщения, правки (в том числе старых сообщений) и удаления. Удалённое сообщение записывается без текста, как `{ "id", "chatId", "deleted": true }`. Каталог с другими файлами или экспортированный из другого аккаунта отклоняется. Изменение одних только реакций изменением не считается.
 
 ### С паролем
 
-`--encrypt` в `store export` (с `--output` или `--to`) и в `store backup` сжимает файл и шифрует его паролем — других программ не нужно. `tg personal store decrypt <file> --output <new file>` расшифровывает файл; `tg personal store restore` запрашивает пароль зашифрованной копии.
+`--encrypt` в `store export` (с `--output` или `--output-dir`) и в `store backup` сжимает файл и шифрует его паролем — других программ не нужно. `tg personal store decrypt <file> --output <new file>` расшифровывает файл; `tg personal store restore` запрашивает пароль зашифрованной копии.
 
 - **Пароль нигде не хранится** — ни в настройках, ни в хранилище ключей, ни в записях. Если вы его потеряете, файл открыть нельзя.
 - Вводите пароль сами в скрытом запросе, который спрашивает его дважды. Агент, которому вы его дали, передаёт пароль через stdin, а не аргументом: аргументы видны другим программам на компьютере.
@@ -391,7 +391,7 @@ the message store was written by a newer version (schema N, needs at least M; th
 
 `tg personal replies test [rule] --since-time 7d --json` имитирует то, что будут получать сохраненные сообщения; он никогда не отправляет. Правила находятся в файле ответов профиля. `replies status`, `pause` и `resume` проверяют/контролируют их. Фактические общие ответы `serve` требуют явного разрешения `replies.send:allow` и отправляются всем, кому соответствует правило, если только аудитория не ограничивает их. По умолчанию отправка запрещена. Изменения, сообщения до запуска и уже отвеченные сообщения игнорируются. `ask` не может отправить сообщение из автоматической службы.
 
-Создайте отключенное правило с помощью `tg personal replies add away`, отредактируйте его с помощью `replies edit away --template`, затем используйте `replies on away` или `off away`. Для включенных правил ответа требуется непустой шаблон. Редактирование изменяет только именованные поля; списки представляют собой замены, разделенные запятыми, пустая строка очищает одну. Варианты включают `--do reply,task`, `--kinds`, `--chats`, `--not-chats`, `--words`, `--question` / `--no-question`, `--mentions-me` / `--no-mentions-me`, `--people`, `--not-people`, `--contacts-only` / `--no-contacts-only`, `--as-reply` / `--no-as-reply`, `--per-chat`, `--per-person` и поля часов `--outside`, `--days`, `--timezone` (`--no-hours` очищает их). Для первой настройки часов требуются все три поля. Недопустимые изменения сохраняют файл, другие правила, аудиторию и историю ответов.
+Создайте отключенное правило с помощью `tg personal replies add away`, отредактируйте его с помощью `replies edit away --template`, затем используйте `replies on away` или `off away`. Для включенных правил ответа требуется непустой шаблон. Редактирование изменяет только именованные поля; списки представляют собой замены, разделенные запятыми, пустая строка очищает одну. Варианты включают `--do reply,task`, `--kinds`, `--allow-chats`, `--deny-chats`, `--words`, `--question` / `--no-question`, `--mentions-me` / `--no-mentions-me`, `--allow-people`, `--deny-people`, `--contacts-only` / `--no-contacts-only`, `--as-reply` / `--no-as-reply`, `--per-chat`, `--per-person` и поля часов `--outside`, `--days`, `--timezone` (`--no-hours` очищает их). Для первой настройки часов требуются все три поля. Недопустимые изменения сохраняют файл, другие правила, аудиторию и историю ответов.
 
 `tg personal replies audience` показывает аудиторию профиля; `--reply all|listed`, `--allow-people`, `--allow-chats`, `--deny-people` и `--deny-chats` заменяют именованные поля. Отрицание побеждает; указан с пустым списком разрешенных, никому не отвечает; новый файл отвечает всем, кому соответствует правило. Локальная задача правила может открыться даже там, где ответ запрещен.
 

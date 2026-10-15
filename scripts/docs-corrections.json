@@ -1463,25 +1463,6 @@
   {
     "tool": "tg",
     "slug": "search",
-    "reason": "Imported email is mail, not a kind of note. Correct the reader task labels in the reviewed guide.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "Искать только импортированные почтовые заметки",
-          "after": "Искать только почту, импортированную memo"
-        }
-      ],
-      "es": [
-        {
-          "before": "Buscar sólo la nota de correo importada",
-          "after": "Buscar solo correo importado"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "search",
     "reason": "Query language refers to search syntax rather than a spoken language.",
     "replacements": {
       "es": [
@@ -1553,37 +1534,299 @@
   },
   {
     "tool": "tg",
-    "slug": "search",
-    "reason": "tg 0.53.0 search guide names memo sync --mail, which arrives in a memo release newer than the pinned memo 0.21.0; there mail and notes are imported with memo import --mail and memo import --notes. Drop this correction when the memo pin reaches memo sync.",
+    "slug": "commands",
+    "reason": "The released 0.60 manifest uses Core 0.288.0 and strict snake_case settings; fix the stale introductory setting name.",
     "replacements": {
       "en": [
         {
-          "before": "# only the mail memo sync --mail brought in",
-          "after": "# only the mail memo import --mail brought in"
-        },
-        {
-          "before": "`memo sync --mail` and `memo import`",
-          "after": "`memo import --mail` and `memo import --notes`"
+          "before": "`defaultProfile`",
+          "after": "`default_profile`"
         }
       ],
       "ru": [
         {
-          "before": "# only the mail memo sync --mail brought in",
-          "after": "# only the mail memo import --mail brought in"
-        },
-        {
-          "before": "`memo sync --mail` и `memo import`",
-          "after": "`memo import --mail` и `memo import --notes`"
+          "before": "`defaultProfile`",
+          "after": "`default_profile`"
         }
       ],
       "es": [
         {
-          "before": "# only the mail memo sync --mail brought in",
-          "after": "# only the mail memo import --mail brought in"
+          "before": "`defaultProfile`",
+          "after": "`default_profile`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "changelog",
+    "reason": "Use exact dependency versions from the immutable 0.59.0 and 0.60.0 package manifests instead of provisional next-core labels.",
+    "replacements": {
+      "en": [
+        {
+          "before": "next cli-core, cli-base",
+          "after": "cli-core 0.288.0, cli-base"
         },
         {
-          "before": "`memo sync --mail` y `memo import`",
-          "after": "`memo import --mail` y `memo import --notes`"
+          "before": "next cli-core)",
+          "after": "cli-core 0.287.0)"
+        }
+      ],
+      "ru": [
+        {
+          "before": "следующий cli-core, cli-base",
+          "after": "cli-core 0.288.0, cli-base"
+        },
+        {
+          "before": "следующий cli-core)",
+          "after": "cli-core 0.287.0)"
+        }
+      ],
+      "es": [
+        {
+          "before": "próximo cli-core, cli-base",
+          "after": "cli-core 0.288.0, cli-base"
+        },
+        {
+          "before": "próximo cli-core)",
+          "after": "cli-core 0.287.0)"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "search",
+    "reason": "Core 0.285.0 removed TG mail search. Preserve the pinned Memo 0.21 import syntax and distinguish searchable notes from mail owned by Memo.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Mail and notes reach the store through memo: `memo sync --mail` and `memo import`. Without them,\n`search all` searches messages only.",
+          "after": "Notes reach the store through `memo import --notes`. Without imported notes, `search all` searches messages only. Search mail separately with Memo."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Почта и заметки попадают в архив через memo: `memo sync --mail` и `memo import`. Без них `search all` ищет только сообщения.",
+          "after": "Заметки попадают в архив через `memo import --notes`. Без импортированных заметок `search all` ищет только сообщения. Почту ищите отдельно через Memo."
+        }
+      ],
+      "es": [
+        {
+          "before": "El correo y las notas llegan al archivo local mediante memo: `memo sync --mail` y `memo import`. Sin ellos, `search all` busca únicamente mensajes.",
+          "after": "Las notas llegan al archivo local mediante `memo import --notes`. Sin notas importadas, `search all` busca solo mensajes. Busca el correo por separado con Memo."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "query-language",
+    "reason": "Core 0.288.0 cli/envelope and Base 0.33.0 stream framing retain the final completeness/page record after JSONL items.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`--jsonl` streams the items only.",
+          "after": "`--jsonl` emits one item per line followed by a final record with completeness and pagination metadata."
+        }
+      ],
+      "ru": [
+        {
+          "before": "`--jsonl` выдаёт потоком только элементы.",
+          "after": "`--jsonl` выводит по одному элементу на строку, затем итоговую запись с полнотой результата и данными о страницах."
+        }
+      ],
+      "es": [
+        {
+          "before": "`--jsonl` emite solo los elementos.",
+          "after": "`--jsonl` emite un elemento por línea y termina con un registro de integridad del resultado y paginación."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "search",
+    "reason": "Core 0.288.0 cli/envelope and Base 0.33.0 stream framing retain the final completeness/page record after JSONL items.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`--jsonl` streams the messages only, one per line.",
+          "after": "`--jsonl` emits one item per line followed by a final record with completeness and pagination metadata."
+        }
+      ],
+      "ru": [
+        {
+          "before": "`--jsonl` передает только сообщения, по одному на строку.",
+          "after": "`--jsonl` выводит по одному элементу на строку, затем итоговую запись с полнотой результата и данными о страницах."
+        }
+      ],
+      "es": [
+        {
+          "before": "`--jsonl` transmite solo los mensajes, uno por línea.",
+          "after": "`--jsonl` emite un elemento por línea y termina con un registro de integridad del resultado y paginación."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "query-language",
+    "reason": "Preserve incoming anchors removed by the single-query-language and permissions-only settings cleanup in TG 0.57.0.",
+    "replacements": {
+      "en": [
+        {
+          "before": "## What it can do",
+          "after": "<a id=\"a-javascript-regular-expression---regex\" />\n\n## What it can do"
+        }
+      ],
+      "ru": [
+        {
+          "before": "## Что можно выразить",
+          "after": "<a id=\"регулярное-выражение-javascript---regex\" />\n\n## Что можно выразить"
+        }
+      ],
+      "es": [
+        {
+          "before": "## Qué puede hacer",
+          "after": "<a id=\"una-expresión-regular-de-javascript---regex\" />\n\n## Qué puede hacer"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "configuration-reference",
+    "reason": "Preserve incoming anchors removed by the single-query-language and permissions-only settings cleanup in TG 0.57.0.",
+    "replacements": {
+      "en": [
+        {
+          "before": "### Older settings",
+          "after": "<a id=\"older-settings-that-still-work\" />\n\n<a id=\"migrating-legacy-access-settings\" />\n\n### Older settings"
+        }
+      ],
+      "ru": [
+        {
+          "before": "### Старые настройки",
+          "after": "<a id=\"совместимость-со-старыми-настройками\" />\n\n<a id=\"перенос-устаревших-настроек-доступа\" />\n\n### Старые настройки"
+        }
+      ],
+      "es": [
+        {
+          "before": "### Ajustes anteriores",
+          "after": "<a id=\"ajustes-anteriores-que-siguen-funcionando\" />\n\n<a id=\"migrar-la-configuración-de-acceso-heredada\" />\n\n### Ajustes anteriores"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "commands",
+    "reason": "Retain links to retired migration and mail commands at the corresponding current reference sections.",
+    "replacements": {
+      "en": [
+        {
+          "before": "### `tg config set`",
+          "after": "<a id=\"tg-config-migrate\" />\n\n### `tg config set`"
+        },
+        {
+          "before": "### `tg search all`",
+          "after": "<a id=\"tg-search-mail\" />\n\n### `tg search all`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "### `tg config set`",
+          "after": "<a id=\"tg-config-migrate\" />\n\n### `tg config set`"
+        },
+        {
+          "before": "### `tg search all`",
+          "after": "<a id=\"tg-search-mail\" />\n\n### `tg search all`"
+        }
+      ],
+      "es": [
+        {
+          "before": "### `tg config set`",
+          "after": "<a id=\"tg-config-migrate\" />\n\n### `tg config set`"
+        },
+        {
+          "before": "### `tg search all`",
+          "after": "<a id=\"tg-search-mail\" />\n\n### `tg search all`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "search",
+    "reason": "TG 0.58.0 removed the mail subcommand; explain the rejected legacy path without presenting it as an executable command.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`tg personal search mail`",
+          "after": "the former mail-search command"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`tg personal search mail`",
+          "after": "прежняя команда поиска почты"
+        }
+      ],
+      "es": [
+        {
+          "before": "`tg personal search mail`",
+          "after": "el antiguo comando de búsqueda de correo"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "tags",
+    "reason": "TG 0.58.0 no longer searches mail. Pinned Memo 0.21.0 owns mail search; sharing tags does not restore TG mail search.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`tg search mail 'tag:follow-up'`",
+          "after": "`memo search mail 'tag:follow-up'`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`tg search mail 'tag:follow-up'`",
+          "after": "`memo search mail 'tag:follow-up'`"
+        }
+      ],
+      "es": [
+        {
+          "before": "`tg search mail 'tag:follow-up'`",
+          "after": "`memo search mail 'tag:follow-up'`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "search",
+    "reason": "Core 0.285.0 removed mail search from TG; the released guide opening still promises mail alongside notes. Keep the opening consistent with the supported search sources.",
+    "replacements": {
+      "en": [
+        {
+          "before": "and the mail and notes that [memo]",
+          "after": "and the notes that [memo]"
+        }
+      ],
+      "ru": [
+        {
+          "before": "сообщения Telegram, почту и заметки, импортированные [memo]",
+          "after": "сообщения Telegram и заметки, импортированные [memo]"
+        }
+      ],
+      "es": [
+        {
+          "before": "mensajes de Telegram y el correo y las notas que [memo]",
+          "after": "mensajes de Telegram y las notas que [memo]"
         }
       ]
     }
