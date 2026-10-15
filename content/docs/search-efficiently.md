@@ -90,8 +90,9 @@ The answer says whether more results exist (`has_more`). That describes the page
 ## Keep the output small
 
 - `--limit <n>` caps the hits.
-- `--brief` shows each found message as a reference, time, sender and excerpt. Scan with it, then open one hit.
-- `--json=ref` keeps only the fields you name. `--jsonl` prints one result per line. `--full` returns whole texts.
+- `--json=<fields>` keeps only the fields you name, for example `--json=ref,date,text`. It is the one option that
+  shrinks every answer: 31% to 64% smaller than full `--json` in [our measurement](https://github.com/WireCatLabs/cli-testing/tree/main/performance/agents/output-size).
+- `--jsonl` prints one result per line. It is no smaller than `--json`. `--full` returns whole texts.
 - `--max-output-bytes` caps machine output at 4 MiB by default. A result over the cap fails visibly instead of being cut.
 - `--context <n>` adds `n` neighbouring messages on each side of a hit. It is 0 when the output is not a terminal.
 
@@ -114,8 +115,8 @@ Replace the names with yours.
 | --- | --- |
 | An agreement and its source | `tg personal search messages 'chat:"Book club" agreed date>=2026-10-01' --limit 5` |
 | Everything about one person this month | `tg personal contacts timeline "Kai Sample" --since-time 2026-10-01` |
-| Where a phone number appears | `tg personal search messages 'phone:"+1 555 010 0100"' --brief` |
-| Files sent in a chat last week | `tg personal search messages 'chat:"Book club" has:file date>=2026-10-07' --brief` |
+| Where a phone number appears | `tg personal search messages 'phone:"+1 555 010 0100"'` |
+| Files sent in a chat last week | `tg personal search messages 'chat:"Book club" has:file date>=2026-10-07'` |
 | What a Drive document says about a topic | `drive personal search 'budget' --exact --limit 5` |
 
 For longer ones, see the recipes for [Telegram](./tg/recipes.md) and [MAX](./max/recipes.md).

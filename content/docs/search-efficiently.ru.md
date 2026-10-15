@@ -90,8 +90,9 @@ tg personal search messages 'chat:"Book club" from:"Kai Sample" date>=2026-10-01
 ## Держите вывод коротким
 
 - `--limit <n>` ограничивает число результатов.
-- `--brief` показывает каждое найденное сообщение как ссылку на источник, время, отправителя и фрагмент. Просмотрите так, потом откройте один результат.
-- `--json=ref` оставляет только названные поля. `--jsonl` печатает по одному результату в строке. `--full` возвращает тексты целиком.
+- `--json=<поля>` оставляет только названные поля, например `--json=ref,date,text`. Только этот флаг уменьшает
+  любой ответ: на 31–64% меньше полного `--json` в [нашем замере](https://github.com/WireCatLabs/cli-testing/tree/main/performance/agents/output-size).
+- `--jsonl` печатает по одному результату в строке. Он не короче `--json`. `--full` возвращает тексты целиком.
 - `--max-output-bytes` по умолчанию ограничивает машинный вывод 4 МиБ. Результат больше лимита завершается явной ошибкой, а не обрезается.
 - `--context <n>` добавляет `n` соседних сообщений с каждой стороны. Вне терминала значение равно 0.
 
@@ -114,8 +115,8 @@ tg personal messages context "msg:telegram/1/77/42" --thread
 | --- | --- |
 | Договорённость и её источник | `tg personal search messages 'chat:"Book club" agreed date>=2026-10-01' --limit 5` |
 | Всё об одном человеке за этот месяц | `tg personal contacts timeline "Kai Sample" --since-time 2026-10-01` |
-| Где встречается номер телефона | `tg personal search messages 'phone:"+1 555 010 0100"' --brief` |
-| Файлы, присланные в чат на прошлой неделе | `tg personal search messages 'chat:"Book club" has:file date>=2026-10-07' --brief` |
+| Где встречается номер телефона | `tg personal search messages 'phone:"+1 555 010 0100"'` |
+| Файлы, присланные в чат на прошлой неделе | `tg personal search messages 'chat:"Book club" has:file date>=2026-10-07'` |
 | Что документ Drive говорит о теме | `drive personal search 'budget' --exact --limit 5` |
 
 Более длинные примеры: [Telegram](./tg/recipes.md) и [MAX](./max/recipes.md).
