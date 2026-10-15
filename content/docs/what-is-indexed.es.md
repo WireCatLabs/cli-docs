@@ -121,10 +121,12 @@ Una foto sin pie y sin mensajes cerca no recibe fragmento. Para encontrarla, usa
 
 Recuerdas cómo es la imagen. Está apagado hasta que lo actives, y se activa por perfil. Está en las últimas versiones de `tg` y `max`; ejecuta `images --help` para comprobar la tuya. En orden:
 
-1. `config set picture_search true`
-2. `images models download clip-b32`
-3. `images embed --chat "Book club" --limit 100`
-4. Busca con palabras, por ejemplo `search messages "dog on a beach"`
+```sh
+config set picture_search true
+images models download clip-b32
+images embed --chat "Book club" --limit 100
+search messages "dog on a beach"
+```
 
 Pon delante de cada comando el nombre de la herramienta y de tu perfil, como en los ejemplos anteriores.
 
